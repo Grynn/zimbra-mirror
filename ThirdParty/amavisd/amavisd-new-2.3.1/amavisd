@@ -1027,7 +1027,6 @@ sub read_config(@) {
     elsif ($errn)      { $msg = "is inaccessible: $!" }
     elsif (-d _)       { $msg = "is a directory" }
     elsif (!-f _)      { $msg = "is not a regular file" }
-    elsif ($> && -o _) { $msg = "is owned by EUID $>, should be owned by root"}
     elsif ($> && -w _) { $msg = "is writable by EUID $>, EGID $)" }
     if (defined $msg)  { die "Config file \"$config_file\" $msg," }
     $! = undef; my($rv) = do $config_file;
