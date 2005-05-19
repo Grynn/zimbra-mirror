@@ -6157,8 +6157,8 @@ sub after_chroot_init() {
           rename($config_file.'.moved', $config_file);  # try to rename back
           $m = 'is writable (confirmed)';
         }
-        push(@msg, "Directory of a config file \"$config_file\" $m, ".
-                   "UID $<, EUID $>, EGID $)" );
+#        push(@msg, "Directory of a config file \"$config_file\" $m, ".
+#                   "UID $<, EUID $>, EGID $)" );
       }
       last  if @msg;
     }
