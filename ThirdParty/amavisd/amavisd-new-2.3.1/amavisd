@@ -260,6 +260,7 @@ BEGIN {
       $file
     )],
     'sa' => [qw(
+	  $sa_rules_file $sa_site_rules_file $sa_userprefs_file
       $helpers_home $dspam
       $sa_local_tests_only $sa_auto_whitelist $sa_timeout $sa_debug
     )],
@@ -12352,6 +12353,9 @@ sub init() {
     local_tests_only  => $sa_local_tests_only,
     home_dir_for_helpers => $helpers_home,
     stop_at_threshold => 0,
+	rules_filename => $sa_rules_file,
+	site_rules_filename => $sa_site_rules_file,
+	userprefs_filename => $sa_userprefs_file,
 #   DEF_RULES_DIR     => '/usr/local/share/spamassassin',
 #   LOCAL_RULES_DIR   => '/etc/mail/spamassassin',
 #see man Mail::SpamAssassin for other options
