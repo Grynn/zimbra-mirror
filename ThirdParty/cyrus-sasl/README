@@ -1,0 +1,39 @@
+
+Build
+
+	Run "liquid-cyrus-sasl-build.sh"
+	
+	"make install" as root
+
+Configuring the server: 
+
+	version=2.1.21.LIQUID
+
+	mkdir /opt/liquid/cyrus-sasl-${version}/etc
+
+	(echo "liquid_url: http://bolton/service/soap/";
+	echo "liquid_cert_file: /opt/liquid/conf/blah";
+	echo "liquid_cert_check: off") > \
+	 /opt/liquid/cyrus-sasl-{verison}/etc/saslauthd.conf
+
+	mkdir /opt/liquid/cyrus-sasl-${version}/state
+
+Testing:
+
+	In one window run:
+
+	# /opt/liquid/cyrus-sasl-2.1.21.LIQUID/sbin/saslauthd -a liquid -d
+
+	In another run:
+
+	# testsaslauthd -f /opt/liquid/cyrus-sasl-2.1.21.LIQUID/state/mux \
+		-u admin -p test123
+
+TODO:
+
+	make it part of the RPM
+
+	configure at install
+
+	make sure curl https: to our server works
+
