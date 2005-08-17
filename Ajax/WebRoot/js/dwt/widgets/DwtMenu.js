@@ -39,7 +39,7 @@ function DwtMenu(parent, style, className, posStyle, dialog) {
 	this._dialog = dialog;
 	
 	var htmlElement = this.getHtmlElement();
-	this._menuListeners = new LsVector();
+	this._menuListeners = new AjxVector();
 	
 	// Don't need to create table for color picker and calendar picker styles
 	if (this._style != DwtMenu.COLOR_PICKER_STYLE && this._style != DwtMenu.CALENDAR_PICKER_STYLE) {
@@ -58,11 +58,11 @@ function DwtMenu(parent, style, className, posStyle, dialog) {
 		DwtMenu._activeMenuIds.add(htmlElement.id);
 		this._isPoppedup = true;
  	}
-	this._popdownAction = new LsTimedAction();
+	this._popdownAction = new AjxTimedAction();
 	this._popdownAction.method = DwtMenu.prototype._doPopdown;
 	this._popdownAction.obj = this;
 	this._popdownActionId = -1;
-	this._popupAction = new LsTimedAction();
+	this._popupAction = new AjxTimedAction();
 	this._popupAction.method = DwtMenu.prototype._doPopup;
 	this._popupAction.obj = this;
 	this._popupActionId = -1;
@@ -89,7 +89,7 @@ DwtMenu.COLOR_PICKER_STYLE =  4;
 DwtMenu.CALENDAR_PICKER_STYLE = 5;
 
 DwtMenu._activeMenuUp = false;
-DwtMenu._activeMenuIds = new LsVector();
+DwtMenu._activeMenuIds = new AjxVector();
 
 DwtMenu.prototype.addMenuListener = 
 function(listener) {
@@ -160,13 +160,13 @@ function(msec, x, y) {
 	if (this._style == DwtMenu.BAR_STYLE) 
 		return;
 	if (this._popdownActionId != -1) {
-		LsTimedAction.cancelAction(this._popdownActionId);
+		AjxTimedAction.cancelAction(this._popdownActionId);
 		this._popdownActionId = -1;
 	} else {
 		if (this._isPoppedup || (this._popupActionId != -1 && msec && msec > 0)) {
 			return;
 		} else if (this._popupActionId != -1){
-			LsTimedAction.cancelAction(this._popupActionId);
+			AjxTimedAction.cancelAction(this._popupActionId);
 			this._popupActionId = -1;
 		}
 		if (!msec) {
@@ -174,7 +174,7 @@ function(msec, x, y) {
 		} else {
 			this._popupAction.params.add(x);
 			this._popupAction.params.add(y);
-			this._popupActionId = LsTimedAction.scheduleAction(this._popupAction, msec);
+			this._popupActionId = AjxTimedAction.scheduleAction(this._popupAction, msec);
 		}
 	}
 }
@@ -184,7 +184,7 @@ function(msec) {
 	if (this._style == DwtMenu.BAR_STYLE) 
 		return;
 	if (this._popupActionId != -1) {
-		LsTimedAction.cancelAction(this._popupActionId);	
+		AjxTimedAction.cancelAction(this._popupActionId);	
 		this._popupActionId = -1;
 	} else {
 		if (!this._isPoppedup || this._popdownActionId != -1) 
@@ -192,7 +192,7 @@ function(msec) {
 		if (msec == null || msec == 0)
 			this._doPopdown();
 		else
-			this._popdownActionId = LsTimedAction.scheduleAction(this._popdownAction, msec);
+			this._popdownActionId = AjxTimedAction.scheduleAction(this._popdownAction, msec);
 	}
 }
 
@@ -435,7 +435,7 @@ function(args) {
 	this._popupActionId = -1;
 	this._isPoppedup = true;
 	if (this._outsideListener) {
-		LsCore.addListener(document.body, "onmousedown", 
+		AjxCore.addListener(document.body, "onmousedown", 
 						   DwtMenu._outsideMouseDownListener);
 	}
 	if (!DwtMenu._activeMenu) {
@@ -466,7 +466,7 @@ function() {
 	
 	// TODO release capture if you have it
 	if (this._outsideListener) {
-		LsCore.removeListener(document.body, "onmousedown", 
+		AjxCore.removeListener(document.body, "onmousedown", 
 							  DwtMenu._outsideMouseDownListener);
 	}
 

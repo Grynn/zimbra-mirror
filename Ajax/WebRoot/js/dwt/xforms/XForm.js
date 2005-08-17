@@ -376,7 +376,7 @@ XForm.prototype.getItems = function () {
 XForm.prototype.outputForm = function () {
 	var t0 = new Date().getTime();
 	
-	var html = new LsBuffer();			// holds the HTML output
+	var html = new AjxBuffer();			// holds the HTML output
 	var items = this.getItems();
 	var indent = "";
 	
@@ -389,7 +389,7 @@ XForm.prototype.outputForm = function () {
 	this._itemsToInsert = {};
 	this._itemsToCleanup = [];
 
-	var updateScript = new LsBuffer();		// holds the script to populate values and show/hide elements based on relevant attibute
+	var updateScript = new AjxBuffer();		// holds the script to populate values and show/hide elements based on relevant attibute
 
 	// in initializeItems(), we guaranteed that there was a single outer item
 	//	and that it is a group that sets certain properties that can be set at
@@ -738,7 +738,7 @@ XForm.prototype.appendToUpdateScript = function (script) {
 //
 
 XForm.prototype.getUpdateScriptStart = function () {
-	return LsBuffer.concat(	
+	return AjxBuffer.concat(	
 			"var t0 = new Date().getTime();\r",
 			
 			"var updateScript;\r",
@@ -754,7 +754,7 @@ XForm.prototype.getUpdateScriptStart = function () {
 
 
 XForm.prototype.getUpdateScriptEnd = function () {
-	return LsBuffer.concat(	
+	return AjxBuffer.concat(	
 			"_____________________________________________________++;\r",
 			"}\r",	// end with (this)
 			"var event = new DwtXFormsEvent(form);\r",

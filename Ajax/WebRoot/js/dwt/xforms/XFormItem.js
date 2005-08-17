@@ -480,7 +480,7 @@ XFormItem.prototype.getElementValueGetterHTML = function () {
 XFormItem.prototype.getChangeHandlerHTML = function() {
 	var elementChangeHandler = this.getElementChangeHandler();
 	if (elementChangeHandler != "onkeypress") {
-		return LsBuffer.concat(" ", elementChangeHandler, "=\"", this.getChangehandlerJSCode() + "\"",this.getKeyPressHandlerHTML());
+		return AjxBuffer.concat(" ", elementChangeHandler, "=\"", this.getChangehandlerJSCode() + "\"",this.getKeyPressHandlerHTML());
 	} else {
 		return this.getKeyPressHandlerHTML();
 	}
@@ -491,14 +491,14 @@ XFormItem.prototype.getChangeHandlerHTML = function() {
 * @author Greg Solovyev
 **/
 XFormItem.prototype.getChangehandlerJSCode = function () {
-	return LsBuffer.concat(this.getElementValueGetterHTML(),this.getExternalChangeHandler());
+	return AjxBuffer.concat(this.getElementValueGetterHTML(),this.getExternalChangeHandler());
 }
 
 XFormItem.prototype.getFocusHandlerHTML = function () {
 	var formId = this.getFormGlobalRef(),
 		itemId = this.getId()
 	;
-	return LsBuffer.concat(
+	return AjxBuffer.concat(
 		" onfocus=\"", formId, ".onFocus('", itemId, "')\"",
 		" onblur=\"", formId, ".onBlur('", itemId, "')\""
 	);
@@ -509,7 +509,7 @@ XFormItem.prototype.getOnActivateHandlerHTML = function() {
 	var method = this.getOnActivateMethod();
 	if (method == null) return "";
 	
-	return LsBuffer.concat(
+	return AjxBuffer.concat(
 			" ", this.getElementChangeHandler(), "=\"", 
 			this.getGlobalRef(),".$onActivate(event||window.event)\""
 		);
@@ -525,7 +525,7 @@ XFormItem.prototype.getOnActivateHandlerHTML = function() {
 XFormItem.prototype.handleKeyUp = function (ev, domItem) {
 	// don't fire off another if we've already set one up.
 	if (this.keyPressDelayHdlr != null) {
-		LsTimedAction.cancelAction(this.keyPressDelayHdlr);
+		AjxTimedAction.cancelAction(this.keyPressDelayHdlr);
 		XForm.keyPressDelayHdlr = null;
 	}
 	var form = this.getForm();
@@ -535,13 +535,13 @@ XFormItem.prototype.handleKeyUp = function (ev, domItem) {
 		DwtUiEvent.setBehaviour(ev, true, false);
 		return false;
 	}	
-	var action = new LsTimedAction();
+	var action = new AjxTimedAction();
 	action.obj = this;
 	action.method = this.handleKeyPressDelay;
 	action.params.add(ev);
 	action.params.add(domItem);
 	//XForm.keyPressDelayHdlr = setTimeout(XForm.handleKeyPressDelay, 250, item, ev, formItem);
-	this.keyPressDelayHdlr = LsTimedAction.scheduleAction(action, 500);
+	this.keyPressDelayHdlr = AjxTimedAction.scheduleAction(action, 500);
 };
 
 XFormItem.prototype.handleKeyDown = function (ev, domItem) {
@@ -584,10 +584,10 @@ XFormItem.prototype.getKeyPressHandlerHTML = function () {
 	 * added handler for onkeypress event in order to be able to update the form before the field looses focus
 	 **/
 	var keydownEv = "onkeydown";
-	if (LsEnv.isNav) {
+	if (AjxEnv.isNav) {
 		keydownEv = "onkeypress";
 	}
-	return LsBuffer.concat(" ", keydownEv,"=\"",this.getGlobalRef(), ".handleKeyDown(event, this)\"",
+	return AjxBuffer.concat(" ", keydownEv,"=\"",this.getGlobalRef(), ".handleKeyDown(event, this)\"",
 						   " onkeyup=\"", this.getGlobalRef(), ".handleKeyUp(event, this)\"");
 };
 
@@ -723,7 +723,7 @@ XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript, inde
 				"} else {\r  ");
 			if(this.focusable) {
 				updateScript.append(
-					"DBG.println(LsDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
+					"DBG.println(AjxDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
 					"item.getForm().tabIdOrder.push(item.getId());\r"
 				);
 			}
@@ -737,7 +737,7 @@ XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript, inde
 				"} else {\r  ");
 			if(this.focusable) {
 				updateScript.append(
-					"DBG.println(LsDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
+					"DBG.println(AjxDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
 					"item.getForm().tabIdOrder.push(item.getId());\r"
 				);
 			}
@@ -749,7 +749,7 @@ XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript, inde
 	} else {
 		if(this.focusable) {
 			updateScript.append(
-				"DBG.println(LsDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
+				"DBG.println(AjxDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
 				"item.getForm().tabIdOrder.push(item.getId());\r"
 			);
 		}
@@ -917,7 +917,7 @@ XFormItem.prototype.updateValueInHTMLSelect = function (newValue, element, selec
 XFormItem.prototype.getChoicesHTML = function(indent) {
 	var choices = this.getNormalizedChoices();
 	if (choices == null) return "";	//throw an error?
-	var html = new LsBuffer();
+	var html = new AjxBuffer();
 	if (indent == null) indent = "";
 
 	this.outputChoicesHTMLStart(html, indent);
@@ -944,7 +944,7 @@ XFormItem.prototype.getChoiceCssClass = function() {
 }
 
 XFormItem.prototype.getChoiceHTML = function (itemNum, value, label, cssClass, indent) {
-	return LsBuffer.concat(indent,"<option value=\"", value, "\">", label,"</option>");
+	return AjxBuffer.concat(indent,"<option value=\"", value, "\">", label,"</option>");
 }
 
 XFormItem.prototype.updateChoicesHTML = function () {
@@ -953,9 +953,9 @@ XFormItem.prototype.updateChoicesHTML = function () {
 	// NOTE: setting the innerHTML of the options doesn't work
 	//	for now, just set the outer HTML of the entire widget
 	// TODO: do this by frobbing the options manually for speed and so things don't flash
-	var html = new LsBuffer();
-	var updateScript = new LsBuffer();	// NOTE: we won't be using this...
-	this.outputHTML(html, new LsBuffer(), "");
+	var html = new AjxBuffer();
+	var updateScript = new AjxBuffer();	// NOTE: we won't be using this...
+	this.outputHTML(html, new AjxBuffer(), "");
 	this.getContainer().innerHTML = html.toString();
 	return;
 
@@ -1128,7 +1128,7 @@ XFormItem.prototype.getNormalizedChoices = function () {
 	var normalizedChoices;
 	if (typeof choices.getChoices == "function") {
 		normalizedChoices = choices.getChoices();
-	} else if (LsUtil.isArray(choices)) {
+	} else if (AjxUtil.isArray(choices)) {
 		// it's either an array of objects or an array of strings
 		if (typeof choices[0] == "object") {
 			// list of objects
@@ -1837,7 +1837,7 @@ Checkbox_XFormItem.prototype.getElementValueGetterHTML = function () {
 		if (trueValue == null) trueValue = true;
 		if (falseValue == null) falseValue = false;
 	
-		return LsBuffer.concat(
+		return AjxBuffer.concat(
 			"var value = (this.checked ? ",  trueValue, " : ", falseValue, ");"
 		);
 	} else {
@@ -1951,7 +1951,7 @@ Anchor_XFormItem.prototype.getAnchorTag = function(href, label) {
 	if (label == null) label = this.getLabel();
 	
 	var inNewWindow = this.getShowInNewWindow();
-	return LsBuffer.concat(
+	return AjxBuffer.concat(
 			'<a href=', href, 
 				this.getOnActivateHandlerHTML(), 
 				(inNewWindow ? ' target="_blank"' : ''),
@@ -2047,7 +2047,7 @@ Image_XFormItem.prototype.updateElement = function (src) {
 		var path = this.getSrcPath();
 		if (path != null) src = path + src;
 
-		var output = LsBuffer.concat(
+		var output = AjxBuffer.concat(
 			"<img id=\"", this.getId(), "\" border=0 ", this.getCssString(),
 				" src=\"", src, "\"",
 			">"
@@ -2087,7 +2087,7 @@ Ls_Image_XFormItem.prototype.updateElement = function (src) {
  		// prepend the image path
  		var path = this.getSrcPath();
  		if (path != null) src = path + src;
-		var output = LsImg.getImageHtml(src, "position:relative;")
+		var output = AjxImg.getImageHtml(src, "position:relative;")
  	}
  	this.getContainer().innerHTML = output;
 };
@@ -2112,7 +2112,7 @@ Select1_XFormItem.prototype.initFormItem = function () {
 	if (choices == null || choices.constructor != XFormChoices) return;
 
 	//	...set up to receive notification when its choices change
-	var listener = new LsListener(this, this.dirtyDisplay);
+	var listener = new AjxListener(this, this.dirtyDisplay);
 	choices.addListener(DwtEvent.XFORMS_CHOICES_CHANGED, listener);
 }
 
@@ -2522,16 +2522,16 @@ Repeat_XFormItem.prototype.updateElement = function (value) {
 		var table = element.getElementsByTagName("table")[0];
 		var tbody = element.getElementsByTagName("tbody")[0];
 
-		if (LsEnv.isIE) {
+		if (AjxEnv.isIE) {
 			var tempDiv = this.createElement("temp",null,"div","");
 			tempDiv.display = "none";
 		}
-		var updateScript = new LsBuffer();
+		var updateScript = new AjxBuffer();
 		while (this.items.length < itemsToShow) {
 			var newItems = this.makeRepeatInstance(this);
-			var html = new LsBuffer();
+			var html = new AjxBuffer();
 			form.outputItemList(newItems, this, html, updateScript, "        ", this.getNumCols(), 0, true);
-			if (LsEnv.isIE) {
+			if (AjxEnv.isIE) {
 				tempDiv.innerHTML = "<table><tr>" + html + "</table>";
 				var rows = tempDiv.getElementsByTagName("table")[0].rows;
 				for (var r = 0; r < rows.length; r++) {
@@ -3018,7 +3018,7 @@ Dwt_Button_XFormItem.prototype.constructWidget = function () {
 			kp = styleArr[i].split(":");
 			if (kp.length > 0){
 				if (kp[0] == "float"){
-					kp[0] = (LsEnv.isIE)? "styleFloat": "cssFloat";
+					kp[0] = (AjxEnv.isIE)? "styleFloat": "cssFloat";
 				}
 				el.style[kp[0]] = kp[1];
 			}
@@ -3028,7 +3028,7 @@ Dwt_Button_XFormItem.prototype.constructWidget = function () {
 
 	var onActivateMethod = this.getOnActivateMethod();
 	if (onActivateMethod != null) {
-		var ls = new LsListener(this, onActivateMethod);
+		var ls = new AjxListener(this, onActivateMethod);
 		widget.addSelectionListener(ls);
 	}
 
@@ -3074,7 +3074,7 @@ Dwt_Select_XFormItem.prototype.constructWidget = function () {
 			"var widget = event._args.selectObj;\r"
 		  + "value = event._args.newValue; " + this.getExternalChangeHandler()
 	);
-	var ls = new LsListener(this.getForm(), onChangeFunc);
+	var ls = new AjxListener(this.getForm(), onChangeFunc);
 	widget.addChangeListener(ls);
 
 	if (this._enabled !== void 0) {
@@ -3132,7 +3132,7 @@ Dwt_Date_XFormItem.prototype.constructWidget = function () {
 	var cal = new DwtCalendar(menu);
 	cal._invokingForm = this.getForm();
 	cal._invokingFormItemId = this.getId();
-	cal.addSelectionListener(new LsListener(this, this._calOnChange));
+	cal.addSelectionListener(new AjxListener(this, this._calOnChange));
 	widget.__cal = cal;
 	
 	// create a static instance of DwtCalendar that all instances will show
@@ -3140,14 +3140,14 @@ Dwt_Date_XFormItem.prototype.constructWidget = function () {
 		// DO WE NEED TO CONSTRUCT A MENU HERE FIRST???
 		//	CAN THE MENU BE SHARED???
 	//	var cal = this.constructor._calendarPopup = new DwtCalendar(menu);
-	//	cal.addSelectionListener(new LsListener(this, this._calOnChange));
+	//	cal.addSelectionListener(new AjxListener(this, this._calOnChange));
 	//}
 
 	// We have to add listeners both for the drop down cell, and 
 	// the button proper, to get notified when any part of the 
 	// button is hit.
-	//widget.addSelectionListener(new LsListener(this, this._prePopup));
-	//widget.addDropDownSelectionListener(new LsListener(this, this._prePopup));
+	//widget.addSelectionListener(new AjxListener(this, this._prePopup));
+	//widget.addDropDownSelectionListener(new AjxListener(this, this._prePopup));
 	// NOTE: WHEN THE BUTTON IS PRESSED, WE WANT TO CALL:
 	//var cal = this.constructor._calendarPopup;
 	//cal.setDate(this.widget._date, true);
@@ -3196,7 +3196,7 @@ function Dwt_Time_XFormItem() {
 	this.items[1].choices = Dwt_Time_XFormItem.TIME_MINUTE_CHOICES;
 	this.items[1].getDisplayValue = function (newValue) {
 		if (!(newValue instanceof Date)) newValue = new Date();
-		var ret = LsDateUtil._pad(LsDateUtil.getRoundedMins(newValue, 15));
+		var ret = AjxDateUtil._pad(AjxDateUtil.getRoundedMins(newValue, 15));
 		return ret;
 	};
 	this.items[2].type = _DWT_SELECT_;
@@ -3377,7 +3377,7 @@ Dwt_AddRemove_XFormItem.prototype.updateWidget = function(newvalue) {
 		this.widget.removeStateChangeListener(this._stateChangeListener);
 	}
 	else {
-		this._stateChangeListener = new LsListener(this, Dwt_AddRemove_XFormItem.prototype._handleStateChange)
+		this._stateChangeListener = new AjxListener(this, Dwt_AddRemove_XFormItem.prototype._handleStateChange)
 	}
 
 	var sourceItems = this.getSourceInstanceValue();
@@ -3501,7 +3501,7 @@ Dwt_TabBar_XFormItem.prototype.updateWidget = function(newvalue) {
 		this.widget.removeStateChangeListener(this._stateChangeListener);
 	}
 	else {
-		this._stateChangeListener = new LsListener(this, Dwt_TabBar_XFormItem.prototype._handleStateChange);
+		this._stateChangeListener = new AjxListener(this, Dwt_TabBar_XFormItem.prototype._handleStateChange);
 	}
 	
 	var tabKey = this._value2tabkey[newvalue];

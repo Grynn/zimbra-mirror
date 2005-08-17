@@ -13,7 +13,7 @@ function DwtTree(parent, style, className, posStyle) {
 			style |= DwtTree.SINGLE_STYLE;
 		this._style = style;
 	}
-	this._selectedItems = new LsVector();
+	this._selectedItems = new AjxVector();
 	this._selEv = new DwtSelectionEvent(true);
 }
 

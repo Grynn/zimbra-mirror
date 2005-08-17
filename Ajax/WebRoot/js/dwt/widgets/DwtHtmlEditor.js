@@ -130,7 +130,7 @@ DwtHtmlEditor.prototype.focus =
 function() {
 	this._getIframeWin().focus();
 	// Hack to fix IE focusing bug
-	if (LsEnv.isIE) {
+	if (AjxEnv.isIE) {
 		if (this._currInsPt) {
 			if (this._currInsPt.text.length <= 1)
 				this._currInsPt.collapse(false);
@@ -166,7 +166,7 @@ function(enable) {
 
 DwtHtmlEditor.prototype.isHtmlEditingSupported =
 function() {
-	return (!LsEnv.isGeckoBased && !LsEnv.isIE) ? false : true;
+	return (!AjxEnv.isGeckoBased && !AjxEnv.isIE) ? false : true;
 }
 
 /**
@@ -219,15 +219,15 @@ function(mode, convert) {
 		var textArea = Dwt.getDomObj(doc, this._textAreaId);
 		var iFrame;
 		if (this._iFrameId != null) {
-			this._getIframeDoc().body.innerHTML = (convert) ? LsStringUtil.htmlEncodeSpace(textArea.value) : textArea.value;
+			this._getIframeDoc().body.innerHTML = (convert) ? AjxStringUtil.htmlEncodeSpace(textArea.value) : textArea.value;
 			iFrame = Dwt.getDomObj(doc, this._iFrameId);
 		} else {
-			iFrame = this._initHtmlMode((convert) ? LsStringUtil.htmlEncodeSpace(textArea.value) : textArea.value);
+			iFrame = this._initHtmlMode((convert) ? AjxStringUtil.htmlEncodeSpace(textArea.value) : textArea.value);
 		}
 		Dwt.setVisible(textArea, false);
 		Dwt.setVisible(iFrame, true);
 		// XXX: mozilla hack
-		if (LsEnv.isGeckoBased)
+		if (AjxEnv.isGeckoBased)
 			this._enableDesignMode([this._getIframeDoc()]);
 	} else {
 		var textArea = this._textAreaId != null
@@ -292,7 +292,7 @@ function(family, style, size, color, hiliteColor) {
 		this._execCommand(DwtHtmlEditor._FONT_COLOR, color);
 
 	if (hiliteColor)
-		this._execCommand((LsEnv.isIE) ? DwtHtmlEditor._FONT_HILITE_IE : DwtHtmlEditor._FONT_HILITE, hiliteColor);
+		this._execCommand((AjxEnv.isIE) ? DwtHtmlEditor._FONT_HILITE_IE : DwtHtmlEditor._FONT_HILITE, hiliteColor);
 }
 
 DwtHtmlEditor.prototype.setJustification =
@@ -363,17 +363,17 @@ function(content) {
 	this._stateEvent = new DwtHtmlEditorStateEvent();
 	this._stateEvent.dwtObj = this;
 	
-	this._updateStateAction = new LsTimedAction();
+	this._updateStateAction = new AjxTimedAction();
 	this._updateStateAction.obj = this;
 	this._updateStateAction.method = DwtHtmlEditor.prototype._updateState;
 	
 	this._pendingContent = content || "";
 	
 	// IE can sometimes race ahead and execute script before the underlying component is created
-	var timedAction = new LsTimedAction();
+	var timedAction = new AjxTimedAction();
 	timedAction.obj = this;
 	timedAction.method = DwtHtmlEditor.prototype._finishHtmlModeInit;
-	LsTimedAction.scheduleAction(timedAction, 100);
+	AjxTimedAction.scheduleAction(timedAction, 100);
 	
 	return iFrame;
 }
@@ -423,7 +423,7 @@ function() {
 
 DwtHtmlEditor.prototype._getParentElement = 
 function() {
-	if (LsEnv.isIE) {
+	if (AjxEnv.isIE) {
 		var iFrameDoc = this._getIframeDoc();
 		var selection = iFrameDoc.selection;
 		var range = selection.createRange();
@@ -454,7 +454,7 @@ DBG.println("P: " + p);
 DwtHtmlEditor.prototype._getRange =
 function() {
 	var iFrameDoc = this._getIframeDoc();
-	if (LsEnv.isIE) {
+	if (AjxEnv.isIE) {
 		return iFrameDoc.selection;
 	} else {
 		this.focus();
@@ -476,9 +476,9 @@ function(iFrame, iFrameDoc) {
 	var events = ["mouseup", "keydown", "keypress", "drag", "mousedown"];
 	var me = this;
 	// TODO - Hopefully this closure doesn't cause a memory leak!!!!
-	var func = function (evt) {return me._handleEditorEvent(LsEnv.isIE ? iFrame.contentWindow.event : evt);};
+	var func = function (evt) {return me._handleEditorEvent(AjxEnv.isIE ? iFrame.contentWindow.event : evt);};
 	
-	if (LsEnv.isIE) {
+	if (AjxEnv.isIE) {
 		for (var i in events)
 			iFrameDoc.attachEvent("on" + events[i], func);
 		
@@ -531,7 +531,7 @@ function(ev) {
 					
 				default:
 					// IE Has full on keyboard shortcuts
-					//if (!LsEnv.isIE)
+					//if (!AjxEnv.isIE)
 						cmd = DwtHtmlEditor._KEY2CMDS[key];
 					break;
 			}
@@ -551,7 +551,7 @@ function(ev) {
 	// Set's up the a range for the current ins point or selection. This is IE only because the iFrame can
 	// easily lose focus (e.g. by clicking on a button in the toolbar) and we need to be able to get back
 	// to the correct insertion point/selection.
-	if (LsEnv.isIE) {
+	if (AjxEnv.isIE) {
 		var iFrameDoc = this._getIframeDoc();
 		this._currInsPt = iFrameDoc.selection.createRange();
 		// If just at the insertion point, then collapse so that we don't get
@@ -563,9 +563,9 @@ function(ev) {
 	}
 	
 	if (this._stateUpdateActionId != null) 
-		LsTimedAction.cancelAction(this._stateUpdateActionId);
+		AjxTimedAction.cancelAction(this._stateUpdateActionId);
 	
-	this._stateUpdateActionId = LsTimedAction.scheduleAction(this._updateStateAction, 100);
+	this._stateUpdateActionId = AjxTimedAction.scheduleAction(this._updateStateAction, 100);
 
 	return retVal;
 }
@@ -605,7 +605,7 @@ function() {
 	}
 	
 	ev.fontSize = iFrameDoc.queryCommandValue(DwtHtmlEditor._FONT_SIZE);
-	ev.backgroundColor = iFrameDoc.queryCommandValue((LsEnv.isIE) ? "backcolor" : "hilitecolor");
+	ev.backgroundColor = iFrameDoc.queryCommandValue((AjxEnv.isIE) ? "backcolor" : "hilitecolor");
 	ev.color = iFrameDoc.queryCommandValue("forecolor");
 	ev.justification = null;
 	ev.direction = null;
@@ -657,12 +657,12 @@ function(params) {
 		iFrameDoc.designMode = "on";
 	} catch (ex) {
 		//Gecko may take some time to enable design mode..
-		if (LsEnv.isGeckoBased) {
-			var ta = new LsTimedAction();
+		if (AjxEnv.isGeckoBased) {
+			var ta = new AjxTimedAction();
 			ta.obj = this;
 			ta.method = this._enableDesignMode;
 			ta.params.add(iFrameDoc);
-			LsTimedAction.scheduleAction(ta, 10);
+			AjxTimedAction.scheduleAction(ta, 10);
 			return true;
 		} else {
 			// TODO Should perhaps throw an exception?
@@ -678,13 +678,13 @@ function() {
 		iframeDoc.body.innerHTML = this._pendingContent;
 		//this._pendingContent = null;
 		// XXX: mozilla hack
-		if (LsEnv.isGeckoBased)
+		if (AjxEnv.isGeckoBased)
 			this._enableDesignMode([iframeDoc]);
 	} catch (ex) {
-		var ta = new LsTimedAction();
+		var ta = new AjxTimedAction();
 		ta.obj = this;
 		ta.method = this._setContentOnTimer;
-		LsTimedAction.scheduleAction(ta, 10);
+		AjxTimedAction.scheduleAction(ta, 10);
 		return true;
 	}
 }
@@ -710,5 +710,5 @@ function(command, option) {
 DwtHtmlEditor.prototype._convertHtml2Text =
 function() {
 	var iFrameDoc = this._getIframeDoc();
-	return LsStringUtil.convertHtml2Text(iFrameDoc.body);
+	return AjxStringUtil.convertHtml2Text(iFrameDoc.body);
 }

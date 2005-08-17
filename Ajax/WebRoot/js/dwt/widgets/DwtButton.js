@@ -29,13 +29,13 @@ function DwtButton(parent, style, className, posStyle, actionTiming) {
 	this._setMouseEventHdlrs();
 	this._setIERolloverEventHdlrs();
 	this._setKeyEventHdlrs();
-	this._mouseOverListener = new LsListener(this, DwtButton.prototype._mouseOverListener);
-	this._mouseOutListener = new LsListener(this, DwtButton.prototype._mouseOutListener);
-	this._mouseDownListener = new LsListener(this, DwtButton.prototype._mouseDownListener);
-	this._mouseUpListener = new LsListener(this, DwtButton.prototype._mouseUpListener);
+	this._mouseOverListener = new AjxListener(this, DwtButton.prototype._mouseOverListener);
+	this._mouseOutListener = new AjxListener(this, DwtButton.prototype._mouseOutListener);
+	this._mouseDownListener = new AjxListener(this, DwtButton.prototype._mouseDownListener);
+	this._mouseUpListener = new AjxListener(this, DwtButton.prototype._mouseUpListener);
 	this._addMouseListeners();
 	
-	this._dropDownEvtMgr = new LsEventMgr();
+	this._dropDownEvtMgr = new AjxEventMgr();
 
 	this._toggled = false;
 
@@ -116,12 +116,12 @@ DwtButton.prototype.setDropDownImages = function (enabledImg, disImg, hovImg, de
  */
 DwtButton.prototype._addMouseListeners = 
 function() {
-	if (LsEnv.isIE)	{ 
+	if (AjxEnv.isIE)	{ 
 		this.addListener(DwtEvent.ONMOUSEENTER, this._mouseOverListener);
 	} else {
 		this.addListener(DwtEvent.ONMOUSEOVER, this._mouseOverListener);
 	}
-	if (LsEnv.isIE) {
+	if (AjxEnv.isIE) {
 		this.addListener(DwtEvent.ONMOUSELEAVE, this._mouseOutListener);
 	} else {
 		this.addListener(DwtEvent.ONMOUSEOUT, this._mouseOutListener);
@@ -135,12 +135,12 @@ function() {
  */
 DwtButton.prototype._removeMouseListeners =
 function() {
-	if (LsEnv.isIE) {
+	if (AjxEnv.isIE) {
 		this.removeListener(DwtEvent.ONMOUSEENTER, this._mouseOverListener);
 	} else {
 		this.removeListener(DwtEvent.ONMOUSEOVER, this._mouseOverListener);
 	}
-	if (LsEnv.isIE) {
+	if (AjxEnv.isIE) {
 		this.removeListener(DwtEvent.ONMOUSELEAVE, this._mouseOutListener);
 	} else {
 		this.removeListener(DwtEvent.ONMOUSEOUT, this._mouseOutListener);
@@ -166,7 +166,7 @@ function(enabled) {
 			// set event handler for pull down menu if applicable
 			if (this._menu) {
 				this._setupDropDownCellMouseHandlers();
-				LsImg.setImage(this._dropDownCell, this._dropDownImg);
+				AjxImg.setImage(this._dropDownCell, this._dropDownImg);
 			}
 		} else {
 			this.setClassName(this._origClassName); // clear activated or triggered
@@ -174,7 +174,7 @@ function(enabled) {
 			// remove event handlers for pull down menu if applicable
 			if (this._menu) {
 				this._removeDropDownCellMouseHandlers();
-				LsImg.setImage(this._dropDownCell, this._dropDownDisImg);
+				AjxImg.setImage(this._dropDownCell, this._dropDownDisImg);
 			}
 		}
 	}
@@ -208,7 +208,7 @@ DwtButton.prototype.setMenu =
 		if (this._dropDownImg == null) this._dropDownImg = DwtImg.SELECT_PULL_DOWN;
 		if (this._dropDownDisImg == null) this._dropDownDisImg = DwtImg.SELECT_PULL_DOWN_DISABLED;
 		if (this._dropDownHovImg == null) this._dropDownHovImg = DwtImg.SELECT_PULL_DOWN_ENABLED;
-		LsImg.setImage(this._dropDownCell, this._dropDownImg);
+		AjxImg.setImage(this._dropDownCell, this._dropDownImg);
 
 		this._menu.setAssociatedElementId(this._dropDownCell.id);
 		// set event handler if applicable
@@ -314,7 +314,7 @@ function(ev) {
     }
     this.setClassName(this._activatedClassName);
     if (this._dropDownCell && this._dropDownHovImg && !this.noMenuBar) {
-		LsImg.setImage(this._dropDownCell, this._dropDownHovImg);
+		AjxImg.setImage(this._dropDownCell, this._dropDownHovImg);
     }
     ev._stopPropagation = true;
 }
@@ -323,7 +323,7 @@ function(ev) {
 DwtButton.prototype._mouseDownListener = 
 function(ev) {
     if (this._dropDownCell && this._dropDownDepImg) {
-		LsImg.setImage(this._dropDownCell, this._dropDownDepImg);
+		AjxImg.setImage(this._dropDownCell, this._dropDownDepImg);
     }
 	switch (this._actionTiming) {
 	  case DwtButton.ACTION_MOUSEDOWN:
@@ -379,7 +379,7 @@ function (){
 DwtButton.prototype._mouseUpListener = 
 function(ev) {
     if (this._dropDownCell && this._dropDownHovImg && !this.noMenuBar){
-		LsImg.setImage(this._dropDownCell, this._dropDownHovImg);
+		AjxImg.setImage(this._dropDownCell, this._dropDownHovImg);
     }	
 	switch (this._actionTiming) {
 	  case DwtButton.ACTION_MOUSEDOWN:
@@ -425,7 +425,7 @@ function(ev) {
 	this._setMouseOutClassName();
 
     if (this._dropDownCell){
-		LsImg.setImage(this._dropDownCell, this._dropDownImg);
+		AjxImg.setImage(this._dropDownCell, this._dropDownImg);
     }	
 }
 
@@ -434,7 +434,7 @@ function(ev) {
 DwtButton._dropDownCellMouseDownHdlr = 
 function(ev) {
     if (this._depImg){
-		LsImg.setImage(this, this._depImg);
+		AjxImg.setImage(this, this._depImg);
     }	
 
 	DwtEventManager.notifyListeners(DwtEvent.ONMOUSEDOWN, ev);
@@ -462,7 +462,7 @@ function(ev) {
 DwtButton._dropDownCellMouseUpHdlr = 
 function(ev) {
     if (this._hovImg && !this.noMenuBar) {
-		LsImg.setImage(this, this._hovImg);
+		AjxImg.setImage(this, this._hovImg);
     }	
 
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);

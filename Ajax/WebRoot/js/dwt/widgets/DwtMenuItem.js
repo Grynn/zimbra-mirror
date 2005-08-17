@@ -57,10 +57,10 @@ function DwtMenuItem(parent, style, radioGroupId, index, className, posStyle) {
 			this._createCascadeStyle();
 	}
 
-	this._mouseOverListener = new LsListener(this, DwtMenuItem.prototype._mouseOverListener);
-	this._mouseOutListener = new LsListener(this, DwtMenuItem.prototype._mouseOutListener);
-	this._mouseUpListener = new LsListener(this, DwtMenuItem.prototype._mouseUpListener);
-	this._mouseDownListener = new LsListener(this, DwtMenuItem.prototype._mouseDownListener);
+	this._mouseOverListener = new AjxListener(this, DwtMenuItem.prototype._mouseOverListener);
+	this._mouseOutListener = new AjxListener(this, DwtMenuItem.prototype._mouseOutListener);
+	this._mouseUpListener = new AjxListener(this, DwtMenuItem.prototype._mouseUpListener);
+	this._mouseDownListener = new AjxListener(this, DwtMenuItem.prototype._mouseDownListener);
 	this.addListener(DwtEvent.ONMOUSEOVER, this._mouseOverListener);
 	this.addListener(DwtEvent.ONMOUSEOUT, this._mouseOutListener);
 	this.addListener(DwtEvent.ONMOUSEUP, this._mouseUpListener);
@@ -70,7 +70,7 @@ function DwtMenuItem(parent, style, radioGroupId, index, className, posStyle) {
 		parent._addItem(this, index);
 	this.setCursor("default");
 	this._menu = null;
-	this._menuDisposeListener = new LsListener(this, DwtMenuItem.prototype._menuDisposed)
+	this._menuDisposeListener = new AjxListener(this, DwtMenuItem.prototype._menuDisposed)
 }
 
 DwtMenuItem.prototype = new DwtComposite;
@@ -141,9 +141,9 @@ function(checked, ev, skipNotify) {
 		
 		if (checked) {
 			if (this._style == DwtMenuItem.CHECK_STYLE) {
-				LsImg.setImage(this._checkedCell, DwtImg.MENU_CHECK);
+				AjxImg.setImage(this._checkedCell, DwtImg.MENU_CHECK);
 			} else {
-				LsImg.setImage(this._checkedCell, DwtImg.MENU_RADIO);
+				AjxImg.setImage(this._checkedCell, DwtImg.MENU_RADIO);
 				// This will cause the parent menu to deselect the currently selected radio item
 				this.parent._radioItemSelected(this, skipNotify);
 			}
@@ -151,7 +151,7 @@ function(checked, ev, skipNotify) {
 			if (gp && (gp instanceof DwtButton) && (gp._followIconStyle == this._style))
 				gp.setImage(this._imageInfo);
 		} else {
-			LsImg.setImage(this._checkedCell, DwtImg.BLANK9);
+			AjxImg.setImage(this._checkedCell, DwtImg.BLANK9);
 		}
 		
 		if (skipNotify) return;
@@ -224,7 +224,7 @@ function(imageInfo) {
 DwtMenuItem.prototype._setImage =
 function(imageInfo) {
 	if (this._style != DwtMenuItem.SEPARATOR_STYLE) {
-		LsImg.setImage(this._iconCell, imageInfo);
+		AjxImg.setImage(this._iconCell, imageInfo);
 	}
 }
 
@@ -248,7 +248,7 @@ function(menu) {
 	if (this._style == DwtMenuItem.CASCADE_STYLE || this._style == DwtMenuItem.CHECK_STYLE
 		|| this._style == DwtMenuItem.RADIO_STYLE) {
 		if (menu) {
-			LsImg.setImage(this._cascCell, DwtImg.CASCADE);
+			AjxImg.setImage(this._cascCell, DwtImg.CASCADE);
 		} else if (!menu) {
 			this._cascCell.innerHTML = "";
 		}

@@ -9,7 +9,7 @@ function DwtToolBar(parent, className, posStyle, cellSpacing, cellPadding, style
 	this._table.border = 0;
 	this._table.cellPadding = cellPadding ? cellPadding : 0;
 	this._table.cellSpacing = cellSpacing ? cellSpacing : 0;
-	this._menuListeners = new LsVector();
+	this._menuListeners = new AjxVector();
 	this.getHtmlElement().appendChild(this._table);
 	this._table.backgroundColor = DwtCssStyle.getProperty(this.parent.getHtmlElement(), "background-color");
 
@@ -104,7 +104,7 @@ function(type, element, index) {
 		col.vAlign = "middle";
 		col.noWrap = true;
 		// bug fix #33 - IE defines box model differently
-		if (LsEnv.isIE)
+		if (AjxEnv.isIE)
 			col.style.paddingRight = "4px";
 
 		if (type == DwtToolBar.FILLER) {

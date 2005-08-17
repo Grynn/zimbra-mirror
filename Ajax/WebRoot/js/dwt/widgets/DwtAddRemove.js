@@ -114,7 +114,7 @@ DwtAddRemove.prototype.setSourceItems = function(items) {
 DwtAddRemove.prototype.removeAllSourceItems = function() {
 	// DwtListView#set calls removeAll and setUI
 	//this._sourceList.removeAll();
-	var list = new LsVector();
+	var list = new AjxVector();
 	this._sourceList.set(list);
 		
 	this._addAllButton.setEnabled(false);
@@ -158,7 +158,7 @@ DwtAddRemove.prototype.setTargetItems = function(items) {
 DwtAddRemove.prototype.removeAllTargetItems = function(skipNotify) {
 	// DwtListView#set calls removeAll and setUI
 	//this._targetList.removeAll(skipNotify);
-	var list = new LsVector();
+	var list = new AjxVector();
 	this._targetList.set(list);
 		
 	this._removeButton.setEnabled(false);
@@ -293,7 +293,7 @@ DwtAddRemove.prototype._createHTML = function(listClassName) {
 	var controlsDiv = row.insertCell(row.cells.length);
 	controlsDiv.id = controlsDivId;
 	controlsDiv.align = "center";
-	if (LsEnv.isIE) {
+	if (AjxEnv.isIE) {
 		controlsDiv.style.paddingRight = "4px";
 	}
 	
@@ -314,26 +314,26 @@ DwtAddRemove.prototype._createHTML = function(listClassName) {
 
 	// initialize controls
 	this._sourceList._setNoResultsHtml = new Function();
-	this._sourceList.addSelectionListener(new LsListener(this, this._sourceListListener));
+	this._sourceList.addSelectionListener(new AjxListener(this, this._sourceListListener));
 
 	this._addAllButton.setText(DwtMsg.addAll);
 	this._addAllButton.setEnabled(false);
-	this._addAllButton.addSelectionListener(new LsListener(this, this._addAllButtonListener));
+	this._addAllButton.addSelectionListener(new AjxListener(this, this._addAllButtonListener));
 
 	this._addButton.setText(DwtMsg.add);
 	this._addButton.setEnabled(false);
-	this._addButton.addSelectionListener(new LsListener(this, this._addButtonListener));
+	this._addButton.addSelectionListener(new AjxListener(this, this._addButtonListener));
 	
 	this._removeButton.setText(DwtMsg.remove);
 	this._removeButton.setEnabled(false);
-	this._removeButton.addSelectionListener(new LsListener(this, this._removeButtonListener));
+	this._removeButton.addSelectionListener(new AjxListener(this, this._removeButtonListener));
 
 	this._removeAllButton.setText(DwtMsg.removeAll);
 	this._removeAllButton.setEnabled(false);
-	this._removeAllButton.addSelectionListener(new LsListener(this, this._removeAllButtonListener));
+	this._removeAllButton.addSelectionListener(new AjxListener(this, this._removeAllButtonListener));
 
 	this._targetList._setNoResultsHtml = new Function();
-	this._targetList.addSelectionListener(new LsListener(this, this._targetListListener));
+	this._targetList.addSelectionListener(new AjxListener(this, this._targetListListener));
 
 	// insert controls into html
 	sourceDiv.appendChild(this._sourceList.getHtmlElement());
@@ -372,9 +372,9 @@ DwtAddRemoveListView.prototype._createItemHtml = function(item, now, isDnDIcon) 
 		"DwtAddRemoveListViewRow";
 	div.className = div._styleClass;
 	if( typeof (item) == "object") {
-		div.innerHTML = LsStringUtil.htmlEncode(item.toString());
+		div.innerHTML = AjxStringUtil.htmlEncode(item.toString());
 	} else {
-		div.innerHTML = LsStringUtil.htmlEncode(String(item));
+		div.innerHTML = AjxStringUtil.htmlEncode(String(item));
 	}
 	this.associateItemWithElement(item, div, DwtListView.TYPE_LIST_ITEM);
 	return div;

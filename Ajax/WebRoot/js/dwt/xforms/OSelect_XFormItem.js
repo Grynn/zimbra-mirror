@@ -102,22 +102,22 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 	menu.style.display = "block";
 
 	if (this.$hideListener == null) {
-		this.$hideListener = new LsListener(this, this.hideMenu);
+		this.$hideListener = new AjxListener(this, this.hideMenu);
 	}
 	
 	if (this.$outsideMouseDownListener == null) {
-		this.$outsideMouseDownListener = new LsListener(this, this.onOutsideMouseDown);
+		this.$outsideMouseDownListener = new AjxListener(this, this.onOutsideMouseDown);
 	}
 
-	LsCore.addListener(window, "onmouseup", this.$hideListener);
-	LsCore.addListener(document.body, "onmousedown", this.$outsideMouseDownListener);
+	AjxCore.addListener(window, "onmouseup", this.$hideListener);
+	AjxCore.addListener(document.body, "onmousedown", this.$outsideMouseDownListener);
 	
 }
 
 OSelect1_XFormItem.prototype.hideMenu = function () {
 	// hide the menu on a timer so we don't have to deal with wierd selection bugs
 	setTimeout(this.getFormGlobalRef()+".getElement('" + this.getMenuElementId() + "').style.display = 'none'", 10);
-	LsCore.removeListener(window, "onmouseup", this.$hideListener);
+	AjxCore.removeListener(window, "onmouseup", this.$hideListener);
 }
 
 OSelect1_XFormItem.prototype.onOutsideMouseDown = function (ev) {
@@ -138,7 +138,7 @@ OSelect1_XFormItem.prototype.onOutsideMouseDown = function (ev) {
 			}
 		}
 	}
-	LsCore.removeListener(document.body, "onmousedown", this.$outsideMouseDownListener);	
+	AjxCore.removeListener(document.body, "onmousedown", this.$outsideMouseDownListener);	
 	if(!found)
 		this.hideMenu();
 		
@@ -189,21 +189,21 @@ OSelect1_XFormItem.prototype.showArrowOver = function () {
 	if(!this._enabled)
 		return;
 		
-	LsImg.setImage(this.getArrowElement(), DwtImg.SELECT_PULL_DOWN_ENABLED);
+	AjxImg.setImage(this.getArrowElement(), DwtImg.SELECT_PULL_DOWN_ENABLED);
 }
 
 OSelect1_XFormItem.prototype.showArrowOut = function () {
 	if(!this._enabled)
 		return;
 		
-	LsImg.setImage(this.getArrowElement(), DwtImg.SELECT_PULL_DOWN);
+	AjxImg.setImage(this.getArrowElement(), DwtImg.SELECT_PULL_DOWN);
 }
 
 OSelect1_XFormItem.prototype.showArrowDown = function () {
 	if(!this._enabled)
 		return;
 		
-	LsImg.setImage(this.getArrowElement(), DwtImg.SELECT_PULL_DOWN_DEPRESSED);
+	AjxImg.setImage(this.getArrowElement(), DwtImg.SELECT_PULL_DOWN_DEPRESSED);
 }
 
 OSelect1_XFormItem.prototype.dehiliteChoice = function(itemNum) {
@@ -300,12 +300,12 @@ OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput, updateScript, in
 
 OSelect1_XFormItem.prototype.getArrowButtonHTML = function () {
 	var ref = this.getFormGlobalRef() + ".getItemById('"+ this.getId()+ "')";
-	return LsBuffer.concat("<div id=", this.getId(), "_arrow_button",
+	return AjxBuffer.concat("<div id=", this.getId(), "_arrow_button",
 	 " onmouseover=\"", ref, ".showArrowOver();\"",
  	 " onmouseout=\"", ref, ".showArrowOut();\"",
  	 " onmousedown=\"", ref, ".showArrowDown();\"", 	 
- 	 ">", LsImg.getImageHtml(DwtImg.SELECT_PULL_DOWN), "</div>");
-//	return LsImg.getImageHtml(DwtImg.SELECT_PULL_DOWN, "", LsBuffer.concat("id=",this.getId(), "_arrow_button"));
+ 	 ">", AjxImg.getImageHtml(DwtImg.SELECT_PULL_DOWN), "</div>");
+//	return AjxImg.getImageHtml(DwtImg.SELECT_PULL_DOWN, "", AjxBuffer.concat("id=",this.getId(), "_arrow_button"));
 }
 
 OSelect1_XFormItem.prototype.getTableCssClass = function () {
@@ -343,7 +343,7 @@ OSelect1_XFormItem.prototype.getChoiceHTML = function (itemNum, value, label, cs
 	if (this.showCheck == true) {
 		checkTdHtml = "<td width=10 class=" + cssClass + "_check></td>";
 	}
-	return LsBuffer.concat(indent,
+	return AjxBuffer.concat(indent,
 		"<tr>", checkTdHtml, "<td width='*' class=", cssClass, 
 			" onmouseover=\"",ref, ".onChoiceOver(", itemNum,", event||window.event)\"",
 			" onmouseout=\"",ref, ".onChoiceOut(", itemNum,", event||window.event)\"",
@@ -362,12 +362,12 @@ OSelect1_XFormItem.prototype.setElementEnabled = function(enabled) {
 	var table = this.getForm().getElement(this.getId()).getElementsByTagName("table")[0];
 	if(enabled) {
 		this.getDisplayElement().className = this.getDisplayCssClass();
-		LsImg.setImage(this.getArrowElement(), DwtImg.SELECT_PULL_DOWN_ENABLED);
+		AjxImg.setImage(this.getArrowElement(), DwtImg.SELECT_PULL_DOWN_ENABLED);
 		this.getForm().getElement(this.getId()).className = this.cssClass;
 		table.className = this.getTableCssClass();
 	} else {
 		this.getDisplayElement().className = this.getDisplayCssClass() + "_disabled";
-		LsImg.setImage(this.getArrowElement(), DwtImg.SELECT_PULL_DOWN_DISABLED);
+		AjxImg.setImage(this.getArrowElement(), DwtImg.SELECT_PULL_DOWN_DISABLED);
 		this.getForm().getElement(this.getId()).className = this.cssClass + "_disabled";
 		table.className = this.getTableCssClass()+"_disabled";
 	}
@@ -516,7 +516,7 @@ XFormItemFactory.createItemType("_OSELECT_CHECK_", "oselect_check", OSelect_Chec
 
 OSelect_Check_XFormItem.prototype.getChoiceHTML = function (itemNum, value, label, cssClass, indent) {
 	var ref = this.getFormGlobalRef() + ".getItemById('"+ this.getId()+ "')";
-	return LsBuffer.concat(indent,
+	return AjxBuffer.concat(indent,
 		"<tr><td class=", cssClass, 
 			" onmouseover=\"",ref, ".onChoiceOver(", itemNum,", event||window.event)\"",
 			" onmouseout=\"",ref, ".onChoiceOut(", itemNum,", event||window.event)\"",

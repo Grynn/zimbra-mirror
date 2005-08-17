@@ -1,16 +1,16 @@
-function LsSoapException(msg, code, method, detail) {
+function AjxSoapException(msg, code, method, detail) {
 	if (arguments.length == 0) return;
-	LsException.call(this, msg, code, method, detail);
+	AjxException.call(this, msg, code, method, detail);
 }
 
-LsSoapException.prototype.toString = 
+AjxSoapException.prototype.toString = 
 function() {
-	return "LsSoapException";
+	return "AjxSoapException";
 }
 
-LsSoapException.prototype = new LsException;
-LsSoapException.prototype.constructor = LsSoapException;
+AjxSoapException.prototype = new AjxException;
+AjxSoapException.prototype.constructor = AjxSoapException;
 
-LsSoapException.INTERNAL_ERROR 		= "INTERNAL_ERROR";
-LsSoapException.INVALID_PDU 		= "INVALID_PDU";
-LsSoapException.ELEMENT_EXISTS 		= "ELEMENT_EXISTS";
+AjxSoapException.INTERNAL_ERROR 		= "INTERNAL_ERROR";
+AjxSoapException.INVALID_PDU 		= "INVALID_PDU";
+AjxSoapException.ELEMENT_EXISTS 		= "ELEMENT_EXISTS";

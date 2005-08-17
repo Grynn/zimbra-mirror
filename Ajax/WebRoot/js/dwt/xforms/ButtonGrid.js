@@ -122,7 +122,7 @@ BGP.onButtonClick = function(choiceValue, element, event) {
 BGP.getHTML = function (indent) {
 	if (this.choices == null) return (this.__HTMLOutput = null);
 
-	var buffer = new LsBuffer();
+	var buffer = new AjxBuffer();
 	if (indent == null) indent = "";
 	
 	// write HTML for this element

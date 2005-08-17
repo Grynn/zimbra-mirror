@@ -69,7 +69,7 @@ XFG.showEl = function (id) {
 	var el = (typeof id == "string" ? XFG.getEl(id) : id);
 	if (el) {
 		if (el.tagName == "TD") {
-			if (LsEnv.isIE) {
+			if (AjxEnv.isIE) {
 				el.style.display = "block";
 			} else {
 				el.style.display = "table-cell";			
@@ -131,7 +131,7 @@ XFG.hideDisabled = function (element) {
 
 
 
-/* StringBuffer class  changed to LsBuffer and moved into LiquidAjax/js/util/  */
+/* StringBuffer class  changed to AjxBuffer and moved into LiquidAjax/js/util/  */
 
 
 
@@ -157,7 +157,7 @@ XFG.valueToString = function (value, indent, skipDerivedProperties, skipMethods,
 
 	// for arrays, list all the objects in it
 	if (value instanceof Array) {
-		var buffer = new LsBuffer();
+		var buffer = new AjxBuffer();
 		for (var i = 0; i < value.length; i++) {
 			buffer.append(indent, "        ", XFG.valueToString(value[i], indent+"    ", skipDerivedProperties, skipMethods, skipPrototypeProperties));
 		}
@@ -196,10 +196,10 @@ XFG.objectToString = function (object, indent, skipDerivedProperties, skipMethod
 		
 		// if we have a derived property, write its id or [object] so we don't recurse too much
 		if ((prop.indexOf("__") == 0 || prop.indexOf("$") == 0) && value instanceof Object) {
-			buffer.push(LsBuffer.concat(prop, ": ", value.toString()));
+			buffer.push(AjxBuffer.concat(prop, ": ", value.toString()));
 		} else {
 			hasObject = hasObject || (typeof value == "object");
-			buffer.push(LsBuffer.concat(prop, ": ", XFG.valueToString(value, indent, skipDerivedProperties, skipMethods, skipPrototypeProperties)));
+			buffer.push(AjxBuffer.concat(prop, ": ", XFG.valueToString(value, indent, skipDerivedProperties, skipMethods, skipPrototypeProperties)));
 		}
 		propCount++;
 	}
@@ -230,7 +230,7 @@ XFG.sortSpecialLast = function (a,b) {
 
 
 
-/* DEPRECATED:  Use LsBuffer() instead */
+/* DEPRECATED:  Use AjxBuffer() instead */
 function StringBuffer() {
 	this.clear();
 	if (arguments.length > 0) {

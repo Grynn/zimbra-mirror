@@ -1,52 +1,52 @@
-function LsCore() {}
+function AjxCore() {}
 
-LsCore._objectIds = [null];
+AjxCore._objectIds = [null];
 
 
-LsCore.assignId = 
+AjxCore.assignId = 
 function(anObject) {
-	var myId = LsCore._objectIds.length;
-	LsCore._objectIds[myId]= anObject;
+	var myId = AjxCore._objectIds.length;
+	AjxCore._objectIds[myId]= anObject;
 	return myId;
 };
 
-LsCore.unassignId = 
+AjxCore.unassignId = 
 function(anId) {
-	LsCore._objectIds[anId]= null;
+	AjxCore._objectIds[anId]= null;
 };
 
-LsCore.objectWithId = 
+AjxCore.objectWithId = 
 function(anId) {
-	return LsCore._objectIds[anId];
+	return AjxCore._objectIds[anId];
 };
 
 /**
  * Adds a listener to an element, for the given event name.
  */
-LsCore.addListener = 
+AjxCore.addListener = 
 function(eventSource, eventName, action) {
-	eventSource = LsCore._getEventSource(eventSource);
-	var listenerStruct = LsCore._getListenerStruct(eventSource, eventName, true);
+	eventSource = AjxCore._getEventSource(eventSource);
+	var listenerStruct = AjxCore._getListenerStruct(eventSource, eventName, true);
 	listenerStruct.list[listenerStruct.list.length] = action;
 };
 
 /**
  * sets a one time event handler for the given eventName.
  */
-LsCore.setEventHandler = 
+AjxCore.setEventHandler = 
 function(eventSource, eventName, action) {
-	eventSource = LsCore._getEventSource(eventSource);
-	var listenerStruct = LsCore._getListenerStruct(eventSource, eventName, true);
+	eventSource = AjxCore._getEventSource(eventSource);
+	var listenerStruct = AjxCore._getListenerStruct(eventSource, eventName, true);
 	listenerStruct.single = action;
 };
 
 /**
  * removes a listener for a given event
  */
-LsCore.removeListener = 
+AjxCore.removeListener = 
 function(eventSource, eventName, action) {
-	eventSource = LsCore._getEventSource(eventSource);
-	var listenerStruct = LsCore._getListenerStruct(eventSource, eventName);
+	eventSource = AjxCore._getEventSource(eventSource);
+	var listenerStruct = AjxCore._getListenerStruct(eventSource, eventName);
 
 	if (listenerStruct) {
 		var listenerList = listenerStruct.list;
@@ -60,17 +60,17 @@ function(eventSource, eventName, action) {
 /**
  * removes all listeners for a given eventName, and source
  */
-LsCore.removeAllListeners = 
+AjxCore.removeAllListeners = 
 function(eventSource, eventName) {
-	eventSource = LsCore._getEventSource(eventSource);
-	var listenerStruct = LsCore._getListenerStruct(eventSource, eventName);
+	eventSource = AjxCore._getEventSource(eventSource);
+	var listenerStruct = AjxCore._getListenerStruct(eventSource, eventName);
 
 	if (listenerStruct) {
 		var listenerList = listenerStruct.list;
 		for (var i = 0; i < listenerList.length; i++)
 			listenerList[i] = null;
 	}
-	LsCore.unassignId(listenerStruct.id);
+	AjxCore.unassignId(listenerStruct.id);
 };
 
 /**
@@ -78,37 +78,37 @@ function(eventSource, eventName) {
  * the event is not a standard DOM event. Those types of event callbacks
  * will be triggered by their event handlers
  */
-LsCore.notifyListeners = 
+AjxCore.notifyListeners = 
 function(eventSource, eventName, arg1) {
-	eventSource = LsCore._getEventSource(eventSource);
-	var listenerStruct = LsCore._getListenerStruct(eventSource, eventName)
+	eventSource = AjxCore._getEventSource(eventSource);
+	var listenerStruct = AjxCore._getListenerStruct(eventSource, eventName)
 	if (listenerStruct)
 		eventSource[eventName](arg1);
 };
 
-LsCore._getEventSource = 
+AjxCore._getEventSource = 
 function(eventSource) {
 	if (typeof(eventSource) == 'string')
 		eventSource = document.getElementById(eventSource);
 	return eventSource;
 };
 
-LsCore.getListenerStruct = 
+AjxCore.getListenerStruct = 
 function (eventSource, eventName) {
-	return LsCore._getListenerStruct(eventSource, eventName);
+	return AjxCore._getListenerStruct(eventSource, eventName);
 };
 
 /**
  * gets the existing struct for the eventSource, or creates a new one.
  */
-LsCore._getListenerStruct = 
+AjxCore._getListenerStruct = 
 function(eventSource, eventName, create) {
 	var listenerStruct = null;
 	if (eventSource[eventName]) {
 		var id = eventSource[eventName]._lsListenerStructId;
-		listenerStruct = LsCore.objectWithId(id);
+		listenerStruct = AjxCore.objectWithId(id);
 	} else if (create) {
-		listenerStruct = LsCore._setupListener(eventSource, eventName);
+		listenerStruct = AjxCore._setupListener(eventSource, eventName);
 	}
 
 	return listenerStruct;
@@ -117,23 +117,23 @@ function(eventSource, eventName, create) {
 /**
  * Creates a listener struct
  */
-LsCore._setupListener = 
+AjxCore._setupListener = 
 function(eventSource, eventName, id) {
 	var listenerStruct = new Object();
 	listenerStruct.list = new Array();
 	listenerStruct.single = null;
-	var id = listenerStruct.id = LsCore.assignId(listenerStruct);
-	var handler = LsCore._createListenerClosure(id);
+	var id = listenerStruct.id = AjxCore.assignId(listenerStruct);
+	var handler = AjxCore._createListenerClosure(id);
 	eventSource[eventName] = handler;
 	eventSource[eventName]._lsListenerStructId = id;
 
 	return listenerStruct;
 };
 
-LsCore._createListenerClosure = 
+AjxCore._createListenerClosure = 
 function(id) {
 	var closure = function(arg1) {
-		var listenerStruct = LsCore.objectWithId(id);
+		var listenerStruct = AjxCore.objectWithId(id);
 		var listenerList = listenerStruct.list;
 		for (var i = 0; i < listenerList.length; i++) {
 			var callback = listenerList[i];
@@ -141,7 +141,7 @@ function(id) {
 				if (typeof(callback) == 'string') {
 					eval(callback);
 				} else {
-					// handle LsListener callbacks as well as simple functions
+					// handle AjxListener callbacks as well as simple functions
 					if (callback.handleEvent) {
 						callback.handleEvent(arg1, this);
 					} else {
@@ -167,27 +167,27 @@ function(id) {
 /**
  * Convenience method for adding onload listeners
  */
-LsCore.addOnloadListener = 
+AjxCore.addOnloadListener = 
 function(action) {
 	if (window.onload && (!window.onload._lsListenerStructId)) {
 		var priorListener = window.onload;
 		window.onload = null;
-		LsCore.addListener(window, "onload", priorListener);
+		AjxCore.addListener(window, "onload", priorListener);
 	}
 
-	LsCore.addListener(window, "onload", action);
+	AjxCore.addListener(window, "onload", action);
 };
 
 /**
  * Convenience method for adding onunload listeners
  */    
-LsCore.addOnunloadListener = 
+AjxCore.addOnunloadListener = 
 function(action) {
 	if (window.onunload && (!window.onunload._lsListenerStructId)) {
 		var priorListener = window.onunload;
 		window.onunload = null;
-		LsCore.addListener(window, "onunload", priorListener);
+		AjxCore.addListener(window, "onunload", priorListener);
 	}
 
-	LsCore.addListener(window, "onunload", action);
+	AjxCore.addListener(window, "onunload", action);
 };

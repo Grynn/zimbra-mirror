@@ -1,6 +1,6 @@
 function DwtDragSource(supportedOps) {
 	this._supportedOps = supportedOps
-	this._evtMgr = new LsEventMgr();
+	this._evtMgr = new AjxEventMgr();
 }
 
 DwtDragSource._DRAG_LISTENER = "DwtDragSource._DRAG_LISTENER";

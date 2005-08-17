@@ -121,7 +121,7 @@ function() {
 DwtTreeItem.prototype.setImage =
 function(imageInfo) {
 	if (this._initialized) {
-		LsImg.setImage(this._imageCell, imageInfo);
+		AjxImg.setImage(this._imageCell, imageInfo);
 		this._imageInfo = imageInfo;
 	} else {
 		this._imageInfoParam = imageInfo;
@@ -225,8 +225,8 @@ function(child) {
 			this._expanded = false;
 		
 		if (this._initialized) {
-			LsImg.setImage(this._nodeCell, DwtImg.BLANK16REAL);
-			LsImg.getImageElement(this._nodeCell).onmousedown = null;
+			AjxImg.setImage(this._nodeCell, DwtImg.BLANK16REAL);
+			AjxImg.getImageElement(this._nodeCell).onmousedown = null;
 		}
 	}
 }
@@ -259,12 +259,12 @@ function(index) {
 	
 	// If we have deferred children, then we need to make sure we set up accordingly
 	if (this._children.size() > 0) {
-		LsImg.setImage(this._nodeCell, DwtImg.NODE_COLLAPSED);
-		var img = LsImg.getImageElement(this._nodeCell);
+		AjxImg.setImage(this._nodeCell, DwtImg.NODE_COLLAPSED);
+		var img = AjxImg.getImageElement(this._nodeCell);
 		img.onmousedown = DwtTreeItem._nodeIconMouseDownHdlr;
 		img.onmouseup = DwtTreeItem._nodeIconMouseUpHdlr;
 	} else {
-		LsImg.setImage(this._nodeCell, DwtImg.BLANK16REAL);
+		AjxImg.setImage(this._nodeCell, DwtImg.BLANK16REAL);
 	}
 	
 	if (this._tree._isCheckedStyle()) {
@@ -283,7 +283,7 @@ function(index) {
 	//this._imageCell.style.paddingRight = "3px";
 	this._imageCell.noWrap = true;
 	if (this._imageInfoParam) {
-		LsImg.setImage(this._imageCell, this._imageInfoParam);
+		AjxImg.setImage(this._imageCell, this._imageInfoParam);
 		this._imageInfo = this._imageInfoParam;
 	}
 	
@@ -296,8 +296,8 @@ function(index) {
     this._expanded = false;
     this._selected = false;
     this._actioned = false;
-    this.addListener(DwtEvent.ONMOUSEUP, new LsListener(this, this._mouseUpListener));
-    this.addListener(DwtEvent.ONDBLCLICK, new LsListener(this, this._doubleClickListener));  
+    this.addListener(DwtEvent.ONMOUSEUP, new AjxListener(this, this._mouseUpListener));
+    this.addListener(DwtEvent.ONDBLCLICK, new AjxListener(this, this._doubleClickListener));  
 
 	this.parent._addItem(this, index);
 	this._initialized = true;
@@ -307,8 +307,8 @@ DwtTreeItem.prototype._addDeferredChild =
 function(child, index) {
 	// If we are initialized, then we need to add a expansion node
 	if (this._initialized && this._children.size() == 0) {
-		LsImg.setImage(this._nodeCell, DwtImg.NODE_COLLAPSED);
-		var img = LsImg.getImageElement(this._nodeCell);
+		AjxImg.setImage(this._nodeCell, DwtImg.NODE_COLLAPSED);
+		var img = AjxImg.getImageElement(this._nodeCell);
 		img.onmousedown = DwtTreeItem._nodeIconMouseDownHdlr;
 		img.onmouseup = DwtTreeItem._nodeIconMouseUpHdlr;
 	}
@@ -335,12 +335,12 @@ function(item, index) {
 			this._childDiv.style.display = "none";
 	}
 	
-	if (LsImg.getImageClass(this._nodeCell) == DwtImg.BLANK16REAL[0]) {
+	if (AjxImg.getImageClass(this._nodeCell) == DwtImg.BLANK16REAL[0]) {
 		if (this._expanded) 
-			LsImg.setImage(this._nodeCell, DwtImg.NODE_EXPANDED);
+			AjxImg.setImage(this._nodeCell, DwtImg.NODE_EXPANDED);
 		else 
-			LsImg.setImage(this._nodeCell, DwtImg.NODE_COLLAPSED);
-		LsImg.getImageElement(this._nodeCell).onmousedown = DwtTreeItem._nodeIconMouseDownHdlr;
+			AjxImg.setImage(this._nodeCell, DwtImg.NODE_COLLAPSED);
+		AjxImg.getImageElement(this._nodeCell).onmousedown = DwtTreeItem._nodeIconMouseDownHdlr;
 	}	
 	
 	var childDiv = this._childDiv;
@@ -368,7 +368,7 @@ function() {
 	var c = row.insertCell(i++);
 	c.noWrap = true;
 	if (this._imageInfo) {
-		LsImg.setImage(c, this._imageInfo);
+		AjxImg.setImage(c, this._imageInfo);
 	}
 	
 	c = row.insertCell(i);
@@ -432,7 +432,7 @@ function(expand, ev) {
 	if (!expand) {
 		this._expanded = false;
 		this._childDiv.style.display = "none";
-		LsImg.setImage(this._nodeCell, DwtImg.NODE_COLLAPSED);
+		AjxImg.setImage(this._nodeCell, DwtImg.NODE_COLLAPSED);
 		this._tree._itemCollapsed(this, ev);
 	} else {
 		// The first thing we need to do is initialize any deferred children so that they
@@ -440,7 +440,7 @@ function(expand, ev) {
 		this._realizeDeferredChildren();
 		this._expanded = true;
 		this._childDiv.style.display = "block";
-		LsImg.setImage(this._nodeCell, DwtImg.NODE_EXPANDED);
+		AjxImg.setImage(this._nodeCell, DwtImg.NODE_EXPANDED);
 		this._tree._itemExpanded(this, ev);
 	}	
 }

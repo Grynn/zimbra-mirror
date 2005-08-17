@@ -7,7 +7,7 @@ function DwtDropTarget(transferType) {
 			
 		this._transferTypes.length = i;
 	}
-	this._evtMgr = new LsEventMgr();
+	this._evtMgr = new AjxEventMgr();
 }
 
 DwtDropTarget._DROP_LISTENER = "DwtDropTarget._DROP_LISTENER";

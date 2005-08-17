@@ -5,7 +5,7 @@ function DwtEventManager () {
     
 }
 
-DwtEventManager._instance = new LsEventMgr();
+DwtEventManager._instance = new AjxEventMgr();
 
 DwtEventManager._domEventToDwtMap = {
 	'ondblclick': DwtEvent.ONDBLCLICK,
@@ -37,7 +37,7 @@ function(eventType, listener) {
 // received by other Dwt widgets
 DwtEventManager.addGlobalListener = 
 function (element, eventType, listener) {
-	LsCore.addListener(element, eventType, listener);
+	AjxCore.addListener(element, eventType, listener);
 	var dwtEventName = DwtEventManager._domEventToDwtMap[eventType];
 	if (dwtEventName) {
 		DwtEventManager.addListener(dwtEventName, listener);

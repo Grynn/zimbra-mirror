@@ -22,7 +22,7 @@ function(htmlElement, cssPropName) {
 	} else {
 		var doc = htmlElement.ownerDocument;
 	}
-	if (doc.defaultView && !LsEnv.isSafari) {
+	if (doc.defaultView && !AjxEnv.isSafari) {
 		var cssDecl = doc.defaultView.getComputedStyle(htmlElement, "");
 		result = cssDecl.getPropertyValue(cssPropName);
 	} else {

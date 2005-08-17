@@ -82,7 +82,7 @@ function DwtDialog(parent, className, title, standardButtons, extraButtons, zInd
 		this._button[buttonId] = new DwtButton(this);
 		this._button[buttonId].setText(this._buttonDesc[buttonId].label);
 		this._button[buttonId].buttonId = buttonId;
-		this._button[buttonId].addSelectionListener(new LsListener(this, this._buttonListener));
+		this._button[buttonId].addSelectionListener(new AjxListener(this, this._buttonListener));
 		Dwt.getDomObj(doc, this._buttonElementId[buttonId]).appendChild(this._button[buttonId].getHtmlElement());
 	}
 	this.initializeDragging(this._titleHandleId);
@@ -194,7 +194,7 @@ DwtDialog.prototype.getButtonEnabled = function (buttonId) {
 */
 DwtDialog.prototype.registerCallback =
 function(buttonId, func, obj, args) {
-	this._buttonDesc[buttonId].callback = new LsCallback(obj, func, args);
+	this._buttonDesc[buttonId].callback = new AjxCallback(obj, func, args);
 }
 
 /**
@@ -267,7 +267,7 @@ DwtDialog.prototype._getStartBorder = function () {
 	var html = new Array();
 	var idx = 0;
 	html[idx++] = DwtBaseDialog.prototype._getStartBorder.call(this);
-	if (LsEnv.isNav) {
+	if (AjxEnv.isNav) {
 		html[idx++] = "<input type='button' id='";
 		html[idx++] = this._focusElementId = Dwt.getNextId();
 		html[idx++] = "' style='height:0px; width:0px;";
@@ -356,37 +356,37 @@ function (html, idx){
 		html[idx++] = this._getButtonsContainerStartTemplate();
 		
 		if (leftButtons.length) {
-			html[idx++] = LsStringUtil.resolve(
+			html[idx++] = AjxStringUtil.resolve(
 								  this._getButtonsAlignStartTemplate(),
 								  ["left"]);
 			for (var i = 0; i < leftButtons.length; i++) {
 				var buttonId = leftButtons[i];
-		 		html[idx++] = LsStringUtil.resolve(
+		 		html[idx++] = AjxStringUtil.resolve(
 								  this._getButtonsCellTemplate(),
 								  [this._buttonElementId[buttonId]]);
 		 	}
 			html[idx++] = this._getButtonsAlignEndTemplate();
 		}
 		if (centerButtons.length){
-			html[idx++] = LsStringUtil.resolve(
+			html[idx++] = AjxStringUtil.resolve(
 								this._getButtonsAlignStartTemplate(),
 								["center"]);
 			for (var i = 0; i < centerButtons.length; i++) {
 				var buttonId = centerButtons[i];
-		 		html[idx++] = LsStringUtil.resolve(
+		 		html[idx++] = AjxStringUtil.resolve(
 								this._getButtonsCellTemplate(),
 								[this._buttonElementId[buttonId]]);
 		 	}
 			html[idx++] = this._getButtonsAlignEndTemplate();
 		}
 		if (rightButtons.length) {
-			html[idx++] = LsStringUtil.resolve(
+			html[idx++] = AjxStringUtil.resolve(
 								this._getButtonsAlignStartTemplate(),
 								["right"]);
 			for (var i = 0; i < rightButtons.length; i++) {
 				var buttonId = rightButtons[i];
 				var templ = this._getButtonsCellTemplate();
-		 		html[idx++] = LsStringUtil.resolve(templ,
+		 		html[idx++] = AjxStringUtil.resolve(templ,
 											[this._buttonElementId[buttonId]]);
 		 	}
 			html[idx++] = this._getButtonsAlignEndTemplate();
@@ -428,9 +428,9 @@ function() {
 		var id = DwtDialog.ALL_BUTTONS[i];
 		if (this._buttonDesc[id]) {
 			if (id == DwtDialog.DETAIL_BUTTON) {
-				this._buttonDesc[id].callback = new LsCallback(this, this._showDetail);
+				this._buttonDesc[id].callback = new AjxCallback(this, this._showDetail);
 			} else {
-				this._buttonDesc[id].callback = new LsCallback(this, this.popdown);
+				this._buttonDesc[id].callback = new AjxCallback(this, this.popdown);
 			}
 		}
 	}

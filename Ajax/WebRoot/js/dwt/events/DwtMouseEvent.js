@@ -39,7 +39,7 @@ function(ev) {
 		else
 			this.button = DwtMouseEvent.NONE;
 	}
-	if (LsEnv.isMac) {
+	if (AjxEnv.isMac) {
 		// if ctrlKey and LEFT mouse, turn into RIGHT mouse with no ctrl key
 		if (this.ctrlKey && this.button == DwtMouseEvent.LEFT) {
 			this.button = DwtMouseEvent.RIGHT;

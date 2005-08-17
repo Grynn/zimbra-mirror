@@ -5,17 +5,17 @@
 * @author Conrad Damon
 * @author Ross Dargahi
 */
-function LsImg() {
+function AjxImg() {
 }
-LsImg.prototype = new Object;
-LsImg.prototype.constructor = null;
+AjxImg.prototype = new Object;
+AjxImg.prototype.constructor = null;
 
-LsImg.ICON = 1;
-LsImg.HORIZ_BORDER = 2;
-LsImg.VERT_BORDER = 3;
-LsImg.BACKGROUND = 4;
+AjxImg.ICON = 1;
+AjxImg.HORIZ_BORDER = 2;
+AjxImg.VERT_BORDER = 3;
+AjxImg.BACKGROUND = 4;
 
-LsImg._VIEWPORT_ID = "LsImg_VP";
+AjxImg._VIEWPORT_ID = "LsImg_VP";
 
 /**
 * This method will set the image for <i>parentEl</i>. <i>parentEl</i> should only contain this image and no 
@@ -23,13 +23,13 @@ LsImg._VIEWPORT_ID = "LsImg_VP";
 *
 * @param parentEl The parent element for the image
 * @param imageInfo The array describing the image. First element is the css rule name, second & third are width and height
-* @param style image style. Can be LsImg.ICON for icons (default), LsImg.VERT_BORDER for vertical borders
-* 	LsImg.HORIZ_BORDER for horizontal borders, or LsImg.BACKGROUND for backgrounds
+* @param style image style. Can be AjxImg.ICON for icons (default), AjxImg.VERT_BORDER for vertical borders
+* 	AjxImg.HORIZ_BORDER for horizontal borders, or AjxImg.BACKGROUND for backgrounds
 * @ param useParenEl If true will use the parent element as the root for the image and will not create an intermediate DIV
 */
-LsImg.setImage =
+AjxImg.setImage =
 function(parentEl, imageInfo, style, useParentEl) {
-	style = (!style) ? LsImg.ICON : style;
+	style = (!style) ? AjxImg.ICON : style;
 	var className = imageInfo[0];
 
 	if (useParentEl) {
@@ -47,17 +47,17 @@ function(parentEl, imageInfo, style, useParentEl) {
 	}
 }
 
-LsImg.getImageClass =
+AjxImg.getImageClass =
 function(parentEl) {
 	return parentEl.firstChild ? parentEl.firstChild.className : parentEl.className;
 }
 
-LsImg.getImageElement =
+AjxImg.getImageElement =
 function(parentEl) {
 	return parentEl.firstChild ? parentEl.firstChild : parentEl;
 }
 
-LsImg.getParentElement =
+AjxImg.getParentElement =
 function(imageEl) {
 	return imageEl.parentNode;
 }
@@ -68,7 +68,7 @@ function(imageEl) {
 * @param styleStr	additional style info e.g. "display:inline"
 * @param attrStr	additional attributes eg. "id=X748"
 */
-LsImg.getImageHtml = 
+AjxImg.getImageHtml = 
 function(imageInfo, styleStr, attrStr) {
 	attrStr = (!attrStr) ? "" : attrStr;
 	var className = imageInfo[0];

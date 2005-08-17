@@ -425,7 +425,7 @@ XModel.prototype._makePathGetter = function (path) {
 		pathToStep += this.pathDelimiter;
 	}
 
-	var methodBody = LsBuffer.concat(
+	var methodBody = AjxBuffer.concat(
 			"try {\r",
 			"var current = instance;\r",
 			"\t", methodSteps.join("\r\t"), "\r",

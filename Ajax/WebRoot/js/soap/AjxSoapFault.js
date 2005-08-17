@@ -6,7 +6,7 @@
 * - reason: Reason string
 * - errorCode: server error code
 */
-function LsSoapFault(faultEl) {
+function AjxSoapFault(faultEl) {
 	if (arguments.length == 0) return;
 	var prefix = faultEl.prefix;
 	var codeStr = prefix + ":Code";
@@ -18,17 +18,17 @@ function LsSoapFault(faultEl) {
 		if (childNode.nodeName == codeStr) {
 			var faultCode = childNode.firstChild.firstChild.nodeValue;
 			if (faultCode == (prefix + ":VersionMismatch"))
-				this.faultCode = LsSoapFault.VERSION_MISMATCH;
+				this.faultCode = AjxSoapFault.VERSION_MISMATCH;
 			else if (faultCode == (prefix + ":MustUnderstand"))
-				this.faultCode = LsSoapFault.MUST_UNDERSTAND;
+				this.faultCode = AjxSoapFault.MUST_UNDERSTAND;
 			else if (faultCode == (prefix + ":DataEncodingUnknown"))
-				this.faultCode = LsSoapFault.DATA_ENCODING_UNKNOWN;
+				this.faultCode = AjxSoapFault.DATA_ENCODING_UNKNOWN;
 			else if (faultCode == (prefix + ":Sender"))
-				this.faultCode = LsSoapFault.SENDER;
+				this.faultCode = AjxSoapFault.SENDER;
 			else if (faultCode == (prefix + ":Receiver"))
-				this.faultCode = LsSoapFault.RECEIVER;
+				this.faultCode = AjxSoapFault.RECEIVER;
 			else
-				this.faultCode = LsSoapFault.UNKNOWN;		
+				this.faultCode = AjxSoapFault.UNKNOWN;		
 		} else if (childNode.nodeName == reasonStr) {
 			this.reason = childNode.firstChild.firstChild.nodeValue;
 		} else if (childNode.nodeName == detailStr) {
@@ -37,14 +37,14 @@ function LsSoapFault(faultEl) {
 	}
 }
 
-LsSoapFault.prototype.toString = 
+AjxSoapFault.prototype.toString = 
 function() {
-	return "LsSoapFault";
+	return "AjxSoapFault";
 }
 
-LsSoapFault.SENDER = -1;
-LsSoapFault.RECEIVER = -2;
-LsSoapFault.VERSION_MISMATCH = -3;
-LsSoapFault.MUST_UNDERSTAND = -4;
-LsSoapFault.DATA_ENCODING_UNKNOWN = -5;
-LsSoapFault.UNKNOWN = -6;
+AjxSoapFault.SENDER = -1;
+AjxSoapFault.RECEIVER = -2;
+AjxSoapFault.VERSION_MISMATCH = -3;
+AjxSoapFault.MUST_UNDERSTAND = -4;
+AjxSoapFault.DATA_ENCODING_UNKNOWN = -5;
+AjxSoapFault.UNKNOWN = -6;

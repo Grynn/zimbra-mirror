@@ -29,12 +29,12 @@ function DwtListView(parent, className, posStyle, headerList, noMaximize) {
 	this._setKeyEventHdlrs();
 	this.setCursor("default");
 
-	this._listenerMouseOver = new LsListener(this, DwtListView.prototype._mouseOverListener);
-	this._listenerMouseOut = new LsListener(this, DwtListView.prototype._mouseOutListener);
-	this._listenerMouseDown = new LsListener(this, DwtListView.prototype._mouseDownListener);
-	this._listenerMouseUp = new LsListener(this, DwtListView.prototype._mouseUpListener);
-	this._listenerMouseMove = new LsListener(this, DwtListView.prototype._mouseMoveListener);
-	this._listenerDoubleClick = new LsListener(this, DwtListView.prototype._doubleClickListener);
+	this._listenerMouseOver = new AjxListener(this, DwtListView.prototype._mouseOverListener);
+	this._listenerMouseOut = new AjxListener(this, DwtListView.prototype._mouseOutListener);
+	this._listenerMouseDown = new AjxListener(this, DwtListView.prototype._mouseDownListener);
+	this._listenerMouseUp = new AjxListener(this, DwtListView.prototype._mouseUpListener);
+	this._listenerMouseMove = new AjxListener(this, DwtListView.prototype._mouseMoveListener);
+	this._listenerDoubleClick = new AjxListener(this, DwtListView.prototype._doubleClickListener);
 	this.addListener(DwtEvent.ONMOUSEOVER, this._listenerMouseOver);
 	this.addListener(DwtEvent.ONMOUSEOUT, this._listenerMouseOut);
 	this.addListener(DwtEvent.ONMOUSEDOWN, this._listenerMouseDown);
@@ -42,8 +42,8 @@ function DwtListView(parent, className, posStyle, headerList, noMaximize) {
 	this.addListener(DwtEvent.ONMOUSEMOVE, this._listenerMouseMove);
 	this.addListener(DwtEvent.ONDBLCLICK, this._listenerDoubleClick);
 
-	this._evtMgr = new LsEventMgr();
-	this._selectedItems = new LsVector();
+	this._evtMgr = new AjxEventMgr();
+	this._selectedItems = new AjxVector();
 	this._selAnchor = null; 
 	this._selEv = new DwtSelectionEvent(true);
 	this._actionEv = new DwtListViewActionEvent(true);
@@ -152,7 +152,7 @@ function(defaultColumnSort) {
 		htmlArr[idx++] = "<table border=0 cellpadding=0 cellspacing=0 width=100%><tr>";
 		if (headerCol._iconInfo) {
 			htmlArr[idx++] = "<td><center>";
-			htmlArr[idx++] = LsImg.getImageHtml(headerCol._iconInfo);
+			htmlArr[idx++] = AjxImg.getImageHtml(headerCol._iconInfo);
 			htmlArr[idx++] = "</center></td>";
 		}
 			
@@ -164,9 +164,9 @@ function(defaultColumnSort) {
 			var id = DwtListView.HEADERITEM_ARROW + headerCol._id;
 			if (headerCol._sortable == defaultColumnSort) {
 				this._currentColId = headerCol._id;
-				htmlArr[idx++] = "<td width=10 id='" + id + "'>" + LsImg.getImageHtml(arrowIcon) + "</td>";
+				htmlArr[idx++] = "<td width=10 id='" + id + "'>" + AjxImg.getImageHtml(arrowIcon) + "</td>";
 			} else {
-				htmlArr[idx++] = "<td width=10 id='" + id + "'>" + LsImg.getImageHtml(arrowIcon, "visibility:hidden") + "</td>";
+				htmlArr[idx++] = "<td width=10 id='" + id + "'>" + AjxImg.getImageHtml(arrowIcon, "visibility:hidden") + "</td>";
 			}
 		}
 		
@@ -231,7 +231,7 @@ function(headerId) {
 * Creates a list view out of the given vector of items. The derived class should override _createItemHtml()
 * in order to display an item.
 *
-* @param list	a vector of items (LsVector)
+* @param list	a vector of items (AjxVector)
 * @param defaultColumnSort	default column field to sort (optional)
 */
 DwtListView.prototype.set =
@@ -248,7 +248,7 @@ DwtListView.prototype.setUI =
 function(defaultColumnSort) {
 	this.removeAll();
 	this.createHeaderHtml(defaultColumnSort);
-	if (this._list instanceof LsVector && this._list.size()) {
+	if (this._list instanceof AjxVector && this._list.size()) {
 		var size = this._list.size();
 		for (var i = 0; i < size; i++) {
 			var item = this._list.get(i);
@@ -270,7 +270,7 @@ function(defaultColumnSort) {
 DwtListView.prototype.addItem =
 function(item, index, skipNotify) {
 	if (!this._list)
-		this._list = new LsVector();
+		this._list = new AjxVector();
 	
 	// clear the "no results" message before adding!
 	if (this._list.size() == 0)
@@ -463,10 +463,10 @@ function() {
 
 DwtListView.prototype.getDnDSelection =
 function() {
-	if (this._dndSelection instanceof LsVector) {
+	if (this._dndSelection instanceof AjxVector) {
 		return this.getSelection();
 	} else {
-		return LsCore.objectWithId(this._dndSelection);
+		return AjxCore.objectWithId(this._dndSelection);
 	}
 }
 
@@ -474,12 +474,12 @@ DwtListView.prototype.getSelection =
 function() {
 	var a = new Array();
 	if (this._rightSelItems) {
-		a.push(LsCore.objectWithId(this._rightSelItems._itemIndex));
+		a.push(AjxCore.objectWithId(this._rightSelItems._itemIndex));
 	} else {
 		var sa = this._selectedItems.getArray();
 		var saLen = this._selectedItems.size();
 		for (var i = 0; i < saLen; i++)
-			a[i] = LsCore.objectWithId(sa[i]._itemIndex);
+			a[i] = AjxCore.objectWithId(sa[i]._itemIndex);
 	}
 	return a;
 }
@@ -506,7 +506,7 @@ function(item, skipNotify) {
 			var selEv = new DwtSelectionEvent(true);
 			selEv.button = DwtMouseEvent.LEFT;
 			selEv.target = el;
-			selEv.item = LsCore.objectWithId(el._itemIndex);
+			selEv.item = AjxCore.objectWithId(el._itemIndex);
 			selEv.detail = DwtListView.ITEM_SELECTED;
 			this._evtMgr.notifyListeners(DwtEvent.SELECTION, selEv);
 		}	
@@ -565,7 +565,7 @@ function (element){
 	if (element._itemIndex !== void 0){
 		switch (element._type){
 			case DwtListView.TYPE_LIST_ITEM:
-			  return LsCore.objectWithId(element._itemIndex);
+			  return AjxCore.objectWithId(element._itemIndex);
 			case DwtListView.TYPE_HEADER_ITEM:
 			// most users don't want to get the header items this way
 			//return this._headerList[element._itemIndex];
@@ -585,7 +585,7 @@ function() {
 DwtListView.prototype.associateItemWithElement =
 function (item, element, type, optionalId) {
 	element.id = optionalId ? optionalId : this._getItemId(item);
-	element._itemIndex = LsCore.assignId(item);
+	element._itemIndex = AjxCore.assignId(item);
 	element._type = type;
 }
 
@@ -646,7 +646,7 @@ function(mouseEv, div) {
 	if (div._type == DwtListView.TYPE_HEADER_ITEM && div._isSortable && this._headerClone == null) {
 		div.className = "DwtListView-Column DwtListView-ColumnHover";
 	} else if (div._type == DwtListView.TYPE_HEADER_SASH) {
-		div.style.cursor = LsEnv.isIE ? "col-resize" : "e-resize";
+		div.style.cursor = AjxEnv.isIE ? "col-resize" : "e-resize";
 	} else if (div._type == DwtListView.TYPE_LIST_ITEM) {
 		if (div._hoverStyleClass == null || div == this._rightSelItems) {
 			div.hoverSet = false;
@@ -852,7 +852,7 @@ function(clickedEl, ev) {
 			this._selAnchor = clickedEl;
 			clickedEl.className = clickedEl._selectedStyleClass;
 			this._firstSelIndex = this._list 
-				? this._list.indexOf(LsCore.objectWithId(clickedEl._itemIndex)) : -1;
+				? this._list.indexOf(AjxCore.objectWithId(clickedEl._itemIndex)) : -1;
 		} else if (ev.button == DwtMouseEvent.RIGHT && !bContained) {
 			// save right click selection
 			this._rightSelItems = clickedEl;
@@ -931,12 +931,12 @@ function(clickedEl, ev) {
 	// let derived class call notifyListeners(), since it may want to add to event
 	if (ev.button == DwtMouseEvent.LEFT) {
 		DwtUiEvent.copy(this._selEv, ev);
-		this._selEv.item = LsCore.objectWithId(clickedEl._itemIndex);
+		this._selEv.item = AjxCore.objectWithId(clickedEl._itemIndex);
 		if (this.constructor == DwtListView)
 			this._evtMgr.notifyListeners(DwtEvent.SELECTION, this._selEv);
 	} else if (ev.button == DwtMouseEvent.RIGHT) {
 		DwtUiEvent.copy(this._actionEv, ev);
-		this._actionEv.item = LsCore.objectWithId(clickedEl._itemIndex);
+		this._actionEv.item = AjxCore.objectWithId(clickedEl._itemIndex);
 		if (this.constructor == DwtListView)
 			this._evtMgr.notifyListeners(DwtEvent.ACTION, this._actionEv);
 	}
@@ -989,7 +989,7 @@ function(columnId) {
 		oldArrowId = DwtListView.HEADERITEM_ARROW + this._currentColId;
 		oldArrowCell = Dwt.getDomObj(doc, oldArrowId);
 		if (oldArrowCell && oldArrowCell.firstChild) {
-			var imgEl = (LsImg._mode == LsImg.SINGLE_IMG) ? oldArrowCell.firstChild : oldArrowCell.firstChild.firstChild;
+			var imgEl = (AjxImg._mode == AjxImg.SINGLE_IMG) ? oldArrowCell.firstChild : oldArrowCell.firstChild.firstChild;
 			if (imgEl)
 				imgEl.style.visibility = "hidden";
 		}
@@ -1005,8 +1005,8 @@ function(columnId) {
 	var newArrowId = DwtListView.HEADERITEM_ARROW + columnId;
 	var newArrowCell = Dwt.getDomObj(doc, newArrowId);
 	if (newArrowCell) {
-		LsImg.setImage(newArrowCell, this._bSortAsc ? DwtImg.COLUMN_UP : DwtImg.COLUMN_DOWN);
-		var imgEl = (LsImg._mode == LsImg.SINGLE_IMG) ? newArrowCell.firstChild : newArrowCell.firstChild.firstChild;
+		AjxImg.setImage(newArrowCell, this._bSortAsc ? DwtImg.COLUMN_UP : DwtImg.COLUMN_DOWN);
+		var imgEl = (AjxImg._mode == AjxImg.SINGLE_IMG) ? newArrowCell.firstChild : newArrowCell.firstChild.firstChild;
 		if (imgEl)
 			imgEl.style.visibility = "visible";
 	}
@@ -1027,14 +1027,14 @@ function() {
 	// explicitly remove each child (setting innerHTML causes mem leak)
 	while (this._parentEl.hasChildNodes()) {
 		cDiv = this._parentEl.removeChild(this._parentEl.firstChild);
-		LsCore.unassignId(cDiv._itemIndex);
+		AjxCore.unassignId(cDiv._itemIndex);
 	}
 }
 
 DwtListView.prototype._destroyDnDIcon =
 function(icon) {
 	if (icon._itemIndex){
-		LsCore.unassignId(icon._itemIndex);
+		AjxCore.unassignId(icon._itemIndex);
 	}
 	DwtControl.prototype._destroyDnDIcon.call(this,icon);
 }
@@ -1055,8 +1055,8 @@ function(ev) {
 		var doc = this.getDocument();
 		this._headerClone = doc.createElement("div");
 		var size = Dwt.getSize(this._clickDiv);
-		var width = LsEnv.isIE ? size.x : size.x-3;	// stupid FF/IE quirks
-		var height = LsEnv.isIE ? size.y : size.y-5;
+		var width = AjxEnv.isIE ? size.x : size.x-3;	// stupid FF/IE quirks
+		var height = AjxEnv.isIE ? size.y : size.y-5;
 		Dwt.setSize(this._headerClone, width, height);
 		Dwt.setPosition(this._headerClone, Dwt.ABSOLUTE_STYLE); 
 		Dwt.setZIndex(this._headerClone, Dwt.Z_DND);
@@ -1135,7 +1135,7 @@ function(ev) {
 	if (parent) {
 		parent.removeChild(this._headerClone);
 	} else {
-		DBG.println(LsDebug.DBG1, "XXX: column header has no parent!");
+		DBG.println(AjxDebug.DBG1, "XXX: column header has no parent!");
 	}
 	delete this._headerClone;
 	

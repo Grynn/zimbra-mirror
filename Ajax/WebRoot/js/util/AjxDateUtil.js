@@ -1,21 +1,21 @@
-function LsDateUtil() {
+function AjxDateUtil() {
 };
 
-LsDateUtil.YEAR = 1;
-LsDateUtil.MONTH = 2;
-LsDateUtil.WEEK = 3;
-LsDateUtil.DAY = 4;
+AjxDateUtil.YEAR = 1;
+AjxDateUtil.MONTH = 2;
+AjxDateUtil.WEEK = 3;
+AjxDateUtil.DAY = 4;
 
-LsDateUtil.MSEC_PER_HALF_HOUR = 1800000;
-LsDateUtil.MSEC_PER_HOUR = 3600000;
-LsDateUtil.MSEC_PER_DAY = 24 * LsDateUtil.MSEC_PER_HOUR;
-LsDateUtil._months = [LsMsg.jan, LsMsg.feb, LsMsg.mar, LsMsg.apr, LsMsg.may, LsMsg.jun,
+AjxDateUtil.MSEC_PER_HALF_HOUR = 1800000;
+AjxDateUtil.MSEC_PER_HOUR = 3600000;
+AjxDateUtil.MSEC_PER_DAY = 24 * AjxDateUtil.MSEC_PER_HOUR;
+AjxDateUtil._months = [LsMsg.jan, LsMsg.feb, LsMsg.mar, LsMsg.apr, LsMsg.may, LsMsg.jun,
                       LsMsg.jul, LsMsg.aug, LsMsg.sep, LsMsg.oct, LsMsg.nov, LsMsg.dec];
 
-LsDateUtil._daysOfTheWeek = [LsMsg.sunday, LsMsg.monday, LsMsg.tuesday, LsMsg.wednesday, LsMsg.thursday, LsMsg.friday,
+AjxDateUtil._daysOfTheWeek = [LsMsg.sunday, LsMsg.monday, LsMsg.tuesday, LsMsg.wednesday, LsMsg.thursday, LsMsg.friday,
 							 LsMsg.saturday];
 
-LsDateUtil._daysPerMonth = {
+AjxDateUtil._daysPerMonth = {
 	0:31,
 	1:29,
 	2:31,
@@ -30,22 +30,22 @@ LsDateUtil._daysPerMonth = {
 	11:31
 };
 
-LsDateUtil._init =
+AjxDateUtil._init =
 function() {                                           
-	LsDateUtil._dateSep = LsConfig.DATE_SEP;
-	LsDateUtil._timeSep = LsConfig.TIME_SEP;
-	LsDateUtil._dateFmt = new Array();
-	var tmp = LsConfig.DATE_FMT;
+	AjxDateUtil._dateSep = AjxConfig.DATE_SEP;
+	AjxDateUtil._timeSep = AjxConfig.TIME_SEP;
+	AjxDateUtil._dateFmt = new Array();
+	var tmp = AjxConfig.DATE_FMT;
 	for (var i = 0; i < tmp.length; i++)
-		LsDateUtil._dateFmt[i] = tmp.substr(i, 1);
+		AjxDateUtil._dateFmt[i] = tmp.substr(i, 1);
 };
 
-LsDateUtil._init();                    
+AjxDateUtil._init();                    
 
 /* return true if the specified date (yyyy, m (0-11), d (1-31)) 
  * is valid or not.
  */
-LsDateUtil.validDate =
+AjxDateUtil.validDate =
 function(y, m, d) {
 	var date = new Date(y, m, d);
 	return date.getMonth() == m && date.getDate() == d;
@@ -53,7 +53,7 @@ function(y, m, d) {
 
 /* return number of days (1-31) in specified month (yyyy, mm (0-11))
  */
-LsDateUtil.daysInMonth =
+AjxDateUtil.daysInMonth =
 function(y, m) {
 	var date = new Date(y, m, 1, 12);
 	date.setMonth(date.getMonth()+1);
@@ -63,7 +63,7 @@ function(y, m) {
 
 /* return true if year is a leap year
  */
-LsDateUtil.isLeapYear =
+AjxDateUtil.isLeapYear =
 function(y) {
 	return (new Date(y, 1, 29)).getMonth() == 1;
 };
@@ -73,25 +73,25 @@ function(y) {
  * then the max day in the new month, set it to the max. The date passed in is
  * modified and also returned.
  */
-LsDateUtil.roll = 
+AjxDateUtil.roll = 
 function(date, field, offset) {
 	var d = date.getDate();
 	 // move back to first day before rolling in case previous
 	 // month/year has less days
 
-	if (field == LsDateUtil.MONTH) {
+	if (field == AjxDateUtil.MONTH) {
 		date.setDate(1);	
 		date.setMonth(date.getMonth() + offset);
-		var max = LsDateUtil.daysInMonth(date.getFullYear(), date.getMonth());
+		var max = AjxDateUtil.daysInMonth(date.getFullYear(), date.getMonth());
 		date.setDate(Math.min(d, max));		
-	} else if (field == LsDateUtil.YEAR) {
+	} else if (field == AjxDateUtil.YEAR) {
 		date.setDate(1);		
 		date.setFullYear(date.getFullYear() + offset);
-		var max = LsDateUtil.daysInMonth(date.getFullYear(), date.getMonth());
+		var max = AjxDateUtil.daysInMonth(date.getFullYear(), date.getMonth());
 		date.setDate(Math.min(d, max));		
-	} else if (field == LsDateUtil.WEEK) {
+	} else if (field == AjxDateUtil.WEEK) {
 		date.setDate(date.getDate() + 7*offset);
-	} else if (field == LsDateUtil.DAY) {
+	} else if (field == AjxDateUtil.DAY) {
 		date.setDate(date.getDate() + offset);		
 	} else {
 		return date;
@@ -101,21 +101,21 @@ function(date, field, offset) {
 
 // Computes the difference between now and <dateMSec>. Returns a string describing
 // the difference
-LsDateUtil.computeDateDelta =
+AjxDateUtil.computeDateDelta =
 function(dateMSec) {
 	var deltaMSec = (new Date()).getTime() - dateMSec;
-	var years =  Math.floor(deltaMSec / (LsDateUtil.MSEC_PER_DAY * 365));
+	var years =  Math.floor(deltaMSec / (AjxDateUtil.MSEC_PER_DAY * 365));
 	if (years != 0)
-		deltaMSec -= years * LsDateUtil.MSEC_PER_DAY * 365;
-	var months = Math.floor(deltaMSec / (LsDateUtil.MSEC_PER_DAY * 30.42));
+		deltaMSec -= years * AjxDateUtil.MSEC_PER_DAY * 365;
+	var months = Math.floor(deltaMSec / (AjxDateUtil.MSEC_PER_DAY * 30.42));
 	if (months > 0)
-		deltaMSec -= Math.floor(months * LsDateUtil.MSEC_PER_DAY * 30.42);
-	var days = Math.floor(deltaMSec / LsDateUtil.MSEC_PER_DAY);
+		deltaMSec -= Math.floor(months * AjxDateUtil.MSEC_PER_DAY * 30.42);
+	var days = Math.floor(deltaMSec / AjxDateUtil.MSEC_PER_DAY);
 	if (days > 0)
-		deltaMSec -= days * LsDateUtil.MSEC_PER_DAY;
-	var hours = Math.floor(deltaMSec / LsDateUtil.MSEC_PER_HOUR);
+		deltaMSec -= days * AjxDateUtil.MSEC_PER_DAY;
+	var hours = Math.floor(deltaMSec / AjxDateUtil.MSEC_PER_HOUR);
 	if (hours > 0) 
-		deltaMSec -= hours * LsDateUtil.MSEC_PER_HOUR;
+		deltaMSec -= hours * AjxDateUtil.MSEC_PER_HOUR;
 	var mins = Math.floor(deltaMSec / 60000);
 	if (mins > 0)
 		deltaMSec -= mins * 60000;
@@ -165,7 +165,7 @@ function(dateMSec) {
 	return deltaStr;
 };
 
-LsDateUtil.simpleComputeDateStr = 
+AjxDateUtil.simpleComputeDateStr = 
 function(date, stringToPrepend) {
 	var year, month, day;
 	var idx = 0;
@@ -175,24 +175,24 @@ function(date, stringToPrepend) {
 		dateArr[0] = stringToPrepend;
 		written = true;
 	}
-	for (var i = 0; i < LsDateUtil._dateFmt.length; i++) {
-		switch (LsDateUtil._dateFmt[i]) {
+	for (var i = 0; i < AjxDateUtil._dateFmt.length; i++) {
+		switch (AjxDateUtil._dateFmt[i]) {
 		case 'Y':
 			year = date.getFullYear() % 100;
 			dateArr[idx++] =  ((written)? "/" : "");
-			dateArr[idx++] = LsDateUtil._pad(year);
+			dateArr[idx++] = AjxDateUtil._pad(year);
 			written = true;
 			break;
 		case 'M':
 			month = date.getMonth() + 1;
 			dateArr[idx++] = ( (written)? "/" : "");
-			dateArr[idx++] = LsDateUtil._pad(month);
+			dateArr[idx++] = AjxDateUtil._pad(month);
 			written = true;
 			break;
 		case 'D':
 			day = date.getDate();
 			dateArr[idx++] = ((written) ? "/" : "");
-			dateArr[idx++] = LsDateUtil._pad(day);
+			dateArr[idx++] = AjxDateUtil._pad(day);
 			written = true;
 			break;
 		}
@@ -200,7 +200,7 @@ function(date, stringToPrepend) {
 	return dateArr.join("");
 };
 
-LsDateUtil.computeDateStr =
+AjxDateUtil.computeDateStr =
 function(now, dateMSec) {
 	if (dateMSec == null)
 		return "";
@@ -211,87 +211,87 @@ function(now, dateMSec) {
 	var date = new Date(dateMSec);
 	var year = date.getFullYear();
 	var dateStr = "";
-	if (nowMSec - dateMSec < LsDateUtil.MSEC_PER_DAY && nowDay == date.getDay()) {
+	if (nowMSec - dateMSec < AjxDateUtil.MSEC_PER_DAY && nowDay == date.getDay()) {
 		var hours = date.getHours();
 		var mins = date.getMinutes();
-		dateStr = LsDateUtil._pad(hours) + LsDateUtil._timeSep + LsDateUtil._pad(mins);
+		dateStr = AjxDateUtil._pad(hours) + AjxDateUtil._timeSep + AjxDateUtil._pad(mins);
 	} else if (year == nowYear) {
-		for (var i = 0; i < LsDateUtil._dateFmt.length; i++) {
-			switch (LsDateUtil._dateFmt[i]) {
+		for (var i = 0; i < AjxDateUtil._dateFmt.length; i++) {
+			switch (AjxDateUtil._dateFmt[i]) {
 				case 'M':
-					dateStr = dateStr + ((dateStr != "") ? " " : "") + LsDateUtil._months[date.getMonth()];
+					dateStr = dateStr + ((dateStr != "") ? " " : "") + AjxDateUtil._months[date.getMonth()];
 					break;
 				case 'D':
 					var day = date.getDate();
-					dateStr = dateStr + ((dateStr != "") ? " " : "") + LsDateUtil._pad(day);
+					dateStr = dateStr + ((dateStr != "") ? " " : "") + AjxDateUtil._pad(day);
 					break;
 			}
 		}
 	} else {
-		dateStr = LsDateUtil.simpleComputeDateStr(date);
+		dateStr = AjxDateUtil.simpleComputeDateStr(date);
 	} 
 	return dateStr;
 };
 
-LsDateUtil._getHoursStr = 
+AjxDateUtil._getHoursStr = 
 function(date, pad, useMilitary) {
 	var myVal = date.getHours();
 	if (!useMilitary) {
 		myVal %= 12;
 		if (myVal == 0) myVal = 12;
 	}
-	return pad ? LsDateUtil._pad(myVal) : myVal;
+	return pad ? AjxDateUtil._pad(myVal) : myVal;
 };
 
-LsDateUtil._getMinutesStr = 
+AjxDateUtil._getMinutesStr = 
 function(date) {
-	return LsDateUtil._pad(date.getMinutes());
+	return AjxDateUtil._pad(date.getMinutes());
 };
 
-LsDateUtil._getSecondsStr = 
+AjxDateUtil._getSecondsStr = 
 function(date) {
-	return LsDateUtil._pad(date.getSeconds());
+	return AjxDateUtil._pad(date.getSeconds());
 };
 
-LsDateUtil._getAMPM = 
+AjxDateUtil._getAMPM = 
 function (date, upper) {
 	var myHour = date.getHours();
 	return (myHour < 12) ? (upper ? 'AM' : 'am') : (upper ? 'PM' : 'pm');
 };
 
-LsDateUtil._getMonthName = 
+AjxDateUtil._getMonthName = 
 function (date) {
-	return LsDateUtil._months[date.getMonth()];
+	return AjxDateUtil._months[date.getMonth()];
 };
 
-LsDateUtil._getDate = 
+AjxDateUtil._getDate = 
 function(date, pad) {
 	var myVal = date.getDate();
-	return pad == true ? LsDateUtil._pad(myVal) : myVal;
+	return pad == true ? AjxDateUtil._pad(myVal) : myVal;
 };
 
-LsDateUtil._getFullYear = 
+AjxDateUtil._getFullYear = 
 function(date) {
 	return date.getFullYear();
 };
 
-LsDateUtil.getTimeStr = 
+AjxDateUtil.getTimeStr = 
 function(date, format) {
 	var s = format;
-	s = s.replace(/%d/g, LsDateUtil._getDate(date, true));				// zero padded day of the month
-	s = s.replace(/%D/g, LsDateUtil._getDate(date, false));				// day of the month without padding
-	s = s.replace(/%M/g, LsDateUtil._getMonthName(date));				// full month name
-	s = s.replace(/%Y/g, LsDateUtil._getFullYear(date));				// full year
-	s = s.replace(/%h/g, LsDateUtil._getHoursStr(date, false, false));	// non-padded hours
-	s = s.replace(/%H/g, LsDateUtil._getHoursStr(date, true, false ));	// padded hours
-	s = s.replace(/%m/g, LsDateUtil._getMinutesStr(date));				// padded minutes
-	s = s.replace(/%s/g, LsDateUtil._getSecondsStr(date));				// padded seconds
-	s = s.replace(/%P/g, LsDateUtil._getAMPM(date, true));				// upper case AM PM
-	s = s.replace(/%p/g, LsDateUtil._getAMPM(date, false));				// lower case AM PM
+	s = s.replace(/%d/g, AjxDateUtil._getDate(date, true));				// zero padded day of the month
+	s = s.replace(/%D/g, AjxDateUtil._getDate(date, false));				// day of the month without padding
+	s = s.replace(/%M/g, AjxDateUtil._getMonthName(date));				// full month name
+	s = s.replace(/%Y/g, AjxDateUtil._getFullYear(date));				// full year
+	s = s.replace(/%h/g, AjxDateUtil._getHoursStr(date, false, false));	// non-padded hours
+	s = s.replace(/%H/g, AjxDateUtil._getHoursStr(date, true, false ));	// padded hours
+	s = s.replace(/%m/g, AjxDateUtil._getMinutesStr(date));				// padded minutes
+	s = s.replace(/%s/g, AjxDateUtil._getSecondsStr(date));				// padded seconds
+	s = s.replace(/%P/g, AjxDateUtil._getAMPM(date, true));				// upper case AM PM
+	s = s.replace(/%p/g, AjxDateUtil._getAMPM(date, false));				// lower case AM PM
 	return s;
 };
 
-LsDateUtil.getRoundedMins = 
+AjxDateUtil.getRoundedMins = 
 function (date, roundTo) {
 	var mins = date.getMinutes();
 	if (mins != 0 && roundTo)
@@ -299,7 +299,7 @@ function (date, roundTo) {
 	return mins;
 };
 
-LsDateUtil.roundTimeMins = 
+AjxDateUtil.roundTimeMins = 
 function(date, roundTo) {
 	var mins = date.getMinutes();
 	var hours = date.getHours();
@@ -315,12 +315,12 @@ function(date, roundTo) {
 	return date;
 };
 
-LsDateUtil.isInRange = 
+AjxDateUtil.isInRange = 
 function(startTime1, endTime1, startTime2, endTime2) {
 	return (startTime1 < endTime2 && endTime1 > startTime2);
 }
 
-LsDateUtil._pad = 
+AjxDateUtil._pad = 
 function(n) {
 	return n < 10 ? ('0' + n) : n;
 };

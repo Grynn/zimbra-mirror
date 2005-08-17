@@ -19,9 +19,9 @@ DwtDraggable._dragEl = null;
 * @param maxX	Maximum x coord to which we can drag (optional)
 * @param minY	Minimum y coord to which we can drag (optional)
 * @param maxY	Maximum x coord to which we can drag (optional)
-* @param dragStartCB LsCallback that is called when dragging is started
-* @param dragCB LsCallback that is called when dragging
-* @param dragEndCB LsCallback that is called when dragging is ended
+* @param dragStartCB AjxCallback that is called when dragging is started
+* @param dragCB AjxCallback that is called when dragging
+* @param dragEndCB AjxCallback that is called when dragging is ended
 * @param swapHorizRef If true, then mouse motion to the right will move element left (optional)
 * @param swapVertRef If true, then mouse motion to the bottom will move element up (optional)
 * @param fXMapper function that overides this classes x coordinate transformations (optional)

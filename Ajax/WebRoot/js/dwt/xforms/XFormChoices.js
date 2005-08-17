@@ -11,7 +11,7 @@ function XFormChoices(choiceObject, type, valueProperty, labelProperty) {
 	
 	if (this._type == XFormChoices.AUTO) this.autoDetermineType();
 	
-	this._eventMgr = new LsEventMgr();
+	this._eventMgr = new AjxEventMgr();
 }
 XFormChoices.prototype = new Object();
 XFormChoices.prototype.constructor = XFormChoices;
@@ -75,14 +75,14 @@ XFormChoices.prototype.autoDetermineType = function () {
 
 	var choices = this._choiceObject;
 	if (choices) {
-		if (LsUtil.isArray(choices)) {
+		if (AjxUtil.isArray(choices)) {
 			var firstChoice = choices[0];
-			if (LsUtil.isObject(firstChoice)) {
+			if (AjxUtil.isObject(firstChoice)) {
 				type = XFormChoices.OBJECT_LIST;
 			} else {
 				type = XFormChoices.SIMPLE_LIST;
 			}
-		} else if (LsUtil.isObject(choices)) {
+		} else if (AjxUtil.isObject(choices)) {
 			type = XFormChoices.HASH;
 		}
 	}

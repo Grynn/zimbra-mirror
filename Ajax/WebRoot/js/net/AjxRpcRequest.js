@@ -1,53 +1,53 @@
 /**
-* class LsRpcRequest encapsulates XMLHttpRequest as _httpReq
+* class AjxRpcRequest encapsulates XMLHttpRequest as _httpReq
 *
 **/
-function LsRpcRequest(init) {
+function AjxRpcRequest(init) {
 	if (arguments.length == 0) return;
 	
-	if (!LsRpcRequest._inited) 
-		LsRpcRequest._init();	
+	if (!AjxRpcRequest._inited) 
+		AjxRpcRequest._init();	
 	
-	if (LsEnv.isIE) {
-		this._httpReq = new ActiveXObject(LsRpcRequest._msxmlVers);
-	} else if (LsEnv.isSafari || LsEnv.isNav) {
+	if (AjxEnv.isIE) {
+		this._httpReq = new ActiveXObject(AjxRpcRequest._msxmlVers);
+	} else if (AjxEnv.isSafari || AjxEnv.isNav) {
 		this._httpReq =  new XMLHttpRequest();
 	}
 	this.busy=false;
 }
 
-LsRpcRequest._inited = false;
-LsRpcRequest._msxmlVers = null;
+AjxRpcRequest._inited = false;
+AjxRpcRequest._msxmlVers = null;
 
 
-LsRpcRequest.prototype.toString = 
+AjxRpcRequest.prototype.toString = 
 function() {
-	return "LsRpcRequest";
+	return "AjxRpcRequest";
 }
 
 /**
-* @method public LsRpcRequest.prototype.invoke
+* @method public AjxRpcRequest.prototype.invoke
 * @param requestStr - http request string
 * @param serverUrl - URI for HTTP request
 * @requestHeaders - HTTP request headers
-* @param callback - LsCallback instance. if call back is null, then the call is synchronous
+* @param callback - AjxCallback instance. if call back is null, then the call is synchronous
 **/
-LsRpcRequest.prototype.invoke =
+AjxRpcRequest.prototype.invoke =
 function(requestStr, serverUrl, requestHeaders, callback) {
 	// TODO Allow arbritatry request headers to be passed in
 	this._httpReq.open("post", serverUrl, (callback != null) );
 	if (callback) {
 		var tempThis = this;
-		DBG.println(LsDebug.DBG1, "Have callback");
+		DBG.println(AjxDebug.DBG1, "Have callback");
 		this._httpReq.onreadystatechange = function (evt) {
-			DBG.println(LsDebug.DBG1, "ReadyState changed");
+			DBG.println(AjxDebug.DBG1, "ReadyState changed");
 			if(!tempThis) {
 				//IE sometimes looses objects
 				callback.run( {text: null, xml: null, success: false, status: null} );				
 			}
-			DBG.println(LsDebug.DBG1, "ready state = " + tempThis._httpReq.readyState);
+			DBG.println(AjxDebug.DBG1, "ready state = " + tempThis._httpReq.readyState);
 			if(tempThis._httpReq.readyState==4) {
-				DBG.println(LsDebug.DBG1, "status = " + tempThis._httpReq.status);				
+				DBG.println(AjxDebug.DBG1, "status = " + tempThis._httpReq.status);				
 				if(tempThis._httpReq.status==200) {
 					callback.run( {text: tempThis._httpReq.responseText, xml: tempThis._httpReq.responseXML, success: true} );				
 				} else {
@@ -73,23 +73,23 @@ function(requestStr, serverUrl, requestHeaders, callback) {
 	}
 }
 
-LsRpcRequest._init =
+AjxRpcRequest._init =
 function() {
-	if (LsEnv.isIE) {
+	if (AjxEnv.isIE) {
 		var msxmlVers = ["MSXML2.XMLHTTP.4.0", "MSXML2.XMLHTTP.3.0", "MSXML2.XMLHTTP", "Microsoft.XMLHTTP"];
 		for (var i = 0; i < msxmlVers.length; i++) {
 			try {
 				// search for the xml version on user's machine
 				var x = new ActiveXObject(msxmlVers[i]);
-				LsRpcRequest._msxmlVers = msxmlVers[i];
+				AjxRpcRequest._msxmlVers = msxmlVers[i];
 				break;
 			} catch (ex) {
 				// do nothing
 			}
 		}
-		if (LsRpcRequest._msxmlVers == null)
-			throw new LsException("MSXML not installed", LsException.INTERNAL_ERROR, "LsRpc._init");
+		if (AjxRpcRequest._msxmlVers == null)
+			throw new AjxException("MSXML not installed", AjxException.INTERNAL_ERROR, "AjxRpc._init");
 	}
-	LsRpcRequest._inited = true;
+	AjxRpcRequest._inited = true;
 }
 

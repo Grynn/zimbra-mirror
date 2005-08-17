@@ -1,41 +1,41 @@
-function LsTimedAction() {
+function AjxTimedAction() {
 	this.obj = null;
 	this.method = null;
-	this.params = new LsVector();
+	this.params = new AjxVector();
 	this._tid = -1;
 	this._id = -1;
 }
 
-LsTimedAction.prototype.toString = 
+AjxTimedAction.prototype.toString = 
 function() {
-	return "LsTimedAction";
+	return "AjxTimedAction";
 }
 
-LsTimedAction._pendingActions = new Object();
-LsTimedAction._nextActionId = 0;
+AjxTimedAction._pendingActions = new Object();
+AjxTimedAction._nextActionId = 0;
 
-LsTimedAction.scheduleAction =
+AjxTimedAction.scheduleAction =
 function(action, timeout){
-	var id = action._id = LsTimedAction._nextActionId++;
-	LsTimedAction._pendingActions[id] = action;
-	var actionStr = "LsTimedAction._exec(" + id + ")";
+	var id = action._id = AjxTimedAction._nextActionId++;
+	AjxTimedAction._pendingActions[id] = action;
+	var actionStr = "AjxTimedAction._exec(" + id + ")";
 	action._tid = window.setTimeout(actionStr, timeout);
 	return action._id;
 }
 
-LsTimedAction.cancelAction =
+AjxTimedAction.cancelAction =
 function(actionId) {
-	var action = LsTimedAction._pendingActions[actionId];
+	var action = AjxTimedAction._pendingActions[actionId];
 	if (action) {
 		window.clearTimeout(action._tid);
-		delete LsTimedAction._pendingActions[actionId];
+		delete AjxTimedAction._pendingActions[actionId];
 	}
 }
 
-LsTimedAction._exec =
+AjxTimedAction._exec =
 function(actionId) {
-	var action = LsTimedAction._pendingActions[actionId];
-	delete LsTimedAction._pendingActions[actionId];
+	var action = AjxTimedAction._pendingActions[actionId];
+	delete AjxTimedAction._pendingActions[actionId];
 	if (action) {
 		if (action.obj)
 			action.method.apply(action.obj, action.params.getArray());

@@ -76,7 +76,7 @@ function (title, tabView) {
 		Dwt.setVisible(this._tabs[tabKey]["view"].getHtmlElement(), false);
 	}
 	
-	this._tabBar.addSelectionListener(tabKey, new LsListener(this, DwtTabView.prototype._tabButtonListener));	
+	this._tabBar.addSelectionListener(tabKey, new AjxListener(this, DwtTabView.prototype._tabButtonListener));	
 
 	return tabKey;
 }
@@ -283,7 +283,7 @@ function() {
 	} else {
 		//if the parent is not visible yet, then resize the page to fit the parent
 		var parentHeight = parseInt(this.parent.getHtmlElement().style.height);
-		var units = LsStringUtil.getUnitsFromSizeString(this.parent.getHtmlElement().style.height);
+		var units = AjxStringUtil.getUnitsFromSizeString(this.parent.getHtmlElement().style.height);
 		if(parentHeight > 80) {
 			this.getHtmlElement().style.height = (Number(parentHeight-80).toString() + units);
 		}
@@ -348,7 +348,7 @@ DwtTabBar.prototype.constructor = DwtTabBar;
  * the tab bar's div element is a table.
  */
 DwtTabBar.prototype._addItem = function(type, element, index) {
-	if (!LsUtil.isNumber(index)) {
+	if (!AjxUtil.isNumber(index)) {
 		var el = this.getHtmlElement().firstChild;
 		index = this._style == DwtToolBar.HORIZ_STYLE 
 			  ? el.rows[0].cells.length - 1: el.rows.length - 1;
@@ -373,7 +373,7 @@ DwtTabBar.prototype._createSpacerElement = function() {
 	var row3 = table.insertRow(table.rows.length);
 	
 	var row3cell1 = row3.insertCell(row3.cells.length);
-	LsImg.setImage(row3cell1, DwtImg.TAB_SPACER, null, true);
+	AjxImg.setImage(row3cell1, DwtImg.TAB_SPACER, null, true);
 	
 	return table;
 }
@@ -394,7 +394,7 @@ function() {
 //public method
 /**
 * @param tabId - the id used to create tab button in @link DwtTabBar.addButton method
-* @param listener - LsListener
+* @param listener - AjxListener
 **/
 DwtTabBar.prototype.addSelectionListener =
 function(tabKey, listener) {
@@ -413,7 +413,7 @@ function(tabKey, listener) {
 
 /**
 * @param tabId - the id used to create tab button in @link DwtTabBar.addButton method
-* @param listener - LsListener
+* @param listener - AjxListener
 **/
 DwtTabBar.prototype.removeSelectionListener =
 function(tabKey, listener) {
@@ -434,9 +434,9 @@ function (tabKey, tabTitle) {
 	be.style.position = "relative";
 	be.style.top = "-3px";
 	
-	this._buttons[tabKey].addSelectionListener(new LsListener(this, DwtTabBar._setActiveTab));
+	this._buttons[tabKey].addSelectionListener(new AjxListener(this, DwtTabBar._setActiveTab));
 	this._tbuttons[tabKey].addListener(DwtEvent.ONMOUSEUP,
-					   (new LsListener(this,DwtTabBar._setActiveTab)));
+					   (new AjxListener(this,DwtTabBar._setActiveTab)));
 	
 	if (this._btnImage != null)
 		b.setImage(this._btnImage);
@@ -551,17 +551,17 @@ function DwtTabButton(parent) {
 	this.bottomImg = document.createElement("div");
 	this.rightBottomImg = document.createElement("div");
 
-	LsImg.setImage(this.leftTopImg, DwtImg.TAB_TOP_LEFT, null, true);
-	LsImg.setImage(this.topImg, DwtImg.TAB_TOP_MIDDLE, LsImg.HORIZ_BORDER, true);
-	LsImg.setImage(this.rightTopImg, DwtImg.TAB_TOP_RIGHT, null, true);
+	AjxImg.setImage(this.leftTopImg, DwtImg.TAB_TOP_LEFT, null, true);
+	AjxImg.setImage(this.topImg, DwtImg.TAB_TOP_MIDDLE, AjxImg.HORIZ_BORDER, true);
+	AjxImg.setImage(this.rightTopImg, DwtImg.TAB_TOP_RIGHT, null, true);
 
-	LsImg.setImage(this.leftImg, DwtImg.TAB_MIDDLE_LEFT, LsImg.VERT_BORDER, true);
-	LsImg.setImage(this.centerImg, DwtImg.TAB_MIDDLE_MIDDLE, LsImg.BACKGROUND, true);
-	LsImg.setImage(this.rightImg, DwtImg.TAB_MIDDLE_RIGHT, LsImg.VERT_BORDER, true);
+	AjxImg.setImage(this.leftImg, DwtImg.TAB_MIDDLE_LEFT, AjxImg.VERT_BORDER, true);
+	AjxImg.setImage(this.centerImg, DwtImg.TAB_MIDDLE_MIDDLE, AjxImg.BACKGROUND, true);
+	AjxImg.setImage(this.rightImg, DwtImg.TAB_MIDDLE_RIGHT, AjxImg.VERT_BORDER, true);
 
-	LsImg.setImage(this.leftBottomImg, DwtImg.TAB_BOTTOM_LEFT, null, true);
-	LsImg.setImage(this.bottomImg, DwtImg.TAB_BOTTOM_MIDDLE, LsImg.HORIZ_BORDER, true);
-	LsImg.setImage(this.rightBottomImg, DwtImg.TAB_BOTTOM_RIGHT, null, true);
+	AjxImg.setImage(this.leftBottomImg, DwtImg.TAB_BOTTOM_LEFT, null, true);
+	AjxImg.setImage(this.bottomImg, DwtImg.TAB_BOTTOM_MIDDLE, AjxImg.HORIZ_BORDER, true);
+	AjxImg.setImage(this.rightBottomImg, DwtImg.TAB_BOTTOM_RIGHT, null, true);
 		
 	this._leftTopCell.appendChild(this.leftTopImg);
 	this._centerTopCell.appendChild(this.topImg);
@@ -579,12 +579,12 @@ function DwtTabButton(parent) {
 	this.table.className=this._inactiveClassName;
 
 	this._setMouseEventHdlrs();
-	this._mouseOverListener = new LsListener(this, DwtTabButton.prototype._mouseOverListener);
-	this._mouseOutListener = new LsListener(this, DwtTabButton.prototype._mouseOutListener);
+	this._mouseOverListener = new AjxListener(this, DwtTabButton.prototype._mouseOverListener);
+	this._mouseOutListener = new AjxListener(this, DwtTabButton.prototype._mouseOutListener);
 
 	this.addListener(DwtEvent.ONMOUSEOVER, this._mouseOverListener);
 	this.addListener(DwtEvent.ONMOUSEOUT, this._mouseOutListener);
-	this._mouseOutAction = new LsTimedAction();
+	this._mouseOutAction = new AjxTimedAction();
 	this._mouseOutAction.method = DwtTabButton.prototype._handleMouseOut;
 	this._mouseOutAction.obj = this;
 	this._mouseOutActionId = -1;
@@ -605,17 +605,17 @@ DwtTabButton.prototype.setOpen =
 function () {
 	this.table.className=this._activeClassName;	
 
-	LsImg.setImage(this.leftTopImg, DwtImg.TAB_SELECTED_TOP_LEFT, null, true);
-	LsImg.setImage(this.topImg, DwtImg.TAB_SELECTED_TOP_MIDDLE, LsImg.HORIZ_BORDER, true);
-	LsImg.setImage(this.rightTopImg, DwtImg.TAB_SELECTED_TOP_RIGHT, null, true);
+	AjxImg.setImage(this.leftTopImg, DwtImg.TAB_SELECTED_TOP_LEFT, null, true);
+	AjxImg.setImage(this.topImg, DwtImg.TAB_SELECTED_TOP_MIDDLE, AjxImg.HORIZ_BORDER, true);
+	AjxImg.setImage(this.rightTopImg, DwtImg.TAB_SELECTED_TOP_RIGHT, null, true);
 
-	LsImg.setImage(this.leftImg, DwtImg.TAB_SELECTED_MIDDLE_LEFT, LsImg.VERT_BORDER, true);
-	LsImg.setImage(this._centerMiddleCell, DwtImg.TAB_SELECTED_MIDDLE_MIDDLE, LsImg.BACKGROUND, true);
-	LsImg.setImage(this.rightImg, DwtImg.TAB_SELECTED_MIDDLE_RIGHT, LsImg.VERT_BORDER, true);
+	AjxImg.setImage(this.leftImg, DwtImg.TAB_SELECTED_MIDDLE_LEFT, AjxImg.VERT_BORDER, true);
+	AjxImg.setImage(this._centerMiddleCell, DwtImg.TAB_SELECTED_MIDDLE_MIDDLE, AjxImg.BACKGROUND, true);
+	AjxImg.setImage(this.rightImg, DwtImg.TAB_SELECTED_MIDDLE_RIGHT, AjxImg.VERT_BORDER, true);
 
-	LsImg.setImage(this.leftBottomImg, DwtImg.TAB_SELECTED_BOTTOM_LEFT, null, true);
-	LsImg.setImage(this.bottomImg, DwtImg.TAB_SELECTED_BOTTOM_MIDDLE, LsImg.HORIZ_BORDER, true);
-	LsImg.setImage(this.rightBottomImg, DwtImg.TAB_SELECTED_BOTTOM_RIGHT, null, true);
+	AjxImg.setImage(this.leftBottomImg, DwtImg.TAB_SELECTED_BOTTOM_LEFT, null, true);
+	AjxImg.setImage(this.bottomImg, DwtImg.TAB_SELECTED_BOTTOM_MIDDLE, AjxImg.HORIZ_BORDER, true);
+	AjxImg.setImage(this.rightBottomImg, DwtImg.TAB_SELECTED_BOTTOM_RIGHT, null, true);
 	
 	this._isClosed = false;
 }
@@ -627,17 +627,17 @@ DwtTabButton.prototype.setClosed =
 function () {
 	this.table.className = this._inactiveClassName;	
 
-	LsImg.setImage(this.leftTopImg, DwtImg.TAB_TOP_LEFT, null, true);
-	LsImg.setImage(this.topImg, DwtImg.TAB_TOP_MIDDLE, LsImg.HORIZ_BORDER, true);
-	LsImg.setImage(this.rightTopImg, DwtImg.TAB_TOP_RIGHT, null, true);
+	AjxImg.setImage(this.leftTopImg, DwtImg.TAB_TOP_LEFT, null, true);
+	AjxImg.setImage(this.topImg, DwtImg.TAB_TOP_MIDDLE, AjxImg.HORIZ_BORDER, true);
+	AjxImg.setImage(this.rightTopImg, DwtImg.TAB_TOP_RIGHT, null, true);
 
-	LsImg.setImage(this.leftImg, DwtImg.TAB_MIDDLE_LEFT, LsImg.VERT_BORDER, true);
-	LsImg.setImage(this._centerMiddleCell, DwtImg.TAB_MIDDLE_MIDDLE, LsImg.BACKGROUND, true);
-	LsImg.setImage(this.rightImg, DwtImg.TAB_MIDDLE_RIGHT, LsImg.VERT_BORDER, true);
+	AjxImg.setImage(this.leftImg, DwtImg.TAB_MIDDLE_LEFT, AjxImg.VERT_BORDER, true);
+	AjxImg.setImage(this._centerMiddleCell, DwtImg.TAB_MIDDLE_MIDDLE, AjxImg.BACKGROUND, true);
+	AjxImg.setImage(this.rightImg, DwtImg.TAB_MIDDLE_RIGHT, AjxImg.VERT_BORDER, true);
 
-	LsImg.setImage(this.leftBottomImg, DwtImg.TAB_BOTTOM_LEFT, null, true);
-	LsImg.setImage(this.bottomImg, DwtImg.TAB_BOTTOM_MIDDLE, LsImg.HORIZ_BORDER, true);
-	LsImg.setImage(this.rightBottomImg, DwtImg.TAB_BOTTOM_RIGHT, null, true);
+	AjxImg.setImage(this.leftBottomImg, DwtImg.TAB_BOTTOM_LEFT, null, true);
+	AjxImg.setImage(this.bottomImg, DwtImg.TAB_BOTTOM_MIDDLE, AjxImg.HORIZ_BORDER, true);
+	AjxImg.setImage(this.rightBottomImg, DwtImg.TAB_BOTTOM_RIGHT, null, true);
 	
 	this._isClosed = true;
 }
@@ -656,29 +656,29 @@ function (child) {
 DwtTabButton.prototype._mouseOverListener = 
 function(ev) {
 	if (this._mouseOutActionId != -1) {
-		LsTimedAction.cancelAction(this._mouseOutActionId);
+		AjxTimedAction.cancelAction(this._mouseOutActionId);
 		this._mouseOutActionId = -1;
 	}
 	if (this._isClosed) {
-		LsImg.setImage(this.leftTopImg, DwtImg.TAB_ACTIVE_TOP_LEFT, null, true);
-		LsImg.setImage(this.topImg, DwtImg.TAB_ACTIVE_TOP_MIDDLE, LsImg.HORIZ_BORDER, true);
-		LsImg.setImage(this.rightTopImg, DwtImg.TAB_ACTIVE_TOP_RIGHT, null, true);
+		AjxImg.setImage(this.leftTopImg, DwtImg.TAB_ACTIVE_TOP_LEFT, null, true);
+		AjxImg.setImage(this.topImg, DwtImg.TAB_ACTIVE_TOP_MIDDLE, AjxImg.HORIZ_BORDER, true);
+		AjxImg.setImage(this.rightTopImg, DwtImg.TAB_ACTIVE_TOP_RIGHT, null, true);
 
-		LsImg.setImage(this.leftImg, DwtImg.TAB_ACTIVE_MIDDLE_LEFT, LsImg.VERT_BORDER, true);
-		LsImg.setImage(this._centerMiddleCell, DwtImg.TAB_ACTIVE_MIDDLE_MIDDLE, LsImg.BACKGROUND, true);
-		LsImg.setImage(this.rightImg, DwtImg.TAB_ACTIVE_MIDDLE_RIGHT, LsImg.VERT_BORDER, true);
+		AjxImg.setImage(this.leftImg, DwtImg.TAB_ACTIVE_MIDDLE_LEFT, AjxImg.VERT_BORDER, true);
+		AjxImg.setImage(this._centerMiddleCell, DwtImg.TAB_ACTIVE_MIDDLE_MIDDLE, AjxImg.BACKGROUND, true);
+		AjxImg.setImage(this.rightImg, DwtImg.TAB_ACTIVE_MIDDLE_RIGHT, AjxImg.VERT_BORDER, true);
 
-		LsImg.setImage(this.leftBottomImg, DwtImg.TAB_ACTIVE_BOTTOM_LEFT, null, true);
-		LsImg.setImage(this.bottomImg, DwtImg.TAB_ACTIVE_BOTTOM_MIDDLE, LsImg.HORIZ_BORDER, true);
-		LsImg.setImage(this.rightBottomImg, DwtImg.TAB_ACTIVE_BOTTOM_RIGHT, null, true);
+		AjxImg.setImage(this.leftBottomImg, DwtImg.TAB_ACTIVE_BOTTOM_LEFT, null, true);
+		AjxImg.setImage(this.bottomImg, DwtImg.TAB_ACTIVE_BOTTOM_MIDDLE, AjxImg.HORIZ_BORDER, true);
+		AjxImg.setImage(this.rightBottomImg, DwtImg.TAB_ACTIVE_BOTTOM_RIGHT, null, true);
 	}
 }
 
 DwtTabButton.prototype._mouseOutListener = 
 function(ev) {
-	if (LsEnv.isIE){
+	if (AjxEnv.isIE){
 		this._mouseOutActionId = 
- 		   LsTimedAction.scheduleAction(this._mouseOutAction, 1);
+ 		   AjxTimedAction.scheduleAction(this._mouseOutAction, 1);
 	} else {
 		this._handleMouseOut();
 	}
@@ -687,16 +687,16 @@ function(ev) {
 DwtTabButton.prototype._handleMouseOut = function (){
 	this._mouseOutActionId = -1;
 	if (this._isClosed) {
-		LsImg.setImage(this.leftTopImg, DwtImg.TAB_TOP_LEFT, null, true);
-		LsImg.setImage(this.topImg, DwtImg.TAB_TOP_MIDDLE, LsImg.HORIZ_BORDER, true);
-		LsImg.setImage(this.rightTopImg, DwtImg.TAB_TOP_RIGHT, null, true);
+		AjxImg.setImage(this.leftTopImg, DwtImg.TAB_TOP_LEFT, null, true);
+		AjxImg.setImage(this.topImg, DwtImg.TAB_TOP_MIDDLE, AjxImg.HORIZ_BORDER, true);
+		AjxImg.setImage(this.rightTopImg, DwtImg.TAB_TOP_RIGHT, null, true);
 
-		LsImg.setImage(this.leftImg, DwtImg.TAB_MIDDLE_LEFT, LsImg.VERT_BORDER, true);
-		LsImg.setImage(this._centerMiddleCell, DwtImg.TAB_MIDDLE_MIDDLE, LsImg.BACKGROUND, true);
-		LsImg.setImage(this.rightImg, DwtImg.TAB_MIDDLE_RIGHT, LsImg.VERT_BORDER, true);
+		AjxImg.setImage(this.leftImg, DwtImg.TAB_MIDDLE_LEFT, AjxImg.VERT_BORDER, true);
+		AjxImg.setImage(this._centerMiddleCell, DwtImg.TAB_MIDDLE_MIDDLE, AjxImg.BACKGROUND, true);
+		AjxImg.setImage(this.rightImg, DwtImg.TAB_MIDDLE_RIGHT, AjxImg.VERT_BORDER, true);
 
-		LsImg.setImage(this.leftBottomImg, DwtImg.TAB_BOTTOM_LEFT, null, true);
-		LsImg.setImage(this.bottomImg, DwtImg.TAB_BOTTOM_MIDDLE, LsImg.HORIZ_BORDER, true);
-		LsImg.setImage(this.rightBottomImg, DwtImg.TAB_BOTTOM_RIGHT, null, true);
+		AjxImg.setImage(this.leftBottomImg, DwtImg.TAB_BOTTOM_LEFT, null, true);
+		AjxImg.setImage(this.bottomImg, DwtImg.TAB_BOTTOM_MIDDLE, AjxImg.HORIZ_BORDER, true);
+		AjxImg.setImage(this.rightBottomImg, DwtImg.TAB_BOTTOM_RIGHT, null, true);
 	}
 }

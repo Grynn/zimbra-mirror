@@ -13,9 +13,9 @@ function DwtWizardDialog (parent, className, title, w, h) {
 	if (arguments.length == 0) return;
 	var clsName = className || "DwtDialog";
 	
-	var nextButton = new DwtDialog_ButtonDescriptor(DwtWizardDialog.NEXT_BUTTON, DwtMsg._next, DwtDialog.ALIGN_RIGHT, new LsCallback(this, this.goNext));
-	var prevButton = new DwtDialog_ButtonDescriptor(DwtWizardDialog.PREV_BUTTON, DwtMsg._prev, DwtDialog.ALIGN_RIGHT, new LsCallback(this, this.goPrev));
-	var finishButton = new DwtDialog_ButtonDescriptor(DwtWizardDialog.FINISH_BUTTON, DwtMsg._finish, DwtDialog.ALIGN_RIGHT, new LsCallback(this, this.finishWizard));
+	var nextButton = new DwtDialog_ButtonDescriptor(DwtWizardDialog.NEXT_BUTTON, DwtMsg._next, DwtDialog.ALIGN_RIGHT, new AjxCallback(this, this.goNext));
+	var prevButton = new DwtDialog_ButtonDescriptor(DwtWizardDialog.PREV_BUTTON, DwtMsg._prev, DwtDialog.ALIGN_RIGHT, new AjxCallback(this, this.goPrev));
+	var finishButton = new DwtDialog_ButtonDescriptor(DwtWizardDialog.FINISH_BUTTON, DwtMsg._finish, DwtDialog.ALIGN_RIGHT, new AjxCallback(this, this.finishWizard));
 	DwtDialog.call(this, parent, clsName, null, [DwtDialog.CANCEL_BUTTON], [prevButton,nextButton,finishButton]);
 
 	if (!w) {
@@ -352,13 +352,13 @@ DwtWizardPage.prototype.showMe =
 function() {
 	this.setZIndex(DwtTabView.Z_ACTIVE_TAB);
 	/*
-	DBG.println(LsDebug.DBG3, "DwtWizardPage.prototype.showMe");
-	DBG.println(LsDebug.DBG3, "this.parent.getHtmlElement().offsetHeight: " + this.parent.getHtmlElement().offsetHeight);		
-	DBG.println(LsDebug.DBG3, "this.parent.getHtmlElement().clientHeight: " + this.parent.getHtmlElement().clientHeight);				
-	DBG.println(LsDebug.DBG3, "this.parent.getHtmlElement().offsetWidth: " + this.parent.getHtmlElement().offsetWidth);		
-	DBG.println(LsDebug.DBG3, "this.parent.getHtmlElement().clientWidth: " + this.parent.getHtmlElement().clientWidth);				
-	DBG.println(LsDebug.DBG3, "this.parent._contentH: " + this.parent._contentH);					
-	DBG.println(LsDebug.DBG3, "this.parent._contentW: " + this.parent._contentW);		
+	DBG.println(AjxDebug.DBG3, "DwtWizardPage.prototype.showMe");
+	DBG.println(AjxDebug.DBG3, "this.parent.getHtmlElement().offsetHeight: " + this.parent.getHtmlElement().offsetHeight);		
+	DBG.println(AjxDebug.DBG3, "this.parent.getHtmlElement().clientHeight: " + this.parent.getHtmlElement().clientHeight);				
+	DBG.println(AjxDebug.DBG3, "this.parent.getHtmlElement().offsetWidth: " + this.parent.getHtmlElement().offsetWidth);		
+	DBG.println(AjxDebug.DBG3, "this.parent.getHtmlElement().clientWidth: " + this.parent.getHtmlElement().clientWidth);				
+	DBG.println(AjxDebug.DBG3, "this.parent._contentH: " + this.parent._contentH);					
+	DBG.println(AjxDebug.DBG3, "this.parent._contentW: " + this.parent._contentW);		
 	*/
 	this.getHtmlElement().style.height=this.parent._contentH;
 
@@ -377,7 +377,7 @@ function DwtWizProgressBar(parent) {
 	this._table.border = 0;
 	this._table.cellPadding = 0;
 	this._table.cellSpacing = 0;
-	this._menuListeners = new LsVector();
+	this._menuListeners = new AjxVector();
 	this.getHtmlElement().appendChild(this._table);
 	this._table.backgroundColor = DwtCssStyle.getProperty(this.parent.getHtmlElement(), "background-color");
 	this._stepsNumber = 0; //number of steps

@@ -10,16 +10,16 @@
 * @param obj	(optional) the object to call the function from
 * @param func	the listener function
 */
-function LsListener(obj, method) {
-	LsCallback.call(this, obj, method);
+function AjxListener(obj, method) {
+	AjxCallback.call(this, obj, method);
 }
 
-LsListener.prototype = LsCallback;
-LsListener.prototype.constructor = LsListener;
+AjxListener.prototype = AjxCallback;
+AjxListener.prototype.constructor = AjxListener;
 
-LsListener.prototype.toString = 
+AjxListener.prototype.toString = 
 function() {
-	return "LsListener";
+	return "AjxListener";
 }
 
 /**
@@ -27,7 +27,7 @@ function() {
 *
 * @param ev		the event object that gets passed to an event handler
 */
-LsListener.prototype.handleEvent =
+AjxListener.prototype.handleEvent =
 function(ev) {
-	return LsCallback.prototype.run.call(this, ev);
+	return AjxCallback.prototype.run.call(this, ev);
 }

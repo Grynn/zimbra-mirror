@@ -73,11 +73,11 @@ function() {
 DwtBaseDialog.prototype.initializeDragging = function (dragHandleId) {
 	var dragHandle = document.getElementById(dragHandleId);
 	if (dragHandle) {
-		var p = Dwt.getSize(LsCore.objectWithId(window._dwtShell).getHtmlElement());
+		var p = Dwt.getSize(AjxCore.objectWithId(window._dwtShell).getHtmlElement());
 		var dragObj = document.getElementById(this._htmlElId);
 		var size = this.getSize();
-		var dragEndCb = new LsCallback(this, DwtBaseDialog.prototype._dragEnd);
-		var dragCb = new LsCallback(this, DwtBaseDialog.prototype._duringDrag);
+		var dragEndCb = new AjxCallback(this, DwtBaseDialog.prototype._dragEnd);
+		var dragCb = new AjxCallback(this, DwtBaseDialog.prototype._duringDrag);
 		DwtDraggable.init(dragHandle, dragObj, 0,
 						  p.x - size.x, 0, p.y - size.y, null, dragCb, dragEndCb);
 	}	

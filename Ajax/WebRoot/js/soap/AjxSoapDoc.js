@@ -1,23 +1,23 @@
 // Don't directly instantiate SoapDoc, use one of the create factory methods instead
-function LsSoapDoc() {
+function AjxSoapDoc() {
 }
 
-LsSoapDoc.prototype.toString = 
+AjxSoapDoc.prototype.toString = 
 function() {
-	return "LsSoapDoc";
+	return "AjxSoapDoc";
 }
 
-LsSoapDoc._SOAP_URI = "http://www.w3.org/2003/05/soap-envelope";
-LsSoapDoc._XMLNS_URI = "http://www.w3.org/2000/xmlns";
+AjxSoapDoc._SOAP_URI = "http://www.w3.org/2003/05/soap-envelope";
+AjxSoapDoc._XMLNS_URI = "http://www.w3.org/2000/xmlns";
 
-LsSoapDoc.create =
+AjxSoapDoc.create =
 function(method, namespace, namespaceId) {
-	var sd = new LsSoapDoc();
-	sd._xmlDoc = LsXmlDoc.create();
+	var sd = new AjxSoapDoc();
+	sd._xmlDoc = AjxXmlDoc.create();
 	var d = sd._xmlDoc.getDoc();	
 	var envEl = d.createElement("soap:Envelope");
 	
-	envEl.setAttribute("xmlns:soap", LsSoapDoc._SOAP_URI);
+	envEl.setAttribute("xmlns:soap", AjxSoapDoc._SOAP_URI);
 
 	d.appendChild(envEl);
 	
@@ -34,43 +34,43 @@ function(method, namespace, namespaceId) {
 	return sd;
 }
 
-LsSoapDoc.createFromDom =
+AjxSoapDoc.createFromDom =
 function(doc) {	
-	var sd = new LsSoapDoc();
-	sd._xmlDoc = LsXmlDoc.createFromDom(doc);
+	var sd = new AjxSoapDoc();
+	sd._xmlDoc = AjxXmlDoc.createFromDom(doc);
 	sd._methodEl = sd._check(sd._xmlDoc);
 	return sd;
 }
 
-LsSoapDoc.createFromXml =
+AjxSoapDoc.createFromXml =
 function(xml) {
-	var sd = new LsSoapDoc();
-	sd._xmlDoc = LsXmlDoc.createFromXml(xml);
+	var sd = new AjxSoapDoc();
+	sd._xmlDoc = AjxXmlDoc.createFromXml(xml);
 	sd._methodEl = sd._check(sd._xmlDoc);
 	return sd;
 }
 
-LsSoapDoc.element2FaultObj =
+AjxSoapDoc.element2FaultObj =
 function(el) {
 	// If the element is not a SOAP fault, then return null
 	var faultEl = el.firstChild;
 	// Safari sux at handling namespaces
-	if (!LsEnv.isSafari) {
-		if (faultEl != null && faultEl.namespaceURI != LsSoapDoc._SOAP_URI || faultEl.nodeName != (el.prefix + ":Fault"))
+	if (!AjxEnv.isSafari) {
+		if (faultEl != null && faultEl.namespaceURI != AjxSoapDoc._SOAP_URI || faultEl.nodeName != (el.prefix + ":Fault"))
 			return null;
 	} else {
 		if (faultEl != null && faultEl.nodeName != (el.prefix + ":Fault"))
 			return null;
 	}
-	return new LsSoapFault(faultEl);
+	return new AjxSoapFault(faultEl);
 }
 
-LsSoapDoc.prototype.setMethodAttribute =
+AjxSoapDoc.prototype.setMethodAttribute =
 function(name, value){
 	this._methodEl.setAttribute(name, value);
 };
 
-LsSoapDoc.prototype.set =
+AjxSoapDoc.prototype.set =
 function(name, value, element) {
 	var p = this._xmlDoc.getDoc().createElement(name);
 	if (value != null) {
@@ -86,90 +86,90 @@ function(name, value, element) {
 	return p;
 }
 
-LsSoapDoc.prototype.getMethod =
+AjxSoapDoc.prototype.getMethod =
 function() {
 	return this._methodEl;
 }
 
-LsSoapDoc.prototype.createHeaderElement =
+AjxSoapDoc.prototype.createHeaderElement =
 function() {
 	var d = this._xmlDoc.getDoc();
 	var envEl = d.firstChild;
 	var header = this.getHeader();
 	if (header != null) {
-		throw new LsSoapException("SOAP header already exists", LsSoapException.ELEMENT_EXISTS, "LsSoapDoc.prototype.createHeaderElement");
+		throw new AjxSoapException("SOAP header already exists", AjxSoapException.ELEMENT_EXISTS, "AjxSoapDoc.prototype.createHeaderElement");
 	}
 	header = d.createElement("soap:Header")
 	envEl.insertBefore(header, envEl.firstChild);
 	return header;
 }
 
-LsSoapDoc.prototype.getHeader =
+AjxSoapDoc.prototype.getHeader =
 function() {
 	// would love to use getElementsByTagNameNS, but IE does not support it
 	var d = this._xmlDoc.getDoc();
 	var nodeList;
-	if (LsEnv.isIE)
+	if (AjxEnv.isIE)
 		nodeList = d.getElementsByTagName(d.firstChild.prefix + ":Header");
 	else
-		nodeList = d.getElementsByTagNameNS(LsSoapDoc._SOAP_URI, "Header");
+		nodeList = d.getElementsByTagNameNS(AjxSoapDoc._SOAP_URI, "Header");
 	if (nodeList == null) 
 		return null;
 	return nodeList[0];
 }
 
 
-LsSoapDoc.prototype.getBody =
+AjxSoapDoc.prototype.getBody =
 function() {
 	// would love to use getElementsByTagNameNS, but IE does not support it
 	var d = this._xmlDoc.getDoc();
 	var nodeList;
-	if (LsEnv.isIE)
+	if (AjxEnv.isIE)
 		nodeList = d.getElementsByTagName(d.firstChild.prefix + ":Body");
 	else
-		nodeList = d.getElementsByTagNameNS(LsSoapDoc._SOAP_URI, "Body");
+		nodeList = d.getElementsByTagNameNS(AjxSoapDoc._SOAP_URI, "Body");
 	if (nodeList == null) 
 		return null;
 	return nodeList[0];
 }
 
-LsSoapDoc.prototype.getDoc =
+AjxSoapDoc.prototype.getDoc =
 function() {
 	return this._xmlDoc.getDoc();
 }
 
-LsSoapDoc.prototype.getXml =
+AjxSoapDoc.prototype.getXml =
 function() {
-	if (LsEnv.isSafari)
-		return LsXmlDoc.getXml(this._xmlDoc.getDoc());
+	if (AjxEnv.isSafari)
+		return AjxXmlDoc.getXml(this._xmlDoc.getDoc());
 	else 
 		return this._xmlDoc.getDoc().xml;
 }
 
 
 // Very simple checking of soap doc. Should be made more comprehensive
-LsSoapDoc.prototype._check =
+AjxSoapDoc.prototype._check =
 function(xmlDoc) {
 	var doc = xmlDoc.getDoc();
 	if (doc.childNodes.length != 1) 
-		throw new LsSoapException("Invalid SOAP PDU", LsSoapException.INVALID_PDU, "LsSoapDoc.createFromXml:1");
+		throw new AjxSoapException("Invalid SOAP PDU", AjxSoapException.INVALID_PDU, "AjxSoapDoc.createFromXml:1");
 
 	// Check to make sure we have a soap envelope
 	var el = doc.firstChild;
 
 	// Safari sux at handling namespaces
-	if (!LsEnv.isSafari) {
-		if (el.namespaceURI != LsSoapDoc._SOAP_URI || 
+	if (!AjxEnv.isSafari) {
+		if (el.namespaceURI != AjxSoapDoc._SOAP_URI || 
 		    el.nodeName != (el.prefix + ":Envelope") || 
 		    (el.childNodes.length < 1 || el.childNodes.length > 2)) 
 		{
 			DBG.println("<font color=red>XML PARSE ERROR on RESPONSE:</font>");
 			DBG.printRaw(doc.xml);
-			throw new LsSoapException("Invalid SOAP PDU", LsSoapException.INVALID_PDU, "LsSoapDoc.createFromXml:2");
+			throw new AjxSoapException("Invalid SOAP PDU", AjxSoapException.INVALID_PDU, "AjxSoapDoc.createFromXml:2");
 		}
 	} else {
 		if (el.nodeName != (el.prefix + ":Envelope"))
-			throw new LsSoapException("Invalid SOAP PDU", LsSoapException.INVALID_PDU, "LsSoapDoc.createFromXml:2");
+			throw new AjxSoapException("Invalid SOAP PDU", AjxSoapException.INVALID_PDU, "AjxSoapDoc.createFromXml:2");
 	}
 }
 

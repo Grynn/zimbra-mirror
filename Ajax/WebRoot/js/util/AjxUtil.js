@@ -1,66 +1,66 @@
 /**
- * LsUtil - static class with some utility methods. This is where to
+ * AjxUtil - static class with some utility methods. This is where to
  * put things when no other class wants them.
  *
- * 12/3/2004 At this point, it only needs LsEnv to be loaded.
+ * 12/3/2004 At this point, it only needs AjxEnv to be loaded.
  */
-function LsUtil () {
+function AjxUtil () {
 };
 
-LsUtil.FLOAT_RE = /^[+\-]?((\d+(\.\d*)?)|((\d*\.)?\d+))([eE][+\-]?\d+)?$/;
-LsUtil.NOTFLOAT_RE = /[^\d\.]/;
-LsUtil.NOTINT_RE = /[^0-9]+/;
-LsUtil.LIFETIME_FIELD = /^([0-9])+([dhms])?$/;
-LsUtil.isSpecified 	= function(aThing) { return ((aThing !== void 0) && (aThing !== null)); };
-LsUtil.isUndefined 	= function(aThing) { return (aThing === void 0); };
-LsUtil.isNull 		= function(aThing) { return (aThing === null); };
-LsUtil.isBoolean 	= function(aThing) { return (typeof(aThing) == 'boolean'); };
-LsUtil.isString 	= function(aThing) { return (typeof(aThing) == 'string'); };
-LsUtil.isNumber 	= function(aThing) { return (typeof(aThing) == 'number'); };
-LsUtil.isObject 	= function(aThing) { return ((typeof(aThing) == 'object') && (aThing !== null)); };
-LsUtil.isArray 		= function(aThing) { return LsUtil.isInstance(aThing, Array); };
-LsUtil.isFunction 	= function(aThing) { return (typeof(aThing) == 'function'); };
-LsUtil.isDate 		= function(aThing) { return LsUtil.isInstance(aThing, Date); };
+AjxUtil.FLOAT_RE = /^[+\-]?((\d+(\.\d*)?)|((\d*\.)?\d+))([eE][+\-]?\d+)?$/;
+AjxUtil.NOTFLOAT_RE = /[^\d\.]/;
+AjxUtil.NOTINT_RE = /[^0-9]+/;
+AjxUtil.LIFETIME_FIELD = /^([0-9])+([dhms])?$/;
+AjxUtil.isSpecified 	= function(aThing) { return ((aThing !== void 0) && (aThing !== null)); };
+AjxUtil.isUndefined 	= function(aThing) { return (aThing === void 0); };
+AjxUtil.isNull 		= function(aThing) { return (aThing === null); };
+AjxUtil.isBoolean 	= function(aThing) { return (typeof(aThing) == 'boolean'); };
+AjxUtil.isString 	= function(aThing) { return (typeof(aThing) == 'string'); };
+AjxUtil.isNumber 	= function(aThing) { return (typeof(aThing) == 'number'); };
+AjxUtil.isObject 	= function(aThing) { return ((typeof(aThing) == 'object') && (aThing !== null)); };
+AjxUtil.isArray 		= function(aThing) { return AjxUtil.isInstance(aThing, Array); };
+AjxUtil.isFunction 	= function(aThing) { return (typeof(aThing) == 'function'); };
+AjxUtil.isDate 		= function(aThing) { return AjxUtil.isInstance(aThing, Date); };
 
-LsUtil.isNumeric 	= function(aThing) { return (!isNaN(parseInt(aThing)) && LsUtil.FLOAT_RE.test(aThing) && !LsUtil.NOTFLOAT_RE.test(aThing)); };
-LsUtil.isInteger	= function(aThing) { return (LsUtil.isNumeric(aThing) && !LsUtil.NOTINT_RE.test(aThing)); };
-LsUtil.isNonNegativeInteger = function (aThing) {
-	var retVal = (LsUtil.isNumeric(aThing) && LsUtil.isInteger(aThing) && (parseInt(aThing) >= 0) ); 
+AjxUtil.isNumeric 	= function(aThing) { return (!isNaN(parseInt(aThing)) && AjxUtil.FLOAT_RE.test(aThing) && !AjxUtil.NOTFLOAT_RE.test(aThing)); };
+AjxUtil.isInteger	= function(aThing) { return (AjxUtil.isNumeric(aThing) && !AjxUtil.NOTINT_RE.test(aThing)); };
+AjxUtil.isNonNegativeInteger = function (aThing) {
+	var retVal = (AjxUtil.isNumeric(aThing) && AjxUtil.isInteger(aThing) && (parseInt(aThing) >= 0) ); 
 	return retVal;
 };
-LsUtil.isLifeTime = function (aThing) { return LsUtil.LIFETIME_FIELD.test(aThing); };
+AjxUtil.isLifeTime = function (aThing) { return AjxUtil.LIFETIME_FIELD.test(aThing); };
 
-LsUtil.SIZE_GIGABYTES = "GB";
-LsUtil.SIZE_MEGABYTES = "MB";
-LsUtil.SIZE_KILOBYTES = "KB";
-LsUtil.SIZE_BYTES = "B";
+AjxUtil.SIZE_GIGABYTES = "GB";
+AjxUtil.SIZE_MEGABYTES = "MB";
+AjxUtil.SIZE_KILOBYTES = "KB";
+AjxUtil.SIZE_BYTES = "B";
 
 /**
  * Formats a size (in bytes) to the largest whole unit. For example,
- * LsUtil.formatSize(302132199) returns "288 MB".
+ * AjxUtil.formatSize(302132199) returns "288 MB".
  *
  * @param size      The size (in bytes) to be formatted.
  * @param round     True to round to nearest integer. Default is true.
  * @param fractions Number of fractional digits to display, if not rounding.
  *                  Trailing zeros after the decimal point are trimmed.
  */
-LsUtil.formatSize = 
+AjxUtil.formatSize = 
 function(size, round, fractions) {
 	if (round == null) round = true;
 	if (fractions == null) fractions = 20; // max allowed for toFixed is 20
 
-	var units = LsUtil.SIZE_BYTES;
+	var units = AjxUtil.SIZE_BYTES;
 	if (size >= 1073741824) {
 		size /= 1073741824;
-		units = LsUtil.SIZE_GIGABYTES;
+		units = AjxUtil.SIZE_GIGABYTES;
 	}
 	else if (size >= 1048576) {
 		size /= 1048576;
-		units = LsUtil.SIZE_MEGABYTES;
+		units = AjxUtil.SIZE_MEGABYTES;
 	}
 	else if (size > 1023) {
 		size /= 1024;
-		units = LsUtil.SIZE_KILOBYTES;
+		units = AjxUtil.SIZE_KILOBYTES;
 	}
 
 	var formattedSize = round ? Math.round(size) : size.toFixed(fractions).replace(/\.?0+$/,"");
@@ -72,7 +72,7 @@ function(size, round, fractions) {
 /**
  * Formats a size (in bytes) to a specific unit. Since the unit size is
  * known, the unit is not shown in the returned string. For example,
- * LsUtil.formatSizeForUnit(302132199, LsUtil.SIZE_MEGABYTES, false, 2) 
+ * AjxUtil.formatSizeForUnit(302132199, AjxUtil.SIZE_MEGABYTES, false, 2) 
  * returns "288.13".
  *
  * @param size      The size (in bytes) to be formatted.
@@ -81,15 +81,15 @@ function(size, round, fractions) {
  * @param fractions Number of fractional digits to display, if not rounding.
  *                  Trailing zeros after the decimal point are trimmed.
  */
-LsUtil.formatSizeForUnits = function(size, units, round, fractions) {
-	if (units == null) units = LsUtil.SIZE_BYTES;
+AjxUtil.formatSizeForUnits = function(size, units, round, fractions) {
+	if (units == null) units = AjxUtil.SIZE_BYTES;
 	if (round == null) round = true;
 	if (fractions == null) fractions = 20; // max allowed for toFixed is 20
 
 	switch (units) {
-		case LsUtil.SIZE_GIGABYTES: { size /= 1073741824; break; }
-		case LsUtil.SIZE_MEGABYTES: { size /= 1048576; break; }
-		case LsUtil.SIZE_KILOBYTES: { size /= 1024; break; }
+		case AjxUtil.SIZE_GIGABYTES: { size /= 1073741824; break; }
+		case AjxUtil.SIZE_MEGABYTES: { size /= 1048576; break; }
+		case AjxUtil.SIZE_KILOBYTES: { size /= 1024; break; }
 	}
 	
 	var formattedSize = round ? Math.round(size) : size.toFixed(fractions).replace(/\.?0+$/,"");
@@ -97,7 +97,7 @@ LsUtil.formatSizeForUnits = function(size, units, round, fractions) {
 }
 
 /**
- * Performs the opposite of LsUtil.formatSize in that this function takes a 
+ * Performs the opposite of AjxUtil.formatSize in that this function takes a 
  * formatted size.
  *
  * @param units Unit constant: "GB", "MB", "KB", "B". Must be specified 
@@ -105,7 +105,7 @@ LsUtil.formatSizeForUnits = function(size, units, round, fractions) {
  *				which case the size marker in the formattedSize param
  *				overrides this parameter.
  */
-LsUtil.parseSize = function(formattedSize, units) {
+AjxUtil.parseSize = function(formattedSize, units) {
 	// NOTE: Take advantage of fact that parseFloat ignores bad chars
 	//       after numbers
 	var size = parseFloat(formattedSize.replace(/^\s*/,""));
@@ -118,25 +118,25 @@ LsUtil.parseSize = function(formattedSize, units) {
 	}
 	
 	switch (units) {
-		case LsUtil.SIZE_GIGABYTES: size *= 1073741824; break;
-		case LsUtil.SIZE_MEGABYTES: size *= 1048576; break; 
-		case LsUtil.SIZE_KILOBYTES: size *= 1024; break;
+		case AjxUtil.SIZE_GIGABYTES: size *= 1073741824; break;
+		case AjxUtil.SIZE_MEGABYTES: size *= 1048576; break; 
+		case AjxUtil.SIZE_KILOBYTES: size *= 1024; break;
 	}
 	
-	//alert("LsUtil#parseSize: formattedSize="+formattedSize+", size="+size);
+	//alert("AjxUtil#parseSize: formattedSize="+formattedSize+", size="+size);
 	return size;
 }
 
-LsUtil.isInstance = 
+AjxUtil.isInstance = 
 function(aThing, aClass) { 
 	return !!(aThing && aThing.constructor && (aThing.constructor === aClass)); 
 };
 
-LsUtil.assert = function(aCondition, aMessage) {
-	if (!aCondition && LsUtil.onassert) LsUtil.onassert(aMessage);
+AjxUtil.assert = function(aCondition, aMessage) {
+	if (!aCondition && AjxUtil.onassert) AjxUtil.onassert(aMessage);
 };
 
-LsUtil.onassert = 
+AjxUtil.onassert = 
 function(aMessage) {
 	// Create an exception object and set the message
 	var myException = new Object();
@@ -144,7 +144,7 @@ function(aMessage) {
 	
 	// Compile a stack trace
 	var myStack = new Array();
-	if (LsEnv.isIE5_5up) {
+	if (AjxEnv.isIE5_5up) {
 		// On IE, the caller chain is on the arguments stack
 		var myTrace = arguments.caller;
 		while (myTrace) {
@@ -187,52 +187,52 @@ function(aMessage) {
 	throw myException;
 };
 
-LsUtil.NODE_REPEATS = new Object();
-LsUtil.NODE_REPEATS["folder"]	= true;
-LsUtil.NODE_REPEATS["search"]	= true;
-LsUtil.NODE_REPEATS["tag"]		= true;
-LsUtil.NODE_REPEATS["pref"]		= true;
-LsUtil.NODE_REPEATS["attr"]		= true;
-LsUtil.NODE_REPEATS["c"]		= true;
-LsUtil.NODE_REPEATS["m"]		= true;
-LsUtil.NODE_REPEATS["cn"]		= true;
-LsUtil.NODE_REPEATS["e"]		= true;
-LsUtil.NODE_REPEATS["a"]		= true;
-LsUtil.NODE_REPEATS["mbx"]		= true;
-//LsUtil.NODE_REPEATS["mp"]		= true; // only when parent is "mp"
+AjxUtil.NODE_REPEATS = new Object();
+AjxUtil.NODE_REPEATS["folder"]	= true;
+AjxUtil.NODE_REPEATS["search"]	= true;
+AjxUtil.NODE_REPEATS["tag"]		= true;
+AjxUtil.NODE_REPEATS["pref"]		= true;
+AjxUtil.NODE_REPEATS["attr"]		= true;
+AjxUtil.NODE_REPEATS["c"]		= true;
+AjxUtil.NODE_REPEATS["m"]		= true;
+AjxUtil.NODE_REPEATS["cn"]		= true;
+AjxUtil.NODE_REPEATS["e"]		= true;
+AjxUtil.NODE_REPEATS["a"]		= true;
+AjxUtil.NODE_REPEATS["mbx"]		= true;
+//AjxUtil.NODE_REPEATS["mp"]		= true; // only when parent is "mp"
 // these really shouldn't repeat
-LsUtil.NODE_REPEATS["prefs"]	= true;
-LsUtil.NODE_REPEATS["attrs"]	= true;
-LsUtil.NODE_REPEATS["tags"]	= true;
+AjxUtil.NODE_REPEATS["prefs"]	= true;
+AjxUtil.NODE_REPEATS["attrs"]	= true;
+AjxUtil.NODE_REPEATS["tags"]	= true;
 
-LsUtil.NODE_IS_ATTR = new Object();
-LsUtil.NODE_IS_ATTR["authToken"]	= true;
-LsUtil.NODE_IS_ATTR["lifetime"]		= true;
-LsUtil.NODE_IS_ATTR["sessionId"]	= true;
-LsUtil.NODE_IS_ATTR["name"]			= true;
-LsUtil.NODE_IS_ATTR["quotaUsed"]	= true;
-LsUtil.NODE_IS_ATTR["su"]			= true;
-LsUtil.NODE_IS_ATTR["fr"]			= true;
-LsUtil.NODE_IS_ATTR["mid"]			= true;
-//LsUtil.NODE_IS_ATTR["content"]	= true; // only when parent is "note"
+AjxUtil.NODE_IS_ATTR = new Object();
+AjxUtil.NODE_IS_ATTR["authToken"]	= true;
+AjxUtil.NODE_IS_ATTR["lifetime"]		= true;
+AjxUtil.NODE_IS_ATTR["sessionId"]	= true;
+AjxUtil.NODE_IS_ATTR["name"]			= true;
+AjxUtil.NODE_IS_ATTR["quotaUsed"]	= true;
+AjxUtil.NODE_IS_ATTR["su"]			= true;
+AjxUtil.NODE_IS_ATTR["fr"]			= true;
+AjxUtil.NODE_IS_ATTR["mid"]			= true;
+//AjxUtil.NODE_IS_ATTR["content"]	= true; // only when parent is "note"
 
-LsUtil.NODE_CONTENT = new Object();
-LsUtil.NODE_CONTENT["pref"]	= true;
-LsUtil.NODE_CONTENT["attr"]	= true;
-LsUtil.NODE_CONTENT["a"]	= true;
+AjxUtil.NODE_CONTENT = new Object();
+AjxUtil.NODE_CONTENT["pref"]	= true;
+AjxUtil.NODE_CONTENT["attr"]	= true;
+AjxUtil.NODE_CONTENT["a"]	= true;
 
 // IE doesn't define Node type constants
-LsUtil.ELEMENT_NODE	= 1;
-LsUtil.TEXT_NODE	= 3;
+AjxUtil.ELEMENT_NODE	= 1;
+AjxUtil.TEXT_NODE	= 3;
 
-LsUtil.xmlToJs =
+AjxUtil.xmlToJs =
 function(node, omitName) {
 
-	if (node.nodeType == LsUtil.TEXT_NODE)
+	if (node.nodeType == AjxUtil.TEXT_NODE)
 		return ['"', node.data, '"'].join("");
 
 	var name = node.name ? node.name : node.localName;
-	if (node.nodeType == LsUtil.ELEMENT_NODE) {
+	if (node.nodeType == AjxUtil.ELEMENT_NODE) {
 		var text = omitName ? "{" : [name, ":{"].join("");
 		var needComma = false;	
 		if (node.attributes) {
@@ -240,7 +240,7 @@ function(node, omitName) {
 				var attr = node.attributes[i];
 				if (attr.name == "xmlns") continue;
 				if (needComma) text += ",";
-				var value = LsUtil.isNumeric(attr.value) ? attr.value : LsUtil.jsEncode(attr.value);
+				var value = AjxUtil.isNumeric(attr.value) ? attr.value : AjxUtil.jsEncode(attr.value);
 				text = [text, attr.name, ':', value].join("");
 				needComma = true;
 			}
@@ -251,11 +251,11 @@ function(node, omitName) {
 			for (var i = 0; i < node.childNodes.length; i++) {
 				var child = node.childNodes[i];
 				var cname = child.name ? child.name : child.localName;
-				var isAttr = LsUtil.NODE_IS_ATTR[cname] || 
+				var isAttr = AjxUtil.NODE_IS_ATTR[cname] || 
 							 (name == "content" && parent.name == "note");
 				if (isAttr) {
 					if (needComma) text += ",";
-					text = [text, cname, ':', LsUtil.jsEncode(child.textContent)].join("");
+					text = [text, cname, ':', AjxUtil.jsEncode(child.textContent)].join("");
 					needComma = true;
 				} else {
 					if (!cnodes[cname])
@@ -270,13 +270,13 @@ function(node, omitName) {
 					text += ",";
 					needComma = false;
 				}
-				var repeats = LsUtil.NODE_REPEATS[cname] ||
+				var repeats = AjxUtil.NODE_REPEATS[cname] ||
 							  (cname == "mp" && name == "mp");
 				if (repeats) text += cname + ":[";
 				var clist = cnodes[cname];
 				for (var i = 0; i < clist.length; i++) {
 					if (needComma) text += ",";
-					text += LsUtil.xmlToJs(clist[i], repeats);
+					text += AjxUtil.xmlToJs(clist[i], repeats);
 					needComma = true;
 				}
 				if (repeats) text += "]";
@@ -288,14 +288,14 @@ function(node, omitName) {
 	return text;
 }
 
-LsUtil.JS_CHAR_ENCODINGS = [
+AjxUtil.JS_CHAR_ENCODINGS = [
 	"\\u0000", "\\u0001", "\\u0002", "\\u0003", "\\u0004", "\\u0005", "\\u0006", "\\u0007",
 	"\\b",     "\\t",     "\\n",     "\\u000B", "\\f",     "\\r",     "\\u000E", "\\u000F",
 	"\\u0010", "\\u0011", "\\u0012", "\\u0013", "\\u0014", "\\u0015", "\\u0016", "\\u0017",
 	"\\u0018", "\\u0019", "\\u001A", "\\u001B", "\\u001C", "\\u001D", "\\u001E", "\\u001F"
 ];
 
-LsUtil.jsEncode =
+AjxUtil.jsEncode =
 function(string) {
 
 	if (!string) return "\"\"";
@@ -309,7 +309,7 @@ function(string) {
 				break;
 			default:
 				var code = string.charCodeAt(i);
-				text += (code < 32) ? LsUtil.JS_CHAR_ENCODINGS[code] : c;
+				text += (code < 32) ? AjxUtil.JS_CHAR_ENCODINGS[code] : c;
 		}
 	}
 	text += '"';

@@ -143,7 +143,7 @@ function(field, title, html, idx, titleWidth) {
 	this._fieldIds[field] = id;
 	if(title) {
 		html[idx++] = "<td align='left' style='width:" + titleWidth + "'>";
-		html[idx++] = LsStringUtil.htmlEncode(title) + ":";
+		html[idx++] = AjxStringUtil.htmlEncode(title) + ":";
 		html[idx++] = "</td>";
 	}
 	html[idx++] = "<td align='left'>";
@@ -169,7 +169,7 @@ function(field, title, html, idx, titleWidth) {
 		
 	if(title) {
 		html[idx++] = "<td style='width:" + tWidth + ";' align='left'>";
-		html[idx++] = LsStringUtil.htmlEncode(title) + ":";
+		html[idx++] = AjxStringUtil.htmlEncode(title) + ":";
 		html[idx++] = "</td>";
 	}
 	html[idx++] = "<td align='left'>";
@@ -188,7 +188,7 @@ function(field, title, html, idx, noWrap) {
 	this._fieldIds[field] = id;
 	html[idx++] = "<tr valign='center'>";
 	html[idx++] = "<td align='left' style='width:60ex;'>";
-	html[idx++] = LsStringUtil.htmlEncode(title) + ":";
+	html[idx++] = AjxStringUtil.htmlEncode(title) + ":";
 	html[idx++] = "</td></tr>";
 	html[idx++] = "<tr valign='center'><td align='left' style='width:60ex;'><textarea wrap='" + myWrap + "' rows='8' cols ='60' id='";	
 	html[idx++] = id;
@@ -240,7 +240,7 @@ function(field, title, html, idx, type, fldsize, tailTitle, titleWidth, withAste
 	this._fieldIds[field] = id;
 	if(title) {
 		html[idx++] = "<td align='left' style='width:" + tWidth + ";'>";
-		html[idx++] = LsStringUtil.htmlEncode(title) + ":";
+		html[idx++] = AjxStringUtil.htmlEncode(title) + ":";
 		html[idx++] = "</td>";
 	}
 	html[idx++] = "<td ";

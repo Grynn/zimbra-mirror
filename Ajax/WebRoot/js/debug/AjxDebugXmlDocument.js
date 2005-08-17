@@ -1,5 +1,5 @@
 // XmlDocument factory
-function LsDebugXmlDocument() {
+function AjxDebugXmlDocument() {
 }
 
 // used to find the Automation server name
@@ -21,7 +21,7 @@ function getDomDocumentPrefix() {
 	throw new Error("Could not find an installed XML parser");
 }
 
-LsDebugXmlDocument.prototype.create = 
+AjxDebugXmlDocument.prototype.create = 
 function () {
 	try {
 		// DOM2
@@ -54,7 +54,7 @@ if (window.DOMParser &&
 	window.Node && Node.prototype && Node.prototype.__defineGetter__) {
 	// XMLDocument did not extend the Document interface in some versions
 	// of Mozilla. Extend both!
-	LsDebugXmlDocument.prototype.loadXML = function(s) {
+	AjxDebugXmlDocument.prototype.loadXML = function(s) {
 	//Document.prototype.loadXML = function (s) {
 		
 		// parse the string to a new doc	
@@ -77,7 +77,7 @@ if (window.DOMParser &&
 	 */
 	// XMLDocument did not extend the Document interface in some versions
 	// of Mozilla. Extend both!
-	LsDebugXmlDocument.prototype.__defineGetter__("xml", function () {
+	AjxDebugXmlDocument.prototype.__defineGetter__("xml", function () {
 		return (new XMLSerializer()).serializeToString(this);
 	});
 	/*

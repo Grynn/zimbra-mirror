@@ -1,12 +1,12 @@
-function LsCookie() {
+function AjxCookie() {
 }
 
-LsCookie.prototype.toString = 
+AjxCookie.prototype.toString = 
 function() {
-	return "LsCookie";
+	return "AjxCookie";
 }
 
-LsCookie.getCookie = 
+AjxCookie.getCookie = 
 function(doc, name) {
 	var arg = name + "=";
 	var alen = arg.length;
@@ -28,7 +28,7 @@ function(doc, name) {
   return null;
 }
 
-LsCookie.setCookie = 
+AjxCookie.setCookie = 
 function(doc, name, value, expires, path, domain, secure) {
 	doc.cookie = name + "=" + escape (value) +
 		((expires) ? "; expires=" + expires.toGMTString() : "") +
@@ -37,7 +37,7 @@ function(doc, name, value, expires, path, domain, secure) {
 		((secure) ? "; secure" : "");
 }
 
-LsCookie.deleteCookie = 
+AjxCookie.deleteCookie = 
 function (doc, name, path, domain) {
 	doc.cookie = name + "=" +
 	((path) ? "; path=" + path : "") +

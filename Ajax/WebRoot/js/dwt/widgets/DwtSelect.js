@@ -20,7 +20,7 @@ function DwtSelect(parent, options, className, posStyle, width, height) {
 
     // initialize some variables
     this._currentSelectionId = -1;
-    this._options = new LsVector();
+    this._options = new AjxVector();
     this._optionValuesToIndices = new Object();
     this._selectedValue = null;
 	this._selectedOption = null;
@@ -44,7 +44,7 @@ function() {
  */
 DwtSelect.prototype._createTable =
 function() {
-	if (LsEnv.isIE) {
+	if (AjxEnv.isIE) {
 		var tableId = Dwt.getNextId();
 		var html = [];
 		var idx = 0;
@@ -101,7 +101,7 @@ function(anId) {
 DwtSelect.getObjectFromElement = 
 function(element) {
 	if (element && element.dwtObj) {
-		return LsCore.objectWithId(element.dwtObj);
+		return AjxCore.objectWithId(element.dwtObj);
 	}
 };
 
@@ -131,7 +131,7 @@ function(anElement, containerElement) {
     myBounds.height = anElement.offsetHeight;
     
     if(containerElement == null) {
-        containerElement = LsEnv.isIE ? anElement.document.body : anElement.ownerDocument.body;
+        containerElement = AjxEnv.isIE ? anElement.document.body : anElement.ownerDocument.body;
     }
     
     // account for the scrollbars if necessary
@@ -146,7 +146,7 @@ function(anElement, containerElement) {
         while (hasScroll && (trace != nextEl)) {
             myBounds.x -= trace.scrollLeft;
             myBounds.y -= trace.scrollTop;
-            trace = LsEnv.isIE ? nextEl : trace.parentNode;
+            trace = AjxEnv.isIE ? nextEl : trace.parentNode;
         }
         trace = nextEl;
     }
@@ -380,7 +380,7 @@ function(show) {
 		for (var i = 0 ; i < optArr.length; ++i){
 			var mi = new DwtMenuItem(this._menu, DwtMenuItem.SELECT_STYLE);
 			mi.setText(optArr[i].getDisplayValue());
-			mi.addSelectionListener(new LsListener(this, this._handleOptionSelection));
+			mi.addSelectionListener(new AjxListener(this, this._handleOptionSelection));
 			mi._optionIndex = i;
 			optArr[i].setItem(mi);
 		}

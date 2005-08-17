@@ -6,11 +6,11 @@
 *	Useage:
 * 	1) For a small amount of text, call it statically as:
 *
-*		LsBuffer.concat("a", 1, "b", this.getFoo(), ...);
+*		AjxBuffer.concat("a", 1, "b", this.getFoo(), ...);
 *
 *	2) Or create an instance and use that to assemble a big pile of HTML:
 *
-*		var buffer = new LsBuffer();
+*		var buffer = new AjxBuffer();
 *		buffer.append("foo", myObject.someOtherFoo(), ...);
 *		...
 *		buffer.append(fooo.yetMoreFoo());
@@ -26,35 +26,35 @@
 * @author Owen Williams
 */
 
-function LsBuffer() {
+function AjxBuffer() {
 	this.clear();
 	if (arguments.length > 0) {
 		arguments.join = this.buffer.join;
 		this.buffer[this.buffer.length] = arguments.join("");
 	}
 }
-LsBuffer.prototype.toString = function () {
+AjxBuffer.prototype.toString = function () {
 	return this.buffer.join("");
 }
-LsBuffer.prototype.join = function (delim) {
+AjxBuffer.prototype.join = function (delim) {
 	if (delim == null) delim = "";
 	return this.buffer.join(delim);
 }
-LsBuffer.prototype.append = function () {
+AjxBuffer.prototype.append = function () {
 	arguments.join = this.buffer.join;
 	this.buffer[this.buffer.length] = arguments.join("");
 }
-LsBuffer.prototype.join = function (str) {
+AjxBuffer.prototype.join = function (str) {
 	return this.buffer.join(str);
 }
-LsBuffer.prototype.set = function(str) {
+AjxBuffer.prototype.set = function(str) {
 	this.buffer = [str];
 }
-LsBuffer.prototype.clear = function() {
+AjxBuffer.prototype.clear = function() {
 	this.buffer = [];
 }
-LsBuffer.concat = function() {
+AjxBuffer.concat = function() {
 	arguments.join = Array.prototype.join;
 	return arguments.join("");
 }
-LsBuffer.append = LsBuffer.concat;
+AjxBuffer.append = AjxBuffer.concat;

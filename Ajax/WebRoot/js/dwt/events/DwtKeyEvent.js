@@ -25,7 +25,7 @@ function(ev) {
 
 DwtKeyEvent.isKeyPressEvent =
 function(ev) {
-	return (LsEnv.isIE && ev.type == "keydown") || (ev.type == "keypress");
+	return (AjxEnv.isIE && ev.type == "keydown") || (ev.type == "keypress");
 }
 
 

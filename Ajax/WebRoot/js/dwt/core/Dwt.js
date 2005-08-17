@@ -71,7 +71,7 @@ function() {
 }
 
 Dwt.associateElementWithObject = function (domElement, jsObject){
-	domElement.dwtObj = jsObject.__internalId = LsCore.assignId(jsObject);
+	domElement.dwtObj = jsObject.__internalId = AjxCore.assignId(jsObject);
 };
 
 Dwt.disassociateElementFromObject = function (domElement, jsObject){
@@ -79,12 +79,12 @@ Dwt.disassociateElementFromObject = function (domElement, jsObject){
 		delete domElement.dwtObj;
 	}
 	if (jsObject.__internalId){
-		LsCore.unassignId(jsObject.__internalId);
+		AjxCore.unassignId(jsObject.__internalId);
 	}
 };
 
 Dwt.getObjectFromElement = function (domElement) {
-	return LsCore.objectWithId(domElement.dwtObj);
+	return AjxCore.objectWithId(domElement.dwtObj);
 };
 
 
@@ -134,7 +134,7 @@ function(htmlElement) {
 Dwt.setLocation =
 function(htmlElement, x, y) {
 	if (htmlElement.style.position != Dwt.ABSOLUTE_STYLE) {
-		DBG.println(LsDebug.DBG1, "Cannot position static widget " + htmlElement.className);
+		DBG.println(AjxDebug.DBG1, "Cannot position static widget " + htmlElement.className);
 		throw new DwtException("Static widgets may not be positioned", DwtException.INVALID_OP, "Dwt.setLocation");
 	}
 	if (x = Dwt.checkPxVal(x))
@@ -149,7 +149,7 @@ function(val) {
 		return false;
 	if (typeof(val) == "number" && val != Dwt.LOC_NOWHERE) {
 //		if (val < 0) {
-//			DBG.println(LsDebug.DBG1, "negative pixel value: " + val);
+//			DBG.println(AjxDebug.DBG1, "negative pixel value: " + val);
 //			val = 0;
 //		}
 		val = val + "px";
@@ -269,7 +269,7 @@ function(htmlElement) {
 
 Dwt.setZIndex =
 function(htmlElement, idx) {
-//DBG.println(LsDebug.DBG3, "set zindex for " + htmlElement.className + ": " + idx);
+//DBG.println(AjxDebug.DBG3, "set zindex for " + htmlElement.className + ": " + idx);
 	htmlElement.style.zIndex = idx;
 }
 
@@ -308,7 +308,7 @@ function(text) {
 
 Dwt.getIframeDoc = 
 function(iframeObj) {
-	return LsEnv.isIE 
+	return AjxEnv.isIE 
 		? (iframeObj ? iframeObj.contentWindow.document : null)
 		: iframeObj.contentDocument;
 }
@@ -320,7 +320,7 @@ function(iframeObj) {
 
 Dwt._ffOverflowHack = 
 function (htmlElId, myZindex, lowThresholdZ, turnOffOverflowScroll, disableSelf) {
-	if (!LsEnv.isNav)
+	if (!AjxEnv.isNav)
 		return;
 		
 	var ds = disableSelf? disableSelf: false;
@@ -405,7 +405,7 @@ Dwt.parseHtmlFragment = function (htmlStr, tagName) {
 Dwt.contains = 
 function (parentEl, childEl) {
   	var isContained = false;
-  	if (LsEnv.isSafari) {
+  	if (AjxEnv.isSafari) {
   		return false;
   	} else if (parentEl.compareDocumentPosition) {
 		var relPos = parentEl.compareDocumentPosition(childEl);

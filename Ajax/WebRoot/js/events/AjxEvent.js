@@ -1,7 +1,7 @@
-function LsEvent() {
+function AjxEvent() {
 }
 
-LsEvent.prototype.toString = 
+AjxEvent.prototype.toString = 
 function() {
-	return "LsEvent";
+	return "AjxEvent";
 }

@@ -12,7 +12,7 @@
 * @param func	the callback function
 * @param args   default arguments
 */
-function LsCallback(obj, func, args) {
+function AjxCallback(obj, func, args) {
 	if (arguments.length == 0) return;
 
 	this.obj = obj;
@@ -20,9 +20,9 @@ function LsCallback(obj, func, args) {
 	this._args = args;
 }
 
-LsCallback.prototype.toString = 
+AjxCallback.prototype.toString = 
 function() {
-	return "LsCallback";
+	return "AjxCallback";
 }
 
 /**
@@ -34,7 +34,7 @@ function() {
 * @param args	arguments to pass to the called function
 * @returns		whatever the called function returns
 */
-LsCallback.prototype.run =
+AjxCallback.prototype.run =
 function(args) {
 	var args1;
 	if (this._args != undefined && args != undefined) {

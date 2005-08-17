@@ -1,91 +1,91 @@
-// Don't directly instantiate LsXmlDoc, use one of the create factory methods instead
-function LsXmlDoc(init) {
+// Don't directly instantiate AjxXmlDoc, use one of the create factory methods instead
+function AjxXmlDoc(init) {
 	if (arguments.length == 0) return;
-	if (!LsXmlDoc._inited)
-		LsXmlDoc._init();
+	if (!AjxXmlDoc._inited)
+		AjxXmlDoc._init();
 }
 
-LsXmlDoc.prototype.toString = 
+AjxXmlDoc.prototype.toString = 
 function() {
-	return "LsXmlDoc";
+	return "AjxXmlDoc";
 }
 
-LsXmlDoc._inited = false;
-LsXmlDoc._msxmlVers = null;
+AjxXmlDoc._inited = false;
+AjxXmlDoc._msxmlVers = null;
 
-LsXmlDoc.create =
+AjxXmlDoc.create =
 function() {
-	var xmlDoc = new LsXmlDoc(true);
+	var xmlDoc = new AjxXmlDoc(true);
 	var newDoc = null;
-	if (LsEnv.isIE) {
-		newDoc = new ActiveXObject(LsXmlDoc._msxmlVers);
+	if (AjxEnv.isIE) {
+		newDoc = new ActiveXObject(AjxXmlDoc._msxmlVers);
 		newDoc.async = true; // Force Async loading
-		if (LsXmlDoc._msxmlVers == "MSXML2.DOMDocument.4.0") {
+		if (AjxXmlDoc._msxmlVers == "MSXML2.DOMDocument.4.0") {
 			newDoc.setProperty("SelectionLanguage", "XPath");
 			newDoc.setProperty("SelectionNamespaces", "xmlns:liquid='urn:liquid' xmlns:mail='urn:liquidMail' xmlns:account='urn:liquidAccount'");
 		}
 	} else if (document.implementation && document.implementation.createDocument) {
 		newDoc = document.implementation.createDocument("", "", null);
 	} else {
-		throw new LsException("Unable to create new Doc", LsException.INTERNAL_ERROR, "LsXmlDoc.create");
+		throw new AjxException("Unable to create new Doc", AjxException.INTERNAL_ERROR, "AjxXmlDoc.create");
 	}
 	xmlDoc._doc = newDoc;
 	return xmlDoc;
 }
 
-LsXmlDoc.createFromDom =
+AjxXmlDoc.createFromDom =
 function(doc) {
-	var xmlDoc = new LsXmlDoc();
+	var xmlDoc = new AjxXmlDoc();
 	xmlDoc._doc = doc;
 	return xmlDoc;
 }
 
-LsXmlDoc.createFromXml =
+AjxXmlDoc.createFromXml =
 function(xml) {
-	var xmlDoc = LsXmlDoc.create();
+	var xmlDoc = AjxXmlDoc.create();
 	xmlDoc.loadFromString(xml);
 	return xmlDoc;
 }
 
-LsXmlDoc.getXml =
+AjxXmlDoc.getXml =
 function(node) {
 	var ser = new XMLSerializer();
 	return ser.serializeToString(node);
 }
 
-LsXmlDoc.prototype.getDoc =
+AjxXmlDoc.prototype.getDoc =
 function() {
 	return this._doc;
 }
 
-LsXmlDoc.prototype.loadFromString =
+AjxXmlDoc.prototype.loadFromString =
 function(str) {
 	this._doc.loadXML(str);
 
 }
 
-LsXmlDoc.prototype.loadFromUrl =
+AjxXmlDoc.prototype.loadFromUrl =
 function(url) {
 	this._doc.load(url);
 }
 
-LsXmlDoc._init =
+AjxXmlDoc._init =
 function() {
-	if (LsEnv.isIE) {
+	if (AjxEnv.isIE) {
 		var msxmlVers = ["MSXML4.DOMDocument", "MSXML3.DOMDocument", "MSXML2.DOMDocument.4.0",
 										 "MSXML2.DOMDocument.3.0", "MSXML2.DOMDocument", "MSXML.DOMDocument", 
 										 "Microsoft.XmlDom"];
 		for (var i = 0; i < msxmlVers.length; i++) {
 			try {
 				new ActiveXObject(msxmlVers[i]);
-				LsXmlDoc._msxmlVers = msxmlVers[i];
+				AjxXmlDoc._msxmlVers = msxmlVers[i];
 				break;
 			} catch (ex) {
 			}
 		}
-		if (LsXmlDoc._msxmlVers == null)
-			throw new LsException("MSXML not installed", LsException.INTERNAL_ERROR, "LsXmlDoc._init");
-	}	else if (LsEnv.isNav) {
+		if (AjxXmlDoc._msxmlVers == null)
+			throw new AjxException("MSXML not installed", AjxException.INTERNAL_ERROR, "AjxXmlDoc._init");
+	}	else if (AjxEnv.isNav) {
 		Document.prototype.loadXML = function(str) {
 			var domParser = new DOMParser();
 			var domObj = domParser.parseFromString(str, "text/xml");
@@ -104,9 +104,9 @@ function() {
 		Node.prototype.__defineGetter__("xml", _NodeGetXml);
 	}
 	
-	if (LsEnv.isNav || LsEnv.isSafari) {
+	if (AjxEnv.isNav || AjxEnv.isSafari) {
 	}
 	
-	LsXmlDoc._inited = true;
+	AjxXmlDoc._inited = true;
 }
 

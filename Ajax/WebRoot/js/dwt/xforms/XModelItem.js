@@ -189,7 +189,7 @@ XModelItem.prototype.validate = function (value, form, formItem, instance) {
 	var constraints = this.getConstraints();
 	if (constraints == null) return value;
 
-	if (! (LsUtil.isInstance(constraints, Array))) constraints = [constraints];
+	if (! (AjxUtil.isInstance(constraints, Array))) constraints = [constraints];
 	for (var i = 0; i < constraints.length; i++) {
 		var constraint = constraints[i];
 		if (constraint.type == "method") {
@@ -273,16 +273,16 @@ XModelItem.prototype.getMinLength = function () 	{	return this.minLength;				}
 XModelItem.prototype.getMaxLength = function () 	{	return this.maxLength;				}
 XModelItem.prototype.getPattern = function() {
 	if (this.pattern != null && this.pattern.checked == null) {
-		if (LsUtil.isString(this.pattern)) {
+		if (AjxUtil.isString(this.pattern)) {
 			this.pattern = [ new RegExp(this.pattern) ];
 		}
-		else if (LsUtil.isInstance(this.pattern, RegExp)) {
+		else if (AjxUtil.isInstance(this.pattern, RegExp)) {
 			this.pattern = [ this.pattern ];
 		}
-		else if (LsUtil.isArray(this.pattern)) {
+		else if (AjxUtil.isArray(this.pattern)) {
 			for (var i = 0; i < this.pattern.length; i++) {
 				var pattern = this.pattern[i];
-				if (LsUtil.isString(pattern)) {
+				if (AjxUtil.isString(pattern)) {
 					this.pattern[i] = new RegExp(this.pattern[i]);
 				}
 			}
@@ -307,7 +307,7 @@ XModel.registerErrorMessage("stringMismatch",   DwtMsg.stringMismatch);
 XModelItem.prototype.validateString = function(value) {
 	if (value == null) return;
 	
-	if (!LsUtil.isString(value)) {
+	if (!AjxUtil.isString(value)) {
 		throw this.getModel().getErrorMessage("notAString", value);
 	}
 
@@ -446,7 +446,7 @@ XModelItem.prototype.validateNumber = function(value) {
 
 	var nvalue = parseFloat(value);
 
-	if (isNaN(nvalue) || !LsUtil.FLOAT_RE.test(value)) {
+	if (isNaN(nvalue) || !AjxUtil.FLOAT_RE.test(value)) {
 		throw this.getModel().getErrorMessage("notANumber", value);
 	}
 
@@ -502,8 +502,8 @@ XModel.registerErrorMessage("invalidDateString", DwtMsg.invalidDateString);
 // methods
 XModelItem.prototype.validateDate = function(value) {
 	
-	if (LsUtil.isInstance(value, Date)) return value;
-	if (LsUtil.isString(value)) {
+	if (AjxUtil.isInstance(value, Date)) return value;
+	if (AjxUtil.isString(value)) {
 		value = value.toLowerCase();
 		var date = new Date();
 
@@ -548,13 +548,13 @@ XModel.registerErrorMessage("invalidTimeString",		 DwtMsg.invalidTimeString);
 // time is returned as a number of milliseconds since
 XModelItem.prototype.validateTime = function (value) {
 
-	if (LsUtil.isNumber(value)) return value;
+	if (AjxUtil.isNumber(value)) return value;
 	
-	if (LsUtil.isInstance(value, Date)) {
+	if (AjxUtil.isInstance(value, Date)) {
 		return ((value.getHours() * 360) + (value.getMinutes() * 60) + value.getSeconds()) * 1000;
 	}
 	
-	if (LsUtil.isString(value)) {
+	if (AjxUtil.isString(value)) {
 		value = value.toLowerCase();
 		if (value.indexOf(":") > -1) {
 			value = value.split(":");
@@ -581,9 +581,9 @@ XModelItem.prototype.validateTime = function (value) {
 XModel.registerErrorMessage("invalidDatetimeString",		 DwtMsg.invalidDatetimeString);
 XModelItem.prototype.validateDateTime = function (value) {
 
-	if (LsUtil.isInstance(value, Date)) return value;
-	if (LsUtil.isNumber(value)) return value;
-	if (LsUtil.isString(value)) {
+	if (AjxUtil.isInstance(value, Date)) return value;
+	if (AjxUtil.isNumber(value)) return value;
+	if (AjxUtil.isString(value)) {
 		// try to get the value as a date
 		//  (this will ignore time fields, and will throw an exeception if we couldn't parse a date)
 		var date = this.validateDate(value);
@@ -727,7 +727,7 @@ Enum_XModelItem.prototype.validateType = function (value) {
 	var choices = this.getChoices();
 	for (var i = 0; i < choices.length; i++) {
 		var choice = choices[i];
-		if (LsUtil.isInstance(choice, Object)) {
+		if (AjxUtil.isInstance(choice, Object)) {
 			if (choice.value == value) return value;
 		} else {
 			if (choice == value) return value;
@@ -745,13 +745,13 @@ FileSize_XModelItem.prototype.getterScope = _MODELITEM_;
 FileSize_XModelItem.prototype.setterScope = _MODELITEM_;
 FileSize_XModelItem.prototype.getter = "getValue";
 FileSize_XModelItem.prototype.setter = "setValue";
-FileSize_XModelItem.prototype.units = LsUtil.SIZE_MEGABYTES;
+FileSize_XModelItem.prototype.units = AjxUtil.SIZE_MEGABYTES;
 
 FileSize_XModelItem.prototype.getValue =  function(instance, current, ref) {
 	var value = eval("instance."+ref);
-	return value ? LsUtil.formatSizeForUnits(value, LsUtil.SIZE_KILOBYTES, false, 2) : 0;
+	return value ? AjxUtil.formatSizeForUnits(value, AjxUtil.SIZE_KILOBYTES, false, 2) : 0;
 }
 
 FileSize_XModelItem.prototype.setValue = function(value, instance, current, ref) {
-	return eval("instance."+ref+" = LsUtil.parseSize(value, this.units)");
+	return eval("instance."+ref+" = AjxUtil.parseSize(value, this.units)");
 }

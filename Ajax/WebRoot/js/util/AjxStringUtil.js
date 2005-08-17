@@ -8,7 +8,7 @@
 * @author Roland Schemers
 * @author Conrad Damon
 */
-function LsStringUtil() {
+function AjxStringUtil() {
 }
 
 /**
@@ -24,18 +24,18 @@ function LsStringUtil() {
 * @returns			a trimmed string
 */
 
-LsStringUtil.TRIM_RE = /^\s+|\s+$/g;
-LsStringUtil.COMPRESS_RE = /\s+/g;
-LsStringUtil.ELLIPSIS = " ... ";
+AjxStringUtil.TRIM_RE = /^\s+|\s+$/g;
+AjxStringUtil.COMPRESS_RE = /\s+/g;
+AjxStringUtil.ELLIPSIS = " ... ";
 
-LsStringUtil.trim =
+AjxStringUtil.trim =
 function (str, compress, space) {
 
 	if (!str) return "";
 
-	var trim_re = LsStringUtil.TRIM_RE;
+	var trim_re = AjxStringUtil.TRIM_RE;
 
-	var compress_re = LsStringUtil.COMPRESS_RE;
+	var compress_re = AjxStringUtil.COMPRESS_RE;
 	if (space) {
 		trim_re = new RegExp("^" + space + "+|" + space + "+$", "g");
 		compress_re = new RegExp(space + "+", "g");
@@ -55,7 +55,7 @@ function (str, compress, space) {
 * @param str		a string
 * @param num		number of times to repeat the string
 */
-LsStringUtil.repeat =
+AjxStringUtil.repeat =
 function(str, num) {
 	var text = "";
 	for (var i = 0; i < num; i++)
@@ -63,7 +63,7 @@ function(str, num) {
 	return text;
 }
 
-LsStringUtil.getUnitsFromSizeString = 
+AjxStringUtil.getUnitsFromSizeString = 
 function(sizeString) {
 	var units="px";
 	if(typeof(sizeString) == "string") {
@@ -88,7 +88,7 @@ function(sizeString) {
 * @param dels	an optional string of delimiter characters
 * @returns		an array of strings
 */
-LsStringUtil.split =
+AjxStringUtil.split =
 function(str, dels) {
 
 	if (!str) return new Array();
@@ -143,7 +143,7 @@ function(str, dels) {
 * @param compress	remove single returns within a paragraph before wrapping
 * @returns			the wrapped/quoted text
 */
-LsStringUtil.wordWrap = 
+AjxStringUtil.wordWrap = 
 function(text, len, pre, eol, breakOkay, compress) {
 
 	if (!text) return "";
@@ -157,7 +157,7 @@ function(text, len, pre, eol, breakOkay, compress) {
 	var c = 0;
 	
 	// preprocess the text: remove leading/trailing space, space at the end of lines, and set up for wrapping paragraphs
-	text = LsStringUtil.trim(text, false);
+	text = AjxStringUtil.trim(text, false);
 	text = text.replace(/[ \t]+\n/g, '\n'); // optional tidying, could remove this step
 	if (compress)
 		text = text.replace(/\b\n\b/g, ' ');
@@ -202,18 +202,18 @@ function(text, len, pre, eol, breakOkay, compress) {
 * @returns 			true if the character for the given key is considered printable
 */
 
-LsStringUtil.IS_PRINT_CODE = new Object();
+AjxStringUtil.IS_PRINT_CODE = new Object();
 var print_codes = [32,48,49,50,51,52,53,54,55,56,57,59,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,
                    81,82,83,84,85,86,87,88,89,90,96,97,98,99,100,101,102,103,104,105,106,107,109,110,111,186,
                    187,188,189,190,191,192,219,220,221,222];
 var l = print_codes.length;
 for (var i = 0; i < l; i++) {
-	LsStringUtil.IS_PRINT_CODE[print_codes[i]] = true;
+	AjxStringUtil.IS_PRINT_CODE[print_codes[i]] = true;
 }
 
-LsStringUtil.isPrintKey =
+AjxStringUtil.isPrintKey =
 function(keycode) {
-	return LsStringUtil.IS_PRINT_CODE[keycode];
+	return AjxStringUtil.IS_PRINT_CODE[keycode];
 }
 
 /**
@@ -224,13 +224,13 @@ function(keycode) {
 * @returns			a character
 */
 
-LsStringUtil.SHIFT_CHAR = { 48:')', 49:'!', 50:'@', 51:'#', 52:'$', 53:'%', 54:'^', 55:'&', 56:'*', 57:'(',
+AjxStringUtil.SHIFT_CHAR = { 48:')', 49:'!', 50:'@', 51:'#', 52:'$', 53:'%', 54:'^', 55:'&', 56:'*', 57:'(',
 							59:':', 186:':', 187:'+', 188:'<', 189:'_', 190:'>', 191:'?', 192:'~',
 							219:'{', 220:'|', 221:'}', 222:'"' }
 
-LsStringUtil.shiftChar =
+AjxStringUtil.shiftChar =
 function(keycode, shifted) {
-	return shifted ? LsStringUtil.SHIFT_CHAR[keycode] || String.fromCharCode(keycode) : String.fromCharCode(keycode);
+	return shifted ? AjxStringUtil.SHIFT_CHAR[keycode] || String.fromCharCode(keycode) : String.fromCharCode(keycode);
 }
 
 /**
@@ -240,7 +240,7 @@ function(keycode, shifted) {
 * @param str2	another string
 * @returns		the index at which they first differ
 */
-LsStringUtil.diffPoint =
+AjxStringUtil.diffPoint =
 function(str1, str2) {
 	if (!(str1 && str2))
 		return 0;
@@ -260,12 +260,12 @@ function(str1, str2) {
 * @param values	 	an array of values to interpolate
 * @returns			a string with the variables replaced
 */
-LsStringUtil.resolve =
+AjxStringUtil.resolve =
 function(str, values) {
 
 	if (!str) return "";
 	if (!(values instanceof Array)) values = [values];
-	if (!LsEnv.isSafari)
+	if (!AjxEnv.isSafari)
 		return str.replace(/\$(\d+)/g, function(str, num) { return values[num]; });
 
 	//quick hack
@@ -284,17 +284,17 @@ function(str, values) {
 * @param str	the string to encode
 */
 
-LsStringUtil.ENCODE_MAP = { '>' : '&gt;', '<' : '&lt;', '&' : '&amp;' };
+AjxStringUtil.ENCODE_MAP = { '>' : '&gt;', '<' : '&lt;', '&' : '&amp;' };
 
-LsStringUtil.htmlEncode =
+AjxStringUtil.htmlEncode =
 function(str, includeSpaces) {
 	if (!str) return "";
 
-	if (!LsEnv.isSafari) {
+	if (!AjxEnv.isSafari) {
 		if (includeSpaces) 
-			return str.replace(/[<>&]/g, function(htmlChar) { return LsStringUtil.ENCODE_MAP[htmlChar]; }).replace(/  /g, ' &nbsp;');
+			return str.replace(/[<>&]/g, function(htmlChar) { return AjxStringUtil.ENCODE_MAP[htmlChar]; }).replace(/  /g, ' &nbsp;');
 		else
-			return str.replace(/[<>&]/g, function(htmlChar) { return LsStringUtil.ENCODE_MAP[htmlChar]; });
+			return str.replace(/[<>&]/g, function(htmlChar) { return AjxStringUtil.ENCODE_MAP[htmlChar]; });
 	} else {
 		if (includeSpaces) 
 			return str.replace(/[&]/g, '&amp;').replace(/  /g, ' &nbsp;').replace(/[<]/g, '&lt;').replace(/[>]/g, '&gt;');
@@ -310,32 +310,32 @@ function(str, includeSpaces) {
 * @param str	the string to encode
 */
 
-LsStringUtil.SPACE_ENCODE_MAP = { ' ' : ' &nbsp;', '>' : '&gt;', '<' : '&lt;', '&' : '&amp;' , '\n': '<br>'};
+AjxStringUtil.SPACE_ENCODE_MAP = { ' ' : ' &nbsp;', '>' : '&gt;', '<' : '&lt;', '&' : '&amp;' , '\n': '<br>'};
 
-LsStringUtil.htmlEncodeSpace =
+AjxStringUtil.htmlEncodeSpace =
 function(str) {
 	if (!str) return "";
 
-	if (!LsEnv.isSafari) {
-		return str.replace(/[ <>&\n]/g, function(htmlChar) { return LsStringUtil.SPACE_ENCODE_MAP[htmlChar]; });
+	if (!AjxEnv.isSafari) {
+		return str.replace(/[ <>&\n]/g, function(htmlChar) { return AjxStringUtil.SPACE_ENCODE_MAP[htmlChar]; });
 	} else {
 		return str.replace(/[&]/g, '&amp;').replace(/ /g, '&nbsp').replace(/[<]/g, '&lt;').replace(/[>]/g, '&gt;');
 	}
 }
 
-LsStringUtil.xmlAttrEncode =
+AjxStringUtil.xmlAttrEncode =
 function(str) {
 	return str.replace(/"/g, '&quot;');
 }
 
-LsStringUtil.xmlAttrDecode =
+AjxStringUtil.xmlAttrDecode =
 function(str) {
 	return str.replace(/&quot;/g, '"');
 }
 
 var LsStringUtil_calcDIV = null; // used by 'clip()' and 'wrap()' functions
 
-LsStringUtil.calcDIV =
+AjxStringUtil.calcDIV =
 function() {
 	if (LsStringUtil_calcDIV == null) {
 		LsStringUtil_calcDIV = document.createElement("div");
@@ -348,19 +348,19 @@ function() {
 }
 
 /**
- * Clips a string at "pixelWidth" using using "className" on hidden 'LsStringUtil._calcDIV'.
+ * Clips a string at "pixelWidth" using using "className" on hidden 'AjxStringUtil._calcDIV'.
  * Returns "origString" with "..." appended if clipped.
  *
  * NOTE: The same CSS style ("className") must be assigned to both the intended display area and the
- * hidden 'LsStringUtil._calcDIV'.  "className" is optional; if supplied, it will be assigned to
- * 'LsStringUtil._calcDIV' to handle different CSS styles ("className"s) on same page.
+ * hidden 'AjxStringUtil._calcDIV'.  "className" is optional; if supplied, it will be assigned to
+ * 'AjxStringUtil._calcDIV' to handle different CSS styles ("className"s) on same page.
  *
  * NOTE2: MSIE Benchmark - clipping an average of 17 characters each over 190 iterations
  * averaged 27ms each (5.1 seconds total for 190)
  */
-LsStringUtil.clip =
+AjxStringUtil.clip =
 function(origString, pixelWidth, className) {
-	var calcDIV = LsStringUtil.calcDIV();
+	var calcDIV = AjxStringUtil.calcDIV();
 	if (arguments.length == 3) calcDIV.className = className;
 	//calcDIV.innerHTML = "<div>" + origString + "</div>"; // prevents screen flash in IE?
 	calcDIV.innerHTML = origString;
@@ -368,22 +368,22 @@ function(origString, pixelWidth, className) {
 
 	for (var i=origString.length-1; i>0; i--) {
 		var newString = origString.substr(0,i);
-		calcDIV.innerHTML = newString + LsStringUtil.ELLIPSIS;
-		if (calcDIV.offsetWidth <= pixelWidth) return newString + LsStringUtil.ELLIPSIS;
+		calcDIV.innerHTML = newString + AjxStringUtil.ELLIPSIS;
+		if (calcDIV.offsetWidth <= pixelWidth) return newString + AjxStringUtil.ELLIPSIS;
 	}
 	return origString;
 }
 
 /**
- * Forces a string to wrap at "pixelWidth" using "className" on hidden 'LsStringUtil._calcDIV'.
+ * Forces a string to wrap at "pixelWidth" using "className" on hidden 'AjxStringUtil._calcDIV'.
  * Returns "origString" with "&lt;br&gt;" tags inserted to force wrapping.
  * Breaks string on embedded space characters, EOL ("/n") and "&lt;br&gt;" tags when possible.
  *
  * @returns		"origString" with "&lt;br&gt;" tags inserted to force wrapping.
  */
-LsStringUtil.wrap =
+AjxStringUtil.wrap =
 function(origString, pixelWidth, className) {
-	var calcDIV = LsStringUtil.calcDIV();
+	var calcDIV = AjxStringUtil.calcDIV();
 	if (arguments.length == 3) calcDIV.className = className;
 
 	var newString = "";
@@ -440,14 +440,14 @@ function(origString, pixelWidth, className) {
 }
 
 // Regexes for finding non-quoted content
-LsStringUtil.MSG_SEP_RE = new RegExp("^\\s*--+\\s*(" + "Original Message" + "|" + "Forwarded Message" + ")\\s*--+", "i");
-LsStringUtil.SIG_RE = /^(- ?-+)|(__+)\r?$/;
-LsStringUtil.COLON_RE = /\S+:$/;
-LsStringUtil.PREFIX_RE = /^\s*(>|\|)/;
-LsStringUtil.BRACKET_RE = /^\s*\[.+\]\s*$/;
-LsStringUtil.LINE_RE = /^\s*_{30,}\s*$/;
-LsStringUtil.BLANK_RE = /^\s*$/;
-LsStringUtil.HDR_RE = /^\s*\w+:/;
+AjxStringUtil.MSG_SEP_RE = new RegExp("^\\s*--+\\s*(" + "Original Message" + "|" + "Forwarded Message" + ")\\s*--+", "i");
+AjxStringUtil.SIG_RE = /^(- ?-+)|(__+)\r?$/;
+AjxStringUtil.COLON_RE = /\S+:$/;
+AjxStringUtil.PREFIX_RE = /^\s*(>|\|)/;
+AjxStringUtil.BRACKET_RE = /^\s*\[.+\]\s*$/;
+AjxStringUtil.LINE_RE = /^\s*_{30,}\s*$/;
+AjxStringUtil.BLANK_RE = /^\s*$/;
+AjxStringUtil.HDR_RE = /^\s*\w+:/;
 
 /**
 * Returns a list of chunks of top-level content in a message body. Top-level content is what was
@@ -480,10 +480,10 @@ LsStringUtil.HDR_RE = /^\s*\w+:/;
 * @param text		a message body
 * @param eol		the eol sequence, defaults to '\n'
 */
-LsStringUtil.getTopLevel =
+AjxStringUtil.getTopLevel =
 function(text, eol) {
 	eol = eol ? eol : '\n';
-	text = LsStringUtil._trimBlankLines(text, eol);
+	text = AjxStringUtil._trimBlankLines(text, eol);
 	var lines = text.split(eol);
 	var len = lines.length;
 	var i = 0, start = 0;
@@ -491,75 +491,75 @@ function(text, eol) {
 	var skipping = false;
 	while (i < len) {
 		var wasSkipping = skipping;
-		var skip = LsStringUtil._linesToSkip(lines, i);
+		var skip = AjxStringUtil._linesToSkip(lines, i);
 		skipping = (skip > 0);
 		if (wasSkipping && !skipping)
 			start = i;
 		else if (!wasSkipping && skipping && i > start)
-			chunks.push(LsStringUtil._trimBlankLines(lines.slice(start, i).join(eol), eol) + eol);
+			chunks.push(AjxStringUtil._trimBlankLines(lines.slice(start, i).join(eol), eol) + eol);
 		i += skipping ? skip : 1;
 	}
 	if (!skipping && i > start)
-		chunks.push(LsStringUtil._trimBlankLines(lines.slice(start, i).join(eol), eol) + eol);
+		chunks.push(AjxStringUtil._trimBlankLines(lines.slice(start, i).join(eol), eol) + eol);
 
 	return chunks;
 }
 
 // Starting at a given line, returns the number of lines that should be skipped because
 // they are quoted (or signature) content.
-LsStringUtil._linesToSkip =
+AjxStringUtil._linesToSkip =
 function(lines, i) {
 	var len = lines.length;
 	var skip = 0;
 	var start = i;
-	if (LsStringUtil.MSG_SEP_RE.test(lines[i])) {
+	if (AjxStringUtil.MSG_SEP_RE.test(lines[i])) {
 		skip = len - i;
-	} else if (LsStringUtil.SIG_RE.test(lines[i])) {
+	} else if (AjxStringUtil.SIG_RE.test(lines[i])) {
 		skip = len - i;
-	} else if (LsStringUtil.PREFIX_RE.test(lines[i])) {
-		while (i < lines.length && (LsStringUtil.PREFIX_RE.test(lines[i]) || LsStringUtil.BLANK_RE.test(lines[i])))
+	} else if (AjxStringUtil.PREFIX_RE.test(lines[i])) {
+		while (i < lines.length && (AjxStringUtil.PREFIX_RE.test(lines[i]) || AjxStringUtil.BLANK_RE.test(lines[i])))
 			i++;
 		skip = i - start;
-	} else if (LsStringUtil.COLON_RE.test(lines[i])) {
-		var idx = LsStringUtil._nextNonBlankLineIndex(lines, i + 1);
+	} else if (AjxStringUtil.COLON_RE.test(lines[i])) {
+		var idx = AjxStringUtil._nextNonBlankLineIndex(lines, i + 1);
 		var line1 = (idx != -1) ? lines[idx] : null;
-		if (line1 && LsStringUtil.PREFIX_RE.test(line1)) {
+		if (line1 && AjxStringUtil.PREFIX_RE.test(line1)) {
 			skip = idx - i;
 		} else {
 			if (idx != -1)
-				idx = LsStringUtil._nextNonBlankLineIndex(lines, idx + 1);
+				idx = AjxStringUtil._nextNonBlankLineIndex(lines, idx + 1);
 			var line2 = (idx != -1) ? lines[idx] : null;
-			if (line2 && LsStringUtil.BRACKET_RE.test(line1) && LsStringUtil.PREFIX_RE.test(line2))
+			if (line2 && AjxStringUtil.BRACKET_RE.test(line1) && AjxStringUtil.PREFIX_RE.test(line2))
 				skip = idx - i;
 		}
-	} else if (LsStringUtil.LINE_RE.test(lines[i])) {
-		var idx = LsStringUtil._nextNonBlankLineIndex(lines, i + 1);
+	} else if (AjxStringUtil.LINE_RE.test(lines[i])) {
+		var idx = AjxStringUtil._nextNonBlankLineIndex(lines, i + 1);
 		var line1 = (idx != -1) ? lines[idx] : null;
-		if (line1 && LsStringUtil.HDR_RE.test(line1))
+		if (line1 && AjxStringUtil.HDR_RE.test(line1))
 			skip = len - i;
 	}
 	return skip;
 }
 
 // Returns the index of the next non-blank line
-LsStringUtil._nextNonBlankLineIndex =
+AjxStringUtil._nextNonBlankLineIndex =
 function(lines, i) {
-	while (i < lines.length && LsStringUtil.BLANK_RE.test(lines[i]))
+	while (i < lines.length && AjxStringUtil.BLANK_RE.test(lines[i]))
 		i++;
 	return ((i < lines.length) ? i : -1);
 }
 
 // Removes blank lines from the beginning and end of text
-LsStringUtil._trimBlankLines =
+AjxStringUtil._trimBlankLines =
 function(text, eol) {
 	eol = eol ? eol : '\n';
 	var lines = text.split(eol);
 	var len = lines.length;
 	var i = 0;
-	while (i < len && LsStringUtil.BLANK_RE.test(lines[i]))
+	while (i < len && AjxStringUtil.BLANK_RE.test(lines[i]))
 		i++;
 	var j = len;
-	while (j > 0 && LsStringUtil.BLANK_RE.test(lines[j - 1]))
+	while (j > 0 && AjxStringUtil.BLANK_RE.test(lines[j - 1]))
 		j--;
 	if (i != 0 || j != len)
 		text = lines.slice(i, j).join(eol) + eol;
@@ -573,50 +573,50 @@ function(text, eol) {
 * There has got to be a better way of doing this! 
 */
 
-LsStringUtil._NO_LIST = 0;
-LsStringUtil._ORDERED_LIST = 1;
-LsStringUtil._UNORDERED_LIST = 2;
-LsStringUtil._INDENT = "    ";
-LsStringUtil._NON_WHITESPACE = /\S+/;
-LsStringUtil._LF = /\n/;
+AjxStringUtil._NO_LIST = 0;
+AjxStringUtil._ORDERED_LIST = 1;
+AjxStringUtil._UNORDERED_LIST = 2;
+AjxStringUtil._INDENT = "    ";
+AjxStringUtil._NON_WHITESPACE = /\S+/;
+AjxStringUtil._LF = /\n/;
 
-LsStringUtil.convertHtml2Text =
+AjxStringUtil.convertHtml2Text =
 function(domRoot) {
 	if (!domRoot) return null;
 	var text = new Array();
 	var idx = 0;
 	var ctxt = new Object();
-	this._traverse(domRoot, text, idx, LsStringUtil._NO_LIST, 0, 0, ctxt);
+	this._traverse(domRoot, text, idx, AjxStringUtil._NO_LIST, 0, 0, ctxt);
 	var textStr = text.join("");
 	return textStr;
 }
 
-LsStringUtil._traverse =
+AjxStringUtil._traverse =
 function(el, text, idx, listType, listLevel, bulletNum, ctxt) {
 	var nodeName = el.nodeName.toLowerCase();
 
 	if (nodeName == "#text") {
-		if (el.nodeValue.search(LsStringUtil._NON_WHITESPACE) != -1) {
+		if (el.nodeValue.search(AjxStringUtil._NON_WHITESPACE) != -1) {
 			if (ctxt.lastNode == "ol" || ctxt.lastNode == "ul")
 				text[idx++] = "\n";
-			text[idx++] = LsStringUtil.trim(el.nodeValue.replace(LsStringUtil._LF, " "), true) + " ";
+			text[idx++] = AjxStringUtil.trim(el.nodeValue.replace(AjxStringUtil._LF, " "), true) + " ";
 		}
 	} else if (nodeName == "p") {
 		text[idx++] = "\n\n";
-	} else if (listType == LsStringUtil._NO_LIST && (nodeName == "br" || nodeName == "hr")) {
+	} else if (listType == AjxStringUtil._NO_LIST && (nodeName == "br" || nodeName == "hr")) {
 		text[idx++] = "\n";
 	} else if (nodeName == "ol" || nodeName == "ul") {
 		text[idx++] = "\n";
 		if (el.parentNode.nodeName.toLowerCase() != "li" && ctxt.lastNode != "br"
 			&& ctxt.lastNode != "hr")
 			text[idx++] = "\n";
-		listType = (nodeName == "ol") ? LsStringUtil._ORDERED_LIST : LsStringUtil._UNORDERED_LIST;
+		listType = (nodeName == "ol") ? AjxStringUtil._ORDERED_LIST : AjxStringUtil._UNORDERED_LIST;
 		listLevel++;
 		bulletNum = 0;
 	} else if (nodeName == "li") {
 		for (var i = 0; i < listLevel; i++)
-			text[idx++] = LsStringUtil._INDENT;
-		if (listType == LsStringUtil._ORDERED_LIST)
+			text[idx++] = AjxStringUtil._INDENT;
+		if (listType == AjxStringUtil._ORDERED_LIST)
 			text[idx++] = bulletNum + ". ";
 		else
 			text[idx++] = "\u2022 "; // TODO LmMsg.bullet

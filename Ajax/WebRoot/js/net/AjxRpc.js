@@ -1,32 +1,32 @@
-LsRpc._rpcCache = new Array();
-LsRpc._RPC_CACHE_MAX = 10;
+AjxRpc._rpcCache = new Array();
+AjxRpc._RPC_CACHE_MAX = 10;
 
-function LsRpc() {
+function AjxRpc() {
 }
 
 /**
-* @method public static LsRpc.invoke
+* @method public static AjxRpc.invoke
 * @param requestStr - http request string
 * @param serverUrl - URI for HTTP request
 * @requestHeaders - HTTP request headers
-* @param callback - LsCallback instance
+* @param callback - AjxCallback instance
 **/
-LsRpc.invoke =
+AjxRpc.invoke =
 function(requestStr, serverUrl, requestHeaders, callback) {
-	var rpcCtxt = LsRpc._getRpcCtxt();
+	var rpcCtxt = AjxRpc._getRpcCtxt();
 
 	try {
 	 	var response = rpcCtxt.rpcRequestObj.invoke(requestStr, serverUrl, requestHeaders, callback);
 	} catch (ex) {
-		var newEx = new LsException();
-		newEx.method = "LsRpc.prototype._invoke";
+		var newEx = new AjxException();
+		newEx.method = "AjxRpc.prototype._invoke";
 		if (ex instanceof Error) {
 			newEx.detail = ex.message;
-			newEx.code = LsException.NETWORK_ERROR;
+			newEx.code = AjxException.NETWORK_ERROR;
 			newEx.msg = "Network error";
 		} else {
 			newEx.detail = ex.toString();
-			newEx.code = LsException.UNKNOWN_ERROR;
+			newEx.code = AjxException.UNKNOWN_ERROR;
 			newEx.msg = "Unknown Error";
 		}
 		if(!callback)		
@@ -42,38 +42,38 @@ function(requestStr, serverUrl, requestHeaders, callback) {
 /**
 * inner class _RpcCtxt
  members:
- 	rpcRequestObj : LsRpcRequest
+ 	rpcRequestObj : AjxRpcRequest
 **/
 function _RpcCtxt() {
-	this.rpcRequestObj = new LsRpcRequest(true);
+	this.rpcRequestObj = new AjxRpcRequest(true);
 }
 
 /**
 * singleton factory of _RpcCtxt objects
 **/
-LsRpc._getRpcCtxt = 
+AjxRpc._getRpcCtxt = 
 function() {
 	var rpcCtxt = null
-	for (var i = 0; i < LsRpc._rpcCache.length; i++) {
-		rpcCtxt = LsRpc._rpcCache[i];
+	for (var i = 0; i < AjxRpc._rpcCache.length; i++) {
+		rpcCtxt = AjxRpc._rpcCache[i];
 		if (!rpcCtxt.rpcRequestObj.busy) {
-			DBG.println(LsDebug.DBG1, "Found free Rpc Context in cache");
+			DBG.println(AjxDebug.DBG1, "Found free Rpc Context in cache");
 			break;
 		}
 	}
 	
 	// if we didnt find a non-busy rpc cache, create new one
-	if (i == LsRpc._rpcCache.length) {
-		if (LsRpc._rpcCache.length == LsRpc._RPC_CACHE_MAX) {
-			DBG.println(LsDebug.DBG1, "Out of RPC Contexts");
-			throw new LsException("Out of RPC cache", LsException.OUT_OF_RPC_CACHE, "LsCsfeCommand._getRpcCtxt");	
+	if (i == AjxRpc._rpcCache.length) {
+		if (AjxRpc._rpcCache.length == AjxRpc._RPC_CACHE_MAX) {
+			DBG.println(AjxDebug.DBG1, "Out of RPC Contexts");
+			throw new AjxException("Out of RPC cache", AjxException.OUT_OF_RPC_CACHE, "LsCsfeCommand._getRpcCtxt");	
 		}
 		rpcCtxt = new _RpcCtxt();
-		LsRpc._rpcCache.push(rpcCtxt);
+		AjxRpc._rpcCache.push(rpcCtxt);
 		
 		// XXX: this should never eval to true in synchronous mode
 		//      REMOVE THIS CHECK WHEN ASYNCH HAS BEEN IMPLEMENTED
-		if (LsRpc._rpcCache.length > 1)
+		if (AjxRpc._rpcCache.length > 1)
 			DBG.println("XXXX: ---- more than one rpc cache created ---- :XXXX");
 	}
 	rpcCtxt.rpcRequestObj.busy = true;

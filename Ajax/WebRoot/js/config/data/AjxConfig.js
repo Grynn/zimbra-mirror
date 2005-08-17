@@ -1,6 +1,6 @@
-function LsConfig() {
+function AjxConfig() {
 }
 
-LsConfig.DATE_FMT = "MDY";
-LsConfig.DATE_SEP = "/";
-LsConfig.TIME_SEP = ":";
+AjxConfig.DATE_FMT = "MDY";
+AjxConfig.DATE_SEP = "/";
+AjxConfig.TIME_SEP = ":";

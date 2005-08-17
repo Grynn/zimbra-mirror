@@ -362,11 +362,11 @@ function(mo, yr) {
 DwtCalendar.prototype._installListeners =
 function() {
 	this._setMouseEventHdlrs();
-	this.addListener(DwtEvent.ONMOUSEOVER, new LsListener(this, this._mouseOverListener));
-	this.addListener(DwtEvent.ONMOUSEOUT, new LsListener(this, this._mouseOutListener));
-	this.addListener(DwtEvent.ONMOUSEDOWN, new LsListener(this, this._mouseDownListener));
-	this.addListener(DwtEvent.ONMOUSEUP, new LsListener(this, this._mouseUpListener));
-	this.addListener(DwtEvent.ONDBLCLICK, new LsListener(this, this._doubleClickListener));
+	this.addListener(DwtEvent.ONMOUSEOVER, new AjxListener(this, this._mouseOverListener));
+	this.addListener(DwtEvent.ONMOUSEOUT, new AjxListener(this, this._mouseOutListener));
+	this.addListener(DwtEvent.ONMOUSEDOWN, new AjxListener(this, this._mouseDownListener));
+	this.addListener(DwtEvent.ONMOUSEUP, new AjxListener(this, this._mouseUpListener));
+	this.addListener(DwtEvent.ONDBLCLICK, new AjxListener(this, this._doubleClickListener));
 }
 
 DwtCalendar.prototype._selectionNotify =
@@ -632,14 +632,14 @@ function() {
     html[idx++] = 	             		"' id='b:py:";
     html[idx++] = 	             		this._uuid;
     html[idx++] = 					    "'>";
-    html[idx++] = 					    LsImg.getImageHtml(DwtImg.FAST_REV, null, ["id='b:py:img:", this._uuid, "'"].join(""));
+    html[idx++] = 					    AjxImg.getImageHtml(DwtImg.FAST_REV, null, ["id='b:py:img:", this._uuid, "'"].join(""));
     html[idx++] = 					"</td>"
     html[idx++] = 	             	"<td class='";
     html[idx++] = 	             		DwtCalendar._BUTTON_CLASS;
     html[idx++] = 	             		"' id='b:pm:";
     html[idx++] = 						this._uuid;
     html[idx++] = 						"'>";
-    html[idx++] = 					    LsImg.getImageHtml(DwtImg.REV, null, ["id='b:pm:img:", this._uuid, "'"].join(""));
+    html[idx++] = 					    AjxImg.getImageHtml(DwtImg.REV, null, ["id='b:pm:img:", this._uuid, "'"].join(""));
     html[idx++] =					"</td>";
 	html[idx++] = 					"<td align='center' class='DwtCalendarTitleCell' nowrap'><span class='"
 	html[idx++] =                       DwtCalendar._TITLE_CLASS;
@@ -651,14 +651,14 @@ function() {
     html[idx++] = 	             		"' id='b:nm:";
     html[idx++] =						this._uuid;
     html[idx++] =						"'>";
-    html[idx++] = 					    LsImg.getImageHtml(DwtImg.FWD, null, ["id='b:nm:img:", this._uuid, "'"].join(""));
+    html[idx++] = 					    AjxImg.getImageHtml(DwtImg.FWD, null, ["id='b:nm:img:", this._uuid, "'"].join(""));
 	html[idx++] =					"</td>";
     html[idx++] = 	             	"<td class='";
     html[idx++] = 	             		DwtCalendar._BUTTON_CLASS;
     html[idx++] = 	             		"' id='b:ny:";
     html[idx++] =						this._uuid;
     html[idx++] =						"'>";
-    html[idx++] = 					    LsImg.getImageHtml(DwtImg.FAST_FWD, null, ["id='b:ny:img:", this._uuid, "'"].join(""));
+    html[idx++] = 					    AjxImg.getImageHtml(DwtImg.FAST_FWD, null, ["id='b:ny:img:", this._uuid, "'"].join(""));
     html[idx++] =					"</td>";
  	html[idx++] = 				"</tr>";
 	html[idx++] = 			"</table>";
@@ -677,7 +677,7 @@ function() {
     html[idx++] = "</tr>";
 
 	// bug fix #3355
-	var style = LsEnv.isLinux ? " style='line-height: 12px'" : "";
+	var style = AjxEnv.isLinux ? " style='line-height: 12px'" : "";
     for (var i = 0; i < 6; i++) {
  		html[idx++] = "<tr" + style + "><td width='2%' id='w:";
  		html[idx++] = i;
@@ -718,10 +718,10 @@ function(ev) {
 		var img;
 		if (target.firstChild == null) {
 			img = target;
-			LsImg.getParentElement(target).className = DwtCalendar._BUTTON_ACTIVATED_CLASS;
+			AjxImg.getParentElement(target).className = DwtCalendar._BUTTON_ACTIVATED_CLASS;
 		} else {
 			target.className = DwtCalendar._BUTTON_ACTIVATED_CLASS;
-			img = LsImg.getImageElement(target);
+			img = AjxImg.getImageElement(target);
 		}
 		img.className = img._origClassName;
 	} else if (target.id.charAt(0) == 'w') {
@@ -745,10 +745,10 @@ function(ev) {
 		target.className = DwtCalendar._BUTTON_CLASS;
 		if (target.firstChild == null) {
 			img = target;
-			LsImg.getParentElement(target).className = DwtCalendar._BUTTON_CLASS;
+			AjxImg.getParentElement(target).className = DwtCalendar._BUTTON_CLASS;
 		} else {
 			target.className = DwtCalendar._BUTTON_CLASS;
-			img = LsImg.getImageElement(target);
+			img = AjxImg.getImageElement(target);
 		}
 		img.className = 	img._origClassName;
 	} else if (target.id.charAt(0) == 'w') {
@@ -767,10 +767,10 @@ function(ev) {
 		var img;
 		if (target.firstChild == null) {
 			img = target;
-			LsImg.getParentElement(target).className = DwtCalendar._BUTTON_TRIGGERED_CLASS;
+			AjxImg.getParentElement(target).className = DwtCalendar._BUTTON_TRIGGERED_CLASS;
 		} else {
 			target.className = DwtCalendar._BUTTON_TRIGGERED_CLASS;
-			img = LsImg.getImageElement(target);
+			img = AjxImg.getImageElement(target);
 		}
 		img.className = img._origClassName;
 	} else if (target.id.charAt(0) == 'w') {
@@ -792,10 +792,10 @@ function(ev) {
 		var img;
 		if (target.firstChild == null) {
 			img = target;
-			LsImg.getParentElement(target).className = DwtCalendar._BUTTON_ACTIVATED_CLASS;
+			AjxImg.getParentElement(target).className = DwtCalendar._BUTTON_ACTIVATED_CLASS;
 		} else {
 			target.className = DwtCalendar._BUTTON_ACTIVATED_CLASS;
-			img = LsImg.getImageElement(target);
+			img = AjxImg.getImageElement(target);
 		}
 		img.className = img._origClassName;
 		
@@ -834,23 +834,23 @@ function(ev) {
 DwtCalendar.prototype._prevMonth = 
 function(ev) {
 	var d = new Date(this._date.getTime());
-	this.setDate(LsDateUtil.roll(d, LsDateUtil.MONTH, -1));
+	this.setDate(AjxDateUtil.roll(d, AjxDateUtil.MONTH, -1));
 }
 
 DwtCalendar.prototype._nextMonth = 
 function(ev) {
 	var d = new Date(this._date.getTime());
-	this.setDate(LsDateUtil.roll(d, LsDateUtil.MONTH, 1));
+	this.setDate(AjxDateUtil.roll(d, AjxDateUtil.MONTH, 1));
 }
 
 DwtCalendar.prototype._prevYear = 
 function(ev) {
 	var d = new Date(this._date.getTime());
-	this.setDate(LsDateUtil.roll(d, LsDateUtil.YEAR, -1));
+	this.setDate(AjxDateUtil.roll(d, AjxDateUtil.YEAR, -1));
 }
 
 DwtCalendar.prototype._nextYear = 
 function(ev) {
 	var d = new Date(this._date.getTime());
-	this.setDate(LsDateUtil.roll(d, LsDateUtil.YEAR, 1));
+	this.setDate(AjxDateUtil.roll(d, AjxDateUtil.YEAR, 1));
 }

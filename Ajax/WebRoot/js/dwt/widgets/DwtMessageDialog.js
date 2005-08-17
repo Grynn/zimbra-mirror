@@ -12,7 +12,7 @@ function DwtMessageDialog(parent, className, buttons) {
  	DwtDialog.call(this, parent, className, null, buttons);
 	this.setContent(this._contentHtml());
  	this._msgCell = Dwt.getDomObj(this.getDocument(), this._msgCellId);
-	this.addEnterListener(new LsListener(this, this._enterListener));
+	this.addEnterListener(new AjxListener(this, this._enterListener));
 }
 
 DwtMessageDialog.prototype = new DwtDialog;
@@ -58,7 +58,7 @@ function(msgStr, detailStr, style, title) {
 		var i = 0;
 		html[i++] = "<table cellspacing='0' cellpadding='0' border='0'><tr>";
 		html[i++] = "<td valign='top'>";
-		html[i++] = LsImg.getImageHtml(DwtMessageDialog.ICON[style]);
+		html[i++] = AjxImg.getImageHtml(DwtMessageDialog.ICON[style]);
 		html[i++] = "</td><td class='DwtMsgArea'>";
 		html[i++] = msgStr;
 		html[i++] = "</td></tr></table>";

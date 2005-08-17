@@ -11,7 +11,7 @@
  *
  */
 	
-LsSelectionManager = function(anOwner) {
+AjxSelectionManager = function(anOwner) {
 	this._owner = anOwner;
 };
 
@@ -20,20 +20,20 @@ LsSelectionManager = function(anOwner) {
 // -----------------------------------------------------------
 
 // Actions for select()
-LsSelectionManager.SELECT_ONE_CLEAR_OTHERS = 0;
-LsSelectionManager.TOGGLE_ONE_LEAVE_OTHERS = 1;
-LsSelectionManager.SELECT_TO_ANCHOR = 2;
-LsSelectionManager.DESELECT_ALL = 3;
-LsSelectionManager.SELECT_ALL = 4;
+AjxSelectionManager.SELECT_ONE_CLEAR_OTHERS = 0;
+AjxSelectionManager.TOGGLE_ONE_LEAVE_OTHERS = 1;
+AjxSelectionManager.SELECT_TO_ANCHOR = 2;
+AjxSelectionManager.DESELECT_ALL = 3;
+AjxSelectionManager.SELECT_ALL = 4;
 
 // -----------------------------------------------------------
 // API Methods
 // -----------------------------------------------------------
 
 /**
- * returns an LsVector
+ * returns an AjxVector
  */
-LsSelectionManager.prototype.getItems = function() {
+AjxSelectionManager.prototype.getItems = function() {
 	if (this._selectedItems == null) {
 		this._selectedItems = this._createItemsCollection();
 	}
@@ -43,14 +43,14 @@ LsSelectionManager.prototype.getItems = function() {
 /**
  * returns the number of selected items
  */	
-LsSelectionManager.prototype.getLength = function() {
+AjxSelectionManager.prototype.getLength = function() {
 	return this.getItems().length;
 };
 	
 /**
  * returns the anchor, unless nothing is selected
  */
-LsSelectionManager.prototype.getAnchor = function() {
+AjxSelectionManager.prototype.getAnchor = function() {
 	if (this._anchor == null) {
 		var items = this.getItems();
 		if (items.length > 0) {
@@ -65,7 +65,7 @@ LsSelectionManager.prototype.getAnchor = function() {
  * the keyboard. This returns the item that is currently the cursor,
  * and null if nothing is selected.
  */
-LsSelectionManager.prototype.getCursor = function() {
+AjxSelectionManager.prototype.getCursor = function() {
 	if (this._cursor == null) {
 		this._cursor = this.getAnchor();
 	}
@@ -76,28 +76,28 @@ LsSelectionManager.prototype.getCursor = function() {
 /**
  * Returns true if the given item is selected.
  */
-LsSelectionManager.prototype.isSelected = function(item) {
+AjxSelectionManager.prototype.isSelected = function(item) {
 	return this.getItems().binarySearch(item) != -1;
 };
     
-LsSelectionManager.prototype.selectOneItem = function(item) {
-	this.select(item, LsSelectionManager.SELECT_ONE_CLEAR_OTHERS);
+AjxSelectionManager.prototype.selectOneItem = function(item) {
+	this.select(item, AjxSelectionManager.SELECT_ONE_CLEAR_OTHERS);
 };
     
-LsSelectionManager.prototype.toggleItem = function(item) {
-	this.select(item, LsSelectionManager.TOGGLE_ONE_LEAVE_OTHERS);
+AjxSelectionManager.prototype.toggleItem = function(item) {
+	this.select(item, AjxSelectionManager.TOGGLE_ONE_LEAVE_OTHERS);
 };
 	
-LsSelectionManager.prototype.selectFromAnchorToItem = function(item) {
-	this.select(item, LsSelectionManager.SELECT_TO_ANCHOR);
+AjxSelectionManager.prototype.selectFromAnchorToItem = function(item) {
+	this.select(item, AjxSelectionManager.SELECT_TO_ANCHOR);
 };
     
-LsSelectionManager.prototype.deselectAll = function() {
-	this.select(null, LsSelectionManager.DESELECT_ALL);
+AjxSelectionManager.prototype.deselectAll = function() {
+	this.select(null, AjxSelectionManager.DESELECT_ALL);
 };
 	
-LsSelectionManager.prototype.selectAll = function() {
-	this.select(null, LsSelectionManager.SELECT_ALL);
+AjxSelectionManager.prototype.selectAll = function() {
+	this.select(null, AjxSelectionManager.SELECT_ALL);
 };
     
     
@@ -108,7 +108,7 @@ LsSelectionManager.prototype.selectAll = function() {
  * owner defines it) once at the end, if anything changed selection.
  *
  */
-LsSelectionManager.prototype.select = function(item, action) {
+AjxSelectionManager.prototype.select = function(item, action) {
 	
 	// Update the anchor and cursor, if necessary
 	this._setAnchorAndCursor(item, action);
@@ -132,7 +132,7 @@ LsSelectionManager.prototype.select = function(item, action) {
 		var newSelectionExists = oldSelectionExists;
 		
 		switch (action) {
-		case LsSelectionManager.SELECT_TO_ANCHOR:
+		case AjxSelectionManager.SELECT_TO_ANCHOR:
 			if (this._anchor == null) {
 				// If we have no anchor, let it be the first item
 				// in the list
@@ -153,18 +153,18 @@ LsSelectionManager.prototype.select = function(item, action) {
 			}
 
 			break;
-		case LsSelectionManager.SELECT_ONE_CLEAR_OTHERS:
+		case AjxSelectionManager.SELECT_ONE_CLEAR_OTHERS:
 			newSelectionExists = (testItem == item);
 			break;
-		case LsSelectionManager.TOGGLE_ONE_LEAVE_OTHERS:
+		case AjxSelectionManager.TOGGLE_ONE_LEAVE_OTHERS:
 			if (testItem == item) {
 				newSelectionExists = !oldSelectionExists ;
 			}
 			break;
-		case LsSelectionManager.DESELECT_ALL:
+		case AjxSelectionManager.DESELECT_ALL:
 			newSelectionExists = false;
 			break;
-		case LsSelectionManager.SELECT_ALL:
+		case AjxSelectionManager.SELECT_ALL:
 			newSelectionExists = true;
 			break;
 		}
@@ -197,7 +197,7 @@ LsSelectionManager.prototype.select = function(item, action) {
  * Remove an item from the selection managers selected items
  * collection if it exists.
  */
-LsSelectionManager.prototype.removeItem = function(item) {
+AjxSelectionManager.prototype.removeItem = function(item) {
 	if (this._selectedItems) {
 		var index = this._selectedItems.binarySearch(item);
 		if (index > -1) this._selectedItems.removeAt(index);
@@ -212,11 +212,11 @@ LsSelectionManager.prototype.removeItem = function(item) {
  * Creates an array suitable for use as the sorted list of selected
  * items and returns it.
  */
-LsSelectionManager.prototype._createItemsCollection = function() {
-	return new LsVector();
+AjxSelectionManager.prototype._createItemsCollection = function() {
+	return new AjxVector();
 };
 
-LsSelectionManager.prototype._isItemOldSelection = function (testItem, oldItems) {
+AjxSelectionManager.prototype._isItemOldSelection = function (testItem, oldItems) {
 	var ret = false;
 	if (oldItems) {
 		var oldSelectionIndex = oldItems.binarySearch(testItem);
@@ -228,24 +228,24 @@ LsSelectionManager.prototype._isItemOldSelection = function (testItem, oldItems)
 	return ret;
 };
 
-LsSelectionManager.prototype._setAnchorAndCursor = function (item, action) {
+AjxSelectionManager.prototype._setAnchorAndCursor = function (item, action) {
 	switch (action) {
-	case LsSelectionManager.SELECT_TO_ANCHOR:
+	case AjxSelectionManager.SELECT_TO_ANCHOR:
 		this._cursor = item;
 		break;
-	case LsSelectionManager.SELECT_ONE_CLEAR_OTHERS:		
+	case AjxSelectionManager.SELECT_ONE_CLEAR_OTHERS:		
 		this._anchor = item;
 		this._cursor = item;
 		break;
-	case LsSelectionManager.TOGGLE_ONE_LEAVE_OTHERS:
+	case AjxSelectionManager.TOGGLE_ONE_LEAVE_OTHERS:
 		this._anchor = item;
 		this._cursor = item;
 		break;
-	case LsSelectionManager.DESELECT_ALL:
+	case AjxSelectionManager.DESELECT_ALL:
 		this._anchor = null;
 		this._cursor = null;
 		break;
-	case LsSelectionManager.SELECT_ALL:
+	case AjxSelectionManager.SELECT_ALL:
 		return;
 	}
 };

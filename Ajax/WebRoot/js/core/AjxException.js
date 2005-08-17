@@ -1,4 +1,4 @@
-function LsException(msg, code, method, detail) {
+function AjxException(msg, code, method, detail) {
 	if (arguments.length == 0) return;
 	this.msg = msg;
 	this.code = code;
@@ -6,21 +6,21 @@ function LsException(msg, code, method, detail) {
 	this.detail = detail;
 }
 
-LsException.prototype.toString = 
+AjxException.prototype.toString = 
 function() {
-	return "LsException";
+	return "AjxException";
 }
 
-LsException.prototype.dump = 
+AjxException.prototype.dump = 
 function() {
-	return "LsException: msg="+this.msg+" code="+this.code+" method="+this.method+" detail="+this.detail;
+	return "AjxException: msg="+this.msg+" code="+this.code+" method="+this.method+" detail="+this.detail;
 }
-LsException.INVALIDPARENT 			= "LsException.INVALIDPARENT";
-LsException.INVALID_OP 				= "LsException.INVALID_OP";
-LsException.INTERNAL_ERROR 			= "LsException.INTERNAL_ERROR";
-LsException.INVALID_PARAM 			= "LsException.INVALID_PARAM";
-LsException.UNIMPLEMENTED_METHOD 	= "LsException.UNIMPLEMENTED_METHOD";
-LsException.NETWORK_ERROR 			= "LsException.NETWORK_ERROR";
-LsException.OUT_OF_RPC_CACHE		= "LsException.OUT_OF_RPC_CACHE";
-LsException.UNSUPPORTED 			= "LsException.UNSUPPORTED";
-LsException.UNKNOWN_ERROR 			= "LsException.UNKNOWN_ERROR";
+AjxException.INVALIDPARENT 			= "AjxException.INVALIDPARENT";
+AjxException.INVALID_OP 				= "AjxException.INVALID_OP";
+AjxException.INTERNAL_ERROR 			= "AjxException.INTERNAL_ERROR";
+AjxException.INVALID_PARAM 			= "AjxException.INVALID_PARAM";
+AjxException.UNIMPLEMENTED_METHOD 	= "AjxException.UNIMPLEMENTED_METHOD";
+AjxException.NETWORK_ERROR 			= "AjxException.NETWORK_ERROR";
+AjxException.OUT_OF_RPC_CACHE		= "AjxException.OUT_OF_RPC_CACHE";
+AjxException.UNSUPPORTED 			= "AjxException.UNSUPPORTED";
+AjxException.UNKNOWN_ERROR 			= "AjxException.UNKNOWN_ERROR";

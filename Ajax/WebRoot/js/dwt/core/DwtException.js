@@ -1,9 +1,9 @@
 function DwtException(msg, code, method, detail) {
 	if (arguments.length == 0) return;
-	LsException.call(this, msg, code, method, detail);
+	AjxException.call(this, msg, code, method, detail);
 }
 
-DwtException.prototype = new LsException;
+DwtException.prototype = new AjxException;
 DwtException.prototype.constructor = DwtException;
 
 DwtException.prototype.toString = 

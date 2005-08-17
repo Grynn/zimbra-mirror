@@ -4,7 +4,7 @@ function DwtComposite(parent, className, posStyle, deferred) {
 	className = className || "DwtComposite";
 	DwtControl.call(this, parent, className, posStyle, deferred);
 
-	this._children = new LsVector();
+	this._children = new AjxVector();
 	this._updating = false;
 }
 
@@ -22,7 +22,7 @@ function() {
 DwtComposite.prototype.dispose =
 function() {
 	if (this._disposed) return;
-DBG.println(LsDebug.DBG3, "DwtComposite.prototype.dispose: " + this.toString() + " - " + this._htmlElId);
+DBG.println(AjxDebug.DBG3, "DwtComposite.prototype.dispose: " + this.toString() + " - " + this._htmlElId);
 	var sz = this._children.size();
 	if (sz > 0) {
 		// Dup the array since disposing the children will result in _removeChild
@@ -67,7 +67,7 @@ function(child) {
 
 DwtComposite.prototype._removeChild =
 function(child) {
-	DBG.println(LsDebug.DBG3, "DwtComposite.prototype._removeChild: " + child._htmlElId + " - " + child.toString());
+	DBG.println(AjxDebug.DBG3, "DwtComposite.prototype._removeChild: " + child._htmlElId + " - " + child.toString());
 	// Make sure that the child is initialized. Certain children (such as DwtTreeItems)
 	// can be created in a deferred manner (i.e. they will only be initialized if they
 	// are required to be visible

@@ -1,15 +1,15 @@
-function LsWindowOpener () {
+function AjxWindowOpener () {
 	
 }
 
-LsWindowOpener.PARAM_INSTANCE_ID = "id";
-LsWindowOpener.HELPER_URL = "";
-LsWindowOpener.QUESTION = "?";
-LsWindowOpener.EQUALS = "=";
-LsWindowOpener.QS_SEPARATOR = "&";
-LsWindowOpener.PARAM_ASYNC = "async";
+AjxWindowOpener.PARAM_INSTANCE_ID = "id";
+AjxWindowOpener.HELPER_URL = "";
+AjxWindowOpener.QUESTION = "?";
+AjxWindowOpener.EQUALS = "=";
+AjxWindowOpener.QS_SEPARATOR = "&";
+AjxWindowOpener.PARAM_ASYNC = "async";
 
-LsWindowOpener.getUrl = 
+AjxWindowOpener.getUrl = 
 function (url) {
 	if (!url || url == "") return "";
 
@@ -17,34 +17,34 @@ function (url) {
 	var idx = 0;
 	
 	fullUrlArray[idx++] = url;
-	fullUrlArray[idx++] = LsWindowOpener.QUESTION;
-	fullUrlArray[idx++] = LsWindowOpener.PARAM_INSTANCE_ID;
-	fullUrlArray[idx++] = LsWindowOpener.EQUALS;
+	fullUrlArray[idx++] = AjxWindowOpener.QUESTION;
+	fullUrlArray[idx++] = AjxWindowOpener.PARAM_INSTANCE_ID;
+	fullUrlArray[idx++] = AjxWindowOpener.EQUALS;
 	fullUrlArray[idx++] = arguments[1];
-	fullUrlArray[idx++] = LsWindowOpener.QS_SEPARATOR;
-	fullUrlArray[idx++] = LsWindowOpener.PARAM_ASYNC;
-	fullUrlArray[idx++] = LsWindowOpener.EQUALS;
+	fullUrlArray[idx++] = AjxWindowOpener.QS_SEPARATOR;
+	fullUrlArray[idx++] = AjxWindowOpener.PARAM_ASYNC;
+	fullUrlArray[idx++] = AjxWindowOpener.EQUALS;
 	fullUrlArray[idx++] = arguments[2];
 	return fullUrlArray.join("");
 };
 
-LsWindowOpener.openBlank = 
+AjxWindowOpener.openBlank = 
 function(windowName, windowArgs, openedCallback, callingObject, asyncCallback) {
 
-	return LsWindowOpener.open(LsWindowOpener.HELPER_URL, windowName, 
+	return AjxWindowOpener.open(AjxWindowOpener.HELPER_URL, windowName, 
 							   windowArgs, openedCallback, 
 							   callingObject, asyncCallback);
 };
 
-LsWindowOpener.open = 
+AjxWindowOpener.open = 
 function(url, windowName, windowArgs, openedCallback, callingObject, asyncCallback) {
 	var newWin;
 	if (url && url != "") {
 		var objWrapper = { obj: callingObject, callback: openedCallback };
 		var async = asyncCallback || false;
 		// only assign an id if we think there will be a callback.
-		var id = url && url != "" ? LsCore.assignId(objWrapper) : -1;
-		var localUrl = LsWindowOpener.getUrl(url, id, async);
+		var id = url && url != "" ? AjxCore.assignId(objWrapper) : -1;
+		var localUrl = AjxWindowOpener.getUrl(url, id, async);
 		newWin = window.open(localUrl, windowName, windowArgs);
 		// EMC: This is some magic that I don't understand. For some custom IE browsers 
 		// browser, opening a new debug window, seems to call window.open in 
@@ -56,20 +56,20 @@ function(url, windowName, windowArgs, openedCallback, callingObject, asyncCallba
 	} else {
 		newWin = window.open("", windowName, windowArgs);
 		if (openedCallback) {
-			var ta = new LsTimedAction();
+			var ta = new AjxTimedAction();
 			ta.obj = callingObject;
 			ta.method = openedCallback;
-			LsTimedAction.scheduleAction(ta, 0);
+			AjxTimedAction.scheduleAction(ta, 0);
 		}
 	}
 	
 	return newWin
 };
 
-LsWindowOpener.onWindowOpened = 
+AjxWindowOpener.onWindowOpened = 
 function (wrapperId) {
-	var wrapper = LsCore.objectWithId(wrapperId);
-	LsCore.unassignId(wrapperId);
+	var wrapper = AjxCore.objectWithId(wrapperId);
+	AjxCore.unassignId(wrapperId);
 	if (!wrapper.window.closed && wrapper.callback) {
 		if (wrapper.obj) {
 			wrapper.callback.call(wrapper.obj);

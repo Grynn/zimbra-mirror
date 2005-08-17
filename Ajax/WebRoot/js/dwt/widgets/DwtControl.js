@@ -24,7 +24,7 @@ function DwtControl(parent, className, posStyle, deferred) {
 		throw new DwtException("Parent must be a subclass of Composite", DwtException.INVALIDPARENT, "DwtWidget");
 
 	this._data = new Object();
-	this._eventMgr = new LsEventMgr();
+	this._eventMgr = new AjxEventMgr();
 	this._disposed = false;
     
  	if (parent == null) 
@@ -603,7 +603,7 @@ function(clear) {
  */
 DwtControl.prototype._setIERolloverEventHdlrs =
 function(clear) {
-	if (LsEnv.isIE) {
+	if (AjxEnv.isIE) {
 		if (this._disposed) return;
 		
 		if (!this._ctrlInited) 
@@ -961,7 +961,7 @@ function(ev) {
 				obj._dragEndX = mouseEv.docX;
 				obj._dragEndY = mouseEv.docY;
 				if (obj._badDropAction == null) {
-					obj._badDropAction = new LsTimedAction();
+					obj._badDropAction = new AjxTimedAction();
 					obj._badDropAction.method = 
 						DwtControl.prototype._badDropEffect;
 					obj._badDropAction.obj = obj;	
@@ -973,7 +973,7 @@ function(ev) {
 				obj._badDropAction.params.add(m);
 				obj._badDropAction.params.add(obj._dragStartY - (m * obj._dragStartX));
 				obj._badDropAction.params.add((obj._dragStartX - obj._dragEndX < 0) ? -1 : 1);
-				LsTimedAction.scheduleAction(obj._badDropAction, 0);
+				AjxTimedAction.scheduleAction(obj._badDropAction, 0);
 			}
 			mouseEv._stopPropagation = true;
 			mouseEv._returnValue = false;
@@ -999,7 +999,7 @@ function(m, c, d) {
 			this._dndIcon.style.top = this._dragEndY;
 			this._dndIcon.style.left = (this._dragEndY - c) / m;
 		}	
-		LsTimedAction.scheduleAction(this._badDropAction, 0);
+		AjxTimedAction.scheduleAction(this._badDropAction, 0);
  	} else {
   		this._destroyDnDIcon(this._dndIcon);
 		this._dragging = DwtControl._NO_DRAG;

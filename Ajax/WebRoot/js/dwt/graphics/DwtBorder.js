@@ -6,7 +6,7 @@
 *	Note that images for the border are used in the same style as LsImage.
 *
 *
-*	TODO: get the borders working with the LsImg scheme to do hires/lores images.
+*	TODO: get the borders working with the AjxImg scheme to do hires/lores images.
 *
 * @author Owen Williams
 */
@@ -32,7 +32,7 @@ DwtBorder.getBorderTemplate = function(style) {
 
 
 DwtBorder.getBorderHtml = function (style, substitutions, innerDivId) {
-	return LsBuffer.append(
+	return AjxBuffer.append(
 				this.getBorderStartHtml(style, substitutions),
 				(innerDivId ? "<div id=" + innerDivId + "></div>" : ""),
 				this.getBorderEndHtml(style, substitutions)

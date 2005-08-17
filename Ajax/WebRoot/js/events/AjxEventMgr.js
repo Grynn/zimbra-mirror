@@ -1,17 +1,17 @@
-function LsEventMgr() {
+function AjxEventMgr() {
 	this._listeners = new Object();
 }
 
-LsEventMgr.prototype.toString = 
+AjxEventMgr.prototype.toString = 
 function() {
-	return "LsEventMgr";
+	return "AjxEventMgr";
 }
 
-LsEventMgr.prototype.addListener =
+AjxEventMgr.prototype.addListener =
 function(eventType, listener) {
 	var lv = this._listeners[eventType];
 	if (lv == null) {
-		lv = this._listeners[eventType] = new LsVector();
+		lv = this._listeners[eventType] = new AjxVector();
 	}         	 
 	if (!lv.contains(listener)) {
 		lv.add(listener);
@@ -20,7 +20,7 @@ function(eventType, listener) {
 	return false;
 }
 
-LsEventMgr.prototype.notifyListeners =
+AjxEventMgr.prototype.notifyListeners =
 function(eventType, event) {
 	var lv = this._listeners[eventType];
 	if (lv != null) {
@@ -37,13 +37,13 @@ function(eventType, event) {
 	}	
 }
 
-LsEventMgr.prototype.isListenerRegistered =
+AjxEventMgr.prototype.isListenerRegistered =
 function(eventType) {
 	var lv = this._listeners[eventType];
 	return (lv != null && lv.size() > 0);
 }
 
-LsEventMgr.prototype.removeListener = 
+AjxEventMgr.prototype.removeListener = 
 function(eventType, listener) {
 	var lv = this._listeners[eventType];
 	if (lv != null) {
@@ -53,7 +53,7 @@ function(eventType, listener) {
 	return false;
 }
 
-LsEventMgr.prototype.removeAll = 
+AjxEventMgr.prototype.removeAll = 
 function(eventType) {
 	var lv = this._listeners[eventType];
 	if (lv != null) {

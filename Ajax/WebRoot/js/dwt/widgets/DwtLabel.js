@@ -197,7 +197,7 @@ function(imageInfo) {
 			this._imageCell = this._row.insertCell(idx);
 			this._doAlign();
 		}
-		LsImg.setImage(this._imageCell, imageInfo);
+		AjxImg.setImage(this._imageCell, imageInfo);
 	}	
 }
 

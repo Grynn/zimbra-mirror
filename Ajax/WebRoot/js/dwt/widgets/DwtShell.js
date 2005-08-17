@@ -17,7 +17,7 @@ function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell) {
     // with DwtShell since the parent of DwtShell is null. 
 	this._ctrlInited = true;
 
-	window._dwtShell = LsCore.assignId(this);
+	window._dwtShell = AjxCore.assignId(this);
 	
 	if (confirmExitMethod != null) {
 		// TEMPORARILY COMMENT OUT UNTIL WE FIGURE THIS OUT MORE
@@ -53,7 +53,7 @@ function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell) {
 
     // Busy overlay - used when we want to enforce a modal busy state
     this._busyOverlay = window.document.createElement("div");
-    this._busyOverlayDefCName = (!LsEnv.isLinux) ? DwtShell.BUSY_OVERLAY_CLASS : DwtShell.BUSY_OVERLAY_CLASS + "-linux";
+    this._busyOverlayDefCName = (!AjxEnv.isLinux) ? DwtShell.BUSY_OVERLAY_CLASS : DwtShell.BUSY_OVERLAY_CLASS + "-linux";
     this._busyOverlay.className = this._busyOverlayDefCName;
     this._busyOverlay.style.position = "absolute";
     Dwt.setBounds(this._busyOverlay, 0, 0, "100%", "100%")
@@ -63,9 +63,9 @@ function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell) {
     
 	// Veil overlay - used by DwtDialog to disable underlying app
 	this._veilOverlay = window.document.createElement("div");
-	this._veilOverlay.className = (!LsEnv.isLinux) ? "VeilOverlay" : "VeilOverlay-linux";
+	this._veilOverlay.className = (!AjxEnv.isLinux) ? "VeilOverlay" : "VeilOverlay-linux";
 	this._veilOverlay.style.position = "absolute";
-	this._veilOverlay.style.cursor = LsEnv.isIE6up ? "not-allowed" : "wait";
+	this._veilOverlay.style.cursor = AjxEnv.isIE6up ? "not-allowed" : "wait";
 	Dwt.setBounds(this._veilOverlay, 0, 0, "100%", "100%");
     Dwt.setZIndex(this._veilOverlay, Dwt.Z_HIDDEN);
 	this._veilOverlay.veilZ = new Array();
@@ -116,7 +116,7 @@ function() {
 	if (window.innerWidth) {
 		p.x = window.innerWidth;
 		p.y = window.innerHeight;
-	} else if (LsEnv.isIE6CSS) {
+	} else if (AjxEnv.isIE6CSS) {
 		p.x = window.document.body.parentElement.clientWidth;
 		p.y = window.document.body.parentElement.clientHeight;
 	} else if (window.document.body && window.document.body.clientWidth) {
@@ -146,7 +146,7 @@ DwtShell.prototype.getToolTip = function() {
 
 DwtShell._preventDefaultSelectPrt =
 function(ev) {
-    var evt = LsCore.objectWithId(window._dwtShell)._uiEvent;
+    var evt = AjxCore.objectWithId(window._dwtShell)._uiEvent;
     evt.setFromDhtmlEvent(ev);
 
 	if (evt.dwtObj && evt.dwtObj instanceof DwtControl && !evt.dwtObj.preventSelection(evt.target)) {
@@ -163,7 +163,7 @@ function(ev) {
 DwtShell._preventDefaultPrt =
 function(ev) {
 	ev = DwtUiEvent.getEvent(ev);
-    var evt = LsCore.objectWithId(window._dwtShell)._uiEvent;
+    var evt = AjxCore.objectWithId(window._dwtShell)._uiEvent;
     evt.setFromDhtmlEvent(ev);
 	//default behavior
     evt._stopPropagation = true;
@@ -186,7 +186,7 @@ function(ev) {
 
 DwtShell._resizeHdlr =
 function(ev) {
-	var shell = LsCore.objectWithId(window._dwtShell);
+	var shell = AjxCore.objectWithId(window._dwtShell);
 	if (shell.isListenerRegistered(DwtEvent.CONTROL)) {
 	 	var evt = DwtShell.controlEvent;
 	 	evt.reset();
@@ -203,5 +203,5 @@ function(ev) {
 
 DwtShell.getShell =
 function(win){
-	return LsCore.objectWithId(win._dwtShell);
+	return AjxCore.objectWithId(win._dwtShell);
 };

@@ -8,9 +8,9 @@ function DwtToolTip(shell, className, dialog) {
 //	this._div.style.padding = "2px";
 //	this._div.style.whiteSpace = "nowrap";
 	this.shell.getHtmlElement().appendChild(this._div);
-	this._popupAction = new LsTimedAction();
+	this._popupAction = new AjxTimedAction();
 	this._popupAction.method = DwtToolTip.prototype._popupToolTip;
-	this._popdownAction = new LsTimedAction();
+	this._popdownAction = new AjxTimedAction();
 	this._popdownAction.method = DwtToolTip.prototype._popdownToolTip;
 	this._popupActionId = -1;
 	this._popdownActionId = -1;
@@ -37,11 +37,11 @@ function(content) {
 DwtToolTip.prototype.mouseOver =
 function(x, y, delay) {
 	if (this._popdownActionId != -1) {
-		LsTimedAction.cancelAction(this._popdownActionId);
+		AjxTimedAction.cancelAction(this._popdownActionId);
 		this._popdownActionId = -1;
 	}
 	if (this._popupActionId != -1) {
-		LsTimedAction.cancelAction(this._popupActionId);
+		AjxTimedAction.cancelAction(this._popupActionId);
 		this._popupActionId = -1;
 	}
 	if (Dwt.getZIndex(this._div) == Dwt.Z_HIDDEN) {
@@ -51,7 +51,7 @@ function(x, y, delay) {
 			this._popupAction.params.add(x);
 			this._popupAction.params.add(y);
 			this._popupAction.obj = this;
-		 	this._popupActionId = LsTimedAction.scheduleAction(this._popupAction, delay);
+		 	this._popupActionId = AjxTimedAction.scheduleAction(this._popupAction, delay);
 		}
 	}
 }
@@ -59,10 +59,10 @@ function(x, y, delay) {
 DwtToolTip.prototype.mouseMove =
 function(delay) {
 	if (this._popupActionId != -1) {
-		LsTimedAction.cancelAction(this._popupActionId);
+		AjxTimedAction.cancelAction(this._popupActionId);
 		this._popupAction.obj = this;
 		delay = (delay == null) ? DwtToolTip._TOOLTIP_DELAY : (delay > 0) ? delay : 0;
-	 	this._popupActionId = LsTimedAction.scheduleAction(this._popupAction, delay);
+	 	this._popupActionId = AjxTimedAction.scheduleAction(this._popupAction, delay);
 	}
 }
 
@@ -79,7 +79,7 @@ function(delay) {
 			this._popdownAction.obj = this;
 			delay = (delay == null) ? 50 : delay;
 			if (delay > 0)
-				this._popdownActionId = LsTimedAction.scheduleAction(this._popdownAction, delay);
+				this._popdownActionId = AjxTimedAction.scheduleAction(this._popdownAction, delay);
 			else 
 				this._popdownToolTip();
 		}
@@ -163,7 +163,7 @@ function(x, y) {
 DwtToolTip.prototype._popdownToolTip = 
 function() {
 	if (this._popupActionId != -1) {
-		LsTimedAction.cancelAction(this._popupActionId);	
+		AjxTimedAction.cancelAction(this._popupActionId);	
 		this._popupActionId = -1;
 	}
 	if (this._content != null) {
