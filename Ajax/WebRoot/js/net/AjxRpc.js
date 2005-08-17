@@ -66,7 +66,7 @@ function() {
 	if (i == AjxRpc._rpcCache.length) {
 		if (AjxRpc._rpcCache.length == AjxRpc._RPC_CACHE_MAX) {
 			DBG.println(AjxDebug.DBG1, "Out of RPC Contexts");
-			throw new AjxException("Out of RPC cache", AjxException.OUT_OF_RPC_CACHE, "LsCsfeCommand._getRpcCtxt");	
+			throw new AjxException("Out of RPC cache", AjxException.OUT_OF_RPC_CACHE, "ZmCsfeCommand._getRpcCtxt");	
 		}
 		rpcCtxt = new _RpcCtxt();
 		AjxRpc._rpcCache.push(rpcCtxt);

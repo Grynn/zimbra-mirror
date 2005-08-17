@@ -11,7 +11,7 @@
  */
  
 /**
- * @author schemers@liquidsys.com
+ * @author schemers@zimbra.com
  * 
  * very Mutated version of ElementRemover.java filter from cyberneko html.
  * change accepted/removed elements to static hashmaps for one-time 
@@ -81,7 +81,7 @@ AjxDefangFilter.ID_REGEX = /id\s*=\s*[\"\']?([^\s^\"^\']*)[\"\']?/i;
 AjxDefangFilter.SRC_REGEX = /src\s*=\s*[\"\']?([^\s^\"^\']*)[\"\']?/i;
 AjxDefangFilter.TARGET_REGEX = /target\s*=\s*[\"\']?([^\s^\"^\']*)[\"\']?/i;
 
-// regex for URLs href. TODO: beef this up
+// regex for URL. TODO: beef this up
 AjxDefangFilter.ABSOLUTE_URL = new RegExp("^(https?://[\\w-]|mailto:).*", "i");
 
 //
@@ -368,14 +368,14 @@ AjxDefangFilter.prototype.cleanHTML = function (dirtyHTML) {
 	var tags = re.exec(dirtyHTML);
 	var removalArray = new Array();
 	var sanitizedArray = new Array();
-	//LsLog.info("tags length = " + tags.length);
+	//AjxLog.info("tags length = " + tags.length);
 	var tag = null;
 	// Loop through all the tags
 	while (tags != null){
 		var tagName = tags[1];
 		var fullTag = tags[0];
 		var eName = tagName.toLowerCase();
-		//LsLog.info("Cleaning " +  tagName);
+		//AjxLog.info("Cleaning " +  tagName);
 		// See if the tag is one we accept
 		if (this.elementAccepted(tagName)) {
 			var aNames = AjxDefangFilter.mAcceptedElements[eName];
@@ -391,18 +391,18 @@ AjxDefangFilter.prototype.cleanHTML = function (dirtyHTML) {
 				while(attrMatch = attrRegex.exec(fullTag)){
 					attrName = attrMatch[1]? attrMatch[1]: attrMatch[3];
 					attrValue = attrMatch[2]? attrMatch[2]: attrMatch[4];
-					//LsLog.info("  Looking at attr " + attrName  + " : " +
+					//AjxLog.info("  Looking at attr " + attrName  + " : " +
 					//	attrValue);
 					// If the attribute is not accepted, 
 					// remove the whole attribute. If it is accepted, pass 
 					// it through a filter to sanitize the content.
 					if (!aNames[attrName]){
 						// remove attribute
-						//LsLog.info("    Remove single attr " + attrName);
+						//AjxLog.info("    Remove single attr " + attrName);
 						newTag = newTag.replace(attrMatch[0], "");
 					} else {
 						// sanitize
-						//LsLog.info("    Sanitize: " + attrName + " val = " +
+						//AjxLog.info("    Sanitize: " + attrName + " val = " +
 						//attrValue);
 						var newVal = this.sanatizeAttrValueStr(eName, attrName,
 															   fullTag, 
@@ -418,7 +418,7 @@ AjxDefangFilter.prototype.cleanHTML = function (dirtyHTML) {
 				// necessary. If it's an anchor, make the target a new 
 				// window.
 				if (eName == "img" && this.mNeuterImages) {
-					//LsLog.info("  IMG TAG " + newTag);
+					//AjxLog.info("  IMG TAG " + newTag);
 					newTag = this.neuterImageTagStr(newTag);
 				} else if (eName == "a") {
 					newTag = this.fixATagStr(newTag);
@@ -426,7 +426,7 @@ AjxDefangFilter.prototype.cleanHTML = function (dirtyHTML) {
 				
 				// if the tag has changed, mark it for replacement
 				if (fullTag != newTag){
-					//LsLog.info("    Will sanitize " + fullTag + " with " + 
+					//AjxLog.info("    Will sanitize " + fullTag + " with " + 
 					//newTag);
 					sanitizedArray[sanitizedArray.length] = {fullTag: fullTag,
 															 newTag: newTag};
@@ -435,7 +435,7 @@ AjxDefangFilter.prototype.cleanHTML = function (dirtyHTML) {
 
 			}
 		} else {
-			//LsLog.info("Removing all attributes for " + fullTag);
+			//AjxLog.info("Removing all attributes for " + fullTag);
 			var newTag = "<" + tagName + ">";
 			sanitizedArray[sanitizedArray.length] = {fullTag: fullTag,
 													 newTag: newTag};
@@ -457,7 +457,7 @@ AjxDefangFilter.prototype.cleanHTML = function (dirtyHTML) {
 					end = close + 1;
 				}
 				var element = cleanHTML.substring(start, end);
-				//LsLog.info("Will remove " + element);
+				//AjxLog.info("Will remove " + element);
 				removalArray[removalArray.length] = {element: element,
 													 end: end,
 													 start: start};
@@ -488,22 +488,22 @@ AjxDefangFilter.prototype.cleanHTML = function (dirtyHTML) {
  * moves the src attribute to the id
  */
 AjxDefangFilter.prototype.neuterImageTagStr = function (element) {
-	//LsLog.info("neuter Image tag for " + element);
+	//AjxLog.info("neuter Image tag for " + element);
 	var idRegex = AjxDefangFilter.ID_REGEX;
 	var idMatch = idRegex.exec(element);
-	//LsLog.info("  idMatch = " , idMatch);
+	//AjxLog.info("  idMatch = " , idMatch);
 	var srcRegex = AjxDefangFilter.SRC_REGEX
 	var srcMatch = srcRegex.exec(element);
-	//LsLog.info("  srcMatch = " ,srcMatch);
+	//AjxLog.info("  srcMatch = " ,srcMatch);
 	var src;
 	var id;
 	var retStr = null;
 	if (srcMatch) {
 		retStr = element;
 		src = srcMatch[1];
-		//LsLog.info("  src = " +src);
+		//AjxLog.info("  src = " +src);
 		if (idMatch) {
-			//LsLog.info("  about to replace");
+			//AjxLog.info("  about to replace");
 			id = idMatch[1];
 			retStr = 
 				retStr.replace(idMatch[0],idMatch[1]+"=\"" + src + "\"");
@@ -512,7 +512,7 @@ AjxDefangFilter.prototype.neuterImageTagStr = function (element) {
 		}
 		retStr = retStr.replace(srcMatch[0], "src='' ");
 	}
-	//LsLog.info("Done neuter " + retStr);
+	//AjxLog.info("Done neuter " + retStr);
 	return retStr;
 	
 };
@@ -612,7 +612,7 @@ AjxDefangFilter.prototype._traverseTree = function (nodes) {
 	var node = null;
 	for (var i = 0; i < nodes.length; ++i ) {
 		node = nodes[i];
-		//LsLog.info("node name = " + node.nodeName + " type = " + node.nodeType
+		//AjxLog.info("node name = " + node.nodeName + " type = " + node.nodeType
 		//	   + " node value = " + node.nodeValue);
 		switch (node.nodeType) {
 		case 1:	// Element
@@ -713,7 +713,7 @@ AjxDefangFilter.prototype.parse = function (htmlStr) {
 		//htmlEl = document.createElement('div');
 		//htmlEl.innerHTML = htmlStr;
 		return this.cleanHTML(htmlStr);
-		//LsLog.info("htmlStr \n" + htmlStr);
+		//AjxLog.info("htmlStr \n" + htmlStr);
 		//htmlEl.open();
 		//htmlEl.write(htmlStr);
 		//htmlEl.close();

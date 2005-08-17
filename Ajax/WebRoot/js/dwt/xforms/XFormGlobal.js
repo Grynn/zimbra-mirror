@@ -131,7 +131,7 @@ XFG.hideDisabled = function (element) {
 
 
 
-/* StringBuffer class  changed to AjxBuffer and moved into LiquidAjax/js/util/  */
+/* StringBuffer class  changed to AjxBuffer and moved into Ajax/js/util/  */
 
 
 

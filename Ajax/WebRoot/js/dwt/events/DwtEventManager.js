@@ -1,5 +1,5 @@
 /**
- * static class that wraps around LsEventManager
+ * static class that wraps around AjxEventManager
  */
 function DwtEventManager () {
     

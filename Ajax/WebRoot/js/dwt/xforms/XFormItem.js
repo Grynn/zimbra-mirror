@@ -2062,19 +2062,19 @@ Image_XFormItem.prototype.setElementEnabled = XFormItem.prototype.setElementEnab
 
 
 
-// Ls_Image
-function Ls_Image_XFormItem() {}
-XFormItemFactory.createItemType("_LS_IMAGE_", "ls_image", Ls_Image_XFormItem, XFormItem);
+// Ajx_Image
+function Ajx_Image_XFormItem() {}
+XFormItemFactory.createItemType("_AJX_IMAGE_", "ajx_image", Ajx_Image_XFormItem, XFormItem);
 
 
 //	type defaults
-Ls_Image_XFormItem.prototype.forceUpdate = true;
-Ls_Image_XFormItem.prototype.src = _UNDEFINED_;
-Ls_Image_XFormItem.prototype.srcPath = _UNDEFINED_;;
-Ls_Image_XFormItem.prototype.writeElementDiv = false;
+Ajx_Image_XFormItem.prototype.forceUpdate = true;
+Ajx_Image_XFormItem.prototype.src = _UNDEFINED_;
+Ajx_Image_XFormItem.prototype.srcPath = _UNDEFINED_;;
+Ajx_Image_XFormItem.prototype.writeElementDiv = false;
 
 // //	methods
-Ls_Image_XFormItem.prototype.updateElement = function (src) {
+Ajx_Image_XFormItem.prototype.updateElement = function (src) {
 	if (src == null) src = this.getSrc();
 
  	// dereference through the choices array, if provided
@@ -2644,18 +2644,18 @@ XFormItemFactory.createItemType("_DATE_", "date", Date_XFormItem, Composite_XFor
 
 //	type defaults
 Date_XFormItem.prototype.DATE_MONTH_CHOICES = [
-				{value:1, label:LsMsg.jan},
-				{value:2, label:LsMsg.feb},
-				{value:3, label:LsMsg.mar},
-				{value:4, label:LsMsg.apr},
-				{value:5, label:LsMsg.may},
-				{value:6, label:LsMsg.jun},
-				{value:7, label:LsMsg.jul},
-				{value:8, label:LsMsg.aug},
-				{value:9, label:LsMsg.sep},
-				{value:10, label:LsMsg.oct},
-				{value:11, label:LsMsg.nov},
-				{value:12, label:LsMsg.dec}
+				{value:1, label:AjxMsg.jan},
+				{value:2, label:AjxMsg.feb},
+				{value:3, label:AjxMsg.mar},
+				{value:4, label:AjxMsg.apr},
+				{value:5, label:AjxMsg.may},
+				{value:6, label:AjxMsg.jun},
+				{value:7, label:AjxMsg.jul},
+				{value:8, label:AjxMsg.aug},
+				{value:9, label:AjxMsg.sep},
+				{value:10, label:AjxMsg.oct},
+				{value:11, label:AjxMsg.nov},
+				{value:12, label:AjxMsg.dec}
 			];
 Date_XFormItem.prototype.DATE_DAY_CHOICES = ["1","2","3","4","5","6","7","8","9","10","11","12",
 						  "13","14","15","16","17","18","19","20","21","22",
@@ -2740,7 +2740,7 @@ XFormItemFactory.createItemType("_TIME_", "time", Time_XFormItem, Composite_XFor
 Time_XFormItem.prototype.numCols = 3;
 Time_XFormItem.prototype.TIME_HOUR_CHOICES = ["1","2","3","4","5", "6","7","8","9","10","11","12"];
 Time_XFormItem.prototype.TIME_MINUTE_CHOICES = ["00","05","10","15","20","25", "30","35","40","45","50","55"];
-Time_XFormItem.prototype.TIME_AMPM_CHOICES = [LsMsg.am,LsMsg.pm];
+Time_XFormItem.prototype.TIME_AMPM_CHOICES = [AjxMsg.am,AjxMsg.pm];
 
 
 Time_XFormItem.prototype.items = [
@@ -2823,8 +2823,8 @@ Time_XFormItem.prototype.items = [
 		getDisplayValue:function (newValue) {
 			if (!(newValue instanceof Date)) newValue = new Date();
 			var hours = newValue.getHours();
-			if (hours > 11) return LsMsg.pm;
-			return LsMsg.am;
+			if (hours > 11) return AjxMsg.pm;
+			return AjxMsg.am;
 		},
 		elementChanged:function (ampmStr, currentDate, event) {
 			if (currentDate == null) currentDate = new Date();	//??? should get values of other fields???
@@ -2833,7 +2833,7 @@ Time_XFormItem.prototype.items = [
 			}
 			this.__dummyDate.setTime(currentDate.getTime());
 
-			var isPM = (ampmStr == LsMsg.pm);
+			var isPM = (ampmStr == AjxMsg.pm);
 			var hours = currentDate.getHours() % 12;
 			
 			this.__dummyDate.setHours(hours + (isPM ? 12 : 0));

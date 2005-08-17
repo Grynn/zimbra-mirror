@@ -9,11 +9,11 @@ AjxDateUtil.DAY = 4;
 AjxDateUtil.MSEC_PER_HALF_HOUR = 1800000;
 AjxDateUtil.MSEC_PER_HOUR = 3600000;
 AjxDateUtil.MSEC_PER_DAY = 24 * AjxDateUtil.MSEC_PER_HOUR;
-AjxDateUtil._months = [LsMsg.jan, LsMsg.feb, LsMsg.mar, LsMsg.apr, LsMsg.may, LsMsg.jun,
-                      LsMsg.jul, LsMsg.aug, LsMsg.sep, LsMsg.oct, LsMsg.nov, LsMsg.dec];
+AjxDateUtil._months = [AjxMsg.jan, AjxMsg.feb, AjxMsg.mar, AjxMsg.apr, AjxMsg.may, AjxMsg.jun,
+                      AjxMsg.jul, AjxMsg.aug, AjxMsg.sep, AjxMsg.oct, AjxMsg.nov, AjxMsg.dec];
 
-AjxDateUtil._daysOfTheWeek = [LsMsg.sunday, LsMsg.monday, LsMsg.tuesday, LsMsg.wednesday, LsMsg.thursday, LsMsg.friday,
-							 LsMsg.saturday];
+AjxDateUtil._daysOfTheWeek = [AjxMsg.sunday, AjxMsg.monday, AjxMsg.tuesday, AjxMsg.wednesday, AjxMsg.thursday, AjxMsg.friday,
+							 AjxMsg.saturday];
 
 AjxDateUtil._daysPerMonth = {
 	0:31,
@@ -124,44 +124,44 @@ function(dateMSec) {
 	var deltaStr = "";
 	if (years > 0) {
 		deltaStr =  years + " ";
-		deltaStr += (years > 1) ? LsMsg.years : LsMsg.year;
+		deltaStr += (years > 1) ? AjxMsg.years : AjxMsg.year;
 		if (years <= 3 && months > 0) {
     		deltaStr += " " + months;
-    		deltaStr += " " + ((months > 1) ? LsMsg.months : LsMsg.months);
+    		deltaStr += " " + ((months > 1) ? AjxMsg.months : AjxMsg.months);
 		}
 	} else if (months > 0) {
 		deltaStr =  months + " ";
-		deltaStr += (months > 1) ? LsMsg.months : LsMsg.month;
+		deltaStr += (months > 1) ? AjxMsg.months : AjxMsg.month;
 		if (months <= 3 && days > 0) {
     		deltaStr += " " + days;
-    		deltaStr += " " + ((days > 1) ? LsMsg.days : LsMsg.day);
+    		deltaStr += " " + ((days > 1) ? AjxMsg.days : AjxMsg.day);
 		}
 	} else if (days > 0) {
 		deltaStr = days + " ";
-		deltaStr += (days > 1) ? LsMsg.days : LsMsg.day;
+		deltaStr += (days > 1) ? AjxMsg.days : AjxMsg.day;
 		if (days <= 2 && hours > 0) {
     		deltaStr += " " + hours;
-    		deltaStr += " " + ((hours > 1) ? LsMsg.hours : LsMsg.hour);
+    		deltaStr += " " + ((hours > 1) ? AjxMsg.hours : AjxMsg.hour);
 		}
 	} else if (hours > 0) {
 		deltaStr = hours + " ";
-		deltaStr += (hours > 1) ? LsMsg.hours : LsMsg.hour;
+		deltaStr += (hours > 1) ? AjxMsg.hours : AjxMsg.hour;
 		if (hours < 5 && mins > 0) {
     		deltaStr += " " + mins;
-    		deltaStr += " " + ((mins > 1) ? LsMsg.minutes : LsMsg.minute);
+    		deltaStr += " " + ((mins > 1) ? AjxMsg.minutes : AjxMsg.minute);
 		}
 	} else if (mins > 0) {
 		deltaStr = mins + " ";
-		deltaStr += ((mins > 1) ? LsMsg.minutes : LsMsg.minute);
+		deltaStr += ((mins > 1) ? AjxMsg.minutes : AjxMsg.minute);
 		if (mins < 5 && secs > 0) {
     		deltaStr += " " + secs;
-    		deltaStr += " " + ((secs > 1) ? LsMsg.seconds : LsMsg.second);
+    		deltaStr += " " + ((secs > 1) ? AjxMsg.seconds : AjxMsg.second);
 		}
 	} else {
 		deltaStr = secs;
-		deltaStr += " " + ((secs > 1) ? LsMsg.seconds : LsMsg.second);
+		deltaStr += " " + ((secs > 1) ? AjxMsg.seconds : AjxMsg.second);
 	}
-	deltaStr += " " + LsMsg.ago;
+	deltaStr += " " + AjxMsg.ago;
 	return deltaStr;
 };
 

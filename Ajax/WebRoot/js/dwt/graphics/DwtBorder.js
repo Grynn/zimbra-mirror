@@ -3,7 +3,7 @@
 * This static class  allows you to draw "interesting" borders
 *		(eg: borders that are composed of multiple images)
 *
-*	Note that images for the border are used in the same style as LsImage.
+*	Note that images for the border are used in the same style as AjxImage.
 *
 *
 *	TODO: get the borders working with the AjxImg scheme to do hires/lores images.
@@ -18,7 +18,7 @@
 //	Class that allows you to draw "interesting" borders
 //		(eg: borders that are composed of multiple images)
 //
-//	Note: you'll use this class statically, like LsImage
+//	Note: you'll use this class statically, like AjxImage
 //
 function DwtBorder() {
 }

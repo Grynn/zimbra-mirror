@@ -333,18 +333,18 @@ function(str) {
 	return str.replace(/&quot;/g, '"');
 }
 
-var LsStringUtil_calcDIV = null; // used by 'clip()' and 'wrap()' functions
+var AjxStringUtil_calcDIV = null; // used by 'clip()' and 'wrap()' functions
 
 AjxStringUtil.calcDIV =
 function() {
-	if (LsStringUtil_calcDIV == null) {
-		LsStringUtil_calcDIV = document.createElement("div");
-		LsStringUtil_calcDIV.style.zIndex = 0;
-		LsStringUtil_calcDIV.style.position = DwtControl.ABSOLUTE_STYLE;
-		LsStringUtil_calcDIV.style.visibility = "hidden";
-		document.body.appendChild(LsStringUtil_calcDIV);
+	if (AjxStringUtil_calcDIV == null) {
+		AjxStringUtil_calcDIV = document.createElement("div");
+		AjxStringUtil_calcDIV.style.zIndex = 0;
+		AjxStringUtil_calcDIV.style.position = DwtControl.ABSOLUTE_STYLE;
+		AjxStringUtil_calcDIV.style.visibility = "hidden";
+		document.body.appendChild(AjxStringUtil_calcDIV);
 	}
-	return LsStringUtil_calcDIV;
+	return AjxStringUtil_calcDIV;
 }
 
 /**

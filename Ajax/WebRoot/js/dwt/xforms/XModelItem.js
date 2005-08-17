@@ -528,12 +528,12 @@ XModelItem.prototype.validateDate = function(value) {
 			// set to midnight today according to local time
 			date.setHours(0,0,0,0);
 			
-			if (value == LsMsg.today) {
+			if (value == AjxMsg.today) {
 				return date;
-			} else if (value == LsMsg.yesterday) {
+			} else if (value == AjxMsg.yesterday) {
 				date.setTime(date.getTime() - this.msecInOneDay);
 				return date;
-			} else if (value == LsMsg.tomorrow) {
+			} else if (value == AjxMsg.tomorrow) {
 				date.setTiem(date.getTime() + this.msecInOneDay);
 				return date;
 			}
@@ -561,7 +561,7 @@ XModelItem.prototype.validateTime = function (value) {
 
 			var isPM = false;
 			var lastPiece = value[value.length - 1];
-			isPM = (lastPiece.indexOf(LsMsg.pm.toLowerCase()) > -1);
+			isPM = (lastPiece.indexOf(AjxMsg.pm.toLowerCase()) > -1);
 
 			var hour = parseInt(value[0]);
 			var min = parseInt(value[1]);

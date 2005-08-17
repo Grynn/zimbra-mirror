@@ -15,7 +15,7 @@ AjxImg.HORIZ_BORDER = 2;
 AjxImg.VERT_BORDER = 3;
 AjxImg.BACKGROUND = 4;
 
-AjxImg._VIEWPORT_ID = "LsImg_VP";
+AjxImg._VIEWPORT_ID = "AjxImg_VP";
 
 /**
 * This method will set the image for <i>parentEl</i>. <i>parentEl</i> should only contain this image and no 

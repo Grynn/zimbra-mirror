@@ -17,7 +17,7 @@
 * @param showTime	a boolean that toggles the display of timestamps before debug messages
 */
 function AjxDebug(level, name, showTime) {
-	this._dbgName = "LsDebugWin_" + location.hostname.replace(/\./g,'_');
+	this._dbgName = "AjxDebugWin_" + location.hostname.replace(/\./g,'_');
 	this._level = level;
 	this._showTime = showTime;
 	this._enabled = (this._level != AjxDebug.NONE);
@@ -49,7 +49,7 @@ AjxDebug.DBG[3] = AjxDebug.DBG3;
 
 AjxDebug.MAX_OUT = 25000; // max length capable of outputting
 
-AjxDebug.DEBUG_BOX_ID = "LsDebugBox";
+AjxDebug.DEBUG_BOX_ID = "AjxDebugBox";
 
 AjxDebug.prototype.toString = 
 function() {
@@ -431,7 +431,7 @@ AjxDebug.prototype._openDebugWindow =
 function() {
 	// check if there is a debug window already open
 	if (!this._useDiv){
-		this._isPrevWinOpen = this._getCookieVal("LsDebugWinOpen");
+		this._isPrevWinOpen = this._getCookieVal("AjxDebugWinOpen");
 		var winName = this._getWindowName();
 		if (!this._isPrevWinOpen) {
 			this._debugWindow = 
@@ -452,7 +452,7 @@ AjxDebug.prototype._initDiv =
 function() {
 	this._document = document;
 	var container = this._divContainer = this._document.createElement("div");
-	container.id = "LsDebugDivContainer";
+	container.id = "AjxDebugDivContainer";
 	container.style.height = "300px";
 	container.style.width = "300px";
 	container.style.display = "block";
@@ -509,7 +509,7 @@ function() {
 			
 			// If we're not using a div
 			// Set a cookie telling ourselves that a debug window is already open
-			document.cookie = "LsDebugWinOpen=true";
+			document.cookie = "AjxDebugWinOpen=true";
 			
 			// setup an onunload method
 			if (!AjxEnv.isIE) {
@@ -568,7 +568,7 @@ AjxDebug.unloadHandler = function () {
 };
 
 AjxDebug.deleteWindowCookie = function () {
-	AjxDebug.deleteCookie("LsDebugWinOpen", false);
+	AjxDebug.deleteCookie("AjxDebugWinOpen", false);
 };
 
 AjxDebug.deleteCookie = function (cookieName, val) {

@@ -29,7 +29,7 @@ function(container, callback, formId, optionalTimeout) {
 	this._callback = callback;
 	var doc = AjxEnv.isIE ? container.Document : container.contentDocument;
 	var form = doc.getElementById(formId);
-	var req = new LsPostRequest(form, doc);
+	var req = new AjxPostRequest(form, doc);
 	var failureAction = new AjxTimedAction();
 	failureAction.method = this._onFailure;
 	failureAction.obj = this;
@@ -72,7 +72,7 @@ function(status, reqId, id) {
 	}
 };
 
-function LsPostRequest (form, doc) {
+function AjxPostRequest (form, doc) {
 	this.id = AjxPost._reqIds++;
 	this._cancelled = false;
 	this._form = form;
@@ -84,21 +84,21 @@ function LsPostRequest (form, doc) {
 	this._form.appendChild(inp);
 }
 
-LsPostRequest.prototype.send = function (failureAction, timeout) {
+AjxPostRequest.prototype.send = function (failureAction, timeout) {
 	// Not sure what a fair timeout is for uploads, so for now,
 	// we won't have a failed callback.
 	//this._timeoutId = AjxTimedAction.scheduleAction(failureAction, timeout);
 	this._form.submit();
 };
 
-LsPostRequest.prototype.hasBeenCancelled = function () {
+AjxPostRequest.prototype.hasBeenCancelled = function () {
 	return this._cancelled;
 };
 
-LsPostRequest.prototype.cancelTimeout = function () {
+AjxPostRequest.prototype.cancelTimeout = function () {
 	AjxTimedAction.cancelAction(this._timeoutId);
 };
 
-LsPostRequest.prototype.cancel = function (){
+AjxPostRequest.prototype.cancel = function (){
 	this._canceled = true;
 };
