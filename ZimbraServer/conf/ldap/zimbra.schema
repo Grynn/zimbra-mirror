@@ -113,7 +113,7 @@ objectIdentifier zimbraMailSpamLifetime ZimbraAttrType:105
 objectIdentifier zimbraMailMessageLifetime ZimbraAttrType:106
 objectIdentifier zimbraContactMaxNumEntries ZimbraAttrType:107
 objectIdentifier zimbraAuthTokenLifetime ZimbraAttrType:108
-objectIdentifier Zimbra::AdminAuthTokenLifetime ZimbraAttrType:109
+objectIdentifier zimbraAdminAuthTokenLifetime ZimbraAttrType:109
 objectIdentifier zimbraMailMinPollingInterval ZimbraAttrType:110
 objectIdentifier zimbraPrefMailPollingInterval ZimbraAttrType:111
 objectIdentifier zimbraAccountClientAttr ZimbraAttrType:112
@@ -149,7 +149,7 @@ objectIdentifier zimbraNewMailNotificationSubject ZimbraAttrType:151
 objectIdentifier zimbraNewMailNotificationBody ZimbraAttrType:152
 objectIdentifier zimbraGalLdapAttrMap ZimbraAttrType:153
 objectIdentifier zimbraMailPort ZimbraAttrType:154
-objectIdentifier Zimbra::AdminPort ZimbraAttrType:155
+objectIdentifier zimbraAdminPort ZimbraAttrType:155
 objectIdentifier zimbraPrefMailSignatureStyle ZimbraAttrType:156
 objectIdentifier zimbraMimeType ZimbraAttrType:157
 objectIdentifier zimbraMimeIndexingEnabled ZimbraAttrType:158
@@ -327,8 +327,8 @@ attributetype ( zimbraAccountStatus
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32} 
 	SINGLE-VALUE )
 
-attributetype ( Zimbra::AdminAuthTokenLifetime
-	NAME 'Zimbra::AdminAuthTokenLifetime'
+attributetype ( zimbraAdminAuthTokenLifetime
+	NAME 'zimbraAdminAuthTokenLifetime'
 	DESC 'lifetime (nnnnn[hmsd]) of newly created admin auth tokens'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
@@ -1523,8 +1523,8 @@ attributetype ( zimbraMailSSLPort
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )	
 
-attributetype ( Zimbra::AdminPort
-	NAME 'Zimbra::AdminPort'
+attributetype ( zimbraAdminPort
+	NAME 'zimbraAdminPort'
 	DESC 'SSL port for admin UI'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
@@ -1810,7 +1810,7 @@ objectclass ( zimbraAccount
 		zimbraAttachmentsIndexingEnabled $
 		zimbraAttachmentsViewInHtmlOnly $
 		zimbraAuthTokenLifetime $
-		Zimbra::AdminAuthTokenLifetime $
+		zimbraAdminAuthTokenLifetime $
 		zimbraContactMaxNumEntries $
 		zimbraCOSId $
 		zimbraFeatureContactsEnabled $
@@ -1953,7 +1953,7 @@ objectclass ( zimbraCOS
 		zimbraAttachmentsIndexingEnabled $
 		zimbraAttachmentsViewInHtmlOnly $
 		zimbraAuthTokenLifetime $
-		Zimbra::AdminAuthTokenLifetime $
+		zimbraAdminAuthTokenLifetime $
 		zimbraContactMaxNumEntries $
 		zimbraFeatureContactsEnabled $
 		zimbraFeatureGalEnabled $
@@ -2082,7 +2082,7 @@ objectclass ( zimbraGlobalConfig
 		zimbraAuthTokenKey $
 		zimbraMailPort $
 		zimbraMailSSLPort $
-		Zimbra::AdminPort $
+		zimbraAdminPort $
 		zimbraVirusBlockEncryptedArchive $
 		zimbraVirusCheckEnabled $
 		zimbraVirusWarnRecipient $
@@ -2202,7 +2202,7 @@ objectclass ( zimbraServer
 		zimbraVirusDefinitionsUpdateFrequency $		
 		zimbraMailPort $
 		zimbraMailSSLPort $
-		Zimbra::AdminPort $
+		zimbraAdminPort $
 		zimbraRedoLogProvider
 	))
 	
