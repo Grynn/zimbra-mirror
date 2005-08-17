@@ -50,11 +50,11 @@ ZaServer.A_zimbraMtaTlsAuthOnly = "zimbraMtaTlsAuthOnly";
 ZaServer.A_SmtpHostname  = "zimbraSmtpHostname";
 ZaServer.A_SmtpPort = "zimbraSmtpPort";
 ZaServer.A_SmtpTimeout = "zimbraSmtpTimeout";
-//Zmtp
-ZaServer.A_ZmtpAdvertisedName = "zimbraZmtpAdvertisedName";
-ZaServer.A_ZmtpBindAddress = "zimbraZmtpBindAddress";
-ZaServer.A_ZmtpBindPort = "zimbraZmtpBindPort";
-ZaServer.A_ZmtpNumThreads = "zimbraZmtpNumThreads";
+//Lmtp
+ZaServer.A_LmtpAdvertisedName = "zimbraLmtpAdvertisedName";
+ZaServer.A_LmtpBindAddress = "zimbraLmtpBindAddress";
+ZaServer.A_LmtpBindPort = "zimbraLmtpBindPort";
+ZaServer.A_LmtpNumThreads = "zimbraLmtpNumThreads";
 //pop3
 ZaServer.A_Pop3NumThreads = "zimbraPop3NumThreads";
 ZaServer.A_Pop3AdvertisedName ="zimbraPop3AdvertisedName";
@@ -113,15 +113,13 @@ ZaServer.myXModel = {
 		{id:ZaServer.A_SmtpHostname, ref:"attrs/" +  ZaServer.A_SmtpHostname, type:_STRING_},														
 		{id:ZaServer.A_SmtpPort, ref:"attrs/" +  ZaServer.A_SmtpPort, type:_STRING_},																
 		{id:ZaServer.A_SmtpTimeout, ref:"attrs/" + ZaServer.A_SmtpTimeout, type:_STRING_},		
-		{id:ZaServer.A_ZmtpAdvertisedName, ref:"attrs/" +  ZaServer.A_ZmtpAdvertisedName, type:_STRING_},
-		{id:ZaServer.A_ZmtpBindAddress, ref:"attrs/" +  ZaServer.A_ZmtpBindAddress, type:_STRING_},		
-		{id:ZaServer.A_ZmtpBindPort, ref:"attrs/" +  ZaServer.A_ZmtpBindPort, type:_STRING_},		
-		{id:ZaServer.A_ZmtpNumThreads, ref:"attrs/" +  ZaServer.A_ZmtpNumThreads, type:_STRING_},		
+		{id:ZaServer.A_LmtpAdvertisedName, ref:"attrs/" +  ZaServer.A_LmtpAdvertisedName, type:_STRING_},
+		{id:ZaServer.A_LmtpBindAddress, ref:"attrs/" +  ZaServer.A_LmtpBindAddress, type:_STRING_},		
+		{id:ZaServer.A_LmtpBindPort, ref:"attrs/" +  ZaServer.A_LmtpBindPort, type:_STRING_},		
+		{id:ZaServer.A_LmtpNumThreads, ref:"attrs/" +  ZaServer.A_LmtpNumThreads, type:_STRING_},		
 		{id:ZaServer.A_Pop3NumThreads, ref:"attrs/" +  ZaServer.A_Pop3NumThreads, type:_STRING_},		
 		{id:ZaServer.A_Pop3AdvertisedName, ref:"attrs/" +  ZaServer.A_Pop3AdvertisedName, type:_STRING_},		
 		{id:ZaServer.A_Pop3BindAddress, ref:"attrs/" +  ZaServer.A_Pop3BindAddress, type:_STRING_},		
-		{id:ZaServer.A_ZmtpBindPort, ref:"attrs/" +  ZaServer.A_ZmtpBindPort, type:_STRING_},		
-		{id:ZaServer.A_ZmtpNumThreads, ref:"attrs/" +  ZaServer.A_ZmtpNumThreads, type:_STRING_},		
 		{id:ZaServer.A_Pop3NumThreads, ref:"attrs/" +  ZaServer.A_Pop3NumThreads, type:_STRING_},		
 		{id:ZaServer.A_Pop3AdvertisedName, ref:"attrs/" +  ZaServer.A_Pop3AdvertisedName, type:_STRING_},		
 		{id:ZaServer.A_Pop3BindAddress, ref:"attrs/" +  ZaServer.A_Pop3BindAddress, type:_STRING_},		

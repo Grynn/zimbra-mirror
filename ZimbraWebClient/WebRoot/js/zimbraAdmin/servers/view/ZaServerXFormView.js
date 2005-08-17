@@ -56,16 +56,16 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 							  label:ZaMsg.NAD_ServiceHostname, width: "18em",
 							  onChange:ZaServerXFormView.onFormFieldChanged
 							},
-							{ ref: ZaServer.A_ZmtpAdvertisedName, type:_INPUT_, 
-							  label: ZaMsg.NAD_ZmtpAdvertisedName, width: "18em",
+							{ ref: ZaServer.A_LmtpAdvertisedName, type:_INPUT_, 
+							  label: ZaMsg.NAD_LmtpAdvertisedName, width: "18em",
 							  onChange: ZaServerXFormView.onFormFieldChanged
 							},
-							{ ref: ZaServer.A_ZmtpBindAddress, type:_INPUT_, 
-							  label:ZaMsg.NAD_ZmtpBindAddress, width: "18em",
+							{ ref: ZaServer.A_LmtpBindAddress, type:_INPUT_, 
+							  label:ZaMsg.NAD_LmtpBindAddress, width: "18em",
 							  onChange:ZaServerXFormView.onFormFieldChanged
 							},
 							/***
-							{ref:ZaServer.A_ZmtpBindPort, type:_INPUT_, label:ZaMsg.NAD_ZmtpBindPort, labelLocation:_LEFT_, onChange:ZaServerXFormView.onFormFieldChanged, autoSaveValue:true},									
+							{ref:ZaServer.A_LmtpBindPort, type:_INPUT_, label:ZaMsg.NAD_LmtpBindPort, labelLocation:_LEFT_, onChange:ZaServerXFormView.onFormFieldChanged, autoSaveValue:true},									
 							/***/
 							{ ref: ZaServer.A_notes, type:_TEXTAREA_, 
 							  label: ZaMsg.NAD_Notes, labelCssStyle: "vertical-align:top", width: "30em",

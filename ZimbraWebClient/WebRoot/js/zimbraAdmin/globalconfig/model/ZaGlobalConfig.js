@@ -44,8 +44,8 @@ ZaGlobalConfig.A_zimbraMtaRejectUnknownSenderDomain = "_"+ZaGlobalConfig.A_zimbr
 ZaGlobalConfig.A_zimbraGalLdapFilterDef = "zimbraGalLdapFilterDef";
 ZaGlobalConfig.A_zimbraGalMaxResults = "zimbraGalMaxResults";
 //Server
-ZaGlobalConfig.A_zimbraZmtpNumThreads = "zimbraZmtpNumThreads";
-ZaGlobalConfig.A_zimbraZmtpBindPort = "zimbraZmtpBindPort";
+ZaGlobalConfig.A_zimbraLmtpNumThreads = "zimbraLmtpNumThreads";
+ZaGlobalConfig.A_zimbraLmtpBindPort = "zimbraLmtpBindPort";
 ZaGlobalConfig.A_zimbraPop3NumThreads = "zimbraPop3NumThreads";
 ZaGlobalConfig.A_zimbraPop3BindPort = "zimbraPop3BindPort";
 ZaGlobalConfig.A_zimbraRedologEnabled = "zimbraRedologEnabled";

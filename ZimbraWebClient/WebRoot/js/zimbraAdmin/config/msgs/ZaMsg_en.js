@@ -352,10 +352,10 @@ ZaMsg.NAD_ServiceCurrentRole = "Current Role";
 ZaMsg.NAD_ServiceHostname = "Service Host Name";
 ZaMsg.NAD_Server = "Server: ";
 //lmtp
-ZaMsg.NAD_ZmtpAdvertisedName = "LMTP advertised name:";
-ZaMsg.NAD_ZmtpBindAddress = "LMTP bind address:";
-ZaMsg.NAD_ZmtpBindPort = "LMTP bind port:";
-ZaMsg.NAD_ZmtpNumThreads = "LMTP number of threads:";
+ZaMsg.NAD_LmtpAdvertisedName = "LMTP advertised name:";
+ZaMsg.NAD_LmtpBindAddress = "LMTP bind address:";
+ZaMsg.NAD_LmtpBindPort = "LMTP bind port:";
+ZaMsg.NAD_LmtpNumThreads = "LMTP number of threads:";
 //pop3
 ZaMsg.NAD_POP_Service = "POP3 service:";
 ZaMsg.NAD_POP_Enabled = "Enabled";
