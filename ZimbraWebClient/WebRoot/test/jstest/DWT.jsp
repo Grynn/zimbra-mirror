@@ -11,7 +11,7 @@
 <script type="text/javascript" src="/ZimbraConsole/js/dwt/widgets/Control.js"></script>
 <script type="text/javascript" src="/ZimbraConsole/js/dwt/widgets/Composite.js"></script>
 <script type="text/javascript" src="/ZimbraConsole/js/dwt/widgets/Text.js"></script>
-<script type="text/javascript" src="/ZimbraConsole/js/dwt/widgets/Zabel.js"></script>
+<script type="text/javascript" src="/ZimbraConsole/js/dwt/widgets/Label.js"></script>
 <script type="text/javascript" src="/ZimbraConsole/js/dwt/widgets/Button.js"></script>
 <script type="text/javascript" src="/ZimbraConsole/js/dwt/widgets/Window.js"></script>
 </c:if>

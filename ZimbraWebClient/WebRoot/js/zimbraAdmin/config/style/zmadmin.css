@@ -605,7 +605,7 @@ DIV.vSpace {
 	padding: 10px;
 }
 .DwtDialog textarea { width: 100%; }
-.DwtDialog .Zabel { font-size: 10pt; }
+.DwtDialog .Label { font-size: 10pt; }
 .DwtDialog .Field { width: 290px; }
 
 /* Message dialog */
@@ -1078,7 +1078,7 @@ DIV.vSpace {
 	table-layout: fixed;
 	width: 100%;
 }
-.prefZabel {width: 300px;}
+.prefLabel {width: 300px;}
 .prefContent {width: 410px;}
 
 /* make things line up visually */
@@ -1177,7 +1177,7 @@ DIV.vSpace {
 	position: static;
 }
 
-.DwtStepZabelActive {
+.DwtStepLabelActive {
 	font-size: 12pt;
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
 	font-weight: bold;
@@ -1186,7 +1186,7 @@ DIV.vSpace {
 	padding-left: 2px;	
 }
 
-.DwtStepZabelInactive {
+.DwtStepLabelInactive {
 	font-size: 14pt;
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
 	font-weight: normal;
@@ -1281,7 +1281,7 @@ DIV.vSpace {
   text-align:right;
 }
 
-.checkboxZabel { 
+.checkboxLabel { 
   font-weight:bold;
 };
 
