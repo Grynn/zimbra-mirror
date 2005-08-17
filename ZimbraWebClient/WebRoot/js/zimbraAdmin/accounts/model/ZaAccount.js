@@ -365,13 +365,13 @@ function(tmpObj, app) {
 		}
 	}
 	try {
-		var resp = AjxCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+		var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	} catch (ex) {
 		switch(ex.code) {
-			case AjxCsfeException.ACCT_EXISTS:
+			case ZmCsfeException.ACCT_EXISTS:
 				app.getCurrentController().popupMsgDialog(ZaMsg.ERROR_ACCOUNT_EXISTS);
 			break;
-			case AjxCsfeException.ACCT_INVALID_PASSWORD:
+			case ZmCsfeException.ACCT_INVALID_PASSWORD:
 				app.getCurrentController().popupMsgDialog(ZaMsg.ERROR_PASSWORD_INVALID);
 			break;
 			default:
@@ -394,7 +394,7 @@ function(tmpObj, app) {
 					account.addAlias(tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]);
 					account.attrs[ZaAccount.A_zimbraMailAlias].push(tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]);
 				} catch (ex) {
-					if(ex.code == AjxCsfeException.ACCT_EXISTS) {
+					if(ex.code == ZmCsfeException.ACCT_EXISTS) {
 						//if failed because account exists just show a warning
 						failedAliases += ("<br>" + tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]);
 						failedAliasesCnt++;
@@ -448,7 +448,7 @@ function(mods) {
 		}
 	}
 
-	var resp = AjxCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	//update itseld
 	this.initFromDom(resp.firstChild);
 	this[ZaAccount.A2_confirmPassword] = null;
@@ -465,7 +465,7 @@ function (newAlias) {
 	var soapDoc = AjxSoapDoc.create("AddAccountAliasRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
 	soapDoc.set("alias", newAlias);	
-	AjxCsfeCommand.invoke(soapDoc, null, null, null, true);	
+	ZmCsfeCommand.invoke(soapDoc, null, null, null, true);	
 }
 
 /**
@@ -477,7 +477,7 @@ function (aliasToRemove) {
 	var soapDoc = AjxSoapDoc.create("RemoveAccountAliasRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
 	soapDoc.set("alias", aliasToRemove);	
-	AjxCsfeCommand.invoke(soapDoc, null, null, null, true);	
+	ZmCsfeCommand.invoke(soapDoc, null, null, null, true);	
 }
 
 
@@ -505,7 +505,7 @@ function(accId) {
 	var soapDoc = AjxSoapDoc.create("DelegateAuthRequest", "urn:zimbraAdmin", null);	
 	var attr = soapDoc.set("account", accId);
 	attr.setAttribute("by", "id");
-	var resp = AjxCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;	
+	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;	
 	var children = resp.childNodes;
 	for (var i=0; i< children.length;  i++) {
 		child = children[i];
@@ -539,7 +539,7 @@ function(query, pagenum, orderby, isascending, app) {
 	soapDoc.getMethod().setAttribute("attrs", attrs);
 	soapDoc.getMethod().setAttribute("sortBy", orderby);
 	soapDoc.getMethod().setAttribute("sortAscending", myisascending);
-	var resp = AjxCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	var list = new ZaItemList("account", ZaAccount, app);
 	list.loadFromDom(resp);
 	var searchTotal = resp.getAttribute("searchTotal");
@@ -596,7 +596,7 @@ function (domainName, pagenum, orderby, isascending, app) {
 	soapDoc.getMethod().setAttribute("attrs", attrs);
 	soapDoc.getMethod().setAttribute("sortBy", orderby);
 	soapDoc.getMethod().setAttribute("sortAscending", myisascending);
-	var resp = AjxCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	var list = new ZaItemList("account", ZaAccount, app);
 	list.loadFromDom(resp);
 	var searchTotal = resp.getAttribute("searchTotal");
@@ -654,7 +654,7 @@ function() {
 	//find out which server I am on
 	var myServer = this._app.getServerByName(this.attrs[ZaAccount.A_mailHost]);
 
-	AjxCsfeCommand.invoke(soapDoc, null, null, myServer.id, true);	
+	ZmCsfeCommand.invoke(soapDoc, null, null, myServer.id, true);	
 }
 
 ZaAccount.prototype.load = 
@@ -667,7 +667,7 @@ function(by, val, withCos) {
 	}
 	var elBy = soapDoc.set("account", val);
 	elBy.setAttribute("by", by);
-	var resp = AjxCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	this.attrs = new Object();
 	this.initFromDom(resp.firstChild);
 	
@@ -677,7 +677,7 @@ function(by, val, withCos) {
 	//find out which server I am on
 	var myServer = this._app.getServerByName(this.attrs[ZaAccount.A_mailHost]);
 				
-	var resp = AjxCsfeCommand.invoke(soapDoc, false, null, myServer.id, true);
+	var resp = ZmCsfeCommand.invoke(soapDoc, false, null, myServer.id, true);
 	if(resp && resp.firstChild && resp.firstChild.firstChild) {
 		this.attrs[ZaAccount.A2_mbxsize] = resp.firstChild.firstChild.getAttribute("s");
 	}
@@ -722,7 +722,7 @@ function (newName) {
 	var soapDoc = AjxSoapDoc.create("RenameAccountRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
 	soapDoc.set("newName", newName);	
-	AjxCsfeCommand.invoke(soapDoc, null, null, null, true);	
+	ZmCsfeCommand.invoke(soapDoc, null, null, null, true);	
 }
 
 /**
@@ -734,7 +734,7 @@ function (newPassword) {
 	var soapDoc = AjxSoapDoc.create("SetPasswordRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
 	soapDoc.set("newPassword", newPassword);	
-	AjxCsfeCommand.invoke(soapDoc, null, null, null, true);
+	ZmCsfeCommand.invoke(soapDoc, null, null, null, true);
 }
 
 function ZaAccountQuery (queryString, byDomain, byVal) {

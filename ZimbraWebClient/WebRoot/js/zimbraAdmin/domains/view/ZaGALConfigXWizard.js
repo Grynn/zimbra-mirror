@@ -140,7 +140,7 @@ function () {
 **/
 ZaGALConfigXWizard.prototype.checkCallBack = 
 function (arg) {
-	if(arg instanceof AjxException || arg instanceof AjxCsfeException || arg instanceof AjxSoapException) {
+	if(arg instanceof AjxException || arg instanceof ZmCsfeException || arg instanceof AjxSoapException) {
 		this._containedObject[ZaDomain.A_GALTestResultCode] = arg.code;
 		this._containedObject[ZaDomain.A_GALTestMessage] = arg.detail;
 	} else {

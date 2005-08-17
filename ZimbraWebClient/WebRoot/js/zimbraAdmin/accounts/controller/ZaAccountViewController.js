@@ -214,14 +214,14 @@ function () {
 		try {
 			this._currentObject.rename(newName);
 		} catch (ex) {
-			if (ex.code == AjxCsfeException.SVC_AUTH_EXPIRED || ex.code == AjxCsfeException.SVC_AUTH_REQUIRED || ex.code == AjxCsfeException.NO_AUTH_TOKEN) {
+			if (ex.code == ZmCsfeException.SVC_AUTH_EXPIRED || ex.code == ZmCsfeException.SVC_AUTH_REQUIRED || ex.code == ZmCsfeException.NO_AUTH_TOKEN) {
 					this._showLoginDialog();
 			} else {
 				/*var detailStr = "";
 				for (var prop in ex) {
 					detailStr = detailStr + prop + " - " + ex[prop] + "\n";				
 				}*/
-				if(ex.code == AjxCsfeException.ACCT_EXISTS) {
+				if(ex.code == ZmCsfeException.ACCT_EXISTS) {
 					this.popupMsgDialog(ZaMsg.FAILED_RENAME_ACCOUNT_1, ex, true);
 					/*this._msgDialog.setMessage(ZaMsg.FAILED_RENAME_ACCOUNT_1, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
 					this._msgDialog.popup();*/
@@ -280,7 +280,7 @@ function () {
 	try {	
 		this._currentObject.modify(mods);
 	} catch (ex) {
-		if (ex.code == AjxCsfeException.SVC_AUTH_EXPIRED || ex.code == AjxCsfeException.SVC_AUTH_REQUIRED || ex.code == AjxCsfeException.NO_AUTH_TOKEN) {
+		if (ex.code == ZmCsfeException.SVC_AUTH_EXPIRED || ex.code == ZmCsfeException.SVC_AUTH_REQUIRED || ex.code == ZmCsfeException.NO_AUTH_TOKEN) {
 				this._showLoginDialog();
 		} else {
 /*			var detailStr = "";
@@ -288,7 +288,7 @@ function () {
 				detailStr = detailStr + prop + " - " + ex[prop] + "\n";				
 			}
 */			
-			if(ex.code == AjxCsfeException.ACCT_EXISTS) {
+			if(ex.code == ZmCsfeException.ACCT_EXISTS) {
 				this.popupMsgDialog(ZaMsg.FAILED_CREATE_ACCOUNT_1, ex, true);
 	/*			this._msgDialog.setMessage(ZaMsg.FAILED_CREATE_ACCOUNT_1, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);				
 				this._msgDialog.popup();*/
@@ -355,7 +355,7 @@ function () {
 				if(tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix])
 					this._currentObject.addAlias(tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]);
 			} catch (ex) {
-				if(ex.code == AjxCsfeException.ACCT_EXISTS) {
+				if(ex.code == ZmCsfeException.ACCT_EXISTS) {
 					//if failed because account exists just show a warning
 					failedAliases += ("<br>" + tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]);
 					failedAliasesCnt++;
@@ -452,7 +452,7 @@ function (params) {
 		}
 	} catch (ex) {
 		//if exception thrown - don' go away
-		if(ex.code == AjxCsfeException.ACCT_EXISTS) {
+		if(ex.code == ZmCsfeException.ACCT_EXISTS) {
 			this._msgDialog.setMessage(ZaMsg.ERROR_ACCOUNT_EXISTS, null, DwtMessageDialog.CRITICAL_STYLE, null);
 			this._msgDialog.popup();
 		} else {
@@ -489,7 +489,7 @@ function () {
 
 	} catch (ex) {
 		this._confirmMessageDialog.popdown();	
-		if(ex.code == AjxCsfeException.SVC_WRONG_HOST) {
+		if(ex.code == ZmCsfeException.SVC_WRONG_HOST) {
 			var szMsg = ZaMsg.ERROR_WRONG_HOST;
 			if(ex.detail) {
 				szMsg +="<br>Details:<br>";

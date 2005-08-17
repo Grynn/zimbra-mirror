@@ -20,7 +20,7 @@ SingleAccountRestoreXWizard.labelChoices = new XFormChoices([], XFormChoices.OBJ
 **/
 SingleAccountRestoreXWizard.prototype.backupQueryCallBack = 
 function (arg) {
-	if(arg instanceof AjxException || arg instanceof AjxCsfeException || arg instanceof AjxSoapException) {
+	if(arg instanceof AjxException || arg instanceof ZmCsfeException || arg instanceof AjxSoapException) {
 		this._containedObject[ZaModel.ErrorCode] = arg.code;
 		this._containedObject[ZaModel.ErrorMessage] = arg.detail;
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
@@ -66,7 +66,7 @@ function (arg) {
 **/
 SingleAccountRestoreXWizard.prototype.restoreCallBack = 
 function (arg) {
-	if(arg instanceof AjxException || arg instanceof AjxCsfeException || arg instanceof AjxSoapException) {
+	if(arg instanceof AjxException || arg instanceof ZmCsfeException || arg instanceof AjxSoapException) {
 		this._containedObject[ZaModel.ErrorCode] = arg.code;
 		this._containedObject[ZaModel.ErrorMessage] = arg.detail;
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);		

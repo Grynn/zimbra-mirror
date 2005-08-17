@@ -21,7 +21,7 @@ function (uname, pword, isPublic) {
 		
 	soapDoc.set("name", uname);
 	soapDoc.set("password", pword);
-	var resp = AjxCsfeCommand.invoke(soapDoc, true, null, null, true).firstChild;
+	var resp = ZmCsfeCommand.invoke(soapDoc, true, null, null, true).firstChild;
 	this._setAuthToken(resp);	
 }
 
@@ -39,5 +39,5 @@ function(resp) {
 		else if (el.nodeName=="sessionId")
 			sessionId = el.firstChild.nodeValue;
 	}
-	AjxCsfeCommand.setAuthToken(authToken, lifetime, sessionId);
+	ZmCsfeCommand.setAuthToken(authToken, lifetime, sessionId);
 }

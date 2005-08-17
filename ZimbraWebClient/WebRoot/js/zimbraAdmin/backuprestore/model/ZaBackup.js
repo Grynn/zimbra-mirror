@@ -40,7 +40,7 @@ function (node) {
 * @param label:string
 * @param fromDate:timestamp
 * @param verbose:Boolean
-* @param callback:AjxCallback - callback that will be invoked by AjxCsfeAsynchCommand
+* @param callback:AjxCallback - callback that will be invoked by ZmCsfeAsynchCommand
 **/
 ZaBackup.queryBackups = 
 function (serverId, target, label, fromDate, verbose, callback) {
@@ -58,7 +58,7 @@ function (serverId, target, label, fromDate, verbose, callback) {
 	if(verbose) {
 		queryEl.setAttribute("verbose", verbose);
 	}
-	var asynCommand = new AjxCsfeAsynchCommand();
+	var asynCommand = new ZmCsfeAsynchCommand();
 	asynCommand.addInvokeListener(callback);
 	asynCommand.invoke(soapDoc, false, null, serverId, true);	
 }
@@ -68,7 +68,7 @@ function (serverId, target, label, fromDate, verbose, callback) {
 * @param serverId:string - zimbraId of the server to which the SOAP request will be sent
 * @param target:string - path to the location of backups
 * @param accounts:Array - array of account names 
-* @param callback:AjxCallback - callback that will be invoked by AjxCsfeAsynchCommand
+* @param callback:AjxCallback - callback that will be invoked by ZmCsfeAsynchCommand
 **/
 ZaBackup.queryAccountBackup = 
 function (serverId, target, accounts, callback) {
@@ -85,7 +85,7 @@ function (serverId, target, accounts, callback) {
 		var accEl = soapDoc.set("a", "", queryEl);
 		accEl.setAttribute("name", accounts[i]);
 	}
-	var asynCommand = new AjxCsfeAsynchCommand();
+	var asynCommand = new ZmCsfeAsynchCommand();
 	asynCommand.addInvokeListener(callback);
 	asynCommand.invoke(soapDoc, false, null, serverId, true);	
 }

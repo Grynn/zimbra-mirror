@@ -94,7 +94,7 @@ var _TIME_OF_DAY_CHOICES = [
 
 		if (location.search && location.search.indexOf("host=") != -1)
 			value += location.search;
-		AjxCsfeCommand.setServerUri(value);
+		ZmCsfeCommand.setServerUri(value);
 
 		var soapDoc = AjxSoapDoc.create("GetFreeBusyRequest", "urn:zimbraMail");
 		var now = new Date();
@@ -113,7 +113,7 @@ var _TIME_OF_DAY_CHOICES = [
 		soapDoc.setMethodAttribute("e", end.getTime());
 		soapDoc.setMethodAttribute("uid", "user1@db682461.zimbra.com");
 		// This is erroring out
-		var resp = AjxCsfeCommand.invoke(soapDoc, null, null, null, false);
+		var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false);
 		//var resp = ZmZimbraMail.prototype.sendRequest(soapDoc).firstChild;
 		var userSchedules = ZmUserSchedule.loadFromDom(resp.Body);
 		var dummyAppt = new ZmAppt();

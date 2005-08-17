@@ -1,67 +1,67 @@
-function LsCsfeCommand() {
+function ZmCsfeCommand() {
 }
 
-LsCsfeCommand._COOKIE_NAME = "LS_AUTH_TOKEN";
+ZmCsfeCommand._COOKIE_NAME = "LS_AUTH_TOKEN";
 
 // All the cache and context stuff is to support async calls in the future
-LsCsfeCommand.serverUri = null;
-LsCsfeCommand._authToken = null;
-LsCsfeCommand._sessionId = null;
+ZmCsfeCommand.serverUri = null;
+ZmCsfeCommand._authToken = null;
+ZmCsfeCommand._sessionId = null;
 
-LsCsfeCommand.getAuthToken =
+ZmCsfeCommand.getAuthToken =
 function() {
 	// See if the auth token is cached. If not try and get it from the cookie
-	if (LsCsfeCommand._authToken != null)
-		return LsCsfeCommand._authToken;
-	var authToken = LsCookie.getCookie(document, LsCsfeCommand._COOKIE_NAME)
-	LsCsfeCommand._authToken = authToken;
+	if (ZmCsfeCommand._authToken != null)
+		return ZmCsfeCommand._authToken;
+	var authToken = LsCookie.getCookie(document, ZmCsfeCommand._COOKIE_NAME)
+	ZmCsfeCommand._authToken = authToken;
 	return authToken;
 }
 
-LsCsfeCommand.setCookieName =
+ZmCsfeCommand.setCookieName =
 function(cookieName) {
-	LsCsfeCommand._COOKIE_NAME = cookieName;
+	ZmCsfeCommand._COOKIE_NAME = cookieName;
 }
 
-LsCsfeCommand.setAuthToken =
+ZmCsfeCommand.setAuthToken =
 function(authToken, lifetimeMs, sessionId) {
-	LsCsfeCommand._authToken = authToken;
+	ZmCsfeCommand._authToken = authToken;
 	if (lifetimeMs != null) {
 		var exp = new Date();
 		var lifetime = parseInt(lifetimeMs);
 		exp.setTime(exp.getTime() + lifetime);
-		LsCookie.setCookie(document, LsCsfeCommand._COOKIE_NAME, authToken, exp, "/");
+		LsCookie.setCookie(document, ZmCsfeCommand._COOKIE_NAME, authToken, exp, "/");
 	} else {
-		LsCookie.deleteCookie(document, LsCsfeCommand._COOKIE_NAME, "/");
+		LsCookie.deleteCookie(document, ZmCsfeCommand._COOKIE_NAME, "/");
 	}
 	if (sessionId)
-		LsCsfeCommand.setSessionId(sessionId);
+		ZmCsfeCommand.setSessionId(sessionId);
 }
 
-LsCsfeCommand.clearAuthToken =
+ZmCsfeCommand.clearAuthToken =
 function() {
-	LsCsfeCommand._authToken = null;
-	LsCookie.deleteCookie(document, LsCsfeCommand._COOKIE_NAME, "/");
+	ZmCsfeCommand._authToken = null;
+	LsCookie.deleteCookie(document, ZmCsfeCommand._COOKIE_NAME, "/");
 }
 
-LsCsfeCommand.getSessionId =
+ZmCsfeCommand.getSessionId =
 function() {
-	return LsCsfeCommand._sessionId;
+	return ZmCsfeCommand._sessionId;
 }
 
-LsCsfeCommand.setSessionId =
+ZmCsfeCommand.setSessionId =
 function(id) {
-	LsCsfeCommand._sessionId = id;
+	ZmCsfeCommand._sessionId = id;
 }
 
-LsCsfeCommand.invoke =
+ZmCsfeCommand.invoke =
 function(soapDoc, noAuthTokenRequired, serverUri, targetServer, useXml) {
 	// See if we have an auth token, if not, then mock up and need to authenticate or just have no auth cookie
 	if (!noAuthTokenRequired) {
-		var authToken = LsCsfeCommand.getAuthToken();
+		var authToken = ZmCsfeCommand.getAuthToken();
 		if (!authToken)
-			throw new LsCsfeException("AuthToken required", LsCsfeException.NO_AUTH_TOKEN, "LsCsfeCommand.invoke");
-		var sessionId = LsCsfeCommand.getSessionId();
+			throw new ZmCsfeException("AuthToken required", ZmCsfeException.NO_AUTH_TOKEN, "ZmCsfeCommand.invoke");
+		var sessionId = ZmCsfeCommand.getSessionId();
 		var hdr = soapDoc.createHeaderElement();
 		var ctxt = soapDoc.set("context", null, hdr);
 		ctxt.setAttribute("xmlns", "urn:liquid");
@@ -82,7 +82,7 @@ function(soapDoc, noAuthTokenRequired, serverUri, targetServer, useXml) {
 
 	var xmlResponse = false;
 	try {
-		var uri = serverUri || LsCsfeCommand.serverUri;
+		var uri = serverUri || ZmCsfeCommand.serverUri;
 		var requestStr = !LsEnv.isSafari 
 			? soapDoc.getXml() 
 			: soapDoc.getXml().replace("soap=", "xmlns:soap=");
@@ -108,10 +108,10 @@ function(soapDoc, noAuthTokenRequired, serverUri, targetServer, useXml) {
 		} else if (ex instanceof LsException) {
 			throw ex; 
 		}  else {
-			var newEx = new LsCsfeException();
-			newEx.method = "LsCsfeCommand.invoke";
+			var newEx = new ZmCsfeException();
+			newEx.method = "ZmCsfeCommand.invoke";
 			newEx.detail = ex.toString();
-			newEx.code = LsCsfeException.UNKNOWN_ERROR;
+			newEx.code = ZmCsfeException.UNKNOWN_ERROR;
 			newEx.msg = "Unknown Error";
 			throw newEx;
 		}
@@ -125,7 +125,7 @@ function(soapDoc, noAuthTokenRequired, serverUri, targetServer, useXml) {
 		var body = respDoc.getBody();
 		var fault = LsSoapDoc.element2FaultObj(body);
 		if (fault) {
-			throw new LsCsfeException("Csfe service error", fault.errorCode, "LsCsfeCommand.invoke", fault.reason);
+			throw new ZmCsfeException("Csfe service error", fault.errorCode, "ZmCsfeCommand.invoke", fault.reason);
 		}
 		if (useXml)
 			return body;
@@ -146,14 +146,14 @@ function(soapDoc, noAuthTokenRequired, serverUri, targetServer, useXml) {
 
 	var fault = data.Body.Fault;
 	if (fault)
-		throw new LsCsfeException(fault.Reason.Text, fault.Detail.Error.Code, "LsCsfeCommand.invoke", fault.Code.Value);
+		throw new ZmCsfeException(fault.Reason.Text, fault.Detail.Error.Code, "ZmCsfeCommand.invoke", fault.Code.Value);
 	if (data.Header && data.Header.context && data.Header.context.sessionId)
-		LsCsfeCommand.setSessionId(data.Header.context.sessionId);
+		ZmCsfeCommand.setSessionId(data.Header.context.sessionId);
 
 	return data;
 }
 
-LsCsfeCommand.setServerUri =
+ZmCsfeCommand.setServerUri =
 function(uri) {
-	LsCsfeCommand.serverUri = uri;
+	ZmCsfeCommand.serverUri = uri;
 }

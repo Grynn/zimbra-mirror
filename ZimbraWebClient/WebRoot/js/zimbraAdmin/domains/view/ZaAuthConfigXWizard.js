@@ -62,7 +62,7 @@ function () {
 **/
 ZaAuthConfigXWizard.prototype.checkCallBack = 
 function (arg) {
-	if(arg instanceof AjxException || arg instanceof AjxCsfeException || arg instanceof AjxSoapException) {
+	if(arg instanceof AjxException || arg instanceof ZmCsfeException || arg instanceof AjxSoapException) {
 		this._containedObject[ZaDomain.A_AuthTestResultCode] = arg.code;
 		this._containedObject[ZaDomain.A_AuthTestMessage] = arg.detail;
 	} else {

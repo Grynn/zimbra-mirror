@@ -519,7 +519,7 @@ function () {
 				successRemList.push(this._removeList[key]);
 			} catch (ex) {
 				this._removeConfirmMessageDialog.popdown();
-				if(ex.code == AjxCsfeException.SVC_WRONG_HOST) {
+				if(ex.code == ZmCsfeException.SVC_WRONG_HOST) {
 					var szMsg = ZaMsg.ERROR_WRONG_HOST;
 					if(ex.detail) {
 						szMsg +="<br>Details:<br>";
@@ -603,7 +603,7 @@ function (item) {
 
 		} catch (ex) {
 			this._chngPwdDlg.popdown();
-			if(ex.code == AjxCsfeException.INVALID_PASSWORD ) {
+			if(ex.code == ZmCsfeException.INVALID_PASSWORD ) {
 				var szMsg = ZaMsg.ERROR_PASSWORD_INVALID;
 				if(ex.detail) {
 					szMsg +="<br>Details:<br>";

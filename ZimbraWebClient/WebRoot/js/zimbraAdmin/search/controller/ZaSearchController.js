@@ -190,7 +190,7 @@ DBG.dumpObj(params);
 		this._app.getAccountListController().setQuery(curQuery);	
 	} catch (ex) {
 		// Only restart on error if we are not initialized and it isn't a parse error
-		if (ex.code != AjxCsfeException.MAIL_QUERY_PARSE_ERROR) {
+		if (ex.code != ZmCsfeException.MAIL_QUERY_PARSE_ERROR) {
 			this._handleException(ex, ZaSearchController.prototype._doSearch, null, (this._inited) ? false : true);
 		} else {
 			this.popupMsgDialog(ZaMsg.queryParseError, ex);

@@ -376,7 +376,7 @@ function () {
 				successRemList.push(this._removeList[key]);					
 			} catch (ex) {
 				this._removeConfirmMessageDialog.popdown();
-				if(ex.code == AjxCsfeException.DOMAIN_NOT_EMPTY) {
+				if(ex.code == ZmCsfeException.DOMAIN_NOT_EMPTY) {
 					this._msgDialog.setMessage(ZaMsg.ERROR_DOMAIN_NOT_EMPTY, null, DwtMessageDialog.CRITICAL_STYLE, null);
 					this._msgDialog.popup();			
 				} else {
@@ -437,7 +437,7 @@ function(ev) {
 			this._newDomainWizard.popdown();		
 		}
 	} catch (ex) {
-		if(ex.code == AjxCsfeException.DOMAIN_EXISTS) {
+		if(ex.code == ZmCsfeException.DOMAIN_EXISTS) {
 			this.popupMsgDialog(ZaMsg.ERROR_DOMAIN_EXISTS, ex);
 //			this._msgDialog.setMessage(ZaMsg.ERROR_DOMAIN_EXISTS, null, DwtMessageDialog.CRITICAL_STYLE, null);
 	//		this._msgDialog.popup();

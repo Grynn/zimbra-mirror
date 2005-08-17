@@ -309,7 +309,7 @@ function(ev) {
 			}
 		} catch (ex) {
 			if(!ex) {
-				ex = new AjxCsfeException("Unknown error", AjxException.UNKNOWN_ERROR, "ZaOverviewPanelController.prototype._overviewTreeListener", "Unknown error")
+				ex = new ZmCsfeException("Unknown error", AjxException.UNKNOWN_ERROR, "ZaOverviewPanelController.prototype._overviewTreeListener", "Unknown error")
 			}
 			this._handleException(ex, "ZaOverviewPanelController.prototype._overviewTreeListener", null, false);
 		}

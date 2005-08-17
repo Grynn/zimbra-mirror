@@ -96,7 +96,7 @@ ZaDomain.AUTH_MECH_CHOICES = [ZaDomain.AuthMech_ad,ZaDomain.AuthMech_ldap,ZaDoma
 ZaDomain.getAll =
 function() {
 	var soapDoc = AjxSoapDoc.create("GetAllDomainsRequest", "urn:zimbraAdmin", null);	
-	var resp = AjxCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	var list = new ZaItemList("domain", ZaDomain);
 	list.loadFromDom(resp);
 //	list.sortByName();		
@@ -205,7 +205,7 @@ function(tmpObj, app) {
 	attr.setAttribute("n", ZaDomain.A_AuthMech);	
 
 	var newDomain = new ZaDomain();
-	var resp = AjxCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	newDomain.initFromDom(resp.firstChild);
 	return newDomain;
 }
@@ -225,7 +225,7 @@ function (obj, callback) {
 	attr = soapDoc.set("name", obj[ZaDomain.A_AuthTestUserName]);
 	attr = soapDoc.set("password", obj[ZaDomain.A_AuthTestPassword]);	
 	
-	var asynCommand = new AjxCsfeAsynchCommand();
+	var asynCommand = new ZmCsfeAsynchCommand();
 	asynCommand.addInvokeListener(callback);
 	asynCommand.invoke(soapDoc, null, null, null, true);	
 }
@@ -256,7 +256,7 @@ function (obj, callback, sampleQuery) {
 	}
 	soapDoc.set("query", "cn=*" + sampleQuery + "*");
 
-	var asynCommand = new AjxCsfeAsynchCommand();
+	var asynCommand = new ZmCsfeAsynchCommand();
 	asynCommand.addInvokeListener(callback);
 	asynCommand.invoke(soapDoc, null, null, null, true);
 }
@@ -290,7 +290,7 @@ function(tmpObj, oldObj) {
 		attr.setAttribute("n", ZaDomain.A_GalMaxResults);	
 	}
 
-	var resp = AjxCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	oldObj.initFromDom(resp.firstChild);
 }
 
@@ -317,7 +317,7 @@ function(tmpObj, oldObj) {
 		attr.setAttribute("n", ZaDomain.A_AuthLdapUserDn);	
 	
 	}
-	var resp = AjxCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	oldObj.initFromDom(resp.firstChild);
 }
 
@@ -334,7 +334,7 @@ function(mods) {
 		attr.setAttribute("n", aname);
 	}
 		
-	var resp = AjxCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	//update itself
 	this.initFromDom(resp.firstChild);
 }
@@ -478,7 +478,7 @@ ZaDomain.prototype.remove =
 function() {
 	var soapDoc = AjxSoapDoc.create("DeleteDomainRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
-	AjxCsfeCommand.invoke(soapDoc, null, null, null, true);	
+	ZmCsfeCommand.invoke(soapDoc, null, null, null, true);	
 }
 
 ZaDomain.myXModel = {

@@ -188,12 +188,12 @@ function(bReloginMode) {
 ZaController.prototype._handleException =
 function(ex, method, params, restartOnError, obj) {
 	DBG.dumpObj(ex);
-	if (ex.code == AjxCsfeException.SVC_AUTH_EXPIRED || 
-		ex.code == AjxCsfeException.SVC_AUTH_REQUIRED || 
-		ex.code == AjxCsfeException.NO_AUTH_TOKEN) 
+	if (ex.code == ZmCsfeException.SVC_AUTH_EXPIRED || 
+		ex.code == ZmCsfeException.SVC_AUTH_REQUIRED || 
+		ex.code == ZmCsfeException.NO_AUTH_TOKEN) 
 	{
 		var bReloginMode = true;
-		if (ex.code == AjxCsfeException.SVC_AUTH_EXPIRED) 
+		if (ex.code == ZmCsfeException.SVC_AUTH_EXPIRED) 
 		{
 			// remember the last search attempted ONLY for expired auto token exception
 			this._execFrame = {obj: obj, method: method, params: params, restartOnError: restartOnError};
@@ -210,23 +210,23 @@ function(ex, method, params, restartOnError, obj) {
 	{
 		this._execFrame = {obj: obj, method: method, params: params, restartOnError: restartOnError};
 		this._msgDialog.registerCallback(DwtDialog.OK_BUTTON, this._msgDialogCallback, this);
-		if (ex.code == AjxCsfeException.SOAP_ERROR) {
+		if (ex.code == ZmCsfeException.SOAP_ERROR) {
 			this.popupMsgDialog(ZaMsg.SOAP_ERROR, ex, true);
-		} else if (ex.code == AjxCsfeException.NETWORK_ERROR) {
+		} else if (ex.code == ZmCsfeException.NETWORK_ERROR) {
 			this.popupMsgDialog(ZaMsg.NETWORK_ERROR, ex, true);
-		} else if (ex.code ==  AjxCsfeException.SVC_PARSE_ERROR) {
+		} else if (ex.code ==  ZmCsfeException.SVC_PARSE_ERROR) {
 			this.popupMsgDialog(ZaMsg.PARSE_ERROR, ex, true);
-		} else if (ex.code ==  AjxCsfeException.SVC_PERM_DENIED) {
+		} else if (ex.code ==  ZmCsfeException.SVC_PERM_DENIED) {
 			this.popupMsgDialog(ZaMsg.PERMISSION_DENIED, ex, true);
-		} else if (ex.code == AjxCsfeException.ACCT_NO_SUCH_ACCOUNT) {
+		} else if (ex.code == ZmCsfeException.ACCT_NO_SUCH_ACCOUNT) {
 			this.popupMsgDialog(ZaMsg.ERROR_NO_SUCH_ACCOUNT, ex, true);
-		} else if (ex.code == AjxCsfeException.CSFE_SVC_ERROR || ex.code == AjxCsfeException.SVC_FAILURE || (ex.code && ex.code.match(/^(service|account|mail)\./))) {
+		} else if (ex.code == ZmCsfeException.CSFE_SVC_ERROR || ex.code == ZmCsfeException.SVC_FAILURE || (ex.code && ex.code.match(/^(service|account|mail)\./))) {
 			this.popupMsgDialog(ZaMsg.SERVER_ERROR, ex, true);
 		} else {
 			//search for error code
 			var gotit = false;
-			for(var ix in AjxCsfeException) {
-				if(AjxCsfeException[ix] == ex.code) {
+			for(var ix in ZmCsfeException) {
+				if(ZmCsfeException[ix] == ex.code) {
 					this.popupMsgDialog(ZaMsg.SERVER_ERROR, ex, true);
 					gotit = true;
 					break;
@@ -240,7 +240,7 @@ function(ex, method, params, restartOnError, obj) {
 
 ZaController.prototype._doAuth = 
 function(params) {
-	AjxCsfeCommand.clearAuthToken();
+	ZmCsfeCommand.clearAuthToken();
 	var auth = new ZaAuthenticate(this._appCtxt);
 	try {
 		auth.execute(params.username, params.password);
@@ -249,12 +249,12 @@ function(params) {
 		// Schedule this since we want to make sure the app is built up before we actually hide the login dialog
 		this._schedule(this._hideLoginDialog);
 	} catch (ex) {
-		if (ex.code == AjxCsfeException.ACCT_AUTH_FAILED || 
-			ex.code == AjxCsfeException.INVALID_REQUEST) 
+		if (ex.code == ZmCsfeException.ACCT_AUTH_FAILED || 
+			ex.code == ZmCsfeException.INVALID_REQUEST) 
 		{
 			this._loginDialog.setError(ZaMsg.ERROR_AUTH_FAILED);
 			return;
-		} else if(ex.code == AjxCsfeException.SVC_PERM_DENIED) {
+		} else if(ex.code == ZmCsfeException.SVC_PERM_DENIED) {
 			this._loginDialog.setError(ZaMsg.ERROR_AUTH_NO_ADMIN_RIGHTS);
 			return;
 		} else {

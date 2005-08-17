@@ -151,7 +151,7 @@ ZaServer.myXModel = {
 ZaServer.getAll =
 function() {
 	var soapDoc = AjxSoapDoc.create("GetAllServersRequest", "urn:zimbraAdmin", null);	
-	var resp = AjxCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	var list = new ZaItemList("server", ZaServer);
 	list.loadFromDom(resp);
 //	list.sortByName();		
@@ -185,7 +185,7 @@ function(mods) {
 			attr.setAttribute("n", aname);
 		}
 	}
-	var resp = AjxCsfeCommand.invoke(soapDoc, false, null, this.id, true).firstChild;
+	var resp = ZmCsfeCommand.invoke(soapDoc, false, null, this.id, true).firstChild;
 	//update itseld
 	this.initFromDom(resp.firstChild);
 }
@@ -222,7 +222,7 @@ ZaServer.prototype.remove =
 function() {
 	var soapDoc = AjxSoapDoc.create("DeleteServerRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
-	AjxCsfeCommand.invoke(soapDoc, null, null, null, true);	
+	ZmCsfeCommand.invoke(soapDoc, null, null, null, true);	
 }
 
 ZaServer.prototype.load = 
@@ -235,7 +235,7 @@ function(by, val, withConfig) {
 	}
 	var elBy = soapDoc.set("server", val);
 	elBy.setAttribute("by", by);
-	var resp = AjxCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	this.initFromDom(resp.firstChild);
 }
 

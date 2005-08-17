@@ -61,7 +61,7 @@ ZaRestore.myXModel.items.push({id:ZaModel.currentStep, type:_NUMBER_, ref:ZaMode
 * @param prefix:string 
 * @param accounts:Array - array of account names 
 * @param serverId:string - zimbraId of the server to which the SOAP request will be sent
-* @param callback:AjxCallback - callback that will be invoked by AjxCsfeAsynchCommand
+* @param callback:AjxCallback - callback that will be invoked by ZmCsfeAsynchCommand
 **/
 ZaRestore.restoreAccount = 
 function (method, includeIncrementals, label, target, prefix, accounts, serverId, callback) {
@@ -98,7 +98,7 @@ function (method, includeIncrementals, label, target, prefix, accounts, serverId
 		el = soapDoc.set("a", "", restoreEl);
 		el.setAttribute("name", accounts[i]);
 	}
-	var asynCommand = new AjxCsfeAsynchCommand();
+	var asynCommand = new ZmCsfeAsynchCommand();
 	asynCommand.addInvokeListener(callback);
 	asynCommand.invoke(soapDoc, false, null, serverId, true);	
 }

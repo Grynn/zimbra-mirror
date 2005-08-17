@@ -98,7 +98,7 @@ ZaGlobalConfig.A_zimbraNewExtension = "_zimbraNewExtension";
 ZaGlobalConfig.prototype.load =
 function () {
 	var soapDoc = AjxSoapDoc.create("GetAllConfigRequest", "urn:zimbraAdmin", null);
-	var resp = AjxCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	this.initFromDom(resp);
 }
 
@@ -188,7 +188,7 @@ function (mods) {
 			attr.setAttribute("n", aname);
 		}
 	}
-	var resp = AjxCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	var newConfig = this._app.getGlobalConfig(true);
 	if(newConfig.attrs) {
 		for (var aname in newConfig.attrs) {

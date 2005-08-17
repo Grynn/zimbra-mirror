@@ -1,13 +1,13 @@
 /**
-* @class LsCsfeAsynchCommand
+* @class ZmCsfeAsynchCommand
 * This class executes Csfe commands assynchronously.
 * When command is executed (Rpc call returns) all invokeListeners are notified.
 * @ constructor
 * @author Greg Solovyev
 **/
 
-function LsCsfeAsynchCommand () {
-	LsCsfeCommand.call(this);
+function ZmCsfeAsynchCommand () {
+	ZmCsfeCommand.call(this);
 	this.invokeListeners = new Array();
 	this.commandSoapDoc = "";
 	this._responseSoapDoc = null;
@@ -15,12 +15,12 @@ function LsCsfeAsynchCommand () {
 	this._en = null; //end time (call returned)
 }
 
-LsCsfeAsynchCommand.prototype = new LsCsfeCommand;
-LsCsfeAsynchCommand.prototype.constructor = LsCsfeAsynchCommand;
+ZmCsfeAsynchCommand.prototype = new ZmCsfeCommand;
+ZmCsfeAsynchCommand.prototype.constructor = ZmCsfeAsynchCommand;
 
-LsCsfeAsynchCommand.prototype.toString = 
+ZmCsfeAsynchCommand.prototype.toString = 
 function () {
-	return 	"LsCsfeAsynchCommand";
+	return 	"ZmCsfeAsynchCommand";
 }
 
 /**
@@ -30,7 +30,7 @@ function () {
 * Callback receives an argument that is either responseSoapDocBody or exceptionObject
 * -	_responseSoapDoc:LsSoapDoc is a resonse SOAP document
 **/
-LsCsfeAsynchCommand.prototype.addInvokeListener = 
+ZmCsfeAsynchCommand.prototype.addInvokeListener = 
 function (obj) {
 	this.invokeListeners.push(obj);
 }
@@ -40,7 +40,7 @@ function (obj) {
 * @param obj
 * use this method to unsubscribe obj from events of this command object
 **/
-LsCsfeAsynchCommand.prototype.removeInvokeListener = 
+ZmCsfeAsynchCommand.prototype.removeInvokeListener = 
 function (obj) {
 	var cnt = this.invokeListeners.length;
 	var ix = 0;
@@ -53,7 +53,7 @@ function (obj) {
 }
 
 
-LsCsfeAsynchCommand.prototype._fireInvokeEvent = 
+ZmCsfeAsynchCommand.prototype._fireInvokeEvent = 
 function (exceptionObject) {
 	var cnt = this.invokeListeners.length;
 	for(var ix = 0; ix < cnt; ix++) {
@@ -64,7 +64,7 @@ function (exceptionObject) {
 				if(this._responseSoapDoc) {
 					this.invokeListeners[ix].run(this._responseSoapDoc);					
 				} else {
-					this.invokeListeners[ix].run(new LsCsfeException("Csfe service error", LsException.UNKNOWN_ERROR, "LsCsfeAsynchCommand.prototype._fireInvokeEvent", "Service returned empty document"));				
+					this.invokeListeners[ix].run(new ZmCsfeException("Csfe service error", LsException.UNKNOWN_ERROR, "ZmCsfeAsynchCommand.prototype._fireInvokeEvent", "Service returned empty document"));				
 				}
 			}
 		}
@@ -78,7 +78,7 @@ function (exceptionObject) {
 response obejct contains the following properties
 text, xml, success, status
 **/
-LsCsfeAsynchCommand.prototype.rpcCallback = 
+ZmCsfeAsynchCommand.prototype.rpcCallback = 
 function (response) {
 	this._en = new Date();
 	DBG.println(LsDebug.DBG1, "<H4>ASYNCHRONOUS REQUEST RETURNED</H4>");
@@ -95,12 +95,12 @@ function (response) {
 			
 				var fault = LsSoapDoc.element2FaultObj(respDoc.getBody());
 				if (fault) {
-					newEx = new LsCsfeException("Csfe service error", fault.errorCode, "LsCsfeAsynchCommand.prototype.rpcCallback", fault.reason);
+					newEx = new ZmCsfeException("Csfe service error", fault.errorCode, "ZmCsfeAsynchCommand.prototype.rpcCallback", fault.reason);
 				}		
 			} 							
 		} catch (ex) {
-			newEx =	new LsCsfeException();
-			newEx.method = "LsCsfeAsynchCommand.prototype.rpcCallback";
+			newEx =	new ZmCsfeException();
+			newEx.method = "ZmCsfeAsynchCommand.prototype.rpcCallback";
 			newEx.detail = "Unknown problem ecnountered while communicating to server. ";
 			newEx.detail += "text: ";
 			newEx.detail += response.text; 
@@ -111,7 +111,7 @@ function (response) {
 			newEx.detail += "status: ";
 			newEx.detail += response.status;		
 			newEx.detail += "\n";
-			newEx.code = LsCsfeException.UNKNOWN_ERROR;
+			newEx.code = ZmCsfeException.UNKNOWN_ERROR;
 			newEx.msg = "Unknown Error";
 		}
 	} else {
@@ -127,10 +127,10 @@ function (response) {
 			if ((ex instanceof LsSoapException) || (ex instanceof LsException)) {
 				newEx =	ex;
 			} else {
-				newEx =	new LsCsfeException();
-				newEx.method = "LsCsfeAsynchCommand.prototype.rpcCallback";
+				newEx =	new ZmCsfeException();
+				newEx.method = "ZmCsfeAsynchCommand.prototype.rpcCallback";
 				newEx.detail = ex.toString();
-				newEx.code = LsCsfeException.UNKNOWN_ERROR;
+				newEx.code = ZmCsfeException.UNKNOWN_ERROR;
 				newEx.msg = "Unknown Error";
 			}
 		}
@@ -138,7 +138,7 @@ function (response) {
 			//check if we received a Fault message from server
 			var fault = LsSoapDoc.element2FaultObj(this._responseSoapDoc.getBody());
 			if (fault) {
-				newEx = new LsCsfeException("Csfe service error", fault.errorCode, "LsCsfeAsynchCommand.prototype.rpcCallback", fault.reason);
+				newEx = new ZmCsfeException("Csfe service error", fault.errorCode, "ZmCsfeAsynchCommand.prototype.rpcCallback", fault.reason);
 			}
 		} catch (ex) {
 			newEx = ex;
@@ -148,13 +148,13 @@ function (response) {
 	this._fireInvokeEvent(newEx);
 }
 
-LsCsfeAsynchCommand.prototype.invoke = 
+ZmCsfeAsynchCommand.prototype.invoke = 
 function (soapDoc, noAuthTokenRequired, serverUri, targetServer, useXml) {
 	if (!noAuthTokenRequired) {
-		var authToken = LsCsfeCommand.getAuthToken();
+		var authToken = ZmCsfeCommand.getAuthToken();
 		if (authToken == null)
-			throw new LsCsfeException("AuthToken required", LsCsfeException.NO_AUTH_TOKEN, "LsCsfeCommand.invoke");
-		var sessionId = LsCsfeCommand.getSessionId();
+			throw new ZmCsfeException("AuthToken required", ZmCsfeException.NO_AUTH_TOKEN, "ZmCsfeCommand.invoke");
+		var sessionId = ZmCsfeCommand.getSessionId();
 		var hdr = soapDoc.createHeaderElement();
 		var ctxt = soapDoc.set("context", null, hdr);
 		ctxt.setAttribute("xmlns", "urn:liquid");
@@ -173,24 +173,24 @@ function (soapDoc, noAuthTokenRequired, serverUri, targetServer, useXml) {
 	try {
 		DBG.println(LsDebug.DBG1, "<H4>ASYNCHRONOUS REQUEST</H4>");
 		DBG.printXML(LsDebug.DBG1, soapDoc.getXml());
-		var uri = serverUri || LsCsfeCommand.serverUri;
+		var uri = serverUri || ZmCsfeCommand.serverUri;
 		var requestStr = !LsEnv.isSafari 
 			? soapDoc.getXml() 
 			: soapDoc.getXml().replace("soap=", "xmlns:soap=");
 			
 		this._st = new Date();
-		LsRpc.invoke(requestStr, uri,  {"Content-Type": "application/soap+xml; charset=utf-8"}, new LsCallback(this, LsCsfeAsynchCommand.prototype.rpcCallback)); //asynchronous call returns null 
+		LsRpc.invoke(requestStr, uri,  {"Content-Type": "application/soap+xml; charset=utf-8"}, new LsCallback(this, ZmCsfeAsynchCommand.prototype.rpcCallback)); //asynchronous call returns null 
 	} catch (ex) {
 		//JavaScript error, network error or unknown error may happen
-		var newEx = new LsCsfeException();
-		newEx.method = "LsCsfeCommand.invoke";
+		var newEx = new ZmCsfeException();
+		newEx.method = "ZmCsfeCommand.invoke";
 		if (ex instanceof LsException) {
 			newEx.detail = ex.msg + ": " + ex.code + " (" + ex.method + ")";
 			newEx.msg = "Network Error";
 			newEx.code = ex.code;
 		} else {
 			newEx.detail = ex.toString();
-			newEx.code = LsCsfeException.UNKNOWN_ERROR;
+			newEx.code = ZmCsfeException.UNKNOWN_ERROR;
 			newEx.msg = "Unknown Error";
 		}
 		//notify listeners

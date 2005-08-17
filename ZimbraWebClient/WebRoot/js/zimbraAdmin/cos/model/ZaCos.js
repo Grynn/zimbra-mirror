@@ -83,7 +83,7 @@ function (by, val) {
 	var soapDoc = AjxSoapDoc.create("GetCosRequest", "urn:zimbraAdmin", null);
 	var el = soapDoc.set("cos", val);
 	el.setAttribute("by", by);
-	var resp = AjxCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	this.initFromDom(resp.firstChild);
 }
 
@@ -153,7 +153,7 @@ function(name, mods) {
 			attr.setAttribute("n", aname);
 		}	
 	}
-	var resp = AjxCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	this.initFromDom(resp.firstChild);
 }
 
@@ -166,7 +166,7 @@ function(newName) {
 	var soapDoc = AjxSoapDoc.create("RenameCosRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
 	soapDoc.set("newName", newName);	
-	var resp = AjxCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	this.initFromDom(resp.firstChild);
 }
 
@@ -178,7 +178,7 @@ ZaCos.prototype.remove =
 function() {
 	var soapDoc = AjxSoapDoc.create("DeleteCosRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
-	AjxCsfeCommand.invoke(soapDoc, null, null, null, true);	
+	ZmCsfeCommand.invoke(soapDoc, null, null, null, true);	
 }
 /**
 * public ZaCos.modify
@@ -207,7 +207,7 @@ function (mods) {
 			attr.setAttribute("n", aname);
 		}
 	}
-	var resp = AjxCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	//update itseld
 	this.initFromDom(resp.firstChild);
 		
@@ -245,7 +245,7 @@ function() {
 ZaCos.getAll =
 function(app) {
 	var soapDoc = AjxSoapDoc.create("GetAllCosRequest", "urn:zimbraAdmin", null);	
-	var resp = AjxCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	var list = new ZaItemList("cos", ZaCos, app);
 	list.loadFromDom(resp);
 	//list.sortByName();		

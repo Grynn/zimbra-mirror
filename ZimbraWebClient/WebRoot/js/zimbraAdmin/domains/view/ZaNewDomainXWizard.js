@@ -172,7 +172,7 @@ function () {
 **/
 ZaNewDomainXWizard.prototype.checkGALCallBack = 
 function (arg) {
-	if(arg instanceof AjxException || arg instanceof AjxCsfeException || arg instanceof AjxSoapException) {
+	if(arg instanceof AjxException || arg instanceof ZmCsfeException || arg instanceof AjxSoapException) {
 		this._containedObject[ZaDomain.A_GALTestResultCode] = arg.code;
 		this._containedObject[ZaDomain.A_GALTestMessage] = arg.detail;
 	} else {
@@ -281,7 +281,7 @@ function () {
 **/
 ZaNewDomainXWizard.prototype.checkAuthCallBack = 
 function (arg) {
-	if(arg instanceof AjxException || arg instanceof AjxCsfeException || arg instanceof AjxSoapException) {
+	if(arg instanceof AjxException || arg instanceof ZmCsfeException || arg instanceof AjxSoapException) {
 		this._containedObject[ZaDomain.A_AuthTestResultCode] = arg.code;
 		this._containedObject[ZaDomain.A_AuthTestMessage] = arg.detail;
 	} else {

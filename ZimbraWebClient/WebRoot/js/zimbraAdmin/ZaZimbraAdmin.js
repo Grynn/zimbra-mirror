@@ -57,8 +57,8 @@ function() {
 ZaZimbraAdmin.run =
 function(domain) {
 
-	AjxCsfeCommand.setServerUri(location.protocol+"//" + domain + ZaSettings.CSFE_SERVER_URI);
-	AjxCsfeCommand.setCookieName(ZaZimbraAdmin._COOKIE_NAME);
+	ZmCsfeCommand.setServerUri(location.protocol+"//" + domain + ZaSettings.CSFE_SERVER_URI);
+	ZmCsfeCommand.setCookieName(ZaZimbraAdmin._COOKIE_NAME);
 //	ZaAuthenticate.setAdmin(true);
 	
 	// Create the global app context
@@ -158,7 +158,7 @@ function(appName) {
 
 ZaZimbraAdmin.logOff =
 function() {
-	AjxCsfeCommand.clearAuthToken();
+	ZmCsfeCommand.clearAuthToken();
 	var locationStr = location.protocol + "//" + location.hostname + ((location.port == '80')? "" : ":" +location.port) + "/zimbraAdmin";
 	// not sure why IE doesn't allow this to process immediately, but since
 	// it does not, we'll set up a timed action.
