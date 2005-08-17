@@ -5,15 +5,15 @@
 # we just make assumptions about install layout.
 #
 
-LQROOT=`dirname $0`/..
-LQROOT=`(cd "${LQROOT}"; pwd)`
+ZMROOT=`dirname $0`/..
+ZMROOT=`(cd "${ZMROOT}"; pwd)`
 
-if [ -x "${LQROOT}/java/bin/java" ]; then
-    java="${LQROOT}/java/bin/java"
+if [ -x "${ZMROOT}/java/bin/java" ]; then
+    java="${ZMROOT}/java/bin/java"
 else
     java=java
 fi
 
-CP=${LQROOT}/lib/zimbrastore.jar:${LQROOT}/lib/commons-logging.jar:${LQROOT}/lib/commons-cli-2.0.jar:${LQROOT}/lib/dom4j-1.5.jar:${LQROOT}/lib/log4j-1.2.8.jar:${LQROOT}/lib/commons-httpclient-2.0.1.jar
-exec ${java} -client -Dzimbra.home="${LQROOT}" -cp "$CP" \
+CP=${ZMROOT}/lib/zimbrastore.jar:${ZMROOT}/lib/commons-logging.jar:${ZMROOT}/lib/commons-cli-2.0.jar:${ZMROOT}/lib/dom4j-1.5.jar:${ZMROOT}/lib/log4j-1.2.8.jar:${ZMROOT}/lib/commons-httpclient-2.0.1.jar
+exec ${java} -client -Dzimbra.home="${ZMROOT}" -cp "$CP" \
     com.zimbra.cs.localconfig.Main "$@"

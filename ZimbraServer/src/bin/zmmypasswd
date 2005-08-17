@@ -12,7 +12,7 @@ zmsetvars zimbra_home zimbra_mysql_user mysql_root_password
 #
 usage() {
     cat<<EOF
-Usage: $ lqmypasswd [ --root ] newpassword
+Usage: $ zmmypasswd [ --root ] newpassword
 
 By default, this script changes zimbra_myql_password.  If the --root
 option is specified, then mysql_root_passwd is changed.  In both cases,

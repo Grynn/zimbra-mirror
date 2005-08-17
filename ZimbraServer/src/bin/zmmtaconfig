@@ -691,9 +691,9 @@ sub controlProcess {
 	my ($section) = (@_);
 	my %scripts = (
 			"mta"	=>	"/opt/zimbra/bin/postfix",
-			"antispam"	=>	"/opt/zimbra/bin/lqamavisdctl",
-			"antivirus"	=>	"/opt/zimbra/bin/lqclamdctl",
-			"sasl"	=>	"/opt/zimbra/bin/lqsaslauthdctl",
+			"antispam"	=>	"/opt/zimbra/bin/zmamavisdctl",
+			"antivirus"	=>	"/opt/zimbra/bin/zmclamdctl",
+			"sasl"	=>	"/opt/zimbra/bin/zmsaslauthdctl",
 			);
 	my $action = ("restart", "stop", "start")[$stopstarts{$section}+1];
 	# Postfix, unique to the end.
