@@ -1,0 +1,42 @@
+#!/usr/bin/perl -w
+
+use strict;
+
+use lib '.';
+
+use LWP::UserAgent;
+
+use XmlElement;
+use XmlDoc;
+use Soap;
+
+my $ACCTNS = "urn:liquidAccount";
+my $MAILNS = "urn:liquidMail";
+
+my $url = "http://localhost:7070/service/soap/";
+
+my $SOAP = $Soap::Soap12;
+my $d = new XmlDoc;
+$d->start('AuthRequest', $ACCTNS);
+$d->add('account', undef, { by => "name"}, 'user1@liquidsys.com');
+$d->add('password', undef, undef, "mypassWord");
+$d->end();
+
+
+
+my $authResponse = $SOAP->invoke($url, $d->root());
+
+my $authToken = $authResponse->find_child('authToken')->content;
+
+print "authToken($authToken)\n";
+
+my $context = $SOAP->liquidContext($authToken);
+
+$d = new XmlDoc;
+$d->start('SearchRequest', $MAILNS);
+$d->add('query', undef, undef, "xml");
+$d->end();
+
+my $searchResponse = $SOAP->invoke($url, $d->root(), $context);
+
+print $searchResponse->to_string(),"\n";

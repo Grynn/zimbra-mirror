@@ -1,0 +1,4 @@
+// @copyright@
+
+function ExMsg() {
+}

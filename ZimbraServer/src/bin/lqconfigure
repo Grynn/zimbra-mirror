@@ -1,0 +1,85 @@
+#!/usr/bin/perl
+
+use strict;
+
+my $sfilename=$ARGV[0];
+my $dfilename=$ARGV[1];
+
+my $id = `whoami`;
+chomp $id;
+if ($id ne "liquid") {
+    print STDERR "Error: must be run as liquid user\n";
+	exit (1);
+}
+
+if ( $dfilename eq "" ) {
+	print STDERR "Usage: $0 <source> <dest>\n\n";
+	exit (1);
+}
+
+if ( ! -f $sfilename ) {
+	print STDERR "Error: $sfilename does not exist\n]n";
+	exit (1);
+}
+
+unlink ($dfilename);
+
+if ( -f $dfilename ) {
+	print STDERR "Error: Can't remove $dfilename\n\n";
+	exit (1);
+}
+
+# @@var@@ for lqlocalconfig variables
+# %%var%% for lqprov variables
+
+open (SOURCE, $sfilename) or die "Can't open $sfilename: $!";
+my @slines = <SOURCE>;
+close SOURCE;
+
+open (DEST, ">$dfilename");
+
+my $host = "";
+
+foreach my $sline (@slines) {
+	while ($sline =~ m/\@\@([^\@]+)\@\@/g) {
+		my $sr = $1;
+		my $rep=`/opt/liquid/bin/lqlocalconfig -q -m nokey $sr`;
+		chomp $rep;
+		$sline =~ s/\@\@$sr\@\@/$rep/g;
+	}
+
+	# We support parsing for the lqprov functions.
+	# Normal parsing uses gcf
+	# Functions supported:
+	#	comment(args) - replace with comment char "#" if true (or value exists)
+	#
+	# args supported:
+	#	SERVER:key - use command gs with liquid_server_hostname, get value of key
+	#
+	while ($sline =~ m/%%([^%]+)%%/g) {
+		my $sr = $1;
+		my $rep;
+		if ($sr =~ m/^comment/) {
+			my ($cmd, $key, $pattern) = ($sr =~ m/comment ([^:]+):(\S+) (.*)/);
+			if ($cmd eq "SERVER") {
+				if ($host eq "") {
+					$host=`/opt/liquid/bin/lqlocalconfig -q -m nokey liquid_server_hostname`;
+					chomp $host;
+				}
+				$rep = `/opt/liquid/bin/lqprov gs $host | sed -e 's/[^ ]* //' | grep $pattern`;
+				if ($rep ne "") {
+					$rep = "#";
+				}
+			}
+		} else {
+			$rep=`/opt/liquid/bin/lqprov gcf $sr | sed -e 's/[^ ]* //'`;
+			chomp $rep;
+		}
+		$sline =~ s/%%$sr%%/$rep/g;
+	}
+
+	print DEST $sline;
+}
+close DEST;
+
+

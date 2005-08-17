@@ -1,0 +1,23 @@
+#!/bin/bash
+
+progdir=`dirname $0`
+
+source `dirname $0`/lqshutil || exit 1
+
+lqsetvars \
+	liquid_home \
+	liquid_server_hostname 
+
+rewriteconfig() {
+    /opt/liquid/bin/lqmtaconfig mta > /dev/null 2>&1
+}
+
+if [ $1 = "start" -o $1 = "reload" ]; then
+	if [ x$2 = "x" ]; then
+		rewriteconfig
+	fi
+fi
+
+sudo ${liquid_home}/postfix/sbin/postalias /etc/aliases
+sudo ${liquid_home}/postfix/sbin/postfix $@
+

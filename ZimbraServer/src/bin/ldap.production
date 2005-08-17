@@ -1,0 +1,86 @@
+#!/bin/sh
+
+PID=""
+PIDFILE="/opt/liquid/openldap/var/run/slapd.pid"
+
+mkdir -p "/opt/liquid/openldap/var/run/"
+
+getpid()
+{
+	if [ -f $PIDFILE ]; then
+		PID=`cat $PIDFILE`
+	fi
+}
+
+checkrunning()
+{
+	getpid
+	if [ "x$PID" = "x" ]; then
+		RUNNING=0
+	else
+		kill -0 $PID
+		if [ $? != 0 ]; then
+			PID=""
+			RUNNING=0
+		else
+			RUNNING=1
+		fi
+	fi
+}
+
+start()
+{
+	checkrunning
+	if [ $RUNNING = 0 ]; then
+		# Run db_recover on startup, in case of power failure.
+		if [ -x /opt/liquid/sleepycat/bin/db_recover ]; then
+			/opt/liquid/sleepycat/bin/db_recover -h /opt/liquid/openldap/var/openldap-data -v
+		fi
+		/opt/liquid/openldap/libexec/slapd -4 -u liquid -h "ldap://:7389/" \
+			-f /opt/liquid/conf/slapd.conf
+		sleep 2
+		getpid
+		echo "Started slapd: pid $PID"
+	else
+		echo "slapd already running: pid $PID"
+		exit 1
+	fi
+}
+
+stop()
+{
+	checkrunning
+	if [ $RUNNING = 0 ]; then
+		echo "slapd not running"
+		exit 1
+	else
+		kill -TERM $PID
+	fi
+}
+
+status()
+{
+	checkrunning
+	if [ $RUNNING = 0 ]; then
+		exit 1
+	else
+		echo "slapd running pid: $PID"
+		exit 0
+	fi
+}
+
+case "$1" in 
+	start)
+		start
+		;;
+	stop)
+		stop
+		;;
+	status)
+		status
+		;;
+	*)
+		echo "Usage: $0 start|stop|status"
+		exit 1
+		;;
+esac

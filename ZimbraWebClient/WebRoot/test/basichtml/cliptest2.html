@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>clipTest.html</title>
+    <style type="text/css">
+    	.parent {border: solid 1px red; overflow:hidden; width: 100; height: 100;}
+    	.icon1 {width:1024; height:822; position: relative; top: 0; left: -100; background-image: url('cmap.gif');}
+     	.icon2 {width:1024; height:822; position: relative; top: 0; left: -200; background-image: url('cmap.gif');}
+     	.icon3 {width:1024; height:822; position: relative; top: 0; left: -300; background-image: url('cmap.gif');}
+    </style>
+  </head>  
+  <body>
+  	<div id=test1 style='position:absolute;left:10;top:10;'></div>
+  	<div id=test2 style='position:absolute;left:200;top:10;'></div>
+  	<div id=test3 style='position:absolute;left:400;top:10;'></div>
+  	
+  	<script language="JavaScript">
+  		var test1 = document.getElementById("test1");
+  		var test2 = document.getElementById("test2");
+  		var test3 = document.getElementById("test3");
+  		
+  		var t1Start = new Date().getTime();
+  		for (var i = 0; i < 1000; i++) {
+  			var pDiv = document.createElement("div");
+  			pDiv.className = "parent";
+  			var div = document.createElement("div");
+  			div.className = "icon" + (i % 3 + 1);
+  			pDiv.appendChild(div);
+  			test1.appendChild(pDiv);
+  		} 
+  		var t1End = new Date().getTime();
+/*  		
+   		var t2Start = new Date().getTime();
+  		var html = new Array();
+  		var j =0;
+  		for (var i = 0; i < 1000; i++) {
+  			html[j++] = ["<div class=parent><div class=icon", (i % 3 + 1), "></div></div>"].join("");
+  		}
+  		test2.innerHTML = html.join("");
+   		var t2End = new Date().getTime();
+ 
+ 
+    	var t3Start = new Date().getTime();
+  		var html = new Array();
+  		var j =0;
+  		for (var i = 0; i < 1000; i++) {
+  			html[j++] = "<img src=cmap.gif><BR>";
+  		}
+  		test3.innerHTML = html.join("");
+   		var t3End = new Date().getTime();
+ 
+  		alert("Dom add element: " + (t1End-t1Start) + " msec\n" +
+		  	  "Blast HTML: " + (t2End-t2Start) + " msec\n" +
+  			  "Blast image tags: " + (t3End-t3Start) + " msec\n"
+  		);
+ */		
+  	</script>
+   </body>
+</html>
+
+<!-- t r b l -->

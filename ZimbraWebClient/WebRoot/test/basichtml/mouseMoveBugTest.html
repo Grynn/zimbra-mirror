@@ -1,0 +1,57 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>filterPanel.html</title>
+    <style type="text/css">
+      <!--
+      @import url(http://localhost:7070/liquid/js/liquidMail/config/style/lm.css);
+      -->
+    </style>   
+  </head>  
+  <body>
+    <div id="div1" style="width:300px; position:absolute; top:0; left:0;z-index:300; background-color:orange">Div 1
+      <div id="enclosing1" style="width:100%;position:absolute; top:0; left:0; z-index:300; background-color:white">Enclosing1
+	<div id="div2" style="z-index:auto; background-color:green">Div 2</div>
+	<div id="div3" style="z-index:auto; background-color:red">Div 3</div>
+      </div>
+    </div>
+    <div id="div4" style="width:300px;position:absolute; top:0; left:300;z-index:300; background-color:pink">Div 4
+      <div id="enclosing2" style="width:100%;position:absolute; top:0; left:0; z-index:300; background-color:white">Enclosing2
+	<div id="div5" style="z-index:auto; background-color:yellow">Div 5</div>
+	<div id="div6" style="z-index:auto; background-color:blue">Div 6</div>
+      </div>
+    </div>
+    <div id=log style="width:100%; position:absolute; top:100px; left: 0px;border:1px solid black; height: 500px;overflow:scroll">Log</div>
+  </body>
+  <script>
+    function myonmouseover (event) {
+	  var ev = event? event: window.event;
+	  target = ev.target? ev.target: ev.srcElement;
+	  var log = document.getElementById("log");
+	  log.innerHTML = log.innerHTML + "<br>" + target.id + "&nbsp;" + (ev.currentTarget? ev.currentTarget.id : "null") + "&nbsp;" + (ev.relatedTarget? ev.relatedTarget.id : "null");
+	  if (ev.stopPropagation != null) {
+		  ev.stopPropagation();
+	  } else {
+		  // IE only..
+		  ev.returnValue = false; 
+		  ev.cancelBubble = true;
+	  }
+	  return false;
+
+    }
+	document.body.onmousemove = myonmouseover;
+	document.getElementById("enclosing1").onmousemove = myonmouseover;
+	document.getElementById("enclosing2").onmousemove = myonmouseover;
+				  document.getElementById("log").onmousemove = function (ev) {
+					  ev = ev? ev: window.event;
+					  if (ev.stopPropagation != null){
+						  ev.stopPropagation();
+					  } else {
+						  ev.returnValue = false;
+						  ev.cancelBubble = true;
+					  }
+					  return false;
+				  };
+  </script>
+</html>

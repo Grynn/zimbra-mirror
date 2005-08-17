@@ -1,0 +1,37 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>OverFlowHackTest</title>
+    <style>
+      a:link {color: white}
+    </style>
+  </head>
+
+  <body style="border: 0px; padding:0px; margin:0px">
+    <h1>OverFlowHackTest</h1>
+
+
+    <div id=abs style="position:absolute; background-color:orange; top:55; left:0; width:500px; height:300px;z-index:10;overflow:scroll">Absolutely positioned Div - overflow set to scroll</div>
+    <div style="width:300px; height:300px">Relatively positioned div</div>
+    <div id=rel style="border:1px solid black; width:500px; height:300px; overflow:scroll">Relatively positioned div</div>
+    <div  style="position:absolute; top:85; left:10; width:100px; height:30px; z-index:300">
+      <input type="text" value="Input 1"/>
+    </div>
+    <div style="position:absolute; top:385; left:10; width:100px; height:30px; z-index:300">
+      <input type="text" value="Input 2"/>
+    </div>
+    <div style="position:absolute; top:55; left: 510; width:400px ;height:300px; z-index:300; background-color:grey; color:white;">
+      <a href="javascript:switchOverflow(document.getElementById('abs'),'hidden')">Switch overflow to hidden on Absolutely positioned div</a><br>
+      <a href="javascript:switchOverflow(document.getElementById('abs'),'scroll')">Switch overflow to scroll on absolutely positioned div</a><br><br>
+      <a href="javascript:switchOverflow(document.getElementById('rel'),'hidden')">Switch overflow to hidden on relatively positioned div</a><br>
+      <a href="javascript:switchOverflow(document.getElementById('rel'),'scroll')">Switch overflow to scroll on relatively positioned div</a><br>
+    </div>
+  </body>
+  
+  <script>
+    function switchOverflow (elem, set){
+    elem.style.overflow=set;
+    }
+    
+  </script>
+</html>

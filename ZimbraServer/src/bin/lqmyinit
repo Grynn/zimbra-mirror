@@ -1,0 +1,98 @@
+#!/bin/bash
+
+source `dirname $0`/lqshutil || exit 1
+lqsetvars \
+    liquid_home \
+    liquid_index_directory \
+    liquid_store_directory \
+    liquid_log_directory \
+    liquid_db_directory \
+    mysql_mycnf \
+    mysql_data_directory \
+    mysql_directory
+
+sql_root_pw=$1
+
+#
+# Sanity checks
+#
+lqassert -x ${liquid_home}/bin/lqmycnf
+lqassert -x ${liquid_home}/bin/mysqladmin
+lqassert -x ${liquid_home}/bin/mysql
+lqassert -x ${liquid_home}/bin/lqlocalconfig
+lqassert -x ${liquid_home}/bin/lqmypasswd
+lqassert -x ${mysql_directory}/scripts/mysql_install_db
+lqassert -r ${liquid_db_directory}/db.sql
+lqassert -r ${liquid_db_directory}/versions-init.sql
+
+#
+# Create necessary directories
+#
+echo '*' Creating required directories
+mkdir -p ${mysql_data_directory}
+mkdir -p ${liquid_index_directory}
+mkdir -p ${liquid_store_directory}
+mkdir -p ${liquid_log_directory}
+
+#
+# Generate a mysql config file
+#
+echo '*' Generating mysql config ${mysql_mycnf}
+rm -f ${mysql_mycnf}
+${liquid_home}/bin/lqmycnf > ${mysql_mycnf}
+
+#
+# Create database
+#
+echo '*' Creating database in ${mysql_data_directory}
+(cd ${mysql_directory}; ./scripts/mysql_install_db \
+    --defaults-file=${mysql_mycnf}) \
+    >> ${liquid_log_directory}/lqmyinit.log 2>&1
+
+#
+# Start mysql server
+#
+echo '*' Starting mysql server
+${liquid_home}/bin/mysql.server start \
+    >> ${liquid_log_directory}/lqmyinit.log 2>&1
+sleep 1
+
+#
+# Load liquid sql files
+#
+echo '*' Loading schema ${liquid_db_directory}/db.sql 
+${liquid_home}/bin/mysql -u root --password= < \
+    ${liquid_db_directory}/db.sql
+
+echo '*' Loading version from ${liquid_db_directory}/versions-init.sql
+${liquid_home}/bin/mysql -u root --password= < \
+    ${liquid_db_directory}/versions-init.sql
+
+#
+# Generate passwords for mysql into local config
+#
+if [ x$sql_root_pw = "x" ]; then
+	echo '*' Setting random password for mysql root user in liquid local config
+	${liquid_home}/bin/lqlocalconfig -r -f -e mysql_root_password
+
+	echo '*' Setting random password for mysql liquid user in liquid local config
+	${liquid_home}/bin/lqlocalconfig -r -f -e liquid_mysql_password
+else
+	echo '*' Setting password for mysql root user in liquid local config
+	${liquid_home}/bin/lqlocalconfig -f -e mysql_root_password=$sql_root_pw
+	echo '*' Setting password for mysql liquid user in liquid local config
+	${liquid_home}/bin/lqlocalconfig -f -e liquid_mysql_password=$sql_root_pw
+fi
+
+#
+# Change mysql root user password, but first read back the passwords 
+# liquid local config - they was generated above.  Note that we can not
+# use 'lqmypasswd --root' here because of bootstrapping problems - at
+# this stage we know that the root password is empty.
+#
+lqsetvars mysql_root_password liquid_mysql_password
+echo '*' Changing mysql root user password
+${liquid_home}/bin/mysqladmin -u root --password= password ${mysql_root_password}
+
+echo '*' Changing mysql liquid user password
+${liquid_home}/bin/lqmypasswd ${liquid_mysql_password}

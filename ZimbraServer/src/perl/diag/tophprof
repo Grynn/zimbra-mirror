@@ -1,0 +1,108 @@
+#!/usr/bin/perl -w
+
+use strict;
+
+#
+# Remove the header block
+#
+while (<>) {
+    if (/^--------$/) {
+        my $ignore = <>;
+        last;
+    }
+}
+
+
+
+my %traces = ();
+my %threads = ();
+
+my $currentTraceNumber  = '<notfound>';
+my $currentTraceStack = "";
+my $inTrace = 0;
+
+sub newblock() {
+    if ($inTrace) {
+        $traces{$currentTraceNumber} = $currentTraceStack;
+
+        $inTrace = 0;
+        $currentTraceNumber  = '<notfound>';
+        $currentTraceStack = "";
+    }
+}
+
+while (<>) {
+    
+    if (/^THREAD /) {
+        newblock();
+	chomp;
+	my $t = $_;
+	if ($t =~ /^THREAD START .*, id = (\d+)/) {
+	    $threads{$1} = $t;
+	} elsif ($t =~ /^THREAD END \(id = (\d+)/) {
+	    delete($threads{$1});
+	}
+    } elsif (/^TRACE /) {
+        newblock();
+        
+        chomp;
+        s/^TRACE //g;
+        s/:$//g;
+        $currentTraceNumber = $_;
+        $inTrace = 1;
+    } elsif ($inTrace && /^\t/) {
+        # not a newblock();
+
+        $currentTraceStack .= $_;
+    } elsif (/^HEAP DUMP BEGIN/) {
+        newblock();
+        while (<>) {
+            if (/HEAP DUMP END/) {
+                last;
+            }
+	}
+    } elsif (/^SITES BEGIN/) {
+        newblock();
+
+        print;                      # display the SITES BEGIN line
+        my $line = <>; print $line; # and the two after it
+        $line = <>; print $line;    #
+
+        my $SHOW_DEPTH = 100;
+        my $i = 0;
+        
+        while (<>) {
+            if (/SITES END/) {
+                last;
+            }
+            if ($i++ < $SHOW_DEPTH) {
+                print;
+                chomp;
+                my $tnum = (split(/\s+/, $_))[8];
+                my $val = $traces{$tnum};
+		if (defined($val)) {
+		    print $val;
+		} else {
+		    print "    no trace available\n";
+		}
+            }
+        }
+    } else {
+        newblock();
+        print;
+    }
+
+}
+
+my @threadIDs = sort(keys %threads);
+my $numThreads = scalar(@threadIDs);
+if ($numThreads > 0) {
+    print "\n\n$numThreads ACTIVE THREADS\n\n";
+    foreach my $tid (@threadIDs) {
+	my $line = $threads{$tid};
+	if ($line =~ /^THREAD START \((.*)\)/) {
+	    $line = $1;
+	}
+	print "$line\n";
+    }
+}

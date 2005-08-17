@@ -1,0 +1,19 @@
+#!/bin/bash
+#
+# We cannot rely on any config parameters when running
+# lqlocalconfig for obvious chicken and egg reasons.  So
+# we just make assumptions about install layout.
+#
+
+LQROOT=`dirname $0`/..
+LQROOT=`(cd "${LQROOT}"; pwd)`
+
+if [ -x "${LQROOT}/java/bin/java" ]; then
+    java="${LQROOT}/java/bin/java"
+else
+    java=java
+fi
+
+CP=${LQROOT}/lib/liquidstore.jar:${LQROOT}/lib/commons-logging.jar:${LQROOT}/lib/commons-cli-2.0.jar:${LQROOT}/lib/dom4j-1.5.jar:${LQROOT}/lib/log4j-1.2.8.jar:${LQROOT}/lib/commons-httpclient-2.0.1.jar
+exec ${java} -client -Dliquid.home="${LQROOT}" -cp "$CP" \
+    com.liquidsys.coco.localconfig.Main "$@"

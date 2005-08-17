@@ -1,0 +1,223 @@
+/**
+* Creates a label.
+* @constructor
+* @class
+* This class represents a label, which consists of an image and/or some text. It is used
+* both as a concrete class and as the base class for buttons. The label's components are
+* managed within a table. The label can be enabled or disabled, which are reflected in 
+* its display. A disabled label looks greyed out.
+*
+* @author Ross Dargahi
+* @param parent		the parent widget
+* @param style		the label style (a bitsum of constants)
+* @param className	a CSS class
+* @param posStyle	positioning style
+*/
+function DwtLabel(parent, style, className, posStyle) {
+
+	if (arguments.length == 0) return;
+	className = className ? className : "DwtLabel";
+	DwtComposite.call(this, parent, className, posStyle);
+
+	this._style = style ? style : (DwtLabel.IMAGE_LEFT | DwtLabel.ALIGN_CENTER);
+
+	this._createTable();
+	this.setCursor("default");
+}
+
+DwtLabel.prototype = new DwtComposite;
+DwtLabel.prototype.constructor = DwtLabel;
+
+// display styles
+DwtLabel.IMAGE_LEFT = 1;
+DwtLabel.IMAGE_RIGHT = 2;
+DwtLabel.ALIGN_LEFT = 4;
+DwtLabel.ALIGN_RIGHT = 8;
+DwtLabel.ALIGN_CENTER = 16;
+DwtLabel._LAST_STYLE = 16;
+
+// Public methods
+
+DwtLabel.prototype.toString = 
+function() {
+	return "DwtLabel";
+}
+
+DwtLabel.prototype._createTable =
+function() {
+	this._table = this.getDocument().createElement("table");
+	this._table.border = 0;
+	
+	// Left is the default alignment. Note that if we do an explicit align left, Firefox freaks out
+	if (this._style & DwtLabel.ALIGN_RIGHT)
+		this._table.align = "right";
+	else if (!(this._style & DwtLabel.ALIGN_LEFT)) {
+		this._table.align = "center";
+		this._table.width = "100%";
+	}
+		
+	this._row = this._table.insertRow(0);
+	this.getHtmlElement().appendChild(this._table);
+};
+
+/**
+* Sets the enabled/disabled state of the label. A disabled label may have a different
+* image, and greyed out text.
+*
+* @param enabled	whether to enable the label
+*/
+DwtLabel.prototype.setEnabled =
+function(enabled) {
+	if (enabled != this._enabled) {
+		DwtControl.prototype.setEnabled.call(this, enabled);
+		if (enabled) {
+			this._setImage(this._imageInfo);
+			if (this._textCell != null)
+				this._textCell.className = "";
+		} else {
+			if (this._disabledImageInfo)
+				this._setImage(this._disabledImageInfo);
+			if (this._textCell)
+				this._textCell.className = "DisabledText";
+		}
+	}
+}
+
+/**
+* Returns the current Image Info.
+*/
+DwtLabel.prototype.getImage =
+function() {
+	return this._imageInfo;
+}
+
+/**
+* Sets the main (enabled) image. If the label is currently enabled, its image is updated.
+*/
+DwtLabel.prototype.setImage =
+function(imageInfo) {
+	this._imageInfo = imageInfo;
+	if (this._enabled || (!this._enabled && this._disabledImageInfo))
+		this._setImage(imageInfo);
+}
+
+/**
+* Returns the disabled image. If the label is currently disabled, its image is updated.
+*
+* @param imageSrc	the disabled image
+*/
+DwtLabel.prototype.setDisabledImage =
+function(imageInfo) {
+	this._disabledImageInfo = imageInfo;
+	if (!this._enabled && imageInfo)
+		this._setImage(imageInfo);
+}
+
+/**
+* Returns the label text.
+*/
+DwtLabel.prototype.getText =
+function() {
+	return (this._text != null) ? this._text.data : null;
+}
+
+/**
+* Sets the label text, and manages its placement and display.
+*
+* @param text	the new label text
+*/
+DwtLabel.prototype.setText =
+function(text) {
+	if (text == null) {
+		if (this._textCell != null) {
+			this._row.deleteCell(this._textCell.cellIndex);
+		}
+	} else {
+		if (this._text == null) {
+		  this._text = this.getDocument().createTextNode(text);
+		}
+		this._text.data = text;
+		var idx;
+		if (this._textCell == null) {
+			if (this._style & DwtLabel.IMAGE_RIGHT) {
+				idx = 0;
+			} else {
+				idx = (this._imageCell != null) ? 1 : 0;
+			}
+			this._textCell = this._row.insertCell(idx);
+				
+			if (this._enabled)
+				this._textCell.className = "Text";
+			else
+				this._textCell.className = "DisabledText";
+				
+			this._doAlign();
+			this._textCell.noWrap = true;
+			this._textCell.appendChild(this._text);
+		}
+	}
+}
+
+DwtLabel.prototype.setAlign =
+function(alignStyle) {
+	this._style = alignStyle;
+	
+	// reset dom since alignment style may have changed
+	if (this._textCell) {
+		//this._row.deleteCell(this._textCell.cellIndex);
+		this._row.removeChild(this._textCell);
+		this._textCell = null;
+		this.setText(this._text.data)
+	}
+	if (this._imageCell) {
+		//this._row.deleteCell(this._imageCell.cellIndex);
+		this._row.removeChild(this._imageCell);
+		this._imageCell = null;
+		this._setImage(this._imageInfo);
+	}
+}
+
+// Private methods
+
+// Set the label's image, and manage its placement.
+DwtLabel.prototype._setImage =
+function(imageInfo) {
+	if (!imageInfo) {
+		if (this._imageCell) {
+			this._row.deleteCell(this._imageCell.cellIndex);
+		}
+	} else {
+		var idx;
+		if (!this._imageCell) {
+			if (this._style & DwtLabel.IMAGE_LEFT) {
+				idx = 0;
+			} else {
+				idx = this._textCell ? 1 : 0;
+			}
+			this._imageCell = this._row.insertCell(idx);
+			this._doAlign();
+		}
+		LsImg.setImage(this._imageCell, imageInfo);
+	}	
+}
+
+// Handle the alignment style.
+DwtLabel.prototype._doAlign =
+function() {
+	if (this._style & DwtLabel.ALIGN_CENTER) {
+		if (this._imageCell != null && this._textCell != null) {
+			// XXX: this doesnt seem right (no pun intended)
+			if (this._style & DwtLabel.IMAGE_LEFT) {
+				this._imageCell.align = "right";
+				this._textCell.align = "left";
+			} else {
+				this._imageCell.align = "left";
+				this._textCell.align = "right";
+			}
+		} else if (this._imageCell != null) {
+			this._imageCell.align = "center";
+		} else if (this._textCell != null) {
+			this._textCell.align = "center";
+		}
+	}
+}

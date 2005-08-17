@@ -1,0 +1,251 @@
+#!/usr/bin/perl
+
+use strict;
+use Getopt::Long;
+use English;
+
+# Options
+my $user = "liquid";
+my $password = "liquid";
+my $database = "liquid";
+my $mySqlCommand = "mysql";
+my $verbose = 0;
+my $usage = 0;
+
+if (-f "/opt/liquid/bin/lqlocalconfig") {
+    $password = `lqlocalconfig -s -m nokey liquid_mysql_password`;
+    chomp $password;
+    $user = `lqlocalconfig -m nokey liquid_mysql_user`;
+    chomp $user;
+}
+
+GetOptions("verbose" => \$verbose, "user=s" => \$user, "password=s" => \$password,
+    "database=s" => \$database, "mysql=s" => \$mySqlCommand, "help" => \$usage);
+
+if ($usage) {
+    usage();
+    exit(0);
+}
+
+# Descriptions of status variables for verbose mode
+my %descriptions = (
+    "Connections" =>
+        "The number of connection attempts (successful or not) to the MySQL server.",
+    "Handler_read_key" =>
+        "The number of requests to read a row based on a key. If this is high,\n" .
+        "it is a good indication that your queries and tables are properly indexed.",
+    "Handler_read_rnd" =>
+        "The number of requests to read a row based on a fixed position. This will\n" .
+        "be high if you are doing a lot of queries that require sorting of the result.\n" .
+        "You probably have a lot of queries that require MySQL to scan whole tables\n" .
+        "or you have joins that don't use keys properly.",
+    "Handler_read_rnd_next" =>
+        "The number of requests to read the next row in the data file. This will\n" .
+        "be high if you are doing a lot of table scans. Generally this suggests that\n" .
+        "your tables are not properly indexed or that your queries are not written to\n" .
+        "take advantage of the indexes you have.",
+    "Handler_read_first" =>
+        "The number of times the first entry was read from an index. If this is high,\n" .
+        "it suggests that the server is doing a lot of full index scans; for example,\n" .
+        "SELECT col1 FROM foo, assuming that col1 is indexed.",
+    "Key_read_requests" =>
+        "The number of requests to read a key block from the cache.",
+    "Key_reads" =>
+        "The number of physical reads of a key block from disk. If Key_reads is big,\n" .
+        "then your key_buffer_size value is probably too small.",
+    "Key_write_requests" =>
+        "The number of requests to write a key block to the cache.",
+    "Key_writes" =>
+        "The number of physical writes of a key block to disk.",
+    "Max_used_connections" =>
+        "The maximum number of connections that have been in use simultaneously since\n" .
+        "the server started.",
+    "Select_full_join" =>
+        "The number of joins that do not use indexes. If this value is not 0, you should\n" .
+        "carefully check the indexes of your tables.",
+    "Select_full_range_join" =>
+        "The number of joins that used a range search on a reference table.",
+    "Select_range_check" =>
+        "The number of joins without keys that check for key usage after each row.\n" .
+        "(If this is not 0, you should carefully check the indexes of your tables.)",
+    "Select_scan" =>
+        "The number of joins that did a full scan of the first table.",
+    "Sort_merge_passes" =>
+        "The number of merge passes the sort algorithm has had to do. If this value\n" .
+        "is large, you should consider increasing the value of the sort_buffer_size\n" .
+        "system variable.",
+    "Sort_range" =>
+        "The number of sorts that were done with ranges.",
+    "Sort_rows" =>
+        "The number of sorted rows.",
+    "Sort_scan" =>
+        "The number of sorts that were done by scanning the table.",
+    "Threads_cached" =>
+        "The number of threads in the thread cache.",
+    "Threads_connected" =>
+        "The number of currently open connections.",
+    "Threads_created" =>
+        "The number of threads created to handle connections. If Threads_created is\n" .
+        "big, you may want to increase the thread_cache_size value."
+);
+
+# Run SHOW STATUS and format output
+
+my @results = runSql("SHOW STATUS");
+my %status;
+
+foreach (@results) {
+    my ($var, $value) = split("\t");
+    $status{$var} = $value;
+}
+
+printf("MySQL uptime: %0.2d minutes\n\n", $status{"Uptime"} / 60);
+print("Connections and Threads:\n");
+print("-----------------------\n");
+printVar("Connections");
+printVar("Max_used_connections");
+printVar("Threads_cached");
+printVar("Threads_connected");
+printVar("Threads_created");
+printVar("Threads_running");
+print("\n");
+
+print("Operations by type:\n");
+print("------------------\n");
+printVar("Com_select");
+printVar("Com_insert");
+printVar("Com_insert_select");
+printVar("Com_update");
+printVar("Com_delete");
+printVar("Com_delete_multi");
+print("\n");
+
+print("Temp table activity:\n");
+print("-------------------\n");
+printVar("Created_tmp_disk_tables");
+printVar("Created_tmp_files");
+print("\n");
+
+print("Row-level statistics:\n");
+print("--------------------\n");
+printVar("Handler_read_key");
+printVar("Handler_read_first");
+printVar("Handler_read_rnd");
+printVar("Handler_read_rnd_next");
+printVar("Handler_write");
+printVar("Handler_update");
+printVar("Handler_delete");
+printVar("Handler_commit");
+printVar("Handler_rollback");
+print("\n");
+
+print("Key Buffer:\n");
+print("----------\n");
+printVar("Key_read_requests");
+printVar("Key_reads");
+printVar("Key_write_requests");
+printVar("Key_writes");
+print("\n");
+
+print("Handles:\n");
+print("-------\n");
+printVar("Open_files");
+printVar("Open_tables");
+print("\n");
+
+print("Table scans:\n");
+print("-----------\n");
+printVar("Select_full_join");
+printVar("Select_full_range_join");
+printVar("Select_range_check");
+printVar("Select_scan");
+print("\n");
+
+print("Sorting:\n");
+print("-------\n");
+printVar("Sort_merge_passes");
+printVar("Sort_range");
+printVar("Sort_rows");
+printVar("Sort_scan");
+print("\n");
+
+print("Locking:\n");
+print("-------\n");
+printVar("Table_locks_immediate");
+printVar("Table_locks_waited");
+print("\n");
+
+# Print the interesting part of InnoDB status
+print("InnoDB Status:\n");
+@results = runSql("SHOW INNODB STATUS");
+@results = split(/\\n/, $results[0]);
+my $printLine = 0;
+foreach my $line (@results) {
+    if ($line =~ /BUFFER POOL/) {
+        $printLine = 1;
+    }
+    if ($printLine) {
+        print("$line\n");
+    }
+    if ($line =~ /inserts\/s/) {
+        $printLine = 0;
+    }
+}
+
+exit(0);
+
+############################
+
+sub printVar($) {
+    my ($var) = @_;
+    print("$var = $status{$var}\n");
+    if ($verbose && defined($descriptions{$var})) {
+        foreach my $line (split("\n", $descriptions{$var})) {
+            print("\t$line\n");
+        }
+    }
+}
+
+sub runSql($) {
+    my ($script) = @_;
+
+    # Write the last script to a text file for debugging
+    # open(LASTSCRIPT, ">lastScript.sql") || die "Could not open lastScript.sql";
+    # print(LASTSCRIPT $script);
+    # close(LASTSCRIPT);
+
+    # Run the mysql command and redirect output to a temp file
+    my $tempFile = "mysql.out";
+    my $command = "$mySqlCommand --user=$user --password=$password " .
+        "--database=$database --batch --skip-column-names";
+    open(MYSQL, "| $command > $tempFile") || die "Unable to run $command";
+    print(MYSQL $script);
+    close(MYSQL);
+
+    if ($? != 0) {
+        die "Error while running '$command'.";
+    }
+
+    # Process output
+    open(OUTPUT, $tempFile) || die "Could not open $tempFile";
+    my @output;
+    while (<OUTPUT>) {
+        s/\s+$//;
+        push(@output, $_);
+    }
+
+    unlink($tempFile);
+    return @output;
+}
+
+sub usage() {
+    print <<USAGE_EOF
+Usage: $PROGRAM_NAME
+  -h, --help           Displays this usage message
+  -u, --user=name      MySQL user name (default: "liquid")
+  -p, --password=name  MySQL password (default: "liquid")
+  -d, --database=name  MySQL database (default: "liquid")
+  -m, --mysql=command  MySQL client command name (default: "mysql")
+  -v, --verbose        Displays variable descriptions
+USAGE_EOF
+}

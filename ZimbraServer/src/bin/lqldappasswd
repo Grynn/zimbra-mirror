@@ -1,0 +1,98 @@
+#!/bin/bash
+#
+# Change password for liquid_ldap_password, and optionally for
+# ldap_root_password.  Updates both the Liquid local config file and
+# ldap configs, and reruns liquid.ldif
+#
+source `dirname $0`/lqshutil || exit 1
+lqsetvars \
+    liquid_home \
+    liquid_ldap_userdn
+
+#
+# Usage.
+#
+usage() {
+    cat<<EOF
+Usage: $ lqldappasswd [ --root ] newpassword
+
+By default, this script changes liquid_ldap_password.  If the --root
+option is specified, then ldap_root_passwd is changed.  In both cases,
+slapd.conf is modified and liquid.ldif reloaded.
+
+EOF
+}
+
+#
+# Parse command line
+#
+if [ "x$1" = "x--root" ]; then
+    password_key="ldap_root_password"
+    shift # lose --root option
+else
+    password_key="liquid_ldap_password"
+fi
+
+if [ $# -ne 1 ]; then
+    usage
+    exit 1
+fi
+newpassword="$1"
+
+#
+# Change the password in the config file.
+# TODO: notify app server that the password has changed,
+# for now you will have to restart tomcat
+#
+echo "Updating local config"
+if ! ${liquid_home}/bin/lqlocalconfig -f -e ${password_key}=${newpassword}; then
+    echo Error: command failed: ${liquid_home}/bin/lqlocalconfig -e ${password_key}='#'
+    exit 1
+fi
+
+#
+# Stop ldap
+#
+echo "Stopping ldap"
+${liquid_home}/bin/ldap stop
+
+#
+# Get the SHA password.  We have modified one of these above.
+#
+lqsetvars ldap_root_password liquid_ldap_password
+root_sha=`${liquid_home}/openldap/sbin/slappasswd -s ${ldap_root_password}`
+liquid_sha=`${liquid_home}/openldap/sbin/slappasswd -s ${liquid_ldap_password}`
+config_dir="${liquid_home}/openldap/etc/openldap"
+
+#
+# Update slapd.conf
+#
+echo "Updating ldap configuration"
+sed -e "s|^rootpw.*|rootpw ${root_sha}|" \
+	${config_dir}/slapd.conf > /tmp/slapd.conf.$$
+mv -f /tmp/slapd.conf.$$ ${config_dir}/slapd.conf
+
+#
+# Start ldap
+#
+echo "Starting ldap"
+${liquid_home}/bin/ldap start > /dev/null 2>&1
+
+#
+# Update liquid.ldif
+#
+echo "Updating liquid.ldif"
+sed -e "s|^userPassword.*|userPassword: ${liquid_sha}|" \
+	${config_dir}/liquid.ldif > /tmp/liquid.ldif.$$
+mv -f /tmp/liquid.ldif.$$ ${config_dir}/liquid.ldif
+
+#
+# Rerun liquid.ldif
+#
+echo "Running ldapmodify"
+ldapmodify -c -w ${ldap_root_password} -D ${liquid_ldap_userdn} \
+	-x -f /opt/liquid/openldap/etc/openldap/liquid.ldif > /dev/null 2>&1
+echo "Password change complete."
+echo ""
+echo "You may need to restart tomcat, if it is running."
+echo ""

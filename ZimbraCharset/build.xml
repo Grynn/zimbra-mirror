@@ -1,0 +1,25 @@
+<project name="UTF7" default="jar">
+
+  <path id="source.path">
+	    <pathelement location="src/java"/>
+  </path>
+
+  <target name="compile">
+    <javac destdir="build/classes" debug="true" source="1.4" target="1.4">
+        <src refid="source.path"/>
+    </javac>
+  </target>
+  
+  <target name="jar" depends="compile">
+    <mkdir dir="build/classes/META-INF/services"/>
+    <copy todir="build/classes/META-INF/services" file="conf/java.nio.charset.spi.CharsetProvider"/>
+    <jar destfile="build/liquidcharset.jar"
+          basedir="build/classes" includes="**/*UTF7*.class **/java.nio.charset.spi.CharsetProvider"/>
+    <delete dir="build/classes/META-INF"/>
+  </target>
+
+  <target name="clean">
+    <delete dir="${build.dir}"/>
+  </target>
+
+</project>

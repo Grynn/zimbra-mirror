@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>defang</title>
+  </head>
+  <script src="http://localhost:7070/liquid/js/liquid/core/LsEnv.js"></script>
+  <script src="http://localhost:7070/liquid/js/liquid/util/LsUtil.js"></script>
+  <script src="http://localhost:7070/liquid/js/liquid/debug/LsGlobal.js"></script>
+  <script src="http://localhost:7070/liquid/js/liquid/debug/LsEncode.js"></script>
+  <script src="http://localhost:7070/liquid/js/liquid/debug/LsLog.js"></script>
+  <script src="http://localhost:7070/liquid/js/liquid/util/defangFilter.js"></script>
+    <script language="javascript">
+function load () {
+	var ye = document.getElementById('yahoo')
+		var htmlStr = null;
+	if (ye.Document) {
+		htmlStr = ye.Document.documentElement.innerHTML;
+	} else {
+		htmlStr = ye.contentDocument.documentElement.innerHTML;
+	}
+	var filter = new DefangFilter(true);
+	var body = filter.parse(htmlStr);
+	var res = document.getElementById('result');
+	var doc = null;
+	if (res.Document){
+		doc = res.Document;
+	} else {
+		doc = res.contentDocument;
+	}
+	doc.open();
+	doc.write(body);
+	doc.close();
+    
+}
+LsLog.showConsole();
+//window.onload = load;
+function resetImgs(show) {
+	LsLog.info("Reset START");
+	var iframe = document.getElementById('result');
+	var idoc = iframe.Document? iframe.Document: iframe.contentWindow.document;
+	var imgs = idoc.getElementsByTagName("img");
+	LsLog.info("  length =" + imgs.length);
+	for (var i = 0; i < imgs.length; i++) {
+		if (imgs[i].id) {
+			if (show) {
+				imgs[i].src = imgs[i].id;
+			} else {
+				imgs[i].src = void 0;
+			}
+		}
+	}
+}
+
+    </script>
+
+  <body>
+    <h1>defang</h1>
+      <!--iframe id="yahoo" style="width:500px; height: 400px" src="http://localhost:7070/liquid/test/basichtml/malicious.html"></iframe-->
+      <iframe id="yahoo" style="width:500px; height: 400px" src="http://localhost:7070/liquid/test/basichtml/yahoo.html"></iframe>
+      <iframe id="ieDefang" security="restricted" style="display:none; width:500px; height: 400px" src="about:blank"></iframe>
+      <iframe id="result" style="width:500px; height: 400px" src="about:blank"></iframe>
+      
+    <hr>
+      <a href="javascript:load()"> reload</a><br><br>
+	<a href="javascript:resetImgs(true)"> Reset Images in new window</a><br><br>
+      <a href="javascript:resetImgs(false)"> Remove Images in new Win</a>
+  </body>
+</html>

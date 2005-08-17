@@ -1,0 +1,139 @@
+<html>
+<head>
+<title>memory leak test 1</title>
+<style type="text/css">
+.pdiv { 
+	overflow:auto; 
+	border:solid black thin; 
+	width:500; 
+	height: 350 
+}
+</style>
+<script language="javascript">
+
+function contact()
+{	
+	// add fake properties to this object
+	this.first = "parag";
+	this.last = "shah";
+	this.address = "555 Somewhere street";
+	this.city = "sunnyvale";
+	this.state = "ca";
+	this.zipcode = "94087";
+	this.email = "pshah@liquidsys.com";
+	this.phone = "555-555-5555";
+	this.work = "Liquid Systems";
+	this.workPhone = "408-973-0500";
+	this.workAddress = "1054 S. De Anza Blvd.";
+	this.workCity = "San Jose";
+	this.workState = "CA";
+}
+
+// deleting the property from this object or nulling out its value 
+// does not seem to have any effect on memory leak w/ FF.
+contact.prototype.dtor = function() {
+	// "remove" all properties from this object.
+	/*
+	delete this.first;
+	delete this.last;
+	delete this.address;
+	delete this.city;
+	delete this.state;
+	delete this.zipcode;
+	delete this.email;
+	delete this.phone;
+	delete this.work;
+	delete this.workPhone;
+	delete this.workAddress;
+	delete this.workCity;
+	delete this.workState;
+	*/
+	this.first = null;
+	this.last = null;
+	this.address = null;
+	this.city = null;
+	this.state = null;
+	this.zipcode = null;
+	this.email = null;
+	this.phone = null;
+	this.work = null;
+	this.workPhone = null;
+	this.workAddress = null;
+	this.workCity = null;
+	this.workState = null;
+}
+
+// possible list of x number of contacts
+function foobar() 
+{
+	this.list = new Array(200);
+	for (var i=0; i<this.list.length; i++)
+		this.list[i] = new contact();
+}
+
+var counter = 0;
+
+function doIt() 
+{
+	var pDiv = document.getElementById("one");
+	if (pDiv) {
+		var len = pDiv.childNodes.length;
+		for (var j=0; j<len; j++) {
+			if (pDiv.childNodes[0]._item) {
+				pDiv.childNodes[0]._item.dtor();
+				pDiv.childNodes[0]._item = null;
+			}
+			pDiv.removeChild(pDiv.childNodes[0]);
+		}
+		document.body.removeChild(pDiv);
+	}
+	pDiv = document.createElement("div");
+	pDiv.className = "pdiv";
+	pDiv.id = "one";
+	document.body.appendChild(pDiv);
+	//pDiv.innerHTML = null;
+	// try calling removeChild instead
+	/*
+	var len = pDiv.childNodes.length;
+	for (var j=0; j<len; j++) {
+		if (pDiv.childNodes[0]._item) {
+			pDiv.childNodes[0]._item.dtor();
+			pDiv.childNodes[0]._item = null;
+		}
+		pDiv.removeChild(pDiv.childNodes[0]);
+	}
+	*/
+
+	for (var i=0; i<25; i++) {
+		cDiv = document.createElement("div");
+		cDiv.innerHTML = "<b>Hello world!</b> " + counter + "<br>";
+		cDiv._item = new contact(); // XXX: memory leak here!
+		pDiv.appendChild(cDiv);
+	}
+	++counter;
+}
+
+function startTimer()
+{
+	setInterval("doIt()", 500);
+}
+
+</script>
+</head>
+<body>
+
+<p><a href="javascript:;" onclick="startTimer();">Start Timer</a> or <a href="javascript:;" onclick="doIt();">do it manually</a></p>
+<p><u><b>Notes:</b></u> This is a test to see which browser (IE or FF) causes memory leaks by setting a custom object (contact) to a DOM object's (DIV) properties.</p>
+<p>It appears that FF leaks in this instance while IE remains constant in its memory usage. Even with all the memory cleanup code in place:
+<ul>
+	<li>removing properties from the custom object with delete</li>
+	<li>nulling out properties of custom object</li>
+	<li>removing child div by calling removeChild on parent div</li>
+	<li>setting parent div's innerHTML to "" or null</li>
+	<li>adding/removing parent div by calling removeChild and appendChild on document.body (even w/ above code cleanup)</li>
+</ul>
+FF still leaks.
+</p>
+
+</body>
+</html>

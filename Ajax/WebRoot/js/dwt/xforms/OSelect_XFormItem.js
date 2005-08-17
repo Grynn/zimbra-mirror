@@ -1,0 +1,550 @@
+//
+//	OSelect class -- lightning fast SELECT type widget
+//
+function OSelect1_XFormItem(){ this._enabled = true; }
+XFormItemFactory.createItemType("_OSELECT1_", "oselect1", OSelect1_XFormItem, Select1_XFormItem);
+
+// override the default SELECT type
+//XFormItemFactory.registerItemType("_SELECT1_", "select1", OSelect1_XFormItem)
+OSelect1_XFormItem.prototype.focusable = false;
+OSelect1_XFormItem.prototype.cssClass = "oselect";
+OSelect1_XFormItem.prototype.multiple = false;
+OSelect1_XFormItem.prototype.writeElementDiv = false;
+OSelect1_XFormItem.prototype.width = "auto";
+
+//TODO: get showing check working for the normal SELECT, requires:
+//		* separate notion of hilited row (for mouseover) and selected row(s)
+//		* teach select1 that more than one value may be selected (same as select)
+//		* convert OSELECT_CHECK to just use showCheck?
+//		* does &radic; work everywhere?  Use an image?
+OSelect1_XFormItem.prototype.showCheck = false;
+OSelect1_XFormItem.prototype.checkHTML = "&radic;";
+
+
+OSelect1_XFormItem.prototype.updateElement = function (newValue) {
+	// hack: if this item can display multiple values and there's a comma in the value
+	//		assume it's a list of values
+	if (this.getMultiple() && newValue != null && newValue.indexOf(",") > -1) {
+		newValue = newValue.split(",");
+		for (var i = 0; i < newValue.length; i++) {
+			newValue[i] = this.getChoiceLabel(newValue[i]);
+		}
+	} else {
+		newValue = this.getChoiceLabel(newValue);
+	}
+	if (newValue == null) newValue = "";
+	
+	var el = this.getDisplayElement();
+	if (el) el.innerHTML = newValue;
+}
+
+
+OSelect1_XFormItem.prototype.getShowCheck = function () {
+	return this.cacheInheritedProperty("showCheck", "$showCheck");
+}
+
+OSelect1_XFormItem.prototype.getCheckHTML = function () {
+	return this.cacheInheritedProperty("checkHTML", "$checkHTML");
+}
+
+
+OSelect1_XFormItem.prototype.getMenuElementId = function () {
+	return "___OSELECT_MENU___";
+}
+OSelect1_XFormItem.prototype.getMenuElement = function () {
+	var id = this.getMenuElementId();
+	var el = this.getElement(id);
+	if (el == null) {
+		el = this.createElement(id, null, "div", "MENU CONTENTS");
+	}
+	return el;
+}
+
+
+OSelect1_XFormItem.prototype.showMenu = function() {
+	if(!this._enabled)
+		return;
+
+	var menu = this.getMenuElement();
+	if (menu == null) return; //DBG.println(this,".showMenu() -- couldn't get menu element.");
+
+	menu.className = this.getMenuCssClass();
+	menu.innerHTML = this.getChoicesHTML();
+
+	// move the menu underneath the button
+	var button = this.getElement();
+	button.appendChild(menu);
+	var bounds = Dwt.getBounds(button);
+	
+	// need to adjust offsets for absolutely positioned ancestors
+	var parentNode = button.parentNode;
+	while (parentNode != null) {
+		if (parentNode.style && parentNode.style.position == "absolute") {
+			bounds.y -= parseInt(parentNode.style.top);
+			bounds.x -= parseInt(parentNode.style.left);
+		}
+		parentNode = parentNode.parentNode;
+	}
+
+	//DBG.println(bounds.x + ":" + bounds.y+ ":" + bounds.width+ ":" + bounds.height);
+	menu.style.left = bounds.x;
+	menu.style.top = bounds.y + bounds.height - 1;
+	
+	var value = this.getInstanceValue();
+	if (this.$getDisplayValue) {
+		value = this.$getDisplayValue(value);
+	}
+	var selectedItemNum = this.getChoiceNum(value);
+	this.__currentHiliteItem = selectedItemNum;
+	this.hiliteChoice(selectedItemNum);
+
+	menu.style.zIndex = 1000000;
+	menu.style.display = "block";
+
+	if (this.$hideListener == null) {
+		this.$hideListener = new LsListener(this, this.hideMenu);
+	}
+	
+	if (this.$outsideMouseDownListener == null) {
+		this.$outsideMouseDownListener = new LsListener(this, this.onOutsideMouseDown);
+	}
+
+	LsCore.addListener(window, "onmouseup", this.$hideListener);
+	LsCore.addListener(document.body, "onmousedown", this.$outsideMouseDownListener);
+	
+}
+
+OSelect1_XFormItem.prototype.hideMenu = function () {
+	// hide the menu on a timer so we don't have to deal with wierd selection bugs
+	setTimeout(this.getFormGlobalRef()+".getElement('" + this.getMenuElementId() + "').style.display = 'none'", 10);
+	LsCore.removeListener(window, "onmouseup", this.$hideListener);
+}
+
+OSelect1_XFormItem.prototype.onOutsideMouseDown = function (ev) {
+	// hide the menu on a timer so we don't have to deal with wierd selection bugs
+	ev = ev || window.event;
+	var found = false;
+    if (ev) {
+		// figure out if we are over the menu that is up
+		var htmlEl = DwtUiEvent.getTarget(ev);
+		if(htmlEl && htmlEl.attributes && htmlEl.attributes.length) {
+			var cnt = htmlEl.attributes.length;
+			for(var i = 0; i < cnt; i++) {
+				if(htmlEl.attributes[i].name == "itemnum") {
+					this.onChoiceClick(htmlEl.attributes[i].value, ev);
+					found = true;
+					break;
+				}
+			}
+		}
+	}
+	LsCore.removeListener(document.body, "onmousedown", this.$outsideMouseDownListener);	
+	if(!found)
+		this.hideMenu();
+		
+	return true;
+}
+
+// TAKE DIRECTLY FROM DWT_SELECT
+OSelect1_XFormItem.prototype.onChoiceOver = function (itemNum, event) {
+	if (this.__currentHiliteItem != null) this.dehiliteChoice(this.__currentHiliteItem);
+	this.hiliteChoice(itemNum);
+	this.__currentHiliteItem = itemNum;
+}
+OSelect1_XFormItem.prototype.onChoiceOut = function (itemNum, event) {
+	if (this.__currentHiliteItem != null) this.dehiliteChoice(this.__currentHiliteItem);
+	this.__currentHiliteItem = null;
+}
+OSelect1_XFormItem.prototype.onChoiceClick = function (itemNum, event) {
+	this.choiceSelected(itemNum, false, event);
+}
+
+OSelect1_XFormItem.prototype.onChoiceDoubleClick = function (itemNum, event) {
+	this.choiceSelected(itemNum, true, event);
+}
+
+
+OSelect1_XFormItem.prototype.choiceSelected = function (itemNum, clearOldValues, event) {
+	this.onChoiceOut();
+	this.hideMenu();
+	var value = this.getNormalizedValues()[itemNum];
+	this.setValue(value, clearOldValues, event);
+}
+
+
+OSelect1_XFormItem.prototype.setValue = function (newValue, clearOldValues, event) {
+	var method = this.getElementChangedMethod();
+	method.call(this, newValue, this.getInstanceValue(), event);
+}
+
+OSelect1_XFormItem.prototype.hiliteChoice = function (itemNum) {
+	this.setChoiceCssClass(itemNum, this.getChoiceSelectedCssClass());
+	if (this.getShowCheck() == true) {
+		var els = this.getChoiceElements(itemNum);
+		if (els) els[0].innerHTML = this.getCheckHTML();
+	}
+}
+
+OSelect1_XFormItem.prototype.showArrowOver = function () {
+	if(!this._enabled)
+		return;
+		
+	LsImg.setImage(this.getArrowElement(), DwtImg.SELECT_PULL_DOWN_ENABLED);
+}
+
+OSelect1_XFormItem.prototype.showArrowOut = function () {
+	if(!this._enabled)
+		return;
+		
+	LsImg.setImage(this.getArrowElement(), DwtImg.SELECT_PULL_DOWN);
+}
+
+OSelect1_XFormItem.prototype.showArrowDown = function () {
+	if(!this._enabled)
+		return;
+		
+	LsImg.setImage(this.getArrowElement(), DwtImg.SELECT_PULL_DOWN_DEPRESSED);
+}
+
+OSelect1_XFormItem.prototype.dehiliteChoice = function(itemNum) {
+	this.setChoiceCssClass(itemNum, this.getChoiceCssClass());
+	if (this.getShowCheck() == true) {
+		var els = this.getChoiceElements(itemNum);
+		if (els) els[0].innerHTML = "&nbsp;";
+	}
+}
+
+
+OSelect1_XFormItem.prototype.clearAllHilites = function () {
+	for (var i = 0; i < this._normalizedValues.length; i++) {
+		this.dehiliteChoice(i);
+	}
+}
+
+
+
+OSelect1_XFormItem.prototype.setChoiceCssClass = function (itemNum, cssClass) {
+	var els = this.getChoiceElements(itemNum);
+	if (els) {
+		if (this.getShowCheck()) {
+			els[0].className = cssClass + "_check";
+			els[1].className = cssClass;
+		} else {
+			els[0].className = cssClass;
+		}
+	}
+}
+
+OSelect1_XFormItem.prototype.getArrowElement = function () {
+	return this.getForm().getElement(this.getId() + "_arrow_button");
+}
+
+OSelect1_XFormItem.prototype.getDisplayElement = function () {
+	return this.getElement(this.getId() + "_display");
+}
+
+
+OSelect1_XFormItem.prototype.getItemNumFromEvent = function (event) {
+	var target = event.target || event.src;
+	while (target) {
+		if (target.id) {
+			var itemNum = parseInt(target.id);
+			if (isNaN(itemNum)) return -1;
+			return itemNum;
+		}
+		target = target.parentNode;
+	}
+	return -1;
+}
+
+OSelect1_XFormItem.prototype.getChoiceElements = function (itemNum) {
+	if (itemNum == null || itemNum == -1) return null;
+	try {
+		return this.getForm().getElement(this.getId() + "_menu_table").rows[itemNum].getElementsByTagName("td");
+	} catch (e) {
+		return null;
+	}
+}
+
+
+
+
+
+OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput, updateScript, indent) {
+	var id = this.getId();
+	if (this.getWidth() == "auto") {
+		var element = this.getElement("temp");
+		var element = this.createElement("temp", null, "div", "MENU CONTENTS");
+		element.style.left = -1000;
+		element.style.top = -1000;
+		element.className = this.getMenuCssClass();
+		element.innerHTML = this.getChoicesHTML();
+		this._width = element.offsetWidth;
+		element.innerHTML = "";
+	}
+
+	HTMLoutput.append(indent,
+		"<div id=", id, this.getCssString(),
+			" onclick=\"", this.getFormGlobalRef(), ".getItemById('",this.getId(),"').showMenu(this, event)\"",
+			" onselectstart=\"return false\"",
+			">\r", indent,
+
+			"  <table ", this.getTableCssString(), ">\r", indent,
+				"  <tr><td width=100%><div id=", id, "_display class=", this.getDisplayCssClass(), ">VALUE</div></td>\r", indent,
+					"    <td>", this.getArrowButtonHTML(),"</td>\r", indent,
+				"  </tr>\r", indent,
+			"  </table>\r", indent,
+		"</div>\r"
+	);
+}
+
+OSelect1_XFormItem.prototype.getArrowButtonHTML = function () {
+	var ref = this.getFormGlobalRef() + ".getItemById('"+ this.getId()+ "')";
+	return LsBuffer.concat("<div id=", this.getId(), "_arrow_button",
+	 " onmouseover=\"", ref, ".showArrowOver();\"",
+ 	 " onmouseout=\"", ref, ".showArrowOut();\"",
+ 	 " onmousedown=\"", ref, ".showArrowDown();\"", 	 
+ 	 ">", LsImg.getImageHtml(DwtImg.SELECT_PULL_DOWN), "</div>");
+//	return LsImg.getImageHtml(DwtImg.SELECT_PULL_DOWN, "", LsBuffer.concat("id=",this.getId(), "_arrow_button"));
+}
+
+OSelect1_XFormItem.prototype.getTableCssClass = function () {
+	return this.cssClass + "_table";
+}
+OSelect1_XFormItem.prototype.getDisplayCssClass = function () {
+	return this.cssClass + "_display";
+}
+
+OSelect1_XFormItem.prototype.getMenuCssClass = function () {
+	return this.cssClass + "_menu";
+}
+OSelect1_XFormItem.prototype.getChoiceTableCssClass = function () {
+	return this.cssClass + "_choice_table";
+}
+OSelect1_XFormItem.prototype.getChoiceCssClass = function () {
+	return this.cssClass + "_choice";
+}
+OSelect1_XFormItem.prototype.getChoiceSelectedCssClass = function () {
+	return this.cssClass + "_choice_selected";
+}
+
+
+
+OSelect1_XFormItem.prototype.outputChoicesHTMLStart = function(html, indent) {
+	html.append(indent, "<table id=", this.getId(),"_menu_table class=", this.getChoiceTableCssClass(), ">\r");
+}
+OSelect1_XFormItem.prototype.outputChoicesHTMLEnd = function(html, indent) {
+	html.append(indent, "</table>\r");
+}
+
+OSelect1_XFormItem.prototype.getChoiceHTML = function (itemNum, value, label, cssClass, indent) {
+	var ref = this.getFormGlobalRef() + ".getItemById('"+ this.getId()+ "')";
+	var checkTdHtml = "";
+	if (this.showCheck == true) {
+		checkTdHtml = "<td width=10 class=" + cssClass + "_check></td>";
+	}
+	return LsBuffer.concat(indent,
+		"<tr>", checkTdHtml, "<td width='*' class=", cssClass, 
+			" onmouseover=\"",ref, ".onChoiceOver(", itemNum,", event||window.event)\"",
+			" onmouseout=\"",ref, ".onChoiceOut(", itemNum,", event||window.event)\"",
+			" onclick=\"",ref, ".onChoiceClick(", itemNum,", event||window.event)\"",
+			" itemnum = '", itemNum, "'",
+		">",
+				label,
+		"</td></tr>\r"
+	);
+}
+
+
+// set up how disabling works for this item type
+OSelect1_XFormItem.prototype.setElementEnabled = function(enabled) {
+	this._enabled = enabled;
+	var table = this.getForm().getElement(this.getId()).getElementsByTagName("table")[0];
+	if(enabled) {
+		this.getDisplayElement().className = this.getDisplayCssClass();
+		LsImg.setImage(this.getArrowElement(), DwtImg.SELECT_PULL_DOWN_ENABLED);
+		this.getForm().getElement(this.getId()).className = this.cssClass;
+		table.className = this.getTableCssClass();
+	} else {
+		this.getDisplayElement().className = this.getDisplayCssClass() + "_disabled";
+		LsImg.setImage(this.getArrowElement(), DwtImg.SELECT_PULL_DOWN_DISABLED);
+		this.getForm().getElement(this.getId()).className = this.cssClass + "_disabled";
+		table.className = this.getTableCssClass()+"_disabled";
+	}
+}
+
+//
+//	OSelect class -- lightning fast SELECT type widget
+//
+function OSelect_XFormItem() {}
+XFormItemFactory.createItemType("_OSELECT_", "oselect", OSelect_XFormItem, OSelect1_XFormItem);
+// override the default SELECT type
+//XFormItemFactory.registerItemType("_SELECT_", "select", OSelect_XFormItem)
+
+OSelect_XFormItem.prototype.focusable = false;
+OSelect_XFormItem.prototype.multiple = true;
+OSelect_XFormItem.prototype.writeElementDiv = true;
+OSelect_XFormItem.prototype.overflow = "auto";
+OSelect_XFormItem.prototype.cssStyle = "border:2px inset gray;";
+OSelect_XFormItem.prototype.showCheck = false;
+
+OSelect_XFormItem.prototype.outputHTML = function(html) {
+	var it = this.getChoicesHTML();
+	html.append(it);
+}
+
+OSelect_XFormItem.prototype.outputChoicesHTMLStart = function(html, indent) {
+	html.append(indent, "<table id=", this.getId(),"_menu_table width=100% cellspacing=0 cellpadding=0>\r");
+}
+OSelect_XFormItem.prototype.outputChoicesHTMLEnd = function(html, indent) {
+	html.append(indent, "</table>\r");
+}
+
+
+OSelect_XFormItem.prototype.getMenuElementId = function () {
+	return this.getId();
+}
+
+OSelect_XFormItem.prototype.updateElement = function (values) {
+	var element = this.getElement();
+	element.innerHTML = this.getChoicesHTML();
+
+	if (values == null) return;	
+	if (typeof values == "string") values = values.split(",");
+	for (var i = 0; i < values.length; i++) {
+		var itemNum = this.getChoiceNum(values[i]);
+		if (itemNum != -1) this.hiliteChoice(itemNum);
+	}
+}
+
+OSelect_XFormItem.prototype.onChoiceOver = function (itemNum) {}
+OSelect_XFormItem.prototype.onChoiceOut = function (itemNum) {}
+
+OSelect_XFormItem.prototype.onChoiceClick = function (itemNum, event) {
+	event = event || window.event;
+	var clearOthers = true;
+	var includeIntermediates = false;
+	//if (event.ctrlKey){
+		clearOthers = false;
+	//} else if (event.shiftKey) {
+	if (event.shiftKey) {
+		clearOthers = false;
+		includeIntermediates = true;
+	}
+	this.choiceSelected(itemNum, clearOthers, includeIntermediates, event);
+};
+
+OSelect_XFormItem.prototype.choiceSelected = function (itemNum, clearOldValues, includeIntermediates, event) {
+	if (includeIntermediates){
+		this._selectionCursor = itemNum;
+		if (this._selectionAnchor == null) {
+			this._selectionAnchor = itemNum;
+		}
+	} else {
+		this._selectionAnchor = itemNum;
+		this._selectionCursor = itemNum;
+	}
+
+	var value = this.getNormalizedValues()[itemNum];
+	this.setValue(value, clearOldValues, includeIntermediates, event);
+}
+
+OSelect_XFormItem.prototype.setValue = function (newValue, clearOldValues, includeIntermediates, event) {
+	if (clearOldValues) {
+		var oldValues = [newValue];
+
+	} else {
+		var oldValues;
+		if (includeIntermediates) {
+			oldValues = [];
+			var vals = this.getNormalizedValues();
+			var start = this._selectionCursor;
+			var dist = this._selectionAnchor - this._selectionCursor;
+			if (dist < 0 ) {
+				dist = this._selectionCursor - this._selectionAnchor;
+				start = this._selectionAnchor;
+			}
+			for (var i = start; i <= start + dist; ++i) {
+				oldValues.push(vals[i]);
+			}
+		} else {
+			oldValues = this.getInstanceValue();
+			if (typeof oldValues == "string") {
+				if (oldValues == "") 	oldValues = [];
+				else					oldValues = oldValues.split(",");
+			}
+			
+			var found = false;
+			for (var i = 0; i < oldValues.length; i++) {
+				if (oldValues[i] == newValue) {
+					found = true;
+					break;
+				}
+			}
+			
+			if (found) {
+				oldValues.splice(i, 1);
+			} else {
+				oldValues.push(newValue);
+			}
+		}
+
+		if (oldValues.length == 1 && oldValues[0] == "") oldValues = [];
+		
+		// if we have a modelItem which is a LIST type
+		//	convert the output to the propert outputType
+		var modelItem = this.getModelItem();
+		if (modelItem && modelItem.getOutputType) {
+			if (modelItem.getOutputType() == _STRING_) {
+				oldValues = oldValues.join(modelItem.getItemDelimiter());
+			}
+		} else {
+			// otherwise assume we should convert it to a comma-separated string
+			oldValues = oldValues.join(",");
+		}
+	}
+	this.getForm().itemChanged(this, oldValues, event);
+}
+
+
+
+
+
+
+function OSelect_Check_XFormItem() {}
+XFormItemFactory.createItemType("_OSELECT_CHECK_", "oselect_check", OSelect_Check_XFormItem, OSelect_XFormItem)
+
+OSelect_Check_XFormItem.prototype.getChoiceHTML = function (itemNum, value, label, cssClass, indent) {
+	var ref = this.getFormGlobalRef() + ".getItemById('"+ this.getId()+ "')";
+	return LsBuffer.concat(indent,
+		"<tr><td class=", cssClass, 
+			" onmouseover=\"",ref, ".onChoiceOver(", itemNum,", event||window.event)\"",
+			" onmouseout=\"",ref, ".onChoiceOut(", itemNum,", event||window.event)\"",
+			" onclick=\"",ref, ".onChoiceClick(", itemNum,", event||window.event)\"",
+			" ondblclick=\"",ref, ".onChoiceDoubleClick(", itemNum,", event||window.event)\"",
+		">",
+		"<table cellspacing=0 cellpadding=0><tr><td><input type=checkbox></td><td>",
+				label,
+		"</td></tr></table></tr>\r"
+	);
+}
+
+OSelect_Check_XFormItem.prototype.hiliteChoice = function (itemNum) {
+	var el = this.getChoiceElements(itemNum)[0];
+	el.className = this.getChoiceSelectedCssClass();
+	
+	var checks = el.getElementsByTagName("input");
+	if (checks) {
+		checks[0].checked = true;
+	}
+}
+
+OSelect_Check_XFormItem.prototype.dehiliteChoice = function(itemNum) {
+	var el = this.getChoiceElements(itemNum)[0];
+	el.className = this.getChoiceCssClass();
+
+	var checks = el.getElementsByTagName("input");
+	if (checks) {
+		checks[0].checked = false;
+	}
+}

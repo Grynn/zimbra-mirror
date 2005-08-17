@@ -1,0 +1,185 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "windows.h"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#define APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "#include ""windows.h""\r\n"
+    "#undef APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDC_LIQUID_NOTIFIER_WND DIALOGEX 0, 0, 235, 50
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_BORDER | WS_SYSMENU
+EXSTYLE WS_EX_TOPMOST | WS_EX_TOOLWINDOW
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "This is the thread summary that hopefully wraps when the summary is too long.  Is this long enough to test this feature?  There seems to be an option to automagically ellipse the end of the string if it is too long.  Lets see if the fucker works",
+                    IDC_SUMMARY,38,20,189,25
+    CONTROL         "",IDC_BAR,"Static",SS_GRAYRECT,0,0,235,5
+    CONTROL         134,IDC_BMP_MAIL,"Static",SS_BITMAP,7,9,21,19
+    CONTROL         "Sam Khavari <skhavari@hotmail.com>",IDC_FROM,"Static",
+                    SS_LEFTNOWORDWRAP | WS_GROUP,34,9,157,10,
+                    WS_EX_TRANSPARENT
+    CONTROL         132,IDC_FLAG,"Static",SS_BITMAP,6,32,11,10
+    CONTROL         133,IDC_DELETE,"Static",SS_BITMAP,20,32,11,10
+END
+
+IDD_TRAY_DLG DIALOGEX 0, 0, 235, 50
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_BORDER | WS_SYSMENU
+EXSTYLE WS_EX_TOPMOST | WS_EX_TOOLWINDOW
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+END
+
+IDD_DIALOG_OPTIONS DIALOGEX 0, 0, 264, 155
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | 
+    WS_CAPTION
+EXSTYLE WS_EX_WINDOWEDGE
+CAPTION "Liquid Notifier Options"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,151,134,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,207,134,50,14
+    GROUPBOX        " Target Server ",IDC_STATIC,7,7,250,67
+    LTEXT           "Liquid Server",IDC_STATIC,23,26,42,8
+    LTEXT           "Liquid Port",IDC_STATIC,23,46,34,8
+    EDITTEXT        IDC_EDIT_SERVER,73,23,156,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_PORT,73,43,44,14,ES_AUTOHSCROLL
+    GROUPBOX        " Other Options ",IDC_STATIC,7,78,250,45
+    CONTROL         "Use Liquid Mail for mailto: links",IDC_CHECK_MAILTO,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,24,98,112,10
+    PUSHBUTTON      "Reset Password",IDC_BUTTON_RESET_PWD,172,95,63,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BITMAP_FLAG         BITMAP                  "res/flag.bmp"
+IDB_BITMAP_DELETE       BITMAP                  "res/delete.bmp"
+IDB_BITMAP_MAIL         BITMAP                  "res/mail.bmp"
+IDB_BITMAP_BANNER       BITMAP                  "res/liqbanner.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICON_MAIL           ICON                    "res/mail.ico"
+IDI_ICON_MAIL_NEW       ICON                    "res/icon_mai.ico"
+IDI_ICON_MAIL_ERROR     ICON                    "res/ico00001.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU_POPUP MENU 
+BEGIN
+    POPUP "What"
+    BEGIN
+        MENUITEM "View Mailbox",                ID_POPUP_VIEWMAILBOX
+        MENUITEM "Show Again",                  ID_POPUP_SHOW_AGAIN
+        MENUITEM "Options",                     ID_POPUP_OPTIONS
+        MENUITEM SEPARATOR
+        MENUITEM "Exit",                        ID_POPUP_QUIT
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_DIALOG_OPTIONS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 257
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 148
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_SAMKHAVARI          "Sam Khavari"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

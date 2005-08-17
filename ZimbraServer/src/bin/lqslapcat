@@ -1,0 +1,25 @@
+#!/bin/sh
+
+if [ x`whoami` != xliquid ]; then
+	echo Error: must be run as liquid user
+	exit 1
+fi
+
+source `dirname $0`/lqshutil || exit 1
+lqsetvars \
+	liquid_home 
+
+if [ ! -L ${liquid_home}/openldap ]; then
+	# No ldap - exit gracefully
+	exit 0
+fi
+
+DEST=$1
+
+if [ x$DEST = "x" ]; then
+	DEST="${liquid_home}/backup/ldap"
+fi
+
+mkdir -p $DEST
+
+${liquid_home}/openldap/sbin/slapcat > $DEST/ldap.bak

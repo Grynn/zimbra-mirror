@@ -1,0 +1,37 @@
+#!/bin/bash
+#
+# Init file for liquid mail
+#
+# chkconfig: 345 99 01
+# description: Liquid mail service
+#
+
+
+command()
+{
+	su - liquid -c "lqcontrol $1"
+}
+
+case "$1" in
+	restart)
+		command shutdown
+		command startup
+		RETVAL=$?
+		;;
+	start)
+		command startup
+		RETVAL=$?
+		;;
+	stop)
+		command shutdown
+		RETVAL=$?
+		;;
+	reload|status)
+		command $1
+		RETVAL=$?
+		;;
+	*)
+		echo $"Usage: $0 {start|stop|restart|reload|status}"
+		RETVAL=1
+esac
+exit $RETVAL

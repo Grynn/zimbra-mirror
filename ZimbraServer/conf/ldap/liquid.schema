@@ -1,0 +1,2264 @@
+#
+# Liquid Systems Schema
+#
+# our root OID (http://www.iana.org/assignments/enterprise-numbers)
+#
+#  1.3.6.1.4.1.19348
+#  1.3.6.1.4.1.19348.2      LDAP elements
+#  1.3.6.1.4.1.19348.2.1    Attribute Types
+#  1.3.6.1.4.1.19348.2.2    Object Classes
+
+objectIdentifier LiquidRoot 1.3.6.1.4.1.19348
+objectIdentifier LiquidLDAP LiquidRoot:2
+
+#################################################################
+# attribute OIDs
+#################################################################
+
+# attributes
+objectIdentifier LiquidAttrType LiquidLDAP:1
+objectIdentifier LiquidReserved2 LiquidLDAP:2
+objectIdentifier LiquidReserved3 LiquidLDAP:3
+
+#
+# define new attribute OIDS here:
+#
+# 1) always add the new attribute at the end of the list, adding one to the highest
+#    number in use. No need to sort by name here, as you can sort by name in the object class
+#    itself.
+#
+# 2) when defining new attributes, try and use descriptive names. The name should *always* start with liquid*.
+#    When defining multiple-attributes use a standard prefix for all related attributes. For example, if you 
+#    are defining multiple attrs all related to the blob store, then prefix them all with liquidBlob*.
+#
+# 3) never change/re-use numbers after the product released.
+#
+# 4) prefix attrs that are user-settable prefs with liquidPref*.
+
+objectIdentifier liquidId LiquidAttrType:1
+objectIdentifier liquidAccountStatus LiquidAttrType:2
+objectIdentifier liquidMailAddress LiquidAttrType:3
+objectIdentifier liquidMailHost LiquidAttrType:4
+#objectIdentifier liquidAttr LiquidAttrType:8
+objectIdentifier liquidNotes LiquidAttrType:9
+objectIdentifier liquidMember LiquidAttrType:10
+objectIdentifier liquidMemberOf LiquidAttrType:11
+objectIdentifier liquidMailForwardingAddress LiquidAttrType:12
+objectIdentifier liquidMailDeliveryAddress LiquidAttrType:13
+objectIdentifier liquidCOSId LiquidAttrType:14
+objectIdentifier liquidMailStatus LiquidAttrType:15
+objectIdentifier liquidMailQuota LiquidAttrType:16
+objectIdentifier liquidPrefMailSignature LiquidAttrType:17
+objectIdentifier liquidPrefMailSignatureEnabled LiquidAttrType:18
+objectIdentifier liquidDomainName LiquidAttrType:19
+objectIdentifier liquidMailAlias LiquidAttrType:20
+objectIdentifier liquidCOSInheritedAttr LiquidAttrType:21
+objectIdentifier liquidPrefSaveToSent LiquidAttrType:22
+objectIdentifier liquidLmtpAdvertisedName LiquidAttrType:23
+objectIdentifier liquidLmtpBindPort LiquidAttrType:24
+objectIdentifier liquidLmtpBindAddress LiquidAttrType:25
+objectIdentifier liquidLmtpNumThreads LiquidAttrType:26
+objectIdentifier liquidIsAdminAccount LiquidAttrType:31
+objectIdentifier liquidMailSieveScript LiquidAttrType:32
+objectIdentifier liquidPasswordMinLength LiquidAttrType:33
+objectIdentifier liquidPasswordMaxLength LiquidAttrType:34
+objectIdentifier liquidPasswordMinAge LiquidAttrType:35
+objectIdentifier liquidPasswordMaxAge LiquidAttrType:36
+objectIdentifier liquidPasswordEnforceHistory LiquidAttrType:37
+objectIdentifier liquidPasswordHistory LiquidAttrType:38
+objectIdentifier liquidPasswordModifiedTime LiquidAttrType:39
+objectIdentifier liquidAliasTargetId LiquidAttrType:40
+objectIdentifier liquidPasswordMustChange LiquidAttrType:41
+objectIdentifier liquidAuthMech LiquidAttrType:42
+objectIdentifier liquidAuthLdapURL LiquidAttrType:43
+objectIdentifier liquidAuthLdapBindDn LiquidAttrType:44
+objectIdentifier liquidPasswordLocked LiquidAttrType:45
+objectIdentifier liquidGalMode LiquidAttrType:46
+objectIdentifier liquidGalLdapURL LiquidAttrType:47
+objectIdentifier liquidGalLdapSearchBase LiquidAttrType:48
+objectIdentifier liquidGalLdapBindDn LiquidAttrType:49
+objectIdentifier liquidGalLdapBindPassword LiquidAttrType:50
+objectIdentifier liquidGalLdapFilter LiquidAttrType:51
+objectIdentifier liquidGalLdapFilterDef LiquidAttrType:52
+objectIdentifier liquidGalMaxResults LiquidAttrType:53
+objectIdentifier liquidPrefGroupMailBy LiquidAttrType:54
+objectIdentifier liquidPrefIncludeSpamInSearch LiquidAttrType:55
+objectIdentifier liquidPrefIncludeTrashInSearch LiquidAttrType:56
+objectIdentifier liquidPrefMailItemsPerPage LiquidAttrType:57
+objectIdentifier liquidPrefOutOfOfficeReply LiquidAttrType:58
+objectIdentifier liquidPrefOutOfOfficeReplyEnabled LiquidAttrType:59
+objectIdentifier liquidPrefReplyToAddress LiquidAttrType:60
+objectIdentifier liquidPrefUseKeyboardShortcuts LiquidAttrType:61
+objectIdentifier liquidServerInheritedAttr LiquidAttrType:62
+objectIdentifier liquidDomainInheritedAttr LiquidAttrType:63
+#objectIdentifier liquidService LiquidAttrType:64
+objectIdentifier liquidServiceHostname LiquidAttrType:65
+objectIdentifier liquidRedoLogEnabled LiquidAttrType:74
+objectIdentifier liquidRedoLogLogPath LiquidAttrType:75
+objectIdentifier liquidRedoLogArchiveDir LiquidAttrType:76
+objectIdentifier liquidRedoLogRolloverFileSizeKB LiquidAttrType:78
+objectIdentifier liquidRedoLogFsyncIntervalMS LiquidAttrType:79
+objectIdentifier liquidPop3AdvertisedName LiquidAttrType:93
+objectIdentifier liquidPop3BindPort LiquidAttrType:94
+objectIdentifier liquidPop3BindAddress LiquidAttrType:95
+objectIdentifier liquidPop3NumThreads LiquidAttrType:96
+objectIdentifier liquidSmtpHostname LiquidAttrType:97
+objectIdentifier liquidSmtpPort LiquidAttrType:98
+objectIdentifier liquidSmtpTimeout LiquidAttrType:99
+objectIdentifier liquidAuthTokenKey LiquidAttrType:100
+objectIdentifier liquidPrefMailInitialSearch LiquidAttrType:102
+objectIdentifier liquidPrefSentMailFolder LiquidAttrType:103
+objectIdentifier liquidMailTrashLifetime LiquidAttrType:104
+objectIdentifier liquidMailSpamLifetime LiquidAttrType:105
+objectIdentifier liquidMailMessageLifetime LiquidAttrType:106
+objectIdentifier liquidContactMaxNumEntries LiquidAttrType:107
+objectIdentifier liquidAuthTokenLifetime LiquidAttrType:108
+objectIdentifier liquidAdminAuthTokenLifetime LiquidAttrType:109
+objectIdentifier liquidMailMinPollingInterval LiquidAttrType:110
+objectIdentifier liquidPrefMailPollingInterval LiquidAttrType:111
+objectIdentifier liquidAccountClientAttr LiquidAttrType:112
+objectIdentifier liquidLastLogonTimestamp LiquidAttrType:113
+objectIdentifier liquidLastLogonTimestampFrequency LiquidAttrType:114
+objectIdentifier liquidAttachmentsBlocked LiquidAttrType:115
+objectIdentifier liquidAttachmentsViewInHtmlOnly LiquidAttrType:116
+objectIdentifier liquidMailHostPool LiquidAttrType:125
+objectIdentifier liquidPrefNewMailNotificationEnabled LiquidAttrType:126
+objectIdentifier liquidPrefNewMailNotificationAddress LiquidAttrType:127
+objectIdentifier liquidPrefForwardReplyPrefixChar LiquidAttrType:130
+objectIdentifier liquidPrefAutoAddAddressEnabled LiquidAttrType:131
+objectIdentifier liquidIsMonitorHost LiquidAttrType:132
+objectIdentifier liquidPrefReplyIncludeOriginalText LiquidAttrType:133
+objectIdentifier liquidPrefForwardIncludeOriginalText LiquidAttrType:134
+objectIdentifier liquidFeatureContactsEnabled LiquidAttrType:135
+objectIdentifier liquidFeatureCalendarEnabled LiquidAttrType:136
+objectIdentifier liquidFeatureTaggingEnabled LiquidAttrType:137
+objectIdentifier liquidFeatureAdvancedSearchEnabled LiquidAttrType:138
+objectIdentifier liquidFeatureSavedSearchesEnabled LiquidAttrType:139
+objectIdentifier liquidFeatureConversationsEnabled LiquidAttrType:140
+objectIdentifier liquidFeatureChangePasswordEnabled LiquidAttrType:141
+objectIdentifier liquidFeatureInitialSearchPreferenceEnabled LiquidAttrType:142
+objectIdentifier liquidFeatureFiltersEnabled LiquidAttrType:143
+objectIdentifier liquidPrefDedupeMessagesSentToSelf LiquidAttrType:144
+objectIdentifier liquidPrefMessageViewHtmlPreferred LiquidAttrType:145
+objectIdentifier liquidUserServicesEnabled LiquidAttrType:146
+objectIdentifier liquidMailIdleSessionTimeout LiquidAttrType:147
+objectIdentifier liquidPrefContactsPerPage LiquidAttrType:148
+objectIdentifier liquidFeatureGalEnabled LiquidAttrType:149
+objectIdentifier liquidNewMailNotificationFrom LiquidAttrType:150
+objectIdentifier liquidNewMailNotificationSubject LiquidAttrType:151
+objectIdentifier liquidNewMailNotificationBody LiquidAttrType:152
+objectIdentifier liquidGalLdapAttrMap LiquidAttrType:153
+objectIdentifier liquidMailPort LiquidAttrType:154
+objectIdentifier liquidAdminPort LiquidAttrType:155
+objectIdentifier liquidPrefMailSignatureStyle LiquidAttrType:156
+objectIdentifier liquidMimeType LiquidAttrType:157
+objectIdentifier liquidMimeIndexingEnabled LiquidAttrType:158
+objectIdentifier liquidMimeHandlerClass LiquidAttrType:159
+objectIdentifier liquidMimeFileExtension LiquidAttrType:160
+objectIdentifier liquidObjectType LiquidAttrType:161
+objectIdentifier liquidObjectIndexingEnabled LiquidAttrType:162
+objectIdentifier liquidObjectStoreMatched LiquidAttrType:163
+objectIdentifier liquidObjectHandlerClass LiquidAttrType:164
+objectIdentifier liquidObjectHandlerConfig LiquidAttrType:165
+objectIdentifier liquidMailSSLPort LiquidAttrType:166
+objectIdentifier liquidPrefContactsInitialView LiquidAttrType:167
+objectIdentifier liquidTableMaintenanceMinRows LiquidAttrType:168
+objectIdentifier liquidTableMaintenanceMaxRows LiquidAttrType:169
+objectIdentifier liquidTableMaintenanceOperation LiquidAttrType:170
+objectIdentifier liquidTableMaintenanceGrowthFactor LiquidAttrType:171
+objectIdentifier liquidDefaultDomainName LiquidAttrType:172
+objectIdentifier liquidAttachmentsIndexingEnabled LiquidAttrType:173
+objectIdentifier liquidImapEnabled LiquidAttrType:174
+objectIdentifier liquidPop3Enabled LiquidAttrType:175
+objectIdentifier liquidImapServerEnabled LiquidAttrType:176
+objectIdentifier liquidPop3ServerEnabled LiquidAttrType:177
+objectIdentifier liquidImapAdvertisedName LiquidAttrType:178
+objectIdentifier liquidImapBindAddress LiquidAttrType:179
+objectIdentifier liquidImapBindPort LiquidAttrType:180
+objectIdentifier liquidImapNumThreads LiquidAttrType:181
+objectIdentifier liquidImapSSLBindAddress LiquidAttrType:182
+objectIdentifier liquidImapSSLBindPort LiquidAttrType:183
+objectIdentifier liquidImapSSLServerEnabled LiquidAttrType:184
+objectIdentifier liquidImapCleartextLoginEnabled LiquidAttrType:185
+objectIdentifier liquidPop3SSLBindAddress LiquidAttrType:186
+objectIdentifier liquidPop3SSLBindPort LiquidAttrType:187
+objectIdentifier liquidPop3SSLServerEnabled LiquidAttrType:188
+objectIdentifier liquidPop3CleartextLoginEnabled LiquidAttrType:189
+#objectIdentifier liquidVirusDefinitionsUpdateTime LiquidAttrType:190
+objectIdentifier liquidVirusDefinitionsUpdateFrequency LiquidAttrType:191
+objectIdentifier liquidPrefShowFragments LiquidAttrType:192
+objectIdentifier liquidMtaAuthEnabled LiquidAttrType:194
+objectIdentifier liquidMtaBlockedExtension LiquidAttrType:195
+objectIdentifier liquidMtaCommonBlockedExtension LiquidAttrType:196
+objectIdentifier liquidMtaDnsLookupsEnabled LiquidAttrType:197
+objectIdentifier liquidMtaMaxMessageSize LiquidAttrType:198
+objectIdentifier liquidMtaRelayHost LiquidAttrType:199
+objectIdentifier liquidMtaTlsAuthOnly LiquidAttrType:200
+objectIdentifier liquidSpamCheckEnabled LiquidAttrType:201
+objectIdentifier liquidSpamKillPercent LiquidAttrType:202
+objectIdentifier liquidSpamSubjectTag LiquidAttrType:203
+objectIdentifier liquidSpamTagPercent LiquidAttrType:204
+objectIdentifier liquidVirusBlockEncryptedArchive LiquidAttrType:205
+objectIdentifier liquidVirusCheckEnabled LiquidAttrType:206
+objectIdentifier liquidVirusWarnAdmin LiquidAttrType:207
+objectIdentifier liquidVirusWarnRecipient LiquidAttrType:208
+objectIdentifier liquidPrefComposeInNewWindow LiquidAttrType:209
+objectIdentifier liquidSpamHeader LiquidAttrType:210
+objectIdentifier liquidSpamHeaderValue LiquidAttrType:211
+objectIdentifier liquidDomainType LiquidAttrType:212
+objectIdentifier liquidMailCanonicalAddress LiquidAttrType:213
+objectIdentifier liquidMailCatchAllAddress LiquidAttrType:214
+objectIdentifier liquidMailCatchAllForwardingAddress LiquidAttrType:215
+objectIdentifier liquidMailCatchAllCanonicalAddress LiquidAttrType:216
+objectIdentifier liquidPrefComposeFormat LiquidAttrType:217
+objectIdentifier liquidPrefForwardReplyInOriginalFormat LiquidAttrType:218
+objectIdentifier liquidFeatureHtmlComposeEnabled LiquidAttrType:219
+objectIdentifier liquidServiceEnabled LiquidAttrType:220
+objectIdentifier liquidServiceInstalled LiquidAttrType:221
+objectIdentifier liquidPrefShowSearchString LiquidAttrType:222
+objectIdentifier liquidRedoLogProvider LiquidAttrType:225
+objectIdentifier liquidMtaRestriction LiquidAttrType:226
+objectIdentifier liquidFileUploadMaxSize LiquidAttrType:227
+objectIdentifier liquidTimeZoneStandardDtStart LiquidAttrType:229
+objectIdentifier liquidTimeZoneStandardOffset LiquidAttrType:230
+objectIdentifier liquidTimeZoneStandardRRule LiquidAttrType:231
+objectIdentifier liquidTimeZoneDaylightDtStart LiquidAttrType:232
+objectIdentifier liquidTimeZoneDaylightOffset LiquidAttrType:233
+objectIdentifier liquidTimeZoneDaylightRRule LiquidAttrType:234
+objectIdentifier liquidPrefTimeZoneId LiquidAttrType:235
+objectIdentifier liquidPrefUseTimeZoneListInCalendar LiquidAttrType:236
+objectIdentifier liquidAttachmentsScanEnabled LiquidAttrType:237
+objectIdentifier liquidAttachmentsScanClass LiquidAttrType:238
+objectIdentifier liquidAttachmentsScanURL LiquidAttrType:239
+objectIdentifier liquidPrefCalendarInitialView LiquidAttrType:240
+objectIdentifier liquidPrefImapSearchFoldersEnabled LiquidAttrType:241
+objectIdentifier liquidComponentAvailable LiquidAttrType:242
+objectIdentifier liquidCalendarCompatibilityMode LiquidAttrType:243
+
+#################################################################
+# object class OIDs
+#################################################################
+
+# classes 
+objectIdentifier LiquidObjectClass LiquidLDAP:2
+
+# define new class OIDs here. Same general rules as attrs
+
+objectIdentifier liquidAccount LiquidObjectClass:1
+objectIdentifier liquidCOS LiquidObjectClass:3
+objectIdentifier liquidDomain LiquidObjectClass:4
+objectIdentifier liquidSecurityGroup LiquidObjectClass:5
+objectIdentifier liquidDistributionList LiquidObjectClass:6
+objectIdentifier liquidMailRecipient LiquidObjectClass:7
+objectIdentifier liquidServer LiquidObjectClass:8
+objectIdentifier liquidGlobalConfig LiquidObjectClass:9
+objectIdentifier liquidAlias LiquidObjectClass:11
+objectIdentifier liquidMimeEntry LiquidObjectClass:12
+objectIdentifier liquidObjectEntry LiquidObjectClass:13
+objectIdentifier liquidTimeZone LiquidObjectClass:14
+
+# break glass in case of emergency
+#
+# A generic attr like this is probably seductive, but would probably cause
+# too much pain long term...
+#
+#attributetype ( liquidAttr
+#	NAME ( 'liquidAttr' )
+#	DESC 'generic name=value attribute'
+#	EQUALITY caseIgnoreMatch
+#	SUBSTR caseIgnoreSubstringsMatch
+#	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32} )
+
+
+
+#################################################################
+# attribute definitions
+#
+# OID (the first arg) comes from the objectIdentifier defined above
+#
+# NAME should be the same as objectIdentifier
+#
+# DESC should be the description of the attribute
+#
+# EQUALITY is the rule to use when doing a search/compare for an attribute value.
+#
+# SUBSTR is the rule to use when doing a substring search (*foo*)
+#
+# SYNTAX is the syntax (i.e., type) of the attribute. We should probably stick to syntaxes:
+#       1.3.6.1.4.1.1466.115.121.1.15 	  -> directoryString (UTF-8 string)
+#       1.3.6.1.4.1.1466.115.121.1.26   -> IA5String (ASCII String)
+#       1.3.6.1.4.1.1466.115.121.1.27   -> integer (Integer value)
+#       1.3.6.1.4.1.1466.115.121.1.7    -> boolean (TRUE/FALSE)
+#
+# SINGLE-VALUE should be present if only one instance of this attribute is allowed within an entry
+#
+# When defining a new attr def, find an attribute that does something similar and cut-and-paste.
+#
+# after defining the attribute, add it to any object classes which it may be a member of.
+#
+#      
+#################################################################
+
+#### From Microsoft Schema
+attributetype ( 1.2.840.113556.1.2.146 
+        NAME 'company'
+        SYNTAX '1.3.6.1.4.1.1466.115.121.1.15' 
+        SINGLE-VALUE )
+
+attributetype ( liquidComponentAvailable
+	NAME 'liquidComponentAvailable'
+	DESC 'Names of additonal components that have been installed'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{64} )
+
+attributetype ( liquidAccountClientAttr
+	NAME 'liquidAccountClientAttr'
+	DESC 'additional account attrs that get returned to a client'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1024} )
+
+attributetype ( liquidAccountStatus
+	NAME ( 'liquidAccountStatus' )
+	DESC 'account status (TODO: enumerate valid values here)'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32} 
+	SINGLE-VALUE )
+
+attributetype ( liquidAdminAuthTokenLifetime
+	NAME 'liquidAdminAuthTokenLifetime'
+	DESC 'lifetime (nnnnn[hmsd]) of newly created admin auth tokens'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
+	SINGLE-VALUE )
+
+attributetype ( liquidAliasTargetId
+	NAME ( 'liquidAliasTargetId' )
+	DESC 'liquidId of alias target'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} 
+	SINGLE-VALUE )
+
+attributetype ( liquidAttachmentsBlocked
+	NAME 'liquidAttachmentsBlocked'
+	DESC 'block all attachment downloading'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidAttachmentsIndexingEnabled
+	NAME 'liquidAttachmentsIndexingEnabled'
+	DESC 'whether or not to index attachemts'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidAttachmentsViewInHtmlOnly
+	NAME 'liquidAttachmentsViewInHtmlOnly'
+	DESC 'view all attachments in html only'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidAttachmentsScanEnabled
+	NAME 'liquidAttachmentsScanEnabled'
+	DESC 'Whether to scan attachments during compose'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidAttachmentsScanClass
+	NAME 'liquidAttachmentsScanClass'
+	DESC 'Class to use to scan attachments during compose'
+	EQUALITY caseExactMatch
+	SUBSTR caseExactSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
+	SINGLE-VALUE )	
+
+attributetype ( liquidAttachmentsScanURL
+	NAME 'liquidAttachmentsScanURL'
+	DESC 'Data for class that scans attachments during compose'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
+	SINGLE-VALUE )	
+
+attributetype ( liquidAuthLdapBindDn
+	NAME 'liquidAuthLdapBindDn'
+	DESC 'LDAP bind dn for ldap auth mech'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
+	SINGLE-VALUE )	
+
+attributetype ( liquidAuthLdapURL
+	NAME 'liquidAuthLdapURL'
+	DESC 'LDAP URL for ldap auth mech'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
+	SINGLE-VALUE )	
+
+attributetype ( liquidAuthMech
+	NAME 'liquidAuthMech'
+	DESC 'mechanism to use for authentication'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{64}
+	SINGLE-VALUE )	
+
+attributetype ( liquidAuthTokenKey
+	NAME 'liquidAuthTokenKey'
+	DESC 'auth token secret key'
+	EQUALITY octetStringMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.40{128}
+	)
+
+attributetype ( liquidAuthTokenLifetime
+	NAME 'liquidAuthTokenLifetime'
+	DESC 'lifetime (nnnnn[hmsd]) of newly created auth tokens'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
+	SINGLE-VALUE )
+			
+attributetype ( liquidCalendarCompatibilityMode
+	NAME 'liquidCalendarCompatibilityMode'
+	DESC 'compatibility mode for calendar server'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32}
+	SINGLE-VALUE )
+
+attributetype ( liquidContactMaxNumEntries
+	NAME 'liquidContactMaxNumEntries'
+	DESC 'maximum number of contacts allowed in mailbox'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )
+	
+attributetype ( liquidCOSId
+	NAME ( 'liquidCOSId' )
+	DESC 'COS liquidID'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} 
+	SINGLE-VALUE )
+
+attributetype ( liquidCOSInheritedAttr
+	NAME 'liquidCOSInheritedAttr'
+	DESC 'liquidCOS attrs that get inherited in a liquidAccount'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1024} )
+
+attributetype ( liquidDomainInheritedAttr
+	NAME 'liquidDomainInheritedAttr'
+	DESC 'liquidDomain attrs that get inherited from global config'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1024} )
+
+attributetype ( liquidDomainName
+	NAME ( 'liquidDomainName' )
+	DESC 'name of the domain'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} 
+	SINGLE-VALUE )
+
+attributetype ( liquidDomainType
+	NAME 'liquidDomainType'
+	DESC 'should be one of: local, alias'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
+	SINGLE-VALUE )			
+
+attributetype ( liquidDefaultDomainName
+	NAME ( 'liquidDefaultDomainName' )
+	DESC 'name of the default domain for accounts when authenticating without a domain'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} 
+	SINGLE-VALUE )
+
+attributetype ( liquidFeatureContactsEnabled
+	NAME 'liquidFeatureContactsEnabled'
+	DESC 'contact features'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidFeatureGalEnabled
+	NAME 'liquidFeatureGalEnabled'
+	DESC 'GAL features'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidFeatureCalendarEnabled
+	NAME 'liquidFeatureCalendarEnabled'
+	DESC 'calendar features'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidFeatureTaggingEnabled
+	NAME 'liquidFeatureTaggingEnabled'
+	DESC 'tagging feature'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidFeatureAdvancedSearchEnabled
+	NAME 'liquidFeatureAdvancedSearchEnabled'
+	DESC 'advanced search button enabled'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidFeatureSavedSearchesEnabled
+	NAME 'liquidFeatureSavedSearchesEnabled'
+	DESC 'saved search feature'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidFeatureConversationsEnabled
+	NAME 'liquidFeatureConversationsEnabled'
+	DESC 'conversations'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidFeatureChangePasswordEnabled
+	NAME 'liquidFeatureChangePasswordEnabled'
+	DESC 'password changing'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidFeatureInitialSearchPreferenceEnabled
+	NAME 'liquidFeatureInitialSearchPreferenceEnabled'
+	DESC 'preference to set initial search'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidFeatureFiltersEnabled
+	NAME 'liquidFeatureFiltersEnabled'
+	DESC 'filter prefs enabled'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidFeatureHtmlComposeEnabled
+	NAME 'liquidFeatureHtmlComposeEnabled'
+	DESC 'enabled html composing'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidGalLdapBindDn
+	NAME 'liquidGalLdapBindDn'
+	DESC 'LDAP bind dn for external GAL queries'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
+	SINGLE-VALUE )	
+	
+attributetype ( liquidGalLdapBindPassword
+	NAME 'liquidGalLdapBindPassword'
+	DESC 'LDAP bind password for external GAL queries'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
+	SINGLE-VALUE )		
+
+attributetype ( liquidGalLdapFilter
+	NAME 'liquidGalLdapFilter'
+	DESC 'LDAP search filter for external GAL queries'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{4096}
+	SINGLE-VALUE )			
+	
+attributetype ( liquidGalLdapFilterDef
+	NAME 'liquidGalLdapFilterDef'
+	DESC 'LDAP search filter definitions for GAL queries'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{4096})
+
+attributetype ( liquidGalLdapAttrMap
+	NAME 'liquidGalLdapAttrMap'
+	DESC 'LDAP Gal attribute to contact attr mapping'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{4096})
+
+attributetype ( liquidGalLdapSearchBase
+	NAME 'liquidGalLdapSearchBase'
+	DESC 'LDAP search base for external GAL queries'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
+	SINGLE-VALUE )				
+	
+attributetype ( liquidGalLdapURL
+	NAME 'liquidGalLdapURL'
+	DESC 'LDAP URL for external GAL queries'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
+	SINGLE-VALUE )					
+
+ attributetype ( liquidGalMaxResults
+	NAME 'liquidGalMaxResults'
+	DESC 'maximum number of gal entries to return from a search'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )
+
+attributetype ( liquidGalMode
+	NAME 'liquidGalMode'
+	DESC 'should be internal (query internal only), external (external only), or both'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
+	SINGLE-VALUE )			
+
+attributetype ( liquidId
+	NAME ( 'liquidId' )
+	DESC 'Liquid Systems Unique ID'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} 
+	SINGLE-VALUE )
+
+attributetype ( liquidImapAdvertisedName
+	NAME ( 'liquidImapAdvertisedName' )
+	DESC 'name to use in greeting and sign-off; if empty, uses hostname'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{128} 
+	SINGLE-VALUE )
+	
+attributetype ( liquidImapBindAddress
+	NAME ( 'liquidImapBindAddress' )
+	DESC 'interface address(es) on which IMAP server should listen; if empty, binds to all interfaces'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{128} 
+	)
+		
+attributetype ( liquidImapBindPort
+	NAME ( 'liquidImapBindPort' )
+	DESC 'port number on which IMAP server should listen'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )
+
+attributetype ( liquidImapEnabled
+	NAME 'liquidImapEnabled'
+	DESC 'whether IMAP is enabled for an account'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidImapNumThreads
+	NAME ( 'liquidImapNumThreads' )
+	DESC 'number of handler threads'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )	
+
+attributetype ( liquidImapServerEnabled
+	NAME 'liquidImapServerEnabled'
+	DESC 'whether IMAP server is enabled for a given server'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidImapSSLBindAddress
+	NAME ( 'liquidImapSSLBindAddress' )
+	DESC 'interface address(es) on which IMAP server should listen; if empty, binds to all interfaces'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{128} 
+	)
+		
+attributetype ( liquidImapSSLBindPort
+	NAME ( 'liquidImapSSLBindPort' )
+	DESC 'port number on which IMAP SSL server should listen on'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )
+
+attributetype ( liquidImapSSLServerEnabled
+	NAME 'liquidImapSSLServerEnabled'
+	DESC 'whether IMAP SSL server is enabled for a given server'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidImapCleartextLoginEnabled
+	NAME 'liquidImapCleartextLoginEnabled'
+	DESC 'whether or not to allow cleartext logins over a non SSL/TLS connection'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidIsAdminAccount
+	NAME 'liquidIsAdminAccount'
+	DESC 'set to true for admin accounts'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidIsMonitorHost
+	NAME 'liquidIsMonitorHost'
+	DESC 'true if this server is the monitor host'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+		
+attributetype ( liquidLastLogonTimestamp
+	NAME 'liquidLastLogonTimestamp'
+	DESC 'rough estimate of when the user last logged in. see liquidLastLogonTimestampFrequency'
+	EQUALITY generalizedTimeMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.24
+	SINGLE-VALUE )	
+
+attributetype ( liquidLastLogonTimestampFrequency
+	NAME 'liquidLastLogonTimestampFrequency'
+	DESC 'how often (nnnnn[hmsd]) the liquidLastLogonTimestamp is updated'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
+	SINGLE-VALUE )
+
+attributetype ( liquidLmtpAdvertisedName
+	NAME ( 'liquidLmtpAdvertisedName' )
+	DESC 'name to use in greeting and sign-off; if empty, uses hostname'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{128} 
+	SINGLE-VALUE )
+	
+attributetype ( liquidLmtpBindAddress
+	NAME ( 'liquidLmtpBindAddress' )
+	DESC 'interface address(es) on which LMTP server should listen; if empty, binds to all interfaces'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{128} 
+	)
+		
+attributetype ( liquidLmtpBindPort
+	NAME ( 'liquidLmtpBindPort' )
+	DESC 'port number on which LMTP server should listen'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )
+	
+attributetype ( liquidLmtpNumThreads
+	NAME ( 'liquidLmtpNumThreads' )
+	DESC 'number of handler threads, should match MTA concurrency setting for this server'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )	
+
+attributetype ( liquidMailAddress
+	NAME 'liquidMailAddress'
+	DESC 'RFC822 email address of this recipient for accepting mail'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
+
+attributetype ( liquidMailAlias
+	NAME 'liquidMailAlias'
+	DESC 'RFC822 email address of this recipient for accepting mail'
+	EQUALITY caseIgnoreIA5Match
+	SUBSTR caseIgnoreSubstringsMatch	
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
+
+attributetype ( liquidMailIdleSessionTimeout
+	NAME 'liquidMailIdleSessionTimeout'
+	DESC 'idle timeout (nnnnn[hmsd])'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
+	SINGLE-VALUE )
+
+attributetype ( liquidPrefAutoAddAddressEnabled
+	NAME 'liquidPrefAutoAddAddressEnabled'
+	DESC 'whether or not new address in outgoing email are auto added to address book'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidPrefComposeFormat
+	NAME 'liquidPrefComposeFormat'
+	DESC 'whether or not to compose in html or text.'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
+	SINGLE-VALUE )
+
+attributetype ( liquidPrefForwardReplyInOriginalFormat
+	NAME 'liquidPrefForwardReplyInOriginalFormat'
+	DESC 'whether or not to use same format (text or html) of message we are replying to'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidPrefComposeInNewWindow
+	NAME 'liquidPrefComposeInNewWindow'
+	DESC 'whether or not compose messages in a new windows by default'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidPrefShowFragments
+	NAME 'liquidPrefShowFragments'
+	DESC 'show fragments in conversation and message lists'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidPrefShowSearchString
+	NAME 'liquidPrefShowSearchString'
+	DESC 'whether to show search box or not'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidPrefDedupeMessagesSentToSelf 
+	NAME 'liquidPrefDedupeMessagesSentToSelf'
+	DESC 'dedupeNone|secondCopyIfOnToOrCC|moveSentMessageToInbox|dedupeAll'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
+	SINGLE-VALUE )
+
+attributetype ( liquidPrefNewMailNotificationAddress
+	NAME 'liquidPrefNewMailNotificationAddress'
+	DESC 'RFC822 email address for email notifications'
+	EQUALITY caseIgnoreIA5Match
+	SUBSTR caseIgnoreSubstringsMatch	
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} 
+	)
+
+attributetype ( liquidPrefNewMailNotificationEnabled
+	NAME 'liquidPrefNewMailNotificationEnabled'
+	DESC 'whether or not new mail notification is enabled'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidPrefMailPollingInterval
+	NAME 'liquidPrefMailPollingInterval'
+	DESC 'configured mail polling interval (nnnnn[hmsd])'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
+	SINGLE-VALUE )
+
+attributetype ( liquidMailMinPollingInterval
+	NAME 'liquidMailMinPollingInterval'
+	DESC 'minimum allowed mail polling interval (nnnnn[hmsd])'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
+	SINGLE-VALUE )
+
+attributetype ( liquidPrefReplyIncludeOriginalText
+	NAME 'liquidPrefReplyIncludeOriginalText'
+	DESC 'what part of the original message to include during replies'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
+	SINGLE-VALUE )
+
+attributetype ( liquidPrefForwardReplyPrefixChar
+	NAME 'liquidPrefForwardReplyPrefixChar'
+	DESC 'prefix character to use during forward/reply'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{1}
+	SINGLE-VALUE )
+
+attributetype ( liquidPrefForwardIncludeOriginalText
+	NAME 'liquidPrefForwardIncludeOriginalText'
+	DESC 'what part of the original message to include during forwards'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
+	SINGLE-VALUE )
+
+attributetype ( liquidMailQuota
+	NAME 'liquidMailQuota'
+	DESC 'mail quota in bytes'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )
+
+attributetype ( liquidMailStatus
+	NAME ( 'liquidMailStatus' )
+	DESC 'mail delivery status (enabled/disabled)'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32} 
+	SINGLE-VALUE )
+
+attributetype ( liquidMailDeliveryAddress
+	NAME 'liquidMailDeliveryAddress'
+	DESC 'RFC822 email address of this recipient for local delivery'
+	EQUALITY caseIgnoreIA5Match
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
+
+attributetype ( liquidMailCanonicalAddress
+	NAME 'liquidMailCanonicalAddress'
+	DESC 'RFC822 email address for senders outbound messages'
+	EQUALITY caseIgnoreIA5Match
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} 
+	SINGLE-VALUE )
+
+attributetype ( liquidMailCatchAllAddress
+	NAME 'liquidMailCatchAllAddress'
+	DESC 'Address to catch all messages to specified domain'
+	EQUALITY caseIgnoreIA5Match
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} 
+	SINGLE-VALUE )
+
+attributetype ( liquidMailCatchAllForwardingAddress
+	NAME 'liquidMailCatchAllForwardingAddress'
+	DESC 'Address to deliver catch all messages to'
+	EQUALITY caseIgnoreIA5Match
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} 
+	SINGLE-VALUE )
+
+attributetype ( liquidMailCatchAllCanonicalAddress
+	NAME 'liquidMailCatchAllCanonicalAddress'
+	DESC 'Catch all address to rewrite to'
+	EQUALITY caseIgnoreIA5Match
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} 
+	SINGLE-VALUE )
+
+attributetype ( liquidMailHost
+	NAME 'liquidMailHost'
+	DESC 'the server hosting the accounts mailbox'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
+	SINGLE-VALUE )
+
+attributetype ( liquidMailHostPool
+	NAME 'liquidMailHostPool'
+	DESC 'servers that an account can be initially provisioned on'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
+
+attributetype ( liquidMailForwardingAddress
+	NAME 'liquidMailForwardingAddress'
+	DESC 'RFC822 forwarding address for an account'
+	EQUALITY caseIgnoreIA5Match
+	SUBSTR caseIgnoreSubstringsMatch	
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
+
+attributetype ( liquidMailMessageLifetime
+	NAME 'liquidMailMessageLifetime'
+	DESC 'lifetime (nnnnn[hmsd]) of a mail message regardless of location'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
+	SINGLE-VALUE )
+
+attributetype ( liquidMailSieveScript
+	NAME 'liquidMailSieveScript'
+	DESC 'sieve script generated from user filter rules'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	SINGLE-VALUE )
+
+attributetype ( liquidMailSpamLifetime
+	NAME 'liquidMailSpamLifetime'
+	DESC 'lifetime (nnnnn[hmsd]) of an item in the spam folder'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
+	SINGLE-VALUE )
+
+attributetype ( liquidMailTrashLifetime
+	NAME 'liquidMailTrashLifetime'
+	DESC 'lifetime (nnnnn[hmsd]) of an item in the trash'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
+	SINGLE-VALUE )
+
+attributetype ( liquidMember
+	NAME ( 'liquidMember' )
+	DESC 'for group membership, included with security group object'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
+
+attributetype ( liquidMemberOf
+	NAME ( 'liquidMemberOf' )
+	DESC 'for group membership, included with person object'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} )
+
+attributetype ( liquidMtaAuthEnabled
+	NAME 'liquidMtaAuthEnabled'
+	DESC 'Value for postconf smtpd_use_tls'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidMtaBlockedExtension
+	NAME 'liquidMtaBlockedExtension'
+	DESC 'Attachment file extensions that are blocked'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{64} )
+
+attributetype ( liquidMtaCommonBlockedExtension
+	NAME 'liquidMtaCommonBlockedExtension'
+	DESC 'Commonly blocked attachment file extensions'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{64} )
+
+attributetype ( liquidMtaDnsLookupsEnabled
+	NAME 'liquidMtaDnsLookupsEnabled'
+	DESC 'Value for postconf disable_dns_lookups (note enable v. disable)'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidMtaMaxMessageSize
+	NAME 'liquidMtaMaxMessageSize'
+	DESC 'Value for postconf message_size_limit'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )	
+
+attributetype ( liquidMtaRelayHost
+	NAME 'liquidMtaRelayHost'
+	DESC 'Value for postconf relayhost'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
+
+attributetype ( liquidMtaRestriction
+	NAME 'liquidMtaRestriction'
+	DESC 'restrictions to reject some suspect SMTP clients'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{64} )
+
+attributetype ( liquidMtaTlsAuthOnly
+	NAME 'liquidMtaTlsAuthOnly'
+	DESC 'Value for postconf smtpd_tls_auth_only'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidNotes 
+	NAME 'liquidNotes'
+	DESC 'administrative notes'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1024}
+	SINGLE-VALUE )
+
+attributetype ( liquidNewMailNotificationFrom
+	NAME 'liquidNewMailNotificationFrom'
+	DESC 'template used to construct the sender of an email notification message'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1000} )
+
+attributetype ( liquidNewMailNotificationSubject
+	NAME 'liquidNewMailNotificationSubject'
+	DESC 'template used to construct the subject of an email notification message'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1000} )
+
+attributetype ( liquidNewMailNotificationBody
+	NAME 'liquidNewMailNotificationBody'
+	DESC 'template used to construct the body of an email notification message'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{10000} )
+#
+# number of unique passwords a user must have before being allowed to
+# re-use an old one. A value of 0 means no password history.
+#
+attributetype ( liquidPasswordEnforceHistory
+	NAME 'liquidPasswordEnforceHistory'
+	DESC 'whether or not to enforce password history'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )	
+
+attributetype ( liquidPasswordLocked
+	NAME 'liquidPasswordLocked'
+	DESC 'user is unable to change password'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+	
+attributetype ( liquidPasswordMinAge
+	NAME 'liquidPasswordMinAge'
+	DESC 'minimum days between password changes'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )
+	
+attributetype ( liquidPasswordMaxAge
+	NAME 'liquidPasswordMaxAge'
+	DESC 'maximum days between password changes'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )	
+
+attributetype ( liquidPasswordMinLength
+	NAME 'liquidPasswordMinLength'
+	DESC 'minimum length of a password'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )
+
+attributetype ( liquidPasswordMaxLength
+	NAME 'liquidPasswordMaxLength'
+	DESC 'max length of a password'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )	
+
+attributetype ( liquidPasswordHistory
+	NAME 'liquidPasswordHistory'
+	DESC 'historical password values'
+	EQUALITY octetStringMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.40{128}
+	)
+		
+attributetype ( liquidPasswordModifiedTime
+	NAME 'liquidPasswordModifiedTime'
+	DESC 'time password was last changed'
+	EQUALITY generalizedTimeMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.24
+	SINGLE-VALUE )	
+
+attributetype ( liquidPasswordMustChange
+	NAME 'liquidPasswordMustChange'
+	DESC 'must change password on auth'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidPop3AdvertisedName
+	NAME ( 'liquidPop3AdvertisedName' )
+	DESC 'name to use in greeting and sign-off; if empty, uses hostname'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{128} 
+	SINGLE-VALUE )
+
+attributetype ( liquidPop3CleartextLoginEnabled
+	NAME 'liquidPop3CleartextLoginEnabled'
+	DESC 'whether or not to allow cleartext logins over a non SSL/TLS connection'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidPop3BindAddress
+	NAME ( 'liquidPop3BindAddress' )
+	DESC 'interface address(es) on which POP3 server should listen; if empty, binds to all interfaces'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{128} 
+	)
+		
+attributetype ( liquidPop3BindPort
+	NAME ( 'liquidPop3BindPort' )
+	DESC 'port number on which POP3 server should listen'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )
+
+attributetype ( liquidPop3Enabled
+	NAME 'liquidPop3Enabled'
+	DESC 'whether POP3 is enabled for an account'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidPop3ServerEnabled
+	NAME 'liquidPop3ServerEnabled'
+	DESC 'whether IMAP is enabled for a server'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidPop3NumThreads
+	NAME ( 'liquidPop3NumThreads' )
+	DESC 'number of handler threads'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )	
+
+	
+attributetype ( liquidPop3SSLBindAddress
+	NAME ( 'liquidPop3SSLBindAddress' )
+	DESC 'interface address(es) on which POP3 server should listen; if empty, binds to all interfaces'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{128} 
+	)
+		
+attributetype ( liquidPop3SSLBindPort
+	NAME ( 'liquidPop3SSLBindPort' )
+	DESC 'port number on which POP3 server should listen'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )
+
+attributetype ( liquidPop3SSLServerEnabled
+	NAME 'liquidPop3SSLServerEnabled'
+	DESC 'whether IMAP is enabled for a server'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidPrefCalendarInitialView
+	NAME ( 'liquidPrefCalendarInitialView' )
+	DESC 'initial calendar view to use'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32} 
+	SINGLE-VALUE )
+
+attributetype ( liquidPrefContactsInitialView
+	NAME ( 'liquidPrefContactsInitialView' )
+	DESC 'initial contact view to use'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32} 
+	SINGLE-VALUE )
+
+attributetype ( liquidPrefGroupMailBy
+	NAME ( 'liquidPrefGroupMailBy' )
+	DESC 'how to group mail by default'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32} 
+	SINGLE-VALUE )
+
+attributetype ( liquidPrefImapSearchFoldersEnabled
+	NAME ( 'liquidPrefImapSearchFoldersEnabled' )
+	DESC 'whether or not the IMAP server exports search folders'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+
+attributetype ( liquidPrefIncludeSpamInSearch
+	NAME 'liquidPrefIncludeSpamInSearch'
+	DESC 'whether or not to include spam in search by default'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidPrefIncludeTrashInSearch
+	NAME 'liquidPrefIncludeTrashInSearch'
+	DESC 'whether or not to include trash in search by default'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidPrefMailInitialSearch
+	NAME 'liquidPrefMailInitialSearch'
+	DESC 'initial search done by dhtml client'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{512}
+	SINGLE-VALUE )
+			
+attributetype ( liquidPrefMailSignature
+	NAME 'liquidPrefMailSignature'
+	DESC 'mail signature'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1024}
+	SINGLE-VALUE )
+			
+attributetype ( liquidPrefMailSignatureStyle
+	NAME 'liquidPrefMailSignatureStyle'
+	DESC 'mail signature style outlook|internet'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32}
+	SINGLE-VALUE )
+
+attributetype ( liquidPrefMailSignatureEnabled
+	NAME 'liquidPrefMailSignatureEnabled'
+	DESC 'mail signature enabled'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidPrefMessageViewHtmlPreferred
+	NAME 'liquidPrefMessageViewHtmlPreferred'
+	DESC 'whether client prefers text/html or text/plain'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+ attributetype ( liquidPrefMailItemsPerPage
+	NAME 'liquidPrefMailItemsPerPage'
+	DESC 'number of messages/conversations per page'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )
+
+ attributetype ( liquidPrefContactsPerPage
+	NAME 'liquidPrefContactsPerPage'
+	DESC 'number of contacts per page'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )
+
+attributetype ( liquidPrefOutOfOfficeReply
+	NAME 'liquidPrefOutOfOfficeReply'
+	DESC 'out of office message'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{8192}
+	SINGLE-VALUE )
+
+attributetype ( liquidPrefOutOfOfficeReplyEnabled
+	NAME 'liquidPrefOutOfOfficeReplyEnabled'
+	DESC 'whether or not out of office reply is enabled'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidPrefReplyToAddress
+	NAME 'liquidPrefReplyToAddress'
+	DESC 'address to put in reply-to header'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
+	SINGLE-VALUE )
+	
+attributetype ( liquidPrefSaveToSent
+	NAME 'liquidPrefSaveToSent'
+	DESC 'whether or not to save outgoing mail'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )	
+
+attributetype ( liquidPrefSentMailFolder
+	NAME ( 'liquidPrefSentMailFolder' )
+	DESC 'name of folder to save sent mail in)'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} 
+	SINGLE-VALUE )
+
+attributetype ( liquidPrefUseKeyboardShortcuts
+	NAME 'liquidPrefUseKeyboardShortcuts'
+	DESC 'whether or not keyboard shortcuts are enabled'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )	
+
+attributetype ( liquidRedoLogArchiveDir
+	NAME 'liquidRedoLogArchiveDir'
+	DESC 'redolog rollover destination'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
+	SINGLE-VALUE )
+
+attributetype ( liquidRedoLogEnabled
+	NAME 'liquidRedoLogEnabled'
+	DESC 'whether redo logging is enabled'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )	
+
+attributetype ( liquidRedoLogFsyncIntervalMS
+	NAME 'liquidRedoLogFsyncIntervalMS'
+	DESC 'how frequently writes to redo log get fsynced to disk'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )
+
+attributetype ( liquidRedoLogLogPath
+	NAME 'liquidRedoLogLogPath'
+	DESC 'name and location of the redolog file'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
+	SINGLE-VALUE )
+
+attributetype ( liquidRedoLogRolloverFileSizeKB
+	NAME 'liquidRedoLogRolloverFileSizeKB'
+	DESC 'redo.log file rolls over when it gets to this size'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )
+
+attributetype ( liquidServerInheritedAttr
+	NAME 'liquidServerInheritedAttr'
+	DESC 'liquidServer attrs that get inherited from global config'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1024} )
+
+attributetype ( liquidServiceHostname
+	NAME ( 'liquidServiceHostname' )
+	DESC 'public hostname of the host'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} 
+	SINGLE-VALUE )	
+
+attributetype ( liquidServiceEnabled
+	NAME ( 'liquidServiceEnabled' )
+	DESC 'services that are enabled on this server'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} )
+
+attributetype ( liquidServiceInstalled
+	NAME ( 'liquidServiceInstalled' )
+	DESC 'services that are installed on this server'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} )
+
+attributetype ( liquidSmtpHostname
+	NAME 'liquidSmtpHostname'
+	DESC 'the SMTP server to connect to when sending mail'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
+
+attributetype ( liquidSmtpPort
+	NAME 'liquidSmtpPort'
+	DESC 'the SMTP server port to connect to when sending mail'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )	
+
+attributetype ( liquidSmtpTimeout
+	NAME 'liquidSmtpTimeout'
+	DESC 'timeout value in seconds'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )	
+
+attributetype ( liquidSpamHeader
+	NAME 'liquidSpamHeader'
+	DESC 'mail header name for flagging spam'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	SINGLE-VALUE )
+	
+attributetype ( liquidSpamHeaderValue
+	NAME 'liquidSpamHeaderValue'
+	DESC 'regular expression for matching the spam header'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	SINGLE-VALUE )
+
+attributetype ( liquidSpamCheckEnabled
+	NAME 'liquidSpamCheckEnabled'
+	DESC 'Whether to enable spam checking'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )	
+
+attributetype ( liquidSpamTagPercent
+	NAME 'liquidSpamTagPercent'
+	DESC 'Spaminess percentage beyound which a message is marked as spam'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )
+
+attributetype ( liquidSpamKillPercent
+	NAME 'liquidSpamKillPercent'
+	DESC 'Spaminess percentage beyond which a message is dropped'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )
+
+attributetype ( liquidSpamSubjectTag
+	NAME 'liquidSpamSubjectTag'
+	DESC 'Subject prefix for spam messages'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
+	SINGLE-VALUE )
+
+attributetype ( liquidUserServicesEnabled
+	NAME 'liquidUserServicesEnabled'
+	DESC 'whether end-user services on SOAP and LMTP interfaces are enabled'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )	
+
+attributetype ( liquidMailPort
+	NAME 'liquidMailPort'
+	DESC 'HTTP port for end-user UI'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )	
+
+attributetype ( liquidMailSSLPort
+	NAME 'liquidMailSSLPort'
+	DESC 'SSL port for end-user UI'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )	
+
+attributetype ( liquidAdminPort
+	NAME 'liquidAdminPort'
+	DESC 'SSL port for admin UI'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )	
+
+attributetype ( liquidFileUploadMaxSize
+	NAME 'liquidFileUploadMaxSize'
+	DESC 'Maximum size in bytes for attachments'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )	
+
+# mime
+
+attributetype ( liquidMimeFileExtension
+	NAME ( 'liquidMimeFileExtension' )
+	DESC 'the file extension (without the .)'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
+
+attributetype ( liquidMimeType
+	NAME ( 'liquidMimeType' )
+	DESC 'the MIME type (type/substype)'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	SINGLE-VALUE )
+
+#
+# TODO: the mime handler class should definitely be stored as a resource in a jar file instead...
+#
+attributetype ( liquidMimeHandlerClass
+	NAME ( 'liquidMimeHandlerClass' )
+	DESC 'the handler class for the mime type'
+	EQUALITY caseExactMatch
+	SUBSTR caseExactSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	SINGLE-VALUE )	
+
+attributetype ( liquidMimeIndexingEnabled
+	NAME 'liquidMimeIndexingEnabled'
+	DESC 'whether or not indexing is enabled for this type'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+	
+# objects (phone numbers, social security numbers, etc.)
+
+attributetype ( liquidObjectType
+	NAME ( 'liquidObjectType' )
+	DESC 'the object type'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	SINGLE-VALUE )
+
+attributetype ( liquidObjectHandlerClass
+	NAME ( 'liquidObjectHandlerClass' )
+	DESC 'the handler class for the object type'
+	EQUALITY caseExactMatch
+	SUBSTR caseExactSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	SINGLE-VALUE )	
+
+attributetype ( liquidObjectIndexingEnabled
+	NAME 'liquidObjectIndexingEnabled'
+	DESC 'whether or not indexing is enabled for this type'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidObjectHandlerConfig
+	NAME 'liquidObjectHandlerConfig'
+	DESC 'config for this type'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	SINGLE-VALUE )
+
+attributetype ( liquidObjectStoreMatched
+	NAME 'liquidObjectStoreMatched'
+	DESC 'whether or not store is matched for this type'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+	
+attributetype ( liquidTableMaintenanceMinRows
+	NAME 'liquidTableMaintenanceMinRows'
+	DESC 'minimum number of rows required for database table maintenance'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )
+
+attributetype ( liquidTableMaintenanceMaxRows
+	NAME 'liquidTableMaintenanceMaxRows'
+	DESC 'maximum number of rows required for database table maintenance'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )
+
+attributetype ( liquidTableMaintenanceOperation
+	NAME 'liquidTableMaintenanceOperation'
+	DESC 'table maintenance operation that will be performed.  Valid options: "ANALYZE", "OPTIMIZE"'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{20} )
+
+attributetype ( liquidTableMaintenanceGrowthFactor
+	NAME 'liquidTableMaintenanceGrowthFactor'
+	DESC 'table maintenance will be performed if the number of rows grows by this factor'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )
+
+attributetype ( liquidVirusCheckEnabled
+	NAME 'liquidVirusCheckEnabled'
+	DESC 'Whether to enable virus checking'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidVirusBlockEncryptedArchive
+	NAME 'liquidVirusBlockEncryptedArchive'
+	DESC 'Whether to block archive files that are password protected or encrypted'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidVirusWarnAdmin
+	NAME 'liquidVirusWarnAdmin'
+	DESC 'Whether to email admin on virus detection'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidVirusWarnRecipient
+	NAME 'liquidVirusWarnRecipient'
+	DESC 'Whether to email recipient on virus detection'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( liquidVirusDefinitionsUpdateFrequency
+	NAME 'liquidVirusDefinitionsUpdateFrequency'
+	DESC 'how often (nnnnn[hmsd]) the virus definitions are updated'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
+	SINGLE-VALUE )
+
+attributetype ( liquidRedoLogProvider
+	NAME 'liquidRedoLogProvider'
+	DESC 'provider class name for redo logging'
+	EQUALITY caseIgnoreMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} )
+
+attributetype ( liquidTimeZoneStandardDtStart
+	NAME 'liquidTimeZoneStandardDtStart'
+	DESC 'Start date for standard time'
+	EQUALITY caseIgnoreMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} )
+
+attributetype ( liquidTimeZoneStandardOffset
+	NAME 'liquidTimeZoneStandardOffset'
+	DESC 'Offset in standard time'
+	EQUALITY caseIgnoreMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{5} )
+
+attributetype ( liquidTimeZoneStandardRRule
+	NAME 'liquidTimeZoneStandardRRule'
+	DESC 'iCalendar recurrence rule for onset of standard time'
+	EQUALITY caseIgnoreMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} )
+
+attributetype ( liquidTimeZoneDaylightDtStart
+	NAME 'liquidTimeZoneDaylightDtStart'
+	DESC 'Start date for daylight time'
+	EQUALITY caseIgnoreMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} )
+
+attributetype ( liquidTimeZoneDaylightOffset
+	NAME 'liquidTimeZoneDaylightOffset'
+	DESC 'Offset in daylight time'
+	EQUALITY caseIgnoreMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{5} )
+
+attributetype ( liquidTimeZoneDaylightRRule
+	NAME 'liquidTimeZoneDaylightRRule'
+	DESC 'iCalendar recurrence rule for onset of daylight time'
+	EQUALITY caseIgnoreMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} )
+
+attributetype ( liquidPrefTimeZoneId
+	NAME 'liquidPrefTimeZoneId'
+	DESC 'time zone of user or COS'
+	EQUALITY caseIgnoreMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} )
+
+attributetype ( liquidPrefUseTimeZoneListInCalendar
+	NAME 'liquidPrefUseTimeZoneListInCalendar'
+	DESC 'whether list of well known time zones is displayed in calendar UI'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+
+#################################################################
+# object class definitions
+#
+# This is where to define the object classes. Object classes are used to define which
+# attribute MAY (optional) or MUST (required) belong to an entry. 
+#
+# classes can be AUXILIARY or STRUCTURAL. An entry in the directory must have one and only one
+# structural class, but can have many AUXILIARY classes.
+#
+# should probably try and keep the attributes listed in MAY and MUST sorted for easy maintenance.
+#
+#################################################################
+
+################
+# liquidMailRecipient is used to represent entries in the directory
+# that can receive mail. i.e., they have a visible external address, that
+# gets expanded into one or more internal/external addresses.
+################
+
+objectclass ( liquidMailRecipient
+	NAME 'liquidMailRecipient'
+	DESC 'Account object'
+	SUP top AUXILIARY
+	MAY (	
+		liquidMailForwardingAddress $
+		liquidMailHost $
+		liquidMailAlias $
+		liquidMailAddress $
+		liquidMailDeliveryAddress $
+		liquidMailCanonicalAddress $
+		liquidMailCatchAllAddress $
+		liquidMailCatchAllForwardingAddress $
+		liquidMailCatchAllCanonicalAddress $
+		liquidMailStatus) )
+
+################
+# liquidAccount extends liquidMailRecipient. It represents a real account in the system
+# (either admin or end-user) that can be logged into, etc.
+#
+# It is defined as AUXILIARY in case it needs to be mixed to an existing directory deployment.
+#
+# cn            - full name, common name
+# co            - country friendly name
+# company       - company (company name)
+# displayName   - name to display in admin tool, outlook uses as well (cn is multi-valued)
+# gn            - first name (given name)
+# initials      - middle initial
+# l             - city (locality)
+# ou            - organizational unit
+# physicalDeliveryOfficeName - office
+# postalAddress - street address
+# postalCode    - zip code
+# sn            - last name (sir name)
+# st            - state
+# telephoneNumber - phone
+#
+################
+
+objectclass ( liquidAccount 
+	NAME 'liquidAccount'
+	DESC 'Account object'
+	SUP liquidMailRecipient AUXILIARY
+	MUST (	
+		liquidId $ 
+		liquidAccountStatus $
+		uid)
+	MAY (	
+		c $
+		co $
+		company $
+		cn $	
+		displayName $
+		gn $		
+		description $
+		initials $
+		l $
+		liquidAttachmentsBlocked $
+		liquidAttachmentsIndexingEnabled $
+		liquidAttachmentsViewInHtmlOnly $
+		liquidAuthTokenLifetime $
+		liquidAdminAuthTokenLifetime $
+		liquidContactMaxNumEntries $
+		liquidCOSId $
+		liquidFeatureContactsEnabled $
+		liquidFeatureGalEnabled $	
+		liquidFeatureHtmlComposeEnabled $
+		liquidFeatureCalendarEnabled $
+		liquidFeatureTaggingEnabled $
+		liquidFeatureAdvancedSearchEnabled $
+		liquidFeatureSavedSearchesEnabled $
+		liquidFeatureConversationsEnabled $
+		liquidFeatureChangePasswordEnabled $
+		liquidFeatureInitialSearchPreferenceEnabled $
+		liquidFeatureFiltersEnabled $
+		liquidImapEnabled $
+		liquidIsAdminAccount $ 
+		liquidLastLogonTimestamp $
+		liquidMailIdleSessionTimeout $
+		liquidMailMessageLifetime $
+		liquidMailMinPollingInterval $
+		liquidMailQuota $
+		liquidMailSieveScript $	
+		liquidMailSpamLifetime $
+		liquidMailTrashLifetime $
+		liquidNewMailNotificationFrom $
+		liquidNewMailNotificationSubject $
+		liquidNewMailNotificationBody $
+		liquidNotes $ 
+		liquidPasswordLocked $
+		liquidPasswordMinLength $
+		liquidPasswordMaxLength $
+		liquidPasswordMinAge $
+		liquidPasswordMaxAge $
+		liquidPasswordEnforceHistory $
+		liquidPasswordHistory $
+		liquidPasswordModifiedTime $
+		liquidPasswordMustChange $
+		liquidPop3Enabled $		
+		liquidPrefTimeZoneId $
+		liquidPrefUseTimeZoneListInCalendar $
+		liquidPrefComposeInNewWindow $
+		liquidPrefComposeFormat $
+		liquidPrefForwardReplyInOriginalFormat $
+		liquidPrefAutoAddAddressEnabled $
+		liquidPrefShowFragments $
+		liquidPrefShowSearchString $
+		liquidPrefCalendarInitialView $
+		liquidPrefContactsInitialView $
+		liquidPrefDedupeMessagesSentToSelf $
+		liquidPrefForwardIncludeOriginalText $
+		liquidPrefForwardReplyPrefixChar $
+		liquidPrefGroupMailBy $
+		liquidPrefImapSearchFoldersEnabled $
+		liquidPrefIncludeSpamInSearch $
+		liquidPrefIncludeTrashInSearch $
+		liquidPrefMailInitialSearch $
+		liquidPrefMailItemsPerPage $
+		liquidPrefContactsPerPage $		
+		liquidPrefMessageViewHtmlPreferred $
+		liquidPrefMailPollingInterval $
+		liquidPrefMailSignature $
+		liquidPrefMailSignatureEnabled $
+		liquidPrefMailSignatureStyle $
+		liquidPrefNewMailNotificationAddress $
+		liquidPrefNewMailNotificationEnabled $
+		liquidPrefOutOfOfficeReply $
+		liquidPrefOutOfOfficeReplyEnabled $
+		liquidPrefReplyIncludeOriginalText $
+		liquidPrefReplyToAddress $
+		liquidPrefSaveToSent $
+		liquidPrefSentMailFolder $
+		liquidPrefUseKeyboardShortcuts $
+		liquidMemberOf $
+		mail $
+		o $
+		ou $	
+		physicalDeliveryOfficeName $	
+		postalAddress $
+		postalCode $
+		sn $
+		st $
+		telephoneNumber $
+		title $
+		userPassword) )
+
+################
+# liquidServer is used to represent a defined server within a liquid install.
+#
+# server-specific configuration information will be added here. This includes information
+# like which services should be running on a server, whether or not the server is normally a master/slave, etc.
+#
+################
+objectclass ( liquidAlias
+	NAME 'liquidAlias'
+	DESC 'An alias to another liquid object'
+	SUP top STRUCTURAL
+	MUST (
+		liquidAliasTargetId $
+		liquidId)
+	MAY (
+		uid $
+		cn)
+	)
+
+################
+# liquidDistributionList represents a distribution/mailing list.
+# It inherits from liquidMailRecipient.  Members (who can be internal/external)
+# are represented  as liquidMailForwardingAddress attrs.
+################
+
+objectclass ( liquidDistributionList 
+	NAME 'liquidDistributionList'
+	DESC 'Distribution List object'
+	SUP top STRUCTURAL
+	MUST (
+		liquidId $
+		uid)
+	MAY (
+		description $
+		liquidNotes)
+	)
+
+################
+# liquidCOS is the class of service object.
+# it should have attributes that are used as default values for accounts that belong to the
+# COS and do not have the same attribute defined in the account directory entry.
+#
+# when adding a new COS attr here, you also need to update the value of liquidGlobalConfig/liquidCOSInheritedAttr
+# (in the liquid.ldif file), as that defines any attrs from the COS entry that are allowed to be inherited.
+################
+objectclass ( liquidCOS 
+	NAME 'liquidCOS'
+	DESC 'Class of Service data'
+	SUP top STRUCTURAL
+	MUST (
+		cn $
+		liquidId)
+	MAY (
+		description $
+		liquidAttachmentsBlocked $
+		liquidAttachmentsIndexingEnabled $
+		liquidAttachmentsViewInHtmlOnly $
+		liquidAuthTokenLifetime $
+		liquidAdminAuthTokenLifetime $
+		liquidContactMaxNumEntries $
+		liquidFeatureContactsEnabled $
+		liquidFeatureGalEnabled $
+		liquidFeatureCalendarEnabled $
+		liquidFeatureHtmlComposeEnabled $
+		liquidFeatureTaggingEnabled $
+		liquidFeatureAdvancedSearchEnabled $
+		liquidFeatureSavedSearchesEnabled $
+		liquidFeatureConversationsEnabled $
+		liquidFeatureChangePasswordEnabled $
+		liquidFeatureInitialSearchPreferenceEnabled $
+		liquidFeatureFiltersEnabled $
+		liquidImapEnabled $		
+		liquidNotes $
+		liquidMailHostPool $
+		liquidMailIdleSessionTimeout $
+		liquidMailMinPollingInterval $
+		liquidMailMessageLifetime $
+		liquidMailQuota $
+		liquidMailTrashLifetime $
+		liquidMailSpamLifetime $
+		liquidNewMailNotificationFrom $
+		liquidNewMailNotificationSubject $
+		liquidNewMailNotificationBody $
+		liquidPasswordMinLength $
+		liquidPasswordMaxLength $
+		liquidPasswordMinAge $
+		liquidPasswordMaxAge $
+		liquidPasswordEnforceHistory $
+		liquidPasswordLocked $
+		liquidPop3Enabled $		
+		liquidPrefTimeZoneId $
+		liquidPrefUseTimeZoneListInCalendar $
+		liquidPrefShowFragments $
+		liquidPrefShowSearchString $
+		liquidPrefCalendarInitialView $
+		liquidPrefComposeInNewWindow $
+		liquidPrefComposeFormat $
+		liquidPrefContactsInitialView $
+		liquidPrefDedupeMessagesSentToSelf $
+		liquidPrefForwardReplyInOriginalFormat $
+		liquidPrefSaveToSent $
+		liquidPrefSentMailFolder $
+		liquidPrefGroupMailBy $
+		liquidPrefIncludeSpamInSearch $
+		liquidPrefIncludeTrashInSearch $
+		liquidPrefImapSearchFoldersEnabled $
+		liquidPrefMailInitialSearch $
+		liquidPrefMailItemsPerPage $	
+		liquidPrefMailSignatureStyle $
+		liquidPrefContactsPerPage $
+		liquidPrefMessageViewHtmlPreferred $
+		liquidPrefMailPollingInterval $
+		liquidPrefReplyIncludeOriginalText $
+		liquidPrefForwardIncludeOriginalText $
+		liquidPrefForwardReplyPrefixChar $
+		liquidPrefAutoAddAddressEnabled $
+		liquidPrefUseKeyboardShortcuts 
+	) )
+
+################
+# liquidGlobalConfig is the entry that holds all the global configuration attrs.
+################
+objectclass ( liquidGlobalConfig
+	NAME 'liquidGlobalConfig'
+	DESC 'global config'
+	SUP top AUXILIARY
+	MAY (
+		liquidAttachmentsBlocked $
+        liquidAttachmentsScanEnabled $
+        liquidAttachmentsScanClass $
+        liquidAttachmentsScanURL $
+		liquidAttachmentsViewInHtmlOnly $
+		liquidAccountClientAttr $
+		liquidCalendarCompatibilityMode $
+		liquidComponentAvailable $
+		liquidCOSInheritedAttr $
+		liquidDefaultDomainName $		
+		liquidDomainInheritedAttr $
+		liquidGalLdapFilterDef $
+		liquidGalLdapAttrMap $
+		liquidGalMaxResults $
+		liquidFileUploadMaxSize $
+		liquidImapServerEnabled $
+		liquidImapNumThreads $
+		liquidImapBindPort $
+		liquidImapSSLBindPort $
+		liquidImapSSLServerEnabled $
+		liquidImapCleartextLoginEnabled $
+		liquidLastLogonTimestampFrequency $
+		liquidLmtpNumThreads $
+		liquidLmtpBindPort $
+		liquidMtaAuthEnabled $
+		liquidMtaBlockedExtension $
+		liquidMtaCommonBlockedExtension $
+		liquidMtaDnsLookupsEnabled $
+		liquidMtaMaxMessageSize $
+		liquidMtaRelayHost $
+		liquidMtaRestriction $
+		liquidMtaTlsAuthOnly $
+		liquidPop3CleartextLoginEnabled $
+		liquidPop3NumThreads $
+		liquidPop3BindPort $
+		liquidPop3ServerEnabled $
+		liquidPop3SSLBindPort $
+		liquidPop3SSLServerEnabled $
+		liquidRedoLogEnabled $
+		liquidRedoLogLogPath $
+		liquidRedoLogArchiveDir $
+		liquidRedoLogRolloverFileSizeKB $
+		liquidRedoLogFsyncIntervalMS $
+		liquidServerInheritedAttr $
+		liquidSmtpHostname $
+		liquidSmtpPort $
+		liquidSmtpTimeout $
+		liquidSpamHeader $
+		liquidSpamHeaderValue $
+		liquidSpamCheckEnabled $
+		liquidSpamKillPercent $
+		liquidSpamSubjectTag $
+		liquidSpamTagPercent $
+		liquidTableMaintenanceGrowthFactor $
+		liquidTableMaintenanceMinRows $
+		liquidTableMaintenanceMaxRows $
+		liquidTableMaintenanceOperation $
+		liquidAuthTokenKey $
+		liquidMailPort $
+		liquidMailSSLPort $
+		liquidAdminPort $
+		liquidVirusBlockEncryptedArchive $
+		liquidVirusCheckEnabled $
+		liquidVirusWarnRecipient $
+		liquidVirusWarnAdmin $
+		liquidVirusDefinitionsUpdateFrequency $
+		liquidRedoLogProvider
+		)
+	 )
+
+################
+# liquidDomain is used to represent a domain in the directory. For example, if we created the foo.com domain, then
+# the  dc=foo,dc=com entry in LDAP would have an objectclass of liquidDomain.
+#
+# domain-specific configuration information (if so-needed) could be added here.
+#
+################
+objectclass ( liquidDomain
+	NAME 'liquidDomain'
+	DESC 'Domain object'
+	SUP liquidMailRecipient AUXILIARY	
+	MUST (	liquidId $
+		liquidDomainName $
+		liquidDomainType)
+	MAY (	
+		description $
+		liquidNotes $
+		liquidAuthLdapURL $
+		liquidAuthLdapBindDn $
+		liquidAuthMech $
+		liquidGalMaxResults $
+		liquidGalMode $
+		liquidGalLdapURL $
+		liquidGalLdapSearchBase $
+		liquidGalLdapBindDn $
+		liquidGalLdapBindPassword $
+		liquidGalLdapAttrMap $
+		liquidGalLdapFilter
+		))
+
+
+################
+# liquidSecurityGroup is used to represent a security group in the directory. Each liquidMember attr
+# is the liquidId of the account (and/or group if we allow recursive groups) that is a member
+# of this group.
+#
+################
+objectclass ( liquidSecurityGroup
+	NAME 'liquidSecurityGroup'
+	DESC 'Security Group'
+	SUP top STRUCTURAL
+	MUST (	liquidId $
+		cn)
+	MAY (	liquidMember $ 
+		liquidNotes $
+		description))
+	
+################
+# liquidServer is used to represent a defined server within a liquid install.
+#
+# server-specific configuration information will be added here. This includes information
+# like which services should be running on a server, whether or not the server is normally a master/slave, etc.
+#
+################
+objectclass ( liquidServer
+	NAME 'liquidServer'
+	DESC 'Server in the cluster'
+	SUP top STRUCTURAL
+	MUST (liquidId $ cn)
+	MAY (
+		description $
+                liquidAttachmentsScanURL $
+		liquidFileUploadMaxSize $
+		liquidIsMonitorHost $
+		liquidLmtpAdvertisedName $
+		liquidLmtpBindAddress $
+		liquidLmtpBindPort $
+		liquidLmtpNumThreads $
+		liquidImapServerEnabled $
+		liquidImapAdvertisedName $
+		liquidImapBindAddress $
+		liquidImapBindPort $
+		liquidImapNumThreads $
+		liquidImapSSLBindAddress $
+		liquidImapSSLBindPort $
+		liquidImapSSLServerEnabled $
+		liquidImapCleartextLoginEnabled $
+		liquidMtaAuthEnabled $
+		liquidMtaDnsLookupsEnabled $
+		liquidMtaRelayHost $
+		liquidMtaTlsAuthOnly $
+		liquidPop3CleartextLoginEnabled $
+		liquidPop3AdvertisedName $
+		liquidPop3BindAddress $
+		liquidPop3BindPort $
+		liquidPop3NumThreads $
+		liquidPop3ServerEnabled $
+		liquidPop3SSLBindAddress $
+		liquidPop3SSLBindPort $
+		liquidPop3SSLServerEnabled $
+		liquidNotes $
+		liquidRedoLogEnabled $
+		liquidRedoLogLogPath $
+		liquidRedoLogArchiveDir $
+		liquidRedoLogRolloverFileSizeKB $
+		liquidRedoLogFsyncIntervalMS $
+		liquidServiceHostname $
+		liquidServiceEnabled $
+		liquidServiceInstalled $
+		liquidSmtpHostname $
+		liquidSmtpPort $
+		liquidSmtpTimeout $
+		liquidTableMaintenanceGrowthFactor $
+		liquidTableMaintenanceMinRows $
+		liquidTableMaintenanceMaxRows $
+		liquidTableMaintenanceOperation $
+		liquidUserServicesEnabled $
+		liquidVirusDefinitionsUpdateFrequency $		
+		liquidMailPort $
+		liquidMailSSLPort $
+		liquidAdminPort $
+		liquidRedoLogProvider
+	))
+	
+################
+# liquidMimeEntry is used to represent status about mime types
+#
+#
+################
+objectclass ( liquidMimeEntry
+	NAME 'liquidMimeEntry'
+	DESC 'MIME type info'
+	SUP top STRUCTURAL
+	MUST (
+		cn $
+		liquidMimeType $ 
+		liquidMimeIndexingEnabled)
+	MAY (description $
+		liquidMimeFileExtension $
+		liquidMimeHandlerClass)
+	))
+
+################
+# liquidObjectEntry is used to represent status about object types
+#
+#
+################
+objectclass ( liquidObjectEntry
+	NAME 'liquidObjectEntry'
+	DESC 'Object type info'
+	SUP top STRUCTURAL
+	MUST (
+		cn $
+		liquidObjectType $ 
+		liquidObjectIndexingEnabled $
+		liquidObjectStoreMatched)
+	MAY (description $
+		liquidObjectHandlerConfig $
+		liquidObjectHandlerClass)
+	))	
+
+################
+# liquidTimeZone is used to define a timezone with daylight savings time
+# rules.  Used in calendar.
+#
+################
+objectclass ( liquidTimeZone
+	NAME 'liquidTimeZone'
+	DESC 'Time Zone info'
+	SUP top STRUCTURAL
+	MUST (
+    	cn $
+		liquidTimeZoneStandardDtStart $
+		liquidTimeZoneStandardOffset)
+	MAY (
+		liquidTimeZoneStandardRRule $
+		liquidTimeZoneDaylightDtStart $
+		liquidTimeZoneDaylightOffset $
+		liquidTimeZoneDaylightRRule
+	))

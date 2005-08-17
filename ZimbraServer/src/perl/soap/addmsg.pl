@@ -1,0 +1,109 @@
+#!/usr/bin/perl -w
+
+#
+# Simple SOAP test-harness for the AddMsg API
+#
+
+use strict;
+
+use lib '.';
+
+use LWP::UserAgent;
+
+use XmlElement;
+use XmlDoc;
+use Soap;
+
+my $ACCTNS = "urn:liquidAccount";
+my $MAILNS = "urn:liquidMail";
+
+my $url = "http://localhost:7070/service/soap/";
+
+my $SOAP = $Soap::Soap12;
+my $d = new XmlDoc;
+$d->start('AuthRequest', $ACCTNS);
+$d->add('account', undef, { by => "name"}, 'user1@liquidsys.com');
+$d->add('password', undef, undef, "mypassWord");
+$d->end();
+
+
+
+my $authResponse = $SOAP->invoke($url, $d->root());
+
+my $authToken = $authResponse->find_child('authToken')->content;
+
+print "authToken($authToken)\n";
+
+my $context = $SOAP->liquidContext($authToken);
+
+#
+# <AddMsgRequest>
+#    <m t="{tags}" l="{folder}" >
+#    ...
+#    </m>
+# </AddMsgRequest>
+#     
+# <AddMsgResponse>
+#    <m id="..." />
+# </AddMsgResponse>
+#
+
+my %msgAttrs;
+$msgAttrs{'l'} = "/sent mail";
+$msgAttrs{'t'} = "\\unseen ,34 , \\FLAGGED";
+
+$d = new XmlDoc;
+$d->start('AddMsgRequest', $MAILNS);
+$d->start('m', undef, \%msgAttrs, undef);
+
+my $g_msg;
+setup_msg();
+
+$d->start('content', undef, undef, $g_msg);
+
+$d->end(); # 'content'
+$d->end(); # 'm'
+$d->end(); # 'AddMsgRequest'
+
+print "\nOUTGOING XML:\n-------------\n";
+print $d->to_string("pretty"),"\n";
+
+my $response = $SOAP->invoke($url, $d->root(), $context);
+
+print "\nRESPONSE:\n--------------\n";
+print $response->to_string("pretty"),"\n";
+
+
+
+
+sub setup_msg
+{
+    
+    $g_msg = <<END_OF_MSG;
+    
+Return-Path: <testest\@curple.com>
+Received: from joplin.siteprotect.com (joplin.siteprotect.com [64.26.0.58])
+	by lsh140.siteprotect.com (8.11.6/8.11.6) with ESMTP id i8TIi8N00839
+	for <tim\@symphonatic.com>; Wed, 29 Sep 2004 13:44:08 -0500
+Received: from c-24-13-52-25.client.comcast.net (c-24-13-52-25.client.comcast.net [24.13.52.25])
+	by joplin.siteprotect.com (8.11.6/8.11.6) with SMTP id i8TIi4T09352;
+Wed, 29 Sep 2004 13:44:04 -0500
+X-Message-Info: VwyyDO050xxvROjpwoHCBRNMxgYUbehSkg471
+Received: from shade-dns.gte.net (95.224.224.151) by dgk9-xfl0.gte.net with Microsoft SMTPSVC(5.0.2195.6824);
+Wed, 29 Sep 2004 15:36:02 -0400
+Date: Wed, 29 Sep 2004 14:39:02 -0600 (CST)
+Message-Id: <77536181.ol184IIydJ898\@arsenal3.raymond05gte.net>
+To: ttestest\@curple.com
+CC: foo\@curple.com
+Subject: Re: Foo A Diamond in The Rough Equity Report
+From: foo\@gub.com
+MIME-Version: 1.0
+Status:
+
+4
+3
+And also your mom
+And your mom
+Your mom 
+END_OF_MSG
+}

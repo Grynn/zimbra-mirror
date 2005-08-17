@@ -1,0 +1,2 @@
+#!/bin/sh
+lqjava com.liquidsys.coco.redolog.util.ReplCommand $@

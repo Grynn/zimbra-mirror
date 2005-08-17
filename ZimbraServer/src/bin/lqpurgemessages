@@ -1,0 +1,96 @@
+#!/usr/bin/perl
+
+#use strict;
+
+use strict;
+
+use lib "/opt/liquid/liquidmon/lib/liquidpm";
+use lib "/opt/liquid/liquidmon/lib/liquidpm/SOAP";
+use lib "/opt/liquid/liquidmon/lib";
+
+use liquidlog;
+
+use Getopt::Std;
+
+use POSIX ":sys_wait_h";
+use LWP::UserAgent;
+
+use XmlElement;
+use XmlDoc;
+use Soap;
+
+use Time::Local;
+
+my $ACCTNS = "urn:liquidAccount";
+my $MAILNS = "urn:liquidMail";
+my $ADMINNS = "urn:liquidAdmin";
+my $SOAP = $Soap::Soap12;
+
+my $authToken;
+my $START;
+my $END;
+my $PERIOD;
+
+our %GlobalOpts;
+
+sub usage { exit 1; }
+
+sub get_auth_token {
+	my $host = shift;
+	my $user = shift;
+	my $pass = shift;
+
+	# print "Authenticating to $host as $user/$pass\n";
+
+	my $url = "https://$host:7071/service/admin/soap/";
+
+	my $d = new XmlDoc;
+	$d->start('AuthRequest', $ADMINNS);
+	$d->add('name', undef, { by => "name"}, "$user");
+	$d->add('password', undef, undef, "$pass");
+	$d->end();
+
+	my $authResponse;
+	eval {
+		$authResponse = $SOAP->invoke($url, $d->root());
+	};
+
+	if (!$authResponse) {return undef;}
+	my $authToken = $authResponse->find_child('authToken')->content;
+
+	# print "authToken($authToken)\n";
+
+	return $authToken;
+
+}
+
+sub purgeMessages {
+	my $host = "localhost";
+	my $user = "liquid";
+	chomp $user;
+	my $pass = `lqlocalconfig -s -m nokey liquid_ldap_password`;
+	chomp $pass;
+	$authToken = get_auth_token ($host, $user, $pass );
+
+	if (!defined ($authToken)) {exit 1;}
+
+	my $context = $SOAP->liquidContext($authToken, "");
+
+	my $url = "https://$host:7071/service/admin/soap/";
+
+	my $d = new XmlDoc;
+	$d->start('PurgeMessagesRequest', $ADMINNS);
+	$d->end();
+
+	my $response = $SOAP->invoke($url, $d->root(), $context);
+
+	# print $response->to_string("pretty"),"\n";
+
+	if ($response->{name} ne "PurgeMessagesResponse") {
+		print STDERR "Error: ".$response->to_string("pretty")."\n";
+		return undef;
+	}
+
+}
+
+purgeMessages();

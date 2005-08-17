@@ -1,0 +1,27 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>clipTest.html</title>
+    <style type="text/css">
+ 	.AttachmentIcon_IE{left:-422;top:-632;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='./combined.PNG',sizingMethod='scale');}
+    </style>
+    <script>
+    	function x() {
+    		var div = document.createElement("div");
+    		div.style.backgroundColor = "blue";
+    		div.style.position = "absolute";
+  			var html = "<H1> DIV 14 </H1><div><table border=1><tr><td><table><tr><td>HELLO WORLD</td><td>"+
+  	  			"<div style='border: solid 1px pink; overflow:hidden; width: 100; height: 100;'>" +
+  	  				"<div class='AttachmentIcon_IE'></div>" +
+    			"</div></td></tr></table></td></tr></table></div>"
+    		div.innerHTML = html;
+    		document.body.appendChild(div);
+    	}
+    </script>
+  </head>  
+  <body>
+	<script>x()</script>
+   </body>
+</html>
+
+<!-- t r b l -->

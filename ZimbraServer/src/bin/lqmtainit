@@ -1,0 +1,85 @@
+#!/bin/bash
+#
+# This script sets up ldap query filters used by postfix.
+#
+
+if [ $# -eq 1 ]; then
+    ldap_host="$1"
+    ldap_port=389
+elif [ $# -eq 2 ]; then
+    ldap_host="$1"
+    ldap_port="$2"
+else 
+    echo Usage: `basename $0` ldap_host [ ldap_port ]
+    exit
+fi
+
+confdir=/opt/liquid/conf
+mkdir -p ${confdir}
+
+cat<<EOF > ${confdir}/ldap-vmm.cf
+server_host = ${ldap_host}
+server_port = ${ldap_port}
+search_base =
+query_filter = (&(liquidMailDeliveryAddress=%s)(liquidMailStatus=enabled))
+result_attribute = liquidMailDeliveryAddress
+version = 3
+bind = no
+timeout = 30
+EOF
+
+cat<<EOF > ${confdir}/ldap-vmd.cf
+server_host = ${ldap_host}
+server_port = ${ldap_port}
+search_base =
+query_filter = (&(liquidDomainName=%s)(liquidDomainType=local)(liquidMailStatus=enabled))
+result_attribute = liquidDomainName
+version = 3
+bind = no
+timeout = 30
+EOF
+
+cat<<EOF > ${confdir}/ldap-vam.cf
+server_host = ${ldap_host}
+server_port = ${ldap_port}
+search_base =
+query_filter = (&(|(liquidMailDeliveryAddress=%s)(liquidMailAlias=%s)(liquidMailCatchAllAddress=%s))(liquidMailStatus=enabled))
+result_attribute = liquidMailDeliveryAddress,liquidMailForwardingAddress,liquidMailCatchAllForwardingAddress
+version = 3
+bind = no
+timeout = 30
+EOF
+
+cat<<EOF > ${confdir}/ldap-vad.cf
+server_host = ${ldap_host}
+server_port = ${ldap_port}
+search_base =
+query_filter = (&(liquidDomainName=%s)(liquidDomainType=alias)(liquidMailStatus=enabled))
+result_attribute = liquidDomainName
+version = 3
+bind = no
+timeout = 30
+EOF
+
+cat<<EOF > ${confdir}/ldap-scm.cf
+server_host = ${ldap_host}
+server_port = ${ldap_port}
+search_base = 
+query_filter = (&(|(liquidMailDeliveryAddress=%s)(liquidMailAlias=%s)(liquidMailCatchAllAddress=%s))(liquidMailStatus=enabled))
+result_attribute = liquidMailCanonicalAddress,liquidMailCatchAllCanonicalAddress
+version = 3
+bind = no
+timeout = 30
+EOF
+
+cat<<EOF > ${confdir}/ldap-transport.cf
+server_host = ${ldap_host}
+server_port = ${ldap_port}
+search_base =
+query_filter = (&(liquidMailDeliveryAddress=%s)(liquidMailStatus=enabled))
+result_attribute = liquidMailHost
+result_filter = lmtp:%s:7025
+version = 3
+bind = no
+timeout = 30
+EOF

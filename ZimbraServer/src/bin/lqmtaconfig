@@ -1,0 +1,726 @@
+#!/usr/bin/perl
+
+use strict;
+
+BEGIN {
+    our $Basedir = "/opt/liquid/liquidmon";
+};
+our $Basedir = "/opt/liquid/liquidmon";
+
+$SIG{CHLD} = 'IGNORE';
+
+use lib "/opt/liquid/liquidmon/lib";
+use lib "/opt/liquid/liquidmon/lib/liquidpm";
+
+my $id = `whoami`;
+chomp $id;
+if ($id ne "liquid") {
+    print STDERR "Error: must be run as liquid user\n";
+	exit (1);
+}
+
+use liquidlog;
+
+my $homedir = "/opt/liquid";
+my $confdir = "$homedir/conf";
+
+my $config = "$confdir/lqmta.cf";
+
+my %commands = (
+		"POSTCONF"	=>	"$homedir/postfix/sbin/postconf -e",
+		);
+
+my %depends = ();
+my %restarts = ();
+my %rewrites = ();
+
+my %sectionkeys = ();
+my %knownkeys = ();
+my %prevknownkeys = ();
+my %todo = ();
+my $cursection = "";
+my %stopstarts = ();
+
+my $firstrun = 1;
+
+my $HOSTNAME = `lqlocalconfig -m nokey liquid_server_hostname`;
+chomp $HOSTNAME;
+
+my $VARS_SET = 0;
+my $LOCALS_SET = 0;
+
+my $fork = 1;
+my %FORCE = ();
+while ($_ = shift) {
+	$fork = 0;
+	$FORCE{$_} = $_;
+	# print STDERR "FORCE: $_\n";
+}
+
+sub getService {
+	my $service = shift;
+
+	# print STDERR "getService: $service\n";
+
+	if ($service =~ /^!/) {
+		$service =~ s/^!//;
+	}
+
+	open CMD, "$homedir/bin/lqprov  gs $HOSTNAME | grep liquidServiceEnabled |";
+	my @out = <CMD>;
+	close CMD;
+
+	chomp @out;
+
+	foreach (@out) {
+		my ($k, $v) = split (' ', $_, 2);
+		$k =~ s/:$//;
+		$knownkeys{"SERVICE:$v"} = 1;
+		$knownkeys{"SERVICE:!$v"} = 0;
+	}
+
+	if (! defined ($knownkeys{"SERVICE:$service"})) {
+
+		my $rc = 0xffff & system ("$homedir/bin/lqprov gs $HOSTNAME | grep liquidServiceEnabled | grep $service > /dev/null 2>&1");
+
+		if ($rc) { 
+			$knownkeys{"SERVICE:$service"} = 0; 
+			$knownkeys{"SERVICE:!$service"} = 1; 
+		} else { 
+			$knownkeys{"SERVICE:$service"} = 1; 
+			$knownkeys{"SERVICE:!$service"} = 0; 
+		}
+	}
+
+}
+
+sub setLocal {
+	my $var = shift;
+
+	$LOCALS_SET=1;
+
+	# print STDERR "Setting locals\n";
+
+	# print STDERR "setLocal: /opt/liquid/bin/lqlocalconfig -s -x ";
+	open CMD, "$homedir/bin/lqlocalconfig -s -x |";
+	my @out = <CMD>;
+	close CMD;
+
+	my $val = "";
+	foreach (@out) {
+		chomp;
+		# print STDERR "out: $_\n";
+		my ($k, undef, $v) = split (' ', $_, 3);
+		$k =~ s/:$//;
+		if ($v eq "TRUE") {
+			$v = "yes";
+		} elsif ($v eq "FALSE") {
+			$v = "no";
+		}
+
+		if ($knownkeys{"LOCAL:$k"} ne "") {
+			$knownkeys{"LOCAL:$k"} .= " ".$v;
+		} else {
+			$knownkeys{"LOCAL:$k"} = $v;
+		}
+		if ($v eq "yes") {
+			$knownkeys{"LOCAL:!$k"} = "no";
+		} elsif ($v eq "no") {
+			$knownkeys{"LOCAL:!$k"} = "yes";
+		}
+		# print STDERR "\tSet LOCAL:$k to ".$knownkeys{"LOCAL:$k"}."\n";
+
+	}
+
+}
+
+sub setVar {
+	my $var = shift;
+
+	$VARS_SET=1;
+	# hmm.  Multi Value attribs?
+
+	# print STDERR "Setting vars\n";
+
+	# First populate the globals, then overwrite with the locals
+	# print STDERR "setVar: /opt/liquid/bin/lqprov gacf | grep $var | grep -v InheritedAttr\n";
+	open CMD, "$homedir/bin/lqprov gacf |  grep -v InheritedAttr |";
+	my @out = <CMD>;
+	close CMD;
+
+	my %globals = ();
+
+	my $val = "";
+	foreach (@out) {
+		chomp;
+		# print STDERR "out: $_\n";
+		my ($k, $v) = split (' ', $_, 2);
+		$k =~ s/:$//;
+		if ($v eq "TRUE") {
+			$v = "yes";
+		} elsif ($v eq "FALSE") {
+			$v = "no";
+		}
+
+		if ($v ne "") {
+			$globals{"VAR:$k"} = 1;
+			if ($knownkeys{"VAR:$k"} ne "") {
+				$knownkeys{"VAR:$k"} .= " ".$v;
+			} else {
+				$knownkeys{"VAR:$k"} = $v;
+			}
+			if ($v eq "yes") {
+				$knownkeys{"VAR:!$k"} = "no";
+			} elsif ($v eq "no") {
+				$knownkeys{"VAR:!$k"} = "yes";
+			}
+			# print STDERR "\tSet VAR:$k to ".$knownkeys{"VAR:$k"}."\n";
+		}
+
+	}
+
+	open CMD, "$homedir/bin/lqprov gs $HOSTNAME | ";
+	@out = <CMD>;
+	close CMD;
+
+	foreach (@out) {
+		chomp;
+		# print STDERR "out: $_\n";
+		my ($k, $v) = split (' ', $_, 2);
+		$k =~ s/:$//;
+		if ($v eq "TRUE") {
+			$v = "yes";
+		} elsif ($v eq "FALSE") {
+			$v = "no";
+		}
+
+		if ($v ne "") {
+			if ($knownkeys{"VAR:$k"} ne "" && ! $globals{"VAR:$k"}) {
+				$knownkeys{"VAR:$k"} .= " ".$v;
+			} else {
+				$knownkeys{"VAR:$k"} = $v;
+				$globals{"VAR:$k"} = 0;
+			}
+			if ($v eq "yes") {
+				$knownkeys{"VAR:!$k"} = "no";
+			} elsif ($v eq "no") {
+				$knownkeys{"VAR:!$k"} = "yes";
+			}
+			# print STDERR "\tSet VAR:$k to ".$knownkeys{"VAR:$k"}."\n";
+		}
+
+	}
+
+}
+
+sub getVar {
+	my (@keys) = (@_);
+
+	# print STDERR "getVar: @_\n";
+
+	if ($keys[0] =~ m/SERVICE/) {
+		if (! defined ($knownkeys{"SERVICE:$keys[1]"})) {
+			getService($keys[1]);
+		}
+	} elsif ($keys[0] =~ m/VAR/) {
+		# Use temp var to handle negation
+		my $t = $keys[1];
+		$t =~ s/^!//;
+		if (! defined ($knownkeys{"VAR:$t"}) && !$VARS_SET) {
+			setVar($t);
+		}
+	} elsif ($keys[0] =~ m/LOCAL/) { 
+		my $t = $keys[1];
+		$t =~ s/^!//;
+		if (! defined ($knownkeys{"LOCAL:$t"}) && !$LOCALS_SET) {
+			setLocal($t);
+		}
+	}
+	$sectionkeys{$cursection}{"$keys[0]:$keys[1]"} = 
+		$knownkeys{"$keys[0]:$keys[1]"};
+	return ($knownkeys{"$keys[0]:$keys[1]"});
+
+}
+
+sub skipPast {
+	return (skipUntil(@_) + 1);
+}
+
+sub skipUntil {
+	my ($lines, $i, $pat) = (@_);
+
+	# We're skipping past un-executed conditionals, so let's keep track
+	# of nested stuff, too.  Works to do else-if.
+
+	#print STDERR "$i skipUntil $pat\n";
+	my $nest = 1;
+	while ($i < scalar(@$lines)) {
+		$$lines[$i] =~ s/^\s+//;
+		$$lines[$i] =~ s/\s+$//;
+		$$lines[$i] =~ s/#.*$//;
+		# print STDERR "\t ($nest) $$lines[$i]\n";
+		if ($$lines[$i] =~ m/^if/) {
+			$nest++;
+		}
+		if ($$lines[$i] =~ /^$pat$/) {
+			$nest--;
+			if (!$nest) {
+				last;
+			}
+		}
+		# print STDERR "  Skipping $$lines[$i]\n";
+		$i++;
+	}
+	return $i;
+}
+
+sub runCmd {
+	# print STDERR "RUNNING: @_\n";
+	return 0xffff & system (@_);
+}
+
+sub processLine {
+	my ($lines, $i) = (@_);
+
+	my $line = $$lines[$i];
+
+	$line =~ s/^\s+//;
+	$line =~ s/\s+$//;
+	$line =~ s/#.*$//;
+	if ($line =~ m/^$/) {return $i+1;}
+
+	# print STDERR "Processing $i: $line\n";
+
+	my @fields = split ' ', $line;
+	if ($line =~ m/^if/) {
+		#print STDERR "$i CONDITIONAL: $$lines[$i] \n";
+		if (getVar($fields[1], $fields[2])) {
+			#print STDERR "$i IF: $$lines[$i] \n";
+			$i++;
+			$$lines[$i] =~ s/^\s+//;
+			$$lines[$i] =~ s/\s+$//;
+			$$lines[$i] =~ s/#.*$//;
+			while ($$lines[$i] ne "else" && $$lines[$i] ne "fi") {
+				$i = processLine($lines, $i);
+				$$lines[$i] =~ s/^\s+//;
+				$$lines[$i] =~ s/\s+$//;
+				$$lines[$i] =~ s/#.*$//;
+			}
+			#print STDERR "$i IF EXIT\n";
+			if ($$lines[$i] ne "fi") {
+				return (skipPast ($lines, $i, "fi"));
+			} else {
+				return $i + 1;
+			}
+		} else {
+			#print STDERR "$i ELSE: $$lines[$i] \n";
+			$i = skipUntil ($lines, $i+1, "else|fi");
+			#print STDERR "$i ELSE: $$lines[$i] \n";
+			$$lines[$i] =~ s/^\s+//;
+			$$lines[$i] =~ s/\s+$//;
+			$$lines[$i] =~ s/#.*$//;
+			if ($$lines[$i] =~ /^else/) {
+				$i++;
+				$$lines[$i] =~ s/^\s+//;
+				$$lines[$i] =~ s/\s+$//;
+				$$lines[$i] =~ s/#.*$//;
+			}
+			while ($$lines[$i] ne "fi") {
+				$i = processLine($lines, $i);
+				$$lines[$i] =~ s/^\s+//;
+				$$lines[$i] =~ s/\s+$//;
+				$$lines[$i] =~ s/#.*$//;
+			}
+			#print STDERR "$i ELSE EXIT\n";
+			return $i + 1;
+		}
+	} elsif ($line =~ m/^POSTCONF/) {
+		my $cmd = $commands{'POSTCONF'};
+		if ($fields[2] eq "VAR") {
+			getVar ($fields[2], $fields[3]);
+			$cmd = $cmd." $fields[1]='".$knownkeys{"VAR:$fields[3]"}."'";
+		} elsif ($fields[2] eq "FILE") {
+			# Should probably do this with getVar...
+			# print STDERR "Rewriting file conf/$fields[3] /tmp/$fields[3].$$\n";
+			rewriteConfig ("conf/$fields[3]", "/tmp/$fields[3].$$");
+			open F, "/tmp/$fields[3].$$";
+			my @l = <F>;
+			close F;
+			@l = grep !/^$/, @l;
+			chomp @l;
+			$knownkeys{"VAR:$fields[3]"} = join ', ',@l;
+			$sectionkeys{$cursection}{"VAR:$fields[3]"} =
+				$knownkeys{"VAR:$fields[3]"};
+			unlink "/tmp/$fields[3].$$";
+			$cmd = $cmd." $fields[1]='".$knownkeys{"VAR:$fields[3]"}."'";
+		} else {
+			$cmd = $cmd." $fields[1]='".$fields[2]."'";
+		}
+		if (changedVar("VAR:$fields[3]") || defined ($FORCE{$cursection}) ) {
+			push @{$todo{$cursection}}, $cmd;
+		}
+		return $i+1;
+	} elsif ($line =~ m/VAR/ || $line =~ m/LOCAL/) {
+		getVar($fields[0], $fields[1]);
+		return $i+1;
+	} else {
+		print STDERR "Error processing line $i: $$lines[$i]\n";
+		return $i+1;
+	}
+}
+
+sub readConfig{
+	%knownkeys = ();
+	%todo = ();
+	%restarts = ();
+	%rewrites = ();
+	%stopstarts = ();
+	%depends = ();
+	$VARS_SET=0;
+	$LOCALS_SET=0;
+	open CONF, "$config" or die "Can't open $config: $!";
+	my @lines = <CONF>;
+	close CONF;
+
+	chomp @lines;
+
+	for (my $i = 0; $i <= $#lines; $i++) {
+		my $line = $lines[$i];
+
+		$line =~ s/^\s+//;
+		$line =~ s/\s+$//;
+		$line =~ s/#.*$//;
+		if ($line =~ m/^$/) {next;}
+
+		# Keywords are:
+		#
+		#	SECTION
+		#	RESTART
+		#
+		#	SERVICE
+		#	POSTCONF
+		#
+		#	if
+		#	else
+		#	fi
+		
+		my @fields = split ' ', $line;
+
+		if ($line =~ m/^SECTION/) {
+			$cursection = $fields[1];
+			getVar("SERVICE",$fields[1]);
+			if ($fields[2] eq "DEPENDS") {
+				$depends{$fields[3]} = $cursection;
+			}
+		} elsif ($line =~ m/^REWRITE/) {
+			$rewrites{$cursection}{$fields[1]} = $fields[2];
+		} elsif ($line =~ m/^RESTART/) {
+			foreach (@fields) {
+				if ($_ eq "RESTART") {next;}
+				push @{$restarts{$cursection}}, $_;
+			}
+			$cursection = "";
+		} else {
+			$i = processLine(\@lines, $i);
+			$i--; # otherwise we skip lines.
+		}
+		
+	}
+
+}
+
+sub changedVar {
+	my $key = shift;
+	if ($knownkeys{$key} ne $prevknownkeys{$key} && 
+		(defined $prevknownkeys{$key} || !$firstrun) ) { 
+		return 1;
+	}
+	return 0;
+}
+
+sub compareKeys {
+	my %affectedsections = ();
+	my $key;
+	my $section;
+
+	# I think this breaks if a section is removed.
+
+	foreach $section (sort keys %sectionkeys) {
+		foreach $key (sort keys %{$sectionkeys{$section}}) {
+			if (changedVar ($key) || defined $FORCE{$section}) {
+				# print STDERR 
+					# "KEYCHANGE: $key from $prevknownkeys{$key} ".
+					# "to $knownkeys{$key}\n";
+				$affectedsections{$section} = 1;
+				if ($key =~ m/^SERVICE:/) {
+					my $val = $key;
+					$val =~ s/^SERVICE://;
+					if ($val !~ /^!/) {
+						$stopstarts{$val} = $knownkeys{$key};
+						last;
+					}
+				} 
+			}
+		}
+	}
+
+	foreach $section (sort keys %affectedsections) {
+		foreach (@{$restarts{$section}}) {
+			if (!defined $stopstarts{$_}) {
+				$stopstarts{$_} = -1;
+			}
+		}
+	}
+
+}
+
+
+sub rewriteConfig {
+	my ($from, $to) = (@_);
+	# print STDERR "REWRITE $from to $to\n";
+	if ($from !~ m|^/|) {
+		$from = "$homedir/$from";
+	}
+	if ($to !~ m|^/|) {
+		$to = "$homedir/$to";
+	}
+
+	unlink ($to);
+
+	if ( -f "$to" ) {
+		print STDERR "Error: Can't remove $to\n\n";
+		return;
+	}
+
+	# @@var@@ for lqlocalconfig variables
+	# %%var%% for lqprov variables
+
+	open (SOURCE, "$from") or die "Can't open $from: $!";
+	my @slines = <SOURCE>;
+	close SOURCE;
+
+	open (DEST, ">$to");
+
+	foreach my $sline (@slines) {
+		while ($sline =~ m/\@\@([^\@]+)\@\@/g) {
+			# print STDERR "\t$sline";
+			my $sr = $1;
+			$sline =~ s/\@\@$sr\@\@/$knownkeys{"LOCAL:$sr"}/g;
+			# print STDERR "\t$sline";
+		}
+
+		# We support parsing for the lqprov functions.
+		# Normal parsing uses gcf
+		# Functions supported:
+		#	(un)comment(args) - replace with comment char "#" if true (or value exists)
+		#   binary(args) - 0 for false, 1 for true
+		# 	range (var low high) - replace with percent of range
+		#   freq (var total) - replace with total / var  (var is period in total)
+		#   contains (var string) - 
+		#		for MV attribs, set to string if string is in the attrib
+		#   contains (var string, replacement) - 
+		#		for MV attribs, set to replacement if string is in the attrib
+		#	list (var separator)
+		#		Works like perl join, for multivalued attrib, joins with join value
+		#		used to create csv or regexes
+		#
+		# args supported:
+		#	SERVER:key - use command gs with liquid_server_hostname, get value of key
+		#
+		while ($sline =~ m/%%([^%]+)%%/g) {
+			# print STDERR "\t$sline";
+			my $sr = $1;
+			my $rep;
+			if ($sr =~ m/^comment/) {
+				my ($cmd, $key) = ($sr =~ m/comment ([^:]+):(\S+)/);
+				if ($knownkeys{"$cmd:$key"} ne "" &&
+					($knownkeys{"$cmd:$key"} ne "no" ||
+					$knownkeys{"$cmd:$key"} == 1)
+					) {
+					$rep = "#";
+				} else {
+					$rep = "";
+				}
+			} elsif ($sr =~ m/^uncomment/) {
+				my ($cmd, $key) = ($sr =~ m/comment ([^:]+):(\S+)/);
+				if ($knownkeys{"$cmd:$key"} ne "" &&
+					($knownkeys{"$cmd:$key"} ne "no" ||
+					$knownkeys{"$cmd:$key"} == 1)
+					) {
+					$rep = "";
+				} else {
+					$rep = "#";
+				}
+			} elsif ($sr =~ m/^binary/) {
+				my ($cmd, $key) = ($sr =~ m/binary ([^:]+):(\S+)/);
+				if ($knownkeys{"$cmd:$key"} eq "TRUE" || 
+					$knownkeys{"$cmd:$key"} eq "yes") {
+					$rep = 1;
+				} else {
+					$rep = 0;
+				}
+			} elsif ($sr =~ m/^range/) {
+				my ($cmd, $key, $lo, $hi) = 
+					($sr =~ m/range ([^:]+):(\S+)\s+(\S+)\s+(\S+)/);
+				$rep = ( ($knownkeys{"$cmd:$key"}/100) * ($hi - $lo) ) + $lo;
+			} elsif ($sr =~ m/^list/) {
+				my (undef, $key, $j) = split (' ',$sr,3);
+				my @l = split (' ', $knownkeys{$key});
+				$rep = join $j,@l
+			} elsif ($sr =~ m/^contains/) {
+				my ($string, $replace) = split (',',$sr,2);
+				my (undef, $key, $str) = split (' ',$string,3);
+				if ($replace eq "") {
+					$replace = $str;
+				}
+				if (grep /$str/, $knownkeys{$key}) {
+					$rep = $replace;
+				} else {
+					$rep = "";
+				}
+			} elsif ($sr =~ m/^freq/) {
+				my ($cmd, $key, $total) = 
+					($sr =~ m/freq ([^:]+):(\S+)\s+(\S+)/);
+				my $p = $knownkeys{"$cmd:$key"};
+				$p =~ s/\D//g;
+				if ($p) {
+					$rep = ( $total/$p );
+				} else {
+					$rep = $total;
+				}
+			} else {
+				$rep=$knownkeys{"VAR:$sr"};
+			}
+			my $qr = quotemeta($sr);
+			$sline =~ s/%%$qr%%/$rep/g;
+			# print STDERR "\t$sline";
+		}
+
+		print DEST $sline;
+	}
+	close DEST;
+
+	`chmod 440 "$to"`;
+
+}
+
+sub doTodo {
+
+	print STDERR "DO: $_\n";
+
+	system ($_);
+
+}
+
+sub stopStartServers {
+	my $forced = 0;
+
+	my %written = ();
+
+	my %done;
+
+	foreach my $section (sort keys %FORCE) {
+		$forced = 1;
+		foreach (sort keys %{$rewrites{$section}}) {
+			if (! defined($written{$_})) {
+				rewriteConfig ($_, $rewrites{$section}{$_});
+				$written{$_} = $rewrites{$section}{$_};
+			}
+		}
+		foreach (@{$todo{$section}}) {
+			if (!defined ($done{$_}) ) {
+				$done{$_} = 1;
+				doTodo($_);
+			}
+		}
+	}
+
+	if ($forced) {
+		exit 0;
+	}
+
+	# We need to parse the stopstart list, and make sure we
+	# don't stop anything that someone else depends on.
+
+	foreach my $section (sort keys %stopstarts) {
+		if ($stopstarts{$section} == 0) {
+			if (defined ($depends{$section}) ) {
+				if ( defined ($stopstarts{$depends{$section}}) &&
+					$stopstarts{$depends{$section}} != 0 && $knownkeys{"SERVICE:$section"}) {
+					# It's got a dependency that we're not stopping (and is running)
+					# So change our action to a restart
+					print STDERR 
+						"$depends{$section} depend on $section - changing STOP to RESTART\n";
+					$stopstarts{$section} = -1;
+				}
+			}
+		}
+	}
+
+	foreach my $section (sort keys %stopstarts) {
+		foreach (@{$todo{$section}}) {
+			if (!defined ($done{$_}) ) {
+				$done{$_} = 1;
+				doTodo($_);
+			}
+		}
+
+		if ($stopstarts{$section} == -1) {
+			foreach (sort keys %{$rewrites{$section}}) {
+				if (! defined($written{$_})) {
+					rewriteConfig ($_, $rewrites{$section}{$_});
+					$written{$_} = $rewrites{$section}{$_};
+				}
+			}
+		} elsif ($stopstarts{$section} == 1) {
+			foreach (sort keys %{$rewrites{$section}}) {
+				if (! defined($written{$_})) {
+					rewriteConfig ($_, $rewrites{$section}{$_});
+					$written{$_} = $rewrites{$section}{$_};
+				}
+			}
+		}
+		controlProcess ($section);
+	}
+}
+
+sub controlProcess {
+	# -1 = restart
+	# 0 = stop
+	# 1 = start
+	my ($section) = (@_);
+	my %scripts = (
+			"mta"	=>	"/opt/liquid/bin/postfix",
+			"antispam"	=>	"/opt/liquid/bin/lqamavisdctl",
+			"antivirus"	=>	"/opt/liquid/bin/lqclamdctl",
+			"sasl"	=>	"/opt/liquid/bin/lqsaslauthdctl",
+			);
+	my $action = ("restart", "stop", "start")[$stopstarts{$section}+1];
+	# Postfix, unique to the end.
+	if ($action eq "restart" && $section eq "mta") {
+		$action = "reload";
+	}
+	print STDERR "CONTROL $section: $scripts{$section} $action norewrite\n";
+	`$scripts{$section} $action norewrite`;
+}
+
+my $cpid;
+if ($fork) {
+	$cpid = fork();
+	if ($cpid) {
+		open PIDFILE, "> $homedir/log/lqmtaconfig.pid";
+		print PIDFILE "$cpid";
+		close PIDFILE;
+		exit (0);
+	}
+}
+
+while (1) {
+	%prevknownkeys=%knownkeys;
+	readConfig();
+	compareKeys();
+	stopStartServers();
+	print STDERR "Sleeping\n";
+	sleep 120;
+	$firstrun = 0;
+}

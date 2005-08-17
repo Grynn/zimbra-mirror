@@ -1,0 +1,6 @@
+body.TitlePanel {background-color: rgb(37, 87, 173);}
+body.OverviewPanel {background-color: white;}
+body.FilterPanel {background-color: white;}
+body.ListPanel {background-color: rgb(229, 240, 254);}
+
+table {border: black solid 5px;}

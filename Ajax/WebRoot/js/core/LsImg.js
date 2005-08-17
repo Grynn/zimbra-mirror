@@ -1,0 +1,81 @@
+/**
+* @class
+* This static class provides basic image support by using CSS and background 
+* images rather than &lt;img&gt; tags. 
+* @author Conrad Damon
+* @author Ross Dargahi
+*/
+function LsImg() {
+}
+LsImg.prototype = new Object;
+LsImg.prototype.constructor = null;
+
+LsImg.ICON = 1;
+LsImg.HORIZ_BORDER = 2;
+LsImg.VERT_BORDER = 3;
+LsImg.BACKGROUND = 4;
+
+LsImg._VIEWPORT_ID = "LsImg_VP";
+
+/**
+* This method will set the image for <i>parentEl</i>. <i>parentEl</i> should only contain this image and no 
+* other children
+*
+* @param parentEl The parent element for the image
+* @param imageInfo The array describing the image. First element is the css rule name, second & third are width and height
+* @param style image style. Can be LsImg.ICON for icons (default), LsImg.VERT_BORDER for vertical borders
+* 	LsImg.HORIZ_BORDER for horizontal borders, or LsImg.BACKGROUND for backgrounds
+* @ param useParenEl If true will use the parent element as the root for the image and will not create an intermediate DIV
+*/
+LsImg.setImage =
+function(parentEl, imageInfo, style, useParentEl) {
+	style = (!style) ? LsImg.ICON : style;
+	var className = imageInfo[0];
+
+	if (useParentEl) {
+		parentEl.className = className;
+	} 
+	else {
+		if (parentEl.firstChild == null) {
+			parentEl.innerHTML = className 
+							   ? ["<div class='", className, "'></div>"].join("")
+							   : "<div></div>";
+   		}
+		else {
+			parentEl.firstChild.className = className;
+		}
+	}
+}
+
+LsImg.getImageClass =
+function(parentEl) {
+	return parentEl.firstChild ? parentEl.firstChild.className : parentEl.className;
+}
+
+LsImg.getImageElement =
+function(parentEl) {
+	return parentEl.firstChild ? parentEl.firstChild : parentEl;
+}
+
+LsImg.getParentElement =
+function(imageEl) {
+	return imageEl.parentNode;
+}
+
+/**
+* Gets the "image" as an HTML string. 
+*
+* @param styleStr	additional style info e.g. "display:inline"
+* @param attrStr	additional attributes eg. "id=X748"
+*/
+LsImg.getImageHtml = 
+function(imageInfo, styleStr, attrStr) {
+	attrStr = (!attrStr) ? "" : attrStr;
+	var className = imageInfo[0];
+	styleStr = styleStr ? "style='" + styleStr + "' " : "";
+	if (className) {
+		return ["<div class='", className, "' ", styleStr, " ", attrStr, "></div>"].join("");
+	}
+	return ["<div ", styleStr, " ", attrStr, "></div>"].join("");
+}
+

@@ -1,0 +1,19 @@
+#!/bin/bash
+#
+# Prefer using the extension class loader mechanism because ps
+# looks ugly otherwise.  But on occassion, an extension jar file
+# will need to load a class from the application classloader
+# (eg, socket factory in SmtpInject) - in those cases, use this
+# script instead.
+#
+source `dirname $0`/lqshutil || exit 1
+lqsetvars liquid_home liquid_java_home
+
+jars=`echo ${liquid_home}/lib/*.jar | sed 's/ /:/g'`
+
+exec ${liquid_java_home}/bin/java \
+     -client \
+     -Dliquid.home=${liquid_home} \
+     -Djava.library.path=${liquid_home}/lib \
+     -classpath ${jars} \
+     "$@"

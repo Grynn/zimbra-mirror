@@ -1,0 +1,54 @@
+#!/bin/bash
+
+source `dirname $0`/lqshutil || exit 1
+lqsetvars mysql_directory mysql_pidfile mysql_mycnf
+
+lqassert -d ${mysql_directory}
+lqassert -x ${mysql_directory}/bin/mysqld_safe
+lqassert -r ${mysql_mycnf}
+lqassert -d `dirname ${mysql_pidfile}`
+
+#
+# Path to my.cnf
+#
+
+case "$1" in
+    'start')
+	# --defaults-file must be first argument
+	cd ${mysql_directory}; \
+            ${mysql_directory}/bin/mysqld_safe \
+                --defaults-file=${mysql_mycnf} \
+                --ledir=${mysql_directory}/bin &
+	;;
+    
+    'stop')
+	if  [ ! -s "${mysql_pidfile}" ]; then 
+	    echo "Error: no pid in '${mysql_pidfile}'"
+	    exit 1
+	fi
+	pid=`cat ${mysql_pidfile}`
+	echo -n "Killing mysqld with pid $pid "
+	kill $pid
+	# wait for mysqld pid file to be removed
+	for ((i = 0; i < 30; i++)); do
+	    sleep 1;
+	    if [ ! -s ${mysql_pidfile} ]; then
+		break;
+	    fi
+	    echo -n "."
+	done 
+	if [ -s ${mysql_pidfile} ]; then 
+	    echo " gave up waiting!"
+	fi
+	;;
+    
+    'restart')
+	$0 stop
+	$0 start
+	;;
+
+    *)
+	echo "Usage: $0 start|stop|restart"
+	exit 1
+	;;
+esac

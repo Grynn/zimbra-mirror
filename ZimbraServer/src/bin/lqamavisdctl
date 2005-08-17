@@ -1,0 +1,69 @@
+#!/bin/bash
+
+if [ x`whoami` != xliquid ]; then
+    echo Error: must be run as liquid user
+	exit 1
+fi
+
+source `dirname $0`/lqshutil || exit 1
+lqsetvars \
+    liquid_home \
+    liquid_log_directory
+
+rewriteconfig() {
+	if [ x$2 = "x" ]; then
+		/opt/liquid/bin/lqmtaconfig antispam > /dev/null 2>&1
+	fi
+}
+
+#
+# Main
+#
+case "$1" in
+    'start')
+		mount -t tmpfs | grep ${liquid_home}/amavisd/tmp > /dev/null 2>&1
+		if [ $? != 0 ]; then
+			mount ${liquid_home}/amavisd/tmp
+		fi
+		rewriteconfig
+		if [ ! -f ${liquid_home}/amavisd/.spamassassin/bayes_toks ]; then
+			# Initial bayes seeding.
+			cp -f ${liquid_home}/amavisd/.spamassassin/init/* \
+				${liquid_home}/amavisd/.spamassassin
+			chmod 644 ${liquid_home}/amavisd/.spamassassin/bayes*
+		fi
+		${liquid_home}/amavisd/sbin/amavisd -c \
+			${liquid_home}/conf/amavisd.conf &
+        ;;
+
+    'kill')
+		cpid=`cat /opt/liquid/log/amavisd.pid`
+        kill -TERM "$cpid" 2> /dev/null
+		sleep 2
+		umount ${liquid_home}/amavisd/tmp
+        ;;
+
+    'stop')
+		cpid=`cat /opt/liquid/log/amavisd.pid`
+        kill -TERM "$cpid" 2> /dev/null
+		killall -TERM ${liquid_home}/amavisd/sbin/amavisd
+		sleep 2
+		umount ${liquid_home}/amavisd/tmp
+        ;;
+    
+    'restart')
+        $0 stop
+        $0 start
+        ;;
+	
+	'status')
+		cpid=`cat /opt/liquid/log/amavisd.pid`
+        kill -0 "$cpid" 2> /dev/null
+		exit $?
+		;;
+    
+    *)
+        echo "Usage: $0 start|stop|kill|restart|status"
+        exit 1
+        ;;
+esac

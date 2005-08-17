@@ -1,0 +1,20 @@
+# This is the right place to customize your installation of SpamAssassin.
+#
+# See 'perldoc Mail::SpamAssassin::Conf' for details of what can be
+# tweaked.
+#
+###########################################################################
+#
+# rewrite_header Subject *****SPAM*****
+# report_safe 1
+# trusted_networks 212.17.35.
+# lock_method flock
+rewrite_header Subject *SPAM* _STARS(*)_
+bayes_auto_learn 1
+bayes_min_spam_num 60
+bayes_min_ham_num 60
+clear_headers
+add_header spam Flag _YESNOCAPS_
+add_header all Status _YESNO_, score=_SCORE_ required=_REQD_ tests=_TESTS_ autolearn=_AUTOLEARN_ version=_VERSION_
+add_header all Level _STARS(*)_
+add_header all Checker-Version SpamAssassin _VERSION_ (_SUBVERSION_) on _HOSTNAME_

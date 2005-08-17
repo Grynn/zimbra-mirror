@@ -1,0 +1,361 @@
+#!/usr/bin/perl -w
+
+use strict;
+use Net::SMTP;
+use Getopt::Long;
+use Pod::Usage;
+use Sys::Hostname;
+
+sub run;
+sub sendmsg;
+
+# TODO: implement the soap test generation part
+
+my ($opt_help, $opt_verbose, $opt_provision, $opt_sendmsg,
+    $opt_mta, $opt_extfwd, $opt_soapfile, $opt_domain,
+    $opt_sender, $opt_catch, $opt_forward, $opt_rewrite);
+
+GetOptions(
+	   "address=s"  => \$opt_mta,
+           "catch=s"    => \$opt_catch,
+	   "domain=s"   => \$opt_domain,
+	   "extfwd=s"   => \$opt_extfwd,
+           "forward=s"  => \$opt_forward,
+           "help"       => \$opt_help,
+           "mail"       => \$opt_sendmsg,
+	   "provision"  => \$opt_provision,
+	   "rewrite=s"  => \$opt_rewrite,
+	   "sender=s"   => \$opt_sender,
+	   "testfile=s" => \$opt_soapfile,
+           "verbose"    => \$opt_verbose ) || pod2usage(2);
+
+pod2usage(1) if ($opt_help);
+if (!defined($opt_sendmsg) && !defined($opt_provision)) {
+    pod2usage(-msg => "One of -m or -p must be specified");
+}
+if (!defined($opt_mta) && defined($opt_sendmsg)) {
+    pod2usage(-msg => "No MTA specified");
+}
+if (!defined($opt_extfwd)) {
+    pod2usage(-msg => "No external forward address specified");
+}
+if (!defined($opt_domain)) {
+    pod2usage(-msg => "No domain specified");
+}
+$opt_soapfile= "aliastest-$opt_domain-verify.xml" if (!defined($opt_soapfile));
+$opt_sender = "" if (!defined($opt_sender));
+
+#
+# If you send to x it will go to y map.  No way to express $opt_extfwd
+# yet.  When you add provisioning steps you have to add to the
+# deliverymap.
+#
+my %deliveryMap = ();
+my $MAX_USERS = 8;
+
+for (my $i = 1; $i <= $MAX_USERS; $i++) {
+    $deliveryMap{"user$i\@$opt_domain"} = [ "user$i\@$opt_domain" ];
+}
+
+$deliveryMap{"list\@$opt_domain"} =
+    [
+     "user1\@$opt_domain",
+     "user2\@$opt_domain",
+     "user5\@$opt_domain",
+     "user7\@$opt_domain"
+     ];
+$deliveryMap{"alias3\@$opt_domain"} = [ "user3\@$opt_domain" ];
+$deliveryMap{"alias4\@$opt_domain"} = [ "user4\@$opt_domain" ];
+$deliveryMap{"alias6\@$opt_domain"} = [ "user6\@$opt_domain" ];
+$deliveryMap{"alias7\@$opt_domain"} = [ "user7\@$opt_domain" ];
+$deliveryMap{"alias8\@$opt_domain"} = [ "user8\@$opt_domain" ];
+
+if (defined($opt_catch)) {
+    $deliveryMap{"catch1\@$opt_domain"} = [ "catch1\@$opt_domain" ];
+    $deliveryMap{"foo\@$opt_catch"} = [ "catch1\@$opt_domain" ];
+    $deliveryMap{"bar\@$opt_catch"} = [ "catch1\@$opt_domain" ];
+
+    $deliveryMap{"catch2\@$opt_domain"} = [ "catch2\@$opt_domain" ];
+    $deliveryMap{"postmaster\@$opt_domain"} = [ "catch2\@$opt_domain" ];
+    $deliveryMap{"yowza\@$opt_domain"} = [ "catch2\@$opt_domain" ];
+    $deliveryMap{"foo\@$opt_domain"} = [ "catch2\@$opt_domain" ];
+}
+
+if (defined($opt_forward)) {
+    $deliveryMap{"user1\@$opt_forward"} = [ "user1\@$opt_domain" ];
+}
+
+#
+# Do provisioning
+#
+if (defined($opt_provision)) {
+    my $provcmds = "/tmp/aliastest.lqprov.$$";
+    open(LQP, "> $provcmds");
+    print LQP "cd $opt_domain\n";
+    print LQP "cdl list\@$opt_domain\n";
+
+    # user1: account, list
+    print LQP "ca user1\@$opt_domain test123\n";
+    print LQP "adlm list\@$opt_domain user1\@$opt_domain\n";
+
+    # user2: account, forward
+    print LQP "ca user2\@$opt_domain test123\n";
+    print LQP "ma user2\@$opt_domain liquidMailForwardingAddress $opt_extfwd\n";
+
+    # user3: account, alias
+    print LQP "ca user3\@$opt_domain test123\n";
+    print LQP "aaa user3\@$opt_domain alias3\@$opt_domain\n";
+
+    # user4: account, alias, list
+    print LQP "ca user4\@$opt_domain test123\n";
+    print LQP "aaa user4\@$opt_domain alias4\@$opt_domain\n";
+    print LQP "adlm list\@$opt_domain user4\@$opt_domain\n";
+
+    # user5: account, forward, list
+    print LQP "ca user5\@$opt_domain test123\n";
+    print LQP "ma user5\@$opt_domain liquidMailForwardingAddress $opt_extfwd\n";
+    print LQP "adlm list\@$opt_domain user5\@$opt_domain\n";
+
+    # user6: account, alias, forward
+    print LQP "ca user6\@$opt_domain test123\n";
+    print LQP "aaa user6\@$opt_domain alias6\@$opt_domain\n";
+    print LQP "ma user6\@$opt_domain liquidMailForwardingAddress $opt_extfwd\n";
+
+    # user7: account, alias, forward, list
+    print LQP "ca user7\@$opt_domain test123\n";
+    print LQP "aaa user7\@$opt_domain alias7\@$opt_domain\n";
+    print LQP "ma user7\@$opt_domain liquidMailForwardingAddress $opt_extfwd\n";
+    print LQP "adlm list\@$opt_domain user7\@$opt_domain\n";
+
+    # user8: account, alias, canonical
+    print LQP "ca user8\@$opt_domain test123\n";
+    print LQP "aaa user8\@$opt_domain alias8\@$opt_domain\n";
+    print LQP "ma user8\@$opt_domain liquidMailCanonicalAddress user8\@test.canonical.$opt_domain.t2\n";
+
+    if (defined($opt_catch)) {
+        # catch1: forward all mail to one domain to a mailbox in another domain
+        print LQP "ca catch1\@$opt_domain test123\n";
+        print LQP "cd $opt_catch liquidDomainType alias liquidMailForwardingAddress catch1\@$opt_domain\n";
+    
+        # catch2: forward all unknown in one domain to mailbox in same domain
+        print LQP "ca catch2\@$opt_domain test123 liquidMailCatchAllAddress \@$opt_domain\n";
+    }
+
+    if (defined($opt_forward)) {
+        # forward: forward all email in one domain to another domain
+        print LQP "cd $opt_forward liquidDomainType alias liquidMailCatchAllForwardingAddress \@$opt_domain\n";
+    }
+
+    if (defined($opt_rewrite)) {
+	# rewrite1: canonical rewrite whole domain
+	print LQP "cd $opt_rewrite liquidMailCatchAllAddress \@$opt_rewrite liquidMailCatchAllCanonicalAddress \@example.com\n";
+	print LQP "ca rewrite1\@$opt_rewrite test123\n";
+
+        # rewrite2: canonical rewrite of account + canonical rewrite domain
+	print LQP "ca rewrite2\@$opt_rewrite test123 liquidMailCanonicalAddress rewrite.two\@$opt_rewrite\n";
+    }
+
+    close(LQP);
+    system("lqprov -v < $provcmds");
+    unlink("$provcmds");
+
+    # There should also be 9 or 11 externally received messages:
+    # 1 (list) + 4 (account) + 2 (alias + forward) = 7
+    # from the canonical test which goes external  = 2
+    # from opt_rewrite test                        = 2
+}
+
+#
+# Do message sending tests
+#
+if (defined($opt_sendmsg)) {
+    
+    my $timestamp = time();
+
+    foreach my $rcpt (sort keys %deliveryMap) {
+        sendmsg($rcpt, 0, $opt_sender, $timestamp);
+    }
+    
+    #
+    # Send _from_ an account that has canonical rewrite
+    #
+    sendmsg("user2\@$opt_domain", 0, "user8\@$opt_domain", $timestamp);
+    sendmsg("user2\@$opt_domain", 0, "alias8\@$opt_domain", $timestamp);
+
+    #
+    # Whole domain canonical rewrite
+    #
+    if (defined($opt_rewrite)) {
+	sendmsg("user2\@$opt_domain", 0, "rewrite1\@$opt_rewrite", $timestamp);
+	sendmsg("user2\@$opt_domain", 0, "rewrite2\@$opt_rewrite", $timestamp);
+    }
+
+    #
+    # Check that unknown account in local domain is rejected
+    # 
+    (my $disclaimer = <<EOF)  =~ s/^/INFO: /gm;
+The following unknown user test can fail if (a) you are testing with
+virtual_mailbox_maps unset (ie no recipient checking) or (b) if you
+are sending from mynetworks (in both cases bounces will be generated
+instead of rcpt_to time reject) or (c) you are running the catchall
+address tests.
+EOF
+    print $disclaimer;
+    sendmsg("dflkjfsdflsddssdfddsfsdffjk\@$opt_domain", 1,
+    $opt_sender, $timestamp);
+
+    #
+    # Check for relaying
+    #
+    sendmsg("$opt_extfwd", 1, $opt_sender, $timestamp);
+    sendmsg("relay\@example.com", 1, $opt_sender, $timestamp);
+    sendmsg("relay\@sdflkjsdfsdflkjsdfsdfsdkljf.com", 1, $opt_sender, $timestamp);
+}
+
+#
+# SMTP routine
+# 
+sub sendmsg($$$$) {
+    my ($rcpt, $mustFail, $sender, $timestamp) = @_;
+
+    my $token = lc($rcpt);
+    $token =~ s/[^a-z0-9]//g;
+    my $rand = int(rand(1000000));
+
+    my $smtp = Net::SMTP->new("$opt_mta") || die "connect to mta failed: $!";
+    $smtp->debug($opt_verbose);
+
+    $smtp->mail("<$sender>") || die($smtp->message());
+
+    if (!$smtp->to("<$rcpt>")) {
+        if ($mustFail) {
+            print "OK: send failed (expected) to=$rcpt: ", $smtp->message();
+        } else {
+            print "FAIL: send failed (unexpected) to=$rcpt: ", $smtp->message();
+        }
+        $smtp->quit;
+        return;
+    } else {
+        if ($mustFail) {
+            print "FAIL: send accepted (unexpected) to=$rcpt: ", $smtp->message();
+            $smtp->quit;
+            return;
+        } else {
+            print "OK: rcpt to=$rcpt: ", $smtp->message();
+        }
+    }
+    $smtp->data();
+    $smtp->datasend("Subject: $token $rand $timestamp\n");
+    $smtp->datasend("To: $rcpt\n");
+    $smtp->datasend("\n");
+    $smtp->datasend("$token $rand $timestamp\n");
+    $smtp->dataend();
+    print "OK: data $token $rand $timestamp\n";
+    $smtp->quit;
+}
+
+__END__
+    
+=head1 NAME
+
+aliastest - mail delivery tester
+
+=head1 SYNOPSIS
+
+aliastest [options]
+
+      Options:
+        -a --address=%s  MTA name or address
+        -c --catch=%s    include catch all mailbox test
+	-d --domain=%s   domain to create accounts in
+        -e --extfwd=%s   external email address to forward to
+        -f --forward=%s  include whole domain forward test
+        -h --help        usage message
+        -m --mail        do mail sending tests
+        -p --provision   do provision step
+        -r --rewrite     include whole domain canonical test
+        -s --sender=%s   enveloper sender email address
+        -t --testfile=%s file to store soap test in
+        -v --verbose     show SMTP details
+
+=head1 OPTIONS
+
+=over 8
+
+=item B<--address>
+
+Name or address of SMTP server to send message through.  This option
+must be specified.  You can also specify host:port if you need to
+connect to a non-standard port.
+
+=item B<--catch>
+
+Include catch all mailbox test. Forward all addrs in --catch domain to
+an address in --domain.  Also enables a test where all unknown
+addresses in --domain go to a catch all mailbox as well.
+
+=item B<--forward>
+
+Include whole domain forward test.  All addresses specified in
+--forward domain are forwarded so same local part in --domain.
+
+=item B<--rewrite>
+
+Include whole domain canonical rewrite test.  Messages sent from
+--rewrite domain should appear as from example.com.
+
+=item B<--domain>
+
+Domain to create accounts in. Try to test atleast these domains:
+
+- domain that is this host name - domain that exists nowhere
+  in DNS (eg: efgefgefg.com)
+
+- domain that is valid elsewhere - to check if we will
+  accept mail locally for it.  We must accept mail locally
+  if the domain here and accounts here - it should relay non
+  local accounts (dogfood.liquidsys.com)
+
+- domain that has an MX record but is only local to here
+  (liquidsys.com)
+
+=item B<--extfwd>
+
+An external email address to which some accounts should be
+forwarding mail to.
+
+=item B<--help>
+
+Prints a brief help message and exits.
+
+=item B<--mail>
+
+Run the message sending step.
+
+=item B<--provision>
+
+Run the provision step.
+
+=item B<--sender>
+
+Envelope sender address.  Optional, defaults to <>.
+
+=item B<--testfile>
+
+File to save the soap test in.
+
+=item B<--verbose>
+
+Print output of SMTP transaction for debugging.
+
+=back
+
+=head1 DESCRIPTION
+
+Creates accounts, aliases, distribution lists, external
+forwards.  Sends messages to them.  Generates a soap test
+that can then be run to verify that messages are getting to
+accounts they should.  Note that the external forward has to
+be verified by manually.
+
+=cut

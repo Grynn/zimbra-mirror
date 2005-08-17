@@ -1,0 +1,24 @@
+#!/bin/bash
+
+source `dirname $0`/lqshutil || exit 1
+
+source_config_dir=/opt/liquid/openldap/etc/openldap
+config_dir=/opt/liquid/conf
+
+lqsetvars liquid_ldap_userdn liquid_ldap_password ldap_root_password liquid_server_hostname
+
+liquid_sha=`/opt/liquid/openldap/sbin/slappasswd -s ${liquid_ldap_password}`
+
+rm -f ${config_dir}/liquid.ldif
+
+sed -e "s|^userPassword.*|userPassword: ${liquid_sha}|" \
+        ${source_config_dir}/liquid.ldif > ${config_dir}/liquid.ldif
+
+ldap start
+
+ldapmodify -a -c -w ${ldap_root_password} -D "${liquid_ldap_userdn}" -x -f ${config_dir}/liquid.ldif
+ldapmodify -a -c -w ${ldap_root_password} -D "${liquid_ldap_userdn}" -x -f ${source_config_dir}/liquid_mimehandlers.ldif
+
+ldapmodify -c -w ${ldap_root_password} -D "${liquid_ldap_userdn}" -x -f ${config_dir}/liquid.ldif
+ldapmodify -c -w ${ldap_root_password} -D "${liquid_ldap_userdn}" -x -f ${source_config_dir}/liquid_mimehandlers.ldif
+

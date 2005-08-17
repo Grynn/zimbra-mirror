@@ -1,0 +1,264 @@
+<project name="LiquidAjax" default="war">
+
+	<property environment="env"/>
+	
+	<property name="build.dir"          location="build"/>
+	<property name="build.examples.dir" location="${build.dir}/WebRoot/examples"/>
+	<property name="build.cmn.dir"      location="${build.examples.dir}/common"/>
+	<property name="dist.dir"           location="build/dist"/>
+	<property name="dist.tomcat.dir"    location="${dist.dir}/jakarta-tomcat-5.0.28"/>
+	<property name="dist.tomcat.webapps.dir" location="${dist.tomcat.dir}/webapps"/>
+	<property name="dist.tarfile"       value="dev-liquid.tar"/>
+
+	<property name="warfile"            location="${dist.tomcat.webapps.dir}/liquidAjax.war"/>
+	
+	<property name="jars.dir"           location="jars"/>
+	<property name="src.dir"            location="src"/>
+	<property name="copyrightText" value="Copyright 2005¬© Liquid Systems, Inc. All Rights Reserved"/>
+
+	<condition property="deploy.dir" value="${env.DEPLOY_DIR}">
+		<isset property="env.DEPLOY_DIR" />
+	</condition>	
+	<condition property="deploy.dir" value="/opt/liquid/tomcat/webapps">
+		<not><isset property="env.DEPLOY_DIR"/></not>
+	</condition>	
+	
+	<property name="deploy.war" value="${warfile}"/>
+	<property name="deploy.url" value="http://localhost:7070/manager/"/>
+	<property name="deploy.user" value="liquid"/>
+	<property name="deploy.password" value="liquid"/>
+	<property name="deploy.path" value="/liquidAjax"/>
+
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<pathelement location="jars/ant-contrib-1.0b1.jar"/>
+		</classpath>
+	</taskdef>
+  
+	<path id="class.path">
+		<fileset dir="${jars.dir}">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+
+	<target name="compile" depends="build-init" description="compile the filter source" >
+		<!-- Compile the java code from ${src} into ${build} -->
+		<javac srcdir="${src.dir}" destdir="${build.dir}" source="1.4" target="1.4" debug="on">
+			<classpath refid="class.path"/>
+			<include name="**/*.java"/>
+		</javac>
+	</target>
+
+	<taskdef name="deploy" classname="org.apache.catalina.ant.DeployTask" classpathref="class.path"/>
+  
+	<target name="build-init">
+		<mkdir dir="${dist.dir}"/>
+		<mkdir dir="${dist.tomcat.webapps.dir}"/>
+		<mkdir dir="${build.dir}/WebRoot/js"/>
+	</target>
+
+	<target name="clean" depends="build-init" description="Removes any temporary files">
+		<delete dir="${build.dir}"/>
+	</target>
+  
+	<target name="copy-files-to-build-area">
+		<copy file="WebRoot/WEB-INF/web.xml" tofile="${build.dir}/WebRoot/WEB-INF/web.xml" overwrite="true"/>
+		<copy todir="${build.dir}/WebRoot/examples/" overwrite="true" >
+			<fileset dir="WebRoot/examples" includes="**/*" excludes="**/img,**/img/"/>
+		</copy>
+		<copy todir="${build.dir}/WebRoot/" overwrite="true" >
+			<fileset dir="WebRoot/" includes="js/**/*_en.js"/>
+		</copy>
+		<replace dir="${build.dir}/WebRoot/js" includes="**/*.js" token="@copyright@" value="${copyrightText}" />
+	</target>
+
+	
+	<target name="dwtimages">
+		<property name="img.cssFile" value="dwtimgs.css"/>
+		
+		<!-- hi res images -->
+		<property name="img.hiRes.destDir" value="${build.cmn.dir}/img/hiRes"/>
+		<mkdir dir="${img.hiRes.destDir}"/>
+		<delete file="${img.hiRes.destDir}/${img.cssFile}"/>
+	    <foreach target="imagecopy" param="var" list="WebRoot/js/dwt/config/img/hiRes">
+			<param name="destDir" value="${img.hiRes.destDir}"/>
+			<param name="cssPrefix" value="/liquidAjax/examples/common/img/hiRes/"/>			
+			<param name="cssFile" value="${img.cssFile}"/>			
+	    </foreach>
+		
+		<!-- lo res images -->
+		<property name="img.loRes.destDir" value="${build.cmn.dir}/img/loRes"/>
+		<mkdir dir="${img.loRes.destDir}"/>
+		<delete file="${img.loRes.destDir}/${img.cssFile}"/>
+		<foreach target="imagemerge" param="var" list="dwt,horizborders,vertborders">
+			<param name="srcDir" value="WebRoot/js/dwt/config/img/loRes"/>
+			<param name="destDir" value="${img.loRes.destDir}"/>
+			<param name="cssPrefix" value="/liquidAjax/examples/common/img/loRes/"/>			
+			<param name="cssFile" value="${img.cssFile}"/>			
+		</foreach>
+		
+	</target>
+
+	<target name="htmleditorexample">
+		<copy todir="${build.examples.dir}/htmlEditor" overwrite="true" >
+			<fileset dir="WebRoot/examples/htmlEditor" includes="**/*" excludes="**/img,**/img/"/>
+		</copy>
+		
+		<property name="htmleditor.cssFile" value="imgs.css"/>
+		<!-- hi res images -->
+		<property name="htmleditor.hiRes.destDir" value="${build.examples.dir}/htmlEditor/img/hiRes"/>
+		<mkdir dir="${htmleditor.hiRes.destDir}"/>
+		<delete file="${htmleditor.hiRes.destDir}/${htmleditor.cssFile}"/>
+	    <foreach target="imagecopy" param="var" list="WebRoot/examples/htmlEditor/img/hiRes">
+			<param name="destDir" value="${htmleditor.hiRes.destDir}"/>
+			<param name="cssPrefix" value="/liquidAjax/examples/htmlEditor/img/hiRes/"/>			
+			<param name="cssFile" value="${htmleditor.cssFile}"/>			
+	    </foreach>
+		
+		<!-- lo res images -->
+		<property name="htmleditor.loRes.destDir" value="${build.examples.dir}/htmlEditor/img/loRes"/>
+		<mkdir dir="${htmleditor.loRes.destDir}"/>
+		<delete file="${htmleditor.loRes.destDir}/${htmleditor.cssFile}"/>
+		<foreach target="imagemerge" param="var" list="img">
+			<param name="srcDir" value="WebRoot/examples/htmlEditor/img/loRes"/>
+			<param name="destDir" value="${htmleditor.loRes.destDir}"/>
+			<param name="cssPrefix" value="/liquidAjax/examples/htmlEditor/img/hiRes/loRes/"/>			
+			<param name="cssFile" value="${htmleditor.cssFile}"/>			
+		</foreach>
+	</target>
+	
+	<target name="dataviewerexample">
+		<copy todir="${build.examples.dir}/dataViewer" overwrite="true" >
+			<fileset dir="WebRoot/examples/dataViewer" includes="**/*" excludes="**/img,**/img/"/>
+		</copy>
+		
+		<property name="dataViewer.cssFile" value="imgs.css"/>
+		<!-- hi res images -->
+		<property name="dataViewer.hiRes.destDir" value="${build.examples.dir}/dataViewer/config/img/hiRes"/>
+		<mkdir dir="${dataViewer.hiRes.destDir}"/>
+		<delete file="${dataViewer.hiRes.destDir}/${dataViewer.cssFile}"/>
+	    <foreach target="imagecopy" param="var" list="WebRoot/examples/dataViewer/config/img/hiRes">
+			<param name="destDir" value="${dataViewer.hiRes.destDir}"/>
+			<param name="cssPrefix" value="/liquidAjax/examples/dataViewer/config/img/hiRes/"/>			
+			<param name="cssFile" value="${dataViewer.cssFile}"/>			
+	    </foreach>
+		
+		<!-- lo res images -->
+		<property name="dataViewer.loRes.destDir" value="${build.examples.dir}/dataViewer/config/img/loRes"/>
+		<mkdir dir="${dataViewer.loRes.destDir}"/>
+		<delete file="${dataViewer.loRes.destDir}/${dataViewer.cssFile}"/>
+		<foreach target="imagemerge" param="var" list="img">
+			<param name="srcDir" value="WebRoot/examples/dataViewer/config/img/loRes"/>
+			<param name="destDir" value="${dataViewer.loRes.destDir}"/>
+			<param name="cssPrefix" value="/liquidAjax/examples/dataViewer/config/img/loRes/"/>			
+			<param name="cssFile" value="${dataViewer.cssFile}"/>			
+		</foreach>
+	</target>
+
+	<target name="treeexample">
+		<copy todir="${build.examples.dir}/tree" overwrite="true" >
+			<fileset dir="WebRoot/examples/tree" includes="**/*" excludes="**/img,**/img/"/>
+		</copy>
+		
+		<property name="tree.cssFile" value="imgs.css"/>
+		<!-- hi res images -->
+		<property name="tree.hiRes.destDir" value="${build.examples.dir}/tree/img/hiRes"/>
+		<mkdir dir="${tree.hiRes.destDir}"/>
+		<delete file="${tree.hiRes.destDir}/${tree.cssFile}"/>
+	    <foreach target="imagecopy" param="var" list="WebRoot/examples/tree/img/hiRes">
+			<param name="destDir" value="${tree.hiRes.destDir}"/>
+			<param name="cssPrefix" value="/liquidAjax/examples/tree/img/hiRes/"/>			
+			<param name="cssFile" value="${tree.cssFile}"/>			
+	    </foreach>
+		
+		<!-- lo res images -->
+		<property name="tree.loRes.destDir" value="${build.examples.dir}/tree/img/loRes"/>
+		<mkdir dir="${tree.loRes.destDir}"/>
+		<delete file="${tree.loRes.destDir}/${tree.cssFile}"/>
+		<foreach target="imagemerge" param="var" list="img">
+			<param name="srcDir" value="WebRoot/examples/tree/img/loRes"/>
+			<param name="destDir" value="${tree.loRes.destDir}"/>
+			<param name="cssPrefix" value="/liquidAjax/examples/tree/img/hiRes/loRes/"/>			
+			<param name="cssFile" value="${tree.cssFile}"/>			
+		</foreach>
+	</target>
+	
+	<target name="xformsexample">
+		<copy todir="${build.examples.dir}/xforms_test" overwrite="true" >
+			<fileset dir="WebRoot/examples/xforms_test" includes="**/*" excludes="**/img,**/img/"/>
+		</copy>
+	</target>
+		
+	<target name="examples" depends="dwtimages, htmleditorexample, treeexample, dataviewerexample, xformsexample"/>
+	
+	<!-- merges images, puts merged image in build area, and generates CSS  -->	
+	<target name="imagemerge" depends="compile" description="prepares images">
+		<echo message="imageMerge ${var}"/>
+		<java classname="com.liquidsys.liquidAjax.imagemerge.ImageMerge" fork="true" classpathref="class.path" failonerror="true">
+			<classpath>
+				<fileset dir="${jars.dir}">
+					<include name="**/*.jar"/>
+				</fileset>
+				<dirset dir="${build.dir}"/>
+			</classpath>
+			<arg value="-i"/> <arg value="${srcDir}/${var}"/>
+			<arg value="-o"/> <arg value="${destDir}" />
+			<arg value="-p"/> <arg value="${cssPrefix}" />
+			<arg value="-s"/> <arg value="${cssFile}" />
+		</java>
+	</target>
+		  
+	<!-- copies images to build area and generates combined CSS -->			
+	<target name="imagecopy" depends="compile" description="prepares images">
+		<echo message="imagecopy ${var}"/>
+		<java classname="com.liquidsys.liquidAjax.imagemerge.ImageMerge" fork="true" classpathref="class.path" failonerror="true">
+			<classpath>
+				<fileset dir="${jars.dir}">
+					<include name="**/*.jar"/>
+				</fileset>
+				<dirset dir="${build.dir}"/>
+			</classpath>
+			<arg value="-i"/> <arg value="${var}"/>
+			<arg value="-o"/> <arg value="${destDir}"/>
+			<arg value="-p"/> <arg value="${cssPrefix}"/>
+			<arg value="-s"/> <arg value="${cssFile}" />
+			<arg value="-c" />
+		</java>
+	</target>
+	
+	
+
+	<!-- 
+	This target is meant only to be run after a full deploy has
+	been done once. It does not deal with the java code used by the
+	LiquidConsole webapp, so if there are any java changes, another
+	deploy will have to be run.
+	-->
+	<target name="dev-sync">
+		<echo message="Deploy Dir: ${deploy.dir}/${deploy.path}"/>
+		<copy verbose="true" todir="${deploy.dir}${deploy.path}">
+			<fileset dir="WebRoot" includes="js/**,examples/**" excludes="examples/**/img/"/>
+		</copy>
+		<copy verbose="true" todir="${deploy.dir}${deploy.path}/WEB-INF">  	
+			<fileset dir="${build.dir}/WebRoot/WEB-INF" includes="web.xml"/>
+			<fileset dir="WebRoot/WEB-INF" includes="tlds/*"/>		
+		</copy>
+	</target>
+
+	<target name="war" depends="build-init, copy-files-to-build-area, examples">
+		<war warfile="${warfile}" webxml="${build.dir}/WebRoot/WEB-INF/web.xml">
+			<lib dir="${jars.dir}" includes="*.jar" excludes="servlet-api.jar"/>
+			<classes dir="${src.dir}" includes="*.properties"/>
+			<classes dir="${build.dir}" includes="**/*.class" excludes="**/build/*"/>
+			<webinf dir="WebRoot/WEB-INF" includes="tlds/*"/>
+			<fileset dir="WebRoot" includes="js/**"/>
+			<fileset dir="${build.dir}/WebRoot" includes="examples/**"/>
+	    </war>
+	  </target>
+
+	<target name="deploy" depends="war">
+		<deploy url="${deploy.url}" username="${deploy.user}" password="${deploy.password}"
+			    path="${deploy.path}" war="${deploy.war}" update="true"/>
+	</target>
+    
+</project>

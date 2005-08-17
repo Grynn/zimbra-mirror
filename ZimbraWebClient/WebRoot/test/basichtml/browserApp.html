@@ -1,0 +1,29 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"/>
+<html>
+  <head>
+    <title>browserApp.html</title>
+    
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    
+    <!--
+    <link rel="stylesheet" type="text/css" href="./styles.css">
+    -->
+  </head>
+  <frameset  frameborder="no" rows="50,*,40">
+  	<frame name="TitlePanel" scrolling="no" noresize="yes"  src="public/titlePanel.html"/>
+  	<frameset cols="30%,*">
+	    <frame name="OverviewPanel" src="public/overviewPanel.html"/>
+	  	<frameset  rows="50%,*">
+	  		<frame name="FilterPanel" src="public/filterPanel.html"/>
+	  		<frame name="ListPanel" src="public/listPanel.html"/>
+	  	</frameset>
+  	</frameset>
+  	<frame name="StatusPanel" scrolling="no" noresize="yes" src="public/statusPanel.html"/>
+  	<noframes>			
+	  <p>
+	    This HTML frameset displays multiple Web pages. To view this frameset, use a Web browser that supports HTML 4.0 and later.
+	  </p>
+	</noframes>
+  </frameset>  
+</html>

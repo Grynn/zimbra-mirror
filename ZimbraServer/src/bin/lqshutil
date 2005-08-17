@@ -1,0 +1,39 @@
+#!/do/not/execute/this/script/it/is/meant/to/be/sourced -*- shell-script -*-
+#
+# lqshutil is meant to be sourced by other scripts.  If run
+# it will do nothing.  It will complain if it can't find
+# local config program.
+#
+
+#
+# Find and set local config variables.
+#
+lqsetvars() {
+	lqlocalconfig="/opt/liquid/bin/lqlocalconfig"
+	if [ ! -x "${lqlocalconfig}" ]; then 
+	    echo Error: can not find lqlocalconfig program
+	    exit 1
+	fi
+
+	if ! eval `${lqlocalconfig} -q -m shell "$@"`; then
+		echo Error: executing: ${lqlocalconfig} -m shell "$@"
+		exit 1
+	fi
+
+	for i in "$@"; do
+    	if [ -z "${!i}" ]; then
+			echo Error: local configkey $i is not set
+			exit 1
+	    fi
+	done
+}
+
+#
+# Check if a conditional expression is true.
+#
+lqassert() { 
+    if [ $@ ]; then
+    	return;
+    fi
+    echo Error: assertion "'$@'" failed && exit 1
+}

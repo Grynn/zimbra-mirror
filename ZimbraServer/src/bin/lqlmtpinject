@@ -1,0 +1,3 @@
+#!/bin/bash
+
+exec `dirname $0`/lqjava com.liquidsys.coco.lmtpserver.utils.LmtpInject "$@"

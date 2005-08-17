@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>BrowserDetectionTest</title>
+  </head>
+<script src="http://localhost:7070/liquid/js/liquid/core/LsEnv.js"></script>
+  <body>
+    <h1>BrowserDetectionTest</h1>
+    <div id='contents' style="height:100%; width:50%; position:absolute; top:40; left:0">
+      :
+    </div>
+    <div id='contents1' style="height:100%; width:50%; position:absolute; top:40; left:500px">
+      :
+    </div>
+	
+
+
+    <hr>
+  </body>
+<script>
+	var uAs = [
+			   "opaisdoanfodsvinoifnvoianvoqernr oiqeoviqnoevinqeo oqiermnvoqirnmvoq/oiinqoreijnqoiervnqoer",
+			   "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.5) Gecko/20041107 Firefox/1.0", 
+			   "Mozilla/4.0 (compatible; MSIE 4.01; Windows 98)",
+			   "Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)",
+			   "Mozilla/4.0 (compatible; MSIE 5.5; AOL 6.0; Windows NT 4.0)",
+			   "Mozilla/4.0 (compatible; MSIE 5.5; AOL 6.0; Windows NT 5.0)",
+			   "Mozilla/4.0 (compatible; MSIE 5.5; Windows 98; Win 9x 4.90)",
+			   "Mozilla/4.0 (compatible; MSIE 5.5; Windows NT 4.0)",
+			   "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.0.3705)",
+			   "Mozilla/4.0 (compatible; MSIE 6.0b; Windows NT 5.1)",
+			   "Mozilla/4.7 [en] (WinNT; U)",
+			   "Mozilla/4.77 [en] (Windows NT 5.0; U)",
+			   "Mozilla/5.0 (Macintosh; U; PPC Mac OS X Mach-O; en-US; rv:1.3.1) Gecko/20030425",  // Moz1.3.1/Mac
+			   "Mozilla/5.0 (Macintosh; U; PPC Mac OS X Mach-O; en-US; rv:1.4) Gecko/20030612",    // Moz1.4rc2/Mac
+			   "Mozilla/5.0 (Windows; U; Win 9x 4.90; en-US; rv:0.9.2) Gecko/20010907 CS 2000 7.0/7.0",    // Compuserve(?)
+			   "Mozilla/5.0 (Windows; U; WinNT4.0; en-US; m18) Gecko/20001108 Netscape6/6.0" ,
+			   "Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; m18) Gecko/20001108 Netscape6/6.0",    // NS 6.0
+			   "Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; m18) Gecko/20001108 Netscape6/6.1",    // NS 6.1
+			   "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.0.2) Gecko/20030208 Netscape/7.02",   // NS 7.02
+			   "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.4) Gecko/20030612",   // Mozilla 1.4/WinXP
+			   "Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-US; rv:1.0.1) Gecko/20020730 AOL/7.0",
+			   "Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en) AppleWebKit/48 (like Gecko) safari/48",
+			   "Mozilla/4.0 (compatible; MSIE 5.0; Windows 98) opera 6.05",
+			   "Mozilla/4.5 (compatible; OmniWeb/4.2-v435.2; Mac_PowerPC)",
+			   "Wget/1.6",
+			   "Macromedia Flash Player 5",
+			   "Macromedia Flash Player 6",
+			   "Macromedia Flash Player 7",
+			   "opaisdoanfodsvinoifnvoianvoqernr oiqeoviqnoevinqeo oqiermnvoqirnmvoq/oiinqoreijnqoiervnqoer",
+			   "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.6) Gecko/20040206 Firefox/0.8",
+			   "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.6) Gecko/20040413 Galeon/1.3.15 (Debian package 1.3.15-2)",
+			   "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.7.3) Gecko/20041007 Debian/1.7.3-5",
+			   "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.5) Gecko/20041107 Firefox/1.0", 
+			   "Mozilla/5.0 (compatible; Konqueror/3.3; Linux) (KHTML, like Gecko)"
+			   ];
+var resDiv = document.getElementById('contents');
+var resDiv1 = document.getElementById('contents1');
+var resArr = new Array();
+var idx = 0;
+var endTime, startTime, diff;
+/*
+startTime = new Date();
+for (var i = 0 ; i < uAs.length; ++i) {
+	initLsEnv(uAs[i]);
+	idx = 0;
+	resArr[idx++] = "<br><br>";
+	resArr[idx++] = uAs[i] + "<br>";
+	resArr[idx++] = "Is IE = " + LsEnv.isIE + "<br>";
+	resArr[idx++] = "Is Nav = " + LsEnv.isNav + "<br>";
+	resArr[idx++] = "Is Safari = " + LsEnv.isSafari + "<br>";
+	resArr[idx++] = "Is Mac = " + LsEnv.isMac + "<br>";
+	resArr[idx++] = "GeckoDate = " + LsEnv.geckoDate + "<br>";
+	resArr[idx++] = "Is Mozilla = " + LsEnv.isMozilla + "<br>";
+	resArr[idx++] = "Is Firefox = " + LsEnv.isFirefox + "<br>";
+	resArr[idx++] = "browserVersion = " + LsEnv.browserVersion + "<br>";
+	resArr.length = idx;
+	resDiv.innerHTML += resArr.join("");
+	LsEnv.reset();
+ }
+endTime = new Date();
+diff = endTime.getTime() - startTime.getTime();
+resDiv.innerHTML += "Time elapsed = " + diff/i + "<br>";
+*/
+LsEnv.reset();
+startTime = new Date();
+for (i = 0 ; i < uAs.length; ++i){
+	LsEnv.parseUA(uAs[i]);
+	idx = 0;
+	resArr[idx++] = "<br><br>";
+	resArr[idx++] = uAs[i] + "<br>";
+	resArr[idx++] = "Is IE = " + LsEnv.isIE + "<br>";
+	resArr[idx++] = "Is Nav = " + LsEnv.isNav + "<br>";
+	resArr[idx++] = "Is Safari = " + LsEnv.isSafari + "<br>";
+	resArr[idx++] = "Is Mac = " + LsEnv.isMac + "<br>";
+	resArr[idx++] = "GeckoDate = " + LsEnv.geckoDate + "<br>";
+	resArr[idx++] = "Is Mozilla = " + LsEnv.isMozilla + "<br>";
+ 	resArr[idx++] = "Is Firefox = " + LsEnv.isFirefox + "<br>";
+	resArr[idx++] = "browserVersion = " + LsEnv.browserVersion + "<br>";
+	resArr.length = idx;
+	resDiv1.innerHTML += resArr.join("");
+	LsEnv.reset();
+ }
+endTime = new Date();
+diff = endTime.getTime() - startTime.getTime();
+resDiv1.innerHTML += "Time elapsed = " + diff/i + "<br>";
+
+</script>
+</html>

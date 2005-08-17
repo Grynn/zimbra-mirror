@@ -1,0 +1,549 @@
+/**
+ * @class DwtSelect
+ * @constructor
+ * 
+ * Widget to replace the native select element.
+ * Note: Currently this does not support multiple
+ *       selection.
+ * @param options (Array) optional array of options. This can be either
+ *                        an array of DwtSelectOptions or an array of strings.
+ */
+function DwtSelect(parent, options, className, posStyle, width, height) {
+    var clsName = className || "DwtSelect";
+    var positionStyle = posStyle || Dwt.STATIC_STYLE;
+    DwtButton.call(this, parent, null, clsName, positionStyle, DwtButton.ACTION_MOUSEDOWN);
+	this._origClassName = this._className;
+	this._activatedClassName = this._className + "-" + DwtCssStyle.ACTIVATED;
+	this._triggeredClassName = this._className + "-" + DwtCssStyle.TRIGGERED;
+	this.setText(" ");
+	this._width = -1;
+
+    // initialize some variables
+    this._currentSelectionId = -1;
+    this._options = new LsVector();
+    this._optionValuesToIndices = new Object();
+    this._selectedValue = null;
+	this._selectedOption = null;
+	//DBG.showTiming(true, "before _render DwtSelect");
+    this._renderSelectBoxHtml(options);
+	//DBG.timePt("After render");
+	this.disabled = false;
+	this._shouldToggleMenu = true;
+}
+
+DwtSelect.prototype = new DwtButton;
+DwtSelect.prototype.constructor = DwtSelect;
+
+DwtSelect.prototype.toString = 
+function() {
+    return "DwtSelect";
+};
+
+/**
+ * This overrides the _createTable method in DwtLabel. 
+ */
+DwtSelect.prototype._createTable =
+function() {
+	if (LsEnv.isIE) {
+		var tableId = Dwt.getNextId();
+		var html = [];
+		var idx = 0;
+		html[idx++] = "<table id='";
+		html[idx++] = tableId;
+		html[idx++] = "'><colgroup><col><col style='width:23px'></colgroup><tr></tr></table>";
+		this.getHtmlElement().innerHTML = html.join("");
+		this._table = document.getElementById(tableId);
+		this._row = this._table.rows[0];
+	} else {
+		// not sure why this doesn't work for IE. The colgroup never gets applied.
+		this._table = this.getDocument().createElement("table");
+			var colgroup = document.createElement('colgroup');
+		colgroup.innerHTML = "<col><col><col style='width:23px'>";
+		this._table.appendChild(colgroup);	
+		this._row = this._table.insertRow(0);
+		this.getHtmlElement().appendChild(this._table);
+	}
+		// Left is the default alignment. Note that if we do an explicit align left, Firefox freaks out
+	if (this._style & DwtLabel.ALIGN_RIGHT)
+		this._table.align = "right";
+	else if (!(this._style & DwtLabel.ALIGN_LEFT)) {
+		this._table.align = "center";
+		this._table.width = "100%";
+	}
+};
+
+// -----------------------------------------------------------
+// static attributes
+// -----------------------------------------------------------
+/** This keeps track of all instances out there **/
+DwtSelect._objectIds = [null];
+
+// -----------------------------------------------------------
+// instance tracking methods
+// -----------------------------------------------------------
+DwtSelect._assignId = 
+function(anObject) {
+    var myId = DwtSelect._objectIds.length;
+    DwtSelect._objectIds[myId]= anObject;
+    return myId;
+};
+
+DwtSelect._getObjectWithId = 
+function(anId) {
+    return DwtSelect._objectIds[anId];
+};
+
+DwtSelect._unassignId = 
+function(anId) {
+    DwtSelect._objectIds[anId] = null;
+};
+
+DwtSelect.getObjectFromElement = 
+function(element) {
+	if (element && element.dwtObj) {
+		return LsCore.objectWithId(element.dwtObj);
+	}
+};
+
+DwtSelect.prototype.dispose = 
+function() {
+	DwtControl.prototype.dispose.call(this);
+	if (this._internalObjectId) {
+		DwtSelect._unassignId(this._internalObjectId);
+	}
+};
+
+// -----------------------------------------------------------
+// overridden base class methods
+// -----------------------------------------------------------
+/**
+ * Wanted to be able to calculate position relative to a containing
+ * element, since the option display div is positioned relative to 
+ * the this.getHtmlElement() div.
+ */
+DwtSelect.prototype.getBounds = 
+function(anElement, containerElement) {
+	anElement = anElement || this.getHtmlElement();
+    var myBounds = new Object();
+    myBounds.x = 0;
+    myBounds.y = 0;
+    myBounds.width = anElement.offsetWidth;
+    myBounds.height = anElement.offsetHeight;
+    
+    if(containerElement == null) {
+        containerElement = LsEnv.isIE ? anElement.document.body : anElement.ownerDocument.body;
+    }
+    
+    // account for the scrollbars if necessary
+    var hasScroll = (anElement.scrollLeft !== void 0);
+    var trace = anElement;
+
+    while(trace != containerElement) {
+        myBounds.x += trace.offsetLeft;
+        myBounds.y += trace.offsetTop;
+        
+        var nextEl = trace.offsetParent;
+        while (hasScroll && (trace != nextEl)) {
+            myBounds.x -= trace.scrollLeft;
+            myBounds.y -= trace.scrollTop;
+            trace = LsEnv.isIE ? nextEl : trace.parentNode;
+        }
+        trace = nextEl;
+    }
+    return myBounds;
+};
+
+// -----------------------------------------------------------
+// rendering methods
+// -----------------------------------------------------------
+DwtSelect.prototype._renderSelectBoxHtml = 
+function (options) {
+    // setup our arrow button
+	this.setDropDownImages(	DwtImg.SELECT_PULL_DOWN,			// normal
+							DwtImg.SELECT_PULL_DOWN_DISABLED,	// disabled
+							DwtImg.SELECT_PULL_DOWN_ENABLED,	// hover
+						   	DwtImg.SELECT_PULL_DOWN_DEPRESSED	// down
+	);
+	var menu = new DwtMenu(this, null, "DwtSelectMenu", null, true);
+	this.setMenu(menu);
+	menu.setAssociatedObj(this);
+    // Add options, if present
+    if (options) {
+        var i = 0;
+        for (; i < options.length; ++i) {
+            this.addOption(options[i]);
+        }
+    }
+	var el = this.getHtmlElement();
+	// Call down to DwtControl to setup the mouse handlers
+	el._selectObjId = this.getUniqueIdentifier();
+	this.setWidth();
+};
+
+// -----------------------------------------------------------
+// public api methods
+// -----------------------------------------------------------
+/**
+ * @param option (String or DwtSelectOption ) -- string for the option value
+ *                                               or the option object.
+ * @param selected (boolen) -- optional argument indicating whether
+ *                             the newly added option should be
+ *                             set as the selected option.
+ * @param value (var) -- if the option parameter is a DwtSelectOption, this 
+ *                       will override the value already set in the option.
+ * @return integer -- A handle to the option added. The handle
+ *                    can be used in other api methods.
+ */
+DwtSelect.prototype.addOption = 
+function(option, selected, value) {
+	var opt = null;
+	var val = null;
+	if (typeof(option) == 'string') {
+		val = value? value: option;
+		opt = new DwtSelectOption(val, selected, option, this);
+	} else {
+		if (option instanceof DwtSelectOption) {
+			opt = option;
+			if (value) {
+				opt.setValue(value);
+			}
+			selected = opt.isSelected();
+		} else if(option instanceof DwtSelectOptionData) {
+			val = value? value: option.value;
+			opt = new DwtSelectOption(val, option.isSelected, option.displayValue, this);
+			selected = option.isSelected;
+		} else {
+			return -1;
+		}
+	}
+	
+	if (opt._optionWidth > this._width) {
+		this._width = opt._optionWidth;
+	}
+
+	if (selected) this.setText(opt.getDisplayValue());
+	this._options.add(opt);
+	if (this._options.size() == 1) {
+		this._setSelectedOption(opt);
+	}
+	this._menu.__isDirty = true;
+	
+
+    // return the index of the option.
+    this._optionValuesToIndices[opt.getValue()] = this._options.size() - 1;
+	this.setWidth();
+    return (this._options.size() - 1);
+};
+
+DwtSelect.prototype.clearOptions = function() {
+	var opts = this._options.getArray();
+	for (var i = 0; i < opts.length; ++i) {
+		opts[i] = null;
+	}
+	this._options.removeAll();
+	this._optionValuesToIndices = null;
+	this._optionValuesToIndices = new Array();
+	this._menu.removeChildren();
+	this._menu.__isDirty = true;
+	this._selectedValue = null;
+	this._selectedOption = null;
+	this._currentSelectionId = -1;
+};
+
+DwtSelect.prototype.setName = function(name) {
+	this._name = name;
+};
+
+DwtSelect.prototype.getName = function() {
+	return this._name;
+};
+
+DwtSelect.prototype.disable = function() {
+	if (!this.disabled) {
+		this.setEnabled(false);
+		this._setDisabledStyle();
+		var el = this.getHtmlElement();
+		el.onselectstart = this._disableSelectionIE;
+		this.disabled = true;
+	}
+};
+
+DwtSelect.prototype.enable = function() {
+	if (this.disabled) {
+		this.setEnabled(true);
+		this._setEnabledStyle();
+		var el = this.getHtmlElement();
+		el.onselectstart = "";
+		this.disabled = false;
+	}
+};
+
+DwtSelect.prototype._disableSelectionIE = function() {
+	return false;
+};
+
+DwtSelect.prototype._disableSelection = function() {
+	var func = function() {
+		window.getSelection().removeAllRanges();
+	};
+	window.setTimeout(func, 5);
+};
+
+DwtSelect.prototype.setSelectedValue = function(optionValue) {
+    var index = this._optionValuesToIndices[optionValue];
+    if ((index !== void 0) && ( index !== null)) {
+        this.setSelected(index);
+    }
+};
+
+/**
+ * Sets the option as the selected option.
+ * @param optionHandle (integer) -- handle returned from addOption
+ */
+DwtSelect.prototype.setSelected = function(optionHandle) {
+    var optionObj = this.getOptionWithHandle(optionHandle);
+	this.setSelectedOption(optionObj);
+};
+
+DwtSelect.prototype.getOptionWithHandle = function(optionHandle) {
+	return this._options.get(optionHandle);
+};
+
+DwtSelect.prototype.getOptionWithValue = function(optionValue) {
+	var index = this._optionValuesToIndices[optionValue];
+	var option = null;
+    if ((index !== void 0) && ( index !== null)) {
+        option = this.getOptionWithHandle(index);
+    }
+	return option;
+};
+
+DwtSelect.prototype.setSelectedOption = function (optionObj) {
+	if (optionObj != null) {
+		this._setSelectedOption(optionObj);
+	}
+};
+
+DwtSelect.prototype.getValue = function() {
+    return this._selectedValue;
+};
+
+DwtSelect.prototype.getSelectedOption = function() {
+	return this._selectedOption;
+};
+
+DwtSelect.prototype.getWidth = function() {
+	return DwtControl.prototype.getSize.call(this).x;
+};
+
+DwtSelect.prototype.setWidth = function() {
+	if (this._lastSetWidth >= this._width){
+		this._width = this._lastSetWidth;
+		return;
+	}
+	var el = this.getHtmlElement();
+	el.style.width = this._width + 29 + "px";
+	this._lastSetWidth = this._width;
+};
+
+DwtSelect.prototype.addChangeListener = 
+function(listener) {
+    this.addListener(DwtEvent.ONCHANGE, listener);
+};
+
+
+// -----------------------------------------------------------
+// public interface for DwtSelectOption
+// -----------------------------------------------------------
+
+DwtSelect.prototype.getUniqueIdentifier = 
+function() {
+	return this._selectObjId;
+};
+
+
+DwtSelect.prototype.size = 
+function() {
+	return this._options.size();
+}
+
+// --------------------------------------------------------------------
+// private methods
+// --------------------------------------------------------------------
+
+DwtSelect.prototype._toggleMenu = 
+function(show) {
+    //var el = document.getElementById(this._menuDivId);
+    // if an argument was not specified, do the opposite
+	if (this._menu.__isDirty) {
+		var optArr = this._options.getArray();
+		for (var i = 0 ; i < optArr.length; ++i){
+			var mi = new DwtMenuItem(this._menu, DwtMenuItem.SELECT_STYLE);
+			mi.setText(optArr[i].getDisplayValue());
+			mi.addSelectionListener(new LsListener(this, this._handleOptionSelection));
+			mi._optionIndex = i;
+			optArr[i].setItem(mi);
+		}
+		this._menu.getHtmlElement().style.width = this.getHtmlElement().style.width;
+		//this._menu.getHtmlElement().style.width = (this._width + 29 )+ "px";
+		this._menu.__isDirty = false;
+	}
+
+	DwtButton.prototype._toggleMenu.call(this);
+	if (this._selectedOption) {
+		var selectedMenuItem = this._selectedOption.getItem();
+		this._menu.setSelectedItem(selectedMenuItem._optionIndex);
+	}
+
+    return show;
+};
+
+DwtSelect.prototype._handleOptionSelection = function (ev) {
+	var menuItem = ev.item;
+	var optionIndex = menuItem._optionIndex;
+	var opt = this._options.get(optionIndex);
+	this._setSelectedOption(opt);
+
+	// notify our listeners
+    var args = new Object();
+    args.selectObj = this;
+    args.newValue = opt.getValue();
+    var event = DwtUiEvent.getEvent(ev);
+    event._args = args;
+    this.notifyListeners(DwtEvent.ONCHANGE, event);
+};
+
+DwtSelect.prototype._clearOptionSelection = 
+function() {
+    if (this._currentSelectionId != -1) {
+        var currOption = DwtSelect._getObjectWithId(this._currentSelectionId);
+        currOption.deSelect();
+    }
+};
+
+DwtSelect.prototype._setSelectedOption = 
+function(option) {
+	var displayValue = option.getDisplayValue();
+	if (this._selectedOption != option) {
+		this.setText(displayValue);
+		this._selectedValue = option._value;
+		this._selectedOption = option;
+		this._menu._selectedOptionId = option.getIdentifier();
+	}
+    this._updateSelection(option);
+};
+
+DwtSelect.prototype._updateSelection = 
+function(newOption) {
+    var currOption = null;
+    if (this._currentSelectionId != -1) {
+        currOption = DwtSelect._getObjectWithId(this._currentSelectionId);
+    }
+    if (currOption) {
+        currOption.deSelect();
+    }
+
+    if (newOption) {
+		newOption.select();
+		this._currentSelectionId = newOption.getIdentifier();
+    }
+};
+
+DwtSelect.prototype._setDisabledStyle = 
+function() {
+	this.setClassName(this._className + " disabled");
+};
+
+DwtSelect.prototype._setEnabledStyle = 
+function() {
+	this.setClassName(this._origClassName);
+};
+
+/**
+* Greg Solovyev 2/2/2004 added this class to be able to create a list of options before creating the DwtSelect control
+* This is a workaround an IE bug, that causes IE to crash with error R6025 when DwtSelectOption object are added to empty DwtSelect
+* @class DwtSelectOptionData
+* @constructor
+*/
+function DwtSelectOptionData (value, displayValue, isSelected) {
+	if(value == null || displayValue==null) 
+		return null;
+
+	this.value = value;
+	this.displayValue = displayValue;
+	this.isSelected = isSelected;
+}
+
+/**
+ * @class DwtSelectOption
+ * @constructor
+ *
+ * DwtSelectOption encapsulates the option object that the DwtSelect widget
+ * uses. 
+ * The owner object that is passed into the constructor must implement the
+ * following methods:
+ *   getUniqueIdentifier()
+ *   calcAndSetWidth(optionObject);
+ *
+ * @param value (string) -- this is the value for the object, it will be 
+ *                          returned in any onchange event.
+ * @param selected (Boolean) -- whether or not the option should be selected
+ *                              to start with.
+ * @param displayValue (string) -- The value that the user will see 
+ *                                 ( html encoding will be done on this 
+ *                                 value internally ).
+ * @param owner (DwtSelect) -- implements the methods metioned above.
+ * @param optionalDOMId (string) -- an optional id you want assigned to 
+ *                                  the outer most underlying element.
+ */
+function DwtSelectOption (value, selected, displayValue, owner, optionalDOMId) {
+	this._value = value;
+	this._displayValue = displayValue;
+	this._internalObjectId = DwtSelect._assignId(this);
+	this._optionWidth = this._calculateWidth(displayValue);	
+}
+
+DwtSelectOption.prototype._calculateWidth = function (str) {
+	return str.length  * 0.9 * 7;
+};
+
+DwtSelectOption.prototype.setItem = function (menuItem) {
+	this._menuItem = menuItem;
+};
+
+DwtSelectOption.prototype.getItem = function (menuItem) {
+	return this._menuItem;
+};
+
+DwtSelectOption.prototype.getDisplayValue = 
+function() {
+	return this._displayValue;
+};
+
+DwtSelectOption.prototype.getValue = 
+function() {
+	return this._value;
+};
+
+DwtSelectOption.prototype.setValue = 
+function(stringOrNumber) {
+	this._value = stringOrNumber;
+};
+
+DwtSelectOption.prototype.select = function () {
+	this._selected = true;
+};
+
+DwtSelectOption.prototype.deSelect = function () {
+	this._selected = false;
+};
+
+DwtSelectOption.prototype.isSelected = 
+function() {
+	return this._selected;
+};
+
+DwtSelectOption.prototype.getIdentifier = 
+function() {
+	return this._internalObjectId;
+};

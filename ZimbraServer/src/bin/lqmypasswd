@@ -1,0 +1,83 @@
+#!/bin/bash
+#
+# Change password for liquid_mysql_password, and optionally for
+# mysql_root_password.  Updates both the Liquid local config file and
+# MySQL.
+#
+source `dirname $0`/lqshutil || exit 1
+lqsetvars liquid_home liquid_mysql_user mysql_root_password
+
+#
+# Usage.
+#
+usage() {
+    cat<<EOF
+Usage: $ lqmypasswd [ --root ] newpassword
+
+By default, this script changes liquid_myql_password.  If the --root
+option is specified, then mysql_root_passwd is changed.  In both cases,
+MySQL is updated with the new passwords.  This script can not bail you
+out of a situation where you have lost your mysql root password -
+consult MySQL documentation to see how you can start the server
+temporarily to skip grant tables, so you can override the root
+password.
+
+EOF
+}
+
+#
+# Parse command line
+#
+if [ "x$1" = "x--root" ]; then
+    password_key="mysql_root_password"
+    shift # lose --root option
+else
+    password_key="liquid_mysql_password"
+fi
+
+if [ $# -ne 1 ]; then
+    usage
+    exit 1
+fi
+newpassword="$1"
+
+#
+# For liquid_mysql_password
+#
+if [ ${password_key} = liquid_mysql_password ]; then 
+    # Change the password in mysql.
+    cat <<EOF | ${liquid_home}/bin/mysql -u root --password="${mysql_root_password}"
+SET PASSWORD FOR '${liquid_mysql_user}' = PASSWORD('${newpassword}');
+SET PASSWORD FOR '${liquid_mysql_user}'@'localhost' = PASSWORD('${newpassword}');
+SET PASSWORD FOR '${liquid_mysql_user}'@'localhost.localdomain' = PASSWORD('${newpassword}');
+EOF
+	if [ $? = 0 ]; then
+		echo '*' Changed liquid mysql user password
+	else
+		echo '****' PASSWORD CHANGE FAILED
+		exit 1
+	fi
+fi
+
+#
+# For mysql_root_password
+#
+if [ ${password_key} = mysql_root_password ]; then
+    echo ${liquid_home}/bin/mysqladmin -u root --password="${mysql_root_password}" password "${newpassword}"
+    ${liquid_home}/bin/mysqladmin -u root --password="${mysql_root_password}" password "${newpassword}"
+	if [ $? = 0 ]; then
+		echo '*' Changed mysql root user password
+	else
+		echo '****' PASSWORD CHANGE FAILED
+		exit 1
+	fi
+fi
+
+#
+# Change the password in local config.  TODO: notify app server that
+# the password has changed, for now you will have to restart tomcat
+#
+if ! ${liquid_home}/bin/lqlocalconfig -f -e "${password_key}=${newpassword}"; then
+    echo Error: command failed: ${liquid_home}/bin/lqlocalconfig -f -e ${password_key}='#'
+    exit 1
+fi

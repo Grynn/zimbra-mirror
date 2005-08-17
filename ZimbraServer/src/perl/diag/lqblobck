@@ -1,0 +1,220 @@
+#!/usr/bin/perl -w
+
+# Blob Store Check
+#
+# Cross reference database and file system and identify missing files.
+# It finds all blobs which are present in the database but missing in fs.
+# It does not find blobs in fs and missing from database.
+
+use lib "$ENV{LIQUID_HOME}/liquidmon/lib";
+
+use strict;
+use Getopt::Std;
+use DBI;
+use Liquid::Failover::Db;
+
+my %MAILBOX;
+
+my $MBOXPATH_MBOX_BITS = 12;
+my $MBOXPATH_GROUP_BITS = 8;
+my $MBOXPATH_GROUP_MASK = 2 ** $MBOXPATH_GROUP_BITS - 1;
+
+my $FILEPATH_FILE_BITS = 12;
+my $FILEPATH_GROUP_BITS = 8;
+my $FILEPATH_GROUP_MASK = 2 ** $FILEPATH_GROUP_BITS - 1;
+
+my $NUM_MISSING_FILES = 0;
+my $NUM_EMPTY_FILES = 0;
+
+sub getSubPath($$$) {
+    my ($id, $itemBits, $groupMask) = @_;
+    my $dir = $id >> $itemBits;
+    $dir &= $groupMask;
+    return "$dir/$id";
+}
+
+sub getBlobPath($$) {
+    my ($mboxId, $blobId) = @_;
+    my $path =
+	$MAILBOX{$mboxId} .
+	'/' .
+	getSubPath($blobId,
+		   $FILEPATH_FILE_BITS,
+		   $FILEPATH_GROUP_MASK) .
+	'.msg';
+    return $path;
+}
+
+#
+# Load mailboxes and their blob store root path from database.
+# Returns 1 if successful, 0 if error.
+#
+sub loadMailboxes($$) {
+    my ($db, $mboxId) = @_;
+
+    # Get path bits config.
+    $MBOXPATH_MBOX_BITS = $db->getConfigKey('store.mailboxPath.mailboxBits');
+    $MBOXPATH_GROUP_BITS = $db->getConfigKey('store.mailboxPath.groupBits');
+    $MBOXPATH_GROUP_MASK = 2 ** $MBOXPATH_GROUP_BITS - 1;
+    $FILEPATH_FILE_BITS = $db->getConfigKey('store.filePath.fileBits');
+    $FILEPATH_GROUP_BITS = $db->getConfigKey('store.filePath.groupBits');
+    $FILEPATH_GROUP_MASK = 2 ** $FILEPATH_GROUP_BITS - 1;
+
+    my %volume;
+    my ($stmt, $sth, $rv, $count);
+    my @data;
+
+    # Query volume table.
+    $stmt = "SELECT id, path FROM volume";
+    $sth = $db->{CONN}->prepare($stmt);
+    $rv = $sth->execute();
+    if (!$rv) {
+	print STDERR "Unable to query volume table: $DBI::errstr\n";
+	return 0;
+    }
+    while (@data = $sth->fetchrow_array()) {
+	$volume{$data[0]} = $data[1];
+    }
+    $sth->finish();
+
+    # Query mailbox table.
+    $stmt = "SELECT id, message_volume_id FROM mailbox";
+    if (defined($mboxId)) {
+	$stmt .= " WHERE id=$mboxId";
+    }
+    $sth = $db->{CONN}->prepare($stmt);
+    $rv = $sth->execute();
+    if (!$rv) {
+	print STDERR "Unable to query mailbox table: $DBI::errstr\n";
+	return 0;
+    }
+    $count = 0;
+    while (@data = $sth->fetchrow_array()) {
+	++$count;
+	my $mbox = $data[0];
+	my $volId = $data[1];
+	my $volRoot = $volume{$volId} || '/missing_root';
+	my $subPath = getSubPath($mbox,
+				 $MBOXPATH_MBOX_BITS,
+				 $MBOXPATH_GROUP_MASK) || 'missing_mbox_path';
+	$MAILBOX{$mbox} = "$volRoot/$subPath/msg";
+    }
+    $sth->finish();
+    print "$count mailboxes found\n" if (!defined($mboxId));
+
+    return 1;
+}
+
+sub generateBlobListFile($$$) {
+    my ($db, $mboxId, $outfile) = @_;
+    my ($stmt, $sth, $rv);
+    my @data;
+
+    if (!open(FH, "> $outfile")) {
+	print STDERR "Unable to open output file $outfile: $!\n";
+	return 0;
+    }
+
+	my $tableName = "mailbox" . $mboxId . ".mail_item";
+    $stmt = "SELECT id FROM $tableName WHERE ";
+	$stmt .= "type=5";
+    
+    $sth = $db->{CONN}->prepare($stmt);
+    $rv = $sth->execute();
+    if (!$rv) {
+	print STDERR "Unable to query mail_item table: $DBI::errstr\n";
+	close(FH);
+	return 0;
+    }
+    my $count = 0;
+    while (@data = $sth->fetchrow_array()) {
+	++$count;
+	my $blobId = $data[0];
+	my $path = getBlobPath($mboxId, $blobId);
+	print FH "$mboxId, $blobId, $path\n";
+    }
+    $sth->finish();
+    print "$count blobs found\n";
+
+    close(FH);
+    if ($count == 0) {
+	unlink($outfile);
+	return 0;
+    }
+    return 1;
+}
+
+sub processBlobListFile($) {
+    my $infile = shift;
+
+    if (!open(FH, "< $infile")) {
+	print STDERR "Unable to open blob list file $infile: $!\n";
+	return 0;
+    }
+
+    my $line;
+    my $lineNum = 0;
+    while (defined($line = <FH>)) {
+	++$lineNum;
+	chomp($line);
+	if ($line =~ /^(\d+),\s*(\d+),\s*([^\s]+)/) {
+	    my ($mboxId, $blobId, $path) = ($1, $2, $3);
+	    if (! -f $path) {
+		print "missing: $path\n";
+		++$NUM_MISSING_FILES;
+	    } elsif (-z $path) {
+		print "EMPTY:   $path\n";
+		++$NUM_EMPTY_FILES;
+	    }
+	} elsif ($line =~ /^\s*#/) { # comment line
+	    next;
+	} else {
+	    print STDERR "Unparseable line $lineNum: $line\n";
+	}
+    }
+
+    close(FH);
+}
+
+sub usage() {
+    print <<USAGE;
+Report message files that are missing or empty.  For every message in the
+database, the filesystem is checked for message file presence.
+Usage: blobck.pl [-m <mailbox ID>] [-l <blob list file>]
+   -m: mailbox to check; by default all mailboxes are checked
+   -l: blob list file for internal processing; default is "./~blobck.out"
+USAGE
+    exit(1);
+}
+
+
+#
+# main
+#
+
+my %opts;
+getopts("m:l:", \%opts) or usage();
+my $mboxId = $opts{m};
+my $outfile = $opts{l} || './~blobck.out';
+
+my $db = Liquid::Failover::Db->connect();
+loadMailboxes($db, $mboxId);
+
+foreach $mboxId (keys %MAILBOX) {
+	my $hasList = generateBlobListFile($db, $mboxId, $outfile);
+	if ($hasList) {
+    	processBlobListFile($outfile);
+	}
+}
+
+$db->disconnect();
+
+print "Done.  ";
+if (-f $outfile) {
+    print "Blob list saved in $outfile\n";
+} else {
+    print "No blob list generated.\n";
+}
+
+print "$NUM_MISSING_FILES missing files, $NUM_EMPTY_FILES empty files\n";
+exit($NUM_MISSING_FILES == 0 && $NUM_EMPTY_FILES == 0 ? 0: 2);

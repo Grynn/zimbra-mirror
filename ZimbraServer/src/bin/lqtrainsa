@@ -1,0 +1,42 @@
+#!/bin/sh
+
+SERVER=$1
+USER=$2
+PASS=$3
+MODE=$4
+FOLDER=$5
+
+if [ x$MODE = "x" -o x$PASS = "x" -o x$USER = "x" -o x$SERVER = "x" ]; then
+	echo "Usage: $0 <server> <user> <pass> <spam|ham> [folder]"
+	exit 1
+fi
+
+if [ x$FOLDER != "x" ]; then
+	FOLDER="-r $FOLDER"
+fi
+
+if [ x`whoami` != xliquid ]; then
+    echo Error: must be run as liquid user
+	exit 1
+fi
+
+if [ ! -f /opt/liquid/bin/fetchmail ]; then
+	# Hack to get around RPM lameness
+	gzip -d /opt/liquid/bin/fetchmail.gz 2> /dev/null
+	chmod 755 /opt/liquid/bin/fetchmail 2> /dev/null
+fi
+
+source `dirname $0`/lqshutil || exit 1
+lqsetvars \
+	liquid_home \
+	liquid_server_hostname
+
+echo "server $SERVER user $USER@$SERVER password $PASS keep" > ${liquid_home}/.fetchmailrc
+chmod 600 ${liquid_home}/.fetchmailrc
+
+
+fetchmail -n -a -u $USER $FOLDER -m "${liquid_home}/bin/sa-learn -p ${liquid_home}/conf/salocal.cf --dbpath ${liquid_home}/amavisd/.spamassassin/ --no-sync --showdots -L --${MODE}" ${SERVER}
+
+${liquid_home}/bin/sa-learn -p ${liquid_home}/conf/salocal.cf --dbpath ${liquid_home}/amavisd/.spamassassin/ --sync
+
+rm -f ${liquid_home}/.fetchmailrc

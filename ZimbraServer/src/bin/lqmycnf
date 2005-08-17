@@ -1,0 +1,100 @@
+#!/bin/bash
+
+source `dirname $0`/lqshutil || exit 1
+lqsetvars \
+    liquid_log_directory \
+    mysql_bind_address \
+    mysql_data_directory \
+    mysql_directory \
+    mysql_innodb_log_buffer_size \
+    mysql_innodb_thread_concurrency \
+    mysql_max_connections \
+    mysql_memory_percent \
+    mysql_pidfile \
+    mysql_port \
+    mysql_socket \
+    mysql_table_cache
+
+#
+# Available system memory in KB
+#
+memkb=`awk '/^MemTotal.*kB$/ { print $2; }' /proc/meminfo`
+
+#
+# Memory for use by MySQL
+#
+mymem=`expr $memkb '*' ${mysql_memory_percent} / 100 / 1024`
+
+#
+# Calculate *a* fraction of the memory we are using for MySQL
+#
+mymempct() { awk "END { print int($1 * $mymem / 100) }" < /dev/null; }
+
+#
+# Buffer pool is 80% of all mysql memory
+#
+computed_innodb_buffer_pool_size=`mymempct 80`M
+
+#
+# Log file is 25% size of buffer pool (doesn't actually use memory)
+#
+computed_innodb_log_file_size=`mymempct 20`M
+
+#
+# Query cache is 5% the size of mysql memory
+#
+computed_query_cache_size=`mymempct 5`M
+
+#
+# Use up 5% for read/sort buffers.  This is a per connection value,
+# divide by 2 for read and sort buffers and the last divide by 20 says
+# 5%.
+#
+buffsize=`awk "END { print int(${mymem}*1024/${mysql_max_connections}/2/20); }" < /dev/null`
+computed_read_buffer_size="${buffsize}K"
+computed_sort_buffer_size="${buffsize}K"
+
+#
+# Write config to stdout
+#
+cat<<EOF
+
+[mysqld]
+
+basedir      = ${mysql_directory}
+datadir      = ${mysql_data_directory}
+socket       = ${mysql_socket}
+pid-file     = ${mysql_pidfile}
+bind-address = ${mysql_bind_address}
+port         = ${mysql_port}
+
+skip-external-locking
+
+log-slow-queries = ${liquid_log_directory}/myslow.log
+long-query-time  = 1
+log-long-format
+log-queries-not-using-indexes
+log-bin
+
+max_connections   = ${mysql_max_connections}
+query_cache_limit = ${computed_query_cache_size}
+query_cache_size  = ${computed_query_cache_size}
+query_cache_type  = 1
+read_buffer_size  = ${computed_read_buffer_size}
+sort_buffer_size  = ${computed_sort_buffer_size}
+
+# Increase the size of the table cache, since each mailbox has its
+# own set of tables
+table_cache = ${mysql_table_cache}
+
+innodb_buffer_pool_size   = ${computed_innodb_buffer_pool_size}
+innodb_log_file_size      = ${computed_innodb_log_file_size}
+innodb_log_buffer_size    = ${mysql_innodb_log_buffer_size}
+innodb_thread_concurrency = ${mysql_innodb_thread_concurrency}
+innodb_file_per_table
+
+[mysqld_safe]
+
+err-log = ${liquid_log_directory}/mysqld.log
+
+EOF

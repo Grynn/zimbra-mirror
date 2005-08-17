@@ -1,0 +1,110 @@
+#!/usr/bin/perl
+use strict;
+use Getopt::Long;
+
+#
+# Usage & options
+#
+sub usage {
+    my $arg = shift;
+    print "Error: $arg\n" if ($arg);
+    print<<EOF;
+Usage: histhprof [--size|--count] [--trace n|--top n] java.hprof.txt
+EOF
+    exit 1;
+}
+
+my ($opt_topdepth, $opt_tracenum, $opt_size, $opt_count);
+GetOptions("top=i" => \$opt_topdepth, "trace=i" => \$opt_tracenum,
+	   "size" => \$opt_size, "count" => \$opt_count) || die;
+
+if (defined($opt_size) && defined($opt_count)) {
+    usage("specify only one of size and count");
+}
+if (!defined($opt_size) && !defined($opt_count)) {
+    $opt_size = 1;
+}
+if (defined($opt_tracenum) && defined($opt_topdepth)) {
+    usage("specify only one of top and trace");
+}
+if (!defined($opt_tracenum) && !defined($opt_topdepth)) {
+    $opt_topdepth =  4;
+}
+
+#
+# Parse data
+#
+my @dumps = ();
+my %allTraces = ();
+my %traceMap = ();
+
+while (<>) {
+    next if (!/^ +[0-9]/);
+
+    my @c = split(/ +/);
+    my $rank = $c[1];
+    my $trace = $c[8];
+
+    next if (defined($opt_tracenum) && ($trace != $opt_tracenum));
+    next if (defined($opt_topdepth) && ($rank >= $opt_topdepth));
+
+    if ($opt_topdepth) {
+        $allTraces{$trace} = 1;
+    }
+
+    if ($rank == 1) {
+        push(@dumps, {%traceMap});
+    }
+
+    $traceMap{$trace} = $_;
+}
+push(@dumps, \%traceMap);
+
+#
+# Print
+#
+
+if ($opt_tracenum) {
+    print "# Histogram for trace #$opt_tracenum\n";
+    for (my $i = 0; $i < $#dumps; $i++) {
+        my $dump = $dumps[$i];
+        next if (!defined($dump->{$opt_tracenum}));
+        
+        my $line = $dump->{$opt_tracenum};
+        my @c = split(/ +/, $line);
+        my $rank = $c[1];
+        my $livesize = $c[4];
+        my $livecount = $c[5];
+        my $trace = $c[8];
+        
+        if ($opt_size) {
+            print $i, " ", $livesize, "\n";
+        } else {
+            print $i, " ", $livecount, "\n";
+        }
+    }
+}
+    
+
+if ($opt_topdepth) {
+    my @allTraces = sort(keys(%allTraces));
+    print "# Histogram for ", $#allTraces, " different traces\n";
+    for (my $i = 0; $i < $#dumps; $i++) {
+        my $dump = $dumps[$i];
+        foreach my $trace (@allTraces) {
+            next if (!defined($dump->{$trace}));
+            my $line = $dump->{$trace};
+            my @c = split(/ +/, $line);
+            my $rank = $c[1];
+            my $livesize = $c[4];
+            my $livecount = $c[5];
+            my $trace = $c[8];
+            
+            if ($opt_size) {
+                print $i, " ", $trace, " ", $livesize, "\n";
+            } else {
+                print $i, " ", $trace, " ", $livecount, "\n";
+            }
+        }
+    }
+}

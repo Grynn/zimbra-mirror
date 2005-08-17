@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>circularTest</title>
+  </head>
+
+  <body>
+    <div id="outerDiv" style="border: 1px solid black">
+      OuterDiv
+      <div id="innerDiv" style="border: 1px solid black; margin:2px">
+	InnerDiv
+      </div>
+    </div>
+    <a href="javascript:addObjToOuterDiv();">Add Obj To outerDiv</a><br>
+    <a href="javascript:addObjToInnerDiv();">Add Obj To innerDiv </a><br>
+    <a href="javascript:addOuterDivToObj();">Add outer div to Obj</a><br>
+    <a href="javascript:addInnerDivToObj();">Add inner div to obj</a><br>
+    <a href="javascript:removeObjFromOuterDiv();">Remove Ojb from outer Div</a><br>
+    <a href="javascript:removeObjFromInnerDiv();">Remove Obj from
+      inner Div</a><br>
+    <a href="javascript:addObjToEventHandler();">Add eventHandler to outerDiv</a><br>
+  </body>
+  <script>
+
+function BaseObj () {
+	this.addDiv();
+}
+
+BaseObj.prototype.addDiv = function () {
+	var outerDiv = document.getElementById("outerDiv");
+	this._baseDiv = outerDiv;
+	this._baseAr = new Array();
+    for (var index =0; index < 10000; index++){
+		var junk = new Object();
+		junk.id = index;
+		this._baseAr.push(junk);
+    }
+
+};
+
+function junkObj () {
+    this.ar = new Array();
+    var index = 0;
+    
+    for (index; index < 50000; index++){
+		var junk = new Object();
+		junk.id = index;
+		this.ar.push(junk);
+    }
+}
+junkObj.prototype = new BaseObj;
+junkObj.prototype.constructor = junkObj;
+
+junkObj.prototype._onmouseover = function (ev) {
+    alert("onmouseover - baseDiv = " + this._baseDiv);
+    div = document.getElementById('outerDiv');
+    var i = obj.ar[100];
+};
+
+obj = new junkObj();
+
+
+function addObjToOuterDiv () {
+	var outerDiv = document.getElementById('outerDiv');
+	outerDiv._obj = obj;
+}
+
+function addObjToInnerDiv () {
+    var innerDiv = document.getElementById('innerDiv');
+    innerDiv._obj = obj;
+}
+
+function addOuterDivToObj () {
+	obj.outerElem = document.getElementById('outerDiv');
+}
+function addInnerDivToObj () {
+	obj.innerElem = document.getElementById('innerDiv');
+}
+
+function removeObjFromOuterDiv () {
+    var outerDiv = document.getElementById("outerDiv");
+    outerDiv._obj = null;
+}
+function removeObjFromInnerDiv () {
+    var innerDiv = document.getElementById("innerDiv");
+    innerDiv._obj = null;
+}
+
+function unload () {
+    alert('here');
+    for (var i = obj.ar.length; i < obj.ar.length - 1; i--){
+    var o = obj.arr.pop();
+    o = void 0;
+    }
+}
+
+function addObjToEventHandler () {
+    var outerDiv = document.getElementById('outerDiv');
+	var func = function (ev) {
+		obj._onmouseover(ev);
+	};
+	outerDiv.onmouseover = func;
+}
+//window.onunload = unload;
+</script>
+
+</html>

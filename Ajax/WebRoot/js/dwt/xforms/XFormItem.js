@@ -1,0 +1,3513 @@
+//
+//	Factory to create XFormItems from simple attributes (eg: from JS object literals or XML)
+//
+
+/** This object is never instantiated. */
+function XFormItemFactory() {}
+
+/**
+ * Creates a form item.
+ *
+ * @param attributes An object whose properties map to component attribute
+ *                   name/value pairs.
+ * @param parentItem The parent item of this item.
+ * @param xform      The form to which this item is being created.
+ */
+XFormItemFactory.createItem = function (attributes, parentItem, xform) {
+	// assign a modelItem to the item
+	var refPath = this.getRefPath(attributes, parentItem);
+
+	var modelItem;
+	if (refPath != null) {
+		// assign a modelItem to the item
+		modelItem = this.getModelItem(xform.xmodel, attributes, refPath);
+	}
+			
+	// get the class for that type and create one
+	var type = this.getItemType(attributes, modelItem);
+	var constructor = this.getItemTypeConstructor(type, xform);
+
+	var item = new constructor();
+	item._setAttributes(attributes);
+
+	// get a unique id for the item
+	var idPrefix = (	attributes.id ? xform.getId() + "_" + attributes.id :
+							  refPath ? xform.getId() + "_" + refPath :
+					item.__parentItem ? item.__parentItem.getId() :
+										xform.getId() + "_" + item.type
+					);
+	// assign a unique id to each item
+	//	(if the item specifies an id, we use a variant of that, just in case there's more than one)
+	item.id = xform.getUniqueId(idPrefix);
+
+	item.refPath = refPath;
+	item.__modelItem = modelItem;
+	item.__xform = xform;
+	item.__parentItem = parentItem;
+	
+	// assign the item into our form's index so we can be found later
+	xform.indexItem(item, item.id);
+
+	// tell the item to initialize any special properties it needs to on construction
+	item.initFormItem();
+	
+	return item;
+} 
+
+XFormItemFactory.getRefPath = function (attributes, parentItem) {
+	if (attributes.refPath) return attributes.refPath;
+	
+	var ref = attributes.ref;
+	if (ref == null) return null;
+	
+	if (parentItem) {
+		var parentPath = parentItem.getRefPath();
+		if (parentPath == null) parentPath = "";
+	} else {
+		var parentPath = "";
+	}
+	
+	var path = ref;
+	if (ref == ".") {
+		path = parentPath;
+
+	} else if (ref == "..") {
+		parentPath = parentPath.split("/");
+		path = parentPath.slice(0, parentPath.length - 1).join("/");
+
+	} else if (parentPath == "") {
+		path = ref;
+
+	} else {
+		path = parentPath + "/" + ref;
+	}
+	return path;
+}
+
+XFormItemFactory.getModelItem = function (xmodel, attributes, refPath) {
+	if (refPath == null || refPath == "") return null;
+	return xmodel.getItem(refPath, true);
+}
+
+XFormItemFactory.getItemType = function (attributes, modelItem) {
+	var type = attributes.type;
+
+	if (type == null) {
+		type = attributes.type = _OUTPUT_;
+	}
+	
+	var modelType = (modelItem && modelItem.type ? modelItem.type : _STRING_);
+
+	if (type == _INPUT_) {
+		if (attributes.value !== _UNDEFINED_) {
+			type = _CHECKBOX_;
+		} else {
+			switch (modelType) {
+				case _STRING_:
+				case _NUMBER_:
+					type = _INPUT_;
+					break;
+
+				case _DATE_:
+				case _DATETIME_:
+				case _TIME_:
+					type = modelType;			
+					break;
+
+				default:
+					type = _INPUT_;
+			}
+		}
+	} else if (type == _SELECT_) {
+		var appearance = attributes.appearance;
+		if (appearance == _RADIO_) {
+			type = _RADIO_;
+		} else {
+			type = _SELECT_;
+		}
+	}
+	return type;
+}
+
+XFormItemFactory.typeConstructorMap = {};
+
+XFormItemFactory.createItemType = 
+function (typeConstant, typeName, constructor, superClassConstructor) {
+	if (constructor == null) constructor = new Function();
+	if (typeof superClassConstructor == "string") superClassConstructor = this.getItemTypeConstructor(superClassConstructor);
+	if (superClassConstructor == null) superClassConstructor = XFormItem;
+
+	// initialize the constructor
+	constructor.prototype = new superClassConstructor();	
+
+	constructor.prototype.type = typeName;
+	constructor.prototype.constructor = constructor;
+	constructor.prototype.toString = new Function("return '[XFormItem:" + typeName + " ' + this.getId() + ']'");
+	constructor.toString = new Function("return '[Class XFormItem:" + typeName + "]'");
+	
+	// put the item type into the typemap
+	this.registerItemType(typeConstant, typeName, constructor);
+	
+	// return the prototype
+	return constructor;
+}
+
+XFormItemFactory.registerItemType = 
+function(typeConstant, typeName, constructor) {
+	// assign the type constant to the window so everyone else can use it
+	window[typeConstant] = typeName;
+	this.typeConstructorMap[typeName] = constructor;	
+}
+
+XFormItemFactory.defaultItemType = "output";
+XFormItemFactory.getItemTypeConstructor = 
+function (typeName, form) {
+	var typeConstructorMap = (form && form.typeConstructorMap ? form.typeConstructorMap : this.typeConstructorMap);
+	
+	var typeConstructor = typeConstructorMap[typeName];
+	if (typeConstructor == null) {
+		var defaultItemType = (form ? form.defaultItemType : this.defaultItemType);
+		typeConstructorMap[defaultItemType];
+	}
+	return typeConstructor;
+}
+
+XFormItemFactory.quickClone = 
+function(object) {
+	this.cloner.prototype = object;
+	return new this.cloner();
+}
+XFormItemFactory.cloner = function(){}
+
+XFormItemFactory.initItemDefaults = function(form, itemDefaults) {
+	// create a clone of the XFormItemFactory typeConstructorMap for the form
+	form.typeConstructorMap =  this.quickClone(this.typeConstructorMap);
+
+	if (itemDefaults == null) itemDefaults = form.itemDefaults;
+	if (itemDefaults != null) {
+		// for each type in itemDefaults
+		for (var type in itemDefaults) {
+			var originalConstructor = this.typeConstructorMap[type];
+			var defaults = itemDefaults[type];
+
+			if (originalConstructor == null) {
+				type = window[type];
+				originalConstructor = this.typeConstructorMap[type];
+			}
+			if (originalConstructor == null) {
+				DBG.println("XFormItem.initItemDefaults(form): can't find item type ", type);
+				continue;
+			}
+			var newConstructor = form.typeConstructorMap[type] = new Function();
+			newConstructor.prototype = new originalConstructor();
+			// NOTE: reassigning the constructor here is technically correct,
+			//		but will result in (item.constructor == originalClass.constructor) not working...
+			newConstructor.prototype.constructor = newConstructor;
+			
+			for (var prop in defaults) {
+				newConstructor.prototype[prop] = defaults[prop];
+			}
+		}
+	}
+}
+
+
+
+
+//
+//	Abstract Class XFormItem
+//
+//	All other form item classes inherit from this.
+//
+
+
+
+
+function XFormItem() {}
+XFormItem.prototype.constructor = XFormItem;
+XFormItemFactory.registerItemType("_FORM_ITEM_", "form_item", XFormItem);
+
+XFormItem.ERROR_STATE_ERROR = 0;
+XFormItem.ERROR_STATE_VALID = 1;
+
+
+//
+// set base class defaults
+// 
+
+XFormItem.prototype._isXFormItem = true;
+
+// outputting and inserting
+XFormItem.prototype.writeElementDiv = false;
+
+// appearance
+XFormItem.prototype.labelLocation = _LEFT_;
+XFormItem.prototype.tableCssClass = "xform_table";				// table that encloses one or more cells
+XFormItem.prototype.tableCssStyle = null;						// table that encloses one or more cells
+XFormItem.prototype.containerCssClass =  "xform_container";		// td that contains the element
+XFormItem.prototype.containerCssString =  null;					// td that contains the element
+XFormItem.prototype.cssClass = null;							// element itself (or element div)
+XFormItem.prototype.labelCssClass =  "xform_label";				// label td
+XFormItem.prototype.errorCssClass =  "xform_error";				// error DIV
+XFormItem.prototype.nowrap = false; 
+XFormItem.prototype.labelWrap = false; 
+XFormItem.prototype.align = _UNDEFINED_;						// _UNDEFINED_ because it's a bit faster to draw
+XFormItem.prototype.valign = _UNDEFINED_;						// _UNDEFINED_ because it's a bit faster to draw
+XFormItem.prototype.focusable = false;
+
+// updating
+XFormItem.prototype.forceUpdate = false;			// SET TO true TO FORCE AN ITEM TO UPDATE, EVEN IF VALUE HAS NOT CHANGED
+XFormItem.prototype.relevant;
+XFormItem.prototype.relevantIfEmpty = true;
+XFormItem.prototype.relevantBehavior = _HIDE_;		//	_HIDE_, _DISABLE_
+
+
+// changing/saving
+XFormItem.prototype.elementChangeHandler = "onchange";
+
+
+// choices map
+XFormItem.prototype.selection = _CLOSED_;
+XFormItem.prototype.openSelectionLabel = "";
+
+// error handling
+XFormItem.prototype.errorLocation = _SELF_;
+
+//
+// Methods
+//
+
+
+// set the initializing attributes of this firm
+XFormItem.prototype._setAttributes = function (attributes) {
+	this.__attributes = attributes;
+}
+
+// override this to do any item initialization you need to do
+//	NOTE: this is called AFTER the formItem is initiaized with its modelItem, set in its form, etc
+XFormItem.prototype.initFormItem = function() {
+	window.status = '';
+}	
+
+// DEFAULT IMPLEMENTATION calls this.getForm().initItemList() on our items array
+//	SOME CLASSES MAY NOT WANT TO DO THIS (eg: _REPEAT_, which does this dynamically later)
+XFormItem.prototype.initializeItems = function () {
+	var items = this.getItems();
+	if (items != null) {
+		this.items = this.getForm().initItemList(items, this);
+	}
+}
+
+
+// error handling
+
+/**
+ * Sets the error message for this form item.
+ * This will set the error for this item, or 
+ * useing the errorLocation, follow the chain up,
+ * to set the error on the related item.
+ *
+ * @param message The message to display. This message should already
+ *                be localized.
+ */
+XFormItem.prototype.setError = function(message, childError) {
+	var errLoc = this.getErrorLocation();
+	if (errLoc == _PARENT_ || errLoc == _INHERIT_){
+		this.getParentItem().setError(message, true);
+		return;
+	}
+	this.getForm().addErrorItem(this);
+	this.__errorState = XFormItem.ERROR_STATE_ERROR;
+	var container = this.getErrorContainer(true);
+	if (container) container.innerHTML = message;
+};
+
+/** 
+ * Clears the error message for this form item. 
+ * This will clear the error for this item, or 
+ * useing the errorLocation, follow the chain up,
+ * to clear the error on the related item.
+ */
+XFormItem.prototype.clearError = function() {
+	var errLoc = this.getErrorLocation();
+	if (errLoc == _PARENT_ || errLoc == _INHERIT_){
+		this.getParentItem().clearError();
+		return;
+	}
+
+	this.getForm().removeErrorItem(this);
+	this.__errorState = XFormItem.ERROR_STATE_VALID;
+	this.removeErrorContainer();
+};
+
+XFormItem.prototype.hasError = function () {
+	return (this.__errorState == XFormItem.ERROR_STATE_ERROR);
+};
+
+XFormItem.prototype.getErrorContainer = function(createIfNecessary) {
+	var container = this.getElement(this.getId() + "___error_container");
+	if (container != null) return container;
+	
+	if (createIfNecessary == true && this.getContainer()) {
+		return this.createErrorContainer();
+	}
+	return null;
+}
+
+XFormItem.prototype.createErrorContainer = function () {
+	// output an error container
+	var errorContainer = document.createElement("div");
+	errorContainer.id = this.getId() + "___error_container";
+	errorContainer.className = this.getErrorCssClass();
+
+	var container = this.getContainer();
+	if (container.hasChildNodes()) {
+		container.insertBefore(errorContainer, container.firstChild);
+	} else {
+		container.appendChild(errorContainer);
+	}	
+	return errorContainer;
+}
+
+XFormItem.prototype.removeErrorContainer = function () {
+	var errorContainer = this.getErrorContainer();
+	if (errorContainer != null) {
+		errorContainer.parentNode.removeChild(errorContainer);
+	}
+}
+
+
+//
+// PROPERTIES OF INDIVIDUAL ITEMS
+//
+
+
+XFormItem.prototype.getType = function () {
+	return this.type;
+}
+
+
+//XXX
+XFormItem.prototype.getParentItem = function () {
+	return this.__parentItem;
+}
+
+XFormItem.prototype.getForm = function () {
+	return this.__xform;
+}
+
+XFormItem.prototype.getGlobalRef = function() {
+	return this.getForm().getGlobalRefString() + ".getItemById('" + this.getId() + "')";
+}
+
+XFormItem.prototype.getFormGlobalRef = function() {
+	return this.getForm().getGlobalRefString();
+}
+
+XFormItem.prototype.getInstance = function() {
+	return this.getForm().instance;
+}
+
+XFormItem.prototype.getModel = function () {
+	return this.getForm().getModel();
+}
+
+
+XFormItem.prototype.getFormController = function () {
+	return this.getForm().getController();
+}
+
+
+XFormItem.prototype.getModelItem = function() {
+	return this.__modelItem;
+}
+
+//XXX NON-STANDARD
+XFormItem.prototype.getRef = function () {
+	if (this.ref !== _UNDEFINED_) return this.ref;
+	return this.__attributes.ref;
+}
+
+
+XFormItem.prototype.getRefPath = function () {
+	return this.refPath;
+}
+
+XFormItem.prototype.getId = function () {
+	return this.id;
+}
+
+XFormItem.prototype.getExternalId = function () {
+	var ret = null;
+	if (this.__attributes.id !== _UNDEFINED_) {
+		ret = this.__attributes.id;
+	} else if ( (ret = this.getRef()) !== _UNDEFINED_) {
+		// nothing
+	} else {
+		ret = null;
+	}
+	return ret;
+};
+
+
+
+//
+//	GENERIC HTML WRITING ROUTINES
+//
+
+
+XFormItem.prototype.getOnChangeMethod = function() {
+	return this.cacheInheritedMethod("onChange","$onChange","value,event,form");
+}
+
+XFormItem.prototype.getOnActivateMethod = function() {
+	return this.cacheInheritedMethod("onActivate","$onActivate","event");
+}
+
+
+XFormItem.prototype.getExternalChangeHandler = function() {
+	return "var item = " + this.getGlobalRef() + "; item.$elementChanged(value, item.getInstanceValue(), event||window.event);";
+}
+XFormItem.prototype.getElementValueGetterHTML = function () {
+	return "var value = this.value;";
+}
+
+/**
+* returns the HTML part of an <input > element that is used to set "onchange" 
+* (or whatever is defined by elementChangehandler)  property of the element
+* Greg Solovyev 07/19/05: moved JS creation part into XFormItem.prototype.getChangehandlerJSCode
+**/
+XFormItem.prototype.getChangeHandlerHTML = function() {
+	var elementChangeHandler = this.getElementChangeHandler();
+	if (elementChangeHandler != "onkeypress") {
+		return LsBuffer.concat(" ", elementChangeHandler, "=\"", this.getChangehandlerJSCode() + "\"",this.getKeyPressHandlerHTML());
+	} else {
+		return this.getKeyPressHandlerHTML();
+	}
+}
+
+/**
+* returns JavaScript code that should be executed when an element is changed by a user
+* @author Greg Solovyev
+**/
+XFormItem.prototype.getChangehandlerJSCode = function () {
+	return LsBuffer.concat(this.getElementValueGetterHTML(),this.getExternalChangeHandler());
+}
+
+XFormItem.prototype.getFocusHandlerHTML = function () {
+	var formId = this.getFormGlobalRef(),
+		itemId = this.getId()
+	;
+	return LsBuffer.concat(
+		" onfocus=\"", formId, ".onFocus('", itemId, "')\"",
+		" onblur=\"", formId, ".onBlur('", itemId, "')\""
+	);
+}
+
+
+XFormItem.prototype.getOnActivateHandlerHTML = function() {
+	var method = this.getOnActivateMethod();
+	if (method == null) return "";
+	
+	return LsBuffer.concat(
+			" ", this.getElementChangeHandler(), "=\"", 
+			this.getGlobalRef(),".$onActivate(event||window.event)\""
+		);
+}
+
+
+/**
+* Schedules this.handleKeyPressDelay to fire later when the user finishes typing
+* @param ev - "onkeypress" event 
+* @param domItem - HTML form element
+* @author Greg Solovyev
+**/
+XFormItem.prototype.handleKeyUp = function (ev, domItem) {
+	// don't fire off another if we've already set one up.
+	if (this.keyPressDelayHdlr != null) {
+		LsTimedAction.cancelAction(this.keyPressDelayHdlr);
+		XForm.keyPressDelayHdlr = null;
+	}
+	var form = this.getForm();
+	ev = ev ? ev : window.event;
+	var key = DwtKeyEvent.getCharCode(ev);
+	if (key == DwtKeyEvent.KEY_TAB) {
+		DwtUiEvent.setBehaviour(ev, true, false);
+		return false;
+	}	
+	var action = new LsTimedAction();
+	action.obj = this;
+	action.method = this.handleKeyPressDelay;
+	action.params.add(ev);
+	action.params.add(domItem);
+	//XForm.keyPressDelayHdlr = setTimeout(XForm.handleKeyPressDelay, 250, item, ev, formItem);
+	this.keyPressDelayHdlr = LsTimedAction.scheduleAction(action, 500);
+};
+
+XFormItem.prototype.handleKeyDown = function (ev, domItem) {
+	ev = (ev != null)? ev: window.event;
+	var key = DwtKeyEvent.getCharCode(ev);
+	if (key == DwtKeyEvent.KEY_ENTER) {
+		// By telling the browser just to let this do the default, and 
+		// not let the event bubble, our keyup handler
+		// wil see the enter key.
+		DwtUiEvent.setBehaviour(ev, true, true);
+		return false;
+	} else if (key == DwtKeyEvent.KEY_TAB) {
+		DwtUiEvent.setBehaviour(ev, true, false);
+		this.getForm().focusNext(this.getId());
+		return false;
+	}
+	return true;
+};
+
+/**
+* Implements delayed handling of "keypress" event. 
+* Calls change handler script on the item.
+* See @link XFormItem.prototype.getChangehandlerJSCode for change handler script.
+* @author Greg Solovyev
+**/
+XFormItem.prototype.handleKeyPressDelay = function(ev, domItem) {	
+	this.keyPressDelayHdlr = null;
+	if (this.$changeHandlerFunc == null) {
+		var JSCode = this.getChangehandlerJSCode();
+		this.$changeHandlerFunc = new Function("event", JSCode);
+	}
+	if(this.$changeHandlerFunc) {
+		this.$changeHandlerFunc.call(domItem, ev);
+	}
+};
+
+XFormItem.prototype.getKeyPressHandlerHTML = function () {
+	/**
+	 * Greg Solovyev 07/19/05
+	 * added handler for onkeypress event in order to be able to update the form before the field looses focus
+	 **/
+	var keydownEv = "onkeydown";
+	if (LsEnv.isNav) {
+		keydownEv = "onkeypress";
+	}
+	return LsBuffer.concat(" ", keydownEv,"=\"",this.getGlobalRef(), ".handleKeyDown(event, this)\"",
+						   " onkeyup=\"", this.getGlobalRef(), ".handleKeyUp(event, this)\"");
+};
+
+
+//
+//	container
+//
+
+
+XFormItem.prototype.outputContainerTDStartHTML = function (html, updateScript, indent, colSpan, rowSpan) {
+	html.append(indent, "  <td id=\"",  this.getId(), "___container\"",
+					(colSpan > 1 ? " colspan=" + colSpan : ""),
+					(rowSpan > 1 ? " rowspan=" + rowSpan : ""),
+					this.getContainerCssString(), 
+					">\r"
+	);
+} 
+
+XFormItem.prototype.outputContainerTDEndHTML = function (html, updateScript, indent) {
+	html.append("\r", indent, "  </td id=\"",  this.getId(), "___container\">\r");
+} 
+
+
+//
+//	element div
+//
+// for items that are effectively elements (or are drawn by something other than this form)
+// NOTE: you can pass in any random CSS properties you want in cssStyle
+XFormItem.prototype.outputElementDivStart = function (html, updateScript, indent) {
+	html.append(indent, "    <div id=", this.getId(), this.getCssString(), " xform_type='elementDiv'>\r");
+}
+
+XFormItem.prototype.outputElementDivEnd = function (html, updateScript, indent) {
+	html.append("\r", indent, "    </div id=\"", this.getId(), "\">");
+}
+
+//
+//	label td
+//
+XFormItem.prototype.outputLabelCellHTML = function (html, updateScript, indent, rowSpan) {
+	var label = this.getLabel();
+	if (label == null) return;
+	
+	if (label == "") label = "&nbsp;";
+	
+	html.append(indent, "<td id=\"", this.getId(),"___label\"", 
+							this.getLabelCssString(), 
+							(rowSpan > 1 ? " rowspan=" + rowSpan : ""), ">", 
+							"<nobr>", label, "</nobr>");
+	if(this.getInheritedProperty("required")) {
+		html.append("<span class='redAsteric'>*</span>");
+	}
+
+	html.append("</td>\r");
+
+}
+
+
+
+//
+//	update script
+//
+XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript, indent) {
+//TODO: take the script they want to place, do a regex look for the variables below and only include the ones they care about!
+	var forceUpdate = this.getForceUpdate();
+	var relevant = this.getRelevant();
+	var relevantIfEmpty = this.getRelevantIfEmpty();
+	
+	var parentRequiresRelevantCheck = (this.__parentItem ? (this.__parentItem._childRelevantCheckRequired == true) : false);
+	if (	forceUpdate == false 
+			&& this.refPath == null 
+			&& relevant == null 
+			&& relevantIfEmpty == true
+			&& parentRequiresRelevantCheck == false
+			&& typeof this.insertElement != "function"
+		) return;
+
+
+	var updateElementMethod = this.getUpdateElementMethod();
+	var elementChangedMethod = this.getElementChangedMethod();
+	var getDisplayValueMethod = this.getDisplayValueMethod();
+
+
+	updateScript.append(
+			// first line is to separate out each item
+			"_____________________________________________________++;\r",
+			"item = form.getItemById('", this.getId(),"', '", this.getRefPath(), "');\r"
+	);
+
+
+	// if there is a relevant attribute, 
+	//		get whether or not this item is relevant, and
+	//		write a script that will show or hide the container element
+	//
+	//	NOTE: we leave the script dangling in the "if relevant" clause, 
+	//			and close the if clause in writeUpdateScriptEnd().
+	//		It is the job  of each individual outputter to write script that will
+	//		update the value of the element (or subelements, etc) during the updateScript.
+	//		The can be assured that it will only be called when it is relevant, and
+	//		can access the following variables:
+	//			value = new value to show
+	//			element = DOM element of the 'control' itself (INPUT, SELECT, whatever a custom outputter gave us)
+	//			itemId = (often internally generated) ID for the control
+	//			ref = ref for the control (in the XForm, not the model)
+	//			container = DOM element of the DIV container of the control
+	//
+	if (relevant != null || relevantIfEmpty == false || parentRequiresRelevantCheck) {
+		if (relevantIfEmpty == false) {
+			if (relevant == null) {
+				relevant = "get(item) != null";
+			} else {
+				relevant = "get(item) != null && (" + relevant + ")";
+			}
+		}
+		if (parentRequiresRelevantCheck) {
+			if (relevant == null) {
+				relevant = "item.__parentItem.__isRelevant";
+			} else {
+				relevant = "item.__parentItem.__isRelevant && (" + relevant + ")";
+			}
+		}
+		updateScript.append(
+			"relevant = (", relevant, ");\r",
+			"item.__isRelevant = (relevant == true);\r"
+		);
+			
+		var relevantBehavior = this.getRelevantBehavior();
+		if (relevantBehavior == _HIDE_) {
+			this._endRelevantClause = true;
+			updateScript.append(
+				"if (!item.__isRelevant) {\r",
+					"item.hide();\r",
+				"} else {\r  ");
+			if(this.focusable) {
+				updateScript.append(
+					"DBG.println(LsDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
+					"item.getForm().tabIdOrder.push(item.getId());\r"
+				);
+			}
+			updateScript.append("item.show();\r");
+		} else if (relevantBehavior == _DISABLE_) {
+			this._endRelevantClause = false;
+			this._childRelevantCheckRequired = true;
+			updateScript.append(
+				"if (!item.__isRelevant) {\r",
+					"item.disableElement();\r",
+				"} else {\r  ");
+			if(this.focusable) {
+				updateScript.append(
+					"DBG.println(LsDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
+					"item.getForm().tabIdOrder.push(item.getId());\r"
+				);
+			}
+			updateScript.append(
+					"item.enableElement();\r",
+				"}\r"//,
+			);		
+		}
+	} else {
+		if(this.focusable) {
+			updateScript.append(
+				"DBG.println(LsDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
+				"item.getForm().tabIdOrder.push(item.getId());\r"
+			);
+		}
+	}
+
+	// if the item should be inserted after drawing, do that now
+	//	(note: this means that hidden elements won't be inserted until they're relevant)
+	if (typeof this.insertElement == "function") {
+		updateScript.append("item.insertElement();\r");
+	}
+
+	// if we should update the element, call that now.
+	// NOTE: by default, we only update values that have changed since the last time
+	//	the form items was updated.  To turn this off, set "forceUpdate:true" in a particular item.
+	//
+	if ((this.refPath || forceUpdate) && (updateElementMethod)) {
+		updateScript.append(
+			"if(!item.hasError()){\r",
+				"value = ", (this.refPath ? 
+							 "model.getInstanceValue(instance, item.refPath)" 
+							 : "null"
+							 ), ";\r",
+			(getDisplayValueMethod != null? "value = item.$getDisplayValue(value);\r" : "")
+		);
+
+		if (forceUpdate != true) {
+			updateScript.append(
+				"var valueStr = ''+value;\r",
+				"if (item.$lastDisplayValue != valueStr) {\r  ",
+					"item.$updateElement(value);\r",
+					"item.$lastDisplayValue = valueStr;\r",
+				"}\r"
+			);
+		} else {
+			updateScript.append(
+				"item.$updateElement(value);\r"
+			);
+		}
+		updateScript.append("}\r");
+	}
+}
+
+
+XFormItem.prototype.outputUpdateScriptEnd = function (html, updateScript, indent) {
+	if (this._endRelevantClause) {
+		updateScript.append("\r}\r");
+		delete this._endRelevantClause;
+	}
+}
+
+
+//
+//	change handling
+//
+
+XFormItem.prototype.elementChanged = function(elementValue, instanceValue, event) {
+	this.getForm().itemChanged(this.getId(), elementValue, event);
+}
+
+
+
+
+
+
+
+//
+//	get and set instance values!
+//
+
+
+XFormItem.prototype.getInstanceValue = function (path) {
+	if (path == null) path = this.getRefPath();
+	if (path == null) return null;
+	return this.getModel().getInstanceValue(this.getInstance(), path);
+}
+
+//NOTE: model.getInstance() gets count of PARENT
+XFormItem.prototype.getInstanceCount = function () {
+	if (this.getRefPath() == null) return 0;
+	return this.getModel().getInstanceCount(this.getInstance(), this.getRefPath());
+}
+
+XFormItem.prototype.setInstanceValue = function (value, path) {
+	if (path == null) path = this.getRefPath();
+	if (path == null) return null;
+	return this.getModel().setInstanceValue(this.getInstance(), path, value);
+}
+XFormItem.prototype.set = XFormItem.prototype.setInstancevalue;
+
+XFormItem.getValueFromHTMLSelect = function (element) {
+	var values = [];
+	for (var i = 0; i < element.options.length; i++) {
+		if (element.options[i].selected) {
+			values[values.length] = element.options[i].value;	
+		}
+	}
+	return values.join(",");
+}
+
+XFormItem.prototype.getValueFromHTMLSelect = function(element) {
+	if (element == null) element = this.getElement();
+	return XFormItem.getValueFromHTMLSelect(element);
+}
+
+XFormItem.updateValueInHTMLSelect1 = function (newValue, element, selectionIsOpen) {
+	if (element == null) return null;
+	if (selectionIsOpen == null) selectionIsOpen = false;
+	
+	var options = element.options;
+	for (i = 0; i < options.length; i++) {
+		var choice = options[i];
+		if (choice.value == newValue) {
+			element.selectedIndex = i;
+			return element.value;
+		}
+	}
+	// default to the first element if nothing was selected (?)
+	if (options.length > 0) {
+		element.selectedIndex = 0;
+		return options[0].value;
+	}
+	return null;
+}
+XFormItem.prototype.updateValueInHTMLSelect1 = function (newValue, element, selectionIsOpen) {
+	if (element == null) element = this.getElement();
+	if (selectionIsOpen == null) selectionIsOpen = this.getSelectionIsOpen();
+	return XFormItem.updateValueInHTMLSelect1(newValue, element, selectionIsOpen);
+}
+
+
+XFormItem.updateValueInHTMLSelect = function (newValue, element, selectionIsOpen) {
+	if (element == null) return null;
+	if (newValue == null) newValue = "";
+	if (selectionIsOpen == null) selectionIsOpen = false;
+	
+	// assumes newValue is a comma-delimited string or an array
+	if (typeof newValue == "string") newValue = newValue.split(",");
+	// hack up newValue to make searching for a particular option newValue easier
+	var uniqueStartStr = "{|[", 
+		uniqueEndStr = "]|}"
+	;
+	newValue = uniqueStartStr + newValue.join(uniqueEndStr + uniqueStartStr) + uniqueEndStr;
+	
+	var options = element.options;
+	var anySelected = false;
+	for (var i = 0; i < options.length; i++) {
+		var isPresent = (newValue.indexOf(uniqueStartStr + options[i].value + uniqueEndStr) > -1);
+		options[i].selected = isPresent;
+		anySelected = anySelected || isPresent;		
+	}
+	
+	if (!anySelected && !selectionIsOpen) {
+		// select the first value???
+		options[0].selected = true;
+	}
+}
+
+XFormItem.prototype.updateValueInHTMLSelect = function (newValue, element, selectionIsOpen) {
+	if (newValue == null) newValue = "";
+	if (element == null) element = this.getElement();
+	if (selectionIsOpen == null) selectionIsOpen = this.getSelectionIsOpen();
+	return XFormItem.updateValueInHTMLSelect(newValue, element, selectionIsOpen);
+}
+
+XFormItem.prototype.getChoicesHTML = function(indent) {
+	var choices = this.getNormalizedChoices();
+	if (choices == null) return "";	//throw an error?
+	var html = new LsBuffer();
+	if (indent == null) indent = "";
+
+	this.outputChoicesHTMLStart(html, indent);
+	var values = choices.values;
+	var labels = choices.labels;
+
+	var choiceCssClass = this.getChoiceCssClass();
+	for (var i = 0; i < values.length; i++) {
+		html.append(indent, this.getChoiceHTML(i, values[i], labels[i], choiceCssClass, indent));
+	}
+	this.outputChoicesHTMLEnd(html, indent);
+	return html.toString();
+}
+
+XFormItem.prototype.outputChoicesHTMLStart = function(html, indent) {
+	return;
+}
+XFormItem.prototype.outputChoicesHTMLEnd = function(html, indent) {
+	return;
+}
+
+XFormItem.prototype.getChoiceCssClass = function() {
+	return "";
+}
+
+XFormItem.prototype.getChoiceHTML = function (itemNum, value, label, cssClass, indent) {
+	return LsBuffer.concat(indent,"<option value=\"", value, "\">", label,"</option>");
+}
+
+XFormItem.prototype.updateChoicesHTML = function () {
+	this.cleanChoiceDisplay();
+
+	// NOTE: setting the innerHTML of the options doesn't work
+	//	for now, just set the outer HTML of the entire widget
+	// TODO: do this by frobbing the options manually for speed and so things don't flash
+	var html = new LsBuffer();
+	var updateScript = new LsBuffer();	// NOTE: we won't be using this...
+	this.outputHTML(html, new LsBuffer(), "");
+	this.getContainer().innerHTML = html.toString();
+	return;
+
+/*	var element = this.getElement();
+	if (element != null) {
+		var options = element.options;
+		element.options.innerHTML = this.getChoicesHTML();
+	}
+*/
+}
+
+
+XFormItem.prototype.getInheritedProperty = function(prop) {
+	// first look in the instance attributes
+	if (this.__attributes[prop] !== _UNDEFINED_) return this.__attributes[prop];
+
+	// look up the inheritance chain for this type
+	if (this[prop] !== _UNDEFINED_) return this[prop];
+
+	// if not found there, look in the xmodel
+	var modelItem = this.__modelItem;
+	if (modelItem && modelItem[prop]) return modelItem[prop];
+
+	return null;
+}
+
+// NOTE: cacheProp MUST be different than prop!
+XFormItem.prototype.cacheInheritedProperty = function (prop, cacheProp) {
+	if (this[cacheProp] !== _UNDEFINED_) return this[cacheProp];
+	return (this[cacheProp] = this.getInheritedProperty(prop));
+}
+
+XFormItem.prototype.cacheInheritedMethod = function (methodName, cacheProp, arguments) {
+	if (this[cacheProp] !== _UNDEFINED_) return this[cacheProp];
+	var func = this.getInheritedProperty(methodName);
+	if (func != null) func = this.convertToFunction(func, arguments);
+	this[cacheProp] = func;
+	return func;
+}
+
+
+
+
+//
+//	properties of the element after its' been drawn
+//
+
+
+XFormItem.prototype.getElement = XForm.prototype.getElement;
+XFormItem.prototype.showElement = XForm.prototype.showElement;
+XFormItem.prototype.hideElement = XForm.prototype.hideElement;
+XFormItem.prototype.createElement = XForm.prototype.createElement;
+
+
+XFormItem.prototype.getWidget = function() {
+	return this.widget;
+}
+
+XFormItem.prototype.setWidget = function(widget) {
+	this.widget = widget;
+}
+
+
+XFormItem.prototype.getContainer = function() {
+	return this.getElement(this.getId() + "___container");
+}
+XFormItem.prototype.getLabelContainer = function() {
+	return this.getElement(this.getId() + "___label");
+}
+XFormItem.prototype.show = function() {
+	var container = this.getLabelContainer();
+	if (container) this.showElement(container);
+	container = this.getContainer();
+	if (container != null) {
+		this.showElement(container);
+	} else {
+		var items = this.getItems();
+		if (items != null) {
+			for (var i = 0; i < items.length; i++) {
+				var item = items[i];
+				item.show();
+			}
+		}
+	}
+}
+XFormItem.prototype.hide = function() {
+	var container = this.getLabelContainer()
+	if (container) this.hideElement(container);
+	container = this.getContainer();
+	if (container != null) {
+		this.hideElement(container);
+	} else {
+		var items = this.getItems();
+		if (items != null) {
+			for (var i = 0; i < items.length; i++) {
+				items[i].hide();
+			}
+		}
+	}
+}
+
+XFormItem.prototype.focus = function () {
+	this.getForm().focusElement(this.getId());
+};
+
+
+//
+//	SIMPLE ATTRIBUTE ACCESSORS
+//
+//	NOTE: this is effectively the public API for the properties you can define
+//			for a FormItem
+//
+
+XFormItem.prototype.getValue = function() {
+	return this.getInheritedProperty("value");
+}
+
+// SPECIAL CASE:  don't take ITEMS from the model...
+//XXX NON-STANDARD
+XFormItem.prototype.getItems = function () {
+	if (this.items) return this.items;
+	return this.__attributes.items;
+}
+
+XFormItem.prototype.getRelevant = function () {
+	return this.cacheInheritedProperty("relevant","_relevant");
+}
+
+XFormItem.prototype.getRelevantIfEmpty = function () {
+	return this.getInheritedProperty("relevantIfEmpty");
+}
+
+XFormItem.prototype.evalRelevant = function () {
+	var relevant = this.getRelevant();
+	if (relevant == null) return true;
+
+	var item = this;
+	var form = this.getForm();
+	var model = this.getModel();
+	var instance = this.getForm().getInstance();
+	with (form) {
+		return eval(relevant);
+	}
+}
+
+
+XFormItem.prototype.getRelevantBehavior = function () {
+	var behavior = this.getInheritedProperty("relevantBehavior");
+	if (behavior == _PARENT_) {
+		if (this.__parentItem) {
+			return this.__parentItem.getRelevantBehavior();
+		} else {
+			return _HIDE_;
+		}
+	}
+	return behavior;
+}
+
+XFormItem.prototype.getChoices = function () {
+	return this.getInheritedProperty("choices");
+}
+
+// normalized choices look like:  {values:[v1, v2, v3...], labels:[l1, l2, l3...]}
+XFormItem.prototype.getNormalizedChoices = function () {
+	if (this.$normalizedChoices) return this.$normalizedChoices;
+
+	var choices = this.getChoices();
+	if (choices == null) return null;
+
+	var normalizedChoices;
+	if (typeof choices.getChoices == "function") {
+		normalizedChoices = choices.getChoices();
+	} else if (LsUtil.isArray(choices)) {
+		// it's either an array of objects or an array of strings
+		if (typeof choices[0] == "object") {
+			// list of objects
+			normalizedChoices = XFormChoices.normalizeChoices(choices, XFormChoices.OBJECT_LIST);
+		} else {
+			// list of simple values
+			normalizedChoices = XFormChoices.normalizeChoices(choices, XFormChoices.SIMPLE_LIST);
+		}
+	} else {
+		// assume it's a hash
+		normalizedChoices = XFormChoices.normalizeChoices(choices, XFormChoices.HASH);
+	}
+	this.$normalizedChoices = normalizedChoices;
+	return this.$normalizedChoices;
+}
+
+
+XFormItem.prototype.getNormalizedValues = function () {
+	var choices = this.getNormalizedChoices();
+	if (choices) return choices.values;
+	return null;
+}
+
+
+XFormItem.prototype.getNormalizedLabels = function () {
+	var choices = this.getNormalizedChoices();
+	if (choices) return choices.labels;
+	return null;
+}
+	
+	
+	
+//
+//	appearance methods
+//
+
+XFormItem.prototype.getAppearance = function () {
+	return this.getInheritedProperty("appearance");
+}
+XFormItem.prototype.getCssClass = function () {
+	return this.getInheritedProperty("cssClass");
+}
+
+XFormItem.prototype.getCssStyle = function () {
+	return this.getInheritedProperty("cssStyle");
+}
+
+XFormItem.prototype.getLabel = function (value) {
+	return this.getInheritedProperty("label");
+}
+
+XFormItem.prototype.getErrorCssClass = function () {
+	return this.getInheritedProperty("errorCssClass");
+}
+XFormItem.prototype.getLabelCssClass = function () {
+	return this.getInheritedProperty("labelCssClass");
+}
+
+XFormItem.prototype.getLabelCssStyle = function () {
+	return this.getInheritedProperty("labelCssStyle");
+}
+
+XFormItem.prototype.getLabelWrap = function () {
+	return this.getInheritedProperty("labelWrap");
+}
+
+XFormItem.prototype.getLabelLocation = function () {
+	return this.getInheritedProperty("labelLocation");
+}
+
+XFormItem.prototype.getContainerCssClass = function () {
+	return this.getInheritedProperty("containerCssClass");
+}
+
+XFormItem.prototype.getContainerCssStyle = function () {
+	return this.getInheritedProperty("containerCssStyle");
+}
+
+XFormItem.prototype.getTableCssClass = function () {
+	return this.getInheritedProperty("tableCssClass");
+}
+XFormItem.prototype.getTableCssStyle = function () {
+	return this.getInheritedProperty("tableCssStyle");
+}
+
+XFormItem.prototype.getNowrap = function () {
+	return this.getInheritedProperty("nowrap");
+}
+
+XFormItem.prototype.getWidth = function () {
+	return this.cacheInheritedProperty("width","_width");
+}
+
+XFormItem.prototype.getHeight = function () {
+	return this.getInheritedProperty("height");
+}
+
+XFormItem.prototype.getOverflow = function () {
+	return this.getInheritedProperty("overflow");
+}
+
+XFormItem.prototype.getNumCols = function () {
+	return this.getInheritedProperty("numCols");
+}
+
+XFormItem.prototype.getAlign = function () {
+	return this.getInheritedProperty("align");
+}
+
+
+XFormItem.prototype.getValign = function() {
+	return this.getInheritedProperty("valign");
+}
+
+// NEW TABLE LAYOUT STUFF
+XFormItem.prototype.useParentTable = true;
+XFormItem.prototype.getUseParentTable = function () {
+	return this.getInheritedProperty("useParentTable");
+}
+XFormItem.prototype.colSizes = _UNDEFINED_;
+XFormItem.prototype.getColSizes = function () {
+	return this.getInheritedProperty("colSizes");
+}
+XFormItem.prototype.colSpan = 1;
+XFormItem.prototype.getColSpan = function () {
+	return this.getInheritedProperty("colSpan");
+}
+XFormItem.prototype.rowSpan = 1;
+XFormItem.prototype.getRowSpan = function () {
+	return this.getInheritedProperty("rowSpan");
+}
+// END NEW TABLE LAYOUT STUFF
+
+// error handling
+XFormItem.prototype.getErrorLocation = function () {
+	return this.getInheritedProperty("errorLocation");
+};
+
+//
+//	convenience methods to figure out drawing types for you
+//
+
+// return the "label" in the choices array for this item
+//	(allows us to do lookup of displayed values easily)
+XFormItem.prototype.getChoiceLabel = function (value) {
+	var choices = this.getNormalizedChoices();
+	if (choices == null) return value;
+	
+	// choices will look like:  {values:[v1, v2, v3...], labels:[l1, l2, l3...]}
+	var values = choices.values;
+	for (var i = 0; i < values.length; i++) {
+		if (values[i] == value) {
+			return choices.labels[i];
+		}
+	}
+	// if we didn't find it, simply return the original value
+	return value;
+}
+
+
+// return the number of the choice for a particular value
+//	returns -1 if not found
+XFormItem.prototype.getChoiceNum = function (value) {
+	var choices = this.getNormalizedChoices();
+	if (choices == null) return -1;
+	
+	// choices will look like:  {values:[v1, v2, v3...], labels:[l1, l2, l3...]}
+	var values = choices.values;
+	for (var i = 0; i < values.length; i++) {
+		if (values[i] == value) {
+			return i;
+		}
+	}
+	return -1
+}
+
+
+XFormItem.prototype.getCssString = function () {
+	var css = (this.getCssClass() || '');
+	if (css != '' && css != null) css = " class=\"" + css + "\"";
+
+	var style = (this.getCssStyle() || '');
+
+	var width = this.getWidth();
+	if (width != null && width != "auto") style += ";width:" + width;
+
+	var height = this.getHeight();
+	if (height != null) style += ";height:" + height;
+
+	var overflow = this.getOverflow();
+	if (overflow != null) style += ";overflow:" + overflow;
+	
+	if (this.getNowrap())	style += ";white-space:nowrap;";
+
+	var valign = this.getValign();
+	if (valign) style += "vertical-align:"+valign;
+	
+	if (style != '') css += " style=\"" + style + ";\"";
+
+	return css;
+}
+
+
+XFormItem.prototype.getLabelCssString = function () {
+	var css = (this.getLabelCssClass() || '');
+	if (css != '' && css != null) css = " class=\"" + css + "\"";
+	var style = (this.getLabelCssStyle() || '');
+	if (this.getLabelWrap() == false) {
+		style += ";white-space:nowrap";
+	}
+	if (style != '') css += " style=\"" + style + ";\"";
+	
+	return css;
+}
+
+
+
+
+XFormItem.prototype.getTableCssString = function () {
+	var css = (this.getTableCssClass() || '');
+	if (css != '' && css != null) css = " class=\"" + css + "\"";
+
+	var style = this.getTableCssStyle();
+	if (style == null) style = '';
+	
+	var colSizes = this.getColSizes();
+	if (colSizes != null) {
+		style += ";table-layout:fixed";
+	}
+
+	var width = this.getWidth();
+	if (width != null) 	style += ";width:"+ width;
+	
+//	var height = this.getHeight();
+//	if (height != null)	style += ";height:"+ height;
+	
+	var overflow = this.getOverflow();
+	if (overflow != null) style += ";overflow:" + overflow;
+
+	return css + (style != null ? " style=\"" + style + ";\"" : "");
+}
+
+
+XFormItem.prototype.getContainerCssString = function () {
+	var css = (this.getContainerCssClass() || '');
+	if (css != '' && css != null) css = " class=\"" + css + "\"";
+	var style = this.getContainerCssStyle();
+	if (style == null) style = '';
+	
+	var align = this.getAlign();
+	if (align != _LEFT_) {
+		if (align == _CENTER_ || align == _MIDDLE_) {
+			style += ";text-align:center";
+		} else if (align == _RIGHT_) {
+			style += ";text-align:right";
+		}
+	}
+	var valign = this.getValign();
+	if (valign == _TOP_) {
+		style += ";vertical-align:top";
+	} else if (valign == _BOTTOM_) {
+		style += ";vertical-align:bottom";
+	} else if (valign == _CENTER_ || valign == _MIDDLE_) {
+		style += ";vertical-align:middle";
+	}
+
+	var relevant = this.getRelevant();
+	if (relevant) {
+		var relevantBehavior = this.getRelevantBehavior();
+		if (relevantBehavior == _HIDE_) {
+			style += ";display:none";
+		}
+	}
+
+	if (style != "") css += " style=\"" + style + ";\"";
+	return css;
+}
+
+
+
+
+//
+//	handling changes to items
+//
+XFormItem.prototype.getElementChangeHandler = function () {
+	return this.getInheritedProperty("elementChangeHandler");
+}
+
+
+
+
+//
+//	outputting, inserting and updating items
+//
+
+XFormItem.prototype.getForceUpdate = function() {
+	return this.getInheritedProperty("forceUpdate");
+}
+
+XFormItem.prototype.getOutputHTMLMethod = function() {
+	return this.convertToFunction(
+				this.getInheritedProperty("outputHTML"),
+				"html,updateScript,indent,currentCol"
+		);
+}
+
+XFormItem.prototype.getElementChangedMethod = function () {
+	return this.cacheInheritedMethod("elementChanged","$elementChanged","elementValue, instanceValue, event");
+}
+
+XFormItem.prototype.getUpdateElementMethod = function() {
+	return this.cacheInheritedMethod("updateElement","$updateElement","newValue");
+}
+
+XFormItem.prototype.getDisplayValueMethod = function() {
+	return this.cacheInheritedMethod("getDisplayValue","$getDisplayValue","newValue");
+}
+
+
+XFormItem.prototype.convertToFunction = function (script, arguments) {
+	if ((script == null) || (typeof(script) == "function")) return script;
+	if (typeof(this[script]) == "function") return this[script];
+	// CLOSURE???
+	return new Function(arguments, script);
+}
+
+
+
+// note that this form item's display needs to be updated
+XFormItem.prototype.dirtyDisplay = function () {
+	delete this.$lastDisplayValue;
+}
+
+// override the next method in your subclass to enable/disable element
+XFormItem.prototype.setElementEnabled = function(enable) {}
+
+// convenience methods that call the above routine
+XFormItem.prototype.disableElement = function () {
+	this.setElementEnabled(false);
+}
+
+XFormItem.prototype.enableElement = function () {
+	this.setElementEnabled(true);
+}
+
+// you can use these to 
+XFormItem.prototype.setElementDisabledProperty = function (enable) {
+	this.getElement().disabled = (enable != true)
+}
+
+
+XFormItem.prototype.setElementEnabledCssClass = function (enable) {
+	var el = this.getElement();
+	if (!el) return;
+	
+	if (enable) {
+		el.className = this.getCssClass();
+	} else {
+		el.className = this.getCssClass() + "_disabled";
+	}
+}
+
+
+
+//
+//	_SELECT_ etc type properties
+//
+XFormItem.prototype.getSelection = function () {
+	return this.getInheritedProperty("selection");
+}
+
+XFormItem.prototype.getSelectionIsOpen = function () {
+	return this.getInheritedProperty("selection");
+}
+
+XFormItem.prototype.getOpenSelectionLabel = function () {
+	return this.getInheritedProperty("openSelectionLabel");
+}
+
+
+//
+//	_REPEAT_ type properties
+//
+
+XFormItem.prototype.getNumberToShow = function () {
+	return this.getInheritedProperty("number");
+}
+
+XFormItem.prototype.getShowAddButton = function () {
+	return this.getInheritedProperty("showAddButton");
+}
+
+XFormItem.prototype.getShowRemoveButton = function () {
+	return this.getInheritedProperty("showRemoveButton");
+}
+
+XFormItem.prototype.getShowMoveUpButton = function () {
+	return this.getInheritedProperty("showMoveUpButton");
+}
+
+XFormItem.prototype.getShowMoveDownButton = function () {
+	return this.getInheritedProperty("showMoveDownButton");
+}
+
+XFormItem.prototype.getAddButton = function () {
+	return this.getInheritedProperty("addButton");
+}
+
+XFormItem.prototype.getRemoveButton = function () {
+	return this.getInheritedProperty("removeButton");
+}
+
+XFormItem.prototype.getMoveUpButton = function () {
+	return this.getInheritedProperty("moveUpButton");
+}
+
+XFormItem.prototype.getMoveDownButton = function () {
+	return this.getInheritedProperty("moveDownButton");
+}
+
+XFormItem.prototype.getAlwaysShowAddButton = function () {
+	return this.getInheritedProperty("alwaysShowAddButton");
+}
+
+XFormItem.prototype.getRepeatInstance = function () {
+	return this.getInheritedProperty("repeatInstance");
+}
+
+
+
+
+//
+//	_IMAGE_ type properties
+//
+
+XFormItem.prototype.getSrc = function () {
+	return this.getInheritedProperty("src");
+}
+
+XFormItem.prototype.getSrcPath = function () {
+	return this.getInheritedProperty("srcPath");
+}
+
+
+
+//
+//	_ANCHOR_, _URL_, etc
+//
+//	type defaults
+XFormItem.prototype.getShowInNewWindow = function () {
+	return this.getInheritedProperty("showInNewWindow");
+}
+
+
+
+
+//
+//	internal properties for creating various item types
+//
+
+
+XFormItem.prototype.getWriteElementDiv = function () {
+	return this.getInheritedProperty("writeElementDiv");
+}
+
+XFormItem.prototype.getMultiple = function () {
+	return this.getInheritedProperty("multiple");
+}
+
+XFormItem.prototype.getAlwaysUpdateChoices = function () {
+	return this.getInheritedProperty("alwaysUpdateChoices");
+}
+
+XFormItem.prototype.choicesAreDirty = function () {
+	return (this._choiceDisplayIsDirty == true || this.getAlwaysUpdateChoices());
+}
+
+
+
+
+
+
+
+
+
+
+
+
+//
+//	XFormItem class: "output"
+//
+function Output_XFormItem() {}
+XFormItemFactory.createItemType("_OUTPUT_", "output", Output_XFormItem, XFormItem);
+
+
+//	type defaults
+Output_XFormItem.prototype.writeElementDiv = true;
+Output_XFormItem.prototype.cssClass =  "xform_output";	// element itself (or element div)
+
+//	methods
+
+Output_XFormItem.prototype.outputHTML = function (html, updateScript, indent) {
+	// by defaut, we output the "attributes.value" if set 
+	//	(in case an item only wants to write out on the initial draw)
+	// NOTE: dereferencing through the choice map happens in getDisplayValue()
+	var value = this.getValue();
+	var method = this.getDisplayValueMethod();
+	if (method) {
+		value = method.call(this, value);
+	}
+	html.append(value);
+}
+
+
+Output_XFormItem.prototype.getDisplayValue = function(newValue) {
+	// dereference through the choices array, if provided
+	newValue = this.getChoiceLabel(newValue);
+
+	if (newValue == null) {
+		newValue = "";
+	} else {
+		newValue = "" + newValue;
+	}
+	return newValue;
+}
+
+Output_XFormItem.prototype.updateElement = function (newValue) {
+	this.getElement().innerHTML = newValue;
+}
+
+
+// set up how disabling works for this item type
+Output_XFormItem.prototype.setElementEnabled = XFormItem.prototype.setElementEnabledCssClass;
+
+
+
+
+
+//
+//	XFormItem class: "textfield"
+//
+function Textfield_XFormItem() {}
+XFormItemFactory.createItemType("_TEXTFIELD_", "textfield", Textfield_XFormItem, XFormItem);
+// aliases for _TEXTFIELD_:  _INPUT_
+XFormItemFactory.registerItemType("_INPUT_", "input", Textfield_XFormItem);
+
+//	type defaults
+Textfield_XFormItem.prototype.width = 100;
+Textfield_XFormItem.prototype._inputType = "text";
+Textfield_XFormItem.prototype.cssClass = "xform_field";
+Textfield_XFormItem.prototype.elementChangeHandler="onkeypress";
+Textfield_XFormItem.prototype.focusable = true;
+
+//	methods
+Textfield_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
+	var inputType = this._inputType;
+	var value = this.getValue();
+	var modelItem = this.getModelItem();
+
+
+	/***
+//XXX this is probably not the best way to tell if we only want to enter numbers...
+	if (modelItem && (modelItem.type == _NUMBER_)) {// || modelItem.type == _COS_NUMBER_)) {
+		var keyStrokeHandler = " onkeypress=\""
+//			+"',45,46,48,49,50,51,52,53,54,55,56,57,69,101,'.indexOf(','+(event||window.event).keyCode+',') > -1\""		
+				+"var code = ','+(event||window.event).which+',';"
+				+"var isValidChar = (',45,46,48,49,50,51,52,53,54,55,56,57,69,101,'.indexOf(code) > -1);"
+				+"DBG.println(code + ':'+isValidChar);"
+				+"event.returnValue = isValidChar;"
+				+"return isValidChar;"
+				+"\""
+	}
+	/***/
+	html.append(indent, 
+			"<input id=\"", this.getId(),"\" type=\"", inputType, "\"", this.getCssString(), 
+				this.getChangeHandlerHTML(), this.getFocusHandlerHTML(),
+				(value != null ? " value=\"" + value + "\"" : ""),
+			">");
+}
+
+Textfield_XFormItem.prototype.updateElement = function(newValue) {
+	if (newValue == null) newValue = this.getValue();
+	if (newValue == null) newValue = "";
+	if (this.getElement().value != newValue) {
+		this.getElement().value = newValue;
+	}
+}
+
+// set up how disabling works for this item type
+Textfield_XFormItem.prototype.setElementEnabled = XFormItem.prototype.setElementDisabledProperty;
+
+
+
+
+
+//
+//	XFormItem class: "secret"
+//
+function Secret_XFormItem() {}
+XFormItemFactory.createItemType("_SECRET_", "secret", Secret_XFormItem, Textfield_XFormItem);
+// alias for the SECRET class:  PASSWORD
+XFormItemFactory.registerItemType("_PASSWORD_", "password", Secret_XFormItem);
+
+
+//	type defaults
+Secret_XFormItem.prototype._inputType = "password";
+Secret_XFormItem.prototype.focusable = true;
+
+
+
+
+//
+//	XFormItem class: "file"
+//
+
+function File_XFormItem() {}
+XFormItemFactory.createItemType("_FILE_", "file", File_XFormItem, Textfield_XFormItem)
+
+//	type defaults
+File_XFormItem.prototype._inputType = "file";
+File_XFormItem.prototype.forceUpdate = false;
+File_XFormItem.prototype.focusable = true;
+
+
+
+//
+//	XFormItem class: "textarea"
+//
+function Textarea_XFormItem() {}
+XFormItemFactory.createItemType("_TEXTAREA_", "textarea", Textarea_XFormItem, Textfield_XFormItem)
+
+Textarea_XFormItem.prototype.width = "100%";
+Textarea_XFormItem.prototype.height = 100;
+Textarea_XFormItem.prototype.focusable = true;
+//	methods
+Textarea_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
+	var wrap = this.getInheritedProperty("textWrapping");
+	if(!wrap)
+		wrap = "off";
+		
+	html.append(indent, 
+		"<textarea id=\"", this.getId(), "\"", this.getCssString(),
+				this.getChangeHandlerHTML(), this.getFocusHandlerHTML(), "wrap='", wrap, "'",
+		"></textarea>");
+}
+
+
+
+
+
+//
+//	XFormItem class: "checkbox"
+//
+function Checkbox_XFormItem() {}
+XFormItemFactory.createItemType("_CHECKBOX_", "checkbox", Checkbox_XFormItem, XFormItem)
+
+//	type defaults
+Checkbox_XFormItem.prototype._inputType = "checkbox";
+Checkbox_XFormItem.prototype.elementChangeHandler = "onclick";
+Checkbox_XFormItem.prototype.labelLocation = _RIGHT_;
+Checkbox_XFormItem.prototype.cssClass = "xform_checkbox";
+Checkbox_XFormItem.prototype.labelCssClass = "xform_checkbox";
+Checkbox_XFormItem.prototype.align = _RIGHT_;
+Checkbox_XFormItem.prototype.trueValue = _UNDEFINED_;		// Don't set in proto so model can override
+Checkbox_XFormItem.prototype.falseValue = _UNDEFINED_;
+Checkbox_XFormItem.prototype.focusable = true;
+
+//	methods
+Checkbox_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
+	// figure out how to show the checkbox as checked or not
+	
+	html.append(indent, 
+		"<input id=\"", this.getId(),"\" type=\"", this._inputType, "\"", this.getCssString(), 
+			this.getChangeHandlerHTML(), this.getFocusHandlerHTML(),
+		">");
+}
+
+
+Checkbox_XFormItem.prototype.getTrueValue = function () {
+	var trueValue = this.getInheritedProperty("trueValue");
+	if (trueValue == null) trueValue = true;
+	return trueValue;
+}
+
+Checkbox_XFormItem.prototype.getFalseValue = function () {
+	var falseValue = this.getInheritedProperty("falseValue");
+	if (falseValue == null) falseValue = false;
+	return falseValue;
+}
+
+
+
+Checkbox_XFormItem.prototype.updateElement = function(newValue) {
+	newValue = (newValue == this.getTrueValue());
+	this.getElement().checked = newValue;
+}
+
+Checkbox_XFormItem.prototype.getElementValueGetterHTML = function () {
+	var trueValue = this.getTrueValue();
+	if (trueValue !== _UNDEFINED_) {
+		if (typeof trueValue == "string") trueValue = "'" + trueValue + "'";
+		
+		var falseValue = this.getFalseValue();
+		if (typeof falseValue == "string") falseValue = "'" + falseValue + "'";
+	
+		if (trueValue == null) trueValue = true;
+		if (falseValue == null) falseValue = false;
+	
+		return LsBuffer.concat(
+			"var value = (this.checked ? ",  trueValue, " : ", falseValue, ");"
+		);
+	} else {
+		return "var value = '"+this.getValue()+"';";
+	}
+}
+
+
+// set up how disabling works for this item type
+//	XXXX eventually we want to disable our label as well...
+Checkbox_XFormItem.prototype.setElementEnabled = XFormItem.prototype.setElementDisabledProperty;
+
+
+
+//
+//	XFormItem class: "radiobutton"
+//
+function Radio_XFormItem() {}
+XFormItemFactory.createItemType("_RADIO_", "radio", Radio_XFormItem, Checkbox_XFormItem)
+
+//	type defaults
+Radio_XFormItem.prototype._inputType = "radio";
+Radio_XFormItem.prototype.focusable = true;
+//	methods
+
+Radio_XFormItem.prototype.updateElement = function(newValue) {
+	this.getElement().checked = (this.getValue() == newValue);
+}
+Radio_XFormItem.prototype.getElementValueGetterHTML = function () {
+	return "var value = '"+this.getValue()+"';";
+}
+
+
+
+//
+//	XFormItem class: "button"
+//
+function Button_XFormItem() {}
+XFormItemFactory.createItemType("_BUTTON_", "button", Button_XFormItem, XFormItem);
+XFormItemFactory.registerItemType("_TRIGGER_", "trigger", Button_XFormItem);
+//	type defaults
+Button_XFormItem.prototype.forceUpdate = false;
+Button_XFormItem.prototype.elementChangeHandler = "onclick";
+Button_XFormItem.prototype.labelLocation = _NONE_;
+Button_XFormItem.prototype.relevantBehavior = _DISABLE_;
+Button_XFormItem.prototype.cssClass = "xform_button";
+Button_XFormItem.prototype.focusable = true;
+// 	methods
+Button_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
+	// write the div to hold the value (will be filled in on update)
+	html.append(indent,
+		"<button id=\"", this.getId(), "\"", this.getCssString(),
+			"\r  ",indent, this.getOnActivateHandlerHTML(), 
+			"\r  ",indent, this.getFocusHandlerHTML(),
+		"\r",indent,">", 
+			this.getLabel(),
+		"</button>");
+}
+
+// set up how disabling works for this item type
+Button_XFormItem.prototype.setElementEnabled = XFormItem.prototype.setElementDisabledProperty;
+
+
+
+//
+//	XFormItem class: "submit"
+//
+function Submit_XFormItem() {}
+XFormItemFactory.createItemType("_SUBMIT_", "submit", Submit_XFormItem, Button_XFormItem)
+
+
+//	methods
+Submit_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
+	// write the div to hold the value (will be filled in on update)
+	html.append(
+		"<input id=\"", this.getId(), "\" type=\"submit\"", this.getCssString(),
+			this.getChangeHandlerHTML(), this.getFocusHandlerHTML(),
+		" value=\"", this.getLabel(), ">"
+	);
+}
+
+
+
+
+
+
+//
+//	XFormItem class: "anchor"
+//
+function Anchor_XFormItem() {}
+XFormItemFactory.createItemType("_ANCHOR_", "anchor", Anchor_XFormItem, XFormItem)
+
+//	type defaults
+Anchor_XFormItem.prototype.writeElementDiv = true;
+Anchor_XFormItem.prototype.forceUpdate = true;
+Anchor_XFormItem.prototype.cssClass = "xform_anchor";
+Anchor_XFormItem.prototype.elementChangeHandler = "onclick";
+Anchor_XFormItem.prototype.href = "javascript:;";
+Anchor_XFormItem.prototype.showInNewWindow = true;
+Anchor_XFormItem.prototype.focusable = true;
+
+Anchor_XFormItem.prototype.getHref = function () {
+	return this.getInheritedProperty("href");
+}
+
+//	type defaults
+
+
+Anchor_XFormItem.prototype.getAnchorTag = function(href, label) {
+	if (href == null) href = this.getHref();
+	if (label == null) label = this.getLabel();
+	
+	var inNewWindow = this.getShowInNewWindow();
+	return LsBuffer.concat(
+			'<a href=', href, 
+				this.getOnActivateHandlerHTML(), 
+				(inNewWindow ? ' target="_blank"' : ''),
+			'>',
+				label,
+			'</a>');
+}
+
+//	methods
+Anchor_XFormItem.prototype.outputHTML = function (html) {
+	html.append(this.getAnchorTag());
+}
+
+
+Anchor_XFormItem.prototype.updateElement = function (value) {
+	this.getElement().innerHTML = this.getAnchorTag(value);
+}
+
+
+// set up how disabling works for this item type
+Anchor_XFormItem.prototype.setElementEnabled = XFormItem.prototype.setElementEnabledCssClass;
+
+
+
+
+//
+// Data anchor -- label is data driven
+//
+function Data_Anchor_XFormItem() {}
+XFormItemFactory.createItemType("_DATA_ANCHOR_", "data_anchor", Data_Anchor_XFormItem, Anchor_XFormItem)
+
+
+Data_Anchor_XFormItem.prototype.updateElement = function (value) {
+	this.getElement().innerHTML = this.getAnchorTag(null, value);
+}
+
+
+
+
+//
+//	XFormItem class: "url"
+//
+function Url_XFormItem() {}
+XFormItemFactory.createItemType("_URL_", "url", Url_XFormItem, Anchor_XFormItem)
+
+
+Url_XFormItem.prototype.updateElement = function (value) {
+	this.getElement().innerHTML = this.getAnchorTag(value, value);
+}
+
+
+
+
+
+//
+//	XFormItem class: "mailto"
+//
+function Mailto_XFormItem() {}
+XFormItemFactory.createItemType("_MAILTO_", "mailto", Mailto_XFormItem, Anchor_XFormItem)
+Mailto_XFormItem.prototype.updateElement = function (value) {
+	this.getElement().innerHTML = this.getAnchorTag("mailto:"+value, value);
+}
+
+
+
+
+//
+//	XFormItem class: "image"
+//
+function Image_XFormItem() {}
+XFormItemFactory.createItemType("_IMAGE_", "image", Image_XFormItem, XFormItem)
+
+
+//	type defaults
+Image_XFormItem.prototype.forceUpdate = true;
+Image_XFormItem.prototype.src = _UNDEFINED_;
+Image_XFormItem.prototype.srcPath = _UNDEFINED_;;
+Image_XFormItem.prototype.writeElementDiv = true;
+
+
+//	methods
+Image_XFormItem.prototype.updateElement = function (src) {
+	if (src == null) src = this.getSrc();
+	
+	// dereference through the choices array, if provided
+	src = this.getChoiceLabel(src);
+
+	// if we didn't get an image name, output nothing (?)
+	if (src == null || src == "") {
+		var output = "";
+	} else {
+		// prepend the image path
+		var path = this.getSrcPath();
+		if (path != null) src = path + src;
+
+		var output = LsBuffer.concat(
+			"<img id=\"", this.getId(), "\" border=0 ", this.getCssString(),
+				" src=\"", src, "\"",
+			">"
+		);
+	}
+	this.getElement().innerHTML = output;
+}
+
+
+// set up how disabling works for this item type
+Image_XFormItem.prototype.setElementEnabled = XFormItem.prototype.setElementEnabledCssClass;
+
+
+
+// Ls_Image
+function Ls_Image_XFormItem() {}
+XFormItemFactory.createItemType("_LS_IMAGE_", "ls_image", Ls_Image_XFormItem, XFormItem);
+
+
+//	type defaults
+Ls_Image_XFormItem.prototype.forceUpdate = true;
+Ls_Image_XFormItem.prototype.src = _UNDEFINED_;
+Ls_Image_XFormItem.prototype.srcPath = _UNDEFINED_;;
+Ls_Image_XFormItem.prototype.writeElementDiv = false;
+
+// //	methods
+Ls_Image_XFormItem.prototype.updateElement = function (src) {
+	if (src == null) src = this.getSrc();
+
+ 	// dereference through the choices array, if provided
+ 	src = this.getChoiceLabel(src);
+
+ 	// if we didn't get an image name, output nothing (?)
+ 	if (src == null || src == "") {
+ 		var output = "";
+ 	} else {
+ 		// prepend the image path
+ 		var path = this.getSrcPath();
+ 		if (path != null) src = path + src;
+		var output = LsImg.getImageHtml(src, "position:relative;")
+ 	}
+ 	this.getContainer().innerHTML = output;
+};
+
+
+
+//
+//	XFormItem class: "select1"
+//
+function Select1_XFormItem() {}
+XFormItemFactory.createItemType("_SELECT1_", "select1", Select1_XFormItem, XFormItem)
+
+//	type defaults
+Select1_XFormItem.prototype.multiple = false;
+Select1_XFormItem.prototype.alwaysUpdateChoices = false;
+Select1_XFormItem.prototype.focusable = true;
+
+//	methods
+Select1_XFormItem.prototype.initFormItem = function () {
+	// if we're dealing with an XFormChoices object...
+	var choices = this.getChoices();
+	if (choices == null || choices.constructor != XFormChoices) return;
+
+	//	...set up to receive notification when its choices change
+	var listener = new LsListener(this, this.dirtyDisplay);
+	choices.addListener(DwtEvent.XFORMS_CHOICES_CHANGED, listener);
+}
+
+
+Select1_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
+	html.append(indent, 
+		"<select id=\"", this.getId(), "\" ", this.getCssString(), 
+			(this.getMultiple() ? "multiple " : ""), 
+			this.getChangeHandlerHTML(), this.getFocusHandlerHTML(),
+		">\r",
+			this.getChoicesHTML(indent + "  "),
+		"\r", indent, "</select>"
+		);
+	this.cleanChoiceDisplay();
+}
+
+Select1_XFormItem.prototype.getElementValueGetterHTML = function () {
+	return "var value = XFormItem.getValueFromHTMLSelect(this);";
+}
+
+
+
+Select1_XFormItem.prototype.setChoices = function(newChoices) {
+	this.choices = newChoices;
+	this.dirtyDisplay();
+	this.updateChoicesHTML();
+}
+
+Select1_XFormItem.prototype.dirtyDisplay = function () {
+	XFormItem.prototype.dirtyDisplay.call(this);
+	this._choiceDisplayIsDirty = true;
+	delete this.$normalizedChoices;
+}
+
+Select1_XFormItem.prototype.cleanChoiceDisplay = function () {
+	this._choiceDisplayIsDirty = false;
+}
+
+
+Select1_XFormItem.prototype.updateElement = function (newValue) {
+	if (this.choicesAreDirty()) this.updateChoicesHTML();
+	this.updateValueInHTMLSelect1(newValue, this.getElement(), this.getSelectionIsOpen());
+}
+
+
+// set up how disabling works for this item type
+Select1_XFormItem.prototype.setElementEnabled = XFormItem.prototype.setElementDisabledProperty;
+
+
+
+//
+//	XFormItem class: "select"
+//
+function Select_XFormItem() {}
+XFormItemFactory.createItemType("_SELECT_", "select", Select_XFormItem, Select1_XFormItem)
+
+//	type defaults
+Select_XFormItem.prototype.multiple = true;
+Select_XFormItem.prototype.selection = _OPEN_;
+Select_XFormItem.prototype.focusable = true;
+
+//	methods
+
+Select_XFormItem.prototype.updateElement = function (newValue) {
+	if (this.choicesAreDirty()) this.updateChoicesHTML();
+	this.updateValueInHTMLSelect(newValue, this.getElement(), this.getSelectionIsOpen());
+}
+
+
+
+
+
+//
+//	XFormItem class: "spacer"
+//
+//	Use to output an entire row spacer
+//
+function Spacer_XFormItem() {}
+XFormItemFactory.createItemType("_SPACER_", "spacer", Spacer_XFormItem, XFormItem)
+
+//	type defaults
+Spacer_XFormItem.prototype.forceUpdate = false;
+Spacer_XFormItem.prototype.labelLocation = _NONE_;
+Spacer_XFormItem.prototype.width = 1;
+Spacer_XFormItem.prototype.height = 10;
+Spacer_XFormItem.prototype.cssStyle = "font-size:1px;overflow:hidden;";
+Spacer_XFormItem.prototype.colSpan = "*";
+Spacer_XFormItem.prototype.focusable = false;
+
+// 	methods
+Spacer_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
+	html.append(indent, "<div ", this.getCssString(),"></div>");
+}
+
+// set up how disabling works for this item type
+Spacer_XFormItem.prototype.setElementEnabled = XFormItem.prototype.setElementEnabledCssClass;
+
+
+//
+//	XFormItem class: "cell_spacer"
+//
+//	Use to output a single cell of space
+//
+function Cell_Spacer_XFormItem() {}
+XFormItemFactory.createItemType("_CELL_SPACER_", "cell_spacer", Cell_Spacer_XFormItem, Spacer_XFormItem)
+XFormItemFactory.registerItemType("_CELLSPACER_", "cell_spacer", Cell_Spacer_XFormItem);
+Cell_Spacer_XFormItem.prototype.width = 10;
+Cell_Spacer_XFormItem.prototype.height = 10;
+Cell_Spacer_XFormItem.prototype.colSpan = 1;
+Cell_Spacer_XFormItem.prototype.focusable = false;
+
+//
+//	XFormItem class: "separator"
+//
+function Separator_XFormItem() {}
+XFormItemFactory.createItemType("_SEPARATOR_", "separator", Separator_XFormItem, XFormItem)
+
+//	type defaults
+Separator_XFormItem.prototype.cssClass = "xform_separator";
+Separator_XFormItem.prototype.colSpan = "*";
+Separator_XFormItem.prototype.align = _CENTER_;
+Separator_XFormItem.prototype.valign = _CENTER_;
+Separator_XFormItem.prototype.height = 10;
+Separator_XFormItem.prototype.focusable = false;
+
+// methods
+Separator_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
+	var css = (this.getCssClass() || '');
+	if (css != '' && css != null) css = " class=\"" + css + "\"";
+	
+	html.append(indent, 
+			"<table width=100% cellspacing=0 cellpadding=0>",
+				"<tr><td height=",this.getHeight(),">",
+					"<div ", css,"></div>",
+			"</td></tr></table>"
+	);
+}
+
+
+// set up how disabling works for this item type
+Separator_XFormItem.prototype.setElementEnabled = XFormItem.prototype.setElementEnabledCssClass;
+
+
+
+
+
+
+
+//
+//	XFormItem class: "group"
+//
+function Group_XFormItem() {}
+XFormItemFactory.createItemType("_GROUP_", "group", Group_XFormItem, XFormItem)
+
+//	type defaults
+Group_XFormItem.prototype.forceUpdate = false;
+Group_XFormItem.prototype.numCols = 2;
+Group_XFormItem.prototype.useParentTable = false;
+Group_XFormItem.prototype.focusable = false;
+
+Group_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
+	this.getForm().outputItemList(this.getItems(), this, html, updateScript, indent, this.getNumCols(), currentCol);
+}
+
+// nothing to do on group update -- each item will take care of it itself
+//group_XFormItem.prototype.updateElement = function (newValue) {}
+
+
+
+//
+//	XFormItem class: "_BORDER_"
+//
+//	NOTE: dependent on the file DwtBorder.js
+//
+function Border_XFormItem() {}
+XFormItemFactory.createItemType("_BORDER_", "border", Border_XFormItem, Group_XFormItem)
+
+//	type defaults
+Border_XFormItem.prototype.forceUpdate = false;
+Border_XFormItem.prototype.colSpan = "*";
+Border_XFormItem.prototype.numCols = 2;
+Border_XFormItem.prototype.useParentTable = false;
+Border_XFormItem.prototype.borderStyle = "card";
+Border_XFormItem.prototype.focusable = false;
+
+Border_XFormItem.prototype.getBorderStyle = function () {
+	return this.getInheritedProperty("borderStyle");
+}
+
+Border_XFormItem.prototype.getSubstitutions = function () {
+	return this.getInheritedProperty("substitutions");
+}
+
+
+
+Border_XFormItem.prototype.getBorderWidth = function () {
+	return DwtBorder.getBorderWidth(this.getBorderStyle());
+}
+
+Border_XFormItem.prototype.getBorderHeight = function () {
+	return DwtBorder.getBorderHeight(this.getBorderStyle());
+}
+
+
+Border_XFormItem.prototype.outputHTMLStart = function (html, updateScript, indent, currentCol) {
+	var style = this.getBorderStyle();
+	var substitutions = this.getSubstitutions();
+	html.append(DwtBorder.getBorderStartHtml(style, substitutions));
+}
+
+Border_XFormItem.prototype.outputHTMLEnd = function (html, updateScript, indent, currentCol) {
+	var style = this.getBorderStyle();
+	var substitutions = this.getSubstitutions();
+	html.append(DwtBorder.getBorderEndHtml(style, substitutions));
+}
+
+
+
+//
+//	XFormItem class: "case"
+//
+function Case_XFormItem() {}
+XFormItemFactory.createItemType("_CASE_", "case", Case_XFormItem, Group_XFormItem)
+
+//	type defaults
+Case_XFormItem.prototype.labelLocation = _NONE_;
+Case_XFormItem.prototype.width = "100%";
+Case_XFormItem.prototype.focusable = false;
+
+
+
+//
+//	XFormItem class: "switch"
+//
+function Switch_XFormItem() {}
+XFormItemFactory.createItemType("_SWITCH_", "switch", Switch_XFormItem, Group_XFormItem)
+
+//	type defaults
+Switch_XFormItem.prototype.labelLocation = _NONE_;
+Switch_XFormItem.prototype.colSpan = "*";
+Switch_XFormItem.prototype.width = "100%";
+Switch_XFormItem.prototype.numCols = 1;
+
+
+//
+//	XFormItem class: "repeat"
+//
+function Repeat_XFormItem() {}
+XFormItemFactory.createItemType("_REPEAT_", "repeat", Repeat_XFormItem, Group_XFormItem)
+
+//	type defaults
+Repeat_XFormItem.prototype.useParentTable = false;
+Repeat_XFormItem.prototype.writeElementDiv = true;
+Repeat_XFormItem.prototype.numCols = 1;
+Repeat_XFormItem.prototype.number = 1;
+Repeat_XFormItem.prototype.showRemoveButton = true;
+Repeat_XFormItem.prototype.showAddButton = true;
+Repeat_XFormItem.prototype.alwaysShowAddButton = false;
+Repeat_XFormItem.prototype.showMoveUpButton = false;
+Repeat_XFormItem.prototype.showMoveDownButton = false;
+Repeat_XFormItem.prototype.removeButton = {
+	type:_BUTTON_, 
+	label:"-", 
+	width:20,
+	cssStyle:"margin-left:20px;",
+	onActivate:function (event) {
+		var repeatItem = this.getParentItem().getParentItem();
+		repeatItem.removeRowButtonClicked(this.getParentItem().instanceNum);
+	},
+	relevant:"item.instanceNum != 0"
+},
+Repeat_XFormItem.prototype.addButton = {
+	ref:".",
+	type:_BUTTON_, 
+	label:"+", 
+	width:20,
+	onActivate:function (event) {
+		var repeatItem = this.getParentItem().getParentItem();
+		repeatItem.addRowButtonClicked(this.getParentItem().instanceNum);
+	},
+	relevantBehavior:_HIDE_,
+	forceUpdate:true
+}
+Repeat_XFormItem.prototype.moveUpButton = {
+	type:_BUTTON_, 
+	label:"^", 
+	width:20,
+	cssStyle:"margin-left:20px;",
+	onActivate:function (event) {
+		var repeatItem = this.getParentItem().getParentItem();
+		repeatItem.moveUpButtonClicked(this.getParentItem().instanceNum);
+	}
+},
+Repeat_XFormItem.prototype.moveDownButton = {
+	ref:".",
+	type:_BUTTON_, 
+	label:"v", 
+	width:20,
+	onActivate:function (event) {
+		var repeatItem = this.getParentItem().getParentItem();
+		repeatItem.moveDownButtonClicked(this.getParentItem().instanceNum);
+	},
+	relevantBehavior:_HIDE_,
+	relevant:"(item.getInstanceCount()-1) == item.__parentItem.instanceNum",
+	forceUpdate:true
+}
+
+
+Repeat_XFormItem.prototype.initializeItems = function () {
+	var items = this.getItems();
+
+	if (items.length == 1 && items[0].items) {
+		var group = items[0];
+	} else {
+		var group = {	
+				ref: this.getRef(), 
+				fromRepeat:true, 
+//				useParentTable:true,
+				type:_GROUP_, 
+				numCols: items.length,
+				items:[].concat(items)
+			};
+	}
+	
+//	group.useParentTable = true;
+	group.colSpan = 1;
+
+	var relevant = "(item.instanceNum <= " + this.getNumberToShow() + ") || (item.instanceNum <= item.getInstanceCount() - 1)";
+	group.relevant = relevant;
+	
+	// add the add and remove buttons to the original items array, if appropriate
+	if (this.getShowRemoveButton()) {
+		group.items[group.items.length] = this.getRemoveButton();
+		group.numCols++;
+	}
+	if (this.getShowAddButton()) {
+		var button = this.getAddButton();
+		if (!this.getAlwaysShowAddButton()) {
+			button.relevant = "(item.getInstanceCount()-1) == item.__parentItem.instanceNum";
+		}
+		group.items[group.items.length] = button;
+		group.numCols++;
+	}
+	if (this.getShowMoveUpButton()) {
+		group.items[group.items.length] = this.getMoveUpButton();
+		group.numCols++;
+	}
+	if (this.getShowMoveDownButton()) {
+		group.items[group.items.length] = this.getMoveDownButton();
+		group.numCols++;
+	}
+
+	// save off the original items in the group
+	this.__originalItems = group;
+	// and reset the items array
+	this.items = [];
+}
+
+Repeat_XFormItem.prototype.makeRepeatInstance = function() {
+	// NOTE: We always append the new items to the end, which is OK,
+	//			since if a *data value* is inserted in the middle,
+	//			each row will show the proper thing when the update script is called
+	//
+	//  NOTE: XFORMS SPEC REQUIRES REPEAT ITEMS TO START AT 1, this implementation starts at 0!!!
+	//
+	var originalGroup = this.__originalItems;
+	var numCols = this.getNumCols();
+	var newItems = [];
+	
+	for (var i = 0; i < numCols; i++) {
+		var instanceNum = this.items.length;
+	
+		originalGroup.refPath = this.getRefPath() + "[" + instanceNum + "]";
+	
+		// initialize the originalGroup and its cloned items
+		groupItem = this.getForm().initItem(originalGroup, this);
+		groupItem.instanceNum = instanceNum;
+	
+		newItems.push(groupItem);
+		this.items.push(groupItem);
+	}	
+	return newItems;
+}
+
+
+Repeat_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
+	// output one item to start
+	//	all other items will be output dynamically
+	this.makeRepeatInstance();
+	this.getForm().outputItemList(this.items, this, html, updateScript, indent + "  ",this.getNumCols(), 0);
+}
+
+
+Repeat_XFormItem.prototype.updateElement = function (value) {
+	var form = this.getForm();
+	
+	var element = this.getElement();
+	if (value == null || value == "") value = [];
+	var itemsToShow = Math.max(value.length, this.getNumberToShow());
+	var slotsPresent = this.items.length;
+
+	var masterId = this.getId();
+	if (itemsToShow > slotsPresent) {
+		var missingElementCount = (itemsToShow - slotsPresent);
+		// create some more slots and show them
+
+		var table = element.getElementsByTagName("table")[0];
+		var tbody = element.getElementsByTagName("tbody")[0];
+
+		if (LsEnv.isIE) {
+			var tempDiv = this.createElement("temp",null,"div","");
+			tempDiv.display = "none";
+		}
+		var updateScript = new LsBuffer();
+		while (this.items.length < itemsToShow) {
+			var newItems = this.makeRepeatInstance(this);
+			var html = new LsBuffer();
+			form.outputItemList(newItems, this, html, updateScript, "        ", this.getNumCols(), 0, true);
+			if (LsEnv.isIE) {
+				tempDiv.innerHTML = "<table><tr>" + html + "</table>";
+				var rows = tempDiv.getElementsByTagName("table")[0].rows;
+				for (var r = 0; r < rows.length; r++) {
+					tbody.appendChild(rows[r]);
+				}
+			} else {
+				var row = table.insertRow(-1);
+				row.innerHTML = html;
+			}
+		}
+		
+		// update the insert and update scripts so they'll be called next time
+		form.appendToUpdateScript(updateScript);
+		
+		// Since this is being called in the middle of update, 
+		//	any items that need to be inserted won't have been, 
+		//  and we won't have updated the items required.  
+		// Handle this now.
+
+		//TODO: PUT this IN THE CORRECT PLACE BY PARSING THE STRING SOMEHOW???
+		form.tempScript = new Function(form.getUpdateScriptStart() + updateScript + form.getUpdateScriptEnd());
+		form.tempScript();
+		delete form.tempScript;
+	}
+}
+
+
+
+
+
+Repeat_XFormItem.prototype.addRowButtonClicked = function (instanceNum) {
+	var path = this.getRefPath();
+	this.getModel().addRowAfter(this.getInstance(), path, instanceNum);
+	this.getForm().refresh();
+}
+
+Repeat_XFormItem.prototype.removeRowButtonClicked = function (instanceNum) {
+	if(this.getOnRemoveMethod() ) {
+		this.getOnRemoveMethod().call(this, instanceNum, this.getForm())
+	} else {
+		var path = this.getRefPath();
+		this.getModel().removeRow(this.getInstance(), path, instanceNum);
+	}
+	this.getForm().refresh();	
+}
+
+Repeat_XFormItem.prototype.getOnRemoveMethod = function() {
+	return this.cacheInheritedMethod("onRemove","$onRemove","index,form");
+}
+
+
+
+function Repeat_Grid_XFormItem() {}
+XFormItemFactory.createItemType("_REPEAT_GRID_", "repeat_grid", Repeat_Grid_XFormItem, Repeat_XFormItem)
+Repeat_Grid_XFormItem.prototype.showRemoveButton = false;
+Repeat_Grid_XFormItem.prototype.showAddButton = false;
+Repeat_Grid_XFormItem.numCols = 2;
+
+
+
+
+
+//
+//	XFormItem class: "composite"
+//
+function Composite_XFormItem() {}
+XFormItemFactory.createItemType("_COMPOSITE_", "composite", Composite_XFormItem, Group_XFormItem)
+
+//	type defaults
+Composite_XFormItem.prototype.useParentTable = false;
+Composite_XFormItem.prototype.tableCssClass = "xform_composite_table";
+Composite_XFormItem.prototype.focusable = false;
+
+Composite_XFormItem.prototype.initializeItems = function () {
+	var items = this.getItems();
+	if (items == null) return;
+	
+	// make sure the numCols is defined (default to the number of items in the composite)
+	if (this.numCols == null) this.numCols = items.length;
+	
+	// actually instantiate them as formItems
+	this.items = this.getForm().initItemList(items, this);
+}
+
+Composite_XFormItem.onFieldChange = function(value, event, form) {
+	if(this.getParentItem() && this.getParentItem().getOnChangeMethod()) {
+		return this.getParentItem().getOnChangeMethod().call(this, value, event, form);
+	} else {
+		return this.setInstanceValue(value);
+	}
+}
+
+//Composite_XFormItem.prototype.getErrorContainer = function () {
+//	
+//}
+
+
+
+
+
+
+
+
+
+//
+//	XFormItem class: "date (composite item)"
+//
+function Date_XFormItem() {}
+XFormItemFactory.createItemType("_DATE_", "date", Date_XFormItem, Composite_XFormItem)
+
+//	type defaults
+Date_XFormItem.prototype.DATE_MONTH_CHOICES = [
+				{value:1, label:LsMsg.jan},
+				{value:2, label:LsMsg.feb},
+				{value:3, label:LsMsg.mar},
+				{value:4, label:LsMsg.apr},
+				{value:5, label:LsMsg.may},
+				{value:6, label:LsMsg.jun},
+				{value:7, label:LsMsg.jul},
+				{value:8, label:LsMsg.aug},
+				{value:9, label:LsMsg.sep},
+				{value:10, label:LsMsg.oct},
+				{value:11, label:LsMsg.nov},
+				{value:12, label:LsMsg.dec}
+			];
+Date_XFormItem.prototype.DATE_DAY_CHOICES = ["1","2","3","4","5","6","7","8","9","10","11","12",
+						  "13","14","15","16","17","18","19","20","21","22",
+						  "23","24","25","26","27","28","29","30","31"];
+Date_XFormItem.prototype.numCols = 3;
+Date_XFormItem.prototype.items = [
+	{	type:_SELECT1_, 
+		ref:".",
+		width:50,
+		valign:_MIDDLE_,
+		relevantBehavior:_PARENT_,
+		choices: Date_XFormItem.prototype.DATE_MONTH_CHOICES,
+		labelLocation:_NONE_,
+		getDisplayValue:function (newValue) {
+			if (!(newValue instanceof Date)) newValue = new Date();
+			return "" + (newValue.getMonth() + 1);
+		},
+		elementChanged:function (monthStr, currentDate, event) {
+			if (currentDate == null) currentDate = new Date();	//??? should get values of other field???
+		
+			var month = parseInt(monthStr);
+			if (!isNaN(month)) {
+				month -= 1;
+				currentDate.setMonth(month);
+			}
+			this.getForm().itemChanged(this.getParentItem(), currentDate, event);
+		}
+	},
+	{	type:_SELECT1_, 
+		ref:".",
+		width:50,
+		valign:_MIDDLE_,
+		relevantBehavior:_PARENT_,
+		labelLocation:_NONE_,
+		choices: Date_XFormItem.prototype.DATE_DAY_CHOICES,
+		getDisplayValue:function (newValue) {
+			if (!(newValue instanceof Date)) newValue = new Date();
+			return "" + newValue.getDate();
+		},
+		elementChanged: function (dateStr, currentDate, event) {
+			if (currentDate == null) currentDate = new Date();	//??? should get values of other field???
+		
+			var date = parseInt(dateStr);
+			if (!isNaN(date)) {
+				currentDate.setDate(date);
+			}
+			this.getForm().itemChanged(this.getParentItem(), currentDate, event);
+		}
+	},
+	{	type:_TEXTFIELD_, 
+		ref:".",
+		relevantBehavior:_PARENT_,
+		width:45,
+		labelLocation:_NONE_,
+
+		getDisplayValue:function (newValue) {
+			if (!(newValue instanceof Date)) newValue = new Date();
+			return "" + newValue.getFullYear();
+		},
+		elementChanged: function (yearStr, currentDate, event) {
+			if (currentDate == null) currentDate = new Date();	//??? should get values of other field???
+		
+			var year = parseInt(yearStr);
+			if (!isNaN(year)) {
+				currentDate.setYear(year);
+			}
+			this.getForm().itemChanged(this.getParentItem(), currentDate, event);
+		}
+
+	}
+];
+
+
+
+//
+//	XFormItem class: "time (composite item)"
+//
+function Time_XFormItem() {}
+XFormItemFactory.createItemType("_TIME_", "time", Time_XFormItem, Composite_XFormItem)
+
+//	type defaults
+Time_XFormItem.prototype.numCols = 3;
+Time_XFormItem.prototype.TIME_HOUR_CHOICES = ["1","2","3","4","5", "6","7","8","9","10","11","12"];
+Time_XFormItem.prototype.TIME_MINUTE_CHOICES = ["00","05","10","15","20","25", "30","35","40","45","50","55"];
+Time_XFormItem.prototype.TIME_AMPM_CHOICES = [LsMsg.am,LsMsg.pm];
+
+
+Time_XFormItem.prototype.items = [
+	{	
+		type:_SELECT1_, 
+		ref:".",
+		width:50,
+		valign:_MIDDLE_,
+		choices: Time_XFormItem.prototype.TIME_HOUR_CHOICES,
+		labelLocation:_NONE_,
+		getDisplayValue:function (newValue) {
+			if (!(newValue instanceof Date)) newValue = new Date();
+			var hours = "" + (newValue.getHours() % 12);
+			if (hours == "0") hours = "12";
+			return hours;
+		},
+		elementChanged:function (hoursStr, currentDate, event) {
+			if (currentDate == null) currentDate = new Date();	//??? should get values of other fields???
+			if (this.__dummyDate == null) {
+				this.__dummyDate = new Date();
+			}
+			this.__dummyDate.setTime(currentDate.getTime());
+			var hours = parseInt(hoursStr);
+			if (!isNaN(hours)) {
+				if (hours == 12) hours = 0;
+				var wasPM = (currentDate.getHours() > 11);
+				if (wasPM) hours += 12;
+				this.__dummyDate.setHours(hours);
+			}
+			var parentItem = this.getParentItem();
+			if (parentItem.$elementChanged != null) {
+				this.getParentItem().$elementChanged(this.__dummyDate, currentDate, event);
+			} else {
+				this.getForm().itemChanged(this.getParentItem(), this.__dummyDate, event);
+			}
+		}
+	},
+
+	{	
+		type:_SELECT1_, 
+		ref:".",
+		width:50,
+		valign:_MIDDLE_,
+		choices: Time_XFormItem.prototype.TIME_MINUTE_CHOICES,
+		labelLocation:_NONE_,
+		getDisplayValue:function (newValue) {
+			if (!(newValue instanceof Date)) newValue = new Date();
+			var minutes = newValue.getMinutes();
+			minutes = Math.round(minutes / 5) * 5;
+			minutes = (minutes < 10 ? "0" + minutes : "" + minutes);
+			return minutes;
+		},
+		elementChanged:function (minutesStr, currentDate, event) {
+			if (currentDate == null) currentDate = new Date();	//??? should get values of other fields???
+			if (this.__dummyDate == null) {
+				this.__dummyDate = new Date();
+			}
+			this.__dummyDate.setTime(currentDate.getTime());
+		
+			var minutes = parseInt(minutesStr);
+			if (!isNaN(minutes)) {
+				this.__dummyDate.setMinutes(minutes);
+			}
+			var parentItem = this.getParentItem();
+			if (parentItem.$elementChanged != null) {
+				this.getParentItem().$elementChanged(this.__dummyDate, currentDate, event);
+			} else {
+				this.getForm().itemChanged(this.getParentItem(), this.__dummyDate, event);
+			}
+		}
+	},
+	
+	{	
+		type:_SELECT1_, 
+		ref:".",
+		choices: Time_XFormItem.prototype.TIME_AMPM_CHOICES,
+		width:50,
+		valign:_MIDDLE_,
+		labelLocation:_NONE_,
+		getDisplayValue:function (newValue) {
+			if (!(newValue instanceof Date)) newValue = new Date();
+			var hours = newValue.getHours();
+			if (hours > 11) return LsMsg.pm;
+			return LsMsg.am;
+		},
+		elementChanged:function (ampmStr, currentDate, event) {
+			if (currentDate == null) currentDate = new Date();	//??? should get values of other fields???
+			if (this.__dummyDate == null) {
+				this.__dummyDate = new Date();
+			}
+			this.__dummyDate.setTime(currentDate.getTime());
+
+			var isPM = (ampmStr == LsMsg.pm);
+			var hours = currentDate.getHours() % 12;
+			
+			this.__dummyDate.setHours(hours + (isPM ? 12 : 0));
+			var parentItem = this.getParentItem();
+			if (parentItem.$elementChanged != null) {
+				this.getParentItem().$elementChanged(this.__dummyDate, currentDate, event);
+			} else {
+				this.getForm().itemChanged(this.getParentItem(), this.__dummyDate, event);
+			}
+		}
+	}
+];
+
+
+
+
+//
+//	XFormItem class: "datetime" (composite item)
+//
+function Datetime_XFormItem() {}
+XFormItemFactory.createItemType("_DATETIME_", "datetime", Datetime_XFormItem, Composite_XFormItem)
+
+//	type defaults
+Datetime_XFormItem.prototype.numCols = 3;
+Datetime_XFormItem.prototype.items = [
+	{type:_DATE_, ref:".", labelLocation:_NONE_},
+	{type:_OUTPUT_, value:"at", valign:_CENTER_}, // TODO: I18N
+	{type:_TIME_, ref:".", labelLocation:_NONE_}
+];
+
+
+
+
+
+//
+//	XFormItem class: "widget_adaptor"
+//
+//	An adaptor for using any random (non-DWT) widget in an xform
+//
+//	NOTE: the generic implementation assumes:
+//			1) you'll create a method called "constructWidget()" which will construct the appropriate widget
+//			2) the widget has a function "insertIntoXForm(form, item, element)"
+//				(overide "this.insertWidget" to change)
+//			3) the widget has a function "updateInXForm(form, item, value, element)"
+//				(overide "this.updateWidget" to change)
+//
+function WidgetAdaptor_XFormItem() {}
+XFormItemFactory.createItemType("_WIDGET_ADAPTOR_", "widget_adaptor", WidgetAdaptor_XFormItem, XFormItem)
+
+//	type defaults
+WidgetAdaptor_XFormItem.prototype.writeElementDiv = true;
+WidgetAdaptor_XFormItem.prototype.focusable = false;
+//	methods
+
+// implement the following to actually construct the instance of your widget
+WidgetAdaptor_XFormItem.prototype.constructWidget = function () {}
+
+
+//
+//	insertElement must guarantee that each element is only inserted ONCE
+//
+WidgetAdaptor_XFormItem.prototype.insertElement = function (newValue) {
+	if (!this.__alreadyInserted) {
+		this.__alreadyInserted = true;
+		
+		// try to construct a widget
+		var widget = this.constructWidget();
+
+		// if we didn't get one, there's nothing to do here
+		if (widget == null) return;
+
+		// otherwise insert it into the form!
+		this.widget = widget;
+		this.insertWidget(this.getForm(), this.widget, this.getElement());
+	}
+}
+
+
+WidgetAdaptor_XFormItem.prototype.insertWidget = function (form, widget, element) {
+	this.widget.insertIntoXForm(form, this, element);
+}
+
+WidgetAdaptor_XFormItem.prototype.updateElement = function(newValue) {
+	this.updateWidget(newValue);
+}
+WidgetAdaptor_XFormItem.prototype.updateWidget = function (newValue) {
+	this.widget.updateInXForm(this.getForm(), this, newValue, this.getElement());
+}
+
+
+
+
+
+//
+//	XFormItem class: "dwt_adaptor"
+//
+//	An adaptor for using any random DWT widget in an xform
+//
+//	NOTE: the generic implementation assumes:
+//			1) you'll create a method called "constructWidget()" which will construct the appropriate widget
+//			2) you'll adapt "insertWidget(form,  widget, element)" to insert the widget properly
+//			3) you'll adapt "updateWidget(newValue)" to update the value properly
+//
+function Dwt_Adaptor_XFormItem() {}
+XFormItemFactory.createItemType("_DWT_ADAPTOR_", "dwt_adaptor", Dwt_Adaptor_XFormItem, WidgetAdaptor_XFormItem)
+
+//	type defaults
+Dwt_Adaptor_XFormItem.prototype.focusable = false;
+//	methods
+
+Dwt_Adaptor_XFormItem.prototype.setElementEnabled = function(enabled) {
+	WidgetAdaptor_XFormItem.prototype.setElementEnabled.call(this, enabled);
+	if (this.widget) {
+		this.widget.setEnabled(enabled);
+	}
+	this._enabled = enabled;
+}
+
+// implement the following to actually construct the instance of your widget
+Dwt_Adaptor_XFormItem.prototype.constructWidget = function () {}
+
+
+Dwt_Adaptor_XFormItem.prototype.insertWidget = function (form, widget, element) {
+	this.getForm()._reparentDwtObject(widget, element);
+}
+
+Dwt_Adaptor_XFormItem.prototype.updateWidget = function (newValue) {}
+
+Dwt_Adaptor_XFormItem.prototype.getDwtSelectItemChoices = function () {
+	if (this.__selOption != null) return this.__selOptions;
+	
+	var selectOptions = null;
+	var choices = this.getChoices();
+	if (choices != null) {
+		var selectOptions = new Array(choices.length);
+		for (var i = 0; i < choices.length; i++) {
+			var choice = choices[i];
+			var choiceValue = (choice instanceof Object ? choice.value : choice);
+			var choiceLabel = (choice instanceof Object ? choice.label : choice);
+			selectOptions[i] = new DwtSelectOptionData(choiceValue, choiceLabel);
+		}
+	}
+	this.__selOptions = selectOptions;
+	return this.__selOptions;
+};
+
+
+//
+//	XFormItem class: "dwt_button"
+//
+//	Adapts a DwtButton to work with the XForm
+//
+function Dwt_Button_XFormItem() {}
+XFormItemFactory.createItemType("_DWT_BUTTON_", "dwt_button", Dwt_Button_XFormItem, Dwt_Adaptor_XFormItem)
+
+//	type defaults
+Dwt_Button_XFormItem.prototype.labelLocation = _NONE_;
+Dwt_Button_XFormItem.prototype.writeElementDiv = false;
+//	methods
+
+Dwt_Button_XFormItem.prototype.insertWidget = function (form, widget, element) {
+	this.getForm()._reparentDwtObject(widget, this.getContainer());
+};
+
+// implement the following to actually construct the instance of your widget
+Dwt_Button_XFormItem.prototype.constructWidget = function () {
+	var widget = new DwtButton(this.getForm(), this.getCssClass());
+	var height = this.getHeight();
+	var width = this.getWidth();
+	var el = null;
+	if (width != null || height != null){
+		el = widget.getHtmlElement();
+		if (width != null) el.style.width = width;
+		if (height != null) el.style.height = height;
+	} 
+	var style = this.getCssStyle();
+	if (style != null){
+		var styleArr = style.split(";");
+		el = (el != null)? el: widget.getHtmlElement();
+		var kp;
+		for (var i = 0 ; i < styleArr.length ; ++i ){
+			kp = styleArr[i].split(":");
+			if (kp.length > 0){
+				if (kp[0] == "float"){
+					kp[0] = (LsEnv.isIE)? "styleFloat": "cssFloat";
+				}
+				el.style[kp[0]] = kp[1];
+			}
+		}
+	}
+	widget.setText(this.getLabel());
+
+	var onActivateMethod = this.getOnActivateMethod();
+	if (onActivateMethod != null) {
+		var ls = new LsListener(this, onActivateMethod);
+		widget.addSelectionListener(ls);
+	}
+
+	if (this._enabled !== void 0) {
+		this.widget = widget;
+		this.setElementEnabled(this._enabled);
+	}
+	
+	return widget;
+}
+
+
+
+//	XFormItem class: "dwt_select"
+//
+//	Adapts a DwtSelect to work with the XForm
+//
+function Dwt_Select_XFormItem() {}
+XFormItemFactory.createItemType("_DWT_SELECT_", "dwt_select", Dwt_Select_XFormItem, Dwt_Adaptor_XFormItem)
+//XFormItemFactory.registerItemType("_SELECT1_", "select1", Dwt_Select_XFormItem)
+
+//	type defaults
+Dwt_Select_XFormItem.prototype.writeElementDiv = false;
+//	methods
+
+Dwt_Select_XFormItem.prototype.insertWidget = function (form, widget, element) {
+	this.getForm()._reparentDwtObject(widget, this.getContainer());
+}
+
+Dwt_Select_XFormItem.prototype.constructWidget = function () {
+	var choices = this.getDwtSelectItemChoices(this.getChoices());
+
+	var widget = new DwtSelect(this.getForm(), choices);
+	var height = this.getHeight();
+	var width = this.getWidth();
+	if (width != null || height != null){
+		var el = widget.getHtmlElement();
+		if (width != null) el.style.width = width;
+		if (height != null) el.style.height = height;
+	} 
+
+	var onChangeFunc = new Function("event", 
+			"var widget = event._args.selectObj;\r"
+		  + "value = event._args.newValue; " + this.getExternalChangeHandler()
+	);
+	var ls = new LsListener(this.getForm(), onChangeFunc);
+	widget.addChangeListener(ls);
+
+	if (this._enabled !== void 0) {
+		this.widget = widget;
+		this.setElementEnabled(this._enabled);
+	}
+	return widget;
+}
+
+Dwt_Select_XFormItem.prototype.updateWidget = function (newValue) {
+	this.widget.setSelectedValue(newValue);
+}
+
+Dwt_Select_XFormItem.prototype.setElementEnabled = function (enable) {
+	this._enabled = enable;
+	if (this.widget == null) return;
+	if (enable) {
+		this.widget.enable();
+	} else {
+		this.widget.disable();
+	}
+};
+
+
+
+
+
+//	XFormItem class: "dwt_date"
+//
+//	Adapts a DwtDate to work with the XForm
+//
+function Dwt_Date_XFormItem() {}
+XFormItemFactory.createItemType("_DWT_DATE_", "dwt_date", Dwt_Date_XFormItem, Dwt_Adaptor_XFormItem)
+
+
+//	type defaults
+Dwt_Date_XFormItem.prototype.cssStyle = "width:80px;";
+
+
+//	methods
+
+Dwt_Date_XFormItem.prototype.constructWidget = function () {
+
+	var widget = new DwtButton(this.getForm());
+	widget.setActionTiming(DwtButton.ACTION_MOUSEDOWN);
+
+	// ONE MENU??
+	var menu = this.menu = new DwtMenu(widget, DwtMenu.CALENDAR_PICKER_STYLE, null, null, this.getForm());
+	widget.setMenu(menu, true)
+	menu.setAssociatedObj(widget);
+
+	// For now, create a new DwtCalendar for each of the buttons, since on
+	// IE, I'm having trouble getting the one calendar to work.
+	// TODO: Figure out the IE problem.
+	var cal = new DwtCalendar(menu);
+	cal._invokingForm = this.getForm();
+	cal._invokingFormItemId = this.getId();
+	cal.addSelectionListener(new LsListener(this, this._calOnChange));
+	widget.__cal = cal;
+	
+	// create a static instance of DwtCalendar that all instances will show
+	//if (window.DwtCalendar && (this.constructor._calendarPopup == null)) {
+		// DO WE NEED TO CONSTRUCT A MENU HERE FIRST???
+		//	CAN THE MENU BE SHARED???
+	//	var cal = this.constructor._calendarPopup = new DwtCalendar(menu);
+	//	cal.addSelectionListener(new LsListener(this, this._calOnChange));
+	//}
+
+	// We have to add listeners both for the drop down cell, and 
+	// the button proper, to get notified when any part of the 
+	// button is hit.
+	//widget.addSelectionListener(new LsListener(this, this._prePopup));
+	//widget.addDropDownSelectionListener(new LsListener(this, this._prePopup));
+	// NOTE: WHEN THE BUTTON IS PRESSED, WE WANT TO CALL:
+	//var cal = this.constructor._calendarPopup;
+	//cal.setDate(this.widget._date, true);
+	//cal._invokingForm = this.getForm();
+	//cal._invokingFormItemId = this.getId();
+	//cal.reparent(event.item.getMenu());
+	//	THEN SHOW THE THING... ???
+
+	return widget;
+}
+
+Dwt_Date_XFormItem.prototype.updateWidget = function (newValue) {
+	if (newValue == null) newValue = new Date();
+	this.widget.setText(this.getButtonLabel(newValue));
+	this.widget._date = newValue;
+	this.widget.__cal.setDate(newValue,true);
+};
+
+Dwt_Date_XFormItem.prototype._calOnChange = function (event) {
+	var value = event.detail;
+	var cal = event.item;
+	var elemChanged = this.getElementChangedMethod();
+	elemChanged.call(this,value, this.getInstanceValue(), event);	
+};
+
+Dwt_Date_XFormItem.prototype._prePopup = function (event) {
+	var cal = this.constructor._calendarPopup;
+	cal.setDate(this.widget._date, true);
+	cal._invokingForm = this.getForm();
+	cal._invokingFormItemId = this.getId();
+	cal.reparent(event.item.getMenu());
+	event.item._toggleMenu();
+};
+
+Dwt_Date_XFormItem.prototype.getButtonLabel = function (newValue) {
+	if (newValue == null || !(newValue instanceof Date)) return "";
+	return (newValue.getMonth()+1) + "/" + newValue.getDate() + "/" + (newValue.getFullYear());
+};
+
+
+function Dwt_Time_XFormItem() {
+	this.items[0].type = _DWT_SELECT_;
+	this.items[0].errorLocation = _INHERIT_;
+	this.items[1].type = _DWT_SELECT_;
+	this.items[1].errorLocation = _INHERIT_;
+	this.items[1].choices = Dwt_Time_XFormItem.TIME_MINUTE_CHOICES;
+	this.items[1].getDisplayValue = function (newValue) {
+		if (!(newValue instanceof Date)) newValue = new Date();
+		var ret = LsDateUtil._pad(LsDateUtil.getRoundedMins(newValue, 15));
+		return ret;
+	};
+	this.items[2].type = _DWT_SELECT_;
+	this.items[2].errorLocation = _INHERIT_;
+}
+Dwt_Time_XFormItem.TIME_MINUTE_CHOICES = ["00","15","30","45"];
+XFormItemFactory.createItemType("_DWT_TIME_", "dwt_time", Dwt_Time_XFormItem, Time_XFormItem);
+
+//
+//	XFormItem class: "dwt_datetime"
+//
+//	Composes a _DWT_DATE_ and a (non-DWT) _TIME_ to make a date/time editor, just for kicks.
+//
+function Dwt_Datetime_XFormItem() {}
+XFormItemFactory.createItemType("_DWT_DATETIME_", "dwt_datetime", Dwt_Datetime_XFormItem, Composite_XFormItem)
+
+//	type defaults
+Dwt_Datetime_XFormItem.prototype.numCols = 3;
+Dwt_Datetime_XFormItem.prototype.useParentTable = false;
+Dwt_Datetime_XFormItem.prototype.cssClass =  "xform_dwt_datetime";
+Dwt_Datetime_XFormItem.prototype.items = [
+	{type:_DWT_DATE_, ref:".", labelLocation:_NONE_, errorLocation:_PARENT_,
+	 elementChanged: 
+	 function (newDate, currentDate, event) {
+		 newDate.setHours(currentDate.getHours(), currentDate.getMinutes(), currentDate.getSeconds(), 0);
+		 this.getParentItem().$elementChanged(newDate, currentDate, event);
+	 }
+	},
+	{type:_OUTPUT_, value:"at"}, // TODO: I18N
+	{type:_DWT_TIME_, ref:".", labelLocation:_NONE_, errorLocation:_PARENT_, 
+	 elementChanged:
+	 function (newDate, currentDate, event) {
+		 this.getParentItem().$elementChanged(newDate, currentDate, event);
+	 }
+	},
+]
+
+//
+//	XFormItem class: "dwt_list"
+//
+//	Composes a _DWT_DATE_ and a (non-DWT) _TIME_ to make a date/time editor, just for kicks.
+//
+function Dwt_List_XFormItem() {}
+XFormItemFactory.createItemType("_DWT_LIST_", "dwt_list", Dwt_List_XFormItem, Dwt_Adaptor_XFormItem)
+
+//	type defaults
+//Dwt_Datetime_XFormItem.prototype.numCols = 3;
+Dwt_Datetime_XFormItem.prototype.useParentTable = false;
+Dwt_Datetime_XFormItem.prototype.cssClass =  "xform_dwt_list";
+
+Dwt_List_XFormItem.prototype.constructWidget = function () {
+	var widget = new DwtListView(this.getForm());
+	return widget;
+};
+
+
+Dwt_List_XFormItem.prototype.insertWidget = function (form, widget, element) {
+	var form = this.getForm();
+	var val = form.get(this.refPath);
+	widget.set(val);
+};
+
+Dwt_List_XFormItem.prototype.updateWidget = function (newValue) {
+
+};
+
+
+//
+//	XFormItem class: "button_grid"
+//
+function Button_Grid_XFormItem() {}
+XFormItemFactory.createItemType("_BUTTON_GRID_", "button_grid", Button_Grid_XFormItem, WidgetAdaptor_XFormItem)
+
+//	type defaults
+Button_Grid_XFormItem.prototype.numCols = 5;
+Button_Grid_XFormItem.prototype.cssClass = "xform_button_grid_medium";
+Button_Grid_XFormItem.prototype.forceUpdate = true;
+
+
+//	methods
+Button_Grid_XFormItem.prototype.constructWidget = function () {
+	var changeHandler = this.getExternalChangeHandler();
+	var attributes = {
+		choices:this.getChoices(),
+		numCols:this.getNumCols(),
+		cssClass:this.getCssClass(),
+		onChange:changeHandler,
+		addBracketingCells:(this.getAlign() == _CENTER_)
+	}
+	var multiple = this.getMultiple();
+	if (multiple !== null) attributes.multiple = multiple;
+	return new ButtonGrid(attributes);
+}
+
+
+
+
+
+//
+//	XFormItem class: "tab_bar"
+//
+//	A simple tab (for switching a switch)
+//	Note: right now it just looks like a button, but soon it'll look much cooler
+//
+function Tab_Bar_XFormItem() {}
+XFormItemFactory.createItemType("_TAB_BAR_", "tab_bar", Tab_Bar_XFormItem, Button_Grid_XFormItem)
+
+//	type defaults
+Tab_Bar_XFormItem.prototype.multiple = false;
+Tab_Bar_XFormItem.prototype.cssClass = "xform_button_grid_tab";
+Tab_Bar_XFormItem.prototype.align = _CENTER_;
+Tab_Bar_XFormItem.prototype.colSpan = "*";
+
+//	methods
+Tab_Bar_XFormItem.prototype.initFormItem = function() {
+	this.numCols = this.getChoices().length;
+}
+
+//
+// XFormItem class: "add_remove"
+//
+
+function Dwt_AddRemove_XFormItem() {}
+XFormItemFactory.createItemType("_DWT_ADD_REMOVE_", "add_remove", Dwt_AddRemove_XFormItem, Dwt_Adaptor_XFormItem);
+
+/***
+NOTE: this won't work because attributes.ref is accessed before this
+method is called in XFormItemFactory#createItem.
+Dwt_AddRemove_XFormItem.prototype._setAttributes = function(attributes) {
+	// allows "targetRef" alias for "ref" attribute
+	if (!attributes.ref && attributes.targetRef) {
+		attributes.ref = attributes.targetRef;
+	}
+	XFormItem.prototype._setAttributes.call(this, attributes);
+}
+/***/
+
+Dwt_AddRemove_XFormItem.prototype.getSorted = function() {
+	return this.getInheritedProperty("sorted");
+}
+Dwt_AddRemove_XFormItem.prototype.getListCssClass = function() {
+	return this.getInheritedProperty("listCssClass");
+}
+
+Dwt_AddRemove_XFormItem.prototype.getSourceInstanceValue = function() {
+	var items = this.getModel().getInstanceValue(this.getInstance(), this.getInheritedProperty("sourceRef"));
+	return items ? items : [];
+}
+
+Dwt_AddRemove_XFormItem.prototype.getTargetInstanceValue = function() {
+	var items = this.getInstanceValue();
+	return items ? items : [];
+}
+
+Dwt_AddRemove_XFormItem.prototype._handleStateChange = function(event) {
+	var form = this.getForm();
+	var id = this.getId();
+	var widget = this.getWidget();
+	var value = widget.getTargetItems();
+	form.itemChanged(id, value);
+}
+
+Dwt_AddRemove_XFormItem.prototype.constructWidget = function() {
+	var form = this.getForm();
+	var cssClass = this.getCssClass();
+	var listCssClass = this.getListCssClass();
+	var widget = new DwtAddRemove(form, cssClass, null, listCssClass);
+	return widget;
+}
+
+Dwt_AddRemove_XFormItem.prototype.updateWidget = function(newvalue) {
+	if(this.widget.isUpdating) {
+		this.widget.isUpdating = false;
+		return;
+	}
+
+	if (this._stateChangeListener) {
+		this.widget.removeStateChangeListener(this._stateChangeListener);
+	}
+	else {
+		this._stateChangeListener = new LsListener(this, Dwt_AddRemove_XFormItem.prototype._handleStateChange)
+	}
+
+	var sourceItems = this.getSourceInstanceValue();
+	var targetItems = this.getTargetInstanceValue();
+
+	var sorted = this.getSorted();
+	if (sorted) {
+		sourceItems = sourceItems.sort();
+		targetItems = targetItems.sort();
+	}
+	
+	this.widget.setSourceItems(sourceItems);
+	this.widget.removeSourceItems(targetItems);
+	this.widget.setTargetItems(targetItems);
+
+	this.widget.addStateChangeListener(this._stateChangeListener);
+}
+
+//
+// XFormItem class: "alert"
+//
+
+function Dwt_Alert_XFormItem() {}
+XFormItemFactory.createItemType("_DWT_ALERT_", "alert", Dwt_Alert_XFormItem, Dwt_Adaptor_XFormItem);
+
+Dwt_Alert_XFormItem.prototype.colSpan = "*";
+Dwt_Alert_XFormItem.prototype.labelLocation = _NONE_;
+
+Dwt_Alert_XFormItem.prototype.getStyle = function() {
+	return this.getInheritedProperty("style");
+}
+Dwt_Alert_XFormItem.prototype.getIconVisible = function() {
+	return this.getInheritedProperty("iconVisible");
+}
+Dwt_Alert_XFormItem.prototype.getTitle = function() {
+	return this.getInheritedProperty("title");
+}
+Dwt_Alert_XFormItem.prototype.getContent = function() {
+	return this.getInheritedProperty("content");
+}
+Dwt_Alert_XFormItem.prototype.getAlertCssClass = function() {
+	return this.getInheritedProperty("alertCssClass");
+}
+
+Dwt_Alert_XFormItem.prototype.constructWidget = function() {
+	var style = this.getStyle();
+	var iconVisible = this.getIconVisible();
+	var title = this.getTitle();
+	var content = this.getContent();
+	var alertCssClass = this.getAlertCssClass();
+	
+	var form = this.getForm();
+	var alert = new DwtAlert(form, alertCssClass);
+	
+	alert.setStyle(style);
+	alert.setIconVisible(iconVisible);
+	alert.setTitle(title);
+	alert.setContent(content);
+	
+	return alert;
+}
+
+Dwt_Alert_XFormItem.prototype.updateWidget = function(newvalue) {
+	// nothing
+}
+
+//
+// XFormItem class: "dwt_tab_bar"
+//
+
+function Dwt_TabBar_XFormItem() {}
+XFormItemFactory.createItemType("_DWT_TAB_BAR_", "dwt_tab_bar", Dwt_TabBar_XFormItem, Dwt_Adaptor_XFormItem);
+
+Dwt_TabBar_XFormItem.prototype._value2tabkey;
+Dwt_TabBar_XFormItem.prototype._tabkey2value;
+
+Dwt_TabBar_XFormItem.prototype._stateChangeListener;
+
+Dwt_TabBar_XFormItem.prototype.getChoices = function() {
+	return this.getInheritedProperty("choices");
+}
+
+Dwt_TabBar_XFormItem.prototype._handleStateChange = function(event) {
+	var form = this.getForm();
+	var widget = this.getWidget();
+	
+	var tabKey = widget.getCurrentTab();
+	var newvalue = this._tabkey2value[tabKey];
+	
+	var id = this.getId();
+	form.itemChanged(id, newvalue);
+}
+
+Dwt_TabBar_XFormItem.prototype.constructWidget = function() {
+	var form = this.getForm();
+	var widget = new DwtTabView(form);
+	
+	this._value2tabkey = {};
+	this._tabkey2value = {};
+	
+	var choices = this.getChoices();
+	for (var i = 0; i < choices.length; i++) {
+		var choice = choices[i];
+		// NOTE: DwtTabView keeps its own internal keys that are numerical
+		this._value2tabkey[choice.value] = i + 1;
+		this._tabkey2value[i + 1] = choice.value;
+		var page = new DwtTabViewPage(widget);
+		widget.addTab(choice.label, page);
+	}
+	
+	return widget;
+}
+
+Dwt_TabBar_XFormItem.prototype.updateWidget = function(newvalue) {
+	if(this.widget.isUpdating) {
+		this.widget.isUpdating = false;
+		return;
+	}
+
+	if (this._stateChangeListener) {
+		this.widget.removeStateChangeListener(this._stateChangeListener);
+	}
+	else {
+		this._stateChangeListener = new LsListener(this, Dwt_TabBar_XFormItem.prototype._handleStateChange);
+	}
+	
+	var tabKey = this._value2tabkey[newvalue];
+	if (tabKey != this.widget.getCurrentTab()) {
+		this.widget.switchToTab(tabKey);
+	}
+
+	this.widget.addStateChangeListener(this._stateChangeListener);
+}

@@ -1,0 +1,426 @@
+function Dwt() {
+}
+
+// Constants for positioning
+Dwt.STATIC_STYLE = "static";
+Dwt.ABSOLUTE_STYLE = "absolute";
+Dwt.RELATIVE_STYLE = "relative";
+
+// Background repeat 
+Dwt.NO_REPEAT = "no-repeat";
+Dwt.REPEAT = "repeat";
+Dwt.REPEAT_X = "repeat-x";
+Dwt.REPEAT_Y = "repeat-y";
+
+// constants for layout
+Dwt.LEFT = 100;
+Dwt.RIGHT = 101;
+Dwt.TOP = 102;
+Dwt.BOTTOM = 103;
+
+Dwt.ABOVE = 104;
+Dwt.BELOW = 105;
+
+Dwt.WIDTH = 106;
+Dwt.HEIGHT = 107;
+
+// Scroll constants
+Dwt.CLIP = 1;
+Dwt.VISIBLE = 2;
+Dwt.SCROLL = 3;
+Dwt.FIXED_SCROLL = 4;
+
+// z-index order
+Dwt.Z_HIDDEN = 100;		// hide the display
+Dwt.Z_CURTAIN = 200;	// not used; could be used if there is leakage
+Dwt.Z_VIEW = 300;		// make visible
+Dwt.Z_TOOLTIP = 400;	// tool tips
+Dwt.Z_MENU = 500;		// popup menus
+Dwt.Z_VEIL = 600;		// goes below dialogs to make them modal
+Dwt.Z_DIALOG = 700;		// dialogs
+Dwt.Z_DIALOG_MENU = 750;// menus in dialogs
+Dwt.Z_DND = 800;		// Drag N Drop icons
+Dwt.Z_BUSY = 900;		// used to block user input
+Dwt.Z_SPLASH = 1000;    // used for splash screens
+
+Dwt.Z_INC = 1;			// atomic amount to bump z-index if needed
+
+Dwt.DEFAULT = -1;
+
+Dwt.LOC_NOWHERE = -10000; // for positioning an element offscreen
+
+// Drag N Drop action constants
+Dwt.DND_DROP_NONE = 0;
+Dwt.DND_DROP_COPY = 1;
+Dwt.DND_DROP_MOVE = 2;
+
+// Keys used for retrieving data
+Dwt.KEY_OBJECT = "_object_";
+Dwt.KEY_ID = "_id_";
+
+Dwt._nextId = 1;
+
+Dwt.getDomObj =
+function(doc, id)  {
+	return doc.getElementById(id);
+}
+
+Dwt.getNextId =
+function() {
+	return "DWT" + Dwt._nextId++;
+}
+
+Dwt.associateElementWithObject = function (domElement, jsObject){
+	domElement.dwtObj = jsObject.__internalId = LsCore.assignId(jsObject);
+};
+
+Dwt.disassociateElementFromObject = function (domElement, jsObject){
+	if (domElement){
+		delete domElement.dwtObj;
+	}
+	if (jsObject.__internalId){
+		LsCore.unassignId(jsObject.__internalId);
+	}
+};
+
+Dwt.getObjectFromElement = function (domElement) {
+	return LsCore.objectWithId(domElement.dwtObj);
+};
+
+
+Dwt.getBackgroundRepeat =
+function(htmlElement) {
+	return DwtCssStyle.getProperty(htmlElement, "background-repeat");
+}
+
+Dwt.setBackgroundRepeat =
+function(htmlElement, style) {
+	htmlElement.style.backgroundRepeat = style;
+}
+
+Dwt.getBounds =
+function(htmlElement, incScroll) {
+	var loc = Dwt.getLocation(htmlElement);
+	var size = Dwt.getSize(htmlElement, incScroll);
+	return new DwtRectangle(loc.x, loc.y, size.x, size.y);
+}
+
+Dwt.setBounds =
+function(htmlElement, x, y, width, height) {
+	Dwt.setLocation(htmlElement, x, y);
+	Dwt.setSize(htmlElement, width, height);
+}
+
+Dwt.getCursor = 
+function(htmlElement) {
+	return DwtCssStyle.getProperty(htmlElement, "cursor");
+}
+
+Dwt.setCursor =
+function(htmlElement, cursorName) {
+	htmlElement.style.cursor = cursorName;
+}
+
+
+Dwt.getLocation =
+function(htmlElement) {
+	if (htmlElement.style.position == Dwt.ABSOLUTE_STYLE)
+		return new DwtPoint(parseInt(DwtCssStyle.getProperty(htmlElement, "left")),
+		                    parseInt(DwtCssStyle.getProperty(htmlElement, "top")));
+	else
+		return Dwt.toWindow(htmlElement, 0, 0);
+}
+
+Dwt.setLocation =
+function(htmlElement, x, y) {
+	if (htmlElement.style.position != Dwt.ABSOLUTE_STYLE) {
+		DBG.println(LsDebug.DBG1, "Cannot position static widget " + htmlElement.className);
+		throw new DwtException("Static widgets may not be positioned", DwtException.INVALID_OP, "Dwt.setLocation");
+	}
+	if (x = Dwt.checkPxVal(x))
+		htmlElement.style.left = x;
+	if (y = Dwt.checkPxVal(y))
+		htmlElement.style.top = y;
+}
+
+Dwt.checkPxVal =
+function(val) {
+	if (val == Dwt.DEFAULT)
+		return false;
+	if (typeof(val) == "number" && val != Dwt.LOC_NOWHERE) {
+//		if (val < 0) {
+//			DBG.println(LsDebug.DBG1, "negative pixel value: " + val);
+//			val = 0;
+//		}
+		val = val + "px";
+	}
+	return val;
+}
+
+Dwt.getPosition =
+function(htmlElement) {
+	return htmlElement.style.position;
+}
+
+Dwt.setPosition =
+function(htmlElement, posStyle) {
+	htmlElement.style.position = posStyle;
+}
+
+Dwt.getScrollStyle =
+function(htmlElement) {
+	var overflow =  DwtCssStyle.getProperty(htmlElement, "overflow");
+	if (overflow == "hidden")
+		return Dwt.CLIP;
+	else if (overflow =="auto")
+		return Dwt.SCROLL;
+	else if (overflow =="scroll")
+		return Dwt.FIXED_SCROLL;
+	else
+		return Dwt.VISIBLE;
+}
+
+Dwt.setScrollStyle =
+function(htmlElement, scrollStyle) {
+	if (scrollStyle == Dwt.CLIP)
+		htmlElement.style.overflow = "hidden";
+	else if (scrollStyle == Dwt.SCROLL)
+		htmlElement.style.overflow = "auto";
+	else if (scrollStyle == Dwt.FIXED_SCROLL)
+		htmlElement.style.overflow = "scroll";
+	else
+		htmlElement.style.overflow = "visible";
+}
+
+// Note: in FireFox, offsetHeight includes border and clientHeight does not;
+// may want to look at clientHeight for FF
+Dwt.getSize = 
+function(htmlElement, incScroll) {
+	var p = new DwtPoint(0, 0);
+	if (htmlElement.offsetWidth != null) {
+		p.x = htmlElement.offsetWidth;
+		p.y = htmlElement.offsetHeight;
+	} else if (htmlElement.clip && htmlElement.clip.width != null) {
+		p.x = htmlElement.clip.width;
+		p.y = htmlElement.clip.height;
+	} else if (htmlElement.style && htmlElement.style.pixelWidth != null) {
+		p.x = htmlElement.style.pixelWidth;
+		p.y = htmlElement.style.pixelHeight;
+	}
+	p.x = parseInt(p.x);
+	p.y = parseInt(p.y);
+	return p;
+}
+
+Dwt.setSize = 
+function(htmlElement, width, height) {
+	if (width = Dwt.checkPxVal(width))
+		htmlElement.style.width = width;
+	if (height = Dwt.checkPxVal(height))
+		htmlElement.style.height = height;
+}
+
+/**
+* Measure the extent in pixels of a section of html
+*/
+Dwt.getHtmlExtent =
+function(html) {
+	if (!Dwt._measureDiv) {
+		var measureDiv = document.createElement("div");
+		measureDiv.id = this._measureDivId = Dwt.getNextId();
+		Dwt.setPosition(measureDiv, Dwt.ABSOLUTE_STYLE);
+		Dwt.setLocation(measureDiv, Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
+		document.body.appendChild(measureDiv);
+		Dwt._measureDiv = measureDiv;
+	}
+	Dwt._measureDiv.innerHTML = html;
+	return Dwt.getSize(Dwt._measureDiv);
+}
+
+Dwt.getVisible =
+function(htmlElement) {
+	var disp = DwtCssStyle.getProperty(htmlElement, "display");
+	return (disp == "none") ? false : true;
+}
+
+Dwt.setVisible =
+function(htmlElement, visible) {
+	if (visible) {
+  		htmlElement.style.display= "block";
+	} else {
+		htmlElement.style.display = "none";
+	}
+
+}
+
+Dwt.setVisible2 =
+function(htmlElement, visible) {
+	if (visible) {
+  		htmlElement.style.visibility = "visible";
+	} else {
+		htmlElement.style.visibility = "hidden";
+	}
+}
+
+Dwt.getZIndex =
+function(htmlElement) {
+	return DwtCssStyle.getProperty(htmlElement, "z-index");
+}
+
+Dwt.setZIndex =
+function(htmlElement, idx) {
+//DBG.println(LsDebug.DBG3, "set zindex for " + htmlElement.className + ": " + idx);
+	htmlElement.style.zIndex = idx;
+}
+
+Dwt.toWindow =
+function(htmlElement, x, y, containerElement) {
+	var container = (containerElement == null)? null: containerElement;
+
+	var p = new DwtPoint(x, y);
+	// EMC 6/3/2005
+	// changed the below line, since it meant we did not 
+	// include the given element in our location calculation.
+	//var offsetParent = htmlElement.offsetParent;
+	var offsetParent = htmlElement;
+	while (offsetParent != containerElement) {
+		p.x += offsetParent.offsetLeft;
+		p.y += offsetParent.offsetTop;
+		offsetParent = offsetParent.offsetParent;
+	}
+	return p;
+}
+
+Dwt.setStatus =
+function(text) {
+	window.status = text;
+}
+
+Dwt.getTitle = 
+function(text) {
+	return window.document.title;
+}
+
+Dwt.setTitle = 
+function(text) {
+	window.document.title = text;
+}
+
+Dwt.getIframeDoc = 
+function(iframeObj) {
+	return LsEnv.isIE 
+		? (iframeObj ? iframeObj.contentWindow.document : null)
+		: iframeObj.contentDocument;
+}
+
+Dwt.getIframeWindow = 
+function(iframeObj) {
+	return iframeObj.contentWindow;
+}
+
+Dwt._ffOverflowHack = 
+function (htmlElId, myZindex, lowThresholdZ, turnOffOverflowScroll, disableSelf) {
+	if (!LsEnv.isNav)
+		return;
+		
+	var ds = disableSelf? disableSelf: false;
+	var lowThresholdZIndex = lowThresholdZ? lowThresholdZ: -100;
+	var coll = document.getElementsByTagName("div");
+	var temp = null;
+	var len = coll.length;
+	var lastGoodZIndex = -1;
+	for (var i = 0; i < len; ++i) {
+		temp = coll[i];
+		if (temp.id == htmlElId) {
+			temp = coll[++i];
+			while(i < len && temp.style.zIndex == '') {
+				// enable myself if someone else turned me off
+				if (temp._oldOverflow && turnOffOverflowScroll){
+					temp.style.overflow = temp._oldOverflow;
+					delete temp._oldOverflow;
+				} else if (ds){
+					temp._oldOverflow = temp.style.overflow;
+					temp.style.overflow = "hidden";
+				}
+				temp = coll[++i];
+			}
+			if (i == len)
+				break;
+		}
+		var divZIndex = parseInt(temp.style.zIndex);
+		// assume that if the value is auto, that we want to shut off the 
+		// overflow setting.
+		if (isNaN(divZIndex)) {
+			divZIndex = lastGoodZIndex;
+		} else {
+			lastGoodZIndex = divZIndex;
+		}
+		if ( divZIndex < myZindex && divZIndex >= lowThresholdZIndex) {
+			switch (turnOffOverflowScroll) {
+			case true:
+				if (!temp._oldOverflow) {
+					var cssDecl = window.getComputedStyle(temp,"");
+					var overflow = cssDecl.getPropertyValue("overflow");
+					if (overflow != 'hidden') {
+						temp._oldOverflow = overflow;
+						temp._oldScrollTop = temp.scrollTop;
+						temp.style.overflow = "visible";
+					}
+				}
+				break;
+			case false:
+				if (temp._oldOverflow) {
+					temp.style.overflow = temp._oldOverflow;
+					delete temp._oldOverflow;
+				}
+				if (temp._oldScrollTop != null) {
+					temp.scrollTop = temp._oldScrollTop;
+				}
+				break;
+			}
+		}
+	}
+};
+
+/**
+ * returns a node for the given tag
+ */
+Dwt.parseHtmlFragment = function (htmlStr, tagName) {
+	if (!Dwt._divBuffer) {
+		Dwt._divBuffer = document.createElement('div');
+	}	
+	var html = htmlStr;
+	if (tagName && tagName == "TR"){
+		html = "<table style='table-layout:fixed'>" + htmlStr + "</table>";
+	}
+	var div = Dwt._divBuffer;
+	div.innerHTML = html;
+	if (tagName && tagName == "TR"){
+		return div.firstChild.rows[0];
+	} else {
+		return div.firstChild;
+	}
+};
+
+Dwt.contains = 
+function (parentEl, childEl) {
+  	var isContained = false;
+  	if (LsEnv.isSafari) {
+  		return false;
+  	} else if (parentEl.compareDocumentPosition) {
+		var relPos = parentEl.compareDocumentPosition(childEl);
+		if ((relPos == (document.DOCUMENT_POSITION_CONTAINED_BY | document.DOCUMENT_POSITION_FOLLOWING))) {
+			isContained = true;
+		}
+
+  	} else if (parentEl.contains) {
+  		isContained = parentEl.contains(childEl);
+  	}
+  	return isContained;
+};
+
+Dwt.removeChildren =
+function(htmlEl) {
+	while (htmlEl.hasChildNodes())
+		htmlEl.removeChild(htmlEl.firstChild);
+}
