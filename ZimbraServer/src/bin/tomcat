@@ -68,12 +68,12 @@ unpack_webapps() {
         (cd ${tomcat_directory}/webapps/service; jar xf ../service.war)
     fi
 
-    if [ ! -f ${tomcat_directory}/webapps/liquid.war ]; then
-        echo Warning: ${tomcat_directory}/webapps/liquid.war does not exist
-    elif [ ! -d "${tomcat_directory}/webapps/liquid" ]; then
-        echo Info: expanding ${tomcat_directory}/webapps/liquid.war
-        mkdir "${tomcat_directory}/webapps/liquid"
-        (cd ${tomcat_directory}/webapps/liquid; jar xf ../liquid.war)
+    if [ ! -f ${tomcat_directory}/webapps/zimbra.war ]; then
+        echo Warning: ${tomcat_directory}/webapps/zimbra.war does not exist
+    elif [ ! -d "${tomcat_directory}/webapps/zimbra" ]; then
+        echo Info: expanding ${tomcat_directory}/webapps/zimbra.war
+        mkdir "${tomcat_directory}/webapps/zimbra"
+        (cd ${tomcat_directory}/webapps/zimbra; jar xf ../zimbra.war)
     fi
 }
 

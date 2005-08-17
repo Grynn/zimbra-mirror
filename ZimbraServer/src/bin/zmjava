@@ -5,7 +5,7 @@ zmsetvars zimbra_home zimbra_java_home
 
 exec ${zimbra_java_home}/bin/java \
      -client \
-     -Dliquid.home=${zimbra_home} \
+     -Dzimbra.home=${zimbra_home} \
      -Djava.library.path=${zimbra_home}/lib \
      -Djava.ext.dirs=${zimbra_java_home}/jre/lib/ext:${zimbra_home}/lib \
      "$@"

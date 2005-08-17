@@ -5,9 +5,9 @@ use Getopt::Long;
 use English;
 
 # Options
-my $user = "liquid";
-my $password = "liquid";
-my $database = "liquid";
+my $user = "zimbra";
+my $password = "zimbra";
+my $database = "zimbra";
 my $mySqlCommand = "mysql";
 my $verbose = 0;
 my $usage = 0;
@@ -242,9 +242,9 @@ sub usage() {
     print <<USAGE_EOF
 Usage: $PROGRAM_NAME
   -h, --help           Displays this usage message
-  -u, --user=name      MySQL user name (default: "liquid")
-  -p, --password=name  MySQL password (default: "liquid")
-  -d, --database=name  MySQL database (default: "liquid")
+  -u, --user=name      MySQL user name (default: "zimbra")
+  -p, --password=name  MySQL password (default: "zimbra")
+  -d, --database=name  MySQL database (default: "zimbra")
   -m, --mysql=command  MySQL client command name (default: "mysql")
   -v, --verbose        Displays variable descriptions
 USAGE_EOF

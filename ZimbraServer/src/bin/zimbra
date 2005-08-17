@@ -1,15 +1,15 @@
 #!/bin/bash
 #
-# Init file for liquid mail
+# Init file for zimbra mail
 #
 # chkconfig: 345 99 01
-# description: Liquid mail service
+# description: Zimbra mail service
 #
 
 
 command()
 {
-	su - liquid -c "lqcontrol $1"
+	su - zimbra -c "zmcontrol $1"
 }
 
 case "$1" in

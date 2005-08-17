@@ -14,6 +14,6 @@ else
     java=java
 fi
 
-CP=${LQROOT}/lib/liquidstore.jar:${LQROOT}/lib/commons-logging.jar:${LQROOT}/lib/commons-cli-2.0.jar:${LQROOT}/lib/dom4j-1.5.jar:${LQROOT}/lib/log4j-1.2.8.jar:${LQROOT}/lib/commons-httpclient-2.0.1.jar
-exec ${java} -client -Dliquid.home="${LQROOT}" -cp "$CP" \
+CP=${LQROOT}/lib/zimbrastore.jar:${LQROOT}/lib/commons-logging.jar:${LQROOT}/lib/commons-cli-2.0.jar:${LQROOT}/lib/dom4j-1.5.jar:${LQROOT}/lib/log4j-1.2.8.jar:${LQROOT}/lib/commons-httpclient-2.0.1.jar
+exec ${java} -client -Dzimbra.home="${LQROOT}" -cp "$CP" \
     com.zimbra.cs.localconfig.Main "$@"

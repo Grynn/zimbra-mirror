@@ -4,11 +4,11 @@
 
 use strict;
 
-use lib "/opt/zimbra/zimbramon/lib/liquidpm";
-use lib "/opt/zimbra/zimbramon/lib/liquidpm/SOAP";
+use lib "/opt/zimbra/zimbramon/lib/zimbrapm";
+use lib "/opt/zimbra/zimbramon/lib/zimbrapm/SOAP";
 use lib "/opt/zimbra/zimbramon/lib";
 
-use liquidlog;
+use zimbralog;
 
 use Getopt::Std;
 
@@ -41,7 +41,7 @@ sub run_maint_command {
 
 	my $url = "https://$h:7071/service/admin/soap/";
 
-	my $context = $SOAP->liquidContext($authToken, "");
+	my $context = $SOAP->zimbraContext($authToken, "");
 
 	my $d = new XmlDoc;
 	$d->start('MaintainTablesRequest', $ADMINNS);
@@ -55,7 +55,7 @@ sub run_maint_command {
 
 sub get_auth_token {
 	my $host = "localhost";
-	my $user = "liquid";
+	my $user = "zimbra";
 	my $pass = `zmlocalconfig -s -m nokey zimbra_ldap_password`;
 	chomp $pass;
 

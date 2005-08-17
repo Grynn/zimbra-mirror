@@ -7,8 +7,8 @@ my $dfilename=$ARGV[1];
 
 my $id = `whoami`;
 chomp $id;
-if ($id ne "liquid") {
-    print STDERR "Error: must be run as liquid user\n";
+if ($id ne "zimbra") {
+    print STDERR "Error: must be run as zimbra user\n";
 	exit (1);
 }
 

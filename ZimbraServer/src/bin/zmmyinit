@@ -58,7 +58,7 @@ ${zimbra_home}/bin/mysql.server start \
 sleep 1
 
 #
-# Load liquid sql files
+# Load zimbra sql files
 #
 echo '*' Loading schema ${zimbra_db_directory}/db.sql 
 ${zimbra_home}/bin/mysql -u root --password= < \
@@ -72,21 +72,21 @@ ${zimbra_home}/bin/mysql -u root --password= < \
 # Generate passwords for mysql into local config
 #
 if [ x$sql_root_pw = "x" ]; then
-	echo '*' Setting random password for mysql root user in liquid local config
+	echo '*' Setting random password for mysql root user in zimbra local config
 	${zimbra_home}/bin/zmlocalconfig -r -f -e mysql_root_password
 
-	echo '*' Setting random password for mysql liquid user in liquid local config
+	echo '*' Setting random password for mysql zimbra user in zimbra local config
 	${zimbra_home}/bin/zmlocalconfig -r -f -e zimbra_mysql_password
 else
-	echo '*' Setting password for mysql root user in liquid local config
+	echo '*' Setting password for mysql root user in zimbra local config
 	${zimbra_home}/bin/zmlocalconfig -f -e mysql_root_password=$sql_root_pw
-	echo '*' Setting password for mysql liquid user in liquid local config
+	echo '*' Setting password for mysql zimbra user in zimbra local config
 	${zimbra_home}/bin/zmlocalconfig -f -e zimbra_mysql_password=$sql_root_pw
 fi
 
 #
 # Change mysql root user password, but first read back the passwords 
-# liquid local config - they was generated above.  Note that we can not
+# zimbra local config - they was generated above.  Note that we can not
 # use 'lqmypasswd --root' here because of bootstrapping problems - at
 # this stage we know that the root password is empty.
 #
@@ -94,5 +94,5 @@ zmsetvars mysql_root_password zimbra_mysql_password
 echo '*' Changing mysql root user password
 ${zimbra_home}/bin/mysqladmin -u root --password= password ${mysql_root_password}
 
-echo '*' Changing mysql liquid user password
+echo '*' Changing mysql zimbra user password
 ${zimbra_home}/bin/lqmypasswd ${zimbra_mysql_password}

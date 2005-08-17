@@ -15,8 +15,8 @@ if [ x$FOLDER != "x" ]; then
 	FOLDER="-r $FOLDER"
 fi
 
-if [ x`whoami` != xliquid ]; then
-    echo Error: must be run as liquid user
+if [ x`whoami` != xzimbra ]; then
+    echo Error: must be run as zimbra user
 	exit 1
 fi
 

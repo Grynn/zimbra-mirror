@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Change password for zimbra_mysql_password, and optionally for
-# mysql_root_password.  Updates both the Liquid local config file and
+# mysql_root_password.  Updates both the Zimbra local config file and
 # MySQL.
 #
 source `dirname $0`/zmshutil || exit 1
@@ -52,7 +52,7 @@ SET PASSWORD FOR '${zimbra_mysql_user}'@'localhost' = PASSWORD('${newpassword}')
 SET PASSWORD FOR '${zimbra_mysql_user}'@'localhost.localdomain' = PASSWORD('${newpassword}');
 EOF
 	if [ $? = 0 ]; then
-		echo '*' Changed liquid mysql user password
+		echo '*' Changed zimbra mysql user password
 	else
 		echo '****' PASSWORD CHANGE FAILED
 		exit 1
