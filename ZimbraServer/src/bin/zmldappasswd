@@ -14,7 +14,7 @@ zmsetvars \
 #
 usage() {
     cat<<EOF
-Usage: $ lqldappasswd [ --root ] newpassword
+Usage: $ zmldappasswd [ --root ] newpassword
 
 By default, this script changes zimbra_ldap_password.  If the --root
 option is specified, then ldap_root_passwd is changed.  In both cases,

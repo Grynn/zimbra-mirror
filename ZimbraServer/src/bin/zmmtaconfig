@@ -24,7 +24,7 @@ use zimbralog;
 my $homedir = "/opt/zimbra";
 my $confdir = "$homedir/conf";
 
-my $config = "$confdir/lqmta.cf";
+my $config = "$confdir/zmmta.cf";
 
 my %commands = (
 		"POSTCONF"	=>	"$homedir/postfix/sbin/postconf -e",
