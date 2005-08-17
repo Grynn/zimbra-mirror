@@ -7,7 +7,7 @@
     <title>DwtCalTest</title>
     <style type="text/css">
       <!--
-        @import url(/zimbra/js/zimbraMail/config/style/lm.css);
+        @import url(/zimbra/js/zimbraMail/config/style/zm.css);
       -->
     </style>
 	<script language="JavaScript">

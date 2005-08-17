@@ -10,7 +10,7 @@
         @import url(/zimbra/img/hiRes/imgs.css);
 
         @import url(/zimbra/js/dwt/config/style/dwt.css);
-        @import url(/zimbra/js/zimbraMail/config/style/lm.css);
+        @import url(/zimbra/js/zimbraMail/config/style/zm.css);
 
       -->
 .DwtSelect{
