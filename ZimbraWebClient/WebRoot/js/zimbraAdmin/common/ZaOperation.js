@@ -1,15 +1,15 @@
 /**
-* @class LaOperation
+* @class ZaOperation
 * @contructor
-* simplified version of LmOperation
-* This class encapsulates the properties of an action that can be taken on some item: image, caption, description, LsListener
+* simplified version of ZmOperation
+* This class encapsulates the properties of an action that can be taken on some item: image, caption, description, AjxListener
 * @param caption string
 * @param tt string
 * @param img string path to image
-* @param lsnr LsListener
+* @param lsnr AjxListener
 **/
 
-function LaOperation(id, caption, tooltip, imgId, disImgId, lsnr) {
+function ZaOperation(id, caption, tooltip, imgId, disImgId, lsnr) {
 	this.id = id;
 	this.caption = caption;
 	this.tt = tooltip;
@@ -18,26 +18,26 @@ function LaOperation(id, caption, tooltip, imgId, disImgId, lsnr) {
 	this.disImageId = disImgId;
 }
 
-LaOperation.prototype.toString = 
+ZaOperation.prototype.toString = 
 function() {
-		return "LaOperation";
+		return "ZaOperation";
 }
 
 // Operations
-LaOperation.NONE = -2;		// no operations or menu items
-LaOperation.SEP = -1;		// separator
-LaOperation.NEW = 1;
-LaOperation.DELETE = 2;
-LaOperation.REFRESH = 3;
-LaOperation.EDIT = 4;
-LaOperation.CHNG_PWD = 5;
-LaOperation.CLOSE = 6;
-LaOperation.SAVE = 7;
-LaOperation.NEW_WIZARD = 8;
-LaOperation.PAGE_FORWARD = 9;
-LaOperation.PAGE_BACK = 10;
-LaOperation.DUPLICATE = 11;
-LaOperation.GAL_WIZARD = 12;
-LaOperation.AUTH_WIZARD =13;
-LaOperation.VIEW_MAIL =14;
-LaOperation.MAIL_RESTORE = 15;
+ZaOperation.NONE = -2;		// no operations or menu items
+ZaOperation.SEP = -1;		// separator
+ZaOperation.NEW = 1;
+ZaOperation.DELETE = 2;
+ZaOperation.REFRESH = 3;
+ZaOperation.EDIT = 4;
+ZaOperation.CHNG_PWD = 5;
+ZaOperation.CLOSE = 6;
+ZaOperation.SAVE = 7;
+ZaOperation.NEW_WIZARD = 8;
+ZaOperation.PAGE_FORWARD = 9;
+ZaOperation.PAGE_BACK = 10;
+ZaOperation.DUPLICATE = 11;
+ZaOperation.GAL_WIZARD = 12;
+ZaOperation.AUTH_WIZARD =13;
+ZaOperation.VIEW_MAIL =14;
+ZaOperation.MAIL_RESTORE = 15;

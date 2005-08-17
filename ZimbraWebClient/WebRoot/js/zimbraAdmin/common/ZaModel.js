@@ -1,32 +1,32 @@
-// LaModel is data with a change listener.
-function LaModel(init) {
+// ZaModel is data with a change listener.
+function ZaModel(init) {
  	if (arguments.length == 0) return;
 
-	this._evtMgr = new LsEventMgr();
+	this._evtMgr = new AjxEventMgr();
 }
 
-LaModel.prototype.toString = 
+ZaModel.prototype.toString = 
 function() {
-	return "LaModel";
+	return "ZaModel";
 }
 
-LaModel.prototype.addChangeListener = 
+ZaModel.prototype.addChangeListener = 
 function(listener) {
-	return this._evtMgr.addListener(LaEvent.L_MODIFY, listener);
+	return this._evtMgr.addListener(ZaEvent.L_MODIFY, listener);
 }
 
-LaModel.prototype.removeChangeListener = 
+ZaModel.prototype.removeChangeListener = 
 function(listener) {
-	return this._evtMgr.removeListener(LaEvent.L_MODIFY, listener);    	
+	return this._evtMgr.removeListener(ZaEvent.L_MODIFY, listener);    	
 }
 
-LaModel.BOOLEAN_CHOICES= [{value:"TRUE", label:"Yes"}, {value:"FALSE", label:"No"}, {value:null, label:"No"}];
-LaModel.BOOLEAN_CHOICES1= [{value:1, label:"Yes"}, {value:0, label:"No"}, {value:null, label:"No"}];
+ZaModel.BOOLEAN_CHOICES= [{value:"TRUE", label:"Yes"}, {value:"FALSE", label:"No"}, {value:null, label:"No"}];
+ZaModel.BOOLEAN_CHOICES1= [{value:1, label:"Yes"}, {value:0, label:"No"}, {value:null, label:"No"}];
 
-LaModel.COMPOSE_FORMAT_CHOICES = [{value:"text", label:"Text"}, {value:"html", label:"HTML"}];
-LaModel.GROUP_MAIL_BY_CHOICES = [{value:"conversation", label:"Conversation"}, {value:"message", label:"Message"}];
-LaModel.SIGNATURE_STYLE_CHOICES = [{value:"outlook", label:"Outlook"}, {value:"internet", label:"Internet"}];
-LaModel.ErrorCode = "code";
-LaModel.ErrorMessage = "error_message";
-LaModel.currentStep = "currentStep";
-LaModel.currentTab = "currentTab";
+ZaModel.COMPOSE_FORMAT_CHOICES = [{value:"text", label:"Text"}, {value:"html", label:"HTML"}];
+ZaModel.GROUP_MAIL_BY_CHOICES = [{value:"conversation", label:"Conversation"}, {value:"message", label:"Message"}];
+ZaModel.SIGNATURE_STYLE_CHOICES = [{value:"outlook", label:"Outlook"}, {value:"internet", label:"Internet"}];
+ZaModel.ErrorCode = "code";
+ZaModel.ErrorMessage = "error_message";
+ZaModel.currentStep = "currentStep";
+ZaModel.currentTab = "currentTab";

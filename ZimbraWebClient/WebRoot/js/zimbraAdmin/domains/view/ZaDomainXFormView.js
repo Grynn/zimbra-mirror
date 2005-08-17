@@ -1,39 +1,39 @@
 /**
-* @class LaDomainXFormView
+* @class ZaDomainXFormView
 * @contructor
 * @param parent
 * @param app
 * @author Greg Solovyev
 **/
-function LaDomainXFormView (parent, app) {
-	LaTabView.call(this, parent, app);	
+function ZaDomainXFormView (parent, app) {
+	ZaTabView.call(this, parent, app);	
 	this.GALModes = [
-		{label:LaMsg.GALMode_internal, value:LaDomain.GAL_Mode_internal},
-		{label:LaMsg.GALMode_external, value:LaDomain.GAL_Mode_external}, 
-		{label:LaMsg.GALMode_both, value:LaDomain.GAL_Mode_both}
+		{label:ZaMsg.GALMode_internal, value:ZaDomain.GAL_Mode_internal},
+		{label:ZaMsg.GALMode_external, value:ZaDomain.GAL_Mode_external}, 
+		{label:ZaMsg.GALMode_both, value:ZaDomain.GAL_Mode_both}
   	];
   	this.GALServerTypes = [
-		{label:LaMsg.GALServerType_ldap, value:LaDomain.GAL_ServerType_ldap},
-		{label:LaMsg.GALServerType_ad, value:LaDomain.GAL_ServerType_ad} 
+		{label:ZaMsg.GALServerType_ldap, value:ZaDomain.GAL_ServerType_ldap},
+		{label:ZaMsg.GALServerType_ad, value:ZaDomain.GAL_ServerType_ad} 
 	];	
 	
 	this.AuthMechs = [
-		{label:LaMsg.AuthMech_liquid, value:LaDomain.AuthMech_liquid},
-		{label:LaMsg.AuthMech_ldap, value:LaDomain.AuthMech_ldap},
-		{label:LaMsg.AuthMech_ad, value:LaDomain.AuthMech_ad}		
+		{label:ZaMsg.AuthMech_zimbra, value:ZaDomain.AuthMech_zimbra},
+		{label:ZaMsg.AuthMech_ldap, value:ZaDomain.AuthMech_ldap},
+		{label:ZaMsg.AuthMech_ad, value:ZaDomain.AuthMech_ad}		
 	];
 	
-	this.initForm(LaDomain.myXModel,this.getMyXForm());
+	this.initForm(ZaDomain.myXModel,this.getMyXForm());
 }
 
-LaDomainXFormView.prototype = new LaTabView();
-LaDomainXFormView.prototype.constructor = LaDomainXFormView;
+ZaDomainXFormView.prototype = new ZaTabView();
+ZaDomainXFormView.prototype.constructor = ZaDomainXFormView;
 
 /**
 * @method setObject sets the object contained in the view
-* @param entry - LaDomain object to display
+* @param entry - ZaDomain object to display
 **/
-LaDomainXFormView.prototype.setObject =
+ZaDomainXFormView.prototype.setObject =
 function(entry) {
 	this._containedObject = new Object();
 	this._containedObject.attrs = new Object();
@@ -42,77 +42,77 @@ function(entry) {
 		this._containedObject.attrs[a] = entry.attrs[a];
 	}
 
-	if(!entry[LaModel.currentTab])
-		this._containedObject[LaModel.currentTab] = "1";
+	if(!entry[ZaModel.currentTab])
+		this._containedObject[ZaModel.currentTab] = "1";
 	else
-		this._containedObject[LaModel.currentTab] = entry[LaModel.currentTab];
+		this._containedObject[ZaModel.currentTab] = entry[ZaModel.currentTab];
 		
 	this._localXForm.setInstance(this._containedObject);
 }
 
-LaDomainXFormView.prototype.getMyXForm = function() {	
+ZaDomainXFormView.prototype.getMyXForm = function() {	
 	var xFormObject = {
 		tableCssStyle:"width:100%;overflow:auto;",
 		items: [
 			{type:_GROUP_, cssClass:"AdminTitleBar", colSpan: "*", 
 				items: [
-					{type:_OUTPUT_, ref:LaDomain.A_domainName, label:LaMsg.NAD_Domain},
-					{type:_OUTPUT_, ref:LaItem.A_liquidId, label:LaMsg.NAD_LiquidID}
+					{type:_OUTPUT_, ref:ZaDomain.A_domainName, label:ZaMsg.NAD_Domain},
+					{type:_OUTPUT_, ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID}
 				]
 			},
-			{type:_TAB_BAR_,  ref:LaModel.currentTab,
+			{type:_TAB_BAR_,  ref:ZaModel.currentTab,
 				choices:[
-					{value:1, label:LaMsg.Domain_Tab_General},
-					{value:2, label:LaMsg.Domain_Tab_GAL},
-					{value:3, label:LaMsg.Domain_Tab_Authentication}
+					{value:1, label:ZaMsg.Domain_Tab_General},
+					{value:2, label:ZaMsg.Domain_Tab_GAL},
+					{value:3, label:ZaMsg.Domain_Tab_Authentication}
 				]
 			},
 			{type:_SWITCH_, items:[
-					{type:_CASE_, relevant:"instance[LaModel.currentTab] == 1", 
+					{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 1", 
 					items:[
-							{ ref: LaDomain.A_domainName, type:_OUTPUT_, 
-							  label:LaMsg.Domain_DomainName
+							{ ref: ZaDomain.A_domainName, type:_OUTPUT_, 
+							  label:ZaMsg.Domain_DomainName
 							},
-							{ ref: LaDomain.A_description, type:_INPUT_, 
-							  label:LaMsg.NAD_Description+":", width: "30em",
-							  onChange:LaTabView.onFormFieldChanged
+							{ ref: ZaDomain.A_description, type:_INPUT_, 
+							  label:ZaMsg.NAD_Description+":", width: "30em",
+							  onChange:ZaTabView.onFormFieldChanged
 						  	},
-							{ ref: LaDomain.A_notes, type:_TEXTAREA_, 
-							  label:LaMsg.NAD_Notes+":", labelCssStyle:"vertical-align:top", width: "30em",
-							  onChange:LaTabView.onFormFieldChanged
+							{ ref: ZaDomain.A_notes, type:_TEXTAREA_, 
+							  label:ZaMsg.NAD_Notes+":", labelCssStyle:"vertical-align:top", width: "30em",
+							  onChange:ZaTabView.onFormFieldChanged
 							}
 						]
 					},
-					{type:_CASE_, relevant:"instance[LaModel.currentTab] == 2", 
+					{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 2", 
 						items: [
-							{ref:LaDomain.A_GalMode, type:_OUTPUT_, label:LaMsg.Domain_GalMode, choices:this.GALModes},
-							{ref:LaDomain.A_GalMaxResults, type:_OUTPUT_, label:LaMsg.NAD_GalMaxResults, autoSaveValue:true},
-							{type:_GROUP_, relevant:"instance.attrs[LaDomain.A_GalMode]!=LaDomain.GAL_Mode_internal", relevantBehavior:_HIDE_,useParentTable:true, colSpan:"*",
+							{ref:ZaDomain.A_GalMode, type:_OUTPUT_, label:ZaMsg.Domain_GalMode, choices:this.GALModes},
+							{ref:ZaDomain.A_GalMaxResults, type:_OUTPUT_, label:ZaMsg.NAD_GalMaxResults, autoSaveValue:true},
+							{type:_GROUP_, relevant:"instance.attrs[ZaDomain.A_GalMode]!=ZaDomain.GAL_Mode_internal", relevantBehavior:_HIDE_,useParentTable:true, colSpan:"*",
 								items: [
-									{ref:LaDomain.A_GALServerType, type:_OUTPUT_, label:LaMsg.Domain_GALServerType, choices:this.GALServerTypes, labelLocation:_LEFT_},
-									{ref:LaDomain.A_GalLdapFilter, type:_OUTPUT_, label:LaMsg.Domain_GalLdapFilter, labelLocation:_LEFT_, relevant:"instance[LaDomain.A_GALServerType] == 'ldap'", relevantBehavior:_HIDE_},
-									{ref:LaDomain.A_GalLdapSearchBase, type:_OUTPUT_, label:LaMsg.Domain_GalLdapSearchBase, labelLocation:_LEFT_},
-									{ref:LaDomain.A_GalLdapURL, type:_OUTPUT_, label:LaMsg.Domain_GalLdapURL, labelLocation:_LEFT_},
-									{ref:LaDomain.A_GalLdapBindDn, type:_OUTPUT_, label:LaMsg.Domain_GalLdapBindDn, labelLocation:_LEFT_, relevant:"instance[LaDomain.A_UseBindPassword] == 'TRUE'", relevantBehavior:_DISABLE_}
+									{ref:ZaDomain.A_GALServerType, type:_OUTPUT_, label:ZaMsg.Domain_GALServerType, choices:this.GALServerTypes, labelLocation:_LEFT_},
+									{ref:ZaDomain.A_GalLdapFilter, type:_OUTPUT_, label:ZaMsg.Domain_GalLdapFilter, labelLocation:_LEFT_, relevant:"instance[ZaDomain.A_GALServerType] == 'ldap'", relevantBehavior:_HIDE_},
+									{ref:ZaDomain.A_GalLdapSearchBase, type:_OUTPUT_, label:ZaMsg.Domain_GalLdapSearchBase, labelLocation:_LEFT_},
+									{ref:ZaDomain.A_GalLdapURL, type:_OUTPUT_, label:ZaMsg.Domain_GalLdapURL, labelLocation:_LEFT_},
+									{ref:ZaDomain.A_GalLdapBindDn, type:_OUTPUT_, label:ZaMsg.Domain_GalLdapBindDn, labelLocation:_LEFT_, relevant:"instance[ZaDomain.A_UseBindPassword] == 'TRUE'", relevantBehavior:_DISABLE_}
 								]
 							}
 						]						
 					}, 
-					{type:_CASE_, relevant:"instance[LaModel.currentTab] == 3", 
+					{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 3", 
 						items: [
-							{ref:LaDomain.A_AuthMech, type:_OUTPUT_, label:LaMsg.Domain_AuthMech, choices:this.AuthMechs},
+							{ref:ZaDomain.A_AuthMech, type:_OUTPUT_, label:ZaMsg.Domain_AuthMech, choices:this.AuthMechs},
 							{type:_SWITCH_,useParentTable:true, colSpan:"*",
 								items: [
-									{type:_CASE_,useParentTable:true, colSpan:"*", relevant:"instance.attrs[LaDomain.A_AuthMech]==LaDomain.AuthMech_ad",
+									{type:_CASE_,useParentTable:true, colSpan:"*", relevant:"instance.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad",
 										items:[
-											{ref:LaDomain.A_AuthLdapUserDn, type:_OUTPUT_, label:LaMsg.Domain_AuthLdapUserDn, labelLocation:_LEFT_},
-											{ref:LaDomain.A_AuthLdapURL, type:_OUTPUT_, label:LaMsg.Domain_AuthLdapURL, labelLocation:_LEFT_}
+											{ref:ZaDomain.A_AuthLdapUserDn, type:_OUTPUT_, label:ZaMsg.Domain_AuthLdapUserDn, labelLocation:_LEFT_},
+											{ref:ZaDomain.A_AuthLdapURL, type:_OUTPUT_, label:ZaMsg.Domain_AuthLdapURL, labelLocation:_LEFT_}
 										]
 									},
-									{type:_CASE_,useParentTable:true, colSpan:"*", relevant:"instance.attrs[LaDomain.A_AuthMech]==LaDomain.AuthMech_ldap",
+									{type:_CASE_,useParentTable:true, colSpan:"*", relevant:"instance.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ldap",
 										items:[
-											{ref:LaDomain.A_AuthLdapUserDn, type:_OUTPUT_, label:LaMsg.Domain_AuthLdapUserDn, labelLocation:_LEFT_},
-											{ref:LaDomain.A_AuthLdapURL, type:_OUTPUT_, label:LaMsg.Domain_AuthLdapURL, labelLocation:_LEFT_}
+											{ref:ZaDomain.A_AuthLdapUserDn, type:_OUTPUT_, label:ZaMsg.Domain_AuthLdapUserDn, labelLocation:_LEFT_},
+											{ref:ZaDomain.A_AuthLdapURL, type:_OUTPUT_, label:ZaMsg.Domain_AuthLdapURL, labelLocation:_LEFT_}
 										]
 									}
 								]

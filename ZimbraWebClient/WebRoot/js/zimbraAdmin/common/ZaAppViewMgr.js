@@ -33,15 +33,15 @@
 * @param banner			the banner
 * @param controller		the app controller
 */
-function LaAppViewMgr(shell, banner, controller) {
+function ZaAppViewMgr(shell, banner, controller) {
 
 	this._shell = shell;
 //	this._banner = banner;
 	this._controller = controller;
 
 	this._shellSz = this._shell.getSize();
-	this._shell.addControlListener(new LsListener(this, this._shellControlListener));
-	this._needBannerLayout = false;
+	this._shell.addControlListener(new AjxListener(this, this._shellControlListener));
+	this._needBannerZayout = false;
 	this._sash = new DwtSash(this._shell, DwtSash.HORIZONTAL_STYLE, "AppSash-horiz", 5);
 	this._sash.registerCallback(this._sashCallback, this);
 	
@@ -59,34 +59,34 @@ function LaAppViewMgr(shell, banner, controller) {
 
 	// hash matching layout style to their methods	
 	this._layoutMethod = new Object();
-	this._layoutMethod[LaAppViewMgr.LAYOUT_VERTICAL] = this._appLayoutVertical;
+	this._layoutMethod[ZaAppViewMgr.LAYOUT_VERTICAL] = this._appZayoutVertical;
 }
 
-LaAppViewMgr.DEFAULT = -1;
+ZaAppViewMgr.DEFAULT = -1;
 
 // reasons the layout changes
-LaAppViewMgr.RESIZE = 1;
-LaAppViewMgr.BROWSE = 2;
-LaAppViewMgr.OVERVIEW = 3;
+ZaAppViewMgr.RESIZE = 1;
+ZaAppViewMgr.BROWSE = 2;
+ZaAppViewMgr.OVERVIEW = 3;
 
 // visible margins (will be shell background color)
-LaAppViewMgr.TOOLBAR_SEPARATION = 0;	// below search bar
-LaAppViewMgr.COMPONENT_SEPARATION = 2;	// in app container
+ZaAppViewMgr.TOOLBAR_SEPARATION = 0;	// below search bar
+ZaAppViewMgr.COMPONENT_SEPARATION = 2;	// in app container
 
 // layout styles
-LaAppViewMgr.LAYOUT_VERTICAL = 1;	// top to bottom, full width, last element gets remaining space
+ZaAppViewMgr.LAYOUT_VERTICAL = 1;	// top to bottom, full width, last element gets remaining space
 
 // used when coming back from pop shield callbacks
-LaAppViewMgr.PENDING_VIEW = "LaAppViewMgr.PENDING_VIEW";
+ZaAppViewMgr.PENDING_VIEW = "ZaAppViewMgr.PENDING_VIEW";
 
 // Public methods
 
-LaAppViewMgr.prototype.toString = 
+ZaAppViewMgr.prototype.toString = 
 function() {
-	return "LaAppViewMgr";
+	return "ZaAppViewMgr";
 }
 
-LaAppViewMgr.prototype.dtor = 
+ZaAppViewMgr.prototype.dtor = 
 function() {
 	for (var i in this._views)
 		this._views[i].getHtmlElement().innerHTML = "";
@@ -101,7 +101,7 @@ function() {
 *
 * @param searchPanel	the search panel
 */
-LaAppViewMgr.prototype.setSearchPanel =
+ZaAppViewMgr.prototype.setSearchPanel =
 function(searchPanel) {
 	this._searchPanel = searchPanel;
 }
@@ -111,7 +111,7 @@ function(searchPanel) {
 *
 * @param overviewPanel	the overview panel
 */
-LaAppViewMgr.prototype.setOverviewPanel =
+ZaAppViewMgr.prototype.setOverviewPanel =
 function(overviewPanel) {
 	this._overviewPanel = overviewPanel;
 }
@@ -119,7 +119,7 @@ function(overviewPanel) {
 /**
 * Returns the name of the app view currently being displayed.
 */
-LaAppViewMgr.prototype.getCurrentView =
+ZaAppViewMgr.prototype.getCurrentView =
 function() {
 	return this._currentView;
 }
@@ -129,7 +129,7 @@ function() {
 *
 * @param app	the name of an app
 */
-LaAppViewMgr.prototype.getAppView =
+ZaAppViewMgr.prototype.getAppView =
 function(app) {
 	return this._appView[app];
 }
@@ -141,7 +141,7 @@ function(app) {
 * @param app	the name of an app
 * @param view	the name of a view
 */
-LaAppViewMgr.prototype.setAppView =
+ZaAppViewMgr.prototype.setAppView =
 function(app, view) {
 	this._appView[app] = view;
 	this._controller.setActiveApp(app);
@@ -160,14 +160,14 @@ function(app, view) {
 * @param staleCallback 	function to call on underlying view when topmost is popped
 * @returns				the app view
 */
-LaAppViewMgr.prototype.createView =
+ZaAppViewMgr.prototype.createView =
 function(viewName, appName, elements, popCallback, style, isVolatile, isAppView, staleCallback) {
-	DBG.println(LsDebug.DBG1, "createView: " + viewName);
+	DBG.println(AjxDebug.DBG1, "createView: " + viewName);
 	var appContainer = new DwtComposite(this._shell, null, DwtControl.ABSOLUTE_STYLE);
 	for (var i = 0; i < elements.length; i++)
 		elements[i].reparent(appContainer);
 	this._views[viewName] = appContainer;
-	this._layoutStyle[viewName] = style || LaAppViewMgr.LAYOUT_VERTICAL;
+	this._layoutStyle[viewName] = style || ZaAppViewMgr.LAYOUT_VERTICAL;
 	this._popCallback[viewName] = popCallback;
 	this._staleCallback[viewName] = staleCallback;
 	this._viewApp[viewName] = appName;
@@ -187,26 +187,26 @@ function(viewName, appName, elements, popCallback, style, isVolatile, isAppView,
 * @param force		ignore popped view's callbacks
 * @returns			true if the view was pushed
 */
-LaAppViewMgr.prototype.pushView =
+ZaAppViewMgr.prototype.pushView =
 function(viewName, force) {
-	DBG.println(LsDebug.DBG1, "pushView: " + viewName);
+	DBG.println(AjxDebug.DBG1, "pushView: " + viewName);
 	if (this._currentView == viewName)
 		return false;
-	if (viewName == LaAppViewMgr.PENDING_VIEW) {
-	DBG.println(LsDebug.DBG1, "pushView of pending view");
+	if (viewName == ZaAppViewMgr.PENDING_VIEW) {
+	DBG.println(AjxDebug.DBG1, "pushView of pending view");
 		viewName = this._pendingView;
 		force = true;
 	}
 	if (this._currentView) {
-		if (!this._hideCurrentView(new LsCallback(this, this.pushView), viewName, force))
+		if (!this._hideCurrentView(new AjxCallback(this, this.pushView), viewName, force))
 		 	return false;
 //		if (!this._volatile[this._currentView])
 			this._hidden.push(this._currentView);
 	}
 	this._currentView = viewName;
-	DBG.println(LsDebug.DBG2, "app view mgr: current view is now " + this._currentView);
+	DBG.println(AjxDebug.DBG2, "app view mgr: current view is now " + this._currentView);
 	// hack to handle <SELECT> elements in IE (see below)
-	if (LsEnv.isIE) {
+	if (AjxEnv.isIE) {
 		var selects = this._views[this._currentView].getHtmlElement().getElementsByTagName("select");
 		for (var i = 0; i < selects.length; i++) {
 			selects[i].style.display = "inline";
@@ -227,17 +227,17 @@ function(viewName, force) {
 * @returns		true if the view was popped
 */
 /*
-LaAppViewMgr.prototype.popView =
+ZaAppViewMgr.prototype.popView =
 function(force) {
-	DBG.println(LsDebug.DBG1, "popView: " + this._currentView);
+	DBG.println(AjxDebug.DBG1, "popView: " + this._currentView);
 	if (!this._currentView) {
-		DBG.println(LsDebug.DBG1, "popView: no view to pop!");
+		DBG.println(AjxDebug.DBG1, "popView: no view to pop!");
 		return false;
 	}
-	if (!this._hideCurrentView(new LsCallback(this, this.popView), null, force))
+	if (!this._hideCurrentView(new AjxCallback(this, this.popView), null, force))
 		return false;
 	this._currentView = this._hidden.pop();
-	DBG.println(LsDebug.DBG2, "app view mgr: current view is now " + this._currentView);
+	DBG.println(AjxDebug.DBG2, "app view mgr: current view is now " + this._currentView);
 	// allow "stale" view to cleanup if necessary
 	if (this._staleCallback[this._currentView])
 		this._staleCallback[this._currentView].run();
@@ -254,9 +254,9 @@ function(force) {
 * @param force		ignore popped view's callbacks
 * @returns			true if the view was set
 */
-LaAppViewMgr.prototype.setView =
+ZaAppViewMgr.prototype.setView =
 function(viewName, force) {
-	DBG.println(LsDebug.DBG1, "setView: " + viewName);
+	DBG.println(AjxDebug.DBG1, "setView: " + viewName);
 	var result = this.pushView(viewName, force);
         if (result)
 		this._hidden = new Array();
@@ -270,10 +270,10 @@ function(viewName, force) {
 *
 * @param show		whether to show the pending view
 */
-LaAppViewMgr.prototype.showPendingView =
+ZaAppViewMgr.prototype.showPendingView =
 function(show) {
 	if (show && this._pendingAction) {
-		if (this._pendingAction.run(LaAppViewMgr.PENDING_VIEW)) {
+		if (this._pendingAction.run(ZaAppViewMgr.PENDING_VIEW)) {
 			this._controller.setActiveApp(this._viewApp[this._pendingView]);
 		}
 	}
@@ -283,7 +283,7 @@ function(show) {
 /**
 * Returns the geometry of the app container.
 */
-LaAppViewMgr.prototype.getAppBounds =
+ZaAppViewMgr.prototype.getAppBounds =
 function() {
 	return this._appBounds;
 }
@@ -293,22 +293,22 @@ function() {
 *
 * @param reason		used to control layout of specific components
 */
-LaAppViewMgr.prototype.layoutChanged =
+ZaAppViewMgr.prototype.layoutChanged =
 function(reason) {
-DBG.println(LsDebug.DBG2, "OMIGAWD, the layout changed! (reason = " + reason + ")");
+DBG.println(AjxDebug.DBG2, "OMIGAWD, the layout changed! (reason = " + reason + ")");
 	this._shellSz = this._shell.getSize();
-/*	if (reason == LaAppViewMgr.RESIZE)
-		this._needBannerLayout = true;*/
+/*	if (reason == ZaAppViewMgr.RESIZE)
+		this._needBannerZayout = true;*/
 	this._layout();
 }
 
 /**
-* Lays out the banner, which is a composite with two children: an image, and a banner bar that
+* Zays out the banner, which is a composite with two children: an image, and a banner bar that
 * contains the banner links.
 */
-LaAppViewMgr.prototype.layoutBanner =
+ZaAppViewMgr.prototype.layoutBanner =
 function() {
-	DBG.println(LsDebug.DBG2, "doing banner layout");
+	DBG.println(AjxDebug.DBG2, "doing banner layout");
 	var bannerHtmlElement = this._banner.getHtmlElement();
 	var bannerImg = bannerHtmlElement.firstChild;
 	Dwt.setLocation(bannerImg, 0, 0);
@@ -318,7 +318,7 @@ function() {
 	bannerBar.setBounds(this._bannerImageSize.x, 0, this._shellSz.x - this._bannerImageSize.x, this._bannerImageSize.y);
 	var bannerTable = bannerBar.getHtmlElement().firstChild;
 	Dwt.setSize(bannerTable, Dwt.DEFAULT, this._bannerImageSize.y);
-	this._needBannerLayout = false;
+	this._needBannerZayout = false;
 }
 
 // Private methods
@@ -328,21 +328,21 @@ function() {
 // view was created as "volatile", it is moved offscreen in order to mask browser bugs with
 // z-index handling. In IE, SELECT elements ignore z-index, and in FireFox, the cursor stays
 // visible. Basically, any view with a form is volatile.
-LaAppViewMgr.prototype._hideCurrentView =
+ZaAppViewMgr.prototype._hideCurrentView =
 function(pendingAction, pendingView, skipCallback) {
 	var okToContinue = true;
 	var callback = this._popCallback[this._currentView];
 	if (callback && !skipCallback) {
-		DBG.println(LsDebug.DBG2, "hiding " + this._currentView + ", waiting on " + pendingView + "; skip = " + skipCallback);
+		DBG.println(AjxDebug.DBG2, "hiding " + this._currentView + ", waiting on " + pendingView + "; skip = " + skipCallback);
 		this._pendingAction = pendingAction;
 		this._pendingView = pendingView;
 		okToContinue = callback.run();
 	}
 	if (okToContinue) {
 		this._views[this._currentView].zShow(false);
-		DBG.println(LsDebug.DBG2, this._currentView + " hidden");
+		DBG.println(AjxDebug.DBG2, this._currentView + " hidden");
 		if (this._volatile[this._currentView]) {
-			DBG.println(LsDebug.DBG1, "quarantining volatile view: " + this._currentView);
+			DBG.println(AjxDebug.DBG1, "quarantining volatile view: " + this._currentView);
 			this._views[this._currentView].setLocation(Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
 		}
 	}
@@ -353,13 +353,13 @@ function(pendingAction, pendingView, skipCallback) {
 // This is the core method of the app view manager. It lays out everything, including
 // the banner, the search bar (which may include a browse panel), the overview panel,
 // and the app area.
-LaAppViewMgr.prototype._layout =
+ZaAppViewMgr.prototype._layout =
 function(style) {
 	
 	if (!this._currentView) return;
 	
 	// banner layout done on startup and due to a shell resize event
-	if (this._needBannerLayout) {
+	if (this._needBannerZayout) {
 		this.layoutBanner();
 	}
 
@@ -368,21 +368,21 @@ function(style) {
 //	y += this._bannerImageSize.y;
 		
 	if (this._searchPanel) {
-		DBG.println(LsDebug.DBG3, "searchPanel: " + x + '/' + y + '/' + this._shellSz.x + '/' + Dwt.DEFAULT);
+		DBG.println(AjxDebug.DBG3, "searchPanel: " + x + '/' + y + '/' + this._shellSz.x + '/' + Dwt.DEFAULT);
 		this._searchPanel.setBounds(x, y, this._shellSz.x, Dwt.DEFAULT);
 		var bv = this._controller.getSearchController().getBrowseView();
 		if (bv)
 			bv.layout();
 		var searchSz = this._searchPanel.getSize();
 		y += searchSz.y;
-		if(!LsEnv.isIE)
-			y += LaAppViewMgr.TOOLBAR_SEPARATION;
+		if(!AjxEnv.isIE)
+			y += ZaAppViewMgr.TOOLBAR_SEPARATION;
 	}
 
 	// overview panel
 	if (this._overviewPanel) {
 		var overviewHeight = Math.max(this._shellSz.y - y, 0);
-		DBG.println(LsDebug.DBG3, "overviewPanel: " + x + '/' + y + '/' + Dwt.DEFAULT + '/' + overviewHeight);
+		DBG.println(AjxDebug.DBG3, "overviewPanel: " + x + '/' + y + '/' + Dwt.DEFAULT + '/' + overviewHeight);
 		this._overviewPanel.setBounds(x, y, Dwt.DEFAULT, overviewHeight);
 		x += this._overviewPanel.getSize().x;
 	}
@@ -390,7 +390,7 @@ function(style) {
 	// sash
 	if (this._sash && this._sash.getVisible()) {
 		var sashHeight = this._overviewPanel.getSize().y;
-		DBG.println(LsDebug.DBG3, "sash: " + x + '/' + y + '/' + Dwt.DEFAULT + '/' + sashHeight);
+		DBG.println(AjxDebug.DBG3, "sash: " + x + '/' + y + '/' + Dwt.DEFAULT + '/' + sashHeight);
 		this._sash.setBounds(x, y, Dwt.DEFAULT, sashHeight);
 		x += this._sash.getSize().x;
 	}	
@@ -399,15 +399,15 @@ function(style) {
 	this._layoutMethod[this._layoutStyle[this._currentView]].call(this, x, y);
 }
 
-// Lays out the elements one on top of the other, separated by COMPONENT_SEPARATION. Each
+// Zays out the elements one on top of the other, separated by COMPONENT_SEPARATION. Each
 // element extends the entire width. The last element uses the remaining vertical space.
-LaAppViewMgr.prototype._appLayoutVertical =
+ZaAppViewMgr.prototype._appZayoutVertical =
 function(x, y) {
 	// app container
 	var appContainer = this._views[this._currentView];
 	var width = Math.max(this._shellSz.x - x, 0);
 	var height = Math.max(this._shellSz.y - y, 0);
-	DBG.println(LsDebug.DBG3, "appContainer: " + x + '/' + y + '/' + width + '/' + height);
+	DBG.println(AjxDebug.DBG3, "appContainer: " + x + '/' + y + '/' + width + '/' + height);
 	appContainer.setBounds(x, y, width, height);
 	this._appBounds = new DwtRectangle(x, y, width, height);
 	
@@ -424,16 +424,16 @@ function(x, y) {
 		// last child gets the rest of the vertical space
 		if (i == (num - 1))
 			childHeight = Math.max(height - y, 0);
-		DBG.println(LsDebug.DBG3, "child " + i + ": " + x + '/' + y + '/' + width + '/' + childHeight);
+		DBG.println(AjxDebug.DBG3, "child " + i + ": " + x + '/' + y + '/' + width + '/' + childHeight);
 		child.setBounds(x, y, width, childHeight);
 		y += childHeight;
-		if(!LsEnv.isIE)
-			y += LaAppViewMgr.COMPONENT_SEPARATION;
+		if(!AjxEnv.isIE)
+			y += ZaAppViewMgr.COMPONENT_SEPARATION;
 	}
 }
 
 // Resizes the app container and its children.
-LaAppViewMgr.prototype._resizeView =
+ZaAppViewMgr.prototype._resizeView =
 function(view, bds) {
 	view.setBounds(bds.x, bds.y, bds.width, bds.height);
 	var children = view.getChildren();
@@ -447,18 +447,18 @@ function(view, bds) {
 // Listeners
 
 // Handles shell resizing event.
-LaAppViewMgr.prototype._shellControlListener =
+ZaAppViewMgr.prototype._shellControlListener =
 function(ev) {
 	if (ev.oldWidth != ev.newWidth || ev.oldHeight != ev.newHeight) {
 		this._shellSz.x = ev.newWidth;;
 		this._shellSz.y = ev.newHeight;
-		this.layoutChanged(LaAppViewMgr.RESIZE);
+		this.layoutChanged(ZaAppViewMgr.RESIZE);
 	}
 }
 
 // Handles sash movement. An attempt to move the sash beyond the extent of the overview 
 // panel or the view results in no movement at all.
-LaAppViewMgr.prototype._sashCallback =
+ZaAppViewMgr.prototype._sashCallback =
 function(delta) {
 	var absDelta = Math.abs(delta);
 	var view = this._views[this._currentView];

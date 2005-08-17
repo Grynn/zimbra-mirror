@@ -29,86 +29,86 @@ TEXTAREA {
 }
 
 /* Login Panel */
-.LaLoginDialog {
+.ZaLoginDialog {
 	background-color: #b7b7b7; 
-	background-image:url(/liquidAdmin/skins/steel/images/bg_steel.gif);
+	background-image:url(/zimbraAdmin/skins/steel/images/bg_steel.gif);
 	overflow:hidden;
 }
-.LaLoginDialog-Transparent {background-color: transparent;}
-.LaLoginDialog-HeaderPanel, .LaLoginDialog-MainPanel {width: 448px;}
-.LaLoginDialog-HeaderPanel {
-	background-image: url("/liquidAdmin/img/hiRes/non-web/LoginBanner.jpg");
+.ZaLoginDialog-Transparent {background-color: transparent;}
+.ZaLoginDialog-HeaderPanel, .ZaLoginDialog-MainPanel {width: 448px;}
+.ZaLoginDialog-HeaderPanel {
+	background-image: url("/zimbraAdmin/img/hiRes/non-web/LoginBanner.jpg");
 	border: 1px solid rgb(124, 124, 148);
 }
-.LaLoginDialog-HeaderText, .LaLoginDialog-SubHeaderText {
+.ZaLoginDialog-HeaderText, .ZaLoginDialog-SubHeaderText {
 	color: white;
 }
-.LaLoginDialog-HeaderText {
+.ZaLoginDialog-HeaderText {
 	font-style: bold;
 }
 
-.LaLoginButton {
+.ZaLoginButton {
 	font-size: 12px;
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
-	background-image:url(/liquidAdmin/skins/steel/images/bg_button_up.gif);
+	background-image:url(/zimbraAdmin/skins/steel/images/bg_button_up.gif);
 	border:1px outset #999999;	
 	width:50px;
 }
 
-.LaLoginButton-activated {
-	background-image:url(/liquidAdmin/skins/steel/images/bg_button_down.gif);
+.ZaLoginButton-activated {
+	background-image:url(/zimbraAdmin/skins/steel/images/bg_button_down.gif);
 	border:1px outset #999999;	
 	font-size: 12px;
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
 	width:50px;
 }
 
-.LaLoginButton-triggered {
-	background-image:url(/liquidAdmin/skins/steel/images/bg_button_down.gif);
+.ZaLoginButton-triggered {
+	background-image:url(/zimbraAdmin/skins/steel/images/bg_button_down.gif);
 	border:1px inset #999999;	
 	font-size: 12px;
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
 	width:50px;
 }
 
-.LaLoginDialog_LogOnButton {
+.ZaLoginDialog_LogOnButton {
 	font-size: 12px;
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
 }
 
-.LaLoginDialog-SubHeaderText {font-size: 12pt;}
-.LaLoginDialog-MainPanel, .LaLoginDialog-ErrorPanel {
+.ZaLoginDialog-SubHeaderText {font-size: 12pt;}
+.ZaLoginDialog-MainPanel, .ZaLoginDialog-ErrorPanel {
 	border: 1px solid rgb(124, 124, 148);
 }
-.LaLoginDialog-MainPanel {background-color: white; table-layout:fixed;}
+.ZaLoginDialog-MainPanel {background-color: white; table-layout:fixed;}
 
-.LaLoginDialog-ErrorPanel {
+.ZaLoginDialog-ErrorPanel {
   background-color: rgb(255, 255, 204);
   width:417px;
 }
-.LaLoginDialog-ErrorIcon {width: 16px;}
-.LaLoginDialog-ErrorText {width: 360px;}
+.ZaLoginDialog-ErrorIcon {width: 16px;}
+.ZaLoginDialog-ErrorText {width: 360px;}
 
 .Text {
 	font-size:12px;
 }
 
-.LaStatusView {background-color: white; }
+.ZaStatusView {background-color: white; }
 
-.LaNewAccountDialog {
+.ZaNewAccountDialog {
 	width: 500px;
 }
 
-.LaNewDomainDialog {
+.ZaNewDomainDialog {
 	width: 500px;
 }
 
-.LaNewCosDialog {
+.ZaNewCosDialog {
 	width: 500px;
 }
 
 /* Account */
-.LaAccountView {
+.ZaAccountView {
 	background-color: rgb(245, 245, 245);
 }
 
@@ -126,69 +126,69 @@ TEXTAREA {
 	padding: 3px;
 }
 
-.LaChngPwdDlg {
+.ZaChngPwdDlg {
 	width: 500px;
 }
 
-.LaDomainGeneralPropPage {
+.ZaDomainGeneralPropPage {
 	background-color: rgb(245, 245, 245);
 }
-.LaDomainGeneralPropPage .TitleBar {
+.ZaDomainGeneralPropPage .TitleBar {
 	background-color: rgb(215, 215, 215);
 	filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#FFF0F0F0,endColorStr=#FF9997B5);
 }
-.LaDomainGeneralPropPage .Title {
+.ZaDomainGeneralPropPage .Title {
 	font: bold 12pt Arial, Helvetica, sans-serif;
 	padding: 3px;
 }
 
-.LaDomainGALPropPage {
+.ZaDomainGALPropPage {
 	background-color: rgb(245, 245, 245);
 }
-.LaDomainGALPropPage .TitleBar {
+.ZaDomainGALPropPage .TitleBar {
 	background-color: rgb(215, 215, 215);
 	filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#FFF0F0F0,endColorStr=#FF9997B5);
 }
-.LaDomainGALPropPage .Title {
+.ZaDomainGALPropPage .Title {
 	font: bold 12pt Arial, Helvetica, sans-serif;
 	padding: 3px;
 }
 
-.LaDomainAuthPropPage {
+.ZaDomainAuthPropPage {
 	background-color: rgb(245, 245, 245);
 }
-.LaDomainAuthPropPage .TitleBar {
+.ZaDomainAuthPropPage .TitleBar {
 	background-color: rgb(215, 215, 215);
 	filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#FFF0F0F0,endColorStr=#FF9997B5);
 }
-.LaDomainAuthPropPage .Title {
+.ZaDomainAuthPropPage .Title {
 	font: bold 12pt Arial, Helvetica, sans-serif;
 	padding: 3px;
 }
 
-.LaDomainView {
+.ZaDomainView {
 	background-color: rgb(245, 245, 245);
 	width: 100%;
 	align: left;
 }
-.LaDomainView .TitleBar {
+.ZaDomainView .TitleBar {
 	background-color: rgb(215, 215, 215);
 	filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#FFF0F0F0,endColorStr=#FF9997B5);
 }
-.LaDomainView .Title {
+.ZaDomainView .Title {
 	font: bold 12pt Arial, Helvetica, sans-serif;
 	padding: 3px;
 }
 
 /* COS */
-.LaCosView {
+.ZaCosView {
 	background-color: rgb(245, 245, 245);
 }
-.LaCosView .TitleBar {
+.ZaCosView .TitleBar {
 	background-color: rgb(215, 215, 215);
 	filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#FFF0F0F0,endColorStr=#FF9997B5);
 }
-.LaCosView .Title {
+.ZaCosView .Title {
 	font: bold 12pt Arial, Helvetica, sans-serif;
 	padding: 3px;
 }
@@ -222,17 +222,17 @@ TEXTAREA {
 .DwtTabButtonBR {
 }
 
-.LaServerGeneralPropPage {
+.ZaServerGeneralPropPage {
 	background-color: rgb(245, 245, 245);
 	width: 100%;
 	align: left;	
 }
 
-.LaServerGeneralPropPage .TitleBar {
+.ZaServerGeneralPropPage .TitleBar {
 	background-color: rgb(215, 215, 215);
 	filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#FFF0F0F0,endColorStr=#FF9997B5);
 }
-.LaServerGeneralPropPage .Title {
+.ZaServerGeneralPropPage .Title {
 	font: bold 12pt Arial, Helvetica, sans-serif;
 	padding: 3px;
 }
@@ -251,9 +251,9 @@ TEXTAREA {
 	overflow:auto;
 }
 
-.LaToolBar {
+.ZaToolBar {
 	width: 100%;
-	background-image:url(/liquidAdmin/skins/steel/images/bg_pebble.gif);
+	background-image:url(/zimbraAdmin/skins/steel/images/bg_pebble.gif);
 	border-style: solid;
 	border-width: 0px 0px 2px 0px;
 	border-bottom-color: #777777;
@@ -277,11 +277,11 @@ TEXTAREA {
 	color: black;
 }
 
-.LaStatusServicesPage {
+.ZaStatusServicesPage {
 	background-color: rgb(255, 255, 255);
 }
 
-.LaStatusServicesPage .DwtButton { 
+.ZaStatusServicesPage .DwtButton { 
   width: 60px;
 }
 
@@ -294,7 +294,7 @@ TEXTAREA {
 	width:25em;
 }
 
-.LaGlobalAttachExt {
+.ZaGlobalAttachExt {
 	height: 200px;
 }
 
@@ -303,7 +303,7 @@ TEXTAREA {
 /*
 * Conventions
 *
-* - Classes that start with "Dwt" or "Lm" have a corollary Javascript object.
+* - Classes that start with "Dwt" or "Zm" have a corollary Javascript object.
 * - Use one line if there is only one selector and one declaration. Otherwise, indent each declaration on its own line.
 * - Group selectors to avoid repetition of styles, as appropriate (ie group within a section). That means you may have
 *   to look at more than one definition to figure out all the applicable styles, but it lets you give the styles a 
@@ -419,7 +419,7 @@ DIV.vSpace {
 }
 .MainShell {
 	background-color: #B7B7B7;
-	background-image:url(/liquidAdmin/skins/steel/images/bg_steel.gif);
+	background-image:url(/zimbraAdmin/skins/steel/images/bg_steel.gif);
 }
 
 /* As of 07/22/05 Linux (or rather X) has a nasty issue that causes a huge perf problem with opacity.*/
@@ -449,9 +449,9 @@ DIV.vSpace {
 /*
 * Splash Screen
 */
-.LaSplashScreen, .LaSplashScreen table {
+.ZaSplashScreen, .ZaSplashScreen table {
 	background-color: #B7B7B7;
-	background-image:url(/liquidAdmin/skins/steel/images/bg_steel.gif);
+	background-image:url(/zimbraAdmin/skins/steel/images/bg_steel.gif);
 }
 
 
@@ -494,7 +494,7 @@ DIV.vSpace {
 * Sashes
 */
 
-.DwtSash, .AppSash-horiz, .AppSash-vert { 	background-image:url(/liquidAdmin/skins/steel/images/bg_steel.gif); }
+.DwtSash, .AppSash-horiz, .AppSash-vert { 	background-image:url(/zimbraAdmin/skins/steel/images/bg_steel.gif); }
 .AppSash-horiz { width: 5px; }
 .AppSash-vert { 
 	height: 5px;
@@ -565,23 +565,23 @@ DIV.vSpace {
 }
 
 .DwtButton, .ColorButton, .TBButton-activated, .TBButtonWhite-activated {
-	background-image:url(/liquidAdmin/skins/steel/images/bg_button_up.gif);
+	background-image:url(/zimbraAdmin/skins/steel/images/bg_button_up.gif);
 	border:1px outset #999999;	
 }
 
 .DwtButton-activated, .ColorButton-activated {
-	background-image:url(/liquidAdmin/skins/steel/images/bg_button_down.gif);
+	background-image:url(/zimbraAdmin/skins/steel/images/bg_button_down.gif);
 	border:1px outset #999999;	
 }
 
 .DwtButton-triggered, .ColorButton-triggered, .TBButton-triggered, .TBButtonWhite-triggered {
-	background-image:url(/liquidAdmin/skins/steel/images/bg_button_down.gif);
+	background-image:url(/zimbraAdmin/skins/steel/images/bg_button_down.gif);
 	border:1px inset #999999;	
 }
 
 
 .DwtButton-toggled, .ColorButton-toggled, .TBButton-toggled, .TBButtonWhite-toggled {
-	background-image:url(/liquidAdmin/skins/steel/images/bg_button_down.gif);
+	background-image:url(/zimbraAdmin/skins/steel/images/bg_button_down.gif);
 	border:1px inset #999999;	
 }
 
@@ -605,7 +605,7 @@ DIV.vSpace {
 	padding: 10px;
 }
 .DwtDialog textarea { width: 100%; }
-.DwtDialog .Label { font-size: 10pt; }
+.DwtDialog .Zabel { font-size: 10pt; }
 .DwtDialog .Field { width: 290px; }
 
 /* Message dialog */
@@ -617,34 +617,34 @@ DIV.vSpace {
 .DwtColorPicker table td img { border: 1px none black; }
 
 /* Login Panel */
-.LmLoginDialog {background-color: rgb(58, 110, 165);}
-.LmLoginDialog-Transparent {background-color: transparent;}
-.LmLoginDialog-HeaderPanel, .LmLoginDialog-MainPanel {width: 448px;}
-.LmLoginDialog-HeaderPanel {
-	background-image: url("/liquidAdmin/img/hiRes/non-web/LoginBanner.jpg");
+.ZmLoginDialog {background-color: rgb(58, 110, 165);}
+.ZmLoginDialog-Transparent {background-color: transparent;}
+.ZmLoginDialog-HeaderPanel, .ZmLoginDialog-MainPanel {width: 448px;}
+.ZmLoginDialog-HeaderPanel {
+	background-image: url("/zimbraAdmin/img/hiRes/non-web/LoginBanner.jpg");
 	border: 1px solid rgb(124, 124, 148);
 }
-.LmLoginDialog-HeaderText, .LmLoginDialog-SubHeaderText {
+.ZmLoginDialog-HeaderText, .ZmLoginDialog-SubHeaderText {
 	color: white;
 }
-.LmLoginDialog-HeaderText {
+.ZmLoginDialog-HeaderText {
 	font-style: bold
 	font-size: 14pt;
 }
-.LmLoginDialog-SubHeaderText {font-size: 12pt;}
-.LmLoginDialog-MainPanel, .LmLoginDialog-ErrorPanel {
+.ZmLoginDialog-SubHeaderText {font-size: 12pt;}
+.ZmLoginDialog-MainPanel, .ZmLoginDialog-ErrorPanel {
 	border: 1px solid rgb(124, 124, 148);
 }
-.LmLoginDialog-MainPanel {background-color: white; table-layout:fixed;}
-.LmLoginDialog-Field {width: 290px}
+.ZmLoginDialog-MainPanel {background-color: white; table-layout:fixed;}
+.ZmLoginDialog-Field {width: 290px}
 
-.LmLoginDialog-ErrorPanel {
+.ZmLoginDialog-ErrorPanel {
   background-color: rgb(255, 255, 204);
   width:417px;
 }
 
-.LmLoginDialog-ErrorText {width: 360px;}
-.LmLoginDialog .DwtButton { width: 50px; }
+.ZmLoginDialog-ErrorText {width: 360px;}
+.ZmLoginDialog .DwtButton { width: 50px; }
 
 /* New tag dialog */
 .TagColorMenu {
@@ -663,13 +663,13 @@ DIV.vSpace {
 .FolderTree td {padding: 0;}
 
 /* Contact picker */
-.LmContactPicker .abPickList {
+.ZmContactPicker .abPickList {
 	width: 250px;
 	height: 285px;
 	margin: 5 5 0 5;
 }
 
-.LmContactPicker .DwtListView {
+.ZmContactPicker .DwtListView {
 	border: 1px solid black;
 	background-color: white;
 }
@@ -810,14 +810,14 @@ DIV.vSpace {
 	text-align: center;
 }
 /* Autocompletion */
-.LmAutocompleteListView {
+.ZmAutocompleteListView {
 	background-color: rgb(245, 245, 245);
 	border: 1px outset;
 	padding: 1px;
 	width: auto;
 }
-.LmAutocompleteListView .Row, .LmAutocompleteListView .Row-selected {padding: 1px;}
-.LmAutocompleteListView .Row-selected { color: white; }
+.ZmAutocompleteListView .Row, .ZmAutocompleteListView .Row-selected {padding: 1px;}
+.ZmAutocompleteListView .Row-selected { color: white; }
 
 /* Row display and highlighting */
 .Row, .Row-selected, .Row-matched, .Row-matched-drag, 
@@ -882,17 +882,17 @@ DIV.vSpace {
 
 .SearchPanel {
 	width:100%;
-	background-image:url(/liquidAdmin/skins/steel/images/bg_steel.gif);	
+	background-image:url(/zimbraAdmin/skins/steel/images/bg_steel.gif);	
 }
 
 .SearchToolBar {
 	width:100%;
-	background-image:url(/liquidAdmin/skins/steel/images/bg_steel.gif);	
+	background-image:url(/zimbraAdmin/skins/steel/images/bg_steel.gif);	
 }
 
 .SearchTBSearchField {
 	width:100%;
-	background-image:url(/liquidAdmin/skins/steel/images/bg_steel.gif);	
+	background-image:url(/zimbraAdmin/skins/steel/images/bg_steel.gif);	
 }
 
 .nobreak {
@@ -961,7 +961,7 @@ DIV.vSpace {
 	background-color: rgb(198, 197, 215);
 }
 
-.LmFilterPrefView .LmToolBar { 
+.ZmFilterPrefView .ZmToolBar { 
   position : relative;
   height:25px;
   border-top: 2px solid rgb(37, 87, 173);
@@ -971,29 +971,29 @@ DIV.vSpace {
 
 }
 
-.LmFilterPrefView .summaryTable { 
+.ZmFilterPrefView .summaryTable { 
   table-layout:fixed; 
   width:100%; 
   height:100%;
 }
 
-.LmFilterPrefView .DwtListView { 
+.ZmFilterPrefView .DwtListView { 
   width:100%;
 }
-.LmFilterPrefView .filterSummaryContainer { 
+.ZmFilterPrefView .filterSummaryContainer { 
   height :100%;
   overflow : visible;
 }
 
-.LmFilterPrefView .DwtButton { 
+.ZmFilterPrefView .DwtButton { 
   margin-bottom:5px;
 }
 
-.LmFilterDetailsView {  
+.ZmFilterDetailsView {  
   width:760px;
 }
 
-.LmFilterDetailsView .shadedBox  {
+.ZmFilterDetailsView .shadedBox  {
   border-top: 1px solid rgb(150, 150, 150); 
   border-bottom:1px solid rgb(240, 240, 240); 
   border-right: 1px solid rgb(200, 200, 200);
@@ -1001,35 +1001,35 @@ DIV.vSpace {
   background-color: rgb(210, 210, 210);
 }
 
-.LmFilterDetailsView .shadedBox .pickerButton,
-.LmFilterDetailsView .shadedBox .pickerButton-activated, 
-.LmFilterDetailsView .shadedBox .pickerButton-triggered{ 
+.ZmFilterDetailsView .shadedBox .pickerButton,
+.ZmFilterDetailsView .shadedBox .pickerButton-activated, 
+.ZmFilterDetailsView .shadedBox .pickerButton-triggered{ 
   width: 120px;
   background-color: white;
   border: 1px solid rgb(127,157, 185); 
 }
 
-.LmFilterDetailsView .paddedTableCell { 
+.ZmFilterDetailsView .paddedTableCell { 
   padding: 4px 0px 0px 2px;
 }
 
-.LmFilterDetailsView .DwtButton {
+.ZmFilterDetailsView .DwtButton {
   border: 1px solid black;
   background-color: rgb(198, 197, 215);
   width: 50px;
 }
-.LmFilterDetailsView .DwtButton.activated {  
+.ZmFilterDetailsView .DwtButton.activated {  
   background-color: rgb(249, 221, 135);
 }
 
-.LmFilterPrefView .DwtListView {
+.ZmFilterPrefView .DwtListView {
   border-bottom:1px solid rgb(189, 189, 189); 
   border-left:1px solid rgb(189, 189, 189); 
   border-top:1px solid rgb(100, 100, 100); 
   border-right:1px solid rgb(110, 110, 110)
 }
 
-.LmFilterPrefView .DwtListView-Rows {
+.ZmFilterPrefView .DwtListView-Rows {
   overflow:visible;
   /* 
      *  this is very important for the filter rules on IE
@@ -1041,12 +1041,12 @@ DIV.vSpace {
 /*
 * Print View
 */
-.LmPrintView-username {
+.ZmPrintView-username {
 	font-size: 14pt;
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
 }
 
-.LmPrintView-company {
+.ZmPrintView-company {
 	font-size: 18pt;
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
 }
@@ -1055,19 +1055,19 @@ DIV.vSpace {
 * Preferences
 */
 
-.LmPrefView {background-color: rgb(245, 245, 245); height:100%}
-.LmPrefView .TitleBar {padding-top: 10px;}
-.LmPrefView .DwtTabTable {background-color: rgb(198, 197, 215);}
+.ZmPrefView {background-color: rgb(245, 245, 245); height:100%}
+.ZmPrefView .TitleBar {padding-top: 10px;}
+.ZmPrefView .DwtTabTable {background-color: rgb(198, 197, 215);}
 
 /* Tabs */
-.LmPrefView .DwtTabButton .Text {font-weight: bold;}
-.LmPrefView .DwtTabButton-active {background-color: rgb(245, 245, 245);}
-.LmPrefView .DwtTabButton-inactive {background-color: rgb(198, 197, 215);}
+.ZmPrefView .DwtTabButton .Text {font-weight: bold;}
+.ZmPrefView .DwtTabButton-active {background-color: rgb(245, 245, 245);}
+.ZmPrefView .DwtTabButton-inactive {background-color: rgb(198, 197, 215);}
 
-.LmPrefView tr {vertical-align: top;}
+.ZmPrefView tr {vertical-align: top;}
 
 /* Divider between groups of related preferences */
-.LmPrefView .horizSep {
+.ZmPrefView .horizSep {
 	margin-top: 4px;
 	border-bottom: 2px solid rgb(198, 197, 215);
 	font-size: 1px;
@@ -1078,17 +1078,17 @@ DIV.vSpace {
 	table-layout: fixed;
 	width: 100%;
 }
-.prefLabel {width: 300px;}
+.prefZabel {width: 300px;}
 .prefContent {width: 410px;}
 
 /* make things line up visually */
-.LmPrefView .leftPad {padding-left: 5px;}
+.ZmPrefView .leftPad {padding-left: 5px;}
 
 /* buttons */
-.LmPreferencesPage .changePasswordButton {width: 50px;}
-.LmPreferencesPage .resetButton {width: 100px;}
+.ZmPreferencesPage .changePasswordButton {width: 50px;}
+.ZmPreferencesPage .resetButton {width: 100px;}
 
-.Row .LmFilterDetailsView td {
+.Row .ZmFilterDetailsView td {
   vertical-align: center;
   white-space: nowrap;
   overflow: hidden;
@@ -1177,7 +1177,7 @@ DIV.vSpace {
 	position: static;
 }
 
-.DwtStepLabelActive {
+.DwtStepZabelActive {
 	font-size: 12pt;
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
 	font-weight: bold;
@@ -1186,7 +1186,7 @@ DIV.vSpace {
 	padding-left: 2px;	
 }
 
-.DwtStepLabelInactive {
+.DwtStepZabelInactive {
 	font-size: 14pt;
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
 	font-weight: normal;
@@ -1221,7 +1221,7 @@ DIV.vSpace {
 	padding: 3px;
 }
 
-.LmChangePasswordDialogInput { 
+.ZmChangePasswordDialogInput { 
   width:250px;
 }
 
@@ -1236,13 +1236,13 @@ DIV.vSpace {
 	color: rgb(250, 0, 0);
 }
 
-.LmBalloonDialog P, .LmBalloonDialog TD, .LmBalloonDialog DIV, 
-.LmBalloonDialog SPAN, .LmBalloonDialog SELECT, .LmBalloonDialog INPUT, 
-.LmBalloonDialog TEXTAREA {
+.ZmBalloonDialog P, .ZmBalloonDialog TD, .ZmBalloonDialog DIV, 
+.ZmBalloonDialog SPAN, .ZmBalloonDialog SELECT, .ZmBalloonDialog INPUT, 
+.ZmBalloonDialog TEXTAREA {
   font-size:10px;
 }
 
-.LmBalloonDialog {
+.ZmBalloonDialog {
   position:absolute;
   left:200;
   top:100;
@@ -1252,7 +1252,7 @@ DIV.vSpace {
 }
 
 
-.LmBalloonDialog .buttonsDiv .DwtButton { 
+.ZmBalloonDialog .buttonsDiv .DwtButton { 
   width:40px;
   border-left:      2px groove rgb(154, 155, 155);
   border-top:       2px groove rgb(154, 155, 155);
@@ -1260,7 +1260,7 @@ DIV.vSpace {
   border-right:     2px groove rgb(123, 123, 123);
 }
 
-.LmBalloonDialog .buttonsDiv .DwtButton.activated { 
+.ZmBalloonDialog .buttonsDiv .DwtButton.activated { 
   width:40px;
   border-left:      2px groove rgb(154, 155, 155);
   border-top:       2px groove rgb(154, 155, 155);
@@ -1269,7 +1269,7 @@ DIV.vSpace {
   background-color: #4da5FF;
 }
 
-.LmBalloonDialog .buttonsDiv .DwtButton.activated .Text { 
+.ZmBalloonDialog .buttonsDiv .DwtButton.activated .Text { 
   color: white;
 }
 
@@ -1281,7 +1281,7 @@ DIV.vSpace {
   text-align:right;
 }
 
-.checkboxLabel { 
+.checkboxZabel { 
   font-weight:bold;
 };
 
@@ -1334,138 +1334,138 @@ DIV.vSpace {
 .balloonClose {
   width:15;
   height:14;
-  /*background-image:url(/liquidAdmin/img/hiRes/balloon_close.png);*/
-  /*filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/liquidAdmin/img/hiRes/balloon_close.png', sizingMethod='scale');*/
+  /*background-image:url(/zimbraAdmin/img/hiRes/balloon_close.png);*/
+  /*filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/zimbraAdmin/img/hiRes/balloon_close.png', sizingMethod='scale');*/
 }
 .balloonCloseOver { 
   width:15;
   height:14;
-  /*background-image:url(/liquidAdmin/img/hiRes/balloon_close_over.png);*/
-  /*filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/liquidAdmin/img/hiRes/balloon_close_over.png', sizingMethod='scale');*/
+  /*background-image:url(/zimbraAdmin/img/hiRes/balloon_close_over.png);*/
+  /*filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/zimbraAdmin/img/hiRes/balloon_close_over.png', sizingMethod='scale');*/
 }
 .balloonEdit { 
   width:30;
   height:19;
-  /*background-image:url(/liquidAdmin/img/hiRes/balloon_edit.png);*/
-  /*filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/liquidAdmin/img/hiRes/balloon_edit.png', sizingMethod='scale');*/
+  /*background-image:url(/zimbraAdmin/img/hiRes/balloon_edit.png);*/
+  /*filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/zimbraAdmin/img/hiRes/balloon_edit.png', sizingMethod='scale');*/
 }
 .balloonEditOver { 
   width:30;
   height:19;
-  /*background-image:url(/liquidAdmin/img/hiRes/balloon_edit_over.png);*/
-  /*filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/liquidAdmin/img/hiRes/balloon_edit_over.png', sizingMethod='scale');*/
+  /*background-image:url(/zimbraAdmin/img/hiRes/balloon_edit_over.png);*/
+  /*filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/zimbraAdmin/img/hiRes/balloon_edit_over.png', sizingMethod='scale');*/
 }
 .balloonSave { 
   width:35;
   height:19;
-  /*background-image:url(/liquidAdmin/img/hiRes/balloon_save.png);*/
-  /*filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/liquidAdmin/img/hiRes/balloon_save.png', sizingMethod='scale');*/
+  /*background-image:url(/zimbraAdmin/img/hiRes/balloon_save.png);*/
+  /*filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/zimbraAdmin/img/hiRes/balloon_save.png', sizingMethod='scale');*/
 }
 .balloonSaveOver { 
   width:35;
   height:19;
-  /*background-image:url(/liquidAdmin/img/hiRes/balloon_save_over.png);*/
-  /*filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/liquidAdmin/img/hiRes/balloon_save_over.png', sizingMethod='scale');*/
+  /*background-image:url(/zimbraAdmin/img/hiRes/balloon_save_over.png);*/
+  /*filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/zimbraAdmin/img/hiRes/balloon_save_over.png', sizingMethod='scale');*/
 }
 .balloonMore {
   width:35;
   height:19;
-  /*background-image:url(/liquidAdmin/img/hiRes/balloon_more.png);*/
-  /*filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/liquidAdmin/img/hiRes/balloon_more.png', sizingMethod='scale');*/
+  /*background-image:url(/zimbraAdmin/img/hiRes/balloon_more.png);*/
+  /*filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/zimbraAdmin/img/hiRes/balloon_more.png', sizingMethod='scale');*/
 }
 .balloonMoreOver { 
   width:35;
   height:19;
-  /*background-image:url(/liquidAdmin/img/hiRes/balloon_more_over.png);*/
-  /*filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/liquidAdmin/img/hiRes/balloon_more_over.png', sizingMethod='scale');*/
+  /*background-image:url(/zimbraAdmin/img/hiRes/balloon_more_over.png);*/
+  /*filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/zimbraAdmin/img/hiRes/balloon_more_over.png', sizingMethod='scale');*/
 }
 
 .balloonCancel	{ 
   width:42;
   height:19;
-  /*background-image:url(/liquidAdmin/img/hiRes/balloon_cancel.png);*/
-  /*filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/liquidAdmin/img/hiRes/balloon_cancel.png', sizingMethod='scale');*/
+  /*background-image:url(/zimbraAdmin/img/hiRes/balloon_cancel.png);*/
+  /*filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/zimbraAdmin/img/hiRes/balloon_cancel.png', sizingMethod='scale');*/
 }
 .balloonCancelOver{ 
   width:42;
   height:19;
-  /*background-image:url(/liquidAdmin/img/hiRes/balloon_cancel_over.png);*/
-  /*filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/liquidAdmin/img/hiRes/balloon_cancel_over.png', sizingMethod='scale');*/
+  /*background-image:url(/zimbraAdmin/img/hiRes/balloon_cancel_over.png);*/
+  /*filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/zimbraAdmin/img/hiRes/balloon_cancel_over.png', sizingMethod='scale');*/
 }
 .balloonTL { 
   width:141;
   height:21;
-  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/liquidAdmin/img/hiRes/corners/balloon_TL.png', sizingMethod='scale');
+  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/zimbraAdmin/img/hiRes/corners/balloon_TL.png', sizingMethod='scale');
 }
 html>body .balloonTL { 
-  background-image:url(/liquidAdmin/img/hiRes/corners/balloon_TL.png);
+  background-image:url(/zimbraAdmin/img/hiRes/corners/balloon_TL.png);
 }
 .balloonTM { 
   Xwidth:100%;
   height:21;
-  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/liquidAdmin/img/hiRes/horizborders/balloon_TM.png', sizingMethod='scale');
+  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/zimbraAdmin/img/hiRes/horizborders/balloon_TM.png', sizingMethod='scale');
 }
 html>body .balloonTM { 
-  background-image:url(/liquidAdmin/img/hiRes/horizborders/balloon_TM.png);
+  background-image:url(/zimbraAdmin/img/hiRes/horizborders/balloon_TM.png);
 }
 .balloonTR { 
   width:22;
   height:21;
-  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/liquidAdmin/img/hiRes/corners/balloon_TR.png', sizingMethod='scale');
+  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/zimbraAdmin/img/hiRes/corners/balloon_TR.png', sizingMethod='scale');
 }
 html>body .balloonTR { 
-  background-image:url(/liquidAdmin/img/hiRes/corners/balloon_TR.png);
+  background-image:url(/zimbraAdmin/img/hiRes/corners/balloon_TR.png);
 }
 .balloonML { 
   width:141;
   height:100%;
-  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/liquidAdmin/img/hiRes/vertborders/balloon_ML.png', sizingMethod='scale');
+  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/zimbraAdmin/img/hiRes/vertborders/balloon_ML.png', sizingMethod='scale');
 }
 html>body .balloonML { 
-  background-image:url(/liquidAdmin/img/hiRes/vertborders/balloon_ML.png);
+  background-image:url(/zimbraAdmin/img/hiRes/vertborders/balloon_ML.png);
 }
 .balloonMM { 
   width:100%;
   height:100%;
-  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/liquidAdmin/img/hiRes/other/balloon_MM.png', sizingMethod='scale');
+  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/zimbraAdmin/img/hiRes/other/balloon_MM.png', sizingMethod='scale');
 }
 html>body .balloonMM { 
-  background-image:url(/liquidAdmin/img/hiRes/other/balloon_MM.png);
+  background-image:url(/zimbraAdmin/img/hiRes/other/balloon_MM.png);
 }
 .balloonMR { 
   width:22;
   height:100%;
-  background-image:url(/liquidAdmin/img/hiRes/vertborders/balloon_MR.png);
-  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/liquidAdmin/img/hiRes/vertborders/balloon_MR.png', sizingMethod='scale');
+  background-image:url(/zimbraAdmin/img/hiRes/vertborders/balloon_MR.png);
+  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/zimbraAdmin/img/hiRes/vertborders/balloon_MR.png', sizingMethod='scale');
 }
 html>body .balloonMR { 
-  background-image:url(/liquidAdmin/img/hiRes/vertborders/balloon_MR.png);
+  background-image:url(/zimbraAdmin/img/hiRes/vertborders/balloon_MR.png);
 }
 .balloonBL { 
   width:141;
   height:69;
-  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/liquidAdmin/img/hiRes/corners/balloon_BL.png', sizingMethod='scale');
+  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/zimbraAdmin/img/hiRes/corners/balloon_BL.png', sizingMethod='scale');
 }
 
 html>body .balloonBL { 
-  background-image:url(/liquidAdmin/img/hiRes/corners/balloon_BL.png);
+  background-image:url(/zimbraAdmin/img/hiRes/corners/balloon_BL.png);
 }
 
 .balloonBM { 
   width:100%;
   height:69;
-  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/liquidAdmin/img/hiRes/horizborders/balloon_BM.png', sizingMethod='scale');
+  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/zimbraAdmin/img/hiRes/horizborders/balloon_BM.png', sizingMethod='scale');
 }
 html>body .balloonBM { 
-  background-image:url(/liquidAdmin/img/hiRes/horizborders/balloon_BM.png);
+  background-image:url(/zimbraAdmin/img/hiRes/horizborders/balloon_BM.png);
 }
 .balloonBR { 
   width:22;
   height:69;
-  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/liquidAdmin/img/hiRes/corners/balloon_BR.png', sizingMethod='scale');
+  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/zimbraAdmin/img/hiRes/corners/balloon_BR.png', sizingMethod='scale');
 }
 html>body .balloonBR { 
-  background-image:url(/liquidAdmin/img/hiRes/corners/balloon_BR.png);
+  background-image:url(/zimbraAdmin/img/hiRes/corners/balloon_BR.png);
 }
 
 
@@ -1844,55 +1844,55 @@ html>body .balloonBR {
 
 /* should be dynamically generated */
 
-.dialog_inset_tl			{	background-image:url(/liquidAdmin/skins/steel/images/dialog_inset_tl.gif);	 	width:10;	height:10;	overflow:hidden;	}
-.dialog_inset_t				{	background-image:url(/liquidAdmin/skins/steel/images/dialog_inset_t.gif); 		width:10;	height:10;	overflow:hidden;	}
-.dialog_inset_tr			{	background-image:url(/liquidAdmin/skins/steel/images/dialog_inset_tr.gif); 		width:10;	height:10;	overflow:hidden;	}
-.dialog_inset_l				{	background-image:url(/liquidAdmin/skins/steel/images/dialog_inset_l.gif); 		width:10;	height:10;	overflow:hidden;	}
-.dialog_inset_r				{	background-image:url(/liquidAdmin/skins/steel/images/dialog_inset_r.gif); 		width:10;	height:10;	overflow:hidden;	}
-.dialog_inset_bl			{	background-image:url(/liquidAdmin/skins/steel/images/dialog_inset_bl.gif); 		width:10;	height:10;	overflow:hidden;	}
-.dialog_inset_b				{	background-image:url(/liquidAdmin/skins/steel/images/dialog_inset_b.gif); 		width:10;	height:10;	overflow:hidden;	}
-.dialog_inset_br			{	background-image:url(/liquidAdmin/skins/steel/images/dialog_inset_br.gif);	 	width:10;	height:10;	overflow:hidden;	}
+.dialog_inset_tl			{	background-image:url(/zimbraAdmin/skins/steel/images/dialog_inset_tl.gif);	 	width:10;	height:10;	overflow:hidden;	}
+.dialog_inset_t				{	background-image:url(/zimbraAdmin/skins/steel/images/dialog_inset_t.gif); 		width:10;	height:10;	overflow:hidden;	}
+.dialog_inset_tr			{	background-image:url(/zimbraAdmin/skins/steel/images/dialog_inset_tr.gif); 		width:10;	height:10;	overflow:hidden;	}
+.dialog_inset_l				{	background-image:url(/zimbraAdmin/skins/steel/images/dialog_inset_l.gif); 		width:10;	height:10;	overflow:hidden;	}
+.dialog_inset_r				{	background-image:url(/zimbraAdmin/skins/steel/images/dialog_inset_r.gif); 		width:10;	height:10;	overflow:hidden;	}
+.dialog_inset_bl			{	background-image:url(/zimbraAdmin/skins/steel/images/dialog_inset_bl.gif); 		width:10;	height:10;	overflow:hidden;	}
+.dialog_inset_b				{	background-image:url(/zimbraAdmin/skins/steel/images/dialog_inset_b.gif); 		width:10;	height:10;	overflow:hidden;	}
+.dialog_inset_br			{	background-image:url(/zimbraAdmin/skins/steel/images/dialog_inset_br.gif);	 	width:10;	height:10;	overflow:hidden;	}
 
-.dialog_shadow_tr			{	background-image:url(/liquidAdmin/skins/steel/images/dialog_shadow_tr.gif);	 	width:6;	height:6;	overflow:hidden;	}
-.dialog_shadow_r			{	background-image:url(/liquidAdmin/skins/steel/images/dialog_shadow_r.gif);	 	width:6;	height:6;	overflow:hidden;	}
-.dialog_shadow_br			{	background-image:url(/liquidAdmin/skins/steel/images/dialog_shadow_br.gif);	 	width:6;	height:6;	overflow:hidden;	}
-.dialog_shadow_bl			{	background-image:url(/liquidAdmin/skins/steel/images/dialog_shadow_bl.gif);	 	width:6;	height:6;	overflow:hidden;	}
-.dialog_shadow_b			{	background-image:url(/liquidAdmin/skins/steel/images/dialog_shadow_b.gif);	 	width:6;	height:6;	overflow:hidden;	}
-
-
-.dialog_outset_tl			{	background-image:url(/liquidAdmin/skins/steel/images/dialog_outset_tl.gif); 		width:4;	height:4;	overflow:hidden;	}
-.dialog_outset_t			{	background-image:url(/liquidAdmin/skins/steel/images/dialog_outset_t.gif); 		width:4;	height:4;	overflow:hidden;	}
-.dialog_outset_tr			{	background-image:url(/liquidAdmin/skins/steel/images/dialog_outset_tr.gif); 		width:4;	height:4;	overflow:hidden;	}
-.dialog_outset_l			{	background-image:url(/liquidAdmin/skins/steel/images/dialog_outset_l.gif); 		width:4;	height:4;	overflow:hidden;	}
-.dialog_outset_r			{	background-image:url(/liquidAdmin/skins/steel/images/dialog_outset_r.gif); 		width:4;	height:4;	overflow:hidden;	}
-.dialog_outset_bl			{	background-image:url(/liquidAdmin/skins/steel/images/dialog_outset_bl.gif); 		width:4;	height:4;	overflow:hidden;	}
-.dialog_outset_b			{	background-image:url(/liquidAdmin/skins/steel/images/dialog_outset_b.gif); 		width:4;	height:4;	overflow:hidden;	}
-.dialog_outset_br			{	background-image:url(/liquidAdmin/skins/steel/images/dialog_outset_br.gif); 		width:4;	height:4;	overflow:hidden;	}
+.dialog_shadow_tr			{	background-image:url(/zimbraAdmin/skins/steel/images/dialog_shadow_tr.gif);	 	width:6;	height:6;	overflow:hidden;	}
+.dialog_shadow_r			{	background-image:url(/zimbraAdmin/skins/steel/images/dialog_shadow_r.gif);	 	width:6;	height:6;	overflow:hidden;	}
+.dialog_shadow_br			{	background-image:url(/zimbraAdmin/skins/steel/images/dialog_shadow_br.gif);	 	width:6;	height:6;	overflow:hidden;	}
+.dialog_shadow_bl			{	background-image:url(/zimbraAdmin/skins/steel/images/dialog_shadow_bl.gif);	 	width:6;	height:6;	overflow:hidden;	}
+.dialog_shadow_b			{	background-image:url(/zimbraAdmin/skins/steel/images/dialog_shadow_b.gif);	 	width:6;	height:6;	overflow:hidden;	}
 
 
-.h_sash_l					{	background-image:url(/liquidAdmin/skins/steel/images/h_sash_l.gif); 				width:4;	height:7;	overflow:hidden;	}
-.h_sash_m					{	background-image:url(/liquidAdmin/skins/steel/images/h_sash_m.gif); 				width:20;	height:7;	overflow:hidden;	}
-.h_sash_r					{	background-image:url(/liquidAdmin/skins/steel/images/h_sash_r.gif); 				width:4;	height:7;	overflow:hidden;	}
-.h_sash_grip				{	background-image:url(/liquidAdmin/skins/steel/images/h_sash_grip.gif); 			width:29;	height:7;	overflow:hidden;	}
+.dialog_outset_tl			{	background-image:url(/zimbraAdmin/skins/steel/images/dialog_outset_tl.gif); 		width:4;	height:4;	overflow:hidden;	}
+.dialog_outset_t			{	background-image:url(/zimbraAdmin/skins/steel/images/dialog_outset_t.gif); 		width:4;	height:4;	overflow:hidden;	}
+.dialog_outset_tr			{	background-image:url(/zimbraAdmin/skins/steel/images/dialog_outset_tr.gif); 		width:4;	height:4;	overflow:hidden;	}
+.dialog_outset_l			{	background-image:url(/zimbraAdmin/skins/steel/images/dialog_outset_l.gif); 		width:4;	height:4;	overflow:hidden;	}
+.dialog_outset_r			{	background-image:url(/zimbraAdmin/skins/steel/images/dialog_outset_r.gif); 		width:4;	height:4;	overflow:hidden;	}
+.dialog_outset_bl			{	background-image:url(/zimbraAdmin/skins/steel/images/dialog_outset_bl.gif); 		width:4;	height:4;	overflow:hidden;	}
+.dialog_outset_b			{	background-image:url(/zimbraAdmin/skins/steel/images/dialog_outset_b.gif); 		width:4;	height:4;	overflow:hidden;	}
+.dialog_outset_br			{	background-image:url(/zimbraAdmin/skins/steel/images/dialog_outset_br.gif); 		width:4;	height:4;	overflow:hidden;	}
 
 
-.tab_spacer.gif				{	background-image:url(/liquidAdmin/skins/steel/images/tab_spacer.gif);	 		width:100%;	height:28;	overflow:hidden;	}
+.h_sash_l					{	background-image:url(/zimbraAdmin/skins/steel/images/h_sash_l.gif); 				width:4;	height:7;	overflow:hidden;	}
+.h_sash_m					{	background-image:url(/zimbraAdmin/skins/steel/images/h_sash_m.gif); 				width:20;	height:7;	overflow:hidden;	}
+.h_sash_r					{	background-image:url(/zimbraAdmin/skins/steel/images/h_sash_r.gif); 				width:4;	height:7;	overflow:hidden;	}
+.h_sash_grip				{	background-image:url(/zimbraAdmin/skins/steel/images/h_sash_grip.gif); 			width:29;	height:7;	overflow:hidden;	}
 
-.Imgtab_L					{	background-image:url(/liquidAdmin/skins/steel/images/tab_L.gif);	 				width:9;	height:28;	overflow:hidden;	}
-.Imgtab_M					{	background-image:url(/liquidAdmin/skins/steel/images/tab_M.gif);	 				width:100%;	height:28;	overflow:hidden;	}
-.Imgtab_R					{	background-image:url(/liquidAdmin/skins/steel/images/tab_R.gif);	 				width:9;	height:28;	overflow:hidden;	}
 
-.Imgtab_active_L			{	background-image:url(/liquidAdmin/skins/steel/images/tab_active_L.gif);	 		width:9;	height:28;	overflow:hidden;	}
-.Imgtab_active_M			{	background-image:url(/liquidAdmin/skins/steel/images/tab_active_M.gif);	 		width:100%;	height:28;	overflow:hidden;	}
-.Imgtab_active_R			{	background-image:url(/liquidAdmin/skins/steel/images/tab_active_R.gif);	 		width:9;	height:28;	overflow:hidden;	}
+.tab_spacer.gif				{	background-image:url(/zimbraAdmin/skins/steel/images/tab_spacer.gif);	 		width:100%;	height:28;	overflow:hidden;	}
 
-.Imgtab_selected_L			{	background-image:url(/liquidAdmin/skins/steel/images/tab_selected_L.gif);	 	width:9;	height:28;	overflow:hidden;	}
-.Imgtab_selected_M			{	background-image:url(/liquidAdmin/skins/steel/images/tab_selected_M.gif);	 	width:100%;	height:28;	overflow:hidden;	}
-.Imgtab_selected_R			{	background-image:url(/liquidAdmin/skins/steel/images/tab_selected_R.gif);	 	width:9;	height:28;	overflow:hidden;	}
+.Imgtab_L					{	background-image:url(/zimbraAdmin/skins/steel/images/tab_L.gif);	 				width:9;	height:28;	overflow:hidden;	}
+.Imgtab_M					{	background-image:url(/zimbraAdmin/skins/steel/images/tab_M.gif);	 				width:100%;	height:28;	overflow:hidden;	}
+.Imgtab_R					{	background-image:url(/zimbraAdmin/skins/steel/images/tab_R.gif);	 				width:9;	height:28;	overflow:hidden;	}
 
-.Imgtab_disabled_L			{	background-image:url(/liquidAdmin/skins/steel/images/tab_disabled_L.gif);	 	width:9;	height:28;	overflow:hidden;	}
-.Imgtab_disabled_M			{	background-image:url(/liquidAdmin/skins/steel/images/tab_disabled_M.gif);	 	width:100%;	height:28;	overflow:hidden;	}
-.Imgtab_disabled_R			{	background-image:url(/liquidAdmin/skins/steel/images/tab_disabled_R.gif);	 	width:9;	height:28;	overflow:hidden;	}
+.Imgtab_active_L			{	background-image:url(/zimbraAdmin/skins/steel/images/tab_active_L.gif);	 		width:9;	height:28;	overflow:hidden;	}
+.Imgtab_active_M			{	background-image:url(/zimbraAdmin/skins/steel/images/tab_active_M.gif);	 		width:100%;	height:28;	overflow:hidden;	}
+.Imgtab_active_R			{	background-image:url(/zimbraAdmin/skins/steel/images/tab_active_R.gif);	 		width:9;	height:28;	overflow:hidden;	}
+
+.Imgtab_selected_L			{	background-image:url(/zimbraAdmin/skins/steel/images/tab_selected_L.gif);	 	width:9;	height:28;	overflow:hidden;	}
+.Imgtab_selected_M			{	background-image:url(/zimbraAdmin/skins/steel/images/tab_selected_M.gif);	 	width:100%;	height:28;	overflow:hidden;	}
+.Imgtab_selected_R			{	background-image:url(/zimbraAdmin/skins/steel/images/tab_selected_R.gif);	 	width:9;	height:28;	overflow:hidden;	}
+
+.Imgtab_disabled_L			{	background-image:url(/zimbraAdmin/skins/steel/images/tab_disabled_L.gif);	 	width:9;	height:28;	overflow:hidden;	}
+.Imgtab_disabled_M			{	background-image:url(/zimbraAdmin/skins/steel/images/tab_disabled_M.gif);	 	width:100%;	height:28;	overflow:hidden;	}
+.Imgtab_disabled_R			{	background-image:url(/zimbraAdmin/skins/steel/images/tab_disabled_R.gif);	 	width:9;	height:28;	overflow:hidden;	}
 
 /* end dynamically generated */
 

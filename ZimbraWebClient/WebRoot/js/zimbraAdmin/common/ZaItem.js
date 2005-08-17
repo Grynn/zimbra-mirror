@@ -1,19 +1,19 @@
 /**
-* @class LaItem
+* @class ZaItem
 * @param app reference to the application instance
 **/
-function LaItem(app) {
+function ZaItem(app) {
 	if (arguments.length == 0) return;
 	this._app = app;
-	LaModel.call(this, true);
+	ZaModel.call(this, true);
 
 }
 
-LaItem.prototype = new LaModel;
-LaItem.prototype.constructor = LaItem;
-LaItem.A_objectClass = "objectClass";
-LaItem.A_liquidId = "liquidId";
-LaItem.compareNamesAsc = 
+ZaItem.prototype = new ZaModel;
+ZaItem.prototype.constructor = ZaItem;
+ZaItem.A_objectClass = "objectClass";
+ZaItem.A_zimbraId = "zimbraId";
+ZaItem.compareNamesAsc = 
 function(a,b) {
 	var al = a.name.toLowerCase();
 	var bl = b.name.toLowerCase();
@@ -26,7 +26,7 @@ function(a,b) {
 		return 0;
 }
 
-LaItem.compareNamesDesc = 
+ZaItem.compareNamesDesc = 
 function(a,b) {
 	var al = a.name.toLowerCase();
 	var bl = b.name.toLowerCase();
@@ -39,12 +39,12 @@ function(a,b) {
 		return 0;
 }
 
-LaItem.compareDescription = 
+ZaItem.compareDescription = 
 function(a,b) {
-	return LaItem.compareAttr(a,b,"description");
+	return ZaItem.compareAttr(a,b,"description");
 }
 
-LaItem.compareAttr = 
+ZaItem.compareAttr = 
 function(a, b, attr) {
 	if (a.attrs[attr] < b.attrs[attr])
 		return -1;
@@ -54,12 +54,12 @@ function(a, b, attr) {
 		return 0;
 }
 
-LaItem.prototype.toString = 
+ZaItem.prototype.toString = 
 function() {
-	return "LaItem "+this.type+": name="+this.name+" id="+this.id;
+	return "ZaItem "+this.type+": name="+this.name+" id="+this.id;
 }
 
-LaItem.prototype.initFromDom =
+ZaItem.prototype.initFromDom =
 function(node) {
 	this.name = node.getAttribute("name");
 	this.id = node.getAttribute("id");
@@ -87,28 +87,28 @@ function(node) {
 }
 
 // Adds a row to the tool tip.
-LaItem.prototype._addRow =
+ZaItem.prototype._addRow =
 function(msg, value, html, idx) {
 	if (value != null) {
 		html[idx++] = "<tr valign='top'><td align='right' style='padding-right: 5px;'><b>";
-		html[idx++] = LsStringUtil.htmlEncode(msg) + ":";
+		html[idx++] = AjxStringUtil.htmlEncode(msg) + ":";
 		html[idx++] = "</b></td><td align='left'><div style='white-space:nowrap; overflow:hidden;'>";
-		html[idx++] = LsStringUtil.htmlEncode(value);
+		html[idx++] = AjxStringUtil.htmlEncode(value);
 		html[idx++] = "</div></td></tr>";
 	}
 	return idx;
 }
 
 // Adds a row to the tool tip.
-LaItem.prototype._addAttrRow =
+ZaItem.prototype._addAttrRow =
 function(name, html, idx) {
 	var value = this.attrs[name];
 	if (value != null) {
-		var desc = LaMsg.attrDesc(name);
+		var desc = ZaMsg.attrDesc(name);
 		html[idx++] = "<tr valign='top'><td align='left' style='padding-right: 5px;'><b>";
-		html[idx++] = LsStringUtil.htmlEncode(desc) + ":";
+		html[idx++] = AjxStringUtil.htmlEncode(desc) + ":";
 		html[idx++] = "</b></td><td align='left'><div style='white-space:nowrap; overflow:hidden;'>";
-		html[idx++] = LsStringUtil.htmlEncode(value);
+		html[idx++] = AjxStringUtil.htmlEncode(value);
 		html[idx++] = "</div></td></tr>";
 	}
 	return idx;

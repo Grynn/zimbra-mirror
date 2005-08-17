@@ -1,4 +1,4 @@
-function LaController(appCtxt, container, app, isAdmin) {
+function ZaController(appCtxt, container, app, isAdmin) {
 
 	if (arguments.length == 0) return;
 
@@ -23,52 +23,52 @@ function LaController(appCtxt, container, app, isAdmin) {
 }
 
 var i = 1;
-LaController.CONVLIST_VIEW 		= i++;
-LaController.CONV_VIEW 			= i++;
-LaController.TRAD_VIEW 			= i++;
-LaController.MSG_VIEW 			= i++;
-LaController.MSG_NEW_WIN_VIEW 	= i++; // needed for HACK (see LmMailMsg)
-LaController.CONTACT_CARDS_VIEW = i++;
-LaController.CONTACT_LIST_VIEW 	= i++;
-LaController.CONTACT_VIEW		= i++;
-LaController.SINGLE_PANE_VIEW 	= i++;
-LaController.DOUBLE_PANE_VIEW 	= i++;
-LaController.ATT_LIST_VIEW 		= i++;
-LaController.ATT_ICON_VIEW 		= i++;
-LaController.CAL_VIEW			= i++;
-LaController.COMPOSE_VIEW		= i++;
-LaController.CONTACT_SRC_VIEW	= i++; // contact picker source list
-LaController.CONTACT_TGT_VIEW	= i++; // contact picker target list
-LaController.PREF_VIEW			= i++;
-LaController.CAL_DAY_VIEW		= i++;
-LaController.CAL_WEEK_VIEW		= i++;
-LaController.CAL_MONTH_VIEW		= i++;
-LaController.CAL_WORK_WEEK_VIEW	= i++;
+ZaController.CONVLIST_VIEW 		= i++;
+ZaController.CONV_VIEW 			= i++;
+ZaController.TRAD_VIEW 			= i++;
+ZaController.MSG_VIEW 			= i++;
+ZaController.MSG_NEW_WIN_VIEW 	= i++; // needed for HACK (see ZmMailMsg)
+ZaController.CONTACT_CARDS_VIEW = i++;
+ZaController.CONTACT_LIST_VIEW 	= i++;
+ZaController.CONTACT_VIEW		= i++;
+ZaController.SINGLE_PANE_VIEW 	= i++;
+ZaController.DOUBLE_PANE_VIEW 	= i++;
+ZaController.ATT_LIST_VIEW 		= i++;
+ZaController.ATT_ICON_VIEW 		= i++;
+ZaController.CAL_VIEW			= i++;
+ZaController.COMPOSE_VIEW		= i++;
+ZaController.CONTACT_SRC_VIEW	= i++; // contact picker source list
+ZaController.CONTACT_TGT_VIEW	= i++; // contact picker target list
+ZaController.PREF_VIEW			= i++;
+ZaController.CAL_DAY_VIEW		= i++;
+ZaController.CAL_WEEK_VIEW		= i++;
+ZaController.CAL_MONTH_VIEW		= i++;
+ZaController.CAL_WORK_WEEK_VIEW	= i++;
 
 
 // Public methods
-LaController.prototype.toString = 
+ZaController.prototype.toString = 
 function() {
-	return "LaController";
+	return "ZaController";
 }
 
-LaController.prototype.setDirty = 
+ZaController.prototype.setDirty = 
 function (isD) {
 	//overwrite this method to disable toolbar buttons, for example, Save button
 }
 
-LaController.prototype.setCurrentView =
+ZaController.prototype.setCurrentView =
 function(view) {
 	this._currentView = view;
 }
 
-LaController.prototype.setEnabled = 
+ZaController.prototype.setEnabled = 
 function(enable) {
 	//abstract
-//	throw new LsException("This method is abstract", LsException.UNIMPLEMENTED_METHOD, "LaController.prototype.setEnabled");	
+//	throw new AjxException("This method is abstract", AjxException.UNIMPLEMENTED_METHOD, "ZaController.prototype.setEnabled");	
 }
 
-LaController.prototype.popupMsgDialog = 
+ZaController.prototype.popupMsgDialog = 
 function(msg, ex, noExecReset)  {
 	if (!noExecReset)
 		this._execFrame = {method: null, params: null, restartOnError: false};
@@ -97,44 +97,44 @@ function(msg, ex, noExecReset)  {
 		}
 	}
 	// popup alert
-	this._msgDialog.setMessage(msg, detailStr, DwtMessageDialog.CRITICAL_STYLE, LaMsg.liquidAdminTitle);
+	this._msgDialog.setMessage(msg, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
 	this._msgDialog.popup();
 }
 
-LaController.prototype.getControllerForView =
+ZaController.prototype.getControllerForView =
 function(view) {
 	switch (view) {
-		case LaController.CONVLIST_VIEW:
-			return this._appCtxt.getApp(LmLiquidMail.MAIL_APP).getConvListController();
-		case LaController.CONV_VIEW:
-			return this._appCtxt.getApp(LmLiquidMail.MAIL_APP).getConvController();
-		case LaController.TRAD_VIEW:
-			return this._appCtxt.getApp(LmLiquidMail.MAIL_APP).getTradController();
-		case LaController.MSG_VIEW:
-			return this._appCtxt.getApp(LmLiquidMail.MAIL_APP).getMsgController();
-		case LaController.CONTACT_CARDS_VIEW:
-		case LaController.CONTACT_LIST_VIEW:
-			return this._appCtxt.getApp(LmLiquidMail.CONTACTS_APP).getContactListController();
-		case LaController.CONTACT_VIEW:
-			return this._appCtxt.getApp(LmLiquidMail.CONTACTS_APP).getContactController();
-		case LaController.CAL_VIEW:
-			return this._appCtxt.getApp(LmLiquidMail.CALENDAR_APP).getCalController();
-		case LaController.ATT_LIST_VIEW:
-		case LaController.ATT_ICON_VIEW:
-			return this._appCtxt.getApp(LmLiquidMail.MAIL_APP).getAttachmentListController();
-		case LaController.COMPOSE_VIEW:
-			return this._appCtxt.getApp(LmLiquidMail.MAIL_APP).getComposeController();
-		case LaController.PREF_VIEW:
-			return this._appCtxt.getApp(LmLiquidMail.PREFERENCES_APP).getPrefController();
+		case ZaController.CONVLIST_VIEW:
+			return this._appCtxt.getApp(ZmZimbraMail.MAIL_APP).getConvListController();
+		case ZaController.CONV_VIEW:
+			return this._appCtxt.getApp(ZmZimbraMail.MAIL_APP).getConvController();
+		case ZaController.TRAD_VIEW:
+			return this._appCtxt.getApp(ZmZimbraMail.MAIL_APP).getTradController();
+		case ZaController.MSG_VIEW:
+			return this._appCtxt.getApp(ZmZimbraMail.MAIL_APP).getMsgController();
+		case ZaController.CONTACT_CARDS_VIEW:
+		case ZaController.CONTACT_LIST_VIEW:
+			return this._appCtxt.getApp(ZmZimbraMail.CONTACTS_APP).getContactListController();
+		case ZaController.CONTACT_VIEW:
+			return this._appCtxt.getApp(ZmZimbraMail.CONTACTS_APP).getContactController();
+		case ZaController.CAL_VIEW:
+			return this._appCtxt.getApp(ZmZimbraMail.CALENDAR_APP).getCalController();
+		case ZaController.ATT_LIST_VIEW:
+		case ZaController.ATT_ICON_VIEW:
+			return this._appCtxt.getApp(ZmZimbraMail.MAIL_APP).getAttachmentListController();
+		case ZaController.COMPOSE_VIEW:
+			return this._appCtxt.getApp(ZmZimbraMail.MAIL_APP).getComposeController();
+		case ZaController.PREF_VIEW:
+			return this._appCtxt.getApp(ZmZimbraMail.PREFERENCES_APP).getPrefController();
 		default: {
-			DBG.println(LsDebug.DBG1, "*** controller not found for view " + view);
+			DBG.println(AjxDebug.DBG1, "*** controller not found for view " + view);
 			return this._appCtxt.getAppController();}
 	}
 }
 
 //Private/protected methods
 
-LaController.prototype._setView =
+ZaController.prototype._setView =
 function() {
 
 }
@@ -147,23 +147,23 @@ function() {
 * UI loop). You can't schedule something, and then have subsequent code that depends on the 
 * scheduled action. 
 */
-LaController.prototype._schedule =
+ZaController.prototype._schedule =
 function(method, params, delay) {
 	if (!delay) {
 		delay = 0;
 		this._shell.setBusy(true);
 	}
-	this._action = new LsTimedAction();
+	this._action = new AjxTimedAction();
 	this._action.obj = this;
-	this._action.method = LaController._exec;
+	this._action.method = ZaController._exec;
 	this._action.params.removeAll();
 	this._action.params.add(method);
 	this._action.params.add(params);
 	this._action.params.add(delay);
-	return LsTimedAction.scheduleAction(this._action, delay);
+	return AjxTimedAction.scheduleAction(this._action, delay);
 }
 
-LaController._exec =
+ZaController._exec =
 function(method, params, delay) {
 	method.call(this, params);
 	if (!delay)
@@ -172,7 +172,7 @@ function(method, params, delay) {
 
 
 
-LaController.prototype._showLoginDialog =
+ZaController.prototype._showLoginDialog =
 function(bReloginMode) {
 	this._authenticating = true;
 	this._loginDialog.setVisible(true, false);
@@ -181,24 +181,24 @@ function(bReloginMode) {
 		this._loginDialog.setFocus(this._appCtxt.getUsername(), bReloginMode);
 	} catch (ex) {
 		// something is out of whack... just make the user relogin
-		LaLiquidAdmin.logOff();
+		ZaZimbraAdmin.logOff();
 	}
 }
 
-LaController.prototype._handleException =
+ZaController.prototype._handleException =
 function(ex, method, params, restartOnError, obj) {
 	DBG.dumpObj(ex);
-	if (ex.code == LsCsfeException.SVC_AUTH_EXPIRED || 
-		ex.code == LsCsfeException.SVC_AUTH_REQUIRED || 
-		ex.code == LsCsfeException.NO_AUTH_TOKEN) 
+	if (ex.code == AjxCsfeException.SVC_AUTH_EXPIRED || 
+		ex.code == AjxCsfeException.SVC_AUTH_REQUIRED || 
+		ex.code == AjxCsfeException.NO_AUTH_TOKEN) 
 	{
 		var bReloginMode = true;
-		if (ex.code == LsCsfeException.SVC_AUTH_EXPIRED) 
+		if (ex.code == AjxCsfeException.SVC_AUTH_EXPIRED) 
 		{
 			// remember the last search attempted ONLY for expired auto token exception
 			this._execFrame = {obj: obj, method: method, params: params, restartOnError: restartOnError};
 			this._loginDialog.registerCallback(this._loginCallback, this);
-			this._loginDialog.setError(LaMsg.ERROR_SESSION_EXPIRED);
+			this._loginDialog.setError(ZaMsg.ERROR_SESSION_EXPIRED);
 		} else {
 			this._loginDialog.setError(null);
 			bReloginMode = false;
@@ -210,38 +210,38 @@ function(ex, method, params, restartOnError, obj) {
 	{
 		this._execFrame = {obj: obj, method: method, params: params, restartOnError: restartOnError};
 		this._msgDialog.registerCallback(DwtDialog.OK_BUTTON, this._msgDialogCallback, this);
-		if (ex.code == LsCsfeException.SOAP_ERROR) {
-			this.popupMsgDialog(LaMsg.SOAP_ERROR, ex, true);
-		} else if (ex.code == LsCsfeException.NETWORK_ERROR) {
-			this.popupMsgDialog(LaMsg.NETWORK_ERROR, ex, true);
-		} else if (ex.code ==  LsCsfeException.SVC_PARSE_ERROR) {
-			this.popupMsgDialog(LaMsg.PARSE_ERROR, ex, true);
-		} else if (ex.code ==  LsCsfeException.SVC_PERM_DENIED) {
-			this.popupMsgDialog(LaMsg.PERMISSION_DENIED, ex, true);
-		} else if (ex.code == LsCsfeException.ACCT_NO_SUCH_ACCOUNT) {
-			this.popupMsgDialog(LaMsg.ERROR_NO_SUCH_ACCOUNT, ex, true);
-		} else if (ex.code == LsCsfeException.CSFE_SVC_ERROR || ex.code == LsCsfeException.SVC_FAILURE || (ex.code && ex.code.match(/^(service|account|mail)\./))) {
-			this.popupMsgDialog(LaMsg.SERVER_ERROR, ex, true);
+		if (ex.code == AjxCsfeException.SOAP_ERROR) {
+			this.popupMsgDialog(ZaMsg.SOAP_ERROR, ex, true);
+		} else if (ex.code == AjxCsfeException.NETWORK_ERROR) {
+			this.popupMsgDialog(ZaMsg.NETWORK_ERROR, ex, true);
+		} else if (ex.code ==  AjxCsfeException.SVC_PARSE_ERROR) {
+			this.popupMsgDialog(ZaMsg.PARSE_ERROR, ex, true);
+		} else if (ex.code ==  AjxCsfeException.SVC_PERM_DENIED) {
+			this.popupMsgDialog(ZaMsg.PERMISSION_DENIED, ex, true);
+		} else if (ex.code == AjxCsfeException.ACCT_NO_SUCH_ACCOUNT) {
+			this.popupMsgDialog(ZaMsg.ERROR_NO_SUCH_ACCOUNT, ex, true);
+		} else if (ex.code == AjxCsfeException.CSFE_SVC_ERROR || ex.code == AjxCsfeException.SVC_FAILURE || (ex.code && ex.code.match(/^(service|account|mail)\./))) {
+			this.popupMsgDialog(ZaMsg.SERVER_ERROR, ex, true);
 		} else {
 			//search for error code
 			var gotit = false;
-			for(var ix in LsCsfeException) {
-				if(LsCsfeException[ix] == ex.code) {
-					this.popupMsgDialog(LaMsg.SERVER_ERROR, ex, true);
+			for(var ix in AjxCsfeException) {
+				if(AjxCsfeException[ix] == ex.code) {
+					this.popupMsgDialog(ZaMsg.SERVER_ERROR, ex, true);
 					gotit = true;
 					break;
 				}
 			}
 			if(!gotit)
-				this.popupMsgDialog(LaMsg.JAVASCRIPT_ERROR + " in method " + method, ex, true);
+				this.popupMsgDialog(ZaMsg.JAVASCRIPT_ERROR + " in method " + method, ex, true);
 		}
 	}
 }
 
-LaController.prototype._doAuth = 
+ZaController.prototype._doAuth = 
 function(params) {
-	LsCsfeCommand.clearAuthToken();
-	var auth = new LaAuthenticate(this._appCtxt);
+	AjxCsfeCommand.clearAuthToken();
+	var auth = new ZaAuthenticate(this._appCtxt);
 	try {
 		auth.execute(params.username, params.password);
     	this._authenticating = false;
@@ -249,21 +249,21 @@ function(params) {
 		// Schedule this since we want to make sure the app is built up before we actually hide the login dialog
 		this._schedule(this._hideLoginDialog);
 	} catch (ex) {
-		if (ex.code == LsCsfeException.ACCT_AUTH_FAILED || 
-			ex.code == LsCsfeException.INVALID_REQUEST) 
+		if (ex.code == AjxCsfeException.ACCT_AUTH_FAILED || 
+			ex.code == AjxCsfeException.INVALID_REQUEST) 
 		{
-			this._loginDialog.setError(LaMsg.ERROR_AUTH_FAILED);
+			this._loginDialog.setError(ZaMsg.ERROR_AUTH_FAILED);
 			return;
-		} else if(ex.code == LsCsfeException.SVC_PERM_DENIED) {
-			this._loginDialog.setError(LaMsg.ERROR_AUTH_NO_ADMIN_RIGHTS);
+		} else if(ex.code == AjxCsfeException.SVC_PERM_DENIED) {
+			this._loginDialog.setError(ZaMsg.ERROR_AUTH_NO_ADMIN_RIGHTS);
 			return;
 		} else {
-			this.popupMsgDialog(LaMsg.SERVER_ERROR, ex); 
+			this.popupMsgDialog(ZaMsg.SERVER_ERROR, ex); 
 		}
 	}
 }
 
-LaController.prototype._hideLoginDialog =
+ZaController.prototype._hideLoginDialog =
 function() {
 	this._appCtxt.getAppController().createBannerBarHtml();
 	this._loginDialog.setVisible(false);
@@ -274,7 +274,7 @@ function() {
 
 /*********** Login dialog Callbacks */
 
-LaController.prototype._loginCallback =
+ZaController.prototype._loginCallback =
 function(args) {
 	this._schedule(this._doAuth, {username: args[0], password: args[1]});
 }
@@ -282,7 +282,7 @@ function(args) {
 
 /*********** Msg dialog Callbacks */
 
-LaController.prototype._msgDialogCallback =
+ZaController.prototype._msgDialogCallback =
 function() {
 	this._msgDialog.popdown();
 	if (this._execFrame) {
@@ -294,7 +294,7 @@ function() {
 
 
 // Pop up a dialog. Since it's a shared resource, we need to reset first.
-LaController.prototype._showDialog = 
+ZaController.prototype._showDialog = 
 function(dialog, callback, organizer, loc, args) {
 	dialog.reset();
 	dialog.registerCallback(DwtDialog.OK_BUTTON, callback, this, args);

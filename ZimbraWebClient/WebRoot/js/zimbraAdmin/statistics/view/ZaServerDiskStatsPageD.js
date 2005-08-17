@@ -1,11 +1,11 @@
 /**
-* @class LaServerDiskStatsPageD 
-* @contructor LaServerDiskStatsPageD
+* @class ZaServerDiskStatsPageD 
+* @contructor ZaServerDiskStatsPageD
 * @param parent
 * @param app
 * @author Greg Solovyev
 **/
-function LaServerDiskStatsPageD (parent, app) {
+function ZaServerDiskStatsPageD (parent, app) {
 	DwtTabViewPage.call(this, parent);
 	this._fieldIds = new Object(); //stores the ids of all the form elements
 	this._app = app;
@@ -14,50 +14,50 @@ function LaServerDiskStatsPageD (parent, app) {
 	this.setScrollStyle(DwtControl.SCROLL);
 }
  
-LaServerDiskStatsPageD.prototype = new DwtTabViewPage;
-LaServerDiskStatsPageD.prototype.constructor = LaServerDiskStatsPageD;
+ZaServerDiskStatsPageD.prototype = new DwtTabViewPage;
+ZaServerDiskStatsPageD.prototype.constructor = ZaServerDiskStatsPageD;
 
-LaServerDiskStatsPageD.prototype.toString = 
+ZaServerDiskStatsPageD.prototype.toString = 
 function() {
-	return "LaServerDiskStatsPageD";
+	return "ZaServerDiskStatsPageD";
 }
 
-LaServerDiskStatsPageD.prototype.showMe = 
+ZaServerDiskStatsPageD.prototype.showMe = 
 function () {
 	DwtTabViewPage.prototype.showMe.call(this);
 }
 
-LaServerDiskStatsPageD.prototype.setObject =
+ZaServerDiskStatsPageD.prototype.setObject =
 function (item) {
 	if(item) {
-		if(item.attrs && item.attrs[LaServer.A_ServiceHostname]) {
-			var newSrc = "/service/statsimg/" + item.attrs[LaServer.A_ServiceHostname] + "/liquid/d/1";
-			var imgElement = Dwt.getDomObj(this.getDocument(), this._LiquidImgID);
+		if(item.attrs && item.attrs[ZaServer.A_ServiceHostname]) {
+			var newSrc = "/service/statsimg/" + item.attrs[ZaServer.A_ServiceHostname] + "/zimbra/d/1";
+			var imgElement = Dwt.getDomObj(this.getDocument(), this._ZimbraImgID);
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}
 			imgElement = Dwt.getDomObj(this.getDocument(), this._DBImgID);	
-			newSrc = "/service/statsimg/" + item.attrs[LaServer.A_ServiceHostname] + "/db/d/1";			
+			newSrc = "/service/statsimg/" + item.attrs[ZaServer.A_ServiceHostname] + "/db/d/1";			
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}
 			imgElement = Dwt.getDomObj(this.getDocument(), this._StoreImgID);		
-			newSrc = "/service/statsimg/" + item.attrs[LaServer.A_ServiceHostname] + "/store/d/1";			
+			newSrc = "/service/statsimg/" + item.attrs[ZaServer.A_ServiceHostname] + "/store/d/1";			
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}			
 			imgElement = Dwt.getDomObj(this.getDocument(), this._IndexImgID);		
-			newSrc = "/service/statsimg/" + item.attrs[LaServer.A_ServiceHostname] + "/index/d/1";			
+			newSrc = "/service/statsimg/" + item.attrs[ZaServer.A_ServiceHostname] + "/index/d/1";			
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}			
 			imgElement = Dwt.getDomObj(this.getDocument(), this._LogImgID);		
-			newSrc = "/service/statsimg/" + item.attrs[LaServer.A_ServiceHostname] + "/log/d/1";			
+			newSrc = "/service/statsimg/" + item.attrs[ZaServer.A_ServiceHostname] + "/log/d/1";			
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}			
 			imgElement = Dwt.getDomObj(this.getDocument(), this._RedologImgID);		
-			newSrc = "/service/statsimg/" + item.attrs[LaServer.A_ServiceHostname] + "/redolog/d/1";			
+			newSrc = "/service/statsimg/" + item.attrs[ZaServer.A_ServiceHostname] + "/redolog/d/1";			
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}			
@@ -65,9 +65,9 @@ function (item) {
 	}
 }
 
-LaServerDiskStatsPageD.prototype._createHTML = 
+ZaServerDiskStatsPageD.prototype._createHTML = 
 function () {
-	this._LiquidImgID = Dwt.getNextId();	
+	this._ZimbraImgID = Dwt.getNextId();	
 	this._DBImgID = Dwt.getNextId();	
 	this._StoreImgID = Dwt.getNextId();		
 	this._IndexImgID = Dwt.getNextId();			
@@ -78,9 +78,9 @@ function () {
 	html[idx++] = "<div style='width:70ex;'>";		
 	html[idx++] = "<table cellpadding='5' cellspacing='4' border='0' align='left'>";	
 	html[idx++] = "<tr valign='top'><td align='left'>&nbsp;&nbsp;</td></tr>";	
-	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + LsStringUtil.htmlEncode(LaMsg.NAD_StatsDataLastDay) + "</td></tr>";	
+	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsDataZastDay) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";
-	html[idx++] = "<img src='#' id='" + this._LiquidImgID + "'>";	
+	html[idx++] = "<img src='#' id='" + this._ZimbraImgID + "'>";	
 	html[idx++] = "</td></tr>";
 	html[idx++] = "<tr valign='top'><td align='left'>&nbsp;&nbsp;</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";

@@ -1,11 +1,11 @@
 /**
-* @class LaServerDiskStatsPage
-* @contructor LaServerDiskStatsPage
+* @class ZaServerDiskStatsPage
+* @contructor ZaServerDiskStatsPage
 * @param parent
 * @param app
 * @author Greg Solovyev
 **/
-function LaServerDiskStatsPage (parent, app) {
+function ZaServerDiskStatsPage (parent, app) {
 	this._app = app;
 	DwtTabViewPage.call(this, parent);
 	this._fieldIds = new Object(); //stores the ids of all the form elements
@@ -15,15 +15,15 @@ function LaServerDiskStatsPage (parent, app) {
 	this._createHTML();
 }
 
-LaServerDiskStatsPage.prototype = new DwtTabViewPage;
-LaServerDiskStatsPage.prototype.constructor = LaServerDiskStatsPage;
+ZaServerDiskStatsPage.prototype = new DwtTabViewPage;
+ZaServerDiskStatsPage.prototype.constructor = ZaServerDiskStatsPage;
 
-LaServerDiskStatsPage.prototype.toString = 
+ZaServerDiskStatsPage.prototype.toString = 
 function() {
-	return "LaServerDiskStatsPage";
+	return "ZaServerDiskStatsPage";
 }
 
-LaServerDiskStatsPage.prototype.showMe = 
+ZaServerDiskStatsPage.prototype.showMe = 
 function() {
 	if(this.internalView !=null) {
 		if(!this._rendered) {
@@ -39,15 +39,15 @@ function() {
 	}
 }
 
-LaServerDiskStatsPage.prototype.setObject = 
+ZaServerDiskStatsPage.prototype.setObject = 
 function (entry) {
 	if(this.internalView==null)
-		this.internalView = new LaServerDiskStatsTabPage(this, this._app);	
+		this.internalView = new ZaServerDiskStatsTabPage(this, this._app);	
 		
 	this.internalView.setObject(entry);
 }
 
-LaServerDiskStatsPage.prototype._createHTML = 
+ZaServerDiskStatsPage.prototype._createHTML = 
 function () {
  	var idx = 0;
 	var html = new Array(5);
@@ -59,41 +59,41 @@ function () {
 	this.getHtmlElement().innerHTML = html.join("");
 }
 /**
-* @class LaServerDiskStatsPage 
-* @contructor LaServerDiskStatsPage
+* @class ZaServerDiskStatsPage 
+* @contructor ZaServerDiskStatsPage
 * @param parent
 * @param app
 * @author Greg Solovyev
 **/
-function LaServerDiskStatsTabPage(parent, app) {
+function ZaServerDiskStatsTabPage(parent, app) {
 	this._app = app;
 	DwtTabView.call(this, parent);
-	this._appCtxt = this.shell.getData(LaAppCtxt.LABEL);
-	this._1DPage = new LaServerDiskStatsPageD(this, app);
-	this._3MPage = new LaServerDiskStatsPage3M(this, app);
-	this._12MPage = new LaServerDiskStatsPage12M(this, app);	
-	this.firstTabKey = this.addTab(LaMsg.TABT_StatsDataLastDay, this._1DPage);		
-	this.addTab(LaMsg.TABT_StatsDataLast3Months, this._3MPage);			
-	this.addTab(LaMsg.TABT_StatsDataLast12Months, this._12MPage);				
+	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
+	this._1DPage = new ZaServerDiskStatsPageD(this, app);
+	this._3MPage = new ZaServerDiskStatsPage3M(this, app);
+	this._12MPage = new ZaServerDiskStatsPage12M(this, app);	
+	this.firstTabKey = this.addTab(ZaMsg.TABT_StatsDataZastDay, this._1DPage);		
+	this.addTab(ZaMsg.TABT_StatsDataZast3Months, this._3MPage);			
+	this.addTab(ZaMsg.TABT_StatsDataZast12Months, this._12MPage);				
 //	this.setScrollStyle(DwtControl.SCROLL);
 }
 
-LaServerDiskStatsTabPage.prototype = new DwtTabView;
-LaServerDiskStatsTabPage.prototype.constructor = LaServerDiskStatsTabPage;
+ZaServerDiskStatsTabPage.prototype = new DwtTabView;
+ZaServerDiskStatsTabPage.prototype.constructor = ZaServerDiskStatsTabPage;
 
-LaServerDiskStatsTabPage.prototype.toString = 
+ZaServerDiskStatsTabPage.prototype.toString = 
 function() {
-	return "LaServerDiskStatsTabPage";
+	return "ZaServerDiskStatsTabPage";
 }
 
-LaServerDiskStatsTabPage.prototype.setObject = 
+ZaServerDiskStatsTabPage.prototype.setObject = 
 function (entry) {
 	this._1DPage.setObject(entry);
 	this._3MPage.setObject(entry);
 	this._12MPage.setObject(entry);
 }
 
-LaServerDiskStatsTabPage.prototype._createHTML = 
+ZaServerDiskStatsTabPage.prototype._createHTML = 
 function() {
 	DwtTabView.prototype._createHTML.call(this);
 }

@@ -1,31 +1,31 @@
-function LaAuthenticate(appCtxt) {
+function ZaAuthenticate(appCtxt) {
 	if (arguments.length == 0) return;
 	this._appCtxt = appCtxt;
 }
 
-LaAuthenticate._isAdmin = true;
+ZaAuthenticate._isAdmin = true;
 
-LaAuthenticate.prototype.toString = 
+ZaAuthenticate.prototype.toString = 
 function() {
-	return "LaAuthenticate";
+	return "ZaAuthenticate";
 }
 
-LaAuthenticate.prototype.execute =
+ZaAuthenticate.prototype.execute =
 function (uname, pword, isPublic) {
-	var soapDoc = LsSoapDoc.create("AuthRequest", "urn:liquidAdmin", null);
+	var soapDoc = AjxSoapDoc.create("AuthRequest", "urn:zimbraAdmin", null);
 	
 //	var header = soapDoc.createHeaderElement();
 //	var context = soapDoc.set("context", null, header);
-//	context.setAttribute("xmlns", "urn:liquidAdmin");
+//	context.setAttribute("xmlns", "urn:zimbraAdmin");
 //	soapDoc.set("nosession", null, context);
 		
 	soapDoc.set("name", uname);
 	soapDoc.set("password", pword);
-	var resp = LsCsfeCommand.invoke(soapDoc, true, null, null, true).firstChild;
+	var resp = AjxCsfeCommand.invoke(soapDoc, true, null, null, true).firstChild;
 	this._setAuthToken(resp);	
 }
 
-LaAuthenticate.prototype._setAuthToken =
+ZaAuthenticate.prototype._setAuthToken =
 function(resp) {
 	var els = resp.childNodes;
 	var len = els.length;
@@ -39,5 +39,5 @@ function(resp) {
 		else if (el.nodeName=="sessionId")
 			sessionId = el.firstChild.nodeValue;
 	}
-	LsCsfeCommand.setAuthToken(authToken, lifetime, sessionId);
+	AjxCsfeCommand.setAuthToken(authToken, lifetime, sessionId);
 }

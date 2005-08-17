@@ -10,7 +10,7 @@
 * This class represents a reusable wizard dialog. 
 * After calling the constructor, define metadata for and call initForm to draw the contents of the dialog
 */
-function LaXWizardDialog (parent, className, title, w, h) {
+function ZaXWizardDialog (parent, className, title, w, h) {
 	if (arguments.length == 0) return;
 	var clsName = className || "DwtDialog";
 	
@@ -21,9 +21,9 @@ function LaXWizardDialog (parent, className, title, w, h) {
 	this._drawn = false;
 	this._containedObject = null;
 	
-	var nextButton = new DwtDialog_ButtonDescriptor(LaXWizardDialog.NEXT_BUTTON, DwtMsg._next, DwtDialog.ALIGN_RIGHT, new LsCallback(this, this.goNext));
-	var prevButton = new DwtDialog_ButtonDescriptor(LaXWizardDialog.PREV_BUTTON, DwtMsg._prev, DwtDialog.ALIGN_RIGHT, new LsCallback(this, this.goPrev));
-	var finishButton = new DwtDialog_ButtonDescriptor(LaXWizardDialog.FINISH_BUTTON, DwtMsg._finish, DwtDialog.ALIGN_RIGHT, new LsCallback(this, this.finishWizard));
+	var nextButton = new DwtDialog_ButtonDescriptor(ZaXWizardDialog.NEXT_BUTTON, DwtMsg._next, DwtDialog.ALIGN_RIGHT, new AjxCallback(this, this.goNext));
+	var prevButton = new DwtDialog_ButtonDescriptor(ZaXWizardDialog.PREV_BUTTON, DwtMsg._prev, DwtDialog.ALIGN_RIGHT, new AjxCallback(this, this.goPrev));
+	var finishButton = new DwtDialog_ButtonDescriptor(ZaXWizardDialog.FINISH_BUTTON, DwtMsg._finish, DwtDialog.ALIGN_RIGHT, new AjxCallback(this, this.finishWizard));
 	DwtDialog.call(this, parent, clsName, null, [DwtDialog.CANCEL_BUTTON], [prevButton,nextButton,finishButton]);
 
 	if (!w) {
@@ -43,12 +43,12 @@ function LaXWizardDialog (parent, className, title, w, h) {
 	this._progressDiv.style.position = DwtControl.STATIC_STYLE;
 	
 	this._pageDiv = this.getDocument().createElement("div");
-	this._pageDiv.className = "LaXWizardDialogPageDiv";
+	this._pageDiv.className = "ZaXWizardDialogPageDiv";
 	this._pageDiv.style.width = this._contentW;
 	this._pageDiv.style.height = this._contentH;
 	this._pageDiv.style.overflow = "auto";
 	
-//	this._progressBar = new LaXWizProgressBar(this);
+//	this._progressBar = new ZaXWizProgressBar(this);
 	this._createContentHtml();	
 
 //	this._initForm();
@@ -56,31 +56,31 @@ function LaXWizardDialog (parent, className, title, w, h) {
 	this.setTitle(title);
 }
 
-LaXWizardDialog.prototype = new DwtDialog;
-LaXWizardDialog.prototype.constructor = LaXWizardDialog;
+ZaXWizardDialog.prototype = new DwtDialog;
+ZaXWizardDialog.prototype.constructor = ZaXWizardDialog;
 
 //Z-index contants for the tabbed view contents are based on Dwt z-index constants
-LaXWizardDialog.Z_ACTIVE_PAGE = Dwt.Z_VIEW+10;
-LaXWizardDialog.Z_HIDDEN_PAGE = Dwt.Z_HIDDEN;
-LaXWizardDialog.Z_TAB_PANEL = Dwt.Z_VIEW+20;
-LaXWizardDialog.Z_CURTAIN = Dwt.Z_CURTAIN;
+ZaXWizardDialog.Z_ACTIVE_PAGE = Dwt.Z_VIEW+10;
+ZaXWizardDialog.Z_HIDDEN_PAGE = Dwt.Z_HIDDEN;
+ZaXWizardDialog.Z_TAB_PANEL = Dwt.Z_VIEW+20;
+ZaXWizardDialog.Z_CURTAIN = Dwt.Z_CURTAIN;
 
-LaXWizardDialog.NEXT_BUTTON = 12;
-LaXWizardDialog.PREV_BUTTON = 11;
-LaXWizardDialog.FINISH_BUTTON = 13;
+ZaXWizardDialog.NEXT_BUTTON = 12;
+ZaXWizardDialog.PREV_BUTTON = 11;
+ZaXWizardDialog.FINISH_BUTTON = 13;
 
 //public methods
-LaXWizardDialog.prototype.toString = 
+ZaXWizardDialog.prototype.toString = 
 function () {
-	return "LaXWizardDialog";
+	return "ZaXWizardDialog";
 }
 
-LaXWizardDialog.prototype.popdown = 
+ZaXWizardDialog.prototype.popdown = 
 function () {
 	DwtDialog.prototype.popdown.call(this);
 }
 /*
-LaXWizardDialog.prototype.handleKeys = 
+ZaXWizardDialog.prototype.handleKeys = 
 function(ev) {
 	var ad = DwtBaseDialog.getActiveDialog();
 	var dialogEl = ad.getHtmlElement();
@@ -107,7 +107,7 @@ function(ev) {
 * @param loc	the desired location
 */
 /*
-LaXWizardDialog.prototype.popup =
+ZaXWizardDialog.prototype.popup =
 function(loc) {
 
 	var thisZ = this._zIndex;
@@ -154,36 +154,36 @@ function(loc) {
 
 /*
 * @param pageKey - key to the page to be shown. 
-* pageKey is the value returned from @link LaXWizardDialog.prototype.addPage method
+* pageKey is the value returned from @link ZaXWizardDialog.prototype.addPage method
 * This method is called by 
 *	@link DwtWizardPage.prototype.switchToNextPage 
 *	and 
 *	@link DwtWizardPage.prototype.switchToPrevPage
 */
-LaXWizardDialog.prototype.goPage = 
+ZaXWizardDialog.prototype.goPage = 
 function(pageKey) {
-	this._containedObject[LaModel.currentStep] = pageKey;
+	this._containedObject[ZaModel.currentStep] = pageKey;
 	this._localXForm.refresh(); //run update script
 }
 
-LaXWizardDialog.prototype.goNext = 
+ZaXWizardDialog.prototype.goNext = 
 function() {
-	this.goPage(this._containedObject[LaModel.currentStep]+1);
+	this.goPage(this._containedObject[ZaModel.currentStep]+1);
 }
 
-LaXWizardDialog.prototype.goPrev = 
+ZaXWizardDialog.prototype.goPrev = 
 function() {
-	this.goPage(this._containedObject[LaModel.currentStep]-1);
+	this.goPage(this._containedObject[ZaModel.currentStep]-1);
 }
 
-LaXWizardDialog.prototype.finishWizard = 
+ZaXWizardDialog.prototype.finishWizard = 
 function() {
 	this.popdown();	
 }
 
-LaXWizardDialog.prototype.getCurrentStep = 
+ZaXWizardDialog.prototype.getCurrentStep = 
 function() {
-	return this._containedObject[LaModel.currentStep];	
+	return this._containedObject[ZaModel.currentStep];	
 }
 
 /**
@@ -191,7 +191,7 @@ function() {
 * @param wizPage - instance of DwtPropertyPage 
 * @return - the key for the added page. This key can be used to retreive the tab using @link getPage.
 **/
-LaXWizardDialog.prototype.addPage =
+ZaXWizardDialog.prototype.addPage =
 function (stepTitle) {
 	var pageKey = this._pageIx++;	
 	//add a step to the progress bar
@@ -205,10 +205,10 @@ function (stepTitle) {
 * @param xModelMetaData
 * @param xFormMetaData
 **/
-LaXWizardDialog.prototype.initForm = 
+ZaXWizardDialog.prototype.initForm = 
 function (xModelMetaData, xFormMetaData) {
 	if(xModelMetaData == null || xFormMetaData == null)
-		throw new LsException("Metadata for XForm and/or XModel are not defined", LsException.INVALID_PARAM, "LaXWizardDialog.prototype._initForm");
+		throw new AjxException("Metadata for XForm and/or XModel are not defined", AjxException.INVALID_PARAM, "ZaXWizardDialog.prototype._initForm");
 		
 	this._localXModel = new XModel(xModelMetaData);
 	this._localXForm = new XForm(xFormMetaData, this._localXModel, null, this);
@@ -223,16 +223,16 @@ function (xModelMetaData, xFormMetaData) {
 * before returning the object this updates the object attributes with 
 * tha values from the form fields 
 **/
-LaXWizardDialog.prototype.getObject =
+ZaXWizardDialog.prototype.getObject =
 function() {
 	return this._containedObject;
 }
 
 /**
 * @method setObject sets the object contained in the view
-* @param entry - LaDomain object to display
+* @param entry - ZaDomain object to display
 **/
-LaXWizardDialog.prototype.setObject =
+ZaXWizardDialog.prototype.setObject =
 function(entry) {
 	this._containedObject = new Object();
 	this._containedObject.attrs = new Object();
@@ -250,7 +250,7 @@ function(entry) {
 * method _createHtml 
 **/
 
-LaXWizardDialog.prototype._createContentHtml =
+ZaXWizardDialog.prototype._createContentHtml =
 function () {
 
 	this._table = this.getDocument().createElement("table");
@@ -313,66 +313,66 @@ function () {
 * Child elements are added to this control in the _createHTML method.
 * @param child
 **/
-LaXWizardDialog.prototype._addChild =
+ZaXWizardDialog.prototype._addChild =
 function(child) {
 	this._children.add(child);
 }
 
 
 /**
-* @class LaXWizProgressBar
+* @class ZaXWizProgressBar
 * @constructor
 * @param parent
 **/
-function LaXWizProgressBar(parent) {
+function ZaXWizProgressBar(parent) {
 	if (arguments.length == 0) return;
-	DwtComposite.call(this, parent, "LaXWizProgressBar", DwtControl.STATIC_STYLE);
+	DwtComposite.call(this, parent, "ZaXWizProgressBar", DwtControl.STATIC_STYLE);
 	this._table = this.getDocument().createElement("table");
 	this._table.border = 0;
 	this._table.cellPadding = 0;
 	this._table.cellSpacing = 0;
-	this._menuListeners = new LsVector();
+	this._menuListeners = new AjxVector();
 	this.getHtmlElement().appendChild(this._table);
 	this._table.backgroundColor = DwtCssStyle.getProperty(this.parent.getHtmlElement(), "background-color");
 	this._stepsNumber = 0; //number of steps
 	this._steps = new Array();
-	this._lblHeader = new LaXWizStepLabel(this);
+	this._lblHeader = new ZaXWizStepZabel(this);
 	this._lblHeader.setText("Step 0 of 0");
 	this._lblHeader.setActive(true);
 }
 
 
-LaXWizProgressBar.prototype = new DwtComposite;
-LaXWizProgressBar.prototype.constructor = LaXWizProgressBar;
+ZaXWizProgressBar.prototype = new DwtComposite;
+ZaXWizProgressBar.prototype.constructor = ZaXWizProgressBar;
 
-LaXWizProgressBar.prototype.toString = 
+ZaXWizProgressBar.prototype.toString = 
 function() {
-	return "LaXWizProgressBar";
+	return "ZaXWizProgressBar";
 }
 
 /**
 * @param stepKey
 **/
-LaXWizProgressBar.prototype.showStep = 
+ZaXWizProgressBar.prototype.showStep = 
 function(stepKey) {
-	var szLabelTxt = "Step " + stepKey + " of " + this._stepsNumber;
+	var szZabelTxt = "Step " + stepKey + " of " + this._stepsNumber;
 	if(this._steps[stepKey]) {
-		szLabelTxt = szLabelTxt + ": " + this._steps[stepKey];
+		szZabelTxt = szZabelTxt + ": " + this._steps[stepKey];
 	}
-	this._lblHeader.setText(szLabelTxt);
+	this._lblHeader.setText(szZabelTxt);
 }
 
 /**
 * @param stepKey
 * @param stepNumber
 **/
-LaXWizProgressBar.prototype.addStep =
+ZaXWizProgressBar.prototype.addStep =
 function (stepKey, stepTitle) {
 	this._steps[stepKey] = stepTitle;
 	return (++this._stepsNumber);
 }
 
-LaXWizProgressBar.prototype._addChild =
+ZaXWizProgressBar.prototype._addChild =
 function(child) {
 	this._children.add(child);
 	var row;
@@ -391,28 +391,28 @@ function(child) {
 
 
 /**
-* @class LaXWizStepLabel
+* @class ZaXWizStepZabel
 * @constructor
 * @param parent
 **/
-function LaXWizStepLabel (parent) {
-	DwtLabel.call(this, parent, DwtLabel.ALIGN_CENTER, "LaXWizStepLabel");
+function ZaXWizStepZabel (parent) {
+	DwtZabel.call(this, parent, DwtZabel.ALIGN_CENTER, "ZaXWizStepZabel");
 }
 
-LaXWizStepLabel.prototype = new DwtLabel;
-LaXWizStepLabel.prototype.constructor = LaXWizStepLabel;
+ZaXWizStepZabel.prototype = new DwtZabel;
+ZaXWizStepZabel.prototype.constructor = ZaXWizStepZabel;
 
-LaXWizStepLabel.prototype.toString = 
+ZaXWizStepZabel.prototype.toString = 
 function() {
-	return "LaXWizStepLabel";
+	return "ZaXWizStepZabel";
 }
 
-LaXWizStepLabel.prototype.setActive = 
+ZaXWizStepZabel.prototype.setActive = 
 function(isActive) {
 	if (isActive) {
- 		this._textCell.className="LaXWizStepLabelActive";
+ 		this._textCell.className="ZaXWizStepZabelActive";
  	} else {
-	 	this._textCell.className="LaXWizStepLabelInactive";
+	 	this._textCell.className="ZaXWizStepZabelInactive";
  	}
 }
 

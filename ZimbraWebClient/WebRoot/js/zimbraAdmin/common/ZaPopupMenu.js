@@ -1,15 +1,15 @@
 /**
-* @class LaPopupMenu
+* @class ZaPopupMenu
 * @constructor
 * @param parent
 * @param className
 * @param dialog
 * @param opList
 *
-* This widget class extends LaPopupMenu. Similar to LaToolBar, this class creates
-* buttons form an array of LaOperation objects
+* This widget class extends ZaPopupMenu. Similar to ZaToolBar, this class creates
+* buttons form an array of ZaOperation objects
 **/
-function LaPopupMenu(parent, className, dialog, opList) {
+function ZaPopupMenu(parent, className, dialog, opList) {
 	if (arguments.length == 0) return;
 	className = className || "ActionMenu";
 	DwtMenu.call(this, parent, DwtMenu.POPUP_STYLE, className, null, dialog);
@@ -23,25 +23,25 @@ function LaPopupMenu(parent, className, dialog, opList) {
 	}
 }
 
-LaPopupMenu.prototype = new DwtMenu;
-LaPopupMenu.prototype.constructor = LaPopupMenu;
+ZaPopupMenu.prototype = new DwtMenu;
+ZaPopupMenu.prototype.constructor = ZaPopupMenu;
 
-LaPopupMenu.prototype.toString = 
+ZaPopupMenu.prototype.toString = 
 function() {
-	return "LaPopupMenu";
+	return "ZaPopupMenu";
 }
 
-LaPopupMenu.prototype.addSelectionListener =
+ZaPopupMenu.prototype.addSelectionListener =
 function(menuItemId, listener) {
 	this._menuItems[menuItemId].addSelectionListener(listener);
 }
 
-LaPopupMenu.prototype.removeSelectionListener =
+ZaPopupMenu.prototype.removeSelectionListener =
 function(menuItemId, listener) {
 	this._menuItems[menuItemId].removeSelectionListener(listener);
 }
 
-LaPopupMenu.prototype.popup =
+ZaPopupMenu.prototype.popup =
 function(delay, x, y) {
 	if (delay == null)
 		delay = 0;
@@ -59,7 +59,7 @@ function(delay, x, y) {
 * @param ids		a list of menu item IDs
 * @param enabled	whether to enable the menu items
 */
-LaPopupMenu.prototype.enable =
+ZaPopupMenu.prototype.enable =
 function(ids, enabled) {
 	if (!(ids instanceof Array))
 		ids = [ids];
@@ -68,18 +68,18 @@ function(ids, enabled) {
 			this._menuItems[ids[i]].setEnabled(enabled);
 }
 
-LaPopupMenu.prototype.enableAll =
+ZaPopupMenu.prototype.enableAll =
 function(enabled) {
 	for (var i in this._menuItems)
 		this._menuItems[i].setEnabled(enabled);
 }
 
-LaPopupMenu.prototype.addMenuItem =
+ZaPopupMenu.prototype.addMenuItem =
 function(menuItemId, menuItem) {
 	this._menuItems[menuItemId] = menuItem;
 }
 
-LaPopupMenu.prototype.createMenuItem =
+ZaPopupMenu.prototype.createMenuItem =
 function(menuItemId, imageId, text, disImageId, enabled, style, radioGroupId) {
 	var mi = this._menuItems[menuItemId] = new DwtMenuItem(this, style, radioGroupId);
 	if (imageId)
@@ -92,7 +92,7 @@ function(menuItemId, imageId, text, disImageId, enabled, style, radioGroupId) {
 	return mi;
 }
 
-LaPopupMenu.prototype.createSeparator =
+ZaPopupMenu.prototype.createSeparator =
 function() {
 	new DwtMenuItem(this, DwtMenuItem.SEPARATOR_STYLE);
 }

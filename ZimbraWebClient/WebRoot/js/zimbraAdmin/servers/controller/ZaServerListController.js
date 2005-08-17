@@ -1,49 +1,49 @@
 /**
 * @constructor
-* @class LaServerListController
-* This is a singleton object that controls all the user interaction with the list of LaServer objects
+* @class ZaServerListController
+* This is a singleton object that controls all the user interaction with the list of ZaServer objects
 **/
-function LaServerListController(appCtxt, container, app) {
-	LaController.call(this, appCtxt, container, app);
-	this._evtMgr = new LsEventMgr();
+function ZaServerListController(appCtxt, container, app) {
+	ZaController.call(this, appCtxt, container, app);
+	this._evtMgr = new AjxEventMgr();
 }
 
-LaServerListController.prototype = new LaController();
-LaServerListController.prototype.constructor = LaServerListController;
+ZaServerListController.prototype = new ZaController();
+ZaServerListController.prototype.constructor = ZaServerListController;
 
-LaServerListController.SERVER_VIEW = "LaServerListController.SERVER_VIEW";
+ZaServerListController.SERVER_VIEW = "ZaServerListController.SERVER_VIEW";
 
-LaServerListController.prototype.show = 
+ZaServerListController.prototype.show = 
 function(list) {
     if (!this._appView) {
     	//create toolbar
     	this._ops = new Array();
-    	this._ops.push(new LaOperation(LaOperation.EDIT, LaMsg.TBB_Edit, LaMsg.SERTBB_Edit_tt, LaImg.I_PROPERTIES, LaImg.I_PROPERTIES, new LsListener(this, LaServerListController.prototype._editButtonListener)));    	
-    	this._ops.push(new LaOperation(LaOperation.DELETE, LaMsg.TBB_Delete, LaMsg.SERTBB_Delete_tt, LaImg.I_DELETE, LaImg.I_DELETE, new LsListener(this, LaServerListController.prototype._deleteButtonListener)));    	    	
-		this._toolbar = new LaToolBar(this._container, this._ops);    
+    	this._ops.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.SERTBB_Edit_tt, ZaImg.I_PROPERTIES, ZaImg.I_PROPERTIES, new AjxListener(this, ZaServerListController.prototype._editButtonListener)));    	
+    	this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.SERTBB_Delete_tt, ZaImg.I_DELETE, ZaImg.I_DELETE, new AjxListener(this, ZaServerListController.prototype._deleteButtonListener)));    	    	
+		this._toolbar = new ZaToolBar(this._container, this._ops);    
  	
 		//create Servers list view
-		this._contentView = new LaServerListView(this._container);
-		this._appView = this._app.createView(LaServerListController.SERVER_VIEW, [this._toolbar,  this._contentView]);
+		this._contentView = new ZaServerListView(this._container);
+		this._appView = this._app.createView(ZaServerListController.SERVER_VIEW, [this._toolbar,  this._contentView]);
 
     	//context menu
-    	this._actionMenu =  new LaPopupMenu(this._contentView, "ActionMenu", null, this._ops);
+    	this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._ops);
 	
 		if (list != null)
 			this._contentView.set(list.getVector());
 
-		this._app.pushView(LaServerListController.SERVER_VIEW);			
+		this._app.pushView(ZaServerListController.SERVER_VIEW);			
 		
 		//set a selection listener on the Server list view
-		this._contentView.addSelectionListener(new LsListener(this, this._listSelectionListener));
-		this._contentView.addActionListener(new LsListener(this, this._listActionListener));			
-		this._removeConfirmMessageDialog = new LaMsgDialog(this._appView.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);					
+		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
+		this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
+		this._removeConfirmMessageDialog = new ZaMsgDialog(this._appView.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);					
 		//this.refresh();
 	} else {
 		if (list != null)
 			this._contentView.set(list.getVector());	
 			
-		this._app.pushView(LaServerListController.SERVER_VIEW);
+		this._app.pushView(ZaServerListController.SERVER_VIEW);
 	}
 	this._app.setCurrentController(this);
 	this._removeList = new Array();
@@ -54,39 +54,39 @@ function(list) {
 }
 
 /**
-* @return LaItemList - the list currently displaid in the list view
+* @return ZaItemList - the list currently displaid in the list view
 **/
-LaServerListController.prototype.getList = 
+ZaServerListController.prototype.getList = 
 function() {
 	return this._list;
 }
 
 /*
-LaServerListController.prototype.refresh = 
+ZaServerListController.prototype.refresh = 
 function() {
 	try {
 		this._contentView.set(this._app.getServerList(true).getVector());
 	} catch (ex) {
-		this._handleException(ex, LaServerListController.prototype.refresh, null, false);
+		this._handleException(ex, ZaServerListController.prototype.refresh, null, false);
 	}
 }
 */
 
-LaServerListController.prototype.set = 
+ZaServerListController.prototype.set = 
 function(serverList) {
 	this.show(serverList);
 }
 
 /**
 * @param ev
-* This listener is invoked by  any controller that can change an LaServer object
+* This listener is invoked by  any controller that can change an ZaServer object
 **/
-LaServerListController.prototype.handleServerChange = 
+ZaServerListController.prototype.handleServerChange = 
 function (ev) {
 	//if any of the data that is currently visible has changed - update the view
 	if(ev) {
 		var details = ev.getDetails();
-		if(details["modFields"] && (details["modFields"][LaServer.A_description] )) {
+		if(details["modFields"] && (details["modFields"][ZaServer.A_description] )) {
 			this._contentView.setUI();
 			if(this._app.getCurrentController() == this) {
 				this.show();			
@@ -97,12 +97,12 @@ function (ev) {
 
 /**
 * @param ev
-* This listener is invoked by LaServerController or any other controller that can create an LaServer object
+* This listener is invoked by ZaServerController or any other controller that can create an ZaServer object
 **/
-LaServerListController.prototype.handleServerCreation = 
+ZaServerListController.prototype.handleServerCreation = 
 function (ev) {
 	if(ev) {
-		//add the new LaServer to the controlled list
+		//add the new ZaServer to the controlled list
 		if(ev.getDetails()) {
 			this._list.add(ev.getDetails());
 			this._contentView.setUI();
@@ -115,12 +115,12 @@ function (ev) {
 
 /**
 * @param ev
-* This listener is invoked by LaServerController or any other controller that can remove an LaServer object
+* This listener is invoked by ZaServerController or any other controller that can remove an ZaServer object
 **/
-LaServerListController.prototype.handleServerRemoval = 
+ZaServerListController.prototype.handleServerRemoval = 
 function (ev) {
 	if(ev) {
-		//add the new LaAccount to the controlled list
+		//add the new ZaAccount to the controlled list
 		if(ev.getDetails()) {
 			this._list.remove(ev.getDetails());
 			this._contentView.setUI();
@@ -135,7 +135,7 @@ function (ev) {
 * @param nextViewCtrlr - the controller of the next view
 * Checks if it is safe to leave this view. Displays warning and Information messages if neccesary.
 **/
-LaServerListController.prototype.switchToNextView = 
+ZaServerListController.prototype.switchToNextView = 
 function (nextViewCtrlr, func, params) {
 	func.call(nextViewCtrlr, params);
 }
@@ -144,59 +144,59 @@ function (nextViewCtrlr, func, params) {
 * public getToolBar
 * @return reference to the toolbar
 **/
-LaServerListController.prototype.getToolBar = 
+ZaServerListController.prototype.getToolBar = 
 function () {
 	return this._toolBar;	
 }
 
 /**
-* Adds listener to removal of an LaServer 
+* Adds listener to removal of an ZaServer 
 * @param listener
 **/
-LaServerListController.prototype.addServerRemovalListener = 
+ZaServerListController.prototype.addServerRemovalListener = 
 function(listener) {
-	this._evtMgr.addListener(LaEvent.E_REMOVE, listener);
+	this._evtMgr.addListener(ZaEvent.E_REMOVE, listener);
 }
 
 /*
 // refresh button was pressed
-LaServerListController.prototype._refreshButtonListener =
+ZaServerListController.prototype._refreshButtonListener =
 function(ev) {
 	this.refresh();
 }
 */
 
 /**
-*	Private method that notifies listeners to that the controlled LaServer (are) removed
+*	Private method that notifies listeners to that the controlled ZaServer (are) removed
 * 	@param details
 */
-LaServerListController.prototype._fireServerRemovalEvent =
+ZaServerListController.prototype._fireServerRemovalEvent =
 function(details) {
 	try {
-		if (this._evtMgr.isListenerRegistered(LaEvent.E_REMOVE)) {
-			var evt = new LaEvent(LaEvent.S_SERVER);
-			evt.set(LaEvent.E_REMOVE, this);
+		if (this._evtMgr.isListenerRegistered(ZaEvent.E_REMOVE)) {
+			var evt = new ZaEvent(ZaEvent.S_SERVER);
+			evt.set(ZaEvent.E_REMOVE, this);
 			evt.setDetails(details);
-			this._evtMgr.notifyListeners(LaEvent.E_REMOVE, evt);
+			this._evtMgr.notifyListeners(ZaEvent.E_REMOVE, evt);
 		}
 	} catch (ex) {
-		this._handleException(ex, LaServerListController.prototype._fireServerRemovalEvent, details, false);	
+		this._handleException(ex, ZaServerListController.prototype._fireServerRemovalEvent, details, false);	
 	}
 }
 
 
 // new button was pressed
-LaServerListController.prototype._newButtonListener =
+ZaServerListController.prototype._newButtonListener =
 function(ev) {
-	var newServer = new LaServer();
+	var newServer = new ZaServer();
 	this._app.getServerController().show(newServer);
 }
 
 /**
-* This listener is called when the item in the list is double clicked. It call LaServerController.show method
+* This listener is called when the item in the list is double clicked. It call ZaServerController.show method
 * in order to display the Server View
 **/
-LaServerListController.prototype._listSelectionListener =
+ZaServerListController.prototype._listSelectionListener =
 function(ev) {
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
 		if(ev.item) {
@@ -208,20 +208,20 @@ function(ev) {
 	}
 }
 
-LaServerListController.prototype._listActionListener =
+ZaServerListController.prototype._listActionListener =
 function (ev) {
 	this._changeActionsState();
 	this._actionMenu.popup(0, ev.docX, ev.docY);
 }
 /**
 * This listener is called when the Edit button is clicked. 
-* It call LaServerController.show method
+* It call ZaServerController.show method
 * in order to display the Server View
 **/
-LaServerListController.prototype._editButtonListener =
+ZaServerListController.prototype._editButtonListener =
 function(ev) {
-	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getLast()) {
-		var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getLast());
+	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getZast()) {
+		var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getZast());
 		this._app.getServerController().show(item);
 	}
 }
@@ -229,7 +229,7 @@ function(ev) {
 /**
 * This listener is called when the Delete button is clicked. 
 **/
-LaServerListController.prototype._deleteButtonListener =
+ZaServerListController.prototype._deleteButtonListener =
 function(ev) {
 	this._removeList = new Array();
 	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getArray()) {
@@ -242,7 +242,7 @@ function(ev) {
 		}
 	}
 	if(this._removeList.length) {
-		dlgMsg = LaMsg.Q_DELETE_SERVERS;
+		dlgMsg = ZaMsg.Q_DELETE_SERVERS;
 		dlgMsg += "<br>";
 		for(var key in this._removeList) {
 			if(i > 19) {
@@ -270,13 +270,13 @@ function(ev) {
 			i++;
 		}
 		this._removeConfirmMessageDialog.setMessage(dlgMsg, null, DwtMessageDialog.INFO_STYLE);
-		this._removeConfirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, LaServerListController.prototype._deleteServersCallback, this);
-		this._removeConfirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, LaServerListController.prototype._donotDeleteServersCallback, this);		
+		this._removeConfirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaServerListController.prototype._deleteServersCallback, this);
+		this._removeConfirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaServerListController.prototype._donotDeleteServersCallback, this);		
 		this._removeConfirmMessageDialog.popup();
 	}
 }
 
-LaServerListController.prototype._deleteServersCallback = 
+ZaServerListController.prototype._deleteServersCallback = 
 function () {
 	var successRemList=new Array();
 	for(var key in this._removeList) {
@@ -286,7 +286,7 @@ function () {
 				successRemList.push(this._removeList[key]);					
 			} catch (ex) {
 				this._removeConfirmMessageDialog.popdown();
-				this._handleException(ex, LaServerListController.prototype._deleteServersCallback, null, false);
+				this._handleException(ex, ZaServerListController.prototype._deleteServersCallback, null, false);
 				return;
 			}
 		}
@@ -298,25 +298,25 @@ function () {
 	this.show();
 }
 
-LaServerListController.prototype._donotDeleteServersCallback = 
+ZaServerListController.prototype._donotDeleteServersCallback = 
 function () {
 	this._removeList = new Array();
 	this._removeConfirmMessageDialog.popdown();
 }
 
-LaServerListController.prototype._changeActionsState = 
+ZaServerListController.prototype._changeActionsState = 
 function () {
 	var cnt = this._contentView.getSelectionCount();
 	if(cnt == 1) {
-		var opsArray = [LaOperation.EDIT];
+		var opsArray = [ZaOperation.EDIT];
 		this._toolbar.enable(opsArray, true);
 		this._actionMenu.enable(opsArray, true);
 	} else if (cnt > 1){
-		var opsArray1 = [LaOperation.EDIT];
+		var opsArray1 = [ZaOperation.EDIT];
 		this._toolbar.enable(opsArray1, false);
 		this._actionMenu.enable(opsArray1, false);
 	} else {
-		var opsArray = [LaOperation.EDIT];
+		var opsArray = [ZaOperation.EDIT];
 		this._toolbar.enable(opsArray, false);
 		this._actionMenu.enable(opsArray, false);
 	}

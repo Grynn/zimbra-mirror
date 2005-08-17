@@ -1,48 +1,48 @@
 /**
-* @class LaServerStatsView 
-* @contructor LaServerStatsView
+* @class ZaServerStatsView 
+* @contructor ZaServerStatsView
 * @param parent
 * @param app
 * @author Greg Solovyev
 **/
-function LaServerStatsView(parent, app) {
+function ZaServerStatsView(parent, app) {
 	this._app = app;
 	DwtTabView.call(this, parent);
-	this._appCtxt = this.shell.getData(LaAppCtxt.LABEL);
-	this._dataPage = new LaServerDataStatsPage(this, app);
-	this._msgsPage = new LaServerMsgsStatsPage(this, app);
-	this._diskPage = new LaServerDiskStatsPage(this, app);		
-	this.addTab(LaMsg.TABT_InData, this._dataPage);		
-	this.addTab(LaMsg.TABT_InMsgs, this._msgsPage);		
-	this.addTab(LaMsg.TABT_Disk, this._diskPage);				
+	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
+	this._dataPage = new ZaServerDataStatsPage(this, app);
+	this._msgsPage = new ZaServerMsgsStatsPage(this, app);
+	this._diskPage = new ZaServerDiskStatsPage(this, app);		
+	this.addTab(ZaMsg.TABT_InData, this._dataPage);		
+	this.addTab(ZaMsg.TABT_InMsgs, this._msgsPage);		
+	this.addTab(ZaMsg.TABT_Disk, this._diskPage);				
 //	this.setScrollStyle(DwtControl.SCROLL);
 }
 
-LaServerStatsView.prototype = new DwtTabView;
-LaServerStatsView.prototype.constructor = LaServerStatsView;
+ZaServerStatsView.prototype = new DwtTabView;
+ZaServerStatsView.prototype.constructor = ZaServerStatsView;
 
-LaServerStatsView.prototype.toString = 
+ZaServerStatsView.prototype.toString = 
 function() {
-	return "LaServerStatsView";
+	return "ZaServerStatsView";
 }
 
 /**
 * @method setObject sets the object contained in the view
-* @param entry - LaServer object to display
+* @param entry - ZaServer object to display
 **/
-LaServerStatsView.prototype.setObject =
+ZaServerStatsView.prototype.setObject =
 function(entry) {
 	this._dataPage.setObject(entry);
 	this._msgsPage.setObject(entry);
 	this._diskPage.setObject(entry);
-	var szTitle = LsStringUtil.htmlEncode(LaMsg.NAD_ServerStatistics);
+	var szTitle = AjxStringUtil.htmlEncode(ZaMsg.NAD_ServerStatistics);
 	if(entry.name) {
 		szTitle = szTitle + entry.name;
 	}
 	this.titleCell.innerHTML = szTitle;
 }
 
-LaServerStatsView.prototype._resetTabSizes = 
+ZaServerStatsView.prototype._resetTabSizes = 
 function (width, height) {
     var tabBarSize = this._tabBar.getSize();
 	var titleCellSize = Dwt.getSize(this.titleCell);
@@ -63,7 +63,7 @@ function (width, height) {
 	}		
 }
 
-LaServerStatsView.prototype._createHTML = 
+ZaServerStatsView.prototype._createHTML = 
 function() {
 	DwtTabView.prototype._createHTML.call(this);
 	var row1;
@@ -81,6 +81,6 @@ function() {
 
 	this.titleCell.id = Dwt.getNextId();
 	this.titleCell.align="left";
-	this.titleCell.innerHTML = LsStringUtil.htmlEncode(LaMsg.NAD_ServerStatistics);
+	this.titleCell.innerHTML = AjxStringUtil.htmlEncode(ZaMsg.NAD_ServerStatistics);
 	this.titleCell.className="AdminTitleBar";
 }

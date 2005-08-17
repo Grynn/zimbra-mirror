@@ -1,28 +1,28 @@
 /**
-* @class LaServerController controls display of a single Domain
-* @contructor LaServerController
+* @class ZaServerController controls display of a single Domain
+* @contructor ZaServerController
 * @param appCtxt
 * @param container
 * @param abApp
 **/
 
-function LaServerController(appCtxt, container, abApp) {
-	LaController.call(this, appCtxt, container, abApp);
-	this._evtMgr = new LsEventMgr();
+function ZaServerController(appCtxt, container, abApp) {
+	ZaController.call(this, appCtxt, container, abApp);
+	this._evtMgr = new AjxEventMgr();
 	this._UICreated = false;
 }
 
-LaServerController.prototype = new LaController();
-LaServerController.prototype.constructor = LaServerController;
+ZaServerController.prototype = new ZaController();
+ZaServerController.prototype.constructor = ZaServerController;
 
-LaServerController.VIEW = "LaServerController.VIEW";
+ZaServerController.VIEW = "ZaServerController.VIEW";
 
 /**
 *	@method show
-*	@param entry - isntance of LaServer class
+*	@param entry - isntance of ZaServer class
 */
 
-LaServerController.prototype.show = 
+ZaServerController.prototype.show = 
 function(entry) {
 	this._setView(entry);
 	this._app.setCurrentController(this);
@@ -30,7 +30,7 @@ function(entry) {
 }
 
 
-LaServerController.prototype.setEnabled = 
+ZaServerController.prototype.setEnabled = 
 function(enable) {
 	//this._view.setEnabled(enable);
 }
@@ -39,35 +39,35 @@ function(enable) {
 * public getToolBar
 * @return reference to the toolbar
 **/
-LaServerController.prototype.getToolBar = 
+ZaServerController.prototype.getToolBar = 
 function () {
 	return this._toolBar;	
 }
 
 /**
-* Adds listener to modifications in the contained LaServer 
+* Adds listener to modifications in the contained ZaServer 
 * @param listener
 **/
-LaServerController.prototype.addServerChangeListener = 
+ZaServerController.prototype.addServerChangeListener = 
 function(listener) {
-	this._evtMgr.addListener(LaEvent.E_MODIFY, listener);
+	this._evtMgr.addListener(ZaEvent.E_MODIFY, listener);
 }
 
 /**
-* Removes listener to modifications in the controlled LaServer 
+* Removes listener to modifications in the controlled ZaServer 
 * @param listener
 **/
-LaServerController.prototype.removeServerChangeListener = 
+ZaServerController.prototype.removeServerChangeListener = 
 function(listener) {
-	this._evtMgr.removeListener(LaEvent.E_MODIFY, listener);    	
+	this._evtMgr.removeListener(ZaEvent.E_MODIFY, listener);    	
 }
 
-LaServerController.prototype.setDirty = 
+ZaServerController.prototype.setDirty = 
 function (isD) {
 	if(isD)
-		this._toolBar.getButton(LaOperation.SAVE).setEnabled(true);
+		this._toolBar.getButton(ZaOperation.SAVE).setEnabled(true);
 	else
-		this._toolBar.getButton(LaOperation.SAVE).setEnabled(false);
+		this._toolBar.getButton(ZaOperation.SAVE).setEnabled(false);
 }
 
 
@@ -75,7 +75,7 @@ function (isD) {
 * @param nextViewCtrlr - the controller of the next view
 * Checks if it is safe to leave this view. Displays warning and Information messages if neccesary.
 **/
-LaServerController.prototype.switchToNextView = 
+ZaServerController.prototype.switchToNextView = 
 function (nextViewCtrlr, func, params) {
 	if(this._view.isDirty()) {
 		//parameters for the confirmation dialog's callback 
@@ -84,10 +84,10 @@ function (nextViewCtrlr, func, params) {
 		args["obj"] = nextViewCtrlr;
 		args["func"] = func;
 		//ask if the user wants to save changes			
-		this._confirmMessageDialog = new LaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);					
-		this._confirmMessageDialog.setMessage(LaMsg.Q_SAVE_CHANGES, null, DwtMessageDialog.INFO_STYLE);
-		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, LaServerController.prototype._saveAndGoAway, this, args);		
-		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, LaServerController.prototype._discardAndGoAway, this, args);		
+		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);					
+		this._confirmMessageDialog.setMessage(ZaMsg.Q_SAVE_CHANGES, null, DwtMessageDialog.INFO_STYLE);
+		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaServerController.prototype._saveAndGoAway, this, args);		
+		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaServerController.prototype._discardAndGoAway, this, args);		
 		this._confirmMessageDialog.popup();
 	} else {
 	
@@ -97,20 +97,20 @@ function (nextViewCtrlr, func, params) {
 }
 
 /**
-*	Private method that notifies listeners to that the controlled LaServer is changed
+*	Private method that notifies listeners to that the controlled ZaServer is changed
 * 	@param details
 */
-LaServerController.prototype._fireServerChangeEvent =
+ZaServerController.prototype._fireServerChangeEvent =
 function(details) {
 	try {
-		if (this._evtMgr.isListenerRegistered(LaEvent.E_MODIFY)) {
-			var evt = new LaEvent(LaEvent.S_SERVER);
-			evt.set(LaEvent.E_MODIFY, this);
+		if (this._evtMgr.isListenerRegistered(ZaEvent.E_MODIFY)) {
+			var evt = new ZaEvent(ZaEvent.S_SERVER);
+			evt.set(ZaEvent.E_MODIFY, this);
 			evt.setDetails(details);
-			this._evtMgr.notifyListeners(LaEvent.E_MODIFY, evt);
+			this._evtMgr.notifyListeners(ZaEvent.E_MODIFY, evt);
 		}
 	} catch (ex) {
-		this._handleException(ex, "LaServerController.prototype._fireServerChangeEvent", details, false);	
+		this._handleException(ex, "ZaServerController.prototype._fireServerChangeEvent", details, false);	
 	}
 }
 
@@ -118,60 +118,60 @@ function(details) {
 
 /**
 *	@method _setView 
-*	@param entry - isntance of LaDomain class
+*	@param entry - isntance of ZaDomain class
 */
-LaServerController.prototype._setView =
+ZaServerController.prototype._setView =
 function(entry) {
 	if(!this._UICreated) {
-		this._view = new LaServerXFormView(this._container, this._app);
-	  	//this._view = new LaServerView(this._container, this._app);
+		this._view = new ZaServerXFormView(this._container, this._app);
+	  	//this._view = new ZaServerView(this._container, this._app);
    		this._ops = new Array();
-   		this._ops.push(new LaOperation(LaOperation.SAVE, LaMsg.TBB_Save, LaMsg.SERTBB_Save_tt, LaImg.I_SAVE, LaImg.ID_SAVE, new LsListener(this, LaServerController.prototype._saveButtonListener)));
-   		this._ops.push(new LaOperation(LaOperation.CLOSE, LaMsg.TBB_Close, LaMsg.SERTBB_Close_tt, LaImg.I_UNDO, LaImg.I_UNDO, new LsListener(this, LaServerController.prototype._closeButtonListener)));    	
+   		this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.SERTBB_Save_tt, ZaImg.I_SAVE, ZaImg.ID_SAVE, new AjxListener(this, ZaServerController.prototype._saveButtonListener)));
+   		this._ops.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.SERTBB_Close_tt, ZaImg.I_UNDO, ZaImg.I_UNDO, new AjxListener(this, ZaServerController.prototype._closeButtonListener)));    	
 
-		this._toolBar = new LaToolBar(this._container, this._ops);
-	    this._app.createView(LaServerController.VIEW, [this._toolBar, this._view]);
+		this._toolBar = new ZaToolBar(this._container, this._ops);
+	    this._app.createView(ZaServerController.VIEW, [this._toolBar, this._view]);
 		this._UICreated = true;
 	} 
-	this._app.pushView(LaServerController.VIEW);
+	this._app.pushView(ZaServerController.VIEW);
 	this._view.setDirty(false);
 	this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
 	this._currentObject = entry;
 }
 
-LaServerController.prototype._saveChanges =
+ZaServerController.prototype._saveChanges =
 function (obj) {
 //	var tmpObj = this._view.getObject();
 	var isNew = false;
 	if(obj.attrs == null) {
 		//show error msg
-		this._msgDialog.setMessage(LaMsg.ERROR_UNKNOWN, null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._msgDialog.setMessage(ZaMsg.ERROR_UNKNOWN, null, DwtMessageDialog.CRITICAL_STYLE, null);
 		this._msgDialog.popup();		
 		return false;	
 	}
 
-	// update liquidServiceEnabled
-	if (obj.attrs[LaServer.A_liquidServiceInstalled]) {
+	// update zimbraServiceEnabled
+	if (obj.attrs[ZaServer.A_zimbraServiceInstalled]) {
 		// get list of actually enabled fields
 		var enabled = [];
-		for (var i = 0; i < obj.attrs[LaServer.A_liquidServiceInstalled].length; i++) {
-			var service = obj.attrs[LaServer.A_liquidServiceInstalled][i];
-			if (obj.attrs["_"+LaServer.A_liquidServiceEnabled+"_"+service]) {
+		for (var i = 0; i < obj.attrs[ZaServer.A_zimbraServiceInstalled].length; i++) {
+			var service = obj.attrs[ZaServer.A_zimbraServiceInstalled][i];
+			if (obj.attrs["_"+ZaServer.A_zimbraServiceEnabled+"_"+service]) {
 				enabled.push(service);
 			}			
 		}
 		
 		// see if list of actually enabled fields is same as before
 		var dirty = enabled.length > 0;
-		if (obj.attrs[LaServer.A_liquidServiceEnabled]) {
-			var prevEnabled = LsUtil.isString(obj.attrs[LaServer.A_liquidServiceEnabled])
-							? [ obj.attrs[LaServer.A_liquidServiceEnabled] ]
-							: obj.attrs[LaServer.A_liquidServiceEnabled];
+		if (obj.attrs[ZaServer.A_zimbraServiceEnabled]) {
+			var prevEnabled = AjxUtil.isString(obj.attrs[ZaServer.A_zimbraServiceEnabled])
+							? [ obj.attrs[ZaServer.A_zimbraServiceEnabled] ]
+							: obj.attrs[ZaServer.A_zimbraServiceEnabled];
 			dirty = enabled.length != prevEnabled.length;		
 			if (!dirty) {
 				for (var i = 0; i < prevEnabled.length; i++) {
 					var service = prevEnabled[i];
-					if (!obj.attrs["_"+LaServer.A_liquidServiceEnabled+"_"+service]) {
+					if (!obj.attrs["_"+ZaServer.A_zimbraServiceEnabled+"_"+service]) {
 						dirty = true;
 						break;
 					}
@@ -181,14 +181,14 @@ function (obj) {
 		
 		// save new list of enabled fields
 		if (dirty) {
-			obj.attrs[LaServer.A_liquidServiceEnabled] = enabled;
+			obj.attrs[ZaServer.A_zimbraServiceEnabled] = enabled;
 		}
 	}
 
-	//transfer the fields from the tmpObj to the _currentObject, since _currentObject is an instance of LaDomain
+	//transfer the fields from the tmpObj to the _currentObject, since _currentObject is an instance of ZaDomain
 	var mods = new Object();
 	for (var a in obj.attrs) {
-		if(a == LaItem.A_objectClass || /^_/.test(a))
+		if(a == ZaItem.A_objectClass || /^_/.test(a))
 			continue;
 		if (this._currentObject.attrs[a] != obj.attrs[a] ) {
 			mods[a] = obj.attrs[a];
@@ -206,11 +206,11 @@ function (obj) {
 	return true;
 }
 
-LaServerController.prototype._saveChangesCallback = 
+ZaServerController.prototype._saveChangesCallback = 
 function (obj) {
 	if(this._saveChanges(obj)) {
 		this._view.setDirty(false);		
-		//this._toolBar.getButton(LaOperation.SAVE).setEnabled(false); 
+		//this._toolBar.getButton(ZaOperation.SAVE).setEnabled(false); 
 		this._confirmMessageDialog.popdown();
 	}
 }
@@ -220,7 +220,7 @@ function (obj) {
 *						 params["func"] - the method to call on the nextViewCtrlr in order to navigate to the next view
 * This method saves changes in the current view and calls the method on the controller of the next view
 **/
-LaServerController.prototype._saveAndGoAway =
+ZaServerController.prototype._saveAndGoAway =
 function (params) {
 	try {
 		var tmpObj = this._view.getObject();
@@ -231,14 +231,14 @@ function (params) {
 		}
 	} catch (ex) {
 		//if exception thrown - don't go away
-		this._handleException(ex, "LaServerController.prototype._saveAndGoAway", null, false);
+		this._handleException(ex, "ZaServerController.prototype._saveAndGoAway", null, false);
 	}
 }
 
 /**
 * Leaves current view without saving any changes
 **/
-LaServerController.prototype._discardAndGoAway = 
+ZaServerController.prototype._discardAndGoAway = 
 function (params) {
 	this._confirmMessageDialog.popdown();
 	params["func"].call(params["obj"], params["params"]);		
@@ -247,18 +247,18 @@ function (params) {
 
 /**
 * handles "save" button click
-* calls modify or create on the current LaDomain
+* calls modify or create on the current ZaDomain
 **/
-LaServerController.prototype._saveButtonListener =
+ZaServerController.prototype._saveButtonListener =
 function(ev) {
 	try {
 		var tmpObj = this._view.getObject();
 		//check if disabling email service
-		if((this._currentObject.attrs[LaServer.A_liquidUserServicesEnabled]=="TRUE") && (tmpObj.attrs[LaServer.A_liquidUserServicesEnabled]=="FALSE")) {
+		if((this._currentObject.attrs[ZaServer.A_zimbraUserServicesEnabled]=="TRUE") && (tmpObj.attrs[ZaServer.A_zimbraUserServicesEnabled]=="FALSE")) {
 			//ask if the user wants to save changes		
-			this._confirmMessageDialog = new LaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
-			this._confirmMessageDialog.setMessage(LaMsg.NAD_Dialog_ShutdownEmailService, null, DwtMessageDialog.WARNING_STYLE);
-			this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, LaServerController.prototype._saveChangesCallback, this, tmpObj);		
+			this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
+			this._confirmMessageDialog.setMessage(ZaMsg.NAD_Dialog_ShutdownEmailService, null, DwtMessageDialog.WARNING_STYLE);
+			this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaServerController.prototype._saveChangesCallback, this, tmpObj);		
 			this._confirmMessageDialog.popup();
 		
 		} else {
@@ -268,14 +268,14 @@ function(ev) {
 		}
 	} catch (ex) {
 		//if exception thrown - don' go away
-		this._handleException(ex, "LaServerController.prototype._saveButtonListener", null, false);
+		this._handleException(ex, "ZaServerController.prototype._saveButtonListener", null, false);
 	}
 }
 
 /**
 * handles the Close button click. Returns to the list view.
 **/ 
-LaServerController.prototype._closeButtonListener =
+ZaServerController.prototype._closeButtonListener =
 function(ev) {
 	//prompt if the user wants to save the changes
 	if(this._view.isDirty()) {
@@ -283,12 +283,12 @@ function(ev) {
 		var args = new Object();		
 		args["params"] = null;
 		args["obj"] = this._app.getServerListController();
-		args["func"] = LaServerListController.prototype.show;
+		args["func"] = ZaServerListController.prototype.show;
 		//ask if the user wants to save changes		
-		this._confirmMessageDialog = new LaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
-		this._confirmMessageDialog.setMessage(LaMsg.NAD_Dialog_SaveChanges, null, DwtMessageDialog.INFO_STYLE);
-		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, LaServerController.prototype._saveAndGoAway, this, args);		
-		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, LaServerController.prototype._discardAndGoAway, this, args);		
+		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
+		this._confirmMessageDialog.setMessage(ZaMsg.NAD_Dialog_SaveChanges, null, DwtMessageDialog.INFO_STYLE);
+		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaServerController.prototype._saveAndGoAway, this, args);		
+		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaServerController.prototype._discardAndGoAway, this, args);		
 		this._confirmMessageDialog.popup();
 	} else {
 		
@@ -298,7 +298,7 @@ function(ev) {
 
 
 
-LaServerController.prototype._closeCnfrmDlg = 
+ZaServerController.prototype._closeCnfrmDlg = 
 function () {
 	this._confirmMessageDialog.popdown();	
 }

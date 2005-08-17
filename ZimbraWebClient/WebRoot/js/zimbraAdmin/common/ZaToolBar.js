@@ -1,13 +1,13 @@
 /**
-* @class LaToolBar
+* @class ZaToolBar
 * @contructor
 * generic class that serves the purpose of creating any toolbar in the admin UI
 * @param parent parent object
-* @param opList array of LaOperation objects
+* @param opList array of ZaOperation objects
 **/
-function LaToolBar(parent, opList, posStyle, className) {
+function ZaToolBar(parent, opList, posStyle, className) {
 	if (arguments.length == 0) return;
-	className = className || "LaToolBar";
+	className = className || "ZaToolBar";
 	posStyle = posStyle || DwtControl.ABSOLUTE_STYLE;
 
 	DwtToolBar.call(this, parent, className, posStyle);
@@ -23,32 +23,32 @@ function LaToolBar(parent, opList, posStyle, className) {
 	}
 }
 
-LaToolBar.VIEW_DATA = "LaToolBar.VIEW";
+ZaToolBar.VIEW_DATA = "ZaToolBar.VIEW";
 
-LaToolBar.prototype = new DwtToolBar;
-LaToolBar.prototype.constructor = LaToolBar;
+ZaToolBar.prototype = new DwtToolBar;
+ZaToolBar.prototype.constructor = ZaToolBar;
 
-LaToolBar.prototype.toString = 
+ZaToolBar.prototype.toString = 
 function() {
-	return "LaToolBar";
+	return "ZaToolBar";
 }
 
-LaToolBar.prototype.addSelectionListener =
+ZaToolBar.prototype.addSelectionListener =
 function(buttonId, listener) {
 	this._buttons[buttonId].addSelectionListener(listener);
 }
 
-LaToolBar.prototype.removeSelectionListener =
+ZaToolBar.prototype.removeSelectionListener =
 function(buttonId, listener) {
 	this._buttons[buttonId].removeSelectionListener(listener);
 }
 
-LaToolBar.prototype.getButton =
+ZaToolBar.prototype.getButton =
 function(buttonId) {
 	return this._buttons[buttonId];
 }
 
-LaToolBar.prototype.setData = 
+ZaToolBar.prototype.setData = 
 function(buttonId, key, data) {
 	this._buttons[buttonId].setData(key, data);
 }
@@ -59,7 +59,7 @@ function(buttonId, key, data) {
 * @param ids		a list of button IDs
 * @param enabled	whether to enable the buttons
 */
-LaToolBar.prototype.enable =
+ZaToolBar.prototype.enable =
 function(ids, enabled) {
 	if (!(ids instanceof Array))
 		ids = [ids];
@@ -68,13 +68,13 @@ function(ids, enabled) {
 			this._buttons[ids[i]].setEnabled(enabled);
 }
 
-LaToolBar.prototype.enableAll =
+ZaToolBar.prototype.enableAll =
 function(enabled) {
 	for (var i in this._buttons)
 		this._buttons[i].setEnabled(enabled);
 }
 
-LaToolBar.prototype.computeHeight =
+ZaToolBar.prototype.computeHeight =
 function(enabled) {
 	var h = 0;
 	for (var i in this._buttons)
@@ -82,7 +82,7 @@ function(enabled) {
 	return h;
 }
 
-LaToolBar.prototype._createButton =
+ZaToolBar.prototype._createButton =
 function(buttonId, imageId, text, disImageId, toolTip, enabled, style, align) {
 	if (!style)
 		style = "TBButton"
@@ -100,12 +100,12 @@ function(buttonId, imageId, text, disImageId, toolTip, enabled, style, align) {
 	return b;
 }
 
-LaToolBar.prototype._createSeparator =
+ZaToolBar.prototype._createSeparator =
 function() {
 	new DwtControl(this, "vertSep");
 }
 
-LaToolBar.prototype._buttonId =
+ZaToolBar.prototype._buttonId =
 function(button) {
 	return button.getData("_buttonId");
 }

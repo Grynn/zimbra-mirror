@@ -1,13 +1,13 @@
 /**
-* @class LaCosServerPoolPage
+* @class ZaCosServerPoolPage
 * @contructor
 **/
-function LaCosServerPoolPage (parent, app) {
+function ZaCosServerPoolPage (parent, app) {
 	if (arguments.length == 0) return;
 	DwtTabViewPage.call(this, parent);
 	this._fieldIds = new Object(); //stores the ids of all the form elements
 	/*
-	* _fieldIds[] - this is a map, the keys are fields names of the LaCos object
+	* _fieldIds[] - this is a map, the keys are fields names of the ZaCos object
 	* and values are ids of the corresponding form fields 
 	*/	
 	this._app = app;
@@ -17,26 +17,26 @@ function LaCosServerPoolPage (parent, app) {
 	this.setScrollStyle(DwtControl.SCROLL);			
 }
 
-LaCosServerPoolPage.prototype = new DwtTabViewPage;
-LaCosServerPoolPage.prototype.constructor = LaCosServerPoolPage;
+ZaCosServerPoolPage.prototype = new DwtTabViewPage;
+ZaCosServerPoolPage.prototype.constructor = ZaCosServerPoolPage;
 
 /**
 * Public methods
 **/
 
-LaCosServerPoolPage.prototype.toString = 
+ZaCosServerPoolPage.prototype.toString = 
 function() {
-	return "LaCosServerPoolPage";
+	return "ZaCosServerPoolPage";
 }
 
-LaCosServerPoolPage.prototype.resetSize = 
+ZaCosServerPoolPage.prototype.resetSize = 
 function(newWidth, newHeight) {
 	if(this._rendered) {
 		DwtTabViewPage.prototype.resetSize.call(this, newWidth, newHeight);
 	}
 }
 
-LaCosServerPoolPage.prototype.showMe = 
+ZaCosServerPoolPage.prototype.showMe = 
 function() {
 	if(!this._rendered) {
 		this._createHTML();
@@ -53,19 +53,19 @@ function() {
 	DwtTabViewPage.prototype.showMe.call(this);
 }
 
-LaCosServerPoolPage.prototype.setEnabled = 
+ZaCosServerPoolPage.prototype.setEnabled = 
 function(flag) {
 	if(!this._rendered) {
 		return;		
 	}
 }
 
-LaCosServerPoolPage.prototype.setDirty = 
+ZaCosServerPoolPage.prototype.setDirty = 
 function (isD) {
 	if(isD) {
 		if(this._app.getCurrentController().getToolBar()) {
-			if(this._app.getCurrentController().getToolBar().getButton(LaOperation.SAVE)) {
-				this._app.getCurrentController().getToolBar().getButton(LaOperation.SAVE).setEnabled(true);
+			if(this._app.getCurrentController().getToolBar().getButton(ZaOperation.SAVE)) {
+				this._app.getCurrentController().getToolBar().getButton(ZaOperation.SAVE).setEnabled(true);
 			}
 		}
 	}
@@ -73,10 +73,10 @@ function (isD) {
 }
 
 /**
-* @param item - LaCos object 
+* @param item - ZaCos object 
 * copies attribute values from object to form fields
 **/
-LaCosServerPoolPage.prototype.setFields = 
+ZaCosServerPoolPage.prototype.setFields = 
 function (item) {
 	this.isNewObject=true;
 	this._currentObject=item;
@@ -92,26 +92,26 @@ function (item) {
 * transfers the values from internal object (_containedObject)
 * to the form fields
 **/
-LaCosServerPoolPage.prototype._setFields = 
+ZaCosServerPoolPage.prototype._setFields = 
 function() {
 
 	var sourceArray = this._app.getServerList().getVector().getArray();
-	var hostVector = new LaItemVector();
-	if(this._currentObject.attrs && this._currentObject.attrs[LaCos.A_liquidMailHostPool]) {
-		if(this._currentObject.attrs[LaCos.A_liquidMailHostPool] instanceof Array) {
-			for(sname in this._currentObject.attrs[LaCos.A_liquidMailHostPool]) {
-				var newServer = new LaServer();
-				newServer.load("id", this._currentObject.attrs[LaCos.A_liquidMailHostPool][sname]);
+	var hostVector = new ZaItemVector();
+	if(this._currentObject.attrs && this._currentObject.attrs[ZaCos.A_zimbraMailHostPool]) {
+		if(this._currentObject.attrs[ZaCos.A_zimbraMailHostPool] instanceof Array) {
+			for(sname in this._currentObject.attrs[ZaCos.A_zimbraMailHostPool]) {
+				var newServer = new ZaServer();
+				newServer.load("id", this._currentObject.attrs[ZaCos.A_zimbraMailHostPool][sname]);
 				hostVector.add(newServer);
 			}
-		} else if(typeof(this._currentObject.attrs[LaCos.A_liquidMailHostPool]) == 'string'){
-			var newServer = new LaServer();
-			newServer.load("id", this._currentObject.attrs[LaCos.A_liquidMailHostPool]);
+		} else if(typeof(this._currentObject.attrs[ZaCos.A_zimbraMailHostPool]) == 'string'){
+			var newServer = new ZaServer();
+			newServer.load("id", this._currentObject.attrs[ZaCos.A_zimbraMailHostPool]);
 			hostVector.add(newServer);
 		}
 	} 
 	this._targetListView.set(hostVector);
-	var sourceVector = new LaItemVector();
+	var sourceVector = new ZaItemVector();
 	for(var ix in sourceArray) {
 		if(!hostVector.contains(sourceArray[ix])) {
 			sourceVector.add(sourceArray[ix]);
@@ -127,51 +127,51 @@ function() {
 * transfers the values from form fields (_containedObject)
 * to the internal object
 **/
-LaCosServerPoolPage.prototype.getFields = 
+ZaCosServerPoolPage.prototype.getFields = 
 function (item) {
-	item.attrs[LaCos.A_liquidMailHostPool] = new Array();
+	item.attrs[ZaCos.A_zimbraMailHostPool] = new Array();
 	var list = this._targetListView.getList().getArray();
 	if(list && list.length) {
 		for (var ix = 0; ix < list.length; ix++) {
-			item.attrs[LaCos.A_liquidMailHostPool].push(list[ix].id);
+			item.attrs[ZaCos.A_zimbraMailHostPool].push(list[ix].id);
 		}
 	}
 }
 
-LaCosServerPoolPage.prototype._createUI = 
+ZaCosServerPoolPage.prototype._createUI = 
 function() {
 	//remove button
-	this._removeButton = this._setupButton(this._removeButtonId, LaMsg.NAD_Remove);
-	this._removeButton.addSelectionListener(new LsListener(this, this._removeButtonListener));
+	this._removeButton = this._setupButton(this._removeButtonId, ZaMsg.NAD_Remove);
+	this._removeButton.addSelectionListener(new AjxListener(this, this._removeButtonListener));
 	this._removeButton.setEnabled(false);
 	var removeDiv = Dwt.getDomObj(this.getDocument(), this._removeDivId);
 	removeDiv.appendChild(this._removeButton.getHtmlElement());
 
-	this._addButton = this._setupButton(this._addButtonId, LaMsg.NAD_Add);
-	this._addButton.addSelectionListener(new LsListener(this, this._addButtonListener));
+	this._addButton = this._setupButton(this._addButtonId, ZaMsg.NAD_Add);
+	this._addButton.addSelectionListener(new AjxListener(this, this._addButtonListener));
 	this._addButton.setEnabled(false);
 	var addDiv = Dwt.getDomObj(this.getDocument(), this._addDivId);
 	addDiv.appendChild(this._addButton.getHtmlElement());
 	
 	var targetListDiv = Dwt.getDomObj(this.getDocument(), this._targetListId);
-	this._targetListView = new LaCosServerPoolPage_LaListView(this);
+	this._targetListView = new ZaCosServerPoolPage_ZaListView(this);
 	targetListDiv.appendChild(this._targetListView.getHtmlElement());
 	
 	//var size = Dwt.getSize(targetListDiv);
 	//this._targetListView.setSize(size.x, size.y);
-	this._targetListView.addSelectionListener(new LsListener(this, this._targetListener));
+	this._targetListView.addSelectionListener(new AjxListener(this, this._targetListener));
 	
 	//source list
 	var sorceListDiv = Dwt.getDomObj(this.getDocument(), this._sourceListId);
-	this._sorceListView = new LaCosServerPoolPage_LaListView(this);
+	this._sorceListView = new ZaCosServerPoolPage_ZaListView(this);
 	sorceListDiv.appendChild(this._sorceListView.getHtmlElement());
 	//var size = Dwt.getSize(sorceListDiv);
 	//this._sorceListView.setSize(size.x, size.y);
-	this._sorceListView.addSelectionListener(new LsListener(this, this._sorceListener));
+	this._sorceListView.addSelectionListener(new AjxListener(this, this._sorceListener));
 	this._rendered = true;
 }
 
-LaCosServerPoolPage.prototype._getField = 
+ZaCosServerPoolPage.prototype._getField = 
 function(obj, field, attr) {
 	var elem = Dwt.getDomObj(this.getDocument(), this._fieldIds[field]);
 	if(elem != null)
@@ -180,7 +180,7 @@ function(obj, field, attr) {
 }
 
 // Creates a DwtButton and adds a few props to it
-LaCosServerPoolPage.prototype._setupButton =
+ZaCosServerPoolPage.prototype._setupButton =
 function(id, name) {
 	var button = new DwtButton(this);
 	button.setText(name);
@@ -191,7 +191,7 @@ function(id, name) {
 	return button;
 }
 
-LaCosServerPoolPage.prototype._createHTML = 
+ZaCosServerPoolPage.prototype._createHTML = 
 function () {
 	var idx = 0;
 	var html = new Array(50);
@@ -202,7 +202,7 @@ function () {
 	this._removeButtonId = Dwt.getNextId();
 	this._removeDivId = Dwt.getNextId();
 	
-	html[idx++] = "<div class='LaCosView'>";	
+	html[idx++] = "<div class='ZaCosView'>";	
 	html[idx++] = "<table style='width:50ex' cellspacing='0' cellpadding='0' border='0'>";
 	html[idx++] = "<tr>";
 	// source list
@@ -223,17 +223,17 @@ function () {
 //	this._rendered = true;
 }
 
-LaCosServerPoolPage.prototype._targetListener = 
+ZaCosServerPoolPage.prototype._targetListener = 
 function (ev) {
 	this._removeButton.setEnabled(true);
 }
 
-LaCosServerPoolPage.prototype._sorceListener = 
+ZaCosServerPoolPage.prototype._sorceListener = 
 function () {
 	this._addButton.setEnabled(true);
 }
 
-LaCosServerPoolPage.prototype._addButtonListener = 
+ZaCosServerPoolPage.prototype._addButtonListener = 
 function (ev) {
 	//get selected item
 	var selected = this._sorceListView.getSelection();
@@ -251,7 +251,7 @@ function (ev) {
 	this.setDirty(true);
 }
 
-LaCosServerPoolPage.prototype._removeButtonListener = 
+ZaCosServerPoolPage.prototype._removeButtonListener = 
 function () {
 	//get selected item
 	var selected = this._targetListView.getSelection();
@@ -269,22 +269,22 @@ function () {
 	this.setDirty(true);
 }
 
-function LaCosServerPoolPage_LaListView(parent) {
+function ZaCosServerPoolPage_ZaListView(parent) {
 	if (arguments.length == 0) return;
-	LaListView.call(this, parent);
+	ZaListView.call(this, parent);
 }
 
 
-LaCosServerPoolPage_LaListView.prototype = new LaListView;
-LaCosServerPoolPage_LaListView.prototype.constructor = LaCosServerPoolPage_LaListView;
+ZaCosServerPoolPage_ZaListView.prototype = new ZaListView;
+ZaCosServerPoolPage_ZaListView.prototype.constructor = ZaCosServerPoolPage_ZaListView;
 
-LaCosServerPoolPage_LaListView.prototype.toString = 
+ZaCosServerPoolPage_ZaListView.prototype.toString = 
 function() {
-	return "LaCosServerPoolPage_LaListView";
+	return "ZaCosServerPoolPage_ZaListView";
 }
 
 // abstract methods
-LaCosServerPoolPage_LaListView.prototype._createItemHtml = 
+ZaCosServerPoolPage_ZaListView.prototype._createItemHtml = 
 function(item) {
 	var html = new Array(50);
 	var	div = this.getDocument().createElement("div");
@@ -298,14 +298,14 @@ function(item) {
 	html[idx++] = "<tr>";
 	// name
 	html[idx++] = "<td>&nbsp;";
-	html[idx++] = LsStringUtil.htmlEncode(item.name);
+	html[idx++] = AjxStringUtil.htmlEncode(item.name);
 	html[idx++] = "</td>";
 	html[idx++] = "</tr></table>";
 	div.innerHTML = html.join("");
 	return div;
 }
 
-LaCosServerPoolPage_LaListView.prototype._setNoResultsHtml = 
+ZaCosServerPoolPage_ZaListView.prototype._setNoResultsHtml = 
 function() {
 	var	div = this.getDocument().createElement("div");
 	div.innerHTML = "<table width='100%' cellspacing='0' cellpadding='1'><tr><td class='NoResults'><br>&nbsp</td></tr></table>";

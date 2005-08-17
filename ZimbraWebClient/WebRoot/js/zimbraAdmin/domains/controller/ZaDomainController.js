@@ -1,28 +1,28 @@
  /**
-* @class LaDomainController controls display of a single Domain
-* @contructor LaDomainController
+* @class ZaDomainController controls display of a single Domain
+* @contructor ZaDomainController
 * @param appCtxt
 * @param container
 * @param abApp
 **/
 
-function LaDomainController(appCtxt, container, abApp) {
-	LaController.call(this, appCtxt, container, abApp);
-	this._evtMgr = new LsEventMgr();
+function ZaDomainController(appCtxt, container, abApp) {
+	ZaController.call(this, appCtxt, container, abApp);
+	this._evtMgr = new AjxEventMgr();
 	this._UICreated = false;
 }
 
-LaDomainController.prototype = new LaController();
-LaDomainController.prototype.constructor = LaDomainController;
+ZaDomainController.prototype = new ZaController();
+ZaDomainController.prototype.constructor = ZaDomainController;
 
-LaDomainController.VIEW = "LaDomainController.VIEW";
+ZaDomainController.VIEW = "ZaDomainController.VIEW";
 
 /**
 *	@method show
-*	@param entry - isntance of LaDomain class
+*	@param entry - isntance of ZaDomain class
 */
 
-LaDomainController.prototype.show = 
+ZaDomainController.prototype.show = 
 function(entry) {
 	this._setView(entry);
 	this._app.setCurrentController(this);
@@ -32,70 +32,70 @@ function(entry) {
 * public getToolBar
 * @return reference to the toolbar
 **/
-LaDomainController.prototype.getToolBar = 
+ZaDomainController.prototype.getToolBar = 
 function () {
 	return this._toolBar;	
 }
 
 /**
-* Adds listener to modifications in the contained LaDomain 
+* Adds listener to modifications in the contained ZaDomain 
 * @param listener
 **/
-LaDomainController.prototype.addDomainChangeListener = 
+ZaDomainController.prototype.addDomainChangeListener = 
 function(listener) {
-	this._evtMgr.addListener(LaEvent.E_MODIFY, listener);
+	this._evtMgr.addListener(ZaEvent.E_MODIFY, listener);
 }
 
 /**
-* Removes listener to modifications in the controlled LaDomain 
+* Removes listener to modifications in the controlled ZaDomain 
 * @param listener
 **/
-LaDomainController.prototype.removeDomainChangeListener = 
+ZaDomainController.prototype.removeDomainChangeListener = 
 function(listener) {
-	this._evtMgr.removeListener(LaEvent.E_MODIFY, listener);    	
+	this._evtMgr.removeListener(ZaEvent.E_MODIFY, listener);    	
 }
 
 /**
-* Adds listener to creation of an LaDomain 
+* Adds listener to creation of an ZaDomain 
 * @param listener
 **/
-LaDomainController.prototype.addDomainCreationListener = 
+ZaDomainController.prototype.addDomainCreationListener = 
 function(listener) {
-	this._evtMgr.addListener(LaEvent.E_CREATE, listener);
+	this._evtMgr.addListener(ZaEvent.E_CREATE, listener);
 }
 
 /**
-* Removes listener to creation of an LaDomain 
+* Removes listener to creation of an ZaDomain 
 * @param listener
 **/
-LaDomainController.prototype.removeDomainCreationListener = 
+ZaDomainController.prototype.removeDomainCreationListener = 
 function(listener) {
-	this._evtMgr.removeListener(LaEvent.E_CREATE, listener);    	
+	this._evtMgr.removeListener(ZaEvent.E_CREATE, listener);    	
 }
 
 /**
-* Adds listener to removal of an LaDomain 
+* Adds listener to removal of an ZaDomain 
 * @param listener
 **/
-LaDomainController.prototype.addDomainRemovalListener = 
+ZaDomainController.prototype.addDomainRemovalListener = 
 function(listener) {
-	this._evtMgr.addListener(LaEvent.E_REMOVE, listener);
+	this._evtMgr.addListener(ZaEvent.E_REMOVE, listener);
 }
 
 /**
-* Removes listener to removal of an LaDomain 
+* Removes listener to removal of an ZaDomain 
 * @param listener
 **/
-LaDomainController.prototype.removeDomainRemovalListener = 
+ZaDomainController.prototype.removeDomainRemovalListener = 
 function(listener) {
-	this._evtMgr.removeListener(LaEvent.E_REMOVE, listener);    	
+	this._evtMgr.removeListener(ZaEvent.E_REMOVE, listener);    	
 }
 
 /**
 * @param nextViewCtrlr - the controller of the next view
 * Checks if it is safe to leave this view. Displays warning and Information messages if neccesary.
 **/
-LaDomainController.prototype.switchToNextView = 
+ZaDomainController.prototype.switchToNextView = 
 function (nextViewCtrlr, func, params) {
 	if(this._view.isDirty()) {
 		//parameters for the confirmation dialog's callback 
@@ -104,10 +104,10 @@ function (nextViewCtrlr, func, params) {
 		args["obj"] = nextViewCtrlr;
 		args["func"] = func;
 		//ask if the user wants to save changes			
-		this._confirmMessageDialog = new LaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);					
-		this._confirmMessageDialog.setMessage(LaMsg.Q_SAVE_CHANGES, null, DwtMessageDialog.INFO_STYLE);
-		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, LaDomainController.prototype._saveAndGoAway, this, args);		
-		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, LaDomainController.prototype._discardAndGoAway, this, args);		
+		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);					
+		this._confirmMessageDialog.setMessage(ZaMsg.Q_SAVE_CHANGES, null, DwtMessageDialog.INFO_STYLE);
+		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaDomainController.prototype._saveAndGoAway, this, args);		
+		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaDomainController.prototype._discardAndGoAway, this, args);		
 		this._confirmMessageDialog.popup();
 	} else {
 	
@@ -116,113 +116,113 @@ function (nextViewCtrlr, func, params) {
 
 }
 
-LaDomainController.prototype.setDirty = 
+ZaDomainController.prototype.setDirty = 
 function (isD) {
 	if(isD)
-		this._toolBar.getButton(LaOperation.SAVE).setEnabled(true);
+		this._toolBar.getButton(ZaOperation.SAVE).setEnabled(true);
 	else
-		this._toolBar.getButton(LaOperation.SAVE).setEnabled(false);
+		this._toolBar.getButton(ZaOperation.SAVE).setEnabled(false);
 }
 
 /**
-*	Private method that notifies listeners to that the controlled LaDomain is changed
+*	Private method that notifies listeners to that the controlled ZaDomain is changed
 * 	@param details
 */
-LaDomainController.prototype._fireDomainChangeEvent =
+ZaDomainController.prototype._fireDomainChangeEvent =
 function(details) {
 	try {
-		if (this._evtMgr.isListenerRegistered(LaEvent.E_MODIFY)) {
-			var evt = new LaEvent(LaEvent.S_DOMAIN);
-			evt.set(LaEvent.E_MODIFY, this);
+		if (this._evtMgr.isListenerRegistered(ZaEvent.E_MODIFY)) {
+			var evt = new ZaEvent(ZaEvent.S_DOMAIN);
+			evt.set(ZaEvent.E_MODIFY, this);
 			evt.setDetails(details);
-			this._evtMgr.notifyListeners(LaEvent.E_MODIFY, evt);
+			this._evtMgr.notifyListeners(ZaEvent.E_MODIFY, evt);
 		}
 	} catch (ex) {
-		this._handleException(ex, "LaDomainController.prototype._fireDomainChangeEvent", details, false);	
+		this._handleException(ex, "ZaDomainController.prototype._fireDomainChangeEvent", details, false);	
 	}
 }
 
 /**
-*	Private method that notifies listeners that a new LaDomain is created
+*	Private method that notifies listeners that a new ZaDomain is created
 * 	@param details
 */
-LaDomainController.prototype._fireDomainCreationEvent =
+ZaDomainController.prototype._fireDomainCreationEvent =
 function(details) {
 	try {
-		if (this._evtMgr.isListenerRegistered(LaEvent.E_CREATE)) {
-			var evt = new LaEvent(LaEvent.S_DOMAIN);
-			evt.set(LaEvent.E_CREATE, this);
+		if (this._evtMgr.isListenerRegistered(ZaEvent.E_CREATE)) {
+			var evt = new ZaEvent(ZaEvent.S_DOMAIN);
+			evt.set(ZaEvent.E_CREATE, this);
 			evt.setDetails(details);
-			this._evtMgr.notifyListeners(LaEvent.E_CREATE, evt);
+			this._evtMgr.notifyListeners(ZaEvent.E_CREATE, evt);
 		}
 	} catch (ex) {
-		this._handleException(ex, "LaDomainController.prototype._fireDomainCreationEvent", details, false);	
+		this._handleException(ex, "ZaDomainController.prototype._fireDomainCreationEvent", details, false);	
 	}
 }
 
 /**
-*	Private method that notifies listeners to that the controlled LaDomain is removed
+*	Private method that notifies listeners to that the controlled ZaDomain is removed
 * 	@param details
 */
-LaDomainController.prototype._fireDomainRemovalEvent =
+ZaDomainController.prototype._fireDomainRemovalEvent =
 function(details) {
 	try {
-		if (this._evtMgr.isListenerRegistered(LaEvent.E_REMOVE)) {
-			var evt = new LaEvent(LaEvent.S_DOMAIN);
-			evt.set(LaEvent.E_REMOVE, this);
+		if (this._evtMgr.isListenerRegistered(ZaEvent.E_REMOVE)) {
+			var evt = new ZaEvent(ZaEvent.S_DOMAIN);
+			evt.set(ZaEvent.E_REMOVE, this);
 			evt.setDetails(details);
-			this._evtMgr.notifyListeners(LaEvent.E_REMOVE, evt);
+			this._evtMgr.notifyListeners(ZaEvent.E_REMOVE, evt);
 		}
 	} catch (ex) {
-		this._handleException(ex, "LaDomainController.prototype._fireDomainRemovalEvent", details, false);	
+		this._handleException(ex, "ZaDomainController.prototype._fireDomainRemovalEvent", details, false);	
 	}
 }
 
 /**
 *	@method _setView 
-*	@param entry - isntance of LaDomain class
+*	@param entry - isntance of ZaDomain class
 */
-LaDomainController.prototype._setView =
+ZaDomainController.prototype._setView =
 function(entry) {
 	if(!this._UICreated) {
-		this._view = new LaDomainXFormView(this._container, this._app);
-	  	//this._view = new LaDomainView(this._container, this._app);
+		this._view = new ZaDomainXFormView(this._container, this._app);
+	  	//this._view = new ZaDomainView(this._container, this._app);
    		this._ops = new Array();
-   		this._ops.push(new LaOperation(LaOperation.NEW, LaMsg.TBB_New, LaMsg.DTBB_New_tt, LaImg.I_DOMAIN, LaImg.I_DOMAIN, new LsListener(this, LaDomainController.prototype._newButtonListener)));
-   		this._ops.push(new LaOperation(LaOperation.GAL_WIZARD, LaMsg.DTBB_GAlConfigWiz, LaMsg.DTBB_GAlConfigWiz_tt, LaImg.I_DOMAIN, LaImg.I_DOMAIN, new LsListener(this, LaDomainController.prototype._galWizButtonListener)));   		
-   		this._ops.push(new LaOperation(LaOperation.AUTH_WIZARD, LaMsg.DTBB_AuthConfigWiz, LaMsg.DTBB_AuthConfigWiz_tt, LaImg.I_DOMAIN, LaImg.I_DOMAIN, new LsListener(this, LaDomainController.prototype._authWizButtonListener)));   		   		
-   		this._ops.push(new LaOperation(LaOperation.SAVE, LaMsg.TBB_Save, LaMsg.DTBB_Save_tt, LaImg.I_SAVE, LaImg.ID_SAVE, new LsListener(this, LaDomainController.prototype._saveButtonListener)));
-   		this._ops.push(new LaOperation(LaOperation.CLOSE, LaMsg.TBB_Close, LaMsg.DTBB_Close_tt, LaImg.I_UNDO, LaImg.I_UNDO, new LsListener(this, LaDomainController.prototype._closeButtonListener)));    	
-   		this._ops.push(new LaOperation(LaOperation.DELETE, LaMsg.TBB_Delete, LaMsg.DTBB_Delete_tt, LaImg.I_DELETE, LaImg.I_DELETE, new LsListener(this, LaDomainController.prototype._deleteButtonListener)));    	    	
+   		this._ops.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.DTBB_New_tt, ZaImg.I_DOMAIN, ZaImg.I_DOMAIN, new AjxListener(this, ZaDomainController.prototype._newButtonListener)));
+   		this._ops.push(new ZaOperation(ZaOperation.GAL_WIZARD, ZaMsg.DTBB_GAlConfigWiz, ZaMsg.DTBB_GAlConfigWiz_tt, ZaImg.I_DOMAIN, ZaImg.I_DOMAIN, new AjxListener(this, ZaDomainController.prototype._galWizButtonListener)));   		
+   		this._ops.push(new ZaOperation(ZaOperation.AUTH_WIZARD, ZaMsg.DTBB_AuthConfigWiz, ZaMsg.DTBB_AuthConfigWiz_tt, ZaImg.I_DOMAIN, ZaImg.I_DOMAIN, new AjxListener(this, ZaDomainController.prototype._authWizButtonListener)));   		   		
+   		this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.DTBB_Save_tt, ZaImg.I_SAVE, ZaImg.ID_SAVE, new AjxListener(this, ZaDomainController.prototype._saveButtonListener)));
+   		this._ops.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.DTBB_Close_tt, ZaImg.I_UNDO, ZaImg.I_UNDO, new AjxListener(this, ZaDomainController.prototype._closeButtonListener)));    	
+   		this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.DTBB_Delete_tt, ZaImg.I_DELETE, ZaImg.I_DELETE, new AjxListener(this, ZaDomainController.prototype._deleteButtonListener)));    	    	
 	
-		this._toolBar = new LaToolBar(this._container, this._ops);
-	    this._app.createView(LaDomainController.VIEW, [this._toolBar, this._view]);
+		this._toolBar = new ZaToolBar(this._container, this._ops);
+	    this._app.createView(ZaDomainController.VIEW, [this._toolBar, this._view]);
 		this._UICreated = true;
 	} 
-	this._app.pushView(LaDomainController.VIEW);
-	this._toolBar.getButton(LaOperation.SAVE).setEnabled(false);  		
+	this._app.pushView(ZaDomainController.VIEW);
+	this._toolBar.getButton(ZaOperation.SAVE).setEnabled(false);  		
 	if(!entry.id) {
-		this._toolBar.getButton(LaOperation.DELETE).setEnabled(false);  			
+		this._toolBar.getButton(ZaOperation.DELETE).setEnabled(false);  			
 	} else {
-		this._toolBar.getButton(LaOperation.DELETE).setEnabled(true);  				
+		this._toolBar.getButton(ZaOperation.DELETE).setEnabled(true);  				
 	}
 	this._view.setDirty(false);
-	entry[LaModel.currentTab] = "1"
+	entry[ZaModel.currentTab] = "1"
 	this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
 	this._currentObject = entry;
 }
 
-LaDomainController.prototype._saveChanges = 
+ZaDomainController.prototype._saveChanges = 
 function () {
 	var tmpObj = this._view.getObject();
 	var mods = new Object();
 	var haveSmth = false;
-	if(tmpObj.attrs[LaDomain.A_notes] != this._currentObject.attrs[LaDomain.A_notes]) {
-		mods[LaDomain.A_notes] = tmpObj.attrs[LaDomain.A_notes] ;
+	if(tmpObj.attrs[ZaDomain.A_notes] != this._currentObject.attrs[ZaDomain.A_notes]) {
+		mods[ZaDomain.A_notes] = tmpObj.attrs[ZaDomain.A_notes] ;
 		haveSmth = true;
 	}
-	if(tmpObj.attrs[LaDomain.A_description] != this._currentObject.attrs[LaDomain.A_description]) {
-		mods[LaDomain.A_description] = tmpObj.attrs[LaDomain.A_description] ;
+	if(tmpObj.attrs[ZaDomain.A_description] != this._currentObject.attrs[ZaDomain.A_description]) {
+		mods[ZaDomain.A_description] = tmpObj.attrs[ZaDomain.A_description] ;
 		haveSmth = true;
 	}
 	if(!haveSmth)
@@ -240,7 +240,7 @@ function () {
 *						 params["func"] - the method to call on the nextViewCtrlr in order to navigate to the next view
 * This method saves changes in the current view and calls the method on the controller of the next view
 **/
-LaDomainController.prototype._saveAndGoAway =
+ZaDomainController.prototype._saveAndGoAway =
 function (params) {
 	try {
 		this._confirmMessageDialog.popdown();		
@@ -250,11 +250,11 @@ function (params) {
 		}
 	} catch (ex) {
 		//if exception thrown - don' go away
-		if(ex.code == LsCsfeException.DOMAIN_EXISTS) {
-			this._msgDialog.setMessage(LaMsg.ERROR_DOMAIN_EXISTS, null, DwtMessageDialog.CRITICAL_STYLE, null);
+		if(ex.code == AjxCsfeException.DOMAIN_EXISTS) {
+			this._msgDialog.setMessage(ZaMsg.ERROR_DOMAIN_EXISTS, null, DwtMessageDialog.CRITICAL_STYLE, null);
 			this._msgDialog.popup(this._getDialogXY());
 		} else {
-			this._handleException(ex, "LaDomainController.prototype._saveAndGoAway", null, false);
+			this._handleException(ex, "ZaDomainController.prototype._saveAndGoAway", null, false);
 		}
 	}
 }
@@ -262,7 +262,7 @@ function (params) {
 /**
 * Leaves current view without saving any changes
 **/
-LaDomainController.prototype._discardAndGoAway = 
+ZaDomainController.prototype._discardAndGoAway = 
 function (params) {
 	this._confirmMessageDialog.popdown();
 
@@ -273,23 +273,23 @@ function (params) {
 
 /**
 * handles "save" button click
-* calls modify or create on the current LaDomain
+* calls modify or create on the current ZaDomain
 **/
-LaDomainController.prototype._saveButtonListener =
+ZaDomainController.prototype._saveButtonListener =
 function(ev) {
 	try {
 		if(this._saveChanges()) {
 			this._view.setDirty(false);		
-			this._toolBar.getButton(LaOperation.SAVE).setEnabled(false); 
+			this._toolBar.getButton(ZaOperation.SAVE).setEnabled(false); 
 			this._view.setObject(this._currentObject, true);
 		}
 	} catch (ex) {
 		//if exception thrown - don' go away
-		if(ex.code == LsCsfeException.DOMAIN_EXISTS) {
-			this._msgDialog.setMessage(LaMsg.ERROR_DOMAIN_EXISTS, null, DwtMessageDialog.CRITICAL_STYLE, null);
+		if(ex.code == AjxCsfeException.DOMAIN_EXISTS) {
+			this._msgDialog.setMessage(ZaMsg.ERROR_DOMAIN_EXISTS, null, DwtMessageDialog.CRITICAL_STYLE, null);
 			this._msgDialog.popup(this._getDialogXY());
 		} else {
-			this._handleException(ex, "LaDomainController.prototype._saveButtonListener", null, false);
+			this._handleException(ex, "ZaDomainController.prototype._saveButtonListener", null, false);
 		}
 	}
 }
@@ -297,7 +297,7 @@ function(ev) {
 /**
 * handles the Close button click. Returns to the list view.
 **/ 
-LaDomainController.prototype._closeButtonListener =
+ZaDomainController.prototype._closeButtonListener =
 function(ev) {
 	//prompt if the user wants to save the changes
 	if(this._view.isDirty()) {
@@ -305,12 +305,12 @@ function(ev) {
 		var args = new Object();		
 		args["params"] = null;
 		args["obj"] = this._app.getDomainListController();
-		args["func"] = LaDomainListController.prototype.show;
+		args["func"] = ZaDomainListController.prototype.show;
 		//ask if the user wants to save changes		
-		this._confirmMessageDialog = new LaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
+		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
 		this._confirmMessageDialog.setMessage("Do you want so save current changes?", null, DwtMessageDialog.INFO_STYLE);
-		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, LaDomainController.prototype._saveAndGoAway, this, args);		
-		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, LaDomainController.prototype._discardAndGoAway, this, args);		
+		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaDomainController.prototype._saveAndGoAway, this, args);		
+		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaDomainController.prototype._discardAndGoAway, this, args);		
 		this._confirmMessageDialog.popup();
 	} else {
 
@@ -321,20 +321,20 @@ function(ev) {
 /**
 * This listener is called when the Delete button is clicked. 
 **/
-LaDomainController.prototype._deleteButtonListener =
+ZaDomainController.prototype._deleteButtonListener =
 function(ev) {
 	if(this._currentObject.id) {
-		this._confirmMessageDialog = new LaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);						
+		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);						
 		this._confirmMessageDialog.setMessage("Are you sure you want to delete this Domain?", null, DwtMessageDialog.INFO_STYLE);
-		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, LaDomainController.prototype._deleteAndGoAway, this, null);		
-		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, LaDomainController.prototype._closeCnfrmDlg, this, null);				
+		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaDomainController.prototype._deleteAndGoAway, this, null);		
+		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaDomainController.prototype._closeCnfrmDlg, this, null);				
 		this._confirmMessageDialog.popup();
 	} else {
 		return;
 	}
 }
 
-LaDomainController.prototype._deleteAndGoAway = 
+ZaDomainController.prototype._deleteAndGoAway = 
 function () {
 	try {
 		if(this._currentObject.id) {
@@ -346,52 +346,52 @@ function () {
 			
 	} catch (ex) {
 		this._confirmMessageDialog.popdown();	
-		if(ex.code == LsCsfeException.DOMAIN_NOT_EMPTY) {
-			this._msgDialog.setMessage(LaMsg.ERROR_DOMAIN_NOT_EMPTY, null, DwtMessageDialog.CRITICAL_STYLE, null);
+		if(ex.code == AjxCsfeException.DOMAIN_NOT_EMPTY) {
+			this._msgDialog.setMessage(ZaMsg.ERROR_DOMAIN_NOT_EMPTY, null, DwtMessageDialog.CRITICAL_STYLE, null);
 			this._msgDialog.popup();			
 		} else {
-			this._handleException(ex, "LaDomainController.prototype._deleteAndGoAway", null, false);				
+			this._handleException(ex, "ZaDomainController.prototype._deleteAndGoAway", null, false);				
 		}
 	}
 }
 
-LaDomainController.prototype._closeCnfrmDlg = 
+ZaDomainController.prototype._closeCnfrmDlg = 
 function () {
 	this._confirmMessageDialog.popdown();	
 }
 
-LaDomainController.prototype.newDomain = 
+ZaDomainController.prototype.newDomain = 
 function () {
-	this._currentObject = new LaDomain();
+	this._currentObject = new ZaDomain();
 	this._showNewDomainWizard();
 }
 
-LaDomainController.prototype._showNewDomainWizard = 
+ZaDomainController.prototype._showNewDomainWizard = 
 function () {
 	try {
-		this._newDomainWizard = new LaNewDomainXWizard(this._container, this._app);	
-		this._newDomainWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, LaDomainController.prototype._finishNewButtonListener, this, null);			
+		this._newDomainWizard = new ZaNewDomainXWizard(this._container, this._app);	
+		this._newDomainWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainController.prototype._finishNewButtonListener, this, null);			
 		this._newDomainWizard.setObject(this._currentObject);
 		this._newDomainWizard.popup();
 	} catch (ex) {
-			this._handleException(ex, "LaDomainController.prototype._showNewDomainWizard", null, false);
+			this._handleException(ex, "ZaDomainController.prototype._showNewDomainWizard", null, false);
 	}
 }
 
 // new button was pressed
-LaDomainController.prototype._newButtonListener =
+ZaDomainController.prototype._newButtonListener =
 function(ev) {
 	if(this._view.isDirty()) {
 		//parameters for the confirmation dialog's callback 
 		var args = new Object();		
 		args["params"] = null;
 		args["obj"] = this._app.getDomainController();
-		args["func"] = LaDomainController.prototype.newDomain;
+		args["func"] = ZaDomainController.prototype.newDomain;
 		//ask if the user wants to save changes		
-		this._confirmMessageDialog = new LaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
+		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
 		this._confirmMessageDialog.setMessage("Do you want so save current changes?", null, DwtMessageDialog.INFO_STYLE);
-		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, LaDomainController.prototype._saveAndGoAway, this, args);		
-		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, LaDomainController.prototype._discardAndGoAway, this, args);		
+		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaDomainController.prototype._saveAndGoAway, this, args);		
+		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaDomainController.prototype._discardAndGoAway, this, args);		
 		this._confirmMessageDialog.popup();
 	} else {
 		this.newDomain();
@@ -399,51 +399,51 @@ function(ev) {
 }
 
 
-LaDomainController.prototype._galWizButtonListener =
+ZaDomainController.prototype._galWizButtonListener =
 function(ev) {
 	try {
-		this._galWizard = new LaGALConfigXWizard(this._container, this._app);	
-		this._galWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, LaDomainController.prototype._finishGalButtonListener, this, null);			
+		this._galWizard = new ZaGALConfigXWizard(this._container, this._app);	
+		this._galWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainController.prototype._finishGalButtonListener, this, null);			
 		this._galWizard.setObject(this._currentObject);
 		this._galWizard.popup();
 	} catch (ex) {
-			this._handleException(ex, "LaDomainController.prototype._showGalWizard", null, false);
+			this._handleException(ex, "ZaDomainController.prototype._showGalWizard", null, false);
 	}
 }
 
 
-LaDomainController.prototype._authWizButtonListener =
+ZaDomainController.prototype._authWizButtonListener =
 function(ev) {
 	try {
-		this._authWizard = new LaAuthConfigXWizard(this._container, this._app);	
-		this._authWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, LaDomainController.prototype._finishAuthButtonListener, this, null);			
+		this._authWizard = new ZaAuthConfigXWizard(this._container, this._app);	
+		this._authWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainController.prototype._finishAuthButtonListener, this, null);			
 		this._authWizard.setObject(this._currentObject);
 		this._authWizard.popup();
 	} catch (ex) {
-			this._handleException(ex, "LaDomainController.prototype._showAuthWizard", null, false);
+			this._handleException(ex, "ZaDomainController.prototype._showAuthWizard", null, false);
 	}
 }
 
-LaDomainController.prototype._finishGalButtonListener =
+ZaDomainController.prototype._finishGalButtonListener =
 function(ev) {
 	try {
 		var changeDetails = new Object();
-		LaDomain.modifyGalSettings(this._galWizard.getObject(),this._currentObject); 
+		ZaDomain.modifyGalSettings(this._galWizard.getObject(),this._currentObject); 
 		//if a modification took place - fire an DomainChangeEvent
 		changeDetails["obj"] = this._currentObject;
 		this._fireDomainChangeEvent(changeDetails);
 		this._view.setObject(this._currentObject);		
 		this._galWizard.popdown();
 	} catch (ex) {
-		this._handleException(ex, "LaDomainController.prototype._finishGalButtonListener", null, false);
+		this._handleException(ex, "ZaDomainController.prototype._finishGalButtonListener", null, false);
 	}
 	return;
 }
 
-LaDomainController.prototype._finishAuthButtonListener =
+ZaDomainController.prototype._finishAuthButtonListener =
 function(ev) {
 	try {
-		LaDomain.modifyAuthSettings(this._authWizard.getObject(), this._currentObject);
+		ZaDomain.modifyAuthSettings(this._authWizard.getObject(), this._currentObject);
 		var changeDetails = new Object();
 		//if a modification took place - fire an DomainChangeEvent
 		changeDetails["obj"] = this._currentObject;
@@ -452,7 +452,7 @@ function(ev) {
 		this._view.setObject(this._currentObject);
 		this._authWizard.popdown();
 	} catch (ex) {
-		this._handleException(ex, "LaDomainController.prototype._finishAuthButtonListener", null, false);
+		this._handleException(ex, "ZaDomainController.prototype._finishAuthButtonListener", null, false);
 	}
 	return;
 }
@@ -462,23 +462,23 @@ function(ev) {
 * This method handles "finish" button click in "New Domain" dialog
 **/
 
-LaDomainController.prototype._finishNewButtonListener =
+ZaDomainController.prototype._finishNewButtonListener =
 function(ev) {
 	try {
-		var domain = LaDomain.create(this._newDomainWizard.getObject(), this._app);
+		var domain = ZaDomain.create(this._newDomainWizard.getObject(), this._app);
 		if(domain != null) {
 			//if creation took place - fire an DomainChangeEvent
 			this._fireDomainCreationEvent(domain);
-			this._toolBar.getButton(LaOperation.DELETE).setEnabled(true);	
+			this._toolBar.getButton(ZaOperation.DELETE).setEnabled(true);	
 			this._newDomainWizard.popdown();		
 		}
 	} catch (ex) {
-		if(ex.code == LsCsfeException.DOMAIN_EXISTS) {
-			this.popupMsgDialog(LaMsg.ERROR_DOMAIN_EXISTS, ex);		
-//			this._msgDialog.setMessage(LaMsg.ERROR_DOMAIN_EXISTS, null, DwtMessageDialog.CRITICAL_STYLE, null);
+		if(ex.code == AjxCsfeException.DOMAIN_EXISTS) {
+			this.popupMsgDialog(ZaMsg.ERROR_DOMAIN_EXISTS, ex);		
+//			this._msgDialog.setMessage(ZaMsg.ERROR_DOMAIN_EXISTS, null, DwtMessageDialog.CRITICAL_STYLE, null);
 	//		this._msgDialog.popup(this._getDialogXY());
 		} else {
-			this._handleException(ex, "LaDomainController.prototype._finishNewButtonListener", null, false);
+			this._handleException(ex, "ZaDomainController.prototype._finishNewButtonListener", null, false);
 		}
 	}
 	return;

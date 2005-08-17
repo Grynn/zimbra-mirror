@@ -1,39 +1,39 @@
 /**
 * @constructor
-* @class LaDomainListView
+* @class ZaDomainListView
 * @param parent
 * @author Roland Schemers
 * @author Greg Solovyev
 **/
 
-function LaDomainListView(parent) {
+function ZaDomainListView(parent) {
 
-//	var className = "LaDomainListView";
+//	var className = "ZaDomainListView";
 	var className = null;
 	var posStyle = DwtControl.ABSOLUTE_STYLE;
 	
 	var headerList = this._getHeaderList();
 	
-	LaListView.call(this, parent, className, posStyle, headerList);
+	ZaListView.call(this, parent, className, posStyle, headerList);
 
-	this._appCtxt = this.shell.getData(LaAppCtxt.LABEL);
+	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
 	
 	//this.setScrollStyle(DwtControl.SCROLL);
-	//this.addControlListener(new LsListener(this, LaDomainListView.prototype._controlListener));
+	//this.addControlListener(new AjxListener(this, ZaDomainListView.prototype._controlListener));
 }
 
-LaDomainListView.prototype = new LaListView;
-LaDomainListView.prototype.constructor = LaDomainListView;
+ZaDomainListView.prototype = new ZaListView;
+ZaDomainListView.prototype.constructor = ZaDomainListView;
 
-LaDomainListView.prototype.toString = 
+ZaDomainListView.prototype.toString = 
 function() {
-	return "LaDomainListView";
+	return "ZaDomainListView";
 }
 
 /**
 * Renders a single item as a DIV element.
 */
-LaDomainListView.prototype._createItemHtml =
+ZaDomainListView.prototype._createItemHtml =
 function(domain, now, isDndIcon) {
 	var html = new Array(50);
 	var	div = this.getDocument().createElement("div");
@@ -48,15 +48,15 @@ function(domain, now, isDndIcon) {
 	var cnt = this._headerList.length;
 	for(var i = 0; i < cnt; i++) {
 		var id = this._headerList[i]._id;
-		if(id.indexOf(LaDomain.A_domainName)==0) {
+		if(id.indexOf(ZaDomain.A_domainName)==0) {
 			// name
 			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
-			html[idx++] = LsStringUtil.htmlEncode(domain.attrs[LaDomain.A_domainName]);
+			html[idx++] = AjxStringUtil.htmlEncode(domain.attrs[ZaDomain.A_domainName]);
 			html[idx++] = "</td>";
-		} else if(id.indexOf(LaDomain.A_description)==0) {
+		} else if(id.indexOf(ZaDomain.A_description)==0) {
 			// description		
 			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
-			html[idx++] = LsStringUtil.htmlEncode(domain.attrs[LaDomain.A_description]);
+			html[idx++] = AjxStringUtil.htmlEncode(domain.attrs[ZaDomain.A_description]);
 			html[idx++] = "</td>";
 		}
 	}
@@ -65,16 +65,16 @@ function(domain, now, isDndIcon) {
 	return div;
 }
 
-LaDomainListView.prototype._getHeaderList =
+ZaDomainListView.prototype._getHeaderList =
 function() {
 
 	var headerList = new Array();
 	//idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
-	headerList[0] = new LaListHeaderItem(LaDomain.A_domainName , LaMsg.CLV_Name_col, null, 250, true, LaDomain.A_domainName, true, true);
-	//headerList[0].initialize(LaMsg.CLV_Name_col, null, "245", true, LaDomain.A_domainName);
+	headerList[0] = new ZaListHeaderItem(ZaDomain.A_domainName , ZaMsg.CLV_Name_col, null, 250, true, ZaDomain.A_domainName, true, true);
+	//headerList[0].initialize(ZaMsg.CLV_Name_col, null, "245", true, ZaDomain.A_domainName);
 
-	headerList[1] = new LaListHeaderItem(LaDomain.A_description, LaMsg.CLV_Description_col, null, null, false, null, true, true);
-	//headerList[1].initialize(LaMsg.CLV_Description_col, null, "245", false, LaDomain.A_description);
+	headerList[1] = new ZaListHeaderItem(ZaDomain.A_description, ZaMsg.CLV_Description_col, null, null, false, null, true, true);
+	//headerList[1].initialize(ZaMsg.CLV_Description_col, null, "245", false, ZaDomain.A_description);
 	
 	return headerList;
 }

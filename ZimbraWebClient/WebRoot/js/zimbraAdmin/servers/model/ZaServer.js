@@ -1,158 +1,158 @@
 /**
-* @class LaServer
-* This class represents liquidServer objects. LaServer extends LaItem
+* @class ZaServer
+* This class represents zimbraServer objects. ZaServer extends ZaItem
 * @author Greg Solovyev
-* @contructor LaServer
+* @contructor ZaServer
 * @param app reference to the application instance
 **/
-function LaServer(app) {
-	LaItem.call(this, app);
+function ZaServer(app) {
+	ZaItem.call(this, app);
 	this.attrs = new Object();
 	this.id = "";
 	this.name="";
 }
 
-LaServer.prototype = new LaItem;
-LaServer.prototype.constructor = LaServer;
-LaServer.prototype.toString = function() {
+ZaServer.prototype = new ZaItem;
+ZaServer.prototype.constructor = ZaServer;
+ZaServer.prototype.toString = function() {
 	return this.name;
 }
 
-//attribute name constants, this values are taken from liquid.schema
-LaServer.A_name = "cn";
-LaServer.A_description = "description";
-LaServer.A_notes = "liquidNotes";
-LaServer.A_Service = "liquidService";
-LaServer.A_ServiceHostname = "liquidServiceHostname";
-LaServer.A_liquidMailPort = "liquidMailPort";
-LaServer.A_liquidMailSSLPort = "liquidMailSSLPort";
+//attribute name constants, this values are taken from zimbra.schema
+ZaServer.A_name = "cn";
+ZaServer.A_description = "description";
+ZaServer.A_notes = "zimbraNotes";
+ZaServer.A_Service = "zimbraService";
+ZaServer.A_ServiceHostname = "zimbraServiceHostname";
+ZaServer.A_zimbraMailPort = "zimbraMailPort";
+ZaServer.A_zimbraMailSSLPort = "zimbraMailSSLPort";
 // services
-LaServer.A_liquidServiceInstalled = "liquidServiceInstalled";
-LaServer.A_liquidLdapServiceInstalled = "_"+LaServer.A_liquidServiceInstalled+"_ldap";
-LaServer.A_liquidMailboxServiceInstalled = "_"+LaServer.A_liquidServiceInstalled+"_mailbox";
-LaServer.A_liquidMtaServiceInstalled = "_"+LaServer.A_liquidServiceInstalled+"_mta";
-LaServer.A_liquidSnmpServiceInstalled = "_"+LaServer.A_liquidServiceInstalled+"_snmp";
-LaServer.A_liquidAntiVirusServiceInstalled = "_"+LaServer.A_liquidServiceInstalled+"_antivirus";
-LaServer.A_liquidAntiSpamServiceInstalled = "_"+LaServer.A_liquidServiceInstalled+"_antispam";
-LaServer.A_liquidServiceEnabled = "liquidServiceEnabled";
-LaServer.A_liquidLdapServiceEnabled = "_"+LaServer.A_liquidServiceEnabled+"_ldap";
-LaServer.A_liquidMailboxServiceEnabled = "_"+LaServer.A_liquidServiceEnabled+"_mailbox";
-LaServer.A_liquidMtaServiceEnabled = "_"+LaServer.A_liquidServiceEnabled+"_mta";
-LaServer.A_liquidSnmpServiceEnabled = "_"+LaServer.A_liquidServiceEnabled+"_snmp";
-LaServer.A_liquidAntiVirusServiceEnabled = "_"+LaServer.A_liquidServiceEnabled+"_antivirus";
-LaServer.A_liquidAntiSpamServiceEnabled = "_"+LaServer.A_liquidServiceEnabled+"_antispam";
+ZaServer.A_zimbraServiceInstalled = "zimbraServiceInstalled";
+ZaServer.A_zimbraLdapServiceInstalled = "_"+ZaServer.A_zimbraServiceInstalled+"_ldap";
+ZaServer.A_zimbraMailboxServiceInstalled = "_"+ZaServer.A_zimbraServiceInstalled+"_mailbox";
+ZaServer.A_zimbraMtaServiceInstalled = "_"+ZaServer.A_zimbraServiceInstalled+"_mta";
+ZaServer.A_zimbraSnmpServiceInstalled = "_"+ZaServer.A_zimbraServiceInstalled+"_snmp";
+ZaServer.A_zimbraAntiVirusServiceInstalled = "_"+ZaServer.A_zimbraServiceInstalled+"_antivirus";
+ZaServer.A_zimbraAntiSpamServiceInstalled = "_"+ZaServer.A_zimbraServiceInstalled+"_antispam";
+ZaServer.A_zimbraServiceEnabled = "zimbraServiceEnabled";
+ZaServer.A_zimbraLdapServiceEnabled = "_"+ZaServer.A_zimbraServiceEnabled+"_ldap";
+ZaServer.A_zimbraMailboxServiceEnabled = "_"+ZaServer.A_zimbraServiceEnabled+"_mailbox";
+ZaServer.A_zimbraMtaServiceEnabled = "_"+ZaServer.A_zimbraServiceEnabled+"_mta";
+ZaServer.A_zimbraSnmpServiceEnabled = "_"+ZaServer.A_zimbraServiceEnabled+"_snmp";
+ZaServer.A_zimbraAntiVirusServiceEnabled = "_"+ZaServer.A_zimbraServiceEnabled+"_antivirus";
+ZaServer.A_zimbraAntiSpamServiceEnabled = "_"+ZaServer.A_zimbraServiceEnabled+"_antispam";
 // MTA
-LaServer.A_liquidMtaAuthEnabled = "liquidMtaAuthEnabled";
-LaServer.A_liquidMtaDnsLookupsEnabled = "liquidMtaDnsLookupsEnabled";
-LaServer.A_liquidMtaRelayHost = "liquidMtaRelayHost";
-LaServer.A_liquidMtaTlsAuthOnly = "liquidMtaTlsAuthOnly";
+ZaServer.A_zimbraMtaAuthEnabled = "zimbraMtaAuthEnabled";
+ZaServer.A_zimbraMtaDnsLookupsEnabled = "zimbraMtaDnsLookupsEnabled";
+ZaServer.A_zimbraMtaRelayHost = "zimbraMtaRelayHost";
+ZaServer.A_zimbraMtaTlsAuthOnly = "zimbraMtaTlsAuthOnly";
 //smtp
-LaServer.A_SmtpHostname  = "liquidSmtpHostname";
-LaServer.A_SmtpPort = "liquidSmtpPort";
-LaServer.A_SmtpTimeout = "liquidSmtpTimeout";
-//Lmtp
-LaServer.A_LmtpAdvertisedName = "liquidLmtpAdvertisedName";
-LaServer.A_LmtpBindAddress = "liquidLmtpBindAddress";
-LaServer.A_LmtpBindPort = "liquidLmtpBindPort";
-LaServer.A_LmtpNumThreads = "liquidLmtpNumThreads";
+ZaServer.A_SmtpHostname  = "zimbraSmtpHostname";
+ZaServer.A_SmtpPort = "zimbraSmtpPort";
+ZaServer.A_SmtpTimeout = "zimbraSmtpTimeout";
+//Zmtp
+ZaServer.A_ZmtpAdvertisedName = "zimbraZmtpAdvertisedName";
+ZaServer.A_ZmtpBindAddress = "zimbraZmtpBindAddress";
+ZaServer.A_ZmtpBindPort = "zimbraZmtpBindPort";
+ZaServer.A_ZmtpNumThreads = "zimbraZmtpNumThreads";
 //pop3
-LaServer.A_Pop3NumThreads = "liquidPop3NumThreads";
-LaServer.A_Pop3AdvertisedName ="liquidPop3AdvertisedName";
-LaServer.A_Pop3BindAddress = "liquidPop3BindAddress";
-LaServer.A_Pop3BindPort = "liquidPop3BindPort";
-LaServer.A_Pop3SSLBindPort = "liquidPop3SSLBindPort";
-LaServer.A_Pop3SSLServerEnabled = "liquidPop3SSLServerEnabled";
-LaServer.A_Pop3ServerEnabled = "liquidPop3ServerEnabled"
-LaServer.A_Pop3CleartextLoginEnabled = "liquidPop3CleartextLoginEnabled";
+ZaServer.A_Pop3NumThreads = "zimbraPop3NumThreads";
+ZaServer.A_Pop3AdvertisedName ="zimbraPop3AdvertisedName";
+ZaServer.A_Pop3BindAddress = "zimbraPop3BindAddress";
+ZaServer.A_Pop3BindPort = "zimbraPop3BindPort";
+ZaServer.A_Pop3SSLBindPort = "zimbraPop3SSLBindPort";
+ZaServer.A_Pop3SSLServerEnabled = "zimbraPop3SSLServerEnabled";
+ZaServer.A_Pop3ServerEnabled = "zimbraPop3ServerEnabled"
+ZaServer.A_Pop3CleartextLoginEnabled = "zimbraPop3CleartextLoginEnabled";
 //imap
-LaServer.A_ImapBindPort="liquidImapBindPort";
-LaServer.A_ImapServerEnabled="liquidImapServerEnabled";
-LaServer.A_ImapSSLBindPort="liquidImapSSLBindPort";
-LaServer.A_ImapSSLServerEnabled="liquidImapSSLServerEnabled";
-LaServer.A_ImapCleartextLoginEnabled="liquidImapCleartextLoginEnabled";
+ZaServer.A_ImapBindPort="zimbraImapBindPort";
+ZaServer.A_ImapServerEnabled="zimbraImapServerEnabled";
+ZaServer.A_ImapSSLBindPort="zimbraImapSSLBindPort";
+ZaServer.A_ImapSSLServerEnabled="zimbraImapSSLServerEnabled";
+ZaServer.A_ImapCleartextLoginEnabled="zimbraImapCleartextLoginEnabled";
 
 //redo log
-LaServer.A_RedologEnabled = "liquidRedologEnabled";
-LaServer.A_RedologLogPath = "liquidRedologLogPath";
-LaServer.A_RedologArchiveDir = "liquidRedologArchiveDir";
-LaServer.A_RedologBacklogDir = "liquidRedologBacklogDir";
-LaServer.A_RedologRolloverFileSizeKB = "liquidRedologRolloverFileSizeKB";
-LaServer.A_RedologFsyncIntervalMS = "liquidRedologFsyncIntervalMS";
+ZaServer.A_RedologEnabled = "zimbraRedologEnabled";
+ZaServer.A_RedologLogPath = "zimbraRedologLogPath";
+ZaServer.A_RedologArchiveDir = "zimbraRedologArchiveDir";
+ZaServer.A_RedologBacklogDir = "zimbraRedologBacklogDir";
+ZaServer.A_RedologRolloverFileSizeKB = "zimbraRedologRolloverFileSizeKB";
+ZaServer.A_RedologFsyncIntervalMS = "zimbraRedologFsyncIntervalMS";
 //master role settings
-LaServer.A_MasterRedologClientConnections = "liquidMasterRedologClientConnections";
-LaServer.A_MasterRedologClientTimeoutSec = "liquidMasterRedologClientTimeoutSec";
-LaServer.A_MasterRedologClientTcpNoDelay = "liquidMasterRedologClientTcpNoDelay";
+ZaServer.A_MasterRedologClientConnections = "zimbraMasterRedologClientConnections";
+ZaServer.A_MasterRedologClientTimeoutSec = "zimbraMasterRedologClientTimeoutSec";
+ZaServer.A_MasterRedologClientTcpNoDelay = "zimbraMasterRedologClientTcpNoDelay";
 //slave role settings
-LaServer.A_liquidUserServicesEnabled = "liquidUserServicesEnabled";
+ZaServer.A_zimbraUserServicesEnabled = "zimbraUserServicesEnabled";
 
-LaServer.STANDALONE = "standalone";
-LaServer.MASTER = "master";
-LaServer.SLAVE = "slave";
+ZaServer.STANDALONE = "standalone";
+ZaServer.MASTER = "master";
+ZaServer.SLAVE = "slave";
 		
-LaServer.myXModel = {
+ZaServer.myXModel = {
 	items: [
-		{id:LaItem.A_liquidId, type:_STRING_, ref:"attrs/" + LaItem.A_liquidId},
-		{id:LaServer.A_name, ref:"attrs/" + LaServer.A_name, type:_STRING_},
-		{id:LaServer.A_description, ref:"attrs/" +  LaServer.A_description, type:_STRING_},
-		{id:LaServer.A_notes, ref:"attrs/" +  LaServer.A_notes, type:_STRING_},		
-		{id:LaServer.A_Service, ref:"attrs/" +  LaServer.A_Service, type:_STRING_},				
-		{id:LaServer.A_ServiceHostname, ref:"attrs/" +  LaServer.A_ServiceHostname, type:_STRING_},								
+		{id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId},
+		{id:ZaServer.A_name, ref:"attrs/" + ZaServer.A_name, type:_STRING_},
+		{id:ZaServer.A_description, ref:"attrs/" +  ZaServer.A_description, type:_STRING_},
+		{id:ZaServer.A_notes, ref:"attrs/" +  ZaServer.A_notes, type:_STRING_},		
+		{id:ZaServer.A_Service, ref:"attrs/" +  ZaServer.A_Service, type:_STRING_},				
+		{id:ZaServer.A_ServiceHostname, ref:"attrs/" +  ZaServer.A_ServiceHostname, type:_STRING_},								
 		// Services
-		{id:LaServer.A_liquidLdapServiceEnabled, ref:"attrs/"+LaServer.A_liquidLdapServiceEnabled, type: _ENUM_, choices: [false,true] },
-		{id:LaServer.A_liquidMailboxServiceEnabled, ref:"attrs/"+LaServer.A_liquidMailboxServiceEnabled, type: _ENUM_, choices: [false,true] },
-		{id:LaServer.A_liquidMtaServiceEnabled, ref:"attrs/"+LaServer.A_liquidMtaServiceEnabled, type: _ENUM_, choices: [false,true] },
-		{id:LaServer.A_liquidSnmpServiceEnabled, ref:"attrs/"+LaServer.A_liquidSnmpServiceEnabled, type: _ENUM_, choices: [false,true] },
-		{id:LaServer.A_liquidAntiVirusServiceEnabled, ref:"attrs/"+LaServer.A_liquidAntiVirusServiceEnabled, type: _ENUM_, choices: [false,true] },
-		{id:LaServer.A_liquidAntiSpamServiceEnabled, ref:"attrs/"+LaServer.A_liquidAntiSpamServiceEnabled, type: _ENUM_, choices: [false,true] },
+		{id:ZaServer.A_zimbraLdapServiceEnabled, ref:"attrs/"+ZaServer.A_zimbraLdapServiceEnabled, type: _ENUM_, choices: [false,true] },
+		{id:ZaServer.A_zimbraMailboxServiceEnabled, ref:"attrs/"+ZaServer.A_zimbraMailboxServiceEnabled, type: _ENUM_, choices: [false,true] },
+		{id:ZaServer.A_zimbraMtaServiceEnabled, ref:"attrs/"+ZaServer.A_zimbraMtaServiceEnabled, type: _ENUM_, choices: [false,true] },
+		{id:ZaServer.A_zimbraSnmpServiceEnabled, ref:"attrs/"+ZaServer.A_zimbraSnmpServiceEnabled, type: _ENUM_, choices: [false,true] },
+		{id:ZaServer.A_zimbraAntiVirusServiceEnabled, ref:"attrs/"+ZaServer.A_zimbraAntiVirusServiceEnabled, type: _ENUM_, choices: [false,true] },
+		{id:ZaServer.A_zimbraAntiSpamServiceEnabled, ref:"attrs/"+ZaServer.A_zimbraAntiSpamServiceEnabled, type: _ENUM_, choices: [false,true] },
 		// MTA
-		{id:LaServer.A_liquidMtaAuthEnabled, ref:"attrs/" +  LaServer.A_liquidMtaAuthEnabled, type: _ENUM_, choices: LaModel.BOOLEAN_CHOICES },
-		{id:LaServer.A_liquidMtaTlsAuthOnly, ref:"attrs/" +  LaServer.A_liquidMtaTlsAuthOnly, type: _ENUM_, choices: LaModel.BOOLEAN_CHOICES },
-		{id:LaServer.A_liquidMtaRelayHost, ref:"attrs/" +  LaServer.A_liquidMtaRelayHost, type: _STRING_ },
-		{id:LaServer.A_liquidMtaDnsLookupsEnabled, ref:"attrs/" +  LaServer.A_liquidMtaDnsLookupsEnabled, type: _ENUM_, choices: LaModel.BOOLEAN_CHOICES },
+		{id:ZaServer.A_zimbraMtaAuthEnabled, ref:"attrs/" +  ZaServer.A_zimbraMtaAuthEnabled, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
+		{id:ZaServer.A_zimbraMtaTlsAuthOnly, ref:"attrs/" +  ZaServer.A_zimbraMtaTlsAuthOnly, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
+		{id:ZaServer.A_zimbraMtaRelayHost, ref:"attrs/" +  ZaServer.A_zimbraMtaRelayHost, type: _STRING_ },
+		{id:ZaServer.A_zimbraMtaDnsLookupsEnabled, ref:"attrs/" +  ZaServer.A_zimbraMtaDnsLookupsEnabled, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
 		// ...other...
-		{id:LaServer.A_SmtpHostname, ref:"attrs/" +  LaServer.A_SmtpHostname, type:_STRING_},														
-		{id:LaServer.A_SmtpPort, ref:"attrs/" +  LaServer.A_SmtpPort, type:_STRING_},																
-		{id:LaServer.A_SmtpTimeout, ref:"attrs/" + LaServer.A_SmtpTimeout, type:_STRING_},		
-		{id:LaServer.A_LmtpAdvertisedName, ref:"attrs/" +  LaServer.A_LmtpAdvertisedName, type:_STRING_},
-		{id:LaServer.A_LmtpBindAddress, ref:"attrs/" +  LaServer.A_LmtpBindAddress, type:_STRING_},		
-		{id:LaServer.A_LmtpBindPort, ref:"attrs/" +  LaServer.A_LmtpBindPort, type:_STRING_},		
-		{id:LaServer.A_LmtpNumThreads, ref:"attrs/" +  LaServer.A_LmtpNumThreads, type:_STRING_},		
-		{id:LaServer.A_Pop3NumThreads, ref:"attrs/" +  LaServer.A_Pop3NumThreads, type:_STRING_},		
-		{id:LaServer.A_Pop3AdvertisedName, ref:"attrs/" +  LaServer.A_Pop3AdvertisedName, type:_STRING_},		
-		{id:LaServer.A_Pop3BindAddress, ref:"attrs/" +  LaServer.A_Pop3BindAddress, type:_STRING_},		
-		{id:LaServer.A_LmtpBindPort, ref:"attrs/" +  LaServer.A_LmtpBindPort, type:_STRING_},		
-		{id:LaServer.A_LmtpNumThreads, ref:"attrs/" +  LaServer.A_LmtpNumThreads, type:_STRING_},		
-		{id:LaServer.A_Pop3NumThreads, ref:"attrs/" +  LaServer.A_Pop3NumThreads, type:_STRING_},		
-		{id:LaServer.A_Pop3AdvertisedName, ref:"attrs/" +  LaServer.A_Pop3AdvertisedName, type:_STRING_},		
-		{id:LaServer.A_Pop3BindAddress, ref:"attrs/" +  LaServer.A_Pop3BindAddress, type:_STRING_},		
-		{id:LaServer.A_Pop3BindPort, ref:"attrs/" +  LaServer.A_Pop3BindPort, type:_STRING_},		
-		{id:LaServer.A_Pop3SSLBindPort, ref:"attrs/" +  LaServer.A_Pop3SSLBindPort, type:_STRING_},		
-		{id:LaServer.A_Pop3SSLServerEnabled, ref:"attrs/" + LaServer.A_Pop3SSLServerEnabled, type:_ENUM_, choices:LaModel.BOOLEAN_CHOICES},		
-		{id:LaServer.A_Pop3ServerEnabled, ref:"attrs/" + LaServer.A_Pop3ServerEnabled, type:_ENUM_, choices:LaModel.BOOLEAN_CHOICES},		
-		{id:LaServer.A_Pop3CleartextLoginEnabled, ref:"attrs/" + LaServer.A_Pop3CleartextLoginEnabled, type:_ENUM_, choices:LaModel.BOOLEAN_CHOICES},		
-		{id:LaServer.A_ImapBindPort, ref:"attrs/" + LaServer.A_ImapBindPort, type:_STRING_},		
-		{id:LaServer.A_ImapServerEnabled, ref:"attrs/" + LaServer.A_ImapServerEnabled, type:_ENUM_, choices:LaModel.BOOLEAN_CHOICES},		
-		{id:LaServer.A_ImapSSLBindPort, ref:"attrs/" + LaServer.A_ImapSSLBindPort, type:_STRING_},		
-		{id:LaServer.A_ImapSSLServerEnabled, ref:"attrs/" + LaServer.A_ImapSSLServerEnabled, type:_ENUM_, choices:LaModel.BOOLEAN_CHOICES},		
-		{id:LaServer.A_ImapCleartextLoginEnabled, ref:"attrs/" + LaServer.A_ImapCleartextLoginEnabled, type:_ENUM_, choices:LaModel.BOOLEAN_CHOICES},		
-		{id:LaServer.A_RedologEnabled, ref:"attrs/" + LaServer.A_RedologEnabled, type:_ENUM_, choices:LaModel.BOOLEAN_CHOICES},		
-		{id:LaServer.A_RedologLogPath, ref:"attrs/" + LaServer.A_RedologLogPath, type:_STRING_},		
-		{id:LaServer.A_RedologArchiveDir, ref:"attrs/" + LaServer.A_RedologArchiveDir, type:_STRING_},		
-		{id:LaServer.A_RedologBacklogDir, ref:"attrs/" + LaServer.A_RedologBacklogDir, type:_STRING_},		
-		{id:LaServer.A_RedologRolloverFileSizeKB, ref:"attrs/" + LaServer.A_RedologRolloverFileSizeKB, type:_STRING_},		
-		{id:LaServer.A_RedologFsyncIntervalMS, ref:"attrs/" + LaServer.A_RedologFsyncIntervalMS, type:_STRING_},		
-		{id:LaServer.A_MasterRedologClientConnections, ref:"attrs/" + LaServer.A_MasterRedologClientConnections, type:_STRING_},		
-		{id:LaServer.A_MasterRedologClientTimeoutSec, ref:"attrs/" + LaServer.A_MasterRedologClientTimeoutSec, type:_STRING_},		
-		{id:LaServer.A_MasterRedologClientTcpNoDelay, ref:"attrs/" + LaServer.A_MasterRedologClientTcpNoDelay, type:_STRING_},		
-		{id:LaServer.A_liquidUserServicesEnabled, ref:"attrs/" + LaServer.A_liquidUserServicesEnabled, type:_ENUM_, choices:LaModel.BOOLEAN_CHOICES}		
+		{id:ZaServer.A_SmtpHostname, ref:"attrs/" +  ZaServer.A_SmtpHostname, type:_STRING_},														
+		{id:ZaServer.A_SmtpPort, ref:"attrs/" +  ZaServer.A_SmtpPort, type:_STRING_},																
+		{id:ZaServer.A_SmtpTimeout, ref:"attrs/" + ZaServer.A_SmtpTimeout, type:_STRING_},		
+		{id:ZaServer.A_ZmtpAdvertisedName, ref:"attrs/" +  ZaServer.A_ZmtpAdvertisedName, type:_STRING_},
+		{id:ZaServer.A_ZmtpBindAddress, ref:"attrs/" +  ZaServer.A_ZmtpBindAddress, type:_STRING_},		
+		{id:ZaServer.A_ZmtpBindPort, ref:"attrs/" +  ZaServer.A_ZmtpBindPort, type:_STRING_},		
+		{id:ZaServer.A_ZmtpNumThreads, ref:"attrs/" +  ZaServer.A_ZmtpNumThreads, type:_STRING_},		
+		{id:ZaServer.A_Pop3NumThreads, ref:"attrs/" +  ZaServer.A_Pop3NumThreads, type:_STRING_},		
+		{id:ZaServer.A_Pop3AdvertisedName, ref:"attrs/" +  ZaServer.A_Pop3AdvertisedName, type:_STRING_},		
+		{id:ZaServer.A_Pop3BindAddress, ref:"attrs/" +  ZaServer.A_Pop3BindAddress, type:_STRING_},		
+		{id:ZaServer.A_ZmtpBindPort, ref:"attrs/" +  ZaServer.A_ZmtpBindPort, type:_STRING_},		
+		{id:ZaServer.A_ZmtpNumThreads, ref:"attrs/" +  ZaServer.A_ZmtpNumThreads, type:_STRING_},		
+		{id:ZaServer.A_Pop3NumThreads, ref:"attrs/" +  ZaServer.A_Pop3NumThreads, type:_STRING_},		
+		{id:ZaServer.A_Pop3AdvertisedName, ref:"attrs/" +  ZaServer.A_Pop3AdvertisedName, type:_STRING_},		
+		{id:ZaServer.A_Pop3BindAddress, ref:"attrs/" +  ZaServer.A_Pop3BindAddress, type:_STRING_},		
+		{id:ZaServer.A_Pop3BindPort, ref:"attrs/" +  ZaServer.A_Pop3BindPort, type:_STRING_},		
+		{id:ZaServer.A_Pop3SSLBindPort, ref:"attrs/" +  ZaServer.A_Pop3SSLBindPort, type:_STRING_},		
+		{id:ZaServer.A_Pop3SSLServerEnabled, ref:"attrs/" + ZaServer.A_Pop3SSLServerEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},		
+		{id:ZaServer.A_Pop3ServerEnabled, ref:"attrs/" + ZaServer.A_Pop3ServerEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},		
+		{id:ZaServer.A_Pop3CleartextLoginEnabled, ref:"attrs/" + ZaServer.A_Pop3CleartextLoginEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},		
+		{id:ZaServer.A_ImapBindPort, ref:"attrs/" + ZaServer.A_ImapBindPort, type:_STRING_},		
+		{id:ZaServer.A_ImapServerEnabled, ref:"attrs/" + ZaServer.A_ImapServerEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},		
+		{id:ZaServer.A_ImapSSLBindPort, ref:"attrs/" + ZaServer.A_ImapSSLBindPort, type:_STRING_},		
+		{id:ZaServer.A_ImapSSLServerEnabled, ref:"attrs/" + ZaServer.A_ImapSSLServerEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},		
+		{id:ZaServer.A_ImapCleartextLoginEnabled, ref:"attrs/" + ZaServer.A_ImapCleartextLoginEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},		
+		{id:ZaServer.A_RedologEnabled, ref:"attrs/" + ZaServer.A_RedologEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},		
+		{id:ZaServer.A_RedologLogPath, ref:"attrs/" + ZaServer.A_RedologLogPath, type:_STRING_},		
+		{id:ZaServer.A_RedologArchiveDir, ref:"attrs/" + ZaServer.A_RedologArchiveDir, type:_STRING_},		
+		{id:ZaServer.A_RedologBacklogDir, ref:"attrs/" + ZaServer.A_RedologBacklogDir, type:_STRING_},		
+		{id:ZaServer.A_RedologRolloverFileSizeKB, ref:"attrs/" + ZaServer.A_RedologRolloverFileSizeKB, type:_STRING_},		
+		{id:ZaServer.A_RedologFsyncIntervalMS, ref:"attrs/" + ZaServer.A_RedologFsyncIntervalMS, type:_STRING_},		
+		{id:ZaServer.A_MasterRedologClientConnections, ref:"attrs/" + ZaServer.A_MasterRedologClientConnections, type:_STRING_},		
+		{id:ZaServer.A_MasterRedologClientTimeoutSec, ref:"attrs/" + ZaServer.A_MasterRedologClientTimeoutSec, type:_STRING_},		
+		{id:ZaServer.A_MasterRedologClientTcpNoDelay, ref:"attrs/" + ZaServer.A_MasterRedologClientTcpNoDelay, type:_STRING_},		
+		{id:ZaServer.A_zimbraUserServicesEnabled, ref:"attrs/" + ZaServer.A_zimbraUserServicesEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES}		
 	]
 };
 		
-LaServer.getAll =
+ZaServer.getAll =
 function() {
-	var soapDoc = LsSoapDoc.create("GetAllServersRequest", "urn:liquidAdmin", null);	
-	var resp = LsCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
-	var list = new LaItemList("server", LaServer);
+	var soapDoc = AjxSoapDoc.create("GetAllServersRequest", "urn:zimbraAdmin", null);	
+	var resp = AjxCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	var list = new ZaItemList("server", ZaServer);
 	list.loadFromDom(resp);
 //	list.sortByName();		
 	return list;
@@ -162,9 +162,9 @@ function() {
 * @param mods - map of modified attributes
 * modifies object's information in the database
 **/
-LaServer.prototype.modify =
+ZaServer.prototype.modify =
 function(mods) {
-	var soapDoc = LsSoapDoc.create("ModifyServerRequest", "urn:liquidAdmin", null);
+	var soapDoc = AjxSoapDoc.create("ModifyServerRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
 	for (var aname in mods) {
 		if (mods[aname] instanceof Array) {
@@ -185,7 +185,7 @@ function(mods) {
 			attr.setAttribute("n", aname);
 		}
 	}
-	var resp = LsCsfeCommand.invoke(soapDoc, false, null, this.id, true).firstChild;
+	var resp = AjxCsfeCommand.invoke(soapDoc, false, null, this.id, true).firstChild;
 	//update itseld
 	this.initFromDom(resp.firstChild);
 }
@@ -193,7 +193,7 @@ function(mods) {
 /**
 * Returns HTML for a tool tip for this domain.
 */
-LaServer.prototype.getToolTip =
+ZaServer.prototype.getToolTip =
 function() {
 	// update/null if modified
 	if (!this._toolTip) {
@@ -204,30 +204,30 @@ function() {
 		html[idx++] = "<div style='border-bottom: 1px solid black; white-space:nowrap; overflow:hidden;width:350'>";
 		html[idx++] = "<table cellpadding='0' cellspacing='0' border='0' style='width:100%;'>";
 		html[idx++] = "<tr valign='center'>";
-		html[idx++] = "<td><b>" + LsStringUtil.htmlEncode(this.name) + "</b></td>";
+		html[idx++] = "<td><b>" + AjxStringUtil.htmlEncode(this.name) + "</b></td>";
 		html[idx++] = "<td align='right'>";
-		html[idx++] = LsImg.getImageHtml(LaImg.I_SERVER);		
+		html[idx++] = AjxImg.getImageHtml(ZaImg.I_SERVER);		
 		html[idx++] = "</td>";
 		html[idx++] = "</table></div></td></tr>";
 		html[idx++] = "<tr></tr>";
-		idx = this._addAttrRow(LaItem.A_description, html, idx);		
-		idx = this._addAttrRow(LaItem.A_liquidId, html, idx);
+		idx = this._addAttrRow(ZaItem.A_description, html, idx);		
+		idx = this._addAttrRow(ZaItem.A_zimbraId, html, idx);
 		html[idx++] = "</table>";
 		this._toolTip = html.join("");
 	}
 	return this._toolTip;
 }
 
-LaServer.prototype.remove = 
+ZaServer.prototype.remove = 
 function() {
-	var soapDoc = LsSoapDoc.create("DeleteServerRequest", "urn:liquidAdmin", null);
+	var soapDoc = AjxSoapDoc.create("DeleteServerRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
-	LsCsfeCommand.invoke(soapDoc, null, null, null, true);	
+	AjxCsfeCommand.invoke(soapDoc, null, null, null, true);	
 }
 
-LaServer.prototype.load = 
+ZaServer.prototype.load = 
 function(by, val, withConfig) {
-	var soapDoc = LsSoapDoc.create("GetServerRequest", "urn:liquidAdmin", null);
+	var soapDoc = AjxSoapDoc.create("GetServerRequest", "urn:zimbraAdmin", null);
 	if(withConfig) {
 		soapDoc.getMethod().setAttribute("applyConfig", "1");	
 	} else {
@@ -235,34 +235,34 @@ function(by, val, withConfig) {
 	}
 	var elBy = soapDoc.set("server", val);
 	elBy.setAttribute("by", by);
-	var resp = LsCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	var resp = AjxCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	this.initFromDom(resp.firstChild);
 }
 
-LaServer.prototype.initFromDom = function(node) {
-	LaItem.prototype.initFromDom.call(this, node);
+ZaServer.prototype.initFromDom = function(node) {
+	ZaItem.prototype.initFromDom.call(this, node);
 	
 	// convert installed/enabled services to hidden fields for xform binding
-	var installed = this.attrs[LaServer.A_liquidServiceInstalled];
+	var installed = this.attrs[ZaServer.A_zimbraServiceInstalled];
 	if (installed) {
-		if (LsUtil.isString(installed)) {
+		if (AjxUtil.isString(installed)) {
 			installed = [ installed ];
 		}
 		for (var i = 0; i < installed.length; i++) {
 			var service = installed[i];
-			this.attrs["_"+LaServer.A_liquidServiceInstalled+"_"+service] = true;
-			this.attrs["_"+LaServer.A_liquidServiceEnabled+"_"+service] = false;
+			this.attrs["_"+ZaServer.A_zimbraServiceInstalled+"_"+service] = true;
+			this.attrs["_"+ZaServer.A_zimbraServiceEnabled+"_"+service] = false;
 		}
 	}
 	
-	var enabled = this.attrs[LaServer.A_liquidServiceEnabled];
+	var enabled = this.attrs[ZaServer.A_zimbraServiceEnabled];
 	if (enabled) {
-		if (LsUtil.isString(enabled)) {
+		if (AjxUtil.isString(enabled)) {
 			enabled = [ enabled ];
 		}
 		for (var i = 0; i < enabled.length; i++) {
 			var service = enabled[i];
-			this.attrs["_"+LaServer.A_liquidServiceEnabled+"_"+service] = true;
+			this.attrs["_"+ZaServer.A_zimbraServiceEnabled+"_"+service] = true;
 		}
 	}
 }

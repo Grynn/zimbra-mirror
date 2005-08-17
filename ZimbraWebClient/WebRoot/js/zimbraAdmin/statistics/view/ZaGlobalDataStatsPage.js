@@ -1,11 +1,11 @@
 /**
-* @class LaGlobalDataStatsPage 
-* @contructor LaGlobalDataStatsPage
+* @class ZaGlobalDataStatsPage 
+* @contructor ZaGlobalDataStatsPage
 * @param parent
 * @param app
 * @author Greg Solovyev
 **/
-function LaGlobalDataStatsPage (parent, app) {
+function ZaGlobalDataStatsPage (parent, app) {
 	DwtTabViewPage.call(this, parent);
 	this._fieldIds = new Object(); //stores the ids of all the form elements
 	this._app = app;
@@ -14,31 +14,31 @@ function LaGlobalDataStatsPage (parent, app) {
 	this.setScrollStyle(DwtControl.SCROLL);	
 }
  
-LaGlobalDataStatsPage.prototype = new DwtTabViewPage;
-LaGlobalDataStatsPage.prototype.constructor = LaGlobalDataStatsPage;
+ZaGlobalDataStatsPage.prototype = new DwtTabViewPage;
+ZaGlobalDataStatsPage.prototype.constructor = ZaGlobalDataStatsPage;
 
-LaGlobalDataStatsPage.prototype.toString = 
+ZaGlobalDataStatsPage.prototype.toString = 
 function() {
-	return "LaGlobalDataStatsPage";
+	return "ZaGlobalDataStatsPage";
 }
 
-LaGlobalDataStatsPage.prototype._createHTML = 
+ZaGlobalDataStatsPage.prototype._createHTML = 
 function () {
 	var idx = 0;
 	var html = new Array(50);
 	html[idx++] = "<div style='width:70ex;'>";	
 	html[idx++] = "<table cellpadding='5' cellspacing='4' border='0' align='left'>";	
-	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + LsStringUtil.htmlEncode(LaMsg.NAD_StatsDataLastDay) + "</td></tr>";	
+	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsDataZastDay) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";
 	html[idx++] = "<img src='/service/statsimg/$y$temw1de/rcvddata/d/1'>";
 	html[idx++] = "</td></tr>";
 	html[idx++] = "<tr valign='top'><td align='left'>&nbsp;&nbsp;</td></tr>";	
-	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + LsStringUtil.htmlEncode(LaMsg.NAD_StatsDataLast3Months) + "</td></tr>";	
+	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsDataZast3Months) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";
 	html[idx++] = "<img src='/service/statsimg/$y$temw1de/rcvddata/m/3'>";
 	html[idx++] = "</td></tr>";
 	html[idx++] = "<tr valign='top'><td align='left'>&nbsp;&nbsp;</td></tr>";		
-	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + LsStringUtil.htmlEncode(LaMsg.NAD_StatsDataLast12Months) + "</td></tr>";	
+	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsDataZast12Months) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";
 	html[idx++] = "<img src='/service/statsimg/$y$temw1de/rcvddata/m/12'>";
 	html[idx++] = "</td></tr>";

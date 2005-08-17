@@ -1,6 +1,6 @@
 /**
-* @class LaListView
-* @constructor LaListView
+* @class ZaListView
+* @constructor ZaListView
 * @param parent
 * @ className
 * @ posStyle
@@ -8,36 +8,36 @@
 * Abstract class list views. All the List views in the Admin panel extend this class.
 * @author Greg Solovyev
 **/
-function LaListView(parent, className, posStyle, headerList) {
+function ZaListView(parent, className, posStyle, headerList) {
 	if (arguments.length == 0) return;
 	DwtListView.call(this, parent, className, posStyle, headerList);
 
 }
 
-LaListView.prototype = new DwtListView;
-LaListView.prototype.constructor = LaListView;
+ZaListView.prototype = new DwtListView;
+ZaListView.prototype.constructor = ZaListView;
 
-LaListView.prototype.toString = 
+ZaListView.prototype.toString = 
 function() {
-	return "LaListView";
+	return "ZaListView";
 }
 
-LaListView.ITEM_FLAG_CLICKED = DwtListView._LAST_REASON + 1;
+ZaListView.ITEM_FLAG_CLICKED = DwtListView._LAST_REASON + 1;
 
 // abstract methods
-LaListView.prototype._createItemHtml = function(item) {}
+ZaListView.prototype._createItemHtml = function(item) {}
 
-LaListView.prototype._mouseOverAction =
+ZaListView.prototype._mouseOverAction =
 function(ev, div) {
 	if (div._type == DwtListView.TYPE_HEADER_ITEM) {
 		if(this._headerList[div._itemIndex]._sortable) {
 			div.className = "DwtListView-Column DwtListView-ColumnHover";		
-			this.setToolTipContent(LaMsg.LST_ClickToSort_tt + this._headerList[div._itemIndex].getLabel());	
+			this.setToolTipContent(ZaMsg.LST_ClickToSort_tt + this._headerList[div._itemIndex].getZabel());	
 		} else {
 			this.setToolTipContent(null);
 		}
 	} else if (div._type == DwtListView.TYPE_HEADER_SASH) {
-		div.style.cursor = LsEnv.isIE ? "col-resize" : "e-resize";
+		div.style.cursor = AjxEnv.isIE ? "col-resize" : "e-resize";
     } else if (div._type == DwtListView.TYPE_LIST_ITEM){
 		var item = this.getItemFromElement(div);
 		if (item && item.getToolTip)
@@ -45,7 +45,7 @@ function(ev, div) {
 	}
 }
 
-LaListView.prototype._mouseOutAction = 
+ZaListView.prototype._mouseOutAction = 
 function(mouseEv, div) {
 	if (div._type == DwtListView.TYPE_HEADER_ITEM) {
 		if(this._headerList[div._itemIndex]._sortable) {
@@ -57,7 +57,7 @@ function(mouseEv, div) {
 	return true;
 }
 
-LaListView.prototype._mouseUpAction =
+ZaListView.prototype._mouseUpAction =
 function(ev, div) {
 	if (ev.button == DwtMouseEvent.LEFT) {
 		if (this._evtMgr.isListenerRegistered(DwtEvent.SELECTION)) {
@@ -73,22 +73,22 @@ function(ev, div) {
 	return true;
 }
 
-LaListView.prototype._sortColumn = 
+ZaListView.prototype._sortColumn = 
 function(columnItem, bSortAsc) {
 	if (bSortAsc) {
-		this._list.sort(LaItem.compareNamesAsc);
+		this._list.sort(ZaItem.compareNamesAsc);
 	} else {
-    	this._list.sort(LaItem.compareNamesDesc);
+    	this._list.sort(ZaItem.compareNamesDesc);
 	}
 	this.setUI();
 }
 
-LaListView.prototype._getFieldId =
+ZaListView.prototype._getFieldId =
 function(item, field, prfx) {
 	return item ? (this._getViewPrefix() + prfx + item.id) : "";
 }
 
-LaListView.prototype._columnClicked =
+ZaListView.prototype._columnClicked =
 function(clickedCol, ev) {
 	
 	if (this.getList().size() > 0) {
@@ -103,16 +103,16 @@ function(clickedCol, ev) {
 	}
 }
 
-function LaListHeaderItem(idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible) {
+function ZaListHeaderItem(idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible) {
 	DwtListHeaderItem.call(this, idPrefix, label, iconInfo, width, sortable, resizeable, visible);
 	this._sortField = sortField;	
 	this._initialized = false;
 }
 
-LaListHeaderItem.prototype = new DwtListHeaderItem;
-LaListHeaderItem.prototype.constructor = LaListHeaderItem;
+ZaListHeaderItem.prototype = new DwtListHeaderItem;
+ZaListHeaderItem.prototype.constructor = ZaListHeaderItem;
 /*
-LaListHeaderItem.prototype.initialize = 
+ZaListHeaderItem.prototype.initialize = 
 function(label, icon, width, sortable, sortField, resizeable) {
 
 	this._id = Dwt.getNextId();
@@ -125,12 +125,12 @@ function(label, icon, width, sortable, sortField, resizeable) {
 	this._initialized = true;
 }*/
 
-LaListHeaderItem.prototype.getSortField = 
+ZaListHeaderItem.prototype.getSortField = 
 function() {
 	return this._sortField;
 }
 
-LaListHeaderItem.prototype.getLabel = 
+ZaListHeaderItem.prototype.getZabel = 
 function () {
 	return this._label;
 }

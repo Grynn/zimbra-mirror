@@ -1,38 +1,38 @@
 /**
 * @constructor
-* @class LaServerListView
+* @class ZaServerListView
 * @param parent
 * @author Greg Solovyev
 **/
 
-function LaServerListView(parent) {
+function ZaServerListView(parent) {
 
-//	var className = "LaServerListView";
+//	var className = "ZaServerListView";
 	var className = null;
 	var posStyle = DwtControl.ABSOLUTE_STYLE;
 	
 	var headerList = this._getHeaderList();
 	
-	LaListView.call(this, parent, className, posStyle, headerList);
+	ZaListView.call(this, parent, className, posStyle, headerList);
 
-	this._appCtxt = this.shell.getData(LaAppCtxt.LABEL);
+	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
 	
 	this.setScrollStyle(DwtControl.SCROLL);
-	//this.addControlListener(new LsListener(this, LaServerListView.prototype._controlListener));
+	//this.addControlListener(new AjxListener(this, ZaServerListView.prototype._controlListener));
 }
 
-LaServerListView.prototype = new LaListView;
-LaServerListView.prototype.constructor = LaServerListView;
+ZaServerListView.prototype = new ZaListView;
+ZaServerListView.prototype.constructor = ZaServerListView;
 
-LaServerListView.prototype.toString = 
+ZaServerListView.prototype.toString = 
 function() {
-	return "LaServerListView";
+	return "ZaServerListView";
 }
 
 /**
 * Renders a single item as a DIV element.
 */
-LaServerListView.prototype._createItemHtml =
+ZaServerListView.prototype._createItemHtml =
 function(server, now, isDndIcon) {
 	var html = new Array(50);
 	var	div = this.getDocument().createElement("div");
@@ -47,15 +47,15 @@ function(server, now, isDndIcon) {
 	var cnt = this._headerList.length;
 	for(var i = 0; i < cnt; i++) {
 		var id = this._headerList[i]._id;
-		if(id.indexOf(LaServer.A_ServiceHostname)==0) {	
+		if(id.indexOf(ZaServer.A_ServiceHostname)==0) {	
 			// name
 			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
-			html[idx++] = LsStringUtil.htmlEncode(server.attrs[LaServer.A_ServiceHostname]);
+			html[idx++] = AjxStringUtil.htmlEncode(server.attrs[ZaServer.A_ServiceHostname]);
 			html[idx++] = "</td>";
-		} else if(id.indexOf(LaServer.A_description)==0) {	
+		} else if(id.indexOf(ZaServer.A_description)==0) {	
 			// description
 			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
-			html[idx++] = LsStringUtil.htmlEncode(server.attrs[LaServer.A_description]);
+			html[idx++] = AjxStringUtil.htmlEncode(server.attrs[ZaServer.A_description]);
 			html[idx++] = "</td>";
 		}
 	}
@@ -64,15 +64,15 @@ function(server, now, isDndIcon) {
 	return div;
 }
 
-LaServerListView.prototype._getHeaderList =
+ZaServerListView.prototype._getHeaderList =
 function() {
 
 	var headerList = new Array();
 //idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
 
-	headerList[0] = new LaListHeaderItem(LaServer.A_ServiceHostname, LaMsg.SLV_ServiceHName_col, null, 200, true, LaServer.A_ServiceHostname, true, true);
+	headerList[0] = new ZaListHeaderItem(ZaServer.A_ServiceHostname, ZaMsg.SLV_ServiceHName_col, null, 200, true, ZaServer.A_ServiceHostname, true, true);
 
-	headerList[1] = new LaListHeaderItem(LaServer.A_description, LaMsg.DLV_Description_col, null, null, false, LaServer.A_description, true, true);
+	headerList[1] = new ZaListHeaderItem(ZaServer.A_description, ZaMsg.DLV_Description_col, null, null, false, ZaServer.A_description, true, true);
 		
 	return headerList;
 }

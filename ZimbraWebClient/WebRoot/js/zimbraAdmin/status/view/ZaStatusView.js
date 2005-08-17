@@ -1,28 +1,28 @@
 /**
-* @class LaStatusView displays status page
-* @contructor LaStatusView
+* @class ZaStatusView displays status page
+* @contructor ZaStatusView
 * @param parent
 * @param app
 * @author Roland Schemers
 * @author Greg Solovyev
 **/
-function LaStatusView(parent, app) {
+function ZaStatusView(parent, app) {
 	this._app = app;
-	DwtTabView.call(this, parent, "LaStatusView");
-	this._appCtxt = this.shell.getData(LaAppCtxt.LABEL);
-//	this._summaryPage = new LaStatusSummaryPage(this, app);
-	this._servicesPage = new LaStatusServicesPage(this, app);
+	DwtTabView.call(this, parent, "ZaStatusView");
+	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
+//	this._summaryPage = new ZaStatusSummaryPage(this, app);
+	this._servicesPage = new ZaStatusServicesPage(this, app);
 //	this.addTab("Summary", this._summaryPage);		
 	this.addTab("Services", this._servicesPage);		
 	
 	this.setScrollStyle(DwtControl.AUTO);
 }
 
-LaStatusView.prototype = new DwtTabView;
-LaStatusView.prototype.constructor = LaStatusView;
+ZaStatusView.prototype = new DwtTabView;
+ZaStatusView.prototype.constructor = ZaStatusView;
 
-LaStatusView.prototype.toString = 
+ZaStatusView.prototype.toString = 
 function() {
-	return "LaStatusView";
+	return "ZaStatusView";
 }
 

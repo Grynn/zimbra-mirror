@@ -1,9 +1,9 @@
-function LaForwardingAddress() {
-	LaItem.call(this, LaEvent.S_ACCOUNT);
+function ZaForwardingAddress() {
+	ZaItem.call(this, ZaEvent.S_ACCOUNT);
 	this.attrs = new Object();
 	this.id = "";
 	this.name="";
 }
 
-LaForwardingAddress.prototype = new LaItem;
-LaForwardingAddress.prototype.constructor = LaForwardingAddress;
+ZaForwardingAddress.prototype = new ZaItem;
+ZaForwardingAddress.prototype.constructor = ZaForwardingAddress;

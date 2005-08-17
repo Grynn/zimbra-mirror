@@ -78,7 +78,7 @@ Cos_Enum_XModelItem.prototype.validateType = function (value) {
 	var choices = this.getChoices();
 	for (var i = 0; i < choices.length; i++) {
 		var choice = choices[i];
-		if (LsUtil.isInstance(choice, Object)) {
+		if (AjxUtil.isInstance(choice, Object)) {
 			if (choice.value == value) return value;
 		} else {
 			if (choice == value) return value;
@@ -157,7 +157,7 @@ XFormItemFactory.createItemType("_COS_TEXTFIELD_", "cos_textfield", Cos_Textfiel
 Cos_Textfield_XFormItem.prototype.useParentTable = true;
 Cos_Textfield_XFormItem.prototype.numCols = 3;
 
-Cos_Textfield_XFormItem.prototype.valueLabel = null;
+Cos_Textfield_XFormItem.prototype.valueZabel = null;
 Cos_Textfield_XFormItem.prototype.items = [
 	{	type:_TEXTFIELD_, ref:".", width:100,
 		relevant:"item.getModelItem().getAccountValue(instance) != null", relevantBehavior:_DISABLE_,
@@ -182,7 +182,7 @@ Cos_Textfield_XFormItem.prototype.items = [
 	{	
 		type:_OUTPUT_, ref:".", width:100,
 		getDisplayValue:function() {
-			return this.getParentItem().getInheritedProperty("checkBoxLabel");
+			return this.getParentItem().getInheritedProperty("checkBoxZabel");
 		}
 	}
 ];
@@ -197,7 +197,7 @@ XFormItemFactory.createItemType("_COS_CHECKBOX_", "cos_checkbox", Cos_Checkbox_X
 Cos_Checkbox_XFormItem.prototype.useParentTable = true;
 Cos_Checkbox_XFormItem.prototype.numCols = 3;
 
-Cos_Checkbox_XFormItem.prototype.valueLabel = "";
+Cos_Checkbox_XFormItem.prototype.valueZabel = "";
 Cos_Checkbox_XFormItem.prototype.items = [
 	{	type:_CHECKBOX_, ref:".", align:_LEFT_,
 		relevant:"item.getModelItem().getAccountValue(instance) != null", relevantBehavior:_DISABLE_,
@@ -219,7 +219,7 @@ Cos_Checkbox_XFormItem.prototype.items = [
 	},
 	{	type:_OUTPUT_, ref:".", width:100,
 		getDisplayValue:function() {
-			return this.getParentItem().getInheritedProperty("checkBoxLabel")
+			return this.getParentItem().getInheritedProperty("checkBoxZabel")
 		}
 	}
 ];
@@ -234,7 +234,7 @@ XFormItemFactory.createItemType("_COS_SELECT1_", "cos_select1", Cos_Select1_XFor
 Cos_Select1_XFormItem.prototype.useParentTable = true;
 Cos_Select1_XFormItem.prototype.numCols = 3;
 
-Cos_Select1_XFormItem.prototype.valueLabel = "";
+Cos_Select1_XFormItem.prototype.valueZabel = "";
 
 Cos_Select1_XFormItem.prototype.items = [
 	{	type:_OSELECT1_, ref:".",
@@ -257,7 +257,7 @@ Cos_Select1_XFormItem.prototype.items = [
 	},
 	{	type:_OUTPUT_, ref:".", width:100,
 		getDisplayValue:function() {
-			return this.getParentItem().getInheritedProperty("checkBoxLabel")
+			return this.getParentItem().getInheritedProperty("checkBoxZabel")
 		}
 	}
 ];
@@ -336,7 +336,7 @@ Cos_Lifetime_XFormItem.prototype.items = [
 	},
 	{	type:_OUTPUT_, ref:".", width:100,
 		getDisplayValue:function() {
-			return this.getParentItem().getInheritedProperty("checkBoxLabel")
+			return this.getParentItem().getInheritedProperty("checkBoxZabel")
 		}
 	}
 ];
@@ -408,7 +408,7 @@ Cos_Lifetime1_XFormItem.prototype.items = [
 	},
 	{	type:_OUTPUT_, ref:".", width:100,
 		getDisplayValue:function() {
-			return this.getParentItem().getInheritedProperty("checkBoxLabel")
+			return this.getParentItem().getInheritedProperty("checkBoxZabel")
 		}
 	}
 ];

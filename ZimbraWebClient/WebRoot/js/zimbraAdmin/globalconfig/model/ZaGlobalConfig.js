@@ -1,116 +1,116 @@
-function LaGlobalConfig(app) {
-	LaItem.call(this, app);
+function ZaGlobalConfig(app) {
+	ZaItem.call(this, app);
 	this.attrs = new Object();
 	this.load();
 }
 
-LaGlobalConfig.prototype = new LaItem;
-LaGlobalConfig.prototype.constructor = LaGlobalConfig;
+ZaGlobalConfig.prototype = new ZaItem;
+ZaGlobalConfig.prototype.constructor = ZaGlobalConfig;
 
-LaGlobalConfig.MTA_RESTRICTIONS = [
+ZaGlobalConfig.MTA_RESTRICTIONS = [
 	"reject_invalid_hostname", "reject_non_fqdn_hostname", "reject_non_fqdn_sender",
 	"reject_unknown_client", "reject_unknown_hostname", "reject_unknown_sender_domain"
 ];
 
 //general
-LaGlobalConfig.A_liquidLastLogonTimestampFrequency = "liquidLastLogonTimestampFrequency";
-LaGlobalConfig.A_liquidDefaultDomainName = "liquidDefaultDomainName";
+ZaGlobalConfig.A_zimbraZastLogonTimestampFrequency = "zimbraZastLogonTimestampFrequency";
+ZaGlobalConfig.A_zimbraDefaultDomainName = "zimbraDefaultDomainName";
 // attachements
-LaGlobalConfig.A_liquidAttachmentsBlocked = "liquidAttachmentsBlocked";
-LaGlobalConfig.A_liquidAttachmentsViewInHtmlOnly = "liquidAttachmentsViewInHtmlOnly";
-LaGlobalConfig.A_liquidMtaBlockedExtension = "liquidMtaBlockedExtension";
-LaGlobalConfig.A_liquidMtaCommonBlockedExtension = "liquidMtaCommonBlockedExtension";
-LaGlobalConfig.A_liquidMtaCommonBlockedExtensions = "liquidMtaCommonBlockedExtensions";
+ZaGlobalConfig.A_zimbraAttachmentsBlocked = "zimbraAttachmentsBlocked";
+ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly = "zimbraAttachmentsViewInHtmlOnly";
+ZaGlobalConfig.A_zimbraMtaBlockedExtension = "zimbraMtaBlockedExtension";
+ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension = "zimbraMtaCommonBlockedExtension";
+ZaGlobalConfig.A_zimbraMtaCommonBlockedExtensions = "zimbraMtaCommonBlockedExtensions";
 // MTA
-LaGlobalConfig.A_liquidMtaAuthEnabled = "liquidMtaAuthEnabled";
-LaGlobalConfig.A_liquidMtaTlsAuthOnly = "liquidMtaTlsAuthOnly";
-LaGlobalConfig.A_liquidMtaDnsLookupsEnabled  = "liquidMtaDnsLookupsEnabled";
-LaGlobalConfig.A_liquidMtaMaxMessageSize = "liquidMtaMaxMessageSize";
-LaGlobalConfig.A_liquidMtaRelayHost = "liquidMtaRelayHost";
-LaGlobalConfig.A_liquidComponentAvailable = "liquidComponentAvailable";
-LaGlobalConfig.A_liquidComponentAvailable_convertd = "_"+LaGlobalConfig.A_liquidComponentAvailable+"_convertd";
-LaGlobalConfig.A_liquidComponentAvailable_replication = "_"+LaGlobalConfig.A_liquidComponentAvailable+"_replication";
-LaGlobalConfig.A_liquidComponentAvailable_hotbackup = "_"+LaGlobalConfig.A_liquidComponentAvailable+"_hotbackup";
+ZaGlobalConfig.A_zimbraMtaAuthEnabled = "zimbraMtaAuthEnabled";
+ZaGlobalConfig.A_zimbraMtaTlsAuthOnly = "zimbraMtaTlsAuthOnly";
+ZaGlobalConfig.A_zimbraMtaDnsLookupsEnabled  = "zimbraMtaDnsLookupsEnabled";
+ZaGlobalConfig.A_zimbraMtaMaxMessageSize = "zimbraMtaMaxMessageSize";
+ZaGlobalConfig.A_zimbraMtaRelayHost = "zimbraMtaRelayHost";
+ZaGlobalConfig.A_zimbraComponentAvailable = "zimbraComponentAvailable";
+ZaGlobalConfig.A_zimbraComponentAvailable_convertd = "_"+ZaGlobalConfig.A_zimbraComponentAvailable+"_convertd";
+ZaGlobalConfig.A_zimbraComponentAvailable_replication = "_"+ZaGlobalConfig.A_zimbraComponentAvailable+"_replication";
+ZaGlobalConfig.A_zimbraComponentAvailable_hotbackup = "_"+ZaGlobalConfig.A_zimbraComponentAvailable+"_hotbackup";
 // --protocol checks
-LaGlobalConfig.A_liquidMtaRestriction = "liquidMtaRestriction";
-LaGlobalConfig.A_liquidMtaRejectInvalidHostname = "_"+LaGlobalConfig.A_liquidMtaRestriction+"_reject_invalid_hostname";
-LaGlobalConfig.A_liquidMtaRejectNonFqdnHostname = "_"+LaGlobalConfig.A_liquidMtaRestriction+"_reject_non_fqdn_hostname";
-LaGlobalConfig.A_liquidMtaRejectNonFqdnSender = "_"+LaGlobalConfig.A_liquidMtaRestriction+"_reject_non_fqdn_sender";
+ZaGlobalConfig.A_zimbraMtaRestriction = "zimbraMtaRestriction";
+ZaGlobalConfig.A_zimbraMtaRejectInvalidHostname = "_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_reject_invalid_hostname";
+ZaGlobalConfig.A_zimbraMtaRejectNonFqdnHostname = "_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_reject_non_fqdn_hostname";
+ZaGlobalConfig.A_zimbraMtaRejectNonFqdnSender = "_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_reject_non_fqdn_sender";
 // -- dns checks
-LaGlobalConfig.A_liquidMtaRejectUnknownClient = "_"+LaGlobalConfig.A_liquidMtaRestriction+"_reject_unknown_client";
-LaGlobalConfig.A_liquidMtaRejectUnknownHostname = "_"+LaGlobalConfig.A_liquidMtaRestriction+"_reject_unknown_hostname";
-LaGlobalConfig.A_liquidMtaRejectUnknownSenderDomain = "_"+LaGlobalConfig.A_liquidMtaRestriction+"_reject_unknown_sender_domain";
+ZaGlobalConfig.A_zimbraMtaRejectUnknownClient = "_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_reject_unknown_client";
+ZaGlobalConfig.A_zimbraMtaRejectUnknownHostname = "_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_reject_unknown_hostname";
+ZaGlobalConfig.A_zimbraMtaRejectUnknownSenderDomain = "_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_reject_unknown_sender_domain";
 //Domain
-LaGlobalConfig.A_liquidGalLdapFilterDef = "liquidGalLdapFilterDef";
-LaGlobalConfig.A_liquidGalMaxResults = "liquidGalMaxResults";
+ZaGlobalConfig.A_zimbraGalLdapFilterDef = "zimbraGalLdapFilterDef";
+ZaGlobalConfig.A_zimbraGalMaxResults = "zimbraGalMaxResults";
 //Server
-LaGlobalConfig.A_liquidLmtpNumThreads = "liquidLmtpNumThreads";
-LaGlobalConfig.A_liquidLmtpBindPort = "liquidLmtpBindPort";
-LaGlobalConfig.A_liquidPop3NumThreads = "liquidPop3NumThreads";
-LaGlobalConfig.A_liquidPop3BindPort = "liquidPop3BindPort";
-LaGlobalConfig.A_liquidRedologEnabled = "liquidRedologEnabled";
-LaGlobalConfig.A_liquidRedologLogPath = "liquidRedologLogPath";
-LaGlobalConfig.A_liquidRedologArchiveDir = "liquidRedologArchiveDir";
-LaGlobalConfig.A_liquidRedologBacklogDir = "liquidRedologBacklogDir";
-LaGlobalConfig.A_liquidRedologRolloverFileSizeKB = "liquidRedologRolloverFileSizeKB";
-LaGlobalConfig.A_liquidRedologFsyncIntervalMS = "liquidRedologFsyncIntervalMS";
+ZaGlobalConfig.A_zimbraZmtpNumThreads = "zimbraZmtpNumThreads";
+ZaGlobalConfig.A_zimbraZmtpBindPort = "zimbraZmtpBindPort";
+ZaGlobalConfig.A_zimbraPop3NumThreads = "zimbraPop3NumThreads";
+ZaGlobalConfig.A_zimbraPop3BindPort = "zimbraPop3BindPort";
+ZaGlobalConfig.A_zimbraRedologEnabled = "zimbraRedologEnabled";
+ZaGlobalConfig.A_zimbraRedologLogPath = "zimbraRedologLogPath";
+ZaGlobalConfig.A_zimbraRedologArchiveDir = "zimbraRedologArchiveDir";
+ZaGlobalConfig.A_zimbraRedologBacklogDir = "zimbraRedologBacklogDir";
+ZaGlobalConfig.A_zimbraRedologRolloverFileSizeKB = "zimbraRedologRolloverFileSizeKB";
+ZaGlobalConfig.A_zimbraRedologFsyncIntervalMS = "zimbraRedologFsyncIntervalMS";
 
 
 
 // smtp
-LaGlobalConfig.A_liquidSmtpHostname = "liquidSmtpHostname";
-LaGlobalConfig.A_liquidSmtpPort = "liquidSmtpPort";
-LaGlobalConfig.A_liquidSmtpTimeout = "liquidSmtpTimeout";
+ZaGlobalConfig.A_zimbraSmtpHostname = "zimbraSmtpHostname";
+ZaGlobalConfig.A_zimbraSmtpPort = "zimbraSmtpPort";
+ZaGlobalConfig.A_zimbraSmtpTimeout = "zimbraSmtpTimeout";
 // pop
-LaGlobalConfig.A_liquidPop3BindPort="liquidPop3BindPort";
-LaGlobalConfig.A_liquidPop3ServerEnabled = "liquidPop3ServerEnabled";
-LaGlobalConfig.A_liquidPop3SSLBindPort = "liquidPop3SSLBindPort";
-LaGlobalConfig.A_liquidPop3SSLServerEnabled = "liquidPop3SSLServerEnabled";
-LaGlobalConfig.A_liquidPop3CleartextLoginEnabled = "liquidPop3CleartextLoginEnabled";
+ZaGlobalConfig.A_zimbraPop3BindPort="zimbraPop3BindPort";
+ZaGlobalConfig.A_zimbraPop3ServerEnabled = "zimbraPop3ServerEnabled";
+ZaGlobalConfig.A_zimbraPop3SSLBindPort = "zimbraPop3SSLBindPort";
+ZaGlobalConfig.A_zimbraPop3SSLServerEnabled = "zimbraPop3SSLServerEnabled";
+ZaGlobalConfig.A_zimbraPop3CleartextLoginEnabled = "zimbraPop3CleartextLoginEnabled";
 // imap
-LaGlobalConfig.A_liquidImapBindPort = "liquidImapBindPort";
-LaGlobalConfig.A_liquidImapServerEnabled = "liquidImapServerEnabled";
-LaGlobalConfig.A_liquidImapSSLBindPort = "liquidImapSSLBindPort";
-LaGlobalConfig.A_liquidImapSSLServerEnabled = "liquidImapSSLServerEnabled";
-LaGlobalConfig.A_liquidImapCleartextLoginEnabled = "liquidImapCleartextLoginEnabled";
+ZaGlobalConfig.A_zimbraImapBindPort = "zimbraImapBindPort";
+ZaGlobalConfig.A_zimbraImapServerEnabled = "zimbraImapServerEnabled";
+ZaGlobalConfig.A_zimbraImapSSLBindPort = "zimbraImapSSLBindPort";
+ZaGlobalConfig.A_zimbraImapSSLServerEnabled = "zimbraImapSSLServerEnabled";
+ZaGlobalConfig.A_zimbraImapCleartextLoginEnabled = "zimbraImapCleartextLoginEnabled";
 // anti-spam
-LaGlobalConfig.A_liquidSpamCheckEnabled = "liquidSpamCheckEnabled";
-LaGlobalConfig.A_liquidSpamKillPercent = "liquidSpamKillPercent";
-LaGlobalConfig.A_liquidSpamTagPercent = "liquidSpamTagPercent";
-LaGlobalConfig.A_liquidSpamSubjectTag = "liquidSpamSubjectTag";
+ZaGlobalConfig.A_zimbraSpamCheckEnabled = "zimbraSpamCheckEnabled";
+ZaGlobalConfig.A_zimbraSpamKillPercent = "zimbraSpamKillPercent";
+ZaGlobalConfig.A_zimbraSpamTagPercent = "zimbraSpamTagPercent";
+ZaGlobalConfig.A_zimbraSpamSubjectTag = "zimbraSpamSubjectTag";
 // anti-virus
-LaGlobalConfig.A_liquidVirusCheckEnabled = "liquidVirusCheckEnabled";
-LaGlobalConfig.A_liquidVirusWarnRecipient = "liquidVirusWarnRecipient";
-LaGlobalConfig.A_liquidVirusWarnAdmin = "liquidVirusWarnAdmin";
-LaGlobalConfig.A_liquidVirusDefinitionsUpdateFrequency = "liquidVirusDefinitionsUpdateFrequency";
-LaGlobalConfig.A_liquidVirusBlockEncryptedArchive = "liquidVirusBlockEncryptedArchive";
+ZaGlobalConfig.A_zimbraVirusCheckEnabled = "zimbraVirusCheckEnabled";
+ZaGlobalConfig.A_zimbraVirusWarnRecipient = "zimbraVirusWarnRecipient";
+ZaGlobalConfig.A_zimbraVirusWarnAdmin = "zimbraVirusWarnAdmin";
+ZaGlobalConfig.A_zimbraVirusDefinitionsUpdateFrequency = "zimbraVirusDefinitionsUpdateFrequency";
+ZaGlobalConfig.A_zimbraVirusBlockEncryptedArchive = "zimbraVirusBlockEncryptedArchive";
 //immutable attrs
-LaGlobalConfig.A_liquidAccountClientAttr = "liquidAccountClientAttr";
-LaGlobalConfig.A_liquidServerInheritedAttr = "liquidServerInheritedAttr";
-LaGlobalConfig.A_liquidDomainInheritedAttr = "liquidDomainInheritedAttr";
-LaGlobalConfig.A_liquidCOSInheritedAttr = "liquidCOSInheritedAttr";
-LaGlobalConfig.A_liquidGalLdapAttrMap = "liquidGalLdapAttrMap";
-LaGlobalConfig.A_liquidGalLdapFilterDef = "liquidGalLdapFilterDef";
+ZaGlobalConfig.A_zimbraAccountClientAttr = "zimbraAccountClientAttr";
+ZaGlobalConfig.A_zimbraServerInheritedAttr = "zimbraServerInheritedAttr";
+ZaGlobalConfig.A_zimbraDomainInheritedAttr = "zimbraDomainInheritedAttr";
+ZaGlobalConfig.A_zimbraCOSInheritedAttr = "zimbraCOSInheritedAttr";
+ZaGlobalConfig.A_zimbraGalLdapAttrMap = "zimbraGalLdapAttrMap";
+ZaGlobalConfig.A_zimbraGalLdapFilterDef = "zimbraGalLdapFilterDef";
 // others
-LaGlobalConfig.A_liquidNewExtension = "_liquidNewExtension";
+ZaGlobalConfig.A_zimbraNewExtension = "_zimbraNewExtension";
 
 
-LaGlobalConfig.prototype.load =
+ZaGlobalConfig.prototype.load =
 function () {
-	var soapDoc = LsSoapDoc.create("GetAllConfigRequest", "urn:liquidAdmin", null);
-	var resp = LsCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	var soapDoc = AjxSoapDoc.create("GetAllConfigRequest", "urn:zimbraAdmin", null);
+	var resp = AjxCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	this.initFromDom(resp);
 }
 
-LaGlobalConfig.prototype.initFromDom = function(node) {
-	LaItem.prototype.initFromDom.call(this, node);
+ZaGlobalConfig.prototype.initFromDom = function(node) {
+	ZaItem.prototype.initFromDom.call(this, node);
 
 	// convert blocked extension lists to arrays
-	var common = this.attrs[LaGlobalConfig.A_liquidMtaCommonBlockedExtension];
+	var common = this.attrs[ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension];
 	if (common == null) {
 		common = [];
 	}
-	else if (LsUtil.isString(common)) {
+	else if (AjxUtil.isString(common)) {
 		common = [ common ];
 	}
 	var commonMap = {};
@@ -120,13 +120,13 @@ LaGlobalConfig.prototype.initFromDom = function(node) {
 		common[i].id = "id_"+ext;
 		commonMap[ext] = common[i];
 	}
-	this.attrs[LaGlobalConfig.A_liquidMtaCommonBlockedExtension] = common;
+	this.attrs[ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension] = common;
 	
-	var blocked = this.attrs[LaGlobalConfig.A_liquidMtaBlockedExtension];
+	var blocked = this.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension];
 	if (blocked == null) {
 		blocked = [];
 	}
-	else if (LsUtil.isString(blocked)) {
+	else if (AjxUtil.isString(blocked)) {
 		blocked = [ blocked ];
 	}
 	for (var i = 0; i < blocked.length; i++) {
@@ -139,36 +139,36 @@ LaGlobalConfig.prototype.initFromDom = function(node) {
 			blocked[i].id = "id_"+ext;
 		}
 	}
-	this.attrs[LaGlobalConfig.A_liquidMtaBlockedExtension] = blocked;
+	this.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension] = blocked;
 
 	// convert available components to hidden fields for xform binding
-	var components = this.attrs[LaGlobalConfig.A_liquidComponentAvailable];
+	var components = this.attrs[ZaGlobalConfig.A_zimbraComponentAvailable];
 	if (components) {
-		if (LsUtil.isString(components)) {
+		if (AjxUtil.isString(components)) {
 			components = [ components ];
 		}
 		for (var i = 0; i < components.length; i++) {
 			var component = components[i];
-			this.attrs["_"+LaGlobalConfig.A_liquidComponentAvailable+"_"+component] = true;
+			this.attrs["_"+ZaGlobalConfig.A_zimbraComponentAvailable+"_"+component] = true;
 		}
 	}
 	
 	// convert restrictions to hidden fields for xform binding
-	var restrictions = this.attrs[LaGlobalConfig.A_liquidMtaRestriction];
+	var restrictions = this.attrs[ZaGlobalConfig.A_zimbraMtaRestriction];
 	if (restrictions) {
-		if (LsUtil.isString(restrictions)) {
+		if (AjxUtil.isString(restrictions)) {
 			restrictions = [ restrictions ];
 		}
 		for (var i = 0; i < restrictions.length; i++) {
 			var restriction = restrictions[i];
-			this.attrs["_"+LaGlobalConfig.A_liquidMtaRestriction+"_"+restriction] = true;
+			this.attrs["_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_"+restriction] = true;
 		}
 	}
 }
 
-LaGlobalConfig.prototype.modify = 
+ZaGlobalConfig.prototype.modify = 
 function (mods) {
-	var soapDoc = LsSoapDoc.create("ModifyConfigRequest", "urn:liquidAdmin", null);
+	var soapDoc = AjxSoapDoc.create("ModifyConfigRequest", "urn:zimbraAdmin", null);
 	for (var aname in mods) {
 		//multy value attribute
 		if(mods[aname] instanceof Array) {
@@ -188,7 +188,7 @@ function (mods) {
 			attr.setAttribute("n", aname);
 		}
 	}
-	var resp = LsCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	var resp = AjxCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	var newConfig = this._app.getGlobalConfig(true);
 	if(newConfig.attrs) {
 		for (var aname in newConfig.attrs) {
@@ -197,57 +197,57 @@ function (mods) {
 	}
 }
 
-LaGlobalConfig.myXModel = {
+ZaGlobalConfig.myXModel = {
 	items:[
 	  	// ...other...
-		{ id:LaGlobalConfig.A_liquidGalMaxResults, ref:"attrs/" + LaGlobalConfig.A_liquidGalMaxResults , type:_NUMBER_},
-		{ id:LaGlobalConfig.A_liquidDefaultDomainName, ref:"attrs/" + LaGlobalConfig.A_liquidDefaultDomainName, type:_STRING_},
+		{ id:ZaGlobalConfig.A_zimbraGalMaxResults, ref:"attrs/" + ZaGlobalConfig.A_zimbraGalMaxResults , type:_NUMBER_},
+		{ id:ZaGlobalConfig.A_zimbraDefaultDomainName, ref:"attrs/" + ZaGlobalConfig.A_zimbraDefaultDomainName, type:_STRING_},
 		// attachments
-		{ id:LaGlobalConfig.A_liquidAttachmentsBlocked, ref:"attrs/" + LaGlobalConfig.A_liquidAttachmentsBlocked, type:_ENUM_, choices:LaModel.BOOLEAN_CHOICES},
-		{ id:LaGlobalConfig.A_liquidMtaBlockedExtension, ref:"attrs/" + LaGlobalConfig.A_liquidMtaBlockedExtension, type: _LIST_, dataType: _STRING_ },
-		{ id:LaGlobalConfig.A_liquidMtaCommonBlockedExtensions, ref:"attrs/" + LaGlobalConfig.A_liquidMtaCommonBlockedExtensions, type: _STRING_ },
-		{ id:LaGlobalConfig.A_liquidMtaCommonBlockedExtension, ref:"attrs/" + LaGlobalConfig.A_liquidMtaCommonBlockedExtension, type: _LIST_, dataType: _STRING_ },
+		{ id:ZaGlobalConfig.A_zimbraAttachmentsBlocked, ref:"attrs/" + ZaGlobalConfig.A_zimbraAttachmentsBlocked, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
+		{ id:ZaGlobalConfig.A_zimbraMtaBlockedExtension, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaBlockedExtension, type: _LIST_, dataType: _STRING_ },
+		{ id:ZaGlobalConfig.A_zimbraMtaCommonBlockedExtensions, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaCommonBlockedExtensions, type: _STRING_ },
+		{ id:ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension, type: _LIST_, dataType: _STRING_ },
 		// MTA
-		{ id:LaGlobalConfig.A_liquidMtaAuthEnabled, ref:"attrs/" + LaGlobalConfig.A_liquidMtaAuthEnabled, type: _ENUM_, choices: LaModel.BOOLEAN_CHOICES },
-		{ id:LaGlobalConfig.A_liquidMtaTlsAuthOnly, ref:"attrs/" + LaGlobalConfig.A_liquidMtaTlsAuthOnly, type: _ENUM_, choices: LaModel.BOOLEAN_CHOICES },
-		{ id:LaGlobalConfig.A_liquidAttachmentsViewInHtmlOnly, ref:"attrs/" + LaGlobalConfig.A_liquidAttachmentsViewInHtmlOnly, type:_ENUM_, choices:LaModel.BOOLEAN_CHOICES},
-		{ id:LaGlobalConfig.A_liquidSmtpHostname, ref:"attrs/" + LaGlobalConfig.A_liquidSmtpHostname, type:_STRING_},
-		{ id:LaGlobalConfig.A_liquidSmtpPort, ref:"attrs/" + LaGlobalConfig.A_liquidSmtpPort, type:_NUMBER_},
-		{ id:LaGlobalConfig.A_liquidMtaMaxMessageSize, ref:"attrs/" + LaGlobalConfig.A_liquidMtaMaxMessageSize, type: _FILE_SIZE_, units: LsUtil.SIZE_KILOBYTES },
-		{ id:LaGlobalConfig.A_liquidMtaRelayHost, ref:"attrs/" + LaGlobalConfig.A_liquidMtaRelayHost, type: _STRING_ },
-		{ id:LaGlobalConfig.A_liquidMtaDnsLookupsEnabled, ref:"attrs/" + LaGlobalConfig.A_liquidMtaDnsLookupsEnabled, type: _ENUM_, choices: LaModel.BOOLEAN_CHOICES },
+		{ id:ZaGlobalConfig.A_zimbraMtaAuthEnabled, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaAuthEnabled, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
+		{ id:ZaGlobalConfig.A_zimbraMtaTlsAuthOnly, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaTlsAuthOnly, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
+		{ id:ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly, ref:"attrs/" + ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
+		{ id:ZaGlobalConfig.A_zimbraSmtpHostname, ref:"attrs/" + ZaGlobalConfig.A_zimbraSmtpHostname, type:_STRING_},
+		{ id:ZaGlobalConfig.A_zimbraSmtpPort, ref:"attrs/" + ZaGlobalConfig.A_zimbraSmtpPort, type:_NUMBER_},
+		{ id:ZaGlobalConfig.A_zimbraMtaMaxMessageSize, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaMaxMessageSize, type: _FILE_SIZE_, units: AjxUtil.SIZE_KILOBYTES },
+		{ id:ZaGlobalConfig.A_zimbraMtaRelayHost, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaRelayHost, type: _STRING_ },
+		{ id:ZaGlobalConfig.A_zimbraMtaDnsLookupsEnabled, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaDnsLookupsEnabled, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
 		// -- protocol checks
-		{ id:LaGlobalConfig.A_liquidMtaRejectInvalidHostname, ref:"attrs/" + LaGlobalConfig.A_liquidMtaRejectInvalidHostname, type: _ENUM_, choices: [false,true] },
-		{ id:LaGlobalConfig.A_liquidMtaRejectNonFqdnHostname, ref:"attrs/" + LaGlobalConfig.A_liquidMtaRejectNonFqdnHostname, type: _ENUM_, choices: [false,true] },
-		{ id:LaGlobalConfig.A_liquidMtaRejectNonFqdnSender, ref:"attrs/" + LaGlobalConfig.A_liquidMtaRejectNonFqdnSender, type: _ENUM_, choices: [false,true] },
+		{ id:ZaGlobalConfig.A_zimbraMtaRejectInvalidHostname, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaRejectInvalidHostname, type: _ENUM_, choices: [false,true] },
+		{ id:ZaGlobalConfig.A_zimbraMtaRejectNonFqdnHostname, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaRejectNonFqdnHostname, type: _ENUM_, choices: [false,true] },
+		{ id:ZaGlobalConfig.A_zimbraMtaRejectNonFqdnSender, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaRejectNonFqdnSender, type: _ENUM_, choices: [false,true] },
 		// -- dns checks
-		{ id:LaGlobalConfig.A_liquidMtaRejectUnknownClient, ref:"attrs/" + LaGlobalConfig.A_liquidMtaRejectUnknownClient, type: _ENUM_, choices: [false,true] },
-		{ id:LaGlobalConfig.A_liquidMtaRejectUnknownHostname, ref:"attrs/" + LaGlobalConfig.A_liquidMtaRejectUnknownHostname, type: _ENUM_, choices: [false,true] },
-		{ id:LaGlobalConfig.A_liquidMtaRejectUnknownSenderDomain, ref:"attrs/" + LaGlobalConfig.A_liquidMtaRejectUnknownSenderDomain, type: _ENUM_, choices: [false,true] },
+		{ id:ZaGlobalConfig.A_zimbraMtaRejectUnknownClient, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaRejectUnknownClient, type: _ENUM_, choices: [false,true] },
+		{ id:ZaGlobalConfig.A_zimbraMtaRejectUnknownHostname, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaRejectUnknownHostname, type: _ENUM_, choices: [false,true] },
+		{ id:ZaGlobalConfig.A_zimbraMtaRejectUnknownSenderDomain, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaRejectUnknownSenderDomain, type: _ENUM_, choices: [false,true] },
 		// smtp
-		{ id:LaGlobalConfig.A_liquidSmtpTimeout, ref:"attrs/" + LaGlobalConfig.A_liquidSmtpTimeout, type:_NUMBER_},		
+		{ id:ZaGlobalConfig.A_zimbraSmtpTimeout, ref:"attrs/" + ZaGlobalConfig.A_zimbraSmtpTimeout, type:_NUMBER_},		
 		// pop
-		{ id:LaGlobalConfig.A_liquidPop3ServerEnabled, ref:"attrs/" + LaGlobalConfig.A_liquidPop3ServerEnabled, type:_ENUM_, choices:LaModel.BOOLEAN_CHOICES},
-		{ id:LaGlobalConfig.A_liquidPop3SSLServerEnabled, ref:"attrs/" + LaGlobalConfig.A_liquidPop3SSLServerEnabled, type:_ENUM_, choices:LaModel.BOOLEAN_CHOICES},		
-		{ id:LaGlobalConfig.A_liquidPop3CleartextLoginEnabled, ref:"attrs/" + LaGlobalConfig.A_liquidPop3CleartextLoginEnabled, type:_ENUM_, choices:LaModel.BOOLEAN_CHOICES},				
-		{ id:LaGlobalConfig.A_liquidPop3BindPort, ref:"attrs/" + LaGlobalConfig.A_liquidPop3BindPort, type:_NUMBER_},				
-		{ id:LaGlobalConfig.A_liquidPop3SSLBindPort, ref:"attrs/" + LaGlobalConfig.A_liquidPop3SSLBindPort, type:_NUMBER_},	
+		{ id:ZaGlobalConfig.A_zimbraPop3ServerEnabled, ref:"attrs/" + ZaGlobalConfig.A_zimbraPop3ServerEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
+		{ id:ZaGlobalConfig.A_zimbraPop3SSLServerEnabled, ref:"attrs/" + ZaGlobalConfig.A_zimbraPop3SSLServerEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},		
+		{ id:ZaGlobalConfig.A_zimbraPop3CleartextLoginEnabled, ref:"attrs/" + ZaGlobalConfig.A_zimbraPop3CleartextLoginEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},				
+		{ id:ZaGlobalConfig.A_zimbraPop3BindPort, ref:"attrs/" + ZaGlobalConfig.A_zimbraPop3BindPort, type:_NUMBER_},				
+		{ id:ZaGlobalConfig.A_zimbraPop3SSLBindPort, ref:"attrs/" + ZaGlobalConfig.A_zimbraPop3SSLBindPort, type:_NUMBER_},	
 		// imap
-		{ id:LaGlobalConfig.A_liquidImapServerEnabled, ref:"attrs/" + LaGlobalConfig.A_liquidImapServerEnabled, type:_ENUM_, choices:LaModel.BOOLEAN_CHOICES},						
-		{ id:LaGlobalConfig.A_liquidImapSSLServerEnabled, ref:"attrs/" + LaGlobalConfig.A_liquidImapSSLServerEnabled, type:_ENUM_, choices:LaModel.BOOLEAN_CHOICES},								
-		{ id:LaGlobalConfig.A_liquidImapCleartextLoginEnabled, ref:"attrs/" + LaGlobalConfig.A_liquidImapCleartextLoginEnabled, type:_ENUM_, choices:LaModel.BOOLEAN_CHOICES},										
-		{ id:LaGlobalConfig.A_liquidImapBindPort, ref:"attrs/" + LaGlobalConfig.A_liquidImapBindPort, type:_NUMBER_},					
-		{ id:LaGlobalConfig.A_liquidImapSSLBindPort, ref:"attrs/" + LaGlobalConfig.A_liquidImapSSLBindPort, type:_NUMBER_},
+		{ id:ZaGlobalConfig.A_zimbraImapServerEnabled, ref:"attrs/" + ZaGlobalConfig.A_zimbraImapServerEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},						
+		{ id:ZaGlobalConfig.A_zimbraImapSSLServerEnabled, ref:"attrs/" + ZaGlobalConfig.A_zimbraImapSSLServerEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},								
+		{ id:ZaGlobalConfig.A_zimbraImapCleartextLoginEnabled, ref:"attrs/" + ZaGlobalConfig.A_zimbraImapCleartextLoginEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},										
+		{ id:ZaGlobalConfig.A_zimbraImapBindPort, ref:"attrs/" + ZaGlobalConfig.A_zimbraImapBindPort, type:_NUMBER_},					
+		{ id:ZaGlobalConfig.A_zimbraImapSSLBindPort, ref:"attrs/" + ZaGlobalConfig.A_zimbraImapSSLBindPort, type:_NUMBER_},
 		// anti-spam
-	  	{ id:LaGlobalConfig.A_liquidSpamCheckEnabled, ref:"attrs/" + LaGlobalConfig.A_liquidSpamCheckEnabled, type: _ENUM_, choices: LaModel.BOOLEAN_CHOICES },
-	  	{ id:LaGlobalConfig.A_liquidSpamKillPercent, ref:"attrs/" + LaGlobalConfig.A_liquidSpamKillPercent, type: _NUMBER_, fractionDigits: 0, minInclusive: 0, maxInclusive: 100 },
-	  	{ id:LaGlobalConfig.A_liquidSpamTagPercent, ref:"attrs/" + LaGlobalConfig.A_liquidSpamTagPercent, type: _NUMBER_, fractionDigits: 0, minInclusive: 0, maxInclusive: 100 },
-	  	{ id:LaGlobalConfig.A_liquidSpamSubjectTag, ref:"attrs/" + LaGlobalConfig.A_liquidSpamSubjectTag, type: _STRING_, whiteSpace: 'collapse' },
+	  	{ id:ZaGlobalConfig.A_zimbraSpamCheckEnabled, ref:"attrs/" + ZaGlobalConfig.A_zimbraSpamCheckEnabled, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
+	  	{ id:ZaGlobalConfig.A_zimbraSpamKillPercent, ref:"attrs/" + ZaGlobalConfig.A_zimbraSpamKillPercent, type: _NUMBER_, fractionDigits: 0, minInclusive: 0, maxInclusive: 100 },
+	  	{ id:ZaGlobalConfig.A_zimbraSpamTagPercent, ref:"attrs/" + ZaGlobalConfig.A_zimbraSpamTagPercent, type: _NUMBER_, fractionDigits: 0, minInclusive: 0, maxInclusive: 100 },
+	  	{ id:ZaGlobalConfig.A_zimbraSpamSubjectTag, ref:"attrs/" + ZaGlobalConfig.A_zimbraSpamSubjectTag, type: _STRING_, whiteSpace: 'collapse' },
 	  	// anti-virus
-	  	{ id:LaGlobalConfig.A_liquidVirusCheckEnabled, ref:"attrs/" + LaGlobalConfig.A_liquidVirusCheckEnabled, type: _ENUM_, choices: LaModel.BOOLEAN_CHOICES },
-	  	{ id:LaGlobalConfig.A_liquidVirusDefinitionsUpdateFrequency, ref:"attrs/" + LaGlobalConfig.A_liquidVirusDefinitionsUpdateFrequency, type: _NUMBER_, fractionDigits: 0 },
-	  	{ id:LaGlobalConfig.A_liquidVirusBlockEncryptedArchive, ref:"attrs/" + LaGlobalConfig.A_liquidVirusBlockEncryptedArchive, type: _ENUM_, choices: LaModel.BOOLEAN_CHOICES },
-	  	{ id:LaGlobalConfig.A_liquidVirusWarnAdmin, ref:"attrs/" + LaGlobalConfig.A_liquidVirusWarnAdmin, type: _ENUM_, choices: LaModel.BOOLEAN_CHOICES },
-	  	{ id:LaGlobalConfig.A_liquidVirusWarnRecipient, ref:"attrs/" + LaGlobalConfig.A_liquidVirusWarnRecipient, type: _ENUM_, choices: LaModel.BOOLEAN_CHOICES }
+	  	{ id:ZaGlobalConfig.A_zimbraVirusCheckEnabled, ref:"attrs/" + ZaGlobalConfig.A_zimbraVirusCheckEnabled, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
+	  	{ id:ZaGlobalConfig.A_zimbraVirusDefinitionsUpdateFrequency, ref:"attrs/" + ZaGlobalConfig.A_zimbraVirusDefinitionsUpdateFrequency, type: _NUMBER_, fractionDigits: 0 },
+	  	{ id:ZaGlobalConfig.A_zimbraVirusBlockEncryptedArchive, ref:"attrs/" + ZaGlobalConfig.A_zimbraVirusBlockEncryptedArchive, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
+	  	{ id:ZaGlobalConfig.A_zimbraVirusWarnAdmin, ref:"attrs/" + ZaGlobalConfig.A_zimbraVirusWarnAdmin, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
+	  	{ id:ZaGlobalConfig.A_zimbraVirusWarnRecipient, ref:"attrs/" + ZaGlobalConfig.A_zimbraVirusWarnRecipient, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES }
 	]	
 };

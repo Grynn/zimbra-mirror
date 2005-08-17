@@ -1,47 +1,47 @@
-function LaOverviewPanel(parent, className, posStyle) {
+function ZaOverviewPanel(parent, className, posStyle) {
 
 	DwtComposite.call(this, parent, className, posStyle);
 
 	this.setScrollStyle(DwtControl.CLIP);
-	this.addControlListener(new LsListener(this, this._panelControlListener));
+	this.addControlListener(new AjxListener(this, this._panelControlListener));
 	this._createFolderTree();
 	this._layout();
 }
 
-LaOverviewPanel.prototype = new DwtComposite();
-LaOverviewPanel.constructor = LaOverviewPanel;
+ZaOverviewPanel.prototype = new DwtComposite();
+ZaOverviewPanel.constructor = ZaOverviewPanel;
 
-LaOverviewPanel._MIN_FOLDERTREE_SIZE = 100;
+ZaOverviewPanel._MIN_FOLDERTREE_SIZE = 100;
 
-LaOverviewPanel.prototype.toString = 
+ZaOverviewPanel.prototype.toString = 
 function() {
-	return "LaOverviewPanel";
+	return "ZaOverviewPanel";
 }
 
-LaOverviewPanel.prototype.getFolderTree =
+ZaOverviewPanel.prototype.getFolderTree =
 function() {
 	return this._tree;
 }
 
-LaOverviewPanel.prototype._createFolderTree =
+ZaOverviewPanel.prototype._createFolderTree =
 function() {
 	this._treePanel = new DwtComposite(this, "OverviewTreePanel", DwtControl.ABSOLUTE_STYLE);
 	this._treePanel.setScrollStyle(DwtControl.SCROLL);
 	this._tree = new DwtTree(this._treePanel, DwtTree.SINGLE_STYLE, "OverviewTree" , DwtControl.ABSOLUTE_STYLE);
 }
 	
-LaOverviewPanel.prototype._layout =
+ZaOverviewPanel.prototype._layout =
 function() {
 	var opSz = this.getSize();
 	opSz.x+=100;
 	var h = opSz.y;
-	h = (h > LaOverviewPanel._MIN_FOLDERTREE_SIZE) ? h : LaOverviewPanel._MIN_FOLDERTREE_SIZE;
+	h = (h > ZaOverviewPanel._MIN_FOLDERTREE_SIZE) ? h : ZaOverviewPanel._MIN_FOLDERTREE_SIZE;
 	
 	this._treePanel.setBounds(0, 0, opSz.x, h);
 	var tfBds = this._treePanel.getBounds();
 }
 
-LaOverviewPanel.prototype._panelControlListener =
+ZaOverviewPanel.prototype._panelControlListener =
 function(ev) {
 	this._layout();
 }

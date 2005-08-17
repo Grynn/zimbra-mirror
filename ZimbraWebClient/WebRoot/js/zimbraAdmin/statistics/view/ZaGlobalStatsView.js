@@ -1,32 +1,32 @@
 /**
-* @class LaGlobalStatsView 
-* @contructor LaGlobalStatsView
+* @class ZaGlobalStatsView 
+* @contructor ZaGlobalStatsView
 * @param parent
 * @param app
 * @author Greg Solovyev
 **/
-function LaGlobalStatsView(parent, app) {
+function ZaGlobalStatsView(parent, app) {
 	this._app = app;
 	DwtTabView.call(this, parent);
-	this._appCtxt = this.shell.getData(LaAppCtxt.LABEL);
-	this._dataPage = new LaGlobalDataStatsPage(this, app);
-	this._msgsPage = new LaGlobalMsgsStatsPage(this, app);
-	this._diskPage = new LaGlobalDiskStatsPage(this, app);	
-	this.addTab(LaMsg.TABT_InData, this._dataPage);		
-	this.addTab(LaMsg.TABT_InMsgs, this._msgsPage);			
-	this.addTab(LaMsg.TABT_Disk, this._diskPage);				
+	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
+	this._dataPage = new ZaGlobalDataStatsPage(this, app);
+	this._msgsPage = new ZaGlobalMsgsStatsPage(this, app);
+	this._diskPage = new ZaGlobalDiskStatsPage(this, app);	
+	this.addTab(ZaMsg.TABT_InData, this._dataPage);		
+	this.addTab(ZaMsg.TABT_InMsgs, this._msgsPage);			
+	this.addTab(ZaMsg.TABT_Disk, this._diskPage);				
 //	this.setScrollStyle(DwtControl.SCROLL);
 }
 
-LaGlobalStatsView.prototype = new DwtTabView;
-LaGlobalStatsView.prototype.constructor = LaGlobalStatsView;
+ZaGlobalStatsView.prototype = new DwtTabView;
+ZaGlobalStatsView.prototype.constructor = ZaGlobalStatsView;
 
-LaGlobalStatsView.prototype.toString = 
+ZaGlobalStatsView.prototype.toString = 
 function() {
-	return "LaGlobalStatsView";
+	return "ZaGlobalStatsView";
 }
 
-LaGlobalStatsView.prototype._resetTabSizes = 
+ZaGlobalStatsView.prototype._resetTabSizes = 
 function (width, height) {
     var tabBarSize = this._tabBar.getSize();
 	var titleCellSize = Dwt.getSize(this.titleCell);
@@ -47,7 +47,7 @@ function (width, height) {
 	}		
 }
 
-LaGlobalStatsView.prototype._createHTML = 
+ZaGlobalStatsView.prototype._createHTML = 
 function() {
 	DwtTabView.prototype._createHTML.call(this);
 	var row1;
@@ -65,6 +65,6 @@ function() {
 
 	this.titleCell.id = Dwt.getNextId();
 	this.titleCell.align="left";
-	this.titleCell.innerHTML = LsStringUtil.htmlEncode(LaMsg.NAD_GlobalStatistics);
+	this.titleCell.innerHTML = AjxStringUtil.htmlEncode(ZaMsg.NAD_GlobalStatistics);
 	this.titleCell.className="AdminTitleBar";
 }

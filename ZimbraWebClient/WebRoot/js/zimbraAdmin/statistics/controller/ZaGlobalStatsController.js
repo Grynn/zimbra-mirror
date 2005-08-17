@@ -1,28 +1,28 @@
 /**
-* @class LaGlobalStatsController 
-* @contructor LaGlobalStatsController
+* @class ZaGlobalStatsController 
+* @contructor ZaGlobalStatsController
 * @param appCtxt
 * @param container
 * @param app
 * @author Greg Solovyev
 **/
-function LaGlobalStatsController(appCtxt, container, app) {
+function ZaGlobalStatsController(appCtxt, container, app) {
 
-	LaController.call(this, appCtxt, container, app);
+	ZaController.call(this, appCtxt, container, app);
 }
 
-LaGlobalStatsController.prototype = new LaController();
-LaGlobalStatsController.prototype.constructor = LaGlobalStatsController;
+ZaGlobalStatsController.prototype = new ZaController();
+ZaGlobalStatsController.prototype.constructor = ZaGlobalStatsController;
 
-LaGlobalStatsController.STATUS_VIEW = "LaGlobalStatsController.STATUS_VIEW";
+ZaGlobalStatsController.STATUS_VIEW = "ZaGlobalStatsController.STATUS_VIEW";
 
-LaGlobalStatsController.prototype.show = 
+ZaGlobalStatsController.prototype.show = 
 function() {
     if (!this._appView) {
-		this._contentView = new LaGlobalStatsView(this._container, this._app);
-		this._appView = this._app.createView(LaGlobalStatsController.STATUS_VIEW, [this._contentView]);
+		this._contentView = new ZaGlobalStatsView(this._container, this._app);
+		this._appView = this._app.createView(ZaGlobalStatsController.STATUS_VIEW, [this._contentView]);
 	}
-	this._app.pushView(LaGlobalStatsController.STATUS_VIEW);
+	this._app.pushView(ZaGlobalStatsController.STATUS_VIEW);
 	this._app.setCurrentController(this);
 }
 
@@ -30,7 +30,7 @@ function() {
 * @param nextViewCtrlr - the controller of the next view
 * Checks if it is safe to leave this view. Displays warning and Information messages if neccesary.
 **/
-LaGlobalStatsController.prototype.switchToNextView = 
+ZaGlobalStatsController.prototype.switchToNextView = 
 function (nextViewCtrlr, func, params) {
 	func.call(nextViewCtrlr, params);
 }

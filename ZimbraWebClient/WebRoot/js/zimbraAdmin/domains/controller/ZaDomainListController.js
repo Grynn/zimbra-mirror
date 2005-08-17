@@ -1,52 +1,52 @@
 /**
 * @constructor
-* @class LaDomainListController
-* This is a singleton object that controls all the user interaction with the list of LaDomain objects
+* @class ZaDomainListController
+* This is a singleton object that controls all the user interaction with the list of ZaDomain objects
 **/
-function LaDomainListController(appCtxt, container, app) {
-	LaController.call(this, appCtxt, container, app);
-	this._evtMgr = new LsEventMgr();
+function ZaDomainListController(appCtxt, container, app) {
+	ZaController.call(this, appCtxt, container, app);
+	this._evtMgr = new AjxEventMgr();
 }
 
-LaDomainListController.prototype = new LaController();
-LaDomainListController.prototype.constructor = LaDomainListController;
+ZaDomainListController.prototype = new ZaController();
+ZaDomainListController.prototype.constructor = ZaDomainListController;
 
-LaDomainListController.DOMAIN_VIEW = "LaDomainListController.DOMAIN_VIEW";
+ZaDomainListController.DOMAIN_VIEW = "ZaDomainListController.DOMAIN_VIEW";
 
-LaDomainListController.prototype.show = 
+ZaDomainListController.prototype.show = 
 function(list) {
     if (!this._appView) {
     	//create toolbar
     	this._ops = new Array();
-    	this._ops.push(new LaOperation(LaOperation.NEW, LaMsg.TBB_New, LaMsg.DTBB_New_tt, LaImg.I_DOMAIN, LaImg.I_DOMAIN, new LsListener(this, LaDomainListController.prototype._newButtonListener)));
-    	this._ops.push(new LaOperation(LaOperation.EDIT, LaMsg.TBB_Edit, LaMsg.DTBB_Edit_tt, LaImg.I_PROPERTIES, LaImg.I_PROPERTIES,  new LsListener(this, LaDomainListController.prototype._editButtonListener)));    	
-    	this._ops.push(new LaOperation(LaOperation.DELETE, LaMsg.TBB_Delete, LaMsg.DTBB_Delete_tt, LaImg.I_DELETE, LaImg.I_DELETE, new LsListener(this, LaDomainListController.prototype._deleteButtonListener)));    	    	
-   		this._ops.push(new LaOperation(LaOperation.GAL_WIZARD, LaMsg.DTBB_GAlConfigWiz, LaMsg.DTBB_GAlConfigWiz_tt, LaImg.I_DOMAIN, LaImg.I_DOMAIN, new LsListener(this, LaDomainListController.prototype._galWizButtonListener)));   		
-   		this._ops.push(new LaOperation(LaOperation.AUTH_WIZARD, LaMsg.DTBB_AuthConfigWiz, LaMsg.DTBB_AuthConfigWiz_tt, LaImg.I_DOMAIN, LaImg.I_DOMAIN, new LsListener(this, LaDomainListController.prototype._authWizButtonListener)));   		   		
+    	this._ops.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.DTBB_New_tt, ZaImg.I_DOMAIN, ZaImg.I_DOMAIN, new AjxListener(this, ZaDomainListController.prototype._newButtonListener)));
+    	this._ops.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.DTBB_Edit_tt, ZaImg.I_PROPERTIES, ZaImg.I_PROPERTIES,  new AjxListener(this, ZaDomainListController.prototype._editButtonListener)));    	
+    	this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.DTBB_Delete_tt, ZaImg.I_DELETE, ZaImg.I_DELETE, new AjxListener(this, ZaDomainListController.prototype._deleteButtonListener)));    	    	
+   		this._ops.push(new ZaOperation(ZaOperation.GAL_WIZARD, ZaMsg.DTBB_GAlConfigWiz, ZaMsg.DTBB_GAlConfigWiz_tt, ZaImg.I_DOMAIN, ZaImg.I_DOMAIN, new AjxListener(this, ZaDomainListController.prototype._galWizButtonListener)));   		
+   		this._ops.push(new ZaOperation(ZaOperation.AUTH_WIZARD, ZaMsg.DTBB_AuthConfigWiz, ZaMsg.DTBB_AuthConfigWiz_tt, ZaImg.I_DOMAIN, ZaImg.I_DOMAIN, new AjxListener(this, ZaDomainListController.prototype._authWizButtonListener)));   		   		
 
-		this._toolbar = new LaToolBar(this._container, this._ops);
+		this._toolbar = new ZaToolBar(this._container, this._ops);
 
 		//create Domains list view
-		this._contentView = new LaDomainListView(this._container);
-		this._appView = this._app.createView(LaDomainListController.DOMAIN_VIEW, [this._toolbar,  this._contentView]);
+		this._contentView = new ZaDomainListView(this._container);
+		this._appView = this._app.createView(ZaDomainListController.DOMAIN_VIEW, [this._toolbar,  this._contentView]);
 		if (list != null)
 			this._contentView.set(list.getVector());
 
     	//context menu
-    	this._actionMenu =  new LaPopupMenu(this._contentView, "ActionMenu", null, this._ops);
+    	this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._ops);
 
-		this._app.pushView(LaDomainListController.DOMAIN_VIEW);			
+		this._app.pushView(ZaDomainListController.DOMAIN_VIEW);			
 		
 		//set a selection listener on the Domain list view
-		this._contentView.addSelectionListener(new LsListener(this, this._listSelectionListener));
-		this._contentView.addActionListener(new LsListener(this, this._listActionListener));			
-		this._removeConfirmMessageDialog = new LaMsgDialog(this._appView.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);					
+		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
+		this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
+		this._removeConfirmMessageDialog = new ZaMsgDialog(this._appView.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);					
 		//this.refresh();
 	} else {
 		if (list != null)
 			this._contentView.set(list.getVector());	
 			
-		this._app.pushView(LaDomainListController.DOMAIN_VIEW);
+		this._app.pushView(ZaDomainListController.DOMAIN_VIEW);
 	}
 	this._app.setCurrentController(this);
 	this._removeList = new Array();
@@ -57,39 +57,39 @@ function(list) {
 }
 
 /**
-* @return LaItemList - the list currently displaid in the list view
+* @return ZaItemList - the list currently displaid in the list view
 **/
-LaDomainListController.prototype.getList = 
+ZaDomainListController.prototype.getList = 
 function() {
 	return this._list;
 }
 
 /*
-LaDomainListController.prototype.refresh = 
+ZaDomainListController.prototype.refresh = 
 function() {
 	try {
 		this._contentView.set(this._app.getDomainList(true).getVector());
 	} catch (ex) {
-		this._handleException(ex, LaDomainListController.prototype.refresh, null, false);
+		this._handleException(ex, ZaDomainListController.prototype.refresh, null, false);
 	}
 }
 */
 
-LaDomainListController.prototype.set = 
+ZaDomainListController.prototype.set = 
 function(domainList) {
 	this.show(domainList);
 }
 
 /**
 * @param ev
-* This listener is invoked by LaAccountViewController or any other controller that can change an LaDomain object
+* This listener is invoked by ZaAccountViewController or any other controller that can change an ZaDomain object
 **/
-LaDomainListController.prototype.handleDomainChange = 
+ZaDomainListController.prototype.handleDomainChange = 
 function (ev) {
 	//if any of the data that is currently visible has changed - update the view
 	if(ev) {
 		var details = ev.getDetails();
-		if(details["modFields"] && (details["modFields"][LaDomain.A_description] || details["modFields"][LaDomain.A_domainName])) {
+		if(details["modFields"] && (details["modFields"][ZaDomain.A_description] || details["modFields"][ZaDomain.A_domainName])) {
 			this._contentView.setUI();
 			if(this._app.getCurrentController() == this) {
 				this.show();			
@@ -100,12 +100,12 @@ function (ev) {
 
 /**
 * @param ev
-* This listener is invoked by LaDomainController or any other controller that can create an LaDomain object
+* This listener is invoked by ZaDomainController or any other controller that can create an ZaDomain object
 **/
-LaDomainListController.prototype.handleDomainCreation = 
+ZaDomainListController.prototype.handleDomainCreation = 
 function (ev) {
 	if(ev) {
-		//add the new LaDomain to the controlled list
+		//add the new ZaDomain to the controlled list
 		if(ev.getDetails()) {
 			this._list.add(ev.getDetails());
 			this._contentView.setUI();
@@ -118,12 +118,12 @@ function (ev) {
 
 /**
 * @param ev
-* This listener is invoked by LaDomainController or any other controller that can remove an LaDomain object
+* This listener is invoked by ZaDomainController or any other controller that can remove an ZaDomain object
 **/
-LaDomainListController.prototype.handleDomainRemoval = 
+ZaDomainListController.prototype.handleDomainRemoval = 
 function (ev) {
 	if(ev) {
-		//add the new LaAccount to the controlled list
+		//add the new ZaAccount to the controlled list
 		if(ev.getDetails()) {
 			this._list.remove(ev.getDetails());
 			this._contentView.setUI();
@@ -138,7 +138,7 @@ function (ev) {
 * @param nextViewCtrlr - the controller of the next view
 * Checks if it is safe to leave this view. Displays warning and Information messages if neccesary.
 **/
-LaDomainListController.prototype.switchToNextView = 
+ZaDomainListController.prototype.switchToNextView = 
 function (nextViewCtrlr, func, params) {
 	func.call(nextViewCtrlr, params);
 }
@@ -147,97 +147,97 @@ function (nextViewCtrlr, func, params) {
 * public getToolBar
 * @return reference to the toolbar
 **/
-LaDomainListController.prototype.getToolBar = 
+ZaDomainListController.prototype.getToolBar = 
 function () {
 	return this._toolBar;	
 }
 
 /**
-* Adds listener to removal of an LaDomain 
+* Adds listener to removal of an ZaDomain 
 * @param listener
 **/
-LaDomainListController.prototype.addDomainRemovalListener = 
+ZaDomainListController.prototype.addDomainRemovalListener = 
 function(listener) {
-	this._evtMgr.addListener(LaEvent.E_REMOVE, listener);
+	this._evtMgr.addListener(ZaEvent.E_REMOVE, listener);
 }
 
 /**
-* Adds listener to creation of an LaDomain 
+* Adds listener to creation of an ZaDomain 
 * @param listener
 **/
-LaDomainListController.prototype.addDomainCreationListener = 
+ZaDomainListController.prototype.addDomainCreationListener = 
 function(listener) {
-	this._evtMgr.addListener(LaEvent.E_CREATE, listener);
+	this._evtMgr.addListener(ZaEvent.E_CREATE, listener);
 }
 
 /*
 // refresh button was pressed
-LaDomainListController.prototype._refreshButtonListener =
+ZaDomainListController.prototype._refreshButtonListener =
 function(ev) {
 	this.refresh();
 }
 */
 
 /**
-*	Private method that notifies listeners that a new LaDomain is created
+*	Private method that notifies listeners that a new ZaDomain is created
 * 	@param details
 */
-LaDomainListController.prototype._fireDomainCreationEvent =
+ZaDomainListController.prototype._fireDomainCreationEvent =
 function(details) {
 	try {
-		if (this._evtMgr.isListenerRegistered(LaEvent.E_CREATE)) {
-			var evt = new LaEvent(LaEvent.S_DOMAIN);
-			evt.set(LaEvent.E_CREATE, this);
+		if (this._evtMgr.isListenerRegistered(ZaEvent.E_CREATE)) {
+			var evt = new ZaEvent(ZaEvent.S_DOMAIN);
+			evt.set(ZaEvent.E_CREATE, this);
 			evt.setDetails(details);
-			this._evtMgr.notifyListeners(LaEvent.E_CREATE, evt);
+			this._evtMgr.notifyListeners(ZaEvent.E_CREATE, evt);
 		}
 	} catch (ex) {
-		this._handleException(ex, "LaDomainListController.prototype._fireDomainCreationEvent", details, false);	
+		this._handleException(ex, "ZaDomainListController.prototype._fireDomainCreationEvent", details, false);	
 	}
 }
 
 /**
-*	Private method that notifies listeners to that the controlled LaDomain is changed
+*	Private method that notifies listeners to that the controlled ZaDomain is changed
 * 	@param details
 */
-LaDomainListController.prototype._fireDomainChangeEvent =
+ZaDomainListController.prototype._fireDomainChangeEvent =
 function(details) {
 	try {
-		if (this._evtMgr.isListenerRegistered(LaEvent.E_MODIFY)) {
-			var evt = new LaEvent(LaEvent.S_DOMAIN);
-			evt.set(LaEvent.E_MODIFY, this);
+		if (this._evtMgr.isListenerRegistered(ZaEvent.E_MODIFY)) {
+			var evt = new ZaEvent(ZaEvent.S_DOMAIN);
+			evt.set(ZaEvent.E_MODIFY, this);
 			evt.setDetails(details);
-			this._evtMgr.notifyListeners(LaEvent.E_MODIFY, evt);
+			this._evtMgr.notifyListeners(ZaEvent.E_MODIFY, evt);
 		}
 	} catch (ex) {
-		this._handleException(ex, "LaDomainListController.prototype._fireDomainChangeEvent", details, false);	
+		this._handleException(ex, "ZaDomainListController.prototype._fireDomainChangeEvent", details, false);	
 	}
 }
 
 /**
-*	Private method that notifies listeners to that the controlled LaDomain (are) removed
+*	Private method that notifies listeners to that the controlled ZaDomain (are) removed
 * 	@param details
 */
-LaDomainListController.prototype._fireDomainRemovalEvent =
+ZaDomainListController.prototype._fireDomainRemovalEvent =
 function(details) {
 	try {
-		if (this._evtMgr.isListenerRegistered(LaEvent.E_REMOVE)) {
-			var evt = new LaEvent(LaEvent.S_DOMAIN);
-			evt.set(LaEvent.E_REMOVE, this);
+		if (this._evtMgr.isListenerRegistered(ZaEvent.E_REMOVE)) {
+			var evt = new ZaEvent(ZaEvent.S_DOMAIN);
+			evt.set(ZaEvent.E_REMOVE, this);
 			evt.setDetails(details);
-			this._evtMgr.notifyListeners(LaEvent.E_REMOVE, evt);
+			this._evtMgr.notifyListeners(ZaEvent.E_REMOVE, evt);
 		}
 	} catch (ex) {
-		this._handleException(ex, "LaDomainListController.prototype._fireDomainRemovalEvent", details, false);	
+		this._handleException(ex, "ZaDomainListController.prototype._fireDomainRemovalEvent", details, false);	
 	}
 }
 
 
 /**
-* This listener is called when the item in the list is double clicked. It call LaDomainController.show method
+* This listener is called when the item in the list is double clicked. It call ZaDomainController.show method
 * in order to display the Domain View
 **/
-LaDomainListController.prototype._listSelectionListener =
+ZaDomainListController.prototype._listSelectionListener =
 function(ev) {
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
 		if(ev.item) {
@@ -249,7 +249,7 @@ function(ev) {
 	}
 }
 
-LaDomainListController.prototype._listActionListener =
+ZaDomainListController.prototype._listActionListener =
 function (ev) {
 	this._changeActionsState();
 	this._actionMenu.popup(0, ev.docX, ev.docY);
@@ -257,68 +257,68 @@ function (ev) {
 
 /**
 * This listener is called when the Edit button is clicked. 
-* It call LaDomainController.show method
+* It call ZaDomainController.show method
 * in order to display the Domain View
 **/
-LaDomainListController.prototype._editButtonListener =
+ZaDomainListController.prototype._editButtonListener =
 function(ev) {
-	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getLast()) {
-		var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getLast());
+	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getZast()) {
+		var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getZast());
 		this._app.getDomainController().show(item);
 	}
 }
 
 // new button was pressed
-LaDomainListController.prototype._newButtonListener =
+ZaDomainListController.prototype._newButtonListener =
 function(ev) {
 	try {
-		var domain = new LaDomain(this._app);
-		this._newDomainWizard = new LaNewDomainXWizard(this._container, this._app);	
-		this._newDomainWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, LaDomainListController.prototype._finishNewButtonListener, this, null);			
+		var domain = new ZaDomain(this._app);
+		this._newDomainWizard = new ZaNewDomainXWizard(this._container, this._app);	
+		this._newDomainWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainListController.prototype._finishNewButtonListener, this, null);			
 		this._newDomainWizard.setObject(domain);
 		this._newDomainWizard.popup();
 	} catch (ex) {
-		this._handleException(ex, "LaDomainListController.prototype._newButtonListener", null, false);
+		this._handleException(ex, "ZaDomainListController.prototype._newButtonListener", null, false);
 	}
 }
 
 
-LaDomainListController.prototype._galWizButtonListener =
+ZaDomainListController.prototype._galWizButtonListener =
 function(ev) {
 	try {
-		if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getLast()) {
-			var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getLast());
+		if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getZast()) {
+			var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getZast());
 			this._currentObject = item;
-			this._galWizard = new LaGALConfigXWizard(this._container, this._app);	
-			this._galWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, LaDomainListController.prototype._finishGalButtonListener, this, null);			
+			this._galWizard = new ZaGALConfigXWizard(this._container, this._app);	
+			this._galWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainListController.prototype._finishGalButtonListener, this, null);			
 			this._galWizard.setObject(item);
 			this._galWizard.popup();
 		}
 	} catch (ex) {
-		this._handleException(ex, "LaDomainListController.prototype._showGalWizard", null, false);
+		this._handleException(ex, "ZaDomainListController.prototype._showGalWizard", null, false);
 	}
 }
 
 
-LaDomainListController.prototype._authWizButtonListener =
+ZaDomainListController.prototype._authWizButtonListener =
 function(ev) {
 	try {
-		if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getLast()) {
-			var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getLast());
+		if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getZast()) {
+			var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getZast());
 			this._currentObject = item;
-			this._authWizard = new LaAuthConfigXWizard(this._container, this._app);	
-			this._authWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, LaDomainListController.prototype._finishAuthButtonListener, this, null);			
+			this._authWizard = new ZaAuthConfigXWizard(this._container, this._app);	
+			this._authWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainListController.prototype._finishAuthButtonListener, this, null);			
 			this._authWizard.setObject(item);
 			this._authWizard.popup();
 		}
 	} catch (ex) {
-		this._handleException(ex, "LaDomainListController.prototype._showAuthWizard", null, false);
+		this._handleException(ex, "ZaDomainListController.prototype._showAuthWizard", null, false);
 	}
 }
 /**
 * This listener is called when the Delete button is clicked. 
 **/
-LaDomainListController.prototype._deleteButtonListener =
+ZaDomainListController.prototype._deleteButtonListener =
 function(ev) {
 	this._removeList = new Array();
 	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getArray()) {
@@ -331,7 +331,7 @@ function(ev) {
 		}
 	}
 	if(this._removeList.length) {
-		dlgMsg = LaMsg.Q_DELETE_DOMAINS;
+		dlgMsg = ZaMsg.Q_DELETE_DOMAINS;
 		dlgMsg += "<br>";
 		for(var key in this._removeList) {
 			if(i > 19) {
@@ -360,13 +360,13 @@ function(ev) {
 		}
 		dlgMsg += "</ul>";
 		this._removeConfirmMessageDialog.setMessage(dlgMsg, null, DwtMessageDialog.INFO_STYLE);
-		this._removeConfirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, LaDomainListController.prototype._deleteDomainsCallback, this);
-		this._removeConfirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, LaDomainListController.prototype._donotDeleteDomainsCallback, this);		
+		this._removeConfirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaDomainListController.prototype._deleteDomainsCallback, this);
+		this._removeConfirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaDomainListController.prototype._donotDeleteDomainsCallback, this);		
 		this._removeConfirmMessageDialog.popup();
 	}
 }
 
-LaDomainListController.prototype._deleteDomainsCallback = 
+ZaDomainListController.prototype._deleteDomainsCallback = 
 function () {
 	var successRemList=new Array();
 	for(var key in this._removeList) {
@@ -376,11 +376,11 @@ function () {
 				successRemList.push(this._removeList[key]);					
 			} catch (ex) {
 				this._removeConfirmMessageDialog.popdown();
-				if(ex.code == LsCsfeException.DOMAIN_NOT_EMPTY) {
-					this._msgDialog.setMessage(LaMsg.ERROR_DOMAIN_NOT_EMPTY, null, DwtMessageDialog.CRITICAL_STYLE, null);
+				if(ex.code == AjxCsfeException.DOMAIN_NOT_EMPTY) {
+					this._msgDialog.setMessage(ZaMsg.ERROR_DOMAIN_NOT_EMPTY, null, DwtMessageDialog.CRITICAL_STYLE, null);
 					this._msgDialog.popup();			
 				} else {
-					this._handleException(ex, "LaDomainListController.prototype._deleteDomainsCallback", null, false);				
+					this._handleException(ex, "ZaDomainListController.prototype._deleteDomainsCallback", null, false);				
 				}
 				return;
 			}
@@ -393,87 +393,87 @@ function () {
 	this.show();
 }
 
-LaDomainListController.prototype._donotDeleteDomainsCallback = 
+ZaDomainListController.prototype._donotDeleteDomainsCallback = 
 function () {
 	this._removeList = new Array();
 	this._removeConfirmMessageDialog.popdown();
 }
 
-LaDomainListController.prototype._changeActionsState = 
+ZaDomainListController.prototype._changeActionsState = 
 function () {
 	var cnt = this._contentView.getSelectionCount();
 	if(cnt == 1) {
-		var opsArray = [LaOperation.EDIT, LaOperation.DELETE, LaOperation.AUTH_WIZARD, LaOperation.GAL_WIZARD];
+		var opsArray = [ZaOperation.EDIT, ZaOperation.DELETE, ZaOperation.AUTH_WIZARD, ZaOperation.GAL_WIZARD];
 		this._toolbar.enable(opsArray, true);
 		this._actionMenu.enable(opsArray, true);
 	} else if (cnt > 1){
-		var opsArray1 = [LaOperation.EDIT, LaOperation.AUTH_WIZARD, LaOperation.GAL_WIZARD];
+		var opsArray1 = [ZaOperation.EDIT, ZaOperation.AUTH_WIZARD, ZaOperation.GAL_WIZARD];
 		this._toolbar.enable(opsArray1, false);
 		this._actionMenu.enable(opsArray1, false);
 
-		var opsArray2 = [LaOperation.DELETE];
+		var opsArray2 = [ZaOperation.DELETE];
 		this._toolbar.enable(opsArray2, true);
 		this._actionMenu.enable(opsArray2, true);
 	} else {
-		var opsArray = [LaOperation.EDIT, LaOperation.DELETE, LaOperation.AUTH_WIZARD, LaOperation.GAL_WIZARD];
+		var opsArray = [ZaOperation.EDIT, ZaOperation.DELETE, ZaOperation.AUTH_WIZARD, ZaOperation.GAL_WIZARD];
 		this._toolbar.enable(opsArray, false);
 		this._actionMenu.enable(opsArray, false);
 	}
 }
 
-LaDomainListController.prototype._finishNewButtonListener =
+ZaDomainListController.prototype._finishNewButtonListener =
 function(ev) {
 	try {
-		var domain = LaDomain.create(this._newDomainWizard.getObject(), this._app);
+		var domain = ZaDomain.create(this._newDomainWizard.getObject(), this._app);
 		if(domain != null) {
 			//if creation took place - fire an DomainChangeEvent
 			this._fireDomainCreationEvent(domain);
 			
-			var evt = new LaEvent(LaEvent.S_DOMAIN);
-			evt.set(LaEvent.E_CREATE, this);
+			var evt = new ZaEvent(ZaEvent.S_DOMAIN);
+			evt.set(ZaEvent.E_CREATE, this);
 			evt.setDetails(domain);
 			this.handleDomainCreation(evt);
 			
 			this._newDomainWizard.popdown();		
 		}
 	} catch (ex) {
-		if(ex.code == LsCsfeException.DOMAIN_EXISTS) {
-			this.popupMsgDialog(LaMsg.ERROR_DOMAIN_EXISTS, ex);
-//			this._msgDialog.setMessage(LaMsg.ERROR_DOMAIN_EXISTS, null, DwtMessageDialog.CRITICAL_STYLE, null);
+		if(ex.code == AjxCsfeException.DOMAIN_EXISTS) {
+			this.popupMsgDialog(ZaMsg.ERROR_DOMAIN_EXISTS, ex);
+//			this._msgDialog.setMessage(ZaMsg.ERROR_DOMAIN_EXISTS, null, DwtMessageDialog.CRITICAL_STYLE, null);
 	//		this._msgDialog.popup();
 		} else {
-			this._handleException(ex, "LaDomainListController.prototype._finishNewButtonListener", null, false);
+			this._handleException(ex, "ZaDomainListController.prototype._finishNewButtonListener", null, false);
 		}
 	}
 	return;
 }
 
-LaDomainListController.prototype._finishAuthButtonListener =
+ZaDomainListController.prototype._finishAuthButtonListener =
 function(ev) {
 	try {
-		LaDomain.modifyAuthSettings(this._authWizard.getObject(), this._currentObject);
+		ZaDomain.modifyAuthSettings(this._authWizard.getObject(), this._currentObject);
 		var changeDetails = new Object();
 		//if a modification took place - fire an DomainChangeEvent
 		changeDetails["obj"] = this._currentObject;
 		this._fireDomainChangeEvent(changeDetails);
 		this._authWizard.popdown();
 	} catch (ex) {
-		this._handleException(ex, "LaDomainListController.prototype._finishAuthButtonListener", null, false);
+		this._handleException(ex, "ZaDomainListController.prototype._finishAuthButtonListener", null, false);
 	}
 	return;
 }
 
-LaDomainListController.prototype._finishGalButtonListener =
+ZaDomainListController.prototype._finishGalButtonListener =
 function(ev) {
 	try {
 		var changeDetails = new Object();
-		LaDomain.modifyGalSettings(this._galWizard.getObject(),this._currentObject); 
+		ZaDomain.modifyGalSettings(this._galWizard.getObject(),this._currentObject); 
 		//if a modification took place - fire an DomainChangeEvent
 		changeDetails["obj"] = this._currentObject;
 		this._fireDomainChangeEvent(changeDetails);
 		this._galWizard.popdown();
 	} catch (ex) {
-		this._handleException(ex, "LaDomainListController.prototype._finishGalButtonListener", null, false);
+		this._handleException(ex, "ZaDomainListController.prototype._finishGalButtonListener", null, false);
 	}
 	return;
 }

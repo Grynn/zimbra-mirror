@@ -7,14 +7,14 @@
 * stuff that is common to the app as a whole (such as tags). The methods are almost all
 * just getters and setters.
 */
-function LaAppCtxt() {
+function ZaAppCtxt() {
 }
 
-LaAppCtxt.LABEL = "appCtxt";
+ZaAppCtxt.LABEL = "appCtxt";
 
-LaAppCtxt.prototype.toString = 
+ZaAppCtxt.prototype.toString = 
 function() {
-	return "LaAppCtxt";
+	return "ZaAppCtxt";
 }
 
 /**
@@ -23,106 +23,106 @@ function() {
 * @param shell		the shell
 * @returns			the app context
 */
-LaAppCtxt.getFromShell =
+ZaAppCtxt.getFromShell =
 function(shell) {
-	return shell.getData(LaAppCtxt.LABEL);
+	return shell.getData(ZaAppCtxt.LABEL);
 }
 
 
 
-LaAppCtxt.prototype.setAppController =
+ZaAppCtxt.prototype.setAppController =
 function(appController) {
 	this._appController = appController;
 }
 
-LaAppCtxt.prototype.getAppController =
+ZaAppCtxt.prototype.getAppController =
 function() {
 	return this._appController;
 }
 
 
-LaAppCtxt.prototype.getApp =
+ZaAppCtxt.prototype.getApp =
 function(appName) {
 	return this._appController.getApp(appName);
 }
 
-LaAppCtxt.prototype.getAppViewMgr =
+ZaAppCtxt.prototype.getAppViewMgr =
 function() {
 	return this._appController.getAppViewMgr();
 }
 
-LaAppCtxt.prototype.setClientCmdHdlr =
+ZaAppCtxt.prototype.setClientCmdHdlr =
 function(clientCmdHdlr) {
 	this._clientCmdHdlr = clientCmdHdlr;
 }
 
-LaAppCtxt.prototype.getClientCmdHdlr =
+ZaAppCtxt.prototype.getClientCmdHdlr =
 function() {
 	return this._clientCmdHdlr;
 }
 
-LaAppCtxt.prototype.getSearchController =
+ZaAppCtxt.prototype.getSearchController =
 function() {
 	return this._appController.getSearchController();
 }
 
-LaAppCtxt.prototype.getOverviewPanelController =
+ZaAppCtxt.prototype.getOverviewPanelController =
 function() {
 	return this._appController.getOverviewPanelController();
 }
 
-LaAppCtxt.prototype.getLoginDialog =
+ZaAppCtxt.prototype.getLoginDialog =
 function(isAdmin) {
 	if (!this._loginDialog)
-		this._loginDialog = new LaLoginDialog(this.getShell(), null, null, isAdmin);
+		this._loginDialog = new ZaLoginDialog(this.getShell(), null, null, isAdmin);
 	return this._loginDialog;
 }
 
-LaAppCtxt.prototype.getMsgDialog =
+ZaAppCtxt.prototype.getMsgDialog =
 function() {
 	if (!this._msgDialog)
-		this._msgDialog = new LaMsgDialog(this.getShell());
+		this._msgDialog = new ZaMsgDialog(this.getShell());
 	return this._msgDialog;
 }
 
-LaAppCtxt.prototype.getShell =
+ZaAppCtxt.prototype.getShell =
 function() {
 	return this._shell;
 }
 
-LaAppCtxt.prototype.setShell =
+ZaAppCtxt.prototype.setShell =
 function(shell) {
 	this._shell = shell;
-	shell.setData(LaAppCtxt.LABEL, this);
+	shell.setData(ZaAppCtxt.LABEL, this);
 }
 
 
-LaAppCtxt.prototype.getFolderTree =
+ZaAppCtxt.prototype.getFolderTree =
 function() {
 	return this._folderTree;
 }
 
-LaAppCtxt.prototype.setFolderTree =
+ZaAppCtxt.prototype.setFolderTree =
 function(folderTree) {
 	this._folderTree = folderTree;
 }
 
-LaAppCtxt.prototype.getUsername = 
+ZaAppCtxt.prototype.getUsername = 
 function() { 
 	return this._username;
 }
 
-LaAppCtxt.prototype.setUsername = 
+ZaAppCtxt.prototype.setUsername = 
 function(username) {
 	this._username = username;
 }
 
-LaAppCtxt.prototype.getCurrentSearch =
+ZaAppCtxt.prototype.getCurrentSearch =
 function() { 
 	return this._currentSearch;
 }
 
-LaAppCtxt.prototype.setCurrentSearch =
+ZaAppCtxt.prototype.setCurrentSearch =
 function(search) {
 	this._currentSearch = search;
 }

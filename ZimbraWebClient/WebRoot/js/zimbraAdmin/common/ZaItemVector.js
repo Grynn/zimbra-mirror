@@ -1,22 +1,22 @@
 /**
 * @constructor
-* @class LaItemVector
-* This is a Vector that contains LaItems. Unlike in LsVector @link LsVector.contains and
-@link LsVector.remove methods compare object ids (@link LaItem.id) instead of comparing the whole objects.
-@link LsVector.add method is overwriten to accept only instances of LaItem class.
+* @class ZaItemVector
+* This is a Vector that contains ZaItems. Unlike in AjxVector @link AjxVector.contains and
+@link AjxVector.remove methods compare object ids (@link ZaItem.id) instead of comparing the whole objects.
+@link AjxVector.add method is overwriten to accept only instances of ZaItem class.
 **/
 
-function LaItemVector() {
-	LsVector.call(this, null);
+function ZaItemVector() {
+	AjxVector.call(this, null);
 }
 
-LaItemVector.prototype = new LsVector;
-LaItemVector.prototype.constructor = LaItemVector;
+ZaItemVector.prototype = new AjxVector;
+ZaItemVector.prototype.constructor = ZaItemVector;
 
-LaItemVector.prototype.contains = 
+ZaItemVector.prototype.contains = 
 function(obj) {
-	if(! (obj instanceof LaItem) ) {
-		throw new DwtException("Invalid parameter", DwtException.INTERNAL_ERROR, "LaItemVector.prototype.add", "LaItemVector can contain only objects of LaItem class and classes that extend LaItem.");
+	if(! (obj instanceof ZaItem) ) {
+		throw new DwtException("Invalid parameter", DwtException.INTERNAL_ERROR, "ZaItemVector.prototype.add", "ZaItemVector can contain only objects of ZaItem class and classes that extend ZaItem.");
 	}
 	for (var i = 0; i < this._array.length; i++) {
 		if (this._array[i].id == obj.id)
@@ -25,10 +25,10 @@ function(obj) {
 	return false;
 }
 
-LaItemVector.prototype.remove = 
+ZaItemVector.prototype.remove = 
 function(obj) {
-	if(! (obj instanceof LaItem) ) {
-		throw new DwtException("Invalid parameter", DwtException.INTERNAL_ERROR, "LaItemVector.prototype.add", "LaItemVector can contain only objects of LaItem class and classes that extend LaItem.");
+	if(! (obj instanceof ZaItem) ) {
+		throw new DwtException("Invalid parameter", DwtException.INTERNAL_ERROR, "ZaItemVector.prototype.add", "ZaItemVector can contain only objects of ZaItem class and classes that extend ZaItem.");
 	}
 	for (var i = 0; i < this._array.length; i++) {
 		if (this._array[i].id == obj.id) {
@@ -40,11 +40,11 @@ function(obj) {
 }
 
 
-LaItemVector.prototype.add =
+ZaItemVector.prototype.add =
 function(obj, index) {
 	// if index is out of bounds, 
-	if(! (obj instanceof LaItem) ) {
-		throw new DwtException("Invalid parameter", DwtException.INTERNAL_ERROR, "LaItemVector.prototype.add", "LaItemVector can contain only objects of LaItem class and classes that extend LaItem.");
+	if(! (obj instanceof ZaItem) ) {
+		throw new DwtException("Invalid parameter", DwtException.INTERNAL_ERROR, "ZaItemVector.prototype.add", "ZaItemVector can contain only objects of ZaItem class and classes that extend ZaItem.");
 	}
 	if (index == null || index < 0 || index >= this._array.length) {
 		// append object to the end

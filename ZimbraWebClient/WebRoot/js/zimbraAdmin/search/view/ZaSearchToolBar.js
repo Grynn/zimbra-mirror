@@ -1,8 +1,8 @@
-function LaSearchToolBar(parent, posStyle) {
+function ZaSearchToolBar(parent, posStyle) {
 
-	LaToolBar.call(this, parent, null, posStyle, "SearchToolBar");
+	ZaToolBar.call(this, parent, null, posStyle, "SearchToolBar");
 
-	this._searchField = new LaSearchField(this, "SearchTBSearchField", 48);
+	this._searchField = new ZaSearchField(this, "SearchTBSearchField", 48);
 	var h1 = this._searchField.getSize().y;
 		
 	this._createSeparator();
@@ -12,24 +12,24 @@ function LaSearchToolBar(parent, posStyle) {
 	this.setSize(DwtControl.DEFAULT, Math.max(this._searchField.getSize().y, this.computeHeight()));
 }
 
-LaSearchToolBar.prototype = new LaToolBar;
-LaSearchToolBar.prototype.constructor = LaSearchToolBar;
+ZaSearchToolBar.prototype = new ZaToolBar;
+ZaSearchToolBar.prototype.constructor = ZaSearchToolBar;
 
-LaSearchToolBar.prototype.toString = 
+ZaSearchToolBar.prototype.toString = 
 function() {
-	return "LaSearchToolBar";
+	return "ZaSearchToolBar";
 }
 
-LaSearchToolBar.prototype.addSelectionListener =
+ZaSearchToolBar.prototype.addSelectionListener =
 function(buttonId, listener) {
 	// Don't allow listeners on the search by button since we only want listeners registered
 	// on its menu items
-	if (buttonId != LaSearchToolBar.SEARCHFOR_BUTTON)
-		LaToolBar.prototype.addSelectionListener.call(this, buttonId, listener);
+	if (buttonId != ZaSearchToolBar.SEARCHFOR_BUTTON)
+		ZaToolBar.prototype.addSelectionListener.call(this, buttonId, listener);
 }
 
 
-LaSearchToolBar.prototype.getSearchField =
+ZaSearchToolBar.prototype.getSearchField =
 function() {
 	return this._searchField;
 }

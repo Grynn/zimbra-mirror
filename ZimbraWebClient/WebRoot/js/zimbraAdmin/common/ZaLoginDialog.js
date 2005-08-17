@@ -1,6 +1,6 @@
-function LaLoginDialog(parent, zIndex, className, isAdmin) { 
+function ZaLoginDialog(parent, zIndex, className, isAdmin) { 
 
-    className = className || "LaLoginDialog";
+    className = className || "ZaLoginDialog";
     DwtComposite.call(this, parent, className, DwtControl.ABSOLUTE_STYLE);
 
 	this._isAdmin = (isAdmin === true);	
@@ -26,19 +26,19 @@ function LaLoginDialog(parent, zIndex, className, isAdmin) {
    	
    	this._unameField = Dwt.getDomObj(doc, unameId);
     this._unameField._parentId = this._htmlElId;
-    this._unameField.onfocus = LaLoginDialog.handleFieldFocus;
+    this._unameField.onfocus = ZaLoginDialog.handleFieldFocus;
     
     this._pwordField = Dwt.getDomObj(doc, pwordId);
     this._pwordField._parentId = this._htmlElId;
-    this._pwordField.onfocus = LaLoginDialog.handleFieldFocus;
+    this._pwordField.onfocus = ZaLoginDialog.handleFieldFocus;
     
-    this._loginButton = new DwtButton(this, "", "LaLoginButton");
-    this._loginButton.setText(LaMsg.login);
+    this._loginButton = new DwtButton(this, "", "ZaLoginButton");
+    this._loginButton.setText(ZaMsg.login);
     this._loginButton.setData("me", this);
-    this._loginButton.addSelectionListener(new LsListener(this, this._loginSelListener));
+    this._loginButton.addSelectionListener(new AjxListener(this, this._loginSelListener));
     
     this._okCell = Dwt.getDomObj(doc, okCellId);
-	if (!LsEnv.isIE){
+	if (!AjxEnv.isIE){
 		this._hiddenBtn = document.createElement('input');
 		this._hiddenBtn.type='submit';
 		this._hiddenBtn.style.display="none";
@@ -51,36 +51,36 @@ function LaLoginDialog(parent, zIndex, className, isAdmin) {
 //	this.setUpKeyHandlers();
 }
 
-LaLoginDialog.prototype = new DwtComposite;
-LaLoginDialog.prototype.constructor = LaLoginDialog;
+ZaLoginDialog.prototype = new DwtComposite;
+ZaLoginDialog.prototype.constructor = ZaLoginDialog;
 
-LaLoginDialog.prototype.toString = 
+ZaLoginDialog.prototype.toString = 
 function() {
-	return "LaLoginDialog";
+	return "ZaLoginDialog";
 }
 
-LaLoginDialog.prototype.setUpKeyHandlers = 
+ZaLoginDialog.prototype.setUpKeyHandlers = 
 function () {
 	var doc = this.getDocument();
 	this.handleKeyBoard = true;
-  	if (LsEnv.isIE) {
-//	  	DBG.println(LsDebug.DBG3, "IE. element ID: " + htmlElement.id);
-  		doc.onkeydown = LaLoginDialog._keyPressHdlr;
-  		this._unameField.onkeydown = LaLoginDialog._keyPressHdlr;
-    	this._pwordField.onkeydown = LaLoginDialog._keyPressHdlr;
+  	if (AjxEnv.isIE) {
+//	  	DBG.println(AjxDebug.DBG3, "IE. element ID: " + htmlElement.id);
+  		doc.onkeydown = ZaLoginDialog._keyPressHdlr;
+  		this._unameField.onkeydown = ZaLoginDialog._keyPressHdlr;
+    	this._pwordField.onkeydown = ZaLoginDialog._keyPressHdlr;
 	} else {
-		window.onkeypress = LaLoginDialog._keyPressHdlr;	
-	  	this._unameField.onkeypress = LaLoginDialog._keyPressHdlr;	
-    	this._pwordField.onkeypress = LaLoginDialog._keyPressHdlr;
-		this._hiddenBtn.onkeypress = LaLoginDialog._keyPressHdlr;		   	
+		window.onkeypress = ZaLoginDialog._keyPressHdlr;	
+	  	this._unameField.onkeypress = ZaLoginDialog._keyPressHdlr;	
+    	this._pwordField.onkeypress = ZaLoginDialog._keyPressHdlr;
+		this._hiddenBtn.onkeypress = ZaLoginDialog._keyPressHdlr;		   	
 	}
 }
 
-LaLoginDialog.prototype.clearKeyHandlers = 
+ZaLoginDialog.prototype.clearKeyHandlers = 
 function () {
 	this.handleKeyBoard = false;
 	var doc = this.getDocument();
-  	if (LsEnv.isIE) {
+  	if (AjxEnv.isIE) {
   		doc.onkeydown = null;
   		this._unameField.onkeydown = null;
     	this._pwordField.onkeydown = null;
@@ -93,7 +93,7 @@ function () {
 }
 
 
-LaLoginDialog.handleFieldFocus = function (ev) {
+ZaLoginDialog.handleFieldFocus = function (ev) {
 	var obj = DwtUiEvent.getTarget(ev);
 	var doc = obj.document ? obj.document : ((obj.ownerDocument)? obj.ownerDocument : window.document);
 	var parent = Dwt.getObjectFromElement(Dwt.getDomObj(doc, obj._parentId));
@@ -102,22 +102,22 @@ LaLoginDialog.handleFieldFocus = function (ev) {
 
 
 
-LaLoginDialog.prototype.registerCallback =
+ZaLoginDialog.prototype.registerCallback =
 function(func, obj) {
-	this._callback = new LsCallback(obj, func);
+	this._callback = new AjxCallback(obj, func);
 }
 
-LaLoginDialog.prototype.clearAll =
+ZaLoginDialog.prototype.clearAll =
 function() {
 	this._unameField.value = this._pwordField.value = "";
 }
 
-LaLoginDialog.prototype.clearPassword =
+ZaLoginDialog.prototype.clearPassword =
 function() {
 	this._pwordField.value = "";
 }
 
-LaLoginDialog.prototype.setError =
+ZaLoginDialog.prototype.setError =
 function(errorStr) {
 	this.setCursor("default");
 	var html;
@@ -126,7 +126,7 @@ function(errorStr) {
 		var i = 0;
 		htmlArr[i++] = "<table cellspacing='12' class='" + this._className + "-ErrorPanel'>";
 		htmlArr[i++] = "<tr><td class='" + this._className + "-ErrorIcon'>";
-		htmlArr[i++] = LsImg.getImageHtml(LaImg.I_CRITICAL);						
+		htmlArr[i++] = AjxImg.getImageHtml(ZaImg.I_CRITICAL);						
 		htmlArr[i++] = "</td>";
 		htmlArr[i++] = "<td class='" + this._className + "-ErrorText'>" + errorStr + "</td></tr></table>";
 		html = htmlArr.join("");
@@ -136,7 +136,7 @@ function(errorStr) {
 	this._errorCell.innerHTML = html;
 }
 
-LaLoginDialog.prototype.setFocus =
+ZaLoginDialog.prototype.setFocus =
 function(username, bReloginMode) {
 	if (this._unameField.value.length > 0) {
 		this._pwordField.focus();
@@ -148,7 +148,7 @@ function(username, bReloginMode) {
 	}
  }
 
-LaLoginDialog.prototype.setVisible = 
+ZaLoginDialog.prototype.setVisible = 
 function(visible, transparentBg) {
 	DwtComposite.prototype.setVisible.call(this, visible);
 	Dwt._ffOverflowHack(this._htmlElId, this.getZIndex(), visible);	
@@ -167,7 +167,7 @@ function(visible, transparentBg) {
 }
 
 // TODO: Rewrite this using box model rather than tables
-LaLoginDialog.prototype._createHtml = 
+ZaLoginDialog.prototype._createHtml = 
 function(unameId, pwordId, okCellId, errorCellId) {
 	var html = new Array();
 	var i = 0;
@@ -175,13 +175,13 @@ function(unameId, pwordId, okCellId, errorCellId) {
 	html[i++] = "<table border=0 cellspacing=0 cellpadding=0 style='width:100%; height:100%'><tr><td>";
 	html[i++] = "<table align=center border=0 cellspacing=0 cellpadding=0><tr><td>";
 	html[i++] = "<table border=0 cellspacing=12 class='" + this._className + "-HeaderPanel'><tr height=10><td>&nbsp;</td></tr>";
-	html[i++] = "<tr><td><table border=0 height=32><tr><td class='" + this._className + "-HeaderText'>" + LaMsg.loginHeader + "</td></tr>";
+	html[i++] = "<tr><td><table border=0 height=32><tr><td class='" + this._className + "-HeaderText'>" + ZaMsg.loginHeader + "</td></tr>";
 	html[i++] = "<tr><td class='" + this._className + "-SubHeaderText'>&nbsp;</td></tr></table></td></tr></table></td></tr><tr><td>";
 	html[i++] = "<table border=0 cellspacing=12 class='" + this._className + "-MainPanel'>";
 	html[i++] = "<colgroup><col style='width:75px'></col><col style='width:225px'></col></colgroup>";
-	html[i++] = "<tr><td colspan=2 id='" + errorCellId + "'>&nbsp;</td></tr><tr><td align=right>" + LaMsg.username + ":</td>";
+	html[i++] = "<tr><td colspan=2 id='" + errorCellId + "'>&nbsp;</td></tr><tr><td align=right>" + ZaMsg.username + ":</td>";
 	html[i++] = "<td><input style=\"width:100%; height:22px\" autocomplete=OFF type=text tabIndex=1 id='" + unameId + "'/></td></tr>";
-	html[i++] = "<tr><td align=right>" + LaMsg.password + ":</td><td><input style=\"width:100%; height:22px\" type=password tabIndex=2 id='" + pwordId + "'/></td></tr>";
+	html[i++] = "<tr><td align=right>" + ZaMsg.password + ":</td><td><input style=\"width:100%; height:22px\" type=password tabIndex=2 id='" + pwordId + "'/></td></tr>";
 	html[i++] = "<tr>";
 	html[i++] = "<td colspan=2 id='" + okCellId + "' align=right>";
 	html[i++] = "</td></tr></table>";
@@ -190,20 +190,20 @@ function(unameId, pwordId, okCellId, errorCellId) {
 	return html.join("");
 }
 
-LaLoginDialog.prototype._addChild =
+ZaLoginDialog.prototype._addChild =
 function(child, childHtmlElement) {
     this._children.add(child);
 }
 
-LaLoginDialog.prototype.setReloginMode = 
+ZaLoginDialog.prototype.setReloginMode = 
 function(bReloginMode, app, obj) {
 
 	this._unameField.disabled = bReloginMode;
 	
 	/*if (bReloginMode) {
-		this._reloginModeField.innerHTML =  "<a id='" + modeId + "' href='javascript:;'>" + LaMsg.loginAsDiff + "</a>";
+		this._reloginModeField.innerHTML =  "<a id='" + modeId + "' href='javascript:;'>" + ZaMsg.loginAsDiff + "</a>";
 		var anchor = Dwt.getDomObj(this.getDocument(), modeId);
-		anchor.onclick = LaLoginDialog._loginDiffListener;
+		anchor.onclick = ZaLoginDialog._loginDiffListener;
 		anchor._app = app;
 		anchor._obj = obj;
 		anchor._parent = this;
@@ -212,12 +212,12 @@ function(bReloginMode, app, obj) {
 	//}
 }
 
-LaLoginDialog.prototype._loginSelListener =
+ZaLoginDialog.prototype._loginSelListener =
 function(selEvt) {
 	this.setCursor("wait");
 	var username = this._unameField.value;
 	if (!(username && username.length)) {
-		this.setError(LaMsg.enterUsername);
+		this.setError(ZaMsg.enterUsername);
 		return;
 	}
 
@@ -231,7 +231,7 @@ function(selEvt) {
 // event handler methods
 // -----------------------------------------------------------------
 
-LaLoginDialog._keyPressHdlr =
+ZaLoginDialog._keyPressHdlr =
 function(evt) {
 	evt = (evt) ? evt : ((event) ? event : null);
 	var charCode = DwtKeyEvent.getCharCode(evt);
@@ -264,7 +264,7 @@ function(evt) {
 				parent._pwordField.focus();
 			else {
 				parent._loginButton.setActivated(true);
-				if (LsEnv.isIE)
+				if (AjxEnv.isIE)
 	 			    parent._loginButton.getHtmlElement().focus();
 				else
 					parent._hiddenBtn.focus();
@@ -272,7 +272,7 @@ function(evt) {
 		} else if (obj == parent._pwordField){
 			if(!shiftKey) {
 				parent._loginButton.setActivated(true);
-				if (LsEnv.isIE)
+				if (AjxEnv.isIE)
 	 			    parent._loginButton.getHtmlElement().focus();
 				else
 					parent._hiddenBtn.focus();
@@ -287,13 +287,13 @@ function(evt) {
 				parent._pwordField.focus();
 			}
 		} 
-		LaLoginDialog.cancelEvent(evt);
+		ZaLoginDialog.cancelEvent(evt);
 		return false; 
 	} 
 	return true;
 }
 
-LaLoginDialog.cancelEvent = function (ev){
+ZaLoginDialog.cancelEvent = function (ev){
 	if (ev.stopPropagation){
 		ev.stopPropagation();
 	}
@@ -304,8 +304,8 @@ LaLoginDialog.cancelEvent = function (ev){
 	ev.returnValue = false;
 }
 
-LaLoginDialog._loginDiffListener =
+ZaLoginDialog._loginDiffListener =
 function(ev) {
-	LaLiquidAdmin.logOff();
+	ZaZimbraAdmin.logOff();
 	return;
 };

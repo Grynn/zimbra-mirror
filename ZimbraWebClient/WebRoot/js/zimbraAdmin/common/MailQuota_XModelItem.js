@@ -45,7 +45,7 @@ MailQuota2_XModelItem.prototype.getValue = function(instance, current, ref) {
 	var value = this.getAccountValue(instance, current, ref);
 	if (value == null) value = this.getCosValue(instance, current, ref);
 	if(value <=0) 
-		value = LaMsg.Unlimited;
+		value = ZaMsg.Unlimited;
 	return value;
 }
 

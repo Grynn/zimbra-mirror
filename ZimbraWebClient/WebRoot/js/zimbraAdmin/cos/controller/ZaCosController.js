@@ -1,29 +1,29 @@
 /**
-* @class LaCosController controls display of a single COS
-* @contructor LaCosController
+* @class ZaCosController controls display of a single COS
+* @contructor ZaCosController
 * @param appCtxt
 * @param container
 * @param abApp
 **/
 
-function LaCosController(appCtxt, container, abApp) {
-	LaController.call(this, appCtxt, container, abApp);
-	this._evtMgr = new LsEventMgr();
+function ZaCosController(appCtxt, container, abApp) {
+	ZaController.call(this, appCtxt, container, abApp);
+	this._evtMgr = new AjxEventMgr();
 	this._confirmMessageDialog;
 	this._UICreated = false;	
 }
 
-LaCosController.prototype = new LaController();
-LaCosController.prototype.constructor = LaCosController;
+ZaCosController.prototype = new ZaController();
+ZaCosController.prototype.constructor = ZaCosController;
 
-LaCosController.VIEW = "LaCosController.VIEW";
+ZaCosController.VIEW = "ZaCosController.VIEW";
 
 /**
 *	@method show
-*	@param entry - isntance of LaCos class
+*	@param entry - isntance of ZaCos class
 */
 
-LaCosController.prototype.show = 
+ZaCosController.prototype.show = 
 function(entry) {
 	this._setView(entry);
 	this._app.setCurrentController(this);
@@ -32,57 +32,57 @@ function(entry) {
 
 
 /**
-* Adds listener to modifications in the contained LaCos 
+* Adds listener to modifications in the contained ZaCos 
 * @param listener
 **/
-LaCosController.prototype.addCosChangeListener = 
+ZaCosController.prototype.addCosChangeListener = 
 function(listener) {
-	this._evtMgr.addListener(LaEvent.E_MODIFY, listener);
+	this._evtMgr.addListener(ZaEvent.E_MODIFY, listener);
 }
 
 /**
-* Removes listener to modifications in the controlled LaCos 
+* Removes listener to modifications in the controlled ZaCos 
 * @param listener
 **/
-LaCosController.prototype.removeCosChangeListener = 
+ZaCosController.prototype.removeCosChangeListener = 
 function(listener) {
-	this._evtMgr.removeListener(LaEvent.E_MODIFY, listener);    	
+	this._evtMgr.removeListener(ZaEvent.E_MODIFY, listener);    	
 }
 
 /**
-* Adds listener to creation of an LaCos 
+* Adds listener to creation of an ZaCos 
 * @param listener
 **/
-LaCosController.prototype.addCosCreationListener = 
+ZaCosController.prototype.addCosCreationListener = 
 function(listener) {
-	this._evtMgr.addListener(LaEvent.E_CREATE, listener);
+	this._evtMgr.addListener(ZaEvent.E_CREATE, listener);
 }
 
 /**
-* Removes listener to creation of an LaCos 
+* Removes listener to creation of an ZaCos 
 * @param listener
 **/
-LaCosController.prototype.removeCosCreationListener = 
+ZaCosController.prototype.removeCosCreationListener = 
 function(listener) {
-	this._evtMgr.removeListener(LaEvent.E_CREATE, listener);    	
+	this._evtMgr.removeListener(ZaEvent.E_CREATE, listener);    	
 }
 
 /**
-* Adds listener to removal of an LaCos 
+* Adds listener to removal of an ZaCos 
 * @param listener
 **/
-LaCosController.prototype.addCosRemovalListener = 
+ZaCosController.prototype.addCosRemovalListener = 
 function(listener) {
-	this._evtMgr.addListener(LaEvent.E_REMOVE, listener);
+	this._evtMgr.addListener(ZaEvent.E_REMOVE, listener);
 }
 
 /**
-* Removes listener to removal of an LaCos 
+* Removes listener to removal of an ZaCos 
 * @param listener
 **/
-LaCosController.prototype.removeCosRemovalListener = 
+ZaCosController.prototype.removeCosRemovalListener = 
 function(listener) {
-	this._evtMgr.removeListener(LaEvent.E_REMOVE, listener);    	
+	this._evtMgr.removeListener(ZaEvent.E_REMOVE, listener);    	
 }
 
 /**
@@ -91,7 +91,7 @@ function(listener) {
 * @param params		   - arguments to pass to the method specified in func parameter
 * Checks if it is safe to leave this view. Displays warning and Information messages if neccesary.
 **/
-LaCosController.prototype.switchToNextView = 
+ZaCosController.prototype.switchToNextView = 
 function (nextViewCtrlr, func, params) {
 	if(this._view.isDirty()) {
 		//parameters for the confirmation dialog's callback 
@@ -100,10 +100,10 @@ function (nextViewCtrlr, func, params) {
 		args["obj"] = nextViewCtrlr;
 		args["func"] = func;
 		//ask if the user wants to save changes			
-		this._confirmMessageDialog = new LaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);					
-		this._confirmMessageDialog.setMessage(LaMsg.Q_SAVE_CHANGES, null, DwtMessageDialog.INFO_STYLE);
-		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, LaCosController.prototype._saveAndGoAway, this, args);		
-		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, LaCosController.prototype._discardAndGoAway, this, args);		
+		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);					
+		this._confirmMessageDialog.setMessage(ZaMsg.Q_SAVE_CHANGES, null, DwtMessageDialog.INFO_STYLE);
+		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaCosController.prototype._saveAndGoAway, this, args);		
+		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaCosController.prototype._discardAndGoAway, this, args);		
 		this._confirmMessageDialog.popup();
 	} else {
 
@@ -115,122 +115,122 @@ function (nextViewCtrlr, func, params) {
 * public getToolBar
 * @return reference to the toolbar
 **/
-LaCosController.prototype.getToolBar = 
+ZaCosController.prototype.getToolBar = 
 function () {
 	return this._toolBar;	
 }
 
-LaCosController.prototype.setDirty = 
+ZaCosController.prototype.setDirty = 
 function (isD) {
 	if(isD)
-		this._toolBar.getButton(LaOperation.SAVE).setEnabled(true);
+		this._toolBar.getButton(ZaOperation.SAVE).setEnabled(true);
 	else
-		this._toolBar.getButton(LaOperation.SAVE).setEnabled(false);
+		this._toolBar.getButton(ZaOperation.SAVE).setEnabled(false);
 }
 /**
-*	Private method that notifies listeners to that the controlled LaCos is changed
+*	Private method that notifies listeners to that the controlled ZaCos is changed
 * 	@param details
 */
-LaCosController.prototype._fireCosChangeEvent =
+ZaCosController.prototype._fireCosChangeEvent =
 function(details) {
 	try {
-		if (this._evtMgr.isListenerRegistered(LaEvent.E_MODIFY)) {
-			var evt = new LaEvent(LaEvent.S_COS);
-			evt.set(LaEvent.E_MODIFY, this);
+		if (this._evtMgr.isListenerRegistered(ZaEvent.E_MODIFY)) {
+			var evt = new ZaEvent(ZaEvent.S_COS);
+			evt.set(ZaEvent.E_MODIFY, this);
 			evt.setDetails(details);
-			this._evtMgr.notifyListeners(LaEvent.E_MODIFY, evt);
+			this._evtMgr.notifyListeners(ZaEvent.E_MODIFY, evt);
 		}
 	} catch (ex) {
-		this._handleException(ex, LaCosController.prototype._fireCosChangeEvent, details, false);
+		this._handleException(ex, ZaCosController.prototype._fireCosChangeEvent, details, false);
 	}
 }
 
 /**
-*	Private method that notifies listeners that a new LaCos is created
+*	Private method that notifies listeners that a new ZaCos is created
 * 	@param details
 */
-LaCosController.prototype._fireCosCreationEvent =
+ZaCosController.prototype._fireCosCreationEvent =
 function(details) {
 	try {
-		if (this._evtMgr.isListenerRegistered(LaEvent.E_CREATE)) {
-			var evt = new LaEvent(LaEvent.S_COS);
-			evt.set(LaEvent.E_CREATE, this);
+		if (this._evtMgr.isListenerRegistered(ZaEvent.E_CREATE)) {
+			var evt = new ZaEvent(ZaEvent.S_COS);
+			evt.set(ZaEvent.E_CREATE, this);
 			evt.setDetails(details);
-			this._evtMgr.notifyListeners(LaEvent.E_CREATE, evt);
+			this._evtMgr.notifyListeners(ZaEvent.E_CREATE, evt);
 		}
 	} catch (ex) {
-		this._handleException(ex, LaCosController.prototype._fireCosCreationEvent, details, false);	
+		this._handleException(ex, ZaCosController.prototype._fireCosCreationEvent, details, false);	
 	}
 }
 
 /**
-*	Private method that notifies listeners to that the controlled LaCos is removed
+*	Private method that notifies listeners to that the controlled ZaCos is removed
 * 	@param details
 */
-LaCosController.prototype._fireCosRemovalEvent =
+ZaCosController.prototype._fireCosRemovalEvent =
 function(details) {
 	try {
-		if (this._evtMgr.isListenerRegistered(LaEvent.E_REMOVE)) {
-			var evt = new LaEvent(LaEvent.S_COS);
-			evt.set(LaEvent.E_REMOVE, this);
+		if (this._evtMgr.isListenerRegistered(ZaEvent.E_REMOVE)) {
+			var evt = new ZaEvent(ZaEvent.S_COS);
+			evt.set(ZaEvent.E_REMOVE, this);
 			evt.setDetails(details);
-			this._evtMgr.notifyListeners(LaEvent.E_REMOVE, evt);
+			this._evtMgr.notifyListeners(ZaEvent.E_REMOVE, evt);
 		}
 	} catch (ex) {
-		this._handleException(ex, LaCosController.prototype._fireCosRemovalEvent, details, false);	
+		this._handleException(ex, ZaCosController.prototype._fireCosRemovalEvent, details, false);	
 	}
 }
 
 /**
 *	@method _setView 
-*	@param entry - isntance of LaCos class
+*	@param entry - isntance of ZaCos class
 */
-LaCosController.prototype._setView =
+ZaCosController.prototype._setView =
 function(entry) {
 	try {
 	   	//create toolbar
 		if(!this._UICreated) {
 		   	this._ops = new Array();
-	   		this._ops.push(new LaOperation(LaOperation.NEW, LaMsg.TBB_New, LaMsg.COSTBB_New_tt, LaImg.I_NEWCOS, LaImg.I_NEWCOS, new LsListener(this, LaCosController.prototype._newButtonListener)));
-	   		this._ops.push(new LaOperation(LaOperation.SAVE, LaMsg.TBB_Save, LaMsg.COSTBB_Save_tt, LaImg.I_SAVE, LaImg.ID_SAVE, new LsListener(this, LaCosController.prototype._saveButtonListener)));
-	   		this._ops.push(new LaOperation(LaOperation.CLOSE, LaMsg.TBB_Close, LaMsg.COSTBB_Close_tt, LaImg.I_UNDO, LaImg.I_UNDO, new LsListener(this, LaCosController.prototype._closeButtonListener)));    	
-	   		this._ops.push(new LaOperation(LaOperation.DELETE, LaMsg.TBB_Delete, LaMsg.COSTBB_Delete_tt, LaImg.I_DELETE, LaImg.I_DELETE, new LsListener(this, LaCosController.prototype._deleteButtonListener)));    	    	
-			this._toolBar = new LaToolBar(this._container, this._ops);
+	   		this._ops.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.COSTBB_New_tt, ZaImg.I_NEWCOS, ZaImg.I_NEWCOS, new AjxListener(this, ZaCosController.prototype._newButtonListener)));
+	   		this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.COSTBB_Save_tt, ZaImg.I_SAVE, ZaImg.ID_SAVE, new AjxListener(this, ZaCosController.prototype._saveButtonListener)));
+	   		this._ops.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.COSTBB_Close_tt, ZaImg.I_UNDO, ZaImg.I_UNDO, new AjxListener(this, ZaCosController.prototype._closeButtonListener)));    	
+	   		this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.COSTBB_Delete_tt, ZaImg.I_DELETE, ZaImg.I_DELETE, new AjxListener(this, ZaCosController.prototype._deleteButtonListener)));    	    	
+			this._toolBar = new ZaToolBar(this._container, this._ops);
 	
-		  	//this._view = new LaCosView(this._container, this._app, entry.id);
-		  	this._view = new LaCosXFormView(this._container, this._app, entry.id);
-		    this._app.createView(LaCosController.VIEW, [this._toolBar, this._view]);  	
+		  	//this._view = new ZaCosView(this._container, this._app, entry.id);
+		  	this._view = new ZaCosXFormView(this._container, this._app, entry.id);
+		    this._app.createView(ZaCosController.VIEW, [this._toolBar, this._view]);  	
 		    this._UICreated = true;
 	  	}
 	
-		this._app.pushView(LaCosController.VIEW);
-		this._toolBar.getButton(LaOperation.SAVE).setEnabled(false);
+		this._app.pushView(ZaCosController.VIEW);
+		this._toolBar.getButton(ZaOperation.SAVE).setEnabled(false);
 		if(!entry.id) {
-			this._toolBar.getButton(LaOperation.DELETE).setEnabled(false);  			
+			this._toolBar.getButton(ZaOperation.DELETE).setEnabled(false);  			
 		} else {
-			this._toolBar.getButton(LaOperation.DELETE).setEnabled(true);  				
+			this._toolBar.getButton(ZaOperation.DELETE).setEnabled(true);  				
 		}	
 		this._view.setDirty(false);
-		entry[LaModel.currentTab] = "1"
+		entry[ZaModel.currentTab] = "1"
 	  	this._view.setObject(entry);
 
 	} catch (ex) {
-		this._handleException(ex, LaCosController.prototype._setView, null, false);	
+		this._handleException(ex, ZaCosController.prototype._setView, null, false);	
 	}
 	this._currentObject = entry;
 }
 
 /**
-* saves the changes in the fields, calls modify or create on the current LaCos
+* saves the changes in the fields, calls modify or create on the current ZaCos
 * @return Boolean - indicates if the changes were succesfully saved
 **/
-LaCosController.prototype._saveChanges =
+ZaCosController.prototype._saveChanges =
 function () {
 
 	//check if the XForm has any errors
 	if(this._view.getMyForm().hasErrors()) {
 		var errItems = this._view.getMyForm().getItemsInErrorState();
-		var dlgMsg = LaMsg.CORRECT_ERRORS;
+		var dlgMsg = ZaMsg.CORRECT_ERRORS;
 		dlgMsg +=  "<br><ul>";
 		var i = 0;
 		for(var key in errItems) {
@@ -261,24 +261,24 @@ function () {
 	//Check the data
 	if(tmpObj.attrs == null) {
 		//show error msg
-		this._msgDialog.setMessage(LaMsg.ERROR_UNKNOWN, null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._msgDialog.setMessage(ZaMsg.ERROR_UNKNOWN, null, DwtMessageDialog.CRITICAL_STYLE, null);
 		this._msgDialog.popup();		
 		return false;	
 	}
 
 	//name
-	if(tmpObj.attrs[LaCos.A_name] == null || tmpObj.attrs[LaCos.A_name].length < 1 ) {
+	if(tmpObj.attrs[ZaCos.A_name] == null || tmpObj.attrs[ZaCos.A_name].length < 1 ) {
 		//show error msg
-		this._msgDialog.setMessage(LaMsg.ERROR_NAME_REQUIRED, null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._msgDialog.setMessage(ZaMsg.ERROR_NAME_REQUIRED, null, DwtMessageDialog.CRITICAL_STYLE, null);
 		this._msgDialog.popup();		
 		return false;
 	} else {
-		tmpObj.name = tmpObj.attrs[LaCos.A_name];
+		tmpObj.name = tmpObj.attrs[ZaCos.A_name];
 	}
 
-	if(tmpObj.name.length > 256 || tmpObj.attrs[LaCos.A_name].length > 256) {
+	if(tmpObj.name.length > 256 || tmpObj.attrs[ZaCos.A_name].length > 256) {
 		//show error msg
-		this._msgDialog.setMessage(LaMsg.ERROR_COS_NAME_TOOLONG, null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._msgDialog.setMessage(ZaMsg.ERROR_COS_NAME_TOOLONG, null, DwtMessageDialog.CRITICAL_STYLE, null);
 		this._msgDialog.popup();		
 		return false;
 	}
@@ -287,106 +287,106 @@ function () {
 	* check values
 	**/
 	
-	if(!LsUtil.isNonNegativeInteger(tmpObj.attrs[LaCos.A_liquidMailQuota])) {
+	if(!AjxUtil.isNonNegativeInteger(tmpObj.attrs[ZaCos.A_zimbraMailQuota])) {
 		//show error msg
-		this._msgDialog.setMessage(LaMsg.ERROR_INVALID_VALUE + ": " + LaMsg.NAD_MailQuota + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._msgDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_MailQuota + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
 		this._msgDialog.popup();		
 		return false;
 	}
 
-	if(!LsUtil.isNonNegativeInteger(tmpObj.attrs[LaCos.A_liquidContactMaxNumEntries])) {
+	if(!AjxUtil.isNonNegativeInteger(tmpObj.attrs[ZaCos.A_zimbraContactMaxNumEntries])) {
 		//show error msg
-		this._msgDialog.setMessage(LaMsg.ERROR_INVALID_VALUE + ": " + LaMsg.NAD_ContactMaxNumEntries + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._msgDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_ContactMaxNumEntries + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
 		this._msgDialog.popup();		
 		return false;
 	}
 	
-	if(!LsUtil.isNonNegativeInteger(tmpObj.attrs[LaCos.A_liquidMinPwdLength])) {
+	if(!AjxUtil.isNonNegativeInteger(tmpObj.attrs[ZaCos.A_zimbraMinPwdLength])) {
 		//show error msg
-		this._msgDialog.setMessage(LaMsg.ERROR_INVALID_VALUE + ": " + LaMsg.NAD_passMinLength + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._msgDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_passMinLength + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
 		this._msgDialog.popup();		
 		return false;
 	}
 	
-	if(!LsUtil.isNonNegativeInteger(tmpObj.attrs[LaCos.A_liquidMaxPwdLength])) {
+	if(!AjxUtil.isNonNegativeInteger(tmpObj.attrs[ZaCos.A_zimbraMaxPwdLength])) {
 		//show error msg
-		this._msgDialog.setMessage(LaMsg.ERROR_INVALID_VALUE + ": " + LaMsg.NAD_passMaxLength + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._msgDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_passMaxLength + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
 		this._msgDialog.popup();		
 		return false;
 	}	
 	
-	if(parseInt(tmpObj.attrs[LaCos.A_liquidMaxPwdLength]) < parseInt(tmpObj.attrs[LaCos.A_liquidMinPwdLength]) && parseInt(tmpObj.attrs[LaCos.A_liquidMaxPwdLength]) > 0) {
+	if(parseInt(tmpObj.attrs[ZaCos.A_zimbraMaxPwdLength]) < parseInt(tmpObj.attrs[ZaCos.A_zimbraMinPwdLength]) && parseInt(tmpObj.attrs[ZaCos.A_zimbraMaxPwdLength]) > 0) {
 		//show error msg
-		this._msgDialog.setMessage(LaMsg.ERROR_MAX_MIN_PWDLENGTH, null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._msgDialog.setMessage(ZaMsg.ERROR_MAX_MIN_PWDLENGTH, null, DwtMessageDialog.CRITICAL_STYLE, null);
 		this._msgDialog.popup();		
 		return false;
 	}	
 
-	if(!LsUtil.isNonNegativeInteger(tmpObj.attrs[LaCos.A_liquidMinPwdAge])) {
+	if(!AjxUtil.isNonNegativeInteger(tmpObj.attrs[ZaCos.A_zimbraMinPwdAge])) {
 		//show error msg
-		this._msgDialog.setMessage(LaMsg.ERROR_INVALID_VALUE + ": " + LaMsg.NAD_passMinAge + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._msgDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_passMinAge + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
 		this._msgDialog.popup();		
 		return false;
 	}		
 	
-	if(!LsUtil.isNonNegativeInteger(tmpObj.attrs[LaCos.A_liquidMaxPwdAge])) {
+	if(!AjxUtil.isNonNegativeInteger(tmpObj.attrs[ZaCos.A_zimbraMaxPwdAge])) {
 		//show error msg
-		this._msgDialog.setMessage(LaMsg.ERROR_INVALID_VALUE + ": " + LaMsg.NAD_passMaxAge + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._msgDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_passMaxAge + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
 		this._msgDialog.popup();		
 		return false;
 	}		
 	
-	if(parseInt(tmpObj.attrs[LaCos.A_liquidMaxPwdAge]) < parseInt(tmpObj.attrs[LaCos.A_liquidMinPwdAge]) && parseInt(tmpObj.attrs[LaCos.A_liquidMaxPwdAge]) > 0) {
+	if(parseInt(tmpObj.attrs[ZaCos.A_zimbraMaxPwdAge]) < parseInt(tmpObj.attrs[ZaCos.A_zimbraMinPwdAge]) && parseInt(tmpObj.attrs[ZaCos.A_zimbraMaxPwdAge]) > 0) {
 		//show error msg
-		this._msgDialog.setMessage(LaMsg.ERROR_MAX_MIN_PWDAGE, null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._msgDialog.setMessage(ZaMsg.ERROR_MAX_MIN_PWDAGE, null, DwtMessageDialog.CRITICAL_STYLE, null);
 		this._msgDialog.popup();		
 		return false;
 	}
 		
-	if(!LsUtil.isLifeTime(tmpObj.attrs[LaCos.A_liquidAuthTokenLifetime])) {
+	if(!AjxUtil.isLifeTime(tmpObj.attrs[ZaCos.A_zimbraAuthTokenLifetime])) {
 		//show error msg
-		this._msgDialog.setMessage(LaMsg.ERROR_INVALID_VALUE + ": " + LaMsg.NAD_AuthTokenLifetime + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._msgDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_AuthTokenLifetime + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
 		this._msgDialog.popup();		
 		return false;
 	}
 
-	if(!LsUtil.isLifeTime(tmpObj.attrs[LaCos.A_liquidAdminAuthTokenLifetime])) {
+	if(!AjxUtil.isLifeTime(tmpObj.attrs[ZaCos.A_zimbraAdminAuthTokenLifetime])) {
 		//show error msg
-		this._msgDialog.setMessage(LaMsg.ERROR_INVALID_VALUE + ": " + LaMsg.NAD_AdminAuthTokenLifetime + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._msgDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_AdminAuthTokenLifetime + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
 		this._msgDialog.popup();		
 		return false;
 	}		
 	
-	if(!LsUtil.isLifeTime(tmpObj.attrs[LaCos.A_liquidMailMessageLifetime])) {
+	if(!AjxUtil.isLifeTime(tmpObj.attrs[ZaCos.A_zimbraMailMessageLifetime])) {
 		//show error msg
-		this._msgDialog.setMessage(LaMsg.ERROR_INVALID_VALUE + ": " + LaMsg.NAD_MailMessageLifetime + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._msgDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_MailMessageLifetime + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
 		this._msgDialog.popup();		
 		return false;
 	}			
 
-	if(!LsUtil.isLifeTime(tmpObj.attrs[LaCos.A_liquidMailTrashLifetime])) {
+	if(!AjxUtil.isLifeTime(tmpObj.attrs[ZaCos.A_zimbraMailTrashLifetime])) {
 		//show error msg
-		this._msgDialog.setMessage(LaMsg.ERROR_INVALID_VALUE + ": " + LaMsg.NAD_MailTrashLifetime + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._msgDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_MailTrashLifetime + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
 		this._msgDialog.popup();		
 		return false;
 	}	
 	
-	if(!LsUtil.isLifeTime(tmpObj.attrs[LaCos.A_liquidMailSpamLifetime])) {
+	if(!AjxUtil.isLifeTime(tmpObj.attrs[ZaCos.A_zimbraMailSpamLifetime])) {
 		//show error msg
-		this._msgDialog.setMessage(LaMsg.ERROR_INVALID_VALUE + ": " + LaMsg.NAD_MailSpamLifetime + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._msgDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_MailSpamLifetime + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
 		this._msgDialog.popup();		
 		return false;
 	}		
 	
-	if(!LsUtil.isNonNegativeInteger(tmpObj.attrs[LaCos.A_liquidPrefContactsPerPage])) {
+	if(!AjxUtil.isNonNegativeInteger(tmpObj.attrs[ZaCos.A_zimbraPrefContactsPerPage])) {
 		//show error msg
-		this._msgDialog.setMessage(LaMsg.ERROR_INVALID_VALUE + ": " + LaMsg.NAD_PrefContactsPerPage + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._msgDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_PrefContactsPerPage + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
 		this._msgDialog.popup();		
 		return false;
 	}	
-	if(!LsUtil.isNonNegativeInteger(tmpObj.attrs[LaCos.A_liquidEnforcePwdHistory])) {
+	if(!AjxUtil.isNonNegativeInteger(tmpObj.attrs[ZaCos.A_zimbraEnforcePwdHistory])) {
 		//show error msg
-		this._msgDialog.setMessage(LaMsg.ERROR_INVALID_VALUE + ": " + LaMsg.NAD_passEnforceHistory + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._msgDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_passEnforceHistory + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
 		this._msgDialog.popup();		
 		return false;
 	}	
@@ -398,7 +398,7 @@ function () {
 		
 	//transfer the fields from the tmpObj to the _currentObject
 	for (var a in tmpObj.attrs) {
-		if( (a == LaItem.A_objectClass) || (a == LaItem.A_liquidId) || (a == LaCos.A_liquidMailHostPool))
+		if( (a == ZaItem.A_objectClass) || (a == ZaItem.A_zimbraId) || (a == ZaCos.A_zimbraMailHostPool))
 			continue;
 		//check if the value has been modified or the object is new
 		if (isNew || (this._currentObject.attrs[a] != tmpObj.attrs[a]) ) {
@@ -407,13 +407,13 @@ function () {
 	}
 	//check if host pool has been changed
 	var poolServerIds = new Array();
-	if(tmpObj[LaCos.A_liquidMailHostPoolInternal]) {
-		var cnt = tmpObj[LaCos.A_liquidMailHostPoolInternal].length;
+	if(tmpObj[ZaCos.A_zimbraMailHostPoolInternal]) {
+		var cnt = tmpObj[ZaCos.A_zimbraMailHostPoolInternal].length;
 		for(var i = 0; i < cnt; i ++) {
-			poolServerIds.push(tmpObj[LaCos.A_liquidMailHostPoolInternal][i].id);
+			poolServerIds.push(tmpObj[ZaCos.A_zimbraMailHostPoolInternal][i].id);
 		}
-		if(poolServerIds.toString() != this._currentObject[LaCos.A_liquidMailHostPoolInternal].toString()) {
-			mods[LaCos.A_liquidMailHostPool] = poolServerIds;
+		if(poolServerIds.toString() != this._currentObject[ZaCos.A_zimbraMailHostPoolInternal].toString()) {
+			mods[ZaCos.A_zimbraMailHostPool] = poolServerIds;
 		}
 	}
 	
@@ -425,18 +425,18 @@ function () {
 			try {
 				this._currentObject.rename(newName);
 			} catch (ex) {
-				if (ex.code == LsCsfeException.SVC_AUTH_EXPIRED || ex.code == LsCsfeException.SVC_AUTH_REQUIRED || ex.code == LsCsfeException.NO_AUTH_TOKEN) {
+				if (ex.code == AjxCsfeException.SVC_AUTH_EXPIRED || ex.code == AjxCsfeException.SVC_AUTH_REQUIRED || ex.code == AjxCsfeException.NO_AUTH_TOKEN) {
 						this._showLoginDialog();
 				} else {
 					var detailStr = "";
 					for (var prop in ex) {
 						detailStr = detailStr + prop + " - " + ex[prop] + "\n";				
 					}
-					if(ex.code == LsCsfeException.COS_EXISTS) {
-						this._msgDialog.setMessage(LaMsg.FAILED_RENAME_COS_1, detailStr, DwtMessageDialog.CRITICAL_STYLE, LaMsg.liquidAdminTitle);
+					if(ex.code == AjxCsfeException.COS_EXISTS) {
+						this._msgDialog.setMessage(ZaMsg.FAILED_RENAME_COS_1, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
 						this._msgDialog.popup();
 					} else {
-						this._msgDialog.setMessage(LaMsg.FAILED_RENAME_COS, detailStr, DwtMessageDialog.CRITICAL_STYLE, LaMsg.liquidAdminTitle);
+						this._msgDialog.setMessage(ZaMsg.FAILED_RENAME_COS, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
 						this._msgDialog.popup();
 					}
 				}
@@ -450,7 +450,7 @@ function () {
 			this._currentObject.create(tmpObj.name, mods);
 			//if creation took place - fire an CosChangeEvent
 			this._fireCosCreationEvent(this._currentObject);
-			this._toolBar.getButton(LaOperation.DELETE).setEnabled(true);	
+			this._toolBar.getButton(ZaOperation.DELETE).setEnabled(true);	
 		} else {
 			this._currentObject.modify(mods);
 			//if modification took place - fire an CosChangeEvent
@@ -459,21 +459,21 @@ function () {
 			this._fireCosChangeEvent(changeDetails);
 		}
 	} catch (ex) {
-		if (ex.code == LsCsfeException.SVC_AUTH_EXPIRED || ex.code == LsCsfeException.SVC_AUTH_REQUIRED || ex.code == LsCsfeException.NO_AUTH_TOKEN) {
+		if (ex.code == AjxCsfeException.SVC_AUTH_EXPIRED || ex.code == AjxCsfeException.SVC_AUTH_REQUIRED || ex.code == AjxCsfeException.NO_AUTH_TOKEN) {
 				this._showLoginDialog();
 		} else {
 			var detailStr = "";
 			for (var prop in ex) {
 				detailStr = detailStr + prop + " - " + ex[prop] + "\n";				
 			}
-			if(ex.code == LsCsfeException.COS_EXISTS) {
-				this._msgDialog.setMessage(LaMsg.FAILED_CREATE_COS_1, detailStr, DwtMessageDialog.CRITICAL_STYLE, LaMsg.liquidAdminTitle);				
+			if(ex.code == AjxCsfeException.COS_EXISTS) {
+				this._msgDialog.setMessage(ZaMsg.FAILED_CREATE_COS_1, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);				
 				this._msgDialog.popup();
 			} else {
 				if(isNew) {
-					this._msgDialog.setMessage(LaMsg.FAILED_CREATE_COS, detailStr, DwtMessageDialog.CRITICAL_STYLE, LaMsg.liquidAdminTitle);
+					this._msgDialog.setMessage(ZaMsg.FAILED_CREATE_COS, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
 				} else {
-					this._msgDialog.setMessage(LaMsg.FAILED_SAVE_COS, detailStr, DwtMessageDialog.CRITICAL_STYLE, LaMsg.liquidAdminTitle);
+					this._msgDialog.setMessage(ZaMsg.FAILED_SAVE_COS, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
 				}
 				this._msgDialog.popup();
 			}
@@ -489,7 +489,7 @@ function () {
 *						 params["func"] - the method to call on the nextViewCtrlr in order to navigate to the next view
 * This method saves changes in the current view and calls the method on the controller of the next view
 **/
-LaCosController.prototype._saveAndGoAway =
+ZaCosController.prototype._saveAndGoAway =
 function (params) {
 	this._confirmMessageDialog.popdown();			
 	try {
@@ -498,44 +498,44 @@ function (params) {
 
 		}
 	} catch (ex) {
-		this._handleException(ex, LaCosController.prototype._saveAndGoAway, null, false);
+		this._handleException(ex, ZaCosController.prototype._saveAndGoAway, null, false);
 	}
 }
 
 /**
 * Leaves current view without saving any changes
 **/
-LaCosController.prototype._discardAndGoAway = 
+ZaCosController.prototype._discardAndGoAway = 
 function (params) {
 	this._confirmMessageDialog.popdown();
 	try {
 		params["func"].call(params["obj"], params["params"]);		
 
 	} catch (ex) {
-		this._handleException(ex, LaCosController.prototype._discardAndGoAway, null, false);
+		this._handleException(ex, ZaCosController.prototype._discardAndGoAway, null, false);
 	}
 }
 /**
 * @param 	ev event object
 * This method handles "save" button click
 **/
-LaCosController.prototype._saveButtonListener =
+ZaCosController.prototype._saveButtonListener =
 function(ev) {
 	try {
 		if(this._saveChanges()) {
 			this._view.setDirty(false);	
-			this._toolBar.getButton(LaOperation.SAVE).setEnabled(false);					
+			this._toolBar.getButton(ZaOperation.SAVE).setEnabled(false);					
 			this._view.setObject(this._currentObject, true);				
 		}
 	} catch (ex) {
-		this._handleException(ex, LaCosController.prototype._saveButtonListener, null, false);
+		this._handleException(ex, ZaCosController.prototype._saveButtonListener, null, false);
 	}
 }
 
 /**
 * handles the Close button click. Returns to the list view.
 **/ 
-LaCosController.prototype._closeButtonListener =
+ZaCosController.prototype._closeButtonListener =
 function(ev) {
 	//prompt if the user wants to save the changes
 	if(this._view.isDirty()) {
@@ -543,12 +543,12 @@ function(ev) {
 		var args = new Object();		
 		args["params"] = null;
 		args["obj"] = this._app.getCosListController();
-		args["func"] = LaCosListController.prototype.show;
+		args["func"] = ZaCosListController.prototype.show;
 		//ask if the user wants to save changes		
-		this._confirmMessageDialog = new LaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
+		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
 		this._confirmMessageDialog.setMessage("Do you want so save current changes?", null, DwtMessageDialog.INFO_STYLE);
-		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, LaCosController.prototype._saveAndGoAway, this, args);		
-		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, LaCosController.prototype._discardAndGoAway, this, args);		
+		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaCosController.prototype._saveAndGoAway, this, args);		
+		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaCosController.prototype._discardAndGoAway, this, args);		
 		this._confirmMessageDialog.popup();
 	} else {
 
@@ -559,20 +559,20 @@ function(ev) {
 /**
 * This listener is called when the Delete button is clicked. 
 **/
-LaCosController.prototype._deleteButtonListener =
+ZaCosController.prototype._deleteButtonListener =
 function(ev) {
 	if(this._currentObject.id) {
-		this._confirmMessageDialog = new LaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);						
+		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);						
 		this._confirmMessageDialog.setMessage("Are you sure you want to delete this COS?", null, DwtMessageDialog.INFO_STYLE);
-		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, LaCosController.prototype._deleteAndGoAway, this, null);		
-		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, LaCosController.prototype._closeCnfrmDlg, this, null);				
+		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaCosController.prototype._deleteAndGoAway, this, null);		
+		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaCosController.prototype._closeCnfrmDlg, this, null);				
 		this._confirmMessageDialog.popup();
 	} else {
 		this._app.getCosListController().show();
 	}
 }
 
-LaCosController.prototype._deleteAndGoAway = 
+ZaCosController.prototype._deleteAndGoAway = 
 function () {
 	try {
 		if(this._currentObject.id) {
@@ -584,35 +584,35 @@ function () {
 
 	} catch (ex) {
 		this._confirmMessageDialog.popdown();	
-		this._handleException(ex, LaCosController.prototype._deleteAndGoAway, null, false);				
+		this._handleException(ex, ZaCosController.prototype._deleteAndGoAway, null, false);				
 	}
 }
 
-LaCosController.prototype._closeCnfrmDlg = 
+ZaCosController.prototype._closeCnfrmDlg = 
 function () {
 	this._confirmMessageDialog.popdown();	
 }
 
-LaCosController.prototype.newCos = 
+ZaCosController.prototype.newCos = 
 function () {
-	var newCos = new LaCos(this._app);
+	var newCos = new ZaCos(this._app);
 	this._setView(newCos);
 }
 
 // new button was pressed
-LaCosController.prototype._newButtonListener =
+ZaCosController.prototype._newButtonListener =
 function(ev) {
 	if(this._view.isDirty()) {
 		//parameters for the confirmation dialog's callback 
 		var args = new Object();		
 		args["params"] = null;
 		args["obj"] = this._app.getCosController();
-		args["func"] = LaCosController.prototype.newCos;
+		args["func"] = ZaCosController.prototype.newCos;
 		//ask if the user wants to save changes		
-		this._confirmMessageDialog = new LaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
+		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
 		this._confirmMessageDialog.setMessage("Do you want so save current changes?", null, DwtMessageDialog.INFO_STYLE);
-		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, LaCosController.prototype._saveAndGoAway, this, args);		
-		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, LaCosController.prototype._discardAndGoAway, this, args);		
+		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaCosController.prototype._saveAndGoAway, this, args);		
+		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaCosController.prototype._discardAndGoAway, this, args);		
 		this._confirmMessageDialog.popup();
 	} else {
 		this.newCos();

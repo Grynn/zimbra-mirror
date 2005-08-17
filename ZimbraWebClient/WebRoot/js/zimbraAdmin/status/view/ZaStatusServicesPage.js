@@ -1,12 +1,12 @@
 /**
-* @class LaStatusServicesPage 
-* @contructor LaStatusServicesPage
+* @class ZaStatusServicesPage 
+* @contructor ZaStatusServicesPage
 * @param parent
 * @param app
 * @author Greg Solovyev
 **/
-function LaStatusServicesPage (parent, app) {
-	DwtTabViewPage.call(this, parent, "LaStatusServicesPage", DwtControl.ABSOLUTE_STYLE);
+function ZaStatusServicesPage (parent, app) {
+	DwtTabViewPage.call(this, parent, "ZaStatusServicesPage", DwtControl.ABSOLUTE_STYLE);
 	this._fieldIds = new Object(); //stores the ids of all the form elements
 	this._app = app;
 	this.initialized=false;
@@ -14,15 +14,15 @@ function LaStatusServicesPage (parent, app) {
 	this.setScrollStyle(DwtControl.SCROLL);	
 }
  
-LaStatusServicesPage.prototype = new DwtTabViewPage;
-LaStatusServicesPage.prototype.constructor = LaStatusServicesPage;
+ZaStatusServicesPage.prototype = new DwtTabViewPage;
+ZaStatusServicesPage.prototype.constructor = ZaStatusServicesPage;
 
-LaStatusServicesPage.prototype.toString = 
+ZaStatusServicesPage.prototype.toString = 
 function() {
-	return "LaStatusServicesPage";
+	return "ZaStatusServicesPage";
 }
 
-LaStatusServicesPage.prototype.showMe = 
+ZaStatusServicesPage.prototype.showMe = 
 function() {
 	if(!this._rendered) {
 		this._createHtml();		
@@ -31,17 +31,17 @@ function() {
 	this._statusListView.set(mystatusVector);
 	DwtTabViewPage.prototype.showMe.call(this);
 	this.getHtmlElement().style.width = '520px';
-	DBG.println(LsDebug.DBG3, "this._statusListView.getHtmlElement().offsetWidth: " + this._statusListView.getHtmlElement().offsetWidth);		
-	DBG.println(LsDebug.DBG3, "this._statusListView.getHtmlElement().clientWidth: " + this._statusListView.getHtmlElement().clientWidth);				
-	DBG.println(LsDebug.DBG3, "this.parent.getHtmlElement().offsetWidth: " + this.parent.getHtmlElement().offsetWidth);				
+	DBG.println(AjxDebug.DBG3, "this._statusListView.getHtmlElement().offsetWidth: " + this._statusListView.getHtmlElement().offsetWidth);		
+	DBG.println(AjxDebug.DBG3, "this._statusListView.getHtmlElement().clientWidth: " + this._statusListView.getHtmlElement().clientWidth);				
+	DBG.println(AjxDebug.DBG3, "this.parent.getHtmlElement().offsetWidth: " + this.parent.getHtmlElement().offsetWidth);				
 	
-	DBG.println(LsDebug.DBG3, "this.getHtmlElement().offsetWidth: " + this.getHtmlElement().offsetWidth);		
-	DBG.println(LsDebug.DBG3, "this.getHtmlElement().clientWidth: " + this.getHtmlElement().clientWidth);				
-	DBG.println(LsDebug.DBG3, "this.getHtmlElement().style.width: " + this.getHtmlElement().style.width);				
+	DBG.println(AjxDebug.DBG3, "this.getHtmlElement().offsetWidth: " + this.getHtmlElement().offsetWidth);		
+	DBG.println(AjxDebug.DBG3, "this.getHtmlElement().clientWidth: " + this.getHtmlElement().clientWidth);				
+	DBG.println(AjxDebug.DBG3, "this.getHtmlElement().style.width: " + this.getHtmlElement().style.width);				
 	
 }
 
-LaStatusServicesPage.prototype._createHtml = 
+ZaStatusServicesPage.prototype._createHtml = 
 function() {
 	var idx = 0;
 	var html = new Array(50);
@@ -59,40 +59,40 @@ function() {
 	this._rendered=true;
 }
 
-LaStatusServicesPage.prototype._createUI = 
+ZaStatusServicesPage.prototype._createUI = 
 function () {
 	var htmlElement = this.getHtmlElement();
 	var _contentDiv = Dwt.getDomObj(this.getDocument(), this._listContainerDivId);
 
-	this._statusListView = new LaStatusServicesPage_LaListView(this);
+	this._statusListView = new ZaStatusServicesPage_ZaListView(this);
 //	alert(this._statusListView.getHtmlElement().style.width);
-	//DBG.println(LsDebug.DBG3, "width 1: " + this._statusListView.getHtmlElement().style.width + "width2: " + this._statusListView.getHtmlElement().width);
+	//DBG.println(AjxDebug.DBG3, "width 1: " + this._statusListView.getHtmlElement().style.width + "width2: " + this._statusListView.getHtmlElement().width);
 	this._statusListView.getHtmlElement().width='520';
 	_contentDiv.appendChild(this._statusListView.getHtmlElement());
 }
 
-function LaStatusServicesPage_LaListView(parent) {
+function ZaStatusServicesPage_ZaListView(parent) {
 	if (arguments.length == 0) return;
 	var posStyle = DwtControl.ABSOLUTE_STYLE;
 	var headerList = this._getHeaderList();
-	LaListView.call(this, parent, null, posStyle, headerList);
+	ZaListView.call(this, parent, null, posStyle, headerList);
 }
 
 
-LaStatusServicesPage_LaListView.prototype = new LaListView;
-LaStatusServicesPage_LaListView.prototype.constructor = LaStatusServicesPage_LaListView;
+ZaStatusServicesPage_ZaListView.prototype = new ZaListView;
+ZaStatusServicesPage_ZaListView.prototype.constructor = ZaStatusServicesPage_ZaListView;
 
-LaStatusServicesPage_LaListView.prototype.toString = 
+ZaStatusServicesPage_ZaListView.prototype.toString = 
 function() {
-	return "LaStatusServicesPage_LaListView";
+	return "ZaStatusServicesPage_ZaListView";
 }
 
-LaStatusServicesPage_LaListView.prototype._getViewPrefix = 
+ZaStatusServicesPage_ZaListView.prototype._getViewPrefix = 
 function() {
 	return "Status_Service";
 }
 
-LaStatusServicesPage_LaListView.prototype._createItemHtml = 
+ZaStatusServicesPage_ZaListView.prototype._createItemHtml = 
 function(item) {
 	var html = new Array(50);
 	var	div = this.getDocument().createElement("div");
@@ -108,19 +108,19 @@ function(item) {
 	var cnt = this._headerList.length;
 	for(var i = 0; i < cnt; i++) {
 		var id = this._headerList[i]._id;
-		if(id.indexOf(LaStatus.PRFX_Server)==0) {		
+		if(id.indexOf(ZaStatus.PRFX_Server)==0) {		
 			html[idx++] = "<td width=" + this._headerList[i]._width + " aligh=left>";
-			html[idx++] = LsStringUtil.htmlEncode(item.serverName);
+			html[idx++] = AjxStringUtil.htmlEncode(item.serverName);
 			html[idx++] = "</td>";
-		} else if(id.indexOf(LaStatus.PRFX_Service)==0) {		
+		} else if(id.indexOf(ZaStatus.PRFX_Service)==0) {		
 			html[idx++] = "<td width=" + this._headerList[i]._width + " aligh=left>";
-			html[idx++] = LsStringUtil.htmlEncode(item.serviceName);
+			html[idx++] = AjxStringUtil.htmlEncode(item.serviceName);
 			html[idx++] = "</td>";
-		} else if(id.indexOf(LaStatus.PRFX_Time)==0) {
+		} else if(id.indexOf(ZaStatus.PRFX_Time)==0) {
 			html[idx++] = "<td width=" + this._headerList[i]._width + " aligh=left>";
-			html[idx++] = LsStringUtil.htmlEncode(item.time);
+			html[idx++] = AjxStringUtil.htmlEncode(item.time);
 			html[idx++] = "</td>";
-		} else if(id.indexOf(LaStatus.PRFX_Status)==0) {
+		} else if(id.indexOf(ZaStatus.PRFX_Status)==0) {
 			html[idx++] = "<td width=" + this._headerList[i]._width + " aligh=left>";
 			if(item.status==1) {
 				html[idx++] = "On";
@@ -135,25 +135,25 @@ function(item) {
 	return div;
 }
 
-LaStatusServicesPage_LaListView.prototype._setNoResultsHtml = 
+ZaStatusServicesPage_ZaListView.prototype._setNoResultsHtml = 
 function() {
 	var	div = this.getDocument().createElement("div");
 	div.innerHTML = "<table width='100%' cellspacing='0' cellpadding='1'><tr><td class='NoResults'><br>Status data is not available.</td></tr></table>";
 	this._parentEl.appendChild(div);
 }
 
-LaStatusServicesPage_LaListView.prototype._getHeaderList =
+ZaStatusServicesPage_ZaListView.prototype._getHeaderList =
 function() {
 
 	var headerList = new Array();
 
-	headerList[0] = new LaListHeaderItem(LaStatus.PRFX_Server, LaMsg.STV_Server_col, null, 100, false, null, true, true);
+	headerList[0] = new ZaListHeaderItem(ZaStatus.PRFX_Server, ZaMsg.STV_Server_col, null, 100, false, null, true, true);
 
-	headerList[1] = new LaListHeaderItem(LaStatus.PRFX_Service, LaMsg.STV_Service_col, null, 150, false, null, true, true);
+	headerList[1] = new ZaListHeaderItem(ZaStatus.PRFX_Service, ZaMsg.STV_Service_col, null, 150, false, null, true, true);
 	
-	headerList[2] = new LaListHeaderItem(LaStatus.PRFX_Time, LaMsg.STV_Time_col, null, 150, false, null, true, true);
+	headerList[2] = new ZaListHeaderItem(ZaStatus.PRFX_Time, ZaMsg.STV_Time_col, null, 150, false, null, true, true);
 	
-	headerList[3] = new LaListHeaderItem(LaStatus.PRFX_Status, LaMsg.STV_Status_col, null, null, false, null, true, true);
+	headerList[3] = new ZaListHeaderItem(ZaStatus.PRFX_Status, ZaMsg.STV_Status_col, null, null, false, null, true, true);
 	
 	return headerList;
 }

@@ -1,6 +1,6 @@
-function LaApp(appCtxt, container) {
+function ZaApp(appCtxt, container) {
 	if (arguments.length == 0) return;
-	this._name = LaLiquidAdmin.ADMIN_APP;
+	this._name = ZaZimbraAdmin.ADMIN_APP;
 	this._appCtxt = appCtxt;
 	this._appViewMgr = appCtxt.getAppViewMgr();
 	this._container = container;
@@ -11,37 +11,37 @@ function LaApp(appCtxt, container) {
 	this._serverMap = null;
 }
 
-LaApp.prototype.constructor = LaApp;
+ZaApp.prototype.constructor = ZaApp;
 
-LaApp.prototype.toString = 
+ZaApp.prototype.toString = 
 function() {
-	return "LaApp";
+	return "ZaApp";
 }
 
-LaApp.prototype.launch =
+ZaApp.prototype.launch =
 function(appCtxt) {
 	this.getStatusViewController().show();
-	//this.getAccountListController().show(LaAccount.getAll());
+	//this.getAccountListController().show(ZaAccount.getAll());
 }
 
-LaApp.prototype.setActive =
+ZaApp.prototype.setActive =
 function(active) {
 	if (active) {
 		this.getStatusViewController().show();
 	}
 }
 
-LaApp.prototype.getAppCtxt = 
+ZaApp.prototype.getAppCtxt = 
 function() {
 	return this._appCtxt;
 }
 
-LaApp.prototype.setCurrentController = 
+ZaApp.prototype.setCurrentController = 
 function(ctrlr) {
 	this._currentController = ctrlr;
 }
 
-LaApp.prototype.getCurrentController = 
+ZaApp.prototype.getCurrentController = 
 function(ctrlr) {
 	return this._currentController;
 }
@@ -50,166 +50,166 @@ function(ctrlr) {
 /**
 * View controllers
 **/
-LaApp.prototype.getStatusViewController =
+ZaApp.prototype.getStatusViewController =
 function() {
 	if (this._statusViewController == null)
-		this._statusViewController = new LaStatusViewController(this._appCtxt, this._container, this);
+		this._statusViewController = new ZaStatusViewController(this._appCtxt, this._container, this);
 	return this._statusViewController;
 }
 
-LaApp.prototype.getServerStatsController =
+ZaApp.prototype.getServerStatsController =
 function() {
 	if (this._serverStatsController == null)
-		this._serverStatsController = new LaServerStatsController(this._appCtxt, this._container, this);
+		this._serverStatsController = new ZaServerStatsController(this._appCtxt, this._container, this);
 	return this._serverStatsController;
 }
 
-LaApp.prototype.getGlobalStatsController =
+ZaApp.prototype.getGlobalStatsController =
 function() {
 	if (this._globalStatsController == null)
-		this._globalStatsController = new LaGlobalStatsController(this._appCtxt, this._container, this);
+		this._globalStatsController = new ZaGlobalStatsController(this._appCtxt, this._container, this);
 	return this._globalStatsController;
 }
 
-LaApp.prototype.getGlobalConfigViewController =
+ZaApp.prototype.getGlobalConfigViewController =
 function() {
 	if (this._globalConfigViewController == null)
-		this._globalConfigViewController = new LaGlobalConfigViewController(this._appCtxt, this._container, this);
+		this._globalConfigViewController = new ZaGlobalConfigViewController(this._appCtxt, this._container, this);
 	return this._globalConfigViewController;
 }
 
-LaApp.prototype.getAccountListController =
+ZaApp.prototype.getAccountListController =
 function() {
 	if (this._accountListController == null) {
-		this._accountListController = new LaAccountListController(this._appCtxt, this._container, this);
-		this._accountListController.addAccountRemovalListener(new LsListener(this, LaApp.prototype.handleAccountRemoval));					
-		this._accountListController.addAccountRemovalListener(new LsListener(this.getAccountListController(), LaAccountListController.prototype.handleAccountRemoval));							
+		this._accountListController = new ZaAccountListController(this._appCtxt, this._container, this);
+		this._accountListController.addAccountRemovalListener(new AjxListener(this, ZaApp.prototype.handleAccountRemoval));					
+		this._accountListController.addAccountRemovalListener(new AjxListener(this.getAccountListController(), ZaAccountListController.prototype.handleAccountRemoval));							
 	}
 	return this._accountListController;
 }
 
-LaApp.prototype.getAccountViewController =
+ZaApp.prototype.getAccountViewController =
 function() {
 	if (this._accountViewController == null) {
-		this._accountViewController = new LaAccountViewController(this._appCtxt, this._container, this);
+		this._accountViewController = new ZaAccountViewController(this._appCtxt, this._container, this);
 		//since we are creating the account controller now - register all the interested listeners with it
-		this._accountViewController.addAccountChangeListener(new LsListener(this.getAccountListController(), LaAccountListController.prototype.handleAccountChange));
-		this._accountViewController.addAccountCreationListener(new LsListener(this.getAccountListController(), LaAccountListController.prototype.handleAccountCreation));	
-		this._accountViewController.addAccountRemovalListener(new LsListener(this.getAccountListController(), LaAccountListController.prototype.handleAccountRemoval));			
-		this._accountViewController.addAccountCreationListener(new LsListener(this, LaApp.prototype.handleAccountCreation));			
-		this._accountViewController.addAccountRemovalListener(new LsListener(this, LaApp.prototype.handleAccountRemoval));					
+		this._accountViewController.addAccountChangeListener(new AjxListener(this.getAccountListController(), ZaAccountListController.prototype.handleAccountChange));
+		this._accountViewController.addAccountCreationListener(new AjxListener(this.getAccountListController(), ZaAccountListController.prototype.handleAccountCreation));	
+		this._accountViewController.addAccountRemovalListener(new AjxListener(this.getAccountListController(), ZaAccountListController.prototype.handleAccountRemoval));			
+		this._accountViewController.addAccountCreationListener(new AjxListener(this, ZaApp.prototype.handleAccountCreation));			
+		this._accountViewController.addAccountRemovalListener(new AjxListener(this, ZaApp.prototype.handleAccountRemoval));					
 	}
 	return this._accountViewController;
 }
 
-LaApp.prototype.getNewAccountWizController =
+ZaApp.prototype.getNewAccountWizController =
 function() {
 	if (this._newAccountWizController == null) {
-		this._newAccountWizController = new LaNewAccountWizController(this._appCtxt, this._container, this);
+		this._newAccountWizController = new ZaNewAccountWizController(this._appCtxt, this._container, this);
 		//since we are creating the account controller now - register all the interested listeners with it
-		this._newAccountWizController.addAccountCreationListener(new LsListener(this.getAccountListController(), LaAccountListController.prototype.handleAccountCreation));	
-		this._newAccountWizController.addAccountCreationListener(new LsListener(this, LaApp.prototype.handleAccountCreation));			
+		this._newAccountWizController.addAccountCreationListener(new AjxListener(this.getAccountListController(), ZaAccountListController.prototype.handleAccountCreation));	
+		this._newAccountWizController.addAccountCreationListener(new AjxListener(this, ZaApp.prototype.handleAccountCreation));			
 	}
 	return this._newAccountWizController;
 }
 
 
-LaApp.prototype.getDomainListController =
+ZaApp.prototype.getDomainListController =
 function() {
 	if (this._domainListController == null) {
-		this._domainListController = new LaDomainListController(this._appCtxt, this._container, this);
+		this._domainListController = new ZaDomainListController(this._appCtxt, this._container, this);
 		
-		this._domainListController.addDomainCreationListener(new LsListener(this, LaApp.prototype.handleDomainCreation));					
-		this._domainListController.addDomainCreationListener(new LsListener(this._appCtxt.getAppController().getOverviewPanelController(), LaOverviewPanelController.prototype.handleDomainCreation));				
+		this._domainListController.addDomainCreationListener(new AjxListener(this, ZaApp.prototype.handleDomainCreation));					
+		this._domainListController.addDomainCreationListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleDomainCreation));				
 
-		this._domainListController.addDomainRemovalListener(new LsListener(this, LaApp.prototype.handleDomainRemoval));							
-		this._domainListController.addDomainRemovalListener(new LsListener(this._appCtxt.getAppController().getOverviewPanelController(), LaOverviewPanelController.prototype.handleDomainRemoval));						
+		this._domainListController.addDomainRemovalListener(new AjxListener(this, ZaApp.prototype.handleDomainRemoval));							
+		this._domainListController.addDomainRemovalListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleDomainRemoval));						
 		
 	}
 	return this._domainListController;
 }
 
-LaApp.prototype.getDomainController =
+ZaApp.prototype.getDomainController =
 function() {
 	if (this._domainController == null) {
-		this._domainController = new LaDomainController(this._appCtxt, this._container, this);
+		this._domainController = new ZaDomainController(this._appCtxt, this._container, this);
 		//since we are creating the account controller now - register all the interested listeners with it
-		this._domainController.addDomainChangeListener(new LsListener(this.getDomainListController(), LaDomainListController.prototype.handleDomainChange));
+		this._domainController.addDomainChangeListener(new AjxListener(this.getDomainListController(), ZaDomainListController.prototype.handleDomainChange));
 
-		this._domainController.addDomainCreationListener(new LsListener(this, LaApp.prototype.handleDomainCreation));					
-		this._domainController.addDomainCreationListener(new LsListener(this.getDomainListController(), LaDomainListController.prototype.handleDomainCreation));	
-		this._domainController.addDomainCreationListener(new LsListener(this._appCtxt.getAppController().getOverviewPanelController(), LaOverviewPanelController.prototype.handleDomainCreation));				
+		this._domainController.addDomainCreationListener(new AjxListener(this, ZaApp.prototype.handleDomainCreation));					
+		this._domainController.addDomainCreationListener(new AjxListener(this.getDomainListController(), ZaDomainListController.prototype.handleDomainCreation));	
+		this._domainController.addDomainCreationListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleDomainCreation));				
 
-		this._domainController.addDomainRemovalListener(new LsListener(this.getDomainListController(), LaDomainListController.prototype.handleDomainRemoval));			
-		this._domainController.addDomainRemovalListener(new LsListener(this, LaApp.prototype.handleDomainRemoval));							
+		this._domainController.addDomainRemovalListener(new AjxListener(this.getDomainListController(), ZaDomainListController.prototype.handleDomainRemoval));			
+		this._domainController.addDomainRemovalListener(new AjxListener(this, ZaApp.prototype.handleDomainRemoval));							
 		
-		this._domainController.addDomainRemovalListener(new LsListener(this._appCtxt.getAppController().getOverviewPanelController(), LaOverviewPanelController.prototype.handleDomainRemoval));						
+		this._domainController.addDomainRemovalListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleDomainRemoval));						
 	}
 
 	return this._domainController;
 }
 
-LaApp.prototype.getServerListController =
+ZaApp.prototype.getServerListController =
 function() {
 	if (this._serverListController == null) {
-		this._serverListController = new LaServerListController(this._appCtxt, this._container, this);
-		this._serverListController.addServerRemovalListener(new LsListener(this, LaApp.prototype.handleServerRemoval));	
+		this._serverListController = new ZaServerListController(this._appCtxt, this._container, this);
+		this._serverListController.addServerRemovalListener(new AjxListener(this, ZaApp.prototype.handleServerRemoval));	
 	
 	}
 	return this._serverListController;
 }
 
-LaApp.prototype.getServerController =
+ZaApp.prototype.getServerController =
 function() {
 	if (this._serverController == null) {
-		this._serverController = new LaServerController(this._appCtxt, this._container, this);
-		this._serverController.addServerChangeListener(new LsListener(this, LaApp.prototype.handleServerChange));		
-		this._serverController.addServerChangeListener(new LsListener(this.getServerListController(), LaServerListController.prototype.handleServerChange));		
+		this._serverController = new ZaServerController(this._appCtxt, this._container, this);
+		this._serverController.addServerChangeListener(new AjxListener(this, ZaApp.prototype.handleServerChange));		
+		this._serverController.addServerChangeListener(new AjxListener(this.getServerListController(), ZaServerListController.prototype.handleServerChange));		
 	}
 	return this._serverController;
 }
 
-LaApp.prototype.getCosListController =
+ZaApp.prototype.getCosListController =
 function() {
 	if (this._cosListController == null) {
-		this._cosListController = new LaCosListController(this._appCtxt, this._container, this);
-		this._cosListController.addCosRemovalListener(new LsListener(this, LaApp.prototype.handleCosRemoval));			
+		this._cosListController = new ZaCosListController(this._appCtxt, this._container, this);
+		this._cosListController.addCosRemovalListener(new AjxListener(this, ZaApp.prototype.handleCosRemoval));			
 	}
 	return this._cosListController;
 }
 
 
-LaApp.prototype.getCosController =
+ZaApp.prototype.getCosController =
 function() {
 	if (this._cosController == null) {
-		this._cosController = new LaCosController(this._appCtxt, this._container, this);
+		this._cosController = new ZaCosController(this._appCtxt, this._container, this);
 		//since we are creating the COS controller now - register all the interested listeners with it
-		this._cosController.addCosChangeListener(new LsListener(this, LaApp.prototype.handleCosChange));			
-		this._cosController.addCosChangeListener(new LsListener(this.getCosListController(), LaCosListController.prototype.handleCosChange));
+		this._cosController.addCosChangeListener(new AjxListener(this, ZaApp.prototype.handleCosChange));			
+		this._cosController.addCosChangeListener(new AjxListener(this.getCosListController(), ZaCosListController.prototype.handleCosChange));
 
-		this._cosController.addCosCreationListener(new LsListener(this.getCosListController(), LaCosListController.prototype.handleCosCreation));	
-		this._cosController.addCosCreationListener(new LsListener(this, LaApp.prototype.handleCosCreation));			
+		this._cosController.addCosCreationListener(new AjxListener(this.getCosListController(), ZaCosListController.prototype.handleCosCreation));	
+		this._cosController.addCosCreationListener(new AjxListener(this, ZaApp.prototype.handleCosCreation));			
 
-		this._cosController.addCosRemovalListener(new LsListener(this, LaApp.prototype.handleCosRemoval));			
-		this._cosController.addCosRemovalListener(new LsListener(this.getCosListController(), LaCosListController.prototype.handleCosRemoval));			
+		this._cosController.addCosRemovalListener(new AjxListener(this, ZaApp.prototype.handleCosRemoval));			
+		this._cosController.addCosRemovalListener(new AjxListener(this.getCosListController(), ZaCosListController.prototype.handleCosRemoval));			
 	}
 	return this._cosController;
 }
 
-LaApp.prototype.getDomainList =
+ZaApp.prototype.getDomainList =
 function(refresh) {
 	if (refresh || this._domainList == null) {
-		this._domainList = LaDomain.getAll();
+		this._domainList = ZaDomain.getAll();
 		EmailAddr_XFormItem.domainChoices.setChoices(this._domainList.getArray());
 		EmailAddr_XFormItem.domainChoices.dirtyChoices();
 	}
 	return this._domainList;	
 }
 
-LaApp.prototype.getDomainListChoices =
+ZaApp.prototype.getDomainListChoices =
 function(refresh) {
 	if (refresh || this._domainList == null) {
-		this._domainList = LaDomain.getAll(this);
+		this._domainList = ZaDomain.getAll(this);
 	}
 	if(refresh || this._domainListChoices == null) {
 		if(this._domainListChoices == null)
@@ -222,36 +222,36 @@ function(refresh) {
 	return this._domainListChoices;	
 }
 
-LaApp.prototype.getServerByName =
+ZaApp.prototype.getServerByName =
 function(serverName) {
 	if (this._serverList == null) {
-		this._serverList = LaServer.getAll();
+		this._serverList = ZaServer.getAll();
 	}
 	var cnt = this._serverList.getArray().length;
-	var myServer = new LaServer(this);
+	var myServer = new ZaServer(this);
 	for(var i = 0; i < cnt; i++) {
-		if(this._serverList.getArray()[i].attrs[LaServer.A_ServiceHostname] == serverName)
+		if(this._serverList.getArray()[i].attrs[ZaServer.A_ServiceHostname] == serverName)
 			return this._serverList.getArray()[i];
 	}
 	if(i == cnt) {
-		myServer = new LaServer();
+		myServer = new ZaServer();
 		myServer.load("name", serverName);
 	}
 	return myServer;	
 }
 
-LaApp.prototype.getServerList =
+ZaApp.prototype.getServerList =
 function(refresh) {
 	if (refresh || this._serverList == null) {
-		this._serverList = LaServer.getAll();
+		this._serverList = ZaServer.getAll();
 	}
 	return this._serverList;	
 }
 
-LaApp.prototype.getServerListChoices =
+ZaApp.prototype.getServerListChoices =
 function(refresh) {
 	if (refresh || this._serverList == null) {
-		this._serverList = LaServer.getAll();
+		this._serverList = ZaServer.getAll();
 	}
 	if(refresh || this._serverChoices == null) {
 		if(this._serverChoices == null) {
@@ -264,10 +264,10 @@ function(refresh) {
 	return this._serverChoices;	
 }
 
-LaApp.prototype.getServerMap =
+ZaApp.prototype.getServerMap =
 function(refresh) {
 	if(refresh || this._serverList == null) {
-		this._serverList = LaServer.getAll();
+		this._serverList = ZaServer.getAll();
 	}
 	if(refresh || this._serverMap == null) {
 		this._serverMap = new Object();
@@ -279,18 +279,18 @@ function(refresh) {
 	return this._serverMap;
 }
 
-LaApp.prototype.getCosList =
+ZaApp.prototype.getCosList =
 function(refresh) {
 	if (refresh || this._cosList == null) {
-		this._cosList = LaCos.getAll(this);
+		this._cosList = ZaCos.getAll(this);
 	}
 	return this._cosList;	
 }
 
-LaApp.prototype.getCosListChoices =
+ZaApp.prototype.getCosListChoices =
 function(refresh) {
 	if (refresh || this._cosList == null) {
-		this._cosList = LaCos.getAll(this);
+		this._cosList = ZaCos.getAll(this);
 	}
 	if(refresh || this._cosListChoices == null) {
 		if(this._cosListChoices == null)
@@ -303,26 +303,26 @@ function(refresh) {
 	return this._cosListChoices;	
 }
 
-LaApp.prototype.getStatusList =
+ZaApp.prototype.getStatusList =
 function(refresh) {
 	if (refresh || this._statusList == null) {
-		this._statusList = LaStatus.loadStatusTable();
+		this._statusList = ZaStatus.loadStatusTable();
 	}
 	return this._statusList;	
 }
 
-LaApp.prototype.getAccountList =
+ZaApp.prototype.getAccountList =
 function(refresh) {
 	if (refresh || this._accountList == null) {
-		this._accountList = LaAccount.getAll(this).list;
+		this._accountList = ZaAccount.getAll(this).list;
 	}
 	return this._accountList;	
 }
 
-LaApp.prototype.getGlobalConfig =
+ZaApp.prototype.getGlobalConfig =
 function(refresh) {
 	if (refresh || this._globalConfig == null) {
-		this._globalConfig = new LaGlobalConfig(this);
+		this._globalConfig = new ZaGlobalConfig(this);
 	}
 	return this._globalConfig;	
 }
@@ -330,15 +330,15 @@ function(refresh) {
 
 /**
 * @param ev
-* This listener is invoked by any controller that can create an LaDomain object
+* This listener is invoked by any controller that can create an ZaDomain object
 **/
-LaApp.prototype.handleDomainCreation = 
+ZaApp.prototype.handleDomainCreation = 
 function (ev) {
 	if(ev) {
-		//add the new LaDomain to the controlled list
+		//add the new ZaDomain to the controlled list
 		if(ev.getDetails()) {
 			if(!this._domainList) {
-				this._domainList=LaDomain.getAll();
+				this._domainList=ZaDomain.getAll();
 			}
 			this._domainList.add(ev.getDetails());
 			EmailAddr_XFormItem.domainChoices.setChoices(this._domainList.getArray());
@@ -355,15 +355,15 @@ function (ev) {
 
 /**
 * @param ev
-* This listener is invoked by any controller that can create an LaCos object
+* This listener is invoked by any controller that can create an ZaCos object
 **/
-LaApp.prototype.handleCosCreation = 
+ZaApp.prototype.handleCosCreation = 
 function (ev) {
 	if(ev) {
-		//add the new LaCos to the controlled list
+		//add the new ZaCos to the controlled list
 		if(ev.getDetails()) {
 			if(!this._cosList) {
-				this._cosList=LaCos.getAll(this);
+				this._cosList=ZaCos.getAll(this);
 			} else {
 				this._cosList.add(ev.getDetails());
 			}
@@ -379,15 +379,15 @@ function (ev) {
 
 /**
 * @param ev
-* This listener is invoked by any controller that can change an LaCos object
+* This listener is invoked by any controller that can change an ZaCos object
 **/
-LaApp.prototype.handleCosChange = 
+ZaApp.prototype.handleCosChange = 
 function (ev) {
 	if(ev) {
-		//add the new LaCos to the controlled list
+		//add the new ZaCos to the controlled list
 		if(ev.getDetails()) {
 			if(!this._cosList) {
-				this._cosList=LaCos.getAll(this);
+				this._cosList=ZaCos.getAll(this);
 			} else {
 				//find the modified COS 
 				var cnt = this._cosList.getArray().length;
@@ -410,15 +410,15 @@ function (ev) {
 }
 /**
 * @param ev
-* This listener is invoked by any controller that can create an LaAccount object
+* This listener is invoked by any controller that can create an ZaAccount object
 **/
-LaApp.prototype.handleAccountCreation = 
+ZaApp.prototype.handleAccountCreation = 
 function (ev) {
 	if(ev) {
-		//add the new LaAccount to the controlled list
+		//add the new ZaAccount to the controlled list
 		if(ev.getDetails()) {
 			if(!this._accountList) {
-				this._accountList=LaAccount.getAll().list;
+				this._accountList=ZaAccount.getAll().list;
 			} else {
 				this._accountList.add(ev.getDetails());
 			}
@@ -428,21 +428,21 @@ function (ev) {
 
 /**
 * @param ev
-* This listener is invoked by LaAccountViewController or any other controller that can remove an LaAccount object
+* This listener is invoked by ZaAccountViewController or any other controller that can remove an ZaAccount object
 **/
-LaApp.prototype.handleAccountRemoval = 
+ZaApp.prototype.handleAccountRemoval = 
 function (ev) {
 	if(ev) {
 		if(!this._accountList) {
-			this._accountList=LaAccount.getAll().list;
+			this._accountList=ZaAccount.getAll().list;
 		} else {
-			//remove the LaAccount from the controlled list
+			//remove the ZaAccount from the controlled list
 			var detls = ev.getDetails();
 			if(detls && (detls instanceof Array)) {
 				for (var key in detls) {
 					this._accountList.remove(detls[key]);
 				}
-			} else if(detls && (detls instanceof LaAccount)) {
+			} else if(detls && (detls instanceof ZaAccount)) {
 				this._accountList.remove(ev.getDetails());
 			}
 		}
@@ -451,21 +451,21 @@ function (ev) {
 
 /**
 * @param ev
-* This listener is invoked by LaCosController or any other controller that can remove an LaCos object
+* This listener is invoked by ZaCosController or any other controller that can remove an ZaCos object
 **/
-LaApp.prototype.handleCosRemoval = 
+ZaApp.prototype.handleCosRemoval = 
 function (ev) {
 	if(ev) {
 		if(!this._cosList) {
-			this._cosList=LaCos.getAll(this);
+			this._cosList=ZaCos.getAll(this);
 		} else {
-			//remove the LaCos from the controlled list
+			//remove the ZaCos from the controlled list
 			var detls = ev.getDetails();
 			if(detls && (detls instanceof Array)) {
 				for (var key in detls) {
 					this._cosList.remove(detls[key]);
 				}
-			} else if(detls && (detls instanceof LaCos)) {
+			} else if(detls && (detls instanceof ZaCos)) {
 				this._cosList.remove(ev.getDetails());
 			}
 		}
@@ -478,11 +478,11 @@ function (ev) {
 	}
 }
 
-LaApp.prototype.handleServerChange = 
+ZaApp.prototype.handleServerChange = 
 function (ev) {
 	if(ev) {
 		if(this._serverList) {
-			this._serverList=LaServer.getAll();
+			this._serverList=ZaServer.getAll();
 			if(this._serverChoices == null) {
 				this._serverChoices = new XFormChoices(this._serverList.getArray(), XFormChoices.OBJECT_LIST, "id", "name");
 			} else {	
@@ -501,21 +501,21 @@ function (ev) {
 
 /**
 * @param ev
-* This listener is invoked by any controller that can remove an LaServer object
+* This listener is invoked by any controller that can remove an ZaServer object
 **/
-LaApp.prototype.handleServerRemoval = 
+ZaApp.prototype.handleServerRemoval = 
 function (ev) {
 	if(ev) {
 		if(!this._serverList) {
-			this._serverList=LaServer.getAll();
+			this._serverList=ZaServer.getAll();
 		} else {
-			//remove the LaCos from the controlled list
+			//remove the ZaCos from the controlled list
 			var detls = ev.getDetails();
 			if(detls && (detls instanceof Array)) {
 				for (var key in detls) {
 					this._serverList.remove(detls[key]);
 				}
-			} else if(detls && (detls instanceof LaServer)) {
+			} else if(detls && (detls instanceof ZaServer)) {
 				this._serverList.remove(ev.getDetails());
 			}
 		}
@@ -536,21 +536,21 @@ function (ev) {
 }
 /**
 * @param ev
-* This listener is invoked by LaDomainController or any other controller that can remove an LaDomain object
+* This listener is invoked by ZaDomainController or any other controller that can remove an ZaDomain object
 **/
-LaApp.prototype.handleDomainRemoval = 
+ZaApp.prototype.handleDomainRemoval = 
 function (ev) {
 	if(ev) {
 		if(!this._domainList) {
-			this._domainList=LaDomain.getAll();
+			this._domainList=ZaDomain.getAll();
 		} else {
-			//remove the LaDomain from the controlled list
+			//remove the ZaDomain from the controlled list
 			var detls = ev.getDetails();
 			if(detls && (detls instanceof Array)) {
 				for (var key in detls) {
 					this._domainList.remove(detls[key]);
 				}
-			} else if(detls && (detls instanceof LaDomain)) {
+			} else if(detls && (detls instanceof ZaDomain)) {
 				this._domainList.remove(ev.getDetails());
 			}
 		}
@@ -568,7 +568,7 @@ function (ev) {
 /**
 * Returns the app's name.
 */
-LaApp.prototype.getName =
+ZaApp.prototype.getName =
 function() {
 	return this._name;
 }
@@ -576,34 +576,34 @@ function() {
 /**
 * Returns the app view manager.
 */
-LaApp.prototype.getAppViewMgr = 
+ZaApp.prototype.getAppViewMgr = 
 function() {
 	return this._appViewMgr;
 }
 
-// Convenience functions that call through to app view manager. See LaAppViewMgr for details.
+// Convenience functions that call through to app view manager. See ZaAppViewMgr for details.
 
-LaApp.prototype.setAppView =
+ZaApp.prototype.setAppView =
 function(view) {
 	this._appViewMgr.setAppView(this._name, view);
 }
 
-LaApp.prototype.createView =
+ZaApp.prototype.createView =
 function(viewName, elements, popCallback, style, isVolatile, isAppView) {
 	return this._appViewMgr.createView(viewName, this._name, elements, popCallback, style, isVolatile, isAppView);
 }
 
-LaApp.prototype.pushView =
+ZaApp.prototype.pushView =
 function(name, force) {
 	return this._appViewMgr.pushView(name, force);
 }
 /*
-LaApp.prototype.popView =
+ZaApp.prototype.popView =
 function(force) {
 	return this._appViewMgr.popView(force);
 }
 */
-LaApp.prototype.setView =
+ZaApp.prototype.setView =
 function(name, force) {
 	return this._appViewMgr.setView(name, force);
 }
@@ -613,13 +613,13 @@ function(name, force) {
 /**
 * Run when the activation state of an app changes.
 */
-LaApp.prototype.activate =
+ZaApp.prototype.activate =
 function(active) {
 }
 
 /**
 * Clears an app's state.
 */
-LaApp.prototype.reset =
+ZaApp.prototype.reset =
 function(active) {
 }

@@ -1,22 +1,22 @@
-function LaItemList(type, constructor, app) {
+function ZaItemList(type, constructor, app) {
 
 	if (arguments.length == 0) return;
-	LaModel.call(this, true);
+	ZaModel.call(this, true);
 
 	this.type = type;
 	this._constructor = constructor;
 	this._app = app;
 	
-	this._vector = new LaItemVector();
+	this._vector = new ZaItemVector();
 	this._idHash = new Object();
 }
 
-LaItemList.prototype = new LaModel;
-LaItemList.prototype.constructor = LaItemList;
+ZaItemList.prototype = new ZaModel;
+ZaItemList.prototype.constructor = ZaItemList;
 
-LaItemList.prototype.toString = 
+ZaItemList.prototype.toString = 
 function() {
-	return "LaItemList "+this.type;
+	return "ZaItemList "+this.type;
 }
 
 /**
@@ -25,7 +25,7 @@ function() {
 * @param item	the item to add
 * @param index	the index at which to add the item (defaults to end of list)
 */
-LaItemList.prototype.add = 
+ZaItemList.prototype.add = 
 function(item, index) {
 	this._vector.add(item, index);
 	if (item.id) {
@@ -40,7 +40,7 @@ function(item, index) {
 *
 * @param item	the item to remove
 */
-LaItemList.prototype.remove = 
+ZaItemList.prototype.remove = 
 function(item) {
 	this._vector.remove(item);
 	if (item.id)
@@ -50,7 +50,7 @@ function(item) {
 /**
 * Returns the number of items in the list.
 */
-LaItemList.prototype.size = 
+ZaItemList.prototype.size = 
 function() {
 	this._vector.size();
 }
@@ -58,15 +58,15 @@ function() {
 /**
 * Returns the list as an array.
 */
-LaItemList.prototype.getArray =
+ZaItemList.prototype.getArray =
 function() {
 	return this._vector.getArray();
 }
 
 /**
-* Returns the list as a LaItemVector.
+* Returns the list as a ZaItemVector.
 */
-LaItemList.prototype.getVector =
+ZaItemList.prototype.getVector =
 function() {
 	return this._vector;
 }
@@ -74,7 +74,7 @@ function() {
 /**
 * Returns the hash matching IDs to items.
 */
-LaItemList.prototype.getIdHash =
+ZaItemList.prototype.getIdHash =
 function() {
 	return this._idHash;
 }
@@ -84,7 +84,7 @@ function() {
 *
 * @param id		an item ID
 */
-LaItemList.prototype.getItemById =
+ZaItemList.prototype.getItemById =
 function(id) {
 	return this._idHash[id];
 }
@@ -92,7 +92,7 @@ function(id) {
 /**
 * Clears the list, including its ID hash.
 */
-LaItemList.prototype.clear =
+ZaItemList.prototype.clear =
 function() {
 	this._vector.removeAll();
 	for (var id in this._idHash)
@@ -101,12 +101,12 @@ function() {
 }
 /*
 Sorting is done on the server
-LaItemList.prototype.sortByName =
+ZaItemList.prototype.sortByName =
 function(descending) {
 	if (descending)
-		this._vector.getArray().sort(LaItem.compareNamesDesc);
+		this._vector.getArray().sort(ZaItem.compareNamesDesc);
 	else 
-		this._vector.getArray().sort(LaItem.compareNamesAsc);	
+		this._vector.getArray().sort(ZaItem.compareNamesAsc);	
 }*/
 
 /**
@@ -115,7 +115,7 @@ function(descending) {
 *
 * @param respNode	an XML node whose children are item nodes
 */
-LaItemList.prototype.loadFromDom = 
+ZaItemList.prototype.loadFromDom = 
 function(respNode) {
 	this.clear();
 	var nodes = respNode.childNodes;
@@ -129,7 +129,7 @@ function(respNode) {
 }
 
 // Grab the IDs out of a list of items, and return them as both a string and a hash.
-LaItemList.prototype._getIds =
+ZaItemList.prototype._getIds =
 function(list) {
 	var idHash = new Object();
 	if (!(list && list.length))

@@ -1,23 +1,23 @@
 /**
-* @class LaBackup
-* @contructor LaBackup
-* @param LaApp app
+* @class ZaBackup
+* @contructor ZaBackup
+* @param ZaApp app
 * this class is a model for doing backup and restore operations
 * @author Greg Solovyev
 **/
-function LaBackup(app) {
-	LaItem.call(this, app);
+function ZaBackup(app) {
+	ZaItem.call(this, app);
 	this.label = "";
 	this.server = "";
 	this.accounts = null;
 	this.live=0;
-	this[LaModel.currentStep] = 1;
+	this[ZaModel.currentStep] = 1;
 }
 
-LaBackup.prototype = new LaItem;
-LaBackup.prototype.constructor = LaBackup;
+ZaBackup.prototype = new ZaItem;
+ZaBackup.prototype.constructor = ZaBackup;
 
-LaBackup.prototype.initFromDom = 
+ZaBackup.prototype.initFromDom = 
 function (node) {
 	this.accounts = new Array();
 	var queryNode = node.firstChild;
@@ -35,16 +35,16 @@ function (node) {
 
 /**
 * @method static queryBackups
-* @param serverId:string - liquidId of the server to which the SOAP request will be sent
+* @param serverId:string - zimbraId of the server to which the SOAP request will be sent
 * @param target:string - path to the location of backups
 * @param label:string
 * @param fromDate:timestamp
 * @param verbose:Boolean
-* @param callback:LsCallback - callback that will be invoked by LsCsfeAsynchCommand
+* @param callback:AjxCallback - callback that will be invoked by AjxCsfeAsynchCommand
 **/
-LaBackup.queryBackups = 
+ZaBackup.queryBackups = 
 function (serverId, target, label, fromDate, verbose, callback) {
-	var soapDoc = LsSoapDoc.create("BackupQueryRequest", "urn:liquidAdmin", null);
+	var soapDoc = AjxSoapDoc.create("BackupQueryRequest", "urn:zimbraAdmin", null);
 	var queryEl = soapDoc.set("query", "");
 	if(target) {
 		queryEl.setAttribute("target", target);
@@ -58,34 +58,34 @@ function (serverId, target, label, fromDate, verbose, callback) {
 	if(verbose) {
 		queryEl.setAttribute("verbose", verbose);
 	}
-	var asynCommand = new LsCsfeAsynchCommand();
+	var asynCommand = new AjxCsfeAsynchCommand();
 	asynCommand.addInvokeListener(callback);
 	asynCommand.invoke(soapDoc, false, null, serverId, true);	
 }
 
 /**
 * @method static queryAccountBackup
-* @param serverId:string - liquidId of the server to which the SOAP request will be sent
+* @param serverId:string - zimbraId of the server to which the SOAP request will be sent
 * @param target:string - path to the location of backups
 * @param accounts:Array - array of account names 
-* @param callback:LsCallback - callback that will be invoked by LsCsfeAsynchCommand
+* @param callback:AjxCallback - callback that will be invoked by AjxCsfeAsynchCommand
 **/
-LaBackup.queryAccountBackup = 
+ZaBackup.queryAccountBackup = 
 function (serverId, target, accounts, callback) {
-	var soapDoc = LsSoapDoc.create("BackupAccountQueryRequest", "urn:liquidAdmin", null);
+	var soapDoc = AjxSoapDoc.create("BackupAccountQueryRequest", "urn:zimbraAdmin", null);
 	var queryEl = soapDoc.set("query", "");
 	if(target) {
 		queryEl.setAttribute("target", target);
 	}
 	if(!accounts) {
-		throw(new LsException("accounts parameter cannot be null", LsException.INVALID_PARAM, "LaBackup.queryAccountBackup", LaMsg.ERROR_BACKUP_1));
+		throw(new AjxException("accounts parameter cannot be null", AjxException.INVALID_PARAM, "ZaBackup.queryAccountBackup", ZaMsg.ERROR_BACKUP_1));
 	} 
 	var cnt = accounts.length;
 	for(var i = 0; i < cnt; i ++) {
 		var accEl = soapDoc.set("a", "", queryEl);
 		accEl.setAttribute("name", accounts[i]);
 	}
-	var asynCommand = new LsCsfeAsynchCommand();
+	var asynCommand = new AjxCsfeAsynchCommand();
 	asynCommand.addInvokeListener(callback);
 	asynCommand.invoke(soapDoc, false, null, serverId, true);	
 }
