@@ -8,17 +8,17 @@ config_dir=/opt/zimbra/conf
 ldap_pw=$1
 
 if [ x$ldap_pw = "x" ]; then
-	zmlocalconfig -f -e -r liquid_ldap_password
+	zmlocalconfig -f -e -r zimbra_ldap_password
 	zmlocalconfig -f -e -r ldap_root_password
 else
-	zmlocalconfig -f -e liquid_ldap_password=$ldap_pw
+	zmlocalconfig -f -e zimbra_ldap_password=$ldap_pw
 	zmlocalconfig -f -e ldap_root_password=$ldap_pw
 fi
 
-zmsetvars liquid_ldap_userdn liquid_ldap_password ldap_root_password liquid_server_hostname
+zmsetvars zimbra_ldap_userdn zimbra_ldap_password ldap_root_password zimbra_server_hostname
 
 root_sha=`/opt/zimbra/openldap/sbin/slappasswd -s ${ldap_root_password}`
-liquid_sha=`/opt/zimbra/openldap/sbin/slappasswd -s ${liquid_ldap_password}`
+zimbra_sha=`/opt/zimbra/openldap/sbin/slappasswd -s ${zimbra_ldap_password}`
 
 # Update slapd.conf
 
@@ -27,13 +27,13 @@ sed -e "s|^rootpw.*|rootpw ${root_sha}|" \
 
 # Update liquid.ldif
 
-sed -e "s|^userPassword.*|userPassword: ${liquid_sha}|" \
+sed -e "s|^userPassword.*|userPassword: ${zimbra_sha}|" \
 	${source_config_dir}/liquid.ldif > ${config_dir}/liquid.ldif
 
 # Start ldap
 
 ldap start
 
-ldapmodify -a -c -w ${ldap_root_password} -D "${liquid_ldap_userdn}" -x -f ${config_dir}/liquid.ldif
-ldapmodify -a -c -w ${ldap_root_password} -D "${liquid_ldap_userdn}" -x -f ${source_config_dir}/liquid_mimehandlers.ldif
+ldapmodify -a -c -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${config_dir}/liquid.ldif
+ldapmodify -a -c -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${source_config_dir}/zimbra_mimehandlers.ldif
 

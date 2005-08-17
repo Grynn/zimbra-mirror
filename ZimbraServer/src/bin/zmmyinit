@@ -3,10 +3,10 @@
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
     zimbra_home \
-    liquid_index_directory \
-    liquid_store_directory \
-    liquid_log_directory \
-    liquid_db_directory \
+    zimbra_index_directory \
+    zimbra_store_directory \
+    zimbra_log_directory \
+    zimbra_db_directory \
     mysql_mycnf \
     mysql_data_directory \
     mysql_directory
@@ -22,17 +22,17 @@ zmassert -x ${zimbra_home}/bin/mysql
 zmassert -x ${zimbra_home}/bin/zmlocalconfig
 zmassert -x ${zimbra_home}/bin/lqmypasswd
 zmassert -x ${mysql_directory}/scripts/mysql_install_db
-zmassert -r ${liquid_db_directory}/db.sql
-zmassert -r ${liquid_db_directory}/versions-init.sql
+zmassert -r ${zimbra_db_directory}/db.sql
+zmassert -r ${zimbra_db_directory}/versions-init.sql
 
 #
 # Create necessary directories
 #
 echo '*' Creating required directories
 mkdir -p ${mysql_data_directory}
-mkdir -p ${liquid_index_directory}
-mkdir -p ${liquid_store_directory}
-mkdir -p ${liquid_log_directory}
+mkdir -p ${zimbra_index_directory}
+mkdir -p ${zimbra_store_directory}
+mkdir -p ${zimbra_log_directory}
 
 #
 # Generate a mysql config file
@@ -47,26 +47,26 @@ ${zimbra_home}/bin/lqmycnf > ${mysql_mycnf}
 echo '*' Creating database in ${mysql_data_directory}
 (cd ${mysql_directory}; ./scripts/mysql_install_db \
     --defaults-file=${mysql_mycnf}) \
-    >> ${liquid_log_directory}/lqmyinit.log 2>&1
+    >> ${zimbra_log_directory}/lqmyinit.log 2>&1
 
 #
 # Start mysql server
 #
 echo '*' Starting mysql server
 ${zimbra_home}/bin/mysql.server start \
-    >> ${liquid_log_directory}/lqmyinit.log 2>&1
+    >> ${zimbra_log_directory}/lqmyinit.log 2>&1
 sleep 1
 
 #
 # Load liquid sql files
 #
-echo '*' Loading schema ${liquid_db_directory}/db.sql 
+echo '*' Loading schema ${zimbra_db_directory}/db.sql 
 ${zimbra_home}/bin/mysql -u root --password= < \
-    ${liquid_db_directory}/db.sql
+    ${zimbra_db_directory}/db.sql
 
-echo '*' Loading version from ${liquid_db_directory}/versions-init.sql
+echo '*' Loading version from ${zimbra_db_directory}/versions-init.sql
 ${zimbra_home}/bin/mysql -u root --password= < \
-    ${liquid_db_directory}/versions-init.sql
+    ${zimbra_db_directory}/versions-init.sql
 
 #
 # Generate passwords for mysql into local config
@@ -76,12 +76,12 @@ if [ x$sql_root_pw = "x" ]; then
 	${zimbra_home}/bin/zmlocalconfig -r -f -e mysql_root_password
 
 	echo '*' Setting random password for mysql liquid user in liquid local config
-	${zimbra_home}/bin/zmlocalconfig -r -f -e liquid_mysql_password
+	${zimbra_home}/bin/zmlocalconfig -r -f -e zimbra_mysql_password
 else
 	echo '*' Setting password for mysql root user in liquid local config
 	${zimbra_home}/bin/zmlocalconfig -f -e mysql_root_password=$sql_root_pw
 	echo '*' Setting password for mysql liquid user in liquid local config
-	${zimbra_home}/bin/zmlocalconfig -f -e liquid_mysql_password=$sql_root_pw
+	${zimbra_home}/bin/zmlocalconfig -f -e zimbra_mysql_password=$sql_root_pw
 fi
 
 #
@@ -90,9 +90,9 @@ fi
 # use 'lqmypasswd --root' here because of bootstrapping problems - at
 # this stage we know that the root password is empty.
 #
-zmsetvars mysql_root_password liquid_mysql_password
+zmsetvars mysql_root_password zimbra_mysql_password
 echo '*' Changing mysql root user password
 ${zimbra_home}/bin/mysqladmin -u root --password= password ${mysql_root_password}
 
 echo '*' Changing mysql liquid user password
-${zimbra_home}/bin/lqmypasswd ${liquid_mysql_password}
+${zimbra_home}/bin/lqmypasswd ${zimbra_mysql_password}

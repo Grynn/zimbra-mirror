@@ -13,9 +13,9 @@ my $verbose = 0;
 my $usage = 0;
 
 if (-f "/opt/zimbra/bin/zmlocalconfig") {
-    $password = `zmlocalconfig -s -m nokey liquid_mysql_password`;
+    $password = `zmlocalconfig -s -m nokey zimbra_mysql_password`;
     chomp $password;
-    $user = `zmlocalconfig -m nokey liquid_mysql_user`;
+    $user = `zmlocalconfig -m nokey zimbra_mysql_user`;
     chomp $user;
 }
 

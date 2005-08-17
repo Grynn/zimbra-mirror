@@ -15,11 +15,11 @@ my $logDir = "/opt/zimbra/log";
 my $ignore;
 
 if (-f "/opt/zimbra/bin/zmlocalconfig") {
-    $password = `zmlocalconfig -s -m nokey liquid_mysql_password`;
+    $password = `zmlocalconfig -s -m nokey zimbra_mysql_password`;
     chomp $password;
-    $user = `zmlocalconfig -m nokey liquid_mysql_user`;
+    $user = `zmlocalconfig -m nokey zimbra_mysql_user`;
     chomp $user;
-    $logDir = `zmlocalconfig -x -m nokey liquid_log_directory`;
+    $logDir = `zmlocalconfig -x -m nokey zimbra_log_directory`;
     chomp $logDir;
 }
 

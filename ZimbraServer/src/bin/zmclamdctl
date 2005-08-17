@@ -8,7 +8,7 @@ fi
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
     zimbra_home \
-    liquid_log_directory
+    zimbra_log_directory
 
 rewriteconfig() {
 	if [ x$2 = "x" ]; then
@@ -34,10 +34,10 @@ case "$1" in
 		rewriteconfig
 		${zimbra_home}/clamav/bin/freshclam \
 			--config-file=${zimbra_home}/conf/freshclam.conf -d --checks=12 \
-		    >> ${liquid_log_directory}/freshclam.log 2>&1 &
+		    >> ${zimbra_log_directory}/freshclam.log 2>&1 &
 		${zimbra_home}/clamav/sbin/clamd \
 			--config-file ${zimbra_home}/conf/clamd.conf \
-		    >> ${liquid_log_directory}/clamd.log 2>&1 &
+		    >> ${zimbra_log_directory}/clamd.log 2>&1 &
         ;;
 
     'kill')

@@ -8,7 +8,7 @@ fi
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
     zimbra_home \
-    liquid_log_directory
+    zimbra_log_directory
 
 #
 # Main
@@ -16,7 +16,7 @@ zmsetvars \
 case "$1" in
     'start')
 		${zimbra_home}/bin/zmmtaconfig   \
-		    >> ${liquid_log_directory}/zmmtaconfig.log 2>&1 &
+		    >> ${zimbra_log_directory}/zmmtaconfig.log 2>&1 &
         ;;
 
     'kill')

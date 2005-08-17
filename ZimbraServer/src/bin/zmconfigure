@@ -54,7 +54,7 @@ foreach my $sline (@slines) {
 	#	comment(args) - replace with comment char "#" if true (or value exists)
 	#
 	# args supported:
-	#	SERVER:key - use command gs with liquid_server_hostname, get value of key
+	#	SERVER:key - use command gs with zimbra_server_hostname, get value of key
 	#
 	while ($sline =~ m/%%([^%]+)%%/g) {
 		my $sr = $1;
@@ -63,7 +63,7 @@ foreach my $sline (@slines) {
 			my ($cmd, $key, $pattern) = ($sr =~ m/comment ([^:]+):(\S+) (.*)/);
 			if ($cmd eq "SERVER") {
 				if ($host eq "") {
-					$host=`/opt/zimbra/bin/zmlocalconfig -q -m nokey liquid_server_hostname`;
+					$host=`/opt/zimbra/bin/zmlocalconfig -q -m nokey zimbra_server_hostname`;
 					chomp $host;
 				}
 				$rep = `/opt/zimbra/bin/zmprov gs $host | sed -e 's/[^ ]* //' | grep $pattern`;

@@ -8,7 +8,7 @@ fi
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
     zimbra_home \
-    liquid_log_directory
+    zimbra_log_directory
 
 rewriteconfig() {
 	if [ x$2 = "x" ]; then

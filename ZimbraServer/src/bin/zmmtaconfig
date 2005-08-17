@@ -43,7 +43,7 @@ my %stopstarts = ();
 
 my $firstrun = 1;
 
-my $HOSTNAME = `zmlocalconfig -m nokey liquid_server_hostname`;
+my $HOSTNAME = `zmlocalconfig -m nokey zimbra_server_hostname`;
 chomp $HOSTNAME;
 
 my $VARS_SET = 0;
@@ -525,7 +525,7 @@ sub rewriteConfig {
 		#		used to create csv or regexes
 		#
 		# args supported:
-		#	SERVER:key - use command gs with liquid_server_hostname, get value of key
+		#	SERVER:key - use command gs with zimbra_server_hostname, get value of key
 		#
 		while ($sline =~ m/%%([^%]+)%%/g) {
 			# print STDERR "\t$sline";

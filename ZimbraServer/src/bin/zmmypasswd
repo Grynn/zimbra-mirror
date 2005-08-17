@@ -1,11 +1,11 @@
 #!/bin/bash
 #
-# Change password for liquid_mysql_password, and optionally for
+# Change password for zimbra_mysql_password, and optionally for
 # mysql_root_password.  Updates both the Liquid local config file and
 # MySQL.
 #
 source `dirname $0`/zmshutil || exit 1
-zmsetvars zimbra_home liquid_mysql_user mysql_root_password
+zmsetvars zimbra_home zimbra_mysql_user mysql_root_password
 
 #
 # Usage.
@@ -14,7 +14,7 @@ usage() {
     cat<<EOF
 Usage: $ lqmypasswd [ --root ] newpassword
 
-By default, this script changes liquid_myql_password.  If the --root
+By default, this script changes zimbra_myql_password.  If the --root
 option is specified, then mysql_root_passwd is changed.  In both cases,
 MySQL is updated with the new passwords.  This script can not bail you
 out of a situation where you have lost your mysql root password -
@@ -32,7 +32,7 @@ if [ "x$1" = "x--root" ]; then
     password_key="mysql_root_password"
     shift # lose --root option
 else
-    password_key="liquid_mysql_password"
+    password_key="zimbra_mysql_password"
 fi
 
 if [ $# -ne 1 ]; then
@@ -42,14 +42,14 @@ fi
 newpassword="$1"
 
 #
-# For liquid_mysql_password
+# For zimbra_mysql_password
 #
-if [ ${password_key} = liquid_mysql_password ]; then 
+if [ ${password_key} = zimbra_mysql_password ]; then 
     # Change the password in mysql.
     cat <<EOF | ${zimbra_home}/bin/mysql -u root --password="${mysql_root_password}"
-SET PASSWORD FOR '${liquid_mysql_user}' = PASSWORD('${newpassword}');
-SET PASSWORD FOR '${liquid_mysql_user}'@'localhost' = PASSWORD('${newpassword}');
-SET PASSWORD FOR '${liquid_mysql_user}'@'localhost.localdomain' = PASSWORD('${newpassword}');
+SET PASSWORD FOR '${zimbra_mysql_user}' = PASSWORD('${newpassword}');
+SET PASSWORD FOR '${zimbra_mysql_user}'@'localhost' = PASSWORD('${newpassword}');
+SET PASSWORD FOR '${zimbra_mysql_user}'@'localhost.localdomain' = PASSWORD('${newpassword}');
 EOF
 	if [ $? = 0 ]; then
 		echo '*' Changed liquid mysql user password

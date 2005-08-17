@@ -2,7 +2,7 @@
 
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
-    liquid_log_directory \
+    zimbra_log_directory \
     mysql_bind_address \
     mysql_data_directory \
     mysql_directory \
@@ -70,7 +70,7 @@ port         = ${mysql_port}
 
 skip-external-locking
 
-log-slow-queries = ${liquid_log_directory}/myslow.log
+log-slow-queries = ${zimbra_log_directory}/myslow.log
 long-query-time  = 1
 log-long-format
 log-queries-not-using-indexes
@@ -95,6 +95,6 @@ innodb_file_per_table
 
 [mysqld_safe]
 
-err-log = ${liquid_log_directory}/mysqld.log
+err-log = ${zimbra_log_directory}/mysqld.log
 
 EOF
