@@ -337,7 +337,6 @@ XModel.prototype.removeRow = function (instance, path, instanceNum) {
 	if (list == null) return;
 
 	// WHAT IF LIST IS A STRING?
-	//Then we're doomed ;)
 	list.splice(instanceNum, 1);
 }
 
