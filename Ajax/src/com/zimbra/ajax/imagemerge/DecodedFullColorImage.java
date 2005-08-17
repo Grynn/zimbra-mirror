@@ -1,4 +1,4 @@
-package com.zimbra.zimbraAjax.imagemerge;
+package com.zimbra.ajax.imagemerge;
 
 import javax.imageio.*;
 import javax.imageio.stream.*;

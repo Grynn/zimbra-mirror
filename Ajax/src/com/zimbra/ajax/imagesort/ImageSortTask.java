@@ -1,4 +1,4 @@
-package com.zimbra.zimbraAjax.imagesort;
+package com.zimbra.ajax.imagesort;
 
 import org.apache.tools.ant.*;
 import org.apache.tools.ant.util.FileUtils;
