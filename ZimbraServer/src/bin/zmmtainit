@@ -21,8 +21,8 @@ cat<<EOF > ${confdir}/ldap-vmm.cf
 server_host = ${ldap_host}
 server_port = ${ldap_port}
 search_base =
-query_filter = (&(liquidMailDeliveryAddress=%s)(liquidMailStatus=enabled))
-result_attribute = liquidMailDeliveryAddress
+query_filter = (&(zimbraMailDeliveryAddress=%s)(zimbraMailStatus=enabled))
+result_attribute = zimbraMailDeliveryAddress
 version = 3
 bind = no
 timeout = 30
@@ -32,8 +32,8 @@ cat<<EOF > ${confdir}/ldap-vmd.cf
 server_host = ${ldap_host}
 server_port = ${ldap_port}
 search_base =
-query_filter = (&(liquidDomainName=%s)(liquidDomainType=local)(liquidMailStatus=enabled))
-result_attribute = liquidDomainName
+query_filter = (&(zimbraDomainName=%s)(zimbraDomainType=local)(zimbraMailStatus=enabled))
+result_attribute = zimbraDomainName
 version = 3
 bind = no
 timeout = 30
@@ -43,8 +43,8 @@ cat<<EOF > ${confdir}/ldap-vam.cf
 server_host = ${ldap_host}
 server_port = ${ldap_port}
 search_base =
-query_filter = (&(|(liquidMailDeliveryAddress=%s)(liquidMailAlias=%s)(liquidMailCatchAllAddress=%s))(liquidMailStatus=enabled))
-result_attribute = liquidMailDeliveryAddress,liquidMailForwardingAddress,liquidMailCatchAllForwardingAddress
+query_filter = (&(|(zimbraMailDeliveryAddress=%s)(zimbraMailAlias=%s)(zimbraMailCatchAllAddress=%s))(zimbraMailStatus=enabled))
+result_attribute = zimbraMailDeliveryAddress,zimbraMailForwardingAddress,zimbraMailCatchAllForwardingAddress
 version = 3
 bind = no
 timeout = 30
@@ -54,8 +54,8 @@ cat<<EOF > ${confdir}/ldap-vad.cf
 server_host = ${ldap_host}
 server_port = ${ldap_port}
 search_base =
-query_filter = (&(liquidDomainName=%s)(liquidDomainType=alias)(liquidMailStatus=enabled))
-result_attribute = liquidDomainName
+query_filter = (&(zimbraDomainName=%s)(zimbraDomainType=alias)(zimbraMailStatus=enabled))
+result_attribute = zimbraDomainName
 version = 3
 bind = no
 timeout = 30
@@ -65,8 +65,8 @@ cat<<EOF > ${confdir}/ldap-scm.cf
 server_host = ${ldap_host}
 server_port = ${ldap_port}
 search_base = 
-query_filter = (&(|(liquidMailDeliveryAddress=%s)(liquidMailAlias=%s)(liquidMailCatchAllAddress=%s))(liquidMailStatus=enabled))
-result_attribute = liquidMailCanonicalAddress,liquidMailCatchAllCanonicalAddress
+query_filter = (&(|(zimbraMailDeliveryAddress=%s)(zimbraMailAlias=%s)(zimbraMailCatchAllAddress=%s))(zimbraMailStatus=enabled))
+result_attribute = zimbraMailCanonicalAddress,zimbraMailCatchAllCanonicalAddress
 version = 3
 bind = no
 timeout = 30
@@ -76,8 +76,8 @@ cat<<EOF > ${confdir}/ldap-transport.cf
 server_host = ${ldap_host}
 server_port = ${ldap_port}
 search_base =
-query_filter = (&(liquidMailDeliveryAddress=%s)(liquidMailStatus=enabled))
-result_attribute = liquidMailHost
+query_filter = (&(zimbraMailDeliveryAddress=%s)(zimbraMailStatus=enabled))
+result_attribute = zimbraMailHost
 result_filter = lmtp:%s:7025
 version = 3
 bind = no
