@@ -1,102 +1,102 @@
 
 # for storing mime config
-dn: cn=mime,cn=config,cn=liquid
+dn: cn=mime,cn=config,cn=zimbra
 objectclass: organizationalRole
 cn: mime
 description: for storing MIME configuration
 
-dn: cn=application/octet-stream,cn=mime,cn=config,cn=liquid
-liquidMimeType: application/octet-stream
+dn: cn=application/octet-stream,cn=mime,cn=config,cn=zimbra
+zimbraMimeType: application/octet-stream
 cn: application/octet-stream
-objectclass: liquidMimeEntry
-liquidMimeIndexingEnabled: TRUE
-liquidMimeHandlerClass: com.zimbra.cs.mime.handler.opensrc.AppOctetStreamHandler
+objectclass: zimbraMimeEntry
+zimbraMimeIndexingEnabled: TRUE
+zimbraMimeHandlerClass: com.zimbra.cs.mime.handler.opensrc.AppOctetStreamHandler
 description: Unknown Binary Content
 
-dn: cn=application/msword,cn=mime,cn=config,cn=liquid
-liquidMimeType: application/msword
+dn: cn=application/msword,cn=mime,cn=config,cn=zimbra
+zimbraMimeType: application/msword
 cn: application/msword
-objectclass: liquidMimeEntry
-liquidMimeIndexingEnabled: TRUE
-liquidMimeHandlerClass: com.zimbra.cs.mime.handler.opensrc.MSWordHandler
-liquidMimeFileExtension: doc
-liquidMimeFileExtension: word
+objectclass: zimbraMimeEntry
+zimbraMimeIndexingEnabled: TRUE
+zimbraMimeHandlerClass: com.zimbra.cs.mime.handler.opensrc.MSWordHandler
+zimbraMimeFileExtension: doc
+zimbraMimeFileExtension: word
 description: Microsoft Word Document
 
-dn: cn=application/pdf,cn=mime,cn=config,cn=liquid
-liquidMimeType: application/pdf
+dn: cn=application/pdf,cn=mime,cn=config,cn=zimbra
+zimbraMimeType: application/pdf
 cn: application/pdf
-objectclass: liquidMimeEntry
-liquidMimeIndexingEnabled: TRUE
-liquidMimeHandlerClass: com.zimbra.cs.mime.handler.opensrc.PDFHandler
-liquidMimeFileExtension: pdf
+objectclass: zimbraMimeEntry
+zimbraMimeIndexingEnabled: TRUE
+zimbraMimeHandlerClass: com.zimbra.cs.mime.handler.opensrc.PDFHandler
+zimbraMimeFileExtension: pdf
 description: Adobe PDF Document
 
-dn: cn=application/postscript,cn=mime,cn=config,cn=liquid
-liquidMimeType: application/postscript
+dn: cn=application/postscript,cn=mime,cn=config,cn=zimbra
+zimbraMimeType: application/postscript
 cn: application/postscript
-objectclass: liquidMimeEntry
-liquidMimeIndexingEnabled: TRUE
-liquidMimeFileExtension: ps
-liquidMimeFileExtension: eps
+objectclass: zimbraMimeEntry
+zimbraMimeIndexingEnabled: TRUE
+zimbraMimeFileExtension: ps
+zimbraMimeFileExtension: eps
 description: Adobe Postscript Document
 
-dn: cn=application/vnd.ms-excel,cn=mime,cn=config,cn=liquid
-liquidMimeType: application/vnd.ms-excel
+dn: cn=application/vnd.ms-excel,cn=mime,cn=config,cn=zimbra
+zimbraMimeType: application/vnd.ms-excel
 cn: application/vnd.ms-excel
-objectclass: liquidMimeEntry
-liquidMimeIndexingEnabled: TRUE
-liquidMimeFileExtension: xls
+objectclass: zimbraMimeEntry
+zimbraMimeIndexingEnabled: TRUE
+zimbraMimeFileExtension: xls
 description: Microsoft Excel Document
 
-dn: cn=application/vnd.ms-powerpoint,cn=mime,cn=config,cn=liquid
-liquidMimeType: application/vnd.ms-powerpoint
+dn: cn=application/vnd.ms-powerpoint,cn=mime,cn=config,cn=zimbra
+zimbraMimeType: application/vnd.ms-powerpoint
 cn: application/vnd.ms-powerpoint
-objectclass: liquidMimeEntry
-liquidMimeIndexingEnabled: TRUE
-liquidMimeFileExtension: ppt
+objectclass: zimbraMimeEntry
+zimbraMimeIndexingEnabled: TRUE
+zimbraMimeFileExtension: ppt
 description: Microsoft PowerPoint Document
 
-dn: cn=application/x-zip-compressed,cn=mime,cn=config,cn=liquid
-liquidMimeType: application/x-zip-compressed
+dn: cn=application/x-zip-compressed,cn=mime,cn=config,cn=zimbra
+zimbraMimeType: application/x-zip-compressed
 cn: application/x-zip-compressed
-objectclass: liquidMimeEntry
-liquidMimeIndexingEnabled: FALSE
-liquidMimeFileExtension: zip
+objectclass: zimbraMimeEntry
+zimbraMimeIndexingEnabled: FALSE
+zimbraMimeFileExtension: zip
 description: Zip Archive
 
-dn: cn=message/rfc822,cn=mime,cn=config,cn=liquid
-liquidMimeType: message/rfc822
+dn: cn=message/rfc822,cn=mime,cn=config,cn=zimbra
+zimbraMimeType: message/rfc822
 cn: message/rfc822
-objectclass: liquidMimeEntry
-liquidMimeIndexingEnabled: TRUE
-liquidMimeHandlerClass: MessageRFC822Handler
+objectclass: zimbraMimeEntry
+zimbraMimeIndexingEnabled: TRUE
+zimbraMimeHandlerClass: MessageRFC822Handler
 description: Mail Message
 
-dn: cn=text/html,cn=mime,cn=config,cn=liquid
-liquidMimeType: text/html
+dn: cn=text/html,cn=mime,cn=config,cn=zimbra
+zimbraMimeType: text/html
 cn: text/html
-objectclass: liquidMimeEntry
-liquidMimeIndexingEnabled: TRUE
-liquidMimeHandlerClass: com.zimbra.cs.mime.handler.opensrc.TextHtmlHandler
-liquidMimeFileExtension: html
-liquidMimeFileExtension: htm
+objectclass: zimbraMimeEntry
+zimbraMimeIndexingEnabled: TRUE
+zimbraMimeHandlerClass: com.zimbra.cs.mime.handler.opensrc.TextHtmlHandler
+zimbraMimeFileExtension: html
+zimbraMimeFileExtension: htm
 description: HTML Document
 
-dn: cn=text/plain,cn=mime,cn=config,cn=liquid
-liquidMimeType: text/plain
+dn: cn=text/plain,cn=mime,cn=config,cn=zimbra
+zimbraMimeType: text/plain
 cn: text/plain
-objectclass: liquidMimeEntry
-liquidMimeIndexingEnabled: TRUE
-liquidMimeHandlerClass: TextPlainHandler
-liquidMimeFileExtension: text
-liquidMimeFileExtension: txt
+objectclass: zimbraMimeEntry
+zimbraMimeIndexingEnabled: TRUE
+zimbraMimeHandlerClass: TextPlainHandler
+zimbraMimeFileExtension: text
+zimbraMimeFileExtension: txt
 description: Plain Text Document
 
-dn: cn=all,cn=mime,cn=config,cn=liquid
-liquidMimeType: all
+dn: cn=all,cn=mime,cn=config,cn=zimbra
+zimbraMimeType: all
 cn: all
-objectclass: liquidMimeEntry
-liquidMimeIndexingEnabled: TRUE
-liquidMimeHandlerClass: UnknownTypeHandler
+objectclass: zimbraMimeEntry
+zimbraMimeIndexingEnabled: TRUE
+zimbraMimeHandlerClass: UnknownTypeHandler
 description: All Document

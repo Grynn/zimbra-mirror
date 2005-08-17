@@ -1,5 +1,5 @@
 #
-# Liquid Systems Schema
+# Zimbra Systems Schema
 #
 # our root OID (http://www.iana.org/assignments/enterprise-numbers)
 #
@@ -8,17 +8,17 @@
 #  1.3.6.1.4.1.19348.2.1    Attribute Types
 #  1.3.6.1.4.1.19348.2.2    Object Classes
 
-objectIdentifier LiquidRoot 1.3.6.1.4.1.19348
-objectIdentifier LiquidLDAP LiquidRoot:2
+objectIdentifier ZimbraRoot 1.3.6.1.4.1.19348
+objectIdentifier ZimbraLDAP ZimbraRoot:2
 
 #################################################################
 # attribute OIDs
 #################################################################
 
 # attributes
-objectIdentifier LiquidAttrType LiquidLDAP:1
-objectIdentifier LiquidReserved2 LiquidLDAP:2
-objectIdentifier LiquidReserved3 LiquidLDAP:3
+objectIdentifier ZimbraAttrType ZimbraLDAP:1
+objectIdentifier ZimbraReserved2 ZimbraLDAP:2
+objectIdentifier ZimbraReserved3 ZimbraLDAP:3
 
 #
 # define new attribute OIDS here:
@@ -27,243 +27,243 @@ objectIdentifier LiquidReserved3 LiquidLDAP:3
 #    number in use. No need to sort by name here, as you can sort by name in the object class
 #    itself.
 #
-# 2) when defining new attributes, try and use descriptive names. The name should *always* start with liquid*.
+# 2) when defining new attributes, try and use descriptive names. The name should *always* start with zimbra*.
 #    When defining multiple-attributes use a standard prefix for all related attributes. For example, if you 
-#    are defining multiple attrs all related to the blob store, then prefix them all with liquidBlob*.
+#    are defining multiple attrs all related to the blob store, then prefix them all with zimbraBlob*.
 #
 # 3) never change/re-use numbers after the product released.
 #
-# 4) prefix attrs that are user-settable prefs with liquidPref*.
+# 4) prefix attrs that are user-settable prefs with zimbraPref*.
 
-objectIdentifier liquidId LiquidAttrType:1
-objectIdentifier liquidAccountStatus LiquidAttrType:2
-objectIdentifier liquidMailAddress LiquidAttrType:3
-objectIdentifier liquidMailHost LiquidAttrType:4
-#objectIdentifier liquidAttr LiquidAttrType:8
-objectIdentifier liquidNotes LiquidAttrType:9
-objectIdentifier liquidMember LiquidAttrType:10
-objectIdentifier liquidMemberOf LiquidAttrType:11
-objectIdentifier liquidMailForwardingAddress LiquidAttrType:12
-objectIdentifier liquidMailDeliveryAddress LiquidAttrType:13
-objectIdentifier liquidCOSId LiquidAttrType:14
-objectIdentifier liquidMailStatus LiquidAttrType:15
-objectIdentifier liquidMailQuota LiquidAttrType:16
-objectIdentifier liquidPrefMailSignature LiquidAttrType:17
-objectIdentifier liquidPrefMailSignatureEnabled LiquidAttrType:18
-objectIdentifier liquidDomainName LiquidAttrType:19
-objectIdentifier liquidMailAlias LiquidAttrType:20
-objectIdentifier liquidCOSInheritedAttr LiquidAttrType:21
-objectIdentifier liquidPrefSaveToSent LiquidAttrType:22
-objectIdentifier liquidLmtpAdvertisedName LiquidAttrType:23
-objectIdentifier liquidLmtpBindPort LiquidAttrType:24
-objectIdentifier liquidLmtpBindAddress LiquidAttrType:25
-objectIdentifier liquidLmtpNumThreads LiquidAttrType:26
-objectIdentifier liquidIsAdminAccount LiquidAttrType:31
-objectIdentifier liquidMailSieveScript LiquidAttrType:32
-objectIdentifier liquidPasswordMinLength LiquidAttrType:33
-objectIdentifier liquidPasswordMaxLength LiquidAttrType:34
-objectIdentifier liquidPasswordMinAge LiquidAttrType:35
-objectIdentifier liquidPasswordMaxAge LiquidAttrType:36
-objectIdentifier liquidPasswordEnforceHistory LiquidAttrType:37
-objectIdentifier liquidPasswordHistory LiquidAttrType:38
-objectIdentifier liquidPasswordModifiedTime LiquidAttrType:39
-objectIdentifier liquidAliasTargetId LiquidAttrType:40
-objectIdentifier liquidPasswordMustChange LiquidAttrType:41
-objectIdentifier liquidAuthMech LiquidAttrType:42
-objectIdentifier liquidAuthLdapURL LiquidAttrType:43
-objectIdentifier liquidAuthLdapBindDn LiquidAttrType:44
-objectIdentifier liquidPasswordLocked LiquidAttrType:45
-objectIdentifier liquidGalMode LiquidAttrType:46
-objectIdentifier liquidGalLdapURL LiquidAttrType:47
-objectIdentifier liquidGalLdapSearchBase LiquidAttrType:48
-objectIdentifier liquidGalLdapBindDn LiquidAttrType:49
-objectIdentifier liquidGalLdapBindPassword LiquidAttrType:50
-objectIdentifier liquidGalLdapFilter LiquidAttrType:51
-objectIdentifier liquidGalLdapFilterDef LiquidAttrType:52
-objectIdentifier liquidGalMaxResults LiquidAttrType:53
-objectIdentifier liquidPrefGroupMailBy LiquidAttrType:54
-objectIdentifier liquidPrefIncludeSpamInSearch LiquidAttrType:55
-objectIdentifier liquidPrefIncludeTrashInSearch LiquidAttrType:56
-objectIdentifier liquidPrefMailItemsPerPage LiquidAttrType:57
-objectIdentifier liquidPrefOutOfOfficeReply LiquidAttrType:58
-objectIdentifier liquidPrefOutOfOfficeReplyEnabled LiquidAttrType:59
-objectIdentifier liquidPrefReplyToAddress LiquidAttrType:60
-objectIdentifier liquidPrefUseKeyboardShortcuts LiquidAttrType:61
-objectIdentifier liquidServerInheritedAttr LiquidAttrType:62
-objectIdentifier liquidDomainInheritedAttr LiquidAttrType:63
-#objectIdentifier liquidService LiquidAttrType:64
-objectIdentifier liquidServiceHostname LiquidAttrType:65
-objectIdentifier liquidRedoLogEnabled LiquidAttrType:74
-objectIdentifier liquidRedoLogLogPath LiquidAttrType:75
-objectIdentifier liquidRedoLogArchiveDir LiquidAttrType:76
-objectIdentifier liquidRedoLogRolloverFileSizeKB LiquidAttrType:78
-objectIdentifier liquidRedoLogFsyncIntervalMS LiquidAttrType:79
-objectIdentifier liquidPop3AdvertisedName LiquidAttrType:93
-objectIdentifier liquidPop3BindPort LiquidAttrType:94
-objectIdentifier liquidPop3BindAddress LiquidAttrType:95
-objectIdentifier liquidPop3NumThreads LiquidAttrType:96
-objectIdentifier liquidSmtpHostname LiquidAttrType:97
-objectIdentifier liquidSmtpPort LiquidAttrType:98
-objectIdentifier liquidSmtpTimeout LiquidAttrType:99
-objectIdentifier liquidAuthTokenKey LiquidAttrType:100
-objectIdentifier liquidPrefMailInitialSearch LiquidAttrType:102
-objectIdentifier liquidPrefSentMailFolder LiquidAttrType:103
-objectIdentifier liquidMailTrashLifetime LiquidAttrType:104
-objectIdentifier liquidMailSpamLifetime LiquidAttrType:105
-objectIdentifier liquidMailMessageLifetime LiquidAttrType:106
-objectIdentifier liquidContactMaxNumEntries LiquidAttrType:107
-objectIdentifier liquidAuthTokenLifetime LiquidAttrType:108
-objectIdentifier liquidAdminAuthTokenLifetime LiquidAttrType:109
-objectIdentifier liquidMailMinPollingInterval LiquidAttrType:110
-objectIdentifier liquidPrefMailPollingInterval LiquidAttrType:111
-objectIdentifier liquidAccountClientAttr LiquidAttrType:112
-objectIdentifier liquidLastLogonTimestamp LiquidAttrType:113
-objectIdentifier liquidLastLogonTimestampFrequency LiquidAttrType:114
-objectIdentifier liquidAttachmentsBlocked LiquidAttrType:115
-objectIdentifier liquidAttachmentsViewInHtmlOnly LiquidAttrType:116
-objectIdentifier liquidMailHostPool LiquidAttrType:125
-objectIdentifier liquidPrefNewMailNotificationEnabled LiquidAttrType:126
-objectIdentifier liquidPrefNewMailNotificationAddress LiquidAttrType:127
-objectIdentifier liquidPrefForwardReplyPrefixChar LiquidAttrType:130
-objectIdentifier liquidPrefAutoAddAddressEnabled LiquidAttrType:131
-objectIdentifier liquidIsMonitorHost LiquidAttrType:132
-objectIdentifier liquidPrefReplyIncludeOriginalText LiquidAttrType:133
-objectIdentifier liquidPrefForwardIncludeOriginalText LiquidAttrType:134
-objectIdentifier liquidFeatureContactsEnabled LiquidAttrType:135
-objectIdentifier liquidFeatureCalendarEnabled LiquidAttrType:136
-objectIdentifier liquidFeatureTaggingEnabled LiquidAttrType:137
-objectIdentifier liquidFeatureAdvancedSearchEnabled LiquidAttrType:138
-objectIdentifier liquidFeatureSavedSearchesEnabled LiquidAttrType:139
-objectIdentifier liquidFeatureConversationsEnabled LiquidAttrType:140
-objectIdentifier liquidFeatureChangePasswordEnabled LiquidAttrType:141
-objectIdentifier liquidFeatureInitialSearchPreferenceEnabled LiquidAttrType:142
-objectIdentifier liquidFeatureFiltersEnabled LiquidAttrType:143
-objectIdentifier liquidPrefDedupeMessagesSentToSelf LiquidAttrType:144
-objectIdentifier liquidPrefMessageViewHtmlPreferred LiquidAttrType:145
-objectIdentifier liquidUserServicesEnabled LiquidAttrType:146
-objectIdentifier liquidMailIdleSessionTimeout LiquidAttrType:147
-objectIdentifier liquidPrefContactsPerPage LiquidAttrType:148
-objectIdentifier liquidFeatureGalEnabled LiquidAttrType:149
-objectIdentifier liquidNewMailNotificationFrom LiquidAttrType:150
-objectIdentifier liquidNewMailNotificationSubject LiquidAttrType:151
-objectIdentifier liquidNewMailNotificationBody LiquidAttrType:152
-objectIdentifier liquidGalLdapAttrMap LiquidAttrType:153
-objectIdentifier liquidMailPort LiquidAttrType:154
-objectIdentifier liquidAdminPort LiquidAttrType:155
-objectIdentifier liquidPrefMailSignatureStyle LiquidAttrType:156
-objectIdentifier liquidMimeType LiquidAttrType:157
-objectIdentifier liquidMimeIndexingEnabled LiquidAttrType:158
-objectIdentifier liquidMimeHandlerClass LiquidAttrType:159
-objectIdentifier liquidMimeFileExtension LiquidAttrType:160
-objectIdentifier liquidObjectType LiquidAttrType:161
-objectIdentifier liquidObjectIndexingEnabled LiquidAttrType:162
-objectIdentifier liquidObjectStoreMatched LiquidAttrType:163
-objectIdentifier liquidObjectHandlerClass LiquidAttrType:164
-objectIdentifier liquidObjectHandlerConfig LiquidAttrType:165
-objectIdentifier liquidMailSSLPort LiquidAttrType:166
-objectIdentifier liquidPrefContactsInitialView LiquidAttrType:167
-objectIdentifier liquidTableMaintenanceMinRows LiquidAttrType:168
-objectIdentifier liquidTableMaintenanceMaxRows LiquidAttrType:169
-objectIdentifier liquidTableMaintenanceOperation LiquidAttrType:170
-objectIdentifier liquidTableMaintenanceGrowthFactor LiquidAttrType:171
-objectIdentifier liquidDefaultDomainName LiquidAttrType:172
-objectIdentifier liquidAttachmentsIndexingEnabled LiquidAttrType:173
-objectIdentifier liquidImapEnabled LiquidAttrType:174
-objectIdentifier liquidPop3Enabled LiquidAttrType:175
-objectIdentifier liquidImapServerEnabled LiquidAttrType:176
-objectIdentifier liquidPop3ServerEnabled LiquidAttrType:177
-objectIdentifier liquidImapAdvertisedName LiquidAttrType:178
-objectIdentifier liquidImapBindAddress LiquidAttrType:179
-objectIdentifier liquidImapBindPort LiquidAttrType:180
-objectIdentifier liquidImapNumThreads LiquidAttrType:181
-objectIdentifier liquidImapSSLBindAddress LiquidAttrType:182
-objectIdentifier liquidImapSSLBindPort LiquidAttrType:183
-objectIdentifier liquidImapSSLServerEnabled LiquidAttrType:184
-objectIdentifier liquidImapCleartextLoginEnabled LiquidAttrType:185
-objectIdentifier liquidPop3SSLBindAddress LiquidAttrType:186
-objectIdentifier liquidPop3SSLBindPort LiquidAttrType:187
-objectIdentifier liquidPop3SSLServerEnabled LiquidAttrType:188
-objectIdentifier liquidPop3CleartextLoginEnabled LiquidAttrType:189
-#objectIdentifier liquidVirusDefinitionsUpdateTime LiquidAttrType:190
-objectIdentifier liquidVirusDefinitionsUpdateFrequency LiquidAttrType:191
-objectIdentifier liquidPrefShowFragments LiquidAttrType:192
-objectIdentifier liquidMtaAuthEnabled LiquidAttrType:194
-objectIdentifier liquidMtaBlockedExtension LiquidAttrType:195
-objectIdentifier liquidMtaCommonBlockedExtension LiquidAttrType:196
-objectIdentifier liquidMtaDnsLookupsEnabled LiquidAttrType:197
-objectIdentifier liquidMtaMaxMessageSize LiquidAttrType:198
-objectIdentifier liquidMtaRelayHost LiquidAttrType:199
-objectIdentifier liquidMtaTlsAuthOnly LiquidAttrType:200
-objectIdentifier liquidSpamCheckEnabled LiquidAttrType:201
-objectIdentifier liquidSpamKillPercent LiquidAttrType:202
-objectIdentifier liquidSpamSubjectTag LiquidAttrType:203
-objectIdentifier liquidSpamTagPercent LiquidAttrType:204
-objectIdentifier liquidVirusBlockEncryptedArchive LiquidAttrType:205
-objectIdentifier liquidVirusCheckEnabled LiquidAttrType:206
-objectIdentifier liquidVirusWarnAdmin LiquidAttrType:207
-objectIdentifier liquidVirusWarnRecipient LiquidAttrType:208
-objectIdentifier liquidPrefComposeInNewWindow LiquidAttrType:209
-objectIdentifier liquidSpamHeader LiquidAttrType:210
-objectIdentifier liquidSpamHeaderValue LiquidAttrType:211
-objectIdentifier liquidDomainType LiquidAttrType:212
-objectIdentifier liquidMailCanonicalAddress LiquidAttrType:213
-objectIdentifier liquidMailCatchAllAddress LiquidAttrType:214
-objectIdentifier liquidMailCatchAllForwardingAddress LiquidAttrType:215
-objectIdentifier liquidMailCatchAllCanonicalAddress LiquidAttrType:216
-objectIdentifier liquidPrefComposeFormat LiquidAttrType:217
-objectIdentifier liquidPrefForwardReplyInOriginalFormat LiquidAttrType:218
-objectIdentifier liquidFeatureHtmlComposeEnabled LiquidAttrType:219
-objectIdentifier liquidServiceEnabled LiquidAttrType:220
-objectIdentifier liquidServiceInstalled LiquidAttrType:221
-objectIdentifier liquidPrefShowSearchString LiquidAttrType:222
-objectIdentifier liquidRedoLogProvider LiquidAttrType:225
-objectIdentifier liquidMtaRestriction LiquidAttrType:226
-objectIdentifier liquidFileUploadMaxSize LiquidAttrType:227
-objectIdentifier liquidTimeZoneStandardDtStart LiquidAttrType:229
-objectIdentifier liquidTimeZoneStandardOffset LiquidAttrType:230
-objectIdentifier liquidTimeZoneStandardRRule LiquidAttrType:231
-objectIdentifier liquidTimeZoneDaylightDtStart LiquidAttrType:232
-objectIdentifier liquidTimeZoneDaylightOffset LiquidAttrType:233
-objectIdentifier liquidTimeZoneDaylightRRule LiquidAttrType:234
-objectIdentifier liquidPrefTimeZoneId LiquidAttrType:235
-objectIdentifier liquidPrefUseTimeZoneListInCalendar LiquidAttrType:236
-objectIdentifier liquidAttachmentsScanEnabled LiquidAttrType:237
-objectIdentifier liquidAttachmentsScanClass LiquidAttrType:238
-objectIdentifier liquidAttachmentsScanURL LiquidAttrType:239
-objectIdentifier liquidPrefCalendarInitialView LiquidAttrType:240
-objectIdentifier liquidPrefImapSearchFoldersEnabled LiquidAttrType:241
-objectIdentifier liquidComponentAvailable LiquidAttrType:242
-objectIdentifier liquidCalendarCompatibilityMode LiquidAttrType:243
+objectIdentifier zimbraId ZimbraAttrType:1
+objectIdentifier zimbraAccountStatus ZimbraAttrType:2
+objectIdentifier zimbraMailAddress ZimbraAttrType:3
+objectIdentifier zimbraMailHost ZimbraAttrType:4
+#objectIdentifier zimbraAttr ZimbraAttrType:8
+objectIdentifier zimbraNotes ZimbraAttrType:9
+objectIdentifier zimbraMember ZimbraAttrType:10
+objectIdentifier zimbraMemberOf ZimbraAttrType:11
+objectIdentifier zimbraMailForwardingAddress ZimbraAttrType:12
+objectIdentifier zimbraMailDeliveryAddress ZimbraAttrType:13
+objectIdentifier zimbraCOSId ZimbraAttrType:14
+objectIdentifier zimbraMailStatus ZimbraAttrType:15
+objectIdentifier zimbraMailQuota ZimbraAttrType:16
+objectIdentifier zimbraPrefMailSignature ZimbraAttrType:17
+objectIdentifier zimbraPrefMailSignatureEnabled ZimbraAttrType:18
+objectIdentifier zimbraDomainName ZimbraAttrType:19
+objectIdentifier zimbraMailAlias ZimbraAttrType:20
+objectIdentifier zimbraCOSInheritedAttr ZimbraAttrType:21
+objectIdentifier zimbraPrefSaveToSent ZimbraAttrType:22
+objectIdentifier zimbraLmtpAdvertisedName ZimbraAttrType:23
+objectIdentifier zimbraLmtpBindPort ZimbraAttrType:24
+objectIdentifier zimbraLmtpBindAddress ZimbraAttrType:25
+objectIdentifier zimbraLmtpNumThreads ZimbraAttrType:26
+objectIdentifier zimbraIsAdminAccount ZimbraAttrType:31
+objectIdentifier zimbraMailSieveScript ZimbraAttrType:32
+objectIdentifier zimbraPasswordMinLength ZimbraAttrType:33
+objectIdentifier zimbraPasswordMaxLength ZimbraAttrType:34
+objectIdentifier zimbraPasswordMinAge ZimbraAttrType:35
+objectIdentifier zimbraPasswordMaxAge ZimbraAttrType:36
+objectIdentifier zimbraPasswordEnforceHistory ZimbraAttrType:37
+objectIdentifier zimbraPasswordHistory ZimbraAttrType:38
+objectIdentifier zimbraPasswordModifiedTime ZimbraAttrType:39
+objectIdentifier zimbraAliasTargetId ZimbraAttrType:40
+objectIdentifier zimbraPasswordMustChange ZimbraAttrType:41
+objectIdentifier zimbraAuthMech ZimbraAttrType:42
+objectIdentifier zimbraAuthLdapURL ZimbraAttrType:43
+objectIdentifier zimbraAuthLdapBindDn ZimbraAttrType:44
+objectIdentifier zimbraPasswordLocked ZimbraAttrType:45
+objectIdentifier zimbraGalMode ZimbraAttrType:46
+objectIdentifier zimbraGalLdapURL ZimbraAttrType:47
+objectIdentifier zimbraGalLdapSearchBase ZimbraAttrType:48
+objectIdentifier zimbraGalLdapBindDn ZimbraAttrType:49
+objectIdentifier zimbraGalLdapBindPassword ZimbraAttrType:50
+objectIdentifier zimbraGalLdapFilter ZimbraAttrType:51
+objectIdentifier zimbraGalLdapFilterDef ZimbraAttrType:52
+objectIdentifier zimbraGalMaxResults ZimbraAttrType:53
+objectIdentifier zimbraPrefGroupMailBy ZimbraAttrType:54
+objectIdentifier zimbraPrefIncludeSpamInSearch ZimbraAttrType:55
+objectIdentifier zimbraPrefIncludeTrashInSearch ZimbraAttrType:56
+objectIdentifier zimbraPrefMailItemsPerPage ZimbraAttrType:57
+objectIdentifier zimbraPrefOutOfOfficeReply ZimbraAttrType:58
+objectIdentifier zimbraPrefOutOfOfficeReplyEnabled ZimbraAttrType:59
+objectIdentifier zimbraPrefReplyToAddress ZimbraAttrType:60
+objectIdentifier zimbraPrefUseKeyboardShortcuts ZimbraAttrType:61
+objectIdentifier zimbraServerInheritedAttr ZimbraAttrType:62
+objectIdentifier zimbraDomainInheritedAttr ZimbraAttrType:63
+#objectIdentifier zimbraService ZimbraAttrType:64
+objectIdentifier zimbraServiceHostname ZimbraAttrType:65
+objectIdentifier zimbraRedoLogEnabled ZimbraAttrType:74
+objectIdentifier zimbraRedoLogLogPath ZimbraAttrType:75
+objectIdentifier zimbraRedoLogArchiveDir ZimbraAttrType:76
+objectIdentifier zimbraRedoLogRolloverFileSizeKB ZimbraAttrType:78
+objectIdentifier zimbraRedoLogFsyncIntervalMS ZimbraAttrType:79
+objectIdentifier zimbraPop3AdvertisedName ZimbraAttrType:93
+objectIdentifier zimbraPop3BindPort ZimbraAttrType:94
+objectIdentifier zimbraPop3BindAddress ZimbraAttrType:95
+objectIdentifier zimbraPop3NumThreads ZimbraAttrType:96
+objectIdentifier zimbraSmtpHostname ZimbraAttrType:97
+objectIdentifier zimbraSmtpPort ZimbraAttrType:98
+objectIdentifier zimbraSmtpTimeout ZimbraAttrType:99
+objectIdentifier zimbraAuthTokenKey ZimbraAttrType:100
+objectIdentifier zimbraPrefMailInitialSearch ZimbraAttrType:102
+objectIdentifier zimbraPrefSentMailFolder ZimbraAttrType:103
+objectIdentifier zimbraMailTrashLifetime ZimbraAttrType:104
+objectIdentifier zimbraMailSpamLifetime ZimbraAttrType:105
+objectIdentifier zimbraMailMessageLifetime ZimbraAttrType:106
+objectIdentifier zimbraContactMaxNumEntries ZimbraAttrType:107
+objectIdentifier zimbraAuthTokenLifetime ZimbraAttrType:108
+objectIdentifier Zimbra::AdminAuthTokenLifetime ZimbraAttrType:109
+objectIdentifier zimbraMailMinPollingInterval ZimbraAttrType:110
+objectIdentifier zimbraPrefMailPollingInterval ZimbraAttrType:111
+objectIdentifier zimbraAccountClientAttr ZimbraAttrType:112
+objectIdentifier zimbraLastLogonTimestamp ZimbraAttrType:113
+objectIdentifier zimbraLastLogonTimestampFrequency ZimbraAttrType:114
+objectIdentifier zimbraAttachmentsBlocked ZimbraAttrType:115
+objectIdentifier zimbraAttachmentsViewInHtmlOnly ZimbraAttrType:116
+objectIdentifier zimbraMailHostPool ZimbraAttrType:125
+objectIdentifier zimbraPrefNewMailNotificationEnabled ZimbraAttrType:126
+objectIdentifier zimbraPrefNewMailNotificationAddress ZimbraAttrType:127
+objectIdentifier zimbraPrefForwardReplyPrefixChar ZimbraAttrType:130
+objectIdentifier zimbraPrefAutoAddAddressEnabled ZimbraAttrType:131
+objectIdentifier zimbraIsMonitorHost ZimbraAttrType:132
+objectIdentifier zimbraPrefReplyIncludeOriginalText ZimbraAttrType:133
+objectIdentifier zimbraPrefForwardIncludeOriginalText ZimbraAttrType:134
+objectIdentifier zimbraFeatureContactsEnabled ZimbraAttrType:135
+objectIdentifier zimbraFeatureCalendarEnabled ZimbraAttrType:136
+objectIdentifier zimbraFeatureTaggingEnabled ZimbraAttrType:137
+objectIdentifier zimbraFeatureAdvancedSearchEnabled ZimbraAttrType:138
+objectIdentifier zimbraFeatureSavedSearchesEnabled ZimbraAttrType:139
+objectIdentifier zimbraFeatureConversationsEnabled ZimbraAttrType:140
+objectIdentifier zimbraFeatureChangePasswordEnabled ZimbraAttrType:141
+objectIdentifier zimbraFeatureInitialSearchPreferenceEnabled ZimbraAttrType:142
+objectIdentifier zimbraFeatureFiltersEnabled ZimbraAttrType:143
+objectIdentifier zimbraPrefDedupeMessagesSentToSelf ZimbraAttrType:144
+objectIdentifier zimbraPrefMessageViewHtmlPreferred ZimbraAttrType:145
+objectIdentifier zimbraUserServicesEnabled ZimbraAttrType:146
+objectIdentifier zimbraMailIdleSessionTimeout ZimbraAttrType:147
+objectIdentifier zimbraPrefContactsPerPage ZimbraAttrType:148
+objectIdentifier zimbraFeatureGalEnabled ZimbraAttrType:149
+objectIdentifier zimbraNewMailNotificationFrom ZimbraAttrType:150
+objectIdentifier zimbraNewMailNotificationSubject ZimbraAttrType:151
+objectIdentifier zimbraNewMailNotificationBody ZimbraAttrType:152
+objectIdentifier zimbraGalLdapAttrMap ZimbraAttrType:153
+objectIdentifier zimbraMailPort ZimbraAttrType:154
+objectIdentifier Zimbra::AdminPort ZimbraAttrType:155
+objectIdentifier zimbraPrefMailSignatureStyle ZimbraAttrType:156
+objectIdentifier zimbraMimeType ZimbraAttrType:157
+objectIdentifier zimbraMimeIndexingEnabled ZimbraAttrType:158
+objectIdentifier zimbraMimeHandlerClass ZimbraAttrType:159
+objectIdentifier zimbraMimeFileExtension ZimbraAttrType:160
+objectIdentifier zimbraObjectType ZimbraAttrType:161
+objectIdentifier zimbraObjectIndexingEnabled ZimbraAttrType:162
+objectIdentifier zimbraObjectStoreMatched ZimbraAttrType:163
+objectIdentifier zimbraObjectHandlerClass ZimbraAttrType:164
+objectIdentifier zimbraObjectHandlerConfig ZimbraAttrType:165
+objectIdentifier zimbraMailSSLPort ZimbraAttrType:166
+objectIdentifier zimbraPrefContactsInitialView ZimbraAttrType:167
+objectIdentifier zimbraTableMaintenanceMinRows ZimbraAttrType:168
+objectIdentifier zimbraTableMaintenanceMaxRows ZimbraAttrType:169
+objectIdentifier zimbraTableMaintenanceOperation ZimbraAttrType:170
+objectIdentifier zimbraTableMaintenanceGrowthFactor ZimbraAttrType:171
+objectIdentifier zimbraDefaultDomainName ZimbraAttrType:172
+objectIdentifier zimbraAttachmentsIndexingEnabled ZimbraAttrType:173
+objectIdentifier zimbraImapEnabled ZimbraAttrType:174
+objectIdentifier zimbraPop3Enabled ZimbraAttrType:175
+objectIdentifier zimbraImapServerEnabled ZimbraAttrType:176
+objectIdentifier zimbraPop3ServerEnabled ZimbraAttrType:177
+objectIdentifier zimbraImapAdvertisedName ZimbraAttrType:178
+objectIdentifier zimbraImapBindAddress ZimbraAttrType:179
+objectIdentifier zimbraImapBindPort ZimbraAttrType:180
+objectIdentifier zimbraImapNumThreads ZimbraAttrType:181
+objectIdentifier zimbraImapSSLBindAddress ZimbraAttrType:182
+objectIdentifier zimbraImapSSLBindPort ZimbraAttrType:183
+objectIdentifier zimbraImapSSLServerEnabled ZimbraAttrType:184
+objectIdentifier zimbraImapCleartextLoginEnabled ZimbraAttrType:185
+objectIdentifier zimbraPop3SSLBindAddress ZimbraAttrType:186
+objectIdentifier zimbraPop3SSLBindPort ZimbraAttrType:187
+objectIdentifier zimbraPop3SSLServerEnabled ZimbraAttrType:188
+objectIdentifier zimbraPop3CleartextLoginEnabled ZimbraAttrType:189
+#objectIdentifier zimbraVirusDefinitionsUpdateTime ZimbraAttrType:190
+objectIdentifier zimbraVirusDefinitionsUpdateFrequency ZimbraAttrType:191
+objectIdentifier zimbraPrefShowFragments ZimbraAttrType:192
+objectIdentifier zimbraMtaAuthEnabled ZimbraAttrType:194
+objectIdentifier zimbraMtaBlockedExtension ZimbraAttrType:195
+objectIdentifier zimbraMtaCommonBlockedExtension ZimbraAttrType:196
+objectIdentifier zimbraMtaDnsLookupsEnabled ZimbraAttrType:197
+objectIdentifier zimbraMtaMaxMessageSize ZimbraAttrType:198
+objectIdentifier zimbraMtaRelayHost ZimbraAttrType:199
+objectIdentifier zimbraMtaTlsAuthOnly ZimbraAttrType:200
+objectIdentifier zimbraSpamCheckEnabled ZimbraAttrType:201
+objectIdentifier zimbraSpamKillPercent ZimbraAttrType:202
+objectIdentifier zimbraSpamSubjectTag ZimbraAttrType:203
+objectIdentifier zimbraSpamTagPercent ZimbraAttrType:204
+objectIdentifier zimbraVirusBlockEncryptedArchive ZimbraAttrType:205
+objectIdentifier zimbraVirusCheckEnabled ZimbraAttrType:206
+objectIdentifier zimbraVirusWarnAdmin ZimbraAttrType:207
+objectIdentifier zimbraVirusWarnRecipient ZimbraAttrType:208
+objectIdentifier zimbraPrefComposeInNewWindow ZimbraAttrType:209
+objectIdentifier zimbraSpamHeader ZimbraAttrType:210
+objectIdentifier zimbraSpamHeaderValue ZimbraAttrType:211
+objectIdentifier zimbraDomainType ZimbraAttrType:212
+objectIdentifier zimbraMailCanonicalAddress ZimbraAttrType:213
+objectIdentifier zimbraMailCatchAllAddress ZimbraAttrType:214
+objectIdentifier zimbraMailCatchAllForwardingAddress ZimbraAttrType:215
+objectIdentifier zimbraMailCatchAllCanonicalAddress ZimbraAttrType:216
+objectIdentifier zimbraPrefComposeFormat ZimbraAttrType:217
+objectIdentifier zimbraPrefForwardReplyInOriginalFormat ZimbraAttrType:218
+objectIdentifier zimbraFeatureHtmlComposeEnabled ZimbraAttrType:219
+objectIdentifier zimbraServiceEnabled ZimbraAttrType:220
+objectIdentifier zimbraServiceInstalled ZimbraAttrType:221
+objectIdentifier zimbraPrefShowSearchString ZimbraAttrType:222
+objectIdentifier zimbraRedoLogProvider ZimbraAttrType:225
+objectIdentifier zimbraMtaRestriction ZimbraAttrType:226
+objectIdentifier zimbraFileUploadMaxSize ZimbraAttrType:227
+objectIdentifier zimbraTimeZoneStandardDtStart ZimbraAttrType:229
+objectIdentifier zimbraTimeZoneStandardOffset ZimbraAttrType:230
+objectIdentifier zimbraTimeZoneStandardRRule ZimbraAttrType:231
+objectIdentifier zimbraTimeZoneDaylightDtStart ZimbraAttrType:232
+objectIdentifier zimbraTimeZoneDaylightOffset ZimbraAttrType:233
+objectIdentifier zimbraTimeZoneDaylightRRule ZimbraAttrType:234
+objectIdentifier zimbraPrefTimeZoneId ZimbraAttrType:235
+objectIdentifier zimbraPrefUseTimeZoneListInCalendar ZimbraAttrType:236
+objectIdentifier zimbraAttachmentsScanEnabled ZimbraAttrType:237
+objectIdentifier zimbraAttachmentsScanClass ZimbraAttrType:238
+objectIdentifier zimbraAttachmentsScanURL ZimbraAttrType:239
+objectIdentifier zimbraPrefCalendarInitialView ZimbraAttrType:240
+objectIdentifier zimbraPrefImapSearchFoldersEnabled ZimbraAttrType:241
+objectIdentifier zimbraComponentAvailable ZimbraAttrType:242
+objectIdentifier zimbraCalendarCompatibilityMode ZimbraAttrType:243
 
 #################################################################
 # object class OIDs
 #################################################################
 
 # classes 
-objectIdentifier LiquidObjectClass LiquidLDAP:2
+objectIdentifier ZimbraObjectClass ZimbraLDAP:2
 
 # define new class OIDs here. Same general rules as attrs
 
-objectIdentifier liquidAccount LiquidObjectClass:1
-objectIdentifier liquidCOS LiquidObjectClass:3
-objectIdentifier liquidDomain LiquidObjectClass:4
-objectIdentifier liquidSecurityGroup LiquidObjectClass:5
-objectIdentifier liquidDistributionList LiquidObjectClass:6
-objectIdentifier liquidMailRecipient LiquidObjectClass:7
-objectIdentifier liquidServer LiquidObjectClass:8
-objectIdentifier liquidGlobalConfig LiquidObjectClass:9
-objectIdentifier liquidAlias LiquidObjectClass:11
-objectIdentifier liquidMimeEntry LiquidObjectClass:12
-objectIdentifier liquidObjectEntry LiquidObjectClass:13
-objectIdentifier liquidTimeZone LiquidObjectClass:14
+objectIdentifier zimbraAccount ZimbraObjectClass:1
+objectIdentifier zimbraCOS ZimbraObjectClass:3
+objectIdentifier zimbraDomain ZimbraObjectClass:4
+objectIdentifier zimbraSecurityGroup ZimbraObjectClass:5
+objectIdentifier zimbraDistributionList ZimbraObjectClass:6
+objectIdentifier zimbraMailRecipient ZimbraObjectClass:7
+objectIdentifier zimbraServer ZimbraObjectClass:8
+objectIdentifier zimbraGlobalConfig ZimbraObjectClass:9
+objectIdentifier zimbraAlias ZimbraObjectClass:11
+objectIdentifier zimbraMimeEntry ZimbraObjectClass:12
+objectIdentifier zimbraObjectEntry ZimbraObjectClass:13
+objectIdentifier zimbraTimeZone ZimbraObjectClass:14
 
 # break glass in case of emergency
 #
 # A generic attr like this is probably seductive, but would probably cause
 # too much pain long term...
 #
-#attributetype ( liquidAttr
-#	NAME ( 'liquidAttr' )
+#attributetype ( zimbraAttr
+#	NAME ( 'zimbraAttr' )
 #	DESC 'generic name=value attribute'
 #	EQUALITY caseIgnoreMatch
 #	SUBSTR caseIgnoreSubstringsMatch
@@ -305,785 +305,785 @@ attributetype ( 1.2.840.113556.1.2.146
         SYNTAX '1.3.6.1.4.1.1466.115.121.1.15' 
         SINGLE-VALUE )
 
-attributetype ( liquidComponentAvailable
-	NAME 'liquidComponentAvailable'
+attributetype ( zimbraComponentAvailable
+	NAME 'zimbraComponentAvailable'
 	DESC 'Names of additonal components that have been installed'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{64} )
 
-attributetype ( liquidAccountClientAttr
-	NAME 'liquidAccountClientAttr'
+attributetype ( zimbraAccountClientAttr
+	NAME 'zimbraAccountClientAttr'
 	DESC 'additional account attrs that get returned to a client'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1024} )
 
-attributetype ( liquidAccountStatus
-	NAME ( 'liquidAccountStatus' )
+attributetype ( zimbraAccountStatus
+	NAME ( 'zimbraAccountStatus' )
 	DESC 'account status (TODO: enumerate valid values here)'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32} 
 	SINGLE-VALUE )
 
-attributetype ( liquidAdminAuthTokenLifetime
-	NAME 'liquidAdminAuthTokenLifetime'
+attributetype ( Zimbra::AdminAuthTokenLifetime
+	NAME 'Zimbra::AdminAuthTokenLifetime'
 	DESC 'lifetime (nnnnn[hmsd]) of newly created admin auth tokens'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
 	SINGLE-VALUE )
 
-attributetype ( liquidAliasTargetId
-	NAME ( 'liquidAliasTargetId' )
-	DESC 'liquidId of alias target'
+attributetype ( zimbraAliasTargetId
+	NAME ( 'zimbraAliasTargetId' )
+	DESC 'zimbraId of alias target'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} 
 	SINGLE-VALUE )
 
-attributetype ( liquidAttachmentsBlocked
-	NAME 'liquidAttachmentsBlocked'
+attributetype ( zimbraAttachmentsBlocked
+	NAME 'zimbraAttachmentsBlocked'
 	DESC 'block all attachment downloading'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidAttachmentsIndexingEnabled
-	NAME 'liquidAttachmentsIndexingEnabled'
+attributetype ( zimbraAttachmentsIndexingEnabled
+	NAME 'zimbraAttachmentsIndexingEnabled'
 	DESC 'whether or not to index attachemts'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidAttachmentsViewInHtmlOnly
-	NAME 'liquidAttachmentsViewInHtmlOnly'
+attributetype ( zimbraAttachmentsViewInHtmlOnly
+	NAME 'zimbraAttachmentsViewInHtmlOnly'
 	DESC 'view all attachments in html only'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidAttachmentsScanEnabled
-	NAME 'liquidAttachmentsScanEnabled'
+attributetype ( zimbraAttachmentsScanEnabled
+	NAME 'zimbraAttachmentsScanEnabled'
 	DESC 'Whether to scan attachments during compose'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidAttachmentsScanClass
-	NAME 'liquidAttachmentsScanClass'
+attributetype ( zimbraAttachmentsScanClass
+	NAME 'zimbraAttachmentsScanClass'
 	DESC 'Class to use to scan attachments during compose'
 	EQUALITY caseExactMatch
 	SUBSTR caseExactSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
 	SINGLE-VALUE )	
 
-attributetype ( liquidAttachmentsScanURL
-	NAME 'liquidAttachmentsScanURL'
+attributetype ( zimbraAttachmentsScanURL
+	NAME 'zimbraAttachmentsScanURL'
 	DESC 'Data for class that scans attachments during compose'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
 	SINGLE-VALUE )	
 
-attributetype ( liquidAuthLdapBindDn
-	NAME 'liquidAuthLdapBindDn'
+attributetype ( zimbraAuthLdapBindDn
+	NAME 'zimbraAuthLdapBindDn'
 	DESC 'LDAP bind dn for ldap auth mech'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
 	SINGLE-VALUE )	
 
-attributetype ( liquidAuthLdapURL
-	NAME 'liquidAuthLdapURL'
+attributetype ( zimbraAuthLdapURL
+	NAME 'zimbraAuthLdapURL'
 	DESC 'LDAP URL for ldap auth mech'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
 	SINGLE-VALUE )	
 
-attributetype ( liquidAuthMech
-	NAME 'liquidAuthMech'
+attributetype ( zimbraAuthMech
+	NAME 'zimbraAuthMech'
 	DESC 'mechanism to use for authentication'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{64}
 	SINGLE-VALUE )	
 
-attributetype ( liquidAuthTokenKey
-	NAME 'liquidAuthTokenKey'
+attributetype ( zimbraAuthTokenKey
+	NAME 'zimbraAuthTokenKey'
 	DESC 'auth token secret key'
 	EQUALITY octetStringMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.40{128}
 	)
 
-attributetype ( liquidAuthTokenLifetime
-	NAME 'liquidAuthTokenLifetime'
+attributetype ( zimbraAuthTokenLifetime
+	NAME 'zimbraAuthTokenLifetime'
 	DESC 'lifetime (nnnnn[hmsd]) of newly created auth tokens'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
 	SINGLE-VALUE )
 			
-attributetype ( liquidCalendarCompatibilityMode
-	NAME 'liquidCalendarCompatibilityMode'
+attributetype ( zimbraCalendarCompatibilityMode
+	NAME 'zimbraCalendarCompatibilityMode'
 	DESC 'compatibility mode for calendar server'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32}
 	SINGLE-VALUE )
 
-attributetype ( liquidContactMaxNumEntries
-	NAME 'liquidContactMaxNumEntries'
+attributetype ( zimbraContactMaxNumEntries
+	NAME 'zimbraContactMaxNumEntries'
 	DESC 'maximum number of contacts allowed in mailbox'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )
 	
-attributetype ( liquidCOSId
-	NAME ( 'liquidCOSId' )
-	DESC 'COS liquidID'
+attributetype ( zimbraCOSId
+	NAME ( 'zimbraCOSId' )
+	DESC 'COS zimbraID'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} 
 	SINGLE-VALUE )
 
-attributetype ( liquidCOSInheritedAttr
-	NAME 'liquidCOSInheritedAttr'
-	DESC 'liquidCOS attrs that get inherited in a liquidAccount'
+attributetype ( zimbraCOSInheritedAttr
+	NAME 'zimbraCOSInheritedAttr'
+	DESC 'zimbraCOS attrs that get inherited in a zimbraAccount'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1024} )
 
-attributetype ( liquidDomainInheritedAttr
-	NAME 'liquidDomainInheritedAttr'
-	DESC 'liquidDomain attrs that get inherited from global config'
+attributetype ( zimbraDomainInheritedAttr
+	NAME 'zimbraDomainInheritedAttr'
+	DESC 'zimbraDomain attrs that get inherited from global config'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1024} )
 
-attributetype ( liquidDomainName
-	NAME ( 'liquidDomainName' )
+attributetype ( zimbraDomainName
+	NAME ( 'zimbraDomainName' )
 	DESC 'name of the domain'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} 
 	SINGLE-VALUE )
 
-attributetype ( liquidDomainType
-	NAME 'liquidDomainType'
+attributetype ( zimbraDomainType
+	NAME 'zimbraDomainType'
 	DESC 'should be one of: local, alias'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
 	SINGLE-VALUE )			
 
-attributetype ( liquidDefaultDomainName
-	NAME ( 'liquidDefaultDomainName' )
+attributetype ( zimbraDefaultDomainName
+	NAME ( 'zimbraDefaultDomainName' )
 	DESC 'name of the default domain for accounts when authenticating without a domain'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} 
 	SINGLE-VALUE )
 
-attributetype ( liquidFeatureContactsEnabled
-	NAME 'liquidFeatureContactsEnabled'
+attributetype ( zimbraFeatureContactsEnabled
+	NAME 'zimbraFeatureContactsEnabled'
 	DESC 'contact features'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidFeatureGalEnabled
-	NAME 'liquidFeatureGalEnabled'
+attributetype ( zimbraFeatureGalEnabled
+	NAME 'zimbraFeatureGalEnabled'
 	DESC 'GAL features'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidFeatureCalendarEnabled
-	NAME 'liquidFeatureCalendarEnabled'
+attributetype ( zimbraFeatureCalendarEnabled
+	NAME 'zimbraFeatureCalendarEnabled'
 	DESC 'calendar features'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidFeatureTaggingEnabled
-	NAME 'liquidFeatureTaggingEnabled'
+attributetype ( zimbraFeatureTaggingEnabled
+	NAME 'zimbraFeatureTaggingEnabled'
 	DESC 'tagging feature'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidFeatureAdvancedSearchEnabled
-	NAME 'liquidFeatureAdvancedSearchEnabled'
+attributetype ( zimbraFeatureAdvancedSearchEnabled
+	NAME 'zimbraFeatureAdvancedSearchEnabled'
 	DESC 'advanced search button enabled'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidFeatureSavedSearchesEnabled
-	NAME 'liquidFeatureSavedSearchesEnabled'
+attributetype ( zimbraFeatureSavedSearchesEnabled
+	NAME 'zimbraFeatureSavedSearchesEnabled'
 	DESC 'saved search feature'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidFeatureConversationsEnabled
-	NAME 'liquidFeatureConversationsEnabled'
+attributetype ( zimbraFeatureConversationsEnabled
+	NAME 'zimbraFeatureConversationsEnabled'
 	DESC 'conversations'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidFeatureChangePasswordEnabled
-	NAME 'liquidFeatureChangePasswordEnabled'
+attributetype ( zimbraFeatureChangePasswordEnabled
+	NAME 'zimbraFeatureChangePasswordEnabled'
 	DESC 'password changing'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidFeatureInitialSearchPreferenceEnabled
-	NAME 'liquidFeatureInitialSearchPreferenceEnabled'
+attributetype ( zimbraFeatureInitialSearchPreferenceEnabled
+	NAME 'zimbraFeatureInitialSearchPreferenceEnabled'
 	DESC 'preference to set initial search'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidFeatureFiltersEnabled
-	NAME 'liquidFeatureFiltersEnabled'
+attributetype ( zimbraFeatureFiltersEnabled
+	NAME 'zimbraFeatureFiltersEnabled'
 	DESC 'filter prefs enabled'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidFeatureHtmlComposeEnabled
-	NAME 'liquidFeatureHtmlComposeEnabled'
+attributetype ( zimbraFeatureHtmlComposeEnabled
+	NAME 'zimbraFeatureHtmlComposeEnabled'
 	DESC 'enabled html composing'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidGalLdapBindDn
-	NAME 'liquidGalLdapBindDn'
+attributetype ( zimbraGalLdapBindDn
+	NAME 'zimbraGalLdapBindDn'
 	DESC 'LDAP bind dn for external GAL queries'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
 	SINGLE-VALUE )	
 	
-attributetype ( liquidGalLdapBindPassword
-	NAME 'liquidGalLdapBindPassword'
+attributetype ( zimbraGalLdapBindPassword
+	NAME 'zimbraGalLdapBindPassword'
 	DESC 'LDAP bind password for external GAL queries'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
 	SINGLE-VALUE )		
 
-attributetype ( liquidGalLdapFilter
-	NAME 'liquidGalLdapFilter'
+attributetype ( zimbraGalLdapFilter
+	NAME 'zimbraGalLdapFilter'
 	DESC 'LDAP search filter for external GAL queries'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{4096}
 	SINGLE-VALUE )			
 	
-attributetype ( liquidGalLdapFilterDef
-	NAME 'liquidGalLdapFilterDef'
+attributetype ( zimbraGalLdapFilterDef
+	NAME 'zimbraGalLdapFilterDef'
 	DESC 'LDAP search filter definitions for GAL queries'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{4096})
 
-attributetype ( liquidGalLdapAttrMap
-	NAME 'liquidGalLdapAttrMap'
+attributetype ( zimbraGalLdapAttrMap
+	NAME 'zimbraGalLdapAttrMap'
 	DESC 'LDAP Gal attribute to contact attr mapping'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{4096})
 
-attributetype ( liquidGalLdapSearchBase
-	NAME 'liquidGalLdapSearchBase'
+attributetype ( zimbraGalLdapSearchBase
+	NAME 'zimbraGalLdapSearchBase'
 	DESC 'LDAP search base for external GAL queries'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
 	SINGLE-VALUE )				
 	
-attributetype ( liquidGalLdapURL
-	NAME 'liquidGalLdapURL'
+attributetype ( zimbraGalLdapURL
+	NAME 'zimbraGalLdapURL'
 	DESC 'LDAP URL for external GAL queries'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
 	SINGLE-VALUE )					
 
- attributetype ( liquidGalMaxResults
-	NAME 'liquidGalMaxResults'
+ attributetype ( zimbraGalMaxResults
+	NAME 'zimbraGalMaxResults'
 	DESC 'maximum number of gal entries to return from a search'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )
 
-attributetype ( liquidGalMode
-	NAME 'liquidGalMode'
+attributetype ( zimbraGalMode
+	NAME 'zimbraGalMode'
 	DESC 'should be internal (query internal only), external (external only), or both'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
 	SINGLE-VALUE )			
 
-attributetype ( liquidId
-	NAME ( 'liquidId' )
-	DESC 'Liquid Systems Unique ID'
+attributetype ( zimbraId
+	NAME ( 'zimbraId' )
+	DESC 'Zimbra Systems Unique ID'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} 
 	SINGLE-VALUE )
 
-attributetype ( liquidImapAdvertisedName
-	NAME ( 'liquidImapAdvertisedName' )
+attributetype ( zimbraImapAdvertisedName
+	NAME ( 'zimbraImapAdvertisedName' )
 	DESC 'name to use in greeting and sign-off; if empty, uses hostname'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{128} 
 	SINGLE-VALUE )
 	
-attributetype ( liquidImapBindAddress
-	NAME ( 'liquidImapBindAddress' )
+attributetype ( zimbraImapBindAddress
+	NAME ( 'zimbraImapBindAddress' )
 	DESC 'interface address(es) on which IMAP server should listen; if empty, binds to all interfaces'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{128} 
 	)
 		
-attributetype ( liquidImapBindPort
-	NAME ( 'liquidImapBindPort' )
+attributetype ( zimbraImapBindPort
+	NAME ( 'zimbraImapBindPort' )
 	DESC 'port number on which IMAP server should listen'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )
 
-attributetype ( liquidImapEnabled
-	NAME 'liquidImapEnabled'
+attributetype ( zimbraImapEnabled
+	NAME 'zimbraImapEnabled'
 	DESC 'whether IMAP is enabled for an account'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidImapNumThreads
-	NAME ( 'liquidImapNumThreads' )
+attributetype ( zimbraImapNumThreads
+	NAME ( 'zimbraImapNumThreads' )
 	DESC 'number of handler threads'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )	
 
-attributetype ( liquidImapServerEnabled
-	NAME 'liquidImapServerEnabled'
+attributetype ( zimbraImapServerEnabled
+	NAME 'zimbraImapServerEnabled'
 	DESC 'whether IMAP server is enabled for a given server'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidImapSSLBindAddress
-	NAME ( 'liquidImapSSLBindAddress' )
+attributetype ( zimbraImapSSLBindAddress
+	NAME ( 'zimbraImapSSLBindAddress' )
 	DESC 'interface address(es) on which IMAP server should listen; if empty, binds to all interfaces'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{128} 
 	)
 		
-attributetype ( liquidImapSSLBindPort
-	NAME ( 'liquidImapSSLBindPort' )
+attributetype ( zimbraImapSSLBindPort
+	NAME ( 'zimbraImapSSLBindPort' )
 	DESC 'port number on which IMAP SSL server should listen on'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )
 
-attributetype ( liquidImapSSLServerEnabled
-	NAME 'liquidImapSSLServerEnabled'
+attributetype ( zimbraImapSSLServerEnabled
+	NAME 'zimbraImapSSLServerEnabled'
 	DESC 'whether IMAP SSL server is enabled for a given server'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidImapCleartextLoginEnabled
-	NAME 'liquidImapCleartextLoginEnabled'
+attributetype ( zimbraImapCleartextLoginEnabled
+	NAME 'zimbraImapCleartextLoginEnabled'
 	DESC 'whether or not to allow cleartext logins over a non SSL/TLS connection'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidIsAdminAccount
-	NAME 'liquidIsAdminAccount'
+attributetype ( zimbraIsAdminAccount
+	NAME 'zimbraIsAdminAccount'
 	DESC 'set to true for admin accounts'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidIsMonitorHost
-	NAME 'liquidIsMonitorHost'
+attributetype ( zimbraIsMonitorHost
+	NAME 'zimbraIsMonitorHost'
 	DESC 'true if this server is the monitor host'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 		
-attributetype ( liquidLastLogonTimestamp
-	NAME 'liquidLastLogonTimestamp'
-	DESC 'rough estimate of when the user last logged in. see liquidLastLogonTimestampFrequency'
+attributetype ( zimbraLastLogonTimestamp
+	NAME 'zimbraLastLogonTimestamp'
+	DESC 'rough estimate of when the user last logged in. see zimbraLastLogonTimestampFrequency'
 	EQUALITY generalizedTimeMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.24
 	SINGLE-VALUE )	
 
-attributetype ( liquidLastLogonTimestampFrequency
-	NAME 'liquidLastLogonTimestampFrequency'
-	DESC 'how often (nnnnn[hmsd]) the liquidLastLogonTimestamp is updated'
+attributetype ( zimbraLastLogonTimestampFrequency
+	NAME 'zimbraLastLogonTimestampFrequency'
+	DESC 'how often (nnnnn[hmsd]) the zimbraLastLogonTimestamp is updated'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
 	SINGLE-VALUE )
 
-attributetype ( liquidLmtpAdvertisedName
-	NAME ( 'liquidLmtpAdvertisedName' )
+attributetype ( zimbraLmtpAdvertisedName
+	NAME ( 'zimbraLmtpAdvertisedName' )
 	DESC 'name to use in greeting and sign-off; if empty, uses hostname'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{128} 
 	SINGLE-VALUE )
 	
-attributetype ( liquidLmtpBindAddress
-	NAME ( 'liquidLmtpBindAddress' )
+attributetype ( zimbraLmtpBindAddress
+	NAME ( 'zimbraLmtpBindAddress' )
 	DESC 'interface address(es) on which LMTP server should listen; if empty, binds to all interfaces'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{128} 
 	)
 		
-attributetype ( liquidLmtpBindPort
-	NAME ( 'liquidLmtpBindPort' )
+attributetype ( zimbraLmtpBindPort
+	NAME ( 'zimbraLmtpBindPort' )
 	DESC 'port number on which LMTP server should listen'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )
 	
-attributetype ( liquidLmtpNumThreads
-	NAME ( 'liquidLmtpNumThreads' )
+attributetype ( zimbraLmtpNumThreads
+	NAME ( 'zimbraLmtpNumThreads' )
 	DESC 'number of handler threads, should match MTA concurrency setting for this server'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )	
 
-attributetype ( liquidMailAddress
-	NAME 'liquidMailAddress'
+attributetype ( zimbraMailAddress
+	NAME 'zimbraMailAddress'
 	DESC 'RFC822 email address of this recipient for accepting mail'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
 
-attributetype ( liquidMailAlias
-	NAME 'liquidMailAlias'
+attributetype ( zimbraMailAlias
+	NAME 'zimbraMailAlias'
 	DESC 'RFC822 email address of this recipient for accepting mail'
 	EQUALITY caseIgnoreIA5Match
 	SUBSTR caseIgnoreSubstringsMatch	
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
 
-attributetype ( liquidMailIdleSessionTimeout
-	NAME 'liquidMailIdleSessionTimeout'
+attributetype ( zimbraMailIdleSessionTimeout
+	NAME 'zimbraMailIdleSessionTimeout'
 	DESC 'idle timeout (nnnnn[hmsd])'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
 	SINGLE-VALUE )
 
-attributetype ( liquidPrefAutoAddAddressEnabled
-	NAME 'liquidPrefAutoAddAddressEnabled'
+attributetype ( zimbraPrefAutoAddAddressEnabled
+	NAME 'zimbraPrefAutoAddAddressEnabled'
 	DESC 'whether or not new address in outgoing email are auto added to address book'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidPrefComposeFormat
-	NAME 'liquidPrefComposeFormat'
+attributetype ( zimbraPrefComposeFormat
+	NAME 'zimbraPrefComposeFormat'
 	DESC 'whether or not to compose in html or text.'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
 	SINGLE-VALUE )
 
-attributetype ( liquidPrefForwardReplyInOriginalFormat
-	NAME 'liquidPrefForwardReplyInOriginalFormat'
+attributetype ( zimbraPrefForwardReplyInOriginalFormat
+	NAME 'zimbraPrefForwardReplyInOriginalFormat'
 	DESC 'whether or not to use same format (text or html) of message we are replying to'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidPrefComposeInNewWindow
-	NAME 'liquidPrefComposeInNewWindow'
+attributetype ( zimbraPrefComposeInNewWindow
+	NAME 'zimbraPrefComposeInNewWindow'
 	DESC 'whether or not compose messages in a new windows by default'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidPrefShowFragments
-	NAME 'liquidPrefShowFragments'
+attributetype ( zimbraPrefShowFragments
+	NAME 'zimbraPrefShowFragments'
 	DESC 'show fragments in conversation and message lists'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidPrefShowSearchString
-	NAME 'liquidPrefShowSearchString'
+attributetype ( zimbraPrefShowSearchString
+	NAME 'zimbraPrefShowSearchString'
 	DESC 'whether to show search box or not'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidPrefDedupeMessagesSentToSelf 
-	NAME 'liquidPrefDedupeMessagesSentToSelf'
+attributetype ( zimbraPrefDedupeMessagesSentToSelf 
+	NAME 'zimbraPrefDedupeMessagesSentToSelf'
 	DESC 'dedupeNone|secondCopyIfOnToOrCC|moveSentMessageToInbox|dedupeAll'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
 	SINGLE-VALUE )
 
-attributetype ( liquidPrefNewMailNotificationAddress
-	NAME 'liquidPrefNewMailNotificationAddress'
+attributetype ( zimbraPrefNewMailNotificationAddress
+	NAME 'zimbraPrefNewMailNotificationAddress'
 	DESC 'RFC822 email address for email notifications'
 	EQUALITY caseIgnoreIA5Match
 	SUBSTR caseIgnoreSubstringsMatch	
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} 
 	)
 
-attributetype ( liquidPrefNewMailNotificationEnabled
-	NAME 'liquidPrefNewMailNotificationEnabled'
+attributetype ( zimbraPrefNewMailNotificationEnabled
+	NAME 'zimbraPrefNewMailNotificationEnabled'
 	DESC 'whether or not new mail notification is enabled'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidPrefMailPollingInterval
-	NAME 'liquidPrefMailPollingInterval'
+attributetype ( zimbraPrefMailPollingInterval
+	NAME 'zimbraPrefMailPollingInterval'
 	DESC 'configured mail polling interval (nnnnn[hmsd])'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
 	SINGLE-VALUE )
 
-attributetype ( liquidMailMinPollingInterval
-	NAME 'liquidMailMinPollingInterval'
+attributetype ( zimbraMailMinPollingInterval
+	NAME 'zimbraMailMinPollingInterval'
 	DESC 'minimum allowed mail polling interval (nnnnn[hmsd])'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
 	SINGLE-VALUE )
 
-attributetype ( liquidPrefReplyIncludeOriginalText
-	NAME 'liquidPrefReplyIncludeOriginalText'
+attributetype ( zimbraPrefReplyIncludeOriginalText
+	NAME 'zimbraPrefReplyIncludeOriginalText'
 	DESC 'what part of the original message to include during replies'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
 	SINGLE-VALUE )
 
-attributetype ( liquidPrefForwardReplyPrefixChar
-	NAME 'liquidPrefForwardReplyPrefixChar'
+attributetype ( zimbraPrefForwardReplyPrefixChar
+	NAME 'zimbraPrefForwardReplyPrefixChar'
 	DESC 'prefix character to use during forward/reply'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{1}
 	SINGLE-VALUE )
 
-attributetype ( liquidPrefForwardIncludeOriginalText
-	NAME 'liquidPrefForwardIncludeOriginalText'
+attributetype ( zimbraPrefForwardIncludeOriginalText
+	NAME 'zimbraPrefForwardIncludeOriginalText'
 	DESC 'what part of the original message to include during forwards'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
 	SINGLE-VALUE )
 
-attributetype ( liquidMailQuota
-	NAME 'liquidMailQuota'
+attributetype ( zimbraMailQuota
+	NAME 'zimbraMailQuota'
 	DESC 'mail quota in bytes'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )
 
-attributetype ( liquidMailStatus
-	NAME ( 'liquidMailStatus' )
+attributetype ( zimbraMailStatus
+	NAME ( 'zimbraMailStatus' )
 	DESC 'mail delivery status (enabled/disabled)'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32} 
 	SINGLE-VALUE )
 
-attributetype ( liquidMailDeliveryAddress
-	NAME 'liquidMailDeliveryAddress'
+attributetype ( zimbraMailDeliveryAddress
+	NAME 'zimbraMailDeliveryAddress'
 	DESC 'RFC822 email address of this recipient for local delivery'
 	EQUALITY caseIgnoreIA5Match
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
 
-attributetype ( liquidMailCanonicalAddress
-	NAME 'liquidMailCanonicalAddress'
+attributetype ( zimbraMailCanonicalAddress
+	NAME 'zimbraMailCanonicalAddress'
 	DESC 'RFC822 email address for senders outbound messages'
 	EQUALITY caseIgnoreIA5Match
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} 
 	SINGLE-VALUE )
 
-attributetype ( liquidMailCatchAllAddress
-	NAME 'liquidMailCatchAllAddress'
+attributetype ( zimbraMailCatchAllAddress
+	NAME 'zimbraMailCatchAllAddress'
 	DESC 'Address to catch all messages to specified domain'
 	EQUALITY caseIgnoreIA5Match
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} 
 	SINGLE-VALUE )
 
-attributetype ( liquidMailCatchAllForwardingAddress
-	NAME 'liquidMailCatchAllForwardingAddress'
+attributetype ( zimbraMailCatchAllForwardingAddress
+	NAME 'zimbraMailCatchAllForwardingAddress'
 	DESC 'Address to deliver catch all messages to'
 	EQUALITY caseIgnoreIA5Match
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} 
 	SINGLE-VALUE )
 
-attributetype ( liquidMailCatchAllCanonicalAddress
-	NAME 'liquidMailCatchAllCanonicalAddress'
+attributetype ( zimbraMailCatchAllCanonicalAddress
+	NAME 'zimbraMailCatchAllCanonicalAddress'
 	DESC 'Catch all address to rewrite to'
 	EQUALITY caseIgnoreIA5Match
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} 
 	SINGLE-VALUE )
 
-attributetype ( liquidMailHost
-	NAME 'liquidMailHost'
+attributetype ( zimbraMailHost
+	NAME 'zimbraMailHost'
 	DESC 'the server hosting the accounts mailbox'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
 	SINGLE-VALUE )
 
-attributetype ( liquidMailHostPool
-	NAME 'liquidMailHostPool'
+attributetype ( zimbraMailHostPool
+	NAME 'zimbraMailHostPool'
 	DESC 'servers that an account can be initially provisioned on'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
 
-attributetype ( liquidMailForwardingAddress
-	NAME 'liquidMailForwardingAddress'
+attributetype ( zimbraMailForwardingAddress
+	NAME 'zimbraMailForwardingAddress'
 	DESC 'RFC822 forwarding address for an account'
 	EQUALITY caseIgnoreIA5Match
 	SUBSTR caseIgnoreSubstringsMatch	
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
 
-attributetype ( liquidMailMessageLifetime
-	NAME 'liquidMailMessageLifetime'
+attributetype ( zimbraMailMessageLifetime
+	NAME 'zimbraMailMessageLifetime'
 	DESC 'lifetime (nnnnn[hmsd]) of a mail message regardless of location'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
 	SINGLE-VALUE )
 
-attributetype ( liquidMailSieveScript
-	NAME 'liquidMailSieveScript'
+attributetype ( zimbraMailSieveScript
+	NAME 'zimbraMailSieveScript'
 	DESC 'sieve script generated from user filter rules'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
 	SINGLE-VALUE )
 
-attributetype ( liquidMailSpamLifetime
-	NAME 'liquidMailSpamLifetime'
+attributetype ( zimbraMailSpamLifetime
+	NAME 'zimbraMailSpamLifetime'
 	DESC 'lifetime (nnnnn[hmsd]) of an item in the spam folder'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
 	SINGLE-VALUE )
 
-attributetype ( liquidMailTrashLifetime
-	NAME 'liquidMailTrashLifetime'
+attributetype ( zimbraMailTrashLifetime
+	NAME 'zimbraMailTrashLifetime'
 	DESC 'lifetime (nnnnn[hmsd]) of an item in the trash'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
 	SINGLE-VALUE )
 
-attributetype ( liquidMember
-	NAME ( 'liquidMember' )
+attributetype ( zimbraMember
+	NAME ( 'zimbraMember' )
 	DESC 'for group membership, included with security group object'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
 
-attributetype ( liquidMemberOf
-	NAME ( 'liquidMemberOf' )
+attributetype ( zimbraMemberOf
+	NAME ( 'zimbraMemberOf' )
 	DESC 'for group membership, included with person object'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} )
 
-attributetype ( liquidMtaAuthEnabled
-	NAME 'liquidMtaAuthEnabled'
+attributetype ( zimbraMtaAuthEnabled
+	NAME 'zimbraMtaAuthEnabled'
 	DESC 'Value for postconf smtpd_use_tls'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidMtaBlockedExtension
-	NAME 'liquidMtaBlockedExtension'
+attributetype ( zimbraMtaBlockedExtension
+	NAME 'zimbraMtaBlockedExtension'
 	DESC 'Attachment file extensions that are blocked'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{64} )
 
-attributetype ( liquidMtaCommonBlockedExtension
-	NAME 'liquidMtaCommonBlockedExtension'
+attributetype ( zimbraMtaCommonBlockedExtension
+	NAME 'zimbraMtaCommonBlockedExtension'
 	DESC 'Commonly blocked attachment file extensions'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{64} )
 
-attributetype ( liquidMtaDnsLookupsEnabled
-	NAME 'liquidMtaDnsLookupsEnabled'
+attributetype ( zimbraMtaDnsLookupsEnabled
+	NAME 'zimbraMtaDnsLookupsEnabled'
 	DESC 'Value for postconf disable_dns_lookups (note enable v. disable)'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidMtaMaxMessageSize
-	NAME 'liquidMtaMaxMessageSize'
+attributetype ( zimbraMtaMaxMessageSize
+	NAME 'zimbraMtaMaxMessageSize'
 	DESC 'Value for postconf message_size_limit'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )	
 
-attributetype ( liquidMtaRelayHost
-	NAME 'liquidMtaRelayHost'
+attributetype ( zimbraMtaRelayHost
+	NAME 'zimbraMtaRelayHost'
 	DESC 'Value for postconf relayhost'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
 
-attributetype ( liquidMtaRestriction
-	NAME 'liquidMtaRestriction'
+attributetype ( zimbraMtaRestriction
+	NAME 'zimbraMtaRestriction'
 	DESC 'restrictions to reject some suspect SMTP clients'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{64} )
 
-attributetype ( liquidMtaTlsAuthOnly
-	NAME 'liquidMtaTlsAuthOnly'
+attributetype ( zimbraMtaTlsAuthOnly
+	NAME 'zimbraMtaTlsAuthOnly'
 	DESC 'Value for postconf smtpd_tls_auth_only'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidNotes 
-	NAME 'liquidNotes'
+attributetype ( zimbraNotes 
+	NAME 'zimbraNotes'
 	DESC 'administrative notes'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1024}
 	SINGLE-VALUE )
 
-attributetype ( liquidNewMailNotificationFrom
-	NAME 'liquidNewMailNotificationFrom'
+attributetype ( zimbraNewMailNotificationFrom
+	NAME 'zimbraNewMailNotificationFrom'
 	DESC 'template used to construct the sender of an email notification message'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1000} )
 
-attributetype ( liquidNewMailNotificationSubject
-	NAME 'liquidNewMailNotificationSubject'
+attributetype ( zimbraNewMailNotificationSubject
+	NAME 'zimbraNewMailNotificationSubject'
 	DESC 'template used to construct the subject of an email notification message'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1000} )
 
-attributetype ( liquidNewMailNotificationBody
-	NAME 'liquidNewMailNotificationBody'
+attributetype ( zimbraNewMailNotificationBody
+	NAME 'zimbraNewMailNotificationBody'
 	DESC 'template used to construct the body of an email notification message'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
@@ -1092,446 +1092,446 @@ attributetype ( liquidNewMailNotificationBody
 # number of unique passwords a user must have before being allowed to
 # re-use an old one. A value of 0 means no password history.
 #
-attributetype ( liquidPasswordEnforceHistory
-	NAME 'liquidPasswordEnforceHistory'
+attributetype ( zimbraPasswordEnforceHistory
+	NAME 'zimbraPasswordEnforceHistory'
 	DESC 'whether or not to enforce password history'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )	
 
-attributetype ( liquidPasswordLocked
-	NAME 'liquidPasswordLocked'
+attributetype ( zimbraPasswordLocked
+	NAME 'zimbraPasswordLocked'
 	DESC 'user is unable to change password'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 	
-attributetype ( liquidPasswordMinAge
-	NAME 'liquidPasswordMinAge'
+attributetype ( zimbraPasswordMinAge
+	NAME 'zimbraPasswordMinAge'
 	DESC 'minimum days between password changes'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )
 	
-attributetype ( liquidPasswordMaxAge
-	NAME 'liquidPasswordMaxAge'
+attributetype ( zimbraPasswordMaxAge
+	NAME 'zimbraPasswordMaxAge'
 	DESC 'maximum days between password changes'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )	
 
-attributetype ( liquidPasswordMinLength
-	NAME 'liquidPasswordMinLength'
+attributetype ( zimbraPasswordMinLength
+	NAME 'zimbraPasswordMinLength'
 	DESC 'minimum length of a password'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )
 
-attributetype ( liquidPasswordMaxLength
-	NAME 'liquidPasswordMaxLength'
+attributetype ( zimbraPasswordMaxLength
+	NAME 'zimbraPasswordMaxLength'
 	DESC 'max length of a password'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )	
 
-attributetype ( liquidPasswordHistory
-	NAME 'liquidPasswordHistory'
+attributetype ( zimbraPasswordHistory
+	NAME 'zimbraPasswordHistory'
 	DESC 'historical password values'
 	EQUALITY octetStringMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.40{128}
 	)
 		
-attributetype ( liquidPasswordModifiedTime
-	NAME 'liquidPasswordModifiedTime'
+attributetype ( zimbraPasswordModifiedTime
+	NAME 'zimbraPasswordModifiedTime'
 	DESC 'time password was last changed'
 	EQUALITY generalizedTimeMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.24
 	SINGLE-VALUE )	
 
-attributetype ( liquidPasswordMustChange
-	NAME 'liquidPasswordMustChange'
+attributetype ( zimbraPasswordMustChange
+	NAME 'zimbraPasswordMustChange'
 	DESC 'must change password on auth'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidPop3AdvertisedName
-	NAME ( 'liquidPop3AdvertisedName' )
+attributetype ( zimbraPop3AdvertisedName
+	NAME ( 'zimbraPop3AdvertisedName' )
 	DESC 'name to use in greeting and sign-off; if empty, uses hostname'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{128} 
 	SINGLE-VALUE )
 
-attributetype ( liquidPop3CleartextLoginEnabled
-	NAME 'liquidPop3CleartextLoginEnabled'
+attributetype ( zimbraPop3CleartextLoginEnabled
+	NAME 'zimbraPop3CleartextLoginEnabled'
 	DESC 'whether or not to allow cleartext logins over a non SSL/TLS connection'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidPop3BindAddress
-	NAME ( 'liquidPop3BindAddress' )
+attributetype ( zimbraPop3BindAddress
+	NAME ( 'zimbraPop3BindAddress' )
 	DESC 'interface address(es) on which POP3 server should listen; if empty, binds to all interfaces'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{128} 
 	)
 		
-attributetype ( liquidPop3BindPort
-	NAME ( 'liquidPop3BindPort' )
+attributetype ( zimbraPop3BindPort
+	NAME ( 'zimbraPop3BindPort' )
 	DESC 'port number on which POP3 server should listen'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )
 
-attributetype ( liquidPop3Enabled
-	NAME 'liquidPop3Enabled'
+attributetype ( zimbraPop3Enabled
+	NAME 'zimbraPop3Enabled'
 	DESC 'whether POP3 is enabled for an account'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidPop3ServerEnabled
-	NAME 'liquidPop3ServerEnabled'
+attributetype ( zimbraPop3ServerEnabled
+	NAME 'zimbraPop3ServerEnabled'
 	DESC 'whether IMAP is enabled for a server'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidPop3NumThreads
-	NAME ( 'liquidPop3NumThreads' )
+attributetype ( zimbraPop3NumThreads
+	NAME ( 'zimbraPop3NumThreads' )
 	DESC 'number of handler threads'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )	
 
 	
-attributetype ( liquidPop3SSLBindAddress
-	NAME ( 'liquidPop3SSLBindAddress' )
+attributetype ( zimbraPop3SSLBindAddress
+	NAME ( 'zimbraPop3SSLBindAddress' )
 	DESC 'interface address(es) on which POP3 server should listen; if empty, binds to all interfaces'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{128} 
 	)
 		
-attributetype ( liquidPop3SSLBindPort
-	NAME ( 'liquidPop3SSLBindPort' )
+attributetype ( zimbraPop3SSLBindPort
+	NAME ( 'zimbraPop3SSLBindPort' )
 	DESC 'port number on which POP3 server should listen'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )
 
-attributetype ( liquidPop3SSLServerEnabled
-	NAME 'liquidPop3SSLServerEnabled'
+attributetype ( zimbraPop3SSLServerEnabled
+	NAME 'zimbraPop3SSLServerEnabled'
 	DESC 'whether IMAP is enabled for a server'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidPrefCalendarInitialView
-	NAME ( 'liquidPrefCalendarInitialView' )
+attributetype ( zimbraPrefCalendarInitialView
+	NAME ( 'zimbraPrefCalendarInitialView' )
 	DESC 'initial calendar view to use'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32} 
 	SINGLE-VALUE )
 
-attributetype ( liquidPrefContactsInitialView
-	NAME ( 'liquidPrefContactsInitialView' )
+attributetype ( zimbraPrefContactsInitialView
+	NAME ( 'zimbraPrefContactsInitialView' )
 	DESC 'initial contact view to use'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32} 
 	SINGLE-VALUE )
 
-attributetype ( liquidPrefGroupMailBy
-	NAME ( 'liquidPrefGroupMailBy' )
+attributetype ( zimbraPrefGroupMailBy
+	NAME ( 'zimbraPrefGroupMailBy' )
 	DESC 'how to group mail by default'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32} 
 	SINGLE-VALUE )
 
-attributetype ( liquidPrefImapSearchFoldersEnabled
-	NAME ( 'liquidPrefImapSearchFoldersEnabled' )
+attributetype ( zimbraPrefImapSearchFoldersEnabled
+	NAME ( 'zimbraPrefImapSearchFoldersEnabled' )
 	DESC 'whether or not the IMAP server exports search folders'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
 
-attributetype ( liquidPrefIncludeSpamInSearch
-	NAME 'liquidPrefIncludeSpamInSearch'
+attributetype ( zimbraPrefIncludeSpamInSearch
+	NAME 'zimbraPrefIncludeSpamInSearch'
 	DESC 'whether or not to include spam in search by default'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidPrefIncludeTrashInSearch
-	NAME 'liquidPrefIncludeTrashInSearch'
+attributetype ( zimbraPrefIncludeTrashInSearch
+	NAME 'zimbraPrefIncludeTrashInSearch'
 	DESC 'whether or not to include trash in search by default'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidPrefMailInitialSearch
-	NAME 'liquidPrefMailInitialSearch'
+attributetype ( zimbraPrefMailInitialSearch
+	NAME 'zimbraPrefMailInitialSearch'
 	DESC 'initial search done by dhtml client'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{512}
 	SINGLE-VALUE )
 			
-attributetype ( liquidPrefMailSignature
-	NAME 'liquidPrefMailSignature'
+attributetype ( zimbraPrefMailSignature
+	NAME 'zimbraPrefMailSignature'
 	DESC 'mail signature'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1024}
 	SINGLE-VALUE )
 			
-attributetype ( liquidPrefMailSignatureStyle
-	NAME 'liquidPrefMailSignatureStyle'
+attributetype ( zimbraPrefMailSignatureStyle
+	NAME 'zimbraPrefMailSignatureStyle'
 	DESC 'mail signature style outlook|internet'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32}
 	SINGLE-VALUE )
 
-attributetype ( liquidPrefMailSignatureEnabled
-	NAME 'liquidPrefMailSignatureEnabled'
+attributetype ( zimbraPrefMailSignatureEnabled
+	NAME 'zimbraPrefMailSignatureEnabled'
 	DESC 'mail signature enabled'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidPrefMessageViewHtmlPreferred
-	NAME 'liquidPrefMessageViewHtmlPreferred'
+attributetype ( zimbraPrefMessageViewHtmlPreferred
+	NAME 'zimbraPrefMessageViewHtmlPreferred'
 	DESC 'whether client prefers text/html or text/plain'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
- attributetype ( liquidPrefMailItemsPerPage
-	NAME 'liquidPrefMailItemsPerPage'
+ attributetype ( zimbraPrefMailItemsPerPage
+	NAME 'zimbraPrefMailItemsPerPage'
 	DESC 'number of messages/conversations per page'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )
 
- attributetype ( liquidPrefContactsPerPage
-	NAME 'liquidPrefContactsPerPage'
+ attributetype ( zimbraPrefContactsPerPage
+	NAME 'zimbraPrefContactsPerPage'
 	DESC 'number of contacts per page'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )
 
-attributetype ( liquidPrefOutOfOfficeReply
-	NAME 'liquidPrefOutOfOfficeReply'
+attributetype ( zimbraPrefOutOfOfficeReply
+	NAME 'zimbraPrefOutOfOfficeReply'
 	DESC 'out of office message'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{8192}
 	SINGLE-VALUE )
 
-attributetype ( liquidPrefOutOfOfficeReplyEnabled
-	NAME 'liquidPrefOutOfOfficeReplyEnabled'
+attributetype ( zimbraPrefOutOfOfficeReplyEnabled
+	NAME 'zimbraPrefOutOfOfficeReplyEnabled'
 	DESC 'whether or not out of office reply is enabled'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidPrefReplyToAddress
-	NAME 'liquidPrefReplyToAddress'
+attributetype ( zimbraPrefReplyToAddress
+	NAME 'zimbraPrefReplyToAddress'
 	DESC 'address to put in reply-to header'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
 	SINGLE-VALUE )
 	
-attributetype ( liquidPrefSaveToSent
-	NAME 'liquidPrefSaveToSent'
+attributetype ( zimbraPrefSaveToSent
+	NAME 'zimbraPrefSaveToSent'
 	DESC 'whether or not to save outgoing mail'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )	
 
-attributetype ( liquidPrefSentMailFolder
-	NAME ( 'liquidPrefSentMailFolder' )
+attributetype ( zimbraPrefSentMailFolder
+	NAME ( 'zimbraPrefSentMailFolder' )
 	DESC 'name of folder to save sent mail in)'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} 
 	SINGLE-VALUE )
 
-attributetype ( liquidPrefUseKeyboardShortcuts
-	NAME 'liquidPrefUseKeyboardShortcuts'
+attributetype ( zimbraPrefUseKeyboardShortcuts
+	NAME 'zimbraPrefUseKeyboardShortcuts'
 	DESC 'whether or not keyboard shortcuts are enabled'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )	
 
-attributetype ( liquidRedoLogArchiveDir
-	NAME 'liquidRedoLogArchiveDir'
+attributetype ( zimbraRedoLogArchiveDir
+	NAME 'zimbraRedoLogArchiveDir'
 	DESC 'redolog rollover destination'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
 	SINGLE-VALUE )
 
-attributetype ( liquidRedoLogEnabled
-	NAME 'liquidRedoLogEnabled'
+attributetype ( zimbraRedoLogEnabled
+	NAME 'zimbraRedoLogEnabled'
 	DESC 'whether redo logging is enabled'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )	
 
-attributetype ( liquidRedoLogFsyncIntervalMS
-	NAME 'liquidRedoLogFsyncIntervalMS'
+attributetype ( zimbraRedoLogFsyncIntervalMS
+	NAME 'zimbraRedoLogFsyncIntervalMS'
 	DESC 'how frequently writes to redo log get fsynced to disk'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )
 
-attributetype ( liquidRedoLogLogPath
-	NAME 'liquidRedoLogLogPath'
+attributetype ( zimbraRedoLogLogPath
+	NAME 'zimbraRedoLogLogPath'
 	DESC 'name and location of the redolog file'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
 	SINGLE-VALUE )
 
-attributetype ( liquidRedoLogRolloverFileSizeKB
-	NAME 'liquidRedoLogRolloverFileSizeKB'
+attributetype ( zimbraRedoLogRolloverFileSizeKB
+	NAME 'zimbraRedoLogRolloverFileSizeKB'
 	DESC 'redo.log file rolls over when it gets to this size'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )
 
-attributetype ( liquidServerInheritedAttr
-	NAME 'liquidServerInheritedAttr'
-	DESC 'liquidServer attrs that get inherited from global config'
+attributetype ( zimbraServerInheritedAttr
+	NAME 'zimbraServerInheritedAttr'
+	DESC 'zimbraServer attrs that get inherited from global config'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1024} )
 
-attributetype ( liquidServiceHostname
-	NAME ( 'liquidServiceHostname' )
+attributetype ( zimbraServiceHostname
+	NAME ( 'zimbraServiceHostname' )
 	DESC 'public hostname of the host'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} 
 	SINGLE-VALUE )	
 
-attributetype ( liquidServiceEnabled
-	NAME ( 'liquidServiceEnabled' )
+attributetype ( zimbraServiceEnabled
+	NAME ( 'zimbraServiceEnabled' )
 	DESC 'services that are enabled on this server'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} )
 
-attributetype ( liquidServiceInstalled
-	NAME ( 'liquidServiceInstalled' )
+attributetype ( zimbraServiceInstalled
+	NAME ( 'zimbraServiceInstalled' )
 	DESC 'services that are installed on this server'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} )
 
-attributetype ( liquidSmtpHostname
-	NAME 'liquidSmtpHostname'
+attributetype ( zimbraSmtpHostname
+	NAME 'zimbraSmtpHostname'
 	DESC 'the SMTP server to connect to when sending mail'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
 
-attributetype ( liquidSmtpPort
-	NAME 'liquidSmtpPort'
+attributetype ( zimbraSmtpPort
+	NAME 'zimbraSmtpPort'
 	DESC 'the SMTP server port to connect to when sending mail'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )	
 
-attributetype ( liquidSmtpTimeout
-	NAME 'liquidSmtpTimeout'
+attributetype ( zimbraSmtpTimeout
+	NAME 'zimbraSmtpTimeout'
 	DESC 'timeout value in seconds'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )	
 
-attributetype ( liquidSpamHeader
-	NAME 'liquidSpamHeader'
+attributetype ( zimbraSpamHeader
+	NAME 'zimbraSpamHeader'
 	DESC 'mail header name for flagging spam'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
 	SINGLE-VALUE )
 	
-attributetype ( liquidSpamHeaderValue
-	NAME 'liquidSpamHeaderValue'
+attributetype ( zimbraSpamHeaderValue
+	NAME 'zimbraSpamHeaderValue'
 	DESC 'regular expression for matching the spam header'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
 	SINGLE-VALUE )
 
-attributetype ( liquidSpamCheckEnabled
-	NAME 'liquidSpamCheckEnabled'
+attributetype ( zimbraSpamCheckEnabled
+	NAME 'zimbraSpamCheckEnabled'
 	DESC 'Whether to enable spam checking'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )	
 
-attributetype ( liquidSpamTagPercent
-	NAME 'liquidSpamTagPercent'
+attributetype ( zimbraSpamTagPercent
+	NAME 'zimbraSpamTagPercent'
 	DESC 'Spaminess percentage beyound which a message is marked as spam'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )
 
-attributetype ( liquidSpamKillPercent
-	NAME 'liquidSpamKillPercent'
+attributetype ( zimbraSpamKillPercent
+	NAME 'zimbraSpamKillPercent'
 	DESC 'Spaminess percentage beyond which a message is dropped'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )
 
-attributetype ( liquidSpamSubjectTag
-	NAME 'liquidSpamSubjectTag'
+attributetype ( zimbraSpamSubjectTag
+	NAME 'zimbraSpamSubjectTag'
 	DESC 'Subject prefix for spam messages'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
 	SINGLE-VALUE )
 
-attributetype ( liquidUserServicesEnabled
-	NAME 'liquidUserServicesEnabled'
+attributetype ( zimbraUserServicesEnabled
+	NAME 'zimbraUserServicesEnabled'
 	DESC 'whether end-user services on SOAP and LMTP interfaces are enabled'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )	
 
-attributetype ( liquidMailPort
-	NAME 'liquidMailPort'
+attributetype ( zimbraMailPort
+	NAME 'zimbraMailPort'
 	DESC 'HTTP port for end-user UI'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )	
 
-attributetype ( liquidMailSSLPort
-	NAME 'liquidMailSSLPort'
+attributetype ( zimbraMailSSLPort
+	NAME 'zimbraMailSSLPort'
 	DESC 'SSL port for end-user UI'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )	
 
-attributetype ( liquidAdminPort
-	NAME 'liquidAdminPort'
+attributetype ( Zimbra::AdminPort
+	NAME 'Zimbra::AdminPort'
 	DESC 'SSL port for admin UI'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )	
 
-attributetype ( liquidFileUploadMaxSize
-	NAME 'liquidFileUploadMaxSize'
+attributetype ( zimbraFileUploadMaxSize
+	NAME 'zimbraFileUploadMaxSize'
 	DESC 'Maximum size in bytes for attachments'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
@@ -1539,15 +1539,15 @@ attributetype ( liquidFileUploadMaxSize
 
 # mime
 
-attributetype ( liquidMimeFileExtension
-	NAME ( 'liquidMimeFileExtension' )
+attributetype ( zimbraMimeFileExtension
+	NAME ( 'zimbraMimeFileExtension' )
 	DESC 'the file extension (without the .)'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
 
-attributetype ( liquidMimeType
-	NAME ( 'liquidMimeType' )
+attributetype ( zimbraMimeType
+	NAME ( 'zimbraMimeType' )
 	DESC 'the MIME type (type/substype)'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
@@ -1557,16 +1557,16 @@ attributetype ( liquidMimeType
 #
 # TODO: the mime handler class should definitely be stored as a resource in a jar file instead...
 #
-attributetype ( liquidMimeHandlerClass
-	NAME ( 'liquidMimeHandlerClass' )
+attributetype ( zimbraMimeHandlerClass
+	NAME ( 'zimbraMimeHandlerClass' )
 	DESC 'the handler class for the mime type'
 	EQUALITY caseExactMatch
 	SUBSTR caseExactSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
 	SINGLE-VALUE )	
 
-attributetype ( liquidMimeIndexingEnabled
-	NAME 'liquidMimeIndexingEnabled'
+attributetype ( zimbraMimeIndexingEnabled
+	NAME 'zimbraMimeIndexingEnabled'
 	DESC 'whether or not indexing is enabled for this type'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
@@ -1574,156 +1574,156 @@ attributetype ( liquidMimeIndexingEnabled
 	
 # objects (phone numbers, social security numbers, etc.)
 
-attributetype ( liquidObjectType
-	NAME ( 'liquidObjectType' )
+attributetype ( zimbraObjectType
+	NAME ( 'zimbraObjectType' )
 	DESC 'the object type'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
 	SINGLE-VALUE )
 
-attributetype ( liquidObjectHandlerClass
-	NAME ( 'liquidObjectHandlerClass' )
+attributetype ( zimbraObjectHandlerClass
+	NAME ( 'zimbraObjectHandlerClass' )
 	DESC 'the handler class for the object type'
 	EQUALITY caseExactMatch
 	SUBSTR caseExactSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
 	SINGLE-VALUE )	
 
-attributetype ( liquidObjectIndexingEnabled
-	NAME 'liquidObjectIndexingEnabled'
+attributetype ( zimbraObjectIndexingEnabled
+	NAME 'zimbraObjectIndexingEnabled'
 	DESC 'whether or not indexing is enabled for this type'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidObjectHandlerConfig
-	NAME 'liquidObjectHandlerConfig'
+attributetype ( zimbraObjectHandlerConfig
+	NAME 'zimbraObjectHandlerConfig'
 	DESC 'config for this type'
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
 	SINGLE-VALUE )
 
-attributetype ( liquidObjectStoreMatched
-	NAME 'liquidObjectStoreMatched'
+attributetype ( zimbraObjectStoreMatched
+	NAME 'zimbraObjectStoreMatched'
 	DESC 'whether or not store is matched for this type'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 	
-attributetype ( liquidTableMaintenanceMinRows
-	NAME 'liquidTableMaintenanceMinRows'
+attributetype ( zimbraTableMaintenanceMinRows
+	NAME 'zimbraTableMaintenanceMinRows'
 	DESC 'minimum number of rows required for database table maintenance'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )
 
-attributetype ( liquidTableMaintenanceMaxRows
-	NAME 'liquidTableMaintenanceMaxRows'
+attributetype ( zimbraTableMaintenanceMaxRows
+	NAME 'zimbraTableMaintenanceMaxRows'
 	DESC 'maximum number of rows required for database table maintenance'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )
 
-attributetype ( liquidTableMaintenanceOperation
-	NAME 'liquidTableMaintenanceOperation'
+attributetype ( zimbraTableMaintenanceOperation
+	NAME 'zimbraTableMaintenanceOperation'
 	DESC 'table maintenance operation that will be performed.  Valid options: "ANALYZE", "OPTIMIZE"'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{20} )
 
-attributetype ( liquidTableMaintenanceGrowthFactor
-	NAME 'liquidTableMaintenanceGrowthFactor'
+attributetype ( zimbraTableMaintenanceGrowthFactor
+	NAME 'zimbraTableMaintenanceGrowthFactor'
 	DESC 'table maintenance will be performed if the number of rows grows by this factor'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )
 
-attributetype ( liquidVirusCheckEnabled
-	NAME 'liquidVirusCheckEnabled'
+attributetype ( zimbraVirusCheckEnabled
+	NAME 'zimbraVirusCheckEnabled'
 	DESC 'Whether to enable virus checking'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidVirusBlockEncryptedArchive
-	NAME 'liquidVirusBlockEncryptedArchive'
+attributetype ( zimbraVirusBlockEncryptedArchive
+	NAME 'zimbraVirusBlockEncryptedArchive'
 	DESC 'Whether to block archive files that are password protected or encrypted'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidVirusWarnAdmin
-	NAME 'liquidVirusWarnAdmin'
+attributetype ( zimbraVirusWarnAdmin
+	NAME 'zimbraVirusWarnAdmin'
 	DESC 'Whether to email admin on virus detection'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidVirusWarnRecipient
-	NAME 'liquidVirusWarnRecipient'
+attributetype ( zimbraVirusWarnRecipient
+	NAME 'zimbraVirusWarnRecipient'
 	DESC 'Whether to email recipient on virus detection'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-attributetype ( liquidVirusDefinitionsUpdateFrequency
-	NAME 'liquidVirusDefinitionsUpdateFrequency'
+attributetype ( zimbraVirusDefinitionsUpdateFrequency
+	NAME 'zimbraVirusDefinitionsUpdateFrequency'
 	DESC 'how often (nnnnn[hmsd]) the virus definitions are updated'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
 	SINGLE-VALUE )
 
-attributetype ( liquidRedoLogProvider
-	NAME 'liquidRedoLogProvider'
+attributetype ( zimbraRedoLogProvider
+	NAME 'zimbraRedoLogProvider'
 	DESC 'provider class name for redo logging'
 	EQUALITY caseIgnoreMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} )
 
-attributetype ( liquidTimeZoneStandardDtStart
-	NAME 'liquidTimeZoneStandardDtStart'
+attributetype ( zimbraTimeZoneStandardDtStart
+	NAME 'zimbraTimeZoneStandardDtStart'
 	DESC 'Start date for standard time'
 	EQUALITY caseIgnoreMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} )
 
-attributetype ( liquidTimeZoneStandardOffset
-	NAME 'liquidTimeZoneStandardOffset'
+attributetype ( zimbraTimeZoneStandardOffset
+	NAME 'zimbraTimeZoneStandardOffset'
 	DESC 'Offset in standard time'
 	EQUALITY caseIgnoreMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{5} )
 
-attributetype ( liquidTimeZoneStandardRRule
-	NAME 'liquidTimeZoneStandardRRule'
+attributetype ( zimbraTimeZoneStandardRRule
+	NAME 'zimbraTimeZoneStandardRRule'
 	DESC 'iCalendar recurrence rule for onset of standard time'
 	EQUALITY caseIgnoreMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} )
 
-attributetype ( liquidTimeZoneDaylightDtStart
-	NAME 'liquidTimeZoneDaylightDtStart'
+attributetype ( zimbraTimeZoneDaylightDtStart
+	NAME 'zimbraTimeZoneDaylightDtStart'
 	DESC 'Start date for daylight time'
 	EQUALITY caseIgnoreMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} )
 
-attributetype ( liquidTimeZoneDaylightOffset
-	NAME 'liquidTimeZoneDaylightOffset'
+attributetype ( zimbraTimeZoneDaylightOffset
+	NAME 'zimbraTimeZoneDaylightOffset'
 	DESC 'Offset in daylight time'
 	EQUALITY caseIgnoreMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{5} )
 
-attributetype ( liquidTimeZoneDaylightRRule
-	NAME 'liquidTimeZoneDaylightRRule'
+attributetype ( zimbraTimeZoneDaylightRRule
+	NAME 'zimbraTimeZoneDaylightRRule'
 	DESC 'iCalendar recurrence rule for onset of daylight time'
 	EQUALITY caseIgnoreMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} )
 
-attributetype ( liquidPrefTimeZoneId
-	NAME 'liquidPrefTimeZoneId'
+attributetype ( zimbraPrefTimeZoneId
+	NAME 'zimbraPrefTimeZoneId'
 	DESC 'time zone of user or COS'
 	EQUALITY caseIgnoreMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} )
 
-attributetype ( liquidPrefUseTimeZoneListInCalendar
-	NAME 'liquidPrefUseTimeZoneListInCalendar'
+attributetype ( zimbraPrefUseTimeZoneListInCalendar
+	NAME 'zimbraPrefUseTimeZoneListInCalendar'
 	DESC 'whether list of well known time zones is displayed in calendar UI'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
@@ -1744,29 +1744,29 @@ attributetype ( liquidPrefUseTimeZoneListInCalendar
 #################################################################
 
 ################
-# liquidMailRecipient is used to represent entries in the directory
+# zimbraMailRecipient is used to represent entries in the directory
 # that can receive mail. i.e., they have a visible external address, that
 # gets expanded into one or more internal/external addresses.
 ################
 
-objectclass ( liquidMailRecipient
-	NAME 'liquidMailRecipient'
+objectclass ( zimbraMailRecipient
+	NAME 'zimbraMailRecipient'
 	DESC 'Account object'
 	SUP top AUXILIARY
 	MAY (	
-		liquidMailForwardingAddress $
-		liquidMailHost $
-		liquidMailAlias $
-		liquidMailAddress $
-		liquidMailDeliveryAddress $
-		liquidMailCanonicalAddress $
-		liquidMailCatchAllAddress $
-		liquidMailCatchAllForwardingAddress $
-		liquidMailCatchAllCanonicalAddress $
-		liquidMailStatus) )
+		zimbraMailForwardingAddress $
+		zimbraMailHost $
+		zimbraMailAlias $
+		zimbraMailAddress $
+		zimbraMailDeliveryAddress $
+		zimbraMailCanonicalAddress $
+		zimbraMailCatchAllAddress $
+		zimbraMailCatchAllForwardingAddress $
+		zimbraMailCatchAllCanonicalAddress $
+		zimbraMailStatus) )
 
 ################
-# liquidAccount extends liquidMailRecipient. It represents a real account in the system
+# zimbraAccount extends zimbraMailRecipient. It represents a real account in the system
 # (either admin or end-user) that can be logged into, etc.
 #
 # It is defined as AUXILIARY in case it needs to be mixed to an existing directory deployment.
@@ -1788,13 +1788,13 @@ objectclass ( liquidMailRecipient
 #
 ################
 
-objectclass ( liquidAccount 
-	NAME 'liquidAccount'
+objectclass ( zimbraAccount 
+	NAME 'zimbraAccount'
 	DESC 'Account object'
-	SUP liquidMailRecipient AUXILIARY
+	SUP zimbraMailRecipient AUXILIARY
 	MUST (	
-		liquidId $ 
-		liquidAccountStatus $
+		zimbraId $ 
+		zimbraAccountStatus $
 		uid)
 	MAY (	
 		c $
@@ -1806,83 +1806,83 @@ objectclass ( liquidAccount
 		description $
 		initials $
 		l $
-		liquidAttachmentsBlocked $
-		liquidAttachmentsIndexingEnabled $
-		liquidAttachmentsViewInHtmlOnly $
-		liquidAuthTokenLifetime $
-		liquidAdminAuthTokenLifetime $
-		liquidContactMaxNumEntries $
-		liquidCOSId $
-		liquidFeatureContactsEnabled $
-		liquidFeatureGalEnabled $	
-		liquidFeatureHtmlComposeEnabled $
-		liquidFeatureCalendarEnabled $
-		liquidFeatureTaggingEnabled $
-		liquidFeatureAdvancedSearchEnabled $
-		liquidFeatureSavedSearchesEnabled $
-		liquidFeatureConversationsEnabled $
-		liquidFeatureChangePasswordEnabled $
-		liquidFeatureInitialSearchPreferenceEnabled $
-		liquidFeatureFiltersEnabled $
-		liquidImapEnabled $
-		liquidIsAdminAccount $ 
-		liquidLastLogonTimestamp $
-		liquidMailIdleSessionTimeout $
-		liquidMailMessageLifetime $
-		liquidMailMinPollingInterval $
-		liquidMailQuota $
-		liquidMailSieveScript $	
-		liquidMailSpamLifetime $
-		liquidMailTrashLifetime $
-		liquidNewMailNotificationFrom $
-		liquidNewMailNotificationSubject $
-		liquidNewMailNotificationBody $
-		liquidNotes $ 
-		liquidPasswordLocked $
-		liquidPasswordMinLength $
-		liquidPasswordMaxLength $
-		liquidPasswordMinAge $
-		liquidPasswordMaxAge $
-		liquidPasswordEnforceHistory $
-		liquidPasswordHistory $
-		liquidPasswordModifiedTime $
-		liquidPasswordMustChange $
-		liquidPop3Enabled $		
-		liquidPrefTimeZoneId $
-		liquidPrefUseTimeZoneListInCalendar $
-		liquidPrefComposeInNewWindow $
-		liquidPrefComposeFormat $
-		liquidPrefForwardReplyInOriginalFormat $
-		liquidPrefAutoAddAddressEnabled $
-		liquidPrefShowFragments $
-		liquidPrefShowSearchString $
-		liquidPrefCalendarInitialView $
-		liquidPrefContactsInitialView $
-		liquidPrefDedupeMessagesSentToSelf $
-		liquidPrefForwardIncludeOriginalText $
-		liquidPrefForwardReplyPrefixChar $
-		liquidPrefGroupMailBy $
-		liquidPrefImapSearchFoldersEnabled $
-		liquidPrefIncludeSpamInSearch $
-		liquidPrefIncludeTrashInSearch $
-		liquidPrefMailInitialSearch $
-		liquidPrefMailItemsPerPage $
-		liquidPrefContactsPerPage $		
-		liquidPrefMessageViewHtmlPreferred $
-		liquidPrefMailPollingInterval $
-		liquidPrefMailSignature $
-		liquidPrefMailSignatureEnabled $
-		liquidPrefMailSignatureStyle $
-		liquidPrefNewMailNotificationAddress $
-		liquidPrefNewMailNotificationEnabled $
-		liquidPrefOutOfOfficeReply $
-		liquidPrefOutOfOfficeReplyEnabled $
-		liquidPrefReplyIncludeOriginalText $
-		liquidPrefReplyToAddress $
-		liquidPrefSaveToSent $
-		liquidPrefSentMailFolder $
-		liquidPrefUseKeyboardShortcuts $
-		liquidMemberOf $
+		zimbraAttachmentsBlocked $
+		zimbraAttachmentsIndexingEnabled $
+		zimbraAttachmentsViewInHtmlOnly $
+		zimbraAuthTokenLifetime $
+		Zimbra::AdminAuthTokenLifetime $
+		zimbraContactMaxNumEntries $
+		zimbraCOSId $
+		zimbraFeatureContactsEnabled $
+		zimbraFeatureGalEnabled $	
+		zimbraFeatureHtmlComposeEnabled $
+		zimbraFeatureCalendarEnabled $
+		zimbraFeatureTaggingEnabled $
+		zimbraFeatureAdvancedSearchEnabled $
+		zimbraFeatureSavedSearchesEnabled $
+		zimbraFeatureConversationsEnabled $
+		zimbraFeatureChangePasswordEnabled $
+		zimbraFeatureInitialSearchPreferenceEnabled $
+		zimbraFeatureFiltersEnabled $
+		zimbraImapEnabled $
+		zimbraIsAdminAccount $ 
+		zimbraLastLogonTimestamp $
+		zimbraMailIdleSessionTimeout $
+		zimbraMailMessageLifetime $
+		zimbraMailMinPollingInterval $
+		zimbraMailQuota $
+		zimbraMailSieveScript $	
+		zimbraMailSpamLifetime $
+		zimbraMailTrashLifetime $
+		zimbraNewMailNotificationFrom $
+		zimbraNewMailNotificationSubject $
+		zimbraNewMailNotificationBody $
+		zimbraNotes $ 
+		zimbraPasswordLocked $
+		zimbraPasswordMinLength $
+		zimbraPasswordMaxLength $
+		zimbraPasswordMinAge $
+		zimbraPasswordMaxAge $
+		zimbraPasswordEnforceHistory $
+		zimbraPasswordHistory $
+		zimbraPasswordModifiedTime $
+		zimbraPasswordMustChange $
+		zimbraPop3Enabled $		
+		zimbraPrefTimeZoneId $
+		zimbraPrefUseTimeZoneListInCalendar $
+		zimbraPrefComposeInNewWindow $
+		zimbraPrefComposeFormat $
+		zimbraPrefForwardReplyInOriginalFormat $
+		zimbraPrefAutoAddAddressEnabled $
+		zimbraPrefShowFragments $
+		zimbraPrefShowSearchString $
+		zimbraPrefCalendarInitialView $
+		zimbraPrefContactsInitialView $
+		zimbraPrefDedupeMessagesSentToSelf $
+		zimbraPrefForwardIncludeOriginalText $
+		zimbraPrefForwardReplyPrefixChar $
+		zimbraPrefGroupMailBy $
+		zimbraPrefImapSearchFoldersEnabled $
+		zimbraPrefIncludeSpamInSearch $
+		zimbraPrefIncludeTrashInSearch $
+		zimbraPrefMailInitialSearch $
+		zimbraPrefMailItemsPerPage $
+		zimbraPrefContactsPerPage $		
+		zimbraPrefMessageViewHtmlPreferred $
+		zimbraPrefMailPollingInterval $
+		zimbraPrefMailSignature $
+		zimbraPrefMailSignatureEnabled $
+		zimbraPrefMailSignatureStyle $
+		zimbraPrefNewMailNotificationAddress $
+		zimbraPrefNewMailNotificationEnabled $
+		zimbraPrefOutOfOfficeReply $
+		zimbraPrefOutOfOfficeReplyEnabled $
+		zimbraPrefReplyIncludeOriginalText $
+		zimbraPrefReplyToAddress $
+		zimbraPrefSaveToSent $
+		zimbraPrefSentMailFolder $
+		zimbraPrefUseKeyboardShortcuts $
+		zimbraMemberOf $
 		mail $
 		o $
 		ou $	
@@ -1896,369 +1896,369 @@ objectclass ( liquidAccount
 		userPassword) )
 
 ################
-# liquidServer is used to represent a defined server within a liquid install.
+# zimbraServer is used to represent a defined server within a zimbra install.
 #
 # server-specific configuration information will be added here. This includes information
 # like which services should be running on a server, whether or not the server is normally a master/slave, etc.
 #
 ################
-objectclass ( liquidAlias
-	NAME 'liquidAlias'
-	DESC 'An alias to another liquid object'
+objectclass ( zimbraAlias
+	NAME 'zimbraAlias'
+	DESC 'An alias to another zimbra object'
 	SUP top STRUCTURAL
 	MUST (
-		liquidAliasTargetId $
-		liquidId)
+		zimbraAliasTargetId $
+		zimbraId)
 	MAY (
 		uid $
 		cn)
 	)
 
 ################
-# liquidDistributionList represents a distribution/mailing list.
-# It inherits from liquidMailRecipient.  Members (who can be internal/external)
-# are represented  as liquidMailForwardingAddress attrs.
+# zimbraDistributionList represents a distribution/mailing list.
+# It inherits from zimbraMailRecipient.  Members (who can be internal/external)
+# are represented  as zimbraMailForwardingAddress attrs.
 ################
 
-objectclass ( liquidDistributionList 
-	NAME 'liquidDistributionList'
+objectclass ( zimbraDistributionList 
+	NAME 'zimbraDistributionList'
 	DESC 'Distribution List object'
 	SUP top STRUCTURAL
 	MUST (
-		liquidId $
+		zimbraId $
 		uid)
 	MAY (
 		description $
-		liquidNotes)
+		zimbraNotes)
 	)
 
 ################
-# liquidCOS is the class of service object.
+# zimbraCOS is the class of service object.
 # it should have attributes that are used as default values for accounts that belong to the
 # COS and do not have the same attribute defined in the account directory entry.
 #
-# when adding a new COS attr here, you also need to update the value of liquidGlobalConfig/liquidCOSInheritedAttr
-# (in the liquid.ldif file), as that defines any attrs from the COS entry that are allowed to be inherited.
+# when adding a new COS attr here, you also need to update the value of zimbraGlobalConfig/zimbraCOSInheritedAttr
+# (in the zimbra.ldif file), as that defines any attrs from the COS entry that are allowed to be inherited.
 ################
-objectclass ( liquidCOS 
-	NAME 'liquidCOS'
+objectclass ( zimbraCOS 
+	NAME 'zimbraCOS'
 	DESC 'Class of Service data'
 	SUP top STRUCTURAL
 	MUST (
 		cn $
-		liquidId)
+		zimbraId)
 	MAY (
 		description $
-		liquidAttachmentsBlocked $
-		liquidAttachmentsIndexingEnabled $
-		liquidAttachmentsViewInHtmlOnly $
-		liquidAuthTokenLifetime $
-		liquidAdminAuthTokenLifetime $
-		liquidContactMaxNumEntries $
-		liquidFeatureContactsEnabled $
-		liquidFeatureGalEnabled $
-		liquidFeatureCalendarEnabled $
-		liquidFeatureHtmlComposeEnabled $
-		liquidFeatureTaggingEnabled $
-		liquidFeatureAdvancedSearchEnabled $
-		liquidFeatureSavedSearchesEnabled $
-		liquidFeatureConversationsEnabled $
-		liquidFeatureChangePasswordEnabled $
-		liquidFeatureInitialSearchPreferenceEnabled $
-		liquidFeatureFiltersEnabled $
-		liquidImapEnabled $		
-		liquidNotes $
-		liquidMailHostPool $
-		liquidMailIdleSessionTimeout $
-		liquidMailMinPollingInterval $
-		liquidMailMessageLifetime $
-		liquidMailQuota $
-		liquidMailTrashLifetime $
-		liquidMailSpamLifetime $
-		liquidNewMailNotificationFrom $
-		liquidNewMailNotificationSubject $
-		liquidNewMailNotificationBody $
-		liquidPasswordMinLength $
-		liquidPasswordMaxLength $
-		liquidPasswordMinAge $
-		liquidPasswordMaxAge $
-		liquidPasswordEnforceHistory $
-		liquidPasswordLocked $
-		liquidPop3Enabled $		
-		liquidPrefTimeZoneId $
-		liquidPrefUseTimeZoneListInCalendar $
-		liquidPrefShowFragments $
-		liquidPrefShowSearchString $
-		liquidPrefCalendarInitialView $
-		liquidPrefComposeInNewWindow $
-		liquidPrefComposeFormat $
-		liquidPrefContactsInitialView $
-		liquidPrefDedupeMessagesSentToSelf $
-		liquidPrefForwardReplyInOriginalFormat $
-		liquidPrefSaveToSent $
-		liquidPrefSentMailFolder $
-		liquidPrefGroupMailBy $
-		liquidPrefIncludeSpamInSearch $
-		liquidPrefIncludeTrashInSearch $
-		liquidPrefImapSearchFoldersEnabled $
-		liquidPrefMailInitialSearch $
-		liquidPrefMailItemsPerPage $	
-		liquidPrefMailSignatureStyle $
-		liquidPrefContactsPerPage $
-		liquidPrefMessageViewHtmlPreferred $
-		liquidPrefMailPollingInterval $
-		liquidPrefReplyIncludeOriginalText $
-		liquidPrefForwardIncludeOriginalText $
-		liquidPrefForwardReplyPrefixChar $
-		liquidPrefAutoAddAddressEnabled $
-		liquidPrefUseKeyboardShortcuts 
+		zimbraAttachmentsBlocked $
+		zimbraAttachmentsIndexingEnabled $
+		zimbraAttachmentsViewInHtmlOnly $
+		zimbraAuthTokenLifetime $
+		Zimbra::AdminAuthTokenLifetime $
+		zimbraContactMaxNumEntries $
+		zimbraFeatureContactsEnabled $
+		zimbraFeatureGalEnabled $
+		zimbraFeatureCalendarEnabled $
+		zimbraFeatureHtmlComposeEnabled $
+		zimbraFeatureTaggingEnabled $
+		zimbraFeatureAdvancedSearchEnabled $
+		zimbraFeatureSavedSearchesEnabled $
+		zimbraFeatureConversationsEnabled $
+		zimbraFeatureChangePasswordEnabled $
+		zimbraFeatureInitialSearchPreferenceEnabled $
+		zimbraFeatureFiltersEnabled $
+		zimbraImapEnabled $		
+		zimbraNotes $
+		zimbraMailHostPool $
+		zimbraMailIdleSessionTimeout $
+		zimbraMailMinPollingInterval $
+		zimbraMailMessageLifetime $
+		zimbraMailQuota $
+		zimbraMailTrashLifetime $
+		zimbraMailSpamLifetime $
+		zimbraNewMailNotificationFrom $
+		zimbraNewMailNotificationSubject $
+		zimbraNewMailNotificationBody $
+		zimbraPasswordMinLength $
+		zimbraPasswordMaxLength $
+		zimbraPasswordMinAge $
+		zimbraPasswordMaxAge $
+		zimbraPasswordEnforceHistory $
+		zimbraPasswordLocked $
+		zimbraPop3Enabled $		
+		zimbraPrefTimeZoneId $
+		zimbraPrefUseTimeZoneListInCalendar $
+		zimbraPrefShowFragments $
+		zimbraPrefShowSearchString $
+		zimbraPrefCalendarInitialView $
+		zimbraPrefComposeInNewWindow $
+		zimbraPrefComposeFormat $
+		zimbraPrefContactsInitialView $
+		zimbraPrefDedupeMessagesSentToSelf $
+		zimbraPrefForwardReplyInOriginalFormat $
+		zimbraPrefSaveToSent $
+		zimbraPrefSentMailFolder $
+		zimbraPrefGroupMailBy $
+		zimbraPrefIncludeSpamInSearch $
+		zimbraPrefIncludeTrashInSearch $
+		zimbraPrefImapSearchFoldersEnabled $
+		zimbraPrefMailInitialSearch $
+		zimbraPrefMailItemsPerPage $	
+		zimbraPrefMailSignatureStyle $
+		zimbraPrefContactsPerPage $
+		zimbraPrefMessageViewHtmlPreferred $
+		zimbraPrefMailPollingInterval $
+		zimbraPrefReplyIncludeOriginalText $
+		zimbraPrefForwardIncludeOriginalText $
+		zimbraPrefForwardReplyPrefixChar $
+		zimbraPrefAutoAddAddressEnabled $
+		zimbraPrefUseKeyboardShortcuts 
 	) )
 
 ################
-# liquidGlobalConfig is the entry that holds all the global configuration attrs.
+# zimbraGlobalConfig is the entry that holds all the global configuration attrs.
 ################
-objectclass ( liquidGlobalConfig
-	NAME 'liquidGlobalConfig'
+objectclass ( zimbraGlobalConfig
+	NAME 'zimbraGlobalConfig'
 	DESC 'global config'
 	SUP top AUXILIARY
 	MAY (
-		liquidAttachmentsBlocked $
-        liquidAttachmentsScanEnabled $
-        liquidAttachmentsScanClass $
-        liquidAttachmentsScanURL $
-		liquidAttachmentsViewInHtmlOnly $
-		liquidAccountClientAttr $
-		liquidCalendarCompatibilityMode $
-		liquidComponentAvailable $
-		liquidCOSInheritedAttr $
-		liquidDefaultDomainName $		
-		liquidDomainInheritedAttr $
-		liquidGalLdapFilterDef $
-		liquidGalLdapAttrMap $
-		liquidGalMaxResults $
-		liquidFileUploadMaxSize $
-		liquidImapServerEnabled $
-		liquidImapNumThreads $
-		liquidImapBindPort $
-		liquidImapSSLBindPort $
-		liquidImapSSLServerEnabled $
-		liquidImapCleartextLoginEnabled $
-		liquidLastLogonTimestampFrequency $
-		liquidLmtpNumThreads $
-		liquidLmtpBindPort $
-		liquidMtaAuthEnabled $
-		liquidMtaBlockedExtension $
-		liquidMtaCommonBlockedExtension $
-		liquidMtaDnsLookupsEnabled $
-		liquidMtaMaxMessageSize $
-		liquidMtaRelayHost $
-		liquidMtaRestriction $
-		liquidMtaTlsAuthOnly $
-		liquidPop3CleartextLoginEnabled $
-		liquidPop3NumThreads $
-		liquidPop3BindPort $
-		liquidPop3ServerEnabled $
-		liquidPop3SSLBindPort $
-		liquidPop3SSLServerEnabled $
-		liquidRedoLogEnabled $
-		liquidRedoLogLogPath $
-		liquidRedoLogArchiveDir $
-		liquidRedoLogRolloverFileSizeKB $
-		liquidRedoLogFsyncIntervalMS $
-		liquidServerInheritedAttr $
-		liquidSmtpHostname $
-		liquidSmtpPort $
-		liquidSmtpTimeout $
-		liquidSpamHeader $
-		liquidSpamHeaderValue $
-		liquidSpamCheckEnabled $
-		liquidSpamKillPercent $
-		liquidSpamSubjectTag $
-		liquidSpamTagPercent $
-		liquidTableMaintenanceGrowthFactor $
-		liquidTableMaintenanceMinRows $
-		liquidTableMaintenanceMaxRows $
-		liquidTableMaintenanceOperation $
-		liquidAuthTokenKey $
-		liquidMailPort $
-		liquidMailSSLPort $
-		liquidAdminPort $
-		liquidVirusBlockEncryptedArchive $
-		liquidVirusCheckEnabled $
-		liquidVirusWarnRecipient $
-		liquidVirusWarnAdmin $
-		liquidVirusDefinitionsUpdateFrequency $
-		liquidRedoLogProvider
+		zimbraAttachmentsBlocked $
+        zimbraAttachmentsScanEnabled $
+        zimbraAttachmentsScanClass $
+        zimbraAttachmentsScanURL $
+		zimbraAttachmentsViewInHtmlOnly $
+		zimbraAccountClientAttr $
+		zimbraCalendarCompatibilityMode $
+		zimbraComponentAvailable $
+		zimbraCOSInheritedAttr $
+		zimbraDefaultDomainName $		
+		zimbraDomainInheritedAttr $
+		zimbraGalLdapFilterDef $
+		zimbraGalLdapAttrMap $
+		zimbraGalMaxResults $
+		zimbraFileUploadMaxSize $
+		zimbraImapServerEnabled $
+		zimbraImapNumThreads $
+		zimbraImapBindPort $
+		zimbraImapSSLBindPort $
+		zimbraImapSSLServerEnabled $
+		zimbraImapCleartextLoginEnabled $
+		zimbraLastLogonTimestampFrequency $
+		zimbraLmtpNumThreads $
+		zimbraLmtpBindPort $
+		zimbraMtaAuthEnabled $
+		zimbraMtaBlockedExtension $
+		zimbraMtaCommonBlockedExtension $
+		zimbraMtaDnsLookupsEnabled $
+		zimbraMtaMaxMessageSize $
+		zimbraMtaRelayHost $
+		zimbraMtaRestriction $
+		zimbraMtaTlsAuthOnly $
+		zimbraPop3CleartextLoginEnabled $
+		zimbraPop3NumThreads $
+		zimbraPop3BindPort $
+		zimbraPop3ServerEnabled $
+		zimbraPop3SSLBindPort $
+		zimbraPop3SSLServerEnabled $
+		zimbraRedoLogEnabled $
+		zimbraRedoLogLogPath $
+		zimbraRedoLogArchiveDir $
+		zimbraRedoLogRolloverFileSizeKB $
+		zimbraRedoLogFsyncIntervalMS $
+		zimbraServerInheritedAttr $
+		zimbraSmtpHostname $
+		zimbraSmtpPort $
+		zimbraSmtpTimeout $
+		zimbraSpamHeader $
+		zimbraSpamHeaderValue $
+		zimbraSpamCheckEnabled $
+		zimbraSpamKillPercent $
+		zimbraSpamSubjectTag $
+		zimbraSpamTagPercent $
+		zimbraTableMaintenanceGrowthFactor $
+		zimbraTableMaintenanceMinRows $
+		zimbraTableMaintenanceMaxRows $
+		zimbraTableMaintenanceOperation $
+		zimbraAuthTokenKey $
+		zimbraMailPort $
+		zimbraMailSSLPort $
+		Zimbra::AdminPort $
+		zimbraVirusBlockEncryptedArchive $
+		zimbraVirusCheckEnabled $
+		zimbraVirusWarnRecipient $
+		zimbraVirusWarnAdmin $
+		zimbraVirusDefinitionsUpdateFrequency $
+		zimbraRedoLogProvider
 		)
 	 )
 
 ################
-# liquidDomain is used to represent a domain in the directory. For example, if we created the foo.com domain, then
-# the  dc=foo,dc=com entry in LDAP would have an objectclass of liquidDomain.
+# zimbraDomain is used to represent a domain in the directory. For example, if we created the foo.com domain, then
+# the  dc=foo,dc=com entry in LDAP would have an objectclass of zimbraDomain.
 #
 # domain-specific configuration information (if so-needed) could be added here.
 #
 ################
-objectclass ( liquidDomain
-	NAME 'liquidDomain'
+objectclass ( zimbraDomain
+	NAME 'zimbraDomain'
 	DESC 'Domain object'
-	SUP liquidMailRecipient AUXILIARY	
-	MUST (	liquidId $
-		liquidDomainName $
-		liquidDomainType)
+	SUP zimbraMailRecipient AUXILIARY	
+	MUST (	zimbraId $
+		zimbraDomainName $
+		zimbraDomainType)
 	MAY (	
 		description $
-		liquidNotes $
-		liquidAuthLdapURL $
-		liquidAuthLdapBindDn $
-		liquidAuthMech $
-		liquidGalMaxResults $
-		liquidGalMode $
-		liquidGalLdapURL $
-		liquidGalLdapSearchBase $
-		liquidGalLdapBindDn $
-		liquidGalLdapBindPassword $
-		liquidGalLdapAttrMap $
-		liquidGalLdapFilter
+		zimbraNotes $
+		zimbraAuthLdapURL $
+		zimbraAuthLdapBindDn $
+		zimbraAuthMech $
+		zimbraGalMaxResults $
+		zimbraGalMode $
+		zimbraGalLdapURL $
+		zimbraGalLdapSearchBase $
+		zimbraGalLdapBindDn $
+		zimbraGalLdapBindPassword $
+		zimbraGalLdapAttrMap $
+		zimbraGalLdapFilter
 		))
 
 
 ################
-# liquidSecurityGroup is used to represent a security group in the directory. Each liquidMember attr
-# is the liquidId of the account (and/or group if we allow recursive groups) that is a member
+# zimbraSecurityGroup is used to represent a security group in the directory. Each zimbraMember attr
+# is the zimbraId of the account (and/or group if we allow recursive groups) that is a member
 # of this group.
 #
 ################
-objectclass ( liquidSecurityGroup
-	NAME 'liquidSecurityGroup'
+objectclass ( zimbraSecurityGroup
+	NAME 'zimbraSecurityGroup'
 	DESC 'Security Group'
 	SUP top STRUCTURAL
-	MUST (	liquidId $
+	MUST (	zimbraId $
 		cn)
-	MAY (	liquidMember $ 
-		liquidNotes $
+	MAY (	zimbraMember $ 
+		zimbraNotes $
 		description))
 	
 ################
-# liquidServer is used to represent a defined server within a liquid install.
+# zimbraServer is used to represent a defined server within a zimbra install.
 #
 # server-specific configuration information will be added here. This includes information
 # like which services should be running on a server, whether or not the server is normally a master/slave, etc.
 #
 ################
-objectclass ( liquidServer
-	NAME 'liquidServer'
+objectclass ( zimbraServer
+	NAME 'zimbraServer'
 	DESC 'Server in the cluster'
 	SUP top STRUCTURAL
-	MUST (liquidId $ cn)
+	MUST (zimbraId $ cn)
 	MAY (
 		description $
-                liquidAttachmentsScanURL $
-		liquidFileUploadMaxSize $
-		liquidIsMonitorHost $
-		liquidLmtpAdvertisedName $
-		liquidLmtpBindAddress $
-		liquidLmtpBindPort $
-		liquidLmtpNumThreads $
-		liquidImapServerEnabled $
-		liquidImapAdvertisedName $
-		liquidImapBindAddress $
-		liquidImapBindPort $
-		liquidImapNumThreads $
-		liquidImapSSLBindAddress $
-		liquidImapSSLBindPort $
-		liquidImapSSLServerEnabled $
-		liquidImapCleartextLoginEnabled $
-		liquidMtaAuthEnabled $
-		liquidMtaDnsLookupsEnabled $
-		liquidMtaRelayHost $
-		liquidMtaTlsAuthOnly $
-		liquidPop3CleartextLoginEnabled $
-		liquidPop3AdvertisedName $
-		liquidPop3BindAddress $
-		liquidPop3BindPort $
-		liquidPop3NumThreads $
-		liquidPop3ServerEnabled $
-		liquidPop3SSLBindAddress $
-		liquidPop3SSLBindPort $
-		liquidPop3SSLServerEnabled $
-		liquidNotes $
-		liquidRedoLogEnabled $
-		liquidRedoLogLogPath $
-		liquidRedoLogArchiveDir $
-		liquidRedoLogRolloverFileSizeKB $
-		liquidRedoLogFsyncIntervalMS $
-		liquidServiceHostname $
-		liquidServiceEnabled $
-		liquidServiceInstalled $
-		liquidSmtpHostname $
-		liquidSmtpPort $
-		liquidSmtpTimeout $
-		liquidTableMaintenanceGrowthFactor $
-		liquidTableMaintenanceMinRows $
-		liquidTableMaintenanceMaxRows $
-		liquidTableMaintenanceOperation $
-		liquidUserServicesEnabled $
-		liquidVirusDefinitionsUpdateFrequency $		
-		liquidMailPort $
-		liquidMailSSLPort $
-		liquidAdminPort $
-		liquidRedoLogProvider
+                zimbraAttachmentsScanURL $
+		zimbraFileUploadMaxSize $
+		zimbraIsMonitorHost $
+		zimbraLmtpAdvertisedName $
+		zimbraLmtpBindAddress $
+		zimbraLmtpBindPort $
+		zimbraLmtpNumThreads $
+		zimbraImapServerEnabled $
+		zimbraImapAdvertisedName $
+		zimbraImapBindAddress $
+		zimbraImapBindPort $
+		zimbraImapNumThreads $
+		zimbraImapSSLBindAddress $
+		zimbraImapSSLBindPort $
+		zimbraImapSSLServerEnabled $
+		zimbraImapCleartextLoginEnabled $
+		zimbraMtaAuthEnabled $
+		zimbraMtaDnsLookupsEnabled $
+		zimbraMtaRelayHost $
+		zimbraMtaTlsAuthOnly $
+		zimbraPop3CleartextLoginEnabled $
+		zimbraPop3AdvertisedName $
+		zimbraPop3BindAddress $
+		zimbraPop3BindPort $
+		zimbraPop3NumThreads $
+		zimbraPop3ServerEnabled $
+		zimbraPop3SSLBindAddress $
+		zimbraPop3SSLBindPort $
+		zimbraPop3SSLServerEnabled $
+		zimbraNotes $
+		zimbraRedoLogEnabled $
+		zimbraRedoLogLogPath $
+		zimbraRedoLogArchiveDir $
+		zimbraRedoLogRolloverFileSizeKB $
+		zimbraRedoLogFsyncIntervalMS $
+		zimbraServiceHostname $
+		zimbraServiceEnabled $
+		zimbraServiceInstalled $
+		zimbraSmtpHostname $
+		zimbraSmtpPort $
+		zimbraSmtpTimeout $
+		zimbraTableMaintenanceGrowthFactor $
+		zimbraTableMaintenanceMinRows $
+		zimbraTableMaintenanceMaxRows $
+		zimbraTableMaintenanceOperation $
+		zimbraUserServicesEnabled $
+		zimbraVirusDefinitionsUpdateFrequency $		
+		zimbraMailPort $
+		zimbraMailSSLPort $
+		Zimbra::AdminPort $
+		zimbraRedoLogProvider
 	))
 	
 ################
-# liquidMimeEntry is used to represent status about mime types
+# zimbraMimeEntry is used to represent status about mime types
 #
 #
 ################
-objectclass ( liquidMimeEntry
-	NAME 'liquidMimeEntry'
+objectclass ( zimbraMimeEntry
+	NAME 'zimbraMimeEntry'
 	DESC 'MIME type info'
 	SUP top STRUCTURAL
 	MUST (
 		cn $
-		liquidMimeType $ 
-		liquidMimeIndexingEnabled)
+		zimbraMimeType $ 
+		zimbraMimeIndexingEnabled)
 	MAY (description $
-		liquidMimeFileExtension $
-		liquidMimeHandlerClass)
+		zimbraMimeFileExtension $
+		zimbraMimeHandlerClass)
 	))
 
 ################
-# liquidObjectEntry is used to represent status about object types
+# zimbraObjectEntry is used to represent status about object types
 #
 #
 ################
-objectclass ( liquidObjectEntry
-	NAME 'liquidObjectEntry'
+objectclass ( zimbraObjectEntry
+	NAME 'zimbraObjectEntry'
 	DESC 'Object type info'
 	SUP top STRUCTURAL
 	MUST (
 		cn $
-		liquidObjectType $ 
-		liquidObjectIndexingEnabled $
-		liquidObjectStoreMatched)
+		zimbraObjectType $ 
+		zimbraObjectIndexingEnabled $
+		zimbraObjectStoreMatched)
 	MAY (description $
-		liquidObjectHandlerConfig $
-		liquidObjectHandlerClass)
+		zimbraObjectHandlerConfig $
+		zimbraObjectHandlerClass)
 	))	
 
 ################
-# liquidTimeZone is used to define a timezone with daylight savings time
+# zimbraTimeZone is used to define a timezone with daylight savings time
 # rules.  Used in calendar.
 #
 ################
-objectclass ( liquidTimeZone
-	NAME 'liquidTimeZone'
+objectclass ( zimbraTimeZone
+	NAME 'zimbraTimeZone'
 	DESC 'Time Zone info'
 	SUP top STRUCTURAL
 	MUST (
     	cn $
-		liquidTimeZoneStandardDtStart $
-		liquidTimeZoneStandardOffset)
+		zimbraTimeZoneStandardDtStart $
+		zimbraTimeZoneStandardOffset)
 	MAY (
-		liquidTimeZoneStandardRRule $
-		liquidTimeZoneDaylightDtStart $
-		liquidTimeZoneDaylightOffset $
-		liquidTimeZoneDaylightRRule
+		zimbraTimeZoneStandardRRule $
+		zimbraTimeZoneDaylightDtStart $
+		zimbraTimeZoneDaylightOffset $
+		zimbraTimeZoneDaylightRRule
 	))

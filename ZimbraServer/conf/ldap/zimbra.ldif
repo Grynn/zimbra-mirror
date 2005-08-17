@@ -1,1158 +1,1158 @@
-dn: cn=liquid
+dn: cn=zimbra
 objectclass: organizationalRole
-description: Liquid Systems Application Data
-cn: liquid
+description: Zimbra Systems Application Data
+cn: zimbra
 
-dn: cn=admins,cn=liquid
+dn: cn=admins,cn=zimbra
 objectclass: organizationalRole
 description: admin accounts
 cn: admins
 
 # place folder for initial admin
-dn: uid=liquid,cn=admins,cn=liquid
-uid: liquid
-objectclass: liquidAccount
+dn: uid=zimbra,cn=admins,cn=zimbra
+uid: zimbra
+objectclass: zimbraAccount
 objectclass: organizationalPerson
-cn: liquid
-sn: liquid
-liquidAccountStatus: active
-liquidIsAdminAccount: TRUE
-liquidId: e0fafd89-1360-11d9-8661-000a95d98ef2
-description: The master liquid admin account
+cn: zimbra
+sn: zimbra
+zimbraAccountStatus: active
+zimbraIsAdminAccount: TRUE
+zimbraId: e0fafd89-1360-11d9-8661-000a95d98ef2
+description: The master zimbra admin account
 userPassword: {SSHA}Ig5RshpcsYSPhtyx6EH1AxOgz5pOWKD+
 
 # for storing global config
-dn: cn=config,cn=liquid
+dn: cn=config,cn=zimbra
 objectclass: organizationalRole
 cn: config
-objectclass: liquidGlobalConfig
-liquidAttachmentsBlocked: FALSE
-liquidAttachmentsScanEnabled: FALSE
-liquidAttachmentsScanClass: com.zimbra.cs.scan.ClamScanner
-liquidAttachmentsViewInHtmlOnly: FALSE
-liquidAccountClientAttr: displayName
-liquidAccountClientAttr: liquidMailAlias
-liquidAccountClientAttr: liquidMailMinPollingInterval
-liquidAccountClientAttr: liquidMailIdleSessionTimeout
-liquidAccountClientAttr: liquidMailQuota
-liquidAccountClientAttr: liquidContactMaxNumEntries
-liquidAccountClientAttr: liquidFeatureContactsEnabled
-liquidAccountClientAttr: liquidFeatureGalEnabled
-liquidAccountClientAttr: liquidFeatureCalendarEnabled
-liquidAccountClientAttr: liquidFeatureHtmlComposeEnabled
-liquidAccountClientAttr: liquidFeatureTaggingEnabled
-liquidAccountClientAttr: liquidFeatureAdvancedSearchEnabled
-liquidAccountClientAttr: liquidFeatureSavedSearchesEnabled
-liquidAccountClientAttr: liquidFeatureConversationsEnabled
-liquidAccountClientAttr: liquidFeatureChangePasswordEnabled
-liquidAccountClientAttr: liquidFeatureInitialSearchPreferenceEnabled
-liquidAccountClientAttr: liquidFeatureFiltersEnabled
-liquidCalendarCompatibilityMode: standard
-liquidCOSInheritedAttr: liquidAttachmentsBlocked
-liquidCOSInheritedAttr: liquidAttachmentsIndexingEnabled
-liquidCOSInheritedAttr: liquidAttachmentsViewInHtmlOnly
-liquidCOSInheritedAttr: liquidAdminAuthTokenLifetime
-liquidCOSInheritedAttr: liquidAuthTokenLifetime
-liquidCOSInheritedAttr: liquidContactMaxNumEntries
-liquidCOSInheritedAttr: liquidMailIdleSessionTimeout
-liquidCOSInheritedAttr: liquidMailMessageLifetime
-liquidCOSInheritedAttr: liquidMailMinPollingInterval
-liquidCOSInheritedAttr: liquidMailQuota
-liquidCOSInheritedAttr: liquidMailSpamLifetime
-liquidCOSInheritedAttr: liquidMailTrashLifetime
-liquidCOSInheritedAttr: liquidPrefSaveToSent
-liquidCOSInheritedAttr: liquidPrefSentMailFolder
-liquidCOSInheritedAttr: liquidPasswordEnforceHistory
-liquidCOSInheritedAttr: liquidPasswordLocked
-liquidCOSInheritedAttr: liquidPasswordMinAge
-liquidCOSInheritedAttr: liquidPasswordMaxAge
-liquidCOSInheritedAttr: liquidPasswordMinLength
-liquidCOSInheritedAttr: liquidPasswordMaxLength
-liquidCOSInheritedAttr: liquidPrefTimeZoneId
-liquidCOSInheritedAttr: liquidPrefUseTimeZoneListInCalendar
-liquidCOSInheritedAttr: liquidPrefComposeInNewWindow
-liquidCOSInheritedAttr: liquidPrefCalendarInitialView
-liquidCOSInheritedAttr: liquidPrefContactsInitialView
-liquidCOSInheritedAttr: liquidPrefShowFragments
-liquidCOSInheritedAttr: liquidPrefShowSearchString
-liquidCOSInheritedAttr: liquidPrefDedupeMessagesSentToSelf
-liquidCOSInheritedAttr: liquidPrefGroupMailBy
-liquidCOSInheritedAttr: liquidPrefImapSearchFoldersEnabled
-liquidCOSInheritedAttr: liquidPrefIncludeSpamInSearch
-liquidCOSInheritedAttr: liquidPrefIncludeTrashInSearch
-liquidCOSInheritedAttr: liquidPrefMailItemsPerPage
-liquidCOSInheritedAttr: liquidPrefContactsPerPage
-liquidCOSInheritedAttr: liquidPrefMessageViewHtmlPreferred
-liquidCOSInheritedAttr: liquidPrefMailPollingInterval
-liquidCOSInheritedAttr: liquidPrefUseKeyboardShortcuts
-liquidCOSInheritedAttr: liquidPrefMailInitialSearch
-liquidCOSInheritedAttr: liquidPrefMailSignatureStyle
-liquidCOSInheritedAttr: liquidPrefReplyIncludeOriginalText
-liquidCOSInheritedAttr: liquidPrefForwardIncludeOriginalText
-liquidCOSInheritedAttr: liquidPrefForwardReplyPrefixChar
-liquidCOSInheritedAttr: liquidPrefAutoAddAddressEnabled
-liquidCOSInheritedAttr: liquidFeatureContactsEnabled
-liquidCOSInheritedAttr: liquidFeatureGalEnabled
-liquidCOSInheritedAttr: liquidFeatureCalendarEnabled
-liquidCOSInheritedAttr: liquidFeatureTaggingEnabled
-liquidCOSInheritedAttr: liquidFeatureAdvancedSearchEnabled
-liquidCOSInheritedAttr: liquidFeatureSavedSearchesEnabled
-liquidCOSInheritedAttr: liquidFeatureConversationsEnabled
-liquidCOSInheritedAttr: liquidFeatureChangePasswordEnabled
-liquidCOSInheritedAttr: liquidFeatureInitialSearchPreferenceEnabled
-liquidCOSInheritedAttr: liquidFeatureFiltersEnabled
-liquidCOSInheritedAttr: liquidNewMailNotificationFrom
-liquidCOSInheritedAttr: liquidNewMailNotificationSubject
-liquidCOSInheritedAttr: liquidNewMailNotificationBody
-liquidCOSInheritedAttr: liquidPop3Enabled
-liquidCOSInheritedAttr: liquidImapEnabled
-liquidCOSInheritedAttr: liquidPrefComposeFormat
-liquidCOSInheritedAttr: liquidPrefForwardReplyInOriginalFormat
-liquidCOSInheritedAttr: liquidFeatureHtmlComposeEnabled
-liquidDomainInheritedAttr: liquidGalMaxResults
-liquidDomainInheritedAttr: liquidGalLdapAttrMap
-liquidFileUploadMaxSize: 10485760
-liquidGalLdapFilterDef: liquid:(&(|(cn=*%s*)(sn=*%s*)(gn=*%s*)(mail=*%s*)(liquidMailDeliveryAddress=*%s*)(liquidMailAlias=*%s*)(liquidMailAddress=*%s*))(objectclass=liquidAccount))
-liquidGalLdapFilterDef: ad:(&(|(cn=*%s*)(sn=*%s*)(gn=*%s*)(mail=*%s*))(!(msExchHideFromAddressLists=TRUE))(mailnickname=*)(|(&(objectCategory=person)(objectClass=user)(!(homeMDB=*))(!(msExchHomeServerName=*)))(&(objectCategory=person)(objectClass=user)(|(homeMDB=*)(msExchHomeServerName=*)))(&(objectCategory=person)(objectClass=contact))(objectCategory=group)(objectCategory=publicFolder)(objectCategory=msExchDynamicDistributionList)))
-liquidGalLdapAttrMap: co=workCountry
-liquidGalLdapAttrMap: company=company
-liquidGalLdapAttrMap: givenName=firstName
-liquidGalLdapAttrMap: sn=lastName
-liquidGalLdapAttrMap: displayName,cn=fullName
-liquidGalLdapAttrMap: initials=initials
-liquidGalLdapAttrMap: l=workCity
-liquidGalLdapAttrMap: physicalDeliveryOfficeName=office
-liquidGalLdapAttrMap: ou=department
-liquidGalLdapAttrMap: postalAddress=workStreet
-liquidGalLdapAttrMap: postalCode=workPostalCode
-liquidGalLdapAttrMap: telephoneNumber=workPhone
-liquidGalLdapAttrMap: st=workState
-liquidGalLdapAttrMap: liquidMailDeliveryAddress,mail=email
-liquidGalLdapAttrMap: title=jobTitle
-liquidGalMaxResults: 100
-liquidLastLogonTimestampFrequency: 7d
-liquidLmtpNumThreads: 8
-liquidLmtpBindPort: 7025
-liquidImapServerEnabled: TRUE
-liquidImapNumThreads: 10
-liquidImapBindPort: 7143
-liquidImapSSLBindPort: 7993
-liquidImapSSLServerEnabled: TRUE
-liquidImapCleartextLoginEnabled: FALSE
-liquidMtaAuthEnabled: TRUE
-liquidMtaCommonBlockedExtension: asd
-liquidMtaCommonBlockedExtension: bat
-liquidMtaCommonBlockedExtension: chm
-liquidMtaCommonBlockedExtension: cmd
-liquidMtaCommonBlockedExtension: com
-liquidMtaCommonBlockedExtension: dll
-liquidMtaCommonBlockedExtension: do
-liquidMtaCommonBlockedExtension: exe
-liquidMtaCommonBlockedExtension: hlp
-liquidMtaCommonBlockedExtension: hta
-liquidMtaCommonBlockedExtension: js
-liquidMtaCommonBlockedExtension: jse
-liquidMtaCommonBlockedExtension: lnk
-liquidMtaCommonBlockedExtension: mov
-liquidMtaCommonBlockedExtension: ocx
-liquidMtaCommonBlockedExtension: pif
-liquidMtaCommonBlockedExtension: reg
-liquidMtaCommonBlockedExtension: rm
-liquidMtaCommonBlockedExtension: scr
-liquidMtaCommonBlockedExtension: shb
-liquidMtaCommonBlockedExtension: shm
-liquidMtaCommonBlockedExtension: shs
-liquidMtaCommonBlockedExtension: vbe
-liquidMtaCommonBlockedExtension: vbs
-liquidMtaCommonBlockedExtension: vbx
-liquidMtaCommonBlockedExtension: vxd
-liquidMtaCommonBlockedExtension: wav
-liquidMtaCommonBlockedExtension: wmf
-liquidMtaCommonBlockedExtension: wsf
-liquidMtaCommonBlockedExtension: wsh
-liquidMtaCommonBlockedExtension: xl
-liquidMtaDnsLookupsEnabled: TRUE
-liquidMtaMaxMessageSize: 10240000
-liquidMtaRestriction: reject_invalid_hostname
-liquidMtaRestriction: reject_non_fqdn_hostname
-liquidMtaRestriction: reject_non_fqdn_sender
-liquidMtaTlsAuthOnly: TRUE
-liquidPop3CleartextLoginEnabled: FALSE
-liquidPop3NumThreads: 10
-liquidPop3BindPort: 7110
-liquidPop3ServerEnabled: TRUE
-liquidPop3SSLBindPort: 7995
-liquidPop3SSLServerEnabled: TRUE
-liquidRedoLogEnabled: TRUE
-liquidRedoLogLogPath: redolog/redo.log
-liquidRedoLogArchiveDir: redolog/archive
-liquidRedoLogRolloverFileSizeKB: 102400
-liquidRedoLogFsyncIntervalMS: 10
-liquidSmtpHostname: localhost
-liquidSmtpPort: 25
-liquidSmtpTimeout: 60
-liquidSpamCheckEnabled: FALSE
-liquidSpamKillPercent: 75
-liquidSpamTagPercent: 33
-liquidSpamHeader: X-Spam-Flag
-liquidSpamHeaderValue: YES
-liquidTableMaintenanceGrowthFactor: 10
-liquidTableMaintenanceMinRows: 10000
-liquidTableMaintenanceMaxRows: 1000000
-liquidTableMaintenanceOperation: ANALYZE
-liquidMailPort: 80
-liquidMailSSLPort: 0
-liquidAdminPort: 7071
-liquidServerInheritedAttr: liquidAttachmentsScanURL
-liquidServerInheritedAttr: liquidFileUploadMaxSize
-liquidServerInheritedAttr: liquidLmtpNumThreads
-liquidServerInheritedAttr: liquidLmtpBindPort
-liquidServerInheritedAttr: liquidImapServerEnabled
-liquidServerInheritedAttr: liquidImapNumThreads
-liquidServerInheritedAttr: liquidImapBindPort
-liquidServerInheritedAttr: liquidImapSSLServerEnabled
-liquidServerInheritedAttr: liquidImapCleartextLoginEnabled
-liquidServerInheritedAttr: liquidImapSSLBindPort
-liquidServerInheritedAttr: liquidMtaAuthEnabled
-liquidServerInheritedAttr: liquidMtaDnsLookupsEnabled
-liquidServerInheritedAttr: liquidMtaRelayHost
-liquidServerInheritedAttr: liquidMtaTlsAuthOnly
-liquidServerInheritedAttr: liquidPop3ServerEnabled
-liquidServerInheritedAttr: liquidPop3NumThreads
-liquidServerInheritedAttr: liquidPop3BindPort
-liquidServerInheritedAttr: liquidPop3SSLServerEnabled
-liquidServerInheritedAttr: liquidPop3SSLBindPort
-liquidServerInheritedAttr: liquidPop3CleartextLoginEnabled
-liquidServerInheritedAttr: liquidRedoLogEnabled
-liquidServerInheritedAttr: liquidRedoLogLogPath
-liquidServerInheritedAttr: liquidRedoLogArchiveDir
-liquidServerInheritedAttr: liquidRedoLogRolloverFileSizeKB
-liquidServerInheritedAttr: liquidRedoLogFsyncIntervalMS
-liquidServerInheritedAttr: liquidSmtpHostname
-liquidServerInheritedAttr: liquidSmtpPort
-liquidServerInheritedAttr: liquidSmtpTimeout
-liquidServerInheritedAttr: liquidTableMaintenanceGrowthFactor
-liquidServerInheritedAttr: liquidTableMaintenanceMinRows
-liquidServerInheritedAttr: liquidTableMaintenanceMaxRows
-liquidServerInheritedAttr: liquidTableMaintenanceOperation
-liquidServerInheritedAttr: liquidMailPort
-liquidServerInheritedAttr: liquidMailSSLPort
-liquidServerInheritedAttr: liquidAdminPort
-liquidServerInheritedAttr: liquidVirusDefinitionsUpdateFrequency
-liquidServerInheritedAttr: liquidRedoLogProvider
-liquidVirusCheckEnabled: FALSE
-liquidVirusWarnRecipient: TRUE
-liquidVirusWarnAdmin: TRUE
-liquidVirusBlockEncryptedArchive: TRUE
-liquidVirusDefinitionsUpdateFrequency: 2h
+objectclass: zimbraGlobalConfig
+zimbraAttachmentsBlocked: FALSE
+zimbraAttachmentsScanEnabled: FALSE
+zimbraAttachmentsScanClass: com.zimbra.cs.scan.ClamScanner
+zimbraAttachmentsViewInHtmlOnly: FALSE
+zimbraAccountClientAttr: displayName
+zimbraAccountClientAttr: zimbraMailAlias
+zimbraAccountClientAttr: zimbraMailMinPollingInterval
+zimbraAccountClientAttr: zimbraMailIdleSessionTimeout
+zimbraAccountClientAttr: zimbraMailQuota
+zimbraAccountClientAttr: zimbraContactMaxNumEntries
+zimbraAccountClientAttr: zimbraFeatureContactsEnabled
+zimbraAccountClientAttr: zimbraFeatureGalEnabled
+zimbraAccountClientAttr: zimbraFeatureCalendarEnabled
+zimbraAccountClientAttr: zimbraFeatureHtmlComposeEnabled
+zimbraAccountClientAttr: zimbraFeatureTaggingEnabled
+zimbraAccountClientAttr: zimbraFeatureAdvancedSearchEnabled
+zimbraAccountClientAttr: zimbraFeatureSavedSearchesEnabled
+zimbraAccountClientAttr: zimbraFeatureConversationsEnabled
+zimbraAccountClientAttr: zimbraFeatureChangePasswordEnabled
+zimbraAccountClientAttr: zimbraFeatureInitialSearchPreferenceEnabled
+zimbraAccountClientAttr: zimbraFeatureFiltersEnabled
+zimbraCalendarCompatibilityMode: standard
+zimbraCOSInheritedAttr: zimbraAttachmentsBlocked
+zimbraCOSInheritedAttr: zimbraAttachmentsIndexingEnabled
+zimbraCOSInheritedAttr: zimbraAttachmentsViewInHtmlOnly
+zimbraCOSInheritedAttr: Zimbra::AdminAuthTokenLifetime
+zimbraCOSInheritedAttr: zimbraAuthTokenLifetime
+zimbraCOSInheritedAttr: zimbraContactMaxNumEntries
+zimbraCOSInheritedAttr: zimbraMailIdleSessionTimeout
+zimbraCOSInheritedAttr: zimbraMailMessageLifetime
+zimbraCOSInheritedAttr: zimbraMailMinPollingInterval
+zimbraCOSInheritedAttr: zimbraMailQuota
+zimbraCOSInheritedAttr: zimbraMailSpamLifetime
+zimbraCOSInheritedAttr: zimbraMailTrashLifetime
+zimbraCOSInheritedAttr: zimbraPrefSaveToSent
+zimbraCOSInheritedAttr: zimbraPrefSentMailFolder
+zimbraCOSInheritedAttr: zimbraPasswordEnforceHistory
+zimbraCOSInheritedAttr: zimbraPasswordLocked
+zimbraCOSInheritedAttr: zimbraPasswordMinAge
+zimbraCOSInheritedAttr: zimbraPasswordMaxAge
+zimbraCOSInheritedAttr: zimbraPasswordMinLength
+zimbraCOSInheritedAttr: zimbraPasswordMaxLength
+zimbraCOSInheritedAttr: zimbraPrefTimeZoneId
+zimbraCOSInheritedAttr: zimbraPrefUseTimeZoneListInCalendar
+zimbraCOSInheritedAttr: zimbraPrefComposeInNewWindow
+zimbraCOSInheritedAttr: zimbraPrefCalendarInitialView
+zimbraCOSInheritedAttr: zimbraPrefContactsInitialView
+zimbraCOSInheritedAttr: zimbraPrefShowFragments
+zimbraCOSInheritedAttr: zimbraPrefShowSearchString
+zimbraCOSInheritedAttr: zimbraPrefDedupeMessagesSentToSelf
+zimbraCOSInheritedAttr: zimbraPrefGroupMailBy
+zimbraCOSInheritedAttr: zimbraPrefImapSearchFoldersEnabled
+zimbraCOSInheritedAttr: zimbraPrefIncludeSpamInSearch
+zimbraCOSInheritedAttr: zimbraPrefIncludeTrashInSearch
+zimbraCOSInheritedAttr: zimbraPrefMailItemsPerPage
+zimbraCOSInheritedAttr: zimbraPrefContactsPerPage
+zimbraCOSInheritedAttr: zimbraPrefMessageViewHtmlPreferred
+zimbraCOSInheritedAttr: zimbraPrefMailPollingInterval
+zimbraCOSInheritedAttr: zimbraPrefUseKeyboardShortcuts
+zimbraCOSInheritedAttr: zimbraPrefMailInitialSearch
+zimbraCOSInheritedAttr: zimbraPrefMailSignatureStyle
+zimbraCOSInheritedAttr: zimbraPrefReplyIncludeOriginalText
+zimbraCOSInheritedAttr: zimbraPrefForwardIncludeOriginalText
+zimbraCOSInheritedAttr: zimbraPrefForwardReplyPrefixChar
+zimbraCOSInheritedAttr: zimbraPrefAutoAddAddressEnabled
+zimbraCOSInheritedAttr: zimbraFeatureContactsEnabled
+zimbraCOSInheritedAttr: zimbraFeatureGalEnabled
+zimbraCOSInheritedAttr: zimbraFeatureCalendarEnabled
+zimbraCOSInheritedAttr: zimbraFeatureTaggingEnabled
+zimbraCOSInheritedAttr: zimbraFeatureAdvancedSearchEnabled
+zimbraCOSInheritedAttr: zimbraFeatureSavedSearchesEnabled
+zimbraCOSInheritedAttr: zimbraFeatureConversationsEnabled
+zimbraCOSInheritedAttr: zimbraFeatureChangePasswordEnabled
+zimbraCOSInheritedAttr: zimbraFeatureInitialSearchPreferenceEnabled
+zimbraCOSInheritedAttr: zimbraFeatureFiltersEnabled
+zimbraCOSInheritedAttr: zimbraNewMailNotificationFrom
+zimbraCOSInheritedAttr: zimbraNewMailNotificationSubject
+zimbraCOSInheritedAttr: zimbraNewMailNotificationBody
+zimbraCOSInheritedAttr: zimbraPop3Enabled
+zimbraCOSInheritedAttr: zimbraImapEnabled
+zimbraCOSInheritedAttr: zimbraPrefComposeFormat
+zimbraCOSInheritedAttr: zimbraPrefForwardReplyInOriginalFormat
+zimbraCOSInheritedAttr: zimbraFeatureHtmlComposeEnabled
+zimbraDomainInheritedAttr: zimbraGalMaxResults
+zimbraDomainInheritedAttr: zimbraGalLdapAttrMap
+zimbraFileUploadMaxSize: 10485760
+zimbraGalLdapFilterDef: zimbra:(&(|(cn=*%s*)(sn=*%s*)(gn=*%s*)(mail=*%s*)(zimbraMailDeliveryAddress=*%s*)(zimbraMailAlias=*%s*)(zimbraMailAddress=*%s*))(objectclass=zimbraAccount))
+zimbraGalLdapFilterDef: ad:(&(|(cn=*%s*)(sn=*%s*)(gn=*%s*)(mail=*%s*))(!(msExchHideFromAddressLists=TRUE))(mailnickname=*)(|(&(objectCategory=person)(objectClass=user)(!(homeMDB=*))(!(msExchHomeServerName=*)))(&(objectCategory=person)(objectClass=user)(|(homeMDB=*)(msExchHomeServerName=*)))(&(objectCategory=person)(objectClass=contact))(objectCategory=group)(objectCategory=publicFolder)(objectCategory=msExchDynamicDistributionList)))
+zimbraGalLdapAttrMap: co=workCountry
+zimbraGalLdapAttrMap: company=company
+zimbraGalLdapAttrMap: givenName=firstName
+zimbraGalLdapAttrMap: sn=lastName
+zimbraGalLdapAttrMap: displayName,cn=fullName
+zimbraGalLdapAttrMap: initials=initials
+zimbraGalLdapAttrMap: l=workCity
+zimbraGalLdapAttrMap: physicalDeliveryOfficeName=office
+zimbraGalLdapAttrMap: ou=department
+zimbraGalLdapAttrMap: postalAddress=workStreet
+zimbraGalLdapAttrMap: postalCode=workPostalCode
+zimbraGalLdapAttrMap: telephoneNumber=workPhone
+zimbraGalLdapAttrMap: st=workState
+zimbraGalLdapAttrMap: zimbraMailDeliveryAddress,mail=email
+zimbraGalLdapAttrMap: title=jobTitle
+zimbraGalMaxResults: 100
+zimbraLastLogonTimestampFrequency: 7d
+zimbraLmtpNumThreads: 8
+zimbraLmtpBindPort: 7025
+zimbraImapServerEnabled: TRUE
+zimbraImapNumThreads: 10
+zimbraImapBindPort: 7143
+zimbraImapSSLBindPort: 7993
+zimbraImapSSLServerEnabled: TRUE
+zimbraImapCleartextLoginEnabled: FALSE
+zimbraMtaAuthEnabled: TRUE
+zimbraMtaCommonBlockedExtension: asd
+zimbraMtaCommonBlockedExtension: bat
+zimbraMtaCommonBlockedExtension: chm
+zimbraMtaCommonBlockedExtension: cmd
+zimbraMtaCommonBlockedExtension: com
+zimbraMtaCommonBlockedExtension: dll
+zimbraMtaCommonBlockedExtension: do
+zimbraMtaCommonBlockedExtension: exe
+zimbraMtaCommonBlockedExtension: hlp
+zimbraMtaCommonBlockedExtension: hta
+zimbraMtaCommonBlockedExtension: js
+zimbraMtaCommonBlockedExtension: jse
+zimbraMtaCommonBlockedExtension: lnk
+zimbraMtaCommonBlockedExtension: mov
+zimbraMtaCommonBlockedExtension: ocx
+zimbraMtaCommonBlockedExtension: pif
+zimbraMtaCommonBlockedExtension: reg
+zimbraMtaCommonBlockedExtension: rm
+zimbraMtaCommonBlockedExtension: scr
+zimbraMtaCommonBlockedExtension: shb
+zimbraMtaCommonBlockedExtension: shm
+zimbraMtaCommonBlockedExtension: shs
+zimbraMtaCommonBlockedExtension: vbe
+zimbraMtaCommonBlockedExtension: vbs
+zimbraMtaCommonBlockedExtension: vbx
+zimbraMtaCommonBlockedExtension: vxd
+zimbraMtaCommonBlockedExtension: wav
+zimbraMtaCommonBlockedExtension: wmf
+zimbraMtaCommonBlockedExtension: wsf
+zimbraMtaCommonBlockedExtension: wsh
+zimbraMtaCommonBlockedExtension: xl
+zimbraMtaDnsLookupsEnabled: TRUE
+zimbraMtaMaxMessageSize: 10240000
+zimbraMtaRestriction: reject_invalid_hostname
+zimbraMtaRestriction: reject_non_fqdn_hostname
+zimbraMtaRestriction: reject_non_fqdn_sender
+zimbraMtaTlsAuthOnly: TRUE
+zimbraPop3CleartextLoginEnabled: FALSE
+zimbraPop3NumThreads: 10
+zimbraPop3BindPort: 7110
+zimbraPop3ServerEnabled: TRUE
+zimbraPop3SSLBindPort: 7995
+zimbraPop3SSLServerEnabled: TRUE
+zimbraRedoLogEnabled: TRUE
+zimbraRedoLogLogPath: redolog/redo.log
+zimbraRedoLogArchiveDir: redolog/archive
+zimbraRedoLogRolloverFileSizeKB: 102400
+zimbraRedoLogFsyncIntervalMS: 10
+zimbraSmtpHostname: localhost
+zimbraSmtpPort: 25
+zimbraSmtpTimeout: 60
+zimbraSpamCheckEnabled: FALSE
+zimbraSpamKillPercent: 75
+zimbraSpamTagPercent: 33
+zimbraSpamHeader: X-Spam-Flag
+zimbraSpamHeaderValue: YES
+zimbraTableMaintenanceGrowthFactor: 10
+zimbraTableMaintenanceMinRows: 10000
+zimbraTableMaintenanceMaxRows: 1000000
+zimbraTableMaintenanceOperation: ANALYZE
+zimbraMailPort: 80
+zimbraMailSSLPort: 0
+Zimbra::AdminPort: 7071
+zimbraServerInheritedAttr: zimbraAttachmentsScanURL
+zimbraServerInheritedAttr: zimbraFileUploadMaxSize
+zimbraServerInheritedAttr: zimbraLmtpNumThreads
+zimbraServerInheritedAttr: zimbraLmtpBindPort
+zimbraServerInheritedAttr: zimbraImapServerEnabled
+zimbraServerInheritedAttr: zimbraImapNumThreads
+zimbraServerInheritedAttr: zimbraImapBindPort
+zimbraServerInheritedAttr: zimbraImapSSLServerEnabled
+zimbraServerInheritedAttr: zimbraImapCleartextLoginEnabled
+zimbraServerInheritedAttr: zimbraImapSSLBindPort
+zimbraServerInheritedAttr: zimbraMtaAuthEnabled
+zimbraServerInheritedAttr: zimbraMtaDnsLookupsEnabled
+zimbraServerInheritedAttr: zimbraMtaRelayHost
+zimbraServerInheritedAttr: zimbraMtaTlsAuthOnly
+zimbraServerInheritedAttr: zimbraPop3ServerEnabled
+zimbraServerInheritedAttr: zimbraPop3NumThreads
+zimbraServerInheritedAttr: zimbraPop3BindPort
+zimbraServerInheritedAttr: zimbraPop3SSLServerEnabled
+zimbraServerInheritedAttr: zimbraPop3SSLBindPort
+zimbraServerInheritedAttr: zimbraPop3CleartextLoginEnabled
+zimbraServerInheritedAttr: zimbraRedoLogEnabled
+zimbraServerInheritedAttr: zimbraRedoLogLogPath
+zimbraServerInheritedAttr: zimbraRedoLogArchiveDir
+zimbraServerInheritedAttr: zimbraRedoLogRolloverFileSizeKB
+zimbraServerInheritedAttr: zimbraRedoLogFsyncIntervalMS
+zimbraServerInheritedAttr: zimbraSmtpHostname
+zimbraServerInheritedAttr: zimbraSmtpPort
+zimbraServerInheritedAttr: zimbraSmtpTimeout
+zimbraServerInheritedAttr: zimbraTableMaintenanceGrowthFactor
+zimbraServerInheritedAttr: zimbraTableMaintenanceMinRows
+zimbraServerInheritedAttr: zimbraTableMaintenanceMaxRows
+zimbraServerInheritedAttr: zimbraTableMaintenanceOperation
+zimbraServerInheritedAttr: zimbraMailPort
+zimbraServerInheritedAttr: zimbraMailSSLPort
+zimbraServerInheritedAttr: Zimbra::AdminPort
+zimbraServerInheritedAttr: zimbraVirusDefinitionsUpdateFrequency
+zimbraServerInheritedAttr: zimbraRedoLogProvider
+zimbraVirusCheckEnabled: FALSE
+zimbraVirusWarnRecipient: TRUE
+zimbraVirusWarnAdmin: TRUE
+zimbraVirusBlockEncryptedArchive: TRUE
+zimbraVirusDefinitionsUpdateFrequency: 2h
 
 # for storing object config info
 
-dn: cn=object,cn=config,cn=liquid
+dn: cn=object,cn=config,cn=zimbra
 objectclass: organizationalRole
 cn: object
 description: for storing object configuration
 
-dn: cn=url,cn=object,cn=config,cn=liquid
-liquidObjectType: url
+dn: cn=url,cn=object,cn=config,cn=zimbra
+zimbraObjectType: url
 cn: url
-objectclass: liquidObjectEntry
-liquidObjectIndexingEnabled: TRUE
-liquidObjectStoreMatched: FALSE
-liquidObjectHandlerClass: URLHandler
+objectclass: zimbraObjectEntry
+zimbraObjectIndexingEnabled: TRUE
+zimbraObjectStoreMatched: FALSE
+zimbraObjectHandlerClass: URLHandler
 description: URLs
 
-dn: cn=phone,cn=object,cn=config,cn=liquid
-liquidObjectType: phone
+dn: cn=phone,cn=object,cn=config,cn=zimbra
+zimbraObjectType: phone
 cn: phone
-objectclass: liquidObjectEntry
-liquidObjectIndexingEnabled: TRUE
-liquidObjectStoreMatched: FALSE
-liquidObjectHandlerClass: NANPHandler
+objectclass: zimbraObjectEntry
+zimbraObjectIndexingEnabled: TRUE
+zimbraObjectStoreMatched: FALSE
+zimbraObjectHandlerClass: NANPHandler
 description: Phone Number
 
-dn: cn=tracking,cn=object,cn=config,cn=liquid
-liquidObjectType: tracking
+dn: cn=tracking,cn=object,cn=config,cn=zimbra
+zimbraObjectType: tracking
 cn: tracking
-objectclass: liquidObjectEntry
-liquidObjectIndexingEnabled: TRUE
-liquidObjectStoreMatched: FALSE
-liquidObjectHandlerClass: TrackingHandler
+objectclass: zimbraObjectEntry
+zimbraObjectIndexingEnabled: TRUE
+zimbraObjectStoreMatched: FALSE
+zimbraObjectHandlerClass: TrackingHandler
 description: Shipping Tracking Number
 
-dn: cn=po,cn=object,cn=config,cn=liquid
-liquidObjectType: po
+dn: cn=po,cn=object,cn=config,cn=zimbra
+zimbraObjectType: po
 cn: po
-objectclass: liquidObjectEntry
-liquidObjectIndexingEnabled: TRUE
-liquidObjectStoreMatched: FALSE
-liquidObjectHandlerClass: RegexHandler
-liquidObjectHandlerConfig: GR\w{6}\-\w{5}
-description: Liquid Purchase Order
+objectclass: zimbraObjectEntry
+zimbraObjectIndexingEnabled: TRUE
+zimbraObjectStoreMatched: FALSE
+zimbraObjectHandlerClass: RegexHandler
+zimbraObjectHandlerConfig: GR\w{6}\-\w{5}
+description: Zimbra Purchase Order
 
 # for storing class-of-service config
-dn: cn=cos,cn=liquid
+dn: cn=cos,cn=zimbra
 objectclass: organizationalRole
 cn: cos
 
-dn: cn=default,cn=cos,cn=liquid
+dn: cn=default,cn=cos,cn=zimbra
 cn: default
-objectclass: liquidCOS
-liquidId: e00428a1-0c00-11d9-836a-000d93afea2a
+objectclass: zimbraCOS
+zimbraId: e00428a1-0c00-11d9-836a-000d93afea2a
 description: The default COS
-liquidAttachmentsBlocked: FALSE
-liquidAttachmentsIndexingEnabled: TRUE
-liquidAttachmentsViewInHtmlOnly: FALSE
-liquidFeatureContactsEnabled: TRUE
-liquidFeatureHtmlComposeEnabled: TRUE
-liquidFeatureGalEnabled: TRUE
-liquidFeatureCalendarEnabled: TRUE
-liquidFeatureTaggingEnabled: TRUE
-liquidFeatureAdvancedSearchEnabled: TRUE
-liquidFeatureSavedSearchesEnabled: TRUE
-liquidFeatureConversationsEnabled: TRUE
-liquidFeatureChangePasswordEnabled: TRUE
-liquidFeatureInitialSearchPreferenceEnabled: TRUE
-liquidFeatureFiltersEnabled: TRUE
-liquidImapEnabled: TRUE
-liquidMailIdleSessionTimeout: 0
-liquidMailTrashLifetime: 30d
-liquidMailSpamLifetime: 30d
-liquidMailMessageLifetime: 0
-liquidContactMaxNumEntries: 0
-liquidAuthTokenLifetime: 2d
-liquidAdminAuthTokenLifetime: 12h
-liquidMailMinPollingInterval: 2m
-liquidPrefMailPollingInterval: 5m
-liquidMailQuota: 0
-liquidPasswordEnforceHistory: 0
-LiquidPasswordMinAge: 0
-liquidPasswordMaxAge: 0
-liquidPasswordMinLength: 6
-liquidPasswordMaxLength: 64
-liquidPasswordLocked: FALSE
-liquidPop3Enabled: TRUE
-liquidPrefTimeZoneId: (GMT-08.00) Pacific Time (US & Canada) / Tijuana
-liquidPrefUseTimeZoneListInCalendar: FALSE
-liquidPrefShowFragments: TRUE
-liquidPrefShowSearchString: FALSE
-liquidPrefDedupeMessagesSentToSelf: dedupeNone
-liquidPrefSaveToSent: TRUE
-liquidPrefSentMailFolder: sent
-liquidPrefComposeInNewWindow: FALSE
-liquidPrefCalendarInitialView: workWeek
-liquidPrefContactsInitialView: list
-liquidPrefGroupMailBy: conversation
-liquidPrefIncludeSpamInSearch: FALSE
-liquidPrefIncludeTrashInSearch: FALSE
-liquidPrefImapSearchFoldersEnabled: TRUE
-liquidPrefMessageViewHtmlPreferred: TRUE
-liquidPrefMailInitialSearch: in:inbox
-liquidPrefContactsPerPage: 25
-liquidPrefMailItemsPerPage: 25
-liquidPrefMailSignatureStyle: outlook
-liquidPrefUseKeyboardShortcuts: FALSE
-liquidPrefReplyIncludeOriginalText: includeBody
-liquidPrefforwardIncludeOriginalText: includeBody
-liquidPrefForwardReplyPrefixChar: >
-liquidPrefAutoAddAddressEnabled: FALSE
-liquidPrefComposeFormat: text
-liquidPrefForwardReplyInOriginalFormat: FALSE
-liquidNewMailNotificationFrom: Postmaster <postmaster@${RECIPIENT_DOMAIN}>
-liquidNewMailNotificationSubject: New message received at ${RECIPIENT_ADDRESS}
-liquidNewMailNotificationBody: New message received at ${RECIPIENT_ADDRESS}.${NEWLINE}
+zimbraAttachmentsBlocked: FALSE
+zimbraAttachmentsIndexingEnabled: TRUE
+zimbraAttachmentsViewInHtmlOnly: FALSE
+zimbraFeatureContactsEnabled: TRUE
+zimbraFeatureHtmlComposeEnabled: TRUE
+zimbraFeatureGalEnabled: TRUE
+zimbraFeatureCalendarEnabled: TRUE
+zimbraFeatureTaggingEnabled: TRUE
+zimbraFeatureAdvancedSearchEnabled: TRUE
+zimbraFeatureSavedSearchesEnabled: TRUE
+zimbraFeatureConversationsEnabled: TRUE
+zimbraFeatureChangePasswordEnabled: TRUE
+zimbraFeatureInitialSearchPreferenceEnabled: TRUE
+zimbraFeatureFiltersEnabled: TRUE
+zimbraImapEnabled: TRUE
+zimbraMailIdleSessionTimeout: 0
+zimbraMailTrashLifetime: 30d
+zimbraMailSpamLifetime: 30d
+zimbraMailMessageLifetime: 0
+zimbraContactMaxNumEntries: 0
+zimbraAuthTokenLifetime: 2d
+Zimbra::AdminAuthTokenLifetime: 12h
+zimbraMailMinPollingInterval: 2m
+zimbraPrefMailPollingInterval: 5m
+zimbraMailQuota: 0
+zimbraPasswordEnforceHistory: 0
+ZimbraPasswordMinAge: 0
+zimbraPasswordMaxAge: 0
+zimbraPasswordMinLength: 6
+zimbraPasswordMaxLength: 64
+zimbraPasswordLocked: FALSE
+zimbraPop3Enabled: TRUE
+zimbraPrefTimeZoneId: (GMT-08.00) Pacific Time (US & Canada) / Tijuana
+zimbraPrefUseTimeZoneListInCalendar: FALSE
+zimbraPrefShowFragments: TRUE
+zimbraPrefShowSearchString: FALSE
+zimbraPrefDedupeMessagesSentToSelf: dedupeNone
+zimbraPrefSaveToSent: TRUE
+zimbraPrefSentMailFolder: sent
+zimbraPrefComposeInNewWindow: FALSE
+zimbraPrefCalendarInitialView: workWeek
+zimbraPrefContactsInitialView: list
+zimbraPrefGroupMailBy: conversation
+zimbraPrefIncludeSpamInSearch: FALSE
+zimbraPrefIncludeTrashInSearch: FALSE
+zimbraPrefImapSearchFoldersEnabled: TRUE
+zimbraPrefMessageViewHtmlPreferred: TRUE
+zimbraPrefMailInitialSearch: in:inbox
+zimbraPrefContactsPerPage: 25
+zimbraPrefMailItemsPerPage: 25
+zimbraPrefMailSignatureStyle: outlook
+zimbraPrefUseKeyboardShortcuts: FALSE
+zimbraPrefReplyIncludeOriginalText: includeBody
+zimbraPrefforwardIncludeOriginalText: includeBody
+zimbraPrefForwardReplyPrefixChar: >
+zimbraPrefAutoAddAddressEnabled: FALSE
+zimbraPrefComposeFormat: text
+zimbraPrefForwardReplyInOriginalFormat: FALSE
+zimbraNewMailNotificationFrom: Postmaster <postmaster@${RECIPIENT_DOMAIN}>
+zimbraNewMailNotificationSubject: New message received at ${RECIPIENT_ADDRESS}
+zimbraNewMailNotificationBody: New message received at ${RECIPIENT_ADDRESS}.${NEWLINE}
  Sender: ${SENDER_ADDRESS}${NEWLINE}
  Subject: ${SUBJECT}
 
 # for storing server info
-dn: cn=servers,cn=liquid
+dn: cn=servers,cn=zimbra
 objectclass: organizationalRole
 cn: servers
 
 # Root node for all timezones
-dn: cn=timezones,cn=config,cn=liquid
+dn: cn=timezones,cn=config,cn=zimbra
 objectclass: organizationalRole
 cn: timezones
 
 # (GMT-12.00) International Date Line West
-dn: cn=(GMT-12.00) International Date Line West,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT-12.00) International Date Line West,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT-12.00) International Date Line West
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: -1200
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: -1200
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: -1200
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: -1200
 
 # (GMT-11.00) Midway Island / Samoa
-dn: cn=(GMT-11.00) Midway Island / Samoa,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT-11.00) Midway Island / Samoa,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT-11.00) Midway Island / Samoa
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: -1100
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: -1100
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: -1100
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: -1100
 
 # (GMT-10.00) Hawaii
-dn: cn=(GMT-10.00) Hawaii,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT-10.00) Hawaii,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT-10.00) Hawaii
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: -1000
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: -1000
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: -1000
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: -1000
 
 # (GMT-09.00) Alaska
 # (supports Daylight Savings Time)
-dn: cn=(GMT-09.00) Alaska,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT-09.00) Alaska,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT-09.00) Alaska
-liquidTimeZoneStandardDtStart: 16010101T020000
-liquidTimeZoneStandardOffset: -0900
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: -0800
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=4;BYDAY=1SU
+zimbraTimeZoneStandardDtStart: 16010101T020000
+zimbraTimeZoneStandardOffset: -0900
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: -0800
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=4;BYDAY=1SU
 
 # (GMT-08.00) Pacific Time (US & Canada) / Tijuana
 # (supports Daylight Savings Time)
-dn: cn=(GMT-08.00) Pacific Time (US & Canada) / Tijuana,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT-08.00) Pacific Time (US & Canada) / Tijuana,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT-08.00) Pacific Time (US & Canada) / Tijuana
-liquidTimeZoneStandardDtStart: 16010101T020000
-liquidTimeZoneStandardOffset: -0800
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: -0700
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=4;BYDAY=1SU
+zimbraTimeZoneStandardDtStart: 16010101T020000
+zimbraTimeZoneStandardOffset: -0800
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: -0700
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=4;BYDAY=1SU
 
 # (GMT-07.00) Arizona
-dn: cn=(GMT-07.00) Arizona,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT-07.00) Arizona,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT-07.00) Arizona
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: -0700
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: -0700
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: -0700
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: -0700
 
 # (GMT-07.00) Chihuahua / La Paz / Mazatlan
 # (supports Daylight Savings Time)
-dn: cn=(GMT-07.00) Chihuahua / La Paz / Mazatlan,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT-07.00) Chihuahua / La Paz / Mazatlan,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT-07.00) Chihuahua / La Paz / Mazatlan
-liquidTimeZoneStandardDtStart: 16010101T020000
-liquidTimeZoneStandardOffset: -0700
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: -0600
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=4;BYDAY=1SU
+zimbraTimeZoneStandardDtStart: 16010101T020000
+zimbraTimeZoneStandardOffset: -0700
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: -0600
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=4;BYDAY=1SU
 
 # (GMT-07.00) Mountain Time (US & Canada)
 # (supports Daylight Savings Time)
-dn: cn=(GMT-07.00) Mountain Time (US & Canada),cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT-07.00) Mountain Time (US & Canada),cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT-07.00) Mountain Time (US & Canada)
-liquidTimeZoneStandardDtStart: 16010101T020000
-liquidTimeZoneStandardOffset: -0700
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: -0600
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=4;BYDAY=1SU
+zimbraTimeZoneStandardDtStart: 16010101T020000
+zimbraTimeZoneStandardOffset: -0700
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: -0600
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=4;BYDAY=1SU
 
 # (GMT-06.00) Central America
-dn: cn=(GMT-06.00) Central America,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT-06.00) Central America,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT-06.00) Central America
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: -0600
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: -0600
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: -0600
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: -0600
 
 # (GMT-06.00) Central Time (US & Canada)
 # (supports Daylight Savings Time)
-dn: cn=(GMT-06.00) Central Time (US & Canada),cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT-06.00) Central Time (US & Canada),cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT-06.00) Central Time (US & Canada)
-liquidTimeZoneStandardDtStart: 16010101T020000
-liquidTimeZoneStandardOffset: -0600
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: -0500
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=4;BYDAY=1SU
+zimbraTimeZoneStandardDtStart: 16010101T020000
+zimbraTimeZoneStandardOffset: -0600
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: -0500
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=4;BYDAY=1SU
 
 # (GMT-06.00) Guadalajara / Mexico City / Monterrey
 # (supports Daylight Savings Time)
-dn: cn=(GMT-06.00) Guadalajara / Mexico City / Monterrey,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT-06.00) Guadalajara / Mexico City / Monterrey,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT-06.00) Guadalajara / Mexico City / Monterrey
-liquidTimeZoneStandardDtStart: 16010101T020000
-liquidTimeZoneStandardOffset: -0600
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: -0500
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=4;BYDAY=1SU
+zimbraTimeZoneStandardDtStart: 16010101T020000
+zimbraTimeZoneStandardOffset: -0600
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: -0500
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=4;BYDAY=1SU
 
 # (GMT-06.00) Saskatchewan
-dn: cn=(GMT-06.00) Saskatchewan,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT-06.00) Saskatchewan,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT-06.00) Saskatchewan
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: -0600
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: -0600
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: -0600
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: -0600
 
 # (GMT-05.00) Bogota / Lima / Quito
-dn: cn=(GMT-05.00) Bogota / Lima / Quito,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT-05.00) Bogota / Lima / Quito,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT-05.00) Bogota / Lima / Quito
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: -0500
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: -0500
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: -0500
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: -0500
 
 # (GMT-05.00) Eastern Time (US & Canada)
 # (supports Daylight Savings Time)
-dn: cn=(GMT-05.00) Eastern Time (US & Canada),cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT-05.00) Eastern Time (US & Canada),cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT-05.00) Eastern Time (US & Canada)
-liquidTimeZoneStandardDtStart: 16010101T020000
-liquidTimeZoneStandardOffset: -0500
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: -0400
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=4;BYDAY=1SU
+zimbraTimeZoneStandardDtStart: 16010101T020000
+zimbraTimeZoneStandardOffset: -0500
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: -0400
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=4;BYDAY=1SU
 
 # (GMT-05.00) Indiana (East)
-dn: cn=(GMT-05.00) Indiana (East),cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT-05.00) Indiana (East),cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT-05.00) Indiana (East)
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: -0500
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: -0500
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: -0500
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: -0500
 
 # (GMT-04.00) Atlantic Time (Canada)
-dn: cn=(GMT-04.00) Atlantic Time (Canada),cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT-04.00) Atlantic Time (Canada),cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT-04.00) Atlantic Time (Canada)
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: -0500
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: -0500
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: -0500
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: -0500
 
 # (GMT-04.00) Caracas / La Paz
-dn: cn=(GMT-04.00) Caracas / La Paz,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT-04.00) Caracas / La Paz,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT-04.00) Caracas / La Paz
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: -0400
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: -0400
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: -0400
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: -0400
 
 # (GMT-04.00) Santiago
 # (supports Daylight Savings Time)
-dn: cn=(GMT-04.00) Santiago,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT-04.00) Santiago,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT-04.00) Santiago
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: -0400
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=2SA
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: -0300
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=2SA
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: -0400
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=2SA
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: -0300
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=2SA
 
 # (GMT-03.30) Newfoundland
 # (supports Daylight Savings Time)
-dn: cn=(GMT-03.30) Newfoundland,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT-03.30) Newfoundland,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT-03.30) Newfoundland
-liquidTimeZoneStandardDtStart: 16010101T020000
-liquidTimeZoneStandardOffset: -0330
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: -0230
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=4;BYDAY=1SU
+zimbraTimeZoneStandardDtStart: 16010101T020000
+zimbraTimeZoneStandardOffset: -0330
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: -0230
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=4;BYDAY=1SU
 
 # (GMT-03.00) Brasilia
 # (supports Daylight Savings Time)
-dn: cn=(GMT-03.00) Brasilia,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT-03.00) Brasilia,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT-03.00) Brasilia
-liquidTimeZoneStandardDtStart: 16010101T020000
-liquidTimeZoneStandardOffset: -0300
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=2;BYDAY=2SU
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: -0200
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=3SU
+zimbraTimeZoneStandardDtStart: 16010101T020000
+zimbraTimeZoneStandardOffset: -0300
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=2;BYDAY=2SU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: -0200
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=3SU
 
 # (GMT-03.00) Buenos Aires / Georgetown
-dn: cn=(GMT-03.00) Buenos Aires / Georgetown,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT-03.00) Buenos Aires / Georgetown,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT-03.00) Buenos Aires / Georgetown
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: -0300
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: -0300
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: -0300
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: -0300
 
 # (GMT-03.00) Greenland
 # (supports Daylight Savings Time)
-dn: cn=(GMT-03.00) Greenland,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT-03.00) Greenland,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT-03.00) Greenland
-liquidTimeZoneStandardDtStart: 16010101T020000
-liquidTimeZoneStandardOffset: -0300
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: -0200
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=4;BYDAY=1SU
+zimbraTimeZoneStandardDtStart: 16010101T020000
+zimbraTimeZoneStandardOffset: -0300
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: -0200
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=4;BYDAY=1SU
 
 # (GMT-02.00) Mid-Atlantic
 # (supports Daylight Savings Time)
-dn: cn=(GMT-02.00) Mid-Atlantic,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT-02.00) Mid-Atlantic,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT-02.00) Mid-Atlantic
-liquidTimeZoneStandardDtStart: 16010101T020000
-liquidTimeZoneStandardOffset: -0200
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=9;BYDAY=-1SU
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: -0100
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
+zimbraTimeZoneStandardDtStart: 16010101T020000
+zimbraTimeZoneStandardOffset: -0200
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=9;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: -0100
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
 
 # (GMT-01.00) Azores
 # (supports Daylight Savings Time)
-dn: cn=(GMT-01.00) Azores,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT-01.00) Azores,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT-01.00) Azores
-liquidTimeZoneStandardDtStart: 16010101T030000
-liquidTimeZoneStandardOffset: -0100
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: +0000
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
+zimbraTimeZoneStandardDtStart: 16010101T030000
+zimbraTimeZoneStandardOffset: -0100
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: +0000
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
 
 # (GMT-01.00) Cape Verde Is.
-dn: cn=(GMT-01.00) Cape Verde Is.,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT-01.00) Cape Verde Is.,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT-01.00) Cape Verde Is.
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: -0100
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: -0100
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: -0100
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: -0100
 
 # (GMT) Casablanca / Monrovia
-dn: cn=(GMT) Casablanca / Monrovia,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT) Casablanca / Monrovia,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT) Casablanca / Monrovia
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: +0000
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: +0000
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: +0000
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: +0000
 
 # (GMT) Greenwich Mean Time - Dublin / Edinburgh / Lisbon / London
 # (supports Daylight Savings Time)
-dn: cn=(GMT) Greenwich Mean Time - Dublin / Edinburgh / Lisbon / London,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT) Greenwich Mean Time - Dublin / Edinburgh / Lisbon / London,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT) Greenwich Mean Time - Dublin / Edinburgh / Lisbon / London
-liquidTimeZoneStandardDtStart: 16010101T020000
-liquidTimeZoneStandardOffset: +0000
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
-liquidTimeZoneDaylightDtStart: 16010101T010000
-liquidTimeZoneDaylightOffset: +0100
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
+zimbraTimeZoneStandardDtStart: 16010101T020000
+zimbraTimeZoneStandardOffset: +0000
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T010000
+zimbraTimeZoneDaylightOffset: +0100
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
 
 # (GMT+01.00) Amsterdam / Berlin / Bern / Rome / Stockholm / Vienna
 # (supports Daylight Savings Time)
-dn: cn=(GMT\+01.00) Amsterdam / Berlin / Bern / Rome / Stockholm / Vienna,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+01.00) Amsterdam / Berlin / Bern / Rome / Stockholm / Vienna,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+01.00) Amsterdam / Berlin / Bern / Rome / Stockholm / Vienna
-liquidTimeZoneStandardDtStart: 16010101T030000
-liquidTimeZoneStandardOffset: +0100
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: +0200
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
+zimbraTimeZoneStandardDtStart: 16010101T030000
+zimbraTimeZoneStandardOffset: +0100
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: +0200
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
 
 # (GMT+01.00) Belgrade / Bratislava / Budapest / Ljubljana / Prague
 # (supports Daylight Savings Time)
-dn: cn=(GMT\+01.00) Belgrade / Bratislava / Budapest / Ljubljana / Prague,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+01.00) Belgrade / Bratislava / Budapest / Ljubljana / Prague,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+01.00) Belgrade / Bratislava / Budapest / Ljubljana / Prague
-liquidTimeZoneStandardDtStart: 16010101T030000
-liquidTimeZoneStandardOffset: +0100
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: +0200
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
+zimbraTimeZoneStandardDtStart: 16010101T030000
+zimbraTimeZoneStandardOffset: +0100
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: +0200
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
 
 # (GMT+01.00) Brussels / Copenhagen / Madrid / Paris
 # (supports Daylight Savings Time)
-dn: cn=(GMT\+01.00) Brussels / Copenhagen / Madrid / Paris,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+01.00) Brussels / Copenhagen / Madrid / Paris,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+01.00) Brussels / Copenhagen / Madrid / Paris
-liquidTimeZoneStandardDtStart: 16010101T030000
-liquidTimeZoneStandardOffset: +0100
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: +0200
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
+zimbraTimeZoneStandardDtStart: 16010101T030000
+zimbraTimeZoneStandardOffset: +0100
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: +0200
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
 
 # (GMT+01.00) Sarajevo / Skopje / Warsaw / Zagreb
 # (supports Daylight Savings Time)
-dn: cn=(GMT\+01.00) Sarajevo / Skopje / Warsaw / Zagreb,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+01.00) Sarajevo / Skopje / Warsaw / Zagreb,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+01.00) Sarajevo / Skopje / Warsaw / Zagreb
-liquidTimeZoneStandardDtStart: 16010101T030000
-liquidTimeZoneStandardOffset: +0100
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: +0200
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
+zimbraTimeZoneStandardDtStart: 16010101T030000
+zimbraTimeZoneStandardOffset: +0100
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: +0200
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
 
 # (GMT+01.00) West Central Africa
-dn: cn=(GMT\+01.00) West Central Africa,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+01.00) West Central Africa,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+01.00) West Central Africa
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: +0100
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: +0100
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: +0100
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: +0100
 
 # (GMT+02.00) Athens / Beirut / Istanbul / Minsk
 # (supports Daylight Savings Time)
-dn: cn=(GMT\+02.00) Athens / Beirut / Istanbul / Minsk,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+02.00) Athens / Beirut / Istanbul / Minsk,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+02.00) Athens / Beirut / Istanbul / Minsk
-liquidTimeZoneStandardDtStart: 16010101T030000
-liquidTimeZoneStandardOffset: +0200
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: +0300
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
+zimbraTimeZoneStandardDtStart: 16010101T030000
+zimbraTimeZoneStandardOffset: +0200
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: +0300
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
 
 # (GMT+02.00) Bucharest
 # (supports Daylight Savings Time)
-dn: cn=(GMT\+02.00) Bucharest,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+02.00) Bucharest,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+02.00) Bucharest
-liquidTimeZoneStandardDtStart: 16010101T010000
-liquidTimeZoneStandardOffset: +0200
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: +0300
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
+zimbraTimeZoneStandardDtStart: 16010101T010000
+zimbraTimeZoneStandardOffset: +0200
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: +0300
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
 
 # (GMT+02.00) Cairo
 # (supports Daylight Savings Time)
-dn: cn=(GMT\+02.00) Cairo,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+02.00) Cairo,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+02.00) Cairo
-liquidTimeZoneStandardDtStart: 16010101T020000
-liquidTimeZoneStandardOffset: +0200
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=9;BYDAY=-1WE
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: +0300
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=5;BYDAY=1FR
+zimbraTimeZoneStandardDtStart: 16010101T020000
+zimbraTimeZoneStandardOffset: +0200
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=9;BYDAY=-1WE
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: +0300
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=5;BYDAY=1FR
 
 # (GMT+02.00) Harare / Pretoria
-dn: cn=(GMT\+02.00) Harare / Pretoria,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+02.00) Harare / Pretoria,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+02.00) Harare / Pretoria
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: +0200
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: +0200
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: +0200
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: +0200
 
 # (GMT+02.00) Helsinki / Kyiv / Riga / Sofia / Tallinn / Vilnius
 # (supports Daylight Savings Time)
-dn: cn=(GMT\+02.00) Helsinki / Kyiv / Riga / Sofia / Tallinn / Vilnius,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+02.00) Helsinki / Kyiv / Riga / Sofia / Tallinn / Vilnius,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+02.00) Helsinki / Kyiv / Riga / Sofia / Tallinn / Vilnius
-liquidTimeZoneStandardDtStart: 16010101T040000
-liquidTimeZoneStandardOffset: +0200
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
-liquidTimeZoneDaylightDtStart: 16010101T030000
-liquidTimeZoneDaylightOffset: +0300
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
+zimbraTimeZoneStandardDtStart: 16010101T040000
+zimbraTimeZoneStandardOffset: +0200
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T030000
+zimbraTimeZoneDaylightOffset: +0300
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
 
 # (GMT+02.00) Jerusalem
-dn: cn=(GMT\+02.00) Jerusalem,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+02.00) Jerusalem,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+02.00) Jerusalem
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: +0200
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: +0200
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: +0200
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: +0200
 
 # (GMT+03.00) Baghdad
 # (supports Daylight Savings Time)
-dn: cn=(GMT\+03.00) Baghdad,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+03.00) Baghdad,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+03.00) Baghdad
-liquidTimeZoneStandardDtStart: 16010101T040000
-liquidTimeZoneStandardOffset: +0300
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=1SU
-liquidTimeZoneDaylightDtStart: 16010101T030000
-liquidTimeZoneDaylightOffset: +0400
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=4;BYDAY=1SU
+zimbraTimeZoneStandardDtStart: 16010101T040000
+zimbraTimeZoneStandardOffset: +0300
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=1SU
+zimbraTimeZoneDaylightDtStart: 16010101T030000
+zimbraTimeZoneDaylightOffset: +0400
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=4;BYDAY=1SU
 
 # (GMT+03.00) Kuwait / Riyadh
-dn: cn=(GMT\+03.00) Kuwait / Riyadh,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+03.00) Kuwait / Riyadh,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+03.00) Kuwait / Riyadh
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: +0300
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: +0300
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: +0300
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: +0300
 
 # (GMT+03.00) Moscow / St. Petersburg / Volgograd
 # (supports Daylight Savings Time)
-dn: cn=(GMT\+03.00) Moscow / St. Petersburg / Volgograd,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+03.00) Moscow / St. Petersburg / Volgograd,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+03.00) Moscow / St. Petersburg / Volgograd
-liquidTimeZoneStandardDtStart: 16010101T030000
-liquidTimeZoneStandardOffset: +0300
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: +0400
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
+zimbraTimeZoneStandardDtStart: 16010101T030000
+zimbraTimeZoneStandardOffset: +0300
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: +0400
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
 
 # (GMT+03.00) Nairobi
-dn: cn=(GMT\+03.00) Nairobi,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+03.00) Nairobi,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+03.00) Nairobi
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: +0300
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: +0300
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: +0300
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: +0300
 
 # (GMT+03.30) Tehran
 # (supports Daylight Savings Time)
-dn: cn=(GMT\+03.30) Tehran,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+03.30) Tehran,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+03.30) Tehran
-liquidTimeZoneStandardDtStart: 16010101T020000
-liquidTimeZoneStandardOffset: +0330
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=9;BYDAY=4TU
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: +0430
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=1SU
+zimbraTimeZoneStandardDtStart: 16010101T020000
+zimbraTimeZoneStandardOffset: +0330
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=9;BYDAY=4TU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: +0430
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=1SU
 
 # (GMT+04.00) Abu Dhabi / Muscat
-dn: cn=(GMT\+04.00) Abu Dhabi / Muscat,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+04.00) Abu Dhabi / Muscat,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+04.00) Abu Dhabi / Muscat
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: +0400
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: +0400
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: +0400
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: +0400
 
 # (GMT+04.00) Baku / Tbilisi / Yerevan
 # (supports Daylight Savings Time)
-dn: cn=(GMT\+04.00) Baku / Tbilisi / Yerevan,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+04.00) Baku / Tbilisi / Yerevan,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+04.00) Baku / Tbilisi / Yerevan
-liquidTimeZoneStandardDtStart: 16010101T030000
-liquidTimeZoneStandardOffset: +0400
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: +0500
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
+zimbraTimeZoneStandardDtStart: 16010101T030000
+zimbraTimeZoneStandardOffset: +0400
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: +0500
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
 
 # (GMT+04.30) Kabul
-dn: cn=(GMT\+04.30) Kabul,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+04.30) Kabul,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+04.30) Kabul
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: +0430
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: +0430
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: +0430
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: +0430
 
 # (GMT+05.00) Ekaterinburg
 # (supports Daylight Savings Time)
-dn: cn=(GMT\+05.00) Ekaterinburg,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+05.00) Ekaterinburg,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+05.00) Ekaterinburg
-liquidTimeZoneStandardDtStart: 16010101T030000
-liquidTimeZoneStandardOffset: +0500
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: +0600
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
+zimbraTimeZoneStandardDtStart: 16010101T030000
+zimbraTimeZoneStandardOffset: +0500
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: +0600
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
 
 # (GMT+05.00) Islamabad / Karachi / Tashkent
-dn: cn=(GMT\+05.00) Islamabad / Karachi / Tashkent,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+05.00) Islamabad / Karachi / Tashkent,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+05.00) Islamabad / Karachi / Tashkent
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: +0500
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: +0500
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: +0500
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: +0500
 
 # (GMT+05.30) Chennai / Kolkata / Mumbai / New Delhi
-dn: cn=(GMT\+05.30) Chennai / Kolkata / Mumbai / New Delhi,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+05.30) Chennai / Kolkata / Mumbai / New Delhi,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+05.30) Chennai / Kolkata / Mumbai / New Delhi
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: +0530
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: +0530
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: +0530
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: +0530
 
 # (GMT+05.45) Kathmandu
-dn: cn=(GMT\+05.45) Kathmandu,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+05.45) Kathmandu,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+05.45) Kathmandu
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: +0545
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: +0545
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: +0545
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: +0545
 
 # (GMT+06.00) Almaty / Novosibirsk
 # (supports Daylight Savings Time)
-dn: cn=(GMT\+06.00) Almaty / Novosibirsk,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+06.00) Almaty / Novosibirsk,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+06.00) Almaty / Novosibirsk
-liquidTimeZoneStandardDtStart: 16010101T030000
-liquidTimeZoneStandardOffset: +0600
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: +0700
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
+zimbraTimeZoneStandardDtStart: 16010101T030000
+zimbraTimeZoneStandardOffset: +0600
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: +0700
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
 
 # (GMT+06.00) Astana / Dhaka
-dn: cn=(GMT\+06.00) Astana / Dhaka,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+06.00) Astana / Dhaka,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+06.00) Astana / Dhaka
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: +0600
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: +0600
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: +0600
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: +0600
 
 # (GMT+06.00) Sri Jayawardenepura
-dn: cn=(GMT\+06.00) Sri Jayawardenepura,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+06.00) Sri Jayawardenepura,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+06.00) Sri Jayawardenepura
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: +0600
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: +0600
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: +0600
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: +0600
 
 # (GMT+06.30) Rangoon
-dn: cn=(GMT\+06.30) Rangoon,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+06.30) Rangoon,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+06.30) Rangoon
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: +0630
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: +0630
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: +0630
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: +0630
 
 # (GMT+07.00) Bangkok / Hanoi / Jakarta
-dn: cn=(GMT\+07.00) Bangkok / Hanoi / Jakarta,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+07.00) Bangkok / Hanoi / Jakarta,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+07.00) Bangkok / Hanoi / Jakarta
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: +0700
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: +0700
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: +0700
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: +0700
 
 # (GMT+07.00) Krasnoyarsk
 # (supports Daylight Savings Time)
-dn: cn=(GMT\+07.00) Krasnoyarsk,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+07.00) Krasnoyarsk,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+07.00) Krasnoyarsk
-liquidTimeZoneStandardDtStart: 16010101T030000
-liquidTimeZoneStandardOffset: +0700
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: +0800
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
+zimbraTimeZoneStandardDtStart: 16010101T030000
+zimbraTimeZoneStandardOffset: +0700
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: +0800
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
 
 # (GMT+08.00) Beijing / Chongqing / Hong Kong / Urumqi
-dn: cn=(GMT\+08.00) Beijing / Chongqing / Hong Kong / Urumqi,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+08.00) Beijing / Chongqing / Hong Kong / Urumqi,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+08.00) Beijing / Chongqing / Hong Kong / Urumqi
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: +0800
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: +0800
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: +0800
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: +0800
 
 # (GMT+08.00) Irkutsk / Ulaan Bataar
 # (supports Daylight Savings Time)
-dn: cn=(GMT\+08.00) Irkutsk / Ulaan Bataar,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+08.00) Irkutsk / Ulaan Bataar,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+08.00) Irkutsk / Ulaan Bataar
-liquidTimeZoneStandardDtStart: 16010101T030000
-liquidTimeZoneStandardOffset: +0800
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: +0900
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
+zimbraTimeZoneStandardDtStart: 16010101T030000
+zimbraTimeZoneStandardOffset: +0800
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: +0900
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
 
 # (GMT+08.00) Kuala Lumpur / Singapore
-dn: cn=(GMT\+08.00) Kuala Lumpur / Singapore,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+08.00) Kuala Lumpur / Singapore,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+08.00) Kuala Lumpur / Singapore
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: +0800
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: +0800
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: +0800
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: +0800
 
 # (GMT+08.00) Perth
-dn: cn=(GMT\+08.00) Perth,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+08.00) Perth,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+08.00) Perth
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: +0800
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: +0800
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: +0800
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: +0800
 
 # (GMT+08.00) Taipei
-dn: cn=(GMT\+08.00) Taipei,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+08.00) Taipei,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+08.00) Taipei
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: +0800
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: +0800
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: +0800
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: +0800
 
 # (GMT+09.00) Osaka / Sapporo / Tokyo
-dn: cn=(GMT\+09.00) Osaka / Sapporo / Tokyo,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+09.00) Osaka / Sapporo / Tokyo,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+09.00) Osaka / Sapporo / Tokyo
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: +0900
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: +0900
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: +0900
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: +0900
 
 # (GMT+09.00) Seoul
-dn: cn=(GMT\+09.00) Seoul,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+09.00) Seoul,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+09.00) Seoul
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: +0900
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: +0900
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: +0900
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: +0900
 
 # (GMT+09.00) Yakutsk
 # (supports Daylight Savings Time)
-dn: cn=(GMT\+09.00) Yakutsk,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+09.00) Yakutsk,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+09.00) Yakutsk
-liquidTimeZoneStandardDtStart: 16010101T030000
-liquidTimeZoneStandardOffset: +0900
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: +1000
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
+zimbraTimeZoneStandardDtStart: 16010101T030000
+zimbraTimeZoneStandardOffset: +0900
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: +1000
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
 
 # (GMT+09.30) Adelaide
 # (supports Daylight Savings Time)
-dn: cn=(GMT\+09.30) Adelaide,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+09.30) Adelaide,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+09.30) Adelaide
-liquidTimeZoneStandardDtStart: 16010101T030000
-liquidTimeZoneStandardOffset: +0930
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: +1030
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+zimbraTimeZoneStandardDtStart: 16010101T030000
+zimbraTimeZoneStandardOffset: +0930
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: +1030
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
 
 # (GMT+09.30) Darwin
-dn: cn=(GMT\+09.30) Darwin,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+09.30) Darwin,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+09.30) Darwin
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: +0930
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: +0930
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: +0930
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: +0930
 
 # (GMT+10.00) Brisbane
-dn: cn=(GMT\+10.00) Brisbane,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+10.00) Brisbane,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+10.00) Brisbane
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: +1000
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: +1000
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: +1000
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: +1000
 
 # (GMT+10.00) Canberra / Melbourne / Sydney
 # (supports Daylight Savings Time)
-dn: cn=(GMT\+10.00) Canberra / Melbourne / Sydney,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+10.00) Canberra / Melbourne / Sydney,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+10.00) Canberra / Melbourne / Sydney
-liquidTimeZoneStandardDtStart: 16010101T030000
-liquidTimeZoneStandardOffset: +1000
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: +1100
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+zimbraTimeZoneStandardDtStart: 16010101T030000
+zimbraTimeZoneStandardOffset: +1000
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: +1100
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
 
 # (GMT+10.00) Guam / Port Moresby
-dn: cn=(GMT\+10.00) Guam / Port Moresby,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+10.00) Guam / Port Moresby,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+10.00) Guam / Port Moresby
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: +1000
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: +1000
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: +1000
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: +1000
 
 # (GMT+10.00) Hobart
 # (supports Daylight Savings Time)
-dn: cn=(GMT\+10.00) Hobart,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+10.00) Hobart,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+10.00) Hobart
-liquidTimeZoneStandardDtStart: 16010101T030000
-liquidTimeZoneStandardOffset: +1000
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: +1100
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=1SU
+zimbraTimeZoneStandardDtStart: 16010101T030000
+zimbraTimeZoneStandardOffset: +1000
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: +1100
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=1SU
 
 # (GMT+10.00) Vladivostok
 # (supports Daylight Savings Time)
-dn: cn=(GMT\+10.00) Vladivostok,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+10.00) Vladivostok,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+10.00) Vladivostok
-liquidTimeZoneStandardDtStart: 16010101T030000
-liquidTimeZoneStandardOffset: +1000
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: +1100
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
+zimbraTimeZoneStandardDtStart: 16010101T030000
+zimbraTimeZoneStandardOffset: +1000
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: +1100
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
 
 # (GMT+11.00) Magadan / Solomon Is. / New Calenodia
-dn: cn=(GMT\+11.00) Magadan / Solomon Is. / New Calenodia,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+11.00) Magadan / Solomon Is. / New Calenodia,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+11.00) Magadan / Solomon Is. / New Calenodia
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: +1100
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: +1100
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: +1100
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: +1100
 
 # (GMT+12.00) Auckland / Wellington
 # (supports Daylight Savings Time)
-dn: cn=(GMT\+12.00) Auckland / Wellington,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+12.00) Auckland / Wellington,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+12.00) Auckland / Wellington
-liquidTimeZoneStandardDtStart: 16010101T020000
-liquidTimeZoneStandardOffset: +1200
-liquidTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=3SU
-liquidTimeZoneDaylightDtStart: 16010101T020000
-liquidTimeZoneDaylightOffset: +1300
-liquidTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=1SU
+zimbraTimeZoneStandardDtStart: 16010101T020000
+zimbraTimeZoneStandardOffset: +1200
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=3SU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: +1300
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=1SU
 
 # (GMT+12.00) Fiji / Kamchatka / Marshall Is.
-dn: cn=(GMT\+12.00) Fiji / Kamchatka / Marshall Is.,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+12.00) Fiji / Kamchatka / Marshall Is.,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+12.00) Fiji / Kamchatka / Marshall Is.
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: +1200
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: +1200
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: +1200
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: +1200
 
 # (GMT+13.00) Nuku'alofa
-dn: cn=(GMT\+13.00) Nuku'alofa,cn=timezones,cn=config,cn=liquid
-objectclass: liquidTimeZone
+dn: cn=(GMT\+13.00) Nuku'alofa,cn=timezones,cn=config,cn=zimbra
+objectclass: zimbraTimeZone
 cn: (GMT+13.00) Nuku'alofa
-liquidTimeZoneStandardDtStart: 16010101T000000
-liquidTimeZoneStandardOffset: +1300
-liquidTimeZoneDaylightDtStart: 16010101T000000
-liquidTimeZoneDaylightOffset: +1300
+zimbraTimeZoneStandardDtStart: 16010101T000000
+zimbraTimeZoneStandardOffset: +1300
+zimbraTimeZoneDaylightDtStart: 16010101T000000
+zimbraTimeZoneDaylightOffset: +1300
