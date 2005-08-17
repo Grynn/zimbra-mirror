@@ -116,20 +116,20 @@ function(e)	{
 	var nx, ny;
 
 	if (!dragEl._xMapper) {
-		if (dragEl.minX != null)
-			ex = dragEl._hMode ? Math.max(ex, dragEl.minMouseX) : Math.min(ex, dragEl.maxMouseX);
-		if (dragEl.maxX != null)
-			ex = dragEl._hMode ? Math.min(ex, dragEl.maxMouseX) : Math.max(ex, dragEl.minMouseX);
+		if (dragEl._minX != null)
+			ex = dragEl._hMode ? Math.max(ex, dragEl._minMouseX) : Math.min(ex, dragEl._maxMouseX);
+		if (dragEl._maxX != null)
+			ex = dragEl._hMode ? Math.min(ex, dragEl._maxMouseX) : Math.max(ex, dragEl._minMouseX);
 		nx = x + ((ex - dragEl._lastMouseX) * (dragEl._hMode ? 1 : -1));
 	} else {
 		nx = dragEl._xMapper(y);
 	}
 
 	if (!dragEl._yMapper) {
-		if (dragEl.minY != null)
-			ey = dragEl._vMode ? Math.max(ey, dragEl.minMouseY) : Math.min(ey, dragEl.maxMouseY);
-		if (dragEl.maxY != null)
-			ey = dragEl._vMode ? Math.min(ey, dragEl.maxMouseY) : Math.max(ey, dragEl.minMouseY);
+		if (dragEl._minY != null)
+			ey = dragEl._vMode ? Math.max(ey, dragEl._minMouseY) : Math.min(ey, dragEl._maxMouseY);
+		if (dragEl._maxY != null)
+			ey = dragEl._vMode ? Math.min(ey, dragEl._maxMouseY) : Math.max(ey, dragEl._minMouseY);
 		ny = y + ((ey - dragEl._lastMouseY) * (dragEl._vMode ? 1 : -1));
 	} else {
 		ny = dragEl._yMapper(x);
@@ -141,7 +141,7 @@ function(e)	{
 	DwtDraggable._dragEl._lastMouseY = ey;
 
 	if (DwtDraggable._dragEl._root.onDrag)
-		DwtDraggable._dragEl._root.onDrag.run(nx, ny);
+		DwtDraggable._dragEl._root.onDrag.run([nx, ny]);
 		
 	return false;
 }
@@ -151,8 +151,8 @@ function() {
 	document.onmousemove = null;
 	document.onmouseup   = null;
 	if (DwtDraggable._dragEl._root.onDragEnd)
-		DwtDraggable._dragEl._root.onDragEnd.run(parseInt(DwtDraggable._dragEl._root.style[DwtDraggable._dragEl._hMode ? "left" : "right"]), 
-											 	 parseInt(DwtDraggable._dragEl._root.style[DwtDraggable._dragEl._vMode ? "top" : "bottom"]));
+		DwtDraggable._dragEl._root.onDragEnd.run([parseInt(DwtDraggable._dragEl._root.style[DwtDraggable._dragEl._hMode ? "left" : "right"]), 
+											 	 parseInt(DwtDraggable._dragEl._root.style[DwtDraggable._dragEl._vMode ? "top" : "bottom"])]);
 	DwtDraggable._dragEl = null;
 }
 

@@ -36,6 +36,7 @@ function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell) {
     htmlElement.className = className;
     htmlElement.style.width = "100%";
     htmlElement.style.height = "100%";
+	htmlElement.style.overflow = "hidden";
 
 	// if there is a user shell (body content), move it below this shell
 	// into a container that's absolutely positioned

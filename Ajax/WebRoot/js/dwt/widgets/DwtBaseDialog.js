@@ -78,10 +78,13 @@ DwtBaseDialog.prototype.initializeDragging = function (dragHandleId) {
 		var size = this.getSize();
 		var dragEndCb = new AjxCallback(this, DwtBaseDialog.prototype._dragEnd);
 		var dragCb = new AjxCallback(this, DwtBaseDialog.prototype._duringDrag);
-		DwtDraggable.init(dragHandle, dragObj, 0,
-						  p.x - size.x, 0, p.y - size.y, null, dragCb, dragEndCb);
+		
+ 		DwtDraggable.init(dragHandle, dragObj, 0,
+ 						  document.body.offsetWidth - 10, 0, document.body.offsetHeight-10, null, dragCb, dragEndCb);
+
 	}	
 };
+
 /**
 * Makes the dialog visible, and places it. Everything under the dialog will become veiled
 * if we are modal.
@@ -407,13 +410,19 @@ function() {
 }
 
 DwtBaseDialog.prototype._dragEnd =
-function(x, y) {
-	// save dropped position so popup(null) will not re-center dialog box
+function(args) {
+ 	var x = args[0];
+ 	var y = args[1];
+// 	// save dropped position so popup(null) will not re-center dialog box
+// 	DBG.println("drag end x:", x, " y:", y);
 	this._loc = new DwtPoint(x, y);
 }
 
 DwtBaseDialog.prototype._duringDrag =
-function(x, y) {
+function(args) {
+// 	var x = args[0];
+// 	var y = args[1];
+// 	DBG.println("during drag x:", x, " y:", y);
 	// overload me
 };
 
