@@ -1,9 +1,9 @@
 #!/usr/bin/perl -w
 
-use lib "$ENV{LIQUID_HOME}/liquidmon/lib";
+use lib "$ENV{ZIMBRA_HOME}/zimbramon/lib";
 use strict;
 use Getopt::Std;
-use Liquid::Failover::IPUtil;
+use Zimbra::Failover::IPUtil;
 
 sub usage() {
     print STDERR <<_EOM_;
@@ -22,8 +22,8 @@ my $device = $opts{d} or usage();
 my $ip = $opts{i} or usage();
 my $router = $opts{r} or usage();
 
-Liquid::Failover::IPUtil::takeoverIP($device, $ip, $router);
-my $status = Liquid::Failover::IPUtil::getIPStatus($ip);
+Zimbra::Failover::IPUtil::takeoverIP($device, $ip, $router);
+my $status = Zimbra::Failover::IPUtil::getIPStatus($ip);
 if ($status eq 'conflict') {
     print STDERR "IP came up; conflict detected\n";
     exit(-2);

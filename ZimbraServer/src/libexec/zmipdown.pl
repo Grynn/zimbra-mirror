@@ -1,9 +1,9 @@
 #!/usr/bin/perl -w
 
-use lib "$ENV{LIQUID_HOME}/liquidmon/lib";
+use lib "$ENV{ZIMBRA_HOME}/zimbramon/lib";
 use strict;
 use Getopt::Std;
-use Liquid::Failover::IPUtil;
+use Zimbra::Failover::IPUtil;
 
 sub usage() {
     print STDERR <<_EOM_;
@@ -17,4 +17,4 @@ _EOM_
 my %opts;
 getopts("i:", \%opts) or usage();
 my $ip = $opts{i} or usage();
-Liquid::Failover::IPUtil::relinquishIP($ip);
+Zimbra::Failover::IPUtil::relinquishIP($ip);
