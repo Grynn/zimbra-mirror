@@ -3,7 +3,7 @@
   <head>
     <title>BrowserDetectionTest</title>
   </head>
-<script src="http://localhost:7070/zimbra/js/zimbra/core/LsEnv.js"></script>
+<script src="http://localhost:7070/zimbra/js/zimbra/core/AjxEnv.js"></script>
   <body>
     <h1>BrowserDetectionTest</h1>
     <div id='contents' style="height:100%; width:50%; position:absolute; top:40; left:0">
@@ -62,44 +62,44 @@ var endTime, startTime, diff;
 /*
 startTime = new Date();
 for (var i = 0 ; i < uAs.length; ++i) {
-	initLsEnv(uAs[i]);
+	initAjxEnv(uAs[i]);
 	idx = 0;
 	resArr[idx++] = "<br><br>";
 	resArr[idx++] = uAs[i] + "<br>";
-	resArr[idx++] = "Is IE = " + LsEnv.isIE + "<br>";
-	resArr[idx++] = "Is Nav = " + LsEnv.isNav + "<br>";
-	resArr[idx++] = "Is Safari = " + LsEnv.isSafari + "<br>";
-	resArr[idx++] = "Is Mac = " + LsEnv.isMac + "<br>";
-	resArr[idx++] = "GeckoDate = " + LsEnv.geckoDate + "<br>";
-	resArr[idx++] = "Is Mozilla = " + LsEnv.isMozilla + "<br>";
-	resArr[idx++] = "Is Firefox = " + LsEnv.isFirefox + "<br>";
-	resArr[idx++] = "browserVersion = " + LsEnv.browserVersion + "<br>";
+	resArr[idx++] = "Is IE = " + AjxEnv.isIE + "<br>";
+	resArr[idx++] = "Is Nav = " + AjxEnv.isNav + "<br>";
+	resArr[idx++] = "Is Safari = " + AjxEnv.isSafari + "<br>";
+	resArr[idx++] = "Is Mac = " + AjxEnv.isMac + "<br>";
+	resArr[idx++] = "GeckoDate = " + AjxEnv.geckoDate + "<br>";
+	resArr[idx++] = "Is Mozilla = " + AjxEnv.isMozilla + "<br>";
+	resArr[idx++] = "Is Firefox = " + AjxEnv.isFirefox + "<br>";
+	resArr[idx++] = "browserVersion = " + AjxEnv.browserVersion + "<br>";
 	resArr.length = idx;
 	resDiv.innerHTML += resArr.join("");
-	LsEnv.reset();
+	AjxEnv.reset();
  }
 endTime = new Date();
 diff = endTime.getTime() - startTime.getTime();
 resDiv.innerHTML += "Time elapsed = " + diff/i + "<br>";
 */
-LsEnv.reset();
+AjxEnv.reset();
 startTime = new Date();
 for (i = 0 ; i < uAs.length; ++i){
-	LsEnv.parseUA(uAs[i]);
+	AjxEnv.parseUA(uAs[i]);
 	idx = 0;
 	resArr[idx++] = "<br><br>";
 	resArr[idx++] = uAs[i] + "<br>";
-	resArr[idx++] = "Is IE = " + LsEnv.isIE + "<br>";
-	resArr[idx++] = "Is Nav = " + LsEnv.isNav + "<br>";
-	resArr[idx++] = "Is Safari = " + LsEnv.isSafari + "<br>";
-	resArr[idx++] = "Is Mac = " + LsEnv.isMac + "<br>";
-	resArr[idx++] = "GeckoDate = " + LsEnv.geckoDate + "<br>";
-	resArr[idx++] = "Is Mozilla = " + LsEnv.isMozilla + "<br>";
- 	resArr[idx++] = "Is Firefox = " + LsEnv.isFirefox + "<br>";
-	resArr[idx++] = "browserVersion = " + LsEnv.browserVersion + "<br>";
+	resArr[idx++] = "Is IE = " + AjxEnv.isIE + "<br>";
+	resArr[idx++] = "Is Nav = " + AjxEnv.isNav + "<br>";
+	resArr[idx++] = "Is Safari = " + AjxEnv.isSafari + "<br>";
+	resArr[idx++] = "Is Mac = " + AjxEnv.isMac + "<br>";
+	resArr[idx++] = "GeckoDate = " + AjxEnv.geckoDate + "<br>";
+	resArr[idx++] = "Is Mozilla = " + AjxEnv.isMozilla + "<br>";
+ 	resArr[idx++] = "Is Firefox = " + AjxEnv.isFirefox + "<br>";
+	resArr[idx++] = "browserVersion = " + AjxEnv.browserVersion + "<br>";
 	resArr.length = idx;
 	resDiv1.innerHTML += resArr.join("");
-	LsEnv.reset();
+	AjxEnv.reset();
  }
 endTime = new Date();
 diff = endTime.getTime() - startTime.getTime();

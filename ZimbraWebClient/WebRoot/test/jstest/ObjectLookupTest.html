@@ -6,7 +6,7 @@
 
   <body>
     <h1>ObjectLookupTest</h1>
-    <a href="javascript:createLargeObject()"><code>CreateObject</code></a>
+    <a href="javascript:createZargeObject()"><code>CreateObject</code></a>
     <div id=results1 style="border:1px solid black; width:400px; overflow:auto">Results</div>
     <a href="javascript:lookupAttributes()"><code>Lookup Attributes</code></a>
     <div id=results2 style="border:1px solid black; width:400px; overflow:auto">Results</div>
@@ -15,7 +15,7 @@
   <script>
 var largeObject = new Object();
 var totalAttrs = 20000;
-function createLargeObject () {
+function createZargeObject () {
     var startTime = new Date();
     for (var i =0; i < totalAttrs; ++i){
 	largeObject[i] = new Object();

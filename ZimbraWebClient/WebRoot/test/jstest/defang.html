@@ -3,11 +3,11 @@
   <head>
     <title>defang</title>
   </head>
-  <script src="http://localhost:7070/zimbra/js/zimbra/core/LsEnv.js"></script>
-  <script src="http://localhost:7070/zimbra/js/zimbra/util/LsUtil.js"></script>
-  <script src="http://localhost:7070/zimbra/js/zimbra/debug/LsGlobal.js"></script>
-  <script src="http://localhost:7070/zimbra/js/zimbra/debug/LsEncode.js"></script>
-  <script src="http://localhost:7070/zimbra/js/zimbra/debug/LsLog.js"></script>
+  <script src="http://localhost:7070/zimbra/js/zimbra/core/AjxEnv.js"></script>
+  <script src="http://localhost:7070/zimbra/js/zimbra/util/AjxUtil.js"></script>
+  <script src="http://localhost:7070/zimbra/js/zimbra/debug/AjxGlobal.js"></script>
+  <script src="http://localhost:7070/zimbra/js/zimbra/debug/AjxEncode.js"></script>
+  <script src="http://localhost:7070/zimbra/js/zimbra/debug/AjxLog.js"></script>
   <script src="http://localhost:7070/zimbra/js/zimbra/util/defangFilter.js"></script>
     <script language="javascript">
 function load () {
@@ -32,14 +32,14 @@ function load () {
 	doc.close();
     
 }
-LsLog.showConsole();
+AjxLog.showConsole();
 //window.onload = load;
 function resetImgs(show) {
-	LsLog.info("Reset START");
+	AjxLog.info("Reset START");
 	var iframe = document.getElementById('result');
 	var idoc = iframe.Document? iframe.Document: iframe.contentWindow.document;
 	var imgs = idoc.getElementsByTagName("img");
-	LsLog.info("  length =" + imgs.length);
+	AjxLog.info("  length =" + imgs.length);
 	for (var i = 0; i < imgs.length; i++) {
 		if (imgs[i].id) {
 			if (show) {

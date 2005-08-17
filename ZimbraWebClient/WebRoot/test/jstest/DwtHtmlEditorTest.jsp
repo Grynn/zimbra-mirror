@@ -25,10 +25,10 @@
     <noscript><p><b>Javascript must be enabled to use this.</b></p></noscript>
     <script language="JavaScript">   	
    		function launch() {
-   			DBG = new LsDebug(LsDebug.DBG1, null, false);
+   			DBG = new AjxDebug(AjxDebug.DBG1, null, false);
 	    	DwtHtmlEditorTest.run();
 	    }
-        LsCore.addOnloadListener(launch);
+        AjxCore.addOnloadListener(launch);
     </script>
     </body>
 </html>

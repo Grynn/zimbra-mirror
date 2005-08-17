@@ -20,10 +20,10 @@
     <script type="text/javascript" src="DwtCalTest.js"></script>
     <script language="JavaScript">   	
    		function launch() {
-   			DBG = new LsDebug(LsDebug.DBG1, null, false);
+   			DBG = new AjxDebug(AjxDebug.DBG1, null, false);
 	    	DwtCalTest.run();
 	    }
-        LsCore.addOnloadListener(launch);
+        AjxCore.addOnloadListener(launch);
     </script>
   </head>
     <body>

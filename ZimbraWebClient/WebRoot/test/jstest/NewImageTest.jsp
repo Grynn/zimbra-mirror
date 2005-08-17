@@ -24,10 +24,10 @@
     <noscript><p><b>Javascript must be enabled to use this.</b></p></noscript>
     <script language="JavaScript">   	
    		function launch() {
-   			DBG = new LsDebug(LsDebug.DBG1, null, false);
+   			DBG = new AjxDebug(AjxDebug.DBG1, null, false);
 	    	NewImageTest.run();
 	    }
-       //LsCore.addOnloadListener(launch);
+       //AjxCore.addOnloadListener(launch);
        launch();
     </script>
     </body>

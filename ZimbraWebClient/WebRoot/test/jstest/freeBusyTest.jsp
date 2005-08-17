@@ -86,7 +86,7 @@ var _TIME_OF_DAY_CHOICES = [
  ];
 
 	function launch() {
-		DBG = new LsDebug(LsDebug.DBG1, null, false);
+		DBG = new AjxDebug(AjxDebug.DBG1, null, false);
 		var x = new DwtShell();
 		//sel = new DwtSelect(x, _TIME_OF_DAY_CHOICES);
 
@@ -94,9 +94,9 @@ var _TIME_OF_DAY_CHOICES = [
 
 		if (location.search && location.search.indexOf("host=") != -1)
 			value += location.search;
-		LsCsfeCommand.setServerUri(value);
+		AjxCsfeCommand.setServerUri(value);
 
-		var soapDoc = LsSoapDoc.create("GetFreeBusyRequest", "urn:zimbraMail");
+		var soapDoc = AjxSoapDoc.create("GetFreeBusyRequest", "urn:zimbraMail");
 		var now = new Date();
 		now.setHours(0);
 		now.setMinutes(0);
@@ -113,10 +113,10 @@ var _TIME_OF_DAY_CHOICES = [
 		soapDoc.setMethodAttribute("e", end.getTime());
 		soapDoc.setMethodAttribute("uid", "user1@db682461.zimbra.com");
 		// This is erroring out
-		var resp = LsCsfeCommand.invoke(soapDoc, null, null, null, false);
+		var resp = AjxCsfeCommand.invoke(soapDoc, null, null, null, false);
 		//var resp = ZmZimbraMail.prototype.sendRequest(soapDoc).firstChild;
-		var userSchedules = LmUserSchedule.loadFromDom(resp.Body);
-		var dummyAppt = new LmAppt();
+		var userSchedules = ZmUserSchedule.loadFromDom(resp.Body);
+		var dummyAppt = new ZmAppt();
 		dummyAppt.startDate = new Date();
 		dummyAppt.startDate.setHours(8);
 		dummyAppt.startDate.setMinutes(30);
@@ -126,7 +126,7 @@ var _TIME_OF_DAY_CHOICES = [
 		dummyAppt.endDate.setMinutes(30);
 		dummyAppt.endDate.setSeconds(0);
 
-		var freeBusy =  new LmFreeBusyView(x,  userSchedules, now, end, dummyAppt);
+		var freeBusy =  new ZmFreeBusyView(x,  userSchedules, now, end, dummyAppt);
 		//for(var i = 0 ; i < _TIME_OF_DAY_CHOICES.length; i++){
 		//	sel.addOption(new DwtSelectOptionData(_TIME_OF_DAY_CHOICES[i].value, _TIME_OF_DAY_CHOICES[i].label));
 		//}
