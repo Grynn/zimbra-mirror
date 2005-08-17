@@ -1,6 +1,6 @@
 <?php
 
-require_once("Liquid/ServerResponse.php");
+require_once("Zimbra/ServerResponse.php");
 
 $filename = $_FILES["text"];
 if ($filename != NULL) {

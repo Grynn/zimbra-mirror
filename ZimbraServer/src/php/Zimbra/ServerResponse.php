@@ -51,12 +51,12 @@ class ServerResponse {
             $mode = $value["mode"];
             $inHandle = fopen($filename, $mode);
             if ($inHandle == FALSE) {
-                error_log("Liquid::ServerResponse: unable to open '$filename', '$mode'");
+                error_log("Zimbra::ServerResponse: unable to open '$filename', '$mode'");
                 continue;
             }
             $outHandle = fopen("php://output", "wb");
             if ($outHandle == FALSE) {
-                error_log("Liquid::ServerResponse: unable to open php://output");
+                error_log("Zimbra::ServerResponse: unable to open php://output");
                 break;
             }
 
