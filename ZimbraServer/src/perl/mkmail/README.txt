@@ -10,7 +10,7 @@ QUICK START:
    ZimbraServer\jars\mail.jar
    ZimbraServer\jars\activation.jar
    ZimbraServer\jars\commons-codec-1.2.jar
-5) java com.zimbra.cs.tools.Journalize -i <path_to_mkmail>\out -o c:\opt\liquid\mqueue\new
+5) java com.zimbra.cs.tools.Journalize -i <path_to_mkmail>\out -o c:\opt\zimbra\mqueue\new
 6) Run the archiver
 
 
