@@ -1,4 +1,4 @@
-package com.liquidsys.liquidAjax.imagemerge;
+package com.zimbra.zimbraAjax.imagemerge;
 
 import java.awt.*;
 import java.io.*;

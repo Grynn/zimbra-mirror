@@ -1,5 +1,5 @@
 
-package com.liquidsys.liquidConsole.filters;
+package com.zimbra.zimbraConsole.filters;
 
 import java.io.IOException;
 import java.util.Enumeration;

@@ -1,4 +1,4 @@
-package com.liquidsys.liquidAjax.imagemerge;
+package com.zimbra.zimbraAjax.imagemerge;
 
 public class ImageMergeException extends Exception {
 

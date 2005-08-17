@@ -1,10 +1,10 @@
-package com.liquidsys.liquidConsole.servlet;
+package com.zimbra.zimbraConsole.servlet;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class Forward extends LCServlet
+public class Forward extends ZCServlet
 {
     
     public static final String DEFAULT_FORWARD_URL = 

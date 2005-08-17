@@ -1,4 +1,4 @@
-package com.liquidsys.liquidConsole.servlet;
+package com.zimbra.zimbraConsole.servlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.naming.*;
 
-public class LCServlet extends HttpServlet
+public class ZCServlet extends HttpServlet
 {
     
     private static final String PARAM_AUTH_TOKEN = "authToken";

@@ -1,4 +1,4 @@
-package com.liquidsys.liquidAjax.imagesort;
+package com.zimbra.zimbraAjax.imagesort;
 
 import org.apache.tools.ant.*;
 import org.apache.tools.ant.util.FileUtils;

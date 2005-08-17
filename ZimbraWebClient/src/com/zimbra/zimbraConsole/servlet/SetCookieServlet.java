@@ -1,4 +1,4 @@
-package com.liquidsys.liquidConsole.servlet;
+package com.zimbra.zimbraConsole.servlet;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Cookie;
 import java.io.IOException;
 
-public class SetCookieServlet extends LCServlet
+public class SetCookieServlet extends ZCServlet
 {
     
     private static final String PARAM_AUTH_TOKEN = "authToken";

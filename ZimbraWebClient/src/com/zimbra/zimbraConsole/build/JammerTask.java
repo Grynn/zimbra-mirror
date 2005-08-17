@@ -1,4 +1,4 @@
-package com.liquidsys.liquidConsole.build;
+package com.zimbra.zimbraConsole.build;
 
 import org.apache.tools.ant.*;
 import org.apache.tools.ant.types.*;
