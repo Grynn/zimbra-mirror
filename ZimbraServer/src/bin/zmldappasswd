@@ -2,7 +2,7 @@
 #
 # Change password for zimbra_ldap_password, and optionally for
 # ldap_root_password.  Updates both the Liquid local config file and
-# ldap configs, and reruns liquid.ldif
+# ldap configs, and reruns zimbra.ldif
 #
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
@@ -18,7 +18,7 @@ Usage: $ lqldappasswd [ --root ] newpassword
 
 By default, this script changes zimbra_ldap_password.  If the --root
 option is specified, then ldap_root_passwd is changed.  In both cases,
-slapd.conf is modified and liquid.ldif reloaded.
+slapd.conf is modified and zimbra.ldif reloaded.
 
 EOF
 }
@@ -79,19 +79,19 @@ echo "Starting ldap"
 ${zimbra_home}/bin/ldap start > /dev/null 2>&1
 
 #
-# Update liquid.ldif
+# Update zimbra.ldif
 #
-echo "Updating liquid.ldif"
+echo "Updating zimbra.ldif"
 sed -e "s|^userPassword.*|userPassword: ${zimbra_sha}|" \
-	${config_dir}/liquid.ldif > /tmp/liquid.ldif.$$
-mv -f /tmp/liquid.ldif.$$ ${config_dir}/liquid.ldif
+	${config_dir}/zimbra.ldif > /tmp/zimbra.ldif.$$
+mv -f /tmp/zimbra.ldif.$$ ${config_dir}/zimbra.ldif
 
 #
-# Rerun liquid.ldif
+# Rerun zimbra.ldif
 #
 echo "Running ldapmodify"
 ldapmodify -c -w ${ldap_root_password} -D ${zimbra_ldap_userdn} \
-	-x -f /opt/zimbra/openldap/etc/openldap/liquid.ldif > /dev/null 2>&1
+	-x -f /opt/zimbra/openldap/etc/openldap/zimbra.ldif > /dev/null 2>&1
 echo "Password change complete."
 echo ""
 echo "You may need to restart tomcat, if it is running."

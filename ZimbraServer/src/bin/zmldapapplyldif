@@ -9,16 +9,16 @@ zmsetvars zimbra_ldap_userdn zimbra_ldap_password ldap_root_password zimbra_serv
 
 zimbra_sha=`/opt/zimbra/openldap/sbin/slappasswd -s ${zimbra_ldap_password}`
 
-rm -f ${config_dir}/liquid.ldif
+rm -f ${config_dir}/zimbra.ldif
 
 sed -e "s|^userPassword.*|userPassword: ${zimbra_sha}|" \
-        ${source_config_dir}/liquid.ldif > ${config_dir}/liquid.ldif
+        ${source_config_dir}/zimbra.ldif > ${config_dir}/zimbra.ldif
 
 ldap start
 
-ldapmodify -a -c -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${config_dir}/liquid.ldif
+ldapmodify -a -c -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${config_dir}/zimbra.ldif
 ldapmodify -a -c -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${source_config_dir}/zimbra_mimehandlers.ldif
 
-ldapmodify -c -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${config_dir}/liquid.ldif
+ldapmodify -c -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${config_dir}/zimbra.ldif
 ldapmodify -c -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${source_config_dir}/zimbra_mimehandlers.ldif
 
