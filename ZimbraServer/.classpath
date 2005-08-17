@@ -27,7 +27,7 @@
 	<classpathentry kind="lib" path="jars/commons-digester-1.5.jar"/>
 	<classpathentry kind="lib" path="jars/jakarta-oro-2.0.7.jar"/>
 	<classpathentry sourcepath="/ThirdParty/jsieve" kind="lib" path="jars/jsieve-0.1.jar"/>
-	<classpathentry kind="lib" path="jars/liquidos.jar"/>
+	<classpathentry kind="lib" path="jars/zimbra-native.jar"/>
 	<classpathentry kind="lib" path="jars/lucene-1.4.3.jar"/>
 	<classpathentry kind="lib" path="jars/mail.jar">
 		<attributes>
