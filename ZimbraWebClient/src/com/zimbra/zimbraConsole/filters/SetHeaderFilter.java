@@ -337,14 +337,14 @@ public class SetHeaderFilter implements Filter {
         }
     }
     
-    private static final String URI_LIQUID = "/liquid/";
-    private static final String URI_MAIL = "/liquid/mail";
-    private static final String URI_AUTH = "/liquid/auth/";
+    private static final String URI_ZIMBRA = "/zimbra/";
+    private static final String URI_MAIL = "/zimbra/mail";
+    private static final String URI_AUTH = "/zimbra/auth/";
     
     private boolean isDynamicContent (String uri) 
     {
         return ( (uri != null) && 
-		 ( uri.equals(URI_LIQUID) ||
+		 ( uri.equals(URI_ZIMBRA) ||
 		   (uri.indexOf(URI_MAIL) != -1) ||
 		   uri.equals(URI_AUTH) ||
 		   (uri.indexOf(JSP_EXTENSION)) != -1));

@@ -216,7 +216,7 @@ public class Jammer {
         private String webroot = null;
         private String webappName = null;
         
-        private static final String DEFAULT_WEBAPP_NAME="liquid";
+        private static final String DEFAULT_WEBAPP_NAME="zimbra";
         
         public LineReader(String filesString, Task owner, String splitToken,
                           String webroot, String webapp) {

@@ -12,7 +12,7 @@ public class ZCServlet extends HttpServlet
     private static final String PARAM_AUTH_TOKEN = "authToken";
     private static final String PARAM_QUERY_STRING_TO_CARRY = "qs";
     private static final String PARAM_AUTH_TOKEN_LIFETIME = "atl";
-    private static final String DEFAULT_MAIL_URL = "/liquid/mail";
+    private static final String DEFAULT_MAIL_URL = "/zimbra/mail";
     
 
     private static String redirectLocation;

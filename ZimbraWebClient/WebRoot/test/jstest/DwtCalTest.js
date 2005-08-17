@@ -13,50 +13,50 @@ function() {
 	cal.setZIndex(10000);
 	cal.setLocation(0, 0);
 	
-	cal.addSelectionListener(new LsListener(null, DwtCalTest.calSelListener));
-	cal.addDateRangeListener(new LsListener(null, DwtCalTest.calDateRangeListener));
+	cal.addSelectionListener(new AjxListener(null, DwtCalTest.calSelListener));
+	cal.addDateRangeListener(new AjxListener(null, DwtCalTest.calDateRangeListener));
 	
 	var b = new DwtButton(shell, null, null, DwtControl.ABSOLUTE_STYLE);
 	b.setText("Force RO");
 	b.setZIndex(10000);
 	b.setBounds(250, 0);
-	b.addSelectionListener(new LsListener(null, DwtCalTest.roButtonListener));
+	b.addSelectionListener(new AjxListener(null, DwtCalTest.roButtonListener));
 	
 	b = new DwtButton(shell, null, null, DwtControl.ABSOLUTE_STYLE);
 	b.setText("FDOWX");
 	b.setZIndex(10000);
 	b.setLocation(250, 25);
-	b.addSelectionListener(new LsListener(null, DwtCalTest.fdowButtonListener));
+	b.addSelectionListener(new AjxListener(null, DwtCalTest.fdowButtonListener));
 	
 	b = new DwtButton(shell, null, null, DwtControl.ABSOLUTE_STYLE);
 	b.setText("HILITE");
 	b.setZIndex(10000);
 	b.setLocation(250, 50);
-	b.addSelectionListener(new LsListener(null, DwtCalTest.hlButtonListener));
+	b.addSelectionListener(new AjxListener(null, DwtCalTest.hlButtonListener));
 
 	b = new DwtButton(shell, null, null, DwtControl.ABSOLUTE_STYLE);
 	b.setText("WEEK MODE");
 	b.setZIndex(10000);
 	b.setLocation(250, 75);
-	b.addSelectionListener(new LsListener(null, DwtCalTest.wmButtonListener));
+	b.addSelectionListener(new AjxListener(null, DwtCalTest.wmButtonListener));
 	
 	b = new DwtButton(shell, null, null, DwtControl.ABSOLUTE_STYLE);
 	b.setText("WORK WEEK MODE");
 	b.setZIndex(10000);
 	b.setLocation(250, 100);
-	b.addSelectionListener(new LsListener(null, DwtCalTest.wwmButtonListener));
+	b.addSelectionListener(new AjxListener(null, DwtCalTest.wwmButtonListener));
 
 	b = new DwtButton(shell, null, null, DwtControl.ABSOLUTE_STYLE);
 	b.setText("DAY MODE");
 	b.setZIndex(10000);
 	b.setLocation(250, 125);
-	b.addSelectionListener(new LsListener(null, DwtCalTest.dmButtonListener));
+	b.addSelectionListener(new AjxListener(null, DwtCalTest.dmButtonListener));
 
 	b = new DwtButton(shell, null, null, DwtControl.ABSOLUTE_STYLE);
 	b.setText("SET WW");
 	b.setZIndex(10000);
 	b.setLocation(250, 150);
-	b.addSelectionListener(new LsListener(null, DwtCalTest.swwButtonListener));	
+	b.addSelectionListener(new AjxListener(null, DwtCalTest.swwButtonListener));	
 }
 
 DwtCalTest.calSelListener = 

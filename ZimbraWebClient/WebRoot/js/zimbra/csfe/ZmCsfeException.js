@@ -1,9 +1,9 @@
 function ZmCsfeException(msg, code, method, detail) {
 	if (arguments.length == 0) return;
-	LsException.call(this, msg, code, method, detail);
+	AjxException.call(this, msg, code, method, detail);
 }
 
-ZmCsfeException.prototype = new LsException;
+ZmCsfeException.prototype = new AjxException;
 ZmCsfeException.prototype.constructor = ZmCsfeException;
 
 ZmCsfeException.prototype.toString = 

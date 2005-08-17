@@ -14,7 +14,7 @@ public class SetCookieServlet extends ZCServlet
     private static final String PARAM_PUBLIC_COMPUTER = "publicComputer";
     private static final String PARAM_QUERY_STRING_TO_CARRY = "qs";
     private static final String PARAM_AUTH_TOKEN_LIFETIME = "atl";
-    private static final String DEFAULT_MAIL_URL = "/liquid/mail";
+    private static final String DEFAULT_MAIL_URL = "/zimbra/mail";
     
     private static final String HEADER_HOST = "host";
     private static final String HEADER_REFERER = "referer";

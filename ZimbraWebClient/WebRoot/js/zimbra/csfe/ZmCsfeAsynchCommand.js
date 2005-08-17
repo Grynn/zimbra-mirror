@@ -25,10 +25,10 @@ function () {
 
 /**
 * @method addInvokeListener
-* @param obj : LsCallback
+* @param obj : AjxCallback
 * use this method to be notified when rpc call returns.
 * Callback receives an argument that is either responseSoapDocBody or exceptionObject
-* -	_responseSoapDoc:LsSoapDoc is a resonse SOAP document
+* -	_responseSoapDoc:AjxSoapDoc is a resonse SOAP document
 **/
 ZmCsfeAsynchCommand.prototype.addInvokeListener = 
 function (obj) {
@@ -64,7 +64,7 @@ function (exceptionObject) {
 				if(this._responseSoapDoc) {
 					this.invokeListeners[ix].run(this._responseSoapDoc);					
 				} else {
-					this.invokeListeners[ix].run(new ZmCsfeException("Csfe service error", LsException.UNKNOWN_ERROR, "ZmCsfeAsynchCommand.prototype._fireInvokeEvent", "Service returned empty document"));				
+					this.invokeListeners[ix].run(new ZmCsfeException("Csfe service error", AjxException.UNKNOWN_ERROR, "ZmCsfeAsynchCommand.prototype._fireInvokeEvent", "Service returned empty document"));				
 				}
 			}
 		}
@@ -81,19 +81,19 @@ text, xml, success, status
 ZmCsfeAsynchCommand.prototype.rpcCallback = 
 function (response) {
 	this._en = new Date();
-	DBG.println(LsDebug.DBG1, "<H4>ASYNCHRONOUS REQUEST RETURNED</H4>");
-	DBG.println(LsDebug.DBG1, "ASYNCHRONOUS ROUND TRIP TIME: " + (this._en.getTime() - this._st.getTime()));	
+	DBG.println(AjxDebug.DBG1, "<H4>ASYNCHRONOUS REQUEST RETURNED</H4>");
+	DBG.println(AjxDebug.DBG1, "ASYNCHRONOUS ROUND TRIP TIME: " + (this._en.getTime() - this._st.getTime()));	
 	var newEx = null;
 	if(!response.success) {
 		try {
-			var respDoc = LsEnv.isIE || response.xml == null
-							? LsSoapDoc.createFromXml(response.text) 
-							: LsSoapDoc.createFromDom(response.xml);		
+			var respDoc = AjxEnv.isIE || response.xml == null
+							? AjxSoapDoc.createFromXml(response.text) 
+							: AjxSoapDoc.createFromDom(response.xml);		
 			if(respDoc.getBody()) {
-				DBG.println(LsDebug.DBG1, "<H4>RESPONSE</H4>");
-				DBG.printXML(LsDebug.DBG1, respDoc.getXml());
+				DBG.println(AjxDebug.DBG1, "<H4>RESPONSE</H4>");
+				DBG.printXML(AjxDebug.DBG1, respDoc.getXml());
 			
-				var fault = LsSoapDoc.element2FaultObj(respDoc.getBody());
+				var fault = AjxSoapDoc.element2FaultObj(respDoc.getBody());
 				if (fault) {
 					newEx = new ZmCsfeException("Csfe service error", fault.errorCode, "ZmCsfeAsynchCommand.prototype.rpcCallback", fault.reason);
 				}		
@@ -117,14 +117,14 @@ function (response) {
 	} else {
 		try {
 			// responseXML is empty under IE and FF doesnt seem to populate xml if faulted
-			var respDoc = LsEnv.isIE || response.xml == null
-							? LsSoapDoc.createFromXml(response.text) 
-							: LsSoapDoc.createFromDom(response.xml);
+			var respDoc = AjxEnv.isIE || response.xml == null
+							? AjxSoapDoc.createFromXml(response.text) 
+							: AjxSoapDoc.createFromDom(response.xml);
 			this._responseSoapDoc = respDoc;
-			DBG.println(LsDebug.DBG1, "<H4>RESPONSE</H4>");
-			DBG.printXML(LsDebug.DBG1, respDoc.getXml());
+			DBG.println(AjxDebug.DBG1, "<H4>RESPONSE</H4>");
+			DBG.printXML(AjxDebug.DBG1, respDoc.getXml());
 		} catch (ex) {
-			if ((ex instanceof LsSoapException) || (ex instanceof LsException)) {
+			if ((ex instanceof AjxSoapException) || (ex instanceof AjxException)) {
 				newEx =	ex;
 			} else {
 				newEx =	new ZmCsfeException();
@@ -136,7 +136,7 @@ function (response) {
 		}
 		try {
 			//check if we received a Fault message from server
-			var fault = LsSoapDoc.element2FaultObj(this._responseSoapDoc.getBody());
+			var fault = AjxSoapDoc.element2FaultObj(this._responseSoapDoc.getBody());
 			if (fault) {
 				newEx = new ZmCsfeException("Csfe service error", fault.errorCode, "ZmCsfeAsynchCommand.prototype.rpcCallback", fault.reason);
 			}
@@ -157,7 +157,7 @@ function (soapDoc, noAuthTokenRequired, serverUri, targetServer, useXml) {
 		var sessionId = ZmCsfeCommand.getSessionId();
 		var hdr = soapDoc.createHeaderElement();
 		var ctxt = soapDoc.set("context", null, hdr);
-		ctxt.setAttribute("xmlns", "urn:liquid");
+		ctxt.setAttribute("xmlns", "urn:zimbra");
 		soapDoc.set("authToken", authToken, ctxt);
 		if (sessionId != null)
 			soapDoc.set("sessionId", sessionId, ctxt);
@@ -171,20 +171,20 @@ function (soapDoc, noAuthTokenRequired, serverUri, targetServer, useXml) {
 	}
 	
 	try {
-		DBG.println(LsDebug.DBG1, "<H4>ASYNCHRONOUS REQUEST</H4>");
-		DBG.printXML(LsDebug.DBG1, soapDoc.getXml());
+		DBG.println(AjxDebug.DBG1, "<H4>ASYNCHRONOUS REQUEST</H4>");
+		DBG.printXML(AjxDebug.DBG1, soapDoc.getXml());
 		var uri = serverUri || ZmCsfeCommand.serverUri;
-		var requestStr = !LsEnv.isSafari 
+		var requestStr = !AjxEnv.isSafari 
 			? soapDoc.getXml() 
 			: soapDoc.getXml().replace("soap=", "xmlns:soap=");
 			
 		this._st = new Date();
-		LsRpc.invoke(requestStr, uri,  {"Content-Type": "application/soap+xml; charset=utf-8"}, new LsCallback(this, ZmCsfeAsynchCommand.prototype.rpcCallback)); //asynchronous call returns null 
+		AjxRpc.invoke(requestStr, uri,  {"Content-Type": "application/soap+xml; charset=utf-8"}, new AjxCallback(this, ZmCsfeAsynchCommand.prototype.rpcCallback)); //asynchronous call returns null 
 	} catch (ex) {
 		//JavaScript error, network error or unknown error may happen
 		var newEx = new ZmCsfeException();
 		newEx.method = "ZmCsfeCommand.invoke";
-		if (ex instanceof LsException) {
+		if (ex instanceof AjxException) {
 			newEx.detail = ex.msg + ": " + ex.code + " (" + ex.method + ")";
 			newEx.msg = "Network Error";
 			newEx.code = ex.code;

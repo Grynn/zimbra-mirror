@@ -6,7 +6,7 @@ function DwtHtmlEditorTest(parent) {
 	this.rte.setSize(800, 600);
 	this.rte.zShow(true);
 	
-	this.rte.addStateChangeListener(new LsListener(this, this._rteStateChangeListener));
+	this.rte.addStateChangeListener(new AjxListener(this, this._rteStateChangeListener));
 	
 	/*var cp = new DwtColorPicker(parent, null, DwtControl.ABSOLUTE_STYLE);
 	cp.setLocation(410, 400);
@@ -100,7 +100,7 @@ function(shell) {
 	this._createFontSizeMenu(tb);
 	new DwtControl(tb, "vertSep");
 	
-	var listener = new LsListener(this, this._fontStyleListener);
+	var listener = new AjxListener(this, this._fontStyleListener);
 	var b = this._boldButton = new DwtButton(tb, DwtButton.TOGGLE_STYLE, "LmComposeTBButton");
 	b.setImage(LmImg.I_BOLD_TEXT);
 	b.setToolTipContent(LmMsg.boldText);
@@ -144,7 +144,7 @@ function(shell) {
 	tb.zShow(true);
 	tb.setLocation(0, 30);
 	
-	var listener = new LsListener(this, this._justificationListener);
+	var listener = new AjxListener(this, this._justificationListener);
 	var b = this._leftJustifyButton = new DwtButton(tb, DwtButton.TOGGLE_STYLE, "LmComposeTBButton");
 	b.setImage(LmImg.I_LEFT_JUSTIFY);
 	b.setToolTipContent(LmMsg.leftJustify);
@@ -171,7 +171,7 @@ function(shell) {
 	
 	new DwtControl(tb, "vertSep");
 
-	var insElListener = new LsListener(this, this._insElementListener);
+	var insElListener = new AjxListener(this, this._insElementListener);
 	b = this._listButton = new DwtButton(tb, DwtButton.TOGGLE_STYLE,  "LmComposeTBButton");
 	b.setToolTipContent(LmMsg.bulletedList);
 	b.setImage(LmImg.I_LIST);
@@ -184,7 +184,7 @@ function(shell) {
 	b.setData(DwtHtmlEditorTest._VALUE, DwtHtmlEditor.ORDERED_LIST);
 	b.addSelectionListener(insElListener);
 
-	listener = new LsListener(this, this._indentListener);	
+	listener = new AjxListener(this, this._indentListener);	
 	b = this._outdentButton = new DwtButton(tb, null, "LmComposeTBButton");
 	b.setToolTipContent(LmMsg.outdent);
 	b.setImage(LmImg.I_OUTDENT);
@@ -204,7 +204,7 @@ function(shell) {
 	b.setToolTipContent(LmMsg.fontColor);
 	var m = new DwtMenu(b, DwtMenu.COLOR_PICKER_STYLE);
 	var cp = new DwtColorPicker(m);
-	cp.addSelectionListener(new LsListener(this, this._fontColorListener));
+	cp.addSelectionListener(new AjxListener(this, this._fontColorListener));
 	b.setMenu(m);
 	
 	b = this._fontBackgroundButton = new DwtButton(tb, null, "LmComposeTBButton");
@@ -212,7 +212,7 @@ function(shell) {
 	b.setToolTipContent(LmMsg.fontBackground);
 	m = new DwtMenu(b, DwtMenu.COLOR_PICKER_STYLE);
 	cp = new DwtColorPicker(m);
-	cp.addSelectionListener(new LsListener(this, this._fontHiliteListener));
+	cp.addSelectionListener(new AjxListener(this, this._fontHiliteListener));
 	b.setMenu(m);
 	
 	new DwtControl(tb, "vertSep");
@@ -251,18 +251,18 @@ function(shell) {
 	mi.setImage(LmImg.I_HTML);
 	mi.setText(LmMsg.htmlDocument);
 	mi.setData(DwtHtmlEditorTest._VALUE, DwtHtmlEditor.HTML);
-	mi.addSelectionListener(new LsListener(this, this._mailFormatListener));
+	mi.addSelectionListener(new AjxListener(this, this._mailFormatListener));
 	
 	mi = new DwtMenuItem(m, DwtMenuItem.RADIO_STYLE);
 	mi.setImage(LmImg.I_DOCUMENT);
 	mi.setText(LmMsg.plainText);
 	mi.setData(DwtHtmlEditorTest._VALUE, DwtHtmlEditor.TEXT);
-	mi.addSelectionListener(new LsListener(this, this._mailFormatListener));	
+	mi.addSelectionListener(new AjxListener(this, this._mailFormatListener));	
 }
 
 DwtHtmlEditorTest.prototype._createStyleSelect =
 function(tb) {
-	var listener = new LsListener(this, this._styleListener);
+	var listener = new AjxListener(this, this._styleListener);
 	var s = this._styleSelect = new DwtSelect(tb, null, "LmComposeTBSelect");
 	s.addChangeListener(listener);
 	
@@ -280,7 +280,7 @@ function(tb) {
 
 DwtHtmlEditorTest.prototype._createFontFamilySelect =
 function(tb) {
-	var listener = new LsListener(this, this._fontNameListener);
+	var listener = new AjxListener(this, this._fontNameListener);
 	var s = this._fontFamilySelect = new DwtSelect(tb, null, "LmComposeTBSelect");
 	s.addChangeListener(listener);
 	
@@ -292,7 +292,7 @@ function(tb) {
 
 DwtHtmlEditorTest.prototype._createFontSizeMenu =
 function(tb) {
-	var listener = new LsListener(this, this._fontSizeListener);
+	var listener = new AjxListener(this, this._fontSizeListener);
 	var s = this._fontSizeSelect = new DwtSelect(tb, null, "LmComposeTBSelect");
 	s.addChangeListener(listener);
 	

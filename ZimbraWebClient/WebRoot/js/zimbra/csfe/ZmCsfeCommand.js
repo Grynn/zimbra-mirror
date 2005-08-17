@@ -13,7 +13,7 @@ function() {
 	// See if the auth token is cached. If not try and get it from the cookie
 	if (ZmCsfeCommand._authToken != null)
 		return ZmCsfeCommand._authToken;
-	var authToken = LsCookie.getCookie(document, ZmCsfeCommand._COOKIE_NAME)
+	var authToken = AjxCookie.getCookie(document, ZmCsfeCommand._COOKIE_NAME)
 	ZmCsfeCommand._authToken = authToken;
 	return authToken;
 }
@@ -30,9 +30,9 @@ function(authToken, lifetimeMs, sessionId) {
 		var exp = new Date();
 		var lifetime = parseInt(lifetimeMs);
 		exp.setTime(exp.getTime() + lifetime);
-		LsCookie.setCookie(document, ZmCsfeCommand._COOKIE_NAME, authToken, exp, "/");
+		AjxCookie.setCookie(document, ZmCsfeCommand._COOKIE_NAME, authToken, exp, "/");
 	} else {
-		LsCookie.deleteCookie(document, ZmCsfeCommand._COOKIE_NAME, "/");
+		AjxCookie.deleteCookie(document, ZmCsfeCommand._COOKIE_NAME, "/");
 	}
 	if (sessionId)
 		ZmCsfeCommand.setSessionId(sessionId);
@@ -41,7 +41,7 @@ function(authToken, lifetimeMs, sessionId) {
 ZmCsfeCommand.clearAuthToken =
 function() {
 	ZmCsfeCommand._authToken = null;
-	LsCookie.deleteCookie(document, ZmCsfeCommand._COOKIE_NAME, "/");
+	AjxCookie.deleteCookie(document, ZmCsfeCommand._COOKIE_NAME, "/");
 }
 
 ZmCsfeCommand.getSessionId =
@@ -64,7 +64,7 @@ function(soapDoc, noAuthTokenRequired, serverUri, targetServer, useXml) {
 		var sessionId = ZmCsfeCommand.getSessionId();
 		var hdr = soapDoc.createHeaderElement();
 		var ctxt = soapDoc.set("context", null, hdr);
-		ctxt.setAttribute("xmlns", "urn:liquid");
+		ctxt.setAttribute("xmlns", "urn:zimbra");
 		soapDoc.set("authToken", authToken, ctxt);
 		if (sessionId)
 			soapDoc.set("sessionId", sessionId, ctxt);
@@ -77,20 +77,20 @@ function(soapDoc, noAuthTokenRequired, serverUri, targetServer, useXml) {
 		js.setAttribute("type", "js");
 	}
 
-	DBG.println(LsDebug.DBG1, "<H4>REQUEST</H4>");
-	DBG.printXML(LsDebug.DBG1, soapDoc.getXml());
+	DBG.println(AjxDebug.DBG1, "<H4>REQUEST</H4>");
+	DBG.printXML(AjxDebug.DBG1, soapDoc.getXml());
 
 	var xmlResponse = false;
 	try {
 		var uri = serverUri || ZmCsfeCommand.serverUri;
-		var requestStr = !LsEnv.isSafari 
+		var requestStr = !AjxEnv.isSafari 
 			? soapDoc.getXml() 
 			: soapDoc.getXml().replace("soap=", "xmlns:soap=");
 			
 		var _st = new Date();
-		var response = LsRpc.invoke(requestStr, uri, {"Content-Type": "application/soap+xml; charset=utf-8"});
+		var response = AjxRpc.invoke(requestStr, uri, {"Content-Type": "application/soap+xml; charset=utf-8"});
 		var _en = new Date();
-		DBG.println(LsDebug.DBG1, "ROUND TRIP TIME: " + (_en.getTime() - _st.getTime()));
+		DBG.println(AjxDebug.DBG1, "ROUND TRIP TIME: " + (_en.getTime() - _st.getTime()));
 
 		var respDoc = null;
 		if (typeof(response.text) == "string" && response.text.indexOf("{") == 0) {
@@ -98,14 +98,14 @@ function(soapDoc, noAuthTokenRequired, serverUri, targetServer, useXml) {
 		} else {
 			xmlResponse = true;
 			// responseXML is empty under IE
-			respDoc = (LsEnv.isIE || response.xml == null)
-				? LsSoapDoc.createFromXml(response.text) 
-				: LsSoapDoc.createFromDom(response.xml);
+			respDoc = (AjxEnv.isIE || response.xml == null)
+				? AjxSoapDoc.createFromXml(response.text) 
+				: AjxSoapDoc.createFromDom(response.xml);
 		}
 	} catch (ex) {
-		if (ex instanceof LsSoapException) {
+		if (ex instanceof AjxSoapException) {
 			throw ex;
-		} else if (ex instanceof LsException) {
+		} else if (ex instanceof AjxException) {
 			throw ex; 
 		}  else {
 			var newEx = new ZmCsfeException();
@@ -117,13 +117,13 @@ function(soapDoc, noAuthTokenRequired, serverUri, targetServer, useXml) {
 		}
 	}
 	
-	DBG.println(LsDebug.DBG1, "<H4>RESPONSE</H4>");
+	DBG.println(AjxDebug.DBG1, "<H4>RESPONSE</H4>");
 
 	var resp;
 	if (xmlResponse) {
-		DBG.printXML(LsDebug.DBG1, respDoc.getXml());
+		DBG.printXML(AjxDebug.DBG1, respDoc.getXml());
 		var body = respDoc.getBody();
-		var fault = LsSoapDoc.element2FaultObj(body);
+		var fault = AjxSoapDoc.element2FaultObj(body);
 		if (fault) {
 			throw new ZmCsfeException("Csfe service error", fault.errorCode, "ZmCsfeCommand.invoke", fault.reason);
 		}
@@ -133,8 +133,8 @@ function(soapDoc, noAuthTokenRequired, serverUri, targetServer, useXml) {
 		resp = "{";
 		var hdr = respDoc.getHeader();
 		if (hdr)
-			resp += LsUtil.xmlToJs(hdr) + ",";
-		resp += LsUtil.xmlToJs(body);
+			resp += AjxUtil.xmlToJs(hdr) + ",";
+		resp += AjxUtil.xmlToJs(body);
 		resp += "}";
 	} else {
 		resp = respDoc;	

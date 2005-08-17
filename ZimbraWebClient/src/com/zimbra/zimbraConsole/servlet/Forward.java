@@ -8,7 +8,7 @@ public class Forward extends ZCServlet
 {
     
     public static final String DEFAULT_FORWARD_URL = 
-	"/public/launchLiquidMail.jsp";
+	"/public/launchZimbraMail.jsp";
     private static final String PARAM_FORWARD_URL = "fu";
     
     public void doGet (HttpServletRequest req,
