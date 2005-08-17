@@ -314,10 +314,10 @@ Domain to create accounts in. Try to test atleast these domains:
 - domain that is valid elsewhere - to check if we will
   accept mail locally for it.  We must accept mail locally
   if the domain here and accounts here - it should relay non
-  local accounts (dogfood.zimbrasys.com)
+  local accounts (dogfood.zimbra.com)
 
 - domain that has an MX record but is only local to here
-  (zimbrasys.com)
+  (zimbra.com)
 
 =item B<--extfwd>
 
