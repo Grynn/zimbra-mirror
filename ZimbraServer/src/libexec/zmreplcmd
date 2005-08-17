@@ -1,2 +1,2 @@
 #!/bin/sh
-lqjava com.zimbra.cs.redolog.util.ReplCommand $@
+zmjava com.zimbra.cs.redolog.util.ReplCommand $@
