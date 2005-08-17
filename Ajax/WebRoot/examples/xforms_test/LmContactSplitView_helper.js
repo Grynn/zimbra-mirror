@@ -25,7 +25,7 @@ var owen = {
 		otherFax:"888-222-2222",
 		otherUrl:"http://other.com",
 		email:"owen@smartsoul.com",
-		email2:"owen@liquidsys.com",
+		email2:"owen@zimbra.com",
 		email3:"owen@dynabooks.com",
 		notes:"Testing notes note note note note note notes!"
 	}
@@ -33,11 +33,11 @@ var owen = {
 var parag = {
 	attr: {
 		fileAs:"Parag Shah",
-		company:"Liquid Systems",
+		company:"Zimbra Inc",
 		workAddr:"1500 Fashion Island Blvd<br>San Mateo, Ca 94414",
 		workStreet:"1500 Fashion Island Blvd",
 		workPhone:"888-222-2222",
-		email:"parag@liquidsys.com",
+		email:"parag@zimbra.com",
 		homePhone:"homephone"
 		//notes:"Parag's notes!"
 	}
@@ -45,12 +45,12 @@ var parag = {
 
 var contactsList = {
 	list:[
-		{attr:{fileAs:"Janie O'Toole", email:"janie@liquidsys.com"}},
-		{attr:{fileAs:"John Robb", email:"john.robb@liquidsys.com"}},
+		{attr:{fileAs:"Janie O'Toole", email:"janie@zimbra.com"}},
+		{attr:{fileAs:"John Robb", email:"john.robb@zimbra.com"}},
 		owen,
 		parag,
-		{attr:{fileAs:"Ross Dargahi", email:"rossd@liquidsys.com"}},
-		{attr:{fileAs:"Roland Schemers", email:"roland@liquidsys.com"}}
+		{attr:{fileAs:"Ross Dargahi", email:"rossd@zimbra.com"}},
+		{attr:{fileAs:"Roland Schemers", email:"roland@zimbra.com"}}
 	]
 }
 

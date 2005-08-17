@@ -4,7 +4,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <HTML>
 <HEAD>
-<link href="liquid_widgets.css" 	rel="stylesheet" type="text/css">
+<link href="zimbra_widgets.css" 	rel="stylesheet" type="text/css">
 <style type="text/css">
   <!--
         @import url(../common/img/hiRes/dwtimgs.css);
@@ -15,7 +15,7 @@
 </script>
     
 <jsp:include page="../Messages.jsp"/>
-<jsp:include page="../LiquidAjax.jsp"/>
+<jsp:include page="../Ajax.jsp"/>
 
 <STYLE type="text/css">
 	.tabtable {

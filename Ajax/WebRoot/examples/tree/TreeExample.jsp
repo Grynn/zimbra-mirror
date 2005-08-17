@@ -13,11 +13,11 @@
       -->
     </style>
 	<script language="JavaScript">
-    	DwtConfigPath = "/liquidAjax/js/dwt/config";
+    	DwtConfigPath = "/ajax/js/dwt/config";
     </script>
     	
     <jsp:include page="../Messages.jsp"/>
-    <jsp:include page="../LiquidAjax.jsp"/>
+    <jsp:include page="../Ajax.jsp"/>
     <script type="text/javascript" src="ExMsg.js"></script>
     <script type="text/javascript" src="ExImg.js"></script>
     <script type="text/javascript" src="TreeExample.js"></script>

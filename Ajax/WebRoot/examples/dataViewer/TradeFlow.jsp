@@ -17,7 +17,7 @@
     </script>
     
     <jsp:include page="../Messages.jsp"/>
-    <jsp:include page="../LiquidAjax.jsp"/>
+    <jsp:include page="../Ajax.jsp"/>
     
 	<script type="text/javascript" src="config/msgs/DvMsg_en.js"/></script>
 	<script type="text/javascript" src="model/DvModel.js"></script>

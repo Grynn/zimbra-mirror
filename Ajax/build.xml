@@ -1,4 +1,4 @@
-<project name="LiquidAjax" default="war">
+<project name="Ajax" default="war">
 
 	<property environment="env"/>
 	
@@ -8,9 +8,9 @@
 	<property name="dist.dir"           location="build/dist"/>
 	<property name="dist.tomcat.dir"    location="${dist.dir}/jakarta-tomcat-5.0.28"/>
 	<property name="dist.tomcat.webapps.dir" location="${dist.tomcat.dir}/webapps"/>
-	<property name="dist.tarfile"       value="dev-liquid.tar"/>
+	<property name="dist.tarfile"       value="dev-zimbra.tar"/>
 
-	<property name="warfile"            location="${dist.tomcat.webapps.dir}/liquidAjax.war"/>
+	<property name="warfile"            location="${dist.tomcat.webapps.dir}/ajax.war"/>
 	
 	<property name="jars.dir"           location="jars"/>
 	<property name="src.dir"            location="src"/>
@@ -19,15 +19,15 @@
 	<condition property="deploy.dir" value="${env.DEPLOY_DIR}">
 		<isset property="env.DEPLOY_DIR" />
 	</condition>	
-	<condition property="deploy.dir" value="/opt/liquid/tomcat/webapps">
+	<condition property="deploy.dir" value="/opt/zimbra/tomcat/webapps">
 		<not><isset property="env.DEPLOY_DIR"/></not>
 	</condition>	
 	
 	<property name="deploy.war" value="${warfile}"/>
 	<property name="deploy.url" value="http://localhost:7070/manager/"/>
-	<property name="deploy.user" value="liquid"/>
-	<property name="deploy.password" value="liquid"/>
-	<property name="deploy.path" value="/liquidAjax"/>
+	<property name="deploy.user" value="zimbra"/>
+	<property name="deploy.password" value="zimbra"/>
+	<property name="deploy.path" value="/ajax"/>
 
 	<taskdef resource="net/sf/antcontrib/antlib.xml">
 		<classpath>
@@ -82,7 +82,7 @@
 		<delete file="${img.hiRes.destDir}/${img.cssFile}"/>
 	    <foreach target="imagecopy" param="var" list="WebRoot/js/dwt/config/img/hiRes">
 			<param name="destDir" value="${img.hiRes.destDir}"/>
-			<param name="cssPrefix" value="/liquidAjax/examples/common/img/hiRes/"/>			
+			<param name="cssPrefix" value="/ajax/examples/common/img/hiRes/"/>			
 			<param name="cssFile" value="${img.cssFile}"/>			
 	    </foreach>
 		
@@ -93,7 +93,7 @@
 		<foreach target="imagemerge" param="var" list="dwt,horizborders,vertborders">
 			<param name="srcDir" value="WebRoot/js/dwt/config/img/loRes"/>
 			<param name="destDir" value="${img.loRes.destDir}"/>
-			<param name="cssPrefix" value="/liquidAjax/examples/common/img/loRes/"/>			
+			<param name="cssPrefix" value="/ajax/examples/common/img/loRes/"/>			
 			<param name="cssFile" value="${img.cssFile}"/>			
 		</foreach>
 		
@@ -111,7 +111,7 @@
 		<delete file="${htmleditor.hiRes.destDir}/${htmleditor.cssFile}"/>
 	    <foreach target="imagecopy" param="var" list="WebRoot/examples/htmlEditor/img/hiRes">
 			<param name="destDir" value="${htmleditor.hiRes.destDir}"/>
-			<param name="cssPrefix" value="/liquidAjax/examples/htmlEditor/img/hiRes/"/>			
+			<param name="cssPrefix" value="/ajax/examples/htmlEditor/img/hiRes/"/>			
 			<param name="cssFile" value="${htmleditor.cssFile}"/>			
 	    </foreach>
 		
@@ -122,7 +122,7 @@
 		<foreach target="imagemerge" param="var" list="img">
 			<param name="srcDir" value="WebRoot/examples/htmlEditor/img/loRes"/>
 			<param name="destDir" value="${htmleditor.loRes.destDir}"/>
-			<param name="cssPrefix" value="/liquidAjax/examples/htmlEditor/img/hiRes/loRes/"/>			
+			<param name="cssPrefix" value="/ajax/examples/htmlEditor/img/hiRes/loRes/"/>			
 			<param name="cssFile" value="${htmleditor.cssFile}"/>			
 		</foreach>
 	</target>
@@ -139,7 +139,7 @@
 		<delete file="${dataViewer.hiRes.destDir}/${dataViewer.cssFile}"/>
 	    <foreach target="imagecopy" param="var" list="WebRoot/examples/dataViewer/config/img/hiRes">
 			<param name="destDir" value="${dataViewer.hiRes.destDir}"/>
-			<param name="cssPrefix" value="/liquidAjax/examples/dataViewer/config/img/hiRes/"/>			
+			<param name="cssPrefix" value="/ajax/examples/dataViewer/config/img/hiRes/"/>			
 			<param name="cssFile" value="${dataViewer.cssFile}"/>			
 	    </foreach>
 		
@@ -150,7 +150,7 @@
 		<foreach target="imagemerge" param="var" list="img">
 			<param name="srcDir" value="WebRoot/examples/dataViewer/config/img/loRes"/>
 			<param name="destDir" value="${dataViewer.loRes.destDir}"/>
-			<param name="cssPrefix" value="/liquidAjax/examples/dataViewer/config/img/loRes/"/>			
+			<param name="cssPrefix" value="/ajax/examples/dataViewer/config/img/loRes/"/>			
 			<param name="cssFile" value="${dataViewer.cssFile}"/>			
 		</foreach>
 	</target>
@@ -167,7 +167,7 @@
 		<delete file="${tree.hiRes.destDir}/${tree.cssFile}"/>
 	    <foreach target="imagecopy" param="var" list="WebRoot/examples/tree/img/hiRes">
 			<param name="destDir" value="${tree.hiRes.destDir}"/>
-			<param name="cssPrefix" value="/liquidAjax/examples/tree/img/hiRes/"/>			
+			<param name="cssPrefix" value="/ajax/examples/tree/img/hiRes/"/>			
 			<param name="cssFile" value="${tree.cssFile}"/>			
 	    </foreach>
 		
@@ -178,7 +178,7 @@
 		<foreach target="imagemerge" param="var" list="img">
 			<param name="srcDir" value="WebRoot/examples/tree/img/loRes"/>
 			<param name="destDir" value="${tree.loRes.destDir}"/>
-			<param name="cssPrefix" value="/liquidAjax/examples/tree/img/hiRes/loRes/"/>			
+			<param name="cssPrefix" value="/ajax/examples/tree/img/hiRes/loRes/"/>			
 			<param name="cssFile" value="${tree.cssFile}"/>			
 		</foreach>
 	</target>
@@ -194,7 +194,7 @@
 	<!-- merges images, puts merged image in build area, and generates CSS  -->	
 	<target name="imagemerge" depends="compile" description="prepares images">
 		<echo message="imageMerge ${var}"/>
-		<java classname="com.liquidsys.liquidAjax.imagemerge.ImageMerge" fork="true" classpathref="class.path" failonerror="true">
+		<java classname="com.zimbra.ajax.imagemerge.ImageMerge" fork="true" classpathref="class.path" failonerror="true">
 			<classpath>
 				<fileset dir="${jars.dir}">
 					<include name="**/*.jar"/>
@@ -211,7 +211,7 @@
 	<!-- copies images to build area and generates combined CSS -->			
 	<target name="imagecopy" depends="compile" description="prepares images">
 		<echo message="imagecopy ${var}"/>
-		<java classname="com.liquidsys.liquidAjax.imagemerge.ImageMerge" fork="true" classpathref="class.path" failonerror="true">
+		<java classname="com.zimbra.ajax.imagemerge.ImageMerge" fork="true" classpathref="class.path" failonerror="true">
 			<classpath>
 				<fileset dir="${jars.dir}">
 					<include name="**/*.jar"/>

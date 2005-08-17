@@ -106,16 +106,16 @@ IFRAME {
 }
 
 
-#liquid_logo {
+#zimbra_logo {
 	width:195;
 	height:38;
-	background-image:url(images/liquid_logo.gif);
+	background-image:url(images/zimbra_logo.gif);
 }
 
 #quota {
 	width:296;
 	height:38;
-	background-image:url(images/liquid_quota.gif);
+	background-image:url(images/zimbra_quota.gif);
 }
 
 
@@ -322,7 +322,7 @@ IFRAME {
 
 
 .white_text,
-	#liquid_logo,
+	#zimbra_logo,
 	#quota,
 	#header_toolbar,
 	.white_button,

@@ -58,9 +58,9 @@ var contactInstance = {
 			firstName: "Parag",
 			lastName: "Shah",
 			middleName: "Naresh",
-			company: "Liquid Systems",
+			company: "Zimbra Inc",
 			jobTitle: "Software Engineer",
-			email: "pshah@liquidsys.com",
+			email: "pshah@zimbra.com",
 		}
 	},
 }
