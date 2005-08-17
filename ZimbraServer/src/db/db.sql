@@ -54,9 +54,9 @@ INSERT INTO volume (id, name, path, file_bits, file_group_bits, mailbox_bits, ma
 INSERT INTO volume (id, name, path, file_bits, file_group_bits, mailbox_bits, mailbox_group_bits)
   VALUES (4, 'index2',   '/dev/shm/zimbra/index', 12, 8, 12, 8);
 INSERT INTO volume (id, name, path, file_bits, file_group_bits, mailbox_bits, mailbox_group_bits)
-  VALUES (5, 'message3', '/LQMSGS/store', 12, 8, 12, 8);
+  VALUES (5, 'message3', '/ZIMBRA/store', 12, 8, 12, 8);
 INSERT INTO volume (id, name, path, file_bits, file_group_bits, mailbox_bits, mailbox_group_bits)
-  VALUES (6, 'index3',   '/LQMSGS/index', 12, 8, 12, 8);
+  VALUES (6, 'index3',   '/ZIMBRA/index', 12, 8, 12, 8);
 
 INSERT INTO current_volumes (message_volume_id, index_volume_id, next_mailbox_id) VALUES (1, 2, 1);
 COMMIT;
