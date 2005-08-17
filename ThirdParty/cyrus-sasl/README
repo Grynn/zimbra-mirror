@@ -1,32 +1,32 @@
 
 Build
 
-	Run "liquid-cyrus-sasl-build.sh"
+	Run "zimbra-cyrus-sasl-build.sh"
 	
 	"make install" as root
 
 Configuring the server: 
 
-	version=2.1.21.LIQUID
+	version=2.1.21.ZIMBRA
 
-	mkdir /opt/liquid/cyrus-sasl-${version}/etc
+	mkdir /opt/zimbra/cyrus-sasl-${version}/etc
 
-	(echo "liquid_url: http://bolton/service/soap/";
-	echo "liquid_cert_file: /opt/liquid/conf/blah";
-	echo "liquid_cert_check: off") > \
-	 /opt/liquid/cyrus-sasl-{verison}/etc/saslauthd.conf
+	(echo "zimbra_url: http://bolton/service/soap/";
+	echo "zimbra_cert_file: /opt/zimbra/conf/blah";
+	echo "zimbra_cert_check: off") > \
+	 /opt/zimbra/cyrus-sasl-{verison}/etc/saslauthd.conf
 
-	mkdir /opt/liquid/cyrus-sasl-${version}/state
+	mkdir /opt/zimbra/cyrus-sasl-${version}/state
 
 Testing:
 
 	In one window run:
 
-	# /opt/liquid/cyrus-sasl-2.1.21.LIQUID/sbin/saslauthd -a liquid -d
+	# /opt/zimbra/cyrus-sasl-2.1.21.ZIMBRA/sbin/saslauthd -a zimbra -d
 
 	In another run:
 
-	# testsaslauthd -f /opt/liquid/cyrus-sasl-2.1.21.LIQUID/state/mux \
+	# testsaslauthd -f /opt/zimbra/cyrus-sasl-2.1.21.ZIMBRA/state/mux \
 		-u admin -p test123
 
 TODO:

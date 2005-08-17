@@ -1,12 +1,12 @@
 #!/bin/bash -x
 
 #
-# Builds a saslauthd with Liquid authentication support.  We modify
+# Builds a saslauthd with Zimbra authentication support.  We modify
 # configure.in which means we have to run autoconf.  I have borrowed
 # the steps to run autoconf from the rpm spec.  The cyrus CVS tree's
 # SMakefile is probably the source for the rpm spec.
 #
-src=cyrus-sasl-2.1.21.LIQUID
+src=cyrus-sasl-2.1.21.ZIMBRA
 
 rm -fr build
 mkdir build
@@ -31,8 +31,8 @@ autoheader
 autoconf -f
 
 cd ..
-./configure --enable-liquid --prefix=/opt/liquid/${src} \
-            --with-saslauthd=/opt/liquid/${src}/state \
-            --with-plugindir=/opt/liquid/${src}/lib/sasl2 \
+./configure --enable-zimbra --prefix=/opt/zimbra/${src} \
+            --with-saslauthd=/opt/zimbra/${src}/state \
+            --with-plugindir=/opt/zimbra/${src}/lib/sasl2 \
 	    --enable-login
 make
