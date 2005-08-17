@@ -3,7 +3,7 @@
 use strict;
 use Getopt::Std;
 
-my $PIDFILE = $ENV{LIQUID_HOME} . "/log/tomcat.pid";
+my $PIDFILE = $ENV{ZIMBRA_HOME} . "/log/tomcat.pid";
 
 sub usage() {
     print <<USAGE;
@@ -12,7 +12,7 @@ At every interval prints "time<tab>RSS<tab>VIRT".
 Usage: memmon.pl [-i <interval>] [-p <pid>]
    -i: interval between samples, in number of seconds (default 10)
    -p: process ID to monitor
-       By default, pid stored in /opt/liquid/log/tomcat.pid file is used.
+       By default, pid stored in /opt/zimbra/log/tomcat.pid file is used.
 USAGE
     exit(1);
 }

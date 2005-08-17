@@ -5,11 +5,11 @@ QUICK START:
 2) install Statistics-Basic (just type that from inside ppm).  quit.
 3) mkmail.pl <NUMBER>
 4) put the following onto classpath:
-   LiquidArchive\build\classes
-   LiquidArchive\jars\commons-cli-1.0.jar
-   LiquidArchive\jars\mail.jar
-   LiquidArchive\jars\activation.jar
-   LiquidArchive\jars\commons-codec-1.2.jar
+   ZimbraServer\build\classes
+   ZimbraServer\jars\commons-cli-1.0.jar
+   ZimbraServer\jars\mail.jar
+   ZimbraServer\jars\activation.jar
+   ZimbraServer\jars\commons-codec-1.2.jar
 5) java com.zimbra.cs.tools.Journalize -i <path_to_mkmail>\out -o c:\opt\liquid\mqueue\new
 6) Run the archiver
 

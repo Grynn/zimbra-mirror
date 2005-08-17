@@ -6,12 +6,12 @@
 # It finds all blobs which are present in the database but missing in fs.
 # It does not find blobs in fs and missing from database.
 
-use lib "$ENV{LIQUID_HOME}/liquidmon/lib";
+use lib "$ENV{ZIMBRA_HOME}/zimbramon/lib";
 
 use strict;
 use Getopt::Std;
 use DBI;
-use Liquid::Failover::Db;
+use Zimbra::Failover::Db;
 
 my %MAILBOX;
 
@@ -197,7 +197,7 @@ getopts("m:l:", \%opts) or usage();
 my $mboxId = $opts{m};
 my $outfile = $opts{l} || './~blobck.out';
 
-my $db = Liquid::Failover::Db->connect();
+my $db = Zimbra::Failover::Db->connect();
 loadMailboxes($db, $mboxId);
 
 foreach $mboxId (keys %MAILBOX) {
