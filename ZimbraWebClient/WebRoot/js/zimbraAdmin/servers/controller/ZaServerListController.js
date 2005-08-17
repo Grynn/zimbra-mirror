@@ -220,8 +220,8 @@ function (ev) {
 **/
 ZaServerListController.prototype._editButtonListener =
 function(ev) {
-	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getZast()) {
-		var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getZast());
+	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getLast()) {
+		var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getLast());
 		this._app.getServerController().show(item);
 	}
 }

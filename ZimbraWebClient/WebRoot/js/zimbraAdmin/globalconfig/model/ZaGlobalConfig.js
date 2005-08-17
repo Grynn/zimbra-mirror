@@ -13,7 +13,7 @@ ZaGlobalConfig.MTA_RESTRICTIONS = [
 ];
 
 //general
-ZaGlobalConfig.A_zimbraZastLogonTimestampFrequency = "zimbraZastLogonTimestampFrequency";
+ZaGlobalConfig.A_zimbraLastLogonTimestampFrequency = "zimbraLastLogonTimestampFrequency";
 ZaGlobalConfig.A_zimbraDefaultDomainName = "zimbraDefaultDomainName";
 // attachements
 ZaGlobalConfig.A_zimbraAttachmentsBlocked = "zimbraAttachmentsBlocked";

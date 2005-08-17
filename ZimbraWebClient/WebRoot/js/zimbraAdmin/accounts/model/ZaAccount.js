@@ -110,7 +110,7 @@ ZaAccount.A_zimbraImapEnabled = "zimbraImapEnabled";
 ZaAccount.A_zimbraPop3Enabled = "zimbraPop3Enabled";
 
 //readonly
-ZaAccount.A_zimbraZastLogonTimestamp = "zimbraZastLogonTimestamp";
+ZaAccount.A_zimbraLastLogonTimestamp = "zimbraLastLogonTimestamp";
 ZaAccount.A_zimbraPasswordModifiedTime = "zimbraPasswordModifiedTime";
 
 

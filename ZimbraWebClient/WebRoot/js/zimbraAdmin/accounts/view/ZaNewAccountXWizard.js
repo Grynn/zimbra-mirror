@@ -178,7 +178,7 @@ ZaNewAccountXWizard.prototype.getMyXForm = function() {
 									this.getForm().itemChanged(this, elementValue, event);
 								}
 							},	
-							{ref:ZaAccount.A_lastName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ZastName,label:ZaMsg.NAD_ZastName+":", labelLocation:_LEFT_, required:true, cssClass:"admin_xform_name_input",
+							{ref:ZaAccount.A_lastName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_LastName,label:ZaMsg.NAD_LastName+":", labelLocation:_LEFT_, required:true, cssClass:"admin_xform_name_input",
 								elementChanged: function(elementValue,instanceValue, event) {
 									if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
 										ZaAccountXFormView.generateDisplayName(this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], elementValue ,this.getInstance().attrs[ZaAccount.A_initials]);

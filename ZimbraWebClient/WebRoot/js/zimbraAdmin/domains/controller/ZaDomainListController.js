@@ -262,8 +262,8 @@ function (ev) {
 **/
 ZaDomainListController.prototype._editButtonListener =
 function(ev) {
-	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getZast()) {
-		var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getZast());
+	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getLast()) {
+		var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getLast());
 		this._app.getDomainController().show(item);
 	}
 }
@@ -286,8 +286,8 @@ function(ev) {
 ZaDomainListController.prototype._galWizButtonListener =
 function(ev) {
 	try {
-		if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getZast()) {
-			var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getZast());
+		if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getLast()) {
+			var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getLast());
 			this._currentObject = item;
 			this._galWizard = new ZaGALConfigXWizard(this._container, this._app);	
 			this._galWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainListController.prototype._finishGalButtonListener, this, null);			
@@ -303,8 +303,8 @@ function(ev) {
 ZaDomainListController.prototype._authWizButtonListener =
 function(ev) {
 	try {
-		if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getZast()) {
-			var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getZast());
+		if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getLast()) {
+			var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getLast());
 			this._currentObject = item;
 			this._authWizard = new ZaAuthConfigXWizard(this._container, this._app);	
 			this._authWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainListController.prototype._finishAuthButtonListener, this, null);			

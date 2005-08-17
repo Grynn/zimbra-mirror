@@ -27,7 +27,7 @@
 <jsp:include page="/js/dwt/widgets/Control.js"/>
 <jsp:include page="/js/dwt/widgets/Composite.js"/>
 <jsp:include page="/js/dwt/widgets/Text.js"/>
-<jsp:include page="/js/dwt/widgets/Zabel.js"/>
+<jsp:include page="/js/dwt/widgets/Label.js"/>
 <jsp:include page="/js/dwt/widgets/Button.js"/>
 <jsp:include page="/js/dwt/widgets/Window.js"/>
 </script>

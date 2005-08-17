@@ -151,8 +151,8 @@ function(ev) {
 ZaCosListController.prototype._duplicateButtonListener =
 function(ev) {
 	var newCos = new ZaCos(this._app); //new COS
-	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getZast()) {
-		var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getZast());
+	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getLast()) {
+		var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getLast());
 		if(item && item.attrs) { //copy the attributes from the selected COS to the new COS
 			for(var aname in item.attrs) {
 				if( (aname == ZaItem.A_objectClass) || (aname == ZaItem.A_zimbraId) || (aname == ZaCos.A_name) || (aname == ZaCos.A_description) || (aname == ZaCos.A_notes) )
@@ -211,8 +211,8 @@ function (ev) {
 **/
 ZaCosListController.prototype._editButtonListener =
 function(ev) {
-	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getZast()) {
-		var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getZast());
+	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getLast()) {
+		var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getLast());
 		this._app.getCosController().show(item);
 	}
 }

@@ -214,14 +214,14 @@ DBG.println(AjxDebug.DBG1, "Creating app " + appName);
 	this._apps[appName] = new this._appFactory[appName](this._appCtxt, this._shell);	
 }
 
-// Zaunching an app causes it to create a view (if necessary) and display it. The view that is created is up to the app.
+// Launching an app causes it to create a view (if necessary) and display it. The view that is created is up to the app.
 // Since most apps schedule an action as part of their launch, a call to this function should not be
 // followed by any code that depends on it (ie, it should be a leaf action).
 ZaZimbraAdmin.prototype._launchApp =
 function(appName) {
 	if (!this._apps[appName])
 		this._createApp(appName);
-DBG.println(AjxDebug.DBG1, "Zaunching app " + appName);
+DBG.println(AjxDebug.DBG1, "Launching app " + appName);
 	this._apps[appName].launch();
 }
 

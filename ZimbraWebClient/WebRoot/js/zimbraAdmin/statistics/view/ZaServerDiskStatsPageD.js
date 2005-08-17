@@ -78,7 +78,7 @@ function () {
 	html[idx++] = "<div style='width:70ex;'>";		
 	html[idx++] = "<table cellpadding='5' cellspacing='4' border='0' align='left'>";	
 	html[idx++] = "<tr valign='top'><td align='left'>&nbsp;&nbsp;</td></tr>";	
-	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsDataZastDay) + "</td></tr>";	
+	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsDataLastDay) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";
 	html[idx++] = "<img src='#' id='" + this._ZimbraImgID + "'>";	
 	html[idx++] = "</td></tr>";

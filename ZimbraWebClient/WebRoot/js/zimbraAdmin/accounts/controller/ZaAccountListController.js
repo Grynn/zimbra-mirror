@@ -337,8 +337,8 @@ function (ev) {
 **/
 ZaAccountListController.prototype._editButtonListener =
 function(ev) {
-	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getZast()){
-		var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getZast());
+	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getLast()){
+		var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getLast());
 		this._app.getAccountViewController().show(item);
 	}
 }
@@ -349,9 +349,9 @@ function(ev) {
 **/
 ZaAccountListController.prototype._chngPwdListener =
 function(ev) {
-	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getZast()) {
+	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getLast()) {
 		this._chngPwdDlg = new ZaAccChangePwdDlg(this._appView.shell, this._app);
-		var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getZast());
+		var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getLast());
 		this._chngPwdDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountListController._changePwdOKCallback, this, item);				
 		this._chngPwdDlg.popup(item.attrs[ZaAccount.A_zimbraPasswordMustChange]);
 	}
@@ -385,7 +385,7 @@ function (delegateToken, tokenLifetime, mailServer) {
 ZaAccountListController.prototype._viewMailListener =
 function(ev) {
 	try {
-		var el = this._contentView.getSelectedItems().getZast();
+		var el = this._contentView.getSelectedItems().getLast();
 		if(el) {
 			var account = DwtListView.prototype.getItemFromElement.call(this, el);
 			if(account) {

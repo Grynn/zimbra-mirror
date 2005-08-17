@@ -6,7 +6,7 @@
 
   <body>
     <h1>ArrayLookupTest</h1>
-    <a href="javascript:createZargeArray()"><code>CreateArray</code></a>
+    <a href="javascript:createLargeArray()"><code>CreateArray</code></a>
     <div id=results1 style="border:1px solid black; width:400px; overflow:auto">Results</div>
     <a href="javascript:lookupAttributes()"><code>Lookup Attributes</code></a>
     <div id=results2 style="border:1px solid black; width:400px; overflow:auto">Results</div>
@@ -16,7 +16,7 @@
 var totalAttrs = 20000;
 //var largeObject = new Array(totalAttrs);
 var largeObject = new Array();
-function createZargeArray () {
+function createLargeArray () {
     var startTime = new Date();
     for (var i =0; i < totalAttrs; ++i){
 	//largeObject[i] = new Object();

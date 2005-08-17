@@ -41,7 +41,7 @@ function ZaAppViewMgr(shell, banner, controller) {
 
 	this._shellSz = this._shell.getSize();
 	this._shell.addControlListener(new AjxListener(this, this._shellControlListener));
-	this._needBannerZayout = false;
+	this._needBannerLayout = false;
 	this._sash = new DwtSash(this._shell, DwtSash.HORIZONTAL_STYLE, "AppSash-horiz", 5);
 	this._sash.registerCallback(this._sashCallback, this);
 	
@@ -59,7 +59,7 @@ function ZaAppViewMgr(shell, banner, controller) {
 
 	// hash matching layout style to their methods	
 	this._layoutMethod = new Object();
-	this._layoutMethod[ZaAppViewMgr.LAYOUT_VERTICAL] = this._appZayoutVertical;
+	this._layoutMethod[ZaAppViewMgr.LAYOUT_VERTICAL] = this._appLayoutVertical;
 }
 
 ZaAppViewMgr.DEFAULT = -1;
@@ -298,12 +298,12 @@ function(reason) {
 DBG.println(AjxDebug.DBG2, "OMIGAWD, the layout changed! (reason = " + reason + ")");
 	this._shellSz = this._shell.getSize();
 /*	if (reason == ZaAppViewMgr.RESIZE)
-		this._needBannerZayout = true;*/
+		this._needBannerLayout = true;*/
 	this._layout();
 }
 
 /**
-* Zays out the banner, which is a composite with two children: an image, and a banner bar that
+* Lays out the banner, which is a composite with two children: an image, and a banner bar that
 * contains the banner links.
 */
 ZaAppViewMgr.prototype.layoutBanner =
@@ -318,7 +318,7 @@ function() {
 	bannerBar.setBounds(this._bannerImageSize.x, 0, this._shellSz.x - this._bannerImageSize.x, this._bannerImageSize.y);
 	var bannerTable = bannerBar.getHtmlElement().firstChild;
 	Dwt.setSize(bannerTable, Dwt.DEFAULT, this._bannerImageSize.y);
-	this._needBannerZayout = false;
+	this._needBannerLayout = false;
 }
 
 // Private methods
@@ -359,7 +359,7 @@ function(style) {
 	if (!this._currentView) return;
 	
 	// banner layout done on startup and due to a shell resize event
-	if (this._needBannerZayout) {
+	if (this._needBannerLayout) {
 		this.layoutBanner();
 	}
 
@@ -399,9 +399,9 @@ function(style) {
 	this._layoutMethod[this._layoutStyle[this._currentView]].call(this, x, y);
 }
 
-// Zays out the elements one on top of the other, separated by COMPONENT_SEPARATION. Each
+// Lays out the elements one on top of the other, separated by COMPONENT_SEPARATION. Each
 // element extends the entire width. The last element uses the remaining vertical space.
-ZaAppViewMgr.prototype._appZayoutVertical =
+ZaAppViewMgr.prototype._appLayoutVertical =
 function(x, y) {
 	// app container
 	var appContainer = this._views[this._currentView];

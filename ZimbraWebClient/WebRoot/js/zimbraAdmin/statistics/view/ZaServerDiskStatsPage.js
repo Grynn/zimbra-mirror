@@ -72,9 +72,9 @@ function ZaServerDiskStatsTabPage(parent, app) {
 	this._1DPage = new ZaServerDiskStatsPageD(this, app);
 	this._3MPage = new ZaServerDiskStatsPage3M(this, app);
 	this._12MPage = new ZaServerDiskStatsPage12M(this, app);	
-	this.firstTabKey = this.addTab(ZaMsg.TABT_StatsDataZastDay, this._1DPage);		
-	this.addTab(ZaMsg.TABT_StatsDataZast3Months, this._3MPage);			
-	this.addTab(ZaMsg.TABT_StatsDataZast12Months, this._12MPage);				
+	this.firstTabKey = this.addTab(ZaMsg.TABT_StatsDataLastDay, this._1DPage);		
+	this.addTab(ZaMsg.TABT_StatsDataLast3Months, this._3MPage);			
+	this.addTab(ZaMsg.TABT_StatsDataLast12Months, this._12MPage);				
 //	this.setScrollStyle(DwtControl.SCROLL);
 }
 
