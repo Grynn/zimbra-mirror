@@ -90,72 +90,72 @@ if (defined($opt_forward)) {
 #
 if (defined($opt_provision)) {
     my $provcmds = "/tmp/aliastest.zmprov.$$";
-    open(LQP, "> $provcmds");
-    print LQP "cd $opt_domain\n";
-    print LQP "cdl list\@$opt_domain\n";
+    open(ZMP, "> $provcmds");
+    print ZMP "cd $opt_domain\n";
+    print ZMP "cdl list\@$opt_domain\n";
 
     # user1: account, list
-    print LQP "ca user1\@$opt_domain test123\n";
-    print LQP "adlm list\@$opt_domain user1\@$opt_domain\n";
+    print ZMP "ca user1\@$opt_domain test123\n";
+    print ZMP "adlm list\@$opt_domain user1\@$opt_domain\n";
 
     # user2: account, forward
-    print LQP "ca user2\@$opt_domain test123\n";
-    print LQP "ma user2\@$opt_domain zimbraMailForwardingAddress $opt_extfwd\n";
+    print ZMP "ca user2\@$opt_domain test123\n";
+    print ZMP "ma user2\@$opt_domain zimbraMailForwardingAddress $opt_extfwd\n";
 
     # user3: account, alias
-    print LQP "ca user3\@$opt_domain test123\n";
-    print LQP "aaa user3\@$opt_domain alias3\@$opt_domain\n";
+    print ZMP "ca user3\@$opt_domain test123\n";
+    print ZMP "aaa user3\@$opt_domain alias3\@$opt_domain\n";
 
     # user4: account, alias, list
-    print LQP "ca user4\@$opt_domain test123\n";
-    print LQP "aaa user4\@$opt_domain alias4\@$opt_domain\n";
-    print LQP "adlm list\@$opt_domain user4\@$opt_domain\n";
+    print ZMP "ca user4\@$opt_domain test123\n";
+    print ZMP "aaa user4\@$opt_domain alias4\@$opt_domain\n";
+    print ZMP "adlm list\@$opt_domain user4\@$opt_domain\n";
 
     # user5: account, forward, list
-    print LQP "ca user5\@$opt_domain test123\n";
-    print LQP "ma user5\@$opt_domain zimbraMailForwardingAddress $opt_extfwd\n";
-    print LQP "adlm list\@$opt_domain user5\@$opt_domain\n";
+    print ZMP "ca user5\@$opt_domain test123\n";
+    print ZMP "ma user5\@$opt_domain zimbraMailForwardingAddress $opt_extfwd\n";
+    print ZMP "adlm list\@$opt_domain user5\@$opt_domain\n";
 
     # user6: account, alias, forward
-    print LQP "ca user6\@$opt_domain test123\n";
-    print LQP "aaa user6\@$opt_domain alias6\@$opt_domain\n";
-    print LQP "ma user6\@$opt_domain zimbraMailForwardingAddress $opt_extfwd\n";
+    print ZMP "ca user6\@$opt_domain test123\n";
+    print ZMP "aaa user6\@$opt_domain alias6\@$opt_domain\n";
+    print ZMP "ma user6\@$opt_domain zimbraMailForwardingAddress $opt_extfwd\n";
 
     # user7: account, alias, forward, list
-    print LQP "ca user7\@$opt_domain test123\n";
-    print LQP "aaa user7\@$opt_domain alias7\@$opt_domain\n";
-    print LQP "ma user7\@$opt_domain zimbraMailForwardingAddress $opt_extfwd\n";
-    print LQP "adlm list\@$opt_domain user7\@$opt_domain\n";
+    print ZMP "ca user7\@$opt_domain test123\n";
+    print ZMP "aaa user7\@$opt_domain alias7\@$opt_domain\n";
+    print ZMP "ma user7\@$opt_domain zimbraMailForwardingAddress $opt_extfwd\n";
+    print ZMP "adlm list\@$opt_domain user7\@$opt_domain\n";
 
     # user8: account, alias, canonical
-    print LQP "ca user8\@$opt_domain test123\n";
-    print LQP "aaa user8\@$opt_domain alias8\@$opt_domain\n";
-    print LQP "ma user8\@$opt_domain zimbraMailCanonicalAddress user8\@test.canonical.$opt_domain.t2\n";
+    print ZMP "ca user8\@$opt_domain test123\n";
+    print ZMP "aaa user8\@$opt_domain alias8\@$opt_domain\n";
+    print ZMP "ma user8\@$opt_domain zimbraMailCanonicalAddress user8\@test.canonical.$opt_domain.t2\n";
 
     if (defined($opt_catch)) {
         # catch1: forward all mail to one domain to a mailbox in another domain
-        print LQP "ca catch1\@$opt_domain test123\n";
-        print LQP "cd $opt_catch zimbraDomainType alias zimbraMailForwardingAddress catch1\@$opt_domain\n";
+        print ZMP "ca catch1\@$opt_domain test123\n";
+        print ZMP "cd $opt_catch zimbraDomainType alias zimbraMailForwardingAddress catch1\@$opt_domain\n";
     
         # catch2: forward all unknown in one domain to mailbox in same domain
-        print LQP "ca catch2\@$opt_domain test123 zimbraMailCatchAllAddress \@$opt_domain\n";
+        print ZMP "ca catch2\@$opt_domain test123 zimbraMailCatchAllAddress \@$opt_domain\n";
     }
 
     if (defined($opt_forward)) {
         # forward: forward all email in one domain to another domain
-        print LQP "cd $opt_forward zimbraDomainType alias zimbraMailCatchAllForwardingAddress \@$opt_domain\n";
+        print ZMP "cd $opt_forward zimbraDomainType alias zimbraMailCatchAllForwardingAddress \@$opt_domain\n";
     }
 
     if (defined($opt_rewrite)) {
 	# rewrite1: canonical rewrite whole domain
-	print LQP "cd $opt_rewrite zimbraMailCatchAllAddress \@$opt_rewrite zimbraMailCatchAllCanonicalAddress \@example.com\n";
-	print LQP "ca rewrite1\@$opt_rewrite test123\n";
+	print ZMP "cd $opt_rewrite zimbraMailCatchAllAddress \@$opt_rewrite zimbraMailCatchAllCanonicalAddress \@example.com\n";
+	print ZMP "ca rewrite1\@$opt_rewrite test123\n";
 
         # rewrite2: canonical rewrite of account + canonical rewrite domain
-	print LQP "ca rewrite2\@$opt_rewrite test123 zimbraMailCanonicalAddress rewrite.two\@$opt_rewrite\n";
+	print ZMP "ca rewrite2\@$opt_rewrite test123 zimbraMailCanonicalAddress rewrite.two\@$opt_rewrite\n";
     }
 
-    close(LQP);
+    close(ZMP);
     system("zmprov -v < $provcmds");
     unlink("$provcmds");
 
