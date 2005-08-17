@@ -336,7 +336,7 @@ function ZaXWizProgressBar(parent) {
 	this._table.backgroundColor = DwtCssStyle.getProperty(this.parent.getHtmlElement(), "background-color");
 	this._stepsNumber = 0; //number of steps
 	this._steps = new Array();
-	this._lblHeader = new ZaXWizStepZabel(this);
+	this._lblHeader = new ZaXWizStepLabel(this);
 	this._lblHeader.setText("Step 0 of 0");
 	this._lblHeader.setActive(true);
 }
@@ -355,11 +355,11 @@ function() {
 **/
 ZaXWizProgressBar.prototype.showStep = 
 function(stepKey) {
-	var szZabelTxt = "Step " + stepKey + " of " + this._stepsNumber;
+	var szLabelTxt = "Step " + stepKey + " of " + this._stepsNumber;
 	if(this._steps[stepKey]) {
-		szZabelTxt = szZabelTxt + ": " + this._steps[stepKey];
+		szLabelTxt = szLabelTxt + ": " + this._steps[stepKey];
 	}
-	this._lblHeader.setText(szZabelTxt);
+	this._lblHeader.setText(szLabelTxt);
 }
 
 /**
@@ -391,28 +391,28 @@ function(child) {
 
 
 /**
-* @class ZaXWizStepZabel
+* @class ZaXWizStepLabel
 * @constructor
 * @param parent
 **/
-function ZaXWizStepZabel (parent) {
-	DwtZabel.call(this, parent, DwtZabel.ALIGN_CENTER, "ZaXWizStepZabel");
+function ZaXWizStepLabel (parent) {
+	DwtLabel.call(this, parent, DwtLabel.ALIGN_CENTER, "ZaXWizStepLabel");
 }
 
-ZaXWizStepZabel.prototype = new DwtZabel;
-ZaXWizStepZabel.prototype.constructor = ZaXWizStepZabel;
+ZaXWizStepLabel.prototype = new DwtLabel;
+ZaXWizStepLabel.prototype.constructor = ZaXWizStepLabel;
 
-ZaXWizStepZabel.prototype.toString = 
+ZaXWizStepLabel.prototype.toString = 
 function() {
-	return "ZaXWizStepZabel";
+	return "ZaXWizStepLabel";
 }
 
-ZaXWizStepZabel.prototype.setActive = 
+ZaXWizStepLabel.prototype.setActive = 
 function(isActive) {
 	if (isActive) {
- 		this._textCell.className="ZaXWizStepZabelActive";
+ 		this._textCell.className="ZaXWizStepLabelActive";
  	} else {
-	 	this._textCell.className="ZaXWizStepZabelInactive";
+	 	this._textCell.className="ZaXWizStepLabelInactive";
  	}
 }
 

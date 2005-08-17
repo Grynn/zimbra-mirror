@@ -3,7 +3,7 @@ function SingleAccountRestoreXWizard (parent, app) {
 	this.addPage("Account Name"); //1
 	this.addPage("Select Servers"); //2
 	this.addPage("Looking for backup labels");	//3
-	this.addPage("Select Zabels");	//4
+	this.addPage("Select Labels");	//4
 	this.addPage("Restoring");	//5
 	this.addPage("Result");	//6
 	this._app = app;
@@ -29,14 +29,14 @@ function (arg) {
 		var nodes = arg.getBody().firstChild.childNodes;
 		if(!nodes || nodes.length == 0) {
 			this._containedObject[ZaModel.ErrorCode] = -1;
-			this._containedObject[ZaModel.ErrorMessage] = ZaMsg.Restore_NoZabelsFound;
+			this._containedObject[ZaModel.ErrorMessage] = ZaMsg.Restore_NoLabelsFound;
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 		} else {
 			var accountNode = nodes[0];
 			if(!accountNode.childNodes || accountNode.childNodes.length < 1) {
 				this._containedObject[ZaModel.ErrorCode] = -1;
-				this._containedObject[ZaModel.ErrorMessage] = ZaMsg.Restore_NoZabelsFound;
+				this._containedObject[ZaModel.ErrorMessage] = ZaMsg.Restore_NoLabelsFound;
 				this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 				this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 			} else {
@@ -182,7 +182,7 @@ SingleAccountRestoreXWizard.prototype.getMyXForm = function() {
 					},
 					{type:_CASE_, numCols:2,relevant:"instance[ZaModel.currentStep] == 3", 
 						items :[
-							{type:_OUTPUT_, value:ZaMsg.Restore_LookingForZabels}
+							{type:_OUTPUT_, value:ZaMsg.Restore_LookingForLabels}
 						]
 					}, 
 					{type:_CASE_, numCols:2, relevant:"instance[ZaModel.currentStep] == 4", //select label
@@ -191,7 +191,7 @@ SingleAccountRestoreXWizard.prototype.getMyXForm = function() {
 								items: [
 									{type:_CASE_, relevant:"instance[ZaModel.ErrorCode] == 0",
 										items: [
-											{ref:ZaRestore.A_label, type:_OSELECT1_, label:ZaMsg.Restore_Zabel, choices:SingleAccountRestoreXWizard.labelChoices},
+											{ref:ZaRestore.A_label, type:_OSELECT1_, label:ZaMsg.Restore_Label, choices:SingleAccountRestoreXWizard.labelChoices},
 											{ref:ZaRestore.A_includeIncrementals, type:_CHECKBOX_, label:ZaMsg.Restore_IncludeIncrementals, trueValue:"TRUE", falseValue:"FALSE", labelLocation:_LEFT_},
 											{ref:ZaRestore.A_prefix, type:_TEXTFIELD_, label:ZaMsg.Restore_Prefix},
 											{ref:ZaRestore.A_restoreMethod, type:_OSELECT1_, label:ZaMsg.Restore_method}
@@ -199,7 +199,7 @@ SingleAccountRestoreXWizard.prototype.getMyXForm = function() {
 									},
 									{type:_CASE_, relevant:"instance[ZaModel.ErrorCode] != 0",
 										items: [
-											{type:_OUTPUT_, value:ZaMsg.Restore_ZabelsProblem, relevant:"instance[ZaModel.ErrorCode] > 0"},
+											{type:_OUTPUT_, value:ZaMsg.Restore_LabelsProblem, relevant:"instance[ZaModel.ErrorCode] > 0"},
 											{type:_OUTPUT_, ref:ZaModel.ErrorMessage}
 										]
 									}
@@ -223,7 +223,7 @@ SingleAccountRestoreXWizard.prototype.getMyXForm = function() {
 									},
 									{type:_CASE_, relevant:"instance[ZaModel.ErrorCode] != 0",
 										items: [
-											{type:_OUTPUT_, value:ZaMsg.Restore_ZabelsProblem, relevant:"instance[ZaModel.ErrorCode] > 0"},
+											{type:_OUTPUT_, value:ZaMsg.Restore_LabelsProblem, relevant:"instance[ZaModel.ErrorCode] > 0"},
 											{type:_OUTPUT_, ref:ZaModel.ErrorMessage}
 										]
 									}

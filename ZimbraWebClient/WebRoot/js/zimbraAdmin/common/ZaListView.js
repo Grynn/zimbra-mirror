@@ -32,7 +32,7 @@ function(ev, div) {
 	if (div._type == DwtListView.TYPE_HEADER_ITEM) {
 		if(this._headerList[div._itemIndex]._sortable) {
 			div.className = "DwtListView-Column DwtListView-ColumnHover";		
-			this.setToolTipContent(ZaMsg.LST_ClickToSort_tt + this._headerList[div._itemIndex].getZabel());	
+			this.setToolTipContent(ZaMsg.LST_ClickToSort_tt + this._headerList[div._itemIndex].getLabel());	
 		} else {
 			this.setToolTipContent(null);
 		}
@@ -130,7 +130,7 @@ function() {
 	return this._sortField;
 }
 
-ZaListHeaderItem.prototype.getZabel = 
+ZaListHeaderItem.prototype.getLabel = 
 function () {
 	return this._label;
 }
