@@ -6,7 +6,7 @@
  */
 
 /**
- * Most of this code is taken driectly from the java implementation written
+ * Most of this code is taken directly from the java implementation written
  * by Roland.
  */
  
@@ -706,8 +706,7 @@ AjxDefangFilter.prototype.parse = function (htmlStr) {
 		//document.body.appendChild(iframe);		
 		//htmlEl = iframe.Document;
 
-		// innerHTML is read only on the html element for some microsoft
-		// like reason.
+		// innerHTML is read only on the html element for some reason.
 		// The downside to using a div, is that the browser strips the
 		// tags before the body.
 		//htmlEl = document.createElement('div');

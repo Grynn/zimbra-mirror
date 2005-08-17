@@ -1055,8 +1055,8 @@ function(ev) {
 		var doc = this.getDocument();
 		this._headerClone = doc.createElement("div");
 		var size = Dwt.getSize(this._clickDiv);
-		var width = AjxEnv.isIE ? size.x : size.x-3;	// stupid FF/IE quirks
-		var height = AjxEnv.isIE ? size.y : size.y-5;
+		var width = AjxEnv.isIE ? size.x : size.x - 3;	// browser quirks
+		var height = AjxEnv.isIE ? size.y : size.y - 5;
 		Dwt.setSize(this._headerClone, width, height);
 		Dwt.setPosition(this._headerClone, Dwt.ABSOLUTE_STYLE); 
 		Dwt.setZIndex(this._headerClone, Dwt.Z_DND);
