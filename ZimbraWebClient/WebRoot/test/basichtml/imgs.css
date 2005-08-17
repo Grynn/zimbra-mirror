@@ -1,448 +1,448 @@
-.SplashScreen{background-image:url("/liquid/js/img/combined.PNG");left:-0;top:0;width:447;height:798;position:relative;}
-.SplashScreen_IE{left:-0;top:0;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.ImageNotAvailable{background-image:url("/liquid/js/img/combined.PNG");left:-0;top:-222;width:447;height:798;position:relative;}
-.ImageNotAvailable_IE{left:-0;top:-222;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.LoginBanner{background-image:url("/liquid/js/img/combined.PNG");left:-0;top:-422;width:447;height:798;position:relative;}
-.LoginBanner_IE{left:-0;top:-422;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.DndMultiNoIcon{background-image:url("/liquid/js/img/combined.PNG");left:-0;top:-532;width:447;height:798;position:relative;}
-.DndMultiNoIcon_IE{left:-0;top:-532;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.DndMultiYesIcon{background-image:url("/liquid/js/img/combined.PNG");left:-52;top:-532;width:447;height:798;position:relative;}
-.DndMultiYesIcon_IE{left:-52;top:-532;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.BinaryDocumentIcon48x48{background-image:url("/liquid/js/img/combined.PNG");left:-104;top:-532;width:447;height:798;position:relative;}
-.BinaryDocumentIcon48x48_IE{left:-104;top:-532;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.BmpImageIcon48x48{background-image:url("/liquid/js/img/combined.PNG");left:-152;top:-532;width:447;height:798;position:relative;}
-.BmpImageIcon48x48_IE{left:-152;top:-532;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.DocumentIcon48x48{background-image:url("/liquid/js/img/combined.PNG");left:-200;top:-532;width:447;height:798;position:relative;}
-.DocumentIcon48x48_IE{left:-200;top:-532;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.EnvelopeIcon48x48{background-image:url("/liquid/js/img/combined.PNG");left:-248;top:-532;width:447;height:798;position:relative;}
-.EnvelopeIcon48x48_IE{left:-248;top:-532;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.GifImageIcon48x48{background-image:url("/liquid/js/img/combined.PNG");left:-296;top:-532;width:447;height:798;position:relative;}
-.GifImageIcon48x48_IE{left:-296;top:-532;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.HtmlDocumentIcon48x48{background-image:url("/liquid/js/img/combined.PNG");left:-344;top:-532;width:447;height:798;position:relative;}
-.HtmlDocumentIcon48x48_IE{left:-344;top:-532;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.ImageIcon48x48{background-image:url("/liquid/js/img/combined.PNG");left:-392;top:-532;width:447;height:798;position:relative;}
-.ImageIcon48x48_IE{left:-392;top:-532;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.JpegImageIcon48x48{background-image:url("/liquid/js/img/combined.PNG");left:-0;top:-584;width:447;height:798;position:relative;}
-.JpegImageIcon48x48_IE{left:-0;top:-584;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MSExcelDocIcon48x48{background-image:url("/liquid/js/img/combined.PNG");left:-48;top:-584;width:447;height:798;position:relative;}
-.MSExcelDocIcon48x48_IE{left:-48;top:-584;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MSPPTDocIcon48x48{background-image:url("/liquid/js/img/combined.PNG");left:-96;top:-584;width:447;height:798;position:relative;}
-.MSPPTDocIcon48x48_IE{left:-96;top:-584;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MSProjectDocIcon48x48{background-image:url("/liquid/js/img/combined.PNG");left:-144;top:-584;width:447;height:798;position:relative;}
-.MSProjectDocIcon48x48_IE{left:-144;top:-584;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MSVisioDocIcon48x48{background-image:url("/liquid/js/img/combined.PNG");left:-192;top:-584;width:447;height:798;position:relative;}
-.MSVisioDocIcon48x48_IE{left:-192;top:-584;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MSWMVIcon48x48{background-image:url("/liquid/js/img/combined.PNG");left:-240;top:-584;width:447;height:798;position:relative;}
-.MSWMVIcon48x48_IE{left:-240;top:-584;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MSWordDocIcon48x48{background-image:url("/liquid/js/img/combined.PNG");left:-288;top:-584;width:447;height:798;position:relative;}
-.MSWordDocIcon48x48_IE{left:-288;top:-584;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.PDFDocIcon48x48{background-image:url("/liquid/js/img/combined.PNG");left:-336;top:-584;width:447;height:798;position:relative;}
-.PDFDocIcon48x48_IE{left:-336;top:-584;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.ZipDocumentIcon48x48{background-image:url("/liquid/js/img/combined.PNG");left:-384;top:-584;width:447;height:798;position:relative;}
-.ZipDocumentIcon48x48_IE{left:-384;top:-584;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.AudioIcon48x48{background-image:url("/liquid/js/img/combined.PNG");left:-0;top:-632;width:447;height:798;position:relative;}
-.AudioIcon48x48_IE{left:-0;top:-632;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.Banner{background-image:url("/liquid/js/img/combined.PNG");left:-48;top:-632;width:447;height:798;position:relative;}
-.Banner_IE{left:-48;top:-632;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.CriticalIcon32x32{background-image:url("/liquid/js/img/combined.PNG");left:-248;top:-632;width:447;height:798;position:relative;}
-.CriticalIcon32x32_IE{left:-248;top:-632;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.InformationIcon32x32{background-image:url("/liquid/js/img/combined.PNG");left:-280;top:-632;width:447;height:798;position:relative;}
-.InformationIcon32x32_IE{left:-280;top:-632;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.WarningIcon32x32{background-image:url("/liquid/js/img/combined.PNG");left:-312;top:-632;width:447;height:798;position:relative;}
-.WarningIcon32x32_IE{left:-312;top:-632;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.ClosedTabLeft{background-image:url("/liquid/js/img/combined.PNG");left:-344;top:-632;width:447;height:798;position:relative;}
-.ClosedTabLeft_IE{left:-344;top:-632;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.ClosedTabLeft2{background-image:url("/liquid/js/img/combined.PNG");left:-350;top:-632;width:447;height:798;position:relative;}
-.ClosedTabLeft2_IE{left:-350;top:-632;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.ClosedTabRight{background-image:url("/liquid/js/img/combined.PNG");left:-356;top:-632;width:447;height:798;position:relative;}
-.ClosedTabRight_IE{left:-356;top:-632;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.OpenTabLeft{background-image:url("/liquid/js/img/combined.PNG");left:-362;top:-632;width:447;height:798;position:relative;}
-.OpenTabLeft_IE{left:-362;top:-632;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.OpenTabRight{background-image:url("/liquid/js/img/combined.PNG");left:-368;top:-632;width:447;height:798;position:relative;}
-.OpenTabRight_IE{left:-368;top:-632;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.16x16BlankIcon{background-image:url("/liquid/js/img/combined.PNG");left:-374;top:-632;width:447;height:798;position:relative;}
-.16x16BlankIcon_IE{left:-374;top:-632;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.AppointmentIcon{background-image:url("/liquid/js/img/combined.PNG");left:-390;top:-632;width:447;height:798;position:relative;}
-.AppointmentIcon_IE{left:-390;top:-632;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.AttachmentIcon-Disabled{background-image:url("/liquid/js/img/combined.PNG");left:-406;top:-632;width:447;height:798;position:relative;}
-.AttachmentIcon-Disabled_IE{left:-406;top:-632;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.AttachmentIcon{background-image:url("/liquid/js/img/combined.PNG");left:-422;top:-632;width:447;height:798;position:relative;}
-.AttachmentIcon_IE{left:-422;top:-632;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.AudioIcon{background-image:url("/liquid/js/img/combined.PNG");left:-0;top:-679;width:447;height:798;position:relative;}
-.AudioIcon_IE{left:-0;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.BinaryDocumentIcon{background-image:url("/liquid/js/img/combined.PNG");left:-16;top:-679;width:447;height:798;position:relative;}
-.BinaryDocumentIcon_IE{left:-16;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.BmpImageIcon{background-image:url("/liquid/js/img/combined.PNG");left:-32;top:-679;width:447;height:798;position:relative;}
-.BmpImageIcon_IE{left:-32;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.BoldTextIcon{background-image:url("/liquid/js/img/combined.PNG");left:-48;top:-679;width:447;height:798;position:relative;}
-.BoldTextIcon_IE{left:-48;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.BrowseIcon-Disabled{background-image:url("/liquid/js/img/combined.PNG");left:-64;top:-679;width:447;height:798;position:relative;}
-.BrowseIcon-Disabled_IE{left:-64;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.BrowseIcon{background-image:url("/liquid/js/img/combined.PNG");left:-80;top:-679;width:447;height:798;position:relative;}
-.BrowseIcon_IE{left:-80;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.CascadeIcon{background-image:url("/liquid/js/img/combined.PNG");left:-96;top:-679;width:447;height:798;position:relative;}
-.CascadeIcon_IE{left:-96;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.CenterJustifyIcon{background-image:url("/liquid/js/img/combined.PNG");left:-112;top:-679;width:447;height:798;position:relative;}
-.CenterJustifyIcon_IE{left:-112;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.ColorWheelIcon-Disabled{background-image:url("/liquid/js/img/combined.PNG");left:-128;top:-679;width:447;height:798;position:relative;}
-.ColorWheelIcon-Disabled_IE{left:-128;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.ColorWheelIcon{background-image:url("/liquid/js/img/combined.PNG");left:-144;top:-679;width:447;height:798;position:relative;}
-.ColorWheelIcon_IE{left:-144;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.ContactIcon{background-image:url("/liquid/js/img/combined.PNG");left:-160;top:-679;width:447;height:798;position:relative;}
-.ContactIcon_IE{left:-160;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.ContactPicker{background-image:url("/liquid/js/img/combined.PNG");left:-176;top:-679;width:447;height:798;position:relative;}
-.ContactPicker_IE{left:-176;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.ConvIcon-Disabled{background-image:url("/liquid/js/img/combined.PNG");left:-192;top:-679;width:447;height:798;position:relative;}
-.ConvIcon-Disabled_IE{left:-192;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.ConvIcon{background-image:url("/liquid/js/img/combined.PNG");left:-208;top:-679;width:447;height:798;position:relative;}
-.ConvIcon_IE{left:-208;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.CopyFolderIcon{background-image:url("/liquid/js/img/combined.PNG");left:-224;top:-679;width:447;height:798;position:relative;}
-.CopyFolderIcon_IE{left:-224;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.CopyIcon{background-image:url("/liquid/js/img/combined.PNG");left:-240;top:-679;width:447;height:798;position:relative;}
-.CopyIcon_IE{left:-240;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.CutIcon{background-image:url("/liquid/js/img/combined.PNG");left:-256;top:-679;width:447;height:798;position:relative;}
-.CutIcon_IE{left:-256;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.DateIcon{background-image:url("/liquid/js/img/combined.PNG");left:-272;top:-679;width:447;height:798;position:relative;}
-.DateIcon_IE{left:-272;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.DayViewIcon-Disabled{background-image:url("/liquid/js/img/combined.PNG");left:-288;top:-679;width:447;height:798;position:relative;}
-.DayViewIcon-Disabled_IE{left:-288;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.DayViewIcon{background-image:url("/liquid/js/img/combined.PNG");left:-304;top:-679;width:447;height:798;position:relative;}
-.DayViewIcon_IE{left:-304;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.DelConvIcon{background-image:url("/liquid/js/img/combined.PNG");left:-320;top:-679;width:447;height:798;position:relative;}
-.DelConvIcon_IE{left:-320;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.DelMsgIcon{background-image:url("/liquid/js/img/combined.PNG");left:-336;top:-679;width:447;height:798;position:relative;}
-.DelMsgIcon_IE{left:-336;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.DeleteFolderIcon{background-image:url("/liquid/js/img/combined.PNG");left:-352;top:-679;width:447;height:798;position:relative;}
-.DeleteFolderIcon_IE{left:-352;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.DeleteIcon{background-image:url("/liquid/js/img/combined.PNG");left:-368;top:-679;width:447;height:798;position:relative;}
-.DeleteIcon_IE{left:-368;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.DeleteTagIcon-Disabled{background-image:url("/liquid/js/img/combined.PNG");left:-384;top:-679;width:447;height:798;position:relative;}
-.DeleteTagIcon-Disabled_IE{left:-384;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.DeleteTagIcon{background-image:url("/liquid/js/img/combined.PNG");left:-400;top:-679;width:447;height:798;position:relative;}
-.DeleteTagIcon_IE{left:-400;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.DistributionListIcon{background-image:url("/liquid/js/img/combined.PNG");left:-416;top:-679;width:447;height:798;position:relative;}
-.DistributionListIcon_IE{left:-416;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.DocumentIcon{background-image:url("/liquid/js/img/combined.PNG");left:-0;top:-695;width:447;height:798;position:relative;}
-.DocumentIcon_IE{left:-0;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.DomainIcon{background-image:url("/liquid/js/img/combined.PNG");left:-16;top:-695;width:447;height:798;position:relative;}
-.DomainIcon_IE{left:-16;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.DoorIcon{background-image:url("/liquid/js/img/combined.PNG");left:-32;top:-695;width:447;height:798;position:relative;}
-.DoorIcon_IE{left:-32;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.DownArrowIcon-Disabled{background-image:url("/liquid/js/img/combined.PNG");left:-48;top:-695;width:447;height:798;position:relative;}
-.DownArrowIcon-Disabled_IE{left:-48;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.DownArrowIcon{background-image:url("/liquid/js/img/combined.PNG");left:-64;top:-695;width:447;height:798;position:relative;}
-.DownArrowIcon_IE{left:-64;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.DraftFolderIcon{background-image:url("/liquid/js/img/combined.PNG");left:-80;top:-695;width:447;height:798;position:relative;}
-.DraftFolderIcon_IE{left:-80;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.DropDownIconDisabled{background-image:url("/liquid/js/img/combined.PNG");left:-96;top:-695;width:447;height:798;position:relative;}
-.DropDownIconDisabled_IE{left:-96;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.EnvelopeIcon{background-image:url("/liquid/js/img/combined.PNG");left:-112;top:-695;width:447;height:798;position:relative;}
-.EnvelopeIcon_IE{left:-112;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.FeedbackIcon{background-image:url("/liquid/js/img/combined.PNG");left:-128;top:-695;width:447;height:798;position:relative;}
-.FeedbackIcon_IE{left:-128;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.FlagOffIcon{background-image:url("/liquid/js/img/combined.PNG");left:-144;top:-695;width:447;height:798;position:relative;}
-.FlagOffIcon_IE{filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');left:-144;top:-695;width:447;height:798;position:relative;}
-.FlagOnIcon{background-image:url("/liquid/js/img/combined.PNG");left:-160;top:-695;width:447;height:798;position:relative;}
-.FlagOnIcon_IE{left:-160;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.FolderIcon{background-image:url("/liquid/js/img/combined.PNG");left:-176;top:-695;width:447;height:798;position:relative;}
-.FolderIcon_IE{left:-176;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.FontBackgroundColorIcon{background-image:url("/liquid/js/img/combined.PNG");left:-192;top:-695;width:447;height:798;position:relative;}
-.FontBackgroundColorIcon_IE{left:-192;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.FontColorIcon{background-image:url("/liquid/js/img/combined.PNG");left:-208;top:-695;width:447;height:798;position:relative;}
-.FontColorIcon_IE{left:-208;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.FullJustifyIcon{background-image:url("/liquid/js/img/combined.PNG");left:-224;top:-695;width:447;height:798;position:relative;}
-.FullJustifyIcon_IE{left:-224;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.GalIcon{background-image:url("/liquid/js/img/combined.PNG");left:-240;top:-695;width:447;height:798;position:relative;}
-.GalIcon_IE{left:-240;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.GifImageIcon{background-image:url("/liquid/js/img/combined.PNG");left:-256;top:-695;width:447;height:798;position:relative;}
-.GifImageIcon_IE{left:-256;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.GlobeIcon{background-image:url("/liquid/js/img/combined.PNG");left:-271;top:-695;width:447;height:798;position:relative;}
-.GlobeIcon_IE{left:-271;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.GreenCheckIcon{background-image:url("/liquid/js/img/combined.PNG");left:-287;top:-695;width:447;height:798;position:relative;}
-.GreenCheckIcon_IE{left:-287;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.GroupScheduleIcon{background-image:url("/liquid/js/img/combined.PNG");left:-303;top:-695;width:447;height:798;position:relative;}
-.GroupScheduleIcon_IE{left:-303;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.HelpIcon{background-image:url("/liquid/js/img/combined.PNG");left:-319;top:-695;width:447;height:798;position:relative;}
-.HelpIcon_IE{left:-319;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.HorizRuleIcon{background-image:url("/liquid/js/img/combined.PNG");left:-335;top:-695;width:447;height:798;position:relative;}
-.HorizRuleIcon_IE{left:-335;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.HtmlDocumentIcon{background-image:url("/liquid/js/img/combined.PNG");left:-351;top:-695;width:447;height:798;position:relative;}
-.HtmlDocumentIcon_IE{left:-351;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.IconIcon{background-image:url("/liquid/js/img/combined.PNG");left:-367;top:-695;width:447;height:798;position:relative;}
-.IconIcon_IE{left:-367;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.ImageIcon{background-image:url("/liquid/js/img/combined.PNG");left:-383;top:-695;width:447;height:798;position:relative;}
-.ImageIcon_IE{left:-383;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.IndentIcon{background-image:url("/liquid/js/img/combined.PNG");left:-399;top:-695;width:447;height:798;position:relative;}
-.IndentIcon_IE{left:-399;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.InsertTableIcon{background-image:url("/liquid/js/img/combined.PNG");left:-415;top:-695;width:447;height:798;position:relative;}
-.InsertTableIcon_IE{left:-415;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.ItalicTextIcon{background-image:url("/liquid/js/img/combined.PNG");left:-431;top:-695;width:447;height:798;position:relative;}
-.ItalicTextIcon_IE{left:-431;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.JpegImageIcon{background-image:url("/liquid/js/img/combined.PNG");left:-0;top:-711;width:447;height:798;position:relative;}
-.JpegImageIcon_IE{left:-0;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.JunkFolderIcon{background-image:url("/liquid/js/img/combined.PNG");left:-16;top:-711;width:447;height:798;position:relative;}
-.JunkFolderIcon_IE{left:-16;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.LeftArrowIcon-Disabled{background-image:url("/liquid/js/img/combined.PNG");left:-32;top:-711;width:447;height:798;position:relative;}
-.LeftArrowIcon-Disabled_IE{left:-32;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.LeftArrowIcon{background-image:url("/liquid/js/img/combined.PNG");left:-48;top:-711;width:447;height:798;position:relative;}
-.LeftArrowIcon_IE{left:-48;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.LeftDoubleArrowIcon-Disabled{background-image:url("/liquid/js/img/combined.PNG");left:-64;top:-711;width:447;height:798;position:relative;}
-.LeftDoubleArrowIcon-Disabled_IE{left:-64;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.LeftDoubleArrowIcon{background-image:url("/liquid/js/img/combined.PNG");left:-80;top:-711;width:447;height:798;position:relative;}
-.LeftDoubleArrowIcon_IE{left:-80;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.LeftJustifyIcon{background-image:url("/liquid/js/img/combined.PNG");left:-96;top:-711;width:447;height:798;position:relative;}
-.LeftJustifyIcon_IE{left:-96;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.ListIcon{background-image:url("/liquid/js/img/combined.PNG");left:-112;top:-711;width:447;height:798;position:relative;}
-.ListIcon_IE{left:-112;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.LogoffIcon{background-image:url("/liquid/js/img/combined.PNG");left:-128;top:-711;width:447;height:798;position:relative;}
-.LogoffIcon_IE{left:-128;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MSExcelDocIcon{background-image:url("/liquid/js/img/combined.PNG");left:-144;top:-711;width:447;height:798;position:relative;}
-.MSExcelDocIcon_IE{left:-144;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MSPPTDocIcon{background-image:url("/liquid/js/img/combined.PNG");left:-160;top:-711;width:447;height:798;position:relative;}
-.MSPPTDocIcon_IE{left:-160;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MSProjectDocIcon{background-image:url("/liquid/js/img/combined.PNG");left:-176;top:-711;width:447;height:798;position:relative;}
-.MSProjectDocIcon_IE{left:-176;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MSVisioDocIcon{background-image:url("/liquid/js/img/combined.PNG");left:-192;top:-711;width:447;height:798;position:relative;}
-.MSVisioDocIcon_IE{left:-192;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MSWMVIcon{background-image:url("/liquid/js/img/combined.PNG");left:-208;top:-711;width:447;height:798;position:relative;}
-.MSWMVIcon_IE{left:-208;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MSWordDocIcon{background-image:url("/liquid/js/img/combined.PNG");left:-224;top:-711;width:447;height:798;position:relative;}
-.MSWordDocIcon_IE{left:-224;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MailFolderIcon{background-image:url("/liquid/js/img/combined.PNG");left:-240;top:-711;width:447;height:798;position:relative;}
-.MailFolderIcon_IE{left:-240;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MailForwardIcon-Disabled{background-image:url("/liquid/js/img/combined.PNG");left:-256;top:-711;width:447;height:798;position:relative;}
-.MailForwardIcon-Disabled_IE{left:-256;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MailForwardIcon{background-image:url("/liquid/js/img/combined.PNG");left:-272;top:-711;width:447;height:798;position:relative;}
-.MailForwardIcon_IE{left:-272;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MailIcon-Disabled{background-image:url("/liquid/js/img/combined.PNG");left:-288;top:-711;width:447;height:798;position:relative;}
-.MailIcon-Disabled_IE{left:-288;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MailIcon{background-image:url("/liquid/js/img/combined.PNG");left:-304;top:-711;width:447;height:798;position:relative;}
-.MailIcon_IE{left:-304;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MailMessageIcon-Disabled{background-image:url("/liquid/js/img/combined.PNG");left:-320;top:-711;width:447;height:798;position:relative;}
-.MailMessageIcon-Disabled_IE{left:-320;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MailMessageIcon{background-image:url("/liquid/js/img/combined.PNG");left:-336;top:-711;width:447;height:798;position:relative;}
-.MailMessageIcon_IE{left:-336;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MailReplyAllIcon-Disabled{background-image:url("/liquid/js/img/combined.PNG");left:-352;top:-711;width:447;height:798;position:relative;}
-.MailReplyAllIcon-Disabled_IE{left:-352;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MailReplyAllIcon{background-image:url("/liquid/js/img/combined.PNG");left:-368;top:-711;width:447;height:798;position:relative;}
-.MailReplyAllIcon_IE{left:-368;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MailReplyIcon-Disabled{background-image:url("/liquid/js/img/combined.PNG");left:-384;top:-711;width:447;height:798;position:relative;}
-.MailReplyIcon-Disabled_IE{left:-384;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MailReplyIcon{background-image:url("/liquid/js/img/combined.PNG");left:-400;top:-711;width:447;height:798;position:relative;}
-.MailReplyIcon_IE{left:-400;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MailRuleIcon{background-image:url("/liquid/js/img/combined.PNG");left:-416;top:-711;width:447;height:798;position:relative;}
-.MailRuleIcon_IE{left:-416;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MailStatusIcon{background-image:url("/liquid/js/img/combined.PNG");left:-0;top:-727;width:447;height:798;position:relative;}
-.MailStatusIcon_IE{left:-0;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MailToIcon{background-image:url("/liquid/js/img/combined.PNG");left:-16;top:-727;width:447;height:798;position:relative;}
-.MailToIcon_IE{left:-16;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MeetingRequestIcon{background-image:url("/liquid/js/img/combined.PNG");left:-32;top:-727;width:447;height:798;position:relative;}
-.MeetingRequestIcon_IE{left:-32;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MiniTagIcon{background-image:url("/liquid/js/img/combined.PNG");left:-48;top:-727;width:447;height:798;position:relative;}
-.MiniTagIcon_IE{left:-48;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MiniTagIconBlue{background-image:url("/liquid/js/img/combined.PNG");left:-64;top:-727;width:447;height:798;position:relative;}
-.MiniTagIconBlue_IE{left:-64;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MiniTagIconCyan{background-image:url("/liquid/js/img/combined.PNG");left:-80;top:-727;width:447;height:798;position:relative;}
-.MiniTagIconCyan_IE{left:-80;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MiniTagIconGreen{background-image:url("/liquid/js/img/combined.PNG");left:-96;top:-727;width:447;height:798;position:relative;}
-.MiniTagIconGreen_IE{left:-96;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MiniTagIconOrange{background-image:url("/liquid/js/img/combined.PNG");left:-112;top:-727;width:447;height:798;position:relative;}
-.MiniTagIconOrange_IE{left:-112;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MiniTagIconPink{background-image:url("/liquid/js/img/combined.PNG");left:-128;top:-727;width:447;height:798;position:relative;}
-.MiniTagIconPink_IE{left:-128;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MiniTagIconPurple{background-image:url("/liquid/js/img/combined.PNG");left:-144;top:-727;width:447;height:798;position:relative;}
-.MiniTagIconPurple_IE{left:-144;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MiniTagIconRed{background-image:url("/liquid/js/img/combined.PNG");left:-160;top:-727;width:447;height:798;position:relative;}
-.MiniTagIconRed_IE{left:-160;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MiniTagIconYellow{background-image:url("/liquid/js/img/combined.PNG");left:-176;top:-727;width:447;height:798;position:relative;}
-.MiniTagIconYellow_IE{left:-176;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MiniTagStackIcon{background-image:url("/liquid/js/img/combined.PNG");left:-192;top:-727;width:447;height:798;position:relative;}
-.MiniTagStackIcon_IE{left:-192;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MinusIcon{background-image:url("/liquid/js/img/combined.PNG");left:-208;top:-727;width:447;height:798;position:relative;}
-.MinusIcon_IE{left:-208;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MonthViewIcon-Disabled{background-image:url("/liquid/js/img/combined.PNG");left:-224;top:-727;width:447;height:798;position:relative;}
-.MonthViewIcon-Disabled_IE{left:-224;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MonthViewIcon{background-image:url("/liquid/js/img/combined.PNG");left:-240;top:-727;width:447;height:798;position:relative;}
-.MonthViewIcon_IE{left:-240;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MoveToFolderIcon-Disabled{background-image:url("/liquid/js/img/combined.PNG");left:-256;top:-727;width:447;height:798;position:relative;}
-.MoveToFolderIcon-Disabled_IE{left:-256;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MoveToFolderIcon{background-image:url("/liquid/js/img/combined.PNG");left:-272;top:-727;width:447;height:798;position:relative;}
-.MoveToFolderIcon_IE{left:-272;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.NewFolderIcon{background-image:url("/liquid/js/img/combined.PNG");left:-288;top:-727;width:447;height:798;position:relative;}
-.NewFolderIcon_IE{left:-288;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.NewTagIcon{background-image:url("/liquid/js/img/combined.PNG");left:-304;top:-727;width:447;height:798;position:relative;}
-.NewTagIcon_IE{left:-304;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.NodeCollapsedIcon{background-image:url("/liquid/js/img/combined.PNG");left:-320;top:-727;width:447;height:798;position:relative;}
-.NodeCollapsedIcon_IE{left:-320;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.NodeExpandedIcon{background-image:url("/liquid/js/img/combined.PNG");left:-336;top:-727;width:447;height:798;position:relative;}
-.NodeExpandedIcon_IE{left:-336;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.NoteIcon{background-image:url("/liquid/js/img/combined.PNG");left:-352;top:-727;width:447;height:798;position:relative;}
-.NoteIcon_IE{left:-352;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.NumberedListIcon{background-image:url("/liquid/js/img/combined.PNG");left:-368;top:-727;width:447;height:798;position:relative;}
-.NumberedListIcon_IE{left:-368;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.OutdentIcon{background-image:url("/liquid/js/img/combined.PNG");left:-384;top:-727;width:447;height:798;position:relative;}
-.OutdentIcon_IE{left:-384;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.PDFDocIcon{background-image:url("/liquid/js/img/combined.PNG");left:-400;top:-727;width:447;height:798;position:relative;}
-.PDFDocIcon_IE{left:-400;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.POIcon{background-image:url("/liquid/js/img/combined.PNG");left:-416;top:-727;width:447;height:798;position:relative;}
-.POIcon_IE{left:-416;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.PadlockIcon{background-image:url("/liquid/js/img/combined.PNG");left:-0;top:-743;width:447;height:798;position:relative;}
-.PadlockIcon_IE{left:-0;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.PaneDoubleIcon{background-image:url("/liquid/js/img/combined.PNG");left:-16;top:-743;width:447;height:798;position:relative;}
-.PaneDoubleIcon_IE{left:-16;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.PaneSingleIcon{background-image:url("/liquid/js/img/combined.PNG");left:-32;top:-743;width:447;height:798;position:relative;}
-.PaneSingleIcon_IE{left:-32;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.PasteIcon{background-image:url("/liquid/js/img/combined.PNG");left:-48;top:-743;width:447;height:798;position:relative;}
-.PasteIcon_IE{left:-48;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.PlusIcon{background-image:url("/liquid/js/img/combined.PNG");left:-64;top:-743;width:447;height:798;position:relative;}
-.PlusIcon_IE{left:-64;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.PreferencesIcon{background-image:url("/liquid/js/img/combined.PNG");left:-80;top:-743;width:447;height:798;position:relative;}
-.PreferencesIcon_IE{left:-80;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.PrinterIcon-Disabled{background-image:url("/liquid/js/img/combined.PNG");left:-96;top:-743;width:447;height:798;position:relative;}
-.PrinterIcon-Disabled_IE{left:-96;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.PrinterIcon{background-image:url("/liquid/js/img/combined.PNG");left:-112;top:-743;width:447;height:798;position:relative;}
-.PrinterIcon_IE{left:-112;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.PropertiesIcon{background-image:url("/liquid/js/img/combined.PNG");left:-128;top:-743;width:447;height:798;position:relative;}
-.PropertiesIcon_IE{left:-128;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.ReadMessageIcon{background-image:url("/liquid/js/img/combined.PNG");left:-144;top:-743;width:447;height:798;position:relative;}
-.ReadMessageIcon_IE{left:-144;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.RenameIcon{background-image:url("/liquid/js/img/combined.PNG");left:-160;top:-743;width:447;height:798;position:relative;}
-.RenameIcon_IE{left:-160;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.RightArrowIcon-Disabled{background-image:url("/liquid/js/img/combined.PNG");left:-176;top:-743;width:447;height:798;position:relative;}
-.RightArrowIcon-Disabled_IE{left:-176;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.RightArrowIcon{background-image:url("/liquid/js/img/combined.PNG");left:-192;top:-743;width:447;height:798;position:relative;}
-.RightArrowIcon_IE{left:-192;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.RightDoubleArrowIcon-Disabled{background-image:url("/liquid/js/img/combined.PNG");left:-208;top:-743;width:447;height:798;position:relative;}
-.RightDoubleArrowIcon-Disabled_IE{left:-208;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.RightDoubleArrowIcon{background-image:url("/liquid/js/img/combined.PNG");left:-224;top:-743;width:447;height:798;position:relative;}
-.RightDoubleArrowIcon_IE{left:-224;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.RightJustifyIcon{background-image:url("/liquid/js/img/combined.PNG");left:-240;top:-743;width:447;height:798;position:relative;}
-.RightJustifyIcon_IE{left:-240;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.SaveIcon-Disabled{background-image:url("/liquid/js/img/combined.PNG");left:-256;top:-743;width:447;height:798;position:relative;}
-.SaveIcon-Disabled_IE{left:-256;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.SaveIcon{background-image:url("/liquid/js/img/combined.PNG");left:-272;top:-743;width:447;height:798;position:relative;}
-.SaveIcon_IE{left:-272;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.SearchFolderIcon{background-image:url("/liquid/js/img/combined.PNG");left:-288;top:-743;width:447;height:798;position:relative;}
-.SearchFolderIcon_IE{left:-288;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.SearchIcon-Disabled{background-image:url("/liquid/js/img/combined.PNG");left:-304;top:-743;width:447;height:798;position:relative;}
-.SearchIcon-Disabled_IE{left:-304;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.SearchIcon{background-image:url("/liquid/js/img/combined.PNG");left:-320;top:-743;width:447;height:798;position:relative;}
-.SearchIcon_IE{left:-320;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.SentItemsFolderIcon{background-image:url("/liquid/js/img/combined.PNG");left:-336;top:-743;width:447;height:798;position:relative;}
-.SentItemsFolderIcon_IE{left:-336;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.ServerIcon{background-image:url("/liquid/js/img/combined.PNG");left:-352;top:-743;width:447;height:798;position:relative;}
-.ServerIcon_IE{left:-352;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.StrikeThruTextIcon{background-image:url("/liquid/js/img/combined.PNG");left:-368;top:-743;width:447;height:798;position:relative;}
-.StrikeThruTextIcon_IE{left:-368;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.SubscriptIcon{background-image:url("/liquid/js/img/combined.PNG");left:-384;top:-743;width:447;height:798;position:relative;}
-.SubscriptIcon_IE{left:-384;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.SuperscriptIcon{background-image:url("/liquid/js/img/combined.PNG");left:-400;top:-743;width:447;height:798;position:relative;}
-.SuperscriptIcon_IE{left:-400;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.TagFolderIcon-Disabled{background-image:url("/liquid/js/img/combined.PNG");left:-416;top:-743;width:447;height:798;position:relative;}
-.TagFolderIcon-Disabled_IE{left:-416;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.TagFolderIcon{background-image:url("/liquid/js/img/combined.PNG");left:-0;top:-759;width:447;height:798;position:relative;}
-.TagFolderIcon_IE{left:-0;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.TagIcon-Disabled{background-image:url("/liquid/js/img/combined.PNG");left:-16;top:-759;width:447;height:798;position:relative;}
-.TagIcon-Disabled_IE{left:-16;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.TagIcon{background-image:url("/liquid/js/img/combined.PNG");left:-32;top:-759;width:447;height:798;position:relative;}
-.TagIcon_IE{left:-32;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.TagIconBlue{background-image:url("/liquid/js/img/combined.PNG");left:-48;top:-759;width:447;height:798;position:relative;}
-.TagIconBlue_IE{left:-48;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.TagIconCyan{background-image:url("/liquid/js/img/combined.PNG");left:-64;top:-759;width:447;height:798;position:relative;}
-.TagIconCyan_IE{left:-64;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.TagIconGreen{background-image:url("/liquid/js/img/combined.PNG");left:-80;top:-759;width:447;height:798;position:relative;}
-.TagIconGreen_IE{left:-80;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.TagIconOrange{background-image:url("/liquid/js/img/combined.PNG");left:-96;top:-759;width:447;height:798;position:relative;}
-.TagIconOrange_IE{left:-96;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.TagIconPink{background-image:url("/liquid/js/img/combined.PNG");left:-112;top:-759;width:447;height:798;position:relative;}
-.TagIconPink_IE{left:-112;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.TagIconPurple{background-image:url("/liquid/js/img/combined.PNG");left:-128;top:-759;width:447;height:798;position:relative;}
-.TagIconPurple_IE{left:-128;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.TagIconRed{background-image:url("/liquid/js/img/combined.PNG");left:-144;top:-759;width:447;height:798;position:relative;}
-.TagIconRed_IE{left:-144;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.TagIconYellow{background-image:url("/liquid/js/img/combined.PNG");left:-160;top:-759;width:447;height:798;position:relative;}
-.TagIconYellow_IE{left:-160;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.TaskIcon{background-image:url("/liquid/js/img/combined.PNG");left:-176;top:-759;width:447;height:798;position:relative;}
-.TaskIcon_IE{left:-176;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.TelephoneIcon{background-image:url("/liquid/js/img/combined.PNG");left:-192;top:-759;width:447;height:798;position:relative;}
-.TelephoneIcon_IE{left:-192;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.TrashIcon{background-image:url("/liquid/js/img/combined.PNG");left:-208;top:-759;width:447;height:798;position:relative;}
-.TrashIcon_IE{left:-208;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.URLIcon{background-image:url("/liquid/js/img/combined.PNG");left:-224;top:-759;width:447;height:798;position:relative;}
-.URLIcon_IE{left:-224;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.UnderlineTextIcon{background-image:url("/liquid/js/img/combined.PNG");left:-240;top:-759;width:447;height:798;position:relative;}
-.UnderlineTextIcon_IE{left:-240;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.UndoIcon{background-image:url("/liquid/js/img/combined.PNG");left:-256;top:-759;width:447;height:798;position:relative;}
-.UndoIcon_IE{left:-256;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.UnreadMessageIcon{background-image:url("/liquid/js/img/combined.PNG");left:-272;top:-759;width:447;height:798;position:relative;}
-.UnreadMessageIcon_IE{left:-272;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.UpArrowIcon-Disabled{background-image:url("/liquid/js/img/combined.PNG");left:-288;top:-759;width:447;height:798;position:relative;}
-.UpArrowIcon-Disabled_IE{left:-288;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.UpArrowIcon{background-image:url("/liquid/js/img/combined.PNG");left:-304;top:-759;width:447;height:798;position:relative;}
-.UpArrowIcon_IE{left:-304;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.WeekViewIcon-Disabled{background-image:url("/liquid/js/img/combined.PNG");left:-320;top:-759;width:447;height:798;position:relative;}
-.WeekViewIcon-Disabled_IE{left:-320;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.WeekViewIcon{background-image:url("/liquid/js/img/combined.PNG");left:-336;top:-759;width:447;height:798;position:relative;}
-.WeekViewIcon_IE{left:-336;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.WorkWeekViewIcon-Disabled{background-image:url("/liquid/js/img/combined.PNG");left:-352;top:-759;width:447;height:798;position:relative;}
-.WorkWeekViewIcon-Disabled_IE{left:-352;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.WorkWeekViewIcon{background-image:url("/liquid/js/img/combined.PNG");left:-368;top:-759;width:447;height:798;position:relative;}
-.WorkWeekViewIcon_IE{left:-368;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.ZipDocumentIcon{background-image:url("/liquid/js/img/combined.PNG");left:-384;top:-759;width:447;height:798;position:relative;}
-.ZipDocumentIcon_IE{left:-384;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.selectPullDownArrow{background-image:url("/liquid/js/img/combined.PNG");left:-400;top:-759;width:447;height:798;position:relative;}
-.selectPullDownArrow_IE{left:-400;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.selectPullDownArrowEnabled{background-image:url("/liquid/js/img/combined.PNG");left:-419;top:-759;width:447;height:798;position:relative;}
-.selectPullDownArrowEnabled_IE{left:-419;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.selectPullDownDepressed{background-image:url("/liquid/js/img/combined.PNG");left:-0;top:-775;width:447;height:798;position:relative;}
-.selectPullDownDepressed_IE{left:-0;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.selectPullDownDisabled{background-image:url("/liquid/js/img/combined.PNG");left:-19;top:-775;width:447;height:798;position:relative;}
-.selectPullDownDisabled_IE{left:-19;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.Jabber2Icon{background-image:url("/liquid/js/img/combined.PNG");left:-38;top:-775;width:447;height:798;position:relative;}
-.Jabber2Icon_IE{left:-38;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.ApptException{background-image:url("/liquid/js/img/combined.PNG");left:-49;top:-775;width:447;height:798;position:relative;}
-.ApptException_IE{left:-49;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.ApptRecur{background-image:url("/liquid/js/img/combined.PNG");left:-65;top:-775;width:447;height:798;position:relative;}
-.ApptRecur_IE{left:-65;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.ApptReminder{background-image:url("/liquid/js/img/combined.PNG");left:-81;top:-775;width:447;height:798;position:relative;}
-.ApptReminder_IE{left:-81;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.questionMarkIcon{background-image:url("/liquid/js/img/combined.PNG");left:-97;top:-775;width:447;height:798;position:relative;}
-.questionMarkIcon_IE{left:-97;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.9x9BlankIcon{background-image:url("/liquid/js/img/combined.PNG");left:-106;top:-775;width:447;height:798;position:relative;}
-.9x9BlankIcon_IE{left:-106;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.FastFwdIcon{background-image:url("/liquid/js/img/combined.PNG");left:-115;top:-775;width:447;height:798;position:relative;}
-.FastFwdIcon_IE{left:-115;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.FastRevIcon{background-image:url("/liquid/js/img/combined.PNG");left:-125;top:-775;width:447;height:798;position:relative;}
-.FastRevIcon_IE{left:-125;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.FwdIcon{background-image:url("/liquid/js/img/combined.PNG");left:-135;top:-775;width:447;height:798;position:relative;}
-.FwdIcon_IE{left:-135;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MenuCheckIcon{background-image:url("/liquid/js/img/combined.PNG");left:-141;top:-775;width:447;height:798;position:relative;}
-.MenuCheckIcon_IE{left:-141;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.MenuRadioIcon{background-image:url("/liquid/js/img/combined.PNG");left:-150;top:-775;width:447;height:798;position:relative;}
-.MenuRadioIcon_IE{left:-150;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.RevIcon{background-image:url("/liquid/js/img/combined.PNG");left:-159;top:-775;width:447;height:798;position:relative;}
-.RevIcon_IE{left:-159;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.DropDownIcon{background-image:url("/liquid/js/img/combined.PNG");left:-165;top:-775;width:447;height:798;position:relative;}
-.DropDownIcon_IE{left:-165;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.ClosedTabTop{background-image:url("/liquid/js/img/combined.PNG");left:-173;top:-775;width:447;height:798;position:relative;}
-.ClosedTabTop_IE{left:-173;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.ClosedTabTop2{background-image:url("/liquid/js/img/combined.PNG");left:-253;top:-775;width:447;height:798;position:relative;}
-.ClosedTabTop2_IE{left:-253;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.ClosedTabTopLeft{background-image:url("/liquid/js/img/combined.PNG");left:-333;top:-775;width:447;height:798;position:relative;}
-.ClosedTabTopLeft_IE{left:-333;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.ClosedTabTopLeft2{background-image:url("/liquid/js/img/combined.PNG");left:-339;top:-775;width:447;height:798;position:relative;}
-.ClosedTabTopLeft2_IE{left:-339;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.ClosedTabTopRight{background-image:url("/liquid/js/img/combined.PNG");left:-345;top:-775;width:447;height:798;position:relative;}
-.ClosedTabTopRight_IE{left:-345;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.ClosedTabTopRight2{background-image:url("/liquid/js/img/combined.PNG");left:-351;top:-775;width:447;height:798;position:relative;}
-.ClosedTabTopRight2_IE{left:-351;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.ColumnDownArrow{background-image:url("/liquid/js/img/combined.PNG");left:-357;top:-775;width:447;height:798;position:relative;}
-.ColumnDownArrow_IE{left:-357;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.ColumnUpArrow{background-image:url("/liquid/js/img/combined.PNG");left:-365;top:-775;width:447;height:798;position:relative;}
-.ColumnUpArrow_IE{left:-365;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.OpenTabTop{background-image:url("/liquid/js/img/combined.PNG");left:-0;top:-791;width:447;height:798;position:relative;}
-.OpenTabTop_IE{left:-0;top:-791;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.OpenTabTopLeft{background-image:url("/liquid/js/img/combined.PNG");left:-80;top:-791;width:447;height:798;position:relative;}
-.OpenTabTopLeft_IE{left:-80;top:-791;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
-.OpenTabTopRight{background-image:url("/liquid/js/img/combined.PNG");left:-86;top:-791;width:447;height:798;position:relative;}
-.OpenTabTopRight_IE{left:-86;top:-791;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/liquid/js/img/combined.PNG',sizingMethod='scale');}
+.SplashScreen{background-image:url("/zimbra/js/img/combined.PNG");left:-0;top:0;width:447;height:798;position:relative;}
+.SplashScreen_IE{left:-0;top:0;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.ImageNotAvailable{background-image:url("/zimbra/js/img/combined.PNG");left:-0;top:-222;width:447;height:798;position:relative;}
+.ImageNotAvailable_IE{left:-0;top:-222;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.LoginBanner{background-image:url("/zimbra/js/img/combined.PNG");left:-0;top:-422;width:447;height:798;position:relative;}
+.LoginBanner_IE{left:-0;top:-422;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.DndMultiNoIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-0;top:-532;width:447;height:798;position:relative;}
+.DndMultiNoIcon_IE{left:-0;top:-532;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.DndMultiYesIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-52;top:-532;width:447;height:798;position:relative;}
+.DndMultiYesIcon_IE{left:-52;top:-532;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.BinaryDocumentIcon48x48{background-image:url("/zimbra/js/img/combined.PNG");left:-104;top:-532;width:447;height:798;position:relative;}
+.BinaryDocumentIcon48x48_IE{left:-104;top:-532;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.BmpImageIcon48x48{background-image:url("/zimbra/js/img/combined.PNG");left:-152;top:-532;width:447;height:798;position:relative;}
+.BmpImageIcon48x48_IE{left:-152;top:-532;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.DocumentIcon48x48{background-image:url("/zimbra/js/img/combined.PNG");left:-200;top:-532;width:447;height:798;position:relative;}
+.DocumentIcon48x48_IE{left:-200;top:-532;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.EnvelopeIcon48x48{background-image:url("/zimbra/js/img/combined.PNG");left:-248;top:-532;width:447;height:798;position:relative;}
+.EnvelopeIcon48x48_IE{left:-248;top:-532;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.GifImageIcon48x48{background-image:url("/zimbra/js/img/combined.PNG");left:-296;top:-532;width:447;height:798;position:relative;}
+.GifImageIcon48x48_IE{left:-296;top:-532;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.HtmlDocumentIcon48x48{background-image:url("/zimbra/js/img/combined.PNG");left:-344;top:-532;width:447;height:798;position:relative;}
+.HtmlDocumentIcon48x48_IE{left:-344;top:-532;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.ImageIcon48x48{background-image:url("/zimbra/js/img/combined.PNG");left:-392;top:-532;width:447;height:798;position:relative;}
+.ImageIcon48x48_IE{left:-392;top:-532;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.JpegImageIcon48x48{background-image:url("/zimbra/js/img/combined.PNG");left:-0;top:-584;width:447;height:798;position:relative;}
+.JpegImageIcon48x48_IE{left:-0;top:-584;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MSExcelDocIcon48x48{background-image:url("/zimbra/js/img/combined.PNG");left:-48;top:-584;width:447;height:798;position:relative;}
+.MSExcelDocIcon48x48_IE{left:-48;top:-584;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MSPPTDocIcon48x48{background-image:url("/zimbra/js/img/combined.PNG");left:-96;top:-584;width:447;height:798;position:relative;}
+.MSPPTDocIcon48x48_IE{left:-96;top:-584;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MSProjectDocIcon48x48{background-image:url("/zimbra/js/img/combined.PNG");left:-144;top:-584;width:447;height:798;position:relative;}
+.MSProjectDocIcon48x48_IE{left:-144;top:-584;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MSVisioDocIcon48x48{background-image:url("/zimbra/js/img/combined.PNG");left:-192;top:-584;width:447;height:798;position:relative;}
+.MSVisioDocIcon48x48_IE{left:-192;top:-584;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MSWMVIcon48x48{background-image:url("/zimbra/js/img/combined.PNG");left:-240;top:-584;width:447;height:798;position:relative;}
+.MSWMVIcon48x48_IE{left:-240;top:-584;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MSWordDocIcon48x48{background-image:url("/zimbra/js/img/combined.PNG");left:-288;top:-584;width:447;height:798;position:relative;}
+.MSWordDocIcon48x48_IE{left:-288;top:-584;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.PDFDocIcon48x48{background-image:url("/zimbra/js/img/combined.PNG");left:-336;top:-584;width:447;height:798;position:relative;}
+.PDFDocIcon48x48_IE{left:-336;top:-584;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.ZipDocumentIcon48x48{background-image:url("/zimbra/js/img/combined.PNG");left:-384;top:-584;width:447;height:798;position:relative;}
+.ZipDocumentIcon48x48_IE{left:-384;top:-584;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.AudioIcon48x48{background-image:url("/zimbra/js/img/combined.PNG");left:-0;top:-632;width:447;height:798;position:relative;}
+.AudioIcon48x48_IE{left:-0;top:-632;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.Banner{background-image:url("/zimbra/js/img/combined.PNG");left:-48;top:-632;width:447;height:798;position:relative;}
+.Banner_IE{left:-48;top:-632;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.CriticalIcon32x32{background-image:url("/zimbra/js/img/combined.PNG");left:-248;top:-632;width:447;height:798;position:relative;}
+.CriticalIcon32x32_IE{left:-248;top:-632;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.InformationIcon32x32{background-image:url("/zimbra/js/img/combined.PNG");left:-280;top:-632;width:447;height:798;position:relative;}
+.InformationIcon32x32_IE{left:-280;top:-632;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.WarningIcon32x32{background-image:url("/zimbra/js/img/combined.PNG");left:-312;top:-632;width:447;height:798;position:relative;}
+.WarningIcon32x32_IE{left:-312;top:-632;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.ClosedTabLeft{background-image:url("/zimbra/js/img/combined.PNG");left:-344;top:-632;width:447;height:798;position:relative;}
+.ClosedTabLeft_IE{left:-344;top:-632;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.ClosedTabLeft2{background-image:url("/zimbra/js/img/combined.PNG");left:-350;top:-632;width:447;height:798;position:relative;}
+.ClosedTabLeft2_IE{left:-350;top:-632;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.ClosedTabRight{background-image:url("/zimbra/js/img/combined.PNG");left:-356;top:-632;width:447;height:798;position:relative;}
+.ClosedTabRight_IE{left:-356;top:-632;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.OpenTabLeft{background-image:url("/zimbra/js/img/combined.PNG");left:-362;top:-632;width:447;height:798;position:relative;}
+.OpenTabLeft_IE{left:-362;top:-632;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.OpenTabRight{background-image:url("/zimbra/js/img/combined.PNG");left:-368;top:-632;width:447;height:798;position:relative;}
+.OpenTabRight_IE{left:-368;top:-632;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.16x16BlankIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-374;top:-632;width:447;height:798;position:relative;}
+.16x16BlankIcon_IE{left:-374;top:-632;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.AppointmentIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-390;top:-632;width:447;height:798;position:relative;}
+.AppointmentIcon_IE{left:-390;top:-632;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.AttachmentIcon-Disabled{background-image:url("/zimbra/js/img/combined.PNG");left:-406;top:-632;width:447;height:798;position:relative;}
+.AttachmentIcon-Disabled_IE{left:-406;top:-632;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.AttachmentIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-422;top:-632;width:447;height:798;position:relative;}
+.AttachmentIcon_IE{left:-422;top:-632;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.AudioIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-0;top:-679;width:447;height:798;position:relative;}
+.AudioIcon_IE{left:-0;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.BinaryDocumentIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-16;top:-679;width:447;height:798;position:relative;}
+.BinaryDocumentIcon_IE{left:-16;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.BmpImageIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-32;top:-679;width:447;height:798;position:relative;}
+.BmpImageIcon_IE{left:-32;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.BoldTextIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-48;top:-679;width:447;height:798;position:relative;}
+.BoldTextIcon_IE{left:-48;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.BrowseIcon-Disabled{background-image:url("/zimbra/js/img/combined.PNG");left:-64;top:-679;width:447;height:798;position:relative;}
+.BrowseIcon-Disabled_IE{left:-64;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.BrowseIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-80;top:-679;width:447;height:798;position:relative;}
+.BrowseIcon_IE{left:-80;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.CascadeIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-96;top:-679;width:447;height:798;position:relative;}
+.CascadeIcon_IE{left:-96;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.CenterJustifyIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-112;top:-679;width:447;height:798;position:relative;}
+.CenterJustifyIcon_IE{left:-112;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.ColorWheelIcon-Disabled{background-image:url("/zimbra/js/img/combined.PNG");left:-128;top:-679;width:447;height:798;position:relative;}
+.ColorWheelIcon-Disabled_IE{left:-128;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.ColorWheelIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-144;top:-679;width:447;height:798;position:relative;}
+.ColorWheelIcon_IE{left:-144;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.ContactIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-160;top:-679;width:447;height:798;position:relative;}
+.ContactIcon_IE{left:-160;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.ContactPicker{background-image:url("/zimbra/js/img/combined.PNG");left:-176;top:-679;width:447;height:798;position:relative;}
+.ContactPicker_IE{left:-176;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.ConvIcon-Disabled{background-image:url("/zimbra/js/img/combined.PNG");left:-192;top:-679;width:447;height:798;position:relative;}
+.ConvIcon-Disabled_IE{left:-192;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.ConvIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-208;top:-679;width:447;height:798;position:relative;}
+.ConvIcon_IE{left:-208;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.CopyFolderIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-224;top:-679;width:447;height:798;position:relative;}
+.CopyFolderIcon_IE{left:-224;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.CopyIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-240;top:-679;width:447;height:798;position:relative;}
+.CopyIcon_IE{left:-240;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.CutIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-256;top:-679;width:447;height:798;position:relative;}
+.CutIcon_IE{left:-256;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.DateIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-272;top:-679;width:447;height:798;position:relative;}
+.DateIcon_IE{left:-272;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.DayViewIcon-Disabled{background-image:url("/zimbra/js/img/combined.PNG");left:-288;top:-679;width:447;height:798;position:relative;}
+.DayViewIcon-Disabled_IE{left:-288;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.DayViewIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-304;top:-679;width:447;height:798;position:relative;}
+.DayViewIcon_IE{left:-304;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.DelConvIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-320;top:-679;width:447;height:798;position:relative;}
+.DelConvIcon_IE{left:-320;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.DelMsgIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-336;top:-679;width:447;height:798;position:relative;}
+.DelMsgIcon_IE{left:-336;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.DeleteFolderIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-352;top:-679;width:447;height:798;position:relative;}
+.DeleteFolderIcon_IE{left:-352;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.DeleteIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-368;top:-679;width:447;height:798;position:relative;}
+.DeleteIcon_IE{left:-368;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.DeleteTagIcon-Disabled{background-image:url("/zimbra/js/img/combined.PNG");left:-384;top:-679;width:447;height:798;position:relative;}
+.DeleteTagIcon-Disabled_IE{left:-384;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.DeleteTagIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-400;top:-679;width:447;height:798;position:relative;}
+.DeleteTagIcon_IE{left:-400;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.DistributionListIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-416;top:-679;width:447;height:798;position:relative;}
+.DistributionListIcon_IE{left:-416;top:-679;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.DocumentIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-0;top:-695;width:447;height:798;position:relative;}
+.DocumentIcon_IE{left:-0;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.DomainIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-16;top:-695;width:447;height:798;position:relative;}
+.DomainIcon_IE{left:-16;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.DoorIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-32;top:-695;width:447;height:798;position:relative;}
+.DoorIcon_IE{left:-32;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.DownArrowIcon-Disabled{background-image:url("/zimbra/js/img/combined.PNG");left:-48;top:-695;width:447;height:798;position:relative;}
+.DownArrowIcon-Disabled_IE{left:-48;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.DownArrowIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-64;top:-695;width:447;height:798;position:relative;}
+.DownArrowIcon_IE{left:-64;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.DraftFolderIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-80;top:-695;width:447;height:798;position:relative;}
+.DraftFolderIcon_IE{left:-80;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.DropDownIconDisabled{background-image:url("/zimbra/js/img/combined.PNG");left:-96;top:-695;width:447;height:798;position:relative;}
+.DropDownIconDisabled_IE{left:-96;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.EnvelopeIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-112;top:-695;width:447;height:798;position:relative;}
+.EnvelopeIcon_IE{left:-112;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.FeedbackIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-128;top:-695;width:447;height:798;position:relative;}
+.FeedbackIcon_IE{left:-128;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.FlagOffIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-144;top:-695;width:447;height:798;position:relative;}
+.FlagOffIcon_IE{filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');left:-144;top:-695;width:447;height:798;position:relative;}
+.FlagOnIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-160;top:-695;width:447;height:798;position:relative;}
+.FlagOnIcon_IE{left:-160;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.FolderIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-176;top:-695;width:447;height:798;position:relative;}
+.FolderIcon_IE{left:-176;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.FontBackgroundColorIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-192;top:-695;width:447;height:798;position:relative;}
+.FontBackgroundColorIcon_IE{left:-192;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.FontColorIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-208;top:-695;width:447;height:798;position:relative;}
+.FontColorIcon_IE{left:-208;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.FullJustifyIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-224;top:-695;width:447;height:798;position:relative;}
+.FullJustifyIcon_IE{left:-224;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.GalIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-240;top:-695;width:447;height:798;position:relative;}
+.GalIcon_IE{left:-240;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.GifImageIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-256;top:-695;width:447;height:798;position:relative;}
+.GifImageIcon_IE{left:-256;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.GlobeIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-271;top:-695;width:447;height:798;position:relative;}
+.GlobeIcon_IE{left:-271;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.GreenCheckIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-287;top:-695;width:447;height:798;position:relative;}
+.GreenCheckIcon_IE{left:-287;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.GroupScheduleIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-303;top:-695;width:447;height:798;position:relative;}
+.GroupScheduleIcon_IE{left:-303;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.HelpIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-319;top:-695;width:447;height:798;position:relative;}
+.HelpIcon_IE{left:-319;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.HorizRuleIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-335;top:-695;width:447;height:798;position:relative;}
+.HorizRuleIcon_IE{left:-335;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.HtmlDocumentIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-351;top:-695;width:447;height:798;position:relative;}
+.HtmlDocumentIcon_IE{left:-351;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.IconIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-367;top:-695;width:447;height:798;position:relative;}
+.IconIcon_IE{left:-367;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.ImageIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-383;top:-695;width:447;height:798;position:relative;}
+.ImageIcon_IE{left:-383;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.IndentIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-399;top:-695;width:447;height:798;position:relative;}
+.IndentIcon_IE{left:-399;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.InsertTableIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-415;top:-695;width:447;height:798;position:relative;}
+.InsertTableIcon_IE{left:-415;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.ItalicTextIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-431;top:-695;width:447;height:798;position:relative;}
+.ItalicTextIcon_IE{left:-431;top:-695;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.JpegImageIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-0;top:-711;width:447;height:798;position:relative;}
+.JpegImageIcon_IE{left:-0;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.JunkFolderIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-16;top:-711;width:447;height:798;position:relative;}
+.JunkFolderIcon_IE{left:-16;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.LeftArrowIcon-Disabled{background-image:url("/zimbra/js/img/combined.PNG");left:-32;top:-711;width:447;height:798;position:relative;}
+.LeftArrowIcon-Disabled_IE{left:-32;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.LeftArrowIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-48;top:-711;width:447;height:798;position:relative;}
+.LeftArrowIcon_IE{left:-48;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.LeftDoubleArrowIcon-Disabled{background-image:url("/zimbra/js/img/combined.PNG");left:-64;top:-711;width:447;height:798;position:relative;}
+.LeftDoubleArrowIcon-Disabled_IE{left:-64;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.LeftDoubleArrowIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-80;top:-711;width:447;height:798;position:relative;}
+.LeftDoubleArrowIcon_IE{left:-80;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.LeftJustifyIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-96;top:-711;width:447;height:798;position:relative;}
+.LeftJustifyIcon_IE{left:-96;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.ListIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-112;top:-711;width:447;height:798;position:relative;}
+.ListIcon_IE{left:-112;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.LogoffIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-128;top:-711;width:447;height:798;position:relative;}
+.LogoffIcon_IE{left:-128;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MSExcelDocIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-144;top:-711;width:447;height:798;position:relative;}
+.MSExcelDocIcon_IE{left:-144;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MSPPTDocIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-160;top:-711;width:447;height:798;position:relative;}
+.MSPPTDocIcon_IE{left:-160;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MSProjectDocIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-176;top:-711;width:447;height:798;position:relative;}
+.MSProjectDocIcon_IE{left:-176;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MSVisioDocIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-192;top:-711;width:447;height:798;position:relative;}
+.MSVisioDocIcon_IE{left:-192;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MSWMVIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-208;top:-711;width:447;height:798;position:relative;}
+.MSWMVIcon_IE{left:-208;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MSWordDocIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-224;top:-711;width:447;height:798;position:relative;}
+.MSWordDocIcon_IE{left:-224;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MailFolderIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-240;top:-711;width:447;height:798;position:relative;}
+.MailFolderIcon_IE{left:-240;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MailForwardIcon-Disabled{background-image:url("/zimbra/js/img/combined.PNG");left:-256;top:-711;width:447;height:798;position:relative;}
+.MailForwardIcon-Disabled_IE{left:-256;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MailForwardIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-272;top:-711;width:447;height:798;position:relative;}
+.MailForwardIcon_IE{left:-272;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MailIcon-Disabled{background-image:url("/zimbra/js/img/combined.PNG");left:-288;top:-711;width:447;height:798;position:relative;}
+.MailIcon-Disabled_IE{left:-288;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MailIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-304;top:-711;width:447;height:798;position:relative;}
+.MailIcon_IE{left:-304;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MailMessageIcon-Disabled{background-image:url("/zimbra/js/img/combined.PNG");left:-320;top:-711;width:447;height:798;position:relative;}
+.MailMessageIcon-Disabled_IE{left:-320;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MailMessageIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-336;top:-711;width:447;height:798;position:relative;}
+.MailMessageIcon_IE{left:-336;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MailReplyAllIcon-Disabled{background-image:url("/zimbra/js/img/combined.PNG");left:-352;top:-711;width:447;height:798;position:relative;}
+.MailReplyAllIcon-Disabled_IE{left:-352;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MailReplyAllIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-368;top:-711;width:447;height:798;position:relative;}
+.MailReplyAllIcon_IE{left:-368;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MailReplyIcon-Disabled{background-image:url("/zimbra/js/img/combined.PNG");left:-384;top:-711;width:447;height:798;position:relative;}
+.MailReplyIcon-Disabled_IE{left:-384;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MailReplyIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-400;top:-711;width:447;height:798;position:relative;}
+.MailReplyIcon_IE{left:-400;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MailRuleIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-416;top:-711;width:447;height:798;position:relative;}
+.MailRuleIcon_IE{left:-416;top:-711;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MailStatusIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-0;top:-727;width:447;height:798;position:relative;}
+.MailStatusIcon_IE{left:-0;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MailToIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-16;top:-727;width:447;height:798;position:relative;}
+.MailToIcon_IE{left:-16;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MeetingRequestIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-32;top:-727;width:447;height:798;position:relative;}
+.MeetingRequestIcon_IE{left:-32;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MiniTagIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-48;top:-727;width:447;height:798;position:relative;}
+.MiniTagIcon_IE{left:-48;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MiniTagIconBlue{background-image:url("/zimbra/js/img/combined.PNG");left:-64;top:-727;width:447;height:798;position:relative;}
+.MiniTagIconBlue_IE{left:-64;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MiniTagIconCyan{background-image:url("/zimbra/js/img/combined.PNG");left:-80;top:-727;width:447;height:798;position:relative;}
+.MiniTagIconCyan_IE{left:-80;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MiniTagIconGreen{background-image:url("/zimbra/js/img/combined.PNG");left:-96;top:-727;width:447;height:798;position:relative;}
+.MiniTagIconGreen_IE{left:-96;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MiniTagIconOrange{background-image:url("/zimbra/js/img/combined.PNG");left:-112;top:-727;width:447;height:798;position:relative;}
+.MiniTagIconOrange_IE{left:-112;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MiniTagIconPink{background-image:url("/zimbra/js/img/combined.PNG");left:-128;top:-727;width:447;height:798;position:relative;}
+.MiniTagIconPink_IE{left:-128;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MiniTagIconPurple{background-image:url("/zimbra/js/img/combined.PNG");left:-144;top:-727;width:447;height:798;position:relative;}
+.MiniTagIconPurple_IE{left:-144;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MiniTagIconRed{background-image:url("/zimbra/js/img/combined.PNG");left:-160;top:-727;width:447;height:798;position:relative;}
+.MiniTagIconRed_IE{left:-160;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MiniTagIconYellow{background-image:url("/zimbra/js/img/combined.PNG");left:-176;top:-727;width:447;height:798;position:relative;}
+.MiniTagIconYellow_IE{left:-176;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MiniTagStackIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-192;top:-727;width:447;height:798;position:relative;}
+.MiniTagStackIcon_IE{left:-192;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MinusIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-208;top:-727;width:447;height:798;position:relative;}
+.MinusIcon_IE{left:-208;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MonthViewIcon-Disabled{background-image:url("/zimbra/js/img/combined.PNG");left:-224;top:-727;width:447;height:798;position:relative;}
+.MonthViewIcon-Disabled_IE{left:-224;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MonthViewIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-240;top:-727;width:447;height:798;position:relative;}
+.MonthViewIcon_IE{left:-240;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MoveToFolderIcon-Disabled{background-image:url("/zimbra/js/img/combined.PNG");left:-256;top:-727;width:447;height:798;position:relative;}
+.MoveToFolderIcon-Disabled_IE{left:-256;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MoveToFolderIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-272;top:-727;width:447;height:798;position:relative;}
+.MoveToFolderIcon_IE{left:-272;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.NewFolderIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-288;top:-727;width:447;height:798;position:relative;}
+.NewFolderIcon_IE{left:-288;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.NewTagIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-304;top:-727;width:447;height:798;position:relative;}
+.NewTagIcon_IE{left:-304;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.NodeCollapsedIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-320;top:-727;width:447;height:798;position:relative;}
+.NodeCollapsedIcon_IE{left:-320;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.NodeExpandedIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-336;top:-727;width:447;height:798;position:relative;}
+.NodeExpandedIcon_IE{left:-336;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.NoteIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-352;top:-727;width:447;height:798;position:relative;}
+.NoteIcon_IE{left:-352;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.NumberedListIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-368;top:-727;width:447;height:798;position:relative;}
+.NumberedListIcon_IE{left:-368;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.OutdentIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-384;top:-727;width:447;height:798;position:relative;}
+.OutdentIcon_IE{left:-384;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.PDFDocIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-400;top:-727;width:447;height:798;position:relative;}
+.PDFDocIcon_IE{left:-400;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.POIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-416;top:-727;width:447;height:798;position:relative;}
+.POIcon_IE{left:-416;top:-727;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.PadlockIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-0;top:-743;width:447;height:798;position:relative;}
+.PadlockIcon_IE{left:-0;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.PaneDoubleIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-16;top:-743;width:447;height:798;position:relative;}
+.PaneDoubleIcon_IE{left:-16;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.PaneSingleIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-32;top:-743;width:447;height:798;position:relative;}
+.PaneSingleIcon_IE{left:-32;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.PasteIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-48;top:-743;width:447;height:798;position:relative;}
+.PasteIcon_IE{left:-48;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.PlusIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-64;top:-743;width:447;height:798;position:relative;}
+.PlusIcon_IE{left:-64;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.PreferencesIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-80;top:-743;width:447;height:798;position:relative;}
+.PreferencesIcon_IE{left:-80;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.PrinterIcon-Disabled{background-image:url("/zimbra/js/img/combined.PNG");left:-96;top:-743;width:447;height:798;position:relative;}
+.PrinterIcon-Disabled_IE{left:-96;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.PrinterIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-112;top:-743;width:447;height:798;position:relative;}
+.PrinterIcon_IE{left:-112;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.PropertiesIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-128;top:-743;width:447;height:798;position:relative;}
+.PropertiesIcon_IE{left:-128;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.ReadMessageIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-144;top:-743;width:447;height:798;position:relative;}
+.ReadMessageIcon_IE{left:-144;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.RenameIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-160;top:-743;width:447;height:798;position:relative;}
+.RenameIcon_IE{left:-160;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.RightArrowIcon-Disabled{background-image:url("/zimbra/js/img/combined.PNG");left:-176;top:-743;width:447;height:798;position:relative;}
+.RightArrowIcon-Disabled_IE{left:-176;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.RightArrowIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-192;top:-743;width:447;height:798;position:relative;}
+.RightArrowIcon_IE{left:-192;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.RightDoubleArrowIcon-Disabled{background-image:url("/zimbra/js/img/combined.PNG");left:-208;top:-743;width:447;height:798;position:relative;}
+.RightDoubleArrowIcon-Disabled_IE{left:-208;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.RightDoubleArrowIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-224;top:-743;width:447;height:798;position:relative;}
+.RightDoubleArrowIcon_IE{left:-224;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.RightJustifyIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-240;top:-743;width:447;height:798;position:relative;}
+.RightJustifyIcon_IE{left:-240;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.SaveIcon-Disabled{background-image:url("/zimbra/js/img/combined.PNG");left:-256;top:-743;width:447;height:798;position:relative;}
+.SaveIcon-Disabled_IE{left:-256;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.SaveIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-272;top:-743;width:447;height:798;position:relative;}
+.SaveIcon_IE{left:-272;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.SearchFolderIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-288;top:-743;width:447;height:798;position:relative;}
+.SearchFolderIcon_IE{left:-288;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.SearchIcon-Disabled{background-image:url("/zimbra/js/img/combined.PNG");left:-304;top:-743;width:447;height:798;position:relative;}
+.SearchIcon-Disabled_IE{left:-304;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.SearchIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-320;top:-743;width:447;height:798;position:relative;}
+.SearchIcon_IE{left:-320;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.SentItemsFolderIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-336;top:-743;width:447;height:798;position:relative;}
+.SentItemsFolderIcon_IE{left:-336;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.ServerIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-352;top:-743;width:447;height:798;position:relative;}
+.ServerIcon_IE{left:-352;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.StrikeThruTextIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-368;top:-743;width:447;height:798;position:relative;}
+.StrikeThruTextIcon_IE{left:-368;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.SubscriptIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-384;top:-743;width:447;height:798;position:relative;}
+.SubscriptIcon_IE{left:-384;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.SuperscriptIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-400;top:-743;width:447;height:798;position:relative;}
+.SuperscriptIcon_IE{left:-400;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.TagFolderIcon-Disabled{background-image:url("/zimbra/js/img/combined.PNG");left:-416;top:-743;width:447;height:798;position:relative;}
+.TagFolderIcon-Disabled_IE{left:-416;top:-743;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.TagFolderIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-0;top:-759;width:447;height:798;position:relative;}
+.TagFolderIcon_IE{left:-0;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.TagIcon-Disabled{background-image:url("/zimbra/js/img/combined.PNG");left:-16;top:-759;width:447;height:798;position:relative;}
+.TagIcon-Disabled_IE{left:-16;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.TagIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-32;top:-759;width:447;height:798;position:relative;}
+.TagIcon_IE{left:-32;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.TagIconBlue{background-image:url("/zimbra/js/img/combined.PNG");left:-48;top:-759;width:447;height:798;position:relative;}
+.TagIconBlue_IE{left:-48;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.TagIconCyan{background-image:url("/zimbra/js/img/combined.PNG");left:-64;top:-759;width:447;height:798;position:relative;}
+.TagIconCyan_IE{left:-64;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.TagIconGreen{background-image:url("/zimbra/js/img/combined.PNG");left:-80;top:-759;width:447;height:798;position:relative;}
+.TagIconGreen_IE{left:-80;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.TagIconOrange{background-image:url("/zimbra/js/img/combined.PNG");left:-96;top:-759;width:447;height:798;position:relative;}
+.TagIconOrange_IE{left:-96;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.TagIconPink{background-image:url("/zimbra/js/img/combined.PNG");left:-112;top:-759;width:447;height:798;position:relative;}
+.TagIconPink_IE{left:-112;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.TagIconPurple{background-image:url("/zimbra/js/img/combined.PNG");left:-128;top:-759;width:447;height:798;position:relative;}
+.TagIconPurple_IE{left:-128;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.TagIconRed{background-image:url("/zimbra/js/img/combined.PNG");left:-144;top:-759;width:447;height:798;position:relative;}
+.TagIconRed_IE{left:-144;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.TagIconYellow{background-image:url("/zimbra/js/img/combined.PNG");left:-160;top:-759;width:447;height:798;position:relative;}
+.TagIconYellow_IE{left:-160;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.TaskIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-176;top:-759;width:447;height:798;position:relative;}
+.TaskIcon_IE{left:-176;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.TelephoneIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-192;top:-759;width:447;height:798;position:relative;}
+.TelephoneIcon_IE{left:-192;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.TrashIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-208;top:-759;width:447;height:798;position:relative;}
+.TrashIcon_IE{left:-208;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.URLIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-224;top:-759;width:447;height:798;position:relative;}
+.URLIcon_IE{left:-224;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.UnderlineTextIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-240;top:-759;width:447;height:798;position:relative;}
+.UnderlineTextIcon_IE{left:-240;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.UndoIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-256;top:-759;width:447;height:798;position:relative;}
+.UndoIcon_IE{left:-256;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.UnreadMessageIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-272;top:-759;width:447;height:798;position:relative;}
+.UnreadMessageIcon_IE{left:-272;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.UpArrowIcon-Disabled{background-image:url("/zimbra/js/img/combined.PNG");left:-288;top:-759;width:447;height:798;position:relative;}
+.UpArrowIcon-Disabled_IE{left:-288;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.UpArrowIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-304;top:-759;width:447;height:798;position:relative;}
+.UpArrowIcon_IE{left:-304;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.WeekViewIcon-Disabled{background-image:url("/zimbra/js/img/combined.PNG");left:-320;top:-759;width:447;height:798;position:relative;}
+.WeekViewIcon-Disabled_IE{left:-320;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.WeekViewIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-336;top:-759;width:447;height:798;position:relative;}
+.WeekViewIcon_IE{left:-336;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.WorkWeekViewIcon-Disabled{background-image:url("/zimbra/js/img/combined.PNG");left:-352;top:-759;width:447;height:798;position:relative;}
+.WorkWeekViewIcon-Disabled_IE{left:-352;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.WorkWeekViewIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-368;top:-759;width:447;height:798;position:relative;}
+.WorkWeekViewIcon_IE{left:-368;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.ZipDocumentIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-384;top:-759;width:447;height:798;position:relative;}
+.ZipDocumentIcon_IE{left:-384;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.selectPullDownArrow{background-image:url("/zimbra/js/img/combined.PNG");left:-400;top:-759;width:447;height:798;position:relative;}
+.selectPullDownArrow_IE{left:-400;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.selectPullDownArrowEnabled{background-image:url("/zimbra/js/img/combined.PNG");left:-419;top:-759;width:447;height:798;position:relative;}
+.selectPullDownArrowEnabled_IE{left:-419;top:-759;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.selectPullDownDepressed{background-image:url("/zimbra/js/img/combined.PNG");left:-0;top:-775;width:447;height:798;position:relative;}
+.selectPullDownDepressed_IE{left:-0;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.selectPullDownDisabled{background-image:url("/zimbra/js/img/combined.PNG");left:-19;top:-775;width:447;height:798;position:relative;}
+.selectPullDownDisabled_IE{left:-19;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.Jabber2Icon{background-image:url("/zimbra/js/img/combined.PNG");left:-38;top:-775;width:447;height:798;position:relative;}
+.Jabber2Icon_IE{left:-38;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.ApptException{background-image:url("/zimbra/js/img/combined.PNG");left:-49;top:-775;width:447;height:798;position:relative;}
+.ApptException_IE{left:-49;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.ApptRecur{background-image:url("/zimbra/js/img/combined.PNG");left:-65;top:-775;width:447;height:798;position:relative;}
+.ApptRecur_IE{left:-65;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.ApptReminder{background-image:url("/zimbra/js/img/combined.PNG");left:-81;top:-775;width:447;height:798;position:relative;}
+.ApptReminder_IE{left:-81;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.questionMarkIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-97;top:-775;width:447;height:798;position:relative;}
+.questionMarkIcon_IE{left:-97;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.9x9BlankIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-106;top:-775;width:447;height:798;position:relative;}
+.9x9BlankIcon_IE{left:-106;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.FastFwdIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-115;top:-775;width:447;height:798;position:relative;}
+.FastFwdIcon_IE{left:-115;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.FastRevIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-125;top:-775;width:447;height:798;position:relative;}
+.FastRevIcon_IE{left:-125;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.FwdIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-135;top:-775;width:447;height:798;position:relative;}
+.FwdIcon_IE{left:-135;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MenuCheckIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-141;top:-775;width:447;height:798;position:relative;}
+.MenuCheckIcon_IE{left:-141;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.MenuRadioIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-150;top:-775;width:447;height:798;position:relative;}
+.MenuRadioIcon_IE{left:-150;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.RevIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-159;top:-775;width:447;height:798;position:relative;}
+.RevIcon_IE{left:-159;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.DropDownIcon{background-image:url("/zimbra/js/img/combined.PNG");left:-165;top:-775;width:447;height:798;position:relative;}
+.DropDownIcon_IE{left:-165;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.ClosedTabTop{background-image:url("/zimbra/js/img/combined.PNG");left:-173;top:-775;width:447;height:798;position:relative;}
+.ClosedTabTop_IE{left:-173;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.ClosedTabTop2{background-image:url("/zimbra/js/img/combined.PNG");left:-253;top:-775;width:447;height:798;position:relative;}
+.ClosedTabTop2_IE{left:-253;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.ClosedTabTopLeft{background-image:url("/zimbra/js/img/combined.PNG");left:-333;top:-775;width:447;height:798;position:relative;}
+.ClosedTabTopLeft_IE{left:-333;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.ClosedTabTopLeft2{background-image:url("/zimbra/js/img/combined.PNG");left:-339;top:-775;width:447;height:798;position:relative;}
+.ClosedTabTopLeft2_IE{left:-339;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.ClosedTabTopRight{background-image:url("/zimbra/js/img/combined.PNG");left:-345;top:-775;width:447;height:798;position:relative;}
+.ClosedTabTopRight_IE{left:-345;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.ClosedTabTopRight2{background-image:url("/zimbra/js/img/combined.PNG");left:-351;top:-775;width:447;height:798;position:relative;}
+.ClosedTabTopRight2_IE{left:-351;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.ColumnDownArrow{background-image:url("/zimbra/js/img/combined.PNG");left:-357;top:-775;width:447;height:798;position:relative;}
+.ColumnDownArrow_IE{left:-357;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.ColumnUpArrow{background-image:url("/zimbra/js/img/combined.PNG");left:-365;top:-775;width:447;height:798;position:relative;}
+.ColumnUpArrow_IE{left:-365;top:-775;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.OpenTabTop{background-image:url("/zimbra/js/img/combined.PNG");left:-0;top:-791;width:447;height:798;position:relative;}
+.OpenTabTop_IE{left:-0;top:-791;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.OpenTabTopLeft{background-image:url("/zimbra/js/img/combined.PNG");left:-80;top:-791;width:447;height:798;position:relative;}
+.OpenTabTopLeft_IE{left:-80;top:-791;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}
+.OpenTabTopRight{background-image:url("/zimbra/js/img/combined.PNG");left:-86;top:-791;width:447;height:798;position:relative;}
+.OpenTabTopRight_IE{left:-86;top:-791;width:447;height:798;position:relative;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', src='/zimbra/js/img/combined.PNG',sizingMethod='scale');}

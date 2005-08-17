@@ -4,13 +4,13 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>Liquid Mail</title>
+    <title>Zimbra Mail</title>
     <style type="text/css">
       <!--
-        @import url(/liquid/img/hiRes/imgs.css);
+        @import url(/zimbra/img/hiRes/imgs.css);
 
-        @import url(/liquid/js/dwt/config/style/dwt.css);
-        @import url(/liquid/js/liquidMail/config/style/lm.css);
+        @import url(/zimbra/js/dwt/config/style/dwt.css);
+        @import url(/zimbra/js/zimbraMail/config/style/lm.css);
 
       -->
 .DwtSelect{
@@ -51,12 +51,12 @@
 
     </style>
 	<script language="JavaScript">
-    	DwtConfigPath = "/liquid/js/dwt/config";
+    	DwtConfigPath = "/zimbra/js/dwt/config";
     </script>
     <jsp:include page="../../public/Messages.jsp"/>
-    <jsp:include page="../../public/Liquid.jsp"/>
+    <jsp:include page="../../public/Zimbra.jsp"/>
     <jsp:include page="../../public/Dwt.jsp"/>
-    <jsp:include page="../../public/LiquidMail.jsp"/>
+    <jsp:include page="../../public/ZimbraMail.jsp"/>
     <script language="JavaScript">   	
 var _TIME_OF_DAY_CHOICES = [ 
 	{ label:'12:00 AM', value:'0:00' }, { label:'12:30 AM', value: '0:30' },
@@ -96,7 +96,7 @@ var _TIME_OF_DAY_CHOICES = [
 			value += location.search;
 		LsCsfeCommand.setServerUri(value);
 
-		var soapDoc = LsSoapDoc.create("GetFreeBusyRequest", "urn:liquidMail");
+		var soapDoc = LsSoapDoc.create("GetFreeBusyRequest", "urn:zimbraMail");
 		var now = new Date();
 		now.setHours(0);
 		now.setMinutes(0);
@@ -111,10 +111,10 @@ var _TIME_OF_DAY_CHOICES = [
 		// TODO: Not sure what the period should be here
 		end.setDate(now.getDate() + 1);
 		soapDoc.setMethodAttribute("e", end.getTime());
-		soapDoc.setMethodAttribute("uid", "user1@db682461.liquidsys.com");
+		soapDoc.setMethodAttribute("uid", "user1@db682461.zimbra.com");
 		// This is erroring out
 		var resp = LsCsfeCommand.invoke(soapDoc, null, null, null, false);
-		//var resp = LmLiquidMail.prototype.sendRequest(soapDoc).firstChild;
+		//var resp = ZmZimbraMail.prototype.sendRequest(soapDoc).firstChild;
 		var userSchedules = LmUserSchedule.loadFromDom(resp.Body);
 		var dummyAppt = new LmAppt();
 		dummyAppt.startDate = new Date();

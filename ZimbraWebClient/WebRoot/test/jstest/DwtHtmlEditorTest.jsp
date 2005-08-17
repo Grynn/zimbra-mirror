@@ -7,18 +7,18 @@
     <title>DwtCalTest</title>
     <style type="text/css">
       <!--
-        @import url(/liquid/img/loRes/imgs.css);
-        @import url(/liquid/js/liquidMail/config/style/lm.css);
+        @import url(/zimbra/img/loRes/imgs.css);
+        @import url(/zimbra/js/zimbraMail/config/style/lm.css);
       -->
     </style>
 	<script language="JavaScript">
-    	DwtConfigPath = "/liquid/js/dwt/config";
+    	DwtConfigPath = "/zimbra/js/dwt/config";
     </script>
     	
     <jsp:include page="../../public/Messages.jsp"/>
-    <jsp:include page="../../public/Liquid.jsp"/>
+    <jsp:include page="../../public/Zimbra.jsp"/>
     <jsp:include page="../../public/Dwt.jsp"/>
-    <jsp:include page="../../public/LiquidMail.jsp"/>
+    <jsp:include page="../../public/ZimbraMail.jsp"/>
     <script type="text/javascript" src="DwtHtmlEditorTest.js"></script>
   </head>
     <body>
