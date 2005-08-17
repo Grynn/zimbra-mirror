@@ -1799,10 +1799,13 @@ Checkbox_XFormItem.prototype.focusable = true;
 //	methods
 Checkbox_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
 	// figure out how to show the checkbox as checked or not
-	
+	var checked = "";
+	if (this.getInstanceValue() == this.getTrueValue()) {
+		checked = " CHECKED";
+	}
 	html.append(indent, 
 		"<input id=\"", this.getId(),"\" type=\"", this._inputType, "\"", this.getCssString(), 
-			this.getChangeHandlerHTML(), this.getFocusHandlerHTML(),
+				this.getChangeHandlerHTML(), this.getFocusHandlerHTML(), checked,
 		">");
 }
 
