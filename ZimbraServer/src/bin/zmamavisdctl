@@ -7,7 +7,7 @@ fi
 
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
-    liquid_home \
+    zimbra_home \
     liquid_log_directory
 
 rewriteconfig() {
@@ -21,34 +21,34 @@ rewriteconfig() {
 #
 case "$1" in
     'start')
-		mount -t tmpfs | grep ${liquid_home}/amavisd/tmp > /dev/null 2>&1
+		mount -t tmpfs | grep ${zimbra_home}/amavisd/tmp > /dev/null 2>&1
 		if [ $? != 0 ]; then
-			mount ${liquid_home}/amavisd/tmp
+			mount ${zimbra_home}/amavisd/tmp
 		fi
 		rewriteconfig
-		if [ ! -f ${liquid_home}/amavisd/.spamassassin/bayes_toks ]; then
+		if [ ! -f ${zimbra_home}/amavisd/.spamassassin/bayes_toks ]; then
 			# Initial bayes seeding.
-			cp -f ${liquid_home}/amavisd/.spamassassin/init/* \
-				${liquid_home}/amavisd/.spamassassin
-			chmod 644 ${liquid_home}/amavisd/.spamassassin/bayes*
+			cp -f ${zimbra_home}/amavisd/.spamassassin/init/* \
+				${zimbra_home}/amavisd/.spamassassin
+			chmod 644 ${zimbra_home}/amavisd/.spamassassin/bayes*
 		fi
-		${liquid_home}/amavisd/sbin/amavisd -c \
-			${liquid_home}/conf/amavisd.conf &
+		${zimbra_home}/amavisd/sbin/amavisd -c \
+			${zimbra_home}/conf/amavisd.conf &
         ;;
 
     'kill')
 		cpid=`cat /opt/liquid/log/amavisd.pid`
         kill -TERM "$cpid" 2> /dev/null
 		sleep 2
-		umount ${liquid_home}/amavisd/tmp
+		umount ${zimbra_home}/amavisd/tmp
         ;;
 
     'stop')
 		cpid=`cat /opt/liquid/log/amavisd.pid`
         kill -TERM "$cpid" 2> /dev/null
-		killall -TERM ${liquid_home}/amavisd/sbin/amavisd
+		killall -TERM ${zimbra_home}/amavisd/sbin/amavisd
 		sleep 2
-		umount ${liquid_home}/amavisd/tmp
+		umount ${zimbra_home}/amavisd/tmp
         ;;
     
     'restart')

@@ -2,7 +2,7 @@
 
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
-    liquid_home \
+    zimbra_home \
     liquid_index_directory \
     liquid_store_directory \
     liquid_log_directory \
@@ -16,11 +16,11 @@ sql_root_pw=$1
 #
 # Sanity checks
 #
-zmassert -x ${liquid_home}/bin/lqmycnf
-zmassert -x ${liquid_home}/bin/mysqladmin
-zmassert -x ${liquid_home}/bin/mysql
-zmassert -x ${liquid_home}/bin/zmlocalconfig
-zmassert -x ${liquid_home}/bin/lqmypasswd
+zmassert -x ${zimbra_home}/bin/lqmycnf
+zmassert -x ${zimbra_home}/bin/mysqladmin
+zmassert -x ${zimbra_home}/bin/mysql
+zmassert -x ${zimbra_home}/bin/zmlocalconfig
+zmassert -x ${zimbra_home}/bin/lqmypasswd
 zmassert -x ${mysql_directory}/scripts/mysql_install_db
 zmassert -r ${liquid_db_directory}/db.sql
 zmassert -r ${liquid_db_directory}/versions-init.sql
@@ -39,7 +39,7 @@ mkdir -p ${liquid_log_directory}
 #
 echo '*' Generating mysql config ${mysql_mycnf}
 rm -f ${mysql_mycnf}
-${liquid_home}/bin/lqmycnf > ${mysql_mycnf}
+${zimbra_home}/bin/lqmycnf > ${mysql_mycnf}
 
 #
 # Create database
@@ -53,7 +53,7 @@ echo '*' Creating database in ${mysql_data_directory}
 # Start mysql server
 #
 echo '*' Starting mysql server
-${liquid_home}/bin/mysql.server start \
+${zimbra_home}/bin/mysql.server start \
     >> ${liquid_log_directory}/lqmyinit.log 2>&1
 sleep 1
 
@@ -61,11 +61,11 @@ sleep 1
 # Load liquid sql files
 #
 echo '*' Loading schema ${liquid_db_directory}/db.sql 
-${liquid_home}/bin/mysql -u root --password= < \
+${zimbra_home}/bin/mysql -u root --password= < \
     ${liquid_db_directory}/db.sql
 
 echo '*' Loading version from ${liquid_db_directory}/versions-init.sql
-${liquid_home}/bin/mysql -u root --password= < \
+${zimbra_home}/bin/mysql -u root --password= < \
     ${liquid_db_directory}/versions-init.sql
 
 #
@@ -73,15 +73,15 @@ ${liquid_home}/bin/mysql -u root --password= < \
 #
 if [ x$sql_root_pw = "x" ]; then
 	echo '*' Setting random password for mysql root user in liquid local config
-	${liquid_home}/bin/zmlocalconfig -r -f -e mysql_root_password
+	${zimbra_home}/bin/zmlocalconfig -r -f -e mysql_root_password
 
 	echo '*' Setting random password for mysql liquid user in liquid local config
-	${liquid_home}/bin/zmlocalconfig -r -f -e liquid_mysql_password
+	${zimbra_home}/bin/zmlocalconfig -r -f -e liquid_mysql_password
 else
 	echo '*' Setting password for mysql root user in liquid local config
-	${liquid_home}/bin/zmlocalconfig -f -e mysql_root_password=$sql_root_pw
+	${zimbra_home}/bin/zmlocalconfig -f -e mysql_root_password=$sql_root_pw
 	echo '*' Setting password for mysql liquid user in liquid local config
-	${liquid_home}/bin/zmlocalconfig -f -e liquid_mysql_password=$sql_root_pw
+	${zimbra_home}/bin/zmlocalconfig -f -e liquid_mysql_password=$sql_root_pw
 fi
 
 #
@@ -92,7 +92,7 @@ fi
 #
 zmsetvars mysql_root_password liquid_mysql_password
 echo '*' Changing mysql root user password
-${liquid_home}/bin/mysqladmin -u root --password= password ${mysql_root_password}
+${zimbra_home}/bin/mysqladmin -u root --password= password ${mysql_root_password}
 
 echo '*' Changing mysql liquid user password
-${liquid_home}/bin/lqmypasswd ${liquid_mysql_password}
+${zimbra_home}/bin/lqmypasswd ${liquid_mysql_password}

@@ -7,9 +7,9 @@ fi
 
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
-	liquid_home 
+	zimbra_home 
 
-if [ ! -L ${liquid_home}/openldap ]; then
+if [ ! -L ${zimbra_home}/openldap ]; then
 	# No ldap - exit gracefully
 	exit 0
 fi
@@ -17,9 +17,9 @@ fi
 DEST=$1
 
 if [ x$DEST = "x" ]; then
-	DEST="${liquid_home}/backup/ldap"
+	DEST="${zimbra_home}/backup/ldap"
 fi
 
 mkdir -p $DEST
 
-${liquid_home}/openldap/sbin/slapcat > $DEST/ldap.bak
+${zimbra_home}/openldap/sbin/slapcat > $DEST/ldap.bak

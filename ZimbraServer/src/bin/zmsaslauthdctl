@@ -7,7 +7,7 @@ fi
 
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
-    liquid_home \
+    zimbra_home \
     liquid_log_directory
 
 rewriteconfig() {
@@ -21,20 +21,20 @@ rewriteconfig() {
 #
 case "$1" in
     'start')
-		mkdir -p ${liquid_home}/cyrus-sasl-2.1.21.LIQUID/state
+		mkdir -p ${zimbra_home}/cyrus-sasl-2.1.21.LIQUID/state
 		rewriteconfig
-		${liquid_home}/cyrus-sasl-2.1.21.LIQUID/sbin/saslauthd -a liquid 
+		${zimbra_home}/cyrus-sasl-2.1.21.LIQUID/sbin/saslauthd -a liquid 
         ;;
 
     'kill')
-		cpid=`cat ${liquid_home}/cyrus-sasl-2.1.21.LIQUID/state/saslauthd.pid`
+		cpid=`cat ${zimbra_home}/cyrus-sasl-2.1.21.LIQUID/state/saslauthd.pid`
         kill -TERM "$cpid" 2> /dev/null
         ;;
 
     'stop')
-		cpid=`cat ${liquid_home}/cyrus-sasl-2.1.21.LIQUID/state/saslauthd.pid`
+		cpid=`cat ${zimbra_home}/cyrus-sasl-2.1.21.LIQUID/state/saslauthd.pid`
         kill -TERM "$cpid" 2> /dev/null
-		killall -TERM ${liquid_home}/cyrus-sasl-2.1.21.LIQUID/sbin/saslauthd
+		killall -TERM ${zimbra_home}/cyrus-sasl-2.1.21.LIQUID/sbin/saslauthd
         ;;
     
     'restart')
@@ -43,7 +43,7 @@ case "$1" in
         ;;
 	
 	'status')
-		cpid=`cat ${liquid_home}/cyrus-sasl-2.1.21.LIQUID/state/saslauthd.pid`
+		cpid=`cat ${zimbra_home}/cyrus-sasl-2.1.21.LIQUID/state/saslauthd.pid`
         kill -0 "$cpid" 2> /dev/null
 		exit $?
 		;;

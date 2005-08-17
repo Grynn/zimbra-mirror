@@ -7,7 +7,7 @@ fi
 
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
-    liquid_home \
+    zimbra_home \
     tomcat_directory \
     tomcat_java_home \
     tomcat_java_heap_memory_percent \
@@ -91,7 +91,7 @@ case "$1" in
         fi
         # set JAVA_OPTS only in the start case - otherwise the VM
         # invoked to stop tomcat could trash your java.hprof.txt file
-        export JAVA_OPTS="${tomcat_java_options} -Xms${jm}m -Xmx${jm}m -Djava.library.path=${liquid_home}/lib"
+        export JAVA_OPTS="${tomcat_java_options} -Xms${jm}m -Xmx${jm}m -Djava.library.path=${zimbra_home}/lib"
         ${tomcat_directory}/bin/catalina.sh start
         ;;
 

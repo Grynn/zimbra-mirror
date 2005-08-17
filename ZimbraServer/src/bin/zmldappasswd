@@ -6,7 +6,7 @@
 #
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
-    liquid_home \
+    zimbra_home \
     liquid_ldap_userdn
 
 #
@@ -45,8 +45,8 @@ newpassword="$1"
 # for now you will have to restart tomcat
 #
 echo "Updating local config"
-if ! ${liquid_home}/bin/zmlocalconfig -f -e ${password_key}=${newpassword}; then
-    echo Error: command failed: ${liquid_home}/bin/zmlocalconfig -e ${password_key}='#'
+if ! ${zimbra_home}/bin/zmlocalconfig -f -e ${password_key}=${newpassword}; then
+    echo Error: command failed: ${zimbra_home}/bin/zmlocalconfig -e ${password_key}='#'
     exit 1
 fi
 
@@ -54,15 +54,15 @@ fi
 # Stop ldap
 #
 echo "Stopping ldap"
-${liquid_home}/bin/ldap stop
+${zimbra_home}/bin/ldap stop
 
 #
 # Get the SHA password.  We have modified one of these above.
 #
 zmsetvars ldap_root_password liquid_ldap_password
-root_sha=`${liquid_home}/openldap/sbin/slappasswd -s ${ldap_root_password}`
-liquid_sha=`${liquid_home}/openldap/sbin/slappasswd -s ${liquid_ldap_password}`
-config_dir="${liquid_home}/openldap/etc/openldap"
+root_sha=`${zimbra_home}/openldap/sbin/slappasswd -s ${ldap_root_password}`
+liquid_sha=`${zimbra_home}/openldap/sbin/slappasswd -s ${liquid_ldap_password}`
+config_dir="${zimbra_home}/openldap/etc/openldap"
 
 #
 # Update slapd.conf
@@ -76,7 +76,7 @@ mv -f /tmp/slapd.conf.$$ ${config_dir}/slapd.conf
 # Start ldap
 #
 echo "Starting ldap"
-${liquid_home}/bin/ldap start > /dev/null 2>&1
+${zimbra_home}/bin/ldap start > /dev/null 2>&1
 
 #
 # Update liquid.ldif

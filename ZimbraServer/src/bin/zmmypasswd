@@ -5,7 +5,7 @@
 # MySQL.
 #
 source `dirname $0`/zmshutil || exit 1
-zmsetvars liquid_home liquid_mysql_user mysql_root_password
+zmsetvars zimbra_home liquid_mysql_user mysql_root_password
 
 #
 # Usage.
@@ -46,7 +46,7 @@ newpassword="$1"
 #
 if [ ${password_key} = liquid_mysql_password ]; then 
     # Change the password in mysql.
-    cat <<EOF | ${liquid_home}/bin/mysql -u root --password="${mysql_root_password}"
+    cat <<EOF | ${zimbra_home}/bin/mysql -u root --password="${mysql_root_password}"
 SET PASSWORD FOR '${liquid_mysql_user}' = PASSWORD('${newpassword}');
 SET PASSWORD FOR '${liquid_mysql_user}'@'localhost' = PASSWORD('${newpassword}');
 SET PASSWORD FOR '${liquid_mysql_user}'@'localhost.localdomain' = PASSWORD('${newpassword}');
@@ -63,8 +63,8 @@ fi
 # For mysql_root_password
 #
 if [ ${password_key} = mysql_root_password ]; then
-    echo ${liquid_home}/bin/mysqladmin -u root --password="${mysql_root_password}" password "${newpassword}"
-    ${liquid_home}/bin/mysqladmin -u root --password="${mysql_root_password}" password "${newpassword}"
+    echo ${zimbra_home}/bin/mysqladmin -u root --password="${mysql_root_password}" password "${newpassword}"
+    ${zimbra_home}/bin/mysqladmin -u root --password="${mysql_root_password}" password "${newpassword}"
 	if [ $? = 0 ]; then
 		echo '*' Changed mysql root user password
 	else
@@ -77,7 +77,7 @@ fi
 # Change the password in local config.  TODO: notify app server that
 # the password has changed, for now you will have to restart tomcat
 #
-if ! ${liquid_home}/bin/zmlocalconfig -f -e "${password_key}=${newpassword}"; then
-    echo Error: command failed: ${liquid_home}/bin/zmlocalconfig -f -e ${password_key}='#'
+if ! ${zimbra_home}/bin/zmlocalconfig -f -e "${password_key}=${newpassword}"; then
+    echo Error: command failed: ${zimbra_home}/bin/zmlocalconfig -f -e ${password_key}='#'
     exit 1
 fi

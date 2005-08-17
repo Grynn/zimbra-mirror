@@ -5,7 +5,7 @@ progdir=`dirname $0`
 source `dirname $0`/zmshutil || exit 1
 
 zmsetvars \
-	liquid_home \
+	zimbra_home \
 	liquid_server_hostname 
 
 rewriteconfig() {
@@ -18,6 +18,6 @@ if [ $1 = "start" -o $1 = "reload" ]; then
 	fi
 fi
 
-sudo ${liquid_home}/postfix/sbin/postalias /etc/aliases
-sudo ${liquid_home}/postfix/sbin/postfix $@
+sudo ${zimbra_home}/postfix/sbin/postalias /etc/aliases
+sudo ${zimbra_home}/postfix/sbin/postfix $@
 

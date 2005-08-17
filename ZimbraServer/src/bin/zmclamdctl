@@ -7,7 +7,7 @@ fi
 
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
-    liquid_home \
+    zimbra_home \
     liquid_log_directory
 
 rewriteconfig() {
@@ -21,22 +21,22 @@ rewriteconfig() {
 #
 case "$1" in
     'start')
-		if [ ! -f ${liquid_home}/clamav/db/daily.cvd ]; then
+		if [ ! -f ${zimbra_home}/clamav/db/daily.cvd ]; then
 			# Start with the files we ship.
-			cp -f ${liquid_home}/clamav/db/daily.cvd.init \
-				${liquid_home}/clamav/db/daily.cvd
-			cp -f ${liquid_home}/clamav/db/main.cvd.init \
-				${liquid_home}/clamav/db/main.cvd
+			cp -f ${zimbra_home}/clamav/db/daily.cvd.init \
+				${zimbra_home}/clamav/db/daily.cvd
+			cp -f ${zimbra_home}/clamav/db/main.cvd.init \
+				${zimbra_home}/clamav/db/main.cvd
 			# Init the db
-			${liquid_home}/clamav/bin/freshclam \
-				--config-file=${liquid_home}/conf/freshclam.conf &
+			${zimbra_home}/clamav/bin/freshclam \
+				--config-file=${zimbra_home}/conf/freshclam.conf &
 		fi
 		rewriteconfig
-		${liquid_home}/clamav/bin/freshclam \
-			--config-file=${liquid_home}/conf/freshclam.conf -d --checks=12 \
+		${zimbra_home}/clamav/bin/freshclam \
+			--config-file=${zimbra_home}/conf/freshclam.conf -d --checks=12 \
 		    >> ${liquid_log_directory}/freshclam.log 2>&1 &
-		${liquid_home}/clamav/sbin/clamd \
-			--config-file ${liquid_home}/conf/clamd.conf \
+		${zimbra_home}/clamav/sbin/clamd \
+			--config-file ${zimbra_home}/conf/clamd.conf \
 		    >> ${liquid_log_directory}/clamd.log 2>&1 &
         ;;
 
@@ -52,8 +52,8 @@ case "$1" in
         kill -TERM "$cpid" 2> /dev/null
 		cpid=`cat /opt/liquid/log/clamd.pid`
         kill -TERM "$cpid" 2> /dev/null
-		killall -TERM ${liquid_home}/clamav/bin/freshclam
-		killall -TERM ${liquid_home}/clamav/sbin/clamd
+		killall -TERM ${zimbra_home}/clamav/bin/freshclam
+		killall -TERM ${zimbra_home}/clamav/sbin/clamd
         ;;
     
     'restart')

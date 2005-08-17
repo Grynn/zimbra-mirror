@@ -7,13 +7,13 @@
 # script instead.
 #
 source `dirname $0`/zmshutil || exit 1
-zmsetvars liquid_home liquid_java_home
+zmsetvars zimbra_home liquid_java_home
 
-jars=`echo ${liquid_home}/lib/*.jar | sed 's/ /:/g'`
+jars=`echo ${zimbra_home}/lib/*.jar | sed 's/ /:/g'`
 
 exec ${liquid_java_home}/bin/java \
      -client \
-     -Dliquid.home=${liquid_home} \
-     -Djava.library.path=${liquid_home}/lib \
+     -Dliquid.home=${zimbra_home} \
+     -Djava.library.path=${zimbra_home}/lib \
      -classpath ${jars} \
      "$@"
