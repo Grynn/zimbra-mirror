@@ -53,7 +53,7 @@
             <class>org.apache.jsieve.commands.optional.FileInto</class>
         </entry>            
 
-		<!-- Liquid extension actions -->
+		<!-- Zimbra extension actions -->
 		<entry>
 			<name>tag</name>
 			<class>com.zimbra.cs.filter.jsieve.Tag</class>
@@ -111,7 +111,7 @@
             <name>envelope</name>
             <class>org.apache.jsieve.tests.optional.Envelope</class>
         </entry>          
-        <!-- Liquid extension tests -->
+        <!-- Zimbra extension tests -->
         <entry>
         	<name>date</name>
         	<class>com.zimbra.cs.filter.jsieve.DateTest</class>
