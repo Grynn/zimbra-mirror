@@ -7,7 +7,7 @@ use Liquid::Failover::IPUtil;
 
 sub usage() {
     print STDERR <<_EOM_;
-Usage: lqipup.pl -d <eth device> -i <IP address> -r <router IP>
+Usage: zmipup.pl -d <eth device> -i <IP address> -r <router IP>
    -d: network interface device
    -i: IP address to bring up
    -r: next-hop router IP

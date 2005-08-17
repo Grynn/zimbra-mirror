@@ -7,7 +7,7 @@ use Liquid::Failover::IPUtil;
 
 sub usage() {
     print STDERR <<_EOM_;
-Usage: lqipdown.pl -i <IP address>
+Usage: zmipdown.pl -i <IP address>
    -i: IP address to bring down
 _EOM_
     exit(-1);

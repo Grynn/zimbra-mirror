@@ -7,7 +7,7 @@ use Liquid::Failover::IPUtil;
 
 sub usage() {
     print STDERR <<_EOM_;
-Usage: lqipowner.pl -i <IP address>
+Usage: zmipowner.pl -i <IP address>
    -i: IP address to check ownership of
 _EOM_
     exit(-1);
