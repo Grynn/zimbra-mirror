@@ -14,7 +14,7 @@
   <target name="jar" depends="compile">
     <mkdir dir="build/classes/META-INF/services"/>
     <copy todir="build/classes/META-INF/services" file="conf/java.nio.charset.spi.CharsetProvider"/>
-    <jar destfile="build/liquidcharset.jar"
+    <jar destfile="build/zimbra-charset.jar"
           basedir="build/classes" includes="**/*UTF7*.class **/java.nio.charset.spi.CharsetProvider"/>
     <delete dir="build/classes/META-INF"/>
   </target>
