@@ -1,12 +1,12 @@
 #!/bin/bash
 
 source `dirname $0`/lqshutil || exit 1
-lqsetvars mysql_directory mysql_pidfile mysql_mycnf
+zmsetvars mysql_directory mysql_pidfile mysql_mycnf
 
-lqassert -d ${mysql_directory}
-lqassert -x ${mysql_directory}/bin/mysqld_safe
-lqassert -r ${mysql_mycnf}
-lqassert -d `dirname ${mysql_pidfile}`
+zmassert -d ${mysql_directory}
+zmassert -x ${mysql_directory}/bin/mysqld_safe
+zmassert -r ${mysql_mycnf}
+zmassert -d `dirname ${mysql_pidfile}`
 
 #
 # Path to my.cnf

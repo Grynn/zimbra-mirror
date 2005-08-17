@@ -29,7 +29,7 @@ if ( -f $dfilename ) {
 	exit (1);
 }
 
-# @@var@@ for lqlocalconfig variables
+# @@var@@ for zmlocalconfig variables
 # %%var%% for lqprov variables
 
 open (SOURCE, $sfilename) or die "Can't open $sfilename: $!";
@@ -43,7 +43,7 @@ my $host = "";
 foreach my $sline (@slines) {
 	while ($sline =~ m/\@\@([^\@]+)\@\@/g) {
 		my $sr = $1;
-		my $rep=`/opt/liquid/bin/lqlocalconfig -q -m nokey $sr`;
+		my $rep=`/opt/liquid/bin/zmlocalconfig -q -m nokey $sr`;
 		chomp $rep;
 		$sline =~ s/\@\@$sr\@\@/$rep/g;
 	}
@@ -63,7 +63,7 @@ foreach my $sline (@slines) {
 			my ($cmd, $key, $pattern) = ($sr =~ m/comment ([^:]+):(\S+) (.*)/);
 			if ($cmd eq "SERVER") {
 				if ($host eq "") {
-					$host=`/opt/liquid/bin/lqlocalconfig -q -m nokey liquid_server_hostname`;
+					$host=`/opt/liquid/bin/zmlocalconfig -q -m nokey liquid_server_hostname`;
 					chomp $host;
 				}
 				$rep = `/opt/liquid/bin/lqprov gs $host | sed -e 's/[^ ]* //' | grep $pattern`;

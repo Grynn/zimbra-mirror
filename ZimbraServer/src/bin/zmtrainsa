@@ -27,7 +27,7 @@ if [ ! -f /opt/liquid/bin/fetchmail ]; then
 fi
 
 source `dirname $0`/lqshutil || exit 1
-lqsetvars \
+zmsetvars \
 	liquid_home \
 	liquid_server_hostname
 

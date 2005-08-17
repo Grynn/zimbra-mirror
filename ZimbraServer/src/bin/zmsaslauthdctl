@@ -6,13 +6,13 @@ if [ x`whoami` != xliquid ]; then
 fi
 
 source `dirname $0`/lqshutil || exit 1
-lqsetvars \
+zmsetvars \
     liquid_home \
     liquid_log_directory
 
 rewriteconfig() {
 	if [ x$2 = "x" ]; then
-		/opt/liquid/bin/lqmtaconfig sasl > /dev/null 2>&1
+		/opt/liquid/bin/zmmtaconfig sasl > /dev/null 2>&1
 	fi
 }
 

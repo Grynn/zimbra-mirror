@@ -1,7 +1,7 @@
 #!/bin/bash
 
 source `dirname $0`/lqshutil || exit 1
-lqsetvars \
+zmsetvars \
     liquid_log_directory \
     mysql_bind_address \
     mysql_data_directory \

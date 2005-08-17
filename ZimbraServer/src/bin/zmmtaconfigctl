@@ -6,7 +6,7 @@ if [ x`whoami` != xliquid ]; then
 fi
 
 source `dirname $0`/lqshutil || exit 1
-lqsetvars \
+zmsetvars \
     liquid_home \
     liquid_log_directory
 
@@ -15,17 +15,17 @@ lqsetvars \
 #
 case "$1" in
     'start')
-		${liquid_home}/bin/lqmtaconfig   \
-		    >> ${liquid_log_directory}/lqmtaconfig.log 2>&1 &
+		${liquid_home}/bin/zmmtaconfig   \
+		    >> ${liquid_log_directory}/zmmtaconfig.log 2>&1 &
         ;;
 
     'kill')
-		cpid=`cat /opt/liquid/log/lqmtaconfig.pid`
+		cpid=`cat /opt/liquid/log/zmmtaconfig.pid`
         kill -TERM "$cpid" 2> /dev/null
         ;;
 
     'stop')
-		cpid=`cat /opt/liquid/log/lqmtaconfig.pid`
+		cpid=`cat /opt/liquid/log/zmmtaconfig.pid`
         kill -TERM "$cpid" 2> /dev/null
         ;;
     
@@ -35,7 +35,7 @@ case "$1" in
         ;;
 	
 	'status')
-		cpid=`cat /opt/liquid/log/lqmtaconfig.pid`
+		cpid=`cat /opt/liquid/log/zmmtaconfig.pid`
         kill -0 "$cpid" 2> /dev/null
 		exit $?
 		;;

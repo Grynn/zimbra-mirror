@@ -12,10 +12,10 @@ my $mySqlCommand = "mysql";
 my $verbose = 0;
 my $usage = 0;
 
-if (-f "/opt/liquid/bin/lqlocalconfig") {
-    $password = `lqlocalconfig -s -m nokey liquid_mysql_password`;
+if (-f "/opt/liquid/bin/zmlocalconfig") {
+    $password = `zmlocalconfig -s -m nokey liquid_mysql_password`;
     chomp $password;
-    $user = `lqlocalconfig -m nokey liquid_mysql_user`;
+    $user = `zmlocalconfig -m nokey liquid_mysql_user`;
     chomp $user;
 }
 

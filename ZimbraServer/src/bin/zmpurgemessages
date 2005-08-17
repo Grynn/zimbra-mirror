@@ -68,7 +68,7 @@ sub purgeMessages {
 	my $host = "localhost";
 	my $user = "liquid";
 	chomp $user;
-	my $pass = `lqlocalconfig -s -m nokey liquid_ldap_password`;
+	my $pass = `zmlocalconfig -s -m nokey liquid_ldap_password`;
 	chomp $pass;
 	$authToken = get_auth_token ($host, $user, $pass );
 

@@ -5,7 +5,7 @@
 # ldap configs, and reruns liquid.ldif
 #
 source `dirname $0`/lqshutil || exit 1
-lqsetvars \
+zmsetvars \
     liquid_home \
     liquid_ldap_userdn
 
@@ -45,8 +45,8 @@ newpassword="$1"
 # for now you will have to restart tomcat
 #
 echo "Updating local config"
-if ! ${liquid_home}/bin/lqlocalconfig -f -e ${password_key}=${newpassword}; then
-    echo Error: command failed: ${liquid_home}/bin/lqlocalconfig -e ${password_key}='#'
+if ! ${liquid_home}/bin/zmlocalconfig -f -e ${password_key}=${newpassword}; then
+    echo Error: command failed: ${liquid_home}/bin/zmlocalconfig -e ${password_key}='#'
     exit 1
 fi
 
@@ -59,7 +59,7 @@ ${liquid_home}/bin/ldap stop
 #
 # Get the SHA password.  We have modified one of these above.
 #
-lqsetvars ldap_root_password liquid_ldap_password
+zmsetvars ldap_root_password liquid_ldap_password
 root_sha=`${liquid_home}/openldap/sbin/slappasswd -s ${ldap_root_password}`
 liquid_sha=`${liquid_home}/openldap/sbin/slappasswd -s ${liquid_ldap_password}`
 config_dir="${liquid_home}/openldap/etc/openldap"

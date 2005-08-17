@@ -8,15 +8,15 @@
 #
 # Find and set local config variables.
 #
-lqsetvars() {
-	lqlocalconfig="/opt/liquid/bin/lqlocalconfig"
-	if [ ! -x "${lqlocalconfig}" ]; then 
-	    echo Error: can not find lqlocalconfig program
+zmsetvars() {
+	zmlocalconfig="/opt/liquid/bin/zmlocalconfig"
+	if [ ! -x "${zmlocalconfig}" ]; then 
+	    echo Error: can not find zmlocalconfig program
 	    exit 1
 	fi
 
-	if ! eval `${lqlocalconfig} -q -m shell "$@"`; then
-		echo Error: executing: ${lqlocalconfig} -m shell "$@"
+	if ! eval `${zmlocalconfig} -q -m shell "$@"`; then
+		echo Error: executing: ${zmlocalconfig} -m shell "$@"
 		exit 1
 	fi
 
@@ -31,7 +31,7 @@ lqsetvars() {
 #
 # Check if a conditional expression is true.
 #
-lqassert() { 
+zmassert() { 
     if [ $@ ]; then
     	return;
     fi

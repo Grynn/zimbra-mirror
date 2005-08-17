@@ -14,12 +14,12 @@ my $usage = 0;
 my $logDir = "/opt/liquid/log";
 my $ignore;
 
-if (-f "/opt/liquid/bin/lqlocalconfig") {
-    $password = `lqlocalconfig -s -m nokey liquid_mysql_password`;
+if (-f "/opt/liquid/bin/zmlocalconfig") {
+    $password = `zmlocalconfig -s -m nokey liquid_mysql_password`;
     chomp $password;
-    $user = `lqlocalconfig -m nokey liquid_mysql_user`;
+    $user = `zmlocalconfig -m nokey liquid_mysql_user`;
     chomp $user;
-    $logDir = `lqlocalconfig -x -m nokey liquid_log_directory`;
+    $logDir = `zmlocalconfig -x -m nokey liquid_log_directory`;
     chomp $logDir;
 }
 

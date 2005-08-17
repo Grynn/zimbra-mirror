@@ -6,7 +6,7 @@ if [ x`whoami` = xroot ]; then
 fi
 
 source `dirname $0`/lqshutil || exit 1
-lqsetvars \
+zmsetvars \
     liquid_home \
     tomcat_directory \
     tomcat_java_home \
@@ -21,9 +21,9 @@ if [ -d /Library/Java/Home ]; then
 	export JAVA_HOME=/Library/Java/Home
 else
 	export JAVA_HOME=${tomcat_java_home}
-	lqassert -d ${tomcat_java_home}
-	lqassert -x ${tomcat_java_home}/bin/java
-	lqassert -d ${tomcat_directory}
+	zmassert -d ${tomcat_java_home}
+	zmassert -x ${tomcat_java_home}/bin/java
+	zmassert -d ${tomcat_directory}
 fi
 
 #

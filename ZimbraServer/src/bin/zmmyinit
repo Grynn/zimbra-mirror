@@ -1,7 +1,7 @@
 #!/bin/bash
 
 source `dirname $0`/lqshutil || exit 1
-lqsetvars \
+zmsetvars \
     liquid_home \
     liquid_index_directory \
     liquid_store_directory \
@@ -16,14 +16,14 @@ sql_root_pw=$1
 #
 # Sanity checks
 #
-lqassert -x ${liquid_home}/bin/lqmycnf
-lqassert -x ${liquid_home}/bin/mysqladmin
-lqassert -x ${liquid_home}/bin/mysql
-lqassert -x ${liquid_home}/bin/lqlocalconfig
-lqassert -x ${liquid_home}/bin/lqmypasswd
-lqassert -x ${mysql_directory}/scripts/mysql_install_db
-lqassert -r ${liquid_db_directory}/db.sql
-lqassert -r ${liquid_db_directory}/versions-init.sql
+zmassert -x ${liquid_home}/bin/lqmycnf
+zmassert -x ${liquid_home}/bin/mysqladmin
+zmassert -x ${liquid_home}/bin/mysql
+zmassert -x ${liquid_home}/bin/zmlocalconfig
+zmassert -x ${liquid_home}/bin/lqmypasswd
+zmassert -x ${mysql_directory}/scripts/mysql_install_db
+zmassert -r ${liquid_db_directory}/db.sql
+zmassert -r ${liquid_db_directory}/versions-init.sql
 
 #
 # Create necessary directories
@@ -73,15 +73,15 @@ ${liquid_home}/bin/mysql -u root --password= < \
 #
 if [ x$sql_root_pw = "x" ]; then
 	echo '*' Setting random password for mysql root user in liquid local config
-	${liquid_home}/bin/lqlocalconfig -r -f -e mysql_root_password
+	${liquid_home}/bin/zmlocalconfig -r -f -e mysql_root_password
 
 	echo '*' Setting random password for mysql liquid user in liquid local config
-	${liquid_home}/bin/lqlocalconfig -r -f -e liquid_mysql_password
+	${liquid_home}/bin/zmlocalconfig -r -f -e liquid_mysql_password
 else
 	echo '*' Setting password for mysql root user in liquid local config
-	${liquid_home}/bin/lqlocalconfig -f -e mysql_root_password=$sql_root_pw
+	${liquid_home}/bin/zmlocalconfig -f -e mysql_root_password=$sql_root_pw
 	echo '*' Setting password for mysql liquid user in liquid local config
-	${liquid_home}/bin/lqlocalconfig -f -e liquid_mysql_password=$sql_root_pw
+	${liquid_home}/bin/zmlocalconfig -f -e liquid_mysql_password=$sql_root_pw
 fi
 
 #
@@ -90,7 +90,7 @@ fi
 # use 'lqmypasswd --root' here because of bootstrapping problems - at
 # this stage we know that the root password is empty.
 #
-lqsetvars mysql_root_password liquid_mysql_password
+zmsetvars mysql_root_password liquid_mysql_password
 echo '*' Changing mysql root user password
 ${liquid_home}/bin/mysqladmin -u root --password= password ${mysql_root_password}
 

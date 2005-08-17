@@ -26,27 +26,27 @@ if (-f "/etc/SuSE-release") {
 
 sub usage() {
 print STDERR <<_USAGE_;
-Usage: lqiptables -i [<IP address> ...]
-       lqiptables -u
-       lqiptables -p
-       lqiptables -h
+Usage: zmiptables -i [<IP address> ...]
+       zmiptables -u
+       zmiptables -p
+       zmiptables -h
 
 Examples
 
   # Install rules on all IP addresses of host.
-  lqiptables -i
+  zmiptables -i
 
   # Install rules on specified IP addresses plus loopback.
-  lqiptables -i 192.168.0.10 192.168.0.11
+  zmiptables -i 192.168.0.10 192.168.0.11
 
   # Uninstall all rules on all addresses.
-  lqiptables -u
+  zmiptables -u
 
   # Print the port mappings to be installed and available IP addresses.
-  lqiptables -p
+  zmiptables -p
 
   # Print this usage screen.
-  lqiptables -h
+  zmiptables -h
 
 To see the rules installed, run:
 

@@ -4,12 +4,12 @@ progdir=`dirname $0`
 
 source `dirname $0`/lqshutil || exit 1
 
-lqsetvars \
+zmsetvars \
 	liquid_home \
 	liquid_server_hostname 
 
 rewriteconfig() {
-    /opt/liquid/bin/lqmtaconfig mta > /dev/null 2>&1
+    /opt/liquid/bin/zmmtaconfig mta > /dev/null 2>&1
 }
 
 if [ $1 = "start" -o $1 = "reload" ]; then

@@ -8,14 +8,14 @@ config_dir=/opt/liquid/conf
 ldap_pw=$1
 
 if [ x$ldap_pw = "x" ]; then
-	lqlocalconfig -f -e -r liquid_ldap_password
-	lqlocalconfig -f -e -r ldap_root_password
+	zmlocalconfig -f -e -r liquid_ldap_password
+	zmlocalconfig -f -e -r ldap_root_password
 else
-	lqlocalconfig -f -e liquid_ldap_password=$ldap_pw
-	lqlocalconfig -f -e ldap_root_password=$ldap_pw
+	zmlocalconfig -f -e liquid_ldap_password=$ldap_pw
+	zmlocalconfig -f -e ldap_root_password=$ldap_pw
 fi
 
-lqsetvars liquid_ldap_userdn liquid_ldap_password ldap_root_password liquid_server_hostname
+zmsetvars liquid_ldap_userdn liquid_ldap_password ldap_root_password liquid_server_hostname
 
 root_sha=`/opt/liquid/openldap/sbin/slappasswd -s ${ldap_root_password}`
 liquid_sha=`/opt/liquid/openldap/sbin/slappasswd -s ${liquid_ldap_password}`

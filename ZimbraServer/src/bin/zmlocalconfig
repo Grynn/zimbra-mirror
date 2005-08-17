@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # We cannot rely on any config parameters when running
-# lqlocalconfig for obvious chicken and egg reasons.  So
+# zmlocalconfig for obvious chicken and egg reasons.  So
 # we just make assumptions about install layout.
 #
 

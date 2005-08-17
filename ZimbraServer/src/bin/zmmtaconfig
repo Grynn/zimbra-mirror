@@ -43,7 +43,7 @@ my %stopstarts = ();
 
 my $firstrun = 1;
 
-my $HOSTNAME = `lqlocalconfig -m nokey liquid_server_hostname`;
+my $HOSTNAME = `zmlocalconfig -m nokey liquid_server_hostname`;
 chomp $HOSTNAME;
 
 my $VARS_SET = 0;
@@ -101,8 +101,8 @@ sub setLocal {
 
 	# print STDERR "Setting locals\n";
 
-	# print STDERR "setLocal: /opt/liquid/bin/lqlocalconfig -s -x ";
-	open CMD, "$homedir/bin/lqlocalconfig -s -x |";
+	# print STDERR "setLocal: /opt/liquid/bin/zmlocalconfig -s -x ";
+	open CMD, "$homedir/bin/zmlocalconfig -s -x |";
 	my @out = <CMD>;
 	close CMD;
 
@@ -492,7 +492,7 @@ sub rewriteConfig {
 		return;
 	}
 
-	# @@var@@ for lqlocalconfig variables
+	# @@var@@ for zmlocalconfig variables
 	# %%var%% for lqprov variables
 
 	open (SOURCE, "$from") or die "Can't open $from: $!";
@@ -708,7 +708,7 @@ my $cpid;
 if ($fork) {
 	$cpid = fork();
 	if ($cpid) {
-		open PIDFILE, "> $homedir/log/lqmtaconfig.pid";
+		open PIDFILE, "> $homedir/log/zmmtaconfig.pid";
 		print PIDFILE "$cpid";
 		close PIDFILE;
 		exit (0);
