@@ -12,25 +12,25 @@
     Full list of properties are documented at:
     http://dev.mysql.com/doc/connector/j/en/cj-configuration-properties.html#id2757028
   -->
-  <!-- Uncomment to enable SQL tracing.  Traces go to liquid.log. -->
+  <!-- Uncomment to enable SQL tracing.  Traces go to zimbra.log. -->
   <!--
-  <key name="liquid_mysql_connector.profileSQL">
+  <key name="zimbra_mysql_connector.profileSQL">
     <value>true</value>
   </key>
-  <key name="liquid_mysql_connector.logSlowQueries">
+  <key name="zimbra_mysql_connector.logSlowQueries">
     <value>true</value>
   </key>
-  <key name="liquid_mysql_connector.slowQueryThresholdMillis">
+  <key name="zimbra_mysql_connector.slowQueryThresholdMillis">
     <value>50</value>
   </key>
-  <key name="liquid_mysql_connector.dumpQueriesOnException">
+  <key name="zimbra_mysql_connector.dumpQueriesOnException">
     <value>true</value>
   </key>
   -->
   <!-- MySQL bug: NullPointerException is thrown if explainSlowQueries is
        enabled and a slow query is detected.  Do not use this option. -->
   <!--
-  <key name="liquid_mysql_connector.explainSlowQueries">
+  <key name="zimbra_mysql_connector.explainSlowQueries">
     <value>false</value>
   </key>
   -->
