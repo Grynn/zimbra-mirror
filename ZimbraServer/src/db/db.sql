@@ -1,19 +1,19 @@
-CREATE DATABASE liquid;
-ALTER DATABASE liquid DEFAULT CHARACTER SET utf8;
+CREATE DATABASE zimbra;
+ALTER DATABASE zimbra DEFAULT CHARACTER SET utf8;
 
-USE liquid;
+USE zimbra;
 
-GRANT ALL ON liquid.* TO 'liquid' IDENTIFIED BY 'liquid';
-GRANT ALL ON liquid.* TO 'liquid'@'localhost' IDENTIFIED BY 'liquid';
-GRANT ALL ON liquid.* TO 'liquid'@'localhost.localdomain' IDENTIFIED BY 'liquid';
+GRANT ALL ON zimbra.* TO 'zimbra' IDENTIFIED BY 'zimbra';
+GRANT ALL ON zimbra.* TO 'zimbra'@'localhost' IDENTIFIED BY 'zimbra';
+GRANT ALL ON zimbra.* TO 'zimbra'@'localhost.localdomain' IDENTIFIED BY 'zimbra';
 
-# The liquid user needs to be able to create and drop databases and perform
+# The zimbra user needs to be able to create and drop databases and perform
 # backup and restore operations.  Give
-# liquid root access for now to keep things simple until there's a need
+# zimbra root access for now to keep things simple until there's a need
 # to add more security.
-GRANT ALL ON *.* TO 'liquid' WITH GRANT OPTION;
-GRANT ALL ON *.* TO 'liquid'@'localhost' WITH GRANT OPTION;
-GRANT ALL ON *.* TO 'liquid'@'localhost.localdomain' WITH GRANT OPTION;
+GRANT ALL ON *.* TO 'zimbra' WITH GRANT OPTION;
+GRANT ALL ON *.* TO 'zimbra'@'localhost' WITH GRANT OPTION;
+GRANT ALL ON *.* TO 'zimbra'@'localhost.localdomain' WITH GRANT OPTION;
 
  
 #-----------------------------------------------------------------------
@@ -46,13 +46,13 @@ CREATE TABLE current_volumes (
 ) ENGINE = InnoDB;
 
 INSERT INTO volume (id, name, path, file_bits, file_group_bits, mailbox_bits, mailbox_group_bits)
-  VALUES (1, 'message1', '/opt/liquid/store', 12, 8, 12, 8);
+  VALUES (1, 'message1', '/opt/zimbra/store', 12, 8, 12, 8);
 INSERT INTO volume (id, name, path, file_bits, file_group_bits, mailbox_bits, mailbox_group_bits)
-  VALUES (2, 'index1',   '/opt/liquid/index', 12, 8, 12, 8);
+  VALUES (2, 'index1',   '/opt/zimbra/index', 12, 8, 12, 8);
 INSERT INTO volume (id, name, path, file_bits, file_group_bits, mailbox_bits, mailbox_group_bits)
-  VALUES (3, 'message2', '/dev/shm/liquid/store', 12, 8, 12, 8);
+  VALUES (3, 'message2', '/dev/shm/zimbra/store', 12, 8, 12, 8);
 INSERT INTO volume (id, name, path, file_bits, file_group_bits, mailbox_bits, mailbox_group_bits)
-  VALUES (4, 'index2',   '/dev/shm/liquid/index', 12, 8, 12, 8);
+  VALUES (4, 'index2',   '/dev/shm/zimbra/index', 12, 8, 12, 8);
 INSERT INTO volume (id, name, path, file_bits, file_group_bits, mailbox_bits, mailbox_group_bits)
   VALUES (5, 'message3', '/LQMSGS/store', 12, 8, 12, 8);
 INSERT INTO volume (id, name, path, file_bits, file_group_bits, mailbox_bits, mailbox_group_bits)
@@ -162,7 +162,7 @@ INSERT INTO redolog_sequence(sequence) VALUES (0);
 # config
 #------------------------------------------------------------
 INSERT INTO config(name, value, description) VALUES
-  ('common.liquidHome', '/opt/liquid', 
+  ('common.zimbraHome', '/opt/zimbra', 
     'install root'),
 
   ('store.compressBlobs', 'false',
