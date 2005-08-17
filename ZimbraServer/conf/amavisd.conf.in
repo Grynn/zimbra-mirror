@@ -15,21 +15,21 @@ use strict;
 
 $enable_ldap = 1;
 $default_ldap = {
-	hostname      => '@@liquid_server_hostname@@',
+	hostname      => '@@zimbra_server_hostname@@',
 	timeout       => 30,
 	tls           => 0,
 	query_filter  => '(&(objectClass=amavisAccount)(mail=%m))',
-	bind_dn       => '@@liquid_ldap_userdn@@',
-	bind_password => '@@liquid_ldap_password@@',
+	bind_dn       => '@@zimbra_ldap_userdn@@',
+	bind_password => '@@zimbra_ldap_password@@',
 };
 
 $max_servers = 5;            # number of pre-forked children (2..15 is common)
-$daemon_user  = 'liquid';     # (no default;  customary: vscan or amavis)
-$daemon_group = 'liquid';     # (no default;  customary: vscan or amavis)
+$daemon_user  = 'zimbra';     # (no default;  customary: vscan or amavis)
+$daemon_group = 'zimbra';     # (no default;  customary: vscan or amavis)
 
 $mydomain = '@@av_notify_domain@@';   # a convenient default for other settings
 
-$MYHOME   = '/opt/liquid/amavisd';   # a convenient default for other settings
+$MYHOME   = '/opt/zimbra/amavisd';   # a convenient default for other settings
 $TEMPBASE = "$MYHOME/tmp";   # working directory, needs to be created manually
 $ENV{TMPDIR} = $TEMPBASE;    # environment variable TMPDIR
 $QUARANTINEDIR = "$MYHOME/quarantine";
@@ -39,7 +39,7 @@ $QUARANTINEDIR = "$MYHOME/quarantine";
 
 # $db_home   = "$MYHOME/db";
 # $helpers_home = "$MYHOME/var";  # prefer $MYHOME clean and owned by root?
-$pid_file  = "/opt/liquid/log/amavisd.pid";
+$pid_file  = "/opt/zimbra/log/amavisd.pid";
 $lock_file = "$MYHOME/var/amavisd.lock";
 #NOTE: create directories $MYHOME/tmp, $MYHOME/var, $MYHOME/db manually
 
@@ -51,7 +51,7 @@ $log_level = 3;              # verbosity 0..5
 $log_recip_templ = undef;    # disable by-recipient level-0 log entries
 $DO_SYSLOG = 0;              # log via syslogd (preferred)
 $SYSLOG_LEVEL = 'mail.debug';
-$LOGFILE = "/opt/liquid/log/amavisd.log";
+$LOGFILE = "/opt/zimbra/log/amavisd.log";
 
 $enable_db = 1;              # enable use of BerkeleyDB/libdb (SNMP and nanny)
 $enable_global_cache = 1;    # enable use of libdb-based cache if $enable_db=1
@@ -60,15 +60,15 @@ $inet_socket_port = 10024;   # listen on this local TCP port(s) (see $protocol)
 # $unix_socketname = "$MYHOME/amavisd.sock";  # when using sendmail milter
 
 # $sa_debug = 1;
-$sa_rules_file = '/opt/liquid/conf/salocal.cf';
-$sa_site_rules_file = '/opt/liquid/conf/spamassassin';
-$sa_userprefs_file = '/opt/liquid/conf/sauser.cf';
+$sa_rules_file = '/opt/zimbra/conf/salocal.cf';
+$sa_site_rules_file = '/opt/zimbra/conf/spamassassin';
+$sa_userprefs_file = '/opt/zimbra/conf/sauser.cf';
 
 $sa_tag_level_deflt  = -10.0;  # add spam info headers if at, or above that level
-$sa_tag2_level_deflt = %%range VAR:liquidSpamTagPercent 0 20%%; # add 'spam detected' headers at that level
-$sa_kill_level_deflt = %%range VAR:liquidSpamKillPercent 0 20%%; # triggers spam evasive actions
-$sa_dsn_cutoff_level = %%range VAR:liquidSpamKillPercent 0 20%%;    # spam level beyond which a DSN is not sent
-$sa_quarantine_cutoff_level = %%range VAR:liquidSpamKillPercent 0 20%%;  # spam level beyond which quarantine is off
+$sa_tag2_level_deflt = %%range VAR:zimbraSpamTagPercent 0 20%%; # add 'spam detected' headers at that level
+$sa_kill_level_deflt = %%range VAR:zimbraSpamKillPercent 0 20%%; # triggers spam evasive actions
+$sa_dsn_cutoff_level = %%range VAR:zimbraSpamKillPercent 0 20%%;    # spam level beyond which a DSN is not sent
+$sa_quarantine_cutoff_level = %%range VAR:zimbraSpamKillPercent 0 20%%;  # spam level beyond which quarantine is off
 
 $sa_mail_body_size_limit = 200*1024; # don't waste time on SA if mail is larger
 $sa_local_tests_only = 0;    # only tests which do not require internet access?
@@ -95,7 +95,7 @@ $mailfrom_to_quarantine = ''; # null return path; uses original sender if undef
 # $recipient_delimiter = '+';  # undef disables address extensions altogether
 # when enabling addr extensions do also Postfix/main.cf: recipient_delimiter=+
 
-$path = '/opt/liquid/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/sbin:/usr/bin:/bin';
+$path = '/opt/zimbra/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/sbin:/usr/bin:/bin';
 # $dspam = 'dspam';
 
 $MAXLEVELS = 14;
@@ -103,7 +103,7 @@ $MAXFILES = 1500;
 $MIN_EXPANSION_QUOTA =      100*1024;  # bytes  (default undef, not enforced)
 $MAX_EXPANSION_QUOTA = 300*1024*1024;  # bytes  (default undef, not enforced)
 
-$sa_spam_subject_tag = '%%liquidSpamSubjectTag%%';
+$sa_spam_subject_tag = '%%zimbraSpamSubjectTag%%';
 $defang_virus  = 1;  # MIME-wrap passed infected mail
 $defang_banned = 1;  # MIME-wrap passed mail containing banned name
 
@@ -121,7 +121,7 @@ $defang_banned = 1;  # MIME-wrap passed mail containing banned name
 # $final_bad_header_destiny = D_PASS;
 
 
-$warnvirusrecip = %%binary VAR:liquidVirusWarnRecipient%%;
+$warnvirusrecip = %%binary VAR:zimbraVirusWarnRecipient%%;
 # SOME OTHER VARIABLES WORTH CONSIDERING (see amavisd.conf-default for all)
 
 # $warnbadhsender,
@@ -303,7 +303,7 @@ $banned_filename_re = new_RE(
 # ['Sophos SAVI', \&sophos_savi ],
 
 # ### http://www.clamav.net/
-#  \&ask_daemon, ["CONTSCAN {}\n", "/opt/liquid/clamav/clamav.sock"],
+#  \&ask_daemon, ["CONTSCAN {}\n", "/opt/zimbra/clamav/clamav.sock"],
 ['ClamAV-clamd',
   \&ask_daemon, ["CONTSCAN {}\n", '127.0.0.1:3310'],
   qr/\bOK$/, qr/\bFOUND$/,
