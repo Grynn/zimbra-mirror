@@ -3,14 +3,14 @@
 use strict;
 
 BEGIN {
-    our $Basedir = "/opt/liquid/liquidmon";
+    our $Basedir = "/opt/zimbra/zimbramon";
 };
-our $Basedir = "/opt/liquid/liquidmon";
+our $Basedir = "/opt/zimbra/zimbramon";
 
 $SIG{CHLD} = 'IGNORE';
 
-use lib "/opt/liquid/liquidmon/lib";
-use lib "/opt/liquid/liquidmon/lib/liquidpm";
+use lib "/opt/zimbra/zimbramon/lib";
+use lib "/opt/zimbra/zimbramon/lib/liquidpm";
 
 my $id = `whoami`;
 chomp $id;
@@ -21,7 +21,7 @@ if ($id ne "liquid") {
 
 use liquidlog;
 
-my $homedir = "/opt/liquid";
+my $homedir = "/opt/zimbra";
 my $confdir = "$homedir/conf";
 
 my $config = "$confdir/lqmta.cf";
@@ -101,7 +101,7 @@ sub setLocal {
 
 	# print STDERR "Setting locals\n";
 
-	# print STDERR "setLocal: /opt/liquid/bin/zmlocalconfig -s -x ";
+	# print STDERR "setLocal: /opt/zimbra/bin/zmlocalconfig -s -x ";
 	open CMD, "$homedir/bin/zmlocalconfig -s -x |";
 	my @out = <CMD>;
 	close CMD;
@@ -143,7 +143,7 @@ sub setVar {
 	# print STDERR "Setting vars\n";
 
 	# First populate the globals, then overwrite with the locals
-	# print STDERR "setVar: /opt/liquid/bin/zmprov gacf | grep $var | grep -v InheritedAttr\n";
+	# print STDERR "setVar: /opt/zimbra/bin/zmprov gacf | grep $var | grep -v InheritedAttr\n";
 	open CMD, "$homedir/bin/zmprov gacf |  grep -v InheritedAttr |";
 	my @out = <CMD>;
 	close CMD;
@@ -690,10 +690,10 @@ sub controlProcess {
 	# 1 = start
 	my ($section) = (@_);
 	my %scripts = (
-			"mta"	=>	"/opt/liquid/bin/postfix",
-			"antispam"	=>	"/opt/liquid/bin/lqamavisdctl",
-			"antivirus"	=>	"/opt/liquid/bin/lqclamdctl",
-			"sasl"	=>	"/opt/liquid/bin/lqsaslauthdctl",
+			"mta"	=>	"/opt/zimbra/bin/postfix",
+			"antispam"	=>	"/opt/zimbra/bin/lqamavisdctl",
+			"antivirus"	=>	"/opt/zimbra/bin/lqclamdctl",
+			"sasl"	=>	"/opt/zimbra/bin/lqsaslauthdctl",
 			);
 	my $action = ("restart", "stop", "start")[$stopstarts{$section}+1];
 	# Postfix, unique to the end.

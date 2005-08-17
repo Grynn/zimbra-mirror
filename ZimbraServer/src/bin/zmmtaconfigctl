@@ -20,12 +20,12 @@ case "$1" in
         ;;
 
     'kill')
-		cpid=`cat /opt/liquid/log/zmmtaconfig.pid`
+		cpid=`cat /opt/zimbra/log/zmmtaconfig.pid`
         kill -TERM "$cpid" 2> /dev/null
         ;;
 
     'stop')
-		cpid=`cat /opt/liquid/log/zmmtaconfig.pid`
+		cpid=`cat /opt/zimbra/log/zmmtaconfig.pid`
         kill -TERM "$cpid" 2> /dev/null
         ;;
     
@@ -35,7 +35,7 @@ case "$1" in
         ;;
 	
 	'status')
-		cpid=`cat /opt/liquid/log/zmmtaconfig.pid`
+		cpid=`cat /opt/zimbra/log/zmmtaconfig.pid`
         kill -0 "$cpid" 2> /dev/null
 		exit $?
 		;;

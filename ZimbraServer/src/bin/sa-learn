@@ -18,7 +18,7 @@
 use strict;
 use bytes;
 
-use lib '/opt/liquid/liquidmon/lib';
+use lib '/opt/zimbra/zimbramon/lib';
 
 use Getopt::Long;
 use Pod::Usage;

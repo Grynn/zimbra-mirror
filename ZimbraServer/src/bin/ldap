@@ -1,9 +1,9 @@
 #!/bin/sh
 
 PID=""
-PIDFILE="/opt/liquid/openldap/var/run/slapd.pid"
+PIDFILE="/opt/zimbra/openldap/var/run/slapd.pid"
 
-mkdir -p "/opt/liquid/openldap/var/run/"
+mkdir -p "/opt/zimbra/openldap/var/run/"
 
 getpid()
 {
@@ -32,8 +32,8 @@ start()
 {
 	checkrunning
 	if [ $RUNNING = 0 ]; then
-		sudo /opt/liquid/openldap/libexec/slapd -4 -u `whoami` -h "ldap://:389/" \
-			-f /opt/liquid/openldap/etc/openldap/slapd.conf
+		sudo /opt/zimbra/openldap/libexec/slapd -4 -u `whoami` -h "ldap://:389/" \
+			-f /opt/zimbra/openldap/etc/openldap/slapd.conf
 		sleep 2
 		getpid
 		echo "Started slapd: pid $PID"

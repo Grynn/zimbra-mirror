@@ -14,7 +14,7 @@ else
     exit
 fi
 
-confdir=/opt/liquid/conf
+confdir=/opt/zimbra/conf
 mkdir -p ${confdir}
 
 cat<<EOF > ${confdir}/ldap-vmm.cf

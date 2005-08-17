@@ -91,7 +91,7 @@ mv -f /tmp/liquid.ldif.$$ ${config_dir}/liquid.ldif
 #
 echo "Running ldapmodify"
 ldapmodify -c -w ${ldap_root_password} -D ${liquid_ldap_userdn} \
-	-x -f /opt/liquid/openldap/etc/openldap/liquid.ldif > /dev/null 2>&1
+	-x -f /opt/zimbra/openldap/etc/openldap/liquid.ldif > /dev/null 2>&1
 echo "Password change complete."
 echo ""
 echo "You may need to restart tomcat, if it is running."

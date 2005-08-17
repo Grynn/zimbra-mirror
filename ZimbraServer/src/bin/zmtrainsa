@@ -20,10 +20,10 @@ if [ x`whoami` != xliquid ]; then
 	exit 1
 fi
 
-if [ ! -f /opt/liquid/bin/fetchmail ]; then
+if [ ! -f /opt/zimbra/bin/fetchmail ]; then
 	# Hack to get around RPM lameness
-	gzip -d /opt/liquid/bin/fetchmail.gz 2> /dev/null
-	chmod 755 /opt/liquid/bin/fetchmail 2> /dev/null
+	gzip -d /opt/zimbra/bin/fetchmail.gz 2> /dev/null
+	chmod 755 /opt/zimbra/bin/fetchmail 2> /dev/null
 fi
 
 source `dirname $0`/zmshutil || exit 1

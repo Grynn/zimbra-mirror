@@ -9,7 +9,7 @@ zmsetvars \
 	liquid_server_hostname 
 
 rewriteconfig() {
-    /opt/liquid/bin/zmmtaconfig mta > /dev/null 2>&1
+    /opt/zimbra/bin/zmmtaconfig mta > /dev/null 2>&1
 }
 
 if [ $1 = "start" -o $1 = "reload" ]; then

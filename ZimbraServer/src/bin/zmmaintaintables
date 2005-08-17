@@ -4,9 +4,9 @@
 
 use strict;
 
-use lib "/opt/liquid/liquidmon/lib/liquidpm";
-use lib "/opt/liquid/liquidmon/lib/liquidpm/SOAP";
-use lib "/opt/liquid/liquidmon/lib";
+use lib "/opt/zimbra/zimbramon/lib/liquidpm";
+use lib "/opt/zimbra/zimbramon/lib/liquidpm/SOAP";
+use lib "/opt/zimbra/zimbramon/lib";
 
 use liquidlog;
 
@@ -21,9 +21,9 @@ use Soap;
 
 use Time::Local;
 
-my $ACCTNS = "urn:liquidAccount";
-my $MAILNS = "urn:liquidMail";
-my $ADMINNS = "urn:liquidAdmin";
+my $ACCTNS = "urn:zimbraAccount";
+my $MAILNS = "urn:zimbraMail";
+my $ADMINNS = "urn:zimbraAdmin";
 my $SOAP = $Soap::Soap12;
 
 my $authToken;

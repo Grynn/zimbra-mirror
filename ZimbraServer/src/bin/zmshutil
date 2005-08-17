@@ -9,7 +9,7 @@
 # Find and set local config variables.
 #
 zmsetvars() {
-	zmlocalconfig="/opt/liquid/bin/zmlocalconfig"
+	zmlocalconfig="/opt/zimbra/bin/zmlocalconfig"
 	if [ ! -x "${zmlocalconfig}" ]; then 
 	    echo Error: can not find zmlocalconfig program
 	    exit 1

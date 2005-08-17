@@ -2,8 +2,8 @@
 
 source `dirname $0`/zmshutil || exit 1
 
-source_config_dir=/opt/liquid/openldap/etc/openldap
-config_dir=/opt/liquid/conf
+source_config_dir=/opt/zimbra/openldap/etc/openldap
+config_dir=/opt/zimbra/conf
 
 ldap_pw=$1
 
@@ -17,8 +17,8 @@ fi
 
 zmsetvars liquid_ldap_userdn liquid_ldap_password ldap_root_password liquid_server_hostname
 
-root_sha=`/opt/liquid/openldap/sbin/slappasswd -s ${ldap_root_password}`
-liquid_sha=`/opt/liquid/openldap/sbin/slappasswd -s ${liquid_ldap_password}`
+root_sha=`/opt/zimbra/openldap/sbin/slappasswd -s ${ldap_root_password}`
+liquid_sha=`/opt/zimbra/openldap/sbin/slappasswd -s ${liquid_ldap_password}`
 
 # Update slapd.conf
 

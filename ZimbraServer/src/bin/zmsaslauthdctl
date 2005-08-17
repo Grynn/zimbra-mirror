@@ -12,7 +12,7 @@ zmsetvars \
 
 rewriteconfig() {
 	if [ x$2 = "x" ]; then
-		/opt/liquid/bin/zmmtaconfig sasl > /dev/null 2>&1
+		/opt/zimbra/bin/zmmtaconfig sasl > /dev/null 2>&1
 	fi
 }
 

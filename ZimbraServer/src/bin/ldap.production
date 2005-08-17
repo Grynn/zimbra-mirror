@@ -1,9 +1,9 @@
 #!/bin/sh
 
 PID=""
-PIDFILE="/opt/liquid/openldap/var/run/slapd.pid"
+PIDFILE="/opt/zimbra/openldap/var/run/slapd.pid"
 
-mkdir -p "/opt/liquid/openldap/var/run/"
+mkdir -p "/opt/zimbra/openldap/var/run/"
 
 getpid()
 {
@@ -33,11 +33,11 @@ start()
 	checkrunning
 	if [ $RUNNING = 0 ]; then
 		# Run db_recover on startup, in case of power failure.
-		if [ -x /opt/liquid/sleepycat/bin/db_recover ]; then
-			/opt/liquid/sleepycat/bin/db_recover -h /opt/liquid/openldap/var/openldap-data -v
+		if [ -x /opt/zimbra/sleepycat/bin/db_recover ]; then
+			/opt/zimbra/sleepycat/bin/db_recover -h /opt/zimbra/openldap/var/openldap-data -v
 		fi
-		/opt/liquid/openldap/libexec/slapd -4 -u liquid -h "ldap://:7389/" \
-			-f /opt/liquid/conf/slapd.conf
+		/opt/zimbra/openldap/libexec/slapd -4 -u liquid -h "ldap://:7389/" \
+			-f /opt/zimbra/conf/slapd.conf
 		sleep 2
 		getpid
 		echo "Started slapd: pid $PID"

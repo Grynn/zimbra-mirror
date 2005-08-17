@@ -12,7 +12,7 @@ zmsetvars \
 
 rewriteconfig() {
 	if [ x$2 = "x" ]; then
-		/opt/liquid/bin/zmmtaconfig antispam > /dev/null 2>&1
+		/opt/zimbra/bin/zmmtaconfig antispam > /dev/null 2>&1
 	fi
 }
 
@@ -37,14 +37,14 @@ case "$1" in
         ;;
 
     'kill')
-		cpid=`cat /opt/liquid/log/amavisd.pid`
+		cpid=`cat /opt/zimbra/log/amavisd.pid`
         kill -TERM "$cpid" 2> /dev/null
 		sleep 2
 		umount ${zimbra_home}/amavisd/tmp
         ;;
 
     'stop')
-		cpid=`cat /opt/liquid/log/amavisd.pid`
+		cpid=`cat /opt/zimbra/log/amavisd.pid`
         kill -TERM "$cpid" 2> /dev/null
 		killall -TERM ${zimbra_home}/amavisd/sbin/amavisd
 		sleep 2
@@ -57,7 +57,7 @@ case "$1" in
         ;;
 	
 	'status')
-		cpid=`cat /opt/liquid/log/amavisd.pid`
+		cpid=`cat /opt/zimbra/log/amavisd.pid`
         kill -0 "$cpid" 2> /dev/null
 		exit $?
 		;;
