@@ -14,8 +14,8 @@ use XmlElement;
 use XmlDoc;
 use Soap;
 
-my $ACCTNS = "urn:liquidAccount";
-my $MAILNS = "urn:liquidMail";
+my $ACCTNS = "urn:zimbraAccount";
+my $MAILNS = "urn:zimbraMail";
 
 my $url = "http://localhost:7070/service/soap/";
 
@@ -37,7 +37,7 @@ print "authToken($authToken)\n";
 my $context = $SOAP->liquidContext($authToken);
 
 #
-#<SearchRequest xmlns="urn:liquidMail">
+#<SearchRequest xmlns="urn:zimbraMail">
 # <query>tag:\unseen</query>
 #</SearchRequest>
 

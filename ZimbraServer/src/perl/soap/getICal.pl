@@ -41,8 +41,8 @@ if ($ARGV[1] ne "") {
     $msgID = $ARGV[0];
 }
 
-my $ACCTNS = "urn:liquidAccount";
-my $MAILNS = "urn:liquidMail";
+my $ACCTNS = "urn:zimbraAccount";
+my $MAILNS = "urn:zimbraMail";
 
 my $url = "http://localhost:7070/service/soap/";
 

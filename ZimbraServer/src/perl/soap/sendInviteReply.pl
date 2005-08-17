@@ -26,8 +26,8 @@ if (defined($ARGV[1]) && $ARGV[1] ne "") {
     die "USAGE: sendInviteReply INVITE-MESSAGE-ID";
 }
 
-my $ACCTNS = "urn:liquidAccount";
-my $MAILNS = "urn:liquidMail";
+my $ACCTNS = "urn:zimbraAccount";
+my $MAILNS = "urn:zimbraMail";
 
 my $url = "http://localhost:7070/service/soap/";
 

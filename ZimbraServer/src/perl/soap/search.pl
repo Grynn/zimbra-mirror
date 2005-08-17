@@ -15,8 +15,8 @@ use XmlElement;
 use XmlDoc;
 use Soap;
 
-my $ACCTNS = "urn:liquidAccount";
-my $MAILNS = "urn:liquidMail";
+my $ACCTNS = "urn:zimbraAccount";
+my $MAILNS = "urn:zimbraMail";
 
 my $url = "http://localhost:7070/service/soap/";
 #my $url = "http://dogfood:7070/service/soap/";
@@ -55,7 +55,7 @@ my $contextStr = $context->to_string("pretty");
 print("Context = $contextStr\n");
 
 #
-#<SearchRequest xmlns="urn:liquidMail">
+#<SearchRequest xmlns="urn:zimbraMail">
 # <query>tag:\unseen</query>
 #</SearchRequest>
 

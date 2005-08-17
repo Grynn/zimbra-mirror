@@ -30,8 +30,8 @@ my $USER = 'user1@liquidsys.com';
 
 
 
-my $ACCTNS = "urn:liquidAccount";
-my $MAILNS = "urn:liquidMail";
+my $ACCTNS = "urn:zimbraAccount";
+my $MAILNS = "urn:zimbraMail";
 
 
 my $url = "http://$HOST:7070/service/soap/";

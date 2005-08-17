@@ -156,7 +156,7 @@ sub toString {
  
 sub liquidContext {
 	my ($self, $authtoken, $session, $wantcontext) = @_;
-	my $context = new XmlElement("context", "urn:liquid");
+	my $context = new XmlElement("context", "urn:zimbra");
 	my $auth = new XmlElement("authToken");
 	$auth->content($authtoken);
 	$context->add_child($auth);

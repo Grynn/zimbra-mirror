@@ -15,8 +15,8 @@ use XmlElement;
 use XmlDoc;
 use Soap;
 
-my $ACCTNS = "urn:liquidAccount";
-my $MAILNS = "urn:liquidMail";
+my $ACCTNS = "urn:zimbraAccount";
+my $MAILNS = "urn:zimbraMail";
 
 my $invId;
 my $mode = 0; # >= 2: remove attendee (broken right now)

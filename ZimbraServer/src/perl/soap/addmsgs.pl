@@ -14,8 +14,8 @@ use XmlElement;
 use XmlDoc;
 use Soap;
 
-my $ACCTNS = "urn:liquidAccount";
-my $MAILNS = "urn:liquidMail";
+my $ACCTNS = "urn:zimbraAccount";
+my $MAILNS = "urn:zimbraMail";
 
 #my $url = "http://localhost:7070/service/soap/";
 my $url = "http://token:7070/service/soap/";

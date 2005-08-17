@@ -27,8 +27,8 @@ if (defined $ARGV[2] && $ARGV[2] ne "") {
     die "Usage createAppt APPTNAME START END";
 }
 
-my $ACCTNS = "urn:liquidAccount";
-my $MAILNS = "urn:liquidMail";
+my $ACCTNS = "urn:zimbraAccount";
+my $MAILNS = "urn:zimbraMail";
 
 my $url = "http://localhost:7070/service/soap/";
 
