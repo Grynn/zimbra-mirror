@@ -19,7 +19,7 @@ if ($id ne "zimbra") {
 	exit (1);
 }
 
-use zimbralog;
+use Zimbra::Mon::Logger;
 
 my $homedir = "/opt/zimbra";
 my $confdir = "$homedir/conf";
