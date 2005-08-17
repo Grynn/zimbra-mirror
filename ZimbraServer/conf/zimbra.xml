@@ -1,0 +1,4 @@
+<Context path="/" docBase="${catalina.home}/webapps/zimbra" debug="0" >
+
+</Context>
+

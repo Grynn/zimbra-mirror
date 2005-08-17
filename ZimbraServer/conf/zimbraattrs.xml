@@ -54,9 +54,9 @@
 
 <attr name="zimbraAccountStatus" type="enum" value="active,maintenance,locked,closed"/>
 
-<attr name="Zimbra::AdminAuthTokenLifetime" type="duration"/>
+<attr name="zimbraAdminAuthTokenLifetime" type="duration"/>
 
-<attr name="Zimbra::AdminPort" type="port"/>
+<attr name="zimbraAdminPort" type="port"/>
 
 <attr name="zimbraAliasTargetId" type="string" immutable="1"/>
 

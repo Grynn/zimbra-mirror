@@ -27,18 +27,18 @@
 # See the files in examples/chroot-setup for setting up Postfix chroot
 # environments on different UNIX systems.
 #
-queue_directory = /opt/liquid/postfix-2.2.3/spool
+queue_directory = /opt/zimbra/postfix-2.2.3/spool
 
 # The command_directory parameter specifies the location of all
 # postXXX commands.
 #
-command_directory = /opt/liquid/postfix-2.2.3/sbin
+command_directory = /opt/zimbra/postfix-2.2.3/sbin
 
 # The daemon_directory parameter specifies the location of all Postfix
 # daemon programs (i.e. programs listed in the master.cf file). This
 # directory must be owned by root.
 #
-daemon_directory = /opt/liquid/postfix-2.2.3/libexec
+daemon_directory = /opt/zimbra/postfix-2.2.3/libexec
 
 # QUEUE AND PROCESS OWNERSHIP
 #
@@ -510,7 +510,7 @@ unknown_local_recipient_reject_code = 550
 #
 # For details, see "man header_checks".
 #
-header_checks = pcre:/opt/liquid/conf/postfix_header_checks
+header_checks = pcre:/opt/zimbra/conf/postfix_header_checks
 
 # FAST ETRN SERVICE
 #
@@ -595,17 +595,17 @@ debugger_command =
 # sendmail_path: The full pathname of the Postfix sendmail command.
 # This is the Sendmail-compatible mail posting interface.
 # 
-sendmail_path = /opt/liquid/postfix-2.2.3/sbin/sendmail
+sendmail_path = /opt/zimbra/postfix-2.2.3/sbin/sendmail
 
 # newaliases_path: The full pathname of the Postfix newaliases command.
 # This is the Sendmail-compatible command to build alias databases.
 #
-newaliases_path = /opt/liquid/postfix-2.2.3/sbin/newaliases
+newaliases_path = /opt/zimbra/postfix-2.2.3/sbin/newaliases
 
 # mailq_path: The full pathname of the Postfix mailq command.  This
 # is the Sendmail-compatible mail queue listing command.
 # 
-mailq_path = /opt/liquid/postfix-2.2.3/sbin/mailq
+mailq_path = /opt/zimbra/postfix-2.2.3/sbin/mailq
 
 # setgid_group: The group for mail submission and queue management
 # commands.  This must be a group name with a numerical group ID that
@@ -619,32 +619,32 @@ html_directory = no
 
 # manpage_directory: The location of the Postfix on-line manual pages.
 #
-manpage_directory = /opt/liquid/postfix-2.2.3/man
+manpage_directory = /opt/zimbra/postfix-2.2.3/man
 
 # sample_directory: The location of the Postfix sample configuration files.
 # This parameter is obsolete as of Postfix 2.1.
 #
-sample_directory = /opt/liquid/postfix-2.2.3/conf
+sample_directory = /opt/zimbra/postfix-2.2.3/conf
 
 # readme_directory: The location of the Postfix README files.
 #
 readme_directory = no
 
 #
-# Liquid changes.
+# Zimbra changes.
 #
 
-virtual_mailbox_maps = ldap:/opt/liquid/conf/ldap-vmm.cf
+virtual_mailbox_maps = ldap:/opt/zimbra/conf/ldap-vmm.cf
 
-virtual_mailbox_domains = ldap:/opt/liquid/conf/ldap-vmd.cf
+virtual_mailbox_domains = ldap:/opt/zimbra/conf/ldap-vmd.cf
 
-virtual_alias_maps = ldap:/opt/liquid/conf/ldap-vam.cf
+virtual_alias_maps = ldap:/opt/zimbra/conf/ldap-vam.cf
 
-virtual_alias_domains = ldap://opt/liquid/conf/ldap-vad.cf
+virtual_alias_domains = ldap://opt/zimbra/conf/ldap-vad.cf
 
-sender_canonical_maps = ldap:/opt/liquid/conf/ldap-scm.cf
+sender_canonical_maps = ldap:/opt/zimbra/conf/ldap-scm.cf
 
-transport_maps = ldap:/opt/liquid/conf/ldap-transport.cf
+transport_maps = ldap:/opt/zimbra/conf/ldap-transport.cf
 
 # If (email domain name == host name), we don't want $myhostname in
 # mydestination for testing purposes.
@@ -672,7 +672,7 @@ smtpd_recipient_restrictions =
 broken_sasl_auth_clients = yes
 
 smtpd_use_tls = yes
-smtpd_tls_cert_file = /opt/liquid/conf/smtpd.crt
-smtpd_tls_key_file = /opt/liquid/conf/smtpd.key
+smtpd_tls_cert_file = /opt/zimbra/conf/smtpd.crt
+smtpd_tls_key_file = /opt/zimbra/conf/smtpd.key
 smtpd_tls_loglevel = 3
 
