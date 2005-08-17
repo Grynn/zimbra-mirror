@@ -1,7 +1,7 @@
 /*
  * Created on Apr 20, 2005
  */
-package com.liquidsys.coco.mime.charset;
+package com.zimbra.cs.mime.charset;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;

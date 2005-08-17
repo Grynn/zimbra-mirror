@@ -1,7 +1,7 @@
 /*
  * Created on Dec 21, 2004
  */
-package com.liquidsys.coco.mime.charset;
+package com.zimbra.cs.mime.charset;
 
 import java.nio.charset.Charset;
 import java.nio.charset.spi.CharsetProvider;
