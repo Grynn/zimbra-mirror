@@ -42,7 +42,7 @@
 			<attribute value="http://jakarta.apache.org/commons/fileupload/apidocs/" name="javadoc_location"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="jars/liquidcharset.jar"/>
+	<classpathentry kind="lib" path="jars/zimbra-charset.jar"/>
 	<classpathentry kind="lib" path="jars/mysql-connector-java-3.1.10-bin-liquid.jar"/>
 	<classpathentry kind="lib" path="jars/servlet-api.jar">
 		<attributes>
