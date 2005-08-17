@@ -1,3 +1,3 @@
 #!/bin/bash
 
-exec `dirname $0`/lqjava com.liquidsys.coco.account.ProvUtil "$@"
+exec `dirname $0`/lqjava com.zimbra.cs.account.ProvUtil "$@"

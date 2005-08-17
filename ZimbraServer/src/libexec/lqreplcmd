@@ -1,2 +1,2 @@
 #!/bin/sh
-lqjava com.liquidsys.coco.redolog.util.ReplCommand $@
+lqjava com.zimbra.cs.redolog.util.ReplCommand $@

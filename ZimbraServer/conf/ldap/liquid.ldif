@@ -28,7 +28,7 @@ cn: config
 objectclass: liquidGlobalConfig
 liquidAttachmentsBlocked: FALSE
 liquidAttachmentsScanEnabled: FALSE
-liquidAttachmentsScanClass: com.liquidsys.coco.scan.ClamScanner
+liquidAttachmentsScanClass: com.zimbra.cs.scan.ClamScanner
 liquidAttachmentsViewInHtmlOnly: FALSE
 liquidAccountClientAttr: displayName
 liquidAccountClientAttr: liquidMailAlias

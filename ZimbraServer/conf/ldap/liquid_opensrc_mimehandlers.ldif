@@ -1,0 +1,102 @@
+
+# for storing mime config
+dn: cn=mime,cn=config,cn=liquid
+objectclass: organizationalRole
+cn: mime
+description: for storing MIME configuration
+
+dn: cn=application/octet-stream,cn=mime,cn=config,cn=liquid
+liquidMimeType: application/octet-stream
+cn: application/octet-stream
+objectclass: liquidMimeEntry
+liquidMimeIndexingEnabled: TRUE
+liquidMimeHandlerClass: com.zimbra.cs.mime.handler.opensrc.AppOctetStreamHandler
+description: Unknown Binary Content
+
+dn: cn=application/msword,cn=mime,cn=config,cn=liquid
+liquidMimeType: application/msword
+cn: application/msword
+objectclass: liquidMimeEntry
+liquidMimeIndexingEnabled: TRUE
+liquidMimeHandlerClass: com.zimbra.cs.mime.handler.opensrc.MSWordHandler
+liquidMimeFileExtension: doc
+liquidMimeFileExtension: word
+description: Microsoft Word Document
+
+dn: cn=application/pdf,cn=mime,cn=config,cn=liquid
+liquidMimeType: application/pdf
+cn: application/pdf
+objectclass: liquidMimeEntry
+liquidMimeIndexingEnabled: TRUE
+liquidMimeHandlerClass: com.zimbra.cs.mime.handler.opensrc.PDFHandler
+liquidMimeFileExtension: pdf
+description: Adobe PDF Document
+
+dn: cn=application/postscript,cn=mime,cn=config,cn=liquid
+liquidMimeType: application/postscript
+cn: application/postscript
+objectclass: liquidMimeEntry
+liquidMimeIndexingEnabled: TRUE
+liquidMimeFileExtension: ps
+liquidMimeFileExtension: eps
+description: Adobe Postscript Document
+
+dn: cn=application/vnd.ms-excel,cn=mime,cn=config,cn=liquid
+liquidMimeType: application/vnd.ms-excel
+cn: application/vnd.ms-excel
+objectclass: liquidMimeEntry
+liquidMimeIndexingEnabled: TRUE
+liquidMimeFileExtension: xls
+description: Microsoft Excel Document
+
+dn: cn=application/vnd.ms-powerpoint,cn=mime,cn=config,cn=liquid
+liquidMimeType: application/vnd.ms-powerpoint
+cn: application/vnd.ms-powerpoint
+objectclass: liquidMimeEntry
+liquidMimeIndexingEnabled: TRUE
+liquidMimeFileExtension: ppt
+description: Microsoft PowerPoint Document
+
+dn: cn=application/x-zip-compressed,cn=mime,cn=config,cn=liquid
+liquidMimeType: application/x-zip-compressed
+cn: application/x-zip-compressed
+objectclass: liquidMimeEntry
+liquidMimeIndexingEnabled: FALSE
+liquidMimeFileExtension: zip
+description: Zip Archive
+
+dn: cn=message/rfc822,cn=mime,cn=config,cn=liquid
+liquidMimeType: message/rfc822
+cn: message/rfc822
+objectclass: liquidMimeEntry
+liquidMimeIndexingEnabled: TRUE
+liquidMimeHandlerClass: MessageRFC822Handler
+description: Mail Message
+
+dn: cn=text/html,cn=mime,cn=config,cn=liquid
+liquidMimeType: text/html
+cn: text/html
+objectclass: liquidMimeEntry
+liquidMimeIndexingEnabled: TRUE
+liquidMimeHandlerClass: com.zimbra.cs.mime.handler.opensrc.TextHtmlHandler
+liquidMimeFileExtension: html
+liquidMimeFileExtension: htm
+description: HTML Document
+
+dn: cn=text/plain,cn=mime,cn=config,cn=liquid
+liquidMimeType: text/plain
+cn: text/plain
+objectclass: liquidMimeEntry
+liquidMimeIndexingEnabled: TRUE
+liquidMimeHandlerClass: TextPlainHandler
+liquidMimeFileExtension: text
+liquidMimeFileExtension: txt
+description: Plain Text Document
+
+dn: cn=all,cn=mime,cn=config,cn=liquid
+liquidMimeType: all
+cn: all
+objectclass: liquidMimeEntry
+liquidMimeIndexingEnabled: TRUE
+liquidMimeHandlerClass: UnknownTypeHandler
+description: All Document
