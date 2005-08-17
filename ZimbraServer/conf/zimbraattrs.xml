@@ -50,379 +50,379 @@
     
 -->
 
-<attr name="liquidAccountClientAttr" type="string" immutable="1"/>
+<attr name="zimbraAccountClientAttr" type="string" immutable="1"/>
 
-<attr name="liquidAccountStatus" type="enum" value="active,maintenance,locked,closed"/>
+<attr name="zimbraAccountStatus" type="enum" value="active,maintenance,locked,closed"/>
 
-<attr name="liquidAdminAuthTokenLifetime" type="duration"/>
+<attr name="Zimbra::AdminAuthTokenLifetime" type="duration"/>
 
-<attr name="liquidAdminPort" type="port"/>
+<attr name="Zimbra::AdminPort" type="port"/>
 
-<attr name="liquidAliasTargetId" type="string" immutable="1"/>
+<attr name="zimbraAliasTargetId" type="string" immutable="1"/>
 
-<attr name="liquidPrefTimeZoneId" type="string"/>
+<attr name="zimbraPrefTimeZoneId" type="string"/>
 
-<attr name="liquidPrefUseTimeZoneListInCalendar" type="boolean"/>
+<attr name="zimbraPrefUseTimeZoneListInCalendar" type="boolean"/>
 
-<attr name="liquidPrefImapSearchFoldersEnabled" type="boolean"/>
+<attr name="zimbraPrefImapSearchFoldersEnabled" type="boolean"/>
 
-<attr name="liquidAttachmentsBlocked" type="boolean"/>
+<attr name="zimbraAttachmentsBlocked" type="boolean"/>
 
-<attr name="liquidAttachmentsIndexingEnabled" type="boolean"/>
+<attr name="zimbraAttachmentsIndexingEnabled" type="boolean"/>
 
-<attr name="liquidAttachmentsScanEnabled" type="boolean"/>
+<attr name="zimbraAttachmentsScanEnabled" type="boolean"/>
 
-<attr name="liquidAttachmentsScanClass" type="string" max="256"/>
+<attr name="zimbraAttachmentsScanClass" type="string" max="256"/>
 
-<attr name="liquidAttachmentsScanURL" type="string" max="256"/>
+<attr name="zimbraAttachmentsScanURL" type="string" max="256"/>
 
-<attr name="liquidAttachmentsViewInHtmlOnly" type="boolean"/>
+<attr name="zimbraAttachmentsViewInHtmlOnly" type="boolean"/>
 
-<attr name="liquidAuthLdapBindDn" type="string"/>
+<attr name="zimbraAuthLdapBindDn" type="string"/>
 
-<attr name="liquidAuthLdapURL" type="string"/>
+<attr name="zimbraAuthLdapURL" type="string"/>
 
-<attr name="liquidAuthMech" type="enum" value="liquid,ldap,ad"/>
+<attr name="zimbraAuthMech" type="enum" value="zimbra,ldap,ad"/>
 
-<attr name="liquidAuthTokenKey" type="string" immutable="1"/>
+<attr name="zimbraAuthTokenKey" type="string" immutable="1"/>
 
-<attr name="liquidAuthTokenLifetime" type="duration"/>
+<attr name="zimbraAuthTokenLifetime" type="duration"/>
 
-<attr name="liquidCalendarCompatibilityMode" type="enum" value="standard,exchange"/>
+<attr name="zimbraCalendarCompatibilityMode" type="enum" value="standard,exchange"/>
 
-<attr name="liquidComponentAvailable" type="string" max="64"/>
+<attr name="zimbraComponentAvailable" type="string" max="64"/>
 
-<attr name="liquidCOSId" type="id"/> <!-- type "cosId" and check for valid COS id? -->
+<attr name="zimbraCOSId" type="id"/> <!-- type "cosId" and check for valid COS id? -->
 
-<attr name="liquidCOSInheritedAttr" type="string" immutable="1" />
+<attr name="zimbraCOSInheritedAttr" type="string" immutable="1" />
 
-<attr name="liquidContactMaxNumEntries" type="integer" min="0"/>
+<attr name="zimbraContactMaxNumEntries" type="integer" min="0"/>
 
-<attr name="liquidDefaultDomainName" type="string" max="256"/>
+<attr name="zimbraDefaultDomainName" type="string" max="256"/>
 
-<attr name="liquidDomainInheritedAttr" type="string" immutable="1"/>
+<attr name="zimbraDomainInheritedAttr" type="string" immutable="1"/>
 
-<attr name="liquidDomainName" type="string" immutable="1"/>
+<attr name="zimbraDomainName" type="string" immutable="1"/>
 
-<attr name="liquidDomainType" type="enum" value="local,alias" immutable="1"/>
+<attr name="zimbraDomainType" type="enum" value="local,alias" immutable="1"/>
 
-<attr name="liquidFeatureAdvancedSearchEnabled" type="boolean"/>
+<attr name="zimbraFeatureAdvancedSearchEnabled" type="boolean"/>
 
-<attr name="liquidFeatureHtmlComposeEnabled" type="boolean"/>
+<attr name="zimbraFeatureHtmlComposeEnabled" type="boolean"/>
 
-<attr name="liquidFeatureCalendarEnabled" type="boolean"/>
+<attr name="zimbraFeatureCalendarEnabled" type="boolean"/>
 
-<attr name="liquidFeatureChangePasswordEnabled" type="boolean"/>
+<attr name="zimbraFeatureChangePasswordEnabled" type="boolean"/>
 
-<attr name="liquidFeatureContactsEnabled" type="boolean"/>
+<attr name="zimbraFeatureContactsEnabled" type="boolean"/>
 
-<attr name="liquidFeatureConversationsEnabled" type="boolean"/>
+<attr name="zimbraFeatureConversationsEnabled" type="boolean"/>
 
-<attr name="liquidFeatureFiltersEnabled" type="boolean"/>
+<attr name="zimbraFeatureFiltersEnabled" type="boolean"/>
 
-<attr name="liquidFeatureGalEnabled" type="boolean"/>
+<attr name="zimbraFeatureGalEnabled" type="boolean"/>
 
-<attr name="liquidFeatureInitialSearchPreferenceEnabled" type="boolean"/>
+<attr name="zimbraFeatureInitialSearchPreferenceEnabled" type="boolean"/>
 
-<attr name="liquidFeatureSavedSearchesEnabled" type="boolean"/>
+<attr name="zimbraFeatureSavedSearchesEnabled" type="boolean"/>
 
-<attr name="liquidFeatureTaggingEnabled" type="boolean"/>
+<attr name="zimbraFeatureTaggingEnabled" type="boolean"/>
 
-<attr name="liquidGalLdapAttrMap" type="string" immutable="1"/>
+<attr name="zimbraGalLdapAttrMap" type="string" immutable="1"/>
 
-<attr name="liquidGalLdapBindDn" type="string" max="256"/>
+<attr name="zimbraGalLdapBindDn" type="string" max="256"/>
 
-<attr name="liquidGalLdapBindPassword" type="string" max="256"/>
+<attr name="zimbraGalLdapBindPassword" type="string" max="256"/>
 
-<attr name="liquidGalLdapFilter" type="string" max="4096"/>
+<attr name="zimbraGalLdapFilter" type="string" max="4096"/>
 
-<attr name="liquidGalLdapFilterDef" type="string" immutable="1"/>
+<attr name="zimbraGalLdapFilterDef" type="string" immutable="1"/>
 
-<attr name="liquidGalLdapSearchBase"  type="string" max="256"/>
+<attr name="zimbraGalLdapSearchBase"  type="string" max="256"/>
 
-<attr name="liquidGalLdapURL"  type="string" max="256"/>
+<attr name="zimbraGalLdapURL"  type="string" max="256"/>
 
-<attr name="liquidGalMaxResults" type="integer" min="0"/>
+<attr name="zimbraGalMaxResults" type="integer" min="0"/>
 
-<attr name="liquidGalMode" type="enum" value="liquid,both,ldap"/>
+<attr name="zimbraGalMode" type="enum" value="zimbra,both,ldap"/>
 
-<attr name="liquidId" type="id" immutable="1"/>
+<attr name="zimbraId" type="id" immutable="1"/>
 
-<attr name="liquidImapAdvertisedName" type="string" max="128"/>
+<attr name="zimbraImapAdvertisedName" type="string" max="128"/>
 
-<attr name="liquidImapBindAddress" type="string" max="128"/>
+<attr name="zimbraImapBindAddress" type="string" max="128"/>
 
-<attr name="liquidImapBindPort" type="port"/>
+<attr name="zimbraImapBindPort" type="port"/>
 
-<attr name="liquidImapCleartextLoginEnabled" type="boolean"/>
+<attr name="zimbraImapCleartextLoginEnabled" type="boolean"/>
 
-<attr name="liquidImapEnabled" type="boolean"/>
+<attr name="zimbraImapEnabled" type="boolean"/>
 
-<attr name="liquidImapNumThreads" type="integer"/>
+<attr name="zimbraImapNumThreads" type="integer"/>
 
-<attr name="liquidImapSSLBindAddress" type="string" max="128"/>
+<attr name="zimbraImapSSLBindAddress" type="string" max="128"/>
 
-<attr name="liquidImapSSLBindPort" type="port"/>
+<attr name="zimbraImapSSLBindPort" type="port"/>
 
-<attr name="liquidImapSSLServerEnabled" type="boolean"/>
+<attr name="zimbraImapSSLServerEnabled" type="boolean"/>
 
-<attr name="liquidImapServerEnabled" type="boolean"/>
+<attr name="zimbraImapServerEnabled" type="boolean"/>
 
-<attr name="liquidIsAdminAccount" type="boolean"/>
+<attr name="zimbraIsAdminAccount" type="boolean"/>
 
-<attr name="liquidIsMonitorHost" type="boolean"/>
+<attr name="zimbraIsMonitorHost" type="boolean"/>
 
-<attr name="liquidLastLogonTimestamp" type="gentime" immutable="1"/>
+<attr name="zimbraLastLogonTimestamp" type="gentime" immutable="1"/>
 
-<attr name="liquidLastLogonTimestampFrequency" type="duration"/>
+<attr name="zimbraLastLogonTimestampFrequency" type="duration"/>
 
-<attr name="liquidLmtpAdvertisedName" type="string" max="128"/>
+<attr name="zimbraLmtpAdvertisedName" type="string" max="128"/>
 
-<attr name="liquidLmtpBindAddress" type="string" max="128"/>
+<attr name="zimbraLmtpBindAddress" type="string" max="128"/>
 
-<attr name="liquidLmtpBindPort" type="port"/>
+<attr name="zimbraLmtpBindPort" type="port"/>
 
-<attr name="liquidLmtpNumThreads" type="integer" min="0"/>
+<attr name="zimbraLmtpNumThreads" type="integer" min="0"/>
 
-<attr name="liquidMailAddress" type="email" max="256" immutable="1"/>
+<attr name="zimbraMailAddress" type="email" max="256" immutable="1"/>
 
-<attr name="liquidMailAlias" type="email" max="256" immutable="1"/>
+<attr name="zimbraMailAlias" type="email" max="256" immutable="1"/>
 
-<attr name="liquidMailCanonicalAddress" type="email" max="256"/>
+<attr name="zimbraMailCanonicalAddress" type="email" max="256"/>
 
-<attr name="liquidMailCatchAllAddress" type="regex" value="^@[A-Za-z0-9-\.]+$"/>
+<attr name="zimbraMailCatchAllAddress" type="regex" value="^@[A-Za-z0-9-\.]+$"/>
 
-<attr name="liquidMailCatchAllForwardingAddress" type="regex" value="^@[A-Za-z0-9-\.]+$"/>
+<attr name="zimbraMailCatchAllForwardingAddress" type="regex" value="^@[A-Za-z0-9-\.]+$"/>
 
-<attr name="liquidMailCatchAllCanonicalAddress" type="regex" value="^@[A-Za-z0-9-\.]+$"/>
+<attr name="zimbraMailCatchAllCanonicalAddress" type="regex" value="^@[A-Za-z0-9-\.]+$"/>
 
-<attr name="liquidMailDeliveryAddress" type="email" max="256" immutable="1"/>
+<attr name="zimbraMailDeliveryAddress" type="email" max="256" immutable="1"/>
 
-<attr name="liquidMailForwardingAddress" type="email" max="256"/>
+<attr name="zimbraMailForwardingAddress" type="email" max="256"/>
 
-<attr name="liquidMailHost" type="string" max="256" callback="MailHost"/>
+<attr name="zimbraMailHost" type="string" max="256" callback="MailHost"/>
 
-<attr name="liquidMailHostPool" type="id"/>
+<attr name="zimbraMailHostPool" type="id"/>
 
-<attr name="liquidMailIdleSessionTimeout" type="duration"/>
+<attr name="zimbraMailIdleSessionTimeout" type="duration"/>
 
-<attr name="liquidMailMessageLifetime" type="duration"/>
+<attr name="zimbraMailMessageLifetime" type="duration"/>
 
-<attr name="liquidMailMinPollingInterval" type="duration"/> 
+<attr name="zimbraMailMinPollingInterval" type="duration"/> 
 
-<attr name="liquidMailPort" type="port"/>
+<attr name="zimbraMailPort" type="port"/>
 
-<attr name="liquidMailQuota" type="integer"/>
+<attr name="zimbraMailQuota" type="integer"/>
 
-<attr name="liquidMailSSLPort" type="port"/>
+<attr name="zimbraMailSSLPort" type="port"/>
 
-<attr name="liquidMailSieveScript" type="string"/>
+<attr name="zimbraMailSieveScript" type="string"/>
 
-<attr name="liquidMailSpamLifetime" type="duration"/>
+<attr name="zimbraMailSpamLifetime" type="duration"/>
 
-<attr name="liquidMailStatus" type="enum" value="enabled,disabled"/>
+<attr name="zimbraMailStatus" type="enum" value="enabled,disabled"/>
 
-<attr name="liquidMailTrashLifetime" type="duration"/>
+<attr name="zimbraMailTrashLifetime" type="duration"/>
 
-<attr name="liquidMimeFileExtension" type="string"/> 
+<attr name="zimbraMimeFileExtension" type="string"/> 
 
-<attr name="liquidMimeHandlerClass" type="string"/>
+<attr name="zimbraMimeHandlerClass" type="string"/>
 
-<attr name="liquidMimeIndexingEnabled" type="boolean"/>
+<attr name="zimbraMimeIndexingEnabled" type="boolean"/>
 
-<attr name="liquidMimeType" type="string"/>
+<attr name="zimbraMimeType" type="string"/>
 
-<attr name="liquidMtaAuthEnabled" type="boolean"/>
+<attr name="zimbraMtaAuthEnabled" type="boolean"/>
 
-<attr name="liquidMtaBlockedExtension" type="string" max="64"/>
+<attr name="zimbraMtaBlockedExtension" type="string" max="64"/>
 
-<attr name="liquidMtaCommonBlockedExtension" type="string" max="64"/>
+<attr name="zimbraMtaCommonBlockedExtension" type="string" max="64"/>
 
-<attr name="liquidMtaDnsLookupsEnabled" type="boolean"/>
+<attr name="zimbraMtaDnsLookupsEnabled" type="boolean"/>
 
-<attr name="liquidMtaMaxMessageSize" type="integer" min="0"/>
+<attr name="zimbraMtaMaxMessageSize" type="integer" min="0"/>
 
-<attr name="liquidMtaRelayHost" type="string" max="256"/>
+<attr name="zimbraMtaRelayHost" type="string" max="256"/>
 
-<attr name="liquidMtaRestriction" type="string" max="256"/>
+<attr name="zimbraMtaRestriction" type="string" max="256"/>
 
-<attr name="liquidMtaTlsAuthOnly" type="boolean"/>
+<attr name="zimbraMtaTlsAuthOnly" type="boolean"/>
 
-<attr name="liquidNewMailNotificationBody" type="string"/>
+<attr name="zimbraNewMailNotificationBody" type="string"/>
 
-<attr name="liquidNewMailNotificationFrom" type="string"/>
+<attr name="zimbraNewMailNotificationFrom" type="string"/>
 
-<attr name="liquidNewMailNotificationSubject" type="string"/>
+<attr name="zimbraNewMailNotificationSubject" type="string"/>
 
-<attr name="liquidNotes" type="string"/>
+<attr name="zimbraNotes" type="string"/>
 
-<attr name="liquidObjectHandlerClass" type="string"/>
+<attr name="zimbraObjectHandlerClass" type="string"/>
 
-<attr name="liquidObjectHandlerConfig" type="string"/>
+<attr name="zimbraObjectHandlerConfig" type="string"/>
 
-<attr name="liquidObjectIndexingEnabled" type="boolean"/>
+<attr name="zimbraObjectIndexingEnabled" type="boolean"/>
 
-<attr name="liquidObjectStoreMatched" type="boolean"/>
+<attr name="zimbraObjectStoreMatched" type="boolean"/>
 
-<attr name="liquidObjectType" type="string"/>
+<attr name="zimbraObjectType" type="string"/>
 
-<attr name="liquidPasswordEnforceHistory" type="integer" min="0"/>
+<attr name="zimbraPasswordEnforceHistory" type="integer" min="0"/>
 
-<attr name="liquidPasswordHistory" type="string"/>
+<attr name="zimbraPasswordHistory" type="string"/>
 
-<attr name="liquidPasswordLocked" type="boolean"/>
+<attr name="zimbraPasswordLocked" type="boolean"/>
 
-<attr name="liquidPasswordMaxAge" type="integer" min="0"/>
+<attr name="zimbraPasswordMaxAge" type="integer" min="0"/>
 
-<attr name="liquidPasswordMaxLength" type="integer" min="0"/>
+<attr name="zimbraPasswordMaxLength" type="integer" min="0"/>
 
-<attr name="liquidPasswordMinAge" type="integer" min="0"/>
+<attr name="zimbraPasswordMinAge" type="integer" min="0"/>
 
-<attr name="liquidPasswordMinLength" type="integer" min="0"/>
+<attr name="zimbraPasswordMinLength" type="integer" min="0"/>
 
-<attr name="liquidPasswordModifiedTime" type="gentime"/>
+<attr name="zimbraPasswordModifiedTime" type="gentime"/>
 
-<attr name="liquidPasswordMustChange" type="boolean"/>
+<attr name="zimbraPasswordMustChange" type="boolean"/>
 
-<attr name="liquidPop3AdvertisedName" type="string" max="128"/>
+<attr name="zimbraPop3AdvertisedName" type="string" max="128"/>
 
-<attr name="liquidPop3BindAddress" type="string" max="128"/>
+<attr name="zimbraPop3BindAddress" type="string" max="128"/>
 
-<attr name="liquidPop3BindPort" type="port"/>
+<attr name="zimbraPop3BindPort" type="port"/>
 
-<attr name="liquidPop3CleartextLoginEnabled" type="boolean"/>
+<attr name="zimbraPop3CleartextLoginEnabled" type="boolean"/>
 
-<attr name="liquidPop3Enabled" type="boolean"/>
+<attr name="zimbraPop3Enabled" type="boolean"/>
 
-<attr name="liquidPop3NumThreads" type="integer"/>
+<attr name="zimbraPop3NumThreads" type="integer"/>
 
-<attr name="liquidPop3SSLBindAddress" type="string" max="128"/>
+<attr name="zimbraPop3SSLBindAddress" type="string" max="128"/>
 
-<attr name="liquidPop3SSLBindPort" type="port"/>
+<attr name="zimbraPop3SSLBindPort" type="port"/>
 
-<attr name="liquidPop3SSLServerEnabled" type="boolean"/>
+<attr name="zimbraPop3SSLServerEnabled" type="boolean"/>
 
-<attr name="liquidPop3ServerEnabled" type="boolean"/>
+<attr name="zimbraPop3ServerEnabled" type="boolean"/>
 
-<attr name="liquidPrefAutoAddAddressEnabled" type="boolean"/>
+<attr name="zimbraPrefAutoAddAddressEnabled" type="boolean"/>
 
-<attr name="liquidPrefComposeInNewWindow" type="boolean"/>
+<attr name="zimbraPrefComposeInNewWindow" type="boolean"/>
 
-<attr name="liquidPrefComposeFormat" type="enum" value="text,html"/>
+<attr name="zimbraPrefComposeFormat" type="enum" value="text,html"/>
 
-<attr name="liquidPrefForwardReplyInOriginalFormat" type="boolean"/>
+<attr name="zimbraPrefForwardReplyInOriginalFormat" type="boolean"/>
 
-<attr name="liquidPrefContactsInitialView" type="enum" value="cards,list"/>
+<attr name="zimbraPrefContactsInitialView" type="enum" value="cards,list"/>
 
-<attr name="liquidPrefCalendarInitialView" type="enum" value="day,week,workWeek,month"/>
+<attr name="zimbraPrefCalendarInitialView" type="enum" value="day,week,workWeek,month"/>
 
-<attr name="liquidPrefContactsPerPage" type="integer"/> <!-- TODO: get min/max? -->
+<attr name="zimbraPrefContactsPerPage" type="integer"/> <!-- TODO: get min/max? -->
 
-<attr name="liquidPrefDedupeMessagesSentToSelf" type="enum" value="dedupeNone,secondCopyifOnToOrCC,dedupeAll"/>
+<attr name="zimbraPrefDedupeMessagesSentToSelf" type="enum" value="dedupeNone,secondCopyifOnToOrCC,dedupeAll"/>
 
-<attr name="liquidPrefForwardIncludeOriginalText" type="enum" value="includeAsAttachment,includeBody,includeBodyWithPrefix"/> 
+<attr name="zimbraPrefForwardIncludeOriginalText" type="enum" value="includeAsAttachment,includeBody,includeBodyWithPrefix"/> 
 
-<attr name="liquidPrefForwardReplyPrefixChar" type="string"/>
+<attr name="zimbraPrefForwardReplyPrefixChar" type="string"/>
 
-<attr name="liquidPrefGroupMailBy" type="enum" value="conversation,message"/>
+<attr name="zimbraPrefGroupMailBy" type="enum" value="conversation,message"/>
 
-<attr name="liquidPrefIncludeSpamInSearch" type="boolean"/>
+<attr name="zimbraPrefIncludeSpamInSearch" type="boolean"/>
 
-<attr name="liquidPrefIncludeTrashInSearch" type="boolean"/>
+<attr name="zimbraPrefIncludeTrashInSearch" type="boolean"/>
 
-<attr name="liquidPrefMailInitialSearch" type="string" max="512"/>
+<attr name="zimbraPrefMailInitialSearch" type="string" max="512"/>
 
-<attr name="liquidPrefMailItemsPerPage" type="integer"/> <!-- TODO: get min/max? -->
+<attr name="zimbraPrefMailItemsPerPage" type="integer"/> <!-- TODO: get min/max? -->
 
-<attr name="liquidPrefMailPollingInterval" type="duration"/>
+<attr name="zimbraPrefMailPollingInterval" type="duration"/>
 
-<attr name="liquidPrefMailSignature" type="string" max="1024"/>
+<attr name="zimbraPrefMailSignature" type="string" max="1024"/>
 
-<attr name="liquidPrefMailSignatureEnabled" type="boolean"/>
+<attr name="zimbraPrefMailSignatureEnabled" type="boolean"/>
 
-<attr name="liquidPrefMailSignatureStyle" type="enum" value="outlook,internet"/>
+<attr name="zimbraPrefMailSignatureStyle" type="enum" value="outlook,internet"/>
 
-<attr name="liquidPrefMessageViewHtmlPreferred" type="boolean"/>
+<attr name="zimbraPrefMessageViewHtmlPreferred" type="boolean"/>
 
-<attr name="liquidPrefNewMailNotificationAddress" type="string" max="256"/>
+<attr name="zimbraPrefNewMailNotificationAddress" type="string" max="256"/>
 
-<attr name="liquidPrefNewMailNotificationEnabled" type="boolean"/>
+<attr name="zimbraPrefNewMailNotificationEnabled" type="boolean"/>
 
-<attr name="liquidPrefOutOfOfficeReply" type="string" max="8192" callback="OutOfOfficeCallback"/>
+<attr name="zimbraPrefOutOfOfficeReply" type="string" max="8192" callback="OutOfOfficeCallback"/>
 
-<attr name="liquidPrefOutOfOfficeReplyEnabled" type="boolean" callback="OutOfOfficeCallback"/>
+<attr name="zimbraPrefOutOfOfficeReplyEnabled" type="boolean" callback="OutOfOfficeCallback"/>
 
-<attr name="liquidPrefReplyIncludeOriginalText" type="enum" value="includeAsAttachment,includeBody,includeBodyWithPrefix,includeNone,includeSmart"/>
+<attr name="zimbraPrefReplyIncludeOriginalText" type="enum" value="includeAsAttachment,includeBody,includeBodyWithPrefix,includeNone,includeSmart"/>
 
-<attr name="liquidPrefReplyToAddress" type="string" max="256"/>
+<attr name="zimbraPrefReplyToAddress" type="string" max="256"/>
 
-<attr name="liquidPrefSaveToSent" type="boolean"/>
+<attr name="zimbraPrefSaveToSent" type="boolean"/>
 
-<attr name="liquidPrefSentMailFolder" type="string" max="256"/>
+<attr name="zimbraPrefSentMailFolder" type="string" max="256"/>
 
-<attr name="liquidPrefShowFragments" type="boolean"/>
+<attr name="zimbraPrefShowFragments" type="boolean"/>
 
-<attr name="liquidPrefShowSearchString" type="boolean"/>
+<attr name="zimbraPrefShowSearchString" type="boolean"/>
 
-<attr name="liquidPrefUseKeyboardShortcuts" type="boolean"/>
+<attr name="zimbraPrefUseKeyboardShortcuts" type="boolean"/>
 
-<attr name="liquidRedologArchiveDir" type="string"/>
+<attr name="zimbraRedologArchiveDir" type="string"/>
 
-<attr name="liquidRedologBacklogDir" type="string"/>
+<attr name="zimbraRedologBacklogDir" type="string"/>
 
-<attr name="liquidRedologEnabled" type="boolean"/>
+<attr name="zimbraRedologEnabled" type="boolean"/>
 
-<attr name="liquidRedologFsyncIntervalMS" type="integer" min="0"/>
+<attr name="zimbraRedologFsyncIntervalMS" type="integer" min="0"/>
 
-<attr name="liquidRedologLogPath" type="string"/>
+<attr name="zimbraRedologLogPath" type="string"/>
 
-<attr name="liquidRedologRolloverFileSizeKB" type="integer" min="0"/>
+<attr name="zimbraRedologRolloverFileSizeKB" type="integer" min="0"/>
 
-<attr name="liquidServerHostname" type="string" max="256"/>
+<attr name="zimbraServerHostname" type="string" max="256"/>
 
-<attr name="liquidServerInheritedAttr" type="string" immutable="1"/>
+<attr name="zimbraServerInheritedAttr" type="string" immutable="1"/>
 
-<attr name="liquidServiceEnabled" type="string" max="256"/>
+<attr name="zimbraServiceEnabled" type="string" max="256"/>
 
-<attr name="liquidServiceInstalled" type="string" max="256"/>
+<attr name="zimbraServiceInstalled" type="string" max="256"/>
 
-<attr name="liquidServiceHostname" type="string" max="256"/>
+<attr name="zimbraServiceHostname" type="string" max="256"/>
 
-<attr name="liquidSmtpHostname" type="string" max="256"/>
+<attr name="zimbraSmtpHostname" type="string" max="256"/>
 
-<attr name="liquidSmtpPort" type="port"/>
+<attr name="zimbraSmtpPort" type="port"/>
 
-<attr name="liquidSmtpTimeout" type="integer" min="0"/>
+<attr name="zimbraSmtpTimeout" type="integer" min="0"/>
 
-<attr name="liquidSpamCheckEnabled" type="boolean"/>
+<attr name="zimbraSpamCheckEnabled" type="boolean"/>
 
-<attr name="liquidSpamTagPercent" type="integer" min="0"/>
+<attr name="zimbraSpamTagPercent" type="integer" min="0"/>
 
-<attr name="liquidSpamKillPercent" type="integer" min="0"/>
+<attr name="zimbraSpamKillPercent" type="integer" min="0"/>
 
-<attr name="liquidSpamSubjectTag" type="string" max="32"/>
+<attr name="zimbraSpamSubjectTag" type="string" max="32"/>
 
-<attr name="liquidTableMaintenanceGrowthFactor" type="integer" min="0"/>
+<attr name="zimbraTableMaintenanceGrowthFactor" type="integer" min="0"/>
 
-<attr name="liquidTableMaintenanceMaxRows" type="integer" min="0"/>
+<attr name="zimbraTableMaintenanceMaxRows" type="integer" min="0"/>
 
-<attr name="liquidTableMaintenanceMinRows" type="integer" min="0"/>
+<attr name="zimbraTableMaintenanceMinRows" type="integer" min="0"/>
 
-<attr name="liquidTableMaintenanceOperation" type="enum" value="ANALYZE,OPTIMIZE"/>
+<attr name="zimbraTableMaintenanceOperation" type="enum" value="ANALYZE,OPTIMIZE"/>
 
-<attr name="liquidUserServicesEnabled" type="boolean"/>
+<attr name="zimbraUserServicesEnabled" type="boolean"/>
 
-<attr name="liquidVirusCheckEnabled" type="boolean"/>
+<attr name="zimbraVirusCheckEnabled" type="boolean"/>
 
-<attr name="liquidVirusWarnRecipient" type="boolean"/>
+<attr name="zimbraVirusWarnRecipient" type="boolean"/>
 
-<attr name="liquidVirusWarnAdmin" type="boolean"/>
+<attr name="zimbraVirusWarnAdmin" type="boolean"/>
 
-<attr name="liquidVirusBlockEncryptedArchive" type="boolean"/>
+<attr name="zimbraVirusBlockEncryptedArchive" type="boolean"/>
 
-<attr name="liquidVirusDefinitionsUpdateFrequency" type="duration"/>
+<attr name="zimbraVirusDefinitionsUpdateFrequency" type="duration"/>
 
-<attr name="liquidReplicationProvider" type="string" max="256"/>
+<attr name="zimbraReplicationProvider" type="string" max="256"/>
 
 <attr name="c" type="string"/>
 
