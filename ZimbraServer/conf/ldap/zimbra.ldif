@@ -19,7 +19,7 @@ zimbraAccountStatus: active
 zimbraIsAdminAccount: TRUE
 zimbraId: e0fafd89-1360-11d9-8661-000a95d98ef2
 description: The master zimbra admin account
-userPassword: {SSHA}Ig5RshpcsYSPhtyx6EH1AxOgz5pOWKD+
+userPassword: {SSHA}8+r0nkcErptqasSrFPcT0k81NFrbTcAS
 
 # for storing global config
 dn: cn=config,cn=zimbra
