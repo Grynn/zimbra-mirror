@@ -4,7 +4,7 @@
 # mysql_root_password.  Updates both the Liquid local config file and
 # MySQL.
 #
-source `dirname $0`/lqshutil || exit 1
+source `dirname $0`/zmshutil || exit 1
 zmsetvars liquid_home liquid_mysql_user mysql_root_password
 
 #

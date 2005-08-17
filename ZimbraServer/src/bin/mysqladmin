@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source `dirname $0`/lqshutil || exit 1
+source `dirname $0`/zmshutil || exit 1
 zmsetvars mysql_directory mysql_socket mysql_root_password
 
 exec ${mysql_directory}/bin/mysqladmin -S ${mysql_socket} -u root --password=${mysql_root_password} "$@"

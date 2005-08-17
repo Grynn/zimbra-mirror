@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source `dirname $0`/lqshutil || exit 1
+source `dirname $0`/zmshutil || exit 1
 zmsetvars mysql_directory mysql_socket liquid_mysql_user liquid_mysql_password
 		
 exec ${mysql_directory}/bin/mysql -S ${mysql_socket} \

@@ -26,7 +26,7 @@ if [ ! -f /opt/liquid/bin/fetchmail ]; then
 	chmod 755 /opt/liquid/bin/fetchmail 2> /dev/null
 fi
 
-source `dirname $0`/lqshutil || exit 1
+source `dirname $0`/zmshutil || exit 1
 zmsetvars \
 	liquid_home \
 	liquid_server_hostname

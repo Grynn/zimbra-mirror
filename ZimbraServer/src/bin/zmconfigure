@@ -30,7 +30,7 @@ if ( -f $dfilename ) {
 }
 
 # @@var@@ for zmlocalconfig variables
-# %%var%% for lqprov variables
+# %%var%% for zmprov variables
 
 open (SOURCE, $sfilename) or die "Can't open $sfilename: $!";
 my @slines = <SOURCE>;
@@ -48,7 +48,7 @@ foreach my $sline (@slines) {
 		$sline =~ s/\@\@$sr\@\@/$rep/g;
 	}
 
-	# We support parsing for the lqprov functions.
+	# We support parsing for the zmprov functions.
 	# Normal parsing uses gcf
 	# Functions supported:
 	#	comment(args) - replace with comment char "#" if true (or value exists)
@@ -66,13 +66,13 @@ foreach my $sline (@slines) {
 					$host=`/opt/liquid/bin/zmlocalconfig -q -m nokey liquid_server_hostname`;
 					chomp $host;
 				}
-				$rep = `/opt/liquid/bin/lqprov gs $host | sed -e 's/[^ ]* //' | grep $pattern`;
+				$rep = `/opt/liquid/bin/zmprov gs $host | sed -e 's/[^ ]* //' | grep $pattern`;
 				if ($rep ne "") {
 					$rep = "#";
 				}
 			}
 		} else {
-			$rep=`/opt/liquid/bin/lqprov gcf $sr | sed -e 's/[^ ]* //'`;
+			$rep=`/opt/liquid/bin/zmprov gcf $sr | sed -e 's/[^ ]* //'`;
 			chomp $rep;
 		}
 		$sline =~ s/%%$sr%%/$rep/g;

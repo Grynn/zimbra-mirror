@@ -66,7 +66,7 @@ sub getService {
 		$service =~ s/^!//;
 	}
 
-	open CMD, "$homedir/bin/lqprov  gs $HOSTNAME | grep liquidServiceEnabled |";
+	open CMD, "$homedir/bin/zmprov  gs $HOSTNAME | grep liquidServiceEnabled |";
 	my @out = <CMD>;
 	close CMD;
 
@@ -81,7 +81,7 @@ sub getService {
 
 	if (! defined ($knownkeys{"SERVICE:$service"})) {
 
-		my $rc = 0xffff & system ("$homedir/bin/lqprov gs $HOSTNAME | grep liquidServiceEnabled | grep $service > /dev/null 2>&1");
+		my $rc = 0xffff & system ("$homedir/bin/zmprov gs $HOSTNAME | grep liquidServiceEnabled | grep $service > /dev/null 2>&1");
 
 		if ($rc) { 
 			$knownkeys{"SERVICE:$service"} = 0; 
@@ -143,8 +143,8 @@ sub setVar {
 	# print STDERR "Setting vars\n";
 
 	# First populate the globals, then overwrite with the locals
-	# print STDERR "setVar: /opt/liquid/bin/lqprov gacf | grep $var | grep -v InheritedAttr\n";
-	open CMD, "$homedir/bin/lqprov gacf |  grep -v InheritedAttr |";
+	# print STDERR "setVar: /opt/liquid/bin/zmprov gacf | grep $var | grep -v InheritedAttr\n";
+	open CMD, "$homedir/bin/zmprov gacf |  grep -v InheritedAttr |";
 	my @out = <CMD>;
 	close CMD;
 
@@ -179,7 +179,7 @@ sub setVar {
 
 	}
 
-	open CMD, "$homedir/bin/lqprov gs $HOSTNAME | ";
+	open CMD, "$homedir/bin/zmprov gs $HOSTNAME | ";
 	@out = <CMD>;
 	close CMD;
 
@@ -493,7 +493,7 @@ sub rewriteConfig {
 	}
 
 	# @@var@@ for zmlocalconfig variables
-	# %%var%% for lqprov variables
+	# %%var%% for zmprov variables
 
 	open (SOURCE, "$from") or die "Can't open $from: $!";
 	my @slines = <SOURCE>;
@@ -509,7 +509,7 @@ sub rewriteConfig {
 			# print STDERR "\t$sline";
 		}
 
-		# We support parsing for the lqprov functions.
+		# We support parsing for the zmprov functions.
 		# Normal parsing uses gcf
 		# Functions supported:
 		#	(un)comment(args) - replace with comment char "#" if true (or value exists)

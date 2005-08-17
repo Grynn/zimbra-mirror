@@ -1,6 +1,6 @@
 #!/do/not/execute/this/script/it/is/meant/to/be/sourced -*- shell-script -*-
 #
-# lqshutil is meant to be sourced by other scripts.  If run
+# zmshutil is meant to be sourced by other scripts.  If run
 # it will do nothing.  It will complain if it can't find
 # local config program.
 #
