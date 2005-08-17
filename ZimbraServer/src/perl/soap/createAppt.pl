@@ -49,7 +49,7 @@ my $authToken = $authResponse->find_child('authToken')->content;
 my $sessionId = $authResponse->find_child('sessionId')->content;
 #print "sessionId = $sessionId\n";
 
-my $context = $SOAP->liquidContext($authToken, $sessionId);
+my $context = $SOAP->zimbraContext($authToken, $sessionId);
 
 my $contextStr = $context->to_string("pretty");
 #print("Context = $contextStr\n");
@@ -85,13 +85,13 @@ $d->start('m', undef, { 'l' => "/INBOX" }, undef);
 if ($includeMyself) {
     $d->add('e', undef,
             {
-                'a' => "user1\@timbre.liquidsys.com",
+                'a' => "user1\@timbre.example.zimbra.com",
                 't' => "t"
                 } );
 }
 $d->add('e', undef,
         {
-            'a' => "user2\@timbre.liquidsys.com",
+            'a' => "user2\@timbre.example.zimbra.com",
             't' => "t"
             } );
 
@@ -106,7 +106,7 @@ if ($includeCurpleAddr) {
 if ($includeDogfoodAddr) {
     $d->add('e', undef,
             {
-                'a' => "tim\@liquidsys.com",
+                'a' => "tim\@example.zimbra.com",
                 't' => "t",
             } );
 }
@@ -199,10 +199,10 @@ if ($endTime =~ /^([+-])?P(\d+W)$/) {
                       });
 }
 
-$d->add('or', undef, { 'd' => "user1", 'a' => "user1\@timbre.liquidsys.com" } );
+$d->add('or', undef, { 'd' => "user1", 'a' => "user1\@timbre.example.zimbra.com" } );
 
 $d->add('at', undef, { 'd' => "user2",
-                       'a' => "user2\@timbre.liquidsys.com",
+                       'a' => "user2\@timbre.example.zimbra.com",
                        'role' => "REQ",
                        'ptst' => "NE",
 #                       'rsvp' => "1"
@@ -217,7 +217,7 @@ $d->add('at', undef, { 'd' => "user3",
 
 if ($includeDogfoodAddr) {
     $d->add('at', undef, { 'd' => "tim",
-                           'a' => "tim\@liquidsys.com",
+                           'a' => "tim\@example.zimbra.com",
                            'role' => "REQ",
                            'ptst' => "NE",
 #                           'rsvp' => "1",

@@ -49,7 +49,7 @@ my $authToken = $authResponse->find_child('authToken')->content;
 my $sessionId = $authResponse->find_child('sessionId')->content;
 #print "sessionId = $sessionId\n";
 
-my $context = $SOAP->liquidContext($authToken, $sessionId);
+my $context = $SOAP->zimbraContext($authToken, $sessionId);
 
 my $contextStr = $context->to_string("pretty");
 #print("Context = $contextStr\n");
@@ -81,18 +81,18 @@ $d->add("inst", undef, { 'd'=>$instId });
 $d->start('m', undef, undef, undef);
 
 if ($userId eq "user1") {
-    $d->add('e', undef, { 'a' => "tim\@liquidsys.com",
+    $d->add('e', undef, { 'a' => "tim\@example.zimbra.com",
                           't' => "t" } );
 
     $d->add('e', undef,
             {
-                'a' => "user2\@timbre.liquidsys.com",
+                'a' => "user2\@timbre.example.zimbra.com",
                 't' => "t"
                 } );
 
     $d->add('e', undef,
             {
-                'a' => "user1\@timbre.liquidsys.com",
+                'a' => "user1\@timbre.example.zimbra.com",
                 't' => "t"
                 } );
 } else {

@@ -48,7 +48,7 @@ print "authToken($authToken)\n";
 my $sessionId = $authResponse->find_child('sessionId')->content;
 print "sessionId = $sessionId\n";
 
-my $context = $SOAP->liquidContext($authToken, $sessionId);
+my $context = $SOAP->zimbraContext($authToken, $sessionId);
 
 my $contextStr = $context->to_string("pretty");
 print("Context = $contextStr\n");
@@ -67,7 +67,7 @@ $d->start('m', undef, { 'l' => "/INBOX" }, undef);
 
 $d->add('e', undef,
         {
-            'a' => "user1\@timbre.liquidsys.com",
+            'a' => "user1\@timbre.example.zimbra.com",
             't' => "t"
             } );
 

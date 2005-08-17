@@ -27,7 +27,7 @@ use Getopt::Std;
 #    For subject, we pick a number and variance of words, and generate random text.
 #    For date, we pick a random date between 0 and 2 years in the past
 #    For content-type, we currently hardcode to ascii
-#    For to, we hardcode user1@liquidsys.com 
+#    For to, we hardcode user1@example.zimbra.com 
 #    
 #
 #
@@ -170,7 +170,7 @@ sub add_header
         my $numValues = length(@values);
 
         if ($hdrName eq "to") {
-            return "user1\@liquidsys.com, " . @values[rand_int(0, $numValues-1)];
+            return "user1\@example.zimbra.com, " . @values[rand_int(0, $numValues-1)];
         } else {
             return @values[rand_int(0, $numValues-1)];
         }

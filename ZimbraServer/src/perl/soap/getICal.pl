@@ -49,7 +49,7 @@ my $url = "http://localhost:7070/service/soap/";
 my $SOAP = $Soap::Soap12;
 my $d = new XmlDoc;
 $d->start('AuthRequest', $ACCTNS);
-$d->add('account', undef, { by => "name"}, 'user1@liquidsys.com');
+$d->add('account', undef, { by => "name"}, 'user1@example.zimbra.com');
 $d->add('password', undef, undef, "test123");
 $d->end();
 
@@ -63,7 +63,7 @@ print "authToken($authToken)\n";
 my $sessionId = $authResponse->find_child('sessionId')->content;
 print "sessionId = $sessionId\n";
 
-my $context = $SOAP->liquidContext($authToken, $sessionId);
+my $context = $SOAP->zimbraContext($authToken, $sessionId);
 
 my $contextStr = $context->to_string("pretty");
 print("Context = $contextStr\n");

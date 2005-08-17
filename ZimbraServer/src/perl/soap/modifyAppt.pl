@@ -54,7 +54,7 @@ my $authToken = $authResponse->find_child('authToken')->content;
 my $sessionId = $authResponse->find_child('sessionId')->content;
 #print "sessionId = $sessionId\n";
 
-my $context = $SOAP->liquidContext($authToken, $sessionId);
+my $context = $SOAP->zimbraContext($authToken, $sessionId);
 
 my $contextStr = $context->to_string("pretty");
 #print("Context = $contextStr\n");
@@ -72,7 +72,7 @@ $d->start('m', undef, undef, undef);
 
     $d->add('e', undef,
             {
-                'a' => "user2\@timbre.liquidsys.com",
+                'a' => "user2\@timbre.example.zimbra.com",
                 't' => "t"
                 } );
     
@@ -92,7 +92,7 @@ $d->start('m', undef, undef, undef);
 
 # $d->add('e', undef,
 #         {
-#             'a' => "tim\@liquidsys.com",
+#             'a' => "tim\@example.zimbra.com",
 #             't' => "t"
 #             } );
 # } 
@@ -116,10 +116,10 @@ $d->add('s', undef, { 'd', => $startTime, });
 $d->add('e', undef, { 'd', => $endTime, });
 
 
-    $d->add('or', undef, { 'd' => "user1", 'a' => "user1\@timbre.liquidsys.com" } );
+    $d->add('or', undef, { 'd' => "user1", 'a' => "user1\@timbre.example.zimbra.com" } );
 
     $d->add('at', undef, { 'd' => "user2",
-                           'a' => "user2\@timbre.liquidsys.com",
+                           'a' => "user2\@timbre.example.zimbra.com",
                            'role' => "REQ",
                            'status' => "NE",
                        });

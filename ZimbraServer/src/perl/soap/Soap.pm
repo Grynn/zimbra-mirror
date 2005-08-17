@@ -154,7 +154,7 @@ sub toString {
     return "SOAP ".$self->getVersion();
 }
  
-sub liquidContext {
+sub zimbraContext {
 	my ($self, $authtoken, $session, $wantcontext) = @_;
 	my $context = new XmlElement("context", "urn:zimbra");
 	my $auth = new XmlElement("authToken");

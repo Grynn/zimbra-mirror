@@ -31,7 +31,7 @@ use Date::Format;
 #        random text.
 #    For date, we pick a random date between 0 and 2 years in the past
 #    For content-type, we currently hardcode to ascii
-#    For to, we hardcode user$N@liquidsys.com 
+#    For to, we hardcode user$N@example.zimbra.com 
 #    
 # TODOs:
 #    -- attachments
@@ -89,7 +89,7 @@ for (my $convs = 0; $convs < $total_convs;) {
     my $msgs_in_conv = dist_rand_int($convAvg, $convStdDev);
     next if ($msgs_in_conv < 0);
     
-    my $user = "user" . ($convs % $opt_num_users) . "\@liquidsys.com";
+    my $user = "user" . ($convs % $opt_num_users) . "\@example.zimbra.com";
     my $subject = get_subject();
 
     for (my $i = 0; $i <= $msgs_in_conv; $i++) {

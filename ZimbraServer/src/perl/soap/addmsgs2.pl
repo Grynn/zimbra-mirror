@@ -37,7 +37,7 @@ sub authenticate
 #    print "AuthResponse = ".$authResponse->to_string("pretty")."\n";
     my $authToken = $authResponse->find_child('authToken')->content;
 #    print "authToken($authToken)\n";
-    my $context = $SOAP->liquidContext($authToken);
+    my $context = $SOAP->zimbraContext($authToken);
     return $context;
 }
 
@@ -63,8 +63,8 @@ my $g_msg;
 #opendir (DIR, $dirname) or die "couldn't open $dirname";
 #open(IN, "c:\\archive_mail\\archive_32303");
 open(IN, "$ARGV[0]");
-$g_msg = next_file("user1\@liquidsys.com");
-my $context = authenticate("user1\@liquidsys.com");
+$g_msg = next_file("user1\@example.zimbra.com");
+my $context = authenticate("user1\@example.zimbra.com");
 
 my $num = 2;
 
@@ -76,7 +76,7 @@ $d->start('m', undef, \%msgAttrs, undef);
 
 
 my $usernum  = $num%100;
-my $username = "user$num\@liquidsys.com";
+my $username = "user$num\@example.zimbra.com";
 print("Adding mail for user: $username\n");
 $g_msg = next_file($username);
 $context = authenticate($username);
@@ -124,7 +124,7 @@ sub next_file
         if (($found_to == 0) && (~/^To:/)) {
             $found_to = 1;
             if (!($_ =~ /$username/)) {
-                $_ = "To: user1\@liquidsys.com\n";
+                $_ = "To: user1\@example.zimbra.com\n";
             }
         }
         s/\000//g;

@@ -21,9 +21,9 @@ use Soap;
 #
 ######################################################################
 #my $HOST = 'dogfood';
-#my $USER = 'tim@dogfood.liquidsys.com';
+#my $USER = 'tim@dogfood.example.zimbra.com';
 my $HOST = 'localhost';
-my $USER = 'user1@liquidsys.com';
+my $USER = 'user1@example.zimbra.com';
 ######################################################################
 
 
@@ -53,7 +53,7 @@ print "authToken($authToken)\n";
 my $sessionId = $authResponse->find_child('sessionId')->content;
 print "sessionId = $sessionId\n";
 
-my $context = $SOAP->liquidContext($authToken, $sessionId);
+my $context = $SOAP->zimbraContext($authToken, $sessionId);
 
 my $contextStr = $context->to_string("pretty");
 print("Context = $contextStr\n");
