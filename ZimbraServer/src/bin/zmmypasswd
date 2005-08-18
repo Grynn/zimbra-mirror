@@ -51,12 +51,12 @@ SET PASSWORD FOR '${zimbra_mysql_user}' = PASSWORD('${newpassword}');
 SET PASSWORD FOR '${zimbra_mysql_user}'@'localhost' = PASSWORD('${newpassword}');
 SET PASSWORD FOR '${zimbra_mysql_user}'@'localhost.localdomain' = PASSWORD('${newpassword}');
 EOF
-	if [ $? = 0 ]; then
-		echo '*' Changed zimbra mysql user password
-	else
-		echo '****' PASSWORD CHANGE FAILED
-		exit 1
-	fi
+    if [ $? = 0 ]; then
+        echo '*' Changed zimbra mysql user password
+    else
+        echo '****' PASSWORD CHANGE FAILED
+        exit 1
+    fi
 fi
 
 #
@@ -65,12 +65,23 @@ fi
 if [ ${password_key} = mysql_root_password ]; then
     echo ${zimbra_home}/bin/mysqladmin -u root --password="${mysql_root_password}" password "${newpassword}"
     ${zimbra_home}/bin/mysqladmin -u root --password="${mysql_root_password}" password "${newpassword}"
-	if [ $? = 0 ]; then
-		echo '*' Changed mysql root user password
-	else
-		echo '****' PASSWORD CHANGE FAILED
-		exit 1
-	fi
+    if [ $? = 0 ]; then
+        echo '*' Changed mysql root user password
+    else
+        echo '****' PASSWORD CHANGE FAILED
+        exit 1
+    fi
+    # Change for localhost socket clients also - useful for dev.
+    cat <<EOF | ${zimbra_home}/bin/mysql -u root --password="${newpassword}"
+SET PASSWORD FOR 'root'@'localhost' = PASSWORD('${newpassword}');
+SET PASSWORD FOR 'root'@'localhost.localdomain' = PASSWORD('${newpassword}');
+EOF
+    if [ $? = 0 ]; then
+        echo '*' Changed mysql root user password root@localhost
+    else
+        echo '****' PASSWORD CHANGE FAILED FOR root@localhost
+        exit 1
+    fi
 fi
 
 #
