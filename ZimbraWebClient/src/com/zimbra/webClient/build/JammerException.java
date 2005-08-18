@@ -1,4 +1,4 @@
-package com.zimbra.zimbraConsole.build;
+package com.zimbra.webClient.build;
 
 
 public class JammerException extends Exception {

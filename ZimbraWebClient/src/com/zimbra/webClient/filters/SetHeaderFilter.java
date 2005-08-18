@@ -1,5 +1,4 @@
-
-package com.zimbra.zimbraConsole.filters;
+package com.zimbra.webClient.filters;
 
 import java.io.IOException;
 import java.util.Enumeration;

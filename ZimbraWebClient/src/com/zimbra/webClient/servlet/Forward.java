@@ -1,4 +1,4 @@
-package com.zimbra.zimbraConsole.servlet;
+package com.zimbra.webClient.servlet;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
