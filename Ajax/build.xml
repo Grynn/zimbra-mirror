@@ -6,7 +6,7 @@
 	<property name="build.examples.dir" location="${build.dir}/WebRoot/examples"/>
 	<property name="build.cmn.dir"      location="${build.examples.dir}/common"/>
 	<property name="dist.dir"           location="build/dist"/>
-	<property name="dist.tomcat.dir"    location="${dist.dir}/jakarta-tomcat-5.0.28"/>
+	<property name="dist.tomcat.dir"    location="${dist.dir}/tomcat"/>
 	<property name="dist.tomcat.webapps.dir" location="${dist.tomcat.dir}/webapps"/>
 	<property name="dist.tarfile"       value="dev-zimbra.tar"/>
 
