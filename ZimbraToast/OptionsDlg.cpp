@@ -2,7 +2,7 @@
 #include ".\optionsdlg.h"
 #include "resource.h"
 #include "NotifParams.h"
-#include "LiquidNotifier.h"
+#include "ZimbraNotifier.h"
 #include "TrayIcon.h"
 COptionsDlg* COptionsDlg::m_pDlg = NULL;
 
@@ -66,8 +66,8 @@ LRESULT CALLBACK COptionsDlg::WndProc(HWND hWnd, UINT message, WPARAM wParam, LP
 			if (LOWORD(wParam) == IDC_BUTTON_RESET_PWD )
 			{
 				pParams->DeleteCredentials();
-				CLiquidNotifier::GetInstance()->Stop();
-				if(!CLiquidNotifier::GetInstance()->Start() )
+				CZimbraNotifier::GetInstance()->Stop();
+				if(!CZimbraNotifier::GetInstance()->Start() )
 				{
 					CTrayIcon::GetInstance()->SetErrorIcon();
 				}
@@ -94,8 +94,8 @@ LRESULT CALLBACK COptionsDlg::WndProc(HWND hWnd, UINT message, WPARAM wParam, LP
 					pParams->SetMailtoClient();
 				}
 
-				CLiquidNotifier::GetInstance()->Stop();
-				CLiquidNotifier::GetInstance()->Start();
+				CZimbraNotifier::GetInstance()->Stop();
+				CZimbraNotifier::GetInstance()->Start();
 
 				return TRUE;
 			}

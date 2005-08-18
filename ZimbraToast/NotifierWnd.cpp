@@ -87,7 +87,7 @@ BOOL CNotifierWindow::Create(HINSTANCE hInstance)
 	DWORD dwExStyle = WS_EX_TOOLWINDOW | WS_EX_TOPMOST;
 	DWORD dwStyle = WS_POPUP | WS_BORDER | WS_VISIBLE;
 
-	m_hWnd = CreateDialog( m_hInstance, MAKEINTRESOURCE(IDC_LIQUID_NOTIFIER_WND), NULL, (DLGPROC)CNotifierWindow::WndProc );
+	m_hWnd = CreateDialog( m_hInstance, MAKEINTRESOURCE(IDC_ZIMBRA_NOTIFIER_WND), NULL, (DLGPROC)CNotifierWindow::WndProc );
 	if( m_hWnd == 0 )
 		return FALSE;
 	{

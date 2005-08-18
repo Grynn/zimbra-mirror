@@ -96,7 +96,7 @@ class CNotifierWindow
 		//child windows
 		HWND		m_hWndFrom;
 		HWND		m_hWndSummary;
-		//HWND		m_hWndLiquidImage;
+		//HWND		m_hWndZimbraImage;
 		//HWND		m_hWndFlagImage;		
 		//HWND		m_hWndDeleteImage;
 		//HWND		m_hWndDropDown;

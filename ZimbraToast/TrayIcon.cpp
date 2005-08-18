@@ -122,7 +122,7 @@ void openMailbox()
 	UINT port = pP->Port();
 
 	LPTSTR pCmd = new TCHAR[ _tcslen(pS) + 128 ];
-	_stprintf( pCmd, _T("http://%s:%d/liquid"), pS, port );
+	_stprintf( pCmd, _T("http://%s:%d/zimbra"), pS, port );
 
 	ShellExecute( NULL, _T("open"), pCmd, NULL, NULL, SW_SHOWNORMAL );
 	delete [] pCmd;

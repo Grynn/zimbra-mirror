@@ -11,12 +11,12 @@
 #include <Iads.h>
 #include <adshlp.h>
 
-using namespace Liquid::Util;
+using namespace Zimbra::Util;
 
 
 
 FILE* TraceFileAndLineInfo::m_fLogFile = fopen( "ltoast.log", "w+" );
-Liquid::Util::CriticalSection TraceFileAndLineInfo::cs;
+Zimbra::Util::CriticalSection TraceFileAndLineInfo::cs;
 /******************************************************************************
  ******************************************************************************
 	XmlUtil
@@ -357,7 +357,7 @@ XmlParseException::~XmlParseException()
 
 
 
-//HRESULT Liquid::Util::ActiveDirectory::GetLoggedOnUserDN( BSTR* pbstrUserName )
+//HRESULT Zimbra::Util::ActiveDirectory::GetLoggedOnUserDN( BSTR* pbstrUserName )
 //{
 //	IADsADSystemInfo* pADsys = NULL;
 //	HRESULT hr = CoCreateInstance(CLSID_ADSystemInfo,
@@ -375,7 +375,7 @@ XmlParseException::~XmlParseException()
 //}
 //
 //
-//HRESULT Liquid::Util::ActiveDirectory::GetUserExServerDN( BSTR bstrUserDN, BSTR* pbstrLegacyExchangeDN )
+//HRESULT Zimbra::Util::ActiveDirectory::GetUserExServerDN( BSTR bstrUserDN, BSTR* pbstrLegacyExchangeDN )
 //{
 //	IDirectoryObject* pObject = NULL;
 //
@@ -408,7 +408,7 @@ XmlParseException::~XmlParseException()
 //	return hr;
 //}
 //
-//HRESULT Liquid::Util::ActiveDirectory::GetUserLegacyExDN( BSTR bstrUserDN, BSTR* pbstrLegacyExchangeDN )
+//HRESULT Zimbra::Util::ActiveDirectory::GetUserLegacyExDN( BSTR bstrUserDN, BSTR* pbstrLegacyExchangeDN )
 //{
 //	IDirectoryObject* pObject;
 //
@@ -443,7 +443,7 @@ XmlParseException::~XmlParseException()
 
 
 
-void Liquid::Util::HexEncode( LPBYTE pBuffer, DWORD nBufferBytes, LPWSTR& pHexEncodedBuffer )
+void Zimbra::Util::HexEncode( LPBYTE pBuffer, DWORD nBufferBytes, LPWSTR& pHexEncodedBuffer )
 {
 	pHexEncodedBuffer = new WCHAR[ (nBufferBytes * 2) + 1 ];
 	ZeroMemory( pHexEncodedBuffer, ((nBufferBytes * 2) + 1 ) * sizeof(WCHAR) );

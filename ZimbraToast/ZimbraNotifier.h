@@ -1,29 +1,29 @@
 #pragma once
 #include "Mail.h"
 
-class CLiquidNotifier
+class CZimbraNotifier
 {
 	public:
 		BOOL Start();
 		BOOL Stop();
 
-		static CLiquidNotifier* GetInstance();
+		static CZimbraNotifier* GetInstance();
 
-		~CLiquidNotifier();
+		~CZimbraNotifier();
 
 	private:
-		CLiquidNotifier();
+		CZimbraNotifier();
 		static void CALLBACK OnTimer( PVOID pParam, BOOLEAN bTimeOrWait );
 		void OnTimer();
 
-		static DWORD CALLBACK CLiquidNotifier::WorkerThread(LPVOID pParam);
-		void CLiquidNotifier::WorkerThread();
+		static DWORD CALLBACK CZimbraNotifier::WorkerThread(LPVOID pParam);
+		void CZimbraNotifier::WorkerThread();
 
-		void ProcessFirstRequest(Liquid::Mail::Mailbox& mbx);
-		void UpdateMessage(Liquid::Mail::Mailbox& mbx);
+		void ProcessFirstRequest(Zimbra::Mail::Mailbox& mbx);
+		void UpdateMessage(Zimbra::Mail::Mailbox& mbx);
 
 	private:
-		static CLiquidNotifier* m_pNotifier;
+		static CZimbraNotifier* m_pNotifier;
 		
 		static const int TIMER_DUE_TIME;
 		static const int TIMER_PERIOD;

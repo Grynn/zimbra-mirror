@@ -1,7 +1,7 @@
 #pragma once
 
 
-namespace Liquid { namespace Util {
+namespace Zimbra { namespace Util {
 
 /**
  *  Free the memory associated with a string
@@ -160,7 +160,7 @@ class TraceFileAndLineInfo
 
 		void __cdecl operator()(LPCTSTR pszFmt, ...) const
 		{
-			Liquid::Util::AutoCriticalSection guard(cs); //make this thread safe
+			Zimbra::Util::AutoCriticalSection guard(cs); //make this thread safe
 			TCHAR buf[4096], *p = buf;
 
 			SYSTEMTIME st;
@@ -191,7 +191,7 @@ class TraceFileAndLineInfo
 		const TCHAR *const m_pszFileName;
 		const int m_nLineNo;
 		static FILE* m_fLogFile;
-		static Liquid::Util::CriticalSection cs;
+		static Zimbra::Util::CriticalSection cs;
 
 		static void flushit(TCHAR* buf)
 		{

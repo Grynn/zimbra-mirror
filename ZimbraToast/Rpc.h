@@ -2,7 +2,7 @@
 #include "Util.h"
 
 
-namespace Liquid { namespace Rpc {
+namespace Zimbra { namespace Rpc {
 
 class RpcException
 {
@@ -144,7 +144,7 @@ class Connection
 class BatchRequest;
 /*****************************************************************************
  *
- *  Base class for all SOAP requests made to the liquid server
+ *  Base class for all SOAP requests made to the zimbra server
  *
  *****************************************************************************/
 class Request
@@ -351,18 +351,18 @@ class SessionData
 		void Initialize( IXMLDOMDocument2* pDoc )
 		{
 			Cleanup();
-			Liquid::Util::XmlUtil::FindNodeValue( pDoc, L"//account:authToken", _pAuthToken );
-			Liquid::Util::XmlUtil::FindNodeValue( pDoc, L"//account:lifetime",  _pLifeTime  );
-			Liquid::Util::XmlUtil::FindNodeValue( pDoc, L"//account:sessionId", _pSessionId );
+			Zimbra::Util::XmlUtil::FindNodeValue( pDoc, L"//account:authToken", _pAuthToken );
+			Zimbra::Util::XmlUtil::FindNodeValue( pDoc, L"//account:lifetime",  _pLifeTime  );
+			Zimbra::Util::XmlUtil::FindNodeValue( pDoc, L"//account:sessionId", _pSessionId );
 		}
 
 		void Update( IXMLDOMDocument2* pDoc )
 		{
 			LPWSTR pNewSessionId = NULL;
-			Liquid::Util::XmlUtil::FindNodeValue( pDoc, L"//l:sessionId", pNewSessionId );
+			Zimbra::Util::XmlUtil::FindNodeValue( pDoc, L"//l:sessionId", pNewSessionId );
 			if( pNewSessionId != NULL )
 			{
-				Liquid::Util::SafeDelete( _pSessionId ); //remove the old session id
+				Zimbra::Util::SafeDelete( _pSessionId ); //remove the old session id
 				_pSessionId = pNewSessionId;
 			}
 		}
@@ -380,9 +380,9 @@ class SessionData
 		//free internal resources
 		void Cleanup()
 		{
-			Liquid::Util::SafeDelete( _pAuthToken );
-			Liquid::Util::SafeDelete( _pSessionId );
-			Liquid::Util::SafeDelete( _pLifeTime  );
+			Zimbra::Util::SafeDelete( _pAuthToken );
+			Zimbra::Util::SafeDelete( _pSessionId );
+			Zimbra::Util::SafeDelete( _pLifeTime  );
 		}
 
 		LPWSTR _pAuthToken;
@@ -492,14 +492,14 @@ struct ATTRIBUTES
  **/
 struct URNS
 {
-	static LPCWSTR Liquid;
-	static LPCWSTR LiquidAccount;
-	static LPCWSTR LiquidMail;
+	static LPCWSTR Zimbra;
+	static LPCWSTR ZimbraAccount;
+	static LPCWSTR ZimbraMail;
 
 	//variant versions
-	static _variant_t vLiquid;
-	static _variant_t vLiquidAccount;
-	static _variant_t vLiquidMail;
+	static _variant_t vZimbra;
+	static _variant_t vZimbraAccount;
+	static _variant_t vZimbraMail;
 };
 
 };};

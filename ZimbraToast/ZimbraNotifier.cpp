@@ -1,17 +1,17 @@
 #include "StdAfx.h"
-#include "LiquidNotifier.h"
+#include "ZimbraNotifier.h"
 #include "NotifParams.h"
 #include "TrayIcon.h"
 #include "NotifierWnd.h"
 
 //n millis to first timer event
-const int CLiquidNotifier::TIMER_DUE_TIME = 1 * 1000;
+const int CZimbraNotifier::TIMER_DUE_TIME = 1 * 1000;
 
 //millis between timer events
-const int CLiquidNotifier::TIMER_PERIOD = 1 * 60 * 1000;
+const int CZimbraNotifier::TIMER_PERIOD = 1 * 60 * 1000;
 
 //static single instance of this class
-CLiquidNotifier* CLiquidNotifier::m_pNotifier = NULL;
+CZimbraNotifier* CZimbraNotifier::m_pNotifier = NULL;
 
 
 ULONG_PTR REQUEST_EXIT = 1001;
@@ -22,11 +22,11 @@ ULONG_PTR REQUEST_UPDATE = 1009;
  *
  *
  **/
-CLiquidNotifier* CLiquidNotifier::GetInstance()
+CZimbraNotifier* CZimbraNotifier::GetInstance()
 {
 	if( m_pNotifier == NULL )
 	{
-		m_pNotifier = new CLiquidNotifier();
+		m_pNotifier = new CZimbraNotifier();
 	}
 	return m_pNotifier;
 }
@@ -37,7 +37,7 @@ CLiquidNotifier* CLiquidNotifier::GetInstance()
  *
  *
  **/
-CLiquidNotifier::CLiquidNotifier(void)
+CZimbraNotifier::CZimbraNotifier(void)
 {
 	m_hTimerQueue = INVALID_HANDLE_VALUE;
 	m_hTimer = INVALID_HANDLE_VALUE;
@@ -49,7 +49,7 @@ CLiquidNotifier::CLiquidNotifier(void)
  *
  *
  **/
-CLiquidNotifier::~CLiquidNotifier(void)
+CZimbraNotifier::~CZimbraNotifier(void)
 {
 }
 
@@ -61,7 +61,7 @@ CLiquidNotifier::~CLiquidNotifier(void)
  *
  *
  **/
-BOOL CLiquidNotifier::Start()
+BOOL CZimbraNotifier::Start()
 {
 	DWORD tid;
 
@@ -69,7 +69,7 @@ BOOL CLiquidNotifier::Start()
 	m_hCompletionPort = CreateIoCompletionPort( INVALID_HANDLE_VALUE, NULL, 12, 1 );
 
 	//start the worker thread
-	CreateThread( NULL, 0, CLiquidNotifier::WorkerThread, this, 0, &tid );
+	CreateThread( NULL, 0, CZimbraNotifier::WorkerThread, this, 0, &tid );
 
 	//wait for it to be initialized
 	WaitForSingleObject( m_hThreadInit, INFINITE );
@@ -83,7 +83,7 @@ BOOL CLiquidNotifier::Start()
 			m_hTimerQueue = CreateTimerQueue();
 			CreateTimerQueueTimer(  &m_hTimer, 
 									m_hTimerQueue, 
-									CLiquidNotifier::OnTimer, 
+									CZimbraNotifier::OnTimer, 
 									this, 
 									TIMER_DUE_TIME,
 									TIMER_PERIOD,
@@ -101,7 +101,7 @@ BOOL CLiquidNotifier::Start()
  *
  *
  **/
-BOOL CLiquidNotifier::Stop()
+BOOL CZimbraNotifier::Stop()
 {
 	if( m_hTimer != INVALID_HANDLE_VALUE )
 		DeleteTimerQueueTimer( m_hTimerQueue, m_hTimer, INVALID_HANDLE_VALUE );
@@ -132,10 +132,10 @@ BOOL CLiquidNotifier::Stop()
  *
  *
  **/
-void CLiquidNotifier::OnTimer( PVOID pParam, BOOLEAN bTimeOrWait )
+void CZimbraNotifier::OnTimer( PVOID pParam, BOOLEAN bTimeOrWait )
 {
 	
-	CLiquidNotifier* pLN = (CLiquidNotifier*)pParam;
+	CZimbraNotifier* pLN = (CZimbraNotifier*)pParam;
 	pLN->OnTimer();
 }
 
@@ -146,21 +146,21 @@ void CLiquidNotifier::OnTimer( PVOID pParam, BOOLEAN bTimeOrWait )
  *
  *
  **/
-void CLiquidNotifier::OnTimer()
+void CZimbraNotifier::OnTimer()
 {
 	//post a completion event to the worker thread
 	PostQueuedCompletionStatus( m_hCompletionPort, 0, REQUEST_UPDATE, NULL );	
 }
 
 
-DWORD CLiquidNotifier::WorkerThread( LPVOID pParam )
+DWORD CZimbraNotifier::WorkerThread( LPVOID pParam )
 {
-	CLiquidNotifier* pLN = (CLiquidNotifier*)pParam;
+	CZimbraNotifier* pLN = (CZimbraNotifier*)pParam;
 	pLN->WorkerThread();
 	return 0;
 }
 
-void CLiquidNotifier::WorkerThread()
+void CZimbraNotifier::WorkerThread()
 {
 	CoInitialize(NULL);
 
@@ -170,8 +170,8 @@ void CLiquidNotifier::WorkerThread()
 	LPTSTR pServer = CNotifParams::GetInstance()->Server();
 	UINT nPort = CNotifParams::GetInstance()->Port();
 
-	//auth to liquid
-	Liquid::Mail::Mailbox mbx( pServer, nPort );
+	//auth to zimbra
+	Zimbra::Mail::Mailbox mbx( pServer, nPort );
 
 	LocalFree(pServer);
 
@@ -195,7 +195,7 @@ void CLiquidNotifier::WorkerThread()
 			LocalFree(pPass);
 			done = TRUE;
 		}
-		catch( Liquid::LiquidException& le )
+		catch( Zimbra::ZimbraException& le )
 		{
 			if( !CNotifParams::GetInstance()->PrompForCreds() )
 			{
@@ -240,17 +240,17 @@ void CLiquidNotifier::WorkerThread()
 }
 
 
-void CLiquidNotifier::ProcessFirstRequest(Liquid::Mail::Mailbox& mbx)
+void CZimbraNotifier::ProcessFirstRequest(Zimbra::Mail::Mailbox& mbx)
 {
 	IXMLDOMDocument2* pResponseDoc = NULL;
 	try
 	{
-		Liquid::Rpc::PingRequest request;
+		Zimbra::Rpc::PingRequest request;
 		mbx.ProcessRequest( request, FALSE, pResponseDoc );
 
 		WCHAR pMsg[128];
 		LPWSTR pVal = NULL;
-		Liquid::Util::XmlUtil::FindNodeAttributeValue( pResponseDoc, L"/soap:Envelope/soap:Header/l:context/l:refresh/l:folder/l:folder[@id=2]", _T("u"), pVal );
+		Zimbra::Util::XmlUtil::FindNodeAttributeValue( pResponseDoc, L"/soap:Envelope/soap:Header/l:context/l:refresh/l:folder/l:folder[@id=2]", _T("u"), pVal );
 		if( pVal == NULL )
 		{
 			wcscpy( pMsg, L"0 unread messages" );
@@ -266,7 +266,7 @@ void CLiquidNotifier::ProcessFirstRequest(Liquid::Mail::Mailbox& mbx)
 		SafeRelease(pResponseDoc);
 	}catch(...)
 	{
-		CTrayIcon::GetInstance()->SetToolTip( L"Error communicating with liquid" );
+		CTrayIcon::GetInstance()->SetToolTip( L"Error communicating with zimbra" );
 		CTrayIcon::GetInstance()->SetErrorIcon();
 		SafeRelease(pResponseDoc);		
 	}
@@ -331,18 +331,18 @@ LPWSTR MakeMsg( LPWSTR pszSubject, LPWSTR pszFragment )
 
 
 
-void CLiquidNotifier::UpdateMessage(Liquid::Mail::Mailbox& mbx)
+void CZimbraNotifier::UpdateMessage(Zimbra::Mail::Mailbox& mbx)
 {
 	IXMLDOMDocument2* pResponseDoc = NULL;
 	try
 	{
-		Liquid::Rpc::PingRequest request;
+		Zimbra::Rpc::PingRequest request;
 		mbx.ProcessRequest( request, pResponseDoc );
 		
 		LPWSTR pszCount = NULL;
 
 		//how many new messages?
-		Liquid::Util::XmlUtil::FindNodeAttributeValue( pResponseDoc, L"/soap:Envelope/soap:Header/l:context/l:notify/l:modified/l:folder", L"u", pszCount );
+		Zimbra::Util::XmlUtil::FindNodeAttributeValue( pResponseDoc, L"/soap:Envelope/soap:Header/l:context/l:notify/l:modified/l:folder", L"u", pszCount );
 
 		if( pszCount != NULL )
 		{
@@ -387,7 +387,7 @@ void CLiquidNotifier::UpdateMessage(Liquid::Mail::Mailbox& mbx)
 
 			//if the node has flag with d or s, ignore it
 			LPWSTR pFlags = NULL;
-			Liquid::Util::XmlUtil::GetSingleAttribute( pNode, L"f", pFlags );
+			Zimbra::Util::XmlUtil::GetSingleAttribute( pNode, L"f", pFlags );
 			BOOL bSkip = FALSE;
 			if( pFlags != NULL )
 			{
@@ -418,22 +418,22 @@ void CLiquidNotifier::UpdateMessage(Liquid::Mail::Mailbox& mbx)
 			LPWSTR pszFragment = NULL;
 
 			//message id
-			Liquid::Util::XmlUtil::GetSingleAttribute( pNode, L"id", pszId );
+			Zimbra::Util::XmlUtil::GetSingleAttribute( pNode, L"id", pszId );
 
 			//from address
-			Liquid::Util::XmlUtil::FindNodeAttributeValue( pNode, L"./l:e[@t=\"f\"]", L"a", pszAddress );
+			Zimbra::Util::XmlUtil::FindNodeAttributeValue( pNode, L"./l:e[@t=\"f\"]", L"a", pszAddress );
 
 			//from display
-			Liquid::Util::XmlUtil::FindNodeAttributeValue( pNode, L"./l:e[@t=\"f\"]", L"d", pszDisplay );
+			Zimbra::Util::XmlUtil::FindNodeAttributeValue( pNode, L"./l:e[@t=\"f\"]", L"d", pszDisplay );
 
 			//from personal
-			Liquid::Util::XmlUtil::FindNodeAttributeValue( pNode, L"./l:e[@t=\"f\"]", L"p", pszPersonal );
+			Zimbra::Util::XmlUtil::FindNodeAttributeValue( pNode, L"./l:e[@t=\"f\"]", L"p", pszPersonal );
 
 			//subject
-			Liquid::Util::XmlUtil::FindNodeValue( pNode, L"./l:su", pszSubject );
+			Zimbra::Util::XmlUtil::FindNodeValue( pNode, L"./l:su", pszSubject );
 
 			//fragment
-			Liquid::Util::XmlUtil::FindNodeValue( pNode, L"./l:f", pszFragment );
+			Zimbra::Util::XmlUtil::FindNodeValue( pNode, L"./l:f", pszFragment );
 
 			//create and append the correct notify struct
 			pCurr->bHasAttach = 0;
@@ -441,12 +441,12 @@ void CLiquidNotifier::UpdateMessage(Liquid::Mail::Mailbox& mbx)
 			pCurr->pszFrom = MakeFrom( pszAddress, pszDisplay, pszPersonal );
 			pCurr->pszMsg = MakeMsg( pszSubject, pszFragment );
 
-			Liquid::Util::SafeDelete(pszId);
-			Liquid::Util::SafeDelete(pszAddress);
-			Liquid::Util::SafeDelete(pszDisplay);
-			Liquid::Util::SafeDelete(pszPersonal);
-			Liquid::Util::SafeDelete(pszSubject);
-			Liquid::Util::SafeDelete(pszFragment);
+			Zimbra::Util::SafeDelete(pszId);
+			Zimbra::Util::SafeDelete(pszAddress);
+			Zimbra::Util::SafeDelete(pszDisplay);
+			Zimbra::Util::SafeDelete(pszPersonal);
+			Zimbra::Util::SafeDelete(pszSubject);
+			Zimbra::Util::SafeDelete(pszFragment);
 
 			SafeRelease(pNode);
 			pCurr++;
@@ -466,7 +466,7 @@ void CLiquidNotifier::UpdateMessage(Liquid::Mail::Mailbox& mbx)
 	}
 	catch(...)
 	{
-		CTrayIcon::GetInstance()->SetToolTip( L"Error communicating with liquid" );
+		CTrayIcon::GetInstance()->SetToolTip( L"Error communicating with zimbra" );
 		CTrayIcon::GetInstance()->SetErrorIcon();
 		SafeRelease(pResponseDoc);
 	}

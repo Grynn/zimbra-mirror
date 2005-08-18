@@ -1,10 +1,10 @@
 #include "stdafx.h"
-#include "LiquidToast.h"
+#include "ZimbraToast.h"
 #include "NotifierWnd.h"
 #include "TrayIcon.h"
 #include "NotifParams.h"
 #include "OptionsDlg.h"
-#include "LiquidNotifier.h"
+#include "ZimbraNotifier.h"
 
 int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow)
 {
@@ -25,7 +25,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 
 		//TODO: URLEscape
 
-		_stprintf( pszUrl, _T("http://%s:%d/liquid/compose?mailto=%s"), pServer, nPort, pMailToUrl+7 );
+		_stprintf( pszUrl, _T("http://%s:%d/zimbra/compose?mailto=%s"), pServer, nPort, pMailToUrl+7 );
 
 		ShellExecute( NULL, _T("open"), pszUrl, NULL, NULL, SW_SHOWNORMAL );
 
@@ -63,7 +63,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 		return FALSE;
 
 	//start the poller
-	if( !CLiquidNotifier::GetInstance()->Start() )
+	if( !CZimbraNotifier::GetInstance()->Start() )
 	{
 		CTrayIcon::GetInstance()->SetErrorIcon();
 	}
@@ -84,7 +84,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 	}
 
 	//stop the notifier
-	CLiquidNotifier::GetInstance()->Stop();
+	CZimbraNotifier::GetInstance()->Stop();
 
 	//remove any icons from the tray
 	CTrayIcon::GetInstance()->Destroy();

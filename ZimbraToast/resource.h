@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by LiquidToast.rc
+// Used by ZimbraToast.rc
 //
 #define IDC_MYICON                      2
 #define IDD_WINDOWTEST_DIALOG           102
@@ -10,7 +10,7 @@
 #define IDC_WINDOWTEST                  109
 #define IDR_MAINFRAME                   128
 #define IDS_SAMKHAVARI                  131
-#define IDC_LIQUID_NOTIFIER_WND         132
+#define IDC_ZIMBRA_NOTIFIER_WND         132
 #define IDB_BITMAP_FLAG                 132
 #define IDB_BITMAP_DELETE               133
 #define IDD_TRAY_DLG                    133

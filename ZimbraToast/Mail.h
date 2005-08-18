@@ -3,7 +3,7 @@
 #include <map>
 #include "Rpc.h"
 
-namespace Liquid { namespace Mail {
+namespace Zimbra { namespace Mail {
 
 
 
@@ -111,7 +111,7 @@ class MessageFlags
 			wcscpy( _pFlags, mf._pFlags);
 		}
 
-		~MessageFlags(){ Liquid::Util::SafeDelete(_pFlags); }
+		~MessageFlags(){ Zimbra::Util::SafeDelete(_pFlags); }
 
 		void SetUnread()   { wcscat(_pFlags, L"u"); }
 		void SetFlagged()  { wcscat(_pFlags, L"f"); }
@@ -156,7 +156,7 @@ class BatchResponse
  ******************************************************************************/
 class Mailbox
 {
-	friend class LiquidServer;
+	friend class ZimbraServer;
 
 	public:
 		Mailbox( LPWSTR pServer, UINT nPort );
@@ -185,13 +185,13 @@ class Mailbox
 		void			Ping(BOOL bUseSid);
 
 	
-		void ProcessRequest( Liquid::Rpc::Request& request, IXMLDOMDocument2*& pResponseDoc, LPWSTR pTargetAccount = NULL );
-		void ProcessRequest( Liquid::Rpc::Request& request, BOOL bSetAuth, IXMLDOMDocument2*& pResponseDoc, LPWSTR pTargetAccount = NULL );
+		void ProcessRequest( Zimbra::Rpc::Request& request, IXMLDOMDocument2*& pResponseDoc, LPWSTR pTargetAccount = NULL );
+		void ProcessRequest( Zimbra::Rpc::Request& request, BOOL bSetAuth, IXMLDOMDocument2*& pResponseDoc, LPWSTR pTargetAccount = NULL );
 
 	private:
-		Liquid::Rpc::Connection		_connection;
-		Liquid::Rpc::SessionData	_session;
-		Liquid::Rpc::BatchRequest*  _pBatchRequest;
+		Zimbra::Rpc::Connection		_connection;
+		Zimbra::Rpc::SessionData	_session;
+		Zimbra::Rpc::BatchRequest*  _pBatchRequest;
 		BOOL						_bBatching;
 		__int64						_batchIdx;
 };
@@ -214,7 +214,7 @@ class Folder
 	public:
 		~Folder()
 		{
-			Liquid::Util::SafeDelete(_pFolderName);
+			Zimbra::Util::SafeDelete(_pFolderName);
 			SafeRelease(_pFolderNode);
 		}
 
@@ -362,14 +362,14 @@ class ExceptionManager
 
 /******************************************************************************
  *  
- *  LiquidException - the only kind of exception, for now.
+ *  ZimbraException - the only kind of exception, for now.
  *  
  ******************************************************************************/
-class LiquidException
+class ZimbraException
 {
 	public:
-		LiquidException( LPWSTR pErrorCode, LPWSTR pMessage ) : _pErrorCode(pErrorCode), _pMessage(pMessage){}
-		LiquidException( LPCWSTR pErrorCode, LPCWSTR pMessage )
+		ZimbraException( LPWSTR pErrorCode, LPWSTR pMessage ) : _pErrorCode(pErrorCode), _pMessage(pMessage){}
+		ZimbraException( LPCWSTR pErrorCode, LPCWSTR pMessage )
 		{
 			if( pErrorCode != NULL )
 			{
@@ -385,7 +385,7 @@ class LiquidException
 		}
 
 
-		LiquidException( const LiquidException& le )
+		ZimbraException( const ZimbraException& le )
 		{
 			_pErrorCode = NULL;
 			_pMessage = NULL;
@@ -403,17 +403,17 @@ class LiquidException
 			}
 		}
 
-		virtual ~LiquidException()
+		virtual ~ZimbraException()
 		{
-			Liquid::Util::SafeDelete(_pMessage);
-			Liquid::Util::SafeDelete(_pErrorCode);
+			Zimbra::Util::SafeDelete(_pMessage);
+			Zimbra::Util::SafeDelete(_pErrorCode);
 		};
 
 		virtual LPCWSTR GetError(){ return _pErrorCode; }
 		virtual LPCWSTR GetMessage(){ return _pMessage; }
 
 	private:
-		LiquidException(){}
+		ZimbraException(){}
 
 	private:
 		LPWSTR _pErrorCode;
@@ -421,11 +421,11 @@ class LiquidException
 };
 
 
-class LiquidLogonException : public LiquidException
+class ZimbraLogonException : public ZimbraException
 {
 	public:
-		LiquidLogonException( LiquidException& le ) : LiquidException(le) {}
-		virtual ~LiquidLogonException(){}
+		ZimbraLogonException( ZimbraException& le ) : ZimbraException(le) {}
+		virtual ~ZimbraLogonException(){}
 };
 
 

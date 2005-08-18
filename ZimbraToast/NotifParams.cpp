@@ -6,10 +6,10 @@ CNotifParams* CNotifParams::m_pParams = NULL;
 
 CNotifParams::CNotifParams(void)
 {
-	LONG lResult = RegOpenKey( HKEY_CURRENT_USER, _T("Software\\Liquid\\Notifier"), &m_hkNotif );
+	LONG lResult = RegOpenKey( HKEY_CURRENT_USER, _T("Software\\Zimbra\\Notifier"), &m_hkNotif );
 	if( lResult == ERROR_FILE_NOT_FOUND )
 	{
-		RegCreateKey( HKEY_CURRENT_USER, _T("Software\\Liquid\\Notifier"), &m_hkNotif);
+		RegCreateKey( HKEY_CURRENT_USER, _T("Software\\Zimbra\\Notifier"), &m_hkNotif);
 	}
 }
 
@@ -44,7 +44,7 @@ LPTSTR CNotifParams::Server()
 	LONG lResult = RegQueryValueEx( m_hkNotif, _T("Server"), NULL, &dwType, NULL, &dwBytes );
 	if( lResult == ERROR_FILE_NOT_FOUND )
 	{
-		Server( _T("dogfood.liquidsys.com") );
+		Server( _T("dogfood.example.zimbra.com") );
 		dwBytes = 22 * sizeof(TCHAR);
 		dwType = REG_SZ;
 	}
@@ -117,8 +117,8 @@ BOOL CNotifParams::PrompForCreds()
 	CREDUI_INFO credInfo = {0};
 	credInfo.cbSize = sizeof(CREDUI_INFO);
 	credInfo.hwndParent = NULL;
-	credInfo.pszMessageText = _T("Enter your Liquid account name and password");
-	credInfo.pszCaptionText = _T("Liquid Mailbox Credentials");
+	credInfo.pszMessageText = _T("Enter your Zimbra account name and password");
+	credInfo.pszCaptionText = _T("Zimbra Mailbox Credentials");
 	credInfo.hbmBanner = LoadBitmap( GetModuleHandle(NULL), MAKEINTRESOURCE(IDB_BITMAP_BANNER) );
 
 	DWORD dwRetVal = CredUIPromptForCredentials( 

@@ -2,9 +2,9 @@
 #include "Mail.h"
 
 
-using namespace Liquid;
-using namespace Liquid::Mail;
-using namespace Liquid::Util;
+using namespace Zimbra;
+using namespace Zimbra::Mail;
+using namespace Zimbra::Util;
 
 
 
@@ -79,13 +79,13 @@ ContactId BatchResponse::GetCreateContactResponse( __int64 id )
 
 		if( pText != NULL && pCode != NULL )
 		{
-			throw LiquidException( pCode, pText );
+			throw ZimbraException( pCode, pText );
 		}
 		else
 		{
 			SafeDelete(pText);
 			SafeDelete(pCode);
-			throw LiquidException( L"contact_id_not_returned", L"no contact id returned" );
+			throw ZimbraException( L"contact_id_not_returned", L"no contact id returned" );
 		}
 	}
 	ContactId contactId = _wtoi64( pContactId );
@@ -116,13 +116,13 @@ MessageId BatchResponse::GetAddMessageResponse( __int64 id )
 
 		if( pText != NULL && pCode != NULL )
 		{
-			throw LiquidException( pCode, pText );
+			throw ZimbraException( pCode, pText );
 		}
 		else
 		{
 			SafeDelete(pText);
 			SafeDelete(pCode);
-			throw LiquidException( L"message not added", L"no message id returned" );
+			throw ZimbraException( L"message not added", L"no message id returned" );
 		}
 		
 	}
@@ -144,7 +144,7 @@ MessageId BatchResponse::GetAddMessageResponse( __int64 id )
 
 /**
  *
- * A proxy object for a mailbox on a Liquid mail server
+ * A proxy object for a mailbox on a Zimbra mail server
  *
  * @param pServer	The server the mailbox lives on
  * @param nPort		The port to contact the server on
@@ -186,7 +186,7 @@ BOOL Mailbox::Logon( LPCWSTR pAccount, LPCWSTR pPassword )
 	try
 	{
 		//create the request
-		Liquid::Rpc::AuthRequest authRequest( pAccount, pPassword );	
+		Zimbra::Rpc::AuthRequest authRequest( pAccount, pPassword );	
 
 		//process it (an exception will be thrown if an error was returned)
 		ProcessRequest( authRequest, FALSE, pResponseDoc );
@@ -199,10 +199,10 @@ BOOL Mailbox::Logon( LPCWSTR pAccount, LPCWSTR pPassword )
 		//if we were successful, we have an auth token
 		return (_session.AuthToken() != NULL);
 	}
-	catch( LiquidException& le )
+	catch( ZimbraException& le )
 	{
 		SafeRelease(pResponseDoc);
-		throw LiquidLogonException(le);
+		throw ZimbraLogonException(le);
 	}
 	catch(...)
 	{
@@ -228,7 +228,7 @@ void Mailbox::StartBatching()
 		_pBatchRequest = NULL;
 	}
 
-	_pBatchRequest = new Liquid::Rpc::BatchRequest();
+	_pBatchRequest = new Zimbra::Rpc::BatchRequest();
 	_batchIdx = 0;
 }
 
@@ -239,7 +239,7 @@ BatchResponse Mailbox::ExecuteBatchRequest( LPWSTR pTargetAccount )
 	if( _pBatchRequest == NULL )
 	{
 		_bBatching = FALSE;
-		throw LiquidException( L"ExecuteBatchRequest failed", L"no batch request exists" );
+		throw ZimbraException( L"ExecuteBatchRequest failed", L"no batch request exists" );
 	}
 	IXMLDOMDocument2* pResponseDoc = NULL;
 
@@ -249,7 +249,7 @@ BatchResponse Mailbox::ExecuteBatchRequest( LPWSTR pTargetAccount )
 		{
 			ProcessRequest( *_pBatchRequest, pResponseDoc, pTargetAccount );
 		}
-		catch( LiquidException& le )
+		catch( ZimbraException& le )
 		{
 			//swallow this...
 		}
@@ -291,7 +291,7 @@ ContactList* Mailbox::GetContacts(ContactId* pContactIds, UINT nContactIds, LPWS
 	try
 	{
 		//create the request
-		Liquid::Rpc::GetContactsRequest request(pContactIds, nContactIds, pAttrList, nAttrs );
+		Zimbra::Rpc::GetContactsRequest request(pContactIds, nContactIds, pAttrList, nAttrs );
 
 		//ship it
 		ProcessRequest( request, pResponseDoc, pTargetAccount );
@@ -316,7 +316,7 @@ void Mailbox::Ping(BOOL bUseSid)
 	IXMLDOMDocument2* pResponseDoc = NULL;
 	try
 	{
-		Liquid::Rpc::PingRequest request;
+		Zimbra::Rpc::PingRequest request;
 		ProcessRequest( request, bUseSid, pResponseDoc );
 		SafeRelease(pResponseDoc);
 	}
@@ -333,16 +333,16 @@ void Mailbox::Ping(BOOL bUseSid)
  *
  *  @return		A folder object.  Caller must delete the object.
  */
-Liquid::Mail::Folder* Mailbox::GetFolder(LPWSTR pTargetAccount)
+Zimbra::Mail::Folder* Mailbox::GetFolder(LPWSTR pTargetAccount)
 {
 	IXMLDOMDocument2* pResponseDoc = NULL;
 	try
 	{
-		Liquid::Rpc::GetFolderRequest request;
+		Zimbra::Rpc::GetFolderRequest request;
 
 		ProcessRequest( request, pResponseDoc, pTargetAccount );
 
-		Folder* pFolder =  new Liquid::Mail::Folder(pResponseDoc);
+		Folder* pFolder =  new Zimbra::Mail::Folder(pResponseDoc);
 
 		SafeRelease( pResponseDoc );
 
@@ -369,7 +369,7 @@ TagList* Mailbox::GetTag(LPWSTR pTargetAccount)
 
 	try
 	{
-		Liquid::Rpc::GetTagRequest request;
+		Zimbra::Rpc::GetTagRequest request;
 
 		ProcessRequest( request, pResponseDoc, pTargetAccount );
 
@@ -402,7 +402,7 @@ ContactId Mailbox::CreateContact(AttributeMap& contactAttributes, FolderId paren
 
 	try
 	{
-		Liquid::Rpc::CreateContactRequest request(contactAttributes, tags, parentFolderId);
+		Zimbra::Rpc::CreateContactRequest request(contactAttributes, tags, parentFolderId);
 		if( _bBatching )
 		{
 			_pBatchRequest->AppendRequest( request, _batchIdx );
@@ -414,7 +414,7 @@ ContactId Mailbox::CreateContact(AttributeMap& contactAttributes, FolderId paren
 		LPWSTR pContactId = NULL;
 		XmlUtil::FindNodeAttributeValue( pResponseDoc, L"//mail:cn", L"id", pContactId );
 		if( pContactId == NULL )
-			throw LiquidException( L"contact_id_not_returned", L"No contact id was returned." );
+			throw ZimbraException( L"contact_id_not_returned", L"No contact id was returned." );
 
 		ContactId contactId = _wtoi64( pContactId );
 		delete [] pContactId;
@@ -446,14 +446,14 @@ FolderId Mailbox::CreateFolder(LPWSTR pFolderName, FolderId parentFolderId, LPWS
 
 	try
 	{
-		Liquid::Rpc::CreateFolderRequest request(pFolderName, parentFolderId);
+		Zimbra::Rpc::CreateFolderRequest request(pFolderName, parentFolderId);
 
 		ProcessRequest( request, pResponseDoc, pTargetAccount );
 
 		LPWSTR pFolderId = NULL;
 		XmlUtil::FindNodeAttributeValue( pResponseDoc, L"//mail:folder", L"id", pFolderId );
 		if( pFolderId == NULL )
-			throw LiquidException( L"folder not created", L"no folder id returned" );
+			throw ZimbraException( L"folder not created", L"no folder id returned" );
 
 		FolderId folderId = _wtoi64( pFolderId );
 		delete [] pFolderId;
@@ -485,14 +485,14 @@ TagId Mailbox::CreateTag(LPWSTR pTagName, Tag::Color tagColor, LPWSTR pTargetAcc
 
 	try
 	{
-		Liquid::Rpc::CreateTagRequest request(pTagName, tagColor );
+		Zimbra::Rpc::CreateTagRequest request(pTagName, tagColor );
 
 		ProcessRequest( request, pResponseDoc, pTargetAccount );
 
 		LPWSTR pTagId = NULL;
 		XmlUtil::FindNodeAttributeValue( pResponseDoc, L"//mail:tag", L"id", pTagId );
 		if( pTagId == NULL )
-			throw LiquidException( L"tag not created", L"no tag id returned" );
+			throw ZimbraException( L"tag not created", L"no tag id returned" );
 
 		TagId tagId = _wtoi64( pTagId );
 		delete [] pTagId;		
@@ -523,7 +523,7 @@ MessageId Mailbox::AddMessage( LPCWSTR pMimeMsg, FolderId parentFolderId, Messag
 	IXMLDOMDocument2* pResponseDoc = NULL;
 	try
 	{
-		Liquid::Rpc::AddMessageRequest request(pMimeMsg, parentFolderId, (LPWSTR)flags, tags);
+		Zimbra::Rpc::AddMessageRequest request(pMimeMsg, parentFolderId, (LPWSTR)flags, tags);
 		if( _bBatching )
 		{
 			_pBatchRequest->AppendRequest( request, _batchIdx );
@@ -535,7 +535,7 @@ MessageId Mailbox::AddMessage( LPCWSTR pMimeMsg, FolderId parentFolderId, Messag
 		LPWSTR pMbxId = NULL;
 		XmlUtil::FindNodeAttributeValue( pResponseDoc, L"//mail:m", L"id", pMbxId );
 		if( pMbxId == NULL )
-			throw LiquidException( L"message not added", L"no message id returned" );
+			throw ZimbraException( L"message not added", L"no message id returned" );
 
 		MessageId mbxId = _wtoi64(pMbxId);
 		delete [] pMbxId;
@@ -559,7 +559,7 @@ MessageId Mailbox::AddMessage( LPCWSTR pMimeMsg, FolderId parentFolderId, Messag
  * @param request			- The request to send
  * @param pResponseDoc		- The return value
  */
-void Mailbox::ProcessRequest( Liquid::Rpc::Request& request, IXMLDOMDocument2*& pResponseDoc, LPWSTR pTargetAccount )
+void Mailbox::ProcessRequest( Zimbra::Rpc::Request& request, IXMLDOMDocument2*& pResponseDoc, LPWSTR pTargetAccount )
 {
 	ProcessRequest( request, TRUE, pResponseDoc, pTargetAccount ); 
 }
@@ -575,7 +575,7 @@ void Mailbox::ProcessRequest( Liquid::Rpc::Request& request, IXMLDOMDocument2*& 
  * @param bSetSnA			- If true, the auth token and session id will be set.
  * @param pResponseDoc		- The return value
  */
-void Mailbox::ProcessRequest( Liquid::Rpc::Request& request, BOOL bSetSnA, IXMLDOMDocument2*& pResponseDoc, LPWSTR pTargetAccount )
+void Mailbox::ProcessRequest( Zimbra::Rpc::Request& request, BOOL bSetSnA, IXMLDOMDocument2*& pResponseDoc, LPWSTR pTargetAccount )
 {
 	request.SetAuthToken( _session.AuthToken() );
 
@@ -593,7 +593,7 @@ void Mailbox::ProcessRequest( Liquid::Rpc::Request& request, BOOL bSetSnA, IXMLD
 	
 	pResponseDoc->setProperty(L"SelectionLanguage",  _variant_t(L"XPath"));
 	pResponseDoc->setProperty( L"SelectionNamespaces", 
-		_variant_t("xmlns:mail='urn:liquidMail' xmlns:l='urn:liquid' xmlns:account='urn:liquidAccount' xmlns:soap='http://www.w3.org/2003/05/soap-envelope'") );
+		_variant_t("xmlns:mail='urn:zimbraMail' xmlns:l='urn:zimbra' xmlns:account='urn:zimbraAccount' xmlns:soap='http://www.w3.org/2003/05/soap-envelope'") );
 
 	//did it barf?
 	ExceptionManager::tryThrowException( pResponseDoc );
@@ -623,7 +623,7 @@ void Mailbox::ProcessRequest( Liquid::Rpc::Request& request, BOOL bSetSnA, IXMLD
  *
  * @param pDoc 
  */
-void Liquid::Mail::Folder::init(IXMLDOMDocument2* pDoc)
+void Zimbra::Mail::Folder::init(IXMLDOMDocument2* pDoc)
 {
 	//read the values out of the dom and into the member variables
 	pDoc->selectSingleNode( (LPWSTR)(L"//mail:folder"), &_pFolderNode );
@@ -635,7 +635,7 @@ void Liquid::Mail::Folder::init(IXMLDOMDocument2* pDoc)
  *
  * @param pNode 
  */
-void Liquid::Mail::Folder::init(IXMLDOMNode* pNode )
+void Zimbra::Mail::Folder::init(IXMLDOMNode* pNode )
 {
 	_pFolderNode = pNode;
 
@@ -679,7 +679,7 @@ void Liquid::Mail::Folder::init(IXMLDOMNode* pNode )
  * @param pFolderName 
  * @return 
  */
-Liquid::Mail::Folder* Liquid::Mail::Folder::GetFolderByName( FolderId parentFolderId, LPWSTR pFolderName )
+Zimbra::Mail::Folder* Zimbra::Mail::Folder::GetFolderByName( FolderId parentFolderId, LPWSTR pFolderName )
 {
 	IXMLDOMNode* pFolderNode = NULL;
 
@@ -699,7 +699,7 @@ Liquid::Mail::Folder* Liquid::Mail::Folder::GetFolderByName( FolderId parentFold
 	}
 
 	//we found the bastard!
-	return new Liquid::Mail::Folder(pFolderNode);
+	return new Zimbra::Mail::Folder(pFolderNode);
 }
 
 
@@ -709,7 +709,7 @@ Liquid::Mail::Folder* Liquid::Mail::Folder::GetFolderByName( FolderId parentFold
  *
  * @return 
  */
-BOOL Liquid::Mail::Folder::hasChildren()
+BOOL Zimbra::Mail::Folder::hasChildren()
 {
 	VARIANT_BOOL hasChildren = 0;
 	_pFolderNode->hasChildNodes(&hasChildren);
@@ -722,7 +722,7 @@ BOOL Liquid::Mail::Folder::hasChildren()
  *
  * @return 
  */
-Liquid::Mail::FolderList* Liquid::Mail::Folder::getChildren()
+Zimbra::Mail::FolderList* Zimbra::Mail::Folder::getChildren()
 {
 	FolderList* pFolderList = new FolderList();
 
@@ -742,7 +742,7 @@ Liquid::Mail::FolderList* Liquid::Mail::Folder::getChildren()
 		if( pChild == NULL )
 			continue;
 
-		Folder* pFolder = new Liquid::Mail::Folder(pChild);
+		Folder* pFolder = new Zimbra::Mail::Folder(pChild);
 		pFolderList->push_back(pFolder);
 	}
 
@@ -837,49 +837,49 @@ TagList* Tag::CreateTagList( IXMLDOMDocument2* pDoc )
 
 
 
-LPCWSTR Liquid::Mail::Contact::A_callbackPhone = L"callbackPhone";
-LPCWSTR Liquid::Mail::Contact::A_carPhone = L"carPhone";
-LPCWSTR Liquid::Mail::Contact::A_company = L"company";
-LPCWSTR Liquid::Mail::Contact::A_companyPhone = L"companyPhone";
-LPCWSTR Liquid::Mail::Contact::A_email = L"email";
-LPCWSTR Liquid::Mail::Contact::A_email2 = L"email2";
-LPCWSTR Liquid::Mail::Contact::A_email3 = L"email3";
-LPCWSTR Liquid::Mail::Contact::A_fileAs = L"fileAs";
-LPCWSTR Liquid::Mail::Contact::A_firstName = L"firstName";
-LPCWSTR Liquid::Mail::Contact::A_homeCity = L"homeCity";
-LPCWSTR Liquid::Mail::Contact::A_homeCountry = L"homeCountry";
-LPCWSTR Liquid::Mail::Contact::A_homeFax = L"homeFax";
-LPCWSTR Liquid::Mail::Contact::A_homePhone = L"homePhone";
-LPCWSTR Liquid::Mail::Contact::A_homePhone2 = L"homePhone2";
-LPCWSTR Liquid::Mail::Contact::A_homePostalCode = L"homePostalCode";
-LPCWSTR Liquid::Mail::Contact::A_homeState = L"homeState";
-LPCWSTR Liquid::Mail::Contact::A_homeStreet = L"homeStreet";
-LPCWSTR Liquid::Mail::Contact::A_homeURL = L"homeURL";
-LPCWSTR Liquid::Mail::Contact::A_jobTitle = L"jobTitle";
-LPCWSTR Liquid::Mail::Contact::A_lastName = L"lastName";
-LPCWSTR Liquid::Mail::Contact::A_middleName = L"middleName";
-LPCWSTR Liquid::Mail::Contact::A_mobilePhone = L"mobilePhone";
-LPCWSTR Liquid::Mail::Contact::A_namePrefix = L"namePrefix";
-LPCWSTR Liquid::Mail::Contact::A_nameSuffix = L"nameSuffix";
-LPCWSTR Liquid::Mail::Contact::A_notes = L"notes";
-LPCWSTR Liquid::Mail::Contact::A_otherCity = L"otherCity";
-LPCWSTR Liquid::Mail::Contact::A_otherCountry = L"otherCountry";
-LPCWSTR Liquid::Mail::Contact::A_otherFax = L"otherFax";
-LPCWSTR Liquid::Mail::Contact::A_otherPhone = L"otherPhone";
-LPCWSTR Liquid::Mail::Contact::A_otherPostalCode = L"otherPostalCode";
-LPCWSTR Liquid::Mail::Contact::A_otherState = L"otherState";
-LPCWSTR Liquid::Mail::Contact::A_otherStreet = L"otherStreet";
-LPCWSTR Liquid::Mail::Contact::A_otherURL = L"otherURL";
-LPCWSTR Liquid::Mail::Contact::A_pager = L"pager";
-LPCWSTR Liquid::Mail::Contact::A_workCity = L"workCity";
-LPCWSTR Liquid::Mail::Contact::A_workCountry = L"workCountry";
-LPCWSTR Liquid::Mail::Contact::A_workFax = L"workFax";
-LPCWSTR Liquid::Mail::Contact::A_workPhone = L"workPhone";
-LPCWSTR Liquid::Mail::Contact::A_workPhone2 = L"workPhone2";
-LPCWSTR Liquid::Mail::Contact::A_workPostalCode = L"workPostalCode";
-LPCWSTR Liquid::Mail::Contact::A_workState = L"workState";
-LPCWSTR Liquid::Mail::Contact::A_workStreet = L"workStreet";
-LPCWSTR Liquid::Mail::Contact::A_workURL = L"workURL";
+LPCWSTR Zimbra::Mail::Contact::A_callbackPhone = L"callbackPhone";
+LPCWSTR Zimbra::Mail::Contact::A_carPhone = L"carPhone";
+LPCWSTR Zimbra::Mail::Contact::A_company = L"company";
+LPCWSTR Zimbra::Mail::Contact::A_companyPhone = L"companyPhone";
+LPCWSTR Zimbra::Mail::Contact::A_email = L"email";
+LPCWSTR Zimbra::Mail::Contact::A_email2 = L"email2";
+LPCWSTR Zimbra::Mail::Contact::A_email3 = L"email3";
+LPCWSTR Zimbra::Mail::Contact::A_fileAs = L"fileAs";
+LPCWSTR Zimbra::Mail::Contact::A_firstName = L"firstName";
+LPCWSTR Zimbra::Mail::Contact::A_homeCity = L"homeCity";
+LPCWSTR Zimbra::Mail::Contact::A_homeCountry = L"homeCountry";
+LPCWSTR Zimbra::Mail::Contact::A_homeFax = L"homeFax";
+LPCWSTR Zimbra::Mail::Contact::A_homePhone = L"homePhone";
+LPCWSTR Zimbra::Mail::Contact::A_homePhone2 = L"homePhone2";
+LPCWSTR Zimbra::Mail::Contact::A_homePostalCode = L"homePostalCode";
+LPCWSTR Zimbra::Mail::Contact::A_homeState = L"homeState";
+LPCWSTR Zimbra::Mail::Contact::A_homeStreet = L"homeStreet";
+LPCWSTR Zimbra::Mail::Contact::A_homeURL = L"homeURL";
+LPCWSTR Zimbra::Mail::Contact::A_jobTitle = L"jobTitle";
+LPCWSTR Zimbra::Mail::Contact::A_lastName = L"lastName";
+LPCWSTR Zimbra::Mail::Contact::A_middleName = L"middleName";
+LPCWSTR Zimbra::Mail::Contact::A_mobilePhone = L"mobilePhone";
+LPCWSTR Zimbra::Mail::Contact::A_namePrefix = L"namePrefix";
+LPCWSTR Zimbra::Mail::Contact::A_nameSuffix = L"nameSuffix";
+LPCWSTR Zimbra::Mail::Contact::A_notes = L"notes";
+LPCWSTR Zimbra::Mail::Contact::A_otherCity = L"otherCity";
+LPCWSTR Zimbra::Mail::Contact::A_otherCountry = L"otherCountry";
+LPCWSTR Zimbra::Mail::Contact::A_otherFax = L"otherFax";
+LPCWSTR Zimbra::Mail::Contact::A_otherPhone = L"otherPhone";
+LPCWSTR Zimbra::Mail::Contact::A_otherPostalCode = L"otherPostalCode";
+LPCWSTR Zimbra::Mail::Contact::A_otherState = L"otherState";
+LPCWSTR Zimbra::Mail::Contact::A_otherStreet = L"otherStreet";
+LPCWSTR Zimbra::Mail::Contact::A_otherURL = L"otherURL";
+LPCWSTR Zimbra::Mail::Contact::A_pager = L"pager";
+LPCWSTR Zimbra::Mail::Contact::A_workCity = L"workCity";
+LPCWSTR Zimbra::Mail::Contact::A_workCountry = L"workCountry";
+LPCWSTR Zimbra::Mail::Contact::A_workFax = L"workFax";
+LPCWSTR Zimbra::Mail::Contact::A_workPhone = L"workPhone";
+LPCWSTR Zimbra::Mail::Contact::A_workPhone2 = L"workPhone2";
+LPCWSTR Zimbra::Mail::Contact::A_workPostalCode = L"workPostalCode";
+LPCWSTR Zimbra::Mail::Contact::A_workState = L"workState";
+LPCWSTR Zimbra::Mail::Contact::A_workStreet = L"workStreet";
+LPCWSTR Zimbra::Mail::Contact::A_workURL = L"workURL";
 
 
 /**
@@ -1019,7 +1019,7 @@ void ExceptionManager::tryThrowException(IXMLDOMDocument2* pDoc)
 	if( pErrorCode == NULL )
 		return;
 
-	throw LiquidException(pErrorCode, pErrorMessage );
+	throw ZimbraException(pErrorCode, pErrorMessage );
 }
 
 

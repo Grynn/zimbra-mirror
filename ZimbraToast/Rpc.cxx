@@ -12,87 +12,87 @@
  *********************************************************************************************************************/
 
 
-LPCWSTR Liquid::Rpc::TAGS::Context				= L"context";
-LPCWSTR Liquid::Rpc::TAGS::AuthToken			= L"authToken";
-LPCWSTR Liquid::Rpc::TAGS::SessionId			= L"sessionId";
+LPCWSTR Zimbra::Rpc::TAGS::Context				= L"context";
+LPCWSTR Zimbra::Rpc::TAGS::AuthToken			= L"authToken";
+LPCWSTR Zimbra::Rpc::TAGS::SessionId			= L"sessionId";
 
-LPCWSTR Liquid::Rpc::TAGS::AuthRequest			= L"AuthRequest";
-LPCWSTR Liquid::Rpc::TAGS::Account				= L"account";
-LPCWSTR Liquid::Rpc::TAGS::Password				= L"password";
+LPCWSTR Zimbra::Rpc::TAGS::AuthRequest			= L"AuthRequest";
+LPCWSTR Zimbra::Rpc::TAGS::Account				= L"account";
+LPCWSTR Zimbra::Rpc::TAGS::Password				= L"password";
 
-LPCWSTR Liquid::Rpc::TAGS::BatchRequest			= L"BatchRequest";
-LPCWSTR Liquid::Rpc::TAGS::GetFolderRequest		= L"GetFolderRequest";
-LPCWSTR Liquid::Rpc::TAGS::GetTagRequest		= L"GetTagRequest";
-LPCWSTR Liquid::Rpc::TAGS::CreateFolderRequest	= L"CreateFolderRequest";
-LPCWSTR Liquid::Rpc::TAGS::CreateTagRequest		= L"CreateTagRequest";
-LPCWSTR Liquid::Rpc::TAGS::GetContactsRequest	= L"GetContactsRequest";
-LPCWSTR Liquid::Rpc::TAGS::CreateContactRequest	= L"CreateContactRequest";
-LPCWSTR Liquid::Rpc::TAGS::AddMessageRequest	= L"AddMsgRequest";
-LPCWSTR Liquid::Rpc::TAGS::PingRequest			= L"NoOpRequest"; //authenticated nothing!
+LPCWSTR Zimbra::Rpc::TAGS::BatchRequest			= L"BatchRequest";
+LPCWSTR Zimbra::Rpc::TAGS::GetFolderRequest		= L"GetFolderRequest";
+LPCWSTR Zimbra::Rpc::TAGS::GetTagRequest		= L"GetTagRequest";
+LPCWSTR Zimbra::Rpc::TAGS::CreateFolderRequest	= L"CreateFolderRequest";
+LPCWSTR Zimbra::Rpc::TAGS::CreateTagRequest		= L"CreateTagRequest";
+LPCWSTR Zimbra::Rpc::TAGS::GetContactsRequest	= L"GetContactsRequest";
+LPCWSTR Zimbra::Rpc::TAGS::CreateContactRequest	= L"CreateContactRequest";
+LPCWSTR Zimbra::Rpc::TAGS::AddMessageRequest	= L"AddMsgRequest";
+LPCWSTR Zimbra::Rpc::TAGS::PingRequest			= L"NoOpRequest"; //authenticated nothing!
 
-LPCWSTR Liquid::Rpc::TAGS::Folder				= L"folder";
-LPCWSTR Liquid::Rpc::TAGS::Tag					= L"tag";
-LPCWSTR Liquid::Rpc::TAGS::Attribute			= L"a";
-LPCWSTR Liquid::Rpc::TAGS::Contact				= L"cn";
-LPCWSTR Liquid::Rpc::TAGS::Message				= L"m";
-LPCWSTR Liquid::Rpc::TAGS::Content				= L"content";
+LPCWSTR Zimbra::Rpc::TAGS::Folder				= L"folder";
+LPCWSTR Zimbra::Rpc::TAGS::Tag					= L"tag";
+LPCWSTR Zimbra::Rpc::TAGS::Attribute			= L"a";
+LPCWSTR Zimbra::Rpc::TAGS::Contact				= L"cn";
+LPCWSTR Zimbra::Rpc::TAGS::Message				= L"m";
+LPCWSTR Zimbra::Rpc::TAGS::Content				= L"content";
 
 //the bstr version
 
-_bstr_t Liquid::Rpc::TAGS::bContext				( Liquid::Rpc::TAGS::Context				);
-_bstr_t Liquid::Rpc::TAGS::bAuthToken			( Liquid::Rpc::TAGS::AuthToken				);
-_bstr_t Liquid::Rpc::TAGS::bSessionId			( Liquid::Rpc::TAGS::SessionId				);
+_bstr_t Zimbra::Rpc::TAGS::bContext				( Zimbra::Rpc::TAGS::Context				);
+_bstr_t Zimbra::Rpc::TAGS::bAuthToken			( Zimbra::Rpc::TAGS::AuthToken				);
+_bstr_t Zimbra::Rpc::TAGS::bSessionId			( Zimbra::Rpc::TAGS::SessionId				);
 
-_bstr_t Liquid::Rpc::TAGS::bAuthRequest			( Liquid::Rpc::TAGS::AuthRequest			);
-_bstr_t Liquid::Rpc::TAGS::bAccount				( Liquid::Rpc::TAGS::Account				);
-_bstr_t Liquid::Rpc::TAGS::bPassword			( Liquid::Rpc::TAGS::Password				);
+_bstr_t Zimbra::Rpc::TAGS::bAuthRequest			( Zimbra::Rpc::TAGS::AuthRequest			);
+_bstr_t Zimbra::Rpc::TAGS::bAccount				( Zimbra::Rpc::TAGS::Account				);
+_bstr_t Zimbra::Rpc::TAGS::bPassword			( Zimbra::Rpc::TAGS::Password				);
 
-_bstr_t Liquid::Rpc::TAGS::bBatchRequest		( Liquid::Rpc::TAGS::BatchRequest			);
-_bstr_t Liquid::Rpc::TAGS::bGetFolderRequest	( Liquid::Rpc::TAGS::GetFolderRequest		);
-_bstr_t Liquid::Rpc::TAGS::bGetTagRequest		( Liquid::Rpc::TAGS::GetTagRequest			);
-_bstr_t Liquid::Rpc::TAGS::bCreateFolderRequest	( Liquid::Rpc::TAGS::CreateFolderRequest	);
-_bstr_t Liquid::Rpc::TAGS::bCreateTagRequest	( Liquid::Rpc::TAGS::CreateTagRequest		);
-_bstr_t Liquid::Rpc::TAGS::bGetContactsRequest	( Liquid::Rpc::TAGS::GetContactsRequest		);
-_bstr_t Liquid::Rpc::TAGS::bCreateContactRequest( Liquid::Rpc::TAGS::CreateContactRequest	);
-_bstr_t Liquid::Rpc::TAGS::bAddMessageRequest	( Liquid::Rpc::TAGS::AddMessageRequest		);
-_bstr_t Liquid::Rpc::TAGS::bPingRequest			( Liquid::Rpc::TAGS::PingRequest			);
+_bstr_t Zimbra::Rpc::TAGS::bBatchRequest		( Zimbra::Rpc::TAGS::BatchRequest			);
+_bstr_t Zimbra::Rpc::TAGS::bGetFolderRequest	( Zimbra::Rpc::TAGS::GetFolderRequest		);
+_bstr_t Zimbra::Rpc::TAGS::bGetTagRequest		( Zimbra::Rpc::TAGS::GetTagRequest			);
+_bstr_t Zimbra::Rpc::TAGS::bCreateFolderRequest	( Zimbra::Rpc::TAGS::CreateFolderRequest	);
+_bstr_t Zimbra::Rpc::TAGS::bCreateTagRequest	( Zimbra::Rpc::TAGS::CreateTagRequest		);
+_bstr_t Zimbra::Rpc::TAGS::bGetContactsRequest	( Zimbra::Rpc::TAGS::GetContactsRequest		);
+_bstr_t Zimbra::Rpc::TAGS::bCreateContactRequest( Zimbra::Rpc::TAGS::CreateContactRequest	);
+_bstr_t Zimbra::Rpc::TAGS::bAddMessageRequest	( Zimbra::Rpc::TAGS::AddMessageRequest		);
+_bstr_t Zimbra::Rpc::TAGS::bPingRequest			( Zimbra::Rpc::TAGS::PingRequest			);
 
-_bstr_t Liquid::Rpc::TAGS::bFolder				( Liquid::Rpc::TAGS::Folder					);
-_bstr_t Liquid::Rpc::TAGS::bTag					( Liquid::Rpc::TAGS::Tag					);
-_bstr_t Liquid::Rpc::TAGS::bAttribute			( Liquid::Rpc::TAGS::Attribute				);
-_bstr_t Liquid::Rpc::TAGS::bContact				( Liquid::Rpc::TAGS::Contact				);
-_bstr_t Liquid::Rpc::TAGS::bMessage				( Liquid::Rpc::TAGS::Message				);
-_bstr_t Liquid::Rpc::TAGS::bContent				( Liquid::Rpc::TAGS::Content				);
-
-
-LPCWSTR Liquid::Rpc::ATTRIBUTES::XmlNamespace	= L"xmlns";
-LPCWSTR Liquid::Rpc::ATTRIBUTES::By				= L"by";
-LPCWSTR Liquid::Rpc::ATTRIBUTES::ParentFolderId	= L"l";
-LPCWSTR Liquid::Rpc::ATTRIBUTES::Name			= L"name";
-LPCWSTR Liquid::Rpc::ATTRIBUTES::AttributeName   = L"n";
-LPCWSTR Liquid::Rpc::ATTRIBUTES::Color			= L"color";
-LPCWSTR Liquid::Rpc::ATTRIBUTES::Id				= L"id";
-LPCWSTR Liquid::Rpc::ATTRIBUTES::TagIds			= L"t";
-LPCWSTR Liquid::Rpc::ATTRIBUTES::Flags			= L"f";
-
-_bstr_t Liquid::Rpc::ATTRIBUTES::bXmlNamespace		( Liquid::Rpc::ATTRIBUTES::XmlNamespace		);
-_bstr_t Liquid::Rpc::ATTRIBUTES::bBy				( Liquid::Rpc::ATTRIBUTES::By				);
-_bstr_t Liquid::Rpc::ATTRIBUTES::bParentFolderId	( Liquid::Rpc::ATTRIBUTES::ParentFolderId	);
-_bstr_t Liquid::Rpc::ATTRIBUTES::bName				( Liquid::Rpc::ATTRIBUTES::Name				);
-_bstr_t Liquid::Rpc::ATTRIBUTES::bAttributeName		( Liquid::Rpc::ATTRIBUTES::AttributeName	);
-_bstr_t Liquid::Rpc::ATTRIBUTES::bColor				( Liquid::Rpc::ATTRIBUTES::Color			);
-_bstr_t Liquid::Rpc::ATTRIBUTES::bId				( Liquid::Rpc::ATTRIBUTES::Id				);
-_bstr_t Liquid::Rpc::ATTRIBUTES::bTagIds			( Liquid::Rpc::ATTRIBUTES::TagIds			);
-_bstr_t Liquid::Rpc::ATTRIBUTES::bFlags				( Liquid::Rpc::ATTRIBUTES::Flags			);
+_bstr_t Zimbra::Rpc::TAGS::bFolder				( Zimbra::Rpc::TAGS::Folder					);
+_bstr_t Zimbra::Rpc::TAGS::bTag					( Zimbra::Rpc::TAGS::Tag					);
+_bstr_t Zimbra::Rpc::TAGS::bAttribute			( Zimbra::Rpc::TAGS::Attribute				);
+_bstr_t Zimbra::Rpc::TAGS::bContact				( Zimbra::Rpc::TAGS::Contact				);
+_bstr_t Zimbra::Rpc::TAGS::bMessage				( Zimbra::Rpc::TAGS::Message				);
+_bstr_t Zimbra::Rpc::TAGS::bContent				( Zimbra::Rpc::TAGS::Content				);
 
 
-LPCWSTR Liquid::Rpc::URNS::Liquid				= L"urn:liquid";
-LPCWSTR Liquid::Rpc::URNS::LiquidAccount		= L"urn:liquidAccount";
-LPCWSTR Liquid::Rpc::URNS::LiquidMail			= L"urn:liquidMail";
+LPCWSTR Zimbra::Rpc::ATTRIBUTES::XmlNamespace	= L"xmlns";
+LPCWSTR Zimbra::Rpc::ATTRIBUTES::By				= L"by";
+LPCWSTR Zimbra::Rpc::ATTRIBUTES::ParentFolderId	= L"l";
+LPCWSTR Zimbra::Rpc::ATTRIBUTES::Name			= L"name";
+LPCWSTR Zimbra::Rpc::ATTRIBUTES::AttributeName   = L"n";
+LPCWSTR Zimbra::Rpc::ATTRIBUTES::Color			= L"color";
+LPCWSTR Zimbra::Rpc::ATTRIBUTES::Id				= L"id";
+LPCWSTR Zimbra::Rpc::ATTRIBUTES::TagIds			= L"t";
+LPCWSTR Zimbra::Rpc::ATTRIBUTES::Flags			= L"f";
 
-_variant_t Liquid::Rpc::URNS::vLiquid				( Liquid::Rpc::URNS::Liquid			);
-_variant_t Liquid::Rpc::URNS::vLiquidAccount		( Liquid::Rpc::URNS::LiquidAccount	);
-_variant_t Liquid::Rpc::URNS::vLiquidMail			( Liquid::Rpc::URNS::LiquidMail		);
+_bstr_t Zimbra::Rpc::ATTRIBUTES::bXmlNamespace		( Zimbra::Rpc::ATTRIBUTES::XmlNamespace		);
+_bstr_t Zimbra::Rpc::ATTRIBUTES::bBy				( Zimbra::Rpc::ATTRIBUTES::By				);
+_bstr_t Zimbra::Rpc::ATTRIBUTES::bParentFolderId	( Zimbra::Rpc::ATTRIBUTES::ParentFolderId	);
+_bstr_t Zimbra::Rpc::ATTRIBUTES::bName				( Zimbra::Rpc::ATTRIBUTES::Name				);
+_bstr_t Zimbra::Rpc::ATTRIBUTES::bAttributeName		( Zimbra::Rpc::ATTRIBUTES::AttributeName	);
+_bstr_t Zimbra::Rpc::ATTRIBUTES::bColor				( Zimbra::Rpc::ATTRIBUTES::Color			);
+_bstr_t Zimbra::Rpc::ATTRIBUTES::bId				( Zimbra::Rpc::ATTRIBUTES::Id				);
+_bstr_t Zimbra::Rpc::ATTRIBUTES::bTagIds			( Zimbra::Rpc::ATTRIBUTES::TagIds			);
+_bstr_t Zimbra::Rpc::ATTRIBUTES::bFlags				( Zimbra::Rpc::ATTRIBUTES::Flags			);
+
+
+LPCWSTR Zimbra::Rpc::URNS::Zimbra				= L"urn:zimbra";
+LPCWSTR Zimbra::Rpc::URNS::ZimbraAccount		= L"urn:zimbraAccount";
+LPCWSTR Zimbra::Rpc::URNS::ZimbraMail			= L"urn:zimbraMail";
+
+_variant_t Zimbra::Rpc::URNS::vZimbra				( Zimbra::Rpc::URNS::Zimbra			);
+_variant_t Zimbra::Rpc::URNS::vZimbraAccount		( Zimbra::Rpc::URNS::ZimbraAccount	);
+_variant_t Zimbra::Rpc::URNS::vZimbraMail			( Zimbra::Rpc::URNS::ZimbraMail		);
 
 
 
@@ -101,7 +101,7 @@ _variant_t Liquid::Rpc::URNS::vLiquidMail			( Liquid::Rpc::URNS::LiquidMail		);
 	Connection
  *********************************************************************************************************************
  *********************************************************************************************************************/
-using namespace Liquid::Rpc;
+using namespace Zimbra::Rpc;
 
 
 void CALLBACK connectionMonitor( HINTERNET hInternet, DWORD_PTR , DWORD dwInternetStatus, LPVOID , DWORD  )
@@ -176,7 +176,7 @@ Connection::Connection( LPWSTR pServer, unsigned int nPort )
 	//save the port
 	_nPort = nPort;
 
-	_hWHSession =	WinHttpOpen( L"Liquid Systems Notifier", 
+	_hWHSession =	WinHttpOpen( L"Zimbra Systems Notifier", 
 								WINHTTP_ACCESS_TYPE_DEFAULT_PROXY, 
 								WINHTTP_NO_PROXY_NAME, 
 								WINHTTP_NO_PROXY_BYPASS, 
@@ -219,7 +219,7 @@ Connection::~Connection()
 
 /**
  *
- *  POSTS the request in pRequest to the Liquid Soap Server and returns the response
+ *  POSTS the request in pRequest to the Zimbra Soap Server and returns the response
  *  as a utf-8 string (assumes server responds in utf-8)
  *
  **/
@@ -341,7 +341,7 @@ void Connection::SendRequest( Request& req, IXMLDOMDocument2*& pResponseXml )
 /**
  *
  *  If doesn't exist, create a WinHttpConnection and WinHttpRequest 
- *  to the Liquid soap server
+ *  to the Zimbra soap server
  *
  **/
 void Connection::Connect()
@@ -355,7 +355,7 @@ void Connection::Connect()
 
 	WinHttpCloseHandle( _hWHSession );
 
-	_hWHSession =	WinHttpOpen( L"Liquid Systems Notifier", 
+	_hWHSession =	WinHttpOpen( L"Zimbra Systems Notifier", 
 								WINHTTP_ACCESS_TYPE_DEFAULT_PROXY, 
 								WINHTTP_NO_PROXY_NAME, 
 								WINHTTP_NO_PROXY_BYPASS, 
@@ -389,7 +389,7 @@ void Connection::Connect()
 LPWSTR Request::_pRequestTemplate = 
 L"<soap:Envelope xmlns:soap=\"http://www.w3.org/2003/05/soap-envelope\">"
 	L"<soap:Header>"
-		L"<context xmlns=\"urn:liquid\">"
+		L"<context xmlns=\"urn:zimbra\">"
 		L"</context>"
 	L"</soap:Header>"
 	L"<soap:Body>"
@@ -452,7 +452,7 @@ void Request::init()
 	hr = _pDom->put_resolveExternals(VARIANT_FALSE);
 	hr = _pDom->setProperty(L"SelectionLanguage",  _variant_t(L"XPath"));
 	hr = _pDom->setProperty(L"SelectionNamespaces", 
-		_variant_t("xmlns:mail='urn:liquidMail' xmlns:l='urn:liquid' xmlns:account='urn:liquidAccount' xmlns:soap='http://www.w3.org/2003/05/soap-envelope'") );
+		_variant_t("xmlns:mail='urn:zimbraMail' xmlns:l='urn:zimbra' xmlns:account='urn:zimbraAccount' xmlns:soap='http://www.w3.org/2003/05/soap-envelope'") );
 	_pDom->loadXML( this->_pRequestTemplate, &b );
 	//Assert( !FAILED(hr) && b != 0 );
 }
@@ -539,7 +539,7 @@ HRESULT Request::AppendToSoapHeaderContext( IXMLDOMNode* pElement )
 		{
 		}
 
-		hr = pContextElement->setAttribute( ATTRIBUTES::bXmlNamespace, URNS::vLiquid );
+		hr = pContextElement->setAttribute( ATTRIBUTES::bXmlNamespace, URNS::vZimbra );
 		if( FAILED(hr) )
 		{
 		}
@@ -586,7 +586,7 @@ void Request::SetAuthToken(LPCWSTR pAuthTokenStr)
 	HRESULT hr = S_OK;
 	IXMLDOMNode* pAuthTokenNode = NULL;
 
-	hr = _pDom->createNode( _variant_t(NODE_ELEMENT), (TAGS::bAuthToken), _bstr_t("urn:liquid"), &pAuthTokenNode );
+	hr = _pDom->createNode( _variant_t(NODE_ELEMENT), (TAGS::bAuthToken), _bstr_t("urn:zimbra"), &pAuthTokenNode );
 	if( FAILED(hr) )
 	{
 	}
@@ -624,7 +624,7 @@ void Request::SetSessionId(LPCWSTR pSessionIdStr)
 	IXMLDOMNode* pSessionIdNode = NULL;	
 
 	//create the SessionId node
-	hr = _pDom->createNode( _variant_t(NODE_ELEMENT), TAGS::bSessionId, _bstr_t("urn:liquid"), &pSessionIdNode );
+	hr = _pDom->createNode( _variant_t(NODE_ELEMENT), TAGS::bSessionId, _bstr_t("urn:zimbra"), &pSessionIdNode );
 	if( FAILED(hr) )
 	{
 	}
@@ -664,7 +664,7 @@ void Request::SetTargetAccount(LPCWSTR pTargetAccountName)
 	IXMLDOMNode* pTargetAccountNode = NULL;
 
 	//create the SessionId node
-	hr = _pDom->createNode( _variant_t(NODE_ELEMENT), TAGS::bAccount, _bstr_t("urn:liquid"), &pTargetAccountNode );
+	hr = _pDom->createNode( _variant_t(NODE_ELEMENT), TAGS::bAccount, _bstr_t("urn:zimbra"), &pTargetAccountNode );
 	if( FAILED(hr) )
 	{
 	}
@@ -699,7 +699,7 @@ void Request::SetTargetAccount(LPCWSTR pTargetAccountName)
  *********************************************************************************************************************
 	BatchRequest
 	
-	<BatchRequest xmlns=urn:liquid>
+	<BatchRequest xmlns=urn:zimbra>
 		<BlaRequest></BlaRequest>+
 	</AuthRequest>
  *********************************************************************************************************************
@@ -715,7 +715,7 @@ BatchRequest::BatchRequest()
 	}
 
 	//set the namespace attribute
-	hr = _pBatchRequestElement->setAttribute( ATTRIBUTES::bXmlNamespace, URNS::vLiquid );
+	hr = _pBatchRequestElement->setAttribute( ATTRIBUTES::bXmlNamespace, URNS::vZimbra );
 	if( FAILED(hr) )
 	{
 	}
@@ -775,7 +775,7 @@ void BatchRequest::AppendRequest( Request& r, __int64 batchIdx )
  *********************************************************************************************************************
 	AuthRequest 
 	
-	<AuthRequest xmlns=urn:liquidAccount>
+	<AuthRequest xmlns=urn:zimbraAccount>
 		<account by=name>...</account>
 		<password>.../password>
 	</AuthRequest>
@@ -806,7 +806,7 @@ AuthRequest::AuthRequest(LPCWSTR pAccount, LPCWSTR pPassword )
 	}
 
 	//set the namespace attribute
-	hr = pAuthRequestElement->setAttribute( ATTRIBUTES::bXmlNamespace, URNS::vLiquidAccount );
+	hr = pAuthRequestElement->setAttribute( ATTRIBUTES::bXmlNamespace, URNS::vZimbraAccount );
 	if( FAILED(hr) )
 	{
 	}
@@ -914,7 +914,7 @@ void AuthRequest::MakePasswordNode( LPCWSTR pPassword, IXMLDOMElement** ppPasswo
  *********************************************************************************************************************
 	PingRequest
 	
-	<PingRequest xmlns=urn:liquidMail />
+	<PingRequest xmlns=urn:zimbraMail />
  *********************************************************************************************************************
  *********************************************************************************************************************/
 PingRequest::PingRequest()
@@ -927,7 +927,7 @@ PingRequest::PingRequest()
 	{
 	}
 
-	hr = pRequestElement->setAttribute( ATTRIBUTES::bXmlNamespace, URNS::vLiquidMail );
+	hr = pRequestElement->setAttribute( ATTRIBUTES::bXmlNamespace, URNS::vZimbraMail );
 	if( FAILED(hr) )
 	{
 	}
@@ -950,7 +950,7 @@ PingRequest::~PingRequest()
  *********************************************************************************************************************
 	GetFolderRequest
 	
-	<GetFolderRequest xmlns=urn:liquidMail [l="base-folder-id"]/>
+	<GetFolderRequest xmlns=urn:zimbraMail [l="base-folder-id"]/>
  *********************************************************************************************************************
  *********************************************************************************************************************/
 
@@ -970,7 +970,7 @@ GetFolderRequest::GetFolderRequest()
 	{
 	}
 
-	hr = pRequestElement->setAttribute( ATTRIBUTES::bXmlNamespace, URNS::vLiquidMail );
+	hr = pRequestElement->setAttribute( ATTRIBUTES::bXmlNamespace, URNS::vZimbraMail );
 	if( FAILED(hr) )
 	{
 	}
@@ -1000,7 +1000,7 @@ GetFolderRequest::~GetFolderRequest()
  *********************************************************************************************************************
 	GetTagRequest
 	
-	<GetTagRequest xmlns=urn:liquidMail />
+	<GetTagRequest xmlns=urn:zimbraMail />
  *********************************************************************************************************************
  *********************************************************************************************************************/
 
@@ -1020,7 +1020,7 @@ GetTagRequest::GetTagRequest()
 	{
 	}
 
-	hr = pRequestElement->setAttribute( ATTRIBUTES::bXmlNamespace, URNS::vLiquidMail );
+	hr = pRequestElement->setAttribute( ATTRIBUTES::bXmlNamespace, URNS::vZimbraMail );
 	if( FAILED(hr) )
 	{
 	}
@@ -1050,7 +1050,7 @@ GetTagRequest::~GetTagRequest()
  *********************************************************************************************************************
 	CreateFolderRequest
 	
-	<CreateFolderRequest xmlns=urn:liquidMail >
+	<CreateFolderRequest xmlns=urn:zimbraMail >
 		<folder name="..." l="{parent-folder}"/>
 	</CreateFolderRequest>
  *********************************************************************************************************************
@@ -1073,7 +1073,7 @@ CreateFolderRequest::CreateFolderRequest( LPCWSTR pFolderName, __int64 parentFol
 	}
 
 	//set its namespace
-	hr = pRequestElement->setAttribute( ATTRIBUTES::bXmlNamespace, URNS::vLiquidMail );
+	hr = pRequestElement->setAttribute( ATTRIBUTES::bXmlNamespace, URNS::vZimbraMail );
 	if( FAILED(hr) )
 	{
 	}
@@ -1124,7 +1124,7 @@ CreateFolderRequest::~CreateFolderRequest()
  *********************************************************************************************************************
 	CreateTagRequest
 	
-	<CreateTagRequest xmlns=urn:liquidMail >
+	<CreateTagRequest xmlns=urn:zimbraMail >
 		<tag name="..." color="..."/>
 	</CreateTagRequest>
  *********************************************************************************************************************
@@ -1147,7 +1147,7 @@ CreateTagRequest::CreateTagRequest(LPCWSTR pTagName, UINT tagColor )
 	}
 
 	//set its namespace
-	hr = pRequestElement->setAttribute( ATTRIBUTES::bXmlNamespace, URNS::vLiquidMail );
+	hr = pRequestElement->setAttribute( ATTRIBUTES::bXmlNamespace, URNS::vZimbraMail );
 	if( FAILED(hr) )
 	{
 	}
@@ -1201,7 +1201,7 @@ CreateTagRequest::~CreateTagRequest()
  *********************************************************************************************************************
 	GetContactsRequest
 	
-	<GetContactsRequest xmlns=urn:liquidMail >
+	<GetContactsRequest xmlns=urn:zimbraMail >
 		<a n="..."/>*
 		<cn id="contact_id"" />*
 	</GetContactsRequest>
@@ -1219,7 +1219,7 @@ GetContactsRequest::GetContactsRequest(__int64* pContactIds, UINT nContactIds, L
 	{
 	}
 
-	hr = pRequestElement->setAttribute( ATTRIBUTES::bXmlNamespace, URNS::vLiquidMail );
+	hr = pRequestElement->setAttribute( ATTRIBUTES::bXmlNamespace, URNS::vZimbraMail );
 	if( FAILED(hr) )
 	{
 	}
@@ -1294,7 +1294,7 @@ GetContactsRequest::~GetContactsRequest()
  *********************************************************************************************************************
 	CreateContactsRequest
 	
-	<CreateContactsRequest xmlns=urn:liquidMail >
+	<CreateContactsRequest xmlns=urn:zimbraMail >
 		<cn [folder="{folder-id}"]>
 			<a n="...">...</a>+
 		</cn>
@@ -1339,7 +1339,7 @@ CreateContactRequest::CreateContactRequest(std::map<LPWSTR,LPWSTR>& attrs, std::
 	}
 
 	//set the namespace attribute
-	hr = pRequestElement->setAttribute( ATTRIBUTES::bXmlNamespace, URNS::vLiquidMail );
+	hr = pRequestElement->setAttribute( ATTRIBUTES::bXmlNamespace, URNS::vZimbraMail );
 	if( FAILED(hr) )
 	{
 	}
@@ -1421,7 +1421,7 @@ CreateContactRequest::~CreateContactRequest()
  *********************************************************************************************************************
 	AddMessageRequest
 	
-	<AddMsgRequest xmlns=urn:liquidMail >
+	<AddMsgRequest xmlns=urn:zimbraMail >
 		<m l="{parent-folder-id}" f="flags" t="tag-ids">
 			<content>mime-data</content>
 		</m>
@@ -1468,7 +1468,7 @@ AddMessageRequest::AddMessageRequest(LPCWSTR pMimeMsg, __int64 parentFolderId, L
 	}
 
 	//set the namespace attribute
-	hr = pRequestElement->setAttribute( ATTRIBUTES::bXmlNamespace, URNS::vLiquidMail );
+	hr = pRequestElement->setAttribute( ATTRIBUTES::bXmlNamespace, URNS::vZimbraMail );
 	if( FAILED(hr) )
 	{
 	}
