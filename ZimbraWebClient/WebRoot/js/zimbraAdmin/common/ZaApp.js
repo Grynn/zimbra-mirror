@@ -1,3 +1,10 @@
+/**
+* @class ZaApp
+* @constructor ZaApp
+* @param appCtxt instance of ZaAppCtxt
+* @param container
+* @author Greg Solovyev
+**/
 function ZaApp(appCtxt, container) {
 	if (arguments.length == 0) return;
 	this._name = ZaZimbraAdmin.ADMIN_APP;

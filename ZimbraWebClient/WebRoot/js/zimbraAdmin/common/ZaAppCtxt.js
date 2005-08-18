@@ -1,11 +1,6 @@
 /**
-* Does nothing.
-* @constructor
-* @class
-* This class is a container for stuff that the overall app may want to know about. That
-* includes environment information (such as whether the browser in use is public), and
-* stuff that is common to the app as a whole (such as tags). The methods are almost all
-* just getters and setters.
+* @constructor ZaAppCtxt
+* @class ZaAppCtxt
 */
 function ZaAppCtxt() {
 }

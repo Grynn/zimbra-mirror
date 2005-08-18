@@ -1,4 +1,4 @@
-// ZaModel is data with a change listener.
+
 function ZaModel(init) {
  	if (arguments.length == 0) return;
 

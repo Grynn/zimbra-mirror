@@ -30,7 +30,6 @@ function(list) {
 		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 		this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
 		this._removeConfirmMessageDialog = new ZaMsgDialog(this._appView.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);							
-//		this.refresh();
 	} else {
 		if (list != null)
 			this._contentView.set(list.getVector());	
@@ -56,11 +55,6 @@ function (nextViewCtrlr, func, params) {
 
 ZaCosListController.prototype.refresh = 
 function() {
-	/*try {
-		this._contentView.set(this._app.getCosList(true).getVector());
-	} catch (ex) {
-		this._handleException(ex, ZaCosListController.prototype.refresh, null, false);
-	}*/
 }
 
 /**
@@ -189,7 +183,6 @@ ZaCosListController.prototype._listSelectionListener =
 function(ev) {
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
 		if(ev.item) {
-			//this._selectedItem = ev.item;
 			this._app.getCosController().show(ev.item);
 		}
 	} else {

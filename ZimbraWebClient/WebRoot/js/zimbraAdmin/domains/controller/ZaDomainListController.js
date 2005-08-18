@@ -41,7 +41,6 @@ function(list) {
 		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 		this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
 		this._removeConfirmMessageDialog = new ZaMsgDialog(this._appView.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);					
-		//this.refresh();
 	} else {
 		if (list != null)
 			this._contentView.set(list.getVector());	
@@ -64,16 +63,6 @@ function() {
 	return this._list;
 }
 
-/*
-ZaDomainListController.prototype.refresh = 
-function() {
-	try {
-		this._contentView.set(this._app.getDomainList(true).getVector());
-	} catch (ex) {
-		this._handleException(ex, ZaDomainListController.prototype.refresh, null, false);
-	}
-}
-*/
 
 ZaDomainListController.prototype.set = 
 function(domainList) {
@@ -170,13 +159,6 @@ function(listener) {
 	this._evtMgr.addListener(ZaEvent.E_CREATE, listener);
 }
 
-/*
-// refresh button was pressed
-ZaDomainListController.prototype._refreshButtonListener =
-function(ev) {
-	this.refresh();
-}
-*/
 
 /**
 *	Private method that notifies listeners that a new ZaDomain is created
@@ -241,7 +223,6 @@ ZaDomainListController.prototype._listSelectionListener =
 function(ev) {
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
 		if(ev.item) {
-			//this._selectedItem = ev.item;
 			this._app.getDomainController().show(ev.item);
 		}
 	} else {
@@ -439,8 +420,6 @@ function(ev) {
 	} catch (ex) {
 		if(ex.code == ZmCsfeException.DOMAIN_EXISTS) {
 			this.popupMsgDialog(ZaMsg.ERROR_DOMAIN_EXISTS, ex);
-//			this._msgDialog.setMessage(ZaMsg.ERROR_DOMAIN_EXISTS, null, DwtMessageDialog.CRITICAL_STYLE, null);
-	//		this._msgDialog.popup();
 		} else {
 			this._handleException(ex, "ZaDomainListController.prototype._finishNewButtonListener", null, false);
 		}

@@ -48,7 +48,6 @@ function ZaLoginDialog(parent, zIndex, className, isAdmin) {
 
 	}    
 	this._okCell.appendChild(this._loginButton.getHtmlElement());
-//	this.setUpKeyHandlers();
 }
 
 ZaLoginDialog.prototype = new DwtComposite;
@@ -64,7 +63,6 @@ function () {
 	var doc = this.getDocument();
 	this.handleKeyBoard = true;
   	if (AjxEnv.isIE) {
-//	  	DBG.println(AjxDebug.DBG3, "IE. element ID: " + htmlElement.id);
   		doc.onkeydown = ZaLoginDialog._keyPressHdlr;
   		this._unameField.onkeydown = ZaLoginDialog._keyPressHdlr;
     	this._pwordField.onkeydown = ZaLoginDialog._keyPressHdlr;
@@ -166,7 +164,6 @@ function(visible, transparentBg) {
 
 }
 
-// TODO: Rewrite this using box model rather than tables
 ZaLoginDialog.prototype._createHtml = 
 function(unameId, pwordId, okCellId, errorCellId) {
 	var html = new Array();
@@ -199,17 +196,6 @@ ZaLoginDialog.prototype.setReloginMode =
 function(bReloginMode, app, obj) {
 
 	this._unameField.disabled = bReloginMode;
-	
-	/*if (bReloginMode) {
-		this._reloginModeField.innerHTML =  "<a id='" + modeId + "' href='javascript:;'>" + ZaMsg.loginAsDiff + "</a>";
-		var anchor = Dwt.getDomObj(this.getDocument(), modeId);
-		anchor.onclick = ZaLoginDialog._loginDiffListener;
-		anchor._app = app;
-		anchor._obj = obj;
-		anchor._parent = this;
-	} else {*/
-
-	//}
 }
 
 ZaLoginDialog.prototype._loginSelListener =

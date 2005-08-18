@@ -48,10 +48,7 @@ function ZaXWizardDialog (parent, className, title, w, h) {
 	this._pageDiv.style.height = this._contentH;
 	this._pageDiv.style.overflow = "auto";
 	
-//	this._progressBar = new ZaXWizProgressBar(this);
 	this._createContentHtml();	
-
-//	this._initForm();
 
 	this.setTitle(title);
 }
@@ -79,78 +76,6 @@ ZaXWizardDialog.prototype.popdown =
 function () {
 	DwtDialog.prototype.popdown.call(this);
 }
-/*
-ZaXWizardDialog.prototype.handleKeys = 
-function(ev) {
-	var ad = DwtBaseDialog.getActiveDialog();
-	var dialogEl = ad.getHtmlElement();
-	var target = DwtUiEvent.getTarget(ev);
-	var keyCode = DwtKeyEvent.getCharCode(ev);
-	switch (keyCode) {
-	case DwtKeyEvent.KEY_TAB:
-		if (ad && ad._mode == DwtBaseDialog.MODAL) {
-			ad.notifyListeners(DwtEvent.TAB, ev);
-			DwtUiEvent.setBehaviour(ev, true, true);
-		}
-		break;
-	case DwtKeyEvent.KEY_ENTER:
-		ad.notifyListeners(DwtEvent.ENTER, ev);
-		break;
-	}	
-};*/
-
-
-/**
-* Makes the dialog visible, and places it. Everything under the dialog will become veiled
-* if we are modal.
-*
-* @param loc	the desired location
-*/
-/*
-ZaXWizardDialog.prototype.popup =
-function(loc) {
-
-	var thisZ = this._zIndex;
-	if (this._mode == DwtDialog.MODAL) {
-		// place veil under this dialog
-		var dialogZ = this._shell._veilOverlay.dialogZ;
-		var currentDialogZ = null;
-		var veilZ;
-		if (dialogZ.length)
-			currentDialogZ = dialogZ[dialogZ.length - 1];
-		if (currentDialogZ) {
-			thisZ = currentDialogZ + 2;
-			veilZ = currentDialogZ + 1;
-		} else {
-			thisZ = this._zIndex;
-			veilZ = Dwt.Z_VEIL;
-		}
-		this._shell._veilOverlay.veilZ.push(veilZ);
-		this._shell._veilOverlay.dialogZ.push(thisZ);
-		Dwt.setZIndex(this._shell._veilOverlay, veilZ);
-	}
-	Dwt._ffOverflowHack(this._htmlElId, thisZ, false);
-	loc = this._loc = loc || this._loc; // use whichever has a value, local has precedence
-	var sizeShell = this._shell.getSize();
-	var sizeThis = this.getSize();
-	var x, y;
-	if (loc == null) {
-		// if no location, go for the middle
-		x = Math.round((sizeShell.x - sizeThis.x) / 2);
-		y = Math.round((sizeShell.y - sizeThis.y) / 2);
-	} else {
-		x = loc.x;
-		y = loc.y;
-	}
-	// try to stay within shell boundaries
-	if ((x + sizeThis.x) > sizeShell.x)
-		x = sizeShell.x - sizeThis.x;
-	if ((y + sizeThis.y) > sizeShell.y)
-		y = sizeShell.y - sizeThis.y;
-	this.setLocation(x, y);
-	
-	this.setZIndex(thisZ);
-}*/
 
 /*
 * @param pageKey - key to the page to be shown. 
@@ -194,9 +119,6 @@ function() {
 ZaXWizardDialog.prototype.addPage =
 function (stepTitle) {
 	var pageKey = this._pageIx++;	
-	//add a step to the progress bar
-//	this._progressBar.addStep(pageKey, stepTitle);
-	//add the page 
 	return pageKey;
 }
 
@@ -261,37 +183,6 @@ function () {
 	Dwt.associateElementWithObject(this._table, this);
 	this._table.backgroundColor = DwtCssStyle.getProperty(this.parent.getHtmlElement(), "background-color");
 	
-	/*var row1; //_progressBar
-	var col1;
-	row1 = this._table.insertRow(0);
-	row1.align = "left";
-	row1.vAlign = "middle";
-	
-	col1 = row1.insertCell(row1.cells.length);
-	col1.align = "left";
-	col1.vAlign = "middle";
-	col1.noWrap = true;	
-	col1.width="100%";
-	col1.className="DwtTabTable";
-	col1.appendChild(this._progressBar.getHtmlElement());
-
-	var rowSep;//separator
-	var colSep;
-	rowSep = this._table.insertRow(1);
-	rowSep.align = "center";
-	rowSep.vAlign = "middle";
-	
-	colSep = rowSep.insertCell(rowSep.cells.length);
-	colSep.align = "left";
-	colSep.vAlign = "middle";
-	colSep.noWrap = true;	
-	colSep.style.width = this._contentW;
-	var sepDiv = this.getDocument().createElement("div");
-	sepDiv.className = "horizSep";
-	sepDiv.style.width = this._contentW;
-	sepDiv.style.height = "5px";
-	colSep.appendChild(sepDiv);
-	*/
 	var row2; //page
 	var col2;
 	row2 = this._table.insertRow(0);

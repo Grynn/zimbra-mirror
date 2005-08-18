@@ -1,10 +1,10 @@
-// XFormItem class: "emailaddr (composite item)
-//
-// this item is used in the Admin UI to display fields such as session token lifetime
-// instance values are strings that contain numbers and characters (/^([0-9])+([dhms])?$/;)
-// values d, h, m, and s mean 1 day, 1 hour, 1 minute and 1 second
-// 1d means 1 day, 4d means 4 days, 4h means 4 hours, etc.
-//
+/**
+* XFormItem class: "emailaddr (composite item)
+* this item is used in the Admin UI to display email address fields like alias and account name
+* @class EmailAddr_XFormItem
+* @constructor EmailAddr_XFormItem
+* @author Greg Solovyev
+**/
 function EmailAddr_XFormItem() {}
 XFormItemFactory.createItemType("_EMAILADDR_", "emailaddr", EmailAddr_XFormItem, Composite_XFormItem);
 EmailAddr_XFormItem.domainChoices = new XFormChoices([], XFormChoices.OBJECT_LIST, "name", "name");

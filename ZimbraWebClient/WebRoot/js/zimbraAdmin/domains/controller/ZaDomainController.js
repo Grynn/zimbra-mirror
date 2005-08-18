@@ -186,7 +186,6 @@ ZaDomainController.prototype._setView =
 function(entry) {
 	if(!this._UICreated) {
 		this._view = new ZaDomainXFormView(this._container, this._app);
-	  	//this._view = new ZaDomainView(this._container, this._app);
    		this._ops = new Array();
    		this._ops.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.DTBB_New_tt, ZaImg.I_DOMAIN, ZaImg.I_DOMAIN, new AjxListener(this, ZaDomainController.prototype._newButtonListener)));
    		this._ops.push(new ZaOperation(ZaOperation.GAL_WIZARD, ZaMsg.DTBB_GAlConfigWiz, ZaMsg.DTBB_GAlConfigWiz_tt, ZaImg.I_DOMAIN, ZaImg.I_DOMAIN, new AjxListener(this, ZaDomainController.prototype._galWizButtonListener)));   		
@@ -475,8 +474,6 @@ function(ev) {
 	} catch (ex) {
 		if(ex.code == ZmCsfeException.DOMAIN_EXISTS) {
 			this.popupMsgDialog(ZaMsg.ERROR_DOMAIN_EXISTS, ex);		
-//			this._msgDialog.setMessage(ZaMsg.ERROR_DOMAIN_EXISTS, null, DwtMessageDialog.CRITICAL_STYLE, null);
-	//		this._msgDialog.popup(this._getDialogXY());
 		} else {
 			this._handleException(ex, "ZaDomainController.prototype._finishNewButtonListener", null, false);
 		}

@@ -36,7 +36,6 @@
 function ZaAppViewMgr(shell, banner, controller) {
 
 	this._shell = shell;
-//	this._banner = banner;
 	this._controller = controller;
 
 	this._shellSz = this._shell.getSize();
@@ -171,7 +170,7 @@ function(viewName, appName, elements, popCallback, style, isVolatile, isAppView,
 	this._popCallback[viewName] = popCallback;
 	this._staleCallback[viewName] = staleCallback;
 	this._viewApp[viewName] = appName;
-//	if (isVolatile)
+
 	this._volatile[viewName] = true; // make every view volatile, see if it helps with browser quirks
 	if (isAppView)
 		this._isAppView[viewName] = true;
@@ -200,18 +199,11 @@ function(viewName, force) {
 	if (this._currentView) {
 		if (!this._hideCurrentView(new AjxCallback(this, this.pushView), viewName, force))
 		 	return false;
-//		if (!this._volatile[this._currentView])
+
 			this._hidden.push(this._currentView);
 	}
 	this._currentView = viewName;
 	DBG.println(AjxDebug.DBG2, "app view mgr: current view is now " + this._currentView);
-	// hack to handle <SELECT> elements in IE (see below)
-	if (AjxEnv.isIE) {
-		var selects = this._views[this._currentView].getHtmlElement().getElementsByTagName("select");
-		for (var i = 0; i < selects.length; i++) {
-			selects[i].style.display = "inline";
-		}
-	}
 	this._views[viewName].zShow(true);
 	this._layout();
 	this._controller.getControllerForView(viewName).setCurrentView(viewName);
@@ -220,33 +212,7 @@ function(viewName, force) {
 	return true;
 }
 
-/**
-* Hides the currently visible view, and makes the view on top of the hidden stack visible.
-*
-* @param force	ignore popped view's callbacks
-* @returns		true if the view was popped
-*/
-/*
-ZaAppViewMgr.prototype.popView =
-function(force) {
-	DBG.println(AjxDebug.DBG1, "popView: " + this._currentView);
-	if (!this._currentView) {
-		DBG.println(AjxDebug.DBG1, "popView: no view to pop!");
-		return false;
-	}
-	if (!this._hideCurrentView(new AjxCallback(this, this.popView), null, force))
-		return false;
-	this._currentView = this._hidden.pop();
-	DBG.println(AjxDebug.DBG2, "app view mgr: current view is now " + this._currentView);
-	// allow "stale" view to cleanup if necessary
-	if (this._staleCallback[this._currentView])
-		this._staleCallback[this._currentView].run();
-	this._views[this._currentView].zShow(true);
-	this._layout();
-	this._controller.setActiveApp(this._viewApp[this._currentView]);
-	return true;
-}
-*/
+
 /**
 * Makes the given view visible, and clears the hidden stack.
 *
@@ -295,10 +261,9 @@ function() {
 */
 ZaAppViewMgr.prototype.layoutChanged =
 function(reason) {
-DBG.println(AjxDebug.DBG2, "OMIGAWD, the layout changed! (reason = " + reason + ")");
+DBG.println(AjxDebug.DBG2, "The layout changed! (reason = " + reason + ")");
 	this._shellSz = this._shell.getSize();
-/*	if (reason == ZaAppViewMgr.RESIZE)
-		this._needBannerLayout = true;*/
+
 	this._layout();
 }
 
@@ -350,22 +315,19 @@ function(pendingAction, pendingView, skipCallback) {
 	return okToContinue;
 }
 
-// This is the core method of the app view manager. It lays out everything, including
-// the banner, the search bar (which may include a browse panel), the overview panel,
-// and the app area.
+/**
+* This is the core method of the app view manager. It lays out everything, including
+* the search bar (which may include a browse panel), the overview panel,
+* and the app area.
+**/
 ZaAppViewMgr.prototype._layout =
 function(style) {
 	
 	if (!this._currentView) return;
 	
-	// banner layout done on startup and due to a shell resize event
-	if (this._needBannerLayout) {
-		this.layoutBanner();
-	}
-
 	// search panel
 	var x = 0, y = 0;
-//	y += this._bannerImageSize.y;
+
 		
 	if (this._searchPanel) {
 		DBG.println(AjxDebug.DBG3, "searchPanel: " + x + '/' + y + '/' + this._shellSz.x + '/' + Dwt.DEFAULT);
@@ -399,8 +361,10 @@ function(style) {
 	this._layoutMethod[this._layoutStyle[this._currentView]].call(this, x, y);
 }
 
-// Lays out the elements one on top of the other, separated by COMPONENT_SEPARATION. Each
-// element extends the entire width. The last element uses the remaining vertical space.
+/** 
+* Lays out the elements one on top of the other, separated by COMPONENT_SEPARATION. Each
+* element extends the entire width. The last element uses the remaining vertical space.
+**/
 ZaAppViewMgr.prototype._appLayoutVertical =
 function(x, y) {
 	// app container

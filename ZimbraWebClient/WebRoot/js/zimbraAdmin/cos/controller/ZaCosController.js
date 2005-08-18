@@ -197,7 +197,6 @@ function(entry) {
 	   		this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.COSTBB_Delete_tt, ZaImg.I_DELETE, ZaImg.I_DELETE, new AjxListener(this, ZaCosController.prototype._deleteButtonListener)));    	    	
 			this._toolBar = new ZaToolBar(this._container, this._ops);
 	
-		  	//this._view = new ZaCosView(this._container, this._app, entry.id);
 		  	this._view = new ZaCosXFormView(this._container, this._app, entry.id);
 		    this._app.createView(ZaCosController.VIEW, [this._toolBar, this._view]);  	
 		    this._UICreated = true;

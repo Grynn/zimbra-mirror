@@ -1,3 +1,8 @@
+/**
+* @constructor ZaController
+* @class ZaController
+* Base class for all Controller classes in ZimbraAdmin UI
+*/
 function ZaController(appCtxt, container, app, isAdmin) {
 
 	if (arguments.length == 0) return;
@@ -23,28 +28,6 @@ function ZaController(appCtxt, container, app, isAdmin) {
 }
 
 var i = 1;
-ZaController.CONVLIST_VIEW 		= i++;
-ZaController.CONV_VIEW 			= i++;
-ZaController.TRAD_VIEW 			= i++;
-ZaController.MSG_VIEW 			= i++;
-ZaController.MSG_NEW_WIN_VIEW 	= i++; // needed for HACK (see ZmMailMsg)
-ZaController.CONTACT_CARDS_VIEW = i++;
-ZaController.CONTACT_LIST_VIEW 	= i++;
-ZaController.CONTACT_VIEW		= i++;
-ZaController.SINGLE_PANE_VIEW 	= i++;
-ZaController.DOUBLE_PANE_VIEW 	= i++;
-ZaController.ATT_LIST_VIEW 		= i++;
-ZaController.ATT_ICON_VIEW 		= i++;
-ZaController.CAL_VIEW			= i++;
-ZaController.COMPOSE_VIEW		= i++;
-ZaController.CONTACT_SRC_VIEW	= i++; // contact picker source list
-ZaController.CONTACT_TGT_VIEW	= i++; // contact picker target list
-ZaController.PREF_VIEW			= i++;
-ZaController.CAL_DAY_VIEW		= i++;
-ZaController.CAL_WEEK_VIEW		= i++;
-ZaController.CAL_MONTH_VIEW		= i++;
-ZaController.CAL_WORK_WEEK_VIEW	= i++;
-
 
 // Public methods
 ZaController.prototype.toString = 
@@ -103,33 +86,8 @@ function(msg, ex, noExecReset)  {
 
 ZaController.prototype.getControllerForView =
 function(view) {
-	switch (view) {
-		case ZaController.CONVLIST_VIEW:
-			return this._appCtxt.getApp(ZmZimbraMail.MAIL_APP).getConvListController();
-		case ZaController.CONV_VIEW:
-			return this._appCtxt.getApp(ZmZimbraMail.MAIL_APP).getConvController();
-		case ZaController.TRAD_VIEW:
-			return this._appCtxt.getApp(ZmZimbraMail.MAIL_APP).getTradController();
-		case ZaController.MSG_VIEW:
-			return this._appCtxt.getApp(ZmZimbraMail.MAIL_APP).getMsgController();
-		case ZaController.CONTACT_CARDS_VIEW:
-		case ZaController.CONTACT_LIST_VIEW:
-			return this._appCtxt.getApp(ZmZimbraMail.CONTACTS_APP).getContactListController();
-		case ZaController.CONTACT_VIEW:
-			return this._appCtxt.getApp(ZmZimbraMail.CONTACTS_APP).getContactController();
-		case ZaController.CAL_VIEW:
-			return this._appCtxt.getApp(ZmZimbraMail.CALENDAR_APP).getCalController();
-		case ZaController.ATT_LIST_VIEW:
-		case ZaController.ATT_ICON_VIEW:
-			return this._appCtxt.getApp(ZmZimbraMail.MAIL_APP).getAttachmentListController();
-		case ZaController.COMPOSE_VIEW:
-			return this._appCtxt.getApp(ZmZimbraMail.MAIL_APP).getComposeController();
-		case ZaController.PREF_VIEW:
-			return this._appCtxt.getApp(ZmZimbraMail.PREFERENCES_APP).getPrefController();
-		default: {
-			DBG.println(AjxDebug.DBG1, "*** controller not found for view " + view);
-			return this._appCtxt.getAppController();}
-	}
+	DBG.println(AjxDebug.DBG1, "*** controller not found for view " + view);
+	return this._appCtxt.getAppController();
 }
 
 //Private/protected methods

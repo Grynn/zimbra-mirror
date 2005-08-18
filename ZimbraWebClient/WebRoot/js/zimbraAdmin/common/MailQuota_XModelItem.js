@@ -1,3 +1,10 @@
+/**
+* XModelItem class
+*
+* @class MailQuota_XModelItem
+* @constructor MailQuota_XModelItem
+* @author Greg Solovyev
+**/
 MailQuota_XModelItem = function (){}
 XModelItemFactory.createItemType("_MAILQUOTA_", "mailquota", MailQuota_XModelItem);
 MailQuota_XModelItem.prototype.validateType = XModelItem.prototype.validateNumber;

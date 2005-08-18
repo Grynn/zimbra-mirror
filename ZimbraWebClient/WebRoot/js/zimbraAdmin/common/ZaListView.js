@@ -117,19 +117,7 @@ function ZaListHeaderItem(idPrefix, label, iconInfo, width, sortable, sortField,
 
 ZaListHeaderItem.prototype = new DwtListHeaderItem;
 ZaListHeaderItem.prototype.constructor = ZaListHeaderItem;
-/*
-ZaListHeaderItem.prototype.initialize = 
-function(label, icon, width, sortable, sortField, resizeable) {
 
-	this._id = Dwt.getNextId();
-	this._label = label;
-	this._icon = icon;
-	this._width = width;
-	this._sortable = sortable;
-	this._sortField = sortField;
-	this._resizeable = resizeable;
-	this._initialized = true;
-}*/
 
 ZaListHeaderItem.prototype.getSortField = 
 function() {

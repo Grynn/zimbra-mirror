@@ -1,4 +1,3 @@
-// TODO: Make sure current app is highlighted
 /**
 * @class ZaOverviewPanelController
 * @contructor ZaOverviewPanelController
@@ -223,7 +222,6 @@ function(ev) {
 			if (treeItemType != null) {
 				switch (treeItemType) {
 					case ZaOverviewPanelController._COS:
-						DBG.println("cos");
 						if(this._app.getCurrentController()) {
 							this._app.getCurrentController().switchToNextView(this._app.getCosListController(), ZaCosListController.prototype.show, ZaCos.getAll(this._app));
 						} else {
@@ -231,7 +229,7 @@ function(ev) {
 						}
 						break;
 					case ZaOverviewPanelController._ACCOUNTS:
-						DBG.println("accounts");
+
 						this._app.getAccountListController().setPageNum(1);					
 						if(this._app.getCurrentController()) {
 							this._app.getCurrentController().switchToNextView(this._app.getAccountListController(), ZaAccountListController.prototype.show,ZaAccount.getAll(this._app));
@@ -242,25 +240,25 @@ function(ev) {
 						this._app.getAccountListController().setQuery(curQuery);	
 						break;					
 					case ZaOverviewPanelController._DOMAINS:
-						DBG.println("domains");				
+
 						if(this._app.getCurrentController()) {
 							this._app.getCurrentController().switchToNextView(this._app.getDomainListController(), ZaDomainListController.prototype.show, ZaDomain.getAll());
 						} else {					
 							this._app.getDomainListController().show(ZaDomain.getAll());
 						}
-						//this._app.getDomainListController().show(ZaDomain.getAll());
+
 						break;			
 					case ZaOverviewPanelController._SERVERS:
-						DBG.println("servers");				
+
 						if(this._app.getCurrentController()) {
 							this._app.getCurrentController().switchToNextView(this._app.getServerListController(), ZaServerListController.prototype.show, ZaServer.getAll());
 						} else {					
 							this._app.getServerListController().show(ZaServer.getAll());
 						}
-						//this._app.getDomainListController().show(ZaDomain.getAll());
+
 						break;									
 					case ZaOverviewPanelController._STATUS:
-						DBG.println("status");
+
 						if(this._app.getCurrentController()) {
 							this._app.getCurrentController().switchToNextView(this._app.getStatusViewController(),ZaStatusViewController.prototype.show, null);
 						} else {					
@@ -268,7 +266,7 @@ function(ev) {
 						}
 						break;		
 					case ZaOverviewPanelController._STATISTICS:
-						DBG.println("statistics");
+
 						if(this._app.getCurrentController()) {
 							this._app.getCurrentController().switchToNextView(this._app.getGlobalStatsController(),ZaGlobalStatsController.prototype.show, null);
 						} else {					
@@ -276,7 +274,7 @@ function(ev) {
 						}
 						break;		
 					case ZaOverviewPanelController._GLOBAL_SETTINGS:
-						DBG.println("globalsettings");
+
 						if(this._app.getCurrentController()) {
 							this._app.getCurrentController().switchToNextView(this._app.getGlobalConfigViewController(),ZaGlobalConfigViewController.prototype.show, this._app.getGlobalConfig());
 						} else {					
@@ -284,7 +282,7 @@ function(ev) {
 						}
 						break;		
 					case ZaOverviewPanelController._ACCOUNTS_SUB_TREE:
-						DBG.println("accounts by domain");
+
 						this.setCurrentDomain(ev.item.getData(ZaOverviewPanelController._OBJ_ID));
 						this._app.getAccountListController().setPageNum(1);	
 						if(this._app.getCurrentController()) {
@@ -296,7 +294,7 @@ function(ev) {
 						this._app.getAccountListController().setQuery(curQuery);
 						break;		
 					case ZaOverviewPanelController._STATISTICS_SUB_TREE:
-						DBG.println("statistics by server");
+
 						this.setCurrentServer(this._app.getServerList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
 						if(this._app.getCurrentController()) {
 							this._app.getCurrentController().switchToNextView(this._app.getServerStatsController(), ZaServerStatsController.prototype.show,this._currentServer);

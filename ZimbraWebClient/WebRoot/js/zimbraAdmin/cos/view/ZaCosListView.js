@@ -70,10 +70,8 @@ function() {
 	var headerList = new Array();
 	//idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
 	headerList[0] = new ZaListHeaderItem(ZaCos.A_name, ZaMsg.CLV_Name_col, null, null, true, ZaCos.A_name, true, true);
-	//headerList[0].initialize(ZaMsg.CLV_Name_col, null, "245", true, ZaCos.A_name);
 
 	headerList[1] = new ZaListHeaderItem(ZaCos.A_description, ZaMsg.CLV_Description_col, null, null, false, null, true, true);
-	//headerList[1].initialize(ZaMsg.CLV_Description_col, null, null, false, ZaCos.A_description);
 	
 	return headerList;
 }
