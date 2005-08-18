@@ -19,10 +19,8 @@ function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell) {
 
 	window._dwtShell = AjxCore.assignId(this);
 	
-	if (confirmExitMethod != null) {
-		// TEMPORARILY COMMENT OUT UNTIL WE FIGURE THIS OUT MORE
-		// window.onbeforeunload = confirmExitMethod;
-	}
+	if ((confirmExitMethod != null) && (document.domain != "localhost"))
+		window.onbeforeunload = confirmExitMethod;
 		
 	window.document.body.style.marginLeft = 0;
 	window.document.body.style.marginRight = 0;
