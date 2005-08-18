@@ -103,6 +103,12 @@ function(clickedCol, ev) {
 	}
 }
 
+ZaListView.prototype._getParentForColResize = 
+function() {
+	// overload me to return a higher inheritance chain parent
+	return this.parent;
+}
+
 function ZaListHeaderItem(idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible) {
 	DwtListHeaderItem.call(this, idPrefix, label, iconInfo, width, sortable, resizeable, visible);
 	this._sortField = sortField;	

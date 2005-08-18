@@ -4,7 +4,7 @@
 * @param appCtxt
 * @param container
 * @param app
-* This is a singleton object that controls all the user interaction with the list of ZaAccount objects
+* This is a singleton class that controls all the user interaction with the list of ZaAccount objects
 * @author Roland Schemers
 * @author Greg Solovyev
 **/
@@ -13,8 +13,6 @@ function ZaAccountListController(appCtxt, container, app) {
 	this._evtMgr = new AjxEventMgr();			
 	this._currentPageNum = 1;
 	this._currentQuery = new ZaAccountQuery("", false, "");
-//	this._searchResult=null;
-//	this._totalPages = 1;
 	this._currentSortField = ZaAccount.A_uid;
 	this._currentSortOrder = true;
 	this.pages = new Object();

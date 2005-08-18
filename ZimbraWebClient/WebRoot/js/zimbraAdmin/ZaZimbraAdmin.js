@@ -4,8 +4,7 @@
 * @constructor ZimbraAdmin
 * @param appCtx
 * @class ZimbraAdmin
-* This class is the "ubercontroller", as it manages all the apps as well as bootstrapping
-* the ZimbraAdmin application.
+* This class is responsible for bootstrapping the ZimbraAdmin application.
 */
 function ZaZimbraAdmin(appCtxt) {
 
@@ -160,8 +159,6 @@ ZaZimbraAdmin.logOff =
 function() {
 	ZmCsfeCommand.clearAuthToken();
 	var locationStr = location.protocol + "//" + location.hostname + ((location.port == '80')? "" : ":" +location.port) + "/zimbraAdmin";
-	// not sure why IE doesn't allow this to process immediately, but since
-	// it does not, we'll set up a timed action.
 	if (AjxEnv.isIE){
 		var act = new AjxTimedAction ();
 		act.method = ZaZimbraAdmin.redir;
@@ -181,7 +178,6 @@ function(args){
 // Private methods
 
 // Start up the ZimbraMail application
-// TODO: launch app based on prefs
 ZaZimbraAdmin.prototype.startup =
 function() {
 

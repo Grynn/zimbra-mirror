@@ -1,3 +1,9 @@
+/**
+* @class ZaStatus 
+* @contructor ZaStatus
+* @param app
+* @author Greg Solovyev
+**/
 function ZaStatus(app) {
 	ZaItem.call(this, ZaEvent.S_STATUS);
 }

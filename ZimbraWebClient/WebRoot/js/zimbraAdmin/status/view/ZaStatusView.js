@@ -10,9 +10,7 @@ function ZaStatusView(parent, app) {
 	this._app = app;
 	DwtTabView.call(this, parent, "ZaStatusView");
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
-//	this._summaryPage = new ZaStatusSummaryPage(this, app);
 	this._servicesPage = new ZaStatusServicesPage(this, app);
-//	this.addTab("Summary", this._summaryPage);		
 	this.addTab("Services", this._servicesPage);		
 	
 	this.setScrollStyle(DwtControl.AUTO);
