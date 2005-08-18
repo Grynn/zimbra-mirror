@@ -740,7 +740,7 @@
    25 internet
    25 events
    25 12
-   25 microsoft
+   25 bus
    25 car
    25 excellent
    25 cheney
@@ -874,7 +874,7 @@
    20 senate
    20 shift
    20 mso-list:l0
-   20 satish
+   20 samuel
    20 pennsylvania
    20 pdx
    20 http://www.pgpup.com/j.ktq
@@ -2507,7 +2507,7 @@
     6 architecture
     6 sap
     6 guess
-    6 lotus
+    6 lexus
     6 represent
     6 domain
     6 words
@@ -4026,7 +4026,7 @@
     3 carriage
     3 michelle
     3 awe-inspiring
-    3 samuel
+    3 samantha
     3 process.
     3 illuminated
     3 illegal
@@ -4530,7 +4530,7 @@
     3 music.
     3 smoking
     3 croquet
-    3 rape
+    3 concoct
     3 demos
     3 orange
     3 nutz
@@ -5037,7 +5037,7 @@
     2 tmap
     2 rxsavings
     2 cassini
-    2 exchange
+    2 exchanging
     2 mechanism.
     2 postings
     2 http://www.npwfpoqbd.org/npssjttvswfz.iunm
@@ -5299,7 +5299,7 @@
     2 showcase
     2 9253
     2 packages:
-    2 bus
+    2 bust
     2 invitation
     2 33
     2 slept
@@ -5877,7 +5877,7 @@
     2 nt/2000/xp/2003
     2 26cgrfnbr75
     2 mlundin
-    2 ass
+    2 azz
     2 2-1/2
     2 festivities
     2 http://www.kpiolfssz.com/pomjofir/nfejbdpsqt
@@ -6867,7 +6867,7 @@
     2 what:
     2 gang:
     2 english
-    2 sucks
+    2 inhales
     2 operation
     2 911
     2 contributors
@@ -9358,7 +9358,7 @@
     1 cloudfactory.org.
     1 beauty
     1 appetizing
-    1 bitches
+    1 pitches
     1 madhi
     1 alkql
     1 showers
@@ -10747,7 +10747,7 @@
     1 grossly
     1 pierre
     1 taxi
-    1 domino
+    1 dominos
     1 cid:144441216
     1 a.m.
     1 http://www.bwjt.com/bwjtxfc/jnbhft/hmpcbm/fo/sftfswbujpot/fnbjm/sbufjogpsnbujpoupq.hjg
@@ -12627,7 +12627,7 @@
     1 moment:
     1 undoubtedly
     1 etienne.
-    1 raped
+    1 concocted
     1 mar-cooze-uh.
     1 curple.com:
     1 bidiagonal
@@ -12648,7 +12648,7 @@
     1 downtempo.pixiejuice
     1 spell
     1 charges:
-    1 lehman
+    1 layman
     1 pursuit
     1 congenial
     1 http://www.cjpnfedfousbm.com/ofxt/20040624/02
@@ -13329,7 +13329,7 @@
     1 stick
     1 slqef
     1 only1earth
-    1 samantha
+    1 sammy
     1 rodvxmnqs
     1 cira
     1 gvgw
@@ -14132,7 +14132,7 @@
     1 orage
     1 proteins
     1 uoacwop
-    1 fucking
+    1 mucking
     1 confusion.
     1 cclogobanner2.jpg:
     1 inserts
