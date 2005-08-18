@@ -48,7 +48,7 @@ ZaCosXFormView.prototype.getMyXForm = function() {
 			{type:_GROUP_, cssClass:"AdminTitleBar", colSpan: "*", 
 				items: [
 					{type:_OUTPUT_, ref:ZaCos.A_name, label:ZaMsg.NAD_ClassOfService+":"},
-					{type:_OUTPUT_, ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID+":"}
+					{type:_OUTPUT_, ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID}
 				]
 			},
 			{type:_TAB_BAR_,  ref:ZaModel.currentTab,
