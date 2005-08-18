@@ -642,6 +642,8 @@ virtual_alias_maps = ldap:/opt/zimbra/conf/ldap-vam.cf
 
 virtual_alias_domains = ldap://opt/zimbra/conf/ldap-vad.cf
 
+virtual_transport = error
+
 sender_canonical_maps = ldap:/opt/zimbra/conf/ldap-scm.cf
 
 transport_maps = ldap:/opt/zimbra/conf/ldap-transport.cf
