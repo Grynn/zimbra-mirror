@@ -5,10 +5,6 @@ function ZaSearchToolBar(parent, posStyle) {
 	this._searchField = new ZaSearchField(this, "SearchTBSearchField", 48);
 	var h1 = this._searchField.getSize().y;
 		
-	this._createSeparator();
-	
-	this._createSeparator();
-	
 	this.setSize(DwtControl.DEFAULT, Math.max(this._searchField.getSize().y, this.computeHeight()));
 }
 

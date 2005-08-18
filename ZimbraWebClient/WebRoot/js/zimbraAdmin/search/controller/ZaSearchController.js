@@ -3,7 +3,6 @@ function ZaSearchController(appCtxt, container) {
 	ZaController.call(this, appCtxt, container);
 	this._inited = false;
 	this._currentSearch = null;
-//	this._searchFor = ZaSearchToolBar.FOR_ACCOUNTL_MI;
 	this._app = appCtxt.getAppController().getApp(ZaZimbraAdmin.ADMIN_APP);
 	this._setView();    
 }
@@ -140,16 +139,7 @@ function () {
 	Dwt.associateElementWithObject(t, this.bannerBar);	
 
 	var a;
-	/*a = Dwt.getDomObj(doc, this.bannerBar._migrationId);
-	if(a) {
-		a.href = "javascript: void ZaZimbraAdmin._bannerBarHdlr(" + ZaZimbraAdmin._MIGRATION_ID + ",'" + this._bannerTableId + "');";
-		a.onmouseover = a.onmouseout = ZaZimbraAdmin._bannerBarMouseHdlr;
-	}
 	
-	a = Dwt.getDomObj(doc, this.bannerBar._migrationId2);
-	if(a) {
-		a.href = "javascript: void ZaZimbraAdmin._bannerBarHdlr(" + ZaZimbraAdmin._MIGRATION_ID + ",'" + this._bannerTableId + "');";
-	}*/		
 	var a = Dwt.getDomObj(doc, this.bannerBar._helpId);
 	if(a) {
 		a.href = "javascript: void ZaZimbraAdmin._bannerBarHdlr(" + ZaZimbraAdmin._HELP_ID + ",'" + this._bannerTableId + "');";

@@ -12,7 +12,7 @@ function ZaSearchField(parent, className, size, posStyle) {
 	this._searchField = Dwt.getDomObj(doc, fieldId);
 	this._searchField.onkeypress = ZaSearchField._keyPressHdlr;
 	
-	this._searchButton = new DwtButton(this, null, "TBButton");
+	this._searchButton = new DwtButton(this, null, "SearchButton");
 	this._searchButton.setToolTipContent(ZaMsg.searchForAccounts);
     this._searchButton.setImage(ZaImg.I_SEARCH);
     this._searchButton.setText(ZaMsg.search);
@@ -82,7 +82,7 @@ function(size, fieldId, buttonColId) {
 			AjxImg.getImageHtml(ZaImg.M_BANNER) +
 			"</td>" +
 			"<td valign='middle' nowrap><input type='text' nowrap size='" + size + "' id='" + fieldId + "' class='Field'/></td>" + 
-			"<td valign='middle' style='padding-left:2px' id='" + buttonColId + "'></td>" +
+			"<td valign='middle' style='padding-left:2px;padding-right:2px;' id='" + buttonColId + "'></td>" +
 		"</tr>" + 
 	"</table>";
 }

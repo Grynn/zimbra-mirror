@@ -555,6 +555,10 @@ DIV.vSpace {
 *	-triggered	-- mousedown state
 */
 
+.SearchButton {
+	border: 1px outset white;	
+	background-image:url(/zimbraAdmin/skins/steel/images/bg_pebble.gif);	
+}
 
 .TBButton {
 	border: 1px solid #EEEEEE;
@@ -564,7 +568,7 @@ DIV.vSpace {
 	border: 1px solid white;
 }
 
-.DwtButton, .ColorButton, .TBButton-activated, .TBButtonWhite-activated {
+.DwtButton, .ColorButton, .TBButton-activated, .SearchButton-activated, .TBButtonWhite-activated {
 	background-image:url(/zimbraAdmin/skins/steel/images/bg_button_up.gif);
 	border:1px outset #999999;	
 }
@@ -574,13 +578,13 @@ DIV.vSpace {
 	border:1px outset #999999;	
 }
 
-.DwtButton-triggered, .ColorButton-triggered, .TBButton-triggered, .TBButtonWhite-triggered {
+.DwtButton-triggered, .ColorButton-triggered, .SearchButton-triggered, .TBButton-triggered, .TBButtonWhite-triggered {
 	background-image:url(/zimbraAdmin/skins/steel/images/bg_button_down.gif);
 	border:1px inset #999999;	
 }
 
 
-.DwtButton-toggled, .ColorButton-toggled, .TBButton-toggled, .TBButtonWhite-toggled {
+.DwtButton-toggled, .ColorButton-toggled, .SearchButton-toggled, .TBButton-toggled, .TBButtonWhite-toggled {
 	background-image:url(/zimbraAdmin/skins/steel/images/bg_button_down.gif);
 	border:1px inset #999999;	
 }
