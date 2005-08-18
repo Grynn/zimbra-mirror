@@ -125,6 +125,7 @@ function(dest, src) {
 DwtUiEvent.prototype.setFromDhtmlEvent =
 function(ev) {
 	ev = DwtUiEvent.getEvent(ev);
+	if (!ev) return;
 	this.altKey = ev.altKey;
 	this.ctrlKey = ev.ctrlKey;
 	this.shiftKey = ev.shiftKey;
