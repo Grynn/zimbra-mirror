@@ -4,6 +4,12 @@
 function OSelect1_XFormItem(){ this._enabled = true; }
 XFormItemFactory.createItemType("_OSELECT1_", "oselect1", OSelect1_XFormItem, Select1_XFormItem);
 
+OSelect1_XFormItem._mouseWheelEventAttached = false;
+OSelect1_XFormItem._mouseWheelCurrentSelect;
+OSelect1_XFormItem._mouseWheelHideMenu = function() {
+	OSelect1_XFormItem._mouseWheelCurrentSelect.hideMenu();
+};
+
 // override the default SELECT type
 //XFormItemFactory.registerItemType("_SELECT1_", "select1", OSelect1_XFormItem)
 OSelect1_XFormItem.prototype.focusable = false;
@@ -65,6 +71,16 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 	if(!this._enabled)
 		return;
 
+	if (AjxEnv.isIE && !OSelect1_XFormItem._mouseWheelEventAttached) {
+		var form = this.getForm();
+		var formElement = form.getHtmlElement();
+		if (formElement.attachEvent) {
+			formElement.attachEvent("onmousewheel", OSelect1_XFormItem._mouseWheelHideMenu);
+			OSelect1_XFormItem._mouseWheelCurrentSelect = this;
+			OSelect1_XFormItem._mouseWheelEventAttached = true;
+		}
+	}
+
 	var menu = this.getMenuElement();
 	if (menu == null) return; //DBG.println(this,".showMenu() -- couldn't get menu element.");
 
@@ -72,23 +88,11 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 	menu.innerHTML = this.getChoicesHTML();
 
 	// move the menu underneath the button
-	var button = this.getElement();
-	button.appendChild(menu);
-	var bounds = Dwt.getBounds(button);
-	
-	// need to adjust offsets for absolutely positioned ancestors
-	var parentNode = button.parentNode;
-	while (parentNode != null) {
-		if (parentNode.style && parentNode.style.position == "absolute") {
-			bounds.y -= parseInt(parentNode.style.top);
-			bounds.x -= parseInt(parentNode.style.left);
-		}
-		parentNode = parentNode.parentNode;
-	}
-
-	//DBG.println(bounds.x + ":" + bounds.y+ ":" + bounds.width+ ":" + bounds.height);
-	menu.style.left = bounds.x;
-	menu.style.top = bounds.y + bounds.height - 1;
+	// LATER THIS SHOULD RESPECT THIS WINDOW SIZE, ETC
+	var bounds = this.getBounds(this.getElement());
+	//alert(bounds.left + ":" + bounds.top+ ":" + bounds.width+ ":" + bounds.height);
+	menu.style.left = bounds.left;
+	menu.style.top = bounds.top + bounds.height - 1;
 	
 	var value = this.getInstanceValue();
 	if (this.$getDisplayValue) {
@@ -118,6 +122,17 @@ OSelect1_XFormItem.prototype.hideMenu = function () {
 	// hide the menu on a timer so we don't have to deal with wierd selection bugs
 	setTimeout(this.getFormGlobalRef()+".getElement('" + this.getMenuElementId() + "').style.display = 'none'", 10);
 	AjxCore.removeListener(window, "onmouseup", this.$hideListener);
+	
+	if (AjxEnv.isIE && OSelect1_XFormItem._mouseWheelEventAttached) {
+		var form = this.getForm();
+		var formElement = form.getHtmlElement();
+		if (formElement.detachEvent) {
+			window.event.cancelBubble = true;
+			formElement.detachEvent("onmousewheel", OSelect1_XFormItem._mouseWheelHideMenu);
+			OSelect1_XFormItem._mouseWheelEventAttached = false;
+			OSelect1_XFormItem._mouseWheelCurrentSelect = null;
+		}
+	}
 }
 
 OSelect1_XFormItem.prototype.onOutsideMouseDown = function (ev) {
@@ -144,6 +159,38 @@ OSelect1_XFormItem.prototype.onOutsideMouseDown = function (ev) {
 		
 	return true;
 }
+
+OSelect1_XFormItem.prototype.getBounds = function(anElement, containerElement) {
+	var myBounds = new Object();
+	myBounds.left = 0;
+	myBounds.top = 0;
+	myBounds.width = anElement.offsetWidth;
+	myBounds.height = anElement.offsetHeight;
+
+	if(!containerElement) {
+		containerElement = AjxEnv.isIE ? anElement.document.body : anElement.ownerDocument.body;
+	}
+
+	// account for the scrollbars if necessary
+	var hasScroll = (anElement.scrollLeft !== void 0);
+	var trace = anElement;
+
+	while(trace != containerElement) {
+		myBounds.left += trace.offsetLeft;
+		myBounds.top += trace.offsetTop;
+
+		var nextEl = trace.offsetParent;
+		while (hasScroll && (trace != nextEl)) {
+			myBounds.left -= trace.scrollLeft;
+			myBounds.top -= trace.scrollTop;
+			trace = AjxEnv.isIE ? nextEl : trace.parentNode;
+		}
+		trace = nextEl;
+	}
+	return myBounds;
+};
+
+
 
 // TAKE DIRECTLY FROM DWT_SELECT
 OSelect1_XFormItem.prototype.onChoiceOver = function (itemNum, event) {
