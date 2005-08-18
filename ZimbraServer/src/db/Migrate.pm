@@ -5,9 +5,9 @@ use strict;
 #############
 
 my $MYSQL = "mysql";
-my $DB_USER = "liquid";
-my $DB_PASSWORD = "liquid";
-my $DATABASE = "liquid";
+my $DB_USER = "zimbra";
+my $DB_PASSWORD = "zimbra";
+my $DATABASE = "zimbra";
 
 if (-f "/opt/liquid/bin/lqlocalconfig") {
     $DB_PASSWORD = `lqlocalconfig -s -m nokey liquid_mysql_password`;
@@ -16,20 +16,25 @@ if (-f "/opt/liquid/bin/lqlocalconfig") {
     chomp $DB_USER;
 }
 
-sub updateSchemaVersion($) {
-    my ($dbVersion) = @_;
-    if (!defined($dbVersion)) {
-	print("dbVersion not specified.\n");
-	exit(1);
+sub verifySchemaVersion($) {
+    my ($version) = @_;
+    my $versionInDb = (runSql("SELECT value FROM config WHERE name = 'db.version'"))[0];
+    if ($version != $versionInDb) {
+        print("Schema version mismatch.  Expected version $version.  Version in the database is $versionInDb.\n");
+        exit(1);
     }
+    Migrate::log("Verified schema version $version.");
+}
+
+sub updateSchemaVersion($$) {
+    my ($oldVersion, $newVersion) = @_;
+    verifySchemaVersion($oldVersion);
 
     my $sql = <<SET_SCHEMA_VERSION_EOF;
-
-UPDATE $DATABASE.config SET value = '$dbVersion' WHERE name = 'db.version';
-
+UPDATE $DATABASE.config SET value = '$newVersion' WHERE name = 'db.version';
 SET_SCHEMA_VERSION_EOF
 
-    Migrate::log("Updating DB schema version to $dbVersion.");
+    Migrate::log("Updating DB schema version from $oldVersion to $newVersion.");
     runSql($sql);
 }
 
