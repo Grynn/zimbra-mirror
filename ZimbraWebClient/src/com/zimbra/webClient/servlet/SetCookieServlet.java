@@ -1,4 +1,4 @@
-package com.zimbra.webClient.servlet;
+package com.zimbra.zimbraConsole.servlet;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;

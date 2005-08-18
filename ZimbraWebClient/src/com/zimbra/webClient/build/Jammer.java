@@ -1,4 +1,4 @@
-package com.zimbra.webClient.build;
+package com.zimbra.zimbraConsole.build;
 
 import org.apache.tools.ant.*;
 import org.apache.tools.ant.util.*;
