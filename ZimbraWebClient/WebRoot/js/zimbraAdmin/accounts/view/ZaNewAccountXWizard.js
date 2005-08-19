@@ -279,7 +279,7 @@ ZaNewAccountXWizard.prototype.getMyXForm = function() {
 							{type:_OUTPUT_, value:ZaMsg.NAD_AccountForwarding},
 							{ref:ZaAccount.A_zimbraMailForwardingAddress, type:_REPEAT_, label:null, repeatInstance:emptyAlias, showAddButton:true, showRemoveButton:true, 
 								items: [
-									{ref:".", type:_TEXTFIELD_, label:null}
+									{ref:".", type:_TEXTFIELD_, label:null, width:250}
 								]
 							}
 						]

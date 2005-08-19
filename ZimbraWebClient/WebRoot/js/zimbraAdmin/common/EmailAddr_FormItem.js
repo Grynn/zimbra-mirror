@@ -23,7 +23,7 @@ function () {
 };
 
 EmailAddr_XFormItem.prototype.items = [
-	{type:_TEXTFIELD_,forceUpdate:true, ref:".", labelLocation:_NONE_,relevantBehavior:_PARENT_, cssClass:"admin_xform_name_input", width:100,
+	{type:_TEXTFIELD_,forceUpdate:true, ref:".", labelLocation:_NONE_,relevantBehavior:_PARENT_, cssClass:"admin_xform_name_input", width:200,
 		getDisplayValue:function (itemVal) {
 			var val = itemVal;
 			if(val) {

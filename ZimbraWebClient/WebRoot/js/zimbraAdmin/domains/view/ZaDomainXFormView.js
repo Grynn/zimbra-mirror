@@ -74,11 +74,11 @@ ZaDomainXFormView.prototype.getMyXForm = function() {
 							  label:ZaMsg.Domain_DomainName
 							},
 							{ ref: ZaDomain.A_description, type:_INPUT_, 
-							  label:ZaMsg.NAD_Description+":", width: "30em",
+							  label:ZaMsg.NAD_Description+":", width:250,
 							  onChange:ZaTabView.onFormFieldChanged
 						  	},
 							{ ref: ZaDomain.A_notes, type:_TEXTAREA_, 
-							  label:ZaMsg.NAD_Notes+":", labelCssStyle:"vertical-align:top", width: "30em",
+							  label:ZaMsg.NAD_Notes+":", labelCssStyle:"vertical-align:top", width:250,
 							  onChange:ZaTabView.onFormFieldChanged
 							}
 						]
