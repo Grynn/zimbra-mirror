@@ -16,8 +16,8 @@ function() {
 	return "AjxException: msg="+this.msg+" code="+this.code+" method="+this.method+" detail="+this.detail;
 }
 AjxException.INVALIDPARENT 			= "AjxException.INVALIDPARENT";
-AjxException.INVALID_OP 				= "AjxException.INVALID_OP";
-AjxException.INTERNAL_ERROR 			= "AjxException.INTERNAL_ERROR";
+AjxException.INVALID_OP 			= "AjxException.INVALID_OP";
+AjxException.INTERNAL_ERROR 		= "AjxException.INTERNAL_ERROR";
 AjxException.INVALID_PARAM 			= "AjxException.INVALID_PARAM";
 AjxException.UNIMPLEMENTED_METHOD 	= "AjxException.UNIMPLEMENTED_METHOD";
 AjxException.NETWORK_ERROR 			= "AjxException.NETWORK_ERROR";
