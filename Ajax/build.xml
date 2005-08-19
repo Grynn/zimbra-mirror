@@ -14,7 +14,7 @@
 	
 	<property name="jars.dir"           location="jars"/>
 	<property name="src.dir"            location="src"/>
-	<property name="copyrightText" value="Copyright 2005¬© Liquid Systems, Inc. All Rights Reserved"/>
+	<property name="copyrightText" value="Copyright 2005¬© Zimbra, Inc. All Rights Reserved"/>
 
 	<condition property="deploy.dir" value="${env.DEPLOY_DIR}">
 		<isset property="env.DEPLOY_DIR" />
@@ -231,7 +231,7 @@
 	<!-- 
 	This target is meant only to be run after a full deploy has
 	been done once. It does not deal with the java code used by the
-	LiquidConsole webapp, so if there are any java changes, another
+	ZimbraWebClient webapp, so if there are any java changes, another
 	deploy will have to be run.
 	-->
 	<target name="dev-sync">
