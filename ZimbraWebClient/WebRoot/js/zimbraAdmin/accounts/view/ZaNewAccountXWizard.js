@@ -118,6 +118,7 @@ function(entry) {
 	}	
 	this._containedObject.attrs[ZaAccount.A_accountStatus] = ZaAccount.ACCOUNT_STATUS_ACTIVE;
 	this._containedObject[ZaAccount.A2_autodisplayname] = "TRUE";
+	this._containedObject[ZaAccount.A2_autoMailServer] = "TRUE";
 	this._containedObject[ZaAccount.A2_confirmPassword] = null;
 	this._containedObject[ZaModel.currentStep] = 1;
 	this._containedObject.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
@@ -205,7 +206,16 @@ ZaNewAccountXWizard.prototype.getMyXForm = function() {
 								]
 							},
 							{ref:ZaAccount.A_accountStatus, type:_OSELECT1_, msgName:ZaMsg.NAD_AccountStatus,label:ZaMsg.NAD_AccountStatus+":", labelLocation:_LEFT_, choices:this.accountStatusChoices},
-							{ref:ZaAccount.A_description, type:_INPUT_, msgName:ZaMsg.NAD_Description,label:ZaMsg.NAD_Description+":", labelLocation:_LEFT_, cssClass:"admin_xform_name_input"}
+							{ref:ZaAccount.A_description, type:_INPUT_, msgName:ZaMsg.NAD_Description,label:ZaMsg.NAD_Description+":", labelLocation:_LEFT_, cssClass:"admin_xform_name_input"},
+							{type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_MailServer, labelLocation:_LEFT_,
+								items: [
+									{ ref: ZaAccount.A_mailHost, type: _OSELECT1_, label: null, choices: this._app.getServerListChoices2(), 
+										relevant:"instance[ZaAccount.A2_autoMailServer]==\"FALSE\"",
+										relevantBehavior:_DISABLE_
+								  	},
+									{ref:ZaAccount.A2_autoMailServer, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"}
+								]
+							}
 						]
 					}, 
 					{type:_CASE_, numCols:1, relevant:"instance[ZaModel.currentStep] == 2",

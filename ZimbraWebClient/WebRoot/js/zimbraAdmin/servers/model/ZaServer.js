@@ -266,4 +266,5 @@ ZaServer.prototype.initFromDom = function(node) {
 			this.attrs["_"+ZaServer.A_zimbraServiceEnabled+"_"+service] = true;
 		}
 	}
+	this[ZaServer.A_ServiceHostname] = this.attrs[ZaServer.A_ServiceHostname]; // a hack for New Account Wizard	
 }

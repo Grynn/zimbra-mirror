@@ -15,6 +15,7 @@ function ZaApp(appCtxt, container) {
 	this._cosListChoices = null;//new XFormChoices([], XFormChoices.OBJECT_LIST, "id", "name");	
 	this._domainListChoices = null;//new XFormChoices([], XFormChoices.OBJECT_LIST, "name", "name");	
 	this._serverChoices = null; 
+	this._serverChoices2 = null; 	
 	this._serverMap = null;
 }
 
@@ -271,6 +272,22 @@ function(refresh) {
 	return this._serverChoices;	
 }
 
+ZaApp.prototype.getServerListChoices2 =
+function(refresh) {
+	if (refresh || this._serverList == null) {
+		this._serverList = ZaServer.getAll();
+	}
+	if(refresh || this._serverChoices2 == null) {
+		if(this._serverChoices2 == null) {
+			this._serverChoices2 = new XFormChoices(this._serverList.getArray(), XFormChoices.OBJECT_LIST, ZaServer.A_ServiceHostname, ZaServer.A_ServiceHostname);
+		} else {	
+			this._serverChoices2.setChoices(this._serverList.getArray());
+			this._serverChoices2.dirtyChoices();
+		}
+	}
+	return this._serverChoices2;	
+}
+
 ZaApp.prototype.getServerMap =
 function(refresh) {
 	if(refresh || this._serverList == null) {
@@ -497,6 +514,13 @@ function (ev) {
 				this._serverChoices.dirtyChoices();
 			}
 
+			if(this._serverChoices2 == null) {
+				this._serverChoices2 = new XFormChoices(this._serverList.getArray(), XFormChoices.OBJECT_LIST, ZaServer.A_ServiceHostname, ZaServer.A_ServiceHostname);
+			} else {	
+				this._serverChoices2.setChoices(this._serverList.getArray());
+				this._serverChoices2.dirtyChoices();
+			}
+
 			this._serverMap = new Object();
 			var cnt = this._serverList.getArray().length;
 			for (var i = 0; i < cnt; i ++) {
@@ -532,7 +556,13 @@ function (ev) {
 			this._serverChoices.setChoices(this._serverList.getArray());
 			this._serverChoices.dirtyChoices();
 		}
-		
+
+		if(this._serverChoices2 == null) {
+			this._serverChoices2 = new XFormChoices(this._serverList.getArray(), XFormChoices.OBJECT_LIST, ZaServer.A_ServiceHostname, ZaServer.A_ServiceHostname);
+		} else {	
+			this._serverChoices2.setChoices(this._serverList.getArray());
+			this._serverChoices2.dirtyChoices();
+		}		
 		
 		this._serverMap = new Object();
 		var cnt = this._serverList.getArray().length;
