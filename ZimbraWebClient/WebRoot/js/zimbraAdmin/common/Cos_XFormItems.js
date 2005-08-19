@@ -38,10 +38,14 @@ Cos_String_XModelItem.prototype.getValue = function(instance, current, ref) {
 	return value;
 }
 Cos_String_XModelItem.prototype.getCosValue = function(instance) {
+	if(!instance || !instance.cos)
+		return null;
 	var _ref = this.ref.replace("/", ".");
 	return eval("instance.cos." + _ref);
 }
 Cos_String_XModelItem.prototype.getAccountValue = function(instance) {
+	if(!instance)
+		return null;
 	var _ref = this.ref.replace("/", ".");
 	return eval("instance." + _ref);
 }
@@ -108,11 +112,15 @@ Cos_MailQuota_XModelItem.prototype.getValue = function(instance, current, ref) {
 }
 
 Cos_MailQuota_XModelItem.prototype.getCosValue = function(instance) {
+	if(!instance)
+		return null;
 	var _ref = this.ref.replace("/", ".");
 	var value = (eval("instance.cos." + _ref) != null) ? Number(eval("instance.cos." + _ref) / 1048576).toFixed(0) : 0;
 	return value;
 }
 Cos_MailQuota_XModelItem.prototype.getAccountValue = function(instance) {
+	if(!instance)
+		return null;	
 	var _ref = this.ref.replace("/", ".");
 	var value = (eval("instance." + _ref) != null) ? Number(eval("instance." + _ref) / 1048576).toFixed(0) : null;
 	return value;

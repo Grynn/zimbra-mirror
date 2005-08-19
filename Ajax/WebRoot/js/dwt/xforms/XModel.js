@@ -409,7 +409,9 @@ XModel.prototype._makePathGetter = function (path) {
 			}
 			
 			if (scope == _INSTANCE_) {
-				methodSteps.push("current = instance."+ getter+ "(current, '"+ref+"');");
+				methodSteps.push("if(instance) {");	
+				methodSteps.push("	current = instance."+ getter+ "(current, '"+ref+"');");
+				methodSteps.push("}");							
 			} else if (scope == _MODEL_) {
 				methodSteps.push("current = this."+ getter+ "(instance, current, '"+ref+"');");
 			} else {
@@ -417,9 +419,13 @@ XModel.prototype._makePathGetter = function (path) {
 			}
 			
 		} else if (ref == "#") {
-			methodSteps.push("current = current[" + pathStep + "];");
+			methodSteps.push("if(current) {");	
+			methodSteps.push("	current = current[" + pathStep + "];");
+			methodSteps.push("}");					
 		} else {
-			methodSteps.push("current = current." + ref + ";");
+			methodSteps.push("if(current) {");		
+			methodSteps.push("	current = current." + ref + ";");
+			methodSteps.push("}");					
 		}
 		pathToStep += this.pathDelimiter;
 	}

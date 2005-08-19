@@ -124,6 +124,7 @@ ZaAccount.A2_confirmPassword = "confirmPassword";
 ZaAccount.A2_mbxsize = "mbxSize";
 ZaAccount.A2_quota = "quota2";
 ZaAccount.A2_autodisplayname = "autodisplayname";
+ZaAccount.A2_autoMailServer = "automailserver";
 ZaAccount.A2_myCOS = "mycos";
 ZaAccount.A2_newAlias = "newalias";
 //ZaAccount.A2_newForward = "newforward";
@@ -344,6 +345,9 @@ function(tmpObj, app) {
 	if(tmpObj.attrs[ZaAccount.A_password] && tmpObj.attrs[ZaAccount.A_password].length > 0)
 		soapDoc.set(ZaAccount.A_password, tmpObj.attrs[ZaAccount.A_password]);
 		
+	if(tmpObj[ZaAccount.A2_autoMailServer] == "TRUE") {
+		tmpObj.attrs[ZaAccount.A_mailHost] = null;
+	}
 	for (var aname in tmpObj.attrs) {
 		if(aname == ZaAccount.A_password || aname == ZaAccount.A_zimbraMailAlias || aname == ZaItem.A_objectClass || aname == ZaAccount.A2_mbxsize || aname == ZaAccount.A_mail) {
 			continue;
@@ -761,7 +765,6 @@ ZaAccount.myXModel.items.push({id:ZaAccount.A2_confirmPassword, type:_STRING_});
 ZaAccount.myXModel.items.push({id:ZaAccount.A_description, type:_STRING_, ref:"attrs/"+ZaAccount.A_description});
 ZaAccount.myXModel.items.push({id:ZaAccount.A_telephoneNumber, type:_STRING_, ref:"attrs/"+ZaAccount.A_telephoneNumber});
 ZaAccount.myXModel.items.push({id:ZaAccount.A_displayname, type:_STRING_, ref:"attrs/"+ZaAccount.A_displayname});
-ZaAccount.myXModel.items.push({id:ZaAccount.A2_autodisplayname, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES});
 ZaAccount.myXModel.items.push({id:ZaAccount.A_country, type:_STRING_, ref:"attrs/"+ZaAccount.A_country});
 ZaAccount.myXModel.items.push({id:ZaAccount.A_company, type:_STRING_, ref:"attrs/"+ZaAccount.A_company});
 ZaAccount.myXModel.items.push({id:ZaAccount.A_initials, type:_STRING_, ref:"attrs/"+ZaAccount.A_initials});
@@ -850,3 +853,5 @@ ZaAccount.myXModel.items.push({id:ZaAccount.A2_aliases, type:_LIST_,listItem:{ty
 ZaAccount.myXModel.items.push({id:ZaAccount.A2_forwarding, type:_LIST_,listItem:{type:_STRING_}});
 ZaAccount.myXModel.items.push({id:ZaAccount.A2_mbxsize, type:_NUMBER_, ref:"attrs/"+ZaAccount.A2_mbxsize});
 ZaAccount.myXModel.items.push({id:ZaAccount.A2_quota, type:_MAILQUOTA_2_, ref:"attrs/"+ZaAccount.A_zimbraMailQuota});
+ZaAccount.myXModel.items.push({id:ZaAccount.A2_autodisplayname, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES});
+ZaAccount.myXModel.items.push({id:ZaAccount.A2_autoMailServer, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES});
