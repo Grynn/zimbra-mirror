@@ -7,7 +7,7 @@
 #
 # Proszê nie modyfikowaæ tego pliku, gdy¿ wszelkie zmiany zostan± nadpisane
 # podczas nastêpnego uaktualnienia. Zamiast tego, proszê u¿ywaæ
-# /space/home/marcmac/p4/main/LiquidMon/corebuild/opt/liquid/liquidmon/spamassassin/local.cf. Szczegó³y w 'perldoc Mail::SpamAssassin::Conf'
+# /home/build/builds/main/20050819100101/ZimbraBuild/corebuild/opt/zimbra/zimbramon/spamassassin/local.cf. Szczegó³y w 'perldoc Mail::SpamAssassin::Conf'
 #
 # Ten program   jest  darmowy;  mo¿na  go rozprowadzaæ i/lub  modyfikowaæ  na
 # warunkach Licencji    Artystycznej lub Powszechnej Licencji Publicznej  GNU

@@ -1,7 +1,7 @@
 # SpamAssassin rules file: known non-spam mailers ("ratware")
 #
 # Please don't modify this file as your changes will be overwritten with
-# the next update. Use /space/home/marcmac/p4/main/LiquidMon/corebuild/opt/liquid/liquidmon/spamassassin/local.cf instead.
+# the next update. Use /home/build/builds/main/20050819100101/ZimbraBuild/corebuild/opt/zimbra/zimbramon/spamassassin/local.cf instead.
 # See 'perldoc Mail::SpamAssassin::Conf' for details.
 #
 # <@LICENSE>
