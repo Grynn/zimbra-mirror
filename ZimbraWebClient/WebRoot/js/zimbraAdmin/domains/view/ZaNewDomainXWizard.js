@@ -46,14 +46,74 @@ function ZaNewDomainXWizard (parent, app) {
 		{label:ZaMsg.AuthTest_check_FAILURE, value:ZaDomain.Check_FAILURE}												
 	];
 	
-
-		
 	this.initForm(ZaDomain.myXModel,this.getMyXForm());		
+	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaNewDomainXWizard.prototype.handleXFormChange));
+	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(this, ZaNewDomainXWizard.prototype.handleXFormChange));	
+	this.lastErrorStep=0;
 }
 
 ZaNewDomainXWizard.prototype = new ZaXWizardDialog;
 ZaNewDomainXWizard.prototype.constructor = ZaNewDomainXWizard;
 
+ZaNewDomainXWizard.prototype.handleXFormChange = 
+function () {
+	if(this._localXForm.hasErrors()) {
+		if(this.lastErrorStep < this._containedObject[ZaModel.currentStep])
+			this.lastErrorStep=this._containedObject[ZaModel.currentStep];
+	} else {
+		this.lastErrorStep=0;
+	}
+	this.changeButtonStateForStep(this._containedObject[ZaModel.currentStep]);	
+}
+
+ZaNewDomainXWizard.prototype.changeButtonStateForStep = 
+function(stepNum) {
+	if(this.lastErrorStep == stepNum) {
+		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
+		if(stepNum>1)
+			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+	} else {
+		if(stepNum == 1) {
+			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+		} else if (stepNum == 2) {
+			this._containedObject.attrs[ZaDomain.A_AuthADDomainName] = this._containedObject.attrs[ZaDomain.A_domainName];
+			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+		} else if(stepNum == 5) {
+			//change next button to "test"
+			this._button[DwtWizardDialog.NEXT_BUTTON].setText(ZaMsg.Domain_GALTestSettings);
+			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+		} else if(stepNum == 6) {
+			this._button[DwtWizardDialog.NEXT_BUTTON].setText(DwtMsg._next);
+			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
+			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+		} else if (stepNum == 9) {
+			this._button[DwtWizardDialog.NEXT_BUTTON].setText(ZaMsg.Domain_GALTestSettings);
+			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+		} else if(stepNum == 10) {
+			this._button[DwtWizardDialog.NEXT_BUTTON].setText(DwtMsg._next);
+			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
+			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+		} else if(stepNum == 12) {
+			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+			this._button[DwtWizardDialog.NEXT_BUTTON].setText(DwtMsg._next);
+			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+		} else {
+			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+		}
+	}
+}
 /**
 * @method setObject sets the object contained in the view
 * @param entry - ZaDomain object to display
@@ -313,47 +373,56 @@ ZaNewDomainXWizard.prototype.goPrev =
 function () {
 	if(this._containedObject[ZaModel.currentStep] == 7) {
 		//skip 6th step
-		this._button[DwtWizardDialog.NEXT_BUTTON].setText(ZaMsg.Domain_GALTestSettings);
+/*		this._button[DwtWizardDialog.NEXT_BUTTON].setText(ZaMsg.Domain_GALTestSettings);
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
-		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);		
+		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);		*/
 		this.goPage(5);
+		this.changeButtonStateForStep(5);
 	} else if (this._containedObject[ZaModel.currentStep] == 8 && this._containedObject.attrs[ZaDomain.A_GalMode]==ZaDomain.GAL_Mode_internal) {
 		this.goPage(2);
-		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);		
+		this.changeButtonStateForStep(2);		
+//		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);		
 	} else if (this._containedObject[ZaModel.currentStep] == 11) {
 		//skip 10th step
-		this._button[DwtWizardDialog.NEXT_BUTTON].setText(ZaMsg.Domain_GALTestSettings);
+/*		this._button[DwtWizardDialog.NEXT_BUTTON].setText(ZaMsg.Domain_GALTestSettings);
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
-		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);*/
 		this.goPage(9);
+		this.changeButtonStateForStep(9);		
 	} else if(this._containedObject[ZaModel.currentStep] == 12) {
 		if(this._containedObject.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_zimbra) {
 			this.goPage(8); //skip all auth configuration
+			this.changeButtonStateForStep(8);
 		} else {
 			this.goPage(11);
+			this.changeButtonStateForStep(11);
 		}
 	} else {
 		this._button[DwtWizardDialog.NEXT_BUTTON].setText(DwtMsg._next);
 		if(this._containedObject[ZaModel.currentStep] == 2) {
 			//disable PREV button on the first step
-			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
+//			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
+			this.changeButtonStateForStep(1);
 		} else {
-			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+	//		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+			this.changeButtonStateForStep(this._containedObject[ZaModel.currentStep]-1);
 		}
 		this.goPage(this._containedObject[ZaModel.currentStep]-1);
 	}
-	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);	
+//	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);	
 }
 
 ZaNewDomainXWizard.prototype.goNext = 
 function() {
 	if (this._containedObject[ZaModel.currentStep] == 1) {
 		this._containedObject.attrs[ZaDomain.A_AuthADDomainName] = this._containedObject.attrs[ZaDomain.A_domainName];
-		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+//		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+		this.changeButtonStateForStep(2);
 		this.goPage(2);		
 	} else if(this._containedObject[ZaModel.currentStep] == 2 && this._containedObject.attrs[ZaDomain.A_GalMode]==ZaDomain.GAL_Mode_internal) {
+		this.changeButtonStateForStep(8);
 		this.goPage(8);
 	} else if(this._containedObject[ZaModel.currentStep] == 4) {
 		//clear the password if the checkbox is unchecked
@@ -368,41 +437,47 @@ function() {
 			return false;
 		}
 		//change next button to "test"
-		this._button[DwtWizardDialog.NEXT_BUTTON].setText(ZaMsg.Domain_GALTestSettings);
+/*		this._button[DwtWizardDialog.NEXT_BUTTON].setText(ZaMsg.Domain_GALTestSettings);
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
-		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
-		this.goPage(this._containedObject[ZaModel.currentStep]+1);
+		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);*/
+		this.goPage(5);
+		this.changeButtonStateForStep(5);		
 	} else if(this._containedObject[ZaModel.currentStep] == 5) {
 		this.goPage(6);
  		this.testGALSettings();
-		this._button[DwtWizardDialog.NEXT_BUTTON].setText(DwtMsg._next);
+		/*this._button[DwtWizardDialog.NEXT_BUTTON].setText(DwtMsg._next);
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
-		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);*/
+		this.changeButtonStateForStep(6);
 	} else if (this._containedObject[ZaModel.currentStep] == 8) {
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 		if(this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_zimbra) {
-			this._button[DwtWizardDialog.NEXT_BUTTON].setText(DwtMsg._next);
+/*			this._button[DwtWizardDialog.NEXT_BUTTON].setText(DwtMsg._next);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
-			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);*/
 			this.goPage(12);		
+			this.changeButtonStateForStep(12);
 		} else {
-			this._button[DwtWizardDialog.NEXT_BUTTON].setText(ZaMsg.Domain_GALTestSettings);
+/*			this._button[DwtWizardDialog.NEXT_BUTTON].setText(ZaMsg.Domain_GALTestSettings);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
-			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);*/
 			this.goPage(9);
+			this.changeButtonStateForStep(9);			
 		}
 	} else if(this._containedObject[ZaModel.currentStep] == 9) {
 		this.goPage(10);
  		this.testAuthSettings();
-		this._button[DwtWizardDialog.NEXT_BUTTON].setText(DwtMsg._next);
+/*		this._button[DwtWizardDialog.NEXT_BUTTON].setText(DwtMsg._next);
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
-		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);*/
+		this.changeButtonStateForStep(10);
 	} else {
 		this.goPage(this._containedObject[ZaModel.currentStep] + 1);
-		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+//		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+		this.changeButtonStateForStep(this._containedObject[ZaModel.currentStep]);
 	}
 }
 ZaNewDomainXWizard.prototype.getMyXForm = 
