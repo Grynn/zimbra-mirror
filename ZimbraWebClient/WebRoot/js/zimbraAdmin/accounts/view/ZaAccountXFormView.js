@@ -150,6 +150,7 @@ ZaAccountXFormView.prototype.getMyXForm = function() {
 				items: [
 					{type:_OUTPUT_, ref:ZaAccount.A_displayname, label:ZaMsg.NAD_Account},
 					{type:_OUTPUT_, ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID},
+					{type:_OUTPUT_, ref:ZaAccount.A_mailHost, label:ZaMsg.NAD_MailServer},					
 					{type:_GROUP_, colSpan: "*", numCols:4, 
 						items: [
 							{type:_OUTPUT_, ref:ZaAccount.A2_mbxsize, label:ZaMsg.usedQuota+":",
