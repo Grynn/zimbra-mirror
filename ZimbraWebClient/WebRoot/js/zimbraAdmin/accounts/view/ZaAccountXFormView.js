@@ -309,7 +309,7 @@ ZaAccountXFormView.prototype.getMyXForm = function() {
 							{type:_OUTPUT_, value:"Edit forwarding addresses for this account:"},
 							{ref:ZaAccount.A_zimbraMailForwardingAddress, type:_REPEAT_, label:null, repeatInstance:emptyAlias, showAddButton:true, showRemoveButton:true, 
 								items: [
-									{ref:".", type:_TEXTFIELD_, label:null, onChange:ZaTabView.onFormFieldChanged}
+									{ref:".", type:_TEXTFIELD_, label:null, onChange:ZaTabView.onFormFieldChanged, width:250}
 								],
 								onRemove:ZaAccountXFormView.onRepeatRemove
 							}
