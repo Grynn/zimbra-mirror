@@ -106,6 +106,27 @@ XFormChoices.prototype.getChoices = function () {
 	return this.$normalizedChoices;
 }
 
+XFormChoices.prototype.getChoiceByValue = function(value) {
+	switch (this._type) {
+		case XFormChoices.SIMPLE_LIST: {
+			return value;
+			break;
+		}
+		case XFormChoices.OBJECT_LIST: {
+			var valueProperty = this._valueProperty || "value";
+			for (var i = 0; i < this._choiceObject.length; i++) {
+				if (this._choiceObject[i][valueProperty] == value) {
+					return this._choiceObject[i];
+				}
+			}
+			break;
+		}
+		case XFormChoices.HASH: {
+			return this._choiceObject[value];
+		}
+	}
+	return null;
+}
 
 XFormChoices.prototype.dirtyChoices = function () {
 	this._choiceChangeTime = new Date().getTime();

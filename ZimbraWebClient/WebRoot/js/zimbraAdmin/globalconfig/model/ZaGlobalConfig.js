@@ -94,6 +94,8 @@ ZaGlobalConfig.A_zimbraGalLdapFilterDef = "zimbraGalLdapFilterDef";
 // others
 ZaGlobalConfig.A_zimbraNewExtension = "_zimbraNewExtension";
 
+ZaGlobalConfig.A_originalMonitorHost = "_originalMonitorHost";
+ZaGlobalConfig.A_currentMonitorHost = "_currentMonitorHost";
 
 ZaGlobalConfig.prototype.load =
 function () {
@@ -164,6 +166,17 @@ ZaGlobalConfig.prototype.initFromDom = function(node) {
 			this.attrs["_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_"+restriction] = true;
 		}
 	}
+	
+	// keep track of current monitor host server
+	var serverMap = this._app.getServerMap();
+	for (id in serverMap) {
+		var server = serverMap[id];
+		if (server.attrs[ZaServer.A_zimbraIsMonitorHost] == 'TRUE') {
+			this.attrs[ZaGlobalConfig.A_originalMonitorHost] = server.id;
+			this.attrs[ZaGlobalConfig.A_currentMonitorHost] = server.id;
+			break;
+		}
+	}
 }
 
 ZaGlobalConfig.prototype.modify = 
@@ -202,6 +215,7 @@ ZaGlobalConfig.myXModel = {
 	  	// ...other...
 		{ id:ZaGlobalConfig.A_zimbraGalMaxResults, ref:"attrs/" + ZaGlobalConfig.A_zimbraGalMaxResults , type:_NUMBER_},
 		{ id:ZaGlobalConfig.A_zimbraDefaultDomainName, ref:"attrs/" + ZaGlobalConfig.A_zimbraDefaultDomainName, type:_STRING_},
+		{ id:ZaGlobalConfig.A_currentMonitorHost, ref: "attrs/"+ZaGlobalConfig.A_currentMonitorHost, type: _STRING_ },
 		// attachments
 		{ id:ZaGlobalConfig.A_zimbraAttachmentsBlocked, ref:"attrs/" + ZaGlobalConfig.A_zimbraAttachmentsBlocked, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
 		{ id:ZaGlobalConfig.A_zimbraMtaBlockedExtension, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaBlockedExtension, type: _LIST_, dataType: _STRING_ },
@@ -250,4 +264,4 @@ ZaGlobalConfig.myXModel = {
 	  	{ id:ZaGlobalConfig.A_zimbraVirusWarnAdmin, ref:"attrs/" + ZaGlobalConfig.A_zimbraVirusWarnAdmin, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
 	  	{ id:ZaGlobalConfig.A_zimbraVirusWarnRecipient, ref:"attrs/" + ZaGlobalConfig.A_zimbraVirusWarnRecipient, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES }
 	]	
-};
+}

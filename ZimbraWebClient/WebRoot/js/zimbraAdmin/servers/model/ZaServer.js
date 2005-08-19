@@ -85,6 +85,9 @@ ZaServer.A_MasterRedologClientTcpNoDelay = "zimbraMasterRedologClientTcpNoDelay"
 //slave role settings
 ZaServer.A_zimbraUserServicesEnabled = "zimbraUserServicesEnabled";
 
+// other
+ZaServer.A_zimbraIsMonitorHost = "zimbraIsMonitorHost";
+
 ZaServer.STANDALONE = "standalone";
 ZaServer.MASTER = "master";
 ZaServer.SLAVE = "slave";

@@ -334,6 +334,7 @@ ZaMsg.NAD_StatsDataLastDay = "24 hour window";
 ZaMsg.NAD_StatsDataLast3Months = "3 months window";
 ZaMsg.NAD_StatsDataLast12Months = "12 months window";
 ZaMsg.NAD_DefaultDomainName = "Default domain:";
+ZaMsg.NAD_MonitorHostServer = "Monitor host server:";
 
 ZaMsg.TABT_StatsDataLastDay = "24 Hours";
 ZaMsg.TABT_StatsDataLast3Months = "3 Months";
