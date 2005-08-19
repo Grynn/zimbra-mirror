@@ -14,7 +14,6 @@
 	
 	<property name="jars.dir"           location="jars"/>
 	<property name="src.dir"            location="src"/>
-	<property name="copyrightText" value="Copyright 2005¬© Zimbra, Inc. All Rights Reserved"/>
 
 	<condition property="deploy.dir" value="${env.DEPLOY_DIR}">
 		<isset property="env.DEPLOY_DIR" />
@@ -69,7 +68,6 @@
 		<copy todir="${build.dir}/WebRoot/" overwrite="true" >
 			<fileset dir="WebRoot/" includes="js/**/*_en.js"/>
 		</copy>
-		<replace dir="${build.dir}/WebRoot/js" includes="**/*.js" token="@copyright@" value="${copyrightText}" />
 	</target>
 
 	

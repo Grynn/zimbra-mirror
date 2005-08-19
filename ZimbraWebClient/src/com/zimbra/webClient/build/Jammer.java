@@ -23,7 +23,6 @@ public class Jammer {
     private File destFile;
     private Task ownerTask;
     private String webroot;
-    private String copyrightText;
     private String webappName;
    
     /**
@@ -32,15 +31,13 @@ public class Jammer {
      * @param proj - The ant project.
      * @param pathToWebroot - path to the webroot directory ( to resolve absolute urls).
      */
-    public Jammer (File destinationFile, Task owner, String pathToWebroot, String copyright,
-                   String webapp) {
+    public Jammer (File destinationFile, Task owner, String pathToWebroot, String webapp) {
         this.fileList = new Vector();
         this.beginBlockToken = DEFAULT_BEGIN_BLOCK;
         this.endBlockToken = DEFAULT_END_BLOCK;
         this.destFile = destinationFile;
         this.ownerTask = owner;
         this.webroot = pathToWebroot;
-        this.copyrightText = copyright;
         this.webappName = webapp;
     }
     
@@ -155,7 +152,6 @@ public class Jammer {
                 this.destFile.createNewFile();
             }
             destWriter = new BufferedWriter(new FileWriter(this.destFile));
-            destWriter.write("// " + this.copyrightText + "\n\n");
             for (int i = 0; i < files.length; ++i) {
                 File scriptFile = new File((String)files[i]);
                 if (scriptFile.exists()){

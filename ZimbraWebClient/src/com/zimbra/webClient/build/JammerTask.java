@@ -30,10 +30,6 @@ public class JammerTask extends Task {
     private Vector fullFileList;
     
     /**
-     * String representing the copywrite needed at the top of each jammed file
-     */
-    private String copyrightText;
-    /**
      * @constructor
      * No argument constructor.
      */
@@ -70,7 +66,7 @@ public class JammerTask extends Task {
                         + "is not a valid directory");
             }
             Jammer jammer = new Jammer(this.destFile, this, this.webrootDir.toString(), 
-                                       this.copyrightText, this.webappName);
+                                       this.webappName);
             // This should be an array of Files
             Object [] files = this.getIncludedFiles();
         
@@ -138,9 +134,5 @@ public class JammerTask extends Task {
 
     public void setWebrootDir(File dir) {
         this.webrootDir = dir;
-    }
-    
-    public void setCopyright (String text){
-        this.copyrightText = text;
     }
 }
