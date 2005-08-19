@@ -69,8 +69,8 @@ config_dir="${zimbra_home}/openldap/etc/openldap"
 #
 echo "Updating ldap configuration"
 sed -e "s|^rootpw.*|rootpw ${root_sha}|" \
-	${config_dir}/slapd.conf > /tmp/slapd.conf.$$
-mv -f /tmp/slapd.conf.$$ ${config_dir}/slapd.conf
+	/opt/zimbra/conf/slapd.conf > /tmp/slapd.conf.$$
+mv -f /tmp/slapd.conf.$$ /opt/zimbra/conf/slapd.conf
 
 #
 # Start ldap
