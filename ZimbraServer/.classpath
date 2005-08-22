@@ -49,7 +49,11 @@
 			<attribute value="http://jakarta.apache.org/tomcat/tomcat-5.5-doc/servletapi/" name="javadoc_location"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="jars/commons-cli-2.0.jar"/>
+	<classpathentry kind="lib" path="jars/commons-cli-2.0.jar">
+		<attributes>
+			<attribute value="http://jakarta.apache.org/commons/cli/apidocs/" name="javadoc_location"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="jars/tnef.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
