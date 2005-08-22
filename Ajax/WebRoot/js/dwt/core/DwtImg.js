@@ -24,6 +24,7 @@ DwtImg.SELECT_PULL_DOWN = ["ImgselectPullDownArrow", 16, 18];
 DwtImg.SELECT_PULL_DOWN_DEPRESSED = ["ImgselectPullDownDepressed", 16, 18];
 DwtImg.SELECT_PULL_DOWN_DISABLED = ["ImgselectPullDownDis", 16, 18];
 DwtImg.SELECT_PULL_DOWN_ENABLED = ["ImgselectPullDownArrowEnabled", 16, 18];
+DwtImg.SELECT_PULL_UP = ["ImgselectPullUpArrow", 16, 18];
 
 DwtImg.TAB_TOP_LEFT = ["Imgtab_TL",10,10];
 DwtImg.TAB_TOP_MIDDLE = ["Imgtab_TM",10,10];

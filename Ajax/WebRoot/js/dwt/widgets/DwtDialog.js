@@ -77,10 +77,14 @@ function DwtDialog(parent, className, title, standardButtons, extraButtons, zInd
 	this._button = new Object();
 	for (var i = 0; i < this._buttonList.length; i++) {
 		var buttonId = this._buttonList[i];
-		if (buttonId == DwtDialog.DETAIL_BUTTON)
-			this._detailCell = Dwt.getDomObj(doc, this._detailCellId);
 		this._button[buttonId] = new DwtButton(this);
-		this._button[buttonId].setText(this._buttonDesc[buttonId].label);
+		if (buttonId == DwtDialog.DETAIL_BUTTON) {
+			this._detailCell = Dwt.getDomObj(doc, this._detailCellId);
+			this._button[buttonId].setImage(DwtImg.SELECT_PULL_DOWN);
+			this._button[buttonId].getHtmlElement().style.width = "22px";
+		} else {
+			this._button[buttonId].setText(this._buttonDesc[buttonId].label);
+		}
 		this._button[buttonId].buttonId = buttonId;
 		this._button[buttonId].addSelectionListener(new AjxListener(this, this._buttonListener));
 		Dwt.getDomObj(doc, this._buttonElementId[buttonId]).appendChild(this._button[buttonId].getHtmlElement());
@@ -164,24 +168,26 @@ function() {
 	this._resetCallbacks();
 	this.resetButtonStates();
 	DwtBaseDialog.prototype.reset.call(this);
-}
+};
 
 /**
  * Sets all buttons back to inactive
  */
 DwtDialog.prototype.resetButtonStates =
-function () {
+function() {
 	for (b in this._button){
 		this._button[b].setEnabled(true);
 		this._button[b].setActivated(false);
 	}
 };
 
-DwtDialog.prototype.setButtonEnabled = function (buttonId, enabled) {
+DwtDialog.prototype.setButtonEnabled = 
+function(buttonId, enabled) {
 	this._button[buttonId].setEnabled(enabled);
 };
 
-DwtDialog.prototype.getButtonEnabled = function (buttonId) {
+DwtDialog.prototype.getButtonEnabled = 
+function(buttonId) {
 	return this._button[buttonId].getEnabled();
 };
 
@@ -405,7 +411,7 @@ function(ev, args) {
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
 	var buttonId = obj.buttonId;
 	this._runCallbackForButtonId(buttonId, args);
-}
+};
 
 DwtDialog.prototype._runCallbackForButtonId =
 function(id, args) {
@@ -434,18 +440,18 @@ function() {
 			}
 		}
 	}
-}
-
+};
 
 // Displays the detail text
 DwtDialog.prototype._showDetail =
 function() {
 	if (this._detailCell) {
-		if (this._detailCell.innerHTML == "")
+		if (this._detailCell.innerHTML == "") {
+			this._button[DwtDialog.DETAIL_BUTTON].setImage(DwtImg.SELECT_PULL_UP);
 			this._detailCell.innerHTML = this._getDetailHtml();
-		else 
+		} else {
+			this._button[DwtDialog.DETAIL_BUTTON].setImage(DwtImg.SELECT_PULL_DOWN);
 			this._detailCell.innerHTML = "";
+		}
 	}
-}
-
-
+};
