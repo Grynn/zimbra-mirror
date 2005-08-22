@@ -25,8 +25,9 @@ Contributor(s): ______________________________________.
  *
  * @author Ross Dargahi
  */
-function DwtHtmlEditor(parent, className, posStyle, content, mode) {
+function DwtHtmlEditor(parent, className, posStyle, content, mode, blankIframeSrc) {
 	if (arguments.length == 0) return;
+	this.setBlankIframeSrc(blankIframeSrc);
 	className = className || "DwtHtmlEditor";
 	DwtComposite.call(this, parent, className, posStyle);
 	
@@ -37,7 +38,7 @@ function DwtHtmlEditor(parent, className, posStyle, content, mode) {
 		content = (this._mode == DwtHtmlEditor.HTML) ? DwtHtmlEditor._INITIAL_HTML : "";
 	
 	this._pendingContent = content;
-	
+
 	this._initialize();
 }
 
@@ -185,6 +186,9 @@ function(enable) {
 		Dwt.getDomObj(doc, this._iframeId).disabled = !enable;
 }
 
+DwtHtmlEditor.prototype.setBlankIframeSrc = function (src) {
+	this._blankIframeSrc = src;
+};
 
 DwtHtmlEditor.prototype.isHtmlEditingSupported =
 function() {
@@ -408,6 +412,9 @@ function() {
 	var iFrame = doc.createElement("iframe");
 	iFrame.id = this._iFrameId;
 	iFrame.className = "DwtHtmlEditorIFrame";
+	if (AjxEnv.isIE && location.protocol == "https:") {
+		iFrame.src = (this._blankIframeSrc != null)? this._blankIframeSrc: "";
+	}
 	htmlEl.appendChild(iFrame);
 	
 	return iFrame;
