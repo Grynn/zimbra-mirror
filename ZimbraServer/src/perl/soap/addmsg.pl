@@ -22,8 +22,8 @@ my $url = "http://localhost:7070/service/soap/";
 my $SOAP = $Soap::Soap12;
 my $d = new XmlDoc;
 $d->start('AuthRequest', $ACCTNS);
-$d->add('account', undef, { by => "name"}, 'user1@example.zimbra.com');
-$d->add('password', undef, undef, "mypassWord");
+$d->add('account', undef, { by => "name"}, 'user1');
+$d->add('password', undef, undef, "test123");
 $d->end();
 
 
@@ -49,12 +49,15 @@ my $context = $SOAP->zimbraContext($authToken);
 #
 
 my %msgAttrs;
-$msgAttrs{'l'} = "/sent mail";
-$msgAttrs{'t'} = "\\unseen ,34 , \\FLAGGED";
+$msgAttrs{'l'} = "/INBOX";
+#$msgAttrs{'t'} = "\\unseen, \\FLAGGED";
+$msgAttrs{'noICal'} = "1";
 
 $d = new XmlDoc;
 $d->start('AddMsgRequest', $MAILNS);
 $d->start('m', undef, \%msgAttrs, undef);
+
+my$apptName = "ADDMSG'ed APPOINTMENT";
 
 my $g_msg;
 setup_msg();
@@ -62,6 +65,31 @@ setup_msg();
 $d->start('content', undef, undef, $g_msg);
 
 $d->end(); # 'content'
+
+$d->start('inv', undef, { 'type' => "event",
+                          'allday' => "false",
+                          'name' => $apptName,
+                          'loc' => "test location for $apptName",
+                          'uid' => "ASDASDASASD"
+                          });
+{
+
+    #dtstart
+    $d->add('s', undef, { 'd' => "20051001T120000",
+                          'tz' => "(GMT-08.00) Pacific Time (US & Canada) / Tijuana",
+                      });
+
+    $d->add('dur', undef, { 'h' => "1"});
+    $d->add('or', undef, { 'd' => "user1", 'a' => "user1\@timbre.example.zimbra.com" } );
+    $d->add('at', undef, { 'd' => "user2",
+                           'a' => "user2\@timbre.example.zimbra.com",
+                           'role' => "REQ",
+                           'ptst' => "NE",
+                       });
+    
+    $d->end(); #inv
+}
+
 $d->end(); # 'm'
 $d->end(); # 'AddMsgRequest'
 
