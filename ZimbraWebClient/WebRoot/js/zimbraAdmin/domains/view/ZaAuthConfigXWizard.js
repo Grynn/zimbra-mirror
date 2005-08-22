@@ -125,11 +125,7 @@ function (arg) {
 			this._containedObject[ZaDomain.A_AuthComputedBindDn] = arg.getBody().firstChild.lastChild.firstChild.nodeValue;		
 		}
 	}
-	/*
-	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
-	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
-	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
-	*/
+
 	this.goPage(4);
 }
 
@@ -154,14 +150,7 @@ function (value, event, form) {
 		}
 	}
 	form.parent.changeButtonStateForStep(1);
-	/*
-	if(value == ZaDomain.AuthMech_zimbra) {
-		form.parent._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
-		form.parent._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
-	} else {
-		form.parent._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
-		form.parent._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);		
-	}*/
+
 }
 
 ZaAuthConfigXWizard.onLDAPPortChange = 
@@ -194,17 +183,7 @@ ZaAuthConfigXWizard.prototype.popup =
 function (loc) {
 	ZaXWizardDialog.prototype.popup.call(this, loc);
 	this.changeButtonStateForStep(1);
-	/*
-	this._button[DwtWizardDialog.NEXT_BUTTON].setText(DwtMsg._next);
-	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);		
-	
-	if(this._containedObject.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_zimbra) {
-		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
-		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);		
-	} else {
-		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
-		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);				
-	}	*/
+
 }
 
 ZaAuthConfigXWizard.prototype.goPage =
@@ -217,9 +196,6 @@ ZaAuthConfigXWizard.prototype.goPrev =
 function () {
 	if(this._containedObject[ZaModel.currentStep] == 4) {
 		//skip 3rd step
-		/*this._button[DwtWizardDialog.NEXT_BUTTON].setText(ZaMsg.Domain_AuthTestSettings);
-		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
-		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);*/
 		this.goPage(2);
 	} else {
 		this._button[DwtWizardDialog.NEXT_BUTTON].setText(DwtMsg._next);
@@ -234,17 +210,11 @@ ZaAuthConfigXWizard.prototype.goNext =
 function() {
 	if(this._containedObject[ZaModel.currentStep] == 1) {
 		//change next button to "test"
-		/*this._button[DwtWizardDialog.NEXT_BUTTON].setText(ZaMsg.Domain_AuthTestSettings);
-		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
-		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);*/
 		this.goPage(2);
 	} else if(this._containedObject[ZaModel.currentStep] == 2) {
  		this.testSetings();
 		this.goPage(3);
-/*		this._button[DwtWizardDialog.NEXT_BUTTON].setText(DwtMsg._next);
-		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
-		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
-		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);*/
+
 	} 
 }
 
