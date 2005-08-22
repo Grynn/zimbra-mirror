@@ -20,11 +20,69 @@ function ZaGALConfigXWizard (parent, app) {
 		{label:ZaMsg.GALServerType_ad, value:ZaDomain.GAL_ServerType_ad} 
 	];
 	this.initForm(ZaDomain.myXModel,this.getMyXForm());		
+	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaGALConfigXWizard.prototype.handleXFormChange));
+	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(this, ZaGALConfigXWizard.prototype.handleXFormChange));	
+	this.lastErrorStep=0;
+	
 }
 
 ZaGALConfigXWizard.prototype = new ZaXWizardDialog;
 ZaGALConfigXWizard.prototype.constructor = ZaGALConfigXWizard;
 
+ZaGALConfigXWizard.prototype.handleXFormChange = 
+function () {
+	if(this._localXForm.hasErrors()) {
+		if(this.lastErrorStep < this._containedObject[ZaModel.currentStep])
+			this.lastErrorStep=this._containedObject[ZaModel.currentStep];
+	} else {
+		this.lastErrorStep=0;
+	}
+	this.changeButtonStateForStep(this._containedObject[ZaModel.currentStep]);	
+}
+
+ZaGALConfigXWizard.prototype.changeButtonStateForStep = 
+function(stepNum) {
+	if(this.lastErrorStep == stepNum) {
+		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
+		if(stepNum>1)
+			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+	} else {
+		if(stepNum == 1) {
+			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+		} else if (stepNum == 2) {
+			//if internal - enable finish and disable next, its the last step
+			if(this._containedObject.attrs[ZaDomain.A_GalMode]==ZaDomain.GAL_Mode_internal) {
+				this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
+				this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+			} else {			//else - enable next and disable finish
+				this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+				this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+			}
+			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+		} else if(stepNum == 4) {
+			//change next button to "test"
+			this._button[DwtWizardDialog.NEXT_BUTTON].setText(ZaMsg.Domain_GALTestSettings);
+			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+		} else if(stepNum == 5) {
+			this._button[DwtWizardDialog.NEXT_BUTTON].setText(DwtMsg._next);
+			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
+			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+		} else if (stepNum == 6) {
+			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
+			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+		} else {
+			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+		}
+	}
+}
 /**
 * @method setObject sets the object contained in the view
 * @param entry - ZaDomain object to display
@@ -149,10 +207,8 @@ function (arg) {
 			this._containedObject[ZaDomain.A_GALTestMessage] = arg.getBody().firstChild.childNodes[1].firstChild.nodeValue;		
 		}
 	}
-	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
-	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
-	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
 	this.goPage(6);
+//	this.changeButtonStateForStep(6);	
 }
 
 /**
@@ -167,33 +223,28 @@ function (loc) {
 	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);	
 }
 
+ZaGALConfigXWizard.prototype.goPage =
+function(pageNum) {
+	ZaXWizardDialog.prototype.goPage.call(this, pageNum);
+	this.changeButtonStateForStep(pageNum);
+}
+
 ZaGALConfigXWizard.prototype.goPrev =
 function () {
 	if(this._containedObject[ZaModel.currentStep] == 6) {
 		//skip 5th step
-		this._button[DwtWizardDialog.NEXT_BUTTON].setText(ZaMsg.Domain_GALTestSettings);
-		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
-		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 		this.goPage(4);
 	} else {
 		this._button[DwtWizardDialog.NEXT_BUTTON].setText(DwtMsg._next);
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
-		if(this._containedObject[ZaModel.currentStep] == 2) {
-			//disable PREV button on the first step
-			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
-		}
 		this.goPage(this._containedObject[ZaModel.currentStep]-1);
+
 	}
 }
 
 ZaGALConfigXWizard.prototype.goNext = 
 function() {
-	if(this._containedObject[ZaModel.currentStep] == 1 && this._containedObject.attrs[ZaDomain.A_GalMode]==ZaDomain.GAL_Mode_internal) {
-		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
-		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
-		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
-		this.goPage(this._containedObject[ZaModel.currentStep] + 1);
-	} else if(this._containedObject[ZaModel.currentStep] == 3) {
+	if(this._containedObject[ZaModel.currentStep] == 3) {
 		//clear the password if the checkbox is unchecked
 		if(this._containedObject.attrs[ZaDomain.A_UseBindPassword]=="FALSE") {
 			this._containedObject.attrs[ZaDomain.A_GalLdapBindPassword] = null;
@@ -205,21 +256,12 @@ function() {
 			this._app.getCurrentController().popupMsgDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
 			return false;
 		}
-		//change next button to "test"
-		this._button[DwtWizardDialog.NEXT_BUTTON].setText(ZaMsg.Domain_GALTestSettings);
-		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
-		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 		this.goPage(4);
 	} else if(this._containedObject[ZaModel.currentStep] == 4) {
  		this.testSetings();
 		this.goPage(5);
-		this._button[DwtWizardDialog.NEXT_BUTTON].setText(DwtMsg._next);
-		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
-		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
-		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 	} else {
 		this.goPage(this._containedObject[ZaModel.currentStep] + 1);
-		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 	}
 }
 ZaGALConfigXWizard.prototype.getMyXForm = 
