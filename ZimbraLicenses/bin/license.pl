@@ -8,11 +8,12 @@
 # This file prepends (or replaces) a block of license text to text files
 # under the given directory.
 #
-# ./license.pl -l license -c config -d directory -D -n
+# ./license.pl -l license -c config -d directory -f -D -n
 #
 # license: text file containing license block
 # config: config file that controls behavior, defaults to "license.cfg"
 # directory: start directory, defaults to "."
+# -f: force - do replacement even if license version hasn't changed
 # -D: debug - don't do any p4 commands
 # -n: do nothing - don't rewrite any files
 #
@@ -26,11 +27,12 @@
 
 require "getopts.pl";
 
-&Getopts('l:c:d:Dn');
+&Getopts('l:c:d:fDn');
 
 my $license_file = $opt_l;
 my $config_file = $opt_c ? $opt_c : 'license.cfg';
 my $start_dir = $opt_d ? $opt_d : '.';
+my $force_replace = $opt_f;
 my $do_nothing = $opt_n;
 my $debug = $opt_D;
 
@@ -100,7 +102,6 @@ sub process {
 			if (!$do_nothing) {
 				&set_license($path, $license);
 			}
-			print "$path\n";
 		} elsif (-d $path) {
 			# it's a directory
 			if (($db && ($file =~ /$db/)) || ($dw && ($file !~ /$dw/))) {
@@ -130,17 +131,14 @@ sub set_license {
 	$text =~ s/\r\n/\n/g;	# convert PC returns
 	$text =~ s/\r/\n/g;		# convert Mac returns
 	my $file_lic_ver = &get_license_version($text);
-	if ($file_lic_ver eq $license_ver) {
+	if (($file_lic_ver eq $license_ver) && !$force_replace) {
 		return;
 	}
 	if (!$debug) {
 		system "p4 edit $path";
 	}
-	if ($text =~ /\*\*\*\*\* BEGIN LICENSE BLOCK \*\*\*\*\*/) {
-		$text =~ s/\*\*\*\*\* BEGIN LICENSE BLOCK \*\*\*\*\*.+\*\*\*\*\* END LICENSE BLOCK \*\*\*\*\*/$license/;
-	} else {
-		$text = &add_license($text, $path, $license);
-	}
+	my $replace = $force_replace || ($text =~ /\*\*\*\*\* BEGIN LICENSE BLOCK \*\*\*\*\*/);
+	$text = &add_license($text, $path, $license, $replace);
 	my $tmp = $path . '.tmp';
 	unless (open(F, ">$tmp")) {
 		warn "Open of $tmp failed: $!\n";
@@ -149,6 +147,7 @@ sub set_license {
 	print F $text;
 	close F;
 	system "mv $tmp $path";
+	print "$path\n";
 }
 
 # Finds the license version in a block of text.
@@ -164,21 +163,27 @@ sub get_license_version {
 # in the proper comment sequence.
 sub add_license {
 	
-	my ($text, $path, $license) = @_;
+	my ($text, $path, $license, $replace) = @_;
 
 	if ($path =~ /\.(js|css|java)$/) {
-		$text = "/*\n" . $license . "*/\n\n" . $text;
-	} elsif ($path =~ /\.xml(\.\w+)?$/) {
-		if ($text =~ /^<\?xml/) {
-			my $lic_block = "\n<!-- \n$license" . "-->\n\n";
-			$text =~ s/(<\?xml.+\?>\n)/\1\n$lic_block/;
-		} else {
+	    $license =~ s/^/ * /gm;
+	}
+	if ($replace) {
+		$text =~ s|^\*/| */|m;
+		$text =~ s/\*\*\*\*\* BEGIN LICENSE BLOCK \*\*\*\*\*.+\*\*\*\*\* END LICENSE BLOCK \*\*\*\*\*\n/$license/s;
+	} else {
+		if ($path =~ /\.(js|css|java)$/) {
+			$text = "/*\n" . $license . " */\n\n" . $text;
+		} elsif ($path =~ /\.xml(\.\w+)?$/) {
+			if ($text =~ /^<\?xml/) {
+				my $lic_block = "\n<!-- \n$license" . "-->\n\n";
+				$text =~ s/(<\?xml.+\?>\n)/$1\n$lic_block/;
+			} else {
+				$text = "<!-- \n" . $license . "-->\n\n" . $text;
+			}
+		} elsif ($path =~ /\.(html|jsp)$/) {
 			$text = "<!-- \n" . $license . "-->\n\n" . $text;
 		}
-	} elsif ($path =~ /\.(html|jsp)$/) {
-		$text = "<!-- \n" . $license . "-->\n\n" . $text;
-	} elsif ($path =~ /\.(pl|pm)$/) {
-		$text = "=begin\n" . $license . "=end\n=cut\n\n" . $text;
 	}
 	return $text;
 }
