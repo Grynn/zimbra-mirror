@@ -3397,6 +3397,9 @@ Dwt_AddRemove_XFormItem.prototype.updateWidget = function(newvalue) {
 		this.widget.isUpdating = false;
 		return;
 	}
+	if (this._skipUpdate) {
+		return;
+	}
 
 	if (this._stateChangeListener) {
 		this.widget.removeStateChangeListener(this._stateChangeListener);
