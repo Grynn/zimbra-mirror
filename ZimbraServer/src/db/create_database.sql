@@ -60,6 +60,8 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
                                              # the expense of sorting a small number of rows
    INDEX i_date (date),                      # fallback index in case other constraints are not specified
    INDEX i_mod_metadata (mod_metadata),      # used by the sync code
+   INDEX i_tags_date (tags, date),           # for tag searches
+   INDEX i_flags_date (flags, date),         # for flag searches
    CONSTRAINT fk_parent_id FOREIGN KEY (parent_id) REFERENCES ${DATABASE_NAME}.mail_item(id),
    CONSTRAINT fk_folder_id FOREIGN KEY (folder_id) REFERENCES ${DATABASE_NAME}.mail_item(id)
 ) ENGINE = InnoDB;
