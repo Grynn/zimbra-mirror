@@ -63,7 +63,7 @@ function() {
 	h = (h > ZaOverviewPanel._MIN_FOLDERTREE_SIZE) ? h : ZaOverviewPanel._MIN_FOLDERTREE_SIZE;
 	
 	this._treePanel.setBounds(0, 0, opSz.x, h);
-	var tfBds = this._treePanel.getBounds();
+//	var tfBds = this._treePanel.getBounds();
 }
 
 ZaOverviewPanel.prototype._panelControlListener =
