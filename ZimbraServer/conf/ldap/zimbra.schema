@@ -236,6 +236,7 @@ objectIdentifier zimbraComponentAvailable ZimbraAttrType:242
 objectIdentifier zimbraCalendarCompatibilityMode ZimbraAttrType:243
 objectIdentifier zimbraSpamIsSpamAccount ZimbraAttrType:244
 objectIdentifier zimbraSpamIsNotSpamAccount ZimbraAttrType:245
+objectIdentifier zimbraMailTransport ZimbraAttrType:247
 
 #################################################################
 # object class OIDs
@@ -950,6 +951,13 @@ attributetype ( zimbraMailHost
 	DESC 'the server hosting the accounts mailbox'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
+	SINGLE-VALUE )
+
+attributetype ( zimbraMailTransport
+	NAME 'zimbraMailTransport'
+	DESC 'where to deliver parameter for use in postfix transport_maps'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{320}
 	SINGLE-VALUE )
 
 attributetype ( zimbraMailHostPool
@@ -1774,6 +1782,7 @@ objectclass ( zimbraMailRecipient
 	MAY (	
 		zimbraMailForwardingAddress $
 		zimbraMailHost $
+		zimbraMailTransport $
 		zimbraMailAlias $
 		zimbraMailAddress $
 		zimbraMailDeliveryAddress $

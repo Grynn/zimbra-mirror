@@ -204,6 +204,8 @@
 
 <attr name="zimbraMailHostPool" type="id"/>
 
+<attr name="zimbraMailTransport" type="string" max="320" immutable="1"/>
+
 <attr name="zimbraMailIdleSessionTimeout" type="duration"/>
 
 <attr name="zimbraMailMessageLifetime" type="duration"/>
