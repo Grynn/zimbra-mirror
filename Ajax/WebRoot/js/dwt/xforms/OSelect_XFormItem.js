@@ -110,7 +110,7 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 	if (menu == null) return; //DBG.println(this,".showMenu() -- couldn't get menu element.");
 
 	menu.className = this.getMenuCssClass();
-	menu.innerHTML = this.getChoicesHTML();
+	menu.innerHTML = this.getChoicesHTML();	
 
 	// move the menu underneath the button
 	// LATER THIS SHOULD RESPECT THIS WINDOW SIZE, ETC
@@ -118,7 +118,20 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 	//alert(bounds.left + ":" + bounds.top+ ":" + bounds.width+ ":" + bounds.height);
 	menu.style.left = bounds.left;
 	menu.style.top = bounds.top + bounds.height - 1;
-	
+	var choices = this.getNormalizedChoices();
+	if(choices && choices.values) {
+		if(choices.values.length > 5) {
+			menu.style.top	= 	parseInt(menu.style.top)+2;
+			menu.style.height = 110;
+			menu.style.overflow="auto";	
+			menu.style.width = parseInt(bounds.width)+2;
+		} else {
+			menu.style.height = (choices.values.length * 22) + 4;
+			menu.style.width = bounds.width;
+			menu.style.overflow="hidden";
+		}
+	}
+
 	var value = this.getInstanceValue();
 	if (this.$getDisplayValue) {
 		value = this.$getDisplayValue(value);
@@ -131,7 +144,7 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 	menu.style.display = "block";
 
 	if (this.$hideListener == null) {
-		this.$hideListener = new AjxListener(this, this.hideMenu);
+		this.$hideListener = new AjxListener(this, this.oMouseUp);
 	}
 	
 	if (this.$outsideMouseDownListener == null) {
@@ -140,13 +153,17 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 
 	AjxCore.addListener(window, "onmouseup", this.$hideListener);
 	AjxCore.addListener(document.body, "onmousedown", this.$outsideMouseDownListener);
+	DwtEventManager.addListener(DwtEvent.ONMOUSEDOWN, this.$outsideMouseDownListener);	
 	
 }
 
 OSelect1_XFormItem.prototype.hideMenu = function () {
 	// hide the menu on a timer so we don't have to deal with wierd selection bugs
 	setTimeout(this.getFormGlobalRef()+".getElement('" + this.getMenuElementId() + "').style.display = 'none'", 10);
+
 	AjxCore.removeListener(window, "onmouseup", this.$hideListener);
+	AjxCore.removeListener(document.body, "onmousedown", this.$outsideMouseDownListener);	
+	DwtEventManager.removeListener(DwtEvent.ONMOUSEDOWN, this.$outsideMouseDownListener);
 	
 	if (AjxEnv.isIE && OSelect1_XFormItem._mouseWheelEventAttached) {
 		var form = this.getForm();
@@ -158,6 +175,29 @@ OSelect1_XFormItem.prototype.hideMenu = function () {
 			OSelect1_XFormItem._mouseWheelCurrentSelect = null;
 		}
 	}
+}
+
+OSelect1_XFormItem.prototype.oMouseUp = function (ev) {
+	// hide the menu on a timer so we don't have to deal with wierd selection bugs
+	ev = ev || window.event;
+	var found = false;
+    if (ev) {
+		// figure out if we are over the menu that is up
+		var htmlEl = DwtUiEvent.getTarget(ev);
+	//	DBG.println(AjxDebug.DBG1, AjxBuffer.concat("oMouseUp; htmlEl.nodeName=",htmlEl.nodeName," htmlEl.localName = ", htmlEl.nodeName));
+		//check if the user clicked on the scrollbar
+		if(htmlEl.localName == "scrollbar" && htmlEl.parentNode && htmlEl.parentNode.id=="___OSELECT_MENU___") { 
+			found = true;
+		}
+	}
+
+
+	if(!found)
+		this.hideMenu();
+	/*else
+		AjxCore.removeListener(window, "onmouseup", this.$hideListener);*/
+		
+	return true;
 }
 
 OSelect1_XFormItem.prototype.onOutsideMouseDown = function (ev) {
@@ -177,10 +217,23 @@ OSelect1_XFormItem.prototype.onOutsideMouseDown = function (ev) {
 				}
 			}
 		}
+		if(!found) {
+		//	DBG.println(AjxDebug.DBG1, AjxBuffer.concat("onOutsideMouseDown; htmlEl.nodeName=", htmlEl.nodeName," htmlEl.localName = ", htmlEl.localName, " htmlEl.id=", htmlEl.id));
+			//check if the user clicked on the scrollbar
+			if(htmlEl.localName == "scrollbar" && htmlEl.parentNode && htmlEl.parentNode.id=="___OSELECT_MENU___") { 
+				found = true;
+			} else if (htmlEl.id && htmlEl.id == "___OSELECT_MENU___"){
+				found = true;
+			}
+		}
+		
 	}
-	AjxCore.removeListener(document.body, "onmousedown", this.$outsideMouseDownListener);	
 	if(!found)
 		this.hideMenu();
+/*	else {
+		AjxCore.removeListener(document.body, "onmousedown", this.$outsideMouseDownListener);	
+		DwtEventManager.removeListener(DwtEvent.ONMOUSEDOWN, this.$outsideMouseDownListener);
+	}*/
 		
 	return true;
 }
@@ -298,12 +351,14 @@ OSelect1_XFormItem.prototype.clearAllHilites = function () {
 OSelect1_XFormItem.prototype.setChoiceCssClass = function (itemNum, cssClass) {
 	var els = this.getChoiceElements(itemNum);
 	if (els) {
-		if (this.getShowCheck()) {
+		els.className = cssClass;
+/*		if (this.getShowCheck()) {
 			els[0].className = cssClass + "_check";
 			els[1].className = cssClass;
 		} else {
 			els[0].className = cssClass;
 		}
+*/		
 	}
 }
 
@@ -332,7 +387,8 @@ OSelect1_XFormItem.prototype.getItemNumFromEvent = function (event) {
 OSelect1_XFormItem.prototype.getChoiceElements = function (itemNum) {
 	if (itemNum == null || itemNum == -1) return null;
 	try {
-		return this.getForm().getElement(this.getId() + "_menu_table").rows[itemNum].getElementsByTagName("td");
+//		return this.getForm().getElement(this.getId() + "_menu_table").rows[itemNum].getElementsByTagName("td");
+		return this.getForm().getElement(this.getId() + "_menu_table").getElementsByTagName("div")[itemNum];
 	} catch (e) {
 		return null;
 	}
@@ -351,7 +407,7 @@ OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput, updateScript, in
 		element.style.top = -1000;
 		element.className = this.getMenuCssClass();
 		element.innerHTML = this.getChoicesHTML();
-		this._width = element.offsetWidth;
+		this._width = element.offsetWidth+20;
 		element.innerHTML = "";
 	}
 
@@ -403,14 +459,16 @@ OSelect1_XFormItem.prototype.getChoiceSelectedCssClass = function () {
 
 
 OSelect1_XFormItem.prototype.outputChoicesHTMLStart = function(html, indent) {
-	html.append(indent, "<table id=", this.getId(),"_menu_table class=", this.getChoiceTableCssClass(), ">\r");
+	//html.append(indent, "<table id=", this.getId(),"_menu_table class=", this.getChoiceTableCssClass(), ">\r");
+	html.append(indent, "<div width=100% style='overflow:visible;' id=", this.getId(),"_menu_table class=", this.getChoiceTableCssClass(), ">\r");
 }
 OSelect1_XFormItem.prototype.outputChoicesHTMLEnd = function(html, indent) {
-	html.append(indent, "</table>\r");
+	//html.append(indent, "</table>\r");
+	html.append(indent, "</div>\r");
 }
 
 OSelect1_XFormItem.prototype.getChoiceHTML = function (itemNum, value, label, cssClass, indent) {
-	var ref = this.getFormGlobalRef() + ".getItemById('"+ this.getId()+ "')";
+	/*var ref = this.getFormGlobalRef() + ".getItemById('"+ this.getId()+ "')";
 	var checkTdHtml = "";
 	if (this.showCheck == true) {
 		checkTdHtml = "<td width=10 class=" + cssClass + "_check></td>";
@@ -424,6 +482,19 @@ OSelect1_XFormItem.prototype.getChoiceHTML = function (itemNum, value, label, cs
 		">",
 				label,
 		"</td></tr>\r"
+	);*/
+	//try DIVs
+	
+	var ref = this.getFormGlobalRef() + ".getItemById('"+ this.getId()+ "')";
+	return AjxBuffer.concat(indent,
+		"<div width=100% class=", cssClass, 
+			" onmouseover=\"",ref, ".onChoiceOver(", itemNum,", event||window.event)\"",
+			" onmouseout=\"",ref, ".onChoiceOut(", itemNum,", event||window.event)\"",
+			" onclick=\"",ref, ".onChoiceClick(", itemNum,", event||window.event)\"",
+			" itemnum = '", itemNum, "'",
+		">",
+				label,
+		"</div>\r"
 	);
 }
 

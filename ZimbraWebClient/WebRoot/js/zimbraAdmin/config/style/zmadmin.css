@@ -1796,6 +1796,7 @@ html>body .balloonBR {
 .oselect_check_choice_table {
 	border-collapse:collapse;
 	border:1px solid black;
+	background-color:white;
 }
 .oselect_choice {
 	background-color:white;
@@ -1803,7 +1804,6 @@ html>body .balloonBR {
 	padding-top:4px;
 	padding-bottom:4px;
 	padding-left:10px;
-	padding-right:20px;
 	margin:1px;
 	white-space:nowrap;
 }
@@ -1813,7 +1813,6 @@ html>body .balloonBR {
 	padding-top:4px;
 	padding-bottom:4px;
 	padding-left:10px;
-	padding-right:20px;
 	margin:1px;
 }
 
