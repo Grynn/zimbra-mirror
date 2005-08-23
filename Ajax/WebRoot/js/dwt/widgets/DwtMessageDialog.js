@@ -27,11 +27,11 @@ Contributor(s): ______________________________________.
 * This class represents a reusable message dialog box. Messages can be informational, warning, or
 * critical.
 */
-function DwtMessageDialog(parent, className, buttons) {
+function DwtMessageDialog(parent, className, buttons, extraButtons) {
 	if (arguments.length == 0) return;
  	this._msgCellId = Dwt.getNextId();
  	buttons = buttons ? buttons : [DwtDialog.OK_BUTTON, DwtDialog.DETAIL_BUTTON];
- 	DwtDialog.call(this, parent, className, null, buttons);
+ 	DwtDialog.call(this, parent, className, null, buttons, extraButtons);
 	this.setContent(this._contentHtml());
  	this._msgCell = Dwt.getDomObj(this.getDocument(), this._msgCellId);
 	this.addEnterListener(new AjxListener(this, this._enterListener));
