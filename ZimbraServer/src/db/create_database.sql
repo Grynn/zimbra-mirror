@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    parent_id     INTEGER UNSIGNED,
    folder_id     INTEGER UNSIGNED,
    index_id      INTEGER UNSIGNED,
-   date          INTEGER UNSIGNED NOT NULL,  # date is stored as a UNIX-style timestamp
+   date          INTEGER UNSIGNED NOT NULL,  # stored as a UNIX-style timestamp
    size          INTEGER UNSIGNED NOT NULL,
    volume_id     TINYINT UNSIGNED,
    blob_digest   VARCHAR(28) BINARY,         # reference to blob, meaningful for messages only (type == 5)
@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    subject       TEXT,
    metadata      TEXT,
    mod_metadata  INTEGER UNSIGNED NOT NULL,  # change number for last row modification
+   change_date   INTEGER UNSIGNED,           # UNIX-style timestamp for last row modification
    mod_content   INTEGER UNSIGNED NOT NULL,  # change number for last change to "content" (e.g. blob)
 
    PRIMARY KEY (id),
