@@ -44,10 +44,8 @@ if [ x`whoami` != xzimbra ]; then
 	exit 1
 fi
 
-if [ ! -f /opt/zimbra/bin/fetchmail ]; then
-	# Hack to get around RPM lameness
-	gzip -d /opt/zimbra/bin/fetchmail.gz 2> /dev/null
-	chmod 755 /opt/zimbra/bin/fetchmail 2> /dev/null
+if [ ! -f /usr/bin/fetchmail ]; then
+	exit 1;
 fi
 
 source `dirname $0`/zmshutil || exit 1
@@ -59,7 +57,7 @@ echo "server $SERVER user $USER@$SERVER password $PASS keep" > ${zimbra_home}/.f
 chmod 600 ${zimbra_home}/.fetchmailrc
 
 
-fetchmail -n -a -u $USER $FOLDER -m "${zimbra_home}/bin/sa-learn -p ${zimbra_home}/conf/salocal.cf --dbpath ${zimbra_home}/amavisd/.spamassassin/ --no-sync --showdots -L --${MODE}" ${SERVER}
+/usr/bin/fetchmail -n -a -u $USER $FOLDER -m "${zimbra_home}/bin/sa-learn -p ${zimbra_home}/conf/salocal.cf --dbpath ${zimbra_home}/amavisd/.spamassassin/ --no-sync --showdots -L --${MODE}" ${SERVER}
 
 ${zimbra_home}/bin/sa-learn -p ${zimbra_home}/conf/salocal.cf --dbpath ${zimbra_home}/amavisd/.spamassassin/ --sync
 
