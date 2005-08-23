@@ -1,0 +1,51 @@
+#!/usr/bin/perl -w
+
+use strict;
+
+my $LANGUAGE = $ARGV[0];
+my $LICENSE = $ARGV[1];
+my $SOURCE = $ARGV[2];
+
+my $savedSlash = $/;
+undef $/;
+open(LICENSE, $LICENSE) || die "can't open license file: $LICENSE";
+my $license = <LICENSE>;
+close(LICENSE);
+$/ = $savedSlash;
+
+open(SOURCE, $SOURCE) || die "can't open source file: $SOURCE";
+if ($LANGUAGE eq 'java') {
+    print "/*\n"; 
+    $license =~ s/^/ * /gm;
+    print $license;
+    print " */\n";
+    while (<SOURCE>) {
+        print;
+    }
+} elsif ($LANGUAGE eq 'shell' || $LANGUAGE eq 'perl') {
+    my $firstLine = <SOURCE>;
+    if (defined $firstLine) {
+        print $firstLine;
+    }
+    print "# \n";
+    $license =~ s/^/\# /gm;
+    print $license;
+    print "# \n";
+    while (<SOURCE>) {
+        print;
+    }
+} elsif ($LANGUAGE eq 'sql' || $LANGUAGE eq 'perlmodule') {
+    print "# \n";
+    $license =~ s/^/\# /gm;
+    print $license;
+    print "# \n";
+    while (<SOURCE>) {
+        print;
+    }
+} else {
+    die "Unknown language $LANGUAGE";
+}
+    
+
+close(SOURCE);
+
