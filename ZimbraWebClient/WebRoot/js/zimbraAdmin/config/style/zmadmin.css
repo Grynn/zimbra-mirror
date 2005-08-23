@@ -508,8 +508,6 @@ DIV.vSpace {
 */
 
 .DwtToolTip {
-	XXXMOWXXXbackground-color: rgb(255, 247, 176);
-    XXXMOWXXXborder: solid 1px;
 }
 
 /*
@@ -1494,8 +1492,48 @@ html>body .balloonBR {
   background-image:url(/zimbraAdmin/img/hiRes/corners/balloon_BR.png);
 }
 
-
-
+.hover_frame {
+	border-collapse: collapse;
+	padding: 0;
+} 
+.hover_spacer_tl {
+	width: 12;
+	height: 12;
+}
+.hover_spacer_tm {
+	height: 12;
+}
+.hover_spacer_tr {
+	width: 20;
+	height: 12;
+}
+.hover_spacer_ml	{
+	width: 12;
+	height: 100%;
+}
+.hover_spacer_mr {
+	width: 20;
+	height: 100%;
+}
+.hover_spacer_bl {
+	width: 12;
+	height: 20;
+}
+.hover_spacer_bm {
+	height: 20;
+}
+.hover_spacer_br {
+	width: 20;
+	height: 20;
+}
+.hover_contents {
+}
+.hover_tip_top {
+	position: absolute;
+}
+.hover_tip_bottom {
+	position: relative;
+}
 
 /*****
   XForms things

@@ -878,7 +878,7 @@ function(ev) {
 		if (obj._toolTipContent != null) {
 			var shell = DwtShell.getShell(window);
 			var tooltip = shell.getToolTip();
-			tooltip.mouseMove();
+			tooltip.mouseMove(null, mouseEv.docX, mouseEv.docY);
 		}
 		return DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEMOVE);
 	} else {

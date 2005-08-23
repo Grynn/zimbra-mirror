@@ -53,6 +53,12 @@ function() {
 
 DwtToolTip.prototype.setContent =
 function(content) {
+	if (content) {
+		var divContent = DwtBorder.getBorderStartHtml("hover") + 
+							content + 
+						 DwtBorder.getBorderEndHtml("hover");
+		this._div.innerHTML = divContent;
+	}		
 	this._content = content;
 }
 	
@@ -79,11 +85,16 @@ function(x, y, delay) {
 }
 
 DwtToolTip.prototype.mouseMove =
-function(delay) {
+function(delay, x, y) {
 	if (this._popupActionId != -1) {
 		AjxTimedAction.cancelAction(this._popupActionId);
 		this._popupAction.obj = this;
 		delay = (delay == null) ? DwtToolTip._TOOLTIP_DELAY : (delay > 0) ? delay : 0;
+		if (x) {
+			this._popupAction.params.removeAll();
+			this._popupAction.params.add(x);
+			this._popupAction.params.add(y);
+		}
 	 	this._popupActionId = AjxTimedAction.scheduleAction(this._popupAction, delay);
 	}
 }
@@ -111,12 +122,13 @@ function(delay) {
 DwtToolTip.prototype._popupToolTip = 
 function(x, y) {
 	if (this._content != null) {
-		var divContent = DwtBorder.getBorderStartHtml("TL_balloon") + 
-							this._content + 
-						 DwtBorder.getBorderEndHtml("TL_balloon");
-		this._div.innerHTML = divContent;
-		
-		var WINDOW_GUTTER = 10;
+		var WINDOW_GUTTER = 5;
+		var POPUP_OFFSET_X = 8;
+		var POPUP_OFFSET_Y = 8;
+
+		var tt = document.getElementById('tooltip_tip_t');
+		var tb = document.getElementById('tooltip_tip_b');
+		var t = tt;
 
 		var ex = x;
 		var ey = y;
@@ -128,46 +140,89 @@ function(x, y) {
 		var p = Dwt.getSize(this._div);
 		var pw = p.x;
 		var ph = p.y;
-		
-		var px = ex;
-		var py = ey;
 
-		// HACK: need to hard-code the tip dimensions
-		var tw = 20;
-		var th = 70;
-		
+		var btEl = document.getElementById('tooltip_border_tm');
+		var blEl = document.getElementById('tooltip_border_ml');
+		var brEl = document.getElementById('tooltip_border_mr');
+		var bbEl = document.getElementById('tooltip_border_bm');
+
+		var bth = Dwt.getSize(btEl).y;
+		var blw = Dwt.getSize(blEl).x;
+		var brw = Dwt.getSize(brEl).x;
+		var bbh = Dwt.getSize(bbEl).y;
+
+		var ttw = Dwt.getSize(tt).x;
+		var tth = Dwt.getSize(tt).y;
+		var tbw = Dwt.getSize(tb).x;
+		var tbh = Dwt.getSize(tb).y;
+
 		/***
 		DBG.println(
 			"---<br>"+
-			"event = &lt;"+ex+","+ey+"&gt;<br>"+
-			"window = "+ww+"x"+wh+"<br>"+
-			"popup = "+pw+"x"+ph
-		);
-		/***/
+		    "event: &lt;"+ex+","+ey+"><br>"+
+			"window: "+ww+"x"+wh+"<br>"+
+		    "popup: "+pw+"x"+ph+"<br>"+
+		    "borders: top="+btEl+", left="+blEl+", right="+brEl+", bottom="+bbEl+"<br>"+
+		    "borders: top="+bth+", left="+blw+", right="+brw+", bottom="+bbh+"<br>"+
+		    "tip: top="+ttw+"x"+tth+", bottom="+tbw+"x"+tbh
+	    );
+	    /***/
 
-		// adjust popup position
-		if (ex - tw < WINDOW_GUTTER) {
-			px = WINDOW_GUTTER + tw;
-		}
-		else if (ex + tw + pw > ww - WINDOW_GUTTER) {
-			px = ex - pw - tw;
-			var borderStyle = "TR_balloon";
-			var divContent = DwtBorder.getBorderStartHtml(borderStyle) + 
-							this._content + 
-						DwtBorder.getBorderEndHtml(borderStyle);
-			this._div.innerHTML = divContent;
-		}
+		var px = ex - pw / 2 - POPUP_OFFSET_X;
+		var py;
+		
+		var ty;
+		var tw;
 
-		if (py < WINDOW_GUTTER) {
-			py = WINDOW_GUTTER;
+		// tip up
+		var adjust = tbh; // NOTE: because bottom tip is relative
+		if (ph + ey + tth - bth + POPUP_OFFSET_Y < wh - WINDOW_GUTTER + adjust) {
+			py = ey + tth - bth + POPUP_OFFSET_Y;
+			tb.style.display = "none";
+			ty = bth - tth;
+			tw = ttw;
+			t = tt;
 		}
-		else if (py + ph + th > wh - WINDOW_GUTTER) {
-			py = ey - ph - th;
-			var borderStyle = ex + tw + pw > ww - WINDOW_GUTTER ? "BR_balloon" : "BL_balloon";
-			var divContent = DwtBorder.getBorderStartHtml(borderStyle) + 
-							this._content + 
-						DwtBorder.getBorderEndHtml(borderStyle);
-			this._div.innerHTML = divContent;
+		
+		// tip down
+		else {
+			py = ey - ph - tbh + bbh - POPUP_OFFSET_Y;
+			py += tbh; // NOTE: because bottom tip is relative
+			tt.style.display = "none";
+			ty = -bbh;
+			tw = tbw;
+			t = tb;
+		}
+		//DBG.println("position: &lt;"+px+","+py+">");
+
+		// adjust popup x-location
+		if (px < WINDOW_GUTTER) {
+			px = WINDOW_GUTTER;
+		}
+		else if (px + pw > ww - WINDOW_GUTTER) {
+			px = ww - WINDOW_GUTTER - pw;
+		}
+		//DBG.println("position: &lt;"+px+","+py+">");
+		
+		// adjust tip x-location
+		var tx = ex - px - tw / 2;
+		//DBG.println("tip: &lt;"+tx+","+ty+">");
+		if (tx < blw) {
+			tx = blw;
+		}
+		if (tx + tw > pw - brw) {
+			tx = pw - brw - tw;
+		}
+		//DBG.println("tip: &lt;"+tx+","+ty+">");
+
+		t.style.left = tx;
+		t.style.top = ty;
+		if (t == tb) {
+			var y = t.offsetTop;//Dwt.getLocation(t).y;
+			this._div.style.clip = "rect(auto,auto,"+(y + tbh)+",auto)";
+		}
+		else {
+			this._div.style.clip = "rect(auto,auto,auto,auto)";
 		}
 
 		// NOTE: Firefox shows the tooltip in its original position before

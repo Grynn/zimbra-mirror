@@ -106,6 +106,10 @@ DwtBorder.performSubstitutions = function (html, substitutions) {
 		if (html.indexOf(str)) {
 			html = html.split(str).join(substitutions[prop]);
 		}
+		var str = "{$"+prop+"}";
+		if (html.indexOf(str)) {
+			html = html.split(str).join(substitutions[prop]);
+		}
 	}
 	return html;
 }
@@ -602,4 +606,32 @@ DwtBorder.registerBorder(
 		width:10,	//NOT ACCURATE
 		height:7
 	}
+);
+
+DwtBorder.registerBorder( 
+	"hover", 
+	{ 
+		start:	"<div id=tooltip_tip_t class='hover_tip_top Imghover_tip_top'></div>"+
+				"<table class=hover_frame border=0 cellspacing=0 cellpadding=0>"+ 
+				"	<tr>"+ 
+				"		<td id=tooltip_border_tl class=hover_spacer_tl><div class=Imghover_TL></div></td>"+ 
+				"		<td id=tooltip_border_tm class=hover_spacer_tm><div class=Imghover_T style='width:100%'>&nbsp;</div></td>"+ 
+				"		<td id=tooltip_border_tr class=hover_spacer_tr><div class=Imghover_TR></div></td>"+ 
+				"	</tr>"+ 
+				"	<tr>"+
+				"		<td id=tooltip_border_ml class=hover_spacer_ml><div class=Imghover_L style='height:100%'></div></td>"+ 
+				"		<td id=tooltip_border_mm class=Imghover_BG><div class=hover_contents>", 
+		end:	"		</div></td>"+ 
+				"		<td id=tooltip_border_mr class=hover_spacer_mr><div class=Imghover_R style='height:100%'></div></td>"+ 
+				"	</tr>"+ 
+				"	<tr>"+
+				"		<td id=tooltip_border_bl class=hover_spacer_bl><div class=Imghover_BL></div></td>"+ 
+				"		<td id=tooltip_border_bm class=hover_spacer_bm><div class=Imghover_B style='width:100%'>&nbsp;</div></td>"+ 
+				"		<td id=tooltip_border_br class=hover_spacer_br><div class=Imghover_BR></div></td>"+ 
+				"	</tr>"+ 
+				"</table>"+
+				"<div id=tooltip_tip_b class='hover_tip_bottom Imghover_tip_bottom'></div>",
+		width:40, 
+		height:36 
+	} 
 );
