@@ -191,6 +191,7 @@ zimbraRedoLogFsyncIntervalMS: 10
 zimbraSmtpHostname: localhost
 zimbraSmtpPort: 25
 zimbraSmtpTimeout: 60
+zimbraSmtpCheckLocalRecipients: TRUE
 zimbraSpamCheckEnabled: FALSE
 zimbraSpamKillPercent: 75
 zimbraSpamTagPercent: 33

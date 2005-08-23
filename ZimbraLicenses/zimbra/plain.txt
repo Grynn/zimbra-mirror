@@ -1,0 +1,6 @@
+***** BEGIN LICENSE BLOCK *****
+
+Copyright (C) 2005 Zimbra, Inc.
+All Rights Reserved.
+
+***** END LICENSE BLOCK *****
