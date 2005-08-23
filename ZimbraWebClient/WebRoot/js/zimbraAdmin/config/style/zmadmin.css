@@ -900,7 +900,7 @@ DIV.vSpace {
 */
 
 /* Overview Panel */
-.OverviewPanel, .OverviewTreePanel {width: 150px;}
+.OverviewPanel, .OverviewTreePanel {width: 250px;}
 .OverviewPanel {height: 100%;}
 .OverviewTreePanel {background-color: white;}
 .OverviewTree {padding: 5px;}

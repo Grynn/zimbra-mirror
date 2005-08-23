@@ -58,7 +58,7 @@ function() {
 ZaOverviewPanel.prototype._layout =
 function() {
 	var opSz = this.getSize();
-	opSz.x+=100;
+//	opSz.x+=100;
 	var h = opSz.y;
 	h = (h > ZaOverviewPanel._MIN_FOLDERTREE_SIZE) ? h : ZaOverviewPanel._MIN_FOLDERTREE_SIZE;
 	
