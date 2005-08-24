@@ -771,6 +771,7 @@ FileSize_XModelItem.prototype.setterScope = _MODELITEM_;
 FileSize_XModelItem.prototype.getter = "getValue";
 FileSize_XModelItem.prototype.setter = "setValue";
 FileSize_XModelItem.prototype.units = AjxUtil.SIZE_MEGABYTES;
+FileSize_XModelItem.prototype.minInclusive = 0;
 
 FileSize_XModelItem.prototype.getValue =  function(instance, current, ref) {
 	var value = eval("instance."+ref);
