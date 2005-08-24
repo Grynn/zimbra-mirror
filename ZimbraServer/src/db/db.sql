@@ -73,14 +73,6 @@ INSERT INTO volume (id, name, path, file_bits, file_group_bits, mailbox_bits, ma
   VALUES (1, 'message1', '/opt/zimbra/store', 12, 8, 12, 8);
 INSERT INTO volume (id, name, path, file_bits, file_group_bits, mailbox_bits, mailbox_group_bits)
   VALUES (2, 'index1',   '/opt/zimbra/index', 12, 8, 12, 8);
-INSERT INTO volume (id, name, path, file_bits, file_group_bits, mailbox_bits, mailbox_group_bits)
-  VALUES (3, 'message2', '/dev/shm/zimbra/store', 12, 8, 12, 8);
-INSERT INTO volume (id, name, path, file_bits, file_group_bits, mailbox_bits, mailbox_group_bits)
-  VALUES (4, 'index2',   '/dev/shm/zimbra/index', 12, 8, 12, 8);
-INSERT INTO volume (id, name, path, file_bits, file_group_bits, mailbox_bits, mailbox_group_bits)
-  VALUES (5, 'message3', '/ZIMBRA/store', 12, 8, 12, 8);
-INSERT INTO volume (id, name, path, file_bits, file_group_bits, mailbox_bits, mailbox_group_bits)
-  VALUES (6, 'index3',   '/ZIMBRA/index', 12, 8, 12, 8);
 
 INSERT INTO current_volumes (message_volume_id, index_volume_id, next_mailbox_id) VALUES (1, 2, 1);
 COMMIT;
@@ -93,7 +85,6 @@ COMMIT;
 CREATE TABLE mailbox (
    id                 INTEGER UNSIGNED NOT NULL PRIMARY KEY,
    account_id         CHAR(36) NOT NULL,          # e.g. "d94e42c4-1636-11d9-b904-4dd689d02402"
-   message_volume_id  INTEGER UNSIGNED NOT NULL,
    index_volume_id    INTEGER UNSIGNED NOT NULL,
    item_id_checkpoint INTEGER UNSIGNED NOT NULL DEFAULT 0,
    size_checkpoint    BIGINT UNSIGNED NOT NULL DEFAULT 0,
@@ -103,10 +94,8 @@ CREATE TABLE mailbox (
    comment            VARCHAR(255),               # usually the main email address originally associated with the mailbox
 
    UNIQUE INDEX i_account_id (account_id),
-   INDEX i_message_volume_id (message_volume_id),
    INDEX i_index_volume_id (index_volume_id),
 
-   CONSTRAINT fk_mailbox_message_volume_id FOREIGN KEY (message_volume_id) REFERENCES volume(id),
    CONSTRAINT fk_mailbox_index_volume_id FOREIGN KEY (index_volume_id) REFERENCES volume(id)
 ) ENGINE = InnoDB;
 

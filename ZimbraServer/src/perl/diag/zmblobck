@@ -102,7 +102,7 @@ sub loadMailboxes($$) {
     $sth->finish();
 
     # Query mailbox table.
-    $stmt = "SELECT id, message_volume_id FROM mailbox";
+    $stmt = "SELECT m.id, c.message_volume_id FROM mailbox m, current_volumes c";
     if (defined($mboxId)) {
 	$stmt .= " WHERE id=$mboxId";
     }
