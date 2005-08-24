@@ -307,7 +307,6 @@ XModelItem.prototype.getPattern = function() {
 		else if (AjxUtil.isArray(this.pattern)) {
 			for (var i = 0; i < this.pattern.length; i++) {
 				var pattern = this.pattern[i];
-				DBG.println("pattern["+i+"]: "+pattern);
 				if (AjxUtil.isString(pattern)) {
 					this.pattern[i] = new RegExp(this.pattern[i]);
 				}
