@@ -21,7 +21,11 @@
 	<classpathentry kind="lib" path="jars/commons-collections-3.1.jar"/>
 	<classpathentry kind="lib" path="jars/lucene-demos-1.4-final.jar"/>
 	<classpathentry kind="lib" path="jars/commons-httpclient-2.0.1.jar"/>
-	<classpathentry kind="lib" path="jars/junit-3.8.1.jar"/>
+	<classpathentry kind="lib" path="jars/junit-3.8.1.jar">
+		<attributes>
+			<attribute value="http://junit.sourceforge.net/javadoc/" name="javadoc_location"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="jars/jug-1.1.2.jar"/>
 	<classpathentry kind="lib" path="jars/commons-beanutils-1.6.1.jar"/>
 	<classpathentry kind="lib" path="jars/commons-digester-1.5.jar"/>
