@@ -194,11 +194,30 @@ function(unameId, pwordId, okCellId, errorCellId) {
 	var html = new Array();
 	var i = 0;
 
-	html[i++] = "<table border=0 cellspacing=0 cellpadding=0 style='width:100%; height:100%'><tr><td>";
+	html[i++] = "<table  align=center valign=middle width=100% height=100% border=0 cellspacing=0 cellpadding=0><tr><td align=center width=100%>";
+	html[i++] = "<table cellspacing=0 cellpadding=0 class='" + this._className + "-TopPanel'><tr><td class='" + this._className + "-HeaderPanel'>";
+	html[i++] = AjxImg.getImageHtml(ZaImg.M_LOGIN_BANNER);
+ 	html[i++] = "</td></tr>";
+ 	html[i++] = "<tr><td>";
+ 	html[i++] = "<table cellspacing=12 class='" + this._className + "-MainPanel'>";
+ 	html[i++] = "<colgroup><col style='width:75px'></col><col style='width:225px'></col></colgroup>";
+	html[i++] = "<tr><td colspan=2 id='" + errorCellId + "'>&nbsp;</td></tr>";
+	html[i++] = "<tr><td align=right>" + ZaMsg.username + ":</td>";
+	html[i++] = "<td><input style=\"width:100%; height:22px\" autocomplete=OFF type=text tabIndex=1 id='" + unameId + "'/></td></tr>";	
+	html[i++] = "<tr><td align=right>" + ZaMsg.password + ":</td>";
+	html[i++] = "<td><input style=\"width:100%; height:22px\" type=password tabIndex=2 id='" + pwordId + "'/></td></tr>";	
+	html[i++] = "<tr>";
+	html[i++] = "<td colspan=2 id='" + okCellId + "' align=right>";
+	html[i++] = "</td></tr></table>";
+	html[i++] = "</td></tr></table>";
+	html[i++] = "</td></tr></table>";	
+/*
 	html[i++] = "<table align=center border=0 cellspacing=0 cellpadding=0><tr><td>";
-	html[i++] = "<table border=0 cellspacing=12 class='" + this._className + "-HeaderPanel'><tr height=10><td>&nbsp;</td></tr>";
+	html[i++] = "<table border=0 cellspacing=0 class='" + this._className + "-HeaderPanel'>";
+	html[i++] = "<tr height=10><td>" + AjxImg.getImageHtml(ZaImg.M_LOGIN_BANNER) + "</td></tr>";
 	html[i++] = "<tr><td><table border=0 height=32><tr><td class='" + this._className + "-HeaderText'>" + ZaMsg.loginHeader + "</td></tr>";
-	html[i++] = "<tr><td class='" + this._className + "-SubHeaderText'>&nbsp;</td></tr></table></td></tr></table></td></tr><tr><td>";
+	html[i++] = "<tr><td class='" + this._className + "-SubHeaderText'>&nbsp;</td></tr></table></td></tr>";
+	html[i++] = "</table></td></tr><tr><td>";
 	html[i++] = "<table border=0 cellspacing=12 class='" + this._className + "-MainPanel'>";
 	html[i++] = "<colgroup><col style='width:75px'></col><col style='width:225px'></col></colgroup>";
 	html[i++] = "<tr><td colspan=2 id='" + errorCellId + "'>&nbsp;</td></tr><tr><td align=right>" + ZaMsg.username + ":</td>";
@@ -208,7 +227,7 @@ function(unameId, pwordId, okCellId, errorCellId) {
 	html[i++] = "<td colspan=2 id='" + okCellId + "' align=right>";
 	html[i++] = "</td></tr></table>";
 	html[i++] = "</td></tr></table></td></tr></table>";
-	
+*/	
 	return html.join("");
 }
 

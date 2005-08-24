@@ -58,13 +58,31 @@ TEXTAREA {
 	background-color: #b7b7b7; 
 	background-image:url(/zimbraAdmin/skins/steel/images/bg_steel.gif);
 	overflow:hidden;
+	align:center;
 }
 .ZaLoginDialog-Transparent {background-color: transparent;}
-.ZaLoginDialog-HeaderPanel, .ZaLoginDialog-MainPanel {width: 448px;}
-.ZaLoginDialog-HeaderPanel {
-	background-image: url("/zimbraAdmin/img/hiRes/non-web/LoginBanner.jpg");
-	border: 1px solid rgb(124, 124, 148);
+
+.ZaLoginDialog-MainPanel {
+	width: 447px;
+	background-image:url(/zimbraAdmin/skins/steel/images/bg_pebble.gif);
 }
+
+.ZaLoginDialog-TopPanel {
+  border: 2px solid; 
+  border-color: #C7C7C7 #3E3E3E #3E3E3E #C7C7C7;
+  background-image:url(/zimbra/skins/steel/images/bg_pebble.gif);
+}
+
+
+.ZaLoginDialog-ErrorPanel {
+  background-color: rgb(255, 255, 204);
+  width:417px;
+}
+
+.ZaLoginDialog-HeaderPanel {
+	width: 447px;
+}
+
 .ZaLoginDialog-HeaderText, .ZaLoginDialog-SubHeaderText {
 	color: white;
 }
@@ -102,15 +120,8 @@ TEXTAREA {
 }
 
 .ZaLoginDialog-SubHeaderText {font-size: 12pt;}
-.ZaLoginDialog-MainPanel, .ZaLoginDialog-ErrorPanel {
-	border: 1px solid rgb(124, 124, 148);
-}
-.ZaLoginDialog-MainPanel {background-color: white; table-layout:fixed;}
 
-.ZaLoginDialog-ErrorPanel {
-  background-color: rgb(255, 255, 204);
-  width:417px;
-}
+
 .ZaLoginDialog-ErrorIcon {width: 16px;}
 .ZaLoginDialog-ErrorText {width: 360px;}
 

@@ -28,8 +28,9 @@ function ZaImg() {
 
 ZaImg.PATH = ZaSettings.CONFIG_PATH + "/img/";
 // Miscellaneous images
-ZaImg.M_BANNER				= ["ImgBanner", 96, 96];
-ZaImg.M_SPLASH  			= ["ImgSplashScreen", 351, 222];
+ZaImg.M_BANNER 				= ["ImgBanner", 96, 96];
+ZaImg.M_LOGIN_BANNER		= ["ImgAdmin_LoginBanner", 447, 110];
+ZaImg.M_SPLASH  			= ["ImgAdmin_SplashScreen", 500, 350];
 
 // Icons
 ZaImg.I_BACK_ARROW 			= ["ImgLeftArrowIcon", 16, 16];
