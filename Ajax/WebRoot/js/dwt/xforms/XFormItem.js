@@ -220,7 +220,6 @@ XFormItemFactory.initItemDefaults = function(form, itemDefaults) {
 				originalConstructor = this.typeConstructorMap[type];
 			}
 			if (originalConstructor == null) {
-				DBG.println("XFormItem.initItemDefaults(form): can't find item type ", type);
 				continue;
 			}
 			var newConstructor = form.typeConstructorMap[type] = new Function();
@@ -2403,8 +2402,8 @@ Repeat_XFormItem.prototype.showMoveUpButton = false;
 Repeat_XFormItem.prototype.showMoveDownButton = false;
 Repeat_XFormItem.prototype.removeButton = {
 	type:_BUTTON_, 
-	label:"-", 
-	width:20,
+	label: DwtMsg.xformRepeatRemove, 
+	//width:20,
 	cssStyle:"margin-left:20px;",
 	onActivate:function (event) {
 		var repeatItem = this.getParentItem().getParentItem();
@@ -2415,8 +2414,8 @@ Repeat_XFormItem.prototype.removeButton = {
 Repeat_XFormItem.prototype.addButton = {
 	ref:".",
 	type:_BUTTON_, 
-	label:"+", 
-	width:20,
+	label: DwtMsg.xformRepeatAdd, 
+	//width:20,
 	onActivate:function (event) {
 		var repeatItem = this.getParentItem().getParentItem();
 		repeatItem.addRowButtonClicked(this.getParentItem().instanceNum);
@@ -2468,7 +2467,8 @@ Repeat_XFormItem.prototype.initializeItems = function () {
 //	group.useParentTable = true;
 	group.colSpan = 1;
 
-	var relevant = "(item.instanceNum <= " + this.getNumberToShow() + ") || (item.instanceNum <= item.getInstanceCount() - 1)";
+	var relevant = "(item.instanceNum < " + this.getNumberToShow() + ") || "+
+				   "(item.instanceNum < item.getInstanceCount())";
 	group.relevant = relevant;
 	
 	// add the add and remove buttons to the original items array, if appropriate

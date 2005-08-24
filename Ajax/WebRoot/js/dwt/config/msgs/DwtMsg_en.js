@@ -75,3 +75,6 @@ DwtMsg.invalidTimeString = "Time value must be entered in the form:  HH:MM[:SS] 
 DwtMsg.invalidDatetimeString = "Date format not understood.";
 
 DwtMsg.didNotMatchChoice = "Value '$0' did not match any values for this type.";
+
+DwtMsg.xformRepeatAdd = "+";
+DwtMsg.xformRepeatRemove = "-";
