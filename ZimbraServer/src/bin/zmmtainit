@@ -101,8 +101,7 @@ server_host = ${ldap_host}
 server_port = ${ldap_port}
 search_base =
 query_filter = (&(zimbraMailDeliveryAddress=%s)(zimbraMailStatus=enabled))
-result_attribute = zimbraMailHost
-result_filter = lmtp:%s:7025
+result_attribute = zimbraMailTransport
 version = 3
 bind = no
 timeout = 30
