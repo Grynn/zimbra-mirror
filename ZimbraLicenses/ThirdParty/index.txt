@@ -475,7 +475,7 @@ product: expat
 
 vendor: expat.sourceforge.net
 
-license: expat (liberal terms)
+license: MIT like
 
 text: expat.txt
 
@@ -574,7 +574,7 @@ product: snmp
 
 vendor: net-snmp.org
 
-lincese: MIT like + others
+license: BSD like + others
 
 text: snmp.txt
 
