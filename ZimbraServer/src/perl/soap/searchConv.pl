@@ -43,10 +43,22 @@ my $MAILNS = "urn:zimbraMail";
 
 my $url = "http://localhost:7070/service/soap/";
 
+my $user;
+my $convId;
+my $searchString;
+
+if (defined $ARGV[2] && $ARGV[2] ne "") {
+    $user = $ARGV[0];
+    $convId = $ARGV[1];
+    $searchString = $ARGV[2];
+} else {
+    die "Usage search USER CONVID QUERYSTR";
+}
+
 my $SOAP = $Soap::Soap12;
 my $d = new XmlDoc;
 $d->start('AuthRequest', $ACCTNS);
-$d->add('account', undef, { by => "name"}, 'user1@example.zimbra.com');
+$d->add('account', undef, { by => "name"}, $user);
 $d->add('password', undef, undef, "test123");
 $d->end();
 
@@ -71,14 +83,13 @@ my %msgAttrs;
 
 $d = new XmlDoc;
 my %queryAttrs;
-$queryAttrs{'cid'} = "288"; #503
-$queryAttrs{'sortBy'} = "nameAsc";
-#$queryAttrs{'offset'} = "1"; 
-#$queryAttrs{'limit'} = "2";
+$queryAttrs{'cid'} = $convId;
+$queryAttrs{'sortby'} = "datedesc";
 $queryAttrs{'groupBy'} = "none";
+$queryAttrs{'fetch'} = "1";
 $d->start('SearchConvRequest', $MAILNS, \%queryAttrs);
 
-$d->start('query', undef, undef, "implementation");
+$d->start('query', undef, undef, $searchString);
 
 $d->end(); # 'query'
 $d->end(); # 'SearchRequest'

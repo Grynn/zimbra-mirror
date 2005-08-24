@@ -89,6 +89,7 @@ $msgAttrs{'types'} = "message";
 $msgAttrs{'sortby'} = "datedesc";
 $msgAttrs{'offset'} = "0";
 $msgAttrs{'limit'} = "10";
+$msgAttrs{'fetch'} = "1";
 #$msgAttrs{'t'} = "\\unseen ,34 , \\FLAGGED";
 
 $d = new XmlDoc;
