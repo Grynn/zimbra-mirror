@@ -45,7 +45,6 @@ use Soap;
 #
 ######################################################################
 #my $HOST = 'dogfood';
-#my $USER = 'tim@dogfood.example.zimbra.com';
 my $HOST = 'localhost';
 my $USER = 'user1@example.zimbra.com';
 ######################################################################
@@ -87,7 +86,7 @@ print("Context = $contextStr\n");
 #   <rules>
 #     <r name="test">
 #       <g op="anyof">
-#         <c name="address" mod=":all" op=":contains" k0="From" k1="tim@curple.com"/>
+#         <c name="address" mod=":all" op=":contains" k0="From" k1="foo@bar.com"/>
 #       </g>
 #       <action name="tag">
 #         <arg>fromme</arg>
@@ -113,7 +112,7 @@ $d->start('SaveRulesRequest', $MAILNS, undef);
             $c1Attrs{'mod'} = ":all";
             $c1Attrs{'op'} = ":contains";
             $c1Attrs{'k0'} = "From";
-            $c1Attrs{'k1'} = "tim\@curple.com";
+            $c1Attrs{'k1'} = "foo\@bar.com";
             $d->start('c', undef, \%c1Attrs);
             $d->end(); # 'c
         }
