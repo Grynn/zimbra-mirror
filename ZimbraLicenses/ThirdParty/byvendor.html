@@ -27,8 +27,10 @@
 &nbsp;</td>
 <td><a href='gpl.txt'>gpl.txt</a><br>
 </td>
-<td>&nbsp;</td>
+<td>we have made minor change to the mysql connector code
+&nbsp;</td>
 <td>mysql-connector-java-3.1.7-bin.jar
+mysql-connector-java-3.1.10-bin-zimbra.jar
 &nbsp;</td>
 </tr>
 <tr>
@@ -179,11 +181,20 @@ servlet-api.jar
 <td><a href='apache2.txt'>apache2.txt</a><br>
 </td>
 <td>&nbsp;</td>
-<td>commons-beanutils-1.6.1.jar commons-cli-1.0.jar
-commons-codec-1.2.jar commons-collections-3.1.jar
-commons-dbcp-1.1.jar commons-digester-1.5.jar
-commons-fileupload-1.0-liquid.jar commons-httpclient-2.0.1.jar
-commons-logging.jar commons-pool-1.1.jar
+<td>
+commons-beanutils-1.6.1.jar
+commons-cli-1.0.jar
+commons-cli-2.0.jar
+commons-codec-1.2.jar
+commons-collections-3.0.jar
+commons-collections-3.1.jar
+commons-dbcp-1.1.jar
+commons-digester-1.5.jar
+commons-fileupload-1.0-zimbra.jar
+commons-httpclient-2.0.1.jar
+commons-logging.jar
+commons-logging-1.0.3.jar
+commons-pool-1.1.jar
 &nbsp;</td>
 </tr>
 <tr>
@@ -418,8 +429,49 @@ should remove this dependency.<p>
 Do I need a license to use it? Can I get one?  No!
 http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html
 &nbsp;</td>
-<td>concurrent-1.3.4-liquid-1.0.0.jar (modified with our bug fix)
+<td>concurrent-1.3.4-zimbra-1.0.0.jar (modified with our bug fix)
 &nbsp;</td>
+</tr>
+<tr>
+<td>http://asg.web.cmu.edu/sasl/
+</td>
+<td>BSD like
+</td>
+<td>cyrus-sasl
+&nbsp;</td>
+<td><a href='cyrus-sasl.txt'>cyrus-sasl.txt</a><br>
+</td>
+<td>we modify cyrus-sasl (saslauthd specifically) to include
+authenticating against Zimbra server
+&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>http://curl.haxx.se/
+</td>
+<td>MIT like
+</td>
+<td>curl
+&nbsp;</td>
+<td><a href='curl.txt'>curl.txt</a><br>
+</td>
+<td>our saslauthd backend links against libcurl for HTTP/S from C
+code into ZimbraServer
+&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>http://people.ee.ethz.ch/~oetiker/webtools/
+</td>
+<td>GPL
+</td>
+<td>rrdtool/mrtg
+&nbsp;</td>
+<td><a href='gpl.txt'>gpl.txt</a><br>
+</td>
+<td>perl programs invoked from cron and our monitoring scripts
+&nbsp;</td>
+<td>&nbsp;</td>
 </tr>
 <tr>
 <td>http://www.ijs.si/ software/amavisd/
@@ -437,6 +489,20 @@ A/V scanners.
 &nbsp;</td>
 </tr>
 <tr>
+<td>http://xmlsoft.org/
+</td>
+<td>MIT like
+</td>
+<td>libxml2
+&nbsp;</td>
+<td><a href='libxml2.txt'>libxml2.txt</a><br>
+</td>
+<td>our saslauthd backend uses libxml2 to parse SOAP from
+ZimbraServer
+&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
 <td>ical4j.sourceforge.net
 </td>
 <td>BSD
@@ -447,6 +513,7 @@ A/V scanners.
 </td>
 <td>&nbsp;</td>
 <td>ical4j.jar
+ical4j-0.9.13.p2.jar
 &nbsp;</td>
 </tr>
 <tr>
@@ -493,13 +560,13 @@ so parts are copyright Sun.
 </tr>
 <tr>
 <td>net-snmp.org
+lincese: MIT like + others
 </td>
-<td>BSD like
-text snmp.txt
-</td>
+<td>&nbsp;</td>
 <td>snmp
 &nbsp;</td>
-<td></td>
+<td><a href='snmp.txt'>snmp.txt</a><br>
+</td>
 <td>snmp-5.1.2 http://www.net-snmp.org/about/license.html
 &nbsp;</td>
 <td>built from snmp distribution
@@ -638,6 +705,7 @@ License requires acknowledgement, see restriction 6.
 </td>
 <td>&nbsp;</td>
 <td>zlib-1.2.1.tar.gz (included in perllibs)
+http://www.zlib.net/zlib_license.html
 &nbsp;</td>
 </tr>
 </table></body></html>
