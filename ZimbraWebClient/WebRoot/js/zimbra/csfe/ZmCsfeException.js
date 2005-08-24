@@ -74,4 +74,4 @@ ZmCsfeException.MAIL_NO_SUCH_MSG 			= "mail.NO_SUCH_MSG";
 ZmCsfeException.MAIL_NO_SUCH_PART 			= "mail.NO_SUCH_PART";
 ZmCsfeException.MAIL_QUOTA_EXCEEDED 		= "mail.QUOTA_EXCEEDED";
 ZmCsfeException.MAIL_QUERY_PARSE_ERROR 		= "mail.QUERY_PARSE_ERROR";
-ZmCsfeException.MAIL_UNKNOWN_LOCAL_RECIPIENTS = "mail.UNKNOWN_LOCAL_RECIPIENTS";
+ZmCsfeException.MAIL_SEND_FAILURE           = "mail.SEND_FAILURE";
