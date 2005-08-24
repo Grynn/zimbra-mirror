@@ -32,11 +32,13 @@ my $MYSQL = "mysql";
 my $DB_USER = "zimbra";
 my $DB_PASSWORD = "zimbra";
 my $DATABASE = "zimbra";
+my $ZIMBRA_HOME = $ENV{ZIMBRA_HOME} || '/opt/zimbra';
+my $ZMLOCALCONFIG = "$ZIMBRA_HOME/bin/zmlocalconfig";
 
-if (-f "/opt/liquid/bin/lqlocalconfig") {
-    $DB_PASSWORD = `lqlocalconfig -s -m nokey liquid_mysql_password`;
+if (-f $ZMLOCALCONFIG) {
+    $DB_PASSWORD = `$ZMLOCALCONFIG -s -m nokey zimbra_mysql_password`;
     chomp $DB_PASSWORD;
-    $DB_USER = `lqlocalconfig -m nokey liquid_mysql_user`;
+    $DB_USER = `$ZMLOCALCONFIG -m nokey zimbra_mysql_user`;
     chomp $DB_USER;
 }
 
