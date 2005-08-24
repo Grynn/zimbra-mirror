@@ -214,7 +214,7 @@
 
 <attr name="zimbraMailPort" type="port"/>
 
-<attr name="zimbraMailQuota" type="integer"/>
+<attr name="zimbraMailQuota" type="long"/>
 
 <attr name="zimbraMailSSLPort" type="port"/>
 
