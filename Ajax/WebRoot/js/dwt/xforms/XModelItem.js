@@ -307,6 +307,7 @@ XModelItem.prototype.getPattern = function() {
 		else if (AjxUtil.isArray(this.pattern)) {
 			for (var i = 0; i < this.pattern.length; i++) {
 				var pattern = this.pattern[i];
+				DBG.println("pattern["+i+"]: "+pattern);
 				if (AjxUtil.isString(pattern)) {
 					this.pattern[i] = new RegExp(this.pattern[i]);
 				}
@@ -377,7 +378,7 @@ XModelItem.prototype._normalizeAndValidate = function(value) {
     }
 	
     var pattern = this.getPattern();
-    if (pattern !== null) {
+    if (pattern != null) {
     	var matched = false;
     	for (var i = 0; i < pattern.length; i++) {
     		if (pattern[i].test(value)) {
