@@ -201,11 +201,20 @@ license: Apache 2.0
 
 text: apache2.txt
 
-files: commons-beanutils-1.6.1.jar commons-cli-1.0.jar
-       commons-codec-1.2.jar commons-collections-3.1.jar
-       commons-dbcp-1.1.jar commons-digester-1.5.jar
-       commons-fileupload-1.0-liquid.jar commons-httpclient-2.0.1.jar
-       commons-logging.jar commons-pool-1.1.jar
+files: 
+       commons-beanutils-1.6.1.jar
+       commons-cli-1.0.jar
+       commons-cli-2.0.jar 
+       commons-codec-1.2.jar
+       commons-collections-3.0.jar
+       commons-collections-3.1.jar
+       commons-dbcp-1.1.jar
+       commons-digester-1.5.jar
+       commons-fileupload-1.0-zimbra.jar
+       commons-httpclient-2.0.1.jar
+       commons-logging.jar
+       commons-logging-1.0.3.jar
+       commons-pool-1.1.jar
 
 ----------------------------------------------------------------------
 
@@ -218,6 +227,7 @@ license: BSD
 text: ical4j.txt
 
 files: ical4j.jar
+       ical4j-0.9.13.p2.jar
 
 ----------------------------------------------------------------------
 
@@ -239,7 +249,7 @@ vendor: gee.cs.oswego.edu/dl
 
 license: None
 
-files: concurrent-1.3.4-liquid-1.0.0.jar (modified with our bug fix)
+files: concurrent-1.3.4-zimbra-1.0.0.jar (modified with our bug fix)
 
 notes: Concurrency library has been integrated into JDK 1.5.0, but the
        class names are different.  When we are committed to 1.5 we
@@ -318,7 +328,10 @@ license: GPL
 
 text: gpl.txt
 
+notes: we have made minor change to the mysql connector code
+
 files: mysql-connector-java-3.1.7-bin.jar
+       mysql-connector-java-3.1.10-bin-zimbra.jar
 
 ----------------------------------------------------------------------
 
@@ -441,7 +454,8 @@ license: BSD
 
 text: zlib.txt
 
-files: zlib-1.2.1.tar.gz (included in perllibs)
+files: zlib-1.2.1.tar.gz (included in perllibs) 
+       http://www.zlib.net/zlib_license.html
 
 ----------------------------------------------------------------------
 
@@ -560,9 +574,9 @@ product: snmp
 
 vendor: net-snmp.org
 
-license: BSD like
+lincese: MIT like + others
 
-text snmp.txt
+text: snmp.txt
 
 files: built from snmp distribution
 
@@ -612,5 +626,56 @@ files: php-5.x.x.tar.gz
 
 notes: PHP for 3rd party and native code integration (spell check).
        License requires acknowledgement, see restriction 6.
+
+----------------------------------------------------------------------
+
+product: curl
+
+vendor: http://curl.haxx.se/
+
+license: MIT like
+
+text: curl.txt
+
+notes: our saslauthd backend links against libcurl for HTTP/S from C
+       code into ZimbraServer
+
+----------------------------------------------------------------------
+
+product: cyrus-sasl
+
+vendor: http://asg.web.cmu.edu/sasl/
+
+license: BSD like
+
+text: cyrus-sasl.txt
+
+notes: we modify cyrus-sasl (saslauthd specifically) to include
+       authenticating against Zimbra server
+
+----------------------------------------------------------------------
+
+product: libxml2
+
+vendor: http://xmlsoft.org/
+
+license: MIT like
+
+text: libxml2.txt
+
+notes: our saslauthd backend uses libxml2 to parse SOAP from
+       ZimbraServer
+
+----------------------------------------------------------------------
+
+product: rrdtool/mrtg
+
+vendor: http://people.ee.ethz.ch/~oetiker/webtools/
+
+license: GPL
+
+text: gpl.txt
+
+notes: perl programs invoked from cron and our monitoring scripts
 
 ----------------------------------------------------------------------
