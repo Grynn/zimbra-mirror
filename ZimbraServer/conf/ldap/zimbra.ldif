@@ -191,7 +191,7 @@ zimbraRedoLogFsyncIntervalMS: 10
 zimbraSmtpHostname: localhost
 zimbraSmtpPort: 25
 zimbraSmtpTimeout: 60
-zimbraSmtpCheckLocalRecipients: TRUE
+zimbraSmtpSendPartial: FALSE
 zimbraSpamCheckEnabled: FALSE
 zimbraSpamKillPercent: 75
 zimbraSpamTagPercent: 33
@@ -232,6 +232,7 @@ zimbraServerInheritedAttr: zimbraRedoLogFsyncIntervalMS
 zimbraServerInheritedAttr: zimbraSmtpHostname
 zimbraServerInheritedAttr: zimbraSmtpPort
 zimbraServerInheritedAttr: zimbraSmtpTimeout
+zimbraServerInheritedAttr: zimbraSmtpSendPartial
 zimbraServerInheritedAttr: zimbraTableMaintenanceGrowthFactor
 zimbraServerInheritedAttr: zimbraTableMaintenanceMinRows
 zimbraServerInheritedAttr: zimbraTableMaintenanceMaxRows

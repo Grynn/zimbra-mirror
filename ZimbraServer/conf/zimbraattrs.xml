@@ -394,7 +394,7 @@
 
 <attr name="zimbraSmtpPort" type="port"/>
 
-<attr name="zimbraSmtpCheckLocalRecipients" type="boolean"/>
+<attr name="zimbraSmtpSendPartial" type="boolean"/>
 
 <attr name="zimbraSmtpTimeout" type="integer" min="0"/>
 
