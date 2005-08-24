@@ -58,10 +58,10 @@ AjxUtil.isLifeTime = function (aThing) { return AjxUtil.LIFETIME_FIELD.test(aThi
 // REVISIT: Should do more precise checking. However, there are names in
 //			common use that do not follow the RFC patterns (e.g. domain
 //			names that start with digits).
-AjxUtil.IP_ADDRESS_RE = /^\d{1,3}(\.\d{1,3}){3,5}$/;
+AjxUtil.IP_ADDRESS_RE = /^\d{1,3}(\.\d{1,3}){3}(\.\d{1,3}\.\d{1,3})?$/;
 AjxUtil.DOMAIN_NAME_SHORT_RE = /^[A-Za-z0-9\-]{2,}$/;
 AjxUtil.DOMAIN_NAME_FULL_RE = /^[A-Za-z0-9\-]{2,}(\.[A-Za-z0-9\-]{2,}){1,}$/;
-AjxUtil.HOST_NAME_RE = /^[A-Za-z0-9\-]{2,}(\.[A-Za-z0-9\-]{2,})*/;
+AjxUtil.HOST_NAME_RE = /^[A-Za-z0-9\-]{2,}(\.[A-Za-z0-9\-]{2,})*$/;
 AjxUtil.EMAIL_SHORT_RE = /^[^@\s]+$/;
 AjxUtil.EMAIL_FULL_RE = /^[^@\s]+@[A-Za-z0-9\-]{2,}(\.[A-Za-z0-9\-]{2,})*$/;
 
@@ -72,16 +72,13 @@ AjxUtil.isDomain = function(s) {
 	return AjxUtil.DOMAIN_RE.test(s);
 }
 AjxUtil.isDomainName = function(s, shortMatch) {
-	return shortMatch 
-		 ? AjxUtil.DOMAIN_NAME_SHORT_RE.test(s) 
-		 : AjxUtil.DOMAIN_NAME_FULL_RE.test(s);
+	return shortMatch ? AjxUtil.DOMAIN_NAME_SHORT_RE.test(s) : AjxUtil.DOMAIN_NAME_FULL_RE.test(s);
 }
 AjxUtil.isHostName = function(s) {
 	return AjxUtil.HOST_NAME_RE.test(s);
 }
 AjxUtil.isEmailAddress = function(s, nameOnly) {
-	return nameOnly 
-		 ? AjxUtil.EMAIL_SHORT_RE.test(s) : AjxUtil.EMAIL_FULL_RE.test(s);
+	return nameOnly ? AjxUtil.EMAIL_SHORT_RE.test(s) : AjxUtil.EMAIL_FULL_RE.test(s);
 }
 
 AjxUtil.SIZE_GIGABYTES = "GB";

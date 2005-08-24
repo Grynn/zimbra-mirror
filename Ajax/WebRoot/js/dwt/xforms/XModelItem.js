@@ -780,3 +780,21 @@ FileSize_XModelItem.prototype.getValue =  function(instance, current, ref) {
 FileSize_XModelItem.prototype.setValue = function(value, instance, current, ref) {
 	return eval("instance."+ref+" = AjxUtil.parseSize(value, this.units)");
 }
+
+HostNameOrIp_XModelItem = function() {}
+XModelItemFactory.createItemType("_HOSTNAME_OR_IP_", "hostname_or_ip", HostNameOrIp_XModelItem);
+HostNameOrIp_XModelItem.prototype.validateType = XModelItem.prototype.validateString;
+HostNameOrIp_XModelItem.prototype.maxLength = 256;
+HostNameOrIp_XModelItem.prototype.pattern = [ AjxUtil.HOST_NAME_RE, AjxUtil.IP_ADDRESS_RE ];
+
+Port_XModelItem = function() {}
+XModelItemFactory.createItemType("_PORT_", "port", Port_XModelItem);
+Port_XModelItem.prototype.validateType = XModelItem.prototype.validateNumber;
+Port_XModelItem.prototype.minInclusive = 0;
+Port_XModelItem.prototype.maxInclusive = 65535;
+
+Percent_XModelItem = function() {}
+XModelItemFactory.createItemType("_PERCENT_", "percent", Percent_XModelItem);
+Percent_XModelItem.prototype.validateType = XModelItem.prototype.validateNumber;
+Percent_XModelItem.prototype.minInclusive = 0;
+Percent_XModelItem.prototype.maxInclusive = 100;
