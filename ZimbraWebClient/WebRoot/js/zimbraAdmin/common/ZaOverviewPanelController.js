@@ -90,7 +90,7 @@ function (ev) {
 			var newDomain = ev.getDetails();
 			var ti1 = new DwtTreeItem(this._accountsTi);			
 			ti1.setText(newDomain.name);	
-			ti1.setImage(ZaImg.I_DOMAIN);
+			ti1.setImage(ZaImg.I_ACCOUNTBYDOMAIN);
 			ti1.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._ACCOUNTS_SUB_TREE);
 			ti1.setData(ZaOverviewPanelController._OBJ_ID, newDomain.name);
 			this._domainsMap[newDomain.name] = ti1;
