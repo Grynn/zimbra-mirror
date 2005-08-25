@@ -304,6 +304,18 @@ function(str, values) {
 }
 
 /**
+* URL-encodes a string. Replace spaces with + then escape and any + become %2B for for transport in URL's.
+*
+* @param str	the string to encode
+*/
+
+AjxStringUtil.urlEncode =
+function(str) {
+	if (!str) return "";
+	return escape(str.replace(/ /g, '+')).replace(/[+]/g, '%2B');
+}		
+
+/**
 * HTML-encodes a string.
 *
 * @param str	the string to encode
