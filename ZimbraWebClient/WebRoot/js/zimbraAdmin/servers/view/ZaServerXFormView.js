@@ -56,11 +56,14 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 				]
 			},
 			{ type: _DWT_ALERT_,
+			  cssClass: "DwtTabTable",
+			  containerCssStyle: "padding-bottom:0px",
 			  style: DwtAlert.WARNING,
 			  iconVisible: false, 
 			  content: ZaMsg.Alert_ServerDetails
 			},
 			{type:_TAB_BAR_, ref:ZaModel.currentTab,
+				containerCssStyle: "padding-top:0px",
 				choices:[
 					{value:1, label:ZaMsg.NAD_Tab_General},
 					{value:2, label:ZaMsg.NAD_Tab_Services},

@@ -3481,6 +3481,10 @@ Dwt_Alert_XFormItem.prototype.updateWidget = function(newvalue) {
 
 function Dwt_TabBar_XFormItem() {}
 XFormItemFactory.createItemType("_DWT_TAB_BAR_", "dwt_tab_bar", Dwt_TabBar_XFormItem, Dwt_Adaptor_XFormItem);
+Dwt_TabBar_XFormItem.prototype.colSpan = "*";
+Dwt_TabBar_XFormItem.prototype.labelLocation = _NONE_;
+// NOTE: Overriding the _TAB_BAR_
+XFormItemFactory.registerItemType(_TAB_BAR_, "tab_bar", Dwt_TabBar_XFormItem);
 
 Dwt_TabBar_XFormItem.prototype._value2tabkey;
 Dwt_TabBar_XFormItem.prototype._tabkey2value;
@@ -3504,7 +3508,8 @@ Dwt_TabBar_XFormItem.prototype._handleStateChange = function(event) {
 
 Dwt_TabBar_XFormItem.prototype.constructWidget = function() {
 	var form = this.getForm();
-	var widget = new DwtTabView(form);
+	var cssClass = this.getCssClass();
+	var widget = new DwtTabView(form, cssClass, DwtControl.STATIC_STYLE);
 	
 	this._value2tabkey = {};
 	this._tabkey2value = {};
