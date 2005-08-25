@@ -131,3 +131,4 @@ doprint("vendor", @byvendor);
 
 my @byproduct = sort {$a->{product} cmp $b->{product}} @objects;
 doprint("product", @byproduct);
+

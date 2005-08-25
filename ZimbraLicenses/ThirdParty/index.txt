@@ -1,12 +1,14 @@
 # -*- mode: text -*-
 
-product: JRE/JDK
+product: JDK
 
 vendor: Sun
 
-license: Sun JRE/JDK "Binary Code License Agreement"
+license: Sun
 
-text: jdk.txt jre.txt jdk.readme.html jre.readme.txt
+text: http://java.sun.com/j2se/1.5.0/jdk-1_5_0_04-license.txt
+
+local-text: jdk.txt jre.txt jdk.readme.html jre.readme.txt
 
 files: JDK/JRE binary downloads from Sun
 
@@ -38,9 +40,11 @@ product: JavaMail
 
 vendor: Sun
 
-license: Sun BCLA + JavaMail Supplement 
+license: Sun
 
-text: javamail.txt
+local-text: javamail.txt
+
+text: http://java.sun.com/products/javamail/LICENSE.txt
 
 files: mail.jar
 
@@ -52,9 +56,11 @@ product: JNDI
 
 vendor: Sun
 
-license: Sun BCLA + JNDI Supplement
+license: Sun
 
-text: jndi.txt
+text: http://java.sun.com/products/jndi/legal/bcl_jndi121.html
+
+local-text: jndi.txt
 
 files: ldapbp.jar ldap.jar
 
@@ -73,15 +79,17 @@ product: JSP JSTL
 
 vendor: Sun
 
-license: Sun JSTL (No Sun BCLA)
+license: Apache 2.0
 
-text: jstl.txt
+text: http://www.apache.org/licenses/LICENSE-2.0
+
+local-text: apache2.txt
 
 files: jstl.jar
 
-notes: See JDK/JRE notes for Sun license issues.  This file also ships
-       with Tomcat, but does their (ASF/Tomcat's) license to
-       redistribute transfer to us?
+notes: According to Sun
+       http://java.sun.com/j2se/1.4.2/ThirdpartyReadme.html, JSTL is covered
+       by Apache 2 license.
 
 ----------------------------------------------------------------------
 
@@ -89,7 +97,7 @@ product: Java Activation Framework
 
 vendor: Sun
 
-license: Sun BCLA + Sun JAF Supplement
+license: Sun
 
 text: activation.txt
 
@@ -99,18 +107,20 @@ notes: See JDK/JRE notes for Sun license issues
 
 ----------------------------------------------------------------------
 
-product: JavaCC (for development only)
+product: JavaCC
 
 vendor: javacc.dev.java.net
 
-license: BSD
+license: BSD Style
 
-text: javacc.txt
+text: http://www.opensource.org/licenses/bsd-license.html
+
+local-text: javacc.txt
 
 files: javacc-3.2.jar
 
 notes: two orig authors + community.  Written while they worked at Sun
-       so parts are copyright Sun.
+       so parts are copyright Sun.  We use this in development only.
 
 ----------------------------------------------------------------------
 
@@ -120,7 +130,9 @@ vendor: MySQL
 
 license: GPL
 
-text: gpl.txt
+text: http://www.gnu.org/licenses/gpl.txt
+
+local-text: gpl.txt
 
 files: mysql-standard tar.gz from MySQL.com
 
@@ -132,7 +144,9 @@ vendor: apache.org
 
 license: Apache 2.0
 
-text: apache2.txt
+text: http://www.apache.org/licenses/LICENSE-2.0
+
+local-text: apache2.txt
 
 files: tar.gz from jakarta.apache.org, including catalina-ant.jar,
        servlet-api.jar
@@ -143,13 +157,13 @@ product: Postfix
 
 vendor: postfix.org
 
-license: CPL (IBM)
+license: IBM Public License
 
 text: postfix.txt
 
 files: built from postfix source distribution
 
-notes: Weitse Venema/IBM
+notes: Weitse Venema/IBM/CPL like
 
 ----------------------------------------------------------------------
 
@@ -157,7 +171,7 @@ product: OpenLDAP
 
 vendor: www.openldap.org
 
-license: BSD
+license: BSD Style
 
 text: openldap.txt
 
@@ -165,11 +179,11 @@ files: built form openldap source distribution
 
 ----------------------------------------------------------------------
 
-product: Sleepycat Berkeley DB
+product: Sleepycat
 
 vendor: www.sleepycat.com
 
-license: SleepyCat + Berkeley + Harvard
+license: BSD Style
 
 text: sleepycat.txt
 
@@ -185,6 +199,8 @@ vendor: Verity
 
 license: Proprietary
 
+private: exclude
+
 files: verity dlls, KeyView.jar
 
 notes: needs to be packaged seperately - this library is linked into a
@@ -199,7 +215,9 @@ vendor: apache.org
 
 license: Apache 2.0
 
-text: apache2.txt
+text: http://www.apache.org/licenses/LICENSE-2.0
+
+local-text: apache2.txt
 
 files: 
        commons-beanutils-1.6.1.jar
@@ -222,7 +240,7 @@ product: ical4j
 
 vendor: ical4j.sourceforge.net
 
-license: BSD
+license: BSD Style
 
 text: ical4j.txt
 
@@ -231,13 +249,15 @@ files: ical4j.jar
 
 ----------------------------------------------------------------------
 
-product: jakarata-oro
+product: jakarta-oro
 
 vendor: apache.org
 
 license: Apache 2.0
 
-text: apache2.txt
+text: http://www.apache.org/licenses/LICENSE-2.0
+
+local-text: apache2.txt
 
 files: jakarta-oro-2.0.7.jar
 
@@ -246,6 +266,8 @@ files: jakarta-oro-2.0.7.jar
 product: dl.concurrent
 
 vendor: gee.cs.oswego.edu/dl
+
+private: exclude (no license)
 
 license: None
 
@@ -264,7 +286,7 @@ product: junit
 
 vendor: junit.org
 
-license: CPL (IBM)
+license: CPL
 
 text: junit.txt
 
@@ -278,31 +300,37 @@ vendor: apache.org
 
 license: Apache 2.0
 
-text: apache2.txt
+text: http://www.apache.org/licenses/LICENSE-2.0
+
+local-text: apache2.txt
 
 files:   jsieve-0.1.jar
 
 ----------------------------------------------------------------------
 
-product: jug Java UUID Generator 
+product: Java UUID Generator
 
 vendor: www.doomdark.org/ doomdark/proj/jug/
 
 license: LGPL
 
-text: lgpl.txt
+text: http://www.gnu.org/licenses/lgpl.txt
+
+local-text: lgpl.txt
 
 files:   jug-1.1.2.jar
 
 ----------------------------------------------------------------------
 
-product: log4j
+product: Log4j
 
 vendor: apache.org
 
 license: Apache 2.0
 
-text: apache2.txt
+text: http://www.apache.org/licenses/LICENSE-2.0
+
+local-text: apache2.txt
 
 files: log4j-1.2.8.jar
 
@@ -314,7 +342,9 @@ vendor: apache.org
 
 license: Apache 2.0
 
-text: apache2.txt
+text: http://www.apache.org/licenses/LICENSE-2.0
+
+local-text: apache2.txt
 
 files: lucene-1.4.3.jar lucene-demos-1.4-final.jar
 
@@ -326,7 +356,9 @@ vendor: MySQL
 
 license: GPL
 
-text: gpl.txt
+text: http://www.gnu.org/licenses/gpl.txt
+
+local-text: gpl.txt
 
 notes: we have made minor change to the mysql connector code
 
@@ -351,7 +383,7 @@ product: PDFBox
 
 vendor: pdfbox.org
 
-license: BSD
+license: BSD Style
 
 text: pdfbox.txt
 
@@ -377,7 +409,9 @@ vendor: apache.org
 
 license: Apache 2.0
 
-text: apache2.txt
+text: http://www.apache.org/licenses/LICENSE-2.0
+
+local-text: apache2.txt
 
 files:   xercesImpl.jar
 
@@ -389,7 +423,9 @@ vendor: apache.org
 
 license: Apache 2.0
 
-text: apache2.txt
+text: http://www.apache.org/licenses/LICENSE-2.0
+
+local-text: apache2.txt
 
 files:   ant-1.6.2.jar
 
@@ -403,7 +439,9 @@ vendor: ant-contrib.sourceforge.net
 
 license: Apache 2.0
 
-text: apache2.txt
+text: http://www.apache.org/licenses/LICENSE-2.0
+
+local-text: apache2.txt
 
 files:   ant-contrib-1.0b1.jar
 
@@ -415,17 +453,19 @@ vendor: apache.org
 
 license: Apache 2.0
 
-text: apache2.txt
+text: http://www.apache.org/licenses/LICENSE-2.0
+
+local-text: apache2.txt
 
 files:   standard.jar
 
 ----------------------------------------------------------------------
 
-product: Perl libraries
+product: Various Perl libraries
 
 vendor: cpan.org
 
-license: Perl (Artistic and GPL)
+license: Perl Artistic
 
 text: perl.txt gpl.txt
 
@@ -450,7 +490,7 @@ product: zlib
 
 vendor: www.zlib.net
 
-license: BSD
+license: BSD Style
 
 text: zlib.txt
 
@@ -459,13 +499,15 @@ files: zlib-1.2.1.tar.gz (included in perllibs)
 
 ----------------------------------------------------------------------
 
-product: Swatch file watcher
+product: Swatch
 
 vendor: swatch.sourceforge.net
 
 license: GPL
 
-text: gpl.txt
+text: http://www.gnu.org/licenses/gpl.txt
+
+local-text: gpl.txt
 
 files:   swatch-3.1.1.tar.gz (included in perllibs)
 
@@ -475,7 +517,7 @@ product: expat
 
 vendor: expat.sourceforge.net
 
-license: MIT like
+license: MIT Style
 
 text: expat.txt
 
@@ -487,7 +529,7 @@ product: dom4j
 
 vendor: dom4j.org
 
-license: BSD + more
+license: BSD Style
 
 text: dom4j.txt
 
@@ -503,7 +545,7 @@ product: jaxen
 
 vendor: jaxen.org
 
-license: BSD
+license: BSD Style
 
 text: jaxen.txt
 
@@ -519,7 +561,9 @@ vendor: http://www.ijs.si/ software/amavisd/
 
 license: GPL
 
-text: gpl.txt
+text: http://www.gnu.org/licenses/gpl.txt
+
+local-text: gpl.txt
 
 files: big perl script
 
@@ -534,7 +578,9 @@ vendor: spamassassin.org
 
 license: Apache 2.0
 
-text: apache2.txt
+text: http://www.apache.org/licenses/LICENSE-2.0
+
+local-text: apache2.txt
 
 files: perl server/client
 
@@ -548,7 +594,9 @@ vendor: clamav.net
 
 license: GPL
 
-text: gpl.txt
+text: http://www.gnu.org/licenses/gpl.txt
+
+local-text: gpl.txt
 
 files: TBD
 
@@ -562,7 +610,11 @@ vendor: aspell.sourceforge.net
 
 license: LGPL
 
-text: lgpl.txt
+private: exclude - not shipping yet
+
+text: http://www.gnu.org/licenses/lgpl.txt
+
+local-text: lgpl.txt
 
 files: aspell-0.60.x.tar.gz
 
@@ -574,7 +626,7 @@ product: snmp
 
 vendor: net-snmp.org
 
-license: BSD like + others
+license: BSD Style
 
 text: snmp.txt
 
@@ -588,7 +640,7 @@ product: json
 
 vendor: crockford.com 
 
-license: JSON (liberal terms)
+license: JSON
 
 text: json.txt
 
@@ -601,11 +653,15 @@ notes: javascript escaping code in RPC response derived from json
 
 product: apache
 
+private: exclude - not shipping yet
+
 vendor: apache.org
 
 license: Apache 2.0
 
-text: apache2.txt
+text: http://www.apache.org/licenses/LICENSE-2.0
+
+local-text: apache2.txt
 
 files: apache-2.0.xx.tar.gz
 
@@ -620,6 +676,8 @@ vendor: php.net
 
 license: PHP License v3.0
 
+private: exclude - not shipping yet
+
 text: php.txt
 
 files: php-5.x.x.tar.gz
@@ -633,7 +691,7 @@ product: curl
 
 vendor: http://curl.haxx.se/
 
-license: MIT like
+license: MIT Style
 
 text: curl.txt
 
@@ -646,7 +704,7 @@ product: cyrus-sasl
 
 vendor: http://asg.web.cmu.edu/sasl/
 
-license: BSD like
+license: BSD Style
 
 text: cyrus-sasl.txt
 
@@ -659,7 +717,7 @@ product: libxml2
 
 vendor: http://xmlsoft.org/
 
-license: MIT like
+license: MIT Style
 
 text: libxml2.txt
 
@@ -674,7 +732,9 @@ vendor: http://people.ee.ethz.ch/~oetiker/webtools/
 
 license: GPL
 
-text: gpl.txt
+text: http://www.gnu.org/licenses/gpl.txt
+
+local-text: gpl.txt
 
 notes: perl programs invoked from cron and our monitoring scripts
 
