@@ -52,7 +52,7 @@
 
 <attr name="zimbraAccountClientAttr" type="string" immutable="1"/>
 
-<attr name="zimbraAccountStatus" type="enum" value="active,maintenance,locked,closed"/>
+<attr name="zimbraAccountStatus" type="enum" value="active,maintenance,locked,closed" callback="AccountStatus"/>
 
 <attr name="zimbraAdminAuthTokenLifetime" type="duration"/>
 
