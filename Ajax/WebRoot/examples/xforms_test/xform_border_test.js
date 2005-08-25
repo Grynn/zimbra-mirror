@@ -22,11 +22,11 @@
  * 
  * ***** END LICENSE BLOCK *****
  */
-
 var form = {
+	X_showBorder:true,
 	numCols:4,
 	items:[
-	/*
+	
 		{type:_BORDER_, borderStyle:"1pxBlack", colSpan:1, items:[
 				{type:_OUTPUT_, value:"1pxBlack border", width:100, height:100}
 			]
@@ -42,68 +42,79 @@ var form = {
 		{type:_SPACER_},
 		
 		{type:_BORDER_, borderStyle:"dialog", colSpan:1, 
+			substitutions:{title:"Dialog title", icon:"<div class=sm_icon_email></div>"},
 			items:[
-				{type:_OUTPUT_, value:"dialog", width:100, height:100}
+				{type:_OUTPUT_, value:"dialog"}
 			]
 		},
 
-		{type:_BORDER_, borderStyle:"dialog", colSpan:1, 
-			substitutions:{$title:"Dialog title", $icon:"<div class=sm_icon_email></div>"},
+		{type:_BORDER_, borderStyle:"dialogWithTopToolbar", colSpan:1, 
+			substitutions:{title:"Dialog title", icon:"<div class=sm_icon_email></div>"},
 			items:[
-				{type:_OUTPUT_, value:"dialog with title and icon", width:100, height:100}
+				{type:_OUTPUT_, value:"dialog w/ top toolbar", width:100, height:50}
 			]
 		},
+
+		{type:_BORDER_, borderStyle:"dialogWithBottomToolbar", colSpan:1, 
+			substitutions:{title:"Dialog title", icon:"<div class=sm_icon_email></div>"},
+			items:[
+				{type:_OUTPUT_, value:"dialog w/bottom toolbar", width:100, height:50}
+			]
+		},
+
+		{type:_BORDER_, borderStyle:"dialogWithBothToolbars", colSpan:1, 
+			substitutions:{title:"Dialog title", icon:"<div class=sm_icon_email></div>"},
+			items:[
+				{type:_OUTPUT_, value:"dialog with both toolbars", width:100, height:50}
+			]
+		},
+		{type:_BORDER_, borderStyle:"hover", colSpan:1, items:[], width:100, height:100},
 		{type:_BORDER_, borderStyle:"h_sash", colSpan:1, items:[]},
-*/
+
+
 
 		{type:_SPACER_, height:20},
 		{type:_GROUP_, useParentTable:false, colSpan:"*", numCols:6, 
 			items:[
 
-				{type:_BORDER_, width:100, borderStyle:"calendar_appt", colSpan:1, containerCssStyle:"opacity:.2", 
+				{type:_BORDER_, width:100, height:100,borderStyle:"calendar_appt", colSpan:1, containerCssStyle:"opacity:.2;", 
 					substitutions:{
-						name:"<strike>Declined Appt</strike>", starttime:"2:00 pm", status:" | Declined", location:"Flex 1",
-						selState:"",	newState:"",
-						color:"_blue"
+						name:"<strike>Declined Appt</strike>", starttime:"2:00pm", status:" | Declined", location:"Flex 1",
+						selState:"",	newState:"", statusKey:"DE", color:"_blue"
 					}, items:[]
 				},
-				{type:_BORDER_, width:100,  borderStyle:"calendar_appt", colSpan:1, containerCssStyle:"opacity:.6",
+				{type:_BORDER_, width:100, height:100, borderStyle:"calendar_appt", colSpan:1, containerCssStyle:"opacity:.6",
 					substitutions:{
-						name:"Tentative Appt", starttime:"2:00 pm", status:" | Tentative", location:"Flex 1",
-						selState:"",	newState:"",
-						color:"_blue"
-					}, items:[]
-				},
-		
-				{type:_BORDER_, width:100,  borderStyle:"calendar_appt", colSpan:1, 
-					substitutions:{
-						name:"Normal Appt", starttime:"2:00 pm", status:"", location:"Flex 1",
-						selState:"",	newState:"",
-						color:"_blue"
+						name:"Tentative Appt", starttime:"2:00pm", status:"Tentative", location:"Flex 1",
+						selState:"",	newState:"", statusKey:"TE", color:"_blue"
 					}, items:[]
 				},
 		
-				{type:_BORDER_, width:100,  borderStyle:"calendar_appt", colSpan:1, 
+				{type:_BORDER_, width:100, height:100, borderStyle:"calendar_appt", colSpan:1, 
 					substitutions:{
-						name:"Selected Appt", starttime:"2:00 pm", status:" | Accepted", location:"Flex 1",
-						selState:"-selected",	newState:"",
-						color:"_blue"
+						name:"Normal Appt", starttime:"2:00pm", status:"", location:"Flex 1",
+						selState:"",	newState:"", statusKey:"AC", color:"_blue"
 					}, items:[]
 				},
 		
-				{type:_BORDER_, width:100,  borderStyle:"calendar_appt", colSpan:1, 
+				{type:_BORDER_, width:100, height:100, borderStyle:"calendar_appt", containerCssClass:"appt-selected", colSpan:1, 
 					substitutions:{
-						name:"New Appt", starttime:"2:00 pm", status:" | Undecided", location:"Flex 1",
-						selState:"",		newState:"_new", tag:"New",
-						color:"_blue"
+						name:"Selected Appt", starttime:"2:00pm", status:"Accepted", location:"Flex 1",
+						selState:"-selected",	newState:"", statusKey:"AC", color:"_blue"
 					}, items:[]
 				},
 		
-				{type:_BORDER_, width:100,  borderStyle:"calendar_appt", colSpan:1,
+				{type:_BORDER_, width:100, height:100, borderStyle:"calendar_appt", colSpan:1, 
 					substitutions:{
-						name:"Selected New Appt", starttime:"2:00 pm", status:" | Undecided", location:"Flex 1",
-						selState:"-selected",	newState:"_new", tag:"New",
-						color:"_blue"
+						name:"New Appt", starttime:"2:00pm", status:"Undecided", location:"Flex 1",
+						selState:"",		newState:"_new", tag:"New", statusKey:"NE", color:"_blue"
+					}, items:[]
+				},
+		
+				{type:_BORDER_, width:100, height:100, borderStyle:"calendar_appt", containerCssClass:"appt-selected", colSpan:1,
+					substitutions:{
+						name:"Selected New Appt", starttime:"2:00pm", status:"Undecided", location:"Flex 1",
+						selState:"-selected",	newState:"_new", tag:"New", statusKey:"NE", color:"_blue"
 					}, items:[]
 				},
 		
@@ -113,14 +124,14 @@ var form = {
 		
 				{type:_BORDER_, width:100,  borderStyle:"calendar_appt_30", colSpan:1, containerCssStyle:"opacity:.2", 
 					substitutions:{
-						name:"<strike>Declined Appt</strike>", starttime:"2:00 pm", status:" | Declined", location:"Flex 1",
+						name:"<strike>Declined Appt</strike>", starttime:"2:00pm", status:" | Declined", location:"Flex 1",
 						selState:"",	newState:"",
 						color:"_blue"
 					}, items:[]
 				},
 				{type:_BORDER_, width:100,  borderStyle:"calendar_appt_30", colSpan:1, containerCssStyle:"opacity:.6",
 					substitutions:{
-						name:"Tentative Appt", starttime:"2:00 pm", status:" | Tentative", location:"Flex 1",
+						name:"Tentative Appt", starttime:"2:00pm", status:" | Tentative", location:"Flex 1",
 						selState:"",	newState:"",
 						color:"_blue"
 					}, items:[]
@@ -128,7 +139,7 @@ var form = {
 		
 				{type:_BORDER_, width:100,  borderStyle:"calendar_appt_30", colSpan:1,
 					substitutions:{
-						name:"Normal Appt", starttime:"2:00 pm", status:"", location:"Flex 1",
+						name:"Normal Appt", starttime:"2:00pm", status:"", location:"Flex 1",
 						selState:"",	newState:"",
 						color:"_blue"
 					}, items:[]
@@ -136,7 +147,7 @@ var form = {
 		
 				{type:_BORDER_, width:100,  borderStyle:"calendar_appt_30", colSpan:1, 
 					substitutions:{
-						name:"Selected Appt", starttime:"2:00 pm", status:" | Accepted", location:"Flex 1",
+						name:"Selected Appt", starttime:"2:00pm", status:" | Accepted", location:"Flex 1",
 						selState:"-selected",	newState:"",
 						color:"_blue"
 					}, items:[]
@@ -144,7 +155,7 @@ var form = {
 		
 				{type:_BORDER_, width:100,  borderStyle:"calendar_appt_30", colSpan:1, 
 					substitutions:{
-						name:"New Appt", starttime:"2:00 pm", status:" | Undecided", location:"Flex 1",
+						name:"New Appt", starttime:"2:00pm", status:" | Undecided", location:"Flex 1",
 						selState:"",	newState:"_new", tag:"New",
 						color:"_blue"
 					}, items:[]
@@ -152,7 +163,7 @@ var form = {
 		
 				{type:_BORDER_, width:100,  borderStyle:"calendar_appt_30", colSpan:1,
 					substitutions:{
-						name:"Selected New Appt", starttime:"2:00 pm", status:" | Undecided", location:"Flex 1",
+						name:"Selected New Appt", starttime:"2:00pm", status:" | Undecided", location:"Flex 1",
 						selState:"-selected",	newState:"_new", tag:"New",
 						color:"_blue"
 					}, items:[]
@@ -162,74 +173,7 @@ var form = {
 		},
 		{type:_SPACER_, height:20},		{type:_SPACER_, height:20},
 
-/*
 
-		{type:_BORDER_, borderStyle:"TL_balloon", colSpan:1, items:[
-				{type:_OUTPUT_, value:"TL Small"}
-			]
-		},
-		{type:_BORDER_, borderStyle:"TR_balloon", colSpan:1, items:[
-				{type:_OUTPUT_, value:"TR Small"}
-			]
-		},
-		{type:_BORDER_, borderStyle:"BL_balloon", colSpan:1, items:[
-				{type:_OUTPUT_, value:"BL Small"}
-			]
-		},
-		{type:_BORDER_, borderStyle:"BR_balloon", colSpan:1, items:[
-				{type:_OUTPUT_, value:"BR Small"}
-			]
-		},
-
-		{type:_SPACER_, height:30},
-
-	
-		{type:_BORDER_, borderStyle:"TL_balloon", colSpan:1, items:[
-				{type:_OUTPUT_, value:"TL_balloon border<br><br><br>Medium"}
-			]
-		},
-		{type:_BORDER_, borderStyle:"TR_balloon", colSpan:1, items:[
-				{type:_OUTPUT_, value:"TR_balloon border<br><br><br>Medium"}
-			]
-		},
-		{type:_BORDER_, borderStyle:"BL_balloon", colSpan:1, items:[
-				{type:_OUTPUT_, value:"BL_balloon border<br><br><br>Medium"}
-			]
-		},
-		{type:_BORDER_, borderStyle:"BR_balloon", colSpan:1, items:[
-				{type:_OUTPUT_, value:"BR_balloon border<br><br><br>Medium"}
-			]
-		},
-
-		{type:_SPACER_, height:50},
-		
-		
-		{type:_BORDER_, borderStyle:"TL_balloon", colSpan:1, items:[
-				{type:_OUTPUT_, value:"TL_balloon border<br><br><br><br><br><br><br><br><br><br><br>Large"}
-			]
-		},
-		{type:_BORDER_, borderStyle:"TR_balloon", colSpan:1, items:[
-				{type:_OUTPUT_, value:"TR_balloon border<br><br><br><br><br><br><br><br><br><br><br>Large"}
-			]
-		},
-		{type:_BORDER_, borderStyle:"BL_balloon", colSpan:1, items:[
-				{type:_OUTPUT_, value:"BL_balloon border<br><br><br><br><br><br><br><br><br><br><br>Large"}
-			]
-		},
-		{type:_BORDER_, borderStyle:"BR_balloon", colSpan:1, items:[
-				{type:_OUTPUT_, value:"BR_balloon border<br><br><br><br><br><br><br><br><br><br><br>Large"}
-			]
-		},
-		{type:_SPACER_, height:180},
-	
-
-		{type:_CELL_SPACER_},
-
-		{type:_BORDER_, borderStyle:"crab", colSpan:1, items:[
-				{type:_OUTPUT_, value:": &nbsp;&nbsp;&nbsp;:<br><br><br><br><br><br><br><br><br><br><br></center>"}
-			]
-		},
-	*/	
 	]
 }
 

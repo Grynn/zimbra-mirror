@@ -1,8 +1,8 @@
 <HTML>
 <HEAD>
-<link href="/zimbra/js/zimbraMail/config/style/zm.css" 	rel="stylesheet" type="text/css">
+<link href="/ZimbraWebClient/js/zimbraMail/config/style/zm.css" 	rel="stylesheet" type="text/css">
 <link href="/zimbra/img/hiRes/imgs.css" 	rel="stylesheet" type="text/css">
-<link href="/zimbra/skins/steel/skin.css" 	rel="stylesheet" type="text/css">
+<link href="/ZimbraWebClient/skins/steel/skin.css" 	rel="stylesheet" type="text/css">
 <link href="test_styles.css" 	rel="stylesheet" type="text/css">
 </HEAD>
 <BODY ONLOAD='onLoad();'>
@@ -49,15 +49,21 @@
 
 <SCRIPT>var ot0 = new Date().getTime()</SCRIPT>
 <SCRIPT language=JavaScript src="DWT_shim.js"></SCRIPT>
-<SCRIPT language=JavaScript src="/ajax/js/core/LsCore.js"></SCRIPT>
-<SCRIPT language=JavaScript src="/ajax/js/util/LsBuffer.js"></SCRIPT>
-<SCRIPT language=JavaScript src="/ajax/js/util/LsCallback.js"></SCRIPT>
-<SCRIPT language=JavaScript src="/ajax/js/util/LsVector.js"></SCRIPT>
-<SCRIPT language=JavaScript src="/ajax/js/events/LsListener.js"></SCRIPT>
-<SCRIPT language=JavaScript src="/ajax/js/events/LsEventMgr.js"></SCRIPT>
+<SCRIPT language=JavaScript src="/ajax/js/debug/AjxDebug.js"></SCRIPT>
+<SCRIPT language=JavaScript src="/ajax/js/core/AjxEnv.js"></SCRIPT>
+<SCRIPT language=JavaScript src="/ajax/js/config/msgs/AjxMsg_en.js"></SCRIPT>
+<SCRIPT language=JavaScript src="/ajax/js/dwt/config/msgs/DwtMsg_en.js"></SCRIPT>
+<SCRIPT language=JavaScript src="/ajax/js/util/AjxUtil.js"></SCRIPT>
+<SCRIPT language=JavaScript src="/ajax/js/core/AjxCore.js"></SCRIPT>
+<SCRIPT language=JavaScript src="/ajax/js/util/AjxBuffer.js"></SCRIPT>
+<SCRIPT language=JavaScript src="/ajax/js/util/AjxCallback.js"></SCRIPT>
+<SCRIPT language=JavaScript src="/ajax/js/util/AjxVector.js"></SCRIPT>
+<SCRIPT language=JavaScript src="/ajax/js/events/AjxListener.js"></SCRIPT>
+<SCRIPT language=JavaScript src="/ajax/js/events/AjxEventMgr.js"></SCRIPT>
 <SCRIPT language=JavaScript src="/ajax/js/dwt/events/DwtEvent.js"></SCRIPT>
 <SCRIPT language=JavaScript src="/ajax/js/dwt/events/DwtUiEvent.js"></SCRIPT>
-<SCRIPT language=JavaScript src="/ajax/js/core/LsImg.js"></SCRIPT>
+<SCRIPT language=JavaScript src="/ajax/js/dwt/events/DwtXFormsEvent.js"></SCRIPT>
+<SCRIPT language=JavaScript src="/ajax/js/core/AjxImg.js"></SCRIPT>
 <SCRIPT language=JavaScript src="/ajax/js/dwt/core/DwtImg.js"></SCRIPT>
 <SCRIPT language=JavaScript src="/ajax/js/dwt/graphics/DwtBorder.js"></SCRIPT>
 <SCRIPT language=JavaScript src="/ajax/js/dwt/xforms/XFormGlobal.js"></SCRIPT>
@@ -291,11 +297,11 @@ var _DWT_SELECT_ = _OSELECT1_;
 <SCRIPT language=JavaScript src="xform_disable_test.js"></SCRIPT>
 <SCRIPT language=JavaScript src="xform_choices_test.js"></SCRIPT>
 <SCRIPT language=JavaScript src="xform_repeat_test.js"></SCRIPT>
-<SCRIPT language=JavaScript src="/zimbra/js/zimbraMail/config/msgs/LmMsg_en.js"></SCRIPT>
-<SCRIPT language=JavaScript src="/zimbra/js/zimbraMail/prefs/model/LmTimezones.js"></SCRIPT>
-<SCRIPT language=JavaScript src="/zimbra/js/zimbraMail/calendar/view/LmAppointmentView.js"></SCRIPT>
+<SCRIPT language=JavaScript src="/zimbrabuild/js/zimbraMail/config/msgs/LmMsg_en.js"></SCRIPT>
+<SCRIPT language=JavaScript src="/zimbrabuild/js/zimbraMail/prefs/model/LmTimezones.js"></SCRIPT>
+<SCRIPT language=JavaScript src="/zimbrabuild/js/zimbraMail/calendar/view/LmAppointmentView.js"></SCRIPT>
 <SCRIPT language=JavaScript src="LmAppointmentView_helper.js"></SCRIPT>
-<XSCRIPT language=JavaScript src="/zimbra/js/zimbraMail/abook/view/LmContactSplitView.js"><!-- Provides Contact forms? --></SCRIPT>
+<XSCRIPT language=JavaScript src="/zimbrabuild/js/zimbraMail/abook/view/LmContactSplitView.js"><!-- Provides Contact forms? --></SCRIPT>
 <XSCRIPT language=JavaScript src="LmContactSplitView_helper.js"><!-- Depends on Contact form --></SCRIPT>
 <XSCRIPT language=JavaScript src="xform_repeat_grid_test.js"><!-- Depends on Contact form --></SCRIPT>
 <SCRIPT language=JavaScript src="xform_border_test.js"></SCRIPT>

@@ -23,6 +23,18 @@
  * ***** END LICENSE BLOCK *****
  */
 
+
+//
+//	CONTACTS SHIMS
+//
+function LmContactsBaseView() {}
+
+
+//
+//	END SHIM
+//
+
+
 var owen = {
 	attr: {
 		fileAs:"Owen Williams",

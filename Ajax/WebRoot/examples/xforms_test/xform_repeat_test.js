@@ -106,8 +106,9 @@ var xftest = {
 	
 			{type:_SEPARATOR_, height:10},
 
-			{ref:"ATTENDEES", type:_REPEAT_, colSpan:"*", number:1, numCols:3,
+			{ref:"ATTENDEES", type:_REPEAT_, colSpan:"*", number:0, numCols:1,
 					label:"Dynamic group (changes w/ number of items)", labelWrap:true,
+//					alwaysShowAddButton:true,
 					repeatInstance:{NAME:"",STATUS:"?",FREE:""},
 				items:[
 					{ref:"NAME", type:_INPUT_, containerCssStyle:"width:100"},
@@ -171,6 +172,12 @@ var xftest = {
 		"No Items" : {
 		},
 	
+		"One items" : {
+			ATTENDEES : [
+				{NAME:"Satish", STATUS:"A", FREE:"MONDAY"}
+			]
+		},
+		
 		"Two items" : {
 			ATTENDEES : [
 				{NAME:"Satish", STATUS:"A", FREE:"MONDAY"},
