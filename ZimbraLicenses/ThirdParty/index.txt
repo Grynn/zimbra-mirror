@@ -111,7 +111,7 @@ product: JavaCC
 
 vendor: javacc.dev.java.net
 
-license: BSD Style
+license: BSD (revised)
 
 text: http://www.opensource.org/licenses/bsd-license.html
 
@@ -171,9 +171,11 @@ product: OpenLDAP
 
 vendor: www.openldap.org
 
-license: BSD Style
+license: BSD (revised)
 
-text: openldap.txt
+text: http://www.openldap.org/software/release/license.html
+
+local-text: openldap.txt
 
 files: built form openldap source distribution
 
@@ -183,9 +185,11 @@ product: Sleepycat
 
 vendor: www.sleepycat.com
 
-license: BSD Style
+license: BSD (revised)
 
-text: sleepycat.txt
+local-text: sleepycat.txt
+
+text: http://www.opensource.org/licenses/sleepycat
 
 files: build from berkeley db source distribution
 
@@ -219,8 +223,7 @@ text: http://www.apache.org/licenses/LICENSE-2.0
 
 local-text: apache2.txt
 
-files: 
-       commons-beanutils-1.6.1.jar
+files: commons-beanutils-1.6.1.jar
        commons-cli-1.0.jar
        commons-cli-2.0.jar 
        commons-codec-1.2.jar
@@ -240,9 +243,11 @@ product: ical4j
 
 vendor: ical4j.sourceforge.net
 
-license: BSD Style
+license: BSD (revised)
 
-text: ical4j.txt
+text: http://ical4j.sourceforge.net/license.html
+
+local-text: ical4j.txt
 
 files: ical4j.jar
        ical4j-0.9.13.p2.jar
@@ -288,7 +293,9 @@ vendor: junit.org
 
 license: CPL
 
-text: junit.txt
+text: http://www.opensource.org/licenses/cpl
+
+local-text: junit.txt
 
 files: junit-3.8.1.jar
 
@@ -383,7 +390,7 @@ product: PDFBox
 
 vendor: pdfbox.org
 
-license: BSD Style
+license: BSD (revised)
 
 text: pdfbox.txt
 
@@ -395,7 +402,7 @@ product: TextMining
 
 vendor: www.textmining.org
 
-license: Apache 1.1
+license: Apache 1.1 Revised
 
 text: tm-extractors.txt
 
@@ -417,7 +424,7 @@ files:   xercesImpl.jar
 
 ----------------------------------------------------------------------
 
-product: Ant
+product: ant
 
 vendor: apache.org
 
@@ -433,7 +440,7 @@ notes: for development only
 
 ----------------------------------------------------------------------
 
-product: Ant Useful tasks and types
+product: ant-contrib
 
 vendor: ant-contrib.sourceforge.net
 
@@ -443,7 +450,7 @@ text: http://www.apache.org/licenses/LICENSE-2.0
 
 local-text: apache2.txt
 
-files:   ant-contrib-1.0b1.jar
+files:   ant-contrib-1.0b1.jar  Useful tasks and types
 
 ----------------------------------------------------------------------
 
@@ -467,7 +474,9 @@ vendor: cpan.org
 
 license: Perl Artistic
 
-text: perl.txt gpl.txt
+text: http://www.opensource.org/licenses/artistic-license
+
+local-text: perl.txt gpl.txt
 
 files: IO-stringy-1.220.tar.gz Convert-ASN1-0.18.tar.gz
        libwww-perl-5.800.tar.gz MailTools-1.62.tar.gz
@@ -490,9 +499,11 @@ product: zlib
 
 vendor: www.zlib.net
 
-license: BSD Style
+license: BSD (revised)
 
-text: zlib.txt
+text: http://www.opensource.org/licenses/zlib-license
+
+local-text: zlib.txt
 
 files: zlib-1.2.1.tar.gz (included in perllibs) 
        http://www.zlib.net/zlib_license.html
@@ -517,7 +528,7 @@ product: expat
 
 vendor: expat.sourceforge.net
 
-license: MIT Style
+license: MIT (revised)
 
 text: expat.txt
 
@@ -529,9 +540,11 @@ product: dom4j
 
 vendor: dom4j.org
 
-license: BSD Style
+license: BSD (revised)
 
-text: dom4j.txt
+local-text: dom4j.txt
+
+text: http://www.dom4j.org/license.html
 
 files: dom4j-1.5.jar
 
@@ -545,7 +558,7 @@ product: jaxen
 
 vendor: jaxen.org
 
-license: BSD Style
+license: BSD (revised)
 
 text: jaxen.txt
 
@@ -626,13 +639,15 @@ product: snmp
 
 vendor: net-snmp.org
 
-license: BSD Style
+license: BSD (revised)
 
-text: snmp.txt
+text:  http://www.net-snmp.org/about/license.html
+
+local-text: snmp.txt
 
 files: built from snmp distribution
 
-notes: snmp-5.1.2 http://www.net-snmp.org/about/license.html
+notes: snmp-5.1.2
 
 ----------------------------------------------------------------------
 
@@ -642,7 +657,9 @@ vendor: crockford.com
 
 license: JSON
 
-text: json.txt
+text: http://www.crockford.com/JSON/license.html
+
+local-text: json.txt
 
 files: none
 
@@ -691,9 +708,11 @@ product: curl
 
 vendor: http://curl.haxx.se/
 
-license: MIT Style
+license: MIT (revised)
 
-text: curl.txt
+local-text: curl.txt
+
+http://curl.haxx.se/docs/copyright.html
 
 notes: our saslauthd backend links against libcurl for HTTP/S from C
        code into ZimbraServer
@@ -704,7 +723,7 @@ product: cyrus-sasl
 
 vendor: http://asg.web.cmu.edu/sasl/
 
-license: BSD Style
+license: BSD (revised)
 
 text: cyrus-sasl.txt
 
@@ -717,7 +736,7 @@ product: libxml2
 
 vendor: http://xmlsoft.org/
 
-license: MIT Style
+license: MIT (revised)
 
 text: libxml2.txt
 
