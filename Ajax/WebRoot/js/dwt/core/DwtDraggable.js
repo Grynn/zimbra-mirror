@@ -86,6 +86,16 @@ function(dragEl, rootEl, minX, maxX, minY, maxY, dragStartCB, dragCB, dragEndCB,
 }
 
 
+DwtDraggable.setDragBoundaries =
+function (dragEl ,minX, maxX, minY, maxY) {
+	if (dragEl != null) {
+		if (minX != null) dragEl._minX = minX;
+		if (maxX != null) dragEl._maxX = maxX;
+		if (minY != null) dragEl._minY = minY;
+		if (maxY != null) dragEl._maxY = maxY;
+	}
+};
+
 DwtDraggable._start =
 function(e)	{
 	var dragEl = DwtDraggable._dragEl = this;
@@ -93,7 +103,7 @@ function(e)	{
 	var x = parseInt(dragEl._hMode ? dragEl._root.style.left : dragEl._root.style.right );
 	var y = parseInt(dragEl._vMode ? dragEl._root.style.top  : dragEl._root.style.bottom);
 	if (dragEl._root.onDragStart)
-		dragEl._root.onDragStart.run(x, y);
+		dragEl._root.onDragStart.run([x, y]);
 
 	dragEl._lastMouseX = e.clientX;
 	dragEl._lastMouseY = e.clientY;
@@ -147,7 +157,7 @@ function(e)	{
 			ex = dragEl._hMode ? Math.min(ex, dragEl._maxMouseX) : Math.max(ex, dragEl._minMouseX);
 		nx = x + ((ex - dragEl._lastMouseX) * (dragEl._hMode ? 1 : -1));
 	} else {
-		nx = dragEl._xMapper(y);
+		nx = dragEl._xMapper(x, ex);
 	}
 
 	if (!dragEl._yMapper) {
@@ -157,7 +167,7 @@ function(e)	{
 			ey = dragEl._vMode ? Math.min(ey, dragEl._maxMouseY) : Math.max(ey, dragEl._minMouseY);
 		ny = y + ((ey - dragEl._lastMouseY) * (dragEl._vMode ? 1 : -1));
 	} else {
-		ny = dragEl._yMapper(x);
+		ny = dragEl._yMapper(y, ey);
 	}
 
 	DwtDraggable._dragEl._root.style[dragEl._hMode ? "left" : "right"] = nx + "px";

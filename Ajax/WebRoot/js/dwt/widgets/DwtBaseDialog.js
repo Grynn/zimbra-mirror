@@ -103,10 +103,10 @@ DwtBaseDialog.prototype.initializeDragging = function (dragHandleId) {
 		var size = this.getSize();
 		var dragEndCb = new AjxCallback(this, DwtBaseDialog.prototype._dragEnd);
 		var dragCb = new AjxCallback(this, DwtBaseDialog.prototype._duringDrag);
+		var dragStartCb = new AjxCallback(this, DwtBaseDialog.prototype._dragStart);
 		
  		DwtDraggable.init(dragHandle, dragObj, 0,
- 						  document.body.offsetWidth - 10, 0, document.body.offsetHeight-10, null, dragCb, dragEndCb);
-
+ 						  document.body.offsetWidth - 10, 0, document.body.offsetHeight - 10, dragStartCb, dragCb, dragEndCb);
 	}	
 };
 
@@ -434,6 +434,19 @@ function() {
 	// overload me
 }
 
+DwtBaseDialog.prototype._dragStart = 
+function (args){
+	// fix for bug 3177
+	if (AjxEnv.isNav) {
+		var x = args[0];
+		var y = args[1];
+
+		this._currSize = this.getSize();
+		DwtDraggable.setDragBoundaries(DwtDraggable._dragEl, 0, document.body.offsetWidth - this._currSize.x, 0, 
+									   document.body.offsetHeight - this._currSize.y);
+	}
+};
+
 DwtBaseDialog.prototype._dragEnd =
 function(args) {
  	var x = args[0];
@@ -445,8 +458,8 @@ function(args) {
 
 DwtBaseDialog.prototype._duringDrag =
 function(args) {
-// 	var x = args[0];
-// 	var y = args[1];
+	//var x = args[0];
+	//var y = args[1];
 // 	DBG.println("during drag x:", x, " y:", y);
 	// overload me
 };
