@@ -288,7 +288,7 @@ function(id, tableId) {
 		case ZaZimbraAdmin._MIGRATION_ID:
 			Dwt.getDomObj(doc, bannerBar._migrationId).blur();
 			Dwt.getDomObj(doc, bannerBar._migrationId2).blur();			
-			window.open("/zimbraAdmin/migrationwizard/MigrationWizard.exe");
+			window.open("http://zimbra.com/downloads/migrationwizard/accept");
 			break;
 			
 		case ZaZimbraAdmin._HELP_ID:

@@ -137,10 +137,10 @@ function () {
 	var i = 0;
 
 	html[i++] = "<table align='right' id='" + this._bannerTableId + "'><tr>";
-	html[i++] = "<td><a id='" + this.bannerBar._migrationId + "'  target=\"_blank\" href=\"/zimbraAdmin/migrationwizard/MigrationWizard.exe\">";
+	html[i++] = "<td><a id='" + this.bannerBar._migrationId + "'  target=\"_blank\" href=\"http://zimbra.com/downloads/migrationwizard/accept\">";
 	html[i++] = AjxImg.getImageHtml(ZaImg.I_MIGRATIONWIZ, "cursor:hand");
 	html[i++] = "</a></td>";
-	html[i++] = "<td><a id='" + this.bannerBar._migrationId2 + "' style='cursor: hand' target=\"_blank\" href=\"/zimbraAdmin/migrationwizard/MigrationWizard.exe\">";
+	html[i++] = "<td><a id='" + this.bannerBar._migrationId2 + "' style='cursor: hand' target=\"_blank\" href=\"http://zimbra.com/downloads/migrationwizard/accept\">";
 	html[i++] = ZaMsg.migrationWiz + "</a></td>";	
 	html[i++] = "<td><a id='" + this.bannerBar._helpId + "'>";
 	html[i++] = AjxImg.getImageHtml(ZaImg.I_HELP, "cursor:hand");
