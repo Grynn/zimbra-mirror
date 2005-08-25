@@ -17,9 +17,9 @@ sub doobject(@) {
     my $lastwhat;
     for (my $i = 0; $i <= $#lines; $i++) {
         my $line = $lines[$i];
-        my ($what) = ($line =~ /^(product|vendor|license|text|files|notes):/);
+        my ($what) = ($line =~ /^(product|vendor|license|text|files|notes|localtext|private):/);
         if (defined($what)) {
-            $line =~ s/^(product|vendor|license|text|files|notes)://;
+            $line =~ s/^(product|vendor|license|text|files|notes|localtext|private)://;
             $object{$what} = clean($line);
             $lastwhat = $what;
         } elsif (defined($lastwhat)) {
@@ -48,6 +48,7 @@ sub doprint($@) {
         print OUTPUT "<td><b>Vendor</b></td>\n";
     }
     print OUTPUT "<td><b>Documents</b></td>\n";
+    print OUTPUT "<td><b>Links</b></td>\n";
     print OUTPUT "<td><b>Notes</b></td>\n";
     print OUTPUT "<td><b>Files</b></td>\n";
     
@@ -80,9 +81,9 @@ sub doprint($@) {
                 print OUTPUT "<td>&nbsp;</td>\n";
             }
         }
-        
+
         print OUTPUT "<td>";
-        my @licenses = split(/ /, $object->{text});
+        my @licenses = split(/ /, $object->{localtext});
         foreach my $license (@licenses) {
             $license =~ s/\s*$//g;
             warn "$license: does not exist" unless ($license && -f $license);
@@ -90,7 +91,13 @@ sub doprint($@) {
         }
         print OUTPUT "</td>\n";
         
-        
+        if ($object->{text}) {
+            print OUTPUT "<td><a href=\"", $object->{text}, "\">",
+                $object->{text}, "</a></td>\n";
+        } else {
+            print OUTPUT "<td>&nbsp;</td>\n";
+        }
+
         if ($object->{notes}) {
             print OUTPUT "<td>", $object->{notes}, "&nbsp;</td>\n";
         } else {
@@ -106,6 +113,56 @@ sub doprint($@) {
         print OUTPUT "</tr>\n";
     }
     print OUTPUT "</table></body></html>\n";
+    close(OUTPUT);
+}
+
+sub dopublic(@) {
+    my @sorted = @_;
+    open(OUTPUT, "> public/index.html");
+    print OUTPUT "<html><title>Zimbra Third Party Licenses</title>\n";
+    print OUTPUT "<body>\n";
+    print OUTPUT "<table border=1>\n\n";
+    
+    my $prevLicense = "";
+    
+    print OUTPUT "<tr>\n";
+
+    foreach my $object (@sorted) {
+        next if (defined($object->{private}));
+        
+        if ($object->{text} !~ /http/) {
+            my $file = $object->{text};
+            chomp($file);
+            print "Copying $file public/$file\n";
+            system("cp $file public/$file");
+        }
+
+        if ($object->{license} ne $prevLicense) {
+            if (defined($prevLicense)) {
+                print OUTPUT "</tr>\n\n";
+            }
+            print OUTPUT "<tr>\n";
+            print OUTPUT "<td>", $object->{license}, "\n";
+            print OUTPUT "<td>";
+        } else {
+            print OUTPUT ",\n";
+        }
+
+        my $url = $object->{text};
+        chomp($url);
+
+        my $product = $object->{product};
+        chomp($product);
+        
+        print OUTPUT '<a href="', $url, '">', $product, "</a>";
+        $prevLicense = $object->{license};
+    }
+
+    print OUTPUT "</tr>\n";
+    print OUTPUT "</table>\n";
+    print OUTPUT "</body>\n";
+    print OUTPUT "</html>\n";
+
     close(OUTPUT);
 }
 
@@ -125,6 +182,7 @@ close(INDEX);
 
 my @bylicense = sort {$a->{license} cmp $b->{license}} @objects;
 doprint("license", @bylicense);
+dopublic(@bylicense);
 
 my @byvendor = sort {$a->{vendor} cmp $b->{vendor}} @objects;
 doprint("vendor", @byvendor);

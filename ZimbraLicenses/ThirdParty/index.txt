@@ -8,7 +8,7 @@ license: Sun
 
 text: http://java.sun.com/j2se/1.5.0/jdk-1_5_0_04-license.txt
 
-local-text: jdk.txt jre.txt jdk.readme.html jre.readme.txt
+localtext: jdk.txt jre.txt jdk.readme.html jre.readme.txt
 
 files: JDK/JRE binary downloads from Sun
 
@@ -42,7 +42,7 @@ vendor: Sun
 
 license: Sun
 
-local-text: javamail.txt
+localtext: javamail.txt
 
 text: http://java.sun.com/products/javamail/LICENSE.txt
 
@@ -60,7 +60,7 @@ license: Sun
 
 text: http://java.sun.com/products/jndi/legal/bcl_jndi121.html
 
-local-text: jndi.txt
+localtext: jndi.txt
 
 files: ldapbp.jar ldap.jar
 
@@ -83,7 +83,7 @@ license: Apache 2.0
 
 text: http://www.apache.org/licenses/LICENSE-2.0
 
-local-text: apache2.txt
+localtext: apache2.txt
 
 files: jstl.jar
 
@@ -115,7 +115,7 @@ license: BSD (revised)
 
 text: http://www.opensource.org/licenses/bsd-license.html
 
-local-text: javacc.txt
+localtext: javacc.txt
 
 files: javacc-3.2.jar
 
@@ -132,7 +132,7 @@ license: GPL
 
 text: http://www.gnu.org/licenses/gpl.txt
 
-local-text: gpl.txt
+localtext: gpl.txt
 
 files: mysql-standard tar.gz from MySQL.com
 
@@ -146,7 +146,7 @@ license: Apache 2.0
 
 text: http://www.apache.org/licenses/LICENSE-2.0
 
-local-text: apache2.txt
+localtext: apache2.txt
 
 files: tar.gz from jakarta.apache.org, including catalina-ant.jar,
        servlet-api.jar
@@ -175,7 +175,7 @@ license: BSD (revised)
 
 text: http://www.openldap.org/software/release/license.html
 
-local-text: openldap.txt
+localtext: openldap.txt
 
 files: built form openldap source distribution
 
@@ -187,7 +187,7 @@ vendor: www.sleepycat.com
 
 license: BSD (revised)
 
-local-text: sleepycat.txt
+localtext: sleepycat.txt
 
 text: http://www.opensource.org/licenses/sleepycat
 
@@ -221,7 +221,7 @@ license: Apache 2.0
 
 text: http://www.apache.org/licenses/LICENSE-2.0
 
-local-text: apache2.txt
+localtext: apache2.txt
 
 files: commons-beanutils-1.6.1.jar
        commons-cli-1.0.jar
@@ -247,7 +247,7 @@ license: BSD (revised)
 
 text: http://ical4j.sourceforge.net/license.html
 
-local-text: ical4j.txt
+localtext: ical4j.txt
 
 files: ical4j.jar
        ical4j-0.9.13.p2.jar
@@ -262,7 +262,7 @@ license: Apache 2.0
 
 text: http://www.apache.org/licenses/LICENSE-2.0
 
-local-text: apache2.txt
+localtext: apache2.txt
 
 files: jakarta-oro-2.0.7.jar
 
@@ -295,7 +295,7 @@ license: CPL
 
 text: http://www.opensource.org/licenses/cpl
 
-local-text: junit.txt
+localtext: junit.txt
 
 files: junit-3.8.1.jar
 
@@ -309,7 +309,7 @@ license: Apache 2.0
 
 text: http://www.apache.org/licenses/LICENSE-2.0
 
-local-text: apache2.txt
+localtext: apache2.txt
 
 files:   jsieve-0.1.jar
 
@@ -323,7 +323,7 @@ license: LGPL
 
 text: http://www.gnu.org/licenses/lgpl.txt
 
-local-text: lgpl.txt
+localtext: lgpl.txt
 
 files:   jug-1.1.2.jar
 
@@ -337,7 +337,7 @@ license: Apache 2.0
 
 text: http://www.apache.org/licenses/LICENSE-2.0
 
-local-text: apache2.txt
+localtext: apache2.txt
 
 files: log4j-1.2.8.jar
 
@@ -351,7 +351,7 @@ license: Apache 2.0
 
 text: http://www.apache.org/licenses/LICENSE-2.0
 
-local-text: apache2.txt
+localtext: apache2.txt
 
 files: lucene-1.4.3.jar lucene-demos-1.4-final.jar
 
@@ -365,7 +365,7 @@ license: GPL
 
 text: http://www.gnu.org/licenses/gpl.txt
 
-local-text: gpl.txt
+localtext: gpl.txt
 
 notes: we have made minor change to the mysql connector code
 
@@ -378,7 +378,7 @@ product: NekoHTML
 
 vendor: apache.org
 
-license: Apache 1.1
+license: Apache 1.1 (revised)
 
 text: nekohtml.txt
 
@@ -402,7 +402,7 @@ product: TextMining
 
 vendor: www.textmining.org
 
-license: Apache 1.1 Revised
+license: Apache 1.1 (revised)
 
 text: tm-extractors.txt
 
@@ -418,7 +418,7 @@ license: Apache 2.0
 
 text: http://www.apache.org/licenses/LICENSE-2.0
 
-local-text: apache2.txt
+localtext: apache2.txt
 
 files:   xercesImpl.jar
 
@@ -432,7 +432,7 @@ license: Apache 2.0
 
 text: http://www.apache.org/licenses/LICENSE-2.0
 
-local-text: apache2.txt
+localtext: apache2.txt
 
 files:   ant-1.6.2.jar
 
@@ -448,7 +448,7 @@ license: Apache 2.0
 
 text: http://www.apache.org/licenses/LICENSE-2.0
 
-local-text: apache2.txt
+localtext: apache2.txt
 
 files:   ant-contrib-1.0b1.jar  Useful tasks and types
 
@@ -462,7 +462,7 @@ license: Apache 2.0
 
 text: http://www.apache.org/licenses/LICENSE-2.0
 
-local-text: apache2.txt
+localtext: apache2.txt
 
 files:   standard.jar
 
@@ -476,7 +476,7 @@ license: Perl Artistic
 
 text: http://www.opensource.org/licenses/artistic-license
 
-local-text: perl.txt gpl.txt
+localtext: perl.txt gpl.txt
 
 files: IO-stringy-1.220.tar.gz Convert-ASN1-0.18.tar.gz
        libwww-perl-5.800.tar.gz MailTools-1.62.tar.gz
@@ -503,7 +503,7 @@ license: BSD (revised)
 
 text: http://www.opensource.org/licenses/zlib-license
 
-local-text: zlib.txt
+localtext: zlib.txt
 
 files: zlib-1.2.1.tar.gz (included in perllibs) 
        http://www.zlib.net/zlib_license.html
@@ -518,7 +518,7 @@ license: GPL
 
 text: http://www.gnu.org/licenses/gpl.txt
 
-local-text: gpl.txt
+localtext: gpl.txt
 
 files:   swatch-3.1.1.tar.gz (included in perllibs)
 
@@ -542,7 +542,7 @@ vendor: dom4j.org
 
 license: BSD (revised)
 
-local-text: dom4j.txt
+localtext: dom4j.txt
 
 text: http://www.dom4j.org/license.html
 
@@ -576,7 +576,7 @@ license: GPL
 
 text: http://www.gnu.org/licenses/gpl.txt
 
-local-text: gpl.txt
+localtext: gpl.txt
 
 files: big perl script
 
@@ -593,7 +593,7 @@ license: Apache 2.0
 
 text: http://www.apache.org/licenses/LICENSE-2.0
 
-local-text: apache2.txt
+localtext: apache2.txt
 
 files: perl server/client
 
@@ -609,7 +609,7 @@ license: GPL
 
 text: http://www.gnu.org/licenses/gpl.txt
 
-local-text: gpl.txt
+localtext: gpl.txt
 
 files: TBD
 
@@ -627,7 +627,7 @@ private: exclude - not shipping yet
 
 text: http://www.gnu.org/licenses/lgpl.txt
 
-local-text: lgpl.txt
+localtext: lgpl.txt
 
 files: aspell-0.60.x.tar.gz
 
@@ -643,7 +643,7 @@ license: BSD (revised)
 
 text:  http://www.net-snmp.org/about/license.html
 
-local-text: snmp.txt
+localtext: snmp.txt
 
 files: built from snmp distribution
 
@@ -659,7 +659,7 @@ license: JSON
 
 text: http://www.crockford.com/JSON/license.html
 
-local-text: json.txt
+localtext: json.txt
 
 files: none
 
@@ -678,7 +678,7 @@ license: Apache 2.0
 
 text: http://www.apache.org/licenses/LICENSE-2.0
 
-local-text: apache2.txt
+localtext: apache2.txt
 
 files: apache-2.0.xx.tar.gz
 
@@ -710,9 +710,9 @@ vendor: http://curl.haxx.se/
 
 license: MIT (revised)
 
-local-text: curl.txt
+localtext: curl.txt
 
-http://curl.haxx.se/docs/copyright.html
+text: http://curl.haxx.se/docs/copyright.html
 
 notes: our saslauthd backend links against libcurl for HTTP/S from C
        code into ZimbraServer
@@ -753,7 +753,7 @@ license: GPL
 
 text: http://www.gnu.org/licenses/gpl.txt
 
-local-text: gpl.txt
+localtext: gpl.txt
 
 notes: perl programs invoked from cron and our monitoring scripts
 
