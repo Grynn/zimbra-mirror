@@ -24,14 +24,15 @@
  */
 
 /**
-* Creates a new dialog, without displaying it. The shell must be provided, and a title should 
-* be provided as well. Everything else has a reasonable default.
+* Creates a new dialog, without displaying it. The shell must be provided, and a 
+* title should be provided as well. Everything else has a reasonable default.
 * @constructor
 * @class
-* This class represents a popup dialog which has at least a title and up to three standard
-* buttons (OK, Cancel, and Details). A client or subclass sets the content.
+* This class represents a popup dialog which has at least a title and up to 
+* three standard buttons (OK, Cancel). A client or subclass sets the content.
 * <p>
-* Dialogs always hang off the main shell since their stacking order is managed through z-index.
+* Dialogs always hang off the main shell since their stacking order is managed 
+* through z-index.
 *
 * @author Ross Dargahi
 * @author Conrad Damon
@@ -103,13 +104,7 @@ function DwtDialog(parent, className, title, standardButtons, extraButtons, zInd
 	for (var i = 0; i < this._buttonList.length; i++) {
 		var buttonId = this._buttonList[i];
 		this._button[buttonId] = new DwtButton(this);
-		if (buttonId == DwtDialog.DETAIL_BUTTON) {
-			this._detailCell = Dwt.getDomObj(doc, this._detailCellId);
-			this._button[buttonId].setImage(DwtImg.SELECT_PULL_DOWN);
-			this._button[buttonId].getHtmlElement().style.width = "22px";
-		} else {
-			this._button[buttonId].setText(this._buttonDesc[buttonId].label);
-		}
+		this._button[buttonId].setText(this._buttonDesc[buttonId].label);
 		this._button[buttonId].buttonId = buttonId;
 		this._button[buttonId].addSelectionListener(new AjxListener(this, this._buttonListener));
 		Dwt.getDomObj(doc, this._buttonElementId[buttonId]).appendChild(this._button[buttonId].getHtmlElement());
@@ -137,19 +132,18 @@ DwtDialog.ALIGN_RIGHT 		= 2;
 DwtDialog.ALIGN_CENTER 		= 3;
 
 // standard buttons, their labels, and their positioning
-DwtDialog.DETAIL_BUTTON 	= 1;
-DwtDialog.CANCEL_BUTTON 	= 2;
-DwtDialog.OK_BUTTON 		= 3;
-DwtDialog.DISMISS_BUTTON 	= 4;
-DwtDialog.NO_BUTTON 		= 5;
-DwtDialog.YES_BUTTON 		= 6;
-DwtDialog.LAST_BUTTON 		= 6;
+DwtDialog.CANCEL_BUTTON 	= 1;
+DwtDialog.OK_BUTTON 		= 2;
+DwtDialog.DISMISS_BUTTON 	= 3;
+DwtDialog.NO_BUTTON 		= 4;
+DwtDialog.YES_BUTTON 		= 5;
+DwtDialog.LAST_BUTTON 		= 5;
 DwtDialog.NO_BUTTONS 		= 256;
-DwtDialog.ALL_BUTTONS 		= [DwtDialog.DETAIL_BUTTON, DwtDialog.CANCEL_BUTTON, DwtDialog.OK_BUTTON,
-							   DwtDialog.DISMISS_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.YES_BUTTON];
+DwtDialog.ALL_BUTTONS 		= [DwtDialog.CANCEL_BUTTON, DwtDialog.OK_BUTTON, 
+							   DwtDialog.DISMISS_BUTTON, DwtDialog.NO_BUTTON, 
+							   DwtDialog.YES_BUTTON];
 
 DwtDialog.MSG_KEY = new Object();
-DwtDialog.MSG_KEY[DwtDialog.DETAIL_BUTTON] 	= "detail";
 DwtDialog.MSG_KEY[DwtDialog.CANCEL_BUTTON] 	= "cancel";
 DwtDialog.MSG_KEY[DwtDialog.OK_BUTTON] 		= "ok";
 DwtDialog.MSG_KEY[DwtDialog.DISMISS_BUTTON] = "dismiss";
@@ -157,7 +151,6 @@ DwtDialog.MSG_KEY[DwtDialog.NO_BUTTON] 		= "no";
 DwtDialog.MSG_KEY[DwtDialog.YES_BUTTON] 	= "yes";
 
 DwtDialog.ALIGN = new Object();
-DwtDialog.ALIGN[DwtDialog.DETAIL_BUTTON] 	= DwtDialog.ALIGN_LEFT;
 DwtDialog.ALIGN[DwtDialog.CANCEL_BUTTON]	= DwtDialog.ALIGN_RIGHT;
 DwtDialog.ALIGN[DwtDialog.OK_BUTTON] 		= DwtDialog.ALIGN_RIGHT;
 DwtDialog.ALIGN[DwtDialog.DISMISS_BUTTON] 	= DwtDialog.ALIGN_RIGHT;
@@ -189,7 +182,6 @@ function() {
 */
 DwtDialog.prototype.reset =
 function() {
-	this.setDetailString();
 	this._resetCallbacks();
 	this.resetButtonStates();
 	DwtBaseDialog.prototype.reset.call(this);
@@ -200,7 +192,7 @@ function() {
  */
 DwtDialog.prototype.resetButtonStates =
 function() {
-	for (b in this._button){
+	for (b in this._button) {
 		this._button[b].setEnabled(true);
 		this._button[b].setActivated(false);
 	}
@@ -241,28 +233,6 @@ function(buttonId, listener) {
 }
 
 /**
-* Sets the text that shows up when the Detail button is pressed.
-*
-* @param text	detail text
-*/
-DwtDialog.prototype.setDetailString = 
-function(text) {
-	if (!(this._buttonElementId[DwtDialog.DETAIL_BUTTON]))
-		return;	
-	this._detailStr = text;
-	if (text) {
-		this._button[DwtDialog.DETAIL_BUTTON].setVisible(true);
-		if (this._detailCell && this._detailCell.innerHTML != "") {
-			this._detailCell.innerHTML = this._getDetailHtml(); //update detailCell if it is shown
-		}
-	} else {
-		this._button[DwtDialog.DETAIL_BUTTON].setVisible(false);
-		if (this._detailCell)
-			this._detailCell.innerHTML = "";
-	}
-}
-
-/**
 * Sets the dialog title.
 */
 DwtDialog.prototype.setTitle =
@@ -294,7 +264,8 @@ function(id) {
 // -----------------------------------------------------------------------
 // layout methods -- subclasses should override to customize layout
 // -----------------------------------------------------------------------
-DwtDialog.prototype._getStartBorder = function () {
+DwtDialog.prototype._getStartBorder = 
+function() {
 	var html = new Array();
 	var idx = 0;
 	html[idx++] = DwtBaseDialog.prototype._getStartBorder.call(this);
@@ -311,17 +282,10 @@ DwtDialog.prototype._getStartBorder = function () {
 
 DwtDialog.prototype._getContentHtml =
 function() {
-	
-	// buttons go in a row at the bottom, on either the left or the right side
 	var html = new Array();
 	var idx = 0;
 	html[idx++] = DwtBaseDialog.prototype._getContentHtml.call(this);
 	idx = this._addButtonsHtml(html,idx);
-	if (this._buttonElementId[DwtDialog.DETAIL_BUTTON]) {
-		this._detailCellId = Dwt.getNextId();
-		html[idx++] = "<div id='" + this._detailCellId + "'></div>";
-	}
-
 	return html.join("");
 };
 
@@ -332,8 +296,7 @@ function () {
 
 DwtDialog.prototype._getButtonsContainerStartTemplate =
 function () {
-	return "<table cellspacing='0' cellpadding='0' border='0' width='100%'>\
-              <tr>";
+	return "<table cellspacing='0' cellpadding='0' border='0' width='100%'><tr>";
 };
 
 DwtDialog.prototype._getButtonsAlignStartTemplate =
@@ -356,31 +319,18 @@ function () {
 	return  "</tr></table>";
 };
 
-DwtDialog.prototype._getDetailHtml =
-function() {
-	return "<div class='vSpace'></div><table cellspacing=0 cellpadding=0 width='100%'>" +
-		   "<tr><td><textarea readonly rows='10'>" + this._detailStr + "</textarea></td></tr></table>";
-}
-
-
 DwtDialog.prototype._addButtonsHtml =
-function (html, idx){
+function(html, idx) {
 	if (this._buttonList) {
 		var leftButtons = new Array();
 		var rightButtons = new Array();
 		var centerButtons = new Array();
 		for (var i = 0; i < this._buttonList.length; i++) {
 			var buttonId = this._buttonList[i];
-			switch (this._buttonDesc[buttonId].align){
-			case DwtDialog.ALIGN_RIGHT:
-				rightButtons.push(buttonId);
-				break;
-			case DwtDialog.ALIGN_LEFT:
-				leftButtons.push(buttonId);
-				break;
-			case DwtDialog.ALIGN_CENTER:
-				centerButtons.push(buttonId);
-				break;
+			switch (this._buttonDesc[buttonId].align) {
+				case DwtDialog.ALIGN_RIGHT: 	rightButtons.push(buttonId); break;
+				case DwtDialog.ALIGN_LEFT: 		leftButtons.push(buttonId); break;
+				case DwtDialog.ALIGN_CENTER:	centerButtons.push(buttonId); break;
 			}
 		}
 		html[idx++] = this._getSeparatorTemplate();
@@ -427,7 +377,6 @@ function (html, idx){
 
 	}	
 	return idx;
-
 };
 
 // Button listener that checks for callbacks
@@ -457,26 +406,7 @@ DwtDialog.prototype._resetCallbacks =
 function() {
 	for (var i = 0; i < DwtDialog.ALL_BUTTONS.length; i++) {
 		var id = DwtDialog.ALL_BUTTONS[i];
-		if (this._buttonDesc[id]) {
-			if (id == DwtDialog.DETAIL_BUTTON) {
-				this._buttonDesc[id].callback = new AjxCallback(this, this._showDetail);
-			} else {
-				this._buttonDesc[id].callback = new AjxCallback(this, this.popdown);
-			}
-		}
-	}
-};
-
-// Displays the detail text
-DwtDialog.prototype._showDetail =
-function() {
-	if (this._detailCell) {
-		if (this._detailCell.innerHTML == "") {
-			this._button[DwtDialog.DETAIL_BUTTON].setImage(DwtImg.SELECT_PULL_UP);
-			this._detailCell.innerHTML = this._getDetailHtml();
-		} else {
-			this._button[DwtDialog.DETAIL_BUTTON].setImage(DwtImg.SELECT_PULL_DOWN);
-			this._detailCell.innerHTML = "";
-		}
+		if (this._buttonDesc[id])
+			this._buttonDesc[id].callback = new AjxCallback(this, this.popdown);
 	}
 };
