@@ -1946,30 +1946,10 @@ html>body .balloonBR {
 .dialog_outset_b			{	background-image:url(/zimbraAdmin/skins/steel/images/dialog_outset_b.gif); 		width:4;	height:4;	overflow:hidden;	}
 .dialog_outset_br			{	background-image:url(/zimbraAdmin/skins/steel/images/dialog_outset_br.gif); 		width:4;	height:4;	overflow:hidden;	}
 
-
 .h_sash_l					{	background-image:url(/zimbraAdmin/skins/steel/images/h_sash_l.gif); 				width:4;	height:7;	overflow:hidden;	}
 .h_sash_m					{	background-image:url(/zimbraAdmin/skins/steel/images/h_sash_m.gif); 				width:20;	height:7;	overflow:hidden;	}
 .h_sash_r					{	background-image:url(/zimbraAdmin/skins/steel/images/h_sash_r.gif); 				width:4;	height:7;	overflow:hidden;	}
 .h_sash_grip				{	background-image:url(/zimbraAdmin/skins/steel/images/h_sash_grip.gif); 			width:29;	height:7;	overflow:hidden;	}
-
-
-.tab_spacer.gif				{	background-image:url(/zimbraAdmin/skins/steel/images/tab_spacer.gif);	 		width:100%;	height:28;	overflow:hidden;	}
-
-.Imgtab_L					{	background-image:url(/zimbraAdmin/skins/steel/images/tab_L.gif);	 				width:9;	height:28;	overflow:hidden;	}
-.Imgtab_M					{	background-image:url(/zimbraAdmin/skins/steel/images/tab_M.gif);	 				width:100%;	height:28;	overflow:hidden;	}
-.Imgtab_R					{	background-image:url(/zimbraAdmin/skins/steel/images/tab_R.gif);	 				width:9;	height:28;	overflow:hidden;	}
-
-.Imgtab_active_L			{	background-image:url(/zimbraAdmin/skins/steel/images/tab_active_L.gif);	 		width:9;	height:28;	overflow:hidden;	}
-.Imgtab_active_M			{	background-image:url(/zimbraAdmin/skins/steel/images/tab_active_M.gif);	 		width:100%;	height:28;	overflow:hidden;	}
-.Imgtab_active_R			{	background-image:url(/zimbraAdmin/skins/steel/images/tab_active_R.gif);	 		width:9;	height:28;	overflow:hidden;	}
-
-.Imgtab_selected_L			{	background-image:url(/zimbraAdmin/skins/steel/images/tab_selected_L.gif);	 	width:9;	height:28;	overflow:hidden;	}
-.Imgtab_selected_M			{	background-image:url(/zimbraAdmin/skins/steel/images/tab_selected_M.gif);	 	width:100%;	height:28;	overflow:hidden;	}
-.Imgtab_selected_R			{	background-image:url(/zimbraAdmin/skins/steel/images/tab_selected_R.gif);	 	width:9;	height:28;	overflow:hidden;	}
-
-.Imgtab_disabled_L			{	background-image:url(/zimbraAdmin/skins/steel/images/tab_disabled_L.gif);	 	width:9;	height:28;	overflow:hidden;	}
-.Imgtab_disabled_M			{	background-image:url(/zimbraAdmin/skins/steel/images/tab_disabled_M.gif);	 	width:100%;	height:28;	overflow:hidden;	}
-.Imgtab_disabled_R			{	background-image:url(/zimbraAdmin/skins/steel/images/tab_disabled_R.gif);	 	width:9;	height:28;	overflow:hidden;	}
 
 /* end dynamically generated */
 
