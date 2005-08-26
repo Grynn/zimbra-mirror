@@ -58,6 +58,5 @@
 			<attribute value="http://jakarta.apache.org/commons/cli/apidocs/" name="javadoc_location"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="jars/tnef.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
