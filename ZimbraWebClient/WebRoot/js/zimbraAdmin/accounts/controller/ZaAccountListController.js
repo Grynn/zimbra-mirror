@@ -586,29 +586,63 @@ function (item) {
 			} else {
 				//check password
 				var myCos = null;
-				var maxPwdLen = Number.POSITIVE_INFINITY;
-				var minPwdLen = 1;	
+//				var maxPwdLen = Number.POSITIVE_INFINITY;
+				var maxPwdLen = null;
+				var minPwdLen = null;	
 				
-				if(item.attrs[ZaAccount.A_COSId]) {
-					myCos = new ZaCos(this._app);
-					myCos.load("id", item.attrs[ZaAccount.A_COSId]);
-					if(myCos.attrs[ZaCos.A_minPwdLength] > 0) {
-						minPwdLen = myCos.attrs[ZaCos.A_minPwdLength];
+				if(item.attrs[ZaAccount.A_zimbraMinPwdLength] != null) {
+					minPwdLen = item.attrs[ZaAccount.A_zimbraMinPwdLength];
+				} 
+				
+				if(item.attrs[ZaAccount.A_zimbraMaxPwdLength] != null) {
+					maxPwdLen = item.attrs[ZaAccount.A_zimbraMaxPwdLength];
+				} 
+				
+				if(!item.attrs[ZaAccount.A_COSId]) {
+					var cosList = this._app.getCosList().getArray();
+					item.attrs[ZaAccount.A_COSId] = cosList[0].id;
+				}
+				
+				if (minPwdLen == null) {
+					if(item.attrs[ZaAccount.A_COSId]) {
+						myCos = new ZaCos(this._app);
+						myCos.load("id", item.attrs[ZaAccount.A_COSId]);
+						if(myCos.attrs[ZaCos.A_zimbraMinPwdLength] > 0) {
+							minPwdLen = myCos.attrs[ZaCos.A_zimbraMinPwdLength];
+						}
 					}
-					if(myCos.attrs[ZaCos.A_maxPwdLength] > 0) {
-						maxPwdLen = myCos.attrs[ZaCos.A_maxPwdLength];
-					}		
 				}			
+				
+				if (maxPwdLen == null) {
+					if(item.attrs[ZaAccount.A_COSId]) {
+						if(!myCos) { 
+							myCos = new ZaCos(this._app);
+							myCos.load("id", item.attrs[ZaAccount.A_COSId]);
+						}
+						if(myCos.attrs[ZaCos.A_zimbraMaxPwdLength] > 0) {
+							maxPwdLen = myCos.attrs[ZaCos.A_zimbraMaxPwdLength];
+						}		
+					}
+				}		
+				
+				if (maxPwdLen == null) {
+					maxPwdLen = Number.POSITIVE_INFINITY;
+				}
+				
+				if(minPwdLen == null) {
+					minPwdLen = 1;
+				}
+				
 				var szPwd = this._chngPwdDlg.getPassword();
 				if(szPwd.length < minPwdLen || AjxStringUtil.trim(szPwd).length < minPwdLen) { 
 					//show error msg
-					this._chngPwdDlg.popdown();
+					//this._chngPwdDlg.popdown();
 					this._errorMsgDlg = new ZaMsgDialog(this._appView.shell, null, [DwtDialog.OK_BUTTON], this._app);												
 					this._errorMsgDlg.setMessage(ZaMsg.ERROR_PASSWORD_TOOSHORT + "<br>" + ZaMsg.NAD_passMinLength + ": " + minPwdLen, null, DwtMessageDialog.CRITICAL_STYLE, null);
 					this._errorMsgDlg.popup();
 				} else if(AjxStringUtil.trim(szPwd).length > maxPwdLen) { 
 					//show error msg
-					this._chngPwdDlg.popdown();
+					//this._chngPwdDlg.popdown();
 					this._errorMsgDlg = new ZaMsgDialog(this._appView.shell, null, [DwtDialog.OK_BUTTON], this._app);																	
 					this._errorMsgDlg.setMessage(ZaMsg.ERROR_PASSWORD_TOOLONG+ "<br>" + ZaMsg.NAD_passMaxLength + ": " + maxPwdLen, null, DwtMessageDialog.CRITICAL_STYLE, null);
 					this._errorMsgDlg.popup();
