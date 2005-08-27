@@ -18,7 +18,7 @@ zimbraMimeType: text/html
 cn: text/html
 objectclass: zimbraMimeEntry
 zimbraMimeIndexingEnabled: TRUE
-zimbraMimeHandlerClass: com.zimbra.cs.mime.handler.opensrc.TextHtmlHandler
+zimbraMimeHandlerClass: TextHtmlHandler
 zimbraMimeFileExtension: html
 zimbraMimeFileExtension: htm
 description: HTML Document
