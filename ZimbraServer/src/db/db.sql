@@ -46,12 +46,12 @@ GRANT ALL ON *.* TO 'zimbra'@'localhost.localdomain' WITH GRANT OPTION;
 
 # list of known volumes
 CREATE TABLE volume (
-   id    INTEGER UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-   name  VARCHAR(255) NOT NULL,
-   path  TEXT NOT NULL,
-   file_bits SMALLINT NOT NULL,
-   file_group_bits SMALLINT NOT NULL,
-   mailbox_bits SMALLINT NOT NULL,
+   id                 INTEGER UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+   name               VARCHAR(255) NOT NULL,
+   path               TEXT NOT NULL,
+   file_bits          SMALLINT NOT NULL,
+   file_group_bits    SMALLINT NOT NULL,
+   mailbox_bits       SMALLINT NOT NULL,
    mailbox_group_bits SMALLINT NOT NULL
 ) ENGINE = InnoDB;
 
