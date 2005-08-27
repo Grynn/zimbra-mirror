@@ -70,7 +70,7 @@ Dwt.Z_SPLASH = 1000;    // used for splash screens
 
 Dwt.Z_INC = 1;			// atomic amount to bump z-index if needed
 
-Dwt.DEFAULT = -1;
+Dwt.DEFAULT = -123456789;
 
 Dwt.LOC_NOWHERE = -10000; // for positioning an element offscreen
 
