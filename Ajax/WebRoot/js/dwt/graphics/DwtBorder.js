@@ -505,15 +505,3 @@ DwtBorder.registerBorder(
 );
 
 
-
-DwtBorder.registerBorder(
-	"calendarDayGrid",
-	{
-		start: AjxBuffer.concat(
-				"<div class='ImgCalendarDayGrid_H' style='width:100%;height:1008'>"
-			),
-		end: AjxBuffer.concat(
-				"</div>"
-			)
-	}
-);
