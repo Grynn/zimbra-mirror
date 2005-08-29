@@ -468,8 +468,52 @@ DwtBorder.registerBorder(
 					"</tr>", 
 				"</table>",
 				"<div id=tooltip_tip_b class='hover_tip_bottom Imghover_tip_bottom'></div>"
-			),
-		width:40, 
-		height:36 
+			)
 	} 
+);
+
+
+
+DwtBorder.registerBorder( 
+	"hover_IE", 
+	{ 
+		start:	AjxBuffer.concat(
+				"<div id=tooltip_tip_t class='hover_tip_top ImgIE_hover_tip_top'></div>",
+				"<table class=hover_frame border=0 cellspacing=0 cellpadding=0>", 
+					"<tr>", 
+						"<td id=tooltip_border_tl><div class=ImgIE_hover_TL></div></td>", 
+						"<td id=tooltip_border_tm><div class=ImgIE_hover_T style='width:100%'>&nbsp;</div></td>", 
+						"<td id=tooltip_border_tr><div class=ImgIE_hover_TR></div></td>", 
+					"</tr>", 
+					"<tr>",
+						"<td id=tooltip_border_ml><div class=ImgIE_hover_L style='height:100%'></div></td>", 
+						"<td id=tooltip_border_mm class=ImgIE_hover_BG><div class=hover_contents>"
+			), 
+		end:	AjxBuffer.concat(
+					"</div></td>", 
+						"<td id=tooltip_border_mr><div class=ImgIE_hover_R style='height:100%'></div></td>", 
+					"</tr>", 
+					"<tr>",
+						"<td id=tooltip_border_bl><div class=ImgIE_hover_BL></div></td>", 
+						"<td id=tooltip_border_bm><div class=ImgIE_hover_B style='width:100%'>&nbsp;</div></td>", 
+						"<td id=tooltip_border_br><div class=ImgIE_hover_BR></div></td>", 
+					"</tr>", 
+				"</table>",
+				"<div id=tooltip_tip_b class='hover_tip_bottom ImgIE_hover_tip_bottom'></div>"
+			)
+	} 
+);
+
+
+
+DwtBorder.registerBorder(
+	"calendarDayGrid",
+	{
+		start: AjxBuffer.concat(
+				"<div class='ImgCalendarDayGrid_H' style='width:100%;height:1008'>"
+			),
+		end: AjxBuffer.concat(
+				"</div>"
+			)
+	}
 );
