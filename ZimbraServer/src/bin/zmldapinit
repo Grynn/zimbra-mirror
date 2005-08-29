@@ -25,6 +25,7 @@
 # 
 
 source `dirname $0`/zmshutil || exit 1
+zmsetvars zimbra_home
 
 source_config_dir=/opt/zimbra/openldap/etc/openldap
 config_dir=/opt/zimbra/conf
@@ -32,11 +33,11 @@ config_dir=/opt/zimbra/conf
 ldap_pw=$1
 
 if [ x$ldap_pw = "x" ]; then
-	zmlocalconfig -f -e -r zimbra_ldap_password
-	zmlocalconfig -f -e -r ldap_root_password
+	${zimbra_home}/bin/zmlocalconfig -f -e -r zimbra_ldap_password
+	${zimbra_home}/bin/zmlocalconfig -f -e -r ldap_root_password
 else
-	zmlocalconfig -f -e zimbra_ldap_password=$ldap_pw
-	zmlocalconfig -f -e ldap_root_password=$ldap_pw
+	${zimbra_home}/bin/zmlocalconfig -f -e zimbra_ldap_password=$ldap_pw
+	${zimbra_home}/bin/zmlocalconfig -f -e ldap_root_password=$ldap_pw
 fi
 
 zmsetvars zimbra_ldap_userdn zimbra_ldap_password ldap_root_password zimbra_server_hostname
@@ -56,8 +57,8 @@ sed -e "s|^userPassword.*|userPassword: ${zimbra_sha}|" \
 
 # Start ldap
 
-ldap start
+${zimbra_home}/bin/ldap start
 
-ldapmodify -a -c -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${config_dir}/zimbra.ldif
-ldapmodify -a -c -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${source_config_dir}/zimbra_mimehandlers.ldif
+${zimbra_home}/openldap/bin/ldapmodify -a -c -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${config_dir}/zimbra.ldif
+${zimbra_home}/openldap/bin/ldapmodify -a -c -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${source_config_dir}/zimbra_mimehandlers.ldif
 

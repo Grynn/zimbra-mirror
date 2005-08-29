@@ -38,8 +38,8 @@ use lib "/opt/zimbra/zimbramon/lib/zimbrapm";
 
 my $id = `whoami`;
 chomp $id;
-if ($id ne "zimbra") {
-    print STDERR "Error: must be run as zimbra user\n";
+if ($id eq "root") {
+    print STDERR "Error: must not be run as root user\n";
 	exit (1);
 }
 
@@ -67,7 +67,7 @@ my %stopstarts = ();
 
 my $firstrun = 1;
 
-my $HOSTNAME = `zmlocalconfig -m nokey zimbra_server_hostname`;
+my $HOSTNAME = `$homedir/bin/zmlocalconfig -m nokey zimbra_server_hostname`;
 chomp $HOSTNAME;
 
 my $VARS_SET = 0;

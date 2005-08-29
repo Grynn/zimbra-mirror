@@ -30,15 +30,16 @@ USE zimbra;
 GRANT ALL ON zimbra.* TO 'zimbra' IDENTIFIED BY 'zimbra';
 GRANT ALL ON zimbra.* TO 'zimbra'@'localhost' IDENTIFIED BY 'zimbra';
 GRANT ALL ON zimbra.* TO 'zimbra'@'localhost.localdomain' IDENTIFIED BY 'zimbra';
+GRANT ALL ON zimbra.* TO 'root'@'localhost.localdomain' IDENTIFIED BY 'zimbra';
 
 # The zimbra user needs to be able to create and drop databases and perform
 # backup and restore operations.  Give
-# zimbra root access for now to keep things simple until there's a need
+# zimbra root access for now to keep things simple until there is a need
 # to add more security.
 GRANT ALL ON *.* TO 'zimbra' WITH GRANT OPTION;
 GRANT ALL ON *.* TO 'zimbra'@'localhost' WITH GRANT OPTION;
 GRANT ALL ON *.* TO 'zimbra'@'localhost.localdomain' WITH GRANT OPTION;
-
+GRANT ALL ON *.* TO 'root'@'localhost.localdomain' WITH GRANT OPTION;
  
 #-----------------------------------------------------------------------
 # volumes
