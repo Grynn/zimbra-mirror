@@ -24,7 +24,7 @@
 # ***** END LICENSE BLOCK *****
 # 
 
-source `dirname $0`/zmshutil || exit 1
+source `dirname $0`/../bin/zmshutil || exit 1
 zmsetvars \
     zimbra_home \
     zimbra_index_directory \
