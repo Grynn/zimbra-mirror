@@ -1,7 +1,5 @@
 /*-- 
 
- $Id: //depot/main/LiquidArchive/docs/license/jaxen.LICENSE#1 $
-
  Copyright (C) 2000-2002 bob mcwhirter & James Strachan.
  All rights reserved.
  
