@@ -92,7 +92,7 @@ checkpoint 64 5
 # The database directory MUST exist prior to running slapd AND 
 # should only be accessible by the slapd and slap tools.
 # Mode 700 recommended.
-directory	"/opt/zimbra/openldap/var/openldap-data"
+directory	"/opt/zimbra/openldap-data"
 # Indices to maintain
 index   objectClass            eq
 index   zimbraId               eq
