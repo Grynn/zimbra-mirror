@@ -414,7 +414,7 @@ GlobalConfigXFormView.prototype.getMyXForm = function() {
 				  	      getDisplayValue: function(value) { return parseInt(value); },
 				  	      elementChanged: function(elementValue, instanceValue, event) {
 						    instanceValue = elementValue+"h";
-						    this.getForm().itemChanged(this.getParentItem(), instanceValue, event);
+						    this.getForm().itemChanged(this, instanceValue, event);
 						  },
 						  onChange: ZaTabView.onFormFieldChanged
 				  	    },
