@@ -2409,7 +2409,8 @@ Repeat_XFormItem.prototype.removeButton = {
 		var repeatItem = this.getParentItem().getParentItem();
 		repeatItem.removeRowButtonClicked(this.getParentItem().instanceNum);
 	},
-	relevant:"item.instanceNum != 0"
+	relevantBehavior:_HIDE_,
+	relevant: "item.__parentItem.getInstanceCount() != 0"
 },
 Repeat_XFormItem.prototype.addButton = {
 	ref:".",
