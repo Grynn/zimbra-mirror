@@ -75,6 +75,7 @@ function DwtBaseDialog(parent, className, title, zIndex, mode, loc, optionalView
 	// reset tab index
 	this._tabIndex = 0;
     this.setZIndex(Dwt.Z_HIDDEN); // not displayed until popup() called
+	this._positionDialog({x:-10000, y:-10000});
 }
 
 DwtBaseDialog.prototype = new DwtComposite;
