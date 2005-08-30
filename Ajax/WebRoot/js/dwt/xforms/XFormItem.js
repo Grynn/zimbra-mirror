@@ -2885,16 +2885,34 @@ Time_XFormItem.prototype.items = [
 function Datetime_XFormItem() {}
 XFormItemFactory.createItemType("_DATETIME_", "datetime", Datetime_XFormItem, Composite_XFormItem)
 
+Datetime_XFormItem._datetimeFormatToItems = function(format, dateItem, timeItem) {
+	var items = [];
+	var pattern = /{(\d+),\s*(date|time)}/;
+	var index = 0;
+	while ((index = format.search(pattern)) != -1) {
+		if (index > 0) {
+			var item = { type: _OUTPUT_, value: format.substring(0,index), valign: _CENTER_ };
+			items.push(item);
+			format = format.substring(index);
+		}
+		var result = pattern.exec(format);
+		items.push(result[2] == "date" ? dateItem : timeItem);
+		format = format.substring(result[0].length);
+	}
+	if (format.length > 0) {
+		var item = { type:_OUTPUT_, value: format };
+		items.push(item);
+	}
+	return items;
+}
+
 //	type defaults
 Datetime_XFormItem.prototype.numCols = 3;
-Datetime_XFormItem.prototype.items = [
+Datetime_XFormItem.prototype.items = Datetime_XFormItem._datetimeFormatToItems(
+	DwtMsg.xformDateTimeFormat,
 	{type:_DATE_, ref:".", labelLocation:_NONE_},
-	{type:_OUTPUT_, value:"at", valign:_CENTER_}, // TODO: I18N
 	{type:_TIME_, ref:".", labelLocation:_NONE_}
-];
-
-
-
+);
 
 
 //
@@ -3246,7 +3264,8 @@ XFormItemFactory.createItemType("_DWT_DATETIME_", "dwt_datetime", Dwt_Datetime_X
 Dwt_Datetime_XFormItem.prototype.numCols = 3;
 Dwt_Datetime_XFormItem.prototype.useParentTable = false;
 Dwt_Datetime_XFormItem.prototype.cssClass =  "xform_dwt_datetime";
-Dwt_Datetime_XFormItem.prototype.items = [
+Dwt_Datetime_XFormItem.prototype.items = Datetime_XFormItem._datetimeFormatToItems(
+	DwtMsg.xformDateTimeFormat,
 	{type:_DWT_DATE_, ref:".", labelLocation:_NONE_, errorLocation:_PARENT_,
 	 elementChanged: 
 	 function (newDate, currentDate, event) {
@@ -3254,14 +3273,13 @@ Dwt_Datetime_XFormItem.prototype.items = [
 		 this.getParentItem().$elementChanged(newDate, currentDate, event);
 	 }
 	},
-	{type:_OUTPUT_, value:"at"}, // TODO: I18N
 	{type:_DWT_TIME_, ref:".", labelLocation:_NONE_, errorLocation:_PARENT_, 
 	 elementChanged:
 	 function (newDate, currentDate, event) {
 		 this.getParentItem().$elementChanged(newDate, currentDate, event);
 	 }
-	},
-]
+	}
+);
 
 //
 //	XFormItem class: "dwt_list"

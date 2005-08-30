@@ -78,3 +78,4 @@ DwtMsg.didNotMatchChoice = "Value '$0' did not match any values for this type.";
 
 DwtMsg.xformRepeatAdd = "+";
 DwtMsg.xformRepeatRemove = "-";
+DwtMsg.xformDateTimeFormat = "{0,date} at {0,time}";
