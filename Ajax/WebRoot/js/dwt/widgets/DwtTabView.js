@@ -360,6 +360,9 @@ function DwtTabBar(parent) {
 DwtTabBar.prototype = new DwtToolBar;
 DwtTabBar.prototype.constructor = DwtTabBar;
 
+// NOTE: The IE box model fix isn't needed.
+DwtTabBar.prototype.__itemPaddingRight = "0px";
+
 /**
  * This method overrides DwtToolBar#_addItem to handle adding elements at
  * a specific index. If an index is specified, it is passed directly to

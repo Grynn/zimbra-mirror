@@ -59,6 +59,9 @@ function() {
 	return "DwtToolBar";
 }
 
+// bug fix #33 - IE defines box model differently
+DwtToolBar.prototype.__itemPaddingRight = AjxEnv.isIE ? "4px" : "0px";
+
 DwtToolBar.prototype.getItem =
 function(index) {
 	return this._children.get(index);
@@ -129,8 +132,7 @@ function(type, element, index) {
 		col.vAlign = "middle";
 		col.noWrap = true;
 		// bug fix #33 - IE defines box model differently
-		if (AjxEnv.isIE)
-			col.style.paddingRight = "4px";
+		col.style.paddingRight = this.__itemPaddingRight;
 
 		if (type == DwtToolBar.FILLER) {
 			this._numFillers++;
