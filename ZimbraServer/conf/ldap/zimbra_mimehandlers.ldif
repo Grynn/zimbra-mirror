@@ -5,66 +5,6 @@ objectclass: organizationalRole
 cn: mime
 description: for storing MIME configuration
 
-dn: cn=application/octet-stream,cn=mime,cn=config,cn=zimbra
-zimbraMimeType: application/octet-stream
-cn: application/octet-stream
-objectclass: zimbraMimeEntry
-zimbraMimeIndexingEnabled: TRUE
-zimbraMimeHandlerClass: com.zimbra.cs.mime.handler.opensrc.AppOctetStreamHandler
-description: Unknown Binary Content
-
-dn: cn=application/msword,cn=mime,cn=config,cn=zimbra
-zimbraMimeType: application/msword
-cn: application/msword
-objectclass: zimbraMimeEntry
-zimbraMimeIndexingEnabled: TRUE
-zimbraMimeHandlerClass: com.zimbra.cs.mime.handler.opensrc.MSWordHandler
-zimbraMimeFileExtension: doc
-zimbraMimeFileExtension: word
-description: Microsoft Word Document
-
-dn: cn=application/pdf,cn=mime,cn=config,cn=zimbra
-zimbraMimeType: application/pdf
-cn: application/pdf
-objectclass: zimbraMimeEntry
-zimbraMimeIndexingEnabled: TRUE
-zimbraMimeHandlerClass: com.zimbra.cs.mime.handler.opensrc.PDFHandler
-zimbraMimeFileExtension: pdf
-description: Adobe PDF Document
-
-dn: cn=application/postscript,cn=mime,cn=config,cn=zimbra
-zimbraMimeType: application/postscript
-cn: application/postscript
-objectclass: zimbraMimeEntry
-zimbraMimeIndexingEnabled: TRUE
-zimbraMimeFileExtension: ps
-zimbraMimeFileExtension: eps
-description: Adobe Postscript Document
-
-dn: cn=application/vnd.ms-excel,cn=mime,cn=config,cn=zimbra
-zimbraMimeType: application/vnd.ms-excel
-cn: application/vnd.ms-excel
-objectclass: zimbraMimeEntry
-zimbraMimeIndexingEnabled: TRUE
-zimbraMimeFileExtension: xls
-description: Microsoft Excel Document
-
-dn: cn=application/vnd.ms-powerpoint,cn=mime,cn=config,cn=zimbra
-zimbraMimeType: application/vnd.ms-powerpoint
-cn: application/vnd.ms-powerpoint
-objectclass: zimbraMimeEntry
-zimbraMimeIndexingEnabled: TRUE
-zimbraMimeFileExtension: ppt
-description: Microsoft PowerPoint Document
-
-dn: cn=application/x-zip-compressed,cn=mime,cn=config,cn=zimbra
-zimbraMimeType: application/x-zip-compressed
-cn: application/x-zip-compressed
-objectclass: zimbraMimeEntry
-zimbraMimeIndexingEnabled: FALSE
-zimbraMimeFileExtension: zip
-description: Zip Archive
-
 dn: cn=message/rfc822,cn=mime,cn=config,cn=zimbra
 zimbraMimeType: message/rfc822
 cn: message/rfc822
@@ -78,7 +18,7 @@ zimbraMimeType: text/html
 cn: text/html
 objectclass: zimbraMimeEntry
 zimbraMimeIndexingEnabled: TRUE
-zimbraMimeHandlerClass: com.zimbra.cs.mime.handler.opensrc.TextHtmlHandler
+zimbraMimeHandlerClass: com.zimbra.cs.mime.handler.TextHtmlHandler
 zimbraMimeFileExtension: html
 zimbraMimeFileExtension: htm
 description: HTML Document
