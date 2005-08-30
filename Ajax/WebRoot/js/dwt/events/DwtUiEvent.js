@@ -182,11 +182,12 @@ function(ev) {
 	if (ev.offsetX != null) {
 		this.elementX = ev.offsetX;
 		this.elementY = ev.offsetY;
-	} else if (ev.pageX != null) {
-		var p = (this.dwtObj != null) 
-		? Dwt.toWindow(this.dwtObj.getHtmlElement(), 0, 0) : new DwtPoint(0,0);
-		this.elementX = (ev.pageX - p.x >= 0) ? ev.pageX - p.x : 0;
-		this.elementY = (ev.pageY - p.y >= 0) ? ev.pageY - p.y : 0;
+	} else if (ev.layerX != null) {
+		this.elementX = ev.layerX;
+		this.elementY = ev.layerY;
+	} else { // fail hard for others
+		this.elementX = Dwt.DEFAULT;
+		this.elementY = Dwt.DEFAULT;
 	}
 	return ev;
 }
