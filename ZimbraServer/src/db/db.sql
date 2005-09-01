@@ -48,6 +48,7 @@ GRANT ALL ON *.* TO 'root'@'localhost.localdomain' WITH GRANT OPTION;
 # list of known volumes
 CREATE TABLE volume (
    id                 INTEGER UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+   type               TINYINT NOT NULL,   # 1 = primary msg, 2 = secondary msg, 10 = index
    name               VARCHAR(255) NOT NULL,
    path               TEXT NOT NULL,
    file_bits          SMALLINT NOT NULL,
@@ -59,15 +60,24 @@ CREATE TABLE volume (
 # This table has only one row.  It points to message and index volumes
 # to use for newly provisioned mailboxes.
 CREATE TABLE current_volumes (
-   message_volume_id  INTEGER UNSIGNED NOT NULL,
-   index_volume_id    INTEGER UNSIGNED NOT NULL,
-   next_mailbox_id    INTEGER UNSIGNED NOT NULL,
+   message_volume_id           INTEGER UNSIGNED NOT NULL,
+   secondary_message_volume_id INTEGER UNSIGNED,
+   index_volume_id             INTEGER UNSIGNED NOT NULL,
+   next_mailbox_id             INTEGER UNSIGNED NOT NULL,
 
    INDEX i_message_volume_id (message_volume_id),
+   INDEX i_secondary_message_volume_id (secondary_message_volume_id),
    INDEX i_index_volume_id (index_volume_id),
 
-   CONSTRAINT fk_current_volumes_message_volume_id FOREIGN KEY (message_volume_id) REFERENCES volume(id),
-   CONSTRAINT fk_current_volumes_index_volume_id FOREIGN KEY (index_volume_id)     REFERENCES volume(id)
+   CONSTRAINT fk_current_volumes_message_volume_id
+              FOREIGN KEY (message_volume_id)
+              REFERENCES volume(id),
+   CONSTRAINT fk_current_volumes_secondary_message_volume_id
+              FOREIGN KEY (secondary_message_volume_id)
+              REFERENCES volume(id),
+   CONSTRAINT fk_current_volumes_index_volume_id
+              FOREIGN KEY (index_volume_id)
+              REFERENCES volume(id)
 ) ENGINE = InnoDB;
 
 INSERT INTO volume (id, name, path, file_bits, file_group_bits, mailbox_bits, mailbox_group_bits)

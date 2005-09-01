@@ -35,7 +35,7 @@ my $DATABASE = "zimbra";
 my $ZIMBRA_HOME = $ENV{ZIMBRA_HOME} || '/opt/zimbra';
 my $ZMLOCALCONFIG = "$ZIMBRA_HOME/bin/zmlocalconfig";
 
-if (-f $ZMLOCALCONFIG) {
+if ($^O !~ /MSWin/i) {
     $DB_PASSWORD = `$ZMLOCALCONFIG -s -m nokey zimbra_mysql_password`;
     chomp $DB_PASSWORD;
     $DB_USER = `$ZMLOCALCONFIG -m nokey zimbra_mysql_user`;
