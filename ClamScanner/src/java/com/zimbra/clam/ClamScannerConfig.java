@@ -23,7 +23,7 @@
  * ***** END LICENSE BLOCK *****
  */
 
-package com.zimbra.cs.scan;
+package com.zimbra.clam;
 
 import com.zimbra.cs.account.Config;
 import com.zimbra.cs.account.Provisioning;
