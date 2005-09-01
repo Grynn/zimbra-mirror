@@ -396,7 +396,7 @@ DwtBorder.registerBorder(
 			"<div id='<!--$id-->_body' class='appt_body appt<!--$newState--><!--$color-->_body'>",
 				"<table style='width:100%;height:100%'cellspacing=0 cellpadding=2>",
 				"<tr class=appt<!--$newState--><!--$color-->_header>",
-					"<td class=appt_time><!--$starttime--></td>",
+					"<td class=appt_time id='<!--$id-->_st'><!--$starttime--></td>",
 					"<td class=appt_status-<!--$statusKey--> style='text-align:right'><!--$status--></td>",
 //					"<td class=appt<!--$newState-->_tag><!--$tag--></td>",
 				"</tr>",
@@ -407,7 +407,7 @@ DwtBorder.registerBorder(
 						"<!--$location-->",
 					"</td>",
 				"<tr>",
-					"<td colspan=2 class=appt_end_time><!--$endtime--></td>",
+					"<td colspan=2 class=appt_end_time id='<!--$id-->_et'><!--$endtime--></td>",
 				"</tr>",
 				"</table>",
 			"</div>"
