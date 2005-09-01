@@ -364,6 +364,7 @@ function(str) {
 // then finally takes replaces newlines with <br>'s
 AjxStringUtil.nl2br = 
 function(str) {
+	if (!str) return "";
 	return str.replace(/^ /mg, "&nbsp;").replace(/\t/g, "<pre style='display:inline;'>\t</pre>").replace(/\n/g, "<br>");
 }
 
