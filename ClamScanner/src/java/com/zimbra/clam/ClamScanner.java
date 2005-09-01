@@ -40,7 +40,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.zimbra.cs.extension.ZimbraExtension;
-import com.zimbra.cs.scan.UploadScanner;
+import com.zimbra.cs.service.mail.UploadScanner;
 import com.zimbra.cs.service.ServiceException;
 import com.zimbra.cs.tcpserver.TcpServerInputStream;
 import com.zimbra.cs.util.ByteUtil;
