@@ -347,7 +347,7 @@ function(str, includeSpaces) {
 * @param str	the string to encode
 */
 
-AjxStringUtil.SPACE_ENCODE_MAP = { ' ' : ' &nbsp;', '>' : '&gt;', '<' : '&lt;', '&' : '&amp;' , '\n': '<br>'};
+AjxStringUtil.SPACE_ENCODE_MAP = { ' ' : '&nbsp;', '>' : '&gt;', '<' : '&lt;', '&' : '&amp;' , '\n': '<br>'};
 
 AjxStringUtil.htmlEncodeSpace =
 function(str) {
