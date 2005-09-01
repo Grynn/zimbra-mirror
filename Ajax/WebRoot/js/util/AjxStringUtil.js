@@ -360,6 +360,13 @@ function(str) {
 	}
 }
 
+// this function makes sure a leading space is preservered, takes care of tabs, 
+// then finally takes replaces newlines with <br>'s
+AjxStringUtil.nl2br = 
+function(str) {
+	return str.replace(/^ /mg, "&nbsp;").replace(/\t/g, "<pre style='display:inline;'>\t</pre>").replace(/\n/g, "<br>");
+}
+
 AjxStringUtil.xmlAttrEncode =
 function(str) {
 	return str.replace(/"/g, '&quot;');
