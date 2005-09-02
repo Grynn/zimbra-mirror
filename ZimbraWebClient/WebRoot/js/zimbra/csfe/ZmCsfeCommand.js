@@ -80,25 +80,33 @@ function(id) {
 }
 
 ZmCsfeCommand.invoke =
-function(soapDoc, noAuthTokenRequired, serverUri, targetServer, useXml) {
+function(soapDoc, noAuthTokenRequired, serverUri, targetServer, useXml, noSession, changeToken) {
+	var hdr = soapDoc.createHeaderElement();
+	var context = soapDoc.set("context", null, hdr);
+	context.setAttribute("xmlns", "urn:zimbra");
+	if (noSession)
+		soapDoc.set("nosession", null, context);
+	var sessionId = ZmCsfeCommand.getSessionId();
+	if (sessionId)
+		soapDoc.set("sessionId", sessionId, context);
+	if (targetServer)
+		soapDoc.set("targetServer", targetServer, context);
+	if (changeToken) {
+		var ct = soapDoc.set("change", null, context);
+		ct.setAttribute("token", changeToken);
+		ct.setAttribute("type", "new");
+	}
+	
 	// See if we have an auth token, if not, then mock up and need to authenticate or just have no auth cookie
 	if (!noAuthTokenRequired) {
 		var authToken = ZmCsfeCommand.getAuthToken();
 		if (!authToken)
 			throw new ZmCsfeException("AuthToken required", ZmCsfeException.NO_AUTH_TOKEN, "ZmCsfeCommand.invoke");
-		var sessionId = ZmCsfeCommand.getSessionId();
-		var hdr = soapDoc.createHeaderElement();
-		var ctxt = soapDoc.set("context", null, hdr);
-		ctxt.setAttribute("xmlns", "urn:zimbra");
-		soapDoc.set("authToken", authToken, ctxt);
-		if (sessionId)
-			soapDoc.set("sessionId", sessionId, ctxt);
-		if (targetServer)
-			soapDoc.set("targetServer", targetServer, ctxt);
+		soapDoc.set("authToken", authToken, context);
 	}
 	
 	if (!useXml) {
-		var js = soapDoc.set("format", null, ctxt);
+		var js = soapDoc.set("format", null, context);
 		js.setAttribute("type", "js");
 	}
 
