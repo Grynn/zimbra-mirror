@@ -75,10 +75,13 @@ public class ClamScanner extends UploadScanner implements ZimbraExtension {
         	if (!mConfig.getEnabled()) {
         		mLog.info("attachment scan is disabled");
         		mInitialized = true;
+        		return;
         	}
+        	
         	setURL(mConfig.getURL());
-        	mInitialized = true;
         	mLog.info("attachment scan enabled url=" + mConfig.getURL());
+        	
+        	UploadScanner.registerScanner(this);
         } catch (ServiceException e) {
         	mLog.error("error creating scanner", e);
         } catch (MalformedURLException e) {
@@ -88,6 +91,7 @@ public class ClamScanner extends UploadScanner implements ZimbraExtension {
 
 	public void destroy() {
 		mInitialized = false;
+		UploadScanner.unregisterScanner(this);
 	}
 
     public void setURL(String urlArg) throws MalformedURLException {
