@@ -57,9 +57,11 @@ function() {
 DwtToolTip.prototype.setContent =
 function(content) {
 	if (content) {
-		var divContent = DwtBorder.getBorderStartHtml("hover") + 
+		var borderStyle = AjxEnv.isIE ? "hover_IE" : "hover";
+		var substitutions = { id: "tooltip" };
+		var divContent = DwtBorder.getBorderStartHtml(borderStyle, substitutions) + 
 							content + 
-						 DwtBorder.getBorderEndHtml("hover");
+						 DwtBorder.getBorderEndHtml(borderStyle, substitutions);
 		this._div.innerHTML = divContent;
 	}		
 	this._content = content;
@@ -198,6 +200,13 @@ function(x, y) {
 		}
 		//DBG.println("position: &lt;"+px+","+py+">");
 
+		// make sure popup is wide enough for tip graphic
+		if (pw - blw - brw < tw) {
+			var contentEl = document.getElementById("tooltip_contents");
+			contentEl.width = tw; // IE
+			contentEl.style.width = String(tw)+"px"; // everyone else
+		}
+		
 		// adjust popup x-location
 		if (px < WINDOW_GUTTER) {
 			px = WINDOW_GUTTER;
@@ -210,11 +219,11 @@ function(x, y) {
 		// adjust tip x-location
 		var tx = ex - px - tw / 2;
 		//DBG.println("tip: &lt;"+tx+","+ty+">");
-		if (tx < blw) {
-			tx = blw;
-		}
 		if (tx + tw > pw - brw) {
 			tx = pw - brw - tw;
+		}
+		if (tx < blw) {
+			tx = blw;
 		}
 		//DBG.println("tip: &lt;"+tx+","+ty+">");
 
