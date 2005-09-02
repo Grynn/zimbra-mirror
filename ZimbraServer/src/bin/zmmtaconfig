@@ -745,6 +745,6 @@ while (1) {
 	compareKeys();
 	stopStartServers();
 	print STDERR "Sleeping\n";
-	sleep 120;
+	sleep 60;
 	$firstrun = 0;
 }
