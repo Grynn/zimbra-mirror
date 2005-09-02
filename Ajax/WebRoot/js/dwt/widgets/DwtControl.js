@@ -508,7 +508,8 @@ function() {
 	return this._toolTipContent;
 }
 
-DwtControl.prototype.setToolTipContent = function(text) {
+DwtControl.prototype.setToolTipContent =
+function(text) {
 	if (this._disposed) return;
 
 	this._toolTipContent = text;
@@ -802,16 +803,10 @@ DwtControl._mouseOverGeneralHdlr = function (ev, eventName){
 		// Call the tooltip after the listeners to give them a 
 		// chance to change the tooltip text
 		if (obj._toolTipContent != null) {
-			/***
 			var shell = DwtShell.getShell(window);
 			var tooltip = shell.getToolTip();
 			tooltip.setContent(obj._toolTipContent);
 			tooltip.mouseOver(mouseEv.docX, mouseEv.docY);
-			/***/
-			var popper = DwtControl._tooltipPopper;
-			popper.setControl(obj);
-			popper.mouseOver(mouseEv.docX, mouseEv.docY);
-			/***/
 		}
 	}
 	mouseEv._stopPropagation = true;
@@ -829,14 +824,9 @@ function(ev) {
 		return false;
 		
 	if (obj._toolTipContent != null) {
-		/***
 		var shell = DwtShell.getShell(window);
 		var tooltip = shell.getToolTip();
 		tooltip.mouseDown();
-		/***/
-		var popper = DwtControl._tooltipPopper;
-		popper.mouseDown();
-		/***/
 	}
 	
 	// If we have a dragSource, then we need to start capturing mouse events
@@ -889,14 +879,9 @@ function(ev) {
 			&& Math.abs(obj._dragStartY - mouseEv.docY) < 
 			   DwtControl._DRAG_THRESHOLD)) {
 		if (obj._toolTipContent != null) {
-			/***
 			var shell = DwtShell.getShell(window);
 			var tooltip = shell.getToolTip();
 			tooltip.mouseMove(null, mouseEv.docX, mouseEv.docY);
-			/***/
-			var popper = DwtControl._tooltipPopper;
-			popper.mouseMove(null, mouseEv.docX, mouseEv.docY);
-			/***/
 		}
 		return DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEMOVE);
 	} else {
@@ -1061,14 +1046,9 @@ DwtControl._mouseOutGeneralHdlr = function (ev, eventName){
 	if (obj == null)
 		return false;
 	if (obj._toolTipContent != null) {
-		/***
 		var shell = DwtShell.getShell(window);
 		var tooltip = shell.getToolTip();
 		tooltip.mouseOut();
-		/***/
-		var popper = DwtControl._tooltipPopper;
-		popper.mouseOut();
-		/***/
 	}
 	return DwtControl._mouseEvent(ev, eventName);
 };
@@ -1129,122 +1109,3 @@ DwtControl.prototype.clearContent =
 function() {
 	this.getHtmlElement().innerHTML = "";
 }
-
-//
-// Tooltip popper
-//
-
-DwtControl._tooltipPopper = new Object;
-
-// Data
-
-DwtControl._tooltipPopper._popupAction = new AjxTimedAction();
-DwtControl._tooltipPopper._popupActionId = -1;
-
-DwtControl._tooltipPopper._popdownAction = new AjxTimedAction();
-DwtControl._tooltipPopper._popdownActionId = -1;
-
-DwtControl._tooltipPopper._control;
-
-// Public methods
-
-DwtControl._tooltipPopper.setControl = function(control) {
-	this._control = control;
-}
-DwtControl._tooltipPopper.getControl = function() {
-	return this._control;
-}
-
-DwtControl._tooltipPopper.mouseOver = function(x, y, delay) {
-	if (this._popdownActionId != -1) {
-		AjxTimedAction.cancelAction(this._popdownActionId);
-		this._popdownActionId = -1;
-	}
-	if (this._popupActionId != -1) {
-		AjxTimedAction.cancelAction(this._popupActionId);
-		this._popupActionId = -1;
-	}
-	// TODO
-	var shell = DwtShell.getShell(window);
-	var tooltip = shell.getToolTip();
-	if (Dwt.getZIndex(tooltip._div) == Dwt.Z_HIDDEN) {
-		var content = this._control.getToolTipContent();
-		if (content != null && this._popupActionId == -1) {
-			delay = (delay == null) ? DwtToolTip._TOOLTIP_DELAY : (delay > 0) ? delay : 0;
-			this._popupAction.params.removeAll();
-			this._popupAction.params.add(x);
-			this._popupAction.params.add(y);
-			this._popupAction.obj = this;
-		 	this._popupActionId = AjxTimedAction.scheduleAction(this._popupAction, delay);
-		}
-	}
-}
-
-DwtControl._tooltipPopper.mouseMove = function(delay, x, y) {
-	if (this._popupActionId != -1) {
-		AjxTimedAction.cancelAction(this._popupActionId);
-		this._popupAction.obj = this;
-		delay = (delay == null) ? DwtToolTip._TOOLTIP_DELAY : (delay > 0) ? delay : 0;
-		if (x) {
-			this._popupAction.params.removeAll();
-			this._popupAction.params.add(x);
-			this._popupAction.params.add(y);
-		}
-	 	this._popupActionId = AjxTimedAction.scheduleAction(this._popupAction, delay);
-	}
-}
-
-DwtControl._tooltipPopper.mouseDown = function() {
-	this._popdownToolTip();
-}
-
-DwtControl._tooltipPopper.mouseOut = function(delay) {
-	delay = delay || 0;
-	if (this._popdownActionId == -1) {
-		// TODO
-		var shell = DwtShell.getShell(window);
-		var tooltip = shell.getToolTip();
-		var content = this._control.getToolTipContent();
-		if (this._popupActionId != -1 || 
-			(content != null && (Dwt.getZIndex(tooltip._div) != Dwt.Z_HIDDEN))) {	
-			this._popdownAction.obj = this;
-			delay = (delay == null) ? 50 : delay;
-			if (delay > 0) {
-				this._popdownActionId = AjxTimedAction.scheduleAction(this._popdownAction, delay);
-			}
-			else 
-				this._popdownToolTip();
-		}
-	}
-}
-
-// Public functions
-
-DwtControl._tooltipPopper._popupToolTip = function(x, y) {
-	var popper = DwtControl._tooltipPopper;
-	var control = popper.getControl();
-	var content = control.getToolTipContent();
-	
-	var shell = DwtShell.getShell(window);
-	var tooltip = shell.getToolTip();
-	tooltip.setContent(content);
-	tooltip.popup(x, y);
-	
-	popper._popupActionId = -1;
-}
-DwtControl._tooltipPopper._popupAction.method = DwtControl._tooltipPopper._popupToolTip;
-
-DwtControl._tooltipPopper._popdownToolTip = function() {
-	var popper = DwtControl._tooltipPopper;
-	if (popper._popupActionId != -1) {
-		AjxTimedAction.cancelAction(popper._popupActionId);	
-		popper._popupActionId = -1;
-	}
-	
-	var shell = DwtShell.getShell(window);
-	var tooltip = shell.getToolTip();	
-	tooltip.popdown();
-	
-	popper._popdownActionId = -1;
-}
-DwtControl._tooltipPopper._popdownAction.method = DwtControl._tooltipPopper._popdownToolTip;

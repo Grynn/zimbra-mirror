@@ -442,28 +442,28 @@ DwtBorder.registerBorder(
 	"hover", 
 	{ 
 		start: AjxBuffer.concat(
-				"<div id='{$id}_tip_t' class='hover_tip_top Imghover_tip_top'></div>",
+				"<div id=tooltip_tip_t class='hover_tip_top Imghover_tip_top'></div>",
 				"<table class=hover_frame_table border=0 cellspacing=0 cellpadding=0>", 
 					"<tr>", 
-						"<td id='{$id}_border_tl' class=Imghover_TL></td>", 
-						"<td id='{$id}_border_tm' class=Imghover_T></td>", 
-						"<td id='{$id}_border_tr' class=Imghover_TR></td>", 
+						"<td id=tooltip_border_tl class=Imghover_TL></td>", 
+						"<td id=tooltip_border_tm class=Imghover_T></td>", 
+						"<td id=tooltip_border_tr class=Imghover_TR></td>", 
 					"</tr>", 
 					"<tr>",
-						"<td id='{$id}_border_ml' class='Imghover_L'></td>", 
-						"<td id='{$id}_border_mm' class=Imghover_BG><div id='{$id}_contents' class=hover_contents>"
+						"<td id=tooltip_border_ml class='Imghover_L'></td>", 
+						"<td id=tooltip_border_mm class=Imghover_BG><div class=hover_contents>"
 			),
 		end: AjxBuffer.concat(
 						"</div></td>", 
-						"<td id='{$id}_border_mr' class=Imghover_R></td>", 
+						"<td id=tooltip_border_mr class=Imghover_R></td>", 
 					"</tr>", 
 					"<tr>",
-						"<td id='{$id}_border_bl' class=Imghover_BL></div></td>", 
-						"<td id='{$id}_border_bm' class=Imghover_B></td>", 
-						"<td id='{$id}_border_br' class=Imghover_BR></div></td>", 
+						"<td id=tooltip_border_bl class=Imghover_BL></div></td>", 
+						"<td id=tooltip_border_bm class=Imghover_B></td>", 
+						"<td id=tooltip_border_br class=Imghover_BR></div></td>", 
 					"</tr>", 
 				"</table>",
-				"<div id='{$id}_tip_b' class='hover_tip_bottom Imghover_tip_bottom'></div>"
+				"<div id=tooltip_tip_b class='hover_tip_bottom Imghover_tip_bottom'></div>"
 			)
 	} 
 );
@@ -474,28 +474,28 @@ DwtBorder.registerBorder(
 	"hover_IE", 
 	{ 
 		start:	AjxBuffer.concat(
-				"<div id='{$id}_tip_t' class='hover_tip_top ImgIE_hover_tip_top'></div>",
+				"<div id=tooltip_tip_t class='hover_tip_top ImgIE_hover_tip_top'></div>",
 				"<table class=hover_frame border=0 cellspacing=0 cellpadding=0>", 
 					"<tr>", 
-						"<td id='{$id}_border_tl'><div class=ImgIE_hover_TL></div></td>", 
-						"<td id='{$id}_border_tm'><div class=ImgIE_hover_T style='width:100%'>&nbsp;</div></td>", 
-						"<td id='{$id}_border_tr'><div class=ImgIE_hover_TR></div></td>", 
+						"<td id=tooltip_border_tl><div class=ImgIE_hover_TL></div></td>", 
+						"<td id=tooltip_border_tm><div class=ImgIE_hover_T style='width:100%'>&nbsp;</div></td>", 
+						"<td id=tooltip_border_tr><div class=ImgIE_hover_TR></div></td>", 
 					"</tr>", 
 					"<tr>",
-						"<td id='{$id}_border_ml'><div class=ImgIE_hover_L style='height:100%'></div></td>", 
-						"<td id='{$id}_border_mm' class=ImgIE_hover_BG><div id='{$id}_contents' class=hover_contents>"
+						"<td id=tooltip_border_ml><div class=ImgIE_hover_L style='height:100%'></div></td>", 
+						"<td id=tooltip_border_mm class=ImgIE_hover_BG><div class=hover_contents>"
 			), 
 		end:	AjxBuffer.concat(
 					"</div></td>", 
-						"<td id='{$id}_border_mr'><div class=ImgIE_hover_R style='height:100%'></div></td>", 
+						"<td id=tooltip_border_mr><div class=ImgIE_hover_R style='height:100%'></div></td>", 
 					"</tr>", 
 					"<tr>",
-						"<td id='{$id}_border_bl'><div class=ImgIE_hover_BL></div></td>", 
-						"<td id='{$id}_border_bm'><div class=ImgIE_hover_B style='width:100%'>&nbsp;</div></td>", 
-						"<td id='{$id}_border_br'><div class=ImgIE_hover_BR></div></td>", 
+						"<td id=tooltip_border_bl><div class=ImgIE_hover_BL></div></td>", 
+						"<td id=tooltip_border_bm><div class=ImgIE_hover_B style='width:100%'>&nbsp;</div></td>", 
+						"<td id=tooltip_border_br><div class=ImgIE_hover_BR></div></td>", 
 					"</tr>", 
 				"</table>",
-				"<div id='{$id}_tip_b' class='hover_tip_bottom ImgIE_hover_tip_bottom'></div>"
+				"<div id=tooltip_tip_b class='hover_tip_bottom ImgIE_hover_tip_bottom'></div>"
 			)
 	} 
 );
