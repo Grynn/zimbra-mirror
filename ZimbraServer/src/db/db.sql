@@ -80,10 +80,10 @@ CREATE TABLE current_volumes (
               REFERENCES volume(id)
 ) ENGINE = InnoDB;
 
-INSERT INTO volume (id, name, path, file_bits, file_group_bits, mailbox_bits, mailbox_group_bits)
-  VALUES (1, 'message1', '/opt/zimbra/store', 12, 8, 12, 8);
-INSERT INTO volume (id, name, path, file_bits, file_group_bits, mailbox_bits, mailbox_group_bits)
-  VALUES (2, 'index1',   '/opt/zimbra/index', 12, 8, 12, 8);
+INSERT INTO volume (id, type, name, path, file_bits, file_group_bits, mailbox_bits, mailbox_group_bits)
+  VALUES (1, 1, 'message1', '/opt/zimbra/store', 12, 8, 12, 8);
+INSERT INTO volume (id, type, name, path, file_bits, file_group_bits, mailbox_bits, mailbox_group_bits)
+  VALUES (2, 10, 'index1',   '/opt/zimbra/index', 12, 8, 12, 8);
 
 INSERT INTO current_volumes (message_volume_id, index_volume_id, next_mailbox_id) VALUES (1, 2, 1);
 COMMIT;
