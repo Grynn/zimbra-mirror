@@ -31,6 +31,7 @@ AjxDateUtil.MONTH = 2;
 AjxDateUtil.WEEK = 3;
 AjxDateUtil.DAY = 4;
 
+AjxDateUtil.MSEC_PER_FIFTEEN_MINUTES = 900000;
 AjxDateUtil.MSEC_PER_HALF_HOUR = 1800000;
 AjxDateUtil.MSEC_PER_HOUR = 3600000;
 AjxDateUtil.MSEC_PER_DAY = 24 * AjxDateUtil.MSEC_PER_HOUR;
