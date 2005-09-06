@@ -410,6 +410,7 @@ DwtBorder.registerBorder(
 					"<td colspan=2 class=appt_end_time id='<!--$id-->_et'><!--$endtime--></td>",
 				"</tr>",
 				"</table>",
+//				"<div style='position:absolute; bottom:0; right:0;' class=appt_end_time id='<!--$id-->_et'><!--$endtime--></div>",				
 			"</div>"
 			),
 		end: "",
