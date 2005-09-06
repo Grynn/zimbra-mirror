@@ -26,7 +26,7 @@
 function ZmCsfeCommand() {
 }
 
-ZmCsfeCommand._COOKIE_NAME = "LS_AUTH_TOKEN";
+ZmCsfeCommand._COOKIE_NAME = "ZM_AUTH_TOKEN";
 
 // All the cache and context stuff is to support async calls in the future
 ZmCsfeCommand.serverUri = null;

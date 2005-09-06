@@ -63,7 +63,7 @@ ZaZimbraAdmin._LOGOFF_ID = 3;
 ZaZimbraAdmin._PDF_HELP_ID = 4;
 
 // do not change the name of the cookie! SoapServlet looks for it
-ZaZimbraAdmin._COOKIE_NAME = "LS_ADMIN_AUTH_TOKEN";
+ZaZimbraAdmin._COOKIE_NAME = "ZM_ADMIN_AUTH_TOKEN";
 	
 // Public methods
 

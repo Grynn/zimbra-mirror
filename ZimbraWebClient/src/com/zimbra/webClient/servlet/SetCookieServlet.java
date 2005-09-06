@@ -85,7 +85,7 @@ public class SetCookieServlet extends ZCServlet
                     }
                 }
 
-                Cookie c = new Cookie("LS_AUTH_TOKEN", authToken);
+                Cookie c = new Cookie("ZM_AUTH_TOKEN", authToken);
                 c.setPath("/");
                 c.setMaxAge(lifetime);                
                 resp.addCookie(c);
