@@ -75,8 +75,9 @@ function() {
 }
 
 ZmCsfeCommand.setSessionId =
-function(id) {
-	ZmCsfeCommand._sessionId = id;
+function(sessionId) {
+	var id = (sessionId instanceof Array) ? sessionId[0].id : sessionId;
+	ZmCsfeCommand._sessionId = parseInt(id);
 }
 
 ZmCsfeCommand.invoke =
@@ -87,8 +88,10 @@ function(soapDoc, noAuthTokenRequired, serverUri, targetServer, useXml, noSessio
 	if (noSession)
 		soapDoc.set("nosession", null, context);
 	var sessionId = ZmCsfeCommand.getSessionId();
-	if (sessionId)
-		soapDoc.set("sessionId", sessionId, context);
+	if (sessionId) {
+		var si = soapDoc.set("sessionId", null, context);
+		si.setAttribute("id", sessionId);
+	}
 	if (targetServer)
 		soapDoc.set("targetServer", targetServer, context);
 	if (changeToken) {
