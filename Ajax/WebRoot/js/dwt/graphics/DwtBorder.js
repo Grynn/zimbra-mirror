@@ -418,6 +418,31 @@ DwtBorder.registerBorder(
 	}
 );
 
+
+DwtBorder.registerBorder(
+	"calendar_appt_bottom_only",
+	{	
+		start:AjxBuffer.concat(	
+			"<div id='<!--$id-->_body' class='appt_body appt<!--$newState--><!--$color-->_body'>",
+				"<table style='width:100%;height:100%'cellspacing=0 cellpadding=2>",
+				"<tr valign=top>",
+					"<td colspan=2 class=appt<!--$newState-->_name style='height:100%'>",
+						"<!--$name-->",
+						"<BR>",
+						"<!--$location-->",
+					"</td>",
+				"<tr>",
+					"<td colspan=2 class=appt_end_time id='<!--$id-->_et'><!--$endtime--></td>",
+				"</tr>",
+				"</table>",
+			"</div>"
+			),
+		end: "",
+		width:10,	//NOT ACCURATE
+		height:7
+	}
+);
+
 DwtBorder.registerBorder(
 	"calendar_appt_30",
 	{	
