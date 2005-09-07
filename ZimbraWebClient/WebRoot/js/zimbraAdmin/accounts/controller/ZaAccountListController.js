@@ -574,12 +574,12 @@ function (item) {
 	if(this._chngPwdDlg) {
 		try {
 			if(!this._chngPwdDlg.getPassword() || this._chngPwdDlg.getPassword().length < 1) {
-				this._chngPwdDlg.popdown();	//close the dialog
+				//this._chngPwdDlg.popdown();	//close the dialog
 				this._errorMsgDlg = new ZaMsgDialog(this._appView.shell, null, [DwtDialog.OK_BUTTON], this._app);							
 				this._errorMsgDlg.setMessage(ZaMsg.ERROR_PASSWORD_REQUIRED, null, DwtMessageDialog.CRITICAL_STYLE);
 				this._errorMsgDlg.popup();				
 			} else if(this._chngPwdDlg.getPassword() != this._chngPwdDlg.getConfirmPassword()) {
-				this._chngPwdDlg.popdown();	//close the dialog
+				//this._chngPwdDlg.popdown();	//close the dialog
 				this._errorMsgDlg = new ZaMsgDialog(this._appView.shell, null, [DwtDialog.OK_BUTTON], this._app);							
 				this._errorMsgDlg.setMessage(ZaMsg.ERROR_PASSWORD_MISMATCH, null, DwtMessageDialog.CRITICAL_STYLE);
 				this._errorMsgDlg.popup();				
@@ -659,7 +659,7 @@ function (item) {
 			}
 
 		} catch (ex) {
-			this._chngPwdDlg.popdown();
+			//this._chngPwdDlg.popdown();
 			if(ex.code == ZmCsfeException.INVALID_PASSWORD ) {
 				var szMsg = ZaMsg.ERROR_PASSWORD_INVALID;
 				if(ex.detail) {
