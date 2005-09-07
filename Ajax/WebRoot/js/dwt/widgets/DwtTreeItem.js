@@ -318,9 +318,10 @@ function(index) {
     if (this._textParam)
 		this._textCell.innerHTML = this._text = this._textParam;
 
-    this._expanded = false;
-    this._selected = false;
-    this._actioned = false;
+    this._expanded = this._selected = this._actioned = false;
+    this._gotMouseDownLeft = this._gotMouseDownRight = false;
+    this.addListener(DwtEvent.ONMOUSEDOWN, new AjxListener(this, this._mouseDownListener));
+    this.addListener(DwtEvent.ONMOUSEOUT, new AjxListener(this, this._mouseOutListener));
     this.addListener(DwtEvent.ONMOUSEUP, new AjxListener(this, this._mouseUpListener));
     this.addListener(DwtEvent.ONDBLCLICK, new AjxListener(this, this._doubleClickListener));  
 
@@ -530,6 +531,24 @@ function(actioned) {
 	}
 }
 
+DwtTreeItem.prototype._mouseDownListener = 
+function(ev) {
+	if (ev.target == this._childDiv) return;
+
+	if (ev.button == DwtMouseEvent.LEFT && this._selectionEnabled)
+		this._gotMouseDownLeft = true;
+	else if (ev.button == DwtMouseEvent.RIGHT && this._actionEnabled)
+		this._gotMouseDownRight = true;
+}
+
+DwtTreeItem.prototype._mouseOutListener = 
+function(ev) {
+	if (ev.target == this._childDiv) return;
+
+	this._gotMouseDownLeft = false;
+	this._gotMouseDownRight = false;
+}
+
 DwtTreeItem.prototype._mouseUpListener = 
 function(ev) {
 	// Ignore any mouse events in the child div i.e. the div which 
@@ -537,14 +556,13 @@ function(ev) {
 	// reported when clicking in the padding area (note all children
 	// are indented using padding-left style); however, mozilla
 	// reports mouse events that happen in the padding area
-	if (ev.target == this._childDiv) 
-		return;
-	if (ev.button == DwtMouseEvent.LEFT && this._selectionEnabled)
+	if (ev.target == this._childDiv) return;
+
+	if (ev.button == DwtMouseEvent.LEFT && this._gotMouseDownLeft)
 		this._tree._itemClicked(this, ev);
-	else if (ev.button == DwtMouseEvent.RIGHT && this._actionEnabled)
+	else if (ev.button == DwtMouseEvent.RIGHT && this._gotMouseDownRight)
 		this._tree._itemActioned(this, ev);
 }
-
 
 DwtTreeItem.prototype._doubleClickListener =
 function(ev) {
