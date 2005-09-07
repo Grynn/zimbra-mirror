@@ -38,12 +38,25 @@ function ZaNewAccountXWizard (parent, app) {
 	];
 	this.initForm(ZaAccount.myXModel,this.getMyXForm());	
 	this._localXForm.setController(this._app);	
+	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaNewAccountXWizard.prototype.handleXFormChange));
+	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(this, ZaNewAccountXWizard.prototype.handleXFormChange));	
 }
+
 
 ZaNewAccountXWizard.prototype = new ZaXWizardDialog;
 ZaNewAccountXWizard.prototype.constructor = ZaNewAccountXWizard;
 
+ZaNewAccountXWizard.prototype.handleXFormChange = 
+function () {
+	if(this._localXForm.hasErrors()) {
+		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+	} else {
+		if(this._containedObject.attrs[ZaAccount.A_lastName] && this._containedObject[ZaAccount.A_name])
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+	}
+}
 
+/*
 ZaNewAccountXWizard.onNameFieldChanged = 
 function (value, event, form) {
 	if(value && value.length > 0) {
@@ -53,7 +66,7 @@ function (value, event, form) {
 	}
 	this.setInstanceValue(value);
 	return value;
-}
+}*/
 
 /**
 * Overwritten methods that control wizard's flow (open, go next,go previous, finish)
@@ -184,7 +197,7 @@ ZaNewAccountXWizard.prototype.getMyXForm = function() {
 				items:[
 					{type:_CASE_, numCols:1, relevant:"instance[ZaModel.currentStep] == 1", align:_LEFT_, valign:_TOP_, 
 						items:[
-							{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName+":", labelLocation:_LEFT_, onChange:ZaNewAccountXWizard.onNameFieldChanged},
+							{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName+":", labelLocation:_LEFT_},
 							{ref:ZaAccount.A_COSId, type:_OSELECT1_, msgName:ZaMsg.NAD_ClassOfService+":",label:ZaMsg.NAD_ClassOfService+":", labelLocation:_LEFT_, choices:this._app.getCosListChoices(), onChange:ZaNewAccountXWizard.onCOSChanged},
 							{ref:ZaAccount.A_password, type:_SECRET_, msgName:ZaMsg.NAD_Password,label:ZaMsg.NAD_Password+":", labelLocation:_LEFT_, cssClass:"admin_xform_name_input"},														
 							{ref:ZaAccount.A2_confirmPassword, type:_SECRET_, msgName:ZaMsg.NAD_ConfirmPassword,label:ZaMsg.NAD_ConfirmPassword+":", labelLocation:_LEFT_, cssClass:"admin_xform_name_input"},
