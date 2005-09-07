@@ -438,7 +438,6 @@ function(ev) {
 DwtButton.prototype._setMouseOutClassName =
 function() {
     this.setClassName((this._toggled) ? this._toggledClassName : this._origClassName);
-    this.isTriggered = false;
 }
 
 // Button no longer activated/triggered.
@@ -448,6 +447,7 @@ function(ev) {
         this.setImage(this._enabledImageInfo);
     }
 	this._setMouseOutClassName();
+    this.isTriggered = false;
 
     if (this._dropDownCell){
 		AjxImg.setImage(this._dropDownCell, this._dropDownImg);
