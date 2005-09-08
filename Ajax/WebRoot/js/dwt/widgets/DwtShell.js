@@ -31,7 +31,7 @@
  *              alert that is presented to the user. If this method returns null, then no alert is popped up
  *              this parameter may be null
  */
-function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell) {
+function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell, existingElementId) {
 
 	if (window._dwtShell != null) 
 		throw new DwtException("DwtShell already exists for window", DwtException.INVALID_OP, "DwtShell");
@@ -54,24 +54,30 @@ function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell) {
 	if (docBodyScrollable != null && !docBodyScrollable)
 		window.document.body.style.overflow = "hidden";
 
-    var htmlElement = window.document.createElement("div");
-    this._htmlElId = htmlElement.id = Dwt.getNextId();
-    htmlElement.className = className;
-    htmlElement.style.width = "100%";
-    htmlElement.style.height = "100%";
-	//htmlElement.style.overflow = "hidden";
-	if (htmlElement.style.overflow) htmlElement.style.overflow = null;
+	if (existingElementId == null) {
+	    var htmlElement = window.document.createElement("div");
+    	this._htmlElId = htmlElement.id = Dwt.getNextId();
 
-	// if there is a user shell (body content), move it below this shell
-	// into a container that's absolutely positioned
-	if (userShell)
-		window.document.body.removeChild(userShell);
-    window.document.body.appendChild(htmlElement);
-    if (userShell) {
-    	var userShellContainer = new DwtControl(this, null, Dwt.ABSOLUTE_STYLE);
-    	userShellContainer.getHtmlElement().appendChild(userShell);
-    	userShellContainer.setSize(Dwt.DEFAULT, "100%");
-    	userShellContainer.zShow(true);
+		htmlElement.className = className;
+		htmlElement.style.width = "100%";
+		htmlElement.style.height = "100%";
+		//htmlElement.style.overflow = "hidden";
+		if (htmlElement.style.overflow) htmlElement.style.overflow = null;
+	
+		// if there is a user shell (body content), move it below this shell
+		// into a container that's absolutely positioned
+		if (userShell)
+			window.document.body.removeChild(userShell);
+		window.document.body.appendChild(htmlElement);
+		if (userShell) {
+			var userShellContainer = new DwtControl(this, null, Dwt.ABSOLUTE_STYLE);
+			userShellContainer.getHtmlElement().appendChild(userShell);
+			userShellContainer.setSize(Dwt.DEFAULT, "100%");
+			userShellContainer.zShow(true);
+		}
+    } else {
+    	var htmlElement = window.document.getElementById(existingElementId);
+		this._htmlElId = existingElementId;
     }
 	Dwt.associateElementWithObject(htmlElement, this);
     this.shell = this;
