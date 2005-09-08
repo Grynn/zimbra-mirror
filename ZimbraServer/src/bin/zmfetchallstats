@@ -39,8 +39,8 @@ use Getopt::Std;
 use POSIX ":sys_wait_h";
 use LWP::UserAgent;
 
-use XmlElement;
-use XmlDoc;
+use Zimbra::SOAP::XmlElement;
+use Zimbra::SOAP::XmlDoc;
 use Soap;
 
 use Time::Local;
@@ -95,7 +95,7 @@ sub get_auth_token {
 
 	my $url = "https://$host:7071/service/admin/soap/";
 
-	my $d = new XmlDoc;
+	my $d = new Zimbra::SOAP::XmlDoc;
 	$d->start('AuthRequest', $ADMINNS);
 	$d->add('name', undef, { by => "name"}, "$user");
 	$d->add('password', undef, undef, "$pass");
@@ -123,7 +123,7 @@ sub get_host_list {
 
 	my $context = $SOAP->zimbraContext($authToken, "");
 
-	my $d = new XmlDoc;
+	my $d = new Zimbra::SOAP::XmlDoc;
 	$d->start('GetAllServersRequest', $ADMINNS);
 	$d->end();
 
@@ -159,7 +159,7 @@ sub get_stats_from_host {
 
 	my $url = "https://$host:7071/service/admin/soap/";
 
-	my $d = new XmlDoc;
+	my $d = new Zimbra::SOAP::XmlDoc;
 	$d->start('GetServerAggregateStatsRequest', $ADMINNS);
 	$d->add('statName', undef, undef, "$GlobalOpts{S}");
 	$d->add('startTime', undef, undef, "$START");

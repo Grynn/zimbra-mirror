@@ -39,8 +39,8 @@ use Getopt::Std;
 use POSIX ":sys_wait_h";
 use LWP::UserAgent;
 
-use XmlElement;
-use XmlDoc;
+use Zimbra::SOAP::XmlElement;
+use Zimbra::SOAP::XmlDoc;
 use Soap;
 
 use Time::Local;
@@ -95,7 +95,7 @@ if ( ! $GlobalOpts{H} || $GlobalOpts{H} eq "localhost" ) {
 my $url = "https://$GlobalOpts{H}:7071/service/admin/soap/";
 
 my $SOAP = $Soap::Soap12;
-my $d = new XmlDoc;
+my $d = new Zimbra::SOAP::XmlDoc;
 $d->start('AuthRequest', $ADMINNS);
 $d->add('name', undef, { by => "name"}, "$GlobalOpts{u}");
 $d->add('password', undef, undef, "$GlobalOpts{p}");
@@ -120,7 +120,7 @@ my $authToken = $authResponse->find_child('authToken')->content;
 
 my $context = $SOAP->zimbraContext($authToken, "");
 
-$d = new XmlDoc;
+$d = new Zimbra::SOAP::XmlDoc;
 $d->start('GetServerAggregateStatsRequest', $ADMINNS);
 $d->add('statName', undef, undef, "$GlobalOpts{S}");
 $d->add('startTime', undef, undef, "$START");

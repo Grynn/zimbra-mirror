@@ -39,8 +39,8 @@ use Getopt::Std;
 use POSIX ":sys_wait_h";
 use LWP::UserAgent;
 
-use XmlElement;
-use XmlDoc;
+use Zimbra::SOAP::XmlElement;
+use Zimbra::SOAP::XmlDoc;
 use Soap;
 
 use Time::Local;
@@ -68,7 +68,7 @@ sub get_auth_token {
 
 	my $url = "https://$host:7071/service/admin/soap/";
 
-	my $d = new XmlDoc;
+	my $d = new Zimbra::SOAP::XmlDoc;
 	$d->start('AuthRequest', $ADMINNS);
 	$d->add('name', undef, { by => "name"}, "$user");
 	$d->add('password', undef, undef, "$pass");
@@ -102,7 +102,7 @@ sub purgeMessages {
 
 	my $url = "https://$host:7071/service/admin/soap/";
 
-	my $d = new XmlDoc;
+	my $d = new Zimbra::SOAP::XmlDoc;
 	$d->start('PurgeMessagesRequest', $ADMINNS);
 	$d->end();
 
