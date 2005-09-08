@@ -47,7 +47,7 @@ use Time::Local;
 
 my $ACCTNS = "urn:zimbraAccount";
 my $MAILNS = "urn:zimbraMail";
-my $ADMINNS = "urn:Zimbra::Admin";
+my $ADMINNS = "urn:zimbraAdmin";
 
 our %GlobalOpts;
 
