@@ -14,13 +14,13 @@
 	<!-- HTTPBEGIN -->
     <Connector port="7070" proxyPort="80"
         enableLookups="false" redirectPort="443"
-        maxThreads="50" minSpareThreads="50" maxSpareThreads="50"/>
+        maxThreads="100" minSpareThreads="100" maxSpareThreads="100"/>
 	<!-- HTTPEND -->
     <!-- user services connector, SSL -->
 	<!-- HTTPSBEGIN 
     <Connector port="7443" proxyPort="443"
         enableLookups="false"
-        maxThreads="50" minSpareThreads="50" maxSpareThreads="50"
+        maxThreads="100" minSpareThreads="100" maxSpareThreads="100"
         scheme="https" secure="true"
         clientAuth="false" sslProtocol="TLS"
         keystoreFile="conf/keystore" keystorePass="zimbra"/>
@@ -28,7 +28,7 @@
     <!-- admin services connector; requires SSL -->
     <Connector port="7071"
         enableLookups="false"
-        maxThreads="10" minSpareThreads="10" maxSpareThreads="10"
+        maxThreads="50" minSpareThreads="50" maxSpareThreads="50"
         scheme="https" secure="true"
         clientAuth="false" sslProtocol="TLS"
         keystoreFile="conf/keystore" keystorePass="zimbra"/>
