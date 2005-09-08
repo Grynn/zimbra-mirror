@@ -238,6 +238,7 @@ objectIdentifier zimbraSpamIsSpamAccount ZimbraAttrType:244
 objectIdentifier zimbraSpamIsNotSpamAccount ZimbraAttrType:245
 objectIdentifier zimbraMailTransport ZimbraAttrType:247
 objectIdentifier zimbraSmtpSendPartial ZimbraAttrType:249
+objectIdentifier zimbraLogHostname ZimbraAttrType:250
 
 
 #################################################################
@@ -774,6 +775,12 @@ attributetype ( zimbraLmtpNumThreads
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )	
+
+attributetype ( zimbraLogHostname
+	NAME 'zimbraLogHostname'
+	DESC 'the destination for syslog messages'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
 
 attributetype ( zimbraMailAddress
 	NAME 'zimbraMailAddress'
@@ -2082,6 +2089,7 @@ objectclass ( zimbraGlobalConfig
 		zimbraLastLogonTimestampFrequency $
 		zimbraLmtpNumThreads $
 		zimbraLmtpBindPort $
+		zimbraLogHostname $
 		zimbraMtaAuthEnabled $
 		zimbraMtaBlockedExtension $
 		zimbraMtaCommonBlockedExtension $
