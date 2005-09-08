@@ -41,7 +41,7 @@ use LWP::UserAgent;
 
 use Zimbra::SOAP::XmlElement;
 use Zimbra::SOAP::XmlDoc;
-use Soap;
+use Zimbra::SOAP::Soap;
 
 use Time::Local;
 
