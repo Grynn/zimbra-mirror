@@ -40,6 +40,11 @@ function DwtToolTip(shell, className, dialog) {
 	this._popupActionId = -1;
 	this._popdownActionId = -1;
 	Dwt.setZIndex(this._div, Dwt.Z_HIDDEN);
+	
+	var borderStyle = AjxEnv.isIE ? "hover_IE" : "hover";
+	var substitutions = { id: "tooltip" };
+	this._borderStart = DwtBorder.getBorderStartHtml(borderStyle, substitutions);
+	this._borderEnd = DwtBorder.getBorderEndHtml(borderStyle, substitutions);	
 }
 
 DwtToolTip._TOOLTIP_DELAY = 750;
@@ -56,14 +61,6 @@ function() {
 
 DwtToolTip.prototype.setContent =
 function(content) {
-	if (content) {
-		var borderStyle = AjxEnv.isIE ? "hover_IE" : "hover";
-		var substitutions = { id: "tooltip" };
-		var divContent = DwtBorder.getBorderStartHtml(borderStyle, substitutions) + 
-							content + 
-						 DwtBorder.getBorderEndHtml(borderStyle, substitutions);
-		this._div.innerHTML = divContent;
-	}		
 	this._content = content;
 }
 	
@@ -127,6 +124,8 @@ function(delay) {
 DwtToolTip.prototype._popupToolTip = 
 function(x, y) {
 	if (this._content != null) {
+		this._div.innerHTML = this._borderStart + this._content + this._borderEnd;
+	
 		var WINDOW_GUTTER = 5;
 		var POPUP_OFFSET_X = 8;
 		var POPUP_OFFSET_Y = 8;
