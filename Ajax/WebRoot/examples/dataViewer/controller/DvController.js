@@ -42,7 +42,7 @@ function DvController(attrs, data, users, displayAttrs, filterAttrs) {
 	// Create the shell
 	this._shell = new DwtShell("MainShell");
 	this._shellSz = this._shell.getSize();
-	this._shell.addControlListener(new LsListener(this, this._shellControlListener));
+	this._shell.addControlListener(new AjxListener(this, this._shellControlListener));
 
 	// The tab view holds the tabs and their views
 	this._tabView = new DwtTabView(this._shell, null, DwtControl.ABSOLUTE_STYLE);
@@ -60,9 +60,9 @@ function DvController(attrs, data, users, displayAttrs, filterAttrs) {
 
 	// Filter panel support
 	this._filterPanel = new Object();
-	var paginationCallback = new LsCallback(this, this._paginate);
-	var filterListener = new LsListener(this, this._filterButtonListener);
-	var dataListener = new LsListener(this, this._dataButtonListener);
+	var paginationCallback = new AjxCallback(this, this._paginate);
+	var filterListener = new AjxListener(this, this._filterButtonListener);
+	var dataListener = new AjxListener(this, this._dataButtonListener);
 
 	// Create a filter panel for each user
 	this._users = users;
@@ -79,7 +79,7 @@ function DvController(attrs, data, users, displayAttrs, filterAttrs) {
 	this.setCurrentUser(0);
 
 	// Load the initial set of data into each user's view
-	var listSelectionListener = new LsListener(this, this._listSelectionListener);
+	var listSelectionListener = new AjxListener(this, this._listSelectionListener);
 	for (var i = 0; i < users.length; i++) {
 		this._applyFilter(null, i);
 		var view = new DvTabView(this._shell, this._displayAttrs, i, this);
@@ -160,7 +160,7 @@ DvController.prototype.setCurrentUser =
 function(user) {
 	if (user == this._curUser)
 		return;
-	DBG.println(LsDebug.DBG1, "setting current user to " + user + " (" + this._users[user] + ")");
+	DBG.println(AjxDebug.DBG1, "setting current user to " + user + " (" + this._users[user] + ")");
 	this._curUser = user;
 	for (var i = 0; i < this._users.length; i++)
 		this._filterPanel[i].show(i == user);
@@ -201,7 +201,7 @@ function(ev) {
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
 		var attrId = 1;
 		var attr = this._attrList.getById(attrId);
-		var msg = LsStringUtil.resolve(DvMsg.dblClick, [attr.name, ev.item.getValue(attrId)]);
+		var msg = AjxStringUtil.resolve(DvMsg.dblClick, [attr.name, ev.item.getValue(attrId)]);
 		alert(msg);
 	}
 }
@@ -210,7 +210,7 @@ function(ev) {
 // canonical data set. The first page of the matching items will be shown.
 DvController.prototype._filterButtonListener =
 function(ev) {
-	DBG.println(LsDebug.DBG2, "DvController.prototype._filterButtonListener");
+	DBG.println(AjxDebug.DBG2, "DvController.prototype._filterButtonListener");
 	var filter = this._filterPanel[this._curUser].getFilter();
 	var list = this._applyFilter(filter);
 	this._paginate(1);
@@ -220,7 +220,7 @@ function(ev) {
 // canonical list of items.
 DvController.prototype._dataButtonListener =
 function(ev) {
-	DBG.println(LsDebug.DBG2, "DvController.prototype._dataButtonListener");
+	DBG.println(AjxDebug.DBG2, "DvController.prototype._dataButtonListener");
 	var list = this._applyFilter();
 	this._paginate(1);
 }
@@ -240,7 +240,7 @@ function(num, view, user) {
 	var offset = (num - 1) * DvListView.PAGE_SIZE;
 	if (user == null)
 		user = this._curUser;
-	DBG.println(LsDebug.DBG1, "showing page " + num + ", " + this._curList[user].size() + " results");
+	DBG.println(AjxDebug.DBG1, "showing page " + num + ", " + this._curList[user].size() + " results");
 	var list = this._curList[user].getSubList(offset, DvListView.PAGE_SIZE);
 	if (!view)
 		view = this._tabView.getActiveView()._listView;
@@ -366,7 +366,7 @@ function() {
 	// filter panel
 	var filterSz;
 	if (this._filterPanel[this._curUser]) {
-		DBG.println(LsDebug.DBG1, "filterPanel: " + x + '/' + y + '/' + Dwt.DEFAULT + '/' + height);
+		DBG.println(AjxDebug.DBG1, "filterPanel: " + x + '/' + y + '/' + Dwt.DEFAULT + '/' + height);
 		this._filterPanel[this._curUser].setBounds(x, y, Dwt.DEFAULT, height);
 		filterSz = this._filterPanel[this._curUser].getSize();
 		x += filterSz.x;
@@ -375,7 +375,7 @@ function() {
 
 	// sash
 	if (this._sash && this._sash.getVisible()) {
-		DBG.println(LsDebug.DBG1, "sash: " + x + '/' + y + '/' + Dwt.DEFAULT + '/' + height);
+		DBG.println(AjxDebug.DBG1, "sash: " + x + '/' + y + '/' + Dwt.DEFAULT + '/' + height);
 		this._sash.setBounds(x, y, Dwt.DEFAULT, height);
 		x += this._sash.getSize().x;
 	}	
@@ -383,7 +383,7 @@ function() {
 	// tab view
 	if (this._tabView) {
 		var width = this._shellSz.x - x;
-		DBG.println(LsDebug.DBG1, "tabView: " + x + '/' + y + '/' + width + '/' + height);
+		DBG.println(AjxDebug.DBG1, "tabView: " + x + '/' + y + '/' + width + '/' + height);
 		this._tabView.setBounds(x, y, width, height - 55); // gotta take the tab heights into account
 	}
 }

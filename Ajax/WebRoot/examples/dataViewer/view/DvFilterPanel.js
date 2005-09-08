@@ -48,16 +48,16 @@ function DvFilterPanel(parent, attrList, user, paginationCallback) {
 	this._fieldIds = new Array();
 	this._calIds = new Array();
 	this._doc = this.getDocument();
-	this._internalId = LsCore.assignId(this);
+	this._internalId = AjxCore.assignId(this);
 	
 	// popup calendar (reuse singleton)
 	this._cal = new DwtCalendar(this.shell, null, DwtControl.ABSOLUTE_STYLE);
 	this._cal.getHtmlElement().style.border = "1px solid black";
 	this._cal.zShow(false);
 	this._cal.setDate(new Date());
-	this._cal.addSelectionListener(new LsListener(this, this._calSelectionListener));
+	this._cal.addSelectionListener(new AjxListener(this, this._calSelectionListener));
 
-	this._treeSelectionListener = new LsListener(this, this._treeListener);
+	this._treeSelectionListener = new AjxListener(this, this._treeListener);
 	this._createElements();
 }
 
@@ -82,8 +82,8 @@ function(ev) {
 	var element = DwtUiEvent.getTargetWithProp(ev, "_filterPanel");
 	if (!element) return;
 	var id = element.id;
-	DBG.println(LsDebug.DBG1, element.tagName + " click event for " + id);
-	var fp = LsCore.objectWithId(element._filterPanel);
+	DBG.println(AjxDebug.DBG1, element.tagName + " click event for " + id);
+	var fp = AjxCore.objectWithId(element._filterPanel);
 	if (id.indexOf("cal_") === 0) {
 		fp._cal.setLocation(ev.clientX, ev.clientY);
 		fp._cal.setZIndex(Dwt.Z_MENU);
@@ -171,7 +171,7 @@ function(attrs, numItems, numPages) {
 		ti1.showExpansionIcon(false);
 		
 		// The following is for FireFox (Mozilla) focus problems
-		if (LsEnv.isNav) {
+		if (AjxEnv.isNav) {
 			if (attr.type == DvAttr.T_STRING_EXACT || attr.type == DvAttr.T_STRING_CONTAINS || attr.type == DvAttr.T_NUMBER) {
 				var el = Dwt.getDomObj(this._doc, DvFilterPanel.createId(this._user, attr));
 				el.onmousedown = DvFilterPanel._focus;
@@ -201,7 +201,7 @@ function(attrs, numItems, numPages) {
 DvFilterPanel.prototype.show =
 function(show) {
 	// IE bug: select inputs don't obey z-index
-	if (LsEnv.isIE) {
+	if (AjxEnv.isIE) {
 		var selects = this.getHtmlElement().getElementsByTagName("select");
 		for (var i = 0; i < selects.length; i++)
 			selects[i].style.display = show ? "inline" : "none";
@@ -306,7 +306,7 @@ function() {
 		}
 		if (value) {
 			filter[id] = value;
-			DBG.println(LsDebug.DBG2, "add to filter: " + id + " / " + value);
+			DBG.println(AjxDebug.DBG2, "add to filter: " + id + " / " + value);
 		}
 	}
 	return filter;
@@ -475,9 +475,9 @@ function(attr) {
 		var calId2 = "cal_" + fieldId2;
 		html[i++] = "<table border='0' cellpadding='0' cellspacing='2'>";
 		html[i++] = "<tr><td>" + DvMsg.after + ":</td><td><input type='text' size='" + dw + "' id='" + fieldId1 + "'></td>";
-		html[i++] = "<td><a id='" + calId1 + "' href='javascript:;'>" + LsImg.getImageHtml(DvFilterPanel.I_APPT) + "</a></td></tr>";
+		html[i++] = "<td><a id='" + calId1 + "' href='javascript:;'>" + AjxImg.getImageHtml(DvFilterPanel.I_APPT) + "</a></td></tr>";
 		html[i++] = "<tr><td>" + DvMsg.before + ":</td><td><input type='text' size='" + dw + "' id='" + fieldId2 + "'></td>";
-		html[i++] = "<td><a id='" + calId2 + "' href='javascript:;'>" + LsImg.getImageHtml(DvFilterPanel.I_APPT) + "</a></td></tr>";
+		html[i++] = "<td><a id='" + calId2 + "' href='javascript:;'>" + AjxImg.getImageHtml(DvFilterPanel.I_APPT) + "</a></td></tr>";
 		html[i++] = "</table>";
 		this._fieldIds.push(fieldId1, fieldId2);
 		this._calIds.push(calId1, calId2);
@@ -529,7 +529,7 @@ function(ev) {
 DvFilterPanel.prototype._calSelectionListener =
 function(ev) {
 	if (ev.type == DwtCalendar.DATE_DBL_CLICKED) {
-		DBG.println(LsDebug.DBG1, "DvFilterPanel.prototype._calSelectionListener");
+		DBG.println(AjxDebug.DBG1, "DvFilterPanel.prototype._calSelectionListener");
 		this._cal.zShow(false);
 		var d = this._cal.getDate();
 		if (d) {

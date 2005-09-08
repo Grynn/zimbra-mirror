@@ -51,11 +51,10 @@ Contributor(s):
     <noscript><p><b>Javascript must be enabled to use this.</b></p></noscript>
     <script language="JavaScript">   	
    		function launch() {
-   			DBG = new LsDebug(LsDebug.DBG1, null, false);
-			LsImg.setMode(LsImg.SINGLE_IMG);
+   			DBG = new AjxDebug(AjxDebug.DBG1, null, false);
 	    	TreeExample.run();
 	    }
-        LsCore.addOnloadListener(launch);
+        AjxCore.addOnloadListener(launch);
     </script>
     </body>
 </html>

@@ -37,7 +37,7 @@ function TreeExample(parent) {
 	this._addItems();
 	
 	// Add a selection listener to the tree. This listener will be called anytime a tree item is selected
-	this._tree.addSelectionListener(new LsListener(this, this._treeListener));
+	this._tree.addSelectionListener(new AjxListener(this, this._treeListener));
 	
 	
 	// Make the tree visible. Specifically this moves the tree to the right "layer" (i.e. above the
@@ -59,14 +59,14 @@ function() {
 	var ds = this._dragSrc = new DwtDragSource(Dwt.DND_DROP_MOVE);
 	
 	// Add a drag listener to the drag target
-	ds.addDragListener(new LsListener(this, this._dragListener));
+	ds.addDragListener(new AjxListener(this, this._dragListener));
 	
 	// Create a drop target. We will allow only departments to be drop targets and of course only
 	// DwtTreeItems can be transfer types - hence DwtTreeItem being the parameter passed to DwtDropTarget
 	var dt = new DwtDropTarget(DwtTreeItem);
 	
 	// We are going to add a drop listener to the drop target
-	dt.addDropListener(new LsListener(this, this._dropListener));
+	dt.addDropListener(new AjxListener(this, this._dropListener));
 	
 	// Create the accounting department, and add employees under that department
 	var ti = new DwtTreeItem(this._tree);

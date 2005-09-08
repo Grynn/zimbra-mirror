@@ -40,11 +40,11 @@ function DvListView(parent, attrs, app) {
 
 	this._attrs = attrs;
 	this._app = app;
-	this._listChangeListener = new LsListener(this, this._changeListener);
+	this._listChangeListener = new AjxListener(this, this._changeListener);
 	
 	// create one time action menu
 	this._actionMenu = new DvListViewActionMenu(this);
-	var actionListener = new LsListener(this, this._actionListener);
+	var actionListener = new AjxListener(this, this._actionListener);
 	for (var i = 0; i < attrList.length; i++) {
 		var attr = attrList[i];
 		var mi = this._actionMenu.createMenuItem(attr.id, null, attr.name, null, null, DwtMenuItem.CHECK_STYLE);
@@ -76,7 +76,7 @@ function() {
 /**
 * Fills the list view with the given data.
 *
-* @param list		a DvItemList or a LsVector of items
+* @param list		a DvItemList or a AjxVector of items
 */
 DvListView.prototype.set =
 function(list) {
@@ -119,7 +119,7 @@ function(item) {
 		
 		htmlArr[idx++] = "<td";
 		// IE misbehaves w/ the box model so we correct ourselves
-		var width = LsEnv.isIE ? (col._width + 4) : col._width;
+		var width = AjxEnv.isIE ? (col._width + 4) : col._width;
 		htmlArr[idx++] = width ? (" width=" + width + ">") : ">";
 		// add a div to force clipping (TD's dont obey it)
 		htmlArr[idx++] = "<div";
@@ -141,7 +141,7 @@ function(ev) {
 	if (ev.event == DvEvent.E_ADD) {
 		// TODO
 	} else if (ev.event == DvEvent.E_DELETE) {
-		DBG.println(LsDebug.DBG2, "DvListView: DELETE");
+		DBG.println(AjxDebug.DBG2, "DvListView: DELETE");
 		for (var i = 0; i < items.length; i++) {
 			var row = Dwt.getDomObj(document, item.id);
 			if (row) {

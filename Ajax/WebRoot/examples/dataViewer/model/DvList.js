@@ -35,7 +35,7 @@ function DvList(init) {
 	if (arguments.length == 0) return;
 	DvModel.call(this, true);
 
-	this._vector = new LsVector();
+	this._vector = new AjxVector();
 	this._idHash = new Object();
 	this._evt = new DvEvent();
 }
@@ -90,7 +90,7 @@ function() {
 }
 
 /**
-* Returns the list as a LsVector.
+* Returns the list as a AjxVector.
 */
 DvList.prototype.getVector =
 function() {
@@ -136,7 +136,7 @@ function(offset, limit) {
 	var end = (offset + limit > this.size()) ? this.size() : offset + limit;
 	var subList = this.getArray();
 	if (offset < end)
-		subVector = LsVector.fromArray(subList.slice(offset, end));
+		subVector = AjxVector.fromArray(subList.slice(offset, end));
 	return subVector;
 }
 

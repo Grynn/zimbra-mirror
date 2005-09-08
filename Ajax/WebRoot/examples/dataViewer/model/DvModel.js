@@ -25,7 +25,7 @@
 
 // DvModel is data with a change listener.
 function DvModel() {
-	this._evtMgr = new LsEventMgr();
+	this._evtMgr = new AjxEventMgr();
 }
 
 DvModel.prototype.toString = 

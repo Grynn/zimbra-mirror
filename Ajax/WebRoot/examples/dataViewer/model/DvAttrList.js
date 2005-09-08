@@ -32,7 +32,7 @@ function DvAttrList() {
 
 	DvList.call(this, true);
 
-	this._vector = new LsVector();
+	this._vector = new AjxVector();
 	this._idHash = new Object();
 	this._nameHash = new Object();
 	this._evt = new DvEvent();

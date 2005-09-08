@@ -57,17 +57,16 @@ Contributor(s):
 
 	<script language="JavaScript">
 		function launch() {
-			DBG = new LsDebug(LsDebug.NONE, null, false);
+			DBG = new AjxDebug(AjxDebug.NONE, null, false);
 			if (location.search && (location.search.indexOf("debug=") != -1)) {
 				var m = location.search.match(/debug=(\d+)/);
 				if (m.length) {
 					var num = parseInt(m[1]);
-					var level = LsDebug.DBG[num];
+					var level = AjxDebug.DBG[num];
 					if (level)
 						DBG.setDebugLevel(level);
 				}
 	   		}
-			LsImg.setMode(LsImg.SINGLE_IMG);
 
 			var attrs = getSampleAttrs();
 			var data = getSampleFlights();
@@ -160,7 +159,7 @@ Contributor(s):
 			return flights;
 		}
 
-	    LsCore.addOnloadListener(launch);
+	    AjxCore.addOnloadListener(launch);
 	</script>
 
 </head>
