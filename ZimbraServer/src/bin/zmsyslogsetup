@@ -31,30 +31,24 @@ if [ $ID -ne 0 ]; then
 	exit 1
 fi
 
-TYPE=${1:-"local"}
+LOGHOST=`su - zimbra -c 'zmprov gacf | egrep "^zimbraLogHostname"'`
+
+if [ x$LOGHOST = "x" ]; then
+	TYPE="local"
+else
+	TYPE="remote"
+	LOGHOST=`echo $LOGHOST | awk '{print $2}'`
+fi
 
 usage() {
 	echo ""
 	echo "$0: set up syslog.conf for local or remote logging"
 	echo ""
 	echo "Usage:"
-	echo "	$0 [local|remote <hostname>]"
-	echo "		local - log locally (/var/log/zimbra.log)"
-	echo "		remote - log remotely to <hostname>"
+	echo "	$0"
 	echo ""
 	exit 1
 }
-
-if [ $TYPE != "local" -a $TYPE != "remote" ]; then
-	usage
-fi
-
-if [ $TYPE = "remote" ]; then
-	LOGHOST=${2:-"none"}
-	if [ $LOGHOST = "none" ]; then
-		usage
-	fi
-fi
 
 cp -f /etc/syslog.conf /etc/syslog.conf.bak
 
