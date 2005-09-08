@@ -54,6 +54,19 @@ AjxMsg.oct = "Oct";
 AjxMsg.nov = "Nov";
 AjxMsg.dec = "Dec";
 
+AjxMsg.januaray = "January";
+AjxMsg.february = "February";
+AjxMsg.march = "March";
+AjxMsg.april = "April";
+AjxMsg.mayFull = "May";
+AjxMsg.june = "June";
+AjxMsg.july = "July";
+AjxMsg.august = "August";
+AjxMsg.september = "September";
+AjxMsg.october = "October";
+AjxMsg.november = "November";
+AjxMsg.december = "December";
+
 AjxMsg.sunday = "Sunday";
 AjxMsg.monday = "Monday";
 AjxMsg.tuesday = "Tuesday";

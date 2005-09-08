@@ -37,7 +37,8 @@ AjxDateUtil.MSEC_PER_HOUR = 3600000;
 AjxDateUtil.MSEC_PER_DAY = 24 * AjxDateUtil.MSEC_PER_HOUR;
 AjxDateUtil._months = [AjxMsg.jan, AjxMsg.feb, AjxMsg.mar, AjxMsg.apr, AjxMsg.may, AjxMsg.jun,
                       AjxMsg.jul, AjxMsg.aug, AjxMsg.sep, AjxMsg.oct, AjxMsg.nov, AjxMsg.dec];
-
+AjxDateUtil._fullMonths = [AjxMsg.january, AjxMsg.february, AjxMsg.march, AjxMsg.april, AjxMsg.mayFull, AjxMsg.june,
+						   AjxMsg.july, AjxMsg.august, AjxMsg.september, AjxMsg.october, AjxMsg.november, AjxMsg.december];
 AjxDateUtil._daysOfTheWeek = [AjxMsg.sunday, AjxMsg.monday, AjxMsg.tuesday, AjxMsg.wednesday, AjxMsg.thursday, AjxMsg.friday,
 							 AjxMsg.saturday];
 
@@ -287,13 +288,19 @@ function (date, upper) {
 
 AjxDateUtil._getMonthName = 
 function (date) {
-	return AjxDateUtil._months[date.getMonth()];
+	return AjxDateUtil._fullMonths[date.getMonth()];
 };
 
 AjxDateUtil._getDate = 
 function(date, pad) {
 	var myVal = date.getDate();
 	return pad == true ? AjxDateUtil._pad(myVal) : myVal;
+};
+
+AjxDateUtil._getWeekday =
+function (date) {
+	var myVal = date.getDay();
+	return AjxDateUtil._daysOfTheWeek[myVal];
 };
 
 AjxDateUtil._getFullYear = 
@@ -305,7 +312,8 @@ AjxDateUtil.getTimeStr =
 function(date, format) {
 	var s = format;
 	s = s.replace(/%d/g, AjxDateUtil._getDate(date, true));				// zero padded day of the month
-	s = s.replace(/%D/g, AjxDateUtil._getDate(date, false));				// day of the month without padding
+	s = s.replace(/%D/g, AjxDateUtil._getDate(date, false));			// day of the month without padding
+	s = s.replace(/%w/g, AjxDateUtil._getWeekday(date));			// day of the week
 	s = s.replace(/%M/g, AjxDateUtil._getMonthName(date));				// full month name
 	s = s.replace(/%Y/g, AjxDateUtil._getFullYear(date));				// full year
 	s = s.replace(/%h/g, AjxDateUtil._getHoursStr(date, false, false));	// non-padded hours
