@@ -61,6 +61,7 @@ function DwtTreeItem(parent, index, text, imageInfo, deferred, className, posSty
 		this._initialize(index);
 	} else {
 		parent._addDeferredChild(this, index);
+		this._index = index;
 	}
 }
 
@@ -482,7 +483,7 @@ function() {
 				this._childDiv.appendChild(div);
 				a[i]._initialized = true;
 			} else {
-				a[i]._initialize();
+				a[i]._initialize(a[i]._index);
 			}
 		}
 	}
