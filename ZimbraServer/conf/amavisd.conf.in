@@ -49,8 +49,8 @@ $lock_file = "$MYHOME/var/amavisd.lock";
 
 $log_level = 3;              # verbosity 0..5
 $log_recip_templ = undef;    # disable by-recipient level-0 log entries
-$DO_SYSLOG = 0;              # log via syslogd (preferred)
-$SYSLOG_LEVEL = 'mail.debug';
+$DO_SYSLOG = 1;              # log via syslogd (preferred)
+$SYSLOG_LEVEL = 'local0.info';
 $LOGFILE = "/opt/zimbra/log/amavisd.log";
 
 $enable_db = 1;              # enable use of BerkeleyDB/libdb (SNMP and nanny)
