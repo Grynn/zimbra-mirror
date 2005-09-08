@@ -116,6 +116,7 @@ function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell, ex
 
 	// tooltip singleton used by all control in shell
 	this._toolTip = new DwtToolTip(this);
+	this._hoverMgr = new DwtHoverMgr();
 }
 
 DwtShell.prototype = new DwtComposite;
@@ -169,6 +170,10 @@ function(busy, className) {
 DwtShell.prototype.setStatus =
 function(statusStr) {
 	this.window.status = statusStr;
+}
+
+DwtShell.prototype.getHoverMgr = function() {
+	return this._hoverMgr;
 }
 
 DwtShell.prototype.getToolTip = function() {

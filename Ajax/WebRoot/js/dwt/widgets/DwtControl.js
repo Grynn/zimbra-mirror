@@ -62,6 +62,9 @@ function DwtControl(parent, className, posStyle, deferred) {
 	this._posStyle = posStyle;
 	if (!deferred)
 		this._initCtrl();
+		
+	this._hoverOverListener = new AjxListener(this, this._handleHoverOver);
+	this._hoverOutListener = new AjxListener(this, this._handleHoverOut);
 }
 
 DwtControl.prototype.toString = 
@@ -802,11 +805,13 @@ DwtControl._mouseOverGeneralHdlr = function (ev, eventName){
 			obj.notifyListeners(eventName, mouseEv);
 		// Call the tooltip after the listeners to give them a 
 		// chance to change the tooltip text
-		if (obj._toolTipContent != null) {
+		if (obj._toolTipContent != null && !obj._hoverOverHandled) {
 			var shell = DwtShell.getShell(window);
-			var tooltip = shell.getToolTip();
-			tooltip.setContent(obj._toolTipContent);
-			tooltip.mouseOver(mouseEv.docX, mouseEv.docY);
+			var manager = shell.getHoverMgr();
+			manager.reset();
+			manager.setHoverOverDelay(DwtToolTip.TOOLTIP_DELAY);
+			manager.setHoverOverListener(obj._hoverOverListener);
+			manager.hoverOver(mouseEv.docX, mouseEv.docY);
 		}
 	}
 	mouseEv._stopPropagation = true;
@@ -825,8 +830,9 @@ function(ev) {
 		
 	if (obj._toolTipContent != null) {
 		var shell = DwtShell.getShell(window);
-		var tooltip = shell.getToolTip();
-		tooltip.mouseDown();
+		var manager = shell.getHoverMgr();
+		manager.setHoverOutListener(obj._hoverOutListener);
+		manager.hoverOut();
 	}
 	
 	// If we have a dragSource, then we need to start capturing mouse events
@@ -878,10 +884,11 @@ function(ev) {
 			   DwtControl._DRAG_THRESHOLD 
 			&& Math.abs(obj._dragStartY - mouseEv.docY) < 
 			   DwtControl._DRAG_THRESHOLD)) {
-		if (obj._toolTipContent != null) {
+		if (obj._toolTipContent != null && !obj._hoverOverHandled) {
 			var shell = DwtShell.getShell(window);
-			var tooltip = shell.getToolTip();
-			tooltip.mouseMove(null, mouseEv.docX, mouseEv.docY);
+			var manager = shell.getHoverMgr();
+			// NOTE: mouseOver already init'd other hover settings
+			manager.hoverOver(mouseEv.docX, mouseEv.docY);
 		}
 		return DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEMOVE);
 	} else {
@@ -1047,8 +1054,9 @@ DwtControl._mouseOutGeneralHdlr = function (ev, eventName){
 		return false;
 	if (obj._toolTipContent != null) {
 		var shell = DwtShell.getShell(window);
-		var tooltip = shell.getToolTip();
-		tooltip.mouseOut();
+		var manager = shell.getHoverMgr();
+		manager.setHoverOutListener(obj._hoverOutListener);
+		manager.hoverOut();
 	}
 	return DwtControl._mouseEvent(ev, eventName);
 };
@@ -1108,4 +1116,23 @@ function(content) {
 DwtControl.prototype.clearContent =
 function() {
 	this.getHtmlElement().innerHTML = "";
+}
+
+/** Sub-classes that override this method must set this._hoverHandled to true. */
+DwtControl.prototype._handleHoverOver = function(event) {
+	if (this._toolTipContent != null) {
+		var shell = DwtShell.getShell(window);
+		var tooltip = shell.getToolTip();
+		tooltip.setContent(this._toolTipContent);
+		tooltip.popup(event.x, event.y);
+		this._hoverHandled = true;
+	}
+}
+
+/** Sub-classes that override this method must set this._hoverHandled to false. */
+DwtControl.prototype._handleHoverOut = function(event) {
+	var shell = DwtShell.getShell(window);
+	var tooltip = shell.getToolTip();
+	tooltip.popdown();
+	this._hoverHandled = false;
 }

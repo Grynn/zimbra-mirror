@@ -30,15 +30,7 @@ function DwtToolTip(shell, className, dialog) {
 	this._div = shell.getDocument().createElement("div");
 	this._div.className = className || "DwtToolTip";
 	this._div.style.position = DwtControl.ABSOLUTE_STYLE;
-//	this._div.style.padding = "2px";
-//	this._div.style.whiteSpace = "nowrap";
 	this.shell.getHtmlElement().appendChild(this._div);
-	this._popupAction = new AjxTimedAction();
-	this._popupAction.method = DwtToolTip.prototype._popupToolTip;
-	this._popdownAction = new AjxTimedAction();
-	this._popdownAction.method = DwtToolTip.prototype._popdownToolTip;
-	this._popupActionId = -1;
-	this._popdownActionId = -1;
 	Dwt.setZIndex(this._div, Dwt.Z_HIDDEN);
 	
 	var borderStyle = AjxEnv.isIE ? "hover_IE" : "hover";
@@ -47,7 +39,7 @@ function DwtToolTip(shell, className, dialog) {
 	this._borderEnd = DwtBorder.getBorderEndHtml(borderStyle, substitutions);	
 }
 
-DwtToolTip._TOOLTIP_DELAY = 750;
+DwtToolTip.TOOLTIP_DELAY = 750;
 
 DwtToolTip.prototype.toString = 
 function() {
@@ -64,65 +56,7 @@ function(content) {
 	this._content = content;
 }
 	
-DwtToolTip.prototype.mouseOver =
-function(x, y, delay) {
-	if (this._popdownActionId != -1) {
-		AjxTimedAction.cancelAction(this._popdownActionId);
-		this._popdownActionId = -1;
-	}
-	if (this._popupActionId != -1) {
-		AjxTimedAction.cancelAction(this._popupActionId);
-		this._popupActionId = -1;
-	}
-	if (Dwt.getZIndex(this._div) == Dwt.Z_HIDDEN) {
-		if (this._content != null && this._popupActionId == -1) {
-			delay = (delay == null) ? DwtToolTip._TOOLTIP_DELAY : (delay > 0) ? delay : 0;
-			this._popupAction.params.removeAll();
-			this._popupAction.params.add(x);
-			this._popupAction.params.add(y);
-			this._popupAction.obj = this;
-		 	this._popupActionId = AjxTimedAction.scheduleAction(this._popupAction, delay);
-		}
-	}
-}
-
-DwtToolTip.prototype.mouseMove =
-function(delay, x, y) {
-	if (this._popupActionId != -1) {
-		AjxTimedAction.cancelAction(this._popupActionId);
-		this._popupAction.obj = this;
-		delay = (delay == null) ? DwtToolTip._TOOLTIP_DELAY : (delay > 0) ? delay : 0;
-		if (x) {
-			this._popupAction.params.removeAll();
-			this._popupAction.params.add(x);
-			this._popupAction.params.add(y);
-		}
-	 	this._popupActionId = AjxTimedAction.scheduleAction(this._popupAction, delay);
-	}
-}
-
-DwtToolTip.prototype.mouseDown =
-function() {
-	this._popdownToolTip();
-}
-
-DwtToolTip.prototype.mouseOut =
-function(delay) {
-	delay = delay || 0;
-	if (this._popdownActionId == -1) {
-		if (this._popupActionId != -1 || (this._content != null && (Dwt.getZIndex(this._div) != Dwt.Z_HIDDEN))) {	
-			this._popdownAction.obj = this;
-			delay = (delay == null) ? 50 : delay;
-			if (delay > 0)
-				this._popdownActionId = AjxTimedAction.scheduleAction(this._popdownAction, delay);
-			else 
-				this._popdownToolTip();
-		}
-	}
-}
-
-DwtToolTip.prototype._popupToolTip = 
-function(x, y) {
+DwtToolTip.prototype.popup = function(x, y) {
 	if (this._content != null) {
 		this._div.innerHTML = this._borderStart + this._content + this._borderEnd;
 	
@@ -245,17 +179,11 @@ function(x, y) {
 		Dwt.setZIndex(this._div, zIndex);
 		this._div.style.display = "block";
 	}
-	this._popupActionId = -1;
 }
 
-DwtToolTip.prototype._popdownToolTip = 
+DwtToolTip.prototype.popdown = 
 function() {
-	if (this._popupActionId != -1) {
-		AjxTimedAction.cancelAction(this._popupActionId);	
-		this._popupActionId = -1;
-	}
 	if (this._content != null) {
 		Dwt.setZIndex(this._div, Dwt.Z_HIDDEN);
 	}
-	this._popdownActionId = -1;
 }
