@@ -34,5 +34,5 @@ function ExImg() {
 // Icons
 
 ExImg.I_BLANK  = [null, 16, 16];
-ExImg.I_FOLDER  = ["FolderIcon", 16, 16];
-ExImg.I_ICON  = ["IconIcon", 16, 16];
+ExImg.I_FOLDER  = ["ImgFolderIcon", 16, 16];
+ExImg.I_ICON  = ["ImgIconIcon", 16, 16];
