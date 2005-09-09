@@ -140,22 +140,27 @@ DIV.vSpace {
 	background-color: rgb(37, 87, 173);
 }
 
-
 /*
-* Tool tips
+* for tooltips
 */
-
-.DwtToolTip {
-	background-color: rgb(255, 247, 176);
-    border: solid 1px;
-}
-
+.hover_frame_table 		{	border-collapse:collapse;	padding:0;	}
+.hover_spacer_TL	 	{	width:12;		height:12;}
+.hover_spacer_T 		{	width:100%;		height:16;}
+.hover_spacer_TR	 	{	width:20;		height:16;}
+.hover_spacer_L	 		{	width:20;		height:100%;}
+.hover_spacer_R 		{	width:20;		height:100%;}
+.hover_spacer_BL	 	{	width:20;		height:20;}
+.hover_spacer_B 		{	width:100%;		height:20;}
+.hover_spacer_BR	 	{	width:20;		height:20;}
+.hover_contents 	{								}
+.hover_tip_top 		{		position: absolute;		}
+.hover_tip_bottom 	{		position: relative;		}
 
 /*
 * Tool Bars
 */
 
-.ToolBar{
+.ToolBar {
 	background-color: rgb(198, 197, 215);
 	width: 100%;
 	filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#FFF0F0F0,endColorStr=#FF9997B5);
@@ -163,30 +168,49 @@ DIV.vSpace {
 
 /*
 * Buttons
-*
-* The background color is set by a modifier.
-* TBButton - toolbar button, no border
-* OverviewMenuButton - bigger and bolder button
 */
 
-.DwtButton, .TBButton {
-	filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#FFFFFFFF,endColorStr=#20808080);
+.TBButton {
+	border: 1px solid rgb(198, 197, 215);
 }
-.DwtButton { border: 1px solid rgb(124, 124, 148); }
-
-.TBButton { border: none; }
+.TBButton-activated {
+	background-image:url(/zimbra/skins/steel/images/bg_button_up.gif);
+	border: 1px solid;
+	border-color: #E0E0E0 #555555 #555555 #E0E0E0;
+}
+.TBButton-triggered {
+	background-image:url(/zimbra/skins/steel/images/bg_button_down.gif);
+	border:1px solid;
+	border-color: #555555 #E0E0E0 #E0E0E0 #555555;
+}
+.TBButton-toggled {
+	background-image:url(/zimbra/skins/steel/images/bg_button_down.gif);
+	border:1px solid;
+	border-color: #555555 #E0E0E0 #E0E0E0 #555555;
+}
 
 .DisabledText { color: rgb(130, 130, 130); }
 
 /* DwtHtmlEditor */
-.DwtHtmlEditor {background-color: white;}
 .DwtHtmlEditor .DwtHtmlEditorTextArea {
 	font: 10pt monospace;
-	padding: 3px;
+	padding: 1px;
 	width: 100%;
 	height: 100%;
 	overflow: auto;
+	border: 1px solid black;
+/*	font: 10pt monospace;
+	padding: 3px;
+	width: 100%;
+	height: 100%;
+	overflow: auto; */
 }
+.DwtHtmlEditor .DwtHtmlEditorIFrame {
+	background-color: white;
+	width: 100%;
+	border: 1px solid black;
+}
+
 
 /* DwtColorPicker */
 .DwtColorPicker { border: 1px solid rgb(124, 124, 148); }
@@ -212,20 +236,6 @@ DIV.vSpace {
 }
 .DwtMenuItem .DisabledText {color: rgb(130, 130, 130);}
 
-
-.TBButton {
-	filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#FFFFFFFF,endColorStr=#20808080);
-}
-
-
-
-.TBButton td.DDSepVisible div {background-color:black; width:1px;overflow:hidden;}
-.TBButton td.DDSepInvisible div {background-color:transparent;width:1px;overflow:hidden;}
-
-.TBButton.toggled {
-	filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#FFFFFFFF,endColorStr=#20808080);
-	background-color: rgb(255, 255, 255);
-}
 
 /* Calendar */
 .DwtCalendar {background-color: white;}
@@ -259,95 +269,112 @@ DIV.vSpace {
 .DwtCalendarDay-hilited {font-weight: bold;}
 
 
-/*
-* Modifiers
-*
-* A modifier represents a change in state that is the same across several objects. For example, different types of
-* buttons all display activation and triggering the same. There's no "selected" modifier because the different
-* objects that can become selected display it differently.
-* <p>
-* The reason that there are chained selectors is so that the modifier won't lose in precedence due to specificity.
-* By itself, the modifier is a single class, so that component of the specificity is 1. A matching declaration with
-* a conflicting style (namely, background-color) will win on specificity if it has two classes. So we need to give
-* the two-class version of the modifier, which will win because it comes later in this file.
-*
-* So far these just apply to buttons.
-*/
-
-/* button in a toolbar */
-.transparent {
-	background-color: transparent;
-}
-/* button in a form or dialog */
-.contrast {
-	background-color: rgb(198, 197, 215);
-}	
-
-/* button that is the default for some action */
-.active {
-	background-color: rgb(245, 245, 245);
-}	
-/* button onmouseover */
-.activated {
-	background-color: rgb(249, 221, 135);
-}
-/* button onmousedown */
-.triggered {
-	background-color: rgb(240, 160, 38);
-}
-
-/* button toggled on */
-.toggled {background-color: rgb(255, 255, 255);}
-
-
 /* DwtSelect */
 .DwtSelect {  
-  border-width:0;
-  cursor: default;
+	cursor: default;
+	overflow:hidden;
+	height:20px;
+	background-image:url(/zimbra/skins/steel/images/bg_button_up.gif);
+	border: 1px solid;
+	border-color: #E0E0E0 #555555 #555555 #E0E0E0;
+	min-width:40px;
 }
 
-.DwtSelect .DwtButton { 
-  border-width:0;
-  width: 19px;
+.DwtSelect-activated {  
+	cursor: default;
+	overflow:hidden;
+	height:20px;
+	background-image:url(/zimbra/skins/steel/images/bg_button_down.gif);
+	border: 1px solid;
+	border-color: #E0E0E0 #555555 #555555 #E0E0E0;
+	min-width:40px;
 }
 
-.DwtSelect.enabled , .DwtSelect.disabled{ 
-  background-color:white; 
-  border: 1px solid rgb(127,157, 185); 
-  position: relative;
-  width:105px;
-  float:left;
+.DwtSelect-triggered {  
+	cursor: default;
+	overflow:hidden;
+	height:20px;
+	background-image:url(/zimbra/skins/steel/images/bg_button_down.gif);
+	border:1px solid;
+	border-color: #555555 #E0E0E0 #E0E0E0 #555555;
+	min-width:40px;
 }
 
-.DwtSelect.disabled { 
-  background-color: rgb(233,236,216);
-  color: rgb(201, 201, 194);
+
+.DwtSelect table,
+.DwtSelect-activated table,
+.DwtSelect-triggered table,
+.DwtSelect-disabled table {
+	border-spacing:none;
+	border-collapse: collapse;
+	width:100%;
+	text-align:center;
+	table-layout:fixed;
+	padding:0px;
 }
+
+.DwtSelect .Text,
+.DwtSelect-activated .Text,
+.DwtSelect-triggered .Text {
+	padding: 2px;
+	text-align:left;
+	padding-left:4px;
+	overflow:hidden;
+}
+
+.DwtSelect-disabled .Text{
+	padding: 2px;
+	text-align:left;
+	padding-left:4px;
+	overflow:hidden;
+	color:#CCCCCC;
+}
+
+
+.DwtSelect.disabled {
+	border:1px solid #CCCCCC;
+}
+
+.dropDownCell { 
+	width: 16px;
+}
+
+
+.DwtSelectMenu table { 
+	width:99%;
+}
+
+.DwtSelectMenu .DwtMenuItem-text {
+	text-align:left;
+	padding-left:4px;
+}
+
+.DwtSelectMenu .DwtMenuItem-leftFill {
+	width:19px;
+}
+
+.DwtSelectMenu .DwtMenuItem-selected {
+	background-color: #ADD6D6;
+	color:black;
+	cursor: default;
+}
+
+.DwtSelectMenu .DwtMenuItem-selected .DwtMenuItem-text{
+	cursor: default;
+}
+
+.DwtSelectMenu .DwtMenuItem {
+	border: 1px solid white;
+	background-color: white;
+	cursor: default;
+}
+
 
 .DwtSelectMenu { 
-  background-color :rgb(255, 255, 155);
-  border-top: 1px solid rgb(178, 178, 178);
-  border-right: 1px solid black;
-  border-bottom: 1px solid black;
-  border-left: 1px solid rgb(178, 178, 178);
-  position : absolute;
-}
-
-.DwtSelectOption.inactive, .DwtSelectOption.active { 
-  background-color: rgb(255, 255, 255);
-  border-width: 0;
-  padding: 0px 0px 0px 5px;
-  margin: 0px 0px 0px 0px;
-}
-
-.DwtSelectOption.inactive { 
-  background-color: rgb(255, 255, 255);
-  color: black;
-  cursor: default;
-}
-
-.DwtSelectOption.active { 
-  background-color: rgb(49, 106, 197);
-  color: white;
-  cursor: default;
+	background-color:white;
+	border-top: 1px solid #CCCCCC;
+	border-right: 1px solid black;
+	border-bottom: 1px solid black;
+	border-left: 1px solid #CCCCCC;
+	position : absolute;
 }

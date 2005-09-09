@@ -40,6 +40,7 @@ ExMsg.justify = "Justify (Ctrl+J)";
 ExMsg.leftJustify = "Align Left (Ctrl+L)"; 
 ExMsg.list = "List";
 ExMsg.numberedList = "Numbered List";
+ExMsg.outdent = "Decrease Indent";
 ExMsg.plainText = "Plain Text";
 ExMsg.rightJustify = "Align Right (Ctrl+R)"; 
 ExMsg.strikeThruText = "Strikethrough (Ctrl+S)"

@@ -44,67 +44,66 @@ function() {
 
 DwtHtmlEditorExample.prototype._styleListener =
 function(ev) {
-DBG.println("Setting Style: " + ev._args.newValue);
+	DBG.println("Setting Style: " + ev._args.newValue);
 	this.rte.setStyle(ev._args.newValue);
 }
 
 DwtHtmlEditorExample.prototype._fontNameListener =
 function(ev) {
-DBG.println("Setting Font Name: " + ev._args.newValue);
+	DBG.println("Setting Font Name: " + ev._args.newValue);
 	this.rte.setFont(ev._args.newValue);
 }
 
 DwtHtmlEditorExample.prototype._fontSizeListener =
 function(ev) {
-DBG.println("Setting Font Size");
+	DBG.println("Setting Font Size");
 	this.rte.setFont(null, null, ev._args.newValue);
 }
 
 DwtHtmlEditorExample.prototype._directionListener =
 function(ev) {
-DBG.println("Changing Text Direction");
+	DBG.println("Changing Text Direction");
 	this.rte.setTextDirection(ev.item.getData(DwtHtmlEditorExample._VALUE));
 }
 
 DwtHtmlEditorExample.prototype._indentListener =
 function(ev) {
-DBG.println("Indent/Outdenting");
+	DBG.println("Indent/Outdenting");
 	this.rte.setIndent(ev.item.getData(DwtHtmlEditorExample._VALUE));
 }
 
 DwtHtmlEditorExample.prototype._insElementListener =
 function(ev) {
-DBG.println("Inserting Element");
+	DBG.println("Inserting Element");
 	this.rte.insertElement(ev.item.getData(DwtHtmlEditorExample._VALUE));
 }
 
 DwtHtmlEditorExample.prototype._justificationListener =
 function(ev) {
-DBG.println("Setting Justification");
+	DBG.println("Setting Justification");
 	this.rte.setJustification(ev.item.getData(DwtHtmlEditorExample._VALUE));
 }
 
 DwtHtmlEditorExample.prototype._fontStyleListener =
 function(ev) {
-DBG.println("Setting Font Style");
+	DBG.println("Setting Font Style");
 	this.rte.setFont(null, ev.item.getData(DwtHtmlEditorExample._VALUE));
 }
 
 DwtHtmlEditorExample.prototype._fontColorListener =
 function(ev) {
-DBG.println("Setting Font Color");
+	DBG.println("Setting Font Color");
 	this.rte.setFont(null, null, null, ev.detail, null);
 }
 
 DwtHtmlEditorExample.prototype._fontHiliteListener =
 function(ev) {
-DBG.println("Setting Font Hilite");
+	DBG.println("Setting Font Hilite");
 	this.rte.setFont(null, null, null, null, ev.detail);
 }
 
 DwtHtmlEditorExample.prototype._mailFormatListener =
 function(ev) {
-	var fromat;
 	DBG.println("FORMAT CHANGED!");
 	this.rte.setMode(ev.item.getData(DwtHtmlEditorExample._VALUE), true);
 }
