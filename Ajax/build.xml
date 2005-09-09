@@ -14,6 +14,7 @@
 	
 	<property name="jars.dir"           location="jars"/>
 	<property name="src.dir"            location="src"/>
+	<property name="images.dir"			location="WebRoot/js/dwt/config/img"/>
 
 	<condition property="deploy.dir" value="${env.DEPLOY_DIR}">
 		<isset property="env.DEPLOY_DIR" />
@@ -27,6 +28,11 @@
 	<property name="deploy.user" value="zimbra"/>
 	<property name="deploy.password" value="zimbra"/>
 	<property name="deploy.path" value="/ajax"/>
+
+	<property name="images.hiRes.destDir" value="${build.cmn.dir}/img/hiRes"/>
+	<property name="images.loRes.destDir" value="${build.cmn.dir}/img/loRes"/>
+	<property name="images.cssFile" value="dwtimgs.css"/>
+	<property name="images.cssPath" value="/ajax/examples/common/img"/>
 
 	<taskdef resource="net/sf/antcontrib/antlib.xml">
 		<classpath>
@@ -71,30 +77,107 @@
 	</target>
 
 	
-	<target name="dwtimages">
-		<property name="img.cssFile" value="dwtimgs.css"/>
+	<target name='imagesinit' description='checks to see if images need to be processed' unless='images.force'>
+		<dependset>
+			<srcfileset dir='${images.dir}' includes='**/*'/>
+			<targetfilelist dir='${images.loRes.destDir}' files='${images.cssFile}'/>
+		</dependset>
+		<available property='imagesdone' file='${images.loRes.destDir}/${images.cssFile}'/>
+	</target>
 		
-		<!-- hi res images -->
-		<property name="img.hiRes.destDir" value="${build.cmn.dir}/img/hiRes"/>
-		<mkdir dir="${img.hiRes.destDir}"/>
-		<delete file="${img.hiRes.destDir}/${img.cssFile}"/>
-	    <foreach target="imagecopy" param="var" list="WebRoot/js/dwt/config/img/hiRes">
-			<param name="destDir" value="${img.hiRes.destDir}"/>
-			<param name="cssPrefix" value="/ajax/examples/common/img/hiRes/"/>			
-			<param name="cssFile" value="${img.cssFile}"/>			
-	    </foreach>
+	<target name='dwtimages'>
+		<antcall target='images'>
+			<param name='images.dir' value='${images.dir}'/>
+			<param name='images.cssPath' value='${images.cssPath}'/>
+			<param name='images.cssFile' value='${images.cssFile}'/>
+			<param name='images.hiRes.destDir' value='${images.hiRes.destDir}'/>
+			<param name='images.loRes.destDir' value='${images.loRes.destDir}'/>
+		</antcall>
+	</target>
+	
+	<target name='images' depends='imagesinit,compile' unless='imagesdone'>
+		<echo message='images.dir: ${images.dir}'/>
+		<echo message='images.cssPath: ${images.cssPath}'/>
+		<echo message='images.cssFile: ${images.cssFile}'/>
+		<echo message='images.hiRes.destDir: ${images.hiRes.destDir}'/>
+		<echo message='images.loRes.destDir: ${images.loRes.destDir}'/>
+
+		<!-- define imagemerge task -->
+		<pathconvert property='imagemerge.cp' pathsep='${path.separator}'>
+			<path>
+				<pathelement location='${build.dir}'/>
+				<fileset dir='${jars.dir}' includes='**/*.jar'/>
+			</path>
+		</pathconvert>
+		<taskdef name='imagemerge' 
+				 classname='com.zimbra.ajax.imagemerge.ImageMergeTask' 
+				 classpath='${imagemerge.cp}'
+		/>
+
+		<!-- copy hiRes images -->
+		<mkdir dir="${images.hiRes.destDir}"/>
+		<delete file='${images.hiRes.destDir}/${images.cssFile}'/>
+		<echo/>
+		<echo message='Copying high resolution images (-horizborders -vertborders -backgrounds)'/>
+		<echo/>
+		<imagemerge destdir='${images.hiRes.destDir}' copy='true'
+					cssfile='${images.cssFile}' csspath='${images.cssPath}/hiRes/'>
+			<dirset dir='${images.dir}/hiRes' includes='*' excludes='horizborders,vertborders,backgrounds'/>
+		</imagemerge>
+		<echo/>
+		<echo message='Copying high resolution horizontal borders'/>
+		<echo/>
+		<imagemerge destdir='${images.hiRes.destDir}' copy='true' layout='vertical'
+					cssfile='${images.cssFile}' csspath='${images.cssPath}/hiRes/'>
+			<dirset dir='${images.dir}/hiRes' includes='horizborders'/>
+		</imagemerge>
+		<echo/>
+		<echo message='Copying high resolution vertical borders'/>
+		<echo/>
+		<imagemerge destdir='${images.hiRes.destDir}' copy='true' layout='horizontal'
+					cssfile='${images.cssFile}' csspath='${images.cssPath}/hiRes/'>
+			<dirset dir='${images.dir}/hiRes' includes='vertborders'/>
+		</imagemerge>
+		<echo/>
+		<echo message='Copying high resolution backgrounds'/>
+		<echo/>
+		<imagemerge destdir='${images.hiRes.destDir}' copy='true' layout='repeat'
+					cssfile='${images.cssFile}' csspath='${images.cssPath}/hiRes/'>
+			<dirset dir='${images.dir}/hiRes' includes='backgrounds'/>
+		</imagemerge>
 		
-		<!-- lo res images -->
-		<property name="img.loRes.destDir" value="${build.cmn.dir}/img/loRes"/>
-		<mkdir dir="${img.loRes.destDir}"/>
-		<delete file="${img.loRes.destDir}/${img.cssFile}"/>
-		<foreach target="imagemerge" param="var" list="dwt,horizborders,vertborders">
-			<param name="srcDir" value="WebRoot/js/dwt/config/img/loRes"/>
-			<param name="destDir" value="${img.loRes.destDir}"/>
-			<param name="cssPrefix" value="/ajax/examples/common/img/loRes/"/>			
-			<param name="cssFile" value="${img.cssFile}"/>			
-		</foreach>
-		
+		<!-- merge loRes images -->
+		<mkdir dir="${images.loRes.destDir}"/>
+		<delete file='${images.loRes.destDir}/${images.cssFile}'/>
+		<echo/>
+		<echo message='Merging low resolution images (-horizborder -vertborders -backgrounds)'/>
+		<echo/>
+		<imagemerge destdir='${images.loRes.destDir}' layout='auto'
+					cssfile='${images.cssFile}' csspath='${images.cssPath}/loRes/'>
+			<dirset dir='${images.dir}/loRes' 
+					includes='*' excludes='horizborders,vertborders,backgrounds'/>
+		</imagemerge>
+		<echo/>
+		<echo message='Merging low resolution horizontal borders'/>
+		<echo/>
+		<imagemerge destdir='${images.loRes.destDir}' layout='vertical'
+					cssfile='${images.cssFile}' csspath='${images.cssPath}/loRes/'>
+			<dirset dir='${images.dir}/loRes' includes='horizborders'/>
+		</imagemerge>
+		<echo/>
+		<echo message='Merging low resolution vertical borders'/>
+		<echo/>
+		<imagemerge destdir='${images.loRes.destDir}' layout='horizontal'
+					cssfile='${images.cssFile}' csspath='${images.cssPath}/loRes/'>
+			<dirset dir='${images.dir}/loRes' includes='vertborders'/>
+		</imagemerge>
+		<echo/>
+		<echo message='Copying low resolution backgrounds'/>
+		<echo/>
+		<imagemerge destdir='${images.loRes.destDir}' copy='true' layout='repeat'
+					cssfile='${images.cssFile}' csspath='${images.cssPath}/loRes/'>
+			<dirset dir='${images.dir}/loRes' includes='backgrounds'/>
+		</imagemerge>
 	</target>
 
 	<target name="htmleditorexample">
@@ -103,26 +186,15 @@
 		</copy>
 		
 		<property name="htmleditor.cssFile" value="imgs.css"/>
-		<!-- hi res images -->
 		<property name="htmleditor.hiRes.destDir" value="${build.examples.dir}/htmlEditor/img/hiRes"/>
-		<mkdir dir="${htmleditor.hiRes.destDir}"/>
-		<delete file="${htmleditor.hiRes.destDir}/${htmleditor.cssFile}"/>
-	    <foreach target="imagecopy" param="var" list="WebRoot/examples/htmlEditor/img/hiRes">
-			<param name="destDir" value="${htmleditor.hiRes.destDir}"/>
-			<param name="cssPrefix" value="/ajax/examples/htmlEditor/img/hiRes/"/>			
-			<param name="cssFile" value="${htmleditor.cssFile}"/>			
-	    </foreach>
-		
-		<!-- lo res images -->
 		<property name="htmleditor.loRes.destDir" value="${build.examples.dir}/htmlEditor/img/loRes"/>
-		<mkdir dir="${htmleditor.loRes.destDir}"/>
-		<delete file="${htmleditor.loRes.destDir}/${htmleditor.cssFile}"/>
-		<foreach target="imagemerge" param="var" list="img">
-			<param name="srcDir" value="WebRoot/examples/htmlEditor/img/loRes"/>
-			<param name="destDir" value="${htmleditor.loRes.destDir}"/>
-			<param name="cssPrefix" value="/ajax/examples/htmlEditor/img/hiRes/loRes/"/>			
-			<param name="cssFile" value="${htmleditor.cssFile}"/>			
-		</foreach>
+		<antcall target='images'>
+			<param name='images.dir' value='WebRoot/examples/htmlEditor/img'/>
+			<param name="images.hiRes.destDir" value="${htmleditor.hiRes.destDir}"/>
+			<param name="images.loRes.destDir" value="${htmleditor.loRes.destDir}"/>
+			<param name="images.cssPath" value="/ajax/examples/htmlEditor/img"/>			
+			<param name="images.cssFile" value="${htmleditor.cssFile}"/>			
+		</antcall>
 	</target>
 	
 	<target name="dataviewerexample">
@@ -131,26 +203,15 @@
 		</copy>
 		
 		<property name="dataViewer.cssFile" value="imgs.css"/>
-		<!-- hi res images -->
 		<property name="dataViewer.hiRes.destDir" value="${build.examples.dir}/dataViewer/config/img/hiRes"/>
-		<mkdir dir="${dataViewer.hiRes.destDir}"/>
-		<delete file="${dataViewer.hiRes.destDir}/${dataViewer.cssFile}"/>
-	    <foreach target="imagecopy" param="var" list="WebRoot/examples/dataViewer/config/img/hiRes">
-			<param name="destDir" value="${dataViewer.hiRes.destDir}"/>
-			<param name="cssPrefix" value="/ajax/examples/dataViewer/config/img/hiRes/"/>			
-			<param name="cssFile" value="${dataViewer.cssFile}"/>			
-	    </foreach>
-		
-		<!-- lo res images -->
 		<property name="dataViewer.loRes.destDir" value="${build.examples.dir}/dataViewer/config/img/loRes"/>
-		<mkdir dir="${dataViewer.loRes.destDir}"/>
-		<delete file="${dataViewer.loRes.destDir}/${dataViewer.cssFile}"/>
-		<foreach target="imagemerge" param="var" list="img">
-			<param name="srcDir" value="WebRoot/examples/dataViewer/config/img/loRes"/>
-			<param name="destDir" value="${dataViewer.loRes.destDir}"/>
-			<param name="cssPrefix" value="/ajax/examples/dataViewer/config/img/loRes/"/>			
-			<param name="cssFile" value="${dataViewer.cssFile}"/>			
-		</foreach>
+		<antcall target='images'>
+			<param name='images.dir' value='WebRoot/examples/dataViewer/config/img'/>
+			<param name="images.hiRes.destDir" value="${dataViewer.hiRes.destDir}"/>
+			<param name="images.loRes.destDir" value="${dataViewer.loRes.destDir}"/>
+			<param name="images.cssPath" value="/ajax/examples/dataViewer/config/img"/>			
+			<param name="images.cssFile" value="${dataViewer.cssFile}"/>			
+		</antcall>
 	</target>
 
 	<target name="treeexample">
@@ -159,26 +220,15 @@
 		</copy>
 		
 		<property name="tree.cssFile" value="imgs.css"/>
-		<!-- hi res images -->
 		<property name="tree.hiRes.destDir" value="${build.examples.dir}/tree/img/hiRes"/>
-		<mkdir dir="${tree.hiRes.destDir}"/>
-		<delete file="${tree.hiRes.destDir}/${tree.cssFile}"/>
-	    <foreach target="imagecopy" param="var" list="WebRoot/examples/tree/img/hiRes">
-			<param name="destDir" value="${tree.hiRes.destDir}"/>
-			<param name="cssPrefix" value="/ajax/examples/tree/img/hiRes/"/>			
-			<param name="cssFile" value="${tree.cssFile}"/>			
-	    </foreach>
-		
-		<!-- lo res images -->
 		<property name="tree.loRes.destDir" value="${build.examples.dir}/tree/img/loRes"/>
-		<mkdir dir="${tree.loRes.destDir}"/>
-		<delete file="${tree.loRes.destDir}/${tree.cssFile}"/>
-		<foreach target="imagemerge" param="var" list="img">
-			<param name="srcDir" value="WebRoot/examples/tree/img/loRes"/>
-			<param name="destDir" value="${tree.loRes.destDir}"/>
-			<param name="cssPrefix" value="/ajax/examples/tree/img/hiRes/loRes/"/>			
-			<param name="cssFile" value="${tree.cssFile}"/>			
-		</foreach>
+		<antcall target='images'>
+			<param name='images.dir' value='WebRoot/examples/tree/img'/>
+			<param name="images.hiRes.destDir" value="${tree.hiRes.destDir}"/>
+			<param name="images.loRes.destDir" value="${tree.loRes.destDir}"/>
+			<param name="images.cssPath" value="/ajax/examples/tree/img"/>			
+			<param name="images.cssFile" value="${tree.cssFile}"/>			
+		</antcall>
 	</target>
 	
 	<target name="xformsexample">
@@ -189,43 +239,6 @@
 		
 	<target name="examples" depends="dwtimages, htmleditorexample, treeexample, dataviewerexample, xformsexample"/>
 	
-	<!-- merges images, puts merged image in build area, and generates CSS  -->	
-	<target name="imagemerge" depends="compile" description="prepares images">
-		<echo message="imageMerge ${var}"/>
-		<java classname="com.zimbra.ajax.imagemerge.ImageMerge" fork="true" classpathref="class.path" failonerror="true">
-			<classpath>
-				<fileset dir="${jars.dir}">
-					<include name="**/*.jar"/>
-				</fileset>
-				<dirset dir="${build.dir}"/>
-			</classpath>
-			<arg value="-i"/> <arg value="${srcDir}/${var}"/>
-			<arg value="-o"/> <arg value="${destDir}" />
-			<arg value="-p"/> <arg value="${cssPrefix}" />
-			<arg value="-s"/> <arg value="${cssFile}" />
-		</java>
-	</target>
-		  
-	<!-- copies images to build area and generates combined CSS -->			
-	<target name="imagecopy" depends="compile" description="prepares images">
-		<echo message="imagecopy ${var}"/>
-		<java classname="com.zimbra.ajax.imagemerge.ImageMerge" fork="true" classpathref="class.path" failonerror="true">
-			<classpath>
-				<fileset dir="${jars.dir}">
-					<include name="**/*.jar"/>
-				</fileset>
-				<dirset dir="${build.dir}"/>
-			</classpath>
-			<arg value="-i"/> <arg value="${var}"/>
-			<arg value="-o"/> <arg value="${destDir}"/>
-			<arg value="-p"/> <arg value="${cssPrefix}"/>
-			<arg value="-s"/> <arg value="${cssFile}" />
-			<arg value="-c" />
-		</java>
-	</target>
-	
-	
-
 	<!-- 
 	This target is meant only to be run after a full deploy has
 	been done once. It does not deal with the java code used by the

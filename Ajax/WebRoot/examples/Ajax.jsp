@@ -82,11 +82,14 @@ Contributor(s):
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/events/DwtSelectionEvent.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/events/DwtHtmlEditorStateEvent.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/events/DwtTreeEvent.js"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/dwt/events/DwtHoverEvent.js"></script>
 
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/dnd/DwtDragEvent.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/dnd/DwtDragSource.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/dnd/DwtDropEvent.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/dnd/DwtDropTarget.js"></script>
+
+<script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtHoverMgr.js"></script>
 
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtControl.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtComposite.js"></script>
