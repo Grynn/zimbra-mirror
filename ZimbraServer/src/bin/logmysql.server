@@ -1,0 +1,78 @@
+#!/bin/bash
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Version: ZPL 1.1
+# 
+# The contents of this file are subject to the Zimbra Public License
+# Version 1.1 ("License"); you may not use this file except in
+# compliance with the License. You may obtain a copy of the License at
+# http://www.zimbra.com/license
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+# the License for the specific language governing rights and limitations
+# under the License.
+# 
+# The Original Code is: Zimbra Collaboration Suite.
+# 
+# The Initial Developer of the Original Code is Zimbra, Inc.
+# Portions created by Zimbra are Copyright (C) 2005 Zimbra, Inc.
+# All Rights Reserved.
+# 
+# Contributor(s):
+# 
+# ***** END LICENSE BLOCK *****
+# 
+
+source `dirname $0`/zmshutil || exit 1
+zmsetvars logger_mysql_directory logger_mysql_pidfile logger_mysql_mycnf
+
+zmassert -d ${logger_mysql_directory}
+zmassert -x ${logger_mysql_directory}/bin/mysqld_safe
+zmassert -r ${logger_mysql_mycnf}
+zmassert -d `dirname ${logger_mysql_pidfile}`
+
+#
+# Path to my.cnf
+#
+
+case "$1" in
+    'start')
+	# --defaults-file must be first argument
+	cd ${logger_mysql_directory}; \
+            ${logger_mysql_directory}/bin/mysqld_safe \
+                --defaults-file=${logger_mysql_mycnf} \
+                --ledir=${logger_mysql_directory}/bin &
+	;;
+    
+    'stop')
+	if  [ ! -s "${logger_mysql_pidfile}" ]; then 
+	    echo "Error: no pid in '${logger_mysql_pidfile}'"
+	    exit 1
+	fi
+	pid=`cat ${logger_mysql_pidfile}`
+	echo -n "Killing mysqld with pid $pid "
+	kill $pid
+	# wait for mysqld pid file to be removed
+	for ((i = 0; i < 30; i++)); do
+	    sleep 1;
+	    if [ ! -s ${logger_mysql_pidfile} ]; then
+		break;
+	    fi
+	    echo -n "."
+	done 
+	if [ -s ${logger_mysql_pidfile} ]; then 
+	    echo " gave up waiting!"
+	fi
+	;;
+    
+    'restart')
+	$0 stop
+	$0 start
+	;;
+
+    *)
+	echo "Usage: $0 start|stop|restart"
+	exit 1
+	;;
+esac
