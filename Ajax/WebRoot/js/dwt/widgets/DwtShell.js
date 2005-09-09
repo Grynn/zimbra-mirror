@@ -31,7 +31,7 @@
  *              alert that is presented to the user. If this method returns null, then no alert is popped up
  *              this parameter may be null
  */
-function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell, existingElementId) {
+function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell, existingElementId, useCurtain) {
 
 	if (window._dwtShell != null) 
 		throw new DwtException("DwtShell already exists for window", DwtException.INVALID_OP, "DwtShell");
@@ -105,6 +105,17 @@ function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell, ex
 	this._veilOverlay.activeDialogs = new Array();
 	this._veilOverlay.innerHTML = "<table cellspacing=0 cellpadding=0 style='width:100%; height:100%'><tr><td>&nbsp;</td></tr></table>";
 	htmlElement.appendChild(this._veilOverlay);
+    
+	// Curtain overlay - used between hidden and viewable elements using z-index
+	if (useCurtain) {
+		this._curtainOverlay = window.document.createElement("div");
+		this._curtainOverlay.className = "CurtainOverlay";
+		this._curtainOverlay.style.position = "absolute";
+		Dwt.setBounds(this._curtainOverlay, 0, 0, "100%", "100%")
+		Dwt.setZIndex(this._curtainOverlay, Dwt.Z_CURTAIN);
+		this._curtainOverlay.innerHTML = "<table cellspacing=0 cellpadding=0 style='width:100%; height:100%'><tr><td>&nbsp;</td></tr></table>";
+		htmlElement.appendChild(this._curtainOverlay);
+	}
     
     window.document.body.onselect = DwtShell._preventDefaultSelectPrt;
 	window.document.body.onselectstart = DwtShell._preventDefaultSelectPrt;

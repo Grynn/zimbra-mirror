@@ -25,7 +25,7 @@
 
 function TreeExample(parent) {
 	// Create the Tree. Note that we assign an Absolute position to the tree since it is a direct 
-	// child of DwtShell, and the veils in DwtShell are absolutely position. Therefore if we made this
+	// child of DwtShell, and the veils in DwtShell are absolutely positioned. Therefore if we made this
 	// statically positioned, we would never see it!
 	this._tree = new DwtTree(parent, null, null, DwtControl.ABSOLUTE_STYLE);
 	
@@ -41,14 +41,14 @@ function TreeExample(parent) {
 	
 	
 	// Make the tree visible. Specifically this moves the tree to the right "layer" (i.e. above the
-	// shell curtain overlay) in the DwtShell
+	// shell overlays)
 	this._tree.zShow(true);
 }
 
 TreeExample.run =
 function() {
 	// Create the shell
-	var shell = new DwtShell("MainShell", false);
+	var shell = new DwtShell("MainShell", false, null, null, null, true);
 	new TreeExample(shell);
 }
 
@@ -151,32 +151,35 @@ function(ev) {
 	// DwtTree.ITEM_CHECKED - Item was checked (in the case of checked items)
 	// DwtTree.ITEM_ACTIONED - Item was actioned (i.e. right mouse click)
 	// DwtTree.ITEM_DBL_CLICKED - Item was double clicked
-	
-	var alertTxt = ev.item.getText() + " was ";
+
+	var action = "";	
 	switch (ev.detail) {
 		case DwtTree.ITEM_SELECTED:
-			alertTxt += "Selected";
+			action = "Selected";
 			break;
 		case DwtTree.ITEM_DESELECTED:
-			alertTxt += "Deselected";
+			action = "Deselected";
 			break;
 		case DwtTree.ITEM_CHECKED:
-			alertTxt += "Checked";
+			action = "Checked";
 			break;
 		case DwtTree.ITEM_ACTIONED:
-			alertTxt += "Actioned";
+			action = "Actioned";
 			break;
 		case DwtTree.ITEM_DBL_CLICKED:
-			// Won't actually see this because of the alert below gets in the way of the double click
-			alertTxt += "Double Clicked";
+			// Won't see this one unless ITEM_SELECTED and default are commented out
+			action = "Double Clicked";
 			break;
 		default:
-			alertTxt += "OH NO! UNKNOWN ACTION!"
+			action = "[UNKNOWN ACTION]"
 	}
-	
-	alert(alertTxt);
-	
+
+	if (action) {
+		var alertTxt = ev.item.getText() + " was " + action;
+		alert(alertTxt);
+	}
 }
+
 DwtDragEvent.DRAG_START = 1;
 DwtDragEvent.SET_DATA = 2;
 DwtDragEvent.DRAG_END = 3;

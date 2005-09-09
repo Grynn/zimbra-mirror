@@ -140,26 +140,23 @@ DIV.vSpace {
 	background-color: white;
 }
 
-
-/*
-* Tool tips
-*/
-
-.DwtToolTip {
-	background-color: rgb(255, 247, 176);
-    border: solid 1px;
-}
-
 .DisabledText { color: rgb(130, 130, 130); }
 
-/* DwtHtmlEditor */
-.DwtHtmlEditor {background-color: white;}
-.DwtHtmlEditor .TextArea {
-	font: 10pt monospace;
-	padding: 3px;
-	width: 100%;
-	overflow: auto;
-}
+/*
+* for tooltips
+*/
+.hover_frame_table 		{	border-collapse:collapse;	padding:0;	}
+.hover_spacer_TL	 	{	width:12;		height:12;}
+.hover_spacer_T 		{	width:100%;		height:16;}
+.hover_spacer_TR	 	{	width:20;		height:16;}
+.hover_spacer_L	 		{	width:20;		height:100%;}
+.hover_spacer_R 		{	width:20;		height:100%;}
+.hover_spacer_BL	 	{	width:20;		height:20;}
+.hover_spacer_B 		{	width:100%;		height:20;}
+.hover_spacer_BR	 	{	width:20;		height:20;}
+.hover_contents 	{								}
+.hover_tip_top 		{		position: absolute;		}
+.hover_tip_bottom 	{		position: relative;		}
 
 /*
 * Trees
