@@ -515,7 +515,7 @@ function(n) {
 	if (n == null || n == "") {
 		return "";
 	} else {
-		return ("(|(cn=*"+n+"*)(sn=*"+n+"*)(gn=*"+n+"*)(displayName=*"+n+"*)(zimbraMalAlias=*"+n+"*)(zimbraId="+n+")(zimbraMailAddress=*"+n+"*)(zimbraMailDeliveryAddress=*"+n+"*))");
+		return ("(|(cn=*"+n+"*)(sn=*"+n+"*)(gn=*"+n+"*)(displayName=*"+n+"*)(zimbraMailAlias=*"+n+"*)(zimbraId="+n+")(zimbraMailAddress=*"+n+"*)(zimbraMailDeliveryAddress=*"+n+"*))");
 	}
 }
 
