@@ -92,7 +92,7 @@ function(node) {
 	
 	var children = node.childNodes;
 	for (var i=0; i< children.length;  i++) {
-		child = children[i];
+		var child = children[i];
 		if (child.nodeName != 'a') continue;
 		var name = child.getAttribute("n");
 		if (child.firstChild != null) {
