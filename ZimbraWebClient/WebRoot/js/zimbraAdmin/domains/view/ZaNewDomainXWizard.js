@@ -23,6 +23,13 @@
  * ***** END LICENSE BLOCK *****
  */
 
+/**
+* @class ZaNewDomainXWizard
+* @contructor
+* @param parent
+* @param app
+* @author Greg Solovyev
+**/
 function ZaNewDomainXWizard (parent, app) {
 	this._app=app;
 	ZaXWizardDialog.call(this, parent, null, ZaMsg.NDD_Title, "550px", "300px");
@@ -259,10 +266,38 @@ function (arg) {
 	if(arg instanceof AjxException || arg instanceof ZmCsfeException || arg instanceof AjxSoapException) {
 		this._containedObject[ZaDomain.A_GALTestResultCode] = arg.code;
 		this._containedObject[ZaDomain.A_GALTestMessage] = arg.detail;
+		this._containedObject[ZaDomain.A_GALTestSearchResults] = null;	
 	} else {
 		this._containedObject[ZaDomain.A_GALTestResultCode] = arg.getBody().firstChild.firstChild.firstChild.nodeValue;
 		if(this._containedObject[ZaDomain.A_GALTestResultCode] != ZaDomain.Check_OK) {
 			this._containedObject[ZaDomain.A_GALTestMessage] = arg.getBody().firstChild.childNodes[1].firstChild.nodeValue;		
+			this._containedObject[ZaDomain.A_GALTestSearchResults] = null;				
+		} else {
+			//parse returned contacts
+			this._containedObject[ZaDomain.A_GALTestSearchResults] = new Array();				
+			var childNodes = arg.getBody().firstChild.childNodes;
+			if(childNodes) {
+				var cnt = childNodes.length;
+				for(var i = 0; i < cnt; i ++) {
+					if(childNodes[i].nodeName!="cn")
+						continue;
+						
+					var attrNodes = childNodes[i].childNodes;
+					if(attrNodes) {
+						var cnObject = new Object();
+						var countAttrs = attrNodes.length;
+						for(var ix =0; ix < countAttrs; ix++) {
+							var attrNode = attrNodes[ix];
+							if (attrNode.nodeName != 'a') continue;
+							if(attrNode.firstChild != null) {
+								cnObject[attrNode.getAttribute("n")] = attrNode.firstChild.nodeValue;
+							}
+						}
+						if(countAttrs)
+							this._containedObject[ZaDomain.A_GALTestSearchResults].push(cnObject);
+					}						
+				}
+			}		
 		}
 	}
 	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
@@ -545,12 +580,19 @@ function () {
 					}, 
 					{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 7", relevantBehavior:_HIDE_,
 						items: [
-							{type:_OUTPUT_,value:ZaMsg.Domain_GALTestResults},
 							{type:_SWITCH_,
 								items: [
-									{type:_CASE_, relevant:"instance[ZaDomain.A_GALTestResultCode] == ZaDomain.Check_OK",
+									{type:_CASE_, relevant:"instance[ZaDomain.A_GALTestResultCode] == ZaDomain.Check_OK", numCols:2,
 										items: [
-											{type:_OUTPUT_, value:ZaMsg.Domain_GALTestSuccessful}
+											{type:_OUTPUT_, value:ZaMsg.Domain_GALTestSuccessful, colSpan:2},
+											{type:_OUTPUT_, value:ZaMsg.Domain_GALSearchResult+":",  align:_CENTER_, colSpan:2},											
+											{type:_SPACER_,  align:_CENTER_, valign:_TOP_, colSpan:"*"},	
+											{type:_REPEAT_, ref:ZaDomain.A_GALTestSearchResults, colSpan:2, label:null, showAddButton:false, showRemoveButton:false,  
+												items: [
+													{ref:"email", type:_OUTPUT_, label:ZaMsg.ALV_Name_col+":"},
+													{ref:"fullName", type:_OUTPUT_, label:ZaMsg.ALV_FullName_col+":"}
+												]
+											}
 										]
 									},
 									{type:_CASE_, relevant:	"instance[ZaDomain.A_GALTestResultCode] != ZaDomain.Check_OK",
