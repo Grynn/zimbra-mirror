@@ -750,7 +750,6 @@ function() {
 	}
 	htmlElement.className = this._className;
 	htmlElement.style.overflow = "visible";
-	this._toolTipContent = null;
 	this._enabled = true;
 	this._controlEvent = new DwtControlEvent();
 	this._dragging = DwtControl._NO_DRAG;
