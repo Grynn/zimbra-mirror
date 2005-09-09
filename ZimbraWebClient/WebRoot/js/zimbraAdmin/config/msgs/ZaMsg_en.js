@@ -77,6 +77,7 @@ ZaMsg.Domain_GAL_ConfigSummary = "Summary of GAL search settings";
 ZaMsg.Domain_GALTestSettings = "Test";
 ZaMsg.Domain_GALTestingInProgress = "Please wait while the server is testing new GAL search settings...";
 ZaMsg.Domain_GALTestResults = "Test result";
+ZaMsg.Domain_GALSearchResult = "Search result";
 ZaMsg.Domain_GALTestSuccessful = "Test Successful";
 ZaMsg.Domain_GALTestFailed = "GAL search test failed";
 ZaMsg.Domain_GALTestResult = "Test result";
@@ -209,7 +210,7 @@ ZaMsg.SERTBB_Delete_tt = "Delete server";
 ZaMsg.SERTBB_Save_tt = "Save changes";
 ZaMsg.SERTBB_Close_tt = "Close this view";
 
-ZaMsg.ALV_Name_col = "E-Mail Address";
+ZaMsg.ALV_Name_col = "EMail Address";
 ZaMsg.ALV_FullName_col = "Full Name";
 ZaMsg.ALV_DspName_col = "Display Name";
 ZaMsg.ALV_Status_col = "Status";

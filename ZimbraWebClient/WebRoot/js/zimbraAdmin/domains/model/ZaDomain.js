@@ -74,6 +74,7 @@ ZaDomain.A_GALTestMessage = "galtestmessage";
 ZaDomain.A_GALTestResultCode = "galtestresutcode";
 ZaDomain.A_GALSampleQuery = "samplequery";
 ZaDomain.A_UseBindPassword = "usebindpassword";
+ZaDomain.A_GALTestSearchResults = "galtestsearchresults";
 
 //values
 ZaDomain.GAL_Mode_internal = "zimbra";
@@ -279,7 +280,7 @@ function (obj, callback, sampleQuery) {
 		attr = soapDoc.set("a", obj.attrs[ZaDomain.A_GalLdapBindPassword]);
 		attr.setAttribute("n", ZaDomain.A_GalLdapBindPassword);
 	}
-	soapDoc.set("query", "cn=*" + sampleQuery + "*");
+	soapDoc.set("query", "*" + sampleQuery + "*");
 
 	var asynCommand = new ZmCsfeAsynchCommand();
 	asynCommand.addInvokeListener(callback);
@@ -542,6 +543,16 @@ ZaDomain.myXModel = {
 		{id:ZaDomain.A_GALTestMessage, type:_STRING_},
 		{id:ZaDomain.A_GALTestResultCode, type:_STRING_},
 		{id:ZaDomain.A_GALSampleQuery, type:_STRING_},
-		{id:ZaModel.currentStep, type:_NUMBER_, ref:ZaModel.currentStep, maxInclusive:2147483647}
+		{id:ZaModel.currentStep, type:_NUMBER_, ref:ZaModel.currentStep, maxInclusive:2147483647}, 
+		{id:ZaDomain.A_GALTestSearchResults, ref:ZaDomain.A_GALTestSearchResults, type:_LIST_, 
+			listItem: {type:_OBJECT_, 
+				items:[
+					{id:"email", type:_STRING_},
+					{id:"fullName", type:_STRING_},					
+					{id:"firstName", type:_STRING_},										
+					{id:"lastName", type:_STRING_},															
+				]
+			}
+		}
 	]
 };
