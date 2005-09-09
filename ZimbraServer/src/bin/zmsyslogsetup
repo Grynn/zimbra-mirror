@@ -61,6 +61,14 @@ else
       echo "local0.info                /var/log/zimbra.log" >> /tmp/syslog.zimbra
 fi
 
+egrep -v "^mail.*($LOGHOST|zimbra)" /tmp/syslog.zimbra > /tmp/syslog.zimbra
+
+if [ $TYPE = "remote" ]; then
+      echo "mail.info                @$LOGHOST" >> /tmp/syslog.zimbra
+else
+      echo "mail.info                /var/log/zimbra.log" >> /tmp/syslog.zimbra
+fi
+
 cp -f /tmp/syslog.zimbra /etc/syslog.conf
 
 killall -HUP syslogd
