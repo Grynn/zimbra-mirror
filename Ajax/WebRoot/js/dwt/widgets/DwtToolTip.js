@@ -170,20 +170,15 @@ DwtToolTip.prototype.popup = function(x, y) {
 			this._div.style.clip = "rect(auto,auto,auto,auto)";
 		}
 
-		// NOTE: Firefox shows the tooltip in its original position before
-		//		 moving it. This causes it to "jump" between the old and new
-		//		 position.
-		this._div.style.display = "none";
 		Dwt.setLocation(this._div, px, py);
 		var zIndex = this._dialog ? this._dialog.getZIndex() + Dwt.Z_INC : Dwt.Z_TOOLTIP;
 		Dwt.setZIndex(this._div, zIndex);
-		this._div.style.display = "block";
 	}
 }
 
 DwtToolTip.prototype.popdown = 
 function() {
 	if (this._content != null) {
-		Dwt.setZIndex(this._div, Dwt.Z_HIDDEN);
+		Dwt.setLocation(this._div, Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
 	}
 }
