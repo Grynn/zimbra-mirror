@@ -61,7 +61,8 @@ function DwtBaseDialog(parent, className, title, zIndex, mode, loc, optionalView
 
 	this._mode = mode || DwtBaseDialog.MODAL;
 	this._loc = loc;
-	
+	this._ffHackDisabled = false;
+
 	this._createHtml();
 	if (optionalView != null) {
 		this.setView(optionalView);
@@ -136,7 +137,7 @@ function(loc) {
 
 	// Deal with Firefox's horrible bug with absolutely 
 	// positioned divs and inputs floating over them.
-	Dwt._ffOverflowHack(this._htmlElId, thisZ, null, true);
+	if (!this._ffHackDisabled) Dwt._ffOverflowHack(this._htmlElId, thisZ, null, true);
 	
 	// use whichever has a value, local has precedence
 	loc = this._loc = loc || this._loc; 
@@ -145,6 +146,11 @@ function(loc) {
 	this.setZIndex(thisZ);
 	this._poppedUp = true;
 	this.focus();
+}
+
+DwtBaseDialog.prototype._disableFFhack = 
+function() {
+	this._ffHackDisabled = true;
 }
 
 DwtBaseDialog.prototype.focus = 
@@ -182,7 +188,7 @@ function() {
 		if (this._mode == DwtBaseDialog.MODAL) {
 			this._undoModality(myZIndex);
 		} else {
-			Dwt._ffOverflowHack(this._htmlElId, this.getZIndex(), null, false);
+			if (!this._ffHackDisabled) Dwt._ffOverflowHack(this._htmlElId, this.getZIndex(), null, false);
 			this._shell._veilOverlay.activeDialogs.pop();
 		}
 		this.removeKeyListeners();
@@ -399,7 +405,7 @@ function (myZIndex) {
 	var veilZ = this._shell._veilOverlay.veilZ;
 	veilZ.pop();
 	var newVeilZ = veilZ[veilZ.length - 1];
-	Dwt._ffOverflowHack(this._htmlElId, myZIndex, newVeilZ, false);
+	if (!this._ffHackDisabled) Dwt._ffOverflowHack(this._htmlElId, myZIndex, newVeilZ, false);
 	Dwt.setZIndex(this._shell._veilOverlay, newVeilZ);
 	this._shell._veilOverlay.dialogZ.pop();
 	this._shell._veilOverlay.activeDialogs.pop();
