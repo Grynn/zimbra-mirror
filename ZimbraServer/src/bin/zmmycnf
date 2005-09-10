@@ -30,9 +30,10 @@ zmsetvars \
     mysql_bind_address \
     mysql_data_directory \
     mysql_directory \
+    mysql_read_buffer_size \
+    mysql_sort_buffer_size \
     mysql_innodb_log_buffer_size \
-    mysql_innodb_thread_concurrency \
-    mysql_max_connections \
+    mysql_innodb_log_file_size \
     mysql_memory_percent \
     mysql_pidfile \
     mysql_port \
@@ -47,36 +48,29 @@ memkb=`awk '/^MemTotal.*kB$/ { print $2; }' /proc/meminfo`
 #
 # Memory for use by MySQL
 #
-mymem=`expr $memkb '*' ${mysql_memory_percent} / 100 / 1024`
+((mymem=memkb * mysql_memory_percent / 100 / 1024))
 
 #
-# Calculate *a* fraction of the memory we are using for MySQL
+# Allocate 75% of memory that mysql can use to buffer pool.
 #
-mymempct() { awk "END { print int($1 * $mymem / 100) }" < /dev/null; }
+((computed_innodb_buffer_pool_size = mymem * 75 / 100))
 
 #
-# Buffer pool is 80% of all mysql memory
+# Calculate the number of connections allowed.  The magic '2' is stack
+# size per connection.  Ignoring key_buffer_size as we don't use
+# MyISAM.
 #
-computed_innodb_buffer_pool_size=`mymempct 80`M
+((non_buffer_pool_memory = mymem - computed_innodb_buffer_pool_size))
+((per_connection_memory = 2 + mysql_sort_buffer_size + mysql_read_buffer_size + mysql_innodb_log_buffer_size))
+((computed_max_connections = non_buffer_pool_memory / per_connection_memory))
 
 #
-# Log file is 25% size of buffer pool (doesn't actually use memory)
+# Not designed for systems with (< 100MB), but deal with it
+# gracefully.
 #
-computed_innodb_log_file_size=`mymempct 20`M
-
-#
-# Query cache is 5% the size of mysql memory
-#
-computed_query_cache_size=`mymempct 5`M
-
-#
-# Use up 5% for read/sort buffers.  This is a per connection value,
-# divide by 2 for read and sort buffers and the last divide by 20 says
-# 5%.
-#
-buffsize=`awk "END { print int(${mymem}*1024/${mysql_max_connections}/2/20); }" < /dev/null`
-computed_read_buffer_size="${buffsize}K"
-computed_sort_buffer_size="${buffsize}K"
+if [ ${computed_max_connections} -lt 2 ]; then
+    computed_max_connections=2;
+fi
 
 #
 # Write config to stdout
@@ -100,21 +94,22 @@ log-long-format
 log-queries-not-using-indexes
 log-bin
 
-max_connections   = ${mysql_max_connections}
-query_cache_limit = ${computed_query_cache_size}
-query_cache_size  = ${computed_query_cache_size}
-query_cache_type  = 1
-read_buffer_size  = ${computed_read_buffer_size}
-sort_buffer_size  = ${computed_sort_buffer_size}
+thread_cache      = ${computed_max_connections}
+max_connections   = ${computed_max_connections}
+
+# We do a lot of writes, query cache turns out to be not useful.
+query_cache_type = 0
+
+sort_buffer_size = ${mysql_sort_buffer_size}M
+read_buffer_size = ${mysql_read_buffer_size}M
 
 # Increase the size of the table cache, since each mailbox has its
 # own set of tables
 table_cache = ${mysql_table_cache}
 
-innodb_buffer_pool_size   = ${computed_innodb_buffer_pool_size}
-innodb_log_file_size      = ${computed_innodb_log_file_size}
-innodb_log_buffer_size    = ${mysql_innodb_log_buffer_size}
-innodb_thread_concurrency = ${mysql_innodb_thread_concurrency}
+innodb_buffer_pool_size   = ${computed_innodb_buffer_pool_size}M
+innodb_log_file_size      = ${mysql_innodb_log_file_size}M
+innodb_log_buffer_size    = ${mysql_innodb_log_buffer_size}M
 innodb_file_per_table
 
 [mysqld_safe]
