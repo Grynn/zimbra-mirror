@@ -27,10 +27,14 @@ function DwtHtmlEditorExample(parent) {
 	this._createToolBar1(parent);
 	this._createToolBar2(parent);
 	this.rte = new DwtHtmlEditor(parent, null, DwtControl.ABSOLUTE_STYLE, false, null);
-	this.rte.setLocation(0, 58);
-	this.rte.setSize("100%", "100%");
+	this.rte.setMode(DwtHtmlEditor.HTML);
+	var tbHeight = this._toolbar1.getSize().y + this._toolbar2.getSize().y;
+	this.rte.setLocation(0, tbHeight);
+	var parentSz = parent.getSize();
+	var iframe = this.rte.getIframe();
+	Dwt.setSize(iframe, parentSz.x, parentSz.y - tbHeight - 2);
 	this.rte.zShow(true);
-	
+
 	this.rte.addStateChangeListener(new AjxListener(this, this._rteStateChangeListener));	
 }
 
@@ -38,79 +42,63 @@ DwtHtmlEditorExample._VALUE = "value";
 
 DwtHtmlEditorExample.run =
 function() {
-	var shell = new DwtShell("MainShell", false);
+	var shell = new DwtShell("MainShell", false, null, null, null, true);
 	var tst = new DwtHtmlEditorExample(shell);
 }
 
 DwtHtmlEditorExample.prototype._styleListener =
 function(ev) {
-	DBG.println("Setting Style: " + ev._args.newValue);
 	this.rte.setStyle(ev._args.newValue);
-}
+};
 
 DwtHtmlEditorExample.prototype._fontNameListener =
 function(ev) {
-	DBG.println("Setting Font Name: " + ev._args.newValue);
 	this.rte.setFont(ev._args.newValue);
-}
+};
 
 DwtHtmlEditorExample.prototype._fontSizeListener =
 function(ev) {
-	DBG.println("Setting Font Size");
 	this.rte.setFont(null, null, ev._args.newValue);
-}
+};
 
 DwtHtmlEditorExample.prototype._directionListener =
 function(ev) {
-	DBG.println("Changing Text Direction");
 	this.rte.setTextDirection(ev.item.getData(DwtHtmlEditorExample._VALUE));
-}
+};
 
 DwtHtmlEditorExample.prototype._indentListener =
 function(ev) {
-	DBG.println("Indent/Outdenting");
 	this.rte.setIndent(ev.item.getData(DwtHtmlEditorExample._VALUE));
-}
+};
 
 DwtHtmlEditorExample.prototype._insElementListener =
 function(ev) {
-	DBG.println("Inserting Element");
 	this.rte.insertElement(ev.item.getData(DwtHtmlEditorExample._VALUE));
-}
+};
 
 DwtHtmlEditorExample.prototype._justificationListener =
 function(ev) {
-	DBG.println("Setting Justification");
 	this.rte.setJustification(ev.item.getData(DwtHtmlEditorExample._VALUE));
-}
+};
 
 DwtHtmlEditorExample.prototype._fontStyleListener =
 function(ev) {
-	DBG.println("Setting Font Style");
 	this.rte.setFont(null, ev.item.getData(DwtHtmlEditorExample._VALUE));
-}
+};
 
 DwtHtmlEditorExample.prototype._fontColorListener =
 function(ev) {
-	DBG.println("Setting Font Color");
 	this.rte.setFont(null, null, null, ev.detail, null);
-}
+};
 
 DwtHtmlEditorExample.prototype._fontHiliteListener =
 function(ev) {
-	DBG.println("Setting Font Hilite");
 	this.rte.setFont(null, null, null, null, ev.detail);
-}
-
-DwtHtmlEditorExample.prototype._mailFormatListener =
-function(ev) {
-	DBG.println("FORMAT CHANGED!");
-	this.rte.setMode(ev.item.getData(DwtHtmlEditorExample._VALUE), true);
-}
+};
 
 DwtHtmlEditorExample.prototype._createToolBar1 =
-function(shell) {
-	var tb = new DwtToolBar(shell, "ToolBar", DwtControl.ABSOLUTE_STYLE, 2);
+function(parent) {
+	var tb = this._toolbar1 = new DwtToolBar(parent, "ToolBar", DwtControl.ABSOLUTE_STYLE, 2);
 	tb.zShow(true);
 	tb.setLocation(0, 0);
 
@@ -155,13 +143,14 @@ function(shell) {
 	b.setToolTipContent(ExMsg.subscript);
 	b.setData(DwtHtmlEditorExample._VALUE, DwtHtmlEditor.SUBSCRIPT_STYLE);
 	b.addSelectionListener(listener);
-}
+};
 
 DwtHtmlEditorExample.prototype._createToolBar2 =
-function(shell) {
-	var tb = new DwtToolBar(shell, "ToolBar", DwtControl.ABSOLUTE_STYLE, 2);
+function(parent) {
+	var tb = this._toolbar2 = new DwtToolBar(parent, "ToolBar", DwtControl.ABSOLUTE_STYLE, 2);
 	tb.zShow(true);
-	tb.setLocation(0, 30);
+	var y = this._toolbar1.getSize().y;
+	tb.setLocation(0, y);
 	
 	var listener = new AjxListener(this, this._justificationListener);
 	var b = this._leftJustifyButton = new DwtButton(tb, DwtButton.TOGGLE_STYLE, "TBButton");
@@ -241,28 +230,7 @@ function(shell) {
 	b.setToolTipContent(ExMsg.horizRule);
 	b.setData(DwtHtmlEditorExample._VALUE, DwtHtmlEditor.HORIZ_RULE);
 	b.addSelectionListener(insElListener);
-	
-	new DwtControl(tb, "vertSep");
-	
-	b = this._toggleModeButton = new DwtButton(tb, null, "TBButton");
-	b.setText(ExMsg.format);
-	b.setToolTipContent(ExMsg.format);
-	
-	var m = new DwtMenu(b);
-	b.setMenu(m);
-
-	var mi = new DwtMenuItem(m, DwtMenuItem.RADIO_STYLE);
-	mi.setImage(ExImg.I_HTML);
-	mi.setText(ExMsg.htmlDocument);
-	mi.setData(DwtHtmlEditorExample._VALUE, DwtHtmlEditor.HTML);
-	mi.addSelectionListener(new AjxListener(this, this._mailFormatListener));
-	
-	mi = new DwtMenuItem(m, DwtMenuItem.RADIO_STYLE);
-	mi.setImage(ExImg.I_DOCUMENT);
-	mi.setText(ExMsg.plainText);
-	mi.setData(DwtHtmlEditorExample._VALUE, DwtHtmlEditor.TEXT);
-	mi.addSelectionListener(new AjxListener(this, this._mailFormatListener));	
-}
+};
 
 DwtHtmlEditorExample.prototype._createStyleSelect =
 function(tb) {
@@ -279,8 +247,7 @@ function(tb) {
 	s.addOption("Heading 6", false, DwtHtmlEditor.H6);
 	s.addOption("Address", false, DwtHtmlEditor.ADDRESS);
 	s.addOption("Preformatted", false, DwtHtmlEditor.PREFORMATTED);
-}
-
+};
 
 DwtHtmlEditorExample.prototype._createFontFamilySelect =
 function(tb) {
@@ -292,7 +259,7 @@ function(tb) {
 	s.addOption("Times New Roman", true, DwtHtmlEditor.TIMES);
 	s.addOption("Courier New", false, DwtHtmlEditor.COURIER);
 	s.addOption("Verdana", false, DwtHtmlEditor.VERDANA);
-}
+};
 
 DwtHtmlEditorExample.prototype._createFontSizeMenu =
 function(tb) {
@@ -307,27 +274,11 @@ function(tb) {
 	s.addOption("5 (18pt)", false, 5);
 	s.addOption("6 (24pt)", false, 6);
 	s.addOption("7 (36pt)", false, 7);
-}
+};
 
 DwtHtmlEditorExample.prototype._rteStateChangeListener =
 function(ev) {
 
-/*	DBG.println("Bold: " + ev.isBold);
-	DBG.println("Underline: " + ev.isUnderline);
-	DBG.println("Italic: " + ev.isItalic);
-	DBG.println("StrikeThru: " + ev.isStrikeThru);
-	DBG.println("Superscript: " + ev.isSuperscript);
-	DBG.println("Subscript: " + ev.isSuperscript);
-	DBG.println("Font Family: " + ev.fontFamily);
-	DBG.println("Font Size: " + ev.fontSize);
-	DBG.println("Style: " + ev.style);
-	DBG.println("Color: " + ev.color);
-	DBG.println("Background: " + ev.backgroundColor);
-	DBG.println("Justification: " + ev.justification);
-	DBG.println("Ordered List: " + ev.isOrderedList);
-	DBG.println("UnorderedList: " + ev.isUnorderedList);
-	DBG.println("<HR>");
-*/	
 	this._boldButton.setToggled(ev.isBold);
 	this._underlineButton.setToggled(ev.isUnderline);
 	this._italicButton.setToggled(ev.isItalic);
@@ -368,6 +319,4 @@ function(ev) {
 		this._rightJustifyButton.setToggled(false);
 		this._fullJustifyButton.setToggled(true);		
 	}
-}
-
-
+};

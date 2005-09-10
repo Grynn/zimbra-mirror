@@ -356,6 +356,11 @@ function(width, height) {
 	}
 }
 
+DwtHtmlEditor.prototype.getIframe = 
+function() {
+	return Dwt.getDomObj(this.getDocument(), this._iFrameId);
+}
+
 DwtHtmlEditor.prototype._initialize = 
 function() {
 	if (this._mode == DwtHtmlEditor.HTML) 

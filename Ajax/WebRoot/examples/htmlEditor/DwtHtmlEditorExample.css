@@ -199,11 +199,6 @@ DIV.vSpace {
 	height: 100%;
 	overflow: auto;
 	border: 1px solid black;
-/*	font: 10pt monospace;
-	padding: 3px;
-	width: 100%;
-	height: 100%;
-	overflow: auto; */
 }
 .DwtHtmlEditor .DwtHtmlEditorIFrame {
 	background-color: white;
