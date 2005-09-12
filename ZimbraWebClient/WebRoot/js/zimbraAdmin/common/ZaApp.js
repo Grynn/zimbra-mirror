@@ -108,6 +108,7 @@ ZaApp.prototype.getGlobalConfigViewController =
 function() {
 	if (this._globalConfigViewController == null)
 		this._globalConfigViewController = new ZaGlobalConfigViewController(this._appCtxt, this._container, this);
+		this._globalConfigViewController.addSettingsChangeListener(new AjxListener(this, ZaApp.prototype.handleSettingsChange));
 	return this._globalConfigViewController;
 }
 
@@ -624,6 +625,13 @@ function (ev) {
 			this._domainListChoices.setChoices(this._domainList.getArray());
 			this._domainListChoices.dirtyChoices();			
 		}			
+	}
+}
+
+ZaApp.prototype.handleSettingsChange = 
+function(ev) {
+	if(ev) {
+		this._globalConfig = new ZaGlobalConfig(this);
 	}
 }
 

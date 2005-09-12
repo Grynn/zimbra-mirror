@@ -43,6 +43,15 @@ ZaGlobalConfigViewController.prototype.constructor = ZaGlobalConfigViewControlle
 
 ZaGlobalConfigViewController.STATUS_VIEW = "ZaGlobalConfigViewController.STATUS_VIEW";
 
+/**
+* Adds listener to removal of an ZaDomain 
+* @param listener
+**/
+ZaGlobalConfigViewController.prototype.addSettingsChangeListener = 
+function(listener) {
+	this._evtMgr.addListener(ZaEvent.E_MODIFY, listener);
+}
+
 ZaGlobalConfigViewController.prototype.show = 
 function(item) {
 
@@ -254,7 +263,7 @@ function () {
 		setMonitorHost(serverChoices, currentServerId, 'TRUE');
 	}
 
-	//if modification took place - fire an DomainChangeEvent
+	//if modification took place - fire a Settings Change Event
 	changeDetails["obj"] = this._currentObject;
 	changeDetails["modFields"] = mods;
 	this._fireSettingsChangeEvent(changeDetails);
