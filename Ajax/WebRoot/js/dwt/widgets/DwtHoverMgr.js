@@ -50,6 +50,8 @@ DwtHoverMgr.prototype._hoverOutAction;
 DwtHoverMgr.prototype._hoverOutActionId = -1;
 DwtHoverMgr.prototype._hoverOutListener;
 
+DwtHoverMgr.prototype._isHovering = false;
+
 // Public methods
 
 DwtHoverMgr.prototype.reset = function() {
@@ -69,6 +71,10 @@ DwtHoverMgr.prototype.reset = function() {
 	}
 	this._hoverOutActionId = -1;
 	this._hoverOutListener = null;
+}
+
+DwtHoverMgr.prototype.isHovering = function() {
+	return this._isHovering;
 }
 
 DwtHoverMgr.prototype.setHoverOverDelay = function(delay) {
@@ -118,6 +124,7 @@ DwtHoverMgr.prototype.hoverOut = function() {
 
 DwtHoverMgr.prototype._notifyHoverOver = function() {
 	this._hoverOverActionId = -1;
+	this._isHovering = true;
 	if (this._hoverOverListener != null) {
 		var x = this._hoverOverAction.params.get(0);
 		var y = this._hoverOverAction.params.get(1);
@@ -127,6 +134,7 @@ DwtHoverMgr.prototype._notifyHoverOver = function() {
 }
 DwtHoverMgr.prototype._notifyHoverOut = function() {
 	this._hoverOutActionId = -1;
+	this._isHovering = false;
 	if (this._hoverOutListener != null) {
 		var event = new DwtHoverEvent(DwtEvent.HOVEROUT, this._hoverOutDelay, this._hoverOutData);
 		this._hoverOutListener.handleEvent(event);

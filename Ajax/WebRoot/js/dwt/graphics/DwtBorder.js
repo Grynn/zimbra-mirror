@@ -513,8 +513,6 @@ DwtBorder.registerBorder(
 	} 
 );
 
-
-
 DwtBorder.registerBorder( 
 	"hover_IE", 
 	{ 
@@ -545,4 +543,74 @@ DwtBorder.registerBorder(
 	} 
 );
 
+DwtBorder.registerBorder( 
+	"sticky_hover", 
+	{ 
+		start: AjxBuffer.concat(
+				"<div id='{$id}_tip_t' class='hover_tip_top Imghover_tip_top'></div>",
+				"<table class=hover_frame_table border=0 cellspacing=0 cellpadding=0>", 
+					"<tr>", 
+						"<td id='{$id}_border_tl' class=Imghover_TL></td>", 
+						"<td id='{$id}_border_tm' class=Imghover_T colspan='2'></td>", 
+						"<td id='{$id}_border_tr' class=Imghover_TR></td>", 
+					"</tr>", 
+					"<tr>",
+						"<td id='{$id}_border_ml' class='Imghover_L'></td>", 
+						"<td id='{$id}_title' class='DwtStickyToolTipTitle Imghover_BG'>{$title}</td>",
+						"<td id='{$id}_close' class='Imghover_BG' align='right'></td>",
+						"<td id='{$id}_border_mr' class=Imghover_R></td>", 
+					"</tr>",
+					"<tr>",
+						"<td id='{$id}_border_ml' class='Imghover_L'></td>", 
+						"<td id='{$id}_border_mm' class=Imghover_BG colspan='2'><div id='{$id}_contents' class=hover_contents>"
+			),
+		end: AjxBuffer.concat(
+						"</div></td>", 
+						"<td id='{$id}_border_mr' class=Imghover_R></td>", 
+					"</tr>", 
+					"<tr>",
+						"<td id='{$id}_border_bl' class=Imghover_BL></div></td>", 
+						"<td id='{$id}_border_bm' class=Imghover_B colspan='2'></td>", 
+						"<td id='{$id}_border_br' class=Imghover_BR></div></td>", 
+					"</tr>", 
+				"</table>",
+				"<div id='{$id}_tip_b' class='hover_tip_bottom Imghover_tip_bottom'></div>"
+			)
+	} 
+);
 
+DwtBorder.registerBorder( 
+	"sticky_hover_IE", 
+	{ 
+		start: AjxBuffer.concat(
+				"<div id='{$id}_tip_t' class='hover_tip_top ImgIE_hover_tip_top'></div>",
+				"<table class=hover_frame_table border=0 cellspacing=0 cellpadding=0>", 
+					"<tr>", 
+						"<td id='{$id}_border_tl' class=ImgIE_hover_TL></td>", 
+						"<td id='{$id}_border_tm' class=ImgIE_hover_T colspan='2'></td>", 
+						"<td id='{$id}_border_tr' class=ImgIE_hover_TR></td>", 
+					"</tr>", 
+					"<tr>",
+						"<td id='{$id}_border_ml' class='ImgIE_hover_L'></td>", 
+						"<td id='{$id}_title' class='DwtStickyToolTipTitle ImgIE_hover_BG'>{$title}</td>",
+						"<td id='{$id}_close' class='ImgIE_hover_BG' align='right'></td>",
+						"<td id='{$id}_border_mr' class=ImgIE_hover_R></td>", 
+					"</tr>",
+					"<tr>",
+						"<td id='{$id}_border_ml' class='ImgIE_hover_L'></td>", 
+						"<td id='{$id}_border_mm' class=ImgIE_hover_BG colspan='2'><div id='{$id}_contents' class=hover_contents>"
+			),
+		end: AjxBuffer.concat(
+						"</div></td>", 
+						"<td id='{$id}_border_mr' class=ImgIE_hover_R></td>", 
+					"</tr>", 
+					"<tr>",
+						"<td id='{$id}_border_bl' class=ImgIE_hover_BL></div></td>", 
+						"<td id='{$id}_border_bm' class=ImgIE_hover_B colspan='2'></td>", 
+						"<td id='{$id}_border_br' class=ImgIE_hover_BR></div></td>", 
+					"</tr>", 
+				"</table>",
+				"<div id='{$id}_tip_b' class='hover_tip_bottom ImgIE_hover_tip_bottom'></div>"
+			)
+	} 
+);

@@ -804,13 +804,15 @@ DwtControl._mouseOverGeneralHdlr = function (ev, eventName){
 			obj.notifyListeners(eventName, mouseEv);
 		// Call the tooltip after the listeners to give them a 
 		// chance to change the tooltip text
-		if (obj._toolTipContent != null && !obj._hoverOverHandled) {
+		if (obj._toolTipContent != null) {
 			var shell = DwtShell.getShell(window);
 			var manager = shell.getHoverMgr();
-			manager.reset();
-			manager.setHoverOverDelay(DwtToolTip.TOOLTIP_DELAY);
-			manager.setHoverOverListener(obj._hoverOverListener);
-			manager.hoverOver(mouseEv.docX, mouseEv.docY);
+			if (!manager.isHovering()) {
+				manager.reset();
+				manager.setHoverOverDelay(DwtToolTip.TOOLTIP_DELAY);
+				manager.setHoverOverListener(obj._hoverOverListener);
+				manager.hoverOver(mouseEv.docX, mouseEv.docY);
+			}
 		}
 	}
 	mouseEv._stopPropagation = true;
@@ -883,11 +885,13 @@ function(ev) {
 			   DwtControl._DRAG_THRESHOLD 
 			&& Math.abs(obj._dragStartY - mouseEv.docY) < 
 			   DwtControl._DRAG_THRESHOLD)) {
-		if (obj._toolTipContent != null && !obj._hoverOverHandled) {
+		if (obj._toolTipContent != null) {
 			var shell = DwtShell.getShell(window);
 			var manager = shell.getHoverMgr();
-			// NOTE: mouseOver already init'd other hover settings
-			manager.hoverOver(mouseEv.docX, mouseEv.docY);
+			if (!manager.isHovering()) {
+				// NOTE: mouseOver already init'd other hover settings
+				manager.hoverOver(mouseEv.docX, mouseEv.docY);
+			}
 		}
 		return DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEMOVE);
 	} else {
@@ -1117,21 +1121,17 @@ function() {
 	this.getHtmlElement().innerHTML = "";
 }
 
-/** Sub-classes that override this method must set this._hoverHandled to true. */
 DwtControl.prototype._handleHoverOver = function(event) {
 	if (this._toolTipContent != null) {
 		var shell = DwtShell.getShell(window);
 		var tooltip = shell.getToolTip();
 		tooltip.setContent(this._toolTipContent);
 		tooltip.popup(event.x, event.y);
-		this._hoverHandled = true;
 	}
 }
 
-/** Sub-classes that override this method must set this._hoverHandled to false. */
 DwtControl.prototype._handleHoverOut = function(event) {
 	var shell = DwtShell.getShell(window);
 	var tooltip = shell.getToolTip();
 	tooltip.popdown();
-	this._hoverHandled = false;
 }

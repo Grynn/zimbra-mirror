@@ -1954,3 +1954,16 @@ html>body .balloonBR {
 /* end dynamically generated */
 
 /**** END BORDER STUFF ****/
+
+.DwtStickyToolTip {
+}
+
+.DwtStickyToolTipClose {
+}
+.DwtStickyToolTipClose-activated {
+}
+
+.DwtStickyToolTipTitle {
+	font-weight: bold;
+	padding-bottom: 2px;
+}

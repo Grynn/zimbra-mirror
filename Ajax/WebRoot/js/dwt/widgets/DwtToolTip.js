@@ -59,120 +59,12 @@ function(content) {
 DwtToolTip.prototype.popup = function(x, y) {
 	if (this._content != null) {
 		this._div.innerHTML = this._borderStart + this._content + this._borderEnd;
-	
-		var WINDOW_GUTTER = 5;
-		var POPUP_OFFSET_X = 8;
-		var POPUP_OFFSET_Y = 8;
 
-		var tt = document.getElementById('tooltip_tip_t');
-		var tb = document.getElementById('tooltip_tip_b');
-		var t = tt;
-
-		var ex = x;
-		var ey = y;
-
-		var w = this.shell.getSize();
-		var ww = w.x;
-		var wh = w.y;
-
-		var p = Dwt.getSize(this._div);
-		var pw = p.x;
-		var ph = p.y;
-
-		var btEl = document.getElementById('tooltip_border_tm');
-		var blEl = document.getElementById('tooltip_border_ml');
-		var brEl = document.getElementById('tooltip_border_mr');
-		var bbEl = document.getElementById('tooltip_border_bm');
-
-		var bth = Dwt.getSize(btEl).y;
-		var blw = Dwt.getSize(blEl).x;
-		var brw = Dwt.getSize(brEl).x;
-		var bbh = Dwt.getSize(bbEl).y;
-
-		var ttw = Dwt.getSize(tt).x;
-		var tth = Dwt.getSize(tt).y;
-		var tbw = Dwt.getSize(tb).x;
-		var tbh = Dwt.getSize(tb).y;
-
-		/***
-		DBG.println(
-			"---<br>"+
-		    "event: &lt;"+ex+","+ey+"><br>"+
-			"window: "+ww+"x"+wh+"<br>"+
-		    "popup: "+pw+"x"+ph+"<br>"+
-		    "borders: top="+btEl+", left="+blEl+", right="+brEl+", bottom="+bbEl+"<br>"+
-		    "borders: top="+bth+", left="+blw+", right="+brw+", bottom="+bbh+"<br>"+
-		    "tip: top="+ttw+"x"+tth+", bottom="+tbw+"x"+tbh
-	    );
-	    /***/
-
-		var px = ex - pw / 2 - POPUP_OFFSET_X;
-		var py;
-		
-		var ty;
-		var tw;
-
-		// tip up
-		var adjust = tbh; // NOTE: because bottom tip is relative
-		if (ph + ey + tth - bth + POPUP_OFFSET_Y < wh - WINDOW_GUTTER + adjust) {
-			py = ey + tth - bth + POPUP_OFFSET_Y;
-			tb.style.display = "none";
-			ty = bth - tth;
-			tw = ttw;
-			t = tt;
-		}
-		
-		// tip down
-		else {
-			py = ey - ph - tbh + bbh - POPUP_OFFSET_Y;
-			py += tbh; // NOTE: because bottom tip is relative
-			tt.style.display = "none";
-			ty = -bbh;
-			tw = tbw;
-			t = tb;
-		}
-		//DBG.println("position: &lt;"+px+","+py+">");
-
-		// make sure popup is wide enough for tip graphic
-		if (pw - blw - brw < tw) {
-			var contentEl = document.getElementById("tooltip_contents");
-			contentEl.width = tw; // IE
-			contentEl.style.width = String(tw)+"px"; // everyone else
-		}
-		
-		// adjust popup x-location
-		if (px < WINDOW_GUTTER) {
-			px = WINDOW_GUTTER;
-		}
-		else if (px + pw > ww - WINDOW_GUTTER) {
-			px = ww - WINDOW_GUTTER - pw;
-		}
-		//DBG.println("position: &lt;"+px+","+py+">");
-		
-		// adjust tip x-location
-		var tx = ex - px - tw / 2;
-		//DBG.println("tip: &lt;"+tx+","+ty+">");
-		if (tx + tw > pw - brw) {
-			tx = pw - brw - tw;
-		}
-		if (tx < blw) {
-			tx = blw;
-		}
-		//DBG.println("tip: &lt;"+tx+","+ty+">");
-
-		t.style.left = tx;
-		t.style.top = ty;
-		if (t == tb) {
-			var y = t.offsetTop;//Dwt.getLocation(t).y;
-			this._div.style.clip = "rect(auto,auto,"+(y + tbh)+",auto)";
-		}
-		else {
-			this._div.style.clip = "rect(auto,auto,auto,auto)";
-		}
-
-		Dwt.setLocation(this._div, px, py);
-		var zIndex = this._dialog ? this._dialog.getZIndex() + Dwt.Z_INC : Dwt.Z_TOOLTIP;
-		Dwt.setZIndex(this._div, zIndex);
+		var element = this._div;
+		var baseId = "tooltip";
+		var clip = true;
+		var dialog = this._dialog;	
+		this._positionElement(element, x, y, baseId, clip, dialog);
 	}
 }
 
@@ -181,4 +73,118 @@ function() {
 	if (this._content != null) {
 		Dwt.setLocation(this._div, Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
 	}
+}
+
+DwtToolTip.prototype._positionElement = function(element, x, y, baseId, clip, dialog) {
+	var WINDOW_GUTTER = 5;
+	var POPUP_OFFSET_X = 8;
+	var POPUP_OFFSET_Y = 8;
+
+	var tt = document.getElementById(baseId+'_tip_t');
+	var tb = document.getElementById(baseId+'_tip_b');
+	var t = tt;
+
+	var ex = x;
+	var ey = y;
+
+	var w = DwtShell.getShell(window).getSize();
+	var ww = w.x;
+	var wh = w.y;
+
+	var p = Dwt.getSize(element);
+	var pw = p.x;
+	var ph = p.y;
+
+	var btEl = document.getElementById(baseId+'_border_tm');
+	var blEl = document.getElementById(baseId+'_border_ml');
+	var brEl = document.getElementById(baseId+'_border_mr');
+	var bbEl = document.getElementById(baseId+'_border_bm');
+
+	var bth = Dwt.getSize(btEl).y;
+	var blw = Dwt.getSize(blEl).x;
+	var brw = Dwt.getSize(brEl).x;
+	var bbh = Dwt.getSize(bbEl).y;
+
+	var ttw = Dwt.getSize(tt).x;
+	var tth = Dwt.getSize(tt).y;
+	var tbw = Dwt.getSize(tb).x;
+	var tbh = Dwt.getSize(tb).y;
+
+	/***
+	DBG.println(
+		"---<br>"+
+	    "event: &lt;"+ex+","+ey+"><br>"+
+		"window: "+ww+"x"+wh+"<br>"+
+	    "popup: "+pw+"x"+ph+"<br>"+
+	    "borders: top="+btEl+", left="+blEl+", right="+brEl+", bottom="+bbEl+"<br>"+
+	    "borders: top="+bth+", left="+blw+", right="+brw+", bottom="+bbh+"<br>"+
+	    "tip: top="+ttw+"x"+tth+", bottom="+tbw+"x"+tbh
+    );
+    /***/
+
+	var px = ex - pw / 2 - POPUP_OFFSET_X;
+	var py;
+	
+	var ty;
+	var tw;
+
+	// tip up
+	var adjust = tbh; // NOTE: because bottom tip is relative
+	if (ph + ey + tth - bth + POPUP_OFFSET_Y < wh - WINDOW_GUTTER + adjust) {
+		py = ey + tth - bth + POPUP_OFFSET_Y;
+		tb.style.display = "none";
+		ty = bth - tth;
+		tw = ttw;
+		t = tt;
+	}
+	
+	// tip down
+	else {
+		py = ey - ph - tbh + bbh - POPUP_OFFSET_Y;
+		py += tbh; // NOTE: because bottom tip is relative
+		tt.style.display = "none";
+		ty = -bbh;
+		tw = tbw;
+		t = tb;
+	}
+
+	// make sure popup is wide enough for tip graphic
+	if (pw - blw - brw < tw) {
+		var contentEl = document.getElementById(baseId+"_contents");
+		contentEl.width = tw; // IE
+		contentEl.style.width = String(tw)+"px"; // everyone else
+	}
+	
+	// adjust popup x-location
+	if (px < WINDOW_GUTTER) {
+		px = WINDOW_GUTTER;
+	}
+	else if (px + pw > ww - WINDOW_GUTTER) {
+		px = ww - WINDOW_GUTTER - pw;
+	}
+	
+	// adjust tip x-location
+	var tx = ex - px - tw / 2;
+	if (tx + tw > pw - brw) {
+		tx = pw - brw - tw;
+	}
+	if (tx < blw) {
+		tx = blw;
+	}
+
+	t.style.left = tx;
+	t.style.top = ty;
+	if (clip) {
+		if (t == tb) {
+			var y = t.offsetTop;
+			element.style.clip = "rect(auto,auto,"+(y + tbh)+",auto)";
+		}
+		else {
+			element.style.clip = "rect(auto,auto,auto,auto)";
+		}
+	}
+
+	Dwt.setLocation(element, px, py);
+	var zIndex = dialog ? dialog.getZIndex() + Dwt.Z_INC : Dwt.Z_TOOLTIP;
+	Dwt.setZIndex(element, zIndex);
 }
