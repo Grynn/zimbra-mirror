@@ -251,7 +251,7 @@ function(child) {
 			this._expanded = false;
 		
 		if (this._initialized) {
-			AjxImg.setImage(this._nodeCell, DwtImg.BLANK16REAL);
+			AjxImg.setImage(this._nodeCell, "Blank_16");
 			AjxImg.getImageElement(this._nodeCell).onmousedown = null;
 		}
 	}
@@ -285,12 +285,12 @@ function(index) {
 	
 	// If we have deferred children, then we need to make sure we set up accordingly
 	if (this._children.size() > 0) {
-		AjxImg.setImage(this._nodeCell, DwtImg.NODE_COLLAPSED);
+		AjxImg.setImage(this._nodeCell, "NodeCollapsed");
 		var img = AjxImg.getImageElement(this._nodeCell);
 		img.onmousedown = DwtTreeItem._nodeIconMouseDownHdlr;
 		img.onmouseup = DwtTreeItem._nodeIconMouseUpHdlr;
 	} else {
-		AjxImg.setImage(this._nodeCell, DwtImg.BLANK16REAL);
+		AjxImg.setImage(this._nodeCell, "Blank_16");
 	}
 	
 	if (this._tree._isCheckedStyle()) {
@@ -334,7 +334,7 @@ DwtTreeItem.prototype._addDeferredChild =
 function(child, index) {
 	// If we are initialized, then we need to add a expansion node
 	if (this._initialized && this._children.size() == 0) {
-		AjxImg.setImage(this._nodeCell, DwtImg.NODE_COLLAPSED);
+		AjxImg.setImage(this._nodeCell, "NodeCollapsed");
 		var img = AjxImg.getImageElement(this._nodeCell);
 		img.onmousedown = DwtTreeItem._nodeIconMouseDownHdlr;
 		img.onmouseup = DwtTreeItem._nodeIconMouseUpHdlr;
@@ -362,11 +362,11 @@ function(item, index) {
 			this._childDiv.style.display = "none";
 	}
 	
-	if (AjxImg.getImageClass(this._nodeCell) == DwtImg.BLANK16REAL[0]) {
+	if (AjxImg.getImageClass(this._nodeCell) == AjxImg.getClassForImage("Blank_16")) {
 		if (this._expanded) 
-			AjxImg.setImage(this._nodeCell, DwtImg.NODE_EXPANDED);
+			AjxImg.setImage(this._nodeCell, "NodeExpanded");
 		else 
-			AjxImg.setImage(this._nodeCell, DwtImg.NODE_COLLAPSED);
+			AjxImg.setImage(this._nodeCell, "NodeCollapsed");
 		AjxImg.getImageElement(this._nodeCell).onmousedown = DwtTreeItem._nodeIconMouseDownHdlr;
 	}	
 	
@@ -459,7 +459,7 @@ function(expand, ev) {
 	if (!expand) {
 		this._expanded = false;
 		this._childDiv.style.display = "none";
-		AjxImg.setImage(this._nodeCell, DwtImg.NODE_COLLAPSED);
+		AjxImg.setImage(this._nodeCell, "NodeCollapsed");
 		this._tree._itemCollapsed(this, ev);
 	} else {
 		// The first thing we need to do is initialize any deferred children so that they
@@ -467,7 +467,7 @@ function(expand, ev) {
 		this._realizeDeferredChildren();
 		this._expanded = true;
 		this._childDiv.style.display = "block";
-		AjxImg.setImage(this._nodeCell, DwtImg.NODE_EXPANDED);
+		AjxImg.setImage(this._nodeCell, "NodeExpanded");
 		this._tree._itemExpanded(this, ev);
 	}	
 }

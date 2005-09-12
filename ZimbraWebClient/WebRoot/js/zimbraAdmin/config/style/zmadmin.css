@@ -580,19 +580,14 @@ DIV.vSpace {
 
 
 /*
-* Buttons
-*
-* The background color is set by a modifier.
-* TBButton - toolbar button, very light border (so we can show a border on mouseover)
-* States for buttons:
-*	-activated	-- mouseover state
-*	-triggered	-- mousedown state
-*/
-
-.SearchButton {
-	border: 1px outset white;	
-	background-image:url(/zimbraAdmin/skins/steel/images/bg_pebble.gif);	
-}
+ * Buttons
+ *
+ * The background color is set by a modifier.
+ * TBButton - toolbar button, very light border (so we can show a border on mouseover)
+ * States for buttons:
+ *	-activated	-- mouseover state
+ *	-triggered	-- mousedown state
+ */
 
 .TBButton {
 	border: 1px solid #EEEEEE;
@@ -602,7 +597,7 @@ DIV.vSpace {
 	border: 1px solid white;
 }
 
-.DwtButton, .ColorButton, .TBButton-activated, .SearchButton-activated, .TBButtonWhite-activated {
+.DwtButton, .ColorButton, .TBButton-activated, .TBButtonWhite-activated {
 	background-image:url(/zimbraAdmin/skins/steel/images/bg_button_up.gif);
 	border:1px outset #999999;	
 }
@@ -612,22 +607,23 @@ DIV.vSpace {
 	border:1px outset #999999;	
 }
 
-.DwtButton-triggered, .ColorButton-triggered, .SearchButton-triggered, .TBButton-triggered, .TBButtonWhite-triggered {
+.DwtButton-triggered, .ColorButton-triggered, .TBButton-triggered, .TBButtonWhite-triggered {
 	background-image:url(/zimbraAdmin/skins/steel/images/bg_button_down.gif);
 	border:1px inset #999999;	
 }
 
 
-.DwtButton-toggled, .ColorButton-toggled, .SearchButton-toggled, .TBButton-toggled, .TBButtonWhite-toggled {
+.DwtButton-toggled, .ColorButton-toggled, .TBButton-toggled, .TBButtonWhite-toggled {
 	background-image:url(/zimbraAdmin/skins/steel/images/bg_button_down.gif);
 	border:1px inset #999999;	
 }
 
 .DisabledText { color: rgb(130, 130, 130); }
 
+
 /*
-* Dialogs
-*/
+ * Dialogs
+ */
 
 .DwtDialog { background-color: transparent; }
 .DwtDialog .Title {
@@ -646,9 +642,25 @@ DIV.vSpace {
 .DwtDialog .Label { font-size: 10pt; }
 .DwtDialog .Field { width: 290px; }
 
+.DialogBody 			{	background-color:#EEEEEE;		}
+.DialogTable			{	border-collapse:collapse;		}
+
+.DialogToolbar 			{	background-image:url(/zimbra/skins/steel/images/bg_pebble_dark.gif);	}
+
+.DialogTitle			{	background-color:#3d3d3d; cursor:move			}
+.DialogTitleCell		{	color:white;	width:auto;	 font-weight:bold;	}
+.DialogTitleText		{	color:white;	width:auto;	 font-weight:bold;	}
+
+
+
 /* Message dialog */
 .DwtMsgDialog { width: 400px; }
 .DwtMsgArea { padding-left: 12px; }
+
+
+
+
+
 
 /* DwtColorPicker */
 .DwtColorPicker { border: 1px solid rgb(124, 124, 148); }
@@ -659,7 +671,7 @@ DIV.vSpace {
 .ZmLoginDialog-Transparent {background-color: transparent;}
 .ZmLoginDialog-HeaderPanel, .ZmLoginDialog-MainPanel {width: 448px;}
 .ZmLoginDialog-HeaderPanel {
-	background-image: url("/zimbraAdmin/img/hiRes/non-web/LoginBanner.jpg");
+	background-image: url("/zimbraAdmin/img/hiRes/logo/Admin_LoginBanner.gif");
 	border: 1px solid rgb(124, 124, 148);
 }
 .ZmLoginDialog-HeaderText, .ZmLoginDialog-SubHeaderText {
@@ -1889,24 +1901,6 @@ html>body .balloonBR {
 
 
 
-
-
-.dialog_title				{	background-color:#3d3d3d; cursor:move}
-.dialog_title_text			{	color:white;	width:auto;	 font-weight:bold;	}
-.dialog_title_cell			{	color:white;	width:auto;	 font-weight:bold;	}
-
-.dialog_table				{	border-collapse:collapse;	width:auto; height:100%;}
-
-.dialog_outset				{	}
-.dialog_outset_contents		{	width:auto;height:100%;		}
-.dialog_outset_table TD		{	padding:0px;	}
-
-.dialog_inset				{background-color:#EEEEEE	}
-.dialog_inset_contents		{	width:auto;height:100%;		}
-
-.dialog_shadow_c			{ 	width:6; 		height:6;		}
-.dialog_shadow_h			{ 	width:100%; 	height:6;		}
-.dialog_shadow_v			{ 	width:6; 		height:100%;	}
 
 .border_outset_c			{ 	width:4; 		height:4;		}
 .border_inset_c				{ 	width:10; 		height:10;		}

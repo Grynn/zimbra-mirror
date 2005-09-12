@@ -57,11 +57,11 @@ function(searchResult) {
     	//toolbar
     	this._ops = new Array();
 
-   		this._ops.push(new ZaOperation(ZaOperation.NEW_WIZARD, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, ZaImg.I_ACCOUNT, ZaImg.I_ACCOUNT, new AjxListener(this, ZaAccountListController.prototype._newButtonListener)));    	
-    	this._ops.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.ACTBB_Edit_tt, ZaImg.I_PROPERTIES, ZaImg.I_PROPERTIES, new AjxListener(this, ZaAccountListController.prototype._editButtonListener)));
-    	this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt, ZaImg.I_DELETE, ZaImg.I_DELETE, new AjxListener(this, ZaAccountListController.prototype._deleteButtonListener)));
-		this._ops.push(new ZaOperation(ZaOperation.CHNG_PWD, ZaMsg.TBB_ChngPwd, ZaMsg.ACTBB_ChngPwd_tt, ZaImg.I_PADLOCK, ZaImg.I_PADLOCK, new AjxListener(this, ZaAccountListController.prototype._chngPwdListener)));
-		this._ops.push(new ZaOperation(ZaOperation.VIEW_MAIL, ZaMsg.TBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, ZaImg.I_PADLOCK, ZaImg.I_PADLOCK, new AjxListener(this, ZaAccountListController.prototype._viewMailListener)));		
+   		this._ops.push(new ZaOperation(ZaOperation.NEW_WIZARD, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", new AjxListener(this, ZaAccountListController.prototype._newButtonListener)));    	
+    	this._ops.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.ACTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaAccountListController.prototype._editButtonListener)));
+    	this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaAccountListController.prototype._deleteButtonListener)));
+		this._ops.push(new ZaOperation(ZaOperation.CHNG_PWD, ZaMsg.TBB_ChngPwd, ZaMsg.ACTBB_ChngPwd_tt, "Padlock", "PadlockDis", new AjxListener(this, ZaAccountListController.prototype._chngPwdListener)));
+		this._ops.push(new ZaOperation(ZaOperation.VIEW_MAIL, ZaMsg.TBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, "ReadMailbox", "ReadMailboxDis", new AjxListener(this, ZaAccountListController.prototype._viewMailListener)));		
 
 
 		
@@ -71,10 +71,10 @@ function(searchResult) {
 		var globalConf = this._app.getGlobalConfig();
 
     	if(globalConf && globalConf.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_hotbackup])
-			this._ops.push(new ZaOperation(ZaOperation.MAIL_RESTORE, ZaMsg.TBB_RestoreMailbox, ZaMsg.ACTBB_Restore_tt, ZaImg.I_ACCOUNT, ZaImg.I_ACCOUNT, new AjxListener(this, ZaAccountListController.prototype._restoreMailListener)));		
+			this._ops.push(new ZaOperation(ZaOperation.MAIL_RESTORE, ZaMsg.TBB_RestoreMailbox, ZaMsg.ACTBB_Restore_tt, "Account", "AccountDis", new AjxListener(this, ZaAccountListController.prototype._restoreMailListener)));		
 			
-		this._ops.push(new ZaOperation(ZaOperation.PAGE_BACK, ZaMsg.Back, ZaMsg.PrevPage_tt, ZaImg.I_BACK_ARROW, ZaImg.ID_BACK_ARROW,  new AjxListener(this, ZaAccountListController.prototype._prevPageListener)));
-		this._ops.push(new ZaOperation(ZaOperation.PAGE_FORWARD, ZaMsg.Forward, ZaMsg.NextPage_tt, ZaImg.I_FORWARD_ARROW, ZaImg.ID_FORWARD_ARROW, new AjxListener(this, ZaAccountListController.prototype._nextPageListener)));
+		this._ops.push(new ZaOperation(ZaOperation.PAGE_BACK, ZaMsg.Back, ZaMsg.PrevPage_tt, "LeftArrow", "LeftArrowDis",  new AjxListener(this, ZaAccountListController.prototype._prevPageListener)));
+		this._ops.push(new ZaOperation(ZaOperation.PAGE_FORWARD, ZaMsg.Forward, ZaMsg.NextPage_tt, "RightArrow", "RightArrowDis", new AjxListener(this, ZaAccountListController.prototype._nextPageListener)));
 
 		this._toolbar = new ZaToolBar(this._container, this._ops);    
 		

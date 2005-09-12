@@ -37,10 +37,10 @@ ZaCosListController.prototype.show =
 function(list) {
     if (!this._appView) {
     	this._ops = new Array();
-    	this._ops.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.COSTBB_New_tt, ZaImg.I_NEWCOS, ZaImg.I_NEWCOS, new AjxListener(this, ZaCosListController.prototype._newButtonListener)));
-    	this._ops.push(new ZaOperation(ZaOperation.DUPLICATE, ZaMsg.TBB_Duplicate, ZaMsg.COSTBB_Duplicate_tt, ZaImg.I_DUPLCOS, ZaImg.I_DUPLCOS, new AjxListener(this, ZaCosListController.prototype._duplicateButtonListener)));    	    	
-    	this._ops.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.COSTBB_Edit_tt, ZaImg.I_PROPERTIES, ZaImg.I_PROPERTIES, new AjxListener(this, ZaCosListController.prototype._editButtonListener)));    	
-    	this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.COSTBB_Delete_tt, ZaImg.I_DELETE, ZaImg.I_DELETE, new AjxListener(this, ZaCosListController.prototype._deleteButtonListener)));    	    	
+    	this._ops.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.COSTBB_New_tt, "NewCOS", "NewCOSDis", new AjxListener(this, ZaCosListController.prototype._newButtonListener)));
+    	this._ops.push(new ZaOperation(ZaOperation.DUPLICATE, ZaMsg.TBB_Duplicate, ZaMsg.COSTBB_Duplicate_tt, "DuplicateCOS", "DuplicateCOSDis", new AjxListener(this, ZaCosListController.prototype._duplicateButtonListener)));    	    	
+    	this._ops.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.COSTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaCosListController.prototype._editButtonListener)));    	
+    	this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.COSTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaCosListController.prototype._deleteButtonListener)));    	    	
 		this._toolbar = new ZaToolBar(this._container, this._ops);
     
 		this._contentView = new ZaCosListView(this._container);

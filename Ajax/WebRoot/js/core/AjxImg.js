@@ -47,15 +47,15 @@ AjxImg._VIEWPORT_ID = "AjxImg_VP";
 * other children
 *
 * @param parentEl The parent element for the image
-* @param imageInfo The array describing the image. First element is the css rule name, second & third are width and height
+* @param imageName The name of the image.  The CSS entry for the image will be "Img<imageName>".
 * @param style image style. Can be AjxImg.ICON for icons (default), AjxImg.VERT_BORDER for vertical borders
 * 	AjxImg.HORIZ_BORDER for horizontal borders, or AjxImg.BACKGROUND for backgrounds
 * @ param useParenEl If true will use the parent element as the root for the image and will not create an intermediate DIV
 */
 AjxImg.setImage =
-function(parentEl, imageInfo, style, useParentEl) {
+function(parentEl, imageName, style, useParentEl) {
 	style = (!style) ? AjxImg.ICON : style;
-	var className = imageInfo[0];
+	var className = this.getClassForImage(imageName);
 
 	if (useParentEl) {
 		parentEl.className = className;
@@ -70,6 +70,12 @@ function(parentEl, imageInfo, style, useParentEl) {
 			parentEl.firstChild.className = className;
 		}
 	}
+}
+
+
+AjxImg.getClassForImage =
+function(imageName) {
+	return "Img" + imageName;
 }
 
 AjxImg.getImageClass =
@@ -94,9 +100,9 @@ function(imageEl) {
 * @param attrStr	additional attributes eg. "id=X748"
 */
 AjxImg.getImageHtml = 
-function(imageInfo, styleStr, attrStr) {
+function(imageName, styleStr, attrStr) {
 	attrStr = (!attrStr) ? "" : attrStr;
-	var className = imageInfo[0];
+	var className = this.getClassForImage(imageName);
 	styleStr = styleStr ? "style='" + styleStr + "' " : "";
 	if (className) {
 		return ["<div class='", className, "' ", styleStr, " ", attrStr, "></div>"].join("");

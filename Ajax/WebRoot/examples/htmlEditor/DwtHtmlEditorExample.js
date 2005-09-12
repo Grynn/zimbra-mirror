@@ -109,37 +109,37 @@ function(parent) {
 	
 	var listener = new AjxListener(this, this._fontStyleListener);
 	var b = this._boldButton = new DwtButton(tb, DwtButton.TOGGLE_STYLE, "TBButton");
-	b.setImage(ExImg.I_BOLD_TEXT);
+	b.setImage("Bold");
 	b.setToolTipContent(ExMsg.boldText);
 	b.setData(DwtHtmlEditorExample._VALUE, DwtHtmlEditor.BOLD_STYLE);
 	b.addSelectionListener(listener);
 	
 	b = this._italicButton = new DwtButton(tb, DwtButton.TOGGLE_STYLE, "TBButton");
-	b.setImage(ExImg.I_ITALIC_TEXT);
+	b.setImage("Italics");
 	b.setToolTipContent(ExMsg.italicText);
 	b.setData(DwtHtmlEditorExample._VALUE, DwtHtmlEditor.ITALIC_STYLE);
 	b.addSelectionListener(listener);
 	
 	b = this._underlineButton = new DwtButton(tb, DwtButton.TOGGLE_STYLE, "TBButton");
-	b.setImage(ExImg.I_UNDERLINE_TEXT);
+	b.setImage("Underline");
 	b.setToolTipContent(ExMsg.underlineText);
 	b.setData(DwtHtmlEditorExample._VALUE, DwtHtmlEditor.UNDERLINE_STYLE);
 	b.addSelectionListener(listener);
 	
 	b = this._strikeThruButton = new DwtButton(tb, DwtButton.TOGGLE_STYLE, "TBButton");
-	b.setImage(ExImg.I_STRIKETHRU_TEXT);
+	b.setImage("StrikeThru");
 	b.setToolTipContent(ExMsg.strikeThruText);
 	b.setData(DwtHtmlEditorExample._VALUE, DwtHtmlEditor.STRIKETHRU_STYLE);
 	b.addSelectionListener(listener);
 
 	b = this._superscriptButton = new DwtButton(tb, DwtButton.TOGGLE_STYLE, "TBButton");
-	b.setImage(ExImg.I_SUPERSCRIPT);
+	b.setImage("Superscript");
 	b.setToolTipContent(ExMsg.superscript);
 	b.setData(DwtHtmlEditorExample._VALUE, DwtHtmlEditor.SUPERSCRIPT_STYLE);
 	b.addSelectionListener(listener);
 	
 	b = this._subscriptButton = new DwtButton(tb, DwtButton.TOGGLE_STYLE, "TBButton");
-	b.setImage(ExImg.I_SUBSCRIPT);
+	b.setImage("Subscript");
 	b.setToolTipContent(ExMsg.subscript);
 	b.setData(DwtHtmlEditorExample._VALUE, DwtHtmlEditor.SUBSCRIPT_STYLE);
 	b.addSelectionListener(listener);
@@ -154,25 +154,25 @@ function(parent) {
 	
 	var listener = new AjxListener(this, this._justificationListener);
 	var b = this._leftJustifyButton = new DwtButton(tb, DwtButton.TOGGLE_STYLE, "TBButton");
-	b.setImage(ExImg.I_LEFT_JUSTIFY);
+	b.setImage("LeftJustify");
 	b.setToolTipContent(ExMsg.leftJustify);
 	b.setData(DwtHtmlEditorExample._VALUE, DwtHtmlEditor.JUSTIFY_LEFT);
 	b.addSelectionListener(listener);
 	
 	b = this._centerJustifyButton = new DwtButton(tb, DwtButton.TOGGLE_STYLE, "TBButton");
-	b.setImage(ExImg.I_CENTER_JUSTIFY);
+	b.setImage("CenterJustify");
 	b.setToolTipContent(ExMsg.centerJustify);
 	b.setData(DwtHtmlEditorExample._VALUE, DwtHtmlEditor.JUSTIFY_CENTER);
 	b.addSelectionListener(listener);
 
 	b = this._rightJustifyButton = new DwtButton(tb, DwtButton.TOGGLE_STYLE, "TBButton");
-	b.setImage(ExImg.I_RIGHT_JUSTIFY);
+	b.setImage("RightJustify");
 	b.setToolTipContent(ExMsg.rightJustify);
 	b.setData(DwtHtmlEditorExample._VALUE, DwtHtmlEditor.JUSTIFY_RIGHT);
 	b.addSelectionListener(listener);
 	
 	b = this._fullJustifyButton = new DwtButton(tb, DwtButton.TOGGLE_STYLE, "TBButton");
-	b.setImage(ExImg.I_FULL_JUSTIFY);
+	b.setImage("FullJustify");
 	b.setToolTipContent(ExMsg.justify);
 	b.setData(DwtHtmlEditorExample._VALUE, DwtHtmlEditor.JUSTIFY_FULL);
 	b.addSelectionListener(listener);
@@ -182,33 +182,33 @@ function(parent) {
 	var insElListener = new AjxListener(this, this._insElementListener);
 	b = this._listButton = new DwtButton(tb, DwtButton.TOGGLE_STYLE,  "TBButton");
 	b.setToolTipContent(ExMsg.bulletedList);
-	b.setImage(ExImg.I_BULLETED_LIST);
+	b.setImage("BulletedList");
 	b.setData(DwtHtmlEditorExample._VALUE, DwtHtmlEditor.UNORDERED_LIST);
 	b.addSelectionListener(insElListener);
 	
 	b = this._numberedListButton = new DwtButton(tb, DwtButton.TOGGLE_STYLE, "TBButton");
 	b.setToolTipContent(ExMsg.numberedList);
-	b.setImage(ExImg.I_NUMBERED_LIST);
+	b.setImage("NumberedList");
 	b.setData(DwtHtmlEditorExample._VALUE, DwtHtmlEditor.ORDERED_LIST);
 	b.addSelectionListener(insElListener);
 
 	listener = new AjxListener(this, this._indentListener);	
 	b = this._outdentButton = new DwtButton(tb, null, "TBButton");
 	b.setToolTipContent(ExMsg.outdent);
-	b.setImage(ExImg.I_OUTDENT);
+	b.setImage("Outdent");
 	b.setData(DwtHtmlEditorExample._VALUE, DwtHtmlEditor.OUTDENT);
 	b.addSelectionListener(insElListener);
 	
 	b = this._indentButton = new DwtButton(tb, null, "TBButton");
 	b.setToolTipContent(ExMsg.indent);
-	b.setImage(ExImg.I_INDENT);
+	b.setImage("Indent");
 	b.setData(DwtHtmlEditorExample._VALUE, DwtHtmlEditor.INDENT);
 	b.addSelectionListener(insElListener);
 	
 	new DwtControl(tb, "vertSep");
 
 	b = this._fontColorButton = new DwtButton(tb, null, "TBButton");
-	b.setImage(ExImg.I_FONT_COLOR);
+	b.setImage("FontColor");
 	b.setToolTipContent(ExMsg.fontColor);
 	var m = new DwtMenu(b, DwtMenu.COLOR_PICKER_STYLE);
 	var cp = new DwtColorPicker(m);
@@ -216,7 +216,7 @@ function(parent) {
 	b.setMenu(m);
 	
 	b = this._fontBackgroundButton = new DwtButton(tb, null, "TBButton");
-	b.setImage(ExImg.I_FONT_BACKGROUND);
+	b.setImage("FontBackground");
 	b.setToolTipContent(ExMsg.fontBackground);
 	m = new DwtMenu(b, DwtMenu.COLOR_PICKER_STYLE);
 	cp = new DwtColorPicker(m);
@@ -226,7 +226,7 @@ function(parent) {
 	new DwtControl(tb, "vertSep");
 	
 	b = this._horizRuleButton = new DwtButton(tb, null, "TBButton");
-	b.setImage(ExImg.I_HORIZ_RULE);
+	b.setImage("HorizRule");
 	b.setToolTipContent(ExMsg.horizRule);
 	b.setData(DwtHtmlEditorExample._VALUE, DwtHtmlEditor.HORIZ_RULE);
 	b.addSelectionListener(insElListener);

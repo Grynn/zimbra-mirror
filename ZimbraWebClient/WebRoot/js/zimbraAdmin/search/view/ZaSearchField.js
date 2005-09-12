@@ -37,9 +37,9 @@ function ZaSearchField(parent, className, size, posStyle) {
 	this._searchField = Dwt.getDomObj(doc, fieldId);
 	this._searchField.onkeypress = ZaSearchField._keyPressHdlr;
 	
-	this._searchButton = new DwtButton(this, null, "SearchButton");
+	this._searchButton = new DwtButton(this, null, "DwtButton");
 	this._searchButton.setToolTipContent(ZaMsg.searchForAccounts);
-    this._searchButton.setImage(ZaImg.I_SEARCH);
+    this._searchButton.setImage("Search");
     this._searchButton.setText(ZaMsg.search);
     this._searchButton.setData("me", this);
     this._searchButton.addSelectionListener(new AjxListener(this, ZaSearchField.prototype._invokeCallback));
@@ -93,9 +93,9 @@ function(changed) {
 		this._changed = changed;
 		//this._searchButton.setActivated(changed);
 		if (changed)
-			this._searchButton.setImage(ZaImg.I_UNDO);
+			this._searchButton.setImage("CloseGray");
 		else	
-			this._searchButton.setImage(ZaImg.I_SEARCH);
+			this._searchButton.setImage("Search");
 	}
 }
 
@@ -104,7 +104,7 @@ function(size, fieldId, buttonColId) {
 	return "<table cellpadding='0' cellspacing='0' border='0' style='padding:2px;'>" +
 		"<tr valign='middle'>" +
 			"<td valign='middle' nowrap>" +
-			AjxImg.getImageHtml(ZaImg.M_BANNER) +
+			AjxImg.getImageHtml("AppBanner") +
 			"</td>" +
 			"<td valign='middle' nowrap><input type='text' nowrap size='" + size + "' id='" + fieldId + "' class='Field'/></td>" + 
 			"<td valign='middle' style='padding-left:2px;padding-right:2px;' id='" + buttonColId + "'></td>" +

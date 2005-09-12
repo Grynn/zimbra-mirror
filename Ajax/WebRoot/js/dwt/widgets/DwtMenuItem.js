@@ -166,9 +166,9 @@ function(checked, ev, skipNotify) {
 		
 		if (checked) {
 			if (this._style == DwtMenuItem.CHECK_STYLE) {
-				AjxImg.setImage(this._checkedCell, DwtImg.MENU_CHECK);
+				AjxImg.setImage(this._checkedCell, "MenuCheck");
 			} else {
-				AjxImg.setImage(this._checkedCell, DwtImg.MENU_RADIO);
+				AjxImg.setImage(this._checkedCell, "MenuRadio");
 				// This will cause the parent menu to deselect the currently selected radio item
 				this.parent._radioItemSelected(this, skipNotify);
 			}
@@ -176,7 +176,7 @@ function(checked, ev, skipNotify) {
 			if (gp && (gp instanceof DwtButton) && (gp._followIconStyle == this._style))
 				gp.setImage(this._imageInfo);
 		} else {
-			AjxImg.setImage(this._checkedCell, DwtImg.BLANK9);
+			AjxImg.setImage(this._checkedCell, "Blank_9");
 		}
 		
 		if (skipNotify) return;
@@ -273,7 +273,7 @@ function(menu) {
 	if (this._style == DwtMenuItem.CASCADE_STYLE || this._style == DwtMenuItem.CHECK_STYLE
 		|| this._style == DwtMenuItem.RADIO_STYLE) {
 		if (menu) {
-			AjxImg.setImage(this._cascCell, DwtImg.CASCADE);
+			AjxImg.setImage(this._cascCell, "Cascade");
 		} else if (!menu) {
 			this._cascCell.innerHTML = "";
 		}

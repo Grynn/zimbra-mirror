@@ -53,9 +53,9 @@ DwtMessageDialog.TITLE[DwtMessageDialog.INFO_STYLE] = DwtMsg.infoMsg
 DwtMessageDialog.TITLE[DwtMessageDialog.WARNING_STYLE] = DwtMsg.warningMsg;
 
 DwtMessageDialog.ICON = new Object();
-DwtMessageDialog.ICON[DwtMessageDialog.CRITICAL_STYLE] = DwtImg.CRITICAL;
-DwtMessageDialog.ICON[DwtMessageDialog.INFO_STYLE] = DwtImg.INFORMATION;
-DwtMessageDialog.ICON[DwtMessageDialog.WARNING_STYLE] = DwtImg.WARNING;
+DwtMessageDialog.ICON[DwtMessageDialog.CRITICAL_STYLE] = "Critical_32";
+DwtMessageDialog.ICON[DwtMessageDialog.INFO_STYLE] = "Information_32";
+DwtMessageDialog.ICON[DwtMessageDialog.WARNING_STYLE] = "Warning_32";
 
 
 // Public methods

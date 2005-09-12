@@ -151,8 +151,8 @@ function(entry) {
 		this._view = new ZaServerXFormView(this._container, this._app);
 	  	//this._view = new ZaServerView(this._container, this._app);
    		this._ops = new Array();
-   		this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.SERTBB_Save_tt, ZaImg.I_SAVE, ZaImg.ID_SAVE, new AjxListener(this, ZaServerController.prototype._saveButtonListener)));
-   		this._ops.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.SERTBB_Close_tt, ZaImg.I_UNDO, ZaImg.I_UNDO, new AjxListener(this, ZaServerController.prototype._closeButtonListener)));    	
+   		this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.SERTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, ZaServerController.prototype._saveButtonListener)));
+   		this._ops.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.SERTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, ZaServerController.prototype._closeButtonListener)));    	
 
 		this._toolBar = new ZaToolBar(this._container, this._ops);
 	    this._app.createView(ZaServerController.VIEW, [this._toolBar, this._view]);

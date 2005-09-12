@@ -34,6 +34,7 @@ public abstract class DecodedImage {
     protected int mCombinedRow = -1;
     protected int mCombinedColumn = -1;
     protected String mPrefix;
+    protected int mLayoutStyle;
 
     public abstract BufferedImage getBufferedImage();
     public abstract int getWidth();
@@ -49,10 +50,9 @@ public abstract class DecodedImage {
      * Get a JavaScript definition for this piece of the combined image.
      * expects combinedFilename to be of the form "megaimage.gif".
      */
-    public String getJavaScriptRep(int combinedWidth,
+    public String getCssString(int combinedWidth,
                                    int combinedHeight,
-                                   String combinedFilename,
-								   int layoutStyle) 
+                                   String combinedFilename) 
     {
     	String filename = mFilename.substring(mFilename.lastIndexOf(File.separator)+1);
         String fileNameBase = filename.substring(0, filename.indexOf('.'));
@@ -67,16 +67,16 @@ public abstract class DecodedImage {
         //		 x-repeat. All other images should be set no-repeat, unless
         //		 explicitly set as a repeat layout.
         String bgRptStr = "no-repeat";
-        switch (layoutStyle) {
-            case ImageMerge.HORIZ_LAYOUT: bgRptStr = "repeat-y"; break;
-            case ImageMerge.VERT_LAYOUT: bgRptStr = "repeat-x"; break;
-            case ImageMerge.REPEAT_LAYOUT: bgRptStr = "repeat"; break;
+        switch (mLayoutStyle) {
+            case ImageMerge.HORIZ_LAYOUT: bgRptStr = "repeat-x"; break;
+            case ImageMerge.VERT_LAYOUT: bgRptStr = "repeat-y"; break;
+            case ImageMerge.TILE_LAYOUT: bgRptStr = "repeat"; break;
         }
         bgRptStr = "background-repeat:" + bgRptStr + ";";
 
-        String widthStr = layoutStyle != ImageMerge.VERT_LAYOUT && layoutStyle != ImageMerge.REPEAT_LAYOUT 
+        String widthStr = mLayoutStyle != ImageMerge.HORIZ_LAYOUT && mLayoutStyle != ImageMerge.TILE_LAYOUT 
         				? "width:" + getWidth() + "px;" : "";
-        String heightStr = layoutStyle != ImageMerge.HORIZ_LAYOUT && layoutStyle != ImageMerge.REPEAT_LAYOUT 
+        String heightStr = mLayoutStyle != ImageMerge.VERT_LAYOUT && mLayoutStyle != ImageMerge.TILE_LAYOUT 
         				 ? "height:" + getHeight() + "px;" : "";
 
         String className = ".Img" + fileNameBase;

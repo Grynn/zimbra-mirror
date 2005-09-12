@@ -56,7 +56,7 @@ DwtAlert.INFORMATION = 0;
 DwtAlert.WARNING = 1;
 DwtAlert.CRITICAL = 2;
 
-DwtAlert._ICONS = [ DwtImg.INFORMATION[0], DwtImg.WARNING[0], DwtImg.CRITICAL[0] ];
+DwtAlert._ICONS = [ AjxImg.getClassForImage("Information_32"), AjxImg.getClassForImage("Warning_32"), AjxImg.getClassForImage("Critical_32") ];
 DwtAlert._CLASSES = [ "DwtAlertInfo", "DwtAlertWarn", "DwtAlertCrit" ];
 
 //

@@ -314,21 +314,21 @@ OSelect1_XFormItem.prototype.showArrowOver = function () {
 	if(!this._enabled)
 		return;
 		
-	AjxImg.setImage(this.getArrowElement(), DwtImg.SELECT_PULL_DOWN_ENABLED);
+	AjxImg.setImage(this.getArrowElement(), "SelectPullDownArrowHover");
 }
 
 OSelect1_XFormItem.prototype.showArrowOut = function () {
 	if(!this._enabled)
 		return;
 		
-	AjxImg.setImage(this.getArrowElement(), DwtImg.SELECT_PULL_DOWN);
+	AjxImg.setImage(this.getArrowElement(), "SelectPullDownArrow");
 }
 
 OSelect1_XFormItem.prototype.showArrowDown = function () {
 	if(!this._enabled)
 		return;
 		
-	AjxImg.setImage(this.getArrowElement(), DwtImg.SELECT_PULL_DOWN_DEPRESSED);
+	AjxImg.setImage(this.getArrowElement(), "SelectPullDownArrowSel");
 }
 
 OSelect1_XFormItem.prototype.dehiliteChoice = function(itemNum) {
@@ -432,8 +432,8 @@ OSelect1_XFormItem.prototype.getArrowButtonHTML = function () {
 	 " onmouseover=\"", ref, ".showArrowOver();\"",
  	 " onmouseout=\"", ref, ".showArrowOut();\"",
  	 " onmousedown=\"", ref, ".showArrowDown();\"", 	 
- 	 ">", AjxImg.getImageHtml(DwtImg.SELECT_PULL_DOWN), "</div>");
-//	return AjxImg.getImageHtml(DwtImg.SELECT_PULL_DOWN, "", AjxBuffer.concat("id=",this.getId(), "_arrow_button"));
+ 	 ">", AjxImg.getImageHtml("SelectPullDownArrow"), "</div>");
+//	return AjxImg.getImageHtml("SelectPullDownArrow", "", AjxBuffer.concat("id=",this.getId(), "_arrow_button"));
 }
 
 OSelect1_XFormItem.prototype.getTableCssClass = function () {
@@ -505,12 +505,12 @@ OSelect1_XFormItem.prototype.setElementEnabled = function(enabled) {
 	var table = this.getForm().getElement(this.getId()).getElementsByTagName("table")[0];
 	if(enabled) {
 		this.getDisplayElement().className = this.getDisplayCssClass();
-		AjxImg.setImage(this.getArrowElement(), DwtImg.SELECT_PULL_DOWN_ENABLED);
+		AjxImg.setImage(this.getArrowElement(), "SelectPullDownArrow");
 		this.getForm().getElement(this.getId()).className = this.cssClass;
 		table.className = this.getTableCssClass();
 	} else {
 		this.getDisplayElement().className = this.getDisplayCssClass() + "_disabled";
-		AjxImg.setImage(this.getArrowElement(), DwtImg.SELECT_PULL_DOWN_DISABLED);
+		AjxImg.setImage(this.getArrowElement(), "SelectPullDownArrowDis");
 		this.getForm().getElement(this.getId()).className = this.cssClass + "_disabled";
 		table.className = this.getTableCssClass()+"_disabled";
 	}

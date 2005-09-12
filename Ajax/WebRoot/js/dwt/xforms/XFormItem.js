@@ -597,7 +597,7 @@ XFormItem.prototype.handleKeyPressDelay = function(ev, domItem) {
 		var JSCode = this.getChangehandlerJSCode();
 		this.$changeHandlerFunc = new Function("event", JSCode);
 	}
-	if(this.$changeHandlerFunc) {
+	if (this.$changeHandlerFunc) {
 		this.$changeHandlerFunc.call(domItem, ev);
 	}
 };
@@ -651,21 +651,33 @@ XFormItem.prototype.outputElementDivEnd = function (html, updateScript, indent) 
 //
 //	label td
 //
-XFormItem.prototype.outputLabelCellHTML = function (html, updateScript, indent, rowSpan) {
+XFormItem.prototype.outputLabelCellHTML = function (html, updateScript, indent, rowSpan, labelLocation) {
 	var label = this.getLabel();
 	if (label == null) return;
 	
 	if (label == "") label = "&nbsp;";
 	
-	html.append(indent, "<td id=\"", this.getId(),"___label\"", 
-							this.getLabelCssString(), 
-							(rowSpan > 1 ? " rowspan=" + rowSpan : ""), ">", 
-							"<nobr>", label, "</nobr>");
-	if(this.getInheritedProperty("required")) {
-		html.append("<span class='redAsteric'>*</span>");
+	if (labelLocation == _INLINE_) {
+		var style = this.getLabelCssStyle();
+		if (style == null) style = "";
+		style = "position:relative;left:10;top:5;text-align:left;background-color:#eeeeee;margin-left:5px;margin-right:5px;" + style;
+		html.append(indent, "<div id=\"", this.getId(),"___label\"", 
+								this.getLabelCssString(null, style), ">",
+								label,
+							"</div>"
+					);
+	} else {
+		html.append(indent, "<td id=\"", this.getId(),"___label\"", 
+								this.getLabelCssString(), 
+								(rowSpan > 1 ? " rowspan=" + rowSpan : ""), ">", 
+								label
+		);
+		if (this.getRequired()) {
+			html.append("<span class='redAsteric'>*</span>");
+		}
+		html.append("</td>\r");
 	}
 
-	html.append("</td>\r");
 
 }
 
@@ -675,6 +687,11 @@ XFormItem.prototype.outputLabelCellHTML = function (html, updateScript, indent, 
 //	update script
 //
 XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript, indent) {
+	// we need to always call these, so they're set up for items with or without "ref" properties
+	var updateElementMethod = this.getUpdateElementMethod();
+	var elementChangedMethod = this.getElementChangedMethod();
+	var getDisplayValueMethod = this.getDisplayValueMethod();
+
 //TODO: take the script they want to place, do a regex look for the variables below and only include the ones they care about!
 	var forceUpdate = this.getForceUpdate();
 	var relevant = this.getRelevant();
@@ -690,9 +707,6 @@ XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript, inde
 		) return;
 
 
-	var updateElementMethod = this.getUpdateElementMethod();
-	var elementChangedMethod = this.getElementChangedMethod();
-	var getDisplayValueMethod = this.getDisplayValueMethod();
 
 
 	updateScript.append(
@@ -745,7 +759,7 @@ XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript, inde
 				"if (!item.__isRelevant) {\r",
 					"item.hide();\r",
 				"} else {\r  ");
-			if(this.focusable) {
+			if (this.focusable) {
 				updateScript.append(
 					"DBG.println(AjxDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
 					"item.getForm().tabIdOrder.push(item.getId());\r"
@@ -759,7 +773,7 @@ XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript, inde
 				"if (!item.__isRelevant) {\r",
 					"item.disableElement();\r",
 				"} else {\r  ");
-			if(this.focusable) {
+			if (this.focusable) {
 				updateScript.append(
 					"DBG.println(AjxDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
 					"item.getForm().tabIdOrder.push(item.getId());\r"
@@ -771,7 +785,7 @@ XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript, inde
 			);		
 		}
 	} else {
-		if(this.focusable) {
+		if (this.focusable) {
 			updateScript.append(
 				"DBG.println(AjxDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
 				"item.getForm().tabIdOrder.push(item.getId());\r"
@@ -791,7 +805,7 @@ XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript, inde
 	//
 	if ((this.refPath || forceUpdate) && (updateElementMethod)) {
 		updateScript.append(
-			"if(!item.hasError()){\r",
+			"if (!item.hasError()){\r",
 				"value = ", (this.refPath ? 
 							 "model.getInstanceValue(instance, item.refPath)" 
 							 : "null"
@@ -1093,6 +1107,10 @@ XFormItem.prototype.focus = function () {
 //			for a FormItem
 //
 
+XFormItem.prototype.getRequired = function() {
+	return this.getInheritedProperty("reqired");
+}
+
 XFormItem.prototype.getValue = function() {
 	return this.getInheritedProperty("value");
 }
@@ -1207,11 +1225,13 @@ XFormItem.prototype.getLabel = function (value) {
 XFormItem.prototype.getErrorCssClass = function () {
 	return this.getInheritedProperty("errorCssClass");
 }
-XFormItem.prototype.getLabelCssClass = function () {
+XFormItem.prototype.getLabelCssClass = function (className) {
+	if (className != null) return className;
 	return this.getInheritedProperty("labelCssClass");
 }
 
-XFormItem.prototype.getLabelCssStyle = function () {
+XFormItem.prototype.getLabelCssStyle = function (style) {
+	if (style != null) return style;
 	return this.getInheritedProperty("labelCssStyle");
 }
 
@@ -1356,10 +1376,10 @@ XFormItem.prototype.getCssString = function () {
 }
 
 
-XFormItem.prototype.getLabelCssString = function () {
-	var css = (this.getLabelCssClass() || '');
+XFormItem.prototype.getLabelCssString = function (className, style) {
+	var css = (this.getLabelCssClass(className) || '');
 	if (css != '' && css != null) css = " class=\"" + css + "\"";
-	var style = (this.getLabelCssStyle() || '');
+	var style = (this.getLabelCssStyle(style) || '');
 	if (this.getLabelWrap() == false) {
 		style += ";white-space:nowrap";
 	}
@@ -1705,6 +1725,7 @@ Textfield_XFormItem.prototype._inputType = "text";
 Textfield_XFormItem.prototype.cssClass = "xform_field";
 Textfield_XFormItem.prototype.elementChangeHandler="onkeypress";
 Textfield_XFormItem.prototype.focusable = true;
+Textfield_XFormItem.prototype.containerCssClass = "xform_field_container";
 
 //	methods
 Textfield_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
@@ -1790,7 +1811,7 @@ Textarea_XFormItem.prototype.focusable = true;
 //	methods
 Textarea_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
 	var wrap = this.getInheritedProperty("textWrapping");
-	if(!wrap)
+	if (!wrap)
 		wrap = "off";
 		
 	html.append(indent, 
@@ -2131,6 +2152,8 @@ XFormItemFactory.createItemType("_SELECT1_", "select1", Select1_XFormItem, XForm
 Select1_XFormItem.prototype.multiple = false;
 Select1_XFormItem.prototype.alwaysUpdateChoices = false;
 Select1_XFormItem.prototype.focusable = true;
+Select1_XFormItem.prototype.cssClass = "xform_select1";
+Select1_XFormItem.prototype.containerCssClass = "xform_select_container";
 
 //	methods
 Select1_XFormItem.prototype.initFormItem = function () {
@@ -2200,6 +2223,7 @@ XFormItemFactory.createItemType("_SELECT_", "select", Select_XFormItem, Select1_
 Select_XFormItem.prototype.multiple = true;
 Select_XFormItem.prototype.selection = _OPEN_;
 Select_XFormItem.prototype.focusable = true;
+Select_XFormItem.prototype.containerCssClass = "xform_select_container";
 
 //	methods
 
@@ -2318,7 +2342,7 @@ function Border_XFormItem() {}
 XFormItemFactory.createItemType("_BORDER_", "border", Border_XFormItem, Group_XFormItem)
 
 //	type defaults
-Border_XFormItem.prototype.forceUpdate = false;
+Border_XFormItem.prototype.forceUpdate = true;
 Border_XFormItem.prototype.colSpan = "*";
 Border_XFormItem.prototype.numCols = 2;
 Border_XFormItem.prototype.useParentTable = false;
@@ -2356,6 +2380,80 @@ Border_XFormItem.prototype.outputHTMLEnd = function (html, updateScript, indent,
 	html.append(DwtBorder.getBorderEndHtml(style, substitutions));
 }
 
+Border_XFormItem.prototype.updateElement = function () {
+	// firefox has a bug where it will not resize a border vertically if it should get smaller
+	//	set the border table height to a random value to get it to resize
+	if (AjxEnv.isNav) {
+		var it = this.getContainer().getElementsByTagName('TABLE')[0]; 
+		if (it) {
+			var height = parseInt(it.style.height);
+			if (isNaN(height)) height = 0;
+			var newHeight = height;
+			while (newHeight == height) {
+				newHeight = Math.ceil(Math.random() * 20); 
+			}
+			it.style.height = newHeight + 'px';
+		}
+	}
+}
+
+//
+//	XFormItem class: "grouper"
+//
+//	Draws a simple border around the group, with the label placed over the border
+//
+
+function Grouper_XFormItem() {}
+XFormItemFactory.createItemType("_GROUPER_", "grouper", Grouper_XFormItem, Group_XFormItem)
+Grouper_XFormItem.prototype.labelCssClass = "GrouperLabel";
+Grouper_XFormItem.prototype.labelLocation = _INLINE_;		// managed manually by this class
+Grouper_XFormItem.prototype.borderCssClass = "GrouperBorder";
+Grouper_XFormItem.prototype.insetCssClass = "GrouperInset";
+Grouper_XFormItem.prototype.colSpan = "*";
+Grouper_XFormItem.prototype.width = "100%";
+
+Grouper_XFormItem.prototype.getBorderCssClass = function () {
+	return this.getInheritedProperty("borderCssClass");
+}
+
+Grouper_XFormItem.prototype.getInsetCssClass = function () {
+	return this.getInheritedProperty("insetCssClass");
+}
+
+// output the label
+Grouper_XFormItem.prototype.outputHTMLStart = function (html, updateScript, indent, currentCol) {
+	html.append(
+			"<div class=", this.getBorderCssClass(), ">",
+				"<span ", this.getLabelCssString(),">", this.getLabel(), "</span>",
+				"<div class=", this.getInsetCssClass(),">"
+		);
+}
+
+Grouper_XFormItem.prototype.outputHTMLEnd = function (html, updateScript, indent, currentCol) {
+	html.append(
+			"</div></div>"
+		);
+}
+
+
+function RadioGrouper_XFormItem() {}
+XFormItemFactory.createItemType("_RADIO_GROUPER_", "radiogrouper", RadioGrouper_XFormItem, Grouper_XFormItem)
+RadioGrouper_XFormItem.prototype.labelCssClass = "RadioGrouperLabel";
+RadioGrouper_XFormItem.prototype.borderCssClass = "RadioGrouperBorder";
+RadioGrouper_XFormItem.prototype.insetCssClass = "RadioGrouperInset";
+RadioGrouper_XFormItem.prototype.width = "100%";
+
+
+
+function CollapsableRadioGrouper_XFormItem() {}
+XFormItemFactory.createItemType("_COLLAPSABLE_RADIO_GROUPER_", "collapsableradiogrouper", CollapsableRadioGrouper_XFormItem, RadioGrouper_XFormItem)
+
+CollapsableRadioGrouper_XFormItem.prototype.getLabel = function () {
+	var label = XFormItem.prototype.getLabel.apply(this);
+	return "<nobr><span class=xform_button style='font-size:9px;color:black;'>&nbsp;&ndash;&nbsp;</span>&nbsp;"+label+"</nobr>";
+}
+
+
 
 
 //
@@ -2368,6 +2466,33 @@ XFormItemFactory.createItemType("_CASE_", "case", Case_XFormItem, Group_XFormIte
 Case_XFormItem.prototype.labelLocation = _NONE_;
 Case_XFormItem.prototype.width = "100%";
 Case_XFormItem.prototype.focusable = false;
+
+
+
+//
+//	XFormItem class: "top_grouper"
+//
+//	Draws a simple border around the group, with the label placed over the border
+//
+
+function TopGrouper_XFormItem() {}
+XFormItemFactory.createItemType("_TOP_GROUPER_", "top_grouper", TopGrouper_XFormItem, RadioGrouper_XFormItem)
+TopGrouper_XFormItem.prototype.borderCssClass = "TopGrouperBorder";
+
+// output the label
+TopGrouper_XFormItem.prototype.outputHTMLStart = function (html, updateScript, indent, currentCol) {
+	html.append(
+			"<div class=", this.getBorderCssClass(), ">",
+				"<span ", this.getLabelCssString(),">", this.getLabel(), "</span>",
+				"<div class=", this.getInsetCssClass(),">"
+		);
+}
+
+TopGrouper_XFormItem.prototype.outputHTMLEnd = function (html, updateScript, indent, currentCol) {
+	html.append(
+			"</div></div>"
+		);
+}
 
 
 
@@ -2598,7 +2723,7 @@ Repeat_XFormItem.prototype.addRowButtonClicked = function (instanceNum) {
 }
 
 Repeat_XFormItem.prototype.removeRowButtonClicked = function (instanceNum) {
-	if(this.getOnRemoveMethod() ) {
+	if (this.getOnRemoveMethod() ) {
 		this.getOnRemoveMethod().call(this, instanceNum, this.getForm())
 	} else {
 		var path = this.getRefPath();
@@ -2646,7 +2771,7 @@ Composite_XFormItem.prototype.initializeItems = function () {
 }
 
 Composite_XFormItem.onFieldChange = function(value, event, form) {
-	if(this.getParentItem() && this.getParentItem().getOnChangeMethod()) {
+	if (this.getParentItem() && this.getParentItem().getOnChangeMethod()) {
 		return this.getParentItem().getOnChangeMethod().call(this, value, event, form);
 	} else {
 		return this.setInstanceValue(value);
@@ -3415,7 +3540,7 @@ Dwt_AddRemove_XFormItem.prototype.constructWidget = function() {
 }
 
 Dwt_AddRemove_XFormItem.prototype.updateWidget = function(newvalue) {
-	if(this.widget.isUpdating) {
+	if (this.widget.isUpdating) {
 		this.widget.isUpdating = false;
 		return;
 	}
@@ -3547,7 +3672,7 @@ Dwt_TabBar_XFormItem.prototype.constructWidget = function() {
 }
 
 Dwt_TabBar_XFormItem.prototype.updateWidget = function(newvalue) {
-	if(this.widget.isUpdating) {
+	if (this.widget.isUpdating) {
 		this.widget.isUpdating = false;
 		return;
 	}

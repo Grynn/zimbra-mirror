@@ -57,7 +57,7 @@ function(item) {
 
 	if(!this._UICreated) {
   		this._ops = new Array();
-		this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, ZaImg.I_SAVE, ZaImg.ID_SAVE, new AjxListener(this, ZaGlobalConfigViewController.prototype._saveButtonListener)));
+		this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, ZaGlobalConfigViewController.prototype._saveButtonListener)));
 		this._toolBar = new ZaToolBar(this._container, this._ops);
 	
 //		this._view = new ZaGlobalConfigView(this._container, this._app);

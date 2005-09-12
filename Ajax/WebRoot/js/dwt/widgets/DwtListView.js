@@ -185,7 +185,7 @@ function(defaultColumnSort) {
 			htmlArr[idx++] = "<td id='" + DwtListView.HEADERITEM_LABEL + headerCol._id + "'>&nbsp;" + headerCol._label + "</td>";
 		
 		if (headerCol._sortable) {
-			var arrowIcon = this._bSortAsc ? DwtImg.COLUMN_UP : DwtImg.COLUMN_DOWN;
+			var arrowIcon = this._bSortAsc ? "ColumnUpArrow" : "ColumnDownArrow";
 			var id = DwtListView.HEADERITEM_ARROW + headerCol._id;
 			if (headerCol._sortable == defaultColumnSort) {
 				this._currentColId = headerCol._id;
@@ -1031,7 +1031,7 @@ function(columnId) {
 	var newArrowId = DwtListView.HEADERITEM_ARROW + columnId;
 	var newArrowCell = Dwt.getDomObj(doc, newArrowId);
 	if (newArrowCell) {
-		AjxImg.setImage(newArrowCell, this._bSortAsc ? DwtImg.COLUMN_UP : DwtImg.COLUMN_DOWN);
+		AjxImg.setImage(newArrowCell, this._bSortAsc ? "ColumnUpArrow" : "ColumnDownArrow");
 		var imgEl = (AjxImg._mode == AjxImg.SINGLE_IMG) ? newArrowCell.firstChild : newArrowCell.firstChild.firstChild;
 		if (imgEl)
 			imgEl.style.visibility = "visible";

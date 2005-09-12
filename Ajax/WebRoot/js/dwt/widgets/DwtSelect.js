@@ -184,10 +184,10 @@ function(anElement, containerElement) {
 DwtSelect.prototype._renderSelectBoxHtml = 
 function (options) {
     // setup our arrow button
-	this.setDropDownImages(	DwtImg.SELECT_PULL_DOWN,			// normal
-							DwtImg.SELECT_PULL_DOWN_DISABLED,	// disabled
-							DwtImg.SELECT_PULL_DOWN_ENABLED,	// hover
-						   	DwtImg.SELECT_PULL_DOWN_DEPRESSED	// down
+	this.setDropDownImages(	"SelectPullDownArrow",				// normal
+							"SelectPullDownArrowDis",			// disabled
+							"SelectPullDownArrowHover",		// hover
+						   	"SelectPullDownArrowSel"			// down
 	);
 	var menu = new DwtMenu(this, null, "DwtSelectMenu", null, true);
 	this.setMenu(menu);

@@ -35,11 +35,14 @@ public class DecodedGifImage extends DecodedImage {
     private int mSortedColorTable[];
 
     public DecodedGifImage(String filename,
-                           String prefix) 
+                           String prefix,
+                           int layoutStyle
+                           ) 
     {
         d = new GifDecoder();
         mFilename = filename;
         mPrefix = prefix;
+        mLayoutStyle = layoutStyle;
     }
 
 

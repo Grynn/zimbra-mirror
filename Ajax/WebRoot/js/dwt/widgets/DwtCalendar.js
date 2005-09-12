@@ -657,14 +657,14 @@ function() {
     html[idx++] = 	             		"' id='b:py:";
     html[idx++] = 	             		this._uuid;
     html[idx++] = 					    "'>";
-    html[idx++] = 					    AjxImg.getImageHtml(DwtImg.FAST_REV, null, ["id='b:py:img:", this._uuid, "'"].join(""));
+    html[idx++] = 					    AjxImg.getImageHtml("FastRevArrowSmall", null, ["id='b:py:img:", this._uuid, "'"].join(""));
     html[idx++] = 					"</td>"
     html[idx++] = 	             	"<td class='";
     html[idx++] = 	             		DwtCalendar._BUTTON_CLASS;
     html[idx++] = 	             		"' id='b:pm:";
     html[idx++] = 						this._uuid;
     html[idx++] = 						"'>";
-    html[idx++] = 					    AjxImg.getImageHtml(DwtImg.REV, null, ["id='b:pm:img:", this._uuid, "'"].join(""));
+    html[idx++] = 					    AjxImg.getImageHtml("RevArrowSmall", null, ["id='b:pm:img:", this._uuid, "'"].join(""));
     html[idx++] =					"</td>";
 	html[idx++] = 					"<td align='center' class='DwtCalendarTitleCell' nowrap'><span class='"
 	html[idx++] =                       DwtCalendar._TITLE_CLASS;
@@ -676,14 +676,14 @@ function() {
     html[idx++] = 	             		"' id='b:nm:";
     html[idx++] =						this._uuid;
     html[idx++] =						"'>";
-    html[idx++] = 					    AjxImg.getImageHtml(DwtImg.FWD, null, ["id='b:nm:img:", this._uuid, "'"].join(""));
+    html[idx++] = 					    AjxImg.getImageHtml("FwdArrowSmall", null, ["id='b:nm:img:", this._uuid, "'"].join(""));
 	html[idx++] =					"</td>";
     html[idx++] = 	             	"<td class='";
     html[idx++] = 	             		DwtCalendar._BUTTON_CLASS;
     html[idx++] = 	             		"' id='b:ny:";
     html[idx++] =						this._uuid;
     html[idx++] =						"'>";
-    html[idx++] = 					    AjxImg.getImageHtml(DwtImg.FAST_FWD, null, ["id='b:ny:img:", this._uuid, "'"].join(""));
+    html[idx++] = 					    AjxImg.getImageHtml("FastFwdArrowSmall", null, ["id='b:ny:img:", this._uuid, "'"].join(""));
     html[idx++] =					"</td>";
  	html[idx++] = 				"</tr>";
 	html[idx++] = 			"</table>";
@@ -721,10 +721,10 @@ function() {
     
     this.getHtmlElement().innerHTML = html.join("");
     var doc = this.getDocument();
-    Dwt.getDomObj(doc, "b:py:img:" + this._uuid)._origClassName = DwtImg.FAST_REV[0];
-    Dwt.getDomObj(doc, "b:pm:img:" + this._uuid)._origClassName = DwtImg.REV[0];
-    Dwt.getDomObj(doc, "b:nm:img:" + this._uuid)._origClassName = DwtImg.FWD[0];
-    Dwt.getDomObj(doc, "b:ny:img:" + this._uuid)._origClassName = DwtImg.FAST_FWD[0];
+    Dwt.getDomObj(doc, "b:py:img:" + this._uuid)._origClassName = AjxImg.getClassForImage("FastRevArrowSmall");
+    Dwt.getDomObj(doc, "b:pm:img:" + this._uuid)._origClassName = AjxImg.getClassForImage("RevArrowSmall");
+    Dwt.getDomObj(doc, "b:nm:img:" + this._uuid)._origClassName = AjxImg.getClassForImage("FwdArrowSmall");
+    Dwt.getDomObj(doc, "b:ny:img:" + this._uuid)._origClassName = AjxImg.getClassForImage("FastFwdArrowSmall");
     
     this._calWidgetInited = true;
 }

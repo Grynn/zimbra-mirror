@@ -488,7 +488,7 @@ function() {
 		html[idx++] = "<tr valign='center'>";
 		html[idx++] = "<td><b>" + AjxStringUtil.htmlEncode(this.name) + "</b></td>";
 		html[idx++] = "<td align='right'>";
-		html[idx++] = AjxImg.getImageHtml(ZaImg.I_DOMAIN);			
+		html[idx++] = AjxImg.getImageHtml("Domain");			
 		html[idx++] = "</td>";
 		html[idx++] = "</table></div></td></tr>";
 		html[idx++] = "<tr></tr>";

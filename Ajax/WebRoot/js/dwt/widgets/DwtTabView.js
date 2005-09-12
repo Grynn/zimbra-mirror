@@ -401,7 +401,7 @@ DwtTabBar.prototype._createSpacerElement = function() {
 	var row3 = table.insertRow(table.rows.length);
 	
 	var row3cell1 = row3.insertCell(row3.cells.length);
-	AjxImg.setImage(row3cell1, DwtImg.TAB_SPACER, null, true);
+	AjxImg.setImage(row3cell1, "TabSpacer", null, true);
 	
 	return table;
 }
@@ -579,17 +579,17 @@ function DwtTabButton(parent) {
 	this.bottomImg = document.createElement("div");
 	this.rightBottomImg = document.createElement("div");
 
-	AjxImg.setImage(this.leftTopImg, DwtImg.TAB_TOP_LEFT, null, true);
-	AjxImg.setImage(this.topImg, DwtImg.TAB_TOP_MIDDLE, AjxImg.HORIZ_BORDER, true);
-	AjxImg.setImage(this.rightTopImg, DwtImg.TAB_TOP_RIGHT, null, true);
+	AjxImg.setImage(this.leftTopImg, "Tab_TL", null, true);
+	AjxImg.setImage(this.topImg, "Tab_T__H", AjxImg.HORIZ_BORDER, true);
+	AjxImg.setImage(this.rightTopImg, "Tab_TR", null, true);
 
-	AjxImg.setImage(this.leftImg, DwtImg.TAB_MIDDLE_LEFT, AjxImg.VERT_BORDER, true);
-	AjxImg.setImage(this.centerImg, DwtImg.TAB_MIDDLE_MIDDLE, AjxImg.BACKGROUND, true);
-	AjxImg.setImage(this.rightImg, DwtImg.TAB_MIDDLE_RIGHT, AjxImg.VERT_BORDER, true);
+	AjxImg.setImage(this.leftImg, "Tab_L__V", AjxImg.VERT_BORDER, true);
+	AjxImg.setImage(this.centerImg, "Tab__BG", AjxImg.BACKGROUND, true);
+	AjxImg.setImage(this.rightImg, "Tab_R__V", AjxImg.VERT_BORDER, true);
 
-	AjxImg.setImage(this.leftBottomImg, DwtImg.TAB_BOTTOM_LEFT, null, true);
-	AjxImg.setImage(this.bottomImg, DwtImg.TAB_BOTTOM_MIDDLE, AjxImg.HORIZ_BORDER, true);
-	AjxImg.setImage(this.rightBottomImg, DwtImg.TAB_BOTTOM_RIGHT, null, true);
+	AjxImg.setImage(this.leftBottomImg, "Tab_BL", null, true);
+	AjxImg.setImage(this.bottomImg, "Tab_B__H", AjxImg.HORIZ_BORDER, true);
+	AjxImg.setImage(this.rightBottomImg, "Tab_BR", null, true);
 		
 	this._leftTopCell.appendChild(this.leftTopImg);
 	this._centerTopCell.appendChild(this.topImg);
@@ -633,17 +633,7 @@ DwtTabButton.prototype.setOpen =
 function () {
 	this.table.className=this._activeClassName;	
 
-	AjxImg.setImage(this.leftTopImg, DwtImg.TAB_SELECTED_TOP_LEFT, null, true);
-	AjxImg.setImage(this.topImg, DwtImg.TAB_SELECTED_TOP_MIDDLE, AjxImg.HORIZ_BORDER, true);
-	AjxImg.setImage(this.rightTopImg, DwtImg.TAB_SELECTED_TOP_RIGHT, null, true);
-
-	AjxImg.setImage(this.leftImg, DwtImg.TAB_SELECTED_MIDDLE_LEFT, AjxImg.VERT_BORDER, true);
-	AjxImg.setImage(this._centerMiddleCell, DwtImg.TAB_SELECTED_MIDDLE_MIDDLE, AjxImg.BACKGROUND, true);
-	AjxImg.setImage(this.rightImg, DwtImg.TAB_SELECTED_MIDDLE_RIGHT, AjxImg.VERT_BORDER, true);
-
-	AjxImg.setImage(this.leftBottomImg, DwtImg.TAB_SELECTED_BOTTOM_LEFT, null, true);
-	AjxImg.setImage(this.bottomImg, DwtImg.TAB_SELECTED_BOTTOM_MIDDLE, AjxImg.HORIZ_BORDER, true);
-	AjxImg.setImage(this.rightBottomImg, DwtImg.TAB_SELECTED_BOTTOM_RIGHT, null, true);
+	this.setTabImageState("TabSel");
 	
 	this._isClosed = false;
 }
@@ -655,17 +645,7 @@ DwtTabButton.prototype.setClosed =
 function () {
 	this.table.className = this._inactiveClassName;	
 
-	AjxImg.setImage(this.leftTopImg, DwtImg.TAB_TOP_LEFT, null, true);
-	AjxImg.setImage(this.topImg, DwtImg.TAB_TOP_MIDDLE, AjxImg.HORIZ_BORDER, true);
-	AjxImg.setImage(this.rightTopImg, DwtImg.TAB_TOP_RIGHT, null, true);
-
-	AjxImg.setImage(this.leftImg, DwtImg.TAB_MIDDLE_LEFT, AjxImg.VERT_BORDER, true);
-	AjxImg.setImage(this._centerMiddleCell, DwtImg.TAB_MIDDLE_MIDDLE, AjxImg.BACKGROUND, true);
-	AjxImg.setImage(this.rightImg, DwtImg.TAB_MIDDLE_RIGHT, AjxImg.VERT_BORDER, true);
-
-	AjxImg.setImage(this.leftBottomImg, DwtImg.TAB_BOTTOM_LEFT, null, true);
-	AjxImg.setImage(this.bottomImg, DwtImg.TAB_BOTTOM_MIDDLE, AjxImg.HORIZ_BORDER, true);
-	AjxImg.setImage(this.rightBottomImg, DwtImg.TAB_BOTTOM_RIGHT, null, true);
+	this.setTabImageState("Tab");
 	
 	this._isClosed = true;
 }
@@ -688,17 +668,7 @@ function(ev) {
 		this._mouseOutActionId = -1;
 	}
 	if (this._isClosed) {
-		AjxImg.setImage(this.leftTopImg, DwtImg.TAB_ACTIVE_TOP_LEFT, null, true);
-		AjxImg.setImage(this.topImg, DwtImg.TAB_ACTIVE_TOP_MIDDLE, AjxImg.HORIZ_BORDER, true);
-		AjxImg.setImage(this.rightTopImg, DwtImg.TAB_ACTIVE_TOP_RIGHT, null, true);
-
-		AjxImg.setImage(this.leftImg, DwtImg.TAB_ACTIVE_MIDDLE_LEFT, AjxImg.VERT_BORDER, true);
-		AjxImg.setImage(this._centerMiddleCell, DwtImg.TAB_ACTIVE_MIDDLE_MIDDLE, AjxImg.BACKGROUND, true);
-		AjxImg.setImage(this.rightImg, DwtImg.TAB_ACTIVE_MIDDLE_RIGHT, AjxImg.VERT_BORDER, true);
-
-		AjxImg.setImage(this.leftBottomImg, DwtImg.TAB_ACTIVE_BOTTOM_LEFT, null, true);
-		AjxImg.setImage(this.bottomImg, DwtImg.TAB_ACTIVE_BOTTOM_MIDDLE, AjxImg.HORIZ_BORDER, true);
-		AjxImg.setImage(this.rightBottomImg, DwtImg.TAB_ACTIVE_BOTTOM_RIGHT, null, true);
+		this.setTabImageState("TabHover");
 	}
 }
 
@@ -715,16 +685,21 @@ function(ev) {
 DwtTabButton.prototype._handleMouseOut = function (){
 	this._mouseOutActionId = -1;
 	if (this._isClosed) {
-		AjxImg.setImage(this.leftTopImg, DwtImg.TAB_TOP_LEFT, null, true);
-		AjxImg.setImage(this.topImg, DwtImg.TAB_TOP_MIDDLE, AjxImg.HORIZ_BORDER, true);
-		AjxImg.setImage(this.rightTopImg, DwtImg.TAB_TOP_RIGHT, null, true);
-
-		AjxImg.setImage(this.leftImg, DwtImg.TAB_MIDDLE_LEFT, AjxImg.VERT_BORDER, true);
-		AjxImg.setImage(this._centerMiddleCell, DwtImg.TAB_MIDDLE_MIDDLE, AjxImg.BACKGROUND, true);
-		AjxImg.setImage(this.rightImg, DwtImg.TAB_MIDDLE_RIGHT, AjxImg.VERT_BORDER, true);
-
-		AjxImg.setImage(this.leftBottomImg, DwtImg.TAB_BOTTOM_LEFT, null, true);
-		AjxImg.setImage(this.bottomImg, DwtImg.TAB_BOTTOM_MIDDLE, AjxImg.HORIZ_BORDER, true);
-		AjxImg.setImage(this.rightBottomImg, DwtImg.TAB_BOTTOM_RIGHT, null, true);
+		this.setTabImageState("Tab");
 	}
+}
+
+
+DwtTabButton.prototype.setTabImageState = function (imagePrefix) {
+		AjxImg.setImage(this.leftTopImg, imagePrefix + "_TL", null, true);
+		AjxImg.setImage(this.topImg, imagePrefix + "_T__H", AjxImg.HORIZ_BORDER, true);
+		AjxImg.setImage(this.rightTopImg, imagePrefix + "_TR", null, true);
+	
+		AjxImg.setImage(this.leftImg, imagePrefix + "_L__V", AjxImg.VERT_BORDER, true);
+		AjxImg.setImage(this._centerMiddleCell, imagePrefix + "__BG", AjxImg.BACKGROUND, true);
+		AjxImg.setImage(this.rightImg, imagePrefix + "_R__V", AjxImg.VERT_BORDER, true);
+	
+		AjxImg.setImage(this.leftBottomImg, imagePrefix + "_BL", null, true);
+		AjxImg.setImage(this.bottomImg, imagePrefix + "_B__H", AjxImg.HORIZ_BORDER, true);
+		AjxImg.setImage(this.rightBottomImg, imagePrefix + "_BR", null, true);
 }

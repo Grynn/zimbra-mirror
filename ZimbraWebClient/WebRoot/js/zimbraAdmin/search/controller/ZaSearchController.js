@@ -140,31 +140,31 @@ function () {
 
 	html[i++] = "<table align='right' id='" + this._bannerTableId + "'><tr>";
 	html[i++] = "<td><a id='" + this.bannerBar._migrationId + "'  target=\"_blank\" href=\"http://zimbra.com/downloads/migrationwizard/accept\">";
-	html[i++] = AjxImg.getImageHtml(ZaImg.I_MIGRATIONWIZ, "cursor:hand");
+	html[i++] = AjxImg.getImageHtml("MigrationWiz", "cursor:hand");
 	html[i++] = "</a></td>";
 	html[i++] = "<td><a id='" + this.bannerBar._migrationId2 + "' style='cursor: hand' target=\"_blank\" href=\"http://zimbra.com/downloads/migrationwizard/accept\">";
 	html[i++] = ZaMsg.migrationWiz + "</a></td>";	
 
 	html[i++] = "<td><a id='" + this.bannerBar._helpId + "'>";
-	html[i++] = AjxImg.getImageHtml(ZaImg.I_HELP, "cursor:hand");
+	html[i++] = AjxImg.getImageHtml("Help", "cursor:hand");
 	html[i++] = "</a></td>";
 	html[i++] = "<td><a id='" + this.bannerBar._helpId2 + "'>";
 	html[i++] = ZaMsg.help + "</a></td>";		
 
 	html[i++] = "<td><a id='" + this.bannerBar._logAboutId + "'>";
-	html[i++] = AjxImg.getImageHtml(ZaImg.I_ABOUT, "cursor:hand");
+	html[i++] = AjxImg.getImageHtml("ZimbraIcon", "cursor:hand");
 	html[i++] = "</a></td>";
 	html[i++] = "<td><a id='" + this.bannerBar._logAboutId2 + "'>";
 	html[i++] = ZaMsg.about + "</a></td>";		
 
 	html[i++] = "<td><a id='" + this.bannerBar._pdfHelpId + "' target=\"_blank\" href=\"/zimbraAdmin/adminhelp/pdf/admin.pdf\">";
-	html[i++] = AjxImg.getImageHtml(ZaImg.I_PDF, "cursor:hand");
+	html[i++] = AjxImg.getImageHtml("PDFDoc", "cursor:hand");
 	html[i++] = "</a></td>";	
 	html[i++] = "<td><a id='" + this.bannerBar._pdfHelpId2 + "' target=\"_blank\" href=\"/zimbraAdmin/adminhelp/pdf/admin.pdf\">";
 	html[i++] = ZaMsg.adminGuide + "</a></td>";	
 
 	html[i++] = "<td><a id='" + this.bannerBar._logOffId + "'>";
-	html[i++] = AjxImg.getImageHtml(ZaImg.I_LOGOFF, "cursor:hand");		
+	html[i++] = AjxImg.getImageHtml("Logoff", "cursor:hand");		
 	html[i++] = "</a></td>";
 	html[i++] = "<td><a id='" + this.bannerBar._logOffId2 + "'>";		
 	html[i++] = ZaMsg.logOff + "</a></td></tr></table>";

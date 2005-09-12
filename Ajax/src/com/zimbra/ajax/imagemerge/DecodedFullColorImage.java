@@ -43,11 +43,14 @@ public class DecodedFullColorImage extends DecodedImage {
 
     public DecodedFullColorImage(String filename,
                                  String suffix,
-                                 String prefix) 
+                                 String prefix,
+                                 int layoutStyle
+                                ) 
     {
         mFilename = filename;
         mSuffix = suffix;
         mPrefix = prefix;
+        mLayoutStyle = layoutStyle;
     }
 
     public String getSuffix() { return mSuffix; }
@@ -60,12 +63,11 @@ public class DecodedFullColorImage extends DecodedImage {
      * Get a JavaScript definition for this piece of the combined image.
      * expects combinedFilename to be of the form "megaimage.gif".
      */
-    public String getJavaScriptRep(int combinedWidth,
+    public String getCssString(int combinedWidth,
                                    int combinedHeight,
-                                   String combinedFilename,
-								   int layoutStyle) 
+                                   String combinedFilename) 
     {
-        String css = super.getJavaScriptRep(combinedWidth, combinedHeight, combinedFilename, layoutStyle);
+        String css = super.getCssString(combinedWidth, combinedHeight, combinedFilename);
         // NOTE: This is an IE hack to make it use the AlphaImageLoader filter
         //		 instead of background-image for PNG files.
         if (mSuffix.equalsIgnoreCase("png")) {

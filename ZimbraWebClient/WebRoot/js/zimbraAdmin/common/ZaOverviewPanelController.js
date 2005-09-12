@@ -90,7 +90,7 @@ function (ev) {
 			var newDomain = ev.getDetails();
 			var ti1 = new DwtTreeItem(this._accountsTi);			
 			ti1.setText(newDomain.name);	
-			ti1.setImage(ZaImg.I_ACCOUNTBYDOMAIN);
+			ti1.setImage("AccountByDomain");
 			ti1.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._ACCOUNTS_SUB_TREE);
 			ti1.setData(ZaOverviewPanelController._OBJ_ID, newDomain.name);
 			this._domainsMap[newDomain.name] = ti1;
@@ -162,12 +162,12 @@ function() {
 
 	this._statusTi = new DwtTreeItem(tree);
 	this._statusTi.setText(ZaMsg.OVP_status);
-	this._statusTi.setImage(ZaImg.I_STATUS);
+	this._statusTi.setImage("Status");
 	this._statusTi.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._STATUS);
 
 	this.statisticsTi = new DwtTreeItem(tree);
 	this.statisticsTi.setText(ZaMsg.OVP_statistics);
-	this.statisticsTi.setImage(ZaImg.I_STATS);
+	this.statisticsTi.setImage("Statistics");
 	this.statisticsTi.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._STATISTICS);
 	
 	try {
@@ -178,7 +178,7 @@ function() {
 			for(var ix=0; ix< cnt; ix++) {
 				var ti1 = new DwtTreeItem(this.statisticsTi);			
 				ti1.setText(serverList[ix].name);	
-				ti1.setImage(ZaImg.I_STATSBYSERVER);
+				ti1.setImage("StatisticsByServer");
 				ti1.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._STATISTICS_SUB_TREE);
 				ti1.setData(ZaOverviewPanelController._OBJ_ID, serverList[ix].id);
 				this._serversMap[serverList[ix].id] = ti1;
@@ -191,7 +191,7 @@ function() {
 	
 	this._accountsTi = new DwtTreeItem(tree);
 	this._accountsTi.setText(ZaMsg.OVP_accounts);
-	this._accountsTi.setImage(ZaImg.I_ACCOUNT);
+	this._accountsTi.setImage("Account");
 	this._accountsTi.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._ACCOUNTS);
 
 	try {
@@ -202,7 +202,7 @@ function() {
 			for(var ix=0; ix< cnt; ix++) {
 				var ti1 = new DwtTreeItem(this._accountsTi);			
 				ti1.setText(domainList[ix].name);	
-				ti1.setImage(ZaImg.I_ACCOUNTBYDOMAIN);
+				ti1.setImage("AccountByDomain");
 				ti1.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._ACCOUNTS_SUB_TREE);
 				ti1.setData(ZaOverviewPanelController._OBJ_ID, domainList[ix].name);
 				this._domainsMap[domainList[ix].name] = ti1;
@@ -214,23 +214,23 @@ function() {
 
 	ti = new DwtTreeItem(tree);
 	ti.setText(ZaMsg.OVP_cos);
-	ti.setImage(ZaImg.I_COS);
+	ti.setImage("COS");
 	ti.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._COS);
 	
 	ti = new DwtTreeItem(tree);
 	ti.setText(ZaMsg.OVP_domains);
-	ti.setImage(ZaImg.I_DOMAIN);
+	ti.setImage("Domain");
 	ti.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._DOMAINS);
 
 	
 	ti = new DwtTreeItem(tree);
 	ti.setText(ZaMsg.OVP_servers);
-	ti.setImage(ZaImg.I_SERVER);
+	ti.setImage("Server");
 	ti.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._SERVERS);
 	
 	ti = new DwtTreeItem(tree);
 	ti.setText(ZaMsg.OVP_global);
-	ti.setImage(ZaImg.I_GLOBALSETTINGS);
+	ti.setImage("GlobalSettings");
 	ti.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._GLOBAL_SETTINGS);	
 	
 	tree.setSelection(this._statusTi, true);

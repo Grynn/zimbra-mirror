@@ -149,7 +149,7 @@ function(errorStr) {
 		var i = 0;
 		htmlArr[i++] = "<table cellspacing='12' class='" + this._className + "-ErrorPanel'>";
 		htmlArr[i++] = "<tr><td class='" + this._className + "-ErrorIcon'>";
-		htmlArr[i++] = AjxImg.getImageHtml(ZaImg.I_CRITICAL);						
+		htmlArr[i++] = AjxImg.getImageHtml("Critical_32");						
 		htmlArr[i++] = "</td>";
 		htmlArr[i++] = "<td class='" + this._className + "-ErrorText'>" + errorStr + "</td></tr></table>";
 		html = htmlArr.join("");
@@ -196,7 +196,7 @@ function(unameId, pwordId, okCellId, errorCellId) {
 
 	html[i++] = "<table  align=center valign=middle width=100% height=100% border=0 cellspacing=0 cellpadding=0><tr><td align=center width=100%>";
 	html[i++] = "<table cellspacing=0 cellpadding=0 class='" + this._className + "-TopPanel'><tr><td class='" + this._className + "-HeaderPanel'>";
-	html[i++] = AjxImg.getImageHtml(ZaImg.M_LOGIN_BANNER);
+	html[i++] = AjxImg.getImageHtml("Admin_LoginBanner");
  	html[i++] = "</td></tr>";
  	html[i++] = "<tr><td>";
  	html[i++] = "<table cellspacing=12 class='" + this._className + "-MainPanel'>";
@@ -214,7 +214,7 @@ function(unameId, pwordId, okCellId, errorCellId) {
 /*
 	html[i++] = "<table align=center border=0 cellspacing=0 cellpadding=0><tr><td>";
 	html[i++] = "<table border=0 cellspacing=0 class='" + this._className + "-HeaderPanel'>";
-	html[i++] = "<tr height=10><td>" + AjxImg.getImageHtml(ZaImg.M_LOGIN_BANNER) + "</td></tr>";
+	html[i++] = "<tr height=10><td>" + AjxImg.getImageHtml("Admin_LoginBanner") + "</td></tr>";
 	html[i++] = "<tr><td><table border=0 height=32><tr><td class='" + this._className + "-HeaderText'>" + ZaMsg.loginHeader + "</td></tr>";
 	html[i++] = "<tr><td class='" + this._className + "-SubHeaderText'>&nbsp;</td></tr></table></td></tr>";
 	html[i++] = "</table></td></tr><tr><td>";

@@ -230,9 +230,9 @@ DwtButton.prototype.setMenu =
 		this._dropDownCell.id = Dwt.getNextId();
 		this._dropDownCell.className = "dropDownCell";
 
-		if (this._dropDownImg == null) this._dropDownImg = DwtImg.SELECT_PULL_DOWN;
-		if (this._dropDownDisImg == null) this._dropDownDisImg = DwtImg.SELECT_PULL_DOWN_DISABLED;
-		if (this._dropDownHovImg == null) this._dropDownHovImg = DwtImg.SELECT_PULL_DOWN_ENABLED;
+		if (this._dropDownImg == null) this._dropDownImg = "SelectPullDownArrow";
+		if (this._dropDownDisImg == null) this._dropDownDisImg = "SelectPullDownArrowDis";
+		if (this._dropDownHovImg == null) this._dropDownHovImg = "SelectPullDownArrowHover";
 		AjxImg.setImage(this._dropDownCell, this._dropDownImg);
 
 		this._menu.setAssociatedElementId(this._dropDownCell.id);

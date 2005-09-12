@@ -14,7 +14,7 @@
 	
 	<property name="jars.dir"           location="jars"/>
 	<property name="src.dir"            location="src"/>
-	<property name="images.dir"			location="WebRoot/js/dwt/config/img"/>
+	<property name="images.dir"			location="img"/>
 
 	<condition property="deploy.dir" value="${env.DEPLOY_DIR}">
 		<isset property="env.DEPLOY_DIR" />
@@ -125,26 +125,6 @@
 			<dirset dir='${images.dir}/hiRes' includes='*' excludes='horizborders,vertborders,backgrounds'/>
 		</imagemerge>
 		<echo/>
-		<echo message='Copying high resolution horizontal borders'/>
-		<echo/>
-		<imagemerge destdir='${images.hiRes.destDir}' copy='true' layout='vertical'
-					cssfile='${images.cssFile}' csspath='${images.cssPath}/hiRes/'>
-			<dirset dir='${images.dir}/hiRes' includes='horizborders'/>
-		</imagemerge>
-		<echo/>
-		<echo message='Copying high resolution vertical borders'/>
-		<echo/>
-		<imagemerge destdir='${images.hiRes.destDir}' copy='true' layout='horizontal'
-					cssfile='${images.cssFile}' csspath='${images.cssPath}/hiRes/'>
-			<dirset dir='${images.dir}/hiRes' includes='vertborders'/>
-		</imagemerge>
-		<echo/>
-		<echo message='Copying high resolution backgrounds'/>
-		<echo/>
-		<imagemerge destdir='${images.hiRes.destDir}' copy='true' layout='repeat'
-					cssfile='${images.cssFile}' csspath='${images.cssPath}/hiRes/'>
-			<dirset dir='${images.dir}/hiRes' includes='backgrounds'/>
-		</imagemerge>
 		
 		<!-- merge loRes images -->
 		<mkdir dir="${images.loRes.destDir}"/>
@@ -158,26 +138,6 @@
 					includes='*' excludes='horizborders,vertborders,backgrounds'/>
 		</imagemerge>
 		<echo/>
-		<echo message='Merging low resolution horizontal borders'/>
-		<echo/>
-		<imagemerge destdir='${images.loRes.destDir}' layout='vertical'
-					cssfile='${images.cssFile}' csspath='${images.cssPath}/loRes/'>
-			<dirset dir='${images.dir}/loRes' includes='horizborders'/>
-		</imagemerge>
-		<echo/>
-		<echo message='Merging low resolution vertical borders'/>
-		<echo/>
-		<imagemerge destdir='${images.loRes.destDir}' layout='horizontal'
-					cssfile='${images.cssFile}' csspath='${images.cssPath}/loRes/'>
-			<dirset dir='${images.dir}/loRes' includes='vertborders'/>
-		</imagemerge>
-		<echo/>
-		<echo message='Copying low resolution backgrounds'/>
-		<echo/>
-		<imagemerge destdir='${images.loRes.destDir}' copy='true' layout='repeat'
-					cssfile='${images.cssFile}' csspath='${images.cssPath}/loRes/'>
-			<dirset dir='${images.dir}/loRes' includes='backgrounds'/>
-		</imagemerge>
 	</target>
 
 	<target name="htmleditorexample">

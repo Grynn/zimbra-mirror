@@ -58,7 +58,6 @@ Contributor(s):
 <script type="text/javascript" src="<%= contextPath %>/js/util/AjxSelectionManager.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/net/AjxPost.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/util/AjxBuffer.js"></script>
-<script type="text/javascript" src="<%= contextPath %>/js/dwt/core/DwtImg.js"></script>
 
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/core/Dwt.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/core/DwtException.js"></script>

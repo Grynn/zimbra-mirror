@@ -212,12 +212,12 @@ function(entry) {
 	if(!this._UICreated) {
 		this._view = new ZaDomainXFormView(this._container, this._app);
    		this._ops = new Array();
-   		this._ops.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.DTBB_New_tt, ZaImg.I_DOMAIN, ZaImg.I_DOMAIN, new AjxListener(this, ZaDomainController.prototype._newButtonListener)));
-   		this._ops.push(new ZaOperation(ZaOperation.GAL_WIZARD, ZaMsg.DTBB_GAlConfigWiz, ZaMsg.DTBB_GAlConfigWiz_tt, ZaImg.I_DOMAIN, ZaImg.I_DOMAIN, new AjxListener(this, ZaDomainController.prototype._galWizButtonListener)));   		
-   		this._ops.push(new ZaOperation(ZaOperation.AUTH_WIZARD, ZaMsg.DTBB_AuthConfigWiz, ZaMsg.DTBB_AuthConfigWiz_tt, ZaImg.I_DOMAIN, ZaImg.I_DOMAIN, new AjxListener(this, ZaDomainController.prototype._authWizButtonListener)));   		   		
-   		this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.DTBB_Save_tt, ZaImg.I_SAVE, ZaImg.ID_SAVE, new AjxListener(this, ZaDomainController.prototype._saveButtonListener)));
-   		this._ops.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.DTBB_Close_tt, ZaImg.I_UNDO, ZaImg.I_UNDO, new AjxListener(this, ZaDomainController.prototype._closeButtonListener)));    	
-   		this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.DTBB_Delete_tt, ZaImg.I_DELETE, ZaImg.I_DELETE, new AjxListener(this, ZaDomainController.prototype._deleteButtonListener)));    	    	
+   		this._ops.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.DTBB_New_tt, "Domain", "DomainDis", new AjxListener(this, ZaDomainController.prototype._newButtonListener)));
+   		this._ops.push(new ZaOperation(ZaOperation.GAL_WIZARD, ZaMsg.DTBB_GAlConfigWiz, ZaMsg.DTBB_GAlConfigWiz_tt, "GALWizard", "GALWizardDis", new AjxListener(this, ZaDomainController.prototype._galWizButtonListener)));   		
+   		this._ops.push(new ZaOperation(ZaOperation.AUTH_WIZARD, ZaMsg.DTBB_AuthConfigWiz, ZaMsg.DTBB_AuthConfigWiz_tt, "AuthWizard", "AuthWizardDis", new AjxListener(this, ZaDomainController.prototype._authWizButtonListener)));   		   		
+   		this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.DTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, ZaDomainController.prototype._saveButtonListener)));
+   		this._ops.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.DTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, ZaDomainController.prototype._closeButtonListener)));    	
+   		this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.DTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaDomainController.prototype._deleteButtonListener)));    	    	
 	
 		this._toolBar = new ZaToolBar(this._container, this._ops);
 	    this._app.createView(ZaDomainController.VIEW, [this._toolBar, this._view]);

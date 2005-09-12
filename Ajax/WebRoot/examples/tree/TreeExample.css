@@ -170,6 +170,7 @@ DIV.vSpace {
 .DwtTreeItem {
 	background-color: transparent;
 	cursor: default;
+	height:20px;
 }
 
 .DwtTreeItem-selected {
@@ -187,3 +188,8 @@ DIV.vSpace {
 .DwtTreeItem-DragOver table {background-color: rgb(175, 175, 175);}
 .DwtTreeItem-DragOver .ChildDiv table {background-color: white;}
 
+
+.DwtTreeItemLevel1ChildDiv, 
+.DwtTreeItemChildDiv {
+	margin-left:16px;	
+}

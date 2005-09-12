@@ -43,8 +43,8 @@ function(list) {
     if (!this._appView) {
     	//create toolbar
     	this._ops = new Array();
-    	this._ops.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.SERTBB_Edit_tt, ZaImg.I_PROPERTIES, ZaImg.I_PROPERTIES, new AjxListener(this, ZaServerListController.prototype._editButtonListener)));    	
-    	this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.SERTBB_Delete_tt, ZaImg.I_DELETE, ZaImg.I_DELETE, new AjxListener(this, ZaServerListController.prototype._deleteButtonListener)));    	    	
+    	this._ops.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.SERTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaServerListController.prototype._editButtonListener)));    	
+    	this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.SERTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaServerListController.prototype._deleteButtonListener)));    	    	
 		this._toolbar = new ZaToolBar(this._container, this._ops);    
  	
 		//create Servers list view
