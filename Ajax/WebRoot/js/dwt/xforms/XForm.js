@@ -99,6 +99,7 @@ var _RIGHT_ = "right";
 var _BOTTOM_ = "bottom";
 var _CENTER_ = "center";
 var _MIDDLE_ = "middle";
+var _INLINE_ = "inline";
 
 
 // values for "relevantBehavior"
@@ -146,7 +147,9 @@ XForm.prototype.getUniqueId = function (prefix) {
 
 XForm.prototype.getElement = function (id) {
 	if (id == null) id = this.getId();
-	return XFG.getEl(id);
+	var el = XFG.getEl(id);
+	if (el == null) DBG.println("getElement(",id,"): no element found");
+	return el;
 }
 
 XForm.prototype.showElement = function (id) {
@@ -171,7 +174,7 @@ XForm.prototype.focusElement = function (id) {
 	if (el != null) {
 		var tagName = el.tagName;
 		if (tagName != "DIV" && tagName != "TD" && tagName != "TABLE") {
-			el.focus();
+			el.focus();		//MOW: el.select() ????
 			this.onFocus(id);
 		}
 	}
@@ -526,11 +529,11 @@ XForm.prototype.outputItemList = function (items, parentItem, html, updateScript
 			parentItem.__rowSpanItems.push(item);
 			item.__numOutstandingRows = rowSpan;
 		}
-
+		
 		// write the label to the left if desired
 		if (label != null && labelLocation == _LEFT_) {
 			//DBG.println("writing label");
-			item.outputLabelCellHTML(html, updateScript, indent+"  ", rowSpan);
+			item.outputLabelCellHTML(html, updateScript, indent+"  ", rowSpan, labelLocation);
 		}
 
 		var writeElementDiv = item.getWriteElementDiv();
@@ -548,7 +551,6 @@ XForm.prototype.outputItemList = function (items, parentItem, html, updateScript
 	
 			// begin the element div, if required
 			if (writeElementDiv) 	item.outputElementDivStart(html, updateScript, indent);
-			
 			
 			// actually write out the item
 			if (outputMethod) outputMethod.call(item, html, updateScript, indent + "      ", 0);
@@ -771,7 +773,7 @@ XForm.prototype.getUpdateScriptStart = function () {
 			"var form = this;\r",
 			"var model = this.xmodel;\r",
 			"var instance = this.instance;\r",
-			"var item, element, relevant, value, temp;\r",
+			"var item, itemId, element, relevant, value, temp;\r",
 			"this.tabIdOrder = new Array();\r",
 			"with (this) {"
 	);
