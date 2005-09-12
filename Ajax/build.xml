@@ -145,16 +145,7 @@
 			<fileset dir="WebRoot/examples/htmlEditor" includes="**/*" excludes="**/img,**/img/"/>
 		</copy>
 		
-		<property name="htmleditor.cssFile" value="imgs.css"/>
-		<property name="htmleditor.hiRes.destDir" value="${build.examples.dir}/htmlEditor/img/hiRes"/>
-		<property name="htmleditor.loRes.destDir" value="${build.examples.dir}/htmlEditor/img/loRes"/>
-		<antcall target='images'>
-			<param name='images.dir' value='WebRoot/examples/htmlEditor/img'/>
-			<param name="images.hiRes.destDir" value="${htmleditor.hiRes.destDir}"/>
-			<param name="images.loRes.destDir" value="${htmleditor.loRes.destDir}"/>
-			<param name="images.cssPath" value="/ajax/examples/htmlEditor/img"/>			
-			<param name="images.cssFile" value="${htmleditor.cssFile}"/>			
-		</antcall>
+		<!--   NOTE: images now coming from the common "htmlEdit" directory -->
 	</target>
 	
 	<target name="dataviewerexample">
@@ -162,16 +153,7 @@
 			<fileset dir="WebRoot/examples/dataViewer" includes="**/*" excludes="**/img,**/img/"/>
 		</copy>
 		
-		<property name="dataViewer.cssFile" value="imgs.css"/>
-		<property name="dataViewer.hiRes.destDir" value="${build.examples.dir}/dataViewer/config/img/hiRes"/>
-		<property name="dataViewer.loRes.destDir" value="${build.examples.dir}/dataViewer/config/img/loRes"/>
-		<antcall target='images'>
-			<param name='images.dir' value='WebRoot/examples/dataViewer/config/img'/>
-			<param name="images.hiRes.destDir" value="${dataViewer.hiRes.destDir}"/>
-			<param name="images.loRes.destDir" value="${dataViewer.loRes.destDir}"/>
-			<param name="images.cssPath" value="/ajax/examples/dataViewer/config/img"/>			
-			<param name="images.cssFile" value="${dataViewer.cssFile}"/>			
-		</antcall>
+		<!--   NOTE: images now coming from the common "examples" directory -->
 	</target>
 
 	<target name="treeexample">
@@ -179,16 +161,7 @@
 			<fileset dir="WebRoot/examples/tree" includes="**/*" excludes="**/img,**/img/"/>
 		</copy>
 		
-		<property name="tree.cssFile" value="imgs.css"/>
-		<property name="tree.hiRes.destDir" value="${build.examples.dir}/tree/img/hiRes"/>
-		<property name="tree.loRes.destDir" value="${build.examples.dir}/tree/img/loRes"/>
-		<antcall target='images'>
-			<param name='images.dir' value='WebRoot/examples/tree/img'/>
-			<param name="images.hiRes.destDir" value="${tree.hiRes.destDir}"/>
-			<param name="images.loRes.destDir" value="${tree.loRes.destDir}"/>
-			<param name="images.cssPath" value="/ajax/examples/tree/img"/>			
-			<param name="images.cssFile" value="${tree.cssFile}"/>			
-		</antcall>
+		<!--   NOTE: images now coming from the common "examples" directory -->
 	</target>
 	
 	<target name="xformsexample">
