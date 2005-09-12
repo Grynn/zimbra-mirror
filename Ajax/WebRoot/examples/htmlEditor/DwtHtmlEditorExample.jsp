@@ -33,7 +33,6 @@ Contributor(s):
     <style type="text/css">
       <!--
         @import url(../common/img/hiRes/dwtimgs.css);
-        @import url(img/hiRes/imgs.css);
         @import url(DwtHtmlEditorExample.css);
       -->
     </style>
@@ -44,7 +43,6 @@ Contributor(s):
     <jsp:include page="../Messages.jsp"/>
     <jsp:include page="../Ajax.jsp"/>
     <script type="text/javascript" src="ExMsg.js"></script>
-    <script type="text/javascript" src="ExImg.js"></script>
     <script type="text/javascript" src="DwtHtmlEditorExample.js"></script>
   </head>
     <body>

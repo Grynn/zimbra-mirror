@@ -72,9 +72,6 @@ DvFilterPanel.W_DATE = 10;
 
 DvFilterPanel.FILTER_RE = /^u(\d+)a(\d+)f?(\d*)$/;
 
-// mini-calendar icon
-DvFilterPanel.I_APPT  = ["AppointmentIcon", 16, 16];
-
 // handle click on mini-calendar icon or page number
 DvFilterPanel._onClick =
 function(ev) {
@@ -475,9 +472,9 @@ function(attr) {
 		var calId2 = "cal_" + fieldId2;
 		html[i++] = "<table border='0' cellpadding='0' cellspacing='2'>";
 		html[i++] = "<tr><td>" + DvMsg.after + ":</td><td><input type='text' size='" + dw + "' id='" + fieldId1 + "'></td>";
-		html[i++] = "<td><a id='" + calId1 + "' href='javascript:;'>" + AjxImg.getImageHtml(DvFilterPanel.I_APPT) + "</a></td></tr>";
+		html[i++] = "<td><a id='" + calId1 + "' href='javascript:;'>" + AjxImg.getImageHtml("AppointmentIcon") + "</a></td></tr>";
 		html[i++] = "<tr><td>" + DvMsg.before + ":</td><td><input type='text' size='" + dw + "' id='" + fieldId2 + "'></td>";
-		html[i++] = "<td><a id='" + calId2 + "' href='javascript:;'>" + AjxImg.getImageHtml(DvFilterPanel.I_APPT) + "</a></td></tr>";
+		html[i++] = "<td><a id='" + calId2 + "' href='javascript:;'>" + AjxImg.getImageHtml("AppointmentIcon") + "</a></td></tr>";
 		html[i++] = "</table>";
 		this._fieldIds.push(fieldId1, fieldId2);
 		this._calIds.push(calId1, calId2);

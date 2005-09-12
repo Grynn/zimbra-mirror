@@ -44,7 +44,6 @@ Contributor(s):
     <jsp:include page="../Messages.jsp"/>
     <jsp:include page="../Ajax.jsp"/>
     <script type="text/javascript" src="ExMsg.js"></script>
-    <script type="text/javascript" src="ExImg.js"></script>
     <script type="text/javascript" src="TreeExample.js"></script>
   </head>
     <body>
