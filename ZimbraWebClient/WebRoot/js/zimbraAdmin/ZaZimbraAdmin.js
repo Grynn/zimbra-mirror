@@ -347,6 +347,6 @@ ZaAboutDialog.prototype = new DwtDialog;
 ZaAboutDialog.prototype.constructor = ZaAboutDialog;
 
 ZaAboutDialog.prototype._createContentHtml = function () {
-	AjxImg.setImage(this._contentDiv,ZaImg.M_ABOUT);
-	//this._contentDiv.appendChild(AjxImg.getImageHtml(ZaImg.M_ABOUT));
+	AjxImg.setImage(this._contentDiv,"Admin_SplashScreen");
+	//this._contentDiv.appendChild(AjxImg.getImageHtml("Admin_SplashScreen"));
 }
