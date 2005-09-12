@@ -31,6 +31,8 @@ ZaImg.PATH = ZaSettings.CONFIG_PATH + "/img/";
 ZaImg.M_BANNER 				= ["ImgBanner", 96, 96];
 ZaImg.M_LOGIN_BANNER		= ["ImgAdmin_LoginBanner", 447, 110];
 ZaImg.M_SPLASH  			= ["ImgAdmin_SplashScreen", 500, 350];
+ZaImg.M_ABOUT  			= ["ImgAboutScreen", 476, 332];
+ZaImg.I_ABOUT  				= ["Imgzimbra_icon", 27, 16];
 
 // Icons
 ZaImg.I_BACK_ARROW 			= ["ImgLeftArrowIcon", 16, 16];
