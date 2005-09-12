@@ -174,17 +174,17 @@ DIV.vSpace {
 	border: 1px solid rgb(198, 197, 215);
 }
 .TBButton-activated {
-	background-image:url(/zimbra/skins/steel/images/bg_button_up.gif);
+	background-image:url(/ajax/examples/htmlEditor/img/hiRes/img/bg_button_up.gif);
 	border: 1px solid;
 	border-color: #E0E0E0 #555555 #555555 #E0E0E0;
 }
 .TBButton-triggered {
-	background-image:url(/zimbra/skins/steel/images/bg_button_down.gif);
+	background-image:url(/ajax/examples/htmlEditor/img/hiRes/img/bg_button_down.gif);
 	border:1px solid;
 	border-color: #555555 #E0E0E0 #E0E0E0 #555555;
 }
 .TBButton-toggled {
-	background-image:url(/zimbra/skins/steel/images/bg_button_down.gif);
+	background-image:url(/ajax/examples/htmlEditor/img/hiRes/img/bg_button_down.gif);
 	border:1px solid;
 	border-color: #555555 #E0E0E0 #E0E0E0 #555555;
 }
@@ -269,7 +269,7 @@ DIV.vSpace {
 	cursor: default;
 	overflow:hidden;
 	height:20px;
-	background-image:url(/zimbra/skins/steel/images/bg_button_up.gif);
+	background-image:url(/ajax/examples/htmlEditor/img/hiRes/img/bg_button_up.gif);
 	border: 1px solid;
 	border-color: #E0E0E0 #555555 #555555 #E0E0E0;
 	min-width:40px;
@@ -279,7 +279,7 @@ DIV.vSpace {
 	cursor: default;
 	overflow:hidden;
 	height:20px;
-	background-image:url(/zimbra/skins/steel/images/bg_button_down.gif);
+	background-image:url(/ajax/examples/htmlEditor/img/hiRes/img/bg_button_down.gif);
 	border: 1px solid;
 	border-color: #E0E0E0 #555555 #555555 #E0E0E0;
 	min-width:40px;
@@ -289,7 +289,7 @@ DIV.vSpace {
 	cursor: default;
 	overflow:hidden;
 	height:20px;
-	background-image:url(/zimbra/skins/steel/images/bg_button_down.gif);
+	background-image:url(/ajax/examples/htmlEditor/img/hiRes/img/bg_button_down.gif);
 	border:1px solid;
 	border-color: #555555 #E0E0E0 #E0E0E0 #555555;
 	min-width:40px;
