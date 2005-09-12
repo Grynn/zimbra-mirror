@@ -51,9 +51,8 @@ Contributor(s):
     <noscript><p><b>Javascript must be enabled to use this.</b></p></noscript>
     <script language="JavaScript">   	
    		function launch() {
-   			DBG = new AjxDebug(AjxDebug.DBG1, null, false);
-   			DBG.setDebugLevel(AjxDebug.NONE);
-	    	TreeExample.run();
+   			DBG = new AjxDebug(AjxDebug.NONE, null, false);
+ 	    	TreeExample.run();
 	    }
         AjxCore.addOnloadListener(launch);
     </script>
