@@ -140,14 +140,27 @@ Cos_MailQuota_XModelItem.prototype.getCosValue = function(instance) {
 	if(!instance)
 		return null;
 	var _ref = this.ref.replace("/", ".");
-	var value = (eval("instance.cos." + _ref) != null) ? Number(eval("instance.cos." + _ref) / 1048576).toFixed(0) : 0;
+	var value = 0;
+	if((eval("instance.cos." + _ref) != null) && (eval("instance.cos." + _ref) != 0)) {
+		value = (eval("instance.cos." + _ref) / 1048576);
+		if(value != Math.round(value)) {
+			value = Number(value).toFixed(2);
+	  	}
+	} 	
+//	var value = (eval("instance.cos." + _ref) != null) ? Number(eval("instance.cos." + _ref) / 1048576).toFixed(0) : 0;
 	return value;
 }
 Cos_MailQuota_XModelItem.prototype.getAccountValue = function(instance) {
 	if(!instance)
 		return null;	
 	var _ref = this.ref.replace("/", ".");
-	var value = (eval("instance." + _ref) != null) ? Number(eval("instance." + _ref) / 1048576).toFixed(0) : null;
+	var value = null;
+	if(eval("instance." + _ref) != null) {
+		value = (eval("instance." + _ref) / 1048576);
+		if(value != Math.round(value)) {
+			value = Number(value).toFixed(2);
+	  	}
+	} 
 	return value;
 }
 

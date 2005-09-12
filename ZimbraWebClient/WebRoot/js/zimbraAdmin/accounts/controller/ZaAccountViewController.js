@@ -287,7 +287,7 @@ function () {
 			continue;
 		}	
 		//check if the value has been modified
-		if ((this._currentObject.attrs[a] != tmpObj.attrs[a]) && !(this._currentObject.attrs[a] == undefined && tmpObj.attrs[a] == "")) {
+		if ((this._currentObject.attrs[a] != tmpObj.attrs[a]) && !(this._currentObject.attrs[a] == undefined && tmpObj.attrs[a] === "")) {
 			if(a==ZaAccount.A_uid) {
 				continue; //skip uid, it is changed throw a separate request
 			}

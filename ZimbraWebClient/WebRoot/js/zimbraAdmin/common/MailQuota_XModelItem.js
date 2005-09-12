@@ -41,7 +41,13 @@ MailQuota_XModelItem.prototype.maxInclusive = 2047;
 MailQuota_XModelItem.prototype.minInclusive = 0;
 
 MailQuota_XModelItem.prototype.getValue =  function(instance, current, ref) {
-	var value = (eval("instance." + ref) != null) ? Number(eval("instance." + ref) / 1048576).toFixed(3) : 0;
+	var value = 0;
+	if(eval("instance." + ref) != null) {
+	  value = eval("instance." + ref) / 1048576;
+	  if(value != Math.round(value)) {
+		 value = Number(value).toFixed(2);
+	  }
+	}
 	return value;
 }
 

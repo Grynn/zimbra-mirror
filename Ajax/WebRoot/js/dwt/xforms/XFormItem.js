@@ -815,7 +815,7 @@ XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript, inde
 
 		if (forceUpdate != true) {
 			updateScript.append(
-				"var valueStr = ''+value;\r",
+				"var valueStr = ''+String(value);\r",
 				"if (item.$lastDisplayValue != valueStr) {\r  ",
 					"item.$updateElement(value);\r",
 					"item.$lastDisplayValue = valueStr;\r",
