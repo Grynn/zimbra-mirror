@@ -188,6 +188,7 @@ zimbraRedoLogEnabled: TRUE
 zimbraRedoLogLogPath: redolog/redo.log
 zimbraRedoLogArchiveDir: redolog/archive
 zimbraRedoLogRolloverFileSizeKB: 102400
+zimbraRedoLogDeleteOnRollover: TRUE
 zimbraRedoLogFsyncIntervalMS: 10
 zimbraSmtpHostname: localhost
 zimbraSmtpPort: 25
@@ -229,6 +230,7 @@ zimbraServerInheritedAttr: zimbraRedoLogEnabled
 zimbraServerInheritedAttr: zimbraRedoLogLogPath
 zimbraServerInheritedAttr: zimbraRedoLogArchiveDir
 zimbraServerInheritedAttr: zimbraRedoLogRolloverFileSizeKB
+zimbraServerInheritedAttr: zimbraRedoLogDeleteOnRollover
 zimbraServerInheritedAttr: zimbraRedoLogFsyncIntervalMS
 zimbraServerInheritedAttr: zimbraSmtpHostname
 zimbraServerInheritedAttr: zimbraSmtpPort

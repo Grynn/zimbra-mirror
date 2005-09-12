@@ -239,6 +239,7 @@ objectIdentifier zimbraSpamIsNotSpamAccount ZimbraAttrType:245
 objectIdentifier zimbraMailTransport ZimbraAttrType:247
 objectIdentifier zimbraSmtpSendPartial ZimbraAttrType:249
 objectIdentifier zimbraLogHostname ZimbraAttrType:250
+objectIdentifier zimbraRedoLogDeleteOnRollover ZimbraAttrType:251
 
 
 #################################################################
@@ -1428,6 +1429,13 @@ attributetype ( zimbraRedoLogRolloverFileSizeKB
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )
 
+attributetype ( zimbraRedoLogDeleteOnRollover
+	NAME 'zimbraRedoLogDeleteOnRollover'
+	DESC 'whether logs are delete on rollover or archived'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )	
+
 attributetype ( zimbraServerInheritedAttr
 	NAME 'zimbraServerInheritedAttr'
 	DESC 'zimbraServer attrs that get inherited from global config'
@@ -2108,6 +2116,7 @@ objectclass ( zimbraGlobalConfig
 		zimbraRedoLogLogPath $
 		zimbraRedoLogArchiveDir $
 		zimbraRedoLogRolloverFileSizeKB $
+		zimbraRedoLogDeleteOnRollover $
 		zimbraRedoLogFsyncIntervalMS $
 		zimbraServerInheritedAttr $
 		zimbraSmtpHostname $
@@ -2234,6 +2243,7 @@ objectclass ( zimbraServer
 		zimbraRedoLogLogPath $
 		zimbraRedoLogArchiveDir $
 		zimbraRedoLogRolloverFileSizeKB $
+		zimbraRedoLogDeleteOnRollover $
 		zimbraRedoLogFsyncIntervalMS $
 		zimbraServiceHostname $
 		zimbraServiceEnabled $
