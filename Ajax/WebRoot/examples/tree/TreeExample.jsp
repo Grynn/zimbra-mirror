@@ -33,7 +33,6 @@ Contributor(s):
     <style type="text/css">
       <!--
         @import url(../common/img/hiRes/dwtimgs.css);
-        @import url(img/hiRes/imgs.css);
         @import url(TreeExample.css);
       -->
     </style>

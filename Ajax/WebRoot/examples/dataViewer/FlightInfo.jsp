@@ -30,7 +30,6 @@ Contributor(s):
     <style type="text/css">
       <!--
         @import url(../common/img/hiRes/dwtimgs.css);
-        @import url(config/img/hiRes/imgs.css);
         @import url(config/style/dv.css);
        -->
     </style>
