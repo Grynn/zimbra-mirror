@@ -61,6 +61,7 @@ ZmCsfeException.ACCT_NO_SUCH_SAVED_SEARCH 	= "account.NO_SUCH_SAVED_SEARCH";
 ZmCsfeException.ACCT_NO_SUCH_TAG 			= "account.ACCT_NO_SUCH_TAG";
 ZmCsfeException.ACCT_PASS_RECENTLY_USED 	= "account.PASSWORD_RECENTLY_USED";
 ZmCsfeException.ACCT_PASS_CHANGE_TOO_SOON 	= "account.PASSWORD_CHANGE_TOO_SOON";
+ZmCsfeException.ACCT_CHANGE_PASSWORD 		= "account.CHANGE_PASSWORD";
 ZmCsfeException.DOMAIN_NOT_EMPTY			= "account.DOMAIN_NOT_EMPTY";
 
 ZmCsfeException.COS_EXISTS 					= "account.COS_EXISTS";
