@@ -11,4 +11,30 @@ PLEASE READ THIS AGREEMENT CAREFULLY BEFORE USING THE SOFTWARE. ZIMBRA, INC. ("Z
    5. Trademarks. Many open source components, and Zimbra software itself, are also protected by trademarks. While you are free to copy and distribute open source software, you are not allowed to market it under those trademarks without separate licenses. Zimbra is a trademark of Zimbra, Inc. The trademarks of the licensors of our components are listed on their separate websites.
    6. Support. The Zimbra Product is licensed without any support. However, Zimbra is a full-support company. Even though open source licenses for Zimbra components offer few if any warranties, Zimbra, itself, along with our open source partners, will support the components of the Zimbra Product. We encourage you to review our separate service and support offerings.
 
+   Exhibit A
 
+		* Zimbra Public License
+			http://www.zimbra.com/license/zimbra_public_license.html
+		* Zimbra Third Party Licenses
+			http://www.zimbra.com/license/zimbra_third_party_licenses.html
+
+
+		License                 Component
+		------------------------------------------------------------------
+		Apache 1.1 (revised)  	NekoHTML
+		Apache 2.0 	            JSP JSTL, Tomcat, Jakarta Commons Libraries, 
+								jakarta-oro, jseive, Log4j, Lucene, 
+								xerces, ant, ant-contrib, Apache Taglibs, 
+								SpamAssassin
+		BSD (revised) 	        JavaCC, OpenLDAP, Sleepycat, ical4j, 
+								zlib, dom4j, jaxen, snmp, cyrus-sasl
+		CPL 	                junit
+		GPL 	                MySQL, Mysql Connector/J, Swatch, 
+								amavisd-new, ClamAV, rrdtool/mrtg
+		IBM Public License 	    Postfix
+		LGPL 	                Java UUID Generator
+		MIT (revised) 	        expat, curl, libxml2, JSON
+		Perl Artistic 	        Various Perl libraries
+		Sun* 	                JDK, JavaMail, JNDI, Java Activation Framework
+
+		*These subcomponents are not open source
