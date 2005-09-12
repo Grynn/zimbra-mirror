@@ -468,7 +468,7 @@ DwtBorder.registerBorder(
 	"calendar_appt_allday",
 	{	
 		start:AjxBuffer.concat(
-			"<div id='<!--$id-->_body' class='appt_allday_body appt_allday<!--$newState--><!--$color-->_body'>",
+			"<div id='<!--$id-->_body' <!--$body_style--> class='appt_allday_body appt_allday<!--$newState--><!--$color-->_body'>",
 				"<table width=100% cellspacing=0 cellpadding=2>",
 				"<tr>",
 					"<td class=appt_allday<!--$newState-->_name><!--$name--></td>",
