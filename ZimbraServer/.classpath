@@ -19,7 +19,7 @@
 	<classpathentry kind="lib" path="jars/commons-collections-3.1.jar"/>
 	<classpathentry kind="lib" path="jars/lucene-demos-1.4-final.jar"/>
 	<classpathentry kind="lib" path="jars/commons-httpclient-2.0.1.jar"/>
-	<classpathentry kind="lib" path="jars/junit-3.8.1.jar">
+	<classpathentry sourcepath="/ThirdParty/junit-3.8.1" kind="lib" path="jars/junit-3.8.1.jar">
 		<attributes>
 			<attribute value="http://junit.sourceforge.net/javadoc/" name="javadoc_location"/>
 		</attributes>
@@ -29,7 +29,7 @@
 	<classpathentry kind="lib" path="jars/commons-digester-1.5.jar"/>
 	<classpathentry kind="lib" path="jars/jakarta-oro-2.0.7.jar"/>
 	<classpathentry sourcepath="/ThirdParty/jsieve" kind="lib" path="jars/jsieve-0.1.jar"/>
-	<classpathentry kind="lib" path="jars/zimbra-native.jar"/>
+	<classpathentry sourcepath="/ZimbraNative/src/java" kind="lib" path="jars/zimbra-native.jar"/>
 	<classpathentry kind="lib" path="jars/lucene-1.4.3.jar"/>
 	<classpathentry kind="lib" path="jars/mail.jar">
 		<attributes>
