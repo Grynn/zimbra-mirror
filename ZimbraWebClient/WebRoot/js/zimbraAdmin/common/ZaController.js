@@ -275,11 +275,11 @@ function() {
 	}
 }
 
-
+/*
 // Pop up a dialog. Since it's a shared resource, we need to reset first.
 ZaController.prototype._showDialog = 
 function(dialog, callback, organizer, loc, args) {
 	dialog.reset();
 	dialog.registerCallback(DwtDialog.OK_BUTTON, callback, this, args);
 	dialog.popup(organizer, loc);
-}
+}*/

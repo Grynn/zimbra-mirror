@@ -108,11 +108,13 @@ function() {
 	this.bannerBar._helpId = Dwt.getNextId();
 	this.bannerBar._pdfHelpId = Dwt.getNextId();	
 	this.bannerBar._logOffId = Dwt.getNextId();
+	this.bannerBar._logAboutId = Dwt.getNextId();
 	
 	this.bannerBar._migrationId2 = Dwt.getNextId();
 	this.bannerBar._helpId2 = Dwt.getNextId();
 	this.bannerBar._pdfHelpId2 = Dwt.getNextId();	
 	this.bannerBar._logOffId2 = Dwt.getNextId();
+	this.bannerBar._logAboutId2 = Dwt.getNextId();
 	
 	var html = new Array();
 	var i = 0;
@@ -142,16 +144,25 @@ function () {
 	html[i++] = "</a></td>";
 	html[i++] = "<td><a id='" + this.bannerBar._migrationId2 + "' style='cursor: hand' target=\"_blank\" href=\"http://zimbra.com/downloads/migrationwizard/accept\">";
 	html[i++] = ZaMsg.migrationWiz + "</a></td>";	
+
 	html[i++] = "<td><a id='" + this.bannerBar._helpId + "'>";
 	html[i++] = AjxImg.getImageHtml(ZaImg.I_HELP, "cursor:hand");
 	html[i++] = "</a></td>";
 	html[i++] = "<td><a id='" + this.bannerBar._helpId2 + "'>";
 	html[i++] = ZaMsg.help + "</a></td>";		
+
+	html[i++] = "<td><a id='" + this.bannerBar._logAboutId + "'>";
+	html[i++] = AjxImg.getImageHtml(ZaImg.I_ABOUT, "cursor:hand");
+	html[i++] = "</a></td>";
+	html[i++] = "<td><a id='" + this.bannerBar._logAboutId2 + "'>";
+	html[i++] = ZaMsg.about + "</a></td>";		
+
 	html[i++] = "<td><a id='" + this.bannerBar._pdfHelpId + "' target=\"_blank\" href=\"/zimbraAdmin/adminhelp/pdf/admin.pdf\">";
 	html[i++] = AjxImg.getImageHtml(ZaImg.I_PDF, "cursor:hand");
 	html[i++] = "</a></td>";	
 	html[i++] = "<td><a id='" + this.bannerBar._pdfHelpId2 + "' target=\"_blank\" href=\"/zimbraAdmin/adminhelp/pdf/admin.pdf\">";
 	html[i++] = ZaMsg.adminGuide + "</a></td>";	
+
 	html[i++] = "<td><a id='" + this.bannerBar._logOffId + "'>";
 	html[i++] = AjxImg.getImageHtml(ZaImg.I_LOGOFF, "cursor:hand");		
 	html[i++] = "</a></td>";
@@ -186,6 +197,16 @@ function () {
 	if(a) {
 		a.href = "javascript: void ZaZimbraAdmin._bannerBarHdlr(" + ZaZimbraAdmin._LOGOFF_ID + ",'" + this._bannerTableId + "');";
 	}
+	
+	a = Dwt.getDomObj(doc, this.bannerBar._logAboutId);
+	if(a) {
+		a.href = "javascript: void ZaZimbraAdmin._bannerBarHdlr(" + ZaZimbraAdmin._ABOUT_ID + ",'" + this._bannerTableId + "');";
+	}	
+	
+	a = Dwt.getDomObj(doc, this.bannerBar._logAboutId2);
+	if(a) {
+		a.href = "javascript: void ZaZimbraAdmin._bannerBarHdlr(" + ZaZimbraAdmin._ABOUT_ID + ",'" + this._bannerTableId + "');";
+	}		
 }
 ZaSearchController.prototype._doSearch =
 function(params) {

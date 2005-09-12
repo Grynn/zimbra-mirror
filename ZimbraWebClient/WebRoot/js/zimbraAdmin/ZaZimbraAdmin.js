@@ -32,7 +32,7 @@
 * This class is responsible for bootstrapping the ZimbraAdmin application.
 */
 function ZaZimbraAdmin(appCtxt) {
-
+	ZaZimbraAdmin._instance = this;
 	ZaController.call(this, appCtxt, null, null, true);
 	this._shell = this._appCtxt.getShell();	
 	this._splashScreen = new ZaSplashScreen(this._shell, ZaImg.M_SPLASH);
@@ -47,13 +47,15 @@ function ZaZimbraAdmin(appCtxt) {
 	this._appFactory = new Object();
 	this._appFactory[ZaZimbraAdmin.ADMIN_APP] = ZaApp;
 	
-
+	
 //	this._createBanner();								// creates the banner
 	this._schedule(ZaZimbraAdmin.prototype.startup);	// creates everything else
+	this.aboutDialog = new ZaAboutDialog(this._shell,null,ZaMsg.about_title);
 }
 
 ZaZimbraAdmin.prototype = new ZaController;
 ZaZimbraAdmin.prototype.constructor = ZaZimbraAdmin;
+ZaZimbraAdmin._instance = null;
 
 ZaZimbraAdmin.ADMIN_APP = "admin";
 
@@ -61,6 +63,7 @@ ZaZimbraAdmin._MIGRATION_ID = 1;
 ZaZimbraAdmin._HELP_ID = 2;
 ZaZimbraAdmin._LOGOFF_ID = 3;
 ZaZimbraAdmin._PDF_HELP_ID = 4;
+ZaZimbraAdmin._ABOUT_ID = 5;
 
 // do not change the name of the cookie! SoapServlet looks for it
 ZaZimbraAdmin._COOKIE_NAME = "ZM_ADMIN_AUTH_TOKEN";
@@ -98,6 +101,14 @@ function(domain) {
     var lm = new ZaZimbraAdmin(appCtxt);
 }
 
+ZaZimbraAdmin.getInstance = function() {
+	if(ZaZimbraAdmin._instance) {
+		return ZaZimbraAdmin._instance;
+	} else {
+		ZaZimbraAdmin.run(document.domain);
+		return ZaZimbraAdmin._instance;
+	}
+}
 
 /**
 * Returns a handle to the given app.
@@ -307,6 +318,13 @@ function(id, tableId) {
 			Dwt.getDomObj(doc, bannerBar._logOffId).blur();
 			ZaZimbraAdmin.logOff();
 			break;
+		case ZaZimbraAdmin._ABOUT_ID:
+			Dwt.getDomObj(doc, bannerBar._logAboutId).blur();
+			Dwt.getDomObj(doc, bannerBar._logAboutId2).blur();			
+			//show about screen
+			ZaZimbraAdmin.getInstance().aboutDialog.popup();
+			break;
+		
 	}
 }
 
@@ -314,4 +332,21 @@ function(id, tableId) {
 ZaZimbraAdmin._confirmExitMethod =
 function() {
 	return ZaMsg.appExitWarning;
+}
+
+
+function ZaAboutDialog(parent, className, title, w, h) {
+	if (arguments.length == 0) return;
+	var clsName = className || "DwtDialog";
+	
+	DwtDialog.call(this, parent, clsName, null, [DwtDialog.OK_BUTTON]);
+	this._createContentHtml();
+}
+
+ZaAboutDialog.prototype = new DwtDialog;
+ZaAboutDialog.prototype.constructor = ZaAboutDialog;
+
+ZaAboutDialog.prototype._createContentHtml = function () {
+	AjxImg.setImage(this._contentDiv,ZaImg.M_ABOUT);
+	//this._contentDiv.appendChild(AjxImg.getImageHtml(ZaImg.M_ABOUT));
 }

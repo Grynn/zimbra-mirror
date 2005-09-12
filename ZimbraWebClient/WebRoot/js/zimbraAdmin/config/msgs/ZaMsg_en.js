@@ -617,6 +617,8 @@ ZaMsg.SLAVE = "Slave";
 
 ZaMsg.adminGuide = "Admin Guide";
 ZaMsg.help = "Help";
+ZaMsg.about = "About";
+ZaMsg.about_title = "Zimbra(TM) Administration Console";
 ZaMsg.migrationWiz = "Migration Wizard";
 ZaMsg.logOff = "Log Off";
 ZaMsg.done = "Done";
