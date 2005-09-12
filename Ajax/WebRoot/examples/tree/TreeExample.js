@@ -175,8 +175,9 @@ function(ev) {
 	}
 
 	if (action) {
-		var alertTxt = ev.item.getText() + " was " + action;
-		alert(alertTxt);
+		// Uncomment below to get alerts when any tree action is performed
+		//var alertTxt = ev.item.getText() + " was " + action;
+		//alert(alertTxt);
 	}
 }
 
