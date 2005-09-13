@@ -1,25 +1,25 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Version: ZAPL 1.1
- * 
+ *
  * The contents of this file are subject to the Zimbra AJAX Public
  * License Version 1.1 ("License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
  * http://www.zimbra.com/license
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
  * the License for the specific language governing rights and limitations
  * under the License.
- * 
+ *
  * The Original Code is: Zimbra AJAX Toolkit.
- * 
+ *
  * The Initial Developer of the Original Code is Zimbra, Inc.
  * Portions created by Zimbra are Copyright (C) 2005 Zimbra, Inc.
  * All Rights Reserved.
- * 
+ *
  * Contributor(s):
- * 
+ *
  * ***** END LICENSE BLOCK *****
  */
 
@@ -27,10 +27,10 @@
 function AjxSoapDoc() {
 }
 
-AjxSoapDoc.prototype.toString = 
+AjxSoapDoc.prototype.toString =
 function() {
 	return "AjxSoapDoc";
-}
+};
 
 AjxSoapDoc._SOAP_URI = "http://www.w3.org/2003/05/soap-envelope";
 AjxSoapDoc._XMLNS_URI = "http://www.w3.org/2000/xmlns";
@@ -39,33 +39,33 @@ AjxSoapDoc.create =
 function(method, namespace, namespaceId) {
 	var sd = new AjxSoapDoc();
 	sd._xmlDoc = AjxXmlDoc.create();
-	var d = sd._xmlDoc.getDoc();	
+	var d = sd._xmlDoc.getDoc();
 	var envEl = d.createElement("soap:Envelope");
-	
+
 	envEl.setAttribute("xmlns:soap", AjxSoapDoc._SOAP_URI);
 
 	d.appendChild(envEl);
-	
+
 	var bodyEl = d.createElement("soap:Body");
 	envEl.appendChild(bodyEl);
 
 	sd._methodEl = d.createElement(method);
 	if (namespaceId == null)
 		sd._methodEl.setAttribute("xmlns", namespace);
-	else 
+	else
 		sd._methodEl.setAttribute("xmlns:" + namespaceId, namespace);
-		
+
 	bodyEl.appendChild(sd._methodEl);
 	return sd;
-}
+};
 
 AjxSoapDoc.createFromDom =
-function(doc) {	
+function(doc) {
 	var sd = new AjxSoapDoc();
 	sd._xmlDoc = AjxXmlDoc.createFromDom(doc);
 	sd._methodEl = sd._check(sd._xmlDoc);
 	return sd;
-}
+};
 
 AjxSoapDoc.createFromXml =
 function(xml) {
@@ -73,7 +73,7 @@ function(xml) {
 	sd._xmlDoc = AjxXmlDoc.createFromXml(xml);
 	sd._methodEl = sd._check(sd._xmlDoc);
 	return sd;
-}
+};
 
 AjxSoapDoc.element2FaultObj =
 function(el) {
@@ -88,19 +88,58 @@ function(el) {
 			return null;
 	}
 	return new AjxSoapFault(faultEl);
-}
+};
 
 AjxSoapDoc.prototype.setMethodAttribute =
 function(name, value){
 	this._methodEl.setAttribute(name, value);
 };
 
+/*
+ * Basically does what "set()" does, but allows "value" to be a JS object, in
+ * which case it will call itself recursively in order to create a complex data
+ * structure.  Don't pass a "way-too-complicated" object ("value" should only
+ * contain references to simple JS objects, or better put, hashes--don't
+ * include a reference to the "window" object as it will kill your browser).
+ *
+ * Example:
+ *
+ *    soapDoc.setComplex("user_auth", {
+ *       user_name : "foo",
+ *       password  : "bar"
+ *    });
+ *
+ * will create an XML like this under the method tag:
+ *
+ *    <user_auth>
+ *      <user_name>foo</user_name>
+ *      <password>bar</password>
+ *    </user_auth>
+ *
+ * Of course, nesting other hashes is allowed and will work as expected.
+ *
+ * This method can replace set() but for now let's keep both for who-knows-what
+ * compatibility problems may arise.
+ */
+AjxSoapDoc.prototype.setComplex = function(name, value, parent) {
+	var doc = this.getDoc(), p = doc.createElement(name);
+	if (typeof value == "object")
+		for (i in value)
+			this.setComplex(i, value[i], p);
+	else
+		p.appendChild(doc.createTextNode(value));
+	if (!parent)
+		parent = this._methodEl;
+	parent.appendChild(p);
+	return p;
+};
+
 AjxSoapDoc.prototype.set =
 function(name, value, element) {
 	var p = this._xmlDoc.getDoc().createElement(name);
 	if (value != null) {
-   		 var cdata = this._xmlDoc.getDoc().createTextNode("");
-   		 p.appendChild(cdata);
+		var cdata = this._xmlDoc.getDoc().createTextNode("");
+		p.appendChild(cdata);
 		cdata.nodeValue = value;
 	}
 	if (element == null) {
@@ -109,12 +148,12 @@ function(name, value, element) {
 		element.appendChild(p);
 	}
 	return p;
-}
+};
 
 AjxSoapDoc.prototype.getMethod =
 function() {
 	return this._methodEl;
-}
+};
 
 AjxSoapDoc.prototype.createHeaderElement =
 function() {
@@ -138,10 +177,10 @@ function() {
 		nodeList = d.getElementsByTagName(d.firstChild.prefix + ":Header");
 	else
 		nodeList = d.getElementsByTagNameNS(AjxSoapDoc._SOAP_URI, "Header");
-	if (nodeList == null) 
+	if (nodeList == null)
 		return null;
 	return nodeList[0];
-}
+};
 
 
 AjxSoapDoc.prototype.getBody =
@@ -153,30 +192,29 @@ function() {
 		nodeList = d.getElementsByTagName(d.firstChild.prefix + ":Body");
 	else
 		nodeList = d.getElementsByTagNameNS(AjxSoapDoc._SOAP_URI, "Body");
-	if (nodeList == null) 
+	if (nodeList == null)
 		return null;
 	return nodeList[0];
-}
+};
 
 AjxSoapDoc.prototype.getDoc =
 function() {
 	return this._xmlDoc.getDoc();
-}
+};
 
 AjxSoapDoc.prototype.getXml =
 function() {
 	if (AjxEnv.isSafari)
 		return AjxXmlDoc.getXml(this._xmlDoc.getDoc());
-	else 
+	else
 		return this._xmlDoc.getDoc().xml;
-}
-
+};
 
 // Very simple checking of soap doc. Should be made more comprehensive
 AjxSoapDoc.prototype._check =
 function(xmlDoc) {
 	var doc = xmlDoc.getDoc();
-	if (doc.childNodes.length != 1) 
+	if (doc.childNodes.length != 1)
 		throw new AjxSoapException("Invalid SOAP PDU", AjxSoapException.INVALID_PDU, "AjxSoapDoc.createFromXml:1");
 
 	// Check to make sure we have a soap envelope
@@ -184,9 +222,9 @@ function(xmlDoc) {
 
 	// Safari sux at handling namespaces
 	if (!AjxEnv.isSafari) {
-		if (el.namespaceURI != AjxSoapDoc._SOAP_URI || 
-		    el.nodeName != (el.prefix + ":Envelope") || 
-		    (el.childNodes.length < 1 || el.childNodes.length > 2)) 
+		if (el.namespaceURI != AjxSoapDoc._SOAP_URI ||
+		    el.nodeName != (el.prefix + ":Envelope") ||
+		    (el.childNodes.length < 1 || el.childNodes.length > 2))
 		{
 			DBG.println("<font color=red>XML PARSE ERROR on RESPONSE:</font>");
 			DBG.printRaw(doc.xml);
@@ -196,6 +234,6 @@ function(xmlDoc) {
 		if (el.nodeName != (el.prefix + ":Envelope"))
 			throw new AjxSoapException("Invalid SOAP PDU", AjxSoapException.INVALID_PDU, "AjxSoapDoc.createFromXml:2");
 	}
-}
+};
 
 
