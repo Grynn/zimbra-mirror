@@ -62,6 +62,29 @@ var AjxMD5 = function() {
 	};
 
 /*
+ * These functions implement the four basic operations the algorithm uses.
+ */
+	function md5_cmn(q, a, b, x, s, t) {
+		return safe_add(bit_rol(safe_add(safe_add(a, q), safe_add(x, t)), s),b);
+	};
+
+	function md5_ff(a, b, c, d, x, s, t) {
+		return md5_cmn((b & c) | ((~b) & d), a, b, x, s, t);
+	};
+
+	function md5_gg(a, b, c, d, x, s, t) {
+		return md5_cmn((b & d) | (c & (~d)), a, b, x, s, t);
+	};
+
+	function md5_hh(a, b, c, d, x, s, t) {
+		return md5_cmn(b ^ c ^ d, a, b, x, s, t);
+	};
+
+	function md5_ii(a, b, c, d, x, s, t) {
+		return md5_cmn(c ^ (b | (~d)), a, b, x, s, t);
+	};
+
+/*
  * Calculate the MD5 of an array of little-endian words, and a bit length
  */
 	function core_md5(x, len) {
@@ -161,29 +184,6 @@ var AjxMD5 = function() {
  */
 	function bit_rol(num, cnt) {
 		return (num << cnt) | (num >>> (32 - cnt));
-	};
-
-/*
- * These functions implement the four basic operations the algorithm uses.
- */
-	function md5_cmn(q, a, b, x, s, t) {
-		return safe_add(bit_rol(safe_add(safe_add(a, q), safe_add(x, t)), s),b);
-	};
-
-	function md5_ff(a, b, c, d, x, s, t) {
-		return md5_cmn((b & c) | ((~b) & d), a, b, x, s, t);
-	};
-
-	function md5_gg(a, b, c, d, x, s, t) {
-		return md5_cmn((b & d) | (c & (~d)), a, b, x, s, t);
-	};
-
-	function md5_hh(a, b, c, d, x, s, t) {
-		return md5_cmn(b ^ c ^ d, a, b, x, s, t);
-	};
-
-	function md5_ii(a, b, c, d, x, s, t) {
-		return md5_cmn(c ^ (b | (~d)), a, b, x, s, t);
 	};
 
 /*
