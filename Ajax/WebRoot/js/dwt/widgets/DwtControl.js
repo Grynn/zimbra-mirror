@@ -89,6 +89,7 @@ DwtControl._DRAG_REJECTED = 3;
 
 DwtControl._DRAG_THRESHOLD = 3;
 
+DwtControl.TOOLTIP_THRESHOLD = 5;
 
 DwtControl.prototype.addControlListener = 
 function(listener) {
@@ -888,9 +889,20 @@ function(ev) {
 		if (obj._toolTipContent != null) {
 			var shell = DwtShell.getShell(window);
 			var manager = shell.getHoverMgr();
-			if (!manager.isHovering()) {
+			if (!manager.isHovering() && !obj._tooltipClosed) {
 				// NOTE: mouseOver already init'd other hover settings
+				// We do hoverOver() here since the mouse may have moved during
+				// the delay, and we want to use latest x,y
 				manager.hoverOver(mouseEv.docX, mouseEv.docY);
+			} else {
+				var deltaX = obj._lastTooltipX ? Math.abs(mouseEv.docX - obj._lastTooltipX) : null;
+				var deltaY = obj._lastTooltipY ? Math.abs(mouseEv.docY - obj._lastTooltipY) : null;
+				if ((deltaX != null && deltaX > DwtControl.TOOLTIP_THRESHOLD) || 
+					(deltaY != null && deltaY > DwtControl.TOOLTIP_THRESHOLD)) {
+					manager.setHoverOutListener(obj._hoverOutListener);
+					manager.hoverOut();
+					obj._tooltipClosed = true; // prevent tooltip popup during moves in this object
+				}
 			}
 		}
 		return DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEMOVE);
@@ -1060,6 +1072,7 @@ DwtControl._mouseOutGeneralHdlr = function (ev, eventName){
 		var manager = shell.getHoverMgr();
 		manager.setHoverOutListener(obj._hoverOutListener);
 		manager.hoverOut();
+		obj._tooltipClosed = false;
 	}
 	return DwtControl._mouseEvent(ev, eventName);
 };
@@ -1127,6 +1140,9 @@ DwtControl.prototype._handleHoverOver = function(event) {
 		var tooltip = shell.getToolTip();
 		tooltip.setContent(this._toolTipContent);
 		tooltip.popup(event.x, event.y);
+		this._lastTooltipX = event.x;
+		this._lastTooltipY = event.y;
+		this._tooltipClosed = false;
 	}
 }
 
@@ -1134,4 +1150,6 @@ DwtControl.prototype._handleHoverOut = function(event) {
 	var shell = DwtShell.getShell(window);
 	var tooltip = shell.getToolTip();
 	tooltip.popdown();
+	this._lastTooltipX = null;
+	this._lastTooltipY = null;
 }
