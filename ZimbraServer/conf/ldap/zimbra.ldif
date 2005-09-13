@@ -130,6 +130,7 @@ zimbraGalLdapAttrMap: st=workState
 zimbraGalLdapAttrMap: zimbraMailDeliveryAddress,mail=email
 zimbraGalLdapAttrMap: title=jobTitle
 zimbraGalLdapAttrMap: whenChanged,modifyTimeStamp=modifyTimeStamp
+zimbraGalLdapAttrMap: whenCreated,createTimeStamp=createTimeStamp
 zimbraGalMaxResults: 100
 zimbraLastLogonTimestampFrequency: 7d
 zimbraLmtpNumThreads: 8
