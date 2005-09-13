@@ -76,6 +76,7 @@ public class SetHeaderFilter implements Filter {
     protected int expiresValue = 0;
     protected boolean isProdMode = true;
     protected String futureCacheControl = null;
+    protected Pattern noCachePattern = null;
     
     // --------------------------------------------------------------
     // init helper methods
@@ -124,6 +125,21 @@ public class SetHeaderFilter implements Filter {
         extensionPattern = Pattern.compile(extensionRegex);
     }
 
+    private void getNoCachePatternList () {
+        String value = getInitParameter("noCachePatternList", ".jsp");
+        String [] tempList = value.split(",");
+        StringBuffer noCachePatternSb = new StringBuffer(".*(");
+        for (int i = 0; i < tempList.length; ++i){
+            noCachePatternSb.append(tempList[i].trim());
+            if (i < tempList.length - 1){
+                noCachePatternSb.append('|');
+            }
+        }
+        noCachePatternSb.append(")");
+        String noCachePatternRegex = noCachePatternSb.toString();
+        noCachePattern = Pattern.compile(noCachePatternRegex);
+    }
+
     // --------------------------------------------------------------
     // init methods
     // --------------------------------------------------------------
@@ -142,6 +158,7 @@ public class SetHeaderFilter implements Filter {
             serverSupportsGzip = getInitParameterBool("shouldSupportGzip",
                                                       true);
             getExtensionsRegex();
+            getNoCachePatternList();
             gzipExtension = getInitParameter("GzipExtension", ".jgz");
             expiresValue = getInitParameterInt("Expires", 0);
             futureCacheControl = "max-age:" + expiresValue + ", must-revalidate";
@@ -157,6 +174,7 @@ public class SetHeaderFilter implements Filter {
                 System.out.println("  isProdMoe = " + isProdMode);
                 System.out.println("  extensionRegex = " + 
                                    extensionPattern.pattern());
+                System.out.println("  noCachPattern = " + noCachePattern.pattern());
             }
         }
     }
@@ -367,12 +385,17 @@ public class SetHeaderFilter implements Filter {
     
     private boolean isDynamicContent (String uri) 
     {
-        return ( (uri != null) && 
-		 ( uri.equals(URI_ZIMBRA) ||
-		   (uri.indexOf(URI_MAIL) != -1) ||
-		   uri.equals(URI_AUTH) ||
-		   (uri.indexOf(JSP_EXTENSION)) != -1));
-	
+        Matcher m = noCachePattern.matcher(uri);
+        if (debug > 0) {
+            System.out.println("Seeing if uri " + uri +
+                               " matches the noCache pattern " 
+                               + noCachePattern.pattern());
+            System.out.println("Does it? " + m.matches());
+        }
+        if ( m.matches() ) {
+            return true;
+        }
+        return false;        
     }
     
     private void setJspCacheControlHeaders(HttpServletRequest req, 
