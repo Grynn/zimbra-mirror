@@ -26,6 +26,7 @@
 
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
+    zimbra_home \
     zimbra_log_directory \
     mysql_bind_address \
     mysql_data_directory \
@@ -48,7 +49,7 @@ memkb=`awk '/^MemTotal.*kB$/ { print $2; }' /proc/meminfo`
 #
 # Memory for use by MySQL
 #
-((mymem=memkb * mysql_memory_percent / 100 / 1024))
+((mymem=memkb * 1024 * mysql_memory_percent / 100))
 
 #
 # Allocate 75% of memory that mysql can use to buffer pool.
@@ -56,21 +57,33 @@ memkb=`awk '/^MemTotal.*kB$/ { print $2; }' /proc/meminfo`
 ((computed_innodb_buffer_pool_size = mymem * 75 / 100))
 
 #
-# Calculate the number of connections allowed.  The magic '2' is stack
-# size per connection.  Ignoring key_buffer_size as we don't use
+# Calculate the number of connections allowed.  The magic '2097152' is
+# stack size per connection.  Ignoring key_buffer_size as we don't use
 # MyISAM.
 #
 ((non_buffer_pool_memory = mymem - computed_innodb_buffer_pool_size))
-((per_connection_memory = 2 + mysql_sort_buffer_size + mysql_read_buffer_size + mysql_innodb_log_buffer_size))
+((per_connection_memory = 2097152 + mysql_sort_buffer_size + mysql_read_buffer_size + mysql_innodb_log_buffer_size))
 ((computed_max_connections = non_buffer_pool_memory / per_connection_memory))
 
 #
-# Not designed for systems with (< 100MB), but deal with it
-# gracefully.
+# If we have less RAM, fall back on some graceful defaults.
 #
-if [ ${computed_max_connections} -lt 2 ]; then
-    computed_max_connections=2;
+if [ ${computed_max_connections} -lt 10 ]; then
+    computed_max_connections=10;
+    ((mysql_read_buffer_size = non_buffer_pool_memory / computed_max_connections * 1 / 10))
+    ((mysql_sort_buffer_size = non_buffer_pool_memory / computed_max_connections * 1 / 10))
+    ((mysql_innodb_log_buffer_size = non_buffer_pool_memory / computed_max_connections * 8 / 10))
 fi
+
+#
+# Tell the JDBC driver how many mysql active connections to use.
+#
+${zimbra_home}/bin/zmlocalconfig -e zimbra_mysql_connector.maxActive=${computed_max_connections}
+
+#
+# Give some slack for command line mysql invocations.
+#
+((computed_max_connections = computed_max_connections + 4))
 
 #
 # Write config to stdout
@@ -100,16 +113,16 @@ max_connections   = ${computed_max_connections}
 # We do a lot of writes, query cache turns out to be not useful.
 query_cache_type = 0
 
-sort_buffer_size = ${mysql_sort_buffer_size}M
-read_buffer_size = ${mysql_read_buffer_size}M
+sort_buffer_size = ${mysql_sort_buffer_size}
+read_buffer_size = ${mysql_read_buffer_size}
 
 # Increase the size of the table cache, since each mailbox has its
 # own set of tables
 table_cache = ${mysql_table_cache}
 
-innodb_buffer_pool_size   = ${computed_innodb_buffer_pool_size}M
-innodb_log_file_size      = ${mysql_innodb_log_file_size}M
-innodb_log_buffer_size    = ${mysql_innodb_log_buffer_size}M
+innodb_buffer_pool_size   = ${computed_innodb_buffer_pool_size}
+innodb_log_file_size      = ${mysql_innodb_log_file_size}
+innodb_log_buffer_size    = ${mysql_innodb_log_buffer_size}
 innodb_file_per_table
 
 [mysqld_safe]
