@@ -37,6 +37,27 @@ function ZaZimbraAdmin(appCtxt) {
 	this._shell = this._appCtxt.getShell();	
 	this._splashScreen = new ZaSplashScreen(this._shell, "Admin_SplashScreen");
 	
+    this._headerPanel = new DwtComposite(this._shell, "HeaderPanel", DwtControl.ABSOLUTE_STYLE);
+    
+	// Create search toolbar and setup browse tool bar button handlers
+/*	this._searchToolBar = new ZaSearchToolBar(this._searchPanel);
+	this._searchToolBar.setLocation(0, 0);
+	this._searchPanel.setBounds(0, 0, Dwt.DEFAULT, this._searchToolBar.getSize().y);
+*/
+   	this._createBannerBar();
+	this._headerPanel.zShow(true);
+ /*  
+    // Search By tool bar button/menu item handlers
+    var searchForListener = new AjxListener(this, ZaSearchController.prototype._searchForButtonListener);
+	// Setup search field handler
+	this._searchField = this._searchToolBar.getSearchField();
+	this._searchField.registerCallback(ZaSearchController.prototype._searchFieldCallback, this);	
+	this._searchPanel.zShow(true);
+*/
+
+
+
+
 	appCtxt.setAppController(this);
 	appCtxt.setClientCmdHdlr(new ZaClientCmdHandler(appCtxt));
 		
@@ -142,19 +163,20 @@ function() {
 ZaZimbraAdmin.prototype.getOverviewPanelController =
 function() {
 	if (this._overviewPanelController == null)
-		this._overviewPanelController = new ZaOverviewPanelController(this._appCtxt, this._shell, this);
+		this._overviewPanelController = new ZaOverviewPanelController(this._appCtxt, this._shell);
 	return this._overviewPanelController;
 }
 
 /**
 * Returns a handle to the search bar's controller.
 */
+/*
 ZaZimbraAdmin.prototype.getSearchController =
 function() {
 	if (this._searchController == null)
 		this._searchController = new ZaSearchController(this._appCtxt, this._shell, this);
 	return this._searchController;
-}
+}*/
 
 /**
 * Makes the given app the active (displayed) one. The stack of hidden views will be cleared.
@@ -211,7 +233,10 @@ function(args){
 	window.location = locationStr;
 }
 
-// Private methods
+ZaZimbraAdmin.prototype.getHeaderPanel = 
+function () {
+	return this._headerPanel;
+}
 
 // Start up the ZimbraMail application
 ZaZimbraAdmin.prototype.startup =
@@ -222,7 +247,8 @@ function() {
 	try {
 		var domains = ZaDomain.getAll(); // catch an exception before building the UI
 		this._appViewMgr.setOverviewPanel(this.getOverviewPanelController().getOverviewPanel());
-		this._appViewMgr.setSearchPanel(this.getSearchController().getSearchPanel());
+		//this._appViewMgr.setSearchPanel(this.getSearchController().getSearchPanel());
+		this._appViewMgr.setHeaderPanel(this.getHeaderPanel());		
 		// Default to showing admin app
 		this.activateApp(ZaZimbraAdmin.ADMIN_APP);
 	} catch (ex) {
@@ -230,6 +256,9 @@ function() {
 	}
 	this._schedule(this._killSplash);	// kill splash screen	
 }
+
+
+// Private methods
 
 ZaZimbraAdmin.prototype._killSplash =
 function() {
@@ -305,7 +334,7 @@ function(id, tableId) {
 		case ZaZimbraAdmin._HELP_ID:
 			Dwt.getDomObj(doc, bannerBar._helpId).blur();
 			Dwt.getDomObj(doc, bannerBar._helpId2).blur();			
-			window.open("/zimbraAdmin/adminhelp/html/WebHelp/administration_console_help.htm");
+			window.open("/zimbraAdmin/adminhelp/html/OpenSourceAdminHelp/administration_console_help.htm");
 			break;
 
 		case ZaZimbraAdmin._PDF_HELP_ID:
@@ -328,6 +357,125 @@ function(id, tableId) {
 	}
 }
 
+// Creates buttons for general non app-related functions and puts them on the banner.
+ZaZimbraAdmin.prototype._createBannerBar =
+function() {
+
+	this.bannerBar = new DwtComposite(this._headerPanel, "BannerBar", DwtControl.RELATIVE_STYLE);
+	
+	this._bannerTableId = Dwt.getNextId();
+	
+	this.bannerBar._migrationId = Dwt.getNextId();
+	this.bannerBar._helpId = Dwt.getNextId();
+	this.bannerBar._pdfHelpId = Dwt.getNextId();	
+	this.bannerBar._logOffId = Dwt.getNextId();
+	this.bannerBar._logAboutId = Dwt.getNextId();
+	
+	this.bannerBar._migrationId2 = Dwt.getNextId();
+	this.bannerBar._helpId2 = Dwt.getNextId();
+	this.bannerBar._pdfHelpId2 = Dwt.getNextId();	
+	this.bannerBar._logOffId2 = Dwt.getNextId();
+	this.bannerBar._logAboutId2 = Dwt.getNextId();
+	
+	var html = new Array();
+	var i = 0;
+	
+	html[i++] = "<table align='right' id='" + this._bannerTableId + "'><tr><td>&nbsp;";
+	html[i++] = "</td></tr></table>";
+	this.bannerBar.getHtmlElement().innerHTML = html.join("");
+	var doc = this.bannerBar.getDocument();
+	var t = Dwt.getDomObj(doc, this._bannerTableId);
+	this.bannerBar.app = this._app;	
+	Dwt.associateElementWithObject(t, this.bannerBar);		
+
+	this._createBannerBarHtml();
+}
+ZaZimbraAdmin.prototype._createBannerBarHtml =
+function () {
+
+	if(!this.bannerBar || !this.bannerBar._helpId ||  !this.bannerBar._pdfHelpId || !this.bannerBar._logOffId || !this.bannerBar._helpId2 ||  !this.bannerBar._pdfHelpId2 || !this.bannerBar._logOffId2)
+		return;
+		
+	var html = new Array();
+	var i = 0;
+
+	html[i++] = "<table width=100% id='" + this._bannerTableId + "'><tr>";
+	html[i++] = "<td valign='middle' nowrap align='left'>";
+	html[i++] = AjxImg.getImageHtml("AppBanner");
+	html[i++] = "</td>";
+	html[i++] = "<td valign='middle' align='right'>";
+		html[i++] = "<table align='right'><tr>";
+		html[i++] = "<td align=right><a id='" + this.bannerBar._migrationId + "'  target=\"_blank\" href=\"http://zimbra.com/downloads/migrationwizard/accept\">";
+		html[i++] = AjxImg.getImageHtml("MigrationWiz", "cursor:hand");
+		html[i++] = "</a></td>";
+		html[i++] = "<td align=right><a id='" + this.bannerBar._migrationId2 + "' style='cursor: hand' target=\"_blank\" href=\"http://zimbra.com/downloads/migrationwizard/accept\">";
+		html[i++] = ZaMsg.migrationWiz + "</a></td>";	
+	
+		html[i++] = "<td align=right><a id='" + this.bannerBar._helpId + "'>";
+		html[i++] = AjxImg.getImageHtml("Help", "cursor:hand");
+		html[i++] = "</a></td>";
+		html[i++] = "<td align=right><a id='" + this.bannerBar._helpId2 + "'>";
+		html[i++] = ZaMsg.help + "</a></td>";		
+	
+		html[i++] = "<td align=right><a id='" + this.bannerBar._logAboutId + "'>";
+		html[i++] = AjxImg.getImageHtml("ZimbraIcon", "cursor:hand");
+		html[i++] = "</a></td>";
+		html[i++] = "<td align=right><a id='" + this.bannerBar._logAboutId2 + "'>";
+		html[i++] = ZaMsg.about + "</a></td>";		
+	
+		html[i++] = "<td align=right><a id='" + this.bannerBar._pdfHelpId + "' target=\"_blank\" href=\"/zimbraAdmin/adminhelp/pdf/admin.pdf\">";
+		html[i++] = AjxImg.getImageHtml("PDFDoc", "cursor:hand");
+		html[i++] = "</a></td>";	
+		html[i++] = "<td align=right><a id='" + this.bannerBar._pdfHelpId2 + "' target=\"_blank\" href=\"/zimbraAdmin/adminhelp/pdf/admin.pdf\">";
+		html[i++] = ZaMsg.adminGuide + "</a></td>";	
+	
+		html[i++] = "<td align=right><a id='" + this.bannerBar._logOffId + "'>";
+		html[i++] = AjxImg.getImageHtml("Logoff", "cursor:hand");		
+		html[i++] = "</a></td>";
+		html[i++] = "<td align=right><a id='" + this.bannerBar._logOffId2 + "'>";		
+		html[i++] = ZaMsg.logOff + "</a></td></tr></table>";
+	html[i++] = "</td></tr></table>";		
+		
+	this.bannerBar.getHtmlElement().innerHTML = html.join("");
+	var doc = this.bannerBar.getDocument();
+	var t = Dwt.getDomObj(doc, this._bannerTableId);
+	this.bannerBar.app = this._app;	
+	Dwt.associateElementWithObject(t, this.bannerBar);	
+
+	var a;
+	
+	var a = Dwt.getDomObj(doc, this.bannerBar._helpId);
+	if(a) {
+		a.href = "javascript: void ZaZimbraAdmin._bannerBarHdlr(" + ZaZimbraAdmin._HELP_ID + ",'" + this._bannerTableId + "');";
+		a.onmouseover = a.onmouseout = ZaZimbraAdmin._bannerBarMouseHdlr;
+	}
+	
+	a = Dwt.getDomObj(doc, this.bannerBar._helpId2);
+	if(a) {
+		a.href = "javascript: void ZaZimbraAdmin._bannerBarHdlr(" + ZaZimbraAdmin._HELP_ID + ",'" + this._bannerTableId + "');";
+	}	
+			
+	a = Dwt.getDomObj(doc, this.bannerBar._logOffId);
+	if(a) {
+		a.href = "javascript: void ZaZimbraAdmin._bannerBarHdlr(" + ZaZimbraAdmin._LOGOFF_ID + ",'" + this._bannerTableId + "');";
+		a.onmouseover = a.onmouseout = ZaZimbraAdmin._bannerBarMouseHdlr;
+	}
+
+	a = Dwt.getDomObj(doc, this.bannerBar._logOffId2);
+	if(a) {
+		a.href = "javascript: void ZaZimbraAdmin._bannerBarHdlr(" + ZaZimbraAdmin._LOGOFF_ID + ",'" + this._bannerTableId + "');";
+	}
+	
+	a = Dwt.getDomObj(doc, this.bannerBar._logAboutId);
+	if(a) {
+		a.href = "javascript: void ZaZimbraAdmin._bannerBarHdlr(" + ZaZimbraAdmin._ABOUT_ID + ",'" + this._bannerTableId + "');";
+	}	
+	
+	a = Dwt.getDomObj(doc, this.bannerBar._logAboutId2);
+	if(a) {
+		a.href = "javascript: void ZaZimbraAdmin._bannerBarHdlr(" + ZaZimbraAdmin._ABOUT_ID + ",'" + this._bannerTableId + "');";
+	}		
+}
 // This method is called by the window.onbeforeunload method.
 ZaZimbraAdmin._confirmExitMethod =
 function() {

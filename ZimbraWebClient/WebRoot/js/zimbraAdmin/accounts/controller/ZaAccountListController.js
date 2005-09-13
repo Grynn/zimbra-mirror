@@ -41,6 +41,8 @@ function ZaAccountListController(appCtxt, container, app) {
 	this._currentSortField = ZaAccount.A_uid;
 	this._currentSortOrder = true;
 	this.pages = new Object();
+	this._searchPanel = null;
+	this._searchField = null;
 }
 
 ZaAccountListController.prototype = new ZaController();
@@ -76,10 +78,25 @@ function(searchResult) {
 		this._ops.push(new ZaOperation(ZaOperation.PAGE_BACK, ZaMsg.Back, ZaMsg.PrevPage_tt, "LeftArrow", "LeftArrowDis",  new AjxListener(this, ZaAccountListController.prototype._prevPageListener)));
 		this._ops.push(new ZaOperation(ZaOperation.PAGE_FORWARD, ZaMsg.Forward, ZaMsg.NextPage_tt, "RightArrow", "RightArrowDis", new AjxListener(this, ZaAccountListController.prototype._nextPageListener)));
 
+/**
+* searh panel
+*/		
+	    this._searchPanel = new DwtComposite(this._container, "SearchPanel", DwtControl.ABSOLUTE_STYLE);
+	    
+		// Create search toolbar and setup browse tool bar button handlers
+		this._searchToolBar = new ZaSearchToolBar(this._searchPanel);
+	    
+		// Setup search field handler
+		this._searchField = this._searchToolBar.getSearchField();
+		this._searchField.registerCallback(ZaAccountListController.prototype._searchFieldCallback, this);	
+		this._searchPanel.zShow(true);		
+
+/**
+* Toolbar
+*/
 		this._toolbar = new ZaToolBar(this._container, this._ops);    
 		
-
-		this._appView = this._app.createView(ZaAccountListController.ACCOUNT_VIEW, [this._toolbar,  this._contentView]);
+		this._appView = this._app.createView(ZaAccountListController.ACCOUNT_VIEW, [this._searchToolBar, this._toolbar,  this._contentView]);
 
     	//context menu
 
@@ -199,6 +216,22 @@ ZaAccountListController.prototype.getSortField =
 function () {
 	return this._currentSortField;
 }
+
+ZaAccountListController.prototype.search =
+function(searchString, sortBy, offset, limit) {
+
+	// if the search string starts with "$set:" then it is a command to the client 
+	if (searchString.indexOf("$set:") == 0) {
+		this._appCtxt.getClientCmdHdlr().execute((searchString.substr(5)).split(" "));
+		return;
+	}
+	
+	this._searchField.setValue(searchString);
+	this._currentSearch = searchString;
+	this._searchField.setEnabled(false);
+	this._schedule(this._doSearch, {sortBy: sortBy, offset: offset, limit: limit});
+}
+
 /**
 * Adds listener to removal of an ZaAccount 
 * @param listener
@@ -207,6 +240,36 @@ ZaAccountListController.prototype.addAccountRemovalListener =
 function(listener) {
 	this._evtMgr.addListener(ZaEvent.E_REMOVE, listener);
 }
+
+/*********** Search Field Callback */
+
+ZaAccountListController.prototype._searchFieldCallback =
+function(searchField, queryString) {
+	this.search(queryString);
+}
+
+ZaAccountListController.prototype._doSearch =
+function(params) {
+DBG.dumpObj(params);
+	try {
+		this._searchField.setEnabled(true);	
+		//
+		var szQuery = ZaAccount.getSearchByNameQuery(this._currentSearch);
+		this.setPageNum(1);					
+		this.show(ZaAccount.search(szQuery, "1", ZaAccount.A_uid, true, this._app));
+		var curQuery = new ZaAccountQuery(szQuery, false, "");							
+		this.setQuery(curQuery);	
+	} catch (ex) {
+		// Only restart on error if we are not initialized and it isn't a parse error
+		if (ex.code != ZmCsfeException.MAIL_QUERY_PARSE_ERROR) {
+			this._handleException(ex, "ZaAccountListController.prototype._doSearch", null, (this._inited) ? false : true);
+		} else {
+			this.popupMsgDialog(ZaMsg.queryParseError, ex);
+			this._searchField.setEnabled(true);	
+		}
+	}
+}
+
 
 /**
 *	Private method that notifies listeners to that the controlled ZaAccount is (are) removed

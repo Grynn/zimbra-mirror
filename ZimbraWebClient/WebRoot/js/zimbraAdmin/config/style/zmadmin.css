@@ -501,9 +501,9 @@ DIV.vSpace {
 }
 
 .BannerBar {
-	width:400px;
-	float:right;
+	width:100%;
 }
+
 .BannerBar td {padding-right: 5px;}
 .BannerBar a:link, .BannerBar a:active, .BannerBar a:visited, BannerBar a:hover {
 	color: black; 
@@ -928,6 +928,16 @@ DIV.vSpace {
 .OverviewTreePanel {background-color: white;}
 .OverviewTree {padding: 5px;}
 
+/* header bar */
+
+.HeaderPanel {
+	width:100%;
+	background-image:url(/zimbraAdmin/skins/steel/images/bg_steel.gif);	
+	border-style: solid;
+	border-width: 0px 0px 2px 0px;
+	border-bottom-color: #777777;	
+}
+
 /* Search bar */
 
 .SearchPanel {
@@ -937,12 +947,15 @@ DIV.vSpace {
 
 .SearchToolBar {
 	width:100%;
-	background-image:url(/zimbraAdmin/skins/steel/images/bg_steel.gif);	
+	background-image:url(/zimbraAdmin/skins/steel/images/bg_pebble.gif);	
+	border-style: solid;
+	border-width: 0px 0px 2px 0px;
+	border-bottom-color: #777777;	
 }
 
 .SearchTBSearchField {
 	width:100%;
-	background-image:url(/zimbraAdmin/skins/steel/images/bg_steel.gif);	
+	background-image:url(/zimbraAdmin/skins/steel/images/bg_pebble.gif);	
 }
 
 .nobreak {

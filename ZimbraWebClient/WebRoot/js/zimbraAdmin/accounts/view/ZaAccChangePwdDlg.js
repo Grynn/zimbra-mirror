@@ -50,7 +50,6 @@ function() {
 	DwtDialog.prototype.popdown.call(this);
 	if(this._app) {
 		this._app.getCurrentController().setEnabled(true);	
-		this._app.getAppCtxt().getSearchController().setEnabled(true);
 	}
 }
 
@@ -61,7 +60,6 @@ function(mustChange) {
 	ePassword.focus();
 	if(this._app) {
 		this._app.getCurrentController().setEnabled(false);	
-		this._app.getAppCtxt().getSearchController().setEnabled(false);
 	}
 	var eField = Dwt.getDomObj(this.getDocument(), this._fieldIds[ZaAccChangePwdDlg.F_zimbraPasswordMustChange]);
 	if(!eField)

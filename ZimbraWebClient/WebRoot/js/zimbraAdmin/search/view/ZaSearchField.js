@@ -30,10 +30,13 @@ function ZaSearchField(parent, className, size, posStyle) {
 	size = (size == null) ? 16 : size;
 	this._setMouseEventHdlrs(true);
 	var fieldId = Dwt.getNextId();
+	var filterDLId = Dwt.getNextId();	
+	var filterAliasesId = Dwt.getNextId();		
+	var filterAccountsId = Dwt.getNextId();			
 	var buttonColId = Dwt.getNextId();
 
 	var doc = this.getDocument();
-	this.getHtmlElement().innerHTML = this._createHtml(size, fieldId, buttonColId); 
+	this.getHtmlElement().innerHTML = this._createHtml(size, fieldId, buttonColId,filterAccountsId,filterAliasesId, filterDLId); 
 	this._searchField = Dwt.getDomObj(doc, fieldId);
 	this._searchField.onkeypress = ZaSearchField._keyPressHdlr;
 	
@@ -76,10 +79,7 @@ function(enable) {
 
 ZaSearchField.prototype.setValue =
 function(value) {
-//	if (value != this._searchField.value) {
-		this._searchField.value = value;
-		this.setFieldChanged(true);
-//	}
+	this._searchField.value = value;
 }
 
 ZaSearchField.prototype.getValue =
@@ -87,18 +87,21 @@ function() {
 	return this._searchField.value;
 }
 
+/*
 ZaSearchField.prototype.setFieldChanged =
 function(changed) {
 	if (this._changed != changed) {
 		this._changed = changed;
 		//this._searchButton.setActivated(changed);
 		if (changed)
-			this._searchButton.setImage("CloseGray");
+			this._searchButton.setImage("SearchGray");
 		else	
 			this._searchButton.setImage("Search");
 	}
 }
+*/
 
+/*
 ZaSearchField.prototype._createHtml =
 function(size, fieldId, buttonColId) {
 	return "<table cellpadding='0' cellspacing='0' border='0' style='padding:2px;'>" +
@@ -108,6 +111,20 @@ function(size, fieldId, buttonColId) {
 			"</td>" +
 			"<td valign='middle' nowrap><input type='text' nowrap size='" + size + "' id='" + fieldId + "' class='Field'/></td>" + 
 			"<td valign='middle' style='padding-left:2px;padding-right:2px;' id='" + buttonColId + "'></td>" +
+		"</tr>" + 
+	"</table>";
+}*/
+
+
+ZaSearchField.prototype._createHtml =
+function(size, fieldId, buttonColId,filterAccountsId,filterAliasesId, filterDLId) {
+	return "<table cellpadding='0' cellspacing='0' border='0' style='padding:2px;'>" +
+		"<tr valign='middle'>" +
+			"<td valign='middle' nowrap><input type='text' nowrap size='" + size + "' id='" + fieldId + "' class='Field'/></td>" + 
+			"<td valign='middle' style='padding-left:2px;padding-right:2px;' id='" + buttonColId + "'></td>" +
+			"<td valign='middle' nowrap>&nbsp;&nbsp;&nbsp;&nbsp;" + ZaMsg.Filter + ":&nbsp<input type='checkbox' id='" + filterAccountsId + "' class='Field'/> Accounts</td>" + 
+			"<td valign='middle' nowrap><input type='checkbox' id='" + filterAliasesId + "' class='Field'/> Aliases</td>" + 			
+			"<td valign='middle' nowrap><input type='checkbox' id='" + filterDLId + "' class='Field'/> Distribution Lists</td>" + 			
 		"</tr>" + 
 	"</table>";
 }

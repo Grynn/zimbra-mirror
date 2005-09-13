@@ -80,6 +80,7 @@ function(enabled) {
 
 ZaSearchController.prototype._setView =
 function() {
+   /*
     this._searchPanel = new DwtComposite(this._container, "SearchPanel", DwtControl.ABSOLUTE_STYLE);
     
 	// Create search toolbar and setup browse tool bar button handlers
@@ -94,6 +95,7 @@ function() {
 	this._searchField = this._searchToolBar.getSearchField();
 	this._searchField.registerCallback(ZaSearchController.prototype._searchFieldCallback, this);	
 	this._searchPanel.zShow(true);
+*/	
 }
 
 // Creates buttons for general non app-related functions and puts them on the banner.
@@ -241,12 +243,4 @@ DBG.dumpObj(params);
 ZaSearchController.prototype._searchFieldCallback =
 function(searchField, queryString) {
 	this.search(queryString);
-}
-
-/*********** Search Bar Callbacks */
-
-// needed for ZaAppViewMgr
-ZaSearchController.prototype.getBrowseView =
-function() {
-	return null;
 }

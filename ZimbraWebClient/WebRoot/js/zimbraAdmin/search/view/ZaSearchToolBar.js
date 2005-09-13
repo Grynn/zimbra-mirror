@@ -28,9 +28,9 @@ function ZaSearchToolBar(parent, posStyle) {
 	ZaToolBar.call(this, parent, null, posStyle, "SearchToolBar");
 
 	this._searchField = new ZaSearchField(this, "SearchTBSearchField", 48);
-	var h1 = this._searchField.getSize().y;
+//	var h1 = this._searchField.getSize().y;
 		
-	this.setSize(DwtControl.DEFAULT, Math.max(this._searchField.getSize().y, this.computeHeight()));
+	//this.setSize(DwtControl.DEFAULT, Math.max(this._searchField.getSize().y, this.computeHeight()));
 }
 
 ZaSearchToolBar.prototype = new ZaToolBar;

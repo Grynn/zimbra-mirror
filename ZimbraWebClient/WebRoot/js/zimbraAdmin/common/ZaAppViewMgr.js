@@ -118,6 +118,9 @@ function() {
 		this._overviewPanel.getHtmlElement().innerHTML = "";
 	if (this._searchPanel)
 		this._searchPanel.getHtmlElement().innerHTML = "";		
+	if (this._headerPanel)
+		this._headerPanel.getHtmlElement().innerHTML = "";		
+		
 }
 
 /**
@@ -128,6 +131,17 @@ function() {
 ZaAppViewMgr.prototype.setSearchPanel =
 function(searchPanel) {
 	this._searchPanel = searchPanel;
+}
+
+
+/**
+* Provides the header panel for this shell.
+*
+* @param searchPanel	the search panel
+*/
+ZaAppViewMgr.prototype.setHeaderPanel =
+function(headerPanel) {
+	this._headerPanel = headerPanel;
 }
 
 /**
@@ -357,14 +371,22 @@ function(style) {
 	if (this._searchPanel) {
 		DBG.println(AjxDebug.DBG3, "searchPanel: " + x + '/' + y + '/' + this._shellSz.x + '/' + Dwt.DEFAULT);
 		this._searchPanel.setBounds(x, y, this._shellSz.x, Dwt.DEFAULT);
-		var bv = this._controller.getSearchController().getBrowseView();
-		if (bv)
-			bv.layout();
+
 		var searchSz = this._searchPanel.getSize();
 		y += searchSz.y;
 		if(!AjxEnv.isIE)
 			y += ZaAppViewMgr.TOOLBAR_SEPARATION;
 	}
+	
+		
+	if (this._headerPanel) {
+		DBG.println(AjxDebug.DBG3, "headerPanel: " + x + '/' + y + '/' + this._shellSz.x + '/' + Dwt.DEFAULT);
+		this._headerPanel.setBounds(x, y, this._shellSz.x, Dwt.DEFAULT);
+		var headerSz = this._headerPanel.getSize();
+		y += headerSz.y;
+		if(!AjxEnv.isIE)
+			y += ZaAppViewMgr.TOOLBAR_SEPARATION;
+	}	
 
 	// overview panel
 	if (this._overviewPanel) {
