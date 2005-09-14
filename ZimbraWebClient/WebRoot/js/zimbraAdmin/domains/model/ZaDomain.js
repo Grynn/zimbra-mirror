@@ -549,7 +549,7 @@ ZaDomain.myXModel = {
 					{id:"email", type:_STRING_},
 					{id:"fullName", type:_STRING_},					
 					{id:"firstName", type:_STRING_},										
-					{id:"lastName", type:_STRING_},															
+					{id:"lastName", type:_STRING_}														
 				]
 			}
 		}
