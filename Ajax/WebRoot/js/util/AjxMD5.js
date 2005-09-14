@@ -62,6 +62,13 @@ var AjxMD5 = function() {
 	};
 
 /*
+ * Bitwise rotate a 32-bit number to the left.
+ */
+	function bit_rol(num, cnt) {
+		return (num << cnt) | (num >>> (32 - cnt));
+	};
+
+/*
  * These functions implement the four basic operations the algorithm uses.
  */
 	function md5_cmn(q, a, b, x, s, t) {
@@ -177,13 +184,6 @@ var AjxMD5 = function() {
 			d = safe_add(d, oldd);
 		}
 		return Array(a, b, c, d);
-	};
-
-/*
- * Bitwise rotate a 32-bit number to the left.
- */
-	function bit_rol(num, cnt) {
-		return (num << cnt) | (num >>> (32 - cnt));
 	};
 
 /*

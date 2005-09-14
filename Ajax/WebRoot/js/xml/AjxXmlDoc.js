@@ -1,25 +1,25 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Version: ZAPL 1.1
- * 
+ *
  * The contents of this file are subject to the Zimbra AJAX Public
  * License Version 1.1 ("License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
  * http://www.zimbra.com/license
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
  * the License for the specific language governing rights and limitations
  * under the License.
- * 
+ *
  * The Original Code is: Zimbra AJAX Toolkit.
- * 
+ *
  * The Initial Developer of the Original Code is Zimbra, Inc.
  * Portions created by Zimbra are Copyright (C) 2005 Zimbra, Inc.
  * All Rights Reserved.
- * 
+ *
  * Contributor(s):
- * 
+ *
  * ***** END LICENSE BLOCK *****
  */
 
@@ -30,7 +30,7 @@ function AjxXmlDoc(init) {
 		AjxXmlDoc._init();
 }
 
-AjxXmlDoc.prototype.toString = 
+AjxXmlDoc.prototype.toString =
 function() {
 	return "AjxXmlDoc";
 }
@@ -94,11 +94,106 @@ function(url) {
 	this._doc.load(url);
 }
 
+/**
+ * This function tries to create a JavaScript representation of the DOM.  Why,
+ * because it's so much fun to work with JS objets rather than do DOM lookups
+ * using getElementsByTagName 'n stuff.
+ *
+ * Rules:
+ *
+ *   1. The top-level node gets lost; only it's content is seen important.
+ *   2. Each node will be represented as a JS object.  It's textual content
+ *      will be saved in node.__msh_content (returned by toString()).
+ *   3. Attributes get discarded; this might not be good in general but it's OK
+ *      for the application I have in mind now.  IAE, I'll be able to fix this if
+ *      anyone requires--mail mihai@zimbra.com.
+ *   4. Each subnode will map to a property with its tagName in the parent
+ *      node.  So, parent[subnode.tagName] == subnode.
+ *   5. If multiple nodes with the same tagName have the same parent node, then
+ *      parent[tagName] will be an array containing the objects, rather than a
+ *      single object.
+ *
+ * So what this function allows us to do is for instance this:
+ *
+ * XML doc:
+ *
+ * <error>
+ *   <code>404</code>
+ *   <name>Not Found</name>
+ *   <description>Page wasn't found on this server.</description>
+ * </error>
+ *
+ * var obj = AjxXmlDoc.createFromXml(XML).toJSObject();
+ * alert(obj.code + " " + obj.name + " " + obj.description);
+ *
+ * Here's an array example:
+ *
+ * <return>
+ *   <item>
+ *     <name>John Doe</name>
+ *     <email>foo@bar.com</email>
+ *   </item>
+ *   <item>
+ *     <name>Johnny Bravo</name>
+ *     <email>bravo@cartoonnetwork.com</email>
+ *   </item>
+ * </return>
+ *
+ * var obj = AjxXmlDoc.createFromXml(XML).toJSObject();
+ * for (var i = 0; i < obj.item.length; ++i) {
+ *   alert(obj.item[i].name + " / " + obj.item[i].email);
+ * }
+ *
+ * Note that if there's only one <item> tag, then obj.item will be an object
+ * rather than an array.  And if there is no <item> tag, then obj.item will be
+ * undefined.  These are cases that the calling application must take care of.
+ */
+AjxXmlDoc.prototype.toJSObject = function() {
+	var self = this;
+	function _node() { this.__msh_content = ''; };
+	_node.prototype.toString = function() { return this.__msh_content; };
+	function rec(el, o) {
+		var tags = {}, i, t, n;
+		for (i = el.firstChild; i; i = i.nextSibling) {
+			if (i.nodeType == 1) {
+				t = i.tagName;
+				n = new _node();
+				if (tags[t]) {
+					if (tags[t] == 1) {
+						o[t] = [ o[t] ];
+						tags[t] = 2;
+					}
+					o[t].push(n);
+				} else {
+					o[t] = n;
+					tags[t] = 1;
+				}
+				rec(i, n);
+			} else if (i.nodeType == 3)
+				o.__msh_content += i.nodeValue;
+		}
+	};
+	var o = new _node();
+	rec(this._doc.documentElement, o);
+	return o;
+};
+
+AjxXmlDoc.prototype.getElementsByTagNameNS = function(ns, tag) {
+	var doc = this.getDoc();
+	return AjxEnv.isIE
+		? doc.getElementsByTagName(ns + ":" + tag)
+		: doc.getElementsByTagNameNS(ns, tag);
+};
+
+AjxXmlDoc.prototype.getFirstElementByTagNameNS = function(ns, tag) {
+	return this.getElementsByTagNameNS(ns, tag)[0];
+};
+
 AjxXmlDoc._init =
 function() {
 	if (AjxEnv.isIE) {
 		var msxmlVers = ["MSXML4.DOMDocument", "MSXML3.DOMDocument", "MSXML2.DOMDocument.4.0",
-										 "MSXML2.DOMDocument.3.0", "MSXML2.DOMDocument", "MSXML.DOMDocument", 
+										 "MSXML2.DOMDocument.3.0", "MSXML2.DOMDocument", "MSXML.DOMDocument",
 										 "Microsoft.XmlDom"];
 		for (var i = 0; i < msxmlVers.length; i++) {
 			try {
@@ -120,18 +215,18 @@ function() {
 					var importedNode = this.importNode(domObj.childNodes[i], true);
 					this.appendChild(importedNode);
 			}
-		}	
-		
+		}
+
 		_NodeGetXml = function() {
 	  		var ser = new XMLSerializer();
 	  		return ser.serializeToString(this);
-	 	 }	
+	 	 }
 		Node.prototype.__defineGetter__("xml", _NodeGetXml);
 	}
-	
+
 	if (AjxEnv.isNav || AjxEnv.isSafari) {
 	}
-	
+
 	AjxXmlDoc._inited = true;
 }
 
