@@ -278,7 +278,7 @@ function(htmlElement, visible) {
 
 }
 
-Dwt.setVisible2 =
+Dwt.setVisibility =
 function(htmlElement, visible) {
 	if (visible) {
   		htmlElement.style.visibility = "visible";
