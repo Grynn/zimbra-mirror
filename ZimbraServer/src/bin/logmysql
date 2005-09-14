@@ -25,6 +25,7 @@
 # 
 
 source `dirname $0`/zmshutil || exit 1
-zmsetvars zimbra_home logger_mysql_socket mysql_logger_root_password
-
-exec ${zimbra_home}/logger/mysql/bin/mysqladmin -S ${logger_mysql_socket} -u root --password=${mysql_logger_root_password} "$@"
+zmsetvars zimbra_home logger_mysql_socket zimbra_mysql_user zimbra_logger_mysql_password
+		
+exec ${zimbra_home}/logger/mysql/bin/mysql -S ${logger_mysql_socket} \
+    -u ${zimbra_mysql_user} --password=${zimbra_logger_mysql_password} "$@"
