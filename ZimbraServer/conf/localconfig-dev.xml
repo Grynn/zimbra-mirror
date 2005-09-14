@@ -14,23 +14,23 @@
   -->
   <!-- Uncomment to enable SQL tracing.  Traces go to zimbra.log. -->
   <!--
-  <key name="zimbra_mysql_connector.profileSQL">
+  <key name="zimbra_mysql_connector_profileSQL">
     <value>true</value>
   </key>
-  <key name="zimbra_mysql_connector.logSlowQueries">
+  <key name="zimbra_mysql_connector_logSlowQueries">
     <value>true</value>
   </key>
-  <key name="zimbra_mysql_connector.slowQueryThresholdMillis">
+  <key name="zimbra_mysql_connector_slowQueryThresholdMillis">
     <value>50</value>
   </key>
-  <key name="zimbra_mysql_connector.dumpQueriesOnException">
+  <key name="zimbra_mysql_connector_dumpQueriesOnException">
     <value>true</value>
   </key>
   -->
   <!-- MySQL bug: NullPointerException is thrown if explainSlowQueries is
        enabled and a slow query is detected.  Do not use this option. -->
   <!--
-  <key name="zimbra_mysql_connector.explainSlowQueries">
+  <key name="zimbra_mysql_connector_explainSlowQueries">
     <value>false</value>
   </key>
   -->
