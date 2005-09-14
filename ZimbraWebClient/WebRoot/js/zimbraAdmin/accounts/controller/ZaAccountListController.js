@@ -37,7 +37,7 @@ function ZaAccountListController(appCtxt, container, app) {
 	ZaController.call(this, appCtxt, container, app);
 	this._evtMgr = new AjxEventMgr();			
 	this._currentPageNum = 1;
-	this._currentQuery = new ZaAccountQuery("", false, "");
+	this._currentQuery = new ZaSearchQuery("", [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS], false, "");
 	this._currentSortField = ZaAccount.A_uid;
 	this._currentSortOrder = true;
 	this.pages = new Object();
@@ -154,7 +154,7 @@ function(searchResult) {
 ZaAccountListController.prototype.preloadNextPage = 
 function() {
 	if((this._currentPageNum + 1) <= this.pages[this._currentPageNum].numPages && !this.pages[this._currentPageNum+1]) {
-		this.pages[this._currentPageNum+1] = ZaAccount.searchByQueryHolder(this._currentQuery,this._currentPageNum+1, this._currentSortField, this._currentSortOrder, this._app)
+		this.pages[this._currentPageNum+1] = ZaSearch.searchByQueryHolder(this._currentQuery,this._currentPageNum+1, this._currentSortField, this._currentSortOrder, this._app)
 	}		
 	this._shell.setBusy(false);
 }
@@ -254,10 +254,10 @@ DBG.dumpObj(params);
 	try {
 		this._searchField.setEnabled(true);	
 		//
-		var szQuery = ZaAccount.getSearchByNameQuery(this._currentSearch);
+		var szQuery = ZaSearch.getSearchByNameQuery(this._currentSearch);
 		this.setPageNum(1);					
-		this.show(ZaAccount.search(szQuery, "1", ZaAccount.A_uid, true, this._app));
-		var curQuery = new ZaAccountQuery(szQuery, false, "");							
+		this.show(ZaSearch.search(szQuery, [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS], "1", ZaAccount.A_uid, true, this._app));
+		var curQuery = new ZaSearchQuery(szQuery, [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS], false, "");							
 		this.setQuery(curQuery);	
 	} catch (ex) {
 		// Only restart on error if we are not initialized and it isn't a parse error
@@ -311,9 +311,9 @@ ZaAccountListController.prototype.handleAccountCreation =
 function () {
 	this.pages=new Object();
 	if(this._app.getCurrentController() == this) {
-		this.show(ZaAccount.searchByQueryHolder(this._currentQuery, this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app));			
+		this.show(ZaSearch.searchByQueryHolder(this._currentQuery, this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app));			
 	} else {
-		var searchResult = ZaAccount.searchByQueryHolder(this._currentQuery, this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app);
+		var searchResult = ZaSearch.searchByQueryHolder(this._currentQuery, this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app);
 		if (searchResult && searchResult.list != null) {
 			var tmpArr = new Array();
 			var cnt = searchResult.list.getArray().length;
@@ -336,11 +336,11 @@ function (ev) {
 		//add the new ZaAccount to the controlled list
 		if(ev.getDetails()) {
 			this.pages=new Object();
-			var srchResult = ZaAccount.searchByQueryHolder(this._currentQuery, this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app);
+			var srchResult = ZaSearch.searchByQueryHolder(this._currentQuery, this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app);
 			while(this._currentPageNum > 1) { 
 				if(srchResult.numPages < this._currentPageNum) {
 					this._currentPageNum--;
-					srchResult = ZaAccount.searchByQueryHolder(this._currentQuery, this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app);
+					srchResult = ZaSearch.searchByQueryHolder(this._currentQuery, this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app);
 					if(srchResult.numPages >= this._currentPageNum)
 						break;
 				}
@@ -518,7 +518,7 @@ function (ev) {
 		if(this.pages[this._currentPageNum]) {
 			this.show(this.pages[this._currentPageNum])
 		} else {
-			this.show(ZaAccount.searchByQueryHolder(this._currentQuery,this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app));	
+			this.show(ZaSearch.searchByQueryHolder(this._currentQuery,this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app));	
 		}
 	} 
 }
@@ -530,13 +530,9 @@ function (ev) {
 		if(this.pages[this._currentPageNum]) {
 			this.show(this.pages[this._currentPageNum])
 		} else {
-			this.show(ZaAccount.searchByQueryHolder(this._currentQuery,this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app));
+			this.show(ZaSearch.searchByQueryHolder(this._currentQuery,this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app));
 		}
-/*		if(this._currentQuery.isByDomain) {
-			this.show(ZaAccount.searchByDomain(_currentQuery.byWhatAttr,_currentQuery.byValAttr,--this._currentPageNum, this._currentSortField, this._currentSortOrder));	
-		} else {
-			this.show(ZaAccount.search(this._currentQuery.queryString, --this._currentPageNum, this._currentSortField, this._currentSortOrder));
-		}*/
+
 	} 
 	
 }
@@ -622,7 +618,7 @@ function () {
 	}
 	this._fireAccountRemovalEvent(successRemList); 
 	this._removeConfirmMessageDialog.popdown();
-	this.show(ZaAccount.searchByQueryHolder(this._currentQuery, this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app));			
+	this.show(ZaSearch.searchByQueryHolder(this._currentQuery, this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app));			
 }
 
 ZaAccountListController.prototype._donotDeleteAccountsCallback = 

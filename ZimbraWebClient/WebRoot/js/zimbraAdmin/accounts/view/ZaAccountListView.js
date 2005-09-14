@@ -120,7 +120,7 @@ function() {
 ZaAccountListView.prototype._sortColumn = 
 function(columnItem, bSortAsc) {
 	try {
-		var searchResult=ZaAccount.searchByQueryHolder(this._app.getAccountListController().getQuery(),this._app.getAccountListController().getPageNum(), columnItem.getSortField(), bSortAsc, this._app)
+		var searchResult=ZaSearch.searchByQueryHolder(this._app.getAccountListController().getQuery(),this._app.getAccountListController().getPageNum(), columnItem.getSortField(), bSortAsc, this._app)
 		this._app.getAccountListController().setSortOrder(bSortAsc);
 		this._app.getAccountListController().show(searchResult);
 	} catch (ex) {

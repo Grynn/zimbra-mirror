@@ -23,12 +23,12 @@
  * ***** END LICENSE BLOCK *****
  */
 
-function ZaAlias(app) {
+function ZaDistributionList(app) {
 	ZaItem.call(this, app);
 	this.attrs = new Object();
 	this.id = "";
 	this.name="";
 }
 
-ZaAlias.prototype = new ZaItem;
-ZaAlias.prototype.constructor = ZaAlias;
+ZaDistributionList.prototype = new ZaItem;
+ZaDistributionList.prototype.constructor = ZaDistributionList;

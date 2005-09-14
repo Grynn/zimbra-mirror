@@ -120,12 +120,11 @@ ZaDomain.AUTH_MECH_CHOICES = [ZaDomain.AuthMech_ad,ZaDomain.AuthMech_ldap,ZaDoma
 * returns a ZaItemList of ZaDomain objects
 **/
 ZaDomain.getAll =
-function() {
+function(app) {
 	var soapDoc = AjxSoapDoc.create("GetAllDomainsRequest", "urn:zimbraAdmin", null);	
 	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
-	var list = new ZaItemList("domain", ZaDomain);
+	var list = new ZaItemList(ZaDomain, app);
 	list.loadFromDom(resp);
-//	list.sortByName();		
 	return list;
 }
 

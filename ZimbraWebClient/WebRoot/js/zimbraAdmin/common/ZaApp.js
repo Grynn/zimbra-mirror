@@ -54,7 +54,6 @@ function() {
 ZaApp.prototype.launch =
 function(appCtxt) {
 	this.getStatusViewController().show();
-	//this.getAccountListController().show(ZaAccount.getAll());
 }
 
 ZaApp.prototype.setActive =
@@ -233,7 +232,7 @@ function() {
 ZaApp.prototype.getDomainList =
 function(refresh) {
 	if (refresh || this._domainList == null) {
-		this._domainList = ZaDomain.getAll();
+		this._domainList = ZaDomain.getAll(this);
 		EmailAddr_XFormItem.domainChoices.setChoices(this._domainList.getArray());
 		EmailAddr_XFormItem.domainChoices.dirtyChoices();
 	}
@@ -364,7 +363,7 @@ function(refresh) {
 ZaApp.prototype.getAccountList =
 function(refresh) {
 	if (refresh || this._accountList == null) {
-		this._accountList = ZaAccount.getAll(this).list;
+		this._accountList = ZaSearch.getAll(this).list;
 	}
 	return this._accountList;	
 }
@@ -388,7 +387,7 @@ function (ev) {
 		//add the new ZaDomain to the controlled list
 		if(ev.getDetails()) {
 			if(!this._domainList) {
-				this._domainList=ZaDomain.getAll();
+				this._domainList=ZaDomain.getAll(this);
 			}
 			this._domainList.add(ev.getDetails());
 			EmailAddr_XFormItem.domainChoices.setChoices(this._domainList.getArray());
@@ -468,7 +467,7 @@ function (ev) {
 		//add the new ZaAccount to the controlled list
 		if(ev.getDetails()) {
 			if(!this._accountList) {
-				this._accountList=ZaAccount.getAll().list;
+				this._accountList=ZaSearch.getAll().list;
 			} else {
 				this._accountList.add(ev.getDetails());
 			}
@@ -484,7 +483,7 @@ ZaApp.prototype.handleAccountRemoval =
 function (ev) {
 	if(ev) {
 		if(!this._accountList) {
-			this._accountList=ZaAccount.getAll().list;
+			this._accountList=ZaSearch.getAll().list;
 		} else {
 			//remove the ZaAccount from the controlled list
 			var detls = ev.getDetails();
@@ -605,7 +604,7 @@ ZaApp.prototype.handleDomainRemoval =
 function (ev) {
 	if(ev) {
 		if(!this._domainList) {
-			this._domainList=ZaDomain.getAll();
+			this._domainList=ZaDomain.getAll(this);
 		} else {
 			//remove the ZaDomain from the controlled list
 			var detls = ev.getDetails();

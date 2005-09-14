@@ -39,21 +39,9 @@ function ZaZimbraAdmin(appCtxt) {
 	
     this._headerPanel = new DwtComposite(this._shell, "HeaderPanel", DwtControl.ABSOLUTE_STYLE);
     
-	// Create search toolbar and setup browse tool bar button handlers
-/*	this._searchToolBar = new ZaSearchToolBar(this._searchPanel);
-	this._searchToolBar.setLocation(0, 0);
-	this._searchPanel.setBounds(0, 0, Dwt.DEFAULT, this._searchToolBar.getSize().y);
-*/
    	this._createBannerBar();
 	this._headerPanel.zShow(true);
- /*  
-    // Search By tool bar button/menu item handlers
-    var searchForListener = new AjxListener(this, ZaSearchController.prototype._searchForButtonListener);
-	// Setup search field handler
-	this._searchField = this._searchToolBar.getSearchField();
-	this._searchField.registerCallback(ZaSearchController.prototype._searchFieldCallback, this);	
-	this._searchPanel.zShow(true);
-*/
+
 
 
 
@@ -166,17 +154,6 @@ function() {
 		this._overviewPanelController = new ZaOverviewPanelController(this._appCtxt, this._shell);
 	return this._overviewPanelController;
 }
-
-/**
-* Returns a handle to the search bar's controller.
-*/
-/*
-ZaZimbraAdmin.prototype.getSearchController =
-function() {
-	if (this._searchController == null)
-		this._searchController = new ZaSearchController(this._appCtxt, this._shell, this);
-	return this._searchController;
-}*/
 
 /**
 * Makes the given app the active (displayed) one. The stack of hidden views will be cleared.

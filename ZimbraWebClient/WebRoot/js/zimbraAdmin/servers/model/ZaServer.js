@@ -178,7 +178,7 @@ ZaServer.getAll =
 function() {
 	var soapDoc = AjxSoapDoc.create("GetAllServersRequest", "urn:zimbraAdmin", null);	
 	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
-	var list = new ZaItemList("server", ZaServer);
+	var list = new ZaItemList(ZaServer);
 	list.loadFromDom(resp);
 //	list.sortByName();		
 	return list;

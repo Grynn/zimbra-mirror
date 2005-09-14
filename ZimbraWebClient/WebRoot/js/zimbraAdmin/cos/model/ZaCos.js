@@ -271,7 +271,7 @@ ZaCos.getAll =
 function(app) {
 	var soapDoc = AjxSoapDoc.create("GetAllCosRequest", "urn:zimbraAdmin", null);	
 	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
-	var list = new ZaItemList("cos", ZaCos, app);
+	var list = new ZaItemList(ZaCos, app);
 	list.loadFromDom(resp);
 	//list.sortByName();		
 	return list;

@@ -36,6 +36,14 @@ function ZaItem(app) {
 
 ZaItem.prototype = new ZaModel;
 ZaItem.prototype.constructor = ZaItem;
+
+ZaItem.ACCOUNT = "account";
+ZaItem.DL = "distributionlist";
+ZaItem.ALIAS = "alias";
+ZaItem.DOMAIN = "domain";
+ZaItem.COS = "cos";
+ZaItem.SERVER = "server";
+
 ZaItem.A_objectClass = "objectClass";
 ZaItem.A_zimbraId = "zimbraId";
 ZaItem.compareNamesAsc = 
@@ -79,6 +87,33 @@ function(a, b, attr) {
 		return 0;
 }
 
+/**
+* Item Factory
+**/
+ZaItem.getFromType = 
+function (type, app) {
+	switch (type) {
+		case ZaItem.ACCOUNT:
+			return new ZaAccount(app);
+		break;
+		case ZaItem.ALIAS:
+			return new ZaAlias(app);
+		break;
+		case ZaItem.DL:
+			return new ZaDistributionList(app);
+		break;
+		case ZaItem.DOMAIN:
+			return new ZaDomain(app);
+		break;
+		case ZaItem.COS:
+			return new ZaCos(app);
+		break;
+		case ZaItem.SERVER:
+			return new ZaServer(app);
+		break;
+	}
+}
+
 ZaItem.prototype.toString = 
 function() {
 	return "ZaItem "+this.type+": name="+this.name+" id="+this.id;
@@ -89,6 +124,7 @@ function(node) {
 	this.name = node.getAttribute("name");
 	this.id = node.getAttribute("id");
 	this.attrs = new Object();
+	this.type = node.nodeName;
 	
 	var children = node.childNodes;
 	for (var i=0; i< children.length;  i++) {
