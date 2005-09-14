@@ -52,7 +52,6 @@ function DwtButton(parent, style, className, posStyle, actionTiming) {
 
 	// add custom mouse handlers to standard ones
 	this._setMouseEventHdlrs();
-	this._setIERolloverEventHdlrs();
 	this._setKeyEventHdlrs();
 	this._mouseOverListener = new AjxListener(this, DwtButton.prototype._mouseOverListener);
 	this._mouseOutListener = new AjxListener(this, DwtButton.prototype._mouseOutListener);

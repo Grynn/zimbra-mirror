@@ -93,7 +93,7 @@ function DwtMenu(parent, style, className, posStyle, dialog) {
 	this._popupActionId = -1;
  	if ((this.parent instanceof DwtMenuItem && this.parent.parent._style == DwtMenu.BAR_STYLE)
 		|| !(this.parent instanceof DwtMenuItem)){
-		this._outsideListener = true;
+		this._outsideListener = new AjxListener(this, this._outsideMouseDownListener);
 	}
 
 	this._numCheckedStyleItems = 0;
@@ -206,8 +206,8 @@ function(msec, x, y) {
 
 DwtMenu.prototype.popdown =
 function(msec) {
-	if (this._style == DwtMenu.BAR_STYLE) 
-		return;
+	if (this._style == DwtMenu.BAR_STYLE) return;
+
 	if (this._popupActionId != -1) {
 		AjxTimedAction.cancelAction(this._popupActionId);	
 		this._popupActionId = -1;
@@ -452,7 +452,7 @@ function(args) {
 
 	// 5/2/2005
 	// EMC -- changed this to Z_DIALOG_MENU so that you don't have to pass 
-	// dialog object. This helps if you are adding and object to a dialog -- 
+	// dialog object. This helps if you are adding an object to a dialog -- 
 	// where the object doesn't know anything about its container.
 	// var zIndex = this._dialog ? this._dialog.getZIndex() + Dwt.Z_INC : Dwt.Z_MENU;
 	var zIndex = this._dialog ? Dwt.Z_DIALOG_MENU : Dwt.Z_MENU;
@@ -460,25 +460,22 @@ function(args) {
 	this._popupActionId = -1;
 	this._isPoppedup = true;
 	if (this._outsideListener) {
-		AjxCore.addListener(document.body, "onmousedown", 
-						   DwtMenu._outsideMouseDownListener);
+		this.shell._setMouseDownHdlr();
+		this.shell.addListener(DwtEvent.ONMOUSEDOWN, this._outsideListener);
 	}
 	if (!DwtMenu._activeMenu) {
 		DwtMenu._activeMenu = this;
 		DwtMenu._activeMenuUp = true;
-		DwtEventManager.addListener(DwtEvent.ONMOUSEDOWN,
-									DwtMenu._outsideMouseDownListener);
+		DwtEventManager.addListener(DwtEvent.ONMOUSEDOWN, DwtMenu._outsideMouseDownListener);
 	}
 
 	DwtMenu._activeMenuIds.add(this._htmlElId);
 	DwtMenu._activeMenuIds.sort();		
-
-
 }
 
 DwtMenu.prototype._doPopdown =
 function() {
-	// Notify all sub menu's to pop themselves down
+	// Notify all sub menus to pop themselves down
 	var a = this._children.getArray();
 	var s = this._children.size();
 	for (var i = 0; i < s; i++) {
@@ -491,15 +488,14 @@ function() {
 	
 	// TODO release capture if you have it
 	if (this._outsideListener) {
-		AjxCore.removeListener(document.body, "onmousedown", 
-							  DwtMenu._outsideMouseDownListener);
+		this.shell._setMouseDownHdlr();
+		this.shell.removeListener(DwtEvent.ONMOUSEDOWN, this._outsideListener);
 	}
 
 	if (DwtMenu._activeMenu == this) {
 		DwtMenu._activeMenu = null;
 		DwtMenu._activeMenuUp = false;
-		DwtEventManager.removeListener(DwtEvent.ONMOUSEDOWN,
-									   DwtMenu._outsideMouseDownListener);
+		DwtEventManager.removeListener(DwtEvent.ONMOUSEDOWN, DwtMenu._outsideMouseDownListener);
 	}
 	DwtMenu._activeMenuIds.remove(this._htmlElId);
 	this._popdownActionId = -1;
@@ -519,71 +515,64 @@ function(){
 
 DwtMenu._mouseDownListener =
 function(ev) {
-	if (!DwtMenu._activeMenuUp) 
-		return;
-		
+	if (!DwtMenu._activeMenuUp) return;
+
     var obj = DwtMenu._activeMenu;
-   	var mi = null;
-    if (ev) {
-		var mouseEv = DwtShell.mouseEvent;
-		mouseEv.setFromDhtmlEvent(ev);	
-		mouseEv._stopPropagation = false;
-		mouseEv._returnValue = true;
-		mouseEv.setToDhtmlEvent(ev);
-    	mi = mouseEv.dwtObj;
-    }
-	// If we are dealing with a menu item that is istself contained in a menu that is
-	// a menu bar, then don't do a popdown, else if the menuItem has a menu with a selection
-	// listener, then continue with a popdown, else let the menuITem deal with it
+    var mi = ev ? ev.dwtObj : null;
+
+	// If we are dealing with a menu item that is itself contained in a menu that is
+	// a menu bar, then don't do a popdown, else if the menu item has a menu with a selection
+	// listener, then continue with a popdown, else let the menu item deal with it.
 	if (obj.parent instanceof DwtMenuItem && obj.parent.parent._style == DwtMenu.BAR_STYLE) {
 		obj.parent.parent._getActiveItem()._deselect();
 		return true;
 	} else if (mi && mi instanceof DwtMenuItem && !mi.isListenerRegistered(DwtEvent.SELECTION) && mi.getMenu() != null) {
 		return true;
 	}
-	obj.popdown(0);
+	obj.popdown();
 	return true;		
 }
 
-/* Note that a hack has been added to DwtHtmlEditor to call this method when the editor get's focus. The reason
+/* Note that a hack has been added to DwtHtmlEditor to call this method when the editor gets focus. The reason
  * for this is that the editor uses an Iframe whose events are independent of the menu's document. In this case
- * event will be null
+ * event will be null.
  */
 DwtMenu._outsideMouseDownListener =
 function(ev) {
-    if (DwtMenu._activeMenuUp){
-		ev = ev || window.event;
-    	if (ev) {
-			// figure out if we are over the menu that is up
-			var htmlEl = DwtUiEvent.getTarget(ev);
-			var aM = DwtMenu._activeMenu;
-			var nearestDwtObj = DwtUiEvent.getDwtObjFromEvent(ev);
-			var id = aM._htmlElId;
-
-			if (aM._associatedObj && 
-				aM._associatedObj == nearestDwtObj){
-				return true;
-			}
-			// assuming that the active menu is the parent of all other menus
-			// that are up, search through the array of child menus dom ids as
-			// well as our own.
-			while (htmlEl != null) {
-				if (htmlEl.id && htmlEl.id != "" && 
-					(htmlEl.id == id || htmlEl.id == aM._associatedElId ||
-					 DwtMenu._activeMenuIds.binarySearch(htmlEl.id) != -1 )) {
-					return true;
-				}
-				htmlEl = htmlEl.parentNode;
-			}
+    if (DwtMenu._activeMenuUp) {
+		// figure out if we are over the menu that is up
+		var menu = DwtMenu._activeMenu;
+		var nearestDwtObj = DwtUiEvent.getDwtObjFromEvent(ev);
+		if (menu._associatedObj && menu._associatedObj == nearestDwtObj) {
+			return;
 		}
-        DwtMenu._mouseDownListener(ev);
 
-    }
+		// assuming that the active menu is the parent of all other menus
+		// that are up, search through the array of child menu dom IDs as
+		// well as our own.
+		var id = menu._htmlElId;
+		var htmlEl = DwtUiEvent.getTarget(ev);
+		while (htmlEl != null) {
+			if (htmlEl.id && htmlEl.id != "" && 
+				(htmlEl.id == id || htmlEl.id == menu._associatedElId ||
+				 DwtMenu._activeMenuIds.binarySearch(htmlEl.id) != -1 )) {
+				return;
+			}
+			htmlEl = htmlEl.parentNode;
+		}
+
+		// If we've gotten here, the mousedown happened outside the active
+		// menu, so we hide it.
+		menu.popdown();
+	}
+	// propagate the event
+	ev._stopPropagation = false;
+	ev._returnValue = true;
 };
 
 DwtMenu.closeActiveMenu =
 function() {
 	if (DwtMenu._activeMenuUp){
-		DwtMenu._activeMenu.popdown(0);
+		DwtMenu._activeMenu.popdown();
 	}
 };

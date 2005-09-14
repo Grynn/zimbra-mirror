@@ -601,6 +601,15 @@ function(targetEl) {
 	return bIsInput;
 }
 
+DwtControl.prototype._setMouseDownHdlr =
+function(clear) {
+	var htmlElement = this.getHtmlElement();
+	if (clear !== true)
+		htmlElement.onmousedown = DwtControl._mouseDownHdlr;
+	else
+		htmlElement.onmousedown = null;
+}
+
 /* The next two methods are called by subclasses to enable event handling by DwtControl */
 DwtControl.prototype._setMouseEventHdlrs =
 function(clear) {
@@ -612,46 +621,24 @@ function(clear) {
 	var htmlElement = this.getHtmlElement();
 	if (clear !== true) {
 		htmlElement.ondblclick = DwtControl._dblClick; 
-		htmlElement.onmouseover = DwtControl._mouseOverHdlr;
 		htmlElement.onmousemove = DwtControl._mouseMoveHdlr;
 		htmlElement.onmousedown = DwtControl._mouseDownHdlr;
 		htmlElement.onmouseup = DwtControl._mouseUpHdlr;
-		htmlElement.onmouseout = DwtControl._mouseOutHdlr;
-		htmlElement.onselectstart = DwtControl._onselectStartHdlr;
-		htmlElement.oncontextmenu = DwtControl._oncontextMenuHdlr;
+		htmlElement.onselectstart = DwtControl._onSelectStartHdlr;
+		htmlElement.oncontextmenu = DwtControl._onContextMenuHdlr;
+		if (AjxEnv.isIE) {
+			htmlElement.onmouseenter = DwtControl._mouseEnterHdlr;
+			htmlElement.onmouseleave = DwtControl._mouseLeaveHdlr;
+		} else {
+			htmlElement.onmouseover = DwtControl._mouseOverHdlr;
+			htmlElement.onmouseout = DwtControl._mouseOutHdlr;
+		}
 	} else {
 		htmlElement.ondblclick = htmlElement.onmouseover = htmlElement.onmousemove =
 		htmlElement.onmouseenter = htmlElement.onmouseleave = 
 		htmlElement.onmousedown = htmlElement.onmouseup = htmlElement.onmouseout = null; 
 	}
 }
-
-/**
- * This sets mouseenter and mouseleave to handle rollover events.
- * NOTE: It has the side effect of unsetting mouseover and mouseout.
- */
-DwtControl.prototype._setIERolloverEventHdlrs =
-function(clear) {
-	if (AjxEnv.isIE) {
-		if (this._disposed) return;
-		
-		if (!this._ctrlInited) 
-			this._initCtrl();
-		
-		var htmlElement = this.getHtmlElement();
-		
-		
-		if (clear !== true) {
-			htmlElement.onmouseenter = DwtControl._mouseEnterHdlr;
-			htmlElement.onmouseleave = DwtControl._mouseLeaveHdlr;
-			htmlElement.onmouseover = null;
-			htmlElement.onmouseout = null;
-		} else {
-			htmlElement.onmouseenter = null;
-			htmlElement.onmouseleave = null;
-		}
-	}
-};
 
 DwtControl.prototype._setKeyEventHdlrs =
 function(clear) {
@@ -796,15 +783,15 @@ DwtControl._mouseOverGeneralHdlr = function (ev, eventName){
 		return false;
 	}
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
-	if (obj == null)
-		return false;
+	if (!obj) return false;
+	
 	var mouseEv = DwtShell.mouseEvent;
 	if (obj._dragging == DwtControl._NO_DRAG) {
 		mouseEv.setFromDhtmlEvent(ev);
 		if (obj.isListenerRegistered(eventName))
 			obj.notifyListeners(eventName, mouseEv);
 		// Call the tooltip after the listeners to give them a 
-		// chance to change the tooltip text
+		// chance to change the tooltip text.
 		if (obj._toolTipContent != null) {
 			var shell = DwtShell.getShell(window);
 			var manager = shell.getHoverMgr();
@@ -820,15 +807,13 @@ DwtControl._mouseOverGeneralHdlr = function (ev, eventName){
 	mouseEv._returnValue = false;
 	mouseEv.setToDhtmlEvent(ev);
 	return false;
-
 };
 
 DwtControl._mouseDownHdlr =
 function(ev) {
   		
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
-	if (!obj)
-		return false;
+	if (!obj) return false;
 		
 	if (obj._toolTipContent != null) {
 		var shell = DwtShell.getShell(window);
@@ -853,7 +838,7 @@ function(ev) {
 		obj._dragStartY = mouseEv.docY;
 	}
 	
-	return DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEDOWN, mouseEv);
+	return DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEDOWN, obj, mouseEv);
 }
 
 DwtControl._mouseMoveHdlr =
@@ -862,15 +847,14 @@ function(ev) {
 	// mousedown event has not occurred , so do the default behaviour, 
 	// else do the draggable behaviour 
 	var captureObj = DwtMouseEventCapture.getCaptureObj();
-	var obj = (captureObj == null) ? DwtUiEvent.getDwtObjFromEvent(ev) : 
-	            captureObj.targetObj;
- 	if (obj == null)
-		return false;  
+	var obj = captureObj ? captureObj.targetObj : DwtUiEvent.getDwtObjFromEvent(ev);
+ 	if (!obj) return false;
+
 	var mouseEv = DwtShell.mouseEvent;
 	mouseEv.setFromDhtmlEvent(ev);
 
 	// This following can happen during a DnD operation if the mouse moves
-	// out the window. This seems to happen on IE only
+	// out the window. This seems to happen on IE only.
 	if (mouseEv.docX < 0 || mouseEv.docY < 0) {
 		mouseEv._stopPropagation = true;
 		mouseEv._returnValue = false;
@@ -878,8 +862,8 @@ function(ev) {
 		return false;
 	}
 	
-	// If we are not draggable or if have not started dragging and are 
-	// within the Drag threshold then simple handle it as a move
+	// If we are not draggable or if we have not started dragging and are 
+	// within the Drag threshold then simply handle it as a move.
 	if (obj._dragSource == null || captureObj == null
 		|| (obj != null && obj._dragging == DwtControl._NO_DRAG 
 			&& Math.abs(obj._dragStartX - mouseEv.docX) < 
@@ -905,7 +889,7 @@ function(ev) {
 				}
 			}
 		}
-		return DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEMOVE);
+		return DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEMOVE, obj, mouseEv);
 	} else {
 		// Deal with mouse moving out of the window etc...
 		
@@ -968,7 +952,7 @@ function(ev) {
 			// in the code
 		} else {
 			// XXX: confirm w/ ROSS!
-			DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEMOVE);
+			DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEMOVE, obj, mouseEv);
 		}
 		mouseEv._stopPropagation = true;
 		mouseEv._returnValue = false;
@@ -981,16 +965,18 @@ DwtControl._mouseUpHdlr =
 function(ev) {
 	// See if are doing a drag n drop operation
 	var captureObj = DwtMouseEventCapture.getCaptureObj();
-	var obj = (captureObj == null) ? DwtUiEvent.getDwtObjFromEvent(ev) : captureObj.targetObj;
+	var obj = captureObj ? captureObj.targetObj : DwtUiEvent.getDwtObjFromEvent(ev);
+	if (!obj) return false;
+	
 	if (!obj._dragSource || !captureObj) {
-		return DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEUP);
+		return DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEUP, obj);
 	} else {
 		captureObj.release();
 		var mouseEv = DwtShell.mouseEvent;
 		mouseEv.setFromDhtmlEvent(ev);
 		if (obj._dragging != DwtControl._DRAGGING) {
 			obj._dragging = DwtControl._NO_DRAG;
-			return DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEUP, mouseEv);
+			return DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEUP, obj, mouseEv);
 		} else {
 			obj._lastDestDwtObj = null;
 			var destDwtObj = mouseEv.dwtObj;
@@ -1030,6 +1016,77 @@ function(ev) {
 	}
 }
 
+DwtControl._mouseOutHdlr =
+function(ev) {
+	return DwtControl._mouseOutGeneralHdlr(ev, DwtEvent.ONMOUSEOUT);
+};
+
+DwtControl._mouseLeaveHdlr =
+function(ev) {
+	return DwtControl._mouseOutGeneralHdlr(ev, DwtEvent.ONMOUSELEAVE);
+};
+
+DwtControl._mouseOutGeneralHdlr =
+function(ev, eventName) {
+	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+	if (!obj) return false;
+
+	if (obj._toolTipContent != null) {
+		var shell = DwtShell.getShell(window);
+		var manager = shell.getHoverMgr();
+		manager.setHoverOutListener(obj._hoverOutListener);
+		manager.hoverOut();
+		obj._tooltipClosed = false;
+	}
+	return DwtControl._mouseEvent(ev, eventName, obj);
+};
+
+DwtControl._onSelectStartHdlr = 
+function(ev) {
+	return DwtControl._mouseEvent(ev, DwtEvent.ONSELECTSTART);
+}
+
+DwtControl._onContextMenuHdlr = 
+function(ev) {
+	return DwtControl._mouseEvent(ev, DwtEvent.ONCONTEXTMENU);
+}
+
+DwtControl._mouseEvent = 
+function(ev, eventType, obj, mouseEv) {
+
+	var obj = obj ? obj : DwtUiEvent.getDwtObjFromEvent(ev);
+	if (!obj) return false;
+	
+	if (!mouseEv) {
+		mouseEv = DwtShell.mouseEvent;
+		mouseEv.setFromDhtmlEvent(ev);
+	}
+
+	// By default, we halt event processing. Listeners may override.
+	mouseEv._stopPropagation = true;
+	mouseEv._returnValue = false;
+
+	// notify global listeners
+	DwtEventManager.notifyListeners(eventType, mouseEv);
+	// notify widget listeners
+	if (obj.isListenerRegistered(eventType))
+		obj.notifyListeners(eventType, mouseEv);
+
+	// publish our settings to the DOM
+	mouseEv.setToDhtmlEvent(ev);
+	return mouseEv._returnValue;
+}
+
+DwtControl.prototype.setContent =
+function(content) {
+	if (content)
+		this.getHtmlElement().innerHTML = content;
+}
+
+DwtControl.prototype.clearContent =
+function() {
+	this.getHtmlElement().innerHTML = "";
+}
 
 DwtControl.prototype._badDropEffect =
 function(m, c, d) {
@@ -1051,87 +1108,6 @@ function(m, c, d) {
   		this._destroyDnDIcon(this._dndIcon);
 		this._dragging = DwtControl._NO_DRAG;
   	}
-}
-
-DwtControl._mouseOutHdlr =
-function(ev) {
-	return DwtControl._mouseOutGeneralHdlr(ev, DwtEvent.ONMOUSEOUT);
-};
-
-DwtControl._mouseLeaveHdlr =
-function(ev) {
-	return DwtControl._mouseOutGeneralHdlr(ev, DwtEvent.ONMOUSELEAVE);
-};
-
-DwtControl._mouseOutGeneralHdlr = function (ev, eventName){
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
-	if (obj == null)
-		return false;
-	if (obj._toolTipContent != null) {
-		var shell = DwtShell.getShell(window);
-		var manager = shell.getHoverMgr();
-		manager.setHoverOutListener(obj._hoverOutListener);
-		manager.hoverOut();
-		obj._tooltipClosed = false;
-	}
-	return DwtControl._mouseEvent(ev, eventName);
-};
-
-DwtControl._onselectStartHdlr = 
-function(ev) {
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
-	if (!obj)
-		return false;
-
-	return DwtControl._mouseEvent(ev, DwtEvent.ONSELECTSTART);
-}
-
-DwtControl._oncontextMenuHdlr = 
-function(ev) {
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
-	if (!obj)
-		return false;
-
-	return DwtControl._mouseEvent(ev, DwtEvent.ONCONTEXTMENU);
-}
-
-DwtControl._mouseEvent = 
-function(ev, eventType, mouseEvIn) {
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
-	
-	if (obj == null)
-		return false;
-		
-	var mouseEv = (mouseEvIn == null ) ? DwtShell.mouseEvent : mouseEvIn;
-        // notify the world that we have a mouse event.
-        // By notifying before any widget registered listener receives the
-        // messages, we're saying that all widget related listeners will take
-        // precedence over outside listeners.
-	DwtEventManager.notifyListeners( eventType, mouseEv);
-
-	if (obj.isListenerRegistered(eventType)) {
-		if (mouseEvIn == null)
-			mouseEv.setFromDhtmlEvent(ev);	
-		obj.notifyListeners(eventType, mouseEv);
-	}
-	
-	if (!mouseEv._populated) {
-		mouseEv._stopPropagation = true;
-		mouseEv._returnValue = false;
-	}
-	mouseEv.setToDhtmlEvent(ev);
-	return mouseEv._returnValue;
-}
-
-DwtControl.prototype.setContent =
-function(content) {
-	if (content)
-		this.getHtmlElement().innerHTML = content;
-}
-
-DwtControl.prototype.clearContent =
-function() {
-	this.getHtmlElement().innerHTML = "";
 }
 
 DwtControl.prototype._handleHoverOver = function(event) {
