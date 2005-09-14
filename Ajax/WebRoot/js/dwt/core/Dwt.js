@@ -265,7 +265,7 @@ function(html) {
 Dwt.getVisible =
 function(htmlElement) {
 	var disp = DwtCssStyle.getProperty(htmlElement, "display");
-	return (disp == "none") ? false : true;
+	return (disp != "none");
 }
 
 Dwt.setVisible =
@@ -275,7 +275,12 @@ function(htmlElement, visible) {
 	} else {
 		htmlElement.style.display = "none";
 	}
+}
 
+Dwt.getVisibility =
+function(htmlElement) {
+	var vis = DwtCssStyle.getProperty(htmlElement, "visibility");
+	return (vis == "visible");
 }
 
 Dwt.setVisibility =
