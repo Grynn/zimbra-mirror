@@ -184,6 +184,8 @@
 
 <attr name="zimbraLmtpNumThreads" type="integer" min="0"/>
 
+<attr name="zimbraLogHostname" type="string"/>
+
 <attr name="zimbraMailAddress" type="email" max="256" immutable="1"/>
 
 <attr name="zimbraMailAlias" type="email" max="256" immutable="1"/>
