@@ -95,16 +95,19 @@ function(name, value){
 	this._methodEl.setAttribute(name, value);
 };
 
-/*
- * Basically does what "set()" does, but allows "value" to be a JS object, in
- * which case it will call itself recursively in order to create a complex data
- * structure.  Don't pass a "way-too-complicated" object ("value" should only
- * contain references to simple JS objects, or better put, hashes--don't
- * include a reference to the "window" object as it will kill your browser).
+/**
+ * Creates arguments to pass within the envelope.  "value" can be a JS object
+ * or a scalar (string, number, etc.).
+ *
+ * When "value" is a JS object, set() will call itself recursively in order to
+ * create a complex data structure.  Don't pass a "way-too-complicated" object
+ * ("value" should only contain references to simple JS objects, or better put,
+ * hashes--don't include a reference to the "window" object as it will kill
+ * your browser).
  *
  * Example:
  *
- *    soapDoc.setComplex("user_auth", {
+ *    soapDoc.set("user_auth", {
  *       user_name : "foo",
  *       password  : "bar"
  *    });
@@ -117,37 +120,17 @@ function(name, value){
  *    </user_auth>
  *
  * Of course, nesting other hashes is allowed and will work as expected.
- *
- * This method can replace set() but for now let's keep both for who-knows-what
- * compatibility problems may arise.
  */
-AjxSoapDoc.prototype.setComplex = function(name, value, parent) {
+AjxSoapDoc.prototype.set = function(name, value, parent) {
 	var doc = this.getDoc(), p = doc.createElement(name);
 	if (typeof value == "object")
 		for (i in value)
-			this.setComplex(i, value[i], p);
+			this.set(i, value[i], p);
 	else
 		p.appendChild(doc.createTextNode(value));
 	if (!parent)
 		parent = this._methodEl;
-	parent.appendChild(p);
-	return p;
-};
-
-AjxSoapDoc.prototype.set =
-function(name, value, element) {
-	var p = this._xmlDoc.getDoc().createElement(name);
-	if (value != null) {
-		var cdata = this._xmlDoc.getDoc().createTextNode("");
-		p.appendChild(cdata);
-		cdata.nodeValue = value;
-	}
-	if (element == null) {
-		this._methodEl.appendChild(p);
-	} else {
-		element.appendChild(p);
-	}
-	return p;
+	return parent.appendChild(p);
 };
 
 AjxSoapDoc.prototype.getMethod =

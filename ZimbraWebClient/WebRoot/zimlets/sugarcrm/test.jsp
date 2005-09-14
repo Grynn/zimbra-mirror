@@ -85,7 +85,7 @@ function login() {
 		getValues();
 		sugar.login(user, passwd);
 	} catch(ex) {
-		alert(ex.dump());
+		alert(ex.toSource());
 	}
 }
 
@@ -94,7 +94,7 @@ function logout() {
 		getValues();
 		sugar.logout();
 	} catch(ex) {
-		alert(ex.dump());
+		alert(ex.toSource());
 	}
 }
 
@@ -103,7 +103,7 @@ function search() {
 		getValues();
 		sugar.search(document.getElementById("searchStr").value);
 	} catch(ex) {
-		alert(ex.dump());
+		alert(ex.toSource());
 	}
 }
 
@@ -117,7 +117,7 @@ function addContact() {
                                       last_name     : last_name,
                                       email_address : email_address });
 	} catch(ex) {
-		alert(ex.dump());
+		alert(ex.toSource());
 		// alert(ex.toSource());
 	}
 }
@@ -132,7 +132,7 @@ function addLead() {
                                    last_name     : last_name,
                                    email_address : email_address });
 	} catch(ex) {
-		alert(ex.dump());
+		alert(ex.toSource());
 		// alert(ex.toSource());
 	}
 }

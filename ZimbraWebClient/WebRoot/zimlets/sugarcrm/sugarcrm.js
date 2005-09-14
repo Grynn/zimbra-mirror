@@ -139,7 +139,7 @@ ZmSugarCrm.prototype.login = function(user, passwd) {
 		password  : this.passwd = AjxMD5.hex_md5(passwd),
 		version   : "1.1"
 	};
-	env.setComplex("user_auth", auth);
+	env.set("user_auth", auth);
 	env.set("application", "Zimbra");
 	this._rpc(env);
 };
