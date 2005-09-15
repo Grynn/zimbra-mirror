@@ -35,6 +35,7 @@ function() {
 
 // native browser events - value is the associated DOM property
 DwtEvent.ONCHANGE		= "onchange";
+DwtEvent.ONCLICK		= "onclick";
 DwtEvent.ONCONTEXTMENU	= "oncontextmenu";
 DwtEvent.ONDBLCLICK		= "ondblclick";
 DwtEvent.ONFOCUS		= "onfocus";

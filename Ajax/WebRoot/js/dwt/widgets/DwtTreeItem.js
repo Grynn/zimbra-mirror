@@ -252,7 +252,9 @@ function(child) {
 		
 		if (this._initialized) {
 			AjxImg.setImage(this._nodeCell, "Blank_16");
-			AjxImg.getImageElement(this._nodeCell).onmousedown = null;
+			var imgEl = AjxImg.getImageElement(this._nodeCell);
+			if (imgEl)
+				Dwt.clearHandler(imgEl, DwtEvent.ONMOUSEDOWN);
 		}
 	}
 }
@@ -286,9 +288,11 @@ function(index) {
 	// If we have deferred children, then we need to make sure we set up accordingly
 	if (this._children.size() > 0) {
 		AjxImg.setImage(this._nodeCell, "NodeCollapsed");
-		var img = AjxImg.getImageElement(this._nodeCell);
-		img.onmousedown = DwtTreeItem._nodeIconMouseDownHdlr;
-		img.onmouseup = DwtTreeItem._nodeIconMouseUpHdlr;
+		var imgEl = AjxImg.getImageElement(this._nodeCell);
+		if (imgEl) {
+			Dwt.setHandler(imgEl, DwtEvent.ONMOUSEDOWN, DwtTreeItem._nodeIconMouseDownHdlr);
+			Dwt.setHandler(imgEl, DwtEvent.ONMOUSEUP, DwtTreeItem._nodeIconMouseUpHdlr);
+		}
 	} else {
 		AjxImg.setImage(this._nodeCell, "Blank_16");
 	}
@@ -299,8 +303,8 @@ function(index) {
       	this._checkBox = doc.createElement("input");
       	this._checkBox.type = "checkbox";
       	this._checkBoxCell.appendChild(this._checkBox);
-      	this._checkBox.onmouseup = DwtTreeItem._checkBoxMouseUpHdlr;
-      	this._checkBox.onmousedown = DwtTreeItem._checkBoxMouseDownHdlr;
+		Dwt.setHandler(this._checkBox, DwtEvent.ONMOUSEDOWN, DwtTreeItem._checkBoxMouseDownHdlr);
+		Dwt.setHandler(this._checkBox, DwtEvent.ONMOUSEUP, DwtTreeItem._checkBoxMouseUpHdlr);
       	this._checkBox.checked = this._itemChecked
 	}	
 	
@@ -335,9 +339,11 @@ function(child, index) {
 	// If we are initialized, then we need to add a expansion node
 	if (this._initialized && this._children.size() == 0) {
 		AjxImg.setImage(this._nodeCell, "NodeCollapsed");
-		var img = AjxImg.getImageElement(this._nodeCell);
-		img.onmousedown = DwtTreeItem._nodeIconMouseDownHdlr;
-		img.onmouseup = DwtTreeItem._nodeIconMouseUpHdlr;
+		var imgEl = AjxImg.getImageElement(this._nodeCell);
+		if (imgEl) {
+			Dwt.setHandler(imgEl, DwtEvent.ONMOUSEDOWN, DwtTreeItem._nodeIconMouseDownHdlr);
+			Dwt.setHandler(imgEl, DwtEvent.ONMOUSEUP, DwtTreeItem._nodeIconMouseUpHdlr);
+		}
 	}
 	this._children.add(child, index);
 }
@@ -367,7 +373,9 @@ function(item, index) {
 			AjxImg.setImage(this._nodeCell, "NodeExpanded");
 		else 
 			AjxImg.setImage(this._nodeCell, "NodeCollapsed");
-		AjxImg.getImageElement(this._nodeCell).onmousedown = DwtTreeItem._nodeIconMouseDownHdlr;
+		var imgEl = AjxImg.getImageElement(this._nodeCell);
+		if (imgEl)
+			Dwt.setHandler(imgEl, DwtEvent.ONMOUSEDOWN, DwtTreeItem._nodeIconMouseDownHdlr);
 	}	
 	
 	var childDiv = this._childDiv;

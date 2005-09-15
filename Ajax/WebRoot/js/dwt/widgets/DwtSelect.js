@@ -287,8 +287,7 @@ DwtSelect.prototype.disable = function() {
 	if (!this.disabled) {
 		this.setEnabled(false);
 		this._setDisabledStyle();
-		var el = this.getHtmlElement();
-		el.onselectstart = this._disableSelectionIE;
+		this.setHandler(DwtEvent.ONSELECTSTART, this._disableSelectionIE);
 		this.disabled = true;
 	}
 };
@@ -297,8 +296,7 @@ DwtSelect.prototype.enable = function() {
 	if (this.disabled) {
 		this.setEnabled(true);
 		this._setEnabledStyle();
-		var el = this.getHtmlElement();
-		el.onselectstart = "";
+		this.clearHandler(DwtEvent.ONSELECTSTART);
 		this.disabled = false;
 	}
 };

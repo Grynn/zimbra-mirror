@@ -882,15 +882,6 @@ function(targetEl) {
 	return bIsInput;
 }
 
-DwtControl.prototype._setMouseDownHdlr =
-function(clear) {
-	var htmlElement = this.getHtmlElement();
-	if (clear !== true)
-		htmlElement.onmousedown = DwtControl._mouseDownHdlr;
-	else
-		htmlElement.onmousedown = null;
-}
-
 DwtControl.prototype._setEventHdlrs =
 function(events, clear) {
 	if (!this._checkState()) return;

@@ -101,10 +101,15 @@ function() {
 		var numCells = cells.length
 		for (var j = 0; j < numCells; j++) {
 			var cell = cells[j];
-			cell.onmouseover = DwtColorPicker._mouseOverHdlr;
-			cell.onmouseout = DwtColorPicker._mouseOutHdlr;
-			cell.onmousedown = DwtColorPicker._mouseDownHdlr;
-			cell.onmouseup = DwtColorPicker._mouseUpHdlr;
+			Dwt.setHandler(cell, DwtEvent.ONMOUSEDOWN, DwtColorPicker._mouseDownHdlr);
+			Dwt.setHandler(cell, DwtEvent.ONMOUSEUP, DwtColorPicker._mouseUpHdlr);
+			if (AjxEnv.isIE) {
+				Dwt.setHandler(cell, DwtEvent.ONMOUSEOVER, DwtColorPicker._mouseOverHdlr);
+				Dwt.setHandler(cell, DwtEvent.ONMOUSEOUT, DwtColorPicker._mouseOutHdlr);
+			} else {
+				Dwt.setHandler(cell, DwtEvent.ONMOUSEENTER, DwtColorPicker._mouseOverHdlr);
+				Dwt.setHandler(cell, DwtEvent.ONMOUSELEAVE, DwtColorPicker._mouseOutHdlr);
+			}
 			cell.style.border = "2px outset " + cell.style.backgroundColor;
 		}
 	}

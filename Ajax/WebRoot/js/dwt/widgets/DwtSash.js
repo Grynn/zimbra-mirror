@@ -43,9 +43,9 @@ function DwtSash(parent, style, className, threshold, posStyle) {
 	this._captureObj = new DwtMouseEventCapture(this, DwtSash._mouseOverHdlr,
 			DwtSash._mouseDownHdlr, DwtSash._mouseMoveHdlr, 
 			DwtSash._mouseUpHdlr, DwtSash._mouseOutHdlr);
-	htmlElement.onmousedown = DwtSash._mouseDownHdlr;
-	htmlElement.onmouseover = DwtSash._mouseOverHdlr;
-	htmlElement.onmouseout = DwtSash._mouseOutHdlr;
+	this.setHandler(DwtEvent.ONMOUSEDOWN, DwtSash._mouseDownHdlr);
+	this.setHandler(DwtEvent.ONMOUSEOVER, DwtSash._mouseOverHdlr);
+	this.setHandler(DwtEvent.ONMOUSEOUT, DwtSash._mouseOutHdlr);
 
 	this.setZIndex(Dwt.Z_VIEW);
 }

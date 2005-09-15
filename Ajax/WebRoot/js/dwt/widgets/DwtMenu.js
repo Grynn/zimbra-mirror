@@ -460,7 +460,7 @@ function(args) {
 	this._popupActionId = -1;
 	this._isPoppedup = true;
 	if (this._outsideListener) {
-		this.shell._setMouseDownHdlr();
+		this.shell._setEventHdlrs([DwtEvent.ONMOUSEDOWN]);
 		this.shell.addListener(DwtEvent.ONMOUSEDOWN, this._outsideListener);
 	}
 	if (!DwtMenu._activeMenu) {
@@ -486,9 +486,9 @@ function() {
 	
 	this.notifyListeners(DwtEvent.POPDOWN, this);
 	
-	// TODO release capture if you have it
+	// TODO: release capture if you have it
 	if (this._outsideListener) {
-		this.shell._setMouseDownHdlr();
+		this.shell._setEventHdlrs([DwtEvent.ONMOUSEDOWN], true);
 		this.shell.removeListener(DwtEvent.ONMOUSEDOWN, this._outsideListener);
 	}
 

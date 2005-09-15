@@ -71,16 +71,12 @@ function () {
 **/
 DwtPropertyPage.prototype._installOnKeyUpHandler = 
 function(field, func) {
-	if(!field)
-		return;
-	var e=null;
-	e =  Dwt.getDomObj(this.getDocument(), this._fieldIds[field]);
-	if(e) {
-		if(func) {
-			e.onkeyup = func;
-		} else {
-			e.onkeyup = this._onKeyUp;
-		}
+	if (!field)	return;
+	
+	var e = null;
+	e = Dwt.getDomObj(this.getDocument(), this._fieldIds[field]);
+	if (e) {
+		Dwt.setHandler(e, DwtEvent.ONKEYUP, func ? func : this._onKeyUp);
 		e._view = this;
 		e._field = field;
 	}
@@ -91,16 +87,12 @@ function(field, func) {
 **/
 DwtPropertyPage.prototype._installOnClickHandler = 
 function(field, func) {
-	if(!field)
-		return;
-	var e=null;
-	e =  Dwt.getDomObj(this.getDocument(), this._fieldIds[field]);
-	if(e) {
-		if(func) {
-			e.onclick = func;
-		} else {
-			e.onclick = this._onClick;
-		}
+	if (!field) return;
+	
+	var e = null;
+	e = Dwt.getDomObj(this.getDocument(), this._fieldIds[field]);
+	if (e) {
+		Dwt.setHandler(e, DwtEvent.ONCLICK, func ? func : this._onClick);
 		e._view = this;
 		e._field = field;
 	}
@@ -123,16 +115,12 @@ function(ev) {
 **/
 DwtPropertyPage.prototype._installOnChangeHandler = 
 function(field, func) {
-	if(!field)
-		return;
-	var e=null;
-	e =  Dwt.getDomObj(this.getDocument(), this._fieldIds[field]);
+	if (!field) return;
+	
+	var e = null;
+	e = Dwt.getDomObj(this.getDocument(), this._fieldIds[field]);
 	if(e) {
-		if(func) {
-			e.onchange = func;
-		} else {
-			e.onchange = DwtPropertyPage._onChange;
-		}
+		Dwt.setHandler(e, DwtEvent.ONCHANGE, func ? func : this._onChange);
 		e._view = this;
 		e._field = field;
 	}
