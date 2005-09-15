@@ -95,11 +95,13 @@ function() {
 	return "DWT" + Dwt._nextId++;
 }
 
-Dwt.associateElementWithObject = function (domElement, jsObject){
+Dwt.associateElementWithObject =
+function(domElement, jsObject) {
 	domElement.dwtObj = jsObject.__internalId = AjxCore.assignId(jsObject);
 };
 
-Dwt.disassociateElementFromObject = function (domElement, jsObject){
+Dwt.disassociateElementFromObject =
+function(domElement, jsObject) {
 	if (domElement){
 		delete domElement.dwtObj;
 	}
@@ -108,10 +110,20 @@ Dwt.disassociateElementFromObject = function (domElement, jsObject){
 	}
 };
 
-Dwt.getObjectFromElement = function (domElement) {
+Dwt.getObjectFromElement =
+function(domElement) {
 	return AjxCore.objectWithId(domElement.dwtObj);
 };
 
+Dwt.setHandler =
+function(htmlElement, event, func) {
+	htmlElement[event] = func;
+};
+
+Dwt.clearHandler =
+function(htmlElement, event) {
+	htmlElement[event] = null;
+};
 
 Dwt.getBackgroundRepeat =
 function(htmlElement) {
@@ -169,16 +181,16 @@ function(htmlElement, x, y) {
 }
 
 Dwt.checkPxVal =
-function(val) {
-	if (val == Dwt.DEFAULT)
-		return false;
-	if (typeof(val) == "number" && val != Dwt.LOC_NOWHERE) {
-//		if (val < 0) {
-//			DBG.println(AjxDebug.DBG1, "negative pixel value: " + val);
-//			val = 0;
-//		}
-		val = val + "px";
+function(val, check) {
+	if (val == Dwt.DEFAULT) return false;
+	
+	if (check && val < 0 && val != Dwt.LOC_NOWHERE) {
+		DBG.println(AjxDebug.DBG1, "negative pixel value: " + val);
+		val = 0;
 	}
+	if (typeof(val) == "number")
+		val = val + "px";
+
 	return val;
 }
 
@@ -239,9 +251,9 @@ function(htmlElement, incScroll) {
 
 Dwt.setSize = 
 function(htmlElement, width, height) {
-	if (width = Dwt.checkPxVal(width))
+	if (width = Dwt.checkPxVal(width, true))
 		htmlElement.style.width = width;
-	if (height = Dwt.checkPxVal(height))
+	if (height = Dwt.checkPxVal(height, true))
 		htmlElement.style.height = height;
 }
 

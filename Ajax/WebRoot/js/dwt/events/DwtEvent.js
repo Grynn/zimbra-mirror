@@ -33,37 +33,53 @@ function() {
 	return "DwtEvent";
 }
 
-DwtEvent.ONDBLCLICK = "ONDBLCLICK";
-DwtEvent.ONMOUSEDOWN = "ONMOUSEDOWN";
-DwtEvent.ONMOUSEUP = "ONMOUSEUP";
-DwtEvent.ONMOUSEMOVE = "ONMOUSEMOVE";
-DwtEvent.ONMOUSEOUT = "ONMOUSEOUT";
-DwtEvent.ONMOUSELEAVE = "ONMOUSELEAVE";
-DwtEvent.ONMOUSEOVER = "ONMOUSEOVER";
-DwtEvent.ONMOUSEENTER = "ONMOUSEENTER";
-DwtEvent.ONSELECTSTART = "ONSELECTSTART";
-DwtEvent.ONCONTEXTMENU = "ONCONTEXTMENU";
-DwtEvent.ONCHANGE = "ONCHANGE";
-DwtEvent.ONFOCUS = "ONFOCUS";
+// native browser events - value is the associated DOM property
+DwtEvent.ONCHANGE		= "onchange";
+DwtEvent.ONCONTEXTMENU	= "oncontextmenu";
+DwtEvent.ONDBLCLICK		= "ondblclick";
+DwtEvent.ONFOCUS		= "onfocus";
+DwtEvent.ONKEYDOWN		= "onkeydown";
+DwtEvent.ONKEYPRESS		= "onkeypress";
+DwtEvent.ONKEYUP		= "onkeyup";
+DwtEvent.ONMOUSEDOWN	= "onmousedown";
+DwtEvent.ONMOUSEENTER	= "onmouseenter"; // IE onmouseover
+DwtEvent.ONMOUSELEAVE	= "onmouseleave"; // IE onmouseout
+DwtEvent.ONMOUSEMOVE	= "onmousemove";
+DwtEvent.ONMOUSEOUT		= "onmouseout";
+DwtEvent.ONMOUSEOVER	= "onmouseover";
+DwtEvent.ONMOUSEUP		= "onmouseup";
+DwtEvent.ONSELECTSTART	= "onselectstart";
 
-DwtEvent.CONTROL = "CONTROL";
-DwtEvent.DISPOSE = "DISPOSE";
-DwtEvent.SELECTION = "SELECTION";
-DwtEvent.ACTION = "ACTION";
-DwtEvent.TREE = "TREE";
-DwtEvent.POPDOWN = "POPDOWN";
-DwtEvent.DATE_RANGE = "DATE_RANGE";
-DwtEvent.STATE_CHANGE = "STATE_CHANGE";
-DwtEvent.TAB = "TAB";
-DwtEvent.ENTER = "ENTER";
-DwtEvent.HOVEROVER = "HOVEROVER";
-DwtEvent.HOVEROUT = "HOVEROUT";
-
+// semantic events
+DwtEvent.ACTION			= "ACTION";			// right-click
 DwtEvent.BUTTON_PRESSED = "BUTTON_PRESSED";
+DwtEvent.CONTROL		= "CONTROL";		// resize
+DwtEvent.DATE_RANGE		= "DATE_RANGE";
+DwtEvent.DISPOSE		= "DISPOSE";		// removal
+DwtEvent.ENTER			= "ENTER";			// enter/return key
+DwtEvent.HOVEROVER		= "HOVEROVER";		// mouseover for X ms
+DwtEvent.HOVEROUT		= "HOVEROUT";
+DwtEvent.POPDOWN		= "POPDOWN";
+DwtEvent.SELECTION		= "SELECTION";		// left-click
+DwtEvent.TREE			= "TREE";
+DwtEvent.STATE_CHANGE	= "STATE_CHANGE";
+DwtEvent.TAB			= "TAB";
 
-DwtEvent.XFORMS_READY = "xforms-ready";
-DwtEvent.XFORMS_DISPLAY_UPDATED = "xforms-display-updated";
-DwtEvent.XFORMS_VALUE_CHANGED = "xforms-value-changed";
-DwtEvent.XFORMS_FORM_DIRTY_CHANGE = "xforms-form-dirty-change";
-DwtEvent.XFORMS_CHOICES_CHANGED = "xforms-choices-changed";
-DwtEvent.XFORMS_VALUE_ERROR = "xforms-value-error";
+// XForms
+DwtEvent.XFORMS_READY				= "xforms-ready";
+DwtEvent.XFORMS_DISPLAY_UPDATED		= "xforms-display-updated";
+DwtEvent.XFORMS_VALUE_CHANGED		= "xforms-value-changed";
+DwtEvent.XFORMS_FORM_DIRTY_CHANGE	= "xforms-form-dirty-change";
+DwtEvent.XFORMS_CHOICES_CHANGED		= "xforms-choices-changed";
+DwtEvent.XFORMS_VALUE_ERROR			= "xforms-value-error";
+
+// Convenience lists
+DwtEvent.KEY_EVENTS = [DwtEvent.ONKEYDOWN, DwtEvent.ONKEYPRESS, DwtEvent.ONKEYUP];
+
+DwtEvent.MOUSE_EVENTS = [DwtEvent.ONCONTEXTMENU, DwtEvent.ONDBLCLICK, DwtEvent.ONMOUSEDOWN,
+						 DwtEvent.ONMOUSEMOVE, DwtEvent.ONMOUSEUP, DwtEvent.ONSELECTSTART];
+if (AjxEnv.isIE) {
+	DwtEvent.MOUSE_EVENTS.push(DwtEvent.ONMOUSEENTER, DwtEvent.ONMOUSELEAVE);
+} else {
+	DwtEvent.MOUSE_EVENTS.push(DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT);
+}
