@@ -287,8 +287,10 @@ function (date, upper) {
 };
 
 AjxDateUtil._getMonthName = 
-function (date) {
-	return AjxDateUtil._fullMonths[date.getMonth()];
+function(date, abbreviated) {
+	return abbreviated
+		? AjxDateUtil._months[date.getMonth()]
+		: AjxDateUtil._fullMonths[date.getMonth()];
 };
 
 AjxDateUtil._getDate = 
@@ -313,15 +315,16 @@ function(date, format) {
 	var s = format;
 	s = s.replace(/%d/g, AjxDateUtil._getDate(date, true));				// zero padded day of the month
 	s = s.replace(/%D/g, AjxDateUtil._getDate(date, false));			// day of the month without padding
-	s = s.replace(/%w/g, AjxDateUtil._getWeekday(date));			// day of the week
+	s = s.replace(/%w/g, AjxDateUtil._getWeekday(date));				// day of the week
 	s = s.replace(/%M/g, AjxDateUtil._getMonthName(date));				// full month name
+	s = s.replace(/%t/g, AjxDateUtil._getMonthName(date, true));		// abbr. month name
 	s = s.replace(/%Y/g, AjxDateUtil._getFullYear(date));				// full year
 	s = s.replace(/%h/g, AjxDateUtil._getHoursStr(date, false, false));	// non-padded hours
 	s = s.replace(/%H/g, AjxDateUtil._getHoursStr(date, true, false ));	// padded hours
 	s = s.replace(/%m/g, AjxDateUtil._getMinutesStr(date));				// padded minutes
 	s = s.replace(/%s/g, AjxDateUtil._getSecondsStr(date));				// padded seconds
 	s = s.replace(/%P/g, AjxDateUtil._getAMPM(date, true));				// upper case AM PM
-	s = s.replace(/%p/g, AjxDateUtil._getAMPM(date, false));				// lower case AM PM
+	s = s.replace(/%p/g, AjxDateUtil._getAMPM(date, false));			// lower case AM PM
 	return s;
 };
 

@@ -32,22 +32,30 @@
 * @author Ross Dargahi
 * @author Roland Schemers
 *
-* @param parent 	Parent object
-* @param className	This instances class name defaults to DwtCalendar
-* @param posStyle	Positioning style defaults to DwtControl.STATIC_STYLE
+* @param parent 		Parent object
+* @param className		This instances class name defaults to DwtCalendar
+* @param posStyle		Positioning style defaults to DwtControl.STATIC_STYLE
 * @param firstDayOfWeek	The first day of the week. Defaults to DwtCalendar.SUN
-* @param forceRollOver If true, then clicking on (or setting) the widget to a date that is not part of the 
-*		current month (i.e. one of the grey prev or next month days) will result in the widget rolling 
-*		the date to that month. Default is true
-* @param workingDaysArray	An array specifying the working days. This array assume index 0 - Sunday etc.
-*	Defaults to Mon-Fri being working days
+* @param forceRollOver 	If true, then clicking on (or setting) the widget to a 
+						date that is not part of the current month (i.e. one of 
+						the grey prev or next month days) will result in the 
+						widget rolling 	the date to that month. Default is true
+* @param workingDaysArray	An array specifying the working days. This array 
+						assume index 0 - Sunday etc. Defaults to Mon-Fri being 
+						working days
+* @param hidePrevNextMo Flag indicating whether widget should hide days of the 
+						previous/next month
+* @param readOnly 		Flag indicating this widget is read-only (should not 
+						process events, i.e. mouse clicks)
 */
-function DwtCalendar(parent, className, posStyle, firstDayOfWeek, forceRollOver, workingDaysArray) {
+function DwtCalendar(parent, className, posStyle, firstDayOfWeek, forceRollOver, workingDaysArray, hidePrevNextMo, readOnly) {
 
 	if (arguments.length == 0) return;
 	className = className || "DwtCalendar";
 	DwtComposite.call(this, parent, className, posStyle);
 
+	this._hidePrevNextMo = hidePrevNextMo;
+	this._readOnly = readOnly;
 	this._uuid = Dwt.getNextId();
 	var cn = this._origDayClassName = className + "Day";
 	this._todayClassName = " " + className + "Day-today";
@@ -57,8 +65,8 @@ function DwtCalendar(parent, className, posStyle, firstDayOfWeek, forceRollOver,
 	this._hiliteClassName = " " + cn + "-hilited";
 	this._greyClassName = " " + cn + "-grey"
 	
-	// should normally only do this if we have listeners?
-	this._installListeners();
+	if (!this._readOnly)
+		this._installListeners();
 	this.setCursor("default");
 	
 	this._selectionMode = DwtCalendar.DAY;
@@ -199,7 +207,7 @@ function(date, skipNotify, forceRollOver, dblClick) {
 			newDate.setHours(this._date.getHours(), this._date.getMinutes(), this._date.getSeconds(), 0);
 		}
 		this._date = newDate;
-		if (!layout) {
+		if (!layout && !this._readOnly) {
 			this._setSelectedDate();
 			this._setToday();
 		}
@@ -429,25 +437,27 @@ function() {
 	this._selectedDayElId = null;
 		
 	// Figure out how many days from the previous month we have to fill in (see comment below)
-    if (month != 0) {
-    	var lastMoDay = this._getDaysInMonth(month - 1, year) - this._weekDays[firstDay] + 1;
-    	var lastMoYear = year;
-    	var lastMoMonth = month - 1;
-    	if (month != 11) {
-     		var nextMoMonth = month + 1;
-    		var nextMoYear = year;
-    	} else {
-      		var nextMoMonth = 0;
-    		var nextMoYear = year + 1;
-    	}
-     } else {
-     	var lastMoDay = this._getDaysInMonth(11, year - 1) - this._weekDays[firstDay] + 1;
-     	var lastMoYear = year - 1;
-     	var lastMoMonth = 11
-     	var nextMoMonth = 1;
-     	var nextMoYear = year;
-    }
-	  
+	if (!this._hidePrevNextMo) {
+	    if (month != 0) {
+	    	var lastMoDay = this._getDaysInMonth(month - 1, year) - this._weekDays[firstDay] + 1;
+	    	var lastMoYear = year;
+	    	var lastMoMonth = month - 1;
+	    	if (month != 11) {
+	     		var nextMoMonth = month + 1;
+	    		var nextMoYear = year;
+	    	} else {
+	      		var nextMoMonth = 0;
+	    		var nextMoYear = year + 1;
+	    	}
+	     } else {
+	     	var lastMoDay = this._getDaysInMonth(11, year - 1) - this._weekDays[firstDay] + 1;
+	     	var lastMoYear = year - 1;
+	     	var lastMoMonth = 11
+	     	var nextMoMonth = 1;
+	     	var nextMoYear = year;
+	    }
+	}
+
 	for (var i = 0; i < 6; i++) {
     	for (var j = 0; j < 7; j++) {
  	   		var dayCell = Dwt.getDomObj(doc, this._getDayCellId(i * 7 + j));
@@ -467,16 +477,24 @@ function() {
      				dayCell.innerHTML = day++;
     				//dayCell.className = this._origDayClassName;
     				dayCell._dayType = DwtCalendar._THIS_MONTH;
+    				if (this._readOnly) {
+    					dayCell.style.fontFamily = "Arial";
+    					dayCell.style.fontSize = "10px";
+    				}
     			} else {
-    				this._date2CellId[(lastMoYear * 10000) + (lastMoMonth * 100) + lastMoDay] = dayCell.id;
-    				dayCell._day = lastMoDay;
-    				dayCell._month = lastMoMonth
-    			 	dayCell._year = lastMoYear;
-					dayCell.innerHTML = lastMoDay++;
-					//dayCell.className = this._origDayClassName + " " + this._greyClassName;
-					dayCell._dayType = DwtCalendar._PREV_MONTH;		
+    				if (this._hidePrevNextMo) {
+    					dayCell.innerHTML = "";
+    				} else {
+	    				this._date2CellId[(lastMoYear * 10000) + (lastMoMonth * 100) + lastMoDay] = dayCell.id;
+	    				dayCell._day = lastMoDay;
+	    				dayCell._month = lastMoMonth
+	    			 	dayCell._year = lastMoYear;
+						dayCell.innerHTML = lastMoDay++;
+						//dayCell.className = this._origDayClassName + " " + this._greyClassName;
+						dayCell._dayType = DwtCalendar._PREV_MONTH;		
+					}
 				}
-			} else {
+			} else if (!this._hidePrevNextMo) {
 				/* Fill any remaining slots with days from next month */
     			this._date2CellId[(nextMoYear * 10000) + (nextMoMonth * 100) + nextMoDay] = dayCell.id;
     			dayCell._day = nextMoDay;
@@ -494,8 +512,10 @@ function() {
 	
 	// Compute the currently selected day
 	//this._selectedDayElId = null;
-	this._setSelectedDate();
-	this._setToday();
+	if (!this._readOnly) {
+		this._setSelectedDate();
+		this._setToday();
+	}
 	
 	this._setRange();
 }
@@ -652,39 +672,39 @@ function() {
 	html[idx++] = 		"<tr><td class=DwtCalendarTitlebar>"; 
 	html[idx++] = 			"<table width='100%' cellspacing='0' cellpadding='0'>";
 	html[idx++] = 				"<tr>";
-    html[idx++] = 	             	"<td class='";
-    html[idx++] = 	             		DwtCalendar._BUTTON_CLASS;
-    html[idx++] = 	             		"' id='b:py:";
-    html[idx++] = 	             		this._uuid;
-    html[idx++] = 					    "'>";
-    html[idx++] = 					    AjxImg.getImageHtml("FastRevArrowSmall", null, ["id='b:py:img:", this._uuid, "'"].join(""));
-    html[idx++] = 					"</td>"
-    html[idx++] = 	             	"<td class='";
-    html[idx++] = 	             		DwtCalendar._BUTTON_CLASS;
-    html[idx++] = 	             		"' id='b:pm:";
-    html[idx++] = 						this._uuid;
-    html[idx++] = 						"'>";
-    html[idx++] = 					    AjxImg.getImageHtml("RevArrowSmall", null, ["id='b:pm:img:", this._uuid, "'"].join(""));
-    html[idx++] =					"</td>";
+	html[idx++] = 	             	"<td class='";
+	html[idx++] = 	             		DwtCalendar._BUTTON_CLASS;
+	html[idx++] = 	             		"' id='b:py:";
+	html[idx++] = 	             		this._uuid;
+	html[idx++] = 					    "'>";
+	html[idx++] = 					    AjxImg.getImageHtml("FastRevArrowSmall", null, ["id='b:py:img:", this._uuid, "'"].join(""));
+	html[idx++] = 					"</td>"
+	html[idx++] = 	             	"<td class='";
+	html[idx++] = 	             		DwtCalendar._BUTTON_CLASS;
+	html[idx++] = 	             		"' id='b:pm:";
+	html[idx++] = 						this._uuid;
+	html[idx++] = 						"'>";
+	html[idx++] = 					    AjxImg.getImageHtml("RevArrowSmall", null, ["id='b:pm:img:", this._uuid, "'"].join(""));
+	html[idx++] =					"</td>";
 	html[idx++] = 					"<td align='center' class='DwtCalendarTitleCell' nowrap'><span class='"
 	html[idx++] =                       DwtCalendar._TITLE_CLASS;
 	html[idx++] = 					    "' id='";
 	html[idx++] =						this._monthCell;
 	html[idx++] =					"'>&nbsp;</span></td>";	              
-    html[idx++] = 	             	"<td class='";
-    html[idx++] = 	             		DwtCalendar._BUTTON_CLASS;
-    html[idx++] = 	             		"' id='b:nm:";
-    html[idx++] =						this._uuid;
-    html[idx++] =						"'>";
-    html[idx++] = 					    AjxImg.getImageHtml("FwdArrowSmall", null, ["id='b:nm:img:", this._uuid, "'"].join(""));
+	html[idx++] = 	             	"<td class='";
+	html[idx++] = 	             		DwtCalendar._BUTTON_CLASS;
+	html[idx++] = 	             		"' id='b:nm:";
+	html[idx++] =						this._uuid;
+	html[idx++] =						"'>";
+	html[idx++] = 					    AjxImg.getImageHtml("FwdArrowSmall", null, ["id='b:nm:img:", this._uuid, "'"].join(""));
 	html[idx++] =					"</td>";
-    html[idx++] = 	             	"<td class='";
-    html[idx++] = 	             		DwtCalendar._BUTTON_CLASS;
-    html[idx++] = 	             		"' id='b:ny:";
-    html[idx++] =						this._uuid;
-    html[idx++] =						"'>";
-    html[idx++] = 					    AjxImg.getImageHtml("FastFwdArrowSmall", null, ["id='b:ny:img:", this._uuid, "'"].join(""));
-    html[idx++] =					"</td>";
+	html[idx++] = 	             	"<td class='";
+	html[idx++] = 	             		DwtCalendar._BUTTON_CLASS;
+	html[idx++] = 	             		"' id='b:ny:";
+	html[idx++] =						this._uuid;
+	html[idx++] =						"'>";
+	html[idx++] = 					    AjxImg.getImageHtml("FastFwdArrowSmall", null, ["id='b:ny:img:", this._uuid, "'"].join(""));
+	html[idx++] =					"</td>";
  	html[idx++] = 				"</tr>";
 	html[idx++] = 			"</table>";
 	html[idx++] = 		"</td></tr>";
@@ -720,12 +740,14 @@ function() {
     html[idx++] = "</td></tr></table></table>";
     
     this.getHtmlElement().innerHTML = html.join("");
-    var doc = this.getDocument();
-    Dwt.getDomObj(doc, "b:py:img:" + this._uuid)._origClassName = AjxImg.getClassForImage("FastRevArrowSmall");
-    Dwt.getDomObj(doc, "b:pm:img:" + this._uuid)._origClassName = AjxImg.getClassForImage("RevArrowSmall");
-    Dwt.getDomObj(doc, "b:nm:img:" + this._uuid)._origClassName = AjxImg.getClassForImage("FwdArrowSmall");
-    Dwt.getDomObj(doc, "b:ny:img:" + this._uuid)._origClassName = AjxImg.getClassForImage("FastFwdArrowSmall");
-    
+    if (!this._readOnly) {
+	    var doc = this.getDocument();
+	    Dwt.getDomObj(doc, "b:py:img:" + this._uuid)._origClassName = AjxImg.getClassForImage("FastRevArrowSmall");
+	    Dwt.getDomObj(doc, "b:pm:img:" + this._uuid)._origClassName = AjxImg.getClassForImage("RevArrowSmall");
+	    Dwt.getDomObj(doc, "b:nm:img:" + this._uuid)._origClassName = AjxImg.getClassForImage("FwdArrowSmall");
+	    Dwt.getDomObj(doc, "b:ny:img:" + this._uuid)._origClassName = AjxImg.getClassForImage("FastFwdArrowSmall");
+    }
+
     this._calWidgetInited = true;
 }
 
