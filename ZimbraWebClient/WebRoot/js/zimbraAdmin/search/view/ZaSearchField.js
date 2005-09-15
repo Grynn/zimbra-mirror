@@ -26,7 +26,8 @@
 function ZaSearchField(parent, className, size, posStyle) {
 
 	DwtComposite.call(this, parent, className, posStyle);
-
+	this._containedObject = new ZaSearch();
+/*
 	size = (size == null) ? 16 : size;
 	this._setMouseEventHdlrs(true);
 	var fieldId = Dwt.getNextId();
@@ -48,6 +49,9 @@ function ZaSearchField(parent, className, size, posStyle) {
     this._searchButton.addSelectionListener(new AjxListener(this, ZaSearchField.prototype._invokeCallback));
     this._changed = false;
     Dwt.getDomObj(doc, buttonColId).appendChild(this._searchButton.getHtmlElement());
+*/
+	this._initForm(ZaSearch.myXModel,this._getMyXForm());
+	this._localXForm.setInstance(this._containedObject);
 }
 
 ZaSearchField.prototype = new DwtComposite;
@@ -66,6 +70,12 @@ function(callbackFunc, obj) {
 	this._callbackObj = obj;
 }
 
+ZaSearchField.prototype.setObject = 
+function (searchObj) {
+	this._containedObject = searchObj;
+	this._localXForm.setInstance(this._containedObject);
+}
+/*
 ZaSearchField.prototype.focus =
 function() {
 	this._searchField.focus();
@@ -86,36 +96,8 @@ ZaSearchField.prototype.getValue =
 function() {
 	return this._searchField.value;
 }
-
-/*
-ZaSearchField.prototype.setFieldChanged =
-function(changed) {
-	if (this._changed != changed) {
-		this._changed = changed;
-		//this._searchButton.setActivated(changed);
-		if (changed)
-			this._searchButton.setImage("SearchGray");
-		else	
-			this._searchButton.setImage("Search");
-	}
-}
 */
-
 /*
-ZaSearchField.prototype._createHtml =
-function(size, fieldId, buttonColId) {
-	return "<table cellpadding='0' cellspacing='0' border='0' style='padding:2px;'>" +
-		"<tr valign='middle'>" +
-			"<td valign='middle' nowrap>" +
-			AjxImg.getImageHtml("AppBanner") +
-			"</td>" +
-			"<td valign='middle' nowrap><input type='text' nowrap size='" + size + "' id='" + fieldId + "' class='Field'/></td>" + 
-			"<td valign='middle' style='padding-left:2px;padding-right:2px;' id='" + buttonColId + "'></td>" +
-		"</tr>" + 
-	"</table>";
-}*/
-
-
 ZaSearchField.prototype._createHtml =
 function(size, fieldId, buttonColId,filterAccountsId,filterAliasesId, filterDLId) {
 	return "<table cellpadding='0' cellspacing='0' border='0' style='padding:2px;'>" +
@@ -128,23 +110,36 @@ function(size, fieldId, buttonColId,filterAccountsId,filterAliasesId, filterDLId
 		"</tr>" + 
 	"</table>";
 }
-
-ZaSearchField.prototype._invokeCallback =
-function(evt) {
-//	if (this._searchField.value.search(ZaSearchField.UNICODE_CHAR_		return;
+*/
+ZaSearchField.prototype.invokeCallback =
+function() {
+//	if (this._searchField.value.search(ZaSearchField.UNICODE_CHAR_		return;\
+	var objList = new Array();
+	if(this._containedObject[ZaSearch.A_fAccounts] == "TRUE") {
+		objList.push(ZaSearch.ACCOUNTS);
+	}
+	if(this._containedObject[ZaSearch.A_fAliases] == "TRUE") {
+		objList.push(ZaSearch.ALIASES);
+	}
+	if(this._containedObject[ZaSearch.A_fdistributionlists] == "TRUE") {
+		objList.push(ZaSearch.DLS);
+	}
+	var  searchQueryHolder = new ZaSearchQuery(ZaSearch.getSearchByNameQuery(this._containedObject[ZaSearch.A_query]), objList, false, "");
 	if (this._callbackFunc != null) {
 		if (this._callbackObj != null)
-			this._callbackFunc.call(this._callbackObj, this, this._searchField.value);
+			this._callbackFunc.call(this._callbackObj, this, searchQueryHolder);
 		else 
-			this._callbackFunc(this, this._searchField.value);
+			this._callbackFunc(this, searchQueryHolder);
 	}
 }
 
-ZaSearchField.prototype._addChild =
-function(child) {
-    this._children.add(child);
+ZaSearchField.srchButtonHndlr = 
+function(evt) {
+	var fieldObj = this.getForm().parent;
+	fieldObj.invokeCallback(evt);
 }
 
+/*
 ZaSearchField._keyPressHdlr =
 function(ev) {
     var obj = DwtUiEvent.getDwtObjFromEvent(ev);
@@ -156,5 +151,43 @@ function(ev) {
 	}
 	return true;
 }
+*/
 
+ZaSearchField.prototype._getMyXForm = function() {	
+	var xFormObject = {
+		tableCssStyle:"width:100%;",numCols:10,
+		items: [
+			{type:_TEXTFIELD_, ref:ZaSearch.A_query, width:"250px", label:null, 
+				elementChanged: function(elementValue,instanceValue, event) {
+					var charCode = event.charCode;
+					if (charCode == 13 || charCode == 3) {
+					   this.getForm().parent.invokeCallback();
+					} else {
+						this.getForm().itemChanged(this, elementValue, event);
+					}
+				}
+			},
+			{type:_DWT_BUTTON_, label:ZaMsg.search, toolTipContent:ZaMsg.searchForAccounts, icon:"Search", onActivate:ZaSearchField.srchButtonHndlr},
+			{type:_OUTPUT_, value:ZaMsg.Filter+":", label:null},
+			{type:_CHECKBOX_, ref:ZaSearch.A_fAccounts,label:ZaMsg.Filter_Accounts, labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"},					
+			{type:_CHECKBOX_, ref:ZaSearch.A_fAliases,label:ZaMsg.Filter_Aliases, labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"},
+			{type:_CHECKBOX_, ref:ZaSearch.A_fdistributionlists,label:ZaMsg.Filter_DLs, labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"}
+		]
+	};
+	return xFormObject;
+};
 
+/**
+* @param xModelMetaData - XModel metadata that describes data model
+* @param xFormMetaData - XForm metadata that describes the form
+**/
+ZaSearchField.prototype._initForm = 
+function (xModelMetaData, xFormMetaData) {
+	if(xModelMetaData == null || xFormMetaData == null)
+		throw new AjxException("Metadata for XForm and/or XModel are not defined", AjxException.INVALID_PARAM, "DwtXWizardDialog.prototype._initForm");
+
+	this._localXModel = new XModel(xModelMetaData);
+	this._localXForm = new XForm(xFormMetaData, this._localXModel, null, this);
+	this._localXForm.draw();
+	this._drawn = true;
+}

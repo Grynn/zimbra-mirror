@@ -218,18 +218,26 @@ function () {
 }
 
 ZaAccountListController.prototype.search =
-function(searchString, sortBy, offset, limit) {
-
-	// if the search string starts with "$set:" then it is a command to the client 
-	if (searchString.indexOf("$set:") == 0) {
-		this._appCtxt.getClientCmdHdlr().execute((searchString.substr(5)).split(" "));
-		return;
-	}
-	
-	this._searchField.setValue(searchString);
-	this._currentSearch = searchString;
-	this._searchField.setEnabled(false);
-	this._schedule(this._doSearch, {sortBy: sortBy, offset: offset, limit: limit});
+function(searchQuery, sortBy, offset, limit) {
+	try {
+		// if the search string starts with "$set:" then it is a command to the client 
+		if (searchQuery.queryString.indexOf("$set:") == 0) {
+			this._appCtxt.getClientCmdHdlr().execute((searchString.substr(5)).split(" "));
+			return;
+		}
+		
+		//this._searchField.setObject(searchString);
+		this.setQuery(searchQuery);
+		this.show(ZaSearch.searchByQueryHolder(searchQuery, this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app));	
+	} catch (ex) {
+		// Only restart on error if we are not initialized and it isn't a parse error
+		if (ex.code != ZmCsfeException.MAIL_QUERY_PARSE_ERROR) {
+			this._handleException(ex, "ZaAccountListController.prototype.search", null, (this._inited) ? false : true);
+		} else {
+			this.popupMsgDialog(ZaMsg.queryParseError, ex);
+			this._searchField.setEnabled(true);	
+		}
+	}	
 }
 
 /**
@@ -244,19 +252,19 @@ function(listener) {
 /*********** Search Field Callback */
 
 ZaAccountListController.prototype._searchFieldCallback =
-function(searchField, queryString) {
-	this.search(queryString);
+function(searchField, searchQuery) {
+	this.search(searchQuery);
 }
 
+/*
 ZaAccountListController.prototype._doSearch =
 function(params) {
-DBG.dumpObj(params);
 	try {
 		this._searchField.setEnabled(true);	
 		//
 		var szQuery = ZaSearch.getSearchByNameQuery(this._currentSearch);
 		this.setPageNum(1);					
-		this.show(ZaSearch.search(szQuery, [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS], "1", ZaAccount.A_uid, true, this._app));
+
 		var curQuery = new ZaSearchQuery(szQuery, [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS], false, "");							
 		this.setQuery(curQuery);	
 	} catch (ex) {
@@ -269,7 +277,7 @@ DBG.dumpObj(params);
 		}
 	}
 }
-
+*/
 
 /**
 *	Private method that notifies listeners to that the controlled ZaAccount is (are) removed

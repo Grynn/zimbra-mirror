@@ -30,11 +30,20 @@
 * @author Greg Solovyev
 **/
 function ZaSearch() {
+	this[ZaSearch.A_query] = "";
+	this[ZaSearch.A_fAliases] = "TRUE";
+	this[ZaSearch.A_fAccounts] = "TRUE";	
+	this[ZaSearch.A_fdistributionlists] = "TRUE";		
 }
 
 ZaSearch.ALIASES = "aliases";
 ZaSearch.DLS = "distributionlists";
 ZaSearch.ACCOUNTS = "accounts";
+
+ZaSearch.A_query = "query";
+ZaSearch.A_fAliases = "f_aliases";
+ZaSearch.A_fAccounts = "f_accounts";
+ZaSearch.A_fdistributionlists = "f_distributionlists";
 
 /**
 * @param app reference to ZaApp
@@ -126,9 +135,17 @@ function (queryHolder, pagenum, orderby, isascending, app) {
 	}
 }
 
+ZaSearch.myXModel = {
+	items: [
+		{id:ZaSearch.A_query, type:_STRING_},
+		{id:ZaSearch.A_fAliases, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
+		{id:ZaSearch.A_fdistributionlists, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
+		{id:ZaSearch.A_fAccounts, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES}
+	]
+}
 
 function ZaSearchQuery (queryString, types, byDomain, byVal) {
-	this.query = queryString;
+	this.queryString = queryString;
 	this.isByDomain = byDomain;
 	this.byValAttr = byVal;
 	this.types = types;

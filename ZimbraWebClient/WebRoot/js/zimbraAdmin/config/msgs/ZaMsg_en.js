@@ -26,7 +26,7 @@
 function ZaMsg() {
 }
 
-ZaMsg.STBM_SEARCHFOR_Account = "Account";
+
 ZaMsg.Of = "of";
 ZaMsg.Unlimited = "unlimited";
 
@@ -615,6 +615,9 @@ ZaMsg.STANDALONE = "Standalone";
 ZaMsg.MASTER = "Master";
 ZaMsg.SLAVE = "Slave";
 ZaMsg.Filter = "Filter";
+ZaMsg.Filter_Aliases = "Aliases";
+ZaMsg.Filter_Accounts = "Accounts";
+ZaMsg.Filter_DLs = "Distribution Lists";
 
 ZaMsg.adminGuide = "Admin Guide";
 ZaMsg.help = "Help";
