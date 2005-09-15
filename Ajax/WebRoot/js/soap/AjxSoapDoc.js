@@ -123,13 +123,13 @@ function(name, value){
  */
 AjxSoapDoc.prototype.set = function(name, value, parent) {
 	var doc = this.getDoc(), p = doc.createElement(name);
-	if (value == null)
-		value = "";
-	if (typeof value == "object")
-		for (i in value)
-			this.set(i, value[i], p);
-	else
-		p.appendChild(doc.createTextNode(value));
+	if (value != null) {
+		if (typeof value == "object")
+			for (i in value)
+				this.set(i, value[i], p);
+		else
+			p.appendChild(doc.createTextNode(value));
+	}
 	if (!parent)
 		parent = this._methodEl;
 	return parent.appendChild(p);
