@@ -553,7 +553,9 @@ XFormItem.prototype.handleKeyUp = function (ev, domItem) {
 		XForm.keyPressDelayHdlr = null;
 	}
 	var form = this.getForm();
-	ev = ev ? ev : window.event;
+	var evt = new DwtKeyEvent();
+	evt.setFromDhtmlEvent(ev);
+//	ev = ev ? ev : window.event;
 	var key = DwtKeyEvent.getCharCode(ev);
 	if (key == DwtKeyEvent.KEY_TAB) {
 		DwtUiEvent.setBehaviour(ev, true, false);
@@ -562,7 +564,7 @@ XFormItem.prototype.handleKeyUp = function (ev, domItem) {
 	var action = new AjxTimedAction();
 	action.obj = this;
 	action.method = this.handleKeyPressDelay;
-	action.params.add(ev);
+	action.params.add(evt);
 	action.params.add(domItem);
 	//XForm.keyPressDelayHdlr = setTimeout(XForm.handleKeyPressDelay, 250, item, ev, formItem);
 	this.keyPressDelayHdlr = AjxTimedAction.scheduleAction(action, 500);
@@ -3175,6 +3177,7 @@ Dwt_Button_XFormItem.prototype.constructWidget = function () {
 	var widget = new DwtButton(this.getForm(), this.getCssClass());
 	var height = this.getHeight();
 	var width = this.getWidth();
+	
 	var el = null;
 	if (width != null || height != null){
 		el = widget.getHtmlElement();
@@ -3196,6 +3199,17 @@ Dwt_Button_XFormItem.prototype.constructWidget = function () {
 			}
 		}
 	}
+	
+	var icon = this.getInheritedProperty("icon");
+	if(icon != null) {
+		widget.setImage(icon);
+	}
+	
+	var toolTipContent = this.getInheritedProperty("toolTipContent");
+	if(toolTipContent != null) {
+		widget.setToolTipContent(toolTipContent);
+	}
+	
 	widget.setText(this.getLabel());
 
 	var onActivateMethod = this.getOnActivateMethod();
