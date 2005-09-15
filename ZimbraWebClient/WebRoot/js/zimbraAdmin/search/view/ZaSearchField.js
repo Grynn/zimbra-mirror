@@ -27,29 +27,6 @@ function ZaSearchField(parent, className, size, posStyle) {
 
 	DwtComposite.call(this, parent, className, posStyle);
 	this._containedObject = new ZaSearch();
-/*
-	size = (size == null) ? 16 : size;
-	this._setMouseEventHdlrs(true);
-	var fieldId = Dwt.getNextId();
-	var filterDLId = Dwt.getNextId();	
-	var filterAliasesId = Dwt.getNextId();		
-	var filterAccountsId = Dwt.getNextId();			
-	var buttonColId = Dwt.getNextId();
-
-	var doc = this.getDocument();
-	this.getHtmlElement().innerHTML = this._createHtml(size, fieldId, buttonColId,filterAccountsId,filterAliasesId, filterDLId); 
-	this._searchField = Dwt.getDomObj(doc, fieldId);
-	this._searchField.onkeypress = ZaSearchField._keyPressHdlr;
-	
-	this._searchButton = new DwtButton(this, null, "DwtButton");
-	this._searchButton.setToolTipContent(ZaMsg.searchForAccounts);
-    this._searchButton.setImage("Search");
-    this._searchButton.setText(ZaMsg.search);
-    this._searchButton.setData("me", this);
-    this._searchButton.addSelectionListener(new AjxListener(this, ZaSearchField.prototype._invokeCallback));
-    this._changed = false;
-    Dwt.getDomObj(doc, buttonColId).appendChild(this._searchButton.getHtmlElement());
-*/
 	this._initForm(ZaSearch.myXModel,this._getMyXForm());
 	this._localXForm.setInstance(this._containedObject);
 }
@@ -75,28 +52,12 @@ function (searchObj) {
 	this._containedObject = searchObj;
 	this._localXForm.setInstance(this._containedObject);
 }
-/*
-ZaSearchField.prototype.focus =
+
+ZaSearchField.prototype.getObject = 
 function() {
-	this._searchField.focus();
+	return this._containedObject;
 }
 
-ZaSearchField.prototype.setEnabled =
-function(enable) {
-	this._searchField.disabled = !enable;
-	this._searchButton.setEnabled(enable);
-}
-
-ZaSearchField.prototype.setValue =
-function(value) {
-	this._searchField.value = value;
-}
-
-ZaSearchField.prototype.getValue =
-function() {
-	return this._searchField.value;
-}
-*/
 /*
 ZaSearchField.prototype._createHtml =
 function(size, fieldId, buttonColId,filterAccountsId,filterAliasesId, filterDLId) {
@@ -139,25 +100,11 @@ function(evt) {
 	fieldObj.invokeCallback(evt);
 }
 
-/*
-ZaSearchField._keyPressHdlr =
-function(ev) {
-    var obj = DwtUiEvent.getDwtObjFromEvent(ev);
-    obj.setFieldChanged(true);
-	var charCode = DwtKeyEvent.getCharCode(ev);
-	if (charCode == 13 || charCode == 3) {
-	    obj._invokeCallback();
-	    return false;
-	}
-	return true;
-}
-*/
-
 ZaSearchField.prototype._getMyXForm = function() {	
 	var xFormObject = {
-		tableCssStyle:"width:100%;",numCols:10,
+		tableCssStyle:"width:100%;padding:2px;",numCols:10,
 		items: [
-			{type:_TEXTFIELD_, ref:ZaSearch.A_query, width:"250px", label:null, 
+			{type:_TEXTFIELD_, ref:ZaSearch.A_query, width:"250px",containerCssStyle:"padding-left:2px;padding-right:2px;", label:null, 
 				elementChanged: function(elementValue,instanceValue, event) {
 					var charCode = event.charCode;
 					if (charCode == 13 || charCode == 3) {

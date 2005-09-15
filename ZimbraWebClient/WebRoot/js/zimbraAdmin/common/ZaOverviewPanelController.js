@@ -236,6 +236,29 @@ function() {
 	tree.setSelection(this._statusTi, true);
 }
 
+
+ZaOverviewPanelController.prototype._getCurrentQueryHolder = 
+function () {
+	var srchField = this._app.getAccountListController()._searchField;
+	var curQuery = new ZaSearchQuery("", [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS], false, "");							
+	if(srchField) {
+		var obj = srchField.getObject();
+		if(obj) {
+			curQuery.types = new Array();
+			if(obj[ZaSearch.A_fAliases]=="TRUE") {
+				curQuery.types.push(ZaSearch.ALIASES);
+			}
+			if(obj[ZaSearch.A_fdistributionlists]=="TRUE") {
+				curQuery.types.push(ZaSearch.DLS);
+			}			
+			if(obj[ZaSearch.A_fAccounts]=="TRUE") {
+				curQuery.types.push(ZaSearch.ACCOUNTS);
+			}			
+		}
+	}
+	return curQuery;
+}
+
 ZaOverviewPanelController.prototype._overviewTreeListener =
 function(ev) {
 
@@ -254,15 +277,18 @@ function(ev) {
 						}
 						break;
 					case ZaOverviewPanelController._ACCOUNTS:
-
+//						var queryHldr = this._app.getAccountListController().getQuery();
+						var queryHldr = this._getCurrentQueryHolder();
+						queryHldr.isByDomain = false;
+						queryHldr.byValAttr = false;
+						queryHldr.queryString = "";
 						this._app.getAccountListController().setPageNum(1);					
 						if(this._app.getCurrentController()) {
-							this._app.getCurrentController().switchToNextView(this._app.getAccountListController(), ZaAccountListController.prototype.show,ZaSearch.getAll(this._app));
+							this._app.getCurrentController().switchToNextView(this._app.getAccountListController(), ZaAccountListController.prototype.show,ZaSearch.searchByQueryHolder(queryHldr,this._app.getAccountListController().getPageNum(), ZaAccount.A_uid, null,this._app));
 						} else {					
-							this._app.getAccountListController().show(ZaSearch.getAll(this._app));
+							this._app.getAccountListController().show(ZaSearch.searchByQueryHolder(queryHldr,1, ZaAccount.A_uid, null,this._app));
 						}
-						var curQuery = new ZaSearchQuery("", [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS], false, "");							
-						this._app.getAccountListController().setQuery(curQuery);	
+						this._app.getAccountListController().setQuery(queryHldr);	
 						break;					
 					case ZaOverviewPanelController._DOMAINS:
 
@@ -307,16 +333,19 @@ function(ev) {
 						}
 						break;		
 					case ZaOverviewPanelController._ACCOUNTS_SUB_TREE:
-
 						this.setCurrentDomain(ev.item.getData(ZaOverviewPanelController._OBJ_ID));
+//						var queryHldr = this._app.getAccountListController().getQuery();
+						var queryHldr = this._getCurrentQueryHolder();
+						queryHldr.isByDomain = true;
+						queryHldr.byValAttr = this._currentDomain;
+						queryHldr.queryString = "";
 						this._app.getAccountListController().setPageNum(1);	
 						if(this._app.getCurrentController()) {
-							this._app.getCurrentController().switchToNextView(this._app.getAccountListController(), ZaAccountListController.prototype.show,ZaSearch.searchByDomain(this._currentDomain, [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS], 1, ZaAccount.A_uid, true, this._app));
+							this._app.getCurrentController().switchToNextView(this._app.getAccountListController(), ZaAccountListController.prototype.show,ZaSearch.searchByQueryHolder(queryHldr,1, ZaAccount.A_uid, null,this._app));
 						} else {					
-							this._app.getAccountListController().show(ZaSearch.searchByDomain(this._currentDomain,[ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS], 1, ZaAccount.A_uid, true, this._app));
+							this._app.getAccountListController().show(ZaSearch.searchByQueryHolder(queryHldr,1, ZaAccount.A_uid, null,this._app));
 						}
-						var curQuery = new ZaSearchQuery("",[ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS], true,this._currentDomain);							
-						this._app.getAccountListController().setQuery(curQuery);
+						this._app.getAccountListController().setQuery(queryHldr);
 						break;		
 					case ZaOverviewPanelController._STATISTICS_SUB_TREE:
 
