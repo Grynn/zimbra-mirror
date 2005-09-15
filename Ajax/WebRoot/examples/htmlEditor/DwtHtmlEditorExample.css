@@ -174,17 +174,17 @@ DIV.vSpace {
 	border: 1px solid rgb(198, 197, 215);
 }
 .TBButton-activated {
-	background-image:url(/ajax/examples/common/img/hiRes/dwt/ButtonUp__BG.gif);
+	background-image:url(/ajax/examples/common/img/hiRes/dwt/ButtonUp__H.gif);
 	border: 1px solid;
 	border-color: #E0E0E0 #555555 #555555 #E0E0E0;
 }
 .TBButton-triggered {
-	background-image:url(/ajax/examples/common/img/hiRes/dwt/ButtonDown__BG.gif);
+	background-image:url(/ajax/examples/common/img/hiRes/dwt/ButtonDown__H.gif);
 	border:1px solid;
 	border-color: #555555 #E0E0E0 #E0E0E0 #555555;
 }
 .TBButton-toggled {
-	background-image:url(/ajax/examples/common/img/hiRes/dwt/ButtonDown__BG.gif);
+	background-image:url(/ajax/examples/common/img/hiRes/dwt/ButtonDown__H.gif);
 	border:1px solid;
 	border-color: #555555 #E0E0E0 #E0E0E0 #555555;
 }
@@ -269,7 +269,7 @@ DIV.vSpace {
 	cursor: default;
 	overflow:hidden;
 	height:20px;
-	background-image:url(/ajax/examples/common/img/hiRes/dwt/ButtonUp__BG.gif);
+	background-image:url(/ajax/examples/common/img/hiRes/dwt/ButtonUp__H.gif);
 	border: 1px solid;
 	border-color: #E0E0E0 #555555 #555555 #E0E0E0;
 	min-width:40px;
@@ -279,7 +279,7 @@ DIV.vSpace {
 	cursor: default;
 	overflow:hidden;
 	height:20px;
-	background-image:url(/ajax/examples/common/img/hiRes/dwt/ButtonDown__BG.gif);
+	background-image:url(/ajax/examples/common/img/hiRes/dwt/ButtonDown__H.gif);
 	border: 1px solid;
 	border-color: #E0E0E0 #555555 #555555 #E0E0E0;
 	min-width:40px;
@@ -289,7 +289,7 @@ DIV.vSpace {
 	cursor: default;
 	overflow:hidden;
 	height:20px;
-	background-image:url(/ajax/examples/common/img/hiRes/dwt/ButtonDown__BG.gif);
+	background-image:url(/ajax/examples/common/img/hiRes/dwt/ButtonDown__H.gif);
 	border:1px solid;
 	border-color: #555555 #E0E0E0 #E0E0E0 #555555;
 	min-width:40px;

@@ -93,13 +93,13 @@ TEXTAREA {
 .ZaLoginButton {
 	font-size: 12px;
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
-	background-image:url(/zimbraAdmin/skins/steel/images/bg_button_up.gif);
+	background-image:url(/zimbra/img/hiRes/dwt/ButtonUp__H.gif);
 	border:1px outset #999999;	
 	width:50px;
 }
 
 .ZaLoginButton-activated {
-	background-image:url(/zimbraAdmin/skins/steel/images/bg_button_down.gif);
+	background-image:url(/zimbra/img/hiRes/dwt/ButtonDown__H.gif);
 	border:1px outset #999999;	
 	font-size: 12px;
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
@@ -107,7 +107,7 @@ TEXTAREA {
 }
 
 .ZaLoginButton-triggered {
-	background-image:url(/zimbraAdmin/skins/steel/images/bg_button_down.gif);
+	background-image:url(/zimbra/img/hiRes/dwt/ButtonDown__H.gif);
 	border:1px inset #999999;	
 	font-size: 12px;
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
@@ -598,23 +598,23 @@ DIV.vSpace {
 }
 
 .DwtButton, .ColorButton, .TBButton-activated, .TBButtonWhite-activated {
-	background-image:url(/zimbraAdmin/skins/steel/images/bg_button_up.gif);
+	background-image:url(/zimbra/img/hiRes/dwt/ButtonUp__H.gif);
 	border:1px outset #999999;	
 }
 
 .DwtButton-activated, .ColorButton-activated {
-	background-image:url(/zimbraAdmin/skins/steel/images/bg_button_down.gif);
+	background-image:url(/zimbra/img/hiRes/dwt/ButtonDown__H.gif);
 	border:1px outset #999999;	
 }
 
 .DwtButton-triggered, .ColorButton-triggered, .TBButton-triggered, .TBButtonWhite-triggered {
-	background-image:url(/zimbraAdmin/skins/steel/images/bg_button_down.gif);
+	background-image:url(/zimbra/img/hiRes/dwt/ButtonDown__H.gif);
 	border:1px inset #999999;	
 }
 
 
 .DwtButton-toggled, .ColorButton-toggled, .TBButton-toggled, .TBButtonWhite-toggled {
-	background-image:url(/zimbraAdmin/skins/steel/images/bg_button_down.gif);
+	background-image:url(/zimbra/img/hiRes/dwt/ButtonDown__H.gif);
 	border:1px inset #999999;	
 }
 
