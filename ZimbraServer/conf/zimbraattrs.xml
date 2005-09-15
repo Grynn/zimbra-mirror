@@ -84,6 +84,16 @@
 
 <attr name="zimbraAuthMech" type="enum" value="zimbra,ldap,ad"/>
 
+<attr name="zimbraAuthLdapSearchBase" type="string"/>
+
+<attr name="zimbraAuthLdapSearchBindDn" type="string"/>
+
+<attr name="zimbraAuthLdapSearchBindPassword" type="string"/>
+
+<attr name="zimbraAuthLdapSearchFilter" type="string"/>
+
+<attr name="zimbraAuthLdapExternalDn" type="string"/>
+
 <attr name="zimbraAuthTokenKey" type="string" immutable="1"/>
 
 <attr name="zimbraAuthTokenLifetime" type="duration"/>
