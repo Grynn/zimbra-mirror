@@ -130,7 +130,7 @@ function(ev) {
 		if (obj._toolTipContent != null) {
 			var shell = DwtShell.getShell(window);
 			var manager = shell.getHoverMgr();
-			if (!manager.isHovering()) {
+			if (!manager.isHovering() && !DwtMenu.menuShowing()) {
 				manager.reset();
 				manager.setHoverOverDelay(DwtToolTip.TOOLTIP_DELAY);
 				manager.setHoverOverListener(obj._hoverOverListener);
@@ -208,7 +208,7 @@ function(ev) {
 		if (obj._toolTipContent != null) {
 			var shell = DwtShell.getShell(window);
 			var manager = shell.getHoverMgr();
-			if (!manager.isHovering() && !obj._tooltipClosed) {
+			if (!manager.isHovering() && !obj._tooltipClosed && !DwtMenu.menuShowing()) {
 				// NOTE: mouseOver already init'd other hover settings
 				// We do hoverOver() here since the mouse may have moved during
 				// the delay, and we want to use latest x,y
@@ -1027,7 +1027,8 @@ function(m, c, d) {
   	}
 }
 
-DwtControl.prototype._handleHoverOver = function(event) {
+DwtControl.prototype._handleHoverOver =
+function(event) {
 	if (this._toolTipContent != null) {
 		var shell = DwtShell.getShell(window);
 		var tooltip = shell.getToolTip();
@@ -1039,7 +1040,8 @@ DwtControl.prototype._handleHoverOver = function(event) {
 	}
 }
 
-DwtControl.prototype._handleHoverOut = function(event) {
+DwtControl.prototype._handleHoverOut =
+function(event) {
 	var shell = DwtShell.getShell(window);
 	var tooltip = shell.getToolTip();
 	tooltip.popdown();

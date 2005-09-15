@@ -449,6 +449,10 @@ function(args) {
 		this.setLocation(newX, newY);	
 	}
 
+	// Hide the tooltip
+	var tooltip = this.shell.getToolTip();
+	if (tooltip)
+		tooltip.popdown();
 
 	// 5/2/2005
 	// EMC -- changed this to Z_DIALOG_MENU so that you don't have to pass 
@@ -568,6 +572,14 @@ function(ev) {
 	// propagate the event
 	ev._stopPropagation = false;
 	ev._returnValue = true;
+};
+
+/*
+* Returns true if any menu is currently popped up.
+*/
+DwtMenu.menuShowing =
+function() {
+	return DwtMenu._activeMenuUp;
 };
 
 DwtMenu.closeActiveMenu =
