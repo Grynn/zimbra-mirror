@@ -56,14 +56,14 @@ function() {
 	this._statusListView.set(mystatusVector);
 	DwtTabViewPage.prototype.showMe.call(this);
 	this.getHtmlElement().style.width = '520px';
-	DBG.println(AjxDebug.DBG3, "this._statusListView.getHtmlElement().offsetWidth: " + this._statusListView.getHtmlElement().offsetWidth);		
+/*	DBG.println(AjxDebug.DBG3, "this._statusListView.getHtmlElement().offsetWidth: " + this._statusListView.getHtmlElement().offsetWidth);		
 	DBG.println(AjxDebug.DBG3, "this._statusListView.getHtmlElement().clientWidth: " + this._statusListView.getHtmlElement().clientWidth);				
 	DBG.println(AjxDebug.DBG3, "this.parent.getHtmlElement().offsetWidth: " + this.parent.getHtmlElement().offsetWidth);				
 	
 	DBG.println(AjxDebug.DBG3, "this.getHtmlElement().offsetWidth: " + this.getHtmlElement().offsetWidth);		
 	DBG.println(AjxDebug.DBG3, "this.getHtmlElement().clientWidth: " + this.getHtmlElement().clientWidth);				
 	DBG.println(AjxDebug.DBG3, "this.getHtmlElement().style.width: " + this.getHtmlElement().style.width);				
-	
+*/	
 }
 
 ZaStatusServicesPage.prototype._createHtml = 

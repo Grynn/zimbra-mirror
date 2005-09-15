@@ -164,11 +164,11 @@ function() {
 */
 ZaZimbraAdmin.prototype.activateApp =
 function(appName) {
-DBG.println(AjxDebug.DBG1, "activateApp: " + appName + ", current app = " + this._activeApp);
+//DBG.println(AjxDebug.DBG1, "activateApp: " + appName + ", current app = " + this._activeApp);
 	var view = this._appViewMgr.getAppView(appName);
 	if (this._activeApp)
 		this._apps[this._activeApp].activate(false); // notify previously active app
-DBG.println(AjxDebug.DBG3, "activateApp, current " + appName + " view: " + view);
+//DBG.println(AjxDebug.DBG3, "activateApp, current " + appName + " view: " + view);
 	if (view) {
 		if (this._appViewMgr.setView(view)) {
 			this._apps[appName].activate(true);
@@ -248,7 +248,7 @@ ZaZimbraAdmin.prototype._createApp =
 function(appName) {
 	if (this._apps[appName] != null)
 		return;
-DBG.println(AjxDebug.DBG1, "Creating app " + appName);
+//DBG.println(AjxDebug.DBG1, "Creating app " + appName);
 	this._apps[appName] = new this._appFactory[appName](this._appCtxt, this._shell);	
 }
 
@@ -259,7 +259,7 @@ ZaZimbraAdmin.prototype._launchApp =
 function(appName) {
 	if (!this._apps[appName])
 		this._createApp(appName);
-DBG.println(AjxDebug.DBG1, "Launching app " + appName);
+//DBG.println(AjxDebug.DBG1, "Launching app " + appName);
 	this._apps[appName].launch();
 }
 

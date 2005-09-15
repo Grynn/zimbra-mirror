@@ -200,7 +200,7 @@ function(app, view) {
 */
 ZaAppViewMgr.prototype.createView =
 function(viewName, appName, elements, popCallback, style, isVolatile, isAppView, staleCallback) {
-	DBG.println(AjxDebug.DBG1, "createView: " + viewName);
+//	DBG.println(AjxDebug.DBG1, "createView: " + viewName);
 	var appContainer = new DwtComposite(this._shell, null, DwtControl.ABSOLUTE_STYLE);
 	for (var i = 0; i < elements.length; i++)
 		elements[i].reparent(appContainer);
@@ -227,11 +227,11 @@ function(viewName, appName, elements, popCallback, style, isVolatile, isAppView,
 */
 ZaAppViewMgr.prototype.pushView =
 function(viewName, force) {
-	DBG.println(AjxDebug.DBG1, "pushView: " + viewName);
+//	DBG.println(AjxDebug.DBG1, "pushView: " + viewName);
 	if (this._currentView == viewName)
 		return false;
 	if (viewName == ZaAppViewMgr.PENDING_VIEW) {
-	DBG.println(AjxDebug.DBG1, "pushView of pending view");
+//	DBG.println(AjxDebug.DBG1, "pushView of pending view");
 		viewName = this._pendingView;
 		force = true;
 	}
@@ -242,7 +242,7 @@ function(viewName, force) {
 			this._hidden.push(this._currentView);
 	}
 	this._currentView = viewName;
-	DBG.println(AjxDebug.DBG2, "app view mgr: current view is now " + this._currentView);
+//	DBG.println(AjxDebug.DBG2, "app view mgr: current view is now " + this._currentView);
 	this._views[viewName].zShow(true);
 	this._layout();
 	this._controller.getControllerForView(viewName).setCurrentView(viewName);
@@ -261,7 +261,7 @@ function(viewName, force) {
 */
 ZaAppViewMgr.prototype.setView =
 function(viewName, force) {
-	DBG.println(AjxDebug.DBG1, "setView: " + viewName);
+//	DBG.println(AjxDebug.DBG1, "setView: " + viewName);
 	var result = this.pushView(viewName, force);
         if (result)
 		this._hidden = new Array();
@@ -300,7 +300,7 @@ function() {
 */
 ZaAppViewMgr.prototype.layoutChanged =
 function(reason) {
-DBG.println(AjxDebug.DBG2, "The layout changed! (reason = " + reason + ")");
+//DBG.println(AjxDebug.DBG2, "The layout changed! (reason = " + reason + ")");
 	this._shellSz = this._shell.getSize();
 
 	this._layout();
@@ -312,7 +312,7 @@ DBG.println(AjxDebug.DBG2, "The layout changed! (reason = " + reason + ")");
 */
 ZaAppViewMgr.prototype.layoutBanner =
 function() {
-	DBG.println(AjxDebug.DBG2, "doing banner layout");
+//	DBG.println(AjxDebug.DBG2, "doing banner layout");
 	var bannerHtmlElement = this._banner.getHtmlElement();
 	var bannerImg = bannerHtmlElement.firstChild;
 	Dwt.setLocation(bannerImg, 0, 0);
@@ -337,16 +337,16 @@ function(pendingAction, pendingView, skipCallback) {
 	var okToContinue = true;
 	var callback = this._popCallback[this._currentView];
 	if (callback && !skipCallback) {
-		DBG.println(AjxDebug.DBG2, "hiding " + this._currentView + ", waiting on " + pendingView + "; skip = " + skipCallback);
+//		DBG.println(AjxDebug.DBG2, "hiding " + this._currentView + ", waiting on " + pendingView + "; skip = " + skipCallback);
 		this._pendingAction = pendingAction;
 		this._pendingView = pendingView;
 		okToContinue = callback.run();
 	}
 	if (okToContinue) {
 		this._views[this._currentView].zShow(false);
-		DBG.println(AjxDebug.DBG2, this._currentView + " hidden");
+//		DBG.println(AjxDebug.DBG2, this._currentView + " hidden");
 		if (this._volatile[this._currentView]) {
-			DBG.println(AjxDebug.DBG1, "quarantining volatile view: " + this._currentView);
+//			DBG.println(AjxDebug.DBG1, "quarantining volatile view: " + this._currentView);
 			this._views[this._currentView].setLocation(Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
 		}
 	}
@@ -369,7 +369,7 @@ function(style) {
 
 		
 	if (this._searchPanel) {
-		DBG.println(AjxDebug.DBG3, "searchPanel: " + x + '/' + y + '/' + this._shellSz.x + '/' + Dwt.DEFAULT);
+//		DBG.println(AjxDebug.DBG3, "searchPanel: " + x + '/' + y + '/' + this._shellSz.x + '/' + Dwt.DEFAULT);
 		this._searchPanel.setBounds(x, y, this._shellSz.x, Dwt.DEFAULT);
 
 		var searchSz = this._searchPanel.getSize();
@@ -380,7 +380,7 @@ function(style) {
 	
 		
 	if (this._headerPanel) {
-		DBG.println(AjxDebug.DBG3, "headerPanel: " + x + '/' + y + '/' + this._shellSz.x + '/' + Dwt.DEFAULT);
+//		DBG.println(AjxDebug.DBG3, "headerPanel: " + x + '/' + y + '/' + this._shellSz.x + '/' + Dwt.DEFAULT);
 		this._headerPanel.setBounds(x, y, this._shellSz.x, Dwt.DEFAULT);
 		var headerSz = this._headerPanel.getSize();
 		y += headerSz.y;
@@ -391,7 +391,7 @@ function(style) {
 	// overview panel
 	if (this._overviewPanel) {
 		var overviewHeight = Math.max(this._shellSz.y - y, 0);
-		DBG.println(AjxDebug.DBG3, "overviewPanel: " + x + '/' + y + '/' + Dwt.DEFAULT + '/' + overviewHeight);
+//		DBG.println(AjxDebug.DBG3, "overviewPanel: " + x + '/' + y + '/' + Dwt.DEFAULT + '/' + overviewHeight);
 		this._overviewPanel.setBounds(x, y, Dwt.DEFAULT, overviewHeight);
 		x += this._overviewPanel.getSize().x;
 	}
@@ -399,7 +399,7 @@ function(style) {
 	// sash
 	if (this._sash && this._sash.getVisible()) {
 		var sashHeight = this._overviewPanel.getSize().y;
-		DBG.println(AjxDebug.DBG3, "sash: " + x + '/' + y + '/' + Dwt.DEFAULT + '/' + sashHeight);
+//		DBG.println(AjxDebug.DBG3, "sash: " + x + '/' + y + '/' + Dwt.DEFAULT + '/' + sashHeight);
 		this._sash.setBounds(x, y, Dwt.DEFAULT, sashHeight);
 		x += this._sash.getSize().x;
 	}	
@@ -418,7 +418,7 @@ function(x, y) {
 	var appContainer = this._views[this._currentView];
 	var width = Math.max(this._shellSz.x - x, 0);
 	var height = Math.max(this._shellSz.y - y, 0);
-	DBG.println(AjxDebug.DBG3, "appContainer: " + x + '/' + y + '/' + width + '/' + height);
+//	DBG.println(AjxDebug.DBG3, "appContainer: " + x + '/' + y + '/' + width + '/' + height);
 	appContainer.setBounds(x, y, width, height);
 	this._appBounds = new DwtRectangle(x, y, width, height);
 	
@@ -435,7 +435,7 @@ function(x, y) {
 		// last child gets the rest of the vertical space
 		if (i == (num - 1))
 			childHeight = Math.max(height - y, 0);
-		DBG.println(AjxDebug.DBG3, "child " + i + ": " + x + '/' + y + '/' + width + '/' + childHeight);
+//		DBG.println(AjxDebug.DBG3, "child " + i + ": " + x + '/' + y + '/' + width + '/' + childHeight);
 		child.setBounds(x, y, width, childHeight);
 		y += childHeight;
 		if(!AjxEnv.isIE)

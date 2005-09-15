@@ -250,9 +250,9 @@ function () {
 				mods[ZaServer.A_zimbraIsMonitorHost] = value;
 				server.modify(mods);
 			}
-			else {
+			/*else {
 				DBG.println("Unable to get server object with id '"+serverId+"'");
-			}
+			}*/
 		}
 
 		var serverChoices = this._app.getServerListChoices();

@@ -111,7 +111,7 @@ function(msg, ex, noExecReset)  {
 
 ZaController.prototype.getControllerForView =
 function(view) {
-	DBG.println(AjxDebug.DBG1, "*** controller not found for view " + view);
+//	DBG.println(AjxDebug.DBG1, "*** controller not found for view " + view);
 	return this._appCtxt.getAppController();
 }
 
