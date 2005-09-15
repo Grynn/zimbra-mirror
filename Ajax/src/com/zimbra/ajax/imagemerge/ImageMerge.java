@@ -367,21 +367,24 @@ public class ImageMerge {
             // create output directory
             // REVISIT: optimize this by creating the output dirs ahead of time...
 			File outputDir;
+        	String outFilename = curFile.substring(curFile.lastIndexOf(File.separator)+1);
+			String combinedFilename;
+
 			if (createInParentDir) {
 	        	outputDir = new File(outputDirname + File.separator + parentDirname);
+	        	combinedFilename = parentDirname + "/" + outFilename;
 	        } else {
 	        	outputDir = new File(outputDirname);
+	        	combinedFilename = outFilename;
 	        }
+	        
         	if (!outputDir.mkdirs() && !outputDir.exists()) {
         	    throw new ImageMergeException("unable to create output directory");
         	}
 
-        	
-        	String outFilename = curFile.substring(curFile.lastIndexOf(File.separator)+1);
             copyFile(new File(curFile), new File(outputDir, outFilename));
 
             // add to the CSS output
-            String combinedFilename = parentDirname + '/' + outFilename; // NOTE: use URL path sep
             cssOutput.append(curImage.getCssString(curImage.getWidth(), curImage.getHeight(), combinedFilename));
         }
         System.out.println("Copied " + filenames.length + " " + suffix + " images.");
@@ -654,14 +657,14 @@ public class ImageMerge {
     		dims[0] = getMaxWidth(originals, fileCount);
     		dims[1] = placeImagesAuto(originals, fileCount, dims[0]);
     	} else if (layoutStyle == VERT_LAYOUT) {
-      		dims[0] = getMaxWidth(originals, fileCount);
-    		dims[1] = placeImagesVertical(originals, fileCount);
+      		dims[0] = placeVerticalImages(originals, fileCount);
+    		dims[1] = getMaxHeight(originals, fileCount);
     	} else { // _HORIZ_LAYOUT
-    		dims[0] = placeImagesHorizontal(originals, fileCount);
-     		dims[1] = getMaxHeight(originals, fileCount);
+    		dims[0] = getMaxWidth(originals, fileCount);
+     		dims[1] = placeHorizontalImages(originals, fileCount);
     	}
 
-    	System.out.println("Combining " + fileCount + " images into a " + dims[0] + "x" + 
+    	System.out.println(" Combining " + fileCount + " images into a " + dims[0] + "x" + 
     			dims[1] + " image...");    	
     }
 
@@ -691,28 +694,26 @@ public class ImageMerge {
         return currentHeight;
     }
 
-    private static int placeImagesHorizontal(DecodedImage images[],
+    private static int placeVerticalImages(DecodedImage images[],
 		       								 int numImages) {
-        int currentWidth= images[0].getWidth();         
+        int currentLeft = 0;
         for (int i = 0; i < numImages; i++) {
         	images[i].setCombinedRow(0);
-        	images[i].setCombinedColumn(currentWidth);
-        	currentWidth += images[i].getWidth();
+        	images[i].setCombinedColumn(currentLeft);
+        	currentLeft += images[i].getWidth();
         }
-        return currentWidth;
+        return currentLeft;
     }
      
-    private static int placeImagesVertical(DecodedImage images[],
+    private static int placeHorizontalImages(DecodedImage images[],
     								       int numImages) {
-        int currentHeight = images[0].getHeight(); 
-        int currentTop = 0;         
+        int currentTop = 0;
         for (int i = 0; i < numImages; i++) {
         	images[i].setCombinedRow(currentTop);
         	images[i].setCombinedColumn(0);
-        	currentHeight += images[i].getHeight();
+        	currentTop += images[i].getHeight();
         }
-
-        return currentHeight;
+        return currentTop;
     }
      
     private void processGIFs(		File aggFile,
