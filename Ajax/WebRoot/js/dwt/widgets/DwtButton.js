@@ -134,41 +134,18 @@ DwtButton.prototype.setDropDownImages = function (enabledImg, disImg, hovImg, de
 	this._dropDownDepImg = depImg;
 };
 
-/**
- * add all mouse listeners for our widget - this uses mouseenter and mouseleave
- * for IE.
- */
 DwtButton.prototype._addMouseListeners = 
 function() {
-	if (AjxEnv.isIE)	{ 
-		this.addListener(DwtEvent.ONMOUSEENTER, this._mouseOverListener);
-	} else {
-		this.addListener(DwtEvent.ONMOUSEOVER, this._mouseOverListener);
-	}
-	if (AjxEnv.isIE) {
-		this.addListener(DwtEvent.ONMOUSELEAVE, this._mouseOutListener);
-	} else {
-		this.addListener(DwtEvent.ONMOUSEOUT, this._mouseOutListener);
-	}
+	this.addListener(DwtEvent.ONMOUSEOVER, this._mouseOverListener);
+	this.addListener(DwtEvent.ONMOUSEOUT, this._mouseOutListener);
 	this.addListener(DwtEvent.ONMOUSEDOWN, this._mouseDownListener);
 	this.addListener(DwtEvent.ONMOUSEUP, this._mouseUpListener);
 };
 
-/**
- * remove all mouse listeners from our widget
- */
 DwtButton.prototype._removeMouseListeners =
 function() {
-	if (AjxEnv.isIE) {
-		this.removeListener(DwtEvent.ONMOUSEENTER, this._mouseOverListener);
-	} else {
-		this.removeListener(DwtEvent.ONMOUSEOVER, this._mouseOverListener);
-	}
-	if (AjxEnv.isIE) {
-		this.removeListener(DwtEvent.ONMOUSELEAVE, this._mouseOutListener);
-	} else {
-		this.removeListener(DwtEvent.ONMOUSEOUT, this._mouseOutListener);
-	}
+	this.removeListener(DwtEvent.ONMOUSEOVER, this._mouseOverListener);
+	this.removeListener(DwtEvent.ONMOUSEOUT, this._mouseOutListener);
 	this.removeListener(DwtEvent.ONMOUSEDOWN, this._mouseDownListener);
 	this.removeListener(DwtEvent.ONMOUSEUP, this._mouseUpListener);
 };
@@ -245,15 +222,18 @@ DwtButton.prototype.setMenu =
 	}
 }
 
-DwtButton.prototype._setupDropDownCellMouseHandlers = function () {
-	this._dropDownCell.onmousedown = DwtButton._dropDownCellMouseDownHdlr;
-	this._dropDownCell.onmouseup = DwtButton._dropDownCellMouseUpHdlr;
+DwtButton.prototype._setupDropDownCellMouseHandlers =
+function() {
+	Dwt.setHandler(this._dropDownCell, DwtEvent.ONMOUSEDOWN, DwtButton._dropDownCellMouseDownHdlr);
+	Dwt.setHandler(this._dropDownCell, DwtEvent.ONMOUSEUP, DwtButton._dropDownCellMouseUpHdlr);
 };
 
-DwtButton.prototype._removeDropDownCellMouseHandlers = function () {
-	this._dropDownCell.onmousedown = null;
-	this._dropDownCell.onmouseup = null;
+DwtButton.prototype._removeDropDownCellMouseHandlers =
+function() {
+	Dwt.clearHandler(this._dropDownCell, DwtEvent.ONMOUSEDOWN);
+	Dwt.clearHandler(this._dropDownCell, DwtEvent.ONMOUSEUP);
 };
+
 /**
 * Returns the button's menu
 */

@@ -107,17 +107,8 @@ function(ev) {
 	return DwtControl._mouseEvent(ev, DwtEvent.ONDBLCLICK);
 }
 
-DwtControl._mouseEnterHdlr =
-function(ev) {
-	return DwtControl._mouseOverGeneralHdlr(ev, DwtEvent.ONMOUSEENTER);
-};
-
 DwtControl._mouseOverHdlr =
 function(ev) {
-	return DwtControl._mouseOverGeneralHdlr(ev, DwtEvent.ONMOUSEOVER);
-}
-
-DwtControl._mouseOverGeneralHdlr = function (ev, eventName){
 	// Check to see if a drag is occurring. If so, don't process the mouse
 	// over events.
 	var captureObj = DwtMouseEventCapture.getCaptureObj();
@@ -132,8 +123,8 @@ DwtControl._mouseOverGeneralHdlr = function (ev, eventName){
 	var mouseEv = DwtShell.mouseEvent;
 	if (obj._dragging == DwtControl._NO_DRAG) {
 		mouseEv.setFromDhtmlEvent(ev);
-		if (obj.isListenerRegistered(eventName))
-			obj.notifyListeners(eventName, mouseEv);
+		if (obj.isListenerRegistered(DwtEvent.ONMOUSEOVER))
+			obj.notifyListeners(DwtEvent.ONMOUSEOVER, mouseEv);
 		// Call the tooltip after the listeners to give them a 
 		// chance to change the tooltip text.
 		if (obj._toolTipContent != null) {
@@ -362,16 +353,6 @@ function(ev) {
 
 DwtControl._mouseOutHdlr =
 function(ev) {
-	return DwtControl._mouseOutGeneralHdlr(ev, DwtEvent.ONMOUSEOUT);
-};
-
-DwtControl._mouseLeaveHdlr =
-function(ev) {
-	return DwtControl._mouseOutGeneralHdlr(ev, DwtEvent.ONMOUSELEAVE);
-};
-
-DwtControl._mouseOutGeneralHdlr =
-function(ev, eventName) {
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
 	if (!obj) return false;
 
@@ -382,7 +363,7 @@ function(ev, eventName) {
 		manager.hoverOut();
 		obj._tooltipClosed = false;
 	}
-	return DwtControl._mouseEvent(ev, eventName, obj);
+	return DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEOUT, obj);
 };
 
 DwtControl._selectStartHdlr = 
@@ -429,8 +410,8 @@ DwtControl.HANDLER[DwtEvent.ONKEYDOWN] = DwtControl._keyDownHdlr;
 DwtControl.HANDLER[DwtEvent.ONKEYPRESS] = DwtControl._keyPressHdlr;
 DwtControl.HANDLER[DwtEvent.ONKEYUP] = DwtControl._keyUpHdlr;
 DwtControl.HANDLER[DwtEvent.ONMOUSEDOWN] = DwtControl._mouseDownHdlr;
-DwtControl.HANDLER[DwtEvent.ONMOUSEENTER] = DwtControl._mouseEnterHdlr;
-DwtControl.HANDLER[DwtEvent.ONMOUSELEAVE] = DwtControl._mouseLeaveHdlr;
+DwtControl.HANDLER[DwtEvent.ONMOUSEENTER] = DwtControl._mouseOverHdlr;
+DwtControl.HANDLER[DwtEvent.ONMOUSELEAVE] = DwtControl._mouseOutHdlr;
 DwtControl.HANDLER[DwtEvent.ONMOUSEMOVE] = DwtControl._mouseMoveHdlr;
 DwtControl.HANDLER[DwtEvent.ONMOUSEOUT] = DwtControl._mouseOutHdlr;
 DwtControl.HANDLER[DwtEvent.ONMOUSEOVER] = DwtControl._mouseOverHdlr;
