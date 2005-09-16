@@ -32,10 +32,9 @@
  */
 
 /*
- * @param server the fully qualified address of the SugarCRM's soap.php file
- * @user the user name
- * @pass user password (only a MD5 hash will be sent through the network)
- * @callback user defined function that will be called when the request is over
+ * @param server -- the fully qualified address of the SugarCRM's soap.php file
+ * @param callback -- user defined function that will be called when the
+ *                    request is over
  *
  * "callback" may be an AjxCallback in which case it gets called in whatever
  * object environment you specified, or can be a plain function reference which
@@ -50,13 +49,11 @@ function ZmSugarCrm(server, callback) {
 	this.callback = new AjxCallback(this, ZmSugarCrm._requestFinished);
 };
 
-ZmSugarCrm.NS = "http://www.sugarcrm.com/sugarcrm";
-
-ZmSugarCrm.prototype.toString = function() { return "ZmSugarCrm"; };
-
 //* CLASS FUNCTIONS
 
-ZmSugarCrm.RE_ANSWER = /<ns1:(\w+Response)[^>]*>(.*?)<\x2fns1:\1>/;
+ZmSugarCrm.NS = "http://www.sugarcrm.com/sugarcrm";
+
+// ZmSugarCrm.RE_ANSWER = /<ns1:(\w+Response)[^>]*>(.*?)<\x2fns1:\1>/; // $2 will deliver results
 // ZmSugarCrm.RE_RESULT = /<return\s+xsi:type=([\x22\x27])(.*?)\1>(.*?)<\x2freturn>/;
 
 ZmSugarCrm._getAnArray = function(a) {
@@ -65,6 +62,10 @@ ZmSugarCrm._getAnArray = function(a) {
 	return a;
 };
 
+//* INSTANCE FUNCTIONS
+
+ZmSugarCrm.prototype.toString = function() { return "ZmSugarCrm"; };
+
 /// Will be called in the context of the current object, therefore "this" isn't
 /// a reference to the ZmSugarCrm class but to one of its instances.
 ///
@@ -72,11 +73,9 @@ ZmSugarCrm._getAnArray = function(a) {
 /// attributes, calling userCallback thereafter.
 ZmSugarCrm._requestFinished = function(args) {
 	// decode the response here
-	var xml = args.text;
-	if (ZmSugarCrm.RE_ANSWER.test(xml))
-		xml = RegExp.$2;
-	var doc = AjxXmlDoc.createFromXml(xml);
-	var answer = this.answer = doc.toJSObject();
+	var answer = AjxXmlDoc.createFromXml(args.text).toJSObject(true, false);
+	// skip uninteresting stuff
+	this.answer = answer = answer.Body[this.method + "Response"]["return"];
 	switch (this.method) {
 	    case "login":
 		if (answer.error.number == 0)
@@ -102,8 +101,6 @@ ZmSugarCrm._requestFinished = function(args) {
 	this.userCallback.run(args, answer);
 };
 
-//* INSTANCE FUNCTIONS
-
 ZmSugarCrm.prototype._makeEnvelope = function(method) {
 	this.method = method;
 	return AjxSoapDoc.create(method, ZmSugarCrm.NS, "sugar");
@@ -121,6 +118,9 @@ ZmSugarCrm.prototype.test = function(str) {
 	this._rpc(env);
 };
 
+// Throws an exception if:
+//     mode == true and object isn't logged in, or
+//     mode == false and object is logged in.
 ZmSugarCrm.prototype._checkLoggedIn = function(mode) {
 	if (mode) {
 		if (!this.session_id)
@@ -164,6 +164,13 @@ ZmSugarCrm.prototype.search = function(query) {
 	this._rpc(env);
 };
 
+// see [1] above
+//
+// SugarCRM will add a contact even if one with the exact same properties
+// already exists.  This may be good or bad, depending on the calling
+// application.  I chosen to let this function do what it does--if you want to
+// only add a contact when it's not there already, feel free to call "search"
+// beforehand and see what it returns.
 ZmSugarCrm.prototype.createContactThing = function(args, method) {
 	this._checkLoggedIn(true);
 	var env = this._makeEnvelope(method);

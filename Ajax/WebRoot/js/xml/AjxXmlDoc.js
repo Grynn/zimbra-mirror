@@ -85,8 +85,12 @@ function() {
 
 AjxXmlDoc.prototype.loadFromString =
 function(str) {
-	this._doc.loadXML(str);
-
+	var doc = this._doc;
+	doc.loadXML(str);
+	if (AjxEnv.isIE) {
+		if (doc.parseError.errorCode != 0)
+			throw new AjxException(doc.parseError.reason, AjxException.INVALID_PARAM, "AjxXmlDoc.loadFromString");
+	}
 }
 
 AjxXmlDoc.prototype.loadFromUrl =
@@ -101,7 +105,7 @@ function(url) {
  *
  * Rules:
  *
- *   1. The top-level node gets lost; only it's content is seen important.
+ *   1. The top-level tag gets lost; only it's content is seen important.
  *   2. Each node will be represented as a JS object.  It's textual content
  *      will be saved in node.__msh_content (returned by toString()).
  *   3. Attributes get discarded; this might not be good in general but it's OK
@@ -148,15 +152,16 @@ function(url) {
  * rather than an array.  And if there is no <item> tag, then obj.item will be
  * undefined.  These are cases that the calling application must take care of.
  */
-AjxXmlDoc.prototype.toJSObject = function() {
-	var self = this;
+AjxXmlDoc.prototype.toJSObject = function(dropns, lowercase) {
 	function _node() { this.__msh_content = ''; };
 	_node.prototype.toString = function() { return this.__msh_content; };
-	function rec(el, o) {
-		var tags = {}, i, t, n;
-		for (i = el.firstChild; i; i = i.nextSibling) {
+	function rec(i, o) {
+		var tags = {}, t, n;
+		for (i = i.firstChild; i; i = i.nextSibling) {
 			if (i.nodeType == 1) {
 				t = i.tagName;
+				if (dropns)      t = t.replace(/^.*?:/, "");
+				if (lowercase)   t = t.toLowerCase();
 				n = new _node();
 				if (tags[t]) {
 					if (tags[t] == 1) {
@@ -193,8 +198,8 @@ AjxXmlDoc._init =
 function() {
 	if (AjxEnv.isIE) {
 		var msxmlVers = ["MSXML4.DOMDocument", "MSXML3.DOMDocument", "MSXML2.DOMDocument.4.0",
-										 "MSXML2.DOMDocument.3.0", "MSXML2.DOMDocument", "MSXML.DOMDocument",
-										 "Microsoft.XmlDom"];
+				 "MSXML2.DOMDocument.3.0", "MSXML2.DOMDocument", "MSXML.DOMDocument",
+				 "Microsoft.XmlDom"];
 		for (var i = 0; i < msxmlVers.length; i++) {
 			try {
 				new ActiveXObject(msxmlVers[i]);
