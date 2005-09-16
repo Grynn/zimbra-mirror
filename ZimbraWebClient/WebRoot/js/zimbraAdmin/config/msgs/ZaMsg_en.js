@@ -60,6 +60,8 @@ ZaMsg.Domain_AuthTestFailed = "Authentication test failed";
 ZaMsg.Domain_AuthTestResultCode = "Server message";
 ZaMsg.Domain_AuthTestMessage = "Details";
 ZaMsg.Domain_AuthComputedBindDn = "Computed bind DN used in the test";
+ZaMsg.Domain_AuthLdapSearchBase = "LDAP search base:";
+ZaMsg.Domain_AuthLdapFilter = "LDAP filter:";
 
 ZaMsg.AuthTest_check_OK = "Test Successful";
 ZaMsg.AuthTest_check_UNKNOWN_HOST = "Unable to resolve a hostname";
@@ -104,11 +106,15 @@ ZaMsg.Domain_AuthLdapUserDn = "LDAP bind DN template:";
 ZaMsg.Domain_AuthADServerName = "Active Directory server name:";
 ZaMsg.Domain_AuthADDomainName = "Active Directory domain name:";
 ZaMsg.Domain_AuthADServerPort = "Active Directory server port";
-ZaMsg.Domain_AuthADUseSSL = "Use SSL to connect to Active Directory server:";
+ZaMsg.Domain_AuthADUseSSL = "Use SSL:";
 ZaMsg.Domain_AuthLDAPServerName = "LDAP server name:";
 ZaMsg.Domain_AuthLDAPSearchBase = "LDAP search base:";
 ZaMsg.Domain_AuthLDAPServerPort = "LDAP server port:";
-ZaMsg.Domain_AuthLDAPUseSSL = "Use SSL to connect to LDAP server:";
+ZaMsg.Domain_AuthLDAPUseSSL = "Use SSL:";
+ZaMsg.Domain_AuthLdapBindPassword = "Bind password:";
+ZaMsg.Domain_AuthLdapBindPasswordConfirm = "Confirm bind password:";
+ZaMsg.Domain_AuthUseBindPassword = "Use DN/Password to bind to external server:";
+ZaMsg.Domain_AuthLdapBindDn="Bind DN:";
 
 ZaMsg.Restore_SelectPath = "Please provide the path to the backup targets.";
 ZaMsg.Restore_AccountName = "Please provide the email address of the account that you want to restore.";
@@ -445,7 +451,7 @@ ZaMsg.NAD_Disabled = "Disabled";
 ZaMsg.NAD_Enable = "Enable";
 ZaMsg.NAD_Disable = "Disable";
 ZaMsg.NAD_Auto = "auto";
-ZaMsg.NAD_DomainsAuthStr = "expansions for bind DN string:<br>%n = username with @ (or without, if no @ was specified)<br>%u = username with @ removed<br>%d = domain as foo.com<br>%D = domain as dc=foo,dc=com";
+ZaMsg.NAD_DomainsAuthStr = "expansions for LDAP filter:<br>%n = username with @ (or without, if no @ was specified)<br>%u = username with @ removed<br>%d = domain as foo.com<br>%D = domain as dc=foo,dc=com";
 ZaMsg.NAD_ZERO_UNLIMETED = "(Note: Use \"0\" to specify \"unlimited\" value)";
 
 ZaMsg.TABT_GeneralPage = "General Information";

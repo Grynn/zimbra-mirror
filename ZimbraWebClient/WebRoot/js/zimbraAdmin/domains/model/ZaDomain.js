@@ -63,6 +63,10 @@ ZaDomain.A_GalLdapFilter = "zimbraGalLdapFilter";
 ZaDomain.A_AuthMech = "zimbraAuthMech";
 ZaDomain.A_AuthLdapURL = "zimbraAuthLdapURL";
 ZaDomain.A_AuthLdapUserDn = "zimbraAuthLdapBindDn";
+ZaDomain.A_AuthLdapSearchBase = "zimbraAuthLdapSearchBase";
+ZaDomain.A_AuthLdapSearchFilter = "zimbraAuthLdapSearchFilter";
+ZaDomain.A_AuthLdapSearchBindDn ="zimbraAuthLdapSearchBindDn";
+ZaDomain.A_AuthLdapSearchBindPassword="zimbraAuthLdapSearchBindPassword";
 
 //internal attributes - not synched with the server code yet
 //GAL
@@ -94,7 +98,8 @@ ZaDomain.A_AuthTestPassword = "authtestpassword";
 ZaDomain.A_AuthTestMessage = "authtestmessage";
 ZaDomain.A_AuthTestResultCode = "authtestresutcode";
 ZaDomain.A_AuthComputedBindDn = "authcomputedbinddn";
-
+ZaDomain.A_AuthUseBindPassword = "authusebindpassword";
+ZaDomain.A_AuthLdapSearchBindPasswordConfirm = "authldapsearchBindpasswordconfirm";
 
 //server value constants
 ZaDomain.AuthMech_ad = "ad";
@@ -338,8 +343,22 @@ function(tmpObj, oldObj) {
 		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_AuthLdapURL]);
 		attr.setAttribute("n", ZaDomain.A_AuthLdapURL);	
 
-		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_AuthLdapUserDn]);
+		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_AuthLdapSearchFilter]);
+		attr.setAttribute("n", ZaDomain.A_AuthLdapSearchFilter);	
+		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_AuthLdapSearchBase]);
+		attr.setAttribute("n", ZaDomain.A_AuthLdapSearchBase);	
+		
+		if(tmpObj[ZaDomain.A_AuthUseBindPassword] && tmpObj[ZaDomain.A_AuthUseBindPassword] == "TRUE") {
+			attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_AuthLdapSearchBindDn]);
+			attr.setAttribute("n", ZaDomain.A_AuthLdapSearchBindDn);	
+			
+			attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_AuthLdapSearchBindPassword]);
+			attr.setAttribute("n", ZaDomain.A_AuthLdapSearchBindPassword);			
+		}
+		
+		/*attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_AuthLdapUserDn]);
 		attr.setAttribute("n", ZaDomain.A_AuthLdapUserDn);	
+		*/
 	
 	}
 	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
@@ -468,6 +487,12 @@ function (node) {
 		this.attrs[ZaDomain.A_UseBindPassword] = "FALSE";
 	}
 	
+	if(this.attrs[ZaDomain.A_AuthLdapSearchBindDn] || this.attrs[ZaDomain.A_AuthLdapSearchBindPassword]) {
+		this[ZaDomain.A_AuthUseBindPassword] = "TRUE";
+	} else {
+		this[ZaDomain.A_AuthUseBindPassword] = "FALSE";
+	}
+		
 	this[ZaDomain.A_GALSampleQuery] = "john";
 
 }
@@ -533,6 +558,10 @@ ZaDomain.myXModel = {
 		{id:ZaDomain.A_AuthMech, type:_STRING_, ref:"attrs/" + ZaDomain.A_AuthMech},
 		{id:ZaDomain.A_AuthLdapURL, type:_STRING_, ref:"attrs/" + ZaDomain.A_AuthLdapURL},
 		{id:ZaDomain.A_AuthADDomainName, type:_STRING_, ref:"attrs/" + ZaDomain.A_AuthADDomainName},
+		{id:ZaDomain.A_AuthLdapSearchBase, type:_STRING_, ref:"attrs/" + ZaDomain.A_AuthLdapSearchBase},		
+		{id:ZaDomain.A_AuthLdapSearchFilter, type:_STRING_, ref:"attrs/" + ZaDomain.A_AuthLdapSearchFilter},		
+		{id:ZaDomain.A_AuthLdapSearchBindDn, type:_STRING_, ref:"attrs/" + ZaDomain.A_AuthLdapSearchBindDn},		
+		{id:ZaDomain.A_AuthLdapSearchBindPassword, type:_STRING_, ref:"attrs/" + ZaDomain.A_AuthLdapSearchBindPassword},		
 		{id:ZaDomain.A_AuthTestUserName, type:_STRING_},
 		{id:ZaDomain.A_AuthTestPassword, type:_STRING_},
 		{id:ZaDomain.A_AuthTestMessage, type:_STRING_},
@@ -542,6 +571,8 @@ ZaDomain.myXModel = {
 		{id:ZaDomain.A_GALTestMessage, type:_STRING_},
 		{id:ZaDomain.A_GALTestResultCode, type:_STRING_},
 		{id:ZaDomain.A_GALSampleQuery, type:_STRING_},
+		{id:ZaDomain.A_AuthUseBindPassword, type:_STRING_},		
+		{id:ZaDomain.A_AuthLdapSearchBindPasswordConfirm, type:_STRING_},				
 		{id:ZaModel.currentStep, type:_NUMBER_, ref:ZaModel.currentStep, maxInclusive:2147483647}, 
 		{id:ZaDomain.A_GALTestSearchResults, ref:ZaDomain.A_GALTestSearchResults, type:_LIST_, 
 			listItem: {type:_OBJECT_, 
