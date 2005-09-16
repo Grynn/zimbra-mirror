@@ -19,6 +19,7 @@ objectIdentifier ZimbraLDAP ZimbraRoot:2
 objectIdentifier ZimbraAttrType ZimbraLDAP:1
 objectIdentifier ZimbraReserved2 ZimbraLDAP:2
 objectIdentifier ZimbraReserved3 ZimbraLDAP:3
+objectIdentifier ZimbraReserved4 ZimbraLDAP:4
 
 #
 # define new attribute OIDS here:
