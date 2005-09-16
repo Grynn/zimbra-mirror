@@ -156,7 +156,24 @@
 		<!--   NOTE: images now coming from the common "examples" directory -->
 	</target>
 
-	<target name="treeexample">
+	<target name="mixingexample">
+		<copy todir="${build.examples.dir}/mixing" overwrite="true" >
+			<fileset dir="WebRoot/examples/mixing" includes="**/*" excludes="**/img,**/img/"/>
+		</copy>
+		
+		<property name="mixing.cssFile" value="imgs.css"/>
+		<property name="mixing.hiRes.destDir" value="${build.examples.dir}/mixing/img/hiRes"/>
+		<property name="mixing.loRes.destDir" value="${build.examples.dir}/mixing/img/loRes"/>
+		<antcall target='images'>
+			<param name='images.dir' value='WebRoot/examples/mixing/img'/>
+			<param name="images.hiRes.destDir" value="${mixing.hiRes.destDir}"/>
+			<param name="images.loRes.destDir" value="${mixing.loRes.destDir}"/>
+			<param name="images.cssPath" value="/ajax/examples/mixing/img"/>			
+			<param name="images.cssFile" value="${mixing.cssFile}"/>			
+		</antcall>
+	</target>
+	
+<target name="treeexample">
 		<copy todir="${build.examples.dir}/tree" overwrite="true" >
 			<fileset dir="WebRoot/examples/tree" includes="**/*" excludes="**/img,**/img/"/>
 		</copy>
@@ -170,7 +187,7 @@
 		</copy>
 	</target>
 		
-	<target name="examples" depends="dwtimages, htmleditorexample, treeexample, dataviewerexample, xformsexample"/>
+	<target name="examples" depends="dwtimages, htmleditorexample, treeexample, dataviewerexample, mixingexample, xformsexample"/>
 	
 	<!-- 
 	This target is meant only to be run after a full deploy has
