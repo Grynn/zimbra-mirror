@@ -54,7 +54,7 @@ AjxMsg.oct = "Oct";
 AjxMsg.nov = "Nov";
 AjxMsg.dec = "Dec";
 
-AjxMsg.januaray = "January";
+AjxMsg.january = "January";
 AjxMsg.february = "February";
 AjxMsg.march = "March";
 AjxMsg.april = "April";
