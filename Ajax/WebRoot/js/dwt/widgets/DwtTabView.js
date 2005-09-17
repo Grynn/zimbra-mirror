@@ -84,25 +84,32 @@ function (title, tabView) {
 	var tabKey = this._tabIx++;	
 	this._tabs[tabKey] = new Object();
 	this._tabs[tabKey]["title"] = title;
-	this._tabs[tabKey]["view"] = tabView;
+
 	//add the button to the tab bar
 	this._tabBar.addButton(tabKey, title);
 	//add the page 
-
-	this._pageDiv.appendChild(this._tabs[tabKey]["view"].getHtmlElement());
+	if(tabView) {
+		this._tabs[tabKey]["view"] = tabView;
+		this._pageDiv.appendChild(this._tabs[tabKey]["view"].getHtmlElement());
+	} else {
+		this._tabs[tabKey]["view"] = null;
+	}		
 	
 	if(tabKey==1) { //show the first tab 
-		this._tabs[tabKey]["view"].showMe();
+		if(this._tabs[tabKey]["view"])
+			this._tabs[tabKey]["view"].showMe();
 		this._currentTabKey = tabKey;		
 		this.switchToTab(tabKey);
 	} else {
 		//hide all the other tabs
-		this._tabs[tabKey]["view"].hideMe();
-		Dwt.setVisible(this._tabs[tabKey]["view"].getHtmlElement(), false);
+		if(this._tabs[tabKey]["view"]) {		
+			this._tabs[tabKey]["view"].hideMe();
+			Dwt.setVisible(this._tabs[tabKey]["view"].getHtmlElement(), false);
+		}			
 	}
 	
 	this._tabBar.addSelectionListener(tabKey, new AjxListener(this, DwtTabView.prototype._tabButtonListener));	
-
+		
 	return tabKey;
 }
 
@@ -124,7 +131,7 @@ function (tabKey) {
 
 DwtTabView.prototype.switchToTab = 
 function(tabKey) {
-	if(this._tabs && this._tabs[tabKey] && this._tabs[tabKey]["view"]) {
+	if(this._tabs && this._tabs[tabKey]) {
 		this._showTab(tabKey);
 		this._tabBar.openTab(tabKey);
 	}
@@ -219,14 +226,15 @@ function(child) {
 
 DwtTabView.prototype._showTab = 
 function(tabKey) {
-	if(this._tabs && this._tabs[tabKey] && this._tabs[tabKey]["view"]) {
+	if(this._tabs && this._tabs[tabKey]) {
 		this._currentTabKey = tabKey;
 		//hide all the tabs
 		this._hideAllTabs();
 		//make this tab visible
-		this._tabs[tabKey]["view"].showMe();
-//		this._tabs[tabKey]["view"].setZIndex(DwtTabView.Z_ACTIVE_TAB);
-		Dwt.setVisible(this._tabs[tabKey]["view"].getHtmlElement(), true);
+		if(this._tabs[tabKey]["view"]) {
+			this._tabs[tabKey]["view"].showMe();
+			Dwt.setVisible(this._tabs[tabKey]["view"].getHtmlElement(), true);
+		}
 	}
 }
 
@@ -341,15 +349,17 @@ function(newWidth, newHeight) {
 * @param parent
 * DwtTabBar 
 **/
-function DwtTabBar(parent) {
+function DwtTabBar(parent, tabCssClass, btnCssClass) {
 	if (arguments.length == 0) return;
 	//var _className = className || "DwtTabBar";
 	this._buttons = new Array();
 	this._tbuttons = new Array();
-	this._btnStyle = "DwtTabButton";
+	this._btnStyle = btnCssClass ? btnCssClass : "DwtTabButton";
 	this._btnImage = null;
+	this._currentTabKey = 1;
+	var myClass = tabCssClass ? tabCssClass : "DwtTabBar";
 
-	DwtToolBar.call(this, parent, "DwtTabBar", DwtControl.STATIC_STYLE);
+	DwtToolBar.call(this, parent, myClass, DwtControl.STATIC_STYLE);
 
 	// NOTE: We explicitly pass in an index so that we can do exact
 	//		 positioning of the spacer and filler elements.	
@@ -357,31 +367,14 @@ function DwtTabBar(parent) {
 	this.addFiller(null, 1);
 }
 
+
+
 DwtTabBar.prototype = new DwtToolBar;
 DwtTabBar.prototype.constructor = DwtTabBar;
 
-// NOTE: The IE box model fix isn't needed.
-DwtTabBar.prototype.__itemPaddingRight = "0px";
-
-/**
- * This method overrides DwtToolBar#_addItem to handle adding elements at
- * a specific index. If an index is specified, it is passed directly to
- * the superclass's _addItem method. If no index is specified, however,
- * then the index is set to the number of cells in the toolbar minus one.
- * This is done in order to place the item <em>before</em> the trailing
- * filler element.
- * <p>
- * <strong>Note:</strong>
- * The implementation of this method assumes that the first child of
- * the tab bar's div element is a table.
- */
-DwtTabBar.prototype._addItem = function(type, element, index) {
-	if (!AjxUtil.isNumber(index)) {
-		var el = this.getHtmlElement().firstChild;
-		index = this._style == DwtToolBar.HORIZ_STYLE 
-			  ? el.rows[0].cells.length - 1: el.rows.length - 1;
-	}
-	DwtToolBar.prototype._addItem.call(this, type, element, index);
+//public members
+DwtTabBar.prototype.getCurrentTab = function() {
+	return this._currentTabKey;
 }
 
 DwtTabBar.prototype.addSpacer = function(size, index) {
@@ -390,21 +383,6 @@ DwtTabBar.prototype.addSpacer = function(size, index) {
 	return el;
 }
 
-DwtTabBar.prototype._createSpacerElement = function() {
-	var table = this.getDocument().createElement("table");
-	table.width = "100%";
-	table.cellSpacing = 0;
-	table.cellPadding = 0;
-	
-	var row1 = table.insertRow(table.rows.length);
-	var row2 = table.insertRow(table.rows.length);
-	var row3 = table.insertRow(table.rows.length);
-	
-	var row3cell1 = row3.insertCell(row3.cells.length);
-	AjxImg.setImage(row3cell1, "TabSpacer", null, true);
-	
-	return table;
-}
 
 DwtTabBar.prototype.addFiller = function(className, index) {
 	var el = DwtToolBar.prototype.addFiller.apply(this, arguments);
@@ -412,14 +390,20 @@ DwtTabBar.prototype.addFiller = function(className, index) {
 	return el;
 }
 
-DwtTabBar.prototype._createFillerElement = DwtTabBar.prototype._createSpacerElement;
-
 DwtTabBar.prototype.toString = 
 function() {
 	return "DwtTabBar";
 }
 
-//public method
+
+DwtTabBar.prototype.addStateChangeListener = function(listener) {
+	this._eventMgr.addListener(DwtEvent.STATE_CHANGE, listener);
+}
+
+DwtTabBar.prototype.removeStateChangeListener = function(listener) {
+	this._eventMgr.removeListener(DwtEvent.STATE_CHANGE, listener);
+}
+
 /**
 * @param tabId - the id used to create tab button in @link DwtTabBar.addButton method
 * @param listener - AjxListener
@@ -480,6 +464,7 @@ function (tabKey, tabTitle) {
 
 DwtTabBar.prototype.openTab = 
 function (tabK) {
+	this._currentTabKey = tabK;
     var cnt = this._tbuttons.length;
     for(var ix = 0; ix < cnt; ix ++) {
 		if(ix==tabK) 
@@ -491,7 +476,56 @@ function (tabK) {
 		this._tbuttons[tabK].setOpen();
     }
     var nextK = parseInt(tabK) + 1;
+	if (this._eventMgr.isListenerRegistered(DwtEvent.STATE_CHANGE)) {
+		this._eventMgr.notifyListeners(DwtEvent.STATE_CHANGE, this._stateChangeEv);
+	}    
 }
+
+//private members
+// NOTE: The IE box model fix isn't needed.
+DwtTabBar.prototype.__itemPaddingRight = "0px";
+
+/**
+ * This method overrides DwtToolBar#_addItem to handle adding elements at
+ * a specific index. If an index is specified, it is passed directly to
+ * the superclass's _addItem method. If no index is specified, however,
+ * then the index is set to the number of cells in the toolbar minus one.
+ * This is done in order to place the item <em>before</em> the trailing
+ * filler element.
+ * <p>
+ * <strong>Note:</strong>
+ * The implementation of this method assumes that the first child of
+ * the tab bar's div element is a table.
+ */
+DwtTabBar.prototype._addItem = function(type, element, index) {
+	if (!AjxUtil.isNumber(index)) {
+		var el = this.getHtmlElement().firstChild;
+		index = this._style == DwtToolBar.HORIZ_STYLE 
+			  ? el.rows[0].cells.length - 1: el.rows.length - 1;
+	}
+	DwtToolBar.prototype._addItem.call(this, type, element, index);
+}
+
+
+DwtTabBar.prototype._createSpacerElement = function() {
+	var table = this.getDocument().createElement("table");
+	table.width = "100%";
+	table.cellSpacing = 0;
+	table.cellPadding = 0;
+	
+	var row1 = table.insertRow(table.rows.length);
+	var row2 = table.insertRow(table.rows.length);
+	var row3 = table.insertRow(table.rows.length);
+	
+	var row3cell1 = row3.insertCell(row3.cells.length);
+	AjxImg.setImage(row3cell1, "TabSpacer", null, true);
+	
+	return table;
+}
+
+DwtTabBar.prototype._createFillerElement = DwtTabBar.prototype._createSpacerElement;
+
+
 /**
 * Greg Solovyev 1/4/2005 
 * changed ev.target.offsetParent.offsetParent to

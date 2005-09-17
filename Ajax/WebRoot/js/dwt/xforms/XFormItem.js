@@ -3667,8 +3667,10 @@ Dwt_TabBar_XFormItem.prototype._handleStateChange = function(event) {
 Dwt_TabBar_XFormItem.prototype.constructWidget = function() {
 	var form = this.getForm();
 	var cssClass = this.getCssClass();
-	var widget = new DwtTabView(form, cssClass, DwtControl.STATIC_STYLE);
+	var btnCssClass = this.getInheritedProperty("buttonCssClass");	
 	
+	//var widget = new DwtTabView(form, cssClass, DwtControl.STATIC_STYLE);
+	var widget = new DwtTabBar(form, cssClass, btnCssClass);
 	this._value2tabkey = {};
 	this._tabkey2value = {};
 	
@@ -3678,8 +3680,9 @@ Dwt_TabBar_XFormItem.prototype.constructWidget = function() {
 		// NOTE: DwtTabView keeps its own internal keys that are numerical
 		this._value2tabkey[choice.value] = i + 1;
 		this._tabkey2value[i + 1] = choice.value;
-		var page = new DwtTabViewPage(widget);
-		widget.addTab(choice.label, page);
+//		var page = new DwtTabViewPage(widget);
+		widget.addButton(i+1, choice.label);
+		//widget.addTab(choice.label, page);
 	}
 	
 	return widget;
@@ -3700,7 +3703,8 @@ Dwt_TabBar_XFormItem.prototype.updateWidget = function(newvalue) {
 	
 	var tabKey = this._value2tabkey[newvalue];
 	if (tabKey != this.widget.getCurrentTab()) {
-		this.widget.switchToTab(tabKey);
+		//this.widget.switchToTab(tabKey);
+		this.widget.openTab(tabKey);
 	}
 
 	this.widget.addStateChangeListener(this._stateChangeListener);
