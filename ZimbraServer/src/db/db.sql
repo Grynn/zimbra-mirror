@@ -186,16 +186,6 @@ INSERT INTO redolog_sequence(sequence) VALUES (0);
 # config
 #------------------------------------------------------------
 INSERT INTO config(name, value, description) VALUES
-  ('common.zimbraHome', '/opt/zimbra', 
-    'install root'),
-
+  # this should go away when bug 3878 is fixed
   ('store.compressBlobs', 'false',
-    'whether or not to compress blobs'),
-
-  ('indexing.mailboxIndexWriter.maxUncommittedOps', '200',
-    'maximum number of uncommitted indexing operations that may accumulate per mailbox before forcing a commit'),
-  ('indexing.mailboxIndexWriter.LRUSize', '100',
-    'maximum number of open mailbox index writers in the LRU map'),
-  ('indexing.mailboxIndexWriter.idleFlushTimeSec', '600',
-    'flush uncommitted indexing ops in mailbox if idle for longer than this value')
-;
+    'whether or not to compress blobs');
