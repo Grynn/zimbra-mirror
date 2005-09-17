@@ -80,6 +80,8 @@
 
 <attr name="zimbraAuthLdapBindDn" type="string"/>
 
+<attr name="zimbraAuthFallbackToLocal" type="boolean"/>
+
 <attr name="zimbraAuthLdapURL" type="string"/>
 
 <attr name="zimbraAuthMech" type="enum" value="zimbra,ldap,ad"/>

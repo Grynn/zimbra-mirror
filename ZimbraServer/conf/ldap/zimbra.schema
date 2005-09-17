@@ -246,6 +246,7 @@ objectIdentifier zimbraAuthLdapSearchBindDn ZimbraAttrType:253
 objectIdentifier zimbraAuthLdapSearchBindPassword ZimbraAttrType:254
 objectIdentifier zimbraAuthLdapSearchFilter ZimbraAttrType:255
 objectIdentifier zimbraAuthLdapExternalDn ZimbraAttrType:256
+objectIdentifier zimbraAuthFallbackToLocal ZimbraAttrType:257
 
 #################################################################
 # object class OIDs
@@ -398,6 +399,13 @@ attributetype ( zimbraAttachmentsScanURL
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
 	SINGLE-VALUE )	
 
+attributetype ( zimbraAuthFallbackToLocal
+	NAME 'zimbraAuthFallbackToLocal'
+	DESC 'fallback to local auth if external mech fails'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
 attributetype ( zimbraAuthLdapBindDn
 	NAME 'zimbraAuthLdapBindDn'
 	DESC 'LDAP bind dn for ldap auth mech'
@@ -412,7 +420,7 @@ attributetype ( zimbraAuthLdapURL
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
-	SINGLE-VALUE )	
+	)
 
 attributetype ( zimbraAuthLdapSearchBase
 	NAME 'zimbraAuthLdapSearchBase'
@@ -666,7 +674,7 @@ attributetype ( zimbraGalLdapURL
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
-	SINGLE-VALUE )					
+	)
 
  attributetype ( zimbraGalMaxResults
 	NAME 'zimbraGalMaxResults'
@@ -2218,6 +2226,7 @@ objectclass ( zimbraDomain
 		zimbraAuthLdapSearchBindPassword $
 		zimbraAuthLdapSearchFilter $
 		zimbraAuthMech $
+		zimbraAuthFallbackToLocal	$
 		zimbraGalMaxResults $
 		zimbraGalMode $
 		zimbraGalLdapURL $
@@ -2227,7 +2236,6 @@ objectclass ( zimbraDomain
 		zimbraGalLdapAttrMap $
 		zimbraGalLdapFilter
 		))
-
 
 ################
 # zimbraSecurityGroup is used to represent a security group in the directory. Each zimbraMember attr
@@ -2259,7 +2267,7 @@ objectclass ( zimbraServer
 	MUST (zimbraId $ cn)
 	MAY (
 		description $
-                zimbraAttachmentsScanURL $
+        zimbraAttachmentsScanURL $
 		zimbraFileUploadMaxSize $
 		zimbraIsMonitorHost $
 		zimbraLmtpAdvertisedName $
