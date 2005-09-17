@@ -251,6 +251,18 @@ function (obj, callback) {
 	
 	attr = soapDoc.set("a", obj.attrs[ZaDomain.A_AuthLdapUserDn]);
 	attr.setAttribute("n", ZaDomain.A_AuthLdapUserDn);	
+
+	attr = soapDoc.set("a", obj.attrs[ZaDomain.A_AuthLdapSearchBase]);
+	attr.setAttribute("n", ZaDomain.A_AuthLdapSearchBase);
+
+	attr = soapDoc.set("a", obj.attrs[ZaDomain.A_AuthLdapSearchFilter]);
+	attr.setAttribute("n", ZaDomain.A_AuthLdapSearchFilter);
+
+	attr = soapDoc.set("a", obj.attrs[ZaDomain.A_AuthLdapSearchBindDn]);
+	attr.setAttribute("n", ZaDomain.A_AuthLdapSearchBindDn);
+
+	attr = soapDoc.set("a", obj.attrs[ZaDomain.A_AuthLdapSearchBindPassword]);
+	attr.setAttribute("n", ZaDomain.A_AuthLdapSearchBindPassword);
 	
 	attr = soapDoc.set("name", obj[ZaDomain.A_AuthTestUserName]);
 	attr = soapDoc.set("password", obj[ZaDomain.A_AuthTestPassword]);	
