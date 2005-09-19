@@ -1,0 +1,139 @@
+#!/usr/bin/perl
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Version: ZPL 1.1
+# 
+# The contents of this file are subject to the Zimbra Public License
+# Version 1.1 ("License"); you may not use this file except in
+# compliance with the License. You may obtain a copy of the License at
+# http://www.zimbra.com/license
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+# the License for the specific language governing rights and limitations
+# under the License.
+# 
+# The Original Code is: Zimbra Collaboration Suite.
+# 
+# The Initial Developer of the Original Code is Zimbra, Inc.
+# Portions created by Zimbra are Copyright (C) 2005 Zimbra, Inc.
+# All Rights Reserved.
+# 
+# Contributor(s):
+# 
+# ***** END LICENSE BLOCK *****
+# 
+
+use strict;
+
+use lib "/opt/zimbra/zimbramon/lib/zimbrapm";
+use lib "/opt/zimbra/zimbramon/lib/zimbrapm/SOAP";
+use lib "/opt/zimbra/zimbramon/lib";
+
+use DBI;
+use Time::Local;
+
+my $baseDir = "/opt/zimbra";
+
+my $data_source="dbi:mysql:database=zimbra_logger;mysql_read_default_file=/opt/zimbra/conf/my.logger.cnf;mysql_socket=/opt/zimbra/logger/db/mysql.sock";
+
+my $username="zimbra";
+my $password = `/opt/zimbra/bin/zmlocalconfig -s -m nokey zimbra_logger_mysql_password`;
+chomp $password;
+
+my $dbh = DBI->connect($data_source, $username, $password);
+
+if (!$dbh) { 
+	print STDERR "DB: Can't connect to $data_source: $DBI::errstr\n";
+	exit 1;
+}
+
+my %MON = (
+		'Jan' => '01',
+		'Feb' => '02',
+		'Mar' => '03',
+		'Apr' => '04',
+		'May' => '05',
+		'Jun' => '06',
+		'Jul' => '07',
+		'Aug' => '08',
+		'Sep' => '09',
+		'Oct' => '10',
+		'Nov' => '11',
+		'Dec' => '12'
+	);
+
+sub logdate_to_sqldate {
+	my $ts = shift;
+	if ($ts eq "" || !defined($ts)) {
+		return '';
+	}
+	# Sep 14 18:30:02
+
+	my @p = split (' ', $ts);
+	my @s= localtime();
+	my $y = $s[5]+1900;
+	my $m = $MON{$p[0]};
+
+	my $dt = sprintf ("%4d-%02d-%02d %s",$y,$m,$p[1],$p[2]);
+	return $dt;
+}
+
+
+sub get_last_timestamp {
+	my $ts;
+
+	my $statement = "select max(time) from server_stat";
+
+	my $sth = $dbh->prepare($statement);
+
+	if (!$sth->execute) {
+		Zimbra::Logger::Log ("err", "DB: $sth->errstr");
+		return undef;
+	}
+
+	my @ary = $sth->fetchrow_array;
+
+	return (datetime_to_timestamp($ary[0]));
+	
+}
+
+my $statement =
+	"insert into raw_logs(log_date, host, app, pid, msg, postfix_msgid) values (?,?,?,?,?,?)";
+
+my $sth = $dbh->prepare($statement);
+
+my $DEBUG = 0;
+
+($DEBUG) && open FOO, ">/tmp/zmlogger.out";
+
+($DEBUG) && print FOO localtime()," zmlogger starting up\n";
+
+$SIG{QUIT} = \&bye;
+
+while (<>) {
+	my ($log_date, $host, $app, $pid, $msg) =
+		($_ =~ m/(^.{15}) (\S+) ([^[]+)\[(\d+)\]: (.*)$/);
+
+	my $msgid = undef;
+
+	if ($app =~ /^postfix/ && $msg =~ /^(\S{11}): /) {
+		$msgid = $1;
+	} elsif ($app =~ /^amavi/ && $msg =~ /(\S{11})$/) {
+		$msgid = $1;
+	}
+
+	if (!$sth->execute(logdate_to_sqldate($log_date), $host, 
+		$app, $pid, $msg, $msgid) ) {
+		($DEBUG) && print FOO localtime(),
+			" zmlogger insert failed: ",$sth->errstr,"\n";
+	}
+
+}
+($DEBUG) && close FOO;
+
+sub bye {
+	($DEBUG) && close FOO;
+	exit (0);
+}
+

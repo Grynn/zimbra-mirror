@@ -96,7 +96,7 @@ sub getMsgIds {
 	my %uniqIds = ();
 
 	if ($searchId ne "") {
-		push @clauses, "postfix_msgid='".$searchId."'";
+		push @clauses, "msg like '%".$searchId."%'";
 	}
 
 	# ID: from=<sender>
@@ -139,6 +139,7 @@ sub getMsgIds {
 sub displayMsg {
 	my $msg = shift;
 	my $indent = shift;
+	my $only = shift;
 
 	my $sender = $options{s};
 	my $recip = $options{r};
@@ -176,6 +177,7 @@ sub displayMsg {
 
 		foreach my $r ( sort keys %{$$msg{$host}{recipList}} ) {
 			if (defined ($recip) && $r ne $recip) {next;}
+			if (defined ($only) && $r ne $recip) {next;}
 
 			print "$indent", "Recipient $r\n";
 			print "$indent","$indent",
