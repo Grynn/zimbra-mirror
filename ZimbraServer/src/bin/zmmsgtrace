@@ -177,7 +177,7 @@ sub displayMsg {
 
 		foreach my $r ( sort keys %{$$msg{$host}{recipList}} ) {
 			if (defined ($recip) && $r ne $recip) {next;}
-			if (defined ($only) && $r ne $recip) {next;}
+			if (defined ($only) && $r ne $only) {next;}
 
 			print "$indent", "Recipient $r\n";
 			print "$indent","$indent",
