@@ -103,10 +103,10 @@ createKeyStore() {
 	echo "** Creating keystore"
 	echo
 
-	rm -f ${TOMCAT}/keystore
+	rm -f ${CONF}/keystore
 
 	keytool -genkey -dname "CN=$H, OU=Zimbra, O=Zimbra, L=NA, S=NA, C=US" \
-		-alias tomcat -keyalg RSA -keysize 1024 -keystore ${TOMCAT}/keystore \
+		-alias tomcat -keyalg RSA -keysize 1024 -keystore ${CONF}/keystore \
 		-storetype JKS -storepass zimbra -keypass zimbra
 
 }
@@ -118,7 +118,7 @@ createCertReq() {
 
 	keytool -certreq -keyalg RSA -alias tomcat -file \
 		${BASE}/server/server.csr -keystore \
-		${TOMCAT}/keystore -storepass zimbra
+		${CONF}/keystore -storepass zimbra
 
 	cp ${BASE}/server/server.csr /tmp/server.csr.$$
 	cat /tmp/server.csr.$$ | sed -e \

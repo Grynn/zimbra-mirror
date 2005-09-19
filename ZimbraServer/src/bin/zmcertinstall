@@ -72,7 +72,7 @@ importCert() {
 	echo
 
 	if [ $APP = "mailbox" ]; then
-		keytool -import -alias tomcat -keystore ${TOMCAT}/keystore \
+		keytool -import -alias tomcat -keystore ${CONF}/keystore \
 			-trustcacerts -file ${CERTFILE} -storepass zimbra
 	else
 		cp -f $CERTFILE ${CONF}/smtpd.crt

@@ -23,7 +23,7 @@
         maxThreads="100" minSpareThreads="100" maxSpareThreads="100"
         scheme="https" secure="true"
         clientAuth="false" sslProtocol="TLS"
-        keystoreFile="conf/keystore" keystorePass="zimbra"/>
+        keystoreFile="/opt/zimbra/conf/keystore" keystorePass="zimbra"/>
 	HTTPSEND -->
     <!-- admin services connector; requires SSL -->
     <Connector port="7071"
@@ -31,7 +31,7 @@
         maxThreads="50" minSpareThreads="50" maxSpareThreads="50"
         scheme="https" secure="true"
         clientAuth="false" sslProtocol="TLS"
-        keystoreFile="conf/keystore" keystorePass="zimbra"/>
+        keystoreFile="/opt/zimbra/conf/keystore" keystorePass="zimbra"/>
 
     <!-- This is here for compatibility only, not required -->
     <Connector port="8009" protocol="AJP/1.3" />
