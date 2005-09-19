@@ -157,7 +157,7 @@ sub displayMsg {
 		} 
 		
 		if ($sender ne "") {
-			if ($sender !~ /$$msg{$host}{sender}/) {next;}
+			if ($$msg{$host}{sender} !~ /$sender/) {next;}
 		}
 
 		if ($indent eq "") {
