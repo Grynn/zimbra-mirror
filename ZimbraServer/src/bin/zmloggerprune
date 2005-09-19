@@ -1,0 +1,77 @@
+#!/usr/bin/perl
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Version: ZPL 1.1
+# 
+# The contents of this file are subject to the Zimbra Public License
+# Version 1.1 ("License"); you may not use this file except in
+# compliance with the License. You may obtain a copy of the License at
+# http://www.zimbra.com/license
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+# the License for the specific language governing rights and limitations
+# under the License.
+# 
+# The Original Code is: Zimbra Collaboration Suite.
+# 
+# The Initial Developer of the Original Code is Zimbra, Inc.
+# Portions created by Zimbra are Copyright (C) 2005 Zimbra, Inc.
+# All Rights Reserved.
+# 
+# Contributor(s):
+# 
+# ***** END LICENSE BLOCK *****
+# 
+
+use strict;
+
+use lib "/opt/zimbra/zimbramon/lib/zimbrapm";
+use lib "/opt/zimbra/zimbramon/lib/zimbrapm/SOAP";
+use lib "/opt/zimbra/zimbramon/lib";
+
+use DBI;
+use Time::Local;
+
+# 30 days
+my $ts = timestamp_to_datetime(time()-(60*60*24*30));
+
+# print STDERR "Deleting logs older than $ts\n\n";
+
+my $baseDir = "/opt/zimbra";
+
+my $data_source="dbi:mysql:database=zimbra_logger;mysql_read_default_file=/opt/zimbra/conf/my.logger.cnf;mysql_socket=/opt/zimbra/logger/db/mysql.sock";
+
+my $username="zimbra";
+my $password = `/opt/zimbra/bin/zmlocalconfig -s -m nokey zimbra_logger_mysql_password`;
+chomp $password;
+
+my $dbh = DBI->connect($data_source, $username, $password);
+
+if (!$dbh) { 
+	print STDERR "DB: Can't connect to $data_source: $DBI::errstr\n";
+	exit 1;
+}
+
+my $statement =
+	"delete from raw_logs where log_date < ?";
+
+my $sth = $dbh->prepare($statement);
+
+if (!$sth->execute($ts) ) {
+	exit (1);
+}
+
+sub timestamp_to_datetime {
+	my $ts = shift;
+	if ($ts eq "" || !defined($ts)) {
+		return '1000-01-01 00:00:00';
+	}
+	my @s= localtime($ts);
+
+	#'YYYY-MM-DD HH:MM:SS'
+	my $dt = sprintf ("%4d-%02d-%02d %02d:%02d:%02d",
+		$s[5]+1900,$s[4]+1,$s[3],$s[2],$s[1],$s[0]);
+	return $dt;
+}
+

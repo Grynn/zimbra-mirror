@@ -115,7 +115,7 @@ sub trapSignals {
 	$SIG{HUP} = \&handleSignal;
 	$SIG{INT} = \&Zimbra::Mon::Control::killChildren;
 
-	#$SIG{CHLD} = \&reaper;
+	$SIG{CHLD} = 'IGNORE';
 }
 
 sub reaper {

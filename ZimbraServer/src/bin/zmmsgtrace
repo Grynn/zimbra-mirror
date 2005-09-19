@@ -1,0 +1,311 @@
+#!/usr/bin/perl
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Version: ZPL 1.1
+# 
+# The contents of this file are subject to the Zimbra Public License
+# Version 1.1 ("License"); you may not use this file except in
+# compliance with the License. You may obtain a copy of the License at
+# http://www.zimbra.com/license
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+# the License for the specific language governing rights and limitations
+# under the License.
+# 
+# The Original Code is: Zimbra Collaboration Suite.
+# 
+# The Initial Developer of the Original Code is Zimbra, Inc.
+# Portions created by Zimbra are Copyright (C) 2005 Zimbra, Inc.
+# All Rights Reserved.
+# 
+# Contributor(s):
+# 
+# ***** END LICENSE BLOCK *****
+# 
+
+use strict;
+
+use lib "/opt/zimbra/zimbramon/lib";
+
+use DBI;
+use Time::Local;
+
+use Getopt::Std;
+
+my %options = ();
+
+unless ( getopts( 'i:s:r:', \%options ) ) { usage(); }
+
+my $msgId = $options{i};
+my $sender = $options{s};
+my $recip = $options{r};
+
+if ($msgId eq "" && $sender eq "" && $recip eq "") {
+	usage();
+}
+
+my $dbh = connectDb();
+
+print "Tracing messages\n";
+if ($msgId) {
+	print "\tID $msgId\n";
+}
+if ($sender) {
+	print "\tfrom $sender\n";
+}
+if ($recip) {
+	print "\tto $recip\n";
+}
+print "\n";
+
+my @msgIds;
+
+# We may have a msgId from the middle of the path - get the initial ID
+getMsgIds(\@msgIds);
+
+sub getMsgById {
+	my $msgId = shift;
+
+	my $whereClause = "";
+	$whereClause .= "$msgId";
+
+	my $statement =
+		"select log_date, host, app, pid, msg from raw_logs ".
+		"where app like \'%postfix%\' and postfix_msgid = \'$whereClause\'";
+
+	# print "Searching for message $msgId\n";
+
+	my $ary = execSelect($statement);
+
+	return $ary;
+
+}
+
+sub getMsgIds {
+	my $ids = shift;
+	my $searchId = $options{i};
+	my $sender = $options{s};
+	my $recip = $options{r};
+
+	my $whereClause = "";
+	my @clauses = ();
+	my $statement = "";
+	my $ary;
+
+	my %uniqIds = ();
+
+	if ($searchId ne "") {
+		push @clauses, "postfix_msgid='".$searchId."'";
+	}
+
+	# ID: from=<sender>
+	if ($sender ne "") {
+		push @clauses, "msg like '%from=<%".$sender."%>%'";
+	}
+
+	# ID: to=<recip> ... queued as QID
+	if ($recip ne "" && $sender eq "") {
+		push @clauses, "msg like '%to=<%".$recip."%>%queued as %'";
+	}
+
+	$statement = "select log_date, host, pid, msg from raw_logs ".
+		"where app like \'%postfix%\'";# and msg like \'$whereClause\'";
+	foreach (@clauses) {
+		$statement .= " and $_";
+	}
+
+	$ary = execSelect($statement);
+	foreach my $row (@$ary) {
+		my $id = (split (':',$$row[3]))[0];
+		$uniqIds{$id} = $id;
+	}
+
+	foreach my $id (sort keys %uniqIds) {
+		$whereClause = '%queued as '.$id.'%';
+		my $statement = "select log_date, host, pid, msg from raw_logs ".
+			"where app like \'%postfix%\' and msg like \'$whereClause\'";
+		my $ary = execSelect($statement);
+		if ($#$ary >= 0) {
+			delete $uniqIds{$id};
+		} else {
+			#print "Tracing msg: $id\n";
+			displayMsg (traceMsg($id));
+		}
+	}
+
+}
+
+sub displayMsg {
+	my $msg = shift;
+	my $indent = shift;
+
+	my $sender = $options{s};
+	my $recip = $options{r};
+
+	foreach my $host (sort keys %{$msg}) {
+		if ($host eq "ID") {next;}
+
+		if ($recip ne "") {
+			my $found = 0;
+			foreach my $r ( sort keys %{$$msg{$host}{recipList}} ) {
+				if ($recip !~ /$r/) {next;}
+				$found = 1; last;
+			}
+			if (!$found) {next;}
+		} 
+		
+		if ($sender ne "") {
+			if ($sender !~ /$$msg{$host}{sender}/) {next;}
+		}
+
+		if ($indent eq "") {
+			print "\n";
+			print "Message ID $$msg{ID}\n";
+			print "$$msg{$host}{sender} -->\n";
+
+			foreach my $r ( sort keys %{$$msg{$host}{recipList}} ) {
+				print "\t\t$r";
+				print $$msg{$host}{recipList}{$r}{origRecip}?
+					" (originally to $$msg{$host}{recipList}{$r}{origRecip})\n":"\n";
+			}
+			print "\n";
+
+			$indent = "  ";
+		}
+
+		foreach my $r ( sort keys %{$$msg{$host}{recipList}} ) {
+			if (defined ($recip) && $r ne $recip) {next;}
+
+			print "$indent", "Recipient $r\n";
+			print "$indent","$indent",
+				"$$msg{$host}{arriveTime} - $$msg{$host}{prevHost} ",
+				"($$msg{$host}{prevIp}) --> $host\n";
+			print "$indent","$indent",
+				"$$msg{$host}{recipList}{$r}{leaveTime} - $host --> ",
+				"$$msg{$host}{recipList}{$r}{nextHost} ($$msg{$host}{recipList}{$r}{nextIp})";
+			if (defined ($$msg{$host}{recipList}{$r}{nextID})) {
+				print " ID $$msg{$host}{recipList}{$r}{nextID}{ID}";
+			}
+			print " status $$msg{$host}{recipList}{$r}{status}";
+			print "\n";
+
+			if (defined ($$msg{$host}{recipList}{$r}{nextID})) {
+				displayMsg($$msg{$host}{recipList}{$r}{nextID}, "$indent  ", $r);
+			}
+
+		}
+
+	}
+}
+
+sub traceMsg {
+	my $msgId = shift;
+
+	#print "Tracing message $msgId\n\n";
+
+	#$messages{$msgId} = getMsgById ($msgId);
+	my $ary = getMsgById ($msgId);
+
+	my %msg = ();
+
+	$msg{ID} = $msgId;
+
+	# Rows are: date host app pid msg
+	foreach my $row (@$ary) {
+		my ($date, $host, $app, $pid, $msg) = (@$row);
+
+		#print "ROW: $date, $host, $app, $pid, $msg\n\n";
+
+		($msg =~ "^$msgId: (removed|message-id)") && next;
+
+		if ($msg =~ /^${msgId}: client=([^[]+)\[(.*)\]/) {
+			$msg{$host}{arriveTime} = $date;
+			$msg{$host}{prevHost} = $1;
+			$msg{$host}{prevIp} = $2;
+			next;
+		}
+
+		if ($msg =~ /^${msgId}: from=<(.*)>/) {
+			$msg{$host}{sender} = $1?$1:"postmaster";
+			next;
+		}
+
+		if ($msg =~ /^${msgId}: to=<([^>]*)>, relay=([^[]+)\[?(.*)\]?, delay=\d+, status=(\S+) (.*)/) {
+			if (! defined ($msg{$host}{recipList})) {
+				$msg{$host}{recipList} = ();
+			}
+			my $r = $1;
+			$msg{$host}{recipList}{$r}{leaveTime} = $date;
+			$msg{$host}{recipList}{$r}{recip} = $r;
+			$msg{$host}{recipList}{$r}{nextHost} = $2;
+			$msg{$host}{recipList}{$r}{nextIp} = $3;
+			$msg{$host}{recipList}{$r}{status} = $4;
+			if ($5 =~ /queued as (.*)\)/) {
+				$msg{$host}{recipList}{$r}{nextID} = traceMsg($1, $msg{$host}{recipList}{$r}{nextID});
+			}
+			next;
+		}
+
+		if ($msg =~ /^${msgId}: to=<([^>]*)>, orig_to=<([^>]*)>, relay=([^[]+)\[(.*)\], delay=\d+, status=(\S+) (.*)/) {
+			if (! defined ($msg{$host}{recipList})) {
+				$msg{$host}{recipList} = ();
+			}
+			my $r = $1;
+			$msg{$host}{recipList}{$r}{leaveTime} = $date;
+			$msg{$host}{recipList}{$r}{recip} = $r;
+			$msg{$host}{recipList}{$r}{origRecip} = $2;
+			$msg{$host}{recipList}{$r}{nextHost} = $3;
+			$msg{$host}{recipList}{$r}{nextIp} = $4;
+			$msg{$host}{recipList}{$r}{status} = $5;
+
+			if ($6 =~ /queued as (.*)\)/) {
+				$msg{$host}{recipList}{$r}{nextID} = traceMsg($1, $msg{$host}{recipList}{$r}{nextID});
+			}
+			next;
+		}
+
+	}
+
+	return (\%msg);
+}
+
+sub execSelect {
+	my $statement = shift;
+
+	#print "Searching database: \n";
+	#print "\t $statement\n\n";
+
+	my $sth = $dbh->prepare($statement);
+
+	if (!$sth->execute() ) {
+		print STDERR "$0 sql execute failed: ",$sth->errstr,"\n";
+	}
+
+	my $aryref = $sth->fetchall_arrayref;
+
+	return $aryref;
+}
+
+sub usage {
+	print STDERR "Usage: $0 -i msg_id | -s sender_addr -r rcpt_addr\n\n";
+
+	exit (1);
+}
+
+sub connectDb {
+	my $data_source="dbi:mysql:database=zimbra_logger;mysql_read_default_file=/opt/zimbra/conf/my.logger.cnf;mysql_socket=/opt/zimbra/logger/db/mysql.sock";
+
+	my $username="zimbra";
+	my $password = `/opt/zimbra/bin/zmlocalconfig -s -m nokey zimbra_logger_mysql_password`;
+	chomp $password;
+
+	my $dbh = DBI->connect($data_source, $username, $password);
+
+	if (!$dbh) { 
+		print STDERR "DB: Can't connect to $data_source: $DBI::errstr\n";
+		exit 1;
+	}
+
+	return $dbh;
+}

@@ -37,9 +37,14 @@ GRANT ALL ON zimbra_logger.* TO 'root'@'localhost.localdomain' IDENTIFIED BY 'zi
 
 CREATE TABLE raw_logs (
 	id					INTEGER UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	date				DATETIME NOT NULL,
+	log_date			DATETIME NOT NULL,
 	host				VARCHAR(255) NOT NULL,
+	app					VARCHAR(64) NOT NULL,
+	pid					INTEGER UNSIGNED NOT NULL DEFAULT 0,
 	msg 				TEXT NOT NULL,
-	facil				VARCHAR(64) NOT NULL,
-	level				VARCHAR(64) NOT NULL
+	postfix_msgid		VARCHAR(12),
+	INDEX i_app (app),
+	INDEX i_postfix_msgid (postfix_msgid),
+	INDEX i_log_date (log_date),
+	INDEX i_host (host)
 ) ENGINE = MyISAM;

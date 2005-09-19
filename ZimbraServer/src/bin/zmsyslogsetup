@@ -32,12 +32,17 @@ if [ $ID -ne 0 ]; then
 fi
 
 LOGHOST=`su - zimbra -c 'zmprov gacf | egrep "^zimbraLogHostname"'`
+LOCALHOST=`su - zimbra -c 'zmlocalconfig -m nokey zimbra_server_hostname'`
 
-if [ x$LOGHOST = "x" ]; then
+if [ "x$LOGHOST" = "x" ]; then
 	TYPE="local"
 else
-	TYPE="remote"
 	LOGHOST=`echo $LOGHOST | awk '{print $2}'`
+	if [ x$LOGHOST = "x$LOCALHOST" ]; then
+		TYPE="local"
+	else
+		TYPE="remote"
+	fi
 fi
 
 usage() {
