@@ -15,7 +15,7 @@ use strict;
 
 $enable_ldap = 1;
 $default_ldap = {
-	hostname      => '@@zimbra_server_hostname@@',
+	hostname      => '@@ldap_host@@',
 	timeout       => 30,
 	tls           => 0,
 	query_filter  => '(&(objectClass=amavisAccount)(mail=%m))',
