@@ -147,10 +147,10 @@ sub displayMsg {
 	foreach my $host (sort keys %{$msg}) {
 		if ($host eq "ID") {next;}
 
-		if ($recip ne "") {
+		if ($recip ne "" && $only eq "") {
 			my $found = 0;
 			foreach my $r ( sort keys %{$$msg{$host}{recipList}} ) {
-				if ($recip !~ /$r/) {next;}
+				if ($r !~ /$recip/o) {next;}
 				$found = 1; last;
 			}
 			if (!$found) {next;}
@@ -176,7 +176,7 @@ sub displayMsg {
 		}
 
 		foreach my $r ( sort keys %{$$msg{$host}{recipList}} ) {
-			if (defined ($recip) && $r ne $recip) {next;}
+			if (defined ($recip) && $r !~ /$recip/o) {next;}
 			if (defined ($only) && $r ne $only) {next;}
 
 			print "$indent", "Recipient $r\n";
