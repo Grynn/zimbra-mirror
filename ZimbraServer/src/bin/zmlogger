@@ -112,6 +112,8 @@ my $DEBUG = 0;
 $SIG{QUIT} = \&bye;
 
 while (<>) {
+	(/last message repeated/) && next;
+
 	my ($log_date, $host, $app, $pid, $msg) =
 		($_ =~ m/(^.{15}) (\S+) ([^[]+)\[(\d+)\]: (.*)$/);
 
@@ -123,10 +125,18 @@ while (<>) {
 		$msgid = $1;
 	}
 
-	if (!$sth->execute(logdate_to_sqldate($log_date), $host, 
-		$app, $pid, $msg, $msgid) ) {
-		($DEBUG) && print FOO localtime(),
-			" zmlogger insert failed: ",$sth->errstr,"\n";
+	eval {
+		if (!$sth->execute(logdate_to_sqldate($log_date), $host, 
+			$app, $pid, $msg, $msgid) ) {
+			($DEBUG) && print FOO localtime(),
+				" zmlogger insert failed: ",$sth->errstr,"\n";
+		}
+	};
+	if ($@) {
+		print "Error inserting $log_date, $host, $app, $pid, $msg\n";
+		print "From $_\n";
+		print $sth->errstr,"\n";
+		print "$@\n";
 	}
 
 }
