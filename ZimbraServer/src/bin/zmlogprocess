@@ -61,9 +61,12 @@ sub processMta {
 
 	print "Found ".scalar @$ary." messages\n";
 
+	my $count = 0;
 	foreach my $row (sort @$ary) {
+		$count++;
 		$lastRowID = insertMessage(parseMessage($$row[0]));
 	}
+	print "Inserted $count rows\n";
 
 	saveLastRowId("mta", $lastRowID);
 
@@ -187,7 +190,7 @@ sub parseMessage {
 			$msg{$host}{recipList}{$r}{nextIp} = $3;
 			$msg{$host}{recipList}{$r}{status} = $4;
 			if ($5 =~ /queued as (.*)\)/) {
-				$msg{$host}{recipList}{$r}{nextID} = $5;
+				$msg{$host}{recipList}{$r}{nextID} = $1;
 			}
 			next;
 		}
@@ -205,7 +208,7 @@ sub parseMessage {
 			$msg{$host}{recipList}{$r}{status} = $5;
 
 			if ($6 =~ /queued as (.*)\)/) {
-				$msg{$host}{recipList}{$r}{nextID} = $5;
+				$msg{$host}{recipList}{$r}{nextID} = $1;
 			}
 			next;
 		}
@@ -220,13 +223,14 @@ sub insertMessage {
 	my $last = 0;
 
 	my $statement = "insert into mta ".
-		"(arrive_time, leave_time, host, msgid, sender, recipient, ".
+		"(arrive_time, leave_time, host, msgid, next_msgid, ".
+		"sender, recipient, ".
 		"from_host, from_IP, to_host, to_IP, status) ".
-		"values (?,?,?,?,?,?,?,?,?,?,?)";
+		"values (?,?,?,?,?,?,?,?,?,?,?,?)";
 
 	foreach my $host (sort keys %{$msg}) {
 		if ($host eq "ID") {
-			print "Inserting $$msg{$host}\n";
+			#print "Inserting $$msg{$host}\n";
 			next;
 		} 
 		if ($host eq "rowid") {
@@ -241,7 +245,8 @@ sub insertMessage {
 				$$msg{$host}{arriveTime}?$$msg{$host}{arriveTime}:'0000-00-00 00:00:00', 
 				$$msg{$host}{recipList}{$r}{leaveTime}?$$msg{$host}{recipList}{$r}{leaveTime}:
 				'0000-00-00 00:00:00',
-				$host, $$msg{ID}, $$msg{$host}{sender}, $r, $$msg{$host}{prevHost}, 
+				$host, $$msg{ID}, $$msg{$host}{recipList}{$r}{nextID},
+				$$msg{$host}{sender}, $r, $$msg{$host}{prevHost}, 
 				$$msg{$host}{prevIp}, $$msg{$host}{recipList}{$r}{nextHost}, 
 				$$msg{$host}{recipList}{$r}{nextIp}, $$msg{$host}{recipList}{$r}{status});
 		}
@@ -259,6 +264,8 @@ sub deleteRawLogs {
 		print STDERR "Unknown app $app in deleteRawLogs\n\n";
 		return;
 	}
+
+	print "Deleting processed $app logs from raw_logs\n";
 
     my $sth = sqlExec("delete from raw_logs where app like '".$app."%' and id <= '".$lastId."'");
 }

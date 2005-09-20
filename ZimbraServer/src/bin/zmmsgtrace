@@ -110,7 +110,8 @@ sub getMsgIds {
 	}
 
 	$statement = "select log_date, host, pid, msg from raw_logs ".
-		"where app like \'%postfix%\'";# and msg like \'$whereClause\'";
+		"where app like \'%postfix%\'";
+
 	foreach (@clauses) {
 		$statement .= " and $_";
 	}
@@ -128,10 +129,56 @@ sub getMsgIds {
 		my $ary = execSelect($statement);
 		if ($#$ary >= 0) {
 			delete $uniqIds{$id};
-		} else {
-			#print "Tracing msg: $id\n";
-			displayMsg (traceMsg($id));
 		}
+	}
+
+	foreach my $id (sort keys %uniqIds) {
+		#print "Tracing msg: $id\n";
+		displayMsg (traceMsg($id));
+	}
+
+	# Now look in the processed logs
+
+	%uniqIds = ();
+	@clauses = ();
+
+	if ($searchId ne "") {
+		push @clauses, "msgid='".$searchId."' or next_msgid='".$searchId."'";
+	}
+
+	if ($sender ne "") {
+		push @clauses, "sender like '%".$sender."%'";
+	}
+
+	if ($recip ne "" && $sender eq "") {
+		push @clauses, "recipient like '%".$recip."%'";
+	}
+
+	$statement = "select distinct(msgid) from mta ".
+		"where";
+
+	for (my $i = 0; $i <= $#clauses; $i++) {
+		if ($i) { $statement .= " and"; }
+		$statement .= " $clauses[$i]";
+	}
+
+	$ary = execSelect($statement);
+	foreach my $row (@$ary) {
+		my $id = $$row[0];
+		$uniqIds{$id} = $id;
+	}
+
+	foreach my $id (sort keys %uniqIds) {
+		my $st = "select distinct(next_msgid) from mta where next_msgid='".$id."'";
+		my $ary = execSelect($st);
+		if ($#$ary >= 0) {
+			delete $uniqIds{$id};
+		}
+	}
+
+	foreach my $id (sort keys %uniqIds) {
+		#print "Tracing msg: $id\n";
+		displayMsg (traceProcessedMsg($id));
 	}
 
 }
@@ -201,6 +248,53 @@ sub displayMsg {
 	}
 }
 
+sub traceProcessedMsg {
+	my $msgId = shift;
+
+	#print "Tracing processed msg $msgId\n";
+
+	my %msg = ();
+
+	my $statement = 
+		"select recipient from mta where msgid='".$msgId."'";
+
+	my $rary = execSelect($statement);
+
+	foreach my $r (@$rary) {
+		my $recip = $$r[0];
+
+		my $statement =
+			"select arrive_time, leave_time, host, msgid, next_msgid, ".
+			"sender, recipient, status, from_host, from_IP, to_host, to_IP ".
+			"from mta where msgid='".$msgId."' and recipient='".$recip."'";
+
+		my $ary = execSelect($statement);
+
+		$msg{ID} = $msgId;
+
+		foreach my $row (@$ary) {
+			my $host = $$row[2];
+			$msg{$host}{arriveTime} = $$row[0];
+			$msg{$host}{prevHost} = $$row[8];
+			$msg{$host}{prevIp} = $$row[9];
+			$msg{$host}{sender} = $$row[5]?$$row[5]:"postmaster";
+
+			$msg{$host}{recipList}{$recip}{leaveTime} = $$row[1];
+			$msg{$host}{recipList}{$recip}{recip} = $recip;
+			$msg{$host}{recipList}{$recip}{nextHost} = $$row[10];
+			$msg{$host}{recipList}{$recip}{nextIp} = $$row[11];
+			$msg{$host}{recipList}{$recip}{status} = $$row[7];
+			if ($$row[4]) {
+				$msg{$host}{recipList}{$recip}{nextID} = 
+					traceProcessedMsg($$row[4], $msg{$host}{recipList}{$recip}{nextID});
+			}
+
+		}
+	}
+	return (\%msg);
+
+}
+
 sub traceMsg {
 	my $msgId = shift;
 
@@ -244,7 +338,8 @@ sub traceMsg {
 			$msg{$host}{recipList}{$r}{nextIp} = $3;
 			$msg{$host}{recipList}{$r}{status} = $4;
 			if ($5 =~ /queued as (.*)\)/) {
-				$msg{$host}{recipList}{$r}{nextID} = traceMsg($1, $msg{$host}{recipList}{$r}{nextID});
+				$msg{$host}{recipList}{$r}{nextID} = 
+					traceMsg($1, $msg{$host}{recipList}{$r}{nextID});
 			}
 			next;
 		}
@@ -262,7 +357,8 @@ sub traceMsg {
 			$msg{$host}{recipList}{$r}{status} = $5;
 
 			if ($6 =~ /queued as (.*)\)/) {
-				$msg{$host}{recipList}{$r}{nextID} = traceMsg($1, $msg{$host}{recipList}{$r}{nextID});
+				$msg{$host}{recipList}{$r}{nextID} = 
+					traceMsg($1, $msg{$host}{recipList}{$r}{nextID});
 			}
 			next;
 		}
