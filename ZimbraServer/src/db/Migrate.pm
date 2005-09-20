@@ -68,15 +68,21 @@ sub getMailboxIds() {
     return runSql("SELECT id FROM mailbox ORDER BY id");
 }
 
-sub runSql($) {
-    my ($script) = @_;
+sub runSql(@) {
+    my ($script, $logScript) = @_;
+
+    if (! defined($logScript)) {
+	$logScript = 1;
+    }
 
     # Write the last script to a text file for debugging
     # open(LASTSCRIPT, ">lastScript.sql") || die "Could not open lastScript.sql";
     # print(LASTSCRIPT $script);
     # close(LASTSCRIPT);
 
-    Migrate::log($script);
+    if ($logScript) {
+	Migrate::log($script);
+    }
 
     # Run the mysql command and redirect output to a temp file
     my $tempFile = "mysql.out";

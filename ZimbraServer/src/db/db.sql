@@ -47,22 +47,23 @@ GRANT ALL ON *.* TO 'root'@'localhost.localdomain' WITH GRANT OPTION;
 
 # list of known volumes
 CREATE TABLE volume (
-   id                 INTEGER UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+   id                 TINYINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
    type               TINYINT NOT NULL,   # 1 = primary msg, 2 = secondary msg, 10 = index
    name               VARCHAR(255) NOT NULL,
    path               TEXT NOT NULL,
    file_bits          SMALLINT NOT NULL,
    file_group_bits    SMALLINT NOT NULL,
    mailbox_bits       SMALLINT NOT NULL,
-   mailbox_group_bits SMALLINT NOT NULL
+   mailbox_group_bits SMALLINT NOT NULL,
+   compress_blobs     BOOLEAN NOT NULL
 ) ENGINE = InnoDB;
 
 # This table has only one row.  It points to message and index volumes
 # to use for newly provisioned mailboxes.
 CREATE TABLE current_volumes (
-   message_volume_id           INTEGER UNSIGNED NOT NULL,
-   secondary_message_volume_id INTEGER UNSIGNED,
-   index_volume_id             INTEGER UNSIGNED NOT NULL,
+   message_volume_id           TINYINT UNSIGNED NOT NULL,
+   secondary_message_volume_id TINYINT UNSIGNED,
+   index_volume_id             TINYINT UNSIGNED NOT NULL,
    next_mailbox_id             INTEGER UNSIGNED NOT NULL,
 
    INDEX i_message_volume_id (message_volume_id),
@@ -80,10 +81,10 @@ CREATE TABLE current_volumes (
               REFERENCES volume(id)
 ) ENGINE = InnoDB;
 
-INSERT INTO volume (id, type, name, path, file_bits, file_group_bits, mailbox_bits, mailbox_group_bits)
-  VALUES (1, 1, 'message1', '/opt/zimbra/store', 12, 8, 12, 8);
-INSERT INTO volume (id, type, name, path, file_bits, file_group_bits, mailbox_bits, mailbox_group_bits)
-  VALUES (2, 10, 'index1',   '/opt/zimbra/index', 12, 8, 12, 8);
+INSERT INTO volume (id, type, name, path, file_bits, file_group_bits, mailbox_bits, mailbox_group_bits, compress_blobs)
+  VALUES (1, 1, 'message1', '/opt/zimbra/store', 12, 8, 12, 8, 0);
+INSERT INTO volume (id, type, name, path, file_bits, file_group_bits, mailbox_bits, mailbox_group_bits, compress_blobs)
+  VALUES (2, 10, 'index1',   '/opt/zimbra/index', 12, 8, 12, 8, 0);
 
 INSERT INTO current_volumes (message_volume_id, index_volume_id, next_mailbox_id) VALUES (1, 2, 1);
 COMMIT;
@@ -96,7 +97,7 @@ COMMIT;
 CREATE TABLE mailbox (
    id                 INTEGER UNSIGNED NOT NULL PRIMARY KEY,
    account_id         CHAR(36) NOT NULL,          # e.g. "d94e42c4-1636-11d9-b904-4dd689d02402"
-   index_volume_id    INTEGER UNSIGNED NOT NULL,
+   index_volume_id    TINYINT UNSIGNED NOT NULL,
    item_id_checkpoint INTEGER UNSIGNED NOT NULL DEFAULT 0,
    size_checkpoint    BIGINT UNSIGNED NOT NULL DEFAULT 0,
    change_checkpoint  INTEGER UNSIGNED NOT NULL DEFAULT 0,

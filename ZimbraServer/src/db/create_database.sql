@@ -63,8 +63,11 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    INDEX i_mod_metadata (mod_metadata),      # used by the sync code
    INDEX i_tags_date (tags, date),           # for tag searches
    INDEX i_flags_date (flags, date),         # for flag searches
-   CONSTRAINT fk_parent_id FOREIGN KEY (parent_id) REFERENCES ${DATABASE_NAME}.mail_item(id),
-   CONSTRAINT fk_folder_id FOREIGN KEY (folder_id) REFERENCES ${DATABASE_NAME}.mail_item(id)
+   INDEX i_volume_id (volume_id),            # for the foreign key into the volume table
+   
+   CONSTRAINT fk_mail_item_parent_id FOREIGN KEY (parent_id) REFERENCES ${DATABASE_NAME}.mail_item(id),
+   CONSTRAINT fk_mail_item_folder_id FOREIGN KEY (folder_id) REFERENCES ${DATABASE_NAME}.mail_item(id),
+   CONSTRAINT fk_mail_item_volume_id FOREIGN KEY (volume_id) REFERENCES zimbra.volume(id)
 ) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.open_conversation (
@@ -73,7 +76,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.open_conversation (
 
    PRIMARY KEY (hash),
    INDEX i_conv_id (conv_id),
-   CONSTRAINT fk_conv_id FOREIGN KEY (conv_id) REFERENCES ${DATABASE_NAME}.mail_item(id) ON DELETE CASCADE
+   CONSTRAINT fk_open_conversation_conv_id FOREIGN KEY (conv_id) REFERENCES ${DATABASE_NAME}.mail_item(id) ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.appointment (
@@ -84,7 +87,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.appointment (
 
    PRIMARY KEY (uid),
    INDEX i_item_id (item_id),
-   CONSTRAINT fk_item_id FOREIGN KEY (item_id) REFERENCES ${DATABASE_NAME}.mail_item(id) ON DELETE CASCADE
+   CONSTRAINT fk_appointment_item_id FOREIGN KEY (item_id) REFERENCES ${DATABASE_NAME}.mail_item(id) ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.tombstone (
