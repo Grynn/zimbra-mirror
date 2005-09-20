@@ -24,7 +24,6 @@
  */
 
 function ZmCsfeException(msg, code, method, detail) {
-	if (arguments.length == 0) return;
 	AjxException.call(this, msg, code, method, detail);
 }
 

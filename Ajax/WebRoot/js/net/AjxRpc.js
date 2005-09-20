@@ -23,21 +23,26 @@
  * ***** END LICENSE BLOCK *****
  */
 
-AjxRpc._rpcCache = new Array();
-AjxRpc._RPC_CACHE_MAX = 10;
-
 function AjxRpc() {
 }
 
+// pool of RPC contexts
+AjxRpc._rpcCache = new Array();
+AjxRpc._RPC_CACHE_MAX = 10;
+
 /**
-* @method public static AjxRpc.invoke
-* @param requestStr - http request string
-* @param serverUrl - URI for HTTP request
-* @requestHeaders - HTTP request headers
-* @param callback - AjxCallback instance
-**/
+* Submits a request to a URL. The request is handled through a pool of request
+* contexts (each a wrapped XmlHttpRequest). The context does the real work.
+*
+* @param requestStr		[string]		HTTP request string/document
+* @param serverUrl		[string]		request target
+* @param requestHeaders	[Array]			HTTP request headers
+* @param callback		[AjxCallback]	callback (for async requests)
+*/
 AjxRpc.invoke =
 function(requestStr, serverUrl, requestHeaders, callback) {
+
+	var asyncMode = (callback != null);
 	var rpcCtxt = AjxRpc._getRpcCtxt();
 
 	try {
@@ -54,52 +59,54 @@ function(requestStr, serverUrl, requestHeaders, callback) {
 			newEx.code = AjxException.UNKNOWN_ERROR;
 			newEx.msg = "Unknown Error";
 		}
-		if(!callback)		
+		if (!asyncMode)		
 			rpcCtxt.rpcRequestObj.busy = false;
 		throw newEx;
 	}
-	if(!callback)
+	if (!asyncMode)
 		rpcCtxt.rpcRequestObj.busy = false;
+
 	return response;
 }
 
 
 /**
-* inner class _RpcCtxt
- members:
- 	rpcRequestObj : AjxRpcRequest
-**/
-function _RpcCtxt() {
-	this.rpcRequestObj = new AjxRpcRequest(true);
+* Wrapper for a request context.
+*
+* @param id		unique ID for this context
+*/
+function _RpcCtxt(id) {
+	this.id = id;
+	this.rpcRequestObj = new AjxRpcRequest(id);
 }
 
-/**
-* singleton factory of _RpcCtxt objects
-**/
+/*
+* Factory method for getting context objects.
+*/
 AjxRpc._getRpcCtxt = 
 function() {
-	var rpcCtxt = null
+
+	var rpcCtxt = null;
+	
+	// See if we have one in the pool that's now free
 	for (var i = 0; i < AjxRpc._rpcCache.length; i++) {
 		rpcCtxt = AjxRpc._rpcCache[i];
 		if (!rpcCtxt.rpcRequestObj.busy) {
-			DBG.println(AjxDebug.DBG1, "Found free Rpc Context in cache");
+			DBG.println(AjxDebug.DBG1, "Found free RPC context");
 			break;
 		}
 	}
 	
-	// if we didnt find a non-busy rpc cache, create new one
+	// If there's no free context available, create one
 	if (i == AjxRpc._rpcCache.length) {
 		if (AjxRpc._rpcCache.length == AjxRpc._RPC_CACHE_MAX) {
-			DBG.println(AjxDebug.DBG1, "Out of RPC Contexts");
+			DBG.println(AjxDebug.DBG1, "Out of RPC contexts");
 			throw new AjxException("Out of RPC cache", AjxException.OUT_OF_RPC_CACHE, "ZmCsfeCommand._getRpcCtxt");	
 		}
-		rpcCtxt = new _RpcCtxt();
+		var id = "_rpcCtxt_" + i;
+		rpcCtxt = new _RpcCtxt(id);
+		DBG.println(AjxDebug.DBG1, "Created RPC " + id);
 		AjxRpc._rpcCache.push(rpcCtxt);
-		
-		// XXX: this should never eval to true in synchronous mode
-		//      REMOVE THIS CHECK WHEN ASYNCH HAS BEEN IMPLEMENTED
-		if (AjxRpc._rpcCache.length > 1)
-			DBG.println("XXXX: ---- more than one rpc cache created ---- :XXXX");
 	}
 	rpcCtxt.rpcRequestObj.busy = true;
 	return rpcCtxt;

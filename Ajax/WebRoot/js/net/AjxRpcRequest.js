@@ -27,23 +27,21 @@
 * class AjxRpcRequest encapsulates XMLHttpRequest as _httpReq
 *
 **/
-function AjxRpcRequest(init) {
-	if (arguments.length == 0) return;
-	
+function AjxRpcRequest(id) {
 	if (!AjxRpcRequest._inited) 
 		AjxRpcRequest._init();	
 	
+	this.id = id;
 	if (AjxEnv.isIE) {
 		this._httpReq = new ActiveXObject(AjxRpcRequest._msxmlVers);
 	} else if (AjxEnv.isSafari || AjxEnv.isNav) {
 		this._httpReq =  new XMLHttpRequest();
 	}
-	this.busy=false;
+	this.busy = false;
 }
 
 AjxRpcRequest._inited = false;
 AjxRpcRequest._msxmlVers = null;
-
 
 AjxRpcRequest.prototype.toString = 
 function() {
@@ -51,50 +49,65 @@ function() {
 }
 
 /**
-* @method public AjxRpcRequest.prototype.invoke
-* @param requestStr - http request string
-* @param serverUrl - URI for HTTP request
-* @requestHeaders - HTTP request headers
-* @param callback - AjxCallback instance. if call back is null, then the call is synchronous
-**/
+* Sends this request to the target URL. If there is a callback, the request is
+* performed asynchronously.
+*
+* @param requestStr		[string]		HTTP request string/document
+* @param serverUrl		[string]		request target
+* @param requestHeaders	[Array]			HTTP request headers
+* @param callback		[AjxCallback]	callback (for async requests)
+*/
 AjxRpcRequest.prototype.invoke =
 function(requestStr, serverUrl, requestHeaders, callback) {
-	// TODO Allow arbritatry request headers to be passed in
-	this._httpReq.open("post", serverUrl, (callback != null) );
-	if (callback) {
+
+	var asyncMode = (callback != null);
+	this._httpReq.open("post", serverUrl, asyncMode);
+	if (asyncMode) {
+		this._callback = callback;
 		var tempThis = this;
-		DBG.println(AjxDebug.DBG1, "Have callback");
-		this._httpReq.onreadystatechange = function (evt) {
-			DBG.println(AjxDebug.DBG1, "ReadyState changed");
-			if(!tempThis) {
-				//IE sometimes looses objects
-				callback.run( {text: null, xml: null, success: false, status: null} );				
-			}
-			DBG.println(AjxDebug.DBG1, "ready state = " + tempThis._httpReq.readyState);
-			if(tempThis._httpReq.readyState==4) {
-				DBG.println(AjxDebug.DBG1, "status = " + tempThis._httpReq.status);				
-				if(tempThis._httpReq.status==200) {
-					callback.run( {text: tempThis._httpReq.responseText, xml: tempThis._httpReq.responseXML, success: true} );				
-				} else {
-					callback.run( {text: tempThis._httpReq.responseText, xml: tempThis._httpReq.responseXML, success: false, status: tempThis._httpReq.status} );				
-				}
-				tempThis.busy = false;
-				tempThis = null;
-			}
-		}
+		DBG.println(AjxDebug.DBG3, "Async RPC request");
+		this._httpReq.onreadystatechange = function(ev) {AjxRpcRequest._handleResponse(tempThis, callback);};
 	}	
 
 	if (requestHeaders) {
 		for (var i in requestHeaders) {
 			this._httpReq.setRequestHeader(i, requestHeaders[i]);
-			DBG.println("REQ. HEADER: " + i + " - " + requestHeaders[i]);
+			DBG.println(AjxDebug.DBG3, "Async RPC request: Add header " + i + " - " + requestHeaders[i]);
 		}
 	}
+	
 	this._httpReq.send(requestStr);
-	if (callback) {
-		return;
+	if (asyncMode) {
+		return this.id;
 	} else {
 		return {text: this._httpReq.responseText, xml: this._httpReq.responseXML};
+	}
+}
+
+/*
+* Handler that runs when an asynchronous response has been received. It runs a
+* callback to initiate the response handling.
+*
+* @param req		[AjxRpcRequest]		request that generated the response
+* @param callback	[AjxCallback]		callback to run after response is received
+*/
+AjxRpcRequest._handleResponse =
+function(req, callback) {
+	if (!req) {
+		// If IE receives a 500 error, the object reference can be lost
+		DBG.println(AjxDebug.DBG1, "Async RPC request: Lost request object!!!");
+		callback.run( {text: null, xml: null, success: false, status: 500} );
+		return;
+	}
+	DBG.println(AjxDebug.DBG3, "Async RPC request: ready state = " + req._httpReq.readyState);
+	if (req._httpReq.readyState == 4) {
+		DBG.println(AjxDebug.DBG3, "Async RPC request: HTTP status = " + req._httpReq.status);
+		if (req._httpReq.status == 200) {
+			callback.run( {text: req._httpReq.responseText, xml: req._httpReq.responseXML, success: true} );				
+		} else {
+			callback.run( {text: req._httpReq.responseText, xml: req._httpReq.responseXML, success: false, status: req._httpReq.status} );				
+		}
+		req.busy = false;
 	}
 }
 
@@ -117,4 +130,3 @@ function() {
 	}
 	AjxRpcRequest._inited = true;
 }
-

@@ -24,7 +24,6 @@
  */
 
 function AjxSoapException(msg, code, method, detail) {
-	if (arguments.length == 0) return;
 	AjxException.call(this, msg, code, method, detail);
 }
 
@@ -36,6 +35,6 @@ function() {
 AjxSoapException.prototype = new AjxException;
 AjxSoapException.prototype.constructor = AjxSoapException;
 
-AjxSoapException.INTERNAL_ERROR 		= "INTERNAL_ERROR";
+AjxSoapException.INTERNAL_ERROR 	= "INTERNAL_ERROR";
 AjxSoapException.INVALID_PDU 		= "INVALID_PDU";
-AjxSoapException.ELEMENT_EXISTS 		= "ELEMENT_EXISTS";
+AjxSoapException.ELEMENT_EXISTS 	= "ELEMENT_EXISTS";
