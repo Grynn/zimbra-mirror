@@ -48,3 +48,31 @@ CREATE TABLE raw_logs (
 	INDEX i_log_date (log_date),
 	INDEX i_host (host)
 ) ENGINE = MyISAM;
+
+# Processing history (id is the last processed raw_log for app
+
+CREATE TABLE processing_history (
+	app					VARCHAR(64) NOT NULL,
+	id					INTEGER UNSIGNED NOT NULL
+) ENGINE = MyISAM;
+
+# mta
+
+CREATE TABLE mta (
+	arrive_time			DATETIME NOT NULL,
+	leave_time			DATETIME NOT NULL,
+	host				VARCHAR(255) NOT NULL,
+	msgid				VARCHAR(12),
+	sender				VARCHAR(255),
+	recipient			VARCHAR(255),
+	status				VARCHAR(64),
+	from_host			VARCHAR(255),
+	from_IP				VARCHAR(16),
+	to_host				VARCHAR(255),
+	to_IP				VARCHAR(16),
+	INDEX i_msgid (msgid),
+	INDEX i_arrive_time (arrive_time),
+	INDEX i_leave_time (leave_time),
+	INDEX i_host (host)
+) ENGINE = MyISAM;
+

@@ -27,9 +27,9 @@
 MYDIR=`dirname $0`
 MYLDAPSEARCH="$MYDIR/bin/ldapsearch"
 
-. ./util/utilfunc.sh
+. /opt/zimbra/libexec/util/utilfunc.sh
 
-for i in ./util/modules/*sh; do
+for i in /opt/zimbra/libexec/util/modules/*sh; do
 	. $i
 done
 
@@ -48,45 +48,17 @@ while [ $# -ne 0 ]; do
 	shift
 done
 
-. ./util/globals.sh
-
-mkdir -p $SAVEDIR
-chmod 777 $SAVEDIR
-
-echo ""
-echo "Operations logged to $LOGFILE"
+. /opt/zimbra/libexec/util/globals.sh
 
 checkExistingInstall
 
-if [ x$UNINSTALL = "xyes" ]; then
-	askYN "Completely remove existing installation?" "N"
-	if [ $response = "yes" ]; then
-		REMOVE="yes"
-		removeExistingInstall
-	fi
-	exit 1
-fi
-
 displayLicense
 
-checkUser root
+# Modify to check for zimbra user
+
+checkUser zimbra
 
 checkRequired
-
-checkPackages
-
-if [ $AUTOINSTALL = "no" ]; then
-	setRemove
-	getInstallPackages
-fi
-
-removeExistingInstall
-
-echo "Installing packages"
-echo ""
-for i in $INSTALL_PACKAGES; do
-	installPackage "$i"
-done
 
 #
 # Installation complete, now configure

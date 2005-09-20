@@ -119,9 +119,9 @@ while (<>) {
 
 	my $msgid = undef;
 
-	if ($app =~ /^postfix/ && $msg =~ /^(\S{11}): /) {
+	if ($app =~ /^postfix/ && $msg =~ /^(\S{10,12}): /) {
 		$msgid = $1;
-	} elsif ($app =~ /^amavi/ && $msg =~ /(\S{11})$/) {
+	} elsif ($app =~ /^amavi/ && $msg =~ /(\S{10,12})$/) {
 		$msgid = $1;
 	}
 

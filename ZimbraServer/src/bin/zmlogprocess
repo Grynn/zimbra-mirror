@@ -1,0 +1,264 @@
+#!/usr/bin/perl
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Version: ZPL 1.1
+# 
+# The contents of this file are subject to the Zimbra Public License
+# Version 1.1 ("License"); you may not use this file except in
+# compliance with the License. You may obtain a copy of the License at
+# http://www.zimbra.com/license
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+# the License for the specific language governing rights and limitations
+# under the License.
+# 
+# The Original Code is: Zimbra Collaboration Suite.
+# 
+# The Initial Developer of the Original Code is Zimbra, Inc.
+# Portions created by Zimbra are Copyright (C) 2005 Zimbra, Inc.
+# All Rights Reserved.
+# 
+# Contributor(s):
+# 
+# ***** END LICENSE BLOCK *****
+# 
+
+use strict;
+
+use lib "/opt/zimbra/zimbramon/lib/zimbrapm";
+use lib "/opt/zimbra/zimbramon/lib/zimbrapm/SOAP";
+use lib "/opt/zimbra/zimbramon/lib";
+
+use DBI;
+use Time::Local;
+
+my $baseDir = "/opt/zimbra";
+
+my $data_source="dbi:mysql:database=zimbra_logger;mysql_read_default_file=/opt/zimbra/conf/my.logger.cnf;mysql_socket=/opt/zimbra/logger/db/mysql.sock";
+
+my $username="zimbra";
+my $password = `/opt/zimbra/bin/zmlocalconfig -s -m nokey zimbra_logger_mysql_password`;
+chomp $password;
+
+my $dbh = DBI->connect($data_source, $username, $password);
+
+if (!$dbh) { 
+	print STDERR "DB: Can't connect to $data_source: $DBI::errstr\n";
+	exit 1;
+}
+
+processMta();
+
+sub processMta {
+
+	my $lastRowID = getLastRowId("mta");
+
+	print "Processing messages from $lastRowID\n";
+
+	my $sth = sqlExec("select distinct(postfix_msgid) from raw_logs where postfix_msgid is not null and app like 'postfix%' and id > '".$lastRowID."'");
+	my $ary = $sth->fetchall_arrayref;
+
+	print "Found ".scalar @$ary." messages\n";
+
+	foreach my $row (sort @$ary) {
+		$lastRowID = insertMessage(parseMessage($$row[0]));
+	}
+
+	saveLastRowId("mta", $lastRowID);
+
+	deleteRawLogs("mta", $lastRowID);
+}
+
+sub getMessage {
+    my $msgId = shift;
+
+	#print "Getting message $msgId\n";
+
+	my $statement =
+	"select id, log_date, host, app, pid, msg from raw_logs ".
+		"where app like \'%postfix%\' and postfix_msgid = \'$msgId\'";
+
+	# print "Searching for message $msgId\n";
+
+	my $sth = sqlExec($statement);
+
+	return $sth->fetchall_arrayref;
+}
+
+sub getLastRowId {
+	my $app = shift;
+
+	my $statement =
+		"select id from processing_history where app='".$app."'";
+
+	my $sth = sqlExec ($statement);
+	if (defined ($sth)) {
+		my $ary = $sth->fetchall_arrayref;
+		if (scalar (@$ary)) {
+			return ${$$ary[0]}[0];
+		}
+	} 
+	return 0;
+}
+
+sub saveLastRowId {
+	my $app = shift;
+	my $id = shift;
+
+	print "Saving ID $id\n";
+
+	my $statement =
+		"delete from processing_history where app='".$app."'";
+
+	sqlExec ($statement);
+
+	$statement = 
+		"insert into processing_history (id, app) values (?,?)";
+
+	return sqlExec ($statement,$id, $app);
+}
+
+sub sqlExec {
+	my $statement = shift;
+	my @args = @_;
+
+	my $sth = $dbh->prepare($statement);
+
+	#print "Executing $statement with @args\n\n";
+
+	eval {
+		if (!$sth->execute(@args) ) {
+			 die $sth->errstr;
+		}
+	};
+	if ($@) {
+		print "Error executing $statement with @args\n";
+		print $sth->errstr,"\n";
+		print "$@\n";
+		return undef;
+	}
+
+	return $sth;
+}
+
+sub parseMessage {
+	my $msgId = shift;
+
+	#print "Parsing message $msgId\n";
+
+	#$messages{$msgId} = getMsgById ($msgId);
+	my $ary = getMessage ($msgId);
+
+	my %msg = ();
+
+	$msg{ID} = $msgId;
+
+	# Rows are: row_id date host app pid msg
+	foreach my $row (@$ary) {
+		my ($rowid, $date, $host, $app, $pid, $msg) = (@$row);
+
+		#print "ROW: $rowid, $date, $host, $app, $pid, $msg\n\n";
+
+		if ($msg{rowid} < $rowid) {$msg{rowid} = $rowid;}
+
+		($msg =~ "^$msgId: (removed|message-id)") && next;
+
+		if ($msg =~ /^${msgId}: client=([^[]+)\[(.*)\]/) {
+			$msg{$host}{arriveTime} = $date;
+			$msg{$host}{prevHost} = $1;
+			$msg{$host}{prevIp} = $2;
+			next;
+		}
+
+		if ($msg =~ /^${msgId}: from=<(.*)>/) {
+			$msg{$host}{sender} = $1?$1:"postmaster";
+			next;
+		}
+
+		if ($msg =~ /^${msgId}: to=<([^>]*)>, relay=([^[]+)\[?(.*)\]?, delay=\d+, status=(\S+) (.*)/) {
+			if (! defined ($msg{$host}{recipList})) {
+				$msg{$host}{recipList} = ();
+			}
+			my $r = $1;
+			$msg{$host}{recipList}{$r}{leaveTime} = $date;
+			$msg{$host}{recipList}{$r}{recip} = $r;
+			$msg{$host}{recipList}{$r}{nextHost} = $2;
+			$msg{$host}{recipList}{$r}{nextIp} = $3;
+			$msg{$host}{recipList}{$r}{status} = $4;
+			if ($5 =~ /queued as (.*)\)/) {
+				$msg{$host}{recipList}{$r}{nextID} = $5;
+			}
+			next;
+		}
+
+		if ($msg =~ /^${msgId}: to=<([^>]*)>, orig_to=<([^>]*)>, relay=([^[]+)\[(.*)\], delay=\d+, status=(\S+) (.*)/) {
+			if (! defined ($msg{$host}{recipList})) {
+				$msg{$host}{recipList} = ();
+			}
+			my $r = $1;
+			$msg{$host}{recipList}{$r}{leaveTime} = $date;
+			$msg{$host}{recipList}{$r}{recip} = $r;
+			$msg{$host}{recipList}{$r}{origRecip} = $2;
+			$msg{$host}{recipList}{$r}{nextHost} = $3;
+			$msg{$host}{recipList}{$r}{nextIp} = $4;
+			$msg{$host}{recipList}{$r}{status} = $5;
+
+			if ($6 =~ /queued as (.*)\)/) {
+				$msg{$host}{recipList}{$r}{nextID} = $5;
+			}
+			next;
+		}
+
+	}
+
+	return (\%msg);
+}
+
+sub insertMessage {
+	my $msg = shift;
+	my $last = 0;
+
+	my $statement = "insert into mta ".
+		"(arrive_time, leave_time, host, msgid, sender, recipient, ".
+		"from_host, from_IP, to_host, to_IP, status) ".
+		"values (?,?,?,?,?,?,?,?,?,?,?)";
+
+	foreach my $host (sort keys %{$msg}) {
+		if ($host eq "ID") {
+			print "Inserting $$msg{$host}\n";
+			next;
+		} 
+		if ($host eq "rowid") {
+			next;
+		} 
+		if ($$msg{rowid} > $last) {
+			$last = $$msg{rowid};
+		}
+
+		foreach my $r (sort keys %{$$msg{$host}{recipList}}) {
+			sqlExec ($statement, 
+				$$msg{$host}{arriveTime}?$$msg{$host}{arriveTime}:'0000-00-00 00:00:00', 
+				$$msg{$host}{recipList}{$r}{leaveTime}?$$msg{$host}{recipList}{$r}{leaveTime}:
+				'0000-00-00 00:00:00',
+				$host, $$msg{ID}, $$msg{$host}{sender}, $r, $$msg{$host}{prevHost}, 
+				$$msg{$host}{prevIp}, $$msg{$host}{recipList}{$r}{nextHost}, 
+				$$msg{$host}{recipList}{$r}{nextIp}, $$msg{$host}{recipList}{$r}{status});
+		}
+	}
+	return $last;
+}
+
+sub deleteRawLogs {
+	my $app = shift;
+	my $lastId = shift;
+
+	if ($app eq "mta") {
+		$app = "postfix";
+	} else {
+		print STDERR "Unknown app $app in deleteRawLogs\n\n";
+		return;
+	}
+
+    my $sth = sqlExec("delete from raw_logs where app like '".$app."%' and id <= '".$lastId."'");
+}
