@@ -41,6 +41,7 @@ function AjxPost() {
 
 AjxPost._reqIds = 0;
 AjxPost._outStandingRequests = new Object();
+
 /**
 * Submits the form.
 *
@@ -62,7 +63,7 @@ function(container, callback, formId, optionalTimeout) {
 	var timeout = optionalTimeout? optionalTimeout: 5000;
 	AjxPost._outStandingRequests[req.id] = req;
 	req.send(failureAction, timeout);
-}
+};
 
 AjxPost.prototype._onFailure =
 function (reqId){
@@ -73,7 +74,8 @@ function (reqId){
 		this._callback.run([404]);
 		this._callback = null;
 	}
-}
+};
+
 /**
 * Processes the HTTP response from the form post. The server needs to make sure this function is
 * called and passed the appropriate args. Something like the following should do the trick:
@@ -107,23 +109,27 @@ function AjxPostRequest (form, doc) {
 	inp.value = this.id;
 	//var input = Dwt.parseHtmlFragment("<input type='hidden' name='requestId' value='" + this.id + "'></input>");
 	this._form.appendChild(inp);
-}
+};
 
-AjxPostRequest.prototype.send = function (failureAction, timeout) {
+AjxPostRequest.prototype.send =
+function(failureAction, timeout) {
 	// Not sure what a fair timeout is for uploads, so for now,
 	// we won't have a failed callback.
 	//this._timeoutId = AjxTimedAction.scheduleAction(failureAction, timeout);
 	this._form.submit();
 };
 
-AjxPostRequest.prototype.hasBeenCancelled = function () {
+AjxPostRequest.prototype.hasBeenCancelled =
+function() {
 	return this._cancelled;
 };
 
-AjxPostRequest.prototype.cancelTimeout = function () {
+AjxPostRequest.prototype.cancelTimeout =
+function() {
 	AjxTimedAction.cancelAction(this._timeoutId);
 };
 
-AjxPostRequest.prototype.cancel = function (){
-	this._canceled = true;
+AjxPostRequest.prototype.cancel =
+function() {
+	this._cancelled = true;
 };
