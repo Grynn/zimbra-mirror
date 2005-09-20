@@ -47,15 +47,16 @@ GRANT ALL ON *.* TO 'root'@'localhost.localdomain' WITH GRANT OPTION;
 
 # list of known volumes
 CREATE TABLE volume (
-   id                 TINYINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-   type               TINYINT NOT NULL,   # 1 = primary msg, 2 = secondary msg, 10 = index
-   name               VARCHAR(255) NOT NULL,
-   path               TEXT NOT NULL,
-   file_bits          SMALLINT NOT NULL,
-   file_group_bits    SMALLINT NOT NULL,
-   mailbox_bits       SMALLINT NOT NULL,
-   mailbox_group_bits SMALLINT NOT NULL,
-   compress_blobs     BOOLEAN NOT NULL
+   id                    TINYINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+   type                  TINYINT NOT NULL,   # 1 = primary msg, 2 = secondary msg, 10 = index
+   name                  VARCHAR(255) NOT NULL,
+   path                  TEXT NOT NULL,
+   file_bits             SMALLINT NOT NULL,
+   file_group_bits       SMALLINT NOT NULL,
+   mailbox_bits          SMALLINT NOT NULL,
+   mailbox_group_bits    SMALLINT NOT NULL,
+   compress_blobs        BOOLEAN NOT NULL,
+   compression_threshold BIGINT NOT NULL
 ) ENGINE = InnoDB;
 
 # This table has only one row.  It points to message and index volumes
@@ -81,10 +82,12 @@ CREATE TABLE current_volumes (
               REFERENCES volume(id)
 ) ENGINE = InnoDB;
 
-INSERT INTO volume (id, type, name, path, file_bits, file_group_bits, mailbox_bits, mailbox_group_bits, compress_blobs)
-  VALUES (1, 1, 'message1', '/opt/zimbra/store', 12, 8, 12, 8, 0);
-INSERT INTO volume (id, type, name, path, file_bits, file_group_bits, mailbox_bits, mailbox_group_bits, compress_blobs)
-  VALUES (2, 10, 'index1',   '/opt/zimbra/index', 12, 8, 12, 8, 0);
+INSERT INTO volume (id, type, name, path, file_bits, file_group_bits,
+    mailbox_bits, mailbox_group_bits, compress_blobs, compression_threshold)
+  VALUES (1, 1, 'message1', '/opt/zimbra/store', 12, 8, 12, 8, 0, 4096);
+INSERT INTO volume (id, type, name, path, file_bits, file_group_bits,
+    mailbox_bits, mailbox_group_bits, compress_blobs, compression_threshold)
+  VALUES (2, 10, 'index1',   '/opt/zimbra/index', 12, 8, 12, 8, 0, 4096);
 
 INSERT INTO current_volumes (message_volume_id, index_volume_id, next_mailbox_id) VALUES (1, 2, 1);
 COMMIT;
@@ -182,11 +185,3 @@ CREATE TABLE redolog_sequence (
 ) ENGINE = InnoDB;
 
 INSERT INTO redolog_sequence(sequence) VALUES (0);
-  
-#------------------------------------------------------------
-# config
-#------------------------------------------------------------
-INSERT INTO config(name, value, description) VALUES
-  # this should go away when bug 3878 is fixed
-  ('store.compressBlobs', 'false',
-    'whether or not to compress blobs');
