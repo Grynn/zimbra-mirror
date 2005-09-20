@@ -144,7 +144,7 @@ function(type, element, index) {
 			
 		col.appendChild(element);
 	} else {
-		var rowIndex = index || this._table.rows.length;
+		var rowIndex = index || -1;
 		row = this._table.insertRow(rowIndex);
 		row.align = "center";
 		row.vAlign = "middle";

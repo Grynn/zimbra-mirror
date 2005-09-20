@@ -346,9 +346,8 @@ function(item, index) {
 				}
 				this._numCheckedStyleItems++;
 			}
-			var rows = this._table.rows;
-			if (index == null || index > rows.length)
-				index = rows.length;
+			if (index == null || index > this._table.rows.length)
+				index = -1;
 			var row = this._table.insertRow(index);
 			col = row.insertCell(0);
 		}
