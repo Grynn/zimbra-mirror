@@ -56,17 +56,16 @@ function(searchResult) {
 		//create accounts list view
 		this._contentView = new ZaAccountListView(this._container, this._app);
     	//toolbar
+    	//Account operations
     	this._ops = new Array();
-
    		this._ops.push(new ZaOperation(ZaOperation.NEW_WIZARD, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", new AjxListener(this, ZaAccountListController.prototype._newButtonListener)));    	
     	this._ops.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.ACTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaAccountListController.prototype._editButtonListener)));
     	this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaAccountListController.prototype._deleteButtonListener)));
-		this._ops.push(new ZaOperation(ZaOperation.CHNG_PWD, ZaMsg.TBB_ChngPwd, ZaMsg.ACTBB_ChngPwd_tt, "Padlock", "PadlockDis", new AjxListener(this, ZaAccountListController.prototype._chngPwdListener)));
-		this._ops.push(new ZaOperation(ZaOperation.VIEW_MAIL, ZaMsg.TBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, "ReadMailbox", "ReadMailboxDis", new AjxListener(this, ZaAccountListController.prototype._viewMailListener)));		
-
-
-		
-    	this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._ops);
+		this._ops.push(new ZaOperation(ZaOperation.CHNG_PWD, ZaMsg.ACTBB_ChngPwd, ZaMsg.ACTBB_ChngPwd_tt, "Padlock", "PadlockDis", new AjxListener(this, ZaAccountListController.prototype._chngPwdListener)));
+		this._ops.push(new ZaOperation(ZaOperation.VIEW_MAIL, ZaMsg.ACTBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, "ReadMailbox", "ReadMailboxDis", new AjxListener(this, ZaAccountListController.prototype._viewMailListener)));		
+		this._ops.push(new ZaOperation(ZaOperation.MOVE_ALIAS, ZaMsg.ACTBB_MoveAlias, ZaMsg.ACTBB_MoveAlias_tt, "ReadMailbox", "ReadMailboxDis", new AjxListener(this, ZaAccountListController.prototype._moveAliasListener)));		    	
+    	
+    	this._acctionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._ops);
     
    		var haveBackup = false;
 		var globalConf = this._app.getGlobalConfig();
@@ -406,7 +405,7 @@ function(ev) {
 ZaAccountListController.prototype._listActionListener =
 function (ev) {
 	this._changeActionsState();
-	this._actionMenu.popup(0, ev.docX, ev.docY);
+	this._acctionMenu.popup(0, ev.docX, ev.docY);
 }
 
 /**
@@ -431,6 +430,12 @@ ZaAccountListController.prototype._editItem = function (item) {
 		this._app.getAccountViewController().show(item);
 	} else if (type == ZaItem.DL) {
 		this._app.getDistributionListController()._setView(ZaDLController.EDIT_DL_VIEW, item);
+	} else if(type == ZaItem.ALIAS) {
+		account = new ZaAccount(this._app);
+		if(item.attrs && item.attrs[ZaAlias.A_AliasTargetId]) {
+			account.load(item.attrs[ZaAlias.A_AliasTargetId], "id", false);
+			this._app.getAccountViewController().show(account);
+		}
 	}
 };
 /**
@@ -549,6 +554,9 @@ function (ev) {
 ZaAccountListController.prototype._deleteButtonListener =
 function(ev) {
 	this._removeList = new Array();
+	var haveAliases = false;
+	var haveAccounts = false;
+	var haveDls = false;
 	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getArray()) {
 		var arrDivs = this._contentView.getSelectedItems().getArray();
 		var item = null;
@@ -557,10 +565,26 @@ function(ev) {
 			if(item) {
 				this._removeList.push(item);
 			}
+			if(!haveAliases && item.type == ZaItem.ALIAS) {
+				haveAliases = true;
+			} else if(!haveAccounts && item.type == ZaItem.ACCOUNT) {
+				haveAccounts = true;
+			} else if(!haveDls && item.type == ZaItem.DL) {
+				haveDls = true;
+			}
 		}
 	}
 	if(this._removeList.length) {
-		var dlgMsg = ZaMsg.Q_DELETE_ACCOUNTS;
+		var dlgMsg;
+		if(haveDls && !(haveAccounts || haveAliases)) {
+			dlgMsg = ZaMsg.Q_DELETE_DLS;
+		} else if(haveAccounts && !(haveDls || haveAliases)) {
+			dlgMsg = ZaMsg.Q_DELETE_ACCOUNTS;
+		} else if(haveAliases && !(haveDls || haveAccounts)) {
+			dlgMsg = ZaMsg.Q_DELETE_ALIASES;
+		} else {
+			dlgMsg = ZaMsg.Q_DELETE_OBJECTS;
+		}
 		dlgMsg +=  "<br><ul>";
 		var i=0;
 		for(var key in this._removeList) {
@@ -747,19 +771,27 @@ function () {
 	if(cnt == 1) {
 		var opsArray = [ZaOperation.EDIT, ZaOperation.DELETE, ZaOperation.CHNG_PWD, ZaOperation.VIEW_MAIL];
 		this._toolbar.enable(opsArray, true);
-		this._actionMenu.enable(opsArray, true);
+		this._acctionMenu.enable(opsArray, true);
+		//if this is an alias enable move operation
+		if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getLast()){
+			var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getLast());
+			if(item.type == ZaItem.ALIAS) {
+				this._toolbar.enable([ZaOperation.MOVE_ALIAS], true);
+				this._acctionMenu.enable([ZaOperation.MOVE_ALIAS], true);
+			}
+		}		
 	} else if (cnt > 1){
-		var opsArray1 = [ZaOperation.EDIT, ZaOperation.CHNG_PWD, ZaOperation.VIEW_MAIL];
+		var opsArray1 = [ZaOperation.EDIT, ZaOperation.CHNG_PWD, ZaOperation.VIEW_MAIL, ZaOperation.MOVE_ALIAS];
 		this._toolbar.enable(opsArray1, false);
-		this._actionMenu.enable(opsArray1, false);
+		this._acctionMenu.enable(opsArray1, false);
 
 		var opsArray2 = [ZaOperation.DELETE];
 		this._toolbar.enable(opsArray2, true);
-		this._actionMenu.enable(opsArray2, true);
+		this._acctionMenu.enable(opsArray2, true);
 	} else {
-		var opsArray = [ZaOperation.EDIT, ZaOperation.DELETE, ZaOperation.CHNG_PWD, ZaOperation.VIEW_MAIL];
+		var opsArray = [ZaOperation.EDIT, ZaOperation.DELETE, ZaOperation.CHNG_PWD, ZaOperation.VIEW_MAIL,ZaOperation.MOVE_ALIAS];
 		this._toolbar.enable(opsArray, false);
-		this._actionMenu.enable(opsArray, false);
+		this._acctionMenu.enable(opsArray, false);
 	}
 }
 
@@ -779,3 +811,12 @@ function (ev) {
 	return;
 }
 
+ZaAccountListController.prototype._moveAliasListener = 
+function (ev) {
+	try {
+		
+	} catch (ex) {
+		this._handleException(ex, "ZaAccountListController.prototype._moveAliasListener", null, false);
+	}
+	return;
+}

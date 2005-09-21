@@ -167,11 +167,12 @@ ZaMsg.TBB_EditAliases = "Edit Aliases";
 ZaMsg.TBB_Delete = "Delete";
 ZaMsg.TBB_Duplicate = "Duplicate";
 ZaMsg.TBB_Refresh = "Refresh";
-ZaMsg.TBB_ChngPwd = "Change Password";
-ZaMsg.TBB_ViewMail = "View Mail";
+ZaMsg.ACTBB_ChngPwd = "Change Password";
+ZaMsg.ACTBB_ViewMail = "View Mail";
 ZaMsg.TBB_RestoreMailbox = "Restore";
 ZaMsg.TBB_Refresh_tt = "Refresh list";
 ZaMsg.TBB_Cancel = "Cancel";
+ZaMsg.ACTBB_MoveAlias = "Move Alias";
 
 ZaMsg.ALTBB_Save_tt = "Save changes";
 ZaMsg.ALTBB_Close_tt = "Close this view";
@@ -185,6 +186,7 @@ ZaMsg.ACTBB_Delete_tt = "Delete account";
 ZaMsg.ACTBB_ChngPwd_tt = "Change user's password";
 ZaMsg.ACTBB_ViewMail_tt = "Login to email application on behalf of this account";
 ZaMsg.ACTBB_Restore_tt = "Restore an account";
+ZaMsg.ACTBB_MoveAlias_tt = "Move selected alias(es) to another account";
 
 ZaMsg.DTBB_New_tt = "New domain";
 ZaMsg.DTBB_Edit_tt = "Edit domain";
@@ -574,6 +576,8 @@ ZaMsg.ERROR_BACKUP_1 = "Cannot query backup labels for accounts, because argumen
 
 ZaMsg.Q_DELETE_ACCOUNTS ="Are you sure you want to delete these accounts: ";
 ZaMsg.Q_DELETE_ALIASES ="Are you sure you want to delete these aliases:";
+ZaMsg.Q_DELETE_DLS ="Are you sure you want to delete these distribution lists:";
+ZaMsg.Q_DELETE_OBJECTS ="Are you sure you want to delete these objects:";
 ZaMsg.Q_DELETE_DOMAINS ="Are you sure you want to delete these domains:";
 ZaMsg.Q_DELETE_COS ="Are you sure you want to delete these classes of service:";
 ZaMsg.Q_SAVE_CHANGES="Do you want to save current changes?";

@@ -32,3 +32,12 @@ function ZaAlias(app) {
 
 ZaAlias.prototype = new ZaItem;
 ZaAlias.prototype.constructor = ZaAlias;
+ZaAlias.A_AliasTargetId = "zimbraAliasTargetId";
+
+ZaAlias.prototype.remove = 
+function() {
+	var soapDoc = AjxSoapDoc.create("RemoveAccountAliasRequest", "urn:zimbraAdmin", null);
+	soapDoc.set("id", this.attrs[ZaAlias.A_AliasTargetId]);
+	soapDoc.set("alias", this.name);	
+	ZmCsfeCommand.invoke(soapDoc, null, null, null, true);	
+}

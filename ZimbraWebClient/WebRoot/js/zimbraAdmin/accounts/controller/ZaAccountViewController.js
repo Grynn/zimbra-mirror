@@ -50,11 +50,14 @@ ZaAccountViewController.VIEW = "ZaAccountViewController.VIEW";
 /**
 *	@method show
 *	@param entry - isntance of ZaAccount class
+*	@param skipRefresh - forces to skip entry.refresh() call. 
+*		   When getting account from an alias the account is retreived from the server using ZaAccount.load() 
+* 		   so there is no need to refresh it.
 */
 
 ZaAccountViewController.prototype.show = 
-function(entry) {
-	this._setView(entry);
+function(entry, skipRefresh) {
+	this._setView(entry, skipRefresh);
 	this._app.setCurrentController(this);
 }
 
@@ -413,9 +416,10 @@ function () {
 /**
 *	@method _setView 
 *	@param entry - isntance of ZaAccount class
+*	@param skipRefresh - forces to skip entry.refresh() call
 */
 ZaAccountViewController.prototype._setView =
-function(entry) {
+function(entry, skipRefresh) {
 	try {
 
 		if(!this._UICreated) {
@@ -435,7 +439,7 @@ function(entry) {
 	    	this._UICreated = true;
   		}
 		this._app.pushView(ZaAccountViewController.VIEW);
-		if(entry.id) {
+		if(entry.id && !skipRefresh) {
 			try {
 				entry.refresh(false);
 			} catch (ex) {

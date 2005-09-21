@@ -66,3 +66,4 @@ ZaOperation.GAL_WIZARD = 12;
 ZaOperation.AUTH_WIZARD =13;
 ZaOperation.VIEW_MAIL =14;
 ZaOperation.MAIL_RESTORE = 15;
+ZaOperation.MOVE_ALIAS = 16;
