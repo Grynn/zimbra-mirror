@@ -35,13 +35,13 @@ use Getopt::Std;
 
 my %options = ();
 
-unless ( getopts( 'i:s:r:', \%options ) ) { usage(); }
+unless ( getopts( 'i:s:r:F:D:t:', \%options ) ) { usage(); }
 
 my $msgId = $options{i};
 my $sender = $options{s};
 my $recip = $options{r};
 
-if ($msgId eq "" && $sender eq "" && $recip eq "") {
+if ($msgId eq "" && $sender eq "" && $recip eq "" && $options{F} eq "" && $options{D} eq "" && $options{t} eq "") {
 	usage();
 }
 
@@ -56,6 +56,15 @@ if ($sender) {
 }
 if ($recip) {
 	print "\tto $recip\n";
+}
+if ($options{F}) {
+	print "\tReceived from $options{F}\n";
+}
+if ($options{D}) {
+	print "\tDelivered to $options{D}\n";
+}
+if ($options{t}) {
+	print "\tDuring $options{t}\n";
 }
 print "\n";
 
@@ -87,6 +96,19 @@ sub getMsgIds {
 	my $searchId = $options{i};
 	my $sender = $options{s};
 	my $recip = $options{r};
+	my $sourceIp = $options{F};
+	my $destIp = $options{D};
+
+	my $startTime;
+	my $endTime;
+
+	if ($options{t}) {
+		($startTime, $endTime) = split (',',$options{t});
+		$startTime = timeToSqlTime($startTime);
+		if ($endTime) {
+			$endTime = timeToSqlTime($endTime);
+		}
+	}
 
 	my $whereClause = "";
 	my @clauses = ();
@@ -109,12 +131,30 @@ sub getMsgIds {
 		push @clauses, "msg like '%to=<%".$recip."%>%queued as %'";
 	}
 
+	if ($startTime) {
+		push @clauses, "log_date >= '".$startTime."'";
+	}
+
+	if ($endTime) {
+		push @clauses, "log_date <= '".$endTime."'";
+	}
+
+	if ($sourceIp) {
+		push @clauses, "msg like '%client=%".$sourceIp."%'";
+	}
+
+	if ($destIp) {
+		push @clauses, "msg like '%relay=%".$destIp."%'";
+	}
+
 	$statement = "select log_date, host, pid, msg from raw_logs ".
 		"where app like \'%postfix%\'";
 
 	foreach (@clauses) {
 		$statement .= " and $_";
 	}
+
+	#print "$statement\n\n";
 
 	$ary = execSelect($statement);
 	foreach my $row (@$ary) {
@@ -132,8 +172,11 @@ sub getMsgIds {
 		}
 	}
 
+	my $count = 0;
+
 	foreach my $id (sort keys %uniqIds) {
 		#print "Tracing msg: $id\n";
+		$count++;
 		displayMsg (traceMsg($id));
 	}
 
@@ -154,6 +197,22 @@ sub getMsgIds {
 		push @clauses, "recipient like '%".$recip."%'";
 	}
 
+	if ($startTime) {
+		push @clauses, "arrive_time >= '".$startTime."'";
+	}
+
+	if ($endTime) {
+		push @clauses, "arrive_time <= '".$endTime."'";
+	}
+
+	if ($sourceIp) {
+		push @clauses, "(from_host='".$sourceIp."' or from_IP='".$sourceIp."')";
+	}
+
+	if ($destIp) {
+		push @clauses, "(to_host='".$destIp."' or to_IP='".$destIp."')";
+	}
+
 	$statement = "select distinct(msgid) from mta ".
 		"where";
 
@@ -161,6 +220,8 @@ sub getMsgIds {
 		if ($i) { $statement .= " and"; }
 		$statement .= " $clauses[$i]";
 	}
+
+	#print "$statement\n\n";
 
 	$ary = execSelect($statement);
 	foreach my $row (@$ary) {
@@ -178,8 +239,11 @@ sub getMsgIds {
 
 	foreach my $id (sort keys %uniqIds) {
 		#print "Tracing msg: $id\n";
+		$count++;
 		displayMsg (traceProcessedMsg($id));
 	}
+
+	print "\n$count messages found\n\n";
 
 }
 
@@ -386,7 +450,8 @@ sub execSelect {
 }
 
 sub usage {
-	print STDERR "Usage: $0 -i msg_id | -s sender_addr -r rcpt_addr\n\n";
+	print STDERR "Usage: $0 -i msg_id | -s sender_addr -r rcpt_addr -F from_ip/host -D dest_ip/host -t start,end \n";
+	print STDERR "\ttimes in YYYYMMDD[hhmmss] format\n\n";
 
 	exit (1);
 }
@@ -407,3 +472,22 @@ sub connectDb {
 
 	return $dbh;
 }
+
+sub timeToSqlTime {
+	my $ts = shift;
+	if ($ts eq "" || !defined($ts)) {
+		return '1000-01-01 00:00:00';
+	}
+
+	# IN: YYYYMMDDHHMMSS
+
+	# OUT: YYYY-MM-DD HH:MM:SS
+	my $dt = sprintf ("%4d-%02d-%02d %02d:%02d:%02d",
+		substr($ts,0,4), substr($ts,4,2), substr($ts,6,2),
+		substr($ts,8,2)?substr($ts,8,2):0, 
+		substr($ts,10,2)?substr($ts,10,2):0, 
+		substr($ts,12,2)?substr($ts,12,2):0);
+
+	return $dt;
+}
+

@@ -74,6 +74,10 @@ CREATE TABLE mta (
 	INDEX i_msgid (msgid),
 	INDEX i_arrive_time (arrive_time),
 	INDEX i_leave_time (leave_time),
+	INDEX i_from_host (from_host),
+	INDEX i_from_IP (from_IP),
+	INDEX i_to_host (to_host),
+	INDEX i_to_IP (to_IP),
 	INDEX i_host (host)
 ) ENGINE = MyISAM;
 
