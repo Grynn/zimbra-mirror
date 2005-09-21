@@ -38,7 +38,7 @@ ZaItem.prototype = new ZaModel;
 ZaItem.prototype.constructor = ZaItem;
 
 ZaItem.ACCOUNT = "account";
-ZaItem.DL = "distributionlist";
+ZaItem.DL = "dl";
 ZaItem.ALIAS = "alias";
 ZaItem.DOMAIN = "domain";
 ZaItem.COS = "cos";
