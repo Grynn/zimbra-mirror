@@ -79,8 +79,6 @@ DwtEvent.KEY_EVENTS = [DwtEvent.ONKEYDOWN, DwtEvent.ONKEYPRESS, DwtEvent.ONKEYUP
 
 DwtEvent.MOUSE_EVENTS = [DwtEvent.ONCONTEXTMENU, DwtEvent.ONDBLCLICK, DwtEvent.ONMOUSEDOWN,
 						 DwtEvent.ONMOUSEMOVE, DwtEvent.ONMOUSEUP, DwtEvent.ONSELECTSTART];
-if (AjxEnv.isIE) {
+DwtEvent.MOUSE_EVENTS.push(DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT);
+if (AjxEnv.isIE)
 	DwtEvent.MOUSE_EVENTS.push(DwtEvent.ONMOUSEENTER, DwtEvent.ONMOUSELEAVE);
-} else {
-	DwtEvent.MOUSE_EVENTS.push(DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT);
-}
