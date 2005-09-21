@@ -92,7 +92,7 @@ function() {
 	for (var i = 0; i < AjxRpc._rpcCache.length; i++) {
 		rpcCtxt = AjxRpc._rpcCache[i];
 		if (!rpcCtxt.rpcRequestObj.busy) {
-			DBG.println(AjxDebug.DBG1, "Found free RPC context");
+			DBG.println(AjxDebug.DBG1, "Found free RPC context: " + rpcCtxt.id);
 			break;
 		}
 	}
