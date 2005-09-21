@@ -229,6 +229,13 @@ function() {
 	return this._cosController;
 }
 
+ZaApp.prototype.getDistributionListController = function (domain) {
+	if (this._distributionListController == null) {
+		this._distributionListController = new ZaDLController(this._appCtxt, this._container, this, domain);
+	}
+	return this._distributionListController;
+};
+
 ZaApp.prototype.getDomainList =
 function(refresh) {
 	if (refresh || this._domainList == null) {

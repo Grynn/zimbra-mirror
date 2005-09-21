@@ -410,8 +410,7 @@ ZaAccountListController.prototype._listSelectionListener =
 function(ev) {
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
 		if(ev.item) {
-			//this._selectedItem = ev.item;
-			this._app.getAccountViewController().show(ev.item);
+			this._editItem(ev.item);
 		}
 	} else {
 		this._changeActionsState();
@@ -433,11 +432,21 @@ ZaAccountListController.prototype._editButtonListener =
 function(ev) {
 	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getLast()){
 		var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getLast());
-		this._app.getAccountViewController().show(item);
+		this._editItem(item);
 	}
 }
 
-
+ZaAccountListController.prototype._editItem = function (item) {
+	DBG.dumpObj(item, false, 1);
+	var type = item.type;
+	DBG.println("TYPE == ", item.type);
+	if (type == ZaItem.ACCOUNT) {
+		//this._selectedItem = ev.item;
+		this._app.getAccountViewController().show(item);
+	} else if (type == ZaItem.DL) {
+		this._app.getDistributionListController()._setView(ZaDLController.EDIT_DL_VIEW, item);
+	}
+};
 /**
 * This listener is called when the Change Password button is clicked. 
 **/

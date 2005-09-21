@@ -488,7 +488,6 @@ XFormItem.prototype.getOnActivateMethod = function() {
 	return this.cacheInheritedMethod("onActivate","$onActivate","event");
 }
 
-
 XFormItem.prototype.getExternalChangeHandler = function() {
 	return "var item = " + this.getGlobalRef() + "; item.$elementChanged(value, item.getInstanceValue(), event||window.event);";
 }
@@ -1373,7 +1372,6 @@ XFormItem.prototype.getCssString = function () {
 	if (valign) style += "vertical-align:"+valign;
 	
 	if (style != '') css += " style=\"" + style + ";\"";
-
 	return css;
 }
 
@@ -2129,15 +2127,15 @@ Ajx_Image_XFormItem.prototype.updateElement = function (src) {
 
  	// dereference through the choices array, if provided
  	src = this.getChoiceLabel(src);
-
+	var output;
  	// if we didn't get an image name, output nothing (?)
  	if (src == null || src == "") {
- 		var output = "";
+ 		output = "";
  	} else {
  		// prepend the image path
  		var path = this.getSrcPath();
  		if (path != null) src = path + src;
-		var output = AjxImg.getImageHtml(src, "position:relative;")
+		output = AjxImg.getImageHtml(src, "position:relative;" + this.getCssStyle())
  	}
  	this.getContainer().innerHTML = output;
 };
@@ -3154,6 +3152,30 @@ Dwt_Adaptor_XFormItem.prototype.getDwtSelectItemChoices = function () {
 	return this.__selOptions;
 };
 
+Dwt_Adaptor_XFormItem.prototype._addCssStylesToDwtWidget = function () {
+	var style = this.getCssStyle();
+	if (style != null){
+		var styleArr = style.split(";");
+		var el = this.widget.getHtmlElement();
+		var kp;
+		for (var i = 0 ; i < styleArr.length ; ++i ){
+			kp = styleArr[i].split(":");
+			if (kp.length > 0){
+				var key = kp[0];
+				if (key != null) {
+					key = key.replace(/^(\s)*/,"");
+				}
+				if (key == "float"){
+					key = (AjxEnv.isIE)? "styleFloat": "cssFloat";
+				}
+				var val = kp[1];
+				if (val != null) {
+					el.style[key] = val.replace(/^(\s)*/,"");
+				}
+			}
+		}
+	}
+};
 
 //
 //	XFormItem class: "dwt_button"
@@ -3174,7 +3196,7 @@ Dwt_Button_XFormItem.prototype.insertWidget = function (form, widget, element) {
 
 // implement the following to actually construct the instance of your widget
 Dwt_Button_XFormItem.prototype.constructWidget = function () {
-	var widget = new DwtButton(this.getForm(), this.getCssClass());
+	var widget = this.widget = new DwtButton(this.getForm(), this.getCssClass());
 	var height = this.getHeight();
 	var width = this.getWidth();
 	
@@ -3184,21 +3206,7 @@ Dwt_Button_XFormItem.prototype.constructWidget = function () {
 		if (width != null) el.style.width = width;
 		if (height != null) el.style.height = height;
 	} 
-	var style = this.getCssStyle();
-	if (style != null){
-		var styleArr = style.split(";");
-		el = (el != null)? el: widget.getHtmlElement();
-		var kp;
-		for (var i = 0 ; i < styleArr.length ; ++i ){
-			kp = styleArr[i].split(":");
-			if (kp.length > 0){
-				if (kp[0] == "float"){
-					kp[0] = (AjxEnv.isIE)? "styleFloat": "cssFloat";
-				}
-				el.style[kp[0]] = kp[1];
-			}
-		}
-	}
+	this._addCssStylesToDwtWidget();
 	
 	var icon = this.getInheritedProperty("icon");
 	if(icon != null) {
@@ -3219,7 +3227,7 @@ Dwt_Button_XFormItem.prototype.constructWidget = function () {
 	}
 
 	if (this._enabled !== void 0) {
-		this.widget = widget;
+		//this.widget = widget;
 		this.setElementEnabled(this._enabled);
 	}
 	
@@ -3247,7 +3255,7 @@ Dwt_Select_XFormItem.prototype.insertWidget = function (form, widget, element) {
 Dwt_Select_XFormItem.prototype.constructWidget = function () {
 	var choices = this.getDwtSelectItemChoices(this.getChoices());
 
-	var widget = new DwtSelect(this.getForm(), choices);
+	var widget = this.widget = new DwtSelect(this.getForm(), choices);
 	var height = this.getHeight();
 	var width = this.getWidth();
 	if (width != null || height != null){
@@ -3255,6 +3263,7 @@ Dwt_Select_XFormItem.prototype.constructWidget = function () {
 		if (width != null) el.style.width = width;
 		if (height != null) el.style.height = height;
 	} 
+	this._addCssStylesToDwtWidget();
 
 	var onChangeFunc = new Function("event", 
 			"var widget = event._args.selectObj;\r"
@@ -3264,7 +3273,7 @@ Dwt_Select_XFormItem.prototype.constructWidget = function () {
 	widget.addChangeListener(ls);
 
 	if (this._enabled !== void 0) {
-		this.widget = widget;
+		//this.widget = widget;
 		this.setElementEnabled(this._enabled);
 	}
 	return widget;
@@ -3429,24 +3438,62 @@ function Dwt_List_XFormItem() {}
 XFormItemFactory.createItemType("_DWT_LIST_", "dwt_list", Dwt_List_XFormItem, Dwt_Adaptor_XFormItem)
 
 //	type defaults
-//Dwt_Datetime_XFormItem.prototype.numCols = 3;
-Dwt_Datetime_XFormItem.prototype.useParentTable = false;
-Dwt_Datetime_XFormItem.prototype.cssClass =  "xform_dwt_list";
+Dwt_List_XFormItem.prototype.writeElementDiv = false;
 
 Dwt_List_XFormItem.prototype.constructWidget = function () {
-	var widget = new DwtListView(this.getForm());
+	var widget = new DwtListView(this.getForm(), this.getCssClass());
+	var localLs = new AjxListener(this, this._handleSelection);
+	widget.addSelectionListener(localLs);
 	return widget;
 };
 
+Dwt_List_XFormItem.prototype.getSelection = function () {
+	return this.widget.getSelection();
+};
+
+Dwt_List_XFormItem.prototype._handleSelection = function (event) {
+	this.getForm().refresh();
+};
+// Dwt_List_XFormItem.prototype._handleSelection = function (event) {
+// 	var listView = event.dwtObj;
+// 	var newSelection = listView.getSelection();
+
+// 	// if we have a modelItem which is a LIST type
+// 	//	convert the output to the propert outputType
+// 	var modelItem = this.getModelItem();
+// 	if (modelItem && modelItem.getOutputType) {
+// 		if (modelItem.getOutputType() == _STRING_) {
+// 			newSelection = newSelection.join(modelItem.getItemDelimiter());
+// 		}
+// 	} else {
+// 		// otherwise assume we should convert it to a comma-separated string
+// 		newSelection = newSelection.join(",");
+// 	}
+// 	this.getForm().itemChanged(this, newSelection, event);
+// };
 
 Dwt_List_XFormItem.prototype.insertWidget = function (form, widget, element) {
-	var form = this.getForm();
-	var val = form.get(this.refPath);
-	widget.set(val);
+	this.getForm()._reparentDwtObject(widget, this.getContainer());
 };
 
 Dwt_List_XFormItem.prototype.updateWidget = function (newValue) {
-
+// 	DBG.println("********* update list item: newValue = ", newValue);
+// 	DBG.println("********* update list item: isArray(newValue) = ", AjxUtil.isArray(newValue));
+// 	debugger;
+// 	var choices = this.getChoices();
+// 	var tmpArr = new Array();
+// 	for (var i = 0; i < choices.length; i++) {
+// 		tmpArr.push(choices[i].label);
+// 	}
+// 	this.widget.set(AjxVector.fromArray(tmpArr));
+	
+// 	// set the selection
+// 	if (newValue != null) {
+// 		this.widget.setSelectedItems(newValue);
+// 	}
+	if (typeof (newValue) != 'undefined') {
+	this.widget.set(AjxVector.fromArray(newValue));
+	}
 };
 
 
@@ -3527,6 +3574,10 @@ Dwt_AddRemove_XFormItem.prototype.getListCssClass = function() {
 	return this.getInheritedProperty("listCssClass");
 }
 
+Dwt_AddRemove_XFormItem.prototype.getTargetListCssClass = function() {
+	return this.getInheritedProperty("targetListCssClass");
+}
+
 Dwt_AddRemove_XFormItem.prototype.getSourceInstanceValue = function() {
 	var items = this.getModel().getInstanceValue(this.getInstance(), this.getInheritedProperty("sourceRef"));
 	return items ? items : [];
@@ -3548,8 +3599,9 @@ Dwt_AddRemove_XFormItem.prototype._handleStateChange = function(event) {
 Dwt_AddRemove_XFormItem.prototype.constructWidget = function() {
 	var form = this.getForm();
 	var cssClass = this.getCssClass();
-	var listCssClass = this.getListCssClass();
-	var widget = new DwtAddRemove(form, cssClass, null, listCssClass);
+	var sourceListCssClass = this.getListCssClass();
+	var targetListCssClass = this.getTargetListCssClass();
+	var widget = new DwtAddRemove(form, cssClass, null, sourceListCssClass, targetListCssClass);
 	return widget;
 }
 
@@ -3577,7 +3629,7 @@ Dwt_AddRemove_XFormItem.prototype.updateWidget = function(newvalue) {
 		sourceItems = sourceItems.sort();
 		targetItems = targetItems.sort();
 	}
-	
+
 	this.widget.setSourceItems(sourceItems);
 	this.widget.removeSourceItems(targetItems);
 	this.widget.setTargetItems(targetItems);

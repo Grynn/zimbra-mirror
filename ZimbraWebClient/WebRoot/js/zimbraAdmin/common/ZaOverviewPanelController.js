@@ -52,9 +52,11 @@ ZaOverviewPanelController._STATUS = 4;
 ZaOverviewPanelController._SERVERS = 5;
 ZaOverviewPanelController._GLOBAL_SETTINGS = 6;
 ZaOverviewPanelController._STATISTICS = 7;
+ZaOverviewPanelController._DISTRIBUTION_LISTS = 8;
 
 ZaOverviewPanelController._ACCOUNTS_SUB_TREE = 1000;
 ZaOverviewPanelController._STATISTICS_SUB_TREE = 10000;
+ZaOverviewPanelController._DISTRIBUTION_LISTS_SUB_TREE = 100000;
 
 ZaOverviewPanelController._TID = "TID";
 ZaOverviewPanelController._OBJ_ID = "OBJ_ID";
@@ -232,6 +234,31 @@ function() {
 	ti.setText(ZaMsg.OVP_global);
 	ti.setImage("GlobalSettings");
 	ti.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._GLOBAL_SETTINGS);	
+
+ 	ti = new DwtTreeItem(tree);
+ 	ti.setText(ZaMsg.OVP_distributionLists);
+ 	// TODO - ICON for distribution lists
+ 	ti.setImage("GlobalSettings");
+ 	ti.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._DISTRIBUTION_LISTS);	
+
+ 	try {
+ 		//add domain nodes
+ 		var domainList = this._app.getDomainList().getArray();
+ 		if(domainList && domainList.length) {
+ 			var cnt = domainList.length;
+ 			for(var ix=0; ix< cnt; ix++) {
+ 				var ti1 = new DwtTreeItem(ti);
+ 				ti1.setText(domainList[ix].name);	
+				ti1.setImage("AccountByDomain");
+ 				ti1.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._DISTRIBUTION_LISTS_SUB_TREE);
+ 				ti1.setData(ZaOverviewPanelController._OBJ_ID, domainList[ix].name);
+ 				//this._domainsMap[domainList[ix].name] = ti1;
+ 			}
+ 		}
+ 	} catch (ex) {
+ 		this._handleException(ex, "ZaOverviewPanelController.prototype._buildFolderTree", null, false);
+ 	}
+
 	
 	tree.setSelection(this._statusTi, true);
 }
@@ -332,6 +359,8 @@ function(ev) {
 							this._app.getGlobalConfigViewController().show(this._app.getGlobalConfig());
 						}
 						break;		
+ 					case ZaOverviewPanelController._DISTRIBUTION_LISTS_SUB_TREE:
+						// fall through
 					case ZaOverviewPanelController._ACCOUNTS_SUB_TREE:
 						this.setCurrentDomain(ev.item.getData(ZaOverviewPanelController._OBJ_ID));
 //						var queryHldr = this._app.getAccountListController().getQuery();
@@ -356,7 +385,18 @@ function(ev) {
 							this._app.getServerStatsController().show(this._currentServer);
 						}
 
-						break;							
+						break;
+//  				case ZaOverviewPanelController._DISTRIBUTION_LISTS_SUB_TREE:
+//  					this.setCurrentDomain(ev.item.getData(ZaOverviewPanelController._OBJ_ID));
+//  					var currCont = this._app.getCurrentController();
+//  					var distController = this._app.getDistributionListController(this._currentDomain);
+//  					var searchResults = ZaSearch.searchByDomain(this._currentDomain, [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS],1, ZaAccount.A_uid, true, this._app);
+//  					if (currCont) {
+//  						currCont.switchToNextView(distController, distController.show, searchResults);
+//  					} else {
+//  						distController.show(searchResults);
+//  					}
+//  					break;
 				}
 			}
 		} catch (ex) {

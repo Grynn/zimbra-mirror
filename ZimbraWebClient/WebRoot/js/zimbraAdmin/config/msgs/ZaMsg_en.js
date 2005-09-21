@@ -147,6 +147,7 @@ ZaMsg.OVP_accounts = "Accounts";
 ZaMsg.OVP_cos = "Class of Service";
 ZaMsg.OVP_domains = "Domains";
 ZaMsg.OVP_global = "Global Settings";
+ZaMsg.OVP_distributionLists = "Distribution Lists";
 ZaMsg.OVP_servers = "Servers";
 ZaMsg.OVP_status = "Status";
 ZaMsg.OVP_statistics = "Statistics";
@@ -169,6 +170,7 @@ ZaMsg.TBB_ChngPwd = "Change Password";
 ZaMsg.TBB_ViewMail = "View Mail";
 ZaMsg.TBB_RestoreMailbox = "Restore";
 ZaMsg.TBB_Refresh_tt = "Refresh list";
+ZaMsg.TBB_Cancel = "Cancel";
 
 ZaMsg.ALTBB_Save_tt = "Save changes";
 ZaMsg.ALTBB_Close_tt = "Close this view";
@@ -199,6 +201,17 @@ ZaMsg.COSTBB_Delete_tt = "Delete COS";
 ZaMsg.COSTBB_Duplicate_tt = "Duplicate COS";
 ZaMsg.COSTBB_Save_tt = "Save changes";
 ZaMsg.COSTBB_Close_tt = "Close this view";
+
+ZaMsg.DLTBB_New_tt = "New Distribtuion List";
+ZaMsg.DLTBB_Delete_tt = "Delete Distribution List";
+ZaMsg.DLTBB_Edit_tt = "Edit Distribution List";
+ZaMsg.DLTBB_Cancel_tt = "Cancel Distribution List creation";
+
+ZaMsg.DLLV_EmailAddress_col = "Email Address";
+ZaMsg.DLLV_DisplayName_col = "Display Name";
+ZaMsg.DLLV_Description_col =  "Description";
+
+
 
 ZaMsg.Alert_ServerDetails = 
 	"<b>Note:</b> Settings on an individual server override global settings.";

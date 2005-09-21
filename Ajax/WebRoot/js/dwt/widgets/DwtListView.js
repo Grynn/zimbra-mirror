@@ -419,9 +419,25 @@ function(row, index) {
 /**
 * Renders a single item as a DIV element.
 *
-* @abstract
+* Default implementation creates a simple div with the innerHTML set to 
+* the string value of the item.
 */
-DwtListView.prototype._createItemHtml = function(item, now, isDnDIcon) {}
+DwtListView.prototype._createItemHtml = function(item, now, isDnDIcon) {
+	var div = document.createElement("DIV");
+	div.id = Dwt.getNextId();
+	var rowClassName = AjxBuffer.concat(this._className, "Row");
+	div._styleClass = AjxBuffer.concat("Row ",rowClassName);
+	div._selectedStyleClass = AjxBuffer.concat("Row-", DwtCssStyle.SELECTED, " ", rowClassName);
+	div._selectedDisabledStyleClass = AjxBuffer.concat("Row-", DwtCssStyle.SELECTED, "-" , DwtCssStyle.DISABLED, " ", rowClassName);
+	div.className = div._styleClass;
+	if( typeof (item) == "object") {
+		div.innerHTML = AjxStringUtil.htmlEncode(item.toString());
+	} else {
+		div.innerHTML = AjxStringUtil.htmlEncode(String(item));
+	}
+	this.associateItemWithElement(item, div, DwtListView.TYPE_LIST_ITEM);
+	return div;
+}
 
 DwtListView.prototype._setNoResultsHtml = 
 function() {
@@ -520,11 +536,7 @@ function(item, skipNotify) {
 	var el = this._getElFromItem(item);
 	if (el) {
 		var i;
-		var a = this._selectedItems.getArray();
-		var sz = this._selectedItems.size();
-		for (i = 0; i < sz; i++)
-			a[i].className = a[i]._styleClass;
-		this._selectedItems.removeAll();
+		this._deselectAllSelectedItems();
 		this._selectedItems.add(el);
 		this._selAnchor = el;
 		el.className = this.getEnabled() ? el._selectedStyleClass : el._selectedDisabledStyleClass;
@@ -538,6 +550,30 @@ function(item, skipNotify) {
 		}	
 	}
 }
+
+DwtListView.prototype._deselectAllSelectedItems =
+function () {
+	var a = this._selectedItems.getArray();
+	var sz = this._selectedItems.size();
+	for (i = 0; i < sz; i++) {
+		a[i].className = a[i]._styleClass;
+	}
+	this._selectedItems.removeAll();
+};
+
+DwtListView.prototype.setSelectedItems =
+function (selectedArray) {
+	this._deselectAllSelectedItems();
+	var i, sz, el;
+	sz = selectedArray.length;
+	for (i = 0; i < sz; ++i) {
+		el = this._getElFromItem(selectedArray[i]);
+		if (el) {
+			el.className = this.getEnabled()? el._selectedStyleClass: el._selectedDisabledStyleClass;
+			this._selectedItems.add(el);
+		}
+	}
+};
 
 DwtListView.prototype.getSelectionCount =
 function() {

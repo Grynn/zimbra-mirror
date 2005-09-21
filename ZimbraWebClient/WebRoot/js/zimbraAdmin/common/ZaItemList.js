@@ -150,7 +150,7 @@ function(respNode) {
 		} else {
 			item = ZaItem.getFromType(nodes[i].nodeName, this._app);
 		}
-		
+		item.type = nodes[i].nodeName;
 		item.initFromDom(nodes[i]);
 		//add the list as change listener to the item
 		this.add(item);

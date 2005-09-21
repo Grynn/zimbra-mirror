@@ -31,17 +31,19 @@
  * Constructs a control that shows two lists of items and allows the user
  * to move items between the two lists.
  *
- * @param parent    The parent container for this control.
- * @param className (optional) The CSS class for this control. Default
- *					value is "DwtAddRemove".
+ * @param parent               The parent container for this control.
+ * @param className            (optional) The CSS class for this control. Default
+ *					           value is "DwtAddRemove".
  * @param posStyle  (optional) The position style of this control.
+ * @param sourceListClassName  The css class name for the source list.
+ * @param targetListClassName  The css class name for the target list.
  */
-function DwtAddRemove(parent, className, posStyle, listClassName) {
+function DwtAddRemove(parent, className, posStyle, sourceListClassName, targetListClassName) {
 	if (arguments.length == 0) return;
 	className = className || "DwtAddRemove";
 	posStyle = posStyle || DwtControl.STATIC_STYLE;
 	DwtComposite.call(this, parent, className, posStyle);
-	this._createHTML(listClassName);
+	this._createHTML(sourceListClassName, targetListClassName);
 	this.isUpdating = false;
 }
 
@@ -291,7 +293,9 @@ DwtAddRemove.prototype._targetListListener = function(event) {
 }
 
 /** @protected */
-DwtAddRemove.prototype._createHTML = function(listClassName) {
+DwtAddRemove.prototype._createHTML = function(sourceListClassName, targetListClassName) {
+	// if only one class name has been given, assume, both lists get the same class name.
+	if (targetListClassName == null) targetListClassName = sourceListClassName;
 
 	// create unique identifiers
 	var thisId = this.getHtmlElement().id;
@@ -305,17 +309,17 @@ DwtAddRemove.prototype._createHTML = function(listClassName) {
 
 	var document = this.getDocument();
 	var table = document.createElement("TABLE");
-	table.border = 0;
-	table.cellPadding = 0;
-	table.cellSpacing = 4;
+	table.className = AjxBuffer.concat(this._className, "-", "outerTable");
 	
 	var row = table.insertRow(table.rows.length);
 
 	var sourceDiv = row.insertCell(row.cells.length);
+	sourceDiv.className = "DwtAddRemove-sourceContainer";
 	sourceDiv.id = sourceDivId;
 	sourceDiv.width = width; // REVISIT
 	
 	var controlsDiv = row.insertCell(row.cells.length);
+	controlsDiv.className = "DwtAddRemove-controlsContainer";
 	controlsDiv.id = controlsDivId;
 	controlsDiv.align = "center";
 	if (AjxEnv.isIE) {
@@ -323,6 +327,7 @@ DwtAddRemove.prototype._createHTML = function(listClassName) {
 	}
 	
 	var targetDiv = row.insertCell(row.cells.length);
+	targetDiv.className = "DwtAddRemove-targetContainer";
 	targetDiv.id = targetDivId;
 	targetDiv.width = width; // REVISIT
 
@@ -330,12 +335,12 @@ DwtAddRemove.prototype._createHTML = function(listClassName) {
 		
 	// create controls
 	// REVISIT: replace with light-weight list boxes?
-	this._sourceList = new DwtAddRemoveListView(this, listClassName);
+	this._sourceList = new DwtAddRemoveListView(this, sourceListClassName);
 	this._addAllButton = new DwtButton(this);
 	this._addButton = new DwtButton(this);
 	this._removeButton = new DwtButton(this);
 	this._removeAllButton = new DwtButton(this);
-	this._targetList = new DwtAddRemoveListView(this, listClassName);
+	this._targetList = new DwtAddRemoveListView(this, targetListClassName);
 
 	// initialize controls
 	this._sourceList._setNoResultsHtml = new Function();
@@ -375,9 +380,10 @@ DwtAddRemove.prototype._createHTML = function(listClassName) {
 	
 } // DwtAddRemove#_createHTML
 
-function DwtAddRemoveListView(parent, className) {
+function DwtAddRemoveListView(parent, className, type) {
 	className = className || "DwtAddRemoveListView";
 	DwtListView.call(this, parent, className);
+	this._type = type;
 }
 DwtAddRemoveListView.prototype = new DwtListView;
 DwtAddRemoveListView.prototype.constructor = DwtAddRemoveListView;
@@ -386,15 +392,10 @@ DwtAddRemoveListView.prototype._createItemHtml = function(item, now, isDnDIcon) 
 	var document = this.getDocument();
 	var div = document.createElement("DIV");
 	div.id = Dwt.getNextId();
-	div._styleClass = 
-		"Row "+
-		"DwtAddRemoveListViewRow";
-	div._selectedStyleClass = 
-		"Row-"+DwtCssStyle.SELECTED+" "+
-		"DwtAddRemoveListViewRow";
-	div._selectedDisabledStyleClass = 
-		"Row-"+DwtCssStyle.SELECTED+"-"+DwtCssStyle.DISABLED+" "+
-		"DwtAddRemoveListViewRow";
+	var rowClassName = "DwtAddRemoveListViewRow";
+	div._styleClass = AjxBuffer.concat("Row ",rowClassName);
+	div._selectedStyleClass = AjxBuffer.concat("Row-", DwtCssStyle.SELECTED, " ", rowClassName);
+	div._selectedDisabledStyleClass = AjxBuffer.concat("Row-", DwtCssStyle.SELECTED, "-" , DwtCssStyle.DISABLED, " ", rowClassName);
 	div.className = div._styleClass;
 	if( typeof (item) == "object") {
 		div.innerHTML = AjxStringUtil.htmlEncode(item.toString());

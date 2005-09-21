@@ -409,7 +409,7 @@ XForm.prototype.outputForm = function () {
 	var indent = "";
 	
 	html.append('<div id="', this.__id,'"',
-				(this.cssClass != null && this.cssClass != '' ? ' class="' + this.cssClass + ';"' : ""),
+				(this.cssClass != null && this.cssClass != '' ? ' class="' + this.cssClass + '"' : ""),
 				(this.cssStyle != null && this.cssStyle != '' ? ' style="' + this.cssStyle + ';"' : ""),
 				'>\r'
 				);
