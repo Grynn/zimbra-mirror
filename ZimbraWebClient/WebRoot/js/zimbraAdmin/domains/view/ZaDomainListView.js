@@ -55,6 +55,10 @@ function() {
 	return "ZaDomainListView";
 }
 
+ZaDomainListView.prototype.getTitle = 
+function () {
+	return ZaMsg.Domain_view_title;
+}
 /**
 * Renders a single item as a DIV element.
 */

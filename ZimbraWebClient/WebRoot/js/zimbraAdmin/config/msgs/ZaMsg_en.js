@@ -31,6 +31,13 @@ ZaMsg.Of = "of";
 ZaMsg.Unlimited = "unlimited";
 
 ZaMsg.Status_view_title = "System Status";
+ZaMsg.GlobalStats_view_title = "System-wide Statistics";
+ZaMsg.Servers_view_title = "Manage Servers";
+ZaMsg.COS_view_title = "Manage Classes Of Service";
+ZaMsg.Accounts_view_title = "Manage Accounts";
+ZaMsg.DL_view_title = "Manage Distribution Lists";
+ZaMsg.Domain_view_title = "Manage Domains";
+ZaMsg.GlobalConfig_view_title = "Manage Global Configuration";
 //Domain configuration labels 
 ZaMsg.AuthMech_zimbra="Internal";
 ZaMsg.AuthMech_ldap = "External LDAP";

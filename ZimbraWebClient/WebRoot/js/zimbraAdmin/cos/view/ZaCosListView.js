@@ -50,6 +50,11 @@ function() {
 	return "ZaCosListView";
 }
 
+ZaCosListView.prototype.getTitle = 
+function () {
+	return ZaMsg.COS_view_title;
+}
+
 /**
 * Renders a single item as a DIV element.
 */

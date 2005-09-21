@@ -53,6 +53,10 @@ function() {
 	return "ZaAccountListView";
 }
 
+ZaAccountListView.prototype.getTitle = 
+function () {
+	return ZaMsg.Accounts_view_title;
+}
 /**
 * Renders a single item as a DIV element.
 */

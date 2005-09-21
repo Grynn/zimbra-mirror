@@ -38,6 +38,11 @@ function GlobalConfigXFormView (parent, app) {
 GlobalConfigXFormView.prototype = new ZaTabView();
 GlobalConfigXFormView.prototype.constructor = GlobalConfigXFormView;
 
+GlobalConfigXFormView.prototype.getTitle = 
+function () {
+	return ZaMsg.GlobalConfig_view_title;
+}
+
 GlobalConfigXFormView.prototype.getMyXForm = function() {	
 	var xFormObject = {
 		tableCssStyle:"width:100%;overflow:auto;",
