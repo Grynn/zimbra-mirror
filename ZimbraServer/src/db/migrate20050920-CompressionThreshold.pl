@@ -18,5 +18,6 @@ sub alterVolume() {
 	" ADD compression_threshold BIGINT NOT NULL;";
     Migrate::runSql($sql);
 
+    Migrate::runSql("UPDATE volume SET compression_threshold = 4096;");
     Migrate::runSql("DELETE FROM config WHERE name = 'store.compressBlobs'");
 }
