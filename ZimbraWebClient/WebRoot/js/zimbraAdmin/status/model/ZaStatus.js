@@ -40,7 +40,7 @@ ZaStatus.loadStatusTable =
 function() {
 	var soapDoc = AjxSoapDoc.create("GetServiceStatusRequest", "urn:zimbraAdmin", null);
 	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
-	var list = new ZaItemList("status", ZaStatus);
+	var list = new ZaItemList(ZaStatus);
 	list.loadFromDom(resp);
 	return list;
 }
