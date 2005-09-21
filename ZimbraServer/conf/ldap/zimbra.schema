@@ -2033,6 +2033,7 @@ objectclass ( zimbraDistributionList
 		zimbraId $
 		uid)
 	MAY (
+		displayName $
 		description $
 		zimbraNotes)
 	)
