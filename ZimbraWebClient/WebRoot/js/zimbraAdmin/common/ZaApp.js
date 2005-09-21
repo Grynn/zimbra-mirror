@@ -146,6 +146,12 @@ function() {
 	return this._newAccountWizController;
 }
 
+ZaApp.prototype.getDistributionListController = function (domain) {
+	if (this._distributionListController == null) {
+		this._distributionListController = new ZaDLController(this._appCtxt, this._container, this, domain);
+	}
+	return this._distributionListController;
+};
 
 ZaApp.prototype.getDomainListController =
 function() {
@@ -153,10 +159,10 @@ function() {
 		this._domainListController = new ZaDomainListController(this._appCtxt, this._container, this);
 		
 		this._domainListController.addDomainCreationListener(new AjxListener(this, ZaApp.prototype.handleDomainCreation));					
-		this._domainListController.addDomainCreationListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleDomainCreation));				
+//		this._domainListController.addDomainCreationListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleDomainCreation));				
 
 		this._domainListController.addDomainRemovalListener(new AjxListener(this, ZaApp.prototype.handleDomainRemoval));							
-		this._domainListController.addDomainRemovalListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleDomainRemoval));						
+//		this._domainListController.addDomainRemovalListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleDomainRemoval));						
 		
 	}
 	return this._domainListController;
@@ -171,12 +177,12 @@ function() {
 
 		this._domainController.addDomainCreationListener(new AjxListener(this, ZaApp.prototype.handleDomainCreation));					
 		this._domainController.addDomainCreationListener(new AjxListener(this.getDomainListController(), ZaDomainListController.prototype.handleDomainCreation));	
-		this._domainController.addDomainCreationListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleDomainCreation));				
+//		this._domainController.addDomainCreationListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleDomainCreation));				
 
 		this._domainController.addDomainRemovalListener(new AjxListener(this.getDomainListController(), ZaDomainListController.prototype.handleDomainRemoval));			
 		this._domainController.addDomainRemovalListener(new AjxListener(this, ZaApp.prototype.handleDomainRemoval));							
 		
-		this._domainController.addDomainRemovalListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleDomainRemoval));						
+//		this._domainController.addDomainRemovalListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleDomainRemoval));						
 	}
 
 	return this._domainController;
@@ -657,21 +663,14 @@ function() {
 	return this._appViewMgr;
 }
 
-// Convenience functions that call through to app view manager. See ZaAppViewMgr for details.
-
-ZaApp.prototype.setAppView =
-function(view) {
-	this._appViewMgr.setAppView(this._name, view);
-}
-
 ZaApp.prototype.createView =
-function(viewName, elements, popCallback, style, isVolatile, isAppView) {
-	return this._appViewMgr.createView(viewName, this._name, elements, popCallback, style, isVolatile, isAppView);
+function(viewName, elements) {
+	this._appViewMgr.createView(viewName, elements);
 }
 
 ZaApp.prototype.pushView =
-function(name, force) {
-	return this._appViewMgr.pushView(name, force);
+function(name) {
+	return this._appViewMgr.pushView(name);
 }
 /*
 ZaApp.prototype.popView =
@@ -686,12 +685,6 @@ function(name, force) {
 
 // Abstract methods
 
-/**
-* Run when the activation state of an app changes.
-*/
-ZaApp.prototype.activate =
-function(active) {
-}
 
 /**
 * Clears an app's state.

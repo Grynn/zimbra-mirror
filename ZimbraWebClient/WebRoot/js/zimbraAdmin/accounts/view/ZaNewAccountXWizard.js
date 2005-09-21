@@ -160,7 +160,8 @@ function(entry) {
 	this._containedObject[ZaAccount.A2_confirmPassword] = null;
 	this._containedObject[ZaModel.currentStep] = 1;
 	this._containedObject.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
-	var domainName = this._app._appCtxt.getAppController().getOverviewPanelController().getCurrentDomain();
+//	var domainName = this._app._appCtxt.getAppController().getOverviewPanelController().getCurrentDomain();
+	var domainName;
 	if(!domainName) {
 		//find out what is the default domain
 		domainName = this._app.getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraDefaultDomainName];
@@ -187,7 +188,8 @@ function(value, event, form) {
 }
 
 ZaNewAccountXWizard.prototype.getMyXForm = function() {	
-	var domainName = this._app._appCtxt.getAppController().getOverviewPanelController().getCurrentDomain();
+//	var domainName = this._app._appCtxt.getAppController().getOverviewPanelController().getCurrentDomain();
+	var domainName;
 	if(!domainName) {
 		domainName = this._app.getDomainList().getArray()[0].name;
 	}

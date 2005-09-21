@@ -163,7 +163,8 @@ function (index, form) {
 }
 
 ZaAccountXFormView.prototype.getMyXForm = function() {	
-	var domainName = this._app._appCtxt.getAppController().getOverviewPanelController().getCurrentDomain();
+//	var domainName = this._app._appCtxt.getAppController().getOverviewPanelController().getCurrentDomain();
+	var domainName;
 	if(!domainName) {
 		domainName = this._app.getDomainList().getArray()[0].name;
 	}

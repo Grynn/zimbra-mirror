@@ -155,7 +155,11 @@ function(entry) {
    		this._ops.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.SERTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, ZaServerController.prototype._closeButtonListener)));    	
 
 		this._toolBar = new ZaToolBar(this._container, this._ops);
-	    this._app.createView(ZaServerController.VIEW, [this._toolBar, this._view]);
+		var elements = new Object();
+		elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
+		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolBar;		
+	  
+	    this._app.createView(ZaServerController.VIEW, elements);
 		this._UICreated = true;
 	} 
 	this._app.pushView(ZaServerController.VIEW);

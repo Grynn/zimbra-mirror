@@ -43,9 +43,12 @@ ZaGlobalStatsController.STATUS_VIEW = "ZaGlobalStatsController.STATUS_VIEW";
 
 ZaGlobalStatsController.prototype.show = 
 function() {
-    if (!this._appView) {
+    if (!this._contentView) {
 		this._contentView = new ZaGlobalStatsView(this._container, this._app);
-		this._appView = this._app.createView(ZaGlobalStatsController.STATUS_VIEW, [this._contentView]);
+		var elements = new Object();
+		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
+		
+		this._app.createView(ZaGlobalStatsController.STATUS_VIEW, elements);
 	}
 	this._app.pushView(ZaGlobalStatsController.STATUS_VIEW);
 	this._app.setCurrentController(this);

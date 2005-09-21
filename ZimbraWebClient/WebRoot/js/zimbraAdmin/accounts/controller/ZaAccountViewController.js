@@ -428,7 +428,10 @@ function(entry) {
 	
 	  		//this._view = new ZaAccountView(this._container, this._app, entry.id);
 	  		this._view = new ZaAccountXFormView(this._container, this._app);
-	    	this._app.createView(ZaAccountViewController.VIEW, [this._toolBar, this._view]);
+			var elements = new Object();
+			elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
+			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolBar;		  		
+	    	this._app.createView(ZaAccountViewController.VIEW, elements);
 	    	this._UICreated = true;
   		}
 		this._app.pushView(ZaAccountViewController.VIEW);

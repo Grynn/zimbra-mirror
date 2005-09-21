@@ -73,7 +73,12 @@ function(account, now, isDndIcon) {
 	var cnt = this._headerList.length;
 	for(var i = 0; i < cnt; i++) {
 		var id = this._headerList[i]._id;
-		if(id.indexOf(ZaAccount.A_name)==0) {
+		if(id.indexOf("type")==0) {
+			// type
+			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
+			html[idx++] = AjxStringUtil.htmlEncode(account.type);
+			html[idx++] = "</td>";
+		} else if(id.indexOf(ZaAccount.A_name)==0) {
 			// name
 			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
 			html[idx++] = AjxStringUtil.htmlEncode(account.name);
@@ -104,14 +109,16 @@ ZaAccountListView.prototype._getHeaderList =
 function() {
 
 	var headerList = new Array();
+	
+	headerList[0] = new ZaListHeaderItem("type", ZaMsg.ALV_Type_col, null, 90, false, null, true, true);
 
-	headerList[0] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.ALV_Name_col, null, 195, true, ZaAccount.A_uid, true, true);
+	headerList[1] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.ALV_Name_col, null, 195, true, ZaAccount.A_name, true, true);
 //idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
-	headerList[1] = new ZaListHeaderItem(ZaAccount.A_displayname, ZaMsg.ALV_DspName_col, null, 145, true,ZaAccount.A_displayname, true, true);
+	headerList[2] = new ZaListHeaderItem(ZaAccount.A_displayname, ZaMsg.ALV_DspName_col, null, 145, true,ZaAccount.A_displayname, true, true);
 
-	headerList[2] = new ZaListHeaderItem(ZaAccount.A_accountStatus, ZaMsg.ALV_Status_col, null, 80, true,ZaAccount.A_accountStatus, true, true);
+	headerList[3] = new ZaListHeaderItem(ZaAccount.A_accountStatus, ZaMsg.ALV_Status_col, null, 80, true,ZaAccount.A_accountStatus, true, true);
 
-	headerList[3] = new ZaListHeaderItem(ZaAccount.A_description, ZaMsg.ALV_Description_col, null, null, false, null,true, true );
+	headerList[4] = new ZaListHeaderItem(ZaAccount.A_description, ZaMsg.ALV_Description_col, null, null, false, null,true, true );
 	
 	return headerList;
 }

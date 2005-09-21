@@ -35,7 +35,7 @@ ZaCosListController.COS_VIEW = "ZaCosListController.COS_VIEW";
 
 ZaCosListController.prototype.show = 
 function(list) {
-    if (!this._appView) {
+    if (!this._contentView) {
     	this._ops = new Array();
     	this._ops.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.COSTBB_New_tt, "NewCOS", "NewCOSDis", new AjxListener(this, ZaCosListController.prototype._newButtonListener)));
     	this._ops.push(new ZaOperation(ZaOperation.DUPLICATE, ZaMsg.TBB_Duplicate, ZaMsg.COSTBB_Duplicate_tt, "DuplicateCOS", "DuplicateCOSDis", new AjxListener(this, ZaCosListController.prototype._duplicateButtonListener)));    	    	
@@ -44,7 +44,10 @@ function(list) {
 		this._toolbar = new ZaToolBar(this._container, this._ops);
     
 		this._contentView = new ZaCosListView(this._container);
-		this._appView = this._app.createView(ZaCosListController.COS_VIEW, [this._toolbar,  this._contentView]);
+		var elements = new Object();
+		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
+		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		 
+		this._app.createView(ZaCosListController.COS_VIEW, elements);
 		if (list != null)
 			this._contentView.set(list.getVector());
 
@@ -54,7 +57,7 @@ function(list) {
 		//set a selection listener on the account list view
 		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 		this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
-		this._removeConfirmMessageDialog = new ZaMsgDialog(this._appView.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);							
+		this._removeConfirmMessageDialog = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);							
 	} else {
 		if (list != null)
 			this._contentView.set(list.getVector());	

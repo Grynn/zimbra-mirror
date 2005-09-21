@@ -58,32 +58,39 @@
 * @param banner			the banner
 * @param controller		the app controller
 */
-function ZaAppViewMgr(shell, banner, controller) {
+function ZaAppViewMgr(shell, controller, hasSkin) {
 
 	this._shell = shell;
 	this._controller = controller;
-
+	this._appCtxt = controller._appCtxt;
 	this._shellSz = this._shell.getSize();
 	this._shell.addControlListener(new AjxListener(this, this._shellControlListener));
 	this._needBannerLayout = false;
-	this._sash = new DwtSash(this._shell, DwtSash.HORIZONTAL_STYLE, "AppSash-horiz", 5);
+
+/*	this._sash = new DwtSash(this._shell, DwtSash.HORIZONTAL_STYLE, "AppSash-horiz", 5);
 	this._sash.registerCallback(this._sashCallback, this);
-	
+*/	
 	this._currentView = null;			// name of currently visible view
 	this._views = new Object();			// hash that gives names to app views
 	this._hidden = new Array();			// stack of views that aren't visible
 	
 	this._layoutStyle = new Object();	// hash matching view to layout style
-	this._appView = new Object();		// hash matching an app name to its current main view
-	this._popCallback = new Object();	// a view can have a callback for when it is popped
-	this._viewApp = new Object();		// hash matching view names to their owning apps
-	this._volatile = new Object();		// names of volatile views (which trigger browser bugs)
-	this._isAppView = new Object();		// names of top-level app views
 	this._staleCallback = new Object(); // when topmost view is popped, allow underlying view to cleanup
 
-	// hash matching layout style to their methods	
+	this._compList = new Array();		// list of component IDs
+	this._components = new Object();	// component objects (widgets)
+	this._htmlEl = new Object();		// their HTML elements
+	this._containers = new Object();	// containers within the skin
+	this._contBounds = new Object();	// bounds for the containers
+	
+	// view preemption
+	this._pushCallback = new AjxCallback(this, this.pushView);
+//	this._popCallback = new AjxCallback(this, this.popView);
+	
+/*	// hash matching layout style to their methods	
 	this._layoutMethod = new Object();
 	this._layoutMethod[ZaAppViewMgr.LAYOUT_VERTICAL] = this._appLayoutVertical;
+*/	
 }
 
 ZaAppViewMgr.DEFAULT = -1;
@@ -101,7 +108,40 @@ ZaAppViewMgr.COMPONENT_SEPARATION = 2;	// in app container
 ZaAppViewMgr.LAYOUT_VERTICAL = 1;	// top to bottom, full width, last element gets remaining space
 
 // used when coming back from pop shield callbacks
-ZaAppViewMgr.PENDING_VIEW = "ZaAppViewMgr.PENDING_VIEW";
+ZaAppViewMgr.PENDING_VIEW = "ZaAppViewMgr.PENDgING_VIEW";
+
+// components
+ZaAppViewMgr.C_BANNER					= "BANNER";
+//ZaAppViewMgr.C_USER_INFO				= "USER INFO";
+ZaAppViewMgr.C_SEARCH					= "SEARCH";
+//ZaAppViewMgr.C_SEARCH_BUILDER			= "SEARCH BUILDER";
+//ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR	= "SEARCH BUILDER TOOLBAR";
+//ZaAppViewMgr.C_CURRENT_APP				= "CURRENT APP";
+ZaAppViewMgr.C_APP_CHOOSER				= "APP CHOOSER";
+//ZaAppViewMgr.C_TREE						= "TREE";
+//ZaAppViewMgr.C_TREE_FOOTER				= "TREE FOOTER";
+ZaAppViewMgr.C_TOOLBAR_TOP				= "TOP TOOLBAR";
+ZaAppViewMgr.C_TOOLBAR_BOTTOM			= "BOTTOM TOOLBAR";
+ZaAppViewMgr.C_APP_CONTENT				= "APP CONTENT";
+ZaAppViewMgr.C_STATUS					= "STATUS";
+ZaAppViewMgr.C_SASH						= "SASH";
+
+// keys for getting container IDs
+ZaAppViewMgr.CONT_ID_KEY = new Object();
+ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_BANNER]					= ZaSettings.SKIN_LOGO_ID;
+//ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_USER_INFO]				= ZaSettings.SKIN_USER_INFO_ID;
+ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_SEARCH]					= ZaSettings.SKIN_SEARCH_ID;
+//ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_SEARCH_BUILDER]			= ZaSettings.SKIN_SEARCH_BUILDER_ID;
+//ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR]	= ZaSettings.SKIN_SEARCH_BUILDER_TOOLBAR_ID;
+//ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_CURRENT_APP]			= ZaSettings.SKIN_CURRENT_APP_ID;
+ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_APP_CHOOSER]			= ZaSettings.SKIN_APP_CHOOSER_ID;
+//ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_TREE]					= ZaSettings.SKIN_TREE_ID;
+//ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_TREE_FOOTER]			= ZaSettings.SKIN_TREE_FOOTER_ID;
+ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_TOOLBAR_TOP]			= ZaSettings.SKIN_APP_TOP_TOOLBAR_ID;
+ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_TOOLBAR_BOTTOM]			= ZaSettings.SKIN_APP_BOTTOM_TOOLBAR_ID;
+ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_APP_CONTENT]			= ZaSettings.SKIN_APP_MAIN_ID;
+ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_STATUS]					= ZaSettings.SKIN_STATUS_ID;
+ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_SASH]					= ZaSettings.SKIN_SASH_ID;
 
 // Public methods
 
@@ -110,48 +150,9 @@ function() {
 	return "ZaAppViewMgr";
 }
 
-ZaAppViewMgr.prototype.dtor = 
+ZaAppViewMgr.prototype.getShell = 
 function() {
-	for (var i in this._views)
-		this._views[i].getHtmlElement().innerHTML = "";
-	if (this._overviewPanel)
-		this._overviewPanel.getHtmlElement().innerHTML = "";
-	if (this._searchPanel)
-		this._searchPanel.getHtmlElement().innerHTML = "";		
-	if (this._headerPanel)
-		this._headerPanel.getHtmlElement().innerHTML = "";		
-		
-}
-
-/**
-* Provides the search panel for this shell.
-*
-* @param searchPanel	the search panel
-*/
-ZaAppViewMgr.prototype.setSearchPanel =
-function(searchPanel) {
-	this._searchPanel = searchPanel;
-}
-
-
-/**
-* Provides the header panel for this shell.
-*
-* @param searchPanel	the search panel
-*/
-ZaAppViewMgr.prototype.setHeaderPanel =
-function(headerPanel) {
-	this._headerPanel = headerPanel;
-}
-
-/**
-* Provides the overview panel for this shell.
-*
-* @param overviewPanel	the overview panel
-*/
-ZaAppViewMgr.prototype.setOverviewPanel =
-function(overviewPanel) {
-	this._overviewPanel = overviewPanel;
+	return this._shell;
 }
 
 /**
@@ -162,28 +163,6 @@ function() {
 	return this._currentView;
 }
 
-/**
-* Returns the current top-level view for the given app.
-*
-* @param app	the name of an app
-*/
-ZaAppViewMgr.prototype.getAppView =
-function(app) {
-	return this._appView[app];
-}
-
-/**
-* Sets the current top-level view for the given app. Should be called by an app (or controller) that
-* changes the top-level view of the app.
-*
-* @param app	the name of an app
-* @param view	the name of a view
-*/
-ZaAppViewMgr.prototype.setAppView =
-function(app, view) {
-	this._appView[app] = view;
-	this._controller.setActiveApp(app);
-}
 
 /**
 * Creates an app view from the given components and puts it in an app container.
@@ -191,63 +170,40 @@ function(app, view) {
 * @param viewName		the name of the view
 * @param appName		the name of the owning app
 * @param elements		an array of elements to display
-* @param popCallback 	function to call when this view is about to be hidden
-* @param style			layout style
-* @param isVolatile		view is to be destroyed on pop
-* @param isAppView 		
-* @param staleCallback 	function to call on underlying view when topmost is popped
 * @returns				the app view
 */
 ZaAppViewMgr.prototype.createView =
-function(viewName, appName, elements, popCallback, style, isVolatile, isAppView, staleCallback) {
-//	DBG.println(AjxDebug.DBG1, "createView: " + viewName);
-	var appContainer = new DwtComposite(this._shell, null, DwtControl.ABSOLUTE_STYLE);
-	for (var i = 0; i < elements.length; i++)
-		elements[i].reparent(appContainer);
-	this._views[viewName] = appContainer;
-	this._layoutStyle[viewName] = style || ZaAppViewMgr.LAYOUT_VERTICAL;
-	this._popCallback[viewName] = popCallback;
-	this._staleCallback[viewName] = staleCallback;
-	this._viewApp[viewName] = appName;
-
-	this._volatile[viewName] = true; // make every view volatile, see if it helps with browser quirks
-	if (isAppView)
-		this._isAppView[viewName] = true;
-	
-	return appContainer;
+function(viewId, elements) {
+	this._views[viewId] = elements;
+	this.addComponents(elements, false, true);
 }
 
 /**
 * Makes the given view visible, pushing the previously visible one to the top of the
 * hidden stack.
 *
-* @param viewName	the name of the app view to push
-* @param force		ignore popped view's callbacks
+* @param viewId	the name of the app view to push
 * @returns			true if the view was pushed
 */
 ZaAppViewMgr.prototype.pushView =
-function(viewName, force) {
-//	DBG.println(AjxDebug.DBG1, "pushView: " + viewName);
-	if (this._currentView == viewName)
-		return false;
-	if (viewName == ZaAppViewMgr.PENDING_VIEW) {
-//	DBG.println(AjxDebug.DBG1, "pushView of pending view");
-		viewName = this._pendingView;
-		force = true;
+function(viewId) {
+	// if same view, no need to go through hide/show
+	if (viewId == this._currentView) {
+		this._setTitle(viewId);
+		return true;
 	}
-	if (this._currentView) {
-		if (!this._hideCurrentView(new AjxCallback(this, this.pushView), viewName, force))
-		 	return false;
 
-			this._hidden.push(this._currentView);
-	}
-	this._currentView = viewName;
-//	DBG.println(AjxDebug.DBG2, "app view mgr: current view is now " + this._currentView);
-	this._views[viewName].zShow(true);
-	this._layout();
-	this._controller.getControllerForView(viewName).setCurrentView(viewName);
-	if (this._isAppView[viewName])
-		this.setAppView(this._viewApp[viewName], viewName);
+	this._setViewVisible(this._currentView, false);
+	if (this._currentView && (this._currentView != viewId))
+		this._hidden.push(this._currentView);
+
+	this._removeFromHidden(viewId);
+	var temp = this._lastView;
+	this._lastView = this._currentView;
+	this._currentView = viewId;
+
+	this._setViewVisible(viewId, true);
+
 	return true;
 }
 
@@ -256,203 +212,81 @@ function(viewName, force) {
 * Makes the given view visible, and clears the hidden stack.
 *
 * @param viewName	the name of a view
-* @param force		ignore popped view's callbacks
 * @returns			true if the view was set
 */
 ZaAppViewMgr.prototype.setView =
-function(viewName, force) {
+function(viewName) {
 //	DBG.println(AjxDebug.DBG1, "setView: " + viewName);
-	var result = this.pushView(viewName, force);
-        if (result)
+	var result = this.pushView(viewName);
+    if (result)
 		this._hidden = new Array();
 	return result;
 }
 
-/**
-* Shows the view that was waiting for return from a popped view's callback. Typically, the
-* popped view's callback will have put up some sort of dialog, and this function would be
-* called by a listener on a dialog button.
-*
-* @param show		whether to show the pending view
-*/
-ZaAppViewMgr.prototype.showPendingView =
-function(show) {
-	if (show && this._pendingAction) {
-		if (this._pendingAction.run(ZaAppViewMgr.PENDING_VIEW)) {
-			this._controller.setActiveApp(this._viewApp[this._pendingView]);
-		}
+ZaAppViewMgr.prototype.addComponents =
+function(components, doFit, noSetZ) {
+	var list = new Array();
+	for (var cid in components) {
+		this._compList.push(cid);
+		var comp = components[cid];
+		this._components[cid] = comp;
+		var htmlEl = comp.getHtmlElement();
+		this._htmlEl[cid] = htmlEl;
+		var contId = ZaSettings.get(ZaAppViewMgr.CONT_ID_KEY[cid]);
+		var contEl = document.getElementById(contId);
+		this._containers[cid] = contEl;
+		if (Dwt.contains(contEl, htmlEl))
+			throw new AjxException("element already added to container: " + cid);		
+		Dwt.removeChildren(contEl);
+		list.push(cid);
+
+		if (!noSetZ)
+			comp.zShow(true);
+
+		if (cid == ZaAppViewMgr.C_SASH)
+			comp.setCursor("default");
 	}
-	this._pendingAction = this._pendingView = null;
+	if (doFit)
+		this._stickToGrid(list);
 }
-
-/**
-* Returns the geometry of the app container.
-*/
-ZaAppViewMgr.prototype.getAppBounds =
-function() {
-	return this._appBounds;
-}
-
-/**
-* Forces layout to be done.
-*
-* @param reason		used to control layout of specific components
-*/
-ZaAppViewMgr.prototype.layoutChanged =
-function(reason) {
-//DBG.println(AjxDebug.DBG2, "The layout changed! (reason = " + reason + ")");
-	this._shellSz = this._shell.getSize();
-
-	this._layout();
-}
-
-/**
-* Lays out the banner, which is a composite with two children: an image, and a banner bar that
-* contains the banner links.
-*/
-ZaAppViewMgr.prototype.layoutBanner =
-function() {
-//	DBG.println(AjxDebug.DBG2, "doing banner layout");
-	var bannerHtmlElement = this._banner.getHtmlElement();
-	var bannerImg = bannerHtmlElement.firstChild;
-	Dwt.setLocation(bannerImg, 0, 0);
-	this._bannerImageSize = Dwt.getSize(bannerImg);
-	this._banner.setBounds(0, 0, this._shellSz.x, this._bannerImageSize.y);
-	var bannerBar = Dwt.getObjectFromElement(bannerHtmlElement.lastChild);
-	bannerBar.setBounds(this._bannerImageSize.x, 0, this._shellSz.x - this._bannerImageSize.x, this._bannerImageSize.y);
-	var bannerTable = bannerBar.getHtmlElement().firstChild;
-	Dwt.setSize(bannerTable, Dwt.DEFAULT, this._bannerImageSize.y);
-	this._needBannerLayout = false;
-}
-
 // Private methods
 
-// Tries to hide the current view. First checks to see if the current view has a callback
-// for when it is popped. The callback must return true for the view to be hidden. If the
-// view was created as "volatile", it is moved offscreen in order to mask browser bugs with
-// z-index handling. In IE, SELECT elements ignore z-index, and in FireFox, the cursor stays
-// visible. Basically, any view with a form is volatile.
-ZaAppViewMgr.prototype._hideCurrentView =
-function(pendingAction, pendingView, skipCallback) {
-	var okToContinue = true;
-	var callback = this._popCallback[this._currentView];
-	if (callback && !skipCallback) {
-//		DBG.println(AjxDebug.DBG2, "hiding " + this._currentView + ", waiting on " + pendingView + "; skip = " + skipCallback);
-		this._pendingAction = pendingAction;
-		this._pendingView = pendingView;
-		okToContinue = callback.run();
-	}
-	if (okToContinue) {
-		this._views[this._currentView].zShow(false);
-//		DBG.println(AjxDebug.DBG2, this._currentView + " hidden");
-		if (this._volatile[this._currentView]) {
-//			DBG.println(AjxDebug.DBG1, "quarantining volatile view: " + this._currentView);
-			this._views[this._currentView].setLocation(Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
+ZaAppViewMgr.prototype._stickToGrid = 
+function(components) {
+	for (var i = 0; i < components.length; i++) {
+		var cid = components[i];
+		// don't resize logo image (it will tile) or reposition it (centered via style)
+		if (cid == ZaAppViewMgr.C_BANNER) continue;
+		//DBG.println(AjxDebug.DBG3, "fitting to container: " + cid);
+		var cont = this._containers[cid];
+		if (cont) {
+			var contBds = Dwt.getBounds(cont);
+			var comp = this._components[cid];
+			if (cid == ZaAppViewMgr.C_APP_CONTENT || 
+				cid == ZaAppViewMgr.C_TOOLBAR_TOP ||
+				cid == ZaAppViewMgr.C_TOOLBAR_BOTTOM ) {
+				// make sure we fit the component that's current
+				var elements = this._views[this._currentView];
+				comp = elements[cid];
+			}
+			if (comp && (comp.getZIndex() != Dwt.Z_HIDDEN)) {
+				comp.setBounds(contBds.x, contBds.y, contBds.width, contBds.height);
+				this._contBounds[cid] = contBds;
+			}
 		}
 	}
-
-	return okToContinue;
+	//this._debugShowMetrics(components);
 }
 
-/**
-* This is the core method of the app view manager. It lays out everything, including
-* the search bar (which may include a browse panel), the overview panel,
-* and the app area.
-**/
-ZaAppViewMgr.prototype._layout =
-function(style) {
-	
-	if (!this._currentView) return;
-	
-	// search panel
-	var x = 0, y = 0;
 
-		
-	if (this._searchPanel) {
-//		DBG.println(AjxDebug.DBG3, "searchPanel: " + x + '/' + y + '/' + this._shellSz.x + '/' + Dwt.DEFAULT);
-		this._searchPanel.setBounds(x, y, this._shellSz.x, Dwt.DEFAULT);
-
-		var searchSz = this._searchPanel.getSize();
-		y += searchSz.y;
-		if(!AjxEnv.isIE)
-			y += ZaAppViewMgr.TOOLBAR_SEPARATION;
-	}
-	
-		
-	if (this._headerPanel) {
-//		DBG.println(AjxDebug.DBG3, "headerPanel: " + x + '/' + y + '/' + this._shellSz.x + '/' + Dwt.DEFAULT);
-		this._headerPanel.setBounds(x, y, this._shellSz.x, Dwt.DEFAULT);
-		var headerSz = this._headerPanel.getSize();
-		y += headerSz.y;
-		if(!AjxEnv.isIE)
-			y += ZaAppViewMgr.TOOLBAR_SEPARATION;
-	}	
-
-	// overview panel
-	if (this._overviewPanel) {
-		var overviewHeight = Math.max(this._shellSz.y - y, 0);
-//		DBG.println(AjxDebug.DBG3, "overviewPanel: " + x + '/' + y + '/' + Dwt.DEFAULT + '/' + overviewHeight);
-		this._overviewPanel.setBounds(x, y, Dwt.DEFAULT, overviewHeight);
-		x += this._overviewPanel.getSize().x;
-	}
-	
-	// sash
-	if (this._sash && this._sash.getVisible()) {
-		var sashHeight = this._overviewPanel.getSize().y;
-//		DBG.println(AjxDebug.DBG3, "sash: " + x + '/' + y + '/' + Dwt.DEFAULT + '/' + sashHeight);
-		this._sash.setBounds(x, y, Dwt.DEFAULT, sashHeight);
-		x += this._sash.getSize().x;
-	}	
-
-	// layout the app portion in the appropriate style
-	this._layoutMethod[this._layoutStyle[this._currentView]].call(this, x, y);
-}
-
-/** 
-* Lays out the elements one on top of the other, separated by COMPONENT_SEPARATION. Each
-* element extends the entire width. The last element uses the remaining vertical space.
-**/
-ZaAppViewMgr.prototype._appLayoutVertical =
-function(x, y) {
-	// app container
-	var appContainer = this._views[this._currentView];
-	var width = Math.max(this._shellSz.x - x, 0);
-	var height = Math.max(this._shellSz.y - y, 0);
-//	DBG.println(AjxDebug.DBG3, "appContainer: " + x + '/' + y + '/' + width + '/' + height);
-	appContainer.setBounds(x, y, width, height);
-	this._appBounds = new DwtRectangle(x, y, width, height);
-	
-	// position the app container's children
-	x = y = 0;
-	var children = appContainer.getChildren();
-	var num = children.length;
-	for (var i = 0; i < num; i++) {
-		var child = children[i];
-		if (!child.getVisible())
-			child.setVisible(true);
-		var size = child.getSize();
-		var childHeight = size.y || child.getHtmlElement().clientHeight;
-		// last child gets the rest of the vertical space
-		if (i == (num - 1))
-			childHeight = Math.max(height - y, 0);
-//		DBG.println(AjxDebug.DBG3, "child " + i + ": " + x + '/' + y + '/' + width + '/' + childHeight);
-		child.setBounds(x, y, width, childHeight);
-		y += childHeight;
-		if(!AjxEnv.isIE)
-			y += ZaAppViewMgr.COMPONENT_SEPARATION;
-	}
-}
-
-// Resizes the app container and its children.
-ZaAppViewMgr.prototype._resizeView =
-function(view, bds) {
-	view.setBounds(bds.x, bds.y, bds.width, bds.height);
-	var children = view.getChildren();
-	for (var i = 0; i < children.length; i++) {
-		var child = children[i];
-		// children are positioned absolute
-		child.setBounds(Dwt.DEFAULT, Dwt.DEFAULT, bds.width, bds.height);
-	}
+// Removes a view from the hidden stack.
+ZaAppViewMgr.prototype._removeFromHidden =
+function(view) {
+	var newHidden = new Array();
+	for (var i = 0; i < this._hidden.length; i++)
+		if (this._hidden[i] != view)
+			newHidden.push(this._hidden[i]);
+	this._hidden = newHidden;
 }
 
 // Listeners
@@ -461,24 +295,66 @@ function(view, bds) {
 ZaAppViewMgr.prototype._shellControlListener =
 function(ev) {
 	if (ev.oldWidth != ev.newWidth || ev.oldHeight != ev.newHeight) {
-		this._shellSz.x = ev.newWidth;;
+		this._shellSz.x = ev.newWidth;
 		this._shellSz.y = ev.newHeight;
-		this.layoutChanged(ZaAppViewMgr.RESIZE);
+		var deltaWidth = ev.newWidth - ev.oldWidth;
+		var deltaHeight = ev.newHeight - ev.oldHeight;
+		DBG.println(AjxDebug.DBG1, "shell control event: dW = " + deltaWidth + ", dH = " + deltaHeight);
+		if (this._isNewWindow) {
+			// reset width of top toolbar
+			var topToolbar = this._views[this._currentView][ZaAppViewMgr.C_TOOLBAR_TOP];
+			if (topToolbar)
+				topToolbar.setSize(ev.newWidth, Dwt.DEFAULT);
+				
+			var bottomToolbar = this._views[this._currentView][ZaAppViewMgr.C_TOOLBAR_BOTTOM];
+			if (bottomToolbar)
+				bottomToolbar.setSize(ev.newWidth, Dwt.DEFAULT);
+				
+			// make sure to remove height of top toolbar for height of app content
+			var appContent = this._views[this._currentView][ZaAppViewMgr.C_APP_CONTENT];
+			if (appContent)
+				appContent.setSize(ev.newWidth, ev.newHeight - topToolbar.getH());
+		} else {
+			if (deltaHeight) {
+				var list = [ZaAppViewMgr.C_APP_CHOOSER, ZaAppViewMgr.C_SASH, ZaAppViewMgr.C_APP_CONTENT, ZaAppViewMgr.C_STATUS];
+				this._stickToGrid(list);
+			}
+			if (deltaWidth) {
+				var list = [ZaAppViewMgr.C_BANNER, ZaAppViewMgr.C_TOOLBAR_TOP, ZaAppViewMgr.C_APP_CONTENT, ZaAppViewMgr.C_TOOLBAR_BOTTOM];
+				this._stickToGrid(list);
+			}
+		}
 	}
 }
 
-// Handles sash movement. An attempt to move the sash beyond the extent of the overview 
-// panel or the view results in no movement at all.
-ZaAppViewMgr.prototype._sashCallback =
-function(delta) {
-	var absDelta = Math.abs(delta);
-	var view = this._views[this._currentView];
-	var viewBds = view.getBounds();
-	var ovSize = this._overviewPanel.getSize();
-	// make sure we aren't moving too far
-	if ((delta < 0 && (absDelta >= ovSize.x)) || (delta > 0 && (absDelta >= viewBds.width)))
-		return 0;
-	this._resizeView(view, new DwtRectangle(viewBds.x + delta, Dwt.DEFAULT, viewBds.width - delta, Dwt.DEFAULT));
-	this._overviewPanel.setSize(ovSize.x + delta, Dwt.DEFAULT);
-	return delta;
+
+// Makes elements visible/hidden by locating them off- or onscreen and setting
+// their z-index.
+ZaAppViewMgr.prototype._setViewVisible =
+function(viewId, show) {
+	var elements = this._views[viewId];
+	if (show) {
+		var list = new Array();
+		for (var cid in elements) {
+			list.push(cid);
+			elements[cid].zShow(true);
+		}
+		this._stickToGrid(list);
+		this._setTitle(viewId);
+	} else {
+		for (var cid in elements) {
+			elements[cid].setLocation(Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
+			elements[cid].zShow(false);
+		}
+	}
+}
+
+ZaAppViewMgr.prototype._setTitle =
+function(viewId) {
+	var elements = this._views[viewId];
+	var content = elements[ZaAppViewMgr.C_APP_CONTENT];
+	if (content && content.getTitle) {
+		var title = content.getTitle();
+		Dwt.setTitle(title ? title : ZaMsg.zimbraTitle);
+	}
 }

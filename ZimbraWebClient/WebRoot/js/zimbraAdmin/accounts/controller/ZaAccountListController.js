@@ -52,8 +52,7 @@ ZaAccountListController.ACCOUNT_VIEW = "ZaAccountListController.ACCOUNT_VIEW";
 
 ZaAccountListController.prototype.show = 
 function(searchResult) {
-    if (!this._appView) {
-
+    if (!this._contentView) {
 		//create accounts list view
 		this._contentView = new ZaAccountListView(this._container, this._app);
     	//toolbar
@@ -78,25 +77,16 @@ function(searchResult) {
 		this._ops.push(new ZaOperation(ZaOperation.PAGE_BACK, ZaMsg.Back, ZaMsg.PrevPage_tt, "LeftArrow", "LeftArrowDis",  new AjxListener(this, ZaAccountListController.prototype._prevPageListener)));
 		this._ops.push(new ZaOperation(ZaOperation.PAGE_FORWARD, ZaMsg.Forward, ZaMsg.NextPage_tt, "RightArrow", "RightArrowDis", new AjxListener(this, ZaAccountListController.prototype._nextPageListener)));
 
-/**
-* searh panel
-*/		
-	    this._searchPanel = new DwtComposite(this._container, "SearchPanel", DwtControl.ABSOLUTE_STYLE);
-	    
-		// Create search toolbar and setup browse tool bar button handlers
-		this._searchToolBar = new ZaSearchToolBar(this._searchPanel);
-	    
-		// Setup search field handler
-		this._searchField = this._searchToolBar.getSearchField();
-		this._searchField.registerCallback(ZaAccountListController.prototype._searchFieldCallback, this);	
-		this._searchPanel.zShow(true);		
 
 /**
 * Toolbar
 */
 		this._toolbar = new ZaToolBar(this._container, this._ops);    
 		
-		this._appView = this._app.createView(ZaAccountListController.ACCOUNT_VIEW, [this._searchToolBar, this._toolbar,  this._contentView]);
+		var elements = new Object();
+		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
+		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
+		this._app.createView(ZaAccountListController.ACCOUNT_VIEW, elements);
 
     	//context menu
 
@@ -113,7 +103,7 @@ function(searchResult) {
 		//set a selection listener on the account list view
 		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 		this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
-		this._removeConfirmMessageDialog = new ZaMsgDialog(this._appView.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);			
+		this._removeConfirmMessageDialog = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);			
 		//this.refresh();
 	} else {
 		if (searchResult && searchResult.list != null) {
@@ -151,12 +141,31 @@ function(searchResult) {
 	//this._schedule(ZaAccountListController.prototype.preloadNextPage);
 }
 
+/**
+* searh panel
+*/	
+ZaAccountListController.prototype.getSearchPanel = 
+function () {
+	if(!this._searchPanel) {
+	    this._searchPanel = new DwtComposite(this._app.getAppCtxt().getShell(), "SearchPanel", DwtControl.ABSOLUTE_STYLE);
+	    
+		// Create search toolbar and setup browse tool bar button handlers
+		this._searchToolBar = new ZaSearchToolBar(this._searchPanel);
+	    
+		// Setup search field handler
+		this._searchField = this._searchToolBar.getSearchField();
+		this._searchField.registerCallback(ZaAccountListController.prototype._searchFieldCallback, this);	
+		this._searchPanel.zShow(true);		
+	}
+	return this._searchPanel;
+}
+
 ZaAccountListController.prototype.preloadNextPage = 
 function() {
 	if((this._currentPageNum + 1) <= this.pages[this._currentPageNum].numPages && !this.pages[this._currentPageNum+1]) {
 		this.pages[this._currentPageNum+1] = ZaSearch.searchByQueryHolder(this._currentQuery,this._currentPageNum+1, this._currentSortField, this._currentSortOrder, this._app)
 	}		
-	this._shell.setBusy(false);
+	this._app.getAppCtxt().getShell().setBusy(false);
 }
 /**
 * @return ZaItemList - the list currently displaid in the list view
@@ -255,29 +264,6 @@ ZaAccountListController.prototype._searchFieldCallback =
 function(searchField, searchQuery) {
 	this.search(searchQuery);
 }
-
-/*
-ZaAccountListController.prototype._doSearch =
-function(params) {
-	try {
-		this._searchField.setEnabled(true);	
-		//
-		var szQuery = ZaSearch.getSearchByNameQuery(this._currentSearch);
-		this.setPageNum(1);					
-
-		var curQuery = new ZaSearchQuery(szQuery, [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS], false, "");							
-		this.setQuery(curQuery);	
-	} catch (ex) {
-		// Only restart on error if we are not initialized and it isn't a parse error
-		if (ex.code != ZmCsfeException.MAIL_QUERY_PARSE_ERROR) {
-			this._handleException(ex, "ZaAccountListController.prototype._doSearch", null, (this._inited) ? false : true);
-		} else {
-			this.popupMsgDialog(ZaMsg.queryParseError, ex);
-			this._searchField.setEnabled(true);	
-		}
-	}
-}
-*/
 
 /**
 *	Private method that notifies listeners to that the controlled ZaAccount is (are) removed
@@ -453,12 +439,15 @@ ZaAccountListController.prototype._editItem = function (item) {
 ZaAccountListController.prototype._chngPwdListener =
 function(ev) {
 	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getLast()) {
-		this._chngPwdDlg = new ZaAccChangePwdDlg(this._appView.shell, this._app);
+		this._chngPwdDlg = new ZaAccChangePwdDlg(this._app.getAppCtxt().getShell(), this._app);
 		var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getLast());
 		this._chngPwdDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountListController._changePwdOKCallback, this, item);				
 		this._chngPwdDlg.popup(item.attrs[ZaAccount.A_zimbraPasswordMustChange]);
 	}
 }
+/**
+* Launches mail app to view user's email
+**/
 ZaAccountListController.launch = 
 function (delegateToken, tokenLifetime, mailServer) {
 	var form = this.document.createElement('form');
@@ -651,12 +640,12 @@ function (item) {
 		try {
 			if(!this._chngPwdDlg.getPassword() || this._chngPwdDlg.getPassword().length < 1) {
 				//this._chngPwdDlg.popdown();	//close the dialog
-				this._errorMsgDlg = new ZaMsgDialog(this._appView.shell, null, [DwtDialog.OK_BUTTON], this._app);							
+				this._errorMsgDlg = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.OK_BUTTON], this._app);							
 				this._errorMsgDlg.setMessage(ZaMsg.ERROR_PASSWORD_REQUIRED, null, DwtMessageDialog.CRITICAL_STYLE);
 				this._errorMsgDlg.popup();				
 			} else if(this._chngPwdDlg.getPassword() != this._chngPwdDlg.getConfirmPassword()) {
 				//this._chngPwdDlg.popdown();	//close the dialog
-				this._errorMsgDlg = new ZaMsgDialog(this._appView.shell, null, [DwtDialog.OK_BUTTON], this._app);							
+				this._errorMsgDlg = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.OK_BUTTON], this._app);							
 				this._errorMsgDlg.setMessage(ZaMsg.ERROR_PASSWORD_MISMATCH, null, DwtMessageDialog.CRITICAL_STYLE);
 				this._errorMsgDlg.popup();				
 			} else {
@@ -713,13 +702,13 @@ function (item) {
 				if(szPwd.length < minPwdLen || AjxStringUtil.trim(szPwd).length < minPwdLen) { 
 					//show error msg
 					//this._chngPwdDlg.popdown();
-					this._errorMsgDlg = new ZaMsgDialog(this._appView.shell, null, [DwtDialog.OK_BUTTON], this._app);												
+					this._errorMsgDlg = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.OK_BUTTON], this._app);												
 					this._errorMsgDlg.setMessage(ZaMsg.ERROR_PASSWORD_TOOSHORT + "<br>" + ZaMsg.NAD_passMinLength + ": " + minPwdLen, null, DwtMessageDialog.CRITICAL_STYLE, null);
 					this._errorMsgDlg.popup();
 				} else if(AjxStringUtil.trim(szPwd).length > maxPwdLen) { 
 					//show error msg
 					//this._chngPwdDlg.popdown();
-					this._errorMsgDlg = new ZaMsgDialog(this._appView.shell, null, [DwtDialog.OK_BUTTON], this._app);																	
+					this._errorMsgDlg = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.OK_BUTTON], this._app);																	
 					this._errorMsgDlg.setMessage(ZaMsg.ERROR_PASSWORD_TOOLONG+ "<br>" + ZaMsg.NAD_passMaxLength + ": " + maxPwdLen, null, DwtMessageDialog.CRITICAL_STYLE, null);
 					this._errorMsgDlg.popup();
 				} else {		

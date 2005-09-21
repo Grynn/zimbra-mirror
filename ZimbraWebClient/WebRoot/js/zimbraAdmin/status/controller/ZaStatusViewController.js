@@ -44,11 +44,14 @@ ZaStatusViewController.STATUS_VIEW = "ZaStatusViewController.STATUS_VIEW";
 
 ZaStatusViewController.prototype.show = 
 function() {
-    if (!this._appView) {
+    if (!this._contentView) {
 //		this._toolbar = new ZaStatusToolBar(this._container);
 		//this._contentView = new ZaStatusView(this._container, this._app);
 		this._contentView = new ZaServicesListView(this._container, this._app);
-		this._appView = this._app.createView(ZaStatusViewController.STATUS_VIEW, [this._contentView]);
+		var elements = new Object();
+		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
+
+		this._app.createView(ZaStatusViewController.STATUS_VIEW, elements);
 	}
 	var mystatusVector = this._app.getStatusList(true).getVector();
 	this._contentView.set(mystatusVector);

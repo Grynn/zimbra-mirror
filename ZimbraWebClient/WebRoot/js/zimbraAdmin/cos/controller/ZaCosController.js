@@ -223,7 +223,10 @@ function(entry) {
 			this._toolBar = new ZaToolBar(this._container, this._ops);
 	
 		  	this._view = new ZaCosXFormView(this._container, this._app, entry.id);
-		    this._app.createView(ZaCosController.VIEW, [this._toolBar, this._view]);  	
+			var elements = new Object();
+			elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
+			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolBar;			  	
+		    this._app.createView(ZaCosController.VIEW, elements);  	
 		    this._UICreated = true;
 	  	}
 	

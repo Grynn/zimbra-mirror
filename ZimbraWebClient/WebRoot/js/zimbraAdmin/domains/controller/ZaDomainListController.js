@@ -40,7 +40,7 @@ ZaDomainListController.DOMAIN_VIEW = "ZaDomainListController.DOMAIN_VIEW";
 
 ZaDomainListController.prototype.show = 
 function(list) {
-    if (!this._appView) {
+    if (!this._contentView) {
     	//create toolbar
     	this._ops = new Array();
     	this._ops.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.DTBB_New_tt, "Domain", "DomainDis", new AjxListener(this, ZaDomainListController.prototype._newButtonListener)));
@@ -53,7 +53,10 @@ function(list) {
 
 		//create Domains list view
 		this._contentView = new ZaDomainListView(this._container);
-		this._appView = this._app.createView(ZaDomainListController.DOMAIN_VIEW, [this._toolbar,  this._contentView]);
+		var elements = new Object();
+		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
+		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
+		this._app.createView(ZaDomainListController.DOMAIN_VIEW, elements);
 		if (list != null)
 			this._contentView.set(list.getVector());
 
@@ -65,7 +68,7 @@ function(list) {
 		//set a selection listener on the Domain list view
 		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 		this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
-		this._removeConfirmMessageDialog = new ZaMsgDialog(this._appView.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);					
+		this._removeConfirmMessageDialog = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);					
 	} else {
 		if (list != null)
 			this._contentView.set(list.getVector());	

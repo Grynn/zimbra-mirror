@@ -86,11 +86,6 @@ function() {
 	return this._appController.getSearchController();
 }
 
-ZaAppCtxt.prototype.getOverviewPanelController =
-function() {
-	return this._appController.getOverviewPanelController();
-}
-
 ZaAppCtxt.prototype.getLoginDialog =
 function(isAdmin) {
 	if (!this._loginDialog)
@@ -145,4 +140,17 @@ function() {
 ZaAppCtxt.prototype.setCurrentSearch =
 function(search) {
 	this._currentSearch = search;
+}
+
+ZaAppCtxt.prototype.getSettings =
+function() {
+	if (!this._settings)
+		this._settings = new ZaSettings(this);
+	return this._settings;
+}
+
+// NOTE: this is only to be used by any child windows!
+ZaAppCtxt.prototype.setSettings = 
+function(settings) {
+	this._settings = settings;
 }

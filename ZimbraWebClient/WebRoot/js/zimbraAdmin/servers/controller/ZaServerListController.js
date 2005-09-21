@@ -40,7 +40,7 @@ ZaServerListController.SERVER_VIEW = "ZaServerListController.SERVER_VIEW";
 
 ZaServerListController.prototype.show = 
 function(list) {
-    if (!this._appView) {
+    if (!this._contentView) {
     	//create toolbar
     	this._ops = new Array();
     	this._ops.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.SERTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaServerListController.prototype._editButtonListener)));    	
@@ -49,7 +49,10 @@ function(list) {
  	
 		//create Servers list view
 		this._contentView = new ZaServerListView(this._container);
-		this._appView = this._app.createView(ZaServerListController.SERVER_VIEW, [this._toolbar,  this._contentView]);
+		var elements = new Object();
+		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
+		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
+		this._app.createView(ZaServerListController.SERVER_VIEW, elements);
 
     	//context menu
     	this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._ops);
@@ -62,7 +65,7 @@ function(list) {
 		//set a selection listener on the Server list view
 		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 		this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
-		this._removeConfirmMessageDialog = new ZaMsgDialog(this._appView.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);					
+		this._removeConfirmMessageDialog = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);					
 		//this.refresh();
 	} else {
 		if (list != null)

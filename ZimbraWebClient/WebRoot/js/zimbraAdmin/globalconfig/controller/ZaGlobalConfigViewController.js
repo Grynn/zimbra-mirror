@@ -62,7 +62,10 @@ function(item) {
 	
 //		this._view = new ZaGlobalConfigView(this._container, this._app);
 		this._view = new GlobalConfigXFormView(this._container, this._app);
-		this._appView = this._app.createView(ZaGlobalConfigViewController.STATUS_VIEW, [this._toolBar, this._view]);
+		var elements = new Object();
+		elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
+		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolBar;			
+		this._app.createView(ZaGlobalConfigViewController.STATUS_VIEW,elements);
 		this._UICreated = true;		
 	}
 	this._app.pushView(ZaGlobalConfigViewController.STATUS_VIEW);

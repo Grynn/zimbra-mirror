@@ -37,10 +37,10 @@ function ZaZimbraAdmin(appCtxt) {
 	this._shell = this._appCtxt.getShell();	
 	this._splashScreen = new ZaSplashScreen(this._shell, "Admin_SplashScreen");
 	
-    this._headerPanel = new DwtComposite(this._shell, "HeaderPanel", DwtControl.ABSOLUTE_STYLE);
+   // this._headerPanel = new DwtComposite(this._shell, "HeaderPanel", DwtControl.ABSOLUTE_STYLE);
     
-   	this._createBannerBar();
-	this._headerPanel.zShow(true);
+//   	this._createBannerBar();
+//	this._headerPanel.zShow(true);
 
 
 
@@ -49,16 +49,17 @@ function ZaZimbraAdmin(appCtxt) {
 	appCtxt.setAppController(this);
 	appCtxt.setClientCmdHdlr(new ZaClientCmdHandler(appCtxt));
 		
-	this._apps = new Object();
-	this._activeApp = null;
+//	this._apps = new Object();
+//	this._activeApp = null;
 	
 	// handles to various apps
 	this._appFactory = new Object();
 	this._appFactory[ZaZimbraAdmin.ADMIN_APP] = ZaApp;
 	
 	
-//	this._createBanner();								// creates the banner
-	this._schedule(ZaZimbraAdmin.prototype.startup);	// creates everything else
+//	this._createBanner();
+	this._schedule(this.startup);								// creates the banner
+	//this.startup();	// creates everything else
 	this.aboutDialog = new ZaAboutDialog(this._shell,null,ZaMsg.about_title);
 }
 
@@ -103,7 +104,9 @@ function(domain) {
 
 	// Create the shell
 //	var shell = new DwtShell(window, false, ZaZimbraAdmin._confirmExitMethod);
-	var shell = new DwtShell(window, false, null);
+//	var shell = new DwtShell(window, false, null);
+	var userShell = window.document.getElementById(ZaSettings.get(ZaSettings.SKIN_SHELL_ID));
+	var shell = new DwtShell(null, false, ZaZimbraAdmin._confirmExitMethod, userShell);
     appCtxt.setShell(shell);
     
     // Go!
@@ -127,14 +130,17 @@ ZaZimbraAdmin.getInstance = function() {
 ZaZimbraAdmin.prototype.getApp =
 function(appName) {
 //DBG.println(AjxDebug.DBG3, "getApp " + appName);
-	if (this._apps[appName] == null)
+/*	if (this._apps[appName] == null)
 		this._createApp(appName);
 	return this._apps[appName];
+*/
+	return this._app;	
 }
 
 ZaZimbraAdmin.prototype.getAdminApp = 
 function() {
-	return this.getApp(ZaZimbraAdmin.ADMIN_APP);
+	//return this.getApp(ZaZimbraAdmin.ADMIN_APP);
+	return this._app;
 }
 
 /**
@@ -148,36 +154,13 @@ function() {
 /**
 * Returns a handle to the overview panel controller.
 */
+/*
 ZaZimbraAdmin.prototype.getOverviewPanelController =
 function() {
 	if (this._overviewPanelController == null)
 		this._overviewPanelController = new ZaOverviewPanelController(this._appCtxt, this._shell);
 	return this._overviewPanelController;
-}
-
-/**
-* Makes the given app the active (displayed) one. The stack of hidden views will be cleared.
-* Note that setting the name of the currently active app is done separately, since a view
-* switch may not actually happen due to view preemption.
-*
-* @param appName	an app name
-*/
-ZaZimbraAdmin.prototype.activateApp =
-function(appName) {
-//DBG.println(AjxDebug.DBG1, "activateApp: " + appName + ", current app = " + this._activeApp);
-	var view = this._appViewMgr.getAppView(appName);
-	if (this._activeApp)
-		this._apps[this._activeApp].activate(false); // notify previously active app
-//DBG.println(AjxDebug.DBG3, "activateApp, current " + appName + " view: " + view);
-	if (view) {
-		if (this._appViewMgr.setView(view)) {
-			this._apps[appName].activate(true);
-			this._appViewMgr.setAppView(appName, view);
-		}
-	} else {
-		this._launchApp(appName);
-	}
-}
+}*/
 
 /**
 * Sets the name of the currently active app. Done so we can figure out when an
@@ -187,7 +170,7 @@ function(appName) {
 */
 ZaZimbraAdmin.prototype.setActiveApp =
 function(appName) {
-	this._activeApp = appName;
+//	this._activeApp = appName;
 }
 
 ZaZimbraAdmin.logOff =
@@ -210,31 +193,86 @@ function(args){
 	window.location = locationStr;
 }
 
-ZaZimbraAdmin.prototype.getHeaderPanel = 
-function () {
-	return this._headerPanel;
-}
 
 // Start up the ZimbraMail application
 ZaZimbraAdmin.prototype.startup =
 function() {
 
-	this._appViewMgr = new ZaAppViewMgr(this._shell, this._banner, this);
+	this._appViewMgr = new ZaAppViewMgr(this._shell, this, true);
 								        
 	try {
 		var domains = ZaDomain.getAll(); // catch an exception before building the UI
-		this._appViewMgr.setOverviewPanel(this.getOverviewPanelController().getOverviewPanel());
-		//this._appViewMgr.setSearchPanel(this.getSearchController().getSearchPanel());
-		this._appViewMgr.setHeaderPanel(this.getHeaderPanel());		
-		// Default to showing admin app
-		this.activateApp(ZaZimbraAdmin.ADMIN_APP);
+		//if we're not logged in we will be thrown out here
+		
+		//draw stuff
+		var elements = new Object();
+		elements[ZaAppViewMgr.C_SASH] = new DwtSash(this._shell, DwtSash.HORIZONTAL_STYLE,"console_inset_app_l", 20);
+		elements[ZaAppViewMgr.C_BANNER] = this._createBanner();		
+		elements[ZaAppViewMgr.C_APP_CHOOSER] = this._createAppChooser();
+		elements[ZaAppViewMgr.C_STATUS] = this._statusBox = new DwtText(this._shell, "statusBox", Dwt.ABSOLUTE_STYLE);
+		this._statusBox.setScrollStyle(Dwt.CLIP);
+		
+	// the outer element of the entire skin is hidden until this point
+	// so that the skin won't flash (become briefly visible) during app loading
+		if (skin && skin.showSkin)
+			skin.showSkin(true);		
+		this._appViewMgr.addComponents(elements, true);
+		this._launchApp();
+		
+		elements = new Object();
+		elements[ZaAppViewMgr.C_SEARCH] = this._app.getAccountListController().getSearchPanel();		
+		this._appViewMgr.addComponents(elements, true);
 	} catch (ex) {
-		this._handleException(ex, "ZaZimbraAdmin.prototype._startup", null, true);
+		this._handleException(ex, "ZaZimbraAdmin.prototype.startup", null, true);
 	}
 	this._schedule(this._killSplash);	// kill splash screen	
 }
 
+ZaZimbraAdmin.prototype._createAppChooser =
+function() {
+	var buttons = new Array();
+	
+	if (ZaSettings.STATUS_ENABLED)
+		buttons.push(ZaAppChooser.B_STATUS);
+	if (ZaSettings.STATS_ENABLED)
+		buttons.push(ZaAppChooser.B_STATS);
+	if (ZaSettings.ACCOUNTS_ENABLED)
+		buttons.push(ZaAppChooser.B_ACCOUNTS);
+	if (ZaSettings.COSES_ENABLED)
+		buttons.push(ZaAppChooser.B_COSES);
+	if (ZaSettings.DOMAINS_ENABLED)
+		buttons.push(ZaAppChooser.B_DOMAINS);
+	if (ZaSettings.SERVERS_ENABLED)
+		buttons.push(ZaAppChooser.B_SERVERS);
+	if (ZaSettings.GLOBAL_ENABLED)
+		buttons.push(ZaAppChooser.B_GLOBAL);
+		
+	buttons.push(ZaAppChooser.SEP, ZaAppChooser.B_HELP, ZaAppChooser.B_LOGOUT);
+	var appChooser = new ZaAppChooser(this._shell, null, buttons);
+	
+	var buttonListener = new AjxListener(this, this._appButtonListener);
+	for (var i = 0; i < buttons.length; i++) {
+		var id = buttons[i];
+		if (id == ZaAppChooser.SEP) continue;
+		var b = appChooser.getButton(id);
+		b.addSelectionListener(buttonListener);
+	}
 
+	return appChooser;
+}
+
+ZaZimbraAdmin.prototype._createBanner =
+function() {
+	// The LogoContainer style centers the logo
+	var banner = new DwtComposite(this._shell, "LogoContainer", Dwt.ABSOLUTE_STYLE);
+	var html = new Array();
+	var i = 0;
+	html[i++] = "<a href='";
+	html[i++] = ZaSettings.LOGO_URI;
+	html[i++] = "' target='_blank'><div class='"+AjxImg.getClassForImage("AppBanner")+"'></div></a>";
+	banner.getHtmlElement().innerHTML = html.join("");
+	return banner;
+}
 // Private methods
 
 ZaZimbraAdmin.prototype._killSplash =
@@ -242,25 +280,123 @@ function() {
 	this._splashScreen.setVisible(false);
 }
 
+ZaZimbraAdmin.prototype._appButtonListener =
+function(ev) {
+	//var searchController = this._appCtxt.getSearchController();
+	var id = ev.item.getData(Dwt.KEY_ID);
+	switch (id) {
+		case ZaAppChooser.B_COSES:
+			if(this._app.getCurrentController()) {
+				this._app.getCurrentController().switchToNextView(this._app.getCosListController(), ZaCosListController.prototype.show, ZaCos.getAll(this._app));
+			} else {
+				this._app.getCosListController().show(ZaCos.getAll(this._app));
+			}
+			break;
+		case ZaAppChooser.B_ACCOUNTS:
+//						var queryHldr = this._app.getAccountListController().getQuery();
+			var queryHldr = this._getCurrentQueryHolder();
+			queryHldr.isByDomain = false;
+			queryHldr.byValAttr = false;
+			queryHldr.queryString = "";
+			this._app.getAccountListController().setPageNum(1);					
+			if(this._app.getCurrentController()) {
+				this._app.getCurrentController().switchToNextView(this._app.getAccountListController(), ZaAccountListController.prototype.show,ZaSearch.searchByQueryHolder(queryHldr,this._app.getAccountListController().getPageNum(), ZaAccount.A_uid, null,this._app));
+			} else {					
+				this._app.getAccountListController().show(ZaSearch.searchByQueryHolder(queryHldr,1, ZaAccount.A_uid, null,this._app));
+			}
+			this._app.getAccountListController().setQuery(queryHldr);	
+			break;					
+		case ZaAppChooser.B_DOMAINS:
 
-// Creates an app object, which doesn't necessarily do anything just yet.
-ZaZimbraAdmin.prototype._createApp =
-function(appName) {
-	if (this._apps[appName] != null)
-		return;
-//DBG.println(AjxDebug.DBG1, "Creating app " + appName);
-	this._apps[appName] = new this._appFactory[appName](this._appCtxt, this._shell);	
+			if(this._app.getCurrentController()) {
+				this._app.getCurrentController().switchToNextView(this._app.getDomainListController(), ZaDomainListController.prototype.show, ZaDomain.getAll(this._app));
+			} else {					
+				this._app.getDomainListController().show(ZaDomain.getAll(this._app));
+			}
+
+			break;			
+		case ZaAppChooser.B_SERVERS:
+
+			if(this._app.getCurrentController()) {
+				this._app.getCurrentController().switchToNextView(this._app.getServerListController(), ZaServerListController.prototype.show, ZaServer.getAll());
+			} else {					
+				this._app.getServerListController().show(ZaServer.getAll());
+			}
+
+			break;									
+		case ZaAppChooser.B_STATUS:
+
+			if(this._app.getCurrentController()) {
+				this._app.getCurrentController().switchToNextView(this._app.getStatusViewController(),ZaStatusViewController.prototype.show, null);
+			} else {					
+				this._app.getStatusViewController().show();
+			}
+			break;		
+		case ZaAppChooser.B_STATS:
+
+			if(this._app.getCurrentController()) {
+				this._app.getCurrentController().switchToNextView(this._app.getGlobalStatsController(),ZaGlobalStatsController.prototype.show, null);
+			} else {					
+				this._app.getGlobalStatsController().show();
+			}
+			break;		
+		case ZaAppChooser.B_GLOBAL:
+
+			if(this._app.getCurrentController()) {
+				this._app.getCurrentController().switchToNextView(this._app.getGlobalConfigViewController(),ZaGlobalConfigViewController.prototype.show, this._app.getGlobalConfig());
+			} else {					
+				this._app.getGlobalConfigViewController().show(this._app.getGlobalConfig());
+			}
+			break;		
+	}
 }
 
-// Launching an app causes it to create a view (if necessary) and display it. The view that is created is up to the app.
-// Since most apps schedule an action as part of their launch, a call to this function should not be
-// followed by any code that depends on it (ie, it should be a leaf action).
+ZaZimbraAdmin.prototype._getCurrentQueryHolder = 
+function () {
+	var srchField = this._app.getAccountListController()._searchField;
+	var curQuery = new ZaSearchQuery("", [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS], false, "");							
+	if(srchField) {
+		var obj = srchField.getObject();
+		if(obj) {
+			curQuery.types = new Array();
+			if(obj[ZaSearch.A_fAliases]=="TRUE") {
+				curQuery.types.push(ZaSearch.ALIASES);
+			}
+			if(obj[ZaSearch.A_fdistributionlists]=="TRUE") {
+				curQuery.types.push(ZaSearch.DLS);
+			}			
+			if(obj[ZaSearch.A_fAccounts]=="TRUE") {
+				curQuery.types.push(ZaSearch.ACCOUNTS);
+			}			
+		}
+	}
+	return curQuery;
+}
+/**
+* Creates an app object, which doesn't necessarily do anything just yet.
+**/
+ZaZimbraAdmin.prototype._createApp =
+function() {
+/*	if (this._apps[appName] != null)
+		return;
+
+	this._apps[appName] = new this._appFactory[appName](this._appCtxt, this._shell);	
+*/
+	this._app = new ZaApp(this._appCtxt, this._shell);	
+}
+
+
+/**
+* Launching an app causes it to create a view (if necessary) and display it. The view that is created is up to the app.
+* Since most apps schedule an action as part of their launch, a call to this function should not be
+* followed by any code that depends on it (ie, it should be a leaf action).
+**/
 ZaZimbraAdmin.prototype._launchApp =
-function(appName) {
-	if (!this._apps[appName])
-		this._createApp(appName);
-//DBG.println(AjxDebug.DBG1, "Launching app " + appName);
-	this._apps[appName].launch();
+function() {
+	if (!this._app)
+		this._createApp();
+
+	this._app.launch();
 }
 
 // Listeners

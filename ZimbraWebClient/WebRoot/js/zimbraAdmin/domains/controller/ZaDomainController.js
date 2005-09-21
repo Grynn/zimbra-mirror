@@ -220,7 +220,10 @@ function(entry) {
    		this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.DTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaDomainController.prototype._deleteButtonListener)));    	    	
 	
 		this._toolBar = new ZaToolBar(this._container, this._ops);
-	    this._app.createView(ZaDomainController.VIEW, [this._toolBar, this._view]);
+		var elements = new Object();
+		elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
+		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolBar;		
+	    this._app.createView(ZaDomainController.VIEW, elements);
 		this._UICreated = true;
 	} 
 	this._app.pushView(ZaDomainController.VIEW);

@@ -30,6 +30,7 @@ function ZaMsg() {
 ZaMsg.Of = "of";
 ZaMsg.Unlimited = "unlimited";
 
+ZaMsg.Status_view_title = "System Status";
 //Domain configuration labels 
 ZaMsg.AuthMech_zimbra="Internal";
 ZaMsg.AuthMech_ldap = "External LDAP";
@@ -229,6 +230,7 @@ ZaMsg.SERTBB_Delete_tt = "Delete server";
 ZaMsg.SERTBB_Save_tt = "Save changes";
 ZaMsg.SERTBB_Close_tt = "Close this view";
 
+ZaMsg.ALV_Type_col = "Type";
 ZaMsg.ALV_Name_col = "EMail Address";
 ZaMsg.ALV_FullName_col = "Full Name";
 ZaMsg.ALV_DspName_col = "Display Name";
@@ -641,6 +643,7 @@ ZaMsg.Filter_DLs = "Distribution Lists";
 ZaMsg.adminGuide = "Admin Guide";
 ZaMsg.help = "Help";
 ZaMsg.about = "About";
+ZaMsg.zimbraTitle = "Zimbra(TM) Administration Console";
 ZaMsg.about_title = "Zimbra(TM) Administration Console";
 ZaMsg.migrationWiz = "Migration Wizard";
 ZaMsg.logOff = "Log Off";
@@ -656,3 +659,12 @@ ZaMsg.username = "Username";
 ZaMsg.password = "Password";
 ZaMsg.publicComputer = "Public Computer";
 ZaMsg.enterUsername = "Please enter administrator username and password";
+
+ZaMsg.goToServers = "Manage Servers"
+ZaMsg.goToGlobalSettings = "Manage Global Settings";
+ZaMsg.goToDomains = "Manage Domains";
+ZaMsg.goToCoses = "Manage Classes of Service";
+ZaMsg.goToHelp = "View Online Help";
+ZaMsg.goToAccounts = "Manage Email Addresses";
+ZaMsg.goToStats = "View Statistics";
+ZaMsg.goToStatus = "View System Status";
