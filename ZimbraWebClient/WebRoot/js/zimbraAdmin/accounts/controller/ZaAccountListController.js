@@ -776,17 +776,31 @@ ZaAccountListController.prototype._changeActionsState =
 function () {
 	var cnt = this._contentView.getSelectionCount();
 	if(cnt == 1) {
-		var opsArray = [ZaOperation.EDIT, ZaOperation.DELETE, ZaOperation.CHNG_PWD, ZaOperation.VIEW_MAIL];
-		this._toolbar.enable(opsArray, true);
-		this._acctionMenu.enable(opsArray, true);
-		//if this is an alias enable move operation
+		var opsArray = [ZaOperation.EDIT, ZaOperation.DELETE];
+		var opsArray2 = new Array();
 		if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getLast()){
 			var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getLast());
 			if(item.type == ZaItem.ALIAS) {
-				this._toolbar.enable([ZaOperation.MOVE_ALIAS], true);
-				this._acctionMenu.enable([ZaOperation.MOVE_ALIAS], true);
+				opsArray.push(ZaOperation.MOVE_ALIAS);
+				opsArray.push(ZaOperation.VIEW_MAIL);
+				
+				opsArray2.push(ZaOperation.CHNG_PWD);
+			} else if(item.type == ZaItem.ACCOUNT) {
+				opsArray.push(ZaOperation.VIEW_MAIL);
+				opsArray.push(ZaOperation.CHNG_PWD);				
+				
+				opsArray2.push(ZaOperation.MOVE_ALIAS);				
+			} else if(item.type == ZaItem.DL) {
+				opsArray2.push(ZaOperation.MOVE_ALIAS);
+				opsArray2.push(ZaOperation.VIEW_MAIL);
+				opsArray2.push(ZaOperation.CHNG_PWD);
 			}
 		}		
+		this._toolbar.enable(opsArray, true);
+		this._acctionMenu.enable(opsArray, true);
+		
+		this._toolbar.enable(opsArray2, false);
+		this._acctionMenu.enable(opsArray2, false);
 	} else if (cnt > 1){
 		var opsArray1 = [ZaOperation.EDIT, ZaOperation.CHNG_PWD, ZaOperation.VIEW_MAIL, ZaOperation.MOVE_ALIAS];
 		this._toolbar.enable(opsArray1, false);
