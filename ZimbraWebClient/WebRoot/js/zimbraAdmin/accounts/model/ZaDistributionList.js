@@ -28,7 +28,7 @@ function ZaDistributionList(app, id, name, memberList, description) {
 	this.attrs = new Object();
 	this.id = (id != null)? id: null;
 	this.name = (name != null) ? name: null;
-	this._memberList = (memberList != null)? AjxVector.fromArray(memberList): null;
+	this._memberList = (memberList != null)? AjxVector.fromArray(memberList): AjxVector.fromArray([]);
 	this.description = (description != null)? description : null;
 	this._dirty = true;
 }
@@ -204,7 +204,7 @@ ZaDistributionList.prototype.getMembers = function () {
 			// We can't use javascript here, since the response is not returning the correct information
 			var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false).Body.GetDistributionListResponse;
 			var members = resp.dl[0].dlm;
-			var len = members.length;
+			var len = members ? members.length : 0;
 			if (len > 0) {
 				this._memberList = new AjxVector();
 				for (var i =0; i < len; ++i) {
