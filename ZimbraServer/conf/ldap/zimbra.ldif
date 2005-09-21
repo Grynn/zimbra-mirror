@@ -113,7 +113,7 @@ zimbraCOSInheritedAttr: zimbraFeatureHtmlComposeEnabled
 zimbraDomainInheritedAttr: zimbraGalMaxResults
 zimbraDomainInheritedAttr: zimbraGalLdapAttrMap
 zimbraFileUploadMaxSize: 10485760
-zimbraGalLdapFilterDef: zimbra:(&(|(cn=*%s*)(sn=*%s*)(gn=*%s*)(mail=*%s*)(zimbraMailDeliveryAddress=*%s*)(zimbraMailAlias=*%s*)(zimbraMailAddress=*%s*))(objectclass=zimbraAccount))
+zimbraGalLdapFilterDef: zimbra:(&(|(cn=*%s*)(sn=*%s*)(gn=*%s*)(mail=*%s*)(zimbraMailDeliveryAddress=*%s*)(zimbraMailAlias=*%s*)(zimbraMailAddress=*%s*))(|(objectclass=zimbraAccount)(objectclass=zimbraDistributionList)))
 zimbraGalLdapFilterDef: ad:(&(|(cn=*%s*)(sn=*%s*)(gn=*%s*)(mail=*%s*))(!(msExchHideFromAddressLists=TRUE))(mailnickname=*)(|(&(objectCategory=person)(objectClass=user)(!(homeMDB=*))(!(msExchHomeServerName=*)))(&(objectCategory=person)(objectClass=user)(|(homeMDB=*)(msExchHomeServerName=*)))(&(objectCategory=person)(objectClass=contact))(objectCategory=group)(objectCategory=publicFolder)(objectCategory=msExchDynamicDistributionList)))
 zimbraGalLdapAttrMap: co=workCountry
 zimbraGalLdapAttrMap: company=company
@@ -129,6 +129,7 @@ zimbraGalLdapAttrMap: postalCode=workPostalCode
 zimbraGalLdapAttrMap: telephoneNumber=workPhone
 zimbraGalLdapAttrMap: st=workState
 zimbraGalLdapAttrMap: zimbraMailDeliveryAddress,mail=email
+zimbraGalLdapAttrMap: zimbraMailAlias=email2
 zimbraGalLdapAttrMap: title=jobTitle
 zimbraGalLdapAttrMap: whenChanged,modifyTimeStamp=modifyTimeStamp
 zimbraGalLdapAttrMap: whenCreated,createTimeStamp=createTimeStamp
