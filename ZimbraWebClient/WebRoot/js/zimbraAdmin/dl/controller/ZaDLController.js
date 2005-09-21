@@ -195,7 +195,6 @@ ZaDLController.prototype._getView = function (id, args) {
 
 // 				ZaDLController.memberPoolChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST, "name", "name");
 // 				ZaDLController.memberChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST, "name", "name");
-
 				view.setData = function (dl) {
 					// data is probably a ZaItem that doesn't have dl details
 					dl.getMembers();
@@ -224,7 +223,10 @@ ZaDLController.prototype._getView = function (id, args) {
 		if (view.setData != null && args != null) {
 			view.setData(args);
 		}
-		return [toolbar, view];
+		var elements = {};
+		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = toolbar;
+		elements[ZaAppViewMgr.C_APP_CONTENT] = view;
+		return elements;
 	}
 	return null;
 };
@@ -265,8 +267,8 @@ ZaController.prototype.getControllerForView = function( viewId ) {
 //===============================================================
 ZaDLController.prototype._saveListener = function (ev) {
 	DBG.println("SAVE NOT IMPLEMENTED");
-// 	var dl = this._views[ZaDLController.NEW_DL_VIEW].getInstance();
-// 	dl.save();
+//  	var dl = this._views[ZaDLController.NEW_DL_VIEW].getInstance();
+//  	dl.save();
 };
 
 ZaDLController.prototype._editListener = function (ev) {
@@ -328,8 +330,6 @@ ZaDLController.prototype._setSearchResults = function (searchResults) {
 	}
 	this._views[this._currentViewId].getInstance().memberPool = tmpArr;
 	this._dlView.refresh();
-// 	var addRemoveItem = this._views[this._currentViewId].getItemsById("members")[0];
-// 	addRemoveItem.updateWidget();
 };
 
 ZaDLController.prototype._searchListener = function (event, formItem) {
@@ -338,7 +338,6 @@ ZaDLController.prototype._searchListener = function (event, formItem) {
 	//var searchTextItem = form.getItemsById("searchText")[0];
 	var instance = form.getInstance();
 	var searchText = instance.searchText;
-	DBG.println("SEARCH LISTENER");
 	try {
 		// TODO -- paging of results ....
 		var searchQuery = new ZaSearchQuery(ZaSearch.getSearchByNameQuery(searchText), [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS], 
@@ -381,9 +380,11 @@ ZaDLController.prototype._getNewViewXForm = function () {
 		   {type:_GROUP_, width:"100%", numCols:3, tableCssStyle:"width:100%",colSizes:["auto",20,"auto"],
 		       items:[
 			      {type:_OUTPUT_, colSpan:"*",cssClass:"ZmHead", value:"&nbsp;Manage Distribution List", 
-				  cssStyle:"background-color:lightgray; margin-bottom:5px;"},
-			      {type:_GROUP_, colSpan:1, width:"100%", XcontainerCssStyle:"vertical-align:top" ,
-				  items:[		
+				   cssStyle:"background-color:lightgray; margin-bottom:5px;"},
+				  // The colSizes are necessary for firefox to hold the position
+				  // during the repositioning done in ZmAppViewMgr.pushView
+			      {type:_GROUP_, colSpan:1, width:"100%", colSizes:[100,"auto"],
+				   items:[		
 					 {ref: "name", type:_TEXTFIELD_, label: "List name", width:"100%"},
 					 {type:_SPACER_, height:"3"},
 					 {ref:"members", type:_DWT_LIST_, colSpan:"*", cssClass: "DLTarget"},
@@ -391,7 +392,7 @@ ZaDLController.prototype._getNewViewXForm = function () {
 					 {type:_GROUP_, colSpan:2, width:"100%", numCols:4, colSizes:["100%",85,5, 85], 
 					     items:[
 						    {type:_CELLSPACER_},
-						    {type:_DWT_BUTTON_, label:"Remove All", width:80, relevant:"(form.getController().shouldEnableMemberListButtons())",
+						    {type:_DWT_BUTTON_, label:"Remove All", width:80, relevant:"(form.getController().shouldEnableRemoveAllButton())",
 							onActivate:"this.getFormController().removeAllMembers(event,this)",
 							 relevantBehavior:_DISABLE_},
 						    
@@ -437,7 +438,7 @@ ZaDLController.prototype._getNewViewXForm = function () {
 						     {type:_CELLSPACER_},
 						     {type:_DWT_BUTTON_, label:"Add All", width:80,
 							 onActivate:"this.getFormController().addAllAddressesToMembers(event, this)",
-							 relevant:"(form.getController().shouldEnableMemberPoolListButtons())",
+							 relevant:"(form.getController().shouldEnableAddAllButton())",
 							 relevantBehavior:_DISABLE_},
 						     {type:_CELLSPACER_},
 						    ]
@@ -487,6 +488,26 @@ ZaDLController.prototype.shouldEnableMemberListButtons = function() {
 	return (this._getMemberSelection().length > 0);
 };
 
+ZaDLController.prototype.shouldEnableRemoveAllButton = function() {
+	if (this._dlView != null) {
+		var list = this._dlView.getItemsById("members")[0].widget.getList();
+		if (list != null) {
+			return ( list.size() > 0);
+		}
+	}
+	return false;
+};
+
+ZaDLController.prototype.shouldEnableAddAllButton = function() {
+	if (this._dlView != null) {
+		var list = this._dlView.getItemsById("memberPool")[0].widget.getList();
+		if (list != null) {
+			return ( list.size() > 0);
+		}
+	}
+	return false;
+};
+
 ZaDLController.prototype.shouldEnableMemberPoolListButtons = function() {
 	return (this._getMemberPoolSelection().length > 0);
 };
@@ -496,7 +517,6 @@ ZaDLController.prototype.shouldEnableFreeFormButtons = function () {
 	if (this._dlView != null) {
 		optionalAdd = this._dlView.getInstance().optionalAdd;
 	}
-	DBG.println("optionalAdd == ", optionalAdd);
 	return (optionalAdd != null && optionalAdd.length > 0);
 };
 
@@ -509,7 +529,6 @@ ZaDLController.prototype._getMemberPoolSelection = function () {
 };
 
 ZaDLController.prototype._getMemberSelection = function () {
-	DBG.println("Get member selection");
 	if (this._dlView != null) {
 		var membersItem = this._dlView.getItemsById("members")[0];
 		return membersItem.getSelection();
@@ -533,7 +552,6 @@ ZaDLController.prototype.addAddressToMembers = function (event, formItem) {
 	var memberPoolSelection = this._getMemberPoolSelection();
 	// get the current value of the textfied
 	var val;
-	DBG.println("Member pool selection = ", memberPoolSelection);
 	if (memberPoolSelection != null) {
 		for (var i = 0; i < memberPoolSelection.length; ++i) {
 			members.add(memberPoolSelection[i]);
@@ -576,8 +594,14 @@ ZaDLController.distributionListXModel = {
 		var tmpArr = new Array();
 		var tmp;
 		for (var i = 0; i < arr.length; ++i ){
-			tmp = new String(arr[i]);
-			tmp.id = "ZADLV_"+ ZaDLController._IDS++;
+			if (!AjxUtil.isObject(arr[i])){
+				tmp = new String(arr[i]);
+			} else {
+				tmp = arr[i];
+			}
+			if (tmp.id == null) {
+				tmp.id = "ZADLV_"+ ZaDLController._IDS++;
+			}
 			tmpArr.push(tmp);
 		}
 		return tmpArr;

@@ -58,7 +58,18 @@ function(searchResult) {
     	//toolbar
     	//Account operations
     	this._ops = new Array();
-   		this._ops.push(new ZaOperation(ZaOperation.NEW_WIZARD, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", new AjxListener(this, ZaAccountListController.prototype._newButtonListener)));    	
+		// first button in the toolbar is a menu.
+		// create the menu operations/listeners first
+		this._newDLListener = new AjxListener(this, ZaAccountListController.prototype._newDistributionListListener);
+		this._newAcctListener = new AjxListener(this, ZaAccountListController.prototype._newAccountListener);
+		var newMenuOpList = [
+							 new ZaOperation(ZaOperation.NEW_WIZARD, ZaMsg.ACTBB_New_menuItem, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", 
+											 this._newAcctListener),
+							 new ZaOperation(ZaOperation.NEW, ZaMsg.DLTBB_New_menuItem, ZaMsg.DLTBB_New_tt, "Group", "GroupDis", 
+											 this._newDLListener)
+							 ];
+		this._ops.push(new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", this._newAcctListener, 
+									   ZaOperation.TYPE_MENU, newMenuOpList));
     	this._ops.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.ACTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaAccountListController.prototype._editButtonListener)));
     	this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaAccountListController.prototype._deleteButtonListener)));
 		this._ops.push(new ZaOperation(ZaOperation.CHNG_PWD, ZaMsg.ACTBB_ChngPwd, ZaMsg.ACTBB_ChngPwd_tt, "Padlock", "PadlockDis", new AjxListener(this, ZaAccountListController.prototype._chngPwdListener)));
@@ -139,6 +150,27 @@ function(searchResult) {
 	
 	//this._schedule(ZaAccountListController.prototype.preloadNextPage);
 }
+
+ZaAccountListController.prototype.setDefaultType = function (type) {
+	// set the default type,
+	this._defaultType = type;
+	var newButton = this._toolbar.getButton(ZaOperation.NEW_MENU);	
+	if (newButton != null) {
+		newButton.removeSelectionListeners();
+		// set the new menu action
+		if (type == ZaItem.ACCOUNT) {
+			newButton.setToolTipContent(ZaMsg.ACTBB_New_tt);
+			newButton.setImage("Account");
+			newButton.setDisabledImage("AccountDis");
+			newButton.addSelectionListener(this._newAcctListener);
+		} else if (type == ZaItem.DL) {
+			newButton.setToolTipContent(ZaMsg.DLTBB_New_tt);
+			newButton.setImage("Group");
+			newButton.setDisabledImage("GroupDis");
+			newButton.addSelectionListener(this._newDLListener);			
+		}
+	}
+};
 
 /**
 * searh panel
@@ -373,9 +405,10 @@ function () {
 	return this._toolBar;	
 }
 
-// new button was pressed
-ZaAccountListController.prototype._newButtonListener =
+// new account button was pressed
+ZaAccountListController.prototype._newAccountListener =
 function(ev) {
+
 	try {
 		var newAccount = new ZaAccount(this._app);
 		this._newAccountWizard = new ZaNewAccountXWizard(this._container, this._app);	
@@ -383,9 +416,20 @@ function(ev) {
 		this._newAccountWizard.setObject(newAccount);
 		this._newAccountWizard.popup();
 	} catch (ex) {
-		this._handleException(ex, "ZaAccountListController.prototype._newButtonListener", null, false);
+		this._handleException(ex, "ZaAccountListController.prototype._newAccountListener", null, false);
 	}
 }
+
+ZaAccountListController.prototype._newDistributionListListener =
+function(ev) {
+	try {
+		var newDL = new ZaDistributionList(this._app);
+		this._app.getDistributionListController()._setView(ZaDLController.NEW_DL_VIEW, newDL);
+	} catch (ex) {
+		this._handleException(ex, "ZaAccountListController.prototype._newDistributionListListener", null, false);
+	}
+
+};
 
 /**
 * This listener is called when the item in the list is double clicked. It call ZaAccountViewController.show method

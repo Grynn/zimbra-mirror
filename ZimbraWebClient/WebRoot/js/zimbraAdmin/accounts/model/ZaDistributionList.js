@@ -28,7 +28,7 @@ function ZaDistributionList(app, id, name, memberList, description) {
 	this.attrs = new Object();
 	this.id = (id != null)? id: null;
 	this.name = (name != null) ? name: null;
-	this._memberList = (memberList != null)? AjxVector.fromArray(memberList): AjxVector.fromArray([]);
+	this._memberList = (memberList != null)? AjxVector.fromArray(memberList): new AjxVector;
 	this.description = (description != null)? description : null;
 	this._dirty = true;
 }
@@ -59,7 +59,7 @@ ZaDistributionList.prototype.insert = function (index, emailList) {
  * Removes items from the list starting at the given index.
  * 
  */
-ZaDistributionList.prototype.remove = function (index, emailList) {
+ZaDistributionList.prototype.removeMember = function (index, emailList) {
 	if (list instanceof Array) {
 		for (var i = emailList.length; i > 0; --i ){
 			this._memberList.remove(emailList[i]);
@@ -73,11 +73,6 @@ ZaDistributionList.prototype.remove = function (index, emailList) {
  * Save any changes made to the list. If no changes have been
  * made, the function returns false;
  */
-//<CreateDistributionListRequest>
-//   <name>...</name>
-//   <a n="...">...</a>+
-// </CreateDistributionListRequest>
-
 ZaDistributionList.prototype.save = function () {
 	DBG.println("Is list dirty? ", this.isDirty());
 	var app = this._app;
@@ -192,6 +187,7 @@ ZaDistributionList.prototype.setName = function (name) {
 };
 
 ZaDistributionList.ATTR_MEMBER = "zimbraMailForwardingAddress";
+// TODO -- handle dynamic limit and offset
 ZaDistributionList.prototype.getMembers = function () {
 	if (this._memberList == null) {
 		var soapDoc = AjxSoapDoc.create("GetDistributionListRequest", "urn:zimbraAdmin", null);
@@ -211,25 +207,7 @@ ZaDistributionList.prototype.getMembers = function () {
 					this._memberList.add(members[i]._content);
 				}
 			}
-// 			var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
-// 			var children = resp.childNodes[0].childNodes;
-// 			var len = children.length;
-// 			if (len > 0) {
-// 				this._memberList = new AjxVector();
-// 				var node, name;
-// 				for (var i=0; i< children.length;  ++i) {
-// 					node = children[i]; 
-// 					name = node.getAttribute("n");
-// 					if (name == ZaDistributionList.ATTR_MEMBER) {
-// 						this._memberList.add(node.firstChild.nodeValue);
-// 					}
-// 				}
-// 			}
 			this.id = resp.dl[0].id;
-			//this._p
-			DBG.println("memberList after processing response");
-			DBG.dumpObj(this._memberList);
-			//DBG.printXML(resp);
 		} catch (ex) {
 			// TODO -- exception handling
 			DBG.dumpObj(ex);

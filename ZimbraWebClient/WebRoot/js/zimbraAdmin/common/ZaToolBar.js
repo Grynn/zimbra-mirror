@@ -41,7 +41,8 @@ function ZaToolBar(parent, opList, posStyle, className) {
 	if(opList) {
 		var cnt = opList.length;
 		for(var ix=0; ix < cnt; ix++) {
-			this._createButton(opList[ix].id, opList[ix].imageId, opList[ix].caption, opList[ix].disImageId, opList[ix].tt, true);
+			this._createButton(opList[ix].id, opList[ix].imageId, opList[ix].caption, opList[ix].disImageId, opList[ix].tt, true, null, null,
+							   opList[ix].type,opList[ix].menuOpList);
 			this._createSeparator();
 			this.addSelectionListener(opList[ix].id, opList[ix].listener);		
 		}
@@ -108,7 +109,7 @@ function(enabled) {
 }
 
 ZaToolBar.prototype._createButton =
-function(buttonId, imageId, text, disImageId, toolTip, enabled, style, align) {
+function(buttonId, imageId, text, disImageId, toolTip, enabled, style, align, type, menuOpList) {
 	if (!style)
 		style = "TBButton"
 	var b = this._buttons[buttonId] = new DwtButton(this, align, style);
@@ -122,6 +123,11 @@ function(buttonId, imageId, text, disImageId, toolTip, enabled, style, align) {
 		b.setDisabledImage(disImageId);
 	b.setEnabled((enabled) ? true : false);
 	b.setData("_buttonId", buttonId);
+
+	if (type == ZaOperation.TYPE_MENU) {
+		var menu = new ZaPopupMenu(b, null,null, menuOpList);
+		b.setMenu(menu);
+	}
 	return b;
 }
 

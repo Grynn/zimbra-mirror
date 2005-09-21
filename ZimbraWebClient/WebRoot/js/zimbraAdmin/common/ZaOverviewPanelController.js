@@ -361,20 +361,12 @@ function(ev) {
 						break;		
  					case ZaOverviewPanelController._DISTRIBUTION_LISTS_SUB_TREE:
 						// fall through
+						var type = ZaItem.DL;
+						this._showAccountsView(type,ev);
+						break;
 					case ZaOverviewPanelController._ACCOUNTS_SUB_TREE:
-						this.setCurrentDomain(ev.item.getData(ZaOverviewPanelController._OBJ_ID));
-//						var queryHldr = this._app.getAccountListController().getQuery();
-						var queryHldr = this._getCurrentQueryHolder();
-						queryHldr.isByDomain = true;
-						queryHldr.byValAttr = this._currentDomain;
-						queryHldr.queryString = "";
-						this._app.getAccountListController().setPageNum(1);	
-						if(this._app.getCurrentController()) {
-							this._app.getCurrentController().switchToNextView(this._app.getAccountListController(), ZaAccountListController.prototype.show,ZaSearch.searchByQueryHolder(queryHldr,1, ZaAccount.A_uid, null,this._app));
-						} else {					
-							this._app.getAccountListController().show(ZaSearch.searchByQueryHolder(queryHldr,1, ZaAccount.A_uid, null,this._app));
-						}
-						this._app.getAccountListController().setQuery(queryHldr);
+						var type = ZaItem.ACCOUNT;
+						this._showAccountsView(type,ev);
 						break;		
 					case ZaOverviewPanelController._STATISTICS_SUB_TREE:
 
@@ -407,3 +399,21 @@ function(ev) {
 		}
 	}
 }
+
+ZaOverviewPanelController.prototype._showAccountsView = function (defaultType, ev) {
+	this.setCurrentDomain(ev.item.getData(ZaOverviewPanelController._OBJ_ID));
+	var queryHldr = this._getCurrentQueryHolder();
+	queryHldr.isByDomain = true;
+	queryHldr.byValAttr = this._currentDomain;
+	queryHldr.queryString = "";
+	var acctListController = this._app.getAccountListController();
+	acctListController.setPageNum(1);	
+	if(this._app.getCurrentController()) {
+		this._app.getCurrentController().switchToNextView(acctListController, ZaAccountListController.prototype.show,ZaSearch.searchByQueryHolder(queryHldr,1, ZaAccount.A_uid, null,this._app));
+	} else {					
+		acctListController.show(ZaSearch.searchByQueryHolder(queryHldr,1, ZaAccount.A_uid, null,this._app));
+	}
+	acctListController.setDefaultType(defaultType);
+	acctListController.setQuery(queryHldr);
+};
+

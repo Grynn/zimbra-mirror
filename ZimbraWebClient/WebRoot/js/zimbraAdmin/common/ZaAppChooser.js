@@ -31,6 +31,7 @@ function ZaAppChooser(parent, className, buttons) {
 	this.TOOLTIP[ZaAppChooser.B_STATUS]		= ZaMsg.goToStatus;
 	this.TOOLTIP[ZaAppChooser.B_STATS]	= ZaMsg.goToStats;
 	this.TOOLTIP[ZaAppChooser.B_ACCOUNTS]	= ZaMsg.goToAccounts;
+	this.TOOLTIP[ZaAppChooser.B_DISTRIBUTION_LISTS]	= ZaMsg.goToDistributionLists;
 	this.TOOLTIP[ZaAppChooser.B_HELP]		= ZaMsg.goToHelp;
 	this.TOOLTIP[ZaAppChooser.B_COSES]	= ZaMsg.goToCoses;
 	this.TOOLTIP[ZaAppChooser.B_DOMAINS]	= ZaMsg.goToDomains;
@@ -68,6 +69,7 @@ ZaAppChooser.B_COSES	= i++;
 ZaAppChooser.B_DOMAINS	= i++;
 ZaAppChooser.B_SERVERS	= i++;
 ZaAppChooser.B_GLOBAL	= i++;
+ZaAppChooser.B_DISTRIBUTION_LISTS	= i++;
 
 ZaAppChooser.IMAGE = new Object();
 ZaAppChooser.IMAGE[ZaAppChooser.OUTER]		= "app_chiclet";
@@ -77,6 +79,7 @@ ZaAppChooser.IMAGE[ZaAppChooser.OUTER_TRIG]	= "app_chiclet_selected";
 ZaAppChooser.IMAGE[ZaAppChooser.B_STATUS]	= "Status";
 ZaAppChooser.IMAGE[ZaAppChooser.B_STATS]	= "Statistics";
 ZaAppChooser.IMAGE[ZaAppChooser.B_ACCOUNTS]	= "Account";
+ZaAppChooser.IMAGE[ZaAppChooser.B_DISTRIBUTION_LISTS]	= "Group";
 ZaAppChooser.IMAGE[ZaAppChooser.B_COSES]	= "COS";
 ZaAppChooser.IMAGE[ZaAppChooser.B_DOMAINS]	= "Domain";
 ZaAppChooser.IMAGE[ZaAppChooser.B_SERVERS]	= "Server";

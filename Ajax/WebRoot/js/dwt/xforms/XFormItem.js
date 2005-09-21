@@ -762,7 +762,7 @@ XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript, inde
 				"} else {\r  ");
 			if (this.focusable) {
 				updateScript.append(
-					"DBG.println(AjxDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
+// 					"DBG.println(AjxDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
 					"item.getForm().tabIdOrder.push(item.getId());\r"
 				);
 			}
@@ -776,7 +776,7 @@ XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript, inde
 				"} else {\r  ");
 			if (this.focusable) {
 				updateScript.append(
-					"DBG.println(AjxDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
+// 					"DBG.println(AjxDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
 					"item.getForm().tabIdOrder.push(item.getId());\r"
 				);
 			}
@@ -788,7 +788,7 @@ XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript, inde
 	} else {
 		if (this.focusable) {
 			updateScript.append(
-				"DBG.println(AjxDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
+// 				"DBG.println(AjxDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
 				"item.getForm().tabIdOrder.push(item.getId());\r"
 			);
 		}

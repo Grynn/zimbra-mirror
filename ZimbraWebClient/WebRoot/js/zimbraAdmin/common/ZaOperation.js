@@ -34,19 +34,25 @@
 * @param lsnr AjxListener
 **/
 
-function ZaOperation(id, caption, tooltip, imgId, disImgId, lsnr) {
+function ZaOperation(id, caption, tooltip, imgId, disImgId, lsnr, type, menuOpList) {
 	this.id = id;
 	this.caption = caption;
 	this.tt = tooltip;
 	this.listener = lsnr;
 	this.imageId = imgId;
 	this.disImageId = disImgId;
+	this.type = (type == null)? ZaOperation.TYPE_BUTTON: type;
+	this.menuOpList = menuOpList;
 }
 
 ZaOperation.prototype.toString = 
 function() {
 		return "ZaOperation";
 }
+
+// types
+ZaOperation.TYPE_BUTTON = 1;
+ZaOperation.TYPE_MENU = 2;
 
 // Operations
 ZaOperation.NONE = -2;		// no operations or menu items
@@ -67,3 +73,4 @@ ZaOperation.AUTH_WIZARD =13;
 ZaOperation.VIEW_MAIL =14;
 ZaOperation.MAIL_RESTORE = 15;
 ZaOperation.MOVE_ALIAS = 16;
+ZaOperation.NEW_MENU = 17;

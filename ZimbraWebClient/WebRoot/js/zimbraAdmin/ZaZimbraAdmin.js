@@ -238,6 +238,7 @@ function() {
 		buttons.push(ZaAppChooser.B_STATS);
 	if (ZaSettings.ACCOUNTS_ENABLED)
 		buttons.push(ZaAppChooser.B_ACCOUNTS);
+	buttons.push(ZaAppChooser.B_DISTRIBUTION_LISTS);
 	if (ZaSettings.COSES_ENABLED)
 		buttons.push(ZaAppChooser.B_COSES);
 	if (ZaSettings.DOMAINS_ENABLED)
@@ -292,20 +293,16 @@ function(ev) {
 				this._app.getCosListController().show(ZaCos.getAll(this._app));
 			}
 			break;
+			
+		case ZaAppChooser.B_DISTRIBUTION_LISTS:
+			var type = ZaItem.DL;
+			this._showAccountsView(type,ev);
+			break;
 		case ZaAppChooser.B_ACCOUNTS:
-//						var queryHldr = this._app.getAccountListController().getQuery();
-			var queryHldr = this._getCurrentQueryHolder();
-			queryHldr.isByDomain = false;
-			queryHldr.byValAttr = false;
-			queryHldr.queryString = "";
-			this._app.getAccountListController().setPageNum(1);					
-			if(this._app.getCurrentController()) {
-				this._app.getCurrentController().switchToNextView(this._app.getAccountListController(), ZaAccountListController.prototype.show,ZaSearch.searchByQueryHolder(queryHldr,this._app.getAccountListController().getPageNum(), ZaAccount.A_uid, null,this._app));
-			} else {					
-				this._app.getAccountListController().show(ZaSearch.searchByQueryHolder(queryHldr,1, ZaAccount.A_uid, null,this._app));
-			}
-			this._app.getAccountListController().setQuery(queryHldr);	
-			break;					
+			var type = ZaItem.ACCOUNT;
+			this._showAccountsView(type,ev);
+			break;
+
 		case ZaAppChooser.B_DOMAINS:
 
 			if(this._app.getCurrentController()) {
@@ -350,6 +347,22 @@ function(ev) {
 			break;		
 	}
 }
+
+ZaZimbraAdmin.prototype._showAccountsView = function (defaultType, ev){
+	var queryHldr = this._getCurrentQueryHolder();
+	queryHldr.isByDomain = false;
+	queryHldr.byValAttr = this._currentDomain;
+	queryHldr.queryString = "";
+	var acctListController = this._app.getAccountListController();
+	acctListController.setPageNum(1);	
+	if(this._app.getCurrentController()) {
+		this._app.getCurrentController().switchToNextView(acctListController, ZaAccountListController.prototype.show,ZaSearch.searchByQueryHolder(queryHldr,acctListController.getPageNum(), ZaAccount.A_uid, null,this._app));
+	} else {					
+		acctListController.show(ZaSearch.searchByQueryHolder(queryHldr,1, ZaAccount.A_uid, null,this._app));
+	}
+	acctListController.setDefaultType(defaultType);
+	acctListController.setQuery(queryHldr);
+};
 
 ZaZimbraAdmin.prototype._getCurrentQueryHolder = 
 function () {
