@@ -486,7 +486,14 @@ function(ev) {
 		if(el) {
 			var account = DwtListView.prototype.getItemFromElement.call(this, el);
 			if(account) {
-				var obj = ZaAccount.getViewMailLink(account.id);
+				var obj;
+				if(account.type == ZaItem.ACCOUNT) {
+					obj = ZaAccount.getViewMailLink(account.id);
+				} else if(account.type == ZaItem.ALIAS && account.attrs[ZaAlias.A_AliasTargetId]) {
+					obj = ZaAccount.getViewMailLink(account.attrs[ZaAlias.A_AliasTargetId]);
+				} else {
+					return;
+				}
 				var win = window.open("about:blank", "_blank");
 				var ms = account.attrs[ZaAccount.A_mailHost] ? account.attrs[ZaAccount.A_mailHost] : location.hostname;
 				//find my server
