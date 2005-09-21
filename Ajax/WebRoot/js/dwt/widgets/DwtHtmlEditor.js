@@ -532,7 +532,7 @@ function(ev) {
 	// If we have a mousedown event, then let DwtMenu know. This is a nasty hack that we have to do since
 	// the iFrame is in a different document etc
 	if (ev.type == "mousedown") {
-		DwtMenu._outsideMouseDownListener(null);
+		DwtMenu._outsideMouseDownListener(ev);
 		return true;
 	}
 	
