@@ -53,6 +53,12 @@ function() {
 	return "ZaServicesListView";
 }
 
+ZaServicesListView.prototype.getTitle = 
+function () {
+	return ZaMsg.Status_view_title;
+}
+
+
 ZaServicesListView.prototype._getViewPrefix = 
 function() {
 	return "Status_Service";
@@ -62,7 +68,7 @@ function() {
 * Renders a single item as a DIV element.
 */
 ZaServicesListView.prototype._createItemHtml =
-function(account, now, isDndIcon) {
+function(item, now, isDndIcon) {
 	var html = new Array(50);
 	var	div = this.getDocument().createElement("div");
 	div._styleClass = "Row";
