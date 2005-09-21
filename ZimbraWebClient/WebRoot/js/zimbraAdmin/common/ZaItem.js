@@ -119,6 +119,11 @@ function() {
 	return "ZaItem "+this.type+": name="+this.name+" id="+this.id;
 }
 
+ZaItem.prototype.remove = 
+function () {
+	//abstract
+}
+
 ZaItem.prototype.initFromDom =
 function(node) {
 	this.name = node.getAttribute("name");
