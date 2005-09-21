@@ -53,6 +53,35 @@ TEXTAREA {
 	font-size:12px;
 }
 
+/* Generic classes -- try to use one of these if you can */
+.ZmHead {
+	font-size:18px;
+	font-weight:bold;
+	height:20px;
+}
+
+.ZmSubHead {
+	font-size:13px;
+	font-weight:bold;
+	height:18px;
+}
+
+.ZmBigger {
+	font-size:13px;
+	height:18px;
+}
+
+.subtleAnchor {
+	color:black;
+	Xtext-decoration:none;
+}
+
+.subtleAnchor:hover {
+	color:blue;
+	text-decoration:underline;
+}
+
+
 /* Login Panel */
 .ZaLoginDialog {
 	background-color: #b7b7b7; 
@@ -624,6 +653,41 @@ DIV.vSpace {
 /*
  * Dialogs
  */
+/** 
+ * EMC - Copied from zm.css 9/9/2005
+ */
+.DialogTitle				{	background-color:#3d3d3d; cursor:move}
+.DialogTitleCell			{	color:white;	width:auto;	 font-weight:bold;	
+.DialogTitleText			{	color:white;	width:auto;	 font-weight:bold;	}
+								padding-left:2px; padding-right:2px;
+							}
+
+.DialogTable				{	border-collapse:collapse;	}
+
+.dialog_shadow_c			{ 	width:6; 		height:6;		}
+.dialog_shadow_h			{ 	width:100%; 	height:6;		}
+.dialog_shadow_v			{ 	width:6; 		height:100%;	}
+
+.border_outset_c			{ 	width:4; 		height:4;		}
+.border_inset_c				{ 	width:10; 		height:10;		}
+.border_h					{	width:auto;						}
+.border_v					{					height:100%;	}
+
+.border_shadow_c			{ 	width:6; 		height:6;		}
+.border_shadow_h			{ 	width:auto;		height:6;		}
+.border_shadow_v			{ 	width:6; 		height:100%;	}
+
+.DialogBody {
+	background-color:#F8F7F5;
+}
+
+.DialogToolbar {
+	background-image:url(/zimbra/skins/steel/images/bg_pebble_dark.gif);
+}
+
+/** 
+ * EMC - END Copied from zm.css 9/9/2005
+ */
 
 .DwtDialog { background-color: transparent; }
 .DwtDialog .Title {
@@ -813,6 +877,16 @@ DIV.vSpace {
 
 .DwtAddRemove {
 }
+
+.DwtAddRemove-outerTable { 
+  border:0px;
+  border-spacing:0px;
+}
+
+.DwtAddRemove-outerTable TD{ 
+  padding:4px;
+}
+
 .DwtAddRemoveListView {
 	border: solid #777777 1px;
 }
@@ -1159,78 +1233,114 @@ DIV.vSpace {
 
 
 /* DwtSelect */
+/* DwtSelect */
 .DwtSelect {  
-  border-width:0;
-  cursor: default;
-  overflow:hidden;
-  height:20px;
-  background-color:white; 
-  border: 1px solid rgb(127,157, 185); 
-  min-width:40px;
+	cursor: default;
+	overflow:hidden;
+	height:20px;
+	background-image:url(/zimbra/skins/steel/images/bg_button_up.gif);
+	border: 1px solid;
+	border-color: #E0E0E0 #555555 #555555 #E0E0E0;
+	min-width:40px;
 }
 
-.DwtSelect table {
-  border-spacing:none;
-  width:100%;
-  border-collapse: collapse;
-  padding:none;
+.DwtSelect-activated {  
+	cursor: default;
+	overflow:hidden;
+	height:20px;
+	background-image:url(/zimbra/skins/steel/images/bg_button_down.gif);
+	border: 1px solid;
+	border-color: #E0E0E0 #555555 #555555 #E0E0E0;
+	min-width:40px;
 }
 
-.DwtSelect td {
-  padding: 2px;
+.DwtSelect-triggered {  
+	cursor: default;
+	overflow:hidden;
+	height:20px;
+	background-image:url(/zimbra/skins/steel/images/bg_button_down.gif);
+	border:1px solid;
+	border-color: #555555 #E0E0E0 #E0E0E0 #555555;
+	min-width:40px;
 }
 
-.DwtSelect .Text {
-  text-align:left;
-  padding-left:4px;
+
+.DwtSelect table,
+.DwtSelect-activated table,
+.DwtSelect-triggered table,
+.DwtSelect-disabled table {
+	border-spacing:none;
+	border-collapse: collapse;
+	width:100%;
+	text-align:center;
+	table-layout:fixed;
+	padding:0px;
 }
+
+.DwtSelect .Text,
+.DwtSelect-activated .Text,
+.DwtSelect-triggered .Text {
+	padding: 2px;
+	text-align:left;
+	padding-left:4px;
+	overflow:hidden;
+}
+
+.DwtSelect-disabled .Text{
+	padding: 2px;
+	text-align:left;
+	padding-left:4px;
+	overflow:hidden;
+	color:#CCCCCC;
+}
+
 
 .DwtSelect.disabled {
-  background-color: rgb(233,236,216);
-  color: rgb(201, 201, 194);
+	border:1px solid #CCCCCC;
 }
 
+.dropDownCell { 
+	width: 16px;
+}
+
+
 .DwtSelectMenu table { 
-  width:99%;
+	width:99%;
 }
 
 .DwtSelectMenu .DwtMenuItem-text {
-  text-align:left;
-  padding-left:4px;
+	text-align:left;
+	padding-left:4px;
 }
 
 .DwtSelectMenu .DwtMenuItem-leftFill {
-  width:19px;
+	width:19px;
 }
 
 .DwtSelectMenu .DwtMenuItem-selected {
-  background-color: rgb(49, 106, 197);
-  color: white;
-  cursor: default;
+	background-color: #ADD6D6;
+	color:black;
+	cursor: default;
 }
 
 .DwtSelectMenu .DwtMenuItem-selected .DwtMenuItem-text{
-  color: white;
-  cursor: default;
+	cursor: default;
 }
 
 .DwtSelectMenu .DwtMenuItem {
-  background-color: rgb(255, 255, 255);
-  color: black;
-  cursor: default;
+	border: 1px solid white;
+	background-color: white;
+	cursor: default;
 }
 
-.DwtSelect .dropDownCell { 
-  width: 19px;
-}
 
 .DwtSelectMenu { 
-  background-color :rgb(255, 255, 255);
-  border-top: 1px solid rgb(178, 178, 178);
-  border-right: 1px solid black;
-  border-bottom: 1px solid black;
-  border-left: 1px solid rgb(178, 178, 178);
-  position : absolute;
+	background-color:white;
+	border-top: 1px solid #CCCCCC;
+	border-right: 1px solid black;
+	border-bottom: 1px solid black;
+	border-left: 1px solid #CCCCCC;
+	position : absolute;
 }
 
 
@@ -1765,6 +1875,66 @@ html>body .balloonBR {
 	border-bottom:1px solid black;
 }
 
+.GrouperBorder,
+.RadioGrouperBorder,
+.TopGrouperBorder {
+	border:1px solid #999999;
+	margin-top:10px;
+	margin-bottom:5px;
+
+	padding-left:10px;
+	padding-right:10px;
+	padding-bottom:5px;
+}
+
+.TopGrouperBorder {
+	border:1px dotted #999999;
+	border-left:none;
+	border-right:none;
+	border-bottom:none;
+}
+
+.GrouperLabel,
+.RadioGrouperLabel {
+	font-weight:bold;
+	font-size:13px;
+	Xborder:1px solid #999999;
+	position:relative;	left:3; top:-8; margin-bottom:-10px; margin-top:20px;
+	background-color:#EEEEEE;
+	padding-left:2px; padding-right:2px;
+	padding-top:2px; padding-bottom:2px;
+}
+
+.GrouperInset {
+	position:relative;	top:-5px;
+}
+
+.RadioGrouperInset {
+	position:relative;	top:-4px;
+}
+
+.RadioGrouperBorder {
+	border:1px solid #999999;
+	margin-bottom:2px;
+
+}
+
+HTML>BODY .RadioGrouperBorder {
+	border:1px dotted #999999;
+}
+
+.RadioGrouperLabel {
+	margin-left:5px;
+	color:#666666;
+	font-weight:normal;
+	font-size:11px;
+}
+
+HTML>BODY .RadioGrouperLabel {
+	margin-left:-5px;
+}
+
+
 
 /*******
 
@@ -1974,3 +2144,80 @@ html>body .balloonBR {
 	font-weight: bold;
 	padding-bottom: 2px;
 }
+
+/** distribution list stuff **/
+.ZaDLView {
+  background-color:#EEEEEE;
+}
+
+.DLSource, .DLTarget { 
+  border-top: 2px solid #848484;
+  border-left: 2px solid #848484;
+  border-bottom: 2px solid #FAFAFA;
+  border-right: 2px solid #FAFAFA;
+  width:auto;
+  background-color:#FFFFFF;
+}
+
+.DLTarget { 
+  height:385px;
+}
+
+.DLSource { 
+  height:200px;
+}
+
+.inputBorder { 
+  border-top: 2px solid #848484;
+  border-left: 2px solid #848484;
+  border-bottom: 2px solid #FAFAFA;
+  border-right: 2px solid #FAFAFA;
+}
+
+.DLOptionalAddBoxLabel { 
+/*  position:absolute;
+  top:342px;
+  left:91px;*/
+}
+
+.DLOptionalAddBox { 
+/*  position:absolute;
+  top:369px;
+  left:91px;*/
+  width:195px;
+  height:70px;
+  border: 1px solid #CCCCCC;
+}
+
+.DLOptionalAddBoxButton { 
+  /*position:absolute;*/
+  /** styles set in the js code **/
+}
+
+.DLTargetRow {
+  padding-left: .25em;
+}
+
+.ZaDLView .DwtAddRemove-targetContainer{
+  padding:0px;
+}
+
+.ZaDLView .DwtAddRemove-sourceContainer{
+  vertical-align: top;
+  padding-top:30px;
+} 
+
+.ZaDLView .DwtAddRemove-controlsContainer{ 
+  padding:8px;
+}
+
+.ZaDLListView-outerTable { 
+  width:100%;
+  border-spacing:0px;
+}
+
+.ZaDLListView-outerTable TD{ 
+  padding:2px;
+}
+
+/** END distribution list stuff **/
