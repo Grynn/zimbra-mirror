@@ -475,9 +475,9 @@ ZaAccountListController.prototype._editItem = function (item) {
 	} else if (type == ZaItem.DL) {
 		this._app.getDistributionListController().show(item, ZaDLController.MODE_EDIT);
 	} else if(type == ZaItem.ALIAS) {
-		account = new ZaAccount(this._app);
+		var account = new ZaAccount(this._app);
 		if(item.attrs && item.attrs[ZaAlias.A_AliasTargetId]) {
-			account.load(item.attrs[ZaAlias.A_AliasTargetId], "id", false);
+			account.load("id", item.attrs[ZaAlias.A_AliasTargetId], false);
 			this._app.getAccountViewController().show(account);
 		}
 	}
