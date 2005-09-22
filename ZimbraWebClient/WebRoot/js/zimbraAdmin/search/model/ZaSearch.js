@@ -30,10 +30,12 @@
 * @author Greg Solovyev
 **/
 function ZaSearch() {
+	this[ZaSearch.A_selected] = null;
 	this[ZaSearch.A_query] = "";
 	this[ZaSearch.A_fAliases] = "TRUE";
 	this[ZaSearch.A_fAccounts] = "TRUE";	
-	this[ZaSearch.A_fdistributionlists] = "TRUE";		
+	this[ZaSearch.A_fdistributionlists] = "TRUE";	
+	this[ZaSearch.A_pagenum]=1;	
 }
 
 ZaSearch.ALIASES = "aliases";
@@ -41,6 +43,8 @@ ZaSearch.DLS = "distributionlists";
 ZaSearch.ACCOUNTS = "accounts";
 
 ZaSearch.A_query = "query";
+ZaSearch.A_selected = "selected";
+ZaSearch.A_pagenum = "pagenum";
 ZaSearch.A_fAliases = "f_aliases";
 ZaSearch.A_fAccounts = "f_accounts";
 ZaSearch.A_fdistributionlists = "f_distributionlists";
@@ -138,9 +142,11 @@ function (queryHolder, pagenum, orderby, isascending, app) {
 ZaSearch.myXModel = {
 	items: [
 		{id:ZaSearch.A_query, type:_STRING_},
+		{id:ZaSearch.A_selected, type:_OBJECT_, items:ZaAccount.myXModel},		
 		{id:ZaSearch.A_fAliases, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaSearch.A_fdistributionlists, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
-		{id:ZaSearch.A_fAccounts, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES}
+		{id:ZaSearch.A_fAccounts, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
+		{id:ZaSearch.A_pagenum, type:_NUMBER_}
 	]
 }
 

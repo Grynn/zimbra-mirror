@@ -879,7 +879,10 @@ function (ev) {
 ZaAccountListController.prototype._moveAliasListener = 
 function (ev) {
 	try {
-		
+		if(!this._moveAliasDialog) {
+			this._moveAliasDialog = new MoveAliasXDialog(this._container, this._app);
+		}
+		this._moveAliasDialog.popup();
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountListController.prototype._moveAliasListener", null, false);
 	}
