@@ -135,7 +135,7 @@ function() {
 				}
 			},
 			{type:_DWT_BUTTON_, label:ZaMsg.search, toolTipContent:ZaMsg.searchForAccounts, icon:ZaMsg.search, onActivate:MoveAliasXDialog.srchButtonHndlr},
-			{type:_OSELECT1_,width:"350px", colSpan:2,ref:ZaSearch.A_selected, choices:MoveAliasXDialog.resultChoices, label:null}
+			{type:_OSELECT_,width:"350px", colSpan:2,ref:ZaSearch.A_selected, choices:MoveAliasXDialog.resultChoices, label:null,multiple:false}
 		]		
 	}
 	return xFormObject;
