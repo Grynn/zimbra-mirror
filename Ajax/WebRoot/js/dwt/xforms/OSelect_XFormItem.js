@@ -547,9 +547,14 @@ OSelect_XFormItem.prototype.updateElement = function (values) {
 	element.innerHTML = this.getChoicesHTML();
 
 	if (values == null) return;	
-	if (typeof values == "string") values = values.split(",");
-	for (var i = 0; i < values.length; i++) {
-		var itemNum = this.getChoiceNum(values[i]);
+	if(this.getMultiple()) {
+		if (typeof values == "string") values = values.split(",");
+		for (var i = 0; i < values.length; i++) {
+			var itemNum = this.getChoiceNum(values[i]);
+			if (itemNum != -1) this.hiliteChoice(itemNum);
+		}
+	} else {
+		var itemNum = this.getChoiceNum(values);
 		if (itemNum != -1) this.hiliteChoice(itemNum);
 	}
 }
@@ -588,11 +593,15 @@ OSelect_XFormItem.prototype.choiceSelected = function (itemNum, clearOldValues, 
 }
 
 OSelect_XFormItem.prototype.setValue = function (newValue, clearOldValues, includeIntermediates, event) {
+	var oldValues
 	if (clearOldValues) {
-		var oldValues = [newValue];
-
+		if(this.getMultiple()) {
+			oldValues = [newValue];
+		} else {
+			oldValues = newValue;
+		}
 	} else {
-		var oldValues;
+		oldValues;
 		if (includeIntermediates) {
 			oldValues = [];
 			var vals = this.getNormalizedValues();

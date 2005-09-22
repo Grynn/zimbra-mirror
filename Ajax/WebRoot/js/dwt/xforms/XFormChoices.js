@@ -66,7 +66,14 @@ XFormChoices.normalizeChoices = function (choices, type, valueProperty, labelPro
 			}
 		
 			break;
-
+		case XFormChoices.OBJECT_REFERENCE_LIST:
+			values = []; labels = [];
+			if (labelProperty == null) labelProperty = "label";
+			for (var i = 0; i < choices.length; i++) {
+				values.push(choices[i]);
+				labels.push(choices[i][labelProperty]);
+			}		
+			break;	
 
 		case XFormChoices.HASH:
 			values = []; labels = [];
@@ -86,7 +93,7 @@ XFormChoices.AUTO = "auto";
 XFormChoices.SIMPLE_LIST = "list";
 XFormChoices.HASH = "hash";
 XFormChoices.OBJECT_LIST = "object";
-
+XFormChoices.OBJECT_REFERENCE_LIST = "object_reference_list";
 
 // type defaults
 XFormChoices.prototype._type = XFormChoices.AUTO;
@@ -133,11 +140,11 @@ XFormChoices.prototype.getChoices = function () {
 
 XFormChoices.prototype.getChoiceByValue = function(value) {
 	switch (this._type) {
-		case XFormChoices.SIMPLE_LIST: {
+		case XFormChoices.SIMPLE_LIST: 
 			return value;
 			break;
-		}
-		case XFormChoices.OBJECT_LIST: {
+		
+		case XFormChoices.OBJECT_LIST: 
 			var valueProperty = this._valueProperty || "value";
 			for (var i = 0; i < this._choiceObject.length; i++) {
 				if (this._choiceObject[i][valueProperty] == value) {
@@ -145,10 +152,17 @@ XFormChoices.prototype.getChoiceByValue = function(value) {
 				}
 			}
 			break;
-		}
-		case XFormChoices.HASH: {
+		
+		case XFormChoices.OBJECT_REFERENCE_LIST:
+			for (var i = 0; i < this._choiceObject.length; i++) {
+				if (this._choiceObject[i] == value) {
+					return this._choiceObject[i];
+				}
+			}
+			break;
+		case XFormChoices.HASH: 
 			return this._choiceObject[value];
-		}
+		break;
 	}
 	return null;
 }
