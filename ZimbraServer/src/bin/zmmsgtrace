@@ -229,11 +229,19 @@ sub getMsgIds {
 		$uniqIds{$id} = $id;
 	}
 
-	foreach my $id (sort keys %uniqIds) {
-		my $st = "select distinct(next_msgid) from mta where next_msgid='".$id."'";
-		my $ary = execSelect($st);
-		if ($#$ary >= 0) {
-			delete $uniqIds{$id};
+	# Iterate back to find the id of the original message
+	# Probably a faster way...  maybe I should store this in the db
+	my $done = 0;
+	while (!$done) {
+		$done = 1;
+		foreach my $id (sort keys %uniqIds) {
+			my $st = "select distinct(msgid) from mta where next_msgid='".$id."'";
+			my $ary = execSelect($st);
+			if ($#$ary >= 0) {
+				$done = 0;
+				delete $uniqIds{$id};
+				$uniqIds{${$$ary[0]}[0]} = ${$$ary[0]}[0];
+			}
 		}
 	}
 
