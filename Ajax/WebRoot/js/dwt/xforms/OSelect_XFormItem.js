@@ -122,11 +122,11 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 	if(choices && choices.values) {
 		if(choices.values.length > 5) {
 			menu.style.top	= 	parseInt(menu.style.top)+2;
-			menu.style.height = 110;
+//			menu.style.height = 90;
 			menu.style.overflow="auto";	
 			menu.style.width = parseInt(bounds.width)+2;
 		} else {
-			menu.style.height = (choices.values.length * 22) + 4;
+//			menu.style.height = (choices.values.length * 18) + 4;
 			menu.style.width = bounds.width;
 			menu.style.overflow="hidden";
 		}
@@ -310,25 +310,19 @@ OSelect1_XFormItem.prototype.hiliteChoice = function (itemNum) {
 	}
 }
 
-OSelect1_XFormItem.prototype.showArrowOver = function () {
+OSelect1_XFormItem.prototype.displayMouseOver = function () {
 	if(!this._enabled)
 		return;
-		
-	AjxImg.setImage(this.getArrowElement(), "SelectPullDownArrowHover");
 }
 
-OSelect1_XFormItem.prototype.showArrowOut = function () {
+OSelect1_XFormItem.prototype.displayMouseOut = function () {
 	if(!this._enabled)
 		return;
-		
-	AjxImg.setImage(this.getArrowElement(), "SelectPullDownArrow");
 }
 
-OSelect1_XFormItem.prototype.showArrowDown = function () {
+OSelect1_XFormItem.prototype.displayMouseDown = function () {
 	if(!this._enabled)
 		return;
-		
-	AjxImg.setImage(this.getArrowElement(), "SelectPullDownArrowSel");
 }
 
 OSelect1_XFormItem.prototype.dehiliteChoice = function(itemNum) {
@@ -429,9 +423,9 @@ OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput, updateScript, in
 OSelect1_XFormItem.prototype.getArrowButtonHTML = function () {
 	var ref = this.getFormGlobalRef() + ".getItemById('"+ this.getId()+ "')";
 	return AjxBuffer.concat("<div id=", this.getId(), "_arrow_button",
-	 " onmouseover=\"", ref, ".showArrowOver();\"",
- 	 " onmouseout=\"", ref, ".showArrowOut();\"",
- 	 " onmousedown=\"", ref, ".showArrowDown();\"", 	 
+	 " onmouseover=\"", ref, ".displayMouseOver();\"",
+ 	 " onmouseout=\"", ref, ".displayMouseOut();\"",
+ 	 " onmousedown=\"", ref, ".displayMouseDown();\"", 	 
  	 ">", AjxImg.getImageHtml("SelectPullDownArrow"), "</div>");
 //	return AjxImg.getImageHtml("SelectPullDownArrow", "", AjxBuffer.concat("id=",this.getId(), "_arrow_button"));
 }

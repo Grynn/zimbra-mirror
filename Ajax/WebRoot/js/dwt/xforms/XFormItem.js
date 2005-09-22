@@ -1671,6 +1671,7 @@ XFormItemFactory.createItemType("_OUTPUT_", "output", Output_XFormItem, XFormIte
 //	type defaults
 Output_XFormItem.prototype.writeElementDiv = true;
 Output_XFormItem.prototype.cssClass =  "xform_output";	// element itself (or element div)
+Output_XFormItem.prototype.containerCssClass =  "xform_output_container";	// element itself (or element div)
 
 //	methods
 
@@ -2483,7 +2484,7 @@ TopGrouper_XFormItem.prototype.borderCssClass = "TopGrouperBorder";
 TopGrouper_XFormItem.prototype.outputHTMLStart = function (html, updateScript, indent, currentCol) {
 	html.append(
 			"<div class=", this.getBorderCssClass(), ">",
-				"<span ", this.getLabelCssString(),">", this.getLabel(), "</span>",
+				"<div ", this.getLabelCssString(),">", this.getLabel(), "</div>",
 				"<div class=", this.getInsetCssClass(),">"
 		);
 }

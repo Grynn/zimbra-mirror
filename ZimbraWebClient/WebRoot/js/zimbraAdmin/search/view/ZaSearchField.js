@@ -102,8 +102,9 @@ function(evt) {
 
 ZaSearchField.prototype._getMyXForm = function() {	
 	var xFormObject = {
-		tableCssStyle:"width:100%;padding:2px;",numCols:10,
+		tableCssStyle:"width:100%;padding:2px;",numCols:11,
 		items: [
+			{type:_OUTPUT_, value:ZaMsg.searchForAccountsLabel, nowrap:true},
 			{type:_TEXTFIELD_, ref:ZaSearch.A_query, width:"250px",containerCssStyle:"padding-left:2px;padding-right:2px;", label:null, 
 				elementChanged: function(elementValue,instanceValue, event) {
 					var charCode = event.charCode;

@@ -663,6 +663,7 @@ ZaMsg.about_title = "Zimbra(TM) Administration Console";
 ZaMsg.migrationWiz = "Migration Wizard";
 ZaMsg.logOff = "Log Off";
 ZaMsg.done = "Done";
+ZaMsg.searchForAccountsLabel = "Search for accounts:";
 ZaMsg.searchForAccounts = "Search for email accounts, distribution lists and email aliases";
 ZaMsg.search = "Search";
 ZaMsg.queryParseError = "Unable to parse your search query. Please correct any errors and resubmit.";
