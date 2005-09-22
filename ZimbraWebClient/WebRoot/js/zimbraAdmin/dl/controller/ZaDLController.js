@@ -113,9 +113,10 @@ function (optionalOps, optionalDisOps) {
 ZaDLController.prototype.getViewMode = function () {
 	return this._viewMode;
 };
+
 /** 
- * view factory method
  */
+ZaDLController._elementsObject = {};
 ZaDLController.prototype._getView = function (id, args) {
 	var view = this._dlView;
 	var toolbar = this._toolbar;
@@ -131,10 +132,9 @@ ZaDLController.prototype._getView = function (id, args) {
 			view.getHtmlElement().style.position = "absolute";
 			var controller = this;
 			view.setData = function (dl) {
-				// data is probably a ZaItem that doesn't have dl details
-				//if (controller._viewMode == ZaDLController.MODE_EDIT) dl.getMembers();
 				dl.getMembers();
-				view.setInstance(dl);
+				controller._currentDL = dl;
+				view.setInstance(dl.clone());
 			};
 			this._dlView = view;
 			break;
@@ -148,7 +148,7 @@ ZaDLController.prototype._getView = function (id, args) {
 	if (view.setData != null && args != null) {
 		view.setData(args);
 	}
-	var elements = {};
+	var elements = ZaDLController._elementsObject;
 	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = toolbar;
 	elements[ZaAppViewMgr.C_APP_CONTENT] = view;
 	return elements;
@@ -509,10 +509,15 @@ ZaDLController.distributionListXModel = {
 	},
 
 	items: [
-	{id: "name", type:_STRING_, setter:"setName", setterScope: _INSTANCE_},
-	{id: "members", type:_LIST_, getter: "getMembersArray", getterScope:_MODEL_, setter: "setMembersArray", setterScope:_MODEL_},
+			// These three items really shouldn't be here. They are transient, and we really don't want to save
+			// their state.
 	{id: "memberPool", type:_LIST_, setter:"setMemberPool", getterScope:_MODEL_},
 	{id: "optionalAdd", type:_UNTYPED_},
-	{id: "searchText", type:_STRING_}
+	{id: "searchText", type:_UNTYPED_},
+
+	{id: "name", type:_STRING_, setter:"setName", setterScope: _INSTANCE_},
+	{id: "members", type:_LIST_, getter: "getMembersArray", getterScope:_MODEL_, setter: "setMembersArray", setterScope:_MODEL_},
+	{id: "description", type:_STRING_, setter:"setDescription", setterScropt:_INSTANCE_, getter: "getDescription", getterScope: _INSTANCE_},
+	{id: "notes", type:_STRING_, setter:"setNotes", setterScropt:_INSTANCE_, getter: "getNotes", getterScope: _INSTANCE_}
 	]
 };

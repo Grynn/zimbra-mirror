@@ -41,6 +41,23 @@ ZaDistributionList.EMAIL_ADDRESS = "ZDLEA";
 ZaDistributionList.DESCRIPTION = "ZDLDESC";
 ZaDistributionList.ID = "ZDLID";
 
+ZaDistributionList.prototype.clone = function () {
+	var dl = new ZaDistributionList(this._app, this.id, this.name, this._memberList.getArray(), this.description, this.notes);
+	var val, tmp;
+	for (key in this.attrs) {
+		val = this.attrs[key];
+		if (AjxUtil.isArray(val)){
+			tmp = new Array();
+			for (var i = 0; i < val.length; ++i){
+				tmp[i] = val[i];
+			}
+			val = tmp;
+		}
+		dl.attrs[key] = val;
+	}
+	return dl;
+};
+
 ZaDistributionList.prototype.saveEdits = function () {
 	if (this.isDirty()) {
 		var sd = AjxSoapDoc.create("ModifyDistributionListRequest", "urn:zimbraAdmin", null);
