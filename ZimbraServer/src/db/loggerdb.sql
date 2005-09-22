@@ -52,7 +52,8 @@ CREATE TABLE raw_logs (
 
 CREATE TABLE processing_history (
 	app					VARCHAR(64) NOT NULL,
-	id					INTEGER UNSIGNED NOT NULL
+	id					BIGINT UNSIGNED,
+	last_time			DATETIME
 ) ENGINE = MyISAM;
 
 # mta
@@ -91,3 +92,17 @@ CREATE TABLE amavis (
 	INDEX i_msgid (msgid)
 ) ENGINE = MyISAM;
 
+CREATE TABLE mta_aggregate (
+	period_start		DATETIME NOT NULL,
+	period_end			DATETIME NOT NULL,
+	msg_count			INTEGER UNSIGNED,
+	msg_bytes			INTEGER UNSIGNED
+) ENGINE = MyISAM;
+
+CREATE TABLE amavis_aggregate (
+	period_start		DATETIME NOT NULL,
+	period_end			DATETIME NOT NULL,
+	msg_count			INTEGER UNSIGNED,
+	spam_count			INTEGER UNSIGNED,
+	virus_count			INTEGER UNSIGNED
+) ENGINE = MyISAM;
