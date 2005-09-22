@@ -524,7 +524,7 @@ ZaMsg.NDD_Description = "Description";
 
 ZaMsg.CHNP_Title = "Change Password";
 ZaMsg.MoveAlias_Title = "Select an account";
-ZaMsg.MoveAlias_SelectTitle = "select a destination account";
+ZaMsg.MoveAlias_SelectTitle = "Type a name in the search box";
 ZaMsg.NCD_AuthConfigTitle = "Authentication Configuration Wizard";
 ZaMsg.NCD_GALConfigTitle = "GAL Configuration Wizard";
 ZaMsg.Restore_WizTitle = "Mailbox Restore Wizard";

@@ -51,12 +51,13 @@ function MoveAliasXDialog(parent,  app, w, h) {
 	this._pageDiv.style.overflow = "auto";
 
 	this._createContentHtml();
+	this._containedObject = new ZaSearch();
 	this.initForm(ZaSearch.myXModel,this.getMyXForm());
 }
 
 MoveAliasXDialog.prototype = new DwtDialog;
 MoveAliasXDialog.prototype.constructor = MoveAliasXDialog;
-MoveAliasXDialog.resultChoices = new XFormChoices([], XFormChoices.OBJECT_LIST, "id", "name");
+MoveAliasXDialog.resultChoices = new XFormChoices([], XFormChoices.OBJECT_REFERENCE_LIST, null, "name");
 
 /**
 * public method _initForm
@@ -80,13 +81,21 @@ MoveAliasXDialog.prototype.popup =
 function () {
 	DwtDialog.prototype.popup.call(this);
 	this._containedObject = new ZaSearch();
-	MoveAliasXDialog.resultChoices.setChoices([{id:null, name:ZaMsg.MoveAlias_SelectTitle}]);	
+	var emptyAcc = new ZaAccount();
+	emptyAcc.name = ZaMsg.MoveAlias_SelectTitle;
+//	MoveAliasXDialog.resultChoices.setChoices([{id:null, name:ZaMsg.MoveAlias_SelectTitle}]);	
+	MoveAliasXDialog.resultChoices.setChoices([emptyAcc]);	
 	MoveAliasXDialog.resultChoices.dirtyChoices();
 	this._localXForm.setInstance(this._containedObject);
 	if(!this._drawn) {
 		this._localXForm.draw(this._pageDiv)
 		this._drawn = true;
 	}
+}
+
+MoveAliasXDialog.prototype.getObject = 
+function () {
+	return this._containedObject;
 }
 
 MoveAliasXDialog.prototype.searchAccounts = 

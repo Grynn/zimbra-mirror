@@ -708,6 +708,36 @@ function () {
 	this._removeConfirmMessageDialog.popdown();
 }
 
+ZaAccountListController._moveAliasCallback = 
+function() {
+	//remove alias
+	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getLast()){
+		var alias = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getLast());
+		//make sure this is an alias
+		if(alias.type!=ZaItem.ALIAS) 
+			return;
+		
+		var name = alias.name;
+		try {
+			alias.remove();
+		} catch (ex) {
+			this._handleException(ex, "ZaAccountListController._moveAliasCallback", null, false);
+			return;
+		}
+		try {
+			//get destination account		
+			var srch = this._moveAliasDialog.getObject();
+			if(srch[ZaSearch.A_selected] && srch[ZaSearch.A_selected].addAlias!=null) {
+				//add alias
+				srch[ZaSearch.A_selected].addAlias(name);
+			}
+			this._moveAliasDialog.popdown();
+		} catch (ex) {
+			this._handleException(ex, "ZaAccountListController._moveAliasCallback", null, false);
+		}
+	}	
+}
+
 ZaAccountListController._changePwdOKCallback = 
 function (item) {
 	//check the passwords, if they are ok then save the password, else show error
@@ -881,6 +911,7 @@ function (ev) {
 	try {
 		if(!this._moveAliasDialog) {
 			this._moveAliasDialog = new MoveAliasXDialog(this._container, this._app);
+			this._moveAliasDialog.registerCallback(DwtDialog.OK_BUTTON, ZaAccountListController._moveAliasCallback, this, null);				
 		}
 		this._moveAliasDialog.popup();
 	} catch (ex) {
