@@ -518,7 +518,7 @@ DwtTabBar.prototype._createSpacerElement = function() {
 	var row3 = table.insertRow(table.rows.length);
 	
 	var row3cell1 = row3.insertCell(row3.cells.length);
-	AjxImg.setImage(row3cell1, "TabSpacer", null, true);
+	AjxImg.setImage(row3cell1, "TabSpacer__H", null, true);
 	
 	return table;
 }
