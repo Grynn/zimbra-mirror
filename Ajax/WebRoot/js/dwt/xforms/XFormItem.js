@@ -3442,6 +3442,10 @@ Dwt_List_XFormItem.prototype.writeElementDiv = false;
 
 Dwt_List_XFormItem.prototype.constructWidget = function () {
 	var widget = new DwtListView(this.getForm(), this.getCssClass());
+	var multiselect = this.getInheritedProperty("multiselect");
+	if(multiselect != null) {
+		widget.setMultiSelect(multiselect);
+	}	
 	var localLs = new AjxListener(this, this._handleSelection);
 	widget.addSelectionListener(localLs);
 	return widget;
