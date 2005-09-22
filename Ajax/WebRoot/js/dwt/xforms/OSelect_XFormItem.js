@@ -612,10 +612,17 @@ OSelect_XFormItem.prototype.setValue = function (newValue, clearOldValues, inclu
 			}
 		} else {
 			oldValues = this.getInstanceValue();
-			if (typeof oldValues == "string") {
-				if (oldValues == "") 	oldValues = [];
-				else					oldValues = oldValues.split(",");
-			}
+
+			if(oldValues) {
+				if (typeof oldValues == "string") {
+					if (oldValues == "") 	
+						oldValues = [];
+					else
+						oldValues = oldValues.split(",");
+				}
+			} else {
+				oldValues = new Array();			
+			}			
 			
 			var found = false;
 			for (var i = 0; i < oldValues.length; i++) {
@@ -631,9 +638,9 @@ OSelect_XFormItem.prototype.setValue = function (newValue, clearOldValues, inclu
 				oldValues.push(newValue);
 			}
 		}
-
-		if (oldValues.length == 1 && oldValues[0] == "") oldValues = [];
-		
+		if(!oldValues || (oldValues.length == 1 && oldValues[0] == "")) {
+			oldValues = []
+		} 
 		// if we have a modelItem which is a LIST type
 		//	convert the output to the propert outputType
 		var modelItem = this.getModelItem();
