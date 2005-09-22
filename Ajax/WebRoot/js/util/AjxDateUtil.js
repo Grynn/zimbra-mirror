@@ -227,6 +227,12 @@ function(date, stringToPrepend) {
 	return dateArr.join("");
 };
 
+AjxDateUtil.longComputeDateStr = 
+function(date) {
+	// TODO: i18n
+	return AjxDateUtil.getTimeStr(date, "%w, %M %D, %Y");
+}
+
 AjxDateUtil.computeDateStr =
 function(now, dateMSec) {
 	if (dateMSec == null)
