@@ -50,27 +50,189 @@ if (!$dbh) {
 
 processMta();
 
+processClam();
+
+processAmavis();
+
+processSendmail();
+processZimbramon();
+
 sub processMta {
 
 	my $lastRowID = getLastRowId("mta");
 
-	print "Processing messages from $lastRowID\n";
+	print "Processing mta entries from $lastRowID\n";
 
-	my $sth = sqlExec("select distinct(postfix_msgid) from raw_logs where postfix_msgid is not null and app like 'postfix%' and id > '".$lastRowID."'");
+	my $sth = sqlExec("select distinct(postfix_msgid) from raw_logs ".
+		"where postfix_msgid is not null and app ".
+		"like 'postfix%' and id > '".$lastRowID."'");
 	my $ary = $sth->fetchall_arrayref;
 
 	print "Found ".scalar @$ary." messages\n";
 
 	my $count = 0;
-	foreach my $row (sort @$ary) {
-		$count++;
-		$lastRowID = insertMessage(parseMessage($$row[0]));
-	}
-	print "Inserted $count rows\n";
+	if (@$ary) {
+		foreach my $row (sort @$ary) {
+			$count++;
+			$lastRowID = insertMtaMessage(parseMessage($$row[0]));
+		}
+		print "Inserted $count rows\n";
 
-	saveLastRowId("mta", $lastRowID);
+		saveLastRowId("mta", $lastRowID);
+	}
 
 	deleteRawLogs("mta", $lastRowID);
+}
+
+sub processSendmail {
+	# logs don't really show us much - it's all in amavisd
+	my $lastRowID = getLastRowId("sendmail");
+
+	print "Processing sendmail entries from $lastRowID\n";
+
+	my $sth = sqlExec("select distinct(id) from raw_logs where ".
+		"app='sendmail' and id > '".$lastRowID."' order by id asc");
+	my $ary = $sth->fetchall_arrayref;
+
+	print "Found ".scalar @$ary." entries\n";
+
+	if (@$ary) {
+		$lastRowID = ${@$ary[$#$ary]}[0];
+		saveLastRowId("sendmail", $lastRowID);
+	}
+	deleteRawLogs("sendmail", $lastRowID);
+}
+
+sub processZimbramon {
+	# logs don't really show us much - it's all in amavisd
+	my $lastRowID = getLastRowId("zimbramon");
+
+	print "Processing zimbramon entries from $lastRowID\n";
+
+	my $sth = sqlExec("select distinct(id) from raw_logs where ".
+		"app='zimbramon' and id > '".$lastRowID."' order by id asc");
+	my $ary = $sth->fetchall_arrayref;
+
+	print "Found ".scalar @$ary." entries\n";
+
+	if (@$ary) {
+		$lastRowID = ${@$ary[$#$ary]}[0];
+		saveLastRowId("zimbramon", $lastRowID);
+	}
+	deleteRawLogs("zimbramon", $lastRowID);
+}
+
+sub processClam {
+	# Clam logs don't really show us much - it's all in amavisd
+	my $lastRowID = getLastRowId("clamd");
+
+	print "Processing clamd entries from $lastRowID\n";
+
+	my $sth = sqlExec("select distinct(id) from raw_logs where ".
+		"app='clamd' and id > '".$lastRowID."' order by id asc");
+	my $ary = $sth->fetchall_arrayref;
+
+	print "Found ".scalar @$ary." entries\n";
+
+	if (@$ary) {
+		$lastRowID = ${@$ary[$#$ary]}[0];
+		saveLastRowId("clamd", $lastRowID);
+	}
+	deleteRawLogs("clamd", $lastRowID);
+}
+
+sub processAmavis {
+	my $lastRowID = getLastRowId("amavis");
+
+	print "Processing amavis entries from $lastRowID\n";
+
+	my $sth = sqlExec("select distinct(id) from raw_logs where ".
+		"app='amavis' and id > '".$lastRowID."' order by id asc");
+	my $ary = $sth->fetchall_arrayref;
+
+	print "Found ".scalar @$ary." entries\n";
+
+	if (@$ary) {
+		my $msg = "";
+		for (my $i = 0; $i <= $#$ary; $i++) {
+			my $row = $$ary[$i];
+
+			if ($$row[0] > $lastRowID) {$lastRowID = $$row[0];}
+
+			my $sth = sqlExec("select log_date, host, msg from raw_logs where id='".
+				$$row[0]."'");
+			my $amary = $sth->fetchall_arrayref;
+			foreach my $m (@$amary) {
+				my $cmsg = $$m[2];
+
+				if ($cmsg =~ /^\([^)]+\) \.\.\./) {
+					# Continuation of elided line
+					# Remove leading elipses
+					$cmsg =~ s/^\([^)]+\) \.\.\.//;
+				}
+
+				$msg .= $cmsg;
+
+				if ($msg =~ /^\([^)]+\) .*\.\.\.$/) {
+					# Elided log lines.  Genius.
+					# Remove trailing elipses
+					$msg =~ s/\.\.\.$//;
+					last;
+				}
+
+				if ($msg =~ /\(([^)]+)\) (Passed|Blocked) ([^,]+), (?:LOCAL )?\[([^]]+)\] \[([^]]+)\] <([^>]*)> -> (<[^>]+>(?:,<[^>]+>)*),(?: quarantine: [^,]+,)?(?: Message-ID: [^,]+,)?(?: Resent-Message-ID: <[^>]+>,)? mail_id: \S+, Hits: (\S+), (\d+) ms/) {
+					my $pid = $1;
+					my $disp = $2;
+					my $reason = $3;
+					my $fromIP = $4;
+					my $origIP = $5;
+					my $sender = $6;
+					my $recips = $7;
+					my $hits = $8;
+					my $ms = $9;
+
+					my @r = split (' ',$reason,2);
+					$r[1] =~ s/\(//;
+					$r[1] =~ s/\)//;
+
+					my $statement = "select msgid, next_msgid from mta where amavis_pid='".
+						$pid."'";
+
+					my $sth = sqlExec ($statement);
+					my $idary = $sth->fetchall_arrayref;
+
+					my $fromMsgID;
+					my $toMsgID;
+
+					if (@$idary) {
+						$fromMsgID = ${$$idary[0]}[0];
+						$toMsgID = ${$$idary[0]}[1];
+					}
+
+					$statement = "insert into amavis ".
+						"(arrive_time, host, pid, ".
+						"sender, recipient, disposition, ".
+						"status, reason, fromIP, origIP, hits, time, ".
+						"from_postfix_msgid, to_postfix_msgid) ".
+						"values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+					sqlExec ($statement, 
+						$$m[0], $$m[1], $pid, 
+						$sender, $recips, $disp, 
+						$r[0], $r[1], $fromIP, $origIP, $hits, $ms,
+						$fromMsgID, $toMsgID);
+
+				} elsif ($msg =~ /(Passed|Blocked)/) {
+					print "FAILED $$row[0]: $msg\n";
+				}
+
+				$msg = "";
+
+			}
+		}
+		saveLastRowId("amavis", $lastRowID);
+	}
+	deleteRawLogs("amavis", $lastRowID);
 }
 
 sub getMessage {
@@ -174,8 +336,9 @@ sub parseMessage {
 			next;
 		}
 
-		if ($msg =~ /^${msgId}: from=<(.*)>/) {
+		if ($msg =~ /^${msgId}: from=<(.*)>, size=(\d+)/) {
 			$msg{$host}{sender} = $1?$1:"postmaster";
+			$msg{$host}{bytes} = $2;
 			next;
 		}
 
@@ -189,9 +352,14 @@ sub parseMessage {
 			$msg{$host}{recipList}{$r}{nextHost} = $2;
 			$msg{$host}{recipList}{$r}{nextIp} = $3;
 			$msg{$host}{recipList}{$r}{status} = $4;
-			if ($5 =~ /queued as (.*)\)/) {
+
+			if ($5 =~ /id=([^,]+).*queued as (.*)\)/) {
+				$msg{$host}{recipList}{$r}{amavisPid} = $1;
+				$msg{$host}{recipList}{$r}{nextID} = $2;
+			} elsif ($5 =~ /queued as (.*)\)/) {
 				$msg{$host}{recipList}{$r}{nextID} = $1;
 			}
+
 			next;
 		}
 
@@ -207,7 +375,10 @@ sub parseMessage {
 			$msg{$host}{recipList}{$r}{nextIp} = $4;
 			$msg{$host}{recipList}{$r}{status} = $5;
 
-			if ($6 =~ /queued as (.*)\)/) {
+			if ($6 =~ /id=([^,]+).*queued as (.*)\)/) {
+				$msg{$host}{recipList}{$r}{amavisPid} = $1;
+				$msg{$host}{recipList}{$r}{nextID} = $2;
+			} elsif ($6 =~ /queued as (.*)\)/) {
 				$msg{$host}{recipList}{$r}{nextID} = $1;
 			}
 			next;
@@ -218,15 +389,15 @@ sub parseMessage {
 	return (\%msg);
 }
 
-sub insertMessage {
+sub insertMtaMessage {
 	my $msg = shift;
 	my $last = 0;
 
 	my $statement = "insert into mta ".
 		"(arrive_time, leave_time, host, msgid, next_msgid, ".
-		"sender, recipient, ".
+		"sender, recipient, amavis_pid, bytes, ".
 		"from_host, from_IP, to_host, to_IP, status) ".
-		"values (?,?,?,?,?,?,?,?,?,?,?,?)";
+		"values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 	foreach my $host (sort keys %{$msg}) {
 		if ($host eq "ID") {
@@ -246,7 +417,8 @@ sub insertMessage {
 				$$msg{$host}{recipList}{$r}{leaveTime}?$$msg{$host}{recipList}{$r}{leaveTime}:
 				'0000-00-00 00:00:00',
 				$host, $$msg{ID}, $$msg{$host}{recipList}{$r}{nextID},
-				$$msg{$host}{sender}, $r, $$msg{$host}{prevHost}, 
+				$$msg{$host}{sender}, $r, $$msg{$host}{recipList}{$r}{amavisPid},
+				$$msg{$host}{bytes}, $$msg{$host}{prevHost}, 
 				$$msg{$host}{prevIp}, $$msg{$host}{recipList}{$r}{nextHost}, 
 				$$msg{$host}{recipList}{$r}{nextIp}, $$msg{$host}{recipList}{$r}{status});
 		}
@@ -260,6 +432,7 @@ sub deleteRawLogs {
 
 	if ($app eq "mta") {
 		$app = "postfix";
+	} elsif ($app eq "clamd" || $app eq "amavis" || $app eq "sendmail" || $app eq "zimbramon") {
 	} else {
 		print STDERR "Unknown app $app in deleteRawLogs\n\n";
 		return;

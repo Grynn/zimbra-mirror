@@ -71,13 +71,31 @@ CREATE TABLE mta (
 	from_IP				VARCHAR(16),
 	to_host				VARCHAR(255),
 	to_IP				VARCHAR(16),
-	INDEX i_msgid (msgid),
-	INDEX i_arrive_time (arrive_time),
-	INDEX i_leave_time (leave_time),
+	amavis_pid			VARCHAR(16),
+	bytes				INTEGER,
 	INDEX i_from_host (from_host),
 	INDEX i_from_IP (from_IP),
 	INDEX i_to_host (to_host),
 	INDEX i_to_IP (to_IP),
-	INDEX i_host (host)
+	INDEX i_amavis_pid (amavis_pid)
+) ENGINE = MyISAM;
+
+CREATE TABLE amavis (
+	arrive_time			DATETIME NOT NULL,
+	host				VARCHAR(255) NOT NULL,
+	pid					VARCHAR(16),
+	from_postfix_msgid	VARCHAR(16),
+	to_postfix_msgid	VARCHAR(16),
+	sender				VARCHAR(255),
+	recipient			VARCHAR(255),
+	disposition			VARCHAR(16),
+	status				VARCHAR(16),
+	reason				VARCHAR(64),
+	fromIP				VARCHAR(16),
+	origIP				VARCHAR(16),
+	hits				INTEGER,
+	time				INTEGER,
+	INDEX i_from_postfix_msgid (from_postfix_msgid),
+	INDEX i_to_postfix_msgid (to_postfix_msgid)
 ) ENGINE = MyISAM;
 

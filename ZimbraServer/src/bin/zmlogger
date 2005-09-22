@@ -121,9 +121,7 @@ while (<>) {
 
 	if ($app =~ /^postfix/ && $msg =~ /^(\S{10,12}): /) {
 		$msgid = $1;
-	} elsif ($app =~ /^amavi/ && $msg =~ /(\S{10,12})$/) {
-		$msgid = $1;
-	}
+	} 
 
 	eval {
 		if (!$sth->execute(logdate_to_sqldate($log_date), $host, 
