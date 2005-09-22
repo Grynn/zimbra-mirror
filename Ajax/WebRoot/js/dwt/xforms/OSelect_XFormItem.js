@@ -562,12 +562,13 @@ OSelect_XFormItem.prototype.onChoiceClick = function (itemNum, event) {
 	var clearOthers = true;
 	var includeIntermediates = false;
 	//if (event.ctrlKey){
+	if(this.getMultiple()) {
 		clearOthers = false;
-	//} else if (event.shiftKey) {
-	if (event.shiftKey) {
-		clearOthers = false;
-		includeIntermediates = true;
+		if (event.shiftKey) {
+			includeIntermediates = true;
+		}
 	}
+	//} else if (event.shiftKey) {
 	this.choiceSelected(itemNum, clearOthers, includeIntermediates, event);
 };
 
