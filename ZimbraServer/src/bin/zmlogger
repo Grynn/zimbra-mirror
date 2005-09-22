@@ -99,7 +99,7 @@ sub get_last_timestamp {
 }
 
 my $statement =
-	"insert into raw_logs(log_date, host, app, pid, msg, postfix_msgid) values (?,?,?,?,?,?)";
+	"insert into raw_logs(log_date, loghost, app, pid, msg, postfix_qid) values (?,?,?,?,?,?)";
 
 my $sth = $dbh->prepare($statement);
 
@@ -117,15 +117,15 @@ while (<>) {
 	my ($log_date, $host, $app, $pid, $msg) =
 		($_ =~ m/(^.{15}) (\S+) ([^[]+)\[(\d+)\]: (.*)$/);
 
-	my $msgid = undef;
+	my $qid = undef;
 
 	if ($app =~ /^postfix/ && $msg =~ /^(\S{10,12}): /) {
-		$msgid = $1;
+		$qid = $1;
 	} 
 
 	eval {
 		if (!$sth->execute(logdate_to_sqldate($log_date), $host, 
-			$app, $pid, $msg, $msgid) ) {
+			$app, $pid, $msg, $qid) ) {
 			($DEBUG) && print FOO localtime(),
 				" zmlogger insert failed: ",$sth->errstr,"\n";
 		}

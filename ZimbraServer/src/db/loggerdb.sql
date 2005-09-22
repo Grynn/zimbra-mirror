@@ -38,15 +38,14 @@ GRANT ALL ON zimbra_logger.* TO 'root'@'localhost.localdomain' IDENTIFIED BY 'zi
 CREATE TABLE raw_logs (
 	id					BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	log_date			DATETIME NOT NULL,
-	host				VARCHAR(255) NOT NULL,
+	loghost				VARCHAR(255) NOT NULL,
 	app					VARCHAR(64) NOT NULL,
 	pid					INTEGER UNSIGNED NOT NULL DEFAULT 0,
 	msg 				TEXT NOT NULL,
-	postfix_msgid		VARCHAR(12),
+	postfix_qid			VARCHAR(12),
 	INDEX i_app (app),
-	INDEX i_postfix_msgid (postfix_msgid),
-	INDEX i_log_date (log_date),
-	INDEX i_host (host)
+	INDEX i_postfix_qid (postfix_qid),
+	INDEX i_log_date (log_date)
 ) ENGINE = MyISAM;
 
 # Processing history (id is the last processed raw_log for app
@@ -62,8 +61,7 @@ CREATE TABLE mta (
 	arrive_time			DATETIME NOT NULL,
 	leave_time			DATETIME NOT NULL,
 	host				VARCHAR(255) NOT NULL,
-	msgid				VARCHAR(16),
-	next_msgid			VARCHAR(16),
+	msgid				VARCHAR(64) NOT NULL,
 	sender				VARCHAR(255),
 	recipient			VARCHAR(255),
 	status				VARCHAR(64),
@@ -73,19 +71,14 @@ CREATE TABLE mta (
 	to_IP				VARCHAR(16),
 	amavis_pid			VARCHAR(16),
 	bytes				INTEGER,
-	INDEX i_from_host (from_host),
-	INDEX i_from_IP (from_IP),
-	INDEX i_to_host (to_host),
-	INDEX i_to_IP (to_IP),
-	INDEX i_amavis_pid (amavis_pid)
+	INDEX i_msgid (msgid)
 ) ENGINE = MyISAM;
 
 CREATE TABLE amavis (
 	arrive_time			DATETIME NOT NULL,
 	host				VARCHAR(255) NOT NULL,
 	pid					VARCHAR(16),
-	from_postfix_msgid	VARCHAR(16),
-	to_postfix_msgid	VARCHAR(16),
+	msgid				VARCHAR(64) NOT NULL,
 	sender				VARCHAR(255),
 	recipient			VARCHAR(255),
 	disposition			VARCHAR(16),
@@ -93,9 +86,8 @@ CREATE TABLE amavis (
 	reason				VARCHAR(64),
 	fromIP				VARCHAR(16),
 	origIP				VARCHAR(16),
-	hits				INTEGER,
+	hits				FLOAT,
 	time				INTEGER,
-	INDEX i_from_postfix_msgid (from_postfix_msgid),
-	INDEX i_to_postfix_msgid (to_postfix_msgid)
+	INDEX i_msgid (msgid)
 ) ENGINE = MyISAM;
 

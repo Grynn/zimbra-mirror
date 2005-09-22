@@ -63,8 +63,8 @@ sub processMta {
 
 	print "Processing mta entries from $lastRowID\n";
 
-	my $sth = sqlExec("select distinct(postfix_msgid) from raw_logs ".
-		"where postfix_msgid is not null and app ".
+	my $sth = sqlExec("select distinct(postfix_qid) from raw_logs ".
+		"where postfix_qid is not null and app ".
 		"like 'postfix%' and id > '".$lastRowID."'");
 	my $ary = $sth->fetchall_arrayref;
 
@@ -74,14 +74,16 @@ sub processMta {
 	if (@$ary) {
 		foreach my $row (sort @$ary) {
 			$count++;
-			$lastRowID = insertMtaMessage(parseMessage($$row[0]));
+			if (my $l = insertMtaMessage(parseMessage($$row[0]))) {
+				$lastRowID = $l;
+			}
 		}
 		print "Inserted $count rows\n";
 
-		saveLastRowId("mta", $lastRowID);
+		#saveLastRowId("mta", $lastRowID);
 	}
 
-	deleteRawLogs("mta", $lastRowID);
+	#deleteRawLogs("mta", $lastRowID);
 }
 
 sub processSendmail {
@@ -146,7 +148,7 @@ sub processAmavis {
 
 	print "Processing amavis entries from $lastRowID\n";
 
-	my $sth = sqlExec("select distinct(id) from raw_logs where ".
+	my $sth = sqlExec("select id from raw_logs where ".
 		"app='amavis' and id > '".$lastRowID."' order by id asc");
 	my $ary = $sth->fetchall_arrayref;
 
@@ -157,9 +159,9 @@ sub processAmavis {
 		for (my $i = 0; $i <= $#$ary; $i++) {
 			my $row = $$ary[$i];
 
-			if ($$row[0] > $lastRowID) {$lastRowID = $$row[0];}
+            if ($$row[0] > $lastRowID) {$lastRowID = $$row[0];}
 
-			my $sth = sqlExec("select log_date, host, msg from raw_logs where id='".
+			my $sth = sqlExec("select log_date, loghost, msg from raw_logs where id='".
 				$$row[0]."'");
 			my $amary = $sth->fetchall_arrayref;
 			foreach my $m (@$amary) {
@@ -180,7 +182,7 @@ sub processAmavis {
 					last;
 				}
 
-				if ($msg =~ /\(([^)]+)\) (Passed|Blocked) ([^,]+), (?:LOCAL )?\[([^]]+)\] \[([^]]+)\] <([^>]*)> -> (<[^>]+>(?:,<[^>]+>)*),(?: quarantine: [^,]+,)?(?: Message-ID: [^,]+,)?(?: Resent-Message-ID: <[^>]+>,)? mail_id: \S+, Hits: (\S+), (\d+) ms/) {
+				if ($msg =~ /\(([^)]+)\) (Passed|Blocked) ([^,]+), (?:LOCAL )?\[([^]]+)\] \[([^]]+)\] <([^>]*)> -> (<[^>]+>(?:,<[^>]+>)*),(?: quarantine: [^,]+,)? Message-ID: <([^>]+)>,(?: Resent-Message-ID: <[^>]+>,)? mail_id: \S+, Hits: (\S+), (\d+) ms/) {
 					my $pid = $1;
 					my $disp = $2;
 					my $reason = $3;
@@ -188,39 +190,24 @@ sub processAmavis {
 					my $origIP = $5;
 					my $sender = $6;
 					my $recips = $7;
-					my $hits = $8;
-					my $ms = $9;
+					my $msgid = $8;
+					my $hits = $9;
+					my $ms = $10;
 
 					my @r = split (' ',$reason,2);
 					$r[1] =~ s/\(//;
 					$r[1] =~ s/\)//;
 
-					my $statement = "select msgid, next_msgid from mta where amavis_pid='".
-						$pid."'";
-
-					my $sth = sqlExec ($statement);
-					my $idary = $sth->fetchall_arrayref;
-
-					my $fromMsgID;
-					my $toMsgID;
-
-					if (@$idary) {
-						$fromMsgID = ${$$idary[0]}[0];
-						$toMsgID = ${$$idary[0]}[1];
-					}
-
-					$statement = "insert into amavis ".
-						"(arrive_time, host, pid, ".
+					my $statement = "insert into amavis ".
+						"(arrive_time, host, pid, msgid, ".
 						"sender, recipient, disposition, ".
-						"status, reason, fromIP, origIP, hits, time, ".
-						"from_postfix_msgid, to_postfix_msgid) ".
-						"values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+						"status, reason, fromIP, origIP, hits, time)".
+						"values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 					sqlExec ($statement, 
-						$$m[0], $$m[1], $pid, 
+						$$m[0], $$m[1], $pid, $msgid,
 						$sender, $recips, $disp, 
-						$r[0], $r[1], $fromIP, $origIP, $hits, $ms,
-						$fromMsgID, $toMsgID);
+						$r[0], $r[1], $fromIP, $origIP, $hits, $ms);
 
 				} elsif ($msg =~ /(Passed|Blocked)/) {
 					print "FAILED $$row[0]: $msg\n";
@@ -230,21 +217,21 @@ sub processAmavis {
 
 			}
 		}
-		saveLastRowId("amavis", $lastRowID);
+		#saveLastRowId("amavis", $lastRowID);
 	}
-	deleteRawLogs("amavis", $lastRowID);
+	#deleteRawLogs("amavis", $lastRowID);
 }
 
 sub getMessage {
-    my $msgId = shift;
+    my $qid = shift;
 
-	#print "Getting message $msgId\n";
+	#print "Getting message $qid\n";
 
 	my $statement =
-	"select id, log_date, host, app, pid, msg from raw_logs ".
-		"where app like \'%postfix%\' and postfix_msgid = \'$msgId\'";
+	"select id, log_date, loghost, app, pid, msg from raw_logs ".
+		"where app like \'%postfix%\' and postfix_qid = \'$qid\'";
 
-	# print "Searching for message $msgId\n";
+	# print "Searching for message $qid\n";
 
 	my $sth = sqlExec($statement);
 
@@ -308,78 +295,85 @@ sub sqlExec {
 }
 
 sub parseMessage {
-	my $msgId = shift;
+	my $qid = shift;
 
-	#print "Parsing message $msgId\n";
+	#print "Parsing message $qid\n";
 
-	#$messages{$msgId} = getMsgById ($msgId);
-	my $ary = getMessage ($msgId);
+	my $ary = getMessage ($qid);
 
 	my %msg = ();
 
-	$msg{ID} = $msgId;
+	my $messageId;
 
-	# Rows are: row_id date host app pid msg
+	# Rows are: row_id date loghost app pid msg
+
+	# Find the message-id first
+	foreach my $row (@$ary) {
+		my ($rowid, $date, $host, $app, $pid, $msg) = (@$row);
+		if ($msg =~ /^${qid}: message-id=<([^>]+)>/) {
+			$messageId = $1;
+			$msg{$messageId}{host} = $host;
+			last;
+		}
+	}
+	if ($messageId eq "" || $msg{$messageId}{host} eq "") {
+		return undef;
+	}
+
 	foreach my $row (@$ary) {
 		my ($rowid, $date, $host, $app, $pid, $msg) = (@$row);
 
 		#print "ROW: $rowid, $date, $host, $app, $pid, $msg\n\n";
 
-		if ($msg{rowid} < $rowid) {$msg{rowid} = $rowid;}
+		if ($msg{$messageId}{rowid} < $rowid) {$msg{$messageId}{rowid} = $rowid;}
 
-		($msg =~ "^$msgId: (removed|message-id)") && next;
+		($msg =~ "^$qid: (removed|message-id)") && next;
 
-		if ($msg =~ /^${msgId}: client=([^[]+)\[(.*)\]/) {
-			$msg{$host}{arriveTime} = $date;
-			$msg{$host}{prevHost} = $1;
-			$msg{$host}{prevIp} = $2;
+		if ($msg =~ /^${qid}: client=([^[]+)\[(.*)\]/) {
+			$msg{$messageId}{arriveTime} = $date;
+			$msg{$messageId}{prevHost} = $1;
+			$msg{$messageId}{prevIp} = $2;
 			next;
 		}
 
-		if ($msg =~ /^${msgId}: from=<(.*)>, size=(\d+)/) {
-			$msg{$host}{sender} = $1?$1:"postmaster";
-			$msg{$host}{bytes} = $2;
+		if ($msg =~ /^${qid}: from=<(.*)>, size=(\d+)/) {
+			$msg{$messageId}{sender} = $1?$1:"postmaster";
+			$msg{$messageId}{bytes} = $2;
 			next;
 		}
 
-		if ($msg =~ /^${msgId}: to=<([^>]*)>, relay=([^[]+)\[?(.*)\]?, delay=\d+, status=(\S+) (.*)/) {
-			if (! defined ($msg{$host}{recipList})) {
-				$msg{$host}{recipList} = ();
+		if ($msg =~ /^${qid}: to=<([^>]*)>, relay=([^[]+)\[?(.*?)\]?\]?, delay=\d+, status=(\S+) (.*)/) {
+			if (! defined ($msg{$messageId}{recipList})) {
+				$msg{$messageId}{recipList} = ();
 			}
 			my $r = $1;
-			$msg{$host}{recipList}{$r}{leaveTime} = $date;
-			$msg{$host}{recipList}{$r}{recip} = $r;
-			$msg{$host}{recipList}{$r}{nextHost} = $2;
-			$msg{$host}{recipList}{$r}{nextIp} = $3;
-			$msg{$host}{recipList}{$r}{status} = $4;
+			$msg{$messageId}{recipList}{$r}{leaveTime} = $date;
+			$msg{$messageId}{recipList}{$r}{recip} = $r;
+			$msg{$messageId}{recipList}{$r}{nextHost} = $2;
+			$msg{$messageId}{recipList}{$r}{nextIp} = $3;
+			$msg{$messageId}{recipList}{$r}{status} = $4;
 
 			if ($5 =~ /id=([^,]+).*queued as (.*)\)/) {
-				$msg{$host}{recipList}{$r}{amavisPid} = $1;
-				$msg{$host}{recipList}{$r}{nextID} = $2;
-			} elsif ($5 =~ /queued as (.*)\)/) {
-				$msg{$host}{recipList}{$r}{nextID} = $1;
+				$msg{$messageId}{recipList}{$r}{amavisPid} = $1;
 			}
 
 			next;
 		}
 
-		if ($msg =~ /^${msgId}: to=<([^>]*)>, orig_to=<([^>]*)>, relay=([^[]+)\[(.*)\], delay=\d+, status=(\S+) (.*)/) {
-			if (! defined ($msg{$host}{recipList})) {
-				$msg{$host}{recipList} = ();
+		if ($msg =~ /^${qid}: to=<([^>]*)>, orig_to=<([^>]*)>, relay=([^[]+)\[(.*)\], delay=\d+, status=(\S+) (.*)/) {
+			if (! defined ($msg{$messageId}{recipList})) {
+				$msg{$messageId}{recipList} = ();
 			}
 			my $r = $1;
-			$msg{$host}{recipList}{$r}{leaveTime} = $date;
-			$msg{$host}{recipList}{$r}{recip} = $r;
-			$msg{$host}{recipList}{$r}{origRecip} = $2;
-			$msg{$host}{recipList}{$r}{nextHost} = $3;
-			$msg{$host}{recipList}{$r}{nextIp} = $4;
-			$msg{$host}{recipList}{$r}{status} = $5;
+			$msg{$messageId}{recipList}{$r}{leaveTime} = $date;
+			$msg{$messageId}{recipList}{$r}{recip} = $r;
+			$msg{$messageId}{recipList}{$r}{origRecip} = $2;
+			$msg{$messageId}{recipList}{$r}{nextHost} = $3;
+			$msg{$messageId}{recipList}{$r}{nextIp} = $4;
+			$msg{$messageId}{recipList}{$r}{status} = $5;
 
 			if ($6 =~ /id=([^,]+).*queued as (.*)\)/) {
-				$msg{$host}{recipList}{$r}{amavisPid} = $1;
-				$msg{$host}{recipList}{$r}{nextID} = $2;
-			} elsif ($6 =~ /queued as (.*)\)/) {
-				$msg{$host}{recipList}{$r}{nextID} = $1;
+				$msg{$messageId}{recipList}{$r}{amavisPid} = $1;
 			}
 			next;
 		}
@@ -393,34 +387,40 @@ sub insertMtaMessage {
 	my $msg = shift;
 	my $last = 0;
 
-	my $statement = "insert into mta ".
-		"(arrive_time, leave_time, host, msgid, next_msgid, ".
-		"sender, recipient, amavis_pid, bytes, ".
-		"from_host, from_IP, to_host, to_IP, status) ".
-		"values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	if (!defined ($msg)) { return undef; }
 
-	foreach my $host (sort keys %{$msg}) {
-		if ($host eq "ID") {
-			#print "Inserting $$msg{$host}\n";
-			next;
-		} 
-		if ($host eq "rowid") {
-			next;
-		} 
-		if ($$msg{rowid} > $last) {
-			$last = $$msg{rowid};
+	my $statement = "insert into mta ".
+		"(arrive_time, ".
+		"leave_time, ".
+		"host, msgid, ".
+		"sender, recipient, ".
+		"amavis_pid, bytes, ".
+		"from_host, from_IP, ".
+		"to_host, ".
+		"to_IP, ".
+		"status) ".
+		"values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+	foreach my $messageId (sort keys %{$msg}) {
+		if ($$msg{$messageId}{rowid} > $last) {
+			$last = $$msg{$messageId}{rowid};
 		}
 
-		foreach my $r (sort keys %{$$msg{$host}{recipList}}) {
+		foreach my $r (sort keys %{$$msg{$messageId}{recipList}}) {
 			sqlExec ($statement, 
-				$$msg{$host}{arriveTime}?$$msg{$host}{arriveTime}:'0000-00-00 00:00:00', 
-				$$msg{$host}{recipList}{$r}{leaveTime}?$$msg{$host}{recipList}{$r}{leaveTime}:
-				'0000-00-00 00:00:00',
-				$host, $$msg{ID}, $$msg{$host}{recipList}{$r}{nextID},
-				$$msg{$host}{sender}, $r, $$msg{$host}{recipList}{$r}{amavisPid},
-				$$msg{$host}{bytes}, $$msg{$host}{prevHost}, 
-				$$msg{$host}{prevIp}, $$msg{$host}{recipList}{$r}{nextHost}, 
-				$$msg{$host}{recipList}{$r}{nextIp}, $$msg{$host}{recipList}{$r}{status});
+				$$msg{$messageId}{arriveTime}?
+					$$msg{$messageId}{arriveTime}:
+					'0000-00-00 00:00:00', 
+				$$msg{$messageId}{recipList}{$r}{leaveTime}?
+					$$msg{$messageId}{recipList}{$r}{leaveTime}:
+					'0000-00-00 00:00:00',
+				$$msg{$messageId}{host}, $messageId,
+				$$msg{$messageId}{sender}, $r, 
+				$$msg{$messageId}{recipList}{$r}{amavisPid}, $$msg{$messageId}{bytes}, 
+				$$msg{$messageId}{prevHost}, $$msg{$messageId}{prevIp}, 
+				$$msg{$messageId}{recipList}{$r}{nextHost}, 
+				$$msg{$messageId}{recipList}{$r}{nextIp}, 
+				$$msg{$messageId}{recipList}{$r}{status});
 		}
 	}
 	return $last;

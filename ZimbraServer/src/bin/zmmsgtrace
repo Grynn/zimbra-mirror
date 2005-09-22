@@ -116,77 +116,14 @@ sub getMsgIds {
 	my $ary;
 
 	my %uniqIds = ();
-
-	if ($searchId ne "") {
-		push @clauses, "msg like '%".$searchId."%'";
-	}
-
-	# ID: from=<sender>
-	if ($sender ne "") {
-		push @clauses, "msg like '%from=<%".$sender."%>%'";
-	}
-
-	# ID: to=<recip> ... queued as QID
-	if ($recip ne "" && $sender eq "") {
-		push @clauses, "msg like '%to=<%".$recip."%>%queued as %'";
-	}
-
-	if ($startTime) {
-		push @clauses, "log_date >= '".$startTime."'";
-	}
-
-	if ($endTime) {
-		push @clauses, "log_date <= '".$endTime."'";
-	}
-
-	if ($sourceIp) {
-		push @clauses, "msg like '%client=%".$sourceIp."%'";
-	}
-
-	if ($destIp) {
-		push @clauses, "msg like '%relay=%".$destIp."%'";
-	}
-
-	$statement = "select log_date, host, pid, msg from raw_logs ".
-		"where app like \'%postfix%\'";
-
-	foreach (@clauses) {
-		$statement .= " and $_";
-	}
-
-	#print "$statement\n\n";
-
-	$ary = execSelect($statement);
-	foreach my $row (@$ary) {
-		my $id = (split (':',$$row[3]))[0];
-		$uniqIds{$id} = $id;
-	}
-
-	foreach my $id (sort keys %uniqIds) {
-		$whereClause = '%queued as '.$id.'%';
-		my $statement = "select log_date, host, pid, msg from raw_logs ".
-			"where app like \'%postfix%\' and msg like \'$whereClause\'";
-		my $ary = execSelect($statement);
-		if ($#$ary >= 0) {
-			delete $uniqIds{$id};
-		}
-	}
+	my @clauses = ();
 
 	my $count = 0;
 
-	foreach my $id (sort keys %uniqIds) {
-		#print "Tracing msg: $id\n";
-		$count++;
-		displayMsg (traceMsg($id));
-	}
-
-	# Now look in the processed logs
-
 	%uniqIds = ();
-	@clauses = ();
 
 	if ($searchId ne "") {
-		push @clauses, "msgid='".$searchId."' or next_msgid='".$searchId."'";
+		push @clauses, "msgid='".$searchId."'";
 	}
 
 	if ($sender ne "") {
@@ -229,22 +166,6 @@ sub getMsgIds {
 		$uniqIds{$id} = $id;
 	}
 
-	# Iterate back to find the id of the original message
-	# Probably a faster way...  maybe I should store this in the db
-	my $done = 0;
-	while (!$done) {
-		$done = 1;
-		foreach my $id (sort keys %uniqIds) {
-			my $st = "select distinct(msgid) from mta where next_msgid='".$id."'";
-			my $ary = execSelect($st);
-			if ($#$ary >= 0) {
-				$done = 0;
-				delete $uniqIds{$id};
-				$uniqIds{${$$ary[0]}[0]} = ${$$ary[0]}[0];
-			}
-		}
-	}
-
 	foreach my $id (sort keys %uniqIds) {
 		#print "Tracing msg: $id\n";
 		$count++;
@@ -263,61 +184,128 @@ sub displayMsg {
 	my $sender = $options{s};
 	my $recip = $options{r};
 
-	foreach my $host (sort keys %{$msg}) {
-		if ($host eq "ID") {next;}
+	foreach my $msgId (sort keys %{$msg}) {
 
 		if ($recip ne "" && $only eq "") {
 			my $found = 0;
-			foreach my $r ( sort keys %{$$msg{$host}{recipList}} ) {
-				if ($r !~ /$recip/o) {next;}
-				$found = 1; last;
+			foreach my $fromIP ( sort keys %{$$msg{$msgId}} ) {
+				foreach my $r ( sort keys %{$$msg{$msgId}{$fromIP}{recipList}} ) {
+					if ($r !~ /$recip/o) {next;}
+					$found = 1; last;
+				}
+				if ($found) {last;}
 			}
 			if (!$found) {next;}
 		} 
-		
-		if ($sender ne "") {
-			if ($$msg{$host}{sender} !~ /$sender/) {next;}
+
+		# We need to back trace to see if $fromIP is 
+		# entered as a toIP in $$msg{$msgId}
+		my $firstIP;
+
+		foreach ( keys %{$$msg{$msgId}} ) {
+			# Just grab the first key and backtrack
+			$firstIP = $_;
+			last;
 		}
 
-		if ($indent eq "") {
-			print "\n";
-			print "Message ID $$msg{ID}\n";
-			print "$$msg{$host}{sender} -->\n";
+		my %beenthere = ();
+		my $done = 0;
+		TOP: while (!$done) {
+			$beenthere{$firstIP} = $firstIP;
 
-			foreach my $r ( sort keys %{$$msg{$host}{recipList}} ) {
-				print "\t\t$r";
-				print $$msg{$host}{recipList}{$r}{origRecip}?
-					" (originally to $$msg{$host}{recipList}{$r}{origRecip})\n":"\n";
+			foreach ( keys %{$$msg{$msgId}} ) {
+				foreach my $r (keys %{$$msg{$msgId}{$_}{recipList}}) {
+					if ($$msg{$msgId}{$_}{recipList}{$r}{nextIp} eq $firstIP) {
+						$firstIP = $_;
+						if (defined ($beenthere{$firstIP})) {
+							$done=1;
+							next TOP;
+						}
+						$done = 0;
+						next TOP;
+					}
+				}
 			}
-			print "\n";
+			$done = 1;
 
-			$indent = "  ";
 		}
 
-		foreach my $r ( sort keys %{$$msg{$host}{recipList}} ) {
+		$done = 0;
+
+		if ($sender ne "") {
+			if ($$msg{$msgId}{$firstIP}{sender} !~ /$sender/) {next;}
+		}
+
+		print "\n";
+		print "Message ID $msgId\n";
+		print "$$msg{$msgId}{$firstIP}{sender} -->\n";
+
+		foreach my $r ( sort keys %{$$msg{$msgId}{$firstIP}{recipList}} ) {
+			print "\t\t$r";
+			print $$msg{$msgId}{$firstIP}{recipList}{$r}{origRecip}?
+				" (originally to $$msg{$msgId}{$firstIP}{recipList}{$r}{origRecip})\n":"\n";
+		}
+		print "\n";
+
+		foreach my $r ( sort keys %{$$msg{$msgId}{$firstIP}{recipList}} ) {
 			if (defined ($recip) && $r !~ /$recip/o) {next;}
 			if (defined ($only) && $r ne $only) {next;}
 
-			print "$indent", "Recipient $r\n";
-			print "$indent","$indent",
-				"$$msg{$host}{arriveTime} - $$msg{$host}{prevHost} ",
-				"($$msg{$host}{prevIp}) --> $host\n";
-			print "$indent","$indent",
-				"$$msg{$host}{recipList}{$r}{leaveTime} - $host --> ",
-				"$$msg{$host}{recipList}{$r}{nextHost} ($$msg{$host}{recipList}{$r}{nextIp})";
-			if (defined ($$msg{$host}{recipList}{$r}{nextID})) {
-				print " ID $$msg{$host}{recipList}{$r}{nextID}{ID}";
-			}
-			print " status $$msg{$host}{recipList}{$r}{status}";
-			print "\n";
+			my $curIP = $firstIP;
 
-			if (defined ($$msg{$host}{recipList}{$r}{nextID})) {
-				displayMsg($$msg{$host}{recipList}{$r}{nextID}, "$indent  ", $r);
+			$indent = "  ";
+
+
+			my %beenthere = ();
+
+			while (defined($$msg{$msgId}{ $curIP })) {
+				$beenthere{$curIP} = $curIP;
+				printMessage($msg, $msgId, $r, $curIP, $indent);
+				if (defined( $$msg{$msgId}{$curIP}{recipList}{$r}{amavisPid} )) {
+
+					$indent = $indent."  ";
+
+					print $indent, $$msg{$msgId}{$curIP}{recipList}{$r}{amavis}{arriveTime},
+						" ", $$msg{$msgId}{$curIP}{recipList}{$r}{amavis}{disposition},
+						" by amavisd on ",$$msg{$msgId}{$curIP}{recipList}{$r}{amavis}{host},
+						" (", $$msg{$msgId}{$curIP}{recipList}{$r}{amavis}{status};
+					print $$msg{$msgId}{$curIP}{recipList}{$r}{amavis}{reason}?
+						" - ".$$msg{$msgId}{$curIP}{recipList}{$r}{amavis}{reason}:"";
+					print ") HITS: ",
+						$$msg{$msgId}{$curIP}{recipList}{$r}{amavis}{hits}," in ",
+						$$msg{$msgId}{$curIP}{recipList}{$r}{amavis}{time}," ms\n";
+
+				}
+				$indent = $indent."  ";
+				$curIP = $$msg{$msgId}{$curIP}{recipList}{$r}{nextIp};
+
+				if (defined ($beenthere{$curIP})) {
+					last;
+				}
+
 			}
 
 		}
 
 	}
+}
+
+sub printMessage {
+	my $msg = shift;
+	my $msgId = shift;
+	my $r = shift;
+	my $curIP = shift;
+	my $indent = shift;
+
+	if ($indent eq "  ") { print "\n","$indent", "Recipient $r\n"; }
+	print "$indent",
+		"$$msg{$msgId}{$curIP}{recipList}{$r}{arriveTime} - $$msg{$msgId}{$curIP}{prevHost} ",
+		"($$msg{$msgId}{$curIP}{prevIp}) --> $$msg{$msgId}{$curIP}{host}\n";
+	print "$indent",
+		"$$msg{$msgId}{$curIP}{recipList}{$r}{leaveTime} - $$msg{$msgId}{$curIP}{host} --> ",
+		"$$msg{$msgId}{$curIP}{recipList}{$r}{nextHost} ($$msg{$msgId}{$curIP}{recipList}{$r}{nextIp})";
+	print " status $$msg{$msgId}{$curIP}{recipList}{$r}{status}";
+	print "\n";
 }
 
 sub traceProcessedMsg {
@@ -328,111 +316,69 @@ sub traceProcessedMsg {
 	my %msg = ();
 
 	my $statement = 
-		"select recipient from mta where msgid='".$msgId."'";
+		"select distinct(from_IP) from mta where msgid='".$msgId."'";
+	my $fary = execSelect($statement);
 
-	my $rary = execSelect($statement);
 
-	foreach my $r (@$rary) {
-		my $recip = $$r[0];
+	foreach my $f (@$fary) {
 
-		my $statement =
-			"select arrive_time, leave_time, host, msgid, next_msgid, ".
-			"sender, recipient, status, from_host, from_IP, to_host, to_IP ".
-			"from mta where msgid='".$msgId."' and recipient='".$recip."'";
+		my $fromIP = $$f[0];
 
-		my $ary = execSelect($statement);
+		my $statement = 
+			"select distinct(recipient) from mta where msgid='".$msgId.
+				"' and from_IP='".$fromIP."'";
 
-		$msg{ID} = $msgId;
+		my $rary = execSelect($statement);
 
-		foreach my $row (@$ary) {
-			my $host = $$row[2];
-			$msg{$host}{arriveTime} = $$row[0];
-			$msg{$host}{prevHost} = $$row[8];
-			$msg{$host}{prevIp} = $$row[9];
-			$msg{$host}{sender} = $$row[5]?$$row[5]:"postmaster";
+		foreach my $r (@$rary) {
+			my $recip = $$r[0];
 
-			$msg{$host}{recipList}{$recip}{leaveTime} = $$row[1];
-			$msg{$host}{recipList}{$recip}{recip} = $recip;
-			$msg{$host}{recipList}{$recip}{nextHost} = $$row[10];
-			$msg{$host}{recipList}{$recip}{nextIp} = $$row[11];
-			$msg{$host}{recipList}{$recip}{status} = $$row[7];
-			if ($$row[4]) {
-				$msg{$host}{recipList}{$recip}{nextID} = 
-					traceProcessedMsg($$row[4], $msg{$host}{recipList}{$recip}{nextID});
+			my $statement =
+				"select arrive_time, leave_time, host, ".
+				"sender, recipient, status, from_host, from_IP, to_host, to_IP, ".
+				"amavis_pid ".
+				"from mta where msgid='".$msgId."' and recipient='".$recip."' ".
+				"and from_IP='".$fromIP."'";
+
+			my $ary = execSelect($statement);
+
+			foreach my $row (@$ary) {
+				$msg{$msgId}{$fromIP}{recipList}{$recip}{arriveTime} = $$row[0];
+				$msg{$msgId}{$fromIP}{recipList}{$recip}{leaveTime} = $$row[1];
+				$msg{$msgId}{$fromIP}{host} = $$row[2];
+				$msg{$msgId}{$fromIP}{sender} = $$row[3]?$$row[3]:"postmaster";
+
+				$msg{$msgId}{$fromIP}{recipList}{$recip}{recip} = $recip;
+
+				$msg{$msgId}{$fromIP}{recipList}{$recip}{status} = $$row[5];
+				$msg{$msgId}{$fromIP}{prevHost} = $$row[6];
+				$msg{$msgId}{$fromIP}{prevIp} = $$row[7];
+				$msg{$msgId}{$fromIP}{recipList}{$recip}{nextHost} = $$row[8];
+				$msg{$msgId}{$fromIP}{recipList}{$recip}{nextIp} = $$row[9];
+				if (defined ($$row[10])) {
+					$msg{$msgId}{$fromIP}{recipList}{$recip}{amavisPid} = $$row[10];
+				}
 			}
+			if (defined ($msg{$msgId}{$fromIP}{recipList}{$recip}{amavisPid})) {
 
-		}
-	}
-	return (\%msg);
+				$statement =
+					"select arrive_time, msgid, disposition, status, reason, hits, time, host ".
+					"from amavis where msgid='".$msgId."' ".
+					"and pid='".$msg{$msgId}{$fromIP}{recipList}{$recip}{amavisPid}."'";
 
-}
+				$ary = execSelect($statement);
 
-sub traceMsg {
-	my $msgId = shift;
-
-	#print "Tracing message $msgId\n\n";
-
-	#$messages{$msgId} = getMsgById ($msgId);
-	my $ary = getMsgById ($msgId);
-
-	my %msg = ();
-
-	$msg{ID} = $msgId;
-
-	# Rows are: date host app pid msg
-	foreach my $row (@$ary) {
-		my ($date, $host, $app, $pid, $msg) = (@$row);
-
-		#print "ROW: $date, $host, $app, $pid, $msg\n\n";
-
-		($msg =~ "^$msgId: (removed|message-id)") && next;
-
-		if ($msg =~ /^${msgId}: client=([^[]+)\[(.*)\]/) {
-			$msg{$host}{arriveTime} = $date;
-			$msg{$host}{prevHost} = $1;
-			$msg{$host}{prevIp} = $2;
-			next;
-		}
-
-		if ($msg =~ /^${msgId}: from=<(.*)>/) {
-			$msg{$host}{sender} = $1?$1:"postmaster";
-			next;
-		}
-
-		if ($msg =~ /^${msgId}: to=<([^>]*)>, relay=([^[]+)\[?(.*)\]?, delay=\d+, status=(\S+) (.*)/) {
-			if (! defined ($msg{$host}{recipList})) {
-				$msg{$host}{recipList} = ();
+				foreach my $row (@$ary) {
+					$msg{$msgId}{$fromIP}{recipList}{$recip}{amavis}{arriveTime} = $$row[0];
+					$msg{$msgId}{$fromIP}{recipList}{$recip}{amavis}{msgid} = $$row[1];
+					$msg{$msgId}{$fromIP}{recipList}{$recip}{amavis}{disposition} = $$row[2];
+					$msg{$msgId}{$fromIP}{recipList}{$recip}{amavis}{status} = $$row[3];
+					$msg{$msgId}{$fromIP}{recipList}{$recip}{amavis}{reason} = $$row[4];
+					$msg{$msgId}{$fromIP}{recipList}{$recip}{amavis}{hits} = $$row[5];
+					$msg{$msgId}{$fromIP}{recipList}{$recip}{amavis}{time} = $$row[6];
+					$msg{$msgId}{$fromIP}{recipList}{$recip}{amavis}{host} = $$row[7];
+				}
 			}
-			my $r = $1;
-			$msg{$host}{recipList}{$r}{leaveTime} = $date;
-			$msg{$host}{recipList}{$r}{recip} = $r;
-			$msg{$host}{recipList}{$r}{nextHost} = $2;
-			$msg{$host}{recipList}{$r}{nextIp} = $3;
-			$msg{$host}{recipList}{$r}{status} = $4;
-			if ($5 =~ /queued as (.*)\)/) {
-				$msg{$host}{recipList}{$r}{nextID} = 
-					traceMsg($1, $msg{$host}{recipList}{$r}{nextID});
-			}
-			next;
-		}
-
-		if ($msg =~ /^${msgId}: to=<([^>]*)>, orig_to=<([^>]*)>, relay=([^[]+)\[(.*)\], delay=\d+, status=(\S+) (.*)/) {
-			if (! defined ($msg{$host}{recipList})) {
-				$msg{$host}{recipList} = ();
-			}
-			my $r = $1;
-			$msg{$host}{recipList}{$r}{leaveTime} = $date;
-			$msg{$host}{recipList}{$r}{recip} = $r;
-			$msg{$host}{recipList}{$r}{origRecip} = $2;
-			$msg{$host}{recipList}{$r}{nextHost} = $3;
-			$msg{$host}{recipList}{$r}{nextIp} = $4;
-			$msg{$host}{recipList}{$r}{status} = $5;
-
-			if ($6 =~ /queued as (.*)\)/) {
-				$msg{$host}{recipList}{$r}{nextID} = 
-					traceMsg($1, $msg{$host}{recipList}{$r}{nextID});
-			}
-			next;
 		}
 
 	}
