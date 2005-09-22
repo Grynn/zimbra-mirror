@@ -193,7 +193,7 @@ sub getMsgIds {
 		push @clauses, "sender like '%".$sender."%'";
 	}
 
-	if ($recip ne "" && $sender eq "") {
+	if ($recip ne "") {
 		push @clauses, "recipient like '%".$recip."%'";
 	}
 
