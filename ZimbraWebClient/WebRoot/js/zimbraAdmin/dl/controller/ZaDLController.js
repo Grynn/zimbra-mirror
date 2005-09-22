@@ -31,7 +31,6 @@ function ZaDLController (appCtxt, container, abApp, domain) {
 	this._domain = domain;
 	this._createListeners();
 	this._createToolbars();
-	this._views = {};
 }
 
 ZaDLController.prototype = new ZaController();
@@ -41,13 +40,9 @@ ZaDLController.prototype.toString = function () {
 	return "ZaDLController";
 };
 
-ZaDLController.ALL_DL_VIEW = "ZaDLController.ALL_DISTRIBUTION_LIST_VIEW";
 ZaDLController.NEW_DL_VIEW = "ZaDLController.NEW_DISTRIBUTION_LIST_VIEW";
-ZaDLController.EDIT_DL_VIEW = "ZaDLController.EDIT_DISTRIBUTION_LIST_VIEW";
-ZaDLController._validViewIds = {};
-ZaDLController._validViewIds[ZaDLController.ALL_DL_VIEW] = true;
-ZaDLController._validViewIds[ZaDLController.NEW_DL_VIEW] = true;
-ZaDLController._validViewIds[ZaDLController.EDIT_DL_VIEW] = true;
+ZaDLController.MODE_NEW = 1;
+ZaDLController.MODE_EDIT = 2;
 
 //===============================================================
 // initialization methods
@@ -55,29 +50,17 @@ ZaDLController._validViewIds[ZaDLController.EDIT_DL_VIEW] = true;
 ZaDLController.prototype._createListeners = function () {
 	this._listeners = {};
 	this._listeners[ZaOperation.SAVE] = new AjxListener(this, this._saveListener);
-	this._listeners[ZaOperation.NEW] = new AjxListener(this, this._newListener);
-	this._listeners[ZaOperation.EDIT] = new AjxListener(this, this._editListener);
-	this._listeners[ZaOperation.DELETE] = new AjxListener(this, this._deleteListener);
 	this._listeners[ZaOperation.CLOSE] = new AjxListener(this, this._cancelNewListener);
 };
 
 ZaDLController.prototype._createToolbars = function () {
-	this._toolbars = {};
 	var ops = [
 			   new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis",
 							   this._listeners[ZaOperation.SAVE]),
 			   new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Cancel, ZaMsg.DLTBB_Cancel_tt, "Close", "CloseDis",
 							   this._listeners[ZaOperation.CLOSE])
 			   ];
-	this._toolbars[ZaDLController.NEW_DL_VIEW] = this._toolbars[ZaDLController.EDIT_DL_VIEW] = new ZaToolBar(this._container, ops);
-
-	ops = [
-		   new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.DLTBB_New_tt, "New", "NewDis", this._listeners[ZaOperation.NEW]),
-		   new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.DLTBB_Edit_tt, "Edit", "EditDis", this._listeners[ZaOperation.EDIT]),
-		   new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.DLTBB_Delete_tt, "Delete", "DeleteDis", this._listeners[ZaOperation.DELETE])
-		   ];
-
-	this._toolbars[ZaDLController.ALL_DL_VIEW] = new ZaToolBar(this._container, ops);
+	this._toolbar = new ZaToolBar(this._container, ops);
 };
 
 //===============================================================
@@ -99,31 +82,12 @@ ZaDLController.prototype.getDummyDistributionLists = function () {
 /**
  *
  */
-ZaDLController.prototype.show = function(searchResult) {
-	// currently we're showing the new screen, but it should jsut show a listing of all
-	// distribution lists for the given domain.
-	var searchResultArray = null;
-	if (searchResult && searchResult.list != null) {
-		searchResultArray = new Array()
-		var arr = searchResult.list.getArray();
-		var cnt = arr.length;
-		for(var ix = 0; ix < cnt; ix++) {
-			searchResultArray.push(arr[ix]);
-		}
-	}
-	
-	//searchResultArray = ["fuddy-duddy@zimbra.com","ui-team@zimbra.com", "culolulo@zimbra.com", "HackWilson@zimbra.com"];
-	//this._setView(ZaDLController.NEW_DL_VIEW, searchResultArray);
-	this._setView(ZaDLController.ALL_DL_VIEW, searchResultArray);
+ZaDLController.prototype.show = function(distributionList, mode) {
+	this._viewMode = mode;
+	distributionList.memberPool = [];
+	this._setView(distributionList);
 };
 
-ZaDLController.prototype.getAllDistributionLists = function () {
-	var soapDoc = AjxSoapDoc.create("GetAllDistributionListsRequest", "urn:zimbraAdmin", null);
-	soapDoc.setMethodAttribute("domain", this._domain);
-	soapDoc.setMethodAttribute("limit", "25");
-	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false);
-	// 	this.initFromDom(resp.firstChild);
-};
 
 ZaDLController.prototype._updateOperations = 
 function (optionalOps, optionalDisOps) {
@@ -131,107 +95,67 @@ function (optionalOps, optionalDisOps) {
 	var ops = (optionalOps != null)? optionalOps : null;
 	// if both ops, and disOps have not been specified, use our standard rules
 	if (ops == null && disOps == null) {
-		switch (this._currentViewId) {
-			
-		case ZaDLController.ALL_DL_VIEW:
-			var cnt = this._views[this._currentViewId].getSelectionCount();
-		
-			if (cnt < 1) {
-				disOps = [ZaOperation.EDIT, ZaOperation.DELETE];
-				ops = [ZaOperation.NEW];
-			} else if (cnt > 1) {
-				ops = [ZaOperation.NEW, ZaOperation.DELETE];
-				disOps = [ZaOperation.EDIT];
-			} else {
-				ops = [ZaOperation.NEW, ZaOperation.EDIT, ZaOperation.DELETE];
-				disOps = null;
-			}
-			break;
-		case ZaDLController.EDIT_DL_VIEW:
-			// no break
-		case ZaDLController.NEW_DL_VIEW:
-			ops = [ZaOperation.CLOSE];
-			disOps = [ZaOperation.SAVE];
-			break;
-		}
+		ops = [ZaOperation.CLOSE];
+		disOps = [ZaOperation.SAVE];
 	}
 	if (disOps != null) {
-		this._toolbars[this._currentViewId].enable(disOps, false);
+		this._toolbar.enable(disOps, false);
 	} 
 	if (ops != null) {
-		this._toolbars[this._currentViewId].enable(ops, true);
+		this._toolbar.enable(ops, true);
 	}
 };
 
 //===============================================================
 // view accessor methods
 //===============================================================
-ZaDLController.prototype._isValidView = function (id) {
-	return (ZaDLController._validViewIds[id] != null);
-};
 
+ZaDLController.prototype.getViewMode = function () {
+	return this._viewMode;
+};
 /** 
  * view factory method
  */
 ZaDLController.prototype._getView = function (id, args) {
-	if (this._isValidView(id)){
-		var view = this._views[id];
-		var toolbar = this._toolbars[id];
-		if (view == null) {
-			switch (id) {
-			case ZaDLController.EDIT_DL_VIEW:
-				// no break
-				// args should be a distribution list
-				args.editMode = true;
-			case ZaDLController.NEW_DL_VIEW:
-				var xModelObj = new XModel(ZaDLController.distributionListXModel);
-				args.editMode = false;
-				view = new XForm(this._getNewViewXForm(), xModelObj, args, this._container);
-				var ls = new AjxListener(this, this._itemUpdatedListener);
-				view.addListener(DwtEvent.XFORMS_VALUE_CHANGED, ls);
-				view.setController(this);
-				view.draw();
-				view.getHtmlElement().style.position = "absolute";
-
-// 				ZaDLController.memberPoolChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST, "name", "name");
-// 				ZaDLController.memberChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST, "name", "name");
-				view.setData = function (dl) {
-					// data is probably a ZaItem that doesn't have dl details
-					dl.getMembers();
-					//					ZaDLController.memberList.setChoices(dl.getMembersArray());
-					view.setInstance(dl);
-				};
-				this._views[id] = view;
-				this._dlView = view;
-				break;
-			case ZaDLController.ALL_DL_VIEW:
-				// get the distribution lists, and render them
-				// toolbar should have new, edit, delete, back and forward 
-				//this.getAllDistributionLists();
-				args = this.getDummyDistributionLists();
-				view = new ZaDLListView(this._container, this._app);
-				view.addSelectionListener(new AjxListener(this, this._listSelectionListener));
-				this._views[id] = view;
-				break;
-			default:
-				view = null;
-				break;
-			}
+	var view = this._dlView;
+	var toolbar = this._toolbar;
+	if (view == null) {
+		switch (id) {
+		case ZaDLController.NEW_DL_VIEW:
+			var xModelObj = new XModel(ZaDLController.distributionListXModel);
+			view = new XForm(this._getNewViewXForm(), xModelObj, args, this._container);
+			var ls = new AjxListener(this, this._itemUpdatedListener);
+			view.addListener(DwtEvent.XFORMS_VALUE_CHANGED, ls);
+			view.setController(this);
+			view.draw();
+			view.getHtmlElement().style.position = "absolute";
+			var controller = this;
+			view.setData = function (dl) {
+				// data is probably a ZaItem that doesn't have dl details
+				//if (controller._viewMode == ZaDLController.MODE_EDIT) dl.getMembers();
+				dl.getMembers();
+				view.setInstance(dl);
+			};
+			this._dlView = view;
+			break;
+		default:
+			view = null;
+			break;
 		}
-		// if the view has a setData handler, and arguments were passed to us,
-		// call it now
-		if (view.setData != null && args != null) {
-			view.setData(args);
-		}
-		var elements = {};
-		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = toolbar;
-		elements[ZaAppViewMgr.C_APP_CONTENT] = view;
-		return elements;
 	}
-	return null;
+	// if the view has a setData handler, and arguments were passed to us,
+	// call it now
+	if (view.setData != null && args != null) {
+		view.setData(args);
+	}
+	var elements = {};
+	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = toolbar;
+	elements[ZaAppViewMgr.C_APP_CONTENT] = view;
+	return elements;
 };
 
-ZaDLController.prototype._setView = function (id, args) {
+ZaDLController.prototype._setView = function (args) {
+	var id = ZaDLController.NEW_DL_VIEW;
 	// get the view from our stash
 	var elements = this._getView(id, args);
 	// get the app container from the app view manager
@@ -239,23 +163,13 @@ ZaDLController.prototype._setView = function (id, args) {
 	// if the app container from the app view manager is null,
 	// create the app container
 	if (view == null) {
-		var popCallback = new AjxCallback(this, this._popViewCallback);
-		//this._app.getAppViewMgr().createView(id, this._app.getName(), [this._toolbar, newView], staleCallback);
-		this._app.createView(id, elements, popCallback);
+		this._app.createView(id, elements);
 	}
-	// if we are not the view currently visible,
-	// then push our view onto the app view stack
-	if (id != this._currentViewId) {
-		this._app.pushView(id);
-	}
+
+	this._app.pushView(id);
 	// set our current view tracker.
 	this._currentViewId = id;
 	this._updateOperations();
-};
-
-ZaDLController.prototype._popViewCallback = function () {
-	this._currentViewId = null;
-	return true;
 };
 
 ZaController.prototype.getControllerForView = function( viewId ) {
@@ -266,39 +180,28 @@ ZaController.prototype.getControllerForView = function( viewId ) {
 // button listener methods
 //===============================================================
 ZaDLController.prototype._saveListener = function (ev) {
-	DBG.println("SAVE NOT IMPLEMENTED");
-//  	var dl = this._views[ZaDLController.NEW_DL_VIEW].getInstance();
-//  	dl.save();
-};
-
-ZaDLController.prototype._editListener = function (ev) {
-	var selection = this._views[this._currentViewId].getSelection()[0];
-	this._setView(ZaDLController.NEW_DL_VIEW, selection);
-};
-
-ZaDLController.prototype._deleteListener = function (ev) {
-	DBG.println("DLController._deleteListener not implemented");
+	//DBG.println("SAVE NOT IMPLEMENTED");
+	try { 
+		var dl = this._dlView.getInstance();
+		if (this.getViewMode() == ZaDLController.MODE_EDIT){
+			dl.saveEdits();
+		} else {
+			dl.saveNew();
+		}
+		this._close();
+	} catch (ex) {
+		this._handleException(ex, "ZaDLController.prototype._saveListener", null, false);
+	}
 };
 
 ZaDLController.prototype._cancelNewListener = function (ev) {
 	// Cancel is only on the new screen, so go back to the list of
 	// distribution lists
-	//this._setView(ZaDLController.ALL_DL_VIEW);
-	this._app.getAccountListController().show();
+	this._close();
 };
 
-ZaDLController.prototype._newListener = function (ev) {
-	this._setView(ZaDLController.NEW_DL_VIEW, null);
-};
-
-ZaDLController.prototype._listSelectionListener = function(ev) {
-	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
-		if(ev.item) {
-			this._setView(ZaDLController.NEW_DL_VIEW, ev.item);
-		}
-	} else {
-		this._updateOperations();
-	}
+ZaDLController.prototype._close = function () {
+	this._app.getAccountListController().show();	
 };
 
 ZaDLController.prototype._itemUpdatedListener = function (event) {
@@ -328,7 +231,7 @@ ZaDLController.prototype._setSearchResults = function (searchResults) {
 		t.id = arr[i].id;
 		tmpArr.push(t);
 	}
-	this._views[this._currentViewId].getInstance().memberPool = tmpArr;
+	this._dlView.getInstance().memberPool = tmpArr;
 	this._dlView.refresh();
 };
 
@@ -345,7 +248,6 @@ ZaDLController.prototype._searchListener = function (event, formItem) {
 		this.setQuery(searchQuery);
 		var results = ZaSearch.searchByQueryHolder(searchQuery, 1, null, null, this._app);
 		this._setSearchResults(results);
-		this._memberPoolSelection = null;
 		form.refresh();
 	} catch (ex) {
 		// Only restart on error if we are not initialized and it isn't a parse error
@@ -560,12 +462,8 @@ ZaDLController.prototype.addAddressToMembers = function (event, formItem) {
 	}
 };
 /**
- * Highly suspect function. The DwtAddRemove widget, doesn't really play the 
- * XForm game very well -- it doesn't just listen to model changes. It expects
- * the caller to poke the view with new data, at which time, the model gets changed
- * as well. Here, we're trying to get the data from the optional add box, to put
- * it into the target list.
  */
+ZaDLController._IDS = 0;
 ZaDLController.prototype.addFreeFormAddressToMembers = function (event, formItem) {
  	var form = formItem.getForm();
 	var instance = formItem.getForm().getInstance();
@@ -573,13 +471,13 @@ ZaDLController.prototype.addFreeFormAddressToMembers = function (event, formItem
 	// get the current value of the textfied
  	var val = form.get("optionalAdd");
  	var item = new String(val);
- 	item.id = "id_" + val;
+	item.id = "ZADLV_"+ ZaDLController._IDS++
+ 	//item.id = "id_" + val;
 	members.add(item);
 	instance.optionalAdd = null;
 	form.refresh();
 };
 
-ZaDLController._IDS = 0;
 ZaDLController.distributionListXModel = {
 	getMemberPool: function (model, instance) {
 		return instance.memberPool;
@@ -611,17 +509,10 @@ ZaDLController.distributionListXModel = {
 	},
 
 	items: [
-	{id: "name", type:_STRING_},
+	{id: "name", type:_STRING_, setter:"setName", setterScope: _INSTANCE_},
 	{id: "members", type:_LIST_, getter: "getMembersArray", getterScope:_MODEL_, setter: "setMembersArray", setterScope:_MODEL_},
 	{id: "memberPool", type:_LIST_, setter:"setMemberPool", getterScope:_MODEL_},
 	{id: "optionalAdd", type:_UNTYPED_},
 	{id: "searchText", type:_STRING_}
 	]
-};
-
-dummyInstance = {
-	list:[],
-	list2:[],
-	junk:"junk",
-	optionalAdd:"EMPTY"
 };

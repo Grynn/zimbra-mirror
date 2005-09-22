@@ -3449,6 +3449,19 @@ Dwt_List_XFormItem.prototype.constructWidget = function () {
 	}	
 	var localLs = new AjxListener(this, this._handleSelection);
 	widget.addSelectionListener(localLs);
+
+	widget._setNoResultsHtml = function() {
+		var buffer = new AjxBuffer();
+		var	div = this.getDocument().createElement("div");
+		
+		buffer.append("<table width='100%' cellspacing='0' cellpadding='1'>",
+					  "<tr><td class='NoResults'><br>&nbsp",
+					  "</td></tr></table>");
+
+		div.innerHTML = buffer.toString();
+		widget._addRow(div);
+	}
+
 	return widget;
 };
 
@@ -3459,45 +3472,14 @@ Dwt_List_XFormItem.prototype.getSelection = function () {
 Dwt_List_XFormItem.prototype._handleSelection = function (event) {
 	this.getForm().refresh();
 };
-// Dwt_List_XFormItem.prototype._handleSelection = function (event) {
-// 	var listView = event.dwtObj;
-// 	var newSelection = listView.getSelection();
-
-// 	// if we have a modelItem which is a LIST type
-// 	//	convert the output to the propert outputType
-// 	var modelItem = this.getModelItem();
-// 	if (modelItem && modelItem.getOutputType) {
-// 		if (modelItem.getOutputType() == _STRING_) {
-// 			newSelection = newSelection.join(modelItem.getItemDelimiter());
-// 		}
-// 	} else {
-// 		// otherwise assume we should convert it to a comma-separated string
-// 		newSelection = newSelection.join(",");
-// 	}
-// 	this.getForm().itemChanged(this, newSelection, event);
-// };
 
 Dwt_List_XFormItem.prototype.insertWidget = function (form, widget, element) {
 	this.getForm()._reparentDwtObject(widget, this.getContainer());
 };
 
 Dwt_List_XFormItem.prototype.updateWidget = function (newValue) {
-// 	DBG.println("********* update list item: newValue = ", newValue);
-// 	DBG.println("********* update list item: isArray(newValue) = ", AjxUtil.isArray(newValue));
-// 	debugger;
-// 	var choices = this.getChoices();
-// 	var tmpArr = new Array();
-// 	for (var i = 0; i < choices.length; i++) {
-// 		tmpArr.push(choices[i].label);
-// 	}
-// 	this.widget.set(AjxVector.fromArray(tmpArr));
-	
-// 	// set the selection
-// 	if (newValue != null) {
-// 		this.widget.setSelectedItems(newValue);
-// 	}
 	if (typeof (newValue) != 'undefined') {
-	this.widget.set(AjxVector.fromArray(newValue));
+		this.widget.set(AjxVector.fromArray(newValue));
 	}
 };
 

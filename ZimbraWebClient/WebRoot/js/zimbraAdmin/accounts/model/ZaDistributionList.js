@@ -23,13 +23,14 @@
  * ***** END LICENSE BLOCK *****
  */
 
-function ZaDistributionList(app, id, name, memberList, description) {
+function ZaDistributionList(app, id, name, memberList, description, notes) {
 	ZaItem.call(this, app);
 	this.attrs = new Object();
 	this.id = (id != null)? id: null;
 	this.name = (name != null) ? name: null;
-	this._memberList = (memberList != null)? AjxVector.fromArray(memberList): new AjxVector;
+	this._memberList = (memberList != null)? AjxVector.fromArray(memberList): null;
 	this.description = (description != null)? description : null;
+	this.notes = (notes != null) ? notes: null;
 	this._dirty = true;
 }
 
@@ -40,81 +41,61 @@ ZaDistributionList.EMAIL_ADDRESS = "ZDLEA";
 ZaDistributionList.DESCRIPTION = "ZDLDESC";
 ZaDistributionList.ID = "ZDLID";
 
-/**
- * inserts items into the list at the given index.
- * If index is -1, then all items are inserted at the end of the list
- */
-ZaDistributionList.prototype.insert = function (index, emailList) {
-	if (emailList instanceof Array) {
-		for (var i = emailList.length; i > 0; --i ){
-			this._memberList.add(emailList[i], index);
-		}
-	} else {
-		this._memberList.add(email, index);
+ZaDistributionList.prototype.saveEdits = function () {
+	if (this.isDirty()) {
+		var sd = AjxSoapDoc.create("ModifyDistributionListRequest", "urn:zimbraAdmin", null);
+		sd.set("id", this.id);
+		throw "Saving edited Distribution lists is not currently supported";
+		//return this._save(sd, "ModifyDistributionListResponse");
 	}
-	this.markChanged();
 };
 
-/**
- * Removes items from the list starting at the given index.
- * 
- */
-ZaDistributionList.prototype.removeMember = function (index, emailList) {
-	if (list instanceof Array) {
-		for (var i = emailList.length; i > 0; --i ){
-			this._memberList.remove(emailList[i]);
-		}
+ZaDistributionList.prototype.saveNew = function () {
+	if (this.isDirty()) {
+		var sd = AjxSoapDoc.create("CreateDistributionListRequest", "urn:zimbraAdmin", null);
+		return this._save(sd, "CreateDistributionListResponse");
 	}
-	this._memberList.removeAt(index);
-	this.markChanged();
 };
 
 /**
  * Save any changes made to the list. If no changes have been
  * made, the function returns false;
  */
-ZaDistributionList.prototype.save = function () {
-	DBG.println("Is list dirty? ", this.isDirty());
+ZaDistributionList.prototype._save = function (soapDoc, respName) {
+	//DBG.println("Is list dirty? ", this.isDirty());
 	var app = this._app;
 	if (this.isDirty()) {
-		var sd, reqName, respName;
-		if (!this.editMode) {
-			reqName = "CreateDistributionListRequest";
-			respName = "CreateDistributionListResponse";
-			sd = AjxSoapDoc.create("CreateDistributionListRequest", "urn:zimbraAdmin", null);
-		} else {
-			reqName = "ModifyDistributionListRequest";
-			respName = "ModifyDistributionListResponse";
-		}
-		sd = AjxSoapDoc.create(reqName, "urn:zimbraAdmin", null);
-		sd.set("name", this.getName());
+		soapDoc.set("name", this.getName());
 		var a, key;
 		for (key in this.attrs) {
 			if (this.attrs[key] != null) {
-				a = createSoapDoc.set("a", this.attrs[key]);
+				if (key == "objectClass" || key == "zimbraId" || key == "uid") {
+						continue;
+				}
+				a = soapDoc.set("a", this.attrs[key]);
 				a.setAttribute("n", key);
 			}
 		}
 		
 		try {
-			var resp = ZmCsfeCommand.invoke(sd, null, null, null, false).Body[respName];
+			var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false).Body[respName];
 			this.id = resp.dl[0].id;
 			DBG.dumpObj(resp);
 
 			var membersArray = this.getMembersArray();
 			var len = membersArray.length;
 			var addMemberSoapDoc, r;
-			DBG.println("membersArray = ", membersArray);
 			for (var i = 0; i < len; ++i) {
 				addMemberSoapDoc = AjxSoapDoc.create("AddDistributionListMemberRequest", "urn:zimbraAdmin", null);
 				addMemberSoapDoc.set("id", this.id);
 				addMemberSoapDoc.set("dlm", membersArray[i].toString());
 				r = ZmCsfeCommand.invoke(addMemberSoapDoc, null, null, null, false).AddDistributionListMemberResponse;
-				DBG.dumpObj(r);
+				//DBG.dumpObj(r);
 			}
 			
 		} catch (ex) {
 			DBG.dumpObj(ex);
+			throw ex;
 			// TODO:
 			// hmm ... if we fail adding any one ofthe members, but the list creation succeeded ...
 			// how should we tell the user this ....
@@ -143,7 +124,7 @@ ZaDistributionList.prototype.initFromDom = function(node) {
 	this.name = node.getAttribute("name");
 	this.id = node.getAttribute("id");
 	this.attrs = new Object();
-	
+
 	var children = node.childNodes;
 	for (var i=0; i< children.length;  i++) {
 		var child = children[i];
@@ -163,11 +144,10 @@ ZaDistributionList.prototype.initFromDom = function(node) {
 				}
 			}
 		} else if (child.nodeName == 'member') {
+			if (this._memberList == null) this._memberList = new AjxVector();
 			this._memberList.add(child.getAttribute('name'));
 		}
 	}
-	DBG.dumpObj(this, false, 1);
-	DBG.dumpObj(this._memberList);
 };
 
 ZaDistributionList.prototype.getId = function () {
@@ -188,8 +168,9 @@ ZaDistributionList.prototype.setName = function (name) {
 
 ZaDistributionList.ATTR_MEMBER = "zimbraMailForwardingAddress";
 // TODO -- handle dynamic limit and offset
-ZaDistributionList.prototype.getMembers = function () {
-	if (this._memberList == null) {
+ZaDistributionList.prototype.getMembers = function (force) {
+	//DBG.println("Get members: memberList = " , this._memberList, "$");
+	if ((this._memberList == null || (force == true)) && (this.id != null)) {
 		var soapDoc = AjxSoapDoc.create("GetDistributionListRequest", "urn:zimbraAdmin", null);
 		soapDoc.setMethodAttribute("limit", "25");
 		soapDoc.setMethodAttribute("offset", "0");
@@ -212,12 +193,17 @@ ZaDistributionList.prototype.getMembers = function () {
 			// TODO -- exception handling
 			DBG.dumpObj(ex);
 		}
+	} else if (this._memberList == null){
+		this._memberList = new AjxVector();
 	}
 	return this._memberList;
 };
 
 ZaDistributionList.prototype.getMembersArray = function () {
-	return this._memberList.getArray();
+	if (this._memberList != null){
+		return this._memberList.getArray();
+	}
+	return [];
 };
 
 ZaDistributionList.prototype.setMembers = function (list) {

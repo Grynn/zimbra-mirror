@@ -424,7 +424,7 @@ ZaAccountListController.prototype._newDistributionListListener =
 function(ev) {
 	try {
 		var newDL = new ZaDistributionList(this._app);
-		this._app.getDistributionListController()._setView(ZaDLController.NEW_DL_VIEW, newDL);
+		this._app.getDistributionListController().show(newDL, ZaDLController.NEW_DL_VIEW);
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountListController.prototype._newDistributionListListener", null, false);
 	}
@@ -473,7 +473,7 @@ ZaAccountListController.prototype._editItem = function (item) {
 		//this._selectedItem = ev.item;
 		this._app.getAccountViewController().show(item);
 	} else if (type == ZaItem.DL) {
-		this._app.getDistributionListController()._setView(ZaDLController.EDIT_DL_VIEW, item);
+		this._app.getDistributionListController().show(item, ZaDLController.MODE_EDIT);
 	} else if(type == ZaItem.ALIAS) {
 		account = new ZaAccount(this._app);
 		if(item.attrs && item.attrs[ZaAlias.A_AliasTargetId]) {
