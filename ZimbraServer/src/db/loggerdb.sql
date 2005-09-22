@@ -36,7 +36,7 @@ GRANT ALL ON zimbra_logger.* TO 'root'@'localhost.localdomain' IDENTIFIED BY 'zi
 # Raw log data
 
 CREATE TABLE raw_logs (
-	id					INTEGER UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	id					BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	log_date			DATETIME NOT NULL,
 	host				VARCHAR(255) NOT NULL,
 	app					VARCHAR(64) NOT NULL,
