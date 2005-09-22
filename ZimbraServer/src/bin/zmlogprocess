@@ -80,10 +80,10 @@ sub processMta {
 		}
 		print "Inserted $count rows\n";
 
-		#saveLastRowId("mta", $lastRowID);
+		saveLastRowId("mta", $lastRowID);
 	}
 
-	#deleteRawLogs("mta", $lastRowID);
+	deleteRawLogs("mta", $lastRowID);
 }
 
 sub processSendmail {
@@ -217,9 +217,9 @@ sub processAmavis {
 
 			}
 		}
-		#saveLastRowId("amavis", $lastRowID);
+		saveLastRowId("amavis", $lastRowID);
 	}
-	#deleteRawLogs("amavis", $lastRowID);
+	deleteRawLogs("amavis", $lastRowID);
 }
 
 sub getMessage {
