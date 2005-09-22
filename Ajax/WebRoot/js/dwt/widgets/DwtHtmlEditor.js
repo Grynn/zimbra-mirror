@@ -420,9 +420,8 @@ function() {
 	var iFrame = doc.createElement("iframe");
 	iFrame.id = this._iFrameId;
 	iFrame.className = "DwtHtmlEditorIFrame";
-	if (AjxEnv.isIE && location.protocol == "https:") {
-		iFrame.src = (this._blankIframeSrc != null)? this._blankIframeSrc: "";
-	}
+	if (AjxEnv.isIE && location.protocol == "https:")
+		iFrame.src = this._blankIframeSrc || "";
 	htmlEl.appendChild(iFrame);
 	
 	return iFrame;
