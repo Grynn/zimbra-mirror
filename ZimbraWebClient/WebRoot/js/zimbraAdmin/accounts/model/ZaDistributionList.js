@@ -29,9 +29,9 @@ function ZaDistributionList(app, id, name, memberList, description, notes) {
 	this.id = (id != null)? id: null;
 	this.name = (name != null) ? name: null;
 	this._memberList = (memberList != null)? AjxVector.fromArray(memberList): null;
-	this.description = (description != null)? description : null;
-	this.notes = (notes != null) ? notes: null;
 	this._dirty = true;
+	if (description != null) this.attrs.description = description;
+	if (notes != null) this.attrs.zimbraNotes = notes;
 }
 
 ZaDistributionList.prototype = new ZaItem;
@@ -58,12 +58,24 @@ ZaDistributionList.prototype.clone = function () {
 	return dl;
 };
 
+ZaDistributionList.prototype.remove = function () {
+	var sd = AjxSoapDoc.create("DeleteDistributionListRequest", "urn:zimbraAdmin", null);
+	sd.set("id", this.id);
+	var resp = ZmCsfeCommand.invoke(sd, null, null, null, false);
+	return resp;
+};
+
 ZaDistributionList.prototype.saveEdits = function () {
 	if (this.isDirty()) {
-		var sd = AjxSoapDoc.create("ModifyDistributionListRequest", "urn:zimbraAdmin", null);
-		sd.set("id", this.id);
-		throw "Saving edited Distribution lists is not currently supported";
+		//var sd = AjxSoapDoc.create("ModifyDistributionListRequest", "urn:zimbraAdmin", null);
+		//sd.set("id", this.id);
+		//throw "Saving edited Distribution lists is not currently supported";
 		//return this._save(sd, "ModifyDistributionListResponse");
+
+		// TODO - when the backend api for Modify changes, fix this hack.
+		// This is until there is a better way of modifying a distribution list.
+		this.remove();
+		return this.saveNew();
 	}
 };
 
@@ -79,7 +91,6 @@ ZaDistributionList.prototype.saveNew = function () {
  * made, the function returns false;
  */
 ZaDistributionList.prototype._save = function (soapDoc, respName) {
-	//DBG.println("Is list dirty? ", this.isDirty());
 	var app = this._app;
 	if (this.isDirty()) {
 		soapDoc.set("name", this.getName());
@@ -97,7 +108,6 @@ ZaDistributionList.prototype._save = function (soapDoc, respName) {
 		try {
 			var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false).Body[respName];
 			this.id = resp.dl[0].id;
-			DBG.dumpObj(resp);
 
 			var membersArray = this.getMembersArray();
 			var len = membersArray.length;
@@ -107,7 +117,6 @@ ZaDistributionList.prototype._save = function (soapDoc, respName) {
 				addMemberSoapDoc.set("id", this.id);
 				addMemberSoapDoc.set("dlm", membersArray[i].toString());
 				r = ZmCsfeCommand.invoke(addMemberSoapDoc, null, null, null, false).AddDistributionListMemberResponse;
-				//DBG.dumpObj(r);
 			}
 			
 		} catch (ex) {
@@ -183,7 +192,23 @@ ZaDistributionList.prototype.setName = function (name) {
 	this.name = name;
 };
 
-ZaDistributionList.ATTR_MEMBER = "zimbraMailForwardingAddress";
+ZaDistributionList.prototype.setDescription = function (description) {
+	this.attrs.description = description;
+};
+
+ZaDistributionList.prototype.getDescription = function (description) {
+	return this.attrs.description;
+};
+
+ZaDistributionList.prototype.setNotes = function (notes) {
+	this.attrs.zimbraNotes = notes;
+};
+
+ZaDistributionList.prototype.getNotes = function (notes) {
+	return this.attrs.zimbraNotes;
+};
+
+
 // TODO -- handle dynamic limit and offset
 ZaDistributionList.prototype.getMembers = function (force) {
 	//DBG.println("Get members: memberList = " , this._memberList, "$");
@@ -206,6 +231,7 @@ ZaDistributionList.prototype.getMembers = function (force) {
 				}
 			}
 			this.id = resp.dl[0].id;
+			this.attrs = resp.dl[0]._attrs;
 		} catch (ex) {
 			// TODO -- exception handling
 			DBG.dumpObj(ex);
