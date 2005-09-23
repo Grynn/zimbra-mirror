@@ -69,26 +69,12 @@ function() {
  */
 DwtSelect.prototype._createTable =
 function() {
-	if (AjxEnv.isIE) {
-		var tableId = Dwt.getNextId();
-		var html = [];
-		var idx = 0;
-		html[idx++] = "<table id='";
-		html[idx++] = tableId;
-		html[idx++] = "'><colgroup><col><col style='width:23px'></colgroup><tr></tr></table>";
-		this.getHtmlElement().innerHTML = html.join("");
-		this._table = document.getElementById(tableId);
-		this._row = this._table.rows[0];
-	} else {
-		// not sure why this doesn't work for IE. The colgroup never gets applied.
-		this._table = this.getDocument().createElement("table");
-			var colgroup = document.createElement('colgroup');
-		colgroup.innerHTML = "<col><col><col style='width:23px'>";
-		this._table.appendChild(colgroup);	
-		this._row = this._table.insertRow(0);
-		this.getHtmlElement().appendChild(this._table);
-	}
-		// Left is the default alignment. Note that if we do an explicit align left, Firefox freaks out
+	this._table = this.getDocument().createElement("table");
+	this._table.id = Dwt.getNextId();
+	this._row = this._table.insertRow(-1);
+	this.getHtmlElement().appendChild(this._table);
+	
+	// Left is the default alignment. Note that if we do an explicit align left, Firefox freaks out
 	if (this._style & DwtLabel.ALIGN_RIGHT)
 		this._table.align = "right";
 	else if (!(this._style & DwtLabel.ALIGN_LEFT)) {
