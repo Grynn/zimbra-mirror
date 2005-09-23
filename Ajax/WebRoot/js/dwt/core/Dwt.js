@@ -128,35 +128,35 @@ function(htmlElement, event) {
 Dwt.getBackgroundRepeat =
 function(htmlElement) {
 	return DwtCssStyle.getProperty(htmlElement, "background-repeat");
-}
+};
 
 Dwt.setBackgroundRepeat =
 function(htmlElement, style) {
 	htmlElement.style.backgroundRepeat = style;
-}
+};
 
 Dwt.getBounds =
 function(htmlElement, incScroll) {
 	var loc = Dwt.getLocation(htmlElement);
 	var size = Dwt.getSize(htmlElement, incScroll);
 	return new DwtRectangle(loc.x, loc.y, size.x, size.y);
-}
+};
 
 Dwt.setBounds =
 function(htmlElement, x, y, width, height) {
 	Dwt.setLocation(htmlElement, x, y);
 	Dwt.setSize(htmlElement, width, height);
-}
+};
 
 Dwt.getCursor = 
 function(htmlElement) {
 	return DwtCssStyle.getProperty(htmlElement, "cursor");
-}
+};
 
 Dwt.setCursor =
 function(htmlElement, cursorName) {
 	htmlElement.style.cursor = cursorName;
-}
+};
 
 
 Dwt.getLocation =
@@ -166,7 +166,7 @@ function(htmlElement) {
 		                    parseInt(DwtCssStyle.getProperty(htmlElement, "top")));
 	else
 		return Dwt.toWindow(htmlElement, 0, 0);
-}
+};
 
 Dwt.setLocation =
 function(htmlElement, x, y) {
@@ -178,7 +178,7 @@ function(htmlElement, x, y) {
 		htmlElement.style.left = x;
 	if (y = Dwt.checkPxVal(y))
 		htmlElement.style.top = y;
-}
+};
 
 Dwt.checkPxVal =
 function(val, check) {
@@ -192,17 +192,17 @@ function(val, check) {
 		val = val + "px";
 
 	return val;
-}
+};
 
 Dwt.getPosition =
 function(htmlElement) {
 	return htmlElement.style.position;
-}
+};
 
 Dwt.setPosition =
 function(htmlElement, posStyle) {
 	htmlElement.style.position = posStyle;
-}
+};
 
 Dwt.getScrollStyle =
 function(htmlElement) {
@@ -215,7 +215,7 @@ function(htmlElement) {
 		return Dwt.FIXED_SCROLL;
 	else
 		return Dwt.VISIBLE;
-}
+};
 
 Dwt.setScrollStyle =
 function(htmlElement, scrollStyle) {
@@ -227,7 +227,7 @@ function(htmlElement, scrollStyle) {
 		htmlElement.style.overflow = "scroll";
 	else
 		htmlElement.style.overflow = "visible";
-}
+};
 
 // Note: in FireFox, offsetHeight includes border and clientHeight does not;
 // may want to look at clientHeight for FF
@@ -247,7 +247,7 @@ function(htmlElement, incScroll) {
 	p.x = parseInt(p.x);
 	p.y = parseInt(p.y);
 	return p;
-}
+};
 
 Dwt.setSize = 
 function(htmlElement, width, height) {
@@ -255,7 +255,7 @@ function(htmlElement, width, height) {
 		htmlElement.style.width = width;
 	if (height = Dwt.checkPxVal(height, true))
 		htmlElement.style.height = height;
-}
+};
 
 /**
 * Measure the extent in pixels of a section of html
@@ -272,48 +272,40 @@ function(html) {
 	}
 	Dwt._measureDiv.innerHTML = html;
 	return Dwt.getSize(Dwt._measureDiv);
-}
+};
 
 Dwt.getVisible =
 function(htmlElement) {
 	var disp = DwtCssStyle.getProperty(htmlElement, "display");
 	return (disp != "none");
-}
+};
 
 Dwt.setVisible =
 function(htmlElement, visible) {
-	if (visible) {
-  		htmlElement.style.display= "block";
-	} else {
-		htmlElement.style.display = "none";
-	}
-}
+	htmlElement.style.display = visible ? "block" : "none";
+};
 
 Dwt.getVisibility =
 function(htmlElement) {
 	var vis = DwtCssStyle.getProperty(htmlElement, "visibility");
 	return (vis == "visible");
-}
+};
 
 Dwt.setVisibility =
 function(htmlElement, visible) {
-	if (visible) {
-  		htmlElement.style.visibility = "visible";
-	} else {
-		htmlElement.style.visibility = "hidden";
-	}
-}
+	htmlElement.style.visibility = visible ? "visible" : "hidden";
+};
 
 Dwt.getZIndex =
 function(htmlElement) {
 	return DwtCssStyle.getProperty(htmlElement, "z-index");
-}
+};
 
 Dwt.setZIndex =
 function(htmlElement, idx) {
 //DBG.println(AjxDebug.DBG3, "set zindex for " + htmlElement.className + ": " + idx);
 	htmlElement.style.zIndex = idx;
-}
+};
 
 Dwt.toWindow =
 function(htmlElement, x, y, containerElement) {
@@ -331,34 +323,34 @@ function(htmlElement, x, y, containerElement) {
 		offsetParent = offsetParent.offsetParent;
 	}
 	return p;
-}
+};
 
 Dwt.setStatus =
 function(text) {
 	window.status = text;
-}
+};
 
 Dwt.getTitle = 
 function(text) {
 	return window.document.title;
-}
+};
 
 Dwt.setTitle = 
 function(text) {
 	window.document.title = text;
-}
+};
 
 Dwt.getIframeDoc = 
 function(iframeObj) {
 	return AjxEnv.isIE 
 		? (iframeObj ? iframeObj.contentWindow.document : null)
 		: iframeObj.contentDocument;
-}
+};
 
 Dwt.getIframeWindow = 
 function(iframeObj) {
 	return iframeObj.contentWindow;
-}
+};
 
 Dwt._ffOverflowHack = 
 function (htmlElId, myZindex, lowThresholdZ, turnOffOverflowScroll, disableSelf) {
@@ -427,25 +419,25 @@ function (htmlElId, myZindex, lowThresholdZ, turnOffOverflowScroll, disableSelf)
 /**
  * returns a node for the given tag
  */
-Dwt.parseHtmlFragment = function (htmlStr, tagName) {
-	if (!Dwt._divBuffer) {
+Dwt.parseHtmlFragment = 
+function(htmlStr, tagName) {
+	if (!Dwt._divBuffer)
 		Dwt._divBuffer = document.createElement('div');
-	}	
+
 	var html = htmlStr;
-	if (tagName && tagName == "TR"){
+	if (tagName && tagName == "TR")
 		html = "<table style='table-layout:fixed'>" + htmlStr + "</table>";
-	}
+
 	var div = Dwt._divBuffer;
 	div.innerHTML = html;
-	if (tagName && tagName == "TR"){
-		return div.firstChild.rows[0];
-	} else {
-		return div.firstChild;
-	}
+	
+	return (tagName && tagName == "TR")
+		? div.firstChild.rows[0]
+		: div.firstChild;
 };
 
 Dwt.contains = 
-function (parentEl, childEl) {
+function(parentEl, childEl) {
   	var isContained = false;
   	if (AjxEnv.isSafari) {
   		return false;
@@ -465,4 +457,26 @@ Dwt.removeChildren =
 function(htmlEl) {
 	while (htmlEl.hasChildNodes())
 		htmlEl.removeChild(htmlEl.firstChild);
-}
+};
+
+/**
+* Safari always returns zero for cellIndex property of TD element :(
+*
+* @param cell		TD object we want cell index for
+*/
+Dwt.getCellIndex = 
+function(cell) {
+	if (AjxEnv.isSafari) {
+		if (cell.tagName && cell.tagName.toLowerCase() == "td") {
+			// get the cells collection from the TD's parent TR
+			var cells = cell.parentNode.cells;
+			for (var i = 0; i < cells.length; i++) {
+				if (cells[i] == cell)
+					return i;
+			}
+		}
+	} else {
+		return cell.cellIndex;
+	}
+	return -1;
+};

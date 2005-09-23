@@ -276,7 +276,8 @@ function () {
 DwtMenu.prototype._removeChild =
 function(child) {
 	if (this._style == DwtMenu.BAR_STYLE) {
-		this._table.rows[0].deleteCell(child.getHtmlElement().parentNode.cellIndex);
+		var cell = child.getHtmlElement().parentNode;
+		this._table.rows[0].deleteCell(Dwt.getCellIndex(cell));
 	} else {
 		/* If the item we are removing is check/radio style, and it is the last such item in the menu, then we 
 		 * must instruct our other children to delete a "checked column" to ensure that things line up */

@@ -217,7 +217,7 @@ DwtButton.prototype.setMenu =
 			this._setupDropDownCellMouseHandlers();
 		}
 	} else if (!menu && this._dropDownCell) {
-		this._row.deleteCell(this._dropDownCell.cellIndex);
+		this._row.deleteCell(Dwt.getCellIndex(this._dropDownCell));
 		this._dropDownCell = null;
 	}
 }

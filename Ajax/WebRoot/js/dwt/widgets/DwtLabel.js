@@ -153,9 +153,10 @@ function() {
 */
 DwtLabel.prototype.setText =
 function(text) {
-	if (text == null) {
+	if (text == null || text == "") {
 		if (this._textCell != null) {
-			this._row.deleteCell(this._textCell.cellIndex);
+			var cellIndex = Dwt.getCellIndex(this._textCell);
+			this._row.deleteCell(cellIndex);
 		}
 	} else {
 		if (this._text == null) {
@@ -170,12 +171,8 @@ function(text) {
 				idx = (this._imageCell != null) ? 1 : 0;
 			}
 			this._textCell = this._row.insertCell(idx);
-				
-			if (this._enabled)
-				this._textCell.className = "Text";
-			else
-				this._textCell.className = "DisabledText";
-				
+			this._textCell.className = this._enabled ? "Text" : "DisabledText";
+
 			this._doAlign();
 			this._textCell.noWrap = true;
 			this._textCell.appendChild(this._text);
@@ -189,13 +186,11 @@ function(alignStyle) {
 	
 	// reset dom since alignment style may have changed
 	if (this._textCell) {
-		//this._row.deleteCell(this._textCell.cellIndex);
 		this._row.removeChild(this._textCell);
 		this._textCell = null;
 		this.setText(this._text.data)
 	}
 	if (this._imageCell) {
-		//this._row.deleteCell(this._imageCell.cellIndex);
 		this._row.removeChild(this._imageCell);
 		this._imageCell = null;
 		this._setImage(this._imageInfo);
@@ -209,7 +204,8 @@ DwtLabel.prototype._setImage =
 function(imageInfo) {
 	if (!imageInfo) {
 		if (this._imageCell) {
-			this._row.deleteCell(this._imageCell.cellIndex);
+			var cellIndex = Dwt.getCellIndex(this._imageCell);
+			this._row.deleteCell(cellIndex);
 		}
 	} else {
 		var idx;
