@@ -132,7 +132,7 @@ function(entry) {
 	this._localXForm.setInstance(this._containedObject);	
 }
 
-
+/*
 ZaGALConfigXWizard.prototype.generateLDAPUrl = 
 function () {
 	var ldapURL = "";
@@ -146,7 +146,7 @@ function () {
 	ldapURL +=this._containedObject.attrs[ZaDomain.A_GALServerPort];
 	ldapURL +="/";
 	this._containedObject.attrs[ZaDomain.A_GalLdapURL] = ldapURL;
-}
+}*/
 
 /**
 * static change handlers for the form
@@ -160,7 +160,7 @@ function (value, event, form) {
 	}
 	this.setInstanceValue(value);	
 }
-
+/*
 ZaGALConfigXWizard.onUseSSLChange =
 function (value, event, form) {
 	if(value == "TRUE") {
@@ -171,22 +171,25 @@ function (value, event, form) {
 	this.setInstanceValue(value);
 	form.parent.generateLDAPUrl();
 }
+*/
 
-
+/*
 ZaGALConfigXWizard.onGALServerChange = 
 function (value, event, form) {
 //	form.getInstance().attrs[ZaDomain.A_GALServerName] = value;
 	this.setInstanceValue(value);
 	form.parent.generateLDAPUrl();
 }
+*/
 
+/*
 ZaGALConfigXWizard.onGALServerPortChange = 
 function (value, event, form) {
 //	form.getInstance().attrs[ZaDomain.A_GALServerPort] = value;
 	this.setInstanceValue(value);
 	form.parent.generateLDAPUrl();
 }
-
+*/
 
 ZaGALConfigXWizard.onGalModeChange = 
 function (value, event, form) {
@@ -196,13 +199,14 @@ function (value, event, form) {
 		if(!form.getInstance().attrs[ZaDomain.A_GALServerType]) {
 			form.getInstance().attrs[ZaDomain.A_GALServerType] = "ldap";
 		}
-		if(!form.getInstance().attrs[ZaDomain.A_GalLdapURL]) {
+		/*
+		if(!form.getInstance().attrs[ZaDomain.A_GalLdapURL] && form.getInstance().attrs[ZaDomain.A_GalLdapURL].length==0) {
 			form.getInstance().attrs[ZaDomain.A_GALServerPort] = 389;
-			form.getInstance().attrs[ZaDomain.A_GalLdapURL] = "";			
+			form.getInstance().attrs[ZaDomain.A_GalLdapURL] = new Array();			
 			form.getInstance().attrs[ZaDomain.A_GALUseSSL] = "FALSE";
 			form.getInstance().attrs[ZaDomain.A_GALServerName] = "";
 			form.getInstance().attrs[ZaDomain.A_UseBindPassword] = "TRUE";
-		}
+		}*/
 		if(!form.getInstance().attrs[ZaDomain.A_GalLdapSearchBase]) {
 			if(form.getInstance().attrs[ZaDomain.A_domainName]) {
 				var parts = form.getInstance().attrs[ZaDomain.A_domainName].split(".");
@@ -342,9 +346,15 @@ function () {
 					{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 2 && instance.attrs[ZaDomain.A_GalMode]!=ZaDomain.GAL_Mode_internal", relevantBehavior:_HIDE_,
 						items: [
 							{ref:ZaDomain.A_GALServerType, type:_OSELECT1_, label:ZaMsg.Domain_GALServerType, labelLocation:_LEFT_, choices:this.GALServerTypes, onChange:ZaGALConfigXWizard.onGALServerTypeChange},
-							{ref:ZaDomain.A_GALServerName, type:_INPUT_, label:ZaMsg.Domain_GALServerName, labelLocation:_LEFT_, onChange:ZaGALConfigXWizard.onGALServerChange},					
+							{ref:ZaDomain.A_GalLdapURL, type:_REPEAT_, label:ZaMsg.Domain_GalLdapURL+":", repeatInstance:"ldap://server:389", showAddButton:true, showRemoveButton:true,  
+								items: [
+									{ref:".", type:_LDAPURL_, label:null, labelLocation:_NONE_}
+								]
+							},
+							/*{ref:ZaDomain.A_GALServerName, type:_INPUT_, label:ZaMsg.Domain_GALServerName, labelLocation:_LEFT_, onChange:ZaGALConfigXWizard.onGALServerChange},					
 							{ref:ZaDomain.A_GALServerPort, type:_INPUT_, label:ZaMsg.Domain_GALServerPort, labelLocation:_LEFT_,onChange:ZaGALConfigXWizard.onGALServerPortChange},
 							{ref:ZaDomain.A_GALUseSSL, type:_CHECKBOX_, label:ZaMsg.Domain_GALUseSSL, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE", onChange:ZaGALConfigXWizard.onUseSSLChange,labelCssClass:"xform_label", align:_LEFT_},
+							*/
 							{ref:ZaDomain.A_GalLdapFilter, type:_TEXTAREA_, width:380, height:100, label:ZaMsg.Domain_GalLdapFilter, labelLocation:_LEFT_, textWrapping:"soft", relevant:"instance.attrs[ZaDomain.A_GALServerType] == 'ldap'", relevantBehavior:_DISABLE_},
 							{ref:ZaDomain.A_GalLdapSearchBase, type:_TEXTAREA_, width:380, height:50, label:ZaMsg.Domain_GalLdapSearchBase, labelLocation:_LEFT_, textWrapping:"soft"}
 						]
@@ -371,12 +381,17 @@ function () {
 									{type:_CASE_, relevant:"instance.attrs[ZaDomain.A_GalMode]!=ZaDomain.GAL_Mode_internal", relevantBehavior:_HIDE_,
 										items: [
 											{ref:ZaDomain.A_GALServerType, type:_OUTPUT_, label:ZaMsg.Domain_GALServerType, choices:this.GALServerTypes, labelLocation:_LEFT_},
-											{ref:ZaDomain.A_GALServerName, type:_OUTPUT_, label:ZaMsg.Domain_GALServerName, labelLocation:_LEFT_},					
+/*											{ref:ZaDomain.A_GALServerName, type:_OUTPUT_, label:ZaMsg.Domain_GALServerName, labelLocation:_LEFT_},					
 											{ref:ZaDomain.A_GALServerPort, type:_OUTPUT_, label:ZaMsg.Domain_GALServerPort, labelLocation:_LEFT_},
 											{ref:ZaDomain.A_GALUseSSL, type:_OUTPUT_, label:ZaMsg.Domain_GALUseSSL, labelLocation:_LEFT_},
-											{ref:ZaDomain.A_GalLdapFilter, type:_OUTPUT_, label:ZaMsg.Domain_GalLdapFilter, labelLocation:_LEFT_, relevant:"instance.attrs[ZaDomain.A_GALServerType] == 'ldap'", relevantBehavior:_HIDE_},
+*/									
+											{ref:ZaDomain.A_GalLdapURL, type:_REPEAT_, label:ZaMsg.Domain_GalLdapURL+":", labelLocation:_LEFT_,showAddButton:false, showRemoveButton:false,
+												items:[
+													{type:_OUTPUT_, ref:".", label:null,labelLocation:_NONE_}
+												]
+											},	
+											{ref:ZaDomain.A_GalLdapFilter, type:_OUTPUT_, label:ZaMsg.Domain_GalLdapFilter, labelLocation:_LEFT_, relevant:"instance.attrs[ZaDomain.A_GALServerType] == 'ldap'", relevantBehavior:_HIDE_,required:true},
 											{ref:ZaDomain.A_GalLdapSearchBase, type:_OUTPUT_, label:ZaMsg.Domain_GalLdapSearchBase, labelLocation:_LEFT_},
-											{ref:ZaDomain.A_GalLdapURL, type:_OUTPUT_, label:ZaMsg.Domain_GalLdapURL, labelLocation:_LEFT_},
 											{ref:ZaDomain.A_UseBindPassword, type:_OUTPUT_, label:ZaMsg.Domain_UseBindPassword, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE"},
 											{ref:ZaDomain.A_GalLdapBindDn, type:_OUTPUT_, label:ZaMsg.Domain_GalLdapBindDn, labelLocation:_LEFT_, relevant:"instance.attrs[ZaDomain.A_UseBindPassword] == 'TRUE'", relevantBehavior:_HIDE_},
 //											{ref:ZaDomain.A_GalLdapBindPassword, type:_OUTPUT_, label:ZaMsg.Domain_GalLdapBindPassword, labelLocation:_LEFT_, relevant:"instance.attrs[ZaDomain.A_UseBindPassword] == 'TRUE'", relevantBehavior:_HIDE_},
@@ -411,9 +426,9 @@ function () {
 									},
 									{type:_CASE_, relevant:	"instance[ZaDomain.A_GALTestResultCode] != ZaDomain.Check_OK",
 										items: [
-											{type:_OUTPUT_, value:ZaMsg.Domain_GALTestFailed},
+											{type:_OUTPUT_, value:ZaMsg.Domain_GALTestFailed, colSpan:2},
 											{type:_OUTPUT_, ref:ZaDomain.A_GALTestResultCode, label:ZaMsg.Domain_GALTestResult, choices:this.TestResultChoices},
-											{type:_TEXTAREA_, ref:ZaDomain.A_GALTestMessage, label:ZaMsg.Domain_GALTestMessage, height:100}
+											{type:_TEXTAREA_, ref:ZaDomain.A_GALTestMessage, label:ZaMsg.Domain_GALTestMessage, height:"200px", width:"380px"}
 										]
 									}
 								]

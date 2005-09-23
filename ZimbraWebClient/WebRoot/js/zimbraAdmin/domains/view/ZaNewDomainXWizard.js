@@ -167,7 +167,7 @@ function(entry) {
 /**
 * GAL configuration
 **/
-
+/*
 ZaNewDomainXWizard.prototype.generateGALLDAPUrl = 
 function () {
 	var ldapURL = "";
@@ -182,7 +182,7 @@ function () {
 	ldapURL +="/";
 	this._containedObject.attrs[ZaDomain.A_GalLdapURL] = ldapURL;
 }
-
+*/
 /**
 * static change handlers for the form
 **/
@@ -195,7 +195,7 @@ function (value, event, form) {
 	}
 	this.setInstanceValue(value);	
 }
-
+/*
 ZaNewDomainXWizard.onGALUseSSLChange =
 function (value, event, form) {
 	if(value == "TRUE") {
@@ -205,22 +205,23 @@ function (value, event, form) {
 	}
 	this.setInstanceValue(value);
 	form.parent.generateGALLDAPUrl();
-}
-
+}*/
+/*
 ZaNewDomainXWizard.onGALServerChange = 
 function (value, event, form) {
 	form.getInstance().attrs[ZaDomain.A_GALServerName] = value;
 	this.setInstanceValue(value);
 	form.parent.generateGALLDAPUrl();
 }
-
+*/
+/*
 ZaNewDomainXWizard.onGALServerPortChange = 
 function (value, event, form) {
 	form.getInstance().attrs[ZaDomain.A_GALServerPort] = value;
 	this.setInstanceValue(value);
 	form.parent.generateGALLDAPUrl();
 }
-
+*/
 
 ZaNewDomainXWizard.onGalModeChange = 
 function (value, event, form) {
@@ -230,6 +231,7 @@ function (value, event, form) {
 		if(!form.getInstance().attrs[ZaDomain.A_GALServerType]) {
 			form.getInstance().attrs[ZaDomain.A_GALServerType] = "ldap";
 		}
+		/*
 		if(!form.getInstance().attrs[ZaDomain.A_GalLdapURL]) {
 			form.getInstance().attrs[ZaDomain.A_GALServerPort] = 389;
 			form.getInstance().attrs[ZaDomain.A_GalLdapURL] = "";			
@@ -237,6 +239,7 @@ function (value, event, form) {
 			form.getInstance().attrs[ZaDomain.A_GALServerName] = "";
 			form.getInstance().attrs[ZaDomain.A_UseBindPassword] = "TRUE";
 		}
+		*/
 		if(!form.getInstance().attrs[ZaDomain.A_GalLdapSearchBase]) {
 			if(form.getInstance().attrs[ZaDomain.A_domainName]) {
 				var parts = form.getInstance().attrs[ZaDomain.A_domainName].split(".");
@@ -311,6 +314,7 @@ function (arg) {
 /**
 * Auth config methods
 **/
+/*
 ZaNewDomainXWizard.prototype.generateAuthLDAPUrl = 
 function () {
 	var ldapURL = "";
@@ -324,9 +328,9 @@ function () {
 	ldapURL +=this._containedObject.attrs[ZaDomain.A_AuthLDAPServerPort];
 	ldapURL +="/";
 	this._containedObject.attrs[ZaDomain.A_AuthLdapURL] = ldapURL;
-}
+}*/
 
-
+/*
 ZaNewDomainXWizard.onUseAuthSSLChange =
 function (value, event, form) {
 	if(value == "TRUE") {
@@ -337,7 +341,7 @@ function (value, event, form) {
 	this.setInstanceValue(value);
 	form.parent.generateAuthLDAPUrl();
 }
-
+*/
 /**
 * Eevent handlers for form items
 **/
@@ -349,17 +353,19 @@ function (value, event, form) {
 			form.getInstance().attrs[ZaDomain.A_AuthLdapUserDn] = "%u,%D";
 		}
 	}*/ 
+	/*
 	if(value == ZaDomain.AuthMech_ldap || value == ZaDomain.AuthMech_ad) {
 		form.getInstance().attrs[ZaDomain.A_AuthLDAPServerPort] = 389;
 		form.getInstance().attrs[ZaDomain.A_AuthLDAPUseSSL] = "FALSE";
 	}
+	*/
 	if(value == ZaDomain.AuthMech_ad) {
 		if(!form.getInstance().attrs[ZaDomain.A_AuthADDomainName]) {
 			form.getInstance().attrs[ZaDomain.A_AuthADDomainName] = form.getInstance().attrs[ZaDomain.A_domainName];
 		}
 	}
 }
-
+/*
 ZaNewDomainXWizard.onAuthLDAPUseSSLChange = 
 function (value, event, form) {
 	//form.getInstance().attrs[ZaDomain.A_AuthLDAPUseSSL] = value;
@@ -371,7 +377,8 @@ function (value, event, form) {
 	this.setInstanceValue(value);	
 	form.parent.generateAuthLDAPUrl();
 }
-
+*/
+/*
 ZaNewDomainXWizard.onAuthLDAPPortChange = 
 function (value, event, form) {
 	//form.getInstance().attrs[ZaDomain.A_AuthLDAPServerPort] = val;
@@ -379,14 +386,15 @@ function (value, event, form) {
 	form.parent.generateAuthLDAPUrl();
 	
 }
-
+*/
+/*
 ZaNewDomainXWizard.onAuthLDAPServerChange = 
 function (value, event, form) {
 	this.setInstanceValue(value);	
 //	form.getInstance().attrs[ZaDomain.A_AuthLDAPServerName] = value;
 	form.parent.generateAuthLDAPUrl();
 }
-
+*/
 ZaNewDomainXWizard.prototype.testAuthSettings =
 function () {
 	if(this._containedObject.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_ad) {
@@ -553,11 +561,18 @@ function () {
 					{type:_CASE_, numCols:2, relevant:"instance[ZaModel.currentStep] == 3 && instance.attrs[ZaDomain.A_GalMode]!=ZaDomain.GAL_Mode_internal", relevantBehavior:_HIDE_,
 						items: [
 							{ref:ZaDomain.A_GALServerType, type:_OSELECT1_, label:ZaMsg.Domain_GALServerType, labelLocation:_LEFT_, choices:this.GALServerTypes, onChange:ZaNewDomainXWizard.onGALServerTypeChange},
+/*
 							{ref:ZaDomain.A_GALServerName, type:_TEXTFIELD_, label:ZaMsg.Domain_GALServerName, labelLocation:_LEFT_, onChange:ZaNewDomainXWizard.onGALServerChange},					
 							{ref:ZaDomain.A_GALServerPort, type:_TEXTFIELD_, label:ZaMsg.Domain_GALServerPort, labelLocation:_LEFT_,onChange:ZaNewDomainXWizard.onGALServerPortChange},
 							{ref:ZaDomain.A_GALUseSSL, type:_CHECKBOX_, label:ZaMsg.Domain_GALUseSSL, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE", onChange:ZaNewDomainXWizard.onGALUseSSLChange,labelCssClass:"xform_label", align:_LEFT_},
-							{ref:ZaDomain.A_GalLdapFilter, type:_TEXTFIELD_, label:ZaMsg.Domain_GalLdapFilter, labelLocation:_LEFT_, relevant:"instance.attrs[ZaDomain.A_GALServerType] == 'ldap'", relevantBehavior:_DISABLE_, width:"200px"},
-							{ref:ZaDomain.A_GalLdapSearchBase, type:_TEXTFIELD_, label:ZaMsg.Domain_GalLdapSearchBase, labelLocation:_LEFT_, width:"200px"}
+*/	
+							{ref:ZaDomain.A_GalLdapURL, type:_REPEAT_, label:ZaMsg.Domain_GalLdapURL+":", repeatInstance:"ldap://server:389", showAddButton:true, showRemoveButton:true,  
+								items: [
+									{ref:".", type:_LDAPURL_, label:null, labelLocation:_NONE_}
+								]
+							},
+							{ref:ZaDomain.A_GalLdapFilter, type:_TEXTAREA_, width:380, height:100, label:ZaMsg.Domain_GalLdapFilter, labelLocation:_LEFT_, relevant:"instance.attrs[ZaDomain.A_GALServerType] == 'ldap'", relevantBehavior:_DISABLE_},
+							{ref:ZaDomain.A_GalLdapSearchBase, type:_TEXTAREA_, width:380, height:100, label:ZaMsg.Domain_GalLdapSearchBase, labelLocation:_LEFT_}
 						]
 					},
 					{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 4 && instance.attrs[ZaDomain.A_GalMode]!=ZaDomain.GAL_Mode_internal", relevantBehavior:_HIDE_,
@@ -578,12 +593,19 @@ function () {
 									{type:_CASE_, relevant:"instance.attrs[ZaDomain.A_GalMode]!=ZaDomain.GAL_Mode_internal", relevantBehavior:_HIDE_,
 										items: [
 											{ref:ZaDomain.A_GALServerType, type:_OUTPUT_, label:ZaMsg.Domain_GALServerType, choices:this.GALServerTypes, labelLocation:_LEFT_},
+/*											
 											{ref:ZaDomain.A_GALServerName, type:_OUTPUT_, label:ZaMsg.Domain_GALServerName, labelLocation:_LEFT_},					
 											{ref:ZaDomain.A_GALServerPort, type:_OUTPUT_, label:ZaMsg.Domain_GALServerPort, labelLocation:_LEFT_},
 											{ref:ZaDomain.A_GALUseSSL, type:_OUTPUT_, label:ZaMsg.Domain_GALUseSSL, labelLocation:_LEFT_},
+*/
+											{ref:ZaDomain.A_GalLdapURL, type:_REPEAT_, label:ZaMsg.Domain_GalLdapURL+":", labelLocation:_LEFT_,showAddButton:false, showRemoveButton:false,
+												items:[
+													{type:_OUTPUT_, ref:".", label:null,labelLocation:_NONE_}
+												]
+											},											
 											{ref:ZaDomain.A_GalLdapFilter, type:_OUTPUT_, label:ZaMsg.Domain_GalLdapFilter, labelLocation:_LEFT_, relevant:"instance.attrs[ZaDomain.A_GALServerType] == 'ldap'", relevantBehavior:_HIDE_},
 											{ref:ZaDomain.A_GalLdapSearchBase, type:_OUTPUT_, label:ZaMsg.Domain_GalLdapSearchBase, labelLocation:_LEFT_},
-											{ref:ZaDomain.A_GalLdapURL, type:_OUTPUT_, label:ZaMsg.Domain_GalLdapURL, labelLocation:_LEFT_},
+										//	{ref:ZaDomain.A_GalLdapURL, type:_OUTPUT_, label:ZaMsg.Domain_GalLdapURL, labelLocation:_LEFT_},
 											{ref:ZaDomain.A_UseBindPassword, type:_OUTPUT_, label:ZaMsg.Domain_UseBindPassword, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE"},
 											{ref:ZaDomain.A_GalLdapBindDn, type:_OUTPUT_, label:ZaMsg.Domain_GalLdapBindDn, labelLocation:_LEFT_, relevant:"instance.attrs[ZaDomain.A_UseBindPassword] == 'TRUE'", relevantBehavior:_HIDE_},
 										//	{ref:ZaDomain.A_GalLdapBindPassword, type:_OUTPUT_, label:ZaMsg.Domain_GalLdapBindPassword, labelLocation:_LEFT_, relevant:"instance.attrs[ZaDomain.A_UseBindPassword] == 'TRUE'", relevantBehavior:_DISABLE_},
@@ -620,7 +642,7 @@ function () {
 										items: [
 											{type:_OUTPUT_, value:ZaMsg.Domain_GALTestFailed, colSpan:2},
 											{type:_OUTPUT_, ref:ZaDomain.A_GALTestResultCode, label:ZaMsg.Domain_GALTestResult, choices:this.TestResultChoices},
-											{type:_TEXTAREA_, ref:ZaDomain.A_GALTestMessage, label:ZaMsg.Domain_GALTestMessage, height:100,width:"320px"}
+											{type:_TEXTAREA_, ref:ZaDomain.A_GALTestMessage, label:ZaMsg.Domain_GALTestMessage, height:100,width:"380px"}
 										]
 									}
 								]
@@ -638,17 +660,31 @@ function () {
 								items: [
 									{type:_CASE_, relevant:"instance.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad",
 										items:[
+/*										
 											{ref:ZaDomain.A_AuthLDAPServerName, type:_INPUT_, width:200, label:ZaMsg.Domain_AuthADServerName, labelLocation:_LEFT_, onChange:ZaNewDomainXWizard.onAuthLDAPServerChange},
-											{ref:ZaDomain.A_AuthADDomainName, type:_INPUT_, width:200,  label:ZaMsg.Domain_AuthADDomainName, labelLocation:_LEFT_},
 											{ref:ZaDomain.A_AuthLDAPServerPort, type:_INPUT_, label:ZaMsg.Domain_AuthADServerPort, labelLocation:_LEFT_, onChange:ZaNewDomainXWizard.onAuthLDAPPortChange},
 											{ref:ZaDomain.A_AuthLDAPUseSSL, type:_CHECKBOX_, label:ZaMsg.Domain_AuthADUseSSL, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE", onChange:ZaNewDomainXWizard.onAuthLDAPUseSSLChange,labelCssClass:"xform_label", align:_LEFT_}
+*/
+											{ref:ZaDomain.A_AuthADDomainName, type:_INPUT_, width:200,  label:ZaMsg.Domain_AuthADDomainName, labelLocation:_LEFT_},
+											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL+":", repeatInstance:"ldap://server:389", showAddButton:true, showRemoveButton:true,  
+												items: [
+													{ref:".", type:_LDAPURL_, label:null, labelLocation:_NONE_}
+												]
+											}									
 										]
 									},
 									{type:_CASE_, relevant:"instance.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ldap",
 										items:[
+/*										
 											{ref:ZaDomain.A_AuthLDAPServerName, type:_INPUT_, width:200, label:ZaMsg.Domain_AuthLDAPServerName, labelLocation:_LEFT_, onChange:ZaNewDomainXWizard.onAuthLDAPServerChange},
 											{ref:ZaDomain.A_AuthLDAPServerPort, type:_INPUT_, width:200, label:ZaMsg.Domain_AuthLDAPServerPort, labelLocation:_LEFT_, onChange:ZaNewDomainXWizard.onAuthLDAPPortChange},							
 											{ref:ZaDomain.A_AuthLDAPUseSSL, type:_CHECKBOX_, label:ZaMsg.Domain_AuthLDAPUseSSL, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE", onChange:ZaNewDomainXWizard.onAuthLDAPUseSSLChange,labelCssClass:"xform_label", align:_LEFT_},
+*/	
+											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL+":", repeatInstance:"ldap://server:389", showAddButton:true, showRemoveButton:true,  
+												items: [
+													{ref:".", type:_LDAPURL_, label:null, labelLocation:_NONE_}
+												]
+											},
 											{ref:ZaDomain.A_AuthLdapSearchFilter, type:_TEXTAREA_, width:380, height:100, label:ZaMsg.Domain_AuthLdapFilter, labelLocation:_LEFT_, textWrapping:"soft"},
 											{ref:ZaDomain.A_AuthLdapSearchBase, type:_TEXTAREA_, width:380, height:50, label:ZaMsg.Domain_AuthLdapSearchBase, labelLocation:_LEFT_, textWrapping:"soft"},
 											{type:_OUTPUT_, value:ZaMsg.NAD_DomainsAuthStr, colSpan:2}
@@ -680,18 +716,32 @@ function () {
 								items: [
 									{type:_CASE_, relevant:"instance.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad", useParentTable:true,
 										items:[
-											{ref:ZaDomain.A_AuthLDAPServerName, type:_OUTPUT_, label:ZaMsg.Domain_AuthADServerName, labelCssClass:"xform_label_left"},
 											{ref:ZaDomain.A_AuthADDomainName, type:_OUTPUT_, label:ZaMsg.Domain_AuthADDomainName, labelLocation:_LEFT_},
+/*											
+											{ref:ZaDomain.A_AuthLDAPServerName, type:_OUTPUT_, label:ZaMsg.Domain_AuthADServerName, labelCssClass:"xform_label_left"},											
 											{ref:ZaDomain.A_AuthLDAPServerPort, type:_OUTPUT_, label:ZaMsg.Domain_AuthADServerPort, labelLocation:_LEFT_},
 											{ref:ZaDomain.A_AuthLDAPUseSSL, type:_OUTPUT_, label:ZaMsg.Domain_AuthADUseSSL, labelWrap:true, labelLocation:_LEFT_,choices:ZaModel.BOOLEAN_CHOICES}
+*/
+											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL+":", labelLocation:_LEFT_,showAddButton:false, showRemoveButton:false,
+												items:[
+													{type:_OUTPUT_, ref:".", label:null,labelLocation:_NONE_}
+												]
+											}											
 										]
 									},
 									{type:_CASE_, relevant:"instance.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ldap", useParentTable:true,
 										items:[
+/*										
 											{ref:ZaDomain.A_AuthLDAPServerName, type:_OUTPUT_, label:ZaMsg.Domain_AuthLDAPServerName, labelLocation:_LEFT_},
 											{ref:ZaDomain.A_AuthLDAPServerPort, type:_OUTPUT_, label:ZaMsg.Domain_AuthLDAPServerPort, labelLocation:_LEFT_},							
 											{ref:ZaDomain.A_AuthLDAPUseSSL, type:_OUTPUT_, label:ZaMsg.Domain_AuthLDAPUseSSL, labelLocation:_LEFT_,choices:ZaModel.BOOLEAN_CHOICES},
-											{ref:ZaDomain.A_AuthLdapURL, type:_OUTPUT_, label:ZaMsg.Domain_AuthLdapURL, labelLocation:_LEFT_},
+*/
+											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL+":", labelLocation:_LEFT_,showAddButton:false, showRemoveButton:false,
+												items:[
+													{type:_OUTPUT_, ref:".", label:null,labelLocation:_NONE_}
+												]
+											},											
+//											{ref:ZaDomain.A_AuthLdapURL, type:_OUTPUT_, label:ZaMsg.Domain_AuthLdapURL+":", labelLocation:_LEFT_},
 											{ref:ZaDomain.A_AuthLdapSearchFilter, type:_OUTPUT_, label:ZaMsg.Domain_AuthLdapFilter, labelLocation:_LEFT_},
 											{ref:ZaDomain.A_AuthLdapSearchBase, type:_OUTPUT_, label:ZaMsg.Domain_AuthLdapSearchBase, labelLocation:_LEFT_},
 											{ref:ZaDomain.A_AuthUseBindPassword, type:_OUTPUT_, label:ZaMsg.Domain_AuthUseBindPassword, labelLocation:_LEFT_,choices:ZaModel.BOOLEAN_CHOICES},											

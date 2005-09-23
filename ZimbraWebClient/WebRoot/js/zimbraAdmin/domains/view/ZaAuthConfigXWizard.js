@@ -113,6 +113,7 @@ function(stepNum) {
 		}
 	}
 }
+/*
 ZaAuthConfigXWizard.prototype.generateLDAPUrl = 
 function () {
 	var ldapURL = "";
@@ -127,7 +128,7 @@ function () {
 	ldapURL +="/";
 	this._containedObject.attrs[ZaDomain.A_AuthLdapURL] = ldapURL;
 }
-
+*/
 ZaAuthConfigXWizard.prototype.testSetings =
 function () {
 	if(this._containedObject.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_ad) {
@@ -173,10 +174,12 @@ function (value, event, form) {
 			form.getInstance().attrs[ZaDomain.A_AuthLdapUserDn] = "%u,%D";
 		}
 	} */
+	/*
 	if(value == ZaDomain.AuthMech_ldap || value == ZaDomain.AuthMech_ad) {
 		form.getInstance().attrs[ZaDomain.A_AuthLDAPServerPort] = 389;
 		form.getInstance().attrs[ZaDomain.A_AuthLDAPUseSSL] = "FALSE";
 	}
+	*/
 	if(value == ZaDomain.AuthMech_ad) {
 		if(!form.getInstance().attrs[ZaDomain.A_AuthADDomainName]) {
 			form.getInstance().attrs[ZaDomain.A_AuthADDomainName] = form.getInstance().attrs[ZaDomain.A_domainName];
@@ -185,7 +188,7 @@ function (value, event, form) {
 	form.parent.changeButtonStateForStep(1);
 
 }
-
+/*
 ZaAuthConfigXWizard.onLDAPPortChange = 
 function (value, event, form) {
 	this.setInstanceValue(value);
@@ -209,6 +212,7 @@ function (value, event, form) {
 	this.setInstanceValue(value);	
 	form.parent.generateLDAPUrl();
 }
+*/
 /**
 * Overwritten methods that control wizard's flow (open, go next,go previous, finish)
 **/
@@ -306,17 +310,30 @@ function () {
 								items: [
 									{type:_CASE_, relevant:"instance.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad",
 										items:[
-											{ref:ZaDomain.A_AuthLDAPServerName, type:_INPUT_, width:200, label:ZaMsg.Domain_AuthADServerName, labelLocation:_LEFT_, onChange:ZaAuthConfigXWizard.onLDAPServerChange},
-											{ref:ZaDomain.A_AuthADDomainName, type:_INPUT_, width:200,  label:ZaMsg.Domain_AuthADDomainName, labelLocation:_LEFT_},
+/*											{ref:ZaDomain.A_AuthLDAPServerName, type:_INPUT_, width:200, label:ZaMsg.Domain_AuthADServerName, labelLocation:_LEFT_, onChange:ZaAuthConfigXWizard.onLDAPServerChange},
 											{ref:ZaDomain.A_AuthLDAPServerPort, type:_INPUT_, label:ZaMsg.Domain_AuthADServerPort, labelLocation:_LEFT_, onChange:ZaAuthConfigXWizard.onLDAPPortChange},
 											{ref:ZaDomain.A_AuthLDAPUseSSL, type:_CHECKBOX_, label:ZaMsg.Domain_AuthADUseSSL, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE", onChange:ZaAuthConfigXWizard.onLDAPUseSSLChange,labelCssClass:"xform_label", align:_LEFT_}
+*/											
+											{ref:ZaDomain.A_AuthADDomainName, type:_INPUT_, width:200,  label:ZaMsg.Domain_AuthADDomainName, labelLocation:_LEFT_},
+											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL+":", repeatInstance:"ldap://server:389", showAddButton:true, showRemoveButton:true,  
+												items: [
+													{ref:".", type:_LDAPURL_, label:null, labelLocation:_NONE_}
+												]
+											}											
 										]
 									},
 									{type:_CASE_, relevant:"instance.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ldap",
 										items:[
+/*										
 											{ref:ZaDomain.A_AuthLDAPServerName, type:_INPUT_, width:200, label:ZaMsg.Domain_AuthLDAPServerName, labelLocation:_LEFT_, onChange:ZaAuthConfigXWizard.onLDAPServerChange},
 											{ref:ZaDomain.A_AuthLDAPServerPort, type:_INPUT_, width:200, label:ZaMsg.Domain_AuthLDAPServerPort, labelLocation:_LEFT_, onChange:ZaAuthConfigXWizard.onLDAPServerChange},							
 											{ref:ZaDomain.A_AuthLDAPUseSSL, type:_CHECKBOX_, label:ZaMsg.Domain_AuthLDAPUseSSL, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE", onChange:ZaAuthConfigXWizard.onLDAPUseSSLChange,labelCssClass:"xform_label", align:_LEFT_},
+*/
+											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL+":", repeatInstance:"ldap://server:389", showAddButton:true, showRemoveButton:true,  
+												items: [
+													{ref:".", type:_LDAPURL_, label:null, labelLocation:_NONE_}
+												]
+											},	
 											{ref:ZaDomain.A_AuthLdapSearchFilter, type:_TEXTAREA_, width:380, height:100, label:ZaMsg.Domain_AuthLdapFilter, labelLocation:_LEFT_, textWrapping:"soft"},
 											{ref:ZaDomain.A_AuthLdapSearchBase, type:_TEXTAREA_, width:380, height:50, label:ZaMsg.Domain_AuthLdapSearchBase, labelLocation:_LEFT_, textWrapping:"soft"},
 											{type:_OUTPUT_, value:ZaMsg.NAD_DomainsAuthStr, colSpan:2}
@@ -348,18 +365,31 @@ function () {
 								items: [
 									{type:_CASE_, relevant:"instance.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad", useParentTable:true,
 										items:[
-											{ref:ZaDomain.A_AuthLDAPServerName, type:_OUTPUT_, label:ZaMsg.Domain_AuthADServerName, labelCssClass:"xform_label_left"},
-											{ref:ZaDomain.A_AuthADDomainName, type:_OUTPUT_, label:ZaMsg.Domain_AuthADDomainName, labelLocation:_LEFT_},
+/*											{ref:ZaDomain.A_AuthLDAPServerName, type:_OUTPUT_, label:ZaMsg.Domain_AuthADServerName, labelCssClass:"xform_label_left"},
 											{ref:ZaDomain.A_AuthLDAPServerPort, type:_OUTPUT_, label:ZaMsg.Domain_AuthADServerPort, labelLocation:_LEFT_},
 											{ref:ZaDomain.A_AuthLDAPUseSSL, type:_OUTPUT_, label:ZaMsg.Domain_AuthADUseSSL, labelWrap:true, labelLocation:_LEFT_,choices:ZaModel.BOOLEAN_CHOICES}
+*/	
+											{ref:ZaDomain.A_AuthADDomainName, type:_OUTPUT_, label:ZaMsg.Domain_AuthADDomainName, labelLocation:_LEFT_},
+											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL+":", labelLocation:_LEFT_,showAddButton:false, showRemoveButton:false, 
+												items:[
+													{type:_OUTPUT_, ref:".", label:null,labelLocation:_NONE_}
+												]
+											}											
 										]
 									},
 									{type:_CASE_, relevant:"instance.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ldap", useParentTable:true,
 										items:[
+/*										
 											{ref:ZaDomain.A_AuthLDAPServerName, type:_OUTPUT_, label:ZaMsg.Domain_AuthLDAPServerName, labelLocation:_LEFT_},
 											{ref:ZaDomain.A_AuthLDAPServerPort, type:_OUTPUT_, label:ZaMsg.Domain_AuthLDAPServerPort, labelLocation:_LEFT_},							
 											{ref:ZaDomain.A_AuthLDAPUseSSL, type:_OUTPUT_, label:ZaMsg.Domain_AuthLDAPUseSSL, labelLocation:_LEFT_,choices:ZaModel.BOOLEAN_CHOICES},
 											{ref:ZaDomain.A_AuthLdapURL, type:_OUTPUT_, label:ZaMsg.Domain_AuthLdapURL, labelLocation:_LEFT_},
+*/
+											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL+":", labelLocation:_LEFT_,showAddButton:false, showRemoveButton:false, 
+												items:[
+													{type:_OUTPUT_, ref:".", label:null,labelLocation:_NONE_}
+												]
+											},	
 											{ref:ZaDomain.A_AuthLdapSearchFilter, type:_OUTPUT_, label:ZaMsg.Domain_AuthLdapFilter, labelLocation:_LEFT_},
 											{ref:ZaDomain.A_AuthLdapSearchBase, type:_OUTPUT_, label:ZaMsg.Domain_AuthLdapSearchBase, labelLocation:_LEFT_},
 											{ref:ZaDomain.A_AuthUseBindPassword, type:_OUTPUT_, label:ZaMsg.Domain_AuthUseBindPassword, labelLocation:_LEFT_,choices:ZaModel.BOOLEAN_CHOICES},											

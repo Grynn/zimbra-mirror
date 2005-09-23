@@ -71,9 +71,9 @@ ZaDomain.A_AuthLdapSearchBindPassword="zimbraAuthLdapSearchBindPassword";
 //internal attributes - not synched with the server code yet
 //GAL
 ZaDomain.A_GALServerType = "galservertype";
-ZaDomain.A_GALServerName = "galservername";
-ZaDomain.A_GALServerPort = "galserverport";
-ZaDomain.A_GALUseSSL = "galusessl";
+//ZaDomain.A_GALServerName = "galservername";
+//ZaDomain.A_GALServerPort = "galserverport";
+//ZaDomain.A_GALUseSSL = "galusessl";
 ZaDomain.A_GALTestMessage = "galtestmessage";
 ZaDomain.A_GALTestResultCode = "galtestresutcode";
 ZaDomain.A_GALSampleQuery = "samplequery";
@@ -89,10 +89,10 @@ ZaDomain.GAL_ServerType_ldap = "ldap";
 
 //Auth
 ZaDomain.A_AuthADDomainName = "zimbraAuthADDomainName";
-ZaDomain.A_AuthLDAPServerName = "zimbraAuthLDAPServerName";
+//ZaDomain.A_AuthLDAPServerName = "zimbraAuthLDAPServerName";
 ZaDomain.A_AuthLDAPSearchBase = "zimbraAuthLDAPSearchBase";
-ZaDomain.A_AuthLDAPServerPort = "zimbraAuthLDAPServerPort";
-ZaDomain.A_AuthLDAPUseSSL = "authldapusessl";
+//ZaDomain.A_AuthLDAPServerPort = "zimbraAuthLDAPServerPort";
+//ZaDomain.A_AuthLDAPUseSSL = "authldapusessl";
 ZaDomain.A_AuthTestUserName = "authtestusername";
 ZaDomain.A_AuthTestPassword = "authtestpassword";
 ZaDomain.A_AuthTestMessage = "authtestmessage";
@@ -192,14 +192,16 @@ function(tmpObj, app) {
 	attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_notes]);
 	attr.setAttribute("n", ZaDomain.A_notes);	
 	
-	attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_AuthLdapURL]);
+	var temp = tmpObj.attrs[ZaDomain.A_AuthLdapURL].join(" ");
+	attr = soapDoc.set("a", temp);
 	attr.setAttribute("n", ZaDomain.A_AuthLdapURL);		
 	
 	attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_description]);
 	attr.setAttribute("n", ZaDomain.A_description);		
 
 	if(tmpObj.attrs[ZaDomain.A_GalMode] != ZaDomain.GAL_Mode_internal) {
-		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_GalLdapURL]);
+		temp = tmpObj.attrs[ZaDomain.A_GalLdapURL].join(" ");
+		attr = soapDoc.set("a", temp);
 		attr.setAttribute("n", ZaDomain.A_GalLdapURL);	
 
 		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_GalLdapSearchBase]);
@@ -217,18 +219,29 @@ function(tmpObj, app) {
 
 	if(tmpObj.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_ad) {
 		//set bind DN to default for AD
-		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_AuthLdapURL]);
-		attr.setAttribute("n", ZaDomain.A_AuthLdapURL);	
-		
 		attr = soapDoc.set("a", "%u@"+tmpObj.attrs[ZaDomain.A_AuthADDomainName]);
 		attr.setAttribute("n", ZaDomain.A_AuthLdapUserDn);	
-
 	} else if(tmpObj.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_ldap) {
-		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_AuthLdapURL]);
-		attr.setAttribute("n", ZaDomain.A_AuthLdapURL);	
-
-		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_AuthLdapUserDn]);
-		attr.setAttribute("n", ZaDomain.A_AuthLdapUserDn);	
+	
+		if(tmpObj.attrs[ZaDomain.A_AuthLdapSearchFilter] ==null || tmpObj.attrs[ZaDomain.A_AuthLdapSearchFilter].length < 1) {
+			//show error msg
+			app.getCurrentController().popupMsgDialog(ZaMsg.ERROR_SEARCH_FILTER_REQUIRED);
+			return null;
+		}
+	
+		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_AuthLdapSearchFilter]);
+		attr.setAttribute("n", ZaDomain.A_AuthLdapSearchFilter);
+			
+		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_AuthLdapSearchBase]);
+		attr.setAttribute("n", ZaDomain.A_AuthLdapSearchBase);	
+		
+		if(tmpObj[ZaDomain.A_AuthUseBindPassword] && tmpObj[ZaDomain.A_AuthUseBindPassword] == "TRUE") {
+			attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_AuthLdapSearchBindDn]);
+			attr.setAttribute("n", ZaDomain.A_AuthLdapSearchBindDn);	
+			
+			attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_AuthLdapSearchBindPassword]);
+			attr.setAttribute("n", ZaDomain.A_AuthLdapSearchBindPassword);			
+		}
 	}
 
 	var attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_AuthMech]);
@@ -246,23 +259,28 @@ function (obj, callback) {
 	var attr = soapDoc.set("a", obj.attrs[ZaDomain.A_AuthMech]);
 	attr.setAttribute("n", ZaDomain.A_AuthMech);
 	
-	attr = soapDoc.set("a", obj.attrs[ZaDomain.A_AuthLdapURL]);
+	var temp = obj.attrs[ZaDomain.A_AuthLdapURL].join(" ");
+	attr = soapDoc.set("a", temp);
 	attr.setAttribute("n", ZaDomain.A_AuthLdapURL);	
 	
-	attr = soapDoc.set("a", obj.attrs[ZaDomain.A_AuthLdapUserDn]);
-	attr.setAttribute("n", ZaDomain.A_AuthLdapUserDn);	
+	if(obj.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_ad) {	
+		attr = soapDoc.set("a", "%u@"+obj.attrs[ZaDomain.A_AuthADDomainName]);
+		attr.setAttribute("n", ZaDomain.A_AuthLdapUserDn);	
+	}
+	if(obj.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_ldap) {	
+		attr = soapDoc.set("a", obj.attrs[ZaDomain.A_AuthLdapSearchBase]);
+		attr.setAttribute("n", ZaDomain.A_AuthLdapSearchBase);
+	
+		attr = soapDoc.set("a", obj.attrs[ZaDomain.A_AuthLdapSearchFilter]);
+		attr.setAttribute("n", ZaDomain.A_AuthLdapSearchFilter);
 
-	attr = soapDoc.set("a", obj.attrs[ZaDomain.A_AuthLdapSearchBase]);
-	attr.setAttribute("n", ZaDomain.A_AuthLdapSearchBase);
+		attr = soapDoc.set("a", obj.attrs[ZaDomain.A_AuthLdapSearchBindDn]);
+		attr.setAttribute("n", ZaDomain.A_AuthLdapSearchBindDn);
+	
+		attr = soapDoc.set("a", obj.attrs[ZaDomain.A_AuthLdapSearchBindPassword]);
+		attr.setAttribute("n", ZaDomain.A_AuthLdapSearchBindPassword);
+	}
 
-	attr = soapDoc.set("a", obj.attrs[ZaDomain.A_AuthLdapSearchFilter]);
-	attr.setAttribute("n", ZaDomain.A_AuthLdapSearchFilter);
-
-	attr = soapDoc.set("a", obj.attrs[ZaDomain.A_AuthLdapSearchBindDn]);
-	attr.setAttribute("n", ZaDomain.A_AuthLdapSearchBindDn);
-
-	attr = soapDoc.set("a", obj.attrs[ZaDomain.A_AuthLdapSearchBindPassword]);
-	attr.setAttribute("n", ZaDomain.A_AuthLdapSearchBindPassword);
 	
 	attr = soapDoc.set("name", obj[ZaDomain.A_AuthTestUserName]);
 	attr = soapDoc.set("password", obj[ZaDomain.A_AuthTestPassword]);	
@@ -278,7 +296,8 @@ function (obj, callback, sampleQuery) {
 	var attr = soapDoc.set("a", ZaDomain.GAL_Mode_external);
 	attr.setAttribute("n", ZaDomain.A_GalMode);
 
-	attr = soapDoc.set("a", obj.attrs[ZaDomain.A_GalLdapURL]);
+	var temp = obj.attrs[ZaDomain.A_GalLdapURL].join(" ");
+	attr = soapDoc.set("a", temp);
 	attr.setAttribute("n", ZaDomain.A_GalLdapURL);	
 	
 	attr = soapDoc.set("a", obj.attrs[ZaDomain.A_GalLdapSearchBase]);
@@ -310,9 +329,10 @@ function(tmpObj, oldObj) {
 	
 	var attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_GalMode]);
 	attr.setAttribute("n", ZaDomain.A_GalMode);	
-	
+
 	if(tmpObj.attrs[ZaDomain.A_GalMode] != ZaDomain.GAL_Mode_internal) {
-		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_GalLdapURL]);
+		var temp = tmpObj.attrs[ZaDomain.A_GalLdapURL].join(" ");
+		attr = soapDoc.set("a", temp);
 		attr.setAttribute("n", ZaDomain.A_GalLdapURL);	
 
 		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_GalLdapSearchBase]);
@@ -346,17 +366,20 @@ function(tmpObj, oldObj) {
 	attr.setAttribute("n", ZaDomain.A_AuthMech);	
 	
 	if(tmpObj.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_ad) {
-		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_AuthLdapURL]);
+		var temp = tmpObj.attrs[ZaDomain.A_AuthLdapURL].join(" ");
+		attr = soapDoc.set("a", temp);
 		attr.setAttribute("n", ZaDomain.A_AuthLdapURL);	
 
 		attr = soapDoc.set("a", "%u@"+tmpObj.attrs[ZaDomain.A_AuthADDomainName]);
 		attr.setAttribute("n", ZaDomain.A_AuthLdapUserDn);	
 	} else if (tmpObj.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_ldap) {
-		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_AuthLdapURL]);
+		var temp = tmpObj.attrs[ZaDomain.A_AuthLdapURL].join(" ");
+		attr = soapDoc.set("a", temp);
 		attr.setAttribute("n", ZaDomain.A_AuthLdapURL);	
 
 		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_AuthLdapSearchFilter]);
-		attr.setAttribute("n", ZaDomain.A_AuthLdapSearchFilter);	
+		attr.setAttribute("n", ZaDomain.A_AuthLdapSearchFilter);
+			
 		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_AuthLdapSearchBase]);
 		attr.setAttribute("n", ZaDomain.A_AuthLdapSearchBase);	
 		
@@ -409,7 +432,12 @@ function (node) {
 	}
 
 	if(this.attrs[ZaDomain.A_AuthLdapURL]) {
+		/* Split Auth URL into an array */
+		var temp = this.attrs[ZaDomain.A_AuthLdapURL];
+		this.attrs[ZaDomain.A_AuthLdapURL] = temp.split(" ");
+		
 		/* analyze Auth URL */
+		/*
 		var pieces = this.attrs[ZaDomain.A_AuthLdapURL].split(/[:\/]/);
 		if (pieces.length < 4) {
 			//the URL is invalid - use default values
@@ -444,11 +472,15 @@ function (node) {
 	
 		if (pieces.length == 2) {
 			this.attrs[ZaDomain.A_AuthLDAPServerPort] == pieces[1];
-		}
-	}
+		}*/
+	} else this.attrs[ZaDomain.A_AuthLdapURL] = new Array();
 	if(this.attrs[ZaDomain.A_GalLdapURL])	{	
+		var temp = this.attrs[ZaDomain.A_GalLdapURL];
+		this.attrs[ZaDomain.A_GalLdapURL] = temp.split(" ");		
+		
 		/* analyze GAL URL */
-		var pieces = this.attrs[ZaDomain.A_GalLdapURL].split(/[:\/]/);
+		
+		/*var pieces = this.attrs[ZaDomain.A_GalLdapURL].split(/[:\/]/);
 		if (pieces.length < 4) {
 			//the URL is invalid - use default values
 			this.attrs[ZaDomain.A_GALUseSSL] = "FALSE";	
@@ -478,8 +510,8 @@ function (node) {
 			 	}
 			}
 			
-		}
-	}	
+		}*/
+	} else this.attrs[ZaDomain.A_GalLdapURL] = new Array();
 	
 	if(this.attrs[ZaDomain.A_GalMode]) {
 		if(this.attrs[ZaDomain.A_GalMode] == "ldap" || this.attrs[ZaDomain.A_GalMode] == "both") {
@@ -552,13 +584,13 @@ ZaDomain.myXModel = {
 		{id:ZaDomain.A_GalMode, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalMode},
 		{id:ZaDomain.A_GalMaxResults, type:_NUMBER_, ref:"attrs/" + ZaDomain.A_GalMaxResults, maxInclusive:2147483647, minInclusive:1},					
 		{id:ZaDomain.A_GALServerType, type:_STRING_, ref:"attrs/" + ZaDomain.A_GALServerType},
-		{id:ZaDomain.A_GALServerName, type:_STRING_, ref:"attrs/" + ZaDomain.A_GALServerName},					
-		{id:ZaDomain.A_GALServerPort, type:_NUMBER_, ref:"attrs/" + ZaDomain.A_GALServerPort, maxInclusive:2147483647},
-		{id:ZaDomain.A_GALUseSSL, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_GALUseSSL},
-		{id:ZaDomain.A_GalLdapFilter, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapFilter},
+//		{id:ZaDomain.A_GALServerName, type:_STRING_, ref:"attrs/" + ZaDomain.A_GALServerName},					
+	//	{id:ZaDomain.A_GALServerPort, type:_NUMBER_, ref:"attrs/" + ZaDomain.A_GALServerPort, maxInclusive:2147483647},
+//		{id:ZaDomain.A_GALUseSSL, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_GALUseSSL},
+		{id:ZaDomain.A_GalLdapFilter, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapFilter,required:true},
 		{id:ZaDomain.A_GalLdapSearchBase, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapSearchBase},
 		{id:ZaDomain.A_UseBindPassword, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_UseBindPassword},
-		{id:ZaDomain.A_GalLdapURL, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapURL},
+		{id:ZaDomain.A_GalLdapURL, type:_LIST_,  listItem:{type:_STRING_}, ref:"attrs/" + ZaDomain.A_GalLdapURL},
 		{id:ZaDomain.A_GalLdapBindDn, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapBindDn},
 		{id:ZaDomain.A_GalLdapBindPassword, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapBindPassword},
 		{id:ZaDomain.A_GalLdapBindPasswordConfirm, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapBindPasswordConfirm},		
@@ -568,7 +600,7 @@ ZaDomain.myXModel = {
 		{id:ZaDomain.A_AuthLDAPSearchBase, type:_STRING_, ref:"attrs/" + ZaDomain.A_AuthLDAPSearchBase},
 		{id:ZaDomain.A_AuthLDAPServerPort, type:_NUMBER_, ref:"attrs/" + ZaDomain.A_AuthLDAPServerPort, maxInclusive:2147483647},
 		{id:ZaDomain.A_AuthMech, type:_STRING_, ref:"attrs/" + ZaDomain.A_AuthMech},
-		{id:ZaDomain.A_AuthLdapURL, type:_STRING_, ref:"attrs/" + ZaDomain.A_AuthLdapURL},
+		{id:ZaDomain.A_AuthLdapURL, type:_LIST_,  listItem:{type:_STRING_}, ref:"attrs/" + ZaDomain.A_AuthLdapURL},
 		{id:ZaDomain.A_AuthADDomainName, type:_STRING_, ref:"attrs/" + ZaDomain.A_AuthADDomainName},
 		{id:ZaDomain.A_AuthLdapSearchBase, type:_STRING_, ref:"attrs/" + ZaDomain.A_AuthLdapSearchBase},		
 		{id:ZaDomain.A_AuthLdapSearchFilter, type:_STRING_, ref:"attrs/" + ZaDomain.A_AuthLdapSearchFilter},		
