@@ -24,10 +24,6 @@
  */
 
 function ZmCsfeCommand() {
-	this._asyncCallback = null;
-
-	this._st = null; // start time
-	this._en = null; // end time
 }
 
 // Static properties
@@ -141,12 +137,11 @@ function(soapDoc, noAuthToken, serverUri, targetServer, useXml, noSession, chang
 		js.setAttribute("type", "js");
 	}
 
-	DBG.println(AjxDebug.DBG1, "<H4>REQUEST</H4>");
+	var asyncMode = (callback != null);
+
+	DBG.println(AjxDebug.DBG1, asyncMode ? "<H4>REQUEST (asynchronous)</H4>" : "<H4>REQUEST</H4>");
 	DBG.printXML(AjxDebug.DBG1, soapDoc.getXml());
 
-	var asyncMode = (callback != null);
-	this._asyncCallback = callback;
-	
 	try {
 		var uri = serverUri || ZmCsfeCommand._serverUri;
 		var requestStr = soapDoc.getXml();
@@ -156,7 +151,7 @@ function(soapDoc, noAuthToken, serverUri, targetServer, useXml, noSession, chang
 		this._st = new Date();
 		
 		if (asyncMode) {
-			var rpcCallback = new AjxCallback(this, this._runCallback);
+			var rpcCallback = new AjxCallback(this, this._runCallback, callback);
 			this._rpcId = AjxRpc.invoke(requestStr, uri, {"Content-Type": "application/soap+xml; charset=utf-8"}, rpcCallback);
 		} else {
 			var response = AjxRpc.invoke(requestStr, uri, {"Content-Type": "application/soap+xml; charset=utf-8"});
@@ -178,6 +173,12 @@ function(soapDoc, noAuthToken, serverUri, targetServer, useXml, noSession, chang
 	}
 }
 
+/*
+* Takes the response to an RPC request and returns a JS object with the response data.
+*
+* @param response	[Object]	RPC response with properties "text" and "xml"
+* @param asyncMode	[boolean]	true if we're in asynchronous mode
+*/
 ZmCsfeCommand.prototype._getResponseData =
 function(response, asyncMode) {
 	this._en = new Date();
@@ -195,7 +196,7 @@ function(response, asyncMode) {
 			: AjxSoapDoc.createFromDom(response.xml);
 	}
 	
-	DBG.println(AjxDebug.DBG1, "<H4>RESPONSE</H4>");
+	DBG.println(AjxDebug.DBG1, asyncMode ? "<H4>RESPONSE (asynchronous)</H4>" : "<H4>RESPONSE</H4>");
 
 	var resp;
 	if (xmlResponse) {
@@ -241,15 +242,21 @@ function(response, asyncMode) {
 	return data;
 }
 
+/*
+* Runs the callback that was passed to invoke() for an async command.
+*
+* @param callback	[AjxCallback]	Callback to run with response data
+* @param response	[Object]		RPC response object
+*/
 ZmCsfeCommand.prototype._runCallback =
-function(response) {
+function(args) {
+
+	var callback = args[0];
+	var response = args[1];
 
 	var respData = this._getResponseData(response, true);
 	this._en = new Date();
-	DBG.println(AjxDebug.DBG1, "<H4>ASYNCHRONOUS REQUEST RETURNED</H4>");
-	DBG.println(AjxDebug.DBG1, "ASYNCHRONOUS ROUND TRIP TIME: " + (this._en.getTime() - this._st.getTime()));	
 
-	var callback = this._asyncCallback;
 	if (!callback) {
 		DBG.println(AjxDebug.DBG1, "Could not find callback!");
 		return;
