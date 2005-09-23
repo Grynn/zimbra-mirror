@@ -35,6 +35,8 @@ use Time::Local;
 
 my $baseDir = "/opt/zimbra";
 
+my $NOW = time();  #timestamp for all processing
+
 my $data_source="dbi:mysql:database=zimbra_logger;mysql_read_default_file=/opt/zimbra/conf/my.logger.cnf;mysql_socket=/opt/zimbra/logger/db/mysql.sock";
 
 my $username="zimbra";
@@ -55,7 +57,368 @@ processClam();
 processAmavis();
 
 processSendmail();
+
 processZimbramon();
+
+aggregateMta();
+
+aggregateAmavis();
+
+sub aggregateMta {
+
+	foreach my $periodType ("hour", "day", "month", "year") {
+
+		#print "Aggregating $periodType for mta\n";
+		my $lastPeriod = getLastAggPeriod ("mta", $periodType);
+
+		my $periods = getAggPeriods($lastPeriod, $periodType);
+
+		my $periodStart = $lastPeriod;
+		for (my $i = 0; $i <= $#$periods; $i++) {
+			my $periodEnd = $$periods[$i];
+			print "Aggregating $periodType mta from $periodStart to $periodEnd\n";
+
+			my $count;
+			my $bytes;
+			if ($periodType eq "hour") {
+				# From the mta table
+				my $sth = sqlExec("select count(*) from mta where ".
+					"arrive_time >= '".$periodStart."' and ".
+					"arrive_time <= '".$periodEnd."'");
+
+				my $ary = $sth->fetchall_arrayref;
+				if (@$ary) {
+					$count = ${$$ary[0]}[0];
+				}
+
+				$sth = sqlExec("select sum(bytes) from mta where ".
+					"arrive_time >= '".$periodStart."' and ".
+					"arrive_time <= '".$periodEnd."'");
+
+				$ary = $sth->fetchall_arrayref;
+				if (@$ary) {
+					$bytes = ${$$ary[0]}[0];
+				}
+
+				$sth = sqlExec("insert into mta_aggregate ".
+				"(period_start, period_end, period, msg_count, msg_bytes) ".
+				"values (?,?,?,?,?)",
+				$periodStart, $periodEnd, $periodType, $count, $bytes);
+
+			} else {
+				# From the mta_aggregate table
+
+				my $prevPeriod;
+				if ($periodType eq "day") {
+					$prevPeriod="hour";
+				} elsif ($periodType eq "month") {
+					$prevPeriod="day";
+				} else {
+					$prevPeriod="month";
+				}
+
+				my $sth = sqlExec("select sum(msg_bytes), sum(msg_count) ".
+					"from mta_aggregate where ".
+					"period_start >= '".$periodStart."' and ".
+					"period_end <= '".$periodEnd."' and period='".$prevPeriod."'");
+
+				my $ary = $sth->fetchall_arrayref;
+				if (@$ary) {
+					$bytes = ${$$ary[0]}[0];
+					$count = ${$$ary[0]}[1];
+				}
+
+				$sth = sqlExec("delete from mta_aggregate ".
+					"where period_start='".$periodStart."' and ".
+					"period_end = '".$periodEnd."' and ".
+					"period = '".$periodType."'");
+
+				$sth = sqlExec("insert into mta_aggregate ".
+				"(period_start, period_end, period, msg_count, msg_bytes) ".
+				"values (?,?,?,?,?)",
+				$periodStart, $periodEnd, $periodType, $count, $bytes);
+			}
+
+			$periodStart = $periodEnd;
+		}
+
+	}
+
+}
+
+sub aggregateAmavis {
+
+	foreach my $periodType ("hour", "day", "month", "year") {
+
+		my $lastPeriod = getLastAggPeriod ("amavis", $periodType);
+
+		my $periods = getAggPeriods($lastPeriod, $periodType);
+
+		my $periodStart = $lastPeriod;
+		for (my $i = 0; $i <= $#$periods; $i++) {
+			my $periodEnd = $$periods[$i];
+			print "Aggregating $periodType amavis from $periodStart to $periodEnd\n";
+
+			my $count;
+			my $spam;
+			my $virus;
+			if ($periodType eq "hour") {
+				# From the amavis table
+				my $sth = sqlExec("select count(*) from amavis where ".
+					"arrive_time >= '".$periodStart."' and ".
+					"arrive_time <= '".$periodEnd."'");
+
+				my $ary = $sth->fetchall_arrayref;
+				if (@$ary) {
+					$count = ${$$ary[0]}[0];
+				}
+
+				$sth = sqlExec("select count(*) from amavis where ".
+					"arrive_time >= '".$periodStart."' and ".
+					"arrive_time <= '".$periodEnd."' and ".
+					"status = 'SPAM'");
+
+				$ary = $sth->fetchall_arrayref;
+				if (@$ary) {
+					$spam = ${$$ary[0]}[0];
+				}
+
+				$sth = sqlExec("select count(*) from amavis where ".
+					"arrive_time >= '".$periodStart."' and ".
+					"arrive_time <= '".$periodEnd."' and ".
+					"status = 'INFECTED'");
+
+				$ary = $sth->fetchall_arrayref;
+				if (@$ary) {
+					$virus = ${$$ary[0]}[0];
+				}
+
+				$sth = sqlExec("insert into amavis_aggregate ".
+				"(period_start, period_end, period, msg_count, ".
+				"spam_count, virus_count) ".
+				"values (?,?,?,?,?,?)",
+				$periodStart, $periodEnd, $periodType, $count, $spam, $virus);
+
+			} else {
+				# From the amavis_aggregate table
+
+				my $prevPeriod;
+				if ($periodType eq "day") {
+					$prevPeriod="hour";
+				} elsif ($periodType eq "month") {
+					$prevPeriod="day";
+				} else {
+					$prevPeriod="month";
+				}
+
+				my $sth = sqlExec("select sum(msg_count), sum(spam_count), ".
+					"sum(virus_count) ".
+					"from amavis_aggregate where ".
+					"period_start >= '".$periodStart."' and ".
+					"period_end <= '".$periodEnd."' and period='".$prevPeriod."'");
+
+				my $ary = $sth->fetchall_arrayref;
+				if (@$ary) {
+					$count = ${$$ary[0]}[0];
+					$spam = ${$$ary[0]}[1];
+					$virus = ${$$ary[0]}[2];
+				}
+
+				$sth = sqlExec("delete from amavis_aggregate ".
+					"where period_start='".$periodStart."' and ".
+					"period_end = '".$periodEnd."' and ".
+					"period = '".$periodType."'");
+
+				$sth = sqlExec("insert into amavis_aggregate ".
+				"(period_start, period_end, period, msg_count, ".
+				"spam_count, virus_count) ".
+				"values (?,?,?,?,?,?)",
+				$periodStart, $periodEnd, $periodType, $count, $spam, $virus);
+
+			}
+
+			$periodStart = $periodEnd;
+		}
+
+	}
+
+}
+
+sub getAggPeriods {
+	my $lastPeriodEnd = shift;
+	my $periodType = shift;
+
+	# We want to return the END TIME of all the COMPLETE periods between 
+	# the last aggregation and now
+
+	my @periods = ();
+
+	my $sqlNow = tsToSqlTime($NOW);
+
+	my $curPeriodEnd = incSqlTime($lastPeriodEnd, $periodType);
+
+	#print "Finding $periodType periods between $lastPeriodEnd and $sqlNow\n";
+	while ( ($curPeriodEnd cmp $sqlNow) < 1) {
+		#print "Period ($periodType): $curPeriodEnd\n";
+		push (@periods, $curPeriodEnd);
+		$curPeriodEnd = incSqlTime($curPeriodEnd, $periodType);
+	}
+
+	return (\@periods);
+
+}
+
+sub incSqlTime {
+	my $tm = shift;
+	my $period = shift;
+
+	my $sts = sqlTimeToTs($tm);
+
+	if ($period eq "hour") {
+		$sts+=(60*60);
+	} elsif ($period eq "day") {
+		# Strangenes - without the +1, 10/31 + 24 hours == 10/31
+		$sts+=(60*60*(24+1));
+	} elsif ($period eq "month") {
+		# How many days this month, this year?  Let's say 30 :(
+		$sts+=(60*60*24*30);
+	} elsif ($period eq "year") {
+		$sts+=(60*60*24*365);
+	}
+
+	if ($period ne "hour") {
+		# Truncate to day 
+		return (tsToSqlTime($sts,1));
+	}
+	return (tsToSqlTime($sts));
+}
+
+sub tsToSqlTime {
+	my $ts = shift;
+	my $dayTrunc = shift;
+	# 2005-09-18 04:03:33
+	my @tm = localtime($ts);
+
+	# Truncate at hours.
+	if (defined($dayTrunc)) {
+		return sprintf ("%4d-%02d-%02d %02d:%02d:%02d",
+			$tm[5]+1900,$tm[4]+1,$tm[3],0,0,0);
+	} else {
+		return sprintf ("%4d-%02d-%02d %02d:%02d:%02d",
+			$tm[5]+1900,$tm[4]+1,$tm[3],$tm[2],0,0);
+	}
+}
+
+sub sqlTimeToTs {
+	my $sqlTime = shift;
+	# 2005-09-18 04:03:33
+	return timelocal(substr($sqlTime,17,2),substr($sqlTime,14,2),
+		substr($sqlTime,11,2),substr($sqlTime,8,2),
+		(substr($sqlTime,5,2)-1),substr($sqlTime,0,4));
+}
+
+sub getLastAggPeriod {
+	my $app = shift;
+	my $period = shift;
+
+	#print "Getting last agg period for $app ($period)\n";
+
+	# For hourly, we want to return the last aggregated period,
+	# or re-aggregate over the whole set of logs in the $app table
+
+	if ($period eq "hour") {
+
+		my $sth = sqlExec("select period_end from ${app}_aggregate ".
+			"where period='".$period."' order by period_end desc limit 1");
+
+		my $ary = $sth->fetchall_arrayref;
+
+		if (@$ary) {
+			return (${$$ary[0]}[0]);
+		}
+
+		# If we don't have a value, we'll return a period 
+		# that has ended directly preceding the oldest time in 
+		# the app table or a $periodType prior to now, whichever is
+		# older
+
+		my $periodAgo = getPeriodAgo($period);
+
+		my $sth = sqlExec("select min(arrive_time) from ${app} where ".
+			"arrive_time != '0000-00-00 00:00:00'");
+
+		my $ary = $sth->fetchall_arrayref;
+		my $then = ${$$ary[0]}[0];
+
+		if ($then) {
+			# Trunc at hour
+			my $thenEnd = tsToSqlTime(sqlTimeToTs($then));
+			if ( ($thenEnd cmp $periodAgo) < 0 ) {
+				# Trunc at hours
+				return ($thenEnd);
+			}
+		}
+
+		return ($periodAgo);
+	} else {
+		# For others, we want to re-aggregate over the whole set of logs 
+		# in the $app_aggregate table
+
+		# We'll return a period 
+		# that has ended directly preceding the oldest time in 
+		# the app_aggregate table or a $periodType prior to now, whichever is
+		# older
+
+		my $prevPeriod;
+		if ($period eq "day") {
+			$prevPeriod="hour";
+		} elsif ($period eq "month") {
+			$prevPeriod="day";
+		} else {
+			$prevPeriod="month";
+		}
+
+		my $periodAgo = getPeriodAgo($period);
+
+		$periodAgo = tsToSqlTime(sqlTimeToTs($periodAgo),1);
+
+		my $sth = sqlExec("select min(period_start) from ${app}_aggregate where ".
+			"period_start != '0000-00-00 00:00:00' ".
+			"and period = '".$prevPeriod."'");
+
+		my $ary = $sth->fetchall_arrayref;
+		my $then = ${$$ary[0]}[0];
+
+		if ($then) {
+			# Trunc at day
+			my $thenEnd = tsToSqlTime(sqlTimeToTs($then),1);
+			if ( ($thenEnd cmp $periodAgo) < 0 ) {
+				return ($thenEnd);
+			}
+		}
+
+		return $periodAgo;
+	}
+}
+
+sub getPeriodAgo {
+	my $period = shift;
+	my $then = $NOW;
+
+	#print "Getting period ago ($period)\n";
+	if ($period eq "hour") {
+		$then-=(60*(60+1));
+	} elsif ($period eq "day") {
+		$then-=(60*60*(24+1));
+	} elsif ($period eq "month") {
+		# How many days this month, this year?  Let's say 30 :(
+		$then-=(60*60*24*(30+1));
+	} elsif ($period eq "year") {
+		$then-=(60*60*24*(365+1));
+	}
+
+	return tsToSqlTime($then,1);
+}
 
 sub processMta {
 
@@ -432,13 +795,15 @@ sub deleteRawLogs {
 
 	if ($app eq "mta") {
 		$app = "postfix";
-	} elsif ($app eq "clamd" || $app eq "amavis" || $app eq "sendmail" || $app eq "zimbramon") {
+	} elsif ($app eq "clamd" || $app eq "amavis" || 
+		$app eq "sendmail" || $app eq "zimbramon") {
 	} else {
 		print STDERR "Unknown app $app in deleteRawLogs\n\n";
 		return;
 	}
 
-	print "Deleting processed $app logs from raw_logs\n";
+	print "Deleting processed $app logs from raw_logs...";
 
     my $sth = sqlExec("delete from raw_logs where app like '".$app."%' and id <= '".$lastId."'");
+	print "Done\n";
 }
