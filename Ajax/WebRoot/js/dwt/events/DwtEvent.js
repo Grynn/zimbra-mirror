@@ -43,8 +43,8 @@ DwtEvent.ONKEYDOWN		= "onkeydown";
 DwtEvent.ONKEYPRESS		= "onkeypress";
 DwtEvent.ONKEYUP		= "onkeyup";
 DwtEvent.ONMOUSEDOWN	= "onmousedown";
-DwtEvent.ONMOUSEENTER	= "onmouseenter"; // IE onmouseover
-DwtEvent.ONMOUSELEAVE	= "onmouseleave"; // IE onmouseout
+DwtEvent.ONMOUSEENTER	= "onmouseenter"; // IE only
+DwtEvent.ONMOUSELEAVE	= "onmouseleave"; // IE only
 DwtEvent.ONMOUSEMOVE	= "onmousemove";
 DwtEvent.ONMOUSEOUT		= "onmouseout";
 DwtEvent.ONMOUSEOVER	= "onmouseover";
@@ -78,7 +78,5 @@ DwtEvent.XFORMS_VALUE_ERROR			= "xforms-value-error";
 DwtEvent.KEY_EVENTS = [DwtEvent.ONKEYDOWN, DwtEvent.ONKEYPRESS, DwtEvent.ONKEYUP];
 
 DwtEvent.MOUSE_EVENTS = [DwtEvent.ONCONTEXTMENU, DwtEvent.ONDBLCLICK, DwtEvent.ONMOUSEDOWN,
-						 DwtEvent.ONMOUSEMOVE, DwtEvent.ONMOUSEUP, DwtEvent.ONSELECTSTART];
-DwtEvent.MOUSE_EVENTS.push(DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT);
-if (AjxEnv.isIE)
-	DwtEvent.MOUSE_EVENTS.push(DwtEvent.ONMOUSEENTER, DwtEvent.ONMOUSELEAVE);
+						 DwtEvent.ONMOUSEMOVE, DwtEvent.ONMOUSEUP, DwtEvent.ONSELECTSTART,
+						 DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT];

@@ -51,7 +51,13 @@ function DwtButton(parent, style, className, posStyle, actionTiming) {
 	this._toggledClassName = this._className + "-" + DwtCssStyle.TOGGLED;
 
 	// add custom mouse handlers to standard ones
-	this._setMouseEventHdlrs();
+	var mouseEvents = [DwtEvent.ONCONTEXTMENU, DwtEvent.ONDBLCLICK, DwtEvent.ONMOUSEDOWN,
+					   DwtEvent.ONMOUSEMOVE, DwtEvent.ONMOUSEUP, DwtEvent.ONSELECTSTART];
+	if (AjxEnv.isIE)
+		mouseEvents.push(DwtEvent.ONMOUSEENTER, DwtEvent.ONMOUSELEAVE);
+	else
+		mouseEvents.push(DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT);
+	this._setEventHdlrs(mouseEvents);
 	this._setKeyEventHdlrs();
 	this._mouseOverListener = new AjxListener(this, DwtButton.prototype._mouseOverListener);
 	this._mouseOutListener = new AjxListener(this, DwtButton.prototype._mouseOutListener);
