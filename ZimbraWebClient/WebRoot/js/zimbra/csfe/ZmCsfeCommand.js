@@ -158,7 +158,9 @@ function(soapDoc, noAuthToken, serverUri, targetServer, useXml, noSession, chang
 			return this._getResponseData(response, false);
 		}
 	} catch (ex) {
-		if (ex instanceof AjxSoapException) {
+		if (ex instanceof ZmCsfeException) {
+			throw ex;
+		} else if (ex instanceof AjxSoapException) {
 			throw ex;
 		} else if (ex instanceof AjxException) {
 			throw ex; 
