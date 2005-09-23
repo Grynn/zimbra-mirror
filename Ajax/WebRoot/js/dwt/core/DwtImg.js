@@ -49,7 +49,7 @@ DwtImg.SELECT_PULL_DOWN = ["SelectPullDownArrow", 16, 18];		// ---
 DwtImg.SELECT_PULL_DOWN_DEPRESSED = ["SelectPullDownArrowSel", 16, 18];// ---
 DwtImg.SELECT_PULL_DOWN_DISABLED = ["SelectPullDownArrowDis", 16, 18];// ---
 DwtImg.SELECT_PULL_DOWN_ENABLED = ["SelectPullDownArrowHover", 16, 18];// ---
-DwtImg.SELECT_PULL_UP = ["selectPullUpArrow", 16, 18];// ---
+DwtImg.SELECT_PULL_UP = ["SelectPullUpArrow", 16, 18];// ---
 DwtImg.WARNING = ["Warning_32", 32, 32];		// ---
 
 
