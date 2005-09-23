@@ -37,6 +37,20 @@ my $baseDir = "/opt/zimbra";
 
 my $NOW = time();  #timestamp for all processing
 
+# try to avoid multiple instances
+if (-f "/opt/zimbra/log/zmlogprocess.pid") {
+	open PID, "/opt/zimbra/log/zmlogprocess.pid";
+	my $p = <PID>;
+	close PID;
+	if (kill (0, $p)){
+		exit;
+	}
+}
+
+open PID, "> /opt/zimbra/log/zmlogprocess.pid";
+print PID $$;
+close PID;
+
 my $data_source="dbi:mysql:database=zimbra_logger;mysql_read_default_file=/opt/zimbra/conf/my.logger.cnf;mysql_socket=/opt/zimbra/logger/db/mysql.sock";
 
 my $username="zimbra";
