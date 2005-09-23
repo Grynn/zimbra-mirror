@@ -30,7 +30,7 @@ function ZmCsfeCommand() {
 
 // Global settings for each CSFE command
 ZmCsfeCommand._COOKIE_NAME = "ZM_AUTH_TOKEN";
-ZmCsfeCommand._serverUri = null;
+ZmCsfeCommand.serverUri = null;
 ZmCsfeCommand._authToken = null;
 ZmCsfeCommand._sessionId = null;
 
@@ -53,7 +53,7 @@ function(cookieName) {
 
 ZmCsfeCommand.setServerUri =
 function(uri) {
-	ZmCsfeCommand._serverUri = uri;
+	ZmCsfeCommand.serverUri = uri;
 }
 
 ZmCsfeCommand.setAuthToken =
@@ -143,7 +143,7 @@ function(soapDoc, noAuthToken, serverUri, targetServer, useXml, noSession, chang
 	DBG.printXML(AjxDebug.DBG1, soapDoc.getXml());
 
 	try {
-		var uri = serverUri || ZmCsfeCommand._serverUri;
+		var uri = serverUri || ZmCsfeCommand.serverUri;
 		var requestStr = soapDoc.getXml();
 		if (AjxEnv.isSafari)
 			requestStr = requestStr.replace("soap=", "xmlns:soap=");
@@ -306,7 +306,7 @@ function(soapDoc, noAuthTokenRequired, serverUri, targetServer, useXml, noSessio
 
 	var xmlResponse = false;
 	try {
-		var uri = serverUri || ZmCsfeCommand._serverUri;
+		var uri = serverUri || ZmCsfeCommand.serverUri;
 		var requestStr = !AjxEnv.isSafari 
 			? soapDoc.getXml() 
 			: soapDoc.getXml().replace("soap=", "xmlns:soap=");
