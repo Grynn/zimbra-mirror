@@ -34,208 +34,177 @@ use DBI;
 use Time::Local;
 use Logger;
 
-my @DATANAMES=(
-	"LmtpRcvdData:total:bytes",
-	"LmtpRcvdMsgs:total:count",
-	"Slice:/opt/zimbra",
-	"Slice:/opt/zimbra/db",
-	"Slice:/opt/zimbra/index",
-	"Slice:/opt/zimbra/log",
-	"Slice:/opt/zimbra/redolog",
-	"Slice:/opt/zimbra/store"
-	);
+my %graphTimeInfo = (
+	"hour" => {
+		"count" => 24,
+		"step" => 3600,
+		},
+	"day" => {
+		"count" => 30,
+		"step" => 86400,
+		},
+	"month" => {
+		"count" => 12,
+		"step" => 86400,
+		},
+	"year" => {
+		"count" => 2,
+		"step" => 86400,
+		}
+);
+
+my %graphAppInfo = (
+	"mta" => {
+		"columns" => ["msg_count", "msg_bytes"],
+		},
+	"amavis" => {
+		"columns" => ["msg_count", "spam_count", "virus_count"],
+		}
+);
 
 my $baseDir = "/opt/zimbra";
 my $logDir = "$baseDir/log";
 
-my $data_source="dbi:mysql:database=zimbra;mysql_read_default_file=/opt/zimbra/conf/my.cnf;mysql_socket=/opt/zimbra/db/mysql.sock";
-my $username="zimbra";
-my $password = `/opt/zimbra/bin/zmlocalconfig -s -m nokey zimbra_mysql_password`;
-chomp $password;
+my $data_source="dbi:mysql:database=zimbra_logger;".
+	"mysql_read_default_file=/opt/zimbra/conf/my.logger.cnf;".
+	"mysql_socket=/opt/zimbra/logger/db/mysql.sock";
 
-my $pstring;
-my $beg;
-my $step;
-my $count;
+my $username="zimbra";
+my $password = `/opt/zimbra/bin/zmlocalconfig -s -m nokey zimbra_logger_mysql_password`;
+chomp $password;
 
 my $dbh = DBI->connect($data_source, $username, $password);
 
 if (!$dbh) { 
 	print STDERR "DB: Can't connect to $data_source: $DBI::errstr\n";
 	exit 1;
-#	Zimbra::Logger::Log ("err", "DB: Can't connect to $data_source: $DBI::errstr");
-#	return undef;
 }
 
-sub datetime_to_timestamp {
-	my $dt = shift;
-	if ($dt eq "" || !defined ($dt)) {
-		return "0000000000";
-	}
-	if ($dt =~ m/^\d\d\d\d-\d\d-\d\d$/) {
-		$dt .= " 00:00:00";
-	}
-
-	my ($year,$mon,$mday,$hour,$min,$sec) = 
-		($dt =~ m/(\d+)-(\d+)-(\d+) (\d+):(\d+):(\d+)/);
-	my $ts = timelocal($sec,$min,$hour,$mday,$mon-1,$year);
-	return $ts;
-}
-
-sub timestamp_to_datetime {
+sub tsToSqlTime {
 	my $ts = shift;
-	if ($ts eq "" || !defined($ts)) {
-		return '1000-01-01 00:00:00';
-	}
-	my @s= localtime($ts);
+	my $dayTrunc = shift;
+	# 2005-09-18 04:03:33
+	my @tm = localtime($ts);
 
- 	#'YYYY-MM-DD HH:MM:SS'
-	my $dt = sprintf ("%4d-%02d-%02d %02d:%02d:%02d",$s[5]+1900,$s[4]+1,$s[3],$s[2],$s[1],$s[0]);
-	return $dt;
+	if (defined($dayTrunc)) {
+		return sprintf ("%4d-%02d-%02d %02d:%02d:%02d",
+		$tm[5]+1900,$tm[4]+1,$tm[3],0,0,0);
+	} else {
+		# Truncate at hours.
+		return sprintf ("%4d-%02d-%02d %02d:%02d:%02d",
+		$tm[5]+1900,$tm[4]+1,$tm[3],$tm[2],0,0);
+	}
 }
 
-sub fetch_timed_values {
-    my $sn = shift;
-    my $table = shift;
-    my $startdate = shift;
-    my $date = shift;
+sub sqlTimeToTs {
+	my $sqlTime = shift;
+	# 2005-09-18 04:03:33
+	return timelocal(substr($sqlTime,17,2),substr($sqlTime,14,2),
+	substr($sqlTime,11,2),substr($sqlTime,8,2),
+	(substr($sqlTime,5,2)-1),substr($sqlTime,0,4));
+}
+
+sub sqlExec {
+	my $statement = shift;
+	my @args = @_;
+
+	my $sth = $dbh->prepare($statement);
+
+	#print "Executing $statement with @args\n\n";
+
+	eval {
+		if (!$sth->execute(@args) ) {
+			die $sth->errstr;
+		}
+	};
+	if ($@) { 
+		print "Error executing $statement with @args\n";
+		print $sth->errstr,"\n";
+		print "$@\n";
+		return undef;
+	}
+
+	return $sth;
+}
+
+sub getData {
+	my $app = shift;
 	my $period = shift;
 
-    my $statement = "select time, value from $table where name = '$sn' and time > '$startdate' and time <= '$date' and period = '$pstring' order by time asc";
+	my $statement = "select * from ${app}_aggregate ".
+		"where period='".$period."' ".
+		"order by period_end desc limit ".
+		$graphTimeInfo{$period}{count};
 
-    ($DEBUG) && print STDERR "$statement\n";
+	my $sth = sqlExec($statement);
+	my $hash = $sth->fetchall_hashref('period_end');
 
-    my $sth = $dbh->prepare($statement);
-
-    if (!$sth->execute) {
-        Zimbra::Logger::Log ("err", "DB: $sth->errstr");
-        return undef;
-    }
-
-    my $ary = $sth->fetchall_arrayref;
-    return ($ary);
 }
 
-# Grab 24 hourly values, convert timestamps, feed to rrd and gen. picture.
+my $base = "/opt/zimbra/zimbramon/rrdtool";
+my $work = "${base}/work";
+my $rrd = "${base}/bin/rrdtool";
 
-# Arguments are period(s)
-my $period = $ARGV[1];
+if (! -d $work) {mkdir ($work, 0777);}
 
-my $date = timestamp_to_datetime(time());
+#
+# man -M /opt/zimbra/zimbramon/rrdtool/man rrd{graph,update}
+#
+# GTM:GST:MTM:MST:LTM:LST:LPR:LFM
+# 
+# You have to configure three elements making up the x-axis labels and grid. The base grid (G??),
+# the major grid (M??) and the labels (L??). The configuration is based on the idea that you first
+# specify a well known amount of time (?TM) and then say how many times it has to pass between each
+# grid line or label (?ST). For the label you have to define two additional items: The precision of
+# the label in seconds (LPR) and the strftime format used to generate the text of the label (LFM).
+# 
+# The ?TM elements must be one of the following keywords: SECOND, MINUTE, HOUR, DAY, WEEK, MONTH or
+# YEAR.
 
-foreach my $sn (@DATANAMES) {
-	foreach my $period (@ARGV) {
+my $xlabel;
 
-		if ($period eq "d") {
-			$pstring = 1;
-			$step = 3600;
-			$count = 24;
-		} elsif ($period eq "3m") {
-			$pstring = 24;
-			$step = 86400;
-			$count = 90;
-		} elsif ($period eq "12m") {
-			$pstring = 24;
-			$step = 86400;
-			$count = 365;
-		} else {
-			print STDERR "Invalid period\n\n";
-			next;
-		}
+if ($period eq "hour") {
+	$xlabel = '-x MINUTE:30:HOUR:1:HOUR:4:0:%H --no-minor';
+} elsif ($period eq "day") {
+	$xlabel = '-x WEEK:1:WEEK:2:WEEK:2:604800:%d/%b';
+} elsif ($period eq "month") {
+	$xlabel = '-x DAY:7:MONTH:1:DAY:14:2592000:%b --no-minor';
+} elsif ($period eq "year") {
+	$xlabel = '-x DAY:15:MONTH:1:MONTH:2:2592000:%b --no-minor';
+}
 
-		my $startdate = datetime_to_timestamp($date);
+foreach my $app ("mta", "amavis") {
+	foreach my $period ("hour", "day", "month", "year") {
+		my $data = getData($app, $period);
 
-		my $xlabel;
+		foreach my $column ( @{$graphAppInfo{$app}{columns}} ) {
+			my $db = "${work}/${app}.${period}.${column}.rrd";
+			my $graph = "${work}/${app}.${period}.${column}.gif";
+			unlink -f $db;
 
-		if ($period eq "d") {
-			$startdate -= (60*60*24);
-			$xlabel = '-x MINUTE:30:HOUR:1:HOUR:4:0:%H --no-minor';
-		} elsif ($period eq "3m") {
-			$startdate -= (60*60*24*30*3);
-			$xlabel = '-x WEEK:1:WEEK:2:WEEK:2:604800:%d/%b';
-		} elsif ($period eq "12m") {
-			$startdate -= (60*60*24*365);
-			$xlabel = '-x DAY:15:MONTH:1:MONTH:2:2592000:%b --no-minor';
-		}
-		$startdate = timestamp_to_datetime($startdate);
+			print "Generating $period graph for $app\n";
+			`$rrd create $db -b '-5y' -s $graphTimeInfo{$period}{step} DS:$column:GAUGE:86400:U:U RRA:AVERAGE:0.2:1:$graphTimeInfo{$period}{count}`;
 
-		$beg = '-5y';
+			my @rows = sort keys %$data;
 
-		($DEBUG) && print STDERR "SN: $sn\nP: $startdate\nE: $date\n";
-		print STDERR "Generate graphs for $sn from $startdate to $date ($period)\n";
+			my $sts = sqlTimeToTs($rows[0]);
+			my $ets = sqlTimeToTs($rows[$#rows]);
 
-		my $name = $sn;
-		my $keyname;
-		my $massage_disk_slice_data = 0;
-		my $unit = "";
-		my $upper = "";
-		my $lower = "";
-		my $max = 0;
+			foreach my $row (@rows) {
 
-		if ($name =~ m/^Slice/) {
-			$massage_disk_slice_data = 1;
-			$unit = "--unit MB -v MB";
-			$lower = "-l 0";
-			$name =~ s|.*/||g;
-			$keyname = "/opt/zimbra/$name";
-			if ($keyname eq "/opt/zimbra/zimbra") {
-				$keyname = "/opt/zimbra";
+				print "$row - $column: $$data{$row}{$column}\n";
+				my $ts = sqlTimeToTs(${row});
+				`$rrd update $db ${ts}:$$data{$row}{$column}`;
 			}
-		} else {
-			$name =~ s/:.*//g;
-			$keyname = $name;
+
+			my $upper = "";
+			my $lower = "";
+			my $unit = "";
+
+			`$rrd graph $graph --start $sts --end $ets $upper $lower $unit $xlabel DEF:count=${db}:${column}:AVERAGE LINE1:count#ff0000:${app}${column}`;
+
 		}
-
-		my $vals = fetch_timed_values ($sn, "aggregate_stat", $startdate, $date, $period);
-
-		my $base = "/opt/zimbra/zimbramon/rrdtool";
-		my $work = "${base}/work";
-		my $rrd = "${base}/bin/rrdtool";
-		my $db = "${work}/${name}.${period}.rrd";
-		my $graph = "${work}/${name}.${period}.gif";
-
-		if (! -d $work) {mkdir ($work, 0777);}
-
-		unlink -f $db;
-
-		($DEBUG) && print STDERR 
-		"$rrd create $db -b $beg -s $step DS:$name:GAUGE:86400:U:U RRA:AVERAGE:0.2:1:$count\n";
-		`$rrd create $db -b $beg -s $step DS:$name:GAUGE:86400:U:U RRA:AVERAGE:0.2:1:$count`;
-
-		my $sts = -1;
-		my $ets = -1;
-
-		foreach my $row (@$vals) {
-			# print STDERR "Found $$row[0] $$row[1]\n";
-			my $val = $$row[1];
-
-			if ($massage_disk_slice_data) {
-				# val:used:avail:dev:blk
-				my @fields = split ':', $val;
-				$val = $fields[1];
-				if ( $fields[4] > $max ) {
-					$max = $fields[4];
-					$upper = "-u $max";
-				}
-				if ($sts == -1) {
-					$keyname = "\'$keyname ($fields[3]) (MB)\'";
-				}
-			}
-			my $tm = datetime_to_timestamp($$row[0]);
-
-			if ($sts == -1) {$sts = $tm; $ets = $tm;}
-			else {$ets = $tm;}
-
-			($DEBUG) && print STDERR "$rrd update $db $tm:$val\n";
-			`$rrd update $db $tm:$val`;
-		}
-
-		if ($sts eq "-1" || $ets eq "-1") {
-			print STDERR "No values returned\n";
-			next;
-		}
-
-		($DEBUG) && print STDERR "$rrd graph $graph --start $sts --end $ets $upper $lower $unit $xlabel DEF:count=${db}:${name}:AVERAGE LINE2:count#ff0000:$keyname\n";
-		`$rrd graph $graph --start $sts --end $ets $upper $lower $unit $xlabel DEF:count=${db}:${name}:AVERAGE LINE2:count#ff0000:$keyname`;
 	}
 }
+
+__END__
