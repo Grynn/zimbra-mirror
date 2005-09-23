@@ -348,11 +348,18 @@ function(ev) {
 	}
 }
 
+ZaZimbraAdmin._accountTypesArray = [ZaSearch.ALIASES, ZaSearch.ACCOUNTS];
+ZaZimbraAdmin._dlTypesArray = [ZaSearch.DLS];
 ZaZimbraAdmin.prototype._showAccountsView = function (defaultType, ev){
 	var queryHldr = this._getCurrentQueryHolder();
 	queryHldr.isByDomain = false;
 	queryHldr.byValAttr = this._currentDomain;
 	queryHldr.queryString = "";
+	if ( defaultType == ZaItem.DL ){
+		queryHldr.types = ZaZimbraAdmin._dlTypesArray;
+	} else {
+		queryHldr.types = ZaZimbraAdmin._accountTypesArray;
+	}
 	var acctListController = this._app.getAccountListController();
 	acctListController.setPageNum(1);	
 	if(this._app.getCurrentController()) {
@@ -367,7 +374,7 @@ ZaZimbraAdmin.prototype._showAccountsView = function (defaultType, ev){
 ZaZimbraAdmin.prototype._getCurrentQueryHolder = 
 function () {
 	var srchField = this._app.getAccountListController()._searchField;
-	var curQuery = new ZaSearchQuery("", [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS], false, "");							
+	var curQuery = new ZaSearchQuery("", ZaZimbraAdmin._accountTypesArray, false, "");							
 	if(srchField) {
 		var obj = srchField.getObject();
 		if(obj) {

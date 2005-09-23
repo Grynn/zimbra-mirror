@@ -230,6 +230,8 @@ function () {
 ZaAccountListController.prototype.setQuery = 
 function (query) {
 	this._currentQuery = query;
+	searchObj = ZaSearch.getSearchFromQuery(query);
+	this._searchField.setObject(searchObj);
 }
 
 ZaAccountListController.prototype.getQuery = 

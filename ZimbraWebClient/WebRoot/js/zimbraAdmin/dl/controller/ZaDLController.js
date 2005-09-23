@@ -84,7 +84,6 @@ ZaDLController.prototype.getDummyDistributionLists = function () {
  */
 ZaDLController.prototype.show = function(distributionList, mode) {
 	this._viewMode = mode;
-	distributionList.memberPool = [];
 	this._setView(distributionList);
 };
 
@@ -133,8 +132,10 @@ ZaDLController.prototype._getView = function (id, args) {
 			var controller = this;
 			view.setData = function (dl) {
 				dl.getMembers();
-				controller._currentDL = dl;
-				view.setInstance(dl.clone());
+				var clone = dl.clone();
+				// yuck. This really shouldn't be hanging off the instance.
+				clone.memberPool = [];
+				view.setInstance(clone);
 			};
 			this._dlView = view;
 			break;
@@ -315,14 +316,14 @@ ZaDLController.prototype._getNewViewXForm = function () {
 					 {type:_GROUP_, label:"Find:", colSpan:"*", numCols:2, colSizes:["70%","30%"],tableCssStyle:"width:100%", 
 					     items:[
 						    {type:_INPUT_, ref:"searchText", width:"100%",
-							elementChanged: function(elementValue,instanceValue, event) {
-							    var charCode = event.charCode;
-							    if (charCode == 13 || charCode == 3) {
-								this.getFormController().search();
-							    } else {
-								this.getForm().itemChanged(this, elementValue, event);
-							    }
-							}
+							 elementChanged: function(elementValue,instanceValue, event) {
+									var charCode = event.charCode;
+									if (charCode == 13 || charCode == 3) {
+										this.getFormController().search();
+									} else {
+										this.getForm().itemChanged(this, elementValue, event);
+									}
+								}
 						    },
 						    {type:_DWT_BUTTON_, label:"Search", width:80,
 							onActivate:"this.getFormController()._searchListener(event,this)"},
@@ -511,7 +512,7 @@ ZaDLController.distributionListXModel = {
 	items: [
 			// These three items really shouldn't be here. They are transient, and we really don't want to save
 			// their state.
-	{id: "memberPool", type:_LIST_, setter:"setMemberPool", getterScope:_MODEL_},
+	{id: "memberPool", type:_LIST_, setter:"setMemberPool", setterScope:_MODEL_, getter: "getMemberPool", getterScope:_MODEL_},
 	{id: "optionalAdd", type:_UNTYPED_},
 	{id: "searchText", type:_UNTYPED_},
 

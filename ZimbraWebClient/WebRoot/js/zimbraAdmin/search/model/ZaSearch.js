@@ -139,6 +139,30 @@ function (queryHolder, pagenum, orderby, isascending, app) {
 	}
 }
 
+ZaSearch.getSearchFromQuery = function (query) {
+	var searchObj = new ZaSearch();
+	searchObj[ZaSearch.A_selected] = null;
+	searchObj[ZaSearch.A_query] = query.queryString;
+	searchObj[ZaSearch.A_fAliases] = "FALSE";
+	searchObj[ZaSearch.A_fAccounts] = "FALSE";
+	searchObj[ZaSearch.A_fdistributionlists] = "FALSE";
+	
+	if (query.types != null) {
+		for (var i = 0; i < query.types.length; ++i) {
+			if (query.types[i] == ZaSearch.ALIASES){
+				searchObj[ZaSearch.A_fAliases] = "TRUE";
+			}
+			if (query.types[i] == ZaSearch.ACCOUNTS){
+				searchObj[ZaSearch.A_fAccounts] = "TRUE";
+			}
+			if (query.types[i] == ZaSearch.DLS){
+				searchObj[ZaSearch.A_fdistributionlists] = "TRUE";
+			}
+		}
+	}
+	return searchObj;
+};
+
 ZaSearch.myXModel = {
 	items: [
 		{id:ZaSearch.A_query, type:_STRING_},
