@@ -1109,7 +1109,7 @@ XFormItem.prototype.focus = function () {
 //
 
 XFormItem.prototype.getRequired = function() {
-	return this.getInheritedProperty("reqired");
+	return this.getInheritedProperty("required");
 }
 
 XFormItem.prototype.getValue = function() {
