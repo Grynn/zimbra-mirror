@@ -141,7 +141,7 @@ sub aggregateMta {
 
 				my $sth = sqlExec("select distinct(host) from mta_aggregate ".
 					"period_start >= '".$periodStart."' and ".
-					"period_end <= '".$periodEnd."'";
+					"period_end <= '".$periodEnd."'");
 
 				my $ary = $sth->fetchall_arrayref;
 
@@ -265,7 +265,7 @@ sub aggregateAmavis {
 
 				my $sth = sqlExec("select distinct(host) from amavis_aggregate ".
 					"period_start >= '".$periodStart."' and ".
-					"period_end <= '".$periodEnd."'";
+					"period_end <= '".$periodEnd."'");
 
 				my $ary = $sth->fetchall_arrayref;
 
