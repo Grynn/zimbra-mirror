@@ -585,8 +585,8 @@ function() {
 		html[idx++] = "</td>";
 		html[idx++] = "</table></div></td></tr>";
 		html[idx++] = "<tr></tr>";
-		idx = this._addRow(ZaMsg.attrDesc(ZaAccount.A_accountStatus), 
-						ZaMsg.accountStatus(this.attrs[ZaAccount.A_accountStatus]), html, idx);
+		idx = this._addRow(ZaItem._attrDesc(ZaAccount.A_accountStatus), 
+						ZaAccount._accountStatus(this.attrs[ZaAccount.A_accountStatus]), html, idx);
 		// TODO: COS
 		idx = this._addAttrRow(ZaAccount.A_description, html, idx);
 		idx = this._addAttrRow(ZaAccount.A_cn, html, idx);		
@@ -804,3 +804,25 @@ ZaAccount.myXModel.items.push({id:ZaAccount.A2_mbxsize, type:_NUMBER_, ref:"attr
 ZaAccount.myXModel.items.push({id:ZaAccount.A2_quota, type:_MAILQUOTA_2_, ref:"attrs/"+ZaAccount.A_zimbraMailQuota});
 ZaAccount.myXModel.items.push({id:ZaAccount.A2_autodisplayname, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES});
 ZaAccount.myXModel.items.push({id:ZaAccount.A2_autoMailServer, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES});
+
+ZaItem._ATTR[ZaAccount.A_accountName] = ZaMsg.attrDesc_accountName;
+ZaItem._ATTR[ZaAccount.A_description] = ZaMsg.attrDesc_description;
+ZaItem._ATTR[ZaAccount.A_firstName] = ZaMsg.attrDesc_firstName;
+ZaItem._ATTR[ZaAccount.A_lastName] = ZaMsg.attrDesc_lastName;
+ZaItem._ATTR[ZaAccount.A_accountStatus] = ZaMsg.attrDesc_accountStatus;
+ZaItem._ATTR[ZaAccount.A_mailHost] =  ZaMsg.attrDesc_mailHost;
+ZaItem._ATTR[ZaAccount.A_zimbraMailQuota] = ZaMsg.attrDesc_zimbraMailQuota;
+ZaItem._ATTR[ZaAccount.A_notes] = ZaMsg.attrDesc_notes;
+
+ZaAccount._accountStatus = 
+function(val) {
+	var desc = ZaAccount._ACCOUNT_STATUS[val];
+	return (desc == null) ? val : desc;
+}
+
+/* Translation of Account status values into screen names */
+ZaAccount._ACCOUNT_STATUS = new Object ();
+ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_ACTIVE] = ZaMsg.accountStatus_active;
+ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_MAINTENANCE] = ZaMsg.accountStatus_maintenance;
+ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_LOCKED] = ZaMsg.accountStatus_locked;
+ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_CLOSED] = ZaMsg.accountStatus_closed;

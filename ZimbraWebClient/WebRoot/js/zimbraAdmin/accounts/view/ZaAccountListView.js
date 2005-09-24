@@ -95,7 +95,7 @@ function(account, now, isDndIcon) {
 		} else if(id.indexOf(ZaAccount.A_accountStatus)==0) {
 			// status
 			html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";
-			html[idx++] = AjxStringUtil.htmlEncode(ZaMsg.accountStatus(account.attrs[ZaAccount.A_accountStatus]));
+			html[idx++] = AjxStringUtil.htmlEncode(ZaAccount._accountStatus(account.attrs[ZaAccount.A_accountStatus]));
 			html[idx++] = "</nobr></td>";		
 		} else if (id.indexOf(ZaAccount.A_description)==0) {		
 			// description

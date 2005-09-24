@@ -170,7 +170,7 @@ ZaItem.prototype._addAttrRow =
 function(name, html, idx) {
 	var value = this.attrs[name];
 	if (value != null) {
-		var desc = ZaMsg.attrDesc(name);
+		var desc = ZaItem._attrDesc(name);
 		html[idx++] = "<tr valign='top'><td align='left' style='padding-right: 5px;'><b>";
 		html[idx++] = AjxStringUtil.htmlEncode(desc) + ":";
 		html[idx++] = "</b></td><td align='left'><div style='white-space:nowrap; overflow:hidden;'>";
@@ -179,3 +179,14 @@ function(name, html, idx) {
 	}
 	return idx;
 }
+
+ZaItem._attrDesc = 
+function(name) {
+	var desc = ZaItem._ATTR[name];
+	return (desc == null) ? name : desc;
+}
+
+/* Translation of  the attribute names to the screen names */
+ZaItem._ATTR = new Object();
+ZaItem._ATTR[ZaItem.A_zimbraId] = ZaMsg.attrDesc_zimbraId;
+

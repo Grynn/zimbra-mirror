@@ -209,10 +209,11 @@
 	<target name="war" depends="build-init, copy-files-to-build-area, examples">
 		<war warfile="${warfile}" webxml="${build.dir}/WebRoot/WEB-INF/web.xml">
 			<lib dir="${jars.dir}" includes="*.jar" excludes="servlet-api.jar"/>
-			<classes dir="${src.dir}" includes="*.properties"/>
 			<classes dir="${build.dir}" includes="**/*.class" excludes="**/build/*"/>
+			<classes dir="WebRoot/js/config" includes="msgs/*.properties"/>
+			<classes dir="WebRoot/js/dwt/config" includes="msgs/*.properties"/>
 			<webinf dir="WebRoot/WEB-INF" includes="tlds/*"/>
-			<fileset dir="WebRoot" includes="js/**"/>
+			<fileset dir="WebRoot" includes="js/**" excludes='js/**/config/msgs/**'/>
 			<fileset dir="${build.dir}/WebRoot" includes="examples/**"/>
 	    </war>
 	  </target>

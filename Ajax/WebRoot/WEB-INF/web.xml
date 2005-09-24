@@ -42,4 +42,19 @@
       <env-entry-value>7070</env-entry-value>
       <env-entry-type>java.lang.String</env-entry-type>
   </env-entry>
+
+  <servlet>
+  	<servlet-name>Properties2Javascript</servlet-name>
+  	<servlet-class>com.zimbra.webClient.servlet.Props2JsServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+  	<servlet-name>Properties2Javascript</servlet-name>
+  	<url-pattern>/js/ajax/config/msgs/AjxMsg.js</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>Properties2Javascript</servlet-name>
+  	<url-pattern>/js/ajax/dwt/config/msgs/DwtMsg.js</url-pattern> <!-- temporary -->
+  </servlet-mapping>
+
 </web-app>
