@@ -394,7 +394,7 @@ function(ev, eventType, obj, mouseEv) {
 	// notify global listeners
 	DwtEventManager.notifyListeners(eventType, mouseEv);
 	// notify widget listeners
-	if (obj.isListenerRegistered(eventType))
+	if (obj.isListenerRegistered && obj.isListenerRegistered(eventType))
 		obj.notifyListeners(eventType, mouseEv);
 
 	// publish our settings to the DOM
