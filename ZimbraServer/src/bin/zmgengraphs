@@ -37,19 +37,23 @@ use Logger;
 my %graphTimeInfo = (
 	"hour" => {
 		"count" => 24,
-		"step" => 3600,
+		"step" => 7200,
+		"heartbeat" => 14400,
 		},
 	"day" => {
 		"count" => 30,
 		"step" => 86400,
+		"heartbeat" => 172800,
 		},
 	"month" => {
 		"count" => 12,
 		"step" => 86400,
+		"heartbeat" => 172800,
 		},
 	"year" => {
 		"count" => 2,
 		"step" => 86400,
+		"heartbeat" => 172800,
 		}
 );
 
@@ -136,6 +140,8 @@ sub getData {
 		"order by period_end desc limit ".
 		$graphTimeInfo{$period}{count};
 
+	#print "$statement\n";
+
 	my $sth = sqlExec($statement);
 	my $hash = $sth->fetchall_hashref('period_end');
 
@@ -163,19 +169,19 @@ if (! -d $work) {mkdir ($work, 0777);}
 
 my $xlabel;
 
-if ($period eq "hour") {
-	$xlabel = '-x MINUTE:30:HOUR:1:HOUR:4:0:%H --no-minor';
-} elsif ($period eq "day") {
-	$xlabel = '-x WEEK:1:WEEK:2:WEEK:2:604800:%d/%b';
-} elsif ($period eq "month") {
-	$xlabel = '-x DAY:7:MONTH:1:DAY:14:2592000:%b --no-minor';
-} elsif ($period eq "year") {
-	$xlabel = '-x DAY:15:MONTH:1:MONTH:2:2592000:%b --no-minor';
-}
-
 foreach my $app ("mta", "amavis") {
 	foreach my $period ("hour", "day", "month", "year") {
 		my $data = getData($app, $period);
+
+		if ($period eq "hour") {
+			$xlabel = '-x HOUR:4:HOUR:4:HOUR:4:0:%H --no-minor';
+		} elsif ($period eq "day") {
+			$xlabel = '-x WEEK:1:WEEK:2:WEEK:2:604800:%d/%b';
+		} elsif ($period eq "month") {
+			$xlabel = '-x DAY:7:MONTH:1:DAY:14:2592000:%b --no-minor';
+		} elsif ($period eq "year") {
+			$xlabel = '-x DAY:15:MONTH:1:MONTH:2:2592000:%b --no-minor';
+		}
 
 		foreach my $column ( @{$graphAppInfo{$app}{columns}} ) {
 			my $db = "${work}/${app}.${period}.${column}.rrd";
@@ -183,7 +189,7 @@ foreach my $app ("mta", "amavis") {
 			unlink -f $db;
 
 			print "Generating $period graph for $app\n";
-			`$rrd create $db -b '-5y' -s $graphTimeInfo{$period}{step} DS:$column:GAUGE:86400:U:U RRA:AVERAGE:0.2:1:$graphTimeInfo{$period}{count}`;
+			`$rrd create $db -b '-5y' -s $graphTimeInfo{$period}{step} DS:$column:GAUGE:$graphTimeInfo{$period}{heartbeat}:U:U RRA:AVERAGE:0.2:1:$graphTimeInfo{$period}{count}`;
 
 			my @rows = sort keys %$data;
 
@@ -192,8 +198,10 @@ foreach my $app ("mta", "amavis") {
 
 			foreach my $row (@rows) {
 
-				print "$row - $column: $$data{$row}{$column}\n";
+				#print "$row - $column: $$data{$row}{$column}\n";
 				my $ts = sqlTimeToTs(${row});
+				#print "Updating $db with ${ts}:$$data{$row}{$column}\n";
+				#print "$rrd update $db ${ts}:$$data{$row}{$column}\n";
 				`$rrd update $db ${ts}:$$data{$row}{$column}`;
 			}
 
@@ -201,7 +209,7 @@ foreach my $app ("mta", "amavis") {
 			my $lower = "";
 			my $unit = "";
 
-			`$rrd graph $graph --start $sts --end $ets $upper $lower $unit $xlabel DEF:count=${db}:${column}:AVERAGE LINE1:count#ff0000:${app}${column}`;
+			`$rrd graph $graph --start $sts --end $ets $upper $lower $unit $xlabel DEF:count=${db}:${column}:AVERAGE LINE3:count#ff0000:${app}${column}`;
 
 		}
 	}

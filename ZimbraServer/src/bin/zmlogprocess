@@ -106,7 +106,8 @@ sub aggregateMta {
 
 				my $ary = $sth->fetchall_arrayref;
 
-				foreach $host (@$ary) {
+				foreach my $h (@$ary) {
+					$host = $$h[0];
 
 					my $sth = sqlExec("select count(*) from mta where ".
 						"host = '".$host."' and ".
@@ -154,7 +155,8 @@ sub aggregateMta {
 					$prevPeriod="month";
 				}
 
-				foreach $host (@$ary) {
+				foreach my $h (@$ary) {
+					$host = $$h[0];
 
 					my $sth = sqlExec("select sum(msg_bytes), sum(msg_count) ".
 						"from mta_aggregate where ".
@@ -218,7 +220,8 @@ sub aggregateAmavis {
 
 				my $ary = $sth->fetchall_arrayref;
 
-				foreach $host (@$ary) {
+				foreach my $h (@$ary) {
+					$host = $$h[0];
 
 					my $sth = sqlExec("select count(*) from amavis where ".
 						"host = '".$host."' and ".
@@ -278,7 +281,8 @@ sub aggregateAmavis {
 					$prevPeriod="month";
 				}
 
-				foreach $host (@$ary) {
+				foreach my $h (@$ary) {
+					$host = $$h[0];
 
 					my $sth = sqlExec("select sum(msg_count), sum(spam_count), ".
 						"sum(virus_count) ".
