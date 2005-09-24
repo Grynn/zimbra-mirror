@@ -94,6 +94,7 @@ CREATE TABLE amavis (
 CREATE TABLE mta_aggregate (
 	period_start		DATETIME NOT NULL,
 	period_end			DATETIME NOT NULL,
+	host				VARCHAR(255) NOT NULL,
 	period				ENUM ('hour','day','month','year'),
 	msg_count			INTEGER UNSIGNED,
 	msg_bytes			INTEGER UNSIGNED
@@ -102,6 +103,7 @@ CREATE TABLE mta_aggregate (
 CREATE TABLE amavis_aggregate (
 	period_start		DATETIME NOT NULL,
 	period_end			DATETIME NOT NULL,
+	host				VARCHAR(255) NOT NULL,
 	period				ENUM ('hour','day','month','year'),
 	msg_count			INTEGER UNSIGNED,
 	spam_count			INTEGER UNSIGNED,

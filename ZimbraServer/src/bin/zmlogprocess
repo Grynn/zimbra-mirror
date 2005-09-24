@@ -78,6 +78,8 @@ aggregateMta();
 
 aggregateAmavis();
 
+unlink ( "/opt/zimbra/log/zmlogprocess.pid" );
+
 sub aggregateMta {
 
 	foreach my $periodType ("hour", "day", "month", "year") {
@@ -94,33 +96,54 @@ sub aggregateMta {
 
 			my $count;
 			my $bytes;
+			my $host;
 			if ($periodType eq "hour") {
 				# From the mta table
-				my $sth = sqlExec("select count(*) from mta where ".
+
+				my $sth = sqlExec("select distinct(host) from mta where ".
 					"arrive_time >= '".$periodStart."' and ".
 					"arrive_time <= '".$periodEnd."'");
 
 				my $ary = $sth->fetchall_arrayref;
-				if (@$ary) {
-					$count = ${$$ary[0]}[0];
+
+				foreach $host (@$ary) {
+
+					my $sth = sqlExec("select count(*) from mta where ".
+						"host = '".$host."' and ".
+						"arrive_time >= '".$periodStart."' and ".
+						"arrive_time <= '".$periodEnd."'");
+
+					my $ary = $sth->fetchall_arrayref;
+					if (@$ary) {
+						$count = ${$$ary[0]}[0];
+					}
+
+					$sth = sqlExec("select sum(bytes) from mta where ".
+						"host = '".$host."' and ".
+						"arrive_time >= '".$periodStart."' and ".
+						"arrive_time <= '".$periodEnd."'");
+
+					$ary = $sth->fetchall_arrayref;
+					if (@$ary) {
+						$bytes = ${$$ary[0]}[0];
+					}
+
+					$sth = sqlExec("insert into mta_aggregate ".
+						"(period_start, period_end, host, period, ".
+						"msg_count, msg_bytes) ".
+						"values (?,?,?,?,?,?)",
+						$periodStart, $periodEnd, $host, 
+						$periodType, $count, $bytes);
 				}
-
-				$sth = sqlExec("select sum(bytes) from mta where ".
-					"arrive_time >= '".$periodStart."' and ".
-					"arrive_time <= '".$periodEnd."'");
-
-				$ary = $sth->fetchall_arrayref;
-				if (@$ary) {
-					$bytes = ${$$ary[0]}[0];
-				}
-
-				$sth = sqlExec("insert into mta_aggregate ".
-				"(period_start, period_end, period, msg_count, msg_bytes) ".
-				"values (?,?,?,?,?)",
-				$periodStart, $periodEnd, $periodType, $count, $bytes);
 
 			} else {
 				# From the mta_aggregate table
+
+				my $sth = sqlExec("select distinct(host) from mta_aggregate ".
+					"period_start >= '".$periodStart."' and ".
+					"period_end <= '".$periodEnd."'";
+
+				my $ary = $sth->fetchall_arrayref;
 
 				my $prevPeriod;
 				if ($periodType eq "day") {
@@ -131,26 +154,35 @@ sub aggregateMta {
 					$prevPeriod="month";
 				}
 
-				my $sth = sqlExec("select sum(msg_bytes), sum(msg_count) ".
-					"from mta_aggregate where ".
-					"period_start >= '".$periodStart."' and ".
-					"period_end <= '".$periodEnd."' and period='".$prevPeriod."'");
+				foreach $host (@$ary) {
 
-				my $ary = $sth->fetchall_arrayref;
-				if (@$ary) {
-					$bytes = ${$$ary[0]}[0];
-					$count = ${$$ary[0]}[1];
+					my $sth = sqlExec("select sum(msg_bytes), sum(msg_count) ".
+						"from mta_aggregate where ".
+						"host = '".$host."' and ".
+						"period_start >= '".$periodStart."' and ".
+						"period_end <= '".$periodEnd.
+						"' and period='".$prevPeriod."'");
+
+					my $ary = $sth->fetchall_arrayref;
+					if (@$ary) {
+						$bytes = ${$$ary[0]}[0];
+						$count = ${$$ary[0]}[1];
+					}
+
+					$sth = sqlExec("delete from mta_aggregate ".
+						"where period_start='".$periodStart."' and ".
+						"host = '".$host."' and ".
+						"period_end = '".$periodEnd."' and ".
+						"period = '".$periodType."'");
+
+					$sth = sqlExec("insert into mta_aggregate ".
+						"(period_start, period_end, host, ".
+						"period, msg_count, msg_bytes) ".
+						"values (?,?,?,?,?,?)",
+						$periodStart, $periodEnd, $host,
+						$periodType, $count, $bytes);
+			
 				}
-
-				$sth = sqlExec("delete from mta_aggregate ".
-					"where period_start='".$periodStart."' and ".
-					"period_end = '".$periodEnd."' and ".
-					"period = '".$periodType."'");
-
-				$sth = sqlExec("insert into mta_aggregate ".
-				"(period_start, period_end, period, msg_count, msg_bytes) ".
-				"values (?,?,?,?,?)",
-				$periodStart, $periodEnd, $periodType, $count, $bytes);
 			}
 
 			$periodStart = $periodEnd;
@@ -173,48 +205,69 @@ sub aggregateAmavis {
 			my $periodEnd = $$periods[$i];
 			print "Aggregating $periodType amavis from $periodStart to $periodEnd\n";
 
+			my $host;
 			my $count;
 			my $spam;
 			my $virus;
 			if ($periodType eq "hour") {
 				# From the amavis table
-				my $sth = sqlExec("select count(*) from amavis where ".
+
+				my $sth = sqlExec("select distinct(host) from amavis where ".
 					"arrive_time >= '".$periodStart."' and ".
 					"arrive_time <= '".$periodEnd."'");
 
 				my $ary = $sth->fetchall_arrayref;
-				if (@$ary) {
-					$count = ${$$ary[0]}[0];
+
+				foreach $host (@$ary) {
+
+					my $sth = sqlExec("select count(*) from amavis where ".
+						"host = '".$host."' and ".
+						"arrive_time >= '".$periodStart."' and ".
+						"arrive_time <= '".$periodEnd."'");
+
+					my $ary = $sth->fetchall_arrayref;
+					if (@$ary) {
+						$count = ${$$ary[0]}[0];
+					}
+
+					$sth = sqlExec("select count(*) from amavis where ".
+						"host = '".$host."' and ".
+						"arrive_time >= '".$periodStart."' and ".
+						"arrive_time <= '".$periodEnd."' and ".
+						"status = 'SPAM'");
+
+					$ary = $sth->fetchall_arrayref;
+					if (@$ary) {
+						$spam = ${$$ary[0]}[0];
+					}
+
+					$sth = sqlExec("select count(*) from amavis where ".
+						"host = '".$host."' and ".
+						"arrive_time >= '".$periodStart."' and ".
+						"arrive_time <= '".$periodEnd."' and ".
+						"status = 'INFECTED'");
+
+					$ary = $sth->fetchall_arrayref;
+					if (@$ary) {
+						$virus = ${$$ary[0]}[0];
+					}
+
+					$sth = sqlExec("insert into amavis_aggregate ".
+						"(period_start, period_end, host, period, msg_count, ".
+						"spam_count, virus_count) ".
+						"values (?,?,?,?,?,?,?)",
+						$periodStart, $periodEnd, $host,
+						$periodType, $count, $spam, $virus);
 				}
-
-				$sth = sqlExec("select count(*) from amavis where ".
-					"arrive_time >= '".$periodStart."' and ".
-					"arrive_time <= '".$periodEnd."' and ".
-					"status = 'SPAM'");
-
-				$ary = $sth->fetchall_arrayref;
-				if (@$ary) {
-					$spam = ${$$ary[0]}[0];
-				}
-
-				$sth = sqlExec("select count(*) from amavis where ".
-					"arrive_time >= '".$periodStart."' and ".
-					"arrive_time <= '".$periodEnd."' and ".
-					"status = 'INFECTED'");
-
-				$ary = $sth->fetchall_arrayref;
-				if (@$ary) {
-					$virus = ${$$ary[0]}[0];
-				}
-
-				$sth = sqlExec("insert into amavis_aggregate ".
-				"(period_start, period_end, period, msg_count, ".
-				"spam_count, virus_count) ".
-				"values (?,?,?,?,?,?)",
-				$periodStart, $periodEnd, $periodType, $count, $spam, $virus);
 
 			} else {
 				# From the amavis_aggregate table
+
+				my $sth = sqlExec("select distinct(host) from amavis_aggregate ".
+					"period_start >= '".$periodStart."' and ".
+					"period_end <= '".$periodEnd."'";
+
+				my $ary = $sth->fetchall_arrayref;
 
 				my $prevPeriod;
 				if ($periodType eq "day") {
@@ -225,29 +278,35 @@ sub aggregateAmavis {
 					$prevPeriod="month";
 				}
 
-				my $sth = sqlExec("select sum(msg_count), sum(spam_count), ".
-					"sum(virus_count) ".
-					"from amavis_aggregate where ".
-					"period_start >= '".$periodStart."' and ".
-					"period_end <= '".$periodEnd."' and period='".$prevPeriod."'");
+				foreach $host (@$ary) {
 
-				my $ary = $sth->fetchall_arrayref;
-				if (@$ary) {
-					$count = ${$$ary[0]}[0];
-					$spam = ${$$ary[0]}[1];
-					$virus = ${$$ary[0]}[2];
+					my $sth = sqlExec("select sum(msg_count), sum(spam_count), ".
+						"sum(virus_count) ".
+						"from amavis_aggregate where ".
+						"host = '".$host."' and ".
+						"period_start >= '".$periodStart."' and ".
+						"period_end <= '".$periodEnd."' and period='".$prevPeriod."'");
+
+					my $ary = $sth->fetchall_arrayref;
+					if (@$ary) {
+						$count = ${$$ary[0]}[0];
+						$spam = ${$$ary[0]}[1];
+						$virus = ${$$ary[0]}[2];
+					}
+
+					$sth = sqlExec("delete from amavis_aggregate ".
+						"where period_start='".$periodStart."' and ".
+						"period_end = '".$periodEnd."' and ".
+						"host = '".$host."' and ".
+						"period = '".$periodType."'");
+
+					$sth = sqlExec("insert into amavis_aggregate ".
+						"(period_start, period_end, host, period, msg_count, ".
+						"spam_count, virus_count) ".
+						"values (?,?,?,?,?,?,?)",
+						$periodStart, $periodEnd, $host, 
+						$periodType, $count, $spam, $virus);
 				}
-
-				$sth = sqlExec("delete from amavis_aggregate ".
-					"where period_start='".$periodStart."' and ".
-					"period_end = '".$periodEnd."' and ".
-					"period = '".$periodType."'");
-
-				$sth = sqlExec("insert into amavis_aggregate ".
-				"(period_start, period_end, period, msg_count, ".
-				"spam_count, virus_count) ".
-				"values (?,?,?,?,?,?)",
-				$periodStart, $periodEnd, $periodType, $count, $spam, $virus);
 
 			}
 
