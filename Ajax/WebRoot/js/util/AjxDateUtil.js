@@ -35,12 +35,42 @@ AjxDateUtil.MSEC_PER_FIFTEEN_MINUTES = 900000;
 AjxDateUtil.MSEC_PER_HALF_HOUR = 1800000;
 AjxDateUtil.MSEC_PER_HOUR = 3600000;
 AjxDateUtil.MSEC_PER_DAY = 24 * AjxDateUtil.MSEC_PER_HOUR;
-AjxDateUtil._months = [AjxMsg.jan, AjxMsg.feb, AjxMsg.mar, AjxMsg.apr, AjxMsg.may, AjxMsg.jun,
-                      AjxMsg.jul, AjxMsg.aug, AjxMsg.sep, AjxMsg.oct, AjxMsg.nov, AjxMsg.dec];
-AjxDateUtil._fullMonths = [AjxMsg.january, AjxMsg.february, AjxMsg.march, AjxMsg.april, AjxMsg.mayFull, AjxMsg.june,
-						   AjxMsg.july, AjxMsg.august, AjxMsg.september, AjxMsg.october, AjxMsg.november, AjxMsg.december];
-AjxDateUtil._daysOfTheWeek = [AjxMsg.sunday, AjxMsg.monday, AjxMsg.tuesday, AjxMsg.wednesday, AjxMsg.thursday, AjxMsg.friday,
-							 AjxMsg.saturday];
+
+AjxDateUtil.WEEKDAY_SHORT = [
+	AjxMsg.weekdayShortSun, AjxMsg.weekdayShortMon, AjxMsg.weekdayShortTue, 
+	AjxMsg.weekdayShortWed, AjxMsg.weekdayShortThu, AjxMsg.weekdayShortFri, 
+	AjxMsg.weekdayShortSat
+];
+AjxDateUtil.WEEKDAY_MEDIUM = [
+	AjxMsg.weekdayMediumSun, AjxMsg.weekdayMediumMon, AjxMsg.weekdayMediumTue, 
+	AjxMsg.weekdayMediumWed, AjxMsg.weekdayMediumThu, AjxMsg.weekdayMediumFri, 
+	AjxMsg.weekdayMediumSat
+];
+AjxDateUtil.WEEKDAY_LONG = [
+	AjxMsg.weekdayLongSun, AjxMsg.weekdayLongMon, AjxMsg.weekdayLongTue, 
+	AjxMsg.weekdayLongWed, AjxMsg.weekdayLongThu, AjxMsg.weekdayLongFri, 
+	AjxMsg.weekdayLongSat
+];
+
+AjxDateUtil.MONTH_SHORT = [
+	AjxMsg.monthShortJan, AjxMsg.monthShortFeb, AjxMsg.monthShortMar, 
+	AjxMsg.monthShortApr, AjxMsg.monthShortMay, AjxMsg.monthShortJun, 
+	AjxMsg.monthShortJul, AjxMsg.monthShortAug, AjxMsg.monthShortSep, 
+	AjxMsg.monthShortOct, AjxMsg.monthShortNov, AjxMsg.monthShortDec
+];
+AjxDateUtil.MONTH_MEDIUM = [
+	AjxMsg.monthMediumJan, AjxMsg.monthMediumFeb, AjxMsg.monthMediumMar,
+	AjxMsg.monthMediumApr, AjxMsg.monthMediumMay, AjxMsg.monthMediumJun,
+	AjxMsg.monthMediumJul, AjxMsg.monthMediumAug, AjxMsg.monthMediumSep,
+	AjxMsg.monthMediumOct, AjxMsg.monthMediumNov, AjxMsg.monthMediumDec
+	
+];
+AjxDateUtil.MONTH_LONG = [
+	AjxMsg.monthLongJan, AjxMsg.monthLongFeb, AjxMsg.monthLongMar,
+	AjxMsg.monthLongApr, AjxMsg.monthLongMay, AjxMsg.monthLongJun,
+	AjxMsg.monthLongJul, AjxMsg.monthLongAug, AjxMsg.monthLongSep,
+	AjxMsg.monthLongOct, AjxMsg.monthLongNov, AjxMsg.monthLongDec
+];
 
 AjxDateUtil._daysPerMonth = {
 	0:31,
@@ -252,7 +282,7 @@ function(now, dateMSec) {
 		for (var i = 0; i < AjxDateUtil._dateFmt.length; i++) {
 			switch (AjxDateUtil._dateFmt[i]) {
 				case 'M':
-					dateStr = dateStr + ((dateStr != "") ? " " : "") + AjxDateUtil._months[date.getMonth()];
+					dateStr = dateStr + ((dateStr != "") ? " " : "") + AjxDateUtil.MONTH_MEDIUM[date.getMonth()];
 					break;
 				case 'D':
 					var day = date.getDate();
@@ -295,8 +325,8 @@ function (date, upper) {
 AjxDateUtil._getMonthName = 
 function(date, abbreviated) {
 	return abbreviated
-		? AjxDateUtil._months[date.getMonth()]
-		: AjxDateUtil._fullMonths[date.getMonth()];
+		? AjxDateUtil.MONTH_MEDIUM[date.getMonth()]
+		: AjxDateUtil.MONTH_LONG[date.getMonth()];
 };
 
 AjxDateUtil._getDate = 
@@ -308,7 +338,7 @@ function(date, pad) {
 AjxDateUtil._getWeekday =
 function (date) {
 	var myVal = date.getDay();
-	return AjxDateUtil._daysOfTheWeek[myVal];
+	return AjxDateUtil.WEEKDAY_LONG[myVal];
 };
 
 AjxDateUtil._getFullYear = 

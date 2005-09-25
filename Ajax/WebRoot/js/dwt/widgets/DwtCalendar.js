@@ -351,7 +351,7 @@ function(firstDayOfWeek) {
 			this._weekDays[i] = i - firstDayOfWeek;
 		
 		var dowCell = Dwt.getDomObj(doc, this._getDOWCellId(i));
-		dowCell.innerHTML = DwtCalendar.SHORT_WEEKDAY[(firstDayOfWeek + i) % 7];
+		dowCell.innerHTML = AjxDateUtil.WEEKDAY_SHORT[(firstDayOfWeek + i) % 7];
 	}
 	this._layout();
 }
@@ -657,7 +657,7 @@ function(cell, mode) {
 DwtCalendar.prototype._setTitle =
 function(month, year) {
 	var cell = Dwt.getDomObj(this.getDocument(), this._monthCell);
-	cell.innerHTML = DwtCalendar.LONG_MONTH[month] + " " + year;
+	cell.innerHTML = AjxDateUtil.MONTH_LONG[month] + " " + year;
 }
 
 DwtCalendar.prototype._init =
@@ -901,33 +901,3 @@ function(ev) {
 	var d = new Date(this._date.getTime());
 	this.setDate(AjxDateUtil.roll(d, AjxDateUtil.YEAR, 1));
 }
-
-DwtCalendar.SHORT_WEEKDAY = [
-	DwtMsg.weekdayShortSun, DwtMsg.weekdayShortMon, DwtMsg.weekdayShortTue, 
-	DwtMsg.weekdayShortWed, DwtMsg.weekdayShortThu, DwtMsg.weekdayShortFri, 
-	DwtMsg.weekdayShortSat
-];
-DwtCalendar.MEDIUM_WEEKDAY = [
-	DwtMsg.weekdayMediumSun, DwtMsg.weekdayMediumMon, DwtMsg.weekdayMediumTue, 
-	DwtMsg.weekdayMediumWed, DwtMsg.weekdayMediumThu, DwtMsg.weekdayMediumFri, 
-	DwtMsg.weekdayMediumSat
-];
-DwtCalendar.LONG_WEEKDAY = [
-	DwtMsg.weekdayLongSun, DwtMsg.weekdayLongMon, DwtMsg.weekdayLongTue, 
-	DwtMsg.weekdayLongWed, DwtMsg.weekdayLongThu, DwtMsg.weekdayLongFri, 
-	DwtMsg.weekdayLongSat
-];
-DwtCalendar.MEDIUM_MONTH = [
-	DwtMsg.monthMediumJan, DwtMsg.monthMediumFeb, DwtMsg.monthMediumMar,
-	DwtMsg.monthMediumApr, DwtMsg.monthMediumMay, DwtMsg.monthMediumJun,
-	DwtMsg.monthMediumJul, DwtMsg.monthMediumAug, DwtMsg.monthMediumSep,
-	DwtMsg.monthMediumOct, DwtMsg.monthMediumNov, DwtMsg.monthMediumDec
-	
-];
-DwtCalendar.LONG_MONTH = [
-	DwtMsg.monthLongJan, DwtMsg.monthLongFeb, DwtMsg.monthLongMar,
-	DwtMsg.monthLongApr, DwtMsg.monthLongMay, DwtMsg.monthLongJun,
-	DwtMsg.monthLongJul, DwtMsg.monthLongAug, DwtMsg.monthLongSep,
-	DwtMsg.monthLongOct, DwtMsg.monthLongNov, DwtMsg.monthLongDec
-];
-

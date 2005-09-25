@@ -177,7 +177,7 @@ function() {
 		this._containedObject[ZaModel.currentStep]--;
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
-		this._button[DwtWizardDialog.NEXT_BUTTON].setText(DwtMsg._next);
+		this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
 	} else if(this._containedObject[ZaModel.currentStep] == 6) {
 		this._containedObject[ZaModel.currentStep]--;
 		this._button[DwtWizardDialog.NEXT_BUTTON].setText(ZaMsg.Restore_Restore);

@@ -193,7 +193,7 @@ XModelItem.prototype.getDefaultValue = function () {return new Object() };
 //	validate this value (i.e. when a formitem that refers to it has changed)
 //
 
-XModel.registerErrorMessage("valueIsRequired", DwtMsg.valueIsRequired);
+XModel.registerErrorMessage("valueIsRequired", AjxMsg.valueIsRequired);
 XModelItem.prototype.validate = function (value, form, formItem, instance) {
 
 	// see if it's required
@@ -323,11 +323,11 @@ XModelItem.prototype.getPattern = function() {
 XModelItem.prototype.getEnumeration = function() { return this.enumeration; }
 XModelItem.prototype.getWhiteSpace = function() { return this.whiteSpace; }
 
-XModel.registerErrorMessage("notAString",		DwtMsg.notAString);
-XModel.registerErrorMessage("stringLenWrong",   DwtMsg.stringLenWrong);
-XModel.registerErrorMessage("stringTooShort", 	DwtMsg.stringTooShort);
-XModel.registerErrorMessage("stringTooLong",	DwtMsg.stringTooLong);
-XModel.registerErrorMessage("stringMismatch",   DwtMsg.stringMismatch);
+XModel.registerErrorMessage("notAString",		AjxMsg.notAString);
+XModel.registerErrorMessage("stringLenWrong",   AjxMsg.stringLenWrong);
+XModel.registerErrorMessage("stringTooShort", 	AjxMsg.stringTooShort);
+XModel.registerErrorMessage("stringTooLong",	AjxMsg.stringTooLong);
+XModel.registerErrorMessage("stringMismatch",   AjxMsg.stringMismatch);
 
 XModelItem.prototype.validateString = function(value) {
 	if (value == null) return;
@@ -458,13 +458,13 @@ XModelItem.prototype.getMinExclusive = function() { return this.minExclusive; }
 XModelItem.prototype.getMaxInclusive = function () 			{	return this.maxInclusive;				}
 XModelItem.prototype.getMaxExclusive = function() { return this.maxExclusive; }
 
-XModel.registerErrorMessage("notANumber",		 DwtMsg.notANumber);
-XModel.registerErrorMessage("numberTotalExceeded", DwtMsg.numberTotalExceeded);
-XModel.registerErrorMessage("numberFractionExceeded", DwtMsg.numberFractionExceeded);
-XModel.registerErrorMessage("numberMoreThanMax", DwtMsg.numberMoreThanMax);
-XModel.registerErrorMessage("numberMoreThanEqualMax", DwtMsg.numberMoreThanEqualMax);
-XModel.registerErrorMessage("numberLessThanMin", DwtMsg.numberLessThanMin);
-XModel.registerErrorMessage("numberLessThanEqualMin", DwtMsg.numberLessThanEqualMin);
+XModel.registerErrorMessage("notANumber",		 AjxMsg.notANumber);
+XModel.registerErrorMessage("numberTotalExceeded", AjxMsg.numberTotalExceeded);
+XModel.registerErrorMessage("numberFractionExceeded", AjxMsg.numberFractionExceeded);
+XModel.registerErrorMessage("numberMoreThanMax", AjxMsg.numberMoreThanMax);
+XModel.registerErrorMessage("numberMoreThanEqualMax", AjxMsg.numberMoreThanEqualMax);
+XModel.registerErrorMessage("numberLessThanMin", AjxMsg.numberLessThanMin);
+XModel.registerErrorMessage("numberLessThanEqualMin", AjxMsg.numberLessThanEqualMin);
 
 XModelItem.prototype.validateNumber = function(value) {
 	value = this._normalizeAndValidate(value);
@@ -522,7 +522,7 @@ XModelItem.prototype.validateNumber = function(value) {
 //
 
 XModelItem.prototype.msecInOneDay = (1000 * 60 * 60 * 24);
-XModel.registerErrorMessage("invalidDateString", DwtMsg.invalidDateString);
+XModel.registerErrorMessage("invalidDateString", AjxMsg.invalidDateString);
 
 // methods
 XModelItem.prototype.validateDate = function(value) {
@@ -569,7 +569,7 @@ XModelItem.prototype.validateDate = function(value) {
 }
 
 
-XModel.registerErrorMessage("invalidTimeString",		 DwtMsg.invalidTimeString);
+XModel.registerErrorMessage("invalidTimeString",		 AjxMsg.invalidTimeString);
 // time is returned as a number of milliseconds since
 XModelItem.prototype.validateTime = function (value) {
 
@@ -603,7 +603,7 @@ XModelItem.prototype.validateTime = function (value) {
 }
 
 
-XModel.registerErrorMessage("invalidDatetimeString",		 DwtMsg.invalidDatetimeString);
+XModel.registerErrorMessage("invalidDatetimeString",		 AjxMsg.invalidDatetimeString);
 XModelItem.prototype.validateDateTime = function (value) {
 
 	if (AjxUtil.isInstance(value, Date)) return value;
@@ -741,7 +741,7 @@ Enum_XModelItem.prototype.getDefaultValue = function () {	return this.choices[0]
 
 Enum_XModelItem.prototype.getChoices = function()		 {		return this.choices;		}
 Enum_XModelItem.prototype.getSelection = function() 	{		return this.selection;		}
-XModel.registerErrorMessage("didNotMatchChoice",	DwtMsg.didNotMatchChoice);
+XModel.registerErrorMessage("didNotMatchChoice",	AjxMsg.didNotMatchChoice);
 
 Enum_XModelItem.prototype.validateType = function (value) {
 	// if the selection is open, they can enter any value they want

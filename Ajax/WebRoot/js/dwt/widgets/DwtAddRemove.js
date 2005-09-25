@@ -346,19 +346,19 @@ DwtAddRemove.prototype._createHTML = function(sourceListClassName, targetListCla
 	this._sourceList._setNoResultsHtml = new Function();
 	this._sourceList.addSelectionListener(new AjxListener(this, this._sourceListListener));
 
-	this._addAllButton.setText(DwtMsg.addAll);
+	this._addAllButton.setText(AjxMsg.addAll);
 	this._addAllButton.setEnabled(false);
 	this._addAllButton.addSelectionListener(new AjxListener(this, this._addAllButtonListener));
 
-	this._addButton.setText(DwtMsg.add);
+	this._addButton.setText(AjxMsg.add);
 	this._addButton.setEnabled(false);
 	this._addButton.addSelectionListener(new AjxListener(this, this._addButtonListener));
 	
-	this._removeButton.setText(DwtMsg.remove);
+	this._removeButton.setText(AjxMsg.remove);
 	this._removeButton.setEnabled(false);
 	this._removeButton.addSelectionListener(new AjxListener(this, this._removeButtonListener));
 
-	this._removeAllButton.setText(DwtMsg.removeAll);
+	this._removeAllButton.setText(AjxMsg.removeAll);
 	this._removeAllButton.setEnabled(false);
 	this._removeAllButton.addSelectionListener(new AjxListener(this, this._removeAllButtonListener));
 

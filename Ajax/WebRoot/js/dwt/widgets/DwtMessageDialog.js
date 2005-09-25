@@ -48,9 +48,9 @@ DwtMessageDialog.INFO_STYLE = 2;
 DwtMessageDialog.WARNING_STYLE = 3;
 
 DwtMessageDialog.TITLE = new Object();
-DwtMessageDialog.TITLE[DwtMessageDialog.CRITICAL_STYLE] = DwtMsg.criticalMsg;
-DwtMessageDialog.TITLE[DwtMessageDialog.INFO_STYLE] = DwtMsg.infoMsg
-DwtMessageDialog.TITLE[DwtMessageDialog.WARNING_STYLE] = DwtMsg.warningMsg;
+DwtMessageDialog.TITLE[DwtMessageDialog.CRITICAL_STYLE] = AjxMsg.criticalMsg;
+DwtMessageDialog.TITLE[DwtMessageDialog.INFO_STYLE] = AjxMsg.infoMsg
+DwtMessageDialog.TITLE[DwtMessageDialog.WARNING_STYLE] = AjxMsg.warningMsg;
 
 DwtMessageDialog.ICON = new Object();
 DwtMessageDialog.ICON[DwtMessageDialog.CRITICAL_STYLE] = "Critical_32";

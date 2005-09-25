@@ -447,7 +447,7 @@ function() {
 
 	htmlArr[idx++] = "<table width='100%' cellspacing='0' cellpadding='1'>";
 	htmlArr[idx++] = "<tr><td class='NoResults'><br>";
-	htmlArr[idx++] = DwtMsg.noResults;
+	htmlArr[idx++] = AjxMsg.noResults;
 	htmlArr[idx++] = "</td></tr></table>";
 
 	div.innerHTML = htmlArr.join("");

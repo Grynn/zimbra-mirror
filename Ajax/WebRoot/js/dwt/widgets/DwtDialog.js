@@ -67,7 +67,7 @@ function DwtDialog(parent, className, title, standardButtons, extraButtons, zInd
 				var buttonId = standardButtons[i];
 				this._buttonList.push(buttonId);
 				// creating standard button descriptors on file read didn't work, so we create them here
-				this._buttonDesc[buttonId] = new DwtDialog_ButtonDescriptor(buttonId, DwtMsg[DwtDialog.MSG_KEY[buttonId]],
+				this._buttonDesc[buttonId] = new DwtDialog_ButtonDescriptor(buttonId, AjxMsg[DwtDialog.MSG_KEY[buttonId]],
 																			this.getAlignmentForButton(buttonId));
 			}
 			// set standard callbacks

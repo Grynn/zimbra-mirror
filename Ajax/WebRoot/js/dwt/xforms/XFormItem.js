@@ -2528,7 +2528,7 @@ Repeat_XFormItem.prototype.showMoveUpButton = false;
 Repeat_XFormItem.prototype.showMoveDownButton = false;
 Repeat_XFormItem.prototype.removeButton = {
 	type:_BUTTON_, 
-	label: DwtMsg.xformRepeatRemove, 
+	label: AjxMsg.xformRepeatRemove, 
 	//width:20,
 	cssStyle:"margin-left:20px;",
 	onActivate:function (event) {
@@ -2541,7 +2541,7 @@ Repeat_XFormItem.prototype.removeButton = {
 Repeat_XFormItem.prototype.addButton = {
 	ref:".",
 	type:_BUTTON_, 
-	label: DwtMsg.xformRepeatAdd, 
+	label: AjxMsg.xformRepeatAdd, 
 	//width:20,
 	onActivate:function (event) {
 		var repeatItem = this.getParentItem().getParentItem();
@@ -3035,7 +3035,7 @@ Datetime_XFormItem._datetimeFormatToItems = function(format, dateItem, timeItem)
 //	type defaults
 Datetime_XFormItem.prototype.numCols = 3;
 Datetime_XFormItem.prototype.items = Datetime_XFormItem._datetimeFormatToItems(
-	DwtMsg.xformDateTimeFormat,
+	AjxMsg.xformDateTimeFormat,
 	{type:_DATE_, ref:".", labelLocation:_NONE_},
 	{type:_TIME_, ref:".", labelLocation:_NONE_}
 );
@@ -3414,7 +3414,7 @@ Dwt_Datetime_XFormItem.prototype.numCols = 3;
 Dwt_Datetime_XFormItem.prototype.useParentTable = false;
 Dwt_Datetime_XFormItem.prototype.cssClass =  "xform_dwt_datetime";
 Dwt_Datetime_XFormItem.prototype.items = Datetime_XFormItem._datetimeFormatToItems(
-	DwtMsg.xformDateTimeFormat,
+	AjxMsg.xformDateTimeFormat,
 	{type:_DWT_DATE_, ref:".", labelLocation:_NONE_, errorLocation:_PARENT_,
 	 elementChanged: 
 	 function (newDate, currentDate, event) {
