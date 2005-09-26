@@ -65,6 +65,7 @@ CREATE TABLE mta (
 	sender				VARCHAR(255),
 	recipient			VARCHAR(255),
 	status				VARCHAR(64),
+	statusmsg			VARCHAR(255),
 	from_host			VARCHAR(255),
 	from_IP				VARCHAR(16),
 	to_host				VARCHAR(255),

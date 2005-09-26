@@ -775,11 +775,12 @@ sub parseMessage {
 				$msg{$messageId}{recipList} = ();
 			}
 			my $r = $1;
-			$msg{$messageId}{recipList}{$r}{leaveTime} = $date;
+			$msg{$messageId}{recipList}{$r}{leaveTime}{$date} = ();
 			$msg{$messageId}{recipList}{$r}{recip} = $r;
 			$msg{$messageId}{recipList}{$r}{nextHost} = $2;
 			$msg{$messageId}{recipList}{$r}{nextIp} = $3;
-			$msg{$messageId}{recipList}{$r}{status} = $4;
+			$msg{$messageId}{recipList}{$r}{leaveTime}{$date}{status} = $4;
+			$msg{$messageId}{recipList}{$r}{leaveTime}{$date}{statusmsg} = $5;
 
 			if ($5 =~ /id=([^,]+).*queued as (.*)\)/) {
 				$msg{$messageId}{recipList}{$r}{amavisPid} = $1;
@@ -793,12 +794,13 @@ sub parseMessage {
 				$msg{$messageId}{recipList} = ();
 			}
 			my $r = $1;
-			$msg{$messageId}{recipList}{$r}{leaveTime} = $date;
+			$msg{$messageId}{recipList}{$r}{leaveTime}{$date} = ();
 			$msg{$messageId}{recipList}{$r}{recip} = $r;
 			$msg{$messageId}{recipList}{$r}{origRecip} = $2;
 			$msg{$messageId}{recipList}{$r}{nextHost} = $3;
 			$msg{$messageId}{recipList}{$r}{nextIp} = $4;
-			$msg{$messageId}{recipList}{$r}{status} = $5;
+			$msg{$messageId}{recipList}{$r}{leaveTime}{$date}{status} = $5;
+			$msg{$messageId}{recipList}{$r}{leaveTime}{$date}{statusmsg} = $6;
 
 			if ($6 =~ /id=([^,]+).*queued as (.*)\)/) {
 				$msg{$messageId}{recipList}{$r}{amavisPid} = $1;
@@ -826,8 +828,9 @@ sub insertMtaMessage {
 		"from_host, from_IP, ".
 		"to_host, ".
 		"to_IP, ".
-		"status) ".
-		"values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		"status, ".
+		"statusmsg) ".
+		"values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 	foreach my $messageId (sort keys %{$msg}) {
 		if ($$msg{$messageId}{rowid} > $last) {
@@ -835,20 +838,23 @@ sub insertMtaMessage {
 		}
 
 		foreach my $r (sort keys %{$$msg{$messageId}{recipList}}) {
-			sqlExec ($statement, 
-				$$msg{$messageId}{arriveTime}?
-					$$msg{$messageId}{arriveTime}:
-					'0000-00-00 00:00:00', 
-				$$msg{$messageId}{recipList}{$r}{leaveTime}?
-					$$msg{$messageId}{recipList}{$r}{leaveTime}:
-					'0000-00-00 00:00:00',
-				$$msg{$messageId}{host}, $messageId,
-				$$msg{$messageId}{sender}, $r, 
-				$$msg{$messageId}{recipList}{$r}{amavisPid}, $$msg{$messageId}{bytes}, 
-				$$msg{$messageId}{prevHost}, $$msg{$messageId}{prevIp}, 
-				$$msg{$messageId}{recipList}{$r}{nextHost}, 
-				$$msg{$messageId}{recipList}{$r}{nextIp}, 
-				$$msg{$messageId}{recipList}{$r}{status});
+
+			foreach my $lt (sort keys %{$$msg{$messageId}{recipList}{$r}{leaveTime}}) {
+
+				sqlExec ($statement, 
+					$$msg{$messageId}{arriveTime}?
+						$$msg{$messageId}{arriveTime}:
+						'0000-00-00 00:00:00', 
+					$lt?$lt:'0000-00-00 00:00:00',
+					$$msg{$messageId}{host}, $messageId,
+					$$msg{$messageId}{sender}, $r, 
+					$$msg{$messageId}{recipList}{$r}{amavisPid}, $$msg{$messageId}{bytes}, 
+					$$msg{$messageId}{prevHost}, $$msg{$messageId}{prevIp}, 
+					$$msg{$messageId}{recipList}{$r}{nextHost}, 
+					$$msg{$messageId}{recipList}{$r}{nextIp}, 
+					$$msg{$messageId}{recipList}{$r}{leaveTime}{$lt}{status},
+					$$msg{$messageId}{recipList}{$r}{leaveTime}{$lt}{statusmsg});
+			}
 		}
 	}
 	return $last;
