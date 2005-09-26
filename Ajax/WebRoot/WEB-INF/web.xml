@@ -50,11 +50,7 @@
 
   <servlet-mapping>
   	<servlet-name>Properties2Javascript</servlet-name>
-  	<url-pattern>/js/ajax/config/msgs/AjxMsg.js</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-  	<servlet-name>Properties2Javascript</servlet-name>
-  	<url-pattern>/js/ajax/dwt/config/msgs/DwtMsg.js</url-pattern> <!-- temporary -->
+  	<url-pattern>/js/ajax/config/msgs/*</url-pattern>
   </servlet-mapping>
 
 </web-app>

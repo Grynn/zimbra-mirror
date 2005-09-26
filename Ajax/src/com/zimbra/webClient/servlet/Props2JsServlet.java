@@ -2,6 +2,7 @@ package com.zimbra.webClient.servlet;
 
 import java.io.*;
 import java.util.*;
+import java.util.zip.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -58,15 +59,19 @@ public class Props2JsServlet
     
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
     throws IOException, ServletException {
-        PrintWriter out = resp.getWriter();
-
         Locale locale = req.getLocale();
         
         String requestUri = req.getRequestURI();
         String filename = requestUri.substring(requestUri.lastIndexOf('/')+1);
-        String classname = filename.substring(0, filename.lastIndexOf('.'));
+        String classname = filename.substring(0, filename.indexOf('.'));
         String basename = BASENAME_PREFIX+classname;
         
+        OutputStream stream = resp.getOutputStream();
+        if (requestUri.endsWith(".jgz")) {
+            stream = new GZIPOutputStream(stream);
+        }
+        PrintWriter out = new PrintWriter(stream);
+
         /***
         resp.setContentType("text/html");
         out.println("<h1>Information</h1>");
@@ -140,6 +145,8 @@ public class Props2JsServlet
         /***
         out.println("</pre>");
         /***/
+        
+        out.close();
     }
     
 } // class Props2JsServlet
