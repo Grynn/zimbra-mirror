@@ -120,9 +120,12 @@ sub tsToSqlTime {
 sub sqlTimeToTs {
 	my $sqlTime = shift;
 	# 2005-09-18 04:03:33
+	if ($sqlTime ne "") {
 	return timelocal(substr($sqlTime,17,2),substr($sqlTime,14,2),
 	substr($sqlTime,11,2),substr($sqlTime,8,2),
 	(substr($sqlTime,5,2)-1),substr($sqlTime,0,4));
+	}
+	return 0;
 }
 
 sub sqlExec {
@@ -154,9 +157,11 @@ sub getData {
 	my $host = shift;
 
 	my $statement = "select * from ${app}_aggregate ".
-		"where period='".$period."' ".
-		"and host='".$host."' ".
-		"order by period_end desc limit ".
+		"where period='".$period."' ";
+	if ($host ne "ALL") {
+		$statement .= "and host='".$host."' ";
+	} 
+	$statement .= "order by period_end desc limit ".
 		$graphTimeInfo{$period}{count};
 
 	#print "$statement\n";
@@ -206,6 +211,7 @@ if (! -d $work) {mkdir ($work, 0777);}
 foreach my $app ("mta", "amavis") {
 	my $hostlist = getHostList ($app);
 
+	push @$hostlist, ["ALL"];
 	foreach my $h (@$hostlist) {
 	
 	my $host = $$h[0];
@@ -244,6 +250,8 @@ foreach my $app ("mta", "amavis") {
 			`$rrd create $db -b '-5y' -s $graphTimeInfo{$period}{step} $DS RRA:AVERAGE:0.2:1:$graphTimeInfo{$period}{count}`;
 
 			my @rows = sort keys %$data;
+
+			if (!@rows) {next;}
 
 			my $sts = sqlTimeToTs($rows[0]);
 			my $ets = sqlTimeToTs($rows[$#rows]);
