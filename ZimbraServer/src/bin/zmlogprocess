@@ -82,7 +82,7 @@ unlink ( "/opt/zimbra/log/zmlogprocess.pid" );
 
 sub aggregateMta {
 
-	foreach my $periodType ("hour", "day", "month", "year") {
+	foreach my $periodType ("hour", "day") {
 
 		#print "Aggregating $periodType for mta\n";
 		my $lastPeriod = getLastAggPeriod ("mta", $periodType);
@@ -149,11 +149,7 @@ sub aggregateMta {
 				my $prevPeriod;
 				if ($periodType eq "day") {
 					$prevPeriod="hour";
-				} elsif ($periodType eq "month") {
-					$prevPeriod="day";
-				} else {
-					$prevPeriod="month";
-				}
+				} 
 
 				foreach my $h (@$ary) {
 					$host = $$h[0];
@@ -196,7 +192,7 @@ sub aggregateMta {
 
 sub aggregateAmavis {
 
-	foreach my $periodType ("hour", "day", "month", "year") {
+	foreach my $periodType ("hour", "day") {
 
 		my $lastPeriod = getLastAggPeriod ("amavis", $periodType);
 
@@ -275,11 +271,7 @@ sub aggregateAmavis {
 				my $prevPeriod;
 				if ($periodType eq "day") {
 					$prevPeriod="hour";
-				} elsif ($periodType eq "month") {
-					$prevPeriod="day";
-				} else {
-					$prevPeriod="month";
-				}
+				} 
 
 				foreach my $h (@$ary) {
 					$host = $$h[0];
@@ -449,11 +441,7 @@ sub getLastAggPeriod {
 		my $prevPeriod;
 		if ($period eq "day") {
 			$prevPeriod="hour";
-		} elsif ($period eq "month") {
-			$prevPeriod="day";
-		} else {
-			$prevPeriod="month";
-		}
+		} 
 
 		my $periodAgo = getPeriodAgo($period);
 

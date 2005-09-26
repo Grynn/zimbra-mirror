@@ -36,33 +36,50 @@ use Logger;
 
 my %graphTimeInfo = (
 	"hour" => {
-		"count" => 24,
-		"step" => 7200,
-		"heartbeat" => 14400,
+		"count" 		=> 48,
+		"step" 			=> 7200,
+		"heartbeat" 	=> 14400,
+		"agg_period" 	=> "hour",
+		"xlabel"		=> '-x HOUR:4:HOUR:4:HOUR:4:0:%H --no-minor',
 		},
 	"day" => {
-		"count" => 30,
-		"step" => 86400,
-		"heartbeat" => 172800,
+		"count" 		=> 30,
+		"step" 			=> 86400,
+		"heartbeat" 	=> 172800,
+		"agg_period" 	=> "day",
+		"xlabel"		=> '-x DAY:1:DAY:2:DAY:1:86400:%d/%b',
 		},
 	"month" => {
-		"count" => 12,
-		"step" => 86400,
-		"heartbeat" => 172800,
+		"count" 		=> 60,
+		"step" 			=> 86400,
+		"heartbeat" 	=> 172800,
+		"agg_period" 	=> "day",
+		"xlabel"		=> '-x WEEK:1:WEEK:2:DAY:14:86400:%d/%b --no-minor',
 		},
 	"year" => {
-		"count" => 2,
-		"step" => 86400,
-		"heartbeat" => 172800,
+		"count" 		=> 365,
+		"step" 			=> 86400,
+		"heartbeat" 	=> 172800,
+		"agg_period" 	=> "day",
+		"xlabel"		=> '-x DAY:15:MONTH:1:DAY:14:86400:%d/%b --no-minor',
 		}
 );
 
 my %graphAppInfo = (
 	"mta" => {
-		"columns" => ["msg_count", "msg_bytes"],
+			"columns" => [ ["msg_count"] , ["msg_bytes"] ],
+			"graph_names"	=> {
+					"msg_count" => "Message_Count",
+					"msg_bytes" => "Message_Bytes",
+				},
+			"colors" => ["#00ff00","#ff0000","#0000ff"],
 		},
 	"amavis" => {
-		"columns" => ["msg_count", "spam_count", "virus_count"],
+			"columns" => [ ["msg_count", "spam_count", "virus_count"] ],
+			"graph_names"	=> {
+					"msg_count" => "Spam_Activity",
+				},
+			"colors" => ["#00ff00","#0000ff","#ff0000"],
 		}
 );
 
@@ -134,9 +151,11 @@ sub sqlExec {
 sub getData {
 	my $app = shift;
 	my $period = shift;
+	my $host = shift;
 
 	my $statement = "select * from ${app}_aggregate ".
 		"where period='".$period."' ".
+		"and host='".$host."' ".
 		"order by period_end desc limit ".
 		$graphTimeInfo{$period}{count};
 
@@ -145,6 +164,18 @@ sub getData {
 	my $sth = sqlExec($statement);
 	my $hash = $sth->fetchall_hashref('period_end');
 
+}
+
+sub getHostList {
+	my $app = shift;
+
+	my $statement = "select distinct(host) from ${app}_aggregate";
+
+	#print "$statement\n";
+
+	my $sth = sqlExec($statement);
+	my $ary = $sth->fetchall_arrayref;
+	return $ary;
 }
 
 my $base = "/opt/zimbra/zimbramon/rrdtool";
@@ -158,38 +189,59 @@ if (! -d $work) {mkdir ($work, 0777);}
 #
 # GTM:GST:MTM:MST:LTM:LST:LPR:LFM
 # 
-# You have to configure three elements making up the x-axis labels and grid. The base grid (G??),
-# the major grid (M??) and the labels (L??). The configuration is based on the idea that you first
-# specify a well known amount of time (?TM) and then say how many times it has to pass between each
-# grid line or label (?ST). For the label you have to define two additional items: The precision of
-# the label in seconds (LPR) and the strftime format used to generate the text of the label (LFM).
+# You have to configure three elements making up the 
+# x-axis labels and grid. The base grid (G??),
+# the major grid (M??) and the labels (L??). The configuration 
+# is based on the idea that you first
+# specify a well known amount of time (?TM) and then say 
+# how many times it has to pass between each
+# grid line or label (?ST). For the label you have to 
+# define two additional items: The precision of
+# the label in seconds (LPR) and the strftime format 
+# used to generate the text of the label (LFM).
 # 
-# The ?TM elements must be one of the following keywords: SECOND, MINUTE, HOUR, DAY, WEEK, MONTH or
-# YEAR.
-
-my $xlabel;
+# The ?TM elements must be one of the following keywords: SECOND, MINUTE, HOUR, 
+# DAY, WEEK, MONTH or YEAR.
 
 foreach my $app ("mta", "amavis") {
+	my $hostlist = getHostList ($app);
+
+	foreach my $h (@$hostlist) {
+	
+	my $host = $$h[0];
+
 	foreach my $period ("hour", "day", "month", "year") {
-		my $data = getData($app, $period);
+		
+		my $data = getData($app, $graphTimeInfo{$period}{agg_period}, $host);
 
-		if ($period eq "hour") {
-			$xlabel = '-x HOUR:4:HOUR:4:HOUR:4:0:%H --no-minor';
-		} elsif ($period eq "day") {
-			$xlabel = '-x WEEK:1:WEEK:2:WEEK:2:604800:%d/%b';
-		} elsif ($period eq "month") {
-			$xlabel = '-x DAY:7:MONTH:1:DAY:14:2592000:%b --no-minor';
-		} elsif ($period eq "year") {
-			$xlabel = '-x DAY:15:MONTH:1:MONTH:2:2592000:%b --no-minor';
-		}
+		foreach my $columnlist ( @{$graphAppInfo{$app}{columns}} ) {
 
-		foreach my $column ( @{$graphAppInfo{$app}{columns}} ) {
-			my $db = "${work}/${app}.${period}.${column}.rrd";
-			my $graph = "${work}/${app}.${period}.${column}.gif";
+			my $db = "${work}/${app}.${host}.${period}.$graphAppInfo{$app}{graph_names}{$$columnlist[0]}.rrd";
+			my $graph = "${work}/${app}.${host}.${period}.$graphAppInfo{$app}{graph_names}{$$columnlist[0]}.gif";
 			unlink -f $db;
 
-			print "Generating $period graph for $app\n";
-			`$rrd create $db -b '-5y' -s $graphTimeInfo{$period}{step} DS:$column:GAUGE:$graphTimeInfo{$period}{heartbeat}:U:U RRA:AVERAGE:0.2:1:$graphTimeInfo{$period}{count}`;
+
+			my $DDEF = "";
+			my $DS = "";
+			my $dt = "";
+			my $GDEF="";
+			for (my $i = 0; $i <= $#$columnlist; $i++) {
+				my $column = $$columnlist[$i];
+				my $color = $graphAppInfo{$app}{colors}[$i];
+				$DS .= " DS:$column:GAUGE:$graphTimeInfo{$period}{heartbeat}:U:U";
+				if ($dt ne "") { $dt .= ":"; }
+				$dt .= "$column";
+				$DDEF .= "DEF:${column}=$db:$column:AVERAGE ";
+				if ($GDEF eq "") {
+					$GDEF .= "AREA:";
+				} else {
+					$GDEF .= "STACK:";
+				}
+				$GDEF .= "${column}${color}:${app}_${column} ";
+			}
+
+			print "Generating $period graph for $app on $host\n";
+			`$rrd create $db -b '-5y' -s $graphTimeInfo{$period}{step} $DS RRA:AVERAGE:0.2:1:$graphTimeInfo{$period}{count}`;
 
 			my @rows = sort keys %$data;
 
@@ -198,21 +250,28 @@ foreach my $app ("mta", "amavis") {
 
 			foreach my $row (@rows) {
 
-				#print "$row - $column: $$data{$row}{$column}\n";
 				my $ts = sqlTimeToTs(${row});
-				#print "Updating $db with ${ts}:$$data{$row}{$column}\n";
-				#print "$rrd update $db ${ts}:$$data{$row}{$column}\n";
-				`$rrd update $db ${ts}:$$data{$row}{$column}`;
+				my $dataRow = "$ts";
+				foreach my $column (@$columnlist) {
+					#print "$row - $column: $$data{$row}{$column}\n";
+					#print "Updating $db with ${ts}:$$data{$row}{$column}\n";
+					#print "$rrd update $db ${ts}:$$data{$row}{$column}\n";
+					$dataRow .= ":$$data{$row}{$column}";
+				}
+
+				`$rrd update $db -t $dt $dataRow`;
+
 			}
 
 			my $upper = "";
 			my $lower = "";
 			my $unit = "";
 
-			`$rrd graph $graph --start $sts --end $ets $upper $lower $unit $xlabel DEF:count=${db}:${column}:AVERAGE LINE3:count#ff0000:${app}${column}`;
+			`$rrd graph $graph --start $sts --end $ets $upper $lower $unit $graphTimeInfo{$period}{xlabel} $DDEF $GDEF`;
 
 		}
 	}
+	} # hostlist
 }
 
 __END__
