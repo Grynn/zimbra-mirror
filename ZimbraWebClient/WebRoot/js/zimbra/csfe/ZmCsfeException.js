@@ -51,6 +51,7 @@ ZmCsfeException.SVC_UNKNOWN_DOCUMENT 		= "service.UNKNOWN_DOCUMENT";
 ZmCsfeException.SVC_WRONG_HOST 				= "service.WRONG_HOST";
 
 ZmCsfeException.ACCT_AUTH_FAILED 			= "account.AUTH_FAILED";
+ZmCsfeException.ACCT_CHANGE_PASSWORD 		= "account.CHANGE_PASSWORD";
 ZmCsfeException.ACCT_EXISTS 				= "account.ACCOUNT_EXISTS";
 ZmCsfeException.ACCT_INVALID_PASSWORD 		= "account.INVALID_PASSWORD";
 ZmCsfeException.ACCT_INVALID_PREF_NAME 		= "account.INVALID_PREF_NAME";
@@ -58,9 +59,9 @@ ZmCsfeException.ACCT_INVALID_PREF_VALUE 	= "account.INVALID_PREF_VALUE";
 ZmCsfeException.ACCT_NO_SUCH_ACCOUNT 		= "account.NO_SUCH_ACCOUNT";
 ZmCsfeException.ACCT_NO_SUCH_SAVED_SEARCH 	= "account.NO_SUCH_SAVED_SEARCH";
 ZmCsfeException.ACCT_NO_SUCH_TAG 			= "account.ACCT_NO_SUCH_TAG";
-ZmCsfeException.ACCT_PASS_RECENTLY_USED 	= "account.PASSWORD_RECENTLY_USED";
 ZmCsfeException.ACCT_PASS_CHANGE_TOO_SOON 	= "account.PASSWORD_CHANGE_TOO_SOON";
-ZmCsfeException.ACCT_CHANGE_PASSWORD 		= "account.CHANGE_PASSWORD";
+ZmCsfeException.ACCT_PASS_LOCKED 			= "account.PASSWORD_LOCKED";
+ZmCsfeException.ACCT_PASS_RECENTLY_USED 	= "account.PASSWORD_RECENTLY_USED";
 ZmCsfeException.DOMAIN_NOT_EMPTY			= "account.DOMAIN_NOT_EMPTY";
 
 ZmCsfeException.COS_EXISTS 					= "account.COS_EXISTS";
