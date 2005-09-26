@@ -76,7 +76,7 @@ function MixingExample(parent) {
 MixingExample.run =
 function() {
 	// Create the shell
-	var shell = new DwtShell("MainShell", false, null, null, null, true);
+	var shell = new DwtShell("MainShell", false, null, null, true);
 	new MixingExample(shell);
 }
 

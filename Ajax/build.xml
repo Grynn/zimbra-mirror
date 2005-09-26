@@ -5,6 +5,7 @@
 	<property name="build.dir"          location="build"/>
 	<property name="build.examples.dir" location="${build.dir}/WebRoot/examples"/>
 	<property name="build.cmn.dir"      location="${build.examples.dir}/common"/>
+	<property name="build.img"          location="${build.dir}/WebRoot/img"/>
 	<property name="dist.dir"           location="build/dist"/>
 	<property name="dist.tomcat.dir"    location="${dist.dir}/tomcat"/>
 	<property name="dist.tomcat.webapps.dir" location="${dist.tomcat.dir}/webapps"/>
@@ -31,6 +32,7 @@
 
 	<property name="images.hiRes.destDir" value="${build.cmn.dir}/img/hiRes"/>
 	<property name="images.loRes.destDir" value="${build.cmn.dir}/img/loRes"/>
+	<property name="images.animated.destDir" value="${build.cmn.dir}/img/animated"/>
 	<property name="images.cssFile" value="dwtimgs.css"/>
 	<property name="images.cssPath" value="/ajax/examples/common/img"/>
 
@@ -101,6 +103,7 @@
 		<echo message='images.cssFile: ${images.cssFile}'/>
 		<echo message='images.hiRes.destDir: ${images.hiRes.destDir}'/>
 		<echo message='images.loRes.destDir: ${images.loRes.destDir}'/>
+		<echo message='images.animated.destDir: ${images.animated.destDir}'/>
 
 		<!-- define imagemerge task -->
 		<pathconvert property='imagemerge.cp' pathsep='${path.separator}'>
@@ -138,6 +141,14 @@
 					includes='*' excludes='horizborders,vertborders,backgrounds'/>
 		</imagemerge>
 		<echo/>
+		
+		<!-- copy animated images -->
+		<echo message='Copying animated images'/>
+		<copy todir="${build.img}/animated" overwrite="true" >
+			<fileset dir="WebRoot/img/animated" includes="**/*"/>
+		</copy>
+		<echo/>
+		
 	</target>
 
 	<target name="htmleditorexample">

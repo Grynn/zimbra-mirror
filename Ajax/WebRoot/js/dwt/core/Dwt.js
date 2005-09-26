@@ -307,6 +307,25 @@ function(htmlElement, idx) {
 	htmlElement.style.zIndex = idx;
 };
 
+/**
+* Returns the window size of the browser
+*/
+Dwt.getWindowSize =
+function() {
+	var p = new DwtPoint(0, 0);
+	if (window.innerWidth) {
+		p.x = window.innerWidth;
+		p.y = window.innerHeight;
+	} else if (AjxEnv.isIE6CSS) {
+		p.x = document.body.parentElement.clientWidth;
+		p.y = document.body.parentElement.clientHeight;
+	} else if (document.body && document.body.clientWidth) {
+		p.x = document.body.clientWidth;
+		p.y = document.body.clientHeight;
+	}
+	return p;
+}
+
 Dwt.toWindow =
 function(htmlElement, x, y, containerElement) {
 	var container = (containerElement == null)? null: containerElement;
@@ -331,7 +350,7 @@ function(text) {
 };
 
 Dwt.getTitle = 
-function(text) {
+function() {
 	return window.document.title;
 };
 

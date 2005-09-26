@@ -42,7 +42,7 @@ DwtHtmlEditorExample._VALUE = "value";
 
 DwtHtmlEditorExample.run =
 function() {
-	var shell = new DwtShell("MainShell", false, null, null, null, true);
+	var shell = new DwtShell("MainShell", false, null, null, true);
 	var tst = new DwtHtmlEditorExample(shell);
 }
 
