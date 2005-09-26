@@ -15,6 +15,10 @@ REWRITE conf/freshclam.conf.in conf/freshclam.conf
 	VAR zimbraVirusWarnAdmin
 	VAR zimbraVirusDefinitionsUpdateFrequency
 	VAR zimbraVirusBlockEncryptedArchive
+
+	LOCAL ldap_host
+	LOCAL zimbra_ldap_userdn
+	LOCAL zimbra_ldap_password
 	LOCAL av_notify_domain
 	LOCAL av_notify_user
 
@@ -30,6 +34,9 @@ REWRITE conf/amavisd.conf.in conf/amavisd.conf
 		fi
 	fi
 
+	LOCAL ldap_host
+	LOCAL zimbra_ldap_userdn
+	LOCAL zimbra_ldap_password
 	VAR zimbraSpamKillPercent
 	VAR zimbraSpamTagPercent
 	VAR zimbraSpamSubjectTag
