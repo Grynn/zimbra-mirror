@@ -783,7 +783,7 @@ sub parseMessage {
 			$msg{$messageId}{recipList}{$r}{leaveTime}{$date}{statusmsg} = $5;
 
 			if ($5 =~ /id=([^,]+).*queued as (.*)\)/) {
-				$msg{$messageId}{recipList}{$r}{amavisPid} = $1;
+				$msg{$messageId}{recipList}{$r}{leaveTime}{$date}{amavisPid} = $1;
 			}
 
 			next;
@@ -803,7 +803,7 @@ sub parseMessage {
 			$msg{$messageId}{recipList}{$r}{leaveTime}{$date}{statusmsg} = $6;
 
 			if ($6 =~ /id=([^,]+).*queued as (.*)\)/) {
-				$msg{$messageId}{recipList}{$r}{amavisPid} = $1;
+				$msg{$messageId}{recipList}{$r}{leaveTime}{$date}{amavisPid} = $1;
 			}
 			next;
 		}
@@ -848,7 +848,7 @@ sub insertMtaMessage {
 					$lt?$lt:'0000-00-00 00:00:00',
 					$$msg{$messageId}{host}, $messageId,
 					$$msg{$messageId}{sender}, $r, 
-					$$msg{$messageId}{recipList}{$r}{amavisPid}, $$msg{$messageId}{bytes}, 
+					$$msg{$messageId}{recipList}{$r}{leaveTime}{$lt}{amavisPid}, $$msg{$messageId}{bytes}, 
 					$$msg{$messageId}{prevHost}, $$msg{$messageId}{prevIp}, 
 					$$msg{$messageId}{recipList}{$r}{nextHost}, 
 					$$msg{$messageId}{recipList}{$r}{nextIp}, 
