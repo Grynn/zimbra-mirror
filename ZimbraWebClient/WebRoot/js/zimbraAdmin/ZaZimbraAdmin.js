@@ -254,67 +254,6 @@ function(ev) {
 	//var searchController = this._appCtxt.getSearchController();
 	var id = ev.item.getData(Dwt.KEY_ID);
 	switch (id) {
-		case ZaAppChooser.B_COSES:
-			if(this._app.getCurrentController()) {
-				this._app.getCurrentController().switchToNextView(this._app.getCosListController(), ZaCosListController.prototype.show, ZaCos.getAll(this._app));
-			} else {
-				this._app.getCosListController().show(ZaCos.getAll(this._app));
-			}
-			break;
-			
-		case ZaAppChooser.B_DISTRIBUTION_LISTS:
-			var type = ZaItem.DL;
-			this._showAccountsView(type,ev);
-			break;
-		case ZaAppChooser.B_ACCOUNTS:
-			var type = ZaItem.ACCOUNT;
-			this._showAccountsView(type,ev);
-			break;
-
-		case ZaAppChooser.B_DOMAINS:
-
-			if(this._app.getCurrentController()) {
-				this._app.getCurrentController().switchToNextView(this._app.getDomainListController(), ZaDomainListController.prototype.show, ZaDomain.getAll(this._app));
-			} else {					
-				this._app.getDomainListController().show(ZaDomain.getAll(this._app));
-			}
-
-			break;			
-		case ZaAppChooser.B_SERVERS:
-
-			if(this._app.getCurrentController()) {
-				this._app.getCurrentController().switchToNextView(this._app.getServerListController(), ZaServerListController.prototype.show, ZaServer.getAll());
-			} else {					
-				this._app.getServerListController().show(ZaServer.getAll());
-			}
-
-			break;									
-		case ZaAppChooser.B_STATUS:
-
-			if(this._app.getCurrentController()) {
-				this._app.getCurrentController().switchToNextView(this._app.getStatusViewController(),ZaStatusViewController.prototype.show, null);
-			} else {					
-				this._app.getStatusViewController().show();
-			}
-			break;		
-		case ZaAppChooser.B_STATS:
-
-			if(this._app.getCurrentController()) {
-				this._app.getCurrentController().switchToNextView(this._app.getGlobalStatsController(),ZaGlobalStatsController.prototype.show, null);
-			} else {					
-				this._app.getGlobalStatsController().show();
-			}
-			break;		
-		case ZaAppChooser.B_GLOBAL:
-
-			if(this._app.getCurrentController()) {
-				this._app.getCurrentController().switchToNextView(this._app.getGlobalConfigViewController(),ZaGlobalConfigViewController.prototype.show, this._app.getGlobalConfig());
-			} else {					
-				this._app.getGlobalConfigViewController().show(this._app.getGlobalConfig());
-			}
-			break;		
-			
-			
 		case ZaAppChooser.B_MONITORING:
 
 			if(this._app.getCurrentController()) {
@@ -331,9 +270,11 @@ function(ev) {
 			}
 			break;		
 		case ZaAppChooser.B_ADDRESSES:
-
 			this._showAccountsView(ZaItem.ACCOUNT,ev);
 			break;				
+		case ZaAppChooser.B_LOGOUT:
+			ZaZimbraAdmin.logOff();
+			break;
 	}
 }
 
