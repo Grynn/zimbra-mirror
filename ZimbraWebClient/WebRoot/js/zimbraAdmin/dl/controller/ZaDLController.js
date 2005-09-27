@@ -31,6 +31,7 @@ function ZaDLController (appCtxt, container, abApp, domain) {
 	this._domain = domain;
 	this._createListeners();
 	this._createToolbars();
+	this.__internalId = AjxCore.assignId(this);
 }
 
 ZaDLController.prototype = new ZaController();
@@ -122,6 +123,7 @@ ZaDLController.prototype._getView = function (id, args) {
 	if (view == null) {
 		switch (id) {
 		case ZaDLController.NEW_DL_VIEW:
+			this._app.getDomainList();
 			var xModelObj = new XModel(ZaDLController.distributionListXModel);
 			view = new XForm(this._getNewViewXForm(), xModelObj, args, this._container);
 			var ls = new AjxListener(this, this._itemUpdatedListener);
@@ -139,6 +141,7 @@ ZaDLController.prototype._getView = function (id, args) {
 				if (clone[ZaModel.currentTab] == null) {
 					clone[ZaModel.currentTab] = "1";
 				}
+				view.getItemsById('members')[0].dirtyDisplay();
 				view.setInstance(clone);
 			};
 			this._dlView = view;
@@ -242,8 +245,16 @@ ZaDLController.prototype.setQuery = function (query) {
 //===============================================================
 // Forms and form controller methods
 //===============================================================
-ZaDLController.prototype._setSearchResults = function (searchResults) {
+ZaDLController.moreItemId = "MORE_ITEM";
+ZaDLController.prototype._setSearchResults = function (searchResults, appendResults) {
 
+	DBG.dumpObj(searchResults, false, 1);
+	var memberPoolItem = this._dlView.getItemsById("memberPool")[0];
+	if (appendResults) {
+		if (this._moreItem != null) {
+			memberPoolItem.widget.removeItem(this._moreItem);
+		}
+	}
 	var arr = searchResults.list.getArray();
 	var tmpArr = new Array();
 	var t;
@@ -252,24 +263,59 @@ ZaDLController.prototype._setSearchResults = function (searchResults) {
 		t.id = arr[i].id;
 		tmpArr.push(t);
 	}
-	this._dlView.getInstance().memberPool = tmpArr;
+
+	var showMore = (searchResults.numPages > this._currentPageNum);
+	if (showMore){
+		var anchor = AjxBuffer.concat("<a href='javascript:' onclick='javascript:AjxCore.objectWithId(",
+									  this.__internalId, ").fetchMore(", this._currentPageNum + 1,")'>More..</a>");
+		this._moreItem = new String("");
+		this._moreItem.id = ZaDLController.moreItemId;
+		tmpArr.push(this._moreItem);
+	}
+
+	var instance = this._dlView.getInstance();
+	if (appendResults) {
+		memberPoolItem.appendItems(tmpArr);
+		var list = memberPoolItem.widget.getList();
+		instance.memberPool = list.getArray();
+	} else {
+		instance.memberPool = tmpArr;
+	}
+
 	this._dlView.refresh();
+	// HACK -- Since the list view escapes strings, we have to set the anchor tag
+	// ourselves, after the list has rendered
+	if (showMore) {
+		var div = document.getElementById(ZaDLController.moreItemId);
+		div.innerHTML = anchor;
+		// defeat the selection code for the list view
+		div.onmousedown = ZaDLController.emptyHandler;
+		div.onmouseup = ZaDLController.emptyHandler;
+		div.ondblclick = ZaDLController.emptyHandler;
+	}
+};
+
+ZaDLController.emptyHandler = function(event) {
+	event = event? event: window.event;
+	DwtUiEvent.setBehaviour(event, true, true);
+};
+
+ZaDLController.prototype.fetchMore = function () {
+	this._search(this._currentQuery, this._currentPageNum + 1, true);
 };
 
 ZaDLController.prototype._searchListener = function (event, formItem) {
 	var btn = event.item;
+	//var btn = args[0].item;
 	var form = formItem.getForm();
 	//var searchTextItem = form.getItemsById("searchText")[0];
 	var instance = form.getInstance();
 	var searchText = instance.searchText;
 	try {
-		// TODO -- paging of results ....
 		var searchQuery = new ZaSearchQuery(ZaSearch.getSearchByNameQuery(searchText), [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS], 
 											this._domain, false);
-		this.setQuery(searchQuery);
-		var results = ZaSearch.searchByQueryHolder(searchQuery, 1, null, null, this._app);
-		this._setSearchResults(results);
-		form.refresh();
+		this._search(searchQuery, 1);
+		//form.refresh();
 	} catch (ex) {
 		// Only restart on error if we are not initialized and it isn't a parse error
 		if (ex.code != ZmCsfeException.MAIL_QUERY_PARSE_ERROR) {
@@ -278,6 +324,13 @@ ZaDLController.prototype._searchListener = function (event, formItem) {
 			this.popupMsgDialog(ZaMsg.queryParseError, ex);
 		}
 	}	
+};
+
+ZaDLController.prototype._search = function (searchQuery, pagenum, appendResults) {
+	this.setQuery(searchQuery);
+	this._currentPageNum = pagenum;
+	var results = ZaSearch.searchByQueryHolder(searchQuery, this._currentPageNum, null, null, this._app);
+	this._setSearchResults(results, appendResults);
 };
 
 /**
@@ -309,16 +362,22 @@ ZaDLController.prototype._getNewViewXForm = function () {
 					 {type:_CASE_, useParentTable:true, relevant:"instance[ZaModel.currentTab] == 1", colSpan:"*", numCols:5,
 					  items:[
 						 {type:_CELLSPACER_, width:10 },
- 						    {type:_GROUP_, colSpan:1, width:"100%", colSizes:[100,"auto"],
+ 						    {type:_GROUP_, colSpan:1, width:"100%", colSizes:[70,"auto"],
  							 items:[	
-							       {ref: "name", type:_TEXTFIELD_, label: "List name:", width:"100%"},
-								   //{ref: "description", type:_TEXTFIELD_, label: "Description:", width:"100%"},
+									//{ref: "name", type:_TEXTFIELD_, label: "List name:", width:"100%"},
+									{ref:"name", type:_EMAILADDR_, xmsgName:ZaMsg.NAD_AccountName, label:"List name:", XonChange:ZaTabView.onFormFieldChanged,forceUpdate:true, tableCssStyle:"width:100%", inputWidth:"140px"},
+
+								   {ref: "description", type:_TEXTFIELD_, label: "Description:", width:"100%"},
+								   {type:_OUTPUT_, value:"List Members:", width:"100%", colSpan:"*", cssClass:"xform_label_left", 
+									cssStyle:"padding-left:0px"},
 							       //{ref: "notes", type:_TEXTFIELD_, label: "Notes:", width:"100%"},
 							       {type:_SPACER_, height:"3"},
 							       {ref:"members", type:_DWT_LIST_, colSpan:"*", cssClass: "DLTarget"},
-							       {type:_SPACER_, height:"5"},
-							       {type:_GROUP_, colSpan:2, width:"100%", numCols:4, colSizes:["100%",85,5, 85], 
+							       {type:_SPACER_, height:"8"},
+								   {type:_GROUP_, colSpan:2, width:"100%", numCols:6, colSizes:[20,40,"100%",85,5, 85], 
 									items:[
+									  {ref: "zimbraMailStatus", type:_CHECKBOX_, trueValue:"enabled", falseValue:"disabled", label:"Active", 
+									   cssStyle:"padding-left:0px"},
 									  {type:_CELLSPACER_},
 									  {type:_DWT_BUTTON_, label:"Remove All", width:80, relevant:"(form.getController().shouldEnableRemoveAllButton())",
 									      onActivate:"this.getFormController().removeAllMembers(event,this)",
@@ -355,7 +414,7 @@ ZaDLController.prototype._getNewViewXForm = function () {
 									 ]
 							       },
 							       {type:_SPACER_, height:"5"},
-							       {ref:"memberPool", type:_DWT_LIST_, colSpan:"*", cssClass: "DLSource"},
+								   {ref:"memberPool", type:_DWT_LIST_, colSpan:"*", cssClass: "DLSource", forceUpdate: true},
 							       {type:_SPACER_, height:"5"},
 							       {type:_GROUP_, width:"100%", colSpan:"*", numCols:4, colSizes:[85,5,85,"100%"],
 									items: [
@@ -393,15 +452,15 @@ ZaDLController.prototype._getNewViewXForm = function () {
 					 {type:_CASE_, useParentTable:false, relevant:"instance[ZaModel.currentTab] == 2", colSizes:[10, "auto"], colSpan:"*",
 					     items:[
 						    {type:_SPACER_, height:5},
-						    {type:_CELLSPACER_, width:10 },
-						    {type: _OUTPUT_, value:"Description:", cssStyle:"align:left"},
-						    {type:_CELLSPACER_, width:10 },
-						    {ref: "description", type:_TEXTFIELD_, width:"90%"},
+// 						    {type:_CELLSPACER_, width:10 },
+// 						    {type: _OUTPUT_, value:"Description:", cssStyle:"align:left"},
+// 						    {type:_CELLSPACER_, width:10 },
+// 						    {ref: "description", type:_TEXTFIELD_, width:"90%"},
 						    {type:_SPACER_, height:5},
 						    {type:_CELLSPACER_, width:10 },
 						    {type: _OUTPUT_, value:"Notes:", cssStyle:"align:left"},
 						    {type:_CELLSPACER_, width:10 },
-						    {ref: "notes", type:_TEXTAREA_, width:"90%", height:350, labelCssStyle:"vertical-align: top"}
+						    {ref: "notes", type:_TEXTAREA_, width:"90%", height:"400", labelCssStyle:"vertical-align: top"}
 						   ]
 					 }
 					 ]
@@ -671,6 +730,7 @@ ZaDLController.distributionListXModel = {
 	{id: "name", type:_STRING_, setter:"setName", setterScope: _INSTANCE_},
 	{id: "members", type:_LIST_, getter: "getMembersArray", getterScope:_MODEL_, setter: "setMembersArray", setterScope:_MODEL_},
 	{id: "description", type:_STRING_, setter:"setDescription", setterScope:_INSTANCE_, getter: "getDescription", getterScope: _INSTANCE_},
-	{id: "notes", type:_STRING_, setter:"setNotes", setterScope:_INSTANCE_, getter: "getNotes", getterScope: _INSTANCE_}
+	{id: "notes", type:_STRING_, setter:"setNotes", setterScope:_INSTANCE_, getter: "getNotes", getterScope: _INSTANCE_},
+	{id: "zimbraMailStatus", type:_STRING_, setter:"setMailStatus", setterScope:_INSTANCE_, getter: "getMailStatus", getterScope: _INSTANCE_}
 	]
 };

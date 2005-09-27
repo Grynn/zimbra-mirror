@@ -3441,14 +3441,27 @@ XFormItemFactory.createItemType("_DWT_LIST_", "dwt_list", Dwt_List_XFormItem, Dw
 //	type defaults
 Dwt_List_XFormItem.prototype.writeElementDiv = false;
 
+Dwt_List_XFormItem.prototype.getOnSelectionMethod = function() {
+	return this.cacheInheritedMethod("onSelection","$onSelection","event");
+}
+
+
 Dwt_List_XFormItem.prototype.constructWidget = function () {
 	var widget = new DwtListView(this.getForm(), this.getCssClass());
 	var multiselect = this.getInheritedProperty("multiselect");
 	if(multiselect != null) {
 		widget.setMultiSelect(multiselect);
 	}	
+	// make sure the user defined listener is called 
+	// before our selection listener.
+	var selMethod = this.getOnSelectionMethod();
+	if (selMethod) {
+		widget.addSelectionListener(new AjxListener(this, selMethod));
+	}
+
 	var localLs = new AjxListener(this, this._handleSelection);
 	widget.addSelectionListener(localLs);
+
 
 	widget._setNoResultsHtml = function() {
 		var buffer = new AjxBuffer();
@@ -3479,8 +3492,40 @@ Dwt_List_XFormItem.prototype.insertWidget = function (form, widget, element) {
 
 Dwt_List_XFormItem.prototype.updateWidget = function (newValue) {
 	if (typeof (newValue) != 'undefined') {
-		this.widget.set(AjxVector.fromArray(newValue));
+		this.setItems(newValue);
 	}
+};
+
+Dwt_List_XFormItem.prototype.setItems = function (itemArray){
+	var list = this.widget.getList();
+
+	var existingArr = null;
+	if (list) {
+		existingArr = this.widget.getList().getArray();
+	}
+	
+	var proceed = true;
+	var tmpArr = itemArray;
+	if (existingArr == null && itemArray == null) {
+		proceed = false;
+	} else if (existingArr != null && itemArray != null && existingArr === itemArray) {
+		if (existingArr.toString() == itemArray.toString()) {
+			proceed = false;
+		} else {
+			tmpArr = new Array();
+			for (var i = 0 ; i < itemArray.length; ++i) {
+				tmpArr[i] = itemArray[i];
+			}
+		}
+	}
+	if (proceed) {
+		this.widget.set(AjxVector.fromArray(tmpArr));
+	}
+
+};
+
+Dwt_List_XFormItem.prototype.appendItems = function (itemArray){ 
+	this.widget.addItems(itemArray);
 };
 
 

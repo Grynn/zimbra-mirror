@@ -37,6 +37,10 @@ EmailAddr_XFormItem.prototype.numCols = 4;
 EmailAddr_XFormItem.prototype.nowrap = true;
 EmailAddr_XFormItem.prototype.initializeItems = 
 function () {
+	this._inputWidth = this.getInheritedProperty("inputWidth");
+	if (this._inputWidth == null) this._inputWidth = 200;
+	this.items[0].width = this._inputWidth;
+
 	Composite_XFormItem.prototype.initializeItems.call(this);
 	if(EmailAddr_XFormItem.domainChoices) {
 		if(EmailAddr_XFormItem.domainChoices._choiceObject.length >0) {
@@ -48,7 +52,7 @@ function () {
 };
 
 EmailAddr_XFormItem.prototype.items = [
-	{type:_TEXTFIELD_,forceUpdate:true, ref:".", labelLocation:_NONE_,relevantBehavior:_PARENT_, cssClass:"admin_xform_name_input", width:200,
+	{type:_TEXTFIELD_,forceUpdate:true, ref:".", labelLocation:_NONE_,relevantBehavior:_PARENT_, cssClass:"admin_xform_name_input",
 		getDisplayValue:function (itemVal) {
 			var val = itemVal;
 			if(val) {

@@ -42,7 +42,17 @@ ZaDistributionList.DESCRIPTION = "ZDLDESC";
 ZaDistributionList.ID = "ZDLID";
 
 ZaDistributionList.prototype.clone = function () {
-	var dl = new ZaDistributionList(this._app, this.id, this.name, this._memberList.getArray(), this.description, this.notes);
+	var memberList = this._memberList.getArray();
+	var dl = new ZaDistributionList(this._app, this.id, this.name, memberList, this.description, this.notes);
+ 	if (memberList != null) {
+ 		dl._memberList = new AjxVector();
+ 		for (var i = 0 ; i < memberList.length; ++i) {
+ 			dl._memberList.add(memberList[i]);
+ 		}
+ 	} else {
+ 		this._memberList = null;
+ 	}
+
 	var val, tmp;
 	for (key in this.attrs) {
 		val = this.attrs[key];
@@ -196,7 +206,7 @@ ZaDistributionList.prototype.setDescription = function (description) {
 	this.attrs.description = description;
 };
 
-ZaDistributionList.prototype.getDescription = function (description) {
+ZaDistributionList.prototype.getDescription = function () {
 	return this.attrs.description;
 };
 
@@ -204,8 +214,16 @@ ZaDistributionList.prototype.setNotes = function (notes) {
 	this.attrs.zimbraNotes = notes;
 };
 
-ZaDistributionList.prototype.getNotes = function (notes) {
+ZaDistributionList.prototype.getNotes = function () {
 	return this.attrs.zimbraNotes;
+};
+
+ZaDistributionList.prototype.setMailStatus = function (status) {
+	this.attrs.zimbraMailStatus = status;
+};
+
+ZaDistributionList.prototype.getMailStatus = function () {
+	return this.attrs.zimbraMailStatus;
 };
 
 

@@ -273,15 +273,21 @@ DwtListView.prototype.setUI =
 function(defaultColumnSort) {
 	this.removeAll();
 	this.createHeaderHtml(defaultColumnSort);
-	if (this._list instanceof AjxVector && this._list.size()) {
-		var size = this._list.size();
+	this._renderList(this._list);
+}
+
+DwtListView.prototype._renderList =
+function (list) {
+	if (list instanceof AjxVector && list.size()) {
+		var size = list.size();
 		for (var i = 0; i < size; i++) {
-			var item = this._list.get(i);
+			var item = list.get(i);
 			var div = this._createItemHtml(item, this._now);
 			if (div) {
 				if (div instanceof Array) {
-					for (var j = 0; j < div.length; j++)
+					for (var j = 0; j < div.length; j++){
 						this._addRow(div[j]);
+					}
 				} else {
 					this._addRow(div);
 				}
@@ -290,7 +296,25 @@ function(defaultColumnSort) {
 	} else {
 		this._setNoResultsHtml();
 	}
-}
+};
+
+DwtListView.prototype.addItems =
+function(itemArray, index) {
+	if (AjxUtil.isArray(itemArray)){
+		if (!this._list) {
+			this._list = new AjxVector();
+		}
+	
+		// clear the "no results" message before adding!
+		if (this._list.size() == 0) {
+			this._resetList();
+		}
+		var currentSize = this._list.size();
+		var vec = AjxVector.fromArray(itemArray);
+		this._renderList(vec);
+		this._list.addList(itemArray);
+	}
+};
 
 DwtListView.prototype.addItem =
 function(item, index, skipNotify) {
