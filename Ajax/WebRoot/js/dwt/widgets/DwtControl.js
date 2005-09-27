@@ -146,10 +146,9 @@ function(ev) {
 
 DwtControl._mouseDownHdlr =
 function(ev) {
-  		
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
 	if (!obj) return false;
-		
+	
 	if (obj._toolTipContent != null) {
 		var shell = DwtShell.getShell(window);
 		var manager = shell.getHoverMgr();
@@ -373,6 +372,16 @@ function(ev) {
 
 DwtControl._contextMenuHdlr = 
 function(ev) {
+	// for Safari, we have to fake a right click
+	if (AjxEnv.isSafari) {
+		var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+		var prevent = obj ? obj.preventContextMenu() : true;
+		if (prevent) {
+			DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEDOWN);
+			DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEUP);
+			return;
+		}
+	}
 	return DwtControl._mouseEvent(ev, DwtEvent.ONCONTEXTMENU);
 }
 
@@ -859,7 +868,7 @@ function(targetEl) {
 
 DwtControl.prototype.preventContextMenu = 
 function(targetEl) {
-	return !this._isInputEl(targetEl);
+	return targetEl ? (!this._isInputEl(targetEl)) : true;
 }
 
 DwtControl.prototype._checkState =
