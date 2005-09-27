@@ -28,15 +28,16 @@ function ZaAppChooser(parent, className, buttons) {
 	className = className ? className : "ZaAppChooser";
 	DwtToolBar.call(this, parent, className, Dwt.ABSOLUTE_STYLE, null, null, DwtToolBar.VERT_STYLE);
 	this.TOOLTIP = new Object();
-	this.TOOLTIP[ZaAppChooser.B_STATUS]		= ZaMsg.goToStatus;
-	this.TOOLTIP[ZaAppChooser.B_STATS]	= ZaMsg.goToStats;
-	this.TOOLTIP[ZaAppChooser.B_ACCOUNTS]	= ZaMsg.goToAccounts;
-	this.TOOLTIP[ZaAppChooser.B_DISTRIBUTION_LISTS]	= ZaMsg.goToDistributionLists;
-	this.TOOLTIP[ZaAppChooser.B_HELP]		= ZaMsg.goToHelp;
+	this.TOOLTIP[ZaAppChooser.B_MONITORING]		= ZaMsg.goToMonitoring;
+	this.TOOLTIP[ZaAppChooser.B_SYSTEM_CONFIG]	= ZaMsg.goToSystemConfig;
+	this.TOOLTIP[ZaAppChooser.B_ADDRESSES]	= ZaMsg.goToAddresses;
+/*	this.TOOLTIP[ZaAppChooser.B_DISTRIBUTION_LISTS]	= ZaMsg.goToDistributionLists;
 	this.TOOLTIP[ZaAppChooser.B_COSES]	= ZaMsg.goToCoses;
 	this.TOOLTIP[ZaAppChooser.B_DOMAINS]	= ZaMsg.goToDomains;
 	this.TOOLTIP[ZaAppChooser.B_GLOBAL]	= ZaMsg.goToGlobalSettings;
 	this.TOOLTIP[ZaAppChooser.B_SERVERS]	= ZaMsg.goToServers;
+*/
+	this.TOOLTIP[ZaAppChooser.B_HELP]		= ZaMsg.goToHelp;
 	this.TOOLTIP[ZaAppChooser.B_LOGOUT]		= ZaMsg.logOff;
 	
 	this.setScrollStyle(Dwt.CLIP);
@@ -60,6 +61,9 @@ ZaAppChooser.OUTER_TRIG	= i++;
 
 ZaAppChooser.SEP		= i++;
 
+ZaAppChooser.B_MONITORING = i++;
+ZaAppChooser.B_SYSTEM_CONFIG = i++;
+ZaAppChooser.B_ADDRESSES = i++;
 ZaAppChooser.B_HELP		= i++;
 ZaAppChooser.B_LOGOUT	= i++;
 ZaAppChooser.B_STATUS	= i++;
@@ -75,6 +79,10 @@ ZaAppChooser.IMAGE = new Object();
 ZaAppChooser.IMAGE[ZaAppChooser.OUTER]		= "ImgAppChiclet";
 ZaAppChooser.IMAGE[ZaAppChooser.OUTER_ACT]	= "ImgAppChicletHover";
 ZaAppChooser.IMAGE[ZaAppChooser.OUTER_TRIG]	= "ImgAppChicletSel";
+
+ZaAppChooser.IMAGE[ZaAppChooser.B_MONITORING]	= "Status";
+ZaAppChooser.IMAGE[ZaAppChooser.B_SYSTEM_CONFIG]	= "Server";
+ZaAppChooser.IMAGE[ZaAppChooser.B_ADDRESSES]	= "Account";
 
 ZaAppChooser.IMAGE[ZaAppChooser.B_STATUS]	= "Status";
 ZaAppChooser.IMAGE[ZaAppChooser.B_STATS]	= "Statistics";
