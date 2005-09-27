@@ -209,21 +209,12 @@ ZaZimbraAdmin.prototype._createAppChooser =
 function() {
 	var buttons = new Array();
 	
-	if (ZaSettings.STATUS_ENABLED)
-		buttons.push(ZaAppChooser.B_STATUS);
-	if (ZaSettings.STATS_ENABLED)
-		buttons.push(ZaAppChooser.B_STATS);
-	if (ZaSettings.ACCOUNTS_ENABLED)
-		buttons.push(ZaAppChooser.B_ACCOUNTS);
-	buttons.push(ZaAppChooser.B_DISTRIBUTION_LISTS);
-	if (ZaSettings.COSES_ENABLED)
-		buttons.push(ZaAppChooser.B_COSES);
-	if (ZaSettings.DOMAINS_ENABLED)
-		buttons.push(ZaAppChooser.B_DOMAINS);
-	if (ZaSettings.SERVERS_ENABLED)
-		buttons.push(ZaAppChooser.B_SERVERS);
-	if (ZaSettings.GLOBAL_ENABLED)
-		buttons.push(ZaAppChooser.B_GLOBAL);
+	if (ZaSettings.MONITORING_ENABLED)
+		buttons.push(ZaAppChooser.B_MONITORING);
+	if (ZaSettings.SYSTEM_CONFIG_ENABLED)
+		buttons.push(ZaAppChooser.B_SYSTEM_CONFIG);
+	if (ZaSettings.ADDRESSES_ENABLED)
+		buttons.push(ZaAppChooser.B_ADDRESSES);
 		
 	buttons.push(ZaAppChooser.SEP, ZaAppChooser.B_HELP, ZaAppChooser.B_LOGOUT);
 	var appChooser = new ZaAppChooser(this._shell, null, buttons);
@@ -322,29 +313,42 @@ function(ev) {
 				this._app.getGlobalConfigViewController().show(this._app.getGlobalConfig());
 			}
 			break;		
+			
+			
+		case ZaAppChooser.B_MONITORING:
+
+			if(this._app.getCurrentController()) {
+				this._app.getCurrentController().switchToNextView(this._app.getStatusViewController(),ZaStatusViewController.prototype.show, null);
+			} else {					
+				this._app.getStatusViewController().show();
+			}
+			break;		
+		case ZaAppChooser.B_SYSTEM_CONFIG:
+			if(this._app.getCurrentController()) {
+				this._app.getCurrentController().switchToNextView(this._app.getServerListController(), ZaServerListController.prototype.show, ZaServer.getAll());
+			} else {					
+				this._app.getServerListController().show(ZaServer.getAll());
+			}
+			break;		
+		case ZaAppChooser.B_ADDRESSES:
+
+			this._showAccountsView(ZaItem.ACCOUNT,ev);
+			break;				
 	}
 }
 
-ZaZimbraAdmin._accountTypesArray = [ZaSearch.ALIASES, ZaSearch.ACCOUNTS];
-ZaZimbraAdmin._dlTypesArray = [ZaSearch.DLS];
 ZaZimbraAdmin.prototype._showAccountsView = function (defaultType, ev){
 	var queryHldr = this._getCurrentQueryHolder();
 	queryHldr.isByDomain = false;
-	queryHldr.byValAttr = this._currentDomain;
+	queryHldr.byValAttr = false;
 	queryHldr.queryString = "";
-	if ( defaultType == ZaItem.DL ){
-		queryHldr.types = ZaZimbraAdmin._dlTypesArray;
-		queryHldr.fetchAttrs = ZaDistributionList.searchAttributes;
-	} else {
-		queryHldr.types = ZaZimbraAdmin._accountTypesArray;
-		queryHldr.fetchAttrs = ZaSearch.standardAttributes;
-	}
+	queryHldr.types = [ZaSearch.TYPES[defaultType]];
 	var acctListController = this._app.getAccountListController();
-	acctListController.setPageNum(1);	
+	acctListController.setPageNum(1);
+	queryHldr.fetchAttrs = ZaSearch.standardAttributes;
+	
 	if(this._app.getCurrentController()) {
-		this._app.getCurrentController().switchToNextView(acctListController, ZaAccountListController.prototype.show,
-														  ZaSearch.searchByQueryHolder(queryHldr,acctListController.getPageNum(), 
-																					   ZaAccount.A_uid, null,this._app));
+		this._app.getCurrentController().switchToNextView(acctListController, ZaAccountListController.prototype.show,ZaSearch.searchByQueryHolder(queryHldr,acctListController.getPageNum(), ZaAccount.A_uid, null,this._app));
 	} else {					
 		acctListController.show(ZaSearch.searchByQueryHolder(queryHldr,1, ZaAccount.A_uid, null,this._app));
 	}
