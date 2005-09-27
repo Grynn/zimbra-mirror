@@ -47,12 +47,7 @@ if [ $keytype != "dsa" -a $keytype != "rsa" ]; then
 	exit 1
 fi
 
-${zimbra_home}/bin/zmlocalconfig -r -f -e ssh_private_key_passphrase
-
-zmsetvars \
-	ssh_private_key_passphrase
-
-ssh-keygen -f ${keyfile} -N ${ssh_private_key_passphrase} \
+ssh-keygen -f ${keyfile} -N '' \
 	-t ${keytype} -C ${zimbra_server_hostname}
 
 pubkey=`cat ${keyfile}.pub`

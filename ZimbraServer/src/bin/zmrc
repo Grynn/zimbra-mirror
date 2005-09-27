@@ -26,8 +26,6 @@
 
 source `dirname $0`/../bin/zmshutil || exit 1
 
-zmassert `id -u` -eq 0
-
 zmsetvars \
 	zimbra_home \
 	zimbra_server_hostname 

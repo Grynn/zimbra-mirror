@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/perl
 # 
 # ***** BEGIN LICENSE BLOCK *****
 # Version: ZPL 1.1
@@ -24,14 +24,141 @@
 # ***** END LICENSE BLOCK *****
 # 
 
-source `dirname $0`/../bin/zmshutil || exit 1
+use strict;
 
-zmassert `id -u` -eq 0
+# List of authorized commands and their corresponding scripts
+#
 
-zmsetvars \
-	zimbra_home \
-	zimbra_server_hostname
+my %commands = (
+	"start" => {
+		"args" => {
+			"mailbox"	=> {
+				"script"	=> [ "/opt/zimbra/bin/tomcat start", 
+								"/opt/zimbra/bin/zmconvertdctl start",
+								"/opt/zimbra/bin/mysql.server start" ],
+				"user"		=> "zimbra",
+			},
+			"ldap"	=> {
+				"script"	=> [ "/opt/zimbra/bin/ldap start" ],
+				"user"		=> "zimbra",
+			},
+			"mta"	=> {
+				"script"	=> [ "/opt/zimbra/bin/zmsaslauthdctl start",
+								"/opt/zimbra/bin/postfix start",
+								"/opt/zimbra/bin/zmmtaconfigctl start" ],
+				"user"		=> "zimbra",
+			},
+			"antispam"	=> {
+				"script"	=> [ "/opt/zimbra/bin/zmamavisdctl start",
+								"/opt/zimbra/bin/zmmtaconfigctl start" ],
+				"user"		=> "zimbra",
+			},
+			"antivirus"	=> {
+				"script"	=> [ "/opt/zimbra/bin/zmamavisdctl start",
+								"/opt/zimbra/bin/zmclamdctl start",
+								"/opt/zimbra/bin/zmmtaconfigctl start" ],
+				"user"		=> "zimbra",
+			},
+			"snmp"	=> {
+				"script"	=> [ "/opt/zimbra/bin/zmswatchctl start" ],
+				"user"		=> "zimbra",
+			},
+		},
+	},
+	"stop" => {
+		"args" => {
+			"mailbox"	=> {
+				"script"	=> [ "/opt/zimbra/bin/tomcat stop", 
+								"/opt/zimbra/bin/zmconvertdctl stop",
+								"/opt/zimbra/bin/mysql.server stop" ],
+				"user"		=> "zimbra",
+			},
+			"ldap"	=> {
+				"script"	=> [ "/opt/zimbra/bin/ldap stop" ],
+				"user"		=> "zimbra",
+			},
+			"mta"	=> {
+				"script"	=> [ "/opt/zimbra/bin/zmsaslauthdctl stop",
+								"/opt/zimbra/bin/postfix stop",
+								"/opt/zimbra/bin/zmmtaconfigctl stop" ],
+				"user"		=> "zimbra",
+			},
+			"antispam"	=> {
+				"script"	=> [ "/opt/zimbra/bin/zmamavisdctl stop",
+								"/opt/zimbra/bin/zmmtaconfigctl stop" ],
+				"user"		=> "zimbra",
+			},
+			"antivirus"	=> {
+				"script"	=> [ "/opt/zimbra/bin/zmamavisdctl stop",
+								"/opt/zimbra/bin/zmclamdctl stop",
+								"/opt/zimbra/bin/zmmtaconfigctl stop" ],
+				"user"		=> "zimbra",
+			},
+			"snmp"	=> {
+				"script"	=> [ "/opt/zimbra/bin/zmswatchctl stop" ],
+				"user"		=> "zimbra",
+			},
+		},
+	},
+	"startup" => {
+		"script"	=> [ "/opt/zimbra/bin/zmcontrol startup" ],
+		"user"		=> "zimbra",
+	},
+	"shutdown" => {
+		"script"	=> [ "/opt/zimbra/bin/zmcontrol shutdown" ],
+		"user"		=> "zimbra",
+	},
+	"msgtrace" => {
+		"script"	=> [ "/opt/zimbra/bin/zmmsgtrace" ],
+		"user"		=> "zimbra",
+	},
+	"postqueue" => {
+		"script"	=> [ "/opt/zimbra/postfix/sbin/postqueue" ],
+		"user"		=> "zimbra",
+	},
+);
 
-while read i; do
-	$i
-done
+sub runCommand {
+	my $user = shift;
+	my $command = shift;
+	my $args = shift;
+
+	foreach my $cm (@$command) {
+		my $cmdstr = "$cm $args";
+		if ($user ne "root") {
+			$cmdstr = "su - $user -c \"$cmdstr\"";
+		}
+		if (open COMMAND, "$cmdstr $args |") {
+			print "STARTCMD: $cmdstr $args\n";
+			while (<COMMAND>) {
+				print $_;
+			}
+			close COMMAND;
+			print "ENDCMD: $cmdstr $args\n";
+		} else {
+			print "Can't run $cmdstr: $!\n\n";
+		}
+	}
+}
+
+while (<>) {
+	chomp;
+	my ($host, $command, $args) = split (' ', $_, 3);
+
+	# Ignore the host for now...
+
+	if (defined ($commands{$command}{script})) {
+		runCommand ($commands{$command}{user}, $commands{$command}{script}, $args);
+		next;
+	} else {
+		my @a = split (' ', $args);
+		my $arg = shift @a;
+
+		if (defined ($commands{$command}{args}{$arg}{script})) {
+			runCommand ($commands{$command}{args}{$arg}{user}, 
+				$commands{$command}{args}{$arg}{script}, join(' ',@a));
+			next;
+		} 
+	}
+	print STDERR "Unknown command $_\n";
+}
