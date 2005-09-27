@@ -1,0 +1,105 @@
+#!/bin/bash
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Version: ZPL 1.1
+# 
+# The contents of this file are subject to the Zimbra Public License
+# Version 1.1 ("License"); you may not use this file except in
+# compliance with the License. You may obtain a copy of the License at
+# http://www.zimbra.com/license
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+# the License for the specific language governing rights and limitations
+# under the License.
+# 
+# The Original Code is: Zimbra Collaboration Suite.
+# 
+# The Initial Developer of the Original Code is Zimbra, Inc.
+# Portions created by Zimbra are Copyright (C) 2005 Zimbra, Inc.
+# All Rights Reserved.
+# 
+# Contributor(s):
+# 
+# ***** END LICENSE BLOCK *****
+# 
+
+source `dirname $0`/../bin/zmshutil || exit 1
+
+zmassert `id -u` -eq 0
+
+zmsetvars \
+	zimbra_home \
+	zimbra_server_hostname
+
+getPubKey() {
+	server=$1
+	echo "Fetching key for ${s}"
+	pubkey=`su - zimbra -c "${zmprov} gs ${server}" 2> /dev/null \
+		| grep $keyattr | sed -e "s/^${keyattr}: //"`
+}
+
+replacePubKey() {
+	server=$1
+	key=$2
+
+	keyhost=`echo ${key} | awk '{print $3}'`
+
+	echo "${authkeys}" > ${tempkeysfile}
+	cat /dev/null > ${tempkeysfile}.new
+
+	while read keyline; do
+		linehost=`echo ${keyline} | awk '{print $3}'`
+		if [ x$linehost != x$keyhost ]; then
+			echo "${keyline}" >> ${tempkeysfile}.new
+		fi
+	done < ${tempkeysfile}
+
+	#Don't change the indentation on these lines
+
+	authkeys=`cat ${tempkeysfile}.new`
+
+	authkeys="${authkeys}
+${key}"
+	
+	/bin/rm -f ${tempkeysfile} ${tempkeysfile}.new
+
+}
+
+# Get all the public keys from ldap, and replace them in 
+# ~root/.ssh/authorized_keys
+
+root_home=`awk -F: '/^root/ {print $6}' /etc/passwd`
+
+keyattr="zimbraSshPublicKey"
+
+zmprov="/opt/zimbra/bin/zmprov"
+
+authkeysfile="${root_home}/.ssh/authorized_keys"
+
+tempkeysfile="/tmp/auth_keys.tmp"
+
+authkeys=`cat ${authkeysfile}`
+
+#echo "Authorized keys: ${authkeys}"
+
+servers=`su - zimbra -c "${zmprov} gas"`
+
+for s in ${servers}; do
+	echo "updating ${s}"
+	getPubKey ${s}
+	if [ "x$pubkey" != "x" ]; then
+		replacePubKey ${s} "${pubkey}"
+	else
+		echo "Key for ${s} NOT FOUND"
+	fi
+done
+
+echo "Updating ${authkeysfile}"
+echo ""
+
+echo "${authkeys}" > ${tempkeysfile}
+
+mv ${tempkeysfile} ${authkeysfile}
+chmod 644 ${authkeysfile}
+

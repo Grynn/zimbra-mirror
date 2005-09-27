@@ -1,0 +1,60 @@
+#!/bin/bash
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Version: ZPL 1.1
+# 
+# The contents of this file are subject to the Zimbra Public License
+# Version 1.1 ("License"); you may not use this file except in
+# compliance with the License. You may obtain a copy of the License at
+# http://www.zimbra.com/license
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+# the License for the specific language governing rights and limitations
+# under the License.
+# 
+# The Original Code is: Zimbra Collaboration Suite.
+# 
+# The Initial Developer of the Original Code is Zimbra, Inc.
+# Portions created by Zimbra are Copyright (C) 2005 Zimbra, Inc.
+# All Rights Reserved.
+# 
+# Contributor(s):
+# 
+# ***** END LICENSE BLOCK *****
+# 
+
+source `dirname $0`/../bin/zmshutil || exit 1
+zmsetvars \
+	zimbra_home \
+	zimbra_server_hostname
+
+keyattr="zimbraSshPublicKey"
+
+zmprov="/opt/zimbra/bin/zmprov"
+
+keyfile="${zimbra_home}/.ssh/zimbra_identity"
+
+mkdir -p ${zimbra_home}/.ssh
+
+rm -f ${keyfile}
+
+keytype=${1:-dsa}
+
+if [ $keytype != "dsa" -a $keytype != "rsa" ]; then
+	echo "Bad keytype: $keytype"
+	echo ""
+	exit 1
+fi
+
+${zimbra_home}/bin/zmlocalconfig -r -f -e ssh_private_key_passphrase
+
+zmsetvars \
+	ssh_private_key_passphrase
+
+ssh-keygen -f ${keyfile} -N ${ssh_private_key_passphrase} \
+	-t ${keytype} -C ${zimbra_server_hostname}
+
+pubkey=`cat ${keyfile}.pub`
+
+${zmprov} ms ${zimbra_server_hostname} ${keyattr} "${pubkey}"
