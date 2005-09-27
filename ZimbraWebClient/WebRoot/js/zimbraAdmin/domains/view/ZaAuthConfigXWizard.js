@@ -83,7 +83,7 @@ function(stepNum) {
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 	} else {
 		if(stepNum == 1) {
-			this._button[DwtWizardDialog.NEXT_BUTTON].setText(DwtMsg._next);
+			this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
 			if(this._containedObject.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_zimbra) {
 				this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
 				this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
@@ -98,7 +98,7 @@ function(stepNum) {
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 		} else if(stepNum == 5) {
-			this._button[DwtWizardDialog.NEXT_BUTTON].setText(DwtMsg._next);
+			this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
@@ -107,7 +107,7 @@ function(stepNum) {
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
 		} else {
-			this._button[DwtWizardDialog.NEXT_BUTTON].setText(DwtMsg._next);
+			this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 		}
@@ -237,7 +237,7 @@ function () {
 	} else if (this._containedObject[ZaModel.currentStep] == 4 && this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad) {
 		this.goPage(2);//skip 3rd step for Active Directory
 	} else {
-		/*this._button[DwtWizardDialog.NEXT_BUTTON].setText(DwtMsg._next);
+		/*this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
 		if(this._containedObject[ZaModel.currentStep] == 2) {
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
 		}*/

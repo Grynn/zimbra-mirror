@@ -101,7 +101,7 @@ function(stepNum) {
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 		} else if(stepNum == 5) {
-			this._button[DwtWizardDialog.NEXT_BUTTON].setText(DwtMsg._next);
+			this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
@@ -281,7 +281,7 @@ function (arg) {
 ZaGALConfigXWizard.prototype.popup = 
 function (loc) {
 	ZaXWizardDialog.prototype.popup.call(this, loc);
-	this._button[DwtWizardDialog.NEXT_BUTTON].setText(DwtMsg._next);
+	this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
 	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);	
@@ -299,7 +299,7 @@ function () {
 		//skip 5th step
 		this.goPage(4);
 	} else {
-		this._button[DwtWizardDialog.NEXT_BUTTON].setText(DwtMsg._next);
+		this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 		this.goPage(this._containedObject[ZaModel.currentStep]-1);
 

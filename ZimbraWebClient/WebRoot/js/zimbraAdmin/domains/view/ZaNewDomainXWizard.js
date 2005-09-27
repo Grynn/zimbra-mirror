@@ -122,7 +122,7 @@ function(stepNum) {
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 		} else if(stepNum == 6) {
-			this._button[DwtWizardDialog.NEXT_BUTTON].setText(DwtMsg._next);
+			this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
@@ -132,13 +132,13 @@ function(stepNum) {
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 		} else if(stepNum == 12) {
-			this._button[DwtWizardDialog.NEXT_BUTTON].setText(DwtMsg._next);
+			this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 		} else if(stepNum == 14) {
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
-			this._button[DwtWizardDialog.NEXT_BUTTON].setText(DwtMsg._next);
+			this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
 		} else {
@@ -437,7 +437,7 @@ function (arg) {
 ZaNewDomainXWizard.prototype.popup = 
 function (loc) {
 	ZaXWizardDialog.prototype.popup.call(this, loc);
-	this._button[DwtWizardDialog.NEXT_BUTTON].setText(DwtMsg._next);
+	this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
 	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);	
@@ -465,7 +465,7 @@ function () {
 			this.changeButtonStateForStep(13);
 		}
 	} else {
-		this._button[DwtWizardDialog.NEXT_BUTTON].setText(DwtMsg._next);
+		this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
 		if(this._containedObject[ZaModel.currentStep] == 2) {
 			this.changeButtonStateForStep(1);
 		} else {
