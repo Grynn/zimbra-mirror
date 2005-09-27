@@ -49,7 +49,7 @@ replacePubKey() {
 	cat /dev/null > ${tempkeysfile}.new
 
 	while read keyline; do
-		linehost=`echo ${keyline} | awk '{print $3}'`
+		linehost=`echo ${keyline} | awk '{print $4}'`
 		if [ x$linehost != x$keyhost ]; then
 			echo "${keyline}" >> ${tempkeysfile}.new
 		fi
@@ -60,7 +60,7 @@ replacePubKey() {
 	authkeys=`cat ${tempkeysfile}.new`
 
 	authkeys="${authkeys}
-${key}"
+command=\"/opt/zimbra/bin/zmrc\" ${key}"
 	
 	/bin/rm -f ${tempkeysfile} ${tempkeysfile}.new
 
