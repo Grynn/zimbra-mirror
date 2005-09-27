@@ -159,10 +159,10 @@ function() {
 		this._domainListController = new ZaDomainListController(this._appCtxt, this._container, this);
 		
 		this._domainListController.addDomainCreationListener(new AjxListener(this, ZaApp.prototype.handleDomainCreation));					
-//		this._domainListController.addDomainCreationListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleDomainCreation));				
+		this._domainListController.addDomainCreationListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleDomainCreation));							
 
 		this._domainListController.addDomainRemovalListener(new AjxListener(this, ZaApp.prototype.handleDomainRemoval));							
-//		this._domainListController.addDomainRemovalListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleDomainRemoval));						
+		this._domainListController.addDomainRemovalListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleDomainRemoval));						
 		
 	}
 	return this._domainListController;
@@ -177,12 +177,11 @@ function() {
 
 		this._domainController.addDomainCreationListener(new AjxListener(this, ZaApp.prototype.handleDomainCreation));					
 		this._domainController.addDomainCreationListener(new AjxListener(this.getDomainListController(), ZaDomainListController.prototype.handleDomainCreation));	
-//		this._domainController.addDomainCreationListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleDomainCreation));				
+		this._domainController.addDomainCreationListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleDomainCreation));				
 
 		this._domainController.addDomainRemovalListener(new AjxListener(this.getDomainListController(), ZaDomainListController.prototype.handleDomainRemoval));			
 		this._domainController.addDomainRemovalListener(new AjxListener(this, ZaApp.prototype.handleDomainRemoval));							
-		
-//		this._domainController.addDomainRemovalListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleDomainRemoval));						
+		this._domainController.addDomainRemovalListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleDomainRemoval));						
 	}
 
 	return this._domainController;
@@ -193,7 +192,7 @@ function() {
 	if (this._serverListController == null) {
 		this._serverListController = new ZaServerListController(this._appCtxt, this._container, this);
 		this._serverListController.addServerRemovalListener(new AjxListener(this, ZaApp.prototype.handleServerRemoval));	
-	
+		this._serverListController.addServerRemovalListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleServerRemoval));							
 	}
 	return this._serverListController;
 }
@@ -204,6 +203,7 @@ function() {
 		this._serverController = new ZaServerController(this._appCtxt, this._container, this);
 		this._serverController.addServerChangeListener(new AjxListener(this, ZaApp.prototype.handleServerChange));		
 		this._serverController.addServerChangeListener(new AjxListener(this.getServerListController(), ZaServerListController.prototype.handleServerChange));		
+		this._serverController.addServerChangeListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleServerChange));									
 	}
 	return this._serverController;
 }
@@ -213,6 +213,7 @@ function() {
 	if (this._cosListController == null) {
 		this._cosListController = new ZaCosListController(this._appCtxt, this._container, this);
 		this._cosListController.addCosRemovalListener(new AjxListener(this, ZaApp.prototype.handleCosRemoval));			
+		this._cosListController.addCosRemovalListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleCosRemoval));									
 	}
 	return this._cosListController;
 }
@@ -225,12 +226,15 @@ function() {
 		//since we are creating the COS controller now - register all the interested listeners with it
 		this._cosController.addCosChangeListener(new AjxListener(this, ZaApp.prototype.handleCosChange));			
 		this._cosController.addCosChangeListener(new AjxListener(this.getCosListController(), ZaCosListController.prototype.handleCosChange));
+		this._cosController.addCosChangeListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleCosChange));						
 
 		this._cosController.addCosCreationListener(new AjxListener(this.getCosListController(), ZaCosListController.prototype.handleCosCreation));	
 		this._cosController.addCosCreationListener(new AjxListener(this, ZaApp.prototype.handleCosCreation));			
-
+		this._cosController.addCosCreationListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleCosCreation));				
+		
 		this._cosController.addCosRemovalListener(new AjxListener(this, ZaApp.prototype.handleCosRemoval));			
 		this._cosController.addCosRemovalListener(new AjxListener(this.getCosListController(), ZaCosListController.prototype.handleCosRemoval));			
+		this._cosController.addCosRemovalListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleCosRemoval));						
 	}
 	return this._cosController;
 }

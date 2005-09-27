@@ -43,10 +43,12 @@ function ZaOverviewPanelController(appCtxt, container) {
 	
 	this._domainsMap = new Object();
 	this._serversMap = new Object();	
+	this._serversStatsMap = new Object();
+	this._cosMap = new Object();
+	
 	this._app = appCtxt.getAppController().getApp(ZaZimbraAdmin.ADMIN_APP);
 	this._setView();
 	this._currentDomain = "";	
-	this._currentServer = new Object();		
 }
 
 ZaOverviewPanelController.prototype = new ZaController;
@@ -95,6 +97,67 @@ function (nextViewCtrlr, func, params) {
 	func.call(nextViewCtrlr, params);
 }
 
+
+/**
+* @param ev
+* This listener is invoked by any controller that can create an ZaCos object
+**/
+ZaOverviewPanelController.prototype.handleCosCreation = 
+function (ev) {
+	if(ev) {
+		//add the new ZaDomain to the controlled list
+		if(ev.getDetails()) {
+			var newCos = ev.getDetails();
+			var ti1 = new DwtTreeItem(this._cosTi);			
+			ti1.setText(newCos.name);	
+			ti1.setImage("COS");
+			ti1.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._COS_SUB_TREE);
+			ti1.setData(ZaOverviewPanelController._OBJ_ID, newCos.id);
+			this._cosMap[newCos.name] = ti1;
+		}
+	}
+}
+
+/**
+* @param ev
+* This listener is invoked by  any controller that can change a ZaCos object
+* the purpose of this listener is to keep labels of COS sub tree nodes in sync with COSes
+**/
+ZaOverviewPanelController.prototype.handleCosChange =
+function (ev) {
+	if(ev) {
+		var detls = ev.getDetails();		
+		if(detls && delts["obj"]) {
+			if(this._cosMap[delts["obj"].id])
+				this._cosMap[delts["obj"].id].setText(delts["obj"].name);
+		}
+	}
+}
+
+/**
+* @param ev
+* This listener is invoked by  any controller that can remove an ZaCos object
+**/
+ZaOverviewPanelController.prototype.handleCosRemoval = 
+function (ev) {
+	if(ev) {
+		//add the new ZaDomain to the controlled list
+		var detls = ev.getDetails();		
+		if(detls) {
+			if(detls instanceof Array) {
+				for (var key in detls) {
+					if((detls[key] instanceof ZaCos) && this._cosMap[detls[key].id]) {
+						this._cosTi._removeChild(this._cosMap[detls[key].id]);		
+					}
+				}
+			} else if(detls instanceof ZaCos) {
+				if(this._cosMap[detls.name]) {
+					this._cosTi._removeChild(this._cosMap[detls.id]);		
+				}
+			}
+		}
+	}
+}
 /**
 * @param ev
 * This listener is invoked by any controller that can create an ZaDomain object
@@ -105,11 +168,11 @@ function (ev) {
 		//add the new ZaDomain to the controlled list
 		if(ev.getDetails()) {
 			var newDomain = ev.getDetails();
-			var ti1 = new DwtTreeItem(this._accountsTi);			
+			var ti1 = new DwtTreeItem(this._domainsTi);			
 			ti1.setText(newDomain.name);	
-			ti1.setImage("AccountByDomain");
-			ti1.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._ACCOUNTS_SUB_TREE);
-			ti1.setData(ZaOverviewPanelController._OBJ_ID, newDomain.name);
+			ti1.setImage("Domain");
+			ti1.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._DOMAINS_SUB_TREE);
+			ti1.setData(ZaOverviewPanelController._OBJ_ID, newDomain.id);
 			this._domainsMap[newDomain.name] = ti1;
 		}
 	}
@@ -127,39 +190,110 @@ function (ev) {
 		if(detls) {
 			if(detls instanceof Array) {
 				for (var key in detls) {
-					if((detls[key] instanceof ZaDomain) && this._domainsMap[detls[key].name]) {
-						this._accountsTi._removeChild(this._domainsMap[detls[key].name]);		
+					if((detls[key] instanceof ZaDomain) && this._domainsMap[detls[key].id]) {
+						this._domainsTi._removeChild(this._domainsMap[detls[key].id]);		
 					}
 				}
 			} else if(detls instanceof ZaDomain) {
 				if(this._domainsMap[detls.name]) {
-					this._accountsTi._removeChild(this._domainsMap[detls.name]);		
+					this._domainsTi._removeChild(this._domainsMap[detls.id]);		
 				}
 			}
 		}
 	}
 }
 
+/**
+* @param ev
+* This listener is invoked by any controller that can create an ZaServer object
+**/
+ZaOverviewPanelController.prototype.handleServerCreation = 
+function (ev) {
+	if(ev) {
+		//add the new ZaDomain to the controlled list
+		if(ev.getDetails()) {
+			var newServer = ev.getDetails();
+			var ti1 = new DwtTreeItem(this._serversTi);			
+			ti1.setText(newServer.name);	
+			ti1.setImage("Server");
+			ti1.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._SERVERS_SUB_TREE);
+			ti1.setData(ZaOverviewPanelController._OBJ_ID, newServer.id);
+			this._serversMap[newServer.id] = ti1;
+
+			var ti2 = new DwtTreeItem(this._statisticsTi);			
+			ti2.setText(newServer.name);	
+			ti2.setImage("StatisticsByServer");
+			ti2.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._STATISTICS_SUB_TREE);
+			ti2.setData(ZaOverviewPanelController._OBJ_ID, newServer.id);
+			this._serversStatsMap[newServer.id] = ti2;
+
+	
+		}
+	}
+}
+/**
+* @param ev
+* This listener is invoked by any controller that can change an ZaServer object
+* the purpose of this listener is to keep labels of Servers sub tree nodes and 
+* Server Statistics sub tree nodes in sync with Servers
+**/
+ZaOverviewPanelController.prototype.handleServerChange =
+function (ev) {
+	if(ev) {
+		var detls = ev.getDetails();		
+		if(detls && delts["obj"]) {
+			if(this._serversMap[delts["obj"].id])
+				this._serversMap[delts["obj"].id].setText(delts["obj"].name);
+			if(this._serversStatsMap[delts["obj"].id])
+				this._serversStatsMap[delts["obj"].id].setText(delts["obj"].name);		
+		}
+	}
+}
+
+/**
+* @param ev
+* This listener is invoked by any controller that can remove an ZaServer object
+**/
+ZaOverviewPanelController.prototype.handleServerRemoval = 
+function (ev) {
+	if(ev) {
+		var detls = ev.getDetails();		
+		if(detls) {
+			if(detls instanceof Array) {
+				for (var key in detls) {
+					if((detls[key] instanceof ZaServer)) {
+					 	if(this._serversMap[detls[key].id]) {
+							this._serversTi._removeChild(this._serversMap[detls[key].id]);		
+						}
+					 	if(this._serversStatsMap[detls[key].id]) {
+							this._statisticsTi._removeChild(this._serversStatsMap[detls[key].id]);								
+						}
+						
+					}
+				}
+			} else if(detls instanceof ZaServer) {
+				if(this._serversMap[detls.id]) {
+					this._serversTi._removeChild(this._serversMap[detls.id]);		
+				}
+				if(this._serversStatsMap[detls.id]) {
+					this._statisticsTi._removeChild(this._serversStatsMap[detls.id]);		
+				}				
+			}
+		}
+	}
+}
 
 ZaOverviewPanelController.prototype.setCurrentDomain = 
 function (newDomain) {
 	this._currentDomain = newDomain;
 }
 
-ZaOverviewPanelController.prototype.setCurrentServer =
-function (newServer) {
-	this._currentServer = newServer;
-}
 
 ZaOverviewPanelController.prototype.getCurrentDomain = 
 function () {
 	return this._currentDomain;
 }
 
-ZaOverviewPanelController.prototype.getCurrentServer = 
-function () {
-	return this._currentServer;
-}
 
 ZaOverviewPanelController.prototype._setView =
 function() {
@@ -244,7 +378,7 @@ function() {
 				ti1.setText(domainList[ix].name);	
 				ti1.setImage("Domain");
 				ti1.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._DOMAINS_SUB_TREE);
-				ti1.setData(ZaOverviewPanelController._OBJ_ID, domainList[ix].name);
+				ti1.setData(ZaOverviewPanelController._OBJ_ID, domainList[ix].id);
 				this._domainsMap[domainList[ix].name] = ti1;
 			}
 		}
@@ -259,16 +393,16 @@ function() {
 		
 	try {
 		//add COS nodes
-		var domainList = this._app.getCosList().getArray();
-		if(domainList && domainList.length) {
-			var cnt = domainList.length;
+		var cosList = this._app.getCosList().getArray();
+		if(cosList && cosList.length) {
+			var cnt = cosList.length;
 			for(var ix=0; ix< cnt; ix++) {
 				var ti1 = new DwtTreeItem(this._cosTi);			
-				ti1.setText(domainList[ix].name);	
+				ti1.setText(cosList[ix].name);	
 				ti1.setImage("COS");
 				ti1.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._COS_SUB_TREE);
-				ti1.setData(ZaOverviewPanelController._OBJ_ID, domainList[ix].name);
-				this._domainsMap[domainList[ix].name] = ti1;
+				ti1.setData(ZaOverviewPanelController._OBJ_ID, cosList[ix].id);
+				this._cosMap[cosList[ix].name] = ti1;
 			}
 		}
 	} catch (ex) {
@@ -301,7 +435,7 @@ function() {
 				ti1.setImage("StatisticsByServer");
 				ti1.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._STATISTICS_SUB_TREE);
 				ti1.setData(ZaOverviewPanelController._OBJ_ID, serverList[ix].id);
-				this._serversMap[serverList[ix].id] = ti1;
+				this._serversStatsMap[serverList[ix].id] = ti1;
 			}
 		}
 	} catch (ex) {
@@ -398,6 +532,7 @@ function(ev) {
 			if (treeItemType != null) {
 				switch (treeItemType) {
 					case ZaOverviewPanelController._COS:
+
 						if(this._app.getCurrentController()) {
 							this._app.getCurrentController().switchToNextView(this._app.getCosListController(), ZaCosListController.prototype.show, ZaCos.getAll(this._app));
 						} else {
@@ -405,13 +540,15 @@ function(ev) {
 						}
 						break;
 					case ZaOverviewPanelController._ACCOUNTS:
+
 						this._showAccountsView(ZaItem.ACCOUNT,ev);
 						break;
  					case ZaOverviewPanelController._DISTRIBUTION_LISTS:
-						// fall through
+
 						this._showAccountsView(ZaItem.DL,ev);
 						break;
 					case ZaOverviewPanelController._ALIASES:
+						
 						this._showAccountsView(ZaItem.ALIAS,ev);
 						break;
 					case ZaOverviewPanelController._DOMAINS:
@@ -457,26 +594,44 @@ function(ev) {
 						}
 						break;		
 					case ZaOverviewPanelController._STATISTICS_SUB_TREE:
-
-						this.setCurrentServer(this._app.getServerList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
+						var currentServer = this._app.getServerList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID));
 						if(this._app.getCurrentController()) {
-							this._app.getCurrentController().switchToNextView(this._app.getServerStatsController(), ZaServerStatsController.prototype.show,this._currentServer);
+							this._app.getCurrentController().switchToNextView(this._app.getServerStatsController(), ZaServerStatsController.prototype.show,currentServer);
 						} else {					
-							this._app.getServerStatsController().show(this._currentServer);
+							this._app.getServerStatsController().show(currentServer);
 						}
 
 						break;
-//  				case ZaOverviewPanelController._DISTRIBUTION_LISTS_SUB_TREE:
-//  					this.setCurrentDomain(ev.item.getData(ZaOverviewPanelController._OBJ_ID));
-//  					var currCont = this._app.getCurrentController();
-//  					var distController = this._app.getDistributionListController(this._currentDomain);
-//  					var searchResults = ZaSearch.searchByDomain(this._currentDomain, [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS],1, ZaAccount.A_uid, true, this._app);
-//  					if (currCont) {
-//  						currCont.switchToNextView(distController, distController.show, searchResults);
-//  					} else {
-//  						distController.show(searchResults);
-//  					}
-//  					break;
+					case ZaOverviewPanelController._SERVERS_SUB_TREE:
+						
+						if(this._app.getCurrentController()) {
+							this._app.getCurrentController().switchToNextView(this._app.getServerController(),
+							 ZaServerController.prototype.show,
+							 this._app.getServerList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
+						} else {					
+							this._app.getServerController().show(this._app.getServerList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
+						}				
+						break;
+					case ZaOverviewPanelController._DOMAINS_SUB_TREE:
+						
+						if(this._app.getCurrentController()) {
+							this._app.getCurrentController().switchToNextView(this._app.getDomainController(),
+							 ZaDomainController.prototype.show,
+							 this._app.getDomainList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
+						} else {					
+							this._app.getDomainController().show(this._app.getDomainList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
+						}				
+						break;		
+					case ZaOverviewPanelController._COS_SUB_TREE:
+						
+						if(this._app.getCurrentController()) {
+							this._app.getCurrentController().switchToNextView(this._app.getCosController(),
+							 ZaCosController.prototype.show,
+							 this._app.getCosList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
+						} else {					
+							this._app.getCosController().show(this._app.getCosList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
+						}				
+						break;											
 				}
 			}
 		} catch (ex) {
