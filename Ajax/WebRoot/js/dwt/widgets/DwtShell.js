@@ -94,7 +94,7 @@ function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell, us
 	if (userShell) {
 		var userShellContainer = new DwtControl(this, null, Dwt.ABSOLUTE_STYLE);
 		userShellContainer.getHtmlElement().appendChild(userShell);
-		userShellContainer.setSize(Dwt.DEFAULT, "100%");
+		userShellContainer.setSize("100%", "100%");
 		userShellContainer.zShow(true);
 	}
 	Dwt.associateElementWithObject(htmlElement, this);

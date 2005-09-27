@@ -72,9 +72,9 @@ ZaAppChooser.B_GLOBAL	= i++;
 ZaAppChooser.B_DISTRIBUTION_LISTS	= i++;
 
 ZaAppChooser.IMAGE = new Object();
-ZaAppChooser.IMAGE[ZaAppChooser.OUTER]		= "app_chiclet";
-ZaAppChooser.IMAGE[ZaAppChooser.OUTER_ACT]	= "app_chiclet_selected";
-ZaAppChooser.IMAGE[ZaAppChooser.OUTER_TRIG]	= "app_chiclet_selected";
+ZaAppChooser.IMAGE[ZaAppChooser.OUTER]		= "ImgAppChiclet";
+ZaAppChooser.IMAGE[ZaAppChooser.OUTER_ACT]	= "ImgAppChicletHover";
+ZaAppChooser.IMAGE[ZaAppChooser.OUTER_TRIG]	= "ImgAppChicletSel";
 
 ZaAppChooser.IMAGE[ZaAppChooser.B_STATUS]	= "Status";
 ZaAppChooser.IMAGE[ZaAppChooser.B_STATS]	= "Statistics";
