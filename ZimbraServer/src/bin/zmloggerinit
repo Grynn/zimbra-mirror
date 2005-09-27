@@ -38,7 +38,6 @@ sql_root_pw=$1
 #
 # Sanity checks
 #
-zmassert -x ${zimbra_home}/bin/zmmyloggercnf
 zmassert -x ${zimbra_home}/bin/logmysqladmin
 zmassert -x ${zimbra_home}/bin/logmysql
 zmassert -x ${zimbra_home}/bin/zmlocalconfig
@@ -53,13 +52,6 @@ zmassert -r ${zimbra_db_directory}/versions-init.sql
 echo '*' Creating required directories
 mkdir -p ${logger_mysql_data_directory}
 mkdir -p ${zimbra_log_directory}
-
-#
-# Generate a mysql config file
-#
-echo '*' Generating mysql config ${logger_mysql_mycnf}
-rm -f ${mysql_mycnf}
-${zimbra_home}/bin/zmmyloggercnf > ${logger_mysql_mycnf}
 
 #
 # Create database

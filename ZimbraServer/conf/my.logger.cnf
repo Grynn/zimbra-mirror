@@ -1,0 +1,27 @@
+[mysqld]
+
+basedir      = /opt/zimbra/logger/mysql
+datadir      = /opt/zimbra/logger/db/data
+socket       = /opt/zimbra/logger/db/mysql.sock
+pid-file     = /opt/zimbra/logger/db/mysql.pid
+bind-address = localhost
+port         = 3307
+
+skip-external-locking
+
+log-slow-queries = /opt/zimbra/log/logger_myslow.log
+long-query-time  = 1
+log-long-format
+log-queries-not-using-indexes
+log-bin
+
+thread_cache      = 10
+max_connections   = 10
+
+# We do a lot of writes, query cache turns out to be not useful.
+query_cache_type = 0
+
+[mysqld_safe]
+
+err-log = /opt/zimbra/log/logger_mysqld.log
+
