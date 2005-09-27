@@ -80,7 +80,20 @@ function(account, now, isDndIcon) {
 		if(id.indexOf("type")==0) {
 			// type
 			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
-			html[idx++] = AjxStringUtil.htmlEncode(account.type);
+			switch(account.type) {
+				case ZaItem.ACCOUNT:
+					html[idx++] = AjxImg.getImageHtml("Account");
+				break;
+				case ZaItem.DL:
+					html[idx++] = AjxImg.getImageHtml("Group");				
+				break;
+				case ZaItem.ALIAS:
+					html[idx++] = AjxImg.getImageHtml("AccountAlias");				
+				break;								
+				default:
+					html[idx++] = AjxStringUtil.htmlEncode(account.type);
+				break;
+			}
 			html[idx++] = "</td>";
 		} else if(id.indexOf(ZaAccount.A_name)==0) {
 			// name
