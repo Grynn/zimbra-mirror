@@ -30,15 +30,8 @@ zmassert `id -u` -eq 0
 
 zmsetvars \
 	zimbra_home \
-	zimbra_server_hostname 
+	zimbra_server_hostname
 
-desthost=${1}
-
-keyfile="${zimbra_home}/.ssh/zimbra_identity"
-
-if [ "x$desthost" = "x" ]; then
-	echo "Usage: $0 <hostname>"
-	exit 1
-fi
-
-ssh -i ${keyfile} -o StrictHostKeyChecking=no root@${desthost}
+while read i; do
+	$i
+done
