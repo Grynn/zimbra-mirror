@@ -37,29 +37,14 @@ function ZaZimbraAdmin(appCtxt) {
 	this._shell = this._appCtxt.getShell();	
 	this._splashScreen = new ZaSplashScreen(this._shell, "Admin_SplashScreen");
 	
-   // this._headerPanel = new DwtComposite(this._shell, "HeaderPanel", DwtControl.ABSOLUTE_STYLE);
-    
-//   	this._createBannerBar();
-//	this._headerPanel.zShow(true);
-
-
-
-
-
 	appCtxt.setAppController(this);
 	appCtxt.setClientCmdHdlr(new ZaClientCmdHandler(appCtxt));
 		
-//	this._apps = new Object();
-//	this._activeApp = null;
-	
 	// handles to various apps
 	this._appFactory = new Object();
 	this._appFactory[ZaZimbraAdmin.ADMIN_APP] = ZaApp;
-	
-	
-//	this._createBanner();
-	this._schedule(this.startup);								// creates the banner
-	//this.startup();	// creates everything else
+ 
+ 	this._schedule(this.startup);								// creates the banner
 	this.aboutDialog = new ZaAboutDialog(this._shell,null,ZaMsg.about_title);
 }
 
@@ -96,15 +81,12 @@ function(domain) {
 
 	ZmCsfeCommand.setServerUri(location.protocol+"//" + domain + ZaSettings.CSFE_SERVER_URI);
 	ZmCsfeCommand.setCookieName(ZaZimbraAdmin._COOKIE_NAME);
-//	ZaAuthenticate.setAdmin(true);
 	
 	// Create the global app context
 	var appCtxt = new ZaAppCtxt();
 
 
 	// Create the shell
-//	var shell = new DwtShell(window, false, ZaZimbraAdmin._confirmExitMethod);
-//	var shell = new DwtShell(window, false, null);
 	var userShell = window.document.getElementById(ZaSettings.get(ZaSettings.SKIN_SHELL_ID));
 	var shell = new DwtShell(null, false, ZaZimbraAdmin._confirmExitMethod, userShell);
     appCtxt.setShell(shell);
@@ -129,17 +111,11 @@ ZaZimbraAdmin.getInstance = function() {
 */
 ZaZimbraAdmin.prototype.getApp =
 function(appName) {
-//DBG.println(AjxDebug.DBG3, "getApp " + appName);
-/*	if (this._apps[appName] == null)
-		this._createApp(appName);
-	return this._apps[appName];
-*/
 	return this._app;	
 }
 
 ZaZimbraAdmin.prototype.getAdminApp = 
 function() {
-	//return this.getApp(ZaZimbraAdmin.ADMIN_APP);
 	return this._app;
 }
 
@@ -154,13 +130,13 @@ function() {
 /**
 * Returns a handle to the overview panel controller.
 */
-/*
+
 ZaZimbraAdmin.prototype.getOverviewPanelController =
 function() {
 	if (this._overviewPanelController == null)
 		this._overviewPanelController = new ZaOverviewPanelController(this._appCtxt, this._shell);
 	return this._overviewPanelController;
-}*/
+}
 
 /**
 * Sets the name of the currently active app. Done so we can figure out when an
@@ -220,6 +196,7 @@ function() {
 		this._launchApp();
 		
 		elements = new Object();
+		elements[ZaAppViewMgr.C_TREE] = this.getOverviewPanelController().getOverviewPanel();
 		elements[ZaAppViewMgr.C_SEARCH] = this._app.getAccountListController().getSearchPanel();		
 		this._appViewMgr.addComponents(elements, true);
 	} catch (ex) {
@@ -397,11 +374,6 @@ function () {
 **/
 ZaZimbraAdmin.prototype._createApp =
 function() {
-/*	if (this._apps[appName] != null)
-		return;
-
-	this._apps[appName] = new this._appFactory[appName](this._appCtxt, this._shell);	
-*/
 	this._app = new ZaApp(this._appCtxt, this._shell);	
 }
 
@@ -629,5 +601,4 @@ ZaAboutDialog.prototype.constructor = ZaAboutDialog;
 
 ZaAboutDialog.prototype._createContentHtml = function () {
 	AjxImg.setImage(this._contentDiv,"Admin_SplashScreen");
-	//this._contentDiv.appendChild(AjxImg.getImageHtml("Admin_SplashScreen"));
 }

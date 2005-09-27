@@ -37,10 +37,15 @@ function ZaSearch() {
 	this[ZaSearch.A_fdistributionlists] = "TRUE";	
 	this[ZaSearch.A_pagenum]=1;	
 }
-
 ZaSearch.ALIASES = "aliases";
 ZaSearch.DLS = "distributionlists";
 ZaSearch.ACCOUNTS = "accounts";
+
+ZaSearch.TYPES = new Object();
+ZaSearch.TYPES[ZaItem.ALIAS] = ZaSearch.ALIASES;
+ZaSearch.TYPES[ZaItem.DL] = ZaSearch.DLS;
+ZaSearch.TYPES[ZaItem.ACCOUNT] = ZaSearch.ACCOUNTS;
+
 
 ZaSearch.A_query = "query";
 ZaSearch.A_selected = "selected";
