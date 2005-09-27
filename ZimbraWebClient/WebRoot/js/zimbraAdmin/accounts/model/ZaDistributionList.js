@@ -41,6 +41,15 @@ ZaDistributionList.EMAIL_ADDRESS = "ZDLEA";
 ZaDistributionList.DESCRIPTION = "ZDLDESC";
 ZaDistributionList.ID = "ZDLID";
 
+ZaDistributionList.A_mailStatus = "zimbraMailStatus";
+ZaDistributionList.searchAttributes = AjxBuffer.concat(ZaAccount.A_displayname,",",
+													   ZaItem.A_zimbraId,  "," , 
+													   ZaAccount.A_mailHost , "," , 
+													   ZaAccount.A_uid ,"," , 
+													   ZaAccount.A_description, ",",
+													   ZaDistributionList.A_mailStatus);
+
+
 ZaDistributionList.prototype.clone = function () {
 	var memberList = this._memberList.getArray();
 	var dl = new ZaDistributionList(this._app, this.id, this.name, memberList, this.description, this.notes);

@@ -108,7 +108,13 @@ function(account, now, isDndIcon) {
 		} else if(id.indexOf(ZaAccount.A_accountStatus)==0) {
 			// status
 			html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";
-			html[idx++] = AjxStringUtil.htmlEncode(ZaAccount._accountStatus(account.attrs[ZaAccount.A_accountStatus]));
+			var status = "";
+			if (account.type == ZaItem.ACCOUNT) {
+				status = ZaAccount._accountStatus(account.attrs[ZaAccount.A_accountStatus]);
+			} else if (account.type == ZaItem.DL) {
+				status = account.attrs.zimbraMailStatus;
+			}
+			html[idx++] = AjxStringUtil.htmlEncode(status);
 			html[idx++] = "</nobr></td>";		
 		} else if (id.indexOf(ZaAccount.A_description)==0) {		
 			// description
@@ -127,7 +133,7 @@ function() {
 
 	var headerList = new Array();
 	
-	headerList[0] = new ZaListHeaderItem("type", ZaMsg.ALV_Type_col, null, 90, false, null, true, true);
+	headerList[0] = new ZaListHeaderItem("type", ZaMsg.ALV_Type_col, null, 90, true, "objectClass", true, true);
 
 	headerList[1] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.ALV_Name_col, null, 195, true, ZaAccount.A_name, true, true);
 //idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible

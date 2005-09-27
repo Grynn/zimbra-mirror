@@ -334,13 +334,17 @@ ZaZimbraAdmin.prototype._showAccountsView = function (defaultType, ev){
 	queryHldr.queryString = "";
 	if ( defaultType == ZaItem.DL ){
 		queryHldr.types = ZaZimbraAdmin._dlTypesArray;
+		queryHldr.fetchAttrs = ZaDistributionList.searchAttributes;
 	} else {
 		queryHldr.types = ZaZimbraAdmin._accountTypesArray;
+		queryHldr.fetchAttrs = ZaSearch.standardAttributes;
 	}
 	var acctListController = this._app.getAccountListController();
 	acctListController.setPageNum(1);	
 	if(this._app.getCurrentController()) {
-		this._app.getCurrentController().switchToNextView(acctListController, ZaAccountListController.prototype.show,ZaSearch.searchByQueryHolder(queryHldr,acctListController.getPageNum(), ZaAccount.A_uid, null,this._app));
+		this._app.getCurrentController().switchToNextView(acctListController, ZaAccountListController.prototype.show,
+														  ZaSearch.searchByQueryHolder(queryHldr,acctListController.getPageNum(), 
+																					   ZaAccount.A_uid, null,this._app));
 	} else {					
 		acctListController.show(ZaSearch.searchByQueryHolder(queryHldr,1, ZaAccount.A_uid, null,this._app));
 	}

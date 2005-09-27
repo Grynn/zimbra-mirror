@@ -63,8 +63,17 @@ function(app) {
 }
 
 
+ZaSearch.standardAttributes = AjxBuffer.concat(ZaAccount.A_displayname,",",
+											   ZaItem.A_zimbraId,  "," , 
+											   ZaAccount.A_mailHost , "," , 
+											   ZaAccount.A_uid ,"," , 
+											   ZaAccount.A_accountStatus , "," , 
+											   ZaAccount.A_description, ",",
+											   ZaDistributionList.A_mailStatus);
+
+
 ZaSearch.search =
-function(query, types, pagenum, orderby, isascending, app) {
+function(query, types, pagenum, orderby, isascending, app, attrs, limit, domainName) {
 	if(!orderby) orderby = ZaAccount.A_uid;
 	var myisascending = "0";
 	
@@ -72,12 +81,15 @@ function(query, types, pagenum, orderby, isascending, app) {
 		myisascending = "1";
 	} 
 	
-	var offset = (pagenum-1) * ZaAccount.RESULTSPERPAGE;
-	var attrs = ZaAccount.A_displayname + "," + ZaItem.A_zimbraId + "," + ZaAccount.A_mailHost + "," + ZaAccount.A_uid + "," + ZaAccount.A_accountStatus + "," + ZaAccount.A_description;
+	var offset = (pagenum-1) * limit;
+	attrs = (attrs != null)? attrs: ZaSearch.standardAttributes;
 	var soapDoc = AjxSoapDoc.create("SearchAccountsRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("query", query);
+	if (domainName != null) {
+		soapDoc.getMethod().setAttribute("domain", domainName);
+	}
 	soapDoc.getMethod().setAttribute("offset", offset);
-	soapDoc.getMethod().setAttribute("limit", ZaAccount.RESULTSPERPAGE);
+	soapDoc.getMethod().setAttribute("limit", limit);
 	soapDoc.getMethod().setAttribute("applyCos", "0");
 	soapDoc.getMethod().setAttribute("attrs", attrs);
 	soapDoc.getMethod().setAttribute("sortBy", orderby);
@@ -89,40 +101,13 @@ function(query, types, pagenum, orderby, isascending, app) {
 	var list = new ZaItemList(null, app);
 	list.loadFromDom(resp);
 	var searchTotal = resp.getAttribute("searchTotal");
-	var numPages = Math.ceil(searchTotal/ZaAccount.RESULTSPERPAGE);
+	var numPages = Math.ceil(searchTotal/limit);
 	return {"list":list, "numPages":numPages};
 }
 
 ZaSearch.searchByDomain = 
-function (domainName, types, pagenum, orderby, isascending, app) {
-	if(!orderby) orderby = ZaAccount.A_uid;
-	var myisascending = "0";
-	
-	if(isascending) {
-		myisascending = "1";
-	} 
-	
-	var offset = (pagenum-1) * ZaAccount.RESULTSPERPAGE;
-	var attrs = ZaAccount.A_displayname + "," + ZaItem.A_zimbraId + "," + ZaAccount.A_mailHost + "," + ZaAccount.A_uid + "," + ZaAccount.A_accountStatus + "," + ZaAccount.A_description;
-	var soapDoc = AjxSoapDoc.create("SearchAccountsRequest", "urn:zimbraAdmin", null);
-	soapDoc.set("query", "");
-	soapDoc.getMethod().setAttribute("domain", domainName);
-	soapDoc.getMethod().setAttribute("limit", ZaAccount.RESULTSPERPAGE);
-	soapDoc.getMethod().setAttribute("offset", offset);
-	soapDoc.getMethod().setAttribute("applyCos", "0");
-	soapDoc.getMethod().setAttribute("attrs", attrs);
-	soapDoc.getMethod().setAttribute("sortBy", orderby);
-	soapDoc.getMethod().setAttribute("sortAscending", myisascending);
-	if(types != null && types.length>0) {
-		soapDoc.getMethod().setAttribute("types", types.toString());
-	}	
-	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
-	var list = new ZaItemList(null, app);
-	list.loadFromDom(resp);
-	var searchTotal = resp.getAttribute("searchTotal");
-	var numPages = Math.ceil(searchTotal/ZaAccount.RESULTSPERPAGE);
-	return {"list":list, "numPages":numPages};
-	
+function (domainName, types, pagenum, orderby, isascending, app, attrs, limit) {
+	return ZaSearch.search("", types, pagesnum, orderby, isascending, app, attrs, limit, domainName);
 }
 
 
@@ -140,7 +125,8 @@ function (queryHolder, pagenum, orderby, isascending, app) {
 	if(queryHolder.isByDomain) {
  		return ZaSearch.searchByDomain(queryHolder.byValAttr, queryHolder.types, pagenum, orderby, isascending, app);
 	} else {
-		return ZaSearch.search(queryHolder.queryString, queryHolder.types, pagenum, orderby, isascending, app);	
+		return ZaSearch.search(queryHolder.queryString, queryHolder.types, pagenum, orderby, isascending, app, queryHolder.fetchAttrs,
+							   queryHolder.limit);	
 	}
 }
 
@@ -179,9 +165,11 @@ ZaSearch.myXModel = {
 	]
 }
 
-function ZaSearchQuery (queryString, types, byDomain, byVal) {
+function ZaSearchQuery (queryString, types, byDomain, byVal, attrsCommaSeparatedString, limit) {
 	this.queryString = queryString;
 	this.isByDomain = byDomain;
 	this.byValAttr = byVal;
 	this.types = types;
+	this.fetchAttrs = (attrsCommaSeparatedString != null)? attrsCommaSeparatedString: ZaSearch.standardAttributes;
+	this.limit = (limit != null)? limit: ZaAccount.RESULTSPERPAGE;
 }
