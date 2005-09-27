@@ -441,61 +441,11 @@ function() {
 	} catch (ex) {
 		this._handleException(ex, "ZaOverviewPanelController.prototype._buildFolderTree", null, false);
 	}
-
-/*	
-	this._accountsTi = new DwtTreeItem(tree);
-	this._accountsTi.setText(ZaMsg.OVP_accounts);
-	this._accountsTi.setImage("Account");
-	this._accountsTi.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._ACCOUNTS);
-
-	try {
-		//add domain nodes
-		var domainList = this._app.getDomainList().getArray();
-		if(domainList && domainList.length) {
-			var cnt = domainList.length;
-			for(var ix=0; ix< cnt; ix++) {
-				var ti1 = new DwtTreeItem(this._accountsTi);			
-				ti1.setText(domainList[ix].name);	
-				ti1.setImage("AccountByDomain");
-				ti1.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._ACCOUNTS_SUB_TREE);
-				ti1.setData(ZaOverviewPanelController._OBJ_ID, domainList[ix].name);
-				this._domainsMap[domainList[ix].name] = ti1;
-			}
-		}
-	} catch (ex) {
-		this._handleException(ex, "ZaOverviewPanelController.prototype._buildFolderTree", null, false);
-	}
-
-
-
-
-
- 	ti = new DwtTreeItem(tree);
- 	ti.setText(ZaMsg.OVP_distributionLists);
- 	// TODO - ICON for distribution lists
- 	ti.setImage("GlobalSettings");
- 	ti.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._DISTRIBUTION_LISTS);	
-
- 	try {
- 		//add domain nodes
- 		var domainList = this._app.getDomainList().getArray();
- 		if(domainList && domainList.length) {
- 			var cnt = domainList.length;
- 			for(var ix=0; ix< cnt; ix++) {
- 				var ti1 = new DwtTreeItem(ti);
- 				ti1.setText(domainList[ix].name);	
-				ti1.setImage("AccountByDomain");
- 				ti1.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._DISTRIBUTION_LISTS_SUB_TREE);
- 				ti1.setData(ZaOverviewPanelController._OBJ_ID, domainList[ix].name);
- 				//this._domainsMap[domainList[ix].name] = ti1;
- 			}
- 		}
- 	} catch (ex) {
- 		this._handleException(ex, "ZaOverviewPanelController.prototype._buildFolderTree", null, false);
- 	}
-*/
 	
-	tree.setSelection(this._statusTi, true);
+	this._addressesTi.setExpanded(true, false);
+	this._configTi.setExpanded(true, false);
+	this._monitoringTi.setExpanded(true, false);
+	tree.setSelection(this._statusTi, true);	
 }
 
 

@@ -81,7 +81,9 @@ ZaSettings.COSES_ENABLED= true;
 ZaSettings.DOMAINS_ENABLED= true;
 ZaSettings.SERVERS_ENABLED= true;
 ZaSettings.GLOBAL_ENABLED= true;
-
+ZaSettings.MONITORING_ENABLED = true;
+ZaSettings.SYSTEM_CONFIG_ENABLED = true;
+ZaSettings.ADDRESSES_ENABLED = true;
 // IDs FOR HTML COMPONENTS IN THE SKIN
 ZaSettings.INIT[ZaSettings.SKIN_APP_BOTTOM_TOOLBAR_ID]	= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_app_bottom_toolbar"];
 ZaSettings.INIT[ZaSettings.SKIN_APP_CHOOSER_ID]			= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_app_chooser"];
