@@ -599,6 +599,11 @@ ZaOverviewPanelController.prototype._showAccountsView = function (defaultType, e
 	queryHldr.byValAttr = false;
 	queryHldr.queryString = "";
 	queryHldr.types = [ZaSearch.TYPES[defaultType]];
+	if(defaultType == ZaItem.DL) {
+		queryHldr.fetchAttrs = ZaDistributionList.searchAttributes
+	} else {
+		queryHldr.fetchAttrs = ZaSearch.standardAttributes;
+	}
 	var acctListController = this._app.getAccountListController();
 	acctListController.setPageNum(1);	
 	if(this._app.getCurrentController()) {
