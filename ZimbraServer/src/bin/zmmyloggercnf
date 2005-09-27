@@ -78,7 +78,7 @@ fi
 #
 # Tell the JDBC driver how many mysql active connections to use.
 #
-${zimbra_home}/bin/zmlocalconfig -e zimbra_mysql_connector.maxActive=${computed_max_connections}
+${zimbra_home}/bin/zmlocalconfig -e zimbra_mysql_connector_maxActive=${computed_max_connections}
 
 #
 # Give some slack for command line mysql invocations.
