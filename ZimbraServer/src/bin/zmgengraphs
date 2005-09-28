@@ -238,11 +238,7 @@ foreach my $app ("mta", "amavis") {
 				if ($dt ne "") { $dt .= ":"; }
 				$dt .= "$column";
 				$DDEF .= "DEF:${column}=$db:$column:AVERAGE ";
-				if ($GDEF eq "") {
-					$GDEF .= "AREA:";
-				} else {
-					$GDEF .= "STACK:";
-				}
+				$GDEF .= "AREA:";
 				$GDEF .= "${column}${color}:${app}_${column} ";
 			}
 
