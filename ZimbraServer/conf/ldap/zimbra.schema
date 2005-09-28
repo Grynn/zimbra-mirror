@@ -2035,7 +2035,8 @@ objectclass ( zimbraDistributionList
 	MAY (
 		displayName $
 		description $
-		zimbraNotes)
+		zimbraNotes $
+		mail)
 	)
 
 ################
