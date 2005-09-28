@@ -5,7 +5,7 @@ datadir      = /opt/zimbra/logger/db/data
 socket       = /opt/zimbra/logger/db/mysql.sock
 pid-file     = /opt/zimbra/logger/db/mysql.pid
 bind-address = localhost
-port         = 3307
+port         = 7307
 
 skip-external-locking
 
