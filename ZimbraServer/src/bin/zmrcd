@@ -121,24 +121,60 @@ my %commands = (
 my %allhosts = ();
 my $gothosts = 0;
 
-sub runCommand {
+my $thishost = `su - zimbra -c "zmlocalconfig -m nokey zimbra_server_hostname"`;
+chomp $thishost;
+
+sub runRemoteCommand {
 	my $host = shift;
-	my $user = shift;
 	my $command = shift;
 	my $args = shift;
 
-	foreach my $cm (@$command) {
+	print "Remote: HOST:$host $command $args\n";
+}
+
+sub runCommand {
+	my $host = shift;
+	my $command = shift;
+	my $args = shift;
+	my $user;
+
+	if ($host ne $thishost) {
+		runRemoteCommand($host, $command, $args);
+		return;
+	}
+
+	my $cl;
+
+	if (defined ($commands{$command}{script})) {
+		$cl = $commands{$command}{script};
+		$user = $commands{$command}{user};
+	} else {
+		my @a = split (' ', $args);
+		my $arg = shift @a;
+		$args = join(' ',@a);
+
+		$user = $commands{$command}{args}{$arg}{user};
+
+		if (defined ($commands{$command}{args}{$arg}{script})) {
+			$cl = $commands{$command}{args}{$arg}{script};
+		} else {
+			print "ERROR: Unknown command $_\n";
+			return;
+		}
+	}
+
+	foreach my $cm (@$cl) {
 		my $cmdstr = "$cm $args";
 		if ($user ne "root") {
 			$cmdstr = "su - $user -c \"$cmdstr\"";
 		}
 		if (open COMMAND, "$cmdstr $args |") {
-			print "STARTCMD: $host $cmdstr $args\n";
+			print "STARTCMD: $host $cmdstr\n";
 			while (<COMMAND>) {
 				print $_;
 			}
 			close COMMAND;
-			print "ENDCMD: $host $cmdstr $args\n";
+			print "ENDCMD: $host $cmdstr\n";
 		} else {
 			print "Can't run $cmdstr: $!\n\n";
 		}
@@ -224,23 +260,8 @@ while (<>) {
 		last;
 	}
 
-	if (defined ($commands{$command}{script})) {
-		foreach my $h (@$hostlist) {
-			runCommand ($h, $commands{$command}{user}, $commands{$command}{script}, $args);
-		}
-		next;
-	} else {
-		my @a = split (' ', $args);
-		my $arg = shift @a;
-
-		if (defined ($commands{$command}{args}{$arg}{script})) {
-			foreach my $h (@$hostlist) {
-				runCommand ($h, $commands{$command}{args}{$arg}{user}, 
-					$commands{$command}{args}{$arg}{script}, join(' ',@a));
-			}
-			next;
-		} 
+	foreach my $h (@$hostlist) {
+		runCommand ($h, $command, $args);
 	}
 
-	print "ERROR: Unknown command $_\n";
 }
