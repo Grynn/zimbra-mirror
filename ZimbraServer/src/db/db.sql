@@ -176,12 +176,3 @@ CREATE TABLE table_maintenance (
   
   PRIMARY KEY (table_name, database_name)
 ) ENGINE = InnoDB;
-
-# table for the current redo log file sequence number
-CREATE TABLE redolog_sequence (
-  sequence			BIGINT UNSIGNED NOT NULL DEFAULT 0,
-  
-  PRIMARY KEY (sequence)
-) ENGINE = InnoDB;
-
-INSERT INTO redolog_sequence(sequence) VALUES (0);
