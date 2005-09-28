@@ -50,7 +50,7 @@ function(item) {
 		this._app.createView(ZaZimbraAdmin._STATISTICS_BY_SERVER, elements);
 	}
 	this._app.pushView(ZaZimbraAdmin._STATISTICS_BY_SERVER);
-	this._app.setCurrentController(this);
+//	this._app.setCurrentController(this);
 	this._contentView.setObject(item);
 }
 

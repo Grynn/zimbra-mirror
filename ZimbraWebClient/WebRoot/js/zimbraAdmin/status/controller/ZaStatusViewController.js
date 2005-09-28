@@ -56,7 +56,7 @@ function() {
 	var mystatusVector = this._app.getStatusList(true).getVector();
 	this._contentView.set(mystatusVector);
 	this._app.pushView(ZaZimbraAdmin._STATUS);
-	this._app.setCurrentController(this);
+//	this._app.setCurrentController(this);
 }
 
 

@@ -183,14 +183,14 @@ function(viewId, elements) {
 * hidden stack.
 *
 * @param viewId	the name of the app view to push
-* @returns			true if the view was pushed
+* @returns			the id of the view that is displayed
 */
 ZaAppViewMgr.prototype.pushView =
 function(viewId) {
 	// if same view, no need to go through hide/show
 	if (viewId == this._currentView) {
 		this._setTitle(viewId);
-		return true;
+		return viewId;
 	}
 
 	this._setViewVisible(this._currentView, false);
@@ -204,9 +204,32 @@ function(viewId) {
 
 	this._setViewVisible(viewId, true);
 
-	return true;
+	return viewId;
 }
 
+/**
+* Hides the currently visible view, and makes the view on top of the hidden stack visible.
+*
+* @returns		the id of the view that is displayed
+*/
+ZaAppViewMgr.prototype.popView =
+function() {
+	if (!this._currentView)
+		throw new AjxException("no view to pop");
+
+	this._setViewVisible(this._currentView,false);
+
+	this._lastView = this._currentView;
+	this._currentView = this._hidden.pop();
+
+	if (!this._currentView)
+		throw new AjxException("no view to show");
+		
+	this._removeFromHidden(this._currentView);
+
+	this._setViewVisible(this._currentView, true);
+	return this._currentView;
+}
 
 /**
 * Makes the given view visible, and clears the hidden stack.

@@ -130,7 +130,7 @@ function(searchResult) {
 		}
 		this._app.pushView(ZaZimbraAdmin._ACCOUNTS_LIST_VIEW);
 	}
-	this._app.setCurrentController(this);		
+//	this._app.setCurrentController(this);		
 	this._removeList = new Array();
 	if (searchResult && searchResult.list != null) {
 		this.pages[this._currentPageNum] = searchResult;
@@ -260,7 +260,7 @@ function () {
 }
 
 ZaAccountListController.prototype.search =
-function(searchQuery, sortBy, offset, limit) {
+function(searchQuery) {
 	try {
 		// if the search string starts with "$set:" then it is a command to the client 
 		if (searchQuery.queryString.indexOf("$set:") == 0) {

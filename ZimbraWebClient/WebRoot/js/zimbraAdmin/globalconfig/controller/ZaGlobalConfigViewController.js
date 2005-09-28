@@ -70,7 +70,7 @@ function(item) {
 	}
 	this._app.pushView(ZaZimbraAdmin._GLOBAL_SETTINGS);
 	this._toolBar.getButton(ZaOperation.SAVE).setEnabled(false);  	
-	this._app.setCurrentController(this);
+//	this._app.setCurrentController(this);
 	try {		
 		item[ZaModel.currentTab] = "1"
 		this._view.setDirty(false);

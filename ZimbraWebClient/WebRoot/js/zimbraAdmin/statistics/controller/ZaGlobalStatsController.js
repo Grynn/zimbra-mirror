@@ -51,7 +51,7 @@ function() {
 		this._app.createView(ZaZimbraAdmin._STATISTICS, elements);
 	}
 	this._app.pushView(ZaZimbraAdmin._STATISTICS);
-	this._app.setCurrentController(this);
+//	this._app.setCurrentController(this);
 }
 
 /**

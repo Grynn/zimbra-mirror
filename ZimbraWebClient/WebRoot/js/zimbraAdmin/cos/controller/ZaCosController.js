@@ -51,7 +51,7 @@ ZaCosController.prototype.constructor = ZaCosController;
 ZaCosController.prototype.show = 
 function(entry) {
 	this._setView(entry);
-	this._app.setCurrentController(this);
+//	this._app.setCurrentController(this);
 }
 
 

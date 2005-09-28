@@ -109,9 +109,9 @@ ZaOverviewPanelController.prototype.handleCosChange =
 function (ev) {
 	if(ev) {
 		var detls = ev.getDetails();		
-		if(detls && delts["obj"]) {
-			if(this._cosMap[delts["obj"].id])
-				this._cosMap[delts["obj"].id].setText(delts["obj"].name);
+		if(detls && detls["obj"]) {
+			if(this._cosMap[detls["obj"].id])
+				this._cosMap[detls["obj"].id].setText(detls["obj"].name);
 		}
 	}
 }
@@ -223,11 +223,11 @@ ZaOverviewPanelController.prototype.handleServerChange =
 function (ev) {
 	if(ev) {
 		var detls = ev.getDetails();		
-		if(detls && delts["obj"]) {
-			if(this._serversMap[delts["obj"].id])
-				this._serversMap[delts["obj"].id].setText(delts["obj"].name);
-			if(this._serversStatsMap[delts["obj"].id])
-				this._serversStatsMap[delts["obj"].id].setText(delts["obj"].name);		
+		if(detls && detls["obj"]) {
+			if(this._serversMap[detls["obj"].id])
+				this._serversMap[detls["obj"].id].setText(detls["obj"].name);
+			if(this._serversStatsMap[detls["obj"].id])
+				this._serversStatsMap[detls["obj"].id].setText(detls["obj"].name);		
 		}
 	}
 }
@@ -589,11 +589,13 @@ ZaOverviewPanelController.prototype._showAccountsView = function (defaultType, e
 	var acctListController = this._app.getAccountListController();
 	acctListController.setPageNum(1);	
 	if(this._app.getCurrentController()) {
-		this._app.getCurrentController().switchToNextView(acctListController, ZaAccountListController.prototype.show,ZaSearch.searchByQueryHolder(queryHldr,1, ZaAccount.A_uid, null,this._app));
+		this._app.getCurrentController().switchToNextView(acctListController, ZaAccountListController.prototype.search,queryHldr);
 	} else {					
-		acctListController.show(ZaSearch.searchByQueryHolder(queryHldr,1, ZaAccount.A_uid, null,this._app));
+		acctListController.search(queryHldr);
 	}
+	/*
 	acctListController.setDefaultType(defaultType);
 	acctListController.setQuery(queryHldr);
+	*/
 };
 

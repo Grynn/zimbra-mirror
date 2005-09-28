@@ -329,12 +329,14 @@ ZaZimbraAdmin.prototype._showAccountsView = function (defaultType, ev){
 	queryHldr.fetchAttrs = ZaSearch.standardAttributes;
 	
 	if(this._app.getCurrentController()) {
-		this._app.getCurrentController().switchToNextView(acctListController, ZaAccountListController.prototype.show,ZaSearch.searchByQueryHolder(queryHldr,acctListController.getPageNum(), ZaAccount.A_uid, null,this._app));
+		this._app.getCurrentController().switchToNextView(acctListController, ZaAccountListController.prototype.search,queryHldr);
 	} else {					
-		acctListController.show(ZaSearch.searchByQueryHolder(queryHldr,1, ZaAccount.A_uid, null,this._app));
+		acctListController.search(queryHldr);
 	}
+	/*
 	acctListController.setDefaultType(defaultType);
 	acctListController.setQuery(queryHldr);
+	*/
 };
 
 ZaZimbraAdmin.prototype._getCurrentQueryHolder = 

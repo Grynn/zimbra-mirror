@@ -75,7 +75,7 @@ function(list) {
 			
 		this._app.pushView(ZaZimbraAdmin._DOMAINS_LIST_VIEW);
 	}
-	this._app.setCurrentController(this);
+//	this._app.setCurrentController(this);
 	this._removeList = new Array();
 	if (list != null)
 		this._list = list;

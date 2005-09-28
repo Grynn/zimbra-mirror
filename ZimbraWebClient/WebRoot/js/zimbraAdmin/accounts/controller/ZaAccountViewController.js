@@ -56,7 +56,7 @@ ZaAccountViewController.prototype.constructor = ZaAccountViewController;
 ZaAccountViewController.prototype.show = 
 function(entry, skipRefresh) {
 	this._setView(entry, skipRefresh);
-	this._app.setCurrentController(this);
+//	this._app.setCurrentController(this);
 }
 
 /**

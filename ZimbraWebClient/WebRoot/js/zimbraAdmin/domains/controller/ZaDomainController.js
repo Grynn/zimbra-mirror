@@ -50,7 +50,7 @@ ZaDomainController.prototype.constructor = ZaDomainController;
 ZaDomainController.prototype.show = 
 function(entry) {
 	this._setView(entry);
-	this._app.setCurrentController(this);
+//	this._app.setCurrentController(this);
 }
 
 /**
@@ -331,8 +331,8 @@ function(ev) {
 		//parameters for the confirmation dialog's callback 
 		var args = new Object();		
 		args["params"] = null;
-		args["obj"] = this._app.getDomainListController();
-		args["func"] = ZaDomainListController.prototype.show;
+		args["obj"] = this._app;
+		args["func"] = ZaApp.prototype.popView;
 		//ask if the user wants to save changes		
 		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
 		this._confirmMessageDialog.setMessage("Do you want so save current changes?", null, DwtMessageDialog.INFO_STYLE);
@@ -340,8 +340,8 @@ function(ev) {
 		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaDomainController.prototype._discardAndGoAway, this, args);		
 		this._confirmMessageDialog.popup();
 	} else {
-
-		this._app.getDomainListController().show();
+		this._app.popView();
+		//this._app.getDomainListController().show();
 	}	
 }
 
