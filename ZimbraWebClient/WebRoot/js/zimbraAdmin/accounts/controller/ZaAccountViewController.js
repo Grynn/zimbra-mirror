@@ -43,8 +43,6 @@ function ZaAccountViewController(appCtxt, container, abApp) {
 ZaAccountViewController.prototype = new ZaController();
 ZaAccountViewController.prototype.constructor = ZaAccountViewController;
 
-//ZaAccountViewController.VIEW = "ZaAccountViewController.VIEW";
-
 //public methods
 
 /**
@@ -596,7 +594,7 @@ ZaAccountViewController.prototype._deleteButtonListener =
 function(ev) {
 	if(this._currentObject.id) {
 		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);						
-		this._confirmMessageDialog.setMessage("Are you sure you want to delete this account?", null, DwtMessageDialog.INFO_STYLE);
+		this._confirmMessageDialog.setMessage(ZaMsg.Q_DELETE_ACCOUNT, null, DwtMessageDialog.INFO_STYLE);
 		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaAccountViewController.prototype._deleteAndGoAway, this, null);		
 		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaAccountViewController.prototype._closeCnfrmDlg, this, null);				
 		this._confirmMessageDialog.popup();
