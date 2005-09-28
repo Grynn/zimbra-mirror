@@ -118,7 +118,11 @@ my %commands = (
 	},
 );
 
+my %allhosts = ();
+my $gothosts = 0;
+
 sub runCommand {
+	my $host = shift;
 	my $user = shift;
 	my $command = shift;
 	my $args = shift;
@@ -129,36 +133,114 @@ sub runCommand {
 			$cmdstr = "su - $user -c \"$cmdstr\"";
 		}
 		if (open COMMAND, "$cmdstr $args |") {
-			print "STARTCMD: $cmdstr $args\n";
+			print "STARTCMD: $host $cmdstr $args\n";
 			while (<COMMAND>) {
 				print $_;
 			}
 			close COMMAND;
-			print "ENDCMD: $cmdstr $args\n";
+			print "ENDCMD: $host $cmdstr $args\n";
 		} else {
 			print "Can't run $cmdstr: $!\n\n";
 		}
 	}
 }
 
+sub getHostsByService {
+	my $service = shift;
+
+	my @hosts = ();
+
+	if (!$gothosts) {
+		open CMD, "su - zimbra -c 'zmprov gas'|" or return undef;
+		my @hl = <CMD>;
+		close CMD;
+		chomp @hl;
+		foreach my $h (@hl) {
+			open CMD, "su - zimbra -c 'zmprov gs $h' | grep zimbraServiceEnabled | sed -e 's/zimbraServiceEnabled: //'|" or return undef;
+			my @sl = <CMD>;
+			close CMD;
+			chomp @sl;
+			foreach my $s (@sl) {
+				$allhosts{$h}{$s} = $s;
+			}
+		}
+		$gothosts = 1;
+	}
+
+	foreach my $h (keys %allhosts) {
+		foreach my $s (keys %{ $allhosts{$h} }) {
+			if ($s eq $service) {
+				push @hosts, $h;
+			}
+		}
+	}
+	return \@hosts;
+}
+
+sub getHostList {
+	my $hstring = shift;
+
+	# Host format is either 
+	#   HOST:h1[,HOST:h2...] and/or
+	#   SERVICE:s1[SERVICE:s2,...]
+	# The script will de-dup hosts
+
+	my %hosts = ();
+
+	my @hspecs = split (',', $hstring);
+	foreach my $spec (@hspecs) {
+		my ($type, $item) = split (':', $spec);
+		if ($type eq "HOST") {
+			if ($item eq "ALL") {
+				my @h = sort keys %allhosts;
+				return \@h;
+			}
+			$hosts{$item} = $item;
+		} elsif ($type eq "SERVICE") {
+			if ($item eq "ALL") {
+				my @h = sort keys %allhosts;
+				return \@h;
+			}
+			my $hl = getHostsByService($item);
+			foreach (@$hl) {
+				$hosts{$_} = $_;
+			}
+		} else {
+			return undef;
+		}
+	}
+	my @h = sort keys %hosts;
+	return \@h;
+}
+
 while (<>) {
 	chomp;
 	my ($host, $command, $args) = split (' ', $_, 3);
 
-	# Ignore the host for now...
+	my $hostlist = getHostList ($host);
+
+	if (!defined ($hostlist)) {
+		print "ERROR: Invalid hostlist\n";
+		last;
+	}
 
 	if (defined ($commands{$command}{script})) {
-		runCommand ($commands{$command}{user}, $commands{$command}{script}, $args);
+		foreach my $h (@$hostlist) {
+			runCommand ($h, $commands{$command}{user}, $commands{$command}{script}, $args);
+		}
 		next;
 	} else {
 		my @a = split (' ', $args);
 		my $arg = shift @a;
 
 		if (defined ($commands{$command}{args}{$arg}{script})) {
-			runCommand ($commands{$command}{args}{$arg}{user}, 
-				$commands{$command}{args}{$arg}{script}, join(' ',@a));
+			foreach my $h (@$hostlist) {
+				runCommand ($h, $commands{$command}{args}{$arg}{user}, 
+					$commands{$command}{args}{$arg}{script}, join(' ',@a));
+			}
 			next;
 		} 
 	}
-	print STDERR "Unknown command $_\n";
+
+	print "ERROR: Unknown command $_\n";
 }
