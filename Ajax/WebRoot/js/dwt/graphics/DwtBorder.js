@@ -393,10 +393,10 @@ DwtBorder.registerBorder(
 	"calendar_appt",
 	{	
 		start:AjxBuffer.concat(	
-			"<div id='<!--$id-->_body' class='appt_body appt<!--$newState--><!--$color-->_body'>",
+			"<div id='<!--$id-->_body' class='appt_body <!--$bodyColor-->'>",
 				"<table style='width:100%;height:100%'cellspacing=0 cellpadding=2>",
-				"<tr class=appt<!--$newState--><!--$color-->_header>",
-					"<td class=appt_time id='<!--$id-->_st'><!--$starttime--></td>",
+				"<tr class='<!--$headerColor-->'>",
+					"<td class=appt<!--$newState-->_time id='<!--$id-->_st'><!--$starttime--></td>",
 					"<td class=appt_status-<!--$statusKey--> style='text-align:right'><!--$status--></td>",
 //					"<td class=appt<!--$newState-->_tag><!--$tag--></td>",
 				"</tr>",
@@ -424,7 +424,7 @@ DwtBorder.registerBorder(
 	"calendar_appt_bottom_only",
 	{	
 		start:AjxBuffer.concat(	
-			"<div id='<!--$id-->_body' class='appt_body appt<!--$newState--><!--$color-->_body'>",
+			"<div id='<!--$id-->_body' class='appt_body <!--$bodyColor-->'>",
 				"<table style='width:100%;height:100%'cellspacing=0 cellpadding=2>",
 				"<tr valign=top>",
 					"<td colspan=2 class=appt<!--$newState-->_name style='height:100%'>",
@@ -448,7 +448,7 @@ DwtBorder.registerBorder(
 	"calendar_appt_30",
 	{	
 		start:AjxBuffer.concat(
-			"<div id='<!--$id-->_body' class='appt_30_body appt_30<!--$newState--><!--$color-->_header'>",
+			"<div id='<!--$id-->_body' class='appt_30_body <!--$headerColor-->'>",
 				"<table width=100% cellspacing=0 cellpadding=2>",
 				"<tr>",
 					"<td class=appt_30<!--$newState-->_name><!--$name--></td>",
@@ -468,7 +468,7 @@ DwtBorder.registerBorder(
 	"calendar_appt_allday",
 	{	
 		start:AjxBuffer.concat(
-			"<div id='<!--$id-->_body' <!--$body_style--> class='appt_allday_body appt_allday<!--$newState--><!--$color-->_body'>",
+			"<div id='<!--$id-->_body' <!--$body_style--> class='appt_allday_body <!--$headerColor-->'>",
 				"<table width=100% cellspacing=0 cellpadding=2>",
 				"<tr>",
 					"<td class=appt_allday<!--$newState-->_name><!--$name--></td>",
