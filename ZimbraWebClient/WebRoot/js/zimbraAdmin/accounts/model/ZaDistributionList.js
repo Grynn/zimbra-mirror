@@ -77,6 +77,46 @@ ZaDistributionList.prototype.clone = function () {
 	return dl;
 };
 
+ZaDistributionList.prototype.addMembers = function (newMembersArrayOrVector) {
+	var added = false;
+	if (newMembersArrayOrVector != null) {
+		if (AjxUtil.isArray(newMembersArrayOrVector)) {
+			for (var i = 0; i < newMembersArrayOrVector.length; ++i) {
+				this._memberList.add(newMembersArrayOrVector[i]);
+			}
+			if (newMembersArrayOrVector.length > 0){
+				added = true;
+			}
+		} else if (AjxUtil.isInstance(newMembersArrayOrVector, AjxVector)){
+			this._memberList.merge(this._memberList.size(),newMembersArrayOrVector);
+		}
+		this.dedupMembers();
+	}
+	return added;
+};
+
+ZaDistributionList.prototype.sortMembers = function () {
+	//this._memberList.sort(ZaDistributionListMember.comparator);
+	this._memberList.sort();
+};
+
+ZaDistributionList.prototype.dedupMembers = function () {
+	this.sortMembers();
+	var membersArray = this._memberList.getArray();
+	var len = membersArray.length;
+	var i;
+	var prev = null;
+	var curr = null;
+	for (i = len; i >= 0; --i) {
+		curr = membersArray[i];
+		if((curr!=null) && (prev!=null) && curr.valueOf() == prev.valueOf()) {
+			membersArray.splice(i,1);
+		} else {
+			prev = curr;
+		}
+	}
+};
+
 ZaDistributionList.prototype.remove = function () {
 	var sd = AjxSoapDoc.create("DeleteDistributionListRequest", "urn:zimbraAdmin", null);
 	sd.set("id", this.id);
@@ -193,6 +233,7 @@ ZaDistributionList.prototype.initFromDom = function(node) {
 			this._memberList.add(child.getAttribute('name'));
 		}
 	}
+	if (this._memberList != null) 	this.sortMembers();
 };
 
 ZaDistributionList.prototype.getId = function () {
@@ -254,8 +295,9 @@ ZaDistributionList.prototype.getMembers = function (force) {
 			if (len > 0) {
 				this._memberList = new AjxVector();
 				for (var i =0; i < len; ++i) {
-					this._memberList.add(members[i]._content);
+					this._memberList.add(new ZaDistributionListMember(members[i]._content));
 				}
+				this.sortMembers();
 			}
 			this.id = resp.dl[0].id;
 			this.attrs = resp.dl[0]._attrs;
@@ -279,4 +321,18 @@ ZaDistributionList.prototype.getMembersArray = function () {
 ZaDistributionList.prototype.setMembers = function (list) {
 	if (list == null) list = [];
 	return this._memberList = AjxVector.fromArray(list);
+};
+
+function ZaDistributionListMember (name) {
+	this.name = name;
+	this.id = "ZADLM_" + name;
+
+}
+
+ZaDistributionListMember.prototype.toString = function () {
+	return this.name;
+};
+
+ZaDistributionListMember.prototype.valueOf = function () {
+	return this.id;
 };

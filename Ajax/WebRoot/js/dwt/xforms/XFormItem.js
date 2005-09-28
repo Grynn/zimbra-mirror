@@ -3447,11 +3447,13 @@ Dwt_List_XFormItem.prototype.getOnSelectionMethod = function() {
 
 
 Dwt_List_XFormItem.prototype.constructWidget = function () {
-	var widget = new DwtListView(this.getForm(), this.getCssClass());
+	var headerList = this.getInheritedProperty("headerList");
+	var widget = new DwtListView(this.getForm(), this.getCssClass(), null, headerList);
 	var multiselect = this.getInheritedProperty("multiselect");
 	if(multiselect != null) {
 		widget.setMultiSelect(multiselect);
-	}	
+	}
+
 	// make sure the user defined listener is called 
 	// before our selection listener.
 	var selMethod = this.getOnSelectionMethod();
@@ -3473,7 +3475,19 @@ Dwt_List_XFormItem.prototype.constructWidget = function () {
 
 		div.innerHTML = buffer.toString();
 		widget._addRow(div);
-	}
+	};
+
+	widget._sortColumn = function (columnItem, bSortAsc){
+		if (bSortAsc) {
+			var comparator = function (a, b) {
+				return (a < b)? 1 :((a > b)? -1 : 0);
+			};
+			widget.getList().sort(comparator);
+		} else {
+			widget.getList().sort();
+		}
+		
+	};
 
 	return widget;
 };

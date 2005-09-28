@@ -67,19 +67,6 @@ ZaDLController.prototype._createToolbars = function () {
 //===============================================================
 // rendering methods
 //===============================================================
-
-ZaDLController.prototype.getDummyDistributionLists = function () {
-	var tmp = [
-			   new ZaDistributionList(this._app, "one", "one@zimbra.com", ["foo@goo.com", "fuddy@duddy.com", "boo@hoo.com", "bob@marley.com"], "Some one description"),
-			   new ZaDistributionList(this._app, "two", "two@zimbra.com",["foo@goo.com", "fuddy@duddy.com", "boo@hoo.com", "bob@marley.com"], "Some two description"),
-			   new ZaDistributionList(this._app, "three", "three@zimbra.com", ["foo@goo.com", "fuddy@duddy.com", "boo@hoo.com", "bob@marley.com"],  "Some three description"),
-			   new ZaDistributionList(this._app, "four", "four@zimbra.com",["foo@goo.com", "fuddy@duddy.com", "boo@hoo.com", "bob@marley.com"], "Some four description"),
-			   new ZaDistributionList(this._app, "five", "five@zimbra.com",["foo@goo.com", "fuddy@duddy.com", "boo@hoo.com", "bob@marley.com"], "Some five description"),
-			   new ZaDistributionList(this._app, "six", "six@zimbra.com",["foo@goo.com", "fuddy@duddy.com", "boo@hoo.com", "bob@marley.com"], "Some six description"),
-			   ];
-	return tmp;
-};
-
 /**
  *
  */
@@ -259,8 +246,7 @@ ZaDLController.prototype._setSearchResults = function (searchResults, appendResu
 	var tmpArr = new Array();
 	var t;
 	for (var i = 0 ; i < arr.length ; ++i) {
-		t = new String(arr[i].name);
-		t.id = arr[i].id;
+		t = new ZaDistributionListMember(arr[i].name);
 		tmpArr.push(t);
 	}
 
@@ -305,17 +291,13 @@ ZaDLController.prototype.fetchMore = function () {
 };
 
 ZaDLController.prototype._searchListener = function (event, formItem) {
-	var btn = event.item;
-	//var btn = args[0].item;
 	var form = formItem.getForm();
-	//var searchTextItem = form.getItemsById("searchText")[0];
 	var instance = form.getInstance();
 	var searchText = instance.searchText;
 	try {
 		var searchQuery = new ZaSearchQuery(ZaSearch.getSearchByNameQuery(searchText), [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS], 
 											this._domain, false);
 		this._search(searchQuery, 1);
-		//form.refresh();
 	} catch (ex) {
 		// Only restart on error if we are not initialized and it isn't a parse error
 		if (ex.code != ZmCsfeException.MAIL_QUERY_PARSE_ERROR) {
@@ -332,6 +314,7 @@ ZaDLController.prototype._search = function (searchQuery, pagenum, appendResults
 	var results = ZaSearch.searchByQueryHolder(searchQuery, this._currentPageNum, null, null, this._app);
 	this._setSearchResults(results, appendResults);
 };
+
 
 /**
  * Get the view form.
@@ -364,8 +347,8 @@ ZaDLController.prototype._getNewViewXForm = function () {
 						 {type:_CELLSPACER_, width:10 },
  						    {type:_GROUP_, colSpan:1, width:"100%", colSizes:[70,"auto"],
  							 items:[	
-									//{ref: "name", type:_TEXTFIELD_, label: "List name:", width:"100%"},
-									{ref:"name", type:_EMAILADDR_, xmsgName:ZaMsg.NAD_AccountName, label:"List name:", XonChange:ZaTabView.onFormFieldChanged,forceUpdate:true, tableCssStyle:"width:100%", inputWidth:"140px"},
+									{ref:"name", type:_EMAILADDR_, xmsgName:ZaMsg.NAD_AccountName, label:"List name:", 
+									 forceUpdate:true, tableCssStyle:"width:100%", inputWidth:"100%"},
 
 								   {ref: "description", type:_TEXTFIELD_, label: "Description:", width:"100%"},
 								   {type:_OUTPUT_, value:"List Members:", width:"100%", colSpan:"*", cssClass:"xform_label_left", 
@@ -403,7 +386,7 @@ ZaDLController.prototype._getNewViewXForm = function () {
 									      elementChanged: function(elementValue,instanceValue, event) {
 										  var charCode = event.charCode;
 										  if (charCode == 13 || charCode == 3) {
-										      this.getFormController().search();
+										      this.getFormController()._searchListener(null, this);
 										  } else {
 										      this.getForm().itemChanged(this, elementValue, event);
 										  }
@@ -452,10 +435,6 @@ ZaDLController.prototype._getNewViewXForm = function () {
 					 {type:_CASE_, useParentTable:false, relevant:"instance[ZaModel.currentTab] == 2", colSizes:[10, "auto"], colSpan:"*",
 					     items:[
 						    {type:_SPACER_, height:5},
-// 						    {type:_CELLSPACER_, width:10 },
-// 						    {type: _OUTPUT_, value:"Description:", cssStyle:"align:left"},
-// 						    {type:_CELLSPACER_, width:10 },
-// 						    {ref: "description", type:_TEXTFIELD_, width:"90%"},
 						    {type:_SPACER_, height:5},
 						    {type:_CELLSPACER_, width:10 },
 						    {type: _OUTPUT_, value:"Notes:", cssStyle:"align:left"},
@@ -472,115 +451,6 @@ ZaDLController.prototype._getNewViewXForm = function () {
     return this._newXform;
 };
 
-ZaDLController.prototype._getNewViewXFormX = function () {
-    if (this._newXform == null) {
-	this._newXform = {
-	    X_showBorder:1,
-	    numCols:3, 
-	    cssClass:"ZaDLView", 
-	    colSizes:[10,"100%", 10],
-	    itemDefaults:{
-			_INPUT_: { cssClass:"inputBorder" },
-			_TEXTAREA_: {cssClass: "inputBorder"},
-			_TEXTFIELD_: {cssClass: "inputBorder"},
-			_DWT_BUTTON: {forceUpdate: true}
-	    },	    
-	    items:[
-		   {type:_SPACER_, height:10, colSpan:"*" },
-		   {type:_CELLSPACER_, width:10 },
-		   
-		   {type:_GROUP_, width:"100%", numCols:3, tableCssStyle:"width:100%",colSizes:["auto",20,"auto"],
-		       items:[
-			      {type:_OUTPUT_, colSpan:"*",cssClass:"ZmHead", value:"&nbsp;Manage Distribution List", 
-				  cssStyle:"background-color:lightgray; margin-bottom:5px;"},
-			      // The colSizes are necessary for firefox to hold the position
-			      // during the repositioning done in ZmAppViewMgr.pushView
-			      {type:_GROUP_, colSpan:1, width:"100%", colSizes:[100,"auto"],
-				  items:[	
-					 {ref: "name", type:_TEXTFIELD_, label: "List name:", width:"100%"},
-					 {ref: "description", type:_TEXTFIELD_, label: "Description:", width:"100%"},
-					 {ref: "notes", type:_TEXTFIELD_, label: "Notes:", width:"100%"},
-					 {type:_SPACER_, height:"3"},
-					 {ref:"members", type:_DWT_LIST_, colSpan:"*", cssClass: "DLTarget"},
-					 {type:_SPACER_, height:"7"},
-					 {type:_GROUP_, colSpan:2, width:"100%", numCols:4, colSizes:["100%",85,5, 85], 
-					     items:[
-						    {type:_CELLSPACER_},
-						    {type:_DWT_BUTTON_, label:"Remove All", width:80, relevant:"(form.getController().shouldEnableRemoveAllButton())",
-							onActivate:"this.getFormController().removeAllMembers(event,this)",
-							relevantBehavior:_DISABLE_},
-						    
-						    {type:_CELLSPACER_},
-						    {type:_DWT_BUTTON_, label:"Remove", width:80,
-							onActivate:"this.getFormController().removeMembers(event,this)",
-							relevant:"(form.getController().shouldEnableMemberListButtons())",
-							relevantBehavior:_DISABLE_}
-						   ]
-					 }
-					]
-			      },
-			      
-			      {type:_CELLSPACER_, width:20},
-			      
-			      {type:_RADIO_GROUPER_, colSpan:1, numCols:2, colSizes:[50, "100%"], label:"Add Members to this list",
-				  items:[			      
-					 {type:_GROUP_, label:"Find:", colSpan:"*", numCols:2, colSizes:["70%","30%"],tableCssStyle:"width:100%", 
-					     items:[
-						    {type:_INPUT_, ref:"searchText", width:"100%",
-							elementChanged: function(elementValue,instanceValue, event) {
-							    var charCode = event.charCode;
-							    if (charCode == 13 || charCode == 3) {
-								this.getFormController().search();
-							    } else {
-								this.getForm().itemChanged(this, elementValue, event);
-							    }
-							}
-						    },
-						    {type:_DWT_BUTTON_, label:"Search", width:80,
-							onActivate:"this.getFormController()._searchListener(event,this)"},
-						   ]
-					 },
-					 {type:_SPACER_, height:"5"},
-					 {ref:"memberPool", type:_DWT_LIST_, colSpan:"*", cssClass: "DLSource"},
-					 {type:_SPACER_, height:"5"},
-					 {type:_GROUP_, width:"100%", colSpan:"*", numCols:4, colSizes:[85,5,85,"100%"],
-					     items: [
-						     {type:_DWT_BUTTON_, label:"Add", width:80,
-							 onActivate:"this.getFormController().addAddressToMembers(event, this)",
-							 relevant:"(form.getController().shouldEnableMemberPoolListButtons())",
-							 relevantBehavior:_DISABLE_},
-						     {type:_CELLSPACER_},
-						     {type:_DWT_BUTTON_, label:"Add All", width:80,
-							 onActivate:"this.getFormController().addAllAddressesToMembers(event, this)",
-							 relevant:"(form.getController().shouldEnableAddAllButton())",
-							 relevantBehavior:_DISABLE_},
-						     {type:_CELLSPACER_},
-						    ]
-					 },
-					 
-					 {type:_TOP_GROUPER_, label:"Or enter addresses below:", colSpan:"*", items:[]},
-					 {ref:"optionalAdd", type:_TEXTAREA_, colSpan:"*", width:"100%", height:98},
-					 {type:_SPACER_, height:"5"},
-					 {type:_GROUP_, colSpan:"*", numCols:2, width:"100%", colSizes:[80,"100%"],
-					     items: [
-						     {type:_DWT_BUTTON_, label:"Add", width:"100%",
-							 onActivate:"this.getFormController().addFreeFormAddressToMembers(event, this)",
-							 relevant:"form.getController().shouldEnableFreeFormButtons()",
-							 relevantBehavior:_DISABLE_
-						     },
-						     {type:_OUTPUT_, value:"Separate addresses with comma or return", align:"right"}
-						    ]
-					 },					 
-					]
-			      }
-			     ]
-		   },
-		   {type:_CELLSPACER_, width:10 }
-		  ]
-	}
-    }
-    return this._newXform;
-};
 
 ZaDLController.prototype.removeMembers = function(event, formItem) {
 	var form = formItem.getForm();
@@ -634,9 +504,23 @@ ZaDLController.prototype.shouldEnableFreeFormButtons = function () {
 	return (optionalAdd != null && optionalAdd.length > 0);
 };
 
+ZaDLController.prototype._getMemberPoolItem = function () {
+	if (this.$memberPoolItem == null) {
+		this.$memberPoolItem = this._dlView.getItemsById("memberPool")[0];
+	}
+	return this.$memberPoolItem;
+};
+
+ZaDLController.prototype._getMemberItem = function () {
+	if (this.$memberItem == null) {
+		this.$memberItem = this._dlView.getItemsById("members")[0];
+	}
+	return this.$memberItem;
+};
+
 ZaDLController.prototype._getMemberPoolSelection = function () {
 	if (this._dlView != null) {
-		var memberPoolItem = this._dlView.getItemsById("memberPool")[0];
+		var memberPoolItem = this._getMemberPoolItem();
 		return memberPoolItem.getSelection();
 	}
 	return [];
@@ -644,7 +528,7 @@ ZaDLController.prototype._getMemberPoolSelection = function () {
 
 ZaDLController.prototype._getMemberSelection = function () {
 	if (this._dlView != null) {
-		var membersItem = this._dlView.getItemsById("members")[0];
+		var membersItem = this._getMemberItem();
 		return membersItem.getSelection();
 	} 
 	return [];
@@ -654,11 +538,19 @@ ZaDLController.prototype.addAllAddressesToMembers = function (event, formItem) {
 	var form = formItem.getForm();
 	var instance = form.getInstance();
 	var pool = instance.memberPool;
-	var members = instance.getMembers();
-	members.merge(members.size(), pool);
-	form.refresh();
+	if (instance.addMembers(instance.memberPool)) {
+		form.refresh();
+	}
+	var memberItem = this._getMemberItem();
+	memberItem.widget.setSelectedItems(instance.memberPool);
 };
 
+/**
+ * Currently, this manages the data, redraws the whole list, and then sets 
+ * the selection. 
+ * TODO - change the routine to add only the necessary rows to the list view.
+ * Same is true of addAllAddresses
+ */
 ZaDLController.prototype.addAddressToMembers = function (event, formItem) {
  	var form = formItem.getForm();
 	var instance = formItem.getForm().getInstance();
@@ -666,13 +558,13 @@ ZaDLController.prototype.addAddressToMembers = function (event, formItem) {
 	var memberPoolSelection = this._getMemberPoolSelection();
 	// get the current value of the textfied
 	var val;
-	if (memberPoolSelection != null) {
-		for (var i = 0; i < memberPoolSelection.length; ++i) {
-			members.add(memberPoolSelection[i]);
-		}		
-		form.refresh();	
+	if (instance.addMembers(memberPoolSelection)) {
+		form.refresh();
 	}
+	var memberItem = this._getMemberItem();
+	memberItem.widget.setSelectedItems(memberPoolSelection);	
 };
+
 /**
  */
 ZaDLController._IDS = 0;
@@ -682,9 +574,7 @@ ZaDLController.prototype.addFreeFormAddressToMembers = function (event, formItem
 	var members = instance.getMembers();
 	// get the current value of the textfied
  	var val = form.get("optionalAdd");
- 	var item = new String(val);
-	item.id = "ZADLV_"+ ZaDLController._IDS++
- 	//item.id = "id_" + val;
+	var item = new ZaDistributionListMember(val);
 	members.add(item);
 	instance.optionalAdd = null;
 	form.refresh();
@@ -704,13 +594,9 @@ ZaDLController.distributionListXModel = {
 		var tmpArr = new Array();
 		var tmp;
 		for (var i = 0; i < arr.length; ++i ){
+			tmp = arr[i];
 			if (!AjxUtil.isObject(arr[i])){
-				tmp = new String(arr[i]);
-			} else {
-				tmp = arr[i];
-			}
-			if (tmp.id == null) {
-				tmp.id = "ZADLV_"+ ZaDLController._IDS++;
+				tmp = new ZaDistributionListMember(arr[i]);
 			}
 			tmpArr.push(tmp);
 		}
