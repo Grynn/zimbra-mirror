@@ -263,7 +263,7 @@ function() {
 DwtTabView.prototype._tabButtonListener = 
 function (ev) {
     if(ev.item instanceof DwtButton) {
-		this.switchToTab(ev.item.getData("_tabKey"));
+		this.switchToTab(ev.item.getData("tabKey"));
     } else {
 	if (ev && ev.target) {
 	    /**
@@ -276,7 +276,7 @@ function (ev) {
 	    while(elem.tagName != "TABLE" && elem.offsetParent ) {
 	    	elem = elem.offsetParent;
 	    }
-	    var tabKey = elem.getAttribute("_tabKey");
+	    var tabKey = elem.getAttribute("tabKey");
 	    if ((tabKey !== void 0) && (tabKey !== null)){
 			this.switchToTab(tabKey);
 	    }
@@ -412,14 +412,14 @@ DwtTabBar.prototype.addSelectionListener =
 function(tabKey, listener) {
 	this._buttons[tabKey].addSelectionListener(listener);
 	// This is for later retrieval in the listener method.
-	this._tbuttons[tabKey].table.setAttribute("_tabKey", tabKey);
+	this._tbuttons[tabKey].table.setAttribute("tabKey", tabKey);
 	
-	this._tbuttons[tabKey].leftImg.setAttribute("_tabKey", tabKey);
-	this._tbuttons[tabKey].rightImg.setAttribute("_tabKey", tabKey);
-	this._tbuttons[tabKey].leftTopImg.setAttribute("_tabKey", tabKey);
-	this._tbuttons[tabKey].rightTopImg.setAttribute("_tabKey", tabKey);	
-	this._tbuttons[tabKey].topImg.setAttribute("_tabKey", tabKey);		
-	this._tbuttons[tabKey]._bottomRow.setAttribute("_tabKey", tabKey);		
+	this._tbuttons[tabKey].leftImg.setAttribute("tabKey", tabKey);
+	this._tbuttons[tabKey].rightImg.setAttribute("tabKey", tabKey);
+	this._tbuttons[tabKey].leftTopImg.setAttribute("tabKey", tabKey);
+	this._tbuttons[tabKey].rightTopImg.setAttribute("tabKey", tabKey);	
+	this._tbuttons[tabKey].topImg.setAttribute("tabKey", tabKey);		
+	this._tbuttons[tabKey]._bottomRow.setAttribute("tabKey", tabKey);		
 	this._tbuttons[tabKey].addListener(DwtEvent.ONMOUSEUP, listener);
 }
 
@@ -455,7 +455,7 @@ function (tabKey, tabTitle) {
 	if (tabTitle != null)
 		b.setText(tabTitle);
 	b.setEnabled(true);
-	b.setData("_tabKey", tabKey);
+	b.setData("tabKey", tabKey);
 	if(parseInt(tabKey) == 1) {
 		tb.setOpen();
 	} 
@@ -536,13 +536,13 @@ DwtTabBar._setActiveTab =
 function (ev) {
     var tabK = null;
     if(ev && ev.item) {
-		tabK=ev.item.getData("_tabKey");
+		tabK=ev.item.getData("tabKey");
     } else if (ev && ev.target) {
 		var elem = ev.target;
 	    while(elem.tagName != "TABLE" && elem.offsetParent ) {
 	    	elem = elem.offsetParent;
 	    }
-		tabK = elem.getAttribute("_tabKey");
+		tabK = elem.getAttribute("tabKey");
 		if(tabK == null)
 			return false;
     } else {
