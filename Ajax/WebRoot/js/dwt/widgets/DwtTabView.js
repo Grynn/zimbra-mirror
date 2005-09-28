@@ -563,82 +563,8 @@ function DwtTabButton(parent) {
 	DwtComposite.call(this, parent, "DwtTabButton");
 	this._inactiveClassName = "DwtTabButton-inactive";
 	this._activeClassName = "DwtTabButton-active";
-		
-	this.table = this.getDocument().createElement("table");
-	this.table.border = 0;
-	this.table.cellPadding = 0;
-	this.table.cellSpacing = 0;
-	this.table.align = "center";
-	this.table.width = "100%";
-
-	this._topRow = this.table.insertRow(0);
-	this._middleRow = this.table.insertRow(1);
-	this._bottomRow = this.table.insertRow(2);	
-
-	this._leftTopCell = this._topRow.insertCell(0);
-	this._centerTopCell = this._topRow.insertCell(1);
-	this._rightTopCell = this._topRow.insertCell(2);
-
-	this._leftMiddleCell = this._middleRow.insertCell(0);
-	this._centerMiddleCell = this._middleRow.insertCell(1);
-	this._rightMiddleCell = this._middleRow.insertCell(2);
-
-	this._leftBottomCell = this._bottomRow.insertCell(0);
-	this._centerBottomCell = this._bottomRow.insertCell(1);
-	this._rightBottomCell = this._bottomRow.insertCell(2);
-
-	this._leftTopCell.className = "DwtTabButtonTL";
-	this._centerTopCell.className = "DwtTabButtonTM";
-	this._rightTopCell.className = "DwtTabButtonTR";
-
-	this._leftMiddleCell.className = "DwtTabButtonML";
-	this._centerMiddleCell.className = "DwtTabButtonMM";
-	this._rightMiddleCell.className = "DwtTabButtonMR";
-
-	this._leftBottomCell.className = "DwtTabButtonBL";
-	this._centerBottomCell.className = "DwtTabButtonBM";
-	this._rightBottomCell.className = "DwtTabButtonBR";
-
-	var document = this.getDocument();
-
-	this.leftTopImg = document.createElement("div");
-	this.topImg = document.createElement("div");
-	this.rightTopImg = document.createElement("div");
-
-	this.leftImg = this._leftMiddleCell;//document.createElement("div");
-	this.centerImg = this._centerMiddleCell;//document.createElement("div");
-	this.rightImg = this._rightMiddleCell;//document.createElement("div");
-
-	this.leftBottomImg = document.createElement("div");
-	this.bottomImg = document.createElement("div");
-	this.rightBottomImg = document.createElement("div");
-
-	AjxImg.setImage(this.leftTopImg, "Tab_TL", null, true);
-	AjxImg.setImage(this.topImg, "Tab_T__H", AjxImg.HORIZ_BORDER, true);
-	AjxImg.setImage(this.rightTopImg, "Tab_TR", null, true);
-
-	AjxImg.setImage(this.leftImg, "Tab_L__V", AjxImg.VERT_BORDER, true);
-	AjxImg.setImage(this.centerImg, "Tab__BG", AjxImg.BACKGROUND, true);
-	AjxImg.setImage(this.rightImg, "Tab_R__V", AjxImg.VERT_BORDER, true);
-
-	AjxImg.setImage(this.leftBottomImg, "Tab_BL", null, true);
-	AjxImg.setImage(this.bottomImg, "Tab_B__H", AjxImg.HORIZ_BORDER, true);
-	AjxImg.setImage(this.rightBottomImg, "Tab_BR", null, true);
-		
-	this._leftTopCell.appendChild(this.leftTopImg);
-	this._centerTopCell.appendChild(this.topImg);
-	this._rightTopCell.appendChild(this.rightTopImg);
-
-	//this._leftMiddleCell.appendChild(this.leftImg);
-	//this._centerMiddleCell.appendChild(this.centerImg);
-	//this._rightMiddleCell.appendChild(this.rightImg);
-
-	this._leftBottomCell.appendChild(this.leftBottomImg);
-	this._centerBottomCell.appendChild(this.bottomImg);
-	this._rightBottomCell.appendChild(this.rightBottomImg);
-
-	this.getHtmlElement().appendChild(this.table);
-	this.table.className=this._inactiveClassName;
+	
+	this._createHtml();
 
 	this._setMouseEventHdlrs();
 	this._mouseOverListener = new AjxListener(this, DwtTabButton.prototype._mouseOverListener);
@@ -660,40 +586,101 @@ function() {
 	return "DwtTabButton";
 }
 
+DwtTabButton.prototype._createHtml = 
+function() {
+	this.table = this.getDocument().createElement("table");
+	this.table.border = 0;
+	this.table.cellPadding = this.table.cellSpacing = 0;
+	this.table.align = "center";
+	this.table.width = "100%";
+
+	this._topRow = this.table.insertRow(-1);
+	this._middleRow = this.table.insertRow(-1);
+	this._bottomRow = this.table.insertRow(-1);	
+
+	this._leftTopCell = this._topRow.insertCell(-1);
+	this._centerTopCell = this._topRow.insertCell(-1);
+	this._rightTopCell = this._topRow.insertCell(-1);
+
+	this._leftMiddleCell = this._middleRow.insertCell(-1);
+	this._centerMiddleCell = this._middleRow.insertCell(-1);
+	this._rightMiddleCell = this._middleRow.insertCell(-1);
+
+	this._leftBottomCell = this._bottomRow.insertCell(-1);
+	this._centerBottomCell = this._bottomRow.insertCell(-1);
+	this._rightBottomCell = this._bottomRow.insertCell(-1);
+
+	this._leftTopCell.className = "DwtTabButtonTL";
+	this._centerTopCell.className = "DwtTabButtonTM";
+	this._rightTopCell.className = "DwtTabButtonTR";
+
+	this._leftBottomCell.className = "DwtTabButtonBL";
+	this._centerBottomCell.className = "DwtTabButtonBM";
+	this._rightBottomCell.className = "DwtTabButtonBR";
+
+	var document = this.getDocument();
+
+	this.leftTopImg = document.createElement("div");
+	this.topImg = document.createElement("div");
+	this.rightTopImg = document.createElement("div");
+	AjxImg.setImage(this.leftTopImg, "Tab_TL", null, true);
+	AjxImg.setImage(this.topImg, "Tab_T__H", AjxImg.HORIZ_BORDER, true);
+	AjxImg.setImage(this.rightTopImg, "Tab_TR", null, true);
+	this._leftTopCell.appendChild(this.leftTopImg);
+	this._centerTopCell.appendChild(this.topImg);
+	this._rightTopCell.appendChild(this.rightTopImg);
+
+	this.leftImg = this._leftMiddleCell;
+	this.centerImg = this._centerMiddleCell;
+	this.rightImg = this._rightMiddleCell;
+	AjxImg.setImage(this.leftImg, "Tab_L__V", AjxImg.VERT_BORDER, true);
+	AjxImg.setImage(this.centerImg, "Tab__BG", AjxImg.BACKGROUND, true);
+	AjxImg.setImage(this.rightImg, "Tab_R__V", AjxImg.VERT_BORDER, true);
+
+	this.leftBottomImg = document.createElement("div");
+	this.bottomImg = document.createElement("div");
+	this.rightBottomImg = document.createElement("div");
+	AjxImg.setImage(this.leftBottomImg, "Tab_BL", null, true);
+	AjxImg.setImage(this.bottomImg, "Tab_B__H", AjxImg.HORIZ_BORDER, true);
+	AjxImg.setImage(this.rightBottomImg, "Tab_BR", null, true);
+	this._leftBottomCell.appendChild(this.leftBottomImg);
+	this._centerBottomCell.appendChild(this.bottomImg);
+	this._rightBottomCell.appendChild(this.rightBottomImg);
+
+	this.getHtmlElement().appendChild(this.table);
+	this.table.className=this._inactiveClassName;
+};
+
 /**
 * Changes the visual appearance to active tab and sets _isClosed to false
 **/
 DwtTabButton.prototype.setOpen = 
-function () {
+function() {
 	this.table.className=this._activeClassName;	
-
 	this.setTabImageState("TabSel");
-	
 	this._isClosed = false;
-}
+};
 
 /**
 * Changes the visual appearance to inactive tab and sets _isClosed to true
 **/
 DwtTabButton.prototype.setClosed = 
-function () {
+function() {
 	this.table.className = this._inactiveClassName;	
-
 	this.setTabImageState("Tab");
-	
 	this._isClosed = true;
-}
+};
 
 /**
 * @param child
 * DwtComposite._addChild method is overriden to to create tab switch graphics
 **/
 DwtTabButton.prototype._addChild = 
-function (child) {
+function(child) {
 	this._centerMiddleCell.appendChild(child.getHtmlElement());
 	child.addListener(DwtEvent.ONMOUSEOVER, this._mouseOverListener);
 	child.addListener(DwtEvent.ONMOUSEOUT, this._mouseOutListener);
-}
+};
 
 DwtTabButton.prototype._mouseOverListener = 
 function(ev) {
@@ -701,39 +688,37 @@ function(ev) {
 		AjxTimedAction.cancelAction(this._mouseOutActionId);
 		this._mouseOutActionId = -1;
 	}
-	if (this._isClosed) {
+	if (this._isClosed)
 		this.setTabImageState("TabHover");
-	}
-}
+};
 
 DwtTabButton.prototype._mouseOutListener = 
 function(ev) {
-	if (AjxEnv.isIE){
-		this._mouseOutActionId = 
- 		   AjxTimedAction.scheduleAction(this._mouseOutAction, 1);
+	if (AjxEnv.isIE) {
+		this._mouseOutActionId = AjxTimedAction.scheduleAction(this._mouseOutAction, 1);
 	} else {
 		this._handleMouseOut();
 	}
-}
+};
 
-DwtTabButton.prototype._handleMouseOut = function (){
+DwtTabButton.prototype._handleMouseOut = 
+function() {
 	this._mouseOutActionId = -1;
-	if (this._isClosed) {
+	if (this._isClosed)
 		this.setTabImageState("Tab");
-	}
-}
+};
 
+DwtTabButton.prototype.setTabImageState = 
+function(imagePrefix) {
+	AjxImg.setImage(this.leftTopImg, imagePrefix + "_TL", null, true);
+	AjxImg.setImage(this.topImg, imagePrefix + "_T__H", AjxImg.HORIZ_BORDER, true);
+	AjxImg.setImage(this.rightTopImg, imagePrefix + "_TR", null, true);
 
-DwtTabButton.prototype.setTabImageState = function (imagePrefix) {
-		AjxImg.setImage(this.leftTopImg, imagePrefix + "_TL", null, true);
-		AjxImg.setImage(this.topImg, imagePrefix + "_T__H", AjxImg.HORIZ_BORDER, true);
-		AjxImg.setImage(this.rightTopImg, imagePrefix + "_TR", null, true);
-	
-		AjxImg.setImage(this.leftImg, imagePrefix + "_L__V", AjxImg.VERT_BORDER, true);
-		AjxImg.setImage(this._centerMiddleCell, imagePrefix + "__BG", AjxImg.BACKGROUND, true);
-		AjxImg.setImage(this.rightImg, imagePrefix + "_R__V", AjxImg.VERT_BORDER, true);
-	
-		AjxImg.setImage(this.leftBottomImg, imagePrefix + "_BL", null, true);
-		AjxImg.setImage(this.bottomImg, imagePrefix + "_B__H", AjxImg.HORIZ_BORDER, true);
-		AjxImg.setImage(this.rightBottomImg, imagePrefix + "_BR", null, true);
-}
+	AjxImg.setImage(this.leftImg, imagePrefix + "_L__V", AjxImg.VERT_BORDER, true);
+	AjxImg.setImage(this._centerMiddleCell, imagePrefix + "__BG", AjxImg.BACKGROUND, true);
+	AjxImg.setImage(this.rightImg, imagePrefix + "_R__V", AjxImg.VERT_BORDER, true);
+
+	AjxImg.setImage(this.leftBottomImg, imagePrefix + "_BL", null, true);
+	AjxImg.setImage(this.bottomImg, imagePrefix + "_B__H", AjxImg.HORIZ_BORDER, true);
+	AjxImg.setImage(this.rightBottomImg, imagePrefix + "_BR", null, true);
+};

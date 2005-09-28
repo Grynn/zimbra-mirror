@@ -43,35 +43,30 @@ AjxImg.BACKGROUND = 4;
 AjxImg._VIEWPORT_ID = "AjxImg_VP";
 
 /**
-* This method will set the image for <i>parentEl</i>. <i>parentEl</i> should only contain this image and no 
-* other children
+* This method will set the image for <i>parentEl</i>. <i>parentEl</i> should 
+* only contain this image and no other children
 *
-* @param parentEl The parent element for the image
-* @param imageName The name of the image.  The CSS entry for the image will be "Img<imageName>".
-* @param style image style. Can be AjxImg.ICON for icons (default), AjxImg.VERT_BORDER for vertical borders
-* 	AjxImg.HORIZ_BORDER for horizontal borders, or AjxImg.BACKGROUND for backgrounds
-* @ param useParenEl If true will use the parent element as the root for the image and will not create an intermediate DIV
+* @param parentEl 		The parent element for the image
+* @param imageName 		The name of the image.  The CSS entry for the image will be "Img<imageName>".
+* @param useParenEl 	If true will use the parent element as the root for the image and will not create an intermediate DIV
 */
 AjxImg.setImage =
 function(parentEl, imageName, style, useParentEl) {
-	style = (!style) ? AjxImg.ICON : style;
 	var className = this.getClassForImage(imageName);
 
 	if (useParentEl) {
 		parentEl.className = className;
-	} 
-	else {
+	} else {
 		if (parentEl.firstChild == null) {
 			parentEl.innerHTML = className 
-							   ? ["<div class='", className, "'></div>"].join("")
-							   : "<div></div>";
+			   ? ["<div class='", className, "'></div>"].join("")
+			   : "<div></div>";
    		}
 		else {
 			parentEl.firstChild.className = className;
 		}
 	}
 }
-
 
 AjxImg.getClassForImage =
 function(imageName) {
