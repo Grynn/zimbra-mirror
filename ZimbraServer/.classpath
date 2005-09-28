@@ -16,7 +16,11 @@
 	<classpathentry kind="lib" path="jars/commons-pool-1.1.jar"/>
 	<classpathentry sourcepath="/ThirdParty/dom4j-1.5/src/java" kind="lib" path="jars/dom4j-1.5.jar"/>
 	<classpathentry kind="lib" path="jars/jaxen-1.1-beta-3.jar"/>
-	<classpathentry kind="lib" path="jars/commons-collections-3.1.jar"/>
+	<classpathentry kind="lib" path="jars/commons-collections-3.1.jar">
+		<attributes>
+			<attribute value="http://jakarta.apache.org/commons/collections/apidocs-COLLECTIONS_3_1/" name="javadoc_location"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="jars/lucene-demos-1.4-final.jar"/>
 	<classpathentry kind="lib" path="jars/commons-httpclient-2.0.1.jar"/>
 	<classpathentry sourcepath="/ThirdParty/junit-3.8.1" kind="lib" path="jars/junit-3.8.1.jar">
@@ -31,7 +35,7 @@
 	<classpathentry sourcepath="/ThirdParty/jsieve" kind="lib" path="jars/jsieve-0.1.jar"/>
 	<classpathentry sourcepath="/ZimbraNative/src/java" kind="lib" path="jars/zimbra-native.jar"/>
 	<classpathentry kind="lib" path="jars/lucene-1.4.3.jar"/>
-	<classpathentry kind="lib" path="jars/mail.jar">
+	<classpathentry sourcepath="/ThirdParty/javamail-1.3.2/src" kind="lib" path="jars/mail.jar">
 		<attributes>
 			<attribute value="http://java.sun.com/products/javamail/1.3/docs/javadocs/" name="javadoc_location"/>
 		</attributes>
@@ -51,7 +55,7 @@
 			<attribute value="http://jakarta.apache.org/tomcat/tomcat-5.5-doc/servletapi/" name="javadoc_location"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="jars/commons-cli-2.0.jar">
+	<classpathentry sourcepath="/ThirdParty/commons-cli-20050601/src/java" kind="lib" path="jars/commons-cli-2.0.jar">
 		<attributes>
 			<attribute value="http://jakarta.apache.org/commons/cli/apidocs/" name="javadoc_location"/>
 		</attributes>
