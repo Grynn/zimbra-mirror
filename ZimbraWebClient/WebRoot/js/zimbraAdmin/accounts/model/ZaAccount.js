@@ -588,8 +588,7 @@ function() {
 		idx = this._addRow(ZaItem._attrDesc(ZaAccount.A_accountStatus), 
 						ZaAccount._accountStatus(this.attrs[ZaAccount.A_accountStatus]), html, idx);
 		// TODO: COS
-		idx = this._addAttrRow(ZaAccount.A_description, html, idx);
-		idx = this._addAttrRow(ZaAccount.A_cn, html, idx);		
+		idx = this._addAttrRow(ZaAccount.A_displayname, html, idx);
 		idx = this._addAttrRow(ZaItem.A_zimbraId, html, idx);
 		idx = this._addAttrRow(ZaAccount.A_mailHost, html, idx);
 		html[idx++] = "</table>";
@@ -805,7 +804,7 @@ ZaAccount.myXModel.items.push({id:ZaAccount.A2_quota, type:_MAILQUOTA_2_, ref:"a
 ZaAccount.myXModel.items.push({id:ZaAccount.A2_autodisplayname, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES});
 ZaAccount.myXModel.items.push({id:ZaAccount.A2_autoMailServer, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES});
 
-ZaItem._ATTR[ZaAccount.A_accountName] = ZaMsg.attrDesc_accountName;
+ZaItem._ATTR[ZaAccount.A_displayname] = ZaMsg.attrDesc_accountName;
 ZaItem._ATTR[ZaAccount.A_description] = ZaMsg.attrDesc_description;
 ZaItem._ATTR[ZaAccount.A_firstName] = ZaMsg.attrDesc_firstName;
 ZaItem._ATTR[ZaAccount.A_lastName] = ZaMsg.attrDesc_lastName;

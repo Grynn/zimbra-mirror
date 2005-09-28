@@ -81,6 +81,8 @@ function(query, types, pagenum, orderby, isascending, app, attrs, limit, domainN
 		myisascending = "1";
 	} 
 	
+	limit = (limit != null)? limit: ZaAccount.RESULTSPERPAGE;
+	
 	var offset = (pagenum-1) * limit;
 	attrs = (attrs != null)? attrs: ZaSearch.standardAttributes;
 	var soapDoc = AjxSoapDoc.create("SearchAccountsRequest", "urn:zimbraAdmin", null);
