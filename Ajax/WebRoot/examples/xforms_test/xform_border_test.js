@@ -69,6 +69,7 @@ var form = {
 			]
 		},
 		{type:_BORDER_, borderStyle:"hover", colSpan:1, items:[], width:100, height:100},
+		{type:_BORDER_, borderStyle:"SemiModalDialog", colSpan:1, items:[], width:100, height:100},
 		{type:_BORDER_, borderStyle:"h_sash", colSpan:1, items:[]},
 
 

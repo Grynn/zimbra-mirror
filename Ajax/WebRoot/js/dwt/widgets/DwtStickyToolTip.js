@@ -80,14 +80,14 @@ DwtStickyToolTip.prototype._getStartBorder = function () {
 	if (!this._contentId) this._contentId = Dwt.getNextId();
 	if (!this._titleCellId) this._titleCellId = Dwt.getNextId();
 	
-	var borderStyle = AjxEnv.isIE ? "sticky_hover_IE" : "sticky_hover";
+	var borderStyle = "SemiModalDialog";
 	//var substitutions = {title : this._title, titleTextId: this._titleCellId, titleId: this._titleHandleId};
 	var substitutions = { id: this._htmlElId, title: this._title };
 	return DwtBorder.getBorderStartHtml(borderStyle, substitutions);
 };
 
 DwtStickyToolTip.prototype._getEndBorder = function () {
-	var borderStyle = AjxEnv.isIE ? "sticky_hover_IE" : "sticky_hover";
+	var borderStyle = "SemiModalDialog";
 	var substitutions = { id: this._htmlElId };
 	return DwtBorder.getBorderEndHtml(borderStyle, substitutions);
 };

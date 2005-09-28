@@ -76,3 +76,9 @@ DBG.getMessages = function () {
 
 
 
+
+var AjxMsg = {
+	xformRepeatAdd : '+',
+	xformRepeatRemove : '-',
+	xformDateTimeFormat : '{0,date} at {0,time}'
+};

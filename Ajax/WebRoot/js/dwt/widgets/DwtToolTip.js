@@ -33,7 +33,7 @@ function DwtToolTip(shell, className, dialog) {
 	this.shell.getHtmlElement().appendChild(this._div);
 	Dwt.setZIndex(this._div, Dwt.Z_HIDDEN);
 	
-	var borderStyle = AjxEnv.isIE ? "hover_IE" : "hover";
+	var borderStyle = "hover";
 	var substitutions = { id: "tooltip" };
 	this._borderStart = DwtBorder.getBorderStartHtml(borderStyle, substitutions);
 	this._borderEnd = DwtBorder.getBorderEndHtml(borderStyle, substitutions);	
@@ -110,6 +110,11 @@ DwtToolTip.prototype._positionElement = function(element, x, y, baseId, clip, di
 	var tbw = Dwt.getSize(tb).x;
 	var tbh = Dwt.getSize(tb).y;
 
+	if (AjxEnv.useTransparentPNGs) {
+		var bsEl = document.getElementById(baseId+'_border_shadow_b');
+		var bsh = Dwt.getSize(bsEl).y;
+	}
+
 	/***
 	DBG.println(
 		"---<br>"+
@@ -144,6 +149,9 @@ DwtToolTip.prototype._positionElement = function(element, x, y, baseId, clip, di
 		py += tbh; // NOTE: because bottom tip is relative
 		tt.style.display = "none";
 		ty = -bbh;
+		if (AjxEnv.useTransparentPNGs) {
+			ty -= bsh;
+		}
 		tw = tbw;
 		t = tb;
 	}

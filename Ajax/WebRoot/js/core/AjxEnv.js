@@ -61,6 +61,7 @@ AjxEnv.reset = function () {
 	AjxEnv.isSafari = false;
 	AjxEnv.isGeckoBased = false;
 	AjxEnv.isOpera = false;
+	AjxEnv.useTransparentPNGs = false;
 };
 
 AjxEnv.parseUA = function (userAgent) {
@@ -174,7 +175,10 @@ AjxEnv.parseUA = function (userAgent) {
 			AjxEnv.isNormalResolution = false;
 		}
 	}
-	AjxEnv._inited = true;
+	// show transparent PNGs on platforms that support them well
+	//	(eg: all but IE and Linux)
+	AjxEnv.useTransparentPNGs = !AjxEnv.isIE && !AjxEnv.isLinux;
+	AjxEnv._inited = !AjxEnv.isIE;
 };
 
 AjxEnv.reset();

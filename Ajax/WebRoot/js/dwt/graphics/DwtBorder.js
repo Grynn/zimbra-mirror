@@ -196,9 +196,7 @@ var dialogPieces = {
 					"<tr><td class='border_outset_c'><div class='ImgDialogOutset_TL'></div></td>",
 						"<td colspan=3 class='ImgDialogOutset_T__H'></td>",
 						"<td class='border_outset_c'><div class='ImgDialogOutset_TR'></div></td>",
-						"<td valign=top class='border_shadow_v'>",
-							"<div class='ImgShadowBig_TR' style='height:4;'></div>",
-						"</td>",
+						(AjxEnv.useTransparentPNGs ? "<td rowspan=2 valign=top class='border_shadow_v'><div class='ImgShadowBig_TR'></div><div class='ImgShadowBig_R__V' style='height:100%'></div></td>" : ""),
 					"</tr>",
 					// titlebar
 					"<tr><td class='ImgDialogOutset_L__V' style='height:100%'></td>",
@@ -210,7 +208,6 @@ var dialogPieces = {
 							"<td class='DialogTitleCell'><div class='<!--$closeIcon1-->' style='cursor:pointer'></div></td>",
 						"</tr></table></td>",
 						"<td class='ImgDialogOutset_R__V' style='height:100%'></td>",
-						"<td><div class='ImgShadowBig_R__V' style='height:100%'></div></td>",
 					"</tr>"
 				),
 	
@@ -221,11 +218,11 @@ var dialogPieces = {
 						"<td class='DialogBody' Xstyle='width:100%'><div class='ImgDialogInset_T__H'></div></td>",
 						"<td class='DialogBody'><div class='ImgDialogInset_TR'></div></td>",
 						"<td class='ImgDialogOutset_R__V' style='height:100%'></td>",
-						"<td><div class='ImgShadowBig_R__V' style='height:100%'></div></td>",
+						(AjxEnv.useTransparentPNGs ? "<td class='ImgShadowBig_R__V'></div></td>"  : ""),
 					"</tr>",
 					// dialog center
 					"<tr><td class='ImgDialogOutset_L__V' style='height:100%'></td>",
-						"<td class='DialogBody'><div class='ImgDialogInset_L__V' style='height:100%'></div></td>",
+						"<td class='DialogBody ImgDialogInset_L__V' style='height:100%'></td>",
 						"<td class='DialogBody'>"
 				),
 	
@@ -236,7 +233,7 @@ var dialogPieces = {
 						"<td class='DialogToolbar' style='width:100%'><div class='ImgDialogInset_T__H'></div></td>",
 						"<td class='DialogToolbar'><div class='ImgDialogInset_TR'></div></td>",
 						"<td class='ImgDialogOutset_R__V' style='height:100%'></td>",
-						"<td><div class='ImgShadowBig_R__V' style='height:100%'></div></td>",
+						(AjxEnv.useTransparentPNGs ? "<td class='ImgShadowBig_R__V'></div></td>" : ""),
 					"</tr>",
 					// top toolbar
 					"<tr><td class='ImgDialogOutset_L__V' style='height:100%'></td>",
@@ -244,26 +241,26 @@ var dialogPieces = {
 						"<td class='DialogToolbar'></td>",
 						"<td class='DialogToolbar'><div class='ImgDialogInset_R__V' style='height:20'></div></td>",
 						"<td class='ImgDialogOutset_R__V' style='height:100%'></td>",
-						"<td><div class='ImgShadowBig_R__V' style='height:100%'></div></td>",
+						(AjxEnv.useTransparentPNGs ? "<td class='ImgShadowBig_R__V'></div></td>" : ""),
 					"</tr>",
 					"<tr><td class='ImgDialogOutset_L__V' style='height:100%'></td>",
-						"<td class='ImgDialogToolbarSep_TL'></td>",
-						"<td class='ImgDialogToolbarSep_T__H'></td>",
-						"<td class='ImgDialogToolbarSep_TR'></td>",
+						"<td class='ImgDialogToolbarSep_L'></td>",
+						"<td class='ImgDialogToolbarSep__H'></td>",
+						"<td class='ImgDialogToolbarSep_R'></td>",
 						"<td class='ImgDialogOutset_R__V' style='height:100%'></td>",
-						"<td><div class='ImgShadowBig_R__V' style='height:100%'></div></td>",
+						(AjxEnv.useTransparentPNGs ? "<td class='ImgShadowBig_R__V'></div></td>" : ""),
 					"</tr>",
 					// dialog center
 					"<tr><td class='ImgDialogOutset_L__V' style='height:100%'></td>",
-						"<td class='DialogBody'><div class='ImgDialogInset_L__V' style='height:100%'></div></td>",
+						"<td class='DialogBody ImgDialogInset_L__V' style='height:100%'></td>",
 						"<td class='DialogBody'>"
 				),
 	
 	bottomNoToolbar: AjxBuffer.concat(
 						"</td> ",
-						"<td class='DialogBody'><div class='ImgDialogInset_R__V' style='height:100%'></div></td>",
+						"<td class='DialogBody ImgDialogInset_R__V' style='height:100%'></td>",
 						"<td class='ImgDialogOutset_R__V' style='height:100%'></td>",
-						"<td><div class='ImgShadowBig_R__V' style='height:100%'></div></td>",
+						(AjxEnv.useTransparentPNGs ? "<td class='ImgShadowBig_R__V'></div></td>" : ""),
 					"</tr>",
 					// bottom inside edge
 					"<tr><td class='ImgDialogOutset_L__V' style='height:100%'></td>",
@@ -271,30 +268,30 @@ var dialogPieces = {
 						"<td class='DialogBody'><div class='ImgDialogInset_B__H'></div></td>",
 						"<td class='DialogBody'><div class='ImgDialogInset_BR'></div></td>",
 						"<td class='ImgDialogOutset_R__V' style='height:100%'></td>",
-						"<td><div class='ImgShadowBig_R__V' style='height:100%'></div></td>",
+						(AjxEnv.useTransparentPNGs ? "<td class='ImgShadowBig_R__V'></div></td>" : ""),
 					"</tr>"
 				),
 	
 	bottomWithToolbar: AjxBuffer.concat(
 						"</td>",
-						"<td class='DialogBody'><div class='ImgDialogInset_R__V' style='height:100%'></div></td>",
+						"<td class='DialogBody ImgDialogInset_R__V' style='height:100%'></td>",
 						"<td class='ImgDialogOutset_R__V' style='height:100%'></td>",
-						"<td><div class='ImgShadowBig_R__V' style='height:100%'></div></td>",
+						(AjxEnv.useTransparentPNGs ? "<td class='ImgShadowBig_R__V'></div></td>" : ""),
 					"</tr>",
 					// bottom toolbar
 					"<tr><td class='ImgDialogOutset_L__V' style='height:100%'></td>",
-						"<td class='ImgDialogToolbarSep_TL'></td>",
-						"<td class='ImgDialogToolbarSep_T__H'></td>",
-						"<td class='ImgDialogToolbarSep_TR'></td>",
+						"<td class='ImgDialogToolbarSep_L'></td>",
+						"<td class='ImgDialogToolbarSep__H'></td>",
+						"<td class='ImgDialogToolbarSep_R'></td>",
 						"<td class='ImgDialogOutset_R__V' style='height:100%'></td>",
-						"<td><div class='ImgShadowBig_R__V' style='height:100%'></div></td>",
+						(AjxEnv.useTransparentPNGs ? "<td class='ImgShadowBig_R__V'></div></td>" : ""),
 					"</tr>",
 					"<tr><td class='ImgDialogOutset_L__V' style='height:100%'></td>",
-						"<td class='DialogToolbar'><div class='ImgDialogInset_L__V' style='height:20'></div></td>",
+						"<td class='DialogToolbar'><div class='ImgDialogInset_L__V' style='height:20'></td>",
 						"<td class='DialogToolbar'><div id='<!--$id-->_bottom_toolbar'></div></td>",
-						"<td class='DialogToolbar'><div class='ImgDialogInset_R__V' style='height:20'></div></td>",
+						"<td class='DialogToolbar'><div class='ImgDialogInset_R__V' style='height:20'></td>",
 						"<td class='ImgDialogOutset_R__V' style='height:100%'></td>",
-						"<td><div class='ImgShadowBig_R__V' style='height:100%'></div></td>",
+						(AjxEnv.useTransparentPNGs ? "<td class='ImgShadowBig_R__V'></div></td>" : ""),
 					"</tr>",
 					// bottom inside edge
 					"<tr><td class='ImgDialogOutset_L__V' style='height:100%'></td>",
@@ -302,7 +299,7 @@ var dialogPieces = {
 						"<td class='DialogToolbar'><div class='ImgDialogInset_B__H'></div></td>",
 						"<td class='DialogToolbar'><div class='ImgDialogInset_BR'></div></td>",
 						"<td class='ImgDialogOutset_R__V' style='height:100%'></td>",
-						"<td><div class='ImgShadowBig_R__V' style='height:100%'></div></td>",
+						(AjxEnv.useTransparentPNGs ? "<td class='ImgShadowBig_R__V'></div></td>" : ""),
 					"</tr>"	
 				),
 	
@@ -311,16 +308,17 @@ var dialogPieces = {
 					"<tr><td><div class='ImgDialogOutset_bl'></div></td>",
 						"<td colspan=3 class='ImgDialogOutset_B__H'></td>",
 						"<td><div class='ImgDialogOutset_br'></div></td>",
-						"<td><div class='ImgShadowBig_R__V' style='height:100%'></div></td>",
+						(AjxEnv.useTransparentPNGs ? "<td class='ImgShadowBig_R__V'></div></td>" : ""),
 					"</tr>",
 					// bottom shadow
-					"<tr><td><div class='ImgShadowBig_BL' style='width:4;'></div><td>",
-							"<div class='ImgShadowBig_B__H' style='width:100%'></div>",
-						"</td>",
-						"<td colspan=3>",
-							"<div class='ImgShadowBig_B__H' style='width:100%'></div></td>",
-						"<td class=dialog_shadow_c><div class='ImgShadowBig_BR'></div><td>",
-					"</tr>",
+						(AjxEnv.useTransparentPNGs ? 
+							"<tr><td colspan=5><table cellspacing=0 cellpadding=0 border=0><tr><td><div class='ImgShadowBig_BL'></div><td>"+
+									"<td width=100%><div class='ImgShadowBig_B__H' style='width:100%'></div></td></tr></table>"+
+								"</td>"+
+								"<td class=dialog_shadow_c><div class='ImgShadowBig_BR'></div><td>"+
+							"</tr>"
+						  : ""
+						),
 			     "</table>"
 				)
 }
@@ -483,6 +481,8 @@ DwtBorder.registerBorder(
 	}
 );
 
+// NOTE:  For the hover border, we show a PNG transparency shadow if the platform supports it cleanly
+//			(eg: in FF, not in IE or Linux)
 DwtBorder.registerBorder( 
 	"hover", 
 	{ 
@@ -493,6 +493,7 @@ DwtBorder.registerBorder(
 						"<td id='{$id}_border_tl' class=ImgHover_TL></td>", 
 						"<td id='{$id}_border_tm' class=ImgHover_T__H></td>", 
 						"<td id='{$id}_border_tr' class=ImgHover_TR></td>", 
+						(AjxEnv.useTransparentPNGs ? "<td class='ImgCurvedShadow_TR'></td>" : ""),
 					"</tr>", 
 					"<tr>",
 						"<td id='{$id}_border_ml' class=ImgHover_L__V></td>", 
@@ -501,12 +502,22 @@ DwtBorder.registerBorder(
 		end: AjxBuffer.concat(
 						"</div></td>", 
 						"<td id='{$id}_border_mr' class=ImgHover_R__V></td>", 
+						(AjxEnv.useTransparentPNGs ? "<td valign=top><div class='ImgCurvedShadow_T2R'></div><div class='ImgCurvedShadow_R__V' style='height:100%;'></div></td>" : ""),
 					"</tr>", 
 					"<tr>",
 						"<td id='{$id}_border_bl' class=ImgHover_BL></div></td>", 
 						"<td id='{$id}_border_bm' class=ImgHover_B__H></td>", 
 						"<td id='{$id}_border_br' class=ImgHover_BR></div></td>", 
+						(AjxEnv.useTransparentPNGs ? "<td></td>" : ""),
 					"</tr>", 
+						(AjxEnv.useTransparentPNGs ? 
+							"<tr><td class='ImgCurvedShadow_BL'></td>"
+								+"<td><div id='{$id}_border_shadow_b' class='ImgCurvedShadow_B__H' style='width:100%;'></td>"
+								+"<td></td>"
+								+"<td><div style='position:relative;'><div class='ImgCurvedShadow_BR' style='position:absolute;left:-20;top:-14'></div></div></td>"
+							+"</tr>" 
+							: ""
+						),
 				"</table>",
 				"<div id='{$id}_tip_b' class='hover_tip_bottom ImgHoverTip_B'></div>"
 			)
@@ -514,103 +525,62 @@ DwtBorder.registerBorder(
 );
 
 DwtBorder.registerBorder( 
-	"hover_IE", 
+	"SemiModalDialog", 
 	{ 
-		start:	AjxBuffer.concat(
-				"<div id='{$id}_tip_t' class='hover_tip_top ImgIE_HoverTip_T'></div>",
-				"<table class=hover_frame border=0 cellspacing=0 cellpadding=0>", 
+		start: AjxBuffer.concat(
+				"<div id='{$id}_tip_t' class='hover_tip_top ImgSemiModalTip_T'></div>",
+				"<table class=hover_frame_table border=0 cellspacing=0 cellpadding=0>", 
 					"<tr>", 
-						"<td id='{$id}_border_tl' class=ImgIE_Hover_TL></td>", 
-						"<td id='{$id}_border_tm' class=ImgIE_Hover_T__H></td>", 
-						"<td id='{$id}_border_tr' class=ImgIE_Hover_TR></td>", 
+						"<td id='{$id}_border_tl' class=ImgSemiModalHeader_TL></td>", 
+						"<td id='{$id}_border_tm' class=ImgSemiModalHeader_T__H colspan=2></td>", 
+						"<td id='{$id}_border_tr' class=ImgSemiModalHeader_TR></td>", 
+						(AjxEnv.useTransparentPNGs ? "<td class='ImgCurvedShadow_TR'></td>" : ""),
 					"</tr>", 
 					"<tr>",
-						"<td id='{$id}_border_ml' class=ImgIE_Hover_L__V></td>", 
-						"<td id='{$id}_border_mm' class=ImgIE_Hover__BG><div id='{$id}_contents' class=hover_contents>"
-			), 
-		end:	AjxBuffer.concat(
-					"</div></td>", 
-						"<td id='{$id}_border_mr' class=ImgIE_Hover_R__V></div></td>", 
+						"<td id='{$id}_border_ml' class='ImgSemiModalHeader_L__V'></td>", 
+						"<td class='ImgSemiModalHeader__BG'><div id='{$id}_title' class='DwtStickyToolTipTitle' style='position:relative;top:-3px;left:-10px;'>{$title}</div></td>",
+						"<td class='ImgSemiModalHeader__BG'><div id='{$id}_close' class='DwtStickyToolTipTitle' style='position:relative;top:-3px;left:20px;align:right;'></div></td>",
+						"<td id='{$id}_border_mr' class=ImgSemiModalHeader_R__V></td>", 
+						(AjxEnv.useTransparentPNGs ? "<td valign=top><div class='ImgCurvedShadow_T2R'></div><div class='ImgCurvedShadow_R__V' style='height:100%;'></div></td>" : ""),
+					"</tr>",
+					"<tr>",
+						"<td id='{$id}_border_ml' class='ImgSemiModalBody_TL'></td>", 
+						"<td id='{$id}_title' class='ImgSemiModalBody_T__H' colspan=2></td>",
+						"<td id='{$id}_border_mr' class=ImgSemiModalBody_TR></td>", 
+						(AjxEnv.useTransparentPNGs ? "<td><div class='ImgCurvedShadow_R__V' style='height:100%;'></div></td>" : ""),
+					"</tr>",
+					"<tr>",
+						"<td id='{$id}_border_ml' class=ImgSemiModalBody_L__V></td>", 
+						"<td id='{$id}_border_mm' class=ImgSemiModalBody__BG colspan=2><div id='{$id}_contents'>"
+			),
+		end: AjxBuffer.concat(
+						"</div></td>", 
+						"<td id='{$id}_border_mr' class=ImgSemiModalBody_R__V></td>", 
+						(AjxEnv.useTransparentPNGs ? "<td valign=top><div class='ImgCurvedShadow_R__V' style='height:100%;'></div></td>" : ""),
 					"</tr>", 
 					"<tr>",
-						"<td id='{$id}_border_bl' class=ImgIE_Hover_BL></td>", 
-						"<td id='{$id}_border_bm' class=ImgIE_Hover_B__H></td>", 
-						"<td id='{$id}_border_br' class=ImgIE_Hover_BR></td>", 
+						"<td class=ImgSemiModalBody_B1L></div></td>", 
+						"<td class=ImgSemiModalBody__BG colspan=2></td>", 
+						"<td class=ImgSemiModalBody_B1R></div></td>", 
+						(AjxEnv.useTransparentPNGs ? "<td><div class='ImgCurvedShadow_R__V' style='height:100%;'></div></td>" : ""),
 					"</tr>", 
+					"<tr>",
+						"<td id='{$id}_border_bl' class=ImgSemiModalBody_B2L></div></td>", 
+						"<td id='{$id}_border_bm' class=ImgSemiModalBody_B2__H colspan=2></td>", 
+						"<td id='{$id}_border_br' class=ImgSemiModalBody_B2R></div></td>", 
+						(AjxEnv.useTransparentPNGs ? "<td></td>" : ""),
+					"</tr>", 
+						(AjxEnv.useTransparentPNGs ? 
+							"<tr><td class='ImgCurvedShadow_BL'></td>"
+								+"<td colspan=2><div id='{$id}_border_shadow_b' class='ImgCurvedShadow_B__H' style='width:100%;'></td>"
+								+"<td></td>"
+								+"<td><div style='position:relative;'><div class='ImgCurvedShadow_BR' style='position:absolute;left:-20;top:-14'></div></div></td>"
+							+"</tr>" 
+							: ""
+						),
 				"</table>",
-				"<div id='{$id}_tip_b' class='hover_tip_bottom ImgIE_HoverTip_B'></div>"
+				"<div id='{$id}_tip_b' class='hover_tip_bottom ImgSemiModalBodyTip_B'></div>"
 			)
 	} 
 );
 
-DwtBorder.registerBorder( 
-	"sticky_hover", 
-	{ 
-		start: AjxBuffer.concat(
-				"<div id='{$id}_tip_t' class='hover_tip_top ImgHoverTip_T'></div>",
-				"<table class=hover_frame_table border=0 cellspacing=0 cellpadding=0>", 
-					"<tr>", 
-						"<td id='{$id}_border_tl' class=ImgHover_TL></td>", 
-						"<td id='{$id}_border_tm' class=ImgHover_T__H colspan='2'></td>", 
-						"<td id='{$id}_border_tr' class=ImgHover_TR></td>", 
-					"</tr>", 
-					"<tr>",
-						"<td id='{$id}_border_ml' class='ImgHover_L__V'></td>", 
-						"<td id='{$id}_title' class='DwtStickyToolTipTitle ImgHover__BG'>{$title}</td>",
-						"<td id='{$id}_close' class='ImgHover__BG' align='right'></td>",
-						"<td id='{$id}_border_mr' class=ImgHover_R__V></td>", 
-					"</tr>",
-					"<tr>",
-						"<td id='{$id}_border_ml' class='ImgHover_L__V'></td>", 
-						"<td id='{$id}_border_mm' class=ImgHover__BG colspan='2'><div id='{$id}_contents' class=hover_contents>"
-			),
-		end: AjxBuffer.concat(
-						"</div></td>", 
-						"<td id='{$id}_border_mr' class=ImgHover_R__V></td>", 
-					"</tr>", 
-					"<tr>",
-						"<td id='{$id}_border_bl' class=ImgHover_BL></div></td>", 
-						"<td id='{$id}_border_bm' class=ImgHover_B__H colspan='2'></td>", 
-						"<td id='{$id}_border_br' class=ImgHover_BR></div></td>", 
-					"</tr>", 
-				"</table>",
-				"<div id='{$id}_tip_b' class='hover_tip_bottom ImgHoverTip_B'></div>"
-			)
-	} 
-);
-
-DwtBorder.registerBorder( 
-	"sticky_hover_IE", 
-	{ 
-		start: AjxBuffer.concat(
-				"<div id='{$id}_tip_t' class='hover_tip_top ImgIE_HoverTip_T'></div>",
-				"<table class=hover_frame_table border=0 cellspacing=0 cellpadding=0>", 
-					"<tr>", 
-						"<td id='{$id}_border_tl' class=ImgIE_Hover_TL></td>", 
-						"<td id='{$id}_border_tm' class=ImgIE_Hover_T__H colspan='2'></td>", 
-						"<td id='{$id}_border_tr' class=ImgIE_Hover_TR></td>", 
-					"</tr>", 
-					"<tr>",
-						"<td id='{$id}_border_ml' class='ImgIE_Hover_L__V'></td>", 
-						"<td id='{$id}_title' class='DwtStickyToolTipTitle ImgIE_Hover__BG'>{$title}</td>",
-						"<td id='{$id}_close' class='ImgIE_Hover__BG' align='right'></td>",
-						"<td id='{$id}_border_mr' class=ImgIE_Hover_R__V></td>", 
-					"</tr>",
-					"<tr>",
-						"<td id='{$id}_border_ml' class='ImgIE_Hover_L__V'></td>", 
-						"<td id='{$id}_border_mm' class=ImgIE_Hover__BG colspan='2'><div id='{$id}_contents' class=hover_contents>"
-			),
-		end: AjxBuffer.concat(
-						"</div></td>", 
-						"<td id='{$id}_border_mr' class=ImgIE_Hover_R__V></td>", 
-					"</tr>", 
-					"<tr>",
-						"<td id='{$id}_border_bl' class=ImgIE_Hover_BL></div></td>", 
-						"<td id='{$id}_border_bm' class=ImgIE_Hover_B__H colspan='2'></td>", 
-						"<td id='{$id}_border_br' class=ImgIE_Hover_BR></div></td>", 
-					"</tr>", 
-				"</table>",
-				"<div id='{$id}_tip_b' class='hover_tip_bottom ImgIE_HoverTip_B'></div>"
-			)
-	} 
-);
