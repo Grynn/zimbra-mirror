@@ -112,8 +112,12 @@ my %commands = (
 		"script"	=> [ "/opt/zimbra/bin/zmmsgtrace" ],
 		"user"		=> "zimbra",
 	},
-	"postqueue" => {
-		"script"	=> [ "/opt/zimbra/postfix/sbin/postqueue" ],
+	"flushqueue" => {
+		"script"	=> [ "/opt/zimbra/postfix/sbin/postqueue -f" ],
+		"user"		=> "zimbra",
+	},
+	"showqueue" => {
+		"script"	=> [ "/opt/zimbra/postfix/sbin/postqueue -p" ],
 		"user"		=> "zimbra",
 	},
 );
@@ -164,11 +168,13 @@ sub runCommand {
 	}
 
 	foreach my $cm (@$cl) {
-		my $cmdstr = "$cm $args";
+		# Only pass the args that we approve, for security
+		#my $cmdstr = "$cm $args";
+		my $cmdstr = "$cm";
 		if ($user ne "root") {
 			$cmdstr = "su - $user -c \"$cmdstr\"";
 		}
-		if (open COMMAND, "$cmdstr $args |") {
+		if (open COMMAND, "$cmdstr |") {
 			print "STARTCMD: $host $cmdstr\n";
 			while (<COMMAND>) {
 				print $_;
