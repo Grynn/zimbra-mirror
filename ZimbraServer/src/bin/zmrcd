@@ -249,9 +249,32 @@ sub getHostList {
 	return \@h;
 }
 
+sub doHelp {
+	foreach my $cm (sort keys %commands) {
+		if (defined ($commands{$cm}{args})) {
+			foreach my $arg (sort keys %{ $commands{$cm}{args}}) {
+				print "$cm $arg: run as $commands{$cm}{args}{$arg}{user}\n";
+				foreach my $sc (@{ $commands{$cm}{args}{$arg}{script} }) {
+					print "\t$sc\n";
+				}
+			}
+		} else {
+			print "$cm: run as $commands{$cm}{user}\n";
+			foreach my $sc (@{ $commands{$cm}{script} }) {
+				print "\t$sc\n";
+			}
+		}
+	}
+}
+
 while (<>) {
 	chomp;
 	my ($host, $command, $args) = split (' ', $_, 3);
+
+	if ($host eq "?") {
+		doHelp();
+		next;
+	}
 
 	my $hostlist = getHostList ($host);
 
