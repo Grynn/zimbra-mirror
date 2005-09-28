@@ -40,7 +40,7 @@ function ZaDomainController(appCtxt, container, abApp) {
 ZaDomainController.prototype = new ZaController();
 ZaDomainController.prototype.constructor = ZaDomainController;
 
-ZaDomainController.VIEW = "ZaDomainController.VIEW";
+//ZaDomainController.VIEW = "ZaDomainController.VIEW";
 
 /**
 *	@method show
@@ -223,10 +223,10 @@ function(entry) {
 		var elements = new Object();
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
 		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolBar;		
-	    this._app.createView(ZaDomainController.VIEW, elements);
+	    this._app.createView(ZaZimbraAdmin._DOMAIN_VIEW, elements);
 		this._UICreated = true;
 	} 
-	this._app.pushView(ZaDomainController.VIEW);
+	this._app.pushView(ZaZimbraAdmin._DOMAIN_VIEW);
 	this._toolBar.getButton(ZaOperation.SAVE).setEnabled(false);  		
 	if(!entry.id) {
 		this._toolBar.getButton(ZaOperation.DELETE).setEnabled(false);  			

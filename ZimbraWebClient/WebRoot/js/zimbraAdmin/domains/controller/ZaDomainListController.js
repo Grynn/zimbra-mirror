@@ -36,7 +36,7 @@ function ZaDomainListController(appCtxt, container, app) {
 ZaDomainListController.prototype = new ZaController();
 ZaDomainListController.prototype.constructor = ZaDomainListController;
 
-ZaDomainListController.DOMAIN_VIEW = "ZaDomainListController.DOMAIN_VIEW";
+//ZaDomainListController.DOMAIN_VIEW = "ZaDomainListController.DOMAIN_VIEW";
 
 ZaDomainListController.prototype.show = 
 function(list) {
@@ -56,14 +56,14 @@ function(list) {
 		var elements = new Object();
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
-		this._app.createView(ZaDomainListController.DOMAIN_VIEW, elements);
+		this._app.createView(ZaZimbraAdmin._DOMAINS_LIST_VIEW, elements);
 		if (list != null)
 			this._contentView.set(list.getVector());
 
     	//context menu
     	this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._ops);
 
-		this._app.pushView(ZaDomainListController.DOMAIN_VIEW);			
+		this._app.pushView(ZaZimbraAdmin._DOMAINS_LIST_VIEW);			
 		
 		//set a selection listener on the Domain list view
 		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
@@ -73,7 +73,7 @@ function(list) {
 		if (list != null)
 			this._contentView.set(list.getVector());	
 			
-		this._app.pushView(ZaDomainListController.DOMAIN_VIEW);
+		this._app.pushView(ZaZimbraAdmin._DOMAINS_LIST_VIEW);
 	}
 	this._app.setCurrentController(this);
 	this._removeList = new Array();

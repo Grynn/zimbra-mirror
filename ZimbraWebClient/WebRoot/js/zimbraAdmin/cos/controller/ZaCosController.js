@@ -41,7 +41,7 @@ function ZaCosController(appCtxt, container, abApp) {
 ZaCosController.prototype = new ZaController();
 ZaCosController.prototype.constructor = ZaCosController;
 
-ZaCosController.VIEW = "ZaCosController.VIEW";
+//ZaCosController.VIEW = "ZaCosController.VIEW";
 
 /**
 *	@method show
@@ -226,11 +226,11 @@ function(entry) {
 			var elements = new Object();
 			elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
 			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolBar;			  	
-		    this._app.createView(ZaCosController.VIEW, elements);  	
+		    this._app.createView(ZaZimbraAdmin._COS_VIEW, elements);  	
 		    this._UICreated = true;
 	  	}
 	
-		this._app.pushView(ZaCosController.VIEW);
+		this._app.pushView(ZaZimbraAdmin._COS_VIEW);
 		this._toolBar.getButton(ZaOperation.SAVE).setEnabled(false);
 		if(!entry.id) {
 			this._toolBar.getButton(ZaOperation.DELETE).setEnabled(false);  			

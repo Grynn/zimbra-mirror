@@ -60,6 +60,45 @@ ZaZimbraAdmin._LOGOFF_ID = 3;
 ZaZimbraAdmin._PDF_HELP_ID = 4;
 ZaZimbraAdmin._ABOUT_ID = 5;
 
+ZaZimbraAdmin._ADDRESSES = 1;
+ZaZimbraAdmin._ACCOUNTS_LIST_VIEW = 2;
+ZaZimbraAdmin._ALIASES_LIST_VIEW = 3;
+ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW = 4;
+ZaZimbraAdmin._SYS_CONFIG = 5;
+ZaZimbraAdmin._GLOBAL_SETTINGS = 6;
+ZaZimbraAdmin._SERVERS_LIST_VIEW = 7;
+ZaZimbraAdmin._DOMAINS_LIST_VIEW = 8;
+ZaZimbraAdmin._COS_LIST_VIEW = 9;
+ZaZimbraAdmin._MONITORING = 10;
+ZaZimbraAdmin._STATUS = 11;
+ZaZimbraAdmin._STATISTICS = 12;
+
+ZaZimbraAdmin._STATISTICS_BY_SERVER = 13;
+ZaZimbraAdmin._SERVER_VIEW = 14;
+ZaZimbraAdmin._DOMAIN_VIEW = 15;
+ZaZimbraAdmin._COS_VIEW = 16;
+ZaZimbraAdmin._ACCOUNT_VIEW = 17;
+ZaZimbraAdmin._ALIAS_VIEW = 18;
+ZaZimbraAdmin._DL_VIEW = 19;
+
+ZaZimbraAdmin.MSG_KEY = new Object();
+ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._ACCOUNTS_LIST_VIEW] = "Accounts_view_title";
+ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._ACCOUNT_VIEW] = "Accounts_view_title";
+ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._ALIASES_LIST_VIEW] = "Aliases_view_title";
+ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._ALIAS_VIEW] = "Aliases_view_title";
+ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW] = "DL_view_title";
+ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._DL_VIEW] = "DL_view_title";
+ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._GLOBAL_SETTINGS] = "GlobalConfig_view_title";
+ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._SERVERS_LIST_VIEW] = "Servers_view_title";
+ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._DOMAINS_LIST_VIEW] = "Domain_view_title";
+ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._COS_LIST_VIEW] = "COS_view_title";
+ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._STATISTICS] = "GlobalStats_view_title";
+ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._STATISTICS_BY_SERVER] = "ServerStats_view_title";
+ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._SERVER_VIEW] = "Servers_view_title";
+ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._DOMAIN_VIEW] = "Domain_view_title";
+ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._COS_VIEW] = "COS_view_title";
+ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._STATUS] = "Status_view_title";
+
 // do not change the name of the cookie! SoapServlet looks for it
 ZaZimbraAdmin._COOKIE_NAME = "ZM_ADMIN_AUTH_TOKEN";
 	
@@ -198,6 +237,7 @@ function() {
 		elements = new Object();
 		elements[ZaAppViewMgr.C_TREE] = this.getOverviewPanelController().getOverviewPanel();
 		elements[ZaAppViewMgr.C_SEARCH] = this._app.getAccountListController().getSearchPanel();		
+		elements[ZaAppViewMgr.C_CURRENT_APP] = new ZaCurrentAppToolBar(this._shell);
 		this._appViewMgr.addComponents(elements, true);
 	} catch (ex) {
 		this._handleException(ex, "ZaZimbraAdmin.prototype.startup", null, true);

@@ -54,24 +54,6 @@ function ZaOverviewPanelController(appCtxt, container) {
 ZaOverviewPanelController.prototype = new ZaController;
 ZaOverviewPanelController.prototype.constructor = ZaOverviewPanelController;
 
-ZaOverviewPanelController._ADDRESSES = 1;
-ZaOverviewPanelController._ACCOUNTS = 2;
-ZaOverviewPanelController._ALIASES = 3;
-ZaOverviewPanelController._DISTRIBUTION_LISTS = 4;
-ZaOverviewPanelController._SYS_CONFIG = 5;
-ZaOverviewPanelController._GLOBAL_SETTINGS = 6;
-ZaOverviewPanelController._SERVERS = 7;
-ZaOverviewPanelController._DOMAINS = 8;
-ZaOverviewPanelController._COS = 9;
-ZaOverviewPanelController._MONITORING = 10;
-ZaOverviewPanelController._STATUS = 11;
-ZaOverviewPanelController._STATISTICS = 12;
-
-ZaOverviewPanelController._STATISTICS_SUB_TREE = 10000;
-ZaOverviewPanelController._SERVERS_SUB_TREE = 20000;
-ZaOverviewPanelController._DOMAINS_SUB_TREE = 30000;
-ZaOverviewPanelController._COS_SUB_TREE = 40000;
-
 ZaOverviewPanelController._TID = "TID";
 ZaOverviewPanelController._OBJ_ID = "OBJ_ID";
 
@@ -111,7 +93,7 @@ function (ev) {
 			var ti1 = new DwtTreeItem(this._cosTi);			
 			ti1.setText(newCos.name);	
 			ti1.setImage("COS");
-			ti1.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._COS_SUB_TREE);
+			ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._COS_VIEW);
 			ti1.setData(ZaOverviewPanelController._OBJ_ID, newCos.id);
 			this._cosMap[newCos.name] = ti1;
 		}
@@ -171,7 +153,7 @@ function (ev) {
 			var ti1 = new DwtTreeItem(this._domainsTi);			
 			ti1.setText(newDomain.name);	
 			ti1.setImage("Domain");
-			ti1.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._DOMAINS_SUB_TREE);
+			ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DOMAIN_VIEW);
 			ti1.setData(ZaOverviewPanelController._OBJ_ID, newDomain.id);
 			this._domainsMap[newDomain.name] = ti1;
 		}
@@ -216,14 +198,14 @@ function (ev) {
 			var ti1 = new DwtTreeItem(this._serversTi);			
 			ti1.setText(newServer.name);	
 			ti1.setImage("Server");
-			ti1.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._SERVERS_SUB_TREE);
+			ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._SERVER_VIEW);
 			ti1.setData(ZaOverviewPanelController._OBJ_ID, newServer.id);
 			this._serversMap[newServer.id] = ti1;
 
 			var ti2 = new DwtTreeItem(this._statisticsTi);			
 			ti2.setText(newServer.name);	
 			ti2.setImage("StatisticsByServer");
-			ti2.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._STATISTICS_SUB_TREE);
+			ti2.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._STATISTICS_BY_SERVER);
 			ti2.setData(ZaOverviewPanelController._OBJ_ID, newServer.id);
 			this._serversStatsMap[newServer.id] = ti2;
 
@@ -313,37 +295,37 @@ function() {
 
 	this._addressesTi = new DwtTreeItem(tree, null, null, null, null, "overviewPanelHeader");
 	this._addressesTi.setText(ZaMsg.OVP_addresses);
-	this._addressesTi.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._ADDRESSES);
+	this._addressesTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._ADDRESSES);
 		
 	ti = new DwtTreeItem(this._addressesTi);
 	ti.setText(ZaMsg.OVP_accounts);
 	ti.setImage("Account");
-	ti.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._ACCOUNTS);
+	ti.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._ACCOUNTS_LIST_VIEW);
 
 	ti = new DwtTreeItem(this._addressesTi);
 	ti.setText(ZaMsg.OVP_aliases);
 	ti.setImage("AccountAlias");
-	ti.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._ALIASES);
+	ti.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._ALIASES_LIST_VIEW);
 
 	ti = new DwtTreeItem(this._addressesTi);
 	ti.setText(ZaMsg.OVP_distributionLists);
 	ti.setImage("Group");
-	ti.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._DISTRIBUTION_LISTS);
+	ti.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW);
 
 
 	this._configTi = new DwtTreeItem(tree, null, null, null, null, "overviewPanelHeader");
 	this._configTi.setText(ZaMsg.OVP_configuration);
-	this._configTi.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._SYS_CONFIG);	
+	this._configTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._SYS_CONFIG);	
 	
 	ti = new DwtTreeItem(this._configTi);
 	ti.setText(ZaMsg.OVP_global);
 	ti.setImage("GlobalSettings");
-	ti.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._GLOBAL_SETTINGS);	
+	ti.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._GLOBAL_SETTINGS);	
 
 	this._serversTi = new DwtTreeItem(this._configTi);
 	this._serversTi.setText(ZaMsg.OVP_servers);
 	this._serversTi.setImage("Server");
-	this._serversTi.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._SERVERS);
+	this._serversTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._SERVERS_LIST_VIEW);
 	
 	try {
 		//add server nodes
@@ -354,7 +336,7 @@ function() {
 				var ti1 = new DwtTreeItem(this._serversTi);			
 				ti1.setText(serverList[ix].name);	
 				ti1.setImage("Server");
-				ti1.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._SERVERS_SUB_TREE);
+				ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._SERVER_VIEW);
 				ti1.setData(ZaOverviewPanelController._OBJ_ID, serverList[ix].id);
 				this._serversMap[serverList[ix].id] = ti1;
 			}
@@ -366,7 +348,7 @@ function() {
 	this._domainsTi = new DwtTreeItem(this._configTi);
 	this._domainsTi.setText(ZaMsg.OVP_domains);
 	this._domainsTi.setImage("Domain");
-	this._domainsTi.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._DOMAINS);
+	this._domainsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DOMAINS_LIST_VIEW);
 
 	try {
 		//add domain nodes
@@ -377,7 +359,7 @@ function() {
 				var ti1 = new DwtTreeItem(this._domainsTi);			
 				ti1.setText(domainList[ix].name);	
 				ti1.setImage("Domain");
-				ti1.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._DOMAINS_SUB_TREE);
+				ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DOMAIN_VIEW);
 				ti1.setData(ZaOverviewPanelController._OBJ_ID, domainList[ix].id);
 				this._domainsMap[domainList[ix].name] = ti1;
 			}
@@ -389,7 +371,7 @@ function() {
 	this._cosTi = new DwtTreeItem(this._configTi);
 	this._cosTi.setText(ZaMsg.OVP_cos);
 	this._cosTi.setImage("COS");
-	this._cosTi.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._COS);
+	this._cosTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._COS_LIST_VIEW);
 		
 	try {
 		//add COS nodes
@@ -400,7 +382,7 @@ function() {
 				var ti1 = new DwtTreeItem(this._cosTi);			
 				ti1.setText(cosList[ix].name);	
 				ti1.setImage("COS");
-				ti1.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._COS_SUB_TREE);
+				ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._COS_VIEW);
 				ti1.setData(ZaOverviewPanelController._OBJ_ID, cosList[ix].id);
 				this._cosMap[cosList[ix].name] = ti1;
 			}
@@ -411,18 +393,18 @@ function() {
 				
 	this._monitoringTi = new DwtTreeItem(tree, null, null, null, null, "overviewPanelHeader");
 	this._monitoringTi.setText(ZaMsg.OVP_monitoring);
-	this._monitoringTi.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._MONITORING);
+	this._monitoringTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._MONITORING);
 	
 
 	this._statusTi = new DwtTreeItem(this._monitoringTi);
 	this._statusTi.setText(ZaMsg.OVP_status);
 	this._statusTi.setImage("Status");
-	this._statusTi.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._STATUS);
+	this._statusTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._STATUS);
 
 	this._statisticsTi = new DwtTreeItem(this._monitoringTi);
 	this._statisticsTi.setText(ZaMsg.OVP_statistics);
 	this._statisticsTi.setImage("Statistics");
-	this._statisticsTi.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._STATISTICS);
+	this._statisticsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._STATISTICS);
 	
 	try {
 		//add server statistics nodes
@@ -433,7 +415,7 @@ function() {
 				var ti1 = new DwtTreeItem(this._statisticsTi);			
 				ti1.setText(serverList[ix].name);	
 				ti1.setImage("StatisticsByServer");
-				ti1.setData(ZaOverviewPanelController._TID, ZaOverviewPanelController._STATISTICS_SUB_TREE);
+				ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._STATISTICS_BY_SERVER);
 				ti1.setData(ZaOverviewPanelController._OBJ_ID, serverList[ix].id);
 				this._serversStatsMap[serverList[ix].id] = ti1;
 			}
@@ -481,7 +463,7 @@ function(ev) {
 		try {
 			if (treeItemType != null) {
 				switch (treeItemType) {
-					case ZaOverviewPanelController._COS:
+					case ZaZimbraAdmin._COS_LIST_VIEW:
 
 						if(this._app.getCurrentController()) {
 							this._app.getCurrentController().switchToNextView(this._app.getCosListController(), ZaCosListController.prototype.show, ZaCos.getAll(this._app));
@@ -489,19 +471,19 @@ function(ev) {
 							this._app.getCosListController().show(ZaCos.getAll(this._app));
 						}
 						break;
-					case ZaOverviewPanelController._ACCOUNTS:
+					case ZaZimbraAdmin._ACCOUNTS_LIST_VIEW:
 
 						this._showAccountsView(ZaItem.ACCOUNT,ev);
 						break;
- 					case ZaOverviewPanelController._DISTRIBUTION_LISTS:
+ 					case ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW:
 
 						this._showAccountsView(ZaItem.DL,ev);
 						break;
-					case ZaOverviewPanelController._ALIASES:
+					case ZaZimbraAdmin._ALIASES_LIST_VIEW:
 						
 						this._showAccountsView(ZaItem.ALIAS,ev);
 						break;
-					case ZaOverviewPanelController._DOMAINS:
+					case ZaZimbraAdmin._DOMAINS_LIST_VIEW:
 
 						if(this._app.getCurrentController()) {
 							this._app.getCurrentController().switchToNextView(this._app.getDomainListController(), ZaDomainListController.prototype.show, ZaDomain.getAll(this._app));
@@ -510,7 +492,7 @@ function(ev) {
 						}
 
 						break;			
-					case ZaOverviewPanelController._SERVERS:
+					case ZaZimbraAdmin._SERVERS_LIST_VIEW:
 
 						if(this._app.getCurrentController()) {
 							this._app.getCurrentController().switchToNextView(this._app.getServerListController(), ZaServerListController.prototype.show, ZaServer.getAll());
@@ -519,7 +501,7 @@ function(ev) {
 						}
 
 						break;									
-					case ZaOverviewPanelController._STATUS:
+					case ZaZimbraAdmin._STATUS:
 
 						if(this._app.getCurrentController()) {
 							this._app.getCurrentController().switchToNextView(this._app.getStatusViewController(),ZaStatusViewController.prototype.show, null);
@@ -527,7 +509,7 @@ function(ev) {
 							this._app.getStatusViewController().show();
 						}
 						break;		
-					case ZaOverviewPanelController._STATISTICS:
+					case ZaZimbraAdmin._STATISTICS:
 
 						if(this._app.getCurrentController()) {
 							this._app.getCurrentController().switchToNextView(this._app.getGlobalStatsController(),ZaGlobalStatsController.prototype.show, null);
@@ -535,7 +517,7 @@ function(ev) {
 							this._app.getGlobalStatsController().show();
 						}
 						break;		
-					case ZaOverviewPanelController._GLOBAL_SETTINGS:
+					case ZaZimbraAdmin._GLOBAL_SETTINGS:
 
 						if(this._app.getCurrentController()) {
 							this._app.getCurrentController().switchToNextView(this._app.getGlobalConfigViewController(),ZaGlobalConfigViewController.prototype.show, this._app.getGlobalConfig());
@@ -543,7 +525,7 @@ function(ev) {
 							this._app.getGlobalConfigViewController().show(this._app.getGlobalConfig());
 						}
 						break;		
-					case ZaOverviewPanelController._STATISTICS_SUB_TREE:
+					case ZaZimbraAdmin._STATISTICS_BY_SERVER:
 						var currentServer = this._app.getServerList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID));
 						if(this._app.getCurrentController()) {
 							this._app.getCurrentController().switchToNextView(this._app.getServerStatsController(), ZaServerStatsController.prototype.show,currentServer);
@@ -552,7 +534,7 @@ function(ev) {
 						}
 
 						break;
-					case ZaOverviewPanelController._SERVERS_SUB_TREE:
+					case ZaZimbraAdmin._SERVER_VIEW:
 						
 						if(this._app.getCurrentController()) {
 							this._app.getCurrentController().switchToNextView(this._app.getServerController(),
@@ -562,7 +544,7 @@ function(ev) {
 							this._app.getServerController().show(this._app.getServerList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
 						}				
 						break;
-					case ZaOverviewPanelController._DOMAINS_SUB_TREE:
+					case ZaZimbraAdmin._DOMAIN_VIEW:
 						
 						if(this._app.getCurrentController()) {
 							this._app.getCurrentController().switchToNextView(this._app.getDomainController(),
@@ -572,7 +554,7 @@ function(ev) {
 							this._app.getDomainController().show(this._app.getDomainList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
 						}				
 						break;		
-					case ZaOverviewPanelController._COS_SUB_TREE:
+					case ZaZimbraAdmin._COS_VIEW:
 						
 						if(this._app.getCurrentController()) {
 							this._app.getCurrentController().switchToNextView(this._app.getCosController(),

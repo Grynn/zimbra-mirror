@@ -41,7 +41,7 @@ function ZaGlobalConfigViewController(appCtxt, container, app) {
 ZaGlobalConfigViewController.prototype = new ZaController();
 ZaGlobalConfigViewController.prototype.constructor = ZaGlobalConfigViewController;
 
-ZaGlobalConfigViewController.STATUS_VIEW = "ZaGlobalConfigViewController.STATUS_VIEW";
+//ZaGlobalConfigViewController.STATUS_VIEW = "ZaGlobalConfigViewController.STATUS_VIEW";
 
 /**
 * Adds listener to removal of an ZaDomain 
@@ -65,10 +65,10 @@ function(item) {
 		var elements = new Object();
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
 		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolBar;			
-		this._app.createView(ZaGlobalConfigViewController.STATUS_VIEW,elements);
+		this._app.createView(ZaZimbraAdmin._GLOBAL_SETTINGS,elements);
 		this._UICreated = true;		
 	}
-	this._app.pushView(ZaGlobalConfigViewController.STATUS_VIEW);
+	this._app.pushView(ZaZimbraAdmin._GLOBAL_SETTINGS);
 	this._toolBar.getButton(ZaOperation.SAVE).setEnabled(false);  	
 	this._app.setCurrentController(this);
 	try {		

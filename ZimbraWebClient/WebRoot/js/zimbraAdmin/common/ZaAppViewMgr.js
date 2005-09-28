@@ -353,8 +353,18 @@ ZaAppViewMgr.prototype._setTitle =
 function(viewId) {
 	var elements = this._views[viewId];
 	var content = elements[ZaAppViewMgr.C_APP_CONTENT];
-	if (content && content.getTitle) {
+/*	if (content && content.getTitle) {
 		var title = content.getTitle();
 		Dwt.setTitle(title ? title : ZaMsg.zimbraTitle);
+	}
+*/
+	if(this._components[ZaAppViewMgr.C_CURRENT_APP] && this._components[ZaAppViewMgr.C_CURRENT_APP].setCurrentView) {
+		this._components[ZaAppViewMgr.C_CURRENT_APP].setCurrentView(viewId);		
+	}
+
+	if(ZaZimbraAdmin.MSG_KEY[viewId] && ZaMsg[ZaZimbraAdmin.MSG_KEY[viewId]]) {
+		Dwt.setTitle(ZaMsg[ZaZimbraAdmin.MSG_KEY[viewId]]);
+	} else {
+		Dwt.setTitle(ZaMsg.zimbraTitle);	
 	}
 }

@@ -39,7 +39,7 @@ function ZaGlobalStatsController(appCtxt, container, app) {
 ZaGlobalStatsController.prototype = new ZaController();
 ZaGlobalStatsController.prototype.constructor = ZaGlobalStatsController;
 
-ZaGlobalStatsController.STATUS_VIEW = "ZaGlobalStatsController.STATUS_VIEW";
+//ZaGlobalStatsController.STATUS_VIEW = "ZaGlobalStatsController.STATUS_VIEW";
 
 ZaGlobalStatsController.prototype.show = 
 function() {
@@ -48,9 +48,9 @@ function() {
 		var elements = new Object();
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 		
-		this._app.createView(ZaGlobalStatsController.STATUS_VIEW, elements);
+		this._app.createView(ZaZimbraAdmin._STATISTICS, elements);
 	}
-	this._app.pushView(ZaGlobalStatsController.STATUS_VIEW);
+	this._app.pushView(ZaZimbraAdmin._STATISTICS);
 	this._app.setCurrentController(this);
 }
 

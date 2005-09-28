@@ -41,7 +41,7 @@ ZaDLController.prototype.toString = function () {
 	return "ZaDLController";
 };
 
-ZaDLController.NEW_DL_VIEW = "ZaDLController.NEW_DISTRIBUTION_LIST_VIEW";
+//ZaDLController.NEW_DL_VIEW = "ZaDLController.NEW_DISTRIBUTION_LIST_VIEW";
 ZaDLController.MODE_NEW = 1;
 ZaDLController.MODE_EDIT = 2;
 
@@ -109,7 +109,7 @@ ZaDLController.prototype._getView = function (id, args) {
 	var toolbar = this._toolbar;
 	if (view == null) {
 		switch (id) {
-		case ZaDLController.NEW_DL_VIEW:
+		case ZaZimbraAdmin._DL_VIEW:
 			this._app.getDomainList();
 			var xModelObj = new XModel(ZaDLController.distributionListXModel);
 			view = new XForm(this._getNewViewXForm(), xModelObj, args, this._container);
@@ -150,7 +150,7 @@ ZaDLController.prototype._getView = function (id, args) {
 };
 
 ZaDLController.prototype._setView = function (args) {
-	var id = ZaDLController.NEW_DL_VIEW;
+	var id = ZaZimbraAdmin._DL_VIEW;
 	// get the view from our stash
 	var elements = this._getView(id, args);
 	// get the app container from the app view manager
@@ -338,7 +338,7 @@ ZaDLController.prototype._getNewViewXForm = function () {
 			      {type:_OUTPUT_, colSpan:"*",cssClass:"ZmHead", value:"&nbsp;Manage Distribution List", 
 				   cssStyle:"background-color:lightgray; margin-bottom:5px;"},
 				  // The colSizes are necessary for firefox to hold the position
-			      // during the repositioning done in ZmAppViewMgr.pushView
+			      // during the repositioning done in ZaAppViewMgr.pushView
 			      {type:_TAB_BAR_, choices:[ {value:1, label:"Members"}, {value:2, label:"Notes"},], ref: ZaModel.currentTab, colSpan:"*"},
 			      {type:_SWITCH_, useParentTable: true, colSpan:"*", numCols:5,
 				  items:[

@@ -40,7 +40,7 @@ function ZaStatusViewController(appCtxt, container, app) {
 ZaStatusViewController.prototype = new ZaController();
 ZaStatusViewController.prototype.constructor = ZaStatusViewController;
 
-ZaStatusViewController.STATUS_VIEW = "ZaStatusViewController.STATUS_VIEW";
+//ZaStatusViewController.STATUS_VIEW = "ZaStatusViewController.STATUS_VIEW";
 
 ZaStatusViewController.prototype.show = 
 function() {
@@ -51,11 +51,11 @@ function() {
 		var elements = new Object();
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 
-		this._app.createView(ZaStatusViewController.STATUS_VIEW, elements);
+		this._app.createView(ZaZimbraAdmin._STATUS, elements);
 	}
 	var mystatusVector = this._app.getStatusList(true).getVector();
 	this._contentView.set(mystatusVector);
-	this._app.pushView(ZaStatusViewController.STATUS_VIEW);
+	this._app.pushView(ZaZimbraAdmin._STATUS);
 	this._app.setCurrentController(this);
 }
 

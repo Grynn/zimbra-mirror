@@ -40,7 +40,7 @@ function ZaServerController(appCtxt, container, abApp) {
 ZaServerController.prototype = new ZaController();
 ZaServerController.prototype.constructor = ZaServerController;
 
-ZaServerController.VIEW = "ZaServerController.VIEW";
+//ZaServerController.VIEW = "ZaServerController.VIEW";
 
 /**
 *	@method show
@@ -159,10 +159,10 @@ function(entry) {
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
 		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolBar;		
 	  
-	    this._app.createView(ZaServerController.VIEW, elements);
+	    this._app.createView(ZaZimbraAdmin._SERVER_VIEW, elements);
 		this._UICreated = true;
 	} 
-	this._app.pushView(ZaServerController.VIEW);
+	this._app.pushView(ZaZimbraAdmin._SERVER_VIEW);
 	this._view.setDirty(false);
 	this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
 	this._currentObject = entry;

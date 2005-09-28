@@ -221,6 +221,10 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 }
 
 
+.currentAppLabel .Text {
+	font-size: 13px;
+	font-weight: bold;
+}
 
 /* Account */
 .ZaAccountView {
@@ -422,7 +426,10 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 }
 
 
-
+/* Override so first level of the tree does not indent */
+.DwtTreeItemLevel1ChildDiv {
+	padding-left:0px;
+}
 
 /** distribution list stuff **/
 .ZaDLView {

@@ -43,7 +43,7 @@ function ZaAccountViewController(appCtxt, container, abApp) {
 ZaAccountViewController.prototype = new ZaController();
 ZaAccountViewController.prototype.constructor = ZaAccountViewController;
 
-ZaAccountViewController.VIEW = "ZaAccountViewController.VIEW";
+//ZaAccountViewController.VIEW = "ZaAccountViewController.VIEW";
 
 //public methods
 
@@ -435,10 +435,10 @@ function(entry, skipRefresh) {
 			var elements = new Object();
 			elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
 			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolBar;		  		
-	    	this._app.createView(ZaAccountViewController.VIEW, elements);
+	    	this._app.createView(ZaZimbraAdmin._ACCOUNT_VIEW, elements);
 	    	this._UICreated = true;
   		}
-		this._app.pushView(ZaAccountViewController.VIEW);
+		this._app.pushView(ZaZimbraAdmin._ACCOUNT_VIEW);
 		if(entry.id && !skipRefresh) {
 			try {
 				entry.refresh(false);
