@@ -595,7 +595,6 @@ ZaOverviewPanelController.prototype._showAccountsView = function (defaultType, e
 	}
 	/*
 	acctListController.setDefaultType(defaultType);
-	acctListController.setQuery(queryHldr);
 	*/
 };
 

@@ -227,7 +227,7 @@ function () {
 	return this.pages[this._currentPageNum].numPages;
 }
 
-ZaAccountListController.prototype.setQuery = 
+ZaAccountListController.prototype._setQuery = 
 function (query) {
 	this._currentQuery = query;
 	searchObj = ZaSearch.getSearchFromQuery(query);
@@ -269,7 +269,7 @@ function(searchQuery) {
 		}
 		
 		//this._searchField.setObject(searchString);
-		this.setQuery(searchQuery);
+		this._setQuery(searchQuery);
 		this.show(ZaSearch.searchByQueryHolder(searchQuery, this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app));	
 	} catch (ex) {
 		// Only restart on error if we are not initialized and it isn't a parse error

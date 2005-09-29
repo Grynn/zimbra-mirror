@@ -335,7 +335,6 @@ ZaZimbraAdmin.prototype._showAccountsView = function (defaultType, ev){
 	}
 	/*
 	acctListController.setDefaultType(defaultType);
-	acctListController.setQuery(queryHldr);
 	*/
 };
 
