@@ -82,3 +82,31 @@ var AjxMsg = {
 	xformRepeatRemove : '-',
 	xformDateTimeFormat : '{0,date} at {0,time}'
 };
+
+
+function DwtKeyEvent(){}
+DwtKeyEvent.getCharCode = function(){ return -1}
+
+DwtKeyEvent.prototype.setFromDhtmlEvent = function(){}
+var DwtUiEvent = {	setBehavior : function () {} }
+
+
+function AjxTimedAction() {
+	this.params = [];
+	this.params.add = function (item) {
+		this[this.length] = item;
+	}
+}
+var ______id = 0;
+
+AjxTimedAction.scheduleAction = function (action, delay){
+	var id = "id_" + window.______id++;
+	window[id] = action;
+	setTimeout("AjxTimedAction.performCallback(window."+id+"); window."+id+"=null;", delay);
+}
+
+AjxTimedAction.performCallback = function (action){
+	var obj = action.obj;
+	var method = action.method;
+	method.call(obj, action.params);
+}
