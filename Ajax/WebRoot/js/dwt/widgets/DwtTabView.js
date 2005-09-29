@@ -175,43 +175,33 @@ function (width, height) {
 **/
 DwtTabView.prototype._createHTML =
 function () {
-
 	this._table = this.getDocument().createElement("table");
 	this.getHtmlElement().appendChild(this._table);
-	this._table.border = 0;
-	this._table.width="100%";
-	this._table.cellPadding = 0;
-	this._table.cellSpacing = 0;
+	this._table.width = "100%";
+	this._table.border = this._table.cellPadding = this._table.cellSpacing = 0;
 	this._table.backgroundColor = DwtCssStyle.getProperty(this.parent.getHtmlElement(), "background-color");
 	
-	var row1;
-	var col1;
-	row1 = this._table.insertRow(0);
+	var row1 = this._table.insertRow(-1);
 	row1.align = "left";
 	row1.vAlign = "middle";
 	
-	col1 = row1.insertCell(row1.cells.length);
+	var col1 = row1.insertCell(-1);
 	col1.align = "left";
 	col1.vAlign = "middle";
 	col1.noWrap = true;	
 	col1.width="100%";
 	col1.className="DwtTabTable";
-
 	col1.appendChild(this._tabBar.getHtmlElement());
 
-	var row2;
-	var col2;
-	row2 = this._table.insertRow(1);
+	var row2 = this._table.insertRow(-1);
 	row2.align = "left";
 	row2.vAlign = "middle";
 	
-	col2 = row2.insertCell(row2.cells.length);
+	var col2 = row2.insertCell(-1);
 	col2.align = "left";
 	col2.vAlign = "middle";
 	col2.noWrap = true;	
-
 	col2.appendChild(this._pageDiv);
-	
 }
 
 /**
@@ -367,40 +357,41 @@ function DwtTabBar(parent, tabCssClass, btnCssClass) {
 	this.addFiller(null, 1);
 }
 
-
-
 DwtTabBar.prototype = new DwtToolBar;
 DwtTabBar.prototype.constructor = DwtTabBar;
 
 //public members
-DwtTabBar.prototype.getCurrentTab = function() {
-	return this._currentTabKey;
-}
-
-DwtTabBar.prototype.addSpacer = function(size, index) {
-	var el = DwtToolBar.prototype.addSpacer.apply(this, arguments);
-	el.parentNode.style.verticalAlign = "bottom";
-	return el;
-}
-
-
-DwtTabBar.prototype.addFiller = function(className, index) {
-	var el = DwtToolBar.prototype.addFiller.apply(this, arguments);
-	el.parentNode.style.verticalAlign = "bottom";
-	return el;
-}
-
 DwtTabBar.prototype.toString = 
 function() {
 	return "DwtTabBar";
 }
 
+DwtTabBar.prototype.getCurrentTab = 
+function() {
+	return this._currentTabKey;
+}
 
-DwtTabBar.prototype.addStateChangeListener = function(listener) {
+DwtTabBar.prototype.addSpacer = 
+function(size, index) {
+	var el = DwtToolBar.prototype.addSpacer.apply(this, arguments);
+	el.parentNode.style.verticalAlign = "bottom";
+	return el;
+}
+
+DwtTabBar.prototype.addFiller = 
+function(className, index) {
+	var el = DwtToolBar.prototype.addFiller.apply(this, arguments);
+	el.parentNode.style.verticalAlign = "bottom";
+	return el;
+}
+
+DwtTabBar.prototype.addStateChangeListener = 
+function(listener) {
 	this._eventMgr.addListener(DwtEvent.STATE_CHANGE, listener);
 }
 
-DwtTabBar.prototype.removeStateChangeListener = function(listener) {
+DwtTabBar.prototype.removeStateChangeListener = 
+function(listener) {
 	this._eventMgr.removeListener(DwtEvent.STATE_CHANGE, listener);
 }
 
@@ -413,7 +404,6 @@ function(tabKey, listener) {
 	this._buttons[tabKey].addSelectionListener(listener);
 	// This is for later retrieval in the listener method.
 	this._tbuttons[tabKey].table.setAttribute("tabKey", tabKey);
-	
 	this._tbuttons[tabKey].leftImg.setAttribute("tabKey", tabKey);
 	this._tbuttons[tabKey].rightImg.setAttribute("tabKey", tabKey);
 	this._tbuttons[tabKey].leftTopImg.setAttribute("tabKey", tabKey);
@@ -437,7 +427,7 @@ function(tabKey, listener) {
 * @param tabTitle
 **/
 DwtTabBar.prototype.addButton =
-function (tabKey, tabTitle) {
+function(tabKey, tabTitle) {
 	var tb = this._tbuttons[tabKey] = new DwtTabButton(this);
 	var b = this._buttons[tabKey] = new DwtButton(tb, null, this._btnStyle, DwtControl.RELATIVE_STYLE);	
 	
@@ -447,38 +437,41 @@ function (tabKey, tabTitle) {
 	be.style.top = "-3px";
 	
 	this._buttons[tabKey].addSelectionListener(new AjxListener(this, DwtTabBar._setActiveTab));
-	this._tbuttons[tabKey].addListener(DwtEvent.ONMOUSEUP,
-					   (new AjxListener(this,DwtTabBar._setActiveTab)));
+	this._tbuttons[tabKey].addListener(DwtEvent.ONMOUSEUP, (new AjxListener(this,DwtTabBar._setActiveTab)));
 	
 	if (this._btnImage != null)
 		b.setImage(this._btnImage);
+
 	if (tabTitle != null)
 		b.setText(tabTitle);
+
 	b.setEnabled(true);
 	b.setData("tabKey", tabKey);
-	if(parseInt(tabKey) == 1) {
+
+	if(parseInt(tabKey) == 1)
 		tb.setOpen();
-	} 
+
 	return b;
 }
 
 DwtTabBar.prototype.openTab = 
-function (tabK) {
+function(tabK) {
 	this._currentTabKey = tabK;
     var cnt = this._tbuttons.length;
+
     for(var ix = 0; ix < cnt; ix ++) {
-		if(ix==tabK) 
-		    continue;
+		if(ix==tabK) continue;
+
 		if(this._tbuttons[ix])
 	    	this._tbuttons[ix].setClosed();
     }
-    if(this._tbuttons[tabK]) {
+
+    if(this._tbuttons[tabK])
 		this._tbuttons[tabK].setOpen();
-    }
+
     var nextK = parseInt(tabK) + 1;
-	if (this._eventMgr.isListenerRegistered(DwtEvent.STATE_CHANGE)) {
+	if (this._eventMgr.isListenerRegistered(DwtEvent.STATE_CHANGE))
 		this._eventMgr.notifyListeners(DwtEvent.STATE_CHANGE, this._stateChangeEv);
-	}    
 }
 
 //private members
@@ -497,21 +490,23 @@ DwtTabBar.prototype.__itemPaddingRight = "0px";
  * The implementation of this method assumes that the first child of
  * the tab bar's div element is a table.
  */
-DwtTabBar.prototype._addItem = function(type, element, index) {
+DwtTabBar.prototype._addItem = 
+function(type, element, index) {
 	if (!AjxUtil.isNumber(index)) {
 		var el = this.getHtmlElement().firstChild;
 		index = this._style == DwtToolBar.HORIZ_STYLE 
-			  ? el.rows[0].cells.length - 1: el.rows.length - 1;
+			  ? (el.rows[0].cells.length - 1)
+			  : (el.rows.length - 1);
 	}
+
 	DwtToolBar.prototype._addItem.call(this, type, element, index);
 }
 
-
-DwtTabBar.prototype._createSpacerElement = function() {
+DwtTabBar.prototype._createSpacerElement = 
+function() {
 	var table = this.getDocument().createElement("table");
 	table.width = "100%";
-	table.cellSpacing = 0;
-	table.cellPadding = 0;
+	table.cellSpacing = table.cellPadding = 0;
 	
 	var row1 = table.insertRow(table.rows.length);
 	var row2 = table.insertRow(table.rows.length);
@@ -525,7 +520,6 @@ DwtTabBar.prototype._createSpacerElement = function() {
 
 DwtTabBar.prototype._createFillerElement = DwtTabBar.prototype._createSpacerElement;
 
-
 /**
 * Greg Solovyev 1/4/2005 
 * changed ev.target.offsetParent.offsetParent to
@@ -533,17 +527,17 @@ DwtTabBar.prototype._createFillerElement = DwtTabBar.prototype._createSpacerElem
 * as well as from the td elements.
 **/
 DwtTabBar._setActiveTab =
-function (ev) {
+function(ev) {
     var tabK = null;
     if(ev && ev.item) {
 		tabK=ev.item.getData("tabKey");
     } else if (ev && ev.target) {
 		var elem = ev.target;
-	    while(elem.tagName != "TABLE" && elem.offsetParent ) {
+	    while(elem.tagName != "TABLE" && elem.offsetParent )
 	    	elem = elem.offsetParent;
-	    }
+
 		tabK = elem.getAttribute("tabKey");
-		if(tabK == null)
+		if (tabK == null)
 			return false;
     } else {
 		return false;
@@ -559,7 +553,7 @@ function (ev) {
 **/
 function DwtTabButton(parent) {
 	if (arguments.length == 0) return;
-	this._isClosed=true;
+	this._isClosed = true;
 	DwtComposite.call(this, parent, "DwtTabButton");
 	this._inactiveClassName = "DwtTabButton-inactive";
 	this._activeClassName = "DwtTabButton-active";
