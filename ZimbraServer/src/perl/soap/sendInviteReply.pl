@@ -47,7 +47,7 @@ if (defined($ARGV[1]) && $ARGV[1] ne "") {
     $userId = $ARGV[0];
     $msgID = $ARGV[1];
 } else {
-    die "USAGE: sendInviteReply INVITE-MESSAGE-ID";
+    die "USAGE: sendInviteReply USER INVITE-MESSAGE-ID";
 }
 
 my $ACCTNS = "urn:zimbraAccount";
@@ -82,11 +82,13 @@ $d->start('SendInviteReplyRequest', $MAILNS,
           {
               'id' => $msgID,
               'compNum' => "0",
-#              'verb' => "ACCEPT"
-                  'verb' => "TENTATIVE"
+#              'verb' => "TENTATIVE"
+                  'verb' => "DECLINE"
               }
 
           );
+
+$d->start('exceptId', undef, { 'd' => "20051012T090000" });
 $d->start('m', undef, { 'l' => "/INBOX" }, undef);
 
 $d->add('e', undef,
