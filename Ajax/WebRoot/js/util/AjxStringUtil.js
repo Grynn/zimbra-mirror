@@ -356,7 +356,7 @@ function(str) {
 	if (!AjxEnv.isSafari) {
 		return str.replace(/[ <>&\n]/g, function(htmlChar) { return AjxStringUtil.SPACE_ENCODE_MAP[htmlChar]; });
 	} else {
-		return str.replace(/[&]/g, '&amp;').replace(/ /g, '&nbsp').replace(/[<]/g, '&lt;').replace(/[>]/g, '&gt;');
+		return str.replace(/[&]/g, '&amp;').replace(/ /g, '&nbsp;').replace(/[<]/g, '&lt;').replace(/[>]/g, '&gt;');
 	}
 }
 
