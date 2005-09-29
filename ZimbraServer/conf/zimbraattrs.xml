@@ -322,6 +322,12 @@
 
 <attr name="zimbraPrefAutoAddAddressEnabled" type="boolean"/>
 
+<attr name="zimbraPrefHtmlEditorDefaultFontFamily" type="string" max="64"/>
+
+<attr name="zimbraPrefHtmlEditorDefaultFontColor" type="string" max="32"/>
+
+<attr name="zimbraPrefHtmlEditorDefaultFontSize" type="string" max="32"/>
+
 <attr name="zimbraPrefComposeInNewWindow" type="boolean"/>
 
 <attr name="zimbraPrefComposeFormat" type="enum" value="text,html"/>
@@ -329,6 +335,8 @@
 <attr name="zimbraPrefForwardReplyInOriginalFormat" type="boolean"/>
 
 <attr name="zimbraPrefContactsInitialView" type="enum" value="cards,list"/>
+
+<attr name="zimbraPrefCalendarFirstDayOfWeek" type="integer" min="0" max="6"/>
 
 <attr name="zimbraPrefCalendarInitialView" type="enum" value="day,week,workWeek,month"/>
 

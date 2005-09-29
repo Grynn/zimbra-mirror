@@ -61,6 +61,9 @@ zimbraCOSInheritedAttr: zimbraMailMinPollingInterval
 zimbraCOSInheritedAttr: zimbraMailQuota
 zimbraCOSInheritedAttr: zimbraMailSpamLifetime
 zimbraCOSInheritedAttr: zimbraMailTrashLifetime
+zimbraCOSInheritedAttr: zimbraPrefHtmlEditorDefaultFontFamily
+zimbraCOSInheritedAttr: zimbraPrefHtmlEditorDefaultFontSize
+zimbraCOSInheritedAttr: zimbraPrefHtmlEditorDefaultFontColor
 zimbraCOSInheritedAttr: zimbraPrefSaveToSent
 zimbraCOSInheritedAttr: zimbraPrefSentMailFolder
 zimbraCOSInheritedAttr: zimbraPasswordEnforceHistory
@@ -72,6 +75,7 @@ zimbraCOSInheritedAttr: zimbraPasswordMaxLength
 zimbraCOSInheritedAttr: zimbraPrefTimeZoneId
 zimbraCOSInheritedAttr: zimbraPrefUseTimeZoneListInCalendar
 zimbraCOSInheritedAttr: zimbraPrefComposeInNewWindow
+zimbraCOSInheritedAttr: zimbraPrefCalendarFirstDayOfWeek
 zimbraCOSInheritedAttr: zimbraPrefCalendarInitialView
 zimbraCOSInheritedAttr: zimbraPrefContactsInitialView
 zimbraCOSInheritedAttr: zimbraPrefShowFragments
@@ -348,8 +352,12 @@ zimbraPrefDedupeMessagesSentToSelf: dedupeNone
 zimbraPrefSaveToSent: TRUE
 zimbraPrefSentMailFolder: sent
 zimbraPrefComposeInNewWindow: FALSE
+zimbraPrefCalendarFirstDayOfWeek: 0
 zimbraPrefCalendarInitialView: workWeek
 zimbraPrefContactsInitialView: list
+zimbraPrefHtmlEditorDefaultFontFamily: Times New Roman
+zimbraPrefHtmlEditorDefaultFontSize: 12pt
+zimbraPrefHtmlEditorDefaultFontColor: rgb(0,0,0)
 zimbraPrefGroupMailBy: conversation
 zimbraPrefIncludeSpamInSearch: FALSE
 zimbraPrefIncludeTrashInSearch: FALSE

@@ -247,6 +247,10 @@ objectIdentifier zimbraAuthLdapSearchBindPassword ZimbraAttrType:254
 objectIdentifier zimbraAuthLdapSearchFilter ZimbraAttrType:255
 objectIdentifier zimbraAuthLdapExternalDn ZimbraAttrType:256
 objectIdentifier zimbraAuthFallbackToLocal ZimbraAttrType:257
+objectIdentifier zimbraPrefHtmlEditorDefaultFontFamily ZimbraAttrType:258
+objectIdentifier zimbraPrefHtmlEditorDefaultFontSize ZimbraAttrType:259
+objectIdentifier zimbraPrefHtmlEditorDefaultFontColor ZimbraAttrType:260
+objectIdentifier zimbraPrefCalendarFirstDayOfWeek ZimbraAttrType:261
 
 #################################################################
 # object class OIDs
@@ -863,6 +867,13 @@ attributetype ( zimbraPrefAutoAddAddressEnabled
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
+attributetype ( zimbraPrefCalendarFirstDayOfWeek
+	NAME 'zimbraPrefCalendarFirstDayOfWeek'
+	DESC 'first day of week to show in calendar (0=sunday, 6=saturday)'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )
+
 attributetype ( zimbraPrefComposeFormat
 	NAME 'zimbraPrefComposeFormat'
 	DESC 'whether or not to compose in html or text.'
@@ -875,6 +886,27 @@ attributetype ( zimbraPrefForwardReplyInOriginalFormat
 	DESC 'whether or not to use same format (text or html) of message we are replying to'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( zimbraPrefHtmlEditorDefaultFontFamily
+	NAME 'zimbraPrefHtmlEditorDefaultFontFamily'
+	DESC 'default font family'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{64}
+	SINGLE-VALUE )
+
+attributetype ( zimbraPrefHtmlEditorDefaultFontSize
+	NAME 'zimbraPrefHtmlEditorDefaultFontSize'
+	DESC 'default font size'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
+	SINGLE-VALUE )
+
+attributetype ( zimbraPrefHtmlEditorDefaultFontColor
+	NAME 'zimbraPrefHtmlEditorDefaultFontColor'
+	DESC 'default font color'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
 	SINGLE-VALUE )
 
 attributetype ( zimbraPrefComposeInNewWindow
@@ -1957,10 +1989,14 @@ objectclass ( zimbraAccount
 		zimbraPrefUseTimeZoneListInCalendar $
 		zimbraPrefComposeInNewWindow $
 		zimbraPrefComposeFormat $
+		zimbraPrefHtmlEditorDefaultFontColor $
+		zimbraPrefHtmlEditorDefaultFontFamily $
+		zimbraPrefHtmlEditorDefaultFontSize $
 		zimbraPrefForwardReplyInOriginalFormat $
 		zimbraPrefAutoAddAddressEnabled $
 		zimbraPrefShowFragments $
 		zimbraPrefShowSearchString $
+		zimbraPrefCalendarFirstDayOfWeek $
 		zimbraPrefCalendarInitialView $
 		zimbraPrefContactsInitialView $
 		zimbraPrefDedupeMessagesSentToSelf $
@@ -2093,9 +2129,13 @@ objectclass ( zimbraCOS
 		zimbraPasswordLocked $
 		zimbraPop3Enabled $		
 		zimbraPrefTimeZoneId $
+		zimbraPrefHtmlEditorDefaultFontColor $
+		zimbraPrefHtmlEditorDefaultFontFamily $
+		zimbraPrefHtmlEditorDefaultFontSize $
 		zimbraPrefUseTimeZoneListInCalendar $
 		zimbraPrefShowFragments $
 		zimbraPrefShowSearchString $
+		zimbraPrefCalendarFirstDayOfWeek $
 		zimbraPrefCalendarInitialView $
 		zimbraPrefComposeInNewWindow $
 		zimbraPrefComposeFormat $
