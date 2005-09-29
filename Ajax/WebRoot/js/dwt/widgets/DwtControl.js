@@ -55,9 +55,6 @@ function DwtControl(parent, className, posStyle, deferred) {
  	if (parent == null) 
  		return;
 
-	if (!(parent instanceof DwtComposite))
-		throw new DwtException("DwtControl parent must be a DwtComposite", DwtException.INVALIDPARENT, "DwtControl");
-	
 	this._className = className ? className : "DwtControl";
 	this._posStyle = posStyle;
 	if (!deferred)
