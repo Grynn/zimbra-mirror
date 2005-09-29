@@ -317,10 +317,52 @@ function() {
 	this._configTi.setText(ZaMsg.OVP_configuration);
 	this._configTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._SYS_CONFIG);	
 	
-	ti = new DwtTreeItem(this._configTi);
-	ti.setText(ZaMsg.OVP_global);
-	ti.setImage("GlobalSettings");
-	ti.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._GLOBAL_SETTINGS);	
+	this._cosTi = new DwtTreeItem(this._configTi);
+	this._cosTi.setText(ZaMsg.OVP_cos);
+	this._cosTi.setImage("COS");
+	this._cosTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._COS_LIST_VIEW);
+		
+	try {
+		//add COS nodes
+		var cosList = this._app.getCosList().getArray();
+		if(cosList && cosList.length) {
+			var cnt = cosList.length;
+			for(var ix=0; ix< cnt; ix++) {
+				var ti1 = new DwtTreeItem(this._cosTi);			
+				ti1.setText(cosList[ix].name);	
+				ti1.setImage("COS");
+				ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._COS_VIEW);
+				ti1.setData(ZaOverviewPanelController._OBJ_ID, cosList[ix].id);
+				this._cosMap[cosList[ix].name] = ti1;
+			}
+		}
+	} catch (ex) {
+		this._handleException(ex, "ZaOverviewPanelController.prototype._buildFolderTree", null, false);
+	}	
+	
+	this._domainsTi = new DwtTreeItem(this._configTi);
+	this._domainsTi.setText(ZaMsg.OVP_domains);
+	this._domainsTi.setImage("Domain");
+	this._domainsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DOMAINS_LIST_VIEW);
+
+	try {
+		//add domain nodes
+		var domainList = this._app.getDomainList().getArray();
+		if(domainList && domainList.length) {
+			var cnt = domainList.length;
+			for(var ix=0; ix< cnt; ix++) {
+				var ti1 = new DwtTreeItem(this._domainsTi);			
+				ti1.setText(domainList[ix].name);	
+				ti1.setImage("Domain");
+				ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DOMAIN_VIEW);
+				ti1.setData(ZaOverviewPanelController._OBJ_ID, domainList[ix].id);
+				this._domainsMap[domainList[ix].name] = ti1;
+			}
+		}
+	} catch (ex) {
+		this._handleException(ex, "ZaOverviewPanelController.prototype._buildFolderTree", null, false);
+	}
+		
 
 	this._serversTi = new DwtTreeItem(this._configTi);
 	this._serversTi.setText(ZaMsg.OVP_servers);
@@ -345,51 +387,13 @@ function() {
 		this._handleException(ex, "ZaOverviewPanelController.prototype._buildFolderTree", null, false);
 	}
 		
-	this._domainsTi = new DwtTreeItem(this._configTi);
-	this._domainsTi.setText(ZaMsg.OVP_domains);
-	this._domainsTi.setImage("Domain");
-	this._domainsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DOMAINS_LIST_VIEW);
 
-	try {
-		//add domain nodes
-		var domainList = this._app.getDomainList().getArray();
-		if(domainList && domainList.length) {
-			var cnt = domainList.length;
-			for(var ix=0; ix< cnt; ix++) {
-				var ti1 = new DwtTreeItem(this._domainsTi);			
-				ti1.setText(domainList[ix].name);	
-				ti1.setImage("Domain");
-				ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DOMAIN_VIEW);
-				ti1.setData(ZaOverviewPanelController._OBJ_ID, domainList[ix].id);
-				this._domainsMap[domainList[ix].name] = ti1;
-			}
-		}
-	} catch (ex) {
-		this._handleException(ex, "ZaOverviewPanelController.prototype._buildFolderTree", null, false);
-	}
 	
-	this._cosTi = new DwtTreeItem(this._configTi);
-	this._cosTi.setText(ZaMsg.OVP_cos);
-	this._cosTi.setImage("COS");
-	this._cosTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._COS_LIST_VIEW);
-		
-	try {
-		//add COS nodes
-		var cosList = this._app.getCosList().getArray();
-		if(cosList && cosList.length) {
-			var cnt = cosList.length;
-			for(var ix=0; ix< cnt; ix++) {
-				var ti1 = new DwtTreeItem(this._cosTi);			
-				ti1.setText(cosList[ix].name);	
-				ti1.setImage("COS");
-				ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._COS_VIEW);
-				ti1.setData(ZaOverviewPanelController._OBJ_ID, cosList[ix].id);
-				this._cosMap[cosList[ix].name] = ti1;
-			}
-		}
-	} catch (ex) {
-		this._handleException(ex, "ZaOverviewPanelController.prototype._buildFolderTree", null, false);
-	}
+	ti = new DwtTreeItem(this._configTi);
+	ti.setText(ZaMsg.OVP_global);
+	ti.setImage("GlobalSettings");
+	ti.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._GLOBAL_SETTINGS);	
+
 				
 	this._monitoringTi = new DwtTreeItem(tree, null, null, null, null, "overviewPanelHeader");
 	this._monitoringTi.setText(ZaMsg.OVP_monitoring);
