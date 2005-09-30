@@ -58,6 +58,10 @@ DwtIframe.prototype.getIframe = function() {
 	return this.getElementById(this._iframeID);
 };
 
+DwtIframe.prototype.getDocument = function() {
+	return this.getIframe().contentWindow.document;
+};
+
 /// Forwards events to the parent widget
 DwtIframe.prototype._rawEventHandler = function(ev) {
 	var iframe = this.getIframe();
@@ -150,12 +154,12 @@ DwtIframe.prototype._createFrame = function(html) {
 		idoc = Dwt.getIframeDoc(iframe);
 		idoc.open();
 		idoc.write(html);
+		idoc.close();
 		// if we're not giving a break, we can safely do any postprocessing
 		// here.  I.e. if we want to drop backgroundImage-s, it's safe to do it
 		// here because the browser won't have a chance to load them.
 		if (self._processHtmlCallback)
 			self._processHtmlCallback.run(idoc);
-		idoc.close();
 
 		// if we have margins, the translated coordinates won't be OK.
 		// it's best to remove them.  THE way to have some spacing is
