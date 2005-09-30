@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # 
 # ***** BEGIN LICENSE BLOCK *****
 # Version: ZPL 1.1
@@ -45,7 +45,7 @@ if [ "x$CERTFILE" = "x" ]; then
 fi
 
 if [ ! -f $CERTFILE ]; then
-	print STDERR "ERROR - $CERTFILE not found!"
+	echo "ERROR - $CERTFILE not found!"
 	exit 1
 fi
 
