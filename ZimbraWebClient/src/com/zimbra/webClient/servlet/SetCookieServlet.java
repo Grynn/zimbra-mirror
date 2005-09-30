@@ -74,6 +74,7 @@ public class SetCookieServlet extends ZCServlet
                 if (publicComputer != null) {
                     isPublic = new Boolean(publicComputer).booleanValue();
                 }
+                
 
                 int lifetime = -1;
                 if (!isPublic){
@@ -85,10 +86,13 @@ public class SetCookieServlet extends ZCServlet
                     }
                 }
 
-                Cookie c = new Cookie("ZM_AUTH_TOKEN", authToken);
-                c.setPath("/");
-                c.setMaxAge(lifetime);                
-                resp.addCookie(c);
+                String authCookieVal = getCookieValue(req, "ZM_AUTH_TOKEN");
+                if (authCookieVal == null) {
+                    Cookie c = new Cookie("ZM_AUTH_TOKEN", authToken);
+                    c.setPath("/");
+                    c.setMaxAge(lifetime);                
+                    resp.addCookie(c);
+                }
             }
             
             String host = req.getHeader(HEADER_HOST);
@@ -114,5 +118,19 @@ public class SetCookieServlet extends ZCServlet
             ex.printStackTrace ();
         }
     }    
+
+    private String getCookieValue (HttpServletRequest req, String name) {
+        Cookie[] cookies = req.getCookies();
+        String value = null;
+        if (cookies != null) {
+            for (int idx = 0; idx < cookies.length; ++idx) {
+                if (cookies[idx].getName().equals(name)){
+                    value = cookies[idx].getValue();
+                }
+            }
+        }
+        return value;
+    }
+    
 	
 }
