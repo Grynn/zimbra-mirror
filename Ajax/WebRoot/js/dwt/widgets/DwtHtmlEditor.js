@@ -37,8 +37,11 @@ function DwtHtmlEditor(parent, className, posStyle, content, mode, blankIframeSr
 	this._mode = mode == DwtHtmlEditor.HTML && this.isHtmlEditingSupported()
 		? mode : DwtHtmlEditor.TEXT;
 
+	// init content
+	this._initialStyle = this._getInitialStyle(true);
+	var initialHtml = "<html><head>" + this._getInitialStyle(false) + "</head><body></body></html>";
 	if (!content)
-		content = (this._mode == DwtHtmlEditor.HTML) ? DwtHtmlEditor._INITIAL_HTML : "";
+		content = this._mode == DwtHtmlEditor.HTML ? initialHtml : "";
 	
 	this._pendingContent = content;
 
@@ -150,8 +153,6 @@ DwtHtmlEditor._KEY2CMDS = {
 	"5":DwtHtmlEditor._STYLES[5], "6":DwtHtmlEditor._STYLES[6], "0":"DUMP"
 };
 
-DwtHtmlEditor._INITIAL_HTML = "<html><head></head><body></body></html>";
-
 DwtHtmlEditor.prototype.focus =
 function() {
 	this._getIframeWin().focus();
@@ -177,7 +178,7 @@ function(listener) {
 
 DwtHtmlEditor.prototype.clear =
 function() {
-	this.setContent((this._mode == DwtHtmlEditor.HTML) ? DwtHtmlEditor._INITIAL_HTML : "");
+	this.setContent("");
 }
 
 DwtHtmlEditor.prototype.enable =
@@ -189,7 +190,8 @@ function(enable) {
 		Dwt.getDomObj(doc, this._iframeId).disabled = !enable;
 }
 
-DwtHtmlEditor.prototype.setBlankIframeSrc = function (src) {
+DwtHtmlEditor.prototype.setBlankIframeSrc = 
+function(src) {
 	this._blankIframeSrc = src;
 };
 
@@ -205,7 +207,7 @@ DwtHtmlEditor.prototype.getContent =
 function() {
 	if (this._mode == DwtHtmlEditor.HTML) {
 		var iframeDoc = this._getIframeDoc();
-		return iframeDoc.body ? this._getIframeDoc().body.innerHTML : "";
+		return iframeDoc && iframeDoc.body ? (this._initialStyle + this._getIframeDoc().body.innerHTML) : "";
 	} else {
 		return Dwt.getDomObj(this.getDocument(), this._textAreaId).value;
 	}
@@ -218,7 +220,7 @@ DwtHtmlEditor.prototype.setContent =
 function(content) {
 	if (this._mode == DwtHtmlEditor.HTML) {
 		// iframe's document isnt done loading :(
-		this._pendingContent = content;
+		this._pendingContent = content || "";
 		this._setContentOnTimer();
 	} else {
 		Dwt.getDomObj(this.getDocument(), this._textAreaId).value = content;
@@ -266,7 +268,7 @@ function(mode, convert) {
 		// If we have pending content, then an iFrame is being created. This can happen
 		// if the widget is instantiated and immediate setMode is called w/o getting out
 		// to the event loop where _finishHtmlMode is triggered
-		var content = (!this._pendingContent) ? this._getIframeDoc().innerHTML : this._pendingContent;
+		var content = (!this._pendingContent) ? this._getIframeDoc().innerHTML : (this._pendingContent || "");
 		textArea.value = (convert) ? this._convertHtml2Text() : this._getIframeDoc().innerHTML;;
 
 		Dwt.setVisible(Dwt.getDomObj(doc, this._iFrameId), false);
@@ -400,7 +402,7 @@ function(content) {
 	this._updateStateAction = new AjxTimedAction();
 	this._updateStateAction.obj = this;
 	this._updateStateAction.method = DwtHtmlEditor.prototype._updateState;
-	
+
 	this._pendingContent = content || "";
 	
 	// IE can sometimes race ahead and execute script before the underlying component is created
@@ -410,6 +412,62 @@ function(content) {
 	AjxTimedAction.scheduleAction(timedAction, 100);
 	
 	return iFrame;
+}
+
+/**
+* @param useDiv 	Set this to true if prepending to the message body. False is 
+* 					used to set the default settings for compose editor so as 
+* 					you type the fonts appear as they would if the message we 
+* 					being read by the receiver
+*/
+DwtHtmlEditor.prototype._getInitialStyle = 
+function(useDiv) {
+	var initFontFamily = this._getInitialFontFamily();
+	var initFontSize = this._getInitialFontSize();
+	var initFontColor = this._getInitialFontColor();
+
+	var html = new Array();
+	var i = 0;
+	
+	if (useDiv) {
+		html[i++] = "<div style='";
+		html[i++] = "font-family:" + initFontFamily + ";";
+		html[i++] = "font-size:" + initFontSize + ";";
+		html[i++] = "color:" + initFontColor + ";";
+		html[i++] = "'>";
+	} else {
+		html[i++] = "<style type='text/css'>";
+		html[i++] = "p { ";
+		html[i++] = "font-family:" + initFontFamily + ";";
+		html[i++] = "font-size:" + initFontSize + ";";
+		html[i++] = "color:" + initFontColor + ";";
+		html[i++] = " } ";
+		html[i++] = "body { ";
+		html[i++] = "font-family:" + initFontFamily + ";";
+		html[i++] = "font-size:" + initFontSize + ";";
+		html[i++] = "color:" + initFontColor + ";";
+		html[i++] = " } ";
+		html[i++] = "</style>";
+	}
+	return html.join("");
+}
+
+// overload me to initialize to different font family
+DwtHtmlEditor.prototype._getInitialFontFamily = 
+function() {
+	return DwtHtmlEditor._TIMES;
+}
+
+// overload me to initialize to different font size
+DwtHtmlEditor.prototype._getInitialFontSize = 
+function() {
+	return "12pt";
+}
+
+// overload me to initialize to different font color
+DwtHtmlEditor.prototype._getInitialFontColor = 
+function() {
+	return "black";
 }
 
 DwtHtmlEditor.prototype._createIFrameEl = 
@@ -430,9 +488,10 @@ function() {
 DwtHtmlEditor.prototype._finishHtmlModeInit =
 function(params) {
 	var doc = this._getIframeDoc();	
-	try {
+	try {	
+		var content = this._pendingContent || "";
 		doc.open();
-		doc.write(this._pendingContent);
+		doc.write(content);
 		doc.close(); 
 	} catch (ex) {
 		// TODO Replace
