@@ -357,7 +357,7 @@ zimbraPrefCalendarInitialView: workWeek
 zimbraPrefContactsInitialView: list
 zimbraPrefHtmlEditorDefaultFontFamily: Times New Roman
 zimbraPrefHtmlEditorDefaultFontSize: 12pt
-zimbraPrefHtmlEditorDefaultFontColor: rgb(0,0,0)
+zimbraPrefHtmlEditorDefaultFontColor: #000000
 zimbraPrefGroupMailBy: conversation
 zimbraPrefIncludeSpamInSearch: FALSE
 zimbraPrefIncludeTrashInSearch: FALSE
