@@ -31,7 +31,15 @@ config_dir=/opt/zimbra/conf
 
 zmsetvars zimbra_ldap_userdn zimbra_ldap_password ldap_root_password zimbra_server_hostname
 
+root_sha=`/opt/zimbra/openldap/sbin/slappasswd -s ${ldap_root_password}`
 zimbra_sha=`/opt/zimbra/openldap/sbin/slappasswd -s ${zimbra_ldap_password}`
+
+# Update slapd.conf
+
+sed -e "s|^rootpw.*|rootpw ${root_sha}|" \
+    ${source_config_dir}/slapd.conf > ${config_dir}/slapd.conf
+
+# Update zimbra.ldif
 
 rm -f ${config_dir}/zimbra.ldif
 
