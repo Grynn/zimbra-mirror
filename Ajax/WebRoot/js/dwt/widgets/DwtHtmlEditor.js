@@ -223,7 +223,7 @@ function(content) {
 		this._pendingContent = content || "";
 		this._setContentOnTimer();
 	} else {
-		Dwt.getDomObj(this.getDocument(), this._textAreaId).value = content;
+		Dwt.getDomObj(this.getDocument(), this._textAreaId).value = (content || "");
 	}
 }
 
