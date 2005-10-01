@@ -605,7 +605,7 @@ function() {
 }
 
 DwtListView.prototype.handleActionPopdown = 
-function(ev) {
+function() {
 	// clear out old right click selection
 	if (this._rightSelItems) {
 		this._rightSelItems.className = this._rightSelItems._styleClass;

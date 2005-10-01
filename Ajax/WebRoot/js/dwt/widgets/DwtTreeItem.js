@@ -231,7 +231,7 @@ function(visible, itemOnly, childOnly) {
 	} else if (childOnly && !itemOnly) {
 		Dwt.setVisible(this._childDiv, visible);
 	} else {
-		DwtComposite.prototype.setVisible(visible);
+		DwtComposite.prototype.setVisible.call(this, visible);
 	}
 }
 
