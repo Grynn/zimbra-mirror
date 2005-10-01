@@ -1624,7 +1624,7 @@ attributetype ( zimbraSpamSubjectTag
 
 attributetype ( zimbraSshPublicKey
 	NAME 'zimbraSshPublicKey'
-	DESC 'Server's public key, used by other hosts to authorize this server to login.'
+	DESC 'Public key of this server, used by other hosts to authorize this server to login.'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{1024}
 	SINGLE-VALUE )
