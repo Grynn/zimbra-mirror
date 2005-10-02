@@ -23,10 +23,10 @@
  * ***** END LICENSE BLOCK *****
  */
 
-function AjxTimedAction() {
-	this.obj = null;
-	this.method = null;
-	this.params = new AjxVector();
+function AjxTimedAction(obj, method, params) {
+	this.obj = obj ? obj : null;
+	this.method = method ? method : null;
+	this.params = params ? params : new AjxVector();
 	this._tid = -1;
 	this._id = -1;
 }
