@@ -67,15 +67,13 @@ command=\"/opt/zimbra/bin/zmrcd\" ${key}"
 }
 
 # Get all the public keys from ldap, and replace them in 
-# ~root/.ssh/authorized_keys
-
-root_home=`awk -F: '/^root/ {print $6}' /etc/passwd`
+# /opt/zimbra/.ssh/authorized_keys
 
 keyattr="zimbraSshPublicKey"
 
 zmprov="/opt/zimbra/bin/zmprov"
 
-authkeysfile="${root_home}/.ssh/authorized_keys"
+authkeysfile="${zimbra_home}/.ssh/authorized_keys"
 
 tempkeysfile="/tmp/auth_keys.tmp"
 
