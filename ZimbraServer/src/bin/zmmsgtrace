@@ -278,7 +278,7 @@ sub printMessage {
 	my $curIP = shift;
 	my $indent = shift;
 
-	if ($indent eq "  ") { print "\n","$indent", "Recipient $r\n"; }
+	if ($indent eq "  ") { print "$indent", "Recipient $r\n"; }
 	print "$indent",
 		"$$msg{$msgId}{$curIP}{recipList}{$r}{arriveTime} - $$msg{$msgId}{$curIP}{prevHost} ",
 		"($$msg{$msgId}{$curIP}{prevIp}) --> $$msg{$msgId}{$curIP}{host}\n";
