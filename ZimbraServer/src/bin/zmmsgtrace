@@ -227,7 +227,6 @@ sub displayMsg {
 			print $$msg{$msgId}{$firstIP}{recipList}{$r}{origRecip}?
 				" (originally to $$msg{$msgId}{$firstIP}{recipList}{$r}{origRecip})\n":"\n";
 		}
-		print "\n";
 
 		foreach my $r ( sort keys %{$$msg{$msgId}{$firstIP}{recipList}} ) {
 			if (defined ($recip) && $r !~ /$recip/o) {next;}
