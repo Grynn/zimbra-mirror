@@ -50,6 +50,11 @@ zimbra_sha=`/opt/zimbra/openldap/sbin/slappasswd -s ${zimbra_ldap_password}`
 sed -e "s|^rootpw.*|rootpw ${root_sha}|" \
 	${source_config_dir}/slapd.conf > ${config_dir}/slapd.conf
 
+if [ -f "/opt/zimbra/lib/conf/zimbra-ext.schema" ]; then
+	sed -e '\|/opt/zimbra/openldap/etc/openldap/schema/zimbra.schema| a include "/opt/zimbra/lib/conf/zimbra-ext.schema"' ${config_dir}/slapd.conf > /tmp/slapd.conf
+	mv -f /tmp/slapd.conf ${config_dir}/slapd.conf
+fi
+
 # Update zimbra.ldif
 
 sed -e "s|^userPassword.*|userPassword: ${zimbra_sha}|" \
@@ -62,3 +67,6 @@ ${zimbra_home}/bin/ldap start
 ${zimbra_home}/openldap/bin/ldapmodify -a -c -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${config_dir}/zimbra.ldif
 ${zimbra_home}/openldap/bin/ldapmodify -a -c -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${source_config_dir}/zimbra_mimehandlers.ldif
 
+for i in "/opt/zimbra/lib/conf/*ldif"; do
+	${zimbra_home}/openldap/bin/ldapmodify -a -c -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f $i
+done
