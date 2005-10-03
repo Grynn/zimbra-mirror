@@ -102,59 +102,59 @@ function(sessionId) {
 * @param logRequest		[boolean]*		If true, SOAP command name is appended to server URL
 */
 ZmCsfeCommand.prototype.invoke =
-function(soapDoc, noAuthToken, serverUri, targetServer, useXml, noSession, changeToken, callback, logRequest) {
+function(params) {
 
 	// Add the SOAP header and context
-	var hdr = soapDoc.createHeaderElement();
-	var context = soapDoc.set("context", null, hdr);
+	var hdr = params.soapDoc.createHeaderElement();
+	var context = params.soapDoc.set("context", null, hdr);
 	context.setAttribute("xmlns", "urn:zimbra");
-	if (noSession)
-		soapDoc.set("nosession", null, context);
+	if (params.noSession)
+		params.soapDoc.set("nosession", null, context);
 	var sessionId = ZmCsfeCommand.getSessionId();
 	if (sessionId) {
-		var si = soapDoc.set("sessionId", null, context);
+		var si = params.soapDoc.set("sessionId", null, context);
 		si.setAttribute("id", sessionId);
 	}
-	if (targetServer)
-		soapDoc.set("targetServer", targetServer, context);
-	if (changeToken) {
-		var ct = soapDoc.set("change", null, context);
-		ct.setAttribute("token", changeToken);
+	if (params.targetServer)
+		params.soapDoc.set("targetServer", params.targetServer, context);
+	if (params.changeToken) {
+		var ct = params.soapDoc.set("change", null, context);
+		ct.setAttribute("token", params.changeToken);
 		ct.setAttribute("type", "new");
 	}
 	
 	// Get auth token from cookie if required
-	if (!noAuthToken) {
+	if (!params.noAuthToken) {
 		var authToken = ZmCsfeCommand.getAuthToken();
 		if (!authToken)
 			throw new ZmCsfeException("AuthToken required", ZmCsfeException.NO_AUTH_TOKEN, "ZmCsfeCommand.invoke");
-		soapDoc.set("authToken", authToken, context);
+		params.soapDoc.set("authToken", authToken, context);
 	}
 	
 	// Tell server what kind of response we want
-	this._useXml = useXml;
-	if (!useXml) {
-		var js = soapDoc.set("format", null, context);
+	this._useXml = params.useXml;
+	if (!params.useXml) {
+		var js = params.soapDoc.set("format", null, context);
 		js.setAttribute("type", "js");
 	}
 
-	var asyncMode = (callback != null);
+	var asyncMode = (params.callback != null);
 
 	DBG.println(AjxDebug.DBG1, asyncMode ? "<H4>REQUEST (asynchronous)</H4>" : "<H4>REQUEST</H4>");
-	DBG.printXML(AjxDebug.DBG1, soapDoc.getXml());
+	DBG.printXML(AjxDebug.DBG1, params.soapDoc.getXml());
 
 	try {
-		var uri = serverUri || ZmCsfeCommand.serverUri;
-//		if (logRequest)
-			uri = uri + soapDoc._methodEl.nodeName;
-		var requestStr = soapDoc.getXml();
+		var uri = params.serverUri || ZmCsfeCommand.serverUri;
+		if (params.logRequest)
+			uri = uri + params.soapDoc._methodEl.nodeName;
+		var requestStr = params.soapDoc.getXml();
 		if (AjxEnv.isSafari)
 			requestStr = requestStr.replace("soap=", "xmlns:soap=");
 			
 		this._st = new Date();
 		
 		if (asyncMode) {
-			var rpcCallback = new AjxCallback(this, this._runCallback, callback);
+			var rpcCallback = new AjxCallback(this, this._runCallback, params.callback);
 			this._rpcId = AjxRpc.invoke(requestStr, uri, {"Content-Type": "application/soap+xml; charset=utf-8"}, rpcCallback);
 		} else {
 			var response = AjxRpc.invoke(requestStr, uri, {"Content-Type": "application/soap+xml; charset=utf-8"});
