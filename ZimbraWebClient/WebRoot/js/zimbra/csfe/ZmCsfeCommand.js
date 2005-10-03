@@ -99,9 +99,10 @@ function(sessionId) {
 * @param noSession		[boolean]*		If true, no session info is included
 * @param changeToken	[string]*		Current change token
 * @param callback		[AjxCallback]*	Callback to run when response is received (async mode)
+* @param logRequest		[boolean]*		If true, SOAP command name is appended to server URL
 */
 ZmCsfeCommand.prototype.invoke =
-function(soapDoc, noAuthToken, serverUri, targetServer, useXml, noSession, changeToken, callback) {
+function(soapDoc, noAuthToken, serverUri, targetServer, useXml, noSession, changeToken, callback, logRequest) {
 
 	// Add the SOAP header and context
 	var hdr = soapDoc.createHeaderElement();
@@ -144,6 +145,8 @@ function(soapDoc, noAuthToken, serverUri, targetServer, useXml, noSession, chang
 
 	try {
 		var uri = serverUri || ZmCsfeCommand.serverUri;
+//		if (logRequest)
+			uri = uri + soapDoc._methodEl.nodeName;
 		var requestStr = soapDoc.getXml();
 		if (AjxEnv.isSafari)
 			requestStr = requestStr.replace("soap=", "xmlns:soap=");
