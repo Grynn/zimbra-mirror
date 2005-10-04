@@ -852,7 +852,7 @@ function(ev) {
 		return;
 	}
 	delete this._clickDiv;
-	
+
 	if (this._headerList && div._type == DwtListView.TYPE_HEADER_ITEM) {
 		if (div._isSortable && ev.button == DwtMouseEvent.LEFT) {
 			this._columnClicked(div, ev);
@@ -1044,8 +1044,9 @@ function(clickedCol, ev) {
 	this._setSortedColStyle(item._id);
 
 	// call sorting callback if more than one item to sort
-	if (size >= 1)
+	if (size >= 1){
 		this._sortColumn(item, this._bSortAsc);
+	}
 }
 
 DwtListView.prototype._sortColumn = 
@@ -1105,17 +1106,26 @@ function(columnId) {
 
 DwtListView.prototype._resetList =
 function() {
+	this._resetModelList();
+	this._resetListView();
+};
 
+DwtListView.prototype._resetModelList =
+function () {
 	// clear out old list to force GC
-	if (this._list && this._list.size())
+	if (this._list && this._list.size()) {
 		this._list.removeAll();
-	
+	}
+};
+
+DwtListView.prototype._resetListView =
+function () {
 	// explicitly remove each child (setting innerHTML causes mem leak)
 	while (this._parentEl.hasChildNodes()) {
 		cDiv = this._parentEl.removeChild(this._parentEl.firstChild);
 		AjxCore.unassignId(cDiv._itemIndex);
 	}
-}
+};
 
 DwtListView.prototype._destroyDnDIcon =
 function(icon) {
