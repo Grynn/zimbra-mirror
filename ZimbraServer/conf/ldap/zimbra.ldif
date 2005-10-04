@@ -141,6 +141,8 @@ zimbraGalMaxResults: 100
 zimbraLastLogonTimestampFrequency: 7d
 zimbraLmtpNumThreads: 8
 zimbraLmtpBindPort: 7025
+zimbraLogRawLifetime: 31d
+zimbraLogSummaryLifetime: 730d
 zimbraImapServerEnabled: TRUE
 zimbraImapNumThreads: 10
 zimbraImapBindPort: 7143

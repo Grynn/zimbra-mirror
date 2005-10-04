@@ -198,6 +198,10 @@
 
 <attr name="zimbraLogHostname" type="string"/>
 
+<attr name="zimbraLogSummaryLifetime" type="duration"/>
+
+<attr name="zimbraLogRawLifetime" type="duration"/>
+
 <attr name="zimbraMailAddress" type="email" max="256" immutable="1"/>
 
 <attr name="zimbraMailAlias" type="email" max="256" immutable="1"/>

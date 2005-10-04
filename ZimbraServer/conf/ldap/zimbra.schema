@@ -252,6 +252,8 @@ objectIdentifier zimbraPrefHtmlEditorDefaultFontSize ZimbraAttrType:259
 objectIdentifier zimbraPrefHtmlEditorDefaultFontColor ZimbraAttrType:260
 objectIdentifier zimbraPrefCalendarFirstDayOfWeek ZimbraAttrType:261
 objectIdentifier zimbraSshPublicKey ZimbraAttrType:262
+objectIdentifier zimbraLogRawLifetime ZimbraAttrType:263
+objectIdentifier zimbraLogSummaryLifetime ZimbraAttrType:264
 
 #################################################################
 # object class OIDs
@@ -837,9 +839,23 @@ attributetype ( zimbraLmtpNumThreads
 
 attributetype ( zimbraLogHostname
 	NAME 'zimbraLogHostname'
-	DESC 'the destination for syslog messages'
+	DESC 'destination for syslog messages'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
+
+attributetype ( zimbraLogRawLifetime
+	NAME 'zimbraLogRawLifetime'
+	DESC 'lifetime (nnnnn[hmsd]) of raw log rows in consolidated logger tables'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
+	SINGLE-VALUE )
+
+attributetype ( zimbraLogSummaryLifetime
+	NAME 'zimbraLogSummaryLifetime'
+	DESC 'lifetime (nnnnn[hmsd]) of summarized log rows in consolidated logger tables'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
+	SINGLE-VALUE )
 
 attributetype ( zimbraMailAddress
 	NAME 'zimbraMailAddress'
@@ -2202,6 +2218,8 @@ objectclass ( zimbraGlobalConfig
 		zimbraLmtpNumThreads $
 		zimbraLmtpBindPort $
 		zimbraLogHostname $
+		zimbraLogRawLifetime $
+		zimbraLogSummaryLifetime $
 		zimbraMtaAuthEnabled $
 		zimbraMtaBlockedExtension $
 		zimbraMtaCommonBlockedExtension $
