@@ -254,6 +254,8 @@ objectIdentifier zimbraPrefCalendarFirstDayOfWeek ZimbraAttrType:261
 objectIdentifier zimbraSshPublicKey ZimbraAttrType:262
 objectIdentifier zimbraLogRawLifetime ZimbraAttrType:263
 objectIdentifier zimbraLogSummaryLifetime ZimbraAttrType:264
+objectIdentifier zimbraSpellCheckHostname ZimbraAttrType:265
+objectIdentifier zimbraSpellCheckPort ZimbraAttrType:266
 
 #################################################################
 # object class OIDs
@@ -1888,6 +1890,22 @@ attributetype ( zimbraPrefUseTimeZoneListInCalendar
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
+# Multi-valued attribute that allows multiple spell check servers to be specified.
+# If the request to the first server fails, a request to the second server is
+# sent and so on.
+attributetype ( zimbraSpellCheckHostname
+	NAME 'zimbraSpellCheckHostname'
+	DESC 'hostname of the server running the spell checking service'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
+
+attributetype ( zimbraSpellCheckPort
+	NAME ( 'zimbraSpellCheckPort' )
+	DESC 'port on which the spell check service is running'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )
+
 
 #################################################################
 # object class definitions
@@ -2253,6 +2271,8 @@ objectclass ( zimbraGlobalConfig
 		zimbraSpamTagPercent $
 		zimbraSpamIsSpamAccount $
 		zimbraSpamIsNotSpamAccount $
+		zimbraSpellCheckHostname $
+		zimbraSpellCheckPort $
 		zimbraTableMaintenanceGrowthFactor $
 		zimbraTableMaintenanceMinRows $
 		zimbraTableMaintenanceMaxRows $
@@ -2378,7 +2398,9 @@ objectclass ( zimbraServer
 		zimbraSmtpPort $
 		zimbraSmtpTimeout $
 		zimbraSmtpSendPartial $
-                zimbraSshPublicKey $
+		zimbraSpellCheckHostname $
+		zimbraSpellCheckPort $
+		zimbraSshPublicKey $
 		zimbraTableMaintenanceGrowthFactor $
 		zimbraTableMaintenanceMinRows $
 		zimbraTableMaintenanceMaxRows $
