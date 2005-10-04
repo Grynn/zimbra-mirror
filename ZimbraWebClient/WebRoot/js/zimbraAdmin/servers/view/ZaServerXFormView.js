@@ -45,6 +45,43 @@ function (value, event, form) {
 	return value;
 }
 
+ZaServerXFormView.prototype.setObject = 
+function (entry) {
+	this._containedObject = new Object();
+	this._containedObject.attrs = new Object();
+
+	for (var a in entry.attrs) {
+		this._containedObject.attrs[a] = entry.attrs[a];
+	}
+	this._containedObject[ZaServer.A_Volumes] = new Array();
+	var cnt = entry[ZaServer.A_Volumes].length;
+	for (var i = 0; i < cnt; i++) {
+		this._containedObject[ZaServer.A_Volumes][i] = new Object();
+		for (var at in entry[ZaServer.A_Volumes][i]) {
+			this._containedObject[ZaServer.A_Volumes][i][at] = entry[ZaServer.A_Volumes][i][at];
+		}
+	}
+	
+	if(entry[ZaServer.A_CurrentPrimaryMsgVolumeId]) {
+		this._containedObject[ZaServer.A_CurrentPrimaryMsgVolumeId] = entry[ZaServer.A_CurrentPrimaryMsgVolumeId];
+	}
+	if(entry[ZaServer.A_CurrentSecondaryMsgVolumeId]) {
+		this._containedObject[ZaServer.A_CurrentSecondaryMsgVolumeId] = entry[ZaServer.A_CurrentSecondaryMsgVolumeId];
+	}	
+	if(entry[ZaServer.A_CurrentIndexMsgVolumeId]) {
+		this._containedObject[ZaServer.A_CurrentIndexMsgVolumeId] = entry[ZaServer.A_CurrentIndexMsgVolumeId];
+	}	
+	
+	
+	if(!entry[ZaModel.currentTab])
+		this._containedObject[ZaModel.currentTab] = "1";
+	else
+		this._containedObject[ZaModel.currentTab] = entry[ZaModel.currentTab];
+		
+	this._containedObject.globalConfig = this._app.getGlobalConfig();
+	this._localXForm.setInstance(this._containedObject);	
+}
+
 ZaServerXFormView.prototype.getMyXForm = function() {	
 	var xFormObject = {
 		tableCssStyle:"width:100%;position:static;overflow:auto;",
@@ -328,10 +365,32 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 					},
 					{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 6", 
 						items:[
-							{ref:ZaServer.A_Volumes, type:_REPEAT_, label:null, showAddButton:true, showRemoveButton:true,  
+							{type:_GROUP_, numCols:5,  
 								items: [
-									{id:ZaServer.A_VolumeName, type:_TEXTFIELD_, label:null},
-									{id:ZaServer.A_VolumeType, type:_OSELECT1_, choices:ZaServer.columeTypeChoices}
+									{width:"146px", type:_OUTPUT_, label:null, value:ZaMsg.NAD_VM_VolumeName},
+									{width:"246px", type:_OUTPUT_, label:null, value:ZaMsg.NAD_VM_VolumeRootPath},
+									{type:_OUTPUT_, label:null, width:"96px", value:ZaMsg.NAD_VM_VolumeType},
+								  	{type: _OUTPUT_,label:null,width:"96px", value:ZaMsg.NAD_VM_VolumeCompressBlobs},									
+								  	{width:"120px", type:_OUTPUT_, label:null, value:ZaMsg.NAD_VM_VolumeCompressThreshold}
+								]
+							},
+							{type:_SPACER_, colSpan:"*"},
+							{ref:ZaServer.A_Volumes,  type:_REPEAT_, showAddButton:true, showRemoveButton:true,  
+								items: [
+									{ref:ZaServer.A_VolumeName, width:"150px", type:_TEXTFIELD_, label:null},
+									{ref:ZaServer.A_VolumeRootPath, width:"250px", type:_TEXTFIELD_, label:null,
+										relevant:"model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))!=instance[ZaServer.A_CurrentMessageVolumeId] && model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))!=instance[ZaServer.A_CurrentSecondaryMsgVolumeId]  && model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))!=instance[ZaServer.A_CurrentIndexMsgVolumeId]",
+										relevantBehavior:_DISABLE_
+									},
+									{ref:ZaServer.A_VolumeType, type:_OSELECT1_, choices:ZaServer.volumeTypeChoices,width:"100px", label:null,
+										relevant:"model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))!=instance[ZaServer.A_CurrentMessageVolumeId] && model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))!=instance[ZaServer.A_CurrentSecondaryMsgVolumeId]  && model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))!=instance[ZaServer.A_CurrentIndexMsgVolumeId]",
+										relevantBehavior:_DISABLE_
+									},
+								  	{ref:ZaServer.A_VolumeCompressBlobs, type: _CHECKBOX_,width:"100px", label:null},									
+								  	{ref:ZaServer.A_VolumeCompressionThreshold, width:"40px", type:_TEXTFIELD_,label:null/*, label:ZaMsg.NAD_bytes, labelLocation:_RIGHT_,labelCssStyle:"text-align:left"*/},
+								  	{type:_OUTPUT_, value:ZaMsg.NAD_VM_CurrentVolume, relevantBehavior:_HIDE_, 
+										relevant:"model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))==instance[ZaServer.A_CurrentMessageVolumeId] || model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))==instance[ZaServer.A_CurrentSecondaryMsgVolumeId] || model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))==instance[ZaServer.A_CurrentIndexMsgVolumeId]",
+								  	}
 								]
 							}
 						]

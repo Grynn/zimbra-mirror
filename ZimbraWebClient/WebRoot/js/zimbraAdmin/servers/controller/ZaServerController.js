@@ -49,6 +49,7 @@ ZaServerController.prototype.constructor = ZaServerController;
 
 ZaServerController.prototype.show = 
 function(entry) {
+	
 	this._setView(entry);
 //	this._app.setCurrentController(this);
 	this.setDirty(false);
@@ -164,6 +165,7 @@ function(entry) {
 	} 
 	this._app.pushView(ZaZimbraAdmin._SERVER_VIEW);
 	this._view.setDirty(false);
+	entry.load();
 	this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
 	this._currentObject = entry;
 }
