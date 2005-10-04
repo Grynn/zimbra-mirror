@@ -197,7 +197,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 	font-size:12px;
 }
 
-.ZaStatusView {background-color: white; }
+.ZaStatusView {background-color: #EEEEEE; }
 
 .ZaNewAccountDialog {
 	width: 500px;
@@ -460,50 +460,30 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
   border-right: 2px solid #FAFAFA;
 }
 
-.DLOptionalAddBoxLabel { 
-/*  position:absolute;
-  top:342px;
-  left:91px;*/
-}
 
 .DLOptionalAddBox { 
-/*  position:absolute;
-  top:369px;
-  left:91px;*/
   width:195px;
   height:70px;
   border: 1px solid #CCCCCC;
 }
 
-.DLOptionalAddBoxButton { 
-  /*position:absolute;*/
-  /** styles set in the js code **/
-}
-
 .DLTargetRow {
   padding-left: .25em;
 }
+/** END distribution list stuff **/
 
-.ZaDLView .DwtAddRemove-targetContainer{
-  padding:0px;
-}
-
-.ZaDLView .DwtAddRemove-sourceContainer{
-  vertical-align: top;
-  padding-top:30px;
-} 
-
-.ZaDLView .DwtAddRemove-controlsContainer{ 
-  padding:8px;
-}
-
-.ZaDLListView-outerTable { 
+.ZaServicesListView { 
   width:100%;
-  border-spacing:0px;
+  height:100%;
 }
 
-.ZaDLListView-outerTable TD{ 
+.ZaServicesListView_table { 
+  border-spacing:0px;
+  border:none;
+  width:100%;
+  padding:none;
+}
+
+.ZaServicesListView_table TD {  
   padding:2px;
 }
-
-/** END distribution list stuff **/

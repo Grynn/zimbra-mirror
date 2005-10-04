@@ -31,8 +31,10 @@
 * @author Greg Solovyev
 **/
 function ZaServicesListView(parent, app) {
+	if (arguments.length == 0) return;
 	this._app = app;
-	var className = null;
+	var className = "ZaServicesListView";
+	//var className = null;
 	var posStyle = DwtControl.ABSOLUTE_STYLE;
 	
 	var headerList = this._getHeaderList();
@@ -41,7 +43,7 @@ function ZaServicesListView(parent, app) {
 
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
 	
-	this.setScrollStyle(DwtControl.SCROLL);
+	//this.setScrollStyle(DwtControl.SCROLL);
 }
 
 ZaServicesListView.prototype = new ZaListView;
@@ -77,7 +79,7 @@ function(item, now, isDndIcon) {
 	this.associateItemWithElement(item, div, DwtListView.TYPE_LIST_ITEM);
 
 	var idx = 0;
-	html[idx++] = "<table cellpadding=0 cellspacing=2 border=0 width=100%>";
+	html[idx++] = "<table class='ZaServicesListView_table'>";
 	
 	html[idx++] = "<tr>";
 	var cnt = this._headerList.length;
@@ -98,9 +100,9 @@ function(item, now, isDndIcon) {
 		} else if(id.indexOf(ZaStatus.PRFX_Status)==0) {
 			html[idx++] = "<td width=" + this._headerList[i]._width + " aligh=left>";
 			if(item.status==1) {
-				html[idx++] = "On";
+				html[idx++] = AjxImg.getImageHtml("Check");
 			} else {
-				html[idx++] = "Off";
+				html[idx++] = AjxImg.getImageHtml("Cancel");
 			}
 			html[idx++] = "</td>";
 		}
@@ -118,18 +120,37 @@ function() {
 	this._parentEl.appendChild(div);
 }
 
+ZaServicesListView.prototype._sortColumn =
+function(columnItem, bSortAsc) {
+	var f = columnItem.getSortField();
+	var sortFuncDesc = function (a,b) {
+		return (a[f] < b[f])? -1: (( a[f] > b[f])? 1: 0);
+	}
+	var sortFuncAsc = function (a,b) {
+		return (a[f] > b[f])? -1: (( a[f] < b[f])? 1: 0);
+	}
+	if (bSortAsc){
+		this.getList().sort(sortFuncAsc);
+	} else {
+		this.getList().sort(sortFuncDesc);
+	}
+	this._resetListView();
+	this._renderList(this.getList());
+};
+
 ZaServicesListView.prototype._getHeaderList =
 function() {
 
-	var headerList = new Array();
+	var headerList = [
+					  new ZaListHeaderItem(ZaStatus.PRFX_Server, ZaMsg.STV_Server_col, null, 175, true, "serverName", true, true),
 
-	headerList[0] = new ZaListHeaderItem(ZaStatus.PRFX_Server, ZaMsg.STV_Server_col, null, 100, false, null, true, true);
+					  new ZaListHeaderItem(ZaStatus.PRFX_Service, ZaMsg.STV_Service_col, null, 100, true, "serviceName", true, true),
 
-	headerList[1] = new ZaListHeaderItem(ZaStatus.PRFX_Service, ZaMsg.STV_Service_col, null, 150, false, null, true, true);
+					  new ZaListHeaderItem(ZaStatus.PRFX_Status, ZaMsg.STV_Status_col, null, 50, true, "status", true, true),
 	
-	headerList[2] = new ZaListHeaderItem(ZaStatus.PRFX_Time, ZaMsg.STV_Time_col, null, 150, false, null, true, true);
-	
-	headerList[3] = new ZaListHeaderItem(ZaStatus.PRFX_Status, ZaMsg.STV_Status_col, null, null, false, null, true, true);
+					  new ZaListHeaderItem(ZaStatus.PRFX_Time, ZaMsg.STV_Time_col, null, null, false, null, true, true)
+
+					  ];
 	
 	return headerList;
 }

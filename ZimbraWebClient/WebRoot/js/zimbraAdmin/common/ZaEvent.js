@@ -64,7 +64,9 @@ ZaEvent.S_COS			= i++;
 ZaEvent.S_DOMAIN		= i++;
 ZaEvent.S_SERVER		= i++;
 ZaEvent.S_GLOBALCONFIG	= i++;
-ZaEvent.S_STATUS	= i++;
+ZaEvent.S_STATUS		= i++;
+ZaEvent.S_CLUSTER_STATUS= i++;
+
 
 // Event types
 i = 1;
