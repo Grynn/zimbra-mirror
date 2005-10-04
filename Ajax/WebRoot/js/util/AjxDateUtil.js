@@ -72,6 +72,15 @@ AjxDateUtil.MONTH_LONG = [
 	AjxMsg.monthLongOct, AjxMsg.monthLongNov, AjxMsg.monthLongDec
 ];
 
+AjxDateUtil.FREQ_TO_DISPLAY = {
+	SEC: [ZmMsg.second, ZmMsg.seconds],
+	HOU: [ZmMsg.hour, 	ZmMsg.hours],
+	DAI: [ZmMsg.day, 	ZmMsg.days],
+	WEE: [ZmMsg.week, 	ZmMsg.weeks],
+	MON: [ZmMsg.month, 	ZmMsg.months],
+	YEA: [ZmMsg.year, 	ZmMsg.years]
+};
+
 AjxDateUtil._daysPerMonth = {
 	0:31,
 	1:29,
