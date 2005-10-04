@@ -782,7 +782,7 @@ sub parseMessage {
 			$msg{$messageId}{recipList}{$r}{leaveTime}{$date}{status} = $4;
 			$msg{$messageId}{recipList}{$r}{leaveTime}{$date}{statusmsg} = $5;
 
-			if ($5 =~ /id=([^,]+).*queued as (.*)\)/) {
+			if ($5 =~ /id=([^,]+).*/) {
 				$msg{$messageId}{recipList}{$r}{leaveTime}{$date}{amavisPid} = $1;
 			} elsif ($5 =~ /discarded, id=([^ ]+) - /) {
 				$msg{$messageId}{recipList}{$r}{leaveTime}{$date}{amavisPid} = $1;
@@ -804,7 +804,7 @@ sub parseMessage {
 			$msg{$messageId}{recipList}{$r}{leaveTime}{$date}{status} = $5;
 			$msg{$messageId}{recipList}{$r}{leaveTime}{$date}{statusmsg} = $6;
 
-			if ($6 =~ /id=([^,]+).*queued as (.*)\)/) {
+			if ($6 =~ /id=([^,]+).*/) {
 				$msg{$messageId}{recipList}{$r}{leaveTime}{$date}{amavisPid} = $1;
 			} elsif ($6 =~ /discarded, id=([^ ]+) - /) {
 				$msg{$messageId}{recipList}{$r}{leaveTime}{$date}{amavisPid} = $1;
