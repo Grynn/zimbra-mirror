@@ -69,7 +69,8 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 					{value:2, label:ZaMsg.NAD_Tab_Services},
 					{value:3, label:ZaMsg.NAD_Tab_MTA},
 					{value:4, label:ZaMsg.NAD_Tab_IMAP},					
-					{value:5, label:ZaMsg.NAD_Tab_POP}										
+					{value:5, label:ZaMsg.NAD_Tab_POP},
+					{value:6, label:ZaMsg.NAD_Tab_VolumeMgt}										
 				]
 			},
 			{type:_SWITCH_, items:[
@@ -322,10 +323,19 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 								  trueValue: "TRUE", falseValue: "FALSE", 
 								  onChange: ZaServerXFormView.onFormFieldChanged
 								}
-							]},
+							  ]}
+						]
+					},
+					{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 6", 
+						items:[
+							{ref:ZaServer.A_Volumes, type:_REPEAT_, label:null, showAddButton:true, showRemoveButton:true,  
+								items: [
+									{id:ZaServer.A_VolumeName, type:_TEXTFIELD_, label:null},
+									{id:ZaServer.A_VolumeType, type:_OSELECT1_, choices:ZaServer.columeTypeChoices}
+								]
+							}
 						]
 					}
-					
 				]
 			}	
 		]

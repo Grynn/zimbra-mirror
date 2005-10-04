@@ -110,12 +110,23 @@ ZaServer.A_MasterRedologClientTcpNoDelay = "zimbraMasterRedologClientTcpNoDelay"
 //slave role settings
 ZaServer.A_zimbraUserServicesEnabled = "zimbraUserServicesEnabled";
 
+//Volume Management
+ZaServer.A_Volumes = "volumes";
+ZaServer.A_VolumeId = "id";
+ZaServer.A_VolumeName = "name";
+ZaServer.A_VolumeRootPath = "rootPath";
+ZaServer.A_VolumeCompressBlobs = "compressBlobs";
+ZaServer.A_VolumeCompressionThreshold = "compressionThreshold";
+ZaServer.A_VolumeType = "type";
+
 // other
 ZaServer.A_zimbraIsMonitorHost = "zimbraIsMonitorHost";
 
 ZaServer.STANDALONE = "standalone";
 ZaServer.MASTER = "master";
 ZaServer.SLAVE = "slave";
+
+ZaServer.columeTypeChoices = new XFormChoices({1:"Primary Message", 2:"Secondary Message", 10:"Index"}, XFormChoices.HASH);
 		
 ZaServer.myXModel = {
 	items: [
@@ -170,7 +181,19 @@ ZaServer.myXModel = {
 		{id:ZaServer.A_MasterRedologClientConnections, ref:"attrs/" + ZaServer.A_MasterRedologClientConnections, type:_STRING_},		
 		{id:ZaServer.A_MasterRedologClientTimeoutSec, ref:"attrs/" + ZaServer.A_MasterRedologClientTimeoutSec, type:_STRING_},		
 		{id:ZaServer.A_MasterRedologClientTcpNoDelay, ref:"attrs/" + ZaServer.A_MasterRedologClientTcpNoDelay, type:_STRING_},		
-		{id:ZaServer.A_zimbraUserServicesEnabled, ref:"attrs/" + ZaServer.A_zimbraUserServicesEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES}		
+		{id:ZaServer.A_zimbraUserServicesEnabled, ref:"attrs/" + ZaServer.A_zimbraUserServicesEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
+		{id:ZaServer.A_Volumes, type:_LIST_, listItem:
+			{type:_OBJECT_,
+				items: [
+					{id:ZaServer.A_VolumeId, type:_NUMBER_},
+					{id:ZaServer.A_VolumeName, type:_STRING_},
+					{id:ZaServer.A_VolumeType, type:_ENUM_, choices:[1,2,10]},
+					{id:ZaServer.A_VolumeRootPath, type:_STRING_},
+					{id:ZaServer.A_VolumeCompressBlobs, type:_ENUM_, choices:[false,true]},
+					{id:ZaServer.A_VolumeCompressionThreshold, type:_NUMBER_}				
+				]
+			}
+		}		
 	]
 };
 		

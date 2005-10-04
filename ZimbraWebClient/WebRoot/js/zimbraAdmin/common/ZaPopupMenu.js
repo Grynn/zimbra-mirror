@@ -31,7 +31,7 @@
 * @param dialog
 * @param opList
 *
-* This widget class extends ZaPopupMenu. Similar to ZaToolBar, this class creates
+* This widget class extends DwtMenu. Similar to ZaToolBar, this class creates
 * buttons form an array of ZaOperation objects
 **/
 function ZaPopupMenu(parent, className, dialog, opList) {

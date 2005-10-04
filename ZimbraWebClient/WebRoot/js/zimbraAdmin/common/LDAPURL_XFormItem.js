@@ -39,7 +39,7 @@ LDAPURL_XFormItem.prototype._serverPart = "server";
 LDAPURL_XFormItem.prototype._portPart = "389";
 
 LDAPURL_XFormItem.prototype.items = [
-	{type:_OUTPUT_, ref:".", labelLocation:_NONE_, label:null,relevantBehavior:_PARENT_,
+	{type:_OUTPUT_, width:"35px", ref:".", labelLocation:_NONE_, label:null,relevantBehavior:_PARENT_,
 		getDisplayValue:function(itemVal) {
 			var val = "ldap://";
 			if(itemVal!=null && itemVal.length>0) {
@@ -52,7 +52,7 @@ LDAPURL_XFormItem.prototype.items = [
 			return val;
 		}
 	},
-	{type:_TEXTFIELD_,forceUpdate:true, ref:".", labelLocation:_NONE_,relevantBehavior:_PARENT_, cssClass:"admin_xform_name_input", width:200,
+	{type:_TEXTFIELD_, width:"200px", forceUpdate:true, ref:".", labelLocation:_NONE_, label:null,relevantBehavior:_PARENT_,
 		getDisplayValue:function (itemVal) {
 			var val = "server";
 			if(itemVal) {
@@ -70,7 +70,8 @@ LDAPURL_XFormItem.prototype.items = [
 			this.getForm().itemChanged(this.getParentItem(), val, event);
 		}
 	},
-	{type:_TEXTFIELD_,forceUpdate:true, ref:".", labelLocation:_NONE_, label:null, relevantBehavior:_PARENT_, cssClass:"admin_xform_name_input", width:50,
+	{type:_OUTPUT_, width:"5px", labelLocation:_NONE_, label:null,relevantBehavior:_PARENT_,value:":"},
+	{type:_TEXTFIELD_,width:"40px",forceUpdate:true, ref:".", labelLocation:_NONE_, label:null, relevantBehavior:_PARENT_, 
 		getDisplayValue:function (itemVal) {
 			var val = "389";
 			if(itemVal) {
@@ -88,7 +89,7 @@ LDAPURL_XFormItem.prototype.items = [
 			this.getForm().itemChanged(this.getParentItem(), val, event);
 		}
 	},
-	{type:_CHECKBOX_,forceUpdate:true, ref:".", labelLocation:_NONE_, label:null, relevantBehavior:_PARENT_,
+	{type:_CHECKBOX_,width:"40px",forceUpdate:true, ref:".", labelLocation:_NONE_, label:null, relevantBehavior:_PARENT_,
 		getDisplayValue:function (itemVal) {
 			var val = false;
 			var protocol = "ldap://";

@@ -310,12 +310,17 @@ function () {
 								items: [
 									{type:_CASE_, relevant:"instance.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad",
 										items:[
-/*											{ref:ZaDomain.A_AuthLDAPServerName, type:_INPUT_, width:200, label:ZaMsg.Domain_AuthADServerName, labelLocation:_LEFT_, onChange:ZaAuthConfigXWizard.onLDAPServerChange},
-											{ref:ZaDomain.A_AuthLDAPServerPort, type:_INPUT_, label:ZaMsg.Domain_AuthADServerPort, labelLocation:_LEFT_, onChange:ZaAuthConfigXWizard.onLDAPPortChange},
-											{ref:ZaDomain.A_AuthLDAPUseSSL, type:_CHECKBOX_, label:ZaMsg.Domain_AuthADUseSSL, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE", onChange:ZaAuthConfigXWizard.onLDAPUseSSLChange,labelCssClass:"xform_label", align:_LEFT_}
-*/											
 											{ref:ZaDomain.A_AuthADDomainName, type:_INPUT_, width:200,  label:ZaMsg.Domain_AuthADDomainName, labelLocation:_LEFT_},
-											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL+":", repeatInstance:"ldap://server:389", showAddButton:true, showRemoveButton:true,  
+											{type:_GROUP_, numCols:6, colSpan:6,label:"   ",labelLocation:_LEFT_,
+												items: [
+													{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"35px"},
+													{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_AuthADServerName, width:"200px"},
+													{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"5px"},									
+													{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_AuthADServerPort,  width:"40px"},	
+													{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_AuthADUseSSL, width:"40px"}									
+												]
+											},											
+											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthADURL+":", repeatInstance:"ldap://server:389", showAddButton:true, showRemoveButton:true,  
 												items: [
 													{ref:".", type:_LDAPURL_, label:null, labelLocation:_NONE_}
 												]
@@ -324,11 +329,15 @@ function () {
 									},
 									{type:_CASE_, relevant:"instance.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ldap",
 										items:[
-/*										
-											{ref:ZaDomain.A_AuthLDAPServerName, type:_INPUT_, width:200, label:ZaMsg.Domain_AuthLDAPServerName, labelLocation:_LEFT_, onChange:ZaAuthConfigXWizard.onLDAPServerChange},
-											{ref:ZaDomain.A_AuthLDAPServerPort, type:_INPUT_, width:200, label:ZaMsg.Domain_AuthLDAPServerPort, labelLocation:_LEFT_, onChange:ZaAuthConfigXWizard.onLDAPServerChange},							
-											{ref:ZaDomain.A_AuthLDAPUseSSL, type:_CHECKBOX_, label:ZaMsg.Domain_AuthLDAPUseSSL, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE", onChange:ZaAuthConfigXWizard.onLDAPUseSSLChange,labelCssClass:"xform_label", align:_LEFT_},
-*/
+											{type:_GROUP_, numCols:6, colSpan:6,label:"   ",labelLocation:_LEFT_,
+												items: [
+													{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"35px"},
+													{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_AuthLDAPServerName, width:"200px"},
+													{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"5px"},									
+													{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_AuthLDAPServerPort,  width:"40px"},	
+													{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_AuthLDAPUseSSL, width:"40px"}									
+												]
+											},										
 											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL+":", repeatInstance:"ldap://server:389", showAddButton:true, showRemoveButton:true,  
 												items: [
 													{ref:".", type:_LDAPURL_, label:null, labelLocation:_NONE_}

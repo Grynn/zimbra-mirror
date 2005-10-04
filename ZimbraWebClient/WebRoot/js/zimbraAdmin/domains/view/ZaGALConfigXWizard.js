@@ -346,15 +346,20 @@ function () {
 					{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 2 && instance.attrs[ZaDomain.A_GalMode]!=ZaDomain.GAL_Mode_internal", relevantBehavior:_HIDE_,
 						items: [
 							{ref:ZaDomain.A_GALServerType, type:_OSELECT1_, label:ZaMsg.Domain_GALServerType, labelLocation:_LEFT_, choices:this.GALServerTypes, onChange:ZaGALConfigXWizard.onGALServerTypeChange},
+							{type:_GROUP_, numCols:6, colSpan:6,label:"   ",labelLocation:_LEFT_,
+								items: [
+									{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"35px"},
+									{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_GALServerName, width:"200px"},
+									{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"5px"},									
+									{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_GALServerPort,  width:"40px"},	
+									{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_GALUseSSL, width:"40px"}									
+								]
+							},
 							{ref:ZaDomain.A_GalLdapURL, type:_REPEAT_, label:ZaMsg.Domain_GalLdapURL+":", repeatInstance:"ldap://server:389", showAddButton:true, showRemoveButton:true,  
 								items: [
 									{ref:".", type:_LDAPURL_, label:null, labelLocation:_NONE_}
 								]
 							},
-							/*{ref:ZaDomain.A_GALServerName, type:_INPUT_, label:ZaMsg.Domain_GALServerName, labelLocation:_LEFT_, onChange:ZaGALConfigXWizard.onGALServerChange},					
-							{ref:ZaDomain.A_GALServerPort, type:_INPUT_, label:ZaMsg.Domain_GALServerPort, labelLocation:_LEFT_,onChange:ZaGALConfigXWizard.onGALServerPortChange},
-							{ref:ZaDomain.A_GALUseSSL, type:_CHECKBOX_, label:ZaMsg.Domain_GALUseSSL, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE", onChange:ZaGALConfigXWizard.onUseSSLChange,labelCssClass:"xform_label", align:_LEFT_},
-							*/
 							{ref:ZaDomain.A_GalLdapFilter, type:_TEXTAREA_, width:380, height:100, label:ZaMsg.Domain_GalLdapFilter, labelLocation:_LEFT_, textWrapping:"soft", relevant:"instance.attrs[ZaDomain.A_GALServerType] == 'ldap'", relevantBehavior:_DISABLE_},
 							{ref:ZaDomain.A_GalLdapSearchBase, type:_TEXTAREA_, width:380, height:50, label:ZaMsg.Domain_GalLdapSearchBase, labelLocation:_LEFT_, textWrapping:"soft"}
 						]

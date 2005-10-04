@@ -3489,6 +3489,12 @@ Dwt_List_XFormItem.prototype.constructWidget = function () {
 		
 	};
 
+	//check if createPopupMenu method is defined
+	var createPopupMenumethod = this.cacheInheritedMethod("createPopupMenu","$createPopupMenu","parent");
+	if(createPopupMenumethod != null) {
+		createPopupMenumethod.call(this, widget);
+	}
+	
 	return widget;
 };
 
