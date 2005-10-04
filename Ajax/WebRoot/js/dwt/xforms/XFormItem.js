@@ -3440,6 +3440,7 @@ XFormItemFactory.createItemType("_DWT_LIST_", "dwt_list", Dwt_List_XFormItem, Dw
 
 //	type defaults
 Dwt_List_XFormItem.prototype.writeElementDiv = false;
+Dwt_List_XFormItem.prototype.widgetClass = DwtListView;
 
 Dwt_List_XFormItem.prototype.getOnSelectionMethod = function() {
 	return this.cacheInheritedMethod("onSelection","$onSelection","event");
@@ -3448,7 +3449,9 @@ Dwt_List_XFormItem.prototype.getOnSelectionMethod = function() {
 
 Dwt_List_XFormItem.prototype.constructWidget = function () {
 	var headerList = this.getInheritedProperty("headerList");
-	var widget = new DwtListView(this.getForm(), this.getCssClass(), null, headerList);
+	var listClass = this.getInheritedProperty("widgetClass");
+
+	var widget = new listClass(this.getForm(), this.getCssClass(), null, headerList);
 	var multiselect = this.getInheritedProperty("multiselect");
 	if(multiselect != null) {
 		widget.setMultiSelect(multiselect);
@@ -3463,32 +3466,6 @@ Dwt_List_XFormItem.prototype.constructWidget = function () {
 
 	var localLs = new AjxListener(this, this._handleSelection);
 	widget.addSelectionListener(localLs);
-
-
-	widget._setNoResultsHtml = function() {
-		var buffer = new AjxBuffer();
-		var	div = this.getDocument().createElement("div");
-		
-		buffer.append("<table width='100%' cellspacing='0' cellpadding='1'>",
-					  "<tr><td class='NoResults'><br>&nbsp",
-					  "</td></tr></table>");
-
-		div.innerHTML = buffer.toString();
-		widget._addRow(div);
-	};
-
-	widget._sortColumn = function (columnItem, bSortAsc){
-		if (bSortAsc) {
-			var comparator = function (a, b) {
-				return (a < b)? 1 :((a > b)? -1 : 0);
-			};
-			widget.getList().sort(comparator);
-		} else {
-			widget.getList().sort();
-		}
-		
-	};
-
 	//check if createPopupMenu method is defined
 	var createPopupMenumethod = this.cacheInheritedMethod("createPopupMenu","$createPopupMenu","parent");
 	if(createPopupMenumethod != null) {

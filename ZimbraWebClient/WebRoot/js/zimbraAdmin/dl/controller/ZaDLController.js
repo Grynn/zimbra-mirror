@@ -355,7 +355,7 @@ ZaDLController.prototype._getNewViewXForm = function () {
 									cssStyle:"padding-left:0px"},
 							       //{ref: "notes", type:_TEXTFIELD_, label: "Notes:", width:"100%"},
 							       {type:_SPACER_, height:"3"},
-							       {ref:"members", type:_DWT_LIST_, colSpan:"*", cssClass: "DLTarget"},
+									{ref:"members", type:_DWT_LIST_, colSpan:"*", cssClass: "DLTarget", widgetClass:ZaDLListView},
 							       {type:_SPACER_, height:"8"},
 								   {type:_GROUP_, colSpan:2, width:"100%", numCols:6, colSizes:[20,40,"100%",85,5, 85], 
 									items:[
@@ -397,7 +397,7 @@ ZaDLController.prototype._getNewViewXForm = function () {
 									 ]
 							       },
 							       {type:_SPACER_, height:"5"},
-								   {ref:"memberPool", type:_DWT_LIST_, colSpan:"*", cssClass: "DLSource", forceUpdate: true},
+								   {ref:"memberPool", type:_DWT_LIST_, colSpan:"*", cssClass: "DLSource", forceUpdate: true, widgetClass:ZaDLListView},
 							       {type:_SPACER_, height:"5"},
 							       {type:_GROUP_, width:"100%", colSpan:"*", numCols:4, colSizes:[85,5,85,"100%"],
 									items: [
@@ -620,3 +620,4 @@ ZaDLController.distributionListXModel = {
 	{id: "zimbraMailStatus", type:_STRING_, setter:"setMailStatus", setterScope:_INSTANCE_, getter: "getMailStatus", getterScope: _INSTANCE_}
 	]
 };
+
