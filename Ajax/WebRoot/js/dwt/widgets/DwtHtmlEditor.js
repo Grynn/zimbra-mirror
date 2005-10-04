@@ -250,10 +250,10 @@ function(mode, convert) {
 		var textArea = Dwt.getDomObj(doc, this._textAreaId);
 		var iFrame;
 		if (this._iFrameId != null) {
-			this._getIframeDoc().body.innerHTML = (convert) ? AjxStringUtil.htmlEncodeSpace(textArea.value) : textArea.value;
+			this._getIframeDoc().body.innerHTML = (convert) ? AjxStringUtil.convertToHtml(textArea.value) : textArea.value;
 			iFrame = Dwt.getDomObj(doc, this._iFrameId);
 		} else {
-			iFrame = this._initHtmlMode((convert) ? AjxStringUtil.htmlEncodeSpace(textArea.value) : textArea.value);
+			iFrame = this._initHtmlMode((convert) ? AjxStringUtil.convertToHtml(textArea.value) : textArea.value);
 		}
 		Dwt.setVisible(textArea, false);
 		Dwt.setVisible(iFrame, true);
