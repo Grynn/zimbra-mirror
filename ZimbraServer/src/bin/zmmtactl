@@ -1,3 +1,4 @@
+#!/bin/sh
 # 
 # ***** BEGIN LICENSE BLOCK *****
 # Version: ZPL 1.1
@@ -22,39 +23,39 @@
 # 
 # ***** END LICENSE BLOCK *****
 # 
-#!/usr/bin/perl
 
-package application;
+BASE=/opt/zimbra
+SCRIPTS="zmmtaconfigctl postfix zmsaslauthdctl"
 
-use strict;
-
-use Zimbra::Mon::Logger;
-
-require Exporter;
-
-my @ISA = qw(Exporter);
-
-sub new
-{
-	my ($class, $name, $exe, $args, $md, $lbl) = @_;
-	return $class if ref ($class);
-	
-	my $self = 	bless {},  $class;
-	
-	$self->{name} = $name;
-	$self->{exe} = $exe;
-	$self->{args} = $args;
-	$self->{md} = $md;
-	$self->{lbl} = $lbl;
-	#Zimbra::Mon::Logger::Log ("info","Created application $name");
-	return $self;
-}
-
-sub prettyPrint
-{
-	my $self = shift;
-	return "$self->{name} $self->{exe} $self->{args} $self->{md} $self->{lbl}";
-}
-
-1
-
+case "$1" in 
+	start)
+		for i in $SCRIPTS; do
+			/opt/zimbra/bin/$i start
+		done
+	;;
+	stop)
+		for i in $SCRIPTS; do
+			/opt/zimbra/bin/$i stop
+		done
+	;;
+	reload)
+		for i in $SCRIPTS; do
+			/opt/zimbra/bin/$i reload
+		done
+	;;
+	status)
+		STATUS=0
+		for i in $SCRIPTS; do
+			/opt/zimbra/bin/$i status
+			R=$?
+			if [ $R -ne "0" ]; then
+				STATUS=$R
+			fi
+		done
+		exit $STATUS
+	;;
+	*)
+		echo "$0 start|stop|reload|status"
+		exit 1
+	;;
+esac

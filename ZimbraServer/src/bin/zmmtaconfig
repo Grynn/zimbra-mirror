@@ -729,7 +729,13 @@ sub controlProcess {
 }
 
 my $cpid;
+
 if ($fork) {
+	if (-f "$homedir/log/zmmtaconfig.pid") {
+		$cpid = `cat $homedir/log/zmmtaconfig.pid`;
+		chomp $cpid;
+		if (kill (0,$cpid)) { exit 0; }
+	}
 	$cpid = fork();
 	if ($cpid) {
 		open PIDFILE, "> $homedir/log/zmmtaconfig.pid";

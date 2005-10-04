@@ -1,3 +1,4 @@
+#!/bin/sh
 # 
 # ***** BEGIN LICENSE BLOCK *****
 # Version: ZPL 1.1
@@ -22,53 +23,39 @@
 # 
 # ***** END LICENSE BLOCK *****
 # 
-#!/usr/bin/perl
 
-package host;
+BASE=/opt/zimbra
+SCRIPTS="zmmtaconfigctl zmamavisdctl"
 
-use strict;
-
-use Zimbra::Mon::Logger;
-
-require Exporter;
-
-my @ISA = qw(Exporter);
-
-sub new
-{
-	my ($class, $name, $ip ) = @_;
-	return $class if ref ($class);
-	
-	my $self = bless {},  $class;
-	
-	$self->{name} = $name;
-	$self->{ip} = $ip;
-	#Zimbra::Mon::Logger::Log ("debug","Created host $name");
-	return $self;
-}
-
-sub prettyPrint
-{
-	my $self = shift;
-	return "$self->{name} $self->{ip} $self->{isMonitor}";
-}
-
-sub isMonitor {
-
-	my $self = shift;
-
-	my $isMonitor = `zmprov gs $self->{name} 2> /dev/null | grep zimbraIsMonitorHost`;
-
-	chomp $isMonitor;
-
-	$self->{isMonitor} = $isMonitor;
-
-	if ($isMonitor eq "zimbraIsMonitorHost: TRUE") {
-		return "yes";
-	} else {
-		return undef;
-	}
-}
-
-1
-
+case "$1" in 
+	start)
+		for i in $SCRIPTS; do
+			/opt/zimbra/bin/$i start
+		done
+	;;
+	stop)
+		for i in $SCRIPTS; do
+			/opt/zimbra/bin/$i stop
+		done
+	;;
+	reload)
+		for i in $SCRIPTS; do
+			/opt/zimbra/bin/$i reload
+		done
+	;;
+	status)
+		STATUS=0
+		for i in $SCRIPTS; do
+			/opt/zimbra/bin/$i status
+			R=$?
+			if [ $R -ne "0" ]; then
+				STATUS=$R
+			fi
+		done
+		exit $STATUS
+	;;
+	*)
+		echo "$0 start|stop|reload|status"
+		exit 1
+	;;
+esac
