@@ -73,12 +73,13 @@ AjxDateUtil.MONTH_LONG = [
 ];
 
 AjxDateUtil.FREQ_TO_DISPLAY = {
-	SEC: [ZmMsg.second, ZmMsg.seconds],
-	HOU: [ZmMsg.hour, 	ZmMsg.hours],
-	DAI: [ZmMsg.day, 	ZmMsg.days],
-	WEE: [ZmMsg.week, 	ZmMsg.weeks],
-	MON: [ZmMsg.month, 	ZmMsg.months],
-	YEA: [ZmMsg.year, 	ZmMsg.years]
+	SEC: [AjxMsg.second,AjxMsg.seconds],
+	MIN: [AjxMsg.minute,AjxMsg.minutes], 
+	HOU: [AjxMsg.hour, 	AjxMsg.hours],
+	DAI: [AjxMsg.day, 	AjxMsg.days],
+	WEE: [AjxMsg.week, 	AjxMsg.weeks],
+	MON: [AjxMsg.month, AjxMsg.months],
+	YEA: [AjxMsg.year, 	AjxMsg.years]
 };
 
 AjxDateUtil._daysPerMonth = {
