@@ -111,6 +111,7 @@ ZaServer.A_MasterRedologClientTcpNoDelay = "zimbraMasterRedologClientTcpNoDelay"
 ZaServer.A_zimbraUserServicesEnabled = "zimbraUserServicesEnabled";
 
 //Volume Management
+ZaServer.A_RemovedVolumes = "removed_volumes";
 ZaServer.A_Volumes = "volumes";
 ZaServer.A_VolumeId = "id";
 ZaServer.A_VolumeName = "name";
@@ -346,7 +347,7 @@ function () {
 				this[ZaServer.A_CurrentPrimaryMsgVolumeId] =  child.getAttribute(ZaServer.A_VolumeId);
 			} else if (child.getAttribute(ZaServer.A_VolumeType) == ZaServer.SEC_MSG) {
 				this[ZaServer.A_CurrentSecondaryMsgVolumeId] =  child.getAttribute(ZaServer.A_VolumeId);			
-			} else if (child.getAttribute(ZaServer.A_VolumeType) == ZaServer.IDNEX) {
+			} else if (child.getAttribute(ZaServer.A_VolumeType) == ZaServer.INDEX) {
 				this[ZaServer.A_CurrentIndexMsgVolumeId] =  child.getAttribute(ZaServer.A_VolumeId);						
 			}
 		}
@@ -358,7 +359,6 @@ function() {
 	if(!this.id)
 		return;
 	var soapDoc = AjxSoapDoc.create("GetAllVolumesRequest", "urn:zimbraAdmin", null);
-	//find out which server I am on
 	var respNode = ZmCsfeCommand.invoke(soapDoc, false, null, this.id, true).firstChild;	
 
 	var children = respNode.childNodes;
@@ -375,4 +375,43 @@ function() {
 			this[ZaServer.A_Volumes].push(volume);
 		}
 	}
+}
+
+ZaServer.prototype.deleteVolume =
+function (id) {
+	if(!id)
+		return false;
+		
+	var soapDoc = AjxSoapDoc.create("DeleteVolumeRequest", "urn:zimbraAdmin", null);		
+	soapDoc.getMethod().setAttribute(ZaServer.A_VolumeId, id);	
+	var respNode = ZmCsfeCommand.invoke(soapDoc, false, null, this.id, true).firstChild;		
+}
+
+ZaServer.prototype.createVolume =
+function (volume) {
+	if(!volume)
+		return false;
+	var soapDoc = AjxSoapDoc.create("CreateVolumeRequest", "urn:zimbraAdmin", null);		
+	var elVolume = soapDoc.set("volume", null);
+	elVolume.setAttribute("type", volume[ZaServer.A_VolumeType]);
+	elVolume.setAttribute("name", volume[ZaServer.A_VolumeName]);	
+	elVolume.setAttribute("rootpath", volume[ZaServer.A_VolumeRootPath]);		
+	elVolume.setAttribute("compressBlobs", volume[ZaServer.A_VolumeCompressBlobs]);		
+	elVolume.setAttribute("compressionThreshold", volume[ZaServer.A_VolumeCompressionThreshold]);			
+	var respNode = ZmCsfeCommand.invoke(soapDoc, false, null, this.id, true).firstChild;		
+}
+
+ZaServer.prototype.modifyVolume =
+function (volume) {
+	if(!volume)
+		return false;
+	var soapDoc = AjxSoapDoc.create("ModifyVolumeRequest", "urn:zimbraAdmin", null);		
+	soapDoc.getMethod().setAttribute(ZaServer.A_VolumeId, volume[ZaServer.A_VolumeId]);	
+	var elVolume = soapDoc.set("volume", null);
+	elVolume.setAttribute("type", volume[ZaServer.A_VolumeType]);
+	elVolume.setAttribute("name", volume[ZaServer.A_VolumeName]);	
+	elVolume.setAttribute("rootpath", volume[ZaServer.A_VolumeRootPath]);		
+	elVolume.setAttribute("compressBlobs", volume[ZaServer.A_VolumeCompressBlobs]);		
+	elVolume.setAttribute("compressionThreshold", volume[ZaServer.A_VolumeCompressionThreshold]);			
+	var respNode = ZmCsfeCommand.invoke(soapDoc, false, null, this.id, true).firstChild;		
 }

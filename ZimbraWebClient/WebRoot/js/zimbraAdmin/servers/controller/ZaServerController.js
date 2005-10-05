@@ -112,11 +112,10 @@ function (nextViewCtrlr, func, params) {
 		//ask if the user wants to save changes			
 		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);					
 		this._confirmMessageDialog.setMessage(ZaMsg.Q_SAVE_CHANGES, null, DwtMessageDialog.INFO_STYLE);
-		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaServerController.prototype._saveAndGoAway, this, args);		
+		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaServerController.prototype._validateChanges, this, args);		
 		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaServerController.prototype._discardAndGoAway, this, args);		
 		this._confirmMessageDialog.popup();
 	} else {
-	
 		func.call(nextViewCtrlr, params);
 	}
 
@@ -226,44 +225,198 @@ function (obj) {
 		}
 	}
 
+
+	//remove Volumes
+	if(obj[ZaServer.A_RemovedVolumes]) {
+		var cnt = obj[ZaServer.A_RemovedVolumes].length;
+		for(var i = 0; i < cnt; i++) {
+			if(obj[ZaServer.A_RemovedVolumes][i][ZaServer.A_VolumeId] > 0) {
+				this._currentObject.deleteVolume(obj[ZaServer.A_RemovedVolumes][i][ZaServer.A_VolumeId]);			
+			}
+		}
+	}
+	
+	//create new Volumes
+	if(obj[ZaServer.A_Volumes]) {
+		var cnt = obj[ZaServer.A_Volumes].length;
+		for(var i = 0; i < cnt; i++) {
+			if(!obj[ZaServer.A_Volumes][i][ZaServer.A_VolumeId]) {
+				this._currentObject.createVolume(obj[ZaServer.A_Volumes][i]);			
+			}
+		}
+
+		//modify existing volumes
+		cnt--;	
+		
+		var cnt2 = this._currentObject[ZaServer.A_Volumes].length;
+		for(var i = cnt; i >= 0; i--) {
+			var newVolume = obj[ZaServer.A_Volumes][i];
+			var oldVolume;
+			for (var ix =0; ix < cnt2; ix++) {
+				oldVolume = this._currentObject[ZaServer.A_Volumes][ix];
+				if(oldVolume[ZaServer.A_VolumeId] == newVolume[ZaServer.A_VolumeId]) {
+					//check attributes
+					var modified = false;
+					for(var attr in oldVolume) {
+						if(oldVolume[attr] != newVolume[attr]) {
+							modified = true;
+							break;
+						}
+					}
+					
+					if(modified) {
+						this._currentObject.modifyVolume(obj[ZaServer.A_Volumes][i]);
+					}
+					obj[ZaServer.A_Volumes].splice(i,1);
+				}
+			}
+		}
+		
+	}
+	
+	
+/*
+//////	
+
+	var tmpObjCnt = -1;
+	var currentObjCnt = -1;
+	var cnt = tmpObj[ZaServer.A_Volumes].length;
+	for 
+		if(typeof tmpObj[ZaAccount.A_zimbraMailAlias] == "string") {
+			var tmpStr = tmpObj.attrs[ZaAccount.A_zimbraMailAlias];
+			tmpObj.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
+			tmpObj.attrs[ZaAccount.A_zimbraMailAlias].push(tmpStr);
+		}
+		tmpObjCnt = tmpObj.attrs[ZaAccount.A_zimbraMailAlias].length - 1;
+	}
+	
+	if(this._currentObject.attrs[ZaAccount.A_zimbraMailAlias]) {
+		if(typeof this._currentObject.attrs[ZaAccount.A_zimbraMailAlias] == "string") {
+			var tmpStr = this._currentObject.attrs[ZaAccount.A_zimbraMailAlias];
+			this._currentObject.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
+			this._currentObject.attrs[ZaAccount.A_zimbraMailAlias].push(tmpStr);
+		}
+		currentObjCnt = this._currentObject.attrs[ZaAccount.A_zimbraMailAlias].length - 1;
+	}
+
+	//diff two arrays
+	for(var tmpIx=tmpObjCnt; tmpIx >= 0; tmpIx--) {
+		for(var currIx=currentObjCnt; currIx >=0; currIx--) {
+			if(tmpObj.attrs[ZaAccount.A_zimbraMailAlias][tmpIx] == this._currentObject.attrs[ZaAccount.A_zimbraMailAlias][currIx]) {
+				//this alias already exists
+				tmpObj.attrs[ZaAccount.A_zimbraMailAlias].splice(tmpIx,1);
+				this._currentObject.attrs[ZaAccount.A_zimbraMailAlias].splice(currIx,1);
+				break;
+			}
+		}
+	}
+	//remove the aliases 
+	if(currentObjCnt != -1) {
+		currentObjCnt = this._currentObject.attrs[ZaAccount.A_zimbraMailAlias].length;
+	} 
+	try {
+		for(var ix=0; ix < currentObjCnt; ix++) {
+			this._currentObject.removeAlias(this._currentObject.attrs[ZaAccount.A_zimbraMailAlias][ix]);
+		}
+	} catch (ex) {
+		this._handleException(ex, "ZaAccountViewController.prototype._saveChanges", null, false);
+		return false;
+	}
+	if(tmpObjCnt != -1) {
+		tmpObjCnt = tmpObj.attrs[ZaAccount.A_zimbraMailAlias].length;
+	}
+	var failedAliases = "";
+	var failedAliasesCnt = 0;
+	try {
+		for(var ix=0; ix < tmpObjCnt; ix++) {
+			try {
+				if(tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix])
+					this._currentObject.addAlias(tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]);
+			} catch (ex) {
+				if(ex.code == ZmCsfeException.ACCT_EXISTS) {
+					//if failed because account exists just show a warning
+					failedAliases += ("<br>" + tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]);
+					failedAliasesCnt++;
+				} else {
+					//if failed for another reason - jump out
+					throw (ex);
+				}
+			}
+		}
+		if(failedAliasesCnt == 1) {
+			this._msgDialog.setMessage(ZaMsg.WARNING_ALIAS_EXISTS + failedAliases, "", DwtMessageDialog.WARNING_STYLE, ZaMsg.zimbraAdminTitle);
+			this._msgDialog.popup();			
+		} else if(failedAliasesCnt > 1) {
+			this._msgDialog.setMessage(ZaMsg.WARNING_ALIASES_EXIST + failedAliases, "", DwtMessageDialog.WARNING_STYLE, ZaMsg.zimbraAdminTitle);
+			this._msgDialog.popup();			
+		}
+	} catch (ex) {
+
+		this.popupMsgDialog(ZaMsg.FAILED_ADD_ALIASES, ex, true);	
+		return false;
+	}
+//////////	
+*/
 	//save the model
 	var changeDetails = new Object();
 	this._currentObject.modify(mods);
+	this._view.setDirty(false);	
 	//if modification took place - fire an ServerChangeEvent
 	changeDetails["obj"] = this._currentObject;
 	changeDetails["modFields"] = mods;
 	this._fireServerChangeEvent(changeDetails);
-
 	return true;
 }
 
-ZaServerController.prototype._saveChangesCallback = 
-function (obj) {
-	if(this._saveChanges(obj)) {
-		this._view.setDirty(false);		
-		//this._toolBar.getButton(ZaOperation.SAVE).setEnabled(false); 
-		this._confirmMessageDialog.popdown();
+/**
+* @param params - optional, params that contain a callback function 
+* that will be called if the user answers "Yes",
+* an argument for the callback function,
+* and an object on which this function will be called
+**/
+ZaServerController.prototype._validateChanges =
+function (params) {
+	//check if we are removing volumes
+	var obj = this._view.getObject();
+	if(obj[ZaServer.A_RemovedVolumes] && obj[ZaServer.A_RemovedVolumes].length > 0 ) {
+		if(this._confirmMessageDialog)
+			this._confirmMessageDialog.popdown();
+			
+		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);	
+		this._confirmMessageDialog.setMessage(ZaMsg.Q_DELETE_VOLUMES, null, DwtMessageDialog.WARNING_STYLE);
+		var args;
+		var callBack = ZaServerController.prototype._saveChangesCallback;
+		if(!params || !params["callback"]) {
+			args = null;
+		} else {
+			callBack = ZaServerController.prototype._saveChangesCallback;
+			args = params;		
+		}
+		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, callBack, this, args);		
+		this._confirmMessageDialog.popup();		
+	} else {
+		this._saveChangesCallback(params);
 	}
 }
+
 /**
-* @param params		   - params["params"] - arguments to pass to the method specified in func parameter
-* 					     params["obj"] - the controller of the next view
-*						 params["func"] - the method to call on the nextViewCtrlr in order to navigate to the next view
-* This method saves changes in the current view and calls the method on the controller of the next view
+* @param params - optional, contains parameters for the next call
 **/
-ZaServerController.prototype._saveAndGoAway =
+ZaServerController.prototype._saveChangesCallback = 
 function (params) {
 	try {
-		var tmpObj = this._view.getObject();
-		if(this._saveChanges(tmpObj)) {
-			this._confirmMessageDialog.popdown();	
-			params["func"].call(params["obj"], params["params"]);	
-				
+		var obj = this._view.getObject();
+		if(this._saveChanges(obj)) {
+			if(this._confirmMessageDialog)
+				this._confirmMessageDialog.popdown();
+			if(params) {
+				params["func"].call(params["obj"], params["params"]);
+			}
 		}
 	} catch (ex) {
 		//if exception thrown - don't go away
-		this._handleException(ex, "ZaServerController.prototype._saveAndGoAway", null, false);
-	}
+		this._handleException(ex, "ZaServerController.prototype._saveChangesCallback", null, false);
+	}	
 }
 
 /**
@@ -283,20 +436,7 @@ function (params) {
 ZaServerController.prototype._saveButtonListener =
 function(ev) {
 	try {
-		var tmpObj = this._view.getObject();
-		//check if disabling email service
-		if((this._currentObject.attrs[ZaServer.A_zimbraUserServicesEnabled]=="TRUE") && (tmpObj.attrs[ZaServer.A_zimbraUserServicesEnabled]=="FALSE")) {
-			//ask if the user wants to save changes		
-			this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
-			this._confirmMessageDialog.setMessage(ZaMsg.NAD_Dialog_ShutdownEmailService, null, DwtMessageDialog.WARNING_STYLE);
-			this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaServerController.prototype._saveChangesCallback, this, tmpObj);		
-			this._confirmMessageDialog.popup();
-		
-		} else {
-			if(this._saveChanges(tmpObj)) {
-				this._view.setDirty(false);		
-			}
-		}
+		this._validateChanges();
 	} catch (ex) {
 		//if exception thrown - don' go away
 		this._handleException(ex, "ZaServerController.prototype._saveButtonListener", null, false);
@@ -315,15 +455,15 @@ function(ev) {
 		args["params"] = null;
 		args["obj"] = this._app;
 		args["func"] = ZaApp.prototype.popView;
+
 		//ask if the user wants to save changes		
 		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
 		this._confirmMessageDialog.setMessage(ZaMsg.NAD_Dialog_SaveChanges, null, DwtMessageDialog.INFO_STYLE);
-		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaServerController.prototype._saveAndGoAway, this, args);		
+		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaServerController.prototype._validateChanges, this, args);		
 		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaServerController.prototype._discardAndGoAway, this, args);		
 		this._confirmMessageDialog.popup();
 	} else {
 		this._app.popView();
-//		this._app.getServerListController().show();
 	}	
 }
 
