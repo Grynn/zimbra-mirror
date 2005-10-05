@@ -405,8 +405,8 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 										relevantBehavior:_DISABLE_, onChange: ZaServerXFormView.onFormFieldChanged
 									},
 									{ref:ZaServer.A_VolumeType, type:_OSELECT1_, choices:ZaServer.volumeTypeChoices,width:"100px", label:null,
-										//relevant:"model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))!=instance[ZaServer.A_CurrentPrimaryMsgVolumeId] && model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))!=instance[ZaServer.A_CurrentSecondaryMsgVolumeId]  && model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))!=instance[ZaServer.A_CurrentIndexMsgVolumeId]",
-										relevant:"!(ZaServerXFormView.isCurrent.call(item))",
+										relevant:"!(model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId)))",
+//										relevant:"!(ZaServerXFormView.isCurrent.call(item))",
 										relevantBehavior:_DISABLE_, onChange: ZaServerXFormView.onFormFieldChanged
 									},
 								  	{ref:ZaServer.A_VolumeCompressBlobs, type: _CHECKBOX_,width:"100px", label:null, onChange: ZaServerXFormView.onFormFieldChanged},									

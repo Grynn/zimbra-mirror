@@ -294,6 +294,7 @@ function() {
 	var ti;
 
 	this._addressesTi = new DwtTreeItem(tree, null, null, null, null, "overviewHeader");
+	this._addressesTi.enableSelection(false);
 	this._addressesTi.setText(ZaMsg.OVP_addresses);
 	this._addressesTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._ADDRESSES);
 		
@@ -312,8 +313,10 @@ function() {
 	ti.setImage("Group");
 	ti.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW);
 
-
+	this._addressesTi.addSeparator();
+	
 	this._configTi = new DwtTreeItem(tree, null, null, null, null, "overviewHeader");
+	this._configTi.enableSelection(false);
 	this._configTi.setText(ZaMsg.OVP_configuration);
 	this._configTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._SYS_CONFIG);	
 	
@@ -394,8 +397,9 @@ function() {
 	ti.setImage("GlobalSettings");
 	ti.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._GLOBAL_SETTINGS);	
 
-				
+	this._configTi.addSeparator();			
 	this._monitoringTi = new DwtTreeItem(tree, null, null, null, null, "overviewHeader");
+	this._monitoringTi.enableSelection(false);	
 	this._monitoringTi.setText(ZaMsg.OVP_monitoring);
 	this._monitoringTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._MONITORING);
 	

@@ -193,7 +193,7 @@ ZaServer.myXModel = {
 				items: [
 					{id:ZaServer.A_VolumeId, type:_NUMBER_},
 					{id:ZaServer.A_VolumeName, type:_STRING_},
-					{id:ZaServer.A_VolumeType, type:_ENUM_, choices:[ZaServer.PRI_SMG,ZaServer.SEC_SMG,ZaServer.INDEX]},
+					{id:ZaServer.A_VolumeType, type:_ENUM_, choices:[ZaServer.PRI_MSG,ZaServer.SEC_MSG,ZaServer.INDEX]},
 					{id:ZaServer.A_VolumeRootPath, type:_STRING_},
 					{id:ZaServer.A_VolumeCompressBlobs, type:_ENUM_, choices:[false,true]},
 					{id:ZaServer.A_VolumeCompressionThreshold, type:_NUMBER_}				
