@@ -120,6 +120,7 @@ sub startLdap {
 
 sub doStartup {
 	Zimbra::Mon::Logger::Log ("info", "Starting services");
+	print "Host $localHostName\n";
 	if ($localHostName eq $ldapServer) {
 		my $ldapStopped = 0xffff & system("/opt/zimbra/bin/ldap status");
 		if ($ldapStopped) {
@@ -127,7 +128,6 @@ sub doStartup {
 		}
 	}
 	$services = getEnabledServices();
-	print "Host $localHostName\n";
 	foreach (sort keys %{$services}) {
 		if ($_ eq "ldap") {next;}
 		Zimbra::Mon::Logger::Log ("info", "Starting $_");
