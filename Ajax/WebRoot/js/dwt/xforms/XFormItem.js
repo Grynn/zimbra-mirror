@@ -2606,9 +2606,9 @@ Repeat_XFormItem.prototype.initializeItems = function () {
 		var removeButtonRelevant = this.cacheInheritedProperty("remove_relevant","_remove_relevant");
 		if(removeButtonRelevant) {
 			button.relevant = removeButtonRelevant;
-			group.items[group.items.length] = button;
-			group.numCols++;			
-		}
+		} 
+		group.items[group.items.length] = button;
+		group.numCols++;			
 	}
 	if (this.getShowAddButton()) {
 		var button = this.getAddButton();
