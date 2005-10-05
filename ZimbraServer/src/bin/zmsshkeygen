@@ -37,6 +37,8 @@ keyfile="${zimbra_home}/.ssh/zimbra_identity"
 
 mkdir -p ${zimbra_home}/.ssh
 
+chmod 700 ${zimbra_home}/.ssh
+
 rm -f ${keyfile}
 
 keytype=${1:-dsa}
