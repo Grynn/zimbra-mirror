@@ -56,6 +56,7 @@ ZaGlobalConfig.A_zimbraComponentAvailable = "zimbraComponentAvailable";
 ZaGlobalConfig.A_zimbraComponentAvailable_convertd = "_"+ZaGlobalConfig.A_zimbraComponentAvailable+"_convertd";
 ZaGlobalConfig.A_zimbraComponentAvailable_replication = "_"+ZaGlobalConfig.A_zimbraComponentAvailable+"_replication";
 ZaGlobalConfig.A_zimbraComponentAvailable_hotbackup = "_"+ZaGlobalConfig.A_zimbraComponentAvailable+"_hotbackup";
+ZaGlobalConfig.A_zimbraComponentAvailable_cluster = "_" + ZaGlobalConfig.A_zimbraComponentAvailable+"_cluster"
 // --protocol checks
 ZaGlobalConfig.A_zimbraMtaRestriction = "zimbraMtaRestriction";
 ZaGlobalConfig.A_zimbraMtaRejectInvalidHostname = "_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_reject_invalid_hostname";
@@ -121,6 +122,7 @@ ZaGlobalConfig.A_zimbraNewExtension = "_zimbraNewExtension";
 
 ZaGlobalConfig.A_originalMonitorHost = "_originalMonitorHost";
 ZaGlobalConfig.A_currentMonitorHost = "_currentMonitorHost";
+
 
 ZaGlobalConfig.prototype.load =
 function () {

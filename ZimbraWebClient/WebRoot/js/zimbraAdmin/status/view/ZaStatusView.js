@@ -44,9 +44,13 @@ function() {
 	return "ZaStatusView";
 }
 
-ZaStatusView.prototype.set = function (statusVector) {
+	ZaStatusView.prototype.set = function (statusVector, globalConfig) {
 	var instance = {services:statusVector, currentTab:1};
-	if (ZaSettings.CLUSTER_MANEGEMENT_ENABLED) {
+	instance.globalConfig = globalConfig;
+	DBG.dumpObj(instance.globalConfig.attrs, false, 1);
+	//instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_convertd]
+	var clustersEnabled = instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster]
+	if (clustersEnabled) {
 		instance.clusterStatus = ZaClusterStatus.getStatus();
 		var arr = statusVector.getArray();
 		var len = statusVector.size();
@@ -61,18 +65,18 @@ ZaStatusView.prototype.set = function (statusVector) {
 		}
 	}
 	if (this._view == null) {
-// 		var soapDoc = AjxSoapDoc.create("FailoverClusterServiceRequest", "urn:zimbraAdmin", null);
-// 		var serviceEl = soapDoc.set("service");
-// 		serviceEl.setAttribute("name", "mta");
-// 		serviceEl.setAttribute("newServer", "fuddyduddy");
-// 		// js response
-// 		var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false);
-
 		this._view = new XForm(this.getXForm(), new XModel(ZaStatusView.XModel), instance, this);
 		this._view.setController(this);
 		this._view.draw();
 	} else {
 		this._view.setInstance(instance);
+	}
+};
+
+ZaStatusView.prototype.addClusterSelectionListener = function (listener) {
+	var item = this._view.getItemsById('clusterList')[0]
+	if (item.widget) {
+		item.widget.addSelectionListener(listener);
 	}
 };
 
@@ -105,10 +109,10 @@ ZaStatusView.prototype.getXForm = function () {
 					{type:_SPACER_, height: 5},
 					// This list is read only, so we can just do this little hack of accessing the vector's internal array.
 					
-					{ref: "services._array",type:_DWT_LIST_, colSpan:"*", widgetClass:ZaServicesListView,
-					 relevant:"ZaSettings.CLUSTER_MANEGEMENT_ENABLED == false"},
-					{ref: "services._array",type:_DWT_LIST_, colSpan:"*", widgetClass:ZaClusteredServicesListView,
-					 relevant:"ZaSettings.CLUSTER_MANEGEMENT_ENABLED == true"}
+		{ref: "services._array", id:"nonClusterList", type:_DWT_LIST_, colSpan:"*", widgetClass:ZaServicesListView,
+					 relevant:"AjxUtil.isUndefined(instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster])"},
+		{ref: "services._array",id:"clusterList",type:_DWT_LIST_, colSpan:"*", widgetClass:ZaClusteredServicesListView,
+					 relevant:"AjxUtil.isSpecified(instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster])"}
 // 					]
 // 			      },			
 // 			      {type:_CASE_, useParentTable:false, relevant:"instance[ZaModel.currentTab] == 2", colSpan:"*", numCols:2,
@@ -141,6 +145,10 @@ ZaStatusView.prototype.getXForm = function () {
 	
 // 	return resp;
 // };
+
+ZaStatusView.prototype.getSelection = function () {
+	return this._view.getItemsById('clusterList')[0].getSelection();
+};
 
 ZaStatusView.XModel = {
 	items:[

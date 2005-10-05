@@ -25,6 +25,8 @@
 
 function ZaClusteredServicesListView (parent, app) {
 	ZaServicesListView.call(this, parent,app);
+	this.setMultiSelect(false);
+	this.addSelectionListener(new AjxListener(this, this._fullySelect));
 }
 
 ZaClusteredServicesListView.prototype = new ZaServicesListView;
@@ -35,27 +37,27 @@ ZaClusteredServicesListView.prototype._getHeaderList = function() {
 	var headerList = [
 					  new ZaListHeaderItem(ZaStatus.PRFX_Server, ZaMsg.STV_Server_col, null, 175, true, "serverName", true, true),
 
-					  new ZaListHeaderItem("ZaStatus.clustered", "Clustered", null, 50, false, null, true, true),
-
-					  new ZaListHeaderItem("ZaStatus.clusteredStatus", "Cluster Node Status", null, 110, false, null, true, true),
-
 					  new ZaListHeaderItem(ZaStatus.PRFX_Service, ZaMsg.STV_Service_col, null, 100, false, null, true, true),
 
 					  new ZaListHeaderItem(ZaStatus.PRFX_Status, ZaMsg.STV_Status_col, null, 50, false, null, true, true),
 
-					  new ZaListHeaderItem(ZaStatus.PRFX_Time, ZaMsg.STV_Time_col, null, null, false, null, true, true)
+					  new ZaListHeaderItem(ZaStatus.PRFX_Time, ZaMsg.STV_Time_col, null, 250, false, null, true, true),
+
+					  new ZaListHeaderItem("ZaStatus.clustered", "Clustered", null, 50, false, null, true, true),
+
+					  new ZaListHeaderItem("ZaStatus.clusteredStatus", "Cluster Node Status", null, null, false, null, true, true)
 
 					  ];
 	
 	return headerList;
 };
 
+ZaClusteredServicesListView.STYLE_CLASS = "Row";
+ZaClusteredServicesListView.SELECTED_STYLE_CLASS = "Row" + "-" + DwtCssStyle.SELECTED;
+
 ZaClusteredServicesListView.prototype._createItemHtml = function(item, now, isDndIcon, prevItem) {
 	var html = new Array(50);
 	var	div = this.getDocument().createElement("div");
-	div._styleClass = "Row";
-	div._selectedStyleClass = div._styleClass + "-" + DwtCssStyle.SELECTED;
-	div.className = div._styleClass;
 	this.associateItemWithElement(item, div, DwtListView.TYPE_LIST_ITEM);
 
 	var idx = 0;
@@ -67,7 +69,12 @@ ZaClusteredServicesListView.prototype._createItemHtml = function(item, now, isDn
 	var onlyServiceInfo = false;
 	if (prevItem != null && prevItem.serverName == item.serverName) {
 		onlyServiceInfo = true;
+	} else {
+		div._styleClass = ZaClusteredServicesListView.STYLE_CLASS;
+		div._selectedStyleClass = ZaClusteredServicesListView.SELECTED_STYLE_CLASS;
+		div.className = ZaClusteredServicesListView.STYLE_CLASS;
 	}
+
 	for(var i = 0; i < cnt; i++) {
 		var id = this._headerList[i]._id;
 		if(id.indexOf(ZaStatus.PRFX_Server)==0) {
@@ -83,7 +90,9 @@ ZaClusteredServicesListView.prototype._createItemHtml = function(item, now, isDn
 			if (onlyServiceInfo){
 				html[idx++] = AjxStringUtil.htmlEncode(" ");
 			} else {
+				html[idx++] = "<b>"
 				html[idx++] = AjxStringUtil.htmlEncode(item.serverName);
+				html[idx++] = "</b>"
 			}
 			html[idx++] = "</td>";
 		} else if(id.indexOf(ZaStatus.PRFX_Service)==0) {		
@@ -107,7 +116,9 @@ ZaClusteredServicesListView.prototype._createItemHtml = function(item, now, isDn
 			if (onlyServiceInfo){
 				html[idx++] = "&nbsp;";
 			} else if (item.clusterStatus != null) {
+				html[idx++] = "<b>"
 				html[idx++] = AjxStringUtil.htmlEncode(item.clusterStatus);
+				html[idx++] = "</b>";
 			}
 			html[idx++] = "</td>";
 		} else if(id.indexOf("ZaStatus.clustered")==0) {
@@ -116,7 +127,7 @@ ZaClusteredServicesListView.prototype._createItemHtml = function(item, now, isDn
 					html[idx++] = "&nbsp;";
 			} else {
 				if (item.clusterStatus == null) {
-					html[idx++] = "No";
+					html[idx++] = "<b>No</b>";
 				} else {
 					html[idx++] = "<b>Yes</b>";
 				}
@@ -201,3 +212,21 @@ ZaClusteredServicesListView.prototype._renderList = function (list) {
 	}
 };
 
+ZaClusteredServicesListView.prototype._changeClass = function (startDiv, newClass) {
+	var sibling = startDiv.nextSibling;
+	while (sibling != null && sibling._serviceInfo == true) {
+		sibling.className = newClass;
+		sibling = sibling.nextSibling;
+	}	
+};
+
+ZaClusteredServicesListView.prototype._fullySelect = function (event) {
+	if (this._lastSelection) {
+		this._changeClass(this._lastSelection, " ");
+	}
+	var div = DwtUiEvent.getTargetWithProp(event, "_styleClass");
+	this._changeClass(div, "selected");
+
+	this._lastSelection = div;
+	
+};

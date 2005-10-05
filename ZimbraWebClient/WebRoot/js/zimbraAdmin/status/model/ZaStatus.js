@@ -59,3 +59,7 @@ ZaStatus.PRFX_Server = "status_server";
 ZaStatus.PRFX_Service = "status_service";
 ZaStatus.PRFX_Time = "status_time";
 ZaStatus.PRFX_Status = "status_status";
+
+ZaStatus.compare = function (a,b) {
+	return (a.serverName < b.serverName)? -1: ((a.serverName > b.serverName)? 1: 0);
+};

@@ -475,6 +475,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 .ZaServicesListView { 
   width:100%;
   height:100%;
+  background-color:rgb(255,255,255)
 }
 
 .ZaServicesListView_table { 
@@ -486,4 +487,24 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 
 .ZaServicesListView_table TD {  
   padding:2px;
+}
+
+.ZaStatusFailoverDialog { 
+  width: 200px;
+  height:200px;
+}
+
+.ZaStatusFailoverDialog .DwtButton, 
+.ZaStatusFailoverDialog .DwtButton-activated,
+.ZaStatusFailoverDialog .DwtButton-triggered{ 
+  width:60px;
+}
+
+.ZaServicesListView .DwtListView-Rows{ 
+  height:auto;
+  border-bottom: 1px solid #DDDDDD;  
+}
+.ZaServicesListView .Row, .ZaServicesListView .Row-selected {
+  border-bottom:none;
+  border-top: 1px solid #DDDDDD;
 }
