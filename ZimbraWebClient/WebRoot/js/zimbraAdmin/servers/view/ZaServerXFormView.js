@@ -379,17 +379,17 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 								items: [
 									{ref:ZaServer.A_VolumeName, width:"150px", type:_TEXTFIELD_, label:null},
 									{ref:ZaServer.A_VolumeRootPath, width:"250px", type:_TEXTFIELD_, label:null,
-										relevant:"model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))!=instance[ZaServer.A_CurrentMessageVolumeId] && model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))!=instance[ZaServer.A_CurrentSecondaryMsgVolumeId]  && model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))!=instance[ZaServer.A_CurrentIndexMsgVolumeId]",
+										relevant:"model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))!=instance[ZaServer.A_CurrentPrimaryMsgVolumeId] && model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))!=instance[ZaServer.A_CurrentSecondaryMsgVolumeId]  && model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))!=instance[ZaServer.A_CurrentIndexMsgVolumeId]",
 										relevantBehavior:_DISABLE_
 									},
 									{ref:ZaServer.A_VolumeType, type:_OSELECT1_, choices:ZaServer.volumeTypeChoices,width:"100px", label:null,
-										relevant:"model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))!=instance[ZaServer.A_CurrentMessageVolumeId] && model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))!=instance[ZaServer.A_CurrentSecondaryMsgVolumeId]  && model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))!=instance[ZaServer.A_CurrentIndexMsgVolumeId]",
+										relevant:"model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))!=instance[ZaServer.A_CurrentPrimaryMsgVolumeId] && model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))!=instance[ZaServer.A_CurrentSecondaryMsgVolumeId]  && model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))!=instance[ZaServer.A_CurrentIndexMsgVolumeId]",
 										relevantBehavior:_DISABLE_
 									},
 								  	{ref:ZaServer.A_VolumeCompressBlobs, type: _CHECKBOX_,width:"100px", label:null},									
 								  	{ref:ZaServer.A_VolumeCompressionThreshold, width:"40px", type:_TEXTFIELD_,label:null/*, label:ZaMsg.NAD_bytes, labelLocation:_RIGHT_,labelCssStyle:"text-align:left"*/},
 								  	{type:_OUTPUT_, value:ZaMsg.NAD_VM_CurrentVolume, relevantBehavior:_HIDE_, 
-										relevant:"model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))==instance[ZaServer.A_CurrentMessageVolumeId] || model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))==instance[ZaServer.A_CurrentSecondaryMsgVolumeId] || model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))==instance[ZaServer.A_CurrentIndexMsgVolumeId]",
+										relevant:"model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))==instance[ZaServer.A_CurrentPrimaryMsgVolumeId] || model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))==instance[ZaServer.A_CurrentSecondaryMsgVolumeId] || model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))==instance[ZaServer.A_CurrentIndexMsgVolumeId]",
 								  	}
 								]
 							}
