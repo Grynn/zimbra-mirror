@@ -85,7 +85,14 @@ sub runRemoteCommand {
 		die "Can't contact $GlobalOpts{H}";
 
 	while (<REMOTE>) {
-		print "REMOTE: $_";
+		if (/^STARTCMD: (\S+) .*/) {
+			#print "Host $1 starting\n";
+		} elsif (/^ENDCMD: (\S+) .*/) {
+			print "Host $1 complete\n";
+			exit; # Since the pipe doesn't always like to close...
+		} else {
+			print "$_";
+		}
 	}
 	close REMOTE;
 }
@@ -93,18 +100,19 @@ sub runRemoteCommand {
 sub doStatus {
 	$services = getEnabledServices();
 	my $status = 0;
+	print "Host $localHostName\n";
 	foreach (sort keys %{$services}) {
 		my $rc = 0xffff & system ("$allservices{$_} status >/dev/null 2>&1");
 		$rc = $rc >> 8;
 		if ($rc) {$status = $rc;}
-		my $stat = sprintf "%-20s %10s\n",$_,($rc)?"Stopped":"Running";
+		my $stat = sprintf "\t%-20s %10s\n",$_,($rc)?"Stopped":"Running";
 		print "$stat";
 	}
 	return $status;
 }
 
 sub startLdap {
-	print "Starting ldap...";
+	print "\tStarting ldap...";
 	system("/opt/zimbra/bin/ldap start >/dev/null 2>&1");
 	print "Done.\n";
 }
@@ -118,10 +126,11 @@ sub doStartup {
 		}
 	}
 	$services = getEnabledServices();
+	print "Host $localHostName\n";
 	foreach (sort keys %{$services}) {
 		if ($_ eq "ldap") {next;}
 		Zimbra::Mon::Logger::Log ("info", "Starting $_");
-		print "Starting $_...";
+		print "\tStarting $_...";
 		system ("$allservices{$_} start >/dev/null 2>&1");
 		print "Done.\n";
 	}
@@ -130,9 +139,10 @@ sub doStartup {
 
 sub doShutdown {
 	Zimbra::Mon::Logger::Log ("info", "Stopping services");
+	print "Host $localHostName\n";
 	foreach (sort keys %allservices) {
 		Zimbra::Mon::Logger::Log ("info", "Stopping $_");
-		print "Stopping $_...";
+		print "\tStopping $_...";
 		system ("$allservices{$_} stop > /dev/null 2>&1");
 		print "Done\n";
 	}
