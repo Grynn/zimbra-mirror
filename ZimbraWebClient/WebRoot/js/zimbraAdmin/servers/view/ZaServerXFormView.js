@@ -82,6 +82,15 @@ function (entry) {
 	this._localXForm.setInstance(this._containedObject);	
 }
 
+ZaServerXFormView.isCurrent = function() {
+	var volumeId = this.getModel().getInstanceValue(this.getInstance(), this.__parentItem.refPath + "/" +  ZaServer.A_VolumeId);
+	return (volumeId != null && 
+		(volumeId == this.getInstance()[ZaServer.A_CurrentPrimaryMsgVolumeId] ||
+			volumeId == this.getInstance()[ZaServer.A_CurrentIndexMsgVolumeId] ||
+			volumeId == this.getInstance()[ZaServer.A_CurrentSecondaryMsgVolumeId])
+		);
+}
+
 ZaServerXFormView.prototype.getMyXForm = function() {	
 	var xFormObject = {
 		tableCssStyle:"width:100%;position:static;overflow:auto;",
@@ -376,7 +385,7 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 								]
 							},
 							{type:_SPACER_, colSpan:"*"},
-							{ref:ZaServer.A_Volumes,  type:_REPEAT_, showAddButton:true, showRemoveButton:true,  
+							{ref:ZaServer.A_Volumes, type:_REPEAT_, showAddButton:true, showRemoveButton:true, remove_relevant:"!(ZaServerXFormView.isCurrent.call(item))",
 								items: [
 									{ref:ZaServer.A_VolumeName, width:"150px", type:_TEXTFIELD_, label:null},
 									{ref:ZaServer.A_VolumeRootPath, width:"250px", type:_TEXTFIELD_, label:null,
@@ -389,20 +398,14 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 									},
 								  	{ref:ZaServer.A_VolumeCompressBlobs, type: _CHECKBOX_,width:"100px", label:null},									
 								  	{ref:ZaServer.A_VolumeCompressionThreshold, width:"100px", type:_TEXTFIELD_,label:null/*, label:ZaMsg.NAD_bytes, labelLocation:_RIGHT_,labelCssStyle:"text-align:left"*/},
-								  	{type:_OUTPUT_,width:"50px",
-										getDisplayValue: function () {	
-											var volumeId = this.getModel().getInstanceValue(this.getInstance(), this.__parentItem.refPath + "/" +  ZaServer.A_VolumeId);
-											if(!volumeId)
-												return " ";
-											if(volumeId == this.getInstance()[ZaServer.A_CurrentPrimaryMsgVolumeId] ||
-												volumeId == this.getInstance()[ZaServer.A_CurrentIndexMsgVolumeId] ||
-												volumeId == this.getInstance()[ZaServer.A_CurrentSecondaryMsgVolumeId]) {
-													return ZaMsg.NAD_VM_CurrentVolume;
+								  	{type:_OUTPUT_,width:"50px",value:ZaMsg.NAD_VM_CurrentVolume, relevant:"ZaServerXFormView.isCurrent.call(item)"
+/*										getDisplayValue: function () {	
+											if(ZaServerXFormView.isCurrent.call(this)) {
+												return 
 											} else {
-												return " ";
+												return "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 											}
-											
-										}
+										}*/
 								  	}
 								]
 							}
