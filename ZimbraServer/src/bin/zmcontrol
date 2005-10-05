@@ -54,7 +54,8 @@ my %allservices = (
 	"mailbox" => "/opt/zimbra/bin/zmmailboxctl", 
 	"logger" => "/opt/zimbra/bin/zmloggerctl", 
 	"snmp" => "/opt/zimbra/bin/zmswatchctl", 
-	"ldap" => "/opt/zimbra/bin/ldap"
+	"ldap" => "/opt/zimbra/bin/ldap",
+	"spell" => "/opt/zimbra/bin/zmspellctl",
 );
 
 my %GlobalOpts = ();

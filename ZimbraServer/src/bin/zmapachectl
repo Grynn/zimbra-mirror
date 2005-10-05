@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # 
 # ***** BEGIN LICENSE BLOCK *****
 # Version: ZPL 1.1
@@ -24,10 +24,20 @@
 # ***** END LICENSE BLOCK *****
 # 
 
-H=`hostname -s`
-I=`hostname -i`
+BASE=/opt/zimbra
 
-#Symlinks
-
-rm -f /opt/zimbra/httpd
-ln -s /opt/zimbra/httpd-2.0.54 /opt/zimbra/httpd
+case "$1" in 
+	start|stop|reload)
+		/opt/zimbra/httpd/bin/apachectl -k $1 -f /opt/zimbra/conf/httpd.conf
+		exit $?
+	;;
+	status)
+		pid=`cat /opt/zimbra/log/httpd.pid`
+		kill -0 $pid
+		exit $?
+	;;
+	*)
+		echo "$0 start|stop|reload|status"
+		exit 1
+	;;
+esac
