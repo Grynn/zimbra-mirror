@@ -27,6 +27,8 @@
 BASE=/opt/zimbra
 CONFIG=$BASE/conf/logswatchrc
 
+source /opt/zimbra/.bashrc
+
 case "$1" in 
 	start)
 		if [ -f $CONFIG ]; then

@@ -68,6 +68,28 @@ my %COMMANDS = (
 	"status" => \&doStatus,
 );
 
+my %REMOTECOMMANDS = (
+	"start" => "startup",
+	"startup" => "startup",
+	"stop" => "shutdown",
+	"shutdown" => "shutdown",
+	"maintenance" => "maintenance",
+	"status" => "status",
+);
+
+sub runRemoteCommand {
+	my $cmd = shift;
+	my $cstr = "HOST:$GlobalOpts{H} $REMOTECOMMANDS{$cmd}";
+
+	open (REMOTE, "echo $cstr | /opt/zimbra/bin/zmrc $GlobalOpts{H} |") or 
+		die "Can't contact $GlobalOpts{H}";
+
+	while (<REMOTE>) {
+		print "REMOTE: $_";
+	}
+	close REMOTE;
+}
+
 sub doStatus {
 	$services = getEnabledServices();
 	my $status = 0;
@@ -123,7 +145,7 @@ sub setMaintenanceMode {
 
 sub getLocalConfig {
 	my $key = shift;
-	my $val = `zmlocalconfig -m nokey $key`;
+	my $val = `/opt/zimbra/bin/zmlocalconfig -m nokey $key`;
 	chomp $val;
 	return $val;
 }
@@ -175,6 +197,8 @@ sub usage {
 	exit 1;
 }
 
+$| = 1;
+
 unless ( getopts( 'vhH:', \%GlobalOpts ) ) { usage(); }
 
 if ( ! $GlobalOpts{H} ) { $GlobalOpts{H} = $localHostName; chomp $GlobalOpts{H}; }
@@ -186,5 +210,9 @@ if ( $GlobalOpts{v} ) { displayVersion(); exit 1;}
 my $command = $ARGV[0];
 
 unless (defined ($COMMANDS{$command})) {usage();}
+
+if ($GlobalOpts{H} ne $localHostName) {
+	exit (runRemoteCommand ($command));
+}
 
 exit (&{$COMMANDS{$command}}($ARGV[1]));

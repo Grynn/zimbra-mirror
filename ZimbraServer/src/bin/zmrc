@@ -32,6 +32,8 @@ zmsetvars \
 
 desthost=${1}
 
+shift
+
 keyfile="${zimbra_home}/.ssh/zimbra_identity"
 
 if [ "x$desthost" = "x" ]; then
@@ -39,4 +41,8 @@ if [ "x$desthost" = "x" ]; then
 	exit 1
 fi
 
-ssh -i ${keyfile} -o StrictHostKeyChecking=no root@${desthost}
+if [ $# -ne 0 ]; then
+	echo $* | ssh -T -i ${keyfile} -o StrictHostKeyChecking=no zimbra@${desthost}
+else
+	ssh -T -i ${keyfile} -o StrictHostKeyChecking=no zimbra@${desthost}
+fi

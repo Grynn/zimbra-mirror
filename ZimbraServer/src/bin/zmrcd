@@ -32,100 +32,73 @@ use strict;
 my %commands = (
 	"start" => {
 		"args" => {
+
 			"mailbox"	=> {
-				"script"	=> [ "/opt/zimbra/bin/tomcat start", 
-								"/opt/zimbra/bin/zmconvertdctl start",
-								"/opt/zimbra/bin/mysql.server start" ],
-				"user"		=> "zimbra",
+				"script"	=> [ "/opt/zimbra/bin/zmmailboxctl start" ],
 			},
 			"ldap"	=> {
 				"script"	=> [ "/opt/zimbra/bin/ldap start" ],
-				"user"		=> "zimbra",
 			},
 			"mta"	=> {
-				"script"	=> [ "/opt/zimbra/bin/zmsaslauthdctl start",
-								"/opt/zimbra/bin/postfix start",
-								"/opt/zimbra/bin/zmmtaconfigctl start" ],
-				"user"		=> "zimbra",
+				"script"	=> [ "/opt/zimbra/bin/zmmtactl start" ],
 			},
 			"antispam"	=> {
-				"script"	=> [ "/opt/zimbra/bin/zmamavisdctl start",
-								"/opt/zimbra/bin/zmmtaconfigctl start" ],
-				"user"		=> "zimbra",
+				"script"	=> [ "/opt/zimbra/bin/zmantispamctl start" ],
 			},
 			"antivirus"	=> {
-				"script"	=> [ "/opt/zimbra/bin/zmamavisdctl start",
-								"/opt/zimbra/bin/zmclamdctl start",
-								"/opt/zimbra/bin/zmmtaconfigctl start" ],
-				"user"		=> "zimbra",
+				"script"	=> [ "/opt/zimbra/bin/zmantivirusctl start" ],
 			},
 			"snmp"	=> {
 				"script"	=> [ "/opt/zimbra/bin/zmswatchctl start" ],
-				"user"		=> "zimbra",
 			},
+
 		},
 	},
 	"stop" => {
 		"args" => {
+
 			"mailbox"	=> {
-				"script"	=> [ "/opt/zimbra/bin/tomcat stop", 
-								"/opt/zimbra/bin/zmconvertdctl stop",
-								"/opt/zimbra/bin/mysql.server stop" ],
-				"user"		=> "zimbra",
+				"script"	=> [ "/opt/zimbra/bin/zmmailboxctl stop" ],
 			},
 			"ldap"	=> {
 				"script"	=> [ "/opt/zimbra/bin/ldap stop" ],
-				"user"		=> "zimbra",
 			},
 			"mta"	=> {
-				"script"	=> [ "/opt/zimbra/bin/zmsaslauthdctl stop",
-								"/opt/zimbra/bin/postfix stop",
-								"/opt/zimbra/bin/zmmtaconfigctl stop" ],
-				"user"		=> "zimbra",
+				"script"	=> [ "/opt/zimbra/bin/zmmtactl stop" ],
 			},
 			"antispam"	=> {
-				"script"	=> [ "/opt/zimbra/bin/zmamavisdctl stop",
-								"/opt/zimbra/bin/zmmtaconfigctl stop" ],
-				"user"		=> "zimbra",
+				"script"	=> [ "/opt/zimbra/bin/zmantispamctl stop" ],
 			},
 			"antivirus"	=> {
-				"script"	=> [ "/opt/zimbra/bin/zmamavisdctl stop",
-								"/opt/zimbra/bin/zmclamdctl stop",
-								"/opt/zimbra/bin/zmmtaconfigctl stop" ],
-				"user"		=> "zimbra",
+				"script"	=> [ "/opt/zimbra/bin/zmantivirusctl stop" ],
 			},
 			"snmp"	=> {
 				"script"	=> [ "/opt/zimbra/bin/zmswatchctl stop" ],
-				"user"		=> "zimbra",
 			},
+
 		},
 	},
 	"startup" => {
 		"script"	=> [ "/opt/zimbra/bin/zmcontrol startup" ],
-		"user"		=> "zimbra",
 	},
 	"shutdown" => {
 		"script"	=> [ "/opt/zimbra/bin/zmcontrol shutdown" ],
-		"user"		=> "zimbra",
 	},
 	"msgtrace" => {
 		"script"	=> [ "/opt/zimbra/bin/zmmsgtrace" ],
-		"user"		=> "zimbra",
 	},
 	"flushqueue" => {
 		"script"	=> [ "/opt/zimbra/postfix/sbin/postqueue -f" ],
-		"user"		=> "zimbra",
 	},
 	"showqueue" => {
 		"script"	=> [ "/opt/zimbra/postfix/sbin/postqueue -p" ],
-		"user"		=> "zimbra",
 	},
 );
 
 my %allhosts = ();
 my $gothosts = 0;
 
-my $thishost = `su - zimbra -c "zmlocalconfig -m nokey zimbra_server_hostname"`;
+my $thishost = `/opt/zimbra/bin/zmlocalconfig -m nokey zimbra_server_hostname`;
 chomp $thishost;
 
 sub runRemoteCommand {
@@ -140,7 +113,6 @@ sub runCommand {
 	my $host = shift;
 	my $command = shift;
 	my $args = shift;
-	my $user;
 
 	if ($host ne $thishost) {
 		runRemoteCommand($host, $command, $args);
@@ -151,13 +123,11 @@ sub runCommand {
 
 	if (defined ($commands{$command}{script})) {
 		$cl = $commands{$command}{script};
-		$user = $commands{$command}{user};
 	} else {
 		my @a = split (' ', $args);
 		my $arg = shift @a;
 		$args = join(' ',@a);
 
-		$user = $commands{$command}{args}{$arg}{user};
 
 		if (defined ($commands{$command}{args}{$arg}{script})) {
 			$cl = $commands{$command}{args}{$arg}{script};
@@ -171,9 +141,6 @@ sub runCommand {
 		# Only pass the args that we approve, for security
 		#my $cmdstr = "$cm $args";
 		my $cmdstr = "$cm";
-		if ($user ne "root") {
-			$cmdstr = "su - $user -c \"$cmdstr\"";
-		}
 		if (open COMMAND, "$cmdstr |") {
 			print "STARTCMD: $host $cmdstr\n";
 			while (<COMMAND>) {
@@ -193,18 +160,20 @@ sub getHostsByService {
 	my @hosts = ();
 
 	if (!$gothosts) {
-		open CMD, "su - zimbra -c 'zmprov gas'|" or return undef;
+		open CMD, "/opt/zimbra/bin/zmprov gas |" or return undef;
 		my @hl = <CMD>;
 		close CMD;
 		chomp @hl;
 		foreach my $h (@hl) {
-			open CMD, "su - zimbra -c 'zmprov gs $h' | grep zimbraServiceEnabled | sed -e 's/zimbraServiceEnabled: //'|" or return undef;
+			alarm(120);
+			open CMD, "/opt/zimbra/bin/zmprov gs $h | grep zimbraServiceEnabled | sed -e 's/zimbraServiceEnabled: //'|" or return undef;
 			my @sl = <CMD>;
 			close CMD;
 			chomp @sl;
 			foreach my $s (@sl) {
 				$allhosts{$h}{$s} = $s;
 			}
+			alarm(0);
 		}
 		$gothosts = 1;
 	}
@@ -234,12 +203,14 @@ sub getHostList {
 		my ($type, $item) = split (':', $spec);
 		if ($type eq "HOST") {
 			if ($item eq "ALL") {
+				getHostsByService();
 				my @h = sort keys %allhosts;
 				return \@h;
 			}
 			$hosts{$item} = $item;
 		} elsif ($type eq "SERVICE") {
 			if ($item eq "ALL") {
+				getHostsByService();
 				my @h = sort keys %allhosts;
 				return \@h;
 			}
@@ -259,19 +230,30 @@ sub doHelp {
 	foreach my $cm (sort keys %commands) {
 		if (defined ($commands{$cm}{args})) {
 			foreach my $arg (sort keys %{ $commands{$cm}{args}}) {
-				print "$cm $arg: run as $commands{$cm}{args}{$arg}{user}\n";
+				print "$cm $arg";
 				foreach my $sc (@{ $commands{$cm}{args}{$arg}{script} }) {
 					print "\t$sc\n";
 				}
 			}
 		} else {
-			print "$cm: run as $commands{$cm}{user}\n";
+			print "$cm";
 			foreach my $sc (@{ $commands{$cm}{script} }) {
 				print "\t$sc\n";
 			}
 		}
 	}
 }
+
+sub handleALRM {
+	print "ENDCMD: Timeout reached!\n";
+	eval {
+		close CMD;
+	};
+}
+
+$| = 1;
+
+$SIG{ALRM} = \&handleALRM;
 
 while (<>) {
 	chomp;

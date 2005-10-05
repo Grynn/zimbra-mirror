@@ -40,7 +40,7 @@ zmsetvars \
 case "$1" in
     'start')
 		${zimbra_home}/bin/zmmtaconfig   \
-		    >> ${zimbra_log_directory}/zmmtaconfig.log 2>&1 &
+		    >> ${zimbra_log_directory}/zmmtaconfig.log 2>&1 
         ;;
 
     'kill')

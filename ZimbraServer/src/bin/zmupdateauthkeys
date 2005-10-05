@@ -26,8 +26,6 @@
 
 source `dirname $0`/../bin/zmshutil || exit 1
 
-zmassert `id -u` -eq 0
-
 zmsetvars \
 	zimbra_home \
 	zimbra_server_hostname
@@ -35,7 +33,7 @@ zmsetvars \
 getPubKey() {
 	server=$1
 	echo "Fetching key for ${s}"
-	pubkey=`su - zimbra -c "${zmprov} gs ${server}" 2> /dev/null \
+	pubkey=`${zmprov} gs ${server} 2> /dev/null \
 		| grep $keyattr | sed -e "s/^${keyattr}: //"`
 }
 
@@ -77,11 +75,13 @@ authkeysfile="${zimbra_home}/.ssh/authorized_keys"
 
 tempkeysfile="/tmp/auth_keys.tmp"
 
-authkeys=`cat ${authkeysfile}`
+if [ -f $authkeysfile ]; then
+	authkeys=`cat ${authkeysfile}`
+fi
 
 #echo "Authorized keys: ${authkeys}"
 
-servers=`su - zimbra -c "${zmprov} gas"`
+servers=`${zmprov} gas`
 
 for s in ${servers}; do
 	echo "updating ${s}"
