@@ -371,7 +371,8 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 									{width:"246px", type:_OUTPUT_, label:null, value:ZaMsg.NAD_VM_VolumeRootPath},
 									{type:_OUTPUT_, label:null, width:"96px", value:ZaMsg.NAD_VM_VolumeType},
 								  	{type: _OUTPUT_,label:null,width:"96px", value:ZaMsg.NAD_VM_VolumeCompressBlobs},									
-								  	{width:"120px", type:_OUTPUT_, label:null, value:ZaMsg.NAD_VM_VolumeCompressThreshold}
+								  	{width:"120px", type:_OUTPUT_, label:null, value:ZaMsg.NAD_VM_VolumeCompressThreshold},
+								  	{type:_OUTPUT_,width:"50px", value:"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"}
 								]
 							},
 							{type:_SPACER_, colSpan:"*"},
@@ -387,9 +388,21 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 										relevantBehavior:_DISABLE_
 									},
 								  	{ref:ZaServer.A_VolumeCompressBlobs, type: _CHECKBOX_,width:"100px", label:null},									
-								  	{ref:ZaServer.A_VolumeCompressionThreshold, width:"40px", type:_TEXTFIELD_,label:null/*, label:ZaMsg.NAD_bytes, labelLocation:_RIGHT_,labelCssStyle:"text-align:left"*/},
-								  	{type:_OUTPUT_, value:ZaMsg.NAD_VM_CurrentVolume, relevantBehavior:_HIDE_, 
-										relevant:"model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))==instance[ZaServer.A_CurrentPrimaryMsgVolumeId] || model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))==instance[ZaServer.A_CurrentSecondaryMsgVolumeId] || model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))==instance[ZaServer.A_CurrentIndexMsgVolumeId]",
+								  	{ref:ZaServer.A_VolumeCompressionThreshold, width:"100px", type:_TEXTFIELD_,label:null/*, label:ZaMsg.NAD_bytes, labelLocation:_RIGHT_,labelCssStyle:"text-align:left"*/},
+								  	{type:_OUTPUT_,width:"50px",
+										getDisplayValue: function () {	
+											var volumeId = this.getModel().getInstanceValue(this.getInstance(), this.__parentItem.refPath + "/" +  ZaServer.A_VolumeId);
+											if(!volumeId)
+												return " ";
+											if(volumeId == this.getInstance()[ZaServer.A_CurrentPrimaryMsgVolumeId] ||
+												volumeId == this.getInstance()[ZaServer.A_CurrentIndexMsgVolumeId] ||
+												volumeId == this.getInstance()[ZaServer.A_CurrentSecondaryMsgVolumeId]) {
+													return ZaMsg.NAD_VM_CurrentVolume;
+											} else {
+												return " ";
+											}
+											
+										}
 								  	}
 								]
 							}
