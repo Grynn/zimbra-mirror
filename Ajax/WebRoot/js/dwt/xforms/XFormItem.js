@@ -2598,10 +2598,17 @@ Repeat_XFormItem.prototype.initializeItems = function () {
 				   "(item.instanceNum < item.getInstanceCount())";
 	group.relevant = relevant;
 	
+	//Check if we have an explicit condition defined for Remove button
+	
 	// add the add and remove buttons to the original items array, if appropriate
 	if (this.getShowRemoveButton()) {
-		group.items[group.items.length] = this.getRemoveButton();
-		group.numCols++;
+		var button = this.getRemoveButton();
+		var removeButtonRelevant = this.cacheInheritedProperty("remove_relevant","_remove_relevant");
+		if(removeButtonRelevant) {
+			button.relevant = removeButtonRelevant;
+			group.items[group.items.length] = button;
+			group.numCols++;			
+		}
 	}
 	if (this.getShowAddButton()) {
 		var button = this.getAddButton();
