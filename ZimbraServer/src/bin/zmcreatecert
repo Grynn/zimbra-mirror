@@ -24,6 +24,7 @@
 # ***** END LICENSE BLOCK *****
 # 
 CONF=/opt/zimbra/conf
+TCONF=/opt/zimbra/tomcat/conf
 B=/opt/zimbra/ssl
 BASE=${B}/ssl
 
@@ -103,10 +104,10 @@ createKeyStore() {
 	echo "** Creating keystore"
 	echo
 
-	rm -f ${CONF}/keystore
+	rm -f ${TCONF}/keystore
 
 	keytool -genkey -dname "CN=$H, OU=Zimbra, O=Zimbra, L=NA, S=NA, C=US" \
-		-alias tomcat -keyalg RSA -keysize 1024 -keystore ${CONF}/keystore \
+		-alias tomcat -keyalg RSA -keysize 1024 -keystore ${TCONF}/keystore \
 		-storetype JKS -storepass zimbra -keypass zimbra
 
 }
@@ -118,7 +119,7 @@ createCertReq() {
 
 	keytool -certreq -keyalg RSA -alias tomcat -file \
 		${BASE}/server/server.csr -keystore \
-		${CONF}/keystore -storepass zimbra
+		${TCONF}/keystore -storepass zimbra
 
 	cp ${BASE}/server/server.csr /tmp/server.csr.$$
 	cat /tmp/server.csr.$$ | sed -e \

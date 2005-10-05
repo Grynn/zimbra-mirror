@@ -31,6 +31,7 @@ JAVA_HOME=/opt/zimbra/java
 TOMCAT=/opt/zimbra/tomcat/conf
 
 CONF=/opt/zimbra/conf
+TCONF=/opt/zimbra/tomcat/conf
 
 APP=$1
 shift
@@ -72,7 +73,7 @@ importCert() {
 	echo
 
 	if [ $APP = "mailbox" ]; then
-		keytool -import -alias tomcat -keystore ${CONF}/keystore \
+		keytool -import -alias tomcat -keystore ${TCONF}/keystore \
 			-trustcacerts -file ${CERTFILE} -storepass zimbra
 	else
 		cp -f $CERTFILE ${CONF}/smtpd.crt
