@@ -528,7 +528,7 @@ DwtBorder.registerBorder(
 	"SemiModalDialog", 
 	{ 
 		start: AjxBuffer.concat(
-				"<div id='{$id}_tip_t' class='hover_tip_top ImgSemiModalTip_T'></div>",
+//				"<div id='{$id}_tip_t' class='hover_tip_top ImgSemiModalTip_T'></div>",
 				"<table class=hover_frame_table border=0 cellspacing=0 cellpadding=0>", 
 					"<tr>", 
 						"<td id='{$id}_border_tl' class=ImgSemiModalHeader_TL></td>", 

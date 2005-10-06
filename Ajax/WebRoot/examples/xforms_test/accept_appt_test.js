@@ -31,7 +31,7 @@
 		colSizes:[100,450],
 		itemDefaults:{
 			_OUTPUT_:{
-				labelCssClass:"LabelColName", labelCssStyle:"font-weight:bold;text-align:right;vertical-align:top;"
+				labelCssClass:"LabelColName", labelCssStyle:"font-weight:bold;text-align:right;vertical-align:top;padding-top:2px"
 			}
 		
 		},
@@ -135,13 +135,18 @@
 
 
 			// dialog for "Organizer" status (I know it won't really be done this way...
-			{type:_BORDER_, relevant:"get('_status') == 'O'", borderStyle:"non-modal dialog", substitutions:{title:"Meeting invitation: <span style='font-weight:normal'>Attendee status</span>"}, 
-				width:450, numCols:2, colSizes:[100,"100%"], items:[
+			{type:_GROUP_, relevant:"get('_status') == 'O'", XborderStyle:"SemiModalDialog", colSpan:"*", substitutions:{title:"Meeting invitation: <span style='font-weight:normal'>Attendee status</span>"}, 
+				width:500, numCols:2, colSizes:[100,"100%"], items:[
 
-				{type:_OUTPUT_, label:"Accepted:", ref:"_accepted", relevantIfEmpty:false},
-				{type:_OUTPUT_, label:"Tentative:", ref:"_tentative", relevantIfEmpty:false},
-				{type:_OUTPUT_, label:"Declined:", ref:"_declined", relevantIfEmpty:false},
-				{type:_OUTPUT_, label:"Undecided:", ref:"_undecided", relevantIfEmpty:false},
+				{type:_OUTPUT_, colSpan:"*", value:"This appointment was <b>Accepted</b> by <b>Conrad Damon</b> on October 1, 2005 at 12:35pm, with the message:<br><br><i>Sounds great, I'll bring the guacamole.</i><br>"},
+
+			{type:_TOP_GROUPER_, label:"Current status of all attendees", items:[], colSpan:"*", width:"100%"},
+
+
+				{type:_OUTPUT_, label:"<u>Accepted</u>:", ref:"_accepted", relevantIfEmpty:false},
+				{type:_OUTPUT_, label:"<u>Tentative</u>:", ref:"_tentative", relevantIfEmpty:false},
+				{type:_OUTPUT_, label:"<u>Declined</u>:", ref:"_declined", relevantIfEmpty:false},
+				{type:_OUTPUT_, label:"<u>Undecided</u>:", ref:"_undecided", relevantIfEmpty:false},
 
 				{type:_SPACER_, height:10},
 				{type:_GROUP_, colSpan:2, useParentTable:false, align:"right", numCols:5, width:"100%", items:[
@@ -151,7 +156,7 @@
 							this.getForm().refresh();
 						}
 					},
-					{type:_CELLSPACER_, width:"100%"},
+					{type:_CELLSPACER_, width:"150"},
 					{type:_BUTTON_, label:"Edit Next Instance", align:"right", 
 						onActivate:function() {
 							this.setInstanceValue("U", "_status");
@@ -171,7 +176,7 @@
 			},
 
 
-			{type:_SEPARATOR_, height:20},
+			{type:_TOP_GROUPER_, label:"Appointment details", items:[], colSpan:"*", width:"100%"},
 
 			{type:_OUTPUT_, label:"Subject:", ref:"_subject"},
 			{type:_OUTPUT_, label:"Location:", ref:"_location"},
@@ -201,11 +206,11 @@
 		_repeats:"Every Monday",
 		_location:"Flex 1 conference room",
 		
-		_attendees:"Conrad Damon, Andy Clark, Parag Shah, Enrique DelCampo, Owen Williams, Roland Schemers",
-		_accepted:"Conrad Damon, Andy Clark",
-		_tentative:"Parag Shah",
-		_declined:"Enrique DelCampo",
-		_undecided:"Owen Williams, Roland Schemers",
+		_attendees:"<u>Conrad Damon</u>, <u>Andy Clark</u>, <u>Parag Shah</u>, <u>Enrique DelCampo</u>, <u>Owen Williams</u>, <u>Roland Schemers</u>",
+		_accepted:"<u>Conrad Damon</u>, <u>Andy Clark</u>",
+		_tentative:"<u>Parag Shah</u>",
+		_declined:"<u>Enrique DelCampo</u>",
+		_undecided:"<u>Owen Williams</u>, <u>Roland Schemers</u>",
 		
 		_updated:false,
 		_tempStatus:"A",
