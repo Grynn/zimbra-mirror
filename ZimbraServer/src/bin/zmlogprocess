@@ -90,6 +90,7 @@ sub aggregateMta {
 		my $periods = getAggPeriods($lastPeriod, $periodType);
 
 		my $periodStart = $lastPeriod;
+		my $lastPeriodStart;
 		for (my $i = 0; $i <= $#$periods; $i++) {
 			my $periodEnd = $$periods[$i];
 			print "Aggregating $periodType mta from $periodStart to $periodEnd\n";
@@ -183,8 +184,13 @@ sub aggregateMta {
 				}
 			}
 
+			$lastPeriodStart = $periodStart;
 			$periodStart = $periodEnd;
 		}
+
+		$sth = sqlExec("delete from mta ".
+			"where arrive_time <= '".$periodStart."' and ".
+			"host = '".$host."'");
 
 	}
 
@@ -199,6 +205,7 @@ sub aggregateAmavis {
 		my $periods = getAggPeriods($lastPeriod, $periodType);
 
 		my $periodStart = $lastPeriod;
+		my $lastPeriodStart;
 		for (my $i = 0; $i <= $#$periods; $i++) {
 			my $periodEnd = $$periods[$i];
 			print "Aggregating $periodType amavis from $periodStart to $periodEnd\n";
@@ -306,8 +313,13 @@ sub aggregateAmavis {
 
 			}
 
+			$lastPeriodStart = $periodStart;
 			$periodStart = $periodEnd;
 		}
+
+		$sth = sqlExec("delete from amavis ".
+			"where arrive_time <= '".$periodStart."' and ".
+			"host = '".$host."'");
 
 	}
 
