@@ -232,6 +232,14 @@ function() {
 	return this._controllers[ZaZimbraAdmin._COS_VIEW];
 }
 
+ZaApp.prototype.getHelpViewController =
+function() {
+	if (this._controllers[ZaZimbraAdmin._HELP_VIEW] == null) {
+		this._controllers[ZaZimbraAdmin._HELP_VIEW] = new ZaHelpViewController(this._appCtxt, this._container, this);
+	}
+	return this._controllers[ZaZimbraAdmin._HELP_VIEW];
+}
+
 ZaApp.prototype.getDomainList =
 function(refresh) {
 	if (refresh || this._domainList == null) {

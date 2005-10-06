@@ -80,6 +80,7 @@ ZaZimbraAdmin._COS_VIEW = 16;
 ZaZimbraAdmin._ACCOUNT_VIEW = 17;
 ZaZimbraAdmin._ALIAS_VIEW = 18;
 ZaZimbraAdmin._DL_VIEW = 19;
+ZaZimbraAdmin._HELP_VIEW = 20;
 
 ZaZimbraAdmin.MSG_KEY = new Object();
 ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._ACCOUNTS_LIST_VIEW] = "Accounts_view_title";
@@ -95,6 +96,7 @@ ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._COS_LIST_VIEW] = "COS_view_title";
 ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._STATISTICS] = "GlobalStats_view_title";
 ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._STATISTICS_BY_SERVER] = "ServerStats_view_title";
 ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._SERVER_VIEW] = "Servers_view_title";
+ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._HELP_VIEW] = "Help_view_title";
 ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._DOMAIN_VIEW] = "Domain_view_title";
 ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._COS_VIEW] = "COS_view_title";
 ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._STATUS] = "Status_view_title";
@@ -311,7 +313,14 @@ function(ev) {
 			break;		
 		case ZaAppChooser.B_ADDRESSES:
 			this._showAccountsView(ZaItem.ACCOUNT,ev);
-			break;				
+			break;	
+		case ZaAppChooser.B_HELP:
+			if(this._app.getCurrentController()) {
+				this._app.getCurrentController().switchToNextView(this._app.getHelpViewController(), ZaHelpViewController.prototype.show, null);
+			} else {					
+				this._app.getHelpViewController().show();
+			}
+			break;						
 		case ZaAppChooser.B_LOGOUT:
 			ZaZimbraAdmin.logOff();
 			break;
