@@ -91,6 +91,7 @@ function (title, tabView) {
 	if(tabView) {
 		this._tabs[tabKey]["view"] = tabView;
 		this._pageDiv.appendChild(this._tabs[tabKey]["view"].getHtmlElement());
+		tabView._tabKey = tabKey;
 	} else {
 		this._tabs[tabKey]["view"] = null;
 	}		
