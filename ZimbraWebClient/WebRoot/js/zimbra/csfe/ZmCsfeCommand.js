@@ -132,7 +132,6 @@ function(params) {
 	}
 	
 	// Tell server what kind of response we want
-	this._useXml = params.useXml;
 	if (!params.useXml) {
 		var js = params.soapDoc.set("format", null, context);
 		js.setAttribute("type", "js");
@@ -143,6 +142,7 @@ function(params) {
 	DBG.println(AjxDebug.DBG1, asyncMode ? "<H4>REQUEST (asynchronous)</H4>" : "<H4>REQUEST</H4>");
 	DBG.printXML(AjxDebug.DBG1, params.soapDoc.getXml());
 
+	var rpcCallback;
 	try {
 		var uri = params.serverUri || ZmCsfeCommand.serverUri;
 		if (params.logRequest)
@@ -154,26 +154,27 @@ function(params) {
 		this._st = new Date();
 		
 		if (asyncMode) {
-			var rpcCallback = new AjxCallback(this, this._runCallback, params.callback);
+			rpcCallback = new AjxCallback(this, this._runCallback, params.callback);
 			this._rpcId = AjxRpc.invoke(requestStr, uri, {"Content-Type": "application/soap+xml; charset=utf-8"}, rpcCallback);
 		} else {
 			var response = AjxRpc.invoke(requestStr, uri, {"Content-Type": "application/soap+xml; charset=utf-8"});
 			return this._getResponseData(response, false);
 		}
 	} catch (ex) {
-		if (ex instanceof ZmCsfeException) {
-			throw ex;
-		} else if (ex instanceof AjxSoapException) {
-			throw ex;
-		} else if (ex instanceof AjxException) {
-			throw ex; 
-		}  else {
+		if (!(ex instanceof ZmCsfeException || ex instanceof AjxSoapException || ex instanceof AjxException)) {
 			var newEx = new ZmCsfeException();
 			newEx.method = "ZmCsfeCommand.invoke";
 			newEx.detail = ex.toString();
 			newEx.code = ZmCsfeException.UNKNOWN_ERROR;
 			newEx.msg = "Unknown Error";
-			throw newEx;
+			ex = newEx;
+		}
+		if (asyncMode) {
+			var result = new ZmCsfeResult();
+			result.set(ex, true);
+			rpcCallback.run(result);
+		} else {
+			throw ex;
 		}
 	}
 }
@@ -189,6 +190,8 @@ function(response, asyncMode) {
 	this._en = new Date();
 	DBG.println(AjxDebug.DBG1, "ROUND TRIP TIME: " + (this._en.getTime() - this._st.getTime()));
 
+	var result = new ZmCsfeResult();
+	
 	var xmlResponse = false;
 	var respDoc = null;
 	if (typeof(response.text) == "string" && response.text.indexOf("{") == 0) {
@@ -211,12 +214,10 @@ function(response, asyncMode) {
 		if (fault) {
 			var ex = new ZmCsfeException("Csfe service error", fault.errorCode, "ZmCsfeCommand.prototype.invoke", fault.reason);
 			if (asyncMode)
-				return ex;
+				result.set(ex, true);
 			else
 				throw ex;
 		}
-		if (this._useXml)
-			return body;
 
 		resp = "{";
 		var hdr = respDoc.getHeader();
@@ -236,15 +237,18 @@ function(response, asyncMode) {
 	if (fault) {
 		var ex = new ZmCsfeException(fault.Reason.Text, fault.Detail.Error.Code, "ZmCsfeCommand.prototype.invoke", fault.Code.Value);
 		if (asyncMode)
-			return ex;
+			result.set(ex, true);
 		else
 			throw ex;
+	} else {
+		if (asyncMode)
+			result.set(data);
 	}
 	
 	if (data.Header && data.Header.context && data.Header.context.sessionId)
 		ZmCsfeCommand.setSessionId(data.Header.context.sessionId);
 
-	return data;
+	return asyncMode ? result : data;
 }
 
 /*
@@ -259,7 +263,7 @@ function(args) {
 	var callback = args[0];
 	var response = args[1];
 
-	var respData = this._getResponseData(response, true);
+	var result = this._getResponseData(response, true);
 	this._en = new Date();
 
 	if (!callback) {
@@ -267,7 +271,7 @@ function(args) {
 		return;
 	}
 
-	callback.run(respData);
+	callback.run(result);
 }
 
 // DEPRECATED - instead, use instance method invoke() above

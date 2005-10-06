@@ -79,7 +79,7 @@ AjxSoapDoc.element2FaultObj =
 function(el) {
 	// If the element is not a SOAP fault, then return null
 	var faultEl = el.firstChild;
-	// Safari sux at handling namespaces
+	// Safari is bad at handling namespaces
 	if (!AjxEnv.isSafari) {
 		if (faultEl != null && faultEl.namespaceURI != AjxSoapDoc._SOAP_URI || faultEl.nodeName != (el.prefix + ":Fault"))
 			return null;
@@ -205,7 +205,7 @@ function(xmlDoc) {
 	// Check to make sure we have a soap envelope
 	var el = doc.firstChild;
 
-	// Safari sux at handling namespaces
+	// Safari is bad at handling namespaces
 	if (!AjxEnv.isSafari) {
 		if (el.namespaceURI != AjxSoapDoc._SOAP_URI ||
 		    el.nodeName != (el.prefix + ":Envelope") ||
