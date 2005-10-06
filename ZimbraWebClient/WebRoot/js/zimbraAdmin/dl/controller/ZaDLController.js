@@ -117,6 +117,7 @@ ZaDLController.prototype._getView = function (id, args) {
 			view.addListener(DwtEvent.XFORMS_VALUE_CHANGED, ls);
 			view.setController(this);
 			view.draw();
+
 			view.getHtmlElement().style.position = "absolute";
 			var controller = this;
 			view.setData = function (dl) {
@@ -339,7 +340,7 @@ ZaDLController.prototype._getNewViewXForm = function () {
 				   cssStyle:"background-color:lightgray; margin-bottom:5px;"},
 				  // The colSizes are necessary for firefox to hold the position
 			      // during the repositioning done in ZaAppViewMgr.pushView
-			      {type:_TAB_BAR_, choices:[ {value:1, label:"Members"}, {value:2, label:"Notes"},], ref: ZaModel.currentTab, colSpan:"*"},
+			      {type:_TAB_BAR_, choices:[ {value:1, label:"Members"}, {value:2, label:"Notes"}], ref: ZaModel.currentTab, colSpan:"*"},
 			      {type:_SWITCH_, useParentTable: true, colSpan:"*", numCols:5,
 				  items:[
 					 {type:_CASE_, useParentTable:true, relevant:"instance[ZaModel.currentTab] == 1", colSpan:"*", numCols:5,
