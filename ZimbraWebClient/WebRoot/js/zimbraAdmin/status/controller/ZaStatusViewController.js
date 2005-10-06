@@ -147,7 +147,7 @@ ZaStatusViewController.prototype._popupServerSelectDialog = function () {
 		var form = {
 			items:[
 			{type:_SPACER_, height:10},
-			{ref: "selVal", type:_OSELECT1_, choices:this._app.getServerListChoices2(), label:"Choose a server:",},
+			{ref: "selVal", type:_OSELECT1_, choices:this._app.getServerListChoices2(), label:"Choose a server:"},
 			{type:_SPACER_, height:10}
 			]
 		}

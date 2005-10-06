@@ -60,7 +60,7 @@ function (xModelMetaData, xFormMetaData) {
 	this._localXForm.draw();
 	// This is specifically for the dwt button. If the instance is null, which here it is,
 	// dwt widgets don't get inserted into the xform, until you manually call refresh().
-	this._localXForm.refresh();
+	//this._localXForm.refresh();
 	this._drawn = true;
 }
 
@@ -72,7 +72,7 @@ ZaHelpView.prototype.getMyXForm = function() {
 	var xFormObject = {
 		tableCssStyle:"width:100%;overflow:auto;",
 		itemDefaults: {
-			_SEPARATOR_: {containerCssStyle:"padding-right:3px;padding-left:3px;"},
+			_SEPARATOR_: {containerCssStyle:"padding-right:3px;padding-left:3px;"}
 		},
 		items: [
 			{type:_OUTPUT_, label:null, value:ZaMsg.HELP_PAGE_0, colSpan:"*", cssStyle:"font-size:12pt;	font-weight: bold;"},
@@ -138,7 +138,7 @@ ZaHelpView.prototype.getMyXForm = function() {
 					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
 					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
 					{type:_SPACER_, height:"10px"},
-					{type:_DWT_BUTTON_, label:"About Zimbra Version",onActivate:"this.getFormController().showAboutDialog()",
+					{type:_BUTTON_, label:"About Zimbra Version",onActivate:"this.getFormController().showAboutDialog()",
 					 width:"125px"}
 				]
 			},
