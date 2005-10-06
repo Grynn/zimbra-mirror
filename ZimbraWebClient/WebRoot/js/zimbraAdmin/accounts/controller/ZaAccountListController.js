@@ -158,7 +158,7 @@ ZaAccountListController.prototype.setDefaultType = function (type) {
 	if (newButton != null) {
 		newButton.removeSelectionListeners();
 		// set the new menu action
-		if (type == ZaItem.ACCOUNT) {
+		if (type == ZaItem.ACCOUNT || type == ZaItem.ALIAS) {
 			newButton.setToolTipContent(ZaMsg.ACTBB_New_tt);
 			newButton.setImage("Account");
 			newButton.setDisabledImage("AccountDis");
