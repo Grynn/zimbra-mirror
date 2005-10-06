@@ -49,7 +49,6 @@ function() {
 		var elements = new Object();
 		if (AjxUtil.isSpecified(globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster])) {
 			var ops = [
-					   //				   new ZaOperation(ZaOperation.CLOSE, ZaMsg.STATUSTBB_Failover, ZaMsg.STATUSTBB_Failover_tt, "Close", "CloseDis",
 				   new ZaOperation(ZaOperation.CLOSE, ZaMsg.STATUSTBB_Failover, ZaMsg.STATUSTBB_Failover_tt, null, null,
 								   new AjxListener(this, this._failoverListener))
 				   ];

@@ -56,17 +56,28 @@ function (xModelMetaData, xFormMetaData) {
 
 	this._localXModel = new XModel(xModelMetaData);
 	this._localXForm = new XForm(xFormMetaData, this._localXModel, null, this);
-	this._localXForm.setController(this._app);
+	this._localXForm.setController(this);
 	this._localXForm.draw();
+	// This is specifically for the dwt button. If the instance is null, which here it is,
+	// dwt widgets don't get inserted into the xform, until you manually call refresh().
+	this._localXForm.refresh();
 	this._drawn = true;
 }
+
+ZaHelpView.prototype.showAboutDialog = function () {
+	this._appCtxt.getAppController().aboutDialog.popup();
+};
 
 ZaHelpView.prototype.getMyXForm = function() {	
 	var xFormObject = {
 		tableCssStyle:"width:100%;overflow:auto;",
+		itemDefaults: {
+			_SEPARATOR_: {containerCssStyle:"padding-right:3px;padding-left:3px;"},
+		},
 		items: [
 			{type:_OUTPUT_, label:null, value:ZaMsg.HELP_PAGE_0, colSpan:"*", cssStyle:"font-size:12pt;	font-weight: bold;"},
-			{type:_OUTPUT_, label:null, value:ZaMsg.HELP_PAGE_1, colSpan:"*", cssStyle:"font-size:12px;"},					
+			{type:_OUTPUT_, label:null, value:ZaMsg.HELP_PAGE_1, colSpan:"*", cssStyle:"font-size:12px;"},
+
 			{type:_SPACER_, colSpan:"*"},
 			{type:_GROUP_, numCols:2, 
 				items: [
@@ -83,19 +94,29 @@ ZaHelpView.prototype.getMyXForm = function() {
 						]
 					},
 					{type:_SPACER_, colSpan:"*"},					
-					{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.HELP_PAGE_3, cssStyle:"padding-right:10px;padding-left:10px;border-bottom-style:Ridge;border-bottom-width:4px;border-bottom-color:#CCCCCC;"},
-					{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.HELP_PAGE_5, cssStyle:"padding-right:10px;padding-left:10px;border-bottom-style:Ridge;border-bottom-width:4px;border-bottom-color:#CCCCCC;"},
+					{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.HELP_PAGE_3, 
+					 cssStyle:"padding-right:10px;padding-left:10px;"},
+					{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.HELP_PAGE_5,
+					 cssStyle:"padding-right:10px;padding-left:10px;"},
+					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
+					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
+
 
 					{type:_GROUP_,numCols:2,
 						items: [
-							{type:_OUTPUT_, value:"&nbsp;"},
+								//{type:_OUTPUT_, value:"&nbsp;"},
+							{type:_CELL_SPACER_, width:"24px"},
 							{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.HELP_PAGE_6 }
 						]
 					},					
 					{type:_OUTPUT_, label:null, value:"&nbsp;"},
 					{type:_SPACER_, colSpan:"*"},					
-					{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.HELP_PAGE_7, cssStyle:"padding-right:10px;padding-left:10px;border-bottom-style:Ridge;border-bottom-width:4px;border-bottom-color:#CCCCCC;"},
-					{type:_OUTPUT_, label:null, value:"&nbsp;", cssStyle:"padding-right:10px;padding-left:10px;border-bottom-style:Ridge;border-bottom-width:4px;border-bottom-color:#CCCCCC;"},
+					{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.HELP_PAGE_7, 
+					 cssStyle:"padding-right:10px;padding-left:10px;"},
+					{type:_OUTPUT_, label:null, value:"&nbsp;", cssStyle:"padding-right:10px;padding-left:10px;"},
+					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
+					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
+
 
 					{type:_GROUP_,numCols:2,
 						items: [
@@ -110,10 +131,17 @@ ZaHelpView.prototype.getMyXForm = function() {
 						]
 					},
 					{type:_SPACER_, colSpan:"*"},					
-					{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.HELP_PAGE_9, cssStyle:"padding-right:10px;padding-left:10px;border-bottom-style:Ridge;border-bottom-width:4px;border-bottom-color:#CCCCCC;"},
-					{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.HELP_PAGE_11, cssStyle:"padding-right:10px;padding-left:10px;border-bottom-style:Ridge;border-bottom-width:4px;border-bottom-color:#CCCCCC;"}
+					{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.HELP_PAGE_9, 
+					 cssStyle:"padding-right:10px;padding-left:10px;"},
+					{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.HELP_PAGE_11,
+					 cssStyle:"padding-right:10px;padding-left:10px;"},
+					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
+					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
+					{type:_SPACER_, height:"10px"},
+					{type:_DWT_BUTTON_, label:"About Zimbra Version",onActivate:"this.getFormController().showAboutDialog()",
+					 width:"125px"}
 				]
-			}
+			},
 		]
 	}
 	return xFormObject;

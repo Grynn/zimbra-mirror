@@ -315,6 +315,7 @@ function(ev) {
 			this._showAccountsView(ZaItem.ACCOUNT,ev);
 			break;	
 		case ZaAppChooser.B_HELP:
+			ZaServerVersionInfo.load();
 			if(this._app.getCurrentController()) {
 				this._app.getCurrentController().switchToNextView(this._app.getHelpViewController(), ZaHelpViewController.prototype.show, null);
 			} else {					
@@ -585,18 +586,37 @@ ZaZimbraAdmin._confirmExitMethod =
 function() {
 	return ZaMsg.appExitWarning;
 }
-
-
 function ZaAboutDialog(parent, className, title, w, h) {
 	if (arguments.length == 0) return;
-	var clsName = className || "DwtDialog";
-	
-	DwtDialog.call(this, parent, clsName, null, [DwtDialog.OK_BUTTON]);
-	this._createContentHtml();
+ 	var clsName = className || "DwtDialog";
+
+ 	DwtDialog.call(this, parent, clsName, null, [DwtDialog.OK_BUTTON]);
+// 	this._createContentHtml();
 }
 
 ZaAboutDialog.prototype = new DwtDialog;
 ZaAboutDialog.prototype.constructor = ZaAboutDialog;
+
+ZaAboutDialog.prototype.popup = function () {
+	if (this._view == null) {
+		this._view = new XForm(this.getXForm(), new XModel(), null, this.parent);
+		this._view.draw();
+		this.setView(this._view);
+	}
+	DwtDialog.prototype.popup.call(this);
+};
+ZaAboutDialog.prototype.getXForm = function () {
+	this._form = {
+		numCols:1,
+		items:[
+		{type:_OUTPUT_, value:AjxImg.getImageHtml("Admin_SplashScreen")},
+		{type:_OUTPUT_ , value:"Version: "+ZaServerVersionInfo.version},
+		{type:_OUTPUT_ , value:"BuildDate: "+ZaServerVersionInfo.buildDate},
+		{type:_OUTPUT_ , value:"release: "+ZaServerVersionInfo.release}
+		]
+	}
+	return this._form;
+}
 
 ZaAboutDialog.prototype._createContentHtml = function () {
 	AjxImg.setImage(this._contentDiv,"Admin_SplashScreen");

@@ -508,3 +508,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
   border-bottom:none;
   border-top: 1px solid #DDDDDD;
 }
+
+.helpSeparator { 
+  border-bottom:4px Ridge #CCCCCC;
+}
