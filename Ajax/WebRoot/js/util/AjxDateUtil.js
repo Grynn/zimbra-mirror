@@ -97,6 +97,9 @@ AjxDateUtil._daysPerMonth = {
 	11:31
 };
 
+AjxDateUtil._12hour = "12";
+AjxDateUtil._24hour = "24";
+
 AjxDateUtil._init =
 function() {                                           
 	AjxDateUtil._dateSep = AjxConfig.DATE_SEP;
@@ -304,6 +307,22 @@ function(now, dateMSec) {
 		dateStr = AjxDateUtil.simpleComputeDateStr(date);
 	} 
 	return dateStr;
+};
+
+AjxDateUtil.computeTimeString = 
+function(date) {
+	var amPm = "";
+	var hours = date.getHours();
+	if (AjxConfig.TIME_FMT == AjxDateUtil._12hour) {
+		if (hours > 12) {
+			hours -= 12;
+			amPm = " PM";
+		} else {
+			amPm = " AM";
+		}
+	}
+	
+	return hours + AjxConfig.TIME_SEP + date.getMinutes() + amPm;
 };
 
 AjxDateUtil._getHoursStr = 

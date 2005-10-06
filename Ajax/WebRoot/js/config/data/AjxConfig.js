@@ -26,6 +26,7 @@
 function AjxConfig() {
 }
 
+AjxConfig.TIME_FMT = "12";
 AjxConfig.DATE_FMT = "MDY";
 AjxConfig.DATE_SEP = "/";
 AjxConfig.TIME_SEP = ":";
