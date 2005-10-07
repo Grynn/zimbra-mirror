@@ -154,6 +154,11 @@ function(imageInfo) {
 	}	
 }
 
+DwtTreeItem.prototype.setDndImage =
+function(imageInfo) {
+	this._dndImageInfo = imageInfo;
+}
+
 DwtTreeItem.prototype.getSelected =
 function() {
 	return this._selected;
@@ -178,6 +183,11 @@ function(text) {
 	} else {
 		this._textParam = text;
 	}
+}
+
+DwtTreeItem.prototype.setDndText =
+function(text) {
+	this._dndText = text;
 }
 
 DwtTreeItem.prototype.showCheckBox =
@@ -402,15 +412,20 @@ function() {
 	
 	var c = row.insertCell(i++);
 	c.noWrap = true;
-	if (this._imageInfo) {
+	if (this._dndImageInfo) {
+		AjxImg.setImage(c, this._dndImageInfo);
+	} else if (this._imageInfo) {
 		AjxImg.setImage(c, this._imageInfo);
 	}
 	
 	c = row.insertCell(i);
     c.noWrap = true;
     c.className = this._origClassName;
-    if (this._text)
+	if (this._dndText) {
+    	c.innerHTML = this._dndText;
+	} else if (this._text) {
     	c.innerHTML = this._text;
+	}
 	
 	this.shell.getHtmlElement().appendChild(icon);
 	Dwt.setZIndex(icon, Dwt.Z_DND);
