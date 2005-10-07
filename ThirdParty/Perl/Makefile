@@ -93,7 +93,7 @@ all: $(DEST_LIB_DIR)
 	@for lib in $(DBD_PERL_LIBS); do \
 		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xzf $$lib.tar.gz; cd $$lib; \
-		$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) --mysql_config=/opt/zimbra/mysql/bin/mysql_config --libs="-L/usr/lib -lmysqlclient -lz -lcrypt -lnsl -lm"; \
+		$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) --mysql_config=/opt/zimbra/mysql/bin/mysql_config --libs="-L/opt/zimbra/mysql/lib -lmysqlclient -lz -lcrypt -lnsl -lm"; \
 		make; make install;) \
 	done	
 
