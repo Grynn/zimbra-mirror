@@ -41,13 +41,14 @@
  *   immediately after the HTML code was inserted.  A ref. to the document object
  *   will be passed.
  */
-function DwtIframe(parent, className, html, noscroll, posStyle, processHtmlCallback) {
+function DwtIframe(parent, className, hidden, html, noscroll, posStyle, processHtmlCallback) {
 	if (!posStyle)
 		posStyle = DwtControl.STATIC_STYLE;
 	DwtControl.call(this, parent, className || "DwtIframe", posStyle, false);
 	this._noscroll = noscroll;
 	this._iframeID = Dwt.getNextId();
 	this._processHtmlCallback = processHtmlCallback;
+	this._hidden = hidden;
 	this._createFrame(html);
 };
 
@@ -145,6 +146,8 @@ DwtIframe.prototype._createFrame = function(html) {
 		tmp[i++] = "<iframe";
 		if (self._noscroll)
 			tmp[i++] = " scrolling='no'";
+		if (self._hidden)
+			tmp[i++] = " style='visibility:hidden'";
 		tmp[i++] = " frameborder='0' width='100%' height='100%' id='";
 		tmp[i++] = self._iframeID;
 		tmp[i++] = "' src='javascript:\"\";'></iframe>";
