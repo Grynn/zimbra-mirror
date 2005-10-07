@@ -44,11 +44,9 @@ function() {
 	return "ZaStatusView";
 }
 
-	ZaStatusView.prototype.set = function (statusVector, globalConfig) {
+ZaStatusView.prototype.set = function (statusVector, globalConfig) {
 	var instance = {services:statusVector, currentTab:1};
 	instance.globalConfig = globalConfig;
-	DBG.dumpObj(instance.globalConfig.attrs, false, 1);
-	//instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_convertd]
 	var clustersEnabled = instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster]
 	if (clustersEnabled) {
 		instance.clusterStatus = ZaClusterStatus.getStatus();

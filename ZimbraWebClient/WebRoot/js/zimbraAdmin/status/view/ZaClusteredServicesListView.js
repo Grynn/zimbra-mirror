@@ -155,12 +155,36 @@ ZaClusteredServicesListView.prototype._createItemHtml = function(item, now, isDn
 		div.onmousedown = ZaClusteredServicesListView.emptyHandler;
 		div.onmouseup =  ZaClusteredServicesListView.emptyHandler;
 		div.ondblclick =  ZaClusteredServicesListView.emptyHandler;
+		div.onclick = ZaClusteredServicesListView.bubbleEventToParent;
+		div._objId = this.__internalId;
+	} else {
+		div._serverInfo = true;
 	}
 
 	return div;
 
 };
 
+ZaClusteredServicesListView.bubbleEventToParent = function (event) {
+	event = DwtUiEvent.getEvent(event);
+	serviceDiv = DwtUiEvent.getTargetWithProp(event, "_serviceInfo");
+
+	var sibling = serviceDiv.previousSibling;
+	while (sibling != null && sibling._serverInfo != true) {
+		sibling = sibling.previousSibling;
+	}	
+	if (sibling != null) {
+		var serverDiv = sibling;
+		// simulating a click event for the list view
+		var lv = AjxCore.objectWithId(serviceDiv._objId);
+		var ev = new Object();
+		ev.target = serverDiv;
+		ev.button = DwtMouseEvent.LEFT;
+		ev.dwtObj = lv;
+		lv._itemClicked(serverDiv, ev);
+		lv._mouseUpAction(ev, serverDiv);		
+	}
+};
 ZaClusteredServicesListView.prototype._expand = function (event, domObj) {
 	var ev = DwtUiEvent.getEvent(event);
 	var div = DwtUiEvent.getTargetWithProp(event, "_styleClass");
