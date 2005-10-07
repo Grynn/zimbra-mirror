@@ -60,6 +60,16 @@ TMPDIR	:= tmp
 
 PERL_LIB_SOURCE  := $(shell pwd)
 
+P4_ROOT ?= $(shell cd $(PERL_LIB_SOURCE)/../..; pwd)
+
+BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
+
+PERL_TGZ_DEST	:= $(PERL_LIB_SOURCE)/builds/$(BUILD_PLATFORM)/perllib.tgz
+
+ifeq ($(BUILD_PLATFORM), )
+        BUILD_PLATFORM := "UNKNOWN"
+endif
+
 DEST_DIR		:= $(PERL_LIB_SOURCE)/zimbramon
 DEST_LIB_DIR	:= $(DEST_DIR)/lib
 
@@ -94,7 +104,7 @@ all: $(DEST_LIB_DIR)
 		make; make install;) \
 	done	
 
-	(cd $(DEST_LIB_DIR); tar czf $(PERL_LIB_SOURCE)/perllib.tgz .)
+	(cd $(DEST_LIB_DIR); tar czf $(PERL_TGZ_DEST) .)
 
 $(DEST_LIB_DIR):
 	mkdir -p $@
