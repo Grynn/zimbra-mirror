@@ -193,9 +193,10 @@
 						{type:_OUTPUT_, colSpan:"*", value:"You <b>Accepted</b> this invitation on August 15 at 5:30pm.", cssClass:"LmBigger"},
 						{type:_SPACER_, height:5},
 		
-						{type:_GROUP_, colSpan:"*", numCols:2, width:"100%", items:[
-							{type:_BUTTON_, label:"Change Reply"},
-							{type:_BUTTON_, label:"Cancel", align:"right", width:70}
+						{type:_GROUP_, colSpan:"*", numCols:4, colSizes:[150,200,"100%"], width:"100%", items:[
+							{type:_BUTTON_, label:"Change for This Meeting"},
+							{type:_BUTTON_, label:"Change for This and Future Meetings"},
+							{type:_BUTTON_, label:"Done", align:"right", width:70}
 						  ]
 						}
 				  ]
@@ -652,7 +653,7 @@
 
 					{type:_SEPARATOR_, height:15},					
 					{type:_GROUP_, colSpan:"*", numCols:4, colSizes:[100,152,65,60], items: [
-							{type:_BUTTON_, label:"More Details...", width:100},
+							{type:_BUTTON_, label:"More Options", width:100},
 							{type:_CELLSPACER_},
 							{type:_BUTTON_, label:"OK", width:60},
 							{type:_BUTTON_, label:"Cancel", width:60}
