@@ -156,6 +156,10 @@ DwtIframe.prototype._createFrame = function(html) {
 		iframe = self.getIframe();
 		idoc = Dwt.getIframeDoc(iframe);
 		idoc.open();
+		// make sure to explicitly add head tag for safari otherwise it cannot 
+		// be implicitly referenced (i.e. getElementsByTagName('head'))
+		if (AjxEnv.isSafari)
+			idoc.write("<html><head></head>");
 		idoc.write(html);
 		idoc.close();
 		// if we're not giving a break, we can safely do any postprocessing
