@@ -56,3 +56,17 @@ ZaDLListView.prototype._sortColumn = function (columnItem, bSortAsc){
 		this.getList().sort();
 	}
 };
+
+// Since the base class only notifies for itself, 
+// we need to do this
+ZaDLListView.prototype._itemClicked = function(clickedEl, ev) {
+	ev = DwtUiEvent.getEvent(ev);
+	DwtListView.prototype._itemClicked.call(this, clickedEl, ev);	
+	if (ev.button == DwtMouseEvent.LEFT) {
+		// setting up of the selEvent has occurred in the base class
+		this._evtMgr.notifyListeners(DwtEvent.SELECTION, this._selEv);
+	} else if (ev.button == DwtMouseEvent.RIGHT) {
+		// setting up of the actionEv has occurred in the base class
+		this._evtMgr.notifyListeners(DwtEvent.ACTION, this._actionEv);
+	}
+}

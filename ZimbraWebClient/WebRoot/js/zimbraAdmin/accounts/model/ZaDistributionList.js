@@ -28,6 +28,7 @@ function ZaDistributionList(app, id, name, memberList, description, notes) {
 	this.attrs = new Object();
 	this.id = (id != null)? id: null;
 	this.name = (name != null) ? name: null;
+	this._selfMember = new ZaDistributionListMember(this.name);
 	this._memberList = (memberList != null)? AjxVector.fromArray(memberList): null;
 	this._dirty = true;
 	if (description != null) this.attrs.description = description;
@@ -80,15 +81,30 @@ ZaDistributionList.prototype.clone = function () {
 ZaDistributionList.prototype.addMembers = function (newMembersArrayOrVector) {
 	var added = false;
 	if (newMembersArrayOrVector != null) {
+		// Rules:
+		// Don't add yourself -- currently if you add yourself, we just do nothing.
+		// Don't add duplicates.
 		if (AjxUtil.isArray(newMembersArrayOrVector)) {
 			for (var i = 0; i < newMembersArrayOrVector.length; ++i) {
-				this._memberList.add(newMembersArrayOrVector[i]);
+				if (newMembersArrayOrVector[i].valueOf() != this._selfMember.valueOf()) {
+					this._memberList.add(newMembersArrayOrVector[i]);
+				}
 			}
 			if (newMembersArrayOrVector.length > 0){
 				added = true;
 			}
 		} else if (AjxUtil.isInstance(newMembersArrayOrVector, AjxVector)){
-			this._memberList.merge(this._memberList.size(),newMembersArrayOrVector);
+			var i = -1;
+			if ( (i = newMembersArrayOrVector.binarySearch(this._selfMember)) != -1) {
+				if (i > 0){
+					this._memberList.merge(this._memberList.size(),newMembersArrayOrVector.slice(0,i));
+				}
+				if (i+1 < newMembersArrayOrVector.length) {
+					this._memberList.merge(this._memberList.size(),newMembersArrayOrVector.slice(i+1));
+				}
+			} else {
+				this._memberList.merge(this._memberList.size(),newMembersArrayOrVector);
+			}
 		}
 		this.dedupMembers();
 	}
@@ -156,7 +172,8 @@ ZaDistributionList.prototype._save = function (soapDoc, respName) {
 		var a, key;
 		for (key in this.attrs) {
 			if (this.attrs[key] != null) {
-				if (key == "objectClass" || key == "zimbraId" || key == "uid") {
+				if (key == "objectClass" || key == "zimbraId" || key == "uid" ||
+					key == "mail") {
 						continue;
 				}
 				a = soapDoc.set("a", this.attrs[key]);
@@ -207,6 +224,7 @@ ZaDistributionList.prototype.isDirty = function () {
 
 ZaDistributionList.prototype.initFromDom = function(node) {
 	this.name = node.getAttribute("name");
+	this._selfMember = new ZaDistributionListMember(this.name);
 	this.id = node.getAttribute("id");
 	this.attrs = new Object();
 

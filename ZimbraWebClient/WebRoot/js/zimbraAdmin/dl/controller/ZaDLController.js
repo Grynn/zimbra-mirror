@@ -236,7 +236,6 @@ ZaDLController.prototype.setQuery = function (query) {
 ZaDLController.moreItemId = "MORE_ITEM";
 ZaDLController.prototype._setSearchResults = function (searchResults, appendResults) {
 
-	DBG.dumpObj(searchResults, false, 1);
 	var memberPoolItem = this._dlView.getItemsById("memberPool")[0];
 	if (appendResults) {
 		if (this._moreItem != null) {
@@ -336,11 +335,11 @@ ZaDLController.prototype._getNewViewXForm = function () {
 	    },	    
 	    items:[
 		   {type:_SPACER_, height:10, colSpan:"*" },
-			      {type:_OUTPUT_, colSpan:"*",cssClass:"ZmHead", value:"&nbsp;Manage Distribution List", 
-				   cssStyle:"background-color:lightgray; margin-bottom:5px;"},
+		   //{type:_OUTPUT_, colSpan:"*",cssClass:"ZmHead", value:ZaMsg.DLXV_Header, 
+		   //   cssStyle:"background-color:lightgray; margin-bottom:5px;"},
 				  // The colSizes are necessary for firefox to hold the position
 			      // during the repositioning done in ZaAppViewMgr.pushView
-			      {type:_TAB_BAR_, choices:[ {value:1, label:"Members"}, {value:2, label:"Notes"}], ref: ZaModel.currentTab, colSpan:"*"},
+			      {type:_TAB_BAR_, choices:[ {value:1, label:ZaMsg.DLXV_TabMembers}, {value:2, label:ZaMsg.DLXV_TabNotes}], ref: ZaModel.currentTab, colSpan:"*"},
 			      {type:_SWITCH_, useParentTable: true, colSpan:"*", numCols:5,
 				  items:[
 					 {type:_CASE_, useParentTable:true, relevant:"instance[ZaModel.currentTab] == 1", colSpan:"*", numCols:5,
@@ -348,11 +347,11 @@ ZaDLController.prototype._getNewViewXForm = function () {
 						 {type:_CELLSPACER_, width:10 },
  						    {type:_GROUP_, colSpan:1, width:"100%", colSizes:[70,"auto"],
  							 items:[	
-									{ref:"name", type:_EMAILADDR_, xmsgName:ZaMsg.NAD_AccountName, label:"List name:", 
+									{ref:"name", type:_EMAILADDR_, xmsgName:ZaMsg.NAD_AccountName, label: ZaMsg.DLXV_LabelListName, 
 									 forceUpdate:true, tableCssStyle:"width:100%", inputWidth:"100%"},
 
-								   {ref: "description", type:_TEXTFIELD_, label: "Description:", width:"100%"},
-								   {type:_OUTPUT_, value:"List Members:", width:"100%", colSpan:"*", cssClass:"xform_label_left", 
+								   {ref: "description", type:_TEXTFIELD_, label: ZaMsg.DLXV_LabelDescription, width:"100%"},
+								   {type:_OUTPUT_, value:ZaMsg.DLXV_LabelListMembers, width:"100%", colSpan:"*", cssClass:"xform_label_left", 
 									cssStyle:"padding-left:0px"},
 							       //{ref: "notes", type:_TEXTFIELD_, label: "Notes:", width:"100%"},
 							       {type:_SPACER_, height:"3"},
@@ -360,15 +359,16 @@ ZaDLController.prototype._getNewViewXForm = function () {
 							       {type:_SPACER_, height:"8"},
 								   {type:_GROUP_, colSpan:2, width:"100%", numCols:6, colSizes:[20,40,"100%",85,5, 85], 
 									items:[
-									  {ref: "zimbraMailStatus", type:_CHECKBOX_, trueValue:"enabled", falseValue:"disabled", label:"Active", 
+									  {ref: "zimbraMailStatus", type:_CHECKBOX_, trueValue:"enabled", falseValue:"disabled", label:ZaMsg.DLXV_LabelEnabled, 
 									   cssStyle:"padding-left:0px"},
 									  {type:_CELLSPACER_},
-									  {type:_DWT_BUTTON_, label:"Remove All", width:80, relevant:"(form.getController().shouldEnableRemoveAllButton())",
-									      onActivate:"this.getFormController().removeAllMembers(event,this)",
-									      relevantBehavior:_DISABLE_},
+									  {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemoveAll, width:80, 
+									   relevant:"(form.getController().shouldEnableRemoveAllButton())",
+									   onActivate:"this.getFormController().removeAllMembers(event,this)",
+									   relevantBehavior:_DISABLE_},
 									  
 									  {type:_CELLSPACER_},
-									  {type:_DWT_BUTTON_, label:"Remove", width:80,
+									  {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemove, width:80,
 									      onActivate:"this.getFormController().removeMembers(event,this)",
 									      relevant:"(form.getController().shouldEnableMemberListButtons())",
 									      relevantBehavior:_DISABLE_}
@@ -379,9 +379,9 @@ ZaDLController.prototype._getNewViewXForm = function () {
 						    
 						    {type:_CELLSPACER_, width:20},
 						    
-						    {type:_RADIO_GROUPER_, colSpan:1, numCols:2, colSizes:[50, "100%"], label:"Add Members to this list",
+						    {type:_RADIO_GROUPER_, colSpan:1, numCols:2, colSizes:[50, "100%"], label:ZaMsg.DLXV_GroupLabelAddMembers,
 							items:[			      
-							       {type:_GROUP_, label:"Find:", colSpan:"*", numCols:2, colSizes:["70%","30%"],tableCssStyle:"width:100%", 
+							       {type:_GROUP_, label:ZaMsg.DLXV_LabelFind, colSpan:"*", numCols:2, colSizes:["70%","30%"],tableCssStyle:"width:100%", 
 								   items:[
 									  {type:_INPUT_, ref:"searchText", width:"100%",
 									      elementChanged: function(elementValue,instanceValue, event) {
@@ -393,7 +393,7 @@ ZaDLController.prototype._getNewViewXForm = function () {
 										  }
 									      }
 									  },
-									  {type:_DWT_BUTTON_, label:"Search", width:80,
+									  {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonSearch, width:80,
 									   onActivate:"this.getFormController()._searchListener(event,this)"},
 									 ]
 							       },
@@ -402,12 +402,12 @@ ZaDLController.prototype._getNewViewXForm = function () {
 							       {type:_SPACER_, height:"5"},
 							       {type:_GROUP_, width:"100%", colSpan:"*", numCols:4, colSizes:[85,5,85,"100%"],
 									items: [
-									   {type:_DWT_BUTTON_, label:"Add", width:80,
+									   {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddFromList, width:80,
 										onActivate:"this.getFormController().addAddressToMembers(event, this)",
 										relevant:"(form.getController().shouldEnableMemberPoolListButtons())",
 										relevantBehavior:_DISABLE_},
 									   {type:_CELLSPACER_},
-									   {type:_DWT_BUTTON_, label:"Add All", width:80,
+									   {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddAll, width:80,
 										onActivate:"this.getFormController().addAllAddressesToMembers(event, this)",
 										relevant:"(form.getController().shouldEnableAddAllButton())",
 										relevantBehavior:_DISABLE_},
@@ -415,12 +415,12 @@ ZaDLController.prototype._getNewViewXForm = function () {
 									  ]
 							       },
 							       
-							       {type:_TOP_GROUPER_, label:"Or enter addresses below:", colSpan:"*", items:[]},
+							       {type:_TOP_GROUPER_, label:ZaMsg.DLXV_GroupLabelEnterAddressBelow, colSpan:"*", items:[]},
 							       {ref:"optionalAdd", type:_TEXTAREA_, colSpan:"*", width:"100%", height:98},
 							       {type:_SPACER_, height:"5"},
 							       {type:_GROUP_, colSpan:"*", numCols:2, width:"100%", colSizes:[80,"100%"],
 								   items: [
-									   {type:_DWT_BUTTON_, label:"Add", width:"100%",
+									   {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddFromFreeForm, width:"100%",
 										onActivate:"this.getFormController().addFreeFormAddressToMembers(event, this)",
 										relevant:"form.getController().shouldEnableFreeFormButtons()",
 										relevantBehavior:_DISABLE_
@@ -438,7 +438,7 @@ ZaDLController.prototype._getNewViewXForm = function () {
 						    {type:_SPACER_, height:5},
 						    {type:_SPACER_, height:5},
 						    {type:_CELLSPACER_, width:10 },
-						    {type: _OUTPUT_, value:"Notes:", cssStyle:"align:left"},
+						    {type: _OUTPUT_, value:ZaMsg.DLXV_LabelNotes, cssStyle:"align:left"},
 						    {type:_CELLSPACER_, width:10 },
 						    {ref: "notes", type:_TEXTAREA_, width:"90%", height:"400", labelCssStyle:"vertical-align: top"}
 						   ]
@@ -539,11 +539,11 @@ ZaDLController.prototype.addAllAddressesToMembers = function (event, formItem) {
 	var form = formItem.getForm();
 	var instance = form.getInstance();
 	var pool = instance.memberPool;
-	if (instance.addMembers(instance.memberPool)) {
+	if (instance.addMembers(pool)) {
 		form.refresh();
 	}
 	var memberItem = this._getMemberItem();
-	memberItem.widget.setSelectedItems(instance.memberPool);
+	memberItem.widget.setSelectedItems(pool);
 };
 
 /**
