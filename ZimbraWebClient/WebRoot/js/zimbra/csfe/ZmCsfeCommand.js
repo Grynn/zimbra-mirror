@@ -98,6 +98,7 @@ function(sessionId) {
 * @param useXml			[boolean]*		If true, an XML response is requested
 * @param noSession		[boolean]*		If true, no session info is included
 * @param changeToken	[string]*		Current change token
+* @param asyncMode		[boolean]*		If true, request sent asynchronously
 * @param callback		[AjxCallback]*	Callback to run when response is received (async mode)
 * @param logRequest		[boolean]*		If true, SOAP command name is appended to server URL
 */
@@ -137,7 +138,7 @@ function(params) {
 		js.setAttribute("type", "js");
 	}
 
-	var asyncMode = (params.callback != null);
+	var asyncMode = params.asyncMode;
 
 	DBG.println(AjxDebug.DBG1, asyncMode ? "<H4>REQUEST (asynchronous)</H4>" : "<H4>REQUEST</H4>");
 	DBG.printXML(AjxDebug.DBG1, params.soapDoc.getXml());
@@ -271,7 +272,7 @@ function(args) {
 		return;
 	}
 
-	callback.run(result);
+	if (callback) callback.run(result);
 }
 
 // DEPRECATED - instead, use instance method invoke() above
