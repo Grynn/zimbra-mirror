@@ -110,3 +110,7 @@ AjxTimedAction.performCallback = function (action){
 	var method = action.method;
 	method.call(obj, action.params);
 }
+
+
+
+var DwtListView = {}
