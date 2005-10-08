@@ -54,6 +54,7 @@ function DwtCalendar(parent, className, posStyle, firstDayOfWeek, forceRollOver,
 	className = className || "DwtCalendar";
 	DwtComposite.call(this, parent, className, posStyle);
 
+	this._skipNotifyOnPage = false;
 	this._hidePrevNextMo = hidePrevNextMo;
 	this._readOnly = readOnly;
 	this._uuid = Dwt.getNextId();
@@ -156,6 +157,11 @@ function(listener) {
 	this.removeListener(DwtEvent.DATE_RANGE, listener);
 }
 
+// call this method to not notify selection when paging arrow buttons are clicked
+DwtCalendar.prototype.skipNotifyOnPage = 
+function() {
+	this._skipNotifyOnPage = true;
+}
 
 DwtCalendar.prototype.setDate =
 function(date, skipNotify, forceRollOver, dblClick) {
@@ -857,7 +863,7 @@ function(ev) {
 	} else if (target.id.charAt(0) == 't') {
 		// TODO POPUP MENU
 		target.className = DwtCalendar._TITLE_ACTIVATED_CLASS;
-		this.setDate(new Date());
+		this.setDate(new Date(), this._skipNotifyOnPage);
 		// If our parent is a menu then we need to have it close
 		if (this.parent instanceof DwtMenu)
 			DwtMenu.closeActiveMenu();		
@@ -881,23 +887,23 @@ function(ev) {
 DwtCalendar.prototype._prevMonth = 
 function(ev) {
 	var d = new Date(this._date.getTime());
-	this.setDate(AjxDateUtil.roll(d, AjxDateUtil.MONTH, -1));
+	this.setDate(AjxDateUtil.roll(d, AjxDateUtil.MONTH, -1), this._skipNotifyOnPage);
 }
 
 DwtCalendar.prototype._nextMonth = 
 function(ev) {
 	var d = new Date(this._date.getTime());
-	this.setDate(AjxDateUtil.roll(d, AjxDateUtil.MONTH, 1));
+	this.setDate(AjxDateUtil.roll(d, AjxDateUtil.MONTH, 1), this._skipNotifyOnPage);
 }
 
 DwtCalendar.prototype._prevYear = 
 function(ev) {
 	var d = new Date(this._date.getTime());
-	this.setDate(AjxDateUtil.roll(d, AjxDateUtil.YEAR, -1));
+	this.setDate(AjxDateUtil.roll(d, AjxDateUtil.YEAR, -1), this._skipNotifyOnPage);
 }
 
 DwtCalendar.prototype._nextYear = 
 function(ev) {
 	var d = new Date(this._date.getTime());
-	this.setDate(AjxDateUtil.roll(d, AjxDateUtil.YEAR, 1));
+	this.setDate(AjxDateUtil.roll(d, AjxDateUtil.YEAR, 1), this._skipNotifyOnPage);
 }
