@@ -2,7 +2,15 @@
 
 # EXECUTABLES
 
+PERL_ROOT ?= $(shell pwd)
+P4_ROOT ?= $(shell cd $(PERL_ROOT)/../..; pwd)
+ZIMBRA_HOME ?= /opt/zimbra
+
 PERL 	:= $(shell which perl)
+
+BDB_VERSION ?= 4.2.52.2
+BDB_INC ?= $(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/include
+BDB_LIB ?= $(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/lib
 
 # DESTINATIONS
 
@@ -82,10 +90,13 @@ CLEAN_TARGETS	=	\
 
 all: $(DEST_LIB_DIR)
 	mkdir -p $(TMPDIR)
+	export BERKELEYDB_INCLUDE=$(BDB_INC)
+	export BERKELEYDB_LIB=$(BDB_LIB)
 	@for lib in $(PERL_LIBS); do \
 		echo "Compiling perl lib $$lib"; \
 		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xzf $$lib.tar.gz; cd $$lib; \
+		BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) \
 		$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
 		make; make install;) \
 	done
