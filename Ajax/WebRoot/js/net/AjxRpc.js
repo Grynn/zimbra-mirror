@@ -38,15 +38,16 @@ AjxRpc._RPC_CACHE_MAX = 10;
 * @param serverUrl		[string]		request target
 * @param requestHeaders	[Array]			HTTP request headers
 * @param callback		[AjxCallback]	callback (for async requests)
+* @param useGet			[boolean]		if true use get method, else use post
 */
 AjxRpc.invoke =
-function(requestStr, serverUrl, requestHeaders, callback) {
+function(requestStr, serverUrl, requestHeaders, callback, useGet) {
 
 	var asyncMode = (callback != null);
 	var rpcCtxt = AjxRpc._getRpcCtxt();
 
 	try {
-	 	var response = rpcCtxt.rpcRequestObj.invoke(requestStr, serverUrl, requestHeaders, callback);
+	 	var response = rpcCtxt.rpcRequestObj.invoke(requestStr, serverUrl, requestHeaders, callback, useGet);
 	} catch (ex) {
 		var newEx = new AjxException();
 		newEx.method = "AjxRpc.prototype._invoke";

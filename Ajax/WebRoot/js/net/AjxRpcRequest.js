@@ -56,12 +56,13 @@ function() {
 * @param serverUrl		[string]		request target
 * @param requestHeaders	[Array]			HTTP request headers
 * @param callback		[AjxCallback]	callback (for async requests)
+* @param useGet			[boolean]		if true use get method, else use post
 */
 AjxRpcRequest.prototype.invoke =
-function(requestStr, serverUrl, requestHeaders, callback) {
+function(requestStr, serverUrl, requestHeaders, callback, useGet) {
 
 	var asyncMode = (callback != null);
-	this._httpReq.open("post", serverUrl, asyncMode);
+	this._httpReq.open((useGet) ? "get" : "post", serverUrl, asyncMode);
 	if (asyncMode) {
 		this._callback = callback;
 		var tempThis = this;

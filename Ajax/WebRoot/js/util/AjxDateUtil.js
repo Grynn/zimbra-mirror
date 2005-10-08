@@ -102,10 +102,10 @@ AjxDateUtil._24hour = "24";
 
 AjxDateUtil._init =
 function() {                                           
-	AjxDateUtil._dateSep = AjxConfig.DATE_SEP;
-	AjxDateUtil._timeSep = AjxConfig.TIME_SEP;
+	AjxDateUtil._dateSep = AjxMsg.dateSeparator;
+	AjxDateUtil._timeSep = AjxMsg.timeSeparator;
 	AjxDateUtil._dateFmt = new Array();
-	var tmp = AjxConfig.DATE_FMT;
+	var tmp = AjxMsg.dateFormat;
 	for (var i = 0; i < tmp.length; i++)
 		AjxDateUtil._dateFmt[i] = tmp.substr(i, 1);
 };
@@ -280,7 +280,7 @@ AjxDateUtil.computeDateStr =
 function(now, dateMSec) {
 	if (dateMSec == null)
 		return "";
-	
+
 	var nowMSec = now.getTime();
 	var nowDay = now.getDay();
 	var nowYear = now.getFullYear();
@@ -288,9 +288,7 @@ function(now, dateMSec) {
 	var year = date.getFullYear();
 	var dateStr = "";
 	if (nowMSec - dateMSec < AjxDateUtil.MSEC_PER_DAY && nowDay == date.getDay()) {
-		var hours = date.getHours();
-		var mins = date.getMinutes();
-		dateStr = AjxDateUtil._pad(hours) + AjxDateUtil._timeSep + AjxDateUtil._pad(mins);
+		dateStr = AjxDateUtil.computeTimeString(date);
 	} else if (year == nowYear) {
 		for (var i = 0; i < AjxDateUtil._dateFmt.length; i++) {
 			switch (AjxDateUtil._dateFmt[i]) {
@@ -309,21 +307,29 @@ function(now, dateMSec) {
 	return dateStr;
 };
 
-AjxDateUtil.computeTimeString = 
+AjxDateUtil.computeTimeString =
 function(date) {
 	var amPm = "";
 	var hours = date.getHours();
-	if (AjxConfig.TIME_FMT == AjxDateUtil._12hour) {
+	var mins = date.getMinutes();
+DBG.println("HAHA: " + AjxMsg.timeFormat + " -- " + AjxDateUtil._12hour);
+	if (AjxMsg.timeFormat == AjxDateUtil._12hour) {
+DBG.println("BOBO");
 		if (hours > 12) {
 			hours -= 12;
-			amPm = " PM";
+			amPm = " " + AjxMsg.pm;
 		} else {
-			amPm = " AM";
+			if (hours == 0) 
+				hours = 12;
+			amPm = " " + AjxMsg.am;
 		}
+	} else {
+		hours = AjxDateUtil._pad(hours);
 	}
 	
-	return hours + AjxConfig.TIME_SEP + date.getMinutes() + amPm;
-};
+	return hours + AjxMsg.timeSeparator + AjxDateUtil._pad(mins) + amPm;
+}
+
 
 AjxDateUtil._getHoursStr = 
 function(date, pad, useMilitary) {
