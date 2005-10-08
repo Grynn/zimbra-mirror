@@ -76,5 +76,5 @@ function(args) {
 	if (this.obj)
 		return this.func.call(this.obj, args1);
 	else
-		return this.func(args);
+		return this.func(args1);
 }
