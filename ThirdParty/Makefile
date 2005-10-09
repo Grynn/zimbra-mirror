@@ -69,6 +69,8 @@ aspell: force
 clamav: force
 	(cd $@; make)
 
+postfix: PostFix/PostFix-$(POSTFIX_VERSION)
+
 PostFix/PostFix-$(POSTFIX_VERSION): force
 	(cd $@; make)
 
