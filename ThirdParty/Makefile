@@ -26,7 +26,7 @@ POSTFIX_VERSION ?= 2.2.3
 DIRS := mysql \
 	sleepycat \
 	openldap \
-	cyrus \
+	cyrus-sasl \
 	aspell \
 	clamav \
 	PostFix/PostFix-$(POSTFIX_VERSION)
@@ -35,15 +35,15 @@ all: build
 
 build:
 	for dir in $(DIRS); do \
-		make -C $$dir
+		make -C $$dir; \
 	done
 
 clean:
 	for dir in $(DIRS); do \
-		make -C $$dir clean
+		make -C $$dir clean; \
 	done
 
-allclean: clean
+allclean:
 	for dir in $(DIRS); do \
-		make -C $$dir allclean
+		make -C $$dir allclean; \
 	done
