@@ -31,7 +31,10 @@ DIRS := mysql \
 	clamav \
 	PostFix/PostFix-$(POSTFIX_VERSION)
 
-all: build 
+all: $(ZIMBRA_HOME) build 
+
+$(ZIMBRA_HOME):
+	mkdir -p $@
 
 build:
 	for dir in $(DIRS); do \
