@@ -72,4 +72,4 @@ clamav: force
 PostFix/PostFix-$(POSTFIX_VERSION): force
 	(cd $@; make)
 
-force:
+force: ;
