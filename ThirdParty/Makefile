@@ -50,3 +50,26 @@ allclean:
 	for dir in $(DIRS); do \
 		make -C $$dir allclean; \
 	done
+
+mysql: force
+	(cd $@; make)
+
+sleepycat: force
+	(cd $@; make)
+
+openldap: force
+	(cd $@; make)
+
+cyrus-sasl: force
+	(cd $@; make)
+
+aspell: force
+	(cd $@; make)
+
+clamav: force
+	(cd $@; make)
+
+PostFix/PostFix-$(POSTFIX_VERSION): force
+	(cd $@; make)
+
+force:
