@@ -37,6 +37,7 @@ $(ZIMBRA_HOME):
 	mkdir -p $@
 
 build:
+	export LD_LIBRARY_PATH=/opt/zimbra/mysql/lib
 	for dir in $(DIRS); do \
 		make -C $$dir; \
 	done
