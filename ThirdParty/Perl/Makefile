@@ -72,7 +72,8 @@ P4_ROOT ?= $(shell cd $(PERL_LIB_SOURCE)/../..; pwd)
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
-PERL_TGZ_DEST	:= $(PERL_LIB_SOURCE)/builds/$(BUILD_PLATFORM)/perllib.tgz
+PERL_TGZ_DEST_DIR := $(PERL_LIB_SOURCE)/builds/$(BUILD_PLATFORM)
+PERL_TGZ_DEST	:= $(PERL_TGZ_DEST_DIR)/perllib.tgz
 
 ifeq ($(BUILD_PLATFORM), )
         BUILD_PLATFORM := "UNKNOWN"
@@ -88,7 +89,7 @@ CLEAN_TARGETS	=	\
 		$(DEST_DIR) \
 		perllib.tgz
 
-all: $(DEST_LIB_DIR)
+all: $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 	mkdir -p $(TMPDIR)
 	export BERKELEYDB_INCLUDE=$(BDB_INC)
 	export BERKELEYDB_LIB=$(BDB_LIB)
@@ -116,6 +117,10 @@ all: $(DEST_LIB_DIR)
 	done	
 
 	(cd $(DEST_LIB_DIR); tar czf $(PERL_TGZ_DEST) .)
+	chmod -R a+w $(PERL_TGZ_DEST_DIR)
+
+$(PERL_TGZ_DEST_DIR):
+	mkdir -p $@
 
 $(DEST_LIB_DIR):
 	mkdir -p $@
