@@ -171,9 +171,7 @@ function(params) {
 			ex = newEx;
 		}
 		if (asyncMode) {
-			var result = new ZmCsfeResult();
-			result.set(ex, true);
-			rpcCallback.run(result);
+			rpcCallback.run(new ZmCsfeResult(ex, true));
 		} else {
 			throw ex;
 		}

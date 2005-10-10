@@ -276,6 +276,16 @@ AjxUtil.NODE_CONTENT["a"]	= true;
 AjxUtil.ELEMENT_NODE	= 1;
 AjxUtil.TEXT_NODE	= 3;
 
+/**
+* Convert an XML node to the equivalent JS. Traverses the node's
+* children recursively.
+* <p>
+* NOTE: This method has not been extensively tested and likely needs
+* work.
+*
+* @param node		[Element]	XML node
+* @param omitName	[boolean]	if true, don't include node name in output
+*/
 AjxUtil.xmlToJs =
 function(node, omitName) {
 
@@ -284,7 +294,17 @@ function(node, omitName) {
 
 	var name = node.name ? node.name : node.localName;
 	if (node.nodeType == AjxUtil.ELEMENT_NODE) {
-		var text = omitName ? "{" : [name, ":{"].join("");
+		// if only child is text, no need for enclosing {}
+		var hasTextNode = (node.childNodes && node.childNodes.length == 1 && 
+				   (node.childNodes[0].nodeType == AjxUtil.TEXT_NODE));
+		var text;
+		if (omitName) {
+			text = "{";
+		} else if (hasTextNode) {
+			text = [name, ":"].join("");
+		} else {
+			text = [name, ":{"].join("");
+		}
 		var needComma = false;	
 		if (node.attributes) {
 			for (var i = 0; i < node.attributes.length; i++) {
@@ -333,7 +353,7 @@ function(node, omitName) {
 				if (repeats) text += "]";
 			}
 		}
-		text += "}";
+		if (!hasTextNode) text += "}";
 	}
 
 	return text;
