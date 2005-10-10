@@ -192,9 +192,11 @@ function(tmpObj, app) {
 	attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_notes]);
 	attr.setAttribute("n", ZaDomain.A_notes);	
 	
-	var temp = tmpObj.attrs[ZaDomain.A_AuthLdapURL].join(" ");
-	attr = soapDoc.set("a", temp);
-	attr.setAttribute("n", ZaDomain.A_AuthLdapURL);		
+	if(tmpObj.attrs[ZaDomain.A_AuthLdapURL]) {
+		var temp = tmpObj.attrs[ZaDomain.A_AuthLdapURL].join(" ");
+		attr = soapDoc.set("a", temp);
+		attr.setAttribute("n", ZaDomain.A_AuthLdapURL);		
+	}
 	
 	attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_description]);
 	attr.setAttribute("n", ZaDomain.A_description);		
