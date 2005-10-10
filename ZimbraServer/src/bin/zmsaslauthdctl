@@ -47,7 +47,7 @@ case "$1" in
     'start')
 		mkdir -p ${zimbra_home}/cyrus-sasl-2.1.21.ZIMBRA/state
 		rewriteconfig
-		${zimbra_home}/cyrus-sasl-2.1.21.ZIMBRA/sbin/saslauthd -a zimbra 
+		${zimbra_home}/cyrus-sasl-2.1.21.ZIMBRA/sbin/saslauthd -r -a zimbra 
         ;;
 
     'kill')
