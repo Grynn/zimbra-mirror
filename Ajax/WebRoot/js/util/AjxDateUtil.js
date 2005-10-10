@@ -312,9 +312,7 @@ function(date) {
 	var amPm = "";
 	var hours = date.getHours();
 	var mins = date.getMinutes();
-DBG.println("HAHA: " + AjxMsg.timeFormat + " -- " + AjxDateUtil._12hour);
 	if (AjxMsg.timeFormat == AjxDateUtil._12hour) {
-DBG.println("BOBO");
 		if (hours > 12) {
 			hours -= 12;
 			amPm = " " + AjxMsg.pm;
