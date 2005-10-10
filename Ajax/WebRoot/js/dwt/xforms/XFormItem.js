@@ -2537,7 +2537,7 @@ Repeat_XFormItem.prototype.removeButton = {
 	},
 	relevantBehavior:_HIDE_,
 	relevant: "item.__parentItem.getInstanceCount() != 0"
-},
+}
 Repeat_XFormItem.prototype.addButton = {
 	ref:".",
 	type:_BUTTON_, 
@@ -2559,7 +2559,7 @@ Repeat_XFormItem.prototype.moveUpButton = {
 		var repeatItem = this.getParentItem().getParentItem();
 		repeatItem.moveUpButtonClicked(this.getParentItem().instanceNum);
 	}
-},
+}
 Repeat_XFormItem.prototype.moveDownButton = {
 	ref:".",
 	type:_BUTTON_, 
@@ -2603,6 +2603,10 @@ Repeat_XFormItem.prototype.initializeItems = function () {
 	// add the add and remove buttons to the original items array, if appropriate
 	if (this.getShowRemoveButton()) {
 		var button = this.getRemoveButton();
+		var label = this.getInheritedProperty("removeButtonLabel");
+		if(label)
+			button.label = label;
+			
 		var removeButtonRelevant = this.cacheInheritedProperty("remove_relevant","_remove_relevant");
 		if(removeButtonRelevant) {
 			button.relevant = removeButtonRelevant;
@@ -2612,6 +2616,10 @@ Repeat_XFormItem.prototype.initializeItems = function () {
 	}
 	if (this.getShowAddButton()) {
 		var button = this.getAddButton();
+		var label = this.getInheritedProperty("addButtonLabel");
+		if(label)
+			button.label = label;		
+			
 		if (!this.getAlwaysShowAddButton()) {
 			button.relevant = "(item.getInstanceCount()-1) == item.__parentItem.instanceNum";
 		}
