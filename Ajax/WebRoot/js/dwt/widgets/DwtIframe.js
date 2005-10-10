@@ -183,6 +183,6 @@ DwtIframe.prototype._createFrame = function(html) {
 			idoc[tmp[i]] = rawHandlerProxy;
 
 		// catch browser context menus
-		idoc[DwtEvent.ONCONTEXTMENU] = DwtShell._preventDefaultPrt;
+		// idoc[DwtEvent.ONCONTEXTMENU] = DwtShell._preventDefaultPrt;
 	})();
 };
