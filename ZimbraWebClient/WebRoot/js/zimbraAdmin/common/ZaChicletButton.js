@@ -34,6 +34,7 @@
 * - does not support enabled/disabled
 *
 * @author Conrad Damon
+* @author Greg Solovyev - adapted this class from ZmChicletButton
 */
 function ZaChicletButton(parent, outerClass, innerClass) {
 

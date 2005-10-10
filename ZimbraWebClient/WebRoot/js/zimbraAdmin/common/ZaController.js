@@ -17,7 +17,7 @@
  * The Initial Developer of the Original Code is Zimbra, Inc.
  * Portions created by Zimbra are Copyright (C) 2005 Zimbra, Inc.
  * All Rights Reserved.
- * 
+ *
  * Contributor(s):
  * 
  * ***** END LICENSE BLOCK *****
@@ -26,6 +26,7 @@
 /**
 * @constructor ZaController
 * @class ZaController
+* @author Greg Solovyev
 * Base class for all Controller classes in ZimbraAdmin UI
 */
 function ZaController(appCtxt, container, app, isAdmin) {
@@ -183,9 +184,12 @@ function(bReloginMode) {
 ZaController.prototype._handleException =
 function(ex, method, params, restartOnError, obj) {
 	DBG.dumpObj(ex);
-	if (ex.code == ZmCsfeException.SVC_AUTH_EXPIRED || 
-		ex.code == ZmCsfeException.SVC_AUTH_REQUIRED || 
-		ex.code == ZmCsfeException.NO_AUTH_TOKEN) 
+	if (ex.code && 
+			(ex.code == ZmCsfeException.SVC_AUTH_EXPIRED || 
+				ex.code == ZmCsfeException.SVC_AUTH_REQUIRED || 
+				ex.code == ZmCsfeException.NO_AUTH_TOKEN
+			 )
+		) 
 	{
 		var bReloginMode = true;
 		if (ex.code == ZmCsfeException.SVC_AUTH_EXPIRED) 

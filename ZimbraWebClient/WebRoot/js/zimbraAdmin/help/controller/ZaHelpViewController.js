@@ -29,7 +29,6 @@
 * @param appCtxt
 * @param container
 * @param app
-* @author Roland Schemers
 * @author Greg Solovyev
 **/
 function ZaHelpViewController(appCtxt, container, app) {

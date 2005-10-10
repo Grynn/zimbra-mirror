@@ -226,7 +226,7 @@ function (mods) {
 			var cnt = mods[aname].length;
 			if(cnt > 0) {
 				for(var ix=0; ix <cnt; ix++) {
-					var attr = soapDoc.set("a", mods[aname][ix]);
+					var attr = soapDoc.set("a", mods[aname][ix].toString());
 					attr.setAttribute("n", aname);
 				}
 			} 
