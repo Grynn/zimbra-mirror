@@ -115,6 +115,18 @@ function(view) {
 	return this._appCtxt.getAppController();
 }
 
+/**
+* @param nextViewCtrlr - the controller of the next view
+* @param func		   - the method to call on the nextViewCtrlr in order to navigate to the next view
+* @param params		   - arguments to pass to the method specified in func parameter
+* Ovewrite this method in order to check if it is OK to leave the current view or 
+* perform any actions before a user navigates away from the view.
+**/
+ZaController.prototype.switchToNextView = 
+function (nextViewCtrlr, func, params) {
+	func.call(nextViewCtrlr, params);
+}
+
 //Private/protected methods
 
 ZaController.prototype._setView =
