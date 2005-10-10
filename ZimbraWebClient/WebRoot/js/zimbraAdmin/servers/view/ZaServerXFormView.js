@@ -33,6 +33,7 @@
 function ZaServerXFormView (parent, app) {
 	ZaTabView.call(this, parent, app);	
 	this.initForm(ZaServer.myXModel,this.getMyXForm());
+	this._localXForm.setController(this._app);
 }
 
 ZaServerXFormView.prototype = new ZaTabView();
@@ -91,6 +92,11 @@ ZaServerXFormView.isCurrent = function() {
 		);
 }
 
+ZaServerXFormView.isExistingVolume = function() {
+	var volumeId = parseInt(this.getModel().getInstanceValue(this.getInstance(), this.__parentItem.refPath + "/" +  ZaServer.A_VolumeId));
+	return (volumeId > 0);
+}
+
 ZaServerXFormView.onVolumeRemove = function (index, form) {
 	var path = this.getRefPath();
 	if(!this.getInstance()[ZaServer.A_RemovedVolumes]) {
@@ -99,6 +105,28 @@ ZaServerXFormView.onVolumeRemove = function (index, form) {
 	this.getInstance()[ZaServer.A_RemovedVolumes].push(this.getModel().getInstanceValue(this.getInstance(), path)[index]);
 	form.parent.setDirty(true);
 	this.getModel().removeRow(this.getInstance(), path, index);	
+}
+
+ZaServerXFormView.makeCurrentHandler = function(ev) {
+	var instance = this.getInstance();
+	var parentRefPath = this.getParentItem().refPath;
+	var model = this.getModel();
+	var myVolumeType = parseInt(model.getInstanceValue(instance, (parentRefPath + '/' + ZaServer.A_VolumeType)));
+	var myVolumeId = parseInt(model.getInstanceValue(instance, (parentRefPath + '/' + ZaServer.A_VolumeId)));
+	switch(myVolumeType) {
+		case ZaServer.PRI_MSG:
+			instance[ZaServer.A_CurrentPrimaryMsgVolumeId] = myVolumeId;
+		break;
+		case ZaServer.SEC_MSG:
+			instance[ZaServer.A_CurrentSecondaryMsgVolumeId] = myVolumeId;		
+		break;
+		case ZaServer.INDEX:
+			instance[ZaServer.A_CurrentIndexMsgVolumeId] = myVolumeId;				
+		break;
+	}
+	form = this.getForm();
+	form.refresh();
+	form.parent.setDirty(true);
 }
 
 ZaServerXFormView.prototype.getMyXForm = function() {	
@@ -110,13 +138,6 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 					{type:_OUTPUT_, ref:ZaServer.A_name, label:ZaMsg.NAD_Server},
 					{type:_OUTPUT_, ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID}
 				]
-			},
-			{ type: _DWT_ALERT_,
-			  cssClass: "DwtTabTable",
-			  containerCssStyle: "padding-bottom:0px",
-			  style: DwtAlert.WARNING,
-			  iconVisible: false, 
-			  content: ZaMsg.Alert_ServerDetails
 			},
 			{type:_TAB_BAR_, ref:ZaModel.currentTab,
 				containerCssStyle: "padding-top:0px",
@@ -197,6 +218,14 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 					}, 
 					{ type: _CASE_, relevant: "instance[ZaModel.currentTab] == 3",
 				      items: [
+			
+			{ type: _DWT_ALERT_,
+			  cssClass: "DwtTabTable",
+			  containerCssStyle: "padding-bottom:0px",
+			  style: DwtAlert.WARNING,
+			  iconVisible: false, 
+			  content: ZaMsg.Alert_ServerDetails
+			},
 				        { type: _GROUP_, 
 				          label: ZaMsg.NAD_MTA_Authentication, labelCssStyle: "vertical-align:top",
 				          items: [
@@ -244,6 +273,13 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 				    ]},
 					{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 4", 
 						items:[
+			{ type: _DWT_ALERT_,
+			  cssClass: "DwtTabTable",
+			  containerCssStyle: "padding-bottom:0px",
+			  style: DwtAlert.WARNING,
+			  iconVisible: false, 
+			  content: ZaMsg.Alert_ServerDetails
+			},
 							{ type: _DWT_ALERT_,
 							  labelLocation: _LEFT_, label: "",
 							  style: DwtAlert.WARNING,
@@ -303,6 +339,13 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 					},
 					{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 5", 
 						items:[
+							{ type: _DWT_ALERT_,
+			  cssClass: "DwtTabTable",
+			  containerCssStyle: "padding-bottom:0px",
+			  style: DwtAlert.WARNING,
+			  iconVisible: false, 
+			  content: ZaMsg.Alert_ServerDetails
+			},
 							{ type: _DWT_ALERT_,
 							  labelLocation: _LEFT_, label: "",
 							  style: DwtAlert.WARNING,
@@ -411,7 +454,8 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 									},
 								  	{ref:ZaServer.A_VolumeCompressBlobs, type: _CHECKBOX_,width:"100px", label:null, onChange: ZaServerXFormView.onFormFieldChanged},									
 								  	{ref:ZaServer.A_VolumeCompressionThreshold, onChange: ZaServerXFormView.onFormFieldChanged, width:"100px", type:_TEXTFIELD_,label:null/*, label:ZaMsg.NAD_bytes, labelLocation:_RIGHT_,labelCssStyle:"text-align:left"*/},
-								  	{type:_OUTPUT_,width:"50px",value:ZaMsg.NAD_VM_CurrentVolume, relevant:"ZaServerXFormView.isCurrent.call(item)"}
+								  	{type:_OUTPUT_,width:"50px",value:ZaMsg.NAD_VM_CurrentVolume, relevant:"ZaServerXFormView.isCurrent.call(item)"},
+								  	{type:_DWT_BUTTON_, label:ZaMsg.NAD_VM_MAKE_CURRENT, toolTipContent:ZaMsg.NAD_VM_MAKE_CURRENT_TT, onActivate:ZaServerXFormView.makeCurrentHandler, relevant:"( !(ZaServerXFormView.isCurrent.call(item)) && ZaServerXFormView.isExistingVolume.call(item))"}
 								]
 							}
 						]

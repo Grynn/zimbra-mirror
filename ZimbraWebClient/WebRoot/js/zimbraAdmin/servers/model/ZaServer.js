@@ -121,7 +121,7 @@ ZaServer.A_VolumeCompressionThreshold = "compressionThreshold";
 ZaServer.A_VolumeType = "type";
 ZaServer.A_CurrentPrimaryMsgVolumeId = "current_pri_msg_volume_id";
 ZaServer.A_CurrentSecondaryMsgVolumeId = "current_sec_msg_volume_id";
-ZaServer.A_CurrentIndexMsgVolumeId = "current_sec_msg_volume_id";
+ZaServer.A_CurrentIndexMsgVolumeId = "current_index_volume_id";
 // other
 ZaServer.A_zimbraIsMonitorHost = "zimbraIsMonitorHost";
 
@@ -193,10 +193,10 @@ ZaServer.myXModel = {
 				items: [
 					{id:ZaServer.A_VolumeId, type:_NUMBER_},
 					{id:ZaServer.A_VolumeName, type:_STRING_},
-					{id:ZaServer.A_VolumeType, type:_ENUM_, choices:[ZaServer.PRI_MSG,ZaServer.SEC_MSG,ZaServer.INDEX]},
+					{id:ZaServer.A_VolumeType, type:_ENUM_, choices:[ZaServer.PRI_MSG,ZaServer.SEC_MSG,ZaServer.INDEX],defaultValue:ZaServer.PRI_MSG},
 					{id:ZaServer.A_VolumeRootPath, type:_STRING_},
 					{id:ZaServer.A_VolumeCompressBlobs, type:_ENUM_, choices:[false,true]},
-					{id:ZaServer.A_VolumeCompressionThreshold, type:_NUMBER_}				
+					{id:ZaServer.A_VolumeCompressionThreshold, type:_NUMBER_,defaultValue:4096}				
 				]
 			}
 		}		
@@ -415,3 +415,13 @@ function (volume) {
 	elVolume.setAttribute("compressionThreshold", volume[ZaServer.A_VolumeCompressionThreshold]);			
 	var respNode = ZmCsfeCommand.invoke(soapDoc, false, null, this.id, true).firstChild;		
 }
+
+ZaServer.prototype.setCurrentVolume = function (id, type) {
+	if(!id || !type)
+		return false;	
+	var soapDoc = AjxSoapDoc.create("SetCurrentVolumeRequest", "urn:zimbraAdmin", null);		
+	soapDoc.getMethod().setAttribute(ZaServer.A_VolumeType, type);		
+	soapDoc.getMethod().setAttribute(ZaServer.A_VolumeId, id);	
+	var respNode = ZmCsfeCommand.invoke(soapDoc, false, null, this.id, true).firstChild;			
+}
+

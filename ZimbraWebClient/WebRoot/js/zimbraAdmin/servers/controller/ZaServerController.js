@@ -271,92 +271,18 @@ function (obj) {
 				}
 			}
 		}
-		
 	}
-	
-	
-/*
-//////	
-
-	var tmpObjCnt = -1;
-	var currentObjCnt = -1;
-	var cnt = tmpObj[ZaServer.A_Volumes].length;
-	for 
-		if(typeof tmpObj[ZaAccount.A_zimbraMailAlias] == "string") {
-			var tmpStr = tmpObj.attrs[ZaAccount.A_zimbraMailAlias];
-			tmpObj.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
-			tmpObj.attrs[ZaAccount.A_zimbraMailAlias].push(tmpStr);
-		}
-		tmpObjCnt = tmpObj.attrs[ZaAccount.A_zimbraMailAlias].length - 1;
+	//modify current volumes
+	if(this._currentObject[ZaServer.A_CurrentPrimaryMsgVolumeId] != obj[ZaServer.A_CurrentPrimaryMsgVolumeId] && obj[ZaServer.A_CurrentPrimaryMsgVolumeId]) {
+		this._currentObject.setCurrentVolume(obj[ZaServer.A_CurrentPrimaryMsgVolumeId], ZaServer.PRI_MSG);
 	}
-	
-	if(this._currentObject.attrs[ZaAccount.A_zimbraMailAlias]) {
-		if(typeof this._currentObject.attrs[ZaAccount.A_zimbraMailAlias] == "string") {
-			var tmpStr = this._currentObject.attrs[ZaAccount.A_zimbraMailAlias];
-			this._currentObject.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
-			this._currentObject.attrs[ZaAccount.A_zimbraMailAlias].push(tmpStr);
-		}
-		currentObjCnt = this._currentObject.attrs[ZaAccount.A_zimbraMailAlias].length - 1;
+	if(this._currentObject[ZaServer.A_CurrentSecondaryMsgVolumeId] != obj[ZaServer.A_CurrentSecondaryMsgVolumeId] && obj[ZaServer.A_CurrentSecondaryMsgVolumeId]) {
+		this._currentObject.setCurrentVolume(obj[ZaServer.A_CurrentSecondaryMsgVolumeId], ZaServer.SEC_MSG);
+	}
+	if(this._currentObject[ZaServer.A_CurrentIndexMsgVolumeId] != obj[ZaServer.A_CurrentIndexMsgVolumeId] && obj[ZaServer.A_CurrentIndexMsgVolumeId]) {
+		this._currentObject.setCurrentVolume(obj[ZaServer.A_CurrentIndexMsgVolumeId], ZaServer.INDEX);
 	}
 
-	//diff two arrays
-	for(var tmpIx=tmpObjCnt; tmpIx >= 0; tmpIx--) {
-		for(var currIx=currentObjCnt; currIx >=0; currIx--) {
-			if(tmpObj.attrs[ZaAccount.A_zimbraMailAlias][tmpIx] == this._currentObject.attrs[ZaAccount.A_zimbraMailAlias][currIx]) {
-				//this alias already exists
-				tmpObj.attrs[ZaAccount.A_zimbraMailAlias].splice(tmpIx,1);
-				this._currentObject.attrs[ZaAccount.A_zimbraMailAlias].splice(currIx,1);
-				break;
-			}
-		}
-	}
-	//remove the aliases 
-	if(currentObjCnt != -1) {
-		currentObjCnt = this._currentObject.attrs[ZaAccount.A_zimbraMailAlias].length;
-	} 
-	try {
-		for(var ix=0; ix < currentObjCnt; ix++) {
-			this._currentObject.removeAlias(this._currentObject.attrs[ZaAccount.A_zimbraMailAlias][ix]);
-		}
-	} catch (ex) {
-		this._handleException(ex, "ZaAccountViewController.prototype._saveChanges", null, false);
-		return false;
-	}
-	if(tmpObjCnt != -1) {
-		tmpObjCnt = tmpObj.attrs[ZaAccount.A_zimbraMailAlias].length;
-	}
-	var failedAliases = "";
-	var failedAliasesCnt = 0;
-	try {
-		for(var ix=0; ix < tmpObjCnt; ix++) {
-			try {
-				if(tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix])
-					this._currentObject.addAlias(tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]);
-			} catch (ex) {
-				if(ex.code == ZmCsfeException.ACCT_EXISTS) {
-					//if failed because account exists just show a warning
-					failedAliases += ("<br>" + tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]);
-					failedAliasesCnt++;
-				} else {
-					//if failed for another reason - jump out
-					throw (ex);
-				}
-			}
-		}
-		if(failedAliasesCnt == 1) {
-			this._msgDialog.setMessage(ZaMsg.WARNING_ALIAS_EXISTS + failedAliases, "", DwtMessageDialog.WARNING_STYLE, ZaMsg.zimbraAdminTitle);
-			this._msgDialog.popup();			
-		} else if(failedAliasesCnt > 1) {
-			this._msgDialog.setMessage(ZaMsg.WARNING_ALIASES_EXIST + failedAliases, "", DwtMessageDialog.WARNING_STYLE, ZaMsg.zimbraAdminTitle);
-			this._msgDialog.popup();			
-		}
-	} catch (ex) {
-
-		this.popupMsgDialog(ZaMsg.FAILED_ADD_ALIASES, ex, true);	
-		return false;
-	}
-//////////	
-*/
 	//save the model
 	var changeDetails = new Object();
 	this._currentObject.modify(mods);
