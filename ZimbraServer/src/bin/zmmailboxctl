@@ -25,7 +25,7 @@
 # 
 
 BASE=/opt/zimbra
-SCRIPTS="tomcat mysql.server zmconvertctl"
+SCRIPTS="tomcat mysql.server"
 
 case "$1" in 
 	start)
