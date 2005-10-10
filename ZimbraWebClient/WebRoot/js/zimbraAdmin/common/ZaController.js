@@ -203,7 +203,11 @@ function(ex, method, params, restartOnError, obj) {
 			this.popupMsgDialog(ZaMsg.PERMISSION_DENIED, ex, true);
 		} else if (ex.code == ZmCsfeException.ACCT_NO_SUCH_ACCOUNT) {
 			this.popupMsgDialog(ZaMsg.ERROR_NO_SUCH_ACCOUNT, ex, true);
-		} else if (ex.code == ZmCsfeException.CSFE_SVC_ERROR || ex.code == ZmCsfeException.SVC_FAILURE || (ex.code && ex.code.match(/^(service|account|mail)\./))) {
+		} else if (ex.code == ZmCsfeException.CSFE_SVC_ERROR || 
+					ex.code == ZmCsfeException.SVC_FAILURE || 
+						(typeof(ex.code) == 'string' && ex.code && ex.code.match(/^(service|account|mail)\./))
+
+				   ) {
 			this.popupMsgDialog(ZaMsg.SERVER_ERROR, ex, true);
 		} else {
 			//search for error code
