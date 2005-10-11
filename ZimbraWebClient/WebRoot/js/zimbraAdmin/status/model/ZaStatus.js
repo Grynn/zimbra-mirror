@@ -50,7 +50,8 @@ function (node) {
 	this.serverName = node.getAttribute("server");
 	this.serviceName = node.getAttribute("service");
 	this.timestamp = node.getAttribute("t");
-	this.time = new Date(Number(this.timestamp)*1000).toLocaleString();
+	//this.time = new Date(Number(this.timestamp)*1000).toLocaleString();
+	this.time = AjxDateUtil.getTimeStr(new Date(Number(this.timestamp)*1000), "%M %d %Y %H:%m");
 	this.status = node.firstChild.nodeValue;
 //	DBG.println(AjxDebug.DBG3, "serverName=" + this.serverName+"<br>serviceName="+this.serviceName+"<br>time="+this.time+"<br>timestamp="+this.timestamp+"<br>status="+this.status); 
 }

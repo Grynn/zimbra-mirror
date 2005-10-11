@@ -44,6 +44,9 @@ ZaStatusViewController.prototype.constructor = ZaStatusViewController;
 ZaStatusViewController.prototype.show = 
 function() {
 	var globalConfig = this._app.getGlobalConfig();
+
+	var mystatusVector = this._app.getStatusList(true).getVector();
+	//var mystatusVector = this.getDummyVector();
 	//globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster] = "true";
     if (!this._contentView) {
 		var elements = new Object();
@@ -57,15 +60,15 @@ function() {
 			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
 		}
 		this._contentView = new ZaStatusView(this._container, this._app);
-
-
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 		this._app.createView(ZaZimbraAdmin._STATUS, elements);
 
 		
 	}
-	var mystatusVector = this._app.getStatusList(true).getVector();
-	//var mystatusVector = this.getDummyVector();
+
+	if (AjxUtil.isSpecified(globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster])) {
+		mystatusVector = ZaClusterStatus.getCombinedStatus(mystatusVector);
+	}
 	mystatusVector.sort(ZaStatus.compare);
 
 	this._contentView.set(mystatusVector, globalConfig);
@@ -75,11 +78,19 @@ function() {
 
 ZaStatusViewController.prototype._selectionUpdated = function (event) {
 	var list = event.dwtObj;
-	this._updateOperations(list.getSelection().length);
+	this._updateOperations(list.getSelection());
 };
 
-ZaStatusViewController.prototype._updateOperations = function (selectedCount) {
-	if (selectedCount != 1) {
+ZaStatusViewController.prototype._updateOperations = function (selectionArray) {
+	var disable = false;
+	if (selectionArray.length == 0 ) {
+		disable = true;
+	} else if (selectionArray[0].clustered) {
+		// we are currently a single selection list
+		disable = true;
+	}
+
+	if (!disable) {
 		this._toolbar.enable([ZaOperation.CLOSE], false);
 	} else {
 		this._toolbar.enable([ZaOperation.CLOSE], true);
@@ -88,40 +99,49 @@ ZaStatusViewController.prototype._updateOperations = function (selectedCount) {
 
 ZaStatusViewController.prototype.getDummyVector = function () {
 	var i1 = new ZaStatus(this._app);
-	i1.serverName = "barbara.liquidsys.com";
+	i1.serverName = "timmy.liquidsys.com";
 	i1.serviceName = "MTA";
 	i1.timestamp = 1127945551;
 	i1.time = (new Date(1127945551*1000).toLocaleString());
+	i1.time = AjxDateUtil.getTimeStr(new Date(Number(i1.timestamp)*1000), "%M %d %Y %H:%m");
 	i1.status = 1;
+
 	var i2 = new ZaStatus(this._app);
-	i2.serverName = "jenna.liquidsys.com";
+	i2.serverName = "ebola.liquidsys.com";
 	i2.serviceName = "ldap";
 	i2.timestamp = 1127945551;
-	i2.time = (new Date(1127945551*1000).toLocaleString());
+	i2.time = AjxDateUtil.getTimeStr(new Date(Number(i2.timestamp)*1000), "%M %d %Y %H:%m");
 	i2.status = 0;
 
 	var i3 = new ZaStatus(this._app);
-	i3.serverName = "tweak.liquidsys.com";
-	i3.serviceName = "mta";
+	i3.serverName = "mail1.liquidsys.com";
+	i3.serviceName = "mail";
 	i3.timestamp = 1127945551;
-	i3.time = (new Date(1127945551*1000).toLocaleString());
+	i3.time = AjxDateUtil.getTimeStr(new Date(Number(i3.timestamp)*1000), "%M %d %Y %H:%m");
 	i3.status = 0;
 
 	var i4 = new ZaStatus(this._app);
-	i4.serverName = "jenna.liquidsys.com";
-	i4.serviceName = "junk";
+	i4.serverName = "mail1.liquidsys.com";
+	i4.serviceName = "snmp";
 	i4.timestamp = 1127945551;
-	i4.time = (new Date(1127945551*1000).toLocaleString());
+	i4.time = AjxDateUtil.getTimeStr(new Date(Number(i4.timestamp)*1000), "%M %d %Y %H:%m");
 	i4.status = 1;
 
 	var i5 = new ZaStatus(this._app);
-	i5.serverName = "dogfood.liquidsys.com";
-	i5.serviceName = "service-two";
+	i5.serverName = "mail2.liquidsys.com";
+	i5.serviceName = "snmp";
 	i5.timestamp = 1127945551;
-	i5.time = (new Date(1127945551*1000).toLocaleString());
+	i5.time = AjxDateUtil.getTimeStr(new Date(Number(i5.timestamp)*1000), "%M %d %Y %H:%m");
 	i5.status = 0;
 
-	var arr = [i4,i3, i2, i1,i5];
+	var i6 = new ZaStatus(this._app);
+	i6.serverName = "mail2.liquidsys.com";
+	i6.serviceName = "mail";
+	i6.timestamp = 1127945551;
+	i6.time = AjxDateUtil.getTimeStr(new Date(Number(i6.timestamp)*1000), "%M %d %Y %H:%m");
+	i6.status = 0;
+
+	var arr = [i6, i5,i4,i3, i2, i1]; 
 	return AjxVector.fromArray(arr);
 }
 

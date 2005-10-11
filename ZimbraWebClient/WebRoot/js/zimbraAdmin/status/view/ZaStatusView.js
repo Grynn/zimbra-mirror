@@ -45,23 +45,15 @@ function() {
 }
 
 ZaStatusView.prototype.set = function (statusVector, globalConfig) {
+	// TODO  -- make a more appealing data structure here.
 	var instance = {services:statusVector, currentTab:1};
 	instance.globalConfig = globalConfig;
-	var clustersEnabled = instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster]
-	if (clustersEnabled) {
-		instance.clusterStatus = ZaClusterStatus.getStatus();
-		var arr = statusVector.getArray();
-		var len = statusVector.size();
-		var i;
-		for (i = 0 ; i < len ; ++i) {
-			var clusterSt = instance.clusterStatus.services[arr[i].serverName];
-			if (clusterSt != null) {
-				arr[i].clusterStatus = clusterSt.status;
-			} else {
-				delete arr[i].clusterStatus;
-			}
-		}
-	}
+// 	var clustersEnabled = instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster]
+// 	if (clustersEnabled) {
+// 		instance.clusterStatus = ZaClusterStatus.getStatus();
+// 		statusVector = instance.clusterStatus.mergeWithZimbraServiceStatus(statusVector);
+// 	}
+	DBG.dumpObj(statusVector);
 	if (this._view == null) {
 		this._view = new XForm(this.getXForm(), new XModel(ZaStatusView.XModel), instance, this);
 		this._view.setController(this);
@@ -89,7 +81,7 @@ ZaStatusView.prototype.getXForm = function () {
     if (this._xform == null) {
 	this._xform = {
 		width:"100%",
-		tableCssStyle:"width:100%;",
+		tableCssStyle:"width:100%;xheight:100%;",
 	    itemDefaults:{
 
 	    },
@@ -107,10 +99,10 @@ ZaStatusView.prototype.getXForm = function () {
 					{type:_SPACER_, height: 5},
 					// This list is read only, so we can just do this little hack of accessing the vector's internal array.
 					
-		{ref: "services._array", id:"nonClusterList", type:_DWT_LIST_, colSpan:"*", widgetClass:ZaServicesListView,
+		{ref: "services._array", id:"nonClusterList", type:_DWT_LIST_, colSpan:"*", widgetClass:ZaServicesListView,containerCssStyle:"height:100%",
 					 relevant:"AjxUtil.isUndefined(instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster])"},
-		{ref: "services._array",id:"clusterList",type:_DWT_LIST_, colSpan:"*", widgetClass:ZaClusteredServicesListView,
-					 relevant:"AjxUtil.isSpecified(instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster])"}
+		{ref: "services._array",id:"clusterList",type:_DWT_LIST_, colSpan:"*", widgetClass:ZaClusteredServicesListView, containerCssStyle:"height:100%",
+		 relevant:"AjxUtil.isSpecified(instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster])"}
 // 					]
 // 			      },			
 // 			      {type:_CASE_, useParentTable:false, relevant:"instance[ZaModel.currentTab] == 2", colSpan:"*", numCols:2,
