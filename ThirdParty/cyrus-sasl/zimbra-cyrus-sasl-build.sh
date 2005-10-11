@@ -16,7 +16,17 @@ chmod -R +w ${src}
 
 cd ${src}
 rm config/ltconfig config/libtool.m4
-libtoolize -f -c
+if [ -x /usr/bin/libtoolize ]; then
+	LIBTOOLIZE=/usr/bin/libtoolize
+else
+	if [ -x /usr/bin/glibtoolize ]; then
+		LIBTOOLIZE=/usr/bin/glibtoolize
+	else
+		echo "Where is libtoolize?"
+		exit 1
+	fi
+fi
+$LIBTOOLIZE -f -c
 aclocal -I config -I cmulocal
 automake -a -c -f
 autoheader
@@ -24,7 +34,7 @@ autoconf -f
 
 cd saslauthd
 rm config/ltconfig
-libtoolize -f -c
+$LIBTOOLIZE -f -c
 aclocal -I config -I ../cmulocal -I ../config
 automake -a -c -f
 autoheader
