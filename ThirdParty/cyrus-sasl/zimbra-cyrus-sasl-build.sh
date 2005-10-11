@@ -11,7 +11,7 @@ src=cyrus-sasl-2.1.21.ZIMBRA
 rm -fr build
 mkdir build
 cd build
-cp -dpR ../${src} ${src}
+cp -PpR ../${src} ${src}
 chmod -R +w ${src}
 
 cd ${src}
