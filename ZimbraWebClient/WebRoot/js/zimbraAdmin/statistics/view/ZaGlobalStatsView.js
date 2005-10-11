@@ -34,12 +34,12 @@ function ZaGlobalStatsView(parent, app) {
 	this._app = app;
 	DwtTabView.call(this, parent);
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
-	this._dataPage = new ZaGlobalDataStatsPage(this, app);
-	this._msgsPage = new ZaGlobalMsgsStatsPage(this, app);
-	this._diskPage = new ZaGlobalDiskStatsPage(this, app);	
-	this.addTab(ZaMsg.TABT_InData, this._dataPage);		
-	this.addTab(ZaMsg.TABT_InMsgs, this._msgsPage);			
-	this.addTab(ZaMsg.TABT_Disk, this._diskPage);				
+	this._msgCountPage = new ZaGlobalMessageCountPage(this, app);
+	this._msgsVolumePage = new ZaGlobalMessageVolumePage(this, app);
+	this._spamPage = new ZaGlobalSpamActivityPage(this, app);	
+	this.addTab(ZaMsg.TABT_InData, this._msgCountPage);		
+	this.addTab(ZaMsg.TABT_InMsgs, this._msgsVolumePage);			
+	this.addTab(ZaMsg.TABT_Spam_Activity, this._spamPage);				
 //	this.setScrollStyle(DwtControl.SCROLL);
 }
 

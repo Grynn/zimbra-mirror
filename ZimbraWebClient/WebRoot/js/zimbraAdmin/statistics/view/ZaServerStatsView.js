@@ -34,12 +34,12 @@ function ZaServerStatsView(parent, app) {
 	this._app = app;
 	DwtTabView.call(this, parent);
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
-	this._dataPage = new ZaServerDataStatsPage(this, app);
-	this._msgsPage = new ZaServerMsgsStatsPage(this, app);
-	this._diskPage = new ZaServerDiskStatsPage(this, app);		
-	this.addTab(ZaMsg.TABT_InData, this._dataPage);		
-	this.addTab(ZaMsg.TABT_InMsgs, this._msgsPage);		
-	this.addTab(ZaMsg.TABT_Disk, this._diskPage);				
+	this._msgCountPage = new ZaServerMessageCountPage(this, app);
+	this._msgsVolumePage = new ZaServerMessageVolumePage(this, app);
+	this._spamPage = new ZaServerSpamActivityPage(this, app);	
+	this.addTab(ZaMsg.TABT_InData, this._msgCountPage);		
+	this.addTab(ZaMsg.TABT_InMsgs, this._msgsVolumePage);			
+	this.addTab(ZaMsg.TABT_Spam_Activity, this._spamPage);					
 //	this.setScrollStyle(DwtControl.SCROLL);
 }
 
@@ -57,9 +57,9 @@ function() {
 **/
 ZaServerStatsView.prototype.setObject =
 function(entry) {
-	this._dataPage.setObject(entry);
-	this._msgsPage.setObject(entry);
-	this._diskPage.setObject(entry);
+	this._msgCountPage.setObject(entry);
+	this._msgsVolumePage.setObject(entry);
+	this._spamPage.setObject(entry);
 	var szTitle = AjxStringUtil.htmlEncode(ZaMsg.NAD_ServerStatistics);
 	if(entry.name) {
 		szTitle = szTitle + entry.name;
