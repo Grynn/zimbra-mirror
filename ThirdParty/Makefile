@@ -21,6 +21,8 @@ CLAMAV_VERSION ?= clamav-0.85.1.tar.gz
 MYSQL_VERSION ?= standard-4.1.10a-pc-linux-gnu-i686
 MYSQL_CLIENT_VERSION ?= standard-4.1.10a-clientlibs
 
+HTTPD_VERSION ?= 2.0.54
+
 POSTFIX_VERSION ?= 2.2.3
 
 DIRS := mysql \
@@ -29,6 +31,8 @@ DIRS := mysql \
 	cyrus-sasl \
 	aspell \
 	clamav \
+	php \
+	apache-httpd \
 	PostFix/PostFix-$(POSTFIX_VERSION)
 
 all: $(ZIMBRA_HOME) build 

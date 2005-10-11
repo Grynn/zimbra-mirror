@@ -53,7 +53,10 @@ PERL_LIBS 	:= \
 	Archive-Tar-1.24 \
 	Net-IP-1.23 \
 	Net-DNS-0.51 \
-	Archive-Zip-1.14
+	Archive-Zip-1.14 
+
+DBFILE_PERL_LIBS := \
+	DB_File-1.811
 
 SA_PERL_LIBS = \
 	Mail-SpamAssassin-3.0.4
@@ -93,11 +96,24 @@ all: $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 	mkdir -p $(TMPDIR)
 	export BERKELEYDB_INCLUDE=$(BDB_INC)
 	export BERKELEYDB_LIB=$(BDB_LIB)
+
 	@for lib in $(PERL_LIBS); do \
 		echo "Compiling perl lib $$lib"; \
 		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xzf $$lib.tar.gz; cd $$lib; \
 		BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) \
+		$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
+		make; make install;) \
+	done
+
+	@for lib in $(DBFILE_PERL_LIBS); do \
+		echo "Compiling perl lib $$lib"; \
+		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
+		(cd $(TMPDIR); tar xzf $$lib.tar.gz; cd $$lib; \
+		cp config.in config.in.fcs; \
+		sed -e 's|^INCLUDE.*|INCLUDE = /opt/zimbra/sleepycat/include|' \
+		-e 's|^LIB.*|LIB = /opt/zimbra/sleepycat/lib|' \
+		config.in.fcs > config.in; \
 		$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
 		make; make install;) \
 	done

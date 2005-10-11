@@ -1,6 +1,28 @@
-HTTPD-VERSION := 2.0.54
+HTTPD_ROOT := $(shell pwd)
+P4_ROOT ?= $(shell cd $(HTTPD_ROOT)/../..; pwd)
 
+BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
-all: 
-	(cd httpd-$(HTTPD-VERSION); ./configure --prefix=/opt/zimbra/httpd-$(HTTPD-VERSION) --enable-so; make)
+HTTPD_VERSION ?= 2.0.54
 
+ZIMBRA_HOME ?= /opt/zimbra
+
+all: build tar
+
+build:
+	tar xzf httpd-$(HTTPD_VERSION).tar.gz
+	(cd httpd-$(HTTPD_VERSION); ./configure --prefix=/opt/zimbra/httpd-$(HTTPD_VERSION) --enable-so; make; make install)
+
+tar:
+	(cd $(ZIMBRA_HOME); tar czf \
+	$(HTTPD_ROOT)/builds/$(BUILD_PLATFORM)/httpd-$(HTTPD_VERSION).tgz \
+	httpd-$(HTTPD_VERSION))
+	chmod -R a+w \
+	$(HTTPD_ROOT)/builds/$(BUILD_PLATFORM)/httpd-$(HTTPD_VERSION).tgz
+
+clean:
+	rm -rf httpd-$(HTTPD_VERSION)
+
+allclean: clean
+	rm -rf $(ZIMBRA_HOME)/httpd-$(HTTPD_VERSION)
+	rm -rf $(ZIMBRA_HOME)/httpd

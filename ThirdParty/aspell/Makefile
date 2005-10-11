@@ -34,10 +34,14 @@ dict-install:
 		PATH=$(ZIMBRA_HOME)/aspell-$(ASPELL_VERSION)/bin:$$PATH make install) \
 	done
 
-tar:
+tar: $(ASPELL_ROOT)/builds/$(BUILD_PLATFORM)
 	(cd $(ZIMBRA_HOME); tar czf \
 	$(ASPELL_ROOT)/builds/$(BUILD_PLATFORM)/aspell-$(ASPELL_VERSION).tgz \
 	aspell-$(ASPELL_VERSION))
+	chmod -R a+w $(ASPELL_ROOT)/builds/$(BUILD_PLATFORM)
+
+$(ASPELL_ROOT)/builds/$(BUILD_PLATFORM):
+	mkdir -p $@
 
 clean: dict-clean
 	rm -rf aspell-$(ASPELL_VERSION)
