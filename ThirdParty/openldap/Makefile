@@ -11,6 +11,10 @@ ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
 
+ifeq ($(BUILD_PLATFORM), MACOSX)
+	ENVMOD := env LIBS="-lresolv" 
+endif
+
 ZIMBRA_HOME ?= /opt/zimbra
 LDAP_VERSION ?= 2.2.28
 
@@ -23,7 +27,7 @@ build:
 	export CPPFLAGS=-I/opt/zimbra/sleepycat-$(BDB_VERSION)/include; \
 	export LDFLAGS=-L/opt/zimbra/sleepycat-$(BDB_VERSION)/lib; \
 	cp $(OPENLDAP_ROOT)/configure.zimbra $(OPENLDAP_ROOT)/openldap-$(LDAP_VERSION); \
-	./configure.zimbra --prefix=$(ZIMBRA_HOME)/openldap-$(LDAP_VERSION); \
+	$(ENVMOD) ./configure.zimbra --prefix=$(ZIMBRA_HOME)/openldap-$(LDAP_VERSION); \
 	make; make install)
 	(cd $(ZIMBRA_HOME); ln -s openldap-$(LDAP_VERSION) openldap)
 
