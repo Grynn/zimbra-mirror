@@ -64,5 +64,5 @@ function(resp) {
 		else if (el.nodeName=="sessionId")
 			sessionId = el.firstChild.nodeValue;
 	}
-	ZmCsfeCommand.setAuthToken(authToken, lifetime, sessionId);
+	ZmCsfeCommand.setAuthToken(authToken, null, sessionId);
 }
