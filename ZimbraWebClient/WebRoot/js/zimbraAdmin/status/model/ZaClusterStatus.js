@@ -26,81 +26,50 @@
 /**
 **/
 function ZaClusterStatus(app) {
-	ZaStatus.call(this, ZaEvent.S_CLUSTER_STATUS);
+	//	ZaStatus.call(this, ZaEvent.S_CLUSTER_STATUS);
 }
 
-ZaClusterStatus.prototype = new ZaStatus;
-ZaClusterStatus.prototype.constructor = ZaClusterStatus;
+// ZaClusterStatus.prototype = new ZaStatus;
+// ZaClusterStatus.prototype.constructor = ZaClusterStatus;
 
 ZaClusterStatus.getStatus = function() {
 	var soapDoc = AjxSoapDoc.create("GetClusterStatusRequest", "urn:zimbraAdmin", null);
 	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false).Body.GetClusterStatusResponse;
-	var status = new ZaClusterStatus();
-	status._initFromDom(resp);
-	return status;
+	ZaClusterStatus._initFromDom(resp);
 };
 
 ZaClusterStatus.getCombinedStatus = function (serviceVector) {
 	var cStatus = ZaClusterStatus.getStatus();
-// 	cStatus.mergeWithZimbraServiceStatus(serviceVector);
-// 	return serviceVector;
- 	var vec = cStatus.mergeWithZimbraServiceStatus(serviceVector);
+ 	var vec = ZaClusterStatus.mergeWithZimbraServiceStatus(serviceVector);
  	return vec;	
 };
 
-ZaClusterStatus.prototype._initFromDom = function (node) {
-	var i = 0;
-	this._servers = {};
-	this._services = {};
-	this._usedServers = {};
-	for (i = 0; i < node.servers[0].server.length ; ++i) {
-		this._servers[node.servers[0].server[i].name] = node.servers[0].server[i];
+ZaClusterStatus.getServerList = function (refresh) {
+	if (refresh || ZaClusterStatus._servers == null) {
+		ZaClusterStatus.getStatus();
 	}
-	for (i = 0; i < node.services[0].service.length ; ++i) {
-		this._services[node.services[0].service[i].name] = node.services[0].service[i];
-		this._usedServers[node.services[0].service[i].owner] = true;
+	return ZaClusterStatus._serverArray;
+}
+
+ZaClusterStatus._initFromDom = function (node) {
+	if (node.servers != null) {
+		var i = 0;
+		ZaClusterStatus._servers = {};
+		ZaClusterStatus._services = {};
+		ZaClusterStatus._usedServers = {};
+		ZaClusterStatus._serverArray = [];
+		for (i = 0; i < node.servers[0].server.length ; ++i) {
+			ZaClusterStatus._servers[node.servers[0].server[i].name] = node.servers[0].server[i];
+			ZaClusterStatus._serverArray.push(node.servers[0].server[i]);
+		}
+		for (i = 0; i < node.services[0].service.length ; ++i) {
+			ZaClusterStatus._services[node.services[0].service[i].name] = node.services[0].service[i];
+			ZaClusterStatus._usedServers[node.services[0].service[i].owner] = true;
+		}
 	}
 };
 
-ZaClusterStatus.prototype.mergeWithZimbraServiceStatus = function (statusVector) {
-	var arr = statusVector.getArray();
-	var len = statusVector.size();
-	var i;
-	// asign cluster status to each server, if the server is
-	// listed in the status array.
-	//
-	// iterate through the status array, and lookup the status server name 
-	// in the services object.
-	for (i = 0 ; i < len ; ++i) {
-		var clusterSt = this._services[arr[i].serverName];
-		if (clusterSt != null) {
-			arr[i].clusterStatus = clusterSt.status;
-		} else {
-			delete arr[i].clusterStatus;
-		}
-	}
-		
-	var s, sN;	
-	var vectorNeedsSort = false;
-	// make a pass through the servers, and find the ones that are not
-	// used, and add them to the statusVector.
-	for (sN in this._servers) {
-		if (!this._isServerInUse(sN)){
-			var st = new ZaStatus(this._app);
-			st.serverName = this._servers[sN].name;
-			st.clusterStatus = "stopped";
-			statusVector.add(st);
-			vectorNeedsSort = true;
-		}
-	}
-
-	// sort the vector, if we've changed anything.
-	if ( vectorNeedsSort ) {
-		statusVector.sort(ZaStatus.compare);
-	}
-};
-
-ZaClusterStatus.prototype.mergeWithZimbraServiceStatus = function (statusVector) {
+ZaClusterStatus.mergeWithZimbraServiceStatus = function (statusVector) {
 	var arr = statusVector.getArray();
 	var len = statusVector.size();
 	var i;
@@ -115,7 +84,7 @@ ZaClusterStatus.prototype.mergeWithZimbraServiceStatus = function (statusVector)
 	for (i = 0 ; i < len ; ++i) {
 		if (prev == null || prev != arr[i].serverName){
 			s = new ZaServerStatus(arr[i].serverName);
-			var clusterSt = this._services[arr[i].serverName];
+			var clusterSt = ZaClusterStatus._services[arr[i].serverName];
 			s.clustered = false;
 			s.clusterStatus = null;
 			if (clusterSt != null) {
@@ -135,9 +104,9 @@ ZaClusterStatus.prototype.mergeWithZimbraServiceStatus = function (statusVector)
 	var vectorNeedsSort = false;
 	// make a pass through the servers, and find the ones that are not
 	// used, and add them to the statusVector.
-	for (sN in this._servers) {
-		if (!this._isServerInUse(sN)){
-			var st = new ZaServerStatus(this._servers[sN].name, true, "stopped");
+	for (sN in ZaClusterStatus._servers) {
+		if (!ZaClusterStatus._isServerInUse(sN)){
+			var st = new ZaServerStatus(ZaClusterStatus._servers[sN].name, true, "stopped");
 			clusterStatusVector.add(st);
 			vectorNeedsSort = true;
 		}
@@ -151,8 +120,8 @@ ZaClusterStatus.prototype.mergeWithZimbraServiceStatus = function (statusVector)
 	return clusterStatusVector;
 };
 
-ZaClusterStatus.prototype._isServerInUse = function (serverName) {
-	return (this._usedServers[serverName] != null)? true: false;
+ZaClusterStatus._isServerInUse = function (serverName) {
+	return (ZaClusterStatus._usedServers[serverName] != null)? true: false;
 };
 
 function ZaServerStatus(name, clustered, clusterStatus, physicalServerName, serviceArr) {

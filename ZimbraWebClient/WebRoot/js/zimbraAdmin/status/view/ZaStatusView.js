@@ -48,12 +48,6 @@ ZaStatusView.prototype.set = function (statusVector, globalConfig) {
 	// TODO  -- make a more appealing data structure here.
 	var instance = {services:statusVector, currentTab:1};
 	instance.globalConfig = globalConfig;
-// 	var clustersEnabled = instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster]
-// 	if (clustersEnabled) {
-// 		instance.clusterStatus = ZaClusterStatus.getStatus();
-// 		statusVector = instance.clusterStatus.mergeWithZimbraServiceStatus(statusVector);
-// 	}
-	DBG.dumpObj(statusVector);
 	if (this._view == null) {
 		this._view = new XForm(this.getXForm(), new XModel(ZaStatusView.XModel), instance, this);
 		this._view.setController(this);

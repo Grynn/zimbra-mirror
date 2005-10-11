@@ -46,8 +46,8 @@ function() {
 	var globalConfig = this._app.getGlobalConfig();
 
 	var mystatusVector = this._app.getStatusList(true).getVector();
-	//var mystatusVector = this.getDummyVector();
-	//globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster] = "true";
+//  	var mystatusVector = this.getDummyVector();
+  	globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster] = "true";
     if (!this._contentView) {
 		var elements = new Object();
 		if (AjxUtil.isSpecified(globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster])) {
@@ -167,7 +167,7 @@ ZaStatusViewController.prototype._popupServerSelectDialog = function () {
 		var form = {
 			items:[
 			{type:_SPACER_, height:10},
-			{ref: "selVal", type:_OSELECT1_, choices:this._app.getServerListChoices2(), label:"Choose a server:"},
+			{ref: "selVal", type:_OSELECT1_, choices:this._app.getClusterServerChoices(), label:"Choose a server:"},
 			{type:_SPACER_, height:10}
 			]
 		}
@@ -181,10 +181,18 @@ ZaStatusViewController.prototype._popupServerSelectDialog = function () {
 };
 
 ZaStatusViewController.prototype._handleFailoverOkButton = function (event) {
-	var soapDoc = AjxSoapDoc.create("FailoverClusterServiceRequest", "urn:zimbraAdmin", null);
-	var service = soapDoc.set("service");
-	service.setAttribute("name", this._contentView.getSelection()[0].serverName);
-	service.setAttribute("newServer", this._failoverInstance.selVal);
-	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false).Body.FailoverServiceResponse;
+	var val = this._failoverInstance.selVal;
+	var sendFailover = (val != null && val.length > 0);
+	if (sendFailover){
+		var soapDoc = AjxSoapDoc.create("FailoverClusterServiceRequest", "urn:zimbraAdmin", null);
+		var service = soapDoc.set("service");
+		service.setAttribute("name", this._contentView.getSelection()[0].serverName);
+		service.setAttribute("newServer", this._failoverInstance.selVal);
+		var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false).Body.FailoverServiceResponse;
+	}
 	this._failoverDialog.popdown();
+	// refresh the query and show it again.
+	if (sendFailover) {
+		this.show();
+	}
 };

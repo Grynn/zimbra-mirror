@@ -308,6 +308,22 @@ function(refresh) {
 	return this._serverChoices;	
 }
 
+ZaApp.prototype.getClusterServerChoices = 
+function(refresh){
+	if (refresh || this._clusterServerList == null) {
+		this._clusterServerList = ZaClusterStatus.getServerList(true);
+	}
+	if (refresh || this._clusterServerChoices == null) {
+		if (this._clusterServerChoices == null ) {
+			this._clusterServerChoices = new XFormChoices(this._clusterServerList, XFormChoices.OBJECT_LIST, "name", "name");
+		} else {
+			this._clusterServerChoices.setChoices(this._clusterServerList);
+			this._clusterServerChoices.dirtyChoices();
+		}
+	}
+	return this._clusterServerChoices;
+};
+
 ZaApp.prototype.getServerListChoices2 =
 function(refresh) {
 	if (refresh || this._serverList == null) {
