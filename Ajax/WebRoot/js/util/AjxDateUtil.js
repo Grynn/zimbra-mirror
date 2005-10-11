@@ -316,10 +316,12 @@ function(date) {
 		if (hours > 12) {
 			hours -= 12;
 			amPm = " " + AjxMsg.pm;
-		} else {
+		} else if (hours < 12) {
 			if (hours == 0) 
 				hours = 12;
 			amPm = " " + AjxMsg.am;
+		} else {
+			amPm = " " + AjxMsg.pm;
 		}
 	} else {
 		hours = AjxDateUtil._pad(hours);
