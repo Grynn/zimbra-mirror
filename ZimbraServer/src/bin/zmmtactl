@@ -25,7 +25,7 @@
 # 
 
 BASE=/opt/zimbra
-SCRIPTS="zmmtaconfigctl postfix zmsaslauthdctl"
+SCRIPTS="zmmtaconfigctl zmamavisdctl postfix zmsaslauthdctl"
 
 case "$1" in 
 	start)

@@ -37,7 +37,9 @@ case "$1" in
 	;;
 	stop)
 		for i in $SCRIPTS; do
-			/opt/zimbra/bin/$i stop
+			if [ $i = "zmclamdctl" ]; then
+				/opt/zimbra/bin/$i stop
+			fi
 		done
 	;;
 	reload)

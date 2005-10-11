@@ -3,13 +3,7 @@ REWRITE conf/amavisd.conf.in conf/amavisd.conf
 REWRITE conf/clamd.conf.in conf/clamd.conf
 REWRITE conf/freshclam.conf.in conf/freshclam.conf
 
-	if SERVICE antivirus
-		POSTCONF content_filter smtp-amavis:[127.0.0.1]:10024
-	else
-		if SERVICE !antispam
-			POSTCONF content_filter 
-		fi
-	fi
+	POSTCONF content_filter smtp-amavis:[127.0.0.1]:10024
 
 	VAR zimbraVirusWarnRecipient
 	VAR zimbraVirusWarnAdmin
@@ -26,13 +20,7 @@ RESTART antivirus mta
 SECTION antispam
 
 REWRITE conf/amavisd.conf.in conf/amavisd.conf
-	if SERVICE antispam
-		POSTCONF content_filter smtp-amavis:[127.0.0.1]:10024
-	else
-		if SERVICE !antivirus
-			POSTCONF content_filter 
-		fi
-	fi
+	POSTCONF content_filter smtp-amavis:[127.0.0.1]:10024
 
 	LOCAL ldap_host
 	LOCAL zimbra_ldap_userdn
