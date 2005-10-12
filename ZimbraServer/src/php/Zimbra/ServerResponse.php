@@ -73,36 +73,38 @@ class ServerResponse {
         }
 
         // Write streams
-        foreach ($this->mStreams as $name => $value) {
-            // Initialize filehandles
-            $filename = $value["filename"];
-            $mode = $value["mode"];
-            $inHandle = fopen($filename, $mode);
-            if ($inHandle == FALSE) {
-                error_log("Zimbra::ServerResponse: unable to open '$filename', '$mode'");
-                continue;
-            }
-            $outHandle = fopen("php://output", "wb");
-            if ($outHandle == FALSE) {
-                error_log("Zimbra::ServerResponse: unable to open php://output");
-                break;
-            }
+        if ($this->mStreams) {
+            foreach ($this->mStreams as $name => $value) {
+                // Initialize filehandles
+                $filename = $value["filename"];
+                $mode = $value["mode"];
+                $inHandle = fopen($filename, $mode);
+                if ($inHandle == FALSE) {
+                    error_log("Zimbra::ServerResponse: unable to open '$filename', '$mode'");
+                    continue;
+                }
+                $outHandle = fopen("php://output", "wb");
+                if ($outHandle == FALSE) {
+                    error_log("Zimbra::ServerResponse: unable to open php://output");
+                    break;
+                }
 
-            // Write part header
-            echo "--" . ServerResponse_BOUNDARY . ServerResponse_EOL .
-                "Content-Disposition: form-data; name=\"$name\"" . ServerResponse_EOL .
-                ServerResponse_EOL;
+                // Write part header
+                echo "--" . ServerResponse_BOUNDARY . ServerResponse_EOL .
+                    "Content-Disposition: form-data; name=\"$name\"" . ServerResponse_EOL .
+                    ServerResponse_EOL;
 
-            // Write data
-            while (!feof($inHandle)) {
-                $chunk = fread($inHandle, ServerResponse_CHUNK_SIZE);
-                fwrite($outHandle, $chunk);
-            }
-            fwrite($outHandle, ServerResponse_EOL);
+                // Write data
+                while (!feof($inHandle)) {
+                    $chunk = fread($inHandle, ServerResponse_CHUNK_SIZE);
+                    fwrite($outHandle, $chunk);
+                }
+                fwrite($outHandle, ServerResponse_EOL);
             
-            // Close filehandles
-            fclose($inHandle);
-            fclose($outHandle);
+                // Close filehandles
+                fclose($inHandle);
+                fclose($outHandle);
+            }
         }
 
         // End response
