@@ -205,7 +205,7 @@ ZaGlobalConfig.prototype.initFromDom = function(node) {
 			break;
 		}
 	}
-	var choices = new Object();
+/*	var choices = new Object();
 	if(this.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]) {
 		choices[ZaServer.PRI_MSG] = ZaMsg.NAD_HSM_PrimaryMsg;
 		choices[ZaServer.SEC_MSG] = ZaMsg.NAD_HSM_SecMsg;
@@ -216,6 +216,7 @@ ZaGlobalConfig.prototype.initFromDom = function(node) {
 	}
 	ZaServer.volumeTypeChoices.setChoices(choices);
 	ZaServer.volumeTypeChoices.dirtyChoices();
+*/	
 }
 
 ZaGlobalConfig.prototype.modify = 

@@ -122,6 +122,8 @@ ZaServer.A_VolumeType = "type";
 ZaServer.A_CurrentPrimaryMsgVolumeId = "current_pri_msg_volume_id";
 ZaServer.A_CurrentSecondaryMsgVolumeId = "current_sec_msg_volume_id";
 ZaServer.A_CurrentIndexMsgVolumeId = "current_index_volume_id";
+//HSM
+ZaServer.A_zimbraHsmAge = "zimbraHsmAge";
 // other
 ZaServer.A_zimbraIsMonitorHost = "zimbraIsMonitorHost";
 
@@ -132,7 +134,9 @@ ZaServer.SLAVE = "slave";
 ZaServer.PRI_MSG = 1;
 ZaServer.SEC_MSG = 2;
 ZaServer.INDEX = 10;
-ZaServer.volumeTypeChoices = new XFormChoices({1:ZaMsg.NAD_HSM_PrimaryMsg, 2:ZaMsg.NAD_HSM_SecMsg, 10:ZaMsg.NAD_HSM_Index}, XFormChoices.HASH);
+ZaServer.volumeTypeChoicesAll = new XFormChoices({1:ZaMsg.NAD_HSM_PrimaryMsg, 2:ZaMsg.NAD_HSM_SecMsg, 10:ZaMsg.NAD_HSM_Index}, XFormChoices.HASH);
+ZaServer.volumeTypeChoicesNoHSM = new XFormChoices({1:ZaMsg.NAD_HSM_Msg, 10:ZaMsg.NAD_HSM_Index}, XFormChoices.HASH);
+ZaServer.volumeTypeChoicesHSM = new XFormChoices({1:ZaMsg.NAD_HSM_PrimaryMsg, 2:ZaMsg.NAD_HSM_SecMsg}, XFormChoices.HASH);
 		
 ZaServer.myXModel = {
 	items: [
@@ -199,7 +203,9 @@ ZaServer.myXModel = {
 					{id:ZaServer.A_VolumeCompressionThreshold, type:_NUMBER_,defaultValue:4096}				
 				]
 			}
-		}		
+		},
+		{id:ZaServer.A_zimbraHsmAge, ref:"attrs/" + ZaServer.A_zimbraHsmAge, type:_STRING_}		
+				
 	]
 };
 		

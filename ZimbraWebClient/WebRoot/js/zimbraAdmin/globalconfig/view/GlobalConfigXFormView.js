@@ -43,6 +43,7 @@ function () {
 	return ZaMsg.GlobalConfig_view_title;
 }
 
+
 GlobalConfigXFormView.prototype.getMyXForm = function() {	
 	var xFormObject = {
 		tableCssStyle:"width:100%;overflow:auto;",
@@ -54,8 +55,9 @@ GlobalConfigXFormView.prototype.getMyXForm = function() {
 			  iconVisible: false, 
 			  content: ZaMsg.Alert_GlobalConfig
 			},
-			{type:_TAB_BAR_,  ref:ZaModel.currentTab,
+			{type:_TAB_BAR_,  ref:ZaModel.currentTab,relevantBehavior:_HIDE_,
 			 	containerCssStyle: "padding-top:0px",
+			 	relevant:"!instance.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]",
 				choices:[
 					{value:1, label:ZaMsg.NAD_Tab_General},
 					{value:2, label:ZaMsg.NAD_Tab_Attachments},
@@ -64,6 +66,20 @@ GlobalConfigXFormView.prototype.getMyXForm = function() {
 					{value:5, label:ZaMsg.NAD_Tab_IMAP},
 					{value:6, label:ZaMsg.NAD_Tab_AntiSpam},
 					{value:7, label:ZaMsg.NAD_Tab_AntiVirus}
+				]
+			},
+			{type:_TAB_BAR_,  ref:ZaModel.currentTab,relevantBehavior:_HIDE_,
+			 	containerCssStyle: "padding-top:0px",
+			 	relevant:"instance.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]",
+				choices:[
+					{value:1, label:ZaMsg.NAD_Tab_General},
+					{value:2, label:ZaMsg.NAD_Tab_Attachments},
+					{value:3, label:ZaMsg.NAD_Tab_MTA},
+					{value:4, label:ZaMsg.NAD_Tab_POP},
+					{value:5, label:ZaMsg.NAD_Tab_IMAP},
+					{value:6, label:ZaMsg.NAD_Tab_AntiSpam},
+					{value:7, label:ZaMsg.NAD_Tab_AntiVirus},
+					{value:8, label:ZaMsg.NAD_Tab_HSM}					
 				]
 			},
 			{type:_SWITCH_, items:[
@@ -81,14 +97,7 @@ GlobalConfigXFormView.prototype.getMyXForm = function() {
 							  label: ZaMsg.NAD_MonitorHostServer,
 							  choices: this._app.getServerListChoices(),
 							  onChange: ZaTabView.onFormFieldChanged
-						  	},
-							{ref:ZaGlobalConfig.A_zimbraHsmAge, type:_LIFETIME_, 
-								msgName:ZaMsg.NAD_HSM_Threshold,label:ZaMsg.NAD_HSM_Threshold+":", 
-								labelLocation:_LEFT_, 
-								onChange:ZaTabView.onFormFieldChanged,
-								relevant:"instance.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]",
-								colSpan:2
-							}
+						  	}
 						]
 					},
 					{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 2", items:[
@@ -452,7 +461,16 @@ GlobalConfigXFormView.prototype.getMyXForm = function() {
 							  onChange: ZaTabView.onFormFieldChanged
 						  	}
 					  	]}
-					]}
+					]},
+					{type:_CASE_, relevant: "instance[ZaModel.currentTab] == 8 && instance.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]", 
+						items: [
+							{ref:ZaGlobalConfig.A_zimbraHsmAge, type:_LIFETIME_, 
+								msgName:ZaMsg.NAD_HSM_Threshold,label:ZaMsg.NAD_HSM_Threshold+":", 
+								labelLocation:_LEFT_, 
+								onChange:ZaTabView.onFormFieldChanged
+							}
+						]
+					}
 				]
 			}	
 		]
