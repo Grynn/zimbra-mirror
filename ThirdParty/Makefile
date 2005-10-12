@@ -31,8 +31,8 @@ DIRS := mysql \
 	cyrus-sasl \
 	aspell \
 	clamav \
-	php \
 	apache-httpd \
+	php \
 	PostFix/PostFix-$(POSTFIX_VERSION)
 
 all: $(ZIMBRA_HOME) build 
@@ -44,6 +44,7 @@ build:
 	for dir in $(DIRS); do \
 		make -C $$dir; \
 	done
+	make -C apache-httpd tar
 
 clean:
 	for dir in $(DIRS); do \

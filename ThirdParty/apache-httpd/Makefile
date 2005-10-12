@@ -14,6 +14,7 @@ build:
 	(cd httpd-$(HTTPD_VERSION); ./configure --prefix=/opt/zimbra/httpd-$(HTTPD_VERSION) --enable-so; make; make install)
 
 tar:
+	mkdir -p $(HTTPD_ROOT)/builds/$(BUILD_PLATFORM)
 	(cd $(ZIMBRA_HOME); tar czf \
 	$(HTTPD_ROOT)/builds/$(BUILD_PLATFORM)/httpd-$(HTTPD_VERSION).tgz \
 	httpd-$(HTTPD_VERSION))
