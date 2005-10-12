@@ -104,7 +104,7 @@ $d = new XmlDoc;
 
 $d->start('CreateAppointmentRequest', $MAILNS);
 
-$d->start('m', undef, { 'l' => "/INBOX" }, undef);
+$d->start('m', undef, { 'l' => "10" }, undef);
 
 if ($includeMyself) {
     $d->add('e', undef,
