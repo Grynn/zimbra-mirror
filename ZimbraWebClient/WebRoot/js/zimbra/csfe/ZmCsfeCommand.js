@@ -60,10 +60,13 @@ ZmCsfeCommand.setAuthToken =
 function(authToken, lifetimeMs, sessionId) {
 	ZmCsfeCommand._authToken = authToken;
 	if (lifetimeMs != null) {
-		var exp = new Date();
-		var lifetime = parseInt(lifetimeMs);
-		exp.setTime(exp.getTime() + lifetime);
-		AjxCookie.setCookie(document, ZmCsfeCommand._COOKIE_NAME, authToken, exp, "/");
+		var exp = null;
+		if(lifetimeMs > 0) {
+			exp = new Date();
+			var lifetime = parseInt(lifetimeMs);
+			exp.setTime(exp.getTime() + lifetime);
+		}
+		AjxCookie.setCookie(document, ZmCsfeCommand._COOKIE_NAME, authToken, exp, "/");		
 	} else {
 		AjxCookie.deleteCookie(document, ZmCsfeCommand._COOKIE_NAME, "/");
 	}

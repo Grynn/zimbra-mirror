@@ -193,6 +193,7 @@ function(appName) {
 ZaZimbraAdmin.logOff =
 function() {
 	ZmCsfeCommand.clearAuthToken();
+	window.onbeforeunload = null;
 	var locationStr = location.protocol + "//" + location.hostname + ((location.port == '80')? "" : ":" +location.port) + "/zimbraAdmin";
 	if (AjxEnv.isIE){
 		var act = new AjxTimedAction ();
