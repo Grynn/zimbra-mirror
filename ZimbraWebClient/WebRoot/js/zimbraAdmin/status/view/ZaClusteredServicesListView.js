@@ -66,8 +66,10 @@ ZaClusteredServicesListView.prototype._createItemHtml = function(item, now, isDn
 	div.className = ZaClusteredServicesListView.STYLE_CLASS;
 	
 	idx = this._writeElement(html, idx, item, false);
-	for (var i = 0; i < item.services.length; ++i) {
-		idx = this._writeElement(html, idx, item.services[i], true);
+	if (item.services != null) {
+		for (var i = 0; i < item.services.length; ++i) {
+			idx = this._writeElement(html, idx, item.services[i], true);
+		}
 	}
 	div.innerHTML = html.join("");
 

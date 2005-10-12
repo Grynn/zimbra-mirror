@@ -46,8 +46,8 @@ function() {
 	var globalConfig = this._app.getGlobalConfig();
 
 	var mystatusVector = this._app.getStatusList(true).getVector();
-//  	var mystatusVector = this.getDummyVector();
-//   	globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster] = "true";
+//   	var mystatusVector = this.getDummyVector();
+//    	globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster] = "true";
     if (!this._contentView) {
 		var elements = new Object();
 		if (AjxUtil.isSpecified(globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster])) {
@@ -67,7 +67,13 @@ function() {
 	}
 
 	if (AjxUtil.isSpecified(globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster])) {
-		mystatusVector = ZaClusterStatus.getCombinedStatus(mystatusVector);
+		try {
+			mystatusVector = ZaClusterStatus.getCombinedStatus(mystatusVector);
+		} catch (e) {
+			this._handleException(e, ZaStatusViewController.prototype.show, null, false);
+			// Make sure the results are empty if we only have partial data.
+			mystatusVector = AjxVector.fromArray([]);
+		}
 	}
 	mystatusVector.sort(ZaStatus.compare);
 
@@ -184,11 +190,15 @@ ZaStatusViewController.prototype._handleFailoverOkButton = function (event) {
 	var val = this._failoverInstance.selVal;
 	var sendFailover = (val != null && val.length > 0);
 	if (sendFailover){
-		var soapDoc = AjxSoapDoc.create("FailoverClusterServiceRequest", "urn:zimbraAdmin", null);
-		var service = soapDoc.set("service");
-		service.setAttribute("name", this._contentView.getSelection()[0].serverName);
-		service.setAttribute("newServer", this._failoverInstance.selVal);
-		var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false).Body.FailoverServiceResponse;
+		try {
+			var soapDoc = AjxSoapDoc.create("FailoverClusterServiceRequest", "urn:zimbraAdmin", null);
+			var service = soapDoc.set("service");
+			service.setAttribute("name", this._contentView.getSelection()[0].serverName);
+			service.setAttribute("newServer", this._failoverInstance.selVal);
+			var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false).Body.FailoverServiceResponse;
+		} catch (e) {
+			this._handleException(ex, ZaStatusViewController.prototype._handleFailoverOkButton, null, false);
+		}
 	}
 	this._failoverDialog.popdown();
 	// refresh the query and show it again.

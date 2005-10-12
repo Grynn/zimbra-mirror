@@ -311,7 +311,7 @@ function(refresh) {
 ZaApp.prototype.getClusterServerChoices = 
 function(refresh){
 	if (refresh || this._clusterServerList == null) {
-		this._clusterServerList = ZaClusterStatus.getServerList(true);
+		this._clusterServerList = ZaClusterStatus.getServerList();
 	}
 	if (refresh || this._clusterServerChoices == null) {
 		if (this._clusterServerChoices == null ) {
