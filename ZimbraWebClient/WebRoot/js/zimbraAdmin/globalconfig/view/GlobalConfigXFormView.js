@@ -81,7 +81,14 @@ GlobalConfigXFormView.prototype.getMyXForm = function() {
 							  label: ZaMsg.NAD_MonitorHostServer,
 							  choices: this._app.getServerListChoices(),
 							  onChange: ZaTabView.onFormFieldChanged
-						  	}
+						  	},
+							{ref:ZaGlobalConfig.A_zimbraHsmAge, type:_LIFETIME_, 
+								msgName:ZaMsg.NAD_HSM_Threshold,label:ZaMsg.NAD_HSM_Threshold+":", 
+								labelLocation:_LEFT_, 
+								onChange:ZaTabView.onFormFieldChanged,
+								relevant:"instance.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]",
+								colSpan:2
+							}
 						]
 					},
 					{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 2", items:[
@@ -446,7 +453,6 @@ GlobalConfigXFormView.prototype.getMyXForm = function() {
 						  	}
 					  	]}
 					]}
-					
 				]
 			}	
 		]

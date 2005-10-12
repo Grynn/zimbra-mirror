@@ -57,6 +57,7 @@ ZaGlobalConfig.A_zimbraComponentAvailable_convertd = "_"+ZaGlobalConfig.A_zimbra
 ZaGlobalConfig.A_zimbraComponentAvailable_replication = "_"+ZaGlobalConfig.A_zimbraComponentAvailable+"_replication";
 ZaGlobalConfig.A_zimbraComponentAvailable_hotbackup = "_"+ZaGlobalConfig.A_zimbraComponentAvailable+"_hotbackup";
 ZaGlobalConfig.A_zimbraComponentAvailable_cluster = "_" + ZaGlobalConfig.A_zimbraComponentAvailable+"_cluster"
+ZaGlobalConfig.A_zimbraComponentAvailable_HSM = "_" + ZaGlobalConfig.A_zimbraComponentAvailable+"_HSM"
 // --protocol checks
 ZaGlobalConfig.A_zimbraMtaRestriction = "zimbraMtaRestriction";
 ZaGlobalConfig.A_zimbraMtaRejectInvalidHostname = "_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_reject_invalid_hostname";
@@ -80,7 +81,7 @@ ZaGlobalConfig.A_zimbraRedologArchiveDir = "zimbraRedologArchiveDir";
 ZaGlobalConfig.A_zimbraRedologBacklogDir = "zimbraRedologBacklogDir";
 ZaGlobalConfig.A_zimbraRedologRolloverFileSizeKB = "zimbraRedologRolloverFileSizeKB";
 ZaGlobalConfig.A_zimbraRedologFsyncIntervalMS = "zimbraRedologFsyncIntervalMS";
-
+ZaGlobalConfig.A_zimbraHsmAge = "zimbraHsmAge";
 
 
 // smtp
@@ -205,7 +206,7 @@ ZaGlobalConfig.prototype.initFromDom = function(node) {
 		}
 	}
 	var choices = new Object();
-	if(this.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_hsm]) {
+	if(this.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]) {
 		choices[ZaServer.PRI_MSG] = ZaMsg.NAD_HSM_PrimaryMsg;
 		choices[ZaServer.SEC_MSG] = ZaMsg.NAD_HSM_SecMsg;
 		choices[ZaServer.INDEX] = ZaMsg.NAD_HSM_Index;		
@@ -308,8 +309,10 @@ ZaGlobalConfig.myXModel = {
 	  	// anti-virus
 	  	{ id:ZaGlobalConfig.A_zimbraVirusCheckEnabled, ref:"attrs/" + ZaGlobalConfig.A_zimbraVirusCheckEnabled, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
 	  	{ id:ZaGlobalConfig.A_zimbraVirusDefinitionsUpdateFrequency, ref:"attrs/" + ZaGlobalConfig.A_zimbraVirusDefinitionsUpdateFrequency, type: _LIFETIME_NUMBER_, minInclusive: 0, fractionDigits: 0 },
-	  	{ id:ZaGlobalConfig.A_zimbraVirusBlockEncryptedArchive, ref:"attrs/" + ZaGlobalConfig.A_zimbraVirusBlockEncryptedArchive, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
-	  	{ id:ZaGlobalConfig.A_zimbraVirusWarnAdmin, ref:"attrs/" + ZaGlobalConfig.A_zimbraVirusWarnAdmin, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
-	  	{ id:ZaGlobalConfig.A_zimbraVirusWarnRecipient, ref:"attrs/" + ZaGlobalConfig.A_zimbraVirusWarnRecipient, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES }
+	  	{ id:ZaGlobalConfig.A_zimbraVirusBlockEncryptedArchive, ref:"attrs/" + ZaGlobalConfig.A_zimbraVirusBlockEncryptedArchive, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES},
+	  	{ id:ZaGlobalConfig.A_zimbraVirusWarnAdmin, ref:"attrs/" + ZaGlobalConfig.A_zimbraVirusWarnAdmin, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES},
+	  	{ id:ZaGlobalConfig.A_zimbraVirusWarnRecipient, ref:"attrs/" + ZaGlobalConfig.A_zimbraVirusWarnRecipient, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES},
+	  	//hsm
+	  	{ id:ZaGlobalConfig.A_zimbraHsmAge, ref:"attrs/" + ZaGlobalConfig.A_zimbraHsmAge, type: _STRING_}
 	]	
 }
