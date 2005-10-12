@@ -107,7 +107,9 @@ function(msg, ex, noExecReset)  {
 	}
 	// popup alert
 	this._msgDialog.setMessage(msg, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
-	this._msgDialog.popup();
+	if (!this._msgDialog.isPoppedUp()) {
+		this._msgDialog.popup();
+	}
 }
 
 ZaController.prototype.getControllerForView =
