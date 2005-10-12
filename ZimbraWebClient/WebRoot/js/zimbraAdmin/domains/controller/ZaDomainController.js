@@ -130,7 +130,7 @@ function (nextViewCtrlr, func, params) {
 		args["func"] = func;
 		//ask if the user wants to save changes			
 		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);					
-		this._confirmMessageDialog.setMessage(ZaMsg.Q_SAVE_CHANGES, null, DwtMessageDialog.INFO_STYLE);
+		this._confirmMessageDialog.setMessage(ZaMsg.Q_SAVE_CHANGES,  DwtMessageDialog.INFO_STYLE);
 		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaDomainController.prototype._saveAndGoAway, this, args);		
 		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaDomainController.prototype._discardAndGoAway, this, args);		
 		this._confirmMessageDialog.popup();
@@ -335,7 +335,7 @@ function(ev) {
 		args["func"] = ZaApp.prototype.popView;
 		//ask if the user wants to save changes		
 		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
-		this._confirmMessageDialog.setMessage("Do you want so save current changes?", null, DwtMessageDialog.INFO_STYLE);
+		this._confirmMessageDialog.setMessage(ZaMsg.Q_SAVE_CHANGES,  DwtMessageDialog.INFO_STYLE);
 		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaDomainController.prototype._saveAndGoAway, this, args);		
 		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaDomainController.prototype._discardAndGoAway, this, args);		
 		this._confirmMessageDialog.popup();
@@ -352,7 +352,7 @@ ZaDomainController.prototype._deleteButtonListener =
 function(ev) {
 	if(this._currentObject.id) {
 		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);						
-		this._confirmMessageDialog.setMessage("Are you sure you want to delete this Domain?", null, DwtMessageDialog.INFO_STYLE);
+		this._confirmMessageDialog.setMessage("Are you sure you want to delete this Domain?",  DwtMessageDialog.INFO_STYLE);
 		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaDomainController.prototype._deleteAndGoAway, this, null);		
 		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaDomainController.prototype._closeCnfrmDlg, this, null);				
 		this._confirmMessageDialog.popup();
@@ -416,7 +416,7 @@ function(ev) {
 		args["func"] = ZaDomainController.prototype.newDomain;
 		//ask if the user wants to save changes		
 		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
-		this._confirmMessageDialog.setMessage("Do you want so save current changes?", null, DwtMessageDialog.INFO_STYLE);
+		this._confirmMessageDialog.setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
 		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaDomainController.prototype._saveAndGoAway, this, args);		
 		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaDomainController.prototype._discardAndGoAway, this, args);		
 		this._confirmMessageDialog.popup();

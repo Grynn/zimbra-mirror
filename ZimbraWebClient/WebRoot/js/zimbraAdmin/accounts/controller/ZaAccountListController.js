@@ -43,6 +43,7 @@ function ZaAccountListController(appCtxt, container, app) {
 	this.pages = new Object();
 	this._searchPanel = null;
 	this._searchField = null;
+	this._defaultType = ZaItem.ACCOUNT;
 }
 
 ZaAccountListController.prototype = new ZaController();
@@ -68,8 +69,14 @@ function(searchResult) {
 							 new ZaOperation(ZaOperation.NEW, ZaMsg.DLTBB_New_menuItem, ZaMsg.DLTBB_New_tt, "Group", "GroupDis", 
 											 this._newDLListener)
 							 ];
-		this._ops.push(new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", this._newAcctListener, 
+		if(this._defaultType == ZaItem.ACCOUNT || this._defaultType == ZaItem.ALIAS) {
+			this._ops.push(new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", this._newAcctListener, 
 									   ZaOperation.TYPE_MENU, newMenuOpList));
+    	} else if(this._defaultType == ZaItem.DL) {
+			this._ops.push(new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Group", "GroupDis", this._newDLListener, 
+									   ZaOperation.TYPE_MENU, newMenuOpList));
+    	
+    	}
     	this._ops.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.ACTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaAccountListController.prototype._editButtonListener)));
     	this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaAccountListController.prototype._deleteButtonListener)));
 		this._ops.push(new ZaOperation(ZaOperation.CHNG_PWD, ZaMsg.ACTBB_ChngPwd, ZaMsg.ACTBB_ChngPwd_tt, "Padlock", "PadlockDis", new AjxListener(this, ZaAccountListController.prototype._chngPwdListener)));
@@ -154,6 +161,9 @@ function(searchResult) {
 ZaAccountListController.prototype.setDefaultType = function (type) {
 	// set the default type,
 	this._defaultType = type;
+	if(!this._toolbar)
+		return;
+		
 	var newButton = this._toolbar.getButton(ZaOperation.NEW_MENU);	
 	if (newButton != null) {
 		newButton.removeSelectionListeners();
@@ -667,7 +677,7 @@ function(ev) {
 			i++;
 		}
 		dlgMsg += "</ul>";
-		this._removeConfirmMessageDialog.setMessage(dlgMsg, null, DwtMessageDialog.INFO_STYLE);
+		this._removeConfirmMessageDialog.setMessage(dlgMsg,  DwtMessageDialog.INFO_STYLE);
 		this._removeConfirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaAccountListController.prototype._deleteAccountsCallback, this);
 		this._removeConfirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaAccountListController.prototype._donotDeleteAccountsCallback, this);		
 		this._removeConfirmMessageDialog.popup();

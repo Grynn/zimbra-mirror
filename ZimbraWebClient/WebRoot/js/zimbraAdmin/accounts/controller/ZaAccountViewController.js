@@ -75,7 +75,7 @@ function (nextViewCtrlr, func, params) {
 		args["func"] = func;
 		//ask if the user wants to save changes			
 		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);					
-		this._confirmMessageDialog.setMessage(ZaMsg.Q_SAVE_CHANGES, null, DwtMessageDialog.INFO_STYLE);
+		this._confirmMessageDialog.setMessage(ZaMsg.Q_SAVE_CHANGES,  DwtMessageDialog.INFO_STYLE);
 		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaAccountViewController.prototype._saveAndGoAway, this, args);		
 		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaAccountViewController.prototype._discardAndGoAway, this, args);		
 		this._confirmMessageDialog.popup();
@@ -577,7 +577,7 @@ function(ev) {
 		args["func"] = ZaAccountListController.prototype.show;
 		//ask if the user wants to save changes		
 		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
-		this._confirmMessageDialog.setMessage("Do you want so save current changes?", null, DwtMessageDialog.INFO_STYLE);
+		this._confirmMessageDialog.setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
 		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaAccountViewController.prototype._saveAndGoAway, this, args);		
 		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaAccountViewController.prototype._discardAndGoAway, this, args);		
 		this._confirmMessageDialog.popup();
@@ -594,7 +594,7 @@ ZaAccountViewController.prototype._deleteButtonListener =
 function(ev) {
 	if(this._currentObject.id) {
 		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);						
-		this._confirmMessageDialog.setMessage(ZaMsg.Q_DELETE_ACCOUNT, null, DwtMessageDialog.INFO_STYLE);
+		this._confirmMessageDialog.setMessage(ZaMsg.Q_DELETE_ACCOUNT, DwtMessageDialog.INFO_STYLE);
 		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaAccountViewController.prototype._deleteAndGoAway, this, null);		
 		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaAccountViewController.prototype._closeCnfrmDlg, this, null);				
 		this._confirmMessageDialog.popup();
