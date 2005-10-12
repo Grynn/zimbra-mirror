@@ -237,34 +237,33 @@ function(dateMSec) {
 
 AjxDateUtil.simpleComputeDateStr = 
 function(date, stringToPrepend) {
-	var year, month, day;
-	var idx = 0;
 	var dateArr = new Array();
+	var idx = 0;
+
 	var written = false;
-	if (stringToPrepend != null){
-		dateArr[0] = stringToPrepend;
+	if (stringToPrepend) {
+		dateArr[idx++] = stringToPrepend;
 		written = true;
 	}
+
 	for (var i = 0; i < AjxDateUtil._dateFmt.length; i++) {
 		switch (AjxDateUtil._dateFmt[i]) {
-		case 'Y':
-			year = date.getFullYear() % 100;
-			dateArr[idx++] =  ((written)? "/" : "");
-			dateArr[idx++] = AjxDateUtil._pad(year);
-			written = true;
-			break;
-		case 'M':
-			month = date.getMonth() + 1;
-			dateArr[idx++] = ( (written)? "/" : "");
-			dateArr[idx++] = AjxDateUtil._pad(month);
-			written = true;
-			break;
-		case 'D':
-			day = date.getDate();
-			dateArr[idx++] = ((written) ? "/" : "");
-			dateArr[idx++] = AjxDateUtil._pad(day);
-			written = true;
-			break;
+			case 'Y':
+				dateArr[idx++] = written ? "/" : "";
+				dateArr[idx++] = date.getFullYear();
+				written = true;
+				break;
+			case 'M':
+				var month = date.getMonth() + 1;
+				dateArr[idx++] = written ? "/" : "";
+				dateArr[idx++] = AjxDateUtil._pad(month);
+				written = true;
+				break;
+			case 'D':
+				dateArr[idx++] = written ? "/" : "";
+				dateArr[idx++] = AjxDateUtil._pad(date.getDate());
+				written = true;
+				break;
 		}
 	}
 	return dateArr.join("");

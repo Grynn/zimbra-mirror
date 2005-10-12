@@ -411,12 +411,14 @@ DwtSelect.prototype._handleOptionSelection = function (ev) {
 	var menuItem = ev.item;
 	var optionIndex = menuItem._optionIndex;
 	var opt = this._options.get(optionIndex);
+	var oldValue = this.getValue();
 	this._setSelectedOption(opt);
 
 	// notify our listeners
     var args = new Object();
     args.selectObj = this;
     args.newValue = opt.getValue();
+    args.oldValue = oldValue;
     var event = DwtUiEvent.getEvent(ev);
     event._args = args;
     this.notifyListeners(DwtEvent.ONCHANGE, event);
