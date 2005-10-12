@@ -16,6 +16,7 @@ all: build
 build:
 	mkdir -p $(CYRUS_ROOT)/builds/$(BUILD_PLATFORM)
 	./zimbra-cyrus-sasl-build.sh
+	export _S_='~'
 	(cd build/cyrus-sasl-$(CYRUS_VERSION); make install)
 	(cd $(ZIMBRA_HOME); ln -s cyrus-sasl-$(CYRUS_VERSION) cyrus-sasl; \
 	tar czf $(CYRUS_ROOT)/builds/$(BUILD_PLATFORM)/cyrus-sasl-$(CYRUS_VERSION).tgz \

@@ -20,6 +20,7 @@ if [ -x /usr/bin/libtoolize ]; then
 	LIBTOOLIZE=/usr/bin/libtoolize
 else
 	if [ -x /usr/bin/glibtoolize ]; then
+		export CPPFLAGS=-DDARWIN
 		LIBTOOLIZE=/usr/bin/glibtoolize
 	else
 		echo "Where is libtoolize?"
