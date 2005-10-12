@@ -53,7 +53,6 @@ if (defined($ARGV[2]) && $ARGV[2] ne "") {
     $startTime = $ARGV[1];
     $endTime = $ARGV[2];
     $mode = $ARGV[3];
-    
 } else {
     die "USAGE: modifyAppointment INVITE-ID START END [MODE]";
 }
@@ -90,7 +89,7 @@ my $contextStr = $context->to_string("pretty");
 #
 $d = new XmlDoc;
 
-$d->start('ModifyAppointmentRequest', $MAILNS, { 'id' => $uid, 'comp' => '0'});
+$d->start('ModifyAppointmentRequest', $MAILNS, { 'id' => $invId, 'comp' => '0'});
 
 $d->start('m', undef, undef, undef);
 
@@ -128,8 +127,7 @@ $d->add('content', undef, undef, "This meeting has been changed...(mode=$mode)")
 $d->end(); #mp
 
 $d->start('inv', undef, { 'type' => "event",
-                          'transp' => "BU",
-                          'uid' => $uid,
+                          'transp' => "O",
                           'allday' => "false",
                           'name' => "MODIFIED test name",
                           'loc' => "MODIFIED test location"
@@ -145,13 +143,13 @@ $d->add('e', undef, { 'd', => $endTime, });
     $d->add('at', undef, { 'd' => "user2",
                            'a' => "user2\@timbre.example.zimbra.com",
                            'role' => "REQ",
-                           'status' => "NE",
+                           'ptst' => "NE",
                        });
 
     $d->add('at', undef, { 'd' => "user3",
                            'a' => "user3\@curple.com",
                            'role' => "REQ",
-                           'status' => "NE",
+                           'ptst' => "NE",
                        });
     
 
