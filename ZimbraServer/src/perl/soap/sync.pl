@@ -104,6 +104,6 @@ $response = $SOAP->invoke($url, $d->root(), $context);
 
 print "\nRESPONSE:\n--------------\n";
 $out =  $response->to_string("pretty"),"\n";
-#$out =~ s/ns0\://g;
+$out =~ s/ns0\://g;
 print $out."\n";
 
