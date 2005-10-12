@@ -120,9 +120,6 @@ public class ImageMergeTask
         }
 
         // build argument list
-        File projectBaseDir = getProject().getBaseDir();
-        String projectBaseDirName = projectBaseDir.getAbsolutePath() + File.separator;
-
         List argList = new LinkedList();
         
         Iterator iter = _inputDirs.iterator();

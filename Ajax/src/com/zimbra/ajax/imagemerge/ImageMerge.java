@@ -25,15 +25,35 @@
 
 package com.zimbra.ajax.imagemerge;
 
-import javax.imageio.*;
-import javax.imageio.stream.*;
-import java.awt.image.*;
-import java.awt.*;
-import java.io.*;
-import java.util.*;
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Vector;
 
-import net.jmge.gif.*;
-import org.apache.commons.cli.*;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.FileImageOutputStream;
+
+import net.jmge.gif.Gif89Encoder;
+
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 
 /*
  * Program to aggregate n GIFs into single GIF images.  This program
@@ -151,7 +171,7 @@ public class ImageMerge {
        if (cl.hasOption("p") && cl.hasOption("s")) {
             _cssPath = cl.getOptionValue("p");
             String cssFile = cl.getOptionValue("s");
-            _cssFOS = new FileOutputStream(new File(_outputDirName, cl.getOptionValue("s")), true);
+            _cssFOS = new FileOutputStream(new File(_outputDirName, cssFile), true);
        } else {
             explainUsageAndExit();
        }
@@ -549,18 +569,6 @@ public class ImageMerge {
             cssOutput.append(images[i].getCssString(combinedWidth, combinedHeight, combinedFileName));
         }        
         _cssFOS.write(cssOutput.toString().getBytes());
-    }
-
-    private static int getTypeFromSuffix(String suffix) 
-        throws ImageMergeException 
-    {
-        if (suffix.equalsIgnoreCase("jpg"))
-            return BufferedImage.TYPE_3BYTE_BGR;
-        else if (suffix.equalsIgnoreCase("png"))
-            // XXX pretty sure this is right, but if colors are off check it
-            return BufferedImage.TYPE_INT_ARGB;
-        else 
-            throw new ImageMergeException("Unknown image type " + suffix);
     }
 
     private void processFullColorImages(	   File aggFile,
