@@ -299,6 +299,11 @@ function(toggled) {
 	}
 }
 
+DwtButton.prototype.isToggled = 
+function() {
+	return this._toggled;
+}
+
 // Private methods
 
 DwtButton.prototype._toggleMenu =
