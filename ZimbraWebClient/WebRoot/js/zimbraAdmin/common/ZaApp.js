@@ -269,7 +269,7 @@ function(refresh) {
 ZaApp.prototype.getServerByName =
 function(serverName) {
 	if (this._serverList == null) {
-		this._serverList = ZaServer.getAll();
+		this._serverList = ZaServer.getAll(this);
 	}
 	var cnt = this._serverList.getArray().length;
 	var myServer = new ZaServer(this);
@@ -287,7 +287,7 @@ function(serverName) {
 ZaApp.prototype.getServerList =
 function(refresh) {
 	if (refresh || this._serverList == null) {
-		this._serverList = ZaServer.getAll();
+		this._serverList = ZaServer.getAll(this);
 	}
 	return this._serverList;	
 }
@@ -295,7 +295,7 @@ function(refresh) {
 ZaApp.prototype.getServerListChoices =
 function(refresh) {
 	if (refresh || this._serverList == null) {
-		this._serverList = ZaServer.getAll();
+		this._serverList = ZaServer.getAll(this);
 	}
 	if(refresh || this._serverChoices == null) {
 		if(this._serverChoices == null) {
@@ -327,7 +327,7 @@ function(refresh){
 ZaApp.prototype.getServerListChoices2 =
 function(refresh) {
 	if (refresh || this._serverList == null) {
-		this._serverList = ZaServer.getAll();
+		this._serverList = ZaServer.getAll(this);
 	}
 	if(refresh || this._serverChoices2 == null) {
 		if(this._serverChoices2 == null) {
@@ -343,7 +343,7 @@ function(refresh) {
 ZaApp.prototype.getServerMap =
 function(refresh) {
 	if(refresh || this._serverList == null) {
-		this._serverList = ZaServer.getAll();
+		this._serverList = ZaServer.getAll(this);
 	}
 	if(refresh || this._serverMap == null) {
 		this._serverMap = new Object();
@@ -558,7 +558,7 @@ ZaApp.prototype.handleServerChange =
 function (ev) {
 	if(ev) {
 		if(this._serverList) {
-			this._serverList=ZaServer.getAll();
+			this._serverList=ZaServer.getAll(this);
 			if(this._serverChoices == null) {
 				this._serverChoices = new XFormChoices(this._serverList.getArray(), XFormChoices.OBJECT_LIST, "id", "name");
 			} else {	
@@ -590,7 +590,7 @@ ZaApp.prototype.handleServerRemoval =
 function (ev) {
 	if(ev) {
 		if(!this._serverList) {
-			this._serverList=ZaServer.getAll();
+			this._serverList=ZaServer.getAll(this);
 		} else {
 			//remove the ZaCos from the controlled list
 			var detls = ev.getDetails();

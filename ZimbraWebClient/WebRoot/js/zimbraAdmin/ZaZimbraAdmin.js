@@ -307,9 +307,9 @@ function(ev) {
 			break;		
 		case ZaAppChooser.B_SYSTEM_CONFIG:
 			if(this._app.getCurrentController()) {
-				this._app.getCurrentController().switchToNextView(this._app.getServerListController(), ZaServerListController.prototype.show, ZaServer.getAll());
+				this._app.getCurrentController().switchToNextView(this._app.getServerListController(), ZaServerListController.prototype.show, ZaServer.getAll(this._app));
 			} else {					
-				this._app.getServerListController().show(ZaServer.getAll());
+				this._app.getServerListController().show(ZaServer.getAll(this._app));
 			}
 			break;		
 		case ZaAppChooser.B_ADDRESSES:

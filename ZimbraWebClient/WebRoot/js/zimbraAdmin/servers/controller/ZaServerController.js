@@ -175,8 +175,8 @@ function (obj) {
 	var isNew = false;
 	if(obj.attrs == null) {
 		//show error msg
-		this._msgDialog.setMessage(ZaMsg.ERROR_UNKNOWN, null, DwtMessageDialog.CRITICAL_STYLE, null);
-		this._msgDialog.popup();		
+		this._errorDialog.setMessage(ZaMsg.ERROR_UNKNOWN, null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._errorDialog.popup();		
 		return false;	
 	}
 

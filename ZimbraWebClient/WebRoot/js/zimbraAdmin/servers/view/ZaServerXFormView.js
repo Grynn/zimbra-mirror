@@ -48,11 +48,17 @@ function (value, event, form) {
 
 ZaServerXFormView.prototype.setObject = 
 function (entry) {
+	this.entry = entry;
 	this._containedObject = new Object();
 	this._containedObject.attrs = new Object();
 
 	for (var a in entry.attrs) {
 		this._containedObject.attrs[a] = entry.attrs[a];
+	}
+	
+	this._containedObject.hsm = new Object();	
+	for (var a in entry.hsm) {
+		this._containedObject.hsm[a] = entry.hsm[a];
 	}
 	this._containedObject[ZaServer.A_Volumes] = new Array();
 	var cnt = entry[ZaServer.A_Volumes].length;
@@ -130,6 +136,10 @@ ZaServerXFormView.makeCurrentHandler = function(ev) {
 	form = this.getForm();
 	form.refresh();
 	form.parent.setDirty(true);
+}
+
+ZaServerXFormView.runHsm = function(ev) {
+	this.getForm().parent.entry.runHSM();
 }
 
 ZaServerXFormView.prototype.getMyXForm = function() {	
@@ -503,6 +513,14 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 								msgName:ZaMsg.NAD_HSM_Threshold,label:ZaMsg.NAD_HSM_Threshold+":", 
 								labelLocation:_LEFT_, 
 								onChange:ZaTabView.onFormFieldChanged
+							},
+							{type:_OUTPUT_, label:ZaMsg.NAD_HSM_Status, labelLocation:_LEFT_,
+								ref:ZaServer.A_HSMrunning, choices:ZaServer.HSM_StatusChoices
+							},
+							{type:_DWT_BUTTON_, label:ZaMsg.NAD_HSM_StartHsm,
+								relevant:"instance.hsm[ZaServer.A_HSMrunning]==0",
+								width:"120px",
+								onActivate:ZaServerXFormView.runHsm,colSpan:2
 							}
 						]
 					}

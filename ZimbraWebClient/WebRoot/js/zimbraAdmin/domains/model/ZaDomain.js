@@ -144,40 +144,40 @@ function(tmpObj, app) {
 
 	if(tmpObj.attrs == null) {
 		//show error msg
-		app.getCurrentController().popupMsgDialog(ZaMsg.ERROR_UNKNOWN, null);
+		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_UNKNOWN, null);
 		return null;	
 	}
 	
 	//name
 	if(tmpObj.attrs[ZaDomain.A_domainName] ==null || tmpObj.attrs[ZaDomain.A_domainName].length < 1) {
 		//show error msg
-		app.getCurrentController().popupMsgDialog(ZaMsg.ERROR_DOMAIN_NAME_REQUIRED);
+		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_DOMAIN_NAME_REQUIRED);
 		return null;
 	}
 	tmpObj.name = tmpObj.attrs[ZaDomain.A_domainName];
 	//check values
 	if(!AjxUtil.isNonNegativeInteger(tmpObj.attrs[ZaDomain.A_GalMaxResults])) {
 		//show error msg
-		app.getCurrentController().popupMsgDialog(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_GalMaxResults + " ! ");
+		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_GalMaxResults + " ! ");
 		return null;
 	}
 	
 	if(tmpObj.name.length > 256 || tmpObj.attrs[ZaDomain.A_domainName].length > 256) {
 		//show error msg
-		app.getCurrentController().popupMsgDialog(ZaMsg.ERROR_DOMAIN_NAME_TOOLONG);
+		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_DOMAIN_NAME_TOOLONG);
 		return null;
 	}
 	
 	var domainRegEx = /(^([a-zA-Z0-9]))(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 	if( !domainRegEx.test(tmpObj.attrs[ZaDomain.A_domainName]) ) {
 		//show error msg
-		app.getCurrentController().popupMsgDialog(ZaMsg.ERROR_DOMAIN_NAME_INVALID);
+		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_DOMAIN_NAME_INVALID);
 		return null;
 	}
 	var nonAlphaNumEx = /[^a-zA-Z0-9\-\.]+/
 	if(nonAlphaNumEx.test(tmpObj.attrs[ZaDomain.A_domainName]) ) {
 		//show error msg
-		app.getCurrentController().popupMsgDialog(ZaMsg.ERROR_DOMAIN_NAME_INVALID);
+		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_DOMAIN_NAME_INVALID);
 		return null;
 	}	
 
@@ -227,7 +227,7 @@ function(tmpObj, app) {
 	
 		if(tmpObj.attrs[ZaDomain.A_AuthLdapSearchFilter] ==null || tmpObj.attrs[ZaDomain.A_AuthLdapSearchFilter].length < 1) {
 			//show error msg
-			app.getCurrentController().popupMsgDialog(ZaMsg.ERROR_SEARCH_FILTER_REQUIRED);
+			app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_SEARCH_FILTER_REQUIRED);
 			return null;
 		}
 	

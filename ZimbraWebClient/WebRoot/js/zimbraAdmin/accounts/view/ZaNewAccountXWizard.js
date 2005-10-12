@@ -103,7 +103,7 @@ function() {
 		//check if passwords match
 		if(this._containedObject.attrs[ZaAccount.A_password]) {
 			if(this._containedObject.attrs[ZaAccount.A_password] != this._containedObject[ZaAccount.A2_confirmPassword]) {
-				this._app.getCurrentController().popupMsgDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
+				this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
 				return false;
 			}
 		}

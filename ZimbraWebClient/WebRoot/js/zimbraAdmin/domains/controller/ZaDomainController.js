@@ -278,8 +278,8 @@ function (params) {
 	} catch (ex) {
 		//if exception thrown - don' go away
 		if(ex.code == ZmCsfeException.DOMAIN_EXISTS) {
-			this._msgDialog.setMessage(ZaMsg.ERROR_DOMAIN_EXISTS, null, DwtMessageDialog.CRITICAL_STYLE, null);
-			this._msgDialog.popup(this._getDialogXY());
+			this._errorDialog.setMessage(ZaMsg.ERROR_DOMAIN_EXISTS, null, DwtMessageDialog.CRITICAL_STYLE, null);
+			this._errorDialog.popup(this._getDialogXY());
 		} else {
 			this._handleException(ex, "ZaDomainController.prototype._saveAndGoAway", null, false);
 		}
@@ -313,8 +313,8 @@ function(ev) {
 	} catch (ex) {
 		//if exception thrown - don' go away
 		if(ex.code == ZmCsfeException.DOMAIN_EXISTS) {
-			this._msgDialog.setMessage(ZaMsg.ERROR_DOMAIN_EXISTS, null, DwtMessageDialog.CRITICAL_STYLE, null);
-			this._msgDialog.popup(this._getDialogXY());
+			this._errorDialog.setMessage(ZaMsg.ERROR_DOMAIN_EXISTS, null, DwtMessageDialog.CRITICAL_STYLE, null);
+			this._errorDialog.popup(this._getDialogXY());
 		} else {
 			this._handleException(ex, "ZaDomainController.prototype._saveButtonListener", null, false);
 		}
@@ -374,8 +374,8 @@ function () {
 	} catch (ex) {
 		this._confirmMessageDialog.popdown();	
 		if(ex.code == ZmCsfeException.DOMAIN_NOT_EMPTY) {
-			this._msgDialog.setMessage(ZaMsg.ERROR_DOMAIN_NOT_EMPTY, null, DwtMessageDialog.CRITICAL_STYLE, null);
-			this._msgDialog.popup();			
+			this._errorDialog.setMessage(ZaMsg.ERROR_DOMAIN_NOT_EMPTY, null, DwtMessageDialog.CRITICAL_STYLE, null);
+			this._errorDialog.popup();			
 		} else {
 			this._handleException(ex, "ZaDomainController.prototype._deleteAndGoAway", null, false);				
 		}
@@ -501,7 +501,7 @@ function(ev) {
 		}
 	} catch (ex) {
 		if(ex.code == ZmCsfeException.DOMAIN_EXISTS) {
-			this.popupMsgDialog(ZaMsg.ERROR_DOMAIN_EXISTS, ex);		
+			this.popupErrorDialog(ZaMsg.ERROR_DOMAIN_EXISTS, ex);		
 		} else {
 			this._handleException(ex, "ZaDomainController.prototype._finishNewButtonListener", null, false);
 		}

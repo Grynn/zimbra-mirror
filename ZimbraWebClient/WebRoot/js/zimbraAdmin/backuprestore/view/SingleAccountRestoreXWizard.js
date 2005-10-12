@@ -134,7 +134,7 @@ function() {
 	
 	if (this._containedObject[ZaModel.currentStep] == 1) {
 		if(!this._containedObject.restoreRequest[ZaRestore.A_accountName] || this._containedObject.restoreRequest[ZaRestore.A_accountName].length < 3) {
-			this._app.getCurrentController().popupMsgDialog(ZaMsg.ERROR_EMAIL_ADDR_REQUIRED);
+			this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_EMAIL_ADDR_REQUIRED);
 			return false;			
 		}
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);

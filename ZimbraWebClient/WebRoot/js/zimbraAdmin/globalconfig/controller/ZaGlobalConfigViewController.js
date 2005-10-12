@@ -176,23 +176,23 @@ function () {
 	var isNew = false;
 	if(tmpObj.attrs == null) {
 		//show error msg
-		this._msgDialog.setMessage(ZaMsg.ERROR_UNKNOWN, null, DwtMessageDialog.CRITICAL_STYLE, null);
-		this._msgDialog.popup();		
+		this._errorDialog.setMessage(ZaMsg.ERROR_UNKNOWN, null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._errorDialog.popup();		
 		return false;	
 	}
 
 	//check values
 	if(!AjxUtil.isNonNegativeInteger(tmpObj.attrs[ZaGlobalConfig.A_zimbraSmtpPort])) {
 		//show error msg
-		this._msgDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_SmtpPort + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
-		this._msgDialog.popup();		
+		this._errorDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_SmtpPort + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._errorDialog.popup();		
 		return false;
 	}
 		
 	if(!AjxUtil.isNonNegativeInteger(tmpObj.attrs[ZaGlobalConfig.A_zimbraGalMaxResults])) {
 		//show error msg
-		this._msgDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_GalMaxResults + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
-		this._msgDialog.popup();		
+		this._errorDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_GalMaxResults + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._errorDialog.popup();		
 		return false;
 	}		
 	

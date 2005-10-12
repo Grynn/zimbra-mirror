@@ -100,6 +100,13 @@ function() {
 	return this._msgDialog;
 }
 
+ZaAppCtxt.prototype.getErrorDialog = 
+function() {
+	if (!this._errorDialog)
+		this._errorDialog = new ZaErrorDialog(this.getShell(), this);
+	return this._errorDialog;
+}
+
 ZaAppCtxt.prototype.getShell =
 function() {
 	return this._shell;

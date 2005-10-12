@@ -187,7 +187,7 @@ function () {
 			i++;
 		}
 		dlgMsg += "</ul>";
-		this.popupMsgDialog(dlgMsg, null, true);
+		this.popupMsgDialog(dlgMsg, true);
 		return false;
 	}
 	//check if the data is copmlete 
@@ -197,8 +197,8 @@ function () {
 	//Check the data
 	if(tmpObj.attrs == null ) {
 		//show error msg
-		this._msgDialog.setMessage(ZaMsg.ERROR_UNKNOWN, null, DwtMessageDialog.CRITICAL_STYLE, null);
-		this._msgDialog.popup();		
+		this._errorDialog.setMessage(ZaMsg.ERROR_UNKNOWN, null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._errorDialog.popup();		
 		return false;	
 	}
 	
@@ -207,8 +207,8 @@ function () {
 		var emailRegEx = /^([a-zA-Z0-9_\-])+((\.)?([a-zA-Z0-9_\-])+)*@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 		if(!emailRegEx.test(tmpObj.name) ) {
 			//show error msg
-			this._msgDialog.setMessage(ZaMsg.ERROR_ACCOUNT_NAME_INVALID, null, DwtMessageDialog.CRITICAL_STYLE, null);
-			this._msgDialog.popup();		
+			this._errorDialog.setMessage(ZaMsg.ERROR_ACCOUNT_NAME_INVALID, null, DwtMessageDialog.CRITICAL_STYLE, null);
+			this._errorDialog.popup();		
 			return false;
 		}
 		newName = tmpObj.name;
@@ -248,14 +248,14 @@ function () {
 					detailStr = detailStr + prop + " - " + ex[prop] + "\n";				
 				}*/
 				if(ex.code == ZmCsfeException.ACCT_EXISTS) {
-					this.popupMsgDialog(ZaMsg.FAILED_RENAME_ACCOUNT_1, ex, true);
-					/*this._msgDialog.setMessage(ZaMsg.FAILED_RENAME_ACCOUNT_1, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
-					this._msgDialog.popup();*/
+					this.popupErrorDialog(ZaMsg.FAILED_RENAME_ACCOUNT_1, ex, true);
+					/*this._errorDialog.setMessage(ZaMsg.FAILED_RENAME_ACCOUNT_1, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+					this._errorDialog.popup();*/
 				} else {
-					this.popupMsgDialog(ZaMsg.FAILED_RENAME_ACCOUNT, ex, true);
+					this.popupErrorDialog(ZaMsg.FAILED_RENAME_ACCOUNT, ex, true);
 				/*
-					this._msgDialog.setMessage(ZaMsg.FAILED_RENAME_ACCOUNT, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
-					this._msgDialog.popup();*/
+					this._errorDialog.setMessage(ZaMsg.FAILED_RENAME_ACCOUNT, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+					this._errorDialog.popup();*/
 				}
 			}
 			return false;
@@ -274,10 +274,10 @@ function () {
 			for (var prop in ex) {
 				detailStr = detailStr + prop + " - " + ex[prop] + "\n";				
 			}
-			this._msgDialog.setMessage(ZaMsg.FAILED_SAVE_ACCOUNT, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
-			this._msgDialog.popup();
+			this._errorDialog.setMessage(ZaMsg.FAILED_SAVE_ACCOUNT, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+			this._errorDialog.popup();
 			*/
-			this.popupMsgDialog(ZaMsg.FAILED_SAVE_ACCOUNT, ex, true);
+			this.popupErrorDialog(ZaMsg.FAILED_SAVE_ACCOUNT, ex, true);
 			return false;				
 			
 		}
@@ -315,13 +315,13 @@ function () {
 			}
 */			
 			if(ex.code == ZmCsfeException.ACCT_EXISTS) {
-				this.popupMsgDialog(ZaMsg.FAILED_CREATE_ACCOUNT_1, ex, true);
-	/*			this._msgDialog.setMessage(ZaMsg.FAILED_CREATE_ACCOUNT_1, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);				
-				this._msgDialog.popup();*/
+				this.popupErrorDialog(ZaMsg.FAILED_CREATE_ACCOUNT_1, ex, true);
+	/*			this._errorDialog.setMessage(ZaMsg.FAILED_CREATE_ACCOUNT_1, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);				
+				this._errorDialog.popup();*/
 			} else {
-				this.popupMsgDialog(ZaMsg.FAILED_SAVE_ACCOUNT, ex, true);			
-/*				this._msgDialog.setMessage(ZaMsg.FAILED_SAVE_ACCOUNT, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
-				this._msgDialog.popup();*/
+				this.popupErrorDialog(ZaMsg.FAILED_SAVE_ACCOUNT, ex, true);			
+/*				this._errorDialog.setMessage(ZaMsg.FAILED_SAVE_ACCOUNT, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+				this._errorDialog.popup();*/
 			}
 		}
 		return false;
@@ -392,21 +392,21 @@ function () {
 			}
 		}
 		if(failedAliasesCnt == 1) {
-			this._msgDialog.setMessage(ZaMsg.WARNING_ALIAS_EXISTS + failedAliases, "", DwtMessageDialog.WARNING_STYLE, ZaMsg.zimbraAdminTitle);
-			this._msgDialog.popup();			
+			this._errorDialog.setMessage(ZaMsg.WARNING_ALIAS_EXISTS + failedAliases, "", DwtMessageDialog.WARNING_STYLE, ZaMsg.zimbraAdminTitle);
+			this._errorDialog.popup();			
 		} else if(failedAliasesCnt > 1) {
-			this._msgDialog.setMessage(ZaMsg.WARNING_ALIASES_EXIST + failedAliases, "", DwtMessageDialog.WARNING_STYLE, ZaMsg.zimbraAdminTitle);
-			this._msgDialog.popup();			
+			this._errorDialog.setMessage(ZaMsg.WARNING_ALIASES_EXIST + failedAliases, "", DwtMessageDialog.WARNING_STYLE, ZaMsg.zimbraAdminTitle);
+			this._errorDialog.popup();			
 		}
 	} catch (ex) {
 		/*for (var prop in ex) {
 			detailStr = detailStr + prop + " - " + ex[prop] + "\n";				
 		}*/
 			
-		/*this._msgDialog.setMessage(ZaMsg.FAILED_ADD_ALIASES, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
-		this._msgDialog.popup();
+		/*this._errorDialog.setMessage(ZaMsg.FAILED_ADD_ALIASES, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+		this._errorDialog.popup();
 		*/
-		this.popupMsgDialog(ZaMsg.FAILED_ADD_ALIASES, ex, true);	
+		this.popupErrorDialog(ZaMsg.FAILED_ADD_ALIASES, ex, true);	
 		return false;
 	}
 	return true;
@@ -483,8 +483,8 @@ function (params) {
 	} catch (ex) {
 		//if exception thrown - don' go away
 		if(ex.code == ZmCsfeException.ACCT_EXISTS) {
-			this._msgDialog.setMessage(ZaMsg.ERROR_ACCOUNT_EXISTS, null, DwtMessageDialog.CRITICAL_STYLE, null);
-			this._msgDialog.popup();
+			this._errorDialog.setMessage(ZaMsg.ERROR_ACCOUNT_EXISTS, null, DwtMessageDialog.CRITICAL_STYLE, null);
+			this._errorDialog.popup();
 		} else {
 			var mods = null;
 			if(ex.mods) {
@@ -525,8 +525,8 @@ function () {
 				szMsg +="<br>Details:<br>";
 				szMsg += ex.detail;
 			}
-			this._msgDialog.setMessage(szMsg, null, DwtMessageDialog.CRITICAL_STYLE, null);
-			this._msgDialog.popup();					
+			this._errorDialog.setMessage(szMsg, null, DwtMessageDialog.CRITICAL_STYLE, null);
+			this._errorDialog.popup();					
 		} else {
 			this._handleException(ex, "ZaAccountViewController.prototype._deleteAndGoAway", null, false);				
 		}	

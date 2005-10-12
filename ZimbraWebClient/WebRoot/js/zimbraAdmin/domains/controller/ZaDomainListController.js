@@ -386,8 +386,8 @@ function () {
 			} catch (ex) {
 				this._removeConfirmMessageDialog.popdown();
 				if(ex.code == ZmCsfeException.DOMAIN_NOT_EMPTY) {
-					this._msgDialog.setMessage(ZaMsg.ERROR_DOMAIN_NOT_EMPTY, null, DwtMessageDialog.CRITICAL_STYLE, null);
-					this._msgDialog.popup();			
+					this._errorDialog.setMessage(ZaMsg.ERROR_DOMAIN_NOT_EMPTY, null, DwtMessageDialog.CRITICAL_STYLE, null);
+					this._errorDialog.popup();			
 				} else {
 					this._handleException(ex, "ZaDomainListController.prototype._deleteDomainsCallback", null, false);				
 				}
@@ -447,7 +447,7 @@ function(ev) {
 		}
 	} catch (ex) {
 		if(ex.code == ZmCsfeException.DOMAIN_EXISTS) {
-			this.popupMsgDialog(ZaMsg.ERROR_DOMAIN_EXISTS, ex);
+			this.popupErrorDialog(ZaMsg.ERROR_DOMAIN_EXISTS, ex);
 		} else {
 			this._handleException(ex, "ZaDomainListController.prototype._finishNewButtonListener", null, false);
 		}

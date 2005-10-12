@@ -47,9 +47,13 @@ function ZaController(appCtxt, container, app, isAdmin) {
 	this._loginDialog.registerCallback(this._loginCallback, this);
 
 	this._msgDialog = appCtxt.getMsgDialog();
-    this._msgDialog.registerCallback(DwtDialog.OK_BUTTON, this._msgDialogCallback, this);
+	this._errorDialog = appCtxt.getErrorDialog();
+	
+    this._errorDialog.registerCallback(DwtDialog.OK_BUTTON, this._errorDialogCallback, this);
+    this._msgDialog.registerCallback(DwtDialog.OK_BUTTON, this._msgDialogCallback, this);    
     if(app) {
-    	this._msgDialog.setApp(app);
+//    	this._errorDialog.setApp(app);
+    	this._msgDialog.setApp(app);    	
     }	
 }
 
@@ -77,7 +81,7 @@ function(enable) {
 //	throw new AjxException("This method is abstract", AjxException.UNIMPLEMENTED_METHOD, "ZaController.prototype.setEnabled");	
 }
 
-ZaController.prototype.popupMsgDialog = 
+ZaController.prototype.popupErrorDialog = 
 function(msg, ex, noExecReset)  {
 	if (!noExecReset)
 		this._execFrame = {method: null, params: null, restartOnError: false};
@@ -106,7 +110,19 @@ function(msg, ex, noExecReset)  {
 		}
 	}
 	// popup alert
-	this._msgDialog.setMessage(msg, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+	this._errorDialog.setMessage(msg, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+	if (!this._errorDialog.isPoppedUp()) {
+		this._errorDialog.popup();
+	}
+}
+
+ZaController.prototype.popupMsgDialog = 
+function(msg, noExecReset)  {
+	if (!noExecReset)
+		this._execFrame = {method: null, params: null, restartOnError: false};
+	
+	// popup alert
+	this._msgDialog.setMessage(msg, DwtMessageDialog.INFO_STYLE, ZaMsg.zimbraAdminTitle);
 	if (!this._msgDialog.isPoppedUp()) {
 		this._msgDialog.popup();
 	}
@@ -210,7 +226,7 @@ function(ex, method, params, restartOnError, obj) {
 	else 
 	{
 		this._execFrame = {obj: obj, method: method, params: params, restartOnError: restartOnError};
-		this._msgDialog.registerCallback(DwtDialog.OK_BUTTON, this._msgDialogCallback, this);
+		this._errorDialog.registerCallback(DwtDialog.OK_BUTTON, this._errorDialogCallback, this);
 		if (ex.code == ZmCsfeException.SOAP_ERROR) {
 			this.popupMsgDialog(ZaMsg.SOAP_ERROR, ex, true);
 		} else if (ex.code == ZmCsfeException.NETWORK_ERROR) {
@@ -226,7 +242,7 @@ function(ex, method, params, restartOnError, obj) {
 						(typeof(ex.code) == 'string' && ex.code && ex.code.match(/^(service|account|mail)\./))
 
 				   ) {
-			this.popupMsgDialog(ZaMsg.SERVER_ERROR, ex, true);
+			this.popupErrorDialog(ZaMsg.SERVER_ERROR, ex, true);
 		} else {
 			//search for error code
 			var gotit = false;
@@ -238,7 +254,7 @@ function(ex, method, params, restartOnError, obj) {
 				}
 			}
 			if(!gotit)
-				this.popupMsgDialog(ZaMsg.JAVASCRIPT_ERROR + " in method " + method, ex, true);
+				this.popupErrorDialog(ZaMsg.JAVASCRIPT_ERROR + " in method " + method, ex, true);
 		}
 	}
 }
@@ -287,9 +303,9 @@ function(args) {
 
 /*********** Msg dialog Callbacks */
 
-ZaController.prototype._msgDialogCallback =
+ZaController.prototype._errorDialogCallback =
 function() {
-	this._msgDialog.popdown();
+	this._errorDialog.popdown();
 	if (this._execFrame) {
 		if (this._execFrame.restartOnError && !this._authenticating)
 			this._execFrame.method.call(this, this._execFrame.params);
@@ -297,11 +313,12 @@ function() {
 	}
 }
 
-/*
-// Pop up a dialog. Since it's a shared resource, we need to reset first.
-ZaController.prototype._showDialog = 
-function(dialog, callback, organizer, loc, args) {
-	dialog.reset();
-	dialog.registerCallback(DwtDialog.OK_BUTTON, callback, this, args);
-	dialog.popup(organizer, loc);
-}*/
+ZaController.prototype._msgDialogCallback =
+function() {
+	this._msgDialog.popdown();
+	if (this._execFrame) {
+		if (this._execFrame.restartOnError && !this._authenticating)
+			this._execFrame.method.call(this, this._execFrame.params);
+		this._execFrame = null;
+	}	
+}

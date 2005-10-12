@@ -116,7 +116,7 @@ function (ev) {
 		if (ex.code != ZmCsfeException.MAIL_QUERY_PARSE_ERROR) {
 			this._handleException(ex, "ZaAccountListController.prototype.search", null, (this._inited) ? false : true);
 		} else {
-			this.popupMsgDialog(ZaMsg.queryParseError, ex);
+			this.popupErrorDialog(ZaMsg.queryParseError, ex);
 			this._searchField.setEnabled(true);	
 		}
 	}

@@ -191,7 +191,7 @@ ZaDLController.prototype._saveListener = function (ev) {
 			//
 			if (ex.msg.indexOf("add failed") != -1){
 				var m = ex.msg.replace(/system failure: /, "");
-				this.popupMsgDialog(m, ex, true);		
+				this.popupErrorDialog(m, ex, true);		
 				handled = true;
 			}
 		}

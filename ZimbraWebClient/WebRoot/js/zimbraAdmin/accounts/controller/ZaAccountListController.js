@@ -276,7 +276,7 @@ function(searchQuery) {
 		if (ex.code != ZmCsfeException.MAIL_QUERY_PARSE_ERROR) {
 			this._handleException(ex, "ZaAccountListController.prototype.search", null, (this._inited) ? false : true);
 		} else {
-			this.popupMsgDialog(ZaMsg.queryParseError, ex);
+			this.popupErrorDialog(ZaMsg.queryParseError, ex);
 			this._searchField.setEnabled(true);	
 		}
 	}	
@@ -690,8 +690,8 @@ function () {
 						szMsg +="<br>Details:<br>";
 						szMsg += ex.detail;
 					}
-					this._msgDialog.setMessage(szMsg, null, DwtMessageDialog.CRITICAL_STYLE, null);
-					this._msgDialog.popup();					
+					this._errorDialog.setMessage(szMsg, null, DwtMessageDialog.CRITICAL_STYLE, null);
+					this._errorDialog.popup();					
 				} else {
 					this._handleException(ex, "ZaAccountListController.prototype._deleteAccountsCallback", null, false);
 				}
@@ -838,8 +838,8 @@ function (item) {
 					szMsg +="<br>Details:<br>";
 					szMsg += ex.detail;
 				}
-				this._msgDialog.setMessage(szMsg, null, DwtMessageDialog.CRITICAL_STYLE, null);
-				this._msgDialog.popup();
+				this._errorDialog.setMessage(szMsg, null, DwtMessageDialog.CRITICAL_STYLE, null);
+				this._errorDialog.popup();
 			} else {
 				this._handleException(ex, "ZaAccountListController._changePwdOKCallback", null, false);			
 			}
