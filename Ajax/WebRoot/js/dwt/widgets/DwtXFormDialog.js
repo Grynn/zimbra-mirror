@@ -56,7 +56,7 @@ DwtXFormDialog.prototype.getInstance = function() {
 DwtXFormDialog.prototype.popup = function(loc) {
 	// initialize form items
 	if (!this._xformInitialized) {
-		this._xform.initializeItems();
+		//this._xform.initializeItems();
 		this._xform.draw();
 		this._xformInitialized = true;
 	}
