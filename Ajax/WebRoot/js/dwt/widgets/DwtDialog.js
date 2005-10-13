@@ -203,6 +203,11 @@ function(buttonId, enabled) {
 	this._button[buttonId].setEnabled(enabled);
 };
 
+DwtDialog.prototype.setButtonVisible = 
+function(buttonId, visible) {
+	this._button[buttonId].setVisible(visible);
+};
+
 DwtDialog.prototype.getButtonEnabled = 
 function(buttonId) {
 	return this._button[buttonId].getEnabled();
