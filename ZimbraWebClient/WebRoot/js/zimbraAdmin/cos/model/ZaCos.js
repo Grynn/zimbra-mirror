@@ -260,7 +260,6 @@ function() {
 		html[idx++] = "<tr></tr>";
 		idx = this._addAttrRow(ZaItem.A_description, html, idx);
 		idx = this._addAttrRow(ZaItem.A_zimbraId, html, idx);
-		idx = this._addAttrRow(ZaItem.A_zimbraMailQuota, this.attrs.zimbraMailQuota, html, idx);		
 		html[idx++] = "</table>";
 		this._toolTip = html.join("");
 	}
