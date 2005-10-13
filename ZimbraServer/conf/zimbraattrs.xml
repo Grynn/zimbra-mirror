@@ -474,6 +474,8 @@
 
 <attr name="gn" type="string"/>
 
+<attr name="givenName" type="string"/>
+
 <attr name="description" type="string"/>
 
 <attr name="initials" type="string"/>
