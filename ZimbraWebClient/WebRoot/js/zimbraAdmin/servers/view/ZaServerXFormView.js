@@ -159,6 +159,17 @@ ZaServerXFormView.refreshHsm = function(ev) {
 	form.refresh();
 }
 
+ZaServerXFormView.abortHsm = function(ev) {
+	form = this.getForm();
+	form.parent.entry.abortHSM();
+	form.parent.entry.getHSMStatus();
+	var instance = this.getInstance();
+	for (var a in form.parent.entry.hsm) {
+		instance.hsm[a] = form.parent.entry.hsm[a];
+	}
+	form.refresh();
+}
+
 ZaServerXFormView.prototype.getMyXForm = function() {	
 	var xFormObject = {
 		tableCssStyle:"width:100%;position:static;overflow:auto;",
@@ -552,6 +563,11 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 								width:"120px",
 								onActivate:ZaServerXFormView.runHsm,colSpan:2
 							},
+							{type:_DWT_BUTTON_, label:ZaMsg.NAD_HSM_AbortHsm,
+								relevant:"instance.hsm[ZaServer.A_HSMrunning]==1",
+								width:"120px",
+								onActivate:ZaServerXFormView.abortHsm,colSpan:2
+							},							
 							{type:_OUTPUT_, label:ZaMsg.NAD_HSM_Status, labelLocation:_LEFT_,
 								ref:ZaServer.A_HSMrunning, choices:ZaServer.HSM_StatusChoices,
 								relevant:"instance.hsm[ZaServer.A_HSMwasAborted]==0",relevantBehavior:_HIDE_

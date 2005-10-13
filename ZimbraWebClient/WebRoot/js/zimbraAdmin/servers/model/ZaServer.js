@@ -487,3 +487,14 @@ ZaServer.prototype.runHSM = function() {
 		this._app.getCurrentController()._handleException(ex,"ZaServer.prototype.runHSM",null, false);
 	}
 }
+
+ZaServer.prototype.abortHSM = function() {
+	if(!this.id)
+		return;
+	try {
+		var soapDoc = AjxSoapDoc.create("AbortHsmRequest", "urn:zimbraAdmin", null);	
+		var respNode = ZmCsfeCommand.invoke(soapDoc, false, null, this.id, true).firstChild;		
+	} catch (ex) {
+		this._app.getCurrentController()._handleException(ex,"ZaServer.prototype.runHSM",null, false);
+	}
+}
