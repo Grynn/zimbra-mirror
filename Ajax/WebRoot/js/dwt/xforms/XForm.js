@@ -148,7 +148,7 @@ XForm.prototype.getUniqueId = function (prefix) {
 XForm.prototype.getElement = function (id) {
 	if (id == null) id = this.getId();
 	var el = XFG.getEl(id);
-	if (el == null) DBG.println("getElement(",id,"): no element found");
+	if (el == null) DBG.println(AjxDebug.DBG2, "getElement(",id,"): no element found");
 	return el;
 }
 
