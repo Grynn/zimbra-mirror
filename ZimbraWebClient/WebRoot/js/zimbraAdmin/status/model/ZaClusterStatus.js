@@ -89,6 +89,7 @@ ZaClusterStatus.mergeWithZimbraServiceStatus = function (statusVector) {
 			s.clusterStatus = null;
 			if (clusterSt != null) {
 				s.clustered = true;
+				s.serverName = clusterSt.name;
 				s.clusterStatus = clusterSt.status;
 				s.physicalServerName = clusterSt.owner;
 			}
@@ -106,7 +107,7 @@ ZaClusterStatus.mergeWithZimbraServiceStatus = function (statusVector) {
 	// used, and add them to the statusVector.
 	for (sN in ZaClusterStatus._servers) {
 		if (!ZaClusterStatus._isServerInUse(sN)){
-			var st = new ZaServerStatus(ZaClusterStatus._servers[sN].name, true, "stopped");
+			var st = new ZaServerStatus(ZaClusterStatus._servers[sN].name, true, "stopped","(not assigned)");
 			clusterStatusVector.add(st);
 			vectorNeedsSort = true;
 		}
@@ -114,21 +115,26 @@ ZaClusterStatus.mergeWithZimbraServiceStatus = function (statusVector) {
 
 	// sort the vector, if we've changed anything.
 	if ( vectorNeedsSort ) {
-		statusVector.sort(ZaStatus.compare);
+		statusVector.sort(ZaClusterStatus.compare);
 	}
 	DBG.println("clusterdStatusVector = " , clusterStatusVector._array);
 	return clusterStatusVector;
+};
+
+ZaClusterStatus.compare = function (a,b){
+	return (a.physicalServerName < b.physicalServerName)? -1: ((a.physicalServerName > b.physicalServerName)? 1: 0);
 };
 
 ZaClusterStatus._isServerInUse = function (serverName) {
 	return (ZaClusterStatus._usedServers[serverName] != null)? true: false;
 };
 
-function ZaServerStatus(name, clustered, clusterStatus, physicalServerName, serviceArr) {
-	this.serverName = name;
+ZaClusterStatus.NOT_APPLICABLE = "N/A";
+function ZaServerStatus(physicalServerName, clustered, clusterStatus, name, serviceArr) {
+	this.serverName = (name !== (void 0))? name: ZaClusterStatus.NOT_APPLICABLE;
 	this.clustered = clustered;
 	this.clusterStatus = clusterStatus;
-	this.physicalServerName = (physicalServerName !== (void 0))? physicalServerName: "N/A";
+	this.physicalServerName = (physicalServerName !== (void 0))? physicalServerName: ZaClusterStatus.NOT_APPLICABLE;
 	this.services = [];
 	var i, t;
 	if (serviceArr != null) {

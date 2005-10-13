@@ -45,9 +45,9 @@ ZaStatusViewController.prototype.show =
 function() {
 	var globalConfig = this._app.getGlobalConfig();
 
-	var mystatusVector = this._app.getStatusList(true).getVector();
-//   	var mystatusVector = this.getDummyVector();
-//    	globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster] = "true";
+		var mystatusVector = this._app.getStatusList(true).getVector();
+   	var mystatusVector = this.getDummyVector();
+	globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster] = "true";
     if (!this._contentView) {
 		var elements = new Object();
 		if (AjxUtil.isSpecified(globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster])) {
@@ -74,8 +74,9 @@ function() {
 			// Make sure the results are empty if we only have partial data.
 			mystatusVector = AjxVector.fromArray([]);
 		}
+	} else {
+		mystatusVector.sort(ZaStatus.compare);
 	}
-	mystatusVector.sort(ZaStatus.compare);
 
 	this._contentView.set(mystatusVector, globalConfig);
 	this._contentView.addClusterSelectionListener(new AjxListener(this, this._selectionUpdated));
@@ -167,22 +168,31 @@ ZaStatusViewController.prototype._failoverListener = function (event) {
 };
 
 ZaStatusViewController.prototype._popupServerSelectDialog = function () {
+	var serviceToFailover = this._contentView.getSelection()[0].serverName;
+	this._failoverInstance = {selVal:"", service: serviceToFailover };
 	if (this._failoverDialog == null) {
 		this._failoverDialog = new DwtDialog(DwtShell.getShell(window), "ZaStatusFailoverDialog", "Fail service to server");
 		this._failoverDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this,this._handleFailoverOkButton));
 		var form = {
+			numCols:2,
+			colsizes: ["50%","50%"],
 			items:[
 			{type:_SPACER_, height:10},
-			{ref: "selVal", type:_OSELECT1_, choices:this._app.getClusterServerChoices(), label:"Choose a server:"},
+			{type:_OUTPUT_, colSpan:"*", relevant:"instance.service == location.hostname", value:ZaMsg.FailoverWarningSameServer,
+			 cssStyle:"color:red"},
+			{ref: "selVal", type:_OSELECT1_, choices:this._app.getClusterServerChoices(), label:ZaMsg.ChooseFailoverServer},
 			{type:_SPACER_, height:10}
 			]
 		}
-		this._failoverInstance = {};
-		var view = new XForm(form, new XModel({id:"selVal", type:_UNTYPED_}), this._failoverInstance, this._failoverDialog);
-		view.setController(this);
-		view.draw();
-		this._failoverDialog.setView(view);
+
+		this._failoverView = new XForm(form, new XModel({id:"selVal", type:_UNTYPED_}), this._failoverInstance, this._failoverDialog);
+		this._failoverView.setController(this);
+		this._failoverView.draw();
+		this._failoverDialog.setView(this._failoverView);
+	} else {
+		this._failoverView.setInstance(this._failoverInstance);
 	}
+
 	this._failoverDialog.popup();
 };
 
@@ -190,19 +200,31 @@ ZaStatusViewController.prototype._handleFailoverOkButton = function (event) {
 	var val = this._failoverInstance.selVal;
 	var sendFailover = (val != null && val.length > 0);
 	if (sendFailover){
-		try {
-			var soapDoc = AjxSoapDoc.create("FailoverClusterServiceRequest", "urn:zimbraAdmin", null);
-			var service = soapDoc.set("service");
-			service.setAttribute("name", this._contentView.getSelection()[0].serverName);
-			service.setAttribute("newServer", this._failoverInstance.selVal);
-			var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false).Body.FailoverServiceResponse;
-		} catch (e) {
-			this._handleException(ex, ZaStatusViewController.prototype._handleFailoverOkButton, null, false);
-		}
-	}
-	this._failoverDialog.popdown();
-	// refresh the query and show it again.
-	if (sendFailover) {
-		this.show();
+		// check to see if this is your server --
+		// If the admin is about to failover the server he's talking to,
+		// we need to double check that he really, really wants to do that.
+		// if he does, then we need to alert him to what's about to happen.
+
+		// Note: If we can catch the network error, and retry in a few seconds
+		// without killing the user's cpu ( on ff ), then we should do that.
+		var serviceToFailover = this._contentView.getSelection()[0].serverName;
+		var targetServer = this._failoverInstance.selVal;
+		this._doFailover(serviceToFailover, targetServer);
 	}
 };
+
+ZaStatusViewController.prototype._doFailover = function (targetService, newServer) {
+	try {
+		var soapDoc = AjxSoapDoc.create("FailoverClusterServiceRequest", "urn:zimbraAdmin", null);
+		var service = soapDoc.set("service");
+		service.setAttribute("name", targetService);
+		service.setAttribute("newServer", newServer);
+		var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false).Body.FailoverServiceResponse;
+		// refresh the query and show it again.
+		this.show();
+	} catch (ex) {
+		this._handleException(ex, ZaStatusViewController.prototype._doFailover, null, false);
+	} finally {
+		this._failoverDialog.popdown();
+	}
+}

@@ -472,21 +472,36 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 }
 /** END distribution list stuff **/
 
-.ZaServicesListView { 
+.ZaServicesListView,
+.ZaClusterServicesListView { 
   width:100%;
   height:100%;
   background-color:rgb(255,255,255)
 }
 
-.ZaServicesListView_table { 
+.ZaServicesListView_table , .ZaServicesListView_server_table,
+.ZaClusterServicesListView_table , .ZaClusterServicesListView_server_table{
   border-spacing:0px;
   border:none;
   width:100%;
   padding:none;
 }
 
-.ZaServicesListView_table TD {  
+.ZaServicesListView_table TD, .ZaServicesListView_server_table TD,
+.ZaClusterServicesListView_table TD, .ZaClusterServicesListView_server_table TD {  
   padding:2px;
+}
+
+.ZaClusterServicesListView_server_table { 
+  background-color:#dddddd;
+}
+
+.ZaClusterServicesListView .Row-selected { 
+  background-color:#c8e4e4;
+}
+
+.Row-selected .ZaClusterServicesListView_server_table { 
+  background-color:#91c8c8;
 }
 
 .ZaStatusFailoverDialog { 
@@ -500,13 +515,13 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
   width:60px;
 }
 
-.ZaServicesListView .DwtListView-Rows{ 
+.ZaClusterServicesListView .DwtListView-Rows{ 
   height:auto;
-  border-bottom: 1px solid #DDDDDD;  
+  border-bottom: 1px solid #999999;  
 }
-.ZaServicesListView .Row, .ZaServicesListView .Row-selected {
+.ZaClusterServicesListView .Row, .ZaClusterServicesListView .Row-selected {
   border-bottom:none;
-  border-top: 1px solid #DDDDDD;
+  border-top: 1px solid #999999;
 }
 
 .helpSeparator { 
