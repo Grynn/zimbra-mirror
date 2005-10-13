@@ -607,7 +607,7 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 							},
 							{type:_DWT_BUTTON_, label:ZaMsg.NAD_HSM_Refresh,
 								onActivate:ZaServerXFormView.refreshHsm,
-								width:"120px",
+								width:"120px"
 							}
 						]
 					}
