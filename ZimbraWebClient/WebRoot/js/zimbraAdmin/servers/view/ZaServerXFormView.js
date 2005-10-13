@@ -139,7 +139,24 @@ ZaServerXFormView.makeCurrentHandler = function(ev) {
 }
 
 ZaServerXFormView.runHsm = function(ev) {
-	this.getForm().parent.entry.runHSM();
+	form = this.getForm();
+	form.parent.entry.runHSM();
+	form.parent.entry.getHSMStatus();
+	var instance = this.getInstance();
+	for (var a in form.parent.entry.hsm) {
+		instance.hsm[a] = form.parent.entry.hsm[a];
+	}
+	form.refresh();
+}
+
+ZaServerXFormView.refreshHsm = function(ev) {
+	form = this.getForm();
+	form.parent.entry.getHSMStatus();
+	var instance = this.getInstance();
+	for (var a in form.parent.entry.hsm) {
+		instance.hsm[a] = form.parent.entry.hsm[a];
+	}
+	form.refresh();
 }
 
 ZaServerXFormView.prototype.getMyXForm = function() {	
@@ -485,12 +502,28 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 										relevantBehavior:_HIDE_, onChange: ZaServerXFormView.onFormFieldChanged
 									},
 									{ref:ZaServer.A_VolumeType, type:_OSELECT1_, choices:ZaServer.volumeTypeChoicesHSM,width:"100px", label:null,
-										relevant:"model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId)) && instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]",
+										relevant:"model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId)) && instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM] && item.getInstanceValue() != ZaServer.INDEX",
 										relevantBehavior:_HIDE_, onChange: ZaServerXFormView.onFormFieldChanged
 									},
 									{ref:ZaServer.A_VolumeType, type:_OUTPUT_,width:"100px", label:null,
-										relevant:"model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId)) && !instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]",
-										relevantBehavior:_HIDE_
+										relevant:"model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId)) && (!instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM] || item.getInstanceValue() == ZaServer.INDEX)",
+										relevantBehavior:_HIDE_,
+										getDisplayValue:function(val) {
+											if(!val)
+												return "";
+												
+											var value = parseInt(val);
+											switch(value ) {
+												case ZaServer.PRI_MSG :
+													return ZaMsg.NAD_HSM_PrimaryMsg;
+												case ZaServer.SEC_MSG:
+													return ZaMsg.NAD_HSM_SecMsg;
+												case ZaServer.INDEX:
+													return ZaMsg.NAD_HSM_Index;
+												default :
+													return val;
+											}
+										}
 									},									
 								  	{ref:ZaServer.A_VolumeCompressBlobs, type: _CHECKBOX_,width:"100px", label:null, onChange: ZaServerXFormView.onFormFieldChanged},									
 								  	{ref:ZaServer.A_VolumeCompressionThreshold, onChange: ZaServerXFormView.onFormFieldChanged, width:"100px", type:_TEXTFIELD_,label:null/*, label:ZaMsg.NAD_bytes, labelLocation:_RIGHT_,labelCssStyle:"text-align:left"*/},
@@ -514,13 +547,51 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 								labelLocation:_LEFT_, 
 								onChange:ZaTabView.onFormFieldChanged
 							},
-							{type:_OUTPUT_, label:ZaMsg.NAD_HSM_Status, labelLocation:_LEFT_,
-								ref:ZaServer.A_HSMrunning, choices:ZaServer.HSM_StatusChoices
-							},
 							{type:_DWT_BUTTON_, label:ZaMsg.NAD_HSM_StartHsm,
 								relevant:"instance.hsm[ZaServer.A_HSMrunning]==0",
 								width:"120px",
 								onActivate:ZaServerXFormView.runHsm,colSpan:2
+							},
+							{type:_OUTPUT_, label:ZaMsg.NAD_HSM_Status, labelLocation:_LEFT_,
+								ref:ZaServer.A_HSMrunning, choices:ZaServer.HSM_StatusChoices,
+								relevant:"instance.hsm[ZaServer.A_HSMwasAborted]==0",relevantBehavior:_HIDE_
+							},
+							{type:_OUTPUT_, label:ZaMsg.NAD_HSM_Status, labelLocation:_LEFT_,								
+								value:ZaMsg.NAD_HSM_Aborted, 
+								relevant:"instance.hsm[ZaServer.A_HSMwasAborted]==1",relevantBehavior:_HIDE_
+							},
+							{type:_OUTPUT_, label:ZaMsg.NAD_HSM_NumBlobsMoved,  labelLocation:_LEFT_,
+								ref:ZaServer.A_HSMnumBlobsMoved
+							},							
+							{type:_OUTPUT_, label:ZaMsg.NAD_HSM_ProcessedNumOfMbx,  labelLocation:_LEFT_,
+								ref:ZaServer.A_HSMnumMailboxes
+							},							
+							{type:_OUTPUT_, label:ZaMsg.NAD_HSM_RemainingNumOfMbx,  labelLocation:_LEFT_,
+								ref:ZaServer.A_HSMremainingMailboxes
+							},								
+							{type:_OUTPUT_, label:ZaMsg.NAD_HSM_LastStart,  labelLocation:_LEFT_,
+								ref:ZaServer.A_HSMstartDate,
+								getDisplayValue:function(val) {
+									if(val)
+										return AjxBuffer.concat(AjxDateUtil.simpleComputeDateStr(new Date(parseInt(val))),"&nbsp;",
+																			AjxDateUtil.computeTimeString(new Date(parseInt(val))));									
+									else
+										return "";
+								}
+							},
+							{type:_OUTPUT_, label:ZaMsg.NAD_HSM_LastEnd,  labelLocation:_LEFT_,
+								ref:ZaServer.A_HSMendDate,
+								getDisplayValue:function(val) {
+									if(val)								
+										return AjxBuffer.concat(AjxDateUtil.simpleComputeDateStr(new Date(parseInt(val))),"&nbsp;",
+																			AjxDateUtil.computeTimeString(new Date(parseInt(val))));									
+									else
+										return "";
+								}
+							},
+							{type:_DWT_BUTTON_, label:ZaMsg.NAD_HSM_Refresh,
+								onActivate:ZaServerXFormView.refreshHsm,
+								width:"120px",
 							}
 						]
 					}

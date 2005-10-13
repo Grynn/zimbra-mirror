@@ -135,7 +135,7 @@ ZaServer.A_HSMnumBlobsMoved = "numBlobsMoved";
 ZaServer.A_HSMnumMailboxes = "numMailboxes";
 ZaServer.A_HSMtotalMailboxes = "totalMailboxes";
 ZaServer.A_HSMthreshold = "threshold";
-
+ZaServer.A_HSMremainingMailboxes = "remainingMailboxes"
 // other
 ZaServer.A_zimbraIsMonitorHost = "zimbraIsMonitorHost";
 
@@ -212,14 +212,14 @@ ZaServer.myXModel = {
 					{id:ZaServer.A_VolumeName, type:_STRING_},
 					{id:ZaServer.A_VolumeType, type:_ENUM_, choices:[ZaServer.PRI_MSG,ZaServer.SEC_MSG,ZaServer.INDEX],defaultValue:ZaServer.PRI_MSG},
 					{id:ZaServer.A_VolumeRootPath, type:_STRING_},
-					{id:ZaServer.A_VolumeCompressBlobs, type:_ENUM_, choices:[false,true]},
+					{id:ZaServer.A_VolumeCompressBlobs, type:_ENUM_, choices:[false,true], defaultValue:true},
 					{id:ZaServer.A_VolumeCompressionThreshold, type:_NUMBER_,defaultValue:4096}				
 				]
 			}
 		},
 		{id:ZaServer.A_zimbraHsmAge, ref:"attrs/" + ZaServer.A_zimbraHsmAge, type:_STRING_},
-		{id:ZaServer.A_HSMstartDate, ref:"hsm/" + ZaServer.A_HSMstartDate, type:_DATE_},						
-		{id:ZaServer.A_HSMendDate, ref:"hsm/" + ZaServer.A_HSMendDate, type:_DATE_},								
+		{id:ZaServer.A_HSMstartDate, ref:"hsm/" + ZaServer.A_HSMstartDate, type:_NUMBER_},						
+		{id:ZaServer.A_HSMendDate, ref:"hsm/" + ZaServer.A_HSMendDate, type:_NUMBER_},								
 		{id:ZaServer.A_HSMrunning, ref:"hsm/" + ZaServer.A_HSMrunning, type:_ENUM_, choices:[false,true]},						
 		{id:ZaServer.A_HSMwasAborted, ref:"hsm/" + ZaServer.A_HSMwasAborted, type:_ENUM_, choices:[false,true]},				
 		{id:ZaServer.A_HSMaborting, ref:"hsm/" + ZaServer.A_HSMaborting, type:_ENUM_, choices:[false,true]},						
@@ -227,7 +227,8 @@ ZaServer.myXModel = {
 		{id:ZaServer.A_HSMnumBlobsMoved, ref:"hsm/" + ZaServer.A_HSMnumBlobsMoved, type:_NUMBER_},
 		{id:ZaServer.A_HSMnumMailboxes, ref:"hsm/" + ZaServer.A_HSMnumMailboxes, type:_NUMBER_},
 		{id:ZaServer.A_HSMtotalMailboxes, ref:"hsm/" + ZaServer.A_HSMtotalMailboxes, type:_NUMBER_},				
-		{id:ZaServer.A_HSMthreshold, ref:"hsm/" + ZaServer.A_HSMthreshold, type:_DATE_}		
+		{id:ZaServer.A_HSMthreshold, ref:"hsm/" + ZaServer.A_HSMthreshold, type:_NUMBER_},
+		{id:ZaServer.A_HSMremainingMailboxes, ref:"hsm/" + ZaServer.A_HSMremainingMailboxes, type:_NUMBER_}				
 	]
 };
 		
@@ -473,6 +474,7 @@ ZaServer.prototype.getHSMStatus = function () {
 	this.hsm[ZaServer.A_HSMnumMailboxes] = respNode.getAttribute(ZaServer.A_HSMnumMailboxes);
 	this.hsm[ZaServer.A_HSMtotalMailboxes] = respNode.getAttribute(ZaServer.A_HSMtotalMailboxes);
 	this.hsm[ZaServer.A_HSMthreshold] = respNode.getAttribute(ZaServer.A_HSMthreshold);	
+	this.hsm[ZaServer.A_HSMremainingMailboxes] = this.hsm[ZaServer.A_HSMtotalMailboxes] - this.hsm[ZaServer.A_HSMnumMailboxes];
 }
 
 ZaServer.prototype.runHSM = function() {
