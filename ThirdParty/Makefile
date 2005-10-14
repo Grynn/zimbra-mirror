@@ -42,17 +42,20 @@ $(ZIMBRA_HOME):
 
 build:
 	for dir in $(DIRS); do \
+		echo "*** Building in $$dir"; \
 		make -C $$dir; \
 	done
 	make -C apache-httpd tar
 
 clean:
 	for dir in $(DIRS); do \
+		echo "*** Building clean in $$dir"; \
 		make -C $$dir clean; \
 	done
 
 allclean:
 	for dir in $(DIRS); do \
+		echo "*** Building allclean in $$dir"; \
 		make -C $$dir allclean; \
 	done
 
