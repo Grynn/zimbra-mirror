@@ -252,12 +252,13 @@ ZaZimbraAdmin.prototype._createAppChooser =
 function() {
 	var buttons = new Array();
 	
-	if (ZaSettings.MONITORING_ENABLED)
-		buttons.push(ZaAppChooser.B_MONITORING);
-	if (ZaSettings.SYSTEM_CONFIG_ENABLED)
-		buttons.push(ZaAppChooser.B_SYSTEM_CONFIG);
 	if (ZaSettings.ADDRESSES_ENABLED)
 		buttons.push(ZaAppChooser.B_ADDRESSES);
+	if (ZaSettings.SYSTEM_CONFIG_ENABLED)
+		buttons.push(ZaAppChooser.B_SYSTEM_CONFIG);
+	if (ZaSettings.MONITORING_ENABLED)
+		buttons.push(ZaAppChooser.B_MONITORING);
+
 		
 	buttons.push(ZaAppChooser.SEP, ZaAppChooser.B_HELP, ZaAppChooser.B_LOGOUT);
 	var appChooser = new ZaAppChooser(this._shell, null, buttons);
