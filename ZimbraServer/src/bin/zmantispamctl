@@ -31,9 +31,9 @@ source /opt/zimbra/.bashrc
 
 case "$1" in 
 	start)
-		#for i in $SCRIPTS; do
-			#/opt/zimbra/bin/$i start
-		#done
+		for i in $SCRIPTS; do
+			/opt/zimbra/bin/$i start
+		done
 	;;
 	stop)
 		for i in $SCRIPTS; do
