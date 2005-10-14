@@ -255,6 +255,11 @@ objectIdentifier zimbraSshPublicKey ZimbraAttrType:262
 objectIdentifier zimbraLogRawLifetime ZimbraAttrType:263
 objectIdentifier zimbraLogSummaryLifetime ZimbraAttrType:264
 objectIdentifier zimbraSpellCheckURL ZimbraAttrType:267
+objectIdentifier zimbraImapBindOnStartup ZimbraAttrType:268
+objectIdentifier zimbraImapSSLBindOnStartup ZimbraAttrType:269
+objectIdentifier zimbraLmtpBindOnStartup ZimbraAttrType:270
+objectIdentifier zimbraPop3BindOnStartup ZimbraAttrType:271
+objectIdentifier zimbraPop3SSLBindOnStartup ZimbraAttrType:272
 
 #################################################################
 # object class OIDs
@@ -730,6 +735,13 @@ attributetype ( zimbraImapBindPort
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )
 
+attributetype ( zimbraImapBindOnStartup
+	NAME 'zimbraImapBindOnStartup'
+	DESC 'Whether to bind to port on startup irrespective of whether the server is enabled.  Useful when port to bind is privileged and must be bound early.'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
 attributetype ( zimbraImapEnabled
 	NAME 'zimbraImapEnabled'
 	DESC 'whether IMAP is enabled for an account'
@@ -764,6 +776,13 @@ attributetype ( zimbraImapSSLBindPort
 	DESC 'port number on which IMAP SSL server should listen on'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )
+
+attributetype ( zimbraImapSSLBindOnStartup
+	NAME 'zimbraImapSSLBindOnStartup'
+	DESC 'Whether to bind to port on startup irrespective of whether the server is enabled.  Useful when port to bind is privileged and must be bound early.'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
 attributetype ( zimbraImapSSLServerEnabled
@@ -831,6 +850,13 @@ attributetype ( zimbraLmtpBindPort
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )
 	
+attributetype ( zimbraLmtpBindOnStartup
+	NAME 'zimbraLmtpBindOnStartup'
+	DESC 'Whether to bind to port on startup irrespective of whether the server is enabled.  Useful when port to bind is privileged and must be bound early.'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
 attributetype ( zimbraLmtpNumThreads
 	NAME ( 'zimbraLmtpNumThreads' )
 	DESC 'number of handler threads, should match MTA concurrency setting for this server'
@@ -1308,6 +1334,13 @@ attributetype ( zimbraPop3BindPort
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )
 
+attributetype ( zimbraPop3BindOnStartup
+	NAME 'zimbraPop3BindOnStartup'
+	DESC 'Whether to bind to port on startup irrespective of whether the server is enabled.  Useful when port to bind is privileged and must be bound early.'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
 attributetype ( zimbraPop3Enabled
 	NAME 'zimbraPop3Enabled'
 	DESC 'whether POP3 is enabled for an account'
@@ -1329,7 +1362,6 @@ attributetype ( zimbraPop3NumThreads
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )	
 
-	
 attributetype ( zimbraPop3SSLBindAddress
 	NAME ( 'zimbraPop3SSLBindAddress' )
 	DESC 'interface address(es) on which POP3 server should listen; if empty, binds to all interfaces'
@@ -1337,13 +1369,21 @@ attributetype ( zimbraPop3SSLBindAddress
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{128} 
 	)
-		
+
 attributetype ( zimbraPop3SSLBindPort
 	NAME ( 'zimbraPop3SSLBindPort' )
 	DESC 'port number on which POP3 server should listen'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )
+
+attributetype ( zimbraPop3SSLBindOnStartup
+	NAME 'zimbraPop3SSLBindOnStartup'
+	DESC 'Whether to bind to port on startup irrespective of whether the server is enabled.  Useful when port to bind is privileged and must be bound early.'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
 
 attributetype ( zimbraPop3SSLServerEnabled
 	NAME 'zimbraPop3SSLServerEnabled'
@@ -2221,12 +2261,15 @@ objectclass ( zimbraGlobalConfig
 		zimbraImapServerEnabled $
 		zimbraImapNumThreads $
 		zimbraImapBindPort $
+		zimbraImapBindOnStartup $
 		zimbraImapSSLBindPort $
+		zimbraImapSSLBindOnStartup $
 		zimbraImapSSLServerEnabled $
 		zimbraImapCleartextLoginEnabled $
 		zimbraLastLogonTimestampFrequency $
 		zimbraLmtpNumThreads $
 		zimbraLmtpBindPort $
+		zimbraLmtpBindOnStartup $
 		zimbraLogHostname $
 		zimbraLogRawLifetime $
 		zimbraLogSummaryLifetime $
@@ -2241,8 +2284,10 @@ objectclass ( zimbraGlobalConfig
 		zimbraPop3CleartextLoginEnabled $
 		zimbraPop3NumThreads $
 		zimbraPop3BindPort $
+		zimbraPop3BindOnStartup $
 		zimbraPop3ServerEnabled $
 		zimbraPop3SSLBindPort $
+		zimbraPop3SSLBindOnStartup $
 		zimbraPop3SSLServerEnabled $
 		zimbraRedoLogEnabled $
 		zimbraRedoLogLogPath $
@@ -2352,14 +2397,17 @@ objectclass ( zimbraServer
 		zimbraLmtpAdvertisedName $
 		zimbraLmtpBindAddress $
 		zimbraLmtpBindPort $
+		zimbraLmtpBindOnStartup $
 		zimbraLmtpNumThreads $
 		zimbraImapServerEnabled $
 		zimbraImapAdvertisedName $
 		zimbraImapBindAddress $
 		zimbraImapBindPort $
+		zimbraImapBindOnStartup $
 		zimbraImapNumThreads $
 		zimbraImapSSLBindAddress $
 		zimbraImapSSLBindPort $
+		zimbraImapSSLBindOnStartup $
 		zimbraImapSSLServerEnabled $
 		zimbraImapCleartextLoginEnabled $
 		zimbraMtaAuthEnabled $
@@ -2370,10 +2418,12 @@ objectclass ( zimbraServer
 		zimbraPop3AdvertisedName $
 		zimbraPop3BindAddress $
 		zimbraPop3BindPort $
+		zimbraPop3BindOnStartup $
 		zimbraPop3NumThreads $
 		zimbraPop3ServerEnabled $
 		zimbraPop3SSLBindAddress $
 		zimbraPop3SSLBindPort $
+		zimbraPop3SSLBindOnStartup $
 		zimbraPop3SSLServerEnabled $
 		zimbraNotes $
 		zimbraRedoLogEnabled $

@@ -166,6 +166,8 @@
 
 <attr name="zimbraImapBindPort" type="port"/>
 
+<attr name="zimbraImapBindOnStartup" type="boolean"/>
+
 <attr name="zimbraImapCleartextLoginEnabled" type="boolean"/>
 
 <attr name="zimbraImapEnabled" type="boolean"/>
@@ -175,6 +177,8 @@
 <attr name="zimbraImapSSLBindAddress" type="string" max="128"/>
 
 <attr name="zimbraImapSSLBindPort" type="port"/>
+
+<attr name="zimbraImapSSLBindOnStartup" type="boolean"/>
 
 <attr name="zimbraImapSSLServerEnabled" type="boolean"/>
 
@@ -193,6 +197,8 @@
 <attr name="zimbraLmtpBindAddress" type="string" max="128"/>
 
 <attr name="zimbraLmtpBindPort" type="port"/>
+
+<attr name="zimbraLmtpBindOnStartup" type="boolean"/>
 
 <attr name="zimbraLmtpNumThreads" type="integer" min="0"/>
 
@@ -310,6 +316,8 @@
 
 <attr name="zimbraPop3BindPort" type="port"/>
 
+<attr name="zimbraPop3BindOnStartup" type="boolean"/>
+
 <attr name="zimbraPop3CleartextLoginEnabled" type="boolean"/>
 
 <attr name="zimbraPop3Enabled" type="boolean"/>
@@ -319,6 +327,8 @@
 <attr name="zimbraPop3SSLBindAddress" type="string" max="128"/>
 
 <attr name="zimbraPop3SSLBindPort" type="port"/>
+
+<attr name="zimbraPop3SSLBindOnStartup" type="boolean"/>
 
 <attr name="zimbraPop3SSLServerEnabled" type="boolean"/>
 
