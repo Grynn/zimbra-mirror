@@ -52,6 +52,7 @@ ZaDLController.prototype._createListeners = function () {
 	this._listeners = {};
 	this._listeners[ZaOperation.SAVE] = new AjxListener(this, this._saveListener);
 	this._listeners[ZaOperation.CLOSE] = new AjxListener(this, this._cancelNewListener);
+	this._listeners[ZaOperation.HELP] = new AjxListener(this, this._helpButtonListener);	
 };
 
 ZaDLController.prototype._createToolbars = function () {
@@ -59,7 +60,11 @@ ZaDLController.prototype._createToolbars = function () {
 			   new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis",
 							   this._listeners[ZaOperation.SAVE]),
 			   new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Cancel, ZaMsg.DLTBB_Cancel_tt, "Close", "CloseDis",
-							   this._listeners[ZaOperation.CLOSE])
+							   this._listeners[ZaOperation.CLOSE]),
+			   new ZaOperation(ZaOperation.NONE),
+			   new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help",
+			   				 this._listeners[ZaOperation.HELP])							
+							   
 			   ];
 	this._toolbar = new ZaToolBar(this._container, ops);
 };

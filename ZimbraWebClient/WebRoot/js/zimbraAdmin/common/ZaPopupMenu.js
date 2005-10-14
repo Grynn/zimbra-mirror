@@ -42,6 +42,9 @@ function ZaPopupMenu(parent, className, dialog, opList) {
 	if(opList) {
 		var cnt = opList.length;
 		for(var ix=0; ix < cnt; ix++) {
+			if(opList[ix].id == ZaOperation.NONE || opList[ix].id == ZaOperation.SEP || opList[ix].id == ZaOperation.HELP)
+				continue;
+				
 			this.createMenuItem(opList[ix].id, opList[ix].imageId, opList[ix].caption, null, true);
 			this.addSelectionListener(opList[ix].id, opList[ix].listener);		
 		}

@@ -90,9 +90,10 @@ function(searchResult) {
 
     	if(globalConf && globalConf.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_hotbackup])
 			this._ops.push(new ZaOperation(ZaOperation.MAIL_RESTORE, ZaMsg.TBB_RestoreMailbox, ZaMsg.ACTBB_Restore_tt, "Account", "AccountDis", new AjxListener(this, ZaAccountListController.prototype._restoreMailListener)));		
-			
+		this._ops.push(new ZaOperation(ZaOperation.NONE));	
 		this._ops.push(new ZaOperation(ZaOperation.PAGE_BACK, ZaMsg.Back, ZaMsg.PrevPage_tt, "LeftArrow", "LeftArrowDis",  new AjxListener(this, ZaAccountListController.prototype._prevPageListener)));
 		this._ops.push(new ZaOperation(ZaOperation.PAGE_FORWARD, ZaMsg.Forward, ZaMsg.NextPage_tt, "RightArrow", "RightArrowDis", new AjxListener(this, ZaAccountListController.prototype._nextPageListener)));
+		this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));				
 
 
 /**

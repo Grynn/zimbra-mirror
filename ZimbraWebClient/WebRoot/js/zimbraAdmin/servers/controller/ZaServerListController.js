@@ -45,6 +45,9 @@ function(list) {
     	this._ops = new Array();
     	this._ops.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.SERTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaServerListController.prototype._editButtonListener)));    	
     	this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.SERTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaServerListController.prototype._deleteButtonListener)));    	    	
+		this._ops.push(new ZaOperation(ZaOperation.NONE));
+		this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));				
+		
 		this._toolbar = new ZaToolBar(this._container, this._ops);    
  	
 		//create Servers list view

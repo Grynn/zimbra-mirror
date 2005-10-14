@@ -46,8 +46,13 @@ function() {
     if (!this._contentView) {
 		this._contentView = new ZaGlobalStatsView(this._container, this._app);
 		var elements = new Object();
-		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
+		this._ops = new Array();
+		this._ops.push(new ZaOperation(ZaOperation.NONE));
+		this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));				
+		this._toolbar = new ZaToolBar(this._container, this._ops);    		
 		
+		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
+		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
 		this._app.createView(ZaZimbraAdmin._STATISTICS, elements);
 	}
 	this._app.pushView(ZaZimbraAdmin._STATISTICS);

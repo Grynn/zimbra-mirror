@@ -216,10 +216,13 @@ function(entry) {
 	   	//create toolbar
 		if(!this._UICreated) {
 		   	this._ops = new Array();
-	   		this._ops.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.COSTBB_New_tt, "NewCOS", "NewCOSDis", new AjxListener(this, ZaCosController.prototype._newButtonListener)));
 	   		this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.COSTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, ZaCosController.prototype._saveButtonListener)));
 	   		this._ops.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.COSTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, ZaCosController.prototype._closeButtonListener)));    	
+   			this._ops.push(new ZaOperation(ZaOperation.SEP));
+	   		this._ops.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.COSTBB_New_tt, "NewCOS", "NewCOSDis", new AjxListener(this, ZaCosController.prototype._newButtonListener)));
 	   		this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.COSTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaCosController.prototype._deleteButtonListener)));    	    	
+			this._ops.push(new ZaOperation(ZaOperation.NONE));
+			this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));							
 			this._toolBar = new ZaToolBar(this._container, this._ops);
 	
 		  	this._view = new ZaCosXFormView(this._container, this._app, entry.id);
