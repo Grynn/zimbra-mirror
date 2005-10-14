@@ -25,7 +25,7 @@
 # 
 
 BASE=/opt/zimbra
-SCRIPTS="zmmtaconfigctl zmamavisdctl zmclamdctl"
+SCRIPTS="zmmtaconfigctl zmclamdctl zmamavisdctl"
 
 source /opt/zimbra/.bashrc
 

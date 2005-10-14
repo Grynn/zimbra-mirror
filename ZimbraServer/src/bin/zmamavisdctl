@@ -34,9 +34,21 @@ zmsetvars \
     zimbra_home \
     zimbra_log_directory
 
+platform=`/opt/zimbra/bin/get_plat_tag.sh`
+
 rewriteconfig() {
 	if [ x$2 = "x" ]; then
 		/opt/zimbra/bin/zmmtaconfig antispam > /dev/null 2>&1
+	fi
+}
+
+checkRunning() {
+	if [ -f /opt/zimbra/log/amavisd.pid ]; then
+		cpid=`cat /opt/zimbra/log/amavisd.pid`
+		kill -0 "$cpid" 2> /dev/null
+		if [ $? = 0 ]; then
+			exit 0;
+		fi
 	fi
 }
 
@@ -45,9 +57,12 @@ rewriteconfig() {
 #
 case "$1" in
     'start')
-		mount -t tmpfs | grep ${zimbra_home}/amavisd/tmp > /dev/null 2>&1
-		if [ $? != 0 ]; then
-			mount ${zimbra_home}/amavisd/tmp
+		checkRunning
+		if [ "x$platform" != "xMACOSX" ]; then
+			mount -t tmpfs | grep ${zimbra_home}/amavisd/tmp > /dev/null 2>&1
+			if [ $? != 0 ]; then
+				mount ${zimbra_home}/amavisd/tmp
+			fi
 		fi
 		rewriteconfig
 		if [ ! -f ${zimbra_home}/amavisd/.spamassassin/bayes_toks ]; then

@@ -29,6 +29,8 @@ if [ x`whoami` != xzimbra ]; then
 	exit 1
 fi
 
+platform=`/opt/zimbra/bin/get_plat_tag.sh`
+
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
     zimbra_home \
@@ -58,7 +60,11 @@ case "$1" in
     'stop')
 		cpid=`cat ${zimbra_home}/cyrus-sasl-2.1.21.ZIMBRA/state/saslauthd.pid`
         kill -TERM "$cpid" 2> /dev/null
-		killall -TERM ${zimbra_home}/cyrus-sasl-2.1.21.ZIMBRA/sbin/saslauthd
+		if [ x$platform = "xMACOSX" ]; then
+			killall -TERM saslauthd
+		else
+			killall -TERM ${zimbra_home}/cyrus-sasl-2.1.21.ZIMBRA/sbin/saslauthd
+		fi
         ;;
     
     'restart')

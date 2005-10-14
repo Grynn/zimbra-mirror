@@ -31,6 +31,13 @@ if [ $ID -ne 0 ]; then
 	exit 1
 fi
 
+platform=`/opt/zimbra/bin/get_plat_tag.sh`
+
+if [ x$platform = "xMACOSX" ]; then
+	logfile="/var/log/zimbra.log"
+else
+	logfile="-/var/log/zimbra.log"
+fi
 LOGHOST=`su - zimbra -c 'zmprov gacf | egrep "^zimbraLogHostname"'`
 LOCALHOST=`su - zimbra -c 'zmlocalconfig -m nokey zimbra_server_hostname'`
 
@@ -63,7 +70,8 @@ grep -v local0 /etc/syslog.conf > /tmp/syslog.zimbra
 if [ $TYPE = "remote" ]; then
       echo "local0.info                @$LOGHOST" >> /tmp/syslog.zimbra
 else
-      echo "local0.info                -/var/log/zimbra.log" >> /tmp/syslog.zimbra
+      echo "local0.info                $logfile" >> /tmp/syslog.zimbra
+	  touch /var/log/zimbra.log
 fi
 
 egrep -v "^mail.*($LOGHOST|zimbra)" /tmp/syslog.zimbra > /tmp/syslog.zimbra2
@@ -71,7 +79,7 @@ egrep -v "^mail.*($LOGHOST|zimbra)" /tmp/syslog.zimbra > /tmp/syslog.zimbra2
 if [ $TYPE = "remote" ]; then
       echo "mail.info                @$LOGHOST" >> /tmp/syslog.zimbra2
 else
-      echo "mail.info                -/var/log/zimbra.log" >> /tmp/syslog.zimbra2
+      echo "mail.info                $logfile" >> /tmp/syslog.zimbra2
 fi
 
 cp -f /tmp/syslog.zimbra2 /etc/syslog.conf

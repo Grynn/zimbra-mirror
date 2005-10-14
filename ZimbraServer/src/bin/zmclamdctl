@@ -29,6 +29,8 @@ if [ x`whoami` != xzimbra ]; then
 	exit 1
 fi
 
+platform=`/opt/zimbra/bin/get_plat_tag.sh`
+
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
     zimbra_home \
@@ -76,8 +78,13 @@ case "$1" in
         kill -TERM "$cpid" 2> /dev/null
 		cpid=`cat /opt/zimbra/log/clamd.pid`
         kill -TERM "$cpid" 2> /dev/null
-		killall -TERM ${zimbra_home}/clamav/bin/freshclam
-		killall -TERM ${zimbra_home}/clamav/sbin/clamd
+		if [ "x$platform" = "xMACOSX" ]; then
+			killall -TERM freshclam
+			killall -TERM clamd
+		else
+			killall -TERM ${zimbra_home}/clamav/bin/freshclam
+			killall -TERM ${zimbra_home}/clamav/sbin/clamd
+		fi
         ;;
     
     'restart')

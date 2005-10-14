@@ -27,6 +27,12 @@
 BASE=/opt/zimbra
 CONFIG=$BASE/conf/logswatchrc
 
+PIDFILE=/opt/zimbra/log/logswatch.pid
+
+if [ -f $PIDFILE ]; then
+    PID=`cat $PIDFILE`
+fi
+
 source /opt/zimbra/.bashrc
 
 case "$1" in 
@@ -35,19 +41,29 @@ case "$1" in
 			$BASE/bin/logswatch --config-file=$BASE/conf/logswatchrc \
 			-t /var/log/zimbra.log >/tmp/logswatch.out 2>&1 &
 			chmod 777 /tmp/logswatch.out
+			echo $! > $PIDFILE
 		else
 			exit 1
 		fi
 	;;
 	stop)
-		killall -TERM logswatch
+		rm -f $PIDFILE
+		if [ x$PID != 'x' ]; then
+			kill -TERM $PID
+		fi
 	;;
 	reload)
-		killall -HUP logswatch
+		if [ x$PID != 'x' ]; then
+			kill -HUP $PID
+		fi
 	;;
 	status)
-		killall -0 logswatch
-		exit $?
+		if [ x$PID != 'x' ]; then
+			kill -0 $PID
+			exit $?
+		else
+			exit 1
+		fi
 	;;
 	*)
 		echo "$0 start|stop|reload|status"

@@ -32,13 +32,21 @@ chmod 755 /opt/zimbra/libexec/*
 
 chmod 755 /opt/zimbra/bin/*
 
+ROOTGROUP=root
+
+PLAT=`/bin/sh /opt/zimbra/bin/get_plat_tag.sh`
+
+if [ "X$PLAT" = "XMACOSX" ]; then
+	ROOTGROUP=wheel
+fi
+
 if [ -L /opt/zimbra/postfix ]; then
 
-	#chown -R root:root /opt/zimbra/conf/*
+	#chown -R root:$ROOTGROUP /opt/zimbra/conf/*
 	if [ ! -d /opt/zimbra/postfix/spool ]; then
 		mkdir -p /opt/zimbra/postfix/spool
 	fi
-	chown -fR root:root /opt/zimbra/postfix*
+	chown -fR root:$ROOTGROUP /opt/zimbra/postfix*
 	chown -fR postfix:postfix /opt/zimbra/postfix/spool
 	chown -fR root:postfix /opt/zimbra/postfix/conf
 	chown -f root /opt/zimbra/postfix/spool
@@ -66,5 +74,10 @@ fi
 
 if [ -d /opt/zimbra/clamav-0.85.1 ]; then
 	chown zimbra:zimbra /opt/zimbra/clamav-0.85.1
+fi
+
+if [ -f /opt/zimbra/openldap/libexec/slapd ]; then
+	chown root:$ROOTGROUP /opt/zimbra/openldap/libexec/slapd
+	chmod 755 /opt/zimbra/openldap/libexec/slapd
 fi
 

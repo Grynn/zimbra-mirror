@@ -44,7 +44,14 @@ zmsetvars \
 #
 # Available system memory in KB
 #
-memkb=`awk '/^MemTotal.*kB$/ { print $2; }' /proc/meminfo`
+platform=`/opt/zimbra/bin/get_plat_tag.sh`
+if [ "x$platform" = "xMACOSX" ]; then
+	memhex=`nvram -p | awk '/^ram-size/ {print $2}' | sed -e 's/0x//'`
+	memhexkb=`expr $memhex / 400`
+	memkb=`printf "%d" $memhexkb`
+else
+	memkb=`awk '/^MemTotal.*kB$/ { print $2; }' /proc/meminfo`
+fi
 
 #
 # Memory for use by MySQL
