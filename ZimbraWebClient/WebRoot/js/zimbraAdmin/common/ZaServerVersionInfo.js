@@ -28,17 +28,34 @@ function ZaServerVersionInfo() {}
 
 ZaServerVersionInfo.load = function () {
 	if (!ZaServerVersionInfo._loaded){
-		var soapDoc = AjxSoapDoc.create("GetVersionInfoRequest", "urn:zimbraAdmin", null);
-		var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false).Body.GetVersionInfoResponse;
-		ZaServerVersionInfo.buildDate = this._parseDateTime(resp.info[0].buildDate);
-		ZaServerVersionInfo.host = resp.info[0].host;
-		ZaServerVersionInfo.release = resp.info[0].release;
-		ZaServerVersionInfo.version = resp.info[0].version;
+		var soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
+		soapDoc.setMethodAttribute("onerror", "continue");
+		var versionInfoReq = soapDoc.set("GetVersionInfoRequest");
+		versionInfoReq.setAttribute("xmlns", "urn:zimbraAdmin");
+
+		var versionInfoReq = soapDoc.set("GetLicenseInfoRequest");
+		versionInfoReq.setAttribute("xmlns", "urn:zimbraAdmin");
+
+		//var soapDoc = AjxSoapDoc.create("GetVersionInfoRequest", "urn:zimbraAdmin", null);
+		var resp = ZmCsfeCommand.invoke(soapDoc, true, null, null, false).Body.BatchResponse;
+		var versionResponse = resp.GetVersionInfoResponse[0];
+
+		ZaServerVersionInfo.buildDate = this._parseDateTime(versionResponse.info[0].buildDate);
+		ZaServerVersionInfo.host = versionResponse.info[0].host;
+		ZaServerVersionInfo.release = versionResponse.info[0].release;
+		ZaServerVersionInfo.version = versionResponse.info[0].version;
+
+		var licenseResponse = resp.GetLicenseInfoResponse[0].expiration[0];
+		ZaServerVersionInfo.licenseExpired = licenseResponse.isExpired;
+		if (licenseResponse.date != null && licenseResponse.date != ""){
+			ZaServerVersionInfo.liceneseExpirationDate = ZaServerVersionInfo._parseDate(licenseResponse.date);
+		}
 	}
 };
 
-ZaServerVersionInfo._parseDateTime = function (dateTimeStr) {
+ZaServerVersionInfo._parseDate = function (dateTimeStr) {
 	var d = new Date();
+	d.setHours(0, 0, 0, 0);
 	var yyyy = parseInt(dateTimeStr.substr(0,4), 10);
 	var MM = parseInt(dateTimeStr.substr(4,2), 10);
 	var dd = parseInt(dateTimeStr.substr(6,2), 10);
@@ -48,6 +65,11 @@ ZaServerVersionInfo._parseDateTime = function (dateTimeStr) {
 	// setting it twice seems to do the trick. Very odd.
 	d.setMonth(MM - 1);
 	d.setMonth(MM - 1);
+	d.setDate(dd);
+	return d;
+};
+ZaServerVersionInfo._parseDateTime = function (dateTimeStr) {
+	var d = ZaServerVersionInfo._parseDate(dateTimeStr);
 	var hh = parseInt(dateTimeStr.substr(9,2), 10);
 	var mm = parseInt(dateTimeStr.substr(11,2), 10);
 	d.setHours(hh, mm, 0, 0);

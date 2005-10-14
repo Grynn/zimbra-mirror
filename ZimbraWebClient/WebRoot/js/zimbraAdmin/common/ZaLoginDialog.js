@@ -41,9 +41,10 @@ function ZaLoginDialog(parent, zIndex, className, isAdmin) {
 	var pwordId = Dwt.getNextId();
 	var okCellId = Dwt.getNextId();
 	var errorCellId = Dwt.getNextId();
+	var licenseCellId = Dwt.getNextId();
 	this.hiddenBtnId = Dwt.getNextId();
     var form = doc.createElement("form");
-    form.innerHTML = this._createHtml(unameId, pwordId, okCellId, errorCellId);
+    form.innerHTML = this._createHtml(unameId, pwordId, okCellId, errorCellId, licenseCellId);
     htmlElement.appendChild(form);
     this._errorCell = Dwt.getDomObj(doc, errorCellId);
     
@@ -73,6 +74,8 @@ function ZaLoginDialog(parent, zIndex, className, isAdmin) {
 
 	}    
 	this._okCell.appendChild(this._loginButton.getHtmlElement());
+	this._licenseCell = Dwt.getDomObj(doc, licenseCellId);
+	this.resetLicenseWarning();
 }
 
 ZaLoginDialog.prototype = new DwtComposite;
@@ -133,7 +136,13 @@ function(func, obj) {
 ZaLoginDialog.prototype.clearAll =
 function() {
 	this._unameField.value = this._pwordField.value = "";
+	this.resetLicenseWarning();
 }
+
+ZaLoginDialog.prototype.resetLicenseWarning =
+function () {
+	this._licenseCell.style.visibility = (ZaServerVersionInfo.licenseExpired)? "visible": "hidden";
+};
 
 ZaLoginDialog.prototype.clearPassword =
 function() {
@@ -190,7 +199,7 @@ function(visible, transparentBg) {
 }
 
 ZaLoginDialog.prototype._createHtml = 
-function(unameId, pwordId, okCellId, errorCellId) {
+function(unameId, pwordId, okCellId, errorCellId, licenseCellId) {
 	var html = new Array();
 	var i = 0;
 
@@ -206,11 +215,12 @@ function(unameId, pwordId, okCellId, errorCellId) {
 	html[i++] = "<td><input style=\"width:100%; height:22px\" autocomplete=OFF type=text tabIndex=1 id='" + unameId + "'/></td></tr>";	
 	html[i++] = "<tr><td align=right>" + ZaMsg.password + ":</td>";
 	html[i++] = "<td><input style=\"width:100%; height:22px\" type=password tabIndex=2 id='" + pwordId + "'/></td></tr>";	
-	html[i++] = "<tr>";
-	html[i++] = "<td colspan=2 id='" + okCellId + "' align=right>";
+	html[i++] = "<tr><td colspan=2><table cellpadding=0 cellspacing=0 border=0 width=100%>";
+	html[i++] = "<td id='" + licenseCellId + "' style='visibility:hidden;color:red;font-size:16px; font-weight:bold'>License expired</td>";
+	html[i++] = "<td id='" + okCellId + "' align=right></td></tr></table>";
 	html[i++] = "</td></tr></table>";
 	html[i++] = "</td></tr></table>";
-	html[i++] = "</td></tr></table>";	
+	html[i++] = "</td></tr></table>";
 /*
 	html[i++] = "<table align=center border=0 cellspacing=0 cellpadding=0><tr><td>";
 	html[i++] = "<table border=0 cellspacing=0 class='" + this._className + "-HeaderPanel'>";

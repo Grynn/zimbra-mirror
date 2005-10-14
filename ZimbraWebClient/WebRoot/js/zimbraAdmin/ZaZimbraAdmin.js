@@ -123,15 +123,15 @@ function(domain) {
 	ZmCsfeCommand.setServerUri(location.protocol+"//" + domain + ZaSettings.CSFE_SERVER_URI);
 	ZmCsfeCommand.setCookieName(ZaZimbraAdmin._COOKIE_NAME);
 	
+	ZaServerVersionInfo.load();
 	// Create the global app context
 	var appCtxt = new ZaAppCtxt();
-
 
 	// Create the shell
 	var userShell = window.document.getElementById(ZaSettings.get(ZaSettings.SKIN_SHELL_ID));
 	var shell = new DwtShell(null, false, ZaZimbraAdmin._confirmExitMethod, userShell);
-    appCtxt.setShell(shell);
-    
+    appCtxt.setShell(shell);    
+
     // Go!
     var lm = new ZaZimbraAdmin(appCtxt);
 }
@@ -316,7 +316,6 @@ function(ev) {
 			this._showAccountsView(ZaItem.ACCOUNT,ev);
 			break;	
 		case ZaAppChooser.B_HELP:
-			ZaServerVersionInfo.load();
 			if(this._app.getCurrentController()) {
 				this._app.getCurrentController().switchToNextView(this._app.getHelpViewController(), ZaHelpViewController.prototype.show, null);
 			} else {					
