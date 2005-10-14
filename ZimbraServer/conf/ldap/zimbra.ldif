@@ -77,6 +77,7 @@ zimbraCOSInheritedAttr: zimbraPrefUseTimeZoneListInCalendar
 zimbraCOSInheritedAttr: zimbraPrefComposeInNewWindow
 zimbraCOSInheritedAttr: zimbraPrefCalendarFirstDayOfWeek
 zimbraCOSInheritedAttr: zimbraPrefCalendarInitialView
+zimbraCOSInheritedAttr: zimbraPrefCalendarNotifyDelegatedChanges
 zimbraCOSInheritedAttr: zimbraPrefContactsInitialView
 zimbraCOSInheritedAttr: zimbraPrefShowFragments
 zimbraCOSInheritedAttr: zimbraPrefShowSearchString
@@ -367,6 +368,7 @@ zimbraPrefSentMailFolder: sent
 zimbraPrefComposeInNewWindow: FALSE
 zimbraPrefCalendarFirstDayOfWeek: 0
 zimbraPrefCalendarInitialView: workWeek
+zimbraPrefCalendarNotifyDelegatedChanges: FALSE
 zimbraPrefContactsInitialView: list
 zimbraPrefHtmlEditorDefaultFontFamily: Times New Roman
 zimbraPrefHtmlEditorDefaultFontSize: 12pt

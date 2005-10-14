@@ -260,6 +260,7 @@ objectIdentifier zimbraImapSSLBindOnStartup ZimbraAttrType:269
 objectIdentifier zimbraLmtpBindOnStartup ZimbraAttrType:270
 objectIdentifier zimbraPop3BindOnStartup ZimbraAttrType:271
 objectIdentifier zimbraPop3SSLBindOnStartup ZimbraAttrType:272
+objectIdentifier zimbraPrefCalendarNotifyDelegatedChanges ZimbraAttrType:273
 
 #################################################################
 # object class OIDs
@@ -1384,7 +1385,6 @@ attributetype ( zimbraPop3SSLBindOnStartup
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-
 attributetype ( zimbraPop3SSLServerEnabled
 	NAME 'zimbraPop3SSLServerEnabled'
 	DESC 'whether IMAP is enabled for a server'
@@ -1398,6 +1398,13 @@ attributetype ( zimbraPrefCalendarInitialView
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32} 
+	SINGLE-VALUE )
+
+attributetype ( zimbraPrefCalendarNotifyDelegatedChanges
+	NAME 'zimbraPrefCalendarNotifyDelegatedChanges'
+	DESC 'If set to true, user is notified by email of changes made to her calendar by others via delegated calendar access.'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
 attributetype ( zimbraPrefContactsInitialView
@@ -2072,6 +2079,7 @@ objectclass ( zimbraAccount
 		zimbraPrefShowSearchString $
 		zimbraPrefCalendarFirstDayOfWeek $
 		zimbraPrefCalendarInitialView $
+                zimbraPrefCalendarNotifyDelegatedChanges $
 		zimbraPrefContactsInitialView $
 		zimbraPrefDedupeMessagesSentToSelf $
 		zimbraPrefForwardIncludeOriginalText $
@@ -2211,6 +2219,7 @@ objectclass ( zimbraCOS
 		zimbraPrefShowSearchString $
 		zimbraPrefCalendarFirstDayOfWeek $
 		zimbraPrefCalendarInitialView $
+                zimbraPrefCalendarNotifyDelegatedChanges $
 		zimbraPrefComposeInNewWindow $
 		zimbraPrefComposeFormat $
 		zimbraPrefContactsInitialView $

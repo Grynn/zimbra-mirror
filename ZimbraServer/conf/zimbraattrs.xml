@@ -354,6 +354,8 @@
 
 <attr name="zimbraPrefCalendarInitialView" type="enum" value="day,week,workWeek,month"/>
 
+<attr name="zimbraPrefCalendarNotifyDelegatedChanges" type="boolean"/>
+
 <attr name="zimbraPrefContactsPerPage" type="integer"/> <!-- TODO: get min/max? -->
 
 <attr name="zimbraPrefDedupeMessagesSentToSelf" type="enum" value="dedupeNone,secondCopyifOnToOrCC,dedupeAll"/>
