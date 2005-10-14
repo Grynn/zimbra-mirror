@@ -46,10 +46,11 @@ function ZaXWizardDialog (parent, className, title, w, h) {
 	this._drawn = false;
 	this._containedObject = null;
 	
+	var helpButton = new DwtDialog_ButtonDescriptor(ZaXWizardDialog.HELP_BUTTON, ZaMsg.TBB_Help, DwtDialog.ALIGN_LEFT, new AjxCallback(this, this._helpButtonListener));
 	var nextButton = new DwtDialog_ButtonDescriptor(ZaXWizardDialog.NEXT_BUTTON, AjxMsg._next, DwtDialog.ALIGN_RIGHT, new AjxCallback(this, this.goNext));
 	var prevButton = new DwtDialog_ButtonDescriptor(ZaXWizardDialog.PREV_BUTTON, AjxMsg._prev, DwtDialog.ALIGN_RIGHT, new AjxCallback(this, this.goPrev));
 	var finishButton = new DwtDialog_ButtonDescriptor(ZaXWizardDialog.FINISH_BUTTON, AjxMsg._finish, DwtDialog.ALIGN_RIGHT, new AjxCallback(this, this.finishWizard));
-	DwtDialog.call(this, parent, clsName, null, [DwtDialog.CANCEL_BUTTON], [prevButton,nextButton,finishButton]);
+	DwtDialog.call(this, parent, clsName, null, [DwtDialog.CANCEL_BUTTON], [helpButton,prevButton,nextButton,finishButton]);
 
 	if (!w) {
 		this._contentW = "80ex";
@@ -76,6 +77,7 @@ function ZaXWizardDialog (parent, className, title, w, h) {
 	this._createContentHtml();	
 
 	this.setTitle(title);
+	this._helpURL = "/zimbraAdmin/adminhelp/html/OpenSourceAdminHelp/administration_console_help.htm";	
 }
 
 ZaXWizardDialog.prototype = new DwtDialog;
@@ -90,6 +92,7 @@ ZaXWizardDialog.Z_CURTAIN = Dwt.Z_CURTAIN;
 ZaXWizardDialog.NEXT_BUTTON = 12;
 ZaXWizardDialog.PREV_BUTTON = 11;
 ZaXWizardDialog.FINISH_BUTTON = 13;
+ZaXWizardDialog.HELP_BUTTON = 14;
 
 //public methods
 ZaXWizardDialog.prototype.toString = 
@@ -192,6 +195,11 @@ function(entry) {
 }
 
 //private and protected methods
+
+ZaXWizardDialog.prototype._helpButtonListener =
+function() {
+	window.open(this._helpURL);
+}
 
 /**
 * method _createHtml 
