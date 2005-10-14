@@ -26,7 +26,7 @@ var form = {
 	X_showBorder:true,
 	numCols:4,
 	items:[
-	
+/*	
 		{type:_BORDER_, borderStyle:"1pxBlack", colSpan:1, items:[
 				{type:_OUTPUT_, value:"1pxBlack border", width:100, height:100}
 			]
@@ -172,8 +172,34 @@ var form = {
 		
 			]
 		},
-		{type:_SPACER_, height:20},		{type:_SPACER_, height:20},
+*/		{type:_SPACER_, height:20},		{type:_SPACER_, height:20},
 
+		{type:_BORDER_, colSpan:"*", borderStyle:"SplashScreen", colSpan:1, items:[], 
+			substitutions:{
+				url:"<a href='http://www.zimbra.com' target=_blank>http://www.zimbra.com</a>",
+				shortVersion:"BETA",
+				appName:"Collaboration Suite",
+				version:"Version: 2.0 (Wed Oct 12 2005)",
+	//			contents:"<br>Loading something...<br><br><div class=ImgBarberPole_216></div>",
+				contents:"<br><b>Additional information:</b><br><ul>"
+						+"<li style='list-style:circle;'><a href=http://www.zimbra.com/licenses>Licenses</a><br>"
+						+"<li style='list-style:circle;'><a href=http://www.zimbra.com/opensourcepartners>Open Source Partners</a><br>"
+						+"<li style='list-style:circle;'><a href=http://www.zimbra.com/contributors>Contributors</a></ul>",
+				license:"Copyright &copy; 2005 Zimbra, Inc.  &nbsp;&nbsp;&nbsp;'Zimbra' and the Zimbra logos are trademarks of Zimbra, Inc.",
+				button:"<button style='width:60px;'>OK</button>"
+			}
+		},
+
+{type:_SPACER_, height:20},		{type:_SPACER_, height:20},
+
+		{type:_BORDER_, colSpan:"*", borderStyle:"LoginBanner", colSpan:1, items:[], 
+			substitutions:{
+				url:"<a href='http://www.zimbra.com' target=_blank>http://www.zimbra.com</a>",
+				appName:"Collaboration Suite",
+				shortVersion:"BETA",
+				version:"Version: 2.0 (Wed Oct 12 2005)"
+			}
+		},
 
 	]
 }

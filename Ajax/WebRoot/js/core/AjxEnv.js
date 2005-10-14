@@ -177,7 +177,8 @@ AjxEnv.parseUA = function (userAgent) {
 	}
 	// show transparent PNGs on platforms that support them well
 	//	(eg: all but IE and Linux)
-	AjxEnv.useTransparentPNGs = !AjxEnv.isIE && !AjxEnv.isLinux;
+	//	MOW: having trouble getting safari to render transparency for shadows, skipping there, too
+	AjxEnv.useTransparentPNGs = !AjxEnv.isIE && !AjxEnv.isLinux && !AjxEnv.isSafari;
 	AjxEnv._inited = !AjxEnv.isIE;
 };
 

@@ -584,3 +584,63 @@ DwtBorder.registerBorder(
 	} 
 );
 
+
+DwtBorder.registerBorder( 
+	"SplashScreen", 
+	{ 
+		start: AjxBuffer.concat(
+				 "<table class='DialogTable' cellpadding='0' Xborder=1>",
+					// top edge
+					"<tr><td><div style='position:relative'>"+
+							"<div class='ImgSplashScreen_blank'></div>",
+							"<div id=SplashScreenUrl><!--$url--></div>",
+							"<div id=SplashScreenShortVersion><!--$shortVersion--></div>",
+							"<div id=SplashScreenAppName><!--$appName--></div>",
+							"<div id=SplashScreenVersion><!--$version--></div>",
+							"<div id=SplashScreenContents><!--$contents--></div>",
+							"<div id=SplashScreenOKButton><!--$button--></div>",
+							"<div id=SplashScreenLicense><!--$license--></div>",
+						"</div></td>",
+						(AjxEnv.useTransparentPNGs ? "<td valign=top class='border_shadow_v'><div class='ImgShadowBig_TR'></div>"+
+														"<div class='ImgShadowBig_R__V' style='height:100%'></div></td>" : ""),
+
+					"</tr>"
+				),
+
+		end: AjxBuffer.concat(
+					// bottom shadow
+						(AjxEnv.useTransparentPNGs ? 
+							"<tr><td>"+
+									"<table cellspacing=0 cellpadding=0 Xborder=1 width=100%><tr>"+
+										"<td><div class='ImgShadowBig_BL'></div><td>"+
+										"<td width=100%><div class='ImgShadowBig_B__H' style='width:100%'></div></td>"+
+										"<td class=dialog_shadow_c><div class='ImgShadowBig_BR'></div></td>"+
+									"</tr></table>"+
+								"</td>"+
+							"</tr>"
+						  : ""
+						),
+			     "</table>"
+				)
+	}
+);
+
+DwtBorder.registerBorder( 
+	"LoginBanner", 
+	{ 
+		start: AjxBuffer.concat(
+				 "<table class='DialogTable' cellpadding='0' Xborder=1>",
+					// top edge
+					"<tr><td><div style='position:relative'>"+
+							"<div class='ImgLoginBanner_blank'></div>",
+							"<div id=LoginBannerUrl><!--$url--></div>",
+							"<div id=LoginBannerShortVersion><!--$shortVersion--></div>",
+							"<div id=LoginBannerAppName><!--$appName--></div>",
+							"<div id=LoginBannerVersion><!--$version--></div>",
+						"</div></td>",
+					"</tr>",
+			     "</table>"
+				),
+		end:""
+	}
+);
