@@ -1,0 +1,40 @@
+/AddressList.java/1.9/Fri Oct  7 23:10:07 2005//
+/Calendar.java/1.14/Fri Oct  7 23:10:07 2005//
+/CategoryList.java/1.7/Fri Aug 12 02:40:00 2005//
+/Component.java/1.8/Fri Aug 12 02:40:03 2005//
+/ComponentFactory.java/1.7/Fri Oct  7 23:10:08 2005//
+/ComponentList.java/1.8/Fri Oct  7 23:10:08 2005//
+/Content.java/1.6/Fri Aug 12 02:40:01 2005//
+/Date.java/1.4/Fri Oct  7 23:10:08 2005//
+/DateList.java/1.15/Fri Oct  7 23:10:08 2005//
+/DateTime.java/1.7/Mon Oct  3 12:37:02 2005//
+/DefaultTimeZoneRegistryFactory.java/1.2/Tue Oct 11 19:05:18 2005//
+/Dur.java/1.6/Fri Oct  7 23:10:08 2005//
+/Escapable.java/1.1/Sun Jun 26 12:22:13 2005//
+/Iso8601.java/1.4/Fri Oct  7 23:10:08 2005//
+/NumberList.java/1.10/Fri Oct  7 23:10:08 2005//
+/Parameter.java/1.9/Fri Oct  7 23:10:08 2005//
+/ParameterFactory.java/1.6/Fri Aug 12 02:40:03 2005//
+/ParameterFactoryImpl.java/1.6/Fri Aug 12 02:40:03 2005/-kk/
+/ParameterList.java/1.10/Fri Aug 12 02:40:01 2005//
+/Period.java/1.11/Fri Aug 12 02:40:04 2005//
+/PeriodList.java/1.12/Fri Oct  7 23:10:08 2005//
+/Property.java/1.13/Fri Oct  7 23:10:08 2005//
+/PropertyFactory.java/1.7/Fri Aug 12 02:40:02 2005//
+/PropertyFactoryImpl.java/1.4/Fri Aug 12 02:40:00 2005//
+/PropertyList.java/1.8/Fri Oct  7 23:10:08 2005//
+/Recur.java/1.21/Sun Oct  2 06:50:14 2005//
+/ResourceList.java/1.7/Fri Aug 12 02:40:01 2005//
+/Time.java/1.3/Fri Oct  7 23:10:08 2005//
+/TimeZone.java/1.3/Sun Oct  2 06:48:02 2005//
+/TimeZoneRegistry.java/1.2/Sun Oct  2 08:52:20 2005//
+/TimeZoneRegistryFactory.java/1.2/Tue Oct 11 19:05:17 2005//
+/TimeZoneRegistryImpl.java/1.3/Sun Oct  2 08:52:20 2005//
+/UtcOffset.java/1.4/Fri Oct  7 23:10:08 2005//
+/ValidationException.java/1.5/Fri Aug 12 02:40:02 2005//
+/WeekDay.java/1.6/Fri Aug 12 02:40:01 2005//
+/WeekDayList.java/1.8/Fri Oct  7 23:10:08 2005//
+D/component////
+/package.html/1.1/Tue Jul 19 13:44:06 2005//
+D/parameter////
+D/property////

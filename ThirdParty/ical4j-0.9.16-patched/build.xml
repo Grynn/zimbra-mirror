@@ -1,0 +1,142 @@
+<?xml version="1.0"?>
+
+<!--
+  - $Id: build.xml,v 1.12 2005/10/09 12:11:05 fortuna Exp $
+  -
+  - Ant build script for iCal4j project.
+  -->
+<project name="iCal4j" basedir="." default="package">
+
+	<!-- Project details -->
+    <property name="project.version" value="0.9.16"/>
+	
+	<!-- Project paths -->
+    <property name="source.dir" location="source"/>
+    <property name="test.source.dir" location="test"/>
+    <property name="output.dir" location="bin"/>
+    <property name="package.dir" location="build"/>
+    <property name="package.file" value="ical4j.jar"/>
+    <property name="javadoc.dir" location="docs/api"/>
+    <property name="javadoc.packages" value="net.fortuna.ical4j.*"/>
+    <property name="dist.dir" location=".."/>
+    <property name="dist.name" value="ical4j"/>
+    <property name="dist.maven.file" value="${dist.name}-${project.version}-bundle.jar"/>
+	
+	<!-- Load overrides for library paths -->
+	<property file="build.properties"/>
+
+	<!-- Library paths -->
+    <property name="j2se.apiurl" value="http://java.sun.com/j2se/1.4/docs/api/"/>
+    <property name="jakarta-commons-logging.apiurl" value="http://jakarta.apache.org/commons/logging/api/"/>
+	
+	<property name="project.classpath" value="lib/commons-logging.jar;${output.dir}"/>
+    
+	<!-- Targets -->
+    <target name="clean-compile">
+        <mkdir dir="${output.dir}"/>
+        <delete>
+            <fileset dir="${output.dir}"/>
+        </delete>
+    </target>
+    
+    <target name="compile">
+    	<echo message="Compiling source from classpath: ${project.classpath}"/>
+        <javac source="1.4" target="1.4" srcdir="${source.dir}" destdir="${output.dir}" debug="false" deprecation="true" classpath="${project.classpath}"/>
+    </target>
+    
+    <target name="compile-tests">
+    	<echo message="Compiling tests from classpath: ${project.classpath}"/>
+        <javac srcdir="${test.source.dir}" destdir="${output.dir}" debug="false" deprecation="true" classpath="${project.classpath}"/>
+    </target>
+    
+    <target name="clean-package">
+        <mkdir dir="${package.dir}"/>
+        <delete>
+            <fileset dir="${package.dir}"/>
+        </delete>
+    </target>
+    
+    <target name="package" depends="compile, clean-package">
+        <manifest file="etc/manifest.mf">
+            <!-- Add manifest attributes here.. -->
+            <attribute name="Class-Path" value="commons-logging.jar" />
+        </manifest>
+        <jar basedir="${output.dir}" compress="true" jarfile="${package.dir}/${package.file}" manifest="etc/manifest.mf"/>
+    </target>
+    
+    <target name="clean-javadoc">
+        <mkdir dir="${javadoc.dir}"/>
+        <delete>
+            <fileset dir="${javadoc.dir}"/>
+        </delete>
+    </target>
+    
+    <target name="javadoc" depends="clean-javadoc">
+    	<echo message="Generating Javadocs from classpath: ${project.classpath}"/>
+        <javadoc sourcepath="${source.dir}"
+                 destdir="${javadoc.dir}"
+                 packagenames="${javadoc.packages}"
+                 Windowtitle="${ant.project.name}"
+                 Doctitle="${ant.project.name}"
+                 Overview="etc/overview.html"
+                 classpath="${project.classpath}">
+     		<link href="${j2se.apiurl}"/>
+     		<link href="${jakarta-commons-logging.apiurl}"/>
+        </javadoc>
+    </target>
+
+	<!-- Source distribution -->
+    <target name="dist-src" depends="clean-compile, clean-package, javadoc">
+        <zip zipfile="${dist.dir}/${dist.name}-${project.version}-src.zip">
+            <zipfileset dir="." prefix="${dist.name}-${project.version}"/>
+        </zip>
+    </target>
+
+	<!-- Binary distribution -->
+    <target name="dist" depends="clean-compile, package, javadoc">
+        <zip zipfile="${dist.dir}/${dist.name}-${project.version}.zip">
+            <zipfileset dir="." prefix="${dist.name}-${project.version}" includes="LICENSE,CHANGELOG,README"/>
+            <zipfileset dir="docs" prefix="${dist.name}-${project.version}/docs"/>
+            <zipfileset dir="etc" prefix="${dist.name}-${project.version}/etc" includes="FAQ,TODO,rfc2445.txt,samples/**"/>
+            <zipfileset dir="${package.dir}" prefix="${dist.name}-${project.version}/lib"/>
+            <zipfileset dir="lib" prefix="${dist.name}-${project.version}/lib"/>
+        </zip>
+    </target>
+
+	<!-- Maven distribution -->
+    <target name="dist-maven" depends="clean-compile, package">
+        <jar jarfile="${dist.dir}/${dist.maven.file}">
+            <zipfileset dir="." includes="LICENSE" fullpath="LICENSE.txt"/>
+            <zipfileset dir="etc" includes="project.xml"/>
+            <zipfileset dir="build" includes="${package.file}" fullpath="${dist.name}-${project.version}.jar"/>
+        </jar>
+    </target>
+    
+	<!-- Detailed changelog -->
+    <target name="changelog">
+    	<cvschangelog destfile="CHANGES"/>
+    </target>
+    
+	<!-- JUnit tests -->
+    <target name="run-tests" depends="compile, compile-tests">
+    	<echo message="Running unit tests with classpath: ${project.classpath}"/>
+        <junit printsummary="yes" showoutput="yes" fork="yes">
+            <classpath path="${project.classpath}"/>
+            <test name="net.fortuna.ical4j.AllTests"/>
+<!--
+            <batchtest>
+                <fileset dir="${test.source.dir}">
+                    <include name="**/*Test*.java"/>
+                </fileset>
+            </batchtest>
+-->
+            
+            <!--
+            <test name="net.fortuna.ical4j.data.CalendarOutputterTest"/>
+            <test name="net.fortuna.ical4j.model.component.VTimeZoneTest"/>
+            <test name="net.fortuna.ical4j.model.component.VEventTest"/>
+            <test name="net.fortuna.ical4j.data.CalendarBuilderTest"/>
+            -->
+        </junit>
+    </target>
+</project>

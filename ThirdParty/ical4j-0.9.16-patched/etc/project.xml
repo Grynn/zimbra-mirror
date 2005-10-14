@@ -1,0 +1,57 @@
+<project>
+    <groupId>ical4j</groupId>
+    <id>ical4j</id>
+    <artifactId>ical4j</artifactId>
+    <name>iCal4j</name>
+    <currentVersion>0.9.16</currentVersion>
+
+    <organization>
+        <name>Ben Fortuna</name>
+        <url>http://sourceforge.net/users/fortuna</url>
+        <logo/>
+    </organization>
+    
+    <dependencies>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+        </dependency>
+    </dependencies>
+    
+    <build>
+        <sourceDirectory>source</sourceDirectory>
+        <unitTestSourceDirectory>test</unitTestSourceDirectory>
+        
+        <unitTest>
+            <includes>
+                <include>**/*Test.java</include>
+            </includes>
+            <excludes>
+                <exclude>**/*Abstract*Test.java</exclude>
+            </excludes>
+            <resources>
+                <resource>          
+                    <directory>test</directory>
+                    <excludes>
+                        <exclude>**/*.java</exclude>
+                    </excludes>
+                </resource>
+            </resources>
+        </unitTest>
+    
+        <resources>
+            <resource>
+                <directory>source</directory>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+        </resources>
+    </build>
+</project>

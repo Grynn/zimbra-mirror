@@ -1,0 +1,19 @@
+This source code forked out of the iCal4j CVS tree immediately post 0.9.16
+
+Two changes have been made:
+
+1) net.fortuna.ical4j.model.TimeZone has been replaced with a new
+   implementation based on SimpleTimeZone.  This was done because of
+   signifcant performance problems encountered with the iCal4j
+   version.  The iCal4j TimeZone class expands the Daylight and
+   Standard rules over a huge range (1601-present) on every call to
+   inDaylight.
+
+2) Uris.java: commented out the code in Uris.encode() and
+   Uris.decode() because the Uri-encoding was causing problems with
+   java.net.URL building (specifically we would end up with URL's
+   where the SchemeSpecificPart was "MAILTO%3Afoo%40bar.com".  This
+   was done this way (via URIs.java) so as to minimize the amount of
+   iCal4j code changed.
+
+
