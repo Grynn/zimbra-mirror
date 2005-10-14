@@ -68,15 +68,10 @@ my $authResponse = $SOAP->invoke($url, $d->root());
 print "AuthResponse = ".$authResponse->to_string("pretty")."\n";
 
 my $authToken = $authResponse->find_child('authToken')->content;
-#print "authToken($authToken)\n";
-
 my $sessionId = $authResponse->find_child('sessionId')->content;
-#print "sessionId = $sessionId\n";
-
 my $context = $SOAP->zimbraContext($authToken, $sessionId);
-
 my $contextStr = $context->to_string("pretty");
-#print("Context = $contextStr\n");
+
 
 #######################################################################
 #
@@ -85,20 +80,7 @@ my $contextStr = $context->to_string("pretty");
 my $now  = int(time());
 print("now is ".$now."\n");
 
-my $includeMyself = 0;
-my $includeCurpleAddr = 0;
-my $includeDogfoodAddr = 1;
-
-my $nowPlus1Hr = $now+60*60;
-my $nowPlus2Hr = $now+2*60*60;
-
-# convert from secs to msecs for server
-$nowPlus1Hr *= 1000;
-$nowPlus2Hr *= 1000;
-
-
-#print "1 hour from now is ".($nowPlus2Hr)."\n";
-
+my $localHostname = "example.zimbra.com";
 
 $d = new XmlDoc;
 
@@ -106,34 +88,11 @@ $d->start('CreateAppointmentRequest', $MAILNS);
 
 $d->start('m', undef, { 'l' => "10" }, undef);
 
-if ($includeMyself) {
-    $d->add('e', undef,
-            {
-                'a' => "user1\@timbre.example.zimbra.com",
-                't' => "t"
-                } );
-}
 $d->add('e', undef,
         {
-            'a' => "user2\@timbre.example.zimbra.com",
+            'a' => "user2\@$localHostname",
             't' => "t"
             } );
-
-if ($includeCurpleAddr) {
-    $d->add('e', undef,
-            {
-                'a' => "user3\@curple.com",
-                't' => "t"
-                } );
-}
-
-if ($includeDogfoodAddr) {
-    $d->add('e', undef,
-            {
-                'a' => "tim\@example.zimbra.com",
-                't' => "t",
-            } );
-}
 
 $d->add('su', undef, undef, $apptName);
 
@@ -151,15 +110,13 @@ $d->end(); #mp (multipart/mixed
 
 $d->start('inv', undef, { 'type' => "event",
                           'allday' => "false",
-#                          's' => $nowPlus1Hr,
-#                          'e' => $nowPlus2Hr,
                           'name' => $apptName,
                           'loc' => "test location for $apptName"
                           });
 
 #dtstart
 $d->add('s', undef, { 'd', => $startTime,
-                      'tz', => "(GMT-08.00) Pacific Time (US & Canada) / Tijuana",
+#                      'tz', => "(GMT-08.00) Pacific Time (US & Canada) / Tijuana",
                   });
 
 if ($endTime =~ /^([+-])?P(\d+W)$/) {
@@ -174,7 +131,7 @@ if ($endTime =~ /^([+-])?P(\d+W)$/) {
     
     $d->add('dur', undef, %atts);
 } elsif ($endTime =~ /^([+-])?P(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?)?$/) {
-#    print("EndTime is $1 $2 Days $3 Hours $4 Minutes $5 Seconds\n");
+    print("EndTime is $1 $2 Days $3 Hours $4 Minutes $5 Seconds\n");
     #duration
 
     my %atts;
@@ -223,31 +180,22 @@ if ($endTime =~ /^([+-])?P(\d+W)$/) {
                       });
 }
 
-$d->add('or', undef, { 'd' => "user1", 'a' => "user1\@timbre.example.zimbra.com" } );
+$d->add('or', undef, { 'd' => "user1", 'a' => "user1\@$localHostname" } );
 
 $d->add('at', undef, { 'd' => "user2",
-                       'a' => "user2\@timbre.example.zimbra.com",
+                       'a' => "user2\@$localHostname",
                        'role' => "REQ",
                        'ptst' => "NE",
 #                       'rsvp' => "1"
                        });
 
 $d->add('at', undef, { 'd' => "user3",
-                       'a' => "user3\@curple.com",
+                       'a' => "user3\@$localHostname",
                        'role' => "REQ",
                        'ptst' => "NE",
 #                       'rsvp' => "1"
                        });
 
-if ($includeDogfoodAddr) {
-    $d->add('at', undef, { 'd' => "tim",
-                           'a' => "tim\@example.zimbra.com",
-                           'role' => "REQ",
-                           'ptst' => "NE",
-#                           'rsvp' => "1",
-                       });
-}
-    
 if (1) {
     $d->start('recur');
 
@@ -329,32 +277,10 @@ my $end;
 my $avg;
 my $elapsed;
 
-#do {
-
 $start = time;
-#    $msgAttrs{'sortby'} = "subjasc";
 $response = $SOAP->invoke($url, $d->root(), $context);
-#    $end = time;
-#    $elapsed = $end - $start;
-#    $avg = $elapsed *1000;
-#    print("Ran iter in $elapsed time ($avg ms)\n");
-
-#    $start = time;
-#    $msgAttrs{'sortby'} = "subjdesc";
-#$response = $SOAP->invoke($url, $d->root(), $context);
-#    $end = time;
-#    $elapsed = $end - $start;
-#    $avg = $elapsed *1000;
-#    print("Ran iter in $elapsed time ($avg ms)\n");
-
-#$i++;
-#} while($i < 50) ;
-
-#my $lastEnd = time;
-#$avg = ($lastEnd - $firstStart) / $i * 1000;
 print "\nRESPONSE:\n--------------\n";
 $out =  $response->to_string("pretty")."\n";
 #$out =~ s/ns0\://g;
 print $out."\n";
 
-# print("\nRan $i iters in $elapsed time (avg = $avg ms)\n");
