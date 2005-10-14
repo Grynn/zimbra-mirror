@@ -3,7 +3,6 @@
 	<classpathentry kind="lib" path="jars/javacc-3.2.jar"/>
 	<classpathentry kind="src" path="src/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="jars/ical4j-0.9.13.p2.jar"/>
 	<classpathentry kind="lib" path="jars/activation.jar">
 		<attributes>
 			<attribute value="http://java.sun.com/products/javabeans/glasgow/javadocs/" name="javadoc_location"/>
@@ -68,5 +67,6 @@
 			<attribute value="http://jakarta.apache.org/commons/cli/apidocs/" name="javadoc_location"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="jars/ical4j-0.9.16-patched.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
