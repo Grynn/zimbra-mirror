@@ -78,7 +78,7 @@ ZaClusteredServicesListView.prototype._writeElement = function (html, idx, item,
 	} else {
 		html[idx++] = "class='ZaClusterServicesListView_server_table'";
 	}
-	DBG.dumpObj(item);
+
 	html[idx++] = "_serviceInfo=";
 	html[idx++] = onlyServiceInfo;
 	html[idx++] = ">";

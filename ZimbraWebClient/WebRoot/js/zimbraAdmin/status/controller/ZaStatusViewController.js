@@ -46,8 +46,8 @@ function() {
 	var globalConfig = this._app.getGlobalConfig();
 
 		var mystatusVector = this._app.getStatusList(true).getVector();
-   	var mystatusVector = this.getDummyVector();
-	globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster] = "true";
+//    	var mystatusVector = this.getDummyVector();
+// 	globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster] = "true";
     if (!this._contentView) {
 		var elements = new Object();
 		if (AjxUtil.isSpecified(globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster])) {
