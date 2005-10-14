@@ -55,6 +55,8 @@ function ZaController(appCtxt, container, app, isAdmin) {
 //    	this._errorDialog.setApp(app);
     	this._msgDialog.setApp(app);    	
     }	
+    
+    this._helpURL = "/zimbraAdmin/adminhelp/html/OpenSourceAdminHelp/administration_console_help.htm";
 }
 
 var i = 1;
@@ -151,6 +153,11 @@ function (nextViewCtrlr, func, params) {
 ZaController.prototype._setView =
 function() {
 
+}
+
+ZaController.prototype._helpButtonListener =
+function() {
+	window.open(this._helpURL);
 }
 /*
 * We do the whole schedule/execute thing to give the shell the opportunity to popup its "busy" 

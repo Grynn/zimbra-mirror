@@ -535,6 +535,49 @@ function (delegateToken, tokenLifetime, mailServer) {
 	form.submit();		
 }
 
+ZaAccountListController._viewMailListenerLauncher = 
+function(account) {
+	try {
+		var obj;
+		if(account.type == ZaItem.ACCOUNT) {
+			obj = ZaAccount.getViewMailLink(account.id);
+		} else if(account.type == ZaItem.ALIAS && account.attrs[ZaAlias.A_AliasTargetId]) {
+			obj = ZaAccount.getViewMailLink(account.attrs[ZaAlias.A_AliasTargetId]);
+		} else {
+			return;
+		}
+		var win = window.open("about:blank", "_blank");
+		var ms = account.attrs[ZaAccount.A_mailHost] ? account.attrs[ZaAccount.A_mailHost] : location.hostname;
+		//find my server
+		var servers = this._app.getServerList().getArray();
+		var cnt = servers.length;
+		var mailPort = 80;
+		var mailProtocol = "http";
+		
+		for (var i = 0; i < cnt; i++) {
+			if(servers[i].attrs[ZaServer.A_ServiceHostname] == ms) {
+				if(servers[i].attrs[ZaServer.A_zimbraMailSSLPort] && parseInt(servers[i].attrs[ZaServer.A_zimbraMailSSLPort]) > 0) { //if there is SSL, use SSL
+					mailPort = servers[i].attrs[ZaServer.A_zimbraMailSSLPort];
+					mailProtocol = "https";
+				} else if (servers[i].attrs[ZaServer.A_zimbraMailPort] && parseInt(servers[i].attrs[ZaServer.A_zimbraMailPort]) > 0) { //otherwize use HTTP
+					mailPort = servers[i].attrs[ZaServer.A_zimbraMailPort];
+					mailProtocol = "http";
+				}
+				break;
+			}
+		}
+		//TODO: get the port and hostname from zimbraServer object
+		var mServer = mailProtocol + "://" + ms + ":" + mailPort + "/zimbra/auth/" + window.location.search;
+
+		if(!obj.authToken || !obj.lifetime || !mServer)
+			throw new AjxException("Failed to acquire credentials from the server", AjxException.UNKNOWN, "ZaAccountListController.prototype._viewMailListener");
+			
+		ZaAccountListController.launch.call(win, obj.authToken, obj.lifetime, mServer);
+	} catch (ex) {
+		this._handleException(ex, "ZaAccountListController._viewMailListenerLauncher", null, false);			
+	}		
+}
+
 ZaAccountListController.prototype._viewMailListener =
 function(ev) {
 	try {
@@ -542,41 +585,7 @@ function(ev) {
 		if(el) {
 			var account = DwtListView.prototype.getItemFromElement.call(this, el);
 			if(account) {
-				var obj;
-				if(account.type == ZaItem.ACCOUNT) {
-					obj = ZaAccount.getViewMailLink(account.id);
-				} else if(account.type == ZaItem.ALIAS && account.attrs[ZaAlias.A_AliasTargetId]) {
-					obj = ZaAccount.getViewMailLink(account.attrs[ZaAlias.A_AliasTargetId]);
-				} else {
-					return;
-				}
-				var win = window.open("about:blank", "_blank");
-				var ms = account.attrs[ZaAccount.A_mailHost] ? account.attrs[ZaAccount.A_mailHost] : location.hostname;
-				//find my server
-				var servers = this._app.getServerList().getArray();
-				var cnt = servers.length;
-				var mailPort = 80;
-				var mailProtocol = "http";
-				
-				for (var i = 0; i < cnt; i++) {
-					if(servers[i].attrs[ZaServer.A_ServiceHostname] == ms) {
-						if(servers[i].attrs[ZaServer.A_zimbraMailSSLPort] && parseInt(servers[i].attrs[ZaServer.A_zimbraMailSSLPort]) > 0) { //if there is SSL, use SSL
-							mailPort = servers[i].attrs[ZaServer.A_zimbraMailSSLPort];
-							mailProtocol = "https";
-						} else if (servers[i].attrs[ZaServer.A_zimbraMailPort] && parseInt(servers[i].attrs[ZaServer.A_zimbraMailPort]) > 0) { //otherwize use HTTP
-							mailPort = servers[i].attrs[ZaServer.A_zimbraMailPort];
-							mailProtocol = "http";
-						}
-						break;
-					}
-				}
-				//TODO: get the port and hostname from zimbraServer object
-				var mServer = mailProtocol + "://" + ms + ":" + mailPort + "/zimbra/auth/" + window.location.search;
-	
-				if(!obj.authToken || !obj.lifetime || !mServer)
-					throw new AjxException("Failed to acquire credentials from the server", AjxException.UNKNOWN, "ZaAccountListController.prototype._viewMailListener");
-					
-				ZaAccountListController.launch.call(win, obj.authToken, obj.lifetime, mServer);
+				ZaAccountListController._viewMailListenerLauncher.call(this, account);
 			}
 		}
 	} catch (ex) {

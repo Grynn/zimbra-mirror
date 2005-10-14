@@ -41,10 +41,15 @@ function ZaToolBar(parent, opList, posStyle, className) {
 	if(opList) {
 		var cnt = opList.length;
 		for(var ix=0; ix < cnt; ix++) {
-			this._createButton(opList[ix].id, opList[ix].imageId, opList[ix].caption, opList[ix].disImageId, opList[ix].tt, true, null, null,
-							   opList[ix].type,opList[ix].menuOpList);
-			this._createSeparator();
-			this.addSelectionListener(opList[ix].id, opList[ix].listener);		
+			if(opList[ix].id == ZaOperation.SEP) {
+				this._createSeparator();
+			} else if (opList[ix].id == ZaOperation.NONE) {
+				this.addFiller();
+			} else {
+				this._createButton(opList[ix].id, opList[ix].imageId, opList[ix].caption, opList[ix].disImageId, opList[ix].tt, true, opList[ix].className, opList[ix].type, opList[ix].menuOpList);
+	
+				this.addSelectionListener(opList[ix].id, opList[ix].listener);		
+			}
 		}
 	}
 }
@@ -109,10 +114,10 @@ function(enabled) {
 }
 
 ZaToolBar.prototype._createButton =
-function(buttonId, imageId, text, disImageId, toolTip, enabled, style, align, type, menuOpList) {
-	if (!style)
-		style = "TBButton"
-	var b = this._buttons[buttonId] = new DwtButton(this, align, style);
+function(buttonId, imageId, text, disImageId, toolTip, enabled, className, type, menuOpList) {
+	if (!className)
+		className = "TBButton"
+	var b = this._buttons[buttonId] = new DwtButton(this, null, className);
 	if (imageId)
 		b.setImage(imageId);
 	if (text)
@@ -133,7 +138,9 @@ function(buttonId, imageId, text, disImageId, toolTip, enabled, style, align, ty
 
 ZaToolBar.prototype._createSeparator =
 function() {
-	new DwtControl(this, "vertSep");
+	var ctrl = new DwtControl(this);
+	var html = "<table><tr><td class=\"ImgAppToolbarSectionSep__V\" height=20px width=3px> </td></tr></table>";
+	ctrl.setContent(html);
 }
 
 ZaToolBar.prototype._buttonId =

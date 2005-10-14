@@ -422,10 +422,15 @@ function(entry, skipRefresh) {
 
 		if(!this._UICreated) {
 	   		this._ops = new Array();
-	 		this._ops.push(new ZaOperation(ZaOperation.NEW_WIZARD, ZaMsg.TBB_New, ZaMsg.ALTBB_New_tt, "Account", "AccountDis", new AjxListener(this, ZaAccountViewController.prototype._newButtonListener)));   			    	
    			this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, ZaAccountViewController.prototype._saveButtonListener)));
    			this._ops.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.ALTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, ZaAccountViewController.prototype._closeButtonListener)));    	
+   			this._ops.push(new ZaOperation(ZaOperation.SEP));
+	 		this._ops.push(new ZaOperation(ZaOperation.NEW_WIZARD, ZaMsg.TBB_New, ZaMsg.ALTBB_New_tt, "Account", "AccountDis", new AjxListener(this, ZaAccountViewController.prototype._newButtonListener)));   			    	
    			this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ALTBB_Delete_tt,"Delete", "DeleteDis", new AjxListener(this, ZaAccountViewController.prototype._deleteButtonListener)));    	    	
+			this._ops.push(new ZaOperation(ZaOperation.VIEW_MAIL, ZaMsg.ACTBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, "ReadMailbox", "ReadMailboxDis", new AjxListener(this, ZaAccountViewController.prototype._viewMailListener)));		
+			this._ops.push(new ZaOperation(ZaOperation.NONE));
+			this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));		
+
 			this._toolBar = new ZaToolBar(this._container, this._ops);
 	
 	  		//this._view = new ZaAccountView(this._container, this._app, entry.id);
@@ -676,3 +681,13 @@ function(details) {
 
 }
 
+ZaAccountViewController.prototype._viewMailListener =
+function(ev) {
+	try {
+		if(this._currentObject && this._currentObject.id) {
+			ZaAccountListController._viewMailListenerLauncher.call(this, this._currentObject);
+		}
+	} catch (ex) {
+		this._handleException(ex, "ZaAccountViewController.prototype._viewMailListener", null, false);			
+	}
+}
