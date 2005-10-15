@@ -28,6 +28,7 @@
              resourceName="UserDatabase" />
 
       <Host name="localhost" appBase="webapps" autoDeploy="false">
+          <DefaultContext reloadable="false"/>
 	  <Context path="/" docBase="${catalina.home}/webapps/zimbra" debug="0" />
       </Host>
 
