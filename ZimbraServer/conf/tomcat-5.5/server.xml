@@ -29,9 +29,6 @@
         clientAuth="false" sslProtocol="TLS"
         keystoreFile="conf/keystore" keystorePass="zimbra"/>
 
-    <!-- This is here for compatibility only, not required -->
-    <Connector port="8009" protocol="AJP/1.3" />
-
     <Engine name="Catalina" defaultHost="localhost">
       <Realm className="org.apache.catalina.realm.UserDatabaseRealm"
              resourceName="UserDatabase" />
