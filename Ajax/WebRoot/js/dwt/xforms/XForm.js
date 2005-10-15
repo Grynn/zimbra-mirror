@@ -443,6 +443,7 @@ XForm.prototype.getOutstandingRowSpanCols = function (parentItem) {
 	var outstandingRowSpanCols = 0;
 	var previousRowSpans = parentItem.__rowSpanItems;
 	if (previousRowSpans) {
+/*
 		for (var i = 0; i < previousRowSpans.length; i++) {
 			var previousItem = previousRowSpans[i];
 			//DBG.println("outputing ", previousItem.__numDrawnCols," rowSpan columns for ", previousItem);
@@ -457,6 +458,22 @@ XForm.prototype.getOutstandingRowSpanCols = function (parentItem) {
 				}
 			}
 		}
+*/
+		for (var i = previousRowSpans.length-1; i >= 0; i--) {
+			var previousItem = previousRowSpans[i];
+			//DBG.println("outputing ", previousItem.__numDrawnCols," rowSpan columns for ", previousItem);
+			previousItem.__numOutstandingRows -= 1;
+			if ( previousItem.__numOutstandingRows == 0) {
+				if (previousRowSpans.length == 1) {
+					delete parentItem.__rowSpanItems;
+				} else {
+					parentItem.__rowSpanItems.pop();
+				}
+			} else {
+				outstandingRowSpanCols += previousItem.__numDrawnCols;			
+			}
+		}
+
 	}
 	return outstandingRowSpanCols;
 }
@@ -529,7 +546,7 @@ XForm.prototype.outputItemList = function (items, parentItem, html, updateScript
 			parentItem.__rowSpanItems.push(item);
 			item.__numOutstandingRows = rowSpan;
 		}
-		
+		//DBG.println("rowSpan = " + rowSpan);
 		// write the label to the left if desired
 		if (label != null && labelLocation == _LEFT_) {
 			//DBG.println("writing label");
@@ -585,7 +602,7 @@ XForm.prototype.outputItemList = function (items, parentItem, html, updateScript
 		// if the number of outstanding rows is the same as the number of columns we're to generate
 		//	output an empty row for each
 		while (currentCol >= numCols) {
-			DBG.println("outputting empty row because outstandingRowSpanCols >= numCols");
+			//DBG.println("outputting empty row because outstandingRowSpanCols >= numCols");
 			html.append("</tr id='numCols'>");//\r<tr  id='numCols'>");
 			currentCol = this.getOutstandingRowSpanCols(parentItem);
 		}
