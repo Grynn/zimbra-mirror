@@ -558,16 +558,6 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 								labelLocation:_LEFT_, 
 								onChange:ZaTabView.onFormFieldChanged
 							},
-							{type:_DWT_BUTTON_, label:ZaMsg.NAD_HSM_StartHsm,
-								relevant:"instance.hsm[ZaServer.A_HSMrunning]==0",
-								width:"120px",
-								onActivate:ZaServerXFormView.runHsm,colSpan:2
-							},
-							{type:_DWT_BUTTON_, label:ZaMsg.NAD_HSM_AbortHsm,
-								relevant:"instance.hsm[ZaServer.A_HSMrunning]==1",
-								width:"120px",
-								onActivate:ZaServerXFormView.abortHsm,colSpan:2
-							},							
 							{type:_OUTPUT_, label:ZaMsg.NAD_HSM_Status, labelLocation:_LEFT_,
 								ref:ZaServer.A_HSMrunning, choices:ZaServer.HSM_StatusChoices,
 								relevant:"instance.hsm[ZaServer.A_HSMwasAborted]==0",relevantBehavior:_HIDE_
@@ -605,6 +595,16 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 										return "";
 								}
 							},
+							{type:_DWT_BUTTON_, label:ZaMsg.NAD_HSM_StartHsm,
+								relevant:"instance.hsm[ZaServer.A_HSMrunning]==0",
+								width:"120px",
+								onActivate:ZaServerXFormView.runHsm,colSpan:2
+							},
+							{type:_DWT_BUTTON_, label:ZaMsg.NAD_HSM_AbortHsm,
+								relevant:"instance.hsm[ZaServer.A_HSMrunning]==1",
+								width:"120px",
+								onActivate:ZaServerXFormView.abortHsm,colSpan:2
+							},								
 							{type:_DWT_BUTTON_, label:ZaMsg.NAD_HSM_Refresh,
 								onActivate:ZaServerXFormView.refreshHsm,
 								width:"120px"

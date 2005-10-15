@@ -172,27 +172,57 @@ ZaAccountXFormView.prototype.getMyXForm = function() {
 	var xFormObject = {
 		tableCssStyle:"width:100%;overflow:auto;",
 		items: [
-			{type:_GROUP_, cssClass:"AdminTitleBar", colSpan: "*", 
+			{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", 
 				items: [
-					{type:_OUTPUT_, ref:ZaAccount.A_displayname, label:ZaMsg.NAD_Account},
-					{type:_OUTPUT_, ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID},
-					{type:_OUTPUT_, ref:ZaAccount.A_mailHost, label:ZaMsg.NAD_MailServer},					
-					{type:_GROUP_, colSpan: "*", numCols:4, 
-						items: [
+					{type:_GROUP_,	numCols:4,
+						items: [	
+							{type:_AJX_IMAGE_, src:"Person_32", label:null, rowSpan:2},
+							{type:_OUTPUT_, ref:ZaAccount.A_displayname, label:null,cssClass:"AdminTitle", rowSpan:2},
+							{type:_OUTPUT_, ref:ZaAccount.A_COSId, label:ZaMsg.NAD_ClassOfService+":",  choices:this._app.getCosListChoices()},							
+							{type:_OUTPUT_, ref:ZaAccount.A_accountStatus, label:ZaMsg.NAD_AccountStatus+":", labelLocation:_LEFT_, choices:this.accountStatusChoices},												
+							{type:_OUTPUT_, ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID},							
+							{type:_OUTPUT_, ref:ZaAccount.A_mailHost, label:ZaMsg.NAD_MailServer+":"},
 							{type:_OUTPUT_, ref:ZaAccount.A2_mbxsize, label:ZaMsg.usedQuota+":",
 								getDisplayValue:function() {
 									var val = this.getInstanceValue();
 									if(!val) 
-										val = "0 MB";
+										val = "0 MB ";
 									else {
-										val = Number(val / 1048576).toFixed(3) + " MB";
+										val = Number(val / 1048576).toFixed(3) + " MB ";
 									}
+									var quotaUsed = "";
+									
+									if(this.getInstance() != null)
+										quotaUsed = this.getInstanceValue("attrs/" + ZaAccount.A2_quota);
+										
+									val += ZaMsg.Of + " " + quotaUsed;									
 									return val;
 								}
-							},
-							{type:_OUTPUT_, ref:ZaAccount.A2_quota, label:ZaMsg.Of},								
+							}
 						]
 					}
+						/*
+						{type:_GROUP_,numCols:4,
+							items: [							
+								{type:_GROUP_, numCols:4, colSpan:2,
+									items: [
+										{type:_OUTPUT_, ref:ZaAccount.A2_mbxsize, label:ZaMsg.usedQuota+":",
+											getDisplayValue:function() {
+												var val = this.getInstanceValue();
+												if(!val) 
+													val = "0 MB";
+												else {
+													val = Number(val / 1048576).toFixed(3) + " MB";
+												}
+												return val;
+											}
+										},
+										{type:_OUTPUT_, ref:ZaAccount.A2_quota, label:ZaMsg.Of}								
+									]
+								}
+							]
+						}
+						*/
 				]
 			},
 			{type:_TAB_BAR_,  ref:ZaModel.currentTab,
@@ -204,7 +234,8 @@ ZaAccountXFormView.prototype.getMyXForm = function() {
 					{value:5, label:ZaMsg.TABT_Aliases},										
 					{value:6, label:ZaMsg.TABT_Forwarding},															
 					{value:7, label:ZaMsg.TABT_Advanced}									
-				]
+				],
+				cssClass:"ZaTabBar"
 			},
 			{type:_SWITCH_, align:_LEFT_, valign:_TOP_, 
 				items:[

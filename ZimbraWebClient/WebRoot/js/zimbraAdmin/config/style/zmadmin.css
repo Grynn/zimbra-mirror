@@ -527,3 +527,14 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 .helpSeparator { 
   border-bottom:4px Ridge #CCCCCC;
 }
+
+/* Tab button grid */
+.ZaTabBar {
+	background-image:url(/zimbraAdmin/skins/steel/images/bg_pebble.gif);
+}
+
+.AdminTitle {
+	font-size: 14pt;
+	font-style: bold	
+	font-family: Arial, Tahoma, Helvetica, sans-serif;
+}
