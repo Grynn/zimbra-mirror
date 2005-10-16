@@ -56,10 +56,7 @@ function(list) {
 AjxVector.prototype.clone =
 function (){
 	var vec = new AjxVector();
-	var list = this._array;
-	for (var i = 0; i < list.length; ++i){
-		vec._array[i] = list[i];
-	}
+	vec.addList(this);
 	return vec;
 };
 
