@@ -61,14 +61,10 @@ function(ev) {
 DwtUiEvent.getTarget =
 function(ev)  {
 	ev = DwtUiEvent.getEvent(ev);
-	if (ev.target) {
-		/* if text node (like on Safari) return parent */
-		if (ev.target.nodeType == 3) {
-			return ev.target.parentNode;
-		} else {
-			return ev.target;
-		}
-	} else if (ev.srcElement) {
+	if (ev && ev.target) {
+		// if text node (like on Safari) return parent
+		return ev.target.nodeType == 3 ? ev.target.parentNode : ev.target;
+	} else if (ev && ev.srcElement) {
 		return ev.srcElement;
 	} else {
 		return null;
