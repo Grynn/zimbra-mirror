@@ -385,4 +385,23 @@ function(string) {
 	}
 	text += '"';
 	return text;
-}
+};
+
+AjxUtil.getInnerText = function(node) {
+	if (AjxEnv.isIE)
+		return node.innerText;
+	function f(n) {
+		if (n) {
+			if (n.nodeType == 3 /* TEXT_NODE */)
+				return n.data;
+			if (n.nodeType == 1 /* ELEMENT_NODE */) {
+				var str = "";
+				for (var i = n.firstChild; i; i = i.nextSibling)
+					str += f(i);
+				return str;
+			}
+		}
+		return "";
+	};
+	return f(node);
+};
