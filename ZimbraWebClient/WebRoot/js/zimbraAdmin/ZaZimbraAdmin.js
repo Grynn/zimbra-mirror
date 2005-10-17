@@ -101,6 +101,7 @@ ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._HELP_VIEW] = "Help_view_title";
 ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._DOMAIN_VIEW] = "Domain_view_title";
 ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._COS_VIEW] = "COS_view_title";
 ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._STATUS] = "Status_view_title";
+ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._MIGRATION_WIZ_VIEW] = "Migration_wiz_title";
 
 // do not change the name of the cookie! SoapServlet looks for it
 ZaZimbraAdmin._COOKIE_NAME = "ZM_ADMIN_AUTH_TOKEN";
