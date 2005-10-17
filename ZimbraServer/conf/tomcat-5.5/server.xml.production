@@ -1,4 +1,15 @@
 <Server port="8005" shutdown="SHUTDOWN">
+
+  <GlobalNamingResources>
+    <!-- Used by Manager webapp -->
+    <Resource name="UserDatabase" auth="Container"
+              type="org.apache.catalina.UserDatabase"
+       description="User database that can be updated and saved"
+           factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
+          pathname="conf/tomcat-users.xml" />
+  </GlobalNamingResources>
+
+
   <Service name="Catalina">
     <!-- user services connector, no SSL -->
 	<!-- HTTPBEGIN -->
