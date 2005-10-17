@@ -141,7 +141,22 @@ function() {
 
 ZaLoginDialog.prototype.resetLicenseWarning =
 function () {
-	this._licenseCell.style.visibility = (ZaServerVersionInfo.licenseExpired)? "visible": "hidden";
+	if (ZaServerVersionInfo.licenseExists) {
+		this._licenseCell.style.visibility = "visible";
+		var licenseInfoText = null;
+		if (ZaServerVersionInfo.licenseExpired) {
+			this._licenseCell.className = "licenseExpired";
+			licenseInfoText = ZaMsg.licenseExpired;
+		} else {
+			this._licenseCell.className = "licenseWillExpire";
+			licenseInfoText = ZaMsg.licenseWillExpire;
+		}
+		this._licenseCell.innerHTML = AjxBuffer.concat(licenseInfoText," ",
+													   AjxDateUtil.getTimeStr(ZaServerVersionInfo.licenseExpirationDate, ZaMsg.licenseExpiredDateFormat));
+
+	} else {
+		this._licenseCell.style.visibility = "hidden";
+	}
 };
 
 ZaLoginDialog.prototype.clearPassword =
@@ -216,7 +231,7 @@ function(unameId, pwordId, okCellId, errorCellId, licenseCellId) {
 	html[i++] = "<tr><td align=right>" + ZaMsg.password + ":</td>";
 	html[i++] = "<td><input style=\"width:100%; height:22px\" type=password tabIndex=2 id='" + pwordId + "'/></td></tr>";	
 	html[i++] = "<tr><td colspan=2><table cellpadding=0 cellspacing=0 border=0 width=100%>";
-	html[i++] = "<td id='" + licenseCellId + "' style='visibility:hidden;color:red;font-size:16px; font-weight:bold'>License expired</td>";
+	html[i++] = "<td id='" + licenseCellId + "' style='visibility:hidden;'></td>";
 	html[i++] = "<td id='" + okCellId + "' align=right></td></tr></table>";
 	html[i++] = "</td></tr></table>";
 	html[i++] = "</td></tr></table>";

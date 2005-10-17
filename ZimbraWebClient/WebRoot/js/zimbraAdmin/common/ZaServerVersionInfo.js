@@ -44,11 +44,17 @@ ZaServerVersionInfo.load = function () {
 		ZaServerVersionInfo.host = versionResponse.info[0].host;
 		ZaServerVersionInfo.release = versionResponse.info[0].release;
 		ZaServerVersionInfo.version = versionResponse.info[0].version;
-
-		var licenseResponse = resp.GetLicenseInfoResponse[0].expiration[0];
-		ZaServerVersionInfo.licenseExpired = licenseResponse.isExpired;
-		if (licenseResponse.date != null && licenseResponse.date != ""){
-			ZaServerVersionInfo.liceneseExpirationDate = ZaServerVersionInfo._parseDate(licenseResponse.date);
+		ZaServerVersionInfo.licenseExists = false;
+		if (resp.GetLicenseInfoResponse[0].expiration != null) {
+			var licenseResponse = resp.GetLicenseInfoResponse[0].expiration[0];
+			ZaServerVersionInfo.licenseExpired = licenseResponse.isExpired;
+			if (licenseResponse.date != null && licenseResponse.date != ""){
+				ZaServerVersionInfo.licenseExists = true;
+				ZaServerVersionInfo.licenseExpirationDate = ZaServerVersionInfo._parseDate(licenseResponse.date);
+			}
+		} else {
+			ZaServerVersionInfo.licenseExpired = false;
+			ZaServerVersionInfo.licenseExists = false;
 		}
 	}
 };
