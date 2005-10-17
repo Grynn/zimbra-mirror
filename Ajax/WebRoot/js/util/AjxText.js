@@ -538,8 +538,19 @@ function AjxMessageFormat(pattern) {
 AjxMessageFormat.prototype = new AjxFormat;
 AjxMessageFormat.prototype.constructor = AjxMessageFormat;
 
+// Static methods
+
 AjxMessageFormat.format = function(pattern, params) {
 	return new AjxMessageFormat(pattern).format(params);
+}
+
+// Public methods
+
+AjxMessageFormat.prototype.format = function(params) {
+	if (!(params instanceof Array)) {
+		params = [ params ];
+	}
+	return AjxFormat.prototype.format.call(this, params);
 }
 
 AjxMessageFormat.prototype.toString = function() {
