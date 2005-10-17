@@ -110,3 +110,13 @@ CREATE TABLE amavis_aggregate (
 	spam_count			INTEGER UNSIGNED,
 	virus_count			INTEGER UNSIGNED
 ) ENGINE = MyISAM;
+
+# table for status
+CREATE TABLE service_status (
+	server      VARCHAR(255) NOT NULL,
+	service     VARCHAR(255) NOT NULL,
+	time        DATETIME,
+	status      BOOL,
+
+	UNIQUE INDEX i_server_service (server(100), service(100))
+) ENGINE = MyISAM;

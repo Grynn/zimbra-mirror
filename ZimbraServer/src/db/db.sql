@@ -126,34 +126,6 @@ CREATE TABLE config (
   modified    TIMESTAMP
 ) ENGINE = InnoDB;
 
-# table for status
-CREATE TABLE service_status (
-  server      VARCHAR(255) NOT NULL,
-  service     VARCHAR(255) NOT NULL,
-  time        DATETIME,
-  status      BOOL,
-  
-  UNIQUE INDEX i_server_service (server(100), service(100))
-) ENGINE = MyISAM;
-
-# table for statistics
-CREATE TABLE server_stat (
-  time        DATETIME NOT NULL,
-  name        VARCHAR(255) NOT NULL,
-  value       VARCHAR(255),
-  INDEX i_name (name),
-  INDEX i_time (time)
-) ENGINE = MyISAM;
-
-# table for aggregate statistics
-CREATE TABLE aggregate_stat (
-  time        DATETIME NOT NULL,
-  name        VARCHAR(255) NOT NULL,
-  value       VARCHAR(255),
-  period      INTEGER,
-  PRIMARY KEY (time, name, period)
-) ENGINE = MyISAM;
-
 # table for tracking out-of-office replies
 CREATE TABLE out_of_office (
   mailbox_id  INTEGER UNSIGNED NOT NULL,
