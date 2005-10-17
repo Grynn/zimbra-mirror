@@ -195,7 +195,7 @@ if (AjxEnv.isSafari) {
 			return this._ZmOldReplace(re, val);
 		else {
 			// TODO: investigate if it's possible to use the array.join approach
-			var str = this.slice(0), v, l;
+			var str = this.slice(0), v, l, a;
 			while (a = re.exec(str)) {
 				v = val.apply(null, a);
 				l = a[0].length;
