@@ -54,7 +54,13 @@ mkdir -p ${BASE}/ca
 
 getHostInfo() {
 
-	H=`hostname --fqdn`
+	platform=`/opt/zimbra/bin/get_plat_tag.sh`
+	if [ "x$platform" = "xMACOSX" ]; then
+		HH=`hostname`
+		return
+	else
+		H=`hostname --fqdn`
+	fi
 
 	# $H=$H.zimbrasys.com
 
