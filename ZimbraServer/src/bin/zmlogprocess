@@ -551,13 +551,37 @@ sub processZimbramon {
 
 	print "Processing zimbramon entries from $lastRowID\n";
 
-	my $sth = sqlExec("select distinct(id) from raw_logs where ".
+	my $sth = sqlExec("select id, log_date, loghost, msg  from raw_logs where ".
 		"app='zimbramon' and id > '".$lastRowID."' order by id asc");
 	my $ary = $sth->fetchall_arrayref;
 
 	print "Found ".scalar @$ary." entries\n";
 
 	if (@$ary) {
+		foreach my $row (sort @$ary) {
+			my ($id, $dt, $host, $msg) = (@$row);
+			if ($msg =~ /info: ([^,]+), STATUS: (\S+): (Running|Stopped)$/) {
+				my $tm = $1;
+				my $service = $2;
+				my $status = $3;
+				my $statement = "insert into service_status ".
+					"(server, service, time, status) ".
+					"values (?,?,?,?)";
+
+				sqlExec ($statement, $host, $service, $tm, $status);
+			} elsif ($msg =~ /info: ([^,]+), DISK: dev: (\S+), mp: (\S+), tot: (\S+), avail: (\S+),$/) {
+				my $tm = $1;
+				my $dev = $2;
+				my $mp = $3;
+				my $tot = $4;
+				my $avail = $5;
+				my $statement = "insert into disk_status ".
+					"(server, time, device, mount_point, total, available) ".
+					"values (?,?,?,?,?,?)";
+
+				sqlExec ($statement, $host, $tm, $dev, $mp, $tot, $avail);
+			}
+		}
 		$lastRowID = ${@$ary[$#$ary]}[0];
 		saveLastRowId("zimbramon", $lastRowID);
 	}

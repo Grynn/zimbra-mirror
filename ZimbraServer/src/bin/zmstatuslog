@@ -44,6 +44,9 @@ if ($platform eq "MACOSX") {
 	$DFCMD = "df -ml ";
 }
 
+my $dt = `date "+%Y-%m-%d %H:%M:%S"`;
+chomp $dt;
+
 logStatus();
 
 logDiskUsage();
@@ -58,7 +61,7 @@ sub logStatus {
 	foreach my $s (@status) {
 		($s =~ /^Host/) && next;
 		my ($service, $stat) = split ' ', $s;
-		Zimbra::Mon::Logger::Log( "info", "STATUS: $service: $stat" );
+		Zimbra::Mon::Logger::Log( "info", "$dt, STATUS: $service: $stat" );
 	}
 }
 
@@ -73,6 +76,6 @@ sub logDiskUsage {
 		my @df = <DF>;
 		close DF;
 		my (undef, $total, undef, $avail) = split ' ', $df[0];
-		Zimbra::Mon::Logger::Log( "info", "DISK: dev: $dev, mp: $mp, tot: $total, avail: $avail" );
+		Zimbra::Mon::Logger::Log( "info", "$dt, DISK: dev: $dev, mp: $mp, tot: $total, avail: $avail" );
 	}
 }

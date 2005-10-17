@@ -120,3 +120,14 @@ CREATE TABLE service_status (
 
 	UNIQUE INDEX i_server_service (server(100), service(100))
 ) ENGINE = MyISAM;
+
+# table for disk status
+CREATE TABLE disk_status (
+server, time, device, mount_point, total, available
+	server      VARCHAR(255) NOT NULL,
+	time        DATETIME,
+	device		VARCHAR(64),
+	mount_point VARCHAR(64),
+	total		INTEGER UNSIGNED,
+	available   INTEGER UNSIGNED
+) ENGINE = MyISAM;
