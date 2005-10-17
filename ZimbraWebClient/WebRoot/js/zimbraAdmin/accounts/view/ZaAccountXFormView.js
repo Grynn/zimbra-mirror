@@ -174,14 +174,15 @@ ZaAccountXFormView.prototype.getMyXForm = function() {
 		items: [
 			{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", 
 				items: [
-					{type:_GROUP_,	numCols:4,
+					{type:_GROUP_,	numCols:4,colSizes:["32px","350px","100px","200px"],
 						items: [	
 							{type:_AJX_IMAGE_, src:"Person_32", label:null, rowSpan:2},
 							{type:_OUTPUT_, ref:ZaAccount.A_displayname, label:null,cssClass:"AdminTitle", rowSpan:2},
 							{type:_OUTPUT_, ref:ZaAccount.A_COSId, label:ZaMsg.NAD_ClassOfService+":",  choices:this._app.getCosListChoices()},							
 							{type:_OUTPUT_, ref:ZaAccount.A_accountStatus, label:ZaMsg.NAD_AccountStatus+":", labelLocation:_LEFT_, choices:this.accountStatusChoices},												
-							{type:_OUTPUT_, ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID},							
+							{type:_OUTPUT_, ref:ZaAccount.A_name, label:ZaMsg.NAD_Email+":", labelLocation:_LEFT_, required:false},
 							{type:_OUTPUT_, ref:ZaAccount.A_mailHost, label:ZaMsg.NAD_MailServer+":"},
+							{type:_OUTPUT_, ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID},														
 							{type:_OUTPUT_, ref:ZaAccount.A2_mbxsize, label:ZaMsg.usedQuota+":",
 								getDisplayValue:function() {
 									var val = this.getInstanceValue();
@@ -193,9 +194,9 @@ ZaAccountXFormView.prototype.getMyXForm = function() {
 									var quotaUsed = "";
 									
 									if(this.getInstance() != null)
-										quotaUsed = this.getInstanceValue("attrs/" + ZaAccount.A2_quota);
+										quotaUsed = this.getInstanceValue(ZaAccount.A2_quota);
 										
-									val += ZaMsg.Of + " " + quotaUsed;									
+									val += ZaMsg.Of + " " + quotaUsed + " MB";									
 									return val;
 								}
 							}
@@ -323,13 +324,13 @@ ZaAccountXFormView.prototype.getMyXForm = function() {
 							{ref:ZaAccount.A_zimbraPop3Enabled, type:_COS_CHECKBOX_, checkBoxLabel:ZaMsg.NAD_OverrideCOS, msgName:ZaMsg.NAD_zimbraPop3Enabled,label:ZaMsg.NAD_zimbraPop3Enabled+":", labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged}								
 						]
 					},
-					{type:_CASE_, numCols:1,relevant:"instance[ZaModel.currentTab] == 4",
+					{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 4",
 						items :[
 							{ref:ZaAccount.A_prefSaveToSent, type:_COS_CHECKBOX_, checkBoxLabel:ZaMsg.NAD_OverrideCOS, msgName:ZaMsg.NAD_prefSaveToSent,label:ZaMsg.NAD_prefSaveToSent+":", labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",onChange:ZaTabView.onFormFieldChanged},
 							{ref:ZaAccount.A_zimbraPrefMessageViewHtmlPreferred, type:_COS_CHECKBOX_, checkBoxLabel:ZaMsg.NAD_OverrideCOS, msgName:ZaMsg.NAD_zimbraPrefMessageViewHtmlPreferred,label:ZaMsg.NAD_zimbraPrefMessageViewHtmlPreferred+":", labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",onChange:ZaTabView.onFormFieldChanged},
 							{ref:ZaAccount.A_zimbraPrefComposeInNewWindow, type:_COS_CHECKBOX_, checkBoxLabel:ZaMsg.NAD_OverrideCOS, msgName:ZaMsg.NAD_zimbraPrefComposeInNewWindow,label:ZaMsg.NAD_zimbraPrefComposeInNewWindow+":", labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",onChange:ZaTabView.onFormFieldChanged},							
 							{ref:ZaAccount.A_zimbraPrefForwardReplyInOriginalFormat, type:_COS_CHECKBOX_, checkBoxLabel:ZaMsg.NAD_OverrideCOS, msgName:ZaMsg.NAD_zimbraPrefForwardReplyInOriginalFormat,label:ZaMsg.NAD_zimbraPrefForwardReplyInOriginalFormat+":", labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",onChange:ZaTabView.onFormFieldChanged},														
-							{ref:ZaAccount.A_zimbraPrefComposeFormat, type:_COS_SELECT1_, checkBoxLabel:ZaMsg.NAD_OverrideCOS, msgName:ZaMsg.NAD_zimbraPrefComposeFormat,label:ZaMsg.NAD_zimbraPrefComposeFormat+":", labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},							
+							{ref:ZaAccount.A_zimbraPrefComposeFormat, type:_COS_SELECT1_, checkBoxLabel:ZaMsg.NAD_OverrideCOS, msgName:ZaMsg.NAD_zimbraPrefComposeFormat,label:ZaMsg.NAD_zimbraPrefComposeFormat+":", labelLocation:_LEFT_, labelCssStyle:"width:250px;", onChange:ZaTabView.onFormFieldChanged},							
 							{ref:ZaAccount.A_zimbraPrefAutoAddAddressEnabled, type:_COS_CHECKBOX_, checkBoxLabel:ZaMsg.NAD_OverrideCOS, msgName:ZaMsg.NAD_zimbraPrefAutoAddAddressEnabled,label:ZaMsg.NAD_zimbraPrefAutoAddAddressEnabled+":", labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",onChange:ZaTabView.onFormFieldChanged},							
 							{type:_SEPARATOR_},
 							{ref:ZaAccount.A_zimbraPrefGroupMailBy, type:_COS_SELECT1_, checkBoxLabel:ZaMsg.NAD_OverrideCOS, msgName:ZaMsg.NAD_zimbraPrefGroupMailBy,label:ZaMsg.NAD_zimbraPrefGroupMailBy+":", labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},							
@@ -375,9 +376,9 @@ ZaAccountXFormView.prototype.getMyXForm = function() {
 					},
 					{type:_CASE_, numCols:1, relevant:"instance[ZaModel.currentTab] ==7",
 						items: [
-							{type:_GROUP_, numCols:2,
+							{type:_GROUP_, 
 								items :[
-									{ref:ZaAccount.A_zimbraAttachmentsBlocked, type:_COS_CHECKBOX_, checkBoxLabel:ZaMsg.NAD_OverrideCOS, msgName:ZaMsg.NAD_RemoveAllAttachments,label:ZaMsg.NAD_RemoveAllAttachments+":", labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged},
+									{ref:ZaAccount.A_zimbraAttachmentsBlocked, type:_COS_CHECKBOX_, checkBoxLabel:ZaMsg.NAD_OverrideCOS, msgName:ZaMsg.NAD_RemoveAllAttachments,label:ZaMsg.NAD_RemoveAllAttachments+":", labelLocation:_LEFT_, labelCssStyle:"width:250px;", trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged},
 									{ref:ZaAccount.A_zimbraAttachmentsViewInHtmlOnly, type:_COS_CHECKBOX_, 
 										checkBoxLabel:ZaMsg.NAD_OverrideCOS, msgName:ZaMsg.NAD_AttachmentsViewInHtmlOnly,label:ZaMsg.NAD_AttachmentsViewInHtmlOnly+":", labelLocation:_LEFT_, 
 										trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,

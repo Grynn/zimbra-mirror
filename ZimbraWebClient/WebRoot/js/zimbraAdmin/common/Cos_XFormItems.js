@@ -242,7 +242,7 @@ XFormItemFactory.createItemType("_COS_CHECKBOX_", "cos_checkbox", Cos_Checkbox_X
 
 Cos_Checkbox_XFormItem.prototype.useParentTable = true;
 Cos_Checkbox_XFormItem.prototype.numCols = 3;
-
+Cos_Checkbox_XFormItem.prototype.colSizes = ["40px","40px","100px"];
 Cos_Checkbox_XFormItem.prototype.valueLabel = "";
 Cos_Checkbox_XFormItem.prototype.items = [
 	{	type:_CHECKBOX_, ref:".", align:_LEFT_,
