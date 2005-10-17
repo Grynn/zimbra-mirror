@@ -60,5 +60,8 @@
   <key name="debug_disable_objects">
     <value>false</value>
   </key>
+  <key name="debug_validate_outgoing_icalendar">
+    <value>true</value>
+  </key>
 
 </localconfig>
