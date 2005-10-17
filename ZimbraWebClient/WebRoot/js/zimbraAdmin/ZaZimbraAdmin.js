@@ -81,6 +81,7 @@ ZaZimbraAdmin._ACCOUNT_VIEW = 17;
 ZaZimbraAdmin._ALIAS_VIEW = 18;
 ZaZimbraAdmin._DL_VIEW = 19;
 ZaZimbraAdmin._HELP_VIEW = 20;
+ZaZimbraAdmin._MIGRATION_WIZ_VIEW = 21;
 
 ZaZimbraAdmin.MSG_KEY = new Object();
 ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._ACCOUNTS_LIST_VIEW] = "Accounts_view_title";
@@ -260,7 +261,7 @@ function() {
 		buttons.push(ZaAppChooser.B_MONITORING);
 
 		
-	buttons.push(ZaAppChooser.SEP, ZaAppChooser.B_HELP, ZaAppChooser.B_LOGOUT);
+	buttons.push(ZaAppChooser.SEP, ZaAppChooser.B_HELP,ZaAppChooser.B_MIGRATION_WIZ, ZaAppChooser.B_LOGOUT);
 	var appChooser = new ZaAppChooser(this._shell, null, buttons);
 	
 	var buttonListener = new AjxListener(this, this._appButtonListener);
@@ -322,7 +323,15 @@ function(ev) {
 			} else {					
 				this._app.getHelpViewController().show();
 			}
-			break;						
+			break;	
+		case ZaAppChooser.B_MIGRATION_WIZ:
+			if(this._app.getCurrentController()) {
+				this._app.getCurrentController().switchToNextView(this._app.getMigrationWizController(), ZaMigrationWizController.prototype.show, null);
+			} else {					
+				this._app.getMigrationWizController().show();
+			}
+			break;	
+							
 		case ZaAppChooser.B_LOGOUT:
 			ZaZimbraAdmin.logOff();
 			break;

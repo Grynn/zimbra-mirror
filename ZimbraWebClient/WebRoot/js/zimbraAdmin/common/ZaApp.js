@@ -240,6 +240,14 @@ function() {
 	return this._controllers[ZaZimbraAdmin._HELP_VIEW];
 }
 
+ZaApp.prototype.getMigrationWizController = 
+function() {
+	if (this._controllers[ZaZimbraAdmin._MIGRATION_WIZ_VIEW] == null) {
+		this._controllers[ZaZimbraAdmin._MIGRATION_WIZ_VIEW] = new ZaMigrationWizController(this._appCtxt, this._container, this);
+	}
+	return this._controllers[ZaZimbraAdmin._MIGRATION_WIZ_VIEW];
+}
+
 ZaApp.prototype.getDomainList =
 function(refresh) {
 	if (refresh || this._domainList == null) {

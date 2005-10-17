@@ -38,6 +38,7 @@ function ZaAppChooser(parent, className, buttons) {
 	this.TOOLTIP[ZaAppChooser.B_SERVERS]	= ZaMsg.goToServers;
 */
 	this.TOOLTIP[ZaAppChooser.B_HELP]		= ZaMsg.goToHelp;
+	this.TOOLTIP[ZaAppChooser.B_MIGRATION_WIZ]	= ZaMsg.goToMigrationWiz;	
 	this.TOOLTIP[ZaAppChooser.B_LOGOUT]		= ZaMsg.logOff;
 	
 	this.setScrollStyle(Dwt.CLIP);
@@ -74,6 +75,7 @@ ZaAppChooser.B_DOMAINS	= i++;
 ZaAppChooser.B_SERVERS	= i++;
 ZaAppChooser.B_GLOBAL	= i++;
 ZaAppChooser.B_DISTRIBUTION_LISTS	= i++;
+ZaAppChooser.B_MIGRATION_WIZ = i++;
 
 ZaAppChooser.IMAGE = new Object();
 ZaAppChooser.IMAGE[ZaAppChooser.OUTER]		= "ImgAppChiclet";
@@ -94,6 +96,7 @@ ZaAppChooser.IMAGE[ZaAppChooser.B_SERVERS]	= "Server";
 ZaAppChooser.IMAGE[ZaAppChooser.B_GLOBAL]	= "GlobalSettings";
 ZaAppChooser.IMAGE[ZaAppChooser.B_HELP]	= "Help";
 ZaAppChooser.IMAGE[ZaAppChooser.B_LOGOUT]	= "Logoff";
+ZaAppChooser.IMAGE[ZaAppChooser.B_MIGRATION_WIZ]	= "MigrationWiz";
 
 ZaAppChooser.SEP_HEIGHT = 10;
 
