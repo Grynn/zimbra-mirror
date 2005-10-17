@@ -47,7 +47,7 @@ my %graphTimeInfo = (
 		"step" 			=> 86400,
 		"heartbeat" 	=> 172800,
 		"agg_period" 	=> "day",
-		"xlabel"		=> '-x DAY:1:DAY:2:DAY:1:86400:%d/%b',
+		"xlabel"		=> '-x DAY:1:DAY:2:DAY:4:86400:%d/%b',
 		},
 	"month" => {
 		"count" 		=> 60,
@@ -271,7 +271,7 @@ foreach my $app ("mta", "amavis") {
 			my $lower = "";
 			my $unit = "";
 
-			`$rrd graph $graph --start $sts --end $ets $upper $lower $unit $graphTimeInfo{$period}{xlabel} $DDEF $GDEF`;
+			`$rrd graph $graph --title $graphAppInfo{$app}{graph_names}{$$columnlist[0]} --start $sts --end $ets $upper $lower $unit $graphTimeInfo{$period}{xlabel} $DDEF $GDEF`;
 
 		}
 	}
