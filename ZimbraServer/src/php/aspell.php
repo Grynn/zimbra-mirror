@@ -47,6 +47,7 @@ if ($text != NULL) {
 
     $dictionary = pspell_new("en_US");
     $skip = FALSE;
+    $checkedWords = array();
 
     foreach ($words as $word) {
         if ($skip) {
@@ -64,6 +65,13 @@ if ($text != NULL) {
         // Skip numbers
         if (!preg_match('/[A-z]/', $word)) {
             continue;
+        }
+        
+        // Skip duplicates
+        if (array_key_exists($word, $checkedWords)) {
+            continue;
+        } else {
+            $checkedWords[$word] = 1;
         }
 
         // Check spelling
