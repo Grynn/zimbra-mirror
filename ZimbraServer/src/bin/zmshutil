@@ -33,23 +33,23 @@
 # Find and set local config variables.
 #
 zmsetvars() {
+	if [ x${zmsetvars} = "xtrue" ]; then
+		exit 0
+	fi
+
 	zmlocalconfig="/opt/zimbra/bin/zmlocalconfig"
 	if [ ! -x "${zmlocalconfig}" ]; then 
 	    echo Error: can not find zmlocalconfig program
 	    exit 1
 	fi
 
-	if ! eval `${zmlocalconfig} -q -m shell "$@"`; then
+	if ! eval `${zmlocalconfig} -q -m export`; then
 		echo Error: executing: ${zmlocalconfig} -m shell "$@"
 		exit 1
 	fi
 
-	for i in "$@"; do
-    	if [ -z "${!i}" ]; then
-			echo Error: local configkey $i is not set
-			exit 1
-	    fi
-	done
+	export zmsetvars='true'
+
 }
 
 #
