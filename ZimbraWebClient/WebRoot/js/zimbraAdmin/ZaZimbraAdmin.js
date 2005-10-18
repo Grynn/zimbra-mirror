@@ -231,7 +231,7 @@ function() {
 		elements[ZaAppViewMgr.C_APP_CHOOSER] = this._createAppChooser();
 		elements[ZaAppViewMgr.C_STATUS] = this._statusBox = new DwtText(this._shell, "statusBox", Dwt.ABSOLUTE_STYLE);
 		this._statusBox.setScrollStyle(Dwt.CLIP);
-		
+		this._setLicenseStatusMessage();
 	// the outer element of the entire skin is hidden until this point
 	// so that the skin won't flash (become briefly visible) during app loading
 		if (skin && skin.showSkin)
@@ -245,10 +245,43 @@ function() {
 		elements[ZaAppViewMgr.C_CURRENT_APP] = new ZaCurrentAppToolBar(this._shell);
 		this._appViewMgr.addComponents(elements, true);
 	} catch (ex) {
-		this._handleException(ex, "ZaZimbraAdmin.prototype.startup", null, true);
+		this._handleException(ex, ZaZimbraAdmin.prototype.startup, null, true);
 	}
 	this._schedule(this._killSplash);	// kill splash screen	
 }
+
+ZaZimbraAdmin.prototype._setLicenseStatusMessage = function () {
+	if (ZaServerVersionInfo.licenseExists) {
+		var licenseInfoText = null;
+		if (ZaServerVersionInfo.licenseExpired) {
+			licenseInfoText = ZaMsg.consoleLicenseExpired;
+			this._statusBox.getHtmlElement().className = "consoleLicenseExpired";
+		} else {
+			licenseInfoText = ZaMsg.licenseWillExpire;
+			this._statusBox.getHtmlElement().className = "licenseWillExpire";
+		}
+		this.setStatusMsg(AjxBuffer.concat(licenseInfoText," ",
+										   AjxDateUtil.getTimeStr(ZaServerVersionInfo.licenseExpirationDate, ZaMsg.consoleLicenseExpiredDateFormat)));
+	}
+};
+
+ZaZimbraAdmin.prototype.setStatusMsg = 
+function(msg, clear) {
+	this._statusBox.setText(msg);
+	if (msg && clear) {
+		var act = new AjxTimedAction ();
+		act.method = ZmZimbraMail._clearStatus;
+		act.params.add(this._statusBox);
+		AjxTimedAction.scheduleAction(act, ZmZimbraMail.STATUS_LIFE);
+	}
+}
+
+ZaZimbraAdmin._clearStatus = 
+function(args) {
+	args[0].setText("");
+	args[0].getHtmlElement().className = "statusBox";
+}
+
 
 ZaZimbraAdmin.prototype._createAppChooser =
 function() {

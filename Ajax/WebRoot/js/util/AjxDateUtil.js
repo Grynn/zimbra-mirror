@@ -363,6 +363,16 @@ function(date, abbreviated) {
 		: AjxDateUtil.MONTH_LONG[date.getMonth()];
 };
 
+AjxDateUtil._getMonth = 
+function(date, pad) {
+	var myMonth = date.getMonth() + 1;
+	if (pad) {
+		return AjxDateUtil._pad(myMonth);
+	} else {
+		return myMonth;
+	}
+};
+
 AjxDateUtil._getDate = 
 function(date, pad) {
 	var myVal = date.getDate();
@@ -388,6 +398,7 @@ function(date, format) {
 	s = s.replace(/%w/g, AjxDateUtil._getWeekday(date));				// day of the week
 	s = s.replace(/%M/g, AjxDateUtil._getMonthName(date));				// full month name
 	s = s.replace(/%t/g, AjxDateUtil._getMonthName(date, true));		// abbr. month name
+	s = s.replace(/%n/g, AjxDateUtil._getMonth(date, true));		    // zero padded month
 	s = s.replace(/%Y/g, AjxDateUtil._getFullYear(date));				// full year
 	s = s.replace(/%h/g, AjxDateUtil._getHoursStr(date, false, false));	// non-padded hours
 	s = s.replace(/%H/g, AjxDateUtil._getHoursStr(date, true, false ));	// padded hours

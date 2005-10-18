@@ -145,14 +145,15 @@ function () {
 		this._licenseCell.style.visibility = "visible";
 		var licenseInfoText = null;
 		if (ZaServerVersionInfo.licenseExpired) {
-			this._licenseCell.className = "licenseExpired";
+			this._licenseCell.className = "loginLicenseExpired";
 			licenseInfoText = ZaMsg.licenseExpired;
 		} else {
 			this._licenseCell.className = "licenseWillExpire";
 			licenseInfoText = ZaMsg.licenseWillExpire;
 		}
 		this._licenseCell.innerHTML = AjxBuffer.concat(licenseInfoText," ",
-													   AjxDateUtil.getTimeStr(ZaServerVersionInfo.licenseExpirationDate, ZaMsg.licenseExpiredDateFormat));
+													   AjxDateUtil.getTimeStr(ZaServerVersionInfo.licenseExpirationDate, 
+																			  ZaMsg.loginLicenseExpiredDateFormat));
 
 	} else {
 		this._licenseCell.style.visibility = "hidden";
