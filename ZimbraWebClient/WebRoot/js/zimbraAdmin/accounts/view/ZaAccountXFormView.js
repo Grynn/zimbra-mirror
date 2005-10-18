@@ -224,7 +224,8 @@ ZaAccountXFormView.prototype.getMyXForm = function() {
 							]
 						}
 						*/
-				]
+				],
+				cssStyle:"padding-top:5px; padding-bottom:5px"
 			},
 			{type:_TAB_BAR_,  ref:ZaModel.currentTab,
 				choices:[

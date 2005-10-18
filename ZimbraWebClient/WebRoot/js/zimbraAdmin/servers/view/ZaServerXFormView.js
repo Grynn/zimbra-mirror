@@ -184,7 +184,8 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 							{type:_OUTPUT_, ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID}
 						]
 					}
-				]
+				],
+				cssStyle:"padding-top:5px; padding-bottom:5px"
 			},
 			{type:_TAB_BAR_, ref:ZaModel.currentTab,
 				relevant:"!instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]",
