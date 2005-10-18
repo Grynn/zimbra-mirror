@@ -53,8 +53,11 @@ while(my $conn = $server->accept()) {
             $lmtp->quit;
         } else {
             print "Replaying message from ".$client->{FROM}." to ".$to."....";
+            my @toArray;
+            $toArray[0] = $to;
+
             my $relay = new Net::SMTP::Server::Relay($client->{FROM},
-                                                     $client->{TO},
+                                                     \@toArray,
                                                      $client->{MSG});
 
             # if the app hangs before getting here it is likely trying to connect to
