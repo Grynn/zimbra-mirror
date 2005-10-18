@@ -174,10 +174,16 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 	var xFormObject = {
 		tableCssStyle:"width:100%;position:static;overflow:auto;",
 		items: [
-			{type:_GROUP_, cssClass:"AdminTitleBar", colSpan: "*", 
+			{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", 
 				items: [
-					{type:_OUTPUT_, ref:ZaServer.A_name, label:ZaMsg.NAD_Server},
-					{type:_OUTPUT_, ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID}
+					{type:_GROUP_,	numCols:4,colSizes:["32px","350px","100px","250px"],
+						items: [
+							{type:_AJX_IMAGE_, src:"Server_32", label:null, rowSpan:2},
+							{type:_OUTPUT_, ref:ZaServer.A_name, label:null,cssClass:"AdminTitle", rowSpan:2},				
+							{type:_OUTPUT_, ref:ZaServer.A_ServiceHostname, label:ZaMsg.NAD_ServiceHostname+":"},
+							{type:_OUTPUT_, ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID}
+						]
+					}
 				]
 			},
 			{type:_TAB_BAR_, ref:ZaModel.currentTab,
@@ -191,7 +197,8 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 					{value:4, label:ZaMsg.NAD_Tab_IMAP},					
 					{value:5, label:ZaMsg.NAD_Tab_POP},
 					{value:6, label:ZaMsg.NAD_Tab_VolumeMgt}										
-				]
+				],
+				cssClass:"ZaTabBar"
 			},
 			{type:_TAB_BAR_, ref:ZaModel.currentTab,
 				relevant:"instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]",
@@ -205,7 +212,8 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 					{value:5, label:ZaMsg.NAD_Tab_POP},
 					{value:6, label:ZaMsg.NAD_Tab_VolumeMgt},										
 					{value:7, label:ZaMsg.NAD_Tab_HSM}					
-				]
+				],
+				cssClass:"ZaTabBar"
 			},
 			{type:_SWITCH_, items:[
 					{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 1", 
@@ -545,69 +553,97 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 						]
 					},
 					{type:_CASE_, relevant: "instance[ZaModel.currentTab] == 7 && instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]", 
+						numCols:2,
 						items: [
 							{ type: _DWT_ALERT_,
 							  cssClass: "DwtTabTable",
 							  containerCssStyle: "padding-bottom:0px",
 							  style: DwtAlert.WARNING,
 							  iconVisible: false, 
-							  content: ZaMsg.Alert_ServerDetails
-							},						
-							{ref:ZaServer.A_zimbraHsmAge, type:_LIFETIME_, 
-								msgName:ZaMsg.NAD_HSM_Threshold,label:ZaMsg.NAD_HSM_Threshold+":", 
-								labelLocation:_LEFT_, 
-								onChange:ZaTabView.onFormFieldChanged
+							  content: ZaMsg.Alert_ServerDetails,
+							   colSpan:"*"
+							},	
+							{type:_GROUP_, numCols:4,
+								items: [
+									{ref:ZaServer.A_zimbraHsmAge, type:_LIFETIME_, 
+										msgName:ZaMsg.NAD_HSM_Threshold,label:ZaMsg.NAD_HSM_Threshold+":", 
+										labelLocation:_LEFT_, labelCssStyle:"width:190px;",
+										onChange:ZaTabView.onFormFieldChanged
+									},
+									{type:_DWT_BUTTON_, label:ZaMsg.NAD_HSM_StartHsm,
+										relevant:"instance.hsm[ZaServer.A_HSMrunning]==0",
+										width:"120px",
+										onActivate:ZaServerXFormView.runHsm,colSpan:2
+									},
+									{type:_DWT_BUTTON_, label:ZaMsg.NAD_HSM_AbortHsm,
+										relevant:"instance.hsm[ZaServer.A_HSMrunning]==1",
+										width:"120px",
+										onActivate:ZaServerXFormView.abortHsm,colSpan:2
+									}
+								]
 							},
-							{type:_OUTPUT_, label:ZaMsg.NAD_HSM_Status, labelLocation:_LEFT_,
-								ref:ZaServer.A_HSMrunning, choices:ZaServer.HSM_StatusChoices,
-								relevant:"instance.hsm[ZaServer.A_HSMwasAborted]==0",relevantBehavior:_HIDE_
-							},
-							{type:_OUTPUT_, label:ZaMsg.NAD_HSM_Status, labelLocation:_LEFT_,								
-								value:ZaMsg.NAD_HSM_Aborted, 
-								relevant:"instance.hsm[ZaServer.A_HSMwasAborted]==1",relevantBehavior:_HIDE_
-							},
-							{type:_OUTPUT_, label:ZaMsg.NAD_HSM_NumBlobsMoved,  labelLocation:_LEFT_,
-								ref:ZaServer.A_HSMnumBlobsMoved
-							},							
-							{type:_OUTPUT_, label:ZaMsg.NAD_HSM_ProcessedNumOfMbx,  labelLocation:_LEFT_,
-								ref:ZaServer.A_HSMnumMailboxes
-							},							
-							{type:_OUTPUT_, label:ZaMsg.NAD_HSM_RemainingNumOfMbx,  labelLocation:_LEFT_,
-								ref:ZaServer.A_HSMremainingMailboxes
-							},								
-							{type:_OUTPUT_, label:ZaMsg.NAD_HSM_LastStart,  labelLocation:_LEFT_,
-								ref:ZaServer.A_HSMstartDate,
-								getDisplayValue:function(val) {
-									if(val)
-										return AjxBuffer.concat(AjxDateUtil.simpleComputeDateStr(new Date(parseInt(val))),"&nbsp;",
-																			AjxDateUtil.computeTimeString(new Date(parseInt(val))));									
-									else
-										return "";
-								}
-							},
-							{type:_OUTPUT_, label:ZaMsg.NAD_HSM_LastEnd,  labelLocation:_LEFT_,
-								ref:ZaServer.A_HSMendDate,
-								getDisplayValue:function(val) {
-									if(val)								
-										return AjxBuffer.concat(AjxDateUtil.simpleComputeDateStr(new Date(parseInt(val))),"&nbsp;",
-																			AjxDateUtil.computeTimeString(new Date(parseInt(val))));									
-									else
-										return "";
-								}
-							},
-							{type:_DWT_BUTTON_, label:ZaMsg.NAD_HSM_StartHsm,
-								relevant:"instance.hsm[ZaServer.A_HSMrunning]==0",
-								width:"120px",
-								onActivate:ZaServerXFormView.runHsm,colSpan:2
-							},
-							{type:_DWT_BUTTON_, label:ZaMsg.NAD_HSM_AbortHsm,
-								relevant:"instance.hsm[ZaServer.A_HSMrunning]==1",
-								width:"120px",
-								onActivate:ZaServerXFormView.abortHsm,colSpan:2
-							},								
-							{type:_DWT_BUTTON_, label:ZaMsg.NAD_HSM_Refresh,
-								onActivate:ZaServerXFormView.refreshHsm,
-								width:"120px"
+							{type:_SPACER_, colSpan:"*"},
+							{ type: _DWT_ALERT_,
+								//  cssClass: "DwtTabTable",
+								//  containerCssStyle: "padding-bottom:0px",
+								  style: DwtAlert.WARNING,
+								  iconVisible: false, 
+								  content: ZaMsg.Alert_HSM,
+								  colSpan:"*"
+							},		
+							{type:_GROUP_, numCols:2,
+								items: [
+//									{type:_OUTPUT_, label:null, value:ZaMsg.NAD_Current_HSM_Session, colSpan:3},					
+	//								{type:_OUTPUT_, label:null, value:" "},
+									{type:_OUTPUT_, label:ZaMsg.NAD_HSM_Status, labelLocation:_LEFT_,
+										ref:ZaServer.A_HSMrunning, choices:ZaServer.HSM_StatusChoices,
+										relevant:"!instance.hsm[ZaServer.A_HSMwasAborted]",relevantBehavior:_HIDE_,labelCssStyle:"width:190px;"
+									},
+									{type:_OUTPUT_, label:ZaMsg.NAD_HSM_Status, labelLocation:_LEFT_,								
+										value:ZaMsg.NAD_HSM_Aborted, 
+										relevant:"instance.hsm[ZaServer.A_HSMwasAborted]",relevantBehavior:_HIDE_,labelCssStyle:"width:190px;"
+									},
+		//							{type:_OUTPUT_, label:null, value:" "},									
+									{type:_OUTPUT_, label:ZaMsg.NAD_HSM_NumBlobsMoved,  labelLocation:_LEFT_,
+										ref:ZaServer.A_HSMnumBlobsMoved,labelCssStyle:"width:190px;"
+									},							
+			//						{type:_OUTPUT_, label:null, value:" "},									
+									{type:_OUTPUT_, label:ZaMsg.NAD_HSM_ProcessedNumOfMbx,  labelLocation:_LEFT_,
+										ref:ZaServer.A_HSMnumMailboxes,labelCssStyle:"width:190px;"
+									},							
+						//			{type:_OUTPUT_, label:null, value:" "},									
+									{type:_OUTPUT_, label:ZaMsg.NAD_HSM_RemainingNumOfMbx,  labelLocation:_LEFT_,
+										ref:ZaServer.A_HSMremainingMailboxes,labelCssStyle:"width:190px;"
+									},								
+						//			{type:_OUTPUT_, label:null, value:" "},									
+									{type:_OUTPUT_, label:ZaMsg.NAD_HSM_LastStart,  labelLocation:_LEFT_,
+										ref:ZaServer.A_HSMstartDate,
+										getDisplayValue:function(val) {
+											if(val)
+												return AjxBuffer.concat(AjxDateUtil.simpleComputeDateStr(new Date(parseInt(val))),"&nbsp;",
+																					AjxDateUtil.computeTimeString(new Date(parseInt(val))));									
+											else
+												return "";
+										},labelCssStyle:"width:190px;"
+									},
+							//		{type:_OUTPUT_, label:null, value:" "},									
+									{type:_OUTPUT_, label:ZaMsg.NAD_HSM_LastEnd,  labelLocation:_LEFT_,
+										ref:ZaServer.A_HSMendDate,
+										getDisplayValue:function(val) {
+											if(val)								
+												return AjxBuffer.concat(AjxDateUtil.simpleComputeDateStr(new Date(parseInt(val))),"&nbsp;",
+																					AjxDateUtil.computeTimeString(new Date(parseInt(val))));									
+											else
+												return "";
+										},labelCssStyle:"width:190px;"
+									},
+									{type:_SPACER_, colSpan:"*"},
+									{type:_DWT_BUTTON_, label:ZaMsg.NAD_HSM_Refresh,
+										onActivate:ZaServerXFormView.refreshHsm,
+										width:"120px"
+									},
+									{type:_OUTPUT_, label:null, value:" "}									
+								]
 							}
 						]
 					}
