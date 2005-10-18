@@ -75,7 +75,17 @@ updateWebConfig() {
 			-e 's/\(.*HTTPBEGIN\).*/\1 -->/' -e 's/.*\(HTTPEND.*\)/<!-- \1/' \
 			/opt/zimbra/tomcat/conf/server.xml > \
 			/tmp/server.xml.$$
+		if [ -f /opt/zimbra/cyrus-sasl/etc/saslauthd.conf.in ]; then
+			sed -e 's/^zimbra_url: http:/zimbra_url: https:/' \
+				/opt/zimbra/cyrus-sasl/etc/saslauthd.conf.in > \
+				/tmp/saslauthd.conf.in.$$
+		fi
 	else
+		if [ -f /opt/zimbra/cyrus-sasl/etc/saslauthd.conf.in ]; then
+			sed -e 's/^zimbra_url: https:/zimbra_url: http:/' \
+				/opt/zimbra/cyrus-sasl/etc/saslauthd.conf.in > \
+				/tmp/saslauthd.conf.in.$$
+		fi
 		if [ $MODE = "https" ]; then
 			sed -e 's/\(.*HTTPSBEGIN\).*/\1 -->/' -e 's/.*\(HTTPSEND.*\)/<!-- \1/' \
 				-e 's/\(.*HTTPBEGIN\).*/\1/' -e 's/.*\(HTTPEND.*\)/\1/' \
@@ -90,6 +100,7 @@ updateWebConfig() {
 		fi
 	fi
 	mv -f /tmp/server.xml.$$ /opt/zimbra/tomcat/conf/server.xml
+	mv -f /tmp/saslauthd.conf.in.$$ /opt/zimbra/cyrus-sasl/etc/saslauthd.conf.in
 
 	sed -e "s/.*PROTOCOL MODE.*/<env-entry-value>$MODE<\/env-entry-value><!-- PROTOCOL MODE -->/" \
 		/opt/zimbra/tomcat/webapps/zimbra/WEB-INF/web.xml > /tmp/web.xml.$$
