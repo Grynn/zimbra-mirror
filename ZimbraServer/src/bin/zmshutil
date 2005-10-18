@@ -33,8 +33,12 @@
 # Find and set local config variables.
 #
 zmsetvars() {
-	if [ x${zmsetvars} = "xtrue" ]; then
-		return
+	if [ "x$1" = "x-f" ]; then
+		shift;
+	else
+		if [ x${zmsetvars} = "xtrue" ]; then
+			return
+		fi
 	fi
 
 	zmlocalconfig="/opt/zimbra/bin/zmlocalconfig"

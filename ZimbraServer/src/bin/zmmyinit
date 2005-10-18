@@ -114,7 +114,7 @@ fi
 # use 'zmmypasswd --root' here because of bootstrapping problems - at
 # this stage we know that the root password is empty.
 #
-zmsetvars mysql_root_password zimbra_mysql_password
+zmsetvars -f mysql_root_password zimbra_mysql_password
 echo '*' Changing mysql root user password
 ${zimbra_home}/bin/mysqladmin -u root --password= password ${mysql_root_password}
 
