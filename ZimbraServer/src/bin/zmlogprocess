@@ -136,6 +136,10 @@ sub aggregateMta {
 						"values (?,?,?,?,?,?)",
 						$periodStart, $periodEnd, $host, 
 						$periodType, $count, $bytes);
+
+					$sth = sqlExec("delete from mta ".
+						"where arrive_time <= '".$periodStart."' and ".
+						"host = '".$host."'");
 				}
 
 			} else {
@@ -188,9 +192,6 @@ sub aggregateMta {
 			$periodStart = $periodEnd;
 		}
 
-		$sth = sqlExec("delete from mta ".
-			"where arrive_time <= '".$periodStart."' and ".
-			"host = '".$host."'");
 
 	}
 
@@ -264,6 +265,10 @@ sub aggregateAmavis {
 						"values (?,?,?,?,?,?,?)",
 						$periodStart, $periodEnd, $host,
 						$periodType, $count, $spam, $virus);
+
+					$sth = sqlExec("delete from amavis ".
+						"where arrive_time <= '".$periodStart."' and ".
+						"host = '".$host."'");
 				}
 
 			} else {
@@ -317,9 +322,6 @@ sub aggregateAmavis {
 			$periodStart = $periodEnd;
 		}
 
-		$sth = sqlExec("delete from amavis ".
-			"where arrive_time <= '".$periodStart."' and ".
-			"host = '".$host."'");
 
 	}
 
@@ -560,16 +562,21 @@ sub processZimbramon {
 	if (@$ary) {
 		foreach my $row (sort @$ary) {
 			my ($id, $dt, $host, $msg) = (@$row);
-			if ($msg =~ /info: ([^,]+), STATUS: (\S+): (Running|Stopped)$/) {
+			if ($msg =~ /info: ([^,]+), STATUS: (\S+): (Running|Stopped)\s*$/) {
 				my $tm = $1;
 				my $service = $2;
-				my $status = $3;
-				my $statement = "insert into service_status ".
+				my $status = ($3 eq "Running")?1:0;
+				my $statement = "delete from service_status ".
+					"where server=\'".$host."\' and service=\'".$service."\'";
+
+				sqlExec ($statement);
+
+				$statement = "insert into service_status ".
 					"(server, service, time, status) ".
 					"values (?,?,?,?)";
 
 				sqlExec ($statement, $host, $service, $tm, $status);
-			} elsif ($msg =~ /info: ([^,]+), DISK: dev: (\S+), mp: (\S+), tot: (\S+), avail: (\S+),$/) {
+			} elsif ($msg =~ /info: ([^,]+), DISK: dev: (\S+), mp: (\S+), tot: (\S+), avail: (\S+)\s+$/) {
 				my $tm = $1;
 				my $dev = $2;
 				my $mp = $3;
