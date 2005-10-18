@@ -545,8 +545,8 @@ sub getLastAggPeriod {
 
 	if ($period eq "hour") {
 
-		my $sth = sqlExec("select period_end from ${app}_aggregate ".
-			"where period='".$period."' order by period_end desc limit 1");
+		my $sth = sqlExec("select period_start from ${app}_aggregate ".
+			"where period='".$period."' order by period_start desc limit 1");
 
 		my $ary = $sth->fetchall_arrayref;
 
