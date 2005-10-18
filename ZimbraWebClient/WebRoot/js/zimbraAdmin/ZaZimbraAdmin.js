@@ -633,35 +633,26 @@ function() {
 function ZaAboutDialog(parent, className, title, w, h) {
 	if (arguments.length == 0) return;
  	var clsName = className || "DwtDialog";
-
- 	DwtDialog.call(this, parent, clsName, null, [DwtDialog.OK_BUTTON]);
-// 	this._createContentHtml();
+ 	DwtBaseDialog.call(this, parent, clsName);
 }
 
-ZaAboutDialog.prototype = new DwtDialog;
+ZaAboutDialog.prototype = new DwtBaseDialog;
 ZaAboutDialog.prototype.constructor = ZaAboutDialog;
 
 ZaAboutDialog.prototype.popup = function () {
-	if (this._view == null) {
-		this._view = new XForm(this.getXForm(), new XModel(), null, this.parent);
-		this._view.draw();
-		this.setView(this._view);
-	}
-	DwtDialog.prototype.popup.call(this);
+ 	DwtBaseDialog.prototype.popup.call(this);
 };
-ZaAboutDialog.prototype.getXForm = function () {
-	this._form = {
-		numCols:1,
-		items:[
-		{type:_OUTPUT_, value:AjxImg.getImageHtml("Admin_SplashScreen")},
-		{type:_OUTPUT_ , value:"Version: "+ZaServerVersionInfo.version},
-		{type:_OUTPUT_ , value:"BuildDate: "+ZaServerVersionInfo.buildDate},
-		{type:_OUTPUT_ , value:"release: "+ZaServerVersionInfo.release}
-		]
-	}
-	return this._form;
-}
 
-ZaAboutDialog.prototype._createContentHtml = function () {
-	AjxImg.setImage(this._contentDiv,"Admin_SplashScreen");
+ZaAboutDialog.prototype._createHtml = function () {
+	var substitutions = ZaSplashScreen.prototype.getDefaultSubstitutions.call(this);
+	substitutions.buttonId = (this._buttonId = Dwt.getNextId());
+	substitutions.contents = "";
+	this.getHtmlElement().innerHTML = ZmBaseSplashScreen.getHtml(substitutions);	
+	var btnContainer = document.getElementById(this._buttonId);
+	if (btnContainer != null) {
+		var btn = new DwtButton(this);
+		btn.setText("OK");
+		btnContainer.appendChild(btn.getHtmlElement());
+		btn.addSelectionListener(new AjxListener(this, this.popdown));
+	}
 }
