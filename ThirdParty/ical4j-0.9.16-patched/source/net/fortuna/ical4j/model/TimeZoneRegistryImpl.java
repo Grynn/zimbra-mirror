@@ -107,16 +107,17 @@ public class TimeZoneRegistryImpl implements TimeZoneRegistry {
      * Loads an existing VTimeZone from the classpath corresponding to the
      * specified Java timezone.
      */
-    private static VTimeZone loadVTimeZone(final String id) throws IOException,
-            ParserException {
+    private static VTimeZone loadVTimeZone(final String id) {
+//    throws IOException,
+//    ParserException {    
 //        String resource = "/" + id + ".ics";
-        URL resource = TimeZoneRegistryImpl.class.getResource("/" + id + ".ics");
-        if (resource != null) {
-            CalendarBuilder builder = new CalendarBuilder();
-            Calendar calendar = builder.build(resource.openStream());
-            return (VTimeZone) calendar.getComponents().getComponent(
-                    Component.VTIMEZONE);
-        }
+//        URL resource = TimeZoneRegistryImpl.class.getResource("/" + id + ".ics");
+//        if (resource != null) {
+//            CalendarBuilder builder = new CalendarBuilder();
+//            Calendar calendar = builder.build(resource.openStream());
+//            return (VTimeZone) calendar.getComponents().getComponent(
+//                    Component.VTIMEZONE);
+//        }
         return null;
     }
 }
