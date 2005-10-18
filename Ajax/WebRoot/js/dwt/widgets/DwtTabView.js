@@ -223,8 +223,8 @@ function(tabKey) {
 		this._hideAllTabs();
 		//make this tab visible
 		if(this._tabs[tabKey]["view"]) {
-			this._tabs[tabKey]["view"].showMe();
 			Dwt.setVisible(this._tabs[tabKey]["view"].getHtmlElement(), true);
+			this._tabs[tabKey]["view"].showMe();
 		}
 	}
 }

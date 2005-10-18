@@ -328,15 +328,13 @@ function() {
 
 Dwt.toWindow =
 function(htmlElement, x, y, containerElement) {
-	var container = (containerElement == null)? null: containerElement;
-
 	var p = new DwtPoint(x, y);
 	// EMC 6/3/2005
 	// changed the below line, since it meant we did not 
 	// include the given element in our location calculation.
 	//var offsetParent = htmlElement.offsetParent;
 	var offsetParent = htmlElement;
-	while (offsetParent != containerElement) {
+	while (offsetParent && offsetParent != containerElement) {
 		p.x += offsetParent.offsetLeft;
 		p.y += offsetParent.offsetTop;
 		offsetParent = offsetParent.offsetParent;
