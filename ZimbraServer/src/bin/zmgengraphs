@@ -80,6 +80,13 @@ my %graphAppInfo = (
 					"msg_count" => "Spam_Activity",
 				},
 			"colors" => ["#00ff00","#0000ff","#ff0000"],
+		},
+	"disk" => {
+			"columns" => [ ["total", "available"] ],
+			"graph_names"	=> {
+					"total" => "Disk_Usage",
+				},
+			"colors" => ["#00ff00","#0000ff","#ff0000"],
 		}
 );
 
@@ -208,7 +215,7 @@ if (! -d $work) {mkdir ($work, 0777);}
 # The ?TM elements must be one of the following keywords: SECOND, MINUTE, HOUR, 
 # DAY, WEEK, MONTH or YEAR.
 
-foreach my $app ("mta", "amavis") {
+foreach my $app ("mta", "amavis", "disk") {
 	my $hostlist = getHostList ($app);
 
 	push @$hostlist, ["ALL"];

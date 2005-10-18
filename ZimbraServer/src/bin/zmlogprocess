@@ -78,6 +78,8 @@ aggregateMta();
 
 aggregateAmavis();
 
+aggregateDisk();
+
 unlink ( "/opt/zimbra/log/zmlogprocess.pid" );
 
 sub aggregateMta {
@@ -322,9 +324,141 @@ sub aggregateAmavis {
 			$periodStart = $periodEnd;
 		}
 
-
 	}
 
+}
+
+sub aggregateDisk {
+
+	foreach my $periodType ("hour", "day") {
+
+		my $lastPeriod = getLastAggPeriod ("disk", $periodType);
+
+		my $periods = getAggPeriods($lastPeriod, $periodType);
+
+		my $periodStart = $lastPeriod;
+		my $lastPeriodStart;
+		for (my $i = 0; $i <= $#$periods; $i++) {
+			my $periodEnd = $$periods[$i];
+			print "Aggregating $periodType disk from $periodStart to $periodEnd\n";
+
+			my $host;
+			my $count;
+			my $total;
+			my $avail;
+			if ($periodType eq "hour") {
+				# From the disk_status table
+
+				my $sth = sqlExec("select distinct(server) from disk_status where ".
+					"time >= '".$periodStart."' and ".
+					"time <= '".$periodEnd."'");
+
+				my $ary = $sth->fetchall_arrayref;
+
+				foreach my $h (@$ary) {
+					$host = $$h[0];
+
+					my $sth = sqlExec("select distinct(device) from disk_status where ".
+						"server = '".$host."' and ".
+						"time >= '".$periodStart."' and ".
+						"time <= '".$periodEnd."'");
+					my $devary = $sth->fetchall_arrayref;
+
+					foreach my $d (@$devary) {
+
+						my $dev = $$d[0];
+
+						my $sth = sqlExec("select avg(total) from disk_status where ".
+							"server = '".$host."' and ".
+							"device = '".$dev."' and ".
+							"time >= '".$periodStart."' and ".
+							"time <= '".$periodEnd."'");
+
+						my $tary = $sth->fetchall_arrayref;
+						my $total = ${$$tary[0]}[0];
+
+						$sth = sqlExec("select avg(available) from disk_status where ".
+							"server = '".$host."' and ".
+							"device = '".$dev."' and ".
+							"time >= '".$periodStart."' and ".
+							"time <= '".$periodEnd."'");
+
+						$tary = $sth->fetchall_arrayref;
+						my $avail = ${$$tary[0]}[0];
+
+						$sth = sqlExec("insert into disk_aggregate ".
+							"(period_start, period_end, host, period, device, total, available) ".
+							"values (?,?,?,?,?,?,?)",
+							$periodStart, $periodEnd, $host,
+							$periodType, $dev, $total, $avail);
+
+					}
+
+				}
+
+			} else {
+				# From the disk_aggregate table
+
+				my $sth = sqlExec("select distinct(host) from disk_aggregate where ".
+					"period_start >= '".$periodStart."' and ".
+					"period_end <= '".$periodEnd."'");
+
+				my $ary = $sth->fetchall_arrayref;
+
+				my $prevPeriod;
+				if ($periodType eq "day") {
+					$prevPeriod="hour";
+				} 
+
+				foreach my $h (@$ary) {
+					$host = $$h[0];
+
+					my $sth = sqlExec("select distinct(device) from disk_aggregate where ".
+						"host = '".$host."' and ".
+						"period_start >= '".$periodStart."' and ".
+						"period_end <= '".$periodEnd."'");
+					my $devary = $sth->fetchall_arrayref;
+
+					foreach my $d (@$devary) {
+
+						my $dev = $$d[0];
+
+						my $sth = sqlExec("select avg(total) from disk_aggregate where ".
+							"host = '".$host."' and ".
+							"device = '".$dev."' and ".
+							"time >= '".$periodStart."' and ".
+							"time <= '".$periodEnd."'");
+
+						my $tary = $sth->fetchall_arrayref;
+						my $total = ${$$tary[0]}[0];
+
+						$sth = sqlExec("select avg(available) from disk_aggregate where ".
+							"host = '".$host."' and ".
+							"device = '".$dev."' and ".
+							"time >= '".$periodStart."' and ".
+							"time <= '".$periodEnd."'");
+
+						$tary = $sth->fetchall_arrayref;
+						my $avail = ${$$tary[0]}[0];
+
+						$sth = sqlExec("insert into disk_aggregate ".
+							"(period_start, period_end, host, period, device, total, available) ".
+							"values (?,?,?,?,?,?,?)",
+							$periodStart, $periodEnd, $host,
+							$periodType, $dev, $total, $avail);
+
+					}
+
+				}
+
+			}
+
+			$lastPeriodStart = $periodStart;
+			$periodStart = $periodEnd;
+		}
+
+
+	}
 }
 
 sub getAggPeriods {
@@ -427,8 +561,12 @@ sub getLastAggPeriod {
 
 		my $periodAgo = getPeriodAgo($period);
 
-		my $sth = sqlExec("select min(arrive_time) from ${app} where ".
-			"arrive_time != '0000-00-00 00:00:00'");
+		my $app_table = $app;
+		my $tm = "arrive_time";
+		if ($app eq "disk") { $app_table = "disk_status"; $tm = "time"; }
+
+		my $sth = sqlExec("select min($tm) from ${app_table} where ".
+			"$tm != '0000-00-00 00:00:00'");
 
 		my $ary = $sth->fetchall_arrayref;
 		my $then = ${$$ary[0]}[0];
@@ -576,7 +714,7 @@ sub processZimbramon {
 					"values (?,?,?,?)";
 
 				sqlExec ($statement, $host, $service, $tm, $status);
-			} elsif ($msg =~ /info: ([^,]+), DISK: dev: (\S+), mp: (\S+), tot: (\S+), avail: (\S+)\s+$/) {
+			} elsif ($msg =~ /info: ([^,]+), DISK: dev: (\S+), mp: (\S+), tot: (\S+), avail: (\S+)\s*$/) {
 				my $tm = $1;
 				my $dev = $2;
 				my $mp = $3;

@@ -130,3 +130,13 @@ CREATE TABLE disk_status (
 	total		INTEGER UNSIGNED,
 	available   INTEGER UNSIGNED
 ) ENGINE = MyISAM;
+
+CREATE TABLE disk_aggregate (
+	period_start		DATETIME NOT NULL,
+	period_end			DATETIME NOT NULL,
+	host				VARCHAR(255) NOT NULL,
+	period				ENUM ('hour','day','month','year'),
+	device				VARCHAR(64),
+	total				INTEGER UNSIGNED,
+	available			INTEGER UNSIGNED
+) ENGINE = MyISAM;
