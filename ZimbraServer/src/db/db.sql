@@ -148,3 +148,13 @@ CREATE TABLE table_maintenance (
   
   PRIMARY KEY (table_name, database_name)
 ) ENGINE = InnoDB;
+
+CREATE TABLE service_status (
+  server      VARCHAR(255) NOT NULL,
+  service     VARCHAR(255) NOT NULL,
+  time        DATETIME,
+  status      BOOL,
+  
+  UNIQUE INDEX i_server_service (server(100), service(100))
+) ENGINE = MyISAM;
+
