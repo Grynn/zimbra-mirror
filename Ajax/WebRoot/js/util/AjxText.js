@@ -485,6 +485,12 @@ function AjxMessageFormat(pattern) {
 		// literal
 		var c = pattern.charAt(i);
 		if (c == "'") {
+			if (i + 1 < pattern.length && pattern.charAt(i + 1) == "'") {
+				var segment = new AjxFormat.TextSegment(this, "'");
+				this._segments.push(segment);
+				i++;
+				continue;
+			}
 			var head = i + 1;
 			for (i++ ; i < pattern.length; i++) {
 				var c = pattern.charAt(i);
