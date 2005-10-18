@@ -34,7 +34,7 @@
 #
 zmsetvars() {
 	if [ x${zmsetvars} = "xtrue" ]; then
-		exit 0
+		return
 	fi
 
 	zmlocalconfig="/opt/zimbra/bin/zmlocalconfig"
