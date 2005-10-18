@@ -471,8 +471,10 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
   border: 1px solid #CCCCCC;
 }
 
-.DLTargetRow {
+.DlSourceRow, .DLTargetRow {
   padding-left: .25em;
+  padding-top:3px;
+  padding-bottom:3px;
 }
 /** END distribution list stuff **/
 
