@@ -123,7 +123,6 @@ CREATE TABLE service_status (
 
 # table for disk status
 CREATE TABLE disk_status (
-server, time, device, mount_point, total, available
 	server      VARCHAR(255) NOT NULL,
 	time        DATETIME,
 	device		VARCHAR(64),
