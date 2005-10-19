@@ -176,7 +176,7 @@ case "$1" in
                 break
             fi
 			count=`expr $count + 1`
-			if [ $count -gt 5 ]; then
+			if [ $count -gt 3 ]; then
 				echo "Giving up - killing $pid"
 				kill -TERM $pid
 				break
