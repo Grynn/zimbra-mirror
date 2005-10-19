@@ -164,9 +164,24 @@ sub setMaintenanceMode {
 
 sub getLocalConfig {
 	my $key = shift;
-	my $val = `/opt/zimbra/bin/zmlocalconfig -m nokey $key`;
-	chomp $val;
-	return $val;
+	if (defined ($ENV{zmsetvars})) {
+		return $ENV{$key};
+	}
+	open CONF, "/opt/zimbra/bin/zmlocalconfig -q -m shell |";
+	my @conf = <CONF>;
+	close CONF;
+
+	chomp @conf;
+
+	foreach (@conf) {
+		my ($key, $val) = split '=', $_, 2;
+		$val =~ s/;$//;
+		$val =~ s/'$//;
+		$val =~ s/^'//;
+		$ENV{$key} = $val;
+	}
+	$ENV{zmsetvars} = 'true';
+	return $ENV{$key};
 }
 
 sub getEnabledServices {
