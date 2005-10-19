@@ -37,8 +37,8 @@ function ZaGlobalStatsView(parent, app) {
 	this._msgCountPage = new ZaGlobalMessageCountPage(this, app);
 	this._msgsVolumePage = new ZaGlobalMessageVolumePage(this, app);
 	this._spamPage = new ZaGlobalSpamActivityPage(this, app);	
-	this.addTab(ZaMsg.TABT_InData, this._msgCountPage);		
-	this.addTab(ZaMsg.TABT_InMsgs, this._msgsVolumePage);			
+	this.addTab(ZaMsg.TABT_InMsgs, this._msgCountPage);		
+	this.addTab(ZaMsg.TABT_InData, this._msgsVolumePage);			
 	this.addTab(ZaMsg.TABT_Spam_Activity, this._spamPage);				
 //	this.setScrollStyle(DwtControl.SCROLL);
 }
