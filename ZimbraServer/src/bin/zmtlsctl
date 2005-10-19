@@ -82,8 +82,12 @@ updateWebConfig() {
 				/tmp/server.xml.$$
 		fi
 	fi
-	mv -f /tmp/server.xml.$$ /opt/zimbra/tomcat/conf/server.xml
-	mv -f /tmp/saslauthd.conf.in.$$ /opt/zimbra/cyrus-sasl/etc/saslauthd.conf.in
+	if [ -f /tmp/server.xml.$$ ]; then
+		mv -f /tmp/server.xml.$$ /opt/zimbra/tomcat/conf/server.xml
+	fi
+	if [ -f /tmp/saslauthd.conf.in.$$ ]; then
+		mv -f /tmp/saslauthd.conf.in.$$ /opt/zimbra/cyrus-sasl/etc/saslauthd.conf.in
+	fi
 
 	sed -e "s/.*PROTOCOL MODE.*/<env-entry-value>$MODE<\/env-entry-value><!-- PROTOCOL MODE -->/" \
 		/opt/zimbra/tomcat/webapps/zimbra/WEB-INF/web.xml > /tmp/web.xml.$$
