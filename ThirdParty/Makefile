@@ -33,6 +33,7 @@ DIRS := mysql \
 	clamav \
 	apache-httpd \
 	php \
+	pcre \
 	PostFix/PostFix-$(POSTFIX_VERSION)
 
 all: $(ZIMBRA_HOME) build 
