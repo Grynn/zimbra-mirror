@@ -133,6 +133,9 @@ Cos_MailQuota_XModelItem.prototype.minInclusive = 0;
 Cos_MailQuota_XModelItem.prototype.getValue = function(instance, current, ref) {
 	var value = this.getLocalValue(instance, current, ref);
 	if (value == null) value = this.getSuperValue(instance, current, ref);
+	if(value == 0)
+		value = "0";
+		
 	return value;
 }
 
@@ -236,11 +239,11 @@ Super_AnchorHelper_XFormItem.prototype.getAnchorTag = function(href, label) {
 	
 	var inNewWindow = this.getShowInNewWindow();
 	return AjxBuffer.concat(
-			'<a href="javascript:', this.getGlobalRef(), 
-			".resetToSuperValue()",
-			'>',
+			"<a href=\"javascript:", this.getGlobalRef(), 
+			".resetToSuperValue();\"",
+			">",
 				label,
-			'</a>');
+			"</a>");
 }
 
 Super_AnchorHelper_XFormItem.prototype.resetToSuperValue = function(event) {
@@ -264,11 +267,13 @@ Super_Textfield_XFormItem.prototype.items = [
 		updateElement:function(value) {
 			Super_XFormItem.updateCss.call(this,1);
 			Textfield_XFormItem.prototype.updateElement.call(this, value);
-		}
+		},
+		forceUpdate:true
 	},
 	{	
 		type:_SUPER_ANCHOR_HELPER_, ref:".",
 		relevant:"Super_XFormItem.checkIfOverWriten.call(item)",
+		relevantBehavior:_BLOCK_HIDE_,
 		onChange:Composite_XFormItem.onFieldChange
 	}
 ];
@@ -281,7 +286,6 @@ XFormItemFactory.createItemType("_SUPER_CHECKBOX_", "super_checkbox", Super_Chec
 
 Super_Checkbox_XFormItem.prototype.useParentTable = true;
 Super_Checkbox_XFormItem.prototype.numCols = 2;
-Super_Checkbox_XFormItem.prototype.colSizes = ["40px","100px"];
 Super_Checkbox_XFormItem.prototype.items = [
 	{	type:_CHECKBOX_, ref:".", align:_LEFT_,
 		trueValue:"TRUE", falseValue:"FALSE", 
@@ -289,12 +293,15 @@ Super_Checkbox_XFormItem.prototype.items = [
 		updateElement:function(value) {
 			Super_XFormItem.updateCss.call(this,1);
 			Checkbox_XFormItem.prototype.updateElement.call(this, value);
-		}
+		},
+		cssStyle:"width:20px"
 	},
 	{	
 		type:_SUPER_ANCHOR_HELPER_, ref:".",
 		relevant:"Super_XFormItem.checkIfOverWriten.call(item)",
-		onChange:Composite_XFormItem.onFieldChange
+		onChange:Composite_XFormItem.onFieldChange,
+		relevantBehavior:_BLOCK_HIDE_,
+		cssStyle:"width:100px"
 	}
 ];
 
@@ -321,6 +328,7 @@ Super_Select1_XFormItem.prototype.items = [
 	{	
 		type:_SUPER_ANCHOR_HELPER_, ref:".",
 		relevant:"Super_XFormItem.checkIfOverWriten.call(item)",
+		relevantBehavior:_BLOCK_HIDE_,
 		onChange:Composite_XFormItem.onFieldChange
 	}
 ];
@@ -394,6 +402,7 @@ Super_Lifetime_XFormItem.prototype.items = [
 	{	
 		type:_SUPER_ANCHOR_HELPER_, ref:".",
 		relevant:"Super_XFormItem.checkIfOverWriten.call(item)",
+		relevantBehavior:_BLOCK_HIDE_,
 		onChange:Composite_XFormItem.onFieldChange
 	}
 ];
@@ -463,6 +472,7 @@ Super_Lifetime1_XFormItem.prototype.items = [
 	{	
 		type:_SUPER_ANCHOR_HELPER_, ref:".",
 		relevant:"Super_XFormItem.checkIfOverWriten.call(item)",
+		relevantBehavior:_BLOCK_HIDE_,
 		onChange:Composite_XFormItem.onFieldChange
 	}
 ];

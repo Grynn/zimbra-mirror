@@ -48,6 +48,8 @@ MailQuota_XModelItem.prototype.getValue =  function(instance, current, ref) {
 		 value = Number(value).toFixed(2);
 	  }
 	}
+	if(value == 0)
+		value = "0";	
 	return value;
 }
 

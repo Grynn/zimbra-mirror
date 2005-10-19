@@ -85,9 +85,9 @@ function (entry) {
 	else
 		this._containedObject[ZaModel.currentTab] = entry[ZaModel.currentTab];
 		
-	this._containedObject.globalConfig = this._app.getGlobalConfig();
+	this._containedObject.cos = this._app.getGlobalConfig();
 	if(!this._containedObject.attrs[ZaServer.A_zimbraHsmAge]) {
-		this._containedObject.attrs[ZaServer.A_zimbraHsmAge] = this._containedObject.globalConfig.attrs[ZaServer.A_zimbraHsmAge];
+		this._containedObject.attrs[ZaServer.A_zimbraHsmAge] = this._containedObject.cos.attrs[ZaServer.A_zimbraHsmAge];
 	}
 	this._localXForm.setInstance(this._containedObject);	
 }
@@ -188,7 +188,7 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 				cssStyle:"padding-top:5px; padding-bottom:5px"
 			},
 			{type:_TAB_BAR_, ref:ZaModel.currentTab,
-				relevant:"!instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]",
+				relevant:"!instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]",
 				relevantBehavior:_HIDE_,
 				containerCssStyle: "padding-top:0px",
 				choices:[
@@ -202,7 +202,7 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 				cssClass:"ZaTabBar"
 			},
 			{type:_TAB_BAR_, ref:ZaModel.currentTab,
-				relevant:"instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]",
+				relevant:"instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]",
 				relevantBehavior:_HIDE_,
 				containerCssStyle: "padding-top:0px",
 				choices:[
@@ -295,12 +295,12 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 				        { type: _GROUP_, 
 				          label: ZaMsg.NAD_MTA_Authentication, labelCssStyle: "vertical-align:top",
 				          items: [
-					      	{ ref: ZaServer.A_zimbraMtaAuthEnabled, type: _CHECKBOX_,
+					      	{ ref: ZaServer.A_zimbraMtaAuthEnabled, type: _SUPER_CHECKBOX_,
 					      	  label: ZaMsg.NAD_MTA_AuthenticationEnabled,
 					      	  trueValue: "TRUE", falseValue: "FALSE",
 					      	  onChange: ZaServerXFormView.onFormFieldChanged
 				      	    },
-					      	{ ref: ZaServer.A_zimbraMtaTlsAuthOnly, type: _CHECKBOX_,
+					      	{ ref: ZaServer.A_zimbraMtaTlsAuthOnly, type: _SUPER_CHECKBOX_,
 					      	  relevant: "instance.attrs[ZaServer.A_zimbraMtaAuthEnabled] == 'TRUE'", 
 					      	  relevantBehavior: _DISABLE_,
 					      	  label: ZaMsg.NAD_MTA_TlsAuthenticationOnly,
@@ -330,7 +330,7 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 				      	},
 				        { type: _GROUP_, label: ZaMsg.NAD_MTA_Options, labelCssStyle: "vertical-align:top",
 				          items: [
-					      	{ ref: ZaServer.A_zimbraMtaDnsLookupsEnabled, type: _CHECKBOX_,
+					      	{ ref: ZaServer.A_zimbraMtaDnsLookupsEnabled, type:_SUPER_CHECKBOX_,
 					      	  label: ZaMsg.NAD_MTA_DnsLookups,
 					      	  trueValue: "TRUE", falseValue: "FALSE",
 					      	  onChange: ZaServerXFormView.onFormFieldChanged
@@ -509,24 +509,23 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 								items: [
 									{ref:ZaServer.A_VolumeName, width:"150px", type:_TEXTFIELD_, label:null,onChange: ZaServerXFormView.onFormFieldChanged},
 									{ref:ZaServer.A_VolumeRootPath, width:"250px", type:_TEXTFIELD_, label:null,
-//										relevant:"model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))!=instance[ZaServer.A_CurrentPrimaryMsgVolumeId] && model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))!=instance[ZaServer.A_CurrentSecondaryMsgVolumeId]  && model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))!=instance[ZaServer.A_CurrentIndexMsgVolumeId]",
 										relevant:"!(ZaServerXFormView.isCurrent.call(item))",
 										relevantBehavior:_DISABLE_, onChange: ZaServerXFormView.onFormFieldChanged
 									},
 									{ref:ZaServer.A_VolumeType, type:_OSELECT1_, choices:ZaServer.volumeTypeChoicesNoHSM,width:"100px", label:null,
-										relevant:"!(model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))) && !instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]",
+										relevant:"!(model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))) && !instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]",
 										relevantBehavior:_HIDE_, onChange: ZaServerXFormView.onFormFieldChanged
 									},
 									{ref:ZaServer.A_VolumeType, type:_OSELECT1_, choices:ZaServer.volumeTypeChoicesAll,width:"100px", label:null,
-										relevant:"!(model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))) && instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]",
+										relevant:"!(model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))) && instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]",
 										relevantBehavior:_HIDE_, onChange: ZaServerXFormView.onFormFieldChanged
 									},
 									{ref:ZaServer.A_VolumeType, type:_OSELECT1_, choices:ZaServer.volumeTypeChoicesHSM,width:"100px", label:null,
-										relevant:"model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId)) && instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM] && item.getInstanceValue() != ZaServer.INDEX",
+										relevant:"model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId)) && instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM] && item.getInstanceValue() != ZaServer.INDEX",
 										relevantBehavior:_HIDE_, onChange: ZaServerXFormView.onFormFieldChanged
 									},
 									{ref:ZaServer.A_VolumeType, type:_OUTPUT_,width:"100px", label:null,
-										relevant:"model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId)) && (!instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM] || item.getInstanceValue() == ZaServer.INDEX)",
+										relevant:"model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId)) && (!instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM] || item.getInstanceValue() == ZaServer.INDEX)",
 										relevantBehavior:_HIDE_,
 										getDisplayValue:function(val) {
 											if(!val)
@@ -553,7 +552,7 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 							}
 						]
 					},
-					{type:_CASE_, relevant: "instance[ZaModel.currentTab] == 7 && instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]", 
+					{type:_CASE_, relevant: "instance[ZaModel.currentTab] == 7 && instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]", 
 						numCols:2,
 						items: [
 							{ type: _DWT_ALERT_,
@@ -585,8 +584,6 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 							},
 							{type:_SPACER_, colSpan:"*"},
 							{ type: _DWT_ALERT_,
-								//  cssClass: "DwtTabTable",
-								//  containerCssStyle: "padding-bottom:0px",
 								  style: DwtAlert.WARNING,
 								  iconVisible: false, 
 								  content: ZaMsg.Alert_HSM,
@@ -594,8 +591,6 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 							},		
 							{type:_GROUP_, numCols:2,
 								items: [
-//									{type:_OUTPUT_, label:null, value:ZaMsg.NAD_Current_HSM_Session, colSpan:3},					
-	//								{type:_OUTPUT_, label:null, value:" "},
 									{type:_OUTPUT_, label:ZaMsg.NAD_HSM_Status, labelLocation:_LEFT_,
 										ref:ZaServer.A_HSMrunning, choices:ZaServer.HSM_StatusChoices,
 										relevant:"!instance.hsm[ZaServer.A_HSMwasAborted]",relevantBehavior:_HIDE_,labelCssStyle:"width:190px;"
@@ -604,19 +599,19 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 										value:ZaMsg.NAD_HSM_Aborted, 
 										relevant:"instance.hsm[ZaServer.A_HSMwasAborted]",relevantBehavior:_HIDE_,labelCssStyle:"width:190px;"
 									},
-		//							{type:_OUTPUT_, label:null, value:" "},									
+
 									{type:_OUTPUT_, label:ZaMsg.NAD_HSM_NumBlobsMoved,  labelLocation:_LEFT_,
 										ref:ZaServer.A_HSMnumBlobsMoved,labelCssStyle:"width:190px;"
 									},							
-			//						{type:_OUTPUT_, label:null, value:" "},									
+
 									{type:_OUTPUT_, label:ZaMsg.NAD_HSM_ProcessedNumOfMbx,  labelLocation:_LEFT_,
 										ref:ZaServer.A_HSMnumMailboxes,labelCssStyle:"width:190px;"
 									},							
-						//			{type:_OUTPUT_, label:null, value:" "},									
+
 									{type:_OUTPUT_, label:ZaMsg.NAD_HSM_RemainingNumOfMbx,  labelLocation:_LEFT_,
 										ref:ZaServer.A_HSMremainingMailboxes,labelCssStyle:"width:190px;"
 									},								
-						//			{type:_OUTPUT_, label:null, value:" "},									
+
 									{type:_OUTPUT_, label:ZaMsg.NAD_HSM_LastStart,  labelLocation:_LEFT_,
 										ref:ZaServer.A_HSMstartDate,
 										getDisplayValue:function(val) {
@@ -627,7 +622,7 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 												return "";
 										},labelCssStyle:"width:190px;"
 									},
-							//		{type:_OUTPUT_, label:null, value:" "},									
+
 									{type:_OUTPUT_, label:ZaMsg.NAD_HSM_LastEnd,  labelLocation:_LEFT_,
 										ref:ZaServer.A_HSMendDate,
 										getDisplayValue:function(val) {

@@ -245,7 +245,7 @@ function() {
 		elements[ZaAppViewMgr.C_CURRENT_APP] = new ZaCurrentAppToolBar(this._shell);
 		this._appViewMgr.addComponents(elements, true);
 	} catch (ex) {
-		this._handleException(ex, ZaZimbraAdmin.prototype.startup, null, true);
+		this._handleException(ex, "ZaZimbraAdmin.prototype.startup", null, true);
 	}
 	this._schedule(this._killSplash);	// kill splash screen	
 }

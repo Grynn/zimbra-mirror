@@ -310,7 +310,7 @@ ZaAccountXFormView.prototype.getMyXForm = function() {
 					},
 					{type:_CASE_, numCols:1, relevant:"instance[ZaModel.currentTab] == 3",
 						items: [
-							{ref:ZaAccount.A_zimbraFeatureContactsEnabled, type:_SUPER_CHECKBOX_, checkBoxLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_FeatureContactsEnabled,label:ZaMsg.NAD_FeatureContactsEnabled+":", labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged},							
+							{ref:ZaAccount.A_zimbraFeatureContactsEnabled,labelCssStyle:"width:150px;", type:_SUPER_CHECKBOX_, checkBoxLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_FeatureContactsEnabled,label:ZaMsg.NAD_FeatureContactsEnabled+":", labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged},							
 							{ref:ZaAccount.A_zimbraFeatureCalendarEnabled, type:_SUPER_CHECKBOX_, checkBoxLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_FeatureCalendarEnabled,label:ZaMsg.NAD_FeatureCalendarEnabled+":", labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged},														
 							{ref:ZaAccount.A_zimbraFeatureTaggingEnabled, type:_SUPER_CHECKBOX_, checkBoxLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_FeatureTaggingEnabled,label:ZaMsg.NAD_FeatureTaggingEnabled+":", labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged},
 							{ref:ZaAccount.A_zimbraFeatureAdvancedSearchEnabled, type:_SUPER_CHECKBOX_, checkBoxLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_FeatureAdvancedSearchEnabled,label:ZaMsg.NAD_FeatureAdvancedSearchEnabled+":", labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged},
@@ -394,17 +394,17 @@ ZaAccountXFormView.prototype.getMyXForm = function() {
 									}
 								]
 							},
-							{type:_SEPARATOR_},
-							{type:_GROUP_, numCols:2, 
+							{type:_SEPARATOR_, colSpan:"*"},
+							{type:_GROUP_, 
 								items: [
-									{ref:ZaAccount.A_zimbraMailQuota, type:_SUPER_TEXTFIELD_, checkBoxLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_MailQuota,label:ZaMsg.NAD_MailQuota+":", msgName:ZaMsg.NAD_MailQuota,labelLocation:_LEFT_, cssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged, checkBoxLabel:ZaMsg.NAD_ResetToCOS},
+									{ref:ZaAccount.A_zimbraMailQuota, type:_SUPER_TEXTFIELD_, checkBoxLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_MailQuota,label:ZaMsg.NAD_MailQuota+":", msgName:ZaMsg.NAD_MailQuota,labelLocation:_LEFT_, cssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged, checkBoxLabel:ZaMsg.NAD_ResetToCOS,labelCssStyle:"width:250px;"},
 									{ref:ZaAccount.A_zimbraContactMaxNumEntries, type:_SUPER_TEXTFIELD_, checkBoxLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_ContactMaxNumEntries,label:ZaMsg.NAD_ContactMaxNumEntries+":", labelLocation:_LEFT_, cssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged}
 								]
 							},
-							{type:_SEPARATOR_},
-							{type:_GROUP_, numCols:2, 
+							{type:_SEPARATOR_, colSpan:"*"},
+							{type:_GROUP_, 
 								items: [
-									{ref:ZaAccount.A_zimbraMinPwdLength, type:_SUPER_TEXTFIELD_, checkBoxLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_passMinLength,label:ZaMsg.NAD_passMinLength+":", labelLocation:_LEFT_, cssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged},
+									{ref:ZaAccount.A_zimbraMinPwdLength, labelCssStyle:"width:250px;", type:_SUPER_TEXTFIELD_, checkBoxLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_passMinLength,label:ZaMsg.NAD_passMinLength+":", labelLocation:_LEFT_, cssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged},
 									{ref:ZaAccount.A_zimbraMaxPwdLength, type:_SUPER_TEXTFIELD_, checkBoxLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_passMaxLength,label:ZaMsg.NAD_passMaxLength+":", labelLocation:_LEFT_, cssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged},
 									{ref:ZaAccount.A_zimbraMinPwdAge, type:_SUPER_TEXTFIELD_, checkBoxLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_passMinAge,label:ZaMsg.NAD_passMinAge+":", labelLocation:_LEFT_, cssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged},
 									{ref:ZaAccount.A_zimbraMaxPwdAge, type:_SUPER_TEXTFIELD_, checkBoxLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_passMaxAge,label:ZaMsg.NAD_passMaxAge+":", labelLocation:_LEFT_, cssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged},
@@ -412,20 +412,20 @@ ZaAccountXFormView.prototype.getMyXForm = function() {
 									{ref:ZaAccount.A_zimbraPasswordLocked, type:_SUPER_CHECKBOX_, checkBoxLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_PwdLocked,label:ZaMsg.NAD_PwdLocked+":", labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged}
 								]
 							},
-							{type:_SEPARATOR_},							
-							{type:_GROUP_, numCols:2, 
+							{type:_SEPARATOR_, colSpan:"*"},							
+							{type:_GROUP_, 
 								items: [
-									{ref:ZaAccount.A_zimbraAuthTokenLifetime, type:_SUPER_LIFETIME_, checkBoxLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_AuthTokenLifetime,label:ZaMsg.NAD_AuthTokenLifetime+":",labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},								
+									{ref:ZaAccount.A_zimbraAuthTokenLifetime, labelCssStyle:"width:250px;", type:_SUPER_LIFETIME_, checkBoxLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_AuthTokenLifetime,label:ZaMsg.NAD_AuthTokenLifetime+":",labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},								
 									{ref:ZaAccount.A_zimbraMailMessageLifetime, type:_SUPER_LIFETIME1_, checkBoxLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_MailMessageLifetime,label:ZaMsg.NAD_MailMessageLifetime+":",labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},
 									{ref:ZaAccount.A_zimbraMailTrashLifetime, type:_SUPER_LIFETIME1_, checkBoxLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_MailTrashLifetime,label:ZaMsg.NAD_MailTrashLifetime+":", labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},
 									{ref:ZaAccount.A_zimbraMailSpamLifetime, type:_SUPER_LIFETIME1_, checkBoxLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_MailSpamLifetime,label:ZaMsg.NAD_MailSpamLifetime+":", labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged}
 								]
 							},
-							{type:_SEPARATOR_},
-							{type:_GROUP_, numCols:2, 
+							{type:_SEPARATOR_, colSpan:"*"},
+							{type:_GROUP_,
 								items: [
-									{ref:ZaAccount.A_isAdminAccount, type:_CHECKBOX_, msgName:ZaMsg.NAD_IsAdmin,label:ZaMsg.NAD_IsAdmin+":",labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label"},								
-									{ref:ZaAccount.A_zimbraPasswordMustChange, type:_CHECKBOX_,  msgName:ZaMsg.NAD_MustChangePwd,label:ZaMsg.NAD_MustChangePwd+":",labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label"}
+									{ref:ZaAccount.A_isAdminAccount,labelCssStyle:"width:250px;", type:_CHECKBOX_, msgName:ZaMsg.NAD_IsAdmin,label:ZaMsg.NAD_IsAdmin+":",labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label"},								
+									{ref:ZaAccount.A_zimbraPasswordMustChange,labelCssStyle:"width:250px;", type:_CHECKBOX_,  msgName:ZaMsg.NAD_MustChangePwd,label:ZaMsg.NAD_MustChangePwd+":",labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label"}
 								]
 							}
 				
