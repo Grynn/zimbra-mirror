@@ -31,8 +31,9 @@ source /opt/zimbra/.bashrc
 
 case "$1" in 
 	start)
+		/opt/zimbra/bin/zmmtaconfig antivirus
 		for i in $SCRIPTS; do
-			/opt/zimbra/bin/$i start
+			/opt/zimbra/bin/$i start norewrite
 		done
 	;;
 	stop)
