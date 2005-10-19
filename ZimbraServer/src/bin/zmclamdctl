@@ -37,9 +37,7 @@ zmsetvars \
     zimbra_log_directory
 
 rewriteconfig() {
-	if [ x$2 = "x" ]; then
-		/opt/zimbra/bin/zmmtaconfig antivirus > /dev/null 2>&1
-	fi
+	/opt/zimbra/bin/zmmtaconfig antivirus > /dev/null 2>&1
 }
 
 #
@@ -57,7 +55,9 @@ case "$1" in
 			${zimbra_home}/clamav/bin/freshclam \
 				--config-file=${zimbra_home}/conf/freshclam.conf &
 		fi
-		rewriteconfig
+		if [ x$2 = "x" ]; then
+			rewriteconfig
+		fi
 		${zimbra_home}/clamav/bin/freshclam \
 			--config-file=${zimbra_home}/conf/freshclam.conf -d --checks=12 \
 		    >> ${zimbra_log_directory}/freshclam.log 2>&1 &

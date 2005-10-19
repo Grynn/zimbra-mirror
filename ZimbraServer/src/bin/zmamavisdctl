@@ -37,9 +37,7 @@ zmsetvars \
 platform=`/opt/zimbra/bin/get_plat_tag.sh`
 
 rewriteconfig() {
-	if [ x$2 = "x" ]; then
-		/opt/zimbra/bin/zmmtaconfig antispam > /dev/null 2>&1
-	fi
+	/opt/zimbra/bin/zmmtaconfig antispam > /dev/null 2>&1
 }
 
 checkRunning() {
@@ -64,7 +62,9 @@ case "$1" in
 				mount ${zimbra_home}/amavisd/tmp
 			fi
 		fi
-		rewriteconfig
+		if [ x$2 = "x" ]; then
+			rewriteconfig
+		fi
 		if [ ! -f ${zimbra_home}/amavisd/.spamassassin/bayes_toks ]; then
 			# Initial bayes seeding.
 			cp -f ${zimbra_home}/amavisd/.spamassassin/init/* \
