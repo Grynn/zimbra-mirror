@@ -148,7 +148,7 @@ function () {
 			this._licenseCell.className = "loginLicenseExpired";
 			licenseInfoText = ZaMsg.licenseExpired;
 		} else {
-			this._licenseCell.className = "licenseWillExpire";
+			this._licenseCell.className = "loginLicenseWillExpire";
 			licenseInfoText = ZaMsg.licenseWillExpire;
 		}
 		this._licenseCell.innerHTML = AjxBuffer.concat(licenseInfoText," ",
