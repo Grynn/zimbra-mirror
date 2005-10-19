@@ -24,8 +24,6 @@
 # ***** END LICENSE BLOCK *****
 # 
 
-BASE=/opt/zimbra/ssl/ssl
-
 JAVA_HOME=/opt/zimbra/java
 
 TOMCAT=/opt/zimbra/tomcat/conf
@@ -37,21 +35,6 @@ if [ "x$MODE" = "x" ]; then
 else
 	shift
 fi
-
-CERTFILE=$1
-
-if [ "x$CERTFILE" = "x" ]; then
-	CERTFILE=${BASE}/server/server.crt
-fi
-
-if [ ! -f $CERTFILE ]; then
-	echo "ERROR - $CERTFILE not found!"
-	exit 1
-fi
-
-mkdir -p ${BASE}/server
-mkdir -p ${BASE}/cert
-mkdir -p ${BASE}/ca
 
 getHostInfo() {
 
