@@ -67,29 +67,38 @@ my %stopstarts = ();
 
 my $firstrun = 1;
 
-my $HOSTNAME = `$homedir/bin/zmlocalconfig -m nokey zimbra_server_hostname`;
-chomp $HOSTNAME;
-
 my $VARS_SET = 0;
+my $SERVICE_SET = 0;
 my $LOCALS_SET = 0;
+
+my $HOSTNAME = $ENV{zimbra_server_hostname};
+if ($HOSTNAME eq "") {
+	setLocal("LOCAL:zimbra_server_hostname");
+	$HOSTNAME=$knownkeys{'LOCAL:zimbra_server_hostname'};
+}
+
+setVar();
 
 my $fork = 1;
 my %FORCE = ();
 while ($_ = shift) {
 	$fork = 0;
 	$FORCE{$_} = $_;
-	# print STDERR "FORCE: $_\n";
+	#print STDERR "FORCE: $_\n";
 }
 
 sub getService {
 	my $service = shift;
 
-	# print STDERR "getService: $service\n";
+	print STDERR "getService: $service\n";
+
+	$SERVICE_SET=1;
 
 	if ($service =~ /^!/) {
 		$service =~ s/^!//;
 	}
 
+	#print STDERR "Calling zmprov gs $HOSTNAME\n\n";
 	open CMD, "$homedir/bin/zmprov  gs $HOSTNAME | grep zimbraServiceEnabled |";
 	my @out = <CMD>;
 	close CMD;
@@ -105,21 +114,23 @@ sub getService {
 
 	if (! defined ($knownkeys{"SERVICE:$service"})) {
 
-		my $rc = 0xffff & system ("$homedir/bin/zmprov gs $HOSTNAME | grep zimbraServiceEnabled | grep $service > /dev/null 2>&1");
+		#my $rc = 0xffff & system ("$homedir/bin/zmprov gs $HOSTNAME | grep zimbraServiceEnabled | grep $service > /dev/null 2>&1");
 
-		if ($rc) { 
+		#if ($rc) { 
 			$knownkeys{"SERVICE:$service"} = 0; 
 			$knownkeys{"SERVICE:!$service"} = 1; 
-		} else { 
-			$knownkeys{"SERVICE:$service"} = 1; 
-			$knownkeys{"SERVICE:!$service"} = 0; 
-		}
+		#} else { 
+			#$knownkeys{"SERVICE:$service"} = 1; 
+			#$knownkeys{"SERVICE:!$service"} = 0; 
+		#}
 	}
 
 }
 
 sub setLocal {
 	my $var = shift;
+
+	#print STDERR "Calling localconf for $var\n\n";
 
 	$LOCALS_SET=1;
 
@@ -162,12 +173,15 @@ sub setVar {
 	my $var = shift;
 
 	$VARS_SET=1;
+
+	$SERVICE_SET=1;
 	# hmm.  Multi Value attribs?
 
-	# print STDERR "Setting vars\n";
+	# print STDERR "Setting vars ($var)\n";
 
 	# First populate the globals, then overwrite with the locals
 	# print STDERR "setVar: /opt/zimbra/bin/zmprov gacf | grep $var | grep -v InheritedAttr\n";
+	#print STDERR "Calling zmprov gacf\n\n";
 	open CMD, "$homedir/bin/zmprov gacf |  grep -v InheritedAttr |";
 	my @out = <CMD>;
 	close CMD;
@@ -203,6 +217,7 @@ sub setVar {
 
 	}
 
+	#print STDERR "Calling zmprov gs $HOSTNAME\n\n";
 	open CMD, "$homedir/bin/zmprov gs $HOSTNAME | ";
 	@out = <CMD>;
 	close CMD;
@@ -219,6 +234,13 @@ sub setVar {
 		}
 
 		if ($v ne "") {
+			if ($k eq "zimbraServiceEnabled") {
+				#print "Setting service: $v\n";
+				$knownkeys{"SERVICE:$v"} = 1;
+				$knownkeys{"SERVICE:!$v"} = 0;
+				next;
+			}
+
 			if ($knownkeys{"VAR:$k"} ne "" && ! $globals{"VAR:$k"}) {
 				$knownkeys{"VAR:$k"} .= " ".$v;
 			} else {
@@ -243,7 +265,7 @@ sub getVar {
 	# print STDERR "getVar: @_\n";
 
 	if ($keys[0] =~ m/SERVICE/) {
-		if (! defined ($knownkeys{"SERVICE:$keys[1]"})) {
+		if (! defined ($knownkeys{"SERVICE:$keys[1]"}) && !$SERVICE_SET) {
 			getService($keys[1]);
 		}
 	} elsif ($keys[0] =~ m/VAR/) {
@@ -394,14 +416,11 @@ sub processLine {
 }
 
 sub readConfig{
-	%knownkeys = ();
 	%todo = ();
 	%restarts = ();
 	%rewrites = ();
 	%stopstarts = ();
 	%depends = ();
-	$VARS_SET=0;
-	$LOCALS_SET=0;
 	open CONF, "$config" or die "Can't open $config: $!";
 	my @lines = <CONF>;
 	close CONF;
@@ -746,11 +765,15 @@ if ($fork) {
 }
 
 while (1) {
-	%prevknownkeys=%knownkeys;
 	readConfig();
 	compareKeys();
 	stopStartServers();
 	print STDERR "Sleeping\n";
 	sleep 60;
+	%prevknownkeys=%knownkeys;
+	%knownkeys = ();
+	$VARS_SET=0;
+	$SERVICE_SET=0;
+	$LOCALS_SET=0;
 	$firstrun = 0;
 }
