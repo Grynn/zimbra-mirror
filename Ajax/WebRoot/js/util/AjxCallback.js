@@ -57,7 +57,11 @@ function() {
 * called function returns is returned to the caller.
 * <p>
 * If you need to pass in a single array argument that you want to remain an array,
-* wrap it in another array: <code>callback.run([list]);
+* wrap it in another array, either when you create the callback, or when you run it:
+* </p><p>
+* <code>var cb = new AjxCallback(this, this._cbMethod, [anArg]);</code>
+* <code>callback.run([anArg]);</code>
+* </p>
 *
 * @param args	[primitive or Array]	argument(s) to pass to the called function
 */
