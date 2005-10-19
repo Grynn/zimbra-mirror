@@ -382,14 +382,23 @@ function(str) {
 	return str.replace(/^ /mg, "&nbsp;").replace(/\t/g, "<pre style='display:inline;'>\t</pre>").replace(/\n/g, "<br>");
 }
 
+AjxStringUtil.xmlEncode = 
+function(str) {
+	return str ? str.replace(/&/g,"&amp;").replace(/</g,"&lt;") : "";
+}
+AjxStringUtil.xmlDecode =
+function(str) {
+	return str ? str.replace(/&amp;/g,"&").replace(/&lt;/g,"<") : "";
+}
+
 AjxStringUtil.xmlAttrEncode =
 function(str) {
-	return str.replace(/"/g, '&quot;').replace(/'/g, "&apos;").replace(/&/g,"&amp;").replace(/</g,"&lt;");
+	return str ? str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g, '&quot;').replace(/'/g,"&apos;") : "";
 }
 
 AjxStringUtil.xmlAttrDecode =
 function(str) {
-	return str.replace(/&quot;/g, '"');
+	return str ? str.replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&quot;/g, '"').replace(/&apos;/g,"'") : "";
 }
 
 var AjxStringUtil_calcDIV = null; // used by 'clip()' and 'wrap()' functions

@@ -32,9 +32,19 @@ function DwtXFormDialog(xformDef, xmodelDef, parent, className, title, standardB
 	this._xform.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, this._handleXFormDirty));
 	
 	this.setView(this._xform);
-	
-	this.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._handleOkButton));
-	this.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this._handleCancelButton));
+
+	if (this._button[DwtDialog.OK_BUTTON]) {	
+		this.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._handleOkButton));
+	}
+	if (this._button[DwtDialog.CANCEL_BUTTON]) {	
+		this.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this._handleCancelButton));
+	}
+	if (this._button[DwtDialog.YES_BUTTON]) {	
+		this.setButtonListener(DwtDialog.YES_BUTTON, new AjxListener(this, this._handleYesButton));
+	}
+	if (this._button[DwtDialog.NO_BUTTON]) {	
+		this.setButtonListener(DwtDialog.NO_BUTTON, new AjxListener(this, this._handleNoButton));
+	}
 }
 DwtXFormDialog.prototype = new DwtDialog;
 DwtXFormDialog.prototype.constructor = DwtXFormDialog;
@@ -64,19 +74,31 @@ DwtXFormDialog.prototype.popup = function(loc) {
 	// make sure that form represents current data and show
 	this._xform.setIsDirty(true);
 	this._xform.refresh();
-	this.setButtonEnabled(DwtDialog.OK_BUTTON, false);
+	if (this._button[DwtDialog.OK_BUTTON]) {
+		this.setButtonEnabled(DwtDialog.OK_BUTTON, false);
+	}
+	if (this._button[DwtDialog.YES_BUTTON]) {
+		this.setButtonEnabled(DwtDialog.YES_BUTTON, false);
+	}
 	DwtDialog.prototype.popup.call(this, loc);
 }
 
 // Protected methods
 
 DwtXFormDialog.prototype._handleXFormDirty = function(event) {
-	this.setButtonEnabled(DwtDialog.OK_BUTTON, true);
+	if (this._button[DwtDialog.OK_BUTTON]) {
+		this.setButtonEnabled(DwtDialog.OK_BUTTON, true);
+	}
+	if (this._button[DwtDialog.YES_BUTTON]) {
+		this.setButtonEnabled(DwtDialog.YES_BUTTON, true);
+	}
 }
 
 DwtXFormDialog.prototype._handleOkButton = function(event) {
 	this.popdown();
 	this.setInstance(null);
 }
-
 DwtXFormDialog.prototype._handleCancelButton = DwtXFormDialog.prototype._handleOkButton;
+
+DwtXFormDialog.prototype._handleYesButton = DwtXFormDialog.prototype._handleOkButton;
+DwtXFormDialog.prototype._handleNoButton = DwtXFormDialog.prototype._handleOkButton;
