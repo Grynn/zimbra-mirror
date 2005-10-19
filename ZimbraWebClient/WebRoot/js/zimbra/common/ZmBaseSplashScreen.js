@@ -28,10 +28,10 @@ function ZmBaseSplashScreen(shell, imageInfo, className) {
  	if (arguments.length == 0) return;
 	
  	if (!(shell instanceof DwtShell)) {
- 		throw new AjxException("Parent must be a DwtShell", AjxException.INVALIDPARENT, "ZaSplashScreen");
+ 		throw new AjxException("Parent must be a DwtShell", AjxException.INVALIDPARENT, "ZmSplashScreen");
  	}
 	
- 	className = className || "ZaSplashScreen";
+ 	className = className || "ZmSplashScreen";
  	DwtControl.call(this, shell, className, Dwt.ABSOLUTE_STYLE);
 
 	var htmlEl = this.getHtmlElement();
