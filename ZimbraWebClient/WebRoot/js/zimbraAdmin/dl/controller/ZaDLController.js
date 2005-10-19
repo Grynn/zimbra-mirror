@@ -41,10 +41,10 @@ ZaDLController.prototype.toString = function () {
 	return "ZaDLController";
 };
 
-//ZaDLController.NEW_DL_VIEW = "ZaDLController.NEW_DISTRIBUTION_LIST_VIEW";
 ZaDLController.MODE_NEW = 1;
 ZaDLController.MODE_EDIT = 2;
 
+ZaDLController.DEFAULT_LIST_NAME = "<New list name>";
 //===============================================================
 // initialization methods
 //===============================================================
@@ -82,14 +82,21 @@ ZaDLController.prototype.show = function(distributionList, mode) {
 
 
 ZaDLController.prototype._updateOperations = 
-function (optionalOps, optionalDisOps) {
-	var disOps = (optionalDisOps != null)? optionalDisOps : null;
-	var ops = (optionalOps != null)? optionalOps : null;
-	// if both ops, and disOps have not been specified, use our standard rules
-	if (ops == null && disOps == null) {
-		ops = [ZaOperation.CLOSE];
+function () {
+	var ops, disOps;
+	if (this._dlView.hasErrors()){
+		ops = [ZaOperation.CANCEL];
 		disOps = [ZaOperation.SAVE];
+	} else {
+		var instance = this._dlView.getInstance();
+		if (instance.getMembersArray().length > 0 && instance.name != ZaDLController.DEFAULT_LIST_NAME) {
+			ops = [ZaOperation.SAVE, ZaOperation.CLOSE];
+		} else {
+			ops =  [ZaOperation.CLOSE];
+			disOps = [ZaOperation.SAVE];
+		}
 	}
+
 	if (disOps != null) {
 		this._toolbar.enable(disOps, false);
 	} 
@@ -120,6 +127,10 @@ ZaDLController.prototype._getView = function (id, args) {
 			view = new XForm(this._getNewViewXForm(), xModelObj, args, this._container);
 			var ls = new AjxListener(this, this._itemUpdatedListener);
 			view.addListener(DwtEvent.XFORMS_VALUE_CHANGED, ls);
+
+			ls = new AjxListener(this, this._itemErrorListener);
+			view.addListener(DwtEvent.XFORMS_VALUE_ERROR, ls);
+
 			view.setController(this);
 			view.draw();
 
@@ -128,6 +139,10 @@ ZaDLController.prototype._getView = function (id, args) {
 			view.setData = function (dl) {
 				dl.getMembers();
 				var clone = dl.clone();
+				if (clone.name == null) {
+					clone.name = ZaDLController.DEFAULT_LIST_NAME;
+					clone.setMailStatus("enabled");
+				}
 				// yuck. This really shouldn't be hanging off the instance.
 				clone.memberPool = [];
 				clone[ZaModel.currentTab] = dl[ZaModel.currentTab];
@@ -170,7 +185,7 @@ ZaDLController.prototype._setView = function (args) {
 	this._app.pushView(id);
 	// set our current view tracker.
 	this._currentViewId = id;
-	this._updateOperations();
+	this._toolbar.enable([ZaOperation.SAVE], false);
 };
 
 ZaController.prototype.getControllerForView = function( viewId ) {
@@ -221,14 +236,21 @@ ZaDLController.prototype._close = function (refresh) {
 	}
 };
 
+ZaDLController.prototype._itemErrorListener = function (event) {
+	this._itemUpdatedListener(event);
+};
+
 ZaDLController.prototype._itemUpdatedListener = function (event) {
-	var form = event.form;
-	if (form.hasErrors()){
-		this._updateOperations();
-	} else {
-		var ops = [ZaOperation.SAVE, ZaOperation.CANCEL];
-		this._updateOperations(ops);
+	var model = event.formItem.getModelItem();
+	if (model) {
+		var field = model.id;
+		// don't update the buttons if inconsequential fields are being updated
+		if (field == "memberPool" || field == "searchText" || field == "optionalAdd"){
+			return;
+		}
 	}
+
+	this._updateOperations();
 };
 
 ZaDLController.prototype.setQuery = function (query) {
@@ -327,7 +349,7 @@ ZaDLController.prototype._search = function (searchQuery, pagenum, appendResults
 ZaDLController.prototype._getNewViewXForm = function () {
     if (this._newXform == null) {
 	this._newXform = {
-	    X_showBorder:1,
+	    x_showBorder:1,
 	    numCols:5, 
 	    cssClass:"ZaDLView", 
 	    tableCssStyle: "width:100%",
@@ -466,12 +488,14 @@ ZaDLController.prototype.removeMembers = function(event, formItem) {
 		members.remove(membersSelection[i]);
 	}
 	form.refresh();	
+	this._updateOperations();
 };
 
 ZaDLController.prototype.removeAllMembers = function(event, formItem) {
 	var form = formItem.getForm();
 	form.getInstance().setMembers();
 	form.refresh();
+	this._updateOperations();
 };
 
 ZaDLController.prototype.shouldEnableMemberListButtons = function() {
@@ -549,6 +573,7 @@ ZaDLController.prototype.addAllAddressesToMembers = function (event, formItem) {
 	}
 	var memberItem = this._getMemberItem();
 	memberItem.widget.setSelectedItems(pool);
+	this._updateOperations();
 };
 
 /**
@@ -569,6 +594,7 @@ ZaDLController.prototype.addAddressToMembers = function (event, formItem) {
 	}
 	var memberItem = this._getMemberItem();
 	memberItem.widget.setSelectedItems(memberPoolSelection);	
+	this._updateOperations();
 };
 
 /**
@@ -584,6 +610,7 @@ ZaDLController.prototype.addFreeFormAddressToMembers = function (event, formItem
 	members.add(item);
 	instance.optionalAdd = null;
 	form.refresh();
+	this._updateOperations();
 };
 
 ZaDLController.distributionListXModel = {
@@ -619,7 +646,20 @@ ZaDLController.distributionListXModel = {
 	{id: "optionalAdd", type:_UNTYPED_},
 	{id: "searchText", type:_UNTYPED_},
 
-	{id: "name", type:_STRING_, setter:"setName", setterScope: _INSTANCE_},
+	{id: "name", type:_STRING_, setter:"setName", setterScope: _INSTANCE_, required:true,
+	 constraints: {type:"method", value:
+				   function (value, form, formItem, instance) {
+					   var parts = value.split('@');
+					   if (parts[0] == null || parts[0] == ""){
+						   // set the name, so that on refresh, we don't display old data.
+						   instance.setName(value);
+						   throw "list name is required";
+					   } else {
+						   return value;
+					   }
+				   }
+		}
+	},
 	{id: "members", type:_LIST_, getter: "getMembersArray", getterScope:_MODEL_, setter: "setMembersArray", setterScope:_MODEL_},
 	{id: "description", type:_STRING_, setter:"setDescription", setterScope:_INSTANCE_, getter: "getDescription", getterScope: _INSTANCE_},
 	{id: "notes", type:_STRING_, setter:"setNotes", setterScope:_INSTANCE_, getter: "getNotes", getterScope: _INSTANCE_},
