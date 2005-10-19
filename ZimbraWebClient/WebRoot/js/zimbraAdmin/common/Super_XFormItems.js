@@ -257,7 +257,6 @@ Super_Textfield_XFormItem = function () {}
 XFormItemFactory.createItemType("_SUPER_TEXTFIELD_", "super_textfield", Super_Textfield_XFormItem, Super_XFormItem);
 
 Super_Textfield_XFormItem.prototype.useParentTable = true;
-Super_Textfield_XFormItem.prototype.numCols = 2;
 Super_Textfield_XFormItem.prototype.items = [
 	{	type:_TEXTFIELD_, ref:".", width:100,
 		elementChanged: function(elementValue,instanceValue, event) {
