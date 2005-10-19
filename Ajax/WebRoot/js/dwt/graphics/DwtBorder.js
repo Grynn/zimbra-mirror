@@ -614,9 +614,9 @@ DwtBorder.registerBorder(
 									"<table cellspacing=0 cellpadding=0 Xborder=1 width=100%><tr>"+
 										"<td><div class='ImgShadowBig_BL'></div><td>"+
 										"<td width=100%><div class='ImgShadowBig_B__H' style='width:100%'></div></td>"+
-										"<td class=dialog_shadow_c><div class='ImgShadowBig_BR'></div></td>"+
 									"</tr></table>"+
 								"</td>"+
+						        "<td class='dialog_shadow_c'><div class='ImgShadowBig_BR'></div></td>"+
 							"</tr>"
 						  : ""
 						),
