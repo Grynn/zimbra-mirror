@@ -80,20 +80,20 @@ MailQuota2_XModelItem.prototype.getterScope = _MODELITEM_;
 MailQuota2_XModelItem.prototype.getter = "getValue";
 
 MailQuota2_XModelItem.prototype.getValue = function(instance, current, ref) {
-	var value = this.getAccountValue(instance, current, ref);
-	if (value == null) value = this.getCosValue(instance, current, ref);
+	var value = this.getLocalValue(instance, current, ref);
+	if (value == null) value = this.getSuperValue(instance, current, ref);
 	if(value <=0) 
 		value = ZaMsg.Unlimited;
 	return value;
 }
 
-MailQuota2_XModelItem.prototype.getCosValue = function(instance, current, ref) {
+MailQuota2_XModelItem.prototype.getSuperValue = function(instance, current, ref) {
 	var _ref  = ref  ? ref.replace("/", ".") : this.ref.replace("/", ".");
 //	var _ref = this.ref.replace("/", ".");
 	var value = (eval("instance.cos." + _ref) != null) ? Number(eval("instance.cos." + _ref) / 1048576).toFixed(0) : 0;
 	return value;
 }
-MailQuota2_XModelItem.prototype.getAccountValue = function(instance, current, ref) {
+MailQuota2_XModelItem.prototype.getLocalValue = function(instance, current, ref) {
 	var _ref  = ref  ? ref.replace("/", ".") : this.ref.replace("/", ".");
 //	var _ref = this.ref.replace("/", ".");
 	var value = (eval("instance." + _ref) != null) ? Number(eval("instance." + _ref) / 1048576).toFixed(0) : null;
