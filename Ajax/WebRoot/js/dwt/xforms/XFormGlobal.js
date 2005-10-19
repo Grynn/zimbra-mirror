@@ -80,10 +80,12 @@ XFG.getEl = function (id, frame) {
 	return it;
 };
 
-XFG.hideEl = function (id) {
+XFG.hideEl = function (id,isBlock) {
 	var el = (typeof id == "string" ? XFG.getEl(id) : id);
 	if (el) {
-		el.style.display = "none";
+		if(!isBlock)
+			el.style.display = "none";
+			
 		el.style.visibility = "hidden";
 	} else {
 		DBG.println("hideEl(", id, "): element not found");

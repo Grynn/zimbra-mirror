@@ -104,6 +104,7 @@ var _INLINE_ = "inline";
 
 // values for "relevantBehavior"
 var _HIDE_ = "hide";
+var _BLOCK_HIDE_ = "block_hide";
 var _DISABLE_ = "disable";
 var _SHOW_DISABLED_ = "show_disabled";
 var _PARENT_ = "parent"; // used in error location as well
@@ -156,9 +157,9 @@ XForm.prototype.showElement = function (id) {
 	if (id == null) id = this.getId();
 	return XFG.showEl(id);
 }
-XForm.prototype.hideElement = function (id) {
+XForm.prototype.hideElement = function (id,isBlock) {
 	if (id == null) id = this.getId();
-	return XFG.hideEl(id);
+	return XFG.hideEl(id,isBlock);
 }
 
 XForm.prototype.createElement = function (id, parentEl, tagName, contents) {
@@ -669,7 +670,7 @@ XForm.prototype.itemChanged = function (id, value, event) {
 	var onChangeMethod = item.getOnChangeMethod();
 
 	if (typeof onChangeMethod == "function") {
-		DBG.println("itemChanged(", item.ref, ").onChange = ", onChangeMethod);
+//		DBG.println("itemChanged(", item.ref, ").onChange = ", onChangeMethod);
 		value = onChangeMethod.call(item, value, event, this);
 	} else {
 		item.setInstanceValue(value);

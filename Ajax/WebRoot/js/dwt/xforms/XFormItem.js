@@ -754,11 +754,24 @@ XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript, inde
 		);
 			
 		var relevantBehavior = this.getRelevantBehavior();
-		if (relevantBehavior == _HIDE_) {
+		if (relevantBehavior == _HIDE_ ) {
 			this._endRelevantClause = true;
 			updateScript.append(
 				"if (!item.__isRelevant) {\r",
-					"item.hide();\r",
+					"item.hide(false);\r",
+				"} else {\r  ");
+			if (this.focusable) {
+				updateScript.append(
+// 					"DBG.println(AjxDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
+					"item.getForm().tabIdOrder.push(item.getId());\r"
+				);
+			}
+			updateScript.append("item.show();\r");
+		} else if (relevantBehavior == _BLOCK_HIDE_) {
+			this._endRelevantClause = true;
+			updateScript.append(
+				"if (!item.__isRelevant) {\r",
+					"item.hide(true);\r",
 				"} else {\r  ");
 			if (this.focusable) {
 				updateScript.append(
@@ -1080,17 +1093,17 @@ XFormItem.prototype.show = function() {
 		}
 	}
 }
-XFormItem.prototype.hide = function() {
+XFormItem.prototype.hide = function(isBlock) {
 	var container = this.getLabelContainer()
-	if (container) this.hideElement(container);
+	if (container) this.hideElement(container,isBlock);
 	container = this.getContainer();
 	if (container != null) {
-		this.hideElement(container);
+		this.hideElement(container,isBlock);
 	} else {
 		var items = this.getItems();
 		if (items != null) {
 			for (var i = 0; i < items.length; i++) {
-				items[i].hide();
+				items[i].hide(isBlock);
 			}
 		}
 	}
@@ -1444,7 +1457,9 @@ XFormItem.prototype.getContainerCssString = function () {
 		var relevantBehavior = this.getRelevantBehavior();
 		if (relevantBehavior == _HIDE_) {
 			style += ";display:none";
-		}
+		} else if(relevantBehavior == _BLOCK_HIDE_) {
+			style += ";display:block";
+		} 
 	}
 
 	if (style != "") css += " style=\"" + style + ";\"";
