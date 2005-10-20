@@ -44,10 +44,14 @@ ZaStatusViewController.prototype.constructor = ZaStatusViewController;
 ZaStatusViewController.prototype.show = 
 function() {
 	var globalConfig = this._app.getGlobalConfig();
-
-		var mystatusVector = this._app.getStatusList(true).getVector();
-//    	var mystatusVector = this.getDummyVector();
-// 	globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster] = "true";
+	var msystatusVector = null;
+	try {
+		mystatusVector = this._app.getStatusList(true).getVector();
+	} catch (ex) {
+		mystatusVector = AjxVector.fromArray([]);
+	}
+//  	var mystatusVector = this.getDummyVector();
+//   	globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster] = "true";
     if (!this._contentView) {
 		var elements = new Object();
 		if (AjxUtil.isSpecified(globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster])) {
@@ -62,13 +66,13 @@ function() {
 		this._contentView = new ZaStatusView(this._container, this._app);
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 		this._app.createView(ZaZimbraAdmin._STATUS, elements);
-
-		
 	}
 
 	if (AjxUtil.isSpecified(globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster])) {
 		try {
-			mystatusVector = ZaClusterStatus.getCombinedStatus(mystatusVector);
+			if (mystatusVector.size() > 0) {
+				mystatusVector = ZaClusterStatus.getCombinedStatus(mystatusVector);
+			}
 		} catch (e) {
 			this._handleException(e, ZaStatusViewController.prototype.show, null, false);
 			// Make sure the results are empty if we only have partial data.
