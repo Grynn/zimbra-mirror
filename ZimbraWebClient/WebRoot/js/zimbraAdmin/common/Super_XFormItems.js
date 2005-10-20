@@ -215,13 +215,15 @@ Super_XFormItem.updateCss = function(levels) {
 		container = container.parentNode;
 	}
 	if(Super_XFormItem.checkIfOverWriten.call(this)) {
-		if(container.className && container.className != "ZmOverride")
+		if(container.className != null && container.className != "ZmOverride")
 			this._originalClassName = container.className;
 		else 
 			this._originalClassName	= "xform_field_container";
+			
 		container.className="ZmOverride";
 	} else {
-		container.className=this._originalClassName;
+		if(this._originalClassName != null)
+			container.className=this._originalClassName;
 	}
 }
 
@@ -315,7 +317,8 @@ Super_Checkbox_XFormItem.prototype.items = [
 			Super_XFormItem.updateCss.call(this,1);
 			Checkbox_XFormItem.prototype.updateElement.call(this, value);
 		},
-		relevantBehavior:_PARENT_
+		relevantBehavior:_PARENT_,
+		forceUpdate:true
 	},
 	{	
 		type:_SUPER_ANCHOR_HELPER_, ref:".",
