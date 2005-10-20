@@ -53,6 +53,14 @@ ZaStatusView.prototype.set = function (statusVector, globalConfig) {
 		this._view.setController(this);
 		this._view.draw();
 	} else {
+		var cl = this._view.getItemsById('clusterList')[0];
+		if (cl != null) {
+			cl.dirtyDisplay();
+		}
+		var l = this._view.getItemsById('nonClusterList')[0];
+		if (l != null ) {
+			cl.dirtyDisplay();
+		}
 		this._view.setInstance(instance);
 	}
 };
@@ -64,71 +72,29 @@ ZaStatusView.prototype.addClusterSelectionListener = function (listener) {
 	}
 };
 
-// ZaStatusView.prototype.setBounds = function(x, y, width, height) {
-// 	DwtControl.prototype.setBounds.call(this, x, y, width, height);
-// 	DBG.println("setting my widths to ", width);
-// 	//this._view.getHtmlElement().style.width = width;
-// 	//this._view.getItemsById("services._array")[0].widget.getHtmlElement().style.width = width;
-// };
 
 ZaStatusView.prototype.getXForm = function () {
     if (this._xform == null) {
 	this._xform = {
-		width:"100%",
-		tableCssStyle:"width:100%;xheight:100%;",
+	    width:"100%",
+	    tableCssStyle:"width:100%;xheight:100%;",
 	    itemDefaults:{
-
+		
 	    },
 	    items:[
-// 		   {type:_TAB_BAR_, choices:[ 
-// 								{value:1, label:"Services Status"}, 
-// 								{value:2, label:"Cluster Management"}
-// 								], 
-// 			ref: ZaModel.currentTab,colSpan:"*", value:1, relevant:"(ZaSettings.CLUSTER_MANEGEMENT_ENABLED)",
-// 			XonChange:"this.getFormController().tabSwitched(event, this)"},
-// 		   {type:_SWITCH_, useParentTable: true, colSpan:"*",
-// 			items:[
-// 			      {type:_CASE_, useParentTable:false, relevant:"instance[ZaModel.currentTab] == 1", colSpan:"*", numCols:2,
-// 				   items:[
-					{type:_SPACER_, height: 5},
-					// This list is read only, so we can just do this little hack of accessing the vector's internal array.
-					
-		{ref: "services._array", id:"nonClusterList", type:_DWT_LIST_, colSpan:"*", widgetClass:ZaServicesListView,containerCssStyle:"height:100%",
-					 relevant:"AjxUtil.isUndefined(instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster])"},
-		{ref: "services._array",id:"clusterList",type:_DWT_LIST_, colSpan:"*", widgetClass:ZaClusteredServicesListView, containerCssStyle:"height:100%",
-		 relevant:"AjxUtil.isSpecified(instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster])"}
-// 					]
-// 			      },			
-// 			      {type:_CASE_, useParentTable:false, relevant:"instance[ZaModel.currentTab] == 2", colSpan:"*", numCols:2,
-// 				   items:[
-// 					 {type:_OUTPUT_ ,value :"CRAZY STUFF"}
-// 					]
-// 			      }
-// 			     ]
-// 		   }
+		   {type:_SPACER_, height: 5},
+		   // This list is read only, so we can just do this little hack of accessing the vector's internal array.
+		   {ref: "services._array", id:"nonClusterList", type:_DWT_LIST_, colSpan:"*", 
+			widgetClass:ZaServicesListView,containerCssStyle:"height:100%",
+			relevant:"AjxUtil.isUndefined(instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster])"},
+		   {ref: "services._array",id:"clusterList",type:_DWT_LIST_, colSpan:"*", widgetClass:ZaClusteredServicesListView,
+			containerCssStyle:"height:100%",
+			relevant:"AjxUtil.isSpecified(instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster])"}
  		  ]
 	}
     }
     return this._xform;
 };
-
-// ZaStatusView.prototype.tabSwitched = function (event, formItem) {
-// 	var instance = formItem.getForm().getInstance();
-// 	if (instance[ZaModel.currentTab] == 2) {
-// 		if (instance.clusterStatus == null) {
-// 			instance.clusterStatus = this.getClusterStatus();
-// 		}
-// 	}
-// };
-
-// ZaStatusView.prototype.getClusterStatus = function () {
-	
-// 	var soapDoc = AjxSoapDoc.create("GetClusterStatusRequest", "urn:zimbraAdmin", null);
-// 	// js response
-// 	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false);
-	
-// 	return resp;
-// };
 
 ZaStatusView.prototype.getSelection = function () {
 	return this._view.getItemsById('clusterList')[0].getSelection();

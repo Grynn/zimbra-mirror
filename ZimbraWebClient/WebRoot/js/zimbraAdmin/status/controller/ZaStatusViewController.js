@@ -41,43 +41,20 @@ ZaStatusViewController.prototype = new ZaController();
 ZaStatusViewController.prototype.constructor = ZaStatusViewController;
 
 
-ZaStatusViewController.prototype.show = 
-function() {
+ZaStatusViewController.prototype.show = function() {
 	var globalConfig = this._app.getGlobalConfig();
-	var msystatusVector = null;
-	try {
-		mystatusVector = this._app.getStatusList(true).getVector();
-	} catch (ex) {
-		mystatusVector = AjxVector.fromArray([]);
-	}
-//  	var mystatusVector = this.getDummyVector();
-//   	globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster] = "true";
-    if (!this._contentView) {
-		var elements = new Object();
-		if (AjxUtil.isSpecified(globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster])) {
-			var ops = [
-				   new ZaOperation(ZaOperation.CLOSE, ZaMsg.STATUSTBB_Failover, ZaMsg.STATUSTBB_Failover_tt, null, null,
-								   new AjxListener(this, this._failoverListener))
-				   ];
-			this._toolbar = new ZaToolBar(this._container, ops);
-			this._toolbar.enable([ZaOperation.CLOSE], false);
-			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
-		}
-		this._contentView = new ZaStatusView(this._container, this._app);
-		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
-		this._app.createView(ZaZimbraAdmin._STATUS, elements);
-	}
+	//globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster] = "true";
+	var mystatusVector = this._getSimpleStatusData();
+  	//var mystatusVector = this.getDummyVector();
 
-	if (AjxUtil.isSpecified(globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster])) {
-		try {
-			if (mystatusVector.size() > 0) {
-				mystatusVector = ZaClusterStatus.getCombinedStatus(mystatusVector);
-			}
-		} catch (e) {
-			this._handleException(e, ZaStatusViewController.prototype.show, null, false);
-			// Make sure the results are empty if we only have partial data.
-			mystatusVector = AjxVector.fromArray([]);
-		}
+    if (!this._contentView) {
+		this._createView();
+	}
+	// if cluster software is installed on the server, get that data ( which will be )
+	// returned sorted.
+	// otherwise just sort the simple data that we have.
+	if (this._clusterSoftwareIsInstalled()) {
+		mystatusVector = this._getClusterStatusData(mystatusVector);
 	} else {
 		mystatusVector.sort(ZaStatus.compare);
 	}
@@ -86,6 +63,52 @@ function() {
 	this._contentView.addClusterSelectionListener(new AjxListener(this, this._selectionUpdated));
 	this._app.pushView(ZaZimbraAdmin._STATUS);
 };
+
+ZaStatusViewController.prototype._getSimpleStatusData = function () {
+	try {
+		return this._app.getStatusList(true).getVector();
+	} catch (ex) {
+		return AjxVector.fromArray([]);
+	}	
+};
+
+ZaStatusViewController.prototype._createView = function () {
+	var elements = new Object();
+	if (this._clusterSoftwareIsInstalled()){
+		var ops = [
+				   new ZaOperation(ZaOperation.CLOSE, ZaMsg.STATUSTBB_Failover, ZaMsg.STATUSTBB_Failover_tt, null, null,
+								   new AjxListener(this, this._failoverListener))
+				   ];
+		this._toolbar = new ZaToolBar(this._container, ops);
+		this._toolbar.enable([ZaOperation.CLOSE], false);
+		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
+	}
+	this._contentView = new ZaStatusView(this._container, this._app);
+	elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
+	this._app.createView(ZaZimbraAdmin._STATUS, elements);
+};
+
+ZaStatusViewController.prototype._getClusterStatusData = function (simpleDataVector) {
+	var retVector = null;
+	try {
+		if (simpleDataVector.size() > 0) {
+			retVector = ZaClusterStatus.getCombinedStatus(simpleDataVector);
+		}
+	} catch (e) {
+		this._handleException(e, ZaStatusViewController.prototype.show, null, false);
+		// Make sure the results are empty if we only have partial data.
+		retVector = AjxVector.fromArray([]);
+	}
+	return retVector;
+};
+
+ZaStatusViewController.prototype._clusterSoftwareIsInstalled = function () {
+	if (this._globalConfig == null) {
+		this._globalConfig = this._app.getGlobalConfig();
+	}
+	return AjxUtil.isSpecified(this._globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster]);
+};
+
 
 ZaStatusViewController.prototype._selectionUpdated = function (event) {
 	var list = event.dwtObj;

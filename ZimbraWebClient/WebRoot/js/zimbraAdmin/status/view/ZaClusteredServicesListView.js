@@ -120,10 +120,13 @@ ZaClusteredServicesListView.prototype._writeElement = function (html, idx, item,
 			if (onlyServiceInfo){
 				html[idx++] = AjxStringUtil.htmlEncode(" ");
 			} else {
+				DBG.println("item.clusterStatus = ", item.clusterStatus);
 				if(item.clusterStatus == "started") {
 					html[idx++] = AjxImg.getImageHtml("Check");
-				} else {
+				} else if (item.clusterStatus == "stopped"){
 					html[idx++] = AjxImg.getImageHtml("Cancel");
+				} else {
+					html[idx++] = "&nbsp;";
 				}
 				html[idx++] = "<td>";
 				if (item.serverName != ZaClusterStatus.NOT_APPLICABLE) {
