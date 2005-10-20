@@ -235,7 +235,7 @@ Super_AnchorHelper_XFormItem = function () {}
 XFormItemFactory.createItemType("_SUPER_ANCHOR_HELPER_", "super_anchor_helper", Super_AnchorHelper_XFormItem, Anchor_XFormItem);
 Super_AnchorHelper_XFormItem.prototype.getAnchorTag = function(href, label) {
 	if (href == null) href = this.getHref();
-	if (label == null) label = this.getParentItem().getInheritedProperty("checkBoxLabel");
+	if (label == null) label = this.getParentItem().getInheritedProperty("resetToSuperLabel");
 	
 	var inNewWindow = this.getShowInNewWindow();
 	return AjxBuffer.concat(
@@ -285,6 +285,28 @@ XFormItemFactory.createItemType("_SUPER_CHECKBOX_", "super_checkbox", Super_Chec
 
 Super_Checkbox_XFormItem.prototype.useParentTable = true;
 Super_Checkbox_XFormItem.prototype.numCols = 2;
+Super_Checkbox_XFormItem.prototype.initializeItems = function() {
+	var anchorCssStyle = this.getInheritedProperty("anchorCssStyle");
+	if(anchorCssStyle) {
+		this.getItems()[1].cssStyle = anchorCssStyle;
+	}	
+	Composite_XFormItem.prototype.initializeItems.call(this);
+	var checkBoxLabel = this.getInheritedProperty("checkBoxLabel");
+	var checkBoxLabelLocation = this.getInheritedProperty("checkBoxLabelLocation");
+	if(checkBoxLabel) {
+		this.getItems()[0].label = checkBoxLabel;
+		this.numCols = 3;
+	}
+	if(checkBoxLabelLocation) {
+		this.getItems()[0].labelLocation = checkBoxLabelLocation;
+	}
+
+}	
+
+Super_Checkbox_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
+	this.getForm().outputItemList(this.getItems(), this, html, updateScript, indent, this.getNumCols(), currentCol);
+}
+
 Super_Checkbox_XFormItem.prototype.items = [
 	{	type:_CHECKBOX_, ref:".", align:_LEFT_,
 		trueValue:"TRUE", falseValue:"FALSE", 
@@ -293,7 +315,7 @@ Super_Checkbox_XFormItem.prototype.items = [
 			Super_XFormItem.updateCss.call(this,1);
 			Checkbox_XFormItem.prototype.updateElement.call(this, value);
 		},
-		cssStyle:"width:20px"
+		relevantBehavior:_PARENT_
 	},
 	{	
 		type:_SUPER_ANCHOR_HELPER_, ref:".",
@@ -303,6 +325,9 @@ Super_Checkbox_XFormItem.prototype.items = [
 		cssStyle:"width:100px"
 	}
 ];
+
+
+
 
 
 /**

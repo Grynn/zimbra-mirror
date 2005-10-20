@@ -170,6 +170,10 @@ ZaServerXFormView.abortHsm = function(ev) {
 	form.refresh();
 }
 
+ZaServerXFormView.getTLSEnabled = function () {
+	var value = this.getModel().getInstanceValue(this.getInstance(),ZaServer.A_zimbraMtaAuthEnabled);
+	return value == 'TRUE';
+}
 ZaServerXFormView.prototype.getMyXForm = function() {	
 	var xFormObject = {
 		tableCssStyle:"width:100%;position:static;overflow:auto;",
@@ -285,27 +289,32 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 					{ type: _CASE_, relevant: "instance[ZaModel.currentTab] == 3",
 				      items: [
 			
-						{ type: _DWT_ALERT_,
+						/*{ type: _DWT_ALERT_,
 						  cssClass: "DwtTabTable",
 						  containerCssStyle: "padding-bottom:0px",
 						  style: DwtAlert.WARNING,
 						  iconVisible: false, 
 						  content: ZaMsg.Alert_ServerDetails
-						},
-				        { type: _GROUP_, 
+						},*/
+				        { type: _GROUP_, numCols:1,
 				          label: ZaMsg.NAD_MTA_Authentication, labelCssStyle: "vertical-align:top",
 				          items: [
 					      	{ ref: ZaServer.A_zimbraMtaAuthEnabled, type: _SUPER_CHECKBOX_,
-					      	  label: ZaMsg.NAD_MTA_AuthenticationEnabled,
+					      	  checkBoxLabel:ZaMsg.NAD_MTA_AuthenticationEnabled,
 					      	  trueValue: "TRUE", falseValue: "FALSE",
-					      	  onChange: ZaServerXFormView.onFormFieldChanged
+					      	  onChange: ZaServerXFormView.onFormFieldChanged,
+					      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+					      	  label:null, anchorCssStyle:"width:200px;text-align:right;"
 				      	    },
 					      	{ ref: ZaServer.A_zimbraMtaTlsAuthOnly, type: _SUPER_CHECKBOX_,
-					      	  relevant: "instance.attrs[ZaServer.A_zimbraMtaAuthEnabled] == 'TRUE'", 
+					      	 // relevant: "instance.attrs[ZaServer.A_zimbraMtaAuthEnabled] == 'TRUE'", 
+					      	  relevant:"ZaServerXFormView.getTLSEnabled.call(item)",
 					      	  relevantBehavior: _DISABLE_,
-					      	  label: ZaMsg.NAD_MTA_TlsAuthenticationOnly,
+					      	  checkBoxLabel: ZaMsg.NAD_MTA_TlsAuthenticationOnly,
 					      	  trueValue: "TRUE", falseValue: "FALSE",
-					      	  onChange: ZaServerXFormView.onFormFieldChanged
+					      	  onChange: ZaServerXFormView.onFormFieldChanged,
+					      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+  					      	  label:null, anchorCssStyle:"width:200px;text-align:right;"
 				      	    }
 				      	]},
 				      	{ type: _SEPARATOR_, numCols: 2 },
@@ -328,24 +337,28 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 				      	  label: ZaMsg.NAD_MTA_RelayHostname, width: "18em",
 				      	  onChange: ZaServerXFormView.onFormFieldChanged
 				      	},
-				        { type: _GROUP_, label: ZaMsg.NAD_MTA_Options, labelCssStyle: "vertical-align:top",
+				        { type: _GROUP_, numCols:1,
+				        	label: ZaMsg.NAD_MTA_Options, labelCssStyle: "vertical-align:top",
 				          items: [
 					      	{ ref: ZaServer.A_zimbraMtaDnsLookupsEnabled, type:_SUPER_CHECKBOX_,
-					      	  label: ZaMsg.NAD_MTA_DnsLookups,
+					      	  checkBoxLabel: ZaMsg.NAD_MTA_DnsLookups,
+					      	  label:null,
+					      	  anchorCssStyle:"width:200px;text-align:right;",
 					      	  trueValue: "TRUE", falseValue: "FALSE",
-					      	  onChange: ZaServerXFormView.onFormFieldChanged
+					      	  onChange: ZaServerXFormView.onFormFieldChanged,
+					      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
 				      	    }
 				      	]}
 				    ]},
 					{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 4", 
 						items:[
-			{ type: _DWT_ALERT_,
-			  cssClass: "DwtTabTable",
-			  containerCssStyle: "padding-bottom:0px",
-			  style: DwtAlert.WARNING,
-			  iconVisible: false, 
-			  content: ZaMsg.Alert_ServerDetails
-			},
+/*							{ type: _DWT_ALERT_,
+							  cssClass: "DwtTabTable",
+							  containerCssStyle: "padding-bottom:0px",
+							  style: DwtAlert.WARNING,
+							  iconVisible: false, 
+							  content: ZaMsg.Alert_ServerDetails
+							},*/
 							{ type: _DWT_ALERT_,
 							  labelLocation: _LEFT_, label: "",
 							  style: DwtAlert.WARNING,
