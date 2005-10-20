@@ -12,54 +12,57 @@ BDB_VERSION ?= 4.2.52.2
 BDB_INC ?= $(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/include
 BDB_LIB ?= $(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/lib
 
+
 # DESTINATIONS
 
 # Order is important here
 
 DBD_PERL_LIBS 	:= \
-	DBD-mysql-2.9005_3 \
+	DBD::mysql \
 
 PERL_LIBS 	:= \
-	DBI-1.47 \
-	HTML-Tagset-3.03 \
-	HTML-Parser-3.36 \
-	URI-1.31 \
-	libwww-perl-5.800 \
-	HTTP-Parser-0.02 \
-	IO-stringy-1.220 \
-	MIME-Lite-3.01 \
-	MailTools-1.62 \
-	MIME-tools-5.411 \
-	SOAP-Lite-0.55 \
-	XML-Parser-2.34 \
-	Net-Telnet-3.03 \
-	Device-SerialPort-1.000002 \
-	Date-Calc-5.4 \
-	DateManip-5.42a \
-	TimeDate-1.16 \
-	Time-HiRes-1.65 \
-	swatch-3.1.1 \
-	perl-ldap-0.3202 \
-	Convert-ASN1-0.18 \
-	Crypt-SSLeay-0.51 \
-	Net-Server-0.85 \
-	Net-Server-0.87 \
-	Unix-Syslog-0.99 \
-	Compress-Zlib-1.34 \
-	BerkeleyDB-0.26 \
-	Digest-SHA1-2.10 \
-	Convert-TNEF-0.17 \
-	Convert-UUlib-1.051 \
-	Archive-Tar-1.24 \
-	Net-IP-1.23 \
-	Net-DNS-0.51 \
-	Archive-Zip-1.14 
+	DBI \
+	HTML::Tagset \
+	HTML::Parser \
+	URI \
+	Net::HTTP \
+	HTTP::Parser \
+	IO::Stringy \
+	MIME::Lite \
+	Mail::Mailer \
+	MIME::Tools \
+	SOAP::Lite \
+	XML::Parser \
+	Net::Telnet \
+	Device::SerialPort \
+	Date::Calc \
+	Date::Manip \
+	Date::Parse \
+	Time::HiRes \
+	Net::LDAP \
+	Convert::ASN1 \
+	Crypt::SSLeay \
+	Net::Server \
+	Net::Server \
+	Unix::Syslog \
+	Compress::Zlib \
+	BerkeleyDB \
+	Digest::SHA1 \
+	Convert::TNEF \
+	Convert::UUlib \
+	Archive::Tar \
+	Net::IP \
+	Net::DNS \
+	Archive::Zip 
 
 DBFILE_PERL_LIBS := \
-	DB_File-1.811
+	DB_File
 
 SA_PERL_LIBS = \
-	Mail-SpamAssassin-3.0.4
+	Mail::SpamAssassin
+
+SWATCH = \
+	swatch-3.1.1
 
 PERL_MM_USE_DEFAULT	:= 1
 export PERL_MM_USE_DEFAULT
@@ -94,42 +97,32 @@ CLEAN_TARGETS	=	\
 
 all: $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 	mkdir -p $(TMPDIR)
-	export BERKELEYDB_INCLUDE=$(BDB_INC)
-	export BERKELEYDB_LIB=$(BDB_LIB)
 
 	@for lib in $(PERL_LIBS); do \
 		echo "Compiling perl lib $$lib"; \
-		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
-		(cd $(TMPDIR); tar xzf $$lib.tar.gz; cd $$lib; \
-		BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) \
-		$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
-		make; make install;) \
+		BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) perl -MCPAN -e "force (\"install\", \"$$lib\")" ; \
 	done
 
 	@for lib in $(DBFILE_PERL_LIBS); do \
 		echo "Compiling perl lib $$lib"; \
-		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
-		(cd $(TMPDIR); tar xzf $$lib.tar.gz; cd $$lib; \
-		cp config.in config.in.fcs; \
-		sed -e 's|^INCLUDE.*|INCLUDE = /opt/zimbra/sleepycat/include|' \
-		-e 's|^LIB.*|LIB = /opt/zimbra/sleepycat/lib|' \
-		config.in.fcs > config.in; \
-		$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
-		make; make install;) \
+		perl -MCPAN -e "force (\"install\", \"$$lib\")" ; \
 	done
 
-	@for lib in $(DBD_PERL_LIBS); do \
-		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
-		(cd $(TMPDIR); tar xzf $$lib.tar.gz; cd $$lib; \
-		$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) --mysql_config=/opt/zimbra/mysql/bin/mysql_config --libs="-L/opt/zimbra/mysql/lib -lmysqlclient -lz -lcrypt -lnsl -lm"; \
-		make; make install;) \
-	done	
+	echo "Compiling perl lib DBD::mysql"; \
+	perl -MCPAN -e 'install DBI; $$CPAN::Config->{makepl_arg}.=" --libs=\"-lmysqlclient -lz -lm\" --cflags=\"-I/opt/zimbra/mysql/include -Os -arch ppc -fno-common\" "; force ("install", "DBD::mysql")' ; \
 
 	@for lib in $(SA_PERL_LIBS); do \
+		echo "Compiling perl lib $$lib"; \
+		perl -MCPAN -e "force (\"install\", \"$$lib\")" ; \
+	done	
+
+	@for lib in $(SWATCH); do \
+		echo "Compiling perl lib $$lib"; \
 		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xzf $$lib.tar.gz; cd $$lib; \
-		$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) DATADIR=$(DEST_DIR)/share CONFDIR=$(DEST_DIR)/spamassassin; \
-		make; make install;) \
+			BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) \
+			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
+			make; make install;) \
 	done	
 
 	(cd $(DEST_LIB_DIR); tar czf $(PERL_TGZ_DEST) .)
