@@ -325,9 +325,11 @@ function(by, val, withConfig) {
 	elBy.setAttribute("by", _by);
 	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	this.initFromDom(resp.firstChild);
-	this.getMyVolumes();
-	this.getCurrentVolumes();
-	this.getHSMStatus();
+	if(this.attrs[ZaServer.A_zimbraMailboxServiceEnabled]) {
+		this.getMyVolumes();
+		this.getCurrentVolumes();
+		this.getHSMStatus();
+	}
 }
 
 ZaServer.prototype.initFromDom = function(node) {

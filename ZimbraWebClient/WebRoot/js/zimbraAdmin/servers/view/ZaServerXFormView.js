@@ -60,25 +60,26 @@ function (entry) {
 	for (var a in entry.hsm) {
 		this._containedObject.hsm[a] = entry.hsm[a];
 	}
-	this._containedObject[ZaServer.A_Volumes] = new Array();
-	var cnt = entry[ZaServer.A_Volumes].length;
-	for (var i = 0; i < cnt; i++) {
-		this._containedObject[ZaServer.A_Volumes][i] = new Object();
-		for (var at in entry[ZaServer.A_Volumes][i]) {
-			this._containedObject[ZaServer.A_Volumes][i][at] = entry[ZaServer.A_Volumes][i][at];
+	if(entry[ZaServer.A_Volumes]) {
+		this._containedObject[ZaServer.A_Volumes] = new Array();
+		var cnt = entry[ZaServer.A_Volumes].length;
+		for (var i = 0; i < cnt; i++) {
+			this._containedObject[ZaServer.A_Volumes][i] = new Object();
+			for (var at in entry[ZaServer.A_Volumes][i]) {
+				this._containedObject[ZaServer.A_Volumes][i][at] = entry[ZaServer.A_Volumes][i][at];
+			}
 		}
+		
+		if(entry[ZaServer.A_CurrentPrimaryMsgVolumeId]) {
+			this._containedObject[ZaServer.A_CurrentPrimaryMsgVolumeId] = entry[ZaServer.A_CurrentPrimaryMsgVolumeId];
+		}
+		if(entry[ZaServer.A_CurrentSecondaryMsgVolumeId]) {
+			this._containedObject[ZaServer.A_CurrentSecondaryMsgVolumeId] = entry[ZaServer.A_CurrentSecondaryMsgVolumeId];
+		}	
+		if(entry[ZaServer.A_CurrentIndexMsgVolumeId]) {
+			this._containedObject[ZaServer.A_CurrentIndexMsgVolumeId] = entry[ZaServer.A_CurrentIndexMsgVolumeId];
+		}	
 	}
-	
-	if(entry[ZaServer.A_CurrentPrimaryMsgVolumeId]) {
-		this._containedObject[ZaServer.A_CurrentPrimaryMsgVolumeId] = entry[ZaServer.A_CurrentPrimaryMsgVolumeId];
-	}
-	if(entry[ZaServer.A_CurrentSecondaryMsgVolumeId]) {
-		this._containedObject[ZaServer.A_CurrentSecondaryMsgVolumeId] = entry[ZaServer.A_CurrentSecondaryMsgVolumeId];
-	}	
-	if(entry[ZaServer.A_CurrentIndexMsgVolumeId]) {
-		this._containedObject[ZaServer.A_CurrentIndexMsgVolumeId] = entry[ZaServer.A_CurrentIndexMsgVolumeId];
-	}	
-	
 	
 	if(!entry[ZaModel.currentTab])
 		this._containedObject[ZaModel.currentTab] = "1";
@@ -512,7 +513,7 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 							  ]}
 						]
 					},
-					{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 6", 
+					{type:_CASE_, relevant:"((instance[ZaModel.currentTab] == 6) && instance.attrs[ZaServer.A_zimbraServiceInstalled])", 
 						items:[
 							{type:_GROUP_, numCols:5,  
 								items: [
@@ -573,17 +574,23 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 							}
 						]
 					},
-					{type:_CASE_, relevant: "instance[ZaModel.currentTab] == 7 && instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]", 
-						numCols:2,
+					{type:_CASE_, relevant:"((instance[ZaModel.currentTab] == 6) && !instance.attrs[ZaServer.A_zimbraServiceInstalled])", 					
 						items: [
-/*							{ type: _DWT_ALERT_,
+							{ type: _DWT_ALERT_,
 							  cssClass: "DwtTabTable",
 							  containerCssStyle: "padding-bottom:0px",
 							  style: DwtAlert.WARNING,
-							  iconVisible: false, 
-							  content: ZaMsg.Alert_ServerDetails,
+							  iconVisible: true, 
+							  content: ZaMsg.Alert_VM_MailboxServiceNotInstalled,
 							   colSpan:"*"
-							},	*/
+							}						
+						]
+					
+					},
+					{type:_CASE_, relevant: "instance[ZaModel.currentTab] == 7 && instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM] && instance.attrs[ZaServer.A_zimbraServiceInstalled]", 
+						numCols:2,
+						items: [
+
 							{type:_GROUP_, numCols:4,
 								items: [
 									{ref:ZaServer.A_zimbraHsmAge, type:_SUPER_LIFETIME_, 
@@ -666,6 +673,20 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 								]
 							}
 						]
+					},
+					{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 7 && !instance.attrs[ZaServer.A_zimbraServiceInstalled] && instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]", 					
+						items: [
+							{ 
+							  type: _DWT_ALERT_,
+							  cssClass: "DwtTabTable",
+							  containerCssStyle: "padding-bottom:0px",
+							  style: DwtAlert.WARNING,
+							  iconVisible: true, 
+							  content: ZaMsg.Alert_HSM_MailboxServiceNotInstalled,
+							   colSpan:"*"
+							}						
+						]
+					
 					}
 				]
 			}	
