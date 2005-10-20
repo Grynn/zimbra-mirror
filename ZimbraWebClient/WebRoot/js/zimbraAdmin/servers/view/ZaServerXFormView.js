@@ -574,30 +574,22 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 					{type:_CASE_, relevant: "instance[ZaModel.currentTab] == 7 && instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]", 
 						numCols:2,
 						items: [
-							{ type: _DWT_ALERT_,
+/*							{ type: _DWT_ALERT_,
 							  cssClass: "DwtTabTable",
 							  containerCssStyle: "padding-bottom:0px",
 							  style: DwtAlert.WARNING,
 							  iconVisible: false, 
 							  content: ZaMsg.Alert_ServerDetails,
 							   colSpan:"*"
-							},	
+							},	*/
 							{type:_GROUP_, numCols:4,
 								items: [
-									{ref:ZaServer.A_zimbraHsmAge, type:_LIFETIME_, 
-										msgName:ZaMsg.NAD_HSM_Threshold,label:ZaMsg.NAD_HSM_Threshold+":", 
+									{ref:ZaServer.A_zimbraHsmAge, type:_SUPER_LIFETIME_, 
+										msgName:ZaMsg.NAD_HSM_Threshold,
+										label:ZaMsg.NAD_HSM_Threshold+":", 
+										resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
 										labelLocation:_LEFT_, labelCssStyle:"width:190px;",
 										onChange:ZaTabView.onFormFieldChanged
-									},
-									{type:_DWT_BUTTON_, label:ZaMsg.NAD_HSM_StartHsm,
-										relevant:"instance.hsm[ZaServer.A_HSMrunning]==0",
-										width:"120px",
-										onActivate:ZaServerXFormView.runHsm,colSpan:2
-									},
-									{type:_DWT_BUTTON_, label:ZaMsg.NAD_HSM_AbortHsm,
-										relevant:"instance.hsm[ZaServer.A_HSMrunning]==1",
-										width:"120px",
-										onActivate:ZaServerXFormView.abortHsm,colSpan:2
 									}
 								]
 							},
@@ -610,6 +602,17 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 							},		
 							{type:_GROUP_, numCols:2,
 								items: [
+,
+									{type:_DWT_BUTTON_, label:ZaMsg.NAD_HSM_StartHsm,
+										relevant:"instance.hsm[ZaServer.A_HSMrunning]==0",
+										width:"120px",
+										onActivate:ZaServerXFormView.runHsm,colSpan:2
+									},
+									{type:_DWT_BUTTON_, label:ZaMsg.NAD_HSM_AbortHsm,
+										relevant:"instance.hsm[ZaServer.A_HSMrunning]==1",
+										width:"120px",
+										onActivate:ZaServerXFormView.abortHsm,colSpan:2
+									},
 									{type:_OUTPUT_, label:ZaMsg.NAD_HSM_Status, labelLocation:_LEFT_,
 										ref:ZaServer.A_HSMrunning, choices:ZaServer.HSM_StatusChoices,
 										relevant:"!instance.hsm[ZaServer.A_HSMwasAborted]",relevantBehavior:_HIDE_,labelCssStyle:"width:190px;"
