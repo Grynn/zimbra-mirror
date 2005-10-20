@@ -41,10 +41,11 @@
  *   immediately after the HTML code was inserted.  A ref. to the document object
  *   will be passed.
  */
-function DwtIframe(parent, className, hidden, html, noscroll, posStyle, processHtmlCallback) {
+function DwtIframe(parent, className, hidden, html, styles, noscroll, posStyle, processHtmlCallback) {
 	if (!posStyle)
 		posStyle = DwtControl.STATIC_STYLE;
 	DwtControl.call(this, parent, className || "DwtIframe", posStyle, false);
+	this._styles = styles;
 	this._noscroll = noscroll;
 	this._iframeID = Dwt.getNextId();
 	this._processHtmlCallback = processHtmlCallback;
@@ -160,6 +161,8 @@ DwtIframe.prototype._createFrame = function(html) {
 		// be implicitly referenced (i.e. getElementsByTagName('head'))
 		if (AjxEnv.isSafari)
 			idoc.write("<html><head></head>");
+		if (self._styles)
+			idoc.write([ "<style type='text/css'>", self._styles, "</style>" ].join(""));
 		idoc.write(html);
 		idoc.close();
 		// if we're not giving a break, we can safely do any postprocessing
