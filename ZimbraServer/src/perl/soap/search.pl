@@ -47,12 +47,26 @@ my $url = "http://localhost:7070/service/soap/";
 
 my $user;
 my $searchString;
+my $offset = 0;
+
+my $prevId;
+#my $prevOffset;
+my $prevSortVal;
 
 if (defined $ARGV[1] && $ARGV[1] ne "") {
     $user = $ARGV[0];
     $searchString = $ARGV[1];
+    if (defined $ARGV[2]) {
+        $offset = $ARGV[2];
+    }
+    if (defined $ARGV[4]) {
+        $prevId = $ARGV[3];
+        $prevSortVal = $ARGV[4];
+#        $prevOffset = $ARGV[5];
+    }
+    
 } else {
-    die "Usage search USER QUERYSTR";
+    die "Usage search USER QUERYSTR [OFFSET] [PREV-ITEM-ID PREV-SORT-VALUE]";
 }
 
 
@@ -87,13 +101,18 @@ my %msgAttrs;
 #$msgAttrs{'types'} = "conversation";
 $msgAttrs{'types'} = "message";
 $msgAttrs{'sortby'} = "datedesc";
-$msgAttrs{'offset'} = "0";
-$msgAttrs{'limit'} = "10";
-$msgAttrs{'fetch'} = "1";
+$msgAttrs{'offset'} = $offset;
+$msgAttrs{'limit'} = "5";
+$msgAttrs{'fetch'} = "0";
 #$msgAttrs{'t'} = "\\unseen ,34 , \\FLAGGED";
 
 $d = new XmlDoc;
 $d->start('SearchRequest', $MAILNS, \%msgAttrs);
+
+if (defined $prevId) {
+    $d->add("cursor", undef, { "id" => $prevId, "sortVal" => $prevSortVal });
+}
+
 $d->start('query', undef, undef, $searchString);
 
 $d->end(); # 'query'
