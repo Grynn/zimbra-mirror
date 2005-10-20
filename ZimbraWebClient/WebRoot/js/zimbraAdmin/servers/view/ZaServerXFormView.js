@@ -141,11 +141,13 @@ ZaServerXFormView.makeCurrentHandler = function(ev) {
 ZaServerXFormView.runHsm = function(ev) {
 	form = this.getForm();
 	form.parent.entry.runHSM();
-	form.parent.entry.getHSMStatus();
-	var instance = this.getInstance();
-	for (var a in form.parent.entry.hsm) {
+	this.getInstance().hsm[ZaServer.A_HSMrunning] = true;
+	//form.parent.entry.getHSMStatus();
+//	var instance = this.getInstance();
+/*	for (var a in form.parent.entry.hsm) {
 		instance.hsm[a] = form.parent.entry.hsm[a];
 	}
+*/	
 	form.refresh();
 }
 
