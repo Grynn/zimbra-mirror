@@ -79,18 +79,30 @@ ZaDomainXFormView.prototype.getMyXForm = function() {
 	var xFormObject = {
 		tableCssStyle:"width:100%;overflow:auto;",
 		items: [
+			{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", 
+				items: [
+					{type:_GROUP_,	numCols:4,colSizes:["32px","350px","100px","250px"],
+						items: [
+							{type:_AJX_IMAGE_, src:"Domain_32", label:null},
+							{type:_OUTPUT_, ref:ZaDomain.A_domainName, label:null,cssClass:"AdminTitle", rowSpan:2},				
+							{type:_OUTPUT_, ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID}
+						]
+					}
+				],
+				cssStyle:"padding-top:5px; padding-left:2px; padding-bottom:5px"
+			},		/*
 			{type:_GROUP_, cssClass:"AdminTitleBar", colSpan: "*", 
 				items: [
 					{type:_OUTPUT_, ref:ZaDomain.A_domainName, label:ZaMsg.NAD_Domain},
 					{type:_OUTPUT_, ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID}
 				]
-			},
+			},*/
 			{type:_TAB_BAR_,  ref:ZaModel.currentTab,
 				choices:[
 					{value:1, label:ZaMsg.Domain_Tab_General},
 					{value:2, label:ZaMsg.Domain_Tab_GAL},
 					{value:3, label:ZaMsg.Domain_Tab_Authentication}
-				]
+				],cssClass:"ZaTabBar"
 			},
 			{type:_SWITCH_, items:[
 					{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 1", 
