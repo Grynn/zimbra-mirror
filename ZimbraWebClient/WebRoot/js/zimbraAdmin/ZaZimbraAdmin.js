@@ -349,7 +349,7 @@ function(ev) {
 			}
 			break;		
 		case ZaAppChooser.B_ADDRESSES:
-			this._showAccountsView(ZaItem.ACCOUNT,ev);
+			this._showAccountsView([ZaItem.ACCOUNT,ZaItem.DL,ZaItem.ALIAS],ev);
 			break;	
 		case ZaAppChooser.B_HELP:
 			if(this._app.getCurrentController()) {
@@ -377,7 +377,13 @@ ZaZimbraAdmin.prototype._showAccountsView = function (defaultType, ev){
 	queryHldr.isByDomain = false;
 	queryHldr.byValAttr = false;
 	queryHldr.queryString = "";
-	queryHldr.types = [ZaSearch.TYPES[defaultType]];
+	if(typeof(defaultType) == 'object' && defaultType.length) {
+		for(var i = 0; i < defaultType.length; i++) {
+			queryHldr.types[i] = ZaSearch.TYPES[defaultType[i]];
+		}
+	} else {
+		queryHldr.types = [ZaSearch.TYPES[defaultType]];
+	}
 	var acctListController = this._app.getAccountListController();
 	acctListController.setPageNum(1);
 	queryHldr.fetchAttrs = ZaSearch.standardAttributes;
