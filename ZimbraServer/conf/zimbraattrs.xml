@@ -352,7 +352,7 @@
 
 <attr name="zimbraPrefCalendarFirstDayOfWeek" type="integer" min="0" max="6"/>
 
-<attr name="zimbraPrefCalendarInitialView" type="enum" value="day,week,workWeek,month"/>
+<attr name="zimbraPrefCalendarInitialView" type="enum" value="day,week,workWeek,month,schedule"/>
 
 <attr name="zimbraPrefCalendarNotifyDelegatedChanges" type="boolean"/>
 
