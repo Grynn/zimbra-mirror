@@ -174,7 +174,7 @@ function(tmpObj, app) {
 		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_DOMAIN_NAME_INVALID);
 		return null;
 	}
-	var nonAlphaNumEx = /[^a-zA-Z0-9\-\.]+/
+	var nonAlphaNumEx = /[^a-zA-Z0-9\-\.]+/;
 	if(nonAlphaNumEx.test(tmpObj.attrs[ZaDomain.A_domainName]) ) {
 		//show error msg
 		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_DOMAIN_NAME_INVALID);
