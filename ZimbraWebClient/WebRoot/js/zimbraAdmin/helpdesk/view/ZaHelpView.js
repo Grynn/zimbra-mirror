@@ -105,8 +105,8 @@ ZaHelpView.prototype.getMyXForm = function() {
 					{type:_GROUP_,numCols:2,
 						items: [
 								//{type:_OUTPUT_, value:"&nbsp;"},
-							{type:_CELL_SPACER_, width:"24px"},
-							{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.HELP_PAGE_6 }
+							{type:_OUTPUT_, value:AjxImg.getImageHtml("favicon")},
+							{type:_ANCHOR_, cssStyle:"font-size:12px;", href:"http://www.zimbra.com/forums/", showInNewWindow:true,labelLocation:_NONE_,  label:ZaMsg.HELP_PAGE_6 }
 						]
 					},					
 					{type:_OUTPUT_, label:null, value:"&nbsp;"},
