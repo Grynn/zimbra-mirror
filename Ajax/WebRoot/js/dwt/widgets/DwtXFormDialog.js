@@ -64,12 +64,7 @@ DwtXFormDialog.prototype.getInstance = function() {
 }
 
 DwtXFormDialog.prototype.popup = function(loc) {
-	// initialize form items
-	if (!this._xformInitialized) {
-		//this._xform.initializeItems();
-		this._xform.draw();
-		this._xformInitialized = true;
-	}
+	this._initDialog();
 	
 	// make sure that form represents current data and show
 	this._xform.setIsDirty(true);
@@ -84,6 +79,14 @@ DwtXFormDialog.prototype.popup = function(loc) {
 }
 
 // Protected methods
+
+DwtXFormDialog.prototype._initDialog = function() {
+	// initialize form
+	if (!this._xformInitialized) {
+		this._xform.draw();
+		this._xformInitialized = true;
+	}
+}
 
 DwtXFormDialog.prototype._handleXFormDirty = function(event) {
 	if (this._button[DwtDialog.OK_BUTTON]) {
