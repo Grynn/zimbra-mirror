@@ -483,18 +483,15 @@ ZaDLController.prototype._getNewViewXForm = function () {
 
 ZaDLController.prototype.removeMembers = function(event, formItem) {
 	var form = formItem.getForm();
-	var members = form.getInstance().getMembers();
 	var membersSelection = this._getMemberSelection();
-	for (var i = 0; i < membersSelection.length ; ++i) {
-		members.remove(membersSelection[i]);
-	}
+	form.getInstance().removeMembers(membersSelection);
 	form.refresh();	
 	this._updateOperations();
 };
 
 ZaDLController.prototype.removeAllMembers = function(event, formItem) {
 	var form = formItem.getForm();
-	form.getInstance().setMembers();
+	form.getInstance().removeAllMembers();
 	form.refresh();
 	this._updateOperations();
 };
