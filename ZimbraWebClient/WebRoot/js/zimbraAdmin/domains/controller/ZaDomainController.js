@@ -35,6 +35,7 @@ function ZaDomainController(appCtxt, container, abApp) {
 	ZaController.call(this, appCtxt, container, abApp);
 	this._evtMgr = new AjxEventMgr();
 	this._UICreated = false;
+	this._helpURL = "/zimbraAdmin/adminhelp/html/OpenSourceAdminHelp/managing_domains/managing_domains.htm";			
 }
 
 ZaDomainController.prototype = new ZaController();

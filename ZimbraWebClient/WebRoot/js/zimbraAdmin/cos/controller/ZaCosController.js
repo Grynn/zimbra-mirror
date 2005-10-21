@@ -36,6 +36,7 @@ function ZaCosController(appCtxt, container, abApp) {
 	this._evtMgr = new AjxEventMgr();
 	this._confirmMessageDialog;
 	this._UICreated = false;	
+	this._helpURL = "/zimbraAdmin/adminhelp/html/OpenSourceAdminHelp/cos/class_of_service.htm";		
 }
 
 ZaCosController.prototype = new ZaController();

@@ -40,6 +40,7 @@ function ZaNewAccountXWizard (parent, app) {
 	this._localXForm.setController(this._app);	
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaNewAccountXWizard.prototype.handleXFormChange));
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(this, ZaNewAccountXWizard.prototype.handleXFormChange));	
+	this._helpURL = "/zimbraAdmin/adminhelp/html/OpenSourceAdminHelp/managing_accounts/create_an_account.htm";		
 }
 
 

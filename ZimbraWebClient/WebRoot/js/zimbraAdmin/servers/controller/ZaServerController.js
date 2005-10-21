@@ -35,6 +35,7 @@ function ZaServerController(appCtxt, container, abApp) {
 	ZaController.call(this, appCtxt, container, abApp);
 	this._evtMgr = new AjxEventMgr();
 	this._UICreated = false;
+	this._helpURL = "/zimbraAdmin/adminhelp/html/OpenSourceAdminHelp/managing_servers/managing_servers.htm";				
 }
 
 ZaServerController.prototype = new ZaController();

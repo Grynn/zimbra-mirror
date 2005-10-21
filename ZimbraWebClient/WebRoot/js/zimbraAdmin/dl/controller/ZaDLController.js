@@ -32,6 +32,7 @@ function ZaDLController (appCtxt, container, abApp, domain) {
 	this._createListeners();
 	this._createToolbars();
 	this.__internalId = AjxCore.assignId(this);
+	this._helpURL = "/zimbraAdmin/adminhelp/html/OpenSourceAdminHelp/managing_accounts/provisioning_accounts.htm";			
 }
 
 ZaDLController.prototype = new ZaController();
