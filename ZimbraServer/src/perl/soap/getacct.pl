@@ -45,14 +45,12 @@ my $MAILNS = "urn:zimbraAdmin";
 #
 my $url = "https://localhost:7071/service/admin/soap/";
 
-my $acct;
-my $action;
+my $name;
 
-if (defined $ARGV[1] && $ARGV[1] ne "") {
-    $acct = $ARGV[0];
-    $action = $ARGV[1];
+if (defined $ARGV[0] && $ARGV[0] ne "") {
+    $name = $ARGV[0];
 } else {
-    die "Usage reindex MBOX ACTION";
+    die "Usage getacct NAME";
 }
 
 my $SOAP = $Soap::Soap12;
@@ -78,8 +76,9 @@ my $contextStr = $context->to_string("pretty");
 print("Context = $contextStr\n");
 
 $d = new XmlDoc;
-$d->start('ReIndexRequest', $MAILNS, { "action" => $action }); {
-    $d->add('mbox', $MAILNS, { "id" => $acct, });
+
+$d->start('GetAccountRequest', $MAILNS); {
+    $d->add('account', $MAILNS, { "by" => "name" }, $name);
 } $d->end();
 
 print "\nOUTGOING XML:\n-------------\n";
@@ -93,9 +92,16 @@ my $response;
 
 $response = $SOAP->invoke($url, $d->root(), $context);
 
+my $acctInfo = $response->find_child('account');
+my $acctId = $acctInfo->attr("id");
+
+
+
 print "\nRESPONSE:\n--------------\n";
 $out =  $response->to_string("pretty");
 $out =~ s/ns0\://g;
 print $out."\n";
+
+print "AccountID is $acctId\n";
 
 
