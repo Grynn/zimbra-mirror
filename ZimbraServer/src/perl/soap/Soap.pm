@@ -213,6 +213,8 @@ sub invoke {
 	$req->header("SOAPAction" => $uri);
     }
     $req->add_content($soap);
+
+#    print $req->content."\n\n";
     my $res = $ua->request($req);
 
 #    print $res->content;
