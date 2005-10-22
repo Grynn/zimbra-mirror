@@ -513,7 +513,7 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 							  ]}
 						]
 					},
-					{type:_CASE_, relevant:"((instance[ZaModel.currentTab] == 6) && instance.attrs[ZaServer.A_zimbraServiceInstalled])", 
+					{type:_CASE_, relevant:"((instance[ZaModel.currentTab] == 6) && instance.attrs[ZaServer.A_zimbraMailboxServiceEnabled])", 
 						items:[
 							{type:_GROUP_, numCols:5,  
 								items: [
@@ -574,7 +574,7 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 							}
 						]
 					},
-					{type:_CASE_, relevant:"((instance[ZaModel.currentTab] == 6) && !instance.attrs[ZaServer.A_zimbraServiceInstalled])", 					
+					{type:_CASE_, relevant:"((instance[ZaModel.currentTab] == 6) && !instance.attrs[ZaServer.A_zimbraMailboxServiceEnabled])", 					
 						items: [
 							{ type: _DWT_ALERT_,
 							  cssClass: "DwtTabTable",
@@ -587,7 +587,7 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 						]
 					
 					},
-					{type:_CASE_, relevant: "instance[ZaModel.currentTab] == 7 && instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM] && instance.attrs[ZaServer.A_zimbraServiceInstalled]", 
+					{type:_CASE_, relevant: "instance[ZaModel.currentTab] == 7 && instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM] && instance.attrs[ZaServer.A_zimbraMailboxServiceEnabled]", 
 						numCols:2,
 						items: [
 
@@ -674,7 +674,7 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 							}
 						]
 					},
-					{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 7 && !instance.attrs[ZaServer.A_zimbraServiceInstalled] && instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]", 					
+					{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 7 && !instance.attrs[ZaServer.A_zimbraMailboxServiceEnabled] && instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]", 					
 						items: [
 							{ 
 							  type: _DWT_ALERT_,
