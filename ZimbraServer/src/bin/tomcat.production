@@ -1,0 +1,197 @@
+#!/bin/bash
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Version: ZPL 1.1
+# 
+# The contents of this file are subject to the Zimbra Public License
+# Version 1.1 ("License"); you may not use this file except in
+# compliance with the License. You may obtain a copy of the License at
+# http://www.zimbra.com/license
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+# the License for the specific language governing rights and limitations
+# under the License.
+# 
+# The Original Code is: Zimbra Collaboration Suite.
+# 
+# The Initial Developer of the Original Code is Zimbra, Inc.
+# Portions created by Zimbra are Copyright (C) 2005 Zimbra, Inc.
+# All Rights Reserved.
+# 
+# Contributor(s):
+# 
+# ***** END LICENSE BLOCK *****
+# 
+
+source `dirname $0`/zmshutil || exit 1
+zmsetvars \
+    zimbra_home \
+    tomcat_directory \
+    tomcat_java_home \
+    tomcat_java_heap_memory_percent \
+    tomcat_java_options \
+    tomcat_pidfile
+
+#
+# Expected by catalina scripts
+#
+if [ -d /Library/Java/Home ]; then
+	export JAVA_HOME=/Library/Java/Home
+else
+	export JAVA_HOME=${tomcat_java_home}
+	zmassert -d ${tomcat_java_home}
+	zmassert -x ${tomcat_java_home}/bin/java
+	zmassert -d ${tomcat_directory}
+fi
+
+#
+# Available system memory in KB
+#
+if [ -f /proc/meminfo ]; then
+	memkb=`awk '/^MemTotal.*kB$/ { print $2; }' /proc/meminfo`
+else
+	memkb=524288
+fi
+
+#
+# Memory for use by JVM
+#
+jm=`expr $memkb '*' ${tomcat_java_heap_memory_percent} / 100 / 1024`
+
+#
+# Help see if tomcat process is running, note that CATALINA_PID is
+# passed down to tomcat scripts which do the actual writing of the pid
+# file.
+#
+export CATALINA_PID=${tomcat_pidfile}
+
+if [ -s ${tomcat_pidfile} ]; then
+    pid=`cat ${tomcat_pidfile}`
+fi
+
+isrunning() {
+    kill -0 "$pid" 2> /dev/null
+    return
+}
+
+#
+# Expand war files.
+#
+unpack_webapps() {
+    if [ ! -f ${tomcat_directory}/webapps/service.war ]; then
+        echo Warning: ${tomcat_directory}/webapps/service.war does not exist
+    elif [ ! -d "${tomcat_directory}/webapps/service" ]; then
+        echo Info: expanding ${tomcat_directory}/webapps/service.war
+        mkdir "${tomcat_directory}/webapps/service"
+        (cd ${tomcat_directory}/webapps/service; jar xf ../service.war)
+    fi
+
+    if [ ! -f ${tomcat_directory}/webapps/zimbra.war ]; then
+        echo Warning: ${tomcat_directory}/webapps/zimbra.war does not exist
+    elif [ ! -d "${tomcat_directory}/webapps/zimbra" ]; then
+        echo Info: expanding ${tomcat_directory}/webapps/zimbra.war
+        mkdir "${tomcat_directory}/webapps/zimbra"
+        (cd ${tomcat_directory}/webapps/zimbra; jar xf ../zimbra.war)
+    fi
+}
+
+#
+# Main
+#
+case "$1" in
+    'start')
+        unpack_webapps
+        if [ -s ${tomcat_pidfile} ]; then
+            if isrunning; then
+                echo "Error: tomcat already running (pid $pid)"
+                exit 1
+            fi
+        fi
+        # set JAVA_OPTS only in the start case - otherwise the VM
+        # invoked to stop tomcat could trash your java.hprof.txt file
+        export JAVA_OPTS="${tomcat_java_options} -Xms${jm}m -Xmx${jm}m -Djava.library.path=${zimbra_home}/lib"
+        # ${tomcat_directory}/bin/catalina.sh start
+		# export ZIMBRA_TOMCAT_START_DEBUG=1
+		${zimbra_home}/bin/zmtomcatstart ${tomcat_java_options} > ${tomcat_directory}/logs/tomcat.out 2>&1 &
+        ;;
+
+    'kill')
+        if [ ! -s "${tomcat_pidfile}" ]; then
+            echo "Error: no pid in ${tomcat_pidfile}"
+            exit 1
+        fi
+        if ! isrunning; then
+            echo "Error: tomcat not running (pid $pid), stale pid file?"
+            exit 1
+        fi
+        echo "Sending TERM signal to tomcat (pid $pid)"
+        kill -TERM "$pid" 2> /dev/null
+        if isrunning; then
+                sleep 5
+                echo "Sending -9 signal to tomcat (pid $pid)"
+                kill -9 "$pid" 2> /dev/null
+        fi
+        ;;
+
+    'stop')
+        if [ ! -s "${tomcat_pidfile}" ]; then
+            echo "Error: no pid in ${tomcat_pidfile}"
+            exit 1
+        fi
+        if ! isrunning; then
+            echo "Error: tomcat not running (pid $pid), stale pid file?"
+            exit 1
+        fi
+
+
+        # At this point, we know a tomcat java process is running and
+        # we have it's pid.  We'll loop because (a) the tomcat server
+        # might just be starting so the first "catalina.sh stop"
+        # request might fail and (b) if for some reason we couldn't
+        # stop it I want this script to sit here and loop and not
+        # pretend that it did something.
+
+		count=0
+
+        while true; do
+            # Every n seconds we send invoke one of these
+            ${tomcat_directory}/bin/catalina.sh stop
+            echo -n "Waiting "
+            for ((i = 0; i < 5; i++)); do
+                sleep 1;
+                if ! isrunning; then
+                    rm -f ${tomcat_pidfile}
+                    break
+                fi
+                echo -n "."
+            done 
+            if [ -e ${tomcat_pidfile} ]; then
+                echo " trying again"
+            else 
+                echo " shutdown ok"
+                break
+            fi
+			count=`expr $count + 1`
+			if [ $count -gt 3 ]; then
+				echo "Giving up - killing $pid"
+				kill -TERM $pid
+				break
+			fi
+        done
+        ;;
+    
+    'restart')
+        $0 stop
+        $0 start
+        ;;
+    
+	'status')
+		kill -0 "$pid" 2> /dev/null
+		exit $?
+		;;
+    *)
+        echo "Usage: $0 start|stop|kill|restart|status"
+        exit 1
+        ;;
+esac
