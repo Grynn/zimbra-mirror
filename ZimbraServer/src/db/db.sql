@@ -56,7 +56,10 @@ CREATE TABLE volume (
    mailbox_bits          SMALLINT NOT NULL,
    mailbox_group_bits    SMALLINT NOT NULL,
    compress_blobs        BOOLEAN NOT NULL,
-   compression_threshold BIGINT NOT NULL
+   compression_threshold BIGINT NOT NULL,
+
+   UNIQUE INDEX i_name (name),
+   UNIQUE INDEX i_path (path(255))   # Index prefix length of 255 is the max prior to MySQL 4.1.2.  Should be good enough.
 ) ENGINE = InnoDB;
 
 # This table has only one row.  It points to message and index volumes
