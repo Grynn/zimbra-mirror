@@ -108,6 +108,12 @@ case "$1" in
                 exit 1
             fi
         fi
+		# Create the work directories so they're owned by zimbra
+		mkdir -p ${tomcat_directory}/work/Catalina/localhost/_/org/apache/jsp/public_
+		mkdir -p ${tomcat_directory}/work/Catalina/localhost/zimbra/org/apache/jsp/public_
+		mkdir -p ${tomcat_directory}/work/Catalina/localhost/service/org/apache/jsp/public_
+		mkdir -p ${tomcat_directory}/work/Catalina/localhost/zimbraAdmin/org/apache/jsp/public_
+
         # set JAVA_OPTS only in the start case - otherwise the VM
         # invoked to stop tomcat could trash your java.hprof.txt file
         export JAVA_OPTS="${tomcat_java_options} -Xms${jm}m -Xmx${jm}m -Djava.library.path=${zimbra_home}/lib"
