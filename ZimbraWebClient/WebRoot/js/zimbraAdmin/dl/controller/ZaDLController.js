@@ -32,7 +32,7 @@ function ZaDLController (appCtxt, container, abApp, domain) {
 	this._createListeners();
 	this._createToolbars();
 	this.__internalId = AjxCore.assignId(this);
-	this._helpURL = "/zimbraAdmin/adminhelp/html/OpenSourceAdminHelp/managing_accounts/provisioning_accounts.htm";			
+	this._helpURL = "/zimbraAdmin/adminhelp/html/OpenSourceAdminHelp/managing_accounts/provisioning_accounts.htm";
 }
 
 ZaDLController.prototype = new ZaController();
@@ -45,7 +45,6 @@ ZaDLController.prototype.toString = function () {
 ZaDLController.MODE_NEW = 1;
 ZaDLController.MODE_EDIT = 2;
 
-ZaDLController.DEFAULT_LIST_NAME = "<New list name>";
 //===============================================================
 // initialization methods
 //===============================================================
@@ -90,7 +89,7 @@ function () {
 		disOps = [ZaOperation.SAVE];
 	} else {
 		var instance = this._dlView.getInstance();
-		if (instance.getMembersArray().length > 0 && instance.name != ZaDLController.DEFAULT_LIST_NAME) {
+		if (instance.getMembersArray().length > 0 && instance.name != null) {
 			ops = [ZaOperation.SAVE, ZaOperation.CLOSE];
 		} else {
 			ops =  [ZaOperation.CLOSE];
@@ -141,7 +140,6 @@ ZaDLController.prototype._getView = function (id, args) {
 				dl.getMembers();
 				var clone = dl.clone();
 				if (clone.name == null) {
-					clone.name = ZaDLController.DEFAULT_LIST_NAME;
 					clone.setMailStatus("enabled");
 				}
 				// yuck. This really shouldn't be hanging off the instance.
@@ -250,7 +248,6 @@ ZaDLController.prototype._itemUpdatedListener = function (event) {
 			return;
 		}
 	}
-
 	this._updateOperations();
 };
 
@@ -651,7 +648,6 @@ ZaDLController.distributionListXModel = {
 					   var parts = value.split('@');
 					   if (parts[0] == null || parts[0] == ""){
 						   // set the name, so that on refresh, we don't display old data.
-						   //instance.setName(value);
 						   throw ZaMsg.DLXV_ErrorNoListName;
 					   } else {
 						   var re = ZaDLController._validEmailPattern;
