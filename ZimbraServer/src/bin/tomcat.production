@@ -113,6 +113,7 @@ case "$1" in
 		mkdir -p ${tomcat_directory}/work/Catalina/localhost/zimbra/org/apache/jsp/public_
 		mkdir -p ${tomcat_directory}/work/Catalina/localhost/service/org/apache/jsp/public_
 		mkdir -p ${tomcat_directory}/work/Catalina/localhost/zimbraAdmin/org/apache/jsp/public_
+		mkdir -p ${tomcat_directory}/work/Catalina/localhost/manager
 
         # set JAVA_OPTS only in the start case - otherwise the VM
         # invoked to stop tomcat could trash your java.hprof.txt file
