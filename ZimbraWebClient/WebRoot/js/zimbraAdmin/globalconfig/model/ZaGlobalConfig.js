@@ -196,7 +196,7 @@ ZaGlobalConfig.prototype.initFromDom = function(node) {
 	}
 	
 	// keep track of current monitor host server
-	var serverMap = this._app.getServerMap();
+	/*var serverMap = this._app.getServerMap();
 	for (id in serverMap) {
 		var server = serverMap[id];
 		if (server.attrs[ZaServer.A_zimbraIsMonitorHost] == 'TRUE') {
@@ -204,7 +204,7 @@ ZaGlobalConfig.prototype.initFromDom = function(node) {
 			this.attrs[ZaGlobalConfig.A_currentMonitorHost] = server.id;
 			break;
 		}
-	}
+	}*/
 /*	var choices = new Object();
 	if(this.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]) {
 		choices[ZaServer.PRI_MSG] = ZaMsg.NAD_HSM_PrimaryMsg;

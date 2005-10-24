@@ -92,12 +92,12 @@ GlobalConfigXFormView.prototype.getMyXForm = function() {
 							  label: ZaMsg.NAD_DefaultDomainName, //width: "10em",
 							  choices: this._app.getDomainListChoices(), 
 							  onChange:ZaTabView.onFormFieldChanged
-							},
+							}/*,
 							{ ref: ZaGlobalConfig.A_currentMonitorHost, type: _OSELECT1_,
 							  label: ZaMsg.NAD_MonitorHostServer,
 							  choices: this._app.getServerListChoices(),
 							  onChange: ZaTabView.onFormFieldChanged
-						  	}
+						  	}*/
 						]
 					},
 					{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 2", items:[
