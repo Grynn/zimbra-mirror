@@ -244,12 +244,20 @@ function (obj) {
 			}
 		}
 	
-		//create new Volumes
-		if(obj[ZaServer.A_Volumes]) {
+		if(obj[ZaServer.A_Volumes]) {			
+		
+		
+			var tmpVolumeMap = new Array();
 			var cnt = obj[ZaServer.A_Volumes].length;
 			for(var i = 0; i < cnt; i++) {
-				if(!obj[ZaServer.A_Volumes][i][ZaServer.A_VolumeId]) {
-					this._currentObject.createVolume(obj[ZaServer.A_Volumes][i]);			
+				tmpVolumeMap.push(obj[ZaServer.A_Volumes][i]);
+			}
+		
+			//create new Volumes
+			cnt = tmpVolumeMap.length;
+			for(var i = 0; i < cnt; i++) {
+				if(!tmpVolumeMap[i][ZaServer.A_VolumeId]) {
+					this._currentObject.createVolume(tmpVolumeMap[i]);			
 				}
 			}
 	
@@ -258,7 +266,7 @@ function (obj) {
 			
 			var cnt2 = this._currentObject[ZaServer.A_Volumes].length;
 			for(var i = cnt; i >= 0; i--) {
-				var newVolume = obj[ZaServer.A_Volumes][i];
+				var newVolume = tmpVolumeMap[i];
 				var oldVolume;
 				for (var ix =0; ix < cnt2; ix++) {
 					oldVolume = this._currentObject[ZaServer.A_Volumes][ix];
@@ -273,9 +281,9 @@ function (obj) {
 						}
 						
 						if(modified) {
-							this._currentObject.modifyVolume(obj[ZaServer.A_Volumes][i]);
+							this._currentObject.modifyVolume(tmpVolumeMap[i]);
 						}
-						obj[ZaServer.A_Volumes].splice(i,1);
+						tmpVolumeMap.splice(i,1);
 					}
 				}
 			}
@@ -346,6 +354,9 @@ function (params) {
 				this._confirmMessageDialog.popdown();
 			if(params) {
 				params["func"].call(params["obj"], params["params"]);
+			} else {
+				this._currentObject.refresh(false);	
+				this._view.setObject(this._currentObject);				
 			}
 		}
 	} catch (ex) {
@@ -372,6 +383,7 @@ ZaServerController.prototype._saveButtonListener =
 function(ev) {
 	try {
 		this._validateChanges();
+		
 	} catch (ex) {
 		//if exception thrown - don' go away
 		this._handleException(ex, "ZaServerController.prototype._saveButtonListener", null, false);

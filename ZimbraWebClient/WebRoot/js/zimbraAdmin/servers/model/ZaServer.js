@@ -315,6 +315,11 @@ function() {
 	ZmCsfeCommand.invoke(soapDoc, null, null, null, true);	
 }
 
+ZaServer.prototype.refresh = 
+function() {
+	this.load();	
+}
+
 ZaServer.prototype.load = 
 function(by, val, withConfig) {
 	var _by = by ? by : "id";
