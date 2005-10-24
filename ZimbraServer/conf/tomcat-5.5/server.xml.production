@@ -13,13 +13,13 @@
   <Service name="Catalina">
     <!-- user services connector, no SSL -->
 	<!-- HTTPBEGIN -->
-    <Connector port="7070" proxyPort="80"
+    <Connector port="80"
         enableLookups="false" redirectPort="443"
         maxThreads="100" minSpareThreads="100" maxSpareThreads="100"/>
 	<!-- HTTPEND -->
     <!-- user services connector, SSL -->
 	<!-- HTTPSBEGIN 
-    <Connector port="7443" proxyPort="443"
+    <Connector port="443"
         enableLookups="false"
         maxThreads="100" minSpareThreads="100" maxSpareThreads="100"
         scheme="https" secure="true"

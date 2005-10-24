@@ -113,7 +113,8 @@ case "$1" in
         export JAVA_OPTS="${tomcat_java_options} -Xms${jm}m -Xmx${jm}m -Djava.library.path=${zimbra_home}/lib"
         # ${tomcat_directory}/bin/catalina.sh start
 		# export ZIMBRA_TOMCAT_START_DEBUG=1
-		${zimbra_home}/bin/zmtomcatstart ${tomcat_java_options} > ${tomcat_directory}/logs/tomcat.out 2>&1 &
+		nohup sudo ${zimbra_home}/bin/zmtomcatstart ${tomcat_java_options} > ${tomcat_directory}/logs/catalina.out 2>&1 &
+		echo $! > ${tomcat_pidfile}
         ;;
 
     'kill')
