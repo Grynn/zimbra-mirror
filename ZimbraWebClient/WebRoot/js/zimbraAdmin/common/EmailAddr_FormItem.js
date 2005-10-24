@@ -53,6 +53,7 @@ function () {
 
 EmailAddr_XFormItem.prototype.items = [
 	{type:_TEXTFIELD_,forceUpdate:true, ref:".", labelLocation:_NONE_,relevantBehavior:_PARENT_, cssClass:"admin_xform_name_input",
+	 errorLocation:_PARENT_,
 		getDisplayValue:function (itemVal) {
 			var val = itemVal;
 			if(val) {
@@ -76,6 +77,7 @@ EmailAddr_XFormItem.prototype.items = [
 	},
 	{type:_OUTPUT_, value:"@"},
 	{type:_OSELECT1_, ref:".", labelLocation:_NONE_, relevantBehavior:_PARENT_, choices:EmailAddr_XFormItem.domainChoices,
+	 errorLocation:_PARENT_,
 		getDisplayValue:function (itemVal){
 			var val = null;
 			if(itemVal) {

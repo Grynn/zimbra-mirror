@@ -611,6 +611,7 @@ ZaDLController.prototype.addFreeFormAddressToMembers = function (event, formItem
 	this._updateOperations();
 };
 
+ZaDLController._validEmailPattern = new RegExp(/^([a-zA-Z0-9_\-])+((\.)?([a-zA-Z0-9_\-])+)*@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/);
 ZaDLController.distributionListXModel = {
 	getMemberPool: function (model, instance) {
 		return instance.memberPool;
@@ -650,10 +651,15 @@ ZaDLController.distributionListXModel = {
 					   var parts = value.split('@');
 					   if (parts[0] == null || parts[0] == ""){
 						   // set the name, so that on refresh, we don't display old data.
-						   instance.setName(value);
-						   throw "list name is required";
+						   //instance.setName(value);
+						   throw ZaMsg.DLXV_ErrorNoListName;
 					   } else {
-						   return value;
+						   var re = ZaDLController._validEmailPattern;
+						   if (re.test(value)) {
+							   return value;
+						   } else {
+							   throw ZaMsg.DLXV_ErrorInvalidListName;
+						   }
 					   }
 				   }
 		}
