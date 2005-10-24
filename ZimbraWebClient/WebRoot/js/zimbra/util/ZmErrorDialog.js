@@ -27,7 +27,7 @@ Contributor(s): ______________________________________.
 * A normal DwtMessageDialog w/ a "Report" button that will post user info to the 
 * server when clicked.
 */
-function ZmErrorDialog(parent, appCtxt) {
+function ZmErrorDialog(parent, appCtxt, msgs) {
 	if (arguments.length === 0) {return;}
 
 	this._appCtxt = appCtxt;
@@ -35,7 +35,7 @@ function ZmErrorDialog(parent, appCtxt) {
 	this._strNav = this._getNavigatorInfo();
 	this._subjPfx = this._getSubjectPrefix();
 
-	var reportButton = new DwtDialog_ButtonDescriptor(ZmErrorDialog.REPORT_BUTTON, ZmMsg.report, DwtDialog.ALIGN_LEFT);
+	var reportButton = new DwtDialog_ButtonDescriptor(ZmErrorDialog.REPORT_BUTTON, msgs.report, DwtDialog.ALIGN_LEFT);
 	var detailButton = new DwtDialog_ButtonDescriptor(ZmErrorDialog.DETAIL_BUTTON, null, DwtDialog.ALIGN_LEFT);
 	DwtMessageDialog.call(this, parent, null, null, [reportButton, detailButton]);
 
@@ -46,9 +46,6 @@ function ZmErrorDialog(parent, appCtxt) {
 	// arrow icon is too big so hack it to fit (instead of adding new image)
 	Dwt.setSize(detailBtn.getHtmlElement(), 22, (AjxEnv.isIE ? 21 : 19));
 	detailBtn.getHtmlElement().style.overflow = "hidden";
-
-	var reportBtn = this._button[ZmErrorDialog.REPORT_BUTTON];
-	reportBtn.getHtmlElement().style.width = "70px";
 
 	this.registerCallback(ZmErrorDialog.REPORT_BUTTON, this._reportCallback, this);
 	this.registerCallback(ZmErrorDialog.DETAIL_BUTTON, this._showDetail, this);
@@ -130,7 +127,7 @@ ZmErrorDialog.prototype._getNavigatorInfo = function() {
 	var idx = 0;
 	
 	// Add the url the user has used to connect
-	strNav[idx++] = "URL: " + location.href + "\n";
+	strNav[idx++] = "href: " + location.href + "\n";
 
 	for (var i in navigator) {
 		strNav[idx++] = i + ": " + navigator[i] + "\n";
@@ -142,6 +139,8 @@ ZmErrorDialog.prototype._getNavigatorInfo = function() {
 ZmErrorDialog.prototype._getSubjectPrefix = function() {
 	var strSubj = new Array();
 	var idx = 0;
+	
+	strSubj[idx++] = "ER: ";
 	
 	if(AjxEnv.isIE) {
 		strSubj[idx++] = "IE ";
