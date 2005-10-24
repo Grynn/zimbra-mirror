@@ -109,7 +109,7 @@ all: $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 	done
 
 	echo "Compiling perl lib DBD::mysql"; \
-	perl -MCPAN -e 'install DBI; $$CPAN::Config->{makepl_arg}.=" --libs=\"-lmysqlclient -lz -lm\" --cflags=\"-I/opt/zimbra/mysql/include -Os -arch ppc -fno-common\" "; force ("install", "DBD::mysql")' ; \
+	perl -MCPAN -e 'install DBI; $$CPAN::Config->{makepl_arg}.=" --nocatchstderr --mysql_config=\"/opt/zimbra/mysql/bin/mysql_config\" --libs=\"-lmysqlclient -lz -lm\" --cflags=\" -I/opt/zimbra/mysql/include -Os -arch ppc -fno-common\" "; $$CPAN::Config->{make_arg} .=" LD_RUN_PATH=/opt/zimbra/mysql/lib"; force ("install", "DBD::mysql")' ; \
 
 	@for lib in $(SA_PERL_LIBS); do \
 		echo "Compiling perl lib $$lib"; \
@@ -133,6 +133,10 @@ $(PERL_TGZ_DEST_DIR):
 
 $(DEST_LIB_DIR):
 	mkdir -p $@
+
+DBD:
+	echo "Compiling perl lib DBD::mysql"; \
+	perl -MCPAN -e 'install DBI; $$CPAN::Config->{makepl_arg}.=" --nocatchstderr --mysql_config=\"/opt/zimbra/mysql/bin/mysql_config\" --libs=\"-lmysqlclient -lz -lm\" --cflags=\" -I/opt/zimbra/mysql/include -Os -arch ppc -fno-common\" "; $$CPAN::Config->{make_arg} .=" LD_RUN_PATH=/opt/zimbra/mysql/lib"; force ("install", "DBD::mysql")' ; \
 
 clean:
 	rm -rf $(CLEAN_TARGETS)
