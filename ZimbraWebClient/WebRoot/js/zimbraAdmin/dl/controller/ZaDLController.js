@@ -393,7 +393,7 @@ ZaDLController.prototype._getNewViewXForm = function () {
 									   relevantBehavior:_DISABLE_},
 									  
 									  {type:_CELLSPACER_},
-									  {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemove, width:80,
+									  {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemove, width:80, id:"removeButton",
 									      onActivate:"this.getFormController().removeMembers(event,this)",
 									      relevant:"(form.getController().shouldEnableMemberListButtons())",
 									      relevantBehavior:_DISABLE_}
@@ -561,14 +561,8 @@ ZaDLController.prototype._getMemberSelection = function () {
 
 ZaDLController.prototype.addAllAddressesToMembers = function (event, formItem) {
 	var form = formItem.getForm();
-	var instance = form.getInstance();
-	var pool = instance.memberPool;
-	if (instance.addMembers(pool)) {
-		form.refresh();
-	}
-	var memberItem = this._getMemberItem();
-	memberItem.widget.setSelectedItems(pool);
-	this._updateOperations();
+	var pool = form.getInstance().memberPool;
+	this._addListToMemberList(form, pool);
 };
 
 /**
@@ -579,17 +573,10 @@ ZaDLController.prototype.addAllAddressesToMembers = function (event, formItem) {
  */
 ZaDLController.prototype.addAddressToMembers = function (event, formItem) {
  	var form = formItem.getForm();
-	var instance = formItem.getForm().getInstance();
-	var members = instance.getMembers();
 	var memberPoolSelection = this._getMemberPoolSelection();
 	// get the current value of the textfied
 	var val;
-	if (instance.addMembers(memberPoolSelection)) {
-		form.refresh();
-	}
-	var memberItem = this._getMemberItem();
-	memberItem.widget.setSelectedItems(memberPoolSelection);	
-	this._updateOperations();
+	this._addListToMemberList (form, memberPoolSelection);
 };
 
 /**
@@ -597,16 +584,27 @@ ZaDLController.prototype.addAddressToMembers = function (event, formItem) {
 ZaDLController._IDS = 0;
 ZaDLController.prototype.addFreeFormAddressToMembers = function (event, formItem) {
  	var form = formItem.getForm();
-	var instance = formItem.getForm().getInstance();
-	var members = instance.getMembers();
 	// get the current value of the textfied
  	var val = form.get("optionalAdd");
 	var item = new ZaDistributionListMember(val);
-	members.add(item);
-	instance.optionalAdd = null;
-	form.refresh();
-	this._updateOperations();
+	this._addListToMemberList(form, [item]);
+	form.getInstance().optionalAdd = null;
 };
+
+ZaDLController.prototype._addListToMemberList = function (form, list) {
+	if (form.getInstance().addMembers(list)) {
+		form.refresh();
+	}
+	this._getMemberItem().widget.setSelectedItems(list);
+	this._updateOperations();
+	// This should happen by looking at the data, but, the list view has it's data updated ( in form.refresh )
+	// and deletes it's selection. We keep track of the selection here, and poke the list view,
+	// after the refresh, so the button knows nothing about the selection in the list.
+	// We have to poke the button, and set it to enabled.
+	form.getItemsById('removeButton')[0].widget.setEnabled(true);
+};
+
+
 
 ZaDLController._validEmailPattern = new RegExp(/^([a-zA-Z0-9_\-])+((\.)?([a-zA-Z0-9_\-])+)*@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/);
 ZaDLController.distributionListXModel = {
