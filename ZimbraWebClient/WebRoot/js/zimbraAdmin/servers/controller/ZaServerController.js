@@ -329,7 +329,7 @@ function (params) {
 		this._confirmMessageDialog.setMessage(ZaMsg.Q_DELETE_VOLUMES,  DwtMessageDialog.WARNING_STYLE);
 		var args;
 		var callBack = ZaServerController.prototype._saveChangesCallback;
-		if(!params || !params["callback"]) {
+		if(!params || !params["func"]) {
 			args = null;
 		} else {
 			callBack = ZaServerController.prototype._saveChangesCallback;
