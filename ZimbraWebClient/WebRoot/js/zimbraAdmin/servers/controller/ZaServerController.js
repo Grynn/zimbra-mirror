@@ -174,7 +174,7 @@ function(entry) {
 
 ZaServerController.prototype._saveChanges =
 function (obj) {
-//	var tmpObj = this._view.getObject();
+
 	var isNew = false;
 	if(obj.attrs == null) {
 		//show error msg
@@ -184,22 +184,26 @@ function (obj) {
 	}
 
 	// update zimbraServiceEnabled
-	if (obj.attrs[ZaServer.A_zimbraServiceInstalled]) {
+	var svcInstalled = AjxUtil.isString(obj.attrs[ZaServer.A_zimbraServiceInstalled])
+							? [ obj.attrs[ZaServer.A_zimbraServiceInstalled] ]
+							: obj.attrs[ZaServer.A_zimbraServiceInstalled];
+	if (svcInstalled) {
 		// get list of actually enabled fields
 		var enabled = [];
-		for (var i = 0; i < obj.attrs[ZaServer.A_zimbraServiceInstalled].length; i++) {
-			var service = obj.attrs[ZaServer.A_zimbraServiceInstalled][i];
+		for (var i = 0; i < svcInstalled.length; i++) {
+			var service = svcInstalled[i];
 			if (obj.attrs["_"+ZaServer.A_zimbraServiceEnabled+"_"+service]) {
 				enabled.push(service);
 			}			
 		}
 		
 		// see if list of actually enabled fields is same as before
-		var dirty = enabled.length > 0;
-		if (obj.attrs[ZaServer.A_zimbraServiceEnabled]) {
-			var prevEnabled = AjxUtil.isString(obj.attrs[ZaServer.A_zimbraServiceEnabled])
-							? [ obj.attrs[ZaServer.A_zimbraServiceEnabled] ]
-							: obj.attrs[ZaServer.A_zimbraServiceEnabled];
+		
+		var dirty = enabled.length > 0; 
+		if (this._currentObject.attrs[ZaServer.A_zimbraServiceEnabled]) {
+			var prevEnabled = AjxUtil.isString(this._currentObject.attrs[ZaServer.A_zimbraServiceEnabled])
+							? [ this._currentObject.attrs[ZaServer.A_zimbraServiceEnabled] ]
+							: this._currentObject.attrs[ZaServer.A_zimbraServiceEnabled];
 			dirty = enabled.length != prevEnabled.length;		
 			if (!dirty) {
 				for (var i = 0; i < prevEnabled.length; i++) {
@@ -230,62 +234,64 @@ function (obj) {
 
 
 	//remove Volumes
-	if(obj[ZaServer.A_RemovedVolumes]) {
-		var cnt = obj[ZaServer.A_RemovedVolumes].length;
-		for(var i = 0; i < cnt; i++) {
-			if(obj[ZaServer.A_RemovedVolumes][i][ZaServer.A_VolumeId] > 0) {
-				this._currentObject.deleteVolume(obj[ZaServer.A_RemovedVolumes][i][ZaServer.A_VolumeId]);			
-			}
-		}
-	}
-	
-	//create new Volumes
-	if(obj[ZaServer.A_Volumes]) {
-		var cnt = obj[ZaServer.A_Volumes].length;
-		for(var i = 0; i < cnt; i++) {
-			if(!obj[ZaServer.A_Volumes][i][ZaServer.A_VolumeId]) {
-				this._currentObject.createVolume(obj[ZaServer.A_Volumes][i]);			
-			}
-		}
-
-		//modify existing volumes
-		cnt--;	
-		
-		var cnt2 = this._currentObject[ZaServer.A_Volumes].length;
-		for(var i = cnt; i >= 0; i--) {
-			var newVolume = obj[ZaServer.A_Volumes][i];
-			var oldVolume;
-			for (var ix =0; ix < cnt2; ix++) {
-				oldVolume = this._currentObject[ZaServer.A_Volumes][ix];
-				if(oldVolume[ZaServer.A_VolumeId] == newVolume[ZaServer.A_VolumeId]) {
-					//check attributes
-					var modified = false;
-					for(var attr in oldVolume) {
-						if(oldVolume[attr] != newVolume[attr]) {
-							modified = true;
-							break;
-						}
-					}
-					
-					if(modified) {
-						this._currentObject.modifyVolume(obj[ZaServer.A_Volumes][i]);
-					}
-					obj[ZaServer.A_Volumes].splice(i,1);
+	if(this._currentObject.attrs[ZaServer.A_zimbraMailboxServiceEnabled]) {
+		if(obj[ZaServer.A_RemovedVolumes]) {
+			var cnt = obj[ZaServer.A_RemovedVolumes].length;
+			for(var i = 0; i < cnt; i++) {
+				if(obj[ZaServer.A_RemovedVolumes][i][ZaServer.A_VolumeId] > 0) {
+					this._currentObject.deleteVolume(obj[ZaServer.A_RemovedVolumes][i][ZaServer.A_VolumeId]);			
 				}
 			}
 		}
-	}
-	//modify current volumes
-	if(this._currentObject[ZaServer.A_CurrentPrimaryMsgVolumeId] != obj[ZaServer.A_CurrentPrimaryMsgVolumeId] && obj[ZaServer.A_CurrentPrimaryMsgVolumeId]) {
-		this._currentObject.setCurrentVolume(obj[ZaServer.A_CurrentPrimaryMsgVolumeId], ZaServer.PRI_MSG);
-	}
-	if(this._currentObject[ZaServer.A_CurrentSecondaryMsgVolumeId] != obj[ZaServer.A_CurrentSecondaryMsgVolumeId] && obj[ZaServer.A_CurrentSecondaryMsgVolumeId]) {
-		this._currentObject.setCurrentVolume(obj[ZaServer.A_CurrentSecondaryMsgVolumeId], ZaServer.SEC_MSG);
-	}
-	if(this._currentObject[ZaServer.A_CurrentIndexMsgVolumeId] != obj[ZaServer.A_CurrentIndexMsgVolumeId] && obj[ZaServer.A_CurrentIndexMsgVolumeId]) {
-		this._currentObject.setCurrentVolume(obj[ZaServer.A_CurrentIndexMsgVolumeId], ZaServer.INDEX);
-	}
+	
+		//create new Volumes
+		if(obj[ZaServer.A_Volumes]) {
+			var cnt = obj[ZaServer.A_Volumes].length;
+			for(var i = 0; i < cnt; i++) {
+				if(!obj[ZaServer.A_Volumes][i][ZaServer.A_VolumeId]) {
+					this._currentObject.createVolume(obj[ZaServer.A_Volumes][i]);			
+				}
+			}
+	
+			//modify existing volumes
+			cnt--;	
+			
+			var cnt2 = this._currentObject[ZaServer.A_Volumes].length;
+			for(var i = cnt; i >= 0; i--) {
+				var newVolume = obj[ZaServer.A_Volumes][i];
+				var oldVolume;
+				for (var ix =0; ix < cnt2; ix++) {
+					oldVolume = this._currentObject[ZaServer.A_Volumes][ix];
+					if(oldVolume[ZaServer.A_VolumeId] == newVolume[ZaServer.A_VolumeId]) {
+						//check attributes
+						var modified = false;
+						for(var attr in oldVolume) {
+							if(oldVolume[attr] != newVolume[attr]) {
+								modified = true;
+								break;
+							}
+						}
+						
+						if(modified) {
+							this._currentObject.modifyVolume(obj[ZaServer.A_Volumes][i]);
+						}
+						obj[ZaServer.A_Volumes].splice(i,1);
+					}
+				}
+			}
+		}
 
+		//modify current volumes
+		if(this._currentObject[ZaServer.A_CurrentPrimaryMsgVolumeId] != obj[ZaServer.A_CurrentPrimaryMsgVolumeId] && obj[ZaServer.A_CurrentPrimaryMsgVolumeId]) {
+			this._currentObject.setCurrentVolume(obj[ZaServer.A_CurrentPrimaryMsgVolumeId], ZaServer.PRI_MSG);
+		}
+		if(this._currentObject[ZaServer.A_CurrentSecondaryMsgVolumeId] != obj[ZaServer.A_CurrentSecondaryMsgVolumeId] && obj[ZaServer.A_CurrentSecondaryMsgVolumeId]) {
+			this._currentObject.setCurrentVolume(obj[ZaServer.A_CurrentSecondaryMsgVolumeId], ZaServer.SEC_MSG);
+		}
+		if(this._currentObject[ZaServer.A_CurrentIndexMsgVolumeId] != obj[ZaServer.A_CurrentIndexMsgVolumeId] && obj[ZaServer.A_CurrentIndexMsgVolumeId]) {
+			this._currentObject.setCurrentVolume(obj[ZaServer.A_CurrentIndexMsgVolumeId], ZaServer.INDEX);
+		}
+	}
 	//save the model
 	var changeDetails = new Object();
 	this._currentObject.modify(mods);

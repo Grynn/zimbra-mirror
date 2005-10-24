@@ -138,6 +138,7 @@ ZaServer.A_HSMthreshold = "threshold";
 ZaServer.A_HSMremainingMailboxes = "remainingMailboxes"
 // other
 ZaServer.A_zimbraIsMonitorHost = "zimbraIsMonitorHost";
+ZaServer.A_showVolumeAndHSM = "show_volume_and_hsm"; //this attribute is immutable
 
 ZaServer.STANDALONE = "standalone";
 ZaServer.MASTER = "master";
@@ -212,7 +213,7 @@ ZaServer.myXModel = {
 					{id:ZaServer.A_VolumeName, type:_STRING_},
 					{id:ZaServer.A_VolumeType, type:_ENUM_, choices:[ZaServer.PRI_MSG,ZaServer.SEC_MSG,ZaServer.INDEX],defaultValue:ZaServer.PRI_MSG},
 					{id:ZaServer.A_VolumeRootPath, type:_STRING_},
-					{id:ZaServer.A_VolumeCompressBlobs, type:_ENUM_, choices:[false,true], defaultValue:true},
+					{id:ZaServer.A_VolumeCompressBlobs, type:_ENUM_, choices:[0,1], defaultValue:1},
 					{id:ZaServer.A_VolumeCompressionThreshold, type:_NUMBER_,defaultValue:4096}				
 				]
 			}
@@ -228,7 +229,8 @@ ZaServer.myXModel = {
 		{id:ZaServer.A_HSMnumMailboxes, ref:"hsm/" + ZaServer.A_HSMnumMailboxes, type:_NUMBER_},
 		{id:ZaServer.A_HSMtotalMailboxes, ref:"hsm/" + ZaServer.A_HSMtotalMailboxes, type:_NUMBER_},				
 		{id:ZaServer.A_HSMthreshold, ref:"hsm/" + ZaServer.A_HSMthreshold, type:_NUMBER_},
-		{id:ZaServer.A_HSMremainingMailboxes, ref:"hsm/" + ZaServer.A_HSMremainingMailboxes, type:_NUMBER_}				
+		{id:ZaServer.A_HSMremainingMailboxes, ref:"hsm/" + ZaServer.A_HSMremainingMailboxes, type:_NUMBER_},
+		{id:ZaServer.A_showVolumeAndHSM, ref:ZaServer.A_showVolumeAndHSM, type: _ENUM_, choices: [false,true]}
 	]
 };
 		
@@ -269,7 +271,11 @@ function(mods) {
 			attr.setAttribute("n", aname);
 		}
 	}
-	var resp = ZmCsfeCommand.invoke(soapDoc, false, null, this.id, true).firstChild;
+	var targetId = null;
+	if(this.attrs[ZaServer.A_zimbraMailboxServiceEnabled]) {
+		targetId = this.id;
+	}
+	var resp = ZmCsfeCommand.invoke(soapDoc, false, null, targetId, true).firstChild;
 	//update itseld
 	this.initFromDom(resp.firstChild);
 }
@@ -359,7 +365,7 @@ ZaServer.prototype.initFromDom = function(node) {
 		}
 	}
 	this[ZaServer.A_ServiceHostname] = this.attrs[ZaServer.A_ServiceHostname]; // a hack for New Account Wizard	
-
+	this[ZaServer.A_showVolumeAndHSM] = this.attrs[ZaServer.A_zimbraMailboxServiceEnabled];
 
 }
 

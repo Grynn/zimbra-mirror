@@ -87,9 +87,8 @@ function (entry) {
 		this._containedObject[ZaModel.currentTab] = entry[ZaModel.currentTab];
 		
 	this._containedObject.cos = this._app.getGlobalConfig();
-	if(!this._containedObject.attrs[ZaServer.A_zimbraHsmAge]) {
-		this._containedObject.attrs[ZaServer.A_zimbraHsmAge] = this._containedObject.cos.attrs[ZaServer.A_zimbraHsmAge];
-	}
+	this._containedObject[ZaServer.A_showVolumeAndHSM] = entry[ZaServer.A_showVolumeAndHSM];
+
 	this._localXForm.setInstance(this._containedObject);	
 }
 
@@ -186,6 +185,11 @@ ZaServerXFormView.getIMAPEnabled = function () {
 ZaServerXFormView.getPOP3Enabled = function () {
 	var value = this.getModel().getInstanceValue(this.getInstance(),ZaServer.A_Pop3ServerEnabled);
 	return value == 'TRUE';
+}
+
+ZaServerXFormView.getMailboxEnabled = function () {
+	var value = this.getModel().getInstanceValue(this.getInstance(),ZaServer.A_showVolumeAndHSM);
+	return value;
 }
 
 ZaServerXFormView.prototype.getMyXForm = function() {	
@@ -513,7 +517,7 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 							  ]}
 						]
 					},
-					{type:_CASE_, relevant:"((instance[ZaModel.currentTab] == 6) && instance.attrs[ZaServer.A_zimbraMailboxServiceEnabled])", 
+					{type:_CASE_, relevant:"((instance[ZaModel.currentTab] == 6) && ZaServerXFormView.getMailboxEnabled.call(item))", 
 						items:[
 							{type:_GROUP_, numCols:5,  
 								items: [
@@ -566,7 +570,7 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 											}
 										}
 									},									
-								  	{ref:ZaServer.A_VolumeCompressBlobs, type: _CHECKBOX_,width:"100px", label:null, onChange: ZaServerXFormView.onFormFieldChanged},									
+								  	{ref:ZaServer.A_VolumeCompressBlobs, trueValue:1, falsevalue:0, type: _CHECKBOX_,width:"100px", label:null, onChange: ZaServerXFormView.onFormFieldChanged},									
 								  	{ref:ZaServer.A_VolumeCompressionThreshold, onChange: ZaServerXFormView.onFormFieldChanged, width:"100px", type:_TEXTFIELD_,label:null/*, label:ZaMsg.NAD_bytes, labelLocation:_RIGHT_,labelCssStyle:"text-align:left"*/},
 								  	{type:_OUTPUT_,width:"50px",value:ZaMsg.NAD_VM_CurrentVolume, relevant:"ZaServerXFormView.isCurrent.call(item)"},
 								  	{type:_DWT_BUTTON_, label:ZaMsg.NAD_VM_MAKE_CURRENT, toolTipContent:ZaMsg.NAD_VM_MAKE_CURRENT_TT, onActivate:ZaServerXFormView.makeCurrentHandler, relevant:"( !(ZaServerXFormView.isCurrent.call(item)) && ZaServerXFormView.isExistingVolume.call(item))"}
@@ -574,7 +578,7 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 							}
 						]
 					},
-					{type:_CASE_, relevant:"((instance[ZaModel.currentTab] == 6) && !instance.attrs[ZaServer.A_zimbraMailboxServiceEnabled])", 					
+					{type:_CASE_, relevant:"((instance[ZaModel.currentTab] == 6) && !instance[ZaServer.A_showVolumeAndHSM])", 					
 						items: [
 							{ type: _DWT_ALERT_,
 							  cssClass: "DwtTabTable",
@@ -587,7 +591,7 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 						]
 					
 					},
-					{type:_CASE_, relevant: "instance[ZaModel.currentTab] == 7 && instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM] && instance.attrs[ZaServer.A_zimbraMailboxServiceEnabled]", 
+					{type:_CASE_, relevant: "instance[ZaModel.currentTab] == 7 && instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM] && instance[ZaServer.A_showVolumeAndHSM]", 
 						numCols:2,
 						items: [
 
@@ -674,7 +678,7 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 							}
 						]
 					},
-					{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 7 && !instance.attrs[ZaServer.A_zimbraMailboxServiceEnabled] && instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]", 					
+					{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 7 && !instance[ZaServer.A_showVolumeAndHSM] && instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]", 					
 						items: [
 							{ 
 							  type: _DWT_ALERT_,
