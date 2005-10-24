@@ -384,7 +384,8 @@ function () {
 			} catch (ex) {
 				if(ex.code == ZmCsfeException.ACCT_EXISTS) {
 					//if failed because account exists just show a warning
-					failedAliases += ("<br>" + tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]);
+					var account = this._findAlias(tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]);
+					failedAliases += "<br>" +AjxStringUtil.resolve(ZaMsg.WARNING_EACH_ALIAS,[account.name, tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]]);
 					failedAliasesCnt++;
 				} else {
 					//if failed for another reason - jump out
@@ -392,6 +393,7 @@ function () {
 				}
 			}
 		}
+
 		if(failedAliasesCnt == 1) {
 			this._errorDialog.setMessage(ZaMsg.WARNING_ALIAS_EXISTS + failedAliases, "", DwtMessageDialog.WARNING_STYLE, ZaMsg.zimbraAdminTitle);
 			this._errorDialog.popup();			
@@ -412,6 +414,14 @@ function () {
 	}
 	return true;
 }
+
+ZaAccountViewController.prototype._findAlias = function (alias) {
+	var searchQuery = new ZaSearchQuery(ZaSearch.getSearchByNameQuery(alias), [ZaSearch.ACCOUNT], null, false);
+	// this search should only return one result
+	var results = ZaSearch.searchByQueryHolder(searchQuery, 1, null, null, this._app);
+	return results.list.getArray()[0];
+};
+
 /**
 *	@method _setView 
 *	@param entry - isntance of ZaAccount class
