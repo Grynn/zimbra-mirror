@@ -28,6 +28,10 @@
 
 chown -R zimbra:zimbra /opt/zimbra
 
+chown -R root:root /opt/zimbra/libexec
+chown -R root:root /opt/zimbra/bin
+chown -R root:root /opt/zimbra/lib
+
 chmod 755 /opt/zimbra/libexec/*
 
 chmod 755 /opt/zimbra/bin/*
