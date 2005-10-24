@@ -39,6 +39,7 @@ DwtEvent.ONCLICK		= "onclick";
 DwtEvent.ONCONTEXTMENU	= "oncontextmenu";
 DwtEvent.ONDBLCLICK		= "ondblclick";
 DwtEvent.ONFOCUS		= "onfocus";
+DwtEvent.ONBLUR 		= "onblur";
 DwtEvent.ONKEYDOWN		= "onkeydown";
 DwtEvent.ONKEYPRESS		= "onkeypress";
 DwtEvent.ONKEYUP		= "onkeyup";
