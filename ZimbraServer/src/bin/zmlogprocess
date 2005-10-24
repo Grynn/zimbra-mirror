@@ -413,8 +413,8 @@ sub aggregateDisk {
 						my $sth = sqlExec("select avg(total) from disk_aggregate where ".
 							"host = '".$host."' and ".
 							"device = '".$dev."' and ".
-							"time >= '".$periodStart."' and ".
-							"time <= '".$periodEnd."'");
+							"period_start >= '".$periodStart."' and ".
+							"period_end <= '".$periodEnd."'");
 
 						my $tary = $sth->fetchall_arrayref;
 						my $total = ${$$tary[0]}[0];
@@ -422,8 +422,8 @@ sub aggregateDisk {
 						$sth = sqlExec("select avg(available) from disk_aggregate where ".
 							"host = '".$host."' and ".
 							"device = '".$dev."' and ".
-							"time >= '".$periodStart."' and ".
-							"time <= '".$periodEnd."'");
+							"period_start >= '".$periodStart."' and ".
+							"period_end <= '".$periodEnd."'");
 
 						$tary = $sth->fetchall_arrayref;
 						my $avail = ${$$tary[0]}[0];
