@@ -184,20 +184,20 @@ XForm.prototype.focusElement = function (id) {
 XForm.prototype.focusNext = function(id) {
 	if(this.tabIdOrder && this.tabIdOrder.length > 0) {
 		var cnt = this.tabIdOrder.length;
-//		var nextId = null;
-		for (var i = 0; i < cnt; i++) {
-			if(this.tabIdOrder[i] == id) {
-				if(this.tabIdOrder[i+1]) {
-	//				nextId = this.tabIdOrder[i+1];
-					this.focusElement(this.tabIdOrder[i+1]);
-				} else {
-	//				nextId = this.tabIdOrder[0];
-					this.focusElement(this.tabIdOrder[0]);
+		if (id == null) {
+			this.focusElement(this.tabIdOrder[0]);
+		} else {
+			for (var i = 0; i < cnt; i++) {
+				if(this.tabIdOrder[i] == id) {
+					if(this.tabIdOrder[i+1]) {
+						this.focusElement(this.tabIdOrder[i+1]);
+					} else {
+						this.focusElement(this.tabIdOrder[0]);
+					}
+					break;
 				}
-				break;
 			}
-		}
-		
+		}		
 	}
 };
 

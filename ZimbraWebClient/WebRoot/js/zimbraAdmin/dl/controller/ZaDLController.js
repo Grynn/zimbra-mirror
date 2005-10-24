@@ -149,7 +149,9 @@ ZaDLController.prototype._getView = function (id, args) {
 					clone[ZaModel.currentTab] = "1";
 				}
 				view.getItemsById('members')[0].dirtyDisplay();
+				view.getItemsById('searchText')[0].getElement().value = "";
 				view.setInstance(clone);
+				view.focusNext();
 			};
 			this._dlView = view;
 			break;
@@ -187,7 +189,7 @@ ZaDLController.prototype._setView = function (args) {
 	this._toolbar.enable([ZaOperation.SAVE], false);
 };
 
-ZaController.prototype.getControllerForView = function( viewId ) {
+ZaDLController.prototype.getControllerForView = function( viewId ) {
 	return this;
 };
 
@@ -244,7 +246,7 @@ ZaDLController.prototype._itemUpdatedListener = function (event) {
 	if (model) {
 		var field = model.id;
 		// don't update the buttons if inconsequential fields are being updated
-		if (field == "memberPool" || field == "searchText" || field == "optionalAdd"){
+		if (field == "memberPool"  || field == "optionalAdd"){
 			return;
 		}
 	}
@@ -317,8 +319,7 @@ ZaDLController.prototype.fetchMore = function () {
 
 ZaDLController.prototype._searchListener = function (event, formItem) {
 	var form = formItem.getForm();
-	var instance = form.getInstance();
-	var searchText = instance.searchText;
+	var searchText = form.getItemsById('searchText')[0].getElement().value;
 	try {
 		var searchQuery = new ZaSearchQuery(ZaSearch.getSearchByNameQuery(searchText), [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS], 
 											this._domain, false);
@@ -408,7 +409,7 @@ ZaDLController.prototype._getNewViewXForm = function () {
 							items:[			      
 							       {type:_GROUP_, label:ZaMsg.DLXV_LabelFind, colSpan:"*", numCols:2, colSizes:["70%","30%"],tableCssStyle:"width:100%", 
 								   items:[
-									  {type:_INPUT_, ref:"searchText", width:"100%",
+									  {type:_INPUT_, id:"searchText", width:"100%",
 									      elementChanged: function(elementValue,instanceValue, event) {
 										  var charCode = event.charCode;
 										  if (charCode == 13 || charCode == 3) {
@@ -638,7 +639,6 @@ ZaDLController.distributionListXModel = {
 			// their state.
 	{id: "memberPool", type:_LIST_, setter:"setMemberPool", setterScope:_MODEL_, getter: "getMemberPool", getterScope:_MODEL_},
 	{id: "optionalAdd", type:_UNTYPED_},
-	{id: "searchText", type:_UNTYPED_},
 
 	{id: "name", type:_STRING_, setter:"setName", setterScope: _INSTANCE_, required:true,
 	 constraints: {type:"method", value:
