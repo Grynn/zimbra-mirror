@@ -338,10 +338,17 @@ function(refresh) {
 		this._serverList = ZaServer.getAll(this);
 	}
 	if(refresh || this._serverChoices2 == null) {
+		var arr = this._serverList.getArray();
+		var mailServerArr = [];
+		for (var i = 0 ; i < arr.length; ++i) {
+			if (arr[i].attrs[ZaServer.A_zimbraMailboxServiceEnabled]){
+				mailServerArr.push(arr[i]);
+			}
+		}
 		if(this._serverChoices2 == null) {
-			this._serverChoices2 = new XFormChoices(this._serverList.getArray(), XFormChoices.OBJECT_LIST, ZaServer.A_ServiceHostname, ZaServer.A_ServiceHostname);
+			this._serverChoices2 = new XFormChoices(mailServerArr, XFormChoices.OBJECT_LIST, ZaServer.A_ServiceHostname, ZaServer.A_ServiceHostname);
 		} else {	
-			this._serverChoices2.setChoices(this._serverList.getArray());
+			this._serverChoices2.setChoices(mailServerArr);
 			this._serverChoices2.dirtyChoices();
 		}
 	}

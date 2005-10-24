@@ -255,7 +255,7 @@ ZaNewAccountXWizard.prototype.getMyXForm = function() {
 							{type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_MailServer, labelLocation:_LEFT_,
 								items: [
 									{ ref: ZaAccount.A_mailHost, type: _OSELECT1_, label: null, choices: this._app.getServerListChoices2(), 
-										relevant:"instance[ZaAccount.A2_autoMailServer]==\"FALSE\"",
+										relevant:"instance[ZaAccount.A2_autoMailServer]==\"FALSE\" && form.getController().getServerListChoices2().getChoices().values.length != 0",
 										relevantBehavior:_DISABLE_
 								  	},
 									{ref:ZaAccount.A2_autoMailServer, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"}
