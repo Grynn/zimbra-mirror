@@ -25,33 +25,27 @@
 # 
 
 source `dirname $0`/zmshutil || exit 1
-zmsetvars \
-    zimbra_home \
-    tomcat_directory \
-    tomcat_java_home \
-    tomcat_java_heap_memory_percent \
-    tomcat_java_options \
-    tomcat_pidfile
+zmsetvars
 
 #
 # Expected by catalina scripts
 #
 if [ -d /Library/Java/Home ]; then
-	export JAVA_HOME=/Library/Java/Home
+    export JAVA_HOME=/Library/Java/Home
 else
-	export JAVA_HOME=${tomcat_java_home}
-	zmassert -d ${tomcat_java_home}
-	zmassert -x ${tomcat_java_home}/bin/java
-	zmassert -d ${tomcat_directory}
+    export JAVA_HOME=${tomcat_java_home}
+    zmassert -d ${tomcat_java_home}
+    zmassert -x ${tomcat_java_home}/bin/java
+    zmassert -d ${tomcat_directory}
 fi
 
 #
 # Available system memory in KB
 #
 if [ -f /proc/meminfo ]; then
-	memkb=`awk '/^MemTotal.*kB$/ { print $2; }' /proc/meminfo`
+    memkb=`awk '/^MemTotal.*kB$/ { print $2; }' /proc/meminfo`
 else
-	memkb=524288
+    memkb=524288
 fi
 
 #
@@ -108,20 +102,18 @@ case "$1" in
                 exit 1
             fi
         fi
-		# Create the work directories so they're owned by zimbra
-		mkdir -p ${tomcat_directory}/work/Catalina/localhost/_/org/apache/jsp/public_
-		mkdir -p ${tomcat_directory}/work/Catalina/localhost/zimbra/org/apache/jsp/public_
-		mkdir -p ${tomcat_directory}/work/Catalina/localhost/service/org/apache/jsp/public_
-		mkdir -p ${tomcat_directory}/work/Catalina/localhost/zimbraAdmin/org/apache/jsp/public_
-		mkdir -p ${tomcat_directory}/work/Catalina/localhost/manager
-
-        # set JAVA_OPTS only in the start case - otherwise the VM
-        # invoked to stop tomcat could trash your java.hprof.txt file
-        export JAVA_OPTS="${tomcat_java_options} -Xms${jm}m -Xmx${jm}m -Djava.library.path=${zimbra_home}/lib"
-        # ${tomcat_directory}/bin/catalina.sh start
-		# export ZIMBRA_TOMCAT_START_DEBUG=1
-		nohup sudo ${zimbra_home}/libexec/zmtomcatstart ${tomcat_java_options} > ${tomcat_directory}/logs/catalina.out 2>&1 &
-		echo $! > ${tomcat_pidfile}
+        # Create the work directories so they're owned by zimbra
+        mkdir -p ${tomcat_directory}/work/Catalina/localhost/_/org/apache/jsp/public_
+        mkdir -p ${tomcat_directory}/work/Catalina/localhost/zimbra/org/apache/jsp/public_
+        mkdir -p ${tomcat_directory}/work/Catalina/localhost/service/org/apache/jsp/public_
+        mkdir -p ${tomcat_directory}/work/Catalina/localhost/zimbraAdmin/org/apache/jsp/public_
+        mkdir -p ${tomcat_directory}/work/Catalina/localhost/manager
+                
+        # export ZIMBRA_TOMCAT_START_DEBUG=1
+        nohup sudo ${zimbra_home}/libexec/zmtomcatstart \
+            -Xms${jm}m -Xmx${jm}m ${tomcat_java_options} \
+            > ${tomcat_directory}/logs/catalina.out 2>&1 &
+        echo $! > ${tomcat_pidfile}
         ;;
 
     'kill')
@@ -160,7 +152,7 @@ case "$1" in
         # stop it I want this script to sit here and loop and not
         # pretend that it did something.
 
-		count=0
+        count=0
 
         while true; do
             # Every n seconds we send invoke one of these
@@ -180,12 +172,12 @@ case "$1" in
                 echo " shutdown ok"
                 break
             fi
-			count=`expr $count + 1`
-			if [ $count -gt 3 ]; then
-				echo "Giving up - killing $pid"
-				kill -TERM $pid
-				break
-			fi
+            count=`expr $count + 1`
+            if [ $count -gt 3 ]; then
+                echo "Giving up - killing $pid"
+                kill -TERM $pid
+                break
+            fi
         done
         ;;
     
@@ -194,10 +186,11 @@ case "$1" in
         $0 start
         ;;
     
-	'status')
-		kill -0 "$pid" 2> /dev/null
-		exit $?
-		;;
+    'status')
+        kill -0 "$pid" 2> /dev/null
+        exit $?
+        ;;
+
     *)
         echo "Usage: $0 start|stop|kill|restart|status"
         exit 1
