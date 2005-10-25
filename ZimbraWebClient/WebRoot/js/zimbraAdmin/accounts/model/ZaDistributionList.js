@@ -223,7 +223,7 @@ ZaDistributionList.prototype.getMembers = function (force) {
 	//DBG.println("Get members: memberList = " , this._memberList, "$");
 	if ((this._memberList == null || (force == true)) && (this.id != null)) {
 		var soapDoc = AjxSoapDoc.create("GetDistributionListRequest", "urn:zimbraAdmin", null);
-		soapDoc.setMethodAttribute("limit", "25");
+		soapDoc.setMethodAttribute("limit", "0");
 		soapDoc.setMethodAttribute("offset", "0");
 		var dl = soapDoc.set("dl", this.id);
 		dl.setAttribute("by", "id");
