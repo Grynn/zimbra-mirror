@@ -43,10 +43,10 @@ my %graphTimeInfo = (
 		"xlabel"		=> '-x HOUR:4:HOUR:4:HOUR:4:0:%H --no-minor',
 		},
 	"day" => {
-		"count" 		=> 30,
-		"step" 			=> 86400,
+		"count" 		=> 720,
+		"step" 			=> 7200,
 		"heartbeat" 	=> 172800,
-		"agg_period" 	=> "day",
+		"agg_period" 	=> "hour",
 		"xlabel"		=> '-x DAY:1:DAY:2:DAY:4:86400:%d/%b',
 		},
 	"month" => {
@@ -158,20 +158,42 @@ sub sqlExec {
 	return $sth;
 }
 
+sub getDiskSlices {
+	my $host = shift;
+	my $period = shift;
+
+	my $statement = "select distinct(device) from disk_aggregate ".
+		"where period='".$period."' ";
+	if ($host ne "ALL") {
+		$statement .= "and host='".$host."' ";
+	} 
+
+	#print "$statement\n";
+
+	my $sth = sqlExec($statement);
+	my $hash = $sth->fetchall_arrayref();
+
+}
+
 sub getData {
 	my $app = shift;
 	my $period = shift;
+	my $limit = shift;
 	my $host = shift;
+	my $slice = shift;
 
 	my $statement = "select * from ${app}_aggregate ".
 		"where period='".$period."' ";
 	if ($host ne "ALL") {
 		$statement .= "and host='".$host."' ";
 	} 
+	if ($slice ne "") {
+		$statement .= "and device='".$slice."' ";
+	}
 	$statement .= "order by period_end desc limit ".
-		$graphTimeInfo{$period}{count};
+		$limit;
 
-	#print "$statement\n";
+	print "$statement\n";
 
 	my $sth = sqlExec($statement);
 	my $hash = $sth->fetchall_hashref('period_end');
@@ -215,7 +237,7 @@ if (! -d $work) {mkdir ($work, 0777);}
 # The ?TM elements must be one of the following keywords: SECOND, MINUTE, HOUR, 
 # DAY, WEEK, MONTH or YEAR.
 
-foreach my $app ("mta", "amavis", "disk") {
+foreach my $app ("mta", "amavis") {
 	my $hostlist = getHostList ($app);
 
 	push @$hostlist, ["ALL"];
@@ -225,7 +247,7 @@ foreach my $app ("mta", "amavis", "disk") {
 
 	foreach my $period ("hour", "day", "month", "year") {
 		
-		my $data = getData($app, $graphTimeInfo{$period}{agg_period}, $host);
+		my $data = getData($app, $graphTimeInfo{$period}{agg_period}, $graphTimeInfo{$period}{count}, $host);
 
 		foreach my $columnlist ( @{$graphAppInfo{$app}{columns}} ) {
 
@@ -282,6 +304,85 @@ foreach my $app ("mta", "amavis", "disk") {
 
 		}
 	}
+	} # hostlist
+}
+
+foreach my $app ("disk") {
+	my $hostlist = getHostList ($app);
+
+	foreach my $h (@$hostlist) {
+	
+	my $host = $$h[0];
+
+	foreach my $period ("hour", "day", "month", "year") {
+		
+		my $slices = getDiskSlices($host, $graphTimeInfo{$period}{agg_period});
+
+		my $graphnum = 0;
+
+		foreach my $s (@{$slices}) {
+			my $slice = $$s[0];
+			print "SLICE: $slice\n";
+
+			my $data = getData($app, $graphTimeInfo{$period}{agg_period}, $graphTimeInfo{$period}{count}, $host, $slice);
+
+			foreach my $columnlist ( @{$graphAppInfo{$app}{columns}} ) {
+
+				my $db = "${work}/${app}.${host}.${period}.$graphAppInfo{$app}{graph_names}{$$columnlist[0]}_$graphnum.rrd";
+				my $graph = "${work}/${app}.${host}.${period}.$graphAppInfo{$app}{graph_names}{$$columnlist[0]}_$graphnum.gif";
+				unlink -f $db;
+
+
+				my $DDEF = "";
+				my $DS = "";
+				my $dt = "";
+				my $GDEF="";
+				for (my $i = 0; $i <= $#$columnlist; $i++) {
+					my $column = $$columnlist[$i];
+					my $color = $graphAppInfo{$app}{colors}[$i];
+					$DS .= " DS:$column:GAUGE:$graphTimeInfo{$period}{heartbeat}:U:U";
+					if ($dt ne "") { $dt .= ":"; }
+					$dt .= "$column";
+					$DDEF .= "DEF:${column}=$db:$column:AVERAGE ";
+					$GDEF .= "AREA:";
+					$GDEF .= "${column}${color}:${app}_${column} ";
+				}
+
+				print "Generating $period graph for $app on $host\n";
+				`$rrd create $db -b '-5y' -s $graphTimeInfo{$period}{step} $DS RRA:AVERAGE:0.2:1:$graphTimeInfo{$period}{count}`;
+
+				my @rows = sort keys %$data;
+
+				if (!@rows) {next;}
+
+				my $sts = sqlTimeToTs($rows[0]);
+				my $ets = sqlTimeToTs($rows[$#rows]);
+
+				foreach my $row (@rows) {
+
+					my $ts = sqlTimeToTs(${row});
+					my $dataRow = "$ts";
+					foreach my $column (@$columnlist) {
+						#print "$row - $column: $$data{$row}{$column}\n";
+						#print "Updating $db with ${ts}:$$data{$row}{$column}\n";
+						#print "$rrd update $db ${ts}:$$data{$row}{$column}\n";
+						$dataRow .= ":$$data{$row}{$column}";
+					}
+
+					`$rrd update $db -t $dt $dataRow`;
+
+				}
+
+				my $upper = "";
+				my $lower = "";
+				my $unit = "";
+
+				`$rrd graph $graph --title $graphAppInfo{$app}{graph_names}{$$columnlist[0]}_$slice --start $sts --end $ets $upper $lower $unit $graphTimeInfo{$period}{xlabel} $DDEF $GDEF`;
+
+			} #columnlist
+			$graphnum++;
+		} #slice
+	} #period
 	} # hostlist
 }
 
