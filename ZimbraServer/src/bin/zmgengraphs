@@ -193,7 +193,7 @@ sub getData {
 	$statement .= "order by period_end desc limit ".
 		$limit;
 
-	print "$statement\n";
+	#print "$statement\n";
 
 	my $sth = sqlExec($statement);
 	my $hash = $sth->fetchall_hashref('period_end');
@@ -322,7 +322,7 @@ foreach my $app ("disk") {
 
 		foreach my $s (@{$slices}) {
 			my $slice = $$s[0];
-			print "SLICE: $slice\n";
+			#print "SLICE: $slice\n";
 
 			my $data = getData($app, $graphTimeInfo{$period}{agg_period}, $graphTimeInfo{$period}{count}, $host, $slice);
 
