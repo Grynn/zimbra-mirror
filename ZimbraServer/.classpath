@@ -11,7 +11,7 @@
 	<classpathentry kind="lib" path="jars/commons-codec-1.2.jar"/>
 	<classpathentry kind="lib" path="jars/commons-logging.jar"/>
 	<classpathentry kind="lib" path="jars/log4j-1.2.8.jar"/>
-	<classpathentry kind="lib" path="jars/commons-dbcp-1.1.jar"/>
+	<classpathentry sourcepath="/ThirdParty/commons-dbcp-1.1/src" kind="lib" path="jars/commons-dbcp-1.1.jar"/>
 	<classpathentry kind="lib" path="jars/commons-pool-1.1.jar">
 		<attributes>
 			<attribute value="http://jakarta.apache.org/commons/pool/apidocs/" name="javadoc_location"/>
