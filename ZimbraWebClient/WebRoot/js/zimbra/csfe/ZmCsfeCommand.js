@@ -199,11 +199,15 @@ function(response, asyncMode) {
 	if (typeof(response.text) == "string" && response.text.indexOf("{") == 0) {
 		respDoc = response.text;
 	} else {
-		xmlResponse = true;
-		// responseXML is empty under IE
-		respDoc = (AjxEnv.isIE || response.xml == null)
-			? AjxSoapDoc.createFromXml(response.text) 
-			: AjxSoapDoc.createFromDom(response.xml);
+		try {
+			xmlResponse = true;
+			// responseXML is empty under IE
+			respDoc = (AjxEnv.isIE || response.xml == null)
+				? AjxSoapDoc.createFromXml(response.text) 
+				: AjxSoapDoc.createFromDom(response.xml);
+		} catch(ex) {
+			DBG.dumpObj(ex);
+		}
 	}
 	
 	DBG.println(AjxDebug.DBG1, asyncMode ? "<H4>RESPONSE (asynchronous)</H4>" : "<H4>RESPONSE</H4>");
