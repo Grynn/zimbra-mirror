@@ -388,13 +388,15 @@ function(string) {
 };
 
 AjxUtil.getInnerText = function(node) {
-	if (AjxEnv.isIE)
-		return node.innerText;
+ 	if (AjxEnv.isIE)
+ 		return node.innerText;
 	function f(n) {
 		if (n) {
 			if (n.nodeType == 3 /* TEXT_NODE */)
 				return n.data;
 			if (n.nodeType == 1 /* ELEMENT_NODE */) {
+				if (/^br$/i.test(n.tagName))
+					return "\r\n";
 				var str = "";
 				for (var i = n.firstChild; i; i = i.nextSibling)
 					str += f(i);

@@ -342,17 +342,15 @@ function(str, includeSpaces) {
 
 AjxStringUtil.convertToHtml = function(str) {
 	if (!str) return "";
-	var a = str.split(/\r?\n/);
-	for (var i = a.length; --i >= 0;) {
-		a[i] = a[i]
-			.replace(/&/g, "&amp;")
-			.replace(/  /g, " &nbsp;")
-			.replace(/^ /, "&nbsp;")
-			.replace(/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-			.replace(/</g, "&lt;")
-			.replace(/>/g, "&gt;");
-	}
-	return a.join("<br />");
+	str = str
+		.replace(/&/mg, "&amp;")
+		.replace(/  /mg, " &nbsp;")
+		.replace(/^ /mg, "&nbsp;")
+		.replace(/\t/mg, "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+		.replace(/</mg, "&lt;")
+		.replace(/>/mg, "&gt;")
+		.replace(/\r?\n/mg, "<br />");
+	return str;
 };
 
 /**
