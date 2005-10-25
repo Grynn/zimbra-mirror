@@ -33,7 +33,8 @@ chown -R root:root /opt/zimbra/bin
 chown -R root:root /opt/zimbra/lib
 chown -R root:root /opt/zimbra/jdk1.5.0_05
 
-chown root:zimbra /opt/zimbra
+chown root:root /opt/zimbra
+chmod 755 /opt/zimbra
 
 chmod 755 /opt/zimbra/libexec/*
 
