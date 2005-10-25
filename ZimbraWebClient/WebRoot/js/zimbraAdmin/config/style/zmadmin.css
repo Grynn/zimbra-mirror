@@ -472,6 +472,12 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
   border-right: 2px solid #FAFAFA;
 }
 
+.ZaDLView .admin_xform_name_input{ 
+  border-top: 2px solid #848484;
+  border-left: 2px solid #848484;
+  border-bottom: 2px solid #FAFAFA;
+  border-right: 2px solid #FAFAFA;
+}
 
 .DLOptionalAddBox { 
   width:195px;

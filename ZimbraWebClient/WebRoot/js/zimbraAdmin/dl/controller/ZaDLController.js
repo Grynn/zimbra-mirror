@@ -356,7 +356,7 @@ ZaDLController.prototype._getNewViewXForm = function () {
 	    itemDefaults:{
 			_INPUT_: { cssClass:"inputBorder" },
 			_TEXTAREA_: {cssClass: "inputBorder"},
-			_TEXTFIELD_: {cssClass: "inputBorder"},
+			_TEXTFIELD_: {cssClass: "inputBorder", containerCssStyle:"width:100%"}, // containerClass is specifically for the first field in the list name
 			_DWT_BUTTON: {forceUpdate: true}
 	    },	    
 	    items:[
