@@ -112,13 +112,14 @@ function() {
 
 AjxDateUtil._init();                    
 
-/* return true if the specified date (yyyy, m (0-11), d (1-31)) 
+/* return true if the specified date (yyyy|yy, m (0-11), d (1-31)) 
  * is valid or not.
  */
 AjxDateUtil.validDate =
 function(y, m, d) {
 	var date = new Date(y, m, d);
-	return date.getMonth() == m && date.getDate() == d;
+	var year = y > 999 ? date.getFullYear() : date.getYear();
+	return date.getMonth() == m && date.getDate() == d && year == y;
 };
 
 /* return number of days (1-31) in specified month (yyyy, mm (0-11))
