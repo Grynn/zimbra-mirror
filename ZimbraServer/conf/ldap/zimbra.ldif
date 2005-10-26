@@ -192,7 +192,7 @@ zimbraMtaRestriction: reject_non_fqdn_hostname
 zimbraMtaRestriction: reject_non_fqdn_sender
 zimbraMtaTlsAuthOnly: TRUE
 zimbraPop3CleartextLoginEnabled: FALSE
-zimbraPop3NumThreads: 200
+zimbraPop3NumThreads: 20
 zimbraPop3BindPort: 7110
 zimbraPop3BindOnStartup: TRUE
 zimbraPop3ServerEnabled: TRUE
