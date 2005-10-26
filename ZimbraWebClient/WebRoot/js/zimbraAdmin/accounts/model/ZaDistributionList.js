@@ -129,8 +129,12 @@ ZaDistributionList.prototype.dedupMembers = function () {
 };
 
 ZaDistributionList.prototype.remove = function () {
+	return this._remove(this.id);
+};
+
+ZaDistributionList.prototype._remove = function (id) {
 	var sd = AjxSoapDoc.create("DeleteDistributionListRequest", "urn:zimbraAdmin", null);
-	sd.set("id", this.id);
+	sd.set("id", id);
 	var resp = ZmCsfeCommand.invoke(sd, null, null, null, false);
 	return resp;
 };
@@ -140,9 +144,17 @@ ZaDistributionList.prototype.remove = function () {
  */
 ZaDistributionList.prototype.saveEdits = function () {
 	if (this.isDirty()) {
-		var sd = AjxSoapDoc.create("ModifyDistributionListRequest", "urn:zimbraAdmin", null);
-		sd.set("id", this.id);
-		return this._save(sd, "ModifyDistributionListResponse", true, true);
+		if (this._origName != null && this._origName != this.name) {
+			// move all members to the add list, to force a re add.
+			this._addList = AjxVector.fromArray(this._memberList.getArray());
+			var oldId = this.id;
+			this.saveNew();
+			this._remove(oldId);
+		} else {
+			var sd = AjxSoapDoc.create("ModifyDistributionListRequest", "urn:zimbraAdmin", null);
+			sd.set("id", this.id);
+			return this._save(sd, "ModifyDistributionListResponse", true, true);
+		}
 	}
 		
 };
@@ -186,7 +198,12 @@ ZaDistributionList.prototype.getName = function () {
 };
 
 ZaDistributionList.prototype.setName = function (name) {
-	this.name = name;
+	if (name != this.name) {
+		if (this._origName == null) {
+			this._origName = this.name;
+		}
+		this.name = name;
+	} 
 };
 
 ZaDistributionList.prototype.setDescription = function (description) {
