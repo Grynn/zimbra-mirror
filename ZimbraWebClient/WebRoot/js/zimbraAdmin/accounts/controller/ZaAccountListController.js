@@ -731,7 +731,7 @@ function () {
 	this._removeConfirmMessageDialog.popdown();
 }
 
-ZaAccountListController._moveAliasCallback = 
+ZaAccountListController.prototype.moveAlias = 
 function() {
 	//remove alias
 	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getLast()){
@@ -754,7 +754,7 @@ function() {
 				//add alias
 				srch[ZaSearch.A_selected].addAlias(name);
 			}
-			this._moveAliasDialog.popdown();
+//			this._moveAliasDialog.popdown();
 		} catch (ex) {
 			this._handleException(ex, "ZaAccountListController._moveAliasCallback", null, false);
 		}
@@ -928,14 +928,22 @@ function (ev) {
 	}
 	return;
 }
-
+ 
 ZaAccountListController.prototype._moveAliasListener = 
 function (ev) {
 	try {
+		var alias;
+		if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getLast()){
+			var alias = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getLast());
+			//make sure this is an alias
+			if(!alias || alias.type!=ZaItem.ALIAS) {
+				return;			
+			}
+		}
 		if(!this._moveAliasDialog) {
 			this._moveAliasDialog = new MoveAliasXDialog(this._container, this._app);
-			this._moveAliasDialog.registerCallback(DwtDialog.OK_BUTTON, ZaAccountListController._moveAliasCallback, this, null);				
 		}
+		this._moveAliasDialog.setAlias(alias);
 		this._moveAliasDialog.popup();
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountListController.prototype._moveAliasListener", null, false);
