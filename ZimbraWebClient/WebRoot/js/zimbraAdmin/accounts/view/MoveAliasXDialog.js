@@ -92,6 +92,7 @@ function() {
 				this._containedObject[ZaSearch.A_selected].addAlias(name);
 			} else {
 				//throw	
+				throw (new AjxException(ZaMsg.FAILED_MOVE_ALIAS, AjxException.UNKNOWN_ERROR, "MoveAliasXDialog.prototype.moveAlias", "Alias name is not available"));
 			}
 		}
 	} catch (ex) {
@@ -107,12 +108,10 @@ function (ev) {
 	try {
 		var  searchQueryHolder = new ZaSearchQuery(ZaSearch.getSearchByNameQuery(this._containedObject[ZaSearch.A_query]), [ZaSearch.ACCOUNTS], false, "");
 		var result = ZaSearch.searchByQueryHolder(searchQueryHolder, this._containedObject[ZaSearch.A_pagenum], ZaAccount.A_name, null, this._app);
-//		var resultList = new Array();
 		if(result.list) {
 			MoveAliasXDialog.resultChoices.setChoices(result.list.getArray());
 			MoveAliasXDialog.resultChoices.dirtyChoices();
 		}
-//		this._containedObject[ZaSearch.A_selected] = resultList;
 		this._localXForm.refresh();
 
 	} catch (ex) {
@@ -166,7 +165,6 @@ function() {
 								  colSpan:"*",
 								  ref:"resultMsg",align:_CENTER_, valign:_MIDDLE_
 							}						
-//							{type:_OUTPUT_, ref:"resultMsg", align:_CENTER_, valign:_MIDDLE_}
 						]						
 					}
 				]
