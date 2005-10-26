@@ -407,3 +407,35 @@ AjxUtil.getInnerText = function(node) {
 	};
 	return f(node);
 };
+
+/**
+ * This method returns a proxy for the specified object. This is useful when
+ * you want to modify properties of an object and want to keep those values
+ * separate from the values in the original object. You can then iterate
+ * over the proxy's properties and use the <code>hasOwnProperty</code>
+ * method to determine if the property is a new value in the proxy.
+ * <p>
+ * <strong>Note:</strong>
+ * A reference to the original object is stored in the proxy as the "_object_" 
+ * property.
+ *
+ * @param object [object] The object to proxy.
+ * @param level  [number] The number of property levels deep to proxy.
+ *						  Defaults to zero.
+ */
+AjxUtil.createProxy = function(object, level) {
+	var proxyCtor = new Function();
+	proxyCtor.prototype = object;
+	var proxy = new proxyCtor;
+	
+	if (level) {
+		for (var prop in object) {
+			if (typeof object[prop] == "object") {
+				proxy[prop] = AjxUtil.createProxy(object[prop], level - 1);
+			}
+		}
+	}	
+	
+	proxy._object_ = object;
+	return proxy;
+};
