@@ -26,12 +26,8 @@
 function MoveAliasXDialog(parent,  app, alias) {
 	if (arguments.length == 0) return;
 	
-	/*var moveButton = new DwtDialog_ButtonDescriptor(MoveAliasXDialog.MOVE_BUTTON, 
-		ZaMsg._move, DwtDialog.ALIGN_RIGHT, new AjxCallback(this, this.moveAliasCallback));
-	*/
 	this._app = app;
 	this._alias = null;		
-//	ZaXWizardDialog.call(this, parent, null, ZaMsg.MoveAlias_Title, [DwtDialog.CANCEL_BUTTON],[moveButton] );
 	ZaXWizardDialog.call(this, parent, null, ZaMsg.MoveAlias_Title, "500px", "300px");
 
 	this._containedObject = new ZaSearch();
