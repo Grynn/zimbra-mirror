@@ -41,7 +41,7 @@ case "$1" in
 		fi
 		if [ -f $CONFIG ]; then
 			$BASE/bin/swatch --config-file=$BASE/conf/swatchrc \
-			-t /var/log/zimbra.log >/tmp/swatch.out 2>&1 &
+			--script-dir=/tmp -t /var/log/zimbra.log >/tmp/swatch.out 2>&1 &
 			echo $! > $PIDFILE
 			chmod 777 /tmp/swatch.out
 		else

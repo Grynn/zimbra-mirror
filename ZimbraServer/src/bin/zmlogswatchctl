@@ -39,7 +39,7 @@ case "$1" in
 	start)
 		if [ -f $CONFIG ]; then
 			$BASE/bin/logswatch --config-file=$BASE/conf/logswatchrc \
-			-t /var/log/zimbra.log >/tmp/logswatch.out 2>&1 &
+			--script-dir=/tmp -t /var/log/zimbra.log >/tmp/logswatch.out 2>&1 &
 			chmod 777 /tmp/logswatch.out
 			echo $! > $PIDFILE
 		else
