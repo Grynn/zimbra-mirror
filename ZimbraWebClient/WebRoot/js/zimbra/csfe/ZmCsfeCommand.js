@@ -194,18 +194,6 @@ function(response, asyncMode) {
 
 	var result = new ZmCsfeResult();
 
-	if (!response.success) {
-		var ex = new ZmCsfeException("Csfe service error", ZmCsfeException.CSFE_SVC_ERROR,
-									 "ZmCsfeCommand.prototype.invoke", "HTTP response status " + response.status);
-		DBG.dumpObj(AjxDebug.DBG1, ex);
-		if (asyncMode) {
-			result.set(ex, true);
-			return result;
-		} else {
-			throw ex;
-		}
-	}
-	
 	var xmlResponse = false;
 	var respDoc = null;
 	if (typeof(response.text) == "string" && response.text.indexOf("{") == 0) {
@@ -273,6 +261,16 @@ function(response, asyncMode) {
 	var fault = data.Body.Fault;
 	if (fault) {
 		var ex = new ZmCsfeException(fault.Reason.Text, fault.Detail.Error.Code, "ZmCsfeCommand.prototype.invoke", fault.Code.Value);
+		DBG.dumpObj(AjxDebug.DBG1, ex);
+		if (asyncMode) {
+			result.set(ex, true);
+			return result;
+		} else {
+			throw ex;
+		}
+	} else if (!response.success) {
+		var ex = new ZmCsfeException("Csfe service error", ZmCsfeException.CSFE_SVC_ERROR,
+									 "ZmCsfeCommand.prototype.invoke", "HTTP response status " + response.status);
 		DBG.dumpObj(AjxDebug.DBG1, ex);
 		if (asyncMode) {
 			result.set(ex, true);
