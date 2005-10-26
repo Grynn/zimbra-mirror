@@ -54,12 +54,12 @@ function() {
 *
 * @param requestStr		[string]		HTTP request string/document
 * @param serverUrl		[string]		request target
-* @param requestHeaders	[Array]			HTTP request headers
-* @param callback		[AjxCallback]	callback (for async requests)
-* @param useGet			[boolean]		if true use get method, else use post
+* @param requestHeaders	[Array]*		HTTP request headers
+* @param callback		[AjxCallback]*	callback (for async requests)
+* @param useGet			[boolean]*		if true use GET method, else use POST
 */
 AjxRpcRequest.prototype.invoke =
-function(requestStr, serverUrl, requestHeaders, callback, useGet) {
+function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
 
 	var asyncMode = (callback != null);
 	this._httpReq.open((useGet) ? "get" : "post", serverUrl, asyncMode);
@@ -84,7 +84,11 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet) {
 	if (asyncMode) {
 		return this.id;
 	} else {
-		return {text: this._httpReq.responseText, xml: this._httpReq.responseXML};
+		if (this._httpReq.status == 200) {
+			return {text: this._httpReq.responseText, xml: this._httpReq.responseXML, success: true};
+		} else {
+			return {text: this._httpReq.responseText, xml: this._httpReq.responseXML, success: false, status: this._httpReq.status};
+		}
 	}
 }
 
@@ -103,6 +107,7 @@ function(req, callback) {
 		callback.run( {text: null, xml: null, success: false, status: 500} );
 		return;
 	}
+
 	DBG.println(AjxDebug.DBG3, "Async RPC request: ready state = " + req._httpReq.readyState);
 	if (req._httpReq.readyState == 4) {
 		DBG.println(AjxDebug.DBG3, "Async RPC request: HTTP status = " + req._httpReq.status);
@@ -113,6 +118,12 @@ function(req, callback) {
 		}
 		req.busy = false;
 	}
+}
+
+AjxRpcRequest.prototype.cancel =
+function() {
+	DBG.println(AjxDebug.DBG1, "Aborting HTTP request");
+	this._httpReq.abort();
 }
 
 AjxRpcRequest._init =

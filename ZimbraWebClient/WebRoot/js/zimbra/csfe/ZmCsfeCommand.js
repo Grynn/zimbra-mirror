@@ -193,6 +193,18 @@ function(response, asyncMode) {
 	DBG.println(AjxDebug.DBG1, "ROUND TRIP TIME: " + (this._en.getTime() - this._st.getTime()));
 
 	var result = new ZmCsfeResult();
+
+	if (!response.success) {
+		var ex = new ZmCsfeException("Csfe service error", ZmCsfeException.CSFE_SVC_ERROR,
+									 "ZmCsfeCommand.prototype.invoke", "HTTP response status " + response.status);
+		DBG.dumpObj(AjxDebug.DBG1, ex);
+		if (asyncMode) {
+			result.set(ex, true);
+			return result;
+		} else {
+			throw ex;
+		}
+	}
 	
 	var xmlResponse = false;
 	var respDoc = null;
@@ -205,8 +217,24 @@ function(response, asyncMode) {
 			respDoc = (AjxEnv.isIE || response.xml == null)
 				? AjxSoapDoc.createFromXml(response.text) 
 				: AjxSoapDoc.createFromDom(response.xml);
-		} catch(ex) {
-			DBG.dumpObj(ex);
+		} catch (ex) {
+			DBG.dumpObj(AjxDebug.DBG1, ex);
+			if (asyncMode) {
+				result.set(ex, true);
+				return result;
+			} else {
+				throw ex;
+			}
+		}
+		if (!respDoc) {
+			var ex = new ZmCsfeException("Csfe service error", ZmCsfeException.SOAP_ERROR, "ZmCsfeCommand.prototype.invoke", "Bad XML response doc");
+			DBG.dumpObj(AjxDebug.DBG1, ex);
+			if (asyncMode) {
+				result.set(ex, true);
+				return result;
+			} else {
+				throw ex;
+			}
 		}
 	}
 	
@@ -219,10 +247,13 @@ function(response, asyncMode) {
 		var fault = AjxSoapDoc.element2FaultObj(body);
 		if (fault) {
 			var ex = new ZmCsfeException("Csfe service error", fault.errorCode, "ZmCsfeCommand.prototype.invoke", fault.reason);
-			if (asyncMode)
+			DBG.dumpObj(AjxDebug.DBG1, ex);
+			if (asyncMode) {
 				result.set(ex, true);
-			else
+				return result;
+			} else {
 				throw ex;
+			}
 		}
 
 		resp = "{";
@@ -242,10 +273,13 @@ function(response, asyncMode) {
 	var fault = data.Body.Fault;
 	if (fault) {
 		var ex = new ZmCsfeException(fault.Reason.Text, fault.Detail.Error.Code, "ZmCsfeCommand.prototype.invoke", fault.Code.Value);
-		if (asyncMode)
+		DBG.dumpObj(AjxDebug.DBG1, ex);
+		if (asyncMode) {
 			result.set(ex, true);
-		else
+			return result;
+		} else {
 			throw ex;
+		}
 	} else {
 		if (asyncMode)
 			result.set(data);
@@ -266,10 +300,10 @@ function(response, asyncMode) {
 ZmCsfeCommand.prototype._runCallback =
 function(args) {
 
-	var callback = args[0];
-	var response = args[1];
+	var callback	= args[0];
+	var result		= args[1];
 
-	var result = this._getResponseData(response, true);
+	var response = this._getResponseData(result, true);
 	this._en = new Date();
 
 	if (!callback) {
@@ -277,7 +311,7 @@ function(args) {
 		return;
 	}
 
-	if (callback) callback.run(result);
+	if (callback) callback.run(response);
 }
 
 // DEPRECATED - instead, use instance method invoke() above
