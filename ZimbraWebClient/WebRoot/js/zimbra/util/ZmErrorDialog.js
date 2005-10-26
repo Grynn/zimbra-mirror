@@ -134,6 +134,8 @@ ZmErrorDialog.prototype._getNavigatorInfo = function() {
 	strNav[idx++] = "\nhref: " + location.href + "\n";
 
 	for (var i in navigator) {
+		// Skip functions
+		if(typeof navigator[i] == "function") {continue;}
 		strNav[idx++] = i + ": " + navigator[i] + "\n";
 	}
 
