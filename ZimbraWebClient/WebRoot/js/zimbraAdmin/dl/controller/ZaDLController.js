@@ -215,6 +215,9 @@ ZaDLController.prototype._saveListener = function (ev) {
 				this.popupErrorDialog(m, ex, true);		
 				handled = true;
 			}
+		} else if (ex.code == ZmCsfeException.DISTRIBUTION_LIST_EXISTS) {
+			this.popupErrorDialog(AjxStringUtil.resolve(ZaMsg.DLXV_ErrorDistributionListExists,[dl.name]), ex, true);		
+			handled = true;
 		}
 		if (!handled) {
 			this._handleException(ex, "ZaDLController.prototype._saveListener", null, false);

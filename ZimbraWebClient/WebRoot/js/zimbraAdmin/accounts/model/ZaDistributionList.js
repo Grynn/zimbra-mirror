@@ -146,15 +146,14 @@ ZaDistributionList.prototype.saveEdits = function () {
 	if (this.isDirty()) {
 		if (this._origName != null && this._origName != this.name) {
 			// move all members to the add list, to force a re add.
-			this._addList = AjxVector.fromArray(this._memberList.getArray());
-			var oldId = this.id;
-			this.saveNew();
-			this._remove(oldId);
-		} else {
-			var sd = AjxSoapDoc.create("ModifyDistributionListRequest", "urn:zimbraAdmin", null);
+			var sd = AjxSoapDoc.create("RenameDistributionListRequest", "urn:zimbraAdmin", null);
 			sd.set("id", this.id);
-			return this._save(sd, "ModifyDistributionListResponse", true, true);
+			sd.set("newName", this.name);
+			var resp = ZmCsfeCommand.invoke(sd, null, null, null, false);
 		}
+		sd = AjxSoapDoc.create("ModifyDistributionListRequest", "urn:zimbraAdmin", null);
+		sd.set("id", this.id);
+		return this._save(sd, "ModifyDistributionListResponse", true, true);
 	}
 		
 };

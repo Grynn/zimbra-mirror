@@ -63,6 +63,7 @@ ZmCsfeException.ACCT_PASS_CHANGE_TOO_SOON 	= "account.PASSWORD_CHANGE_TOO_SOON";
 ZmCsfeException.ACCT_PASS_LOCKED 			= "account.PASSWORD_LOCKED";
 ZmCsfeException.ACCT_PASS_RECENTLY_USED 	= "account.PASSWORD_RECENTLY_USED";
 ZmCsfeException.DOMAIN_NOT_EMPTY			= "account.DOMAIN_NOT_EMPTY";
+ZmCsfeException.DISTRIBUTION_LIST_EXISTS	= "account.DISTRIBUTION_LIST_EXISTS";
 
 ZmCsfeException.COS_EXISTS 					= "account.COS_EXISTS";
 
