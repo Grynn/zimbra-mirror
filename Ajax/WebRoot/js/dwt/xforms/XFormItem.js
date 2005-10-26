@@ -3742,6 +3742,10 @@ Dwt_Alert_XFormItem.prototype.constructWidget = function() {
 
 Dwt_Alert_XFormItem.prototype.updateWidget = function(newvalue) {
 	// nothing
+	var content = this.getContent();
+	if(!content && newvalue) {
+		this.getWidget().setContent(newvalue);
+	}
 }
 
 //

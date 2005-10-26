@@ -98,6 +98,7 @@ function() {
 		this._app.getCurrentController()._handleException(ex, "MoveAliasXDialog.prototype.moveAlias", null, false);
 		return false;
 	}
+	this._containedObject.resultMsg = String(ZaMsg.Alias_Moved_To).replace("{0}",name).replace("{1}",this._containedObject[ZaSearch.A_selected].name); 
 	return true;	
 }
 
@@ -158,7 +159,14 @@ function() {
 					},
 					{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 2", relevantBehaviorBehavior:_HIDE_,
 						items: [
-							{type:_OUTPUT_, value:"Alias Moved"}
+							{ type: _DWT_ALERT_,
+								  style: DwtAlert.WARNING,
+								  iconVisible: false, 
+								  content: null,
+								  colSpan:"*",
+								  ref:"resultMsg",align:_CENTER_, valign:_MIDDLE_
+							}						
+//							{type:_OUTPUT_, ref:"resultMsg", align:_CENTER_, valign:_MIDDLE_}
 						]						
 					}
 				]
