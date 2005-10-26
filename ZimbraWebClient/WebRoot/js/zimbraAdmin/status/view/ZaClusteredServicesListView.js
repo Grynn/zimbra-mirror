@@ -34,9 +34,11 @@ ZaClusteredServicesListView.prototype.constructor = ZaClusteredServicesListView;
 ZaClusteredServicesListView.prototype._getHeaderList = function() {
 
 	var headerList = [
+					  new ZaListHeaderItem(ZaStatus.PRFX_Server, ZaMsg.CSLV_col_prfx_clusterServerName, null, 175, false, null, true, true),
+
 					  new ZaListHeaderItem("ZaStatus.physicalServer",ZaMsg.CSLV_col_prfx_physicalServer, null, 150, true, "physicalServerName", true, true),
 
-					  new ZaListHeaderItem(ZaStatus.PRFX_Server, ZaMsg.CSLV_col_prfx_clusterServerName, null, 175, false, null, true, true),
+					  new ZaListHeaderItem("ZaStatus.clusterName", ZaMsg.CSLV_col_prfx_clusterName, null, 80, false, null, true, true),
 
 					  new ZaListHeaderItem(ZaStatus.PRFX_Service, ZaMsg.CSLV_col_prfx_service, null, 70, false, null, true, true),
 
@@ -93,34 +95,14 @@ ZaClusteredServicesListView.prototype._writeElement = function (html, idx, item,
 				html[idx++] = " aligh=left>";
 
 				html[idx++] = AjxStringUtil.htmlEncode(" ");
-			} else {
-				html[idx++] = "<td width=\"12px\" aligh=left onclick=\'javascript:AjxCore.objectWithId(";
-				html[idx++] = this.__internalId;
-				html[idx++] = ")._expand(event, this)\'>";
-				html[idx++] = AjxImg.getImageHtml("NodeExpanded");
 				html[idx++] = "</td>";
-
-
-				html[idx++] = "<td width=";
-				html[idx++] = this._headerList[i]._width-12;
-				html[idx++] = " aligh=left>";
-				html[idx++] = AjxStringUtil.htmlEncode(item.physicalServerName);
-			}
-		} else if(id.indexOf(ZaStatus.PRFX_Server)==0) {
-			if (!onlyServiceInfo) {
-				html[idx++] = "<td><table cellpadding=0 cellspacing=0 border=0 width="
-				html[idx++] = (this._headerList[i]._width);
-				html[idx++] = "><tr><td align=left width=20>"
 			} else {
 				html[idx++] = "<td width=";
 				html[idx++] = (this._headerList[i]._width);
-				html[idx++] = " aligh=left>";
-			}
+				html[idx++] = "><table cellpadding=0 cellspacing=0 border=0 style='table-layout:fixed;'>";
+				html[idx++] = "<tr>";
 
-			if (onlyServiceInfo){
-				html[idx++] = AjxStringUtil.htmlEncode(" ");
-			} else {
-				DBG.println("item.clusterStatus = ", item.clusterStatus);
+				html[idx++] = "<td align=left width=20>"
 				if(item.clusterStatus == "started") {
 					html[idx++] = AjxImg.getImageHtml("Check");
 				} else if (item.clusterStatus == "stopped"){
@@ -128,18 +110,54 @@ ZaClusteredServicesListView.prototype._writeElement = function (html, idx, item,
 				} else {
 					html[idx++] = "&nbsp;";
 				}
+				html[idx++] = "</td>";
+
+
+				html[idx++] = "<td width=";
+				html[idx++] = this._headerList[i]._width-12;
+				html[idx++] = " aligh=left>";
+				html[idx++] = AjxStringUtil.htmlEncode(item.physicalServerName);
+				html[idx++] = "</td>";
+				html[idx++] = "</tr></table></td>";
+			}
+		} else if(id.indexOf(ZaStatus.PRFX_Server)==0) {
+			if (!onlyServiceInfo) {
+				html[idx++] = "<td width=";
+				html[idx++] = (this._headerList[i]._width);
+				html[idx++] = "><table cellpadding=0 cellspacing=0 border=0 style='table-layout:fixed;'>";
+				html[idx++] = "<tr>";
+
+				html[idx++] = "<td width=\"12px\" aligh=left onclick=\'javascript:AjxCore.objectWithId(";
+				html[idx++] = this.__internalId;
+				html[idx++] = ")._expand(event, this)\'>";
+				html[idx++] = AjxImg.getImageHtml("NodeExpanded");
+				html[idx++] = "</td>";
 				html[idx++] = "<td>";
 				if (item.serverName != ZaClusterStatus.NOT_APPLICABLE) {
 					html[idx++] = AjxStringUtil.htmlEncode(item.serverName);
 				} else {
-					html[idx++] = AjxStringUtil.htmlEncode(" ");
+					html[idx++] = AjxStringUtil.htmlEncode(item.physicalServerName);
 				}
 				html[idx++] = "</td>";
+				html[idx++] = "</tr></table></td>";
+			} else {
+				html[idx++] = "<td width=";
+				html[idx++] = (this._headerList[i]._width);
+				html[idx++] = " aligh=left>";
+				html[idx++] = AjxStringUtil.htmlEncode(" ");
+				html[idx++] = "</td>";
+			}
+
+		} else if (id.indexOf("ZaStatus.clusterName")==0) {
+			html[idx++] = "<td width=";
+			html[idx++] = this._headerList[i]._width;
+			html[idx++] = " aligh=left>"
+			if (onlyServiceInfo) {
+				html[idx++] = "&nbsp;";
+			} else {
+				html[idx++] = AjxStringUtil.htmlEncode(item.clusterName);
 			}
 			html[idx++] = "</td>";
-			if (!onlyServiceInfo){
-				html[idx++] = "</tr></table></td>";
-			}
 		} else if(id.indexOf(ZaStatus.PRFX_Service)==0) {
 			if (onlyServiceInfo) {
 				html[idx++] = "<td width=";
@@ -178,22 +196,16 @@ ZaClusteredServicesListView.prototype._writeElement = function (html, idx, item,
 	return idx;
 };
 
-ZaClusteredServicesListView.getAncestorWithTag = function (ev, tagName) {
-	var htmlEl = DwtUiEvent.getTarget(ev);
-	while (htmlEl) {
-		if (htmlEl.tagName == tagName) {
-			return htmlEl;
-		}
-		htmlEl = htmlEl.parentNode;
-	}
-	return null;
-};
-
 ZaClusteredServicesListView.prototype._expand = function (event, domObj) {
 	var ev = DwtUiEvent.getEvent(event);
 	var htmlEl = DwtUiEvent.getTarget(ev);
-	//var table = DwtUiEvent.getTargetWithProp(event, "_serviceInfo");
-	var table = ZaClusteredServicesListView.getAncestorWithTag(event, "TABLE");
+	var table = htmlEl;
+	while (table != null){
+		if (table.getAttribute("_serviceInfo") != null) {
+			break;
+		}
+		table = table.parentNode;
+	}
 	var sibling = table.nextSibling;
 	var collapse = true;
 	if (sibling != null) {
