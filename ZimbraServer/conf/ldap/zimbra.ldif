@@ -146,7 +146,7 @@ zimbraLmtpBindOnStartup: FALSE
 zimbraLogRawLifetime: 31d
 zimbraLogSummaryLifetime: 730d
 zimbraImapServerEnabled: TRUE
-zimbraImapNumThreads: 10
+zimbraImapNumThreads: 200
 zimbraImapBindPort: 7143
 zimbraImapBindOnStartup: TRUE
 zimbraImapSSLBindPort: 7993
@@ -192,7 +192,7 @@ zimbraMtaRestriction: reject_non_fqdn_hostname
 zimbraMtaRestriction: reject_non_fqdn_sender
 zimbraMtaTlsAuthOnly: TRUE
 zimbraPop3CleartextLoginEnabled: FALSE
-zimbraPop3NumThreads: 10
+zimbraPop3NumThreads: 200
 zimbraPop3BindPort: 7110
 zimbraPop3BindOnStartup: TRUE
 zimbraPop3ServerEnabled: TRUE
