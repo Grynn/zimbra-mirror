@@ -110,10 +110,9 @@ case "$1" in
         mkdir -p ${tomcat_directory}/work/Catalina/localhost/manager
                 
         # export ZIMBRA_TOMCAT_START_DEBUG=1
-        nohup sudo ${zimbra_home}/libexec/zmtomcatstart \
+        sudo ${zimbra_home}/libexec/zmtomcatstart \
             -Xms${jm}m -Xmx${jm}m ${tomcat_java_options} \
-            > ${tomcat_directory}/logs/catalina.out 2>&1 &
-        echo $! > ${tomcat_pidfile}
+            > ${tomcat_directory}/logs/catalina.out 2>&1
         ;;
 
     'kill')
