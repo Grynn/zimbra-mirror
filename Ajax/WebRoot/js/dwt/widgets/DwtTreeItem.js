@@ -84,8 +84,35 @@ DwtTreeItem.prototype.setChecked =
 function(checked) {
 	if (this._itemChecked != checked) {
 		this._itemChecked = checked;
-		if (this._checkBox != null)
+		if (this._checkBox != null) {
 			this._checkBox.checked = checked;
+			
+			// NOTE: This hack is needed because IE actively loses the checked
+			//		 state for checkbox elements that are programmatically set
+			//		 before being added to the document tree (or even before
+			//		 layout, from the looks of things).
+			//
+			//		 The following code will demonstrate the bug:
+			//
+			//		 var checkbox = document.createElement("INPUT");
+			//		 checkbox.type = "checkbox";
+			//		 checkbox.checked = true;
+			//		 document.body.appendChild(checkbox);
+			//		 alert(checkbox.checked);
+			if (this._checkBox._ieHack) {
+				if (checked) {
+					var document = this.getDocument();
+					var checkbox = document.createElement("<INPUT type='checkbox' checked>");
+					Dwt.setHandler(checkbox, DwtEvent.ONMOUSEDOWN, DwtTreeItem._checkBoxMouseDownHdlr);
+					Dwt.setHandler(checkbox, DwtEvent.ONMOUSEUP, DwtTreeItem._checkBoxMouseUpHdlr);
+					this._checkBox.parentNode.replaceChild(checkbox, this._checkBox);
+					this._checkBox = checkbox;
+				}
+				else {
+					delete this._checkBox._ieHack;
+				}
+			}
+		}
 	}
 }
 
@@ -312,6 +339,10 @@ function(index) {
       	this._checkBoxCell.noWrap = true;
       	this._checkBox = doc.createElement("input");
       	this._checkBox.type = "checkbox";
+      	if (AjxEnv.isIE) {
+      		// NOTE: See note in setChecked method to see why this is here.
+      		this._checkBox._ieHack = true;
+  		}
       	this._checkBoxCell.appendChild(this._checkBox);
 		Dwt.setHandler(this._checkBox, DwtEvent.ONMOUSEDOWN, DwtTreeItem._checkBoxMouseDownHdlr);
 		Dwt.setHandler(this._checkBox, DwtEvent.ONMOUSEUP, DwtTreeItem._checkBoxMouseUpHdlr);
