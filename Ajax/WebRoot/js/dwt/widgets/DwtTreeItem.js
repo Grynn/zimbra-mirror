@@ -315,8 +315,8 @@ function(index) {
       	this._checkBoxCell.appendChild(this._checkBox);
 		Dwt.setHandler(this._checkBox, DwtEvent.ONMOUSEDOWN, DwtTreeItem._checkBoxMouseDownHdlr);
 		Dwt.setHandler(this._checkBox, DwtEvent.ONMOUSEUP, DwtTreeItem._checkBoxMouseUpHdlr);
-      	this._checkBox.checked = this._itemChecked
-	}	
+      	this._checkBox.checked = this._itemChecked;
+	}
 	
 	this._imageCell = this._row.insertCell(i++);
 	this._imageCell.className = "imageCell";
