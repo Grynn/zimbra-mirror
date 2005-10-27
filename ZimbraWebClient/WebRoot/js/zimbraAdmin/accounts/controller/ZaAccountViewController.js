@@ -439,6 +439,7 @@ function(entry, skipRefresh) {
 	 		this._ops.push(new ZaOperation(ZaOperation.NEW_WIZARD, ZaMsg.TBB_New, ZaMsg.ALTBB_New_tt, "Account", "AccountDis", new AjxListener(this, ZaAccountViewController.prototype._newButtonListener)));   			    	
    			this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ALTBB_Delete_tt,"Delete", "DeleteDis", new AjxListener(this, ZaAccountViewController.prototype._deleteButtonListener)));    	    	
 			this._ops.push(new ZaOperation(ZaOperation.VIEW_MAIL, ZaMsg.ACTBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, "ReadMailbox", "ReadMailboxDis", new AjxListener(this, ZaAccountViewController.prototype._viewMailListener)));		
+			this._ops.push(new ZaOperation(ZaOperation.REINDEX_MAILBOX, ZaMsg.ACTBB_ReindexMbx, ZaMsg.ACTBB_ReindexMbx_tt, "ReadMailbox", "ReadMailboxDis", new AjxListener(this, ZaAccountViewController.prototype._reindexMbxListener)));					
 			this._ops.push(new ZaOperation(ZaOperation.NONE));
 			this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));		
 
@@ -631,6 +632,22 @@ function(ev) {
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountViewController.prototype._newButtonListener", null, false);
 	}
+}
+
+ZaAccountViewController.prototype._reindexMbxListener = 
+function (ev) {
+	try {
+//		var newAccount = new ZaAccount(this._app);
+		this._reindexWizard = new ReindexMailboxXDialog(this._container, this._app);	
+		//this._newAccountWizard.setObject(newAccount);
+		var obj = new ZaReindexMailbox();
+		obj.mbxId = this._currentObject.id;
+		this._reindexWizard.setObject(obj);
+		this._reindexWizard.popup();
+	} catch (ex) {
+		this._handleException(ex, "ZaAccountViewController.prototype._reindexMbxListener", null, false);
+	}
+
 }
 
 //event notifiers

@@ -121,6 +121,15 @@ function (val) {
 DwtProgressBar.prototype.getValue = function () {
 	return this._value;
 }
+
+DwtProgressBar.prototype.getMaxValue = function () {
+	return this._maxValue;
+}
+
+DwtProgressBar.prototype.setMaxValue = function (val) {
+	this._maxValue = parseInt(val);
+}
+
 //
 // Protected methods
 //

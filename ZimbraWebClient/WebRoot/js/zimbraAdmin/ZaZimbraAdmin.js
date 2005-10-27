@@ -231,8 +231,9 @@ function() {
 		elements[ZaAppViewMgr.C_APP_CHOOSER] = this._createAppChooser();
 		elements[ZaAppViewMgr.C_STATUS] = this._statusBox = new DwtText(this._shell, "statusBox", Dwt.ABSOLUTE_STYLE);
 //test
-		elements[ZaAppViewMgr.C_USER_INFO] = this._progressBar = new DwtProgressBar(this._shell, null, Dwt.ABSOLUTE_STYLE);		
-		this._progressBar.setValue(30);
+/*		elements[ZaAppViewMgr.C_USER_INFO] = this._progressBar = new DwtProgressBar(this._shell, null, Dwt.ABSOLUTE_STYLE);		
+		this._progressBar.setValue(30);*/
+		
 		this._statusBox.setScrollStyle(Dwt.CLIP);
 		this._setLicenseStatusMessage();
 	// the outer element of the entire skin is hidden until this point

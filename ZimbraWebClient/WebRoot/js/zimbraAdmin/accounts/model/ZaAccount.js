@@ -532,7 +532,100 @@ function(accId) {
 	return retVal;
 }
 
+function ZaReindexMailbox() {
+	this.status = null;
+	this.numSucceeded = 0;
+	this.numFailed = 0;	
+	this.numRemaining = 0;	
+	this.numTotal = 100;	
+	this.numDone = 0;	
+	this.progressMsg = ZaMsg.NAD_ACC_ReindexingNotStarted;
+	this.mbxId = null;
+	this.resultMsg = null;
+	this.errorDetail = null;
+	this.pollInterval = 500;	
+}
 
+ZaAccount.getReindexStatus = 
+function (mbxId) {
+	var soapDoc = AjxSoapDoc.create("ReIndexRequest", "urn:zimbraAdmin", null);
+	soapDoc.getMethod().setAttribute("action", "status");
+	var attr = soapDoc.set("mbox", null);
+	attr.setAttribute("id", mbxId);
+	var resp = null;
+	try {
+		resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true);
+	} catch (ex) {
+		if(ex.code == "service.NOT_IN_PROGRESS") {
+			resp = null;
+		} else {
+			throw (ex);
+		}
+	}
+	return resp;
+}
+
+ZaAccount.startReindexMailbox = 
+function (mbxId) {
+	var soapDoc = AjxSoapDoc.create("ReIndexRequest", "urn:zimbraAdmin", null);
+	soapDoc.getMethod().setAttribute("action", "start");
+	var attr = soapDoc.set("mbox", null);
+	attr.setAttribute("id", mbxId);
+	
+	var resp;
+	try {
+		resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true);
+	} catch (ex) {
+		resp = ex;
+	}
+	return resp;
+}
+
+ZaAccount.abortReindexMailbox = 
+function (mbxId) {
+	var soapDoc = AjxSoapDoc.create("ReIndexRequest", "urn:zimbraAdmin", null);
+	soapDoc.getMethod().setAttribute("action", "cancel");
+	var attr = soapDoc.set("mbox", null);
+	attr.setAttribute("id", mbxId);
+	var resp;
+	try {
+		resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	} catch (ex) {
+		resp = ex;
+	}
+	return resp;
+}
+
+ZaAccount.parseReindexResponse = 
+function (arg, respObj) {
+//	var numFailed, numSucceeded,numRemaining,numTotal,numDone,resultMsg,errorDetail,status;
+	if (!respObj)
+		respObj = new ZaReindexMailbox();
+
+	if(!arg) {
+		respObj.status = null;
+		return;
+	}
+		
+	if(arg instanceof AjxException || arg instanceof ZmCsfeException || arg instanceof AjxSoapException) {
+		respObj.resultMsg = String(ZaMsg.FAILED_REINDEX).replace("{0}", arg.code);
+		respObj.errorDetail = arg.detail;
+		respObj.status = "error";	
+	} else {
+		status = arg.firstChild.getAttribute("status");
+		respObj.status = status;
+		if(arg.firstChild.firstChild) {
+			respObj.numFailed = parseInt(arg.firstChild.firstChild.getAttribute("numFailed"));
+			respObj.numSucceeded = parseInt(arg.firstChild.firstChild.getAttribute("numSucceeded"));
+			respObj.numRemaining = parseInt(arg.firstChild.firstChild.getAttribute("numRemaining"));
+			respObj.numTotal = respObj.numRemaining + respObj.numFailed + respObj.numSucceeded;
+			respObj.numDone  = respObj.numFailed + respObj.umSucceeded;	
+			//temp fix 
+			if (respObj.numRemaining > 0)
+				respObj.status = "running";
+		}
+	}
+}
 
 
 ZaAccount.prototype.initFromDom =

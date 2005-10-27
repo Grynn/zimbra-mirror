@@ -3824,3 +3824,27 @@ Dwt_TabBar_XFormItem.prototype.updateWidget = function(newvalue) {
 
 	this.widget.addStateChangeListener(this._stateChangeListener);
 }
+
+//
+// XFormItem class: "alert"
+//
+
+function Dwt_ProgressBar_XFormItem() {}
+XFormItemFactory.createItemType("_DWT_PROGRESS_BAR_", "dwt_progress_bar", Dwt_ProgressBar_XFormItem, Dwt_Adaptor_XFormItem);
+
+Dwt_ProgressBar_XFormItem.prototype.constructWidget = function() {
+	var form = this.getForm();
+	var widget = new DwtProgressBar(form, null);
+	var maxvalue = this.getInheritedProperty("maxValue");
+	if(!maxvalue) {
+		var maxValueRef = this.getInheritedProperty("maxValueRef");
+		maxvalue = this.getModel().getInstanceValue(this.getInstance(), maxValueRef)
+	}
+	widget.setMaxValue(maxvalue);
+	return widget;
+}
+
+Dwt_ProgressBar_XFormItem.prototype.updateWidget = function(newvalue) {
+	// nothing
+	this.getWidget().setValue(newvalue);
+}
