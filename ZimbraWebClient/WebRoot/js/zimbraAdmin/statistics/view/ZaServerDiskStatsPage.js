@@ -31,94 +31,161 @@
 * @author Greg Solovyev
 **/
 function ZaServerDiskStatsPage (parent, app) {
-	this._app = app;
 	DwtTabViewPage.call(this, parent);
 	this._fieldIds = new Object(); //stores the ids of all the form elements
-	this.cellId = Dwt.getNextId();
+	this._app = app;
+	this.initialized=false;
 	this._rendered = false;
-	this.internalView = null;
-	this._createHTML();
 }
 
 ZaServerDiskStatsPage.prototype = new DwtTabViewPage;
 ZaServerDiskStatsPage.prototype.constructor = ZaServerDiskStatsPage;
 
-ZaServerDiskStatsPage.prototype.toString = 
-function() {
+ZaServerDiskStatsPage.prototype.toString = function() {
 	return "ZaServerDiskStatsPage";
-}
+};
 
-ZaServerDiskStatsPage.prototype.showMe = 
-function() {
-	if(this.internalView !=null) {
-		if(!this._rendered) {
-			var elem = Dwt.getDomObj(this.getDocument(), this.cellId);
-			elem.appendChild(this.internalView.getHtmlElement());
-			this._rendered = true;
-		}	
+ZaServerDiskStatsPage.prototype.setObject = function (item) {
+	this._server = item;
+	this._render(item);
+};
 
-		DwtTabViewPage.prototype.showMe.call(this);
-		this.internalView.getHtmlElement().style.height=this.getHtmlElement().style.height;
-		this.internalView.getHtmlElement().style.width=this.getHtmlElement().style.width;	
-		this.internalView.switchToTab(this.internalView.firstTabKey); 				
+ZaServerDiskStatsPage.prototype._render = function (server) {
+	if (!this._rendered) {
+		var instance = {currentTab:1};
+		var xModelObj = new XModel({id:"currentTab", type:_UNTYPED_});
+		this._view = new XForm(this._getXForm(), xModelObj, instance, this);
+		this._view.setController(this);
+		this._view.draw();
+		this._rendered = true;
+	} else {
+		this._view.getInstance().currentTab = 1;
+		var ims = this._view.getItemsById('images');
+		for (var i = 0 ; i < ims.length; ++i ){
+			ims[i].dirtyDisplay();
+		}
+		this._view.refresh();
 	}
-}
+};
 
-ZaServerDiskStatsPage.prototype.setObject = 
-function (entry) {
-	if(this.internalView==null)
-		this.internalView = new ZaServerDiskStatsTabPage(this, this._app);	
+ZaServerDiskStatsPage.prototype.writeImageHtml = function (periodInt) {
+	var periodString = "hour";
+	var serverName = this._server.name;
+	var periodString = this._getPeriodString(periodInt);
+	return AjxBuffer.concat("<img src='/service/statsimg/disk." , serverName ,
+							".", periodString,"_0.gif?nodef=1' onload='javascript:ZaServerDiskStatsPage.callMethod(",
+							this.__internalId , ",ZaServerDiskStatsPage.prototype.loadNextImage,[this.parentNode," ,
+							periodInt , ", 1])' onerror='javascript:AjxCore.objectWithId(", this.__internalId ,
+							").stopLoadingImages(this,0)'><br>");
+};
+
+ZaServerDiskStatsPage.prototype.loadNextImage = function (parent, periodInt, count) {
+	// let's stop at some arbitrarily high number, so that we don't get caught for some
+	// reason in an infinite loop
+ 	if (count >= 50) {
+ 		return;
+ 	}
+	++count;
+	var server = this._server.name;
+	var periodString = this._getPeriodString(periodInt);
+	var img = Dwt.parseHtmlFragment(AjxBuffer.concat("<img src='/service/statsimg/disk.", server, ".", periodString, "_", 
+													 count, ".gif?nodef=1' onload='javascript:ZaServerDiskStatsPage.callMethod(",
+													 this.__internalId,",ZaServerDiskStatsPage.prototype.loadNextImage,",
+													 "[this.parentNode,",periodInt ,",", count, "])'",
+													 "onerror='javascript:ZaServerDiskStatsPage.callMethod(", this.__internalId ,
+													 ",ZaServerDiskStatsPage.prototype.stopLoadingImages,[this,",count,"])'><br>"));
+
+	parent.appendChild(img);
+	parent.appendChild(document.createElement('br'));
+	parent.appendChild(document.createElement('br'));
+};
+
+
+
+ZaServerDiskStatsPage.callMethod = function (id, method, argsArray) {
+	var obj = AjxCore.objectWithId(id)
+	return method.apply(obj,argsArray);
+};
+
+ZaServerDiskStatsPage.prototype.stopLoadingImages = function (imgObj, count) {
+	if (count == 0) {
+		imgObj.onerror = null;
+		imgObj.onload = null;
+		imgObj.src = "/service/statsimg/data_not_available.gif";
+	} else {
+		imgObj.style.display = "none";
+	}
+};
+
+
+ZaServerDiskStatsPage.prototype._getPeriodString = function (periodInt){
+	switch (periodInt) {
+	case 1:
+		return "hour";
+	case 2:
+		return "day";
+	case 3:
+		return "month";
+	case 4:
+		return "year";
+	}
+	return null;
+};
+
+ZaServerDiskStatsPage.prototype._getXForm = function () {
+	if (this._xform != null) return this._xform;
+
+	this._xform = {
+		x_showBorder:1,
+	    numCols:1, 
+	    cssClass:"ZaServerDiskStatsPage", 
+		tableCssStyle:"width:100%",
+	    itemDefaults:{ },
+	    items:[
+		   {type:_SPACER_, height:10, colSpan:"*" },
 		
-	this.internalView.setObject(entry);
-}
+		   {type:_TAB_BAR_,  ref:ZaModel.currentTab, colSpan:"*",
+		    choices:[
+			     {value:1, label:ZaMsg.TABT_StatsDataLastHour},
+			     {value:2, label:ZaMsg.TABT_StatsDataLastDay},
+			     {value:3, label:ZaMsg.TABT_StatsDataLastMonths},
+			     {value:4, label:ZaMsg.TABT_StatsDataLastYear}
+			    ],
+		    cssClass:"ZaTabBar"
+		   },
 
-ZaServerDiskStatsPage.prototype._createHTML = 
-function () {
- 	var idx = 0;
-	var html = new Array(5);
-//	html[idx++] = "<div style='width:85ex;'>";	
-	html[idx++] = "<table cellpadding='0' cellspacing='0' border='0' align='left' style='width:85ex;table-layout:fixed;'>";	
-	html[idx++] = "<tr valign='top'><td align='left'><div style='width:85ex;' id='" + this.cellId + "'>&nbsp;<br>&nbsp;</div>";
-	html[idx++] = "</td></tr></table>";	
-	html[idx++] = "</div>";
-	this.getHtmlElement().innerHTML = html.join("");
-}
-/**
-* @class ZaServerDiskStatsPage 
-* @contructor ZaServerDiskStatsPage
-* @param parent
-* @param app
-* @author Greg Solovyev
-**/
-function ZaServerDiskStatsTabPage(parent, app) {
-	this._app = app;
-	DwtTabView.call(this, parent);
-	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
-	this._1DPage = new ZaServerDiskStatsPageD(this, app);
-	this._3MPage = new ZaServerDiskStatsPage3M(this, app);
-	this._12MPage = new ZaServerDiskStatsPage12M(this, app);	
-	this.firstTabKey = this.addTab(ZaMsg.TABT_StatsDataLastDay, this._1DPage);		
-	this.addTab(ZaMsg.TABT_StatsDataLast3Months, this._3MPage);			
-	this.addTab(ZaMsg.TABT_StatsDataLast12Months, this._12MPage);				
-//	this.setScrollStyle(DwtControl.SCROLL);
-}
+		   {type:_SWITCH_, align:_LEFT_, valign:_TOP_, 
+		    items:[
+			   {type:_CASE_,  relevant:"instance[ZaModel.currentTab] == 1", align:_LEFT_, valign:_TOP_, 
+			    items:[
+				   {type:_SPACER_, height:10, colSpan:"*" },
+				   {ref: "images", type:_OUTPUT_ , getDisplayValue:"return this.getFormController().writeImageHtml(1)"}
+				   ]
+			   },
+			   {type:_CASE_,  relevant:"instance[ZaModel.currentTab] == 2", align:_LEFT_, valign:_TOP_, 
+			    items:[
+				   {type:_SPACER_, height:10, colSpan:"*" },
+				   {ref: "images",type:_OUTPUT_ , getDisplayValue:"return this.getFormController().writeImageHtml(2)"}
+				   ]
+			   },
 
-ZaServerDiskStatsTabPage.prototype = new DwtTabView;
-ZaServerDiskStatsTabPage.prototype.constructor = ZaServerDiskStatsTabPage;
+			   {type:_CASE_,  relevant:"instance[ZaModel.currentTab] == 3", align:_LEFT_, valign:_TOP_, 
+			    items:[
+				   {type:_SPACER_, height:10, colSpan:"*" },
+				   {ref: "images", type:_OUTPUT_ , getDisplayValue:"return this.getFormController().writeImageHtml(3)"}
+				   ]
+			   },
+			   {type:_CASE_,  relevant:"instance[ZaModel.currentTab] == 4", align:_LEFT_, valign:_TOP_, 
+			    items:[
+				   {type:_SPACER_, height:10, colSpan:"*" },
+				   {ref: "images",type:_OUTPUT_ , getDisplayValue:"return this.getFormController().writeImageHtml(4)"}
+				   ]
+			   }
+			   ]
+		   }
+		   ]
+	};
+		   
 
-ZaServerDiskStatsTabPage.prototype.toString = 
-function() {
-	return "ZaServerDiskStatsTabPage";
-}
-
-ZaServerDiskStatsTabPage.prototype.setObject = 
-function (entry) {
-	this._1DPage.setObject(entry);
-	this._3MPage.setObject(entry);
-	this._12MPage.setObject(entry);
-}
-
-ZaServerDiskStatsTabPage.prototype._createHTML = 
-function() {
-	DwtTabView.prototype._createHTML.call(this);
-}
+	return this._xform;
+};
