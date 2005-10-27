@@ -44,7 +44,7 @@ AjxRpc.invoke =
 function(requestStr, serverUrl, requestHeaders, callback, useGet) {
 
 	var asyncMode = (callback != null);
-	var rpcCtxt = AjxRpc._getRpcCtxt();
+	var rpcCtxt = AjxRpc._getFreeRpcCtxt();
 
 	try {
 	 	var response = rpcCtxt.rpcRequestObj.invoke(requestStr, serverUrl, requestHeaders, callback, useGet);
@@ -84,7 +84,7 @@ function _RpcCtxt(id) {
 /*
 * Factory method for getting context objects.
 */
-AjxRpc._getRpcCtxt = 
+AjxRpc._getFreeRpcCtxt = 
 function() {
 
 	var rpcCtxt = null;
@@ -111,4 +111,19 @@ function() {
 	}
 	rpcCtxt.rpcRequestObj.busy = true;
 	return rpcCtxt;
+}
+
+/**
+* Returns the RPC context with the given ID.
+*
+* @param id		[string]	RPC context ID
+*/
+AjxRpc.getRpcCtxt = 
+function(id) {
+	for (var i = 0; i < AjxRpc._rpcCache.length; i++) {
+		rpcCtxt = AjxRpc._rpcCache[i];
+		if (rpcCtxt.id == id)
+			return rpcCtxt.rpcRequestObj;
+	}
+	return null;
 }

@@ -36,6 +36,7 @@
 *
 * @author Ross Dargahi
 * @author Conrad Damon
+*
 * @param parent				parent widget (the shell)
 * @param classname			a CSS class
 * @param title				a title for the dialog
@@ -196,6 +197,11 @@ function() {
 		this._button[b].setEnabled(true);
 		this._button[b].setActivated(false);
 	}
+};
+
+DwtDialog.prototype.getButton =
+function(buttonId) {
+	return this._button[buttonId];
 };
 
 DwtDialog.prototype.setButtonEnabled = 

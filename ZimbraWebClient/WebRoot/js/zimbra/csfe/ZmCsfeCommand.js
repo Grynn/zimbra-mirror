@@ -108,6 +108,8 @@ function(sessionId) {
 ZmCsfeCommand.prototype.invoke =
 function(params) {
 
+	if (!params.soapDoc) return;
+
 	// Add the SOAP header and context
 	var hdr = params.soapDoc.createHeaderElement();
 	var context = params.soapDoc.set("context", null, hdr);
@@ -310,6 +312,18 @@ function(args) {
 	}
 
 	if (callback) callback.run(response);
+}
+
+/**
+* Cancels this request (which must be async).
+*/
+ZmCsfeCommand.prototype.cancel =
+function() {
+	if (!this._rpcId) return;
+	
+	var rpcRequestObj = AjxRpc.getRpcCtxt(this._rpcId);
+	if (rpcRequestObj)
+		rpcRequestObj.cancel();
 }
 
 // DEPRECATED - instead, use instance method invoke() above

@@ -49,3 +49,4 @@ AjxException.NETWORK_ERROR 			= "AjxException.NETWORK_ERROR";
 AjxException.OUT_OF_RPC_CACHE		= "AjxException.OUT_OF_RPC_CACHE";
 AjxException.UNSUPPORTED 			= "AjxException.UNSUPPORTED";
 AjxException.UNKNOWN_ERROR 			= "AjxException.UNKNOWN_ERROR";
+AjxException.CANCELED				= "AjxException.CANCELED";

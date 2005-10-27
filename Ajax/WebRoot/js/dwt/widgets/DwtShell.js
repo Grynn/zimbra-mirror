@@ -31,22 +31,22 @@
 * @class
 * This class represents a shell, the first widget that must be instantiated in a Dwt based 
 * application. By default the shell covers the whole browser window, though it may also be 
-* instantiated within an HTML element.<br>
-*
-* DwtShell should <b>NOT</b> be subclassed
+* instantiated within an HTML element.
+* <p>
+* DwtShell should <b>NOT</b> be subclassed</p>
 *
 * @author Ross Dargahi
-* @param className [String] The CSS class name
-* @param docBodyScrollable [Boolean] If true then the document body is set to be scrollable
-* @param confirmExitMethod [Function] method which is called when the user attempts to navigate away from 
-*              the application or close the browser window. If this method return a string that 
-*              is displayed as part of the alert that is presented to the user. If this method 
-*              returns null, then no alert is popped up this parameter may be null
-* @param  userShell [Element] If not null then is an HTML element that will be reparented into an absolutely
-*              postioned container in this shell. This is useful in the situation where you have an html 
-*              template and want to use this in context of Dwt.
-* @param useCurtain [Boolean] If true, a curtain overlay is created to be used between hidden and viewable elements 
-*              using z-index. See Dwt.js for various layering constants
+* @param className			[string]*		CSS class name
+* @param docBodyScrollable	[boolean]*		if true, then the document body is set to be scrollable
+* @param confirmExitMethod	[function]*		method which is called when the user attempts to navigate away from 
+*											the application or close the browser window. If this method return a string that 
+*											is displayed as part of the alert that is presented to the user. If this method 
+*											returns null, then no alert is popped up this parameter may be null
+* @param  userShell			[Element]*		an HTML element that will be reparented into an absolutely
+*											postioned container in this shell. This is useful in the situation where you have an HTML 
+*											template and want to use this in context of Dwt.
+* @param useCurtain			[boolean]*		if true, a curtain overlay is created to be used between hidden and viewable elements 
+*											using z-index. See Dwt.js for various layering constants
 */
 function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell, useCurtain) {
 
@@ -131,7 +131,7 @@ function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell, us
     this._uiEvent = new DwtUiEvent(true);
 	this._currWinSize = this.getWindowSize();
 
-	// tooltip singleton used by all control in shell
+	// tooltip singleton used by all controls in shell
 	this._toolTip = new DwtToolTip(this);
 	this._hoverMgr = new DwtHoverMgr();
 }
@@ -139,7 +139,9 @@ function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell, us
 DwtShell.prototype = new DwtComposite;
 DwtShell.prototype.constructor = DwtShell;
 
-// Event objects used to populate events so we dont need to create
+DwtShell.CANCEL_BUTTON = -1; // DwtDialog not defined yet, can't base ID on it
+
+// Event objects used to populate events so we don't need to create
 // them for each event
 DwtShell.controlEvent = new DwtControlEvent();
 DwtShell.keyEvent = new DwtKeyEvent();
@@ -175,14 +177,11 @@ function() {
 /* Set's the busy overlay. The busy overlay disables input to the application and makes the 
  * cursor a wait cursor. Optionally a work in progress (WIP) dialog may be requested. 
  * 
- * @param busy [Boolean] true		Set the busy overlay, false bide the busy overlay
- * @param className [String]		The css classname for the busy dialog (if desiring to override the default)
- * @param showbusyDialog [Boolean] true - show the WIP dialgo
- * @param busyDialogDelay [Integer]	Number of ms to delay popping up the WIP dialog. This is useful for
- *            situation where the WIP should be popped up only if an operation is taking longer than
- *            expected. Application only if showbusyDialog is true
- * @param cancelBusyCallback [ZmCallback]		If provided, then the WIP will display a cancel button which when depressed will
- *            invoke the supplied callaback.
+ * @param busy					[boolean]		if true, set the busy overlay, otherwise hide the busy overlay
+ * @param className				[string]*		css classname for the busy dialog
+ * @param showbusyDialog 		[boolean]*		if true, show the WIP dialog
+ * @param busyDialogDelay 		[int]*			number of ms to delay before popping up the WIP dialog
+ * @param cancelBusyCallback	[AjxCallback]*	callback to run when OK button is pressed in WIP dialog
  */ 
 DwtShell.prototype.setBusy =
 function(busy, className, showbusyDialog, busyDialogDelay, cancelBusyCallback) {
@@ -207,9 +206,9 @@ function(busy, className, showbusyDialog, busyDialogDelay, cancelBusyCallback) {
 				
 			if (cancelBusyCallback) {
 				this._cancelBusyCallback = cancelBusyCallback;
-				this._busyDialog.setButtonEnabled(DwtDialog.CANCEL_BUTTON, true);
+				this._busyDialog.setButtonEnabled(DwtShell.CANCEL_BUTTON, true);
 			} else {
-				this._busyDialog.setButtonEnabled(DwtDialog.CANCEL_BUTTON, false);
+				this._busyDialog.setButtonEnabled(DwtShell.CANCEL_BUTTON, false);
 			}
 		}
     } 
@@ -235,8 +234,6 @@ DwtShell.prototype.setBusyDialogTitle =
 function(title) { 
 	this._busyDialog.setTitle((title) ? title : AjxMsg.workInProgress);
 }
-
-
 
 DwtShell.prototype.getHoverMgr = function() {
 	return this._hoverMgr;
@@ -316,7 +313,6 @@ function(showDialog) {
 	this.__busyActionId = -1;
 }
 
-
 DwtShell.prototype._createBusyOverlay =
 function(htmlElement) { 
     this._busyOverlay = document.createElement("div");
@@ -327,9 +323,10 @@ function(htmlElement) {
     this._busyOverlay.innerHTML = "<table cellspacing=0 cellpadding=0 style='width:100%; height:100%'><tr><td>&nbsp;</td></tr></table>";
     htmlElement.appendChild(this._busyOverlay);
 
-    this._busyDialog = new DwtDialog(this, "DwtShellbusyDialog", AjxMsg.workInProgress, [DwtDialog.CANCEL_BUTTON], null, Dwt.BUSY + 10); 
+	var cancelButton = new DwtDialog_ButtonDescriptor(DwtShell.CANCEL_BUTTON, AjxMsg.cancelRequest, DwtDialog.ALIGN_CENTER);
+    this._busyDialog = new DwtDialog(this, "DwtShellbusyDialog", AjxMsg.workInProgress, DwtDialog.NO_BUTTONS, [cancelButton], Dwt.BUSY + 10);
     this._busyDialog._disableFFhack();
-    this._busyDialog.registerCallback(DwtDialog.CANCEL_BUTTON, this._busyCancelButtonListener, this);
+    this._busyDialog.registerCallback(DwtShell.CANCEL_BUTTON, this._busyCancelButtonListener, this);
     var txtId = Dwt.getNextId();
     var html = [
         "<table xborder=1 class='DialogContent'><tr>",
@@ -344,4 +341,3 @@ function(htmlElement) {
 	this._busyTimedAction.method = this._showBusyDialogAction;
 	this._busyActionId = -1;
 }
-
