@@ -119,6 +119,14 @@ function(evt) {
 	try {
 		var instance = this.getInstance();
 		ZaAccount.parseReindexResponse(ZaAccount.abortReindexMailbox(instance.mbxId),instance);
+		if(instance.status == "running" || instance.status == "started") {
+			// schedule next poll
+			this.getForm().parent._pollHandler = AjxTimedAction.scheduleAction(this.getForm().parent.pollAction, instance.pollInterval);		
+		} else if(this.getForm().parent._pollHandler) {
+			//stop polling
+			AjxTimedAction.cancelAction(this.getForm().parent._pollHandler);
+			this.getForm().parent._pollHandler = null;
+		}		
 		this.getForm().refresh();
 	} catch (ex) {
 		this.getForm().getController()._handleException(ex, "ReindexMailboxXDialog.abortReindexMailbox", null, false);
@@ -140,7 +148,7 @@ function(evt) {
 			AjxTimedAction.cancelAction(this.getForm().parent._pollHandler);
 			this.getForm().parent._pollHandler = null;
 		}
-		this.getForm().parent._pollHandler = AjxTimedAction.scheduleAction(this.getForm().parent.pollAction, instance.pollInterval);	
+		//this.getForm().parent._pollHandler = AjxTimedAction.scheduleAction(this.getForm().parent.pollAction, instance.pollInterval);	
 	} catch (ex) {
 		this.getForm().getController()._handleException(ex, "ReindexMailboxXDialog.startReindexMailbox", null, false);	
 	}
@@ -213,7 +221,7 @@ function() {
 				colSpan:"*"
 			},
 			{type:_DWT_ALERT_, ref:"progressMsg",content: null,
-				relevant:"instance.status == 'running' || instance.status == 'started'",
+				//relevant:"instance.status == 'running' || instance.status == 'started'",
 				colSpan:"*",
 				relevantBehavior:_HIDE_,
  				iconVisible: true,
@@ -224,9 +232,10 @@ function() {
 				maxValue:null,
 				maxValueRef:"numTotal", 
 				ref:"numDone",
-				relevant:"instance.status == 'running' || instance.status == 'started'",
+				//relevant:"instance.status == 'running' || instance.status == 'started'",
 				relevantBehavior:_HIDE_,
 				valign:_CENTER_,
+				align:_CENTER_,	
 				wholeCssClass:"progressbar",
 				progressCssClass:"progressused"
 			},		

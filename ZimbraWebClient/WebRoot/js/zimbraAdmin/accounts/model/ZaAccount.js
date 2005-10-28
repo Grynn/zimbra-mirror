@@ -640,6 +640,9 @@ function (arg, respObj) {
 			respObj.numRemaining = parseInt(node.firstChild.getAttribute("numRemaining"));
 			respObj.numTotal = respObj.numRemaining + respObj.numFailed + respObj.numSucceeded;
 			respObj.numDone  = respObj.numFailed + respObj.numSucceeded;	
+			if(status == "cancel") {
+				respObj.progressMsg = ZaMsg.NAD_ACC_ReindexingCancelled;
+			}
 			respObj.progressMsg = String(ZaMsg.NAD_ACC_ReindexingStatus).replace("{0}", respObj.numSucceeded).replace("{1}",respObj.numRemaining).replace("{2}", respObj.numFailed);
 			//temp fix 
 			if (respObj.numRemaining > 0)

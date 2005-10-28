@@ -32,6 +32,7 @@
  * @param parent    The parent container for this control.
  * @param className (optional) 
  * @param posStyle  (optional) The position style of this control.
+ * @author Greg Solovyev
  */
 function DwtProgressBar(parent, className, posStyle) {
 	if (arguments.length == 0) return;
