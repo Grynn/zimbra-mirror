@@ -286,7 +286,6 @@ function(serverName) {
 			return this._serverList.getArray()[i];
 	}
 	if(i == cnt) {
-		myServer = new ZaServer();
 		myServer.load("name", serverName);
 	}
 	return myServer;	
