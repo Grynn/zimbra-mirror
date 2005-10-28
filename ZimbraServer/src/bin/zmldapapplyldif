@@ -59,7 +59,7 @@ ldapmodify -a -c -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${sou
 ldapmodify -c -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${config_dir}/zimbra.ldif
 ldapmodify -c -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${source_config_dir}/zimbra_mimehandlers.ldif
 
-for i in "/opt/zimbra/lib/conf/*ldif"; do
+for i in `ls /opt/zimbra/lib/conf/*ldif`; do
     ${zimbra_home}/openldap/bin/ldapmodify -a -c -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f $i
 done
 
