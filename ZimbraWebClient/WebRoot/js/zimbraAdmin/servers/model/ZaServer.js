@@ -336,10 +336,13 @@ function(by, val, withConfig) {
 	elBy.setAttribute("by", _by);
 	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	this.initFromDom(resp.firstChild);
+	this.cos = this._app.getGlobalConfig();
+
 	if(this.attrs[ZaServer.A_zimbraMailboxServiceEnabled]) {
 		this.getMyVolumes();
 		this.getCurrentVolumes();
-		this.getHSMStatus();
+		if(this.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM])
+			this.getHSMStatus();
 	}
 }
 

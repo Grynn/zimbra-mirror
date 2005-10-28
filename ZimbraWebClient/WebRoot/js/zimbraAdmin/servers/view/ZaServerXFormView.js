@@ -86,7 +86,7 @@ function (entry) {
 	else
 		this._containedObject[ZaModel.currentTab] = entry[ZaModel.currentTab];
 		
-	this._containedObject.cos = this._app.getGlobalConfig();
+	this._containedObject.cos = entry.cos;
 	this._containedObject[ZaServer.A_showVolumeAndHSM] = entry[ZaServer.A_showVolumeAndHSM];
 
 	this._localXForm.setInstance(this._containedObject);	

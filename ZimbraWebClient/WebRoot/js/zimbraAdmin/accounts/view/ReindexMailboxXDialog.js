@@ -149,7 +149,6 @@ function(evt) {
 ReindexMailboxXDialog.prototype.getReindexStatus = 
 function () {
 	ZaAccount.parseReindexResponse(ZaAccount.getReindexStatus(this._containedObject.mbxId),this._containedObject);
-
 	if(this._containedObject.status == "running" || this._containedObject.status == "started") {
 		// schedule next poll
 		this._pollHandler = AjxTimedAction.scheduleAction(this.pollAction, this._containedObject.pollInterval);		
