@@ -411,7 +411,7 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 							  	/***/
 							]},
 							{ type: _GROUP_, numCols: 1,
-							  label: ZaMsg.NAD_IMAP_Options, labelCssStyle: "vertical-align:top",
+							  label: ZaMsg.NAD_IMAP_CleartextLoginEnabled, labelCssStyle: "vertical-align:top",
 							  items: [
 						      	{ ref: ZaServer.A_ImapCleartextLoginEnabled, type: _SUPER_CHECKBOX_,
 						      	  checkBoxLabel:ZaMsg.NAD_IMAP_Enabled,
@@ -419,7 +419,8 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 						      	  trueValue: "TRUE", falseValue: "FALSE",
 						      	  onChange: ZaServerXFormView.onFormFieldChanged,
 						      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
-						      	  label:null, anchorCssStyle:"width:200px;text-align:right;",
+						      	  label:null,
+						      	  anchorCssStyle:"width:200px;text-align:right;",
 						      	  relevantBehavior:_DISABLE_
 					      	    }							  
 							  ]
@@ -519,6 +520,19 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 					},
 					{type:_CASE_, relevant:"((instance[ZaModel.currentTab] == 6) && ZaServerXFormView.getMailboxEnabled.call(item))", 
 						items:[
+							{type:_GROUP_, numCols:4,
+								relevant:"instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM] && instance[ZaServer.A_showVolumeAndHSM]",
+								relevantBehavior:_HIDE_,
+								items: [
+									{ref:ZaServer.A_zimbraHsmAge, type:_SUPER_LIFETIME_, 
+										msgName:ZaMsg.NAD_HSM_Threshold,
+										label:ZaMsg.NAD_HSM_Threshold+":", 
+										resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+										labelLocation:_LEFT_, labelCssStyle:"width:190px;",
+										onChange:ZaTabView.onFormFieldChanged
+									}
+								]
+							},							
 							{type:_GROUP_, numCols:5,  
 								items: [
 									{width:"146px", type:_OUTPUT_, label:null, value:ZaMsg.NAD_VM_VolumeName},
@@ -590,7 +604,7 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 							}						
 						]
 					
-					},
+					}/*,
 					{type:_CASE_, relevant: "instance[ZaModel.currentTab] == 7 && instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM] && instance[ZaServer.A_showVolumeAndHSM]", 
 						numCols:2,
 						items: [
@@ -691,7 +705,7 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 							}						
 						]
 					
-					}
+					}*/
 				]
 			}	
 		]
