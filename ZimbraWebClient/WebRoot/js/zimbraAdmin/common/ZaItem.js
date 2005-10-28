@@ -124,6 +124,7 @@ function () {
 	//abstract
 }
 
+
 ZaItem.prototype.initFromDom =
 function(node) {
 	this.name = node.getAttribute("name");

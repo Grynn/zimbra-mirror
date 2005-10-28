@@ -558,3 +558,14 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 	font-style: bold;	
 	font-family: arial;
 }
+
+.progressbar {
+	width: 200px;
+	border: 1px solid white;
+	background-color: white;
+}
+
+.progressused {
+	height: 20px;
+	font-size: 20px; /* WEIRD IE QUIRK */
+}

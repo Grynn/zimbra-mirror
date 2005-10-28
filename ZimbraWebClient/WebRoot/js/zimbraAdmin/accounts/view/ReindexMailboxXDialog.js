@@ -146,9 +146,9 @@ function(evt) {
 	}
 }
 
-ReindexMailboxXDialog.prototype.getReindexStatus = 
-function () {
-	ZaAccount.parseReindexResponse(ZaAccount.getReindexStatus(this._containedObject.mbxId),this._containedObject);
+ReindexMailboxXDialog.prototype.getReindexStatusCallBack = 
+function (resp) {
+	ZaAccount.parseReindexResponse(resp,this._containedObject);
 	if(this._containedObject.status == "running" || this._containedObject.status == "started") {
 		// schedule next poll
 		this._pollHandler = AjxTimedAction.scheduleAction(this.pollAction, this._containedObject.pollInterval);		
@@ -159,13 +159,32 @@ function () {
 	}
 	
 	this._localXForm.setInstance(this._containedObject);
+	this._localXForm.refresh();	
+}
+
+ReindexMailboxXDialog.prototype.getReindexStatus = 
+function () {
+	var callback = new AjxCallback(this, this.getReindexStatusCallBack);
+	ZaAccount.getReindexStatus(this._containedObject.mbxId, callback);
+	//ZaAccount.parseReindexResponse(ZaAccount.getReindexStatus(this._containedObject.mbxId),this._containedObject);
+/*	if(this._containedObject.status == "running" || this._containedObject.status == "started") {
+		// schedule next poll
+		this._pollHandler = AjxTimedAction.scheduleAction(this.pollAction, this._containedObject.pollInterval);		
+	} else if(this._pollHandler) {
+		//stop polling
+		AjxTimedAction.cancelAction(this._pollHandler);
+		this._pollHandler = null;		
+	}
+	
+	this._localXForm.setInstance(this._containedObject);
 	this._localXForm.refresh();
+*/	
 }
 
 ReindexMailboxXDialog.prototype.getMyXForm = 
 function() {	
 	var xFormObject = {
-		numCols:3,
+		numCols:2, height:"300px",align:_CENTER_,cssStyle:"text-align:center",
 		items:[
 			{ type: _DWT_ALERT_,
 			  style: DwtAlert.WARNING,
@@ -182,35 +201,52 @@ function() {
 			  ref:"resultMsg",
 			  relevant:"instance.status == 'error'",
 			  relevantBehavior:_HIDE_,
-			  align:_CENTER_
+			  align:_CENTER_,
+			  colSpan:"*"
 			},	
 			{type:_TEXTAREA_,
 				relevant:"instance.status == 'error'", 
 				ref:"errorDetail", 
 				label:ZaMsg.FAILED_REINDEX_DETAILS,
 				relevantBehavior:_HIDE_,
-				height:"100px", width:"200px"
+				height:"100px", width:"200px",
+				colSpan:"*"
+			},
+			{type:_DWT_ALERT_, ref:"progressMsg",content: null,
+				relevant:"instance.status == 'running' || instance.status == 'started'",
+				colSpan:"*",
+				relevantBehavior:_HIDE_,
+ 				iconVisible: true,
+				align:_CENTER_,				
+				style: DwtAlert.INFORMATION
 			},
 			{type:_DWT_PROGRESS_BAR_, label:ZaMsg.ReindexMbx_Progress,
-				maxValue:null, maxValueRef:"numTotal", 
+				maxValue:null,
+				maxValueRef:"numTotal", 
 				ref:"numDone",
 				relevant:"instance.status == 'running' || instance.status == 'started'",
 				relevantBehavior:_HIDE_,
-				valign:_CENTER_
-			},
-			{type:_OUTPUT_, ref:"progressMsg",
-				relevant:"instance.status == 'running' || instance.status == 'started'"
-			},
-					
-			{type:_DWT_BUTTON_, width:"100px", 
-				onActivate:"ReindexMailboxXDialog.startReindexMailbox.call(this)", label:ZaMsg.NAD_ACC_Start_Reindexing, relevantBehavior:_DISABLE_, relevant:"instance.status != 'running' && instance.status != 'started'",
-				valign:_BOTTOM_
-			},
-			{type:_DWT_BUTTON_, width:"100px", 
-				onActivate:"ReindexMailboxXDialog.abortReindexMailbox.call(this)", label:ZaMsg.NAD_ACC_Abort_Reindexing, relevantBehavior:_DISABLE_, relevant:"instance.status == 'running' || instance.status == 'started'",
-				valign:_BOTTOM_				
-			},
-			{type:_SPACER_}
+				valign:_CENTER_,
+				wholeCssClass:"progressbar",
+				progressCssClass:"progressused"
+			},		
+			{type:_SPACER_, 
+				relevant:"instance.status != 'error'", 
+				height:"150px", width:"500px",colSpan:"*"
+			},			
+			{type:_GROUP_, colSpan:"*", numCols:5, width:"490px",cssStyle:"text-align:center", align:_CENTER_, items: [	
+				{type:_SPACER_, width:"100px", colSpan:1},
+				{type:_DWT_BUTTON_, 
+					onActivate:"ReindexMailboxXDialog.startReindexMailbox.call(this)", label:ZaMsg.NAD_ACC_Start_Reindexing, relevantBehavior:_DISABLE_, relevant:"instance.status != 'running' && instance.status != 'started'",
+					valign:_BOTTOM_,width:"100px"
+				},
+				{type:_SPACER_, width:"90px", colSpan:1},
+				{type:_DWT_BUTTON_, 
+					onActivate:"ReindexMailboxXDialog.abortReindexMailbox.call(this)", label:ZaMsg.NAD_ACC_Abort_Reindexing, relevantBehavior:_DISABLE_, relevant:"instance.status == 'running' || instance.status == 'started'",
+					valign:_BOTTOM_,width:"100px"				
+				},
+				{type:_SPACER_, width:"100px", colSpan:1}
+			]}
 		]		
 	}
 	return xFormObject;

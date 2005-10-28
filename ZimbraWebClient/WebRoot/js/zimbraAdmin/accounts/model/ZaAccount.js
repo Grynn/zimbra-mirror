@@ -539,7 +539,7 @@ function ZaReindexMailbox() {
 	this.numRemaining = 0;	
 	this.numTotal = 100;	
 	this.numDone = 0;	
-	this.progressMsg = ZaMsg.NAD_ACC_ReindexingNotStarted;
+	this.progressMsg = ZaMsg.NAD_ACC_ReindexingNotRunning;
 	this.mbxId = null;
 	this.resultMsg = null;
 	this.errorDetail = null;
@@ -547,14 +547,21 @@ function ZaReindexMailbox() {
 }
 
 ZaAccount.getReindexStatus = 
-function (mbxId) {
+function (mbxId, callback) {
 	var soapDoc = AjxSoapDoc.create("ReIndexRequest", "urn:zimbraAdmin", null);
 	soapDoc.getMethod().setAttribute("action", "status");
 	var attr = soapDoc.set("mbox", null);
 	attr.setAttribute("id", mbxId);
 	var resp = null;
 	try {
-		resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true);
+		if(callback) {
+			var asynCommand = new ZmCsfeAsynchCommand();
+			asynCommand.addInvokeListener(callback);
+			asynCommand.invoke(soapDoc, null, null, null, true);			
+			return;
+		} else {
+			resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true);
+		}
 	} catch (ex) {
 		if(ex.code == "service.NOT_IN_PROGRESS") {
 			resp = null;
@@ -608,25 +615,38 @@ function (arg, respObj) {
 	}
 		
 	if(arg instanceof AjxException || arg instanceof ZmCsfeException || arg instanceof AjxSoapException) {
-		respObj.resultMsg = String(ZaMsg.FAILED_REINDEX).replace("{0}", arg.code);
-		respObj.errorDetail = arg.detail;
-		respObj.status = "error";	
+		if(arg.code && arg.code == "service.NOT_IN_PROGRESS") {
+			respObj.status = null;
+			respObj.errorDetail = "";
+			respObj.resultMsg = "";	
+			respObj.progressMsg = ZaMsg.NAD_ACC_ReindexingNotRunning;
+		} else {
+			respObj.resultMsg = String(ZaMsg.FAILED_REINDEX).replace("{0}", arg.code);
+			respObj.errorDetail = arg.detail;
+			respObj.status = "error";	
+		}
 	} else {
-		status = arg.firstChild.getAttribute("status");
+		var node;
+		if(arg instanceof AjxSoapDoc) {
+			node = arg.getBody().firstChild;
+		} else {
+			node = arg.firstChild;
+		}
+		status = node.getAttribute("status");
 		respObj.status = status;
-		if(arg.firstChild.firstChild) {
-			respObj.numFailed = parseInt(arg.firstChild.firstChild.getAttribute("numFailed"));
-			respObj.numSucceeded = parseInt(arg.firstChild.firstChild.getAttribute("numSucceeded"));
-			respObj.numRemaining = parseInt(arg.firstChild.firstChild.getAttribute("numRemaining"));
+		if(node.firstChild) {
+			respObj.numFailed = parseInt(node.firstChild.getAttribute("numFailed"));
+			respObj.numSucceeded = parseInt(node.firstChild.getAttribute("numSucceeded"));
+			respObj.numRemaining = parseInt(node.firstChild.getAttribute("numRemaining"));
 			respObj.numTotal = respObj.numRemaining + respObj.numFailed + respObj.numSucceeded;
-			respObj.numDone  = respObj.numFailed + respObj.umSucceeded;	
+			respObj.numDone  = respObj.numFailed + respObj.numSucceeded;	
+			respObj.progressMsg = String(ZaMsg.NAD_ACC_ReindexingStatus).replace("{0}", respObj.numSucceeded).replace("{1}",respObj.numRemaining).replace("{2}", respObj.numFailed);
 			//temp fix 
 			if (respObj.numRemaining > 0)
 				respObj.status = "running";
 		}
 	}
 }
-
 
 ZaAccount.prototype.initFromDom =
 function(node) {
@@ -701,6 +721,7 @@ function() {
 	ZmCsfeCommand.invoke(soapDoc, null, null, myServer.id, true);	
 }
 
+
 ZaAccount.prototype.load = 
 function(by, val, withCos) {
 	var soapDoc = AjxSoapDoc.create("GetAccountRequest", "urn:zimbraAdmin", null);
@@ -711,7 +732,20 @@ function(by, val, withCos) {
 	}
 	var elBy = soapDoc.set("account", val);
 	elBy.setAttribute("by", by);
-	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+/*
+	var cmd = new ZmCsfeCommand();
+	var params = {"soapDoc":soapDoc, "useXml":false};
+	var resp = cmd.invoke(params);
+	//var resp = cmd.invoke(params).firstChild;
+*/
+/*
+	var cmd = new ZmCsfeCommand();
+	var params = {"soapDoc":soapDoc, "useXml":true, "returnXml":true};
+	var resp = cmd.invoke(params);
+	this.initFromDom(resp.getBody().firstChild.firstChild);
+*/	
+
+	var resp = ZmCsfeCommand.invoke(soapDoc, false, null, null, true).firstChild;	
 	this.attrs = new Object();
 	this.initFromDom(resp.firstChild);
 	

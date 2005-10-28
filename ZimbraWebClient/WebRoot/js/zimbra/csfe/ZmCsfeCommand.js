@@ -164,7 +164,11 @@ function(params) {
 			this._rpcId = AjxRpc.invoke(requestStr, uri, {"Content-Type": "application/soap+xml; charset=utf-8"}, rpcCallback);
 		} else {
 			var response = AjxRpc.invoke(requestStr, uri, {"Content-Type": "application/soap+xml; charset=utf-8"});
-			return this._getResponseData(response, false);
+			if(!params.returnXml) {
+				return this._getResponseData(response, false);
+			} else {
+				return response;
+			}
 		}
 	} catch (ex) {
 		if (!(ex instanceof ZmCsfeException || ex instanceof AjxSoapException || ex instanceof AjxException)) {

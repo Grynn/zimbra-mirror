@@ -3837,14 +3837,29 @@ Dwt_ProgressBar_XFormItem.prototype.constructWidget = function() {
 	var widget = new DwtProgressBar(form, null);
 	var maxvalue = this.getInheritedProperty("maxValue");
 	if(!maxvalue) {
-		var maxValueRef = this.getInheritedProperty("maxValueRef");
-		maxvalue = this.getModel().getInstanceValue(this.getInstance(), maxValueRef)
+		this.maxValueRef = this.getInheritedProperty("maxValueRef");
+		maxvalue = this.getModel().getInstanceValue(this.getInstance(), this.maxValueRef)
 	}
 	widget.setMaxValue(maxvalue);
+	
+	var progressCssClass = this.getInheritedProperty("progressCssClass");
+	if(progressCssClass) {
+		widget.setProgressCssClass(progressCssClass);
+	}
+	
+	var wholeCssClass = this.getInheritedProperty("wholeCssClass");
+	if(wholeCssClass) {
+		widget.setWholeCssClass(wholeCssClass);
+	}	
 	return widget;
 }
 
 Dwt_ProgressBar_XFormItem.prototype.updateWidget = function(newvalue) {
 	// nothing
+//	var maxValueRef = this.getInheritedProperty("maxValueRef");
+	if(this.maxValueRef) {
+		maxvalue = this.getModel().getInstanceValue(this.getInstance(), this.maxValueRef)
+		this.getWidget().setMaxValue(maxvalue);	
+	}
 	this.getWidget().setValue(newvalue);
 }
