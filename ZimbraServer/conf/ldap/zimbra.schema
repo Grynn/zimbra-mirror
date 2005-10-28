@@ -1067,8 +1067,7 @@ attributetype ( zimbraMailCatchAllAddress
 	DESC 'Address to catch all messages to specified domain'
 	EQUALITY caseIgnoreIA5Match
 	SUBSTR caseIgnoreSubstringsMatch
-	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} 
-	SINGLE-VALUE )
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
 
 attributetype ( zimbraMailCatchAllForwardingAddress
 	NAME 'zimbraMailCatchAllForwardingAddress'
