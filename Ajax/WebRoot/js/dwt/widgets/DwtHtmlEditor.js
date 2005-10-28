@@ -155,13 +155,17 @@ DwtHtmlEditor._KEY2CMDS = {
 
 DwtHtmlEditor.prototype.focus =
 function() {
-	this._getIframeWin().focus();
-	// Hack to fix IE focusing bug
-	if (AjxEnv.isIE) {
-		if (this._currInsPt) {
-			if (this._currInsPt.text.length <= 1)
-				this._currInsPt.collapse(false);
-			this._currInsPt.select();
+	if (this._mode == DwtHtmlEditor.TEXT) {
+		Dwt.getDomObj(this.getDocument(), this._textAreaId).focus();
+	} else {
+		this._getIframeWin().focus();
+		// Hack to fix IE focusing bug
+		if (AjxEnv.isIE) {
+			if (this._currInsPt) {
+				if (this._currInsPt.text.length <= 1)
+					this._currInsPt.collapse(false);
+				this._currInsPt.select();
+			}
 		}
 	}
 }
@@ -478,6 +482,11 @@ function() {
 	var iFrame = doc.createElement("iframe");
 	iFrame.id = this._iFrameId;
 	iFrame.className = "DwtHtmlEditorIFrame";
+	iFrame.setAttribute("border", "0", false);
+	iFrame.setAttribute("frameborder", "0", false);
+	iFrame.setAttribute("vspace", "0", false);
+// 	iFrame.setAttribute("marginwidth", "0", false);
+// 	iFrame.setAttribute("marginheight", "0", false);
 	if (AjxEnv.isIE && location.protocol == "https:")
 		iFrame.src = this._blankIframeSrc || "";
 	htmlEl.appendChild(iFrame);
