@@ -23,6 +23,14 @@
  * ***** END LICENSE BLOCK *****
  */
 
+/**
+* @class ReindexMailboxXDialog
+* @contructor ReindexMailboxXDialog
+* @author Greg Solovyev
+* @param parent
+* param w (width)
+* param h (height)
+**/
 function ReindexMailboxXDialog(parent,  app, w, h) {
 	if (arguments.length == 0) return;
 	DwtDialog.call(this, parent, null, ZaMsg.Reindex_Title, [DwtDialog.OK_BUTTON]);
@@ -100,6 +108,15 @@ function () {
 	}
 }
 
+ReindexMailboxXDialog.prototype.popdown = 
+function () {
+	if(this._pollHandler) {
+		//stop polling
+		AjxTimedAction.cancelAction(this._pollHandler);
+	}
+	DwtDialog.prototype.popdown.call(this);
+}
+
 ReindexMailboxXDialog.prototype.getObject = 
 function () {
 	return this._containedObject;
@@ -157,7 +174,7 @@ function(evt) {
 ReindexMailboxXDialog.prototype.getReindexStatusCallBack = 
 function (resp) {
 	ZaAccount.parseReindexResponse(resp,this._containedObject);
-	if(this._containedObject.status == "running" || this._containedObject.status == "started") {
+	if((this._containedObject.status == "running" || this._containedObject.status == "started") && this.isPoppedUp()) {
 		// schedule next poll
 		this._pollHandler = AjxTimedAction.scheduleAction(this.pollAction, this._containedObject.pollInterval);		
 	} else if(this._pollHandler) {
@@ -174,19 +191,7 @@ ReindexMailboxXDialog.prototype.getReindexStatus =
 function () {
 	var callback = new AjxCallback(this, this.getReindexStatusCallBack);
 	ZaAccount.getReindexStatus(this._containedObject.mbxId, callback);
-	//ZaAccount.parseReindexResponse(ZaAccount.getReindexStatus(this._containedObject.mbxId),this._containedObject);
-/*	if(this._containedObject.status == "running" || this._containedObject.status == "started") {
-		// schedule next poll
-		this._pollHandler = AjxTimedAction.scheduleAction(this.pollAction, this._containedObject.pollInterval);		
-	} else if(this._pollHandler) {
-		//stop polling
-		AjxTimedAction.cancelAction(this._pollHandler);
-		this._pollHandler = null;		
-	}
 	
-	this._localXForm.setInstance(this._containedObject);
-	this._localXForm.refresh();
-*/	
 }
 
 ReindexMailboxXDialog.prototype.getMyXForm = 

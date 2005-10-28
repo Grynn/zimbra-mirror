@@ -23,6 +23,14 @@
  * ***** END LICENSE BLOCK *****
  */
 
+/**
+* @class MoveAliasXDialog
+* @contructor MoveAliasXDialog
+* @author Greg Solovyev
+* @param parent
+* param app
+* param alias
+**/
 function MoveAliasXDialog(parent,  app, alias) {
 	if (arguments.length == 0) return;
 	

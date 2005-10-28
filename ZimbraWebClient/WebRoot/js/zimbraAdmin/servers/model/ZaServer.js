@@ -471,6 +471,20 @@ ZaServer.prototype.setCurrentVolume = function (id, type) {
 	var respNode = ZmCsfeCommand.invoke(soapDoc, false, null, this.id, true).firstChild;			
 }
 
+function ZaHSM() {
+	this[ZaServer.A_HSMstartDate] = null;
+	this[ZaServer.A_HSMendDate] = null;
+	this[ZaServer.A_HSMrunning] = false;			
+	this[ZaServer.A_HSMwasAborted] = false;
+	this[ZaServer.A_HSMaborting] = false;			
+	this[ZaServer.A_HSMerror] = null;						
+	this[ZaServer.A_HSMnumBlobsMoved] = 0;
+	this[ZaServer.A_HSMnumMailboxes] = 0;
+	this[ZaServer.A_HSMtotalMailboxes] = 0;
+	this[ZaServer.A_HSMthreshold] = 0;	
+	this[ZaServer.A_HSMremainingMailboxes] = 0;
+}
+
 ZaServer.prototype.getHSMStatus = function () {
 	if(!this.id)
 		return;
