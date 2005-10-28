@@ -558,7 +558,7 @@ function (mbxId, callback) {
 			var asynCommand = new ZmCsfeAsynchCommand();
 			asynCommand.addInvokeListener(callback);
 			asynCommand.invoke(soapDoc, null, null, null, true);			
-			return;
+			return asynCommand;
 		} else {
 			resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true);
 		}
@@ -596,7 +596,7 @@ function (mbxId) {
 	attr.setAttribute("id", mbxId);
 	var resp;
 	try {
-		resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+		resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true);
 	} catch (ex) {
 		resp = ex;
 	}
@@ -632,21 +632,28 @@ function (arg, respObj) {
 		} else {
 			node = arg.firstChild;
 		}
-		status = node.getAttribute("status");
+		var status = node.getAttribute("status");
 		respObj.status = status;
+		if(status == "cancelled") {
+			respObj.progressMsg = ZaMsg.NAD_ACC_ReindexingCancelled;
+		}		
 		if(node.firstChild) {
 			respObj.numFailed = parseInt(node.firstChild.getAttribute("numFailed"));
 			respObj.numSucceeded = parseInt(node.firstChild.getAttribute("numSucceeded"));
 			respObj.numRemaining = parseInt(node.firstChild.getAttribute("numRemaining"));
 			respObj.numTotal = respObj.numRemaining + respObj.numFailed + respObj.numSucceeded;
 			respObj.numDone  = respObj.numFailed + respObj.numSucceeded;	
-			if(status == "cancel") {
-				respObj.progressMsg = ZaMsg.NAD_ACC_ReindexingCancelled;
-			}
 			respObj.progressMsg = String(ZaMsg.NAD_ACC_ReindexingStatus).replace("{0}", respObj.numSucceeded).replace("{1}",respObj.numRemaining).replace("{2}", respObj.numFailed);
+			if(status == "cancelled") {
+				respObj.progressMsg = respObj.progressMsg + "<br>" + ZaMsg.NAD_ACC_ReindexingCancelled;
+			}			
+			if(respObj.numRemaining == 0) {
+				respObj.numDone = respObj.numTotal;
+			}
 			//temp fix 
-			if (respObj.numRemaining > 0)
+			/*if (respObj.numRemaining > 0)
 				respObj.status = "running";
+			*/
 		}
 	}
 }

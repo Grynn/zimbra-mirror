@@ -173,6 +173,18 @@ function (response) {
 	this._fireInvokeEvent(newEx);
 }
 
+/**
+* Cancels this request (which must be async).
+*/
+ZmCsfeAsynchCommand.prototype.cancel =
+function() {
+	if (!this._rpcId) return;
+	
+	var rpcRequestObj = AjxRpc.getRpcCtxt(this._rpcId);
+	if (rpcRequestObj)
+		rpcRequestObj.cancel();
+}
+
 ZmCsfeAsynchCommand.prototype.invoke = 
 function (soapDoc, noAuthTokenRequired, serverUri, targetServer, useXml) {
 	if (!noAuthTokenRequired) {
@@ -204,7 +216,7 @@ function (soapDoc, noAuthTokenRequired, serverUri, targetServer, useXml) {
 			: soapDoc.getXml().replace("soap=", "xmlns:soap=");
 			
 		this._st = new Date();
-		AjxRpc.invoke(requestStr, uri,  {"Content-Type": "application/soap+xml; charset=utf-8"}, new AjxCallback(this, ZmCsfeAsynchCommand.prototype.rpcCallback)); //asynchronous call returns null 
+		this._rpcId = AjxRpc.invoke(requestStr, uri,  {"Content-Type": "application/soap+xml; charset=utf-8"}, new AjxCallback(this, ZmCsfeAsynchCommand.prototype.rpcCallback)); //asynchronous call returns null 
 	} catch (ex) {
 		//JavaScript error, network error or unknown error may happen
 		var newEx = new ZmCsfeException();

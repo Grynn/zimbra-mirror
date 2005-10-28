@@ -135,7 +135,12 @@ ReindexMailboxXDialog.abortReindexMailbox =
 function(evt) {
 	try {
 		var instance = this.getInstance();
+		//abort outstanding status requests
+		if(this.getForm().parent.asynCommand)
+			this.getForm().parent.asynCommand.cancel();
+			
 		ZaAccount.parseReindexResponse(ZaAccount.abortReindexMailbox(instance.mbxId),instance);
+
 		if(instance.status == "running" || instance.status == "started") {
 			// schedule next poll
 			this.getForm().parent._pollHandler = AjxTimedAction.scheduleAction(this.getForm().parent.pollAction, instance.pollInterval);		
@@ -190,7 +195,7 @@ function (resp) {
 ReindexMailboxXDialog.prototype.getReindexStatus = 
 function () {
 	var callback = new AjxCallback(this, this.getReindexStatusCallBack);
-	ZaAccount.getReindexStatus(this._containedObject.mbxId, callback);
+	this.asynCommand = ZaAccount.getReindexStatus(this._containedObject.mbxId, callback);
 	
 }
 
