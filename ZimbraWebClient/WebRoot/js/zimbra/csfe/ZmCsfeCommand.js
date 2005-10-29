@@ -266,7 +266,9 @@ function(response, asyncMode) {
 
 	var fault = data.Body.Fault;
 	if (fault) {
-		var ex = new ZmCsfeException(fault.Reason.Text, fault.Detail.Error.Code, "ZmCsfeCommand.prototype.invoke", fault.Code.Value);
+		var trace = fault.Detail.Error.Trace;
+		var reasonText = fault.Reason.Text + (trace ? "\n"+trace : "");
+		var ex = new ZmCsfeException(reasonText, fault.Detail.Error.Code, "ZmCsfeCommand.prototype.invoke", fault.Code.Value);
 		DBG.dumpObj(AjxDebug.DBG1, ex);
 		if (asyncMode) {
 			result.set(ex, true);
