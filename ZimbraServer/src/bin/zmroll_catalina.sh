@@ -24,6 +24,10 @@
 # ***** END LICENSE BLOCK *****
 # 
 
+if [ ! -f /opt/zimbra/conf/localconfig.xml ]; then
+    exit 0
+fi
+
 DATE=`date +%Y%m%d%H%M`
 cp -f /opt/zimbra/tomcat/logs/catalina.out \
 	/opt/zimbra/tomcat/logs/catalina.out.$DATE

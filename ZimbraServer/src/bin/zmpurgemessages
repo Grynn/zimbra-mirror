@@ -45,6 +45,9 @@ use Soap;
 
 use Time::Local;
 
+# Exit if software-only node.
+exit(0) unless (-f '/opt/zimbra/conf/localconfig.xml');
+
 my $ACCTNS = "urn:zimbraAccount";
 my $MAILNS = "urn:zimbraMail";
 my $ADMINNS = "urn:zimbraAdmin";

@@ -28,6 +28,9 @@ use strict;
 use lib '/opt/zimbra/zimbramon/lib';
 use lib '/opt/zimbra/zimbramon/lib/Zimbra/Mon';
 
+# Exit if software-only node.
+exit(0) unless (-f '/opt/zimbra/conf/localconfig.xml');
+
 my $DEBUG=0;
 
 use DBI;

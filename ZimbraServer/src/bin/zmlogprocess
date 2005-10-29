@@ -33,6 +33,9 @@ use lib "/opt/zimbra/zimbramon/lib";
 use DBI;
 use Time::Local;
 
+# Exit if software-only node.
+exit(0) unless (-f '/opt/zimbra/conf/localconfig.xml');
+
 my $baseDir = "/opt/zimbra";
 
 my $NOW = time();  #timestamp for all processing
