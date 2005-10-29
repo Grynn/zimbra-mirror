@@ -21,7 +21,7 @@
   <Service name="Catalina">
     <!-- user services connector, no SSL -->
     <Connector port="7070"
-        enableLookups="false" redirectPort="443"
+        enableLookups="false" redirectPort="7443"
         maxThreads="10" minSpareThreads="10" maxSpareThreads="10"/>
     <!-- user services connector, SSL -->
     <Connector port="7443"
@@ -33,7 +33,7 @@
     <!-- admin services connector; requires SSL -->
     <Connector port="7071"
         enableLookups="false"
-        maxThreads="5" minSpareThreads="5" maxSpareThreads="5"
+        maxThreads="10" minSpareThreads="10" maxSpareThreads="10"
         scheme="https" secure="true"
         clientAuth="false" sslProtocol="TLS"
         keystoreFile="conf/keystore" keystorePass="zimbra"/>
