@@ -296,6 +296,12 @@ function(htmlElement, visible) {
 	htmlElement.style.visibility = visible ? "visible" : "hidden";
 };
 
+Dwt.setOpacity =
+function(htmlElement, opacity) {
+	if (AjxEnv.isIE) htmlElement.style.filter = "alpha(opacity="+opacity+")";
+	else htmlElement.style.opacity = opacity/100;
+};
+
 Dwt.getZIndex =
 function(htmlElement) {
 	return DwtCssStyle.getProperty(htmlElement, "z-index");
