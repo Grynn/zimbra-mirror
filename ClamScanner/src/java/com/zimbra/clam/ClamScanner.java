@@ -246,4 +246,8 @@ public class ClamScanner extends UploadScanner implements ZimbraExtension {
             }
         }
     }
+
+    public String getName() {
+        return "clamscanner";
+    }
 }

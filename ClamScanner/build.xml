@@ -9,10 +9,28 @@
 		<pathelement location="${src.java.dir}" />
 	</path>
 
-
 	<target name="build-init">
 		<mkdir dir="${build.classes.dir}" />
 	</target>
+
+
+	<property environment="env"/>
+	
+	<!-- set up dependency on ZimbraServer -->
+	<condition property="zimbraServer.dir" value="${env.ZIMBRASERVER_DIR}">
+	    <isset property="env.ZIMBRASERVER_DIR" />
+	</condition>	
+	<condition property="zimbraServer.dir" value="../ZimbraServer">
+	    <not><isset property="env.ZIMBRASERVER_DIR"/></not>
+	</condition>	
+
+	<path id="class.path">
+		<pathelement location="${build.classes.dir}" />
+		<pathelement location="${zimbraServer.dir}/build/classes"/>
+		<fileset dir="${zimbraServer.dir}/jars">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
 
 	<target name="compile" depends="build-init" description="Compiles the source code">
 		<javac destdir="${build.classes.dir}" debug="true" source="1.4" target="1.4" classpathref="class.path">
