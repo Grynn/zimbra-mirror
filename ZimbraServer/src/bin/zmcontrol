@@ -60,6 +60,15 @@ my %allservices = (
 
 my %GlobalOpts = ();
 
+my %DESC = (
+	"start" => "Start services",
+	"startup" => "Start services",
+	"stop" => "Stop services",
+	"shutdown" => "Stop services",
+	"maintenance" => "Toggle maintenance mode",
+	"status" => "Display service status",
+);
+
 my %COMMANDS = (
 	"start" => \&doStartup,
 	"startup" => \&doStartup,
@@ -224,7 +233,7 @@ sub usage {
 	print "\n";
 	print "\tCommand in:\n";
 	foreach ( sort keys %COMMANDS ) {
-		print "\t\t" . sprintf( "%-20s", $_ ) ."\n";
+		print "\t\t" . sprintf( "%-20s%30s", $_, $DESC{$_} ) ."\n";
 	}
 
 	print "\n";
