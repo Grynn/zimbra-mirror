@@ -50,6 +50,8 @@ if ($platform eq "MACOSX") {
 my $dt = `date "+%Y-%m-%d %H:%M:%S"`;
 chomp $dt;
 
+my $hostname;
+
 logStatus();
 
 logDiskUsage();
@@ -62,9 +64,12 @@ sub logStatus {
 	@status = <STATUS>;
 	close STATUS;
 	foreach my $s (@status) {
-		($s =~ /^Host/) && next;
+		if ($s =~ /^Host (.*)/) {
+			$hostname = $1;
+			next;
+		}
 		my ($service, $stat) = split ' ', $s;
-		Zimbra::Mon::Logger::Log( "info", "$dt, STATUS: $service: $stat" );
+		Zimbra::Mon::Logger::Log( "info", "$dt, STATUS: ${hostname}: $service: $stat" );
 	}
 }
 
@@ -79,6 +84,6 @@ sub logDiskUsage {
 		my @df = <DF>;
 		close DF;
 		my (undef, $total, undef, $avail) = split ' ', $df[0];
-		Zimbra::Mon::Logger::Log( "info", "$dt, DISK: dev: $dev, mp: $mp, tot: $total, avail: $avail" );
+		Zimbra::Mon::Logger::Log( "info", "$dt, DISK: ${hostname}: dev: $dev, mp: $mp, tot: $total, avail: $avail" );
 	}
 }

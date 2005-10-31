@@ -764,12 +764,13 @@ sub processZimbramon {
 	if (@$ary) {
 		foreach my $row (sort @$ary) {
 			my ($id, $dt, $host, $msg) = (@$row);
-			if ($msg =~ /info: ([^,]+), STATUS: (\S+): (Running|Stopped)\s*$/) {
+			if ($msg =~ /info: ([^,]+), STATUS: (\S+): (\S+): (Running|Stopped)\s*$/) {
 				my $tm = $1;
-				my $service = $2;
-				my $status = ($3 eq "Running")?1:0;
+				my $hostname = $2;
+				my $service = $3;
+				my $status = ($4 eq "Running")?1:0;
 				my $statement = "delete from service_status ".
-					"where server=\'".$host."\' and service=\'".$service."\'";
+					"where server=\'".$hostname."\' and service=\'".$service."\'";
 
 				sqlExec ($statement);
 
@@ -777,18 +778,19 @@ sub processZimbramon {
 					"(server, service, time, status) ".
 					"values (?,?,?,?)";
 
-				sqlExec ($statement, $host, $service, $tm, $status);
-			} elsif ($msg =~ /info: ([^,]+), DISK: dev: (\S+), mp: (\S+), tot: (\S+), avail: (\S+)\s*$/) {
+				sqlExec ($statement, $hostname, $service, $tm, $status);
+			} elsif ($msg =~ /info: ([^,]+), DISK: (\S+): dev: (\S+), mp: (\S+), tot: (\S+), avail: (\S+)\s*$/) {
 				my $tm = $1;
-				my $dev = $2;
-				my $mp = $3;
-				my $tot = $4;
-				my $avail = $5;
+				my $hostname = $2;
+				my $dev = $3;
+				my $mp = $4;
+				my $tot = $5;
+				my $avail = $6;
 				my $statement = "insert into disk_status ".
 					"(server, time, device, mount_point, total, available) ".
 					"values (?,?,?,?,?,?)";
 
-				sqlExec ($statement, $host, $tm, $dev, $mp, $tot, $avail);
+				sqlExec ($statement, $hostname, $tm, $dev, $mp, $tot, $avail);
 			}
 		}
 		$lastRowID = ${@$ary[$#$ary]}[0];
