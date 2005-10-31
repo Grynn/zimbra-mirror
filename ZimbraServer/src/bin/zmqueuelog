@@ -53,7 +53,7 @@ exit 0;
 
 sub logQueue {
 	my @status = ();
-	open STATUS, "/opt/zimbra/postfix/sbin/postqueue |" or die "Can't get status: $!";
+	open STATUS, "/opt/zimbra/postfix/sbin/postqueue -p |" or die "Can't get status: $!";
 	@status = <STATUS>;
 	close STATUS;
 	my $kb = 0;
