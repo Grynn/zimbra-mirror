@@ -548,6 +548,8 @@ sub incSqlTime {
 
 	my $sts = sqlTimeToTs($tm);
 
+	my $wasdst = (localtime($sts))[8];
+
 	if ($period eq "hour") {
 		$sts+=(60*60);
 	} elsif ($period eq "day") {
@@ -558,6 +560,11 @@ sub incSqlTime {
 		$sts+=(60*60*24*30);
 	} elsif ($period eq "year") {
 		$sts+=(60*60*24*365);
+	}
+
+	my $isdst = (localtime($sts))[8];
+	if ($wasdst && !$isdst) {
+		$sts+=((60*60)+1);
 	}
 
 	if ($period ne "hour") {
