@@ -34,7 +34,9 @@ ZaClusterStatus._clusters = {};
 ZaClusterStatus.getStatus = function() {
 	var soapDoc = AjxSoapDoc.create("GetClusterStatusRequest", "urn:zimbraAdmin", null);
 	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false).Body.GetClusterStatusResponse;
-	return new ZaCluster()._initFromDom(resp);
+	var s = new ZaCluster();
+	s._initFromDom(resp);
+	return s;
 };
 
 ZaClusterStatus.getCombinedStatus = function (serviceVector) {
@@ -44,10 +46,10 @@ ZaClusterStatus.getCombinedStatus = function (serviceVector) {
 };
 
 ZaClusterStatus.getServerList = function (refresh) {
-	if (refresh || ZaClusterStatus._servers == null) {
-		ZaClusterStatus.getStatus();
+	if (refresh || ZaClusterStatus._commonStatus == null) {
+		ZaClusterStatus._commonStatus = ZaClusterStatus.getStatus();
 	}
-	return ZaClusterStatus._serverArray;
+	return ZaClusterStatus._commonStatus.getAvailableServers();
 };
 
 
@@ -200,3 +202,6 @@ ZaCluster.prototype._isServerInUse = function (serverName) {
 	return (this._usedServers[serverName] != null)? true: false;
 };
 
+ZaCluster.prototype._getAvailableServers = function (serverName) {
+	return this._serverArray;
+};

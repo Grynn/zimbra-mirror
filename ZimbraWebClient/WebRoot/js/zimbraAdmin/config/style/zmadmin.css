@@ -495,7 +495,6 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 .ZaServicesListView,
 .ZaClusterServicesListView { 
   width:100%;
-  height:100%;
   background-color:rgb(255,255,255)
 }
 
@@ -536,7 +535,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 }
 
 .ZaClusterServicesListView .DwtListView-Rows{ 
-  height:auto;
+  height:100%;
   border-bottom: 1px solid #999999;  
 }
 .ZaClusterServicesListView .Row, .ZaClusterServicesListView .Row-selected {

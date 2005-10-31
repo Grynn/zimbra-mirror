@@ -42,7 +42,22 @@ ZaStatusView.prototype.constructor = ZaStatusView;
 ZaStatusView.prototype.toString = 
 function() {
 	return "ZaStatusView";
-}
+};
+
+ZaStatusView.prototype.setBounds = function (x, y, width, height) {
+	// 10 is the hieght of the spacer above the lists.
+	height = height - 10;
+	DwtControl.prototype.setBounds.call(this, x , y, width, height);
+	var clusterList = this._view.getItemsById('clusterList')[0];
+	if (clusterList != null && clusterList.widget != null) {
+		clusterList.widget.setSize(width,height);
+	};
+	var nonClusterList = this._view.getItemsById('nonClusterList')[0];
+	if (nonClusterList != null && nonClusterList.widget != null) {
+		nonClusterList.widget.setSize(width);
+	};
+	
+};
 
 ZaStatusView.prototype.set = function (statusVector, globalConfig) {
 	// TODO  -- make a more appealing data structure here.
