@@ -194,19 +194,22 @@ sub getLocalConfig {
 }
 
 sub getEnabledServices {
-	open (ZMPROV, "/opt/zimbra/bin/zmprov gs $localHostName |") or 
-		die "Can't contact ldap: $!";
-	my @lines = <ZMPROV>;
-	close ZMPROV;
+	if (open (ZMPROV, "/opt/zimbra/bin/zmprov gs $localHostName |")) {
+		my @lines = <ZMPROV>;
+		close ZMPROV;
 
-	my %s = ();
-	foreach (@lines) {
-		if (m/^zimbraServiceEnabled: (.*)/) {
-			#print "Found service: $1\n";
-			$s{$1} = $1;
+		my %s = ();
+		foreach (@lines) {
+			if (m/^zimbraServiceEnabled: (.*)/) {
+				#print "Found service: $1\n";
+				$s{$1} = $1;
+			}
 		}
+		return \%s;
+	} else {
+		print "Can't contact ldap!\n";
+		exit 1;
 	}
-	return \%s;
 }
 
 sub getLdapHost {
