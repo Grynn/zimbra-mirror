@@ -351,10 +351,10 @@ ZaDLController.prototype._search = function (searchQuery, pagenum, appendResults
 ZaDLController.prototype._getNewViewXForm = function () {
     if (this._newXform == null) {
 	this._newXform = {
-	    x_showBorder:1,
+	    X_showBorder:true,
 	    numCols:5, 
 	    cssClass:"ZaDLView", 
-	    tableCssStyle: "width:100%",
+	    tableCssStyle: "width:100%;",
 	    colSizes:[10,"auto", 20, "auto", 10],
 	    itemDefaults:{
 			_INPUT_: { cssClass:"inputBorder" },
@@ -364,6 +364,21 @@ ZaDLController.prototype._getNewViewXForm = function () {
 	    },	    
 	    items:[
 		   {type:_SPACER_, height:10, colSpan:"*" },
+
+			{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", 
+				items: [
+					{type:_GROUP_,	numCols:4,colSizes:["32px","350px","100px","250px"],
+						items: [
+							{type:_AJX_IMAGE_, src:"Group_32", label:null, rowSpan:2},
+							{type:_OUTPUT_, ref:"name", label:null,cssClass:"AdminTitle", rowSpan:2},
+							{type:_OUTPUT_, ref:"id", label:ZaMsg.NAD_ZimbraID},
+							{type:_OUTPUT_, ref:"zimbraMailStatus", label:ZaMsg.NAD_AccountStatus+":"}
+						]
+					}
+				],
+				cssStyle:"padding-top:5px; padding-bottom:5px"
+			},
+
 		   //{type:_OUTPUT_, colSpan:"*",cssClass:"ZmHead", value:ZaMsg.DLXV_Header, 
 		   //   cssStyle:"background-color:lightgray; margin-bottom:5px;"},
 				  // The colSizes are necessary for firefox to hold the position
@@ -474,7 +489,7 @@ ZaDLController.prototype._getNewViewXForm = function () {
 					 }
 					 ]
 			      },
-			      {type:_CELLSPACER_, width:10 }
+		   /*{type:_CELLSPACER_, width:10 }*/
 		   ]
 	}
     }
