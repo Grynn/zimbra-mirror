@@ -36,21 +36,6 @@ else
 	shift
 fi
 
-getHostInfo() {
-
-	H=`hostname --fqdn`
-
-	# $H=$H.zimbrasys.com
-
-	HH=`echo $H | grep '\.'`
-
-	if [ "x$HH" = "x" ]; then
-		echo "Error - fully qualified host name not found - please correct"
-		exit
-	fi
-
-}
-
 updateWebConfig() {
 
 	if [ $MODE = "http" ]; then
@@ -104,7 +89,5 @@ updateWebConfig() {
 	fi
 
 }
-
-getHostInfo
 
 updateWebConfig
