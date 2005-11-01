@@ -299,6 +299,24 @@ function(refresh) {
 	return this._serverList;	
 }
 
+ZaApp.prototype.getMailServers =
+function(refresh) {
+	if (refresh || this._serverList == null) {
+		this._serverList = ZaServer.getAll(this);
+	}
+	var resArray = new Array();
+	var tmpArray = this._serverList.getArray();
+	var cnt = tmpArray.length;
+	for(var i = 0; i < cnt; i++) {
+		if(tmpArray[i].attrs[ZaServer.A_zimbraMailboxServiceEnabled]) {
+			resArray.push(tmpArray[i]);
+		}
+	}
+	return resArray;
+}
+
+
+
 ZaApp.prototype.getServerListChoices =
 function(refresh) {
 	if (refresh || this._serverList == null) {

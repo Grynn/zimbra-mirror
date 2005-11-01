@@ -54,7 +54,7 @@ function(entry) {
 		this._containedObject.attrs[a] = entry.attrs[a];
 	}
 	this._containedObject[ZaCos.A_zimbraMailHostPoolInternal] = entry[ZaCos.A_zimbraMailHostPoolInternal];
-	this._containedObject[ZaCos.A_zimbraMailAllServersInternal] = this._app.getServerList().getArray();
+	this._containedObject[ZaCos.A_zimbraMailAllServersInternal] = this._app.getMailServers();
   	this._containedObject.globalConfig = this._app.getGlobalConfig();
   	
 	if(!entry[ZaModel.currentTab])
@@ -148,7 +148,8 @@ ZaCosXFormView.prototype.getMyXForm = function() {
 							{ sourceRef: ZaCos.A_zimbraMailAllServersInternal,
 					  	  	  ref: ZaCos.A_zimbraMailHostPoolInternal, type: _DWT_ADD_REMOVE_,
 							  listCssClass: "DwtAddRemoveListView ZaGlobalAttachExt", sorted: true,
-					  	  	  onChange: ZaTabView.onFormFieldChanged
+					  	  	  onChange: ZaTabView.onFormFieldChanged,
+					  	  	  forceUpdate:true
 					  	  	}
 						]
 					},
