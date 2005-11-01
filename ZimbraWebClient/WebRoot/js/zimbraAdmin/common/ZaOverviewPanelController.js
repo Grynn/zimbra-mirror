@@ -95,7 +95,7 @@ function (ev) {
 			ti1.setImage("COS");
 			ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._COS_VIEW);
 			ti1.setData(ZaOverviewPanelController._OBJ_ID, newCos.id);
-			this._cosMap[newCos.name] = ti1;
+			this._cosMap[newCos.id] = ti1;
 		}
 	}
 }
@@ -133,7 +133,7 @@ function (ev) {
 					}
 				}
 			} else if(detls instanceof ZaCos) {
-				if(this._cosMap[detls.name]) {
+				if(this._cosMap[detls.id]) {
 					this._cosTi._removeChild(this._cosMap[detls.id]);		
 				}
 			}
@@ -336,7 +336,7 @@ function() {
 				ti1.setImage("COS");
 				ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._COS_VIEW);
 				ti1.setData(ZaOverviewPanelController._OBJ_ID, cosList[ix].id);
-				this._cosMap[cosList[ix].name] = ti1;
+				this._cosMap[cosList[ix].id] = ti1;
 			}
 		}
 	} catch (ex) {
