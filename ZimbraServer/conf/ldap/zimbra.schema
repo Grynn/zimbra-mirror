@@ -261,6 +261,8 @@ objectIdentifier zimbraLmtpBindOnStartup ZimbraAttrType:270
 objectIdentifier zimbraPop3BindOnStartup ZimbraAttrType:271
 objectIdentifier zimbraPop3SSLBindOnStartup ZimbraAttrType:272
 objectIdentifier zimbraPrefCalendarNotifyDelegatedChanges ZimbraAttrType:273
+objectIdentifier zimbraPrefCalendarUseQuickAdd ZimbraAttrType:274
+objectIdentifier zimbraPrefCalendarInitialCheckedCalendars ZimbraAttrType:275
 
 #################################################################
 # object class OIDs
@@ -917,6 +919,20 @@ attributetype ( zimbraPrefCalendarFirstDayOfWeek
 	DESC 'first day of week to show in calendar (0=sunday, 6=saturday)'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )
+
+attributetype ( zimbraPrefCalendarUseQuickAdd
+	NAME 'zimbraPrefCalendarUseQuickAdd'
+	DESC 'whether or not use quick add dialog or go into full appt edit view'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( zimbraPrefCalendarInitialCheckedCalendars
+	NAME 'zimbraPrefCalendarInitialCheckedCalendars'
+	DESC 'comma-sep list of calendars that are initially checked'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{512}	
 	SINGLE-VALUE )
 
 attributetype ( zimbraPrefComposeFormat
@@ -2078,7 +2094,9 @@ objectclass ( zimbraAccount
 		zimbraPrefShowSearchString $
 		zimbraPrefCalendarFirstDayOfWeek $
 		zimbraPrefCalendarInitialView $
-                zimbraPrefCalendarNotifyDelegatedChanges $
+		zimbraPrefCalendarInitialCheckedCalendars $
+		zimbraPrefCalendarUseQuickAdd $		
+        zimbraPrefCalendarNotifyDelegatedChanges $
 		zimbraPrefContactsInitialView $
 		zimbraPrefDedupeMessagesSentToSelf $
 		zimbraPrefForwardIncludeOriginalText $
@@ -2218,7 +2236,8 @@ objectclass ( zimbraCOS
 		zimbraPrefShowSearchString $
 		zimbraPrefCalendarFirstDayOfWeek $
 		zimbraPrefCalendarInitialView $
-                zimbraPrefCalendarNotifyDelegatedChanges $
+		zimbraPrefCalendarUseQuickAdd $		
+        zimbraPrefCalendarNotifyDelegatedChanges $
 		zimbraPrefComposeInNewWindow $
 		zimbraPrefComposeFormat $
 		zimbraPrefContactsInitialView $
