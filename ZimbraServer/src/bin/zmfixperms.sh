@@ -39,7 +39,9 @@ chown -R zimbra:zimbra /opt/zimbra
 chown -R root:$ROOTGROUP /opt/zimbra/libexec
 chown -R root:$ROOTGROUP /opt/zimbra/bin
 chown -R root:$ROOTGROUP /opt/zimbra/lib
-chown -R root:$ROOTGROUP /opt/zimbra/jdk1.5.0_05
+if [ -d /opt/zimbra/jdk1.5.0_05 ]; then
+	chown -R root:$ROOTGROUP /opt/zimbra/jdk1.5.0_05
+fi
 
 chown root:$ROOTGROUP /opt/zimbra
 chmod 755 /opt/zimbra
