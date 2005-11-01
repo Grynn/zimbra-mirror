@@ -266,7 +266,9 @@ function (obj) {
 			//create new Volumes
 			cnt = tmpVolumeMap.length;
 			for(var i = 0; i < cnt; i++) {
-				if(!tmpVolumeMap[i][ZaServer.A_VolumeId]) {
+				//consider only new rows (no VolumeID)
+				//ignore empty rows, Bug 4425
+				if(!tmpVolumeMap[i][ZaServer.A_VolumeId] && tmpVolumeMap[i][ZaServer.A_VolumeName] && tmpVolumeMap[i][ZaServer.A_VolumeRootPath]) {
 					this._currentObject.createVolume(tmpVolumeMap[i]);			
 				}
 			}
