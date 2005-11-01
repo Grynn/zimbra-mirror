@@ -26,20 +26,6 @@
 # This may not be there, but we don't want to break the zimbramta package
 # if it's installed.
 
-chown -R zimbra:zimbra /opt/zimbra
-
-chown -R root:root /opt/zimbra/libexec
-chown -R root:root /opt/zimbra/bin
-chown -R root:root /opt/zimbra/lib
-chown -R root:root /opt/zimbra/jdk1.5.0_05
-
-chown root:root /opt/zimbra
-chmod 755 /opt/zimbra
-
-chmod 755 /opt/zimbra/libexec/*
-
-chmod 755 /opt/zimbra/bin/*
-
 ROOTGROUP=root
 
 PLAT=`/bin/sh /opt/zimbra/bin/get_plat_tag.sh`
@@ -47,6 +33,20 @@ PLAT=`/bin/sh /opt/zimbra/bin/get_plat_tag.sh`
 if [ "X$PLAT" = "XMACOSX" ]; then
 	ROOTGROUP=wheel
 fi
+
+chown -R zimbra:zimbra /opt/zimbra
+
+chown -R root:$ROOTGROUP /opt/zimbra/libexec
+chown -R root:$ROOTGROUP /opt/zimbra/bin
+chown -R root:$ROOTGROUP /opt/zimbra/lib
+chown -R root:$ROOTGROUP /opt/zimbra/jdk1.5.0_05
+
+chown root:$ROOTGROUP /opt/zimbra
+chmod 755 /opt/zimbra
+
+chmod 755 /opt/zimbra/libexec/*
+
+chmod 755 /opt/zimbra/bin/*
 
 if [ -L /opt/zimbra/postfix ]; then
 
