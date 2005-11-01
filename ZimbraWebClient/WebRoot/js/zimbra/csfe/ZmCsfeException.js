@@ -64,7 +64,7 @@ ZmCsfeException.define("SVC_AUTH_REQUIRED", "service.AUTH_REQUIRED");
 ZmCsfeException.define("SVC_FAILURE", "service.FAILURE", ZmMsg.errorService);
 ZmCsfeException.define("SVC_INVALID_REQUEST", "service.INVALID_REQUEST");
 ZmCsfeException.define("SVC_PARSE_ERROR", "service.PARSE_ERROR");
-ZmCsfeException.define("SVC_PERM_DENIED", "service.PERM_DENIED", ZmMSg.errorPermission);
+ZmCsfeException.define("SVC_PERM_DENIED", "service.PERM_DENIED", ZmMsg.errorPermission);
 ZmCsfeException.define("SVC_UNKNOWN_DOCUMENT", "service.UNKNOWN_DOCUMENT");
 ZmCsfeException.define("SVC_WRONG_HOST", "service.WRONG_HOST");
 
