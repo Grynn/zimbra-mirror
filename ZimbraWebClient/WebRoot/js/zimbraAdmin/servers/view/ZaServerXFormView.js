@@ -118,7 +118,10 @@ ZaServerXFormView.onVolumeRemove = function (index, form) {
 	if(!this.getInstance()[ZaServer.A_RemovedVolumes]) {
 		this.getInstance()[ZaServer.A_RemovedVolumes] = new Array();
 	}
-	this.getInstance()[ZaServer.A_RemovedVolumes].push(this.getModel().getInstanceValue(this.getInstance(), path)[index]);
+	//remove only existing volumes, ignore volumes that have not been saved yet
+	if(this.getModel().getInstanceValue(this.getInstance(), path)[index][ZaServer.A_VolumeId]) {
+		this.getInstance()[ZaServer.A_RemovedVolumes].push(this.getModel().getInstanceValue(this.getInstance(), path)[index]);
+	}
 	form.parent.setDirty(true);
 	this.getModel().removeRow(this.getInstance(), path, index);	
 }
