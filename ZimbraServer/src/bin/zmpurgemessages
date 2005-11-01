@@ -32,8 +32,6 @@ use lib "/opt/zimbra/zimbramon/lib/zimbrapm";
 use lib "/opt/zimbra/zimbramon/lib/zimbrapm/SOAP";
 use lib "/opt/zimbra/zimbramon/lib";
 
-use zimbralog;
-
 use Getopt::Std;
 
 use POSIX ":sys_wait_h";
@@ -41,7 +39,7 @@ use LWP::UserAgent;
 
 use Zimbra::SOAP::XmlElement;
 use Zimbra::SOAP::XmlDoc;
-use Soap;
+use Zimbra::SOAP::Soap;
 
 use Time::Local;
 
@@ -51,7 +49,7 @@ exit(0) unless (-f '/opt/zimbra/conf/localconfig.xml');
 my $ACCTNS = "urn:zimbraAccount";
 my $MAILNS = "urn:zimbraMail";
 my $ADMINNS = "urn:zimbraAdmin";
-my $SOAP = $Soap::Soap12;
+my $SOAP = $Zimbra::SOAP::Soap::Soap12;
 
 my $authToken;
 my $START;
