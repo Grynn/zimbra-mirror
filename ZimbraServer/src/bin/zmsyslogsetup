@@ -69,18 +69,16 @@ grep -v local0 /etc/syslog.conf > /tmp/syslog.zimbra
 
 if [ $TYPE = "remote" ]; then
       echo "local0.info                @$LOGHOST" >> /tmp/syslog.zimbra
-else
-      echo "local0.info                $logfile" >> /tmp/syslog.zimbra
-	  touch /var/log/zimbra.log
 fi
+echo "local0.info                $logfile" >> /tmp/syslog.zimbra
+touch /var/log/zimbra.log
 
 egrep -v "^mail.*($LOGHOST|zimbra)" /tmp/syslog.zimbra > /tmp/syslog.zimbra2
 
 if [ $TYPE = "remote" ]; then
       echo "mail.info                @$LOGHOST" >> /tmp/syslog.zimbra2
-else
-      echo "mail.info                $logfile" >> /tmp/syslog.zimbra2
 fi
+echo "mail.info                $logfile" >> /tmp/syslog.zimbra2
 
 cp -f /tmp/syslog.zimbra2 /etc/syslog.conf
 
