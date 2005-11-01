@@ -148,12 +148,16 @@ function(details) {
 */
 ZaServerController.prototype._setView =
 function(entry) {
+	entry.load();
 	if(!this._UICreated) {
 		this._view = new ZaServerXFormView(this._container, this._app);
 	  	//this._view = new ZaServerView(this._container, this._app);
    		this._ops = new Array();
    		this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.SERTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, ZaServerController.prototype._saveButtonListener)));
    		this._ops.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.SERTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, ZaServerController.prototype._closeButtonListener)));    	
+		if(entry.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]) {
+			this._ops.push(new ZaOperation(ZaOperation.HSM, ZaMsg.SRVTBB_HSM, ZaMsg.SRVTBB_HSM_tt, "ReadMailbox", "ReadMailboxDis", new AjxListener(this, this._hsmButtonListener)));										
+		}		
 		this._ops.push(new ZaOperation(ZaOperation.NONE));
 		this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));							
 
@@ -165,9 +169,15 @@ function(entry) {
 	    this._app.createView(ZaZimbraAdmin._SERVER_VIEW, elements);
 		this._UICreated = true;
 	} 
+	if(entry.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]) {	
+		if(entry[ZaServer.A_showVolumeAndHSM]) {
+			this._toolBar.enable([ZaOperation.HSM], true);
+		} else {
+			this._toolBar.enable([ZaOperation.HSM], false);
+		}
+	}
 	this._app.pushView(ZaZimbraAdmin._SERVER_VIEW);
 	this._view.setDirty(false);
-	entry.load();
 	this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
 	this._currentObject = entry;
 }
@@ -388,6 +398,27 @@ function(ev) {
 		//if exception thrown - don' go away
 		this._handleException(ex, "ZaServerController.prototype._saveButtonListener", null, false);
 	}
+}
+
+ZaServerController.prototype._hsmButtonListener = 
+function (ev) {
+	try {
+		if(!this._hsmWizard) {
+			this._hsmWizard = new HSMProgressXDialog(this._container, this._app);	
+			this._hsmWizard.registerCallback(DwtDialog.OK_BUTTON, ZaServerController.prototype._hsmOkButtonListener, this);
+		}
+		this._hsmWizard.setObject(this._view.getObject());
+		this._hsmWizard.popup();
+	} catch (ex) {
+		this._handleException(ex, "ZaServerController.prototype._hsmButtonListener", null, false);
+	}
+}
+
+ZaServerController.prototype._hsmOkButtonListener = 
+function () {
+	this._currentObject = this._hsmWizard.getObject();
+	this._view.setObject(this._currentObject);
+	this._hsmWizard.popdown();
 }
 
 /**

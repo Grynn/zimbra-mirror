@@ -24,14 +24,15 @@
  */
 
 /**
-* @class ReindexMailboxXDialog
-* @contructor ReindexMailboxXDialog
+* @class HSMProgressXDialog
+* @contructor HSMProgressXDialog
 * @author Greg Solovyev
 * @param parent
 * param w (width)
 * param h (height)
 **/
-function ReindexMailboxXDialog(parent,  app, w, h) {
+
+function HSMProgressXDialog(parent,  app, w, h) {
 	if (arguments.length == 0) return;
 	DwtDialog.call(this, parent, null, ZaMsg.Reindex_Title, [DwtDialog.OK_BUTTON]);
 	this._button[DwtDialog.OK_BUTTON].setToolTipContent(ZaMsg.Reindex_Mbx_tt);
@@ -60,23 +61,23 @@ function ReindexMailboxXDialog(parent,  app, w, h) {
 	this._pageDiv.style.overflow = "auto";
 
 	this._createContentHtml();
-	this.initForm(ZaSearch.myXModel,this.getMyXForm());
-	this._containedObject = new ZaReindexMailbox();
+	this.initForm(ZaServer.myXModel,this.getMyXForm());
+	this._containedObject = new ZaServer();
 	this.pollAction = new AjxTimedAction();
 	this.pollAction.obj = this;
-	this.pollAction.method = this.getReindexStatus;
+	this.pollAction.method = this.getHSMSessionStatus;
 	this._pollHandler = null;
 }
 
-ReindexMailboxXDialog.prototype = new DwtDialog;
-ReindexMailboxXDialog.prototype.constructor = ReindexMailboxXDialog;
+HSMProgressXDialog.prototype = new DwtDialog;
+HSMProgressXDialog.prototype.constructor = HSMProgressXDialog;
 
 /**
 * public method _initForm
 * @param xModelMetaData
 * @param xFormMetaData
 **/
-ReindexMailboxXDialog.prototype.initForm = 
+HSMProgressXDialog.prototype.initForm = 
 function (xModelMetaData, xFormMetaData) {
 	if(xModelMetaData == null || xFormMetaData == null)
 		throw new AjxException("Metadata for XForm and/or XModel are not defined", AjxException.INVALID_PARAM, "ZaXWizardDialog.prototype.initForm");
@@ -88,27 +89,27 @@ function (xModelMetaData, xFormMetaData) {
 	this._drawn = true;
 }
 
-ReindexMailboxXDialog.prototype.popup = 
+HSMProgressXDialog.prototype.popup = 
 function () {
 	DwtDialog.prototype.popup.call(this);
 	//get status
 	
-	if(this._containedObject.mbxId) {
-		ZaAccount.parseReindexResponse(ZaAccount.getReindexStatus(this._containedObject.mbxId),this._containedObject);
+	if(this._containedObject.id) {
+		ZaServer.parseHSMStatusResponse(ZaServer.getHSMStatus(this._containedObject.id),this._containedObject);
 	}
 		
 	this._localXForm.setInstance(this._containedObject);
 	this._localXForm.refresh();
-	if(this._containedObject.status == "running" || this._containedObject.status == "started") {
+	if(this._containedObject.hsm[ZaServer.A_HSMrunning]==1) {
 		// schedule next poll
-		this._pollHandler = AjxTimedAction.scheduleAction(this.pollAction, this._containedObject.pollInterval);		
+		this._pollHandler = AjxTimedAction.scheduleAction(this.pollAction, this._containedObject.hsm.pollInterval);		
 	} else if(this._pollHandler) {
 		//stop polling
 		AjxTimedAction.cancelAction(this._pollHandler);
 	}
 }
 
-ReindexMailboxXDialog.prototype.popdown = 
+HSMProgressXDialog.prototype.popdown = 
 function () {
 	if(this._pollHandler) {
 		//stop polling
@@ -117,7 +118,7 @@ function () {
 	DwtDialog.prototype.popdown.call(this);
 }
 
-ReindexMailboxXDialog.prototype.getObject = 
+HSMProgressXDialog.prototype.getObject = 
 function () {
 	return this._containedObject;
 }
@@ -125,25 +126,20 @@ function () {
 /**
 * @method setObject sets the object contained in the view
 **/
-ReindexMailboxXDialog.prototype.setObject =
+HSMProgressXDialog.prototype.setObject =
 function(entry) {
 	this._containedObject = entry;
 	this._localXForm.setInstance(this._containedObject);
 }
 
-ReindexMailboxXDialog.abortReindexMailbox = 
+HSMProgressXDialog.abortHSMSession = 
 function(evt) {
 	try {
 		var instance = this.getInstance();
-		//abort outstanding status requests
-		if(this.getForm().parent.asynCommand)
-			this.getForm().parent.asynCommand.cancel();
-			
-		ZaAccount.parseReindexResponse(ZaAccount.abortReindexMailbox(instance.mbxId),instance);
-
-		if(instance.status == "running" || instance.status == "started") {
+		ZaServer.parseHSMStatusResponse(ZaServer.abortHSMSession(instance.id),instance);
+		if(instance.hsm[ZaServer.A_HSMrunning]==1) {
 			// schedule next poll
-			this.getForm().parent._pollHandler = AjxTimedAction.scheduleAction(this.getForm().parent.pollAction, instance.pollInterval);		
+			this.getForm().parent._pollHandler = AjxTimedAction.scheduleAction(this.getForm().parent.pollAction, instance.hsm.pollInterval);		
 		} else if(this.getForm().parent._pollHandler) {
 			//stop polling
 			AjxTimedAction.cancelAction(this.getForm().parent._pollHandler);
@@ -151,35 +147,34 @@ function(evt) {
 		}		
 		this.getForm().refresh();
 	} catch (ex) {
-		this.getForm().getController()._handleException(ex, "ReindexMailboxXDialog.abortReindexMailbox", null, false);
+		this.getForm().getController()._handleException(ex, "HSMProgressXDialog.abortHSMSession", null, false);
 	}
 }
 
-ReindexMailboxXDialog.startReindexMailbox = 
+HSMProgressXDialog.startHSMSession = 
 function(evt) {
 	try {
 		var instance = this.getInstance();
-		ZaAccount.parseReindexResponse(ZaAccount.startReindexMailbox(instance.mbxId),instance);
+		ZaServer.parseHSMStatusResponse(ZaServer.startHSMSession(instance.id),instance);
+//		this.getForm().setInstance(instance);
 		this.getForm().refresh();
-	
-		if(instance.status == "running" || instance.status == "started") {
+		if(instance.hsm[ZaServer.A_HSMrunning]==1) {
 			// schedule next poll
-			this.getForm().parent._pollHandler = AjxTimedAction.scheduleAction(this.getForm().parent.pollAction, instance.pollInterval);		
+			this.getForm().parent._pollHandler = AjxTimedAction.scheduleAction(this.getForm().parent.pollAction, instance.hsm.pollInterval);		
 		} else if(this.getForm().parent._pollHandler) {
 			//stop polling
 			AjxTimedAction.cancelAction(this.getForm().parent._pollHandler);
 			this.getForm().parent._pollHandler = null;
-		}
-		//this.getForm().parent._pollHandler = AjxTimedAction.scheduleAction(this.getForm().parent.pollAction, instance.pollInterval);	
+		}	
 	} catch (ex) {
-		this.getForm().getController()._handleException(ex, "ReindexMailboxXDialog.startReindexMailbox", null, false);	
+		this.getForm().getController()._handleException(ex, "HSMProgressXDialog.startHSMSession", null, false);	
 	}
 }
 
-ReindexMailboxXDialog.prototype.getReindexStatusCallBack = 
+HSMProgressXDialog.prototype.getHSMSessionStatusCallBack = 
 function (resp) {
-	ZaAccount.parseReindexResponse(resp,this._containedObject);
-	if((this._containedObject.status == "running" || this._containedObject.status == "started") && this.isPoppedUp()) {
+	ZaServer.parseHSMStatusResponse(resp,this._containedObject);
+	if(this._containedObject.hsm[ZaServer.A_HSMrunning]==1) {
 		// schedule next poll
 		this._pollHandler = AjxTimedAction.scheduleAction(this.pollAction, this._containedObject.pollInterval);		
 	} else if(this._pollHandler) {
@@ -192,14 +187,23 @@ function (resp) {
 	this._localXForm.refresh();	
 }
 
-ReindexMailboxXDialog.prototype.getReindexStatus = 
+HSMProgressXDialog.prototype.getHSMSessionStatus = 
 function () {
-	var callback = new AjxCallback(this, this.getReindexStatusCallBack);
-	this.asynCommand = ZaAccount.getReindexStatus(this._containedObject.mbxId, callback);
-	
+	var callback = new AjxCallback(this, this.getHSMSessionStatusCallBack);
+	ZaServer.getHSMStatus(this._containedObject.id, callback);
 }
 
-ReindexMailboxXDialog.prototype.getMyXForm = 
+HSMProgressXDialog.haveError = function() {
+	var value = this.getModel().getInstanceValue(this.getInstance(),ZaServer.A_HSMerror);
+	return (value != null);
+}
+
+HSMProgressXDialog.haveErrorMsg = function() {
+	var value = this.getModel().getInstanceValue(this.getInstance(),"errorMsg");
+	return (value != null);
+}
+
+HSMProgressXDialog.prototype.getMyXForm = 
 function() {	
 	var xFormObject = {
 		numCols:2, height:"300px",align:_CENTER_,cssStyle:"text-align:center",
@@ -207,31 +211,13 @@ function() {
 			{ type: _DWT_ALERT_,
 			  style: DwtAlert.WARNING,
 			  iconVisible: true, 
-			  content: ZaMsg.WARNING_REINDEX,
+			  content: ZaMsg.Alert_HSM,
 			  colSpan:"*",
 			  align:_CENTER_,
 			  valign:_TOP_
 			},
-			{ type: _DWT_ALERT_,
-			  style: DwtAlert.CRITICAL,
-			  iconVisible: true, 
-			  content: null,
-			  ref:"resultMsg",
-			  relevant:"instance.status == 'error'",
-			  relevantBehavior:_HIDE_,
-			  align:_CENTER_,
-			  colSpan:"*"
-			},	
-			{type:_TEXTAREA_,
-				relevant:"instance.status == 'error'", 
-				ref:"errorDetail", 
-				label:ZaMsg.FAILED_REINDEX_DETAILS,
-				relevantBehavior:_HIDE_,
-				height:"100px", width:"200px",
-				colSpan:"*"
-			},
 			{type:_DWT_ALERT_, ref:"progressMsg",content: null,
-				//relevant:"instance.status == 'running' || instance.status == 'started'",
+				relevant:"instance.hsm[ZaServer.A_HSMtotalMailboxes]>0",
 				colSpan:"*",
 				relevantBehavior:_HIDE_,
  				iconVisible: true,
@@ -240,29 +226,53 @@ function() {
 			},
 			{type:_DWT_PROGRESS_BAR_, label:ZaMsg.ReindexMbx_Progress,
 				maxValue:null,
-				maxValueRef:"numTotal", 
-				ref:"numDone",
-				//relevant:"instance.status == 'running' || instance.status == 'started'",
+				maxValueRef:ZaServer.A_HSMtotalMailboxes, 
+				ref:ZaServer.A_HSMnumMailboxes,
+				relevant:"instance.hsm[ZaServer.A_HSMtotalMailboxes]>0",
 				relevantBehavior:_HIDE_,
 				valign:_CENTER_,
 				align:_CENTER_,	
 				wholeCssClass:"progressbar",
 				progressCssClass:"progressused"
 			},		
-			{type:_SPACER_, 
-				relevant:"instance.status != 'error'", 
-				height:"150px", width:"490px",colSpan:"*"
+			{ type: _DWT_ALERT_,
+			  style: DwtAlert.CRITICAL,
+			  iconVisible: true, 
+			  content: null,
+			  ref:ZaServer.A_HSMerror, 			 
+			  relevant:"HSMProgressXDialog.haveError.call(item)",
+			  //relevant:"instance.hsm[ZaServer.A_HSMerror]", 
+			  relevantBehavior:_HIDE_,
+			  align:_CENTER_,
+			  colSpan:"*"
+			},	
+			{type:_TEXTAREA_,
+				ref:"errorMsg",
+				relevant:"HSMProgressXDialog.haveErrorMsg.call(item)",
+				label:ZaMsg.FAILED_HSM_DETAILS,
+				relevantBehavior:_HIDE_,
+				height:"100px", width:"200px",
+				colSpan:"*"
 			},			
+			{type:_SPACER_, 
+				relevant:"!instance.hsm.errorMsg", 
+				height:"75px", width:"490px",colSpan:"*"
+			},			
+			{type:_SPACER_, 
+				relevant:"!instance.hsm[ZaServer.A_HSMerror]", 
+				height:"75px", width:"490px",colSpan:"*"
+			},			
+			
 			{type:_GROUP_, colSpan:"*", numCols:5, width:"490px",cssStyle:"text-align:center", align:_CENTER_, items: [	
 				{type:_SPACER_, width:"100px", colSpan:1},
 				{type:_DWT_BUTTON_, 
-					onActivate:"ReindexMailboxXDialog.startReindexMailbox.call(this)", label:ZaMsg.NAD_ACC_Start_Reindexing, relevantBehavior:_DISABLE_, relevant:"instance.status != 'running' && instance.status != 'started'",
-					valign:_BOTTOM_,width:"100px"
+					onActivate:"HSMProgressXDialog.startHSMSession.call(this)", label:ZaMsg.NAD_HSM_StartHsm, relevantBehavior:_DISABLE_, relevant:"instance.hsm[ZaServer.A_HSMrunning]==0",
+					valign:_BOTTOM_,width:"110px"
 				},
-				{type:_SPACER_, width:"90px", colSpan:1},
+				{type:_SPACER_, width:"70px", colSpan:1},
 				{type:_DWT_BUTTON_, 
-					onActivate:"ReindexMailboxXDialog.abortReindexMailbox.call(this)", label:ZaMsg.NAD_ACC_Abort_Reindexing, relevantBehavior:_DISABLE_, relevant:"instance.status == 'running' || instance.status == 'started'",
-					valign:_BOTTOM_,width:"100px"				
+					onActivate:"HSMProgressXDialog.abortHSMSession.call(this)", label:ZaMsg.NAD_HSM_AbortHsm, relevantBehavior:_DISABLE_, relevant:"instance.hsm[ZaServer.A_HSMrunning]==1",
+					valign:_BOTTOM_,width:"110px"				
 				},
 				{type:_SPACER_, width:"100px", colSpan:1}
 			]}
@@ -271,7 +281,7 @@ function() {
 	return xFormObject;
 }
 
-ReindexMailboxXDialog.prototype._createContentHtml =
+HSMProgressXDialog.prototype._createContentHtml =
 function () {
 
 	this._table = this.getDocument().createElement("table");
@@ -303,7 +313,7 @@ function () {
 * Child elements are added to this control in the _createHTML method.
 * @param child
 **/
-ReindexMailboxXDialog.prototype._addChild =
+HSMProgressXDialog.prototype._addChild =
 function(child) {
 	this._children.add(child);
 }

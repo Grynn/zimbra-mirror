@@ -23,11 +23,11 @@
  * ***** END LICENSE BLOCK *****
  */
 
-function ZaSearchToolBar(parent, posStyle) {
+function ZaSearchToolBar(parent, posStyle, app) {
 
 	ZaToolBar.call(this, parent, null, posStyle, "SearchToolBar");
-
-	this._searchField = new ZaSearchField(this, "SearchTBSearchField", 48);
+	this._app = app;
+	this._searchField = new ZaSearchField(this, "SearchTBSearchField", 48, null, this._app);
 //	var h1 = this._searchField.getSize().y;
 		
 	//this.setSize(DwtControl.DEFAULT, Math.max(this._searchField.getSize().y, this.computeHeight()));

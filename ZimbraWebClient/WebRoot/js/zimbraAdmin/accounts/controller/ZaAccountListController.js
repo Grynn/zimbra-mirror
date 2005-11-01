@@ -193,7 +193,7 @@ function () {
 	    this._searchPanel = new DwtComposite(this._app.getAppCtxt().getShell(), "SearchPanel", DwtControl.ABSOLUTE_STYLE);
 	    
 		// Create search toolbar and setup browse tool bar button handlers
-		this._searchToolBar = new ZaSearchToolBar(this._searchPanel);
+		this._searchToolBar = new ZaSearchToolBar(this._searchPanel, null, this._app);
 	    
 		// Setup search field handler
 		this._searchField = this._searchToolBar.getSearchField();

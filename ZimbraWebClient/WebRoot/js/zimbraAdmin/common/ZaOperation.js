@@ -77,3 +77,4 @@ ZaOperation.MOVE_ALIAS = 16;
 ZaOperation.NEW_MENU = 17;
 ZaOperation.HELP = 18;
 ZaOperation.REINDEX_MAILBOX = 19;
+ZaOperation.HSM = 20;

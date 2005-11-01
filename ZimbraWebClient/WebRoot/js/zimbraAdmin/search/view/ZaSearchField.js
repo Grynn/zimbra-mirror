@@ -23,12 +23,13 @@
  * ***** END LICENSE BLOCK *****
  */
 
-function ZaSearchField(parent, className, size, posStyle) {
+function ZaSearchField(parent, className, size, posStyle, app) {
 
 	DwtComposite.call(this, parent, className, posStyle);
 	this._containedObject = new ZaSearch();
 	this._initForm(ZaSearch.myXModel,this._getMyXForm());
 	this._localXForm.setInstance(this._containedObject);
+	this._app = app;
 }
 
 ZaSearchField.prototype = new DwtComposite;
@@ -58,22 +59,13 @@ function() {
 	return this._containedObject;
 }
 
-/*
-ZaSearchField.prototype._createHtml =
-function(size, fieldId, buttonColId,filterAccountsId,filterAliasesId, filterDLId) {
-	return "<table cellpadding='0' cellspacing='0' border='0' style='padding:2px;'>" +
-		"<tr valign='middle'>" +
-			"<td valign='middle' nowrap><input type='text' nowrap size='" + size + "' id='" + fieldId + "' class='Field'/></td>" + 
-			"<td valign='middle' style='padding-left:2px;padding-right:2px;' id='" + buttonColId + "'></td>" +
-			"<td valign='middle' nowrap>&nbsp;&nbsp;&nbsp;&nbsp;" + ZaMsg.Filter + ":&nbsp<input type='checkbox' id='" + filterAccountsId + "' class='Field'/> Accounts</td>" + 
-			"<td valign='middle' nowrap><input type='checkbox' id='" + filterAliasesId + "' class='Field'/> Aliases</td>" + 			
-			"<td valign='middle' nowrap><input type='checkbox' id='" + filterDLId + "' class='Field'/> Distribution Lists</td>" + 			
-		"</tr>" + 
-	"</table>";
-}
-*/
+
 ZaSearchField.prototype.invokeCallback =
 function() {
+	if (this._containedObject[ZaSearch.A_query].indexOf("$set:") == 0) {
+		this._app.getAppCtxt().getClientCmdHdlr().execute((this._containedObject[ZaSearch.A_query].substr(5)).split(" "));
+		return;
+	}
 //	if (this._searchField.value.search(ZaSearchField.UNICODE_CHAR_		return;\
 	var objList = new Array();
 	if(this._containedObject[ZaSearch.A_fAccounts] == "TRUE") {

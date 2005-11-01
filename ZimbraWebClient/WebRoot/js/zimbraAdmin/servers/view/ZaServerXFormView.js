@@ -51,7 +51,14 @@ function (entry) {
 	this.entry = entry;
 	this._containedObject = new Object();
 	this._containedObject.attrs = new Object();
-
+	
+	for(var a in entry) {
+		if(typeof(entry[a]) == "object" || typeof(entry[a]) == "array" || entry[a] instanceof Array) {
+			continue;
+		}
+		this._containedObject[a] = entry[a];
+	}
+	
 	for (var a in entry.attrs) {
 		this._containedObject.attrs[a] = entry.attrs[a];
 	}
@@ -138,39 +145,9 @@ ZaServerXFormView.makeCurrentHandler = function(ev) {
 	form.parent.setDirty(true);
 }
 
-ZaServerXFormView.runHsm = function(ev) {
-	form = this.getForm();
-	form.parent.entry.runHSM();
-	this.getInstance().hsm[ZaServer.A_HSMrunning] = true;
-	//form.parent.entry.getHSMStatus();
-//	var instance = this.getInstance();
-/*	for (var a in form.parent.entry.hsm) {
-		instance.hsm[a] = form.parent.entry.hsm[a];
-	}
-*/	
-	form.refresh();
-}
 
-ZaServerXFormView.refreshHsm = function(ev) {
-	form = this.getForm();
-	form.parent.entry.getHSMStatus();
-	var instance = this.getInstance();
-	for (var a in form.parent.entry.hsm) {
-		instance.hsm[a] = form.parent.entry.hsm[a];
-	}
-	form.refresh();
-}
 
-ZaServerXFormView.abortHsm = function(ev) {
-	form = this.getForm();
-	form.parent.entry.abortHSM();
-	form.parent.entry.getHSMStatus();
-	var instance = this.getInstance();
-	for (var a in form.parent.entry.hsm) {
-		instance.hsm[a] = form.parent.entry.hsm[a];
-	}
-	form.refresh();
-}
+
 
 ZaServerXFormView.getTLSEnabled = function () {
 	var value = this.getModel().getInstanceValue(this.getInstance(),ZaServer.A_zimbraMtaAuthEnabled);
@@ -210,7 +187,6 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 				cssStyle:"padding-top:5px; padding-bottom:5px"
 			},
 			{type:_TAB_BAR_, ref:ZaModel.currentTab,
-				relevant:"!instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]",
 				relevantBehavior:_HIDE_,
 				containerCssStyle: "padding-top:0px",
 				choices:[
@@ -223,7 +199,8 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 				],
 				cssClass:"ZaTabBar"
 			},
-			{type:_TAB_BAR_, ref:ZaModel.currentTab,
+			
+			/*{type:_TAB_BAR_, ref:ZaModel.currentTab,
 				relevant:"instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]",
 				relevantBehavior:_HIDE_,
 				containerCssStyle: "padding-top:0px",
@@ -237,7 +214,7 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 					{value:7, label:ZaMsg.NAD_Tab_HSM}					
 				],
 				cssClass:"ZaTabBar"
-			},
+			},*/
 			{type:_SWITCH_, items:[
 					{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 1", 
 						items:[
@@ -520,7 +497,7 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 					},
 					{type:_CASE_, relevant:"((instance[ZaModel.currentTab] == 6) && ZaServerXFormView.getMailboxEnabled.call(item))", 
 						items:[
-							{type:_GROUP_, numCols:4,
+							{type:_GROUP_, numCols:3,
 								relevant:"instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM] && instance[ZaServer.A_showVolumeAndHSM]",
 								relevantBehavior:_HIDE_,
 								items: [
@@ -530,9 +507,41 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 										resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
 										labelLocation:_LEFT_, labelCssStyle:"width:190px;",
 										onChange:ZaTabView.onFormFieldChanged
+									},
+									{type:_SPACER_, colSpan:"*"},	
+									{type:_DWT_ALERT_, ref:"progressMsg",content: null,
+										relevant:"instance.hsm.progressMsg!=null",
+										colSpan:"*",
+										relevantBehavior:_HIDE_,
+						 				iconVisible: true,
+										align:_CENTER_,				
+										style: DwtAlert.INFORMATION
+									}									
+								/*	{type:_SPACER_, colSpan:"*"},														
+									{type:_OUTPUT_, label:ZaMsg.NAD_HSM_LastStart,  labelLocation:_LEFT_,
+										ref:ZaServer.A_HSMstartDate,
+										getDisplayValue:function(val) {
+											if(val)
+												return AjxBuffer.concat(AjxDateUtil.simpleComputeDateStr(new Date(parseInt(val))),"&nbsp;",
+																					AjxDateUtil.computeTimeString(new Date(parseInt(val))));									
+											else
+												return "";
+										},labelCssStyle:"width:190px;"
+									},
+									{type:_OUTPUT_, label:ZaMsg.NAD_HSM_LastEnd,  labelLocation:_LEFT_,
+										ref:ZaServer.A_HSMendDate,
+										getDisplayValue:function(val) {
+											if(val)								
+												return AjxBuffer.concat(AjxDateUtil.simpleComputeDateStr(new Date(parseInt(val))),"&nbsp;",
+																					AjxDateUtil.computeTimeString(new Date(parseInt(val))));									
+											else
+												return "";
+										},labelCssStyle:"width:190px;"
 									}
+									*/
 								]
-							},							
+							},		
+							{type:_SPACER_, colSpan:"*"},					
 							{type:_GROUP_, numCols:5,  
 								items: [
 									{width:"146px", type:_OUTPUT_, label:null, value:ZaMsg.NAD_VM_VolumeName},
