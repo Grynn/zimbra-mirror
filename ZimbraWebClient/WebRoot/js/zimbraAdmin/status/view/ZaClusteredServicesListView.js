@@ -34,9 +34,11 @@ ZaClusteredServicesListView.prototype.constructor = ZaClusteredServicesListView;
 ZaClusteredServicesListView.prototype._getHeaderList = function() {
 
 	var headerList = [
-					  new ZaListHeaderItem(ZaStatus.PRFX_Server, ZaMsg.CSLV_col_prfx_clusterServerName, null, 175, false, null, true, true),
+					  new ZaListHeaderItem(ZaStatus.PRFX_Server, ZaMsg.CSLV_col_prfx_clusterServerName, null, 185, false, null,
+										   true, true),
 
-					  new ZaListHeaderItem("ZaStatus.physicalServer",ZaMsg.CSLV_col_prfx_physicalServer, null, 150, true, "physicalServerName", true, true),
+					  new ZaListHeaderItem("ZaStatus.physicalServer",ZaMsg.CSLV_col_prfx_physicalServer, null, 150, true, 
+										   "physicalServerName", true, true),
 
 					  new ZaListHeaderItem("ZaStatus.clusterName", ZaMsg.CSLV_col_prfx_clusterName, null, 80, false, null, true, true),
 
@@ -103,9 +105,9 @@ ZaClusteredServicesListView.prototype._writeElement = function (html, idx, item,
 				html[idx++] = "<tr>";
 
 				html[idx++] = "<td align=left width=20>"
-				if(item.clusterStatus == "started") {
+				if(item.nodeStatus == 1) {
 					html[idx++] = AjxImg.getImageHtml("Check");
-				} else if (item.clusterStatus == "stopped"){
+				} else if (item.nodeStatus == 0){
 					html[idx++] = AjxImg.getImageHtml("Cancel");
 				} else {
 					html[idx++] = "&nbsp;";
@@ -135,6 +137,11 @@ ZaClusteredServicesListView.prototype._writeElement = function (html, idx, item,
 				html[idx++] = "<td>";
 				if (item.serverName != ZaClusterStatus.NOT_APPLICABLE) {
 					html[idx++] = AjxStringUtil.htmlEncode(item.serverName);
+					if (item.clusterStatus != null) {
+						html[idx++] = "&nbsp;(";
+						html[idx++] = item.clusterStatus;
+						html[idx++] = ")";
+					}
 				} else {
 					html[idx++] = AjxStringUtil.htmlEncode(item.physicalServerName);
 				}

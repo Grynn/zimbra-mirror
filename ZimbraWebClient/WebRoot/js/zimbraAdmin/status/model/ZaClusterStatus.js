@@ -86,6 +86,7 @@ ZaClusterStatus.mergeWithZimbraServiceStatus = function (statusVector) {
 			s = new ZaServerStatus(arr[i].name);
 			s.clustered = true;
 			s.serverName = arr[i].name;
+			s.nodeStatus = cluster._servers[arr[i].owner].status;
 			s.clusterStatus = arr[i].status;
 			s.physicalServerName = arr[i].owner;
 			s.clusterName = cluster.name;
@@ -117,7 +118,8 @@ ZaClusterStatus.mergeWithZimbraServiceStatus = function (statusVector) {
 		// used, and add them to the statusVector.
 		for (sN in cluster._servers) {
 			if (!cluster._isServerInUse(sN)){
-				var st = new ZaServerStatus(cluster._servers[sN].name, true, "stopped","(not assigned)");
+				var server = cluster._servers[sN];
+				var st = new ZaServerStatus(server.name, true, server.status, null, "(not assigned)");
 				clusterStatusVector.add(st);
 				vectorNeedsSort = true;
 			}
@@ -140,9 +142,10 @@ ZaClusterStatus._isServerInUse = function (serverName) {
 };
 
 ZaClusterStatus.NOT_APPLICABLE = "N/A";
-function ZaServerStatus(physicalServerName, clustered, clusterStatus, name, serviceArr) {
+function ZaServerStatus(physicalServerName, clustered, nodeStatus, clusterStatus, name, serviceArr) {
 	this.serverName = (name !== (void 0))? name: ZaClusterStatus.NOT_APPLICABLE;
 	this.clustered = clustered;
+	this.nodeStatus = nodeStatus;
 	this.clusterStatus = clusterStatus;
 	this.physicalServerName = (physicalServerName !== (void 0))? physicalServerName: ZaClusterStatus.NOT_APPLICABLE;
 	this.services = [];
