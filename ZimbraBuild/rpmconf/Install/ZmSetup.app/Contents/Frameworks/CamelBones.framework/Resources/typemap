@@ -1,0 +1,73 @@
+TYPEMAP
+
+float       T_FLOAT
+const char * T_PV
+
+id          ID_PTR
+
+NSRectEdge  T_IV
+NSRectEdge* T_PTR
+
+NSColor**   T_PTR
+
+SEL         T_SELTYPE
+Class       T_CLASSTYPE
+
+OSType      T_OSTYPE
+NSPoint     T_NSPOINT
+NSRange     T_NSRANGE
+NSRect      T_NSRECT
+NSSize      T_NSSIZE
+
+OSType*     T_PTR
+NSPoint*    T_PTR
+NSRange*    T_PTR
+NSRect*     T_PTR
+NSSize*     T_PTR
+
+float*      T_PTR
+int*        T_PTR
+
+BOOL        T_BOOL
+
+INPUT
+
+ID_PTR
+    $var = CBDerefSVtoID($arg);
+
+T_OSTYPE
+    $var = CBOSTypeFromSV($arg);
+T_NSPOINT
+    $var = CBPointFromSV($arg);
+T_NSRANGE
+    $var = CBRangeFromSV($arg);
+T_NSRECT
+    $var = CBRectFromSV($arg);
+T_NSSIZE
+    $var = CBSizeFromSV($arg);
+    
+T_SELTYPE
+    $var = CBSelectorFromSV($arg);
+T_CLASSTYPE
+    $var = CBClassFromSV($arg);
+
+OUTPUT
+
+ID_PTR
+    $arg = CBDerefIDtoSV($var);
+
+T_OSTYPE
+    $arg = CBOSTypeToSV($var);
+T_NSPOINT
+    $arg = CBPointToSV($var);
+T_NSRANGE
+    $arg = CBRangeToSV($var);
+T_NSRECT
+    $arg = CBRectToSV($var);
+T_NSSIZE
+    $arg = CBSizeToSV($var);
+    
+T_SELTYPE
+    $arg = CBSVFromSelector($var);
+T_CLASSTYPE
+    $arg = CBSVFromClass($var);    
