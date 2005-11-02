@@ -188,23 +188,25 @@ AjxEnv.parseUA(navigator.userAgent);
 // COMPATIBILITY
 
 // Safari doesn't support string.replace(/regexp/, function);
-if (false && AjxEnv.isSafari) {
-	String.prototype._ZmOldReplace = String.prototype.replace;
-	String.prototype.replace = function(re, val) {
-		if (typeof val != "function")
-			return this._ZmOldReplace(re, val);
-		else {
-			// TODO: investigate if it's possible to use the array.join approach
-			var str = this.slice(0), v, l, a;
-			while (a = re.exec(str)) {
-				v = val.apply(null, a);
-				l = a[0].length;
-				re.lastIndex -= l - v.length;
-				str = str.substr(0, a.index) + v + str.substr(a.index + l);
-				if (!re.global)
-					break;
+if (AjxEnv.isSafari) {
+	if (!String.prototype._ZmOldReplace) {
+		String.prototype._ZmOldReplace = String.prototype.replace;
+		String.prototype.replace = function(re, val) {
+			if (typeof val != "function")
+				return this._ZmOldReplace(re, val);
+			else {
+				// TODO: investigate if it's possible to use the array.join approach
+				var str = this.slice(0), v, l, a;
+				while (a = re.exec(str)) {
+					v = val.apply(null, a);
+					l = a[0].length;
+					re.lastIndex -= l - v.length;
+					str = str.substr(0, a.index) + v + str.substr(a.index + l);
+					if (!re.global)
+						break;
+				}
+				return str;
 			}
-			return str;
-		}
-	};
+		};
+	}
 }
