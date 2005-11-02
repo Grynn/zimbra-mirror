@@ -10,7 +10,7 @@ endif
 ZIMBRA_HOME ?= /opt/zimbra
 LDAP_VERSION ?= 2.2.28
 
-BDB_VERSION ?= 4.2.52.2
+BDB_VERSION ?= 4.2.52.4
 
 BDB_ROOT ?= $(P4_ROOT)/ThirdParty/sleepycat
 
