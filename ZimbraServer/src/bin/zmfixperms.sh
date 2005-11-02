@@ -91,3 +91,8 @@ if [ -f /opt/zimbra/openldap/libexec/slapd ]; then
 	chmod 755 /opt/zimbra/openldap/libexec/slapd
 fi
 
+if [ -f /opt/zimbra/libexec/ZmSetup.app/Contents/MacOS/ZmSetup ]; then
+	chown root:$ROOTGROUP /opt/zimbra/libexec/ZmSetup.app/Contents/MacOS/ZmSetup
+	chmod 544 /opt/zimbra/libexec/ZmSetup.app/Contents/MacOS/ZmSetup
+fi
+
