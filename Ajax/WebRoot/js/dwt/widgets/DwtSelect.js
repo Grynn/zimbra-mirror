@@ -202,17 +202,16 @@ function(option, selected, value) {
 	var opt = null;
 	var val = null;
 	if (typeof(option) == 'string') {
-		val = value? value: option;
+		val = value != null ? value : option;
 		opt = new DwtSelectOption(val, selected, option, this);
 	} else {
 		if (option instanceof DwtSelectOption) {
 			opt = option;
-			if (value) {
+			if (value)
 				opt.setValue(value);
-			}
 			selected = opt.isSelected();
 		} else if(option instanceof DwtSelectOptionData) {
-			val = value? value: option.value;
+			val = value != null ? value : option.value;
 			opt = new DwtSelectOption(val, option.isSelected, option.displayValue, this);
 			selected = option.isSelected;
 		} else {
