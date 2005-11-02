@@ -33,60 +33,20 @@
 **/
 function ReindexMailboxXDialog(parent,  app, w, h) {
 	if (arguments.length == 0) return;
-	DwtDialog.call(this, parent, null, ZaMsg.Reindex_Title, [DwtDialog.OK_BUTTON]);
+	ZaXDialog.call(this, parent, app, null, ZaMsg.Reindex_Title, null,null);
+
 	this._button[DwtDialog.OK_BUTTON].setToolTipContent(ZaMsg.Reindex_Mbx_tt);
-	this._app = app;
-	this._localXForm = null;
-	this._localXModel = null;
-	this._drawn = false;
-	this._containedObject = null;	
-
-	if (!w) {
-		this._contentW = "500px";
-	} else {
-		this._contentW = w;
-	}
-	
-	if(!h) {
-		this._contentH = "350px";
-	} else {
-		this._contentH = h;
-	}		
-	
-	this._pageDiv = this.getDocument().createElement("div");
-	this._pageDiv.className = "ZaXWizardDialogPageDiv";
-	this._pageDiv.style.width = this._contentW;
-	this._pageDiv.style.height = this._contentH;
-	this._pageDiv.style.overflow = "auto";
-
-	this._createContentHtml();
-	this.initForm(ZaSearch.myXModel,this.getMyXForm());
 	this._containedObject = new ZaReindexMailbox();
 	this.pollAction = new AjxTimedAction();
 	this.pollAction.obj = this;
 	this.pollAction.method = this.getReindexStatus;
 	this._pollHandler = null;
+	this._helpURL = "/zimbraAdmin/adminhelp/html/OpenSourceAdminHelp/managing_accounts/re-indexing_a_mailbox.htm";		
 }
 
-ReindexMailboxXDialog.prototype = new DwtDialog;
+ReindexMailboxXDialog.prototype = new ZaXDialog;
 ReindexMailboxXDialog.prototype.constructor = ReindexMailboxXDialog;
 
-/**
-* public method _initForm
-* @param xModelMetaData
-* @param xFormMetaData
-**/
-ReindexMailboxXDialog.prototype.initForm = 
-function (xModelMetaData, xFormMetaData) {
-	if(xModelMetaData == null || xFormMetaData == null)
-		throw new AjxException("Metadata for XForm and/or XModel are not defined", AjxException.INVALID_PARAM, "ZaXWizardDialog.prototype.initForm");
-		
-	this._localXModel = new XModel(xModelMetaData);
-	this._localXForm = new XForm(xFormMetaData, this._localXModel, null, this);
-	this._localXForm.setController(this._app.getCurrentController());
-	this._localXForm.draw(this._pageDiv);	
-	this._drawn = true;
-}
 
 ReindexMailboxXDialog.prototype.popup = 
 function () {
@@ -115,20 +75,6 @@ function () {
 		AjxTimedAction.cancelAction(this._pollHandler);
 	}
 	DwtDialog.prototype.popdown.call(this);
-}
-
-ReindexMailboxXDialog.prototype.getObject = 
-function () {
-	return this._containedObject;
-}
-
-/**
-* @method setObject sets the object contained in the view
-**/
-ReindexMailboxXDialog.prototype.setObject =
-function(entry) {
-	this._containedObject = entry;
-	this._localXForm.setInstance(this._containedObject);
 }
 
 ReindexMailboxXDialog.abortReindexMailbox = 
@@ -269,41 +215,4 @@ function() {
 		]		
 	}
 	return xFormObject;
-}
-
-ReindexMailboxXDialog.prototype._createContentHtml =
-function () {
-
-	this._table = this.getDocument().createElement("table");
-	this._table.border = 0;
-	this._table.width=this._contentW;
-	this._table.cellPadding = 0;
-	this._table.cellSpacing = 0;
-	Dwt.associateElementWithObject(this._table, this);
-	this._table.backgroundColor = DwtCssStyle.getProperty(this.parent.getHtmlElement(), "background-color");
-	
-	var row2; //page
-	var col2;
-	row2 = this._table.insertRow(0);
-	row2.align = "left";
-	row2.vAlign = "middle";
-	
-	col2 = row2.insertCell(row2.cells.length);
-	col2.align = "left";
-	col2.vAlign = "middle";
-	col2.noWrap = true;	
-	col2.width = this._contentW;
-	col2.appendChild(this._pageDiv);
-
-	this._contentDiv.appendChild(this._table);
-}
-
-/**
-* Override _addChild method. We need internal control over layout of the children in this class.
-* Child elements are added to this control in the _createHTML method.
-* @param child
-**/
-ReindexMailboxXDialog.prototype._addChild =
-function(child) {
-	this._children.add(child);
 }
