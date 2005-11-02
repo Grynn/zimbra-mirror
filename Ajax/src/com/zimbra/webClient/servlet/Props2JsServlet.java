@@ -51,102 +51,127 @@ import javax.servlet.http.*;
 public class Props2JsServlet 
 	extends HttpServlet {
 
+    //
     // Constants
+    //
     
     private static final String BASENAME_PREFIX = "/msgs/";
+    private static final String COMPRESSED_EXT = ".jgz";
     
+    //
+    // Data
+    //
+    
+    private Map/*<Locale,Map<String,byte[]>>*/ buffers = new HashMap();
+    
+    //
     // HttpServlet methods
+    //
     
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
     throws IOException, ServletException {
         Locale locale = req.getLocale();
+        String uri = req.getRequestURI();
         
-        String requestUri = req.getRequestURI();
-        String filename = requestUri.substring(requestUri.lastIndexOf('/')+1);
-        String classname = filename.substring(0, filename.indexOf('.'));
-        String basename = BASENAME_PREFIX+classname;
-        
-        OutputStream stream = resp.getOutputStream();
-        if (requestUri.endsWith(".jgz")) {
-            stream = new GZIPOutputStream(stream);
+        resp.setContentType(uri.endsWith(COMPRESSED_EXT) ? "application/x-gzip" : "text/plain");
+        OutputStream out = resp.getOutputStream();
+        byte[] buffer = getBuffer(locale, uri);
+        out.write(buffer);
+        out.close();
+    } // doGet(HttpServletRequest,HttpServletResponse)
+    
+    //
+    // Private methods
+    //
+    
+    private byte[] getBuffer(Locale locale, String uri) throws IOException {
+        // get locale buffers
+        Map/*<String,byte[]>*/ localeBuffers = (Map)buffers.get(locale);
+        if (localeBuffers == null) {
+            localeBuffers = new HashMap();
+            buffers.put(locale, localeBuffers);
         }
-        PrintWriter out = new PrintWriter(stream);
-
-        /***
-        resp.setContentType("text/html");
-        out.println("<h1>Information</h1>");
-        out.println("<li>Locale: "+locale);
-        out.println("<li>FileName: "+filename);
-        out.println("<li>ClassName: "+classname);
-        out.println("<li>BaseName: "+basename);
-        out.println("<li>ContextPath: "+req.getContextPath());
-        out.println("<li>PathInfo: "+req.getPathInfo());
-        out.println("<li>PathTranslated: "+req.getPathTranslated());
-        out.println("<li>QueryString: "+req.getQueryString());
-        out.println("<li>RequestURI: "+req.getRequestURI());
-        out.println("<li>RequestURL: "+req.getRequestURL());
         
-        out.println("<h1>Output</h1>");
-        out.println("<pre>");
-        /***/
-        resp.setContentType("text/plain");
-        /***/
-        out.println("// Basename: "+basename);
-        out.println("// Locale: "+locale);
+        // get byte buffer
+        byte[] buffer = (byte[])localeBuffers.get(uri);
+        if (buffer == null) {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            PrintStream out = uri.endsWith(COMPRESSED_EXT) 
+            				? new PrintStream(new GZIPOutputStream(bos)) 
+            				: new PrintStream(bos); 
+            out.println("// Locale: "+locale);
+
+            String filenames = uri.substring(uri.lastIndexOf('/')+1);
+            String classnames = filenames.substring(0, filenames.indexOf('.'));
+            StringTokenizer tokenizer = new StringTokenizer(classnames, ",");
+            while (tokenizer.hasMoreTokens()) {
+                String classname = tokenizer.nextToken();
+                load(out, locale, classname);
+            }
+            
+            // save buffer
+            out.close();
+            buffer = bos.toByteArray();
+            localeBuffers.put(uri, buffer);
+        }
+
+        return buffer;
+    } // getBuffer(Locale,String):byte[]
+
+    private void load(PrintStream out, Locale locale, String classname) {
+        String basename = BASENAME_PREFIX+classname;
+
         out.println();
+        out.println("// Basename: "+basename);
         out.println("function "+classname+"(){}");
         out.println();
         
         ResourceBundle bundle;
         try {
             bundle = ResourceBundle.getBundle(basename, locale);
-        }
-        catch (MissingResourceException e) {
-            out.println("// resource bundle not found");
-            /***
-            out.println("</pre>");
-            /***/
-            return;
-        }
 
-        Enumeration keys = bundle.getKeys();
-        while (keys.hasMoreElements()) {
-            String key = (String)keys.nextElement();
-            String value = bundle.getString(key);
+            Enumeration keys = bundle.getKeys();
+            Set keySet = new TreeSet();
+            while (keys.hasMoreElements()) {
+                keySet.add(keys.nextElement());
+            }
+            Iterator iter = keySet.iterator();
+            while (iter.hasNext()) {
+                String key = (String)iter.next();
+                String value = bundle.getString(key);
 
-            out.print(classname+"."+key+" = \"");
-            int length = value.length();
-            for (int i = 0; i < length; i++) {
-                char c = value.charAt(i);
-                switch (c) {
-                    case '\t': out.print("\\t"); break;
-                    case '\n': out.print("\\n"); break;
-                    case '\r': out.print("\\r"); break;
-                    case '\\': out.print("\\\\"); break;
-                    case '"': out.print("\\\""); break;
-                    default: {
-                        if (c < 32 || c > 127) {
-                            String cs = Integer.toString(c, 16);
-                            out.print("\\u");
-                            int cslen = cs.length();
-                            for (int j = cslen; j < 4; j++) {
-                                out.print('0');
+                out.print(classname+"."+key+" = \"");
+                int length = value.length();
+                for (int i = 0; i < length; i++) {
+                    char c = value.charAt(i);
+                    switch (c) {
+                        case '\t': out.print("\\t"); break;
+                        case '\n': out.print("\\n"); break;
+                        case '\r': out.print("\\r"); break;
+                        case '\\': out.print("\\\\"); break;
+                        case '"': out.print("\\\""); break;
+                        default: {
+                            if (c < 32 || c > 127) {
+                                String cs = Integer.toString(c, 16);
+                                out.print("\\u");
+                                int cslen = cs.length();
+                                for (int j = cslen; j < 4; j++) {
+                                    out.print('0');
+                                }
+                                out.print(cs);
                             }
-                            out.print(cs);
-                        }
-                        else {
-                            out.print(c);
+                            else {
+                                out.print(c);
+                            }
                         }
                     }
                 }
+                out.println("\";");
             }
-            out.println("\";");
         }
-        /***
-        out.println("</pre>");
-        /***/
-        
-        out.close();
-    }
+        catch (MissingResourceException e) {
+            out.println("// resource bundle not found");
+        }
+    } // load(PrintStream,String)
     
 } // class Props2JsServlet
