@@ -35,11 +35,12 @@ platform=`/opt/zimbra/bin/get_plat_tag.sh`
 
 if [ x$platform = "xMACOSX" ]; then
 	logfile="/var/log/zimbra.log"
+	LOCALHOST=`hostname`
 else
 	logfile="-/var/log/zimbra.log"
+	LOCALHOST=`hostname --fqdn`
 fi
 LOGHOST=`su - zimbra -c 'zmprov gacf | egrep "^zimbraLogHostname"'`
-LOCALHOST=`hostname --fqdn`
 
 if [ "x$LOGHOST" = "x" ]; then
 	TYPE="local"
