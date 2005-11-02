@@ -549,7 +549,7 @@ function(account) {
 			return;
 		}
 		var win = window.open("about:blank", "_blank");
-		var ms = account.attrs[ZaAccount.A_mailHost] ? account.attrs[ZaAccount.A_mailHost] : location.hostname;
+		var ms = account.attrs[ZaAccount.A_mailHost] ? account.attrs[ZaAccount.A_mailHost].toLowerCase() : location.hostname.toLowerCase();
 		//find my server
 		var servers = this._app.getServerList().getArray();
 		var cnt = servers.length;
@@ -557,7 +557,7 @@ function(account) {
 		var mailProtocol = "http";
 		
 		for (var i = 0; i < cnt; i++) {
-			if(servers[i].attrs[ZaServer.A_ServiceHostname] == ms) {
+			if(servers[i].attrs[ZaServer.A_ServiceHostname].toLowerCase() == ms) {
 				if(servers[i].attrs[ZaServer.A_zimbraMailSSLPort] && parseInt(servers[i].attrs[ZaServer.A_zimbraMailSSLPort]) > 0) { //if there is SSL, use SSL
 					mailPort = servers[i].attrs[ZaServer.A_zimbraMailSSLPort];
 					mailProtocol = "https";

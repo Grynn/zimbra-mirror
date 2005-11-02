@@ -45,18 +45,31 @@ function() {
 };
 
 ZaStatusView.prototype.setBounds = function (x, y, width, height) {
+
 	// 10 is the hieght of the spacer above the lists.
 	height = height - 10;
+
 	DwtControl.prototype.setBounds.call(this, x , y, width, height);
-	var clusterList = this._view.getItemsById('clusterList')[0];
-	if (clusterList != null && clusterList.widget != null) {
-		clusterList.widget.setSize(width,height);
-	};
-	var nonClusterList = this._view.getItemsById('nonClusterList')[0];
-	if (nonClusterList != null && nonClusterList.widget != null) {
-		nonClusterList.widget.setSize(width);
-	};
-	
+
+	var _clusterList = this._view.getItemsById('clusterList');
+	if(_clusterList) {
+		var clusterList = _clusterList[0];
+		if (clusterList != null && clusterList.widget != null) {
+			clusterList.widget.setSize(width,height);
+		};
+	}
+	var _nonClusterList = this._view.getItemsById('nonClusterList');
+	if(_nonClusterList) {		
+		var nonClusterList = _nonClusterList[0];
+		if (nonClusterList != null && nonClusterList.widget != null) {
+			try {	
+				nonClusterList.widget.setSize(width);
+			} catch (ex) {
+				//	throw ex;
+				//swallow this invalid argument exception from IE, bug 4441
+			}
+		};
+	}	
 };
 
 ZaStatusView.prototype.set = function (statusVector, globalConfig) {

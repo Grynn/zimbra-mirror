@@ -110,6 +110,15 @@ function(msg, ex, noExecReset)  {
 		    detailStr += ex.detail;
 		    detailStr += "\n";			    
 		}
+		
+		if(!detailStr || detailStr == "") {
+			for (var ix in ex) {
+				detailStr += ix;
+				detailStr += ": ";
+				detailStr += ex[ix].toString();
+				detailStr += "\n";
+			}
+		}
 	}
 	// popup alert
 	this._errorDialog.setMessage(msg, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);

@@ -42,26 +42,31 @@ ZaStatusViewController.prototype.constructor = ZaStatusViewController;
 
 
 ZaStatusViewController.prototype.show = function() {
-	var globalConfig = this._app.getGlobalConfig();
-	//globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster] = "true";
-	var mystatusVector = this._getSimpleStatusData();
-  	//var mystatusVector = this.getDummyVector();
-
-    if (!this._contentView) {
-		this._createView();
-	}
-	// if cluster software is installed on the server, get that data ( which will be )
-	// returned sorted.
-	// otherwise just sort the simple data that we have.
-	if (this._clusterSoftwareIsInstalled()) {
-		mystatusVector = this._getClusterStatusData(mystatusVector);
-	} else {
-		mystatusVector.sort(ZaStatus.compare);
-	}
-
-	this._contentView.set(mystatusVector, globalConfig);
-	this._contentView.addClusterSelectionListener(new AjxListener(this, this._selectionUpdated));
-	this._app.pushView(ZaZimbraAdmin._STATUS);
+	try {
+		var globalConfig = this._app.getGlobalConfig();
+		//globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster] = "true";
+		var mystatusVector = this._getSimpleStatusData();
+	  	//var mystatusVector = this.getDummyVector();
+	
+	    if (!this._contentView) {
+			this._createView();
+		}
+		// if cluster software is installed on the server, get that data ( which will be )
+		// returned sorted.
+		// otherwise just sort the simple data that we have.
+	
+		if (this._clusterSoftwareIsInstalled()) {
+			mystatusVector = this._getClusterStatusData(mystatusVector);
+		} else {
+			mystatusVector.sort(ZaStatus.compare);
+		}
+		this._contentView.set(mystatusVector, globalConfig);
+		this._contentView.addClusterSelectionListener(new AjxListener(this, this._selectionUpdated));
+		this._app.pushView(ZaZimbraAdmin._STATUS);
+	} catch (ex) {
+		this._handleException(ex, "ZaStatusViewController.prototype.show", null, false);
+		return;
+	}	
 };
 
 ZaStatusViewController.prototype._getSimpleStatusData = function () {
@@ -73,19 +78,25 @@ ZaStatusViewController.prototype._getSimpleStatusData = function () {
 };
 
 ZaStatusViewController.prototype._createView = function () {
-	var elements = new Object();
-	if (this._clusterSoftwareIsInstalled()){
-		var ops = [
-				   new ZaOperation(ZaOperation.CLOSE, ZaMsg.STATUSTBB_Failover, ZaMsg.STATUSTBB_Failover_tt, null, null,
-								   new AjxListener(this, this._failoverListener))
-				   ];
-		this._toolbar = new ZaToolBar(this._container, ops);
-		this._toolbar.enable([ZaOperation.CLOSE], false);
-		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
-	}
-	this._contentView = new ZaStatusView(this._container, this._app);
-	elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
-	this._app.createView(ZaZimbraAdmin._STATUS, elements);
+	try {
+		var elements = new Object();
+		if (this._clusterSoftwareIsInstalled()){
+			var ops = [
+					   new ZaOperation(ZaOperation.CLOSE, ZaMsg.STATUSTBB_Failover, ZaMsg.STATUSTBB_Failover_tt, null, null,
+									   new AjxListener(this, this._failoverListener))
+					   ];
+			this._toolbar = new ZaToolBar(this._container, ops);
+			this._toolbar.enable([ZaOperation.CLOSE], false);
+			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
+		}
+		this._contentView = new ZaStatusView(this._container, this._app);
+		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
+		this._app.createView(ZaZimbraAdmin._STATUS, elements);
+	} catch (ex) {
+		this._handleException(ex, "ZaStatusViewController.prototype._createView", null, false);
+		return;
+	}	
+		
 };
 
 ZaStatusViewController.prototype._getClusterStatusData = function (simpleDataVector) {
@@ -95,7 +106,7 @@ ZaStatusViewController.prototype._getClusterStatusData = function (simpleDataVec
 			retVector = ZaClusterStatus.getCombinedStatus(simpleDataVector);
 		}
 	} catch (e) {
-		this._handleException(e, ZaStatusViewController.prototype.show, null, false);
+		this._handleException(e, "ZaStatusViewController.prototype._getClusterStatusData", null, false);
 		// Make sure the results are empty if we only have partial data.
 		retVector = AjxVector.fromArray([]);
 	}
@@ -103,10 +114,15 @@ ZaStatusViewController.prototype._getClusterStatusData = function (simpleDataVec
 };
 
 ZaStatusViewController.prototype._clusterSoftwareIsInstalled = function () {
-	if (this._globalConfig == null) {
-		this._globalConfig = this._app.getGlobalConfig();
+	try {
+		if (this._globalConfig == null) {
+			this._globalConfig = this._app.getGlobalConfig();
+		}
+		return AjxUtil.isSpecified(this._globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster]);
+	} catch (ex) {
+		this._handleException(e, "ZaStatusViewController.prototype._clusterSoftwareIsInstalled", null, false);	
 	}
-	return AjxUtil.isSpecified(this._globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster]);
+	return false;
 };
 
 
