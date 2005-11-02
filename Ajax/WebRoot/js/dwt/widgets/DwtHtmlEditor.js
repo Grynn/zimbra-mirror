@@ -682,73 +682,79 @@ function() {
 	this._stateUpdateActionId = null;
 	var ev = this._stateEvent;
 	ev.reset();
-	
+
 	var iFrameDoc = this._getIframeDoc();
-	ev.isBold = iFrameDoc.queryCommandState(DwtHtmlEditor.BOLD_STYLE);
-	ev.isItalic = iFrameDoc.queryCommandState(DwtHtmlEditor.ITALIC_STYLE);
-	ev.isUnderline = iFrameDoc.queryCommandState(DwtHtmlEditor.UNDERLINE_STYLE);
-	ev.isStrikeThru = iFrameDoc.queryCommandState(DwtHtmlEditor.STRIKETHRU_STYLE);
-	ev.isSuperscript = iFrameDoc.queryCommandState(DwtHtmlEditor.SUPERSCRIPT_STYLE);
-	ev.isSubscript = iFrameDoc.queryCommandState(DwtHtmlEditor.SUBSCRIPT_STYLE);
-	ev.isOrderedList = iFrameDoc.queryCommandState(DwtHtmlEditor.ORDERED_LIST);
-	ev.isUnorderedList = iFrameDoc.queryCommandState(DwtHtmlEditor.UNORDERED_LIST);
-	
-	// Don't futz with the order of the if statements below. They are important due to the 
-	// nature of the RegExs
-	var family = iFrameDoc.queryCommandValue(DwtHtmlEditor._FONT_NAME);
-	if (family) {
-		family = family.toLowerCase();
-		if (family.search(DwtHtmlEditor._VERDANA_RE) != -1)
-			ev.fontFamily = DwtHtmlEditor.VERDANA;
-		else if (family.search(DwtHtmlEditor._ARIAL_RE) != -1)
-			ev.fontFamily = DwtHtmlEditor.ARIAL;		
-		else if (family.search(DwtHtmlEditor._TIMES_RE) != -1)
-			ev.fontFamily = DwtHtmlEditor.TIMES;
-		else if (family.search(DwtHtmlEditor._COURIER_RE) != -1)
-			ev.fontFamily = DwtHtmlEditor.COURIER;
-	}
-	
-	ev.fontSize = iFrameDoc.queryCommandValue(DwtHtmlEditor._FONT_SIZE);
-	ev.backgroundColor = iFrameDoc.queryCommandValue((AjxEnv.isIE) ? "backcolor" : "hilitecolor");
-	ev.color = iFrameDoc.queryCommandValue("forecolor");
-	ev.justification = null;
-	ev.direction = null;
-	
-	var style = iFrameDoc.queryCommandValue(DwtHtmlEditor._FORMAT_BLOCK);
-	if (style) {
-		if (style.search(DwtHtmlEditor._H1_RE) != -1)
-			ev.style = DwtHtmlEditor.H1;
-		else if (style.search(DwtHtmlEditor._H2_RE) != -1)
-			ev.style = DwtHtmlEditor.H2;
-		else if (style.search(DwtHtmlEditor._H3_RE) != -1)
-			ev.style = DwtHtmlEditor.H3;
-		else if (style.search(DwtHtmlEditor._H4_RE) != -1)
-			ev.style = DwtHtmlEditor.H4;
-		else if (style.search(DwtHtmlEditor._H5_RE) != -1)
-			ev.style = DwtHtmlEditor.H5;
-		else if (style.search(DwtHtmlEditor._H6_RE) != -1)
-			ev.style = DwtHtmlEditor.H6;
-		else if (style.search(DwtHtmlEditor._PARAGRAPH_RE) != -1)
-			ev.style = DwtHtmlEditor.PARAGRAPH;
-		else if (style.search(DwtHtmlEditor._ADDRESS_RE) != -1)
-			ev.style = DwtHtmlEditor.ADDRESS;
-		else if (style.search(DwtHtmlEditor._PREFORMATTED_RE) != -1)
-			ev.style = DwtHtmlEditor.PREFORMATTED;
-	}
-	
-	if (iFrameDoc.queryCommandState(DwtHtmlEditor.JUSTIFY_LEFT))
-		ev.justification = DwtHtmlEditor.JUSTIFY_LEFT;
-	else if (iFrameDoc.queryCommandState(DwtHtmlEditor.JUSTIFY_CENTER))
-		ev.justification = DwtHtmlEditor.JUSTIFY_CENTER;
-	else if (iFrameDoc.queryCommandState(DwtHtmlEditor.JUSTIFY_RIGHT))
-		ev.justification = DwtHtmlEditor.JUSTIFY_RIGHT;
-	else if (iFrameDoc.queryCommandState(DwtHtmlEditor.JUSTIFY_FULL))
-		ev.justification = DwtHtmlEditor.JUSTIFY_FULL;
+	try {	
+		ev.isBold = iFrameDoc.queryCommandState(DwtHtmlEditor.BOLD_STYLE);
+		ev.isItalic = iFrameDoc.queryCommandState(DwtHtmlEditor.ITALIC_STYLE);
+		ev.isUnderline = iFrameDoc.queryCommandState(DwtHtmlEditor.UNDERLINE_STYLE);
+		ev.isStrikeThru = iFrameDoc.queryCommandState(DwtHtmlEditor.STRIKETHRU_STYLE);
+		ev.isSuperscript = iFrameDoc.queryCommandState(DwtHtmlEditor.SUPERSCRIPT_STYLE);
+		ev.isSubscript = iFrameDoc.queryCommandState(DwtHtmlEditor.SUBSCRIPT_STYLE);
+		ev.isOrderedList = iFrameDoc.queryCommandState(DwtHtmlEditor.ORDERED_LIST);
+		ev.isUnorderedList = iFrameDoc.queryCommandState(DwtHtmlEditor.UNORDERED_LIST);
+		
+		// Don't futz with the order of the if statements below. They are important due to the 
+		// nature of the RegExs
+		var family = iFrameDoc.queryCommandValue(DwtHtmlEditor._FONT_NAME);
+		if (family) {
+			family = family.toLowerCase();
+			if (family.search(DwtHtmlEditor._VERDANA_RE) != -1)
+				ev.fontFamily = DwtHtmlEditor.VERDANA;
+			else if (family.search(DwtHtmlEditor._ARIAL_RE) != -1)
+				ev.fontFamily = DwtHtmlEditor.ARIAL;		
+			else if (family.search(DwtHtmlEditor._TIMES_RE) != -1)
+				ev.fontFamily = DwtHtmlEditor.TIMES;
+			else if (family.search(DwtHtmlEditor._COURIER_RE) != -1)
+				ev.fontFamily = DwtHtmlEditor.COURIER;
+		}
+		
+		ev.fontSize = iFrameDoc.queryCommandValue(DwtHtmlEditor._FONT_SIZE);
+		ev.backgroundColor = iFrameDoc.queryCommandValue((AjxEnv.isIE) ? "backcolor" : "hilitecolor");
+		ev.color = iFrameDoc.queryCommandValue("forecolor");
+		ev.justification = null;
+		ev.direction = null;
+		
+		var style = iFrameDoc.queryCommandValue(DwtHtmlEditor._FORMAT_BLOCK);
+		if (style) {
+			if (style.search(DwtHtmlEditor._H1_RE) != -1)
+				ev.style = DwtHtmlEditor.H1;
+			else if (style.search(DwtHtmlEditor._H2_RE) != -1)
+				ev.style = DwtHtmlEditor.H2;
+			else if (style.search(DwtHtmlEditor._H3_RE) != -1)
+				ev.style = DwtHtmlEditor.H3;
+			else if (style.search(DwtHtmlEditor._H4_RE) != -1)
+				ev.style = DwtHtmlEditor.H4;
+			else if (style.search(DwtHtmlEditor._H5_RE) != -1)
+				ev.style = DwtHtmlEditor.H5;
+			else if (style.search(DwtHtmlEditor._H6_RE) != -1)
+				ev.style = DwtHtmlEditor.H6;
+			else if (style.search(DwtHtmlEditor._PARAGRAPH_RE) != -1)
+				ev.style = DwtHtmlEditor.PARAGRAPH;
+			else if (style.search(DwtHtmlEditor._ADDRESS_RE) != -1)
+				ev.style = DwtHtmlEditor.ADDRESS;
+			else if (style.search(DwtHtmlEditor._PREFORMATTED_RE) != -1)
+				ev.style = DwtHtmlEditor.PREFORMATTED;
+		}
+		
+		if (iFrameDoc.queryCommandState(DwtHtmlEditor.JUSTIFY_LEFT))
+			ev.justification = DwtHtmlEditor.JUSTIFY_LEFT;
+		else if (iFrameDoc.queryCommandState(DwtHtmlEditor.JUSTIFY_CENTER))
+			ev.justification = DwtHtmlEditor.JUSTIFY_CENTER;
+		else if (iFrameDoc.queryCommandState(DwtHtmlEditor.JUSTIFY_RIGHT))
+			ev.justification = DwtHtmlEditor.JUSTIFY_RIGHT;
+		else if (iFrameDoc.queryCommandState(DwtHtmlEditor.JUSTIFY_FULL))
+			ev.justification = DwtHtmlEditor.JUSTIFY_FULL;
 
 
-	// Notify any listeners
-	if (this.isListenerRegistered(DwtEvent.STATE_CHANGE))
-		this.notifyListeners(DwtEvent.STATE_CHANGE, ev);
+		// Notify any listeners
+		if (this.isListenerRegistered(DwtEvent.STATE_CHANGE))
+			this.notifyListeners(DwtEvent.STATE_CHANGE, ev);
+	} catch (ex) {
+		if (AjxEnv.isGeckoBased) {
+			this._enableDesignMode([iFrameDoc]);
+		}
+	}
 }
 
 DwtHtmlEditor.prototype._enableDesignMode =
@@ -804,9 +810,8 @@ function(command, option) {
 		this.focus();
 		this._getIframeDoc().execCommand(command, false, option);	
 	} catch (e) {
-		// TODO remove
-		alert(e);
 		// perhaps retry the command?
+		this._enableDesignMode([this._getIframeDoc()]);
 	}
 	this._updateState();
 }
