@@ -72,6 +72,8 @@ function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell, us
 	if (docBodyScrollable != null && !docBodyScrollable)
 		document.body.style.overflow = "hidden";
 
+	Dwt.setHandler(document, DwtEvent.ONKEYPRESS, DwtShell._keyPressHdlr);
+
     document.body.onselect = DwtShell._preventDefaultSelectPrt;
 	document.body.onselectstart = DwtShell._preventDefaultSelectPrt;
     document.body.oncontextmenu = DwtShell._preventDefaultPrt;
@@ -281,6 +283,30 @@ function(ev) {
     
     evt.setToDhtmlEvent(ev);
     return evt._returnValue;
+}
+
+
+DwtShell._keyPressHdlr =
+function(ev) {
+	var shell = AjxCore.objectWithId(window._dwtShell);
+	if (shell.isListenerRegistered(DwtEvent.ONKEYPRESS)) {
+		var keyEvent = DwtShell.keyEvent;
+		keyEvent.setFromDhtmlEvent(ev);
+		DBG.println("KEY PRESS - KC:" + keyEvent.keyCode + " CC: " + keyEvent.charCode 
+	   	         + " ALT: " + keyEvent.altKey + " SHIFT: " + keyEvent.shiftKey + " CTRL: " + keyEvent.ctrlKey);
+	   	         
+	   	if (keyEvent.target)
+			DBG.println("TARGET NAME: " + keyEvent.target.tagName + " ID: " + keyEvent.target.id);	
+	
+		var tagName = (keyEvent.target) ? keyEvent.target.tagName.toLowerCase() : null;
+		if (tagName != "input") {
+			return shell.notifyListeners(DwtEvent.ONKEYPRESS, keyEvent);
+//			keyEvent._stopPropagation = true;
+//    		keyEvent._returnValue = false;
+//    		keyEvent.setToDhtmlEvent(ev);
+//   		return keyEvent._returnValue;
+    	} 
+    }
 }
 
 /* This the resize handler to track when the browser window size changes */

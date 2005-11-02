@@ -51,7 +51,6 @@ function DwtListView(parent, className, posStyle, headerList, noMaximize) {
 	}
 		
 	this._setMouseEventHdlrs();
-	this._setKeyEventHdlrs();
 	this.setCursor("default");
 
 	this._listenerMouseOver = new AjxListener(this, DwtListView.prototype._mouseOverListener);

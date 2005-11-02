@@ -302,7 +302,6 @@ function(index) {
 	 * the to right in the view! */
 	 
 	this._setMouseEventHdlrs();
-	this._setKeyEventHdlrs();	
 	
 	var doc = this.getDocument();
 	this._itemDiv = doc.createElement("div");

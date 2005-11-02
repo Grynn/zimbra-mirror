@@ -58,7 +58,6 @@ function DwtButton(parent, style, className, posStyle, actionTiming) {
 	else
 		mouseEvents.push(DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT);
 	this._setEventHdlrs(mouseEvents);
-	this._setKeyEventHdlrs();
 	this._mouseOverListener = new AjxListener(this, DwtButton.prototype._mouseOverListener);
 	this._mouseOutListener = new AjxListener(this, DwtButton.prototype._mouseOutListener);
 	this._mouseDownListener = new AjxListener(this, DwtButton.prototype._mouseDownListener);

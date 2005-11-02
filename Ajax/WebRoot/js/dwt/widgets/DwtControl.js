@@ -87,18 +87,6 @@ DwtControl.TOOLTIP_THRESHOLD = 5;
 
 // static methods
 
-DwtControl._keyDownHdlr =
-function(ev) {
-}
-
-DwtControl._keyUpHdlr =
-function(ev) {
-}
-
-DwtControl._keyPressHdlr =
-function(ev) {
-}
-
 DwtControl._dblClickHdlr = 
 function(ev) {
 	return DwtControl._mouseEvent(ev, DwtEvent.ONDBLCLICK);
@@ -412,9 +400,6 @@ function(ev, eventType, obj, mouseEv) {
 DwtControl.HANDLER = new Object();
 DwtControl.HANDLER[DwtEvent.ONCONTEXTMENU] = DwtControl._contextMenuHdlr;
 DwtControl.HANDLER[DwtEvent.ONDBLCLICK] = DwtControl._dblClickHdlr;
-DwtControl.HANDLER[DwtEvent.ONKEYDOWN] = DwtControl._keyDownHdlr;
-DwtControl.HANDLER[DwtEvent.ONKEYPRESS] = DwtControl._keyPressHdlr;
-DwtControl.HANDLER[DwtEvent.ONKEYUP] = DwtControl._keyUpHdlr;
 DwtControl.HANDLER[DwtEvent.ONMOUSEDOWN] = DwtControl._mouseDownHdlr;
 DwtControl.HANDLER[DwtEvent.ONMOUSEENTER] = DwtControl._mouseOverHdlr;
 DwtControl.HANDLER[DwtEvent.ONMOUSELEAVE] = DwtControl._mouseOutHdlr;
@@ -906,10 +891,6 @@ function(clear) {
 	this._setEventHdlrs(DwtEvent.MOUSE_EVENTS, clear);
 }
 
-DwtControl.prototype._setKeyEventHdlrs =
-function(clear) {
-	this._setEventHdlrs(DwtEvent.KEY_EVENTS, clear);
-}
 
 /* Subclasses may override this method to return an HTML element that will represent
  * the dragging icon. The icon must be created on the DwtShell widget. If this method returns

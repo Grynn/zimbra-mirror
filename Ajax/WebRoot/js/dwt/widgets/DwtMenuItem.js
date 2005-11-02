@@ -50,7 +50,6 @@ function DwtMenuItem(parent, style, radioGroupId, index, className, posStyle) {
 		throw new DwtException("DwtMenuItemInit: invalid style", DwtException.INVALID_PARAM, "DwtMenuItem"); 
 
 	this._setMouseEventHdlrs();
-	this._setKeyEventHdlrs();
 	this._origClassName = className;
 	this._selectedClassName = className + "-" + DwtCssStyle.SELECTED;
 	this._triggeredClassName = className + "-" + DwtCssStyle.TRIGGERED;

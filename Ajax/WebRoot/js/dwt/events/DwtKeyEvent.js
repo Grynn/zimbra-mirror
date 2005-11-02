@@ -56,7 +56,7 @@ function(ev) {
 
 DwtKeyEvent.prototype.setFromDhtmlEvent =
 function(ev) {
-	DwtUiEvent.prototype.setFromDhtmlEvent.call(this, ev);
+	ev = DwtUiEvent.prototype.setFromDhtmlEvent.call(this, ev);
 	this.charCode = (ev.charCode) ? ev.charCode : ev.keyCode;
 	this.keyCode = ev.keyCode;
 }

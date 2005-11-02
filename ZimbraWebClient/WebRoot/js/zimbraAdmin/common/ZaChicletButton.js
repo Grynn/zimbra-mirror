@@ -58,7 +58,6 @@ function ZaChicletButton(parent, outerClass, innerClass) {
 	
 	// add custom mouse handlers to standard ones
 	this._setMouseEventHdlrs();
-	this._setKeyEventHdlrs();
 	this.addListener(DwtEvent.ONMOUSEOVER, new AjxListener(this, this._mouseOverListener));
 	this.addListener(DwtEvent.ONMOUSEOUT, new AjxListener(this, this._mouseOutListener));
 	this.addListener(DwtEvent.ONMOUSEDOWN, new AjxListener(this, this._mouseDownListener));
