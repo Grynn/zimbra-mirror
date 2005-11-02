@@ -569,3 +569,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 	height: 20px;
 	font-size: 20px; /* WEIRD IE QUIRK */
 }
+
+.ImgAppBanner {
+	cursor:hand;
+}
