@@ -39,7 +39,7 @@ else
 	logfile="-/var/log/zimbra.log"
 fi
 LOGHOST=`su - zimbra -c 'zmprov gacf | egrep "^zimbraLogHostname"'`
-LOCALHOST=`su - zimbra -c 'zmlocalconfig -m nokey zimbra_server_hostname'`
+LOCALHOST=`hostname --fqdn`
 
 if [ "x$LOGHOST" = "x" ]; then
 	TYPE="local"
