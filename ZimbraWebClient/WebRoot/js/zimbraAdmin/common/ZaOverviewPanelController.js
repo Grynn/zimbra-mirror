@@ -155,7 +155,7 @@ function (ev) {
 			ti1.setImage("Domain");
 			ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DOMAIN_VIEW);
 			ti1.setData(ZaOverviewPanelController._OBJ_ID, newDomain.id);
-			this._domainsMap[newDomain.name] = ti1;
+			this._domainsMap[newDomain.id] = ti1;
 		}
 	}
 }
@@ -177,7 +177,7 @@ function (ev) {
 					}
 				}
 			} else if(detls instanceof ZaDomain) {
-				if(this._domainsMap[detls.name]) {
+				if(this._domainsMap[detls.id]) {
 					this._domainsTi._removeChild(this._domainsMap[detls.id]);		
 				}
 			}
@@ -359,7 +359,7 @@ function() {
 				ti1.setImage("Domain");
 				ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DOMAIN_VIEW);
 				ti1.setData(ZaOverviewPanelController._OBJ_ID, domainList[ix].id);
-				this._domainsMap[domainList[ix].name] = ti1;
+				this._domainsMap[domainList[ix].id] = ti1;
 			}
 		}
 	} catch (ex) {
