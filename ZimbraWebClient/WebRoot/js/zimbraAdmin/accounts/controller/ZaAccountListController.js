@@ -175,11 +175,15 @@ ZaAccountListController.prototype.setDefaultType = function (type) {
 			newButton.setImage("Account");
 			newButton.setDisabledImage("AccountDis");
 			newButton.addSelectionListener(this._newAcctListener);
+			this._toolbar.getButton(ZaOperation.EDIT).setToolTipContent(ZaMsg.ACTBB_Edit_tt);
+			this._toolbar.getButton(ZaOperation.DELETE).setToolTipContent(ZaMsg.ACTBB_Delete_tt);
 		} else if (type == ZaItem.DL) {
 			newButton.setToolTipContent(ZaMsg.DLTBB_New_tt);
 			newButton.setImage("Group");
 			newButton.setDisabledImage("GroupDis");
-			newButton.addSelectionListener(this._newDLListener);			
+			newButton.addSelectionListener(this._newDLListener);
+			this._toolbar.getButton(ZaOperation.EDIT).setToolTipContent(ZaMsg.DLTBB_Edit_tt);
+			this._toolbar.getButton(ZaOperation.DELETE).setToolTipContent(ZaMsg.DLTBB_Delete_tt);
 		}
 	}
 };
