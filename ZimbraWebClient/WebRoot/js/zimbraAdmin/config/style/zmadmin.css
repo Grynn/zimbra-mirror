@@ -446,6 +446,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 /** distribution list stuff **/
 .ZaDLView {
   background-color:#EEEEEE;
+  overflow:auto;
 }
 
 .DLSource, .DLTarget { 
