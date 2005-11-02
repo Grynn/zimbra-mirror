@@ -56,7 +56,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="jars/zimbra-charset.jar"/>
-	<classpathentry kind="lib" path="jars/mysql-connector-java-3.1.10-bin-zimbra.jar"/>
 	<classpathentry kind="lib" path="jars/servlet-api.jar">
 		<attributes>
 			<attribute value="http://jakarta.apache.org/tomcat/tomcat-5.5-doc/servletapi/" name="javadoc_location"/>
@@ -68,5 +67,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="jars/ical4j-0.9.16-patched.jar"/>
+	<classpathentry sourcepath="/ThirdParty/mysql-connector-java-3.1.11/src" kind="lib" path="jars/mysql-connector-java-3.1.11-bin.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
