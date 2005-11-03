@@ -28,7 +28,6 @@
 			<attribute value="http://jakarta.apache.org/commons/collections/apidocs-COLLECTIONS_3_1/" name="javadoc_location"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="jars/lucene-demos-1.4-final.jar"/>
 	<classpathentry kind="lib" path="jars/commons-httpclient-2.0.1.jar"/>
 	<classpathentry sourcepath="/ThirdParty/junit-3.8.1" kind="lib" path="jars/junit-3.8.1.jar">
 		<attributes>
