@@ -73,10 +73,7 @@ function(entry) {
 	/**
 	* If this account does not have a COS assigned to it - assign default COS
 	**/
-	if(!this._containedObject.attrs[ZaAccount.A_COSId] || this._containedObject.attrs[ZaAccount.A_COSId].length < 1  ) {
-		this._containedObject.attrs[ZaAccount.A_COSId] = cosList[0].id;
-		this._containedObject.cos = cosList[0];
-	} else {		
+	if(this._containedObject.attrs[ZaAccount.A_COSId]) {	
 		for(var ix in cosList) {
 			/**
 			* Find the COS assigned to this account 
@@ -86,13 +83,28 @@ function(entry) {
 				break;
 			}
 		}
-		if(!this._containedObject.cos) {
+	}
+	if(!this._containedObject.cos) {
+		/**
+		* We did not find the COS assigned to this account,
+		* this means that the COS was deleted or wasn't assigned, therefore assign default COS to this account
+		**/
+		for(var i in cosList) {
 			/**
-			* We did not find the COS assigned to this account,
-			* this means that the COS was deleted, therefore assign default COS to this account
+			* Find the COS assigned to this account 
 			**/
-			this._containedObject.attrs[ZaAccount.A_COSId] = cosList[0].id;
-			this._containedObject.cos = cosList[0];
+			if(cosList[i].name == "default") {
+				this._containedObject.cos = cosList[i];
+				this._containedObject.attrs[ZaAccount.A_COSId] = cosList[i].id;										
+				break;
+			}
+		}
+		if(!this._containedObject.cos) {
+			//default COS was not found - just assign the first COS
+			if(cosList && cosList.length > 0) {
+				this._containedObject.cos = cosList[0];
+				this._containedObject.attrs[ZaAccount.A_COSId] = cosList[0].id;					
+			}
 		}
 	}
 	if(!this._containedObject.cos) {
@@ -347,7 +359,7 @@ ZaAccountXFormView.prototype.getMyXForm = function() {
 							{ref:ZaAccount.A_zimbraPrefNewMailNotificationAddress, type:_TEXTFIELD_, msgName:ZaMsg.NAD_zimbraPrefNewMailNotificationAddress,label:ZaMsg.NAD_zimbraPrefNewMailNotificationAddress+":", labelLocation:_LEFT_, cssClass:"admin_xform_name_input", onChange:ZaTabView.onFormFieldChanged},							
 							{type:_SEPARATOR_},
 							{ref:ZaAccount.A_prefMailSignatureEnabled, type:_CHECKBOX_, msgName:ZaMsg.NAD_prefMailSignatureEnabled,label:ZaMsg.NAD_prefMailSignatureEnabled+":", labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_},
-							{ref:ZaAccount.A_zimbraPrefMailSignatureStyle, type:_SUPER_SELECT1_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefMailSignatureStyle,label:ZaMsg.NAD_zimbraPrefMailSignatureStyle+":", labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},
+							{ref:ZaAccount.A_zimbraPrefMailSignatureStyle, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefMailSignatureStyle,label:ZaMsg.NAD_zimbraPrefMailSignatureStyle+":", labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged,trueValue:"internet", falseValue:"outlook"},
 							{ref:ZaAccount.A_prefMailSignature, type:_TEXTAREA_, msgName:ZaMsg.NAD_prefMailSignature,label:ZaMsg.NAD_prefMailSignature+":", labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", onChange:ZaTabView.onFormFieldChanged, colSpan:3, width:"30em"},
 							{type:_SEPARATOR_},
 							{ref:ZaAccount.A_zimbraPrefOutOfOfficeReplyEnabled, type:_CHECKBOX_, msgName:ZaMsg.NAD_zimbraPrefOutOfOfficeReplyEnabled,label:ZaMsg.NAD_zimbraPrefOutOfOfficeReplyEnabled+":", labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_},

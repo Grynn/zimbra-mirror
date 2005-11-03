@@ -318,7 +318,7 @@ ZaCos.myXModel.items = new Array();
 		ZaCos.myXModel.items.push({id:ZaCos.A_zimbraPrefGroupMailBy, choices:ZaModel.GROUP_MAIL_BY_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefGroupMailBy, type:_ENUM_});		
 		ZaCos.myXModel.items.push({id:ZaCos.A_zimbraPrefMessageViewHtmlPreferred, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefMessageViewHtmlPreferred, type:_ENUM_});
 		ZaCos.myXModel.items.push({id:ZaCos.A_zimbraPrefShowSearchString, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefShowSearchString, type:_ENUM_});		
-		ZaCos.myXModel.items.push({id:ZaCos.A_zimbraPrefMailSignatureStyle, choices:ZaModel.SIGNATURE_STYLE_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefMailSignatureStyle, type:_ENUM_});				
+		ZaCos.myXModel.items.push({id:ZaCos.A_zimbraPrefMailSignatureStyle, choices:ZaModel.SIGNATURE_STYLE_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefMailSignatureStyle, type:_ENUM_,defaultValue:"internet"});				
 		ZaCos.myXModel.items.push({id:ZaCos.A_zimbraPrefUseTimeZoneListInCalendar, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefUseTimeZoneListInCalendar, type:_ENUM_});		
 		ZaCos.myXModel.items.push({id:ZaCos.A_zimbraPrefMailPollingInterval, ref:"attrs/"+ZaCos.A_zimbraPrefMailPollingInterval, type:_STRING_});		
 //features

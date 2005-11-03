@@ -302,7 +302,10 @@ Super_Checkbox_XFormItem.prototype.initializeItems = function() {
 	if(checkBoxLabelLocation) {
 		this.getItems()[0].labelLocation = checkBoxLabelLocation;
 	}
-
+	var trueValue = this.getInheritedProperty("trueValue");
+	var falseValue = this.getInheritedProperty(", falseValue:");	
+	this.getItems()[0].trueValue = trueValue;
+	this.getItems()[0].falseValue = falseValue;	
 }	
 
 Super_Checkbox_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
@@ -311,7 +314,7 @@ Super_Checkbox_XFormItem.prototype.outputHTML = function (html, updateScript, in
 
 Super_Checkbox_XFormItem.prototype.items = [
 	{	type:_CHECKBOX_, ref:".", align:_LEFT_,
-		trueValue:"TRUE", falseValue:"FALSE", 
+		//trueValue:"TRUE", falseValue:"FALSE", 
 		onChange:Composite_XFormItem.onFieldChange,
 		updateElement:function(value) {
 			Super_XFormItem.updateCss.call(this,1);

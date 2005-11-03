@@ -50,7 +50,7 @@ ZaModel.BOOLEAN_CHOICES1= [{value:1, label:"Yes"}, {value:0, label:"No"}, {value
 
 ZaModel.COMPOSE_FORMAT_CHOICES = [{value:"text", label:"Text"}, {value:"html", label:"HTML"}];
 ZaModel.GROUP_MAIL_BY_CHOICES = [{value:"conversation", label:"Conversation"}, {value:"message", label:"Message"}];
-ZaModel.SIGNATURE_STYLE_CHOICES = [{value:"outlook", label:"Outlook"}, {value:"internet", label:"Internet"}];
+ZaModel.SIGNATURE_STYLE_CHOICES = [{value:"outlook", label:"No"}, {value:"internet", label:"Yes"}];
 ZaModel.ErrorCode = "code";
 ZaModel.ErrorMessage = "error_message";
 ZaModel.currentStep = "currentStep";
