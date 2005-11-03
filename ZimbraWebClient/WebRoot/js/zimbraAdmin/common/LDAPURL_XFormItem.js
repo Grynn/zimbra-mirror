@@ -35,7 +35,7 @@ XFormItemFactory.createItemType("_LDAPURL_", "ldapurl", LDAPURL_XFormItem, Compo
 LDAPURL_XFormItem.prototype.numCols = 5;
 LDAPURL_XFormItem.prototype.nowrap = true;
 LDAPURL_XFormItem.prototype._protocolPart = "ldap://";
-LDAPURL_XFormItem.prototype._serverPart = "server";
+LDAPURL_XFormItem.prototype._serverPart = "";
 LDAPURL_XFormItem.prototype._portPart = "389";
 
 LDAPURL_XFormItem.prototype.items = [
@@ -54,7 +54,7 @@ LDAPURL_XFormItem.prototype.items = [
 	},
 	{type:_TEXTFIELD_, width:"200px", forceUpdate:true, ref:".", labelLocation:_NONE_, label:null,relevantBehavior:_PARENT_,
 		getDisplayValue:function (itemVal) {
-			var val = "server";
+			var val = "";
 			if(itemVal) {
 				var URLChunks = itemVal.split(/[:\/]/);
 				if(URLChunks.length >= 4) {

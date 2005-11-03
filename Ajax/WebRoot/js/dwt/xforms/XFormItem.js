@@ -2632,6 +2632,7 @@ Repeat_XFormItem.prototype.initializeItems = function () {
 	if (this.getShowAddButton()) {
 		var button = this.getAddButton();
 		var label = this.getInheritedProperty("addButtonLabel");
+		var showAddOnNextRow = this.getInheritedProperty("showAddOnNextRow");
 		if(label)
 			button.label = label;		
 			
@@ -2639,7 +2640,11 @@ Repeat_XFormItem.prototype.initializeItems = function () {
 			button.relevant = "(item.getInstanceCount()-1) == item.__parentItem.instanceNum";
 		}
 		group.items[group.items.length] = button;
-		group.numCols++;
+		if(showAddOnNextRow) {
+			group.items[group.items.length] = {type:_SPACER_, colSpan:(group.numCols-1), relevant:"(item.getInstanceCount()-1) == item.__parentItem.instanceNum"};
+		} else {
+			group.numCols++;
+		}
 	}
 	if (this.getShowMoveUpButton()) {
 		group.items[group.items.length] = this.getMoveUpButton();

@@ -571,7 +571,9 @@ function () {
 									{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_GALUseSSL, width:"40px"}									
 								]
 							},
-							{ref:ZaDomain.A_GalLdapURL, type:_REPEAT_, label:ZaMsg.Domain_GalLdapURL+":", repeatInstance:"ldap://server:389", showAddButton:true, showRemoveButton:true,  
+							{ref:ZaDomain.A_GalLdapURL, type:_REPEAT_, label:ZaMsg.Domain_GalLdapURL+":", repeatInstance:"", showAddButton:true, showRemoveButton:true,  
+								addButtonLabel:ZaMsg.Domain_AddURL, 
+								showAddOnNextRow:true,
 								items: [
 									{ref:".", type:_LDAPURL_, label:null, labelLocation:_NONE_}
 								]
@@ -675,7 +677,9 @@ function () {
 													{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_AuthADUseSSL, width:"40px"}									
 												]
 											},
-											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL+":", repeatInstance:"ldap://server:389", showAddButton:true, showRemoveButton:true,  
+											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL+":", repeatInstance:"", showAddButton:true, showRemoveButton:true,  
+												addButtonLabel:ZaMsg.Domain_AddURL, 
+												showAddOnNextRow:true,											
 												items: [
 													{ref:".", type:_LDAPURL_, label:null, labelLocation:_NONE_}
 												]
@@ -693,8 +697,10 @@ function () {
 													{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_AuthLDAPUseSSL, width:"40px"}									
 												]
 											},	
-											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL+":", repeatInstance:"ldap://server:389", showAddButton:true, showRemoveButton:true,  
+											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL+":", repeatInstance:"", showAddButton:true, showRemoveButton:true,  
 												items: [
+													addButtonLabel:ZaMsg.Domain_AddURL, 
+													showAddOnNextRow:true,												
 													{ref:".", type:_LDAPURL_, label:null, labelLocation:_NONE_}
 												]
 											},

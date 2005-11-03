@@ -355,7 +355,9 @@ function () {
 									{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_GALUseSSL, width:"40px"}									
 								]
 							},
-							{ref:ZaDomain.A_GalLdapURL, type:_REPEAT_, label:ZaMsg.Domain_GalLdapURL+":", repeatInstance:"ldap://server:389", showAddButton:true, showRemoveButton:true,  
+							{ref:ZaDomain.A_GalLdapURL, type:_REPEAT_, label:ZaMsg.Domain_GalLdapURL+":", repeatInstance:"", showAddButton:true, showRemoveButton:true,  
+								addButtonLabel:ZaMsg.Domain_AddURL, 
+								showAddOnNextRow:true,							
 								items: [
 									{ref:".", type:_LDAPURL_, label:null, labelLocation:_NONE_}
 								]

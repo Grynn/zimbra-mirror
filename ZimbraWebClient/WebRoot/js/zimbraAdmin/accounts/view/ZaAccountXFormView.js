@@ -368,8 +368,10 @@ ZaAccountXFormView.prototype.getMyXForm = function() {
 					},
 					{type:_CASE_, numCols:1, relevant:"instance[ZaModel.currentTab] == 5",
 						items: [
-							{type:_OUTPUT_, value:"Edit aliases for this account:"},
-							{ref:ZaAccount.A_zimbraMailAlias, type:_REPEAT_, label:null, repeatInstance:emptyAlias, showAddButton:true, showRemoveButton:true,  
+							{type:_OUTPUT_, value:ZaMsg.NAD_EditAliasesGroup},
+							{ref:ZaAccount.A_zimbraMailAlias, type:_REPEAT_, label:null, repeatInstance:emptyAlias, showAddButton:true, showRemoveButton:true, 
+								addButtonLabel:ZaMsg.NAD_AddAlias, 
+								showAddOnNextRow:true,
 								items: [
 									{ref:".", type:_EMAILADDR_, label:null, onChange:ZaTabView.onFormFieldChanged}
 								],
@@ -379,8 +381,10 @@ ZaAccountXFormView.prototype.getMyXForm = function() {
 					},
 					{type:_CASE_, numCols:1, relevant:"instance[ZaModel.currentTab] == 6", 
 						items: [
-							{type:_OUTPUT_, value:"Edit forwarding addresses for this account:"},
+							{type:_OUTPUT_, value:ZaMsg.NAD_EditFwdGroup},
 							{ref:ZaAccount.A_zimbraMailForwardingAddress, type:_REPEAT_, label:null, repeatInstance:emptyAlias, showAddButton:true, showRemoveButton:true, 
+								addButtonLabel:ZaMsg.NAD_AddAddress,
+								showAddOnNextRow:true,
 								items: [
 									{ref:".", type:_TEXTFIELD_, label:null, onChange:ZaTabView.onFormFieldChanged, width:250}
 								],
