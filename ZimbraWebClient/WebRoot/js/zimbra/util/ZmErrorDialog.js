@@ -131,7 +131,7 @@ ZmErrorDialog.prototype._getNavigatorInfo = function() {
 	var idx = 0;
 	
 	// Add the url the user used to connect
-	strNav[idx++] = "\nhref: " + location.href + "\n";
+	strNav[idx++] = "\n\n" + "href: " + location.href + "\n";
 
 	for (var i in navigator) {
 		// Skip functions
