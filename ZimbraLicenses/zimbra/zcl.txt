@@ -5,5 +5,5 @@ PRODUCT, YOU ARE CONSENTING TO BE BOUND BY THIS AGREEMENT. IF YOU DO NOT AGREE
 TO ALL OF THE TERMS OF THIS AGREEMENT, THEN DO NOT DOWNLOAD, INSTALL OR USE THE 
 PRODUCT.
 
-Open Source License Terms for the Zimbra Collaboration Suite:
+License Terms for the Zimbra Collaboration Suite:
 	http://www.zimbra.com/downloads/sourcebinary/index.php?dl=2
