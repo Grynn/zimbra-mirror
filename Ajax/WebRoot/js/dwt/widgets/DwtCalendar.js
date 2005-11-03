@@ -757,12 +757,26 @@ function() {
     this._calWidgetInited = true;
 }
 
+DwtCalendar.prototype.setMouseOverDayCallback =
+function(callback) {
+	this._mouseOverDayCB = callback;
+}
+
+// Temp date used for callback in mouseOverListener
+DwtCalendar._tmpDate = new Date();
+DwtCalendar._tmpDate.setHours(0, 0, 0, 0);
 
 DwtCalendar.prototype._mouseOverListener = 
 function(ev) {
 	var target = ev.target;
 	if (target.id.charAt(0) == 'c') {
 		this._setClassName(target, DwtCalendar._ACTIVATED);
+		/* If a mouse over callback has been registered, then call it to give it chance
+		 * do work like setting the tooltip content */
+		if (this._mouseOverDayCB) {
+			DwtCalendar._tmpDate.setFullYear(target._year, target._month, target_day);
+			this._mouseOverDayCB.run(this, DwtCalendar._tmpDate);
+		}
 	} else if (target.id.charAt(0) == 't') {
 		// Dont activate title for now
 		return;
