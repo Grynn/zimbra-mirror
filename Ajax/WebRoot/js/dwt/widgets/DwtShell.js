@@ -292,11 +292,11 @@ function(ev) {
 	if (shell.isListenerRegistered(DwtEvent.ONKEYPRESS)) {
 		var keyEvent = DwtShell.keyEvent;
 		keyEvent.setFromDhtmlEvent(ev);
-		DBG.println("KEY PRESS - KC:" + keyEvent.keyCode + " CC: " + keyEvent.charCode 
-	   	         + " ALT: " + keyEvent.altKey + " SHIFT: " + keyEvent.shiftKey + " CTRL: " + keyEvent.ctrlKey);
+//		DBG.println("KEY PRESS - KC:" + keyEvent.keyCode + " CC: " + keyEvent.charCode 
+//	   	         + " ALT: " + keyEvent.altKey + " SHIFT: " + keyEvent.shiftKey + " CTRL: " + keyEvent.ctrlKey);
 	   	         
-	   	if (keyEvent.target)
-			DBG.println("TARGET NAME: " + keyEvent.target.tagName + " ID: " + keyEvent.target.id);	
+//	   	if (keyEvent.target)
+//			DBG.println("TARGET NAME: " + keyEvent.target.tagName + " ID: " + keyEvent.target.id);	
 	
 		var tagName = (keyEvent.target) ? keyEvent.target.tagName.toLowerCase() : null;
 		if (tagName != "input") {
