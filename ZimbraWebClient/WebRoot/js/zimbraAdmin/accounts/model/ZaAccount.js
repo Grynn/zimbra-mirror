@@ -546,6 +546,22 @@ function ZaReindexMailbox() {
 	this.pollInterval = 500;	
 }
 
+ZaReindexMailbox.myXModel = {
+	items: [
+		{id:"status", ref:"status", type:_STRING_},						
+		{id:"numSucceeded", ref:"numSucceeded", type:_NUMBER_},								
+		{id:"numFailed", ref:"numFailed", type:_NUMBER_},										
+		{id:"numRemaining", ref:"numRemaining", type:_NUMBER_},												
+		{id:"mbxId", ref:"mbxId", type:_STRING_},														
+		{id:"numTotal", ref:"numTotal", type:_NUMBER_},			
+		{id:"numDone", ref:"numDone", type:_NUMBER_},					
+		{id:"numDone", ref:"numDone", type:_NUMBER_},							
+		{id:"pollInterval", ref:"pollInterval", type:_STRING_},
+		{id:"progressMsg", ref:"progressMsg", type:_STRING_}
+	]
+};
+
+
 ZaAccount.getReindexStatus = 
 function (mbxId, callback) {
 	var soapDoc = AjxSoapDoc.create("ReIndexRequest", "urn:zimbraAdmin", null);

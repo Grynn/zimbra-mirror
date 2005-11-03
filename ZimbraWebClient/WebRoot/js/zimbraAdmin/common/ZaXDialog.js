@@ -62,7 +62,7 @@ function ZaXDialog(parent, app, className, title, w, h) {
 	this._pageDiv.style.overflow = "auto";
 
 	this._createContentHtml();
-	this.initForm(ZaServer.myXModel,this.getMyXForm());
+
 }
 
 ZaXDialog.prototype = new DwtDialog;
