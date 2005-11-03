@@ -184,7 +184,6 @@ function(date, skipNotify, forceRollOver, dblClick) {
 
 	var layout = false;
 	var notify = false;
-	var newSelectedIdx = -1;
 	var cellId;
 	
 	if (this._date2CellId != null) {
@@ -193,7 +192,7 @@ function(date, skipNotify, forceRollOver, dblClick) {
 		
 		if (cellId) {
 		 	if (cellId == this._selectedCellId)
-		 		return true;
+		 		notify = true;
 
 			var cell = Dwt.getDomObj(this.getDocument(), cellId);
 			if (cell._dayType == DwtCalendar._THIS_MONTH)
@@ -859,7 +858,8 @@ function(ev) {
 		if (this.parent instanceof DwtMenu)
 			DwtMenu.closeActiveMenu();
 				
-		if (target.id != this._selectedDayElId && this.setDate(new Date(target._year, target._month, target._day)))
+		//if (target.id != this._selectedDayElId && this.setDate(new Date(target._year, target._month, target._day)))				
+		if (this.setDate(new Date(target._year, target._month, target._day)))
 			return;
 		this._setClassName(target, DwtCalendar._ACTIVATED);
 	} else if (target.id.charAt(0) == 'b') {
