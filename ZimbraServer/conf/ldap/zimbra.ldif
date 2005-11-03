@@ -80,6 +80,7 @@ zimbraCOSInheritedAttr: zimbraPrefComposeInNewWindow
 zimbraCOSInheritedAttr: zimbraPrefCalendarFirstDayOfWeek
 zimbraCOSInheritedAttr: zimbraPrefCalendarInitialView
 zimbraCOSInheritedAttr: zimbraPrefCalendarUseQuickAdd
+zimbraCOSInheritedAttr: zimbraPrefCalendarAlwaysShowMiniCal
 zimbraCOSInheritedAttr: zimbraPrefCalendarNotifyDelegatedChanges
 zimbraCOSInheritedAttr: zimbraPrefContactsInitialView
 zimbraCOSInheritedAttr: zimbraPrefShowFragments
@@ -372,6 +373,7 @@ zimbraPrefComposeInNewWindow: FALSE
 zimbraPrefCalendarFirstDayOfWeek: 0
 zimbraPrefCalendarInitialView: workWeek
 zimbraPrefCalendarUseQuickAdd: FALSE
+zimbraPrefCalendarAlwaysShowMiniCal: TRUE
 zimbraPrefCalendarNotifyDelegatedChanges: FALSE
 zimbraPrefContactsInitialView: list
 zimbraPrefHtmlEditorDefaultFontFamily: Times New Roman

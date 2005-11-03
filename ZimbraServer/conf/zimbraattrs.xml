@@ -354,6 +354,8 @@
 
 <attr name="zimbraPrefCalendarUseQuickAdd" type="boolean"/>
 
+<attr name="zimbraPrefCalendarAlwaysShowMiniCal" type="boolean"/>
+
 <attr name="zimbraPrefCalendarInitialView" type="enum" value="day,week,workWeek,month,schedule"/>
 
 <attr name="zimbraPrefCalendarInitialCheckedCalendars" type="string" max="512"/>

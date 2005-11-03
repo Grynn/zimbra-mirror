@@ -774,8 +774,8 @@ function(ev) {
 		/* If a mouse over callback has been registered, then call it to give it chance
 		 * do work like setting the tooltip content */
 		if (this._mouseOverDayCB) {
-			DwtCalendar._tmpDate.setFullYear(target._year, target._month, target_day);
-			this._mouseOverDayCB.run(this, DwtCalendar._tmpDate);
+			DwtCalendar._tmpDate.setFullYear(target._year, target._month, target._day);
+			this._mouseOverDayCB.run([this, DwtCalendar._tmpDate]);
 		}
 	} else if (target.id.charAt(0) == 't') {
 		// Dont activate title for now
@@ -800,6 +800,7 @@ function(ev) {
 
 DwtCalendar.prototype._mouseOutListener = 
 function(ev) {
+	this.setToolTipContent(null);
 	var target = ev.target;
 	if (target.id.charAt(0) == 'c') {
 		this._setClassName(target, DwtCalendar._NORMAL);
