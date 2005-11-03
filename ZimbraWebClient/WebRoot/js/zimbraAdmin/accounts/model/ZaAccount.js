@@ -636,6 +636,9 @@ function (arg, respObj) {
 			respObj.errorDetail = "";
 			respObj.resultMsg = "";	
 			respObj.progressMsg = ZaMsg.NAD_ACC_ReindexingNotRunning;
+			if(respObj.numRemaining > 0) {
+				respObj.numDone = respObj.numTotal;
+			}
 		} else {
 			respObj.resultMsg = String(ZaMsg.FAILED_REINDEX).replace("{0}", arg.code);
 			respObj.errorDetail = arg.detail;
