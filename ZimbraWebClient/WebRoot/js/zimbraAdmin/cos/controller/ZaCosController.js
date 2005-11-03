@@ -627,6 +627,14 @@ function () {
 ZaCosController.prototype.newCos = 
 function () {
 	var newCos = new ZaCos(this._app);
+	var defCos = new ZaCos(this._app);
+	defCos.load("name", "default");
+	//copy values from default cos to the new cos
+	for(var aname in defCos.attrs) {
+		if( (aname == ZaItem.A_objectClass) || (aname == ZaItem.A_zimbraId) || (aname == ZaCos.A_name) || (aname == ZaCos.A_description) || (aname == ZaCos.A_notes) )
+			continue;			
+		newCos.attrs[aname] = defCos.attrs[aname];
+	}	
 	this._setView(newCos);
 }
 

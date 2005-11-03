@@ -33,6 +33,7 @@
 function ZaCos(app) {
 	ZaItem.call(this, ZaEvent.S_COS);
 	this.attrs = new Object();
+	this[ZaCos.A_zimbraMailHostPoolInternal] = new Array();
 	this.id = "";
 	this.name="";
 	this._app = app;	
