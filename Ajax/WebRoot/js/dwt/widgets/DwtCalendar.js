@@ -157,10 +157,16 @@ function(listener) {
 	this.removeListener(DwtEvent.DATE_RANGE, listener);
 }
 
-// call this method to not notify selection when paging arrow buttons are clicked
-DwtCalendar.prototype.skipNotifyOnPage = 
+// call this method with true to not notify selection when paging arrow buttons are clicked
+DwtCalendar.prototype.setSkipNotifyOnPage = 
+function(skip) {
+	this._skipNotifyOnPage = skip;
+}
+
+// call this method get whether we are skipping notify on page buttons or not
+DwtCalendar.prototype.getSkipNotifyOnPage = 
 function() {
-	this._skipNotifyOnPage = true;
+	return this._skipNotifyOnPage;
 }
 
 DwtCalendar.prototype.setDate =
