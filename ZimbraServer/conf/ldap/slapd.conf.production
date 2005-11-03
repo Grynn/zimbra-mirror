@@ -89,6 +89,7 @@ cachesize 10000
 # check point whenever 64k data bytes written or 
 # 5 minutes has elapsed whichever occurs first
 checkpoint 64 5
+loglevel 256
 # The database directory MUST exist prior to running slapd AND 
 # should only be accessible by the slapd and slap tools.
 # Mode 700 recommended.
