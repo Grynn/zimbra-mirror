@@ -372,6 +372,7 @@ ZaAccountXFormView.prototype.getMyXForm = function() {
 							{ref:ZaAccount.A_zimbraMailAlias, type:_REPEAT_, label:null, repeatInstance:emptyAlias, showAddButton:true, showRemoveButton:true, 
 								addButtonLabel:ZaMsg.NAD_AddAlias, 
 								showAddOnNextRow:true,
+								removeButtonLabel:ZaMsg.NAD_RemoveAlias,
 								items: [
 									{ref:".", type:_EMAILADDR_, label:null, onChange:ZaTabView.onFormFieldChanged}
 								],
@@ -385,6 +386,7 @@ ZaAccountXFormView.prototype.getMyXForm = function() {
 							{ref:ZaAccount.A_zimbraMailForwardingAddress, type:_REPEAT_, label:null, repeatInstance:emptyAlias, showAddButton:true, showRemoveButton:true, 
 								addButtonLabel:ZaMsg.NAD_AddAddress,
 								showAddOnNextRow:true,
+								removeButtonLabel:ZaMsg.NAD_RemoveAddress,								
 								items: [
 									{ref:".", type:_TEXTFIELD_, label:null, onChange:ZaTabView.onFormFieldChanged, width:250}
 								],

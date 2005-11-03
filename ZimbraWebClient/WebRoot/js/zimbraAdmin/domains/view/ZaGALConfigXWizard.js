@@ -357,6 +357,7 @@ function () {
 							},
 							{ref:ZaDomain.A_GalLdapURL, type:_REPEAT_, label:ZaMsg.Domain_GalLdapURL+":", repeatInstance:"", showAddButton:true, showRemoveButton:true,  
 								addButtonLabel:ZaMsg.Domain_AddURL, 
+								removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,								
 								showAddOnNextRow:true,							
 								items: [
 									{ref:".", type:_LDAPURL_, label:null, labelLocation:_NONE_}

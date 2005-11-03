@@ -322,6 +322,7 @@ function () {
 											},											
 											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthADURL+":", repeatInstance:"", showAddButton:true, showRemoveButton:true,  
 												addButtonLabel:ZaMsg.Domain_AddURL, 
+												removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,												
 												showAddOnNextRow:true,											
 												items: [
 													{ref:".", type:_LDAPURL_, label:null, labelLocation:_NONE_}
@@ -342,6 +343,7 @@ function () {
 											},										
 											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL+":", repeatInstance:"", showAddButton:true, showRemoveButton:true,  
 												addButtonLabel:ZaMsg.Domain_AddURL, 
+												removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,												
 												showAddOnNextRow:true,											
 												items: [
 													{ref:".", type:_LDAPURL_, label:null, labelLocation:_NONE_}
