@@ -113,7 +113,7 @@ all: $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 
 	@for lib in $(SA_PERL_LIBS); do \
 		echo "Compiling perl lib $$lib"; \
-		perl -I$(DEST_LIB_DIR) -MCPAN -e "force (\"install\", \"$$lib\")" ; \
+		perl -I$(DEST_LIB_DIR) -MCPAN -e 'install "Mail::SpamAssassin"; $$CPAN::Config->{makepl_arg}.="DATADIR=/opt/zimbra/conf/spamassassin"; force ("install", "Mail::SpamAssassin")' ; \
 	done	
 
 	@for lib in $(SWATCH); do \
@@ -127,6 +127,12 @@ all: $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 
 	(cd $(DEST_LIB_DIR); tar czf $(PERL_TGZ_DEST) .)
 	chmod -R a+w $(PERL_TGZ_DEST_DIR)
+
+sa:
+	@for lib in $(SA_PERL_LIBS); do \
+		echo "Compiling perl lib $$lib"; \
+		perl -I$(DEST_LIB_DIR) -MCPAN -e 'install "Mail::SpamAssassin"; $$CPAN::Config->{makepl_arg}.="DATADIR=/opt/zimbra/conf/spamassassin"; force ("install", "Mail::SpamAssassin")' ; \
+	done	
 
 $(PERL_TGZ_DEST_DIR):
 	mkdir -p $@
