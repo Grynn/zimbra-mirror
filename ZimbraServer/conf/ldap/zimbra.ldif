@@ -372,7 +372,7 @@ zimbraPrefSentMailFolder: sent
 zimbraPrefComposeInNewWindow: FALSE
 zimbraPrefCalendarFirstDayOfWeek: 0
 zimbraPrefCalendarInitialView: workWeek
-zimbraPrefCalendarUseQuickAdd: FALSE
+zimbraPrefCalendarUseQuickAdd: TRUE
 zimbraPrefCalendarAlwaysShowMiniCal: TRUE
 zimbraPrefCalendarNotifyDelegatedChanges: FALSE
 zimbraPrefContactsInitialView: list
