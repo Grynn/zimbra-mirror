@@ -273,7 +273,7 @@ AjxDateFormat._DATETIME_FORMATTERS = {};
 
 AjxDateFormat.getDateInstance = function(style) {
 	// lazily create formatters
-	style = style || AjxDateFormat.DEFAULT;
+	style = style != null ? style : AjxDateFormat.DEFAULT;
 	if (!AjxDateFormat._DATE_FORMATTERS[style]) {
 		AjxDateFormat._DATE_FORMATTERS[style] = new AjxDateFormat(AjxDateFormat._dateFormats[style]);
 	}
@@ -282,7 +282,7 @@ AjxDateFormat.getDateInstance = function(style) {
 
 AjxDateFormat.getTimeInstance = function(style) {
 	// lazily create formatters
-	style = style || AjxDateFormat.DEFAULT;
+	style = style != null ? style : AjxDateFormat.DEFAULT;
 	if (!AjxDateFormat._TIME_FORMATTERS[style]) {
 		AjxDateFormat._TIME_FORMATTERS[style] = new AjxDateFormat(AjxDateFormat._timeFormats[style]);
 	}
@@ -291,8 +291,8 @@ AjxDateFormat.getTimeInstance = function(style) {
 
 AjxDateFormat.getDateTimeInstance = function(dateStyle, timeStyle) {
 	// lazily create formatters
-	dateStyle = dateStyle || AjxDateFormat.DEFAULT;
-	timeStyle = timeStyle || AjxDateFormat.DEFAULT;
+	dateStyle = dateStyle != null ? dateStyle : AjxDateFormat.DEFAULT;
+	timeStyle = timeStyle != null ? timeStyle : AjxDateFormat.DEFAULT;
 	var style = dateStyle * 10 + timeStyle;
 	if (!AjxDateFormat._DATETIME_FORMATTERS[style]) {
 		var pattern = I18nMsg.formatDateTime;
