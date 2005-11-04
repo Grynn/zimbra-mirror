@@ -52,12 +52,14 @@ Contributor(s):
 <script type="text/javascript" src="<%= contextPath %>/js/events/AjxEventMgr.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/util/AjxCallback.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/events/AjxListener.js"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/util/AjxText.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/util/AjxDateUtil.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/util/AjxStringUtil.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/util/AjxVector.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/util/AjxSelectionManager.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/net/AjxPost.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/util/AjxBuffer.js"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/util/AjxTimezone.js"></script>
 
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/core/Dwt.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/core/DwtException.js"></script>

@@ -50,7 +50,7 @@
 
   <servlet-mapping>
   	<servlet-name>Properties2Javascript</servlet-name>
-  	<url-pattern>/js/ajax/config/msgs/*</url-pattern>
+  	<url-pattern>/js/msgs/*</url-pattern>
   </servlet-mapping>
 
 </web-app>

@@ -25,6 +25,5 @@ Contributor(s):
 <% 
    String contextPath = (String)request.getContextPath(); 
 %>
-<script type="text/javascript" src="<%= contextPath %>/js/ajax/config/msgs/AjxMsg.js<%= ext %>?v=<%= vers %>"></script>
-<script type="text/javascript" src="<%= contextPath %>/js/ajax/dwt/config/msgs/DwtMsg.js<%= ext %>?v=<%= vers %>"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/msgs/I18nMsg,AjxMsg.js<%= ext %>?v=<%= vers %>"></script>
 

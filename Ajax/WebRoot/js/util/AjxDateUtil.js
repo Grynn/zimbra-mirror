@@ -36,41 +36,13 @@ AjxDateUtil.MSEC_PER_HALF_HOUR = 1800000;
 AjxDateUtil.MSEC_PER_HOUR = 3600000;
 AjxDateUtil.MSEC_PER_DAY = 24 * AjxDateUtil.MSEC_PER_HOUR;
 
-AjxDateUtil.WEEKDAY_SHORT = [
-	AjxMsg.weekdayShortSun, AjxMsg.weekdayShortMon, AjxMsg.weekdayShortTue, 
-	AjxMsg.weekdayShortWed, AjxMsg.weekdayShortThu, AjxMsg.weekdayShortFri, 
-	AjxMsg.weekdayShortSat
-];
-AjxDateUtil.WEEKDAY_MEDIUM = [
-	AjxMsg.weekdayMediumSun, AjxMsg.weekdayMediumMon, AjxMsg.weekdayMediumTue, 
-	AjxMsg.weekdayMediumWed, AjxMsg.weekdayMediumThu, AjxMsg.weekdayMediumFri, 
-	AjxMsg.weekdayMediumSat
-];
-AjxDateUtil.WEEKDAY_LONG = [
-	AjxMsg.weekdayLongSun, AjxMsg.weekdayLongMon, AjxMsg.weekdayLongTue, 
-	AjxMsg.weekdayLongWed, AjxMsg.weekdayLongThu, AjxMsg.weekdayLongFri, 
-	AjxMsg.weekdayLongSat
-];
+AjxDateUtil.WEEKDAY_SHORT = AjxDateFormat.WeekdaySegment.WEEKDAYS[AjxDateFormat.SHORT];
+AjxDateUtil.WEEKDAY_MEDIUM = AjxDateFormat.WeekdaySegment.WEEKDAYS[AjxDateFormat.MEDIUM];
+AjxDateUtil.WEEKDAY_LONG = AjxDateFormat.WeekdaySegment.WEEKDAYS[AjxDateFormat.LONG];
 
-AjxDateUtil.MONTH_SHORT = [
-	AjxMsg.monthShortJan, AjxMsg.monthShortFeb, AjxMsg.monthShortMar, 
-	AjxMsg.monthShortApr, AjxMsg.monthShortMay, AjxMsg.monthShortJun, 
-	AjxMsg.monthShortJul, AjxMsg.monthShortAug, AjxMsg.monthShortSep, 
-	AjxMsg.monthShortOct, AjxMsg.monthShortNov, AjxMsg.monthShortDec
-];
-AjxDateUtil.MONTH_MEDIUM = [
-	AjxMsg.monthMediumJan, AjxMsg.monthMediumFeb, AjxMsg.monthMediumMar,
-	AjxMsg.monthMediumApr, AjxMsg.monthMediumMay, AjxMsg.monthMediumJun,
-	AjxMsg.monthMediumJul, AjxMsg.monthMediumAug, AjxMsg.monthMediumSep,
-	AjxMsg.monthMediumOct, AjxMsg.monthMediumNov, AjxMsg.monthMediumDec
-	
-];
-AjxDateUtil.MONTH_LONG = [
-	AjxMsg.monthLongJan, AjxMsg.monthLongFeb, AjxMsg.monthLongMar,
-	AjxMsg.monthLongApr, AjxMsg.monthLongMay, AjxMsg.monthLongJun,
-	AjxMsg.monthLongJul, AjxMsg.monthLongAug, AjxMsg.monthLongSep,
-	AjxMsg.monthLongOct, AjxMsg.monthLongNov, AjxMsg.monthLongDec
-];
+AjxDateUtil.MONTH_SHORT = AjxDateFormat.MonthSegment.MONTHS[AjxDateFormat.SHORT];
+AjxDateUtil.MONTH_MEDIUM = AjxDateFormat.MonthSegment.MONTHS[AjxDateFormat.MEDIUM];
+AjxDateUtil.MONTH_LONG = AjxDateFormat.MonthSegment.MONTHS[AjxDateFormat.LONG];
 
 AjxDateUtil.FREQ_TO_DISPLAY = {
 	SEC: [AjxMsg.second,AjxMsg.seconds],

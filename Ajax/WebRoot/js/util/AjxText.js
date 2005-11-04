@@ -147,7 +147,10 @@ AjxFormat.Segment.prototype.toString = function() {
 /**
  * The AjxDateFormat class formats Date objects according to a specified 
  * pattern. The patterns are defined the same as the SimpleDateFormat
- * class in the Java libraries.
+ * class in the Java libraries. <strong>Note:</strong> <em>Only the
+ * Gregorian Calendar is supported at this time.</em> Supporting other
+ * calendars would require a lot more information downloaded to the
+ * client. Limiting dates to the Gregorian calendar is a trade-off.
  * <p>
  * <strong>Note:</strong>
  * The date format differs from the Java patterns in one way: the pattern
@@ -159,10 +162,10 @@ function AjxDateFormat(pattern) {
 	AjxFormat.call(this, pattern);
 	if (typeof pattern == "number") {
 		switch (pattern) {
-			case AjxDateFormat.SHORT: pattern = "TODO"; break;
-			case AjxDateFormat.MEDIUM: pattern = "TODO"; break;
-			case AjxDateFormat.LONG: pattern = "TODO"; break;
-			case AjxDateFormat.FULL: pattern = "TODO"; break;
+			case AjxDateFormat.SHORT: pattern = I18nMsg.formatDateShort; break;
+			case AjxDateFormat.MEDIUM: pattern = I18nMsg.formatDateMedium; break;
+			case AjxDateFormat.LONG: pattern = I18nMsg.formatDateLong; break;
+			case AjxDateFormat.FULL: pattern = I18nMsg.formatDateFull; break;
 		}
 	}	
 	for (var i = 0; i < pattern.length; i++) {
@@ -215,7 +218,7 @@ function AjxDateFormat(pattern) {
 		var field = pattern.substr(head, count);
 		var segment = null;
 		switch (c) {
-			case 'G': segment = new AjxFormat.TextSegment(this, "(TODO:"+field+")"); break;
+			case 'G': segment = new AjxDateFormat.EraSegment(this, field); break;
 			case 'y': segment = new AjxDateFormat.YearSegment(this, field); break;
 			case 'M': segment = new AjxDateFormat.MonthSegment(this, field); break;
 			case 'w': segment = new AjxDateFormat.WeekSegment(this, field); break;
@@ -232,8 +235,8 @@ function AjxDateFormat(pattern) {
 			case 'm': segment = new AjxDateFormat.MinuteSegment(this, field); break;
 			case 's': segment = new AjxDateFormat.SecondSegment(this, field); break;
 			case 'S': segment = new AjxDateFormat.SecondSegment(this, field); break;
-			case 'z': segment = new AjxFormat.TextSegment(this, "(TODO:"+field+")"); break;
-			case 'Z': segment = new AjxFormat.TextSegment(this, "(TODO:"+field+")"); break;
+			case 'z': segment = new AjxDateFormat.TimezoneSegment(this, field); break;
+			case 'Z': segment = new AjxDateFormat.TimezoneSegment(this, field); break;
 		}
 		if (segment != null) {
 			this._segments.push(segment);
@@ -254,12 +257,12 @@ AjxDateFormat.DEFAULT = AjxDateFormat.MEDIUM;
 AjxDateFormat._META_CHARS = "GyMwWDdFEaHkKhmsSzZ";
 
 AjxDateFormat._dateFormats = [
-	AjxMsg.dateFormatShort, AjxMsg.dateFormatMedium, 
-	AjxMsg.dateFormatLong, AjxMsg.dateFormatFull
+	I18nMsg.formatDateShort, I18nMsg.formatDateMedium,
+	I18nMsg.formatDateLong, I18nMsg.formatDateFull
 ];
 AjxDateFormat._timeFormats = [
-	AjxMsg.timeFormatShort, AjxMsg.timeFormatMedium, 
-	AjxMsg.timeFormatLong, AjxMsg.timeFormatFull
+	I18nMsg.formatTimeShort, I18nMsg.formatTimeMedium, 
+	I18nMsg.formatTimeLong, I18nMsg.formatTimeFull
 ];
 
 AjxDateFormat._DATE_FORMATTERS = {};
@@ -292,7 +295,7 @@ AjxDateFormat.getDateTimeInstance = function(dateStyle, timeStyle) {
 	timeStyle = timeStyle || AjxDateFormat.DEFAULT;
 	var style = dateStyle * 10 + timeStyle;
 	if (!AjxDateFormat._DATETIME_FORMATTERS[style]) {
-		var pattern = AjxMsg.dateTimeFormat;
+		var pattern = I18nMsg.formatDateTime;
 		var params = [ AjxDateFormat._dateFormats[dateStyle], AjxDateFormat._timeFormats[timeStyle] ];
 		
 		var dateTimePattern = AjxMessageFormat.format(pattern, params);
@@ -338,6 +341,27 @@ AjxDateFormat.DateSegment.prototype = new AjxFormat.Segment;
 AjxDateFormat.DateSegment.prototype.constructor = AjxDateFormat.DateSegment;
 
 //
+// Date era segment class
+//
+
+AjxDateFormat.EraSegment = function(format, s) {
+	AjxDateFormat.DateSegment.call(this, format, s);
+};
+AjxDateFormat.EraSegment.prototype = new AjxDateFormat.DateSegment;
+AjxDateFormat.EraSegment.prototype.constructor = AjxDateFormat.EraSegment;
+
+// Public methods
+
+AjxDateFormat.EraSegment.prototype.format = function(date) { 
+	// TODO: Only support current era at the moment...
+	return I18nMsg.eraAD;
+};
+
+AjxDateFormat.EraSegment.prototype.toString = function() { 
+	return "dateEra: \""+this._s+'"'; 
+};
+
+//
 // Date year segment class
 //
 
@@ -371,17 +395,23 @@ AjxDateFormat.MonthSegment.prototype.constructor = AjxDateFormat.MonthSegment;
 // Constants
 
 AjxDateFormat.MonthSegment.MONTHS = {};
+AjxDateFormat.MonthSegment.MONTHS[AjxDateFormat.SHORT] = [
+	AjxMsg.monthJanShort, AjxMsg.monthFebShort, AjxMsg.monthMarShort, 
+	AjxMsg.monthAprShort, AjxMsg.monthMayShort, AjxMsg.monthJunShort, 
+	AjxMsg.monthJulShort, AjxMsg.monthAugShort, AjxMsg.monthSepShort, 
+	AjxMsg.monthOctShort, AjxMsg.monthNovShort, AjxMsg.monthDecShort
+];
 AjxDateFormat.MonthSegment.MONTHS[AjxDateFormat.MEDIUM] = [ 
-	AjxMsg.monthMediumJan, AjxMsg.monthMediumFeb, AjxMsg.monthMediumMar,
-	AjxMsg.monthMediumApr, AjxMsg.monthMediumMay, AjxMsg.monthMediumJun,
-	AjxMsg.monthMediumJul, AjxMsg.monthMediumAug, AjxMsg.monthMediumSep,
-	AjxMsg.monthMediumOct, AjxMsg.monthMediumNov, AjxMsg.monthMediumDec
+	I18nMsg.monthJanMedium, I18nMsg.monthFebMedium, I18nMsg.monthMarMedium,
+	I18nMsg.monthAprMedium, I18nMsg.monthMayMedium, I18nMsg.monthJunMedium,
+	I18nMsg.monthJulMedium, I18nMsg.monthAugMedium, I18nMsg.monthSepMedium,
+	I18nMsg.monthOctMedium, I18nMsg.monthNovMedium, I18nMsg.monthDecMedium
 ];
 AjxDateFormat.MonthSegment.MONTHS[AjxDateFormat.LONG] = [ 
-	AjxMsg.monthLongJan, AjxMsg.monthLongFeb, AjxMsg.monthLongMar,
-	AjxMsg.monthLongApr, AjxMsg.monthLongMay, AjxMsg.monthLongJun,
-	AjxMsg.monthLongJul, AjxMsg.monthLongAug, AjxMsg.monthLongSep,
-	AjxMsg.monthLongOct, AjxMsg.monthLongNov, AjxMsg.monthLongDec
+	I18nMsg.monthJanLong, I18nMsg.monthFebLong, I18nMsg.monthMarLong,
+	I18nMsg.monthAprLong, I18nMsg.monthMayLong, I18nMsg.monthJunLong,
+	I18nMsg.monthJulLong, I18nMsg.monthAugLong, I18nMsg.monthSepLong,
+	I18nMsg.monthOctLong, I18nMsg.monthNovLong, I18nMsg.monthDecLong
 ];
 
 // Public methods
@@ -418,7 +448,7 @@ AjxDateFormat.WeekSegment.prototype.format = function(date) {
 	var month = date.getMonth();
 	var day = date.getDate();
 	
-	var ofYear = /[w]/.test(this._s);
+	var ofYear = /w/.test(this._s);
 	var date2 = new Date(year, ofYear ? 0 : month, 1);
 
 	var week = 0;
@@ -452,7 +482,7 @@ AjxDateFormat.DaySegment.prototype.constructor = AjxDateFormat.DaySegment;
 AjxDateFormat.DaySegment.prototype.format = function(date) {
 	var month = date.getMonth();
 	var day = date.getDate();
-	if (/[D]/.test(this._s) && month > 0) {
+	if (/D/.test(this._s) && month > 0) {
 		var year = date.getYear();
 		do {
 			// set date to first day of month and then go back one day
@@ -483,27 +513,28 @@ AjxDateFormat.WeekdaySegment.prototype.constructor = AjxDateFormat.WeekdaySegmen
 // Constants
 
 AjxDateFormat.WeekdaySegment.WEEKDAYS = {};
+// NOTE: The short names aren't available in Java so we have to define them.
 AjxDateFormat.WeekdaySegment.WEEKDAYS[AjxDateFormat.SHORT] = [ 
-	AjxMsg.weekdayShortSun, AjxMsg.weekdayShortMon, AjxMsg.weekdayShortTue,
-	AjxMsg.weekdayShortWed, AjxMsg.weekdayShortThu, AjxMsg.weekdayShortFri,
-	AjxMsg.weekdayShortSat
+	AjxMsg.weekdaySunShort, AjxMsg.weekdayMonShort, AjxMsg.weekdayTueShort,
+	AjxMsg.weekdayWedShort, AjxMsg.weekdayThuShort, AjxMsg.weekdayFriShort,
+	AjxMsg.weekdaySatShort
 ];
 AjxDateFormat.WeekdaySegment.WEEKDAYS[AjxDateFormat.MEDIUM] = [ 
-	AjxMsg.weekdayMediumSun, AjxMsg.weekdayMediumMon, AjxMsg.weekdayMediumTue,
-	AjxMsg.weekdayMediumWed, AjxMsg.weekdayMediumThu, AjxMsg.weekdayMediumFri,
-	AjxMsg.weekdayMediumSat
+	I18nMsg.weekdaySunMedium, I18nMsg.weekdayMonMedium, I18nMsg.weekdayTueMedium,
+	I18nMsg.weekdayWedMedium, I18nMsg.weekdayThuMedium, I18nMsg.weekdayFriMedium,
+	I18nMsg.weekdaySatMedium
 ];
 AjxDateFormat.WeekdaySegment.WEEKDAYS[AjxDateFormat.LONG] = [ 
-	AjxMsg.weekdayLongSun, AjxMsg.weekdayLongMon, AjxMsg.weekdayLongTue,
-	AjxMsg.weekdayLongWed, AjxMsg.weekdayLongThu, AjxMsg.weekdayLongFri,
-	AjxMsg.weekdayLongSat
+	I18nMsg.weekdaySunLong, I18nMsg.weekdayMonLong, I18nMsg.weekdayTueLong,
+	I18nMsg.weekdayWedLong, I18nMsg.weekdayThuLong, I18nMsg.weekdayFriLong,
+	I18nMsg.weekdaySatLong
 ];
 
 // Public methods
 
 AjxDateFormat.WeekdaySegment.prototype.format = function(date) {
 	var weekday = date.getDay();
-	if (/[E]/.test(this._s)) {
+	if (/E/.test(this._s)) {
 		var style;
 		switch (this._s.length) {
 			case 4: style = AjxDateFormat.LONG; break;
@@ -595,7 +626,7 @@ AjxDateFormat.SecondSegment.prototype.constructor = AjxDateFormat.SecondSegment;
 // Public methods
 
 AjxDateFormat.SecondSegment.prototype.format = function(date) {
-	var minutes = /[s]/.test(this._s) ? date.getSeconds() : date.getMilliseconds();
+	var minutes = /s/.test(this._s) ? date.getSeconds() : date.getMilliseconds();
 	return AjxFormat._zeroPad(minutes, this._s.length);
 }
 
@@ -617,12 +648,36 @@ AjxDateFormat.AmPmSegment.prototype.constructor = AjxDateFormat.AmPmSegment;
 
 AjxDateFormat.AmPmSegment.prototype.format = function(date) {
 	var hours = date.getHours();
-	return hours < 12 ? AjxMsg.timeAm : AjxMsg.timePm;
+	return hours < 12 ? I18nMsg.periodAm : I18nMsg.periodPm;
 }
 
 AjxDateFormat.AmPmSegment.prototype.toString = function() { 
 	return "timeAmPm: \""+this._s+'"'; 
 }
+
+//
+// Time timezone segment class
+//
+
+AjxDateFormat.TimezoneSegment = function(format, s) {
+	AjxFormat.Segment.call(this, format, s);
+};
+AjxDateFormat.TimezoneSegment.prototype = new AjxDateFormat.TimeSegment;
+AjxDateFormat.TimezoneSegment.prototype.constructor = AjxDateFormat.TimezoneSegment;
+
+// Public methods
+
+AjxDateFormat.TimezoneSegment.prototype.format = function(date) {
+	var clientId = date.timezone || AjxTimezone.DEFAULT;
+	if (/Z/.test(this._s)) {
+		return AjxTimezone.getShortName(clientId);
+	}
+	return this._s.length < 4 ? AjxTimezone.getMediumName(clientId) : AjxTimezone.getLongName(clientId);
+};
+
+AjxDateFormat.TimezoneSegment.prototype.toString = function() { 
+	return "timeTimezone: \""+this._s+'"'; 
+};
 
 //
 // Message format class

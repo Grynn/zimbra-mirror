@@ -140,32 +140,11 @@ public class Props2JsServlet
                 String key = (String)iter.next();
                 String value = bundle.getString(key);
 
-                out.print(classname+"."+key+" = \"");
-                int length = value.length();
-                for (int i = 0; i < length; i++) {
-                    char c = value.charAt(i);
-                    switch (c) {
-                        case '\t': out.print("\\t"); break;
-                        case '\n': out.print("\\n"); break;
-                        case '\r': out.print("\\r"); break;
-                        case '\\': out.print("\\\\"); break;
-                        case '"': out.print("\\\""); break;
-                        default: {
-                            if (c < 32 || c > 127) {
-                                String cs = Integer.toString(c, 16);
-                                out.print("\\u");
-                                int cslen = cs.length();
-                                for (int j = cslen; j < 4; j++) {
-                                    out.print('0');
-                                }
-                                out.print(cs);
-                            }
-                            else {
-                                out.print(c);
-                            }
-                        }
-                    }
-                }
+                out.print(classname);
+                out.print("[\"");
+                printEscaped(out, key);
+                out.print("\"] = \"");
+                printEscaped(out, value);
                 out.println("\";");
             }
         }
@@ -173,5 +152,33 @@ public class Props2JsServlet
             out.println("// resource bundle not found");
         }
     } // load(PrintStream,String)
+    
+    private static void printEscaped(PrintStream out, String s) {
+        int length = s.length();
+        for (int i = 0; i < length; i++) {
+            char c = s.charAt(i);
+            switch (c) {
+                case '\t': out.print("\\t"); break;
+                case '\n': out.print("\\n"); break;
+                case '\r': out.print("\\r"); break;
+                case '\\': out.print("\\\\"); break;
+                case '"': out.print("\\\""); break;
+                default: {
+                    if (c < 32 || c > 127) {
+                        String cs = Integer.toString(c, 16);
+                        out.print("\\u");
+                        int cslen = cs.length();
+                        for (int j = cslen; j < 4; j++) {
+                            out.print('0');
+                        }
+                        out.print(cs);
+                    }
+                    else {
+                        out.print(c);
+                    }
+                }
+            }
+        }
+    } // printEscaped(PrintStream,String)
     
 } // class Props2JsServlet
