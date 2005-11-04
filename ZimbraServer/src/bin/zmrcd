@@ -99,6 +99,9 @@ my %commands = (
 	"showqueue" => {
 		"script"	=> [ "/opt/zimbra/postfix/sbin/postqueue -p" ],
 	},
+	"slapcat" => {
+		"script"	=> [ "/opt/zimbra/openldap/sbin/slapcat -f /opt/zimbra/conf/slapd.conf" ],
+	},
 );
 
 my %allhosts = ();
