@@ -616,7 +616,7 @@ ZaDomain.myXModel = {
 		{id:ZaDomain.A_AuthComputedBindDn, type:_STRING_},
 		{id:ZaDomain.A_GALTestMessage, type:_STRING_},
 		{id:ZaDomain.A_GALTestResultCode, type:_STRING_},
-		{id:ZaDomain.A_GALSampleQuery, type:_STRING_},
+		{id:ZaDomain.A_GALSampleQuery, type:_STRING_,required:true},
 		{id:ZaDomain.A_AuthUseBindPassword, type:_STRING_},		
 		{id:ZaDomain.A_AuthLdapSearchBindPasswordConfirm, type:_STRING_},				
 		{id:ZaModel.currentStep, type:_NUMBER_, ref:ZaModel.currentStep, maxInclusive:2147483647}, 

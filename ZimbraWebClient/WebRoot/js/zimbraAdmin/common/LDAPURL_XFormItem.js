@@ -53,6 +53,7 @@ LDAPURL_XFormItem.prototype.items = [
 		}
 	},
 	{type:_TEXTFIELD_, width:"200px", forceUpdate:true, ref:".", labelLocation:_NONE_, label:null,relevantBehavior:_PARENT_,
+		required:true,
 		getDisplayValue:function (itemVal) {
 			var val = "";
 			if(itemVal) {

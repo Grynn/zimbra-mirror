@@ -55,6 +55,7 @@ function ZaGALConfigXWizard (parent, app) {
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaGALConfigXWizard.prototype.handleXFormChange));
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(this, ZaGALConfigXWizard.prototype.handleXFormChange));	
 	this.lastErrorStep=0;
+	this._helpURL="/zimbraAdmin/adminhelp/html/OpenSourceAdminHelp/managing_domains/using_the_global_address_list_(gal).htm"
 	
 }
 
@@ -308,6 +309,22 @@ function () {
 
 ZaGALConfigXWizard.prototype.goNext = 
 function() {
+/*	if(this._localXForm.hasErrors()) {
+		this._app.getCurrentController().popupErrorDialog("Please correct errors");		
+		return;
+	}
+*/
+	if(this._containedObject[ZaModel.currentStep] == 2 && this._containedObject.attrs[ZaDomain.A_GalMode]!=ZaDomain.GAL_Mode_internal) {	
+		//check that Filter is provided and at least one server
+		if(!this._containedObject.attrs[ZaDomain.A_GalLdapFilter]) {
+			this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_SEARCH_FILTER_REQUIRED);			
+			return;
+		}
+		if(!this._containedObject.attrs[ZaDomain.A_GalLdapURL] || this._containedObject.attrs[ZaDomain.A_GalLdapURL].length < 1) {
+			this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_LDAP_URL_REQUIRED);					
+			return;
+		}
+	} 
 	if(this._containedObject[ZaModel.currentStep] == 3) {
 		//clear the password if the checkbox is unchecked
 		if(this._containedObject.attrs[ZaDomain.A_UseBindPassword]=="FALSE") {
@@ -322,6 +339,10 @@ function() {
 		}
 		this.goPage(4);
 	} else if(this._containedObject[ZaModel.currentStep] == 4) {
+		if(!this._containedObject[ZaDomain.A_GALSampleQuery]) {
+			this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_SEARCH_TERM_REQUIRED);			
+			return;
+		}
  		this.testSetings();
 		this.goPage(5);
 	} else {
