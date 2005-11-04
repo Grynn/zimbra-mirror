@@ -1,15 +1,18 @@
 /var/log/zimbra.log {
+	daily
     missingok
     notifempty
     create 0644 zimbra zimbra
     postrotate
 	killall -HUP syslogd
 	killall -HUP swatch
+	killall -HUP logswatch
     endscript
 	compress
 }
 
 /opt/zimbra/log/myslow.log {
+	daily
     missingok
     notifempty
     create 0644 zimbra zimbra
