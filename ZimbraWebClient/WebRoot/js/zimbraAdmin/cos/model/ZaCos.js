@@ -138,7 +138,7 @@ function (node) {
 		if(this._app.getServerMap()[this.attrs[ZaCos.A_zimbraMailHostPool]]) {
 			hostVector.add(this._app.getServerMap()[this.attrs[ZaCos.A_zimbraMailHostPool]]);
 		} else {
-			var newServer = new ZaServer();
+			var newServer = new ZaServer(this._app);
 			newServer.load("id", this.attrs[ZaCos.A_zimbraMailHostPool]);
 			hostVector.add(newServer);
 		}

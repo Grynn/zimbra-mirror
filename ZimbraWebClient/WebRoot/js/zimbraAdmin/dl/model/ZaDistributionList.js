@@ -59,7 +59,10 @@ ZaDistributionList.searchAttributes = AjxBuffer.concat(ZaAccount.A_displayname,"
 // ==============================================================
 
 ZaDistributionList.prototype.clone = function () {
-	var memberList = this._memberList.getArray();
+	var memberList;
+	if(this._memberList) {
+		memberList = this._memberList.getArray();
+	}
 	var dl = new ZaDistributionList(this._app, this.id, this.name, memberList, this.description, this.notes);
  	if (memberList != null) {
  		dl._memberList = new AjxVector();

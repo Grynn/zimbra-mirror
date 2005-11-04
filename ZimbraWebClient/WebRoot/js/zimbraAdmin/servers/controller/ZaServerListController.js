@@ -220,7 +220,7 @@ function(details) {
 // new button was pressed
 ZaServerListController.prototype._newButtonListener =
 function(ev) {
-	var newServer = new ZaServer();
+	var newServer = new ZaServer(this._app);
 	this._app.getServerController().show(newServer);
 }
 

@@ -35,9 +35,9 @@
 function HSMProgressXDialog(parent,  app, w, h) {
 	if (arguments.length == 0) return;
 	ZaXDialog.call(this, parent, app, null, ZaMsg.HSM_Title, null, null);
-	this.initForm(ZaReindexMailbox.myXModel,this.getMyXForm());
+	this.initForm(ZaServer.myXModel,this.getMyXForm());
 	this._button[DwtDialog.OK_BUTTON].setToolTipContent(ZaMsg.HSM_Server_tt);
-	this._containedObject = new ZaServer();
+	this._containedObject = new ZaServer(app);
 	this.pollAction = new AjxTimedAction();
 	this.pollAction.obj = this;
 	this.pollAction.method = this.getHSMSessionStatus;

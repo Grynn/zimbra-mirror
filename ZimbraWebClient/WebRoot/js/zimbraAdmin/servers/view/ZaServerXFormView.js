@@ -53,7 +53,7 @@ function (entry) {
 	this._containedObject.attrs = new Object();
 	
 	for(var a in entry) {
-		if(typeof(entry[a]) == "object" || typeof(entry[a]) == "array" || entry[a] instanceof Array) {
+		if(typeof(entry[a]) == "object" || entry[a] instanceof Array) {
 			continue;
 		}
 		this._containedObject[a] = entry[a];

@@ -123,7 +123,54 @@ ZaItem.prototype.remove =
 function () {
 	//abstract
 }
+/**
+	full recursion copy
+	don't use on objects with many references
+**/
 
+/*ZaItem._copyTo = function (targetObj) {
+	if(this instaceof Array) {
+		if(!targetObj)
+			targetObj = new Array();
+			
+		var cnt = this.length;
+		for (var ix = 0; ix < cnt; ix++) {
+			ZaItem._copyTo.call(this[ix], targetObj[ix]);
+		}
+	} else if (typeof(this) == "object")) {
+		if(!targetObj)
+			targetObj = new Object();
+				
+		for(var i in this) {
+			if(this[i] == null)
+				continue;
+		
+			if(typeof(this[i]) == "object") {
+				ZaItem._copyTo.call(this[i], targetObj[i]);
+			} else if (typeof(this[i] == "function")) {
+				continue;
+			} else {
+				targetObj[i] = this[i];
+			}
+		}
+	}
+}*/
+
+ZaItem.prototype.copyTo = 
+function (target/*, fullRecursion*/) {
+	for(var a in this) {
+		target[a] = this[a];
+	}
+
+/*	if(!fullRecursion) {
+		for(var a in this) {
+			target[a] = this[a];
+		}
+	} else {
+		ZaItem._copyTo.call(this, target);
+	}
+*/	
+}
 
 ZaItem.prototype.initFromDom =
 function(node) {

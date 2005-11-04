@@ -409,7 +409,7 @@ function (ev) {
 			this._hsmWizard = new HSMProgressXDialog(this._container, this._app);	
 			this._hsmWizard.registerCallback(DwtDialog.OK_BUTTON, ZaServerController.prototype._hsmOkButtonListener, this);
 		}
-		this._hsmWizard.setObject(this._view.getObject());
+		this._hsmWizard.setObject(this._currentObject);
 		this._hsmWizard.popup();
 	} catch (ex) {
 		this._handleException(ex, "ZaServerController.prototype._hsmButtonListener", null, false);
@@ -418,8 +418,10 @@ function (ev) {
 
 ZaServerController.prototype._hsmOkButtonListener = 
 function () {
-	this._currentObject = this._hsmWizard.getObject();
-	this._view.setObject(this._currentObject);
+	var obj = this._hsmWizard.getObject();
+	var obj2 = this._view.getObject();
+	obj2.hsm = obj.hsm;
+	this._view.setObject(obj2);
 	this._hsmWizard.popdown();
 }
 
