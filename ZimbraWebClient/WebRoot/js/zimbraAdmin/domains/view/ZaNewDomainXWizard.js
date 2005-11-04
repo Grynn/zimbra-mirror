@@ -166,25 +166,6 @@ function(entry) {
 }
 
 /**
-* GAL configuration
-**/
-/*
-ZaNewDomainXWizard.prototype.generateGALLDAPUrl = 
-function () {
-	var ldapURL = "";
-	if(this._containedObject.attrs[ZaDomain.A_GALUseSSL] == "TRUE") {
-		ldapURL +="ldaps://";
-	} else {
-		ldapURL +="ldap://";
-	}
-	ldapURL +=this._containedObject.attrs[ZaDomain.A_GALServerName];
-	ldapURL +=":";
-	ldapURL +=this._containedObject.attrs[ZaDomain.A_GALServerPort];
-	ldapURL +="/";
-	this._containedObject.attrs[ZaDomain.A_GalLdapURL] = ldapURL;
-}
-*/
-/**
 * static change handlers for the form
 **/
 ZaNewDomainXWizard.onGALServerTypeChange =
@@ -196,33 +177,7 @@ function (value, event, form) {
 	}
 	this.setInstanceValue(value);	
 }
-/*
-ZaNewDomainXWizard.onGALUseSSLChange =
-function (value, event, form) {
-	if(value == "TRUE") {
-		form.getInstance().attrs[ZaDomain.A_GALServerPort] = 636;
-	} else {
-		form.getInstance().attrs[ZaDomain.A_GALServerPort] = 389;
-	}
-	this.setInstanceValue(value);
-	form.parent.generateGALLDAPUrl();
-}*/
-/*
-ZaNewDomainXWizard.onGALServerChange = 
-function (value, event, form) {
-	form.getInstance().attrs[ZaDomain.A_GALServerName] = value;
-	this.setInstanceValue(value);
-	form.parent.generateGALLDAPUrl();
-}
-*/
-/*
-ZaNewDomainXWizard.onGALServerPortChange = 
-function (value, event, form) {
-	form.getInstance().attrs[ZaDomain.A_GALServerPort] = value;
-	this.setInstanceValue(value);
-	form.parent.generateGALLDAPUrl();
-}
-*/
+
 
 ZaNewDomainXWizard.onGalModeChange = 
 function (value, event, form) {
@@ -232,15 +187,6 @@ function (value, event, form) {
 		if(!form.getInstance().attrs[ZaDomain.A_GALServerType]) {
 			form.getInstance().attrs[ZaDomain.A_GALServerType] = "ldap";
 		}
-		/*
-		if(!form.getInstance().attrs[ZaDomain.A_GalLdapURL]) {
-			form.getInstance().attrs[ZaDomain.A_GALServerPort] = 389;
-			form.getInstance().attrs[ZaDomain.A_GalLdapURL] = "";			
-			form.getInstance().attrs[ZaDomain.A_GALUseSSL] = "FALSE";
-			form.getInstance().attrs[ZaDomain.A_GALServerName] = "";
-			form.getInstance().attrs[ZaDomain.A_UseBindPassword] = "TRUE";
-		}
-		*/
 		if(!form.getInstance().attrs[ZaDomain.A_GalLdapSearchBase]) {
 			if(form.getInstance().attrs[ZaDomain.A_domainName]) {
 				var parts = form.getInstance().attrs[ZaDomain.A_domainName].split(".");
@@ -313,89 +259,18 @@ function (arg) {
 }
 
 /**
-* Auth config methods
-**/
-/*
-ZaNewDomainXWizard.prototype.generateAuthLDAPUrl = 
-function () {
-	var ldapURL = "";
-	if(this._containedObject.attrs[ZaDomain.A_AuthLDAPUseSSL] == "TRUE") {
-		ldapURL +="ldaps://";
-	} else {
-		ldapURL +="ldap://";
-	}
-	ldapURL +=this._containedObject.attrs[ZaDomain.A_AuthLDAPServerName];
-	ldapURL +=":";
-	ldapURL +=this._containedObject.attrs[ZaDomain.A_AuthLDAPServerPort];
-	ldapURL +="/";
-	this._containedObject.attrs[ZaDomain.A_AuthLdapURL] = ldapURL;
-}*/
-
-/*
-ZaNewDomainXWizard.onUseAuthSSLChange =
-function (value, event, form) {
-	if(value == "TRUE") {
-		form.getInstance().attrs[ZaDomain.A_GALServerPort] = 636;
-	} else {
-		form.getInstance().attrs[ZaDomain.A_GALServerPort] = 389;
-	}
-	this.setInstanceValue(value);
-	form.parent.generateAuthLDAPUrl();
-}
-*/
-/**
 * Eevent handlers for form items
 **/
 ZaNewDomainXWizard.onAuthMechChange = 
 function (value, event, form) {
 	this.setInstanceValue(value);
-	/*if(value == ZaDomain.AuthMech_ldap) {
-		if(!form.getInstance().attrs[ZaDomain.A_AuthLdapUserDn]) {
-			form.getInstance().attrs[ZaDomain.A_AuthLdapUserDn] = "%u,%D";
-		}
-	}*/ 
-	/*
-	if(value == ZaDomain.AuthMech_ldap || value == ZaDomain.AuthMech_ad) {
-		form.getInstance().attrs[ZaDomain.A_AuthLDAPServerPort] = 389;
-		form.getInstance().attrs[ZaDomain.A_AuthLDAPUseSSL] = "FALSE";
-	}
-	*/
 	if(value == ZaDomain.AuthMech_ad) {
 		if(!form.getInstance().attrs[ZaDomain.A_AuthADDomainName]) {
 			form.getInstance().attrs[ZaDomain.A_AuthADDomainName] = form.getInstance().attrs[ZaDomain.A_domainName];
 		}
 	}
 }
-/*
-ZaNewDomainXWizard.onAuthLDAPUseSSLChange = 
-function (value, event, form) {
-	//form.getInstance().attrs[ZaDomain.A_AuthLDAPUseSSL] = value;
-	if(value == "TRUE") {
-		form.getInstance().attrs[ZaDomain.A_AuthLDAPServerPort] = 636;
-	} else {
-		form.getInstance().attrs[ZaDomain.A_AuthLDAPServerPort] = 389;
-	}	
-	this.setInstanceValue(value);	
-	form.parent.generateAuthLDAPUrl();
-}
-*/
-/*
-ZaNewDomainXWizard.onAuthLDAPPortChange = 
-function (value, event, form) {
-	//form.getInstance().attrs[ZaDomain.A_AuthLDAPServerPort] = val;
-	this.setInstanceValue(value);
-	form.parent.generateAuthLDAPUrl();
-	
-}
-*/
-/*
-ZaNewDomainXWizard.onAuthLDAPServerChange = 
-function (value, event, form) {
-	this.setInstanceValue(value);	
-//	form.getInstance().attrs[ZaDomain.A_AuthLDAPServerName] = value;
-	form.parent.generateAuthLDAPUrl();
-}
-*/
+
 ZaNewDomainXWizard.prototype.testAuthSettings =
 function () {
 	if(this._containedObject.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_ad) {
@@ -478,6 +353,17 @@ function () {
 
 ZaNewDomainXWizard.prototype.goNext = 
 function() {
+	if(this._containedObject[ZaModel.currentStep] == 3 && this._containedObject.attrs[ZaDomain.A_GalMode]!=ZaDomain.GAL_Mode_internal) {	
+		//check that Filter is provided and at least one server
+		if(!this._containedObject.attrs[ZaDomain.A_GalLdapFilter]) {
+			this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_SEARCH_FILTER_REQUIRED);			
+			return;
+		}
+		if(!this._containedObject.attrs[ZaDomain.A_GalLdapURL] || this._containedObject.attrs[ZaDomain.A_GalLdapURL].length < 1) {
+			this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_LDAP_URL_REQUIRED);					
+			return;
+		}
+	} 
 	if (this._containedObject[ZaModel.currentStep] == 1) {
 		this._containedObject.attrs[ZaDomain.A_AuthADDomainName] = this._containedObject.attrs[ZaDomain.A_domainName];
 		this.changeButtonStateForStep(2);
@@ -501,6 +387,10 @@ function() {
 		this.goPage(5);
 		this.changeButtonStateForStep(5);		
 	} else if(this._containedObject[ZaModel.currentStep] == 5) {
+		if(!this._containedObject[ZaDomain.A_GALSampleQuery]) {
+			this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_SEARCH_TERM_REQUIRED);			
+			return;
+		}	
 		this.goPage(6);
  		this.testGALSettings();
 		this.changeButtonStateForStep(6);
