@@ -411,6 +411,56 @@ function(startTime1, endTime1, startTime2, endTime2) {
 	return (startTime1 < endTime2 && endTime1 > startTime2);
 }
 
+/**
+ * The following are helper routines for processing server date/time which comes
+ * in this format: YYYYMMDDTHHMMSSZ
+*/
+AjxDateUtil.getServerDate = 
+function(date) {
+	var yyyy = date.getFullYear();
+	var MM = AjxDateUtil._pad(date.getMonth() + 1);
+	var dd = AjxDateUtil._pad(date.getDate());
+	return AjxBuffer.concat(yyyy,MM,dd);
+};
+
+AjxDateUtil.getServerDateTime = 
+function(date) {
+	var yyyy = date.getFullYear();
+	var MM = AjxDateUtil._pad(date.getMonth() + 1);
+	var dd = AjxDateUtil._pad(date.getDate());
+	var hh = AjxDateUtil._pad(date.getHours());
+	var mm = AjxDateUtil._pad(date.getMinutes());
+	var ss = AjxDateUtil._pad(date.getSeconds());
+	return AjxBuffer.concat(yyyy, MM, dd,"T",hh, mm, ss);
+};
+
+AjxDateUtil.parseServerTime = 
+function(serverStr, date) {
+	if (serverStr.charAt(8) == 'T') {
+		var hh = parseInt(serverStr.substr(9,2), 10);
+		var mm = parseInt(serverStr.substr(11,2), 10);
+		var ss = parseInt(serverStr.substr(13,2), 10);
+		date.setHours(hh, mm, ss, 0);
+	}
+	return date;
+};
+
+AjxDateUtil.parseServerDateTime = 
+function(serverStr) {
+	if (serverStr == null) return null;
+
+	var d = new Date();
+	var yyyy = parseInt(serverStr.substr(0,4), 10);
+	var MM = parseInt(serverStr.substr(4,2), 10);
+	var dd = parseInt(serverStr.substr(6,2), 10);
+	d.setFullYear(yyyy);
+	d.setMonth(MM - 1);
+	d.setMonth(MM - 1); // DON'T remove second call to setMonth (see bug #3839)
+	d.setDate(dd);
+	AjxDateUtil.parseServerTime(serverStr, d);
+	return d;
+};
+
 AjxDateUtil._pad = 
 function(n) {
 	return n < 10 ? ('0' + n) : n;
