@@ -62,6 +62,8 @@ function() {
 
 ZaSearchField.prototype.invokeCallback =
 function() {
+	this._containedObject[ZaSearch.A_query] = this._localXForm.getItemsById(ZaSearch.A_query)[0].getElement().value;
+
 	if (this._containedObject[ZaSearch.A_query].indexOf("$set:") == 0) {
 		this._app.getAppCtxt().getClientCmdHdlr().execute((this._containedObject[ZaSearch.A_query].substr(5)).split(" "));
 		return;
