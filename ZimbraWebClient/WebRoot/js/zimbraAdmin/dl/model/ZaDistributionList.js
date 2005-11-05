@@ -29,8 +29,8 @@ function ZaDistributionList(app, id, name, memberList, description, notes) {
 	this.id = (id != null)? id: null;
 	this.name = (name != null) ? name: null;
 	this._selfMember = new ZaDistributionListMember(this.name);
-	this._memberList = (memberList != null)? AjxVector.fromArray(memberList): null;
-	this._origList = (memberList != null)? AjxVector.fromArray(memberList): null;
+	this._memberList = (memberList != null)? AjxVector.fromArray(memberList): new AjxVector();
+	this._origList = (memberList != null)? AjxVector.fromArray(memberList): new AjxVector();
 	this._addList = new AjxVector();
 	this._removeList = new AjxVector();
 	this._dirty = true;
@@ -339,7 +339,11 @@ ZaDistributionList.prototype._removeFromList  = function (arrayOrVector, vector)
 
 ZaDistributionList.prototype._addArrayToList = function (newArray, vector, preAddCallback) {
 	var add = true;
-	for (var i = 0; i < newArray.length; ++i) {
+	var cnt = newArray.length;
+	for (var i = 0; i < cnt; i++) {
+		if(!newArray[i])
+			continue;
+			
 		if (newArray[i].valueOf() != this._selfMember.valueOf()) {
 			add = true;
 			if (preAddCallback != null){
@@ -493,8 +497,8 @@ ZaDistributionList.prototype.initFromDom = function(node) {
 	}
 	if (this._memberList != null){
 		this._origList = new AjxVector();
- 		for (var i = 0 ; i < memberList.length; ++i) {
- 			this._origList.add(memberList[i]);
+ 		for (var i = 0 ; i < this._memberList.length; ++i) {
+ 			this._origList.add(this._memberList[i]);
  		}
 		this._memberList.sort();
 		this._origList.sort();

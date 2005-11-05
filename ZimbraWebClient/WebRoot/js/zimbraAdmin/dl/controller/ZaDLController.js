@@ -605,8 +605,14 @@ ZaDLController.prototype.addFreeFormAddressToMembers = function (event, formItem
  	var form = formItem.getForm();
 	// get the current value of the textfied
  	var val = form.get("optionalAdd");
-	var item = new ZaDistributionListMember(val);
-	this._addListToMemberList(form, [item]);
+ 	var values = val.split(/[\r\n,;]+/);
+	var cnt = values.length;
+ 	var members = new Array();
+	for (var i = 0; i < cnt; i++) {
+		members.push(new ZaDistributionListMember(values[i]));
+	}
+//	var item = new ZaDistributionListMember(val);
+	this._addListToMemberList(form, members);
 	form.getInstance().optionalAdd = null;
 };
 
