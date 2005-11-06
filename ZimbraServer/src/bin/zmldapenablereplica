@@ -63,6 +63,7 @@ createLdapConfig() {
 	sed -e "s|^rootpw.*|rootpw ${root_sha}|" \
 		${zimbra_home}/openldap/etc/openldap/slapd.conf > ${zimbra_home}/conf/slapd.conf
 	grep -v replogfile ${zimbra_home}/conf/slapd.conf > /tmp/slapd.conf
+	grep -v sessionlog /tmp/slapd.conf > ${zimbra_home}/conf/slapd.conf
 	mv -f /tmp/slapd.conf ${zimbra_home}/conf/slapd.conf
 
 	if [ $? -ne 0 ]; then
@@ -79,10 +80,19 @@ createLdapConfig() {
 		echo "FAILED"
 		echo "ERROR - LDAP config creation failed - exiting"
 	fi
-	echo 'updatedn  "uid=zimbrareplication,cn=admins,cn=zimbra"' >> \
-		${zimbra_home}/conf/slapd.conf
-	echo "updateref  ldap://${ldap_host}:${ldap_port}" >> \
-		${zimbra_home}/conf/slapd.conf
+
+	cat >> ${zimbra_home}/conf/slapd.conf <<EOF
+syncrepl rid=100
+	provider=ldap://${ldap_host}:${ldap_port}
+	type=refreshAndPersist
+	schemachecking=off
+	updatedn="uid=zimbrareplication,cn=admins,cn=zimbra"
+	bindmethod=simple
+	binddn="uid=zimbra,cn=admins,cn=zimbra"
+	credentials=${ldap_root_password}
+updateref  ldap://${ldap_host}:${ldap_port}
+EOF
+
 	echo "succeeded"
 }
 
@@ -162,7 +172,7 @@ replicateLdap() {
 
 	echo -n "Writing data..."
 
-	${zimbra_home}/openldap/sbin/slapadd -f ${zimbra_home}/conf/slapd.conf -l /tmp/repl.ldif
+	${zimbra_home}/openldap/sbin/slapadd -p -w -f ${zimbra_home}/conf/slapd.conf -l /tmp/repl.ldif
 	if [ $? -ne 0 ]; then
 		echo "FAILED"
 		echo "Ldap replication failed - exiting"
@@ -172,20 +182,6 @@ replicateLdap() {
 	#/bin/rm -f /tmp/repl.ldif
 	echo "succeeded"
 }
-
-addReplicaToMaster() {
-	echo -n "Adding ${zimbra_server_hostname} as replica to ${ldap_host}..."
-	echo HOST:${ldap_host} addreplica ${zimbra_server_hostname} | \
-	${zimbra_home}/bin/zmrc ${ldap_host} > /dev/null 2>&1
-
-	if [ $? -ne 0 ]; then
-		echo "FAILED"
-		echo "Replica setup failed - exiting"
-		exit 1
-	fi
-	echo "succeeded" 
-}   
-
 
 updateLdapHost() {
 	echo -n "Setting ldap_host on ${zimbra_server_hostname}..."
@@ -220,7 +216,6 @@ enableLdapService
 stopZimbra
 stopRemoteZimbra
 replicateLdap
-addReplicaToMaster
 updateLdapHost
 startRemoteZimbra
 zmsetvars -f ldap_host

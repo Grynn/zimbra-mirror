@@ -26,7 +26,6 @@
 
 PID=""
 PIDFILE="/opt/zimbra/openldap/var/run/slapd.pid"
-SLURPPIDFILE="/opt/zimbra/openldap/var/run/slurpd.pid"
 
 mkdir -p "/opt/zimbra/openldap/var/run/"
 
@@ -34,9 +33,6 @@ getpid()
 {
 	if [ -f $PIDFILE ]; then
 		PID=`cat $PIDFILE`
-	fi
-	if [ -f $SLURPPIDFILE ]; then
-		SLURPPID=`cat $SLURPPIDFILE`
 	fi
 }
 
@@ -67,8 +63,6 @@ start()
 		sudo /opt/zimbra/openldap/libexec/slapd -l LOCAL0 -4 -u zimbra -h "ldap://:389/" \
 			-f /opt/zimbra/conf/slapd.conf
 		sleep 2
-		/opt/zimbra/openldap/libexec/slurpd -f /opt/zimbra/conf/slapd.conf -d 0 &
-		echo $! > $SLURPPIDFILE
 		getpid
 		echo "Started slapd: pid $PID"
 	else
@@ -80,7 +74,6 @@ start()
 stop()
 {
 	checkrunning
-	kill -TERM $SLURPPID
 	if [ $RUNNING = 0 ]; then
 		echo "slapd not running"
 		exit 1

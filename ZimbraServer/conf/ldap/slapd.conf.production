@@ -108,4 +108,4 @@ index   cn                     pres,eq,sub
 index   displayName            pres,eq,sub
 index   sn                     pres,eq,sub
 index   gn                     pres,eq,sub
-replogfile "/opt/zimbra/openldap-replica/replica.log"
+sessionlog 100 100

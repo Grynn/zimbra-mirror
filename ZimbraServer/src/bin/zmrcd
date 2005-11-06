@@ -100,10 +100,7 @@ my %commands = (
 		"script"	=> [ "/opt/zimbra/postfix/sbin/postqueue -p" ],
 	},
 	"slapcat" => {
-		"script"	=> [ "/opt/zimbra/openldap/sbin/slapcat -f /opt/zimbra/conf/slapd.conf" ],
-	},
-	"addreplica" => {
-		"script"	=> [ "/opt/zimbra/bin/zmldapaddreplica" ],
+		"script"	=> [ "/opt/zimbra/openldap/sbin/slapcat -m -f /opt/zimbra/conf/slapd.conf" ],
 	},
 );
 
@@ -153,10 +150,6 @@ sub runCommand {
 		# Only pass the args that we approve, for security
 		#my $cmdstr = "$cm $args";
 		my $cmdstr = "$cm";
-		if ($command eq "addreplica") {
-			$args =~ s/;//g;
-			$cmdstr .= " $args";
-		}
 		if (open COMMAND, "$cmdstr |") {
 			print "STARTCMD: $host $cmdstr\n";
 			while (<COMMAND>) {
