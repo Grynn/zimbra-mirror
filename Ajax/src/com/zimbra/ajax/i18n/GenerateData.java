@@ -370,6 +370,7 @@ public class GenerateData {
         }
         SimpleDateFormat mediumWeekdayFormatter = new SimpleDateFormat("EEE", locale);
         SimpleDateFormat longWeekdayFormatter = new SimpleDateFormat("EEEE", locale);
+        calendar = Calendar.getInstance(locale);        
         for (int i = 0; i < 7; i++) {
             calendar.set(Calendar.DAY_OF_WEEK, i);
             Date date = calendar.getTime();
