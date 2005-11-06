@@ -1,0 +1,227 @@
+#!/bin/bash
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Version: ZPL 1.1
+# 
+# The contents of this file are subject to the Zimbra Public License
+# Version 1.1 ("License"); you may not use this file except in
+# compliance with the License. You may obtain a copy of the License at
+# http://www.zimbra.com/license
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+# the License for the specific language governing rights and limitations
+# under the License.
+# 
+# The Original Code is: Zimbra Collaboration Suite.
+# 
+# The Initial Developer of the Original Code is Zimbra, Inc.
+# Portions created by Zimbra are Copyright (C) 2005 Zimbra, Inc.
+# All Rights Reserved.
+# 
+# Contributor(s):
+# 
+# ***** END LICENSE BLOCK *****
+# 
+
+source `dirname $0`/../bin/zmshutil || exit 1
+
+zmsetvars \
+	zimbra_home \
+	zimbra_server_hostname \
+	ldap_host \
+	ldap_port \
+	ldap_root_password \
+	zimbra_ldap_userdn
+
+verifyLdapInstalled() {
+	echo -n "Looking for LDAP installation..."
+	if [ ! -d ${zimbra_home}/openldap/etc ]; then
+		echo "FAILED"
+		echo "ERROR: openldap does not appear to be installed - exiting"
+		exit 1
+	fi
+	echo "succeeded"
+}
+
+verifyLdap() {
+	echo -n "Verifying ldap on ${ldap_host}:${ldap_port}..."
+	LDS="${zimbra_home}/bin/ldapsearch";
+	ARGS="-x -h ${ldap_host} -p ${ldap_port} -D ${zimbra_ldap_userdn} -w ${ldap_root_password}"
+	$LDS $ARGS > /dev/null 2>&1
+	if [ $? -ne 0 ]; then
+		echo "FAILED"
+		echo "ERROR: Unable to contact ${ldap_host}:${ldap_port} - exiting"
+		exit 1
+	fi
+	echo "succeeded"
+}
+
+createLdapConfig() {
+	echo -n "Creating LDAP config in ${zimbra_home}/conf/slapd.conf..."
+	root_sha=`${zimbra_home}/openldap/sbin/slappasswd -s ${ldap_root_password}`
+	sed -e "s|^rootpw.*|rootpw ${root_sha}|" \
+		${zimbra_home}/openldap/etc/openldap/slapd.conf > ${zimbra_home}/conf/slapd.conf
+	grep -v replogfile ${zimbra_home}/conf/slapd.conf > /tmp/slapd.conf
+	mv -f /tmp/slapd.conf ${zimbra_home}/conf/slapd.conf
+
+	if [ $? -ne 0 ]; then
+		echo "FAILED"
+		echo "ERROR - LDAP config creation failed - exiting"
+	fi
+
+	if [ -f "/opt/zimbra/lib/conf/zimbra-ext.schema" ]; then
+		sed -e '\|/opt/zimbra/openldap/etc/openldap/schema/zimbra.schema| a include "/opt/zimbra/lib/conf/zimbra-ext.schema"' ${zimbra_home}/conf/slapd.conf > /tmp/slapd.conf
+		mv -f /tmp/slapd.conf ${zimbra_home}/conf/slapd.conf
+	fi
+
+	if [ $? -ne 0 ]; then
+		echo "FAILED"
+		echo "ERROR - LDAP config creation failed - exiting"
+	fi
+	echo 'updatedn  "uid=zimbrareplication,cn=admins,cn=zimbra"' >> \
+		${zimbra_home}/conf/slapd.conf
+	echo "updateref  ldap://${ldap_host}:${ldap_port}" >> \
+		${zimbra_home}/conf/slapd.conf
+	echo "succeeded"
+}
+
+createReplicaUser() {
+	echo -n "Setting up replication ldap user..."
+
+	root_sha=`${zimbra_home}/openldap/sbin/slappasswd -s ${ldap_root_password}`
+	
+	cat > /tmp/replicauser.ldif <<EOF
+dn: uid=zimbrareplication,cn=admins,cn=zimbra
+uid: zimbrareplication
+objectclass: zimbraAccount
+objectclass: organizationalPerson
+cn: zimbrareplication
+sn: zimbrareplication
+zimbraAccountStatus: active
+zimbraIsAdminAccount: TRUE
+zimbraId: e0fafd89-1360-11d9-8661-000a95d98ef3
+description: The zimbra replication account
+userPassword: ${root_sha}
+EOF
+
+	${zimbra_home}/openldap/bin/ldapadd -w ${ldap_root_password} -D ${zimbra_ldap_userdn} \
+		-x -f /tmp/replicauser.ldif -h ${ldap_host} -p ${ldap_port} > /dev/null 2>&1
+
+	# Ignore failures, user may already exist?
+	echo "succeeded"
+	
+	/bin/rm -f /tmp/replicauser.ldif
+}
+
+enableLdapService() {
+	echo -n "Enabling LDAP service on ${zimbra_server_hostname}..."
+	SERVICES=`zmprov gs ${zimbra_server_hostname} | sed -ne '/^zimbraServiceEnabled/ s/zimbraServiceEnabled: //p'`
+	echo $SERVICES | grep -q ldap
+	if [ $? -ne 0 ]; then
+		echo -n "..."
+		NEWSERVICES="zimbraServiceEnabled ldap"
+		for s in $SERVICES; do
+			NEWSERVICES="$NEWSERVICES zimbraServiceEnabled $s"
+		done
+		zmprov ms ${zimbra_server_hostname} $NEWSERVICES
+	fi
+	echo "succeeded"
+}
+
+stopRemoteZimbra() {
+	echo -n "Shutting down Zimbra Services on ${ldap_host}..."
+	echo HOST:${ldap_host} shutdown | ${zimbra_home}/bin/zmrc ${ldap_host} \
+		> /dev/null 2>&1
+
+	if [ $? -ne 0 ]; then
+		echo "FAILED"
+		echo "Remote shutdown failed - exiting"
+		exit 1
+	fi
+	echo "done"
+}
+
+stopZimbra() {
+	echo -n "Shutting down Zimbra Services on ${zimbra_server_hostname}..."
+	zmcontrol stop > /dev/null 2>&1
+	echo "done"
+}
+
+replicateLdap() {
+	echo -n "Replicating ldap data from ${ldap_host}..."
+	echo -n "Copying data..."
+	echo HOST:${ldap_host} slapcat | ${zimbra_home}/bin/zmrc ${ldap_host} | \
+		grep -v STARTCMD | grep -v ENDCMD > /tmp/repl.ldif
+
+	if [ $? -ne 0 ]; then
+		echo "FAILED"
+		echo "Ldap replication failed - exiting"
+		exit 1
+	fi
+
+	echo -n "Writing data..."
+
+	${zimbra_home}/openldap/sbin/slapadd -f ${zimbra_home}/conf/slapd.conf -l /tmp/repl.ldif
+	if [ $? -ne 0 ]; then
+		echo "FAILED"
+		echo "Ldap replication failed - exiting"
+		exit 1
+	fi
+
+	#/bin/rm -f /tmp/repl.ldif
+	echo "succeeded"
+}
+
+addReplicaToMaster() {
+	echo -n "Adding ${zimbra_server_hostname} as replica to ${ldap_host}..."
+	echo HOST:${ldap_host} addreplica ${zimbra_server_hostname} | \
+	${zimbra_home}/bin/zmrc ${ldap_host} > /dev/null 2>&1
+
+	if [ $? -ne 0 ]; then
+		echo "FAILED"
+		echo "Replica setup failed - exiting"
+		exit 1
+	fi
+	echo "succeeded" 
+}   
+
+
+updateLdapHost() {
+	echo -n "Setting ldap_host on ${zimbra_server_hostname}..."
+	zmlocalconfig -e ldap_host=${zimbra_server_hostname}
+	echo "done"
+}
+
+startRemoteZimbra() {
+	echo -n "Starting remote Zimbra Services on ${ldap_host}..."
+	echo HOST:${ldap_host} startup | ${zimbra_home}/bin/zmrc ${ldap_host} \
+		> /dev/null 2>&1
+
+	if [ $? -ne 0 ]; then
+		echo "FAILED"
+		echo "Remote startup failed - exiting"
+		exit 1
+	fi
+	echo "done"
+}
+
+startZimbra() {
+	echo -n "Starting Zimbra Services on ${zimbra_server_hostname}..."
+	zmcontrol start > /dev/null 2>&1
+	echo "done"
+}
+
+verifyLdapInstalled
+verifyLdap
+createLdapConfig
+createReplicaUser
+enableLdapService
+stopZimbra
+stopRemoteZimbra
+replicateLdap
+addReplicaToMaster
+updateLdapHost
+startRemoteZimbra
+zmsetvars -f ldap_host
+startZimbra

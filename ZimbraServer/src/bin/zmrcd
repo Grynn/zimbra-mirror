@@ -102,6 +102,9 @@ my %commands = (
 	"slapcat" => {
 		"script"	=> [ "/opt/zimbra/openldap/sbin/slapcat -f /opt/zimbra/conf/slapd.conf" ],
 	},
+	"addreplica" => {
+		"script"	=> [ "/opt/zimbra/bin/zmldapaddreplica" ],
+	},
 );
 
 my %allhosts = ();
@@ -150,6 +153,10 @@ sub runCommand {
 		# Only pass the args that we approve, for security
 		#my $cmdstr = "$cm $args";
 		my $cmdstr = "$cm";
+		if ($command eq "addreplica") {
+			$args =~ s/;//g;
+			$cmdstr .= " $args";
+		}
 		if (open COMMAND, "$cmdstr |") {
 			print "STARTCMD: $host $cmdstr\n";
 			while (<COMMAND>) {
@@ -283,5 +290,6 @@ while (<>) {
 	foreach my $h (@$hostlist) {
 		runCommand ($h, $command, $args);
 	}
+	exit 0;
 
 }

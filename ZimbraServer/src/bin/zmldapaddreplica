@@ -24,19 +24,31 @@
 # ***** END LICENSE BLOCK *****
 # 
 
-rm -f /opt/zimbra/openldap
-ln -s /opt/zimbra/openldap-2.2.28 /opt/zimbra/openldap
+source `dirname $0`/../bin/zmshutil || exit 1
 
-mkdir -p /opt/zimbra/openldap/var/openldap-data
-mkdir -p /opt/zimbra/openldap-data
-mkdir -p /opt/zimbra/openldap-replica
-chown -R zimbra:zimbra /opt/zimbra/openldap-data
-chown -R zimbra:zimbra /opt/zimbra/openldap-replica
+replicaHost=$1
 
-#/bin/sh /opt/zimbra/bin/zmfixperms.sh
-
-egrep -q '^%zimbra.*slapd' /etc/sudoers
-if [ $? != 0 ]; then
-	echo "%zimbra   ALL=NOPASSWD:/opt/zimbra/openldap-2.2.28/libexec/slapd" >> /etc/sudoers
+if [ x$replicaHost = "x" ]; then
+	echo "Need hostname!"
+	exit 1
 fi
 
+zmsetvars \
+	zimbra_home \
+	zimbra_server_hostname \
+	ldap_host \
+	ldap_port \
+	ldap_root_password \
+	zimbra_ldap_userdn
+
+addReplicaToLdapConfig() {
+
+	cat >> ${zimbra_home}/conf/slapd.conf <<EOF
+replica uri=ldap://$replicaHost:389
+	binddn="uid=zimbrareplication,cn=admins,cn=zimbra"
+	bindmethod=simple credentials=${ldap_root_password}
+EOF
+
+}
+
+addReplicaToLdapConfig

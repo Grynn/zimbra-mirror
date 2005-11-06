@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/perl
 # 
 # ***** BEGIN LICENSE BLOCK *****
 # Version: ZPL 1.1
@@ -24,25 +24,28 @@
 # ***** END LICENSE BLOCK *****
 # 
 
-source `dirname $0`/../bin/zmshutil || exit 1
+my $desthost=$ARGV[0];
 
-zmsetvars \
-	zimbra_home \
-	zimbra_server_hostname 
+shift;
 
-desthost=${1}
+my $keyfile="/opt/zimbra/.ssh/zimbra_identity";
 
-shift
+if ($desthost eq "") {
+	print "Usage: $0 <hostname>\n";
+	exit 1;
+}
 
-keyfile="${zimbra_home}/.ssh/zimbra_identity"
+if ($#ARGV >= 0) {
+	$cmd = "echo @ARGV | ssh -T -i ${keyfile} -o StrictHostKeyChecking=no zimbra\@${desthost}";
+} else {
+	$cmd = "ssh -T -i ${keyfile} -o StrictHostKeyChecking=no zimbra\@${desthost}";
+}
 
-if [ "x$desthost" = "x" ]; then
-	echo "Usage: $0 <hostname>"
-	exit 1
-fi
+open P, "$cmd |";
+$SIG{ALRM} = \&quit;
+while (<P>) {print $_; alarm(10);}
+close P;
 
-if [ $# -ne 0 ]; then
-	echo $* | ssh -T -i ${keyfile} -o StrictHostKeyChecking=no zimbra@${desthost}
-else
-	ssh -T -i ${keyfile} -o StrictHostKeyChecking=no zimbra@${desthost}
-fi
+sub quit {
+	exit 0;
+}
