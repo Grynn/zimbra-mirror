@@ -44,6 +44,7 @@ function DwtHtmlEditor(parent, className, posStyle, content, mode, blankIframeSr
 		content = this._mode == DwtHtmlEditor.HTML ? initialHtml : "";
 	
 	this._pendingContent = content;
+	this._htmlEditorInited = false;
 
 	this._initialize();
 }
@@ -139,6 +140,9 @@ undo
 redo
 */
 
+DwtHtmlEditor._INITDELAY = 50;
+
+
 DwtHtmlEditor._BLOCK_ELEMENTS = {
 	address:1, body:1, div:1, dl:1, fieldset:1, form:1, h1:1, h2:1, h3:1, h4:1, h5:1, h6:1, 
 	iframe:1, li:1, ol:1, p:1, pre:1, quote:1, table:1, tbody:1, td:1, textarea:1, tfoot: 1, 
@@ -223,9 +227,19 @@ function() {
 DwtHtmlEditor.prototype.setContent =
 function(content) {
 	if (this._mode == DwtHtmlEditor.HTML) {
-		// iframe's document isnt done loading :(
-		this._pendingContent = content || "";
-		this._setContentOnTimer();
+		// If the html is initialed then go ahead and set the content, else let the
+		// _finishHtmlModeInit run before we try setting the content
+		if (this._htmlEditorInited) {
+			this._pendingContent = content ? ((content instanceof AjxVector) ? content[0] : content) : "";
+			this._setContentOnTimer();
+		} else {
+			var ta = new AjxTimedAction();
+			ta.obj = this;
+			ta.method = DwtHtmlEditor.prototype.setContent;
+			ta.params = new AjxVector();
+			ta.params.add(content);
+			AjxTimedAction.scheduleAction(ta, DwtHtmlEditor._INITDELAY + 1);
+		}
 	} else {
 		Dwt.getDomObj(this.getDocument(), this._textAreaId).value = (content || "");
 	}
@@ -391,7 +405,7 @@ function(ignorePendingContent) {
 		textArea.value = this._pendingContent;
 		this._pendingContent = null;
 	}
-	
+	this._htmlEditorInited = true;
 	return textArea;
 }
 
@@ -413,7 +427,7 @@ function(content) {
 	var timedAction = new AjxTimedAction();
 	timedAction.obj = this;
 	timedAction.method = DwtHtmlEditor.prototype._finishHtmlModeInit;
-	AjxTimedAction.scheduleAction(timedAction, 100);
+	AjxTimedAction.scheduleAction(timedAction, DwtHtmlEditor._INITDELAY);
 	
 	return iFrame;
 }
@@ -498,19 +512,18 @@ DwtHtmlEditor.prototype._finishHtmlModeInit =
 function(params) {
 	var doc = this._getIframeDoc();	
 	try {	
-		var content = this._pendingContent || "";
-		doc.innerHTML = content;
+		doc.innerHTML = this._pendingContent || "";
 	} catch (ex) {
 		// TODO Replace
 		alert("Error loading content");
 		return;
 	}
 	
-	var p = [doc];
-	this._enableDesignMode(p);
+	this._enableDesignMode([doc]);
 	this._registerEditorEventHandlers(Dwt.getDomObj(this.getDocument(), this._iFrameId), doc);
 	this.focus();
 	this._updateState();
+	this._htmlEditorInited = true;
 }
 
 DwtHtmlEditor.prototype._getIframeDoc =
@@ -784,7 +797,6 @@ function() {
 	var iframeDoc = this._getIframeDoc();
 	try {
 		iframeDoc.body.innerHTML = this._pendingContent;
-		//this._pendingContent = null;
 		// XXX: mozilla hack
 		if (AjxEnv.isGeckoBased)
 			this._enableDesignMode([iframeDoc]);
