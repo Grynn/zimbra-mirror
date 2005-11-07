@@ -28,7 +28,9 @@ function DwtPropertySheet(parent, className, positionType) {
 	className = className || "DwtPropertySheet";
 	DwtComposite.call(this, parent, className, positionType);
 
-	this._properties = [];
+	this._propertyIdCount = 0;
+	this._propertyList = [];
+	this._propertyMap = {};
 	
 	var document = this.getDocument();
 	this._tableEl = document.createElement("TABLE");
@@ -55,6 +57,10 @@ DwtPropertySheet.prototype._valueCssClass = "Field";
 
 DwtPropertySheet.prototype._tableEl;
 
+DwtPropertySheet.prototype._propertyIdCount;
+DwtPropertySheet.prototype._propertyList;
+DwtPropertySheet.prototype._propertyMap;
+
 // Public methods
 
 /**
@@ -72,7 +78,7 @@ DwtPropertySheet.prototype._tableEl;
  */
 DwtPropertySheet.prototype.addProperty = function(label, value, required) {
 	var index = this._tableEl.rows.length;
-	
+
 	var row = this._tableEl.insertRow(index);
 	row.vAlign = "top";
 	
@@ -101,10 +107,65 @@ DwtPropertySheet.prototype.addProperty = function(label, value, required) {
 		valueCell.innerHTML = String(value);
 	}
 	
-	return index;
+	var id = this._propertyIdCount++;
+	var property = { id: id, index: index, row: row, visible: true };
+	this._propertyList.push(property);
+	this._propertyMap[id] = property;
+	return id;
 };
 
-DwtPropertySheet.prototype.removeProperty = function(index) {
-	var row = this._tableEl.rows[index];
-	row.parentNode.removeChild(row);
+DwtPropertySheet.prototype.removeProperty = function(id) {
+	var prop = this._propertyMap[id];
+	if (prop.visible) {
+		var propIndex = prop.index;
+		var tableIndex = this.__getTableIndex(propIndex);
+		var row = this._tableEl.rows[tableIndex];
+		row.parentNode.removeChild(row);
+	}
+
+	prop.row = null;
+	for (var i = index + 1; i < this._propertyList.length; i++) {
+		var prop = this._propertyList[i];
+		prop.index--;
+	}
+	this._propertyList.splice(index, 1);
+	delete this._propertyMap[id];
+};
+
+DwtPropertySheet.prototype.setPropertyVisible = function(id, visible) {
+	var prop = this._propertyMap[id];
+	if (prop.visible != visible) {
+		prop.visible = visible;
+		var propIndex = prop.index;
+		if (visible) {
+			var tableIndex = this.__getTableIndex(propIndex);
+			var row = this._tableEl.insertRow(tableIndex);
+			DwtPropertySheet.__moveChildNodes(prop.row, row);
+			prop.row = row;
+		}
+		else {
+			var row = prop.row;
+			row.parentNode.removeChild(row);
+		}
+	}
+};
+
+DwtPropertySheet.prototype.__getTableIndex = function(propIndex) {
+	var tableIndex = 0;
+	for (var i = 0; i < propIndex; i++) {
+		var prop = this._propertyList[i];
+		if (prop.visible) {
+			tableIndex++;
+		}
+	}
+	return tableIndex;
+};
+
+DwtPropertySheet.__moveChildNodes = function(srcParent, destParent) {
+	if (srcParent === destParent) return;
+	var srcChild = srcParent.firstChild;
+	while (srcChild != null) {
+		destParent.appendChild(srcChild);
+		srcChild = srcParent.firstChild;
+	}
 };
