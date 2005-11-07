@@ -126,19 +126,24 @@ sub doStatus {
 
 sub startLdap {
 	print "\tStarting ldap...";
-	system("/opt/zimbra/bin/ldap start >/dev/null 2>&1");
+	my $rc = 0xffff & system("/opt/zimbra/bin/ldap start >/dev/null 2>&1");
+	$rc = $rc >> 8;
 	print "Done.\n";
+	return $rc;
 }
 
 sub doStartup {
 	Zimbra::Mon::Logger::Log ("info", "Starting services");
 	print "Host $localHostName\n";
+	my $rc = 0;
+	my $rrc = 0;
 	if ($localHostName eq $ldapServer) {
 		my $ldapStopped = 0xffff & system("/opt/zimbra/bin/ldap status");
 		if ($ldapStopped) {
-			startLdap();
+			$rrc = startLdap();
 		}
 	}
+	if ($rrc) {$rc = $rrc};
 	$services = getEnabledServices();
 	if (scalar(keys %$services) == 0) {
 		return 1;
@@ -147,24 +152,30 @@ sub doStartup {
 		if ($_ eq "ldap") {next;}
 		Zimbra::Mon::Logger::Log ("info", "Starting $_");
 		print "\tStarting $_...";
-		system ("$allservices{$_} start >/dev/null 2>&1");
+		$rrc = 0xffff & system ("$allservices{$_} start >/dev/null 2>&1");
+		$rrc = $rrc >> 8;
 		print "Done.\n";
+		if ($rrc) {$rc = $rrc};
 	}
-	return 0;
+	return $rc;
 }
 
 sub doShutdown {
 	Zimbra::Mon::Logger::Log ("info", "Stopping services");
 	print "Host $localHostName\n";
+	my $rc = 0;
+	my $rrc = 0;
 	foreach (sort keys %allservices) {
 		Zimbra::Mon::Logger::Log ("info", "Stopping $_");
 		if ($_ eq "ldap" && !(-d "/opt/zimbra/openldap-2.2.28") ) { next; }
 		if ($_ eq "mta" && !(-d "/opt/zimbra/postfix-2.2.3") ) { next; }
 		print "\tStopping $_...";
-		system ("$allservices{$_} stop > /dev/null 2>&1");
+		$rrc = 0xffff & system ("$allservices{$_} stop > /dev/null 2>&1");
+		$rrc = $rrc >> 8;
+		if ($rrc) {$rc = $rrc};
 		print "Done\n";
 	}
-	return 0;
+	return $rc;
 }
 
 sub setMaintenanceMode {
