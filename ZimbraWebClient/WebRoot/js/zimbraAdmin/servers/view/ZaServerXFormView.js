@@ -280,7 +280,17 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 							  	  relevant: "instance.attrs[ZaServer.A_zimbraAntiVirusServiceInstalled]", relevantBehavior: _DISABLE_,
 							  	  label: ZaMsg.NAD_Service_AntiVirus,
 						  	      onChange: ZaServerXFormView.onFormFieldChanged
-							  	}
+							  	},
+							  	{ ref: ZaServer.A_zimbraSpellServiceEnabled, type: _CHECKBOX_,
+							  	  relevant: "instance.attrs[ZaServer.A_zimbraSpellServiceInstalled]", relevantBehavior: _DISABLE_,
+							  	  label: ZaMsg.NAD_Service_Spell,
+						  	      onChange: ZaServerXFormView.onFormFieldChanged
+							  	},
+							  	{ ref: ZaServer.A_zimbraLoggerServiceEnabled, type: _CHECKBOX_,
+							  	  relevant: "instance.attrs[ZaServer.A_zimbraLoggerServiceInstalled]", relevantBehavior: _DISABLE_,
+							  	  label: ZaMsg.NAD_Service_Logger,
+						  	      onChange: ZaServerXFormView.onFormFieldChanged
+							  	}							  	
 							]}
 						]
 					}, 
