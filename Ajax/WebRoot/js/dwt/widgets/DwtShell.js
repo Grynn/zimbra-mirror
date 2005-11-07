@@ -348,6 +348,7 @@ function(htmlElement) {
     Dwt.setZIndex(this._busyOverlay, Dwt.Z_VEIL);
     this._busyOverlay.innerHTML = "<table cellspacing=0 cellpadding=0 style='width:100%; height:100%'><tr><td>&nbsp;</td></tr></table>";
     htmlElement.appendChild(this._busyOverlay);
+	Dwt.setVisible(this._busyOverlay, false);
 
 	var cancelButton = new DwtDialog_ButtonDescriptor(DwtShell.CANCEL_BUTTON, AjxMsg.cancelRequest, DwtDialog.ALIGN_CENTER);
     this._busyDialog = new DwtDialog(this, "DwtShellbusyDialog", AjxMsg.workInProgress, DwtDialog.NO_BUTTONS, [cancelButton], Dwt.BUSY + 10);

@@ -118,9 +118,12 @@ DIV.vSpace {
 
 
 .MainShell {
-	background-color: white;
-    width: "100%";
-    height: "100%";
+	background-color: pink;
+	width: 100%;
+	height: 100%;
+	position:absolute;
+	top:0px;
+	left:0px;
 }
 
 .BusyOverlay table, .VeilOverlay table {
