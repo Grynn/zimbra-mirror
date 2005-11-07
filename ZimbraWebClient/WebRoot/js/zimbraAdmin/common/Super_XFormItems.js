@@ -303,7 +303,7 @@ Super_Checkbox_XFormItem.prototype.initializeItems = function() {
 		this.getItems()[0].labelLocation = checkBoxLabelLocation;
 	}
 	var trueValue = this.getInheritedProperty("trueValue");
-	var falseValue = this.getInheritedProperty(", falseValue:");	
+	var falseValue = this.getInheritedProperty("falseValue");	
 	this.getItems()[0].trueValue = trueValue;
 	this.getItems()[0].falseValue = falseValue;	
 }	
