@@ -499,9 +499,7 @@ function(params) {
 	var doc = this._getIframeDoc();	
 	try {	
 		var content = this._pendingContent || "";
-		doc.open();
-		doc.write(content);
-		doc.close(); 
+		doc.innerHTML = content;
 	} catch (ex) {
 		// TODO Replace
 		alert("Error loading content");
