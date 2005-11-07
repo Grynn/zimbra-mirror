@@ -84,6 +84,7 @@ fi
 
 if [ -d /opt/zimbra/cyrus-sasl-2.1.21.ZIMBRA ]; then
 	chown root:zimbra /opt/zimbra/cyrus-sasl-2.1.21.ZIMBRA
+	mkdir -p /opt/zimbra/cyrus-sasl-2.1.21.ZIMBRA/state
 	chown zimbra:zimbra /opt/zimbra/cyrus-sasl-2.1.21.ZIMBRA/state
 fi
 
