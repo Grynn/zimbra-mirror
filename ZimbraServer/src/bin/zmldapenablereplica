@@ -83,7 +83,7 @@ createLdapConfig() {
 
 	cat >> ${zimbra_home}/conf/slapd.conf <<EOF
 syncrepl rid=100
-	provider=ldap://${ldap_host}:${ldap_port}
+	provider=ldaps://${ldap_host}
 	type=refreshAndPersist
 	schemachecking=off
 	updatedn="uid=zimbrareplication,cn=admins,cn=zimbra"

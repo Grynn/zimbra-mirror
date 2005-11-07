@@ -46,26 +46,6 @@ createConf() {
 	cat ${CONF}/zmssl.cnf.in | sed -e "s/@@HOSTNAME@@/$H/" > ${BASE}/zmssl.cnf
 }
 
-createKey() {
-
-	echo "** Creating CA private key"
-	echo
-
-	openssl req -batch -config ${BASE}/zmssl.cnf -new -newkey \
-		rsa:1024 -nodes -out ${BASE}/ca/ca.csr -keyout ${BASE}/ca/ca.key
-
-}
-
-createCert() {
-
-	echo "** Creating CA cert"
-	echo
-
-	openssl x509 -trustout -signkey ${BASE}/ca/ca.key -days 365 \
-		-req -in ${BASE}/ca/ca.csr -out ${BASE}/ca/ca.pem
-
-}
-
 createSerial() {
 	if [ -f ${BASE}/ca/ca.srl ]; then
 		SER=`cat ${BASE}/ca/ca.srl`
@@ -131,15 +111,16 @@ signCertReq() {
 	openssl x509 -req -days 365 -in ${BASE}/server/server.csr \
 		-signkey ${BASE}/ca/ca.key -out ${BASE}/server/smtpd.crt
 
+	cp ${BASE}/server/smtpd.crt ${CONF}/slapd.crt
+	mkdir -p ${CONF}/ca
+	cp ${BASE}/ca/ca.key ${CONF}/ca/ca.key
+	cp ${BASE}/ca/ca.pem ${CONF}/ca/ca.pem
+
 }
 
 getHostInfo
 
 createConf
-
-createKey
-
-createCert
 
 createSerial
 

@@ -458,6 +458,10 @@
 
 <attr name="zimbraSshPublicKey" type="string" max="1024"/>
 
+<attr name="zimbraSslCaCert" type="string" max="2048"/>
+
+<attr name="zimbraSslCaKey" type="string" max="2048"/>
+
 <attr name="zimbraTableMaintenanceGrowthFactor" type="integer" min="0"/>
 
 <attr name="zimbraTableMaintenanceMaxRows" type="integer" min="0"/>

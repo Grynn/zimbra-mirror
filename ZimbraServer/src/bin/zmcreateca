@@ -1,0 +1,75 @@
+#!/bin/sh
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Version: ZPL 1.1
+# 
+# The contents of this file are subject to the Zimbra Public License
+# Version 1.1 ("License"); you may not use this file except in
+# compliance with the License. You may obtain a copy of the License at
+# http://www.zimbra.com/license
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+# the License for the specific language governing rights and limitations
+# under the License.
+# 
+# The Original Code is: Zimbra Collaboration Suite.
+# 
+# The Initial Developer of the Original Code is Zimbra, Inc.
+# Portions created by Zimbra are Copyright (C) 2005 Zimbra, Inc.
+# All Rights Reserved.
+# 
+# Contributor(s):
+# 
+# ***** END LICENSE BLOCK *****
+# 
+CONF=/opt/zimbra/conf
+TCONF=/opt/zimbra/tomcat/conf
+B=/opt/zimbra/ssl
+BASE=${B}/ssl
+
+JAVA_HOME=/opt/zimbra/java
+
+TOMCAT=/opt/zimbra/tomcat/conf
+
+mkdir -p ${BASE}/ca
+mkdir -p ${BASE}/cert
+mkdir -p ${BASE}/server
+
+getHostInfo() {
+
+	H=`/opt/zimbra/bin/zmlocalconfig -m nokey zimbra_server_hostname`;
+
+}
+
+createConf() {
+	cat ${CONF}/zmssl.cnf.in | sed -e "s/@@HOSTNAME@@/$H/" > ${BASE}/zmssl.cnf
+}
+
+createKey() {
+
+	echo "** Creating CA private key"
+	echo
+
+	openssl req -batch -config ${BASE}/zmssl.cnf -new -newkey \
+		rsa:1024 -nodes -out ${BASE}/ca/ca.csr -keyout ${BASE}/ca/ca.key
+
+}
+
+createCert() {
+
+	echo "** Creating CA cert"
+	echo
+
+	openssl x509 -trustout -signkey ${BASE}/ca/ca.key -days 365 \
+		-req -in ${BASE}/ca/ca.csr -out ${BASE}/ca/ca.pem
+
+}
+
+getHostInfo
+
+createConf
+
+createKey
+
+createCert
