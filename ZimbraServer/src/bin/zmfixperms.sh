@@ -82,6 +82,11 @@ if [ -L /opt/zimbra/postfix ]; then
 
 fi
 
+if [ -d /opt/zimbra/cyrus-sasl-2.1.21.ZIMBRA ]; then
+	chown root:zimbra /opt/zimbra/cyrus-sasl-2.1.21.ZIMBRA
+	chown zimbra:zimbra /opt/zimbra/cyrus-sasl-2.1.21.ZIMBRA/state
+fi
+
 if [ -d /opt/zimbra/clamav-0.85.1 ]; then
 	chown zimbra:zimbra /opt/zimbra/clamav-0.85.1
 fi
