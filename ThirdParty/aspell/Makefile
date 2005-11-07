@@ -33,6 +33,8 @@ dict-install:
 		PATH=$(ZIMBRA_HOME)/aspell-$(ASPELL_VERSION)/bin:$$PATH make; \
 		PATH=$(ZIMBRA_HOME)/aspell-$(ASPELL_VERSION)/bin:$$PATH make install) \
 	done
+	PATH=$(ZIMBRA_HOME)/aspell-$(ASPELL_VERSION)/bin:$$PATH echo "zimbra" | aspell create master --lang=en $(ZIMBRA_HOME)/aspell-$(ASPELL_VERSION)/lib/aspell-0.60/zimbra.rws
+	echo "add zimbra.rws" >> $(ZIMBRA_HOME)/aspell-$(ASPELL_VERSION)/lib/aspell-0.60/en.multi
 
 tar: $(ASPELL_ROOT)/builds/$(BUILD_PLATFORM)
 	(cd $(ZIMBRA_HOME); tar czf \
