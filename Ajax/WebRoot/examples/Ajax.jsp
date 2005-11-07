@@ -1,9 +1,9 @@
 <!-- 
 ***** BEGIN LICENSE BLOCK *****
-Version: ZAPL 1.1
+Version: ZPL 1.1
 
-The contents of this file are subject to the Zimbra AJAX Public
-License Version 1.1 ("License"); you may not use this file except in
+The contents of this file are subject to the Zimbra Public License
+Version 1.1 ("License"); you may not use this file except in
 compliance with the License. You may obtain a copy of the License at
 http://www.zimbra.com/license
 
@@ -12,7 +12,7 @@ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
 the License for the specific language governing rights and limitations
 under the License.
 
-The Original Code is: Zimbra AJAX Toolkit.
+The Original Code is: Zimbra Collaboration Suite.
 
 The Initial Developer of the Original Code is Zimbra, Inc.
 Portions created by Zimbra are Copyright (C) 2005 Zimbra, Inc.
@@ -25,11 +25,15 @@ Contributor(s):
 <% 
    String contextPath = (String)request.getContextPath(); 
 %>
+
 <!-- BEGIN SCRIPT BLOCK -->
-<!-- WARNING: Order matters.  Don't re-order these unless you know what your doing! -->
+<!-- WARNING: Order matters.  Don't re-order these unless you know what you're doing! -->
+
+<!-- AJAX utility classes -->
 <script type="text/javascript" src="<%= contextPath %>/js/core/AjxCore.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/core/AjxEnv.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/util/AjxUtil.js"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/util/AjxText.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/core/AjxException.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/util/AjxCookie.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/soap/AjxSoapException.js"></script>
@@ -52,14 +56,16 @@ Contributor(s):
 <script type="text/javascript" src="<%= contextPath %>/js/events/AjxEventMgr.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/util/AjxCallback.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/events/AjxListener.js"></script>
-<script type="text/javascript" src="<%= contextPath %>/js/util/AjxText.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/util/AjxDateUtil.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/util/AjxStringUtil.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/util/AjxVector.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/util/AjxSelectionManager.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/net/AjxPost.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/util/AjxBuffer.js"></script>
-<script type="text/javascript" src="<%= contextPath %>/js/util/AjxTimezone.js"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/util/AjxCache.js"></script>
+
+<!-- DWT classes -->
+<script type="text/javascript" src="<%= contextPath %>/js/dwt/core/DwtImg.js"></script>
 
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/core/Dwt.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/core/DwtException.js"></script>
@@ -109,6 +115,7 @@ Contributor(s):
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtToolBar.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/graphics/DwtBorder.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtToolTip.js"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtStickyToolTip.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtTreeItem.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtTree.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtCalendar.js"></script>
@@ -119,6 +126,11 @@ Contributor(s):
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtAddRemove.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtAlert.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtText.js"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtIframe.js"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtXFormDialog.js"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtPropertySheet.js"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtGrouper.js"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtProgressBar.js"></script>
 
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/events/DwtXFormsEvent.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/xforms/XFormGlobal.js"></script>

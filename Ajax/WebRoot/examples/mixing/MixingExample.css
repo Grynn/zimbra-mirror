@@ -91,8 +91,8 @@ DIV.vSpace {
 
 .MainShell {
 	background-color: pink;
-    width: "100%";
-    height: "100%";
+    width: 100%;
+    height: 100%;
 }
 
 .BusyOverlay table, .VeilOverlay table {
@@ -101,11 +101,11 @@ DIV.vSpace {
 	opacity:0.5;
 }
 .BusyOverlay table {
-	cursor: "wait";
+	cursor: wait;
 	background-color: transparent;
 }
 .VeilOverlay table {
-	cursor: "not-allowed";
+	cursor: not-allowed;
 	background-color: white;
 }
 .CurtainOverlay table {

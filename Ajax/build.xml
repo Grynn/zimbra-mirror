@@ -34,7 +34,6 @@
 	<property name="images.loRes.destDir" value="${build.cmn.dir}/img/loRes"/>
 	<property name="images.animated.destDir" value="${build.cmn.dir}/img/animated"/>
 	<property name="images.cssFile" value="dwtimgs.css"/>
-	<property name="images.cssPath" value="/ajax/examples/common/img"/>
 
 	<taskdef resource="net/sf/antcontrib/antlib.xml">
 		<classpath>
@@ -49,11 +48,25 @@
 	</path>
 
 	<target name="compile" depends="build-init" description="compile the filter source" >
-		<!-- Compile the java code from ${src} into ${build} -->
-		<javac srcdir="${src.dir}" destdir="${build.dir}" source="1.4" target="1.4" debug="on">
-			<classpath refid="class.path"/>
-			<include name="**/*.java"/>
-		</javac>
+		   <!-- Compile the java code from ${src} into ${build} -->
+		    <mkdir dir='${build.dir}/classes'/>
+		    <javac srcdir="${src.dir}" destdir="${build.dir}/classes" source="1.4" target="1.4" debug="on">
+		      <classpath refid="class.path"/>
+		      <include name="**/*.java"/>
+		    </javac>
+
+		    <!-- define imagemerge task -->
+		    <pathconvert property='imagemerge.cp' pathsep='${path.separator}'>
+		      <path>
+		        <pathelement location='${build.dir}/classes'/>
+		        <fileset dir='${jars.dir}' includes='**/*.jar'/>
+		      </path>
+		    </pathconvert>
+		    <taskdef name='imagemerge' 
+		      classname='com.zimbra.ajax.imagemerge.ImageMergeTask' 
+		      classpath='${imagemerge.cp}'
+		      />
+
 	</target>
 
 	<taskdef name="deploy" classname="org.apache.catalina.ant.DeployTask" classpathref="class.path"/>
@@ -71,7 +84,7 @@
 	<target name='i18n' depends='i18n-init,compile' unless='i18n-done'>
 		<taskdef name='i18n' 
 				 classname='com.zimbra.ajax.i18n.GenerateDataTask' 
-				 classpath='${build.dir}'
+				 classpath='${build.dir}/classes'
 		/>
 		<mkdir dir='${build.dir}/i18n/msgs' />
 		<i18n destdir='${build.dir}/i18n/msgs' />
@@ -90,79 +103,65 @@
 		</copy>
 	</target>
 
+
+	<target name='images'>
+		<antcall target='build-images'>
+			<param name="csspathprefix" value="/ajax/examples/common/img/"/>
+		</antcall>    
+	</target>		
 	
-	<target name='imagesinit' description='checks to see if images need to be processed' unless='images.force'>
+	<target name='images-are-dirty' description='checks to see if images need to be processed' unless='images.force'>
 		<dependset>
-			<srcfileset dir='${images.dir}' includes='**/*'/>
+			<srcfileset dir='img' includes='**/*'/>
 			<targetfilelist dir='${images.loRes.destDir}' files='${images.cssFile}'/>
 		</dependset>
-		<available property='imagesdone' file='${images.loRes.destDir}/${images.cssFile}'/>
-	</target>
-		
-	<target name='dwtimages'>
-		<antcall target='images'>
-			<param name='images.dir' value='${images.dir}'/>
-			<param name='images.cssPath' value='${images.cssPath}'/>
-			<param name='images.cssFile' value='${images.cssFile}'/>
-			<param name='images.hiRes.destDir' value='${images.hiRes.destDir}'/>
-			<param name='images.loRes.destDir' value='${images.loRes.destDir}'/>
-		</antcall>
+	    <available property='imagesdone' file='${images.loRes.destDir}/${images.cssFile}'/>
 	</target>
 	
-	<target name='images' depends='imagesinit,compile' unless='imagesdone'>
-		<echo message='images.dir: ${images.dir}'/>
-		<echo message='images.cssPath: ${images.cssPath}'/>
-		<echo message='images.cssFile: ${images.cssFile}'/>
-		<echo message='images.hiRes.destDir: ${images.hiRes.destDir}'/>
-		<echo message='images.loRes.destDir: ${images.loRes.destDir}'/>
-		<echo message='images.animated.destDir: ${images.animated.destDir}'/>
+	 <target name='build-images' depends='images-are-dirty,compile' unless='imagesdone'>
+	    <!-- copy animated images 
+	    Since the imagemerge program does not support animated GIFs we have to use the
+	    copy ant task and manually create the CSS rules -->
+	    <echo/>
+	    <echo message='Copying animated images'/>
+	    <echo/>
+	    <copy todir="${images.animated.destDir}">
+	      <fileset dir="img/animated"  includes="*"/>
+	    </copy>
 
-		<!-- define imagemerge task -->
-		<pathconvert property='imagemerge.cp' pathsep='${path.separator}'>
-			<path>
-				<pathelement location='${build.dir}'/>
-				<fileset dir='${jars.dir}' includes='**/*.jar'/>
-			</path>
-		</pathconvert>
-		<taskdef name='imagemerge' 
-				 classname='com.zimbra.ajax.imagemerge.ImageMergeTask' 
-				 classpath='${imagemerge.cp}'
-		/>
+	    <!-- copy hiRes images -->
+	    <mkdir dir="${images.hiRes.destDir}"/>
+	    <delete file='${images.hiRes.destDir}/${images.cssFile}'/>
+	    <echo/>
+	    <echo message='Copying high resolution images'/>
+	    <echo/>
+	    <imagemerge destdir='${images.hiRes.destDir}' copy='true'
+	      cssfile='${images.cssFile}' csspath='${csspathprefix}hiRes/'>
+	      <dirset dir='img/hiRes' includes='*'/>
+	    </imagemerge>
+	    <echo/>
 
-		<!-- copy hiRes images -->
-		<mkdir dir="${images.hiRes.destDir}"/>
-		<delete file='${images.hiRes.destDir}/${images.cssFile}'/>
-		<echo/>
-		<echo message='Copying high resolution images (-horizborders -vertborders -backgrounds)'/>
-		<echo/>
-		<imagemerge destdir='${images.hiRes.destDir}' copy='true'
-					cssfile='${images.cssFile}' csspath='${images.cssPath}/hiRes/'>
-			<dirset dir='${images.dir}/hiRes' includes='*' excludes='horizborders,vertborders,backgrounds'/>
-		</imagemerge>
-		<echo/>
-		
-		<!-- merge loRes images -->
-		<mkdir dir="${images.loRes.destDir}"/>
-		<delete file='${images.loRes.destDir}/${images.cssFile}'/>
-		<echo/>
-		<echo message='Merging low resolution images (-horizborder -vertborders -backgrounds)'/>
-		<echo/>
-		<imagemerge destdir='${images.loRes.destDir}' layout='auto'
-					cssfile='${images.cssFile}' csspath='${images.cssPath}/loRes/'>
-			<dirset dir='${images.dir}/loRes' 
-					includes='*' excludes='horizborders,vertborders,backgrounds'/>
-		</imagemerge>
-		<echo/>
-		
-		<!-- copy animated images -->
-		<echo message='Copying animated images'/>
-		<copy todir="${build.img}/animated" overwrite="true" >
-			<fileset dir="WebRoot/img/animated" includes="**/*"/>
-		</copy>
-		<echo/>
-		
-	</target>
+	    <!-- merge loRes images -->
+	    <mkdir dir="${images.loRes.destDir}"/>
+	    <delete file='${images.loRes.destDir}/${images.cssFile}'/>
+	    <echo/>
 
+	    <echo message='Merging low resolution dwt images'/>
+	    <echo/>
+	    <imagemerge destdir='${images.loRes.destDir}' 
+	      cssfile='${images.cssFile}' csspath='${csspathprefix}loRes/'>
+	      <dirset dir='img/loRes' includes='*' excludes='**/examples,**/shadow_border'/>
+	    </imagemerge>
+
+	    <echo message='Copying non-mergeable low resolution dwt images'/>
+	    <echo/>
+	    <imagemerge destdir='${images.loRes.destDir}' copy='true'
+	      cssfile='${images.cssFile}' csspath='${csspathprefix}loRes/'>
+	      <dirset dir='img/loRes' includes='**/examples,**/shadow_border'/>
+	    </imagemerge>
+	  </target>
+	
+	
 	<target name="htmleditorexample">
 		<copy todir="${build.examples.dir}/htmlEditor" overwrite="true" >
 			<fileset dir="WebRoot/examples/htmlEditor" includes="**/*" excludes="**/img,**/img/"/>
@@ -183,20 +182,10 @@
 		<copy todir="${build.examples.dir}/mixing" overwrite="true" >
 			<fileset dir="WebRoot/examples/mixing" includes="**/*" excludes="**/img,**/img/"/>
 		</copy>
-		
-		<property name="mixing.cssFile" value="imgs.css"/>
-		<property name="mixing.hiRes.destDir" value="${build.examples.dir}/mixing/img/hiRes"/>
-		<property name="mixing.loRes.destDir" value="${build.examples.dir}/mixing/img/loRes"/>
-		<antcall target='images'>
-			<param name='images.dir' value='WebRoot/examples/mixing/img'/>
-			<param name="images.hiRes.destDir" value="${mixing.hiRes.destDir}"/>
-			<param name="images.loRes.destDir" value="${mixing.loRes.destDir}"/>
-			<param name="images.cssPath" value="/ajax/examples/mixing/img"/>			
-			<param name="images.cssFile" value="${mixing.cssFile}"/>			
-		</antcall>
+		<!--   NOTE: images now coming from the common "examples" directory -->	
 	</target>
 	
-<target name="treeexample">
+	<target name="treeexample">
 		<copy todir="${build.examples.dir}/tree" overwrite="true" >
 			<fileset dir="WebRoot/examples/tree" includes="**/*" excludes="**/img,**/img/"/>
 		</copy>
@@ -210,7 +199,7 @@
 		</copy>
 	</target>
 		
-	<target name="examples" depends="dwtimages, htmleditorexample, treeexample, dataviewerexample, mixingexample, xformsexample"/>
+	<target name="examples" depends="images, htmleditorexample, treeexample, dataviewerexample, mixingexample, xformsexample"/>
 	
 	<!-- 
 	This target is meant only to be run after a full deploy has
@@ -232,7 +221,7 @@
 	<target name="war" depends="build-init, copy-files-to-build-area, i18n, examples">
 		<war warfile="${warfile}" webxml="${build.dir}/WebRoot/WEB-INF/web.xml">
 			<lib dir="${jars.dir}" includes="*.jar" excludes="servlet-api.jar"/>
-			<classes dir="${build.dir}" includes="**/*.class" excludes="**/build/*"/>
+			<classes dir="${build.dir}/classes" includes="**/*.class" excludes="**/imagemerge/*,**/build/*"/>
 			<classes dir="WebRoot/js/config" includes="msgs/*.properties"/>
 			<classes dir="${build.dir}/i18n" includes="msgs/*.properties"/>
 			<webinf dir="WebRoot/WEB-INF" includes="tlds/*"/>
@@ -247,3 +236,4 @@
 	</target>
     
 </project>
+

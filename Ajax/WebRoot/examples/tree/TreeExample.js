@@ -48,7 +48,7 @@ function TreeExample(parent) {
 TreeExample.run =
 function() {
 	// Create the shell
-	var shell = new DwtShell("MainShell", false, null, null, true);
+	var shell = new DwtShell("MainShell");
 	new TreeExample(shell);
 }
 
