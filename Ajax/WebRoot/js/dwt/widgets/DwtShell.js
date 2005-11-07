@@ -177,42 +177,54 @@ function() {
 }
 
 /* Set's the busy overlay. The busy overlay disables input to the application and makes the 
- * cursor a wait cursor. Optionally a work in progress (WIP) dialog may be requested. 
+ * cursor a wait cursor. Optionally a work in progress (WIP) dialog may be requested. Since
+ * multiple calls to this method may be interleaved, it accepts a unique ID to keep them
+ * separate. We also maintain a count of outstanding calls to setBusy(true). When that count
+ * changes between 0 and 1, the busy overlay is applied or removed.
  * 
  * @param busy					[boolean]		if true, set the busy overlay, otherwise hide the busy overlay
- * @param className				[string]*		css classname for the busy dialog
+ * @param id					[int]			a unique ID for this instance
  * @param showbusyDialog 		[boolean]*		if true, show the WIP dialog
  * @param busyDialogDelay 		[int]*			number of ms to delay before popping up the WIP dialog
  * @param cancelBusyCallback	[AjxCallback]*	callback to run when OK button is pressed in WIP dialog
  */ 
 DwtShell.prototype.setBusy =
-function(busy, className, showbusyDialog, busyDialogDelay, cancelBusyCallback) {
-    if (!busy) {
-    	if (this._busyActionId != -1) {
-    		AjxTimedAction.cancelAction(this._busyActionId);
-    		this._busyActionId = -1;
+function(busy, id, showbusyDialog, busyDialogDelay, cancelBusyCallback) {
+	busy ? this._setBusyCount++ : this._setBusyCount--;
+
+    if (!this._setBusy && (this._setBusyCount > 0)) {
+		// transition from non-busy to busy state
+		Dwt.setCursor(this._busyOverlay, "wait");
+    	Dwt.setVisible(this._busyOverlay, true);
+    	this._setBusy = true;
+    } else if (this._setBusy && (this._setBusyCount == 0)){
+		// transition from busy to non-busy state
+	    Dwt.setCursor(this._busyOverlay, "default");
+	    Dwt.setVisible(this._busyOverlay, false);
+	    this._setBusy = false;
+	}
+	
+	// handle busy dialog whether we've changed state or not
+	if (busy && showbusyDialog) {
+		if (busyDialogDelay && busyDialogDelay > 0) {
+			this._busyActionId[id] = AjxTimedAction.scheduleAction(this._busyTimedAction, busyDialogDelay);
+		} else {
+			this._showBusyDialogAction(id);
+		}
+
+		if (cancelBusyCallback) {
+			this._cancelBusyCallback = cancelBusyCallback;
+			this._busyDialog.setButtonEnabled(DwtShell.CANCEL_BUTTON, true);
+		} else {
+			this._busyDialog.setButtonEnabled(DwtShell.CANCEL_BUTTON, false);
+		}
+	} else {
+    	if (this._busyActionId[id] && (this._busyActionId[id] != -1)) {
+    		AjxTimedAction.cancelAction(this._busyActionId[id]);
+    		this._busyActionId[id] = -1;
     	}
    		if (this._busyDialog.isPoppedUp)
     		this._busyDialog.popdown();
-	    Dwt.setCursor(this._busyOverlay, "default");
-	    Dwt.setVisible(this._busyOverlay, false);
-    } else {
-		this._busyOverlay.className = className ? className : this._busyOverlayDefCName;
-		Dwt.setCursor(this._busyOverlay, "wait");
-    	Dwt.setVisible(this._busyOverlay, true);
-		if (showbusyDialog) {
-			if (busyDialogDelay && busyDialogDelay > 0)
-				AjxTimedAction.scheduleAction(this._busyTimedAction, busyDialogDelay);
-			else
-				this._showBusyDialogAction();
-				
-			if (cancelBusyCallback) {
-				this._cancelBusyCallback = cancelBusyCallback;
-				this._busyDialog.setButtonEnabled(DwtShell.CANCEL_BUTTON, true);
-			} else {
-				this._busyDialog.setButtonEnabled(DwtShell.CANCEL_BUTTON, false);
-			}
-		}
     } 
 }
 
@@ -334,15 +346,15 @@ function(ev) {
 }
 
 DwtShell.prototype._showBusyDialogAction =
-function(showDialog) {
+function(id) {
 	this._busyDialog.popup();
-	this.__busyActionId = -1;
+	this._busyActionId[id] = -1;
 }
 
 DwtShell.prototype._createBusyOverlay =
 function(htmlElement) { 
     this._busyOverlay = document.createElement("div");
-    this._busyOverlayDefCName = (!AjxEnv.isLinux) ? DwtShell._BUSY_OVERLAY_CLASS : DwtShell._BUSY_OVERLAY_CLASS + "-linux";
+    this._busyOverlay.className = (!AjxEnv.isLinux) ? DwtShell._BUSY_OVERLAY_CLASS : DwtShell._BUSY_OVERLAY_CLASS + "-linux";
     this._busyOverlay.style.position = "absolute";
     Dwt.setBounds(this._busyOverlay, 0, 0, "100%", "100%")
     Dwt.setZIndex(this._busyOverlay, Dwt.Z_VEIL);
@@ -366,5 +378,8 @@ function(htmlElement) {
 	this._busyTimedAction = new AjxTimedAction();
 	this._busyTimedAction.obj = this;
 	this._busyTimedAction.method = this._showBusyDialogAction;
-	this._busyActionId = -1;
+	this._busyActionId = {};
+	
+	this._setBusyCount = 0;
+	this._setBusy = false;
 }
