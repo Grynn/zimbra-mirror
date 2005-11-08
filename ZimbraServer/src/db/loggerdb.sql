@@ -70,6 +70,7 @@ CREATE TABLE mta (
 	from_IP				VARCHAR(16),
 	to_host				VARCHAR(255),
 	to_IP				VARCHAR(16),
+	qid					VARCHAR(16),
 	amavis_pid			VARCHAR(16),
 	bytes				INTEGER,
 	INDEX i_msgid (msgid)

@@ -992,6 +992,28 @@ sub parseMessage {
 		}
 	}
 	if ($messageId eq "" || $msg{$messageId}{host} eq "") {
+		# Try to get it from the processed logs
+		my $H;
+		foreach my $row (@$ary) {
+			my ($rowid, $date, $host, $app, $pid, $msg) = (@$row);
+			$H = $host;
+			last;
+		}
+
+		my $statement =
+			"select msgid, arrive_time, from_host, from_IP from mta where qid=\'$qid\' and host=\'$H\'";
+
+		my $sth = sqlExec($statement);
+
+		my $ar = $sth->fetchall_arrayref;
+		$messageId = $$ar[0][0];
+		$msg{$messageId}{host} = $H;
+		$msg{$messageId}{arriveTime} = $$ar[0][1];
+		$msg{$messageId}{prevHost} = $$ar[0][2];
+		$msg{$messageId}{prevIp} = $$ar[0][3];
+
+	}
+	if ($messageId eq "" || $msg{$messageId}{host} eq "") {
 		return undef;
 	}
 
@@ -1024,6 +1046,7 @@ sub parseMessage {
 			my $r = $1;
 			$msg{$messageId}{recipList}{$r}{leaveTime}{$date} = ();
 			$msg{$messageId}{recipList}{$r}{recip} = $r;
+			$msg{$messageId}{recipList}{$r}{qid} = $qid;
 			$msg{$messageId}{recipList}{$r}{nextHost} = $2;
 			$msg{$messageId}{recipList}{$r}{nextIp} = $3;
 			$msg{$messageId}{recipList}{$r}{leaveTime}{$date}{status} = $4;
@@ -1045,6 +1068,7 @@ sub parseMessage {
 			my $r = $1;
 			$msg{$messageId}{recipList}{$r}{leaveTime}{$date} = ();
 			$msg{$messageId}{recipList}{$r}{recip} = $r;
+			$msg{$messageId}{recipList}{$r}{qid} = $qid;
 			$msg{$messageId}{recipList}{$r}{origRecip} = $2;
 			$msg{$messageId}{recipList}{$r}{nextHost} = $3;
 			$msg{$messageId}{recipList}{$r}{nextIp} = $4;
@@ -1079,9 +1103,10 @@ sub insertMtaMessage {
 		"from_host, from_IP, ".
 		"to_host, ".
 		"to_IP, ".
+		"qid, ".
 		"status, ".
 		"statusmsg) ".
-		"values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		"values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 	foreach my $messageId (sort keys %{$msg}) {
 		if ($$msg{$messageId}{rowid} > $last) {
@@ -1103,6 +1128,7 @@ sub insertMtaMessage {
 					$$msg{$messageId}{prevHost}, $$msg{$messageId}{prevIp}, 
 					$$msg{$messageId}{recipList}{$r}{nextHost}, 
 					$$msg{$messageId}{recipList}{$r}{nextIp}, 
+					$$msg{$messageId}{recipList}{$r}{qid}, 
 					$$msg{$messageId}{recipList}{$r}{leaveTime}{$lt}{status},
 					$$msg{$messageId}{recipList}{$r}{leaveTime}{$lt}{statusmsg});
 			}
