@@ -604,7 +604,7 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 										relevant:"!(model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))) && !instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]",
 //										relevantBehavior:_HIDE_, onChange: ZaServerXFormView.onFormFieldChanged
 									},
-									{ref:ZaServer.A_VolumeType, type:_OSELECT1_, choices:ZaServer.volumeTypeChoicesAll,width:"100px", label:null,
+									{ref:ZaServer.A_VolumeType, type:_OSELECT1_, choices:ZaServer.volumeTypeChoicesAll,width:"135px", label:null,
 										relevant:"ZaServerXFormView.whichVolumeTypeSelect.call(item)==3",									
 //										relevant:"!(model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))) && instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]",
 										relevantBehavior:_HIDE_, onChange: ZaServerXFormView.onFormFieldChanged
