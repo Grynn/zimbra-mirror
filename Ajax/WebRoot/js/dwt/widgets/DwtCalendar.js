@@ -424,11 +424,14 @@ function() {
 }
 
 DwtCalendar.prototype._notifyListeners =
-function(eventType, type, detail) {
+function(eventType, type, detail, ev) {
 	if (!this.isListenerRegistered(eventType))
 		return;
 	var selEv = DwtShell.selectionEvent;
-	selEv.reset();
+	if (ev)
+		DwtUiEvent.copy(selEv, ev);
+	else 
+		selEv.reset();
 	selEv.item = this;
 	selEv.detail = detail;
 	selEv.type = type;
@@ -901,7 +904,7 @@ function(ev) {
 				DwtMenu.closeActiveMenu();		
 		}
 	} else if (ev.button == DwtMouseEvent.RIGHT && target.id.charAt(0) == 'c') {					
-		this._notifyListeners(DwtEvent.ACTION, 0, new Date(target._year, target._month, target._day));
+		this._notifyListeners(DwtEvent.ACTION, 0, new Date(target._year, target._month, target._day), ev);
 	}
 }
 

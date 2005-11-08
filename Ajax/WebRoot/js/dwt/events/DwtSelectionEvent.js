@@ -45,7 +45,3 @@ function(dontCallParent) {
 	this.item = null;
 }
 
-DwtSelectionEvent.prototype.setFromDhtmlEvent =
-function(ev, win) {
-	ev = DwtUiEvent.prototype.setFromDhtmlEvent.call(this, ev);
-}
