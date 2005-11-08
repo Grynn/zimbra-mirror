@@ -86,6 +86,8 @@ DwtControl._DRAG_THRESHOLD = 3;
 
 DwtControl.TOOLTIP_THRESHOLD = 5;
 
+DwtControl._DND_HOVER_DELAY = 750;
+
 // static methods
 
 DwtControl._dblClickHdlr = 
@@ -170,6 +172,12 @@ function(ev) {
 	var obj = captureObj ? captureObj.targetObj : DwtUiEvent.getDwtObjFromEvent(ev);
  	if (!obj) return false;
 
+//DND cancel point
+	if (obj._dndHoverActionId != -1) {
+		AjxTimedAction.cancelAction(obj._dndHoverActionId);
+		obj._dndHoverActionId = -1;
+	}
+
 	var mouseEv = DwtShell.mouseEvent;
 	mouseEv.setFromDhtmlEvent(ev);
 
@@ -235,6 +243,13 @@ function(ev) {
 		// will allow it (i.e. via the listeners on the DropTarget
 		if (obj._dragging != DwtControl._DRAG_REJECTED) {
 			var destDwtObj = mouseEv.dwtObj;
+			if (destDwtObj) {
+				// Set up the drag hover event. we will even let this item hover over itself as there may be
+				// scenarios where that will hold true
+				obj._dndHoverAction.params.replace(0, destDwtObj);
+				obj._dndHoverActionId = AjxTimedAction.scheduleAction(obj._dndHoverAction, DwtControl._DND_HOVER_DELAY);
+			}
+
 			if (destDwtObj && destDwtObj._dropTarget && destDwtObj != obj) {
 				if (destDwtObj != obj._lastDestDwtObj || 
 					destDwtObj._dropTarget.hasMultipleTargets()) {
@@ -287,6 +302,12 @@ function(ev) {
 	var captureObj = DwtMouseEventCapture.getCaptureObj();
 	var obj = captureObj ? captureObj.targetObj : DwtUiEvent.getDwtObjFromEvent(ev);
 	if (!obj) return false;
+
+//DND
+	if (obj._dndHoverActionId != -1) {
+		AjxTimedAction.cancelAction(obj._dndHoverActionId);
+		obj._dndHoverActionId = -1;
+	}
 	
 	if (!obj._dragSource || !captureObj) {
 		return DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEUP, obj);
@@ -602,6 +623,8 @@ function(dragSource) {
 		this._ctrlCaptureObj = new DwtMouseEventCapture(this, DwtControl._mouseOverHdlr,
 				DwtControl._mouseDownHdlr, DwtControl._mouseMoveHdlr, 
 				DwtControl._mouseUpHdlr, DwtControl._mouseOutHdlr);
+		this._dndHoverAction = new AjxTimedAction();
+		this._dndHoverAction.method = this._dndDoHover;
 	}
 }
 
@@ -892,6 +915,13 @@ function(clear) {
 	this._setEventHdlrs(DwtEvent.MOUSE_EVENTS, clear);
 }
 
+DwtControl.prototype._dndDoHover =
+function(params) {
+	//TODO Add allow hover?
+	params[0]._dragHover();
+}
+
+
 
 /* Subclasses may override this method to return an HTML element that will represent
  * the dragging icon. The icon must be created on the DwtShell widget. If this method returns
@@ -941,7 +971,8 @@ function(icon) {
 
 /* subclasses may override the following  functions to provide UI behaviour for DnD operations.
  * _dragEnter is called when a drag operation enters a control. _dragOver is called multiple times
- * as an item crossed over the control. _dragLeave is called when the drag operation exits the control. 
+ * as an item crossed over the control. _dragHover is called multiple times as the user hover's over
+ * the control. _dragLeave is called when the drag operation exits the control. 
  * _drop is called when the item is dropped on the target.
  */
 DwtControl.prototype._dragEnter =
@@ -951,6 +982,11 @@ function() {
 DwtControl.prototype._dragOver =
 function() {
 }
+
+DwtControl.prototype._dragHover =
+function() {
+}
+
 
 DwtControl.prototype._dragLeave =
 function() {

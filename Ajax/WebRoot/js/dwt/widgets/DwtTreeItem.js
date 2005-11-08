@@ -469,6 +469,12 @@ function() {
 	this._textCell.className = this._dragOverClassName;
 }
 
+DwtTreeItem.prototype._dragHover =
+function() {
+	if (this.getNumChildren() > 0 && !this.getExpanded())
+		this.setExpanded(true);
+}
+
 DwtTreeItem.prototype._dragLeave =
 function() {
 	if (this._preDragClassName)
