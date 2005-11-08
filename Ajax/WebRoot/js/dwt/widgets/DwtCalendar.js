@@ -143,6 +143,17 @@ function(listener) {
 	this.removeListener(DwtEvent.SELECTION, listener);
 }
 
+DwtCalendar.prototype.addActionListener = 
+function(listener) {
+	this.addListener(DwtEvent.ACTION, listener);
+}
+
+DwtCalendar.prototype.removeActionListener = 
+function(listener) { 
+	this.removeListener(DwtEvent.ACTION, listener);
+}
+
+
 /* Date range listeners are called whenever the date range of the calendar changes i.e. when it rolls over
  * due to a programatic action via setDate or via user selection
  */
@@ -228,7 +239,7 @@ function(date, skipNotify, forceRollOver, dblClick) {
 
 	if (notify && !skipNotify) {
 		var type = dblClick ? DwtCalendar.DATE_DBL_CLICKED : DwtCalendar.DATE_SELECTED;
-		this._selectionNotify(type);
+		this._notifyListeners(DwtEvent.SELECTION, type, this._date);
 	}
 		
 	return true;
@@ -412,17 +423,16 @@ function() {
 	this.addListener(DwtEvent.ONDBLCLICK, new AjxListener(this, this._doubleClickListener));
 }
 
-DwtCalendar.prototype._selectionNotify =
-function(type) {
-	if (!this.isListenerRegistered(DwtEvent.SELECTION))
+DwtCalendar.prototype._notifyListeners =
+function(eventType, type, detail) {
+	if (!this.isListenerRegistered(eventType))
 		return;
-
-	if (!this._selectionEvent)		
-		this._selectionEvent = new DwtSelectionEvent(true);
-	this._selectionEvent.item = this;
-	this._selectionEvent.detail = this._date;
-	this._selectionEvent.type = type;
-	this.notifyListeners(DwtEvent.SELECTION, this._selectionEvent);
+	var selEv = DwtShell.selectionEvent;
+	selEv.reset();
+	selEv.item = this;
+	selEv.detail = detail;
+	selEv.type = type;
+	this.notifyListeners(eventType, selEv);
 }
 
 DwtCalendar.prototype._layout =
@@ -829,64 +839,69 @@ function(ev) {
 
 
 DwtCalendar.prototype._mouseDownListener = 
-function(ev) {
-	var target = ev.target;
-	if (target.id.charAt(0) == 'c') {
-		this._setClassName(target, DwtCalendar._TRIGGERED);
-	} else if (target.id.charAt(0) == 't') {
-		target.className = DwtCalendar._TITLE_TRIGGERED_CLASS;
-	} else if (target.id.charAt(0) == 'b') {
-		var img;
-		if (target.firstChild == null) {
-			img = target;
-			AjxImg.getParentElement(target).className = DwtCalendar._BUTTON_TRIGGERED_CLASS;
-		} else {
-			target.className = DwtCalendar._BUTTON_TRIGGERED_CLASS;
-			img = AjxImg.getImageElement(target);
+function(ev) {	
+	if (ev.button == DwtMouseEvent.LEFT) {
+		var target = ev.target;
+		if (target.id.charAt(0) == 'c') {
+			this._setClassName(target, DwtCalendar._TRIGGERED);
+		} else if (target.id.charAt(0) == 't') {
+			target.className = DwtCalendar._TITLE_TRIGGERED_CLASS;
+		} else if (target.id.charAt(0) == 'b') {
+			var img;
+			if (target.firstChild == null) {
+				img = target;
+				AjxImg.getParentElement(target).className = DwtCalendar._BUTTON_TRIGGERED_CLASS;
+			} else {
+				target.className = DwtCalendar._BUTTON_TRIGGERED_CLASS;
+				img = AjxImg.getImageElement(target);
+			}
+			img.className = img._origClassName;
+		} else if (target.id.charAt(0) == 'w') {
 		}
-		img.className = img._origClassName;
-	} else if (target.id.charAt(0) == 'w') {
 	}
 }
 
 DwtCalendar.prototype._mouseUpListener = 
 function(ev) {
 	var target = ev.target;
-	if (target.id.charAt(0) == 'c') {
-		// If our parent is a menu then we need to have it close
-		if (this.parent instanceof DwtMenu)
-			DwtMenu.closeActiveMenu();
-				
-		//if (target.id != this._selectedDayElId && this.setDate(new Date(target._year, target._month, target._day)))				
-		if (this.setDate(new Date(target._year, target._month, target._day)))
-			return;
-		this._setClassName(target, DwtCalendar._ACTIVATED);
-	} else if (target.id.charAt(0) == 'b') {
-		var img;
-		if (target.firstChild == null) {
-			img = target;
-			AjxImg.getParentElement(target).className = DwtCalendar._BUTTON_ACTIVATED_CLASS;
-		} else {
-			target.className = DwtCalendar._BUTTON_ACTIVATED_CLASS;
-			img = AjxImg.getImageElement(target);
+	if (ev.button == DwtMouseEvent.LEFT) {
+		if (target.id.charAt(0) == 'c') {
+			// If our parent is a menu then we need to have it close
+			if (this.parent instanceof DwtMenu)
+				DwtMenu.closeActiveMenu();
+					
+			if (this.setDate(new Date(target._year, target._month, target._day)))
+				return;
+			this._setClassName(target, DwtCalendar._ACTIVATED);
+		} else if (target.id.charAt(0) == 'b') {
+			var img;
+			if (target.firstChild == null) {
+				img = target;
+				AjxImg.getParentElement(target).className = DwtCalendar._BUTTON_ACTIVATED_CLASS;
+			} else {
+				target.className = DwtCalendar._BUTTON_ACTIVATED_CLASS;
+				img = AjxImg.getImageElement(target);
+			}
+			img.className = img._origClassName;
+			
+			if (img.id.indexOf("py") != -1)
+				this._prevYear();
+			else if (img.id.indexOf("pm") != -1) 
+				this._prevMonth();
+			else if (img.id.indexOf("nm") != -1)
+				this._nextMonth();
+			else 
+				this._nextYear();		
+		} else if (target.id.charAt(0) == 't') {
+			// TODO POPUP MENU
+			target.className = DwtCalendar._TITLE_ACTIVATED_CLASS;
+			this.setDate(new Date(), this._skipNotifyOnPage);
+			// If our parent is a menu then we need to have it close
+			if (this.parent instanceof DwtMenu)
+				DwtMenu.closeActiveMenu();		
 		}
-		img.className = img._origClassName;
-		
-		if (img.id.indexOf("py") != -1)
-			this._prevYear();
-		else if (img.id.indexOf("pm") != -1) 
-			this._prevMonth();
-		else if (img.id.indexOf("nm") != -1)
-			this._nextMonth();
-		else 
-			this._nextYear();		
-	} else if (target.id.charAt(0) == 't') {
-		// TODO POPUP MENU
-		target.className = DwtCalendar._TITLE_ACTIVATED_CLASS;
-		this.setDate(new Date(), this._skipNotifyOnPage);
-		// If our parent is a menu then we need to have it close
-		if (this.parent instanceof DwtMenu)
-			DwtMenu.closeActiveMenu();		
+	} else if (ev.button == DwtMouseEvent.RIGHT && target.id.charAt(0) == 'c') {					
+		this._notifyListeners(DwtEvent.ACTION, 0, new Date(target._year, target._month, target._day));
 	}
 }
 

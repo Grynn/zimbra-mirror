@@ -24,7 +24,7 @@ Contributor(s):
 
 function DwtKeyEvent() {
 	DwtUiEvent.call(this, true);
-	this.keyCode = 0;
+	this.reset(true);
 }
 
 
@@ -50,6 +50,14 @@ function(ev) {
 DwtKeyEvent.isKeyPressEvent =
 function(ev) {
 	return (AjxEnv.isIE && ev.type == "keydown") || (ev.type == "keypress");
+}
+
+DwtKeyEvent.prototype.reset =
+function(dontCallParent) {
+	if (!dontCallParent)
+		DwtUiEvent.prototype.reset.call(this);
+	this.keyCode = 0;
+	this.charCode = 0;
 }
 
 

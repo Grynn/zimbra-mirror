@@ -24,8 +24,7 @@ Contributor(s):
 
 function DwtMouseEvent() {
 	DwtUiEvent.call(this, true);
-	this.button = 0;
-	this._populated = false;
+	this.reset(true);
 }
 
 DwtMouseEvent.prototype = new DwtUiEvent;
@@ -40,6 +39,14 @@ DwtMouseEvent.NONE = 0;
 DwtMouseEvent.LEFT = 1;
 DwtMouseEvent.MIDDLE = 2;
 DwtMouseEvent.RIGHT = 3;
+
+DwtMouseEvent.prototype.reset =
+function(dontCallParent) {
+	if (!dontCallParent)
+		DwtUiEvent.prototype.reset.call(this);
+	this.button = 0;
+	this._populated = false;
+}
 
 DwtMouseEvent.prototype.setFromDhtmlEvent =
 function(ev) {
