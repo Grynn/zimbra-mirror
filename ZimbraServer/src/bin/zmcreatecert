@@ -36,6 +36,8 @@ mkdir -p ${BASE}/ca
 mkdir -p ${BASE}/cert
 mkdir -p ${BASE}/server
 
+mkdir -p ${TCONF}
+
 getHostInfo() {
 
 	H=`/opt/zimbra/bin/zmlocalconfig -m nokey zimbra_server_hostname`;
