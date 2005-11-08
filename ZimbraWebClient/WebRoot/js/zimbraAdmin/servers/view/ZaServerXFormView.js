@@ -172,6 +172,7 @@ ZaServerXFormView.getMailboxEnabled = function () {
 	return value;
 }
 
+
 ZaServerXFormView.prototype.getMyXForm = function() {	
 	var xFormObject = {
 		tableCssStyle:"width:100%;position:static;overflow:auto;",
@@ -464,7 +465,7 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 							  onChange: ZaServerXFormView.onFormFieldChanged
 							},
 							{ ref: ZaServer.A_Pop3NumThreads, type:_INPUT_, 
-							  relevant: "instance.attrs[ZaServer.A_Pop3ServerEnabled] == 'TRUE'",
+							  relevant: "ZaServerXFormView.getPOP3Enabled.call(item)",
 							  relevantBehavior: _DISABLE_,
 							  label: ZaMsg.NAD_POP_NumThreads, width: "5em",
 							  onChange: ZaServerXFormView.onFormFieldChanged
