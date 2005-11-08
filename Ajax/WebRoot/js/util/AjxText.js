@@ -1,5 +1,4 @@
 /*
- * /*
 * ***** BEGIN LICENSE BLOCK *****
 * Version: MPL 1.1
 *
@@ -24,7 +23,6 @@
 * ***** END LICENSE BLOCK *****
 */
 
- */
 
 // NOTE: The API for the classes in this file are inspired by the Java text
 //		 formatting classes but the implementation was NOT copied or ported

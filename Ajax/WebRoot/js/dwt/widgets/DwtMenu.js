@@ -1,5 +1,4 @@
 /*
- * /*
 * ***** BEGIN LICENSE BLOCK *****
 * Version: MPL 1.1
 *
@@ -24,7 +23,6 @@
 * ***** END LICENSE BLOCK *****
 */
 
- */
 
 /**
 * Creates a menu object to menu items can be added. Menus can be created in various styles as

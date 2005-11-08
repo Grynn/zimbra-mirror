@@ -1,5 +1,4 @@
 /*
- * /*
 * ***** BEGIN LICENSE BLOCK *****
 * Version: MPL 1.1
 *
@@ -24,7 +23,6 @@
 * ***** END LICENSE BLOCK *****
 */
 
- */
 
 		{ type: _GROUP_, numCols: 3, colSpan:3, 
 			items: [

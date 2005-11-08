@@ -74,7 +74,6 @@ import javax.servlet.http.*;
  * extension.
  * 
  * @author Andy Clark
- */
 public class Props2JsServlet 
 	extends HttpServlet {
 

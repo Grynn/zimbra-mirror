@@ -1,5 +1,4 @@
 /*
- * /*
 * ***** BEGIN LICENSE BLOCK *****
 * Version: MPL 1.1
 *
@@ -24,7 +23,6 @@
 * ***** END LICENSE BLOCK *****
 */
 
- */
 
 /**
 * Creates a menu item. Menu items can be part of a radio group, or can be checked style menu items

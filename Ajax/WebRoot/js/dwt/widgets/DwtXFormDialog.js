@@ -1,5 +1,4 @@
 /*
- * /*
 * ***** BEGIN LICENSE BLOCK *****
 * Version: MPL 1.1
 *
@@ -24,7 +23,6 @@
 * ***** END LICENSE BLOCK *****
 */
 
- */
 
 function DwtXFormDialog(xformDef, xmodelDef, parent, className, title, standardButtons, extraButtons, zIndex, mode, loc) {
 	if (arguments.length == 0) return;

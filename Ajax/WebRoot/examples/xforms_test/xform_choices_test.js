@@ -1,5 +1,4 @@
 /*
- * /*
 * ***** BEGIN LICENSE BLOCK *****
 * Version: MPL 1.1
 *
@@ -24,7 +23,6 @@
 * ***** END LICENSE BLOCK *****
 */
 
- */
 
 var theList = ["One", "Two","Three","Four","Five","Six"];
 //var theList = [{value:"1", label:"One"}, {value:"2", label:"Two"}];

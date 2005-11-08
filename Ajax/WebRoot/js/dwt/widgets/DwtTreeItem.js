@@ -1,5 +1,4 @@
 /*
- * /*
 * ***** BEGIN LICENSE BLOCK *****
 * Version: MPL 1.1
 *
@@ -24,7 +23,6 @@
 * ***** END LICENSE BLOCK *****
 */
 
- */
 
 // NOTE: Where you see the word "deferred", think "uninitialized"
 function DwtTreeItem(parent, index, text, imageInfo, deferred, className, posStyle) {
