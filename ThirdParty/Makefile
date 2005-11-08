@@ -34,6 +34,7 @@ DIRS := mysql \
 	apache-httpd \
 	php \
 	pcre \
+	perdition \
 	PostFix/PostFix-$(POSTFIX_VERSION)
 
 all: $(ZIMBRA_HOME) build 
