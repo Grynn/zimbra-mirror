@@ -63,7 +63,9 @@ case "$1" in
 	done 
 	if [ -s ${mysql_pidfile} ]; then 
 	    echo " gave up waiting!"
+		exit 1
 	fi
+	exit 0
 	;;
     
     'restart')
