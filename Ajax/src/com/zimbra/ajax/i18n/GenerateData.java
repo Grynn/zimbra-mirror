@@ -521,13 +521,13 @@ public class GenerateData {
     }
     
     private static String getDateFormat(Locale locale, int style) {
-        return toPattern(DateFormat.getDateInstance(style)); 
+        return toPattern(DateFormat.getDateInstance(style, locale)); 
     }
     private static String getTimeFormat(Locale locale, int style) {
-        return toPattern(DateFormat.getTimeInstance(style)); 
+        return toPattern(DateFormat.getTimeInstance(style, locale)); 
     }
     private static String getDateTimeFormat(Locale locale, int dateStyle, int timeStyle) {
-        return toPattern(DateFormat.getDateTimeInstance(dateStyle, timeStyle)); 
+        return toPattern(DateFormat.getDateTimeInstance(dateStyle, timeStyle, locale)); 
     }
 
 	public static String toStyle(int style) {
