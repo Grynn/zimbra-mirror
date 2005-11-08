@@ -1,5 +1,4 @@
 /*
-/*
 * ***** BEGIN LICENSE BLOCK *****
 * Version: MPL 1.1
 *
@@ -22,7 +21,6 @@
 * Contributor(s):
 *
 * ***** END LICENSE BLOCK *****
-*/
 */
 
 package com.zimbra.webClient.servlet;
@@ -74,6 +72,7 @@ import javax.servlet.http.*;
  * extension.
  * 
  * @author Andy Clark
+ */
 public class Props2JsServlet 
 	extends HttpServlet {
 
