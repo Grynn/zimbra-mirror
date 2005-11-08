@@ -126,7 +126,8 @@ function() {
 		   "<tr><td><textarea readonly rows='10'>" + this._detailStr + "</textarea></td></tr></table>";
 };
 
-ZmErrorDialog.prototype._getNavigatorInfo = function() {
+ZmErrorDialog.prototype._getNavigatorInfo = 
+function() {
 	var strNav = new Array();
 	var idx = 0;
 	
@@ -135,14 +136,15 @@ ZmErrorDialog.prototype._getNavigatorInfo = function() {
 
 	for (var i in navigator) {
 		// Skip functions
-		if(typeof navigator[i] == "function") {continue;}
+		if(typeof navigator[i] == "function") continue;
 		strNav[idx++] = i + ": " + navigator[i] + "\n";
 	}
 
 	return strNav.join("");
 };
 
-ZmErrorDialog.prototype._getSubjectPrefix = function() {
+ZmErrorDialog.prototype._getSubjectPrefix = 
+function() {
 	var strSubj = new Array();
 	var idx = 0;
 	
@@ -174,7 +176,9 @@ ZmErrorDialog.prototype._getSubjectPrefix = function() {
 	return strSubj.join("");
 };
 
-ZmErrorDialog.prototype._getUserPrefs = function() {
+ZmErrorDialog.prototype._getUserPrefs = 
+function() {
+	var currSearch = this._appCtxt.getCurrentSearch();
 	var strPrefs = new Array();
 	var idx = 0;
 
@@ -185,14 +189,16 @@ ZmErrorDialog.prototype._getUserPrefs = function() {
 	}
 	// add the user name at the end
 	strPrefs[idx++] = "username: " + this._appCtxt.getUsername() + "\n";
-	strPrefs[idx++] = "currentSearch: " + this._appCtxt.getCurrentSearch().query + "\n";
+	if (currSearch)
+		strPrefs[idx++] = "currentSearch: " + currSearch.query + "\n";
 
 	return strPrefs.join("");
 };
 
 // Callbacks
 
-ZmErrorDialog.prototype._reportCallback = function() {
+ZmErrorDialog.prototype._reportCallback =
+function() {
 	// iframe initialization - recreate iframe if IE and reuse if FF
 	if (this._iframe == null || AjxEnv.isIE) {
 		this._iframe = this.getDocument().createElement("iframe");
@@ -212,6 +218,11 @@ ZmErrorDialog.prototype._reportCallback = function() {
 	var subject = this._subjPfx + this._detailStr.substring(0,40);
 	html[idx++] = "<html><head></head><body>";
 	html[idx++] = "<form id='" + formId + "' method='POST' action='" + ZmErrorDialog.REPORT_URL + "'>";
+	html[idx++] = "<textarea name='buildInfo'>";
+	html[idx++] = "version = " + this._appCtxt.get(ZmSetting.CLIENT_VERSION) + "\n";
+	html[idx++] = "release = " + this._appCtxt.get(ZmSetting.CLIENT_RELEASE) + "\n";
+	html[idx++] = "date = " + this._appCtxt.get(ZmSetting.CLIENT_DATETIME);
+	html[idx++] = "</textarea>";
 	html[idx++] = "<textarea name='details'>" + this._detailStr + "</textarea>";
 	html[idx++] = "<textarea name='navigator'>" + this._strNav + "</textarea>";
 	html[idx++] = "<textarea name='prefs'>" + strPrefs + "</textarea>";
@@ -234,7 +245,8 @@ ZmErrorDialog.prototype._reportCallback = function() {
 };
 
 // Displays the detail text
-ZmErrorDialog.prototype._showDetail = function() {
+ZmErrorDialog.prototype._showDetail = 
+function() {
 	if (this._detailCell) {
 		if (this._detailCell.innerHTML === "") {
 			this._button[ZmErrorDialog.DETAIL_BUTTON].setImage("SelectPullUpArrow");
