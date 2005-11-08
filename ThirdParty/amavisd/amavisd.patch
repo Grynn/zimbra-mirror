@@ -1,0 +1,59 @@
+--- amavisd	2005-05-09 11:22:42.000000000 -0700
++++ amavisd	2005-11-08 15:38:35.167758000 -0800
+@@ -1,4 +1,4 @@
+-#!/usr/bin/perl -T
++#!/usr/bin/perl
+ 
+ #------------------------------------------------------------------------------
+ # This is amavisd-new.
+@@ -260,6 +260,7 @@
+       $file
+     )],
+     'sa' => [qw(
++	  $sa_rules_file $sa_site_rules_file $sa_userprefs_file
+       $helpers_home $dspam
+       $sa_local_tests_only $sa_auto_whitelist $sa_timeout $sa_debug
+     )],
+@@ -1027,7 +1028,6 @@
+     elsif ($errn)      { $msg = "is inaccessible: $!" }
+     elsif (-d _)       { $msg = "is a directory" }
+     elsif (!-f _)      { $msg = "is not a regular file" }
+-    elsif ($> && -o _) { $msg = "is owned by EUID $>, should be owned by root"}
+     elsif ($> && -w _) { $msg = "is writable by EUID $>, EGID $)" }
+     if (defined $msg)  { die "Config file \"$config_file\" $msg," }
+     $! = undef; my($rv) = do $config_file;
+@@ -6158,8 +6158,8 @@
+           rename($config_file.'.moved', $config_file);  # try to rename back
+           $m = 'is writable (confirmed)';
+         }
+-        push(@msg, "Directory of a config file \"$config_file\" $m, ".
+-                   "UID $<, EUID $>, EGID $)" );
++#        push(@msg, "Directory of a config file \"$config_file\" $m, ".
++#                   "UID $<, EUID $>, EGID $)" );
+       }
+       last  if @msg;
+     }
+@@ -7776,11 +7776,12 @@
+       $spam_level_bar =
+         $slc x min($blacklisted ? 64 : $spam_level+$boost, 64)  if $slc ne '';
+       my($s) = $spam_status; $s =~ s/,/,\n /g;  # allow header field wrapping
+-      $full_spam_status = sprintf("%s,\n hits=%s\n%s%s %s%s",
++      $full_spam_status = sprintf("%s,\n hits=%s\n%s%s%s %s%s",
+         $do_tag2 ? 'Yes' : 'No',
+         !defined $spam_level  ? 'x' : 0+sprintf("%.3f",$spam_level+$boost),
+         !defined $tag_level   ? '' : sprintf(" tagged_above=%s\n",$tag_level),
+         !defined $tag2_level  ? '' : sprintf(" required=%s\n",  $tag2_level),
++		!defined $autolearn_status  ? '' : sprintf(" autolearn=%s\n",  $autolearn_status),
+         join('', $blacklisted ? "BLACKLISTED\n " : (),
+                  $whitelisted ? "WHITELISTED\n " : ()),
+         $s);
+@@ -12353,6 +12354,9 @@
+     local_tests_only  => $sa_local_tests_only,
+     home_dir_for_helpers => $helpers_home,
+     stop_at_threshold => 0,
++	rules_filename => $sa_rules_file,
++	site_rules_filename => $sa_site_rules_file,
++	userprefs_filename => $sa_userprefs_file,
+ #   DEF_RULES_DIR     => '/usr/local/share/spamassassin',
+ #   LOCAL_RULES_DIR   => '/etc/mail/spamassassin',
+ #see man Mail::SpamAssassin for other options
