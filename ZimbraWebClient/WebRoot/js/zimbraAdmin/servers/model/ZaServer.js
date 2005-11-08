@@ -96,6 +96,7 @@ ZaServer.A_Pop3SSLServerEnabled = "zimbraPop3SSLServerEnabled";
 ZaServer.A_Pop3ServerEnabled = "zimbraPop3ServerEnabled"
 ZaServer.A_Pop3CleartextLoginEnabled = "zimbraPop3CleartextLoginEnabled";
 //imap
+ZaServer.A_zimbraImapNumThreads="zimbraImapNumThreads";
 ZaServer.A_ImapBindPort="zimbraImapBindPort";
 ZaServer.A_ImapServerEnabled="zimbraImapServerEnabled";
 ZaServer.A_ImapSSLBindPort="zimbraImapSSLBindPort";
@@ -188,6 +189,7 @@ ZaServer.myXModel = {
 		{id:ZaServer.A_LmtpBindPort, ref:"attrs/" +  ZaServer.A_LmtpBindPort, type:_PORT_},		
 		{id:ZaServer.A_LmtpNumThreads, ref:"attrs/" +  ZaServer.A_LmtpNumThreads, type:_NUMBER_, minInclusive: 0 },
 		{id:ZaServer.A_Pop3NumThreads, ref:"attrs/" +  ZaServer.A_Pop3NumThreads, type:_NUMBER_, minInclusive: 0 },		
+		{id:ZaServer.A_zimbraImapNumThreads, ref:"attrs/" +  ZaServer.A_zimbraImapNumThreads, type:_NUMBER_, minInclusive: 0 },		
 		{id:ZaServer.A_Pop3AdvertisedName, ref:"attrs/" +  ZaServer.A_Pop3AdvertisedName, type:_STRING_, maxLength: 128 },
 		{id:ZaServer.A_Pop3BindAddress, ref:"attrs/" +  ZaServer.A_Pop3BindAddress, type:_HOSTNAME_OR_IP_, maxLength: 128 },
 		{id:ZaServer.A_Pop3AdvertisedName, ref:"attrs/" +  ZaServer.A_Pop3AdvertisedName, type:_STRING_, maxLength: 128 },

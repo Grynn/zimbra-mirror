@@ -370,15 +370,14 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 						      	  label:null, anchorCssStyle:"width:200px;text-align:right;"
 					      	    }							  
 						
-							  	/***
-								{ ref: ZaServer.A_ImapBindPort, type:_INPUT_, 
-								  relevant: "instance.attrs[ZaServer.A_ImapServerEnabled] == 'TRUE'",
-								  relevantBehavior: _DISABLE_,
-								  label: ZaMsg.NAD_IMAP_Port, width: "4em",
-								  onChange: ZaServerXFormView.onFormFieldChanged
-								}
-								/***/
+
 							]},
+							{ ref: ZaServer.A_zimbraImapNumThreads, type:_INPUT_, 
+							  relevant: "ZaServerXFormView.getIMAPEnabled.call(item)",
+							  relevantBehavior: _DISABLE_,
+							  label: ZaMsg.NAD_IMAP_NumThreads, width: "5em",
+							  onChange: ZaServerXFormView.onFormFieldChanged
+							},							
 							{ type: _GROUP_, numCols: 1,
 							  label: ZaMsg.NAD_IMAP_SSLService, labelCssStyle: "vertical-align:top",
 							  items: [
@@ -391,15 +390,7 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 						      	  label:null, anchorCssStyle:"width:200px;text-align:right;",
 						      	  relevantBehavior:_DISABLE_
 					      	    }							  
-								/***
-								{ ref: ZaServer.A_ImapSSLBindPort, type:_INPUT_, 
-								  relevant: "instance.attrs[ZaServer.A_ImapServerEnabled] == 'TRUE' && "+
-								  			"instance.attrs[ZaServer.A_ImapSSLServerEnabled] == 'TRUE'",
-								  relevantBehavior: _DISABLE_,
-								  label: ZaMsg.NAD_IMAP_Port, width: "4em",
-								  onChange: ZaServerXFormView.onFormFieldChanged
-							  	}
-							  	/***/
+								
 							]},
 							{ type: _GROUP_, numCols: 1,
 							  label: ZaMsg.NAD_IMAP_CleartextLoginEnabled, labelCssStyle: "vertical-align:top",
@@ -449,14 +440,7 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 								  labelPosition: _NONE_, width: "18em",
 								  onChange:ZaServerXFormView.onFormFieldChanged
 							  	}
-							  	/***
-								{ ref: ZaServer.A_Pop3BindPort, type:_INPUT_, 
-								  relevant: "instance.attrs[ZaServer.A_Pop3ServerEnabled] == 'TRUE'",
-								  relevantBehavior: _DISABLE_,
-								  label: ZaMsg.NAD_POP_Port, width: "4em",
-								  onChange:ZaServerXFormView.onFormFieldChanged
-							  	}
-							  	/***/
+	
 							]},
 							{ ref: ZaServer.A_Pop3AdvertisedName, type:_INPUT_, 
 							  relevant:"ZaServerXFormView.getPOP3Enabled.call(item)",
