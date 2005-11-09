@@ -559,28 +559,6 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 										align:_CENTER_,				
 										style: DwtAlert.INFORMATION
 									}									
-								/*	{type:_SPACER_, colSpan:"*"},														
-									{type:_OUTPUT_, label:ZaMsg.NAD_HSM_LastStart,  labelLocation:_LEFT_,
-										ref:ZaServer.A_HSMstartDate,
-										getDisplayValue:function(val) {
-											if(val)
-												return AjxBuffer.concat(AjxDateUtil.simpleComputeDateStr(new Date(parseInt(val))),"&nbsp;",
-																					AjxDateUtil.computeTimeString(new Date(parseInt(val))));									
-											else
-												return "";
-										},labelCssStyle:"width:190px;"
-									},
-									{type:_OUTPUT_, label:ZaMsg.NAD_HSM_LastEnd,  labelLocation:_LEFT_,
-										ref:ZaServer.A_HSMendDate,
-										getDisplayValue:function(val) {
-											if(val)								
-												return AjxBuffer.concat(AjxDateUtil.simpleComputeDateStr(new Date(parseInt(val))),"&nbsp;",
-																					AjxDateUtil.computeTimeString(new Date(parseInt(val))));									
-											else
-												return "";
-										},labelCssStyle:"width:190px;"
-									}
-									*/
 								]
 							},		
 							{type:_SPACER_, colSpan:"*"},					
@@ -606,21 +584,17 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 									},
 									{ref:ZaServer.A_VolumeType, type:_OSELECT1_, choices:ZaServer.volumeTypeChoicesNoHSM,width:"100px", label:null,
 										relevant:"ZaServerXFormView.whichVolumeTypeSelect.call(item)==4",									
-										relevant:"!(model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))) && !instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]",
-//										relevantBehavior:_HIDE_, onChange: ZaServerXFormView.onFormFieldChanged
+										relevant:"!(model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))) && !instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]"
 									},
 									{ref:ZaServer.A_VolumeType, type:_OSELECT1_, choices:ZaServer.volumeTypeChoicesAll,width:"135px", label:null,
 										relevant:"ZaServerXFormView.whichVolumeTypeSelect.call(item)==3",									
-//										relevant:"!(model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId))) && instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]",
 										relevantBehavior:_HIDE_, onChange: ZaServerXFormView.onFormFieldChanged
 									},
 									{ref:ZaServer.A_VolumeType, type:_OSELECT1_, choices:ZaServer.volumeTypeChoicesHSM,width:"135px", label:null,
 										relevant:"ZaServerXFormView.whichVolumeTypeSelect.call(item)==2",
-//										relevant:"model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId)) && instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM] && item.getInstanceValue() != ZaServer.INDEX && !ZaServerXFormView.isCurrent.call(item)",
 										relevantBehavior:_HIDE_, onChange: ZaServerXFormView.onFormFieldChanged
 									},
 									{ref:ZaServer.A_VolumeType, type:_OUTPUT_,width:"132px", label:null,
-										//relevant:"model.getInstanceValue(instance, (item.__parentItem.refPath + '/' + ZaServer.A_VolumeId)) && (ZaServerXFormView.isCurrent.call(item) || item.getInstanceValue() == ZaServer.INDEX)",
 										relevant:"ZaServerXFormView.whichVolumeTypeSelect.call(item)==1",
 										relevantBehavior:_HIDE_,
 										getDisplayValue:function(val) {
