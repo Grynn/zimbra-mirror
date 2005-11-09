@@ -102,6 +102,10 @@
 
 <attr name="zimbraCalendarCompatibilityMode" type="enum" value="standard,exchange"/>
 
+<attr name="zimbraCertAuthorityCertSelfSigned" type="string" max="2048"/>
+
+<attr name="zimbraCertAuthorityKeySelfSigned" type="string" max="2048"/>
+
 <attr name="zimbraComponentAvailable" type="string" max="64"/>
 
 <attr name="zimbraCOSId" type="id"/> <!-- type "cosId" and check for valid COS id? -->
