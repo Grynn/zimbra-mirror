@@ -285,7 +285,9 @@ function(searchQuery) {
 		}
 		
 		//this._searchField.setObject(searchString);
+		this.pages = new Object();
 		this._setQuery(searchQuery);
+		this._currentPageNum = 1;
 		this.show(ZaSearch.searchByQueryHolder(searchQuery, this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app));	
 	} catch (ex) {
 		// Only restart on error if we are not initialized and it isn't a parse error
