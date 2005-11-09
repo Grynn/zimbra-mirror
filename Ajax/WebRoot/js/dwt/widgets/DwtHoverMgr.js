@@ -39,6 +39,8 @@ function DwtHoverMgr() {
 
 // Data
 
+DwtHoverMgr.prototype._hoverObject;
+
 DwtHoverMgr.prototype._hoverOverDelay = 750;
 DwtHoverMgr.prototype._hoverOverData;
 DwtHoverMgr.prototype._hoverOverAction;
@@ -55,7 +57,15 @@ DwtHoverMgr.prototype._isHovering = false;
 
 // Public methods
 
+DwtHoverMgr.prototype.setHoverObject = function(object) {
+	this._hoverObject = object;
+};
+DwtHoverMgr.prototype.getHoverObject = function() {
+	return this._hoverObject;
+};
+
 DwtHoverMgr.prototype.reset = function() {
+	this._hoverObject = null;
 	this._hoverOverDelay = DwtHoverMgr.prototype._hoverOverDelay;
 	this._hoverOverData = null;
 	if (this._hoverOverActionId != -1) {
@@ -72,31 +82,31 @@ DwtHoverMgr.prototype.reset = function() {
 	}
 	this._hoverOutActionId = -1;
 	this._hoverOutListener = null;
-}
+};
 
 DwtHoverMgr.prototype.isHovering = function() {
 	return this._isHovering;
-}
+};
 
 DwtHoverMgr.prototype.setHoverOverDelay = function(delay) {
 	this._hoverOverDelay = delay;
-}
+};
 DwtHoverMgr.prototype.setHoverOverData= function(data) {
 	this._hoverOverData = data;
-}
+};
 DwtHoverMgr.prototype.setHoverOverListener = function(listener) {
 	this._hoverOverListener = listener;
-}
+};
 
 DwtHoverMgr.prototype.setHoverOutDelay = function(delay) {
 	this._hoverOutDelay = delay;
-}
+};
 DwtHoverMgr.prototype.setHoverOutData = function(data) {
 	this._hoverOutData = data;
-}
+};
 DwtHoverMgr.prototype.setHoverOutListener = function(listener) {
 	this._hoverOutListener = listener;
-}
+};
 
 DwtHoverMgr.prototype.hoverOver = function(x, y) {
 	if (this._hoverOverActionId != -1) {
@@ -106,7 +116,7 @@ DwtHoverMgr.prototype.hoverOver = function(x, y) {
 	this._hoverOverAction.params.add(x);
 	this._hoverOverAction.params.add(y);
 	this._hoverOverActionId = AjxTimedAction.scheduleAction(this._hoverOverAction, this._hoverOverDelay);
-}
+};
 DwtHoverMgr.prototype.hoverOut = function() {
 	if (this._hoverOverActionId != -1) {
 		AjxTimedAction.cancelAction(this._hoverOverActionId);
@@ -119,7 +129,7 @@ DwtHoverMgr.prototype.hoverOut = function() {
 			this._notifyHoverOut();
 		}
 	}
-}
+};
 
 // Protected methods
 
@@ -132,7 +142,7 @@ DwtHoverMgr.prototype._notifyHoverOver = function() {
 		var event = new DwtHoverEvent(DwtEvent.HOVEROVER, this._hoverOverDelay, this._hoverOverData, x, y);
 		this._hoverOverListener.handleEvent(event);
 	}
-}
+};
 DwtHoverMgr.prototype._notifyHoverOut = function() {
 	this._hoverOutActionId = -1;
 	this._isHovering = false;
@@ -140,4 +150,4 @@ DwtHoverMgr.prototype._notifyHoverOut = function() {
 		var event = new DwtHoverEvent(DwtEvent.HOVEROUT, this._hoverOutDelay, this._hoverOutData);
 		this._hoverOutListener.handleEvent(event);
 	}
-}
+};
