@@ -418,7 +418,11 @@ function() {
 
 DwtListView.prototype.size =
 function() {
-	return this._list.size();
+	if(this._list) {
+		return this._list.size();
+	} else {
+		return 0;
+	}
 }
 
 DwtListView.prototype.setMultiSelect = 
