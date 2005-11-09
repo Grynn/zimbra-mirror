@@ -197,6 +197,25 @@ Cos_MLifetime_XModelItem.prototype.validateType = function (value) {
 }
 
 /**
+* _COS_HOSTNAME_OR_IP_
+**/
+Cos_HostNameOrIp_XModelItem = function (){}
+XModelItemFactory.createItemType("_COS_HOSTNAME_OR_IP_", "cos_hostname_or_ip", Cos_HostNameOrIp_XModelItem, Cos_String_XModelItem);
+Cos_HostNameOrIp_XModelItem.prototype.validateType = XModelItem.prototype.validateString;
+Cos_HostNameOrIp_XModelItem.prototype.maxLength = 256;
+Cos_HostNameOrIp_XModelItem.prototype.pattern = [ AjxUtil.HOST_NAME_RE, AjxUtil.IP_ADDRESS_RE ];
+
+/**
+* _COS_PORT_
+**/
+Cos_Port_XModelItem = function (){}
+XModelItemFactory.createItemType("_COS_PORT_", "cos_port", Cos_Port_XModelItem, Cos_Number_XModelItem);
+Cos_Port_XModelItem.prototype.validateType = XModelItem.prototype.validateNumber;
+Cos_Port_XModelItem.prototype.minInclusive = 0;
+Cos_Port_XModelItem.prototype.maxInclusive = 65535;
+
+
+/**
 *	XForm Items that have overwritable super values
 **/
 

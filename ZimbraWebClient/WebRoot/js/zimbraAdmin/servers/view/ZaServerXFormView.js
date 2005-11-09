@@ -356,16 +356,21 @@ ZaServerXFormView.prototype.getMyXForm = function() {
   					      	  label:null, anchorCssStyle:"width:200px;text-align:right;"
 				      	    }
 				      	]},
-				      	{ type: _SEPARATOR_, numCols: 2 },
-				      	{ type: _GROUP_, numCols: 4,
+				      	{ type: _SEPARATOR_, numCols:1 },
+				      	{ type: _GROUP_, numCols:1,
 				      	  label: ZaMsg.NAD_MTA_WebMailHostname,
 				      	  items: [
-							{ ref: ZaServer.A_SmtpHostname, type:_INPUT_, 
-							  labelPosition: _NONE_, width: "18em",
+							{ ref: ZaServer.A_SmtpHostname, type:_SUPER_TEXTFIELD_, 
+							  labelPosition: _NONE_, width: "18em",label:null,
+							  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
 							  onChange: ZaServerXFormView.onFormFieldChanged
-							},
+							}
+						]},
+				      	{ type: _GROUP_, numCols:1,
+				      	  label: ZaMsg.NAD_MTA_WebMailPort,
+				      	  items: [
 							{ ref: ZaServer.A_SmtpPort, type:_OUTPUT_, 
-							  label: ZaMsg.NAD_MTA_WebMailPort, width: "4em"
+							  label: null,labelPosition: _NONE_, width: "4em"
 							}
 						]},
 						{ ref: ZaServer.A_SmtpTimeout, type:_INPUT_, 

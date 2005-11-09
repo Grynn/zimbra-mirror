@@ -205,11 +205,15 @@ GlobalConfigXFormView.prototype.getMyXForm = function() {
 							{ ref: ZaGlobalConfig.A_zimbraSmtpHostname, type: _INPUT_, 
 							  labelLocation: _NONE_, width: "18em",
 							  onChange:ZaTabView.onFormFieldChanged
-							},
-							{ ref: ZaGlobalConfig.A_zimbraSmtpPort, type: _OUTPUT_, 
-							  label: ZaMsg.NAD_MTA_WebMailPort, labelLocation: _LEFT_, width: "4em"
-						    }
+							}
 						]},
+						{ type: _COMPOSITE_, useParentTable: false,
+						  label: ZaMsg.NAD_MTA_WebMailPort, labelCssStyle: "vertical-align:top",
+						  items: [
+							{ ref: ZaGlobalConfig.A_zimbraSmtpPort, type: _OUTPUT_, 
+							  label: null, labelLocation: _NONE_,labelLocation: _LEFT_, width: "4em"
+						    }
+						]},						
 						{ ref: ZaGlobalConfig.A_zimbraMtaRelayHost, type: _INPUT_,
 						  label: ZaMsg.NAD_MTA_RelayHostname, width: "18em",
 						  onChange:ZaTabView.onFormFieldChanged
