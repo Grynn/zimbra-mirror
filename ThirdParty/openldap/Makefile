@@ -23,12 +23,12 @@ all: build tar
 build:
 	(tar xzf openldap-$(LDAP_VERSION).tgz; \
 	cd openldap-$(LDAP_VERSION); \
-	export LD_LIBRARY_PATH=/opt/zimbra/sleepycat-$(BDB_VERSION)/lib; \
-	export CPPFLAGS=-I/opt/zimbra/sleepycat-$(BDB_VERSION)/include; \
-	export LDFLAGS=-L/opt/zimbra/sleepycat-$(BDB_VERSION)/lib; \
 	cp $(OPENLDAP_ROOT)/configure.zimbra $(OPENLDAP_ROOT)/openldap-$(LDAP_VERSION); \
+	LD_LIBRARY_PATH=/opt/zimbra/sleepycat-$(BDB_VERSION)/lib \
+	CPPFLAGS=-I/opt/zimbra/sleepycat-$(BDB_VERSION)/include \
+	LDFLAGS=-L/opt/zimbra/sleepycat-$(BDB_VERSION)/lib \
 	$(ENVMOD) ./configure.zimbra --prefix=$(ZIMBRA_HOME)/openldap-$(LDAP_VERSION); \
-	make; make install)
+	LDFLAGS="-all-static -static" make; make install)
 	(cd $(ZIMBRA_HOME); ln -s openldap-$(LDAP_VERSION) openldap)
 
 tar:
