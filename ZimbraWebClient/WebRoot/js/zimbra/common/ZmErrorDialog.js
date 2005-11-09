@@ -31,7 +31,7 @@ function ZmErrorDialog(parent, appCtxt, msgs) {
 	if (arguments.length === 0) {return;}
 
 	this._appCtxt = appCtxt;
-	// go ahead and cache the navigator info now (since it should never change)		
+	// go ahead and cache the navigator and subject info now (since it should never change)		
 	this._strNav = this._getNavigatorInfo();
 	this._subjPfx = this._getSubjectPrefix();
 
@@ -49,7 +49,7 @@ function ZmErrorDialog(parent, appCtxt, msgs) {
 
 	// Set style on report button
 	var reportBtn = this._button[ZmErrorDialog.REPORT_BUTTON];
-	reportBtn.getHtmlElement().style.width = "75px";
+	reportBtn.getHtmlElement().style.width = "100px";
 
 	this.registerCallback(ZmErrorDialog.REPORT_BUTTON, this._reportCallback, this);
 	this.registerCallback(ZmErrorDialog.DETAIL_BUTTON, this._showDetail, this);
@@ -59,13 +59,12 @@ ZmErrorDialog.prototype = new DwtMessageDialog;
 ZmErrorDialog.prototype.constructor = ZmErrorDialog;
 
 
+
 // Consts
 
 ZmErrorDialog.REPORT_BUTTON = ++DwtDialog.LAST_BUTTON;
 ZmErrorDialog.DETAIL_BUTTON = ++DwtDialog.LAST_BUTTON;
-
-ZmErrorDialog.REPORT_URL = "http://www.zimbra.com/e/";
-
+ZmErrorDialog.REPORT_URL = "//www.zimbra.com/e/";
 
 // Public methods
 
@@ -131,15 +130,14 @@ function() {
 	var strNav = new Array();
 	var idx = 0;
 	
-	// Add the url the user used to connect
+	// Add the url
 	strNav[idx++] = "\n\n" + "href: " + location.href + "\n";
 
 	for (var i in navigator) {
 		// Skip functions
-		if(typeof navigator[i] == "function") continue;
+		if(typeof navigator[i] == "function") {continue;}
 		strNav[idx++] = i + ": " + navigator[i] + "\n";
 	}
-
 	return strNav.join("");
 };
 
@@ -173,6 +171,7 @@ function() {
 	} else {
 		strSubj[idx++] = "UNK ";
 	}
+	strSubj[idx++] = this._appCtxt.get(ZmSetting.CLIENT_VERSION) + " ";
 	return strSubj.join("");
 };
 
@@ -182,16 +181,16 @@ function() {
 	var strPrefs = new Array();
 	var idx = 0;
 
+	// Add username and current search
+	strPrefs[idx++] = "\n\n" + "username: " + this._appCtxt.get(ZmSetting.USERNAME) + "\n";
+	if (currSearch) {
+		strPrefs[idx++] = "currentSearch: " + currSearch.query + "\n";
+	}
 	for (var i in ZmSetting.INIT) {
 		if (ZmSetting.INIT[i][0]) {
 			strPrefs[idx++] = ZmSetting.INIT[i][0] + ": " + ("" + ZmSetting.INIT[i][3]) + "\n";
 		}
 	}
-	// add the user name at the end
-	strPrefs[idx++] = "username: " + this._appCtxt.getUsername() + "\n";
-	if (currSearch)
-		strPrefs[idx++] = "currentSearch: " + currSearch.query + "\n";
-
 	return strPrefs.join("");
 };
 
@@ -200,7 +199,7 @@ function() {
 ZmErrorDialog.prototype._reportCallback =
 function() {
 	// iframe initialization - recreate iframe if IE and reuse if FF
-	if (this._iframe == null || AjxEnv.isIE) {
+	if (!this._iframe || AjxEnv.isIE) {
 		this._iframe = this.getDocument().createElement("iframe");
 		this._iframe.style.width = this._iframe.style.height = 0;
 		this._iframe.style.visibility = "hidden";
@@ -212,18 +211,19 @@ function() {
 	var strPrefs = this._getUserPrefs();
 	var formId = Dwt.getNextId();
 
+		
 	// generate html form for submission via POST
 	var html = new Array();
 	var idx = 0;
 	var subject = this._subjPfx + this._detailStr.substring(0,40);
+	var scheme = (location.protocol == 'https:') ? "https:" : "http:";
 	html[idx++] = "<html><head></head><body>";
-	html[idx++] = "<form id='" + formId + "' method='POST' action='" + ZmErrorDialog.REPORT_URL + "'>";
-	html[idx++] = "<textarea name='buildInfo'>";
-	html[idx++] = "version = " + this._appCtxt.get(ZmSetting.CLIENT_VERSION) + "\n";
-	html[idx++] = "release = " + this._appCtxt.get(ZmSetting.CLIENT_RELEASE) + "\n";
-	html[idx++] = "date = " + this._appCtxt.get(ZmSetting.CLIENT_DATETIME);
+	html[idx++] = "<form id='" + formId + "' method='POST' action='" + scheme + ZmErrorDialog.REPORT_URL + "'>";
+	html[idx++] = "<textarea name='details'>" + this._detailStr;
+	html[idx++] = "version - " + this._appCtxt.get(ZmSetting.CLIENT_VERSION) + "\n";
+	html[idx++] = "release - " + this._appCtxt.get(ZmSetting.CLIENT_RELEASE) + "\n";
+	html[idx++] = "date - " + this._appCtxt.get(ZmSetting.CLIENT_DATETIME);
 	html[idx++] = "</textarea>";
-	html[idx++] = "<textarea name='details'>" + this._detailStr + "</textarea>";
 	html[idx++] = "<textarea name='navigator'>" + this._strNav + "</textarea>";
 	html[idx++] = "<textarea name='prefs'>" + strPrefs + "</textarea>";
 	html[idx++] = "<textarea name='subject'>" + subject + "</textarea>";
