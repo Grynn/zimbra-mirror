@@ -140,11 +140,11 @@ case "$1" in
     'stop')
         if [ ! -s "${tomcat_pidfile}" ]; then
             echo "Error: no pid in ${tomcat_pidfile}"
-            exit 1
+            exit 0
         fi
         if ! isrunning; then
             echo "Error: tomcat not running (pid $pid), stale pid file?"
-            exit 1
+            exit 0
         fi
 
 

@@ -28,8 +28,12 @@ BASE=/opt/zimbra
 
 case "$1" in 
 	start|stop|reload)
-		/opt/zimbra/httpd/bin/apachectl -k $1 -f /opt/zimbra/conf/httpd.conf
-		exit $?
+		if [ -f /opt/zimbra/httpd/bin/apachectl ]; then
+			/opt/zimbra/httpd/bin/apachectl -k $1 -f /opt/zimbra/conf/httpd.conf
+			exit $?
+		else
+			exit 0
+		fi
 	;;
 	status)
 		pid=`cat /opt/zimbra/log/httpd.pid`
