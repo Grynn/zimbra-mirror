@@ -45,7 +45,7 @@ function DwtHtmlEditor(parent, className, posStyle, content, mode, blankIframeSr
 		content = this._mode == DwtHtmlEditor.HTML ? initialHtml : "";
 	
 	this._pendingContent = content;
-	this._htmlEditorInited = false;
+	this._htmlModeInited = false;
 
 	this._initialize();
 }
@@ -230,7 +230,7 @@ function(content) {
 	if (this._mode == DwtHtmlEditor.HTML) {
 		// If the html is initialed then go ahead and set the content, else let the
 		// _finishHtmlModeInit run before we try setting the content
-		if (this._htmlEditorInited) {
+		if (this._htmlModeInited) {
 			this._pendingContent = content ? ((content instanceof AjxVector) ? content[0] : content) : "";
 			this._setContentOnTimer();
 		} else {
@@ -406,7 +406,6 @@ function(ignorePendingContent) {
 		textArea.value = this._pendingContent;
 		this._pendingContent = null;
 	}
-	this._htmlEditorInited = true;
 	return textArea;
 }
 
@@ -524,7 +523,7 @@ function(params) {
 	this._registerEditorEventHandlers(Dwt.getDomObj(this.getDocument(), this._iFrameId), doc);
 	this.focus();
 	this._updateState();
-	this._htmlEditorInited = true;
+	this._htmlModeInited = true;
 }
 
 DwtHtmlEditor.prototype._getIframeDoc =
