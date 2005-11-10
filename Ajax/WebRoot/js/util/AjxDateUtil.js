@@ -211,9 +211,36 @@ function(dateMSec) {
 
 AjxDateUtil.simpleComputeDateStr = 
 function(date, stringToPrepend) {
-	var formatter = AjxDateFormat.getDateInstance(AjxDateFormat.SHORT);
-	var dateStr = formatter.format(date);
-	return stringToPrepend ? [stringToPrepend, dateStr].join("") : dateStr;
+	var dateArr = new Array();
+	var idx = 0;
+
+	var written = false;
+	if (stringToPrepend) {
+		dateArr[idx++] = stringToPrepend;
+		written = true;
+	}
+
+	for (var i = 0; i < AjxDateUtil._dateFmt.length; i++) {
+		switch (AjxDateUtil._dateFmt[i]) {
+			case 'Y':
+				dateArr[idx++] = written ? "/" : "";
+				dateArr[idx++] = date.getFullYear();
+				written = true;
+				break;
+			case 'M':
+				var month = date.getMonth() + 1;
+				dateArr[idx++] = written ? "/" : "";
+				dateArr[idx++] = AjxDateUtil._pad(month);
+				written = true;
+				break;
+			case 'D':
+				dateArr[idx++] = written ? "/" : "";
+				dateArr[idx++] = AjxDateUtil._pad(date.getDate());
+				written = true;
+				break;
+		}
+	}
+	return dateArr.join("");
 };
 
 AjxDateUtil.longComputeDateStr = 
@@ -236,8 +263,17 @@ function(now, dateMSec) {
 	if (nowMSec - dateMSec < AjxDateUtil.MSEC_PER_DAY && nowDay == date.getDay()) {
 		dateStr = AjxDateUtil.computeTimeString(date);
 	} else if (year == nowYear) {
-		var formatter = AjxDateFormat.getDateInstance();
-		dateStr = formatter.format(date);
+		for (var i = 0; i < AjxDateUtil._dateFmt.length; i++) {
+			switch (AjxDateUtil._dateFmt[i]) {
+				case 'M':
+					dateStr = dateStr + ((dateStr != "") ? " " : "") + AjxDateUtil.MONTH_MEDIUM[date.getMonth()];
+					break;
+				case 'D':
+					var day = date.getDate();
+					dateStr = dateStr + ((dateStr != "") ? " " : "") + AjxDateUtil._pad(day);
+					break;
+			}
+		}
 	} else {
 		dateStr = AjxDateUtil.simpleComputeDateStr(date);
 	} 
@@ -246,8 +282,25 @@ function(now, dateMSec) {
 
 AjxDateUtil.computeTimeString =
 function(date) {
-	var formatter = AjxDateFormat.getTimeInstance(AjxDateFormat.SHORT);
-	return formatter.format(date);
+	var amPm = "";
+	var hours = date.getHours();
+	var mins = date.getMinutes();
+	if (AjxMsg.timeFormat == AjxDateUtil._12hour) {
+		if (hours > 12) {
+			hours -= 12;
+			amPm = " " + AjxMsg.pm;
+		} else if (hours < 12) {
+			if (hours == 0) 
+				hours = 12;
+			amPm = " " + AjxMsg.am;
+		} else {
+			amPm = " " + AjxMsg.pm;
+		}
+	} else {
+		hours = AjxDateUtil._pad(hours);
+	}
+	
+	return hours + AjxMsg.timeSeparator + AjxDateUtil._pad(mins) + amPm;
 };
 
 
@@ -374,7 +427,7 @@ function(date) {
 AjxDateUtil.getServerDateTime = 
 function(date) {
 	if (!AjxDateUtil._serverDateTimeFormatter) {
-		AjxDateUtil._serverDateTimeFormatter = new AjxDateFormat("yyyyMMdd'T'kkmmss");
+		AjxDateUtil._serverDateTimeFormatter = new AjxDateFormat("yyyyMMdd'T'HHmmss");
 	}
 	return AjxDateUtil._serverDateTimeFormatter.format(date);
 };
