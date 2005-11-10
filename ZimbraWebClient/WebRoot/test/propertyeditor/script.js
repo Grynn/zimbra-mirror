@@ -35,7 +35,7 @@ function App() {
 	var prop = [
 
 		{ label          : "User ID",
-		  id             : "userid",
+		  name           : "userid",
 		  type           : "string",
 		  value          : "rootshell",
 		  minLength      : 4,
@@ -45,7 +45,7 @@ function App() {
 		},
 
 		{ label      : "Password",
-		  id         : "passwd",
+		  name       : "passwd",
 		  type       : "password",
 		  minLength  : 4,
 		  maxLength  : 8,
@@ -53,61 +53,62 @@ function App() {
 		},
 
 		{ label      : "Read-only field",
-		  id         : "readonly",
+		  name       : "readonly",
 		  readonly   : true,
-		  value      : "Grootesque"
+		  value      : "U can't touch this"
 		},
 
 		{ label      : "Address",
-		  id         : "address",
+		  name       : "address",
 		  type       : "struct",
 		  children   : [
 
 			  { label  : "Street",
-			    id     : "street",
+			    name   : "street",
 			    type   : "string",
 			    value  : "Al. T. Neculai, nr. 19, bl. 945, ap. 2"
 			  },
 
 			  { label  : "City",
-			    id     : "city",
+			    name   : "city",
 			    type   : "string",
 			    value  : "Iasi"
 			  },
 
-			  { label    : "Postal code",
-			    id       : "postCode",
-			    type     : "string",
-			    value    : "700713",
-			    required : true
+			  { label     : "Postal code",
+			    name      : "postCode",
+			    type      : "string",
+			    mustMatch : /^[0-9]+$/,
+			    value     : "700713",
+			    required  : true
 			  },
 
 			  { label    : "Dates",
-			    id       : "foo",
+			    name     : "dates",
 			    type     : "struct",
 			    children : [
 
 				    { label : "Birthday",
 				      type  : "date",
-				      id    : "birthday"
+				      name  : "birthday"
 				    },
 
 				    { label : "Age",
 				      type  : "integer",
-				      id    : "age"
+				      name  : "age"
 				    }
 
 				    ]
 			  },
 
 			  { label    : "State",
-			    id       : "state",
+			    name     : "state",
 			    type     : "string",
 			    value    : "Iasi"
 			  },
 
 			  { label  : "Country",
-			    id     : "country",
+			    name   : "country",
 			    type   : "string",
 			    value  : "Romania"
 			  }
@@ -116,21 +117,21 @@ function App() {
 		},
 
 		{ label      : "Integer",
-		  id         : "integer",
+		  name       : "integer",
 		  type       : "integer",
 		  minValue   : 10,
 		  maxValue   : 30
 		},
 
 		{ label      : "Float",
-		  id         : "float",
+		  name       : "float",
 		  type       : "number",
 		  minValue   : 15,
 		  maxValue   : 25
 		},
 
 		{ label      : "Decimal",
-		  id         : "decimal",
+		  name       : "decimal",
 		  type       : "number",
 		  decimals   : 2
 		}
@@ -138,7 +139,8 @@ function App() {
 		];
 
 	pi.initProperties(prop);
-	pi.makeFixedLabelWidth();
+	pi.setFixedLabelWidth();
+	pi.setFixedFieldWidth();
 };
 
 App.run = function() {

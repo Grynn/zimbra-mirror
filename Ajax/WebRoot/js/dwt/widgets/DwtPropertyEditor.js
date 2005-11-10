@@ -35,13 +35,11 @@ function DwtPropertyEditor(parent, className, positionType) {
 			className = "DwtPropertyEditor";
 		DwtComposite.call(this, parent, className, positionType);
 		this._schema = null;
-// 		this._propsById = {};
-// 		this._props = [];
 		this._init();
-
-		this._setMouseEventHdlrs();
 	}
 };
+
+DwtPropertyEditor.MSG_TIMEOUT = 4000; // 4 seconds should be plenty
 
 DwtPropertyEditor.MSG = {
 	lengthFault   : "The length of this field must be between MINLEN and MAXLEN characters",
@@ -64,22 +62,84 @@ DwtPropertyEditor.prototype.toString = function() { return "DwtPropertyEditor"; 
 
 DwtPropertyEditor.prototype._init = function() {
 	var doc = this.getDocument();
-	this._relDiv = doc.createElement("div");
-	this._relDiv.style.position = "relative";
-	this._tableEl = doc.createElement("table");
-	this._tableEl.cellSpacing = this._tableEl.cellPadding = 0;
-	this._tableEl.appendChild(doc.createElement("tbody"));
-	this._relDiv.appendChild(this._tableEl);
-	this.getHtmlElement().appendChild(this._relDiv);
+	var div = doc.createElement("div");
+	div.id = this._relDivId = Dwt.getNextId();
+	div.style.position = "relative";
+	var table = doc.createElement("table");
+	table.id = this._tableId = Dwt.getNextId();
+	table.cellSpacing = table.cellPadding = 0;
+	table.appendChild(doc.createElement("tbody"));
+	div.appendChild(table);
+	this.getHtmlElement().appendChild(div);
 	this.maxLabelWidth = 0;
+	this.maxFieldWidth = 0;
+	this._setMouseEventHdlrs();
 	this.addListener(DwtEvent.ONMOUSEDOWN, new AjxListener(this, this._onMouseDown));
 };
 
+DwtPropertyEditor.prototype.getRelDiv = function() {
+	return Dwt.getDomObj(this.getDocument(), this._relDivId);
+};
+
+DwtPropertyEditor.prototype.getTable = function() {
+	return Dwt.getDomObj(this.getDocument(), this._tableId);
+};
+
 DwtPropertyEditor.prototype._onMouseDown = function(event) {
+	var target = event.target;
+	var tag = target.tagName.toLowerCase();
+	if (tag == "input") {
+		event._stopPropagation = false;
+		event._returnValue = true;
+		return true;
+	}
 	if (this._currentInputField && !this._currentInputField.onblur()) {
 		event._stopPropagation = true;
 		event._returnValue = false;
+		return false;
 	}
+	try {
+		while (target && tag != "tr") {
+			target = target.parentNode;
+			tag = target.tagName.toLowerCase();
+		}
+		if (target && target.__msh_doMouseDown)
+			target.__msh_doMouseDown(event);
+	} catch(ex) {};
+};
+
+/**
+ * Call this function to retrieve an object that contains all properties,
+ * indexed by name.  Any "struct" property will map to an object that contains
+ * its child properties.
+ *
+ * For the sample schema below (see comments on initProperties()), we would
+ * retrieve an object like this (dots represent the edited value, or the
+ * initial value if the property wasn't modified):
+ *
+ *  {
+ *    userName : ... ,
+ *    address  : {
+ *                  street   : ... ,
+ *                  country  : ... ,
+ *               },
+ *    age      : ... ,
+ *    birthday : ...
+ *  }
+ */
+DwtPropertyEditor.prototype.getProperties = function() {
+	function rec(schema) {
+		var prop = {}, tmp, n = schema.length;
+		for (var i = 0; i < n; ++i) {
+			tmp = schema[i];
+			if (schema[i].type == "struct")
+				prop[tmp.name] = rec(tmp.children);
+			else
+				prop[tmp.name] = tmp.value;
+		}
+		return prop;
+	};
+	return rec(this._schema);
 };
 
 /** This function will initialize the Property Editor with a given schema and
@@ -163,15 +223,16 @@ DwtPropertyEditor.prototype._createProperty = function(prop, parent) {
 	var
 		doc   = this.getDocument(),
 		level = parent ? parent._level + 1 : 0,
-		tr    = this._tableEl.firstChild.appendChild(doc.createElement("tr"));
+		tr    = this.getTable().firstChild.appendChild(doc.createElement("tr"));
 
 	// Initialize the "prop" object with some interesting attributes...
 	prop._parent = parent;
 	prop._level = level;
-	prop._rowEl = tr;
+	prop._rowElId = tr.id = Dwt.getNextId();
 	prop._propertyEditor = this;
 	prop.type != null || (prop.type = "string");
 	prop.value != null || (prop.value = "");
+	prop._initialVal = prop.value;
 
 	// ... and methods.
 	for (var i in DwtPropertyEditor._prop_functions)
@@ -185,24 +246,29 @@ DwtPropertyEditor.prototype._createProperty = function(prop, parent) {
 
 	if (prop.type != "struct") {
 		tr.className += " " + prop.type;
+		tr.__msh_doMouseDown = DwtPropertyEditor.simpleClosure(prop._edit, prop);
 
 		// this is a simple property, create a label and value cell.
 		var tdLabel = doc.createElement("td");
 		tdLabel.className = "label";
 		tr.appendChild(tdLabel);
-		tdLabel.innerHTML = AjxStringUtil.htmlEncode(prop.label);
-		tdLabel.onmousedown = DwtPropertyEditor.simpleClosure(prop._edit, prop);
+		var html = AjxStringUtil.htmlEncode(prop.label);
+		if (prop.required)
+			html += "<span class='DwtPropertyEditor-required'>*</span>";
+		tdLabel.innerHTML = html;
 		var tdField = doc.createElement("td");
 		tdField.className = "field";
 		tr.appendChild(tdField);
-		tdField.value = prop.getValue();
+		tdField.value = prop._getValue();
 		tdField.innerHTML = prop._makeDisplayValue();
-		tdField.onmousedown = DwtPropertyEditor.simpleClosure(prop._edit, prop);
 
-		prop._fieldCell = tdField;
+		prop._fieldCellId = tdField.id = Dwt.getNextId();
+		// prop._labelCellId = tdLabel.id = Dwt.getNextId();
 
 		if (tdLabel.offsetWidth > this.maxLabelWidth)
 			this.maxLabelWidth = tdLabel.offsetWidth;
+		if (tdField.offsetWidth > this.maxFieldWidth)
+			this.maxFieldWidth = tdField.offsetWidth;
 	} else {
 		var td = doc.createElement("td");
 		td.colSpan = 2;
@@ -211,7 +277,7 @@ DwtPropertyEditor.prototype._createProperty = function(prop, parent) {
 		tr.className += " expander-collapsed";
 		td.innerHTML = [ "<div>", AjxStringUtil.htmlEncode(prop.label), "</div>" ].join("");
 		this.initProperties(prop.children, prop);
-		td.onmousedown = DwtPropertyEditor.simpleClosure(prop._toggle, prop);
+		tr.__msh_doMouseDown = DwtPropertyEditor.simpleClosure(prop._toggle, prop);
 	}
 
 	// collapsed by default
@@ -221,15 +287,55 @@ DwtPropertyEditor.prototype._createProperty = function(prop, parent) {
 	}
 };
 
-DwtPropertyEditor.prototype.makeFixedLabelWidth = function() {
-	this._tableEl.rows[0].cells[0].style.width = this.maxLabelWidth + "px";
+// <FIXME: this will create problems when the first property is a "struct">
+DwtPropertyEditor.prototype.setFixedLabelWidth = function(w) {
+	this.getTable().rows[0].cells[0].style.width = (w || this.maxLabelWidth) + "px";
+};
+
+DwtPropertyEditor.prototype.setFixedFieldWidth = function(w) {
+	this.getTable().rows[0].cells[1].style.width = (w || this.maxFieldWidth) + "px";
+};
+// </FIXME>
+
+DwtPropertyEditor.prototype._setCurrentMsgDiv = function(div) {
+	this._currentMsgDiv = div;
+	this._currentMsgDivTimer = setTimeout(
+		DwtPropertyEditor.simpleClosure(this._clearMsgDiv, this),
+		DwtPropertyEditor.MSG_TIMEOUT);
+};
+
+DwtPropertyEditor.prototype._clearMsgDiv = function() {
+	try {
+		this._stopMsgDivTimer();
+	} catch(ex) {};
+	var div = this._currentMsgDiv;
+	if (div) {
+		div.parentNode.removeChild(div);
+		this._currentMsgDiv = div = null;
+		this._currentMsgDivTimer = null;
+	}
+};
+
+DwtPropertyEditor.prototype._stopMsgDivTimer = function() {
+	if (this._currentMsgDivTimer) {
+		clearTimeout(this._currentMsgDivTimer);
+		this._currentMsgDivTimer = null;
+	}
 };
 
 // these will be merged to each prop object that comes in the schema
 DwtPropertyEditor._prop_functions = {
 
+	_modified : function() {
+		return this._initialVal != this.value;
+	},
+
+	_getRowEl : function() {
+		return Dwt.getDomObj(this._propertyEditor.getDocument(), this._rowElId);
+	},
+
 	_makeDisplayValue : function() {
-		var val = this.getValue();
+		var val = this._getValue();
 		if (this.type == "password")
 			val = val.replace(/./g, "*");
 		if (val == "")
@@ -246,14 +352,15 @@ DwtPropertyEditor._prop_functions = {
 		if (c) {
 			var i = c.length;
 			while (--i >= 0) {
-				c[i]._rowEl.style.display = d;
+				c[i]._getRowEl().style.display = d;
 				if (!visible)
 					c[i]._display(false);
 			}
 			this._hidden = !visible;
 
 			// change the class name accordingly
-			this._rowEl.className = this._rowEl.className.replace(
+			var tr = this._getRowEl();
+			tr.className = tr.className.replace(
 				/expander-[^\s]+/,
 				visible ? "expander-expanded" : "expander-collapsed");
 		}
@@ -270,16 +377,14 @@ DwtPropertyEditor._prop_functions = {
 		if (this.readonly)
 			return;
 
-		var self = this;
-
 		switch (this.type) {
 		    case "string" :
 		    case "number" :
 		    case "integer" :
 		    case "password" :
-			setTimeout(function() {
-				self._createInputField();
-			}, 50);
+			setTimeout(
+				DwtPropertyEditor.simpleClosure(
+					this._createInputField, this), 50);
 			break;
 
 		    default :
@@ -289,17 +394,18 @@ DwtPropertyEditor._prop_functions = {
 
 	_createInputField : function() {
 		var
-			td     = this._fieldCell,
 			pe     = this._propertyEditor,
 			doc    = pe.getDocument(),
-			canvas = pe._relDiv,
+			td     = Dwt.getDomObj(doc, this._fieldCellId),
+			canvas = pe.getRelDiv(),
 			input  = doc.createElement("input");
 
 		input.className = this.type;
 		input.setAttribute("autocomplete", "off");
 
-		if (this.type == "password")
-			input.type = "password";
+		input.type = this.type == "password"
+			? "password"
+			: "text";
 
 		var left = td.offsetLeft, top = td.offsetTop;
 		if (AjxEnv.isGeckoBased) {
@@ -311,7 +417,7 @@ DwtPropertyEditor._prop_functions = {
 		input.style.width = td.offsetWidth + 1 + "px";
 		input.style.height = td.offsetHeight + 1 + "px";
 
-		input.value = this.getValue();
+		input.value = this._getValue();
 
 		canvas.appendChild(input);
 		input.focus();
@@ -321,46 +427,44 @@ DwtPropertyEditor._prop_functions = {
 
 		this._propertyEditor._currentInputField = this._inputField = input;
 		if (!AjxEnv.isGeckoBased)
-			setTimeout(function() {
-				input.select();
-			}, 10);
+			input.select();
 		else
 			input.setSelectionRange(0, input.value.length);
 	},
 
-	getValue : function() {
+	_getValue : function() {
 		return this.value || "";
 	},
 
-	checkValue : function(val) {
+	_checkValue : function(val) {
 		var empty = val == "";
 
 		if (empty) {
 			if (!this.required)
 				return val;
-			window.status = DwtPropertyEditor.MSG.isRequired;
+			this._displayMsg(DwtPropertyEditor.MSG.isRequired);
 			return null;
 		}
 
 		if (val.length > this.maxLength ||
 		    val.length < this.minLength) {
-			window.status = DwtPropertyEditor.MSG.lengthFault
-				.replace(/MINLEN/, this.minLength)
-				.replace(/MAXLEN/, this.maxLength);
+			this._displayMsg(DwtPropertyEditor.MSG.lengthFault
+					 .replace(/MINLEN/, this.minLength)
+					 .replace(/MAXLEN/, this.maxLength));
 			return null;
 		}
 
 		if (this.mustMatch && !this.mustMatch.test(val)) {
-			window.status = this.msg_mustMatch ||
-				DwtPropertyEditor.MSG.mustMatch.replace(
-					/REGEXP/, this.mustMatch.toString());
+			this._displayMsg(this.msg_mustMatch ||
+					 DwtPropertyEditor.MSG.mustMatch.replace(
+						 /REGEXP/, this.mustMatch.toString()));
 			return null;
 		}
 
 		if (this.mustNotMatch && this.mustNotMatch.test(val)) {
-			window.status = this.msg_mustNotMatch ||
-				DwtPropertyEditor.MSG.mustNotMatch.replace(
-					/REGEXP/, this.mustNotMatch.toString());
+			this._displayMsg(this.msg_mustNotMatch ||
+					 DwtPropertyEditor.MSG.mustNotMatch.replace(
+						 /REGEXP/, this.mustNotMatch.toString()));
 			return null;
 		}
 
@@ -369,21 +473,21 @@ DwtPropertyEditor._prop_functions = {
 		    case "number" :
 			var n = new Number(val);
 			if (isNaN(n)) {
-				window.status = DwtPropertyEditor.MSG.mustBeNumber;
+				this._displayMsg(DwtPropertyEditor.MSG.mustBeNumber);
 				return null;
 			}
 			if (this.type == "integer" && Math.round(n) != n) {
-				window.status = DwtPropertyEditor.MSG.mustBeInteger;
+				this._displayMsg(DwtPropertyEditor.MSG.mustBeInteger);
 				return null;
 			}
 			if (this.minValue != null && n < this.minValue) {
-				window.status = DwtPropertyEditor.MSG.minValueFault
-					.replace(/MINVAL/, this.minValue);
+				this._displayMsg(DwtPropertyEditor.MSG.minValueFault
+						 .replace(/MINVAL/, this.minValue));
 				return null;
 			}
 			if (this.maxValue != null && n > this.maxValue) {
-				window.status = DwtPropertyEditor.MSG.maxValueFault
-					.replace(/MAXVAL/, this.maxValue);
+				this._displayMsg(DwtPropertyEditor.MSG.maxValueFault
+						 .replace(/MAXVAL/, this.maxValue));
 				return null;
 			}
 			val = n;
@@ -399,23 +503,62 @@ DwtPropertyEditor._prop_functions = {
 		return val;
 	},
 
+	_displayMsg : function(msg) {
+		var x, y, w, h,
+			pe  = this._propertyEditor,
+			doc = pe.getDocument(),
+			div = pe._currentMsgDiv;
+		if (!div) {
+			div = doc.createElement("div");
+			div.className = "DwtPropertyEditor-ErrorMsg";
+			pe.getRelDiv().appendChild(div);
+		} else
+			pe._stopMsgDivTimer();
+		div.style.visibility = "hidden";
+		div.innerHTML = AjxStringUtil.htmlEncode(msg);
+		// position & size
+		var table = pe.getTable();
+		w = table.offsetWidth; // padding & border!
+		if (!AjxEnv.isIE)
+			w -= 12;
+		x = table.offsetLeft;
+		div.style.left = x + "px";
+		div.style.width = w + "px";
+		h = div.offsetHeight;
+		var td = Dwt.getDomObj(doc, this._fieldCellId);
+		y = td.offsetTop + td.offsetHeight;
+		if (y + h > table.offsetTop + table.offsetHeight)
+			y = td.offsetTop - h;
+		div.style.top = y + "px";
+		div.style.visibility = "";
+		pe._setCurrentMsgDiv(div);
+	},
+
 	_saveInput : function() {
 		var input = this._inputField;
-		var val = this.checkValue(input.value);
+		var val = this._checkValue(input.value);
 		if (val != null) {
 			this.value = val;
 			input.onblur = null;
 			input.onkeyup = null;
 			input.onkeydown = null;
 			input.onkeypress = null;
-			input.parentNode.removeChild(input);
-			this._fieldCell.innerHTML = this._makeDisplayValue();
+			var td = Dwt.getDomObj(this._propertyEditor.getDocument(),
+					       this._fieldCellId);
+			td.innerHTML = this._makeDisplayValue();
 			this._inputField = null;
 			this._propertyEditor._currentInputField = null;
+			this._propertyEditor._clearMsgDiv();
+			var tr = this._getRowEl();
+			tr.className = tr.className.replace(/ dirty/, "");
+			if (this._modified())
+				tr.className += " dirty";
+			input.parentNode.removeChild(input);
 			return true;
 		} else {
 			if (input.className.indexOf(" error") == -1)
 				input.className += " error";
+			input.focus();
 			return false;
 		}
 	},
@@ -423,11 +566,14 @@ DwtPropertyEditor._prop_functions = {
 	_inputKeyPress : function(ev) {
 		ev || (ev = window.event);
 		var input = this._inputField;
-		if (ev.keyCode == 13)
+		if (ev.keyCode == 13) {
 			this._saveInput();
-		if (ev.keyCode == 27) {
+		} else if (ev.keyCode == 27) {
 			input.value = this.value;
 			this._saveInput();
+		} else {
+			this._propertyEditor._clearMsgDiv();
+			input.className = input.className.replace(/ error/, "");
 		}
 	}
 };

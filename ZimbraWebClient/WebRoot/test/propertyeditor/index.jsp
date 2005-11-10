@@ -61,7 +61,7 @@ Contributor(s):
     <noscript><p><b>Javascript must be enabled to use this.</b></p></noscript>
     <script language="JavaScript">   	
    		function launch() {
-   			DBG = new AjxDebug(AjxDebug.DBG2, null, false);
+   			DBG = new AjxDebug(AjxDebug.NONE, null, false);
  	    	App.run();
 	    }
         AjxCore.addOnloadListener(launch);

@@ -57,6 +57,7 @@
 .DwtPropertyEditor table tr.level-9 td.label { padding-left: 140px; }
 
 .DwtPropertyEditor table tr.readonly td.field { color: #888; cursor: default; }
+.DwtPropertyEditor table tr.dirty td { color: #42c; }
 
 .DwtPropertyEditor table tr.number td.field,
 .DwtPropertyEditor table tr.integer td.field,
@@ -70,3 +71,15 @@
   padding: 0 4px;
 }
 .DwtPropertyEditor input.error { background-color: #fca; border-color: red; }
+
+.DwtPropertyEditor .DwtPropertyEditor-ErrorMsg {
+  position: absolute;
+  border: 1px solid red;
+  padding: 5px;
+  font-size: 90%;
+  font-weight: bold;
+  background-color: #ffffcd;
+  color: red;
+}
+
+.DwtPropertyEditor span.DwtPropertyEditor-required { font-size: 80%; color: red; }
