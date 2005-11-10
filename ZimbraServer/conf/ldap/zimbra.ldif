@@ -283,43 +283,6 @@ objectclass: organizationalRole
 cn: zimlets
 description: for storing Zimlet configuration
 
-dn: cn=phone,cn=zimlets,cn=zimbra
-zimbraZimletDescription: Phone Number
-zimbraZimletVersion: 1.0
-zimbraZimletHandlerClass: com.zimbra.cs.zimlet.handler.NANPHandler
-objectClass: zimbraZimletEntry
-zimbraZimletIndexingEnabled: TRUE
-zimbraZimletKeyword: phone
-cn: phone
-
-dn: cn=url,cn=zimlets,cn=zimbra
-zimbraZimletDescription: URLs
-zimbraZimletVersion: 1.0
-zimbraZimletHandlerClass: com.zimbra.cs.zimlet.handler.URLHandler
-objectClass: zimbraZimletEntry
-zimbraZimletIndexingEnabled: TRUE
-zimbraZimletKeyword: url
-cn: url
-
-dn: cn=tracking,cn=zimlets,cn=zimbra
-zimbraZimletDescription: Shipping Tracking Number
-zimbraZimletVersion: 1.0
-zimbraZimletHandlerClass: com.zimbra.cs.zimlet.handler.TrackingHandler
-objectClass: zimbraZimletEntry
-zimbraZimletIndexingEnabled: TRUE
-zimbraZimletKeyword: tracking
-cn: tracking
-
-dn: cn=po,cn=zimlets,cn=zimbra
-zimbraZimletDescription: Zimbra Purchase Order
-zimbraZimletVersion: 1.0
-zimbraZimletHandlerClass: com.zimbra.cs.zimlet.handler.RegexHandler
-objectClass: zimbraZimletEntry
-zimbraZimletIndexingEnabled: TRUE
-zimbraZimletServerIndexRegex: GR\w{6}\-\w{5}
-zimbraZimletKeyword: po
-cn: po
-
 # for storing class-of-service config
 dn: cn=cos,cn=zimbra
 objectclass: organizationalRole
