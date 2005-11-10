@@ -41,7 +41,7 @@ else
 fi
 
 ${zimbra_home}/bin/zmlocalconfig -e ldap_is_master="true"
-${zimbra_home}/bin/zmlocalconfig -e ldap_master_url="ldap://$zimbra_server_hostname"
+${zimbra_home}/bin/zmlocalconfig -e ldap_master_url="ldap://$zimbra_server_hostname:389"
 
 zmsetvars -f zimbra_ldap_userdn zimbra_ldap_password ldap_root_password zimbra_server_hostname
 

@@ -29,10 +29,11 @@ source `dirname $0`/../bin/zmshutil || exit 1
 zmsetvars \
 	zimbra_home \
 	zimbra_server_hostname \
-	ldap_host \
-	ldap_port \
+	ldap_master_url \
 	ldap_root_password \
 	zimbra_ldap_userdn
+
+ldap_master_host=`echo ${ldap_master_url} | sed -e 's|ldaps*://\([^:]*\):*.*|\1|'`
 
 verifyLdapInstalled() {
 	echo -n "Looking for LDAP installation..."
@@ -45,13 +46,13 @@ verifyLdapInstalled() {
 }
 
 verifyLdap() {
-	echo -n "Verifying ldap on ${ldap_host}:${ldap_port}..."
+	echo -n "Verifying ldap on ${ldap_master_url}..."
 	LDS="${zimbra_home}/bin/ldapsearch";
-	ARGS="-x -h ${ldap_host} -p ${ldap_port} -D ${zimbra_ldap_userdn} -w ${ldap_root_password}"
+	ARGS="-x -H ${ldap_master_url} -D ${zimbra_ldap_userdn} -w ${ldap_root_password}"
 	$LDS $ARGS > /dev/null 2>&1
 	if [ $? -ne 0 ]; then
 		echo "FAILED"
-		echo "ERROR: Unable to contact ${ldap_host}:${ldap_port} - exiting"
+		echo "ERROR: Unable to contact ${ldap_master_url} - exiting"
 		exit 1
 	fi
 	echo "succeeded"
@@ -83,14 +84,14 @@ createLdapConfig() {
 
 	cat >> ${zimbra_home}/conf/slapd.conf <<EOF
 syncrepl rid=100
-	provider=ldaps://${ldap_host}
+	provider=${ldap_master_url}
 	type=refreshAndPersist
 	schemachecking=off
 	updatedn="uid=zimbrareplication,cn=admins,cn=zimbra"
 	bindmethod=simple
 	binddn="uid=zimbra,cn=admins,cn=zimbra"
 	credentials=${ldap_root_password}
-updateref  ldap://${ldap_host}:${ldap_port}
+updateref  ${ldap_master_url}
 EOF
 
 	echo "succeeded"
@@ -116,7 +117,7 @@ userPassword: ${root_sha}
 EOF
 
 	${zimbra_home}/openldap/bin/ldapadd -w ${ldap_root_password} -D ${zimbra_ldap_userdn} \
-		-x -f /tmp/replicauser.ldif -h ${ldap_host} -p ${ldap_port} > /dev/null 2>&1
+		-x -f /tmp/replicauser.ldif -H ${ldap_master_url} > /dev/null 2>&1
 
 	# Ignore failures, user may already exist?
 	echo "succeeded"
@@ -140,8 +141,8 @@ enableLdapService() {
 }
 
 stopRemoteZimbra() {
-	echo -n "Shutting down Zimbra Services on ${ldap_host}..."
-	echo HOST:${ldap_host} shutdown | ${zimbra_home}/bin/zmrc ${ldap_host} \
+	echo -n "Shutting down Zimbra Services on ${ldap_master_host}..."
+	echo HOST:${ldap_master_host} shutdown | ${zimbra_home}/bin/zmrc ${ldap_master_host} \
 		> /dev/null 2>&1
 
 	if [ $? -ne 0 ]; then
@@ -159,9 +160,9 @@ stopZimbra() {
 }
 
 replicateLdap() {
-	echo -n "Replicating ldap data from ${ldap_host}..."
+	echo -n "Replicating ldap data from ${ldap_master_host}..."
 	echo -n "Copying data..."
-	echo HOST:${ldap_host} slapcat | ${zimbra_home}/bin/zmrc ${ldap_host} | \
+	echo HOST:${ldap_master_host} slapcat | ${zimbra_home}/bin/zmrc ${ldap_master_host} | \
 		grep -v STARTCMD | grep -v ENDCMD > /tmp/repl.ldif
 
 	if [ $? -ne 0 ]; then
@@ -184,14 +185,14 @@ replicateLdap() {
 }
 
 updateLdapHost() {
-	echo -n "Setting ldap_host on ${zimbra_server_hostname}..."
-	zmlocalconfig -e ldap_host=${zimbra_server_hostname}
+	echo -n "Setting ldap_url on ${zimbra_server_hostname}..."
+	zmlocalconfig -e ldap_url="ldap://${zimbra_server_hostname} ${ldap_master_url}"
 	echo "done"
 }
 
 startRemoteZimbra() {
-	echo -n "Starting remote Zimbra Services on ${ldap_host}..."
-	echo HOST:${ldap_host} startup | ${zimbra_home}/bin/zmrc ${ldap_host} \
+	echo -n "Starting remote Zimbra Services on ${ldap_master_host}..."
+	echo HOST:${ldap_master_host} startup | ${zimbra_home}/bin/zmrc ${ldap_master_host} \
 		> /dev/null 2>&1
 
 	if [ $? -ne 0 ]; then
@@ -218,5 +219,5 @@ stopRemoteZimbra
 replicateLdap
 updateLdapHost
 startRemoteZimbra
-zmsetvars -f ldap_host
+zmsetvars -f ldap_url
 startZimbra
