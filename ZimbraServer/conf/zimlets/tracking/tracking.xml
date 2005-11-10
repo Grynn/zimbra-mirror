@@ -1,11 +1,4 @@
-<zimlet>
-	<name>tracking</name>
-	<version>1.0</version>
-	<description>Shipping Tracking Number</description>
-
-	<serverExtension>
-		<hasKeyword>tracking</hasKeyword>
-		<extensionClass>com.zimbra.cs.zimlet.handler.TrackingHandler</extensionClass>
-	</serverExtension>
+<zimlet name="tracking" version="1.0" description="Shipping Tracking Number">
+	<serverExtension hasKeyword="tracking" extensionClass="com.zimbra.cs.zimlet.handler.TrackingHandler"/>
 </zimlet>
 

@@ -1,11 +1,4 @@
-<zimlet>
-	<name>url</name>
-	<version>1.0</version>
-	<description>URLs</description>
-
-	<serverExtension>
-		<hasKeyword>url</hasKeyword>
-		<extensionClass>com.zimbra.cs.zimlet.handler.URLHandler</extensionClass>
-	</serverExtension>
+<zimlet name="url" version="1.0" description="URLs">
+	<serverExtension hasKeyword="url" extensionClass="com.zimbra.cs.zimlet.handler.URLHandler"/>
 </zimlet>
 
