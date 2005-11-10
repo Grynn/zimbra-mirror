@@ -316,7 +316,7 @@ zimbraZimletVersion: 1.0
 zimbraZimletHandlerClass: com.zimbra.cs.zimlet.handler.RegexHandler
 objectClass: zimbraZimletEntry
 zimbraZimletIndexingEnabled: TRUE
-zimbraZimletHandlerConfig: GR\w{6}\-\w{5}
+zimbraZimletServerIndexRegex: GR\w{6}\-\w{5}
 zimbraZimletKeyword: po
 cn: po
 
