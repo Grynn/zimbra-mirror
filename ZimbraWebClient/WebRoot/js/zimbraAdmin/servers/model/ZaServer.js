@@ -134,7 +134,7 @@ ZaServer.A_zimbraHsmAge = "zimbraHsmAge";
 ZaServer.A_HSMstartDate = "startDate";
 ZaServer.A_HSMendDate = "endDate";
 ZaServer.A_HSMrunning = "running";
-ZaServer.A_HSMwasAborted = "wasAborted";
+ZaServer.A_HSMwasAborted = "aborted";
 ZaServer.A_HSMaborting = "aborting";
 ZaServer.A_HSMerror = "error";
 ZaServer.A_HSMnumBlobsMoved = "numBlobsMoved";
@@ -577,11 +577,15 @@ function (arg, respObj) {
 			respNode = arg.firstChild;
 		}
 		if(respNode) {
+			respObj.hsm.errorMsg = null;		
+			respObj.hsm[ZaServer.A_HSMerror] = null;			
 			if(respNode.nodeName == "HsmResponse") {
 				respObj.hsm[ZaServer.A_HSMrunning] = 1;
+				respObj.hsm[ZaServer.A_HSMwasAborted] = 0;
 			} else if (respNode.nodeName == "AbortHsmResponse") {
 				var tmpInt = parseInt(respNode.getAttribute(ZaServer.A_HSMwasAborted));			
 				respObj.hsm[ZaServer.A_HSMwasAborted] = (tmpInt == NaN) ? 0 : tmpInt; 
+				respObj.hsm[ZaServer.A_HSMrunning] = 0;	
 			} else {
 				respObj.hsm[ZaServer.A_HSMstartDate] = respNode.getAttribute(ZaServer.A_HSMstartDate);
 				respObj.hsm[ZaServer.A_HSMendDate] = respNode.getAttribute(ZaServer.A_HSMendDate);
@@ -608,9 +612,6 @@ function (arg, respObj) {
 /*				if(respObj.hsm[ZaServer.A_HSMnumMailboxes] == 0) {
 					respObj.hsm[ZaServer.A_HSMnumMailboxes] = respObj.hsm[ZaServer.A_HSMtotalMailboxes];
 				}*/
-			}
-			if(respObj.hsm[ZaServer.A_HSMwasAborted]==1) {
-				respObj.hsm[ZaServer.A_HSMrunning] = 0;
 			}
 			if(respObj.hsm[ZaServer.A_HSMrunning] == 0 && respObj.hsm[ZaServer.A_HSMstartDate] && respObj.hsm[ZaServer.A_HSMendDate]) {
 				respObj.hsm.progressMsg = String(ZaMsg.HSM_StatusReport).replace("{0}", 
