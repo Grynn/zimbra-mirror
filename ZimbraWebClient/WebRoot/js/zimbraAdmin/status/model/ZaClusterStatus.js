@@ -69,7 +69,7 @@ ZaClusterStatus.mergeWithZimbraServiceStatus = function (statusVector) {
 
 	var cluster;
 	var clusterStatusVector = new AjxVector();
-	DBG.dumpObj(ZaClusterStatus._clusters);
+	//DBG.dumpObj(ZaClusterStatus._clusters);
 	for (cn in ZaClusterStatus._clusters){
 		cluster = ZaClusterStatus._clusters[cn];
 		arr = cluster._serviceArray;
