@@ -50,6 +50,11 @@ chmod 755 /opt/zimbra/libexec/*
 
 chmod 755 /opt/zimbra/bin/*
 
+if [ ! -d /opt/zimbra/tomcat/conf ]; then
+	mkdir -p /opt/zimbra/tomcat/conf
+	chown zimbra:zimbra /opt/zimbra/tomcat/conf
+fi
+
 if [ -L /opt/zimbra/postfix ]; then
 
 	#chown -R root:$ROOTGROUP /opt/zimbra/conf/*
