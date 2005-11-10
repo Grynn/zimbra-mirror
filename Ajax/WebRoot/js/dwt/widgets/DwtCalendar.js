@@ -682,7 +682,9 @@ function(cell, mode) {
 DwtCalendar.prototype._setTitle =
 function(month, year) {
 	var cell = Dwt.getDomObj(this.getDocument(), this._monthCell);
-	cell.innerHTML = AjxDateUtil.MONTH_LONG[month] + " " + year;
+	var formatter = DwtCalendar.getMonthFormatter();
+	var date = new Date(year, month);
+	cell.innerHTML = formatter.format(date);
 }
 
 DwtCalendar.prototype._init =
@@ -947,3 +949,34 @@ function(ev) {
 	var d = new Date(this._date.getTime());
 	this.setDate(AjxDateUtil.roll(d, AjxDateUtil.YEAR, 1), this._skipNotifyOnPage);
 }
+
+DwtCalendar.getDateFormatter = function() {
+	if (!DwtCalendar._dateFormatter) {
+		DwtCalendar._dateFormatter = new AjxDateFormat(AjxMsg.formatCalDate);
+	}
+	return DwtCalendar._dateFormatter;
+};
+DwtCalendar.getDateLongFormatter = function() {
+	if (!DwtCalendar._dateLongFormatter) {
+		DwtCalendar._dateLongFormatter = new AjxDateFormat(AjxMsg.formatCalDateLong);
+	}
+	return DwtCalendar._dateLongFormatter;
+};
+DwtCalendar.getDateFullFormatter = function() {
+	if (!DwtCalendar._dateFullFormatter) {
+		DwtCalendar._dateFullFormatter = new AjxDateFormat(AjxMsg.formatCalDateFull);
+	}
+	return DwtCalendar._dateFullFormatter;
+};
+DwtCalendar.getDayFormatter = function() {
+	if (!DwtCalendar._dayFormatter) {
+		DwtCalendar._dayFormatter = new AjxDateFormat(AjxMsg.formatCalDay);
+	}
+	return DwtCalendar._dayFormatter;
+};
+DwtCalendar.getMonthFormatter = function() {
+	if (!DwtCalendar._monthFormatter) {
+		DwtCalendar._monthFormatter = new AjxDateFormat(AjxMsg.formatCalMonth);
+	}
+	return DwtCalendar._monthFormatter;
+};
