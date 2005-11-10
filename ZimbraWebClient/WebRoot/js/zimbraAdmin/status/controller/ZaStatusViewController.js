@@ -81,13 +81,13 @@ ZaStatusViewController.prototype._createView = function () {
 	try {
 		var elements = new Object();
 		if (this._clusterSoftwareIsInstalled()){
-			var ops = [
+			/*var ops = [
 					   new ZaOperation(ZaOperation.CLOSE, ZaMsg.STATUSTBB_Failover, ZaMsg.STATUSTBB_Failover_tt, null, null,
 									   new AjxListener(this, this._failoverListener))
 					   ];
 			this._toolbar = new ZaToolBar(this._container, ops);
 			this._toolbar.enable([ZaOperation.CLOSE], false);
-			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
+			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;*/
 		}
 		this._contentView = new ZaStatusView(this._container, this._app);
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
