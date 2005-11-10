@@ -2700,12 +2700,11 @@ objectclass ( zimbraZimletEntry
 	SUP top STRUCTURAL
 	MUST (
 		cn $
-		zimbraZimletKeyword $ 
-		zimbraZimletVersion $
-		zimbraZimletIndexingEnabled $
-		zimbraZimletStoreMatched
+		zimbraZimletVersion
 		)
 	MAY (
+		zimbraZimletKeyword $ 
+		zimbraZimletIndexingEnabled $
 		zimbraZimletDescription $
 		zimbraZimletContentObject $
 		zimbraZimletPanelItem $
