@@ -279,7 +279,7 @@ objectIdentifier zimbraZimletContentObject ZimbraAttrType:288
 objectIdentifier zimbraZimletPanelItem ZimbraAttrType:289
 objectIdentifier zimbraZimletScript ZimbraAttrType:290
 objectIdentifier zimbraZimletAvailableZimlets ZimbraAttrType:291
-objectIdentifier zimbraZimletServerIndexRegex ZimbraAttrType:285
+objectIdentifier zimbraZimletServerIndexRegex ZimbraAttrType:292
 
 #################################################################
 # object class OIDs
