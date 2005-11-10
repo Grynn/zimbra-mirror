@@ -486,7 +486,7 @@ function(ev) {
 }
 
 ZaAccountListController.prototype._editItem = function (item) {
-	DBG.dumpObj(item, false, 1);
+//	DBG.dumpObj(item, false, 1);
 	var type = item.type;
 	DBG.println("TYPE == ", item.type);
 	if (type == ZaItem.ACCOUNT) {

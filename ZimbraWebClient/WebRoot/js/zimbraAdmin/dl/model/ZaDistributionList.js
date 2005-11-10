@@ -250,6 +250,7 @@ ZaDistributionList.prototype.getMembers = function (force) {
 		try {
 			// We can't use javascript here, since the response is not returning the correct information
 			var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false).Body.GetDistributionListResponse;
+			DBG.dumpObj(resp);
 			var members = resp.dl[0].dlm;
 			var len = members ? members.length : 0;
 			if (len > 0) {
@@ -266,8 +267,8 @@ ZaDistributionList.prototype.getMembers = function (force) {
 			this.id = resp.dl[0].id;
 			this.attrs = resp.dl[0]._attrs;
 		} catch (ex) {
-			// TODO -- exception handling
-			DBG.dumpObj(ex);
+			app.getCurrentController()._handleException(ex, "ZaDistributionList.prototype.getMembers", null, false);
+			//DBG.dumpObj(ex);
 		}
 	} else if (this._memberList == null){
 		this._memberList = new AjxVector();
@@ -430,7 +431,7 @@ ZaDistributionList.prototype._save = function (soapDoc, respName, add, remove) {
 			this.markClean();
 			return true;
 		} catch (ex) {
-			DBG.dumpObj(ex);
+			//DBG.dumpObj(ex);
 			throw ex;
 			// TODO:
 			// hmm ... if we fail adding any one ofthe members, but the list creation succeeded ...

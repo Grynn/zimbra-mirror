@@ -137,7 +137,7 @@ ZaDLController.prototype._getView = function (id, args) {
 			view.getHtmlElement().style.position = "absolute";
 			var controller = this;
 			view.setData = function (dl) {
-				dl.getMembers();
+				dl.getMembers(true);
 				var clone = dl.clone();
 				if (clone.name == null) {
 					clone.setMailStatus("enabled");
