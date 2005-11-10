@@ -504,7 +504,7 @@
 
 <attr name="zimbraZimletHandlerClass" type="string" max="256"/>
 
-<attr name="zimbraZimletHandlerConfig" type="string" max="256"/>
+<attr name="zimbraZimletHandlerConfig" type="string" max="10240"/>
 
 <attr name="zimbraZimletContentObject" type="string" max="10240"/>
 
