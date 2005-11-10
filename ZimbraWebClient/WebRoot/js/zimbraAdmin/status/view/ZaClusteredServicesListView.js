@@ -137,7 +137,7 @@ ZaClusteredServicesListView.prototype._writeElement = function (html, idx, item,
 				html[idx++] = "<td>";
 				if (item.serverName != ZaClusterStatus.NOT_APPLICABLE) {
 					html[idx++] = AjxStringUtil.htmlEncode(item.serverName);
-					if (item.clusterStatus != null) {
+					if (item.clusterStatus != null && item.clusterStatus != "started") {
 						html[idx++] = "&nbsp;(";
 						html[idx++] = item.clusterStatus;
 						html[idx++] = ")";

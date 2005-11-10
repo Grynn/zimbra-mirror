@@ -34,6 +34,7 @@ ZaClusterStatus._clusters = {};
 ZaClusterStatus.getStatus = function() {
 	var soapDoc = AjxSoapDoc.create("GetClusterStatusRequest", "urn:zimbraAdmin", null);
 	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false).Body.GetClusterStatusResponse;
+	DBG.dumpObj(resp);
 	var s = new ZaCluster();
 	s._initFromDom(resp);
 	return s;
@@ -86,7 +87,14 @@ ZaClusterStatus.mergeWithZimbraServiceStatus = function (statusVector) {
 			s = new ZaServerStatus(arr[i].name);
 			s.clustered = true;
 			s.serverName = arr[i].name;
-			s.nodeStatus = cluster._servers[arr[i].owner].status;
+			var lastOwner = arr[i].owner;
+			if(lastOwner == "none" ) {
+				lastOwner = arr[i].lastOwner;
+			}
+			if(cluster._servers[lastOwner]) {
+				s.nodeStatus = cluster._servers[lastOwner].status;
+			}
+			
 			s.clusterStatus = arr[i].status;
 			s.physicalServerName = arr[i].owner;
 			s.clusterName = cluster.name;
@@ -105,11 +113,25 @@ ZaClusterStatus.mergeWithZimbraServiceStatus = function (statusVector) {
 		for (i = 0 ; i < arr.length; ++i) {
 			if (!arr[i].__seen) {
 				delete arr[i].__seen;
-				s = new ZaServerStatus(arr[i].serverName);
-				s.clustered = false;
-				s.physicalServerName = arr[i].serverName;
-				s.services = [new ZaServiceStatus(arr[i].serviceName, arr[i].time, arr[i].status)];
-				clusterStatusVector.add(s);
+				var tmpArray = clusterStatusVector.getArray();
+				var cnt = tmpArray.length;
+				var found = false;
+				for(var ix = 0; ix < cnt; ix++) {
+					if(tmpArray[ix].physicalServerName==arr[i].serverName) {
+						found = true;
+						tmpArray[ix].services.push(new ZaServiceStatus(arr[i].serviceName, arr[i].time, arr[i].status));
+						tmpArray[ix].nodeStatus = arr[i].status;
+						break;
+					}
+				}
+				if (!found) {
+					s = new ZaServerStatus(arr[i].serverName);
+					s.physicalServerName = arr[i].serverName;
+					s.clustered = false;
+					s.services = [new ZaServiceStatus(arr[i].serviceName, arr[i].time, arr[i].status)];
+					s.nodeStatus = arr[i].status;
+					clusterStatusVector.add(s);
+				}
 			}
 		}
 		var s, sN;	
@@ -119,7 +141,7 @@ ZaClusterStatus.mergeWithZimbraServiceStatus = function (statusVector) {
 		for (sN in cluster._servers) {
 			if (!cluster._isServerInUse(sN)){
 				var server = cluster._servers[sN];
-				var st = new ZaServerStatus(server.name, true, server.status, null, "(not assigned)");
+				var st = new ZaServerStatus(server.name, true, server.status, null, ZaMsg.CSLV_standby);
 				clusterStatusVector.add(st);
 				vectorNeedsSort = true;
 			}
@@ -142,6 +164,7 @@ ZaClusterStatus._isServerInUse = function (serverName) {
 };
 
 ZaClusterStatus.NOT_APPLICABLE = "N/A";
+
 function ZaServerStatus(physicalServerName, clustered, nodeStatus, clusterStatus, name, serviceArr) {
 	this.serverName = (name !== (void 0))? name: ZaClusterStatus.NOT_APPLICABLE;
 	this.clustered = clustered;
@@ -156,6 +179,10 @@ function ZaServerStatus(physicalServerName, clustered, nodeStatus, clusterStatus
 			this.services.push( new ZaServiceStatus(t.name, t.time, t.status));
 		}
 	}
+}
+
+ZaServerStatus.prototype.getPhysicalServerName = function() {
+	return this.physicalServerName;
 }
 
 ZaServerStatus.prototype.toString = function () {
@@ -176,6 +203,7 @@ function ZaServiceStatus(name, lastCheckedTime, status) {
 ZaServiceStatus.prototype.toString = function () {
 	return AjxBuffer.concat("{", this.serviceName, ",", this.time, ",", this.status, "}");
 };
+
 
 function ZaCluster () {}
 
