@@ -264,8 +264,9 @@ ZaZimbraAdmin.prototype._setLicenseStatusMessage = function () {
 			licenseInfoText = ZaMsg.licenseWillExpire;
 			this._statusBox.getHtmlElement().className = "consoleLicenseWillExpire";
 		}
+		var formatter = AjxDateFormat.getDateInstance(AjxDateFormat.SHORT);
 		this.setStatusMsg(AjxBuffer.concat(licenseInfoText," ",
-										   AjxDateUtil.getTimeStr(ZaServerVersionInfo.licenseExpirationDate, ZaMsg.consoleLicenseExpiredDateFormat)));
+										   formatter.format(ZaServerVersionInfo.licenseExpirationDate)));
 	}
 };
 

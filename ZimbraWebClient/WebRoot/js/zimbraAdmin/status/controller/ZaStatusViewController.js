@@ -148,47 +148,49 @@ ZaStatusViewController.prototype._updateOperations = function (selectionArray) {
 };
 
 ZaStatusViewController.prototype.getDummyVector = function () {
+	var formatter = AjxDateFormat.getDateTimeInstance(AjxDateFormat.MEDIUM, AjxDateFormat.SHORT);
+
 	var i1 = new ZaStatus(this._app);
 	i1.serverName = "timmy.liquidsys.com";
 	i1.serviceName = "MTA";
 	i1.timestamp = 1127945551;
 	i1.time = (new Date(1127945551*1000).toLocaleString());
-	i1.time = AjxDateUtil.getTimeStr(new Date(Number(i1.timestamp)*1000), "%M %d %Y %H:%m");
+	i1.time = formatter.format(new Date(Number(i1.timestamp)*1000));
 	i1.status = 1;
 
 	var i2 = new ZaStatus(this._app);
 	i2.serverName = "ebola.liquidsys.com";
 	i2.serviceName = "ldap";
 	i2.timestamp = 1127945551;
-	i2.time = AjxDateUtil.getTimeStr(new Date(Number(i2.timestamp)*1000), "%M %d %Y %H:%m");
+	i2.time = formatter.format(new Date(Number(i2.timestamp)*1000));
 	i2.status = 0;
 
 	var i3 = new ZaStatus(this._app);
 	i3.serverName = "mail1.liquidsys.com";
 	i3.serviceName = "mail";
 	i3.timestamp = 1127945551;
-	i3.time = AjxDateUtil.getTimeStr(new Date(Number(i3.timestamp)*1000), "%M %d %Y %H:%m");
+	i3.time = formatter.format(new Date(Number(i3.timestamp)*1000));
 	i3.status = 0;
 
 	var i4 = new ZaStatus(this._app);
 	i4.serverName = "mail1.liquidsys.com";
 	i4.serviceName = "snmp";
 	i4.timestamp = 1127945551;
-	i4.time = AjxDateUtil.getTimeStr(new Date(Number(i4.timestamp)*1000), "%M %d %Y %H:%m");
+	i4.time = formatter.format(new Date(Number(i4.timestamp)*1000));
 	i4.status = 1;
 
 	var i5 = new ZaStatus(this._app);
 	i5.serverName = "mail2.liquidsys.com";
 	i5.serviceName = "snmp";
 	i5.timestamp = 1127945551;
-	i5.time = AjxDateUtil.getTimeStr(new Date(Number(i5.timestamp)*1000), "%M %d %Y %H:%m");
+	i5.time = formatter.format(new Date(Number(i5.timestamp)*1000));
 	i5.status = 0;
 
 	var i6 = new ZaStatus(this._app);
 	i6.serverName = "mail2.liquidsys.com";
 	i6.serviceName = "mail";
 	i6.timestamp = 1127945551;
-	i6.time = AjxDateUtil.getTimeStr(new Date(Number(i6.timestamp)*1000), "%M %d %Y %H:%m");
+	i6.time = formatter.format(new Date(Number(i6.timestamp)*1000));
 	i6.status = 0;
 
 	var arr = [i6, i5,i4,i3, i2, i1]; 

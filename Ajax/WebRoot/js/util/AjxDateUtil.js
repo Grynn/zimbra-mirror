@@ -211,42 +211,15 @@ function(dateMSec) {
 
 AjxDateUtil.simpleComputeDateStr = 
 function(date, stringToPrepend) {
-	var dateArr = new Array();
-	var idx = 0;
-
-	var written = false;
-	if (stringToPrepend) {
-		dateArr[idx++] = stringToPrepend;
-		written = true;
-	}
-
-	for (var i = 0; i < AjxDateUtil._dateFmt.length; i++) {
-		switch (AjxDateUtil._dateFmt[i]) {
-			case 'Y':
-				dateArr[idx++] = written ? "/" : "";
-				dateArr[idx++] = date.getFullYear();
-				written = true;
-				break;
-			case 'M':
-				var month = date.getMonth() + 1;
-				dateArr[idx++] = written ? "/" : "";
-				dateArr[idx++] = AjxDateUtil._pad(month);
-				written = true;
-				break;
-			case 'D':
-				dateArr[idx++] = written ? "/" : "";
-				dateArr[idx++] = AjxDateUtil._pad(date.getDate());
-				written = true;
-				break;
-		}
-	}
-	return dateArr.join("");
+	var formatter = AjxDateFormat.getDateInstance(AjxDateFormat.SHORT);
+	var dateStr = formatter.format(date);
+	return stringToPrepend ? [stringToPrepend, dateStr].join("") : dateStr;
 };
 
 AjxDateUtil.longComputeDateStr = 
 function(date) {
-	// TODO: i18n
-	return AjxDateUtil.getTimeStr(date, "%w, %M %D, %Y");
+	var formatter = AjxDateFormat.getDateInstance(AjxDateFormat.FULL);
+	return formatter.format(date);
 }
 
 AjxDateUtil.computeDateStr =
@@ -263,17 +236,8 @@ function(now, dateMSec) {
 	if (nowMSec - dateMSec < AjxDateUtil.MSEC_PER_DAY && nowDay == date.getDay()) {
 		dateStr = AjxDateUtil.computeTimeString(date);
 	} else if (year == nowYear) {
-		for (var i = 0; i < AjxDateUtil._dateFmt.length; i++) {
-			switch (AjxDateUtil._dateFmt[i]) {
-				case 'M':
-					dateStr = dateStr + ((dateStr != "") ? " " : "") + AjxDateUtil.MONTH_MEDIUM[date.getMonth()];
-					break;
-				case 'D':
-					var day = date.getDate();
-					dateStr = dateStr + ((dateStr != "") ? " " : "") + AjxDateUtil._pad(day);
-					break;
-			}
-		}
+		var formatter = AjxDateFormat.getDateInstance();
+		dateStr = formatter.format(date);
 	} else {
 		dateStr = AjxDateUtil.simpleComputeDateStr(date);
 	} 
@@ -282,26 +246,9 @@ function(now, dateMSec) {
 
 AjxDateUtil.computeTimeString =
 function(date) {
-	var amPm = "";
-	var hours = date.getHours();
-	var mins = date.getMinutes();
-	if (AjxMsg.timeFormat == AjxDateUtil._12hour) {
-		if (hours > 12) {
-			hours -= 12;
-			amPm = " " + AjxMsg.pm;
-		} else if (hours < 12) {
-			if (hours == 0) 
-				hours = 12;
-			amPm = " " + AjxMsg.am;
-		} else {
-			amPm = " " + AjxMsg.pm;
-		}
-	} else {
-		hours = AjxDateUtil._pad(hours);
-	}
-	
-	return hours + AjxMsg.timeSeparator + AjxDateUtil._pad(mins) + amPm;
-}
+	var formatter = AjxDateFormat.getTimeInstance(AjxDateFormat.SHORT);
+	return formatter.format(date);
+};
 
 
 AjxDateUtil._getHoursStr = 
@@ -418,21 +365,18 @@ function(startTime1, endTime1, startTime2, endTime2) {
 */
 AjxDateUtil.getServerDate = 
 function(date) {
-	var yyyy = date.getFullYear();
-	var MM = AjxDateUtil._pad(date.getMonth() + 1);
-	var dd = AjxDateUtil._pad(date.getDate());
-	return AjxBuffer.concat(yyyy,MM,dd);
+	if (!AjxDateUtil._serverDateFormatter) {
+		AjxDateUtil._serverDateFormatter = new AjxDateFormat("yyyyMMdd");
+	}
+	return AjxDateUtil._serverDateFormatter.format(date);
 };
 
 AjxDateUtil.getServerDateTime = 
 function(date) {
-	var yyyy = date.getFullYear();
-	var MM = AjxDateUtil._pad(date.getMonth() + 1);
-	var dd = AjxDateUtil._pad(date.getDate());
-	var hh = AjxDateUtil._pad(date.getHours());
-	var mm = AjxDateUtil._pad(date.getMinutes());
-	var ss = AjxDateUtil._pad(date.getSeconds());
-	return AjxBuffer.concat(yyyy, MM, dd,"T",hh, mm, ss);
+	if (!AjxDateUtil._serverDateTimeFormatter) {
+		AjxDateUtil._serverDateTimeFormatter = new AjxDateFormat("yyyyMMdd'T'kkmmss");
+	}
+	return AjxDateUtil._serverDateTimeFormatter.format(date);
 };
 
 AjxDateUtil.parseServerTime = 
