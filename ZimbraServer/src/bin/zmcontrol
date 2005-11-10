@@ -44,7 +44,7 @@ use Getopt::Std;
 
 my $localHostName = getHostName();
 
-my $ldapServer = getLdapHost();
+my $ldapMasterHere = isLdapMaster();
 
 my $services;
 my %allservices = ( 
@@ -137,8 +137,8 @@ sub doStartup {
 	print "Host $localHostName\n";
 	my $rc = 0;
 	my $rrc = 0;
-	if ($localHostName eq $ldapServer) {
-		my $ldapStopped = 0xffff & system("/opt/zimbra/bin/ldap status");
+	if ($ldapMasterHere) {
+		my $ldapStopped = 0xffff & system("/opt/zimbra/bin/ldap status > /dev/null 2>&1");
 		if ($ldapStopped) {
 			$rrc = startLdap();
 		}
@@ -154,6 +154,19 @@ sub doStartup {
 	$services = getEnabledServices();
 	if (scalar(keys %$services) == 0) {
 		return 1;
+	}
+	if (defined ($$services{"ldap"}) ) {
+		my $ldapStopped = 0xffff & system("/opt/zimbra/bin/ldap status > /dev/null 2>&1");
+		if ($ldapStopped) {
+			$rrc = startLdap();
+		}
+	}
+	if ($rrc) {
+		$rc = $rrc;
+		my $out = `cat /tmp/zmcontrol.out.$$`;
+		print "FAILED\n";
+		print "$out\n\n";
+		exit (1);
 	}
 	foreach (sort keys %{$services}) {
 		if ($_ eq "ldap") {next;}
@@ -244,8 +257,8 @@ sub getEnabledServices {
 	}
 }
 
-sub getLdapHost {
-	return (getLocalConfig("ldap_host"));
+sub isLdapMaster {
+	return (getLocalConfig("ldap_is_master") eq "true");
 }
 
 sub getHostName {
