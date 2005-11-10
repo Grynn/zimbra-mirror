@@ -276,6 +276,13 @@ zimbraVirusWarnAdmin: TRUE
 zimbraVirusBlockEncryptedArchive: TRUE
 zimbraVirusDefinitionsUpdateFrequency: 2h
 
+# zimlets
+
+dn: cn=zimlets,cn=zimbra
+objectclass: organizationalRole
+cn: zimlets
+description: for storing Zimlet configuration
+
 # for storing object config info
 
 dn: cn=object,cn=config,cn=zimbra

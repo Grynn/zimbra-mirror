@@ -488,6 +488,32 @@
 
 <attr name="zimbraReplicationProvider" type="string" max="256"/>
 
+<attr name="zimbraZimletStoreMatched" type="boolean"/>
+
+<attr name="zimbraZimletIndexingEnabled" type="boolean"/>
+
+<attr name="zimbraZimletKeyword" type="string" max="256"/>
+
+<attr name="zimbraZimletDescription" type="string" max="256"/>
+
+<attr name="zimbraZimletVersion" type="string" max="256"/>
+
+<attr name="zimbraZimletIndexingEnabled" type="string" max="256"/>
+
+<attr name="zimbraZimletKeyword" type="string" max="256"/>
+
+<attr name="zimbraZimletHandlerClass" type="string" max="256"/>
+
+<attr name="zimbraZimletHandlerConfig" type="string" max="256"/>
+
+<attr name="zimbraZimletContentObject" type="string" max="10240"/>
+
+<attr name="zimbraZimletPanelItem" type="string" max="10240"/>
+
+<attr name="zimbraZimletScript" type="string" max="256"/>
+
+<attr name="zimbraZimletAvailableZimlets" type="string" max="256"/>
+
 <attr name="c" type="string"/>
 
 <attr name="co" type="string"/>
