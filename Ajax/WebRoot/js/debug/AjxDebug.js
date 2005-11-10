@@ -219,8 +219,8 @@ function(obj, recurse) {
 	}
 
 	if (AjxUtil.isObject(obj)) {
-		if (obj.toString() == "LmAppCtxt"){
-			return "[LmAppCtxt]";
+		if (obj.toString() == "ZmAppCtxt"){
+			return "[ZmAppCtxt]";
 		}
 		if (AjxDebug._visited.contains(obj))
 			return "[visited object]";

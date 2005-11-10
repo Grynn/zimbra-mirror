@@ -1,4 +1,30 @@
 <zimlet name="phone" version="1.0" description="Phone Number">
 	<serverExtension hasKeyword="phone" extensionClass="com.zimbra.cs.zimlet.handler.NANPHandler"/>
-</zimlet>
+	<contentObject>
+		<matchOn>
+			<regex>/(^|\W)(?:(?:\(\d{3}\)[-.\s]?|\d{3}[-.\s]))?\d{3}[-.\s]\d{4}(\W|$)/g</regex>
+		</matchOn>
 
+		<onClick>
+			<canvas type="window" />
+			<actionJavaScript />
+		</onClick>
+	</contentObject>
+	<contextMenu>
+		<menuItem label="${msg.search}" icon="search.gif" id="SEARCH">
+			<actionJavaScript/>
+		</menuItem>
+		<menuItem label="${msg.addcontact}" icon="addcontact.gif" id="ADDCONTACT">
+			<actionJavaScript/>
+		</menuItem>
+		<menuItem label="${msg.call}" icon="call.gif" id="CALL">
+			<actionJavaScript/>
+		</menuItem>
+	</contextMenu>
+	<zimletPanelItem label="${msg.call}" icon="call.gif">
+		<toolTipText>${msg.panelTooltipText}</toolTipText>
+		<dragSource type="ZmContact">
+			<actionJavaScript/> 
+		</dragSource>
+	</zimletPanelItem>
+</zimlet>
