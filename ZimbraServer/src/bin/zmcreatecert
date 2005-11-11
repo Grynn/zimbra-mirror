@@ -67,6 +67,10 @@ importCA() {
 
 	# rm -f ${JAVA_HOME}/jre/lib/security/cacerts
 
+	keytool -delete -noprompt -keystore \
+		${JAVA_HOME}/jre/lib/security/cacerts \
+		-alias my_ca -storepass changeit
+
 	keytool -import -noprompt -keystore \
 		${JAVA_HOME}/jre/lib/security/cacerts -file \
 		${BASE}/ca/ca.pem -alias my_ca -storepass changeit
