@@ -144,7 +144,7 @@ sub doStartup {
 		}
 	}
 	if ($rrc) {
-		$rc = $rrc;
+		$rc = 1;
 		my $out = `cat /tmp/zmcontrol.out.$$`;
 		print "FAILED\n";
 		print "$out\n\n";
@@ -162,7 +162,7 @@ sub doStartup {
 		}
 	}
 	if ($rrc) {
-		$rc = $rrc;
+		$rc = 1;
 		my $out = `cat /tmp/zmcontrol.out.$$`;
 		print "FAILED\n";
 		print "$out\n\n";
@@ -175,7 +175,7 @@ sub doStartup {
 		$rrc = 0xffff & system ("$allservices{$_} start > /tmp/zmcontrol.out.$$ 2>&1");
 		$rrc = $rrc >> 8;
 		if ($rrc) {
-			$rc = $rrc;
+			$rc = 1;
 			my $out = `cat /tmp/zmcontrol.out.$$`;
 			print "FAILED\n";
 			print "$out\n\n";
@@ -201,7 +201,7 @@ sub doShutdown {
 		$rrc = 0xffff & system ("$allservices{$_} stop > /tmp/zmcontrol.out.$$ 2>&1");
 		$rrc = $rrc >> 8;
 		if ($rrc) {
-			$rc = $rrc;
+			$rc = 1;
 			my $out = `cat /tmp/zmcontrol.out.$$`;
 			print "FAILED\n";
 			print "$out\n\n";
