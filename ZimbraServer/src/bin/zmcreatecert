@@ -32,7 +32,10 @@ JAVA_HOME=/opt/zimbra/java
 
 TOMCAT=/opt/zimbra/tomcat/conf
 
+rm -rf ${BASE}/CA
 mkdir -p ${BASE}/ca
+mkdir -p ${BASE}/CA/newcerts
+touch ${BASE}/CA/index.txt
 mkdir -p ${BASE}/cert
 mkdir -p ${BASE}/server
 
@@ -67,10 +70,6 @@ importCA() {
 
 	# rm -f ${JAVA_HOME}/jre/lib/security/cacerts
 
-	keytool -delete -noprompt -keystore \
-		${JAVA_HOME}/jre/lib/security/cacerts \
-		-alias my_ca -storepass changeit
-
 	keytool -import -noprompt -keystore \
 		${JAVA_HOME}/jre/lib/security/cacerts -file \
 		${BASE}/ca/ca.pem -alias my_ca -storepass changeit
@@ -94,14 +93,18 @@ createCertReq() {
 	echo "** Creating server cert request"
 	echo
 
+	openssl req -new -nodes -out ${BASE}/server/server.csr \
+		-keyout ${BASE}/server/server.key -newkey rsa:1024 \
+		-config ${BASE}/zmssl.cnf -batch
+
 	keytool -certreq -keyalg RSA -alias tomcat -file \
-		${BASE}/server/server.csr -keystore \
+		${BASE}/server/tomcat.csr -keystore \
 		${TCONF}/keystore -storepass zimbra
 
-	cp ${BASE}/server/server.csr /tmp/server.csr.$$
-	cat /tmp/server.csr.$$ | sed -e \
+	cp ${BASE}/server/tomcat.csr /tmp/tomcat.csr.$$
+	cat /tmp/tomcat.csr.$$ | sed -e \
 		's/NEW CERTIFICATE REQUEST/CERTIFICATE REQUEST/' \
-		> ${BASE}/server/server.csr
+		> ${BASE}/server/tomcat.csr
 
 }
 
@@ -110,14 +113,16 @@ signCertReq() {
 	echo "** Signing cert request"
 	echo
 
-	openssl x509 -CA ${BASE}/ca/ca.pem -CAkey ${BASE}/ca/ca.key -CAserial \
-		${BASE}/ca/ca.srl -req -in ${BASE}/server/server.csr -out \
-		${BASE}/server/server.crt -days 365
+	openssl ca -out ${BASE}/server/server.crt -notext \
+		-config ${BASE}/zmssl.cnf -in ${BASE}/server/server.csr \
+		-keyfile ${BASE}/ca/ca.key -cert ${BASE}/ca/ca.pem -batch
 
-	openssl x509 -req -days 365 -in ${BASE}/server/server.csr \
-		-signkey ${BASE}/ca/ca.key -out ${BASE}/server/smtpd.crt
+	openssl x509 -CA ${BASE}/ca/ca.pem -CAkey ${BASE}/ca/ca.key \
+		-CAserial ${BASE}/ca/ca.srl -req -in ${BASE}/server/tomcat.csr \
+		-out ${BASE}/server/tomcat.crt -days 365
 
-	cp ${BASE}/server/smtpd.crt ${CONF}/slapd.crt
+	cp ${BASE}/server/server.crt ${CONF}/slapd.crt
+	cp ${BASE}/server/server.key ${CONF}/slapd.key
 	mkdir -p ${CONF}/ca
 	cp ${BASE}/ca/ca.key ${CONF}/ca/ca.key
 	cp ${BASE}/ca/ca.pem ${CONF}/ca/ca.pem

@@ -79,6 +79,8 @@ importCert() {
 	echo
 
 	if [ $APP = "mailbox" ]; then
+		keytool -delete -alias tomcat -keystore ${TCONF}/keystore \
+			-storepass zimbra
 		keytool -import -alias tomcat -keystore ${TCONF}/keystore \
 			-trustcacerts -file ${CERTFILE} -storepass zimbra
 	else
