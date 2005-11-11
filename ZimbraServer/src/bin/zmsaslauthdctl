@@ -58,12 +58,16 @@ case "$1" in
         ;;
 
     'stop')
-		cpid=`cat ${zimbra_home}/cyrus-sasl-2.1.21.ZIMBRA/state/saslauthd.pid`
-        kill -TERM "$cpid" 2> /dev/null
-		if [ x$platform = "xMACOSX" ]; then
-			killall -TERM saslauthd
-		else
-			killall -TERM ${zimbra_home}/cyrus-sasl-2.1.21.ZIMBRA/sbin/saslauthd
+		if [ -f ${zimbra_home}/cyrus-sasl-2.1.21.ZIMBRA/state/saslauthd.pid ]; then
+			cpid=`cat ${zimbra_home}/cyrus-sasl-2.1.21.ZIMBRA/state/saslauthd.pid`
+			kill -TERM "$cpid" 2> /dev/null
+		fi
+		if [ -f ${zimbra_home}/cyrus-sasl-2.1.21.ZIMBRA/state/saslauthd.pid ]; then
+			if [ x$platform = "xMACOSX" ]; then
+				killall -TERM saslauthd
+			else
+				killall -TERM ${zimbra_home}/cyrus-sasl-2.1.21.ZIMBRA/sbin/saslauthd
+			fi
 		fi
         ;;
     

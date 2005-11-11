@@ -83,11 +83,15 @@ case "$1" in
         ;;
 
     'stop')
-		cpid=`cat /opt/zimbra/log/amavisd.pid`
-        kill -TERM "$cpid" 2> /dev/null
-		killall -TERM ${zimbra_home}/amavisd/sbin/amavisd
-		sleep 2
-		umount ${zimbra_home}/amavisd/tmp
+		if [ -f /opt/zimbra/log/amavisd.pid ]; then
+			cpid=`cat /opt/zimbra/log/amavisd.pid`
+			kill -TERM "$cpid" 2> /dev/null
+			if [ -f /opt/zimbra/log/amavisd.pid ]; then
+				killall -TERM ${zimbra_home}/amavisd/sbin/amavisd
+			fi
+			sleep 2
+			umount ${zimbra_home}/amavisd/tmp
+		fi
         ;;
     
     'restart')

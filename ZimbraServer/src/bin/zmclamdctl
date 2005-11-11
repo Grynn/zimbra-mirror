@@ -86,10 +86,10 @@ case "$1" in
 			killall -TERM freshclam
 			killall -TERM clamd
 		else
-			if [ -f ${zimbra_home}/clamav/bin/freshclam ]; then
+			if [ -f /opt/zimbra/log/freshclam.pid ]; then
 				killall -TERM ${zimbra_home}/clamav/bin/freshclam
 			fi
-			if [ -f ${zimbra_home}/clamav/sbin/clamd ]; then
+			if [ -f /opt/zimbra/log/clamd.pid ]; then
 				killall -TERM ${zimbra_home}/clamav/sbin/clamd
 			fi
 		fi
