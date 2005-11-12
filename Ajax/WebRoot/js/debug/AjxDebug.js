@@ -65,13 +65,23 @@ AjxDebug.NONE = "DBG0"; // no debugging (window will not come up)
 AjxDebug.DBG1 = "DBG1"; // minimal debugging
 AjxDebug.DBG2 = "DBG2"; // moderate debugging
 AjxDebug.DBG3 = "DBG3"; // anything goes
+AjxDebug.PERF = "PERF"; // performance timings
 
 // map from number to debug level
 AjxDebug.DBG = new Object();
+AjxDebug.DBG[-1] = AjxDebug.PERF;
 AjxDebug.DBG[0] = AjxDebug.NONE;
 AjxDebug.DBG[1] = AjxDebug.DBG1;
 AjxDebug.DBG[2] = AjxDebug.DBG2;
 AjxDebug.DBG[3] = AjxDebug.DBG3;
+
+// map from debug level to number
+AjxDebug.GBD = {};
+AjxDebug.GBD[AjxDebug.PERF] = -1;
+AjxDebug.GBD[AjxDebug.NONE] = 0;
+AjxDebug.GBD[AjxDebug.DBG1] = 1;
+AjxDebug.GBD[AjxDebug.DBG2] = 2;
+AjxDebug.GBD[AjxDebug.DBG3] = 3;
 
 AjxDebug.MAX_OUT = 25000; // max length capable of outputting
 
@@ -147,6 +157,11 @@ function(level, msg) {
 	if (!args) return;
 	//msg = args[0];
 	msg = args.join("");
+	/*** DEBUG ***/
+	if (String(level).match(/^DBG|PERF/)) {
+		msg = level + ": " + msg;
+	}
+	/*** DEBUG ***/
 	this._add(this._timestamp() + msg + "<br>");
 };
 
@@ -377,8 +392,12 @@ function(level, text) {
 }
 
 AjxDebug.prototype.timePt =
-function(msg) {
+function(level, msg) {
 	if (!this._showTiming || !this._enabled || this._debugWindow.closed) return;
+	
+	var args = this._handleArgs(arguments);
+	if (!args) return;
+	var msg = args[0];
 	
 	var now = new Date().getTime();
 	var elapsed = now - this._startTimePt;
@@ -402,22 +421,23 @@ AjxDebug.prototype._handleArgs =
 function(args) {
 	if (this._level == AjxDebug.NONE) return;
 	
-	var num1 = 0;
-	var first = args[0];
-	if (typeof first == "string" && first.indexOf("DBG") == 0) {
-		num1 = Number(first.charAt(first.length - 1));
-		var num2 = Number(this._level.charAt(this._level.length - 1));
-		if (num1 > num2) return null;
+	var levelSpecified = false;
+	var curLevel = AjxDebug.GBD[this._level];
+	var msgLevel = AjxDebug.GBD[AjxDebug.DBG1];
+	if (typeof args[0] == "string" && String(args[0]).match(/^DBG|PERF/)) {
+		msgLevel = AjxDebug.GBD[args[0]];
+		levelSpecified = true;
 	}
-
-	var a = new Array(args.length);
-	for (var i = 0; i < args.length; i++)
-		a[i] = args[i];
-	if (num1)
-		a.shift();
-
-	return a;
-}
+	if (msgLevel > curLevel) return;
+	
+	// NOTE: Can't just slice the items we want because args is not an Array
+	var array = new Array(args.length);
+	for (var i = 0; i < args.length; i++) {
+		array[i] = args[i];
+	}
+	if (levelSpecified) { array.shift(); }
+	return array;
+};
 
 AjxDebug.prototype._getCookieVal =
 function (cookieName) {
@@ -512,6 +532,16 @@ AjxDebug.closeDiv = function (anchor) {
 	container.style.display = 'none';
 };
 
+AjxDebug.__mark = function() {
+	var elemId = this._id;
+	var separator = this.ownerDocument.createElement("HR");
+	this.ownerDocument.getElementById(elemId).appendChild(separator);
+};
+AjxDebug.__clear = function() {
+	var elemId = this._id;
+	this.ownerDocument.getElementById(elemId).innerHTML = "";
+};
+
 AjxDebug._openErrors = 0;
 AjxDebug.prototype._initWindow =
 function() {
@@ -529,7 +559,23 @@ function() {
 			
 			this._debugBox = this._document.createElement("div");
 			this._debugBox.id = this._debugBoxId;
+
+			var markBtn = this._document.createElement("BUTTON");
+			markBtn._id = this._debugBoxId;
+			markBtn.onclick = AjxDebug.__mark;
+			markBtn.innerHTML = "Mark";
+			var clearBtn = this._document.createElement("BUTTON");
+			clearBtn._id = this._debugBoxId;
+			clearBtn.onclick = AjxDebug.__clear;
+			clearBtn.innerHTML = "Clear";
+
+			var controls = this._document.createElement("DIV");
+			controls.appendChild(markBtn);
+			controls.appendChild(this._document.createTextNode(" "));
+			controls.appendChild(clearBtn);
+				
 			this._document.body.appendChild(this._debugBox);
+			this._document.body.appendChild(controls);
 			
 			AjxDebug._divBuffer = this._debugWindow.document.createElement('div');
 			
@@ -633,6 +679,10 @@ AjxDebug.prototype._timestamp =
 function() {
 	return this._showTime ? new Date().toLocaleTimeString() + ": " : "";
 }
+
+AjxDebug.prototype.setShowTimestamps = function(show) {
+	this._showTime = show;
+};
 
 // this function takes an xml node and returns an html string that displays that node
 // the indent argument is used to describe what depth the node is at so that
