@@ -32,10 +32,10 @@ JAVA_HOME=/opt/zimbra/java
 
 TOMCAT=/opt/zimbra/tomcat/conf
 
-rm -rf ${BASE}/CA
+rm -rf ${BASE}/newCA
 mkdir -p ${BASE}/ca
-mkdir -p ${BASE}/CA/newcerts
-touch ${BASE}/CA/index.txt
+mkdir -p ${BASE}/newCA/newcerts
+touch ${BASE}/newCA/index.txt
 mkdir -p ${BASE}/cert
 mkdir -p ${BASE}/server
 
