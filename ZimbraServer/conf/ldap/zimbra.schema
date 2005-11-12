@@ -281,6 +281,7 @@ objectIdentifier zimbraZimletScript ZimbraAttrType:290
 objectIdentifier zimbraZimletAvailableZimlets ZimbraAttrType:291
 objectIdentifier zimbraZimletServerIndexRegex ZimbraAttrType:292
 objectIdentifier zimbraMimeHandlerExtension ZimbraAttrType:293
+objectIdentifier zimbraProxyAllowedDomains ZimbraAttrType:294
 
 #################################################################
 # object class OIDs
@@ -2118,6 +2119,14 @@ attributetype ( zimbraZimletServerIndexRegex
 	DESC 'Regex of content object'
 	EQUALITY caseExactMatch
 	SUBSTR caseExactSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} 
+	SINGLE-VALUE )
+
+attributetype ( zimbraProxyAllowedDomains
+	NAME 'zimbraProxyAllowedDomains'
+	DESC 'Proxy servlet whitelist domains'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} )
 
 
@@ -2284,6 +2293,8 @@ objectclass ( zimbraAccount
 		zimbraPrefSaveToSent $
 		zimbraPrefSentMailFolder $
 		zimbraPrefUseKeyboardShortcuts $
+		zimbraZimletAvailableZimlets $
+		zimbraProxyAllowedDomains $
 		zimbraMemberOf $
 		mail $
 		o $
@@ -2423,7 +2434,8 @@ objectclass ( zimbraCOS
 		zimbraPrefForwardReplyPrefixChar $
 		zimbraPrefAutoAddAddressEnabled $
 		zimbraPrefUseKeyboardShortcuts $
-		zimbraZimletAvailableZimlets
+		zimbraZimletAvailableZimlets $
+		zimbraProxyAllowedDomains
 	) )
 
 ################

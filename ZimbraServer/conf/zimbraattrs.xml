@@ -516,6 +516,8 @@
 
 <attr name="zimbraZimletServerIndexRegex" type="string" max="256"/>
 
+<attr name="zimbraProxyAllowedDomains" type="string" max="256"/>
+
 <attr name="c" type="string"/>
 
 <attr name="co" type="string"/>
