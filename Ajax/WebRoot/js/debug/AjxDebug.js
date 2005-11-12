@@ -157,7 +157,7 @@ function(level, msg) {
 	if (!args) return;
 	//msg = args[0];
 	msg = args.join("");
-	/*** DEBUG ***/
+	/*** DEBUG ***
 	if (String(level).match(/^DBG|PERF/)) {
 		msg = level + ": " + msg;
 	}
