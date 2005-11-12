@@ -83,8 +83,12 @@ case "$1" in
 			kill -TERM "$cpid" 2> /dev/null
 		fi
 		if [ "x$platform" = "xMACOSX" ]; then
-			killall -TERM freshclam
-			killall -TERM clamd
+			if [ -f /opt/zimbra/log/freshclam.pid ]; then
+				killall -TERM freshclam
+			fi
+			if [ -f /opt/zimbra/log/clamd.pid ]; then
+				killall -TERM clamd
+			fi
 		else
 			if [ -f /opt/zimbra/log/freshclam.pid ]; then
 				killall -TERM ${zimbra_home}/clamav/bin/freshclam
