@@ -81,13 +81,13 @@ ZaStatusViewController.prototype._createView = function () {
 	try {
 		var elements = new Object();
 		if (this._clusterSoftwareIsInstalled()){
-			/*var ops = [
+			var ops = [
 					   new ZaOperation(ZaOperation.CLOSE, ZaMsg.STATUSTBB_Failover, ZaMsg.STATUSTBB_Failover_tt, null, null,
 									   new AjxListener(this, this._failoverListener))
 					   ];
 			this._toolbar = new ZaToolBar(this._container, ops);
 			this._toolbar.enable([ZaOperation.CLOSE], false);
-			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;*/
+			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
 		}
 		this._contentView = new ZaStatusView(this._container, this._app);
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
@@ -264,11 +264,11 @@ ZaStatusViewController.prototype._doFailover = function (targetService, newServe
 		var service = soapDoc.set("service");
 		service.setAttribute("name", targetService);
 		service.setAttribute("newServer", newServer);
-		var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false).Body.FailoverServiceResponse;
+		var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true);//.Body.FailoverServiceResponse;
 		// refresh the query and show it again.
 		this.show();
 	} catch (ex) {
-		this._handleException(ex, ZaStatusViewController.prototype._doFailover, null, false);
+		this._handleException(ex, "ZaStatusViewController.prototype._doFailover", null, false);
 	} finally {
 		this._failoverDialog.popdown();
 	}

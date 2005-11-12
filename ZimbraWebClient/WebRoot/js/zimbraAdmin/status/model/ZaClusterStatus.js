@@ -233,6 +233,6 @@ ZaCluster.prototype._isServerInUse = function (serverName) {
 	return (this._usedServers[serverName] != null)? true: false;
 };
 
-ZaCluster.prototype._getAvailableServers = function (serverName) {
+ZaCluster.prototype.getAvailableServers = function (serverName) {
 	return this._serverArray;
 };
