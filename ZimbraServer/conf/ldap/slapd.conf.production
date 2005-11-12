@@ -110,6 +110,6 @@ index   sn                     pres,eq,sub
 index   gn                     pres,eq,sub
 sessionlog 100 100
 TLSCertificateFile /opt/zimbra/conf/slapd.crt
-TLSCertificateKeyFile /opt/zimbra/conf/ca/ca.key
+TLSCertificateKeyFile /opt/zimbra/conf/slapd.key
 TLSVerifyClient never
 TLSCACertificateFile /opt/zimbra/conf/ca/ca.pem
