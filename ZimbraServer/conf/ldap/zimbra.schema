@@ -282,6 +282,7 @@ objectIdentifier zimbraZimletAvailableZimlets ZimbraAttrType:291
 objectIdentifier zimbraZimletServerIndexRegex ZimbraAttrType:292
 objectIdentifier zimbraMimeHandlerExtension ZimbraAttrType:293
 objectIdentifier zimbraProxyAllowedDomains ZimbraAttrType:294
+objectIdentifier zimbraForeignPrincipal ZimbraAttrType:295
 
 #################################################################
 # object class OIDs
@@ -656,6 +657,14 @@ attributetype ( zimbraFeatureHtmlComposeEnabled
 	DESC 'enabled html composing'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( zimbraForeignPrincipal
+	NAME ( 'zimbraForeignPrincipal' )
+	DESC 'mapping to foreign principal identifier'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} 
 	SINGLE-VALUE )
 
 attributetype ( zimbraGalLdapBindDn
@@ -2227,6 +2236,7 @@ objectclass ( zimbraAccount
 		zimbraFeatureChangePasswordEnabled $
 		zimbraFeatureInitialSearchPreferenceEnabled $
 		zimbraFeatureFiltersEnabled $
+		zimbraForeignPrincipal $
 		zimbraImapEnabled $
 		zimbraIsAdminAccount $ 
 		zimbraLastLogonTimestamp $

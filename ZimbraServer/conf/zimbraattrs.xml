@@ -144,6 +144,8 @@
 
 <attr name="zimbraFeatureTaggingEnabled" type="boolean"/>
 
+<attr name="zimbraForeignPrincipal" type="string"/>
+
 <attr name="zimbraGalLdapAttrMap" type="string" immutable="1"/>
 
 <attr name="zimbraGalLdapBindDn" type="string" max="256"/>
