@@ -216,7 +216,7 @@ SingleAccountRestoreXWizard.prototype.getMyXForm = function() {
 								items: [
 									{type:_CASE_, relevant:"instance[ZaModel.ErrorCode] == 0",
 										items: [
-											{ref:ZaRestore.A_label, type:_OSELECT1_, label:ZaMsg.Restore_Label, choices:SingleAccountRestoreXWizard.labelChoices},
+											{ref:ZaRestore.A_label, type:_OSELECT1_, label:ZaMsg.Restore_Label, choices:SingleAccountRestoreXWizard.labelChoices, width:"200px"},
 											{ref:ZaRestore.A_includeIncrementals, type:_CHECKBOX_, label:ZaMsg.Restore_IncludeIncrementals, trueValue:"TRUE", falseValue:"FALSE", labelLocation:_LEFT_},
 											{ref:ZaRestore.A_prefix, type:_TEXTFIELD_, label:ZaMsg.Restore_Prefix},
 											{ref:ZaRestore.A_restoreMethod, type:_OSELECT1_, label:ZaMsg.Restore_method}

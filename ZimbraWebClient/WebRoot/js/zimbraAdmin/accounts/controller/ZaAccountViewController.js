@@ -704,7 +704,7 @@ function(details) {
 			this._evtMgr.notifyListeners(ZaEvent.E_CREATE, evt);
 		}
 	} catch (ex) {
-		this._handleException(ex, "ZaAccountViewController.prototype.__fireAccountCreationEvent", details, false);	
+		this._handleException(ex, "ZaAccountViewController.prototype._fireAccountCreationEvent", details, false);	
 	}
 
 }
