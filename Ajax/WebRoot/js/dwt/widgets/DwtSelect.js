@@ -521,6 +521,7 @@ function DwtSelectOptionData (value, displayValue, isSelected) {
  */
 function DwtSelectOption (value, selected, displayValue, owner, optionalDOMId) {
 	this._value = value;
+	this._selected = selected;
 	this._displayValue = displayValue;
 	this._internalObjectId = DwtSelect._assignId(this);
 	this._optionWidth = this._calculateWidth(displayValue);	
