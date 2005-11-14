@@ -129,18 +129,35 @@ AjxDebug.prototype._getWindowName =
 function () {
 	return this._dbgName;
 };
+
+AjxDebug.prototype.isShowTiming = function() {
+	return this._showTiming;
+};
+
 /**
 * Turn the display of timing statements on/off. Timing starts over any time it's turned on.
 *
 * @param on		whether to display timing statements
 */
 AjxDebug.prototype.showTiming = 
-function(on, msg) {
+function(on, level, msg) {
 	if (on)
 		this._startTimePt = this._lastTimePt = 0;
 	this._showTiming = on;
-	if (on && msg)
-		this.println(" ----- " + msg + " ----- ");
+	if (on) {
+		var a = [];
+		for (var i = 1; i < arguments.length; i++) {
+			a.push(arguments[i]);
+		}
+		var args = this._handleArgs(a);
+		if (args) {
+			var msgLevel = AjxDebug.DBG1;
+			if (String(level).match(/^DBG|PERF/)) {
+				msgLevel = level;
+			}
+			this.println(msgLevel, " ----- " + args[0] + " ----- ");
+		}
+	}
 	this._startTimePt = this._lastTimePt = new Date().getTime();
 }
 
