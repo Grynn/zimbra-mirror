@@ -76,7 +76,7 @@ stop()
 	checkrunning
 	if [ $RUNNING = 0 ]; then
 		echo "slapd not running"
-		exit 1
+		exit 0
 	else
 		kill -TERM $PID
 	fi
