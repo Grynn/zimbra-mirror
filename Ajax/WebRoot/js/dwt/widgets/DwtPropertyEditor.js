@@ -74,7 +74,8 @@ DwtPropertyEditor.prototype._init = function() {
 	this.maxLabelWidth = 0;
 	this.maxFieldWidth = 0;
 	this._setMouseEventHdlrs();
-	this.addListener(DwtEvent.ONMOUSEDOWN, new AjxListener(this, this._onMouseDown));
+	this._onMouseDown = new AjxListener(this, this._onMouseDown);
+	this.addListener(DwtEvent.ONMOUSEDOWN, this._onMouseDown);
 };
 
 DwtPropertyEditor.prototype.getRelDiv = function() {
@@ -259,8 +260,11 @@ DwtPropertyEditor.prototype._createProperty = function(prop, parent) {
 		var tdField = doc.createElement("td");
 		tdField.className = "field";
 		tr.appendChild(tdField);
-		tdField.value = prop._getValue();
-		tdField.innerHTML = prop._makeDisplayValue();
+
+		if (prop.type != "select")
+			tdField.innerHTML = prop._makeDisplayValue();
+		else
+			this._createDropDown(prop, tdField);
 
 		prop._fieldCellId = tdField.id = Dwt.getNextId();
 		// prop._labelCellId = tdLabel.id = Dwt.getNextId();
@@ -321,6 +325,34 @@ DwtPropertyEditor.prototype._stopMsgDivTimer = function() {
 		clearTimeout(this._currentMsgDivTimer);
 		this._currentMsgDivTimer = null;
 	}
+};
+
+// This is bad.  We're messing with internals.  I think there should be an
+// option in DwtComposite to specify the element where to add the child, rather
+// than simply getHtmlElement().appendChild(child).
+DwtPropertyEditor.prototype._addChild = function(child) {
+	if (!this._currentFieldCell)
+		DwtComposite.prototype._addChild.call(this, child);
+	else {
+		this._children.add(child);
+		this._currentFieldCell.appendChild(child.getHtmlElement());
+	}
+};
+
+DwtPropertyEditor.prototype._createDropDown = function(prop, target) {
+	this._currentFieldCell = target;
+	var item, sel,
+		i       = 0,
+		options = [],
+		items   = prop.item;
+	while (item = items[i])
+		options[i++] = new DwtSelectOption(item.value,
+						   item.value == prop.value,
+						   item.label);
+	prop._select = sel = new DwtSelect(this, options);
+	sel.addChangeListener(new AjxListener(prop, prop._onSelectChange));
+	sel.addListener(DwtEvent.ONMOUSEDOWN, this._onMouseDown);
+	this._currentFieldCell = null;
 };
 
 // these will be merged to each prop object that comes in the schema
@@ -387,8 +419,8 @@ DwtPropertyEditor._prop_functions = {
 					this._createInputField, this), 50);
 			break;
 
-		    default :
-			alert("We don't support this type yet");
+// 		    default :
+// 			alert("We don't support this type yet");
 		}
 	},
 
@@ -549,10 +581,7 @@ DwtPropertyEditor._prop_functions = {
 			this._inputField = null;
 			this._propertyEditor._currentInputField = null;
 			this._propertyEditor._clearMsgDiv();
-			var tr = this._getRowEl();
-			tr.className = tr.className.replace(/ dirty/, "");
-			if (this._modified())
-				tr.className += " dirty";
+			this._makeDirty();
 			input.parentNode.removeChild(input);
 			return true;
 		} else {
@@ -569,12 +598,24 @@ DwtPropertyEditor._prop_functions = {
 		if (ev.keyCode == 13) {
 			this._saveInput();
 		} else if (ev.keyCode == 27) {
-			input.value = this.value;
+			input.value = this._getValue();
 			this._saveInput();
 		} else {
 			this._propertyEditor._clearMsgDiv();
 			input.className = input.className.replace(/ error/, "");
 		}
+	},
+
+	_onSelectChange : function(ev) {
+		this.value = this._select.getValue();
+		this._makeDirty();
+	},
+
+	_makeDirty : function() {
+		var tr = this._getRowEl();
+		tr.className = tr.className.replace(/ dirty/, "");
+		if (this._modified())
+			tr.className += " dirty";
 	}
 };
 

@@ -52,6 +52,20 @@ function App() {
 		  value      : "default"
 		},
 
+		{ label      : "Account type",
+		  name       : "accttype",
+		  type       : "select",
+		  value      : "wheel",
+		  item       : [
+			  { label : "Administrator",
+			    value : "root" },
+			  { label : "Power users",
+			    value : "wheel" },
+			  { label : "Normal users",
+			    value : "luser" }
+			  ]
+		},
+
 		{ label      : "Read-only field",
 		  name       : "readonly",
 		  readonly   : true,

@@ -30,13 +30,7 @@ Contributor(s):
 <html>
   <head>
     <title>Property Editor test</title>
-    <style type="text/css">
-      <!--
-        @import url(../common/img/hiRes/dwtimgs.css);
-        @import url(style.css);
-      -->
-    </style>
-	<script language="JavaScript">
+    <script language="JavaScript">
     	DwtConfigPath = "/ajax/js/dwt/config";
     </script>
     	
@@ -56,6 +50,32 @@ Contributor(s):
     <jsp:include page="../../public/Dwt.jsp"/>
     <script type="text/javascript" src="<%= contextPath %>/js/ajax/dwt/widgets/DwtPropertyEditor.js<%= ext %>?v=<%= vers %>"></script>
     <script type="text/javascript" src="script.js"></script>
+
+<style type="text/css">
+<!--
+<%String hiRes = (String) request.getParameter("hiRes");
+  // load dynamically generated image files
+  if (hiRes != null) {
+%>
+        @import url(/zimbra/img/hiRes/imgs.css?v=<%= vers %>);
+        @import url(/zimbra/img/hiRes/skins/steel/skin.css?v=<%= vers %>);
+<% } else { %>
+        @import url(/zimbra/img/loRes/imgs.css?v=<%= vers %>);
+        @import url(/zimbra/img/loRes/skins/steel/skin.css?v=<%= vers %>);
+<% } %>
+        @import url(/zimbra/js/zimbraMail/config/style/dwt.css?v=<%= vers %>);
+        @import url(/zimbra/js/zimbraMail/config/style/common.css?v=<%= vers %>);
+        @import url(/zimbra/js/zimbraMail/config/style/zm.css?v=<%= vers %>);
+        @import url(/zimbra/js/zimbraMail/config/style/spellcheck.css?v=<%= vers %>);
+        @import url(/zimbra/skins/steel/skin.css?v=<%= vers %>);
+-->
+</style>
+    <style type="text/css">
+      <!--
+        @import url(style.css);
+      -->
+    </style>
+
   </head>
     <body>
     <noscript><p><b>Javascript must be enabled to use this.</b></p></noscript>

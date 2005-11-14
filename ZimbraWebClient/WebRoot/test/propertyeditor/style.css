@@ -24,8 +24,8 @@
  */
 /* .DwtPropertyEditor { background-color: #ff0; } /* FIXME: TEMPORARY */
 
-.DwtPropertyEditor table { border-collapse: collapse; border: 1px solid #777; }
-.DwtPropertyEditor * { font: 8pt Tahoma,Verdana,sans-serif; }
+.DwtPropertyEditor table { border-collapse: collapse; border: 1px solid #777; background-color: #fff; color: #000; }
+.DwtPropertyEditor * { font: 11px Tahoma,Verdana,sans-serif; }
 .DwtPropertyEditor table td {
   border-bottom: 1px solid #999;
   border-top: 1px solid #999;
