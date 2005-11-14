@@ -105,13 +105,13 @@ DwtIframe.prototype._rawEventHandler = function(ev) {
 	dw.elementX += pos.x;
 	dw.elementY += pos.y;
 
+//   	window.status = dw.type + " doc(" + dw.docX + ", " + dw.docY + ") " +
+//   		" element(" + dw.elementX + ", " + dw.elementY + ") " +
+//  		" stopPropagation: " + dw._stopPropagation + ", " +
+//  		" returnValue: " + dw._returnValue;
+
 	DwtEventManager.notifyListeners(type, dw);
 	this.parent.notifyListeners(type, dw);
-
-//  	window.status = dw.type + " doc(" + dw.docX + ", " + dw.docY + ") " +
-//  		" element(" + dw.elementX + ", " + dw.elementY + ") " +
-// 		" stopPropagation: " + dw._stopPropagation + ", " +
-// 		" returnValue: " + dw._returnValue;
 
 	dw.setToDhtmlEvent(ev);
 	return dw._returnValue;
@@ -158,7 +158,7 @@ DwtIframe.prototype._createFrame = function(html) {
 		iframe = self.getIframe();
 		idoc = Dwt.getIframeDoc(iframe);
 		idoc.open();
-		// make sure to explicitly add head tag for safari otherwise it cannot 
+		// make sure to explicitly add head tag for safari otherwise it cannot
 		// be implicitly referenced (i.e. getElementsByTagName('head'))
 		if (AjxEnv.isSafari)
 			idoc.write("<html><head></head>");
@@ -183,6 +183,8 @@ DwtIframe.prototype._createFrame = function(html) {
 
 		// assign event handlers
 		tmp = DwtIframe._forwardEvents;
+		if (!AjxEnv.isIE)
+			idoc = iframe.contentWindow;
 		for (i = tmp.length; --i >= 0;)
 			idoc[tmp[i]] = rawHandlerProxy;
 
