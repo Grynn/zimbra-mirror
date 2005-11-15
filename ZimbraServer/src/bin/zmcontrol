@@ -117,7 +117,7 @@ sub doStatus {
 	foreach (sort keys %{$services}) {
 		my $rc = 0xffff & system ("$allservices{$_} status >/dev/null 2>&1");
 		$rc = $rc >> 8;
-		if ($rc) {$status = $rc;}
+		if ($rc) {$status = 1;}
 		my $stat = sprintf "\t%-20s %10s\n",$_,($rc)?"Stopped":"Running";
 		print "$stat";
 	}
