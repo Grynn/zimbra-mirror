@@ -155,9 +155,9 @@ AjxFormat.Segment.prototype.toString = function() {
  * <p>
  * <strong>Note:</strong>
  * The date format differs from the Java patterns in one way: the pattern
- * "EEEEE" (5 'E's) denotes a <em>short</em> weekday name. This matches
- * the extended pattern found in the Common Locale Data Repository (CLDR)
- * found at: http://www.unicode.org/cldr/.
+ * "EEEEE" (5 'E's) denotes a <em>short</em> weekday or month name. This 
+ * matches the extended pattern found in the Common Locale Data Repository 
+ * (CLDR) found at: http://www.unicode.org/cldr/.
  */
 function AjxDateFormat(pattern) {
 	AjxFormat.call(this, pattern);
@@ -423,9 +423,9 @@ AjxDateFormat.MonthSegment.prototype.format = function(date) {
 		case 1: return String(month + 1);
 		case 2: return AjxFormat._zeroPad(month + 1, 2);
 		case 3: return AjxDateFormat.MonthSegment.MONTHS[AjxDateFormat.MEDIUM][month];
+		case 5: return AjxDateFormat.MonthSegment.MONTHS[AjxDateFormat.SHORT][month];
 	}
-	var s = AjxDateFormat.MonthSegment.MONTHS[AjxDateFormat.LONG][month];
-	return AjxFormat._zeroPad(s, this._s.length);
+	return AjxDateFormat.MonthSegment.MONTHS[AjxDateFormat.LONG][month];
 };
 
 AjxDateFormat.MonthSegment.prototype.toString = function() { 
