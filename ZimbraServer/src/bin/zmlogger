@@ -122,6 +122,7 @@ while (<>) {
 	my ($log_date, $host, $app, $pid, $msg) =
 		($_ =~ m/(^.{15}) (\S+) ([^[]+)\[(\d+)\]: (.*)$/);
 
+	if ($host eq "") { next;}
 	my $qid = undef;
 
 	if ($app =~ /^postfix/ && $msg =~ /^(\S{10,12}): /) {
