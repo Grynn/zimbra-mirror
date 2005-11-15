@@ -30,7 +30,7 @@ function App() {
 	var pi = this._pi = new DwtPropertyEditor(this.shell, null, "absolute");
 
 	pi.setBounds(100, 100, 500, 500);
-	pi.setZIndex(700);
+	pi.setZIndex(Dwt.Z_VIEW);
 
 	var prop = [
 
@@ -80,7 +80,7 @@ function App() {
 			  { label  : "Street",
 			    name   : "street",
 			    type   : "string",
-			    value  : "Al. T. Neculai, nr. 19, bl. 945, ap. 2"
+			    value  : "Al. T. Neculai, nr. 19"
 			  },
 
 			  { label  : "City",
@@ -102,10 +102,17 @@ function App() {
 			    type     : "struct",
 			    children : [
 
-				    { label : "Birthday",
-				      type  : "date",
-				      name  : "birthday"
+				    { label  : "Before",
+				      name   : "dateBefore",
+				      type   : "date",
+				      format : "EEE, MMM dd, yyyy",
+				      value  : new Date("March 8, 1979").getTime()
 				    },
+
+				    { label  : "After",
+				      name   : "dateAfter",
+				      type   : "date",
+				      format : "yyyy MMMMMM dd" },
 
 				    { label : "Age",
 				      type  : "integer",

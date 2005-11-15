@@ -231,13 +231,12 @@ DwtPropertyEditor.prototype._createProperty = function(prop, parent) {
 	prop._level = level;
 	prop._rowElId = tr.id = Dwt.getNextId();
 	prop._propertyEditor = this;
-	prop.type != null || (prop.type = "string");
-	prop.value != null || (prop.value = "");
-	prop._initialVal = prop.value;
 
 	// ... and methods.
 	for (var i in DwtPropertyEditor._prop_functions)
 		prop[i] = DwtPropertyEditor._prop_functions[i];
+
+	prop._init();
 
 	// indent if needed
 	tr.className = "level-" + level;
@@ -261,10 +260,11 @@ DwtPropertyEditor.prototype._createProperty = function(prop, parent) {
 		tdField.className = "field";
 		tr.appendChild(tdField);
 
-		if (prop.type != "select")
-			tdField.innerHTML = prop._makeDisplayValue();
-		else
-			this._createDropDown(prop, tdField);
+		switch (prop.type) {
+		    case "select" : this._createDropDown(prop, tdField); break;
+		    case "date"   : this._createCalendar(prop, tdField); break;
+		    default       : tdField.innerHTML = prop._makeDisplayValue();
+		}
 
 		prop._fieldCellId = tdField.id = Dwt.getNextId();
 		// prop._labelCellId = tdLabel.id = Dwt.getNextId();
@@ -355,8 +355,46 @@ DwtPropertyEditor.prototype._createDropDown = function(prop, target) {
 	this._currentFieldCell = null;
 };
 
+DwtPropertyEditor.prototype._createCalendar = function(prop, target) {
+	this._currentFieldCell = target;
+	var btn = new DwtButton(this);
+	this._currentFieldCell = null;
+
+	btn.setText(prop._makeDisplayValue());
+	var menu = new DwtMenu(btn, DwtMenu.CALENDAR_PICKER_STYLE);
+	menu.setAssociatedObj(btn);
+	var cal = new DwtCalendar(menu);
+	var date = new Date();
+	date.setTime(prop.value);
+	cal.setDate(date);
+	cal.setSize(150, "auto");
+	cal.addSelectionListener(new AjxListener(prop, prop._onCalendarSelect));
+	btn.setMenu(menu);
+
+	prop._dateButton = btn;
+	prop._dateCalendar = cal;
+};
+
 // these will be merged to each prop object that comes in the schema
 DwtPropertyEditor._prop_functions = {
+
+	_init : function() {
+		this.type != null || (this.type = "string");
+		this.value != null || (this.value = "");
+		this._initialVal = this.value;
+
+		if (this.type == "date") {
+			if (!this.value) {
+// 				var tmp = new Date();
+// 				tmp.setHours(0);
+// 				tmp.setMinutes(0);
+// 				tmp.setSeconds(0);
+				this.value = new Date().getTime();
+			}
+			if (!this.format)
+				this.format = "yyyy/MM/dd";
+		}
+	},
 
 	_modified : function() {
 		return this._initialVal != this.value;
@@ -368,8 +406,16 @@ DwtPropertyEditor._prop_functions = {
 
 	_makeDisplayValue : function() {
 		var val = this._getValue();
-		if (this.type == "password")
+		switch (this.type) {
+		    case "password" :
 			val = val.replace(/./g, "*");
+			break;
+		    case "date" :
+			var date = new Date();
+			date.setTime(val);
+			val = AjxDateFormat.format(this.format, date);
+			break;
+		}
 		if (val == "")
 			val = "<br />";
 		else
@@ -606,8 +652,14 @@ DwtPropertyEditor._prop_functions = {
 		}
 	},
 
-	_onSelectChange : function(ev) {
+	_onSelectChange : function() {
 		this.value = this._select.getValue();
+		this._makeDirty();
+	},
+
+	_onCalendarSelect : function() {
+		this.value = this._dateCalendar.getDate().getTime();
+		this._dateButton.setText(this._makeDisplayValue());
 		this._makeDirty();
 	},
 
