@@ -223,12 +223,9 @@ function(option, selected, value) {
 	if (opt._optionWidth > this._width)
 		this._width = opt._optionWidth;
 
-	if (selected) 
-		this.setText(opt.getDisplayValue());
-
 	this._options.add(opt);
 
-	if (this._options.size() == 1)
+	if (this._options.size() == 1 || selected)
 		this._setSelectedOption(opt);
 
 	this._menu.__isDirty = true;
