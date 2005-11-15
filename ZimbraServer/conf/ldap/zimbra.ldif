@@ -160,6 +160,7 @@ zimbraImapSSLBindPort: 7993
 zimbraImapSSLBindOnStartup: TRUE
 zimbraImapSSLServerEnabled: TRUE
 zimbraImapCleartextLoginEnabled: FALSE
+zimbraMessageCacheSize: 1671168
 zimbraMtaAuthEnabled: TRUE
 zimbraMtaCommonBlockedExtension: asd
 zimbraMtaCommonBlockedExtension: bat
@@ -241,6 +242,7 @@ zimbraServerInheritedAttr: zimbraImapSSLServerEnabled
 zimbraServerInheritedAttr: zimbraImapCleartextLoginEnabled
 zimbraServerInheritedAttr: zimbraImapSSLBindPort
 zimbraServerInheritedAttr: zimbraImapSSLBindOnStartup
+zimbraServerInheritedAttr: zimbraMessageCacheSize
 zimbraServerInheritedAttr: zimbraMtaAuthEnabled
 zimbraServerInheritedAttr: zimbraMtaDnsLookupsEnabled
 zimbraServerInheritedAttr: zimbraMtaRelayHost

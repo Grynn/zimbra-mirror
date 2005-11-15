@@ -256,6 +256,8 @@
 
 <attr name="zimbraMailTrashLifetime" type="duration"/>
 
+<attr name="zimbraMessageCacheSize" type="integer"/>
+
 <attr name="zimbraMimeFileExtension" type="string"/> 
 
 <attr name="zimbraMimeHandlerClass" type="string"/>

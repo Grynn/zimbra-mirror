@@ -284,6 +284,7 @@ objectIdentifier zimbraMimeHandlerExtension ZimbraAttrType:293
 objectIdentifier zimbraProxyAllowedDomains ZimbraAttrType:294
 objectIdentifier zimbraForeignPrincipal ZimbraAttrType:295
 objectIdentifier zimbraZimletUserProperties ZimbraAttrType:296
+objectIdentifier zimbraMessageCacheSize ZimbraAttrType:297
 
 #################################################################
 # object class OIDs
@@ -1206,6 +1207,13 @@ attributetype ( zimbraMemberOf
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} )
+
+attributetype ( zimbraMessageCacheSize
+	NAME 'zimbraMessageCacheSize'
+	DESC 'Size limit in number of bytes on the message cache.'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )	
 
 attributetype ( zimbraMtaAuthEnabled
 	NAME 'zimbraMtaAuthEnabled'
@@ -2497,6 +2505,7 @@ objectclass ( zimbraGlobalConfig
 		zimbraLogHostname $
 		zimbraLogRawLifetime $
 		zimbraLogSummaryLifetime $
+                zimbraMessageCacheSize $
 		zimbraMtaAuthEnabled $
 		zimbraMtaBlockedExtension $
 		zimbraMtaCommonBlockedExtension $
@@ -2636,6 +2645,7 @@ objectclass ( zimbraServer
 		zimbraImapSSLBindOnStartup $
 		zimbraImapSSLServerEnabled $
 		zimbraImapCleartextLoginEnabled $
+                zimbraMessageCacheSize $
 		zimbraMtaAuthEnabled $
 		zimbraMtaDnsLookupsEnabled $
 		zimbraMtaRelayHost $
