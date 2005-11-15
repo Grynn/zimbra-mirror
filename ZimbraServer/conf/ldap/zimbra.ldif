@@ -366,10 +366,6 @@ zimbraNewMailNotificationSubject: New message received at ${RECIPIENT_ADDRESS}
 zimbraNewMailNotificationBody: New message received at ${RECIPIENT_ADDRESS}.${NEWLINE}
  Sender: ${SENDER_ADDRESS}${NEWLINE}
  Subject: ${SUBJECT}
-zimbraZimletAvailableZimlets: phone
-zimbraZimletAvailableZimlets: url
-zimbraZimletAvailableZimlets: tracking
-zimbraZimletAvailableZimlets: po
 
 # for storing server info
 dn: cn=servers,cn=zimbra
