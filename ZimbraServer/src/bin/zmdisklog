@@ -52,9 +52,9 @@ chomp $dt;
 
 my $hostname;
 
-logStatus();
+#logStatus();
 
-#logDiskUsage();
+logDiskUsage();
 
 exit 0;
 

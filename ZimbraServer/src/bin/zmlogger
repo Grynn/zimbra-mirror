@@ -103,6 +103,11 @@ my $statement =
 
 my $sth = $dbh->prepare($statement);
 
+my $status_statement =
+	"insert into service_status(server, service, time, status) values (?,?,?,?)";
+
+my $s_sth = $dbh->prepare($status_statement);
+
 my $DEBUG = 0;
 
 ($DEBUG) && open FOO, ">/tmp/zmlogger.out";
@@ -122,6 +127,33 @@ while (<>) {
 	if ($app =~ /^postfix/ && $msg =~ /^(\S{10,12}): /) {
 		$qid = $1;
 	} 
+
+	if ($msg =~ /info: ([^,]+), STATUS: (\S+): (\S+): (Running|Stopped)\s*$/) {
+		my $tm = $1;
+		my $hostname = $2;
+		my $service = $3;
+		my $status = ($4 eq "Running")?1:0;
+		my $statement = "delete from service_status ".
+			"where server=\'".$hostname."\' and service=\'".$service."\'";
+
+		my $dsth = $dbh->prepare($statement);
+
+		#print "Executing $statement with @args\n\n";
+
+		eval {
+			if (!$dsth->execute() ) {
+				warn $dsth->errstr;
+				next;
+			}
+		};
+
+
+		eval {
+			$s_sth->execute($hostname, $service, $tm, $status);
+		};
+
+		next;
+	}
 
 	eval {
 		if (!$sth->execute(logdate_to_sqldate($log_date), $host, 
