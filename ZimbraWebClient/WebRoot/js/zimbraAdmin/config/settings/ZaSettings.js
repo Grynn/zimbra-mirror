@@ -74,17 +74,35 @@ ZaSettings.SKIN_TREE_FOOTER_ID			= i++;
 ZaSettings.SKIN_USER_INFO_ID				= i++;
 
 //CONSTANTS FOR ROLE-BASED ACCESS
+
 ZaSettings.STATUS_ENABLED= true;
 ZaSettings.STATS_ENABLED= true;
-ZaSettings.ACCOUNTS_ENABLED= true;
-ZaSettings.COSES_ENABLED= true;
-ZaSettings.DOMAINS_ENABLED= true;
-ZaSettings.SERVERS_ENABLED= true;
+ZaSettings.ACCOUNTS_CHPWD_ENABLED = true;
+ZaSettings.ACCOUNTS_ENABLED = true;
+ZaSettings.ACCOUNTS_ADVANCED_ENABLED = true;
+ZaSettings.ACCOUNTS_ALIASES_ENABLED=true;
+ZaSettings.ACCOUNTS_FORWARDING_ENABLED=true;
+ZaSettings.ACCOUNTS_MOVE_ALIAS_ENABLED=true;
+ZaSettings.ACCOUNTS_REINDEX_ENABLED=true;
+ZaSettings.ACCOUNTS_PREFS_ENABLED = true;
+ZaSettings.ACCOUNTS_VIEW_MAIL_ENABLED = true;
+ZaSettings.ACCOUNTS_RESTORE_ENABLED = true;
+ZaSettings.COSES_ENABLED=true;
+ZaSettings.DOMAINS_ENABLED=true;
+ZaSettings.SERVERS_ENABLED=true;
+ZaSettings.SERVER_STATS_ENABLED=true;
 ZaSettings.GLOBAL_ENABLED= true;
+ZaSettings.DISTRIBUTION_LISTS_ENABLED = true;
+
 ZaSettings.MONITORING_ENABLED = true;
 ZaSettings.SYSTEM_CONFIG_ENABLED = true;
 ZaSettings.ADDRESSES_ENABLED = true;
-ZaSettings.DISTRIBUTION_LISTS_ENABLED = true;
+
+
+//Settings for Domain Admin
+//ZaSettings.myDomainIds = ["a419d5d7-5542-11da-85d5-75d84dfa204f"];
+ZaSettings.myDomainIds = [];
+ZaSettings.isDomainAdmin = false;
 
 // IDs FOR HTML COMPONENTS IN THE SKIN
 ZaSettings.INIT[ZaSettings.SKIN_APP_BOTTOM_TOOLBAR_ID]	= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_app_bottom_toolbar"];

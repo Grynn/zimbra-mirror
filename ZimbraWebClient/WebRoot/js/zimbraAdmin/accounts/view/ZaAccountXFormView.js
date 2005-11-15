@@ -214,28 +214,7 @@ ZaAccountXFormView.prototype.getMyXForm = function() {
 							}
 						]
 					}
-						/*
-						{type:_GROUP_,numCols:4,
-							items: [							
-								{type:_GROUP_, numCols:4, colSpan:2,
-									items: [
-										{type:_OUTPUT_, ref:ZaAccount.A2_mbxsize, label:ZaMsg.usedQuota+":",
-											getDisplayValue:function() {
-												var val = this.getInstanceValue();
-												if(!val) 
-													val = "0 MB";
-												else {
-													val = Number(val / 1048576).toFixed(3) + " MB";
-												}
-												return val;
-											}
-										},
-										{type:_OUTPUT_, ref:ZaAccount.A2_quota, label:ZaMsg.Of}								
-									]
-								}
-							]
-						}
-						*/
+						
 				],
 				cssStyle:"padding-top:5px; padding-bottom:5px"
 			},
@@ -259,6 +238,7 @@ ZaAccountXFormView.prototype.getMyXForm = function() {
 							{ref:ZaAccount.A_COSId, type:_OSELECT1_, msgName:ZaMsg.NAD_ClassOfService+":",label:ZaMsg.NAD_ClassOfService+":", labelLocation:_LEFT_, choices:this._app.getCosListChoices(), onChange:ZaAccountXFormView.onCOSChanged},
 							{ref:ZaAccount.A_password, type:_SECRET_, msgName:ZaMsg.NAD_Password,label:ZaMsg.NAD_Password+":", labelLocation:_LEFT_, cssClass:"admin_xform_name_input", onChange:ZaTabView.onFormFieldChanged},														
 							{ref:ZaAccount.A2_confirmPassword, type:_SECRET_, msgName:ZaMsg.NAD_ConfirmPassword,label:ZaMsg.NAD_ConfirmPassword+":", labelLocation:_LEFT_, cssClass:"admin_xform_name_input", onChange:ZaTabView.onFormFieldChanged},
+							{ref:ZaAccount.A_zimbraPasswordMustChange, align:_LEFT_, type:_CHECKBOX_,  msgName:ZaMsg.NAD_MustChangePwd,label:ZaMsg.NAD_MustChangePwd+":",labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label"},
 							{ref:ZaAccount.A_firstName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_FirstName,label:ZaMsg.NAD_FirstName+":", labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:150, onChange:ZaTabView.onFormFieldChanged,
 								elementChanged: function(elementValue,instanceValue, event) {
 									if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
@@ -445,8 +425,7 @@ ZaAccountXFormView.prototype.getMyXForm = function() {
 							{type:_SEPARATOR_, colSpan:"*"},
 							{type:_GROUP_,
 								items: [
-									{ref:ZaAccount.A_isAdminAccount,labelCssStyle:"width:250px;", type:_CHECKBOX_, msgName:ZaMsg.NAD_IsAdmin,label:ZaMsg.NAD_IsAdmin+":",labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label"},								
-									{ref:ZaAccount.A_zimbraPasswordMustChange,labelCssStyle:"width:250px;", type:_CHECKBOX_,  msgName:ZaMsg.NAD_MustChangePwd,label:ZaMsg.NAD_MustChangePwd+":",labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label"}
+									{ref:ZaAccount.A_isAdminAccount,labelCssStyle:"width:250px;", type:_CHECKBOX_, msgName:ZaMsg.NAD_IsAdmin,label:ZaMsg.NAD_IsAdmin+":",labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label"}
 								]
 							}
 				

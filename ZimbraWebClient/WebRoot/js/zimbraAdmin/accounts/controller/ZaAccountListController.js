@@ -64,12 +64,13 @@ function(searchResult) {
 		// create the menu operations/listeners first
 		this._newDLListener = new AjxListener(this, ZaAccountListController.prototype._newDistributionListListener);
 		this._newAcctListener = new AjxListener(this, ZaAccountListController.prototype._newAccountListener);
-		var newMenuOpList = [
-							 new ZaOperation(ZaOperation.NEW_WIZARD, ZaMsg.ACTBB_New_menuItem, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", 
-											 this._newAcctListener),
-							 new ZaOperation(ZaOperation.NEW, ZaMsg.DLTBB_New_menuItem, ZaMsg.DLTBB_New_tt, "Group", "GroupDis", 
-											 this._newDLListener)
-							 ];
+		var newMenuOpList = new Array();
+		newMenuOpList.push(new ZaOperation(ZaOperation.NEW_WIZARD, ZaMsg.ACTBB_New_menuItem, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", this._newAcctListener));
+
+		if(ZaSettings.DISTRIBUTION_LISTS_ENABLED) {
+			newMenuOpList.push(new ZaOperation(ZaOperation.NEW, ZaMsg.DLTBB_New_menuItem, ZaMsg.DLTBB_New_tt, "Group", "GroupDis", this._newDLListener));
+		}
+		
 		if(this._defaultType == ZaItem.ACCOUNT || this._defaultType == ZaItem.ALIAS) {
 			this._ops.push(new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", this._newAcctListener, 
 									   ZaOperation.TYPE_MENU, newMenuOpList));
@@ -80,17 +81,23 @@ function(searchResult) {
     	}
     	this._ops.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.ACTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaAccountListController.prototype._editButtonListener)));
     	this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaAccountListController.prototype._deleteButtonListener)));
-		this._ops.push(new ZaOperation(ZaOperation.CHNG_PWD, ZaMsg.ACTBB_ChngPwd, ZaMsg.ACTBB_ChngPwd_tt, "Padlock", "PadlockDis", new AjxListener(this, ZaAccountListController.prototype._chngPwdListener)));
-		this._ops.push(new ZaOperation(ZaOperation.VIEW_MAIL, ZaMsg.ACTBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, "ReadMailbox", "ReadMailboxDis", new AjxListener(this, ZaAccountListController.prototype._viewMailListener)));		
-		this._ops.push(new ZaOperation(ZaOperation.MOVE_ALIAS, ZaMsg.ACTBB_MoveAlias, ZaMsg.ACTBB_MoveAlias_tt, "ReadMailbox", "ReadMailboxDis", new AjxListener(this, ZaAccountListController.prototype._moveAliasListener)));		    	
+		if(ZaSettings.ACCOUNTS_CHPWD_ENABLED)
+			this._ops.push(new ZaOperation(ZaOperation.CHNG_PWD, ZaMsg.ACTBB_ChngPwd, ZaMsg.ACTBB_ChngPwd_tt, "Padlock", "PadlockDis", new AjxListener(this, ZaAccountListController.prototype._chngPwdListener)));
+	
+		if(ZaSettings.ACCOUNTS_VIEW_MAIL_ENABLED)
+			this._ops.push(new ZaOperation(ZaOperation.VIEW_MAIL, ZaMsg.ACTBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, "ReadMailbox", "ReadMailboxDis", new AjxListener(this, ZaAccountListController.prototype._viewMailListener)));		
+	
+		if(ZaSettings.ACCOUNTS_MOVE_ALIAS_ENABLED)	
+			this._ops.push(new ZaOperation(ZaOperation.MOVE_ALIAS, ZaMsg.ACTBB_MoveAlias, ZaMsg.ACTBB_MoveAlias_tt, "ReadMailbox", "ReadMailboxDis", new AjxListener(this, ZaAccountListController.prototype._moveAliasListener)));		    	
     	
     	this._acctionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._ops);
     
-   		var haveBackup = false;
-		var globalConf = this._app.getGlobalConfig();
-
-    	if(globalConf && globalConf.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_hotbackup])
-			this._ops.push(new ZaOperation(ZaOperation.MAIL_RESTORE, ZaMsg.TBB_RestoreMailbox, ZaMsg.ACTBB_Restore_tt, "RestoreMailbox", "RestoreMailboxDis", new AjxListener(this, ZaAccountListController.prototype._restoreMailListener)));		
+		if(ZaSettings.ACCOUNTS_RESTORE_ENABLED) {
+			var globalConf = this._app.getGlobalConfig();
+	
+	    	if(globalConf && globalConf.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_hotbackup])
+				this._ops.push(new ZaOperation(ZaOperation.MAIL_RESTORE, ZaMsg.TBB_RestoreMailbox, ZaMsg.ACTBB_Restore_tt, "RestoreMailbox", "RestoreMailboxDis", new AjxListener(this, ZaAccountListController.prototype._restoreMailListener)));		
+		}
 		this._ops.push(new ZaOperation(ZaOperation.NONE));	
 		this._ops.push(new ZaOperation(ZaOperation.PAGE_BACK, ZaMsg.Back, ZaMsg.PrevPage_tt, "LeftArrow", "LeftArrowDis",  new AjxListener(this, ZaAccountListController.prototype._prevPageListener)));
 		this._ops.push(new ZaOperation(ZaOperation.PAGE_FORWARD, ZaMsg.Forward, ZaMsg.NextPage_tt, "RightArrow", "RightArrowDis", new AjxListener(this, ZaAccountListController.prototype._nextPageListener)));
