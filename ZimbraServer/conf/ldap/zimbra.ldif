@@ -142,6 +142,9 @@ zimbraGalLdapAttrMap: zimbraMailAlias=email2
 zimbraGalLdapAttrMap: title=jobTitle
 zimbraGalLdapAttrMap: whenChanged,modifyTimeStamp=modifyTimeStamp
 zimbraGalLdapAttrMap: whenCreated,createTimeStamp=createTimeStamp
+zimbraGalLdapAttrMap: zimbraId=zimbraId
+zimbraGalLdapAttrMap: objectClass=objectClass
+zimbraGalLdapAttrMap: zimbraMailForwardingAddress=zimbraMailForwardingAddress
 zimbraGalMaxResults: 100
 zimbraLastLogonTimestampFrequency: 7d
 zimbraLmtpNumThreads: 8
@@ -363,6 +366,10 @@ zimbraNewMailNotificationSubject: New message received at ${RECIPIENT_ADDRESS}
 zimbraNewMailNotificationBody: New message received at ${RECIPIENT_ADDRESS}.${NEWLINE}
  Sender: ${SENDER_ADDRESS}${NEWLINE}
  Subject: ${SUBJECT}
+zimbraZimletAvailableZimlets: phone
+zimbraZimletAvailableZimlets: url
+zimbraZimletAvailableZimlets: tracking
+zimbraZimletAvailableZimlets: po
 
 # for storing server info
 dn: cn=servers,cn=zimbra
