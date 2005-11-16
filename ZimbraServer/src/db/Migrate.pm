@@ -42,9 +42,14 @@ if ($^O !~ /MSWin/i) {
     chomp $DB_USER;
 }
 
+sub getSchemaVersion {
+    my $versionInDb = (runSql("SELECT value FROM config WHERE name = 'db.version'"))[0];
+	return $versionInDb;
+}
+
 sub verifySchemaVersion($) {
     my ($version) = @_;
-    my $versionInDb = (runSql("SELECT value FROM config WHERE name = 'db.version'"))[0];
+    my $versionInDb = getSchemaVersion();
     if ($version != $versionInDb) {
         print("Schema version mismatch.  Expected version $version.  Version in the database is $versionInDb.\n");
         exit(1);
