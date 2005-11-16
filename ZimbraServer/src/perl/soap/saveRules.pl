@@ -97,6 +97,15 @@ $d->start('SaveRulesRequest', $MAILNS, undef);
         ##
         ## Bugmail
         ##
+        ## <r name="Bugmail" active="1">
+        ##   <g op="anyof">
+        ##     <c name="header" k0="from" k1="bugzilla-daemon@depot.liquidsys.com" op=":contains"/>
+        ##   </g>
+        ##   <action name="tag">
+        ##     <arg>"Bugmail"</arg>
+        ##   </action>
+        ## </r>
+        ##     
         $d->start('r', undef, { 'name' => "Bugmail", 'active' => "1" } ); 
         {
             $d->start('g', undef, { 'op' => "anyof" });
@@ -116,6 +125,15 @@ $d->start('SaveRulesRequest', $MAILNS, undef);
         
         ##
         ## Checkins
+        ##
+        ## <r name="Checkins" active="1">
+        ##   <g op="anyof">
+        ##     <c k1="Indeed" name="header" k0="X-From-Perforce" op=":contains"/>
+        ##   </g>
+        ##   <action name="fileinto">
+        ##     <arg>"/Checkins"</arg>
+        ##   </action>
+        ## </r>
         ##
         $d->start('r', undef, { 'name' => "Checkins", 'active' => "1" } ); 
         {
