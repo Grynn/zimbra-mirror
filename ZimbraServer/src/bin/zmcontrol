@@ -267,9 +267,17 @@ sub getHostName {
 }
 
 sub displayVersion {
-	my $release = `rpm -q --queryformat "%{version}_%{release}" zimbra-core`;
-	my $inst = localtime (`rpm -q --queryformat "%{installtime}" zimbra-core`);
-	print "\nRelease $release installed $inst\n\n";
+	my $platform = `/opt/zimbra/bin/get_plat_tag.sh`;
+	chomp $platform;
+	if ($platform eq "MACOSX") {
+		my $release = ` basename /Library/Receipts/zimbra-core* | sed -e 's/zimbra-core.//' -e 's/.pkg//'`;
+		chomp $release;
+		print "\nRelease $release\n\n";
+	} else {
+		my $release = `rpm -q --queryformat "%{version}_%{release}" zimbra-core`;
+		my $inst = localtime (`rpm -q --queryformat "%{installtime}" zimbra-core`);
+		print "\nRelease $release installed $inst\n\n";
+	}
 }
 
 sub usage {
