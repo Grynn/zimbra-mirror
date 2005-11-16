@@ -916,7 +916,8 @@ function(ev) {
 DwtCalendar.prototype._doubleClickListener =
 function(ev) {
 	var target = ev.target;
-	this._selectionEvent.type = DwtCalendar.DATE_DBL_CLICKED;
+	if (this._selectionEvent)
+		this._selectionEvent.type = DwtCalendar.DATE_DBL_CLICKED;
 	if (target.id.charAt(0) == 'c') {
 		// If our parent is a menu then we need to have it close
 		if (this.parent instanceof DwtMenu)
