@@ -116,6 +116,10 @@
 
 <attr name="zimbraDefaultDomainName" type="string" max="256"/>
 
+<attr name="zimbraDomainDefaultCOSId" type="id"/> <!-- type "cosId" and check for valid COS id? -->
+
+<attr name="zimbraDomainAdminModifiableAttr" type="string" immutable="1"/>
+
 <attr name="zimbraDomainInheritedAttr" type="string" immutable="1"/>
 
 <attr name="zimbraDomainName" type="string" immutable="1"/>
@@ -191,6 +195,8 @@
 <attr name="zimbraImapServerEnabled" type="boolean"/>
 
 <attr name="zimbraIsAdminAccount" type="boolean"/>
+
+<attr name="zimbraIsDomainAdminAccount" type="boolean"/>
 
 <attr name="zimbraIsMonitorHost" type="boolean"/>
 
