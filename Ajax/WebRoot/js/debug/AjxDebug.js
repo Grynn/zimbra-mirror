@@ -25,19 +25,22 @@
 
 
 /**
-* Creates a new debug window. The document inside is not kept open.  All the output goes into a single &lt;div&gt; element.
+* Creates a new debug window. The document inside is not kept open.  All the 
+  output goes into a single &lt;div&gt; element.
 * @constructor
 * @class
-* This class pops up a debug window and provides functions to send output there in various ways. The output is continuously
-* appended to the bottom of the window. The document is left unopened so that the browser doesn't think it's continuously loading
-* and keep its little icon flailing forever. Also, the DOM tree can't be manipulated on an open document. All the output is added
-* to the window by appending it the DOM tree. Another method of appending output is to open the document and use document.write(),
-* but then the document is left open.
+* This class pops up a debug window and provides functions to send output there 
+* in various ways. The output is continuously appended to the bottom of the 
+* window. The document is left unopened so that the browser doesn't think it's 
+* continuously loading and keep its little icon flailing forever. Also, the DOM 
+* tree can't be manipulated on an open document. All the output is added to the 
+* window by appending it the DOM tree. Another method of appending output is to 
+* open the document and use document.write(), but then the document is left open.
 * <p>
-* Any client that uses this class can turn off debugging by changing the first argument to the constructor to AjxDebug.NONE.</p>
+* Any client that uses this class can turn off debugging by changing the first 
+* argument to the constructor to AjxDebug.NONE.
 *
 * @author Conrad Damon
-* @author Enrique Del Campo
 * @param level	 	debug level for the current debugger (no window will be displayed for a level of NONE)
 * @param name 		the name of the window. Defaults to "debug_" prepended to the calling window's URL.
 * @param showTime	a boolean that toggles the display of timestamps before debug messages
@@ -48,13 +51,11 @@ function AjxDebug(level, name, showTime) {
 	this._showTime = showTime;
 	this._enabled = (this._level != AjxDebug.NONE);
 	this._showTiming = false;
-	this._startTimePt = 0;
-	this._lastTimePt = 0;
+	this._startTimePt = this._lastTimePt = 0;
 
 	this._msgQueue = new Array();
 	this._debugBoxId = AjxDebug.DEBUG_BOX_ID;
 	this._isPrevWinOpen = false;
-	this._useDiv = false;
 	if (!this._enabled) return;
 
 	this._openContainer();
@@ -108,29 +109,13 @@ function(level) {
 		this._debugWindow = null;
 	} else {
 		this._enabled = true;
-		if (this._debugWindow == null || this._debugWindow.closed) {
+		if (this._debugWindow == null || this._debugWindow.closed)
 			this._openContainer();
-		}
 	}
 }
 
-AjxDebug.prototype.setUseDiv =
-function (useDiv){
-	this._useDiv = useDiv;
-	AjxDebug.deleteWindowCookie();
-	if (useDiv && this._debugWindow && !this._debugWindow.closed) {
-		this._debugWindow.close();
-	}
-	this._enabled = true;
-	this._openContainer();
-};
-
-AjxDebug.prototype._getWindowName = 
-function () {
-	return this._dbgName;
-};
-
-AjxDebug.prototype.isShowTiming = function() {
+AjxDebug.prototype.isShowTiming = 
+function() {
 	return this._showTiming;
 };
 
@@ -141,20 +126,21 @@ AjxDebug.prototype.isShowTiming = function() {
 */
 AjxDebug.prototype.showTiming = 
 function(on, level, msg) {
-	if (on)
-		this._startTimePt = this._lastTimePt = 0;
 	this._showTiming = on;
+
 	if (on) {
+		this._startTimePt = this._lastTimePt = 0;
+
 		var a = [];
-		for (var i = 1; i < arguments.length; i++) {
+		for (var i = 1; i < arguments.length; i++)
 			a.push(arguments[i]);
-		}
+
 		var args = this._handleArgs(a);
 		if (args) {
 			var msgLevel = AjxDebug.DBG1;
-			if (String(level).match(/^DBG|PERF/)) {
+			if (String(level).match(/^DBG|PERF/))
 				msgLevel = level;
-			}
+
 			this.println(msgLevel, " ----- " + args[0] + " ----- ");
 		}
 	}
@@ -172,7 +158,7 @@ function(level, msg) {
 	if (this.isDisabled()) return;
 	var args = this._handleArgs(arguments);
 	if (!args) return;
-	//msg = args[0];
+
 	msg = args.join("");
 	/*** DEBUG ***
 	if (String(level).match(/^DBG|PERF/)) {
@@ -184,19 +170,121 @@ function(level, msg) {
 
 AjxDebug.prototype.isDisabled = 
 function () {
-	if (!this._useDiv){
-		if (!this._enabled){
-			return true;
-		};
-	} else {
-		if (this._divContainer && this._divContainer.style.display == 'none'){
-			return true;
-		}
-	}
+	return !this._enabled;
 };
 
+/**
+* Prints an object into a table, with a column for properties and a column for values. Above the table is a header with the object
+* class and the CSS class (if any). The properties are sorted (numerically if they're all numbers). Creating and appending table 
+* elements worked in Mozilla but not IE. Using the insert* methods works for both. Properties that are function 
+* definitions are skipped.
+*
+* @param level	 	debug level for the current debugger
+* @param obj		the object to be printed
+* @param showFuncs	whether to show props that are functions
+*/
+AjxDebug.prototype.dumpObj = 
+function(level, obj, showFuncs) {
+	if (this.isDisabled())return;
+	var args = this._handleArgs(arguments);
+	if (!args) return;
+	obj = args[0];
+	if (!obj) return;
+	this._showFuncs = args[1];
+
+	AjxDebug._visited = new AjxVector();
+	this._add(null, obj);
+	this._showFuncs = null;
+	
+}
+
+/**
+* Dumps a bunch of text into a &lt;textarea&gt;, so that it is wrapped and scrollable. HTML will not be rendered.
+*
+* @param level	 	debug level for the current debugger
+* @param text		the text to output as is
+*/
+AjxDebug.prototype.printRaw = 
+function(level, text) {
+	if (this.isDisabled()) return;
+	var args = this._handleArgs(arguments);
+	if (!args) return;
+	text = args[0];
+	
+	this._add(null,text, false, true);
+}
+
+/**
+* Pretty-prints a chunk of XML, doing color highlighting for different types of nodes.
+
+* @param level	 	debug level for the current debugger
+* @param text		some XML
+*/
+AjxDebug.prototype.printXML = 
+function(level, text) {
+	if (this.isDisabled()) return;
+	var args = this._handleArgs(arguments);
+	if (!args) return;
+	text = args[0];
+	if (!text) return;
+	
+	// skip generating pretty xml if theres too much data
+	if (AjxEnv.isSafari || text.length > AjxDebug.MAX_OUT) {
+		this.printRaw(text);
+		return;
+	}
+	this._add(null, text, true, false);
+}
+
+/**
+* Reveals white space in text by replacing it with tags.
+*
+* @param level	 	debug level for the current debugger
+* @param text		the text to be displayed
+*/
+AjxDebug.prototype.display =
+function(level, text) {
+	if (this.isDisabled()) return;
+	var args = this._handleArgs(arguments);
+	if (!args) return;
+	text = args[0];
+
+	text = text.replace(/\r?\n/g, '[crlf]');
+	text = text.replace(/ /g, '[space]');
+	text = text.replace(/\t/g, '[tab]');
+	this.printRaw(level, text);
+}
+
+AjxDebug.prototype.timePt =
+function(level, msg) {
+	if (!this._showTiming || !this._enabled || this._debugWindow.closed) return;
+	
+	var args = this._handleArgs(arguments);
+	if (!args) return;
+	var msg = args[0];
+	
+	var now = new Date().getTime();
+	var elapsed = now - this._startTimePt;
+	var interval = now - this._lastTimePt;
+	this._lastTimePt = now;
+	var text = "[" + elapsed + " / " + interval + "]";
+	if (msg)
+		text += " " + msg;
+	html = "<div>" + text + "</div>";
+	extraType = typeof(text);
+
+    var myMsg = new DebugMessage(html);
+	
+    // Add the message to our stack
+    this._addMessage(myMsg);
+	return interval;
+}
+
+
+// Private methods
+
 AjxDebug.prototype._getHtmlForObject = 
-function (anObj, isXml, isRaw) {
+function(anObj, isXml, isRaw) {
 	var html = new Array();
 	var idx = 0;
 
@@ -326,113 +414,6 @@ function(obj, recurse) {
 	return text;
 }
 
-/**
-* Prints an object into a table, with a column for properties and a column for values. Above the table is a header with the object
-* class and the CSS class (if any). The properties are sorted (numerically if they're all numbers). Creating and appending table 
-* elements worked in Mozilla but not IE. Using the insert* methods works for both. Properties that are function 
-* definitions are skipped.
-*
-* @param level	 	debug level for the current debugger
-* @param obj		the object to be printed
-* @param showFuncs	whether to show props that are functions
-*/
-AjxDebug.prototype.dumpObj = 
-function(level, obj, showFuncs) {
-	if (this.isDisabled())return;
-	var args = this._handleArgs(arguments);
-	if (!args) return;
-	obj = args[0];
-	if (!obj) return;
-	this._showFuncs = args[1];
-
-	AjxDebug._visited = new AjxVector();
-	this._add(null, obj);
-	this._showFuncs = null;
-	
-}
-
-/**
-* Dumps a bunch of text into a &lt;textarea&gt;, so that it is wrapped and scrollable. HTML will not be rendered.
-*
-* @param level	 	debug level for the current debugger
-* @param text		the text to output as is
-*/
-AjxDebug.prototype.printRaw = 
-function(level, text) {
-	if (this.isDisabled()) return;
-	var args = this._handleArgs(arguments);
-	if (!args) return;
-	text = args[0];
-	
-	this._add(null,text, false, true);
-}
-
-/**
-* Pretty-prints a chunk of XML, doing color highlighting for different types of nodes.
-
-* @param level	 	debug level for the current debugger
-* @param text		some XML
-*/
-AjxDebug.prototype.printXML = 
-function(level, text) {
-	if (this.isDisabled()) return;
-	var args = this._handleArgs(arguments);
-	if (!args) return;
-	text = args[0];
-	if (!text) return;
-	
-	// skip generating pretty xml if theres too much data
-	if (AjxEnv.isSafari || text.length > AjxDebug.MAX_OUT) {
-		this.printRaw(text);
-		return;
-	}
-	this._add(null, text, true, false);
-}
-
-/**
-* Reveals white space in text by replacing it with tags.
-*
-* @param level	 	debug level for the current debugger
-* @param text		the text to be displayed
-*/
-AjxDebug.prototype.display =
-function(level, text) {
-	if (this.isDisabled()) return;
-	var args = this._handleArgs(arguments);
-	if (!args) return;
-	text = args[0];
-
-	text = text.replace(/\r?\n/g, '[crlf]');
-	text = text.replace(/ /g, '[space]');
-	text = text.replace(/\t/g, '[tab]');
-	this.printRaw(level, text);
-}
-
-AjxDebug.prototype.timePt =
-function(level, msg) {
-	if (!this._showTiming || !this._enabled || this._debugWindow.closed) return;
-	
-	var args = this._handleArgs(arguments);
-	if (!args) return;
-	var msg = args[0];
-	
-	var now = new Date().getTime();
-	var elapsed = now - this._startTimePt;
-	var interval = now - this._lastTimePt;
-	this._lastTimePt = now;
-	var text = "[" + elapsed + " / " + interval + "]";
-	if (msg)
-		text += " " + msg;
-	html = "<div>" + text + "</div>";
-	extraType = typeof(text);
-
-    var myMsg = new DebugMessage(html);
-	
-    // Add the message to our stack
-    this._addMessage(myMsg);
-	return interval;
-}
-
 // If the first arg is a debug level, check it and then strip it.
 AjxDebug.prototype._handleArgs =
 function(args) {
@@ -478,85 +459,19 @@ function (cookieName) {
 AjxDebug.prototype._openContainer =
 function () {
 	this._enabled = true;
-	if (!this._useDiv){ 
-		this._openDebugWindow();
-	} else {
-		this._openDebugDiv();
-	}
-};
-
-AjxDebug.prototype._openDebugDiv = 
-function() {
-	this._initDiv();
+	this._openDebugWindow();
 };
 
 AjxDebug.prototype._openDebugWindow =
 function() {
 	// check if there is a debug window already open
-	if (!this._useDiv){
-		this._isPrevWinOpen = this._getCookieVal("AjxDebugWinOpen");
-		var winName = this._getWindowName();
-		if (!this._isPrevWinOpen) {
-			this._debugWindow = 
-				AjxWindowOpener.openBlank(
-						winName, 
-						"width=400,height=400,resizable=yes,scrollbars=yes", 
-						this._initWindow, this);
-		} else {
-			this._debugWindow = 
-			   window.open("" , winName,
-					   "width=400,height=400,resizable=yes,scrollbars=yes");
-			this._initWindow();
-		}
+	this._isPrevWinOpen = this._getCookieVal("AjxDebugWinOpen");
+	if (!this._isPrevWinOpen) {
+		this._debugWindow = AjxWindowOpener.openBlank(this._dbgName, "width=400,height=400,resizable=yes,scrollbars=yes", this._initWindow, this);
+	} else {
+		this._debugWindow = window.open("" , this._dbgName, "width=400,height=400,resizable=yes,scrollbars=yes");
+		this._initWindow();
 	}
-};
-
-AjxDebug.prototype._initDiv = 
-function() {
-	this._document = document;
-	var container = this._divContainer = this._document.createElement("div");
-	container.id = "AjxDebugDivContainer";
-	container.style.height = "300px";
-	container.style.width = "300px";
-	container.style.display = "block";
-	container.style.position = "absolute";
-	container.style.top = "0px";
-	container.style.left = "0px";
-	container.style.zIndex = 10000;
-	container.style.backgroundColor = "white";
-	var div = this._document.createElement("div");
-	div.style.height="20px";
-	div.style.width="100%";
-	div.innerHTML = "<a href='javascript:;' onclick='AjxDebug.closeDiv(this)'>Close</a>";
-	container.appendChild(div);
-	this._document.body.appendChild(container);
-
-	this._debugBox = this._document.createElement("div");
-	this._debugBox.style.overflow = "auto";
-	this._debugBox.style.height = "98%";
-	this._debugBox.style.width = "100%";
-	this._debugBox.id = this._debugBoxId;
-	container.appendChild(this._debugBox);
-		
-	AjxDebug._divBuffer = document.createElement('div');
-		
-	this._showMessages();
-
-};
-
-AjxDebug.closeDiv = function (anchor) {
-	var container = anchor.parentNode.parentNode;
-	container.style.display = 'none';
-};
-
-AjxDebug.__mark = function() {
-	var elemId = this._id;
-	var separator = this.ownerDocument.createElement("HR");
-	this.ownerDocument.getElementById(elemId).appendChild(separator);
-};
-AjxDebug.__clear = function() {
-	var elemId = this._id;
-	this.ownerDocument.getElementById(elemId).innerHTML = "";
 };
 
 AjxDebug._openErrors = 0;
@@ -573,24 +488,24 @@ function() {
 
 		if (!this._isPrevWinOpen) {
 			this._document.body.innerHTML = "";
-			
+
 			this._debugBox = this._document.createElement("div");
 			this._debugBox.id = this._debugBoxId;
 
 			var markBtn = this._document.createElement("BUTTON");
 			markBtn._id = this._debugBoxId;
-			markBtn.onclick = AjxDebug.__mark;
+			markBtn.onclick = AjxDebug._mark;
 			markBtn.innerHTML = "Mark";
 			var clearBtn = this._document.createElement("BUTTON");
 			clearBtn._id = this._debugBoxId;
-			clearBtn.onclick = AjxDebug.__clear;
+			clearBtn.onclick = AjxDebug._clear;
 			clearBtn.innerHTML = "Clear";
 
 			var controls = this._document.createElement("DIV");
 			controls.appendChild(markBtn);
 			controls.appendChild(this._document.createTextNode(" "));
 			controls.appendChild(clearBtn);
-				
+
 			this._document.body.appendChild(this._debugBox);
 			this._document.body.appendChild(controls);
 			
@@ -603,13 +518,11 @@ function() {
 			// setup an onunload method
 			if (!AjxEnv.isIE) {
 				this._debugWindow.onunload = AjxDebug.unloadHandler;
-				window.addEventListener('unload', AjxDebug.myWindowUnloadHandler, 
-										true);
+				window.addEventListener('unload', AjxDebug.myWindowUnloadHandler, true);
 			} else {
 				this._debugWindow.attachEvent('onunload', AjxDebug.unloadHandler);
 				window.attachEvent = AjxDebug.myWindowUnloadHandler;
 			}
-			
 		} else {
 			this._debugBox = this._document.getElementById(this._debugBoxId);
 			AjxDebug._divBuffer = this._debugWindow.document.createElement('div');
@@ -617,65 +530,24 @@ function() {
 			this._debugBox.appendChild(sepDiv);
 			// Firefox allows us to attach an event listener, and runs it even
 			// though the window with the code is gone ... odd, but nice. IE,
-			// though will not run the handler, so we make sure, event if we
-			// are coming back to the window, to attach the onunload handler.
-			if (AjxEnv.isIE) {
+			// though will not run the handler, so we make sure, even if we're
+			// coming back to the window, to attach the onunload handler.
+			if (AjxEnv.isIE)
 				this._debugWindow.attachEvent('onunload', AjxDebug.unloadHandler);
-			}
 		}
-		// show any messages that have been queued up, while the window
-		// loaded.
+		// show any messages that have been queued up, while the window loaded.
 		this._showMessages();
 	} catch (ex) {
 		AjxDebug.deleteWindowCookie();
 		this._debugWindow.close();
-		// If we've exceeded a certain number of errors,
-		// let's just close the window, and bail.
+
+		// If we've exceeded a certain # of errors, just close window and bail.
 		if (AjxDebug._openErrors < 5) {
 			AjxDebug._openErrors++;
 			this._openContainer();
 		}
-		return;
 	}
 }
-
-AjxDebug.myWindowUnloadHandler = function () {
-	if (AjxEnv.isNav) {
-		DBG._debugWindow.onunload = null;
-	} else {
-		DBG._debugWindow.detachEvent('onunload', AjxDebug.unloadHandler);
-	}
-};
-
-AjxDebug.unloadHandler = function () {
-	try {
-		window.AjxDebug.deleteWindowCookie();
-	} catch (ex) {
-		// do nothing. This might be caused by the unload handler
-		// firing while the window is changing domains.
-	}
-};
-
-AjxDebug.deleteWindowCookie = function () {
-	AjxDebug.deleteCookie("AjxDebugWinOpen", false);
-};
-
-AjxDebug.deleteCookie = function (cookieName, val) {
-    var expiredDate = new Date('Fri, 31 Dec 1999 23:59:59 GMT');
-	document.cookie = cookieName +"=" + val+ ";expires=" + 
-	                   expiredDate.toGMTString();
-};
-
-
-AjxDebug._nextId = 0;
-AjxDebug.getNextId =
-function () {
-	if (window.Dwt){
-		return Dwt.getNextId();
-	} else {
-		return AjxDebug._nextId++;
-	}
-};
 
 /**
 * Scrolls to the bottom of the window. How it does that depends on the browser.
@@ -684,8 +556,9 @@ function () {
 */
 AjxDebug.prototype._scrollToBottom = 
 function() {
-	AjxEnv.isIE ? this._debugBox.scrollIntoView(false) :
-	             this._debugWindow.scrollTo(0, this._document.body.offsetHeight);
+	AjxEnv.isIE 
+		? this._debugBox.scrollIntoView(false) 
+		: this._debugWindow.scrollTo(0, this._document.body.offsetHeight);
 }
 
 /**
@@ -694,10 +567,13 @@ function() {
 */
 AjxDebug.prototype._timestamp = 
 function() {
-	return this._showTime ? new Date().toLocaleTimeString() + ": " : "";
+	return this._showTime 
+		? new Date().toLocaleTimeString() + ": " 
+		: "";
 }
 
-AjxDebug.prototype.setShowTimestamps = function(show) {
+AjxDebug.prototype.setShowTimestamps = 
+function(show) {
 	this._showTime = show;
 };
 
@@ -806,22 +682,18 @@ function(obj) {
 AjxDebug.prototype._add = 
 function (aMsg, extraInfo, isXml, isRaw){
 	var extraType = typeof(extraInfo);
-	if (AjxUtil.isSpecified(extraInfo)) {
-		extraInfo = this._getHtmlForObject(extraInfo, isXml, isRaw);
-    }
 
-    var myMsg = new DebugMessage(aMsg, null, null, 
-								 null, extraInfo);
-	
+	if (AjxUtil.isSpecified(extraInfo))
+		extraInfo = this._getHtmlForObject(extraInfo, isXml, isRaw);
+
     // Add the message to our stack
-    this._addMessage(myMsg);
+    this._addMessage(new DebugMessage(aMsg, null, null, null, extraInfo));
 
 };
 
 AjxDebug.prototype._addMessage = 
 function (aMsg) {
 	this._msgQueue[this._msgQueue.length] = aMsg;
-
 	this._showMessages();
 };
 
@@ -830,9 +702,8 @@ AjxDebug.buf = new Array();
 AjxDebug.prototype._showMessages = 
 function (retryNum) {
 	if (!this._document) {
-		// For now, don't show the messages-- assuming that
-		// this case only happens at startup, and many 
-		// messages will be written
+		// For now, don't show the messages-- assuming that this case only 
+		// happens at startup, and many  messages will be written
 		return;
 	}
 	var i = 0;
@@ -858,18 +729,8 @@ function (retryNum) {
 	this._scrollToBottom();
 };
 
-AjxDebug._escapeForHTML = function(str){
-	if (typeof(str) != 'string') return str;
-	var s = str;
-	s = s.replace(/\&/g, '&amp;');
-	s = s.replace(/\</g, '&lt;');
-	s = s.replace(/\>/g, '&gt;');
-	s = s.replace(/\"/g, '&quot;');
-	s = s.replace(/\xA0/g, '&nbsp;');	
-	return s;
-};
-
-AjxDebug.prototype._parseHtmlFragment = function (htmlStr, tagName) {
+AjxDebug.prototype._parseHtmlFragment = 
+function (htmlStr, tagName) {
 	var html = htmlStr;
 	if (tagName && tagName == "TR"){
 		html = "<table style='table-layout:fixed'>" + htmlStr + "</table>";
@@ -881,6 +742,59 @@ AjxDebug.prototype._parseHtmlFragment = function (htmlStr, tagName) {
 	} else {
 		return div.firstChild;
 	}
+};
+
+
+// Static methods
+
+AjxDebug._mark = 
+function() {
+	var elemId = this._id;
+	var separator = this.ownerDocument.createElement("HR");
+	this.ownerDocument.getElementById(elemId).appendChild(separator);
+};
+
+AjxDebug._clear = 
+function() {
+	var elemId = this._id;
+	this.ownerDocument.getElementById(elemId).innerHTML = "";
+};
+
+AjxDebug.myWindowUnloadHandler = 
+function() {
+	if (AjxEnv.isNav) {
+		DBG._debugWindow.onunload = null;
+	} else {
+		DBG._debugWindow.detachEvent('onunload', AjxDebug.unloadHandler);
+	}
+};
+
+AjxDebug.unloadHandler = 
+function() {
+	try {
+		window.AjxDebug.deleteWindowCookie();
+	} catch (ex) {
+		// do nothing. This might be caused by the unload handler
+		// firing while the window is changing domains.
+	}
+};
+
+AjxDebug.deleteWindowCookie = 
+function() {
+    var expiredDate = new Date('Fri, 31 Dec 1999 23:59:59 GMT');
+	document.cookie = "AjxDebugWinOpen=false;expires=" + expiredDate.toGMTString();
+};
+
+AjxDebug._escapeForHTML = 
+function(str){
+	if (typeof(str) != 'string') return str;
+	var s = str;
+	s = s.replace(/\&/g, '&amp;');
+	s = s.replace(/\</g, '&lt;');
+	s = s.replace(/\>/g, '&gt;');
+	s = s.replace(/\"/g, '&quot;');
+	s = s.replace(/\xA0/g, '&nbsp;');	
+	return s;
 };
 
 
