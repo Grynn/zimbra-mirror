@@ -25,18 +25,29 @@
 # 
 
 BASE=/opt/zimbra
+APACHECTL=$BASE/httpd/bin/apachectl
+CONF=$BASE/conf/httpd.conf
+PIDFILE=$BASE/log/httpd.pid
 
-case "$1" in 
-	start|stop|reload)
-		if [ -f /opt/zimbra/httpd/bin/apachectl ]; then
-			/opt/zimbra/httpd/bin/apachectl -k $1 -f /opt/zimbra/conf/httpd.conf
+case "$1" in
+	start|reload)
+		if [ -f $APACHECTL ]; then
+			$APACHECTL -k $1 -f $CONF
 			exit $?
-		else
-			exit 0
 		fi
+		exit 0
+	;;
+	stop)
+		if [ -f $PIDFILE ]; then
+			if [ -f $APACHECTL ]; then
+				$APACHECTL -k $1 -f $CONF
+				exit $?
+			fi
+		fi
+		exit 0
 	;;
 	status)
-		pid=`cat /opt/zimbra/log/httpd.pid`
+		pid=`cat $PIDFILE`
 		kill -0 $pid
 		exit $?
 	;;
