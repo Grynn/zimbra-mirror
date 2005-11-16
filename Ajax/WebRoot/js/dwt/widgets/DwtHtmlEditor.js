@@ -251,6 +251,59 @@ function(element) {
 	this._execCommand(element);
 }
 
+/** Inserts a table at the current cursor position 
+ * 
+ * @param rows [Int] - The number of rows in the table
+ * @param cols [Int] - The number of columns in the table
+ * @param width [String] - The width of the table. The units should be part of this value e.g. "100%" or "10px"
+ * @param alignment [String] - The alignment of the table. This is one of valid alignment values for the HTML
+ *    <table> element
+ * @param border [Int] - border width
+ * @param cellSpacing [Int] - Cell spacing in the table
+ * @param cellPadding [Int] - Cell padding in the table
+ */
+DwtHtmlEditor.prototype.insertTable =
+function(rows, cols, width, alignment, border, cellSpacing, cellPadding) {
+	if (this._mode != DwtHtmlEditor.HTML)
+		return;
+    
+	var doc = this._getIframeDoc();
+	var table = doc.createElement("table");
+  
+	if (width) table.width = width;
+	if (alignment) table.align = alignment;
+	if (border) table.border = border;  
+	if (cellSpacing) table.cellSpacing = cellSpacing; 
+	if (cellPadding) table.cellPadding = cellPadding;
+    
+	table.style.borderCollapse = "collapse";
+  
+	for (var i = 0; i < rows; i++) {
+		var tr = doc.createElement("tr");
+		table.appendChild(tr);
+		for (var j = 0; j < cols; j++) {
+			var td = doc.createElement("td");
+			tr.appendChild(td);
+    	}
+	}
+  
+	this._insertNodeAtSelection(table);
+}
+
+DwtHtmlEditor.prototype._insertNodeAtSelection =
+function(node) {
+	if (!AjxEng.isIE) {
+		this._getIframeWin().getSelection().removeAllRanges()
+		var range = this._getRange();
+		range.deleteContents();
+		range.insertNode(node);
+		range.selectNodeContents(node);
+	} else {
+		this._getRange().pasteHTML(table.outerHTML);
+	}
+}
+
+
 /**
 * Changes the editor mode.
 *

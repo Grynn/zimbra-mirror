@@ -114,6 +114,7 @@
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtMenu.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtMessageDialog.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtHtmlEditor.js"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtInputField.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtSash.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtToolBar.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/graphics/DwtBorder.js"></script>

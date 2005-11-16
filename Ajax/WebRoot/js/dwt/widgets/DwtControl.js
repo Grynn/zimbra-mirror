@@ -536,6 +536,23 @@ function(newParent) {
 	// TODO do we need a reparent event?
 }
 
+/**
+* Reparents the HTML element of the control to the html element supplied as the
+* parameter to this method. 
+*
+* @param htmlEl Either a string representing an ID, or an html element
+*/
+DwtControl.prototype.reparentHtmlElement =
+function(htmlEl) {
+
+	/* If htmlEl is a string, then it is an ID so lookup the html element that has
+	 * the corresponding ID */
+	if (typeof htmlEl == "string")
+		htmlEl = document.getElementById(htmlEl);
+
+	htmlEl.appendChild(this.getHtmlElement());
+}
+
 DwtControl.prototype.setHandler =
 function(event, func) {
 	if (!this._checkState()) return;
