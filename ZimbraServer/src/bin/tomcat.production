@@ -30,14 +30,9 @@ zmsetvars
 #
 # Expected by catalina scripts
 #
-if [ -d /Library/Java/Home ]; then
-    export JAVA_HOME=/Library/Java/Home
-else
-    export JAVA_HOME=${tomcat_java_home}
-    zmassert -d ${tomcat_java_home}
-    zmassert -x ${tomcat_java_home}/bin/java
-    zmassert -d ${tomcat_directory}
-fi
+export JAVA_HOME=${tomcat_java_home}
+zmassert -d ${tomcat_java_home}
+zmassert -d ${tomcat_directory}
 
 #
 # Available system memory in KB
@@ -45,6 +40,9 @@ fi
 if [ -f /proc/meminfo ]; then
     memkb=`awk '/^MemTotal.*kB$/ { print $2; }' /proc/meminfo`
 else
+    memkb=$(sysctl hw.mmsize 2> /dev/null | awk -F: '{ print $2 / 1024; }');
+fi
+if ! echo $memkb | grep '^[0-9]*$' > /dev/null; then
     memkb=524288
 fi
 

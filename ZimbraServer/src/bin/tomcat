@@ -24,39 +24,26 @@
 # ***** END LICENSE BLOCK *****
 # 
 
-if [ x`whoami` = xroot ]; then
-    echo Error: cannot be run as root user
-        exit 1
-fi
-
 source `dirname $0`/zmshutil || exit 1
-zmsetvars \
-    zimbra_home \
-    tomcat_directory \
-    tomcat_java_home \
-    tomcat_java_heap_memory_percent \
-    tomcat_java_options \
-    tomcat_pidfile
+zmsetvars
 
 #
 # Expected by catalina scripts
 #
-if [ -d /Library/Java/Home ]; then
-	export JAVA_HOME=/Library/Java/Home
-else
-	export JAVA_HOME=${tomcat_java_home}
-	zmassert -d ${tomcat_java_home}
-	zmassert -x ${tomcat_java_home}/bin/java
-	zmassert -d ${tomcat_directory}
-fi
+export JAVA_HOME=${tomcat_java_home}
+zmassert -d ${tomcat_java_home}
+zmassert -d ${tomcat_directory}
 
 #
 # Available system memory in KB
 #
 if [ -f /proc/meminfo ]; then
-	memkb=`awk '/^MemTotal.*kB$/ { print $2; }' /proc/meminfo`
+    memkb=`awk '/^MemTotal.*kB$/ { print $2; }' /proc/meminfo`
 else
-	memkb=524288
+    memkb=$(sysctl hw.mmsize 2> /dev/null | awk -F: '{ print $2 / 1024; }');
+fi
+if ! echo $memkb | grep '^[0-9]*$' > /dev/null; then
+    memkb=524288
 fi
 
 #
@@ -155,8 +142,7 @@ case "$1" in
         # stop it I want this script to sit here and loop and not
         # pretend that it did something.
 
-		count=0
-
+        count=0
         while true; do
             # Every n seconds we send invoke one of these
             ${tomcat_directory}/bin/catalina.sh stop
@@ -175,12 +161,12 @@ case "$1" in
                 echo " shutdown ok"
                 break
             fi
-			count=`expr $count + 1`
-			if [ $count -gt 3 ]; then
-				echo "Giving up - killing $pid"
-				kill -TERM $pid
-				break
-			fi
+            count=`expr $count + 1`
+            if [ $count -gt 3 ]; then
+                echo "Giving up - killing $pid"
+                kill -TERM $pid
+                break
+            fi
         done
         ;;
     
@@ -189,10 +175,10 @@ case "$1" in
         $0 start
         ;;
     
-	'status')
-		kill -0 "$pid" 2> /dev/null
-		exit $?
-		;;
+    'status')
+        kill -0 "$pid" 2> /dev/null
+        exit $?
+        ;;
     *)
         echo "Usage: $0 start|stop|kill|restart|status"
         exit 1

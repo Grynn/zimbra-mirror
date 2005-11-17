@@ -27,9 +27,16 @@
 source `dirname $0`/zmshutil || exit 1
 zmsetvars zimbra_home zimbra_java_home
 
+if [ -d ${zimbra_java_home}/jre ]; then
+    JRE_EXT_DIR=${zimbra_java_home}/jre/lib/ext
+else
+    JRE_EXT_DIR=${zimbra_java_home}/lib/ext
+fi
+zmassert -d ${JRE_EXT_DIR}
+
 exec ${zimbra_java_home}/bin/java \
      -client \
      -Dzimbra.home=${zimbra_home} \
      -Djava.library.path=${zimbra_home}/lib \
-     -Djava.ext.dirs=${zimbra_java_home}/jre/lib/ext:${zimbra_home}/lib \
+     -Djava.ext.dirs=${JRE_EXT_DIR}:${zimbra_home}/lib \
      "$@"
