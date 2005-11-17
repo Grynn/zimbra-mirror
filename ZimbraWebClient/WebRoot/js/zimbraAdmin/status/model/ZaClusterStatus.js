@@ -34,7 +34,7 @@ ZaClusterStatus._clusters = {};
 ZaClusterStatus.getStatus = function() {
 	var soapDoc = AjxSoapDoc.create("GetClusterStatusRequest", "urn:zimbraAdmin", null);
 	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false).Body.GetClusterStatusResponse;
-	DBG.dumpObj(resp);
+	//DBG.dumpObj(resp);
 	var s = new ZaCluster();
 	s._initFromDom(resp);
 	return s;

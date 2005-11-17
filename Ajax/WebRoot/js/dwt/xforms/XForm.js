@@ -436,7 +436,7 @@ DBG.timePt(AjxDebug.PERF, "finished makeUpdateScript");
 	// save the HTML in this.__html (for debugging and such)
 	this.__HTMLOutput = html.toString();
 
-	DBG.println("outputForm() took " + (new Date().getTime() - t0) + " msec");
+	//DBG.println("outputForm() took " + (new Date().getTime() - t0) + " msec");
 
 	return this.__HTMLOutput;
 }

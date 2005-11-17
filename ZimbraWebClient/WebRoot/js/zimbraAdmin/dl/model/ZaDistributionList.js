@@ -250,7 +250,7 @@ ZaDistributionList.prototype.getMembers = function (force) {
 		try {
 			// We can't use javascript here, since the response is not returning the correct information
 			var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false).Body.GetDistributionListResponse;
-			DBG.dumpObj(resp);
+			//DBG.dumpObj(resp);
 			var members = resp.dl[0].dlm;
 			var len = members ? members.length : 0;
 			if (len > 0) {
