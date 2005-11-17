@@ -82,10 +82,10 @@ function (index, newObj) {
 
 AjxVector.prototype.addList =
 function(list) {
-
-	if (list.concat)
+debugger;
+	if (list instanceof Array)
 		this._array = this._array.concat(list);
-	else if (list.size)
+	else if (list instanceof AjxVector)
 		this._array = this._array.concat(list._array);
 }
 
