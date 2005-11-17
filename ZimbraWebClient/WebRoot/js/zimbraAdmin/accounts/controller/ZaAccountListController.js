@@ -438,10 +438,11 @@ function(ev) {
 
 	try {
 		var newAccount = new ZaAccount(this._app);
-		this._newAccountWizard = new ZaNewAccountXWizard(this._container, this._app);	
-//		this._newAccountWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaAccountListController.prototype._finishNewButtonListener, this, null);			
-		this._newAccountWizard.setObject(newAccount);
-		this._newAccountWizard.popup();
+		if(!this._app._newAccountWizard)
+			this._app._newAccountWizard = new ZaNewAccountXWizard(this._container, this._app);	
+
+		this._app._newAccountWizard.setObject(newAccount);
+		this._app._newAccountWizard.popup();
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountListController.prototype._newAccountListener", null, false);
 	}

@@ -624,7 +624,7 @@ XFormItem.prototype.getKeyPressHandlerHTML = function () {
 
 
 XFormItem.prototype.outputContainerTDStartHTML = function (html, updateScript, indent, colSpan, rowSpan) {
-	html.append(indent, "  <td id=\"",  this.getId(), "___container\"",
+	html.append(indent, "<td id=\"",  this.getId(), "___container\"",
 					(colSpan > 1 ? " colspan=" + colSpan : ""),
 					(rowSpan > 1 ? " rowspan=" + rowSpan : ""),
 					this.getContainerCssString(), 
@@ -633,7 +633,7 @@ XFormItem.prototype.outputContainerTDStartHTML = function (html, updateScript, i
 } 
 
 XFormItem.prototype.outputContainerTDEndHTML = function (html, updateScript, indent) {
-	html.append("\r", indent, "  </td id=\"",  this.getId(), "___container\">\r");
+	html.append("\r", indent, "</td id=\"",  this.getId(), "___container\">\r");
 } 
 
 
@@ -643,11 +643,11 @@ XFormItem.prototype.outputContainerTDEndHTML = function (html, updateScript, ind
 // for items that are effectively elements (or are drawn by something other than this form)
 // NOTE: you can pass in any random CSS properties you want in cssStyle
 XFormItem.prototype.outputElementDivStart = function (html, updateScript, indent) {
-	html.append(indent, "    <div id=", this.getId(), this.getCssString(), " xform_type='elementDiv'>\r");
+	html.append(indent, "<div id=", this.getId(), this.getCssString(), " xform_type='elementDiv'>\r");
 }
 
 XFormItem.prototype.outputElementDivEnd = function (html, updateScript, indent) {
-	html.append("\r", indent, "    </div id=\"", this.getId(), "\">");
+	html.append("\r", indent, "</div id=\"", this.getId(), "\">");
 }
 
 //
@@ -1079,6 +1079,9 @@ XFormItem.prototype.getLabelContainer = function() {
 	return this.getElement(this.getId() + "___label");
 }
 XFormItem.prototype.show = function() {
+	if(this.deferred)
+		this._outputHTML();
+		
 	var container = this.getLabelContainer();
 	if (container) this.showElement(container);
 	container = this.getContainer();
@@ -2190,7 +2193,7 @@ Select1_XFormItem.prototype.outputHTML = function (html, updateScript, indent, c
 			(this.getMultiple() ? "multiple " : ""), 
 			this.getChangeHandlerHTML(), this.getFocusHandlerHTML(),
 		">\r",
-			this.getChoicesHTML(indent + "  "),
+			this.getChoicesHTML(indent),
 		"\r", indent, "</select>"
 		);
 	this.cleanChoiceDisplay();
@@ -2484,6 +2487,86 @@ Case_XFormItem.prototype.labelLocation = _NONE_;
 Case_XFormItem.prototype.width = "100%";
 Case_XFormItem.prototype.focusable = false;
 
+Case_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
+	this.getForm().outputItemList([], this, html, updateScript, indent,this.getNumCols(), 0);
+//	this.getForm().outputItemList(this.getItems(), this, html, updateScript, indent + "  ",this.getNumCols(), currentCol);
+	this.deferred = true;
+}
+
+Case_XFormItem.prototype._outputHTML = function () {
+	var form = this.getForm();
+	
+	var element = this.getElement();
+	var masterId = this.getId();
+	var table = element.getElementsByTagName("table")[0];
+	var tbody = element.getElementsByTagName("tbody")[0];
+
+	if (AjxEnv.isIE) {
+		var tempDiv = this.createElement("temp",null,"div","");
+		tempDiv.display = "none";
+	}
+	var updateScript = new AjxBuffer();
+	var html = new AjxBuffer();
+	
+	if (this.outputHTMLStart) {
+		this.outputHTMLStart(html, updateScript, "", 0);
+	}
+	
+	var drawTable = (this.getUseParentTable() == false);
+	if (drawTable) {
+		var colSizes = this.getColSizes();
+		//XXX MOW: appending an elementDiv around the container if we need to style it
+		var outerStyle = this.getCssString();
+		if (outerStyle != null && outerStyle != "") {
+			this.outputElementDivStart(html, updateScript, "");
+		}
+		html.append("<table cellspacing=0 cellpadding=0 ", 
+				(XForm._showBorder ? "border=1" : "border=0"),
+				" id=\"", this.getId(),"_table\" ", this.getTableCssString(),">\r");
+		if (colSizes != null) {
+			html.append(" <colgroup>\r");
+			for (var i = 0; i < colSizes.length; i++) {
+				var size = colSizes[i];
+				if (size < 1) size = size * 100 + "%";
+				html.append("<col width=", size, ">\r");
+			}
+			html.append("</colgroup>\r");
+		}
+		html.append("<tbody>\r");
+	}
+	form.outputItemList(this.getItems(), this, html, updateScript,"", this.getNumCols(), 0, true);
+	html.append("</table>");	
+
+	
+//	DBG.dumpObj(html.toString());
+	element.innerHTML = html.toString();
+
+	/*if (AjxEnv.isIE) {
+		tempDiv.innerHTML = "<table>" + html.toString() + "</table>";
+		var rows = tempDiv.getElementsByTagName("table")[0].rows;
+		for (var r = 0; r < rows.length; r++) {
+			tbody.appendChild(rows[r]);
+		}
+	} else {
+		var row = table.insertRow(-1);
+		var cell = row.insertCell(-1);
+		cell.innerHTML = html;
+	}*/
+
+		
+	// update the insert and update scripts so they'll be called next time
+	form.appendToUpdateScript(updateScript);
+	this.deferred = false;		
+	// Since this is being called in the middle of update, 
+	//	any items that need to be inserted won't have been, 
+	//  and we won't have updated the items required.  
+	// Handle this now.
+
+	//TODO: PUT this IN THE CORRECT PLACE BY PARSING THE STRING SOMEHOW???
+	form.tempScript = new Function(form.getUpdateScriptStart() + updateScript + form.getUpdateScriptEnd());
+	form.tempScript();
+	delete form.tempScript;
+}
 
 
 //
@@ -2693,7 +2776,7 @@ Repeat_XFormItem.prototype.outputHTML = function (html, updateScript, indent, cu
 	// output one item to start
 	//	all other items will be output dynamically
 	this.makeRepeatInstance();
-	this.getForm().outputItemList(this.items, this, html, updateScript, indent + "  ",this.getNumCols(), 0);
+	this.getForm().outputItemList(this.items, this, html, updateScript, indent,this.getNumCols(), 0);
 }
 
 
@@ -2721,7 +2804,7 @@ Repeat_XFormItem.prototype.updateElement = function (value) {
 		while (this.items.length < itemsToShow) {
 			var newItems = this.makeRepeatInstance(this);
 			var html = new AjxBuffer();
-			form.outputItemList(newItems, this, html, updateScript, "        ", this.getNumCols(), 0, true);
+			form.outputItemList(newItems, this, html, updateScript, "", this.getNumCols(), 0, true);
 			if (AjxEnv.isIE) {
 				tempDiv.innerHTML = "<table><tr>" + html + "</table>";
 				var rows = tempDiv.getElementsByTagName("table")[0].rows;

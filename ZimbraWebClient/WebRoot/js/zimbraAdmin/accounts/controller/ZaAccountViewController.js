@@ -626,9 +626,11 @@ ZaAccountViewController.prototype._newButtonListener =
 function(ev) {
 	try {
 		var newAccount = new ZaAccount(this._app);
-		this._newAccountWizard = new ZaNewAccountXWizard(this._container, this._app);	
-		this._newAccountWizard.setObject(newAccount);
-		this._newAccountWizard.popup();
+		if(!this._app._newAccountWizard)
+			this._app._newAccountWizard = new ZaNewAccountXWizard(this._container, this._app);	
+			
+		this._app._newAccountWizard.setObject(newAccount);
+		this._app._newAccountWizard.popup();
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountViewController.prototype._newButtonListener", null, false);
 	}
@@ -637,9 +639,10 @@ function(ev) {
 ZaAccountViewController.prototype._reindexMbxListener = 
 function (ev) {
 	try {
-//		var newAccount = new ZaAccount(this._app);
-		this._reindexWizard = new ReindexMailboxXDialog(this._container, this._app);	
-		//this._newAccountWizard.setObject(newAccount);
+
+		if(!this._reindexWizard)
+			this._reindexWizard = new ReindexMailboxXDialog(this._container, this._app);	
+
 		var obj = new ZaReindexMailbox();
 		obj.mbxId = this._currentObject.id;
 		this._reindexWizard.setObject(obj);

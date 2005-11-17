@@ -277,7 +277,21 @@ Super_AnchorHelper_XFormItem.prototype.resetToSuperValue = function(event) {
 Super_Textfield_XFormItem = function () {}
 XFormItemFactory.createItemType("_SUPER_TEXTFIELD_", "super_textfield", Super_Textfield_XFormItem, Super_XFormItem);
 
-Super_Textfield_XFormItem.prototype.useParentTable = true;
+Super_Textfield_XFormItem.prototype.useParentTable = false;
+
+Super_Textfield_XFormItem.prototype.initializeItems = function() {
+	var anchorCssStyle = this.getInheritedProperty("anchorCssStyle");
+	if(anchorCssStyle) {
+		this.getItems()[1].cssStyle = anchorCssStyle;
+	}	
+	Composite_XFormItem.prototype.initializeItems.call(this);
+	var textFieldCssClass = this.getInheritedProperty("textFieldCssClass");
+	if(textFieldCssClass) {
+		this.getItems()[0].cssStyle = textFieldCssClass;
+	}		
+
+}	
+
 Super_Textfield_XFormItem.prototype.items = [
 	{	type:_TEXTFIELD_, ref:".", width:100,
 		elementChanged: function(elementValue,instanceValue, event) {
@@ -304,7 +318,7 @@ Super_Textfield_XFormItem.prototype.items = [
 Super_Checkbox_XFormItem = function () {}
 XFormItemFactory.createItemType("_SUPER_CHECKBOX_", "super_checkbox", Super_Checkbox_XFormItem, Super_XFormItem);
 
-Super_Checkbox_XFormItem.prototype.useParentTable = true;
+Super_Checkbox_XFormItem.prototype.useParentTable = false;
 Super_Checkbox_XFormItem.prototype.numCols = 2;
 Super_Checkbox_XFormItem.prototype.initializeItems = function() {
 	var anchorCssStyle = this.getInheritedProperty("anchorCssStyle");
@@ -326,10 +340,10 @@ Super_Checkbox_XFormItem.prototype.initializeItems = function() {
 	this.getItems()[0].trueValue = trueValue;
 	this.getItems()[0].falseValue = falseValue;	
 }	
-
+/*
 Super_Checkbox_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
 	this.getForm().outputItemList(this.getItems(), this, html, updateScript, indent, this.getNumCols(), currentCol);
-}
+}*/
 
 Super_Checkbox_XFormItem.prototype.items = [
 	{	type:_CHECKBOX_, ref:".", align:_LEFT_,
@@ -362,7 +376,7 @@ Super_Select1_XFormItem = function () {}
 XFormItemFactory.createItemType("_SUPER_SELECT1_", "super_select1", Super_Select1_XFormItem, Super_XFormItem);
 
 
-Super_Select1_XFormItem.prototype.useParentTable = true;
+Super_Select1_XFormItem.prototype.useParentTable = false;
 Super_Select1_XFormItem.prototype.numCols = 3;
 
 Super_Select1_XFormItem.prototype.items = [

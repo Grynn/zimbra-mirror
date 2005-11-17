@@ -420,16 +420,17 @@ XForm.prototype.outputForm = function () {
 	this._itemsToCleanup = [];
 
 	var updateScript = new AjxBuffer();		// holds the script to populate values and show/hide elements based on relevant attibute
-
+	
+DBG.timePt(AjxDebug.PERF, "starting outputItemList");
 	// in initializeItems(), we guaranteed that there was a single outer item
 	//	and that it is a group that sets certain properties that can be set at
 	//	the form level.  Just output that (and it will output all children)
 
 	// output the actual items of the form
 	this.outputItemList(items[0].items, items[0], html, updateScript, indent, this.numCols);
-
+DBG.timePt(AjxDebug.PERF, "finished outputItemList");
 	this.makeUpdateScript(updateScript);
-	
+DBG.timePt(AjxDebug.PERF, "finished makeUpdateScript");
 	html.append("\r</div id=\"", this.__id,"\">");
 
 	// save the HTML in this.__html (for debugging and such)
@@ -504,16 +505,16 @@ XForm.prototype.outputItemList = function (items, parentItem, html, updateScript
 			parentItem.outputElementDivStart(html, updateScript, indent);
 		}
 		html.append(indent, "<table cellspacing=0 cellpadding=0 ", 
-				(this._showBorder ? "border=1" : "border=0"),
+				(XForm._showBorder ? "border=1" : "border=0"),
 				" id=\"", parentItem.getId(),"_table\" ", parentItem.getTableCssString(),">\r");
 		if (colSizes != null) {
-			html.append(indent, "  <colgroup>\r");
+			html.append(indent, " <colgroup>\r");
 			for (var i = 0; i < colSizes.length; i++) {
 				var size = colSizes[i];
 				if (size < 1) size = size * 100 + "%";
-				html.append(indent, "    <col width=", size, ">\r");
+				html.append(indent, "<col width=", size, ">\r");
 			}
-			html.append(indent, "  </colgroup>\r");
+			html.append(indent, "</colgroup>\r");
 		}
 		html.append(indent, "<tbody>\r");
 	}
@@ -549,18 +550,20 @@ XForm.prototype.outputItemList = function (items, parentItem, html, updateScript
 			item.__numOutstandingRows = rowSpan;
 		}
 		//DBG.println("rowSpan = " + rowSpan);
+		if(currentCol==0)
+			html.append(indent, "<tr>\r");
+		
 		// write the label to the left if desired
 		if (label != null && labelLocation == _LEFT_) {
 			//DBG.println("writing label");
-			item.outputLabelCellHTML(html, updateScript, indent+"  ", rowSpan, labelLocation);
+			item.outputLabelCellHTML(html, updateScript, indent, rowSpan, labelLocation);
 		}
 
 		var writeElementDiv = item.getWriteElementDiv();
 		var outputMethod = item.getOutputHTMLMethod();
-
 		if (isNestingItem && itemUsesParentTable) {
 			// actually write out the item
-			if (outputMethod) outputMethod.call(item, html, updateScript, indent + "  ", currentCol);
+			if (outputMethod) outputMethod.call(item, html, updateScript, indent, currentCol);
 
 		} else {
 
@@ -572,7 +575,7 @@ XForm.prototype.outputItemList = function (items, parentItem, html, updateScript
 			if (writeElementDiv) 	item.outputElementDivStart(html, updateScript, indent);
 			
 			// actually write out the item
-			if (outputMethod) outputMethod.call(item, html, updateScript, indent + "      ", 0);
+			if (outputMethod) outputMethod.call(item, html, updateScript, indent, 0);
 
 	
 			// end the element div, if required
@@ -589,7 +592,7 @@ XForm.prototype.outputItemList = function (items, parentItem, html, updateScript
 		// write the label to the right, if desired
 		if (label != null && labelLocation == _RIGHT_) {
 			//DBG.println("writing label");
-			item.outputLabelCellHTML(html, updateScript, indent+"  ", rowSpan);
+			item.outputLabelCellHTML(html, updateScript, indent, rowSpan);
 		}
 		
 		// now end the update script if necessary
@@ -612,7 +615,7 @@ XForm.prototype.outputItemList = function (items, parentItem, html, updateScript
 	
 	
 	if (drawTable) {
-		html.append("\r", indent, "</tr id='end drawTable'>\r", indent,"</tbody></table>\r");
+		html.append("\r", indent, indent,"</tbody></table>\r");
 		if (outerStyle != null) {
 			parentItem.outputElementDivEnd(html, updateScript, indent);
 		}
