@@ -382,6 +382,7 @@ ZaZimbraAdmin.prototype._showAccountsView = function (defaultType, ev){
 	queryHldr.isByDomain = false;
 	queryHldr.byValAttr = false;
 	queryHldr.queryString = "";
+	queryHldr.types = new Array();
 	if(typeof(defaultType) == 'object' && defaultType.length) {
 		for(var i = 0; i < defaultType.length; i++) {
 			queryHldr.types[i] = ZaSearch.TYPES[defaultType[i]];

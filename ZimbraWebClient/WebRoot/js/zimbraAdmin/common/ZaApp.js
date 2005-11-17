@@ -55,13 +55,40 @@ function() {
 
 ZaApp.prototype.launch =
 function(appCtxt) {
-	this.getStatusViewController().show();
+	if(ZaSettings.STATUS_ENABLED) {
+		this.getStatusViewController().show();
+	} else if(ZaSettings.ADDRESSES_ENABLED) {
+		this._appCtxt.getAppController()._showAccountsView([ZaItem.ACCOUNT,ZaItem.DL,ZaItem.ALIAS],null);
+		/*var queryHldr = this._getCurrentQueryHolder();
+		queryHldr.isByDomain = false;
+		queryHldr.byValAttr = false;
+		queryHldr.queryString = "";
+		queryHldr.types = [ZaSearch.TYPES[ZaItem.ACCOUNT],ZaSearch.TYPES[ZaItem.DL],ZaSearch.TYPES[ZaItem.ALIAS]];
+
+		this.getAccountListController().setPageNum(1);
+		queryHldr.fetchAttrs = ZaSearch.standardAttributes;
+		this.getAccountListController().search(queryHldr);*/
+	}
+		
 }
 
 ZaApp.prototype.setActive =
 function(active) {
 	if (active) {
-		this.getStatusViewController().show();
+		if(ZaSettings.STATUS_ENABLED) {
+			this.getStatusViewController().show();	
+		} else if(ZaSettings.ADDRESSES_ENABLED) {
+			this._appCtxt.getAppController()._showAccountsView([ZaItem.ACCOUNT,ZaItem.DL,ZaItem.ALIAS],null);
+			/*var queryHldr = this._getCurrentQueryHolder();
+			queryHldr.isByDomain = false;
+			queryHldr.byValAttr = false;
+			queryHldr.queryString = "";
+			queryHldr.types = [ZaSearch.TYPES[ZaItem.ACCOUNT],ZaSearch.TYPES[ZaItem.DL],ZaSearch.TYPES[ZaItem.ALIAS]];
+	
+			this.getAccountListController().setPageNum(1);
+			queryHldr.fetchAttrs = ZaSearch.standardAttributes;
+			this.getAccountListController().search(queryHldr);		*/
+		}
 	}
 }
 
