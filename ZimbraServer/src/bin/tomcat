@@ -35,20 +35,9 @@ zmassert -d ${tomcat_java_home}
 zmassert -d ${tomcat_directory}
 
 #
-# Available system memory in KB
-#
-if [ -f /proc/meminfo ]; then
-    memkb=`awk '/^MemTotal.*kB$/ { print $2; }' /proc/meminfo`
-else
-    memkb=$(sysctl hw.mmsize 2> /dev/null | awk -F: '{ print $2 / 1024; }');
-fi
-if ! echo $memkb | grep '^[0-9]*$' > /dev/null; then
-    memkb=524288
-fi
-
-#
 # Memory for use by JVM
 #
+memkb=$(zmsysmemkb)
 jm=`expr $memkb '*' ${tomcat_java_heap_memory_percent} / 100 / 1024`
 
 #

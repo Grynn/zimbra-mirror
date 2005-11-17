@@ -64,3 +64,18 @@ zmassert() {
     fi
     echo Error: assertion "'$@'" failed && exit 1
 }
+
+#
+# Get available system memory in KB.
+#
+zmsysmemkb() {
+    if [ -f /proc/meminfo ]; then
+        memkb=`awk '/^MemTotal.*kB$/ { print $2; }' /proc/meminfo`
+    else
+        memkb=$(sysctl hw.mmsize 2>/dev/null | awk -F: '{ print $2 / 1024; }');
+    fi
+    if ! echo $memkb | grep '^[0-9]*$' > /dev/null; then
+        memkb=524288
+    fi
+    echo $memkb
+}

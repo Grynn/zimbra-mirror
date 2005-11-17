@@ -25,37 +25,12 @@
 # 
 
 source `dirname $0`/zmshutil || exit 1
-zmsetvars \
-    zimbra_home \
-    zimbra_log_directory \
-    mysql_bind_address \
-    mysql_data_directory \
-    mysql_directory \
-    mysql_read_buffer_size \
-    mysql_sort_buffer_size \
-    mysql_innodb_log_buffer_size \
-    mysql_innodb_log_file_size \
-    mysql_memory_percent \
-    mysql_pidfile \
-    mysql_port \
-    mysql_socket \
-    mysql_table_cache
+zmsetvars
 
 #
-# Available system memory in KB
+# Memory for use by MySQL.
 #
-platform=`/opt/zimbra/bin/get_plat_tag.sh`
-if [ "x$platform" = "xMACOSX" ]; then
-	memhex=`nvram -p | awk '/^ram-size/ {print $2}'`
-	mem=`printf "%d" $memhex`
-	memkb=`expr $mem / 1024`
-else
-	memkb=`awk '/^MemTotal.*kB$/ { print $2; }' /proc/meminfo`
-fi
-
-#
-# Memory for use by MySQL
-#
+memkb=$(zmsysmemkb)
 ((mymem=memkb * 1024 * mysql_memory_percent / 100))
 
 #

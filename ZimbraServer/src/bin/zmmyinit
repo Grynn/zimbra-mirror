@@ -25,16 +25,7 @@
 # 
 
 source `dirname $0`/../bin/zmshutil || exit 1
-zmsetvars \
-    zimbra_home \
-    zimbra_index_directory \
-    zimbra_store_directory \
-    zimbra_log_directory \
-    zimbra_db_directory \
-    mysql_mycnf \
-    mysql_data_directory \
-    mysql_directory
-
+zmsetvars
 sql_root_pw=$1
 
 #
@@ -96,16 +87,16 @@ ${zimbra_home}/bin/mysql -u root --password= < \
 # Generate passwords for mysql into local config
 #
 if [ x$sql_root_pw = "x" ]; then
-	echo '*' Setting random password for mysql root user in zimbra local config
-	${zimbra_home}/bin/zmlocalconfig -r -f -e mysql_root_password
-
-	echo '*' Setting random password for mysql zimbra user in zimbra local config
-	${zimbra_home}/bin/zmlocalconfig -r -f -e zimbra_mysql_password
+    echo '*' Setting random passwd for mysql root user in zimbra localconfig
+    ${zimbra_home}/bin/zmlocalconfig -r -f -e mysql_root_password
+    
+    echo '*' Setting random passwd for mysql zimbra user in zimbra localconfig
+    ${zimbra_home}/bin/zmlocalconfig -r -f -e zimbra_mysql_password
 else
-	echo '*' Setting password for mysql root user in zimbra local config
-	${zimbra_home}/bin/zmlocalconfig -f -e mysql_root_password=$sql_root_pw
-	echo '*' Setting password for mysql zimbra user in zimbra local config
-	${zimbra_home}/bin/zmlocalconfig -f -e zimbra_mysql_password=$sql_root_pw
+    echo '*' Setting passwd for mysql root user in zimbra localconfig
+    ${zimbra_home}/bin/zmlocalconfig -f -e mysql_root_password=$sql_root_pw
+    echo '*' Setting passwd for mysql zimbra user in zimbra localconfig
+    ${zimbra_home}/bin/zmlocalconfig -f -e zimbra_mysql_password=$sql_root_pw
 fi
 
 #
