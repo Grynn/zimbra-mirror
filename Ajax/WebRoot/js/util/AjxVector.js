@@ -28,7 +28,7 @@
 
 function AjxVector() {
 	this._array = new Array();
-}
+};
 
 AjxVector.prototype.toString =
 function(sep, compress) {
@@ -42,7 +42,7 @@ function(sep, compress) {
 			a.push(x);
 	}
 	return a.join(sep);
-}
+};
 
 AjxVector.fromArray =
 function(list) {
@@ -52,7 +52,7 @@ function(list) {
 		vec._array = list;
 	}
 	return vec;
-}
+};
 
 AjxVector.prototype.clone =
 function (){
@@ -71,7 +71,7 @@ function(obj, index) {
 		// otherwise, insert object
 		this._array.splice(index, 0, obj);
 	}
-}
+};
 
 AjxVector.prototype.replace =
 function (index, newObj) {
@@ -82,12 +82,11 @@ function (index, newObj) {
 
 AjxVector.prototype.addList =
 function(list) {
-debugger;
 	if (list instanceof Array)
 		this._array = this._array.concat(list);
 	else if (list instanceof AjxVector)
 		this._array = this._array.concat(list._array);
-}
+};
 
 AjxVector.prototype.contains = 
 function(obj) {
@@ -96,7 +95,7 @@ function(obj) {
 			return true;
 	}
 	return false;
-}
+};
 
 /**
 * Returns the index of the obj given w/in vector
@@ -110,7 +109,7 @@ function(obj) {
 			return i;
 	}
 	return -1;
-}
+};
 
 /**
 * Returns true if the vector contains the given object, using the given 
@@ -130,24 +129,24 @@ function(obj, compareFunc) {
 			return true;
 	}
 	return false;
-}
+};
 
 AjxVector.prototype.get =
 function(index) {
 	return index >= this._array.length || index < 0
 		? null : this._array[index];
-}
+};
 
 AjxVector.prototype.getArray =
 function() {
 	return this._array;
-}
+};
 
 AjxVector.prototype.getLast =
 function() {
 	return this._array.length == 0
 		? null : this._array[this._array.length-1];
-}
+};
 
 AjxVector.prototype.remove = 
 function(obj) {
@@ -158,7 +157,7 @@ function(obj) {
 		}
 	}
 	return false;
-}
+};
 
 AjxVector.prototype.removeAt =
 function(index) {
@@ -171,7 +170,7 @@ function(index) {
 		ret = delArr[0];
 	}
 	return ret;
-}
+};
 
 AjxVector.prototype.removeAll = 
 function() {
@@ -180,17 +179,17 @@ function() {
 	for (var i = 0; i < this._array.length; i++)
 		this._array[i] = null;
 	this._array.length = 0;
-}
+};
 
 AjxVector.prototype.removeLast = 
 function() {
 	return this._array.length > 0 ? this._array.pop() : null;
-}
+};
 
 AjxVector.prototype.size =
 function() {
 	return this._array.length;
-}
+};
 
 AjxVector._defaultArrayComparator = function(a, b){
 	return (a < b)? -1 :((a > b)? 1 : 0);
@@ -202,7 +201,7 @@ function(sortFunc) {
 		sortFunc = AjxVector._defaultArrayComparator;
 	}
 	this._array.sort(sortFunc);
-}
+};
 
 AjxVector.prototype.binarySearch = function (valueToFind, sortFunc) {
 	if(!sortFunc){
@@ -227,7 +226,7 @@ AjxVector.prototype.binarySearch = function (valueToFind, sortFunc) {
 			return i;
 		}
 	}
-}
+};
 
 AjxVector.prototype.merge =
 function(offset, list) {
@@ -254,4 +253,4 @@ function(offset, list) {
 		// otherwise, just append the raw list to the end
 		this._array = this._array.concat(rawList);
 	}
-}
+};
