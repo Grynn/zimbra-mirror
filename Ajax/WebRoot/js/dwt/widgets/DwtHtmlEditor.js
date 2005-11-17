@@ -565,7 +565,7 @@ DwtHtmlEditor.prototype._finishHtmlModeInit =
 function(params) {
 	var doc = this._getIframeDoc();	
 	try {	
-		doc.innerHTML = this._pendingContent || "";
+		doc.body.innerHTML = this._pendingContent || "";
 	} catch (ex) {
 		// TODO Replace
 		alert("Error loading content");
