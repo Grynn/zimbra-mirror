@@ -350,7 +350,7 @@ function(item, index) {
 			}
 			if (index == null || index > this._table.rows.length)
 				index = -1;
-			var row = this._table.insertRow(index);
+			row = this._table.insertRow(index);
 			col = row.insertCell(0);
 		}
 		col.noWrap = true;
