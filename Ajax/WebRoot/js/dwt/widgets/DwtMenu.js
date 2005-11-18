@@ -317,7 +317,7 @@ function(item, index) {
 			    || (this._style == DwtMenu.CALENDAR_PICKER_STYLE && !(item instanceof DwtCalendar))))
 			new DwtException("Invalid child", DwtException.INVALID_PARAM, "DwtMenu.prototype._addItem");
 		this._children.add(item);
-		this.getHtmlElement().appendChild(item.getHtmlElement);
+		item.reparentHtmlElement(this.getHtmlElement());
 	} else {
 		var row;
 		var col;

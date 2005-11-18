@@ -53,7 +53,7 @@ AjxImg._VIEWPORT_ID = "AjxImg_VP";
 */
 AjxImg.setImage =
 function(parentEl, imageName, style, useParentEl) {
-	var className = this.getClassForImage(imageName);
+	var className = AjxImg.getClassForImage(imageName);
 
 	if (useParentEl) {
 		parentEl.className = className;
@@ -98,7 +98,7 @@ function(imageEl) {
 AjxImg.getImageHtml = 
 function(imageName, styleStr, attrStr) {
 	attrStr = (!attrStr) ? "" : attrStr;
-	var className = this.getClassForImage(imageName);
+	var className = AjxImg.getClassForImage(imageName);
 	styleStr = styleStr ? "style='" + styleStr + "' " : "";
 	if (className) {
 		return ["<div class='", className, "' ", styleStr, " ", attrStr, "></div>"].join("");
