@@ -33,7 +33,7 @@
 	</path>
 
 	<target name="compile" depends="build-init" description="Compiles the source code">
-		<javac destdir="${build.classes.dir}" debug="true" source="1.4" target="1.4" classpathref="class.path">
+		<javac destdir="${build.classes.dir}" debug="true" classpathref="class.path">
 			<src refid="all.java.path" />
 		</javac>
 	</target>
