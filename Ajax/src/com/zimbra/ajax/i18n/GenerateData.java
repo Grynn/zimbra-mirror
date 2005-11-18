@@ -453,12 +453,23 @@ public class GenerateData {
     
     private static void generateNumberFormats(Properties props, Locale locale) {
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
-        props.setProperty("currencyCode", currencyFormatter.getCurrency().getCurrencyCode());
-        props.setProperty("currencySymbol", currencyFormatter.getCurrency().getSymbol());
-        props.setProperty("formatCurrency", toPattern(currencyFormatter));
-        props.setProperty("formatInteger", toPattern(NumberFormat.getIntegerInstance(locale)));
         props.setProperty("formatNumber", toPattern(NumberFormat.getNumberInstance(locale)));
-        props.setProperty("formatPercent", toPattern(NumberFormat.getPercentInstance(locale)));
+        props.setProperty("formatNumberCurrency", toPattern(currencyFormatter));
+        props.setProperty("formatNumberInteger", toPattern(NumberFormat.getIntegerInstance(locale)));
+        props.setProperty("formatNumberPercent", toPattern(NumberFormat.getPercentInstance(locale)));
+        Currency currency = currencyFormatter.getCurrency();
+        props.setProperty("currencyCode", currency.getCurrencyCode());
+        props.setProperty("currencySymbol", currency.getSymbol());
+    	DecimalFormatSymbols symbols = new DecimalFormatSymbols(locale);
+    	props.setProperty("numberNaN", symbols.getNaN());
+    	props.setProperty("numberInfinity", symbols.getInfinity());
+    	props.setProperty("numberZero", Character.toString(symbols.getZeroDigit()));
+    	props.setProperty("numberSignMinus", Character.toString(symbols.getMinusSign()));
+    	props.setProperty("numberSignPercent", Character.toString(symbols.getPercent()));
+    	props.setProperty("numberSignPerMill", Character.toString(symbols.getPerMill()));
+    	props.setProperty("numberSeparatorDecimal", Character.toString(symbols.getDecimalSeparator()));
+    	props.setProperty("numberSeparatorGrouping", Character.toString(symbols.getGroupingSeparator()));
+    	props.setProperty("numberSeparatorMoneyDecimal", Character.toString(symbols.getMonetaryDecimalSeparator()));
     } // generateNumberFormats(Properties,Locale)
     
     private static void generateTimeZones(Properties props, Locale locale) {

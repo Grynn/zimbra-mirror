@@ -95,7 +95,7 @@ public class Props2JsServlet
     
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
     throws IOException, ServletException {
-        Locale locale = req.getLocale();
+        Locale locale = getLocale(req);
         String uri = req.getRequestURI();
         
         //resp.setContentType(uri.endsWith(COMPRESSED_EXT) ? "application/x-gzip" : "text/plain");
@@ -108,6 +108,22 @@ public class Props2JsServlet
     //
     // Private methods
     //
+
+    private Locale getLocale(HttpServletRequest req) {
+    	String language = req.getParameter("language");
+    	if (language != null) {
+        	String country = req.getParameter("country");
+        	if (country != null) {
+            	String variant = req.getParameter("variant");
+            	if (variant != null) {
+            		return new Locale(language, country, variant);
+            	}
+            	return new Locale(language, country);
+        	}
+        	return new Locale(language);
+    	}
+    	return req.getLocale();
+    } // getLocale(HttpServletRequest):Locale
     
     private byte[] getBuffer(Locale locale, String uri) throws IOException {
         // get locale buffers

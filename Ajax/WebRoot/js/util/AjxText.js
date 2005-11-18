@@ -79,12 +79,18 @@ AjxFormat.prototype.toString = function() {
 
 // Static methods
 
-AjxFormat._zeroPad = function(s, length) {
-	s = typeof s == "string" ? s : String(s);
+AjxFormat._zeroPad = function(s, length, zeroChar, rightSide) {
+	if (s.length >= length) return s;
+
+	zeroChar = zeroChar || '0';
+	
+	var a = [];
 	for (var i = s.length; i < length; i++) {
-		s = '0' + s;
+		a.push(zeroChar);
 	}
-	return s;
+	a[rightSide ? "unshift" : "push"](s);
+
+	return a.join("");
 };
 
 //
@@ -154,10 +160,11 @@ AjxFormat.Segment.prototype.toString = function() {
  * client. Limiting dates to the Gregorian calendar is a trade-off.
  * <p>
  * <strong>Note:</strong>
- * The date format differs from the Java patterns in one way: the pattern
- * "EEEEE" (5 'E's) denotes a <em>short</em> weekday or month name. This 
- * matches the extended pattern found in the Common Locale Data Repository 
- * (CLDR) found at: http://www.unicode.org/cldr/.
+ * The date format differs from the Java patterns a few ways: the pattern
+ * "EEEEE" (5 'E's) denotes a <em>short</em> weekday and the pattern "MMMMM"
+ * (5 'M's) denotes a <em>short</em> month name. This matches the extended 
+ * pattern found in the Common Locale Data Repository (CLDR) found at: 
+ * http://www.unicode.org/cldr/.
  */
 function AjxDateFormat(pattern) {
 	AjxFormat.call(this, pattern);
@@ -779,13 +786,23 @@ AjxMessageFormat.MessageSegment = function(format, s) {
 	this._type = parts[1] || "string";
 	this._style = parts[2];
 	switch (this._type) {
-		case "number": /*TODO*/ break;
-		case "date": case "time": {
+		case "number": {
 			switch (this._style) {
-				case "short": this._style = AjxDateFormat.SHORT; break;
-				case "medium": this._style = AjxDateFormat.MEDIUM; break;
-				case "long": this._style = AjxDateFormat.LONG; break;
-				case "full": this._style = AjxDateFormat.FULL; break;
+				case "integer": this._formatter = AjxNumberFormat.getIntegerInstance(); break;
+				case "currency": this._formatter = AjxNumberFormat.getCurrencyInstance(); break;
+				case "percent": this._formatter = AjxNumberFormat.getPercentInstance(); break;
+				default: this._formatter = this._style == null ? AjxNumberFormat.getInstance() : new AjxNumberFormat(this._style);
+			}
+			break;
+		}
+		case "date": case "time": {
+			var func = this._type == "date" ? AjxDateFormat.getDateInstance : AjxDateFormat.getTimeInstance;
+			switch (this._style) {
+				case "short": this._formatter = func(AjxDateFormat.SHORT); break;
+				case "medium": this._formatter = func(AjxDateFormat.MEDIUM); break;
+				case "long": this._formatter = func(AjxDateFormat.LONG); break;
+				case "full": this._formatter = func(AjxDateFormat.FULL); break;
+				default: this._formatter = this._style == null ? func(AjxDateFormat.DEFAULT) : new AjxDateFormat(this._style);
 			}
 			break;
 		}
@@ -802,37 +819,328 @@ AjxMessageFormat.MessageSegment.prototype._index;
 AjxMessageFormat.MessageSegment.prototype._type;
 AjxMessageFormat.MessageSegment.prototype._style;
 
+AjxMessageFormat.MessageSegment.prototype._formatter;
+
 // Public methods
 
 AjxMessageFormat.MessageSegment.prototype.format = function(args) {
 	var object = args[this._index];
-	switch (this._type) {
-		case "number": {
-			// TODO: Finish integer, percent, currency, pattern
-			return Number(object);
-		}
-		case "date": {
-			return AjxDateFormat.getDateInstance(this._style).format(object);
-		}
-		case "time": {
-			return AjxDateFormat.getTimeInstance(this._style).format(object);
-		}
-		case "choice": /*TODO*/ break;
-	}
-	return String(object);
-}
+	return this._formatter ? this._formatter.format(object) : String(object);
+};
 
 AjxMessageFormat.MessageSegment.prototype.toString = function() {
-	return "message: \""+this._s+'"';
+	var a = [ "message: \"", this._s, "\", index: ", this.index ];
+	if (this._type) a.push(", type: ", this._type);
+	if (this._style) a.push(", style: ", this._style);
+	if (this._formatter) a.push(", formatter: ", this._formatter.toString());
+	return a.join("");
 }
 
 //
 // AjxNumberFormat class
 //
 
-function AjxNumberFormat(pattern) {
+/**
+ * @param pattern       The number pattern.
+ * @param skipNegFormat Specifies whether to skip the generation of this
+ *                      format's negative value formatter. 
+ *                      <p>
+ *                      <strong>Note:</strong> 
+ *                      This parameter is only used by the implementation 
+ *                      and should not be passed by application code 
+ *                      instantiating a custom number format.
+ */
+function AjxNumberFormat(pattern, skipNegFormat) {
 	AjxFormat.call(this, pattern);
-	// TODO
+	if (pattern == "") return;
+
+	var patterns = pattern.split(/;/);
+	var pattern = patterns[0];
+	
+	// parse prefix
+	var i = 0;
+	var results = this.__parseStatic(pattern, i);
+	i = results.offset;
+	var hasPrefix = results.text != "";
+	if (hasPrefix) {
+		this._segments.push(new AjxFormat.TextSegment(this, results.text));
+	}
+	
+	// parse number descriptor
+	var start = i;
+	while (i < pattern.length &&
+	       AjxNumberFormat._META_CHARS.indexOf(pattern.charAt(i)) != -1) {
+		i++;
+	}
+	var end = i;
+
+	var numPattern = pattern.substring(start, end);
+	var e = numPattern.indexOf('E');
+	var expon = e != -1 ? numPattern.substring(e + 1) : null;
+	if (expon) {
+		numPattern = numPattern.substring(0, e);
+		this._showExponent = true;
+	}
+	
+	var dot = numPattern.indexOf('.');
+	var whole = dot != -1 ? numPattern.substring(0, dot) : numPattern;
+	if (whole) {
+		var comma = whole.lastIndexOf(',');
+		if (comma != -1) {
+			this._groupingOffset = whole.length - comma - 1;
+		}
+		whole = whole.replace(/[^#0]/g,"");
+		var zero = whole.indexOf('0');
+		if (zero != -1) {
+			this._minIntDigits = whole.length - zero;
+		}
+		this._maxIntDigits = whole.length;
+	}
+	
+	var fract = dot != -1 ? numPattern.substring(dot + 1) : null;
+	if (fract) {
+		var zero = fract.lastIndexOf('0');
+		if (zero != -1) {
+			this._minFracDigits = zero + 1;
+		}
+		this._maxFracDigits = fract.replace(/[^#0]/g,"").length;
+	}
+	
+	this._segments.push(new AjxNumberFormat.NumberSegment(this, numPattern));
+	
+	// parse suffix
+	var results = this.__parseStatic(pattern, i);
+	i = results.offset;
+	if (results.text != "") {
+		this._segments.push(new AjxFormat.TextSegment(this, results.text));
+	}
+	
+	// add negative formatter
+	if (skipNegFormat) return;
+	
+	if (patterns.length > 1) {
+		var pattern = patterns[1];
+		this._negativeFormatter = new AjxNumberFormat(pattern, true);
+	}
+	else {
+		// no negative pattern; insert minus sign before number segment
+		var formatter = new AjxNumberFormat("");
+		formatter._segments = formatter._segments.concat(this._segments);
+
+		var index = hasPrefix ? 1 : 0;
+		var minus = new AjxFormat.TextSegment(formatter, I18nMsg.numberSignMinus);
+		formatter._segments.splice(index, 0, minus);
+		
+		this._negativeFormatter = formatter;
+	}
 }
 AjxNumberFormat.prototype = new AjxFormat;
 AjxNumberFormat.prototype.constructor = AjxNumberFormat;
+
+AjxNumberFormat.prototype.toString = function() {
+	if (this._negativeFormatter) {
+		return [ 
+			AjxFormat.prototype.toString.call(this), 
+			" ; ", 
+			this._negativeFormatter.toString()
+		].join("");
+	}
+	return AjxFormat.prototype.toString.call(this);
+};
+
+// Constants
+
+AjxNumberFormat._NUMBER = "number";
+AjxNumberFormat._INTEGER = "integer";
+AjxNumberFormat._CURRENCY = "currency";
+AjxNumberFormat._PERCENT = "percent";
+
+AjxNumberFormat._META_CHARS = "0#.,E";
+
+AjxNumberFormat._FORMATTERS = {};
+
+// Data
+
+AjxNumberFormat.prototype._groupingOffset = Number.MAX_VALUE;
+AjxNumberFormat.prototype._maxIntDigits;
+AjxNumberFormat.prototype._minIntDigits = 1;
+AjxNumberFormat.prototype._maxFracDigits;
+AjxNumberFormat.prototype._minFracDigits;
+AjxNumberFormat.prototype._isCurrency = false;
+AjxNumberFormat.prototype._isPercent = false;
+AjxNumberFormat.prototype._isPerMille = false;
+AjxNumberFormat.prototype._showExponent = false;
+
+AjxNumberFormat.prototype._negativeFormatter;
+
+// Static functions
+
+AjxNumberFormat.getInstance = function() {
+	if (!AjxNumberFormat._FORMATTERS[AjxNumberFormat._NUMBER]) {
+		AjxNumberFormat._FORMATTERS[AjxNumberFormat._NUMBER] = new AjxNumberFormat(I18nMsg.formatNumber);
+	}
+	return AjxNumberFormat._FORMATTERS[AjxNumberFormat._NUMBER];
+};
+AjxNumberFormat.getNumberInstance = AjxNumberFormat.getInstance;
+AjxNumberFormat.getCurrencyInstance = function() {
+	if (!AjxNumberFormat._FORMATTERS[AjxNumberFormat._CURRENCY]) {
+		AjxNumberFormat._FORMATTERS[AjxNumberFormat._CURRENCY] = new AjxNumberFormat(I18nMsg.formatNumberCurrency);
+	}
+	return AjxNumberFormat._FORMATTERS[AjxNumberFormat._CURRENCY];
+};
+AjxNumberFormat.getIntegerInstance = function() {
+	if (!AjxNumberFormat._FORMATTERS[AjxNumberFormat._INTEGER]) {
+		AjxNumberFormat._FORMATTERS[AjxNumberFormat._INTEGER] = new AjxNumberFormat(I18nMsg.formatNumberInteger);
+	}
+	return AjxNumberFormat._FORMATTERS[AjxNumberFormat._INTEGER];
+};
+AjxNumberFormat.getPercentInstance = function() {
+	if (!AjxNumberFormat._FORMATTERS[AjxNumberFormat._PERCENT]) {
+		AjxNumberFormat._FORMATTERS[AjxNumberFormat._PERCENT] = new AjxNumberFormat(I18nMsg.formatNumberPercent);
+	}
+	return AjxNumberFormat._FORMATTERS[AjxNumberFormat._PERCENT];
+};
+
+// Public methods
+
+AjxNumberFormat.prototype.format = function(number) {
+	if (number < 0 && this._negativeFormatter) {
+		return this._negativeFormatter.format(number);
+	}
+	return AjxFormat.prototype.format.call(this, number);
+};
+
+// Private methods
+
+AjxNumberFormat.prototype.__parseStatic = function(s, i) {
+	var data = [];
+	while (i < s.length) {
+		var c = s.charAt(i++);
+		if (AjxNumberFormat._META_CHARS.indexOf(c) != -1) {
+			i--;
+			break;
+		}
+		switch (c) {
+			case "'": {
+				var start = i;
+				while (i < s.length && s.charAt(i++) != "'") {
+					// do nothing
+				}
+				var end = i;
+				c = end - start == 0 ? "'" : s.substring(start, end);
+				break;
+			}
+			case '%': {
+				c = I18nMsg.numberSignPercent; 
+				this._isPercent = true;
+				break;
+			}
+			case '\u2030': {
+				c = I18nMsg.numberSignPerMill; 
+				this._isPerMille = true;
+				break;
+			}
+			case '\u00a4': {
+				c = s.charAt(i) == '\u00a4'
+				  ? I18nMsg.currencyCode : I18nMsg.currencySymbol;
+				this._isCurrency = true;
+				break;
+			}
+		}
+		data.push(c);
+	}
+	return { text: data.join(""), offset: i };
+};
+
+//
+// AjxNumberFormat.NumberSegment class
+//
+
+AjxNumberFormat.NumberSegment = function(format, s) {
+	AjxFormat.Segment.call(this, format, s);
+};
+AjxNumberFormat.NumberSegment.prototype = new AjxFormat.Segment;
+AjxNumberFormat.NumberSegment.prototype.constructor = AjxNumberFormat.NumberSegment;
+
+// Public methods
+
+AjxNumberFormat.NumberSegment.prototype.format = function(number) {
+	// special values
+	if (isNaN(number)) return I18nMsg.numberNaN;
+	if (number === Number.NEGATIVE_INFINITY || number === Number.POSITIVE_INFINITY) {
+		return I18nMsg.numberInfinity;
+	}
+
+	// adjust value
+	if (typeof number != "number") number = Number(number);
+	number = Math.abs(number); // NOTE: minus sign is part of pattern
+	if (this._parent._isPercent) number *= 100;
+	else if (this._parent._isPerMille) number *= 1000;
+
+	// format
+	var s = this._parent._showExponent
+	      ? number.toExponential(this._parent._maxFracDigits).toUpperCase().replace(/E\+/,"E")
+	      : number.toFixed(this._parent._maxFracDigits);
+	s = this._normalize(s);
+	return s;
+};
+
+AjxNumberFormat.NumberSegment.prototype.toString = function() {
+	return "number: \""+this._s+"\"";
+};
+
+// Protected methods
+
+AjxNumberFormat.NumberSegment.prototype._normalize = function(s) {
+	var match = s.split(/([\.Ee])/);
+	
+	// normalize whole part
+	var whole = match.shift();
+	if (whole.length < this._parent._minIntDigits) {
+		whole = AjxFormat._zeroPad(whole, this._parent._minIntDigits, I18nMsg.numberZero);
+	}
+	if (whole.length > this._parent._groupingOffset) {
+		var a = [];
+		
+		var i = whole.length - this._parent._groupingOffset;
+		while (i > 0) {
+			a.unshift(whole.substr(i, this._parent._groupingOffset));
+			a.unshift(I18nMsg.numberSeparatorGrouping);
+			i -= this._parent._groupingOffset;
+		}
+		a.unshift(whole.substring(0, i + this._parent._groupingOffset));
+		
+		whole = a.join("");
+	}
+	
+	// normalize rest
+	var fract = '0';
+	var expon;
+	while (match.length > 0) {
+		switch (match.shift()) {
+			case '.': fract = match.shift(); break;
+			case 'E': case 'e': expon = match.shift(); break;
+			default: // NOTE: should never get here!
+		}
+	}
+
+	fract = fract.replace(/0+$/,"");
+	if (fract.length < this._parent._minFracDigits) {
+		fract = AjxFormat._zeroPad(fract, this._parent._minFracDigits, I18nMsg.numberZero, true);
+	}
+	
+	var a = [ whole ];
+	if (fract.length > 0) {
+		var decimal = this._parent._isCurrency
+		            ? I18nMsg.numberSeparatorMoneyDecimal
+		            : I18nMsg.numberSeparatorDecimal;
+		a.push(decimal, fract);
+	}
+	if (expon) {
+		a.push('E', expon.replace(/^\+/,""));
+	}
+	
+	// return normalize result
+	return a.join("");
+};
+
