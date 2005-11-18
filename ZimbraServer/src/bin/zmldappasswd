@@ -108,7 +108,7 @@ ${zimbra_home}/bin/ldap start > /dev/null 2>&1
 echo "Updating zimbra.ldif"
 sed -e "s|^userPassword.*|userPassword: ${zimbra_sha}|" \
 	${config_dir}/zimbra.ldif > /tmp/zimbra.ldif.$$
-mv -f /tmp/zimbra.ldif.$$ ${config_dir}/zimbra.ldif
+mv -f /tmp/zimbra.ldif.$$ ${zimbra_home}/conf/zimbra.ldif
 
 #
 # Rerun zimbra.ldif
