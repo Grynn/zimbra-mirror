@@ -80,6 +80,8 @@ AjxFormat.prototype.toString = function() {
 // Static methods
 
 AjxFormat._zeroPad = function(s, length, zeroChar, rightSide) {
+	s = typeof s == "string" ? s : String(s);
+
 	if (s.length >= length) return s;
 
 	zeroChar = zeroChar || '0';
