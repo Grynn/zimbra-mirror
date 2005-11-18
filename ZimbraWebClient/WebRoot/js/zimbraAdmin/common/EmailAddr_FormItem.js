@@ -76,7 +76,28 @@ EmailAddr_XFormItem.prototype.items = [
 		}
 	},
 	{type:_OUTPUT_, value:"@"},
-	{type:_OSELECT1_, ref:".", labelLocation:_NONE_, relevantBehavior:_PARENT_, choices:EmailAddr_XFormItem.domainChoices,
+	{type:_OUTPUT_,ref:".",relevant:"ZaSettings.isDomainAdmin", relevantBehavior:_HIDE_,
+		choices:EmailAddr_XFormItem.domainChoices,
+		getDisplayValue:function (itemVal){
+			var val = null;
+			if(itemVal) {
+				var emailChunks = itemVal.split("@");
+			
+				if(emailChunks.length > 1 ) {
+					val = emailChunks[1];
+				} 
+			}
+			if(!val) {
+				val = this.getChoices()._choiceObject[0].name;
+			}	
+			this.getParentItem()._domainPart = val;
+			
+			return val;
+		},	
+	},
+	{type:_OSELECT1_, ref:".", labelLocation:_NONE_, relevantBehavior:_HIDE_, 
+	 choices:EmailAddr_XFormItem.domainChoices,
+	 relevant:"!ZaSettings.isDomainAdmin",
 	 errorLocation:_PARENT_,
 		getDisplayValue:function (itemVal){
 			var val = null;

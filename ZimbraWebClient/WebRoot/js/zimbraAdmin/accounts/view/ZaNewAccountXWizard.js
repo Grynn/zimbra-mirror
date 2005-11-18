@@ -158,20 +158,23 @@ function(entry) {
 	this._containedObject.name = "";
 
 	this._containedObject.id = null;
-		
-	var cosList = this._app.getCosList().getArray();
-	for(var ix in cosList) {
-		if(cosList[ix].name == "default") {
-			this._containedObject.attrs[ZaAccount.A_COSId] = cosList[ix].id;
-			this._containedObject.cos = cosList[ix];
-			break;
+	if(ZaSettings.COSES_ENABLED) {
+		var cosList = this._app.getCosList().getArray();
+		for(var ix in cosList) {
+			if(cosList[ix].name == "default") {
+				this._containedObject.attrs[ZaAccount.A_COSId] = cosList[ix].id;
+				this._containedObject.cos = cosList[ix];
+				break;
+			}
 		}
+	
+		if(!this._containedObject.cos) {
+			this._containedObject.cos = cosList[0];
+			this._containedObject.attrs[ZaAccount.A_COSId] = cosList[0].id;
+		}
+	} else {
+		this._containedObject.cos = new ZaCos(this._app);
 	}
-
-	if(!this._containedObject.cos) {
-		this._containedObject.cos = cosList[0];
-		this._containedObject.attrs[ZaAccount.A_COSId] = cosList[0].id;
-	}	
 	this._containedObject.attrs[ZaAccount.A_accountStatus] = ZaAccount.ACCOUNT_STATUS_ACTIVE;
 	this._containedObject[ZaAccount.A2_autodisplayname] = "TRUE";
 	this._containedObject[ZaAccount.A2_autoMailServer] = "TRUE";
@@ -180,12 +183,16 @@ function(entry) {
 	this._containedObject.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
 //	var domainName = this._app._appCtxt.getAppController().getOverviewPanelController().getCurrentDomain();
 	var domainName;
-	if(!domainName) {
-		//find out what is the default domain
-		domainName = this._app.getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraDefaultDomainName];
+	if(!ZaSettings.isDomainAdmin) {
 		if(!domainName) {
-			domainName = this._app.getDomainList().getArray()[0].name;
+			//find out what is the default domain
+			domainName = this._app.getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraDefaultDomainName];
+			if(!domainName) {
+				domainName = this._app.getDomainList().getArray()[0].name;
+			}
 		}
+	} else {
+		domainName =  ZaSettings.myDomainName;
 	}
 	this._containedObject[ZaAccount.A_name] = "@" + domainName;
 	this._localXForm.setInstance(this._containedObject);
@@ -193,6 +200,9 @@ function(entry) {
 
 ZaNewAccountXWizard.onCOSChanged = 
 function(value, event, form) {
+	if(!ZaSettings.COSES_ENABLED)
+		return;
+		
 	var cosList = form.getController().getCosList().getArray();
 	var cnt = cosList.length;
 	for(var i = 0; i < cnt; i++) {
@@ -208,9 +218,11 @@ function(value, event, form) {
 ZaNewAccountXWizard.prototype.getMyXForm = function() {	
 //	var domainName = this._app._appCtxt.getAppController().getOverviewPanelController().getCurrentDomain();
 	var domainName;
-	if(!domainName) {
+	if(ZaSettings.isDomainAdmin)
+		domainName = ZaSettings.myDomainName;
+	else 
 		domainName = this._app.getDomainList().getArray()[0].name;
-	}
+
 	var emptyAlias = "@" + domainName;
 	var xFormObject = {
 		items: [
@@ -222,7 +234,11 @@ ZaNewAccountXWizard.prototype.getMyXForm = function() {
 					{type:_CASE_, numCols:1, relevant:"instance[ZaModel.currentStep] == 1", align:_LEFT_, valign:_TOP_, 
 						items:[
 							{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName+":", labelLocation:_LEFT_},
-							{ref:ZaAccount.A_COSId, type:_OSELECT1_, msgName:ZaMsg.NAD_ClassOfService+":",label:ZaMsg.NAD_ClassOfService+":", labelLocation:_LEFT_, choices:this._app.getCosListChoices(), onChange:ZaNewAccountXWizard.onCOSChanged},
+							{ref:ZaAccount.A_COSId, type:_OSELECT1_, msgName:ZaMsg.NAD_ClassOfService+":",
+								label:ZaMsg.NAD_ClassOfService+":", labelLocation:_LEFT_, 
+								choices:this._app.getCosListChoices(), onChange:ZaNewAccountXWizard.onCOSChanged,
+								relevant:"ZaSettings.COSES_ENABLED"
+							},
 							{ref:ZaAccount.A_password, type:_SECRET_, msgName:ZaMsg.NAD_Password,label:ZaMsg.NAD_Password+":", labelLocation:_LEFT_, cssClass:"admin_xform_name_input"},														
 							{ref:ZaAccount.A2_confirmPassword, type:_SECRET_, msgName:ZaMsg.NAD_ConfirmPassword,label:ZaMsg.NAD_ConfirmPassword+":", labelLocation:_LEFT_, cssClass:"admin_xform_name_input"},
 							{ref:ZaAccount.A_zimbraPasswordMustChange,align:_LEFT_, type:_CHECKBOX_,  msgName:ZaMsg.NAD_MustChangePwd,label:ZaMsg.NAD_MustChangePwd+":",labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label"},
@@ -271,6 +287,7 @@ ZaNewAccountXWizard.prototype.getMyXForm = function() {
 							{ref:ZaAccount.A_accountStatus, type:_OSELECT1_, msgName:ZaMsg.NAD_AccountStatus,label:ZaMsg.NAD_AccountStatus+":", labelLocation:_LEFT_, choices:this.accountStatusChoices},
 							{ref:ZaAccount.A_description, type:_INPUT_, msgName:ZaMsg.NAD_Description,label:ZaMsg.NAD_Description+":", labelLocation:_LEFT_, cssClass:"admin_xform_name_input"},
 							{type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_MailServer, labelLocation:_LEFT_,
+								relevant:"ZaSettings.SERVERS_ENABLED",
 								items: [
 									{ ref: ZaAccount.A_mailHost, type: _OSELECT1_, label: null, choices: this._app.getServerListChoices2(), 
 										relevant:"instance[ZaAccount.A2_autoMailServer]==\"FALSE\" && form.getController().getServerListChoices2().getChoices().values.length != 0",

@@ -68,52 +68,56 @@ function(entry) {
 	if(entry.id)
 		this._containedObject.id = entry.id;
 		
-	var cosList = this._app.getCosList().getArray();
-	
-	/**
-	* If this account does not have a COS assigned to it - assign default COS
-	**/
-	if(this._containedObject.attrs[ZaAccount.A_COSId]) {	
-		for(var ix in cosList) {
-			/**
-			* Find the COS assigned to this account 
-			**/
-			if(cosList[ix].id == this._containedObject.attrs[ZaAccount.A_COSId]) {
-				this._containedObject.cos = cosList[ix];
-				break;
-			}
-		}
-	}
-	if(!this._containedObject.cos) {
+	if(ZaSettings.COSES_ENABLED) {	
+		var cosList = this._app.getCosList().getArray();
+		
 		/**
-		* We did not find the COS assigned to this account,
-		* this means that the COS was deleted or wasn't assigned, therefore assign default COS to this account
+		* If this account does not have a COS assigned to it - assign default COS
 		**/
-		for(var i in cosList) {
-			/**
-			* Find the COS assigned to this account 
-			**/
-			if(cosList[i].name == "default") {
-				this._containedObject.cos = cosList[i];
-				this._containedObject.attrs[ZaAccount.A_COSId] = cosList[i].id;										
-				break;
+		if(this._containedObject.attrs[ZaAccount.A_COSId]) {	
+			for(var ix in cosList) {
+				/**
+				* Find the COS assigned to this account 
+				**/
+				if(cosList[ix].id == this._containedObject.attrs[ZaAccount.A_COSId]) {
+					this._containedObject.cos = cosList[ix];
+					break;
+				}
 			}
 		}
 		if(!this._containedObject.cos) {
-			//default COS was not found - just assign the first COS
-			if(cosList && cosList.length > 0) {
-				this._containedObject.cos = cosList[0];
-				this._containedObject.attrs[ZaAccount.A_COSId] = cosList[0].id;					
+			/**
+			* We did not find the COS assigned to this account,
+			* this means that the COS was deleted or wasn't assigned, therefore assign default COS to this account
+			**/
+			for(var i in cosList) {
+				/**
+				* Find the COS assigned to this account 
+				**/
+				if(cosList[i].name == "default") {
+					this._containedObject.cos = cosList[i];
+					this._containedObject.attrs[ZaAccount.A_COSId] = cosList[i].id;										
+					break;
+				}
+			}
+			if(!this._containedObject.cos) {
+				//default COS was not found - just assign the first COS
+				if(cosList && cosList.length > 0) {
+					this._containedObject.cos = cosList[0];
+					this._containedObject.attrs[ZaAccount.A_COSId] = cosList[0].id;					
+				}
 			}
 		}
+		if(!this._containedObject.cos) {
+			this._containedObject.cos = cosList[0];
+		}	
 	}
-	if(!this._containedObject.cos) {
-		this._containedObject.cos = cosList[0];
-	}	
 	this._containedObject[ZaAccount.A2_autodisplayname] = entry[ZaAccount.A2_autodisplayname];
 	this._containedObject[ZaAccount.A2_confirmPassword] = entry[ZaAccount.A2_confirmPassword];
 	
-   	this._containedObject.globalConfig = this._app.getGlobalConfig();
+	if(!ZaSettings.isDomainAdmin) {
+		this._containedObject.globalConfig = this._app.getGlobalConfig();
+	}
    	
 			
 	if(!entry[ZaModel.currentTab])
@@ -177,9 +181,11 @@ function (index, form) {
 ZaAccountXFormView.prototype.getMyXForm = function() {	
 //	var domainName = this._app._appCtxt.getAppController().getOverviewPanelController().getCurrentDomain();
 	var domainName;
-	if(!domainName) {
+	if(ZaSettings.isDomainAdmin)
+		domainName = ZaSettings.myDomainName;
+	else 
 		domainName = this._app.getDomainList().getArray()[0].name;
-	}
+		
 	var emptyAlias = " @" + domainName;
 	var xFormObject = {
 		tableCssStyle:"width:100%;overflow:auto;",
@@ -190,11 +196,11 @@ ZaAccountXFormView.prototype.getMyXForm = function() {
 						items: [	
 							{type:_AJX_IMAGE_, src:"Person_32", label:null, rowSpan:2},
 							{type:_OUTPUT_, ref:ZaAccount.A_displayname, label:null,cssClass:"AdminTitle", rowSpan:2},
-							{type:_OUTPUT_, ref:ZaAccount.A_COSId, label:ZaMsg.NAD_ClassOfService+":",  choices:this._app.getCosListChoices()},							
+							{type:_OUTPUT_, relevant:"ZaSettings.COSES_ENABLED",ref:ZaAccount.A_COSId, labelLocation:_LEFT_, label:ZaMsg.NAD_ClassOfService+":", choices:this._app.getCosListChoices()},							
+							{type:_OUTPUT_, relevant:"ZaSettings.SERVERS_ENABLED", ref:ZaAccount.A_mailHost, labelLocation:_LEFT_,label:ZaMsg.NAD_MailServer+":"},
 							{type:_OUTPUT_, ref:ZaAccount.A_accountStatus, label:ZaMsg.NAD_AccountStatus+":", labelLocation:_LEFT_, choices:this.accountStatusChoices},												
 							{type:_OUTPUT_, ref:ZaAccount.A_name, label:ZaMsg.NAD_Email+":", labelLocation:_LEFT_, required:false},
-							{type:_OUTPUT_, ref:ZaAccount.A_mailHost, label:ZaMsg.NAD_MailServer+":"},
-							{type:_OUTPUT_, ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID},														
+							{type:_OUTPUT_, relevant:"!ZaSettings.isDomainAdmin", ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID},														
 							{type:_OUTPUT_, ref:ZaAccount.A2_mbxsize, label:ZaMsg.usedQuota+":",
 								getDisplayValue:function() {
 									var val = this.getInstanceValue();
@@ -245,7 +251,7 @@ ZaAccountXFormView.prototype.getMyXForm = function() {
 				{type:_CASE_,  relevant:"instance[ZaModel.currentTab] == 1", height:"400px", align:_LEFT_, valign:_TOP_, 
 					items:[
 						{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName+":", labelLocation:_LEFT_,onChange:ZaTabView.onFormFieldChanged,forceUpdate:true},
-						{ref:ZaAccount.A_COSId, type:_OSELECT1_, msgName:ZaMsg.NAD_ClassOfService+":",label:ZaMsg.NAD_ClassOfService+":", labelLocation:_LEFT_, choices:this._app.getCosListChoices(), onChange:ZaAccountXFormView.onCOSChanged},
+						{ref:ZaAccount.A_COSId, type:_OSELECT1_, relevant:"ZaSettings.COSES_ENABLED", msgName:ZaMsg.NAD_ClassOfService+":",label:ZaMsg.NAD_ClassOfService+":", labelLocation:_LEFT_, choices:this._app.getCosListChoices(), onChange:ZaAccountXFormView.onCOSChanged},
 						{ref:ZaAccount.A_password, type:_SECRET_, msgName:ZaMsg.NAD_Password,label:ZaMsg.NAD_Password+":", labelLocation:_LEFT_, cssClass:"admin_xform_name_input", onChange:ZaTabView.onFormFieldChanged},														
 						{ref:ZaAccount.A2_confirmPassword, type:_SECRET_, msgName:ZaMsg.NAD_ConfirmPassword,label:ZaMsg.NAD_ConfirmPassword+":", labelLocation:_LEFT_, cssClass:"admin_xform_name_input", onChange:ZaTabView.onFormFieldChanged},
 						{ref:ZaAccount.A_zimbraPasswordMustChange, align:_LEFT_, type:_CHECKBOX_,  msgName:ZaMsg.NAD_MustChangePwd,label:ZaMsg.NAD_MustChangePwd+":",labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label"},

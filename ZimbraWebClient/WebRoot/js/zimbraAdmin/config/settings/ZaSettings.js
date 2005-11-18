@@ -101,9 +101,9 @@ ZaSettings.ADDRESSES_ENABLED = true;
 
 
 //Settings for Domain Admin
-//ZaSettings.myDomainIds = ["a419d5d7-5542-11da-85d5-75d84dfa204f"];
-ZaSettings.myDomainIds = [];
+
 ZaSettings.isDomainAdmin = false;
+ZaSettings.myDomainName = "zimbra.com";
 
 // IDs FOR HTML COMPONENTS IN THE SKIN
 ZaSettings.INIT[ZaSettings.SKIN_APP_BOTTOM_TOOLBAR_ID]	= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_app_bottom_toolbar"];
