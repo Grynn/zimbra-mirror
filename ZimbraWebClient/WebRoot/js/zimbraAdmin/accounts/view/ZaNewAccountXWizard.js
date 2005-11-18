@@ -241,7 +241,28 @@ ZaNewAccountXWizard.prototype.getMyXForm = function() {
 							},
 							{ref:ZaAccount.A_password, type:_SECRET_, msgName:ZaMsg.NAD_Password,label:ZaMsg.NAD_Password+":", labelLocation:_LEFT_, cssClass:"admin_xform_name_input"},														
 							{ref:ZaAccount.A2_confirmPassword, type:_SECRET_, msgName:ZaMsg.NAD_ConfirmPassword,label:ZaMsg.NAD_ConfirmPassword+":", labelLocation:_LEFT_, cssClass:"admin_xform_name_input"},
-							{ref:ZaAccount.A_zimbraPasswordMustChange,align:_LEFT_, type:_CHECKBOX_,  msgName:ZaMsg.NAD_MustChangePwd,label:ZaMsg.NAD_MustChangePwd+":",labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label"},
+							{ref:ZaAccount.A_zimbraPasswordMustChange,align:_LEFT_, type:_CHECKBOX_, 
+								 msgName:ZaMsg.NAD_MustChangePwd,label:ZaMsg.NAD_MustChangePwd+":",labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label"},
+							{ref:ZaAccount.A_isAdminAccount,labelCssClass:"xform_label", type:_CHECKBOX_, 
+								msgName:ZaMsg.NAD_IsAdmin,label:ZaMsg.NAD_IsAdmin,labelLocation:_LEFT_, 
+								align:_LEFT_,
+								trueValue:"TRUE", falseValue:"FALSE",relevantBehavior:_HIDE_,
+								relevant:"!ZaSettings.isDomainAdmin", labelCssClass:"xform_label",
+								elementChanged: function(elementValue,instanceValue, event) {
+									if(elementValue == "TRUE") {
+										this.setInstanceValue("FALSE", ZaAccount.A_zimbraIsDomainAdminAccount);
+									}
+									this.getForm().itemChanged(this, elementValue, event);
+								}
+							},
+							{ref:ZaAccount.A_zimbraIsDomainAdminAccount,type:_CHECKBOX_, 
+								msgName:ZaMsg.NAD_IsDomainAdminAccount,label:ZaMsg.NAD_IsDomainAdminAccount,labelLocation:_LEFT_, 
+								trueValue:"TRUE", falseValue:"FALSE",
+								labelCssClass:"xform_label",
+								align:_LEFT_,
+								relevantBehavior:_DISABLE_,
+								relevant:"instance.attrs[ZaAccount.A_isAdminAccount]!=\'TRUE\'"
+							},
 							{ref:ZaAccount.A_firstName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_FirstName,label:ZaMsg.NAD_FirstName+":", labelLocation:_LEFT_, cssClass:"admin_xform_name_input",
 								elementChanged: function(elementValue,instanceValue, event) {
 									if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
@@ -432,14 +453,7 @@ ZaNewAccountXWizard.prototype.getMyXForm = function() {
 									{ref:ZaAccount.A_zimbraMailTrashLifetime,labelCssStyle:"width:160px;", type:_SUPER_LIFETIME1_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_MailTrashLifetime,label:ZaMsg.NAD_MailTrashLifetime+":", labelLocation:_LEFT_},
 									{ref:ZaAccount.A_zimbraMailSpamLifetime,labelCssStyle:"width:160px;", type:_SUPER_LIFETIME1_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_MailSpamLifetime,label:ZaMsg.NAD_MailSpamLifetime+":", labelLocation:_LEFT_}
 								]
-							},
-							{type:_SEPARATOR_, colSpan:"*"},
-							{type:_GROUP_, 
-								items: [
-									{ref:ZaAccount.A_isAdminAccount,labelCssStyle:"width:160px;", type:_CHECKBOX_, msgName:ZaMsg.NAD_IsAdmin,label:ZaMsg.NAD_IsAdmin+":",labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label"}
-								]
 							}
-				
 						]
 					}
 				]
