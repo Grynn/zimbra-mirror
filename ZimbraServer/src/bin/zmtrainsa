@@ -53,12 +53,13 @@ zmsetvars \
 	zimbra_home \
 	zimbra_server_hostname
 
-echo "server $SERVER user $USER@$SERVER password $PASS keep" > ${zimbra_home}/.fetchmailrc
-chmod 600 ${zimbra_home}/.fetchmailrc
+echo "server $SERVER user $USER@$SERVER password $PASS keep" > ${zimbra_home}/conf/.fetchmailrc
+chmod 600 ${zimbra_home}/conf/.fetchmailrc
 
+export HOME=${zimbra_home}/conf
 
-/usr/bin/fetchmail -n -a -u $USER $FOLDER -m "${zimbra_home}/bin/sa-learn -p ${zimbra_home}/conf/salocal.cf --dbpath ${zimbra_home}/amavisd/.spamassassin/ --no-sync --showdots -L --${MODE}" ${SERVER}
+/usr/bin/fetchmail -f ${zimbra_home}/conf/.fetchmailrc -n -a -u $USER $FOLDER -m "${zimbra_home}/bin/sa-learn -p ${zimbra_home}/conf/salocal.cf --dbpath ${zimbra_home}/amavisd/.spamassassin/ --no-sync --showdots -L --${MODE}" ${SERVER}
 
 ${zimbra_home}/bin/sa-learn -p ${zimbra_home}/conf/salocal.cf --dbpath ${zimbra_home}/amavisd/.spamassassin/ --sync
 
-rm -f ${zimbra_home}/.fetchmailrc
+rm -f ${zimbra_home}/conf/.fetchmailrc
