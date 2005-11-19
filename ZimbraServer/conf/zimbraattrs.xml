@@ -530,6 +530,8 @@
 
 <attr name="zimbraZimletUserProperties" type="string" max="1024"/>
 
+<attr name="zimbraZimletEnabled" type="boolean"/>
+
 <attr name="c" type="string"/>
 
 <attr name="co" type="string"/>
