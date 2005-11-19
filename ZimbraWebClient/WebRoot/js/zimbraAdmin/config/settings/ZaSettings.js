@@ -27,6 +27,41 @@ function ZaSettings() {
 }
 
 /**
+* Look for admin name cookies and admin type cookies
+**/
+ZaSettings.init = function () {
+	var adminType = AjxCookie.getCookie(document, ZaSettings.ADMIN_TYPE_COOKIE);
+	if(adminType == "domain") {
+		var adminName = AjxCookie.getCookie(document, ZaSettings.ADMIN_NAME_COOKIE);
+		if(adminName) {
+			var emailChunks = adminName .split("@");
+			var tmpDomain = new ZaDomain();
+			if(emailChunks.length > 1 ) {
+				tmpDomain.name = emailChunks[1];
+				ZaSettings.myDomainName = emailChunks[1];
+				EmailAddr_XFormItem.domainChoices.setChoices([tmpDomain]);
+				EmailAddr_XFormItem.domainChoices.dirtyChoices();							    
+			} else {
+				//throw new AjxException("Failed to parse login name", AjxException.UNKNOWN, "ZaAuthenticate.prototype._processResponse");
+			}				
+		    ZaSettings.isDomainAdmin = true;
+		    ZaSettings.MONITORING_ENABLED = false;
+		    ZaSettings.SYSTEM_CONFIG_ENABLED = false;
+		    ZaSettings.SERVERS_ENABLED = false;
+		    ZaSettings.SERVER_STATS_ENABLED = false;
+			ZaSettings.STATUS_ENABLED = false;
+		    ZaSettings.COSES_ENABLED= false;
+		    ZaSettings.DOMAINS_ENABLED= false;
+		    ZaSettings.ACCOUNTS_FEATURES_ENABLED = false;
+		    ZaSettings.ACCOUNTS_RESTORE_ENABLED = false;
+		    ZaSettings.ACCOUNTS_PREFS_ENABLED = false;
+		    ZaSettings.ACCOUNTS_REINDEX_ENABLED = true;
+		    ZaSettings.ACCOUNTS_ADVANCED_ENABLED = false;	
+		    ZaSettings.ACCOUNTS_VIEW_MAIL_ENABLED = false;	
+		}
+	}
+}
+/**
 * Static method so that static code can get the default value of a setting if it needs to.
 *
 * @param id		the numeric ID of the setting
@@ -101,7 +136,8 @@ ZaSettings.ADDRESSES_ENABLED = true;
 
 
 //Settings for Domain Admin
-
+ZaSettings.ADMIN_NAME_COOKIE = "ZA_ADMIN_NAME_COOKIE";
+ZaSettings.ADMIN_TYPE_COOKIE ="ZA_ADMIN_TYPE_COOKIE";
 ZaSettings.isDomainAdmin = false;
 ZaSettings.myDomainName = "zimbra.com";
 

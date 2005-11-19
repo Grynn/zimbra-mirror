@@ -93,7 +93,7 @@ EmailAddr_XFormItem.prototype.items = [
 			this.getParentItem()._domainPart = val;
 			
 			return val;
-		},	
+		}	
 	},
 	{type:_OSELECT1_, ref:".", labelLocation:_NONE_, relevantBehavior:_HIDE_, 
 	 choices:EmailAddr_XFormItem.domainChoices,

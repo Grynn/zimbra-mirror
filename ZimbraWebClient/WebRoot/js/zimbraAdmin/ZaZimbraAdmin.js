@@ -221,19 +221,18 @@ function() {
 	this._appViewMgr = new ZaAppViewMgr(this._shell, this, true);
 								        
 	try {
-		var domains = ZaDomain.getAll(); // catch an exception before building the UI
+		//var myname = AjxCookie.getCookie(document, ZaSettings.ADMIN_NAME_COOKIE);			    
 		//if we're not logged in we will be thrown out here
+		var testSrch = ZaSearch.search("", [ZaSearch.ACCOUNTS], 1, ZaAccount.A_uid, true, this._app, null, 1); // catch an exception before building the UI
 		
+		//initialize my rights
+		ZaSettings.init();		
 		//draw stuff
 		var elements = new Object();
 		elements[ZaAppViewMgr.C_SASH] = new DwtSash(this._shell, DwtSash.HORIZONTAL_STYLE,"console_inset_app_l", 20);
 		elements[ZaAppViewMgr.C_BANNER] = this._createBanner();		
 		elements[ZaAppViewMgr.C_APP_CHOOSER] = this._createAppChooser();
 		elements[ZaAppViewMgr.C_STATUS] = this._statusBox = new DwtText(this._shell, "statusBox", Dwt.ABSOLUTE_STYLE);
-//test
-/*		elements[ZaAppViewMgr.C_USER_INFO] = this._progressBar = new DwtProgressBar(this._shell, null, Dwt.ABSOLUTE_STYLE);		
-		this._progressBar.setValue(30);*/
-		
 		this._statusBox.setScrollStyle(Dwt.CLIP);
 		this._setLicenseStatusMessage();
 	// the outer element of the entire skin is hidden until this point

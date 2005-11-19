@@ -764,18 +764,6 @@ function(by, val, withCos) {
 	}
 	var elBy = soapDoc.set("account", val);
 	elBy.setAttribute("by", by);
-/*
-	var cmd = new ZmCsfeCommand();
-	var params = {"soapDoc":soapDoc, "useXml":false};
-	var resp = cmd.invoke(params);
-	//var resp = cmd.invoke(params).firstChild;
-*/
-/*
-	var cmd = new ZmCsfeCommand();
-	var params = {"soapDoc":soapDoc, "useXml":true, "returnXml":true};
-	var resp = cmd.invoke(params);
-	this.initFromDom(resp.getBody().firstChild.firstChild);
-*/	
 
 	var resp = ZmCsfeCommand.invoke(soapDoc, false, null, null, true).firstChild;	
 	this.attrs = new Object();
@@ -785,12 +773,17 @@ function(by, val, withCos) {
 	var mbox = soapDoc.set("mbox", "");
 	mbox.setAttribute("id", this.attrs[ZaItem.A_zimbraId]);
 	//find out which server I am on
-	var myServer = this._app.getServerByName(this.attrs[ZaAccount.A_mailHost]);
-				
-	var resp = ZmCsfeCommand.invoke(soapDoc, false, null, myServer.id, true);
-	if(resp && resp.firstChild && resp.firstChild.firstChild) {
-		this.attrs[ZaAccount.A2_mbxsize] = resp.firstChild.firstChild.getAttribute("s");
+	try {
+		var resp = ZmCsfeCommand.invoke(soapDoc, false, null, null, true);
+		if(resp && resp.firstChild && resp.firstChild.firstChild) {
+			this.attrs[ZaAccount.A2_mbxsize] = resp.firstChild.firstChild.getAttribute("s");
+		}
+	} catch (ex) {
+		//show the error and go on
+		//we should not stop the Account from loading if some of the information cannot be accessed
+		this._app.getCurrentController()._handleException(ex, "ZaAccount.prototype.load", null, false);
 	}
+				
 	this[ZaAccount.A2_confirmPassword] = null;
 	
 	var autoDispName;

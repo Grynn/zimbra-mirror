@@ -71,7 +71,18 @@ ZaSearch.standardAttributes = AjxBuffer.concat(ZaAccount.A_displayname,",",
 											   ZaAccount.A_description, ",",
 											   ZaDistributionList.A_mailStatus);
 
-
+/**
+* Sends SearchAccountsRequest to the SOAP Servlet
+* @param query - query string
+* @param types - array of object types to search for([ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS])
+* @pagenum - results page number
+* @orderby - attribute to sort by
+* @isascending - sort order (boolean)
+* @app - reference to ZaApp instance (will be passed on to ZaItemList contructor)
+* @attrs - coma separated list of attributes to return (default: ZaSearch.standardAttributes)
+* @limit - maximum number of records to return
+* @domainName - domain name (optional, if searching within one domain)
+**/
 ZaSearch.search =
 function(query, types, pagenum, orderby, isascending, app, attrs, limit, domainName) {
 	if(!orderby) orderby = ZaAccount.A_uid;

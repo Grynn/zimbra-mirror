@@ -26,6 +26,7 @@
 function ZaAuthenticate(appCtxt) {
 	if (arguments.length == 0) return;
 	this._appCtxt = appCtxt;
+	this._uname = "";
 }
 
 ZaAuthenticate._isAdmin = true;
@@ -43,18 +44,19 @@ function (uname, pword, isPublic) {
 //	var context = soapDoc.set("context", null, header);
 //	context.setAttribute("xmlns", "urn:zimbraAdmin");
 //	soapDoc.set("nosession", null, context);
-		
+	this._uname = uname;
 	soapDoc.set("name", uname);
 	soapDoc.set("password", pword);
 	var resp = ZmCsfeCommand.invoke(soapDoc, true, null, null, true).firstChild;
-	this._setAuthToken(resp);	
+	this._processResponse(resp);	
 }
 
-ZaAuthenticate.prototype._setAuthToken =
+ZaAuthenticate.prototype._processResponse =
 function(resp) {
 	var els = resp.childNodes;
 	var len = els.length;
 	var el, authToken, sessionId;
+	AjxCookie.setCookie(document, ZaSettings.ADMIN_NAME_COOKIE, this._uname, null, "/");			    	
 	for (var i = 0; i < len; i++) {
 		el = els[i];
 		if (el.nodeName == "authToken")
@@ -63,6 +65,17 @@ function(resp) {
 			lifetime = el.firstChild.nodeValue;*/
 		else if (el.nodeName=="sessionId")
 			sessionId = el.firstChild.nodeValue;
+		else if (el.nodeName=="a") {
+			if(ZaAccount.A_zimbraIsDomainAdminAccount == el.getAttribute("n")) {
+				var value = el.firstChild.nodeValue;
+				if(value=="true") {
+					AjxCookie.setCookie(document, ZaSettings.ADMIN_TYPE_COOKIE, "domain", null, "/");			    	
+				} else {
+					AjxCookie.setCookie(document, ZaSettings.ADMIN_TYPE_COOKIE, "super", null, "/");			    	
+				}					
+			}
+		}
 	}
 	ZmCsfeCommand.setAuthToken(authToken, -1, sessionId);
+	ZaSettings.init();					
 }
