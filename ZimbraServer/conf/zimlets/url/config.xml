@@ -1,5 +1,5 @@
 <zimletConfig name="url" version="1.0">
 	<global>
-		<property name="allowedDomains">*.liquidsys.com,*.zimbra.com</property>
+		<property name="allowedDomains">*.liquidsys.com,*.zimbra.com,*.yahoo.com</property>
 	</global>
 </zimletConfig>
