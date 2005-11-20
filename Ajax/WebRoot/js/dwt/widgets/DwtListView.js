@@ -931,18 +931,19 @@ function(clickedEl, ev) {
 		var bContained = this._selectedItems.contains(clickedEl);
 		
 		if (ev.button == DwtMouseEvent.LEFT) {
-		
-			// clear out old left click selection(s)
-			for (i = 0; i < numSelectedItems; i++)
-				a[i].className = a[i]._styleClass;
-			this._selectedItems.removeAll();
-			
-			// save new left click selection
-			this._selectedItems.add(clickedEl);
-			this._selAnchor = clickedEl;
-			clickedEl.className = clickedEl._selectedStyleClass;
-			this._firstSelIndex = this._list 
-				? this._list.indexOf(AjxCore.objectWithId(clickedEl._itemIndex)) : -1;
+			if (this._allowLeftSelection(clickedEl, ev, ev.button)) {
+				// clear out old left click selection(s)
+				for (i = 0; i < numSelectedItems; i++)
+					a[i].className = a[i]._styleClass;
+				this._selectedItems.removeAll();
+				
+				// save new left click selection
+				this._selectedItems.add(clickedEl);
+				this._selAnchor = clickedEl;
+				clickedEl.className = clickedEl._selectedStyleClass;
+				this._firstSelIndex = this._list 
+					? this._list.indexOf(AjxCore.objectWithId(clickedEl._itemIndex)) : -1;
+			}
 		} else if (ev.button == DwtMouseEvent.RIGHT && !bContained) {
 			// save right click selection
 			this._rightSelItems = clickedEl;
@@ -1067,6 +1068,12 @@ function() {
 DwtListView.prototype._getDefaultSortbyForCol = 
 function(colHeader) {
 	// by default, always return ascending
+	return true;
+}
+
+DwtListView.prototype._allowLeftSelection =
+function(clickedEl, ev, button) {
+	// overload me (and return false) if you dont want to actually select clickedEl
 	return true;
 }
 
