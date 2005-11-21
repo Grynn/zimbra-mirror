@@ -29,15 +29,14 @@
 * @constructor
 * @class
 * This singleton class makes an HTTP POST to the server and receives the response, passing returned data
-* to a callback. The form should be within an IFRAME, which can then be filled by the callback as
-* appropriate. This class is used to upload files from the client browser to the server using the file
+* to a callback. This class is used to upload files from the client browser to the server using the file
 * upload feature of POST.
 *
 * @author Conrad Damon
 */
-function AjxPost() {
-	this._container = null;
+function AjxPost(iframeId) {
 	this._callback = null;
+	this._iframeId = iframeId;
 }
 
 AjxPost._reqIds = 0;
@@ -46,17 +45,14 @@ AjxPost._outStandingRequests = new Object();
 /**
 * Submits the form.
 *
-* @param container		the IFRAME element that holds the form
 * @param callback		function to return to after the HTTP response is received
 * @param formId			DOM ID of the form
 */
 AjxPost.prototype.execute =
-function(container, callback, formId, optionalTimeout) {
-	this._container = container;
+function(callback, form, optionalTimeout) {
+	form.target = this._iframeId;
 	this._callback = callback;
-	var doc = AjxEnv.isIE ? container.Document : container.contentDocument;
-	var form = doc.getElementById(formId);
-	var req = new AjxPostRequest(form, doc);
+	var req = new AjxPostRequest(form);
 	var failureAction = new AjxTimedAction();
 	failureAction.method = this._onFailure;
 	failureAction.obj = this;
@@ -84,11 +80,12 @@ function (reqId){
 *        out.println("<html><head></head><body onload=\"window.parent._uploadManager.loaded(" + results +");\"></body></html>");
 * </code>
 *
-* @param status		an HTTP status 
+* @param status		an HTTP status
 * @param id			the id for any attachments that were uploaded
 */
 AjxPost.prototype.loaded =
 function(status, reqId, id) {
+	//alert(document.getElementById(this._iframeId).contentWindow.document.documentElement.innerHTML);
 	var req = AjxPost._outStandingRequests[reqId];
 	if (req && !req.hasBeenCancelled()) {
 		req.cancelTimeout();
@@ -100,16 +97,18 @@ function(status, reqId, id) {
 	}
 };
 
-function AjxPostRequest (form, doc) {
+function AjxPostRequest (form) {
 	this.id = AjxPost._reqIds++;
 	this._cancelled = false;
 	this._form = form;
-	var inp = doc.createElement('input');
-	inp.type = "hidden";
-	inp.name = "requestId";
+	var inp = form.elements.namedItem("requestId");
+	if (!inp) {
+		inp = form.ownerDocument.createElement('input');
+		inp.type = "hidden";
+		inp.name = "requestId";
+	}
 	inp.value = this.id;
-	//var input = Dwt.parseHtmlFragment("<input type='hidden' name='requestId' value='" + this.id + "'></input>");
-	this._form.appendChild(inp);
+	form.appendChild(inp);
 };
 
 AjxPostRequest.prototype.send =
@@ -117,6 +116,7 @@ function(failureAction, timeout) {
 	// Not sure what a fair timeout is for uploads, so for now,
 	// we won't have a failed callback.
 	//this._timeoutId = AjxTimedAction.scheduleAction(failureAction, timeout);
+	//alert(this._form.innerHTML);
 	this._form.submit();
 };
 
