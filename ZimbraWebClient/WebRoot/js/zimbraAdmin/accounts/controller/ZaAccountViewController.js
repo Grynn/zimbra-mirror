@@ -218,18 +218,18 @@ function () {
 	var myCos = null;
 	var maxPwdLen = Number.POSITIVE_INFINITY;
 	var minPwdLen = 1;	
-	
-	if(tmpObj.attrs[ZaAccount.A_COSId]) {
-		myCos = new ZaCos(this._app);
-		myCos.load("id", tmpObj.attrs[ZaAccount.A_COSId]);
-		if(myCos.attrs[ZaCos.A_zimbraMinPwdLength] > 0) {
-			minPwdLen = myCos.attrs[ZaCos.A_zimbraMinPwdLength];
+	if(ZaSettings.COSES_ENABLED) {
+		if(tmpObj.attrs[ZaAccount.A_COSId]) {
+			myCos = new ZaCos(this._app);
+			myCos.load("id", tmpObj.attrs[ZaAccount.A_COSId]);
+			if(myCos.attrs[ZaCos.A_zimbraMinPwdLength] > 0) {
+				minPwdLen = myCos.attrs[ZaCos.A_zimbraMinPwdLength];
+			}
+			if(myCos.attrs[ZaCos.A_zimbraMaxPwdLength] > 0) {
+				maxPwdLen = myCos.attrs[ZaCos.A_zimbraMaxPwdLength];
+			}		
 		}
-		if(myCos.attrs[ZaCos.A_zimbraMaxPwdLength] > 0) {
-			maxPwdLen = myCos.attrs[ZaCos.A_zimbraMaxPwdLength];
-		}		
-	}
-	
+	}		
 
 	var mods = new Object();
 	var changeDetails = new Object();
@@ -456,7 +456,7 @@ function(entry, skipRefresh) {
 		this._app.pushView(ZaZimbraAdmin._ACCOUNT_VIEW);
 		if(entry.id && !skipRefresh) {
 			try {
-				entry.refresh(false);
+				entry.refresh(!ZaSettings.COSES_ENABLED);
 			} catch (ex) {
 				// Data corruption may cause anexception. We should catch it here in order to display the form anyway.
 				this._handleException(ex, null, null, false);

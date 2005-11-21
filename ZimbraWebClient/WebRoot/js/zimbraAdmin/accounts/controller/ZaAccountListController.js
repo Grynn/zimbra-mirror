@@ -505,7 +505,7 @@ ZaAccountListController.prototype._editItem = function (item) {
 	} else if(type == ZaItem.ALIAS) {
 		var account = new ZaAccount(this._app);
 		if(item.attrs && item.attrs[ZaAlias.A_AliasTargetId]) {
-			account.load("id", item.attrs[ZaAlias.A_AliasTargetId], false);
+			account.load("id", item.attrs[ZaAlias.A_AliasTargetId], (!ZaSettings.COSES_ENABLED));
 			this._app.getAccountViewController().show(account);
 		}
 	}
@@ -805,13 +805,13 @@ function (item) {
 					maxPwdLen = item.attrs[ZaAccount.A_zimbraMaxPwdLength];
 				} 
 				
-				if(!item.attrs[ZaAccount.A_COSId]) {
+				if(!item.attrs[ZaAccount.A_COSId] && ZaSettings.COSES_ENABLED) {
 					var cosList = this._app.getCosList().getArray();
 					item.attrs[ZaAccount.A_COSId] = cosList[0].id;
 				}
 				
 				if (minPwdLen == null) {
-					if(item.attrs[ZaAccount.A_COSId]) {
+					if(item.attrs[ZaAccount.A_COSId] && ZaSettings.COSES_ENABLED) {
 						myCos = new ZaCos(this._app);
 						myCos.load("id", item.attrs[ZaAccount.A_COSId]);
 						if(myCos.attrs[ZaCos.A_zimbraMinPwdLength] > 0) {
@@ -821,7 +821,7 @@ function (item) {
 				}			
 				
 				if (maxPwdLen == null) {
-					if(item.attrs[ZaAccount.A_COSId]) {
+					if(item.attrs[ZaAccount.A_COSId] && ZaSettings.COSES_ENABLED) {
 						if(!myCos) { 
 							myCos = new ZaCos(this._app);
 							myCos.load("id", item.attrs[ZaAccount.A_COSId]);

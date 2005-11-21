@@ -192,22 +192,24 @@ function(tmpObj, app) {
 	var minPwdLen = 1;	
 	
 	//find out what is this account's COS
-	var cosList = app.getCosList().getArray();
-	for(var ix in cosList) {
-		if(cosList[ix].id == tmpObj.attrs[ZaAccount.A_COSId]) {
-			myCos = cosList[ix];
-			break;
+	if(ZaSettings.COSES_ENABLED) {
+		var cosList = app.getCosList().getArray();
+		for(var ix in cosList) {
+			if(cosList[ix].id == tmpObj.attrs[ZaAccount.A_COSId]) {
+				myCos = cosList[ix];
+				break;
+			}
 		}
+		if(!myCos && cosList.length > 0) {
+			myCos = cosList[0];
+			tmpObj.attrs[ZaAccount.A_COSId] = cosList[0].id;
+		}		
 	}
 	//if the account did not have a valid cos id - pick the first COS
-	if(!myCos && cosList.length > 0) {
-		myCos = cosList[0];
-		tmpObj.attrs[ZaAccount.A_COSId] = cosList[0].id;
-	}		
 	//validate password length against this account's COS setting
 	if(tmpObj.attrs[ZaAccount.A_zimbraMinPwdLength] != null) {
 		minPwdLen = tmpObj.attrs[ZaAccount.A_zimbraMinPwdLength];
-	} else {
+	} else if(ZaSettings.COSES_ENABLED) {
 		if(myCos) {
 			if(myCos.attrs[ZaCos.A_zimbraMinPwdLength] > 0) {
 				minPwdLen = myCos.attrs[ZaCos.A_zimbraMinPwdLength];
@@ -217,7 +219,7 @@ function(tmpObj, app) {
 	
 	if(tmpObj.attrs[ZaAccount.A_zimbraMaxPwdLength] != null) {
 		maxPwdLen = tmpObj.attrs[ZaAccount.A_zimbraMaxPwdLength];
-	} else {
+	} else if(ZaSettings.COSES_ENABLED) {
 		if(myCos) {
 			if(myCos.attrs[ZaCos.A_zimbraMaxPwdLength] > 0) {
 				maxPwdLen = myCos.attrs[ZaCos.A_zimbraMaxPwdLength];
