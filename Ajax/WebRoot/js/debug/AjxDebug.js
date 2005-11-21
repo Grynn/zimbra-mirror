@@ -358,9 +358,9 @@ function(obj, recurse) {
 	} else if (AjxUtil.isBoolean(obj)) {
 		text += obj ? "true" : "false";
 	} else if (AjxUtil.isString(obj)) {
-		obj = obj.replace(/\r/g, "\\r");
-		obj = obj.replace(/\n/g, "\\n");
-		obj = obj.replace(/\t/g, "\\t");
+	//	obj = obj.replace(/\r/g, "\\r");
+	//	obj = obj.replace(/\n/g, "\\n");
+	//	obj = obj.replace(/\t/g, "\\t");
 		text += '"' + AjxDebug._escapeForHTML(obj) + '"';
 	} else if (AjxUtil.isNumber(obj)) {
 		text += obj;

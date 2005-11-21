@@ -197,7 +197,7 @@ ZaAccountXFormView.prototype.getMyXForm = function() {
 	headerItems.push({type:_OUTPUT_, ref:ZaAccount.A_accountStatus, label:ZaMsg.NAD_AccountStatus+":", labelLocation:_LEFT_, choices:this.accountStatusChoices});
 	headerItems.push({type:_OUTPUT_, ref:ZaAccount.A_name, label:ZaMsg.NAD_Email+":", labelLocation:_LEFT_, required:false});
 	if(!ZaSettings.isDomainAdmin) {
-		headerItems.push({type:_OUTPUT_, relevant:"", ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID});
+		headerItems.push({type:_OUTPUT_,  ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID});
 	}
 	headerItems.push({type:_OUTPUT_, ref:ZaAccount.A2_mbxsize, label:ZaMsg.usedQuota+":",
 						getDisplayValue:function() {
