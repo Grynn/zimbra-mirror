@@ -50,6 +50,8 @@ ZaDomain.prototype.constructor = ZaDomain;
 ZaDomain.A_description = "description";
 ZaDomain.A_notes = "zimbraNotes";
 ZaDomain.A_domainName = "zimbraDomainName";
+ZaDomain.A_domainDefaultCOSId = "zimbraDomainDefaultCOSId";
+
 //GAL
 ZaDomain.A_GalMaxResults = "zimbraGalMaxResults";
 ZaDomain.A_GalMode = "zimbraGalMode";
@@ -249,6 +251,10 @@ function(tmpObj, app) {
 	var attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_AuthMech]);
 	attr.setAttribute("n", ZaDomain.A_AuthMech);	
 
+	if(tmpObj.attrs[ZaDomain.A_domainDefaultCOSId]) {
+		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_domainDefaultCOSId]);
+		attr.setAttribute("n", ZaDomain.A_domainDefaultCOSId);	
+	}
 	var newDomain = new ZaDomain();
 	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	newDomain.initFromDom(resp.firstChild);
@@ -437,82 +443,11 @@ function (node) {
 		/* Split Auth URL into an array */
 		var temp = this.attrs[ZaDomain.A_AuthLdapURL];
 		this.attrs[ZaDomain.A_AuthLdapURL] = temp.split(" ");
-		
-		/* analyze Auth URL */
-		/*
-		var pieces = this.attrs[ZaDomain.A_AuthLdapURL].split(/[:\/]/);
-		if (pieces.length < 4) {
-			//the URL is invalid - use default values
-			this.attrs[ZaDomain.A_AuthLDAPUseSSL] = "FALSE";	
-			this.attrs[ZaDomain.A_AuthLDAPServerPort] = 389;
-			this.attrs[ZaDomain.A_AuthLDAPServerName] = "";
-		} else {
-			if(pieces[0] == "ldaps") {
-				this.attrs[ZaDomain.A_AuthLDAPUseSSL] = "TRUE";
-			} else {
-				this.attrs[ZaDomain.A_AuthLDAPUseSSL] = "FALSE";	
-			}
-			var ix = 1;
-			var cnt = pieces.length;
-			while( (pieces[ix] == null || pieces[ix] == "" || pieces[ix].length == 0) && ix < cnt) {
-				ix++; //skip empty tokens
-			}
-			this.attrs[ZaDomain.A_AuthLDAPServerName] = pieces[ix];
-			ix++;
-			if(ix < cnt && pieces[ix] != null && pieces[ix] != "" && pieces[ix].length >0) {
-				this.attrs[ZaDomain.A_AuthLDAPServerPort] = pieces[ix]; //got port token
-			} else {
-			 	//URL does not contain port, use default values
-			 	if(this.attrs[ZaDomain.A_AuthLDAPUseSSL] == "TRUE") {
-				 	this.attrs[ZaDomain.A_AuthLDAPServerPort] = 636;
-			 	} else {
-		 			this.attrs[ZaDomain.A_AuthLDAPServerPort] = 389;
-			 	}
-			}
-			
-		}
-	
-		if (pieces.length == 2) {
-			this.attrs[ZaDomain.A_AuthLDAPServerPort] == pieces[1];
-		}*/
+
 	} else this.attrs[ZaDomain.A_AuthLdapURL] = new Array();
 	if(this.attrs[ZaDomain.A_GalLdapURL])	{	
 		var temp = this.attrs[ZaDomain.A_GalLdapURL];
 		this.attrs[ZaDomain.A_GalLdapURL] = temp.split(" ");		
-		
-		/* analyze GAL URL */
-		
-		/*var pieces = this.attrs[ZaDomain.A_GalLdapURL].split(/[:\/]/);
-		if (pieces.length < 4) {
-			//the URL is invalid - use default values
-			this.attrs[ZaDomain.A_GALUseSSL] = "FALSE";	
-			this.attrs[ZaDomain.A_GALServerPort] = 389;
-			this.attrs[ZaDomain.A_GALServerName] = "";
-		} else {
-			if(pieces[0] == "ldaps") {
-				this.attrs[ZaDomain.A_GALUseSSL] = "TRUE";
-			} else {
-				this.attrs[ZaDomain.A_GALUseSSL] = "FALSE";	
-			}
-			var ix = 1;
-			var cnt = pieces.length;
-			while( (pieces[ix] == null || pieces[ix] == "" || pieces[ix].length == 0) && ix < cnt) {
-				ix++; //skip empty tokens
-			}
-			this.attrs[ZaDomain.A_GALServerName] = pieces[ix];
-			ix++;
-			if(ix < cnt && pieces[ix] != null && pieces[ix] != "" && pieces[ix].length >0) {
-				this.attrs[ZaDomain.A_GALServerPort] = pieces[ix]; //got port token
-			} else {
-			 	//URL does not contain port, use default values
-			 	if(this.attrs[ZaDomain.A_GALUseSSL] == "TRUE") {
-				 	this.attrs[ZaDomain.A_GALServerPort] = 636;
-			 	} else {
-		 			this.attrs[ZaDomain.A_GALServerPort] = 389;
-			 	}
-			}
-			
-		}*/
 	} else this.attrs[ZaDomain.A_GalLdapURL] = new Array();
 	
 	if(this.attrs[ZaDomain.A_GalMode]) {
@@ -583,12 +518,10 @@ ZaDomain.myXModel = {
 		{id:ZaDomain.A_domainName, type:_STRING_, ref:"attrs/" + ZaDomain.A_domainName, pattern:/(^([a-zA-Z0-9]))(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/},
 		{id:ZaDomain.A_description, type:_STRING_, ref:"attrs/" + ZaDomain.A_description}, 
 		{id:ZaDomain.A_notes, type:_STRING_, ref:"attrs/" + ZaDomain.A_notes},
+		{id:ZaDomain.A_domainDefaultCOSId, type:_STRING_, ref:"attrs/" + ZaDomain.A_domainDefaultCOSId},
 		{id:ZaDomain.A_GalMode, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalMode},
 		{id:ZaDomain.A_GalMaxResults, type:_NUMBER_, ref:"attrs/" + ZaDomain.A_GalMaxResults, maxInclusive:2147483647, minInclusive:1},					
 		{id:ZaDomain.A_GALServerType, type:_STRING_, ref:"attrs/" + ZaDomain.A_GALServerType},
-//		{id:ZaDomain.A_GALServerName, type:_STRING_, ref:"attrs/" + ZaDomain.A_GALServerName},					
-	//	{id:ZaDomain.A_GALServerPort, type:_NUMBER_, ref:"attrs/" + ZaDomain.A_GALServerPort, maxInclusive:2147483647},
-//		{id:ZaDomain.A_GALUseSSL, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_GALUseSSL},
 		{id:ZaDomain.A_GalLdapFilter, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapFilter,required:true},
 		{id:ZaDomain.A_GalLdapSearchBase, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapSearchBase},
 		{id:ZaDomain.A_UseBindPassword, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_UseBindPassword},

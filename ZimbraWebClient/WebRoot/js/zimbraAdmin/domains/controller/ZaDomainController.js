@@ -256,6 +256,10 @@ function () {
 		mods[ZaDomain.A_description] = tmpObj.attrs[ZaDomain.A_description] ;
 		haveSmth = true;
 	}
+	if(tmpObj.attrs[ZaDomain.A_domainDefaultCOSId] != this._currentObject.attrs[ZaDomain.A_domainDefaultCOSId]) {
+		mods[ZaDomain.A_domainDefaultCOSId] = tmpObj.attrs[ZaDomain.A_domainDefaultCOSId] ;
+		haveSmth = true;
+	}	
 	if(!haveSmth)
 		return true;
 	
