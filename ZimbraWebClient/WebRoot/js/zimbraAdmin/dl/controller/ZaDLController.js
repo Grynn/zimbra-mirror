@@ -24,6 +24,7 @@
  */
 
 /**
+ * @author EMC
  * Distribution list controller 
  */
 function ZaDLController (appCtxt, container, abApp, domain) {
@@ -32,7 +33,7 @@ function ZaDLController (appCtxt, container, abApp, domain) {
 	this._createListeners();
 	this._createToolbars();
 	this.__internalId = AjxCore.assignId(this);
-	this._helpURL = "/zimbraAdmin/adminhelp/html/OpenSourceAdminHelp/managing_accounts/provisioning_accounts.htm";
+	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/provisioning_accounts.htm";
 }
 
 ZaDLController.prototype = new ZaController();
@@ -122,7 +123,7 @@ ZaDLController.prototype._getView = function (id, args) {
 	if (view == null) {
 		switch (id) {
 		case ZaZimbraAdmin._DL_VIEW:
-			this._app.getDomainList();
+			//this._app.getDomainList();
 			var xModelObj = new XModel(ZaDLController.distributionListXModel);
 			view = new XForm(this._getNewViewXForm(), xModelObj, args, this._container);
 			var ls = new AjxListener(this, this._itemUpdatedListener);
@@ -149,8 +150,8 @@ ZaDLController.prototype._getView = function (id, args) {
 					clone[ZaModel.currentTab] = "1";
 				}
 				view.getItemsById('members')[0].dirtyDisplay();
-				view.getItemsById('searchText')[0].getElement().value = "";
 				view.setInstance(clone);
+				view.getItemsById('searchText')[0].getElement().value = "";				
 				view.focusNext();
 			};
 			this._dlView = view;
@@ -384,9 +385,9 @@ ZaDLController.prototype._getNewViewXForm = function () {
 				  // The colSizes are necessary for firefox to hold the position
 			      // during the repositioning done in ZaAppViewMgr.pushView
 			      {type:_TAB_BAR_, choices:[ {value:1, label:ZaMsg.DLXV_TabMembers}, {value:2, label:ZaMsg.DLXV_TabNotes}], ref: ZaModel.currentTab, colSpan:"*"},
-			      {type:_SWITCH_, useParentTable: true, colSpan:"*", numCols:5,
+			      {type:_SWITCH_, colSpan:"*", numCols:5,
 				  items:[
-					 {type:_CASE_, useParentTable:true, relevant:"instance[ZaModel.currentTab] == 1", colSpan:"*", numCols:5,
+					 {type:_CASE_,  relevant:"instance[ZaModel.currentTab] == 1", colSpan:"*", numCols:5,
 					  items:[
 						 {type:_CELLSPACER_, width:10 },
  						    {type:_GROUP_, colSpan:1, width:"100%", colSizes:[70,"auto"],
@@ -477,7 +478,7 @@ ZaDLController.prototype._getNewViewXForm = function () {
 						    {type:_CELLSPACER_, width:10 }
 						    ]
 					 },
-					 {type:_CASE_, useParentTable:false, relevant:"instance[ZaModel.currentTab] == 2", colSizes:[10, "auto"], colSpan:"*",
+					 {type:_CASE_, relevant:"instance[ZaModel.currentTab] == 2", colSizes:[10, "auto"], colSpan:"*",
 					     items:[
 						    {type:_SPACER_, height:5},
 						    {type:_SPACER_, height:5},

@@ -22,7 +22,9 @@
  * 
  * ***** END LICENSE BLOCK *****
  */
-
+ /**
+ * @author EMC
+ **/
 function ZaDistributionList(app, id, name, memberList, description, notes) {
 	ZaItem.call(this, app);
 	this.attrs = new Object();

@@ -22,7 +22,10 @@
  * 
  * ***** END LICENSE BLOCK *****
  */
-
+ 
+ /**
+ * @author EMC
+ **/
 function ZaDLListView(parent, className, posStyle, headerList) {
 	DwtListView.call(this, parent, className, posStyle, headerList);
 }
