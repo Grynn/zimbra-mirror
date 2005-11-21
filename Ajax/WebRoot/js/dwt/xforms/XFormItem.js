@@ -711,12 +711,16 @@ XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript, inde
 
 
 
-	updateScript.append(
+	/*updateScript.append(
 			// first line is to separate out each item
 			"_____________________________________________________++;\r",
 			"item = form.getItemById('", this.getId(),"', '", this.getRefPath(), "');\r"
+	);*/
+	updateScript.append(
+			// first line is to separate out each item
+			"_____________________________________________________++;\r",
+			"item = form.getItemById('", this.getId(),"');\r"
 	);
-
 
 	// if there is a relevant attribute, 
 	//		get whether or not this item is relevant, and
