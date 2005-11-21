@@ -462,9 +462,9 @@ XModelItem.prototype.getMaxExclusive = function() { return this.maxExclusive; }
 XModel.registerErrorMessage("notANumber",		 AjxMsg.notANumber);
 XModel.registerErrorMessage("numberTotalExceeded", AjxMsg.numberTotalExceeded);
 XModel.registerErrorMessage("numberFractionExceeded", AjxMsg.numberFractionExceeded);
-XModel.registerErrorMessage("numberMoreThanMax", AjxMsg.numberMoreThanMax);
+XModel.registerErrorMessage("numberMoreThanMax", AjxMsg.xFnumberMoreThanMax);
 XModel.registerErrorMessage("numberMoreThanEqualMax", AjxMsg.numberMoreThanEqualMax);
-XModel.registerErrorMessage("numberLessThanMin", AjxMsg.numberLessThanMin);
+XModel.registerErrorMessage("numberLessThanMin", AjxMsg.xFnumberLessThanMin);
 XModel.registerErrorMessage("numberLessThanEqualMin", AjxMsg.numberLessThanEqualMin);
 
 XModelItem.prototype.validateNumber = function(value) {

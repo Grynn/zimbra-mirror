@@ -256,14 +256,19 @@ function(element) {
  * @param rows [Int] - The number of rows in the table
  * @param cols [Int] - The number of columns in the table
  * @param width [String] - The width of the table. The units should be part of this value e.g. "100%" or "10px"
- * @param alignment [String] - The alignment of the table. This is one of valid alignment values for the HTML
- *    <table> element
- * @param border [Int] - border width
  * @param cellSpacing [Int] - Cell spacing in the table
  * @param cellPadding [Int] - Cell padding in the table
+ * @param alignment [String] - The alignment of the table. This is one of valid alignment values for the HTML
+ *    <table> element 
  */
 DwtHtmlEditor.prototype.insertTable =
-function(rows, cols, width, alignment, border, cellSpacing, cellPadding) {
+function(rows, cols, width, cellSpacing, cellPadding, alignment) {
+DBG.println("Rows: " + rows);
+DBG.println("Cols: " + cols);
+DBG.println("Width: " + width);
+DBG.println("CellSpacing: " + cellSpacing);
+DBG.println("CellPadding: " + cellPadding);
+DBG.println("alignment: " + alignment);
 	if (this._mode != DwtHtmlEditor.HTML)
 		return;
     
@@ -271,18 +276,30 @@ function(rows, cols, width, alignment, border, cellSpacing, cellPadding) {
 	var table = doc.createElement("table");
   
 	if (width) table.width = width;
-	if (alignment) table.align = alignment;
-	if (border) table.border = border;  
+	if (alignment) table.align = alignment.toLowerCase();
 	if (cellSpacing) table.cellSpacing = cellSpacing; 
 	if (cellPadding) table.cellPadding = cellPadding;
-    
+	
+	table.border = 1;
+	table.style.border = "1px solid #000";   
+    table.rules = "all";
 	table.style.borderCollapse = "collapse";
   
+  	var tdWidth = "";
+  	if (1)
+  		tdWidth = Math.floor(100 / cols) + "%";
+
+	var tbody = doc.createElement("tbody");
+	table.appendChild(tbody); 		
 	for (var i = 0; i < rows; i++) {
 		var tr = doc.createElement("tr");
-		table.appendChild(tr);
+		tbody.appendChild(tr);
 		for (var j = 0; j < cols; j++) {
 			var td = doc.createElement("td");
+			if (tdWidth)
+				td.style.width = tdWidth;
+			if (AjxEnv.isGeckoBased)
+				td.appendChild(doc.createElement("br"));
 			tr.appendChild(td);
     	}
 	}
@@ -292,14 +309,14 @@ function(rows, cols, width, alignment, border, cellSpacing, cellPadding) {
 
 DwtHtmlEditor.prototype._insertNodeAtSelection =
 function(node) {
-	if (!AjxEng.isIE) {
-		this._getIframeWin().getSelection().removeAllRanges()
+	if (!AjxEnv.isIE) {
 		var range = this._getRange();
+		this._getIframeWin().getSelection().removeAllRanges()
 		range.deleteContents();
 		range.insertNode(node);
 		range.selectNodeContents(node);
 	} else {
-		this._getRange().pasteHTML(table.outerHTML);
+		this._getRange().pasteHTML(node.outerHTML);
 	}
 }
 
@@ -609,7 +626,6 @@ function() {
 			if (!range.collapsed && range.startContainer == range.endContainer 
 				&& range.startOffset - range.endOffset <= 1 && range.startContainer.hasChildNodes())
 				p = range.startContainer.childNodes[range.startOffset];
-DBG.println("P: " + p);
 			while (p.nodeType == 3)
 				p = p.parentNode;
 			return p;
@@ -631,7 +647,7 @@ function() {
 			try {
 				return selection.getRangeAt(0);
 			} catch(e) {
-				return tiFrameDoc.createRange();
+				return iFrameDoc.createRange();
 			}
 		} else {
 			return iFrameDoc.createRange();

@@ -100,6 +100,8 @@ function DwtInputField(parent, type, initialValue, size, maxLen, errorIconStyle,
 	this._inputField.value = (initialValue) ? initialValue : "";
 
 	this.setValidatorFunction(validatorCtxtObj, validator);
+	this._setMouseEventHdlrs(false);
+	this._setKeyPressEventHdlr(false);
 }
 
 DwtInputField.prototype = new DwtControl;
@@ -246,9 +248,9 @@ function(value) {
 	if (!AjxUtil.isInteger(value))
 		return AjxMsg.notANumber; 
 	else if (this._minNumVal && value < this._minNumVal)
-		return AjxMessageFormat.format(AjxMsg.numberLessThanMin, this._minNumVal).toString();
+		return AjxMessageFormat.format(AjxMsg.numberLessThanMin, this._minNumVal);
 	else if(this._maxNumVal && value > this._maxNumVal)
-		return AjxMessageFormat.format(AjxMsg.numberMoreThanMax, this._maxNumVal).toString();
+		return AjxMessageFormat.format(AjxMsg.numberMoreThanMax, this._maxNumVal);
 	else
 		return null;
 };
@@ -306,15 +308,15 @@ function(value) {
 		
 	if (errorStr) {
 		this.getHtmlElement().className = this._errorClassName;
-		this._inputField.title = errorStr;
 		if (this._errorIconTd)
 			this._errorIconTd.innerHTML = DwtInputField._ERROR_ICON_HTML;
+		this.setToolTipContent(errorStr);
 		retVal = false;
 	} else {
 		this.getHtmlElement().className = this._origClassName;
-		this._inputField.title = "";
 		if (this._errorIconTd) 
 			this._errorIconTd.innerHTML = DwtInputField._NOERROR_ICON_HTML;
+		this.setToolTipContent(null);
 	}
 	
 	if (this._validationCallback)

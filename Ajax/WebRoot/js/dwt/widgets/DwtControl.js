@@ -90,6 +90,20 @@ DwtControl._DND_HOVER_DELAY = 750;
 
 // static methods
 
+DwtControl._keyPressHdlr =
+function(ev) {
+	var obj = obj ? obj : DwtUiEvent.getDwtObjFromEvent(ev);
+	if (!obj) return false;
+	
+	if (obj._toolTipContent != null) {
+		var shell = DwtShell.getShell(window);
+		var manager = shell.getHoverMgr();
+		manager.setHoverOutListener(obj._hoverOutListener);
+		manager.hoverOut();
+		obj._tooltipClosed = false;
+	}
+}
+
 DwtControl._dblClickHdlr = 
 function(ev) {
 	return DwtControl._mouseEvent(ev, DwtEvent.ONDBLCLICK);
@@ -173,7 +187,7 @@ function(ev) {
 	var obj = captureObj ? captureObj.targetObj : DwtUiEvent.getDwtObjFromEvent(ev);
  	if (!obj) return false;
 
-//DND cancel point
+	//DND cancel point
 	if (obj._dndHoverActionId != -1) {
 		AjxTimedAction.cancelAction(obj._dndHoverActionId);
 		obj._dndHoverActionId = -1;
@@ -404,9 +418,14 @@ function(ev, eventType, obj, mouseEv) {
 		mouseEv.setFromDhtmlEvent(ev);
 	}
 
-	// By default, we halt event processing. Listeners may override.
-	mouseEv._stopPropagation = true;
-	mouseEv._returnValue = false;
+	// By default, we halt event processing. Listeners may override
+	if (mouseEv.target.tagName.toLowerCase() != "input") {
+		mouseEv._stopPropagation = true;
+		mouseEv._returnValue = false;
+	} else {
+		mouseEv._stopPropagation = false;
+		mouseEv._returnValue = true;	
+	}
 
 	// notify global listeners
 	DwtEventManager.notifyListeners(eventType, mouseEv);
@@ -431,6 +450,7 @@ DwtControl.HANDLER[DwtEvent.ONMOUSEOUT] = DwtControl._mouseOutHdlr;
 DwtControl.HANDLER[DwtEvent.ONMOUSEOVER] = DwtControl._mouseOverHdlr;
 DwtControl.HANDLER[DwtEvent.ONMOUSEUP] = DwtControl._mouseUpHdlr;
 DwtControl.HANDLER[DwtEvent.ONSELECTSTART] = DwtControl._selectStartHdlr;
+DwtControl.HANDLER[DwtEvent.ONKEYPRESS] = DwtControl._keyPressHdlr;
 
 // instance methods
 
@@ -931,6 +951,12 @@ function(events, clear) {
 DwtControl.prototype._setMouseEventHdlrs =
 function(clear) {
 	this._setEventHdlrs(DwtEvent.MOUSE_EVENTS, clear);
+}
+
+
+DwtControl.prototype._setKeyPressEventHdlr =
+function(clear) {
+	this._setEventHdlrs([DwtEvent.ONKEYPRESS], clear);
 }
 
 DwtControl.prototype._dndDoHover =
