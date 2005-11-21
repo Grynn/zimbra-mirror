@@ -520,6 +520,8 @@
 
 <attr name="zimbraZimletPanelItem" type="string" max="10240"/>
 
+<attr name="zimbraZimletPriority" type="integer" min="0"/>
+
 <attr name="zimbraZimletScript" type="string" max="256"/>
 
 <attr name="zimbraZimletAvailableZimlets" type="string" max="256"/>
