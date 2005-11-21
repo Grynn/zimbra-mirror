@@ -36,7 +36,7 @@ function ZaGlobalConfigViewController(appCtxt, container, app) {
 	this._evtMgr = new AjxEventMgr();
 	this._UICreated = false;
 	this._confirmMessageDialog;	
-	this._helpURL = "/zimbraAdmin/adminhelp/html/OpenSourceAdminHelp/managing_global_settings/global_settings.htm";			
+	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_global_settings/global_settings.htm";			
 }
 
 ZaGlobalConfigViewController.prototype = new ZaController();

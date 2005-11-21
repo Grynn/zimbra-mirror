@@ -494,7 +494,7 @@ function(id, tableId) {
 		case ZaZimbraAdmin._HELP_ID:
 			Dwt.getDomObj(doc, bannerBar._helpId).blur();
 			Dwt.getDomObj(doc, bannerBar._helpId2).blur();			
-			window.open("/zimbraAdmin/adminhelp/html/OpenSourceAdminHelp/administration_console_help.htm");
+			window.open("/zimbraAdmin/adminhelp/html/WebHelp/administration_console_help.htm");
 			break;
 
 		case ZaZimbraAdmin._PDF_HELP_ID:

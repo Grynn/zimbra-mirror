@@ -56,7 +56,7 @@ function ZaController(appCtxt, container, app, isAdmin) {
     	this._msgDialog.setApp(app);    	
     }	
     
-    this._helpURL = "/zimbraAdmin/adminhelp/html/OpenSourceAdminHelp/administration_console_help.htm";
+    this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/administration_console_help.htm";
 }
 
 var i = 1;

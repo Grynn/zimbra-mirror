@@ -44,7 +44,7 @@ function ZaAccountListController(appCtxt, container, app) {
 	this._searchPanel = null;
 	this._searchField = null;
 	this._defaultType = ZaItem.ACCOUNT;
-	this._helpURL = "/zimbraAdmin/adminhelp/html/OpenSourceAdminHelp/managing_accounts/provisioning_accounts.htm";	
+	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/provisioning_accounts.htm";	
 }
 
 ZaAccountListController.prototype = new ZaController();

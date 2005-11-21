@@ -34,7 +34,7 @@
 function ZaGlobalStatsController(appCtxt, container, app) {
 
 	ZaController.call(this, appCtxt, container, app);
-	this._helpURL = "/zimbraAdmin/adminhelp/html/OpenSourceAdminHelp/managing_servers/checking_usage_statistics.htm";	
+	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_servers/checking_usage_statistics.htm";	
 }
 
 ZaGlobalStatsController.prototype = new ZaController();

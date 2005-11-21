@@ -84,7 +84,7 @@ ZaHelpView.prototype.getMyXForm = function() {
 					{type:_GROUP_,numCols:2,
 						items: [
 							{type:_OUTPUT_, value:AjxImg.getImageHtml("Help")},
-							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_2, href:"/zimbraAdmin/adminhelp/html/OpenSourceAdminHelp/administration_console_help.htm"}
+							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_2, href:"/zimbraAdmin/adminhelp/html/WebHelp/administration_console_help.htm"}
 						]
 					},
 					{type:_GROUP_,numCols:2,

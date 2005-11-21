@@ -77,7 +77,7 @@ function ZaXWizardDialog (parent, className, title, w, h) {
 	this._createContentHtml();	
 
 	this.setTitle(title);
-	this._helpURL = "/zimbraAdmin/adminhelp/html/OpenSourceAdminHelp/administration_console_help.htm";	
+	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/administration_console_help.htm";	
 }
 
 ZaXWizardDialog.prototype = new DwtDialog;

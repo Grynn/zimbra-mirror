@@ -55,7 +55,7 @@ function ZaGALConfigXWizard (parent, app) {
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaGALConfigXWizard.prototype.handleXFormChange));
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(this, ZaGALConfigXWizard.prototype.handleXFormChange));	
 	this.lastErrorStep=0;
-	this._helpURL="/zimbraAdmin/adminhelp/html/OpenSourceAdminHelp/managing_domains/using_the_global_address_list_(gal).htm"
+	this._helpURL="/zimbraAdmin/adminhelp/html/WebHelp/managing_domains/using_the_global_address_list_(gal).htm"
 	
 }
 

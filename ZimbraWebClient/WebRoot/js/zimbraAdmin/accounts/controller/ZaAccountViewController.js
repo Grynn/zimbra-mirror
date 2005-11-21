@@ -38,7 +38,7 @@ function ZaAccountViewController(appCtxt, container, abApp) {
 	this._evtMgr = new AjxEventMgr();
 	this._confirmMessageDialog;
 	this._UICreated = false;
-	this._helpURL = "/zimbraAdmin/adminhelp/html/OpenSourceAdminHelp/managing_accounts/provisioning_accounts.htm";		
+	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/provisioning_accounts.htm";		
 }
 
 ZaAccountViewController.prototype = new ZaController();

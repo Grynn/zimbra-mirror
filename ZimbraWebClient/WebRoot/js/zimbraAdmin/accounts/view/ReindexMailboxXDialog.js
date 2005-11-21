@@ -42,7 +42,7 @@ function ReindexMailboxXDialog(parent,  app, w, h) {
 	this.pollAction.method = this.getReindexStatus;
 	this._pollHandler = null;
 	
-	this._helpURL = "/zimbraAdmin/adminhelp/html/OpenSourceAdminHelp/managing_accounts/re-indexing_a_mailbox.htm";		
+	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/re-indexing_a_mailbox.htm";		
 }
 
 ReindexMailboxXDialog.prototype = new ZaXDialog;
