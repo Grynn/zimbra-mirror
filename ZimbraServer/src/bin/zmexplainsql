@@ -1,0 +1,167 @@
+#!/usr/bin/perl
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Version: ZPL 1.1
+# 
+# The contents of this file are subject to the Zimbra Public License
+# Version 1.1 ("License"); you may not use this file except in
+# compliance with the License. You may obtain a copy of the License at
+# http://www.zimbra.com/license
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+# the License for the specific language governing rights and limitations
+# under the License.
+# 
+# The Original Code is: Zimbra Collaboration Suite.
+# 
+# The Initial Developer of the Original Code is Zimbra, Inc.
+# Portions created by Zimbra are Copyright (C) 2005 Zimbra, Inc.
+# All Rights Reserved.
+# 
+# Contributor(s):
+# 
+# ***** END LICENSE BLOCK *****
+# 
+
+use strict;
+use Getopt::Long;
+use English;
+
+# Runs EXPLAIN on all SELECT statements in the input stream.
+# EXPLAIN results that have potential performance impact
+# are followed by a "### NOTES" section.
+
+# Options
+my $user = "zimbra";
+my $password = "zimbra";
+my $database = "zimbra";
+my $mySqlCommand = "mysql";
+my $verbose = 0;
+my $usage = 0;
+my $logDir = "/opt/zimbra/log";
+my $ignore;
+my $normalize = 0;
+
+if (-f "/opt/zimbra/bin/zmlocalconfig") {
+    $password = `zmlocalconfig -s -m nokey zimbra_mysql_password`;
+    chomp $password;
+    $user = `zmlocalconfig -m nokey zimbra_mysql_user`;
+    chomp $user;
+}
+
+GetOptions("user=s" => \$user, "password=s" => \$password,
+	   "database=s" => \$database, "mysql=s" => \$mySqlCommand,
+	   "ignore=s" => \$ignore, "help" => \$usage,
+	   "normalize" => \$normalize);
+
+if ($usage) {
+    usage();
+    exit(0);
+}
+
+my %explained;
+
+while (<>) {
+    my $query = $_;
+    if (!($query =~ /^SELECT/)) {
+	next;
+    }
+    if ((defined($ignore) && $query =~ /$ignore/) || $explained{$query}) {
+	next;
+    }
+    $explained{$query} = 1;
+
+    my @notes;
+    my $rows = 0;
+    my %notes;
+    my $totalRows = 1;
+
+    print($query . "\n\n");
+    my @output = runSql("EXPLAIN " . $query);
+
+    foreach my $line (@output) {
+	if ($line =~ /type\: ALL/ ||
+	    $line =~ /key\: NULL/) {
+	    $notes{"Table scan"} = 1;
+	}
+	if ($line =~ /rows: (\d+)/) {
+	    $rows = $1;
+	    $totalRows = $totalRows * $rows;
+	}
+	if ($line =~ /filesort/) {
+	    if ($rows > 100) {
+		$notes{"Filesort"} = 1;
+	    }
+	}
+	if ($line =~ /temporary/) {
+	    if ($rows > 100) {
+		$notes{"Temporary table"} = 1;
+	    }
+	}
+
+	print($line . "\n");
+    }
+    print("\n");
+
+    if ($totalRows > 100) {
+	$notes{$totalRows . " rows scanned"} = 1;
+    }
+
+    if (scalar(keys(%notes)) > 0) {
+	print("### NOTES: " . join(",", keys(%notes)) . "\n\n");
+    }
+}
+
+exit(0);
+
+############################
+
+sub runSql($) {
+    my ($script) = @_;
+
+    # Write the last script to a text file for debugging
+    open(LASTSCRIPT, ">lastScript.sql") || die "Could not open lastScript.sql";
+    print(LASTSCRIPT $script);
+    close(LASTSCRIPT);
+
+    # Run the mysql command and redirect output to a temp file
+    my $tempFile = "mysql.out";
+    my $command = "$mySqlCommand --user=$user --password=$password " .
+        "--database=$database --vertical";
+    open(MYSQL, "| $command > $tempFile") || die "Unable to run $command";
+    print(MYSQL $script);
+    close(MYSQL);
+
+    if ($? != 0) {
+        die "Error while running '$command'.";
+    }
+
+    # Process output
+    open(OUTPUT, $tempFile) || die "Could not open $tempFile";
+    my @output;
+    while (<OUTPUT>) {
+        s/\s+$//;
+        push(@output, $_);
+    }
+
+    unlink($tempFile);
+    return @output;
+}
+
+sub usage() {
+    print <<USAGE_EOF
+Usage: $PROGRAM_NAME statements.sql
+
+Runs EXPLAIN on all unique SELECT statements in the specified file.
+Statements that span multiple lines are not supported.
+
+  -h, --help           Display this usage message
+  -i, --ignore=regexp  Ignore any SELECT statements that match the
+                       specified regular expression
+  -u, --user=name      MySQL user name (default: "zimbra")
+  -p, --password=name  MySQL password (default: "zimbra")
+  -d, --database=name  MySQL database (default: "zimbra")
+  -m, --mysql=command  MySQL client command name (default: "mysql")
+USAGE_EOF
+}

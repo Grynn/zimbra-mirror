@@ -1,0 +1,75 @@
+#!/usr/bin/perl
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Version: ZPL 1.1
+# 
+# The contents of this file are subject to the Zimbra Public License
+# Version 1.1 ("License"); you may not use this file except in
+# compliance with the License. You may obtain a copy of the License at
+# http://www.zimbra.com/license
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+# the License for the specific language governing rights and limitations
+# under the License.
+# 
+# The Original Code is: Zimbra Collaboration Suite.
+# 
+# The Initial Developer of the Original Code is Zimbra, Inc.
+# Portions created by Zimbra are Copyright (C) 2005 Zimbra, Inc.
+# All Rights Reserved.
+# 
+# Contributor(s):
+# 
+# ***** END LICENSE BLOCK *****
+# 
+
+use strict;
+use Getopt::Long;
+use English;
+
+# Extracts all SQL statements logged to the sqltrace category
+# from the specified logfile.  If a logfile is not specified,
+# reads zimbra.log.
+
+# Options
+my $usage = 0;
+my $logDir = "/opt/zimbra/log";
+
+if (-f "/opt/zimbra/bin/zmlocalconfig") {
+    $logDir = `zmlocalconfig -x -m nokey zimbra_log_directory`;
+    chomp $logDir;
+}
+
+GetOptions("help" => \$usage);
+
+if ($usage) {
+    usage();
+    exit(0);
+}
+
+if (scalar(@ARGV) == 0) {
+    # No file was specified, so read zimbra.log
+    push(@ARGV, $logDir . "/zimbra.log");
+}
+
+while (<>) {
+    if (/sqltrace - (.*) - \d+ms/i) {
+	print($1 . "\n");
+	my $query = $1;
+    }
+}
+
+#########################
+
+sub usage() {
+    print <<USAGE_EOF
+Usage: $PROGRAM_NAME [zimbra.log]
+
+Extracts all SQL statements logged to the sqltrace category
+from the specified logfile.  If a logfile is not specified,
+reads zimbra.log.
+
+  -h, --help           Display this usage message
+USAGE_EOF
+}
