@@ -373,7 +373,7 @@ ZaDLController.prototype._getNewViewXForm = function () {
 							{type:_AJX_IMAGE_, src:"Group_32", label:null, rowSpan:2},
 							{type:_OUTPUT_, ref:"name", label:null,cssClass:"AdminTitle", rowSpan:2},
 							{type:_OUTPUT_, ref:"id", label:ZaMsg.NAD_ZimbraID},
-							{type:_OUTPUT_, ref:"zimbraMailStatus", label:ZaMsg.NAD_AccountStatus+":"}
+							{type:_OUTPUT_, ref:"zimbraMailStatus", label:ZaMsg.NAD_AccountStatus}
 						]
 					}
 				],

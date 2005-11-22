@@ -545,7 +545,7 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 								items: [
 									{ref:ZaServer.A_zimbraHsmAge, type:_SUPER_LIFETIME_, 
 										msgName:ZaMsg.NAD_HSM_Threshold,
-										label:ZaMsg.NAD_HSM_Threshold+":", 
+										label:ZaMsg.NAD_HSM_Threshold, 
 										resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
 										labelLocation:_LEFT_, labelCssStyle:"width:190px;",
 										onChange:ZaTabView.onFormFieldChanged

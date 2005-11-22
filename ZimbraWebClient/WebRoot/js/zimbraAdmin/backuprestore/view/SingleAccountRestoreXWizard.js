@@ -193,7 +193,7 @@ SingleAccountRestoreXWizard.prototype.getMyXForm = function() {
 					{type:_CASE_, numCols:2, relevant:"instance[ZaModel.currentStep] == 1", align:_LEFT_, valign:_TOP_, 
 						items:[
 							{type:_OUTPUT_, value:ZaMsg.Restore_AccountName, colSpan:2},
-							{ref:ZaRestore.A_accountName, type:_TEXTFIELD_, label:ZaMsg.Restore_EmailAddress+":", width:200}
+							{ref:ZaRestore.A_accountName, type:_TEXTFIELD_, label:ZaMsg.Restore_EmailAddress, width:200}
 						]
 					}, 
 					{type:_CASE_, numCols:2, relevant:"instance[ZaModel.currentStep] == 2",

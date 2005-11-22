@@ -275,6 +275,11 @@ function () {
 				label = errItems[key].getParentItem().getInheritedProperty("msgName");
 			}
 			if(label) {
+				if(label.substring(label.length-1,1)==":") {
+					label = label.substring(0, label.length-1);
+				}
+			}
+			if(label) {
 				dlgMsg += "<li>";
 				dlgMsg +=label;			
 				dlgMsg += "</li>";

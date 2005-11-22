@@ -205,7 +205,7 @@ ZaItem.prototype._addRow =
 function(msg, value, html, idx) {
 	if (value != null) {
 		html[idx++] = "<tr valign='top'><td align='right' style='padding-right: 5px;'><b>";
-		html[idx++] = AjxStringUtil.htmlEncode(msg) + ":";
+		html[idx++] = AjxStringUtil.htmlEncode(msg);
 		html[idx++] = "</b></td><td align='left'><div style='white-space:nowrap; overflow:hidden;'>";
 		html[idx++] = AjxStringUtil.htmlEncode(value);
 		html[idx++] = "</div></td></tr>";

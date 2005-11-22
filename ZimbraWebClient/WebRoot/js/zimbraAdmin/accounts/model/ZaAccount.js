@@ -732,12 +732,16 @@ function() {
 		html[idx++] = "</td>";
 		html[idx++] = "</table></div></td></tr>";
 		html[idx++] = "<tr></tr>";
-		idx = this._addRow(ZaItem._attrDesc(ZaAccount.A_accountStatus), 
+		idx = this._addRow(ZaMsg.NAD_AccountStatus, 
 						ZaAccount._accountStatus(this.attrs[ZaAccount.A_accountStatus]), html, idx);
 		// TODO: COS
-		idx = this._addAttrRow(ZaAccount.A_displayname, html, idx);
-		idx = this._addAttrRow(ZaItem.A_zimbraId, html, idx);
-		idx = this._addAttrRow(ZaAccount.A_mailHost, html, idx);
+		idx = this._addRow(ZaMsg.NAD_DisplayName, this.attrs[ZaAccount.A_displayname], html, idx);
+		if(!ZaSettings.isDomainAdmin) {
+			idx = this._addRow(ZaMsg.NAD_ZimbraID, this.attrs[ZaItem.A_zimbraId], html, idx);
+		}
+		if(ZaSettings.SERVERS_ENABLED) {
+			idx = this._addRow(ZaMsg.NAD_MailServer, this.attrs[ZaAccount.A_mailHost], html, idx);
+		}
 		html[idx++] = "</table>";
 		this._toolTip = html.join("");
 	}

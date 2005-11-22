@@ -71,6 +71,17 @@ function() {
 			idx = this._addRow(ZaItem._attrDesc(ZaAlias.A_targetAccount), 
 						account.attrs[ZaAccount.A_displayname], html, idx);
 		
+			idx = this._addRow(ZaMsg.NAD_AccountStatus, 
+						ZaAccount._accountStatus(account.attrs[ZaAccount.A_accountStatus]), html, idx);		
+			
+			if(!ZaSettings.isDomainAdmin) {
+				idx = this._addRow(ZaMsg.NAD_ZimbraID,
+				 account.attrs[ZaAccount.A_zimbraId], html, idx);
+			}
+			if(ZaSettings.SERVERS_ENABLED) {
+				idx = this._addRow(ZaMsg.NAD_MailServer, 
+				account.attrs[ZaAccount.A_mailHost], html, idx);
+			}			
 		}
 		html[idx++] = "</table>";
 		this._toolTip = html.join("");

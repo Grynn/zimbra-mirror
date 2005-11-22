@@ -132,8 +132,8 @@ function(field, title, html, idx) {
 ZaAccChangePwdDlg.prototype._createPwdHtml =
 function(html, idx) {
 	html[idx++] = "<table cellpadding='3' cellspacing='2' border='0' width='100%'>";
-	idx = this._addEntryRow(ZaAccChangePwdDlg.F_password, ZaMsg.NAD_Password+":", html, idx, "password");
-	idx = this._addEntryRow(ZaAccChangePwdDlg.F_confirmPassword, ZaMsg.NAD_ConfirmPassword+":", html, idx, "password");
+	idx = this._addEntryRow(ZaAccChangePwdDlg.F_password, ZaMsg.NAD_Password, html, idx, "password");
+	idx = this._addEntryRow(ZaAccChangePwdDlg.F_confirmPassword, ZaMsg.NAD_ConfirmPassword, html, idx, "password");
 	idx = this._addEntryRow2(ZaAccChangePwdDlg.F_zimbraPasswordMustChange, ZaMsg.NAD_MustChangePwd, html, idx);	
 	html[idx++] = "</table>";
 	return idx;
