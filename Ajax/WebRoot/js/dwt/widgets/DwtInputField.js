@@ -124,8 +124,9 @@ DwtInputField.MANUAL_VALIDATION    = 3; // validate the field  manually
 
 // types
 DwtInputField.INTEGER  = 1; // Integer input field
-DwtInputField.STRING   = 2; // String input field
-DwtInputField.PASSWORD = 3; // Password input field
+DwtInputField.FLOAT    = 2; // Numeric input field
+DwtInputField.STRING   = 3; // String input field
+DwtInputField.PASSWORD = 4; // Password input field
 
 DwtInputField._ERROR_ICON_HTML = AjxImg.getImageHtml("ClearSearch");
 DwtInputField._NOERROR_ICON_HTML = AjxImg.getImageHtml("Blank_9");
@@ -152,11 +153,14 @@ function(obj, validator) {
 		this._validatorObj = obj;
 	} else {
 		switch (this._type) {
-			case DwtInputField.INTEGER:
-				this._validator = DwtInputField.validateInteger;
-				break;
-			default:
-				this._validator = DwtInputField.validateAny;
+		    case DwtInputField.INTEGER:
+			this._validator = DwtInputField.validateInteger;
+			break;
+		    case DwtInputField.FLOAT:
+			this._validator = DwtInputField.validateFloat;
+			break;
+		    default:
+			this._validator = DwtInputField.validateAny;
 		}
 	}
 };
@@ -252,11 +256,20 @@ function() {
 
 DwtInputField.validateInteger =
 function(value) {
-	if (!AjxUtil.isInteger(value))
-		return AjxMsg.notANumber; 
+	var n = new Number(value);
+	if (isNaN(n) || (Math.round(n) != n))
+		return AjxMsg.notAnInteger;
+	return DwtInputField.validateFloat.call(this, value);
+};
+
+DwtInputField.validateFloat =
+function(value) {
+	var n = new Number(value);
+	if (isNaN(n))
+		return AjxMsg.notANumber;
 	else if (this._minNumVal && value < this._minNumVal)
 		return AjxMessageFormat.format(AjxMsg.numberLessThanMin, this._minNumVal);
-	else if(this._maxNumVal && value > this._maxNumVal)
+	else if (this._maxNumVal && value > this._maxNumVal)
 		return AjxMessageFormat.format(AjxMsg.numberMoreThanMax, this._maxNumVal);
 	else
 		return null;

@@ -29,11 +29,12 @@
  *
  * See initProperties() below
  */
-function DwtPropertyEditor(parent, className, positionType) {
+function DwtPropertyEditor(parent, useDwtInputField, className, positionType) {
 	if (arguments.length > 0) {
 		if (!className)
 			className = "DwtPropertyEditor";
 		DwtComposite.call(this, parent, className, positionType);
+		this._useDwtInputField = useDwtInputField;
 		this._schema = null;
 		this._init();
 	}
@@ -239,7 +240,6 @@ DwtPropertyEditor.prototype._createProperty = function(prop, parent) {
 
 	if (prop.type != "struct") {
 		tr.className += " " + prop.type;
-		tr.__msh_doMouseDown = DwtPropertyEditor.simpleClosure(prop._edit, prop);
 
 		// this is a simple property, create a label and value cell.
 		var tdLabel = doc.createElement("td");
@@ -256,7 +256,14 @@ DwtPropertyEditor.prototype._createProperty = function(prop, parent) {
 		switch (prop.type) {
 		    case "select" : this._createDropDown(prop, tdField); break;
 		    case "date"   : this._createCalendar(prop, tdField); break;
-		    default       : tdField.innerHTML = prop._makeDisplayValue();
+		    default       :
+			if (this._useDwtInputField)
+				this._createInputField(prop, tdField);
+			else {
+				tdField.innerHTML = prop._makeDisplayValue();
+				tr.__msh_doMouseDown = DwtPropertyEditor.simpleClosure(prop._edit, prop);
+			}
+			break;
 		}
 
 		prop._fieldCellId = tdField.id = Dwt.getNextId();
@@ -368,6 +375,29 @@ DwtPropertyEditor.prototype._createCalendar = function(prop, target) {
 	prop._dateCalendar = cal;
 };
 
+DwtPropertyEditor.DWT_INPUT_FIELD_TYPES = {
+	"string"    : DwtInputField.STRING,
+	"password"  : DwtInputField.PASSWORD,
+	"integer"   : DwtInputField.INTEGER,
+	"number"    : DwtInputField.FLOAT
+};
+
+DwtPropertyEditor.prototype._createInputField = function(prop, target) {
+	this._currentFieldCell = target;
+	var type = DwtPropertyEditor.DWT_INPUT_FIELD_TYPES[prop.type]
+		|| DwtInputField.STRING;
+	var field = new DwtInputField(this, type, prop.value, null, prop.maxLength);
+	if (type == DwtInputField.INTEGER || type == DwtInputField.NUMBER) {
+		field.setValidNumberRange(prop.minValue || null,
+					  prop.maxValue || null);
+		if (prop.decimals)
+			field._decimals = prop.decimals;
+	}
+	this._currentFieldCell = null;
+	prop._inputField = field;
+	field.setValidationCallback(new AjxCallback(prop, prop._onDwtInputFieldValidated));
+};
+
 // these will be merged to each prop object that comes in the schema
 DwtPropertyEditor._prop_functions = {
 
@@ -471,7 +501,7 @@ DwtPropertyEditor._prop_functions = {
 			canvas = pe.getRelDiv(),
 			input  = doc.createElement("input");
 
-		input.className = this.type;
+		input.className = "DwtPropertyEditor-input " + this.type;
 		input.setAttribute("autocomplete", "off");
 
 		input.type = this.type == "password"
@@ -609,7 +639,7 @@ DwtPropertyEditor._prop_functions = {
 		var input = this._inputField;
 		var val = this._checkValue(input.value);
 		if (val != null) {
-			this.value = val;
+			this._setValue(val);
 			input.onblur = null;
 			input.onkeyup = null;
 			input.onkeydown = null;
@@ -620,12 +650,11 @@ DwtPropertyEditor._prop_functions = {
 			this._inputField = null;
 			this._propertyEditor._currentInputField = null;
 			this._propertyEditor._clearMsgDiv();
-			this._makeDirty();
 			input.parentNode.removeChild(input);
 			return true;
 		} else {
-			if (input.className.indexOf(" error") == -1)
-				input.className += " error";
+			if (input.className.indexOf(" DwtPropertyEditor-input-error") == -1)
+				input.className += " DwtPropertyEditor-input-error";
 			input.focus();
 			return false;
 		}
@@ -641,22 +670,28 @@ DwtPropertyEditor._prop_functions = {
 			this._saveInput();
 		} else {
 			this._propertyEditor._clearMsgDiv();
-			input.className = input.className.replace(/ error/, "");
+			input.className = input.className.replace(/ DwtPropertyEditor-input-error/, "");
 		}
 	},
 
 	_onSelectChange : function() {
-		this.value = this._select.getValue();
-		this._makeDirty();
+		this._setValue(this._select.getValue());
 	},
 
 	_onCalendarSelect : function() {
-		this.value = this._dateCalendar.getDate().getTime();
+		this._setValue(this._dateCalendar.getDate().getTime());
 		this._dateButton.setText(this._makeDisplayValue());
-		this._makeDirty();
 	},
 
-	_makeDirty : function() {
+	_onDwtInputFieldValidated : function(params) {
+		var value     = params[0];
+		var validated = params[1];
+		if (validated)
+			this._setValue(value);
+	},
+
+	_setValue : function(val) {
+		this.value = val;
 		var tr = this._getRowEl();
 		tr.className = tr.className.replace(/ dirty/, "");
 		if (this._modified())

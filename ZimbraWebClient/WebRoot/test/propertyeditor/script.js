@@ -1,25 +1,25 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Version: ZPL 1.1
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.1 ("License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
  * http://www.zimbra.com/license
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
  * the License for the specific language governing rights and limitations
  * under the License.
- * 
+ *
  * The Original Code is: Zimbra Collaboration Suite Web Client
- * 
+ *
  * The Initial Developer of the Original Code is Zimbra, Inc.
  * Portions created by Zimbra are Copyright (C) 2005 Zimbra, Inc.
  * All Rights Reserved.
- * 
+ *
  * Contributor(s):
- * 
+ *
  * ***** END LICENSE BLOCK *****
  */
 function App() {
@@ -27,7 +27,7 @@ function App() {
 	this.shell._setMouseEventHdlrs();
 	this.shell.addListener(DwtEvent.ONMOUSEMOVE, new AjxListener(this, this.func));
 
-	var pi = this._pi = new DwtPropertyEditor(this.shell, null, "absolute");
+	var pi = this._pi = new DwtPropertyEditor(this.shell, true, null, "absolute");
 
 	pi.setBounds(100, 100, 500, 500);
 	pi.setZIndex(Dwt.Z_VIEW);
@@ -140,6 +140,7 @@ function App() {
 		{ label      : "Integer",
 		  name       : "integer",
 		  type       : "integer",
+		  value      : "10.00",
 		  minValue   : 10,
 		  maxValue   : 30
 		},
@@ -147,6 +148,7 @@ function App() {
 		{ label      : "Float",
 		  name       : "float",
 		  type       : "number",
+		  value      : "15",
 		  minValue   : 15,
 		  maxValue   : 25
 		},
@@ -154,6 +156,7 @@ function App() {
 		{ label      : "Decimal",
 		  name       : "decimal",
 		  type       : "number",
+		  value      : "10",
 		  decimals   : 2
 		}
 
