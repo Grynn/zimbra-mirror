@@ -37,24 +37,22 @@ AjxUtil.FLOAT_RE = /^[+\-]?((\d+(\.\d*)?)|((\d*\.)?\d+))([eE][+\-]?\d+)?$/;
 AjxUtil.NOTFLOAT_RE = /[^\d\.]/;
 AjxUtil.NOTINT_RE = /[^0-9]+/;
 AjxUtil.LIFETIME_FIELD = /^([0-9])+([dhms])?$/;
-AjxUtil.isSpecified 	= function(aThing) { return ((aThing !== void 0) && (aThing !== null)); };
-AjxUtil.isUndefined 	= function(aThing) { return (aThing === void 0); };
-AjxUtil.isNull 		= function(aThing) { return (aThing === null); };
-AjxUtil.isBoolean 	= function(aThing) { return (typeof(aThing) == 'boolean'); };
-AjxUtil.isString 	= function(aThing) { return (typeof(aThing) == 'string'); };
-AjxUtil.isNumber 	= function(aThing) { return (typeof(aThing) == 'number'); };
-AjxUtil.isObject 	= function(aThing) { return ((typeof(aThing) == 'object') && (aThing !== null)); };
-AjxUtil.isArray 		= function(aThing) { return AjxUtil.isInstance(aThing, Array); };
-AjxUtil.isFunction 	= function(aThing) { return (typeof(aThing) == 'function'); };
-AjxUtil.isDate 		= function(aThing) { return AjxUtil.isInstance(aThing, Date); };
 
-AjxUtil.isNumeric 	= function(aThing) { return (!isNaN(parseInt(aThing)) && AjxUtil.FLOAT_RE.test(aThing) && !AjxUtil.NOTFLOAT_RE.test(aThing)); };
-AjxUtil.isInteger	= function(aThing) { return (AjxUtil.isNumeric(aThing) && !AjxUtil.NOTINT_RE.test(aThing)); };
-AjxUtil.isNonNegativeInteger = function (aThing) {
-	var retVal = (AjxUtil.isNumeric(aThing) && AjxUtil.isInteger(aThing) && (parseInt(aThing) >= 0) ); 
-	return retVal;
-};
-AjxUtil.isLifeTime = function (aThing) { return AjxUtil.LIFETIME_FIELD.test(aThing); };
+AjxUtil.isSpecified 		= function(aThing) { return ((aThing !== void 0) && (aThing !== null)); };
+AjxUtil.isUndefined 		= function(aThing) { return (aThing === void 0); };
+AjxUtil.isNull 				= function(aThing) { return (aThing === null); };
+AjxUtil.isBoolean 			= function(aThing) { return (typeof(aThing) == 'boolean'); };
+AjxUtil.isString 			= function(aThing) { return (typeof(aThing) == 'string'); };
+AjxUtil.isNumber 			= function(aThing) { return (typeof(aThing) == 'number'); };
+AjxUtil.isObject 			= function(aThing) { return ((typeof(aThing) == 'object') && (aThing !== null)); };
+AjxUtil.isArray 			= function(aThing) { return AjxUtil.isInstance(aThing, Array); };
+AjxUtil.isFunction 			= function(aThing) { return (typeof(aThing) == 'function'); };
+AjxUtil.isDate 				= function(aThing) { return AjxUtil.isInstance(aThing, Date); };
+AjxUtil.isLifeTime 			= function(aThing) { return AjxUtil.LIFETIME_FIELD.test(aThing); };
+AjxUtil.isNumeric 			= function(aThing) { return (!isNaN(parseInt(aThing)) && AjxUtil.FLOAT_RE.test(aThing) && !AjxUtil.NOTFLOAT_RE.test(aThing)); };
+AjxUtil.isInteger			= function(aThing) { return (AjxUtil.isNumeric(aThing) && !AjxUtil.NOTINT_RE.test(aThing)); };
+AjxUtil.isNonNegativeInteger= function(aThing) { return (AjxUtil.isNumeric(aThing) && AjxUtil.isInteger(aThing) && (parseInt(aThing) >= 0)); };
+
 
 // REVISIT: Should do more precise checking. However, there are names in
 //			common use that do not follow the RFC patterns (e.g. domain
@@ -66,21 +64,22 @@ AjxUtil.HOST_NAME_RE = /^[A-Za-z0-9\-]{2,}(\.[A-Za-z0-9\-]{2,})*$/;
 AjxUtil.EMAIL_SHORT_RE = /^[^@\s]+$/;
 AjxUtil.EMAIL_FULL_RE = /^[^@\s]+@[A-Za-z0-9\-]{2,}(\.[A-Za-z0-9\-]{2,})*$/;
 
-AjxUtil.isIpAddress = function(s) {
-	return AjxUtil.IP_ADDR_RE.test(s);
-}
-AjxUtil.isDomain = function(s) {
-	return AjxUtil.DOMAIN_RE.test(s);
-}
-AjxUtil.isDomainName = function(s, shortMatch) {
-	return shortMatch ? AjxUtil.DOMAIN_NAME_SHORT_RE.test(s) : AjxUtil.DOMAIN_NAME_FULL_RE.test(s);
-}
-AjxUtil.isHostName = function(s) {
-	return AjxUtil.HOST_NAME_RE.test(s);
-}
-AjxUtil.isEmailAddress = function(s, nameOnly) {
-	return nameOnly ? AjxUtil.EMAIL_SHORT_RE.test(s) : AjxUtil.EMAIL_FULL_RE.test(s);
-}
+AjxUtil.isIpAddress 		= function(s) { return AjxUtil.IP_ADDR_RE.test(s); };
+AjxUtil.isDomain 			= function(s) {	return AjxUtil.DOMAIN_RE.test(s); };
+AjxUtil.isHostName 			= function(s) { return AjxUtil.HOST_NAME_RE.test(s); };
+AjxUtil.isDomainName = 
+function(s, shortMatch) {
+	return shortMatch 
+		? AjxUtil.DOMAIN_NAME_SHORT_RE.test(s) 
+		: AjxUtil.DOMAIN_NAME_FULL_RE.test(s);
+};
+
+AjxUtil.isEmailAddress = 
+function(s, nameOnly) {
+	return nameOnly 
+		? AjxUtil.EMAIL_SHORT_RE.test(s) 
+		: AjxUtil.EMAIL_FULL_RE.test(s);
+};
 
 AjxUtil.SIZE_GIGABYTES = "GB";
 AjxUtil.SIZE_MEGABYTES = "MB";
@@ -119,7 +118,7 @@ function(size, round, fractions) {
 	var formattedUnits = ' '+units;
 	
 	return formattedSize + formattedUnits;
-}
+};
 
 /**
  * Formats a size (in bytes) to a specific unit. Since the unit size is
@@ -133,7 +132,8 @@ function(size, round, fractions) {
  * @param fractions Number of fractional digits to display, if not rounding.
  *                  Trailing zeros after the decimal point are trimmed.
  */
-AjxUtil.formatSizeForUnits = function(size, units, round, fractions) {
+AjxUtil.formatSizeForUnits = 
+function(size, units, round, fractions) {
 	if (units == null) units = AjxUtil.SIZE_BYTES;
 	if (round == null) round = true;
 	if (fractions == null) fractions = 20; // max allowed for toFixed is 20
@@ -146,7 +146,7 @@ AjxUtil.formatSizeForUnits = function(size, units, round, fractions) {
 	
 	var formattedSize = round ? Math.round(size) : size.toFixed(fractions).replace(/\.?0+$/,"");
 	return formattedSize;
-}
+};
 
 /**
  * Performs the opposite of AjxUtil.formatSize in that this function takes a 
@@ -157,7 +157,8 @@ AjxUtil.formatSizeForUnits = function(size, units, round, fractions) {
  *				which case the size marker in the formattedSize param
  *				overrides this parameter.
  */
-AjxUtil.parseSize = function(formattedSize, units) {
+AjxUtil.parseSize = 
+function(formattedSize, units) {
 	// NOTE: Take advantage of fact that parseFloat ignores bad chars
 	//       after numbers
 	var size = parseFloat(formattedSize.replace(/^\s*/,""));
@@ -177,14 +178,15 @@ AjxUtil.parseSize = function(formattedSize, units) {
 	
 	//alert("AjxUtil#parseSize: formattedSize="+formattedSize+", size="+size);
 	return size;
-}
+};
 
 AjxUtil.isInstance = 
 function(aThing, aClass) { 
 	return !!(aThing && aThing.constructor && (aThing.constructor === aClass)); 
 };
 
-AjxUtil.assert = function(aCondition, aMessage) {
+AjxUtil.assert = 
+function(aCondition, aMessage) {
 	if (!aCondition && AjxUtil.onassert) AjxUtil.onassert(aMessage);
 };
 
@@ -240,28 +242,28 @@ function(aMessage) {
 };
 
 AjxUtil.NODE_REPEATS = new Object();
-AjxUtil.NODE_REPEATS["folder"]	= true;
-AjxUtil.NODE_REPEATS["search"]	= true;
-AjxUtil.NODE_REPEATS["tag"]		= true;
+AjxUtil.NODE_REPEATS["folder"]		= true;
+AjxUtil.NODE_REPEATS["search"]		= true;
+AjxUtil.NODE_REPEATS["tag"]			= true;
 AjxUtil.NODE_REPEATS["pref"]		= true;
 AjxUtil.NODE_REPEATS["attr"]		= true;
-AjxUtil.NODE_REPEATS["c"]		= true;
-AjxUtil.NODE_REPEATS["m"]		= true;
-AjxUtil.NODE_REPEATS["cn"]		= true;
-AjxUtil.NODE_REPEATS["e"]		= true;
-AjxUtil.NODE_REPEATS["a"]		= true;
-AjxUtil.NODE_REPEATS["mbx"]		= true;
+AjxUtil.NODE_REPEATS["c"]			= true;
+AjxUtil.NODE_REPEATS["m"]			= true;
+AjxUtil.NODE_REPEATS["cn"]			= true;
+AjxUtil.NODE_REPEATS["e"]			= true;
+AjxUtil.NODE_REPEATS["a"]			= true;
+AjxUtil.NODE_REPEATS["mbx"]			= true;
 //AjxUtil.NODE_REPEATS["mp"]		= true; // only when parent is "mp"
 // these really shouldn't repeat
-AjxUtil.NODE_REPEATS["prefs"]	= true;
-AjxUtil.NODE_REPEATS["attrs"]	= true;
-AjxUtil.NODE_REPEATS["tags"]	= true;
+AjxUtil.NODE_REPEATS["prefs"]		= true;
+AjxUtil.NODE_REPEATS["attrs"]		= true;
+AjxUtil.NODE_REPEATS["tags"]		= true;
 
 AjxUtil.NODE_IS_ATTR = new Object();
 AjxUtil.NODE_IS_ATTR["authToken"]	= true;
-AjxUtil.NODE_IS_ATTR["lifetime"]		= true;
+AjxUtil.NODE_IS_ATTR["lifetime"]	= true;
 AjxUtil.NODE_IS_ATTR["sessionId"]	= true;
-AjxUtil.NODE_IS_ATTR["name"]			= true;
+AjxUtil.NODE_IS_ATTR["name"]		= true;
 AjxUtil.NODE_IS_ATTR["quotaUsed"]	= true;
 AjxUtil.NODE_IS_ATTR["su"]			= true;
 AjxUtil.NODE_IS_ATTR["fr"]			= true;
@@ -269,13 +271,13 @@ AjxUtil.NODE_IS_ATTR["mid"]			= true;
 //AjxUtil.NODE_IS_ATTR["content"]	= true; // only when parent is "note"
 
 AjxUtil.NODE_CONTENT = new Object();
-AjxUtil.NODE_CONTENT["pref"]	= true;
-AjxUtil.NODE_CONTENT["attr"]	= true;
-AjxUtil.NODE_CONTENT["a"]	= true;
+AjxUtil.NODE_CONTENT["pref"]		= true;
+AjxUtil.NODE_CONTENT["attr"]		= true;
+AjxUtil.NODE_CONTENT["a"]			= true;
 
 // IE doesn't define Node type constants
 AjxUtil.ELEMENT_NODE	= 1;
-AjxUtil.TEXT_NODE	= 3;
+AjxUtil.TEXT_NODE		= 3;
 
 /**
 * Convert an XML node to the equivalent JS. Traverses the node's
@@ -388,9 +390,11 @@ function(string) {
 	return text;
 };
 
-AjxUtil.getInnerText = function(node) {
+AjxUtil.getInnerText = 
+function(node) {
  	if (AjxEnv.isIE)
  		return node.innerText;
+
 	function f(n) {
 		if (n) {
 			if (n.nodeType == 3 /* TEXT_NODE */)
@@ -424,16 +428,16 @@ AjxUtil.getInnerText = function(node) {
  * @param level  [number] The number of property levels deep to proxy.
  *						  Defaults to zero.
  */
-AjxUtil.createProxy = function(object, level) {
+AjxUtil.createProxy = 
+function(object, level) {
 	var proxyCtor = new Function();
 	proxyCtor.prototype = object;
 	var proxy = new proxyCtor;
 	
 	if (level) {
 		for (var prop in object) {
-			if (typeof object[prop] == "object") {
+			if (typeof object[prop] == "object")
 				proxy[prop] = AjxUtil.createProxy(object[prop], level - 1);
-			}
 		}
 	}	
 	
