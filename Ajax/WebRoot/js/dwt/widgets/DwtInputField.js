@@ -65,32 +65,37 @@ function DwtInputField(parent, type, initialValue, size, maxLen, errorIconStyle,
 	var inputFieldId = Dwt.getNextId();
 	var errorIconId = Dwt.getNextId();
 	var htmlEl = this.getHtmlElement();
-	var htmlArr = ["<table cellspacing='0' cellpadding='0'><tr>"];
-	var i = 1;
-	if (this._errorIconStyle == DwtInputField.ERROR_ICON_LEFT)
-		htmlArr[i++] = ["<td style='padding-right:2px;'id='", errorIconId, "'></td>"].join("");
-
-	htmlArr[i++] = ["<td><input id='", inputFieldId, "' type='", 
-		(this._type != DwtInputField.PASSWORD) ? "text" : "password", 
-		"'/></td>"].join("");
-		
-	if (this._errorIconStyle == DwtInputField.ERROR_ICON_RIGHT)
-		htmlArr[i++] = ["<td style='padding-left:2px;' id='", errorIconId, "'></td>"].join("");
+	if (this._errorIconStyle == DwtInputField.ERROR_ICON_NONE) {
+		htmlEl.innerHTML = ["<input id='", inputFieldId, "' type='", 
+			(this._type != DwtInputField.PASSWORD) ? "text" : "password", "'/>"].join("");;
+	} else {
+		var htmlArr = ["<table cellspacing='0' cellpadding='0'><tr>"];
+		var i = 1;
+		if (this._errorIconStyle == DwtInputField.ERROR_ICON_LEFT)
+			htmlArr[i++] = ["<td style='padding-right:2px;'id='", errorIconId, "'></td>"].join("");
 	
-	htmlArr[i++] = "</tr></table>";
-	htmlEl.innerHTML = htmlArr.join("");
+		htmlArr[i++] = ["<td><input id='", inputFieldId, "' type='", 
+			(this._type != DwtInputField.PASSWORD) ? "text" : "password", 
+			"'/></td>"].join("");
+			
+		if (this._errorIconStyle == DwtInputField.ERROR_ICON_RIGHT)
+			htmlArr[i++] = ["<td style='padding-left:2px;' id='", errorIconId, "'></td>"].join("");
+		
+		htmlArr[i++] = "</tr></table>";
+		htmlEl.innerHTML = htmlArr.join("");
+		
+		if (this._errorIconStyle != DwtInputField.ERROR_ICON_NONE) {
+			this._errorIconTd = document.getElementById(errorIconId);
+			this._errorIconTd.vAlign = "middle";
+			this._errorIconTd.innerHTML = DwtInputField._NOERROR_ICON_HTML;
+		}
+	}
 	
 	this._inputField = document.getElementById(inputFieldId);
 	Dwt.associateElementWithObject(this._inputField, this);
 	
 	this._inputField.onkeyup = DwtInputField._keyUpHdlr;
 	this._inputField.onblur = DwtInputField._blurHdlr;
-	
-	if (this._errorIconStyle != DwtInputField.ERROR_ICON_NONE) {
-		this._errorIconTd = document.getElementById(errorIconId);
-		this._errorIconTd.vAlign = "middle";
-		this._errorIconTd.innerHTML = DwtInputField._NOERROR_ICON_HTML;
-	}
 	
 	if (size) this._inputField.size = size;
 	if (maxLen) this._inputField.maxLength = maxLen;
@@ -171,7 +176,9 @@ function(regExp, errorString) {
 
 /**
 * Sets a validation callback. This callback is invoked any time 
-* the input field is validated
+* the input field is validated. The callback is invoked with two
+* parameters. The first (params[0]) is the value of the input field
+* The second is a boolean that if true indicates if the value is valid
 *
 * @param callback [AjxCallback] The callback
 */
@@ -318,9 +325,9 @@ function(value) {
 			this._errorIconTd.innerHTML = DwtInputField._NOERROR_ICON_HTML;
 		this.setToolTipContent(null);
 	}
-	
+
 	if (this._validationCallback)
-		this._validationCallback.run(retVal);
+		this._validationCallback.run([value, retVal]);
 	
 	return retVal;
 };
