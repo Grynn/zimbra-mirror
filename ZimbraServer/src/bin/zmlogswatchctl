@@ -40,8 +40,15 @@ case "$1" in
 		if [ -f $CONFIG ]; then
 			$BASE/bin/logswatch --config-file=$BASE/conf/logswatchrc \
 			--script-dir=/tmp -t /var/log/zimbra.log >/tmp/logswatch.out 2>&1 &
+			PID=$!
 			chmod 777 /tmp/logswatch.out
-			echo $! > $PIDFILE
+			echo $PID > $PIDFILE
+			if [ x$PID != 'x' ]; then
+				kill -0 $PID
+				exit $?
+			else
+				exit 1
+			fi
 		else
 			exit 1
 		fi

@@ -42,8 +42,15 @@ case "$1" in
 		if [ -f $CONFIG ]; then
 			$BASE/bin/swatch --config-file=$BASE/conf/swatchrc \
 			--script-dir=/tmp -t /var/log/zimbra.log >/tmp/swatch.out 2>&1 &
-			echo $! > $PIDFILE
+			PID=$!
+			echo $PID > $PIDFILE
 			chmod 777 /tmp/swatch.out
+			if [ x$PID != 'x' ]; then
+				kill -0 $PID
+				exit $?
+			else
+				exit 1
+			fi
 		else
 			exit 1
 		fi
