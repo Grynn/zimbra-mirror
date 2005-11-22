@@ -73,12 +73,14 @@ function(ev) {
 		return false;
 	}
 	var control = mouseEv.dwtObj;
-    var ctxt = control._movableContext;
-	if (ctxt._callbackFunc != null) {
-		ctxt._captureObj.capture();
-		ctxt._startDoc = {x: mouseEv.docX, y: mouseEv.docY};
-		ctxt._startCoord = ctxt._rootControl.getLocation();
-	}
+	if (control && control._movableContext) {
+        var ctxt = control._movableContext;
+        	if (ctxt._callbackFunc != null) {
+        		ctxt._captureObj.capture();
+        		ctxt._startDoc = {x: mouseEv.docX, y: mouseEv.docY};
+        		ctxt._startCoord = ctxt._rootControl.getLocation();
+        	}
+   	}
 	mouseEv._stopPropagation = true;
 	mouseEv._returnValue = false;
 	mouseEv.setToDhtmlEvent(ev);
@@ -95,15 +97,16 @@ function(ev) {
 	    
 	deltaX = mouseEv.docX - ctxt._startDoc.x;
 	deltaY = mouseEv.docY - ctxt._startDoc.y;
-
+    
 	if (Math.abs(deltaX) >= ctxt._threshX || Math.abs(deltaY) >= ctxt._threshY) {
+	    var data = {delta: {x: deltaX, y: deltaY}, start: ctxt._startCoord};
 		if (ctxt._callbackObj != null)
-			delta = ctxt._callbackFunc.call(ctxt._callbackObj, {x: deltaX, y: deltaY});
+			data = ctxt._callbackFunc.call(ctxt._callbackObj, data);
 		else 
-			delta = ctxt._callbackFunc({x: deltaX, y: deltaY});
+			data = ctxt._callbackFunc(data);
 		// If movement happened, then shift our location by the actual amount of movement
-		if (delta.x != 0 || delta.y != 0) {
-        		ctxt._rootControl.setLocation(ctxt._startCoord.x + delta.x, ctxt._startCoord.y + delta.y);
+		if (data.delta.x != 0 || data.delta.y != 0) {
+        		ctxt._rootControl.setLocation(ctxt._startCoord.x + data.delta.x, ctxt._startCoord.y + data.delta.y);
 		}
 	}
 		
