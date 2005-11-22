@@ -54,6 +54,10 @@ function(control, rootControl, threshX, threshY, callbackFunc, callbackObj) {
 	ctxt._callbackObj = callbackObj;	
 }
 
+DwtMovable.STATE_MOVE_START = 1;
+DwtMovable.STATE_MOVING = 2;
+DwtMovable.STATE_END = 3;
+
 DwtMovable._mouseOverHdlr =
 function(ev) {
 	var mouseEv = DwtShell.mouseEvent;
@@ -79,12 +83,21 @@ function(ev) {
         		ctxt._captureObj.capture();
         		ctxt._startDoc = {x: mouseEv.docX, y: mouseEv.docY};
         		ctxt._startCoord = ctxt._rootControl.getLocation();
+            DwtMovable._doCallback(ctxt,{start: ctxt._startCoord, state: DwtMovable.STATE_MOVE_START});
         	}
    	}
 	mouseEv._stopPropagation = true;
 	mouseEv._returnValue = false;
 	mouseEv.setToDhtmlEvent(ev);
 	return false;	
+}
+
+DwtMovable._doCallback =
+function(ctxt, data) {
+	if (ctxt._callbackObj != null)
+		return ctxt._callbackFunc.call(ctxt._callbackObj, data);
+	else 
+		return ctxt._callbackFunc(data);
 }
 
 DwtMovable._mouseMoveHdlr =
@@ -99,11 +112,8 @@ function(ev) {
 	deltaY = mouseEv.docY - ctxt._startDoc.y;
     
 	if (Math.abs(deltaX) >= ctxt._threshX || Math.abs(deltaY) >= ctxt._threshY) {
-	    var data = {delta: {x: deltaX, y: deltaY}, start: ctxt._startCoord};
-		if (ctxt._callbackObj != null)
-			data = ctxt._callbackFunc.call(ctxt._callbackObj, data);
-		else 
-			data = ctxt._callbackFunc(data);
+	    var data = DwtMovable._doCallback(ctxt,
+	         {delta: {x: deltaX, y: deltaY}, start: ctxt._startCoord, state: DwtMovable.STATE_MOVING});
 		// If movement happened, then shift our location by the actual amount of movement
 		if (data.delta.x != 0 || data.delta.y != 0) {
         		ctxt._rootControl.setLocation(ctxt._startCoord.x + data.delta.x, ctxt._startCoord.y + data.delta.y);
@@ -125,9 +135,12 @@ function(ev) {
 		return false;
 	}
 	
-	if (DwtMouseEventCapture.getTargetObj()._movableContext._callbackFunc != null)
-		DwtMouseEventCapture.getCaptureObj().release();
-		
+	var ctxt = DwtMouseEventCapture.getTargetObj()._movableContext;
+	if (ctxt) {
+        	if (ctxt._callbackFunc != null)
+        		DwtMouseEventCapture.getCaptureObj().release();
+        DwtMovable._doCallback(ctxt,{start: ctxt._startCoord, state: DwtMovable.STATE_MOVE_END});
+	}
 	mouseEv._stopPropagation = true;
 	mouseEv._returnValue = false;
 	mouseEv.setToDhtmlEvent(ev);
