@@ -47,9 +47,27 @@ if ($platform eq "MACOSX") {
 my $dt = `date "+%Y-%m-%d %H:%M:%S"`;
 chomp $dt;
 
+checkPid();
 logQueue();
+clearPid();
 
 exit 0;
+
+sub checkPid {
+	if (-f "/opt/zimbra/log/zmqueuelog.pid") {
+		my $P = `cat /opt/zimbra/log/zmqueuelog.pid`;
+		chomp $P;
+		if ($P ne "") {
+			my $c = kill, 0, $P;
+			if ($c) {exit 0;}
+		}
+	}
+	`echo $$ > "/opt/zimbra/log/zmqueuelog.pid"`;
+}
+
+sub clearPid {
+	unlink ("/opt/zimbra/log/zmqueuelog.pid");
+}
 
 sub logQueue {
 	my @status = ();
