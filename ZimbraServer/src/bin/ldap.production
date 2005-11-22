@@ -64,7 +64,13 @@ start()
 			-f /opt/zimbra/conf/slapd.conf
 		sleep 2
 		getpid
-		echo "Started slapd: pid $PID"
+		if [ "x$PID" = "x" ]; then
+			echo "ERROR - failed to start slapd"
+			echo ""
+			exit 1
+		else
+			echo "Started slapd: pid $PID"
+		fi
 	else
 		echo "slapd already running: pid $PID"
 		exit 1

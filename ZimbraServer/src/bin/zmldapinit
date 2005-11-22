@@ -24,6 +24,14 @@
 # ***** END LICENSE BLOCK *****
 # 
 
+#
+# Exit values
+#
+# 0 - success
+# 1 - ldap start failed
+# 2 - ldapmodify failed
+#
+
 source `dirname $0`/../bin/zmshutil || exit 1
 zmsetvars zimbra_home
 
@@ -67,9 +75,26 @@ sed -e "s|^userPassword.*|userPassword: ${zimbra_sha}|" \
 
 ${zimbra_home}/bin/ldap start
 
+if [ $? -ne 0 ]; then
+	exit 1
+fi
+
 ${zimbra_home}/openldap/bin/ldapmodify -a -c -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${config_dir}/zimbra.ldif
+
+if [ $? -ne 0 ]; then
+	exit 2
+fi
+
 ${zimbra_home}/openldap/bin/ldapmodify -a -c -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${source_config_dir}/zimbra_mimehandlers.ldif
+
+if [ $? -ne 0 ]; then
+	exit 2
+fi
 
 for i in `ls /opt/zimbra/lib/conf/*ldif`; do
 	${zimbra_home}/openldap/bin/ldapmodify -a -c -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f $i
+
+	if [ $? -ne 0 ]; then
+		exit 2
+	fi
 done
