@@ -312,7 +312,7 @@ function(ev) {
 //			DBG.println("TARGET NAME: " + keyEvent.target.tagName + " ID: " + keyEvent.target.id);	
 	
 		var tagName = (keyEvent.target) ? keyEvent.target.tagName.toLowerCase() : null;
-		if (tagName != "input") {
+		if (tagName != "input" && tagName != "textarea") {
 			return shell.notifyListeners(DwtEvent.ONKEYPRESS, keyEvent);
 //			keyEvent._stopPropagation = true;
 //    		keyEvent._returnValue = false;
