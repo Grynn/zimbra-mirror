@@ -42,13 +42,6 @@ function DwtPropertyEditor(parent, className, positionType) {
 DwtPropertyEditor.MSG_TIMEOUT = 4000; // 4 seconds should be plenty
 
 DwtPropertyEditor.MSG = {
-	lengthFault   : "The length of this field must be between MINLEN and MAXLEN characters",
-	mustBeInteger : "This field must be an integer",
-	mustBeNumber  : "This field must be a number",
-	isRequired    : "This field must not be empty",
-	minValueFault : "This field must be >= MINVAL",
-	maxValueFault : "This field must be <= MAXVAL",
-
 	// Now these 2 are kind of pointless...
 	// We should allow a message in the prop. object.
 	mustMatch     : "This field does not match validators: REGEXP",
@@ -520,15 +513,17 @@ DwtPropertyEditor._prop_functions = {
 		if (empty) {
 			if (!this.required)
 				return val;
-			this._displayMsg(DwtPropertyEditor.MSG.isRequired);
+			this._displayMsg(AjxMsg.valueIsRequired);
 			return null;
 		}
 
-		if (val.length > this.maxLength ||
-		    val.length < this.minLength) {
-			this._displayMsg(DwtPropertyEditor.MSG.lengthFault
-					 .replace(/MINLEN/, this.minLength)
-					 .replace(/MAXLEN/, this.maxLength));
+		if (this.maxLength != null && val.length > this.maxLength) {
+			this._displayMsg(AjxMessageFormat.format(AjxMsg.stringTooLong, this.maxLength));
+			return null;
+		}
+
+		if (this.minLength != null && val.length < this.minLength) {
+			this._displayMsg(AjxMessageFormat.format(AjxMsg.stringTooShort, this.minLength));
 			return null;
 		}
 
@@ -551,21 +546,19 @@ DwtPropertyEditor._prop_functions = {
 		    case "number" :
 			var n = new Number(val);
 			if (isNaN(n)) {
-				this._displayMsg(DwtPropertyEditor.MSG.mustBeNumber);
+				this._displayMsg(AjxMsg.notANumber);
 				return null;
 			}
 			if (this.type == "integer" && Math.round(n) != n) {
-				this._displayMsg(DwtPropertyEditor.MSG.mustBeInteger);
+				this._displayMsg(AjxMsg.notAnInteger);
 				return null;
 			}
 			if (this.minValue != null && n < this.minValue) {
-				this._displayMsg(DwtPropertyEditor.MSG.minValueFault
-						 .replace(/MINVAL/, this.minValue));
+				this._displayMsg(AjxMessageFormat.format(AjxMsg.numberLessThanMin, this.minValue));
 				return null;
 			}
 			if (this.maxValue != null && n > this.maxValue) {
-				this._displayMsg(DwtPropertyEditor.MSG.maxValueFault
-						 .replace(/MAXVAL/, this.maxValue));
+				this._displayMsg(AjxMessageFormat.format(AjxMsg.numberMoreThanMax, this.maxValue));
 				return null;
 			}
 			val = n;
