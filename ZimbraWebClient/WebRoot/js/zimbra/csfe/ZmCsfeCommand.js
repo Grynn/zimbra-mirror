@@ -196,7 +196,7 @@ function(params) {
 ZmCsfeCommand.prototype._getResponseData =
 function(response, asyncMode) {
 	this._en = new Date();
-	DBG.println(AjxDebug.DBG1, "ROUND TRIP TIME: " + (this._en.getTime() - this._st.getTime()));
+	DBG.println(AjxDebug.PERF, "ROUND TRIP TIME: " + (this._en.getTime() - this._st.getTime()));
 
 	var result = new ZmCsfeResult();
 
