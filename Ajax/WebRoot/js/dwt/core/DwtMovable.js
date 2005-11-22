@@ -25,24 +25,33 @@
 
 function DwtMovable() {}
 
+/**
+* @param control        the DwtControl that can be moved/dragged
+* @param rootControl    the DwtControl that will actually be moved
+* @param threshX        mimimum number of X pixels before we move (default 1)
+* @param threshY        mimimum number of X pixels before we move (default 1)
+* @param callbackFunc   callback function to veto move
+* @param callbackObj    object for callback
+*/
 DwtMovable.init = 
-function(control, rootEl, threshX, threshY, callbackFunc, callbackObj) {
+function(control, rootControl, threshX, threshY, callbackFunc, callbackObj) {
 
-   control._rootEl = rootEl;
-   var htmlElement = control.getHtmlElement();
+    var ctxt = control._movableContext = {};
+    ctxt._rootControl = rootControl;
+    var htmlElement = control.getHtmlElement();
     
    	htmlElement.style.cursor = "move";
-	control._threshX = (threshX > 0) ? threshX : 1;
-	control._threshY = (threshY > 0) ? threshY : 1;
+	ctxt._threshX = (threshX > 0) ? threshX : 1;
+	ctxt._threshY = (threshY > 0) ? threshY : 1;
 
-	control._captureObj = new DwtMouseEventCapture(control, DwtMovable._mouseOverHdlr,
+	ctxt._captureObj = new DwtMouseEventCapture(control, DwtMovable._mouseOverHdlr,
 			DwtMovable._mouseDownHdlr, DwtMovable._mouseMoveHdlr, 
 			DwtMovable._mouseUpHdlr, DwtMovable._mouseOutHdlr);
 	control.setHandler(DwtEvent.ONMOUSEDOWN, DwtMovable._mouseDownHdlr);
 	control.setHandler(DwtEvent.ONMOUSEOVER, DwtMovable._mouseOverHdlr);
 	control.setHandler(DwtEvent.ONMOUSEOUT, DwtMovable._mouseOutHdlr);
-	control._callbackFunc = callbackFunc;
-	control._callbackObj = callbackObj;	
+	ctxt._callbackFunc = callbackFunc;
+	ctxt._callbackObj = callbackObj;	
 }
 
 DwtMovable._mouseOverHdlr =
@@ -64,10 +73,11 @@ function(ev) {
 		return false;
 	}
 	var control = mouseEv.dwtObj;
-	if (control._callbackFunc != null) {
-		control._captureObj.capture();
-		control._startDoc = {x: mouseEv.docX, y: mouseEv.docY};
-		control._startCoord = control._rootEl.getLocation();
+    var ctxt = control._movableContext;
+	if (ctxt._callbackFunc != null) {
+		ctxt._captureObj.capture();
+		ctxt._startDoc = {x: mouseEv.docX, y: mouseEv.docY};
+		ctxt._startCoord = ctxt._rootControl.getLocation();
 	}
 	mouseEv._stopPropagation = true;
 	mouseEv._returnValue = false;
@@ -81,18 +91,19 @@ function(ev) {
 	mouseEv.setFromDhtmlEvent(ev);	
 	
 	var control = DwtMouseEventCapture.getTargetObj();
-	
-	deltaX = mouseEv.docX - control._startDoc.x;
-	deltaY = mouseEv.docY - control._startDoc.y;
+    var ctxt = control._movableContext;
+	    
+	deltaX = mouseEv.docX - ctxt._startDoc.x;
+	deltaY = mouseEv.docY - ctxt._startDoc.y;
 
-	if (Math.abs(deltaX) >= control._threshX || Math.abs(deltaY) >= control._threshY) {
-		if (control._callbackObj != null)
-			delta = control._callbackFunc.call(control._callbackObj, {x: deltaX, y: deltaY});
+	if (Math.abs(deltaX) >= ctxt._threshX || Math.abs(deltaY) >= ctxt._threshY) {
+		if (ctxt._callbackObj != null)
+			delta = ctxt._callbackFunc.call(ctxt._callbackObj, {x: deltaX, y: deltaY});
 		else 
-			delta = control._callbackFunc({x: deltaX, y: deltaY});
+			delta = ctxt._callbackFunc({x: deltaX, y: deltaY});
 		// If movement happened, then shift our location by the actual amount of movement
 		if (delta.x != 0 || delta.y != 0) {
-        		control._rootEl.setLocation(control._startCoord.x + delta.x, control._startCoord.y + delta.y);
+        		ctxt._rootControl.setLocation(ctxt._startCoord.x + delta.x, ctxt._startCoord.y + delta.y);
 		}
 	}
 		
@@ -111,7 +122,7 @@ function(ev) {
 		return false;
 	}
 	
-	if (DwtMouseEventCapture.getTargetObj()._callbackFunc != null)
+	if (DwtMouseEventCapture.getTargetObj()._movableContext._callbackFunc != null)
 		DwtMouseEventCapture.getCaptureObj().release();
 		
 	mouseEv._stopPropagation = true;
