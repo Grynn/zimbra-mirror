@@ -85,6 +85,7 @@ function DwtDialog(parent, className, title, standardButtons, extraButtons, zInd
 				this._buttonDesc[buttonId] = extraButtons[i];
 			}
 		}
+		DBG.timePt(AjxDebug.PERF, "DwtDialog: constructed buttons");
 	}
 
 	this._titleCellId = Dwt.getNextId();
@@ -98,6 +99,7 @@ function DwtDialog(parent, className, title, standardButtons, extraButtons, zInd
 	var doc = this.getDocument();
 	
 	DwtBaseDialog.call(this, parent, className, this._title, zIndex, mode, loc);
+	DBG.timePt(AjxDebug.PERF, "DwtBaseDialog constructor");
 	this._titleCell = Dwt.getDomObj(doc, this._titleCellId);
 	this._contentDiv = Dwt.getDomObj(doc, this._contentId);
 
@@ -112,6 +114,7 @@ function DwtDialog(parent, className, title, standardButtons, extraButtons, zInd
 		Dwt.getDomObj(doc, this._buttonElementId[buttonId]).appendChild(this._button[buttonId].getHtmlElement());
 	}
 	this.initializeDragging(this._titleHandleId);
+	DBG.timePt(AjxDebug.PERF, "setup buttons and init dragging");
 }
 
 DwtDialog.prototype = new DwtBaseDialog;

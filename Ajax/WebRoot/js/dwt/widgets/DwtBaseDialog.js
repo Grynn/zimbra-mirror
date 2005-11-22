@@ -56,6 +56,7 @@ function DwtBaseDialog(parent, className, title, zIndex, mode, loc, optionalView
 	this._title = title || "";
 
 	DwtComposite.call(this, parent, className, DwtControl.ABSOLUTE_STYLE);
+	DBG.timePt(AjxDebug.PERF, "DwtComposite constructor");
 
 	this._shell = parent;
 	this._zIndex = zIndex || Dwt.Z_DIALOG;
@@ -65,6 +66,7 @@ function DwtBaseDialog(parent, className, title, zIndex, mode, loc, optionalView
 	this._ffHackDisabled = false;
 
 	this._createHtml();
+	DBG.timePt(AjxDebug.PERF, "DwtBaseDialog#_createHtml");
 	if (optionalView != null) {
 		this.setView(optionalView);
 	}
@@ -73,16 +75,17 @@ function DwtBaseDialog(parent, className, title, zIndex, mode, loc, optionalView
 	var doc = this.getDocument();
 	var dHandleId = (optionalDragHandleId)? optionalDragHandleId: (htmlElement.id + "_handle");
 	this.initializeDragging(dHandleId);
+	DBG.timePt(AjxDebug.PERF, "init dragging");
 	
 	// reset tab index
 	this._tabIndex = 0;
     this.setZIndex(Dwt.Z_HIDDEN); // not displayed until popup() called
 	this._positionDialog({x:-10000, y:-10000});
+	DBG.timePt(AjxDebug.PERF, "DwtBaseDialog#_positionDialog");
 }
 
 DwtBaseDialog.prototype = new DwtComposite;
 DwtBaseDialog.prototype.constructor = DwtBaseDialog;
-
 
 // modes
 DwtBaseDialog.MODELESS = 1;
@@ -123,6 +126,7 @@ DwtBaseDialog.prototype.popup =
 function(loc) {
 	
 	this.cleanup(true);
+	DBG.timePt(AjxDebug.PERF, "DwtBaseDialog#cleanup");
 
 	var thisZ = this._zIndex;
 	// if we're modal, setup the veil effect,
@@ -130,23 +134,29 @@ function(loc) {
 	if (this._mode == DwtBaseDialog.MODAL) {
 		thisZ = this._setModalEffect(thisZ);
 	}
+	DBG.timePt(AjxDebug.PERF, "DwtBaseDialog#setModelEffect");
 
 	// add the listener functions for key events that
 	// we're interested in
 	this.addKeyListeners();
 	this._shell._veilOverlay.activeDialogs.push(this);
+	DBG.timePt(AjxDebug.PERF, "push this on list of active dialogs");
 
 	// Deal with Firefox's horrible bug with absolutely 
 	// positioned divs and inputs floating over them.
 	if (!this._ffHackDisabled) Dwt._ffOverflowHack(this._htmlElId, thisZ, null, true);
+	DBG.timePt(AjxDebug.PERF, "Dwt._ffOverflowHack");
 	
 	// use whichever has a value, local has precedence
 	loc = this._loc = loc || this._loc; 
 	
 	this._positionDialog(loc);
+	DBG.timePt(AjxDebug.PERF, "DwtBaseDialog#positionDialog");
 	this.setZIndex(thisZ);
+	DBG.timePt(AjxDebug.PERF, "DwtBaseDialog#setZIndex");
 	this._poppedUp = true;
 	this.focus();
+	DBG.timePt(AjxDebug.PERF, "DwtBaseDialog#focus");
 }
 
 DwtBaseDialog.prototype._disableFFhack = 
@@ -418,7 +428,9 @@ function (myZIndex) {
 DwtBaseDialog.prototype._positionDialog = 
 function (loc) {
 	var sizeShell = this._shell.getSize();
+	DBG.timePt(AjxDebug.PERF, "DwtBaseDialog#_positionDialog: get shell size");
 	var sizeThis = this.getSize();
+	DBG.timePt(AjxDebug.PERF, "DwtBaseDialog#_positionDialog: get dialog size");
 	var x, y;
 	if (loc == null) {
 		// if no location, go for the middle
@@ -434,6 +446,7 @@ function (loc) {
 	if ((y + sizeThis.y) > sizeShell.y)
 		y = sizeShell.y - sizeThis.y;
 	this.setLocation(x, y);
+	DBG.timePt(AjxDebug.PERF, "DwtBaseDialog#_positionDialog: set location");
 };
 
 // returns a list of input fields in dialog
