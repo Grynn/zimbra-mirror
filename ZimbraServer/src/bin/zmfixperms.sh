@@ -34,7 +34,8 @@ if [ "X$PLAT" = "XMACOSX" ]; then
 	ROOTGROUP=wheel
 fi
 
-chown -R zimbra:zimbra /opt/zimbra
+# NOT /opt/zimbra/store, takes forever
+chown -R zimbra:zimbra /opt/zimbra/[a-rt-z]* /opt/zimbra/s[a-su-z]*
 
 chown -R root:$ROOTGROUP /opt/zimbra/libexec
 chown -R root:$ROOTGROUP /opt/zimbra/bin
