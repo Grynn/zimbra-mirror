@@ -50,26 +50,23 @@
 *											using z-index. See Dwt.js for various layering constants
 */
 function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell, useCurtain) {
-
-	if (window._dwtShell != null) 
+	if (window._dwtShell != null) {
 		throw new DwtException("DwtShell already exists for window", DwtException.INVALID_OP, "DwtShell");
+	}
+
 	className = className || "DwtShell";
 	DwtComposite.call(this, null, className);
 
-     
     // HACK! This is a hack to make sure that the control methods work 
     // with DwtShell since the parent of DwtShell is null. 
 	this._ctrlInited = true;
 
 	window._dwtShell = AjxCore.assignId(this);
-	
+
 	if ((confirmExitMethod != null) && (document.domain != "localhost"))
 		window.onbeforeunload = confirmExitMethod;
-		
-	document.body.style.marginLeft = 0;
-	document.body.style.marginRight = 0;
-	document.body.style.marginTop = 0;
-	document.body.style.marginBottom = 0;
+
+	document.body.style.margin = 0;
 	if (docBodyScrollable != null && !docBodyScrollable)
 		document.body.style.overflow = "hidden";
 
@@ -84,10 +81,9 @@ function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell, us
 	this._htmlElId = htmlElement.id = Dwt.getNextId();
 
 	htmlElement.className = className;
-	htmlElement.style.width = "100%";
-	htmlElement.style.height = "100%";
-	//htmlElement.style.overflow = "hidden";
-	if (htmlElement.style.overflow) htmlElement.style.overflow = null;
+	htmlElement.style.width = htmlElement.style.height = "100%";
+	if (htmlElement.style.overflow) 
+		htmlElement.style.overflow = null;
 
 	// if there is a user shell (body content), move it below this shell
 	// into a container that's absolutely positioned
@@ -105,7 +101,7 @@ function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell, us
 
     // Busy overlay - used when we want to enforce a modal busy state
     this._createBusyOverlay(htmlElement);
-    
+
 	// Veil overlay - used by DwtDialog to disable underlying app
 	this._veilOverlay = document.createElement("div");
 	this._veilOverlay.className = (!AjxEnv.isLinux) ? "VeilOverlay" : "VeilOverlay-linux";
@@ -119,7 +115,7 @@ function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell, us
 	this._veilOverlay.activeDialogs = new Array();
 	this._veilOverlay.innerHTML = "<table cellspacing=0 cellpadding=0 style='width:100%; height:100%'><tr><td>&nbsp;</td></tr></table>";
 	htmlElement.appendChild(this._veilOverlay);
-    
+
 	// Curtain overlay - used between hidden and viewable elements using z-index
 	if (useCurtain) {
 		this._curtainOverlay = document.createElement("div");
@@ -130,9 +126,9 @@ function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell, us
 		this._curtainOverlay.innerHTML = "<table cellspacing=0 cellpadding=0 style='width:100%; height:100%'><tr><td>&nbsp;</td></tr></table>";
 		htmlElement.appendChild(this._curtainOverlay);
 	}
-    
+
     this._uiEvent = new DwtUiEvent(true);
-	this._currWinSize = this.getWindowSize();
+	this._currWinSize = Dwt.getWindowSize();
 
 	// tooltip singleton used by all controls in shell
 	this._toolTip = new DwtToolTip(this);
@@ -142,17 +138,18 @@ function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell, us
 DwtShell.prototype = new DwtComposite;
 DwtShell.prototype.constructor = DwtShell;
 
-DwtShell.CANCEL_BUTTON = -1; // DwtDialog not defined yet, can't base ID on it
+// DwtDialog not defined yet, can't base ID on it
+DwtShell.CANCEL_BUTTON = -1;
 
-// Event objects used to populate events so we don't need to create
-// them for each event
-DwtShell.controlEvent = new DwtControlEvent();
-DwtShell.keyEvent = new DwtKeyEvent();
-DwtShell.mouseEvent = new DwtMouseEvent();
+// Event objects used to populate events so we dont need to create them for each event
+DwtShell.controlEvent 	= new DwtControlEvent();
+DwtShell.keyEvent 		= new DwtKeyEvent();
+DwtShell.mouseEvent 	= new DwtMouseEvent();
 DwtShell.selectionEvent = new DwtSelectionEvent(true);
-DwtShell.treeEvent = new DwtTreeEvent();
+DwtShell.treeEvent 		= new DwtTreeEvent();
 
-DwtShell._BUSY_OVERLAY_CLASS = "BusyOverlay";
+
+// Public methods
 
 DwtShell.prototype.toString = 
 function() {
@@ -168,14 +165,6 @@ DwtShell.getShell =
 function(win){
 	return AjxCore.objectWithId(win._dwtShell);
 };
-
-/**
-* <b>DEPRECATED</b>
-*/
-DwtShell.prototype.getWindowSize =
-function() {
-	return Dwt.getWindowSize();
-}
 
 /* Set's the busy overlay. The busy overlay disables input to the application and makes the 
  * cursor a wait cursor. Optionally a work in progress (WIP) dialog may be requested. Since
@@ -244,19 +233,74 @@ function(text) {
 *
 * @param title The title text
 */
-
 DwtShell.prototype.setBusyDialogTitle =
 function(title) { 
 	this._busyDialog.setTitle((title) ? title : AjxMsg.workInProgress);
 }
 
-DwtShell.prototype.getHoverMgr = function() {
+DwtShell.prototype.getHoverMgr = 
+function() {
 	return this._hoverMgr;
 }
 
-DwtShell.prototype.getToolTip = function() {
+DwtShell.prototype.getToolTip = 
+function() {
 	return this._toolTip;
 }
+
+
+// Private / protected methods
+
+DwtShell.prototype._showBusyDialogAction =
+function(id) {
+	this._busyDialog.popup();
+	this._busyActionId[id] = -1;
+}
+
+DwtShell.prototype._createBusyOverlay =
+function(htmlElement) { 
+    this._busyOverlay = document.createElement("div");
+    this._busyOverlay.className = (!AjxEnv.isLinux) ? "BusyOverlay" : "BusyOverlay-linux";
+    this._busyOverlay.style.position = "absolute";
+    Dwt.setBounds(this._busyOverlay, 0, 0, "100%", "100%")
+    Dwt.setZIndex(this._busyOverlay, Dwt.Z_VEIL);
+    this._busyOverlay.innerHTML = "<table cellspacing=0 cellpadding=0 style='width:100%; height:100%'><tr><td>&nbsp;</td></tr></table>";
+    htmlElement.appendChild(this._busyOverlay);
+	Dwt.setVisible(this._busyOverlay, false);
+
+	var cancelButton = new DwtDialog_ButtonDescriptor(DwtShell.CANCEL_BUTTON, AjxMsg.cancelRequest, DwtDialog.ALIGN_CENTER);
+    this._busyDialog = new DwtDialog(this, "DwtShellbusyDialog", AjxMsg.workInProgress, DwtDialog.NO_BUTTONS, [cancelButton], Dwt.BUSY + 10);
+    this._busyDialog._disableFFhack();
+    this._busyDialog.registerCallback(DwtShell.CANCEL_BUTTON, this._busyCancelButtonListener, this);
+    var txtId = Dwt.getNextId();
+    var html = [
+        "<table xborder=1 class='DialogContent'><tr>",
+            "<td class='WaitIcon'></td><td class='MsgText' id='", txtId, "'>&nbsp;</td>",
+        "</tr></table>"].join("");
+    
+    this._busyDialog.setContent(html);
+    this._busyDialogTxt = Dwt.getDomObj(document, txtId);
+       
+	this._busyTimedAction = new AjxTimedAction();
+	this._busyTimedAction.obj = this;
+	this._busyTimedAction.method = this._showBusyDialogAction;
+	this._busyActionId = {};
+	
+	this._setBusyCount = 0;
+	this._setBusy = false;
+}
+
+
+// Listeners
+
+DwtShell.prototype._busyCancelButtonListener =
+function(ev) {
+	this._cancelBusyCallback.run();
+	this._busyDialog.popdown();
+}
+
+
+// Static methods
 
 DwtShell._preventDefaultSelectPrt =
 function(ev) {
@@ -298,7 +342,6 @@ function(ev) {
     return evt._returnValue;
 }
 
-
 DwtShell._keyPressHdlr =
 function(ev) {
 	var shell = AjxCore.objectWithId(window._dwtShell);
@@ -338,49 +381,4 @@ function(ev) {
 	} else {
 		shell._currWinSize = Dwt.getWindowSize();
 	}
-}
-
-DwtShell.prototype._busyCancelButtonListener =
-function(ev) {
-	this._cancelBusyCallback.run();
-	this._busyDialog.popdown();
-}
-
-DwtShell.prototype._showBusyDialogAction =
-function(id) {
-	this._busyDialog.popup();
-	this._busyActionId[id] = -1;
-}
-
-DwtShell.prototype._createBusyOverlay =
-function(htmlElement) { 
-    this._busyOverlay = document.createElement("div");
-    this._busyOverlay.className = (!AjxEnv.isLinux) ? DwtShell._BUSY_OVERLAY_CLASS : DwtShell._BUSY_OVERLAY_CLASS + "-linux";
-    this._busyOverlay.style.position = "absolute";
-    Dwt.setBounds(this._busyOverlay, 0, 0, "100%", "100%")
-    Dwt.setZIndex(this._busyOverlay, Dwt.Z_VEIL);
-    this._busyOverlay.innerHTML = "<table cellspacing=0 cellpadding=0 style='width:100%; height:100%'><tr><td>&nbsp;</td></tr></table>";
-    htmlElement.appendChild(this._busyOverlay);
-	Dwt.setVisible(this._busyOverlay, false);
-
-	var cancelButton = new DwtDialog_ButtonDescriptor(DwtShell.CANCEL_BUTTON, AjxMsg.cancelRequest, DwtDialog.ALIGN_CENTER);
-    this._busyDialog = new DwtDialog(this, "DwtShellbusyDialog", AjxMsg.workInProgress, DwtDialog.NO_BUTTONS, [cancelButton], Dwt.BUSY + 10);
-    this._busyDialog._disableFFhack();
-    this._busyDialog.registerCallback(DwtShell.CANCEL_BUTTON, this._busyCancelButtonListener, this);
-    var txtId = Dwt.getNextId();
-    var html = [
-        "<table xborder=1 class='DialogContent'><tr>",
-            "<td class='WaitIcon'></td><td class='MsgText' id='", txtId, "'>&nbsp;</td>",
-        "</tr></table>"].join("");
-    
-    this._busyDialog.setContent(html);
-    this._busyDialogTxt = Dwt.getDomObj(document, txtId);
-       
-	this._busyTimedAction = new AjxTimedAction();
-	this._busyTimedAction.obj = this;
-	this._busyTimedAction.method = this._showBusyDialogAction;
-	this._busyActionId = {};
-	
-	this._setBusyCount = 0;
-	this._setBusy = false;
 }
