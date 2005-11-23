@@ -44,7 +44,7 @@
       </Host>
 
       <Valve className="org.apache.catalina.valves.AccessLogValve"
-             pattern="common"/>
+             pattern="combined"/>
     </Engine>
   </Service>
 </Server>
