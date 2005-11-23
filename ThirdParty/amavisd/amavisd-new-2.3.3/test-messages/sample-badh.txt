@@ -1,0 +1,8 @@
+Date: Mon, 22 Jan 2001 12:36:25 +0000
+Message-ID: <N1msdrbJXNPfV4@example.com>
+Subject: bad header test
+From: "Brokeñ Héader fíeld" <test@localhost>
+To: undisclosed-recipients: ;
+
+If you are skeptical that's OK but don't let that stop you 
+from getting all the information you need.

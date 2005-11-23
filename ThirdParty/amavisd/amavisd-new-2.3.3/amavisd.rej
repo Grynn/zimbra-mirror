@@ -1,0 +1,26 @@
+***************
+*** 8000,8010 ****
+        $spam_level_bar =
+          $slc x min($blacklisted ? 64 : $spam_level+$boost, 64)  if $slc ne '';
+        my($s) = $spam_status; $s =~ s/,/,\n /g;  # allow header field wrapping
+-       $full_spam_status = sprintf("%s,\n hits=%s\n%s%s %s%s",
+          $do_tag2 ? 'Yes' : 'No',
+          !defined $spam_level  ? 'x' : 0+sprintf("%.3f",$spam_level+$boost),
+          !defined $tag_level   ? '' : sprintf(" tagged_above=%s\n",$tag_level),
+          !defined $tag2_level  ? '' : sprintf(" required=%s\n",  $tag2_level),
+          join('', $blacklisted ? "BLACKLISTED\n " : (),
+                   $whitelisted ? "WHITELISTED\n " : ()),
+          $s);
+--- 8000,8011 ----
+        $spam_level_bar =
+          $slc x min($blacklisted ? 64 : $spam_level+$boost, 64)  if $slc ne '';
+        my($s) = $spam_status; $s =~ s/,/,\n /g;  # allow header field wrapping
++       $full_spam_status = sprintf("%s,\n hits=%s\n%s%s%s %s%s",
+          $do_tag2 ? 'Yes' : 'No',
+          !defined $spam_level  ? 'x' : 0+sprintf("%.3f",$spam_level+$boost),
+          !defined $tag_level   ? '' : sprintf(" tagged_above=%s\n",$tag_level),
+          !defined $tag2_level  ? '' : sprintf(" required=%s\n",  $tag2_level),
++ 		!defined $autolearn_status  ? '' : sprintf(" autolearn=%s\n",  $autolearn_status),
+          join('', $blacklisted ? "BLACKLISTED\n " : (),
+                   $whitelisted ? "WHITELISTED\n " : ()),
+          $s);
