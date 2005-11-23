@@ -43,7 +43,7 @@ $CPAN::Config = {
   'tar' => q[/usr/bin/tar],
   'term_is_latin' => q[1],
   'unzip' => q[/usr/bin/unzip],
-  'urllist' => [q[ftp://ftp.perl.org/pub/mirrors/CPAN/MIRRORED.BY/]],
+  'urllist' => [q[ftp://ftp.perl.org/pub/CPAN/]],
   'wget' => q[],
 };
 1;
