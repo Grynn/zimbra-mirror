@@ -328,7 +328,7 @@ function(ev) {
         this.setImage(this._hoverImageInfo);
     }
     this.setClassName(this._activatedClassName);
-    if (this._dropDownCell && this._dropDownHovImg && !this.noMenuBar) {
+    if (this._dropDownCell && this._dropDownHovImg && !this.noMenuBar && this.isListenerRegistered(DwtEvent.SELECTION)) {
 		AjxImg.setImage(this._dropDownCell, this._dropDownHovImg);
     }
     ev._stopPropagation = true;
@@ -337,6 +337,9 @@ function(ev) {
 // Triggers the button.
 DwtButton.prototype._mouseDownListener = 
 function(ev) {
+	if (ev.button != DwtMouseEvent.LEFT)
+		return;
+		
     if (this._dropDownCell && this._dropDownDepImg) {
 		AjxImg.setImage(this._dropDownCell, this._dropDownDepImg);
     }
@@ -393,6 +396,9 @@ function (){
 // Button has been pressed, notify selection listeners.
 DwtButton.prototype._mouseUpListener = 
 function(ev) {
+	if (ev.button != DwtMouseEvent.LEFT)
+		return;
+
     if (this._dropDownCell && this._dropDownHovImg && !this.noMenuBar){
 		AjxImg.setImage(this._dropDownCell, this._dropDownHovImg);
     }	
@@ -448,23 +454,26 @@ function(ev) {
 // Pops up the dropdown menu.
 DwtButton._dropDownCellMouseDownHdlr = 
 function(ev) {
-    if (this._depImg){
-		AjxImg.setImage(this, this._depImg);
-    }	
-
-	DwtEventManager.notifyListeners(DwtEvent.ONMOUSEDOWN, ev);
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
 	var mouseEv = DwtShell.mouseEvent;
 	mouseEv.setFromDhtmlEvent(ev);
+	
+	if (mouseEv.button == DwtMouseEvent.LEFT) {
+	    if (this._depImg){
+			AjxImg.setImage(this, this._depImg);
+	    }	
 
-	if (obj._dropDownEvtMgr.isListenerRegistered(DwtEvent.SELECTION)) {
-    	var selEv = DwtShell.selectionEvent;
-    	DwtUiEvent.copy(selEv, mouseEv);
-    	selEv.item = obj;
-    	obj._dropDownEvtMgr.notifyListeners(DwtEvent.SELECTION, selEv);
-        
-    } else if (mouseEv.button == DwtMouseEvent.LEFT) {
-		obj._toggleMenu();
+		DwtEventManager.notifyListeners(DwtEvent.ONMOUSEDOWN, mouseEv);
+	
+		if (obj._dropDownEvtMgr.isListenerRegistered(DwtEvent.SELECTION)) {
+	    	var selEv = DwtShell.selectionEvent;
+	    	DwtUiEvent.copy(selEv, mouseEv);
+	    	selEv.item = obj;
+	    	obj._dropDownEvtMgr.notifyListeners(DwtEvent.SELECTION, selEv);
+	        
+	    } else if (mouseEv.button == DwtMouseEvent.LEFT) {
+			obj._toggleMenu();
+		}
 	}
 
 	mouseEv._stopPropagation = true;
@@ -476,13 +485,14 @@ function(ev) {
 // Updates the current mouse event (set from the previous mouse down).
 DwtButton._dropDownCellMouseUpHdlr = 
 function(ev) {
-    if (this._hovImg && !this.noMenuBar) {
-		AjxImg.setImage(this, this._hovImg);
-    }	
-
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
 	var mouseEv = DwtShell.mouseEvent;
 	mouseEv.setFromDhtmlEvent(ev);	
+
+	if (mouseEv.button == DwtMouseEvent.LEFT) {
+	    if (this._hovImg && !this.noMenuBar) {
+			AjxImg.setImage(this, this._hovImg);
+	    }	
+	}
 	mouseEv._stopPropagation = true;
 	mouseEv._returnValue = false;
 	mouseEv.setToDhtmlEvent(ev);

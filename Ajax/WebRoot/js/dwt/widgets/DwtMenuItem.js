@@ -76,7 +76,7 @@ function DwtMenuItem(parent, style, radioGroupId, index, className, posStyle) {
 			this._createCheckedStyle(radioGroupId);
 			break;
 	    case DwtMenuItem.SELECT_STYLE:
-			this._createSimpleStyle();
+			this._createSelectStyle();
 			break;
 		default:
 			this._createCascadeStyle();
@@ -235,8 +235,7 @@ function(imageInfo) {
 
 DwtMenuItem.prototype.getImage =
 function() {
-	return ((this._style == DwtMenuItem.CHECK_STYLE) == 0 && this._imageInfo)
-		? this._imageInfo : null;
+	return this._imageInfo;
 }
 
 DwtMenuItem.prototype.setImage =
@@ -248,6 +247,17 @@ function(imageInfo) {
 
 DwtMenuItem.prototype._setImage =
 function(imageInfo) {
+	if (this._imageInfo == null)
+		return;
+		
+	if (this._iconCell == null) {
+		this._addIconCell(this);
+		this.parent._menuItemHasIcon();
+	}
+		
+	/* TODO First check to see if the item already has an image cell. If
+	 * it does not, then add it, and call up to the Menu to notify
+	 * all children to add the image cell*/ 
 	if (this._style != DwtMenuItem.SEPARATOR_STYLE) {
 		AjxImg.setImage(this._iconCell, imageInfo);
 	}
@@ -266,18 +276,23 @@ function(menu) {
 		this._menu.removeDisposeListener(this._menuDisposeListener);
 	}
 
-	this._menu = menu;
 	if (menu)
-		this._menu.addDisposeListener(this._menuDisposeListener);
+		menu.addDisposeListener(this._menuDisposeListener);
 	
 	if (this._style == DwtMenuItem.CASCADE_STYLE || this._style == DwtMenuItem.CHECK_STYLE
 		|| this._style == DwtMenuItem.RADIO_STYLE) {
 		if (menu) {
+			if (!this._menu)
+				this.parent._submenuItemAdded()
 			AjxImg.setImage(this._cascCell, "Cascade");
 		} else if (!menu) {
-			this._cascCell.innerHTML = "";
+			if (this._menu)
+				this.parent._submenuItemRemoved();
+			if (this._cascCell)
+				AjxImg.setImage(this._cascCell, "Blank_16");
 		}
 	}
+	this._menu = menu;
 }
 
 DwtMenuItem.prototype.setSize = 
@@ -307,86 +322,53 @@ function(text) {
 
 DwtMenuItem.prototype._createSeparatorStyle =
 function() {
-	// TODO - REMOVE MENU_BAR STUFF SINCE MENU BARS CANNOT HAVE SEPARATOR CHILDREN
 	this._table.style.width = "100%";
-	var i = 0;
-	this._iconCell = this._row.insertCell(i++);
-	this._iconCell.noWrap = true;
-	this._iconCell.align = "center";
-	this._iconCell.width = DwtMenuItem._IMAGECELL_DIM;
-	this._iconCell.height = "1px"
-	this._iconCell.className = this._iconAreaClassName;
-	
-	var fillCell = this._row.insertCell(i++);
-	fillCell.width = DwtMenuItem._FILLCELL_DIM;
-	fillCell.noWrap = true;
-	
-	fillCell = this._row.insertCell(i++);
-	fillCell.noWrap = true;
-	fillCell.style.width = "100%";
+	fillCell = this._row.insertCell(0);
 	fillCell.className = this._className + "-Separator";
-	fillCell.style.height = "1px";
 	
 	if (this.parent._menuHasCheckedItems())
 		this._checkItemAdded();
+		
+	if (this.parent._menuHasItemsWithIcons()) {
+		this._addIconCell();
+	}
 }
 
 DwtMenuItem.prototype._createPushStyle =
 function() {
 	var i = 0;
-	this._iconCell = this._row.insertCell(i++);
-	this._iconCell.noWrap = true;
-	this._iconCell.align = "center";
-	this._iconCell.width = this._iconCell.height = DwtMenuItem._IMAGECELL_DIM;
-	this._iconCell.className = this._iconAreaClassName;
-
-	var fillCell = this._row.insertCell(i++);
-	fillCell.width = DwtMenuItem._FILLCELL_DIM;
-	fillCell.noWrap = true;
-		
 	this._textCell = this._row.insertCell(i++);
-	this._textCell.noWrap = true;
-	this._textCell.className = this._className + "-Text";
+	this._textCell.className = "Text";
 	
-	fillCell = this._row.insertCell(i);
-	fillCell.width = DwtMenuItem._FILLCELL_DIM;
-	fillCell.noWrap = true;	
+	if (this.parent._menuHasItemsWithIcons()) {
+		this._addIconCell();
+	}
 }
 
-DwtMenuItem.prototype._createSimpleStyle =
+DwtMenuItem.prototype._createSelectStyle =
 function() {
 	this._table.style.width = "100%";
 	this._textCell = this._row.insertCell(-1);
-	this._textCell.noWrap = true;
-	this._textCell.className = this._className + "-Text";
-	var fillCell = this._row.insertCell(-1);
-	fillCell.className = this._className + "-LeftFill";
+	this._textCell.className = "Text";
 };
 
 DwtMenuItem.prototype._createCascadeStyle =
 function() {
 	this._table.style.width = "100%";
+	
 	var i = 0;
-	this._iconCell = this._row.insertCell(i++);
-	this._iconCell.noWrap = true;
-	this._iconCell.align = "center";
-	this._iconCell.width = this._iconCell.height = DwtMenuItem._IMAGECELL_DIM;
-	this._iconCell.className = this._iconAreaClassName;
-	
-	var fillCell = this._row.insertCell(i++);
-	fillCell.width = DwtMenuItem._FILLCELL_DIM;
-	fillCell.noWrap = true;
-	
 	this._textCell = this._row.insertCell(i++);
-	this._textCell.noWrap = true;
-	this._textCell.className = this._className + "-Text";
+	this._textCell.className = "Text";
 	
-	this._cascCell = this._row.insertCell(i);
-	this._cascCell.noWrap = true;
-	this._cascCell.style.width = this._cascCell.style.height = DwtMenuItem._CASCADE_DIM;
+	if (this.parent._menuHasSubmenus())
+		this._submenuItemAdded()
 
 	if (this.parent._menuHasCheckedItems())
 		this._checkItemAdded();
+		
+	if (this.parent._menuHasItemsWithIcons()) {
+		this._addIconCell();
+	}
 }
 
 DwtMenuItem.prototype._createCheckedStyle =
@@ -418,6 +400,38 @@ function() {
 DwtMenuItem.prototype._checkedItemsRemoved =
 function() {
 	this._row.deleteCell(0);
+	this._checkedCell = null;
+}
+
+DwtMenuItem.prototype._submenuItemAdded =
+function() {
+	if (this._cascCell == null) {
+		this._cascCell = this._row.insertCell(-1);
+		this._cascCell.noWrap = true;
+		this._cascCell.style.width = DwtMenuItem._CASCADE_DIM;
+		this._cascCell.style.height = (this._style != DwtMenuItem.SEPARATOR_STYLE) ?  DwtMenuItem._CASCADE_DIM : 1;;
+	}
+}
+
+/* This method is explicitly called by DwtMenu._removeChild when the last submenu is removed
+ * from the menu. It allows for the item to remove its "bogus" cascade column*/
+DwtMenuItem.prototype._submenuItemRemoved =
+function() {
+	this._row.deleteCell(this._row.cells.length - 1);
+	this._cascCell = null;
+}
+
+DwtMenuItem.prototype._addIconCell =
+function() {
+	if (this._iconCell == null) {
+		var i = (!this._checkedCell) ? 0 : 1;
+		this._iconCell = this._row.insertCell(i++);
+		this._iconCell.noWrap = true;
+		this._iconCell.align = "center";
+		this._iconCell.width =  DwtMenuItem._IMAGECELL_DIM;
+		this._iconCell.height = (this._style != DwtMenuItem.SEPARATOR_STYLE) ?  DwtMenuItem._IMAGECELL_DIM : 1;
+		this._iconCell.className = this._iconAreaClassName;	
+	}
 }
 
 DwtMenuItem.prototype._menuDisposed =
@@ -435,7 +449,8 @@ DwtMenuItem.prototype._deselect =
 function(msec) {
 	if (this._style == DwtMenuItem.CASCADE_STYLE || this._style == DwtMenuItem.CHECK_STYLE
 		|| this._style == DwtMenuItem.RADIO_STYLE) {
-		this._iconCell.className = this._iconAreaClassName;
+		if (this._iconCell)
+			this._iconCell.className = this._iconAreaClassName;
 		if (this._checkedCell)
 			this._checkedCell.className = this._checkedAreaClassName;		
 		msec = (msec == null) ? DwtMenuItem._MENU_POPDOWN_DELAY : msec;
@@ -462,7 +477,8 @@ function(ev) {
 		|| this._style == DwtMenuItem.RADIO_STYLE) {
 		if (activeItem)
 			activeItem._deselect();	
-		this._iconCell.className = this._iconAreaSelClassName;
+		if (this._iconCell)
+			this._iconCell.className = this._iconAreaSelClassName;
 		if (this._checkedCell)
 			this._checkedCell.className = this._checkedAreaSelClassName;
 		if (this._menu)

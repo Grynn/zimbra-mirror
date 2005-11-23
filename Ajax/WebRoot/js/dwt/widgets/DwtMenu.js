@@ -97,7 +97,9 @@ function DwtMenu(parent, style, className, posStyle, dialog) {
 		this._outsideListener = new AjxListener(this, this._outsideMouseDownListener);
 	}
 
-	this._numCheckedStyleItems = 0;
+	this._numCheckedStyleItems = 0;	
+	this._menuItemsHaveIcons = false;
+	this._menuItemsWithSubmenus = 0;
 }
 
 DwtMenu.prototype = new DwtComposite;
@@ -280,21 +282,25 @@ function(child) {
 		var cell = child.getHtmlElement().parentNode;
 		this._table.rows[0].deleteCell(Dwt.getCellIndex(cell));
 	} else {
+		var sz = this._children.size();
 		/* If the item we are removing is check/radio style, and it is the last such item in the menu, then we 
 		 * must instruct our other children to delete a "checked column" to ensure that things line up */
-		if (child._style == DwtMenuItem.CHECK_STYLE || child._style == DwtMenuItem.RADIO_STYLE) {
+		if (sz > 1 && (child._style == DwtMenuItem.CHECK_STYLE || child._style == DwtMenuItem.RADIO_STYLE)) {
 			if (this._numCheckedStyleItems == 1) {
-				var sz = this._children.size();
-				if (sz > 0) {
-					var a = this._children.getArray();
-					for (var i = 0; i < sz; i++) {
-						if (a[i]._style != DwtMenuItem.CHECK_STYLE && a[i]._style != DwtMenuItem.RADIO_STYLE)
-							a[i]._checkedItemsRemoved();
-					}
+				var a = this._children.getArray();
+				for (var i = 0; i < sz; i++) {
+					if (a[i] != child)
+						a[i]._checkedItemsRemoved();
 				}
 			}
 			this._numCheckedStyleItems--;
 		}
+		
+		/* If the item we are removing has a submenu, and it is the last such item in the menu, then we 
+		 * must instruct our other children to delete their cascade cell to ensure that things line up */	
+		if (sz > 1 && child.getMenu())
+			this._submenuItemRemoved();
+		
 		this._table.deleteRow(child.getHtmlElement().parentNode.parentNode.rowIndex);
 	}
 	this._children.remove(child);
@@ -342,7 +348,7 @@ function(item, index) {
 						var a = this._children.getArray();
 						for (var i = 0; i < sz; i++) {
 							if (a[i]._style != DwtMenuItem.CHECK_STYLE && a[i]._style != DwtMenuItem.RADIO_STYLE)
-								a[i]._createCheckedStyle();
+								a[i]._checkItemAdded();
 						}
 					}
 				}
@@ -377,6 +383,56 @@ DwtMenu.prototype._menuHasCheckedItems =
 function() {
 	return (this._numCheckedStyleItems > 0) ? true : false;
 }
+
+DwtMenu.prototype._menuHasSubmenus =
+function() {
+	return (this._menuItemsWithSubmenus > 0) ? true : false;
+}
+
+DwtMenu.prototype._menuHasItemsWithIcons =
+function() {
+	return this._menuItemsHaveIcons;
+}
+
+/* Once an icon is added to any menuItem, then the menu will be considered
+ * to contain menu items with icons for perpetuity */
+DwtMenu.prototype._menuItemHasIcon =
+function(item) {
+	if (!this._menuItemsHaveIcons) {
+		var sz = this._children.size();
+		if (sz > 0) {
+			var a = this._children.getArray();
+			for (var i = 0; i < sz; i++) {
+				if (a[i] != item)
+					a[i]._addIconCell();
+			}
+		}
+	}
+	this._menuItemsHaveIcons = true;
+}
+
+DwtMenu.prototype._submenuItemAdded =
+function() {
+	if (this._menuItemsWithSubmenus == 0) {
+		var sz = this._children.size();
+		var a = this._children.getArray();
+		for (var i = 0; i < sz; i++)
+			a[i]._submenuItemAdded();
+	}
+	this._menuItemsWithSubmenus++;
+}
+
+DwtMenu.prototype._submenuItemRemoved =
+function() {
+	if (this._menuItemsWithSubmenus == 1) {
+		var sz = this._children.size();
+		var a = this._children.getArray();
+		for (var i = 0; i < sz; i++)
+			a[i]._submenuItemRemoved();
+	}
+	this._menuItemsWithSubmenus--;
+}
+
 
 DwtMenu.prototype._doPopup =
 function(args) {
