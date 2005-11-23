@@ -34,7 +34,7 @@ function DwtPropertyEditor(parent, useDwtInputField, className, positionType) {
 		if (!className)
 			className = "DwtPropertyEditor";
 		DwtComposite.call(this, parent, className, positionType);
-		this._useDwtInputField = useDwtInputField;
+		this._useDwtInputField = useDwtInputField != null ? useDwtInputField : true;
 		this._schema = null;
 		this._init();
 	}
@@ -387,14 +387,19 @@ DwtPropertyEditor.prototype._createInputField = function(prop, target) {
 	var type = DwtPropertyEditor.DWT_INPUT_FIELD_TYPES[prop.type]
 		|| DwtInputField.STRING;
 	var field = new DwtInputField(this, type, prop.value, null, prop.maxLength);
-	if (type == DwtInputField.INTEGER || type == DwtInputField.NUMBER) {
+	if (type == DwtInputField.INTEGER || type == DwtInputField.FLOAT) {
 		field.setValidNumberRange(prop.minValue || null,
 					  prop.maxValue || null);
-		if (prop.decimals)
-			field._decimals = prop.decimals;
+		if (prop.decimals != null)
+			field.setNumberPrecision(prop.decimals);
 	}
+	if (type == DwtInputField.STRING || type == DwtInputField.PASSWORD)
+		field.setValidStringLengths(prop.minLength, prop.maxLength);
 	this._currentFieldCell = null;
 	prop._inputField = field;
+	field.setValue(prop.value);
+	if (prop.readonly)
+		field.setReadOnly(true);
 	field.setValidationCallback(new AjxCallback(prop, prop._onDwtInputFieldValidated));
 };
 
