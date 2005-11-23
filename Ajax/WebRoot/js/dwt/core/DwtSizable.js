@@ -23,7 +23,7 @@
 * ***** END LICENSE BLOCK *****
 */
 
-function DwtMovable() {}
+function DwtSizable() {}
 
 /**
 * @param control        the DwtControl that can be moved/dragged
@@ -33,32 +33,32 @@ function DwtMovable() {}
 * @param callbackFunc   callback function to veto move
 * @param callbackObj    object for callback
 */
-DwtMovable.init = 
+DwtSizable.init = 
 function(control, rootControl, threshX, threshY, callbackFunc, callbackObj) {
 
     var ctxt = control._movableContext = {};
     ctxt._rootControl = rootControl;
     var htmlElement = control.getHtmlElement();
     
-   	htmlElement.style.cursor = "move";
+   	htmlElement.style.cursor = "se-resize";
 	ctxt._threshX = (threshX > 0) ? threshX : 1;
 	ctxt._threshY = (threshY > 0) ? threshY : 1;
 
-	ctxt._captureObj = new DwtMouseEventCapture(control, DwtMovable._mouseOverHdlr,
-			DwtMovable._mouseDownHdlr, DwtMovable._mouseMoveHdlr, 
-			DwtMovable._mouseUpHdlr, DwtMovable._mouseOutHdlr);
-	control.setHandler(DwtEvent.ONMOUSEDOWN, DwtMovable._mouseDownHdlr);
-	control.setHandler(DwtEvent.ONMOUSEOVER, DwtMovable._mouseOverHdlr);
-	control.setHandler(DwtEvent.ONMOUSEOUT, DwtMovable._mouseOutHdlr);
+	ctxt._captureObj = new DwtMouseEventCapture(control, DwtSizable._mouseOverHdlr,
+			DwtSizable._mouseDownHdlr, DwtSizable._mouseMoveHdlr, 
+			DwtSizable._mouseUpHdlr, DwtSizable._mouseOutHdlr);
+	control.setHandler(DwtEvent.ONMOUSEDOWN, DwtSizable._mouseDownHdlr);
+	control.setHandler(DwtEvent.ONMOUSEOVER, DwtSizable._mouseOverHdlr);
+	control.setHandler(DwtEvent.ONMOUSEOUT, DwtSizable._mouseOutHdlr);
 	ctxt._callbackFunc = callbackFunc;
 	ctxt._callbackObj = callbackObj;	
 }
 
-DwtMovable.STATE_MOVE_START = 1;
-DwtMovable.STATE_MOVING = 2;
-DwtMovable.STATE_MOVE_END = 3;
+DwtSizable.STATE_SIZE_START = 1;
+DwtSizable.STATE_MOVING = 2;
+DwtSizable.STATE_SIZE_END = 3;
 
-DwtMovable._mouseOverHdlr =
+DwtSizable._mouseOverHdlr =
 function(ev) {
 	var mouseEv = DwtShell.mouseEvent;
 	mouseEv.setFromDhtmlEvent(ev);
@@ -68,7 +68,7 @@ function(ev) {
 	return false;	
 }
 
-DwtMovable._mouseDownHdlr =
+DwtSizable._mouseDownHdlr =
 function(ev) {
 	var mouseEv = DwtShell.mouseEvent;
 	mouseEv.setFromDhtmlEvent(ev);	
@@ -82,8 +82,8 @@ function(ev) {
         	if (ctxt._callbackFunc != null) {
         		ctxt._captureObj.capture();
         		ctxt._startDoc = {x: mouseEv.docX, y: mouseEv.docY};
-        		ctxt._startCoord = ctxt._rootControl.getLocation();
-            DwtMovable._doCallback(ctxt,{start: ctxt._startCoord, state: DwtMovable.STATE_MOVE_START});
+        		ctxt._startSize = ctxt._rootControl.getSize();
+            DwtSizable._doCallback(ctxt,{start: ctxt._startCoord, state: DwtSizable.STATE_SIZE_START});
         	}
    	}
 	mouseEv._stopPropagation = true;
@@ -92,7 +92,7 @@ function(ev) {
 	return false;	
 }
 
-DwtMovable._doCallback =
+DwtSizable._doCallback =
 function(ctxt, data) {
 	if (ctxt._callbackObj != null)
 		return ctxt._callbackFunc.call(ctxt._callbackObj, data);
@@ -100,7 +100,7 @@ function(ctxt, data) {
 		return ctxt._callbackFunc(data);
 }
 
-DwtMovable._mouseMoveHdlr =
+DwtSizable._mouseMoveHdlr =
 function(ev) {
 	var mouseEv = DwtShell.mouseEvent;
 	mouseEv.setFromDhtmlEvent(ev);	
@@ -112,11 +112,11 @@ function(ev) {
 	deltaY = mouseEv.docY - ctxt._startDoc.y;
     
 	if (Math.abs(deltaX) >= ctxt._threshX || Math.abs(deltaY) >= ctxt._threshY) {
-	    var data = DwtMovable._doCallback(ctxt,
-	         {delta: {x: deltaX, y: deltaY}, start: ctxt._startCoord, state: DwtMovable.STATE_MOVING});
+	    var data = DwtSizable._doCallback(ctxt,
+	         {delta: {x: deltaX, y: deltaY}, start: ctxt._startSize, state: DwtSizable.STATE_SIZING});
 		// If movement happened, then shift our location by the actual amount of movement
 		if (data.delta.x != 0 || data.delta.y != 0) {
-        		ctxt._rootControl.setLocation(ctxt._startCoord.x + data.delta.x, ctxt._startCoord.y + data.delta.y);
+        		ctxt._rootControl.setSize(ctxt._startSize.x + data.delta.x, ctxt._startSize.y + data.delta.y);
 		}
 	}
 		
@@ -126,7 +126,7 @@ function(ev) {
 	return false;	
 }
 
-DwtMovable._mouseUpHdlr =
+DwtSizable._mouseUpHdlr =
 function(ev) {
 	var mouseEv = DwtShell.mouseEvent;
 	mouseEv.setFromDhtmlEvent(ev);	
@@ -139,7 +139,7 @@ function(ev) {
 	if (ctxt) {
         	if (ctxt._callbackFunc != null)
         		DwtMouseEventCapture.getCaptureObj().release();
-        DwtMovable._doCallback(ctxt,{start: ctxt._startCoord, state: DwtMovable.STATE_MOVE_END});
+        DwtSizable._doCallback(ctxt,{start: ctxt._startCoord, state: DwtSizable.STATE_SIZE_END});
 	}
 	mouseEv._stopPropagation = true;
 	mouseEv._returnValue = false;
@@ -147,7 +147,7 @@ function(ev) {
 	return false;	
 }
 
-DwtMovable._mouseOutHdlr =
+DwtSizable._mouseOutHdlr =
 function(ev) {
 	var mouseEv = DwtShell.mouseEvent;
 	mouseEv.setFromDhtmlEvent(ev);
