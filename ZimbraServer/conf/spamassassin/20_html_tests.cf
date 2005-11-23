@@ -1,7 +1,7 @@
 # SpamAssassin rules file: HTML tests
 #
 # Please don't modify this file as your changes will be overwritten with
-# the next update. Use /home/build/builds/main/20050819100101/ZimbraBuild/corebuild/opt/zimbra/zimbramon/spamassassin/local.cf instead.
+# the next update. Use @@LOCAL_RULES_DIR@@/local.cf instead.
 # See 'perldoc Mail::SpamAssassin::Conf' for details.
 #
 # <@LICENSE>
@@ -22,14 +22,14 @@
 #
 ###########################################################################
 
-require_version 3.000004
+require_version @@VERSION@@
 
 # HTML parser tests
 #
 # please sort these by eval type then name
 
 # HTML control test, HTML spam rules should all have better S/O than this
-body HTML_MESSAGE		eval:html_test('html_message')
+body HTML_MESSAGE		eval:html_test('html')
 describe HTML_MESSAGE		HTML included in message
 
 # the HTML percentage range
@@ -81,15 +81,14 @@ describe HTML_COMMENT_SHORT	HTML comment is very short
 body HTML_COMMENT_SAVED_URL	eval:html_text_match('comment', '<!-- saved from url=\(\d{4}\)')
 describe HTML_COMMENT_SAVED_URL	HTML message is a saved web page
 
-# Comment is a spam sign when following <DIV>
-body HTML_CONVERTED		eval:html_test('div_converted')
-describe HTML_CONVERTED		HTML conversion tool used by spam
-
 body HTML_EMBEDS		eval:html_test('embeds')
 describe HTML_EMBEDS		HTML with embedded plugin object
 
 body HTML_EVENT_UNSAFE		eval:html_test('html_event_unsafe')
 describe HTML_EVENT_UNSAFE	HTML contains unsafe auto-executing code
+
+body HTML_EXTRA_CLOSE		eval:html_range('closed_extra_ratio', '0.09', 'inf')
+describe HTML_EXTRA_CLOSE	HTML contains far too many close tags
 
 body HTML_FONT_SIZE_TINY	eval:html_eval('min_size', '< 1')
 describe HTML_FONT_SIZE_TINY	HTML font size is tiny
@@ -131,12 +130,16 @@ body HTML_IMAGE_ONLY_12		eval:html_image_only('0800','1200')
 body HTML_IMAGE_ONLY_16		eval:html_image_only('1200','1600')
 body HTML_IMAGE_ONLY_20		eval:html_image_only('1600','2000')
 body HTML_IMAGE_ONLY_24		eval:html_image_only('2000','2400')
+body HTML_IMAGE_ONLY_28		eval:html_image_only('2400','2800')
+body HTML_IMAGE_ONLY_32		eval:html_image_only('2800','3200')
 describe HTML_IMAGE_ONLY_04	HTML: images with 0-400 bytes of words
 describe HTML_IMAGE_ONLY_08	HTML: images with 400-800 bytes of words
 describe HTML_IMAGE_ONLY_12	HTML: images with 800-1200 bytes of words
 describe HTML_IMAGE_ONLY_16	HTML: images with 1200-1600 bytes of words
 describe HTML_IMAGE_ONLY_20	HTML: images with 1600-2000 bytes of words
 describe HTML_IMAGE_ONLY_24	HTML: images with 2000-2400 bytes of words
+describe HTML_IMAGE_ONLY_28	HTML: images with 2400-2800 bytes of words
+describe HTML_IMAGE_ONLY_32	HTML: images with 2800-3200 bytes of words
 
 # HTML_IMAGE_RATIO - more image area than text (ratio)
 body HTML_IMAGE_RATIO_02	eval:html_image_ratio('0.000','0.002')
@@ -148,8 +151,14 @@ describe HTML_IMAGE_RATIO_04	HTML has a low ratio of text to image area
 describe HTML_IMAGE_RATIO_06	HTML has a low ratio of text to image area
 describe HTML_IMAGE_RATIO_08	HTML has a low ratio of text to image area
 
-body HTML_LINK_PUSH_HERE	eval:html_text_match('anchor', '(?i)(?:push|go)\s*(?:here|this)')
+body HTML_LINK_IMAGE_BUG	eval:html_test('anchor_image_bug')
+describe HTML_LINK_IMAGE_BUG	HTML link plus image plus web bug
+
+body HTML_LINK_PUSH_HERE	eval:html_text_match('anchor', '(?i)(?:push|go|cl[1l]ck)\s*(?:here|this)')
 describe HTML_LINK_PUSH_HERE	HTML link text says "push here" or similar
+
+body HTML_LINK_OPT_OUT		eval:html_text_match('anchor', '(?i)opt.?out')
+describe HTML_LINK_OPT_OUT	HTML link text says "opt out" or similar
 
 # HTML obfuscation
 body HTML_OBFUSCATE_05_10	eval:html_range('obfuscation_ratio','.05','.1')
@@ -195,6 +204,9 @@ describe HTML_TAG_BALANCE_BODY	HTML has unbalanced "body" tags
 
 body HTML_TAG_BALANCE_HEAD	eval:html_tag_balance('head', '!= 0')
 describe HTML_TAG_BALANCE_HEAD	HTML has unbalanced "head" tags
+
+body HTML_TAG_EXIST_BGSOUND	eval:html_tag_exists('bgsound')
+describe HTML_TAG_EXIST_BGSOUND	HTML has "bgsound" tag
 
 body HTML_TAG_EXIST_MARQUEE	eval:html_tag_exists('marquee')
 describe HTML_TAG_EXIST_MARQUEE	HTML has "marquee" tag
@@ -247,6 +259,17 @@ describe HTML_NONELEMENT_80_90	80% to 90% of HTML elements are non-standard
 describe HTML_NONELEMENT_90_100	90% to 100% of HTML elements are non-standard
 
 # short HTML messages with certain attributes
+body __HTML_LINK_IMAGE		eval:html_text_match('anchor', '<img>')
+body __HTML_LENGTH_0000_1024	eval:html_range('length', '0', '1024')
+body __HTML_LENGTH_1024_1536	eval:html_range('length', '1024', '1536')
+body __HTML_LENGTH_1536_2048	eval:html_range('length', '1536', '2048')
+meta HTML_SHORT_LINK_IMG_1	__HTML_LENGTH_0000_1024 && __HTML_LINK_IMAGE
+meta HTML_SHORT_LINK_IMG_2	__HTML_LENGTH_1024_1536 && __HTML_LINK_IMAGE
+meta HTML_SHORT_LINK_IMG_3	__HTML_LENGTH_1536_2048 && __HTML_LINK_IMAGE
+describe HTML_SHORT_LINK_IMG_1	HTML is very short with a linked image
+describe HTML_SHORT_LINK_IMG_2	HTML is very short with a linked image
+describe HTML_SHORT_LINK_IMG_3	HTML is very short with a linked image
+
 body HTML_SHORT_LENGTH		eval:html_eval('length', '< 170')
 describe HTML_SHORT_LENGTH	HTML is extremely short
 
@@ -262,6 +285,16 @@ describe HTML_SHORT_CENTER	HTML is very short with CENTER tag
 
 body HTML_TITLE_EMPTY		eval:html_text_not_match('title', '(?s)\S')
 describe HTML_TITLE_EMPTY	HTML title contains no text
+
+# __MIME_ATTACHMENT also used in 20_meta_tests.cf
+body __MIME_ATTACHMENT		eval:check_for_mime('mime_attachment')
+
+body __HTML_TITLE_120		eval:html_text_match('title', '.{120}')
+meta HTML_TITLE_LONG		__HTML_TITLE_120 && !__MIME_ATTACHMENT
+describe HTML_TITLE_LONG	HTML title is very long
+
+body __HTML_TITLE_SUBJ_DIFF	eval:html_title_subject_ratio('3.5')
+meta HTML_TITLE_SUBJ_DIFF	__HTML_TITLE_SUBJ_DIFF && !__MIME_ATTACHMENT
 
 body HTML_TITLE_UNTITLED	eval:html_text_match('title', '(?i)(?:untitled|new page \d+)')
 describe HTML_TITLE_UNTITLED	HTML title contains "Untitled"
@@ -306,3 +339,11 @@ describe ENTITY_DEC_ALPHANUM	HTML contains needlessly encoded characters
 # a good possible rule that may resurface
 #rawbody ENTITY_DEC_OTHER	/\&\#0*(?:3[3679]|4[014567]|5[89]|6[134]|95)\;/
 #describe ENTITY_DEC_OTHER	HTML contains needlessly encoded punctuation
+
+# thanks to Bob Menschel for this one; bug 4116
+rawbody   HTML_EHTML2         m'</html></html>'i
+describe  HTML_EHTML2         HTML has doubled end HTML tag
+
+# bug 3070
+rawbody HTML_TINY_FONT	/\<.*font\-size\:[ \"]*[01][^0-9]+.*\>/i
+describe HTML_TINY_FONT	body contains 1 or 0-point font

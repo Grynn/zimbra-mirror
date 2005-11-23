@@ -1,4 +1,4 @@
-# SpamAssassin rules file: known non-spam mailers ("ratware")
+# SpamAssassin rules file: default whitelist/blacklist subject
 #
 # Please don't modify this file as your changes will be overwritten with
 # the next update. Use @@LOCAL_RULES_DIR@@/local.cf instead.
@@ -19,16 +19,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # </@LICENSE>
-#
+
 ###########################################################################
+# Whitelist/Blacklist rules
+#
+# Note that most of these get 'noautolearn'.  They should not be
+# considered when deciding whether to auto-learn a message, as a
+# user slip-up could result in scribbling side-effects in the bayes
+# db as a result -- which is hard to remedy.
 
-# possible anti-ratware for AppleMail.  NOTE: still uses T_ rules;
-# T_FORGED_USER_AGENT hasn't made it out of testing.   In the nightly
-# mass-check of Apr 21 2003, it got
-# 1.356   0.0000   1.8266    0.000   0.00    0.01  T_USER_AGENT_APPLEMAIL
-# 1.415   0.0000   1.6626    0.000   0.00    0.01  T_USER_AGENT_APPLEMAIL:jm
-# 0.000   0.0000   0.0000    0.500   0.12    0.01  T_USER_AGENT_APPLEMAIL:lan
-# 0.656   0.0000   1.1019    0.000   0.00    0.01  T_USER_AGENT_APPLEMAIL:quinlan
-# 2.501   0.0000   3.7620    0.000   0.00    0.01  T_USER_AGENT_APPLEMAIL:rODbegbie
-#meta USER_AGENT_APPLEMAIL     (__USER_AGENT_APPLEMAIL && !T_FORGED_USER_AGENT)
+ifplugin Mail::SpamAssassin::Plugin::WhiteListSubject
 
+header SUBJECT_IN_WHITELIST	eval:check_subject_in_whitelist()
+describe SUBJECT_IN_WHITELIST	Subject: contains string in the user's white-list
+tflags SUBJECT_IN_WHITELIST	userconf nice noautolearn
+
+header SUBJECT_IN_BLACKLIST	eval:check_subject_in_blacklist()
+describe SUBJECT_IN_BLACKLIST	Subject: contains string in the user's black-list
+tflags SUBJECT_IN_BLACKLIST	userconf noautolearn
+
+endif # Mail::SpamAssassin::Plugin::WhiteListSubject

@@ -1,6 +1,6 @@
 #
 # Please don't modify this file as your changes will be overwritten with
-# the next update. Use /home/build/builds/main/20050819100101/ZimbraBuild/corebuild/opt/zimbra/zimbramon/spamassassin/local.cf instead.
+# the next update. Use @@LOCAL_RULES_DIR@@/local.cf instead.
 # See 'perldoc Mail::SpamAssassin::Conf' for details.
 #
 # <@LICENSE>
@@ -58,10 +58,6 @@ lang de unsafe_report mit einem Texteditor zu öffnen.
 #                     ........................................................................
 
 lang de describe GTUBE Test zur Prüfung von Anti-Spam-Software
-lang de describe RAZOR2_CHECK Gelistet im "Razor2"-System (http://razor.sf.net/)
-lang de describe RAZOR2_CF_RANGE_51_100 Razor2 Spam-Bewertung liegt zwischen 51 und 100
-lang de describe DCC_CHECK Gelistet im DCC-System (http://rhyolite.com/anti-spam/dcc/)
-lang de describe PYZOR_CHECK Gelistet im Pyzor-System (http://pyzor.sf.net/)
 lang de describe DIGEST_MULTIPLE Mehrere Internettests (Razor, DCC, Pyzor, etc.) treffen zu
 lang de describe TRACKER_ID Beinhaltet eine Identitätsnummer zur Nutzerbeobachtung
 lang de describe WEIRD_QUOTING Seltsame Häufung von Anführungszeichen im Nachrichtentext
@@ -75,12 +71,9 @@ lang de describe MIME_HTML_MOSTLY Mehrteilige MIME-Nachricht überwiegend in HTML
 lang de describe MIME_HTML_ONLY MIME-Nachricht besteht nur aus HTML
 lang de describe MIME_HTML_ONLY_MULTI Mehrteilige MIME-Nachricht besteht nur aus HTML
 lang de describe MIME_QP_LONG_LINE "quoted-printable"-kodierte Zeile länger als 76 Zeichen
-lang de describe MIME_SUSPECT_NAME MIME-Dateiname entspricht nicht dem MIME-Typ
 lang de describe MIME_CHARSET_FARAWAY MIME-Zeichensatz deutet auf fremde Sprache hin
 lang de describe MPART_ALT_DIFF Nachrichtentext im Text- und HTML-Format unterscheiden sich
 lang de describe CHARSET_FARAWAY Zeichensatz deutet auf fremde Sprache hin
-lang de describe UNWANTED_LANGUAGE_BODY Nachrichtentext in unerwünschter Sprache
-lang de describe BODY_8BITS Nachrichtentext enthält Folge von 8 oder mehr 8-Bit-Zeichen
 lang de describe EMAIL_ROT13 Eventuell ROT13-kodierte E-Mail-Adresse im Text
 lang de describe BLANK_LINES_70_80 Nachrichtentext besteht zu 70-80% aus Leerzeilen
 lang de describe BLANK_LINES_80_90 Nachrichtentext besteht zu 80-90% aus Leerzeilen
@@ -112,18 +105,12 @@ lang de describe DNS_FROM_RFC_DSN Absender in dsn-Liste von www.rfc-ignorant.org
 lang de describe DNS_FROM_RFC_POST Absender in postmaster-Liste von www.rfc-ignorant.org
 lang de describe DNS_FROM_RFC_ABUSE Absender in abuse-Liste von www.rfc-ignorant.org
 lang de describe DNS_FROM_RFC_WHOIS Absender in whois-Liste von www.rfc-ignorant.org
-#lang de describe RCVD_IN_RFC_IPWHOIS Transportiert via Rechner in ipwhois-Liste von www.rfc-ignorant.org
 lang de describe DNS_FROM_RFC_BOGUSMX Absender in bogusmx-Liste von www.rfc-ignorant.org
 lang de describe RCVD_IN_DSBL Transportiert via Rechner in Liste von list.dsbl.org
 lang de describe DNS_FROM_AHBL_RHSBL Absenderadresse in Liste von dnsbl.ahbl.org
-lang de describe HABEAS_INFRINGER Verletzung das Warenzeichens der Firma Habeas
-lang de describe HABEAS_USER Offizieller Nutzer des Warenzeichens der Firma Habeas 
 lang de describe RCVD_IN_BSP_TRUSTED Senderechner in Liste von http://www.bondedsender.org/
 lang de describe RCVD_IN_BSP_OTHER Senderechner in Liste von http://www.bondedsender.org/
-lang de describe SB_NEW_BULK Domain des Senderechners ist neu und verschickt viele E-mails
-lang de describe SB_NSP_VOLUME_SPIKE Senderechner eines Providers mit kurzfristig hohem E-Mail-Aufkommen
 lang de describe RCVD_IN_BL_SPAMCOP_NET Transportiert via Rechner in Liste von www.spamcop.net
-lang de describe RCVD_IN_RSL Transportiert via Rechner in Liste http://relays.visi.com/
 lang de describe RCVD_IN_MAPS_RBL Transportiert via Rechner in Liste von http://www.mail-abuse.org/rbl/
 lang de describe RCVD_IN_MAPS_DUL Transportiert via Rechner in Liste von http://www.mail-abuse.org/dul/
 lang de describe RCVD_IN_MAPS_RSS Transportiert via Rechner in Liste von http://www.mail-abuse.org/rss/
@@ -133,7 +120,6 @@ lang de describe SUBJECT_DRUG_GAP_L Betreff enthält 'levitra' mit L.ü.c.k.e.n
 lang de describe SUBJECT_DRUG_GAP_P Betreff enthält 'phentermine' mit L.ü.c.k.e.n
 lang de describe SUBJECT_DRUG_GAP_S Betreff enthält 'soma' mit L.ü.c.k.e.n
 lang de describe SUBJECT_DRUG_GAP_VA Betreff enthält 'valium' mit L.ü.c.k.e.n
-lang de describe SUBJECT_DRUG_GAP_VIA Betreff enthält 'viagra' mit L.ü.c.k.e.n
 lang de describe SUBJECT_DRUG_GAP_VIC Betreff enthält 'vicodin' mit L.ü.c.k.e.n
 lang de describe SUBJECT_DRUG_GAP_X Betreff enthält 'xanax' mit L.ü.c.k.e.n
 lang de describe DRUG_DOSAGE Erwähnt den Preis einer Dosis
@@ -192,7 +178,6 @@ lang de describe NO_REAL_NAME Kein vollständiger Name in Absendeadresse
 lang de describe FROM_ENDS_IN_NUMS Absenderadresse endet mit Ziffern im Benutzernamen
 lang de describe FROM_STARTS_WITH_NUMS Absenderadresse beginnt mit Ziffern im Benutzernamen
 lang de describe FROM_HAS_MIXED_NUMS Absendeadresse enthält Mischung aus Ziffern/Buchstaben
-lang de describe FROM_HAS_MIXED_NUMS3 Absenderadresse enthält Ziffern gemischt mit Buchstaben
 lang de describe ADDR_NUMS_AT_BIGSITE Adresse enthält viele Ziffern im Benutzernamen (bekannte Provider)
 lang de describe FROM_ALL_NUMS Adresse enthält nur Ziffern im Benutzernamen
 lang de describe FROM_OFFERS Absenderadresse enthält "@...offers"
@@ -302,8 +287,6 @@ lang de describe MIME_BOUND_MANY_HEX Bestimmtes Muster von Spam-Software in MIME
 lang de describe MIME_BOUND_NEXTPART Bestimmtes Muster von Spam-Software in MIME-Begrenzung
 lang de describe MIME_BOUND_RKFINDY Bestimmtes Muster von Spam-Software in MIME-Begrenzung (rfkindy)
 lang de describe TO_MALFORMED Format der Zieladresse inkorrekt
-lang de describe FROM_NUM_AT_WEBMAIL Absenderadresse webbasierter Maildienste, beginnt aber mit Ziffer
-lang de describe FROM_WEBMAIL_END_NUMS6 Absenderadresse webbasierter Maildienste, endet mit vielen Ziffern
 lang de describe ADDR_FREE Absenderzeile enthält "Free"
 lang de describe TO_TXT Gesendet an eine Textdatei
 lang de describe CHINA_HEADER Kopfzeilen enthalten Hinweis auf "china.com"
@@ -312,9 +295,6 @@ lang de describe WITH_LC_SMTP Kopfzeilen mit "smtp" in Kleinschreibung
 lang de describe FROM_NO_LOWER Absenderzeile enthält keine Kleinbuchstaben
 lang de describe SUBJ_BUY Betreff dreht sich ums Kaufen ("buy...")
 lang de describe FROM_HAS_ULINE_NUMS Benutzername des Absenders enthält Unterstrich und Ziffern/Buchstaben
-lang de describe NIGERIAN_SUBJECT1 Betreff deutet auf nigerianischen Spam hin
-lang de describe NIGERIAN_SUBJECT2 Betreff deutet auf nigerianischen Spam hin
-lang de describe ACCESSDB Nachricht wäre von access.db erkannt worden
 lang de describe RCVD_AM_PM Gefälschte "Received"-Kopfzeilen (AM/PM Zeitangabe)
 lang de describe HEADER_COUNT_CTYPE Kopfzeile "Content-Type" mehrfach vorhanden
 lang de describe NO_RDNS_DOTCOM_HELO HELO-Identifikation als großer Provider, aber rDNS-Name inkorrekt
@@ -343,7 +323,6 @@ lang de describe HTML_TEXT_AFTER_HTML Text nach Endmarkierung "/html"
 lang de describe HTML_TEXT_AFTER_BODY Text nach Endmarkierung "/body"
 lang de describe HTML_COMMENT_SHORT HTML-Kommentar ist sehr kurz
 lang de describe HTML_COMMENT_SAVED_URL Nachricht ist eine gespeicherte Webseite
-lang de describe HTML_CONVERTED HTML-Konvertierungsprogramm typisch für Spam
 lang de describe HTML_EMBEDS HTML-Nachricht mit eingebettetem WWW-Plugin
 lang de describe HTML_EVENT_UNSAFE HTML mit unsicheren, automatisch ausgeführten Programmanweisungen
 lang de describe HTML_FONT_SIZE_TINY HTML-Schriftgröße ist winzig
@@ -425,112 +404,66 @@ lang de describe UPPERCASE_25_50 Nachrichtentext besteht zu 25-50% aus Großbuchs
 lang de describe UPPERCASE_50_75 Nachrichtentext besteht zu 50-75% aus Großbuchstaben
 lang de describe UPPERCASE_75_100 Nachrichtentext besteht zu 75-100% aus Großbuchstaben
 lang de describe PLING_PLING Ungewöhnlich viele Ausrufezeichen im Betreff
-lang de describe NIGERIAN_BODY1 Nachrichtentext sieht nach nigerianischem Spam aus
-lang de describe NIGERIAN_BODY2 Nachrichtentext sieht nach nigerianischem Spam aus
-lang de describe NIGERIAN_BODY3 Nachrichtentext sieht nach nigerianischem Spam aus
-lang de describe NIGERIAN_BODY4 Nachrichtentext sieht nach nigerianischem Spam aus
 lang de describe INVALID_MSGID "Message-ID"-Zeile ist ungültig gemäß RFC-2822
 lang de describe FORGED_MUA_MOZILLA Gefälschte E-Mail gibt vor vom Mailprogramm Mozilla zu kommen
-lang de describe MULTI_REMOVAL_1WORD Anleitung zur Entfernung aus der Adressliste
 lang de describe REMOVE_POSTAL Senden Sie Brief/Postkarte um aus der Liste entfernt zu werden...
 lang de describe CLICK_BELOW_CAPS Aufforderung zum Mausklick in Großbuchstaben
 lang de describe CLICK_TO_REMOVE_1 "Entfernung aus der Adressliste nur ein Mausklick entfernt"
 lang de describe SENT_IN_COMPLIANCE Behauptet, den Vorschriften über Spam zu entsprechen
 lang de describe BILL_1618 Behauptet, dem US-Gesetzentwurf 1618 zu entsprechen
-lang de describe NO_QS_ASKED "Keinerlei Fragen zu benatworten..."
 lang de describe FULL_REFUND Bietet vollständige Geldrückerstattung an
-lang de describe COMPLETELY_FREE Bietet etwas völlig kostenlos an...
 lang de describe NO_COST Bietet etwas völlig kostenlos an...
 lang de describe GUARANTEED_100_PERCENT Zu 100% garantiert...
 lang de describe DEAR_FRIEND Anonyme Anrede ("dear friend")
 lang de describe DEAR_SOMETHING Anonyme Anrede ("dear ...")
 lang de describe BILLION_DOLLARS Erwähnt sehr große Geldbeträge
-lang de describe OPTING_OUT "Falls Sie nicht mitmachen wollen..." (Opt-out)
 lang de describe OPTING_OUT_CAPS "Falls Sie nicht mitmachen wollen..." (Opt-Out)
-lang de describe MILLION_EMAIL Besorgen Sie sich eine Million E-Mail-Adressen
-lang de describe EXCUSE_1 Gibt eine dumme Entschuldigung für Spam an
-lang de describe EXCUSE_3 Behauptet, man könne sich von der Adressliste entfernen lassen
 lang de describe EXCUSE_4 Behauptet, man könne sich von der Adressliste entfernen lassen
 lang de describe EXCUSE_6 Behauptet, man könne sich von der Adressliste entfernen lassen
-lang de describe EXCUSE_7 Behauptet, man könne sich von der Adressliste entfernen lassen
 lang de describe EXCUSE_10 Was zu tun ist, wenn Sie das nicht mehr empfangen wollen...
 lang de describe EXCUSE_12 Vielleicht ist diese E-Mail ja ein Irrtum...
-lang de describe EXCUSE_19 Sie haben angeblich zugestimmt oder sich irgendwo registrieren lassen
 lang de describe EXCUSE_23 Sie haben sich angeblich eine Erlaubnis erteilt
 lang de describe EXCUSE_24 Angeblich haben möchten Sie diese Werbung bekommen
 lang de describe EXCUSE_REMOVE Beschreibt, wie Sie diese Nachrichten wieder loswerden
-lang de describe TARGETED Gezielte Werbung per E-Mail
 lang de describe STRONG_BUY Erwähnt eine starke Kaufempfehlung (von Aktien?)
 lang de describe WE_HONOR_ALL Behauptet, Aufforderungen zur Entfernung von der Liste zu folgen
-lang de describe STOCK_PICK Bietet eine Aktienempfehlung an
 lang de describe STOCK_ALERT Bietet eine Benachrichtigung über Aktienwerte an
 lang de describe MICRO_CAP_WARNING Warnung vor Billigaktien gemäß US-Börsenaufsichtsbestimmungen
 lang de describe NOT_ADVISOR Dreht sich um einen nicht registrierten Investmentberater
 lang de describe SOME_BREAKTHROUGH Jemand hat den großen Durchbruch geschafft
-lang de describe SELECTED_YOU Sie wurden auserwählt
-lang de describe MAIL_IN_ORDER_FORM Enthält ein Formular zur schriftlichen Bestellung
-lang de describe UNIVERSITY_DIPLOMAS Universitätsdiplome, schnell und einfach...
 lang de describe PREST_NON_ACCREDITED Kaufen Sie Studienabschlüsse obskurer Universitäten
-lang de describe CANNOT_BE_SPAM Angeblich kann dies auf keinen Fall Spam sein...
 lang de describe BODY_ENHANCEMENT Informationen zur Penis-/Brustvergrößerung
 lang de describe BODY_ENHANCEMENT2 Informationen zur Penis-/Brustvergrößerung
 lang de describe IMPOTENCE Beseitigt Impotenz
-lang de describe WORK_AT_HOME Informationen über Heimarbeit
 lang de describe MORTGAGE_BEST Informationen über Hypothekendarlehen
 lang de describe MORTGAGE_PITCH Preist Hypothekendarlehen an
 lang de describe MORTGAGE_RATES Informationen über Hypothekendarlehen
-lang de describe ORDER_REPORT Sie sollen einen Report bestellen
 lang de describe MAILTO_SUBJ_REMOVE Hyperlink mit "mailto:" soll Sie von der Adressliste entfernen
-lang de describe AOL_USERS_LINK Enthält einen URL für AOL-Benutzer
 lang de describe NA_DOLLARS Handelt von einer Million Dollar aus den US oder Kanada
 lang de describe US_DOLLARS_3 Erwähnt Millonen von Dollar
 lang de describe MILLION_USD Erwähnt Millonen von Dollar
 lang de describe FRONTPAGE Nachricht wurde vom Programm Frontpage erzeugt
-lang de describe JODY Enthält "My wife, Jody"-Bericht
-lang de describe YOUR_INCOME Steht in Zusammenhang mit Ihrem Verdienst
 lang de describe RESISTANCE_IS_FUTILE Widerstand gegen diesen Spam ist zwecklos...
-lang de describe SUBJ_2_CREDIT Hängt von einer Kreditzusage ab...
 lang de describe URG_BIZ Dringende Geschäfte
 lang de describe EARN_PER_WEEK Hoher wöchentlicher Verdienst
 lang de describe ALL_NATURAL Alles zu 100% natürlich
 lang de describe MONEY_BACK Mit Geld-zurück Garantie
-lang de describe NO_CATCH Die Sache hat keinen Haken
 lang de describe NO_OBLIGATION Völlig ohne Verpflichtung
-lang de describe NO_DISAPPOINTMENT Sie werden nicht enttäuscht sein
-lang de describe SERIOUS_ONLY Nur ernstgemeinte Nachfragen...
 lang de describe RISK_FREE Ganz ohne Risiko
 lang de describe AS_SEEN_ON Aus der Fernsehwerbung
-lang de describe COPY_ACCURATELY Übliche Phrase von Schneeballsystemen
 lang de describe OFFSHORE_SCAM Dubiose Finanztransaktionen im Ausland ("offshore")
 lang de describe WHY_PAY_MORE Warum mehr bezahlen als nötig?
-lang de describe CONGRATULATIONS Warum sollten Ihnen Unbekannte gratulieren?
-lang de describe CELL_PHONE_FREE Dreht sich um kostenlose Mobiltelefone
-lang de describe CELL_PHONE_IMPROVE Verbessert Funkqualität von Mobiltelefonen
 lang de describe RECEIVE_OFFER Ein spezielles Angebot für Sie
 lang de describe FREE_QUOTE_INSTANT Kostenlos ein schnelles Preisangebot, ohne Verpflichtung
-lang de describe FREE_MEMBERSHIP Kostenlose Mitgliedschaft
-lang de describe CREDIT_CARD Dreht sich um Kreditkarten
-lang de describe NO_CREDIT_CHECK Ohne Bonitätsprüfung
-lang de describe BANKRUPTCY Vermeiden Sie den Bankrott
-lang de describe ACCEPT_CREDIT_CARDS Kreditkarten werden akzeptiert
 lang de describe BAD_CREDIT Erwähnt geplatzte Kredite oder Kreditwürdigkeit
-lang de describe NONSECURED_CREDIT Erwähnt ungesicherte Kredite
 lang de describe CONSOLIDATE_DEBT Schulden/Kredite/Rechnungen zusammenlegen
 lang de describe REFINANCE_YOUR_HOME Dreht sich um Baufinanzierung
 lang de describe REFINANCE_NOW Dreht sich um Baufinanzierung
-lang de describe NO_PURCHASE Sie müssen nichts kaufen
 lang de describe NO_MEDICAL Keine medizinischen Examen nötig
 lang de describe NO_FORMS Keine Formulare notwendig
-lang de describe INITIAL_INVEST Anfangsfinanzierung notwendig
-lang de describe BUY_DIRECT Direkteinkauf
-lang de describe DO_IT_TODAY Machen Sie noch heute mit
 lang de describe WHY_WAIT Worauf warten Sie noch?
 lang de describe YOU_CAN_SEARCH Sie können sich nach jedermann erkundigen
-lang de describe SEDUCTION Erfolg bei Frauen
-lang de describe INVALUABLE_MARKETING Unschätzbare Marketinginformationen
 lang de describe GUARANTEED_STUFF Garantiertes Einkommen
-lang de describe EARNINGS Mögliche Gewinne
-lang de describe THE_BEST_RATE Die besten Zinsen
 lang de describe AMAZING_STUFF Erstaunliche Dinge
 lang de describe DIET_1 Reduzieren Sie Ihr Gewicht
 lang de describe DIET_2 Verlieren Sie Gewicht
@@ -539,8 +472,6 @@ lang de describe REVERSE_AGING Halten Sie den Alterungsprozess auf
 lang de describe HAIR_LOSS Mittel gegen Haarausfall
 lang de describe WRINKLES Mittel gegen Falten
 lang de describe WHILE_YOU_SLEEP Während Sie schlafen...
-lang de describe RICH Werden Sie schnell reich
-lang de describe YOU_WON Sie haben gewonnen
 lang de describe HIDDEN_CHARGES Erwähnt versteckte Kosten
 lang de describe FIN_FREE Finanzielle Unabhängigkeit
 lang de describe FORWARD_LOOKING Enthält Formulierungen aus Aktienprospekten
@@ -548,14 +479,12 @@ lang de describe SATIS_GUAR Zufriedenheit ist garantiert
 lang de describe HG_HORMONE Erwähnt menschliche Wachstumshormone
 lang de describe EXTRA_CASH Zusätzliches Geld
 lang de describe GET_PAID Lassen Sie sich bezahlen
-lang de describe BEEN_TURNED_DOWN Wurden Sie abgewiesen?
 lang de describe ONE_TIME Einmaliges Angebot/Gelegenheit
 lang de describe COMPETE Anbieter kämpfen um Sie als Kunden
 lang de describe MEET_SINGLES Treffen Sie andere alleinstehend Menschen
 lang de describe JOIN_MILLIONS Machen Sie es Millionen von Amerikanern nach
 lang de describe BE_BOSS Werden Sie Ihr eigner Chef
 lang de describe ML_MARKETING Erwähnt Betrug mit Pyramidensystemen
-lang de describe ITS_LEGAL Die Sache ist völlig legal...
 lang de describe CONFIDENTIAL_ORDER Alle Bestellungen werden vertraulich behandelt
 lang de describe SAVE_THOUSANDS Sparen Sie eine Menge Geld
 lang de describe MARKETING_PARTNERS Angeblich haben Sie sich bei einem Partnerunternehmen registriert
@@ -566,27 +495,21 @@ lang de describe FREE_SAMPLE Enthält "free sample" mit Großbuchstaben
 lang de describe LOW_PRICE Niedrigste Preise
 lang de describe UNCLAIMED_MONEY Geld oder Gewinne ohne Besitzer
 lang de describe OBSCURED_EMAIL Eventuell ROT13-kodierte E-mail-Adresse im Text
-lang de describe OUR_AFFILIATE_PARTNERS Erwähnt Partnerunternehmen
 lang de describe BANG_EXERCISE Erwähnt Fitnessübungen, mit Ausrufezeichen
 lang de describe BANG_MORE Immer "mehr", mit Ausrufezeichen
 lang de describe BANG_OPRAH Erwähnt Oprah (Winfrey), mit Ausrufezeichen
-lang de describe BANG_QUOTE Erwähnt Angebote, mit Ausrufezeichen
 lang de describe ACT_NOW_CAPS Reagieren Sie jetzt (in Großbuchstaben)
-lang de describe START_NOW_CAPS Starten Sie jetzt (in Großbuchstaben)
 lang de describe MORE_SEX Werden Sie sexuell aktiver
 lang de describe BANG_GUAR Eine Garantie mit Ausrufezeichen
-lang de describe NIGERIAN_BODY_GOVT_3 Nachrichtentext deutet auf nigerianischen Spam hin
 lang de describe SEE_FOR_YOURSELF Sehen Sie selbst
 lang de describe FREE_PORN Eventuell Pornowerbung: Kostenlose Pornos
 lang de describe CUM_SHOT Eventuell Pornowerbung: "cum shot"
-lang de describe PAY_SITE Eventuell Pornowerbung: Bezahlen Sie dafür
 lang de describe LIVE_PORN Eventuell Pornowerbung: Seien Sie live dabei
 lang de describe HARDCORE_PORN Eventuell Pornowerbung: "hard core"
 lang de describe HOT_NASTY Eventuell Pornowerbung: heiß, unartig, wild und jung
 lang de describe BEST_PORN Eventuell Pornowerbung: Beste und größte Sammlung
 lang de describe NASTY_GIRLS Eventuell Pornowerbung: Ungezogene Mädchen
 lang de describe AMATEUR_PORN Eventuell Pornowerbung: Amateurpornos
-lang de describe PORN_CELEBRITY Eventuell Pornowerbung: Neugierig auf Prominente?
 lang de describe SOMETHING_FOR_ADULTS Eventuell Pornowerbung: Webseiten nur für Erwachsene
 lang de describe PORN_15 Worte und Phrasen weisen auf Pornographie hin
 lang de describe PORN_16 Worte und Phrasen weisen auf Pornographie hin
@@ -688,7 +611,25 @@ lang de describe USER_IN_BLACKLIST_TO Empfängeradresse steht in Ihrer persönlich
 lang de describe USER_IN_WHITELIST_TO Empfängeradresse steht in Ihrer persönlichen weißen Liste
 lang de describe USER_IN_MORE_SPAM_TO Empfängeradresse soll fast alle (Spam-) Nachrichten erhalten
 lang de describe USER_IN_ALL_SPAM_TO Empfängeradresse soll alle (Spam-) Nachrichten erhalten
-lang de describe T_RCVD_IN_IADB_LIST Senderechner in IADB-Liste (www.isipp.com)
-lang de describe T_RCVD_IN_IADB_LIST_T Senderechner in IADB-Liste (www.isipp.com)
-lang de describe T_RCVD_IN_CSMA_BL Transportiert via Rechner in Liste von bl.csma.biz
-lang de describe T_DNS_FROM_SECURITYSAGE Absendeadresse in Liste von blackholes.securitysage.com
+
+
+ifplugin Mail::SpamAssassin::Plugin::AntiVirus
+lang de describe MIME_SUSPECT_NAME MIME-Dateiname entspricht nicht dem MIME-Typ
+endif
+
+ifplugin Mail::SpamAssassin::Plugin::DCC
+lang de describe DCC_CHECK Gelistet im DCC-System (http://rhyolite.com/anti-spam/dcc/)
+endif
+
+ifplugin Mail::SpamAssassin::Plugin::Pyzor
+lang de describe PYZOR_CHECK Gelistet im Pyzor-System (http://pyzor.sf.net/)
+endif
+
+ifplugin Mail::SpamAssassin::Plugin::TextCat
+lang de describe BODY_8BITS Nachrichtentext enthält Folge von 8 oder mehr 8-Bit-Zeichen
+lang de describe UNWANTED_LANGUAGE_BODY Nachrichtentext in unerwünschter Sprache
+endif
+
+ifplugin Mail::SpamAssassin::Plugin::AccessDB
+lang de describe ACCESSDB Nachricht wäre von access.db erkannt worden
+endif
