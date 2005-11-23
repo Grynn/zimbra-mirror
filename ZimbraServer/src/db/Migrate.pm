@@ -28,7 +28,7 @@ use strict;
 
 #############
 
-my $MYSQL = "mysql";
+my $MYSQL = "/opt/zimbra/bin/mysql";
 my $DB_USER = "zimbra";
 my $DB_PASSWORD = "zimbra";
 my $DATABASE = "zimbra";
@@ -90,7 +90,7 @@ sub runSql(@) {
     }
 
     # Run the mysql command and redirect output to a temp file
-    my $tempFile = "mysql.out";
+    my $tempFile = "/tmp/mysql.out.$$";
     my $command = "$MYSQL --user=$DB_USER --password=$DB_PASSWORD " .
         "--database=$DATABASE --batch --skip-column-names";
     open(MYSQL, "| $command > $tempFile") || die "Unable to run $command";
