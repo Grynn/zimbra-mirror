@@ -8,7 +8,7 @@ ZIMBRA_HOME ?= /opt/zimbra
 
 PERL 	:= $(shell which perl)
 
-BDB_VERSION ?= 4.2.52.2
+BDB_VERSION ?= 4.2.52.4
 BDB_INC ?= $(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/include
 BDB_LIB ?= $(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/lib
 
