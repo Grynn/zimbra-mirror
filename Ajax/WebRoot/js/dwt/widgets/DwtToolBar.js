@@ -95,7 +95,7 @@ DwtToolBar.prototype._createSpacerElement = function() {
 DwtToolBar.prototype.addSeparator =
 function(className, index) {
 	var el = this._createSeparatorElement();
-	el.className = className || this._defaultSepClass;
+	el.className = className;
 	this._addItem(DwtToolBar.SEPARATOR, el, index);
 	return el;
 }
