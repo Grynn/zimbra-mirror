@@ -43,7 +43,7 @@ function(control, style, threshX, threshY, callbackFunc, callbackObj, userData) 
    	ctxt.style = style;
 	ctxt.threshX = (threshX > 0) ? threshX : 1;
 	ctxt.threshY = (threshY > 0) ? threshY : 1;
-	ctxt.data = { delta: {}, userData: userData, incDelta: {}};
+	ctxt.data = { delta: {}, userData: userData};
 
 	ctxt.captureObj = new DwtMouseEventCapture(control, DwtDragTracker._mouseOverHdlr,
 			DwtDragTracker._mouseDownHdlr, DwtDragTracker._mouseMoveHdlr, 
@@ -94,7 +94,6 @@ function(ev) {
         	if (ctxt.callbackFunc != null) {
         		ctxt.captureObj.capture();
         		ctxt.data.startDoc = {x: mouseEv.docX, y: mouseEv.docY};
-        		ctxt.data.prevDoc = {x: mouseEv.docX, y: mouseEv.docY};
         		ctxt.data.state = DwtDragTracker.STATE_START;
              DwtDragTracker._doCallback(ctxt);
         	}
@@ -125,12 +124,6 @@ function(ev) {
 	data.delta.x = mouseEv.docX - data.startDoc.x;
 	data.delta.y = mouseEv.docY - data.startDoc.y;
 	
-	data.incDelta.x = mouseEv.docX - data.prevDoc.x;
-	data.incDelta.y = mouseEv.docY - data.prevDoc.y;	
-    
-  	data.prevDoc.x = mouseEv.docX;
-  	data.prevDoc.y = mouseEv.docY;
-        		    
 	if (Math.abs(data.delta.x) >= ctxt.threshX || Math.abs(data.delta.y) >= ctxt.threshY) {
         data.prevState = data.state;
         data.state = DwtDragTracker.STATE_DRAGGING;
