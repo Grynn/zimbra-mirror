@@ -1455,6 +1455,6 @@ function DwtListHeaderItem(id, label, iconInfo, width, sortable, resizeable, vis
 	this._sortable = sortable;
 	this._resizeable = resizeable;
 	// only set visible if explicitly set to false
-	this._visible = visible == null || visible === true;
+	this._visible = (visible !== false);
 	this._name = name || label;
 }
