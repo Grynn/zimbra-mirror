@@ -633,7 +633,7 @@ function(ev) {
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
 	var mouseEv = DwtShell.mouseEvent;
 	mouseEv.setFromDhtmlEvent(ev);
-	if (mouseEv.button == DwtMouseEvent.LEFT)
+	if (mouseEv.button == DwtMouseEvent.LEFT || mouseEv.button == DwtMouseEvent.NONE) // NONE for IE bug
 		mouseEv.dwtObj._tree._itemDblClicked(mouseEv.dwtObj, mouseEv);
 }
 
