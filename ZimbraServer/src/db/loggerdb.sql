@@ -73,7 +73,8 @@ CREATE TABLE mta (
 	qid					VARCHAR(16),
 	amavis_pid			VARCHAR(16),
 	bytes				INTEGER,
-	INDEX i_msgid (msgid)
+	INDEX i_msgid (msgid),
+	INDEX i_arrive_time (arrive_time)
 ) ENGINE = MyISAM;
 
 CREATE TABLE amavis (
@@ -90,7 +91,8 @@ CREATE TABLE amavis (
 	origIP				VARCHAR(16),
 	hits				FLOAT,
 	time				INTEGER,
-	INDEX i_msgid (msgid)
+	INDEX i_msgid (msgid),
+	INDEX i_arrive_time (arrive_time)
 ) ENGINE = MyISAM;
 
 CREATE TABLE mta_aggregate (
@@ -100,6 +102,8 @@ CREATE TABLE mta_aggregate (
 	period				ENUM ('hour','day','month','year'),
 	msg_count			INTEGER UNSIGNED,
 	msg_bytes			INTEGER UNSIGNED
+	INDEX i_period_start (period_start),
+	INDEX i_period_end (period_end)
 ) ENGINE = MyISAM;
 
 CREATE TABLE amavis_aggregate (
@@ -110,6 +114,8 @@ CREATE TABLE amavis_aggregate (
 	msg_count			INTEGER UNSIGNED,
 	spam_count			INTEGER UNSIGNED,
 	virus_count			INTEGER UNSIGNED
+	INDEX i_period_start (period_start),
+	INDEX i_period_end (period_end)
 ) ENGINE = MyISAM;
 
 # table for status
