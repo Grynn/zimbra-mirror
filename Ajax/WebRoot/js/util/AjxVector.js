@@ -140,7 +140,9 @@ function(obj) {
 
 AjxVector.prototype.clone =
 function() {
-	return (new AjxVector()).addList(this);
+	var vec = new AjxVector();
+	vec.addList(this);
+	return vec;
 };
 
 AjxVector.prototype.contains = 
