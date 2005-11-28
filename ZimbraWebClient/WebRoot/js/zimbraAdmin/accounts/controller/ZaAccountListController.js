@@ -519,6 +519,7 @@ function(ev) {
 		this._chngPwdDlg = new ZaAccChangePwdDlg(this._app.getAppCtxt().getShell(), this._app);
 		var item = this._contentView.getSelection()[0];
 		this._chngPwdDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountListController._changePwdOKCallback, this, item);				
+		this._chngPwdDlg.setTitle(ZaMsg.CHNP_Title + " (" + item.name + ")")
 		this._chngPwdDlg.popup(item.attrs[ZaAccount.A_zimbraPasswordMustChange]);
 	}
 }
