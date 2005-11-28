@@ -176,8 +176,8 @@ function(ev) {
 ZaCosListController.prototype._duplicateButtonListener =
 function(ev) {
 	var newCos = new ZaCos(this._app); //new COS
-	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getLast()) {
-		var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getLast());
+	if(this._contentView.getSelectionCount() == 1) {
+		var item = this._contentView.getSelection()[0];
 		if(item && item.attrs) { //copy the attributes from the selected COS to the new COS
 			for(var aname in item.attrs) {
 				if( (aname == ZaItem.A_objectClass) || (aname == ZaItem.A_zimbraId) || (aname == ZaCos.A_name) || (aname == ZaCos.A_description) || (aname == ZaCos.A_notes) )
@@ -235,8 +235,8 @@ function (ev) {
 **/
 ZaCosListController.prototype._editButtonListener =
 function(ev) {
-	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getLast()) {
-		var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getLast());
+	if(this._contentView.getSelectionCount() == 1) {
+		var item = this._contentView.getSelection()[0];
 		this._app.getCosController().show(item);
 	}
 }
@@ -247,12 +247,14 @@ function(ev) {
 ZaCosListController.prototype._deleteButtonListener =
 function(ev) {
 	this._removeList = new Array();
-	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getArray()) {
-		var arrDivs = this._contentView.getSelectedItems().getArray();
-		for(var key in arrDivs) {
-			var item = DwtListView.prototype.getItemFromElement.call(this, arrDivs[key]);
-			if(item) {
-				this._removeList.push(item);
+	if(this._contentView.getSelectionCount() > 0) {
+		var arrItems = this._contentView.getSelection();
+		var cnt = arrItems.length;
+		for(var key =0; key < cnt; key++) {
+		
+		//	var item = DwtListView.prototype.getItemFromElement.call(this, arrDivs[key]);
+			if(arrItems[key]) {
+				this._removeList.push(arrItems[key]);
 			}
 		}
 	}

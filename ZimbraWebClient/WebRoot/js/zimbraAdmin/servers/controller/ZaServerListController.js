@@ -264,12 +264,12 @@ function(ev) {
 ZaServerListController.prototype._deleteButtonListener =
 function(ev) {
 	this._removeList = new Array();
-	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getArray()) {
-		var arrDivs = this._contentView.getSelectedItems().getArray();
-		for(var key in arrDivs) {
-			var item = DwtListView.prototype.getItemFromElement.call(this, arrDivs[key]);
-			if(item) {
-				this._removeList.push(item);		
+	if(this._contentView.getSelectionCount() > 0) {
+		var arrItems = this._contentView.getSelection();
+		var cnt = arrItems.length;
+		for(var key =0; key < cnt; key++) {
+			if(arrItems[key]) {
+				this._removeList.push(arrItems[key]);		
 			}
 		}
 	}

@@ -274,8 +274,8 @@ function (ev) {
 **/
 ZaDomainListController.prototype._editButtonListener =
 function(ev) {
-	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getLast()) {
-		var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getLast());
+	if(this._contentView.getSelectionCount() == 1) {
+		var item = this._contentView.getSelection()[0];
 		this._app.getDomainController().show(item);
 	}
 }
@@ -298,8 +298,8 @@ function(ev) {
 ZaDomainListController.prototype._galWizButtonListener =
 function(ev) {
 	try {
-		if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getLast()) {
-			var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getLast());
+		if(this._contentView.getSelectionCount() == 1) {
+			var item = this._contentView.getSelection()[0];
 			this._currentObject = item;
 			this._galWizard = new ZaGALConfigXWizard(this._container, this._app);	
 			this._galWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainListController.prototype._finishGalButtonListener, this, null);			
@@ -315,8 +315,8 @@ function(ev) {
 ZaDomainListController.prototype._authWizButtonListener =
 function(ev) {
 	try {
-		if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getLast()) {
-			var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getLast());
+		if(this._contentView.getSelectionCount() == 1) {
+			var item = this._contentView.getSelection()[0];
 			this._currentObject = item;
 			this._authWizard = new ZaAuthConfigXWizard(this._container, this._app);	
 			this._authWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainListController.prototype._finishAuthButtonListener, this, null);			
@@ -333,12 +333,13 @@ function(ev) {
 ZaDomainListController.prototype._deleteButtonListener =
 function(ev) {
 	this._removeList = new Array();
-	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getArray()) {
-		var arrDivs = this._contentView.getSelectedItems().getArray();
-		for(var key in arrDivs) {
+	if(this._contentView.getSelectionCount()>0) {
+		var arrItems = this._contentView.getSelection();
+		var cnt = arrItems.length;
+		for(var key =0; key < cnt; key++) {
 			var item = DwtListView.prototype.getItemFromElement.call(this, arrDivs[key]);
-			if(item) {
-				this._removeList.push(item);		
+			if(arrItems[key]) {
+				this._removeList.push(arrItems[key]);
 			}
 		}
 	}

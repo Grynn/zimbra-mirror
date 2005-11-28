@@ -647,7 +647,6 @@ function(ev) {
 	var haveDls = false;
 	if(this._contentView.getSelectionCount()>0) {
 		var arrItems = this._contentView.getSelection();
-		var item = null;
 		var cnt = arrItems.length;
 		for(var key =0; key < cnt; key++) {
 			//item = DwtListView.prototype.getItemFromElement.call(this, arrDivs[key]);
