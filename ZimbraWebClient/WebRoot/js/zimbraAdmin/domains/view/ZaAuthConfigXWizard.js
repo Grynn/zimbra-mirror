@@ -283,7 +283,7 @@ function(entry) {
 	for (var a in entry.attrs) {
 		this._containedObject.attrs[a] = entry.attrs[a];
 	}
-	
+	this.setTitle(ZaMsg.NCD_AuthConfigTitle + " (" + entry.name + ")");
 	this._containedObject[ZaModel.currentStep] = 1;
 	this._localXForm.setInstance(this._containedObject);	
 }
