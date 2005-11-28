@@ -487,8 +487,8 @@ function (ev) {
 **/
 ZaAccountListController.prototype._editButtonListener =
 function(ev) {
-	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getLast()){
-		var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getLast());
+	if(this._contentView.getSelectionCount() == 1) {
+		var item = this._contentView.getSelection()[0];
 		this._editItem(item);
 	}
 }
@@ -515,9 +515,9 @@ ZaAccountListController.prototype._editItem = function (item) {
 **/
 ZaAccountListController.prototype._chngPwdListener =
 function(ev) {
-	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getLast()) {
+	if(this._contentView.getSelectionCount()==1) {
 		this._chngPwdDlg = new ZaAccChangePwdDlg(this._app.getAppCtxt().getShell(), this._app);
-		var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getLast());
+		var item = this._contentView.getSelection()[0];
 		this._chngPwdDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountListController._changePwdOKCallback, this, item);				
 		this._chngPwdDlg.popup(item.attrs[ZaAccount.A_zimbraPasswordMustChange]);
 	}
@@ -645,19 +645,20 @@ function(ev) {
 	var haveAliases = false;
 	var haveAccounts = false;
 	var haveDls = false;
-	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getArray()) {
-		var arrDivs = this._contentView.getSelectedItems().getArray();
+	if(this._contentView.getSelectionCount()>0) {
+		var arrItems = this._contentView.getSelection();
 		var item = null;
-		for(var key in arrDivs) {
-			item = DwtListView.prototype.getItemFromElement.call(this, arrDivs[key]);
-			if(item) {
-				this._removeList.push(item);
+		var cnt = arrItems.length;
+		for(var key =0; key < cnt; key++) {
+			//item = DwtListView.prototype.getItemFromElement.call(this, arrDivs[key]);
+			if(arrItems[key]) {
+				this._removeList.push(arrItems[key]);
 			}
-			if(!haveAliases && item.type == ZaItem.ALIAS) {
+			if(!haveAliases && arrItems[key].type == ZaItem.ALIAS) {
 				haveAliases = true;
-			} else if(!haveAccounts && item.type == ZaItem.ACCOUNT) {
+			} else if(!haveAccounts && arrItems[key].type == ZaItem.ACCOUNT) {
 				haveAccounts = true;
-			} else if(!haveDls && item.type == ZaItem.DL) {
+			} else if(!haveDls && arrItems[key].type == ZaItem.DL) {
 				haveDls = true;
 			}
 		}
