@@ -54,11 +54,9 @@ function(list) {
 	return vec;
 };
 
-AjxVector.prototype.clone =
-function (){
-	var vec = new AjxVector();
-	vec.addList(this);
-	return vec;
+AjxVector.prototype.size =
+function() {
+	return this._array.length;
 };
 
 AjxVector.prototype.add =
@@ -73,79 +71,12 @@ function(obj, index) {
 	}
 };
 
-AjxVector.prototype.replace =
-function (index, newObj) {
-	var oldObj = this._array[index];
-	this._array[index] = newObj;
-	return oldObj;
-};
-
 AjxVector.prototype.addList =
 function(list) {
-	if (list instanceof Array)
+	if ((list instanceof Array) && list.length)
 		this._array = this._array.concat(list);
-	else if (list instanceof AjxVector)
+	else if ((list instanceof AjxVector) && list.size())
 		this._array = this._array.concat(list._array);
-};
-
-AjxVector.prototype.contains = 
-function(obj) {
-	for (var i = 0; i < this._array.length; i++) {
-		if (this._array[i] == obj)
-			return true;
-	}
-	return false;
-};
-
-/**
-* Returns the index of the obj given w/in vector
-*
-* @param obj			the object being looked for
-*/
-AjxVector.prototype.indexOf = 
-function(obj) {
-	for (var i = 0; i < this._array.length; i++) {
-		if (this._array[i] == obj)
-			return i;
-	}
-	return -1;
-};
-
-/**
-* Returns true if the vector contains the given object, using the given 
-* function to compare objects. The comparison function should return a 
-* type for which the equality test (==) is meaningful, such as a string 
-* or a base type.
-*
-* @param obj			the object being looked for
-* @param compareFunc	a function for comparing objects
-*/
-AjxVector.prototype.containsLike = 
-function(obj, compareFunc) {
-	var value = compareFunc.call(obj);
-	for (var i = 0; i < this._array.length; i++) {
-		var test = compareFunc.call(this._array[i]);
-		if (test == value)
-			return true;
-	}
-	return false;
-};
-
-AjxVector.prototype.get =
-function(index) {
-	return index >= this._array.length || index < 0
-		? null : this._array[index];
-};
-
-AjxVector.prototype.getArray =
-function() {
-	return this._array;
-};
-
-AjxVector.prototype.getLast =
-function() {
-	return this._array.length == 0
-		? null : this._array[this._array.length-1];
 };
 
 AjxVector.prototype.remove = 
@@ -186,13 +117,76 @@ function() {
 	return this._array.length > 0 ? this._array.pop() : null;
 };
 
-AjxVector.prototype.size =
-function() {
-	return this._array.length;
+AjxVector.prototype.replace =
+function(index, newObj) {
+	var oldObj = this._array[index];
+	this._array[index] = newObj;
+	return oldObj;
 };
 
-AjxVector._defaultArrayComparator = function(a, b){
-	return (a < b)? -1 :((a > b)? 1 : 0);
+/**
+* Returns the index of the obj given w/in vector
+*
+* @param obj			the object being looked for
+*/
+AjxVector.prototype.indexOf = 
+function(obj) {
+	for (var i = 0; i < this._array.length; i++) {
+		if (this._array[i] == obj)
+			return i;
+	}
+	return -1;
+};
+
+AjxVector.prototype.clone =
+function() {
+	return (new AjxVector()).addList(this);
+};
+
+AjxVector.prototype.contains = 
+function(obj) {
+	for (var i = 0; i < this._array.length; i++) {
+		if (this._array[i] == obj)
+			return true;
+	}
+	return false;
+};
+
+/**
+* Returns true if the vector contains the given object, using the given 
+* function to compare objects. The comparison function should return a 
+* type for which the equality test (==) is meaningful, such as a string 
+* or a base type.
+*
+* @param obj			the object being looked for
+* @param compareFunc	a function for comparing objects
+*/
+AjxVector.prototype.containsLike = 
+function(obj, compareFunc) {
+	var value = compareFunc.call(obj);
+	for (var i = 0; i < this._array.length; i++) {
+		var test = compareFunc.call(this._array[i]);
+		if (test == value)
+			return true;
+	}
+	return false;
+};
+
+AjxVector.prototype.get =
+function(index) {
+	return index >= this._array.length || index < 0
+		? null : this._array[index];
+};
+
+AjxVector.prototype.getArray =
+function() {
+	return this._array;
+};
+
+AjxVector.prototype.getLast =
+function() {
+	return this._array.length == 0
+		? null : this._array[this._array.length-1];
 };
 
 AjxVector.prototype.sort =
@@ -203,24 +197,27 @@ function(sortFunc) {
 	this._array.sort(sortFunc);
 };
 
-AjxVector.prototype.binarySearch = function (valueToFind, sortFunc) {
-	if(!sortFunc){
+AjxVector.prototype.binarySearch = 
+function(valueToFind, sortFunc) {
+	if (!sortFunc) {
 		sortFunc = AjxVector._defaultArrayComparator;
 	}
 	
 	var l = 0;
 	var arr = this._array;
 	var u = arr.length - 1;
-	while(true){
-		if(u < l){
+
+	while(true) {
+		if (u < l) {
 			return -1;
 		}
-		
+
 		var i = Math.floor((l + u)/ 2);
 		var comparisonResult = sortFunc(valueToFind, arr[i]);
-		if(comparisonResult < 0){
+
+		if (comparisonResult < 0) {
 			u = i - 1;
-		} else if (comparisonResult > 0){
+		} else if (comparisonResult > 0) {
 			l = i + 1;
 		} else {
 			return i;
@@ -253,4 +250,12 @@ function(offset, list) {
 		// otherwise, just append the raw list to the end
 		this._array = this._array.concat(rawList);
 	}
+};
+
+
+// Static methods
+
+AjxVector._defaultArrayComparator = 
+function(a, b) {
+	return a < b ? -1 : (a > b ? 1 : 0);
 };
