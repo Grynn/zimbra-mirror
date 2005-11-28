@@ -23,7 +23,7 @@ MYSQL_CLIENT_VERSION ?= standard-4.1.10a-clientlibs
 
 HTTPD_VERSION ?= 2.0.54
 
-POSTFIX_VERSION ?= 2.2.3
+POSTFIX_VERSION ?= 2.2.5
 
 DIRS := mysql \
 	sleepycat \
