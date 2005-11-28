@@ -193,13 +193,14 @@ function() {
 		this._poppedUp = false;
 		this.cleanup(false);
 	
-		var myZIndex = this.getZIndex();
+		//var myZIndex = this.getZIndex();
+	    var myZIndex = this._zIndex;
 		this.setZIndex(Dwt.Z_HIDDEN);
 		this._positionDialog({x:-10000, y:-10000});
 		if (this._mode == DwtBaseDialog.MODAL) {
 			this._undoModality(myZIndex);
 		} else {
-			if (!this._ffHackDisabled) Dwt._ffOverflowHack(this._htmlElId, this.getZIndex(), null, false);
+			if (!this._ffHackDisabled) Dwt._ffOverflowHack(this._htmlElId, myZIndex, null, false);
 			this._shell._veilOverlay.activeDialogs.pop();
 		}
 		this.removeKeyListeners();
@@ -416,7 +417,7 @@ function (myZIndex) {
 	var veilZ = this._shell._veilOverlay.veilZ;
 	veilZ.pop();
 	var newVeilZ = veilZ[veilZ.length - 1];
-	if (!this._ffHackDisabled) Dwt._ffOverflowHack(this._htmlElId, myZIndex, newVeilZ, false);
+	if (!this._ffHackDisabled) Dwt._ffOverflowHack(this._htmlElId, myZIndex, null, false);
 	Dwt.setZIndex(this._shell._veilOverlay, newVeilZ);
 	this._shell._veilOverlay.dialogZ.pop();
 	this._shell._veilOverlay.activeDialogs.pop();
