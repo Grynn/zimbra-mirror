@@ -290,6 +290,7 @@ objectIdentifier zimbraDomainDefaultCOSId ZimbraAttrType:299
 objectIdentifier zimbraDomainAdminModifiableAttr ZimbraAttrType:300
 objectIdentifier zimbraZimletEnabled ZimbraAttrType:301
 objectIdentifier zimbraZimletPriority ZimbraAttrType:302
+objectIdentifier zimbraProxyCacheableContentTypes ZimbraAttrType:303
 
 #################################################################
 # object class OIDs
@@ -1637,6 +1638,13 @@ attributetype ( zimbraProxyAllowedDomains
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} )
 
+attributetype ( zimbraProxyCacheableContentTypes
+	NAME 'zimbraProxyCacheableContentTypes'
+	DESC 'Content types that can be cached by proxy servlet'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} )
+
 attributetype ( zimbraRedoLogArchiveDir
 	NAME 'zimbraRedoLogArchiveDir'
 	DESC 'redolog rollover destination'
@@ -2505,7 +2513,8 @@ objectclass ( zimbraCOS
 		zimbraPrefAutoAddAddressEnabled $
 		zimbraPrefUseKeyboardShortcuts $
 		zimbraZimletAvailableZimlets $
-		zimbraProxyAllowedDomains
+		zimbraProxyAllowedDomains $
+		zimbraProxyCacheableContentTypes
 	) )
 
 ################

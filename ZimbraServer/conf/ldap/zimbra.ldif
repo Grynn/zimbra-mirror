@@ -464,6 +464,8 @@ zimbraNewMailNotificationSubject: New message received at ${RECIPIENT_ADDRESS}
 zimbraNewMailNotificationBody: New message received at ${RECIPIENT_ADDRESS}.${NEWLINE}
  Sender: ${SENDER_ADDRESS}${NEWLINE}
  Subject: ${SUBJECT}
+zimbraProxyCacheableContentTypes: text/javascript
+zimbraProxyCacheableContentTypes: application/x-javascript
 
 # for storing server info
 dn: cn=servers,cn=zimbra

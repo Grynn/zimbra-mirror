@@ -530,6 +530,8 @@
 
 <attr name="zimbraProxyAllowedDomains" type="string" max="256"/>
 
+<attr name="zimbraProxyCacheableContentTypes" type="string" max="256"/>
+
 <attr name="zimbraZimletUserProperties" type="string" max="1024"/>
 
 <attr name="zimbraZimletEnabled" type="boolean"/>
