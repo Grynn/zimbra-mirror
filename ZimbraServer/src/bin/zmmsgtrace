@@ -320,8 +320,13 @@ sub traceProcessedMsg {
 		my $fromIP = $$f[0];
 
 		my $statement = 
-			"select distinct(recipient) from mta where msgid='".$msgId.
-				"' and from_IP='".$fromIP."'";
+			"select distinct(recipient) from mta where msgid='".$msgId;
+
+		if ($fromIP ne "") {
+			$statement .= "' and from_IP='".$fromIP."'";
+		} else {
+			$statement .= "' and from_IP is null";
+		}
 
 		my $rary = execSelect($statement);
 
@@ -332,8 +337,13 @@ sub traceProcessedMsg {
 				"select arrive_time, leave_time, host, ".
 				"sender, recipient, status, statusmsg, from_host, from_IP, to_host, to_IP, ".
 				"amavis_pid ".
-				"from mta where msgid='".$msgId."' and recipient='".$recip."' ".
-				"and from_IP='".$fromIP."'";
+				"from mta where msgid='".$msgId."' and recipient='".$recip."' ";
+
+			if ($fromIP ne "") {
+				$statement .= "' and from_IP='".$fromIP."'";
+			} else {
+				$statement .= "' and from_IP is null";
+			}
 
 			my $ary = execSelect($statement);
 
