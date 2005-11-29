@@ -678,3 +678,4 @@ smtpd_tls_cert_file = /opt/zimbra/conf/smtpd.crt
 smtpd_tls_key_file = /opt/zimbra/conf/smtpd.key
 smtpd_tls_loglevel = 3
 
+message_size_limit = 10240000
