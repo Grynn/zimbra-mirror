@@ -21,10 +21,4 @@
 			<actionJavaScript/>
 		</menuItem>
 	</contextMenu>
-	<zimletPanelItem label="${msg.call}" icon="call.gif">
-		<toolTipText>${msg.panelTooltipText}</toolTipText>
-		<dragSource type="ZmContact">
-			<actionJavaScript/> 
-		</dragSource>
-	</zimletPanelItem>
 </zimlet>
