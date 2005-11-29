@@ -36,6 +36,7 @@ function ZaServerController(appCtxt, container, abApp) {
 	this._evtMgr = new AjxEventMgr();
 	this._UICreated = false;
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_servers/managing_servers.htm";				
+	this._toolbarOperations = new Array();
 }
 
 ZaServerController.prototype = new ZaController();
@@ -140,8 +141,44 @@ function(details) {
 	}
 }
 
+/**
+* @method _initToolbar
+* This method creates ZaOperation objects 
+* All the ZaOperation objects are added to this._toolbarOperations array which is then used to 
+* create the toolbar for this view.
+* Each ZaOperation object defines one toolbar button.
+* Help button is always the last button in the toolbar
+**/
+ZaServerController.prototype._initToolbar = 
+function () {
+	//TODO: Instrumentation code here
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.SERTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, ZaServerController.prototype._saveButtonListener)));
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.SERTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, ZaServerController.prototype._closeButtonListener)));    	
+	if(this._app.getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]) {
+		this._toolbarOperations.push(new ZaOperation(ZaOperation.HSM, ZaMsg.SRVTBB_HSM, ZaMsg.SRVTBB_HSM_tt, "ReadMailbox", "ReadMailboxDis", new AjxListener(this, this._hsmButtonListener)));										
+	}		
+	//TODO:Instrumentation code here
+}
 
+/**
+* @method _createUI
+**/
+ZaServerController.prototype._createUI =
+function () {
+	this._view = new ZaServerXFormView(this._container, this._app);
 
+	this._initToolbar();
+	//always add Help button at the end of the toolbar
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.NONE));
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));							
+	this._toolBar = new ZaToolBar(this._container, this._toolbarOperations);		
+	
+	var elements = new Object();
+	elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
+	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolBar;		
+    this._app.createView(ZaZimbraAdmin._SERVER_VIEW, elements);
+	this._UICreated = true;
+}
 /**
 *	@method _setView 
 *	@param entry - isntance of ZaDomain class
@@ -150,25 +187,15 @@ ZaServerController.prototype._setView =
 function(entry) {
 	entry.load();
 	if(!this._UICreated) {
-		this._view = new ZaServerXFormView(this._container, this._app);
-	  	//this._view = new ZaServerView(this._container, this._app);
-   		this._ops = new Array();
-   		this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.SERTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, ZaServerController.prototype._saveButtonListener)));
-   		this._ops.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.SERTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, ZaServerController.prototype._closeButtonListener)));    	
-		if(entry.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]) {
-			this._ops.push(new ZaOperation(ZaOperation.HSM, ZaMsg.SRVTBB_HSM, ZaMsg.SRVTBB_HSM_tt, "ReadMailbox", "ReadMailboxDis", new AjxListener(this, this._hsmButtonListener)));										
-		}		
-		this._ops.push(new ZaOperation(ZaOperation.NONE));
-		this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));							
-
-		this._toolBar = new ZaToolBar(this._container, this._ops);
-		var elements = new Object();
-		elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
-		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolBar;		
-	  
-	    this._app.createView(ZaZimbraAdmin._SERVER_VIEW, elements);
-		this._UICreated = true;
+		this._createUI();
 	} 
+	this._app.pushView(ZaZimbraAdmin._SERVER_VIEW);
+	this._view.setDirty(false);
+	this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
+	this._currentObject = entry;
+
+	//TODO: Move this code to an external file
+	//TODO: instrumentation code here
 	if(entry.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]) {	
 		if(entry[ZaServer.A_showVolumeAndHSM]) {
 			this._toolBar.enable([ZaOperation.HSM], true);
@@ -176,10 +203,6 @@ function(entry) {
 			this._toolBar.enable([ZaOperation.HSM], false);
 		}
 	}
-	this._app.pushView(ZaZimbraAdmin._SERVER_VIEW);
-	this._view.setDirty(false);
-	this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
-	this._currentObject = entry;
 }
 
 ZaServerController.prototype._saveChanges =
@@ -402,6 +425,10 @@ function(ev) {
 	}
 }
 
+/**
+* @method _hsmButtonListener
+**/
+//TODO: Move this method to an external file
 ZaServerController.prototype._hsmButtonListener = 
 function (ev) {
 	try {
@@ -416,6 +443,10 @@ function (ev) {
 	}
 }
 
+/**
+* @method _hsmOkButtonListener
+**/
+//TODO: Move this method to an external file
 ZaServerController.prototype._hsmOkButtonListener = 
 function () {
 	var obj = this._hsmWizard.getObject();

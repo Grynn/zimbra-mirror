@@ -583,7 +583,7 @@ function(account) {
 				break;
 			}
 		}
-		//TODO: get the port and hostname from zimbraServer object
+
 		var mServer = mailProtocol + "://" + ms + ":" + mailPort + "/zimbra/auth/" + window.location.search;
 
 		if(!obj.authToken || !obj.lifetime || !mServer)

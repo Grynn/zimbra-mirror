@@ -32,34 +32,15 @@
 **/
 function ZaOverviewPanelController(appCtxt, container) {
 	ZaController.call(this, appCtxt, container);
-	this._overviewPanel = null;
-	this._addressesTi = null;
-	this._configTi = null;
-	this._monitoringTi = null;
-	this._cosTi = null;
-	this._domainsTi = null;
-	this._serversTi = null;
-	this._statusTi = null;
+
+	this._init(appCtxt, container);
 	
-	if(ZaSettings.DOMAINS_ENABLED)
-		this._domainsMap = new Object();
-	
-	if(ZaSettings.SERVERS_ENABLED)
-		this._serversMap = new Object();	
-	
-	if(ZaSettings.SERVER_STATS_ENABLED)
-		this._serversStatsMap = new Object();
-	
-	if(ZaSettings.COSES_ENABLED)	
-		this._cosMap = new Object();
-	
-	this._app = appCtxt.getAppController().getApp(ZaZimbraAdmin.ADMIN_APP);
 	this._setView();
-	this._currentDomain = "";	
 }
 
 ZaOverviewPanelController.prototype = new ZaController;
 ZaOverviewPanelController.prototype.constructor = ZaOverviewPanelController;
+ZaOverviewPanelController.overviewTreeListeners = new Object();
 
 ZaOverviewPanelController._TID = "TID";
 ZaOverviewPanelController._OBJ_ID = "OBJ_ID";
@@ -283,6 +264,37 @@ function () {
 	return this._currentDomain;
 }
 
+//protected and private methods
+/**
+* @method init
+* this method creates and initializes any members of this class
+* This method is called by the contructor after the superconstructor and before the _setView
+**/
+ZaOverviewPanelController.prototype._init = 
+function (appCtxt, container) {
+	this._overviewPanel = null;
+	this._addressesTi = null;
+	this._configTi = null;
+	this._monitoringTi = null;
+	this._cosTi = null;
+	this._domainsTi = null;
+	this._serversTi = null;
+	this._statusTi = null;
+	this._currentDomain = "";	
+	this._app = appCtxt.getAppController().getApp(ZaZimbraAdmin.ADMIN_APP);
+			
+	if(ZaSettings.DOMAINS_ENABLED)
+		this._domainsMap = new Object();
+	
+	if(ZaSettings.SERVERS_ENABLED)
+		this._serversMap = new Object();	
+	
+	if(ZaSettings.SERVER_STATS_ENABLED)
+		this._serversStatsMap = new Object();
+	
+	if(ZaSettings.COSES_ENABLED)	
+		this._cosMap = new Object();
+}
 
 ZaOverviewPanelController.prototype._setView =
 function() {
@@ -321,6 +333,10 @@ function() {
 		ti.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW);
 	
 		this._addressesTi.addSeparator();
+		
+		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ACCOUNTS_LIST_VIEW] = ZaOverviewPanelController.accountListTreeListener;
+		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ALIASES_LIST_VIEW] = ZaOverviewPanelController.aliasListTreeListener;
+		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW] = ZaOverviewPanelController.dlListTreeListener;		
 	}
 		
 	if(ZaSettings.SYSTEM_CONFIG_ENABLED) {	
@@ -352,6 +368,9 @@ function() {
 			this._handleException(ex, "ZaOverviewPanelController.prototype._buildFolderTree", null, false);
 		}	
 		
+		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._COS_LIST_VIEW] = ZaOverviewPanelController.cosListTreeListener;		
+		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._COS_VIEW] = ZaOverviewPanelController.cosTreeListener;				
+		
 		this._domainsTi = new DwtTreeItem(this._configTi);
 		this._domainsTi.setText(ZaMsg.OVP_domains);
 		this._domainsTi.setImage("Domain");
@@ -375,6 +394,8 @@ function() {
 			this._handleException(ex, "ZaOverviewPanelController.prototype._buildFolderTree", null, false);
 		}
 			
+		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DOMAINS_LIST_VIEW] = ZaOverviewPanelController.domainListTreeListener;		
+		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DOMAIN_VIEW] = ZaOverviewPanelController.domainTreeListener;				
 	
 		this._serversTi = new DwtTreeItem(this._configTi);
 		this._serversTi.setText(ZaMsg.OVP_servers);
@@ -399,13 +420,15 @@ function() {
 			this._handleException(ex, "ZaOverviewPanelController.prototype._buildFolderTree", null, false);
 		}
 			
-	
+		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._SERVERS_LIST_VIEW] = ZaOverviewPanelController.serverListTreeListener;		
+		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._SERVER_VIEW] = ZaOverviewPanelController.serverTreeListener;				
 		
 		ti = new DwtTreeItem(this._configTi);
 		ti.setText(ZaMsg.OVP_global);
 		ti.setImage("GlobalSettings");
 		ti.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._GLOBAL_SETTINGS);	
-	
+
+		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._GLOBAL_SETTINGS] = ZaOverviewPanelController.globalSettingsTreeListener;				
 		this._configTi.addSeparator();			
 	}
 	if(ZaSettings.MONITORING_ENABLED) {
@@ -442,6 +465,11 @@ function() {
 		} catch (ex) {
 			this._handleException(ex, "ZaOverviewPanelController.prototype._buildFolderTree", null, false);
 		}
+		
+		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._STATUS] = ZaOverviewPanelController.statusTreeListener;		
+		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._STATISTICS] = ZaOverviewPanelController.statsTreeListener;				
+		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._STATISTICS_BY_SERVER] = ZaOverviewPanelController.statsByServerTreeListener;						
+		
 	}
 		
 	if(ZaSettings.ADDRESSES_ENABLED)
@@ -483,116 +511,15 @@ function () {
 
 ZaOverviewPanelController.prototype._overviewTreeListener =
 function(ev) {
-
 	if (ev.detail == DwtTree.ITEM_SELECTED) {
 	//DBG.dumpObj(ev);	
 		var treeItemType = ev.item.getData(ZaOverviewPanelController._TID);
 		//DBG.println("ti = "+treeItemType);
 		try {
-			if (treeItemType != null) {
-				switch (treeItemType) {
-					case ZaZimbraAdmin._COS_LIST_VIEW:
-
-						if(this._app.getCurrentController()) {
-							this._app.getCurrentController().switchToNextView(this._app.getCosListController(), ZaCosListController.prototype.show, ZaCos.getAll(this._app));
-						} else {
-							this._app.getCosListController().show(ZaCos.getAll(this._app));
-						}
-						break;
-					case ZaZimbraAdmin._ACCOUNTS_LIST_VIEW:
-
-						this._showAccountsView(ZaItem.ACCOUNT,ev);
-						break;
- 					case ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW:
-
-						this._showAccountsView(ZaItem.DL,ev);
-						break;
-					case ZaZimbraAdmin._ALIASES_LIST_VIEW:
-						
-						this._showAccountsView(ZaItem.ALIAS,ev);
-						break;
-					case ZaZimbraAdmin._DOMAINS_LIST_VIEW:
-
-						if(this._app.getCurrentController()) {
-							this._app.getCurrentController().switchToNextView(this._app.getDomainListController(), ZaDomainListController.prototype.show, ZaDomain.getAll(this._app));
-						} else {					
-							this._app.getDomainListController().show(ZaDomain.getAll(this._app));
-						}
-
-						break;			
-					case ZaZimbraAdmin._SERVERS_LIST_VIEW:
-
-						if(this._app.getCurrentController()) {
-							this._app.getCurrentController().switchToNextView(this._app.getServerListController(), ZaServerListController.prototype.show, ZaServer.getAll(this._app));
-						} else {					
-							this._app.getServerListController().show(ZaServer.getAll(this._app));
-						}
-
-						break;									
-					case ZaZimbraAdmin._STATUS:
-
-						if(this._app.getCurrentController()) {
-							this._app.getCurrentController().switchToNextView(this._app.getStatusViewController(),ZaStatusViewController.prototype.show, null);
-						} else {					
-							this._app.getStatusViewController().show();
-						}
-						break;		
-					case ZaZimbraAdmin._STATISTICS:
-
-						if(this._app.getCurrentController()) {
-							this._app.getCurrentController().switchToNextView(this._app.getGlobalStatsController(),ZaGlobalStatsController.prototype.show, null);
-						} else {					
-							this._app.getGlobalStatsController().show();
-						}
-						break;		
-					case ZaZimbraAdmin._GLOBAL_SETTINGS:
-
-						if(this._app.getCurrentController()) {
-							this._app.getCurrentController().switchToNextView(this._app.getGlobalConfigViewController(),ZaGlobalConfigViewController.prototype.show, this._app.getGlobalConfig());
-						} else {					
-							this._app.getGlobalConfigViewController().show(this._app.getGlobalConfig());
-						}
-						break;		
-					case ZaZimbraAdmin._STATISTICS_BY_SERVER:
-						var currentServer = this._app.getServerList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID));
-						if(this._app.getCurrentController()) {
-							this._app.getCurrentController().switchToNextView(this._app.getServerStatsController(), ZaServerStatsController.prototype.show,currentServer);
-						} else {					
-							this._app.getServerStatsController().show(currentServer);
-						}
-
-						break;
-					case ZaZimbraAdmin._SERVER_VIEW:
-						
-						if(this._app.getCurrentController()) {
-							this._app.getCurrentController().switchToNextView(this._app.getServerController(),
-							 ZaServerController.prototype.show,
-							 this._app.getServerList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
-						} else {					
-							this._app.getServerController().show(this._app.getServerList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
-						}				
-						break;
-					case ZaZimbraAdmin._DOMAIN_VIEW:
-						
-						if(this._app.getCurrentController()) {
-							this._app.getCurrentController().switchToNextView(this._app.getDomainController(),
-							 ZaDomainController.prototype.show,
-							 this._app.getDomainList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
-						} else {					
-							this._app.getDomainController().show(this._app.getDomainList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
-						}				
-						break;		
-					case ZaZimbraAdmin._COS_VIEW:
-						
-						if(this._app.getCurrentController()) {
-							this._app.getCurrentController().switchToNextView(this._app.getCosController(),
-							 ZaCosController.prototype.show,
-							 this._app.getCosList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
-						} else {					
-							this._app.getCosController().show(this._app.getCosList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
-						}				
-						break;											
-				}
+			if (treeItemType != null && 
+				ZaOverviewPanelController.overviewTreeListeners[treeItemType] &&
+				typeof (ZaOverviewPanelController.overviewTreeListeners[treeItemType]) == "function") {
+				ZaOverviewPanelController.overviewTreeListeners[treeItemType].call(this, ev);
 			}
 		} catch (ex) {
 			if(!ex) {
@@ -600,6 +527,107 @@ function(ev) {
 			}
 			this._handleException(ex, "ZaOverviewPanelController.prototype._overviewTreeListener", null, false);
 		}
+	}
+}
+
+/* default tree listeners */
+
+ZaOverviewPanelController.cosTreeListener = function (ev) {
+	if(this._app.getCurrentController()) {
+		this._app.getCurrentController().switchToNextView(this._app.getCosController(),
+		 ZaCosController.prototype.show,
+		 this._app.getCosList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
+	} else {					
+		this._app.getCosController().show(this._app.getCosList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
+	}	
+}
+
+ZaOverviewPanelController.domainTreeListener = function (ev) {
+	if(this._app.getCurrentController()) {
+		this._app.getCurrentController().switchToNextView(this._app.getDomainController(),
+		 ZaDomainController.prototype.show,
+		 this._app.getDomainList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
+	} else {					
+		this._app.getDomainController().show(this._app.getDomainList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
+	}
+}
+
+ZaOverviewPanelController.serverTreeListener = function (ev) {
+	if(this._app.getCurrentController()) {
+		this._app.getCurrentController().switchToNextView(this._app.getServerController(),
+		 ZaServerController.prototype.show,
+		 this._app.getServerList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
+	} else {					
+		this._app.getServerController().show(this._app.getServerList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
+	}
+}
+
+ZaOverviewPanelController.statsByServerTreeListener = function (ev) {
+	var currentServer = this._app.getServerList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID));
+	if(this._app.getCurrentController()) {
+		this._app.getCurrentController().switchToNextView(this._app.getServerStatsController(), ZaServerStatsController.prototype.show,currentServer);
+	} else {					
+		this._app.getServerStatsController().show(currentServer);
+	}
+}
+
+ZaOverviewPanelController.globalSettingsTreeListener = function (ev) {
+	if(this._app.getCurrentController()) {
+		this._app.getCurrentController().switchToNextView(this._app.getGlobalConfigViewController(),ZaGlobalConfigViewController.prototype.show, this._app.getGlobalConfig());
+	} else {					
+		this._app.getGlobalConfigViewController().show(this._app.getGlobalConfig());
+	}
+}
+
+ZaOverviewPanelController.statsTreeListener = function (ev) {
+	if(this._app.getCurrentController()) {
+		this._app.getCurrentController().switchToNextView(this._app.getGlobalStatsController(),ZaGlobalStatsController.prototype.show, null);
+	} else {					
+		this._app.getGlobalStatsController().show();
+	}
+}
+
+ZaOverviewPanelController.statusTreeListener = function (ev) {
+	if(this._app.getCurrentController()) {
+		this._app.getCurrentController().switchToNextView(this._app.getStatusViewController(),ZaStatusViewController.prototype.show, null);
+	} else {					
+		this._app.getStatusViewController().show();
+	}
+}
+
+ZaOverviewPanelController.serverListTreeListener = function (ev) {
+	if(this._app.getCurrentController()) {
+		this._app.getCurrentController().switchToNextView(this._app.getServerListController(), ZaServerListController.prototype.show, ZaServer.getAll(this._app));
+	} else {					
+		this._app.getServerListController().show(ZaServer.getAll(this._app));
+	}
+}
+
+ZaOverviewPanelController.domainListTreeListener = function (ev) {
+	if(this._app.getCurrentController()) {
+		this._app.getCurrentController().switchToNextView(this._app.getDomainListController(), ZaDomainListController.prototype.show, ZaDomain.getAll(this._app));
+	} else {					
+		this._app.getDomainListController().show(ZaDomain.getAll(this._app));
+	}
+}
+
+ZaOverviewPanelController.aliasListTreeListener = function (ev) {
+	this._showAccountsView(ZaItem.ALIAS,ev);
+}
+
+ZaOverviewPanelController.dlListTreeListener = function (ev) {
+	this._showAccountsView(ZaItem.DL,ev);
+}
+
+ZaOverviewPanelController.accountListTreeListener = function (ev) {
+	this._showAccountsView(ZaItem.ACCOUNT,ev);
+}
+
+ZaOverviewPanelController.cosListTreeListener = function (ev) {
+	if(this._app.getCurrentController()) {
+		this._app.getCurrentController().switchToNextView(this._app.getCosListController(), ZaCosListController.prototype.show, ZaCos.getAll(this._app));
+	} else {
+		this._app.getCosListController().show(ZaCos.getAll(this._app));
 	}
 }
 
