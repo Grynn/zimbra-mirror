@@ -508,10 +508,6 @@
 
 <attr name="zimbraZimletVersion" type="string" max="256"/>
 
-<attr name="zimbraZimletIndexingEnabled" type="string" max="256"/>
-
-<attr name="zimbraZimletKeyword" type="string" max="256"/>
-
 <attr name="zimbraZimletHandlerClass" type="string" max="256"/>
 
 <attr name="zimbraZimletHandlerConfig" type="string" max="10240"/>
@@ -535,6 +531,8 @@
 <attr name="zimbraZimletUserProperties" type="string" max="1024"/>
 
 <attr name="zimbraZimletEnabled" type="boolean"/>
+
+<attr name="zimbraZimletIsExtension" type="boolean"/>
 
 <attr name="c" type="string"/>
 
