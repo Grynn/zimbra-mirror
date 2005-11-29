@@ -1,0 +1,60 @@
+#!/bin/sh
+
+NAME=$1
+
+if [ "x$NAME" = "x" ]; then
+	echo "New server name required!"
+	exit 1
+fi
+
+source /opt/zimbra/bin/zmshutil || exit 1
+zmsetvars -f zimbra_home
+
+/opt/zimbra/bin/zmcontrol stop
+
+if [ "x${ldap_is_master}" = "xtrue" ]; then
+	ldap start
+fi
+
+/opt/zimbra/openldap/bin/ldapsearch -H ldap://127.0.0.1:389 -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x "(cn=${zimbra_server_hostname})" -LLL | sed -e "s/${zimbra_server_hostname}/${NAME}/g" > /tmp/server.ldif
+
+/opt/zimbra/openldap/bin/ldapsearch -H ldap://127.0.0.1:389 -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x "(zimbraMailHost=${zimbra_server_hostname})" -LLL dn > /tmp/users.ldif
+
+cat /dev/null > /tmp/newusers.ldif
+while read i; do
+if [ "x$i" != "x" ]; then
+cat >> /tmp/newusers.ldif <<EOF
+$i
+changetype: modify
+replace: zimbraMailHost
+zimbraMailHost: ${NAME}
+-
+replace: zimbraMailTransport
+zimbraMailTransport: lmtp:${NAME}:7025
+-
+
+EOF
+fi
+done < /tmp/users.ldif
+
+/opt/zimbra/openldap/bin/ldapmodify -c -H ldap://127.0.0.1:389 -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f /tmp/newusers.ldif -v
+
+/opt/zimbra/openldap/bin/ldapdelete -H ldap://127.0.0.1:389 -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x "cn=${zimbra_server_hostname},cn=servers,cn=zimbra"
+
+/opt/zimbra/openldap/bin/ldapadd -a -H ldap://127.0.0.1:389 -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f /tmp/server.ldif
+
+zmlocalconfig -e zimbra_server_hostname=${NAME}
+
+foo=`echo ${ldap_master_url} | sed -e "s|${zimbra_server_hostname}|${NAME}|g"`
+if [ "x{$foo}" != "x${ldap_master_url}" ]; then
+	zmlocalconfig -e ldap_master_url=$foo
+fi
+
+foo=`echo ${ldap_url} | sed -e "s|${zimbra_server_hostname}|${NAME}|g"`
+if [ "x{$foo}" != "x${ldap_url}" ]; then
+	zmlocalconfig -e ldap_url=$foo
+fi
+
+# Change per account:
+# zimbraMailHost: wolfowitz.liquidsys.com
+# zimbraMailTransport: lmtp:wolfowitz.liquidsys.com:7025
