@@ -45,6 +45,7 @@ public class ImageMergeTask
     private String _outputDir = null;
     private String _cssFile = null;
     private String _cssPath = null;
+    private String _divFile = null;
     
     // optional
     
@@ -73,6 +74,10 @@ public class ImageMergeTask
     
     public void setCssPath(String path) {
         _cssPath = path;
+    }
+    
+    public void setDivFile(String filename) {
+        _divFile = filename;
     }
     
     // optional
@@ -150,6 +155,11 @@ public class ImageMergeTask
         
         argList.add("-p");
         argList.add(_cssPath);
+        
+        if (_divFile != null) {
+        	argList.add("-d");
+        	argList.add(_divFile);
+        }
         
         if (!_layoutStyle.equals("auto")) {
             argList.add("-l");

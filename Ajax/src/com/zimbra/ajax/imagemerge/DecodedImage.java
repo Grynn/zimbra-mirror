@@ -85,7 +85,7 @@ public abstract class DecodedImage {
         String sizeStr = widthStr + heightStr;
         String otherStr = "overflow:hidden;";
 
-        return className + "{" + backgroundStr + sizeStr + otherStr + "}\n";
+        return className + "{" + backgroundStr + sizeStr + otherStr + "}";
     }
     
     public abstract void load() throws java.io.IOException, ImageMergeException;

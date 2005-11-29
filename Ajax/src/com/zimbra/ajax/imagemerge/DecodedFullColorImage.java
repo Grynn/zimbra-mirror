@@ -82,7 +82,7 @@ public class DecodedFullColorImage extends DecodedImage {
                             "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + mPrefix +  combinedFilename + "',sizingMethod='scale');" + 
                             css.substring(tail + 1);
 
-            String cssIE = "HTML>BODY " + selector + "{" + bgimage + "}\n";
+            String cssIE = "\nHTML>BODY " + selector + "{" + bgimage + "}";
             
             css = cssAll + cssIE;
         }

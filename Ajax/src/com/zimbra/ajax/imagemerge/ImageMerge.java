@@ -28,19 +28,8 @@ package com.zimbra.ajax.imagemerge;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Vector;
+import java.io.*;
+import java.util.*;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriter;
@@ -74,7 +63,8 @@ public class ImageMerge {
     private static Options _mOptions = new Options();
     private Vector _inputDirs = new Vector();
     private String _outputDirName;
-    private FileOutputStream _cssFOS;
+    private PrintWriter _cssOut;
+    private PrintWriter _divOut;
     private String _cssPath;
     private int _layoutStyle;
     private boolean _isCopy;
@@ -115,6 +105,10 @@ public class ImageMerge {
         
         option = new Option("s", "css-file", true, "css file name");
         option.setRequired(true);
+        _mOptions.addOption(option); 
+        
+        option = new Option("d", "div-file", true, "div file name");
+        option.setRequired(false);
         _mOptions.addOption(option); 
     }
 
@@ -172,7 +166,14 @@ public class ImageMerge {
        if (cl.hasOption("p") && cl.hasOption("s")) {
             _cssPath = cl.getOptionValue("p");
             String cssFile = cl.getOptionValue("s");
-            _cssFOS = new FileOutputStream(new File(_outputDirName, cssFile), true);
+            OutputStream cssFOS = new FileOutputStream(new File(_outputDirName, cssFile), true);
+            _cssOut = new PrintWriter(cssFOS);
+            String divFile = cl.getOptionValue("d");
+            if (divFile != null) {
+            	OutputStream divFOS = new FileOutputStream(new File(_outputDirName, divFile), true);
+            	_divOut = new PrintWriter(divFOS);
+            	_divOut.println("<div style='position:absolute;width:1px;height:1px;visibility:hidden;overflow:hidden;'>");
+            }
        } else {
             explainUsageAndExit();
        }
@@ -197,7 +198,13 @@ public class ImageMerge {
         } else {
         	processAggregate(_inputDirs);
         }
-        
+
+        _cssOut.close();
+        if (_divOut != null) {
+        	_divOut.println("</div>");
+        	_divOut.close();
+        }
+
         if (ovalue != null) {
             System.setProperty(PROPERTY, ovalue);
         }
@@ -236,7 +243,6 @@ public class ImageMerge {
     	File aggFile;
     	DecodedFullColorImage orig[];
     	String[] inputFilenames = getFilesOfType(inputDirs, "gif");
-    	StringBuffer cssOutput;
     	
     	int fileCount = inputFilenames.length;
         if (fileCount> 0) {
@@ -256,10 +262,8 @@ public class ImageMerge {
 			// copy background images, since they need to tile
 			inputFilenames = (String[]) sortedFiles[3];
 			if (inputFilenames != null) {
-		    	cssOutput = new StringBuffer();
 				System.out.println(ImageMerge.LAYOUT_MESSAGES[3] + "'" + imageFileName + "'");
-				copyImageFiles(inputFilenames, _outputDirName, cssOutput, "gif", false);
-				_cssFOS.write(cssOutput.toString().getBytes());
+				copyImageFiles(inputFilenames, _outputDirName, "gif", false);
 			}
         }	
         
@@ -283,10 +287,8 @@ public class ImageMerge {
 			// copy background images, since they need to tile
 			inputFilenames = (String[]) sortedFiles[3];
 			if (inputFilenames != null) {
-		    	cssOutput = new StringBuffer();
 				System.out.println(ImageMerge.LAYOUT_MESSAGES[3] + "'" + imageFileName + "'");
-				copyImageFiles(inputFilenames, _outputDirName, cssOutput, "png", false);
-				_cssFOS.write(cssOutput.toString().getBytes());
+				copyImageFiles(inputFilenames, _outputDirName, "png", false);
 			}
          }
 
@@ -307,10 +309,8 @@ public class ImageMerge {
 			// copy background images, since they need to tile
 			inputFilenames = (String[]) sortedFiles[3];
 			if (inputFilenames != null) {
-		    	cssOutput = new StringBuffer();
-				System.out.println(ImageMerge.LAYOUT_MESSAGES[3] + "'" + imageFileName + "'");
-				copyImageFiles(inputFilenames, _outputDirName, cssOutput, "jpg", false);
-				_cssFOS.write(cssOutput.toString().getBytes());
+		    	System.out.println(ImageMerge.LAYOUT_MESSAGES[3] + "'" + imageFileName + "'");
+				copyImageFiles(inputFilenames, _outputDirName, "jpg", false);
 			}
          }
     }
@@ -333,21 +333,14 @@ public class ImageMerge {
     private void processCopy(Vector inputDirs)
         throws IOException, ImageMergeException
     {
-        StringBuffer cssOutput = new StringBuffer();
-
- 		copyImageFiles(getFilesOfType(inputDirs, "gif"), _outputDirName, cssOutput, "gif", true);
-		copyImageFiles(getFilesOfType(inputDirs, "jpg"), _outputDirName, cssOutput, "jpg", true);
-		copyImageFiles(getFilesOfType(inputDirs, "png"), _outputDirName, cssOutput, "png", true);
-
-		// write out CSS output
-        _cssFOS.write(cssOutput.toString().getBytes());
-        _cssFOS.close();
+ 		copyImageFiles(getFilesOfType(inputDirs, "gif"), _outputDirName, "gif", true);
+		copyImageFiles(getFilesOfType(inputDirs, "jpg"), _outputDirName, "jpg", true);
+		copyImageFiles(getFilesOfType(inputDirs, "png"), _outputDirName, "png", true);
     }
 
 
     private void copyImageFiles(String filenames[],
     								   String outputDirname,
-                                       StringBuffer cssOutput,
                                        String suffix,
                                        boolean createInParentDir
                                ) 
@@ -355,6 +348,7 @@ public class ImageMerge {
     {
 
         System.out.println("Copying "+suffix+" files...");
+        String lastFile = "";
         for (int i = 0; i < filenames.length; i++) {
             String curFile = filenames[i];
         
@@ -406,7 +400,12 @@ public class ImageMerge {
             copyFile(new File(curFile), new File(outputDir, outFilename));
 
             // add to the CSS output
-            cssOutput.append(curImage.getCssString(curImage.getWidth(), curImage.getHeight(), combinedFilename));
+            _cssOut.println(curImage.getCssString(curImage.getWidth(), curImage.getHeight(), combinedFilename));
+            String thisFile = _cssPath+combinedFilename;
+            if (_divOut != null && !lastFile.equals(thisFile)) {
+            	_divOut.println("<img src='"+thisFile+"'>");
+            	lastFile = thisFile;
+            }
         }
         System.out.println("Copied " + filenames.length + " " + suffix + " images.");
 
@@ -565,11 +564,15 @@ public class ImageMerge {
                                                  int numImages) 
     throws java.io.IOException {
         // write out a CSS description of the combined image
-        StringBuffer cssOutput = new StringBuffer();
+    	String lastFile = "";
         for (int i = 0; i < numImages; i++) {
-            cssOutput.append(images[i].getCssString(combinedWidth, combinedHeight, combinedFileName));
+            _cssOut.println(images[i].getCssString(combinedWidth, combinedHeight, combinedFileName));
+            String thisFile = _cssPath+combinedFileName;
+            if (_divOut != null && !lastFile.equals(thisFile)) {
+            	_divOut.println("<img src='"+thisFile+"'>");
+            	lastFile = thisFile;
+            }
         }        
-        _cssFOS.write(cssOutput.toString().getBytes());
     }
 
     private void processFullColorImages(	   File aggFile,
