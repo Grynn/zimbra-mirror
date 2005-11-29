@@ -1,0 +1,373 @@
+######################################################################
+# perdition.conf
+#
+# Sample configuration file for perdition.  The file consists of two
+# kind of lines, those which have some effect and those which do not.
+#
+# Comment lines and blank lines have no effect, i.e. they are ignored.
+# All other lines refer to perdition options, and the values of those
+# options.  The options are the same as those specified on the command
+# line and can be specified either on the command line or in the file.
+#
+# If an option is specified both on the command line and in the file,
+# the value in the file is ignored.  Options which make no sense in
+# the file such as 'help' and 'config_file' are ignored.  Any syntax
+# errors in the file cause perdition to print the 'help' information
+# and exit without further processing.
+#
+# For each option specified in the file, one line is required in the
+# file.  As an aid to legibility, blank lines and continuation lines
+# are permitted, see below.
+#
+# There are two different types of option: boolean and non-boolean.
+# Depending on the type of option, a line in the configuration file
+# must be in one of two formats.
+#
+# Boolean options such as -d (--debug) or -i (--inetd_mode) can take
+# the boolean values TRUE or FALSE.  If a boolean option is mentioned
+# in the configuration file it takes the value TRUE, and this has the
+# same effect as specifying it on the command line.  The default value
+# is FALSE (the same as not specifying it on the command line) and if
+# the option is not required simply comment out the line or delete it
+# from the configuration file.
+#
+# Non-boolean options take values which are specified as text strings.
+# Strings may be quoted or unquoted as you choose.  A text string
+# value may be empty ("") in which case the option will not be used
+# unless noted otherwise.
+#
+# For options taking non-boolean values a line in the configuration
+# file is of the floolwing form (the quotes are usually optional)
+#
+# "option" "value"
+#
+# Blank lines are ignored, as is a '#' (hash) and anything after it
+# unless the hash is escaped with a '\' (backslash).  If a backslash
+# immediately precedes a new line then the following line will be
+# concatenated.  If a '\' precedes any other character, including a
+# '#' or '\' it will be treated as a literal.  Anything inside single
+# quotes (') will be treated as a literal.  Anything other than a (')
+# inside double quotes (") will be treated as a literal.  Whitespace
+# in options must be escaped or quoted.  Whitespace in values need not
+# be escaped or quoted.
+#
+# See the perdition(8) man page for more details about the behaviour
+# of options.
+#
+# You can use either the long form or the short form of any option.
+# When you use an option in the file, omit the leading '--' from the
+# long form or the leading '-' from the short.  For example to get
+# debugging output simply include a line containing the word 'debug'
+# in the file, or alternativey a line containing just the letter 'd'.
+#
+# The defaults given in this file refer to the values if perdition is
+# configured with --sysconfdir=/etc as it would be for many binary
+# distributions.  To see the actual defaults of a given perdition
+# binary, run "perdition --help".
+#
+######################################################################
+C true
+d true
+l 9999
+M /opt/zimbra/perdition/lib/libperditiondb_ldap.so
+m '@@ldap_url@@/?zimbraMailDeliveryAddress%2CzimbraMailHost?sub?(&(objectClass=zimbraAccount)(zimbraMailDeliveryAddress=%25s))' 
+pid_file /opt/zimbra/log/perdition.pid
+
+# A|add_domain STATE[,STATE...][,STRIP_DEPTH]:
+# Appends a domain to the USER based on the IP address connected to in
+# given state(s).
+# (default "")
+#A servername_lookup,1
+#add_domain servername_lookup,1
+
+# a|authenticate_in:
+# User is authenticated by perdition before connection to real-server.
+#a
+#authenticate_in
+
+# B|no_bind_banner:
+#  Use uname to generate banner of even if bind_address is in effect.
+#B
+#no_bind_banner
+
+# b|bind_address IP_ADDRESS|HOSTNAME:
+# Bind to this address.
+# (default "")
+#b 127.0.0.1
+#bind_address 127.0.0.1
+
+# C|connection_logging:
+# Log all comminication recieved from end-users or real servers or sent
+# from perdition.
+# Note: debug must be in effect for this option to take effect.
+#C
+#connection_logging
+
+# connect_relog SECONDS:
+# How often to relog the connection.
+# Zero for no relogging.
+# (default 300)
+#connect_relog 300
+
+# c|client_server_specification:
+# Allow end-user to specify the real-server.
+#c
+#client_server_specification
+
+# D|domain_delimiter STRING:
+# Delimiter between username and domain.
+# (default "@")
+#D @
+#domain_delimiter \#
+
+# d|debug:
+# Turn on verbose debuging.
+#d
+#debug
+
+# e|explicit_domain STRING
+# With -A, use STRING as the default domain rather than deriving
+# from the IP address connected to.
+#explicit_domain some.domain
+
+# F|log_facility FACILITY:
+# Facility to log to.
+# (default "mail")
+#F mail
+#log_facility /dev/null
+
+# g|group GROUP:
+# Group to run as. 
+# (default "nobody")
+#g nobody
+#group nobody
+
+# I|capability|pop_capability|imap_capability STRING:
+# Capabilities for the protocol.
+#I IMAP4 IMAP4REV1 LITERAL+
+#I IMAP4 IMAP4REV1
+#imap_capability IMAP4
+
+# i|inetd_mode: 
+# Run in inetd mode.
+#i
+#inetd_mode
+
+# L|connection_limit LIMIT:
+# Maximum number of connections to accept simultaneously. A value of zero
+# sets no limit on the number of simultaneous connections.
+# (default 0)
+#L 64
+#connection_limit 64
+
+# l|listen_port PORT_NUMBER|PORT_NAME:
+# Port to listen on. 
+# (default "protocol dependent")
+#l 110
+#listen_port 110
+
+# login_disabled
+# Do not allow users to log in.
+#login_disabled
+
+# lower_case STATE[,STATE...]:
+# Convert usernames to lower case according the the locale in given
+# state(s). 
+# (default "")
+#lower_case servername_lookup
+
+# M|map_library FILENAME:
+# Library to open that provides functions to look up the server for a user.
+# M /usr/lib/libperditiondb_gdbm.so
+# map_library /usr/lib/libperditiondb_gdbm.so
+# map_library ""
+
+# m|map_library_opt STRING:
+# String option for the map_library.
+# (default "")
+#m /etc/perdition/popmap.gdbm.db
+#map_library_opt /etc/perdition/popmap.gdbm.db
+#map_library_opt ""
+
+# no_daemon:
+# Do not detach from terminal. 
+#no_daemon
+
+# n|no_lookup
+# Disable host and port lookup.
+#n
+#no_lookup
+
+# O|ok_line
+# Use STRING as the OK line to send to the client.
+# Overriden by server_ok_line.
+#O You are so in
+#ok_line blah blah blah
+
+# server_ok_line:
+# This option is depricated and now has the same effect as o|server_resp_line
+# It may be removed in a future release
+
+# o|server_resp_line:
+# If authentication with the back-end server is successful then send the
+# servers +OK line to the client, instead of generting one.
+#o
+#server_resp_line
+
+# P|protocol PROTOCOL:
+# Protocol to use 
+# (default "POP3")
+#P POP3
+#protocol POP3
+
+# p|outgoing_port PORT_NAME|PORT_NUMBER:
+# Default real-server port.
+# (default "protocol dependent")
+#p 110
+#outgoing_port 110
+
+# s|outgoing_server: SERVER[,SERVER...]
+# Default server(s).
+# (default "")
+#s  sarah:110,locahost
+#outgoing_server  sarah:110,localhost
+#outgoing_server  sarah:110
+#outgoing_server  sarah
+
+# pid_file FILENAME
+# Path for pidfile. Must be a full path starting with a '/'.
+# To allow perdition to remove the pid file after the owner of
+# the perdition process is changed to a non-root user, it is advised to
+# specify a pid file in a subdirectory of the system var state directory
+# (usually /var/run).  This subdirectory should be unique to this perdition
+# invocation and will be created and have its owner and permitions set to
+# allow perdition to subsequently remove the pid file.  
+# Empty for no pid file. Not used in inetd mode.
+# default <var_state_dir>/<basename>/<basename>.pid
+#pid_file /var/run/perdition/perdition.pid
+#pid_file /var/run/perdition.pop3/perdition.pop3.pid
+#pid_file /var/run/perdition.pop3s/perdition.pop3s.pid
+#pid_file /var/run/perdition.imap4/perdition.imap4.pid
+#pid_file /var/run/perdition.imap4s/perdition.imap4s.pid
+
+# S|strip_domain: STATE[,STATE...]
+# Allow domain portion of username to be striped in given state(s)
+# (default "")
+#S all
+#strip_domain servername_lookup
+
+# t|timeout SECONDS:
+# Idle timeout. Zero for infinite timeout.
+# (default 1800)
+#t 1800
+#timeout 1800
+
+# u|username USERNAME:
+# User to run as.
+# (default "nobody")
+#u nobody
+#username nobody
+
+# U|username_from_database:
+# Substitute username from popmap lookup.
+#U
+#username_from_database
+
+# q|quiet:
+# Only log errors. Overriden by debug.
+#q
+#quiet
+
+# query_key FORMAT[,FORMAT...]:
+# Speficy a list of query strings to search for in the popmap.
+#query_key \\U
+#query_key \\u,\\D\\d
+#query_key \\I
+#query_key \\u\\da_domain,\\da_domain
+
+
+######################################################################
+# Options below relate to SSL/TLS support.
+# They are not available if perdition is compiled without SSL support.
+######################################################################
+
+# ssl_mode MODE[,MODE ...]::
+# Use SSL and or TLS for the listening and/or outgoing connections.
+#ssl_mode ssl_listen
+
+# ssl_ca_chain_file:
+# Chain file containing Certificate Authorities to use when 
+# verifying certificates. Overrides ssl_ca_file and ssl_ca_path
+# (default "")
+#ssl_ca_chain_file /etc/perdition/perdition.ca.pem
+
+# ssl_ca_file FILENAME:
+# File containing Certificate Authorities to use when verifying certificates.
+# When building the Certificate Authorities chain, ssl_ca_file is used
+# first, if set, and then ssl_ca_path, if set.
+# (default "")
+#(recommended location "/etc/perdition/perdition.ca.pem")
+#ssl_ca_file /etc/perdition/perdition.ca.pem
+
+# ssl_ca_path PATHNAME:
+# Derectory containing Certificate Authorities files to use when verifying 
+# certificates. 
+# When building the Certificate Authorities chain, ssl_ca_file is used
+# first, if set, and then ssl_ca_path, if set.
+# (default "/etc/perdition/perdition.ca/")
+#ssl_ca_path /etc/perdition/perdition.ca/
+
+# ssl_ca_accept_self_signed:
+# Accept self-signed certificates.
+#ssl_ca_accept_self_signed
+
+# ssl_cert_file FILENAME:
+# Certificate chain to use when listening for SSL or TLS connections.
+# (default "/etc/perdition/perdition.crt.pem")
+#ssl_cert_file /etc/perdition/perdition.crt.pem
+
+# ssl_cert_accept_self_signed:
+# Accept self-signed certificates.
+#ssl_cert_accept_self_signed
+
+# ssl_cert_accept_expired:
+# Accept expired certificates. This includes server certificates
+# and certificats authority certificates.
+#ssl_cert_accept_expired
+
+# ssl_cert_accept_not_yet_valid:
+# Accept certificates that are not yet valid. This includes server
+# certificates and certificats authority certificates.
+#ssl_cert_accept_not_yet_valid
+
+# ssl_cert_verify_depth DEPTH:
+# Chain Depth to recurse to when vierifying certificates.
+# (default 9)
+#ssl_cert_verify_depth 9
+
+# ssl_key_file FILENAME:
+# Public key to use when listening for SSL or TLS connections.
+# (default "/etc/perdition/perdition.key.pem")
+#ssl_key_file /etc/perdition/perdition.key.pem
+
+# ssl_listen_ciphers STRING:
+# Cipher list when listening for SSL or TLS connections.
+# If empty ("") then openssl's default will be used.
+# (default "")
+#ssl_listen_ciphers "ALL:!ADH:RC4+RSA:+SSLv2:@STRENGTH"
+
+# ssl_outgoing_ciphers STRING:
+# Cipher list when making outgoing SSL or TLS connections.
+# If empty ("") then openssl's default will be used.
+# (default "")
+#ssl_outgoing_ciphers "ALL:!ADH:RC4+RSA:+SSLv2:@STRENGTH"
+
+# ssl_no_cert_verify:
+# Don't cryptographically verify the real-server's certificate.
+#ssl_no_cert_verify
+
+# ssl_no_cn_verify:
+# Don't verify the real-server's common name with the name used
+# to connect to the server.
+#ssl_no_cn_verify
+
