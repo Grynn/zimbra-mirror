@@ -46,4 +46,6 @@ fi
 
 mkdir -p $DEST
 
-${zimbra_home}/openldap/sbin/slapcat > $DEST/ldap.bak
+D=`date +%Y%m%d%H%M%S`
+${zimbra_home}/openldap/sbin/slapcat > $DEST/ldap.bak.${D}
+cp -f ${DEST}/ldap.bak.${D} ${DEST}/ldap.bak
