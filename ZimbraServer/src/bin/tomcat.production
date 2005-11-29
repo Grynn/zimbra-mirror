@@ -138,9 +138,9 @@ case "$1" in
         # stop it I want this script to sit here and loop and not
         # pretend that it did something.
 
-		lines=`wc -l ${tomcat_directory}/logs/catalina.out`
+		lines=`wc -l ${tomcat_directory}/logs/catalina.out | awk '{print $1}'`
 		kill -3 $pid
-		newlines=`wc -l ${tomcat_directory}/logs/catalina.out`
+		newlines=`wc -l ${tomcat_directory}/logs/catalina.out | awk '{print $1}'`
 		difflines=`expr $newlines - $lines`
 		tail -${difflines} ${tomcat_directory}/logs/catalina.out > ${tomcat_directory}/logs/stacktrace.$$
 
