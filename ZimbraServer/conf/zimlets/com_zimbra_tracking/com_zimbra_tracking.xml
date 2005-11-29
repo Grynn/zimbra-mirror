@@ -1,4 +1,4 @@
-<zimlet name="tracking" version="1.0" description="Shipment Tracking">
+<zimlet name="com_zimbra_tracking" version="1.0" description="Shipment Tracking">
 	<serverExtension hasKeyword="tracking" extensionClass="com.zimbra.cs.zimlet.handler.TrackingHandler"/>
 	<contentObject>
 		<matchOn>

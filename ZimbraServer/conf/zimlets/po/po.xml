@@ -1,4 +1,0 @@
-<zimlet name="po" version="1.0" description="Purchase Order">
-	<serverExtension hasKeyword="po" regex="GR\w{6}\-\w{5}"/>
-</zimlet>
-

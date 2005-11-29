@@ -1,4 +1,4 @@
-<zimlet name="url" version="1.0" description="URL">
+<zimlet name="com_zimbra_url" version="1.0" description="URL">
 	<serverExtension hasKeyword="url" extensionClass="com.zimbra.cs.zimlet.handler.URLHandler"/>
 	<contentObject>
 		<matchOn>
