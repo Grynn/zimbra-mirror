@@ -245,6 +245,18 @@ if(ZaController.initToolbarMethods["ZaServerController"]) {
 	ZaController.initToolbarMethods["ZaServerController"].push(ZaHSM.initToolbar);
 }
 
+ZaHSM.setViewMethod = function (entry) {
+	if(entry.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]) {	
+		if(entry[ZaServer.A_showVolumes]) {
+			this._toolBar.enable([ZaOperation.HSM], true);
+		} else {
+			this._toolBar.enable([ZaOperation.HSM], false);
+		}
+	}
+}
+if(ZaController.setViewMethods["ZaServerController"]) {
+	ZaController.setViewMethods["ZaServerController"].push(ZaHSM.setViewMethod);
+}
 
 ZaHSM.GlobalConfigXFormModifier = function (xFormObject) {
 	xFormObject.items[1] = {type:_TAB_BAR_,  ref:ZaModel.currentTab,relevantBehavior:_HIDE_,

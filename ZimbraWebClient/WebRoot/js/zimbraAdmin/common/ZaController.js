@@ -60,6 +60,7 @@ function ZaController(appCtxt, container, app, iKeyName) {
 
 ZaController.initToolbarMethods = new Object();
 ZaController.initPopupMenuMethods = new Object();
+ZaController.setViewMethods = new Object();
 
 // Public methods
 ZaController.prototype.toString = 
@@ -161,8 +162,18 @@ function (nextViewCtrlr, func, params) {
 //Private/protected methods
 
 ZaController.prototype._setView =
-function() {
-
+function(entry) {
+	//Instrumentation code start
+	if(ZaController.setViewMethods[this._iKeyName]) {
+		var methods = ZaController.setViewMethods[this._iKeyName];
+		var cnt = methods.length;
+		for(var i = 0; i < cnt; i++) {
+			if(typeof(methods[i]) == "function") {
+				methods[i].call(this,entry);
+			}
+		}
+	}	
+	//Instrumentation code end	
 }
 
 

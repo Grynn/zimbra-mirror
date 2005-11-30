@@ -43,16 +43,14 @@ ZaServerController.prototype = new ZaController();
 ZaServerController.prototype.constructor = ZaServerController;
 
 ZaController.initToolbarMethods["ZaServerController"] = new Array();
-
+ZaController.setViewMethods["ZaServerController"] = new Array();
 /**
 *	@method show
 *	@param entry - isntance of ZaServer class
 */
 ZaServerController.prototype.show = 
 function(entry) {
-	
 	this._setView(entry);
-//	this._app.setCurrentController(this);
 	this.setDirty(false);
 }
 
@@ -122,23 +120,7 @@ function (nextViewCtrlr, func, params) {
 
 }
 
-/**
-*	Private method that notifies listeners to that the controlled ZaServer is changed
-* 	@param details
-*/
-ZaServerController.prototype._fireServerChangeEvent =
-function(details) {
-	try {
-		if (this._evtMgr.isListenerRegistered(ZaEvent.E_MODIFY)) {
-			var evt = new ZaEvent(ZaEvent.S_SERVER);
-			evt.set(ZaEvent.E_MODIFY, this);
-			evt.setDetails(details);
-			this._evtMgr.notifyListeners(ZaEvent.E_MODIFY, evt);
-		}
-	} catch (ex) {
-		this._handleException(ex, "ZaServerController.prototype._fireServerChangeEvent", details, false);	
-	}
-}
+
 
 /**
 * @method initToolbarMethod
@@ -154,6 +136,33 @@ function () {
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.SERTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, ZaServerController.prototype._closeButtonListener)));    	
 }
 ZaController.initToolbarMethods["ZaServerController"].push(ZaServerController.initToolbarMethod);
+
+/**
+*	@method setViewMethod 
+*	@param entry - isntance of ZaDomain class
+*/
+ZaServerController.setViewMethod =
+function(entry) {
+	entry.load();
+	if(!this._UICreated) {
+		this._createUI();
+	} 
+	this._app.pushView(ZaZimbraAdmin._SERVER_VIEW);
+	this._view.setDirty(false);
+	this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
+	this._currentObject = entry;
+
+	//TODO: Move this code to an external file
+	//TODO: instrumentation code here
+	if(entry.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]) {	
+		if(entry[ZaServer.A_showVolumes]) {
+			this._toolBar.enable([ZaOperation.HSM], true);
+		} else {
+			this._toolBar.enable([ZaOperation.HSM], false);
+		}
+	}
+}
+ZaController.setViewMethods["ZaServerController"].push(ZaServerController.setViewMethod);
 
 /**
 * @method _createUI
@@ -174,29 +183,22 @@ function () {
     this._app.createView(ZaZimbraAdmin._SERVER_VIEW, elements);
 	this._UICreated = true;
 }
-/**
-*	@method _setView 
-*	@param entry - isntance of ZaDomain class
-*/
-ZaServerController.prototype._setView =
-function(entry) {
-	entry.load();
-	if(!this._UICreated) {
-		this._createUI();
-	} 
-	this._app.pushView(ZaZimbraAdmin._SERVER_VIEW);
-	this._view.setDirty(false);
-	this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
-	this._currentObject = entry;
 
-	//TODO: Move this code to an external file
-	//TODO: instrumentation code here
-	if(entry.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]) {	
-		if(entry[ZaServer.A_showVolumes]) {
-			this._toolBar.enable([ZaOperation.HSM], true);
-		} else {
-			this._toolBar.enable([ZaOperation.HSM], false);
+/**
+*	Private method that notifies listeners to that the controlled ZaServer is changed
+* 	@param details
+*/
+ZaServerController.prototype._fireServerChangeEvent =
+function(details) {
+	try {
+		if (this._evtMgr.isListenerRegistered(ZaEvent.E_MODIFY)) {
+			var evt = new ZaEvent(ZaEvent.S_SERVER);
+			evt.set(ZaEvent.E_MODIFY, this);
+			evt.setDetails(details);
+			this._evtMgr.notifyListeners(ZaEvent.E_MODIFY, evt);
 		}
+	} catch (ex) {
+		this._handleException(ex, "ZaServerController.prototype._fireServerChangeEvent", details, false);	
 	}
 }
 
