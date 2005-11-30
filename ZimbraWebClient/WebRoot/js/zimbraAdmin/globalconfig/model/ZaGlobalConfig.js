@@ -53,6 +53,8 @@ ZaGlobalConfig.A_zimbraMtaDnsLookupsEnabled  = "zimbraMtaDnsLookupsEnabled";
 ZaGlobalConfig.A_zimbraMtaMaxMessageSize = "zimbraMtaMaxMessageSize";
 ZaGlobalConfig.A_zimbraMtaRelayHost = "zimbraMtaRelayHost";
 ZaGlobalConfig.A_zimbraComponentAvailable = "zimbraComponentAvailable";
+
+//TODO: Move this code to an external file
 ZaGlobalConfig.A_zimbraComponentAvailable_convertd = "_"+ZaGlobalConfig.A_zimbraComponentAvailable+"_convertd";
 ZaGlobalConfig.A_zimbraComponentAvailable_replication = "_"+ZaGlobalConfig.A_zimbraComponentAvailable+"_replication";
 ZaGlobalConfig.A_zimbraComponentAvailable_hotbackup = "_"+ZaGlobalConfig.A_zimbraComponentAvailable+"_hotbackup";
@@ -81,8 +83,8 @@ ZaGlobalConfig.A_zimbraRedologArchiveDir = "zimbraRedologArchiveDir";
 ZaGlobalConfig.A_zimbraRedologBacklogDir = "zimbraRedologBacklogDir";
 ZaGlobalConfig.A_zimbraRedologRolloverFileSizeKB = "zimbraRedologRolloverFileSizeKB";
 ZaGlobalConfig.A_zimbraRedologFsyncIntervalMS = "zimbraRedologFsyncIntervalMS";
+//TODO: Move this code to an external file
 ZaGlobalConfig.A_zimbraHsmAge = "zimbraHsmAge";
-
 
 // smtp
 ZaGlobalConfig.A_zimbraSmtpHostname = "zimbraSmtpHostname";
@@ -194,29 +196,7 @@ ZaGlobalConfig.prototype.initFromDom = function(node) {
 			this.attrs["_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_"+restriction] = true;
 		}
 	}
-	
-	// keep track of current monitor host server
-	/*var serverMap = this._app.getServerMap();
-	for (id in serverMap) {
-		var server = serverMap[id];
-		if (server.attrs[ZaServer.A_zimbraIsMonitorHost] == 'TRUE') {
-			this.attrs[ZaGlobalConfig.A_originalMonitorHost] = server.id;
-			this.attrs[ZaGlobalConfig.A_currentMonitorHost] = server.id;
-			break;
-		}
-	}*/
-/*	var choices = new Object();
-	if(this.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]) {
-		choices[ZaServer.PRI_MSG] = ZaMsg.NAD_HSM_PrimaryMsg;
-		choices[ZaServer.SEC_MSG] = ZaMsg.NAD_HSM_SecMsg;
-		choices[ZaServer.INDEX] = ZaMsg.NAD_HSM_Index;		
-	} else {
-		choices[ZaServer.PRI_MSG] = ZaMsg.NAD_HSM_Msg;
-		choices[ZaServer.INDEX] = ZaMsg.NAD_HSM_Index;		
-	}
-	ZaServer.volumeTypeChoices.setChoices(choices);
-	ZaServer.volumeTypeChoices.dirtyChoices();
-*/	
+
 }
 
 ZaGlobalConfig.prototype.modify = 
@@ -313,7 +293,7 @@ ZaGlobalConfig.myXModel = {
 	  	{ id:ZaGlobalConfig.A_zimbraVirusBlockEncryptedArchive, ref:"attrs/" + ZaGlobalConfig.A_zimbraVirusBlockEncryptedArchive, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES},
 	  	{ id:ZaGlobalConfig.A_zimbraVirusWarnAdmin, ref:"attrs/" + ZaGlobalConfig.A_zimbraVirusWarnAdmin, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES},
 	  	{ id:ZaGlobalConfig.A_zimbraVirusWarnRecipient, ref:"attrs/" + ZaGlobalConfig.A_zimbraVirusWarnRecipient, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES},
-	  	//hsm
+	  	//hsm //TODO: Move this code to an external file
 	  	{ id:ZaGlobalConfig.A_zimbraHsmAge, ref:"attrs/" + ZaGlobalConfig.A_zimbraHsmAge, type: _STRING_}
 	]	
 }

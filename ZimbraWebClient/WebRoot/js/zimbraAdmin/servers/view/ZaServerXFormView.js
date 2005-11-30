@@ -94,7 +94,7 @@ function (entry) {
 		this._containedObject[ZaModel.currentTab] = entry[ZaModel.currentTab];
 		
 	this._containedObject.cos = entry.cos;
-	this._containedObject[ZaServer.A_showVolumeAndHSM] = entry[ZaServer.A_showVolumeAndHSM];
+	this._containedObject[ZaServer.A_showVolumes] = entry[ZaServer.A_showVolumes];
 
 	this._localXForm.setInstance(this._containedObject);	
 }
@@ -207,7 +207,7 @@ ZaServerXFormView.getPOP3Enabled = function () {
 }
 
 ZaServerXFormView.getMailboxEnabled = function () {
-	var value = this.getModel().getInstanceValue(this.getInstance(),ZaServer.A_showVolumeAndHSM);
+	var value = this.getModel().getInstanceValue(this.getInstance(),ZaServer.A_showVolumes);
 	return value;
 }
 
@@ -540,7 +540,7 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 					{type:_CASE_, relevant:"((instance[ZaModel.currentTab] == 6) && ZaServerXFormView.getMailboxEnabled.call(item))", 
 						items:[
 							{type:_GROUP_, numCols:3,
-								relevant:"instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM] && instance[ZaServer.A_showVolumeAndHSM]",
+								relevant:"instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM] && instance[ZaServer.A_showVolumes]",
 								relevantBehavior:_HIDE_,
 								items: [
 									{ref:ZaServer.A_zimbraHsmAge, type:_SUPER_LIFETIME_, 
@@ -625,7 +625,7 @@ ZaServerXFormView.prototype.getMyXForm = function() {
 							}
 						]
 					},
-					{type:_CASE_, relevant:"((instance[ZaModel.currentTab] == 6) && !instance[ZaServer.A_showVolumeAndHSM])", 					
+					{type:_CASE_, relevant:"((instance[ZaModel.currentTab] == 6) && !instance[ZaServer.A_showVolumes])", 					
 						items: [
 							{ type: _DWT_ALERT_,
 							  cssClass: "DwtTabTable",

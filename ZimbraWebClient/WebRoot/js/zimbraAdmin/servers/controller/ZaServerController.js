@@ -154,6 +154,7 @@ function () {
 	//TODO: Instrumentation code here
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.SERTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, ZaServerController.prototype._saveButtonListener)));
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.SERTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, ZaServerController.prototype._closeButtonListener)));    	
+	//TODO: Move this code to an external file
 	if(this._app.getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]) {
 		this._toolbarOperations.push(new ZaOperation(ZaOperation.HSM, ZaMsg.SRVTBB_HSM, ZaMsg.SRVTBB_HSM_tt, "ReadMailbox", "ReadMailboxDis", new AjxListener(this, this._hsmButtonListener)));										
 	}		
@@ -197,7 +198,7 @@ function(entry) {
 	//TODO: Move this code to an external file
 	//TODO: instrumentation code here
 	if(entry.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]) {	
-		if(entry[ZaServer.A_showVolumeAndHSM]) {
+		if(entry[ZaServer.A_showVolumes]) {
 			this._toolBar.enable([ZaOperation.HSM], true);
 		} else {
 			this._toolBar.enable([ZaOperation.HSM], false);
