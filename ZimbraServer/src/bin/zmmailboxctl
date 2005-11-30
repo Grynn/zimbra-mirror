@@ -27,24 +27,38 @@
 BASE=/opt/zimbra
 SCRIPTS="tomcat mysql.server"
 
+STATUS=0
+
 case "$1" in 
 	start)
 		for i in $SCRIPTS; do
 			/opt/zimbra/bin/$i start
+			R=$?
+			if [ $R -ne "0" ]; then
+				STATUS=$R
+			fi
 		done
 	;;
 	stop)
 		for i in $SCRIPTS; do
 			/opt/zimbra/bin/$i stop
+			R=$?
+			if [ $R -ne "0" ]; then
+				STATUS=$R
+			fi
 		done
 	;;
 	reload)
 		for i in $SCRIPTS; do
 			/opt/zimbra/bin/$i reload
+			R=$?
+			if [ $R -ne "0" ]; then
+				STATUS=$R
+			fi
 		done
+		exit $STATUS
 	;;
 	status)
-		STATUS=0
 		for i in $SCRIPTS; do
 			if [ $i = "mysql.server" ]; then
 				/opt/zimbra/bin/mysqladmin status > /dev/null 2>&1
