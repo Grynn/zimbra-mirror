@@ -340,9 +340,9 @@ sub traceProcessedMsg {
 				"from mta where msgid='".$msgId."' and recipient='".$recip."' ";
 
 			if ($fromIP ne "") {
-				$statement .= "' and from_IP='".$fromIP."'";
+				$statement .= " and from_IP='".$fromIP."'";
 			} else {
-				$statement .= "' and from_IP is null";
+				$statement .= " and from_IP is null";
 			}
 
 			my $ary = execSelect($statement);
