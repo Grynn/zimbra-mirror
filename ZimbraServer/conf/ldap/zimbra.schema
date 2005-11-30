@@ -292,6 +292,7 @@ objectIdentifier zimbraZimletEnabled ZimbraAttrType:301
 objectIdentifier zimbraZimletPriority ZimbraAttrType:302
 objectIdentifier zimbraProxyCacheableContentTypes ZimbraAttrType:303
 objectIdentifier zimbraZimletIsExtension ZimbraAttrType:304
+objectIdentifier zimbraFeatureIMEnabled ZimbraAttrType:305
 
 #################################################################
 # object class OIDs
@@ -627,6 +628,14 @@ attributetype ( zimbraFeatureCalendarEnabled
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
+
+attributetype ( zimbraFeatureIMEnabled
+	NAME 'zimbraFeatureIMEnabled'
+	DESC 'IM features'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
 
 attributetype ( zimbraFeatureTaggingEnabled
 	NAME 'zimbraFeatureTaggingEnabled'
@@ -2302,6 +2311,7 @@ objectclass ( zimbraAccount
 		zimbraFeatureGalEnabled $	
 		zimbraFeatureHtmlComposeEnabled $
 		zimbraFeatureCalendarEnabled $
+		zimbraFeatureIMEnabled $		
 		zimbraFeatureTaggingEnabled $
 		zimbraFeatureAdvancedSearchEnabled $
 		zimbraFeatureSavedSearchesEnabled $
@@ -2458,6 +2468,7 @@ objectclass ( zimbraCOS
 		zimbraFeatureContactsEnabled $
 		zimbraFeatureGalEnabled $
 		zimbraFeatureCalendarEnabled $
+		zimbraFeatureIMEnabled $		
 		zimbraFeatureHtmlComposeEnabled $
 		zimbraFeatureTaggingEnabled $
 		zimbraFeatureAdvancedSearchEnabled $

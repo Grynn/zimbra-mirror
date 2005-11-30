@@ -132,6 +132,8 @@
 
 <attr name="zimbraFeatureCalendarEnabled" type="boolean"/>
 
+<attr name="zimbraFeatureIMEnabled" type="boolean"/>
+
 <attr name="zimbraFeatureChangePasswordEnabled" type="boolean"/>
 
 <attr name="zimbraFeatureContactsEnabled" type="boolean"/>
