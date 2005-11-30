@@ -101,7 +101,7 @@ CREATE TABLE mta_aggregate (
 	host				VARCHAR(255) NOT NULL,
 	period				ENUM ('hour','day','month','year'),
 	msg_count			INTEGER UNSIGNED,
-	msg_bytes			INTEGER UNSIGNED
+	msg_bytes			INTEGER UNSIGNED,
 	INDEX i_period_start (period_start),
 	INDEX i_period_end (period_end)
 ) ENGINE = MyISAM;
@@ -113,7 +113,7 @@ CREATE TABLE amavis_aggregate (
 	period				ENUM ('hour','day','month','year'),
 	msg_count			INTEGER UNSIGNED,
 	spam_count			INTEGER UNSIGNED,
-	virus_count			INTEGER UNSIGNED
+	virus_count			INTEGER UNSIGNED,
 	INDEX i_period_start (period_start),
 	INDEX i_period_end (period_end)
 ) ENGINE = MyISAM;
