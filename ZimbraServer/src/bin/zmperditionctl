@@ -45,7 +45,7 @@ start() {
 	if [ ! -f "/opt/zimbra/conf/perdition.conf" ]; then
 		${zimbra_home}/bin/zmmtaconfig perdition
 	fi
-	${zimbra_home}/perdition/sbin/perdition.imap4 \
+	${zimbra_home}/perdition/sbin/perdition.imap4s \
 		--config_file=${zimbra_home}/conf/perdition.conf
 }
 
