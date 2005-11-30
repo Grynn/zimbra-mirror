@@ -49,7 +49,7 @@ zmsetvars \
 	zimbra_home \
 	zimbra_server_hostname
 
-echo "server $SERVER user $USER@$SERVER password $PASS keep" > ${zimbra_home}/conf/.fetchmailrc
+echo "server $SERVER protocol IMAP user $USER@$SERVER password $PASS keep" > ${zimbra_home}/conf/.fetchmailrc
 chmod 600 ${zimbra_home}/conf/.fetchmailrc
 
 export HOME=${zimbra_home}/conf
