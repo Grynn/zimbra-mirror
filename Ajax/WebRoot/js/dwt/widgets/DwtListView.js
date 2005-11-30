@@ -975,7 +975,7 @@ function(clickedEl, ev) {
 			var numConvEls = convEls.length;
 			var convEl;
 			var state = 0;
-			for (var i = 0; i < numConvEls; i++) {
+			for (i = 0; i < numConvEls; i++) {
 				convEl = convEls[i];
 				if (convEl == this._rightSelItems)
 					this._rightSelItems = null;
