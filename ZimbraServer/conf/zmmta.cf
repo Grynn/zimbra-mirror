@@ -45,6 +45,6 @@ REWRITE cyrus-sasl-2.1.21.ZIMBRA/etc/saslauthd.conf.in cyrus-sasl-2.1.21.ZIMBRA/
 RESTART mta sasl
 
 SECTION perdition
-	local ldap_url
+	LOCAL ldap_url
 	REWRITE conf/perdition.conf.in conf/perdition.conf
 RESTART perdition
