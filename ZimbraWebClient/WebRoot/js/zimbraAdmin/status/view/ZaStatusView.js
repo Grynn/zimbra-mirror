@@ -108,7 +108,7 @@ ZaStatusView.prototype.getXForm = function () {
 	    tableCssStyle:"width:100%;xheight:100%;",
 	    itemDefaults:{
 		
-	    },
+	    },//TODO: move cluster code to an external file
 	    items:[
 		   {type:_SPACER_, height: 5},
 		   // This list is read only, so we can just do this little hack of accessing the vector's internal array.

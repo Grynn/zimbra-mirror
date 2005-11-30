@@ -44,7 +44,7 @@ ZaStatusViewController.prototype.constructor = ZaStatusViewController;
 ZaStatusViewController.prototype.show = function() {
 	try {
 		var globalConfig = this._app.getGlobalConfig();
-		//globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster] = "true";
+
 		var mystatusVector = this._getSimpleStatusData();
 	  	//var mystatusVector = this.getDummyVector();
 	
@@ -71,7 +71,7 @@ ZaStatusViewController.prototype.show = function() {
 
 ZaStatusViewController.prototype._getSimpleStatusData = function () {
 	try {
-		return this._app.getStatusList(true).getVector();
+		return ZaStatus.loadStatusTable().getVector();
 	} catch (ex) {
 		return AjxVector.fromArray([]);
 	}	

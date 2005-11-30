@@ -109,7 +109,7 @@ GlobalConfigXFormView.prototype.getMyXForm = function() {
 							  trueValue: "TRUE", falseValue: "FALSE", 
 							  onChange: ZaTabView.onFormFieldChanged
 					    	},
-					    	{ type: _GROUP_, useParentTable: true, 
+					    	{ type: _GROUP_, useParentTable: true, //TODO: Move this code to an external file
 							  relevant: "instance.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_convertd]", 
 							  relevantBehavior: _HIDE_,
 					    	  items: [

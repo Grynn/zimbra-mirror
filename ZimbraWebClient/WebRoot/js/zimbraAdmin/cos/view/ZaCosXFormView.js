@@ -160,11 +160,11 @@ ZaCosXFormView.prototype.getMyXForm = function() {
 							{type:_GROUP_, numCols:2,
 								items :[
 									{ref:ZaCos.A_zimbraAttachmentsBlocked, type:_CHECKBOX_,  msgName:ZaMsg.NAD_RemoveAllAttachments,label:ZaMsg.NAD_RemoveAllAttachments, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_},
-									{ref:ZaCos.A_zimbraAttachmentsViewInHtmlOnly, type:_CHECKBOX_, 
+									{ref:ZaCos.A_zimbraAttachmentsViewInHtmlOnly, type:_CHECKBOX_, //TODO: Move this code to an external file
 										msgName:ZaMsg.NAD_AttachmentsViewInHtmlOnly,label:ZaMsg.NAD_AttachmentsViewInHtmlOnly, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_,
 										relevant:"instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_convertd]",
 										relevantBehavior:_HIDE_
-									},	
+									},	//TODO: Move this code to an external file
 									{ref:ZaCos.A_zimbraAttachmentsIndexingEnabled, type:_CHECKBOX_, msgName:ZaMsg.NAD_zimbraAttachmentsIndexingEnabled,label:ZaMsg.NAD_zimbraAttachmentsIndexingEnabled, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_,
 										relevant:"instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_convertd]",
 										relevantBehavior:_HIDE_

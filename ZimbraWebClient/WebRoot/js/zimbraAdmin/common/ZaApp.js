@@ -438,6 +438,7 @@ function(refresh) {
 	return this._cosListChoices;	
 }
 
+/*
 ZaApp.prototype.getStatusList =
 function(refresh) {
 	if (refresh || this._statusList == null) {
@@ -445,6 +446,7 @@ function(refresh) {
 	}
 	return this._statusList;	
 }
+*/
 
 ZaApp.prototype.getAccountList =
 function(refresh) {

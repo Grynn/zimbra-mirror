@@ -38,15 +38,18 @@ ZaStatus.prototype.constructor = ZaStatus;
 
 ZaStatus.loadStatusTable = 
 function() {
+	//TODO: Instrumentation code here
 	var soapDoc = AjxSoapDoc.create("GetServiceStatusRequest", "urn:zimbraAdmin", null);
 	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	var list = new ZaItemList(ZaStatus);
 	list.loadFromDom(resp);
+	//TODO: Instrumentation code here	
 	return list;
 }
 
 ZaStatus.prototype.initFromDom =
 function (node) {
+	//TODO: Instrumentation code here
 	this.serverName = node.getAttribute("server");
 	this.serviceName = node.getAttribute("service");
 	this.timestamp = node.getAttribute("t");
@@ -54,7 +57,7 @@ function (node) {
 	var formatter = AjxDateFormat.getDateTimeInstance(AjxDateFormat.MEDIUM, AjxDateFormat.SHORT);
 	this.time = formatter.format(new Date(Number(this.timestamp)*1000));
 	this.status = node.firstChild.nodeValue;
-//	DBG.println(AjxDebug.DBG3, "serverName=" + this.serverName+"<br>serviceName="+this.serviceName+"<br>time="+this.time+"<br>timestamp="+this.timestamp+"<br>status="+this.status); 
+	//TODO: Instrumentation code here
 }
 
 ZaStatus.PRFX_Server = "status_server";

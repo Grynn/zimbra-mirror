@@ -427,7 +427,7 @@ ZaAccountXFormView.prototype.getMyXForm = function() {
 									labelLocation:_LEFT_, 
 									labelCssStyle:"width:250px;", trueValue:"TRUE", falseValue:"FALSE", 
 									onChange:ZaTabView.onFormFieldChanged
-								},
+								},//TODO: Move this code to an external file
 								{ref:ZaAccount.A_zimbraAttachmentsViewInHtmlOnly, type:_SUPER_CHECKBOX_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_AttachmentsViewInHtmlOnly,
 									label:ZaMsg.NAD_AttachmentsViewInHtmlOnly, 
@@ -435,7 +435,7 @@ ZaAccountXFormView.prototype.getMyXForm = function() {
 									trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,
 									relevant:"instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_convertd]",
 									relevantBehavior:_HIDE_
-								},	
+								},	//TODO: Move this code to an external file
 								{ref:ZaAccount.A_zimbraAttachmentsIndexingEnabled, type:_SUPER_CHECKBOX_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraAttachmentsIndexingEnabled,label:ZaMsg.NAD_zimbraAttachmentsIndexingEnabled, labelLocation:_LEFT_, 
 									trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,									
