@@ -27,8 +27,8 @@
  * @author EMC
  * Distribution list controller 
  */
-function ZaDLController (appCtxt, container, abApp, domain) {
-	ZaController.call(this, appCtxt, container, abApp);
+function ZaDLController (appCtxt, container, app, domain) {
+	ZaController.call(this, appCtxt, container, app, "ZaCosListController");
 	this._domain = domain;
 	this._createListeners();
 	this._createToolbars();

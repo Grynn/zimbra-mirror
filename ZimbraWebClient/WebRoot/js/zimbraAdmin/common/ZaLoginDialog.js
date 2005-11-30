@@ -23,12 +23,11 @@
  * ***** END LICENSE BLOCK *****
  */
 
-function ZaLoginDialog(parent, zIndex, className, isAdmin) { 
+function ZaLoginDialog(parent, zIndex, className) { 
 
     className = className || "ZaLoginDialog";
     DwtComposite.call(this, parent, className, DwtControl.ABSOLUTE_STYLE);
 
-	this._isAdmin = (isAdmin === true);	
 	var doc = this.getDocument();
     this._origClassName = className;
     this._xparentClassName = className + "-Transparent";

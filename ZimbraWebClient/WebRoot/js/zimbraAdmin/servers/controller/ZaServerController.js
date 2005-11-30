@@ -24,15 +24,15 @@
  */
 
 /**
-* @class ZaServerController controls display of a single Domain
+* @class ZaServerController controls display of a single Server
 * @contructor ZaServerController
 * @param appCtxt
 * @param container
 * @param abApp
 **/
 
-function ZaServerController(appCtxt, container, abApp) {
-	ZaController.call(this, appCtxt, container, abApp);
+function ZaServerController(appCtxt, container,app) {
+	ZaController.call(this, appCtxt, container,app,"ZaServerController");
 	this._evtMgr = new AjxEventMgr();
 	this._UICreated = false;
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_servers/managing_servers.htm";				
@@ -42,13 +42,12 @@ function ZaServerController(appCtxt, container, abApp) {
 ZaServerController.prototype = new ZaController();
 ZaServerController.prototype.constructor = ZaServerController;
 
-//ZaServerController.VIEW = "ZaServerController.VIEW";
+ZaController.initToolbarMethods["ZaServerController"] = new Array();
 
 /**
 *	@method show
 *	@param entry - isntance of ZaServer class
 */
-
 ZaServerController.prototype.show = 
 function(entry) {
 	
@@ -142,24 +141,19 @@ function(details) {
 }
 
 /**
-* @method _initToolbar
+* @method initToolbarMethod
 * This method creates ZaOperation objects 
 * All the ZaOperation objects are added to this._toolbarOperations array which is then used to 
 * create the toolbar for this view.
 * Each ZaOperation object defines one toolbar button.
 * Help button is always the last button in the toolbar
 **/
-ZaServerController.prototype._initToolbar = 
+ZaServerController.initToolbarMethod = 
 function () {
-	//TODO: Instrumentation code here
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.SERTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, ZaServerController.prototype._saveButtonListener)));
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.SERTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, ZaServerController.prototype._closeButtonListener)));    	
-	//TODO: Move this code to an external file
-	if(this._app.getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]) {
-		this._toolbarOperations.push(new ZaOperation(ZaOperation.HSM, ZaMsg.SRVTBB_HSM, ZaMsg.SRVTBB_HSM_tt, "ReadMailbox", "ReadMailboxDis", new AjxListener(this, this._hsmButtonListener)));										
-	}		
-	//TODO:Instrumentation code here
 }
+ZaController.initToolbarMethods["ZaServerController"].push(ZaServerController.initToolbarMethod);
 
 /**
 * @method _createUI
@@ -426,36 +420,7 @@ function(ev) {
 	}
 }
 
-/**
-* @method _hsmButtonListener
-**/
-//TODO: Move this method to an external file
-ZaServerController.prototype._hsmButtonListener = 
-function (ev) {
-	try {
-		if(!this._hsmWizard) {
-			this._hsmWizard = new HSMProgressXDialog(this._container, this._app);	
-			this._hsmWizard.registerCallback(DwtDialog.OK_BUTTON, ZaServerController.prototype._hsmOkButtonListener, this);
-		}
-		this._hsmWizard.setObject(this._currentObject);
-		this._hsmWizard.popup();
-	} catch (ex) {
-		this._handleException(ex, "ZaServerController.prototype._hsmButtonListener", null, false);
-	}
-}
 
-/**
-* @method _hsmOkButtonListener
-**/
-//TODO: Move this method to an external file
-ZaServerController.prototype._hsmOkButtonListener = 
-function () {
-	var obj = this._hsmWizard.getObject();
-	var obj2 = this._view.getObject();
-	obj2.hsm = obj.hsm;
-	this._view.setObject(obj2);
-	this._hsmWizard.popdown();
-}
 
 /**
 * handles the Close button click. Returns to the list view.

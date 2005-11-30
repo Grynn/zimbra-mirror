@@ -31,8 +31,8 @@
 * @param abApp
 **/
 
-function ZaCosController(appCtxt, container, abApp) {
-	ZaController.call(this, appCtxt, container, abApp);
+function ZaCosController(appCtxt, container,app) {
+	ZaController.call(this, appCtxt, container,app, "ZaCosController");
 	this._evtMgr = new AjxEventMgr();
 	this._confirmMessageDialog;
 	this._UICreated = false;	

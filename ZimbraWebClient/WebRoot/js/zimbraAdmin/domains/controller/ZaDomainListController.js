@@ -29,7 +29,7 @@
 * This is a singleton object that controls all the user interaction with the list of ZaDomain objects
 **/
 function ZaDomainListController(appCtxt, container, app) {
-	ZaController.call(this, appCtxt, container, app);
+	ZaController.call(this, appCtxt, container, app,"ZaDomainListController");
 	this._evtMgr = new AjxEventMgr();
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_domains/managing_domains.htm";				
 }

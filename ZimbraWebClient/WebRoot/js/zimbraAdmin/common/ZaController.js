@@ -29,10 +29,10 @@
 * @author Greg Solovyev
 * Base class for all Controller classes in ZimbraAdmin UI
 */
-function ZaController(appCtxt, container, app, isAdmin) {
+function ZaController(appCtxt, container, app, iKeyName) {
 
 	if (arguments.length == 0) return;
-
+	this._iKeyName = iKeyName;
 	this._appCtxt = appCtxt;
 	this._container = container;
 	this._app = app;
@@ -43,7 +43,7 @@ function ZaController(appCtxt, container, app, isAdmin) {
 	
 	this._authenticating = false;
 
-	this._loginDialog = appCtxt.getLoginDialog(isAdmin);
+	this._loginDialog = appCtxt.getLoginDialog();
 	this._loginDialog.registerCallback(this._loginCallback, this);
 
 	this._msgDialog = appCtxt.getMsgDialog();
@@ -52,20 +52,21 @@ function ZaController(appCtxt, container, app, isAdmin) {
     this._errorDialog.registerCallback(DwtDialog.OK_BUTTON, this._errorDialogCallback, this);
     this._msgDialog.registerCallback(DwtDialog.OK_BUTTON, this._msgDialogCallback, this);    
     if(app) {
-//    	this._errorDialog.setApp(app);
     	this._msgDialog.setApp(app);    	
     }	
     
     this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/administration_console_help.htm";
 }
 
-var i = 1;
+ZaController.initToolbarMethods = new Object();
+ZaController.initPopupMenuMethods = new Object();
 
 // Public methods
 ZaController.prototype.toString = 
 function() {
 	return "ZaController";
 }
+
 
 ZaController.prototype.setDirty = 
 function (isD) {
@@ -163,6 +164,7 @@ ZaController.prototype._setView =
 function() {
 
 }
+
 
 ZaController.prototype._helpButtonListener =
 function() {
@@ -337,4 +339,32 @@ function() {
 			this._execFrame.method.call(this, this._execFrame.params);
 		this._execFrame = null;
 	}	
+}
+
+ZaController.prototype._initToolbar = function () {
+	//Instrumentation code start
+	if(ZaController.initToolbarMethods[this._iKeyName]) {
+		var methods = ZaController.initToolbarMethods[this._iKeyName];
+		var cnt = methods.length;
+		for(var i = 0; i < cnt; i++) {
+			if(typeof(methods[i]) == "function") {
+				methods[i].call(this);
+			}
+		}
+	}	
+	//Instrumentation code end
+}
+
+ZaController.prototype._initPopupMenu = function () {
+	//Instrumentation code start
+	if(ZaController.initPopupMenuMethods[this._iKeyName]) {
+		var methods = ZaController.initPopupMenuMethods[this._iKeyName];
+		var cnt = methods.length;
+		for(var i = 0; i < cnt; i++) {
+			if(typeof(methods[i]) == "function") {
+				methods[i].call(this);
+			}
+		}
+	}	
+	//Instrumentation code end
 }

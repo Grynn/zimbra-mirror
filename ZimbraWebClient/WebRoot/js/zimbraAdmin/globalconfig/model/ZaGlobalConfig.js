@@ -59,7 +59,7 @@ ZaGlobalConfig.A_zimbraComponentAvailable_convertd = "_"+ZaGlobalConfig.A_zimbra
 ZaGlobalConfig.A_zimbraComponentAvailable_replication = "_"+ZaGlobalConfig.A_zimbraComponentAvailable+"_replication";
 ZaGlobalConfig.A_zimbraComponentAvailable_hotbackup = "_"+ZaGlobalConfig.A_zimbraComponentAvailable+"_hotbackup";
 ZaGlobalConfig.A_zimbraComponentAvailable_cluster = "_" + ZaGlobalConfig.A_zimbraComponentAvailable+"_cluster"
-ZaGlobalConfig.A_zimbraComponentAvailable_HSM = "_" + ZaGlobalConfig.A_zimbraComponentAvailable+"_HSM"
+
 // --protocol checks
 ZaGlobalConfig.A_zimbraMtaRestriction = "zimbraMtaRestriction";
 ZaGlobalConfig.A_zimbraMtaRejectInvalidHostname = "_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_reject_invalid_hostname";
@@ -83,8 +83,7 @@ ZaGlobalConfig.A_zimbraRedologArchiveDir = "zimbraRedologArchiveDir";
 ZaGlobalConfig.A_zimbraRedologBacklogDir = "zimbraRedologBacklogDir";
 ZaGlobalConfig.A_zimbraRedologRolloverFileSizeKB = "zimbraRedologRolloverFileSizeKB";
 ZaGlobalConfig.A_zimbraRedologFsyncIntervalMS = "zimbraRedologFsyncIntervalMS";
-//TODO: Move this code to an external file
-ZaGlobalConfig.A_zimbraHsmAge = "zimbraHsmAge";
+
 
 // smtp
 ZaGlobalConfig.A_zimbraSmtpHostname = "zimbraSmtpHostname";
@@ -292,8 +291,6 @@ ZaGlobalConfig.myXModel = {
 	  	{ id:ZaGlobalConfig.A_zimbraVirusDefinitionsUpdateFrequency, ref:"attrs/" + ZaGlobalConfig.A_zimbraVirusDefinitionsUpdateFrequency, type: _LIFETIME_NUMBER_, minInclusive: 0, fractionDigits: 0 },
 	  	{ id:ZaGlobalConfig.A_zimbraVirusBlockEncryptedArchive, ref:"attrs/" + ZaGlobalConfig.A_zimbraVirusBlockEncryptedArchive, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES},
 	  	{ id:ZaGlobalConfig.A_zimbraVirusWarnAdmin, ref:"attrs/" + ZaGlobalConfig.A_zimbraVirusWarnAdmin, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES},
-	  	{ id:ZaGlobalConfig.A_zimbraVirusWarnRecipient, ref:"attrs/" + ZaGlobalConfig.A_zimbraVirusWarnRecipient, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES},
-	  	//hsm //TODO: Move this code to an external file
-	  	{ id:ZaGlobalConfig.A_zimbraHsmAge, ref:"attrs/" + ZaGlobalConfig.A_zimbraHsmAge, type: _STRING_}
+	  	{ id:ZaGlobalConfig.A_zimbraVirusWarnRecipient, ref:"attrs/" + ZaGlobalConfig.A_zimbraVirusWarnRecipient, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES}
 	]	
 }

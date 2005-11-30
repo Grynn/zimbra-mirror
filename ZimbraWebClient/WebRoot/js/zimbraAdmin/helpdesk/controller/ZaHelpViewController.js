@@ -33,7 +33,7 @@
 **/
 function ZaHelpViewController(appCtxt, container, app) {
 
-	ZaController.call(this, appCtxt, container, app);
+	ZaController.call(this, appCtxt, container, app,"ZaHelpViewController");
 }
 
 ZaHelpViewController.prototype = new ZaController();

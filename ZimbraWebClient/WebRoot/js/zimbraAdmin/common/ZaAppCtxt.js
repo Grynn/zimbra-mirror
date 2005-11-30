@@ -87,9 +87,9 @@ function() {
 }
 
 ZaAppCtxt.prototype.getLoginDialog =
-function(isAdmin) {
+function() {
 	if (!this._loginDialog)
-		this._loginDialog = new ZaLoginDialog(this.getShell(), null, null, isAdmin);
+		this._loginDialog = new ZaLoginDialog(this.getShell(), null, null);
 	return this._loginDialog;
 }
 

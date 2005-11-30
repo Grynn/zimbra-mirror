@@ -32,15 +32,15 @@
 * @author Greg Solovyev
 **/
 function ZaAccount(app) {
-	ZaItem.call(this, app);
-	this.attrs = new Object();
-	this.id = "";
-	this.name="";
-	this.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
+	ZaItem.call(this, app,"ZaAccount");
+	this._init(app);
 }
 
 ZaAccount.prototype = new ZaItem;
 ZaAccount.prototype.constructor = ZaAccount;
+
+ZaItem.loadMethods["ZaAccount"] = new Array();
+ZaItem.initMethods["ZaAccount"] = new Array();
 
 //object attributes
 ZaAccount.A_name = "name";
@@ -760,7 +760,7 @@ function() {
 }
 
 
-ZaAccount.prototype.load = 
+ZaAccount.loadMethod = 
 function(by, val, withCos) {
 	var soapDoc = AjxSoapDoc.create("GetAccountRequest", "urn:zimbraAdmin", null);
 	if(withCos) {
@@ -816,6 +816,7 @@ function(by, val, withCos) {
 		this[ZaAccount.A2_autodisplayname] = "FALSE";
 	}
 }
+ZaItem.loadMethods["ZaAccount"].push(ZaAccount.loadMethod);
 
 ZaAccount.prototype.refresh = 
 function(withCos) {
@@ -985,3 +986,11 @@ ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_ACTIVE] = ZaMsg.accountStatus
 ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_MAINTENANCE] = ZaMsg.accountStatus_maintenance;
 ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_LOCKED] = ZaMsg.accountStatus_locked;
 ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_CLOSED] = ZaMsg.accountStatus_closed;
+
+ZaAccount.initMethod = function (app) {
+	this.attrs = new Object();
+	this.id = "";
+	this.name="";
+	this.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
+}
+ZaItem.initMethods["ZaAccount"].push(ZaAccount.initMethod);

@@ -31,19 +31,14 @@
 * @param app reference to the application instance
 **/
 function ZaServer(app) {
-	ZaItem.call(this, app);
-	this.attrs = new Object();
-	this.hsm = new Object();
-	this.hsm.pollInterval = 500;
-	this.id = "";
-	this.name="";
+	ZaItem.call(this, app,"ZaServer");
+	this._init(app);
 }
 
 ZaServer.prototype = new ZaItem;
 ZaServer.prototype.constructor = ZaServer;
-ZaServer.prototype.toString = function() {
-	return this.name;
-}
+ZaItem.loadMethods["ZaServer"] = new Array();
+ZaItem.initMethods["ZaServer"] = new Array();
 
 //attribute name constants, this values are taken from zimbra.schema
 ZaServer.A_name = "cn";
@@ -129,22 +124,10 @@ ZaServer.A_VolumeType = "type";
 ZaServer.A_CurrentPrimaryMsgVolumeId = "current_pri_msg_volume_id";
 ZaServer.A_CurrentSecondaryMsgVolumeId = "current_sec_msg_volume_id";
 ZaServer.A_CurrentIndexMsgVolumeId = "current_index_volume_id";
-//HSM
-ZaServer.A_zimbraHsmAge = "zimbraHsmAge";
-ZaServer.A_HSMstartDate = "startDate";
-ZaServer.A_HSMendDate = "endDate";
-ZaServer.A_HSMrunning = "running";
-ZaServer.A_HSMwasAborted = "aborted";
-ZaServer.A_HSMaborting = "aborting";
-ZaServer.A_HSMerror = "error";
-ZaServer.A_HSMnumBlobsMoved = "numBlobsMoved";
-ZaServer.A_HSMnumMailboxes = "numMailboxes";
-ZaServer.A_HSMtotalMailboxes = "totalMailboxes";
-ZaServer.A_HSMthreshold = "threshold";
-ZaServer.A_HSMremainingMailboxes = "remainingMailboxes"
+
 // other
 ZaServer.A_zimbraIsMonitorHost = "zimbraIsMonitorHost";
-ZaServer.A_showVolumes = "show_volume_and_hsm"; //this attribute is immutable
+ZaServer.A_showVolumes = "show_volumes"; //this attribute is immutable
 
 ZaServer.STANDALONE = "standalone";
 ZaServer.MASTER = "master";
@@ -153,10 +136,8 @@ ZaServer.SLAVE = "slave";
 ZaServer.PRI_MSG = 1;
 ZaServer.SEC_MSG = 2;
 ZaServer.INDEX = 10;
-ZaServer.volumeTypeChoicesAll = new XFormChoices({1:ZaMsg.NAD_HSM_PrimaryMsg, 2:ZaMsg.NAD_HSM_SecMsg, 10:ZaMsg.NAD_HSM_Index}, XFormChoices.HASH);
 ZaServer.volumeTypeChoicesNoHSM = new XFormChoices({1:ZaMsg.NAD_HSM_Msg, 10:ZaMsg.NAD_HSM_Index}, XFormChoices.HASH);
-ZaServer.volumeTypeChoicesHSM = new XFormChoices({1:ZaMsg.NAD_HSM_PrimaryMsg, 2:ZaMsg.NAD_HSM_SecMsg}, XFormChoices.HASH);
-ZaServer.HSM_StatusChoices = {0:ZaMsg.NAD_HSM_Idle,1:ZaMsg.NAD_HSM_Running};
+
 		
 ZaServer.myXModel = {
 	items: [
@@ -226,24 +207,14 @@ ZaServer.myXModel = {
 				]
 			}
 		},
-		{id:ZaServer.A_zimbraHsmAge, ref:"attrs/" + ZaServer.A_zimbraHsmAge, type:_COS_MLIFETIME_},
-		{id:ZaServer.A_showVolumes, ref:ZaServer.A_showVolumes, type: _ENUM_, choices: [false,true]},
-		{id:ZaServer.A_HSMstartDate, ref:"hsm/" + ZaServer.A_HSMstartDate},						
-		{id:ZaServer.A_HSMendDate, ref:"hsm/" + ZaServer.A_HSMendDate},								
-		{id:ZaServer.A_HSMrunning, ref:"hsm/" + ZaServer.A_HSMrunning, type:_NUMBER_},						
-		{id:ZaServer.A_HSMwasAborted, ref:"hsm/" + ZaServer.A_HSMwasAborted, type:_NUMBER_},				
-		{id:ZaServer.A_HSMaborting, ref:"hsm/" + ZaServer.A_HSMaborting, type:_ENUM_, choices:[false,true]},						
-		{id:ZaServer.A_HSMerror, ref:"hsm/" + ZaServer.A_HSMerror, type:_STRING_},
-		{id:ZaServer.A_HSMnumBlobsMoved, ref:"hsm/" + ZaServer.A_HSMnumBlobsMoved, type:_NUMBER_},
-		{id:ZaServer.A_HSMnumMailboxes, ref:"hsm/" + ZaServer.A_HSMnumMailboxes, type:_NUMBER_},
-		{id:ZaServer.A_HSMtotalMailboxes, ref:"hsm/" + ZaServer.A_HSMtotalMailboxes, type:_NUMBER_},				
-		{id:ZaServer.A_HSMthreshold, ref:"hsm/" + ZaServer.A_HSMthreshold, type:_NUMBER_},
-		{id:ZaServer.A_HSMremainingMailboxes, ref:"hsm/" + ZaServer.A_HSMremainingMailboxes, type:_NUMBER_},
-		{id:"errorMsg", ref:"hsm/errorMsg", type:_STRING_},
-		{id:"progressMsg", ref:"hsm/progressMsg", type:_STRING_}		
+		{id:ZaServer.A_showVolumes, ref:ZaServer.A_showVolumes, type: _ENUM_, choices: [false,true]}
 	]
 };
 		
+ZaServer.prototype.toString = function() {
+	return this.name;
+}
+
 ZaServer.getAll =
 function(app) {
 	var soapDoc = AjxSoapDoc.create("GetAllServersRequest", "urn:zimbraAdmin", null);	
@@ -330,10 +301,8 @@ function() {
 	this.load();	
 }
 
-ZaServer.prototype.load = 
+ZaServer.loadMethod = 
 function(by, val, withConfig) {
-	//TODO: Instrumentation code here
-
 	var _by = by ? by : "id";
 	var _val = val ? val : this.id
 	var soapDoc = AjxSoapDoc.create("GetServerRequest", "urn:zimbraAdmin", null);
@@ -352,24 +321,13 @@ function(by, val, withConfig) {
 		this.getMyVolumes();
 		this.getCurrentVolumes();
 	}
-	//TODO: Instrumentation code here
-	//TODO: Move this code to an external file
-	if(this.attrs[ZaServer.A_zimbraMailboxServiceEnabled]) {
-		if(this.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]) {
-			var statusResp = ZaServer.getHSMStatus(this.id);
-			if(statusResp instanceof AjxException || statusResp instanceof ZmCsfeException || statusResp instanceof AjxSoapException) {
-				this._app.getCurrentController()._handleException(statusResp);
-				return;
-			}
-			ZaServer.parseHSMStatusResponse(statusResp,this);
-		}
-	}
+	
+	
 }
+ZaItem.loadMethods["ZaServer"].push(ZaServer.loadMethod);
 
 ZaServer.prototype.initFromDom = function(node) {
-//TODO: Instrumentation code here
 	ZaItem.prototype.initFromDom.call(this, node);
-	
 	// convert installed/enabled services to hidden fields for xform binding
 	var installed = this.attrs[ZaServer.A_zimbraServiceInstalled];
 	if (installed) {
@@ -395,7 +353,6 @@ ZaServer.prototype.initFromDom = function(node) {
 	}
 	this[ZaServer.A_ServiceHostname] = this.attrs[ZaServer.A_ServiceHostname]; // a hack for New Account Wizard	
 	this[ZaServer.A_showVolumes] = this.attrs[ZaServer.A_zimbraMailboxServiceEnabled];
-//TODO: Instrumentation code here
 }
 
 ZaServer.prototype.getCurrentVolumes =
@@ -492,138 +449,9 @@ ZaServer.prototype.setCurrentVolume = function (id, type) {
 	var respNode = ZmCsfeCommand.invoke(soapDoc, false, null, this.id, true).firstChild;			
 }
 
-//TODO: Move this code to an external file
-ZaServer.parseHSMStatusResponse = 
-function (arg, respObj) {
-	if (!respObj)
-		respObj = new ZaReindexMailbox();
-
-	if(!arg) {
-		respObj.status = null;
-		return;
-	}
-	if(!respObj.hsm) {
-		respObj.hsm = new Object();
-		respObj.hsm.pollInterval = 500;
-	}	
-	if(arg instanceof AjxException || arg instanceof ZmCsfeException || arg instanceof AjxSoapException) {
-		respObj.hsm.errorMsg = arg.detail;
-		respObj.hsm[ZaServer.A_HSMerror] = String(ZaMsg.FAILED_HSM).replace("{0}", arg.code);
-		respObj.hsm[ZaServer.A_HSMrunning] = 0;	
-	} else {
-		var respNode;
-		if(!arg) {
-			return;
-		}
-		if(arg instanceof AjxSoapDoc) {
-			if(!arg.getBody() || !arg.getBody().firstChild) {
-				return;
-			}	
-			respNode = arg.getBody().firstChild;
-		} else {
-			if(!arg.firstChild) {
-				return;
-			}
-			respNode = arg.firstChild;
-		}
-		if(respNode) {
-			respObj.hsm.errorMsg = null;		
-			respObj.hsm[ZaServer.A_HSMerror] = null;			
-			if(respNode.nodeName == "HsmResponse") {
-				respObj.hsm[ZaServer.A_HSMrunning] = 1;
-				respObj.hsm[ZaServer.A_HSMwasAborted] = 0;
-			} else if (respNode.nodeName == "AbortHsmResponse") {
-				var tmpInt = parseInt(respNode.getAttribute(ZaServer.A_HSMwasAborted));			
-				respObj.hsm[ZaServer.A_HSMwasAborted] = (tmpInt == NaN) ? 0 : tmpInt; 
-				respObj.hsm[ZaServer.A_HSMrunning] = 0;	
-			} else {
-				respObj.hsm[ZaServer.A_HSMstartDate] = respNode.getAttribute(ZaServer.A_HSMstartDate);
-				respObj.hsm[ZaServer.A_HSMendDate] = respNode.getAttribute(ZaServer.A_HSMendDate);
-	
-				var tmpInt = parseInt(respNode.getAttribute(ZaServer.A_HSMrunning));
-				respObj.hsm[ZaServer.A_HSMrunning] = (tmpInt == NaN) ? 0 : tmpInt;
-	
-				tmpInt = parseInt(respNode.getAttribute(ZaServer.A_HSMwasAborted));			
-				respObj.hsm[ZaServer.A_HSMwasAborted] = (tmpInt == NaN) ? 0 : tmpInt; 
-	
-				respObj.hsm[ZaServer.A_HSMaborting] = respNode.getAttribute(ZaServer.A_HSMaborting);			
-				respObj.hsm[ZaServer.A_HSMerror] = respNode.getAttribute(ZaServer.A_HSMerror);						
-				respObj.hsm[ZaServer.A_HSMnumBlobsMoved] = respNode.getAttribute(ZaServer.A_HSMnumBlobsMoved);
-				respObj.hsm[ZaServer.A_HSMnumMailboxes] = respNode.getAttribute(ZaServer.A_HSMnumMailboxes);
-				respObj.hsm[ZaServer.A_HSMtotalMailboxes] = respNode.getAttribute(ZaServer.A_HSMtotalMailboxes);
-				respObj.hsm[ZaServer.A_HSMthreshold] = respNode.getAttribute(ZaServer.A_HSMthreshold);	
-				respObj.hsm[ZaServer.A_HSMremainingMailboxes] = respObj.hsm[ZaServer.A_HSMtotalMailboxes] - respObj.hsm[ZaServer.A_HSMnumMailboxes];
-				if(!respObj.hsm[ZaServer.A_HSMrunning]&& !respObj.hsm[ZaServer.A_HSMnumBlobsMoved]
-					&& !respObj.hsm[ZaServer.A_HSMtotalMailboxes] && !respObj.hsm[ZaServer.A_HSMremainingMailboxes]) {
-					respObj.hsm.progressMsg = String(ZaMsg.HSM_InfoUnavailable);
-				} else {
-					respObj.hsm.progressMsg = String(ZaMsg.HSM_ProcessStatus).replace("{0}", respObj.hsm[ZaServer.A_HSMnumBlobsMoved]).replace("{1}",respObj.hsm[ZaServer.A_HSMnumMailboxes]).replace("{2}", respObj.hsm[ZaServer.A_HSMremainingMailboxes]);
-				}
-/*				if(respObj.hsm[ZaServer.A_HSMnumMailboxes] == 0) {
-					respObj.hsm[ZaServer.A_HSMnumMailboxes] = respObj.hsm[ZaServer.A_HSMtotalMailboxes];
-				}*/
-			}
-			if(respObj.hsm[ZaServer.A_HSMrunning] == 0 && respObj.hsm[ZaServer.A_HSMstartDate] && respObj.hsm[ZaServer.A_HSMendDate]) {
-				respObj.hsm.progressMsg = String(ZaMsg.HSM_StatusReport).replace("{0}", 
-					AjxBuffer.concat(
-						AjxDateUtil.simpleComputeDateStr(new Date(parseInt(respObj.hsm[ZaServer.A_HSMstartDate]))),
-						"&nbsp;",
-						AjxDateUtil.computeTimeString(new Date(parseInt(respObj.hsm[ZaServer.A_HSMstartDate])))
-					)
-				).replace("{1}",
-					AjxBuffer.concat(
-						AjxDateUtil.simpleComputeDateStr(new Date(parseInt(respObj.hsm[ZaServer.A_HSMendDate]))),
-						"&nbsp;",
-						AjxDateUtil.computeTimeString(new Date(parseInt(respObj.hsm[ZaServer.A_HSMendDate])))
-					)
-				);
-				
-			}
-		}
-	}
+ZaServer.initMethod = function (app) {
+	this.attrs = new Object();
+	this.id = "";
+	this.name="";
 }
-//TODO: Move this code to an external file
-ZaServer.getHSMStatus = 
-function (serverid,callback) {
-	var soapDoc = AjxSoapDoc.create("GetHsmStatusRequest", "urn:zimbraAdmin", null);
-	var resp = null;
-	try {
-		if(callback) {
-			var asynCommand = new ZmCsfeAsynchCommand();
-			asynCommand.addInvokeListener(callback);
-			asynCommand.invoke(soapDoc, null, null, serverid, true);			
-			return asynCommand;
-		} else {
-			resp = ZmCsfeCommand.invoke(soapDoc, null, null, serverid, true);
-		}
-	} catch (ex) {
-		resp=ex;
-	}
-	return resp;
-}
-//TODO: Move this code to an external file
-ZaServer.abortHSMSession = 
-function (serverid) {
-	var soapDoc = AjxSoapDoc.create("AbortHsmRequest", "urn:zimbraAdmin", null);
-	soapDoc.getMethod().setAttribute("action", "cancel");
-	
-	var resp;
-	try {
-		resp = ZmCsfeCommand.invoke(soapDoc, null, null, serverid, true);
-	} catch (ex) {
-		resp = ex;
-	}
-	return resp;
-}
-//TODO: Move this code to an external file
-ZaServer.startHSMSession = 
-function (serverid) {
-	var soapDoc = AjxSoapDoc.create("HsmRequest", "urn:zimbraAdmin", null);
-	var resp;
-	try {
-		resp = ZmCsfeCommand.invoke(soapDoc, null, null, serverid, true);
-	} catch (ex) {
-		resp = ex;
-	}
-	return resp;
-}
+ZaItem.initMethods["ZaServer"].push(ZaServer.initMethod);

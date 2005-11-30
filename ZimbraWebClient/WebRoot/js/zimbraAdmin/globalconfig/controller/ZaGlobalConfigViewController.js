@@ -32,7 +32,7 @@
 * @author Greg Solovyev
 **/
 function ZaGlobalConfigViewController(appCtxt, container, app) {
-	ZaController.call(this, appCtxt, container, app);
+	ZaController.call(this, appCtxt, container, app,"ZaGlobalConfigViewController");
 	this._evtMgr = new AjxEventMgr();
 	this._UICreated = false;
 	this._confirmMessageDialog;	

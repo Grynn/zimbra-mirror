@@ -24,7 +24,7 @@
  */
 
 function ZaCosListController(appCtxt, container, app) {
-	ZaController.call(this, appCtxt, container, app);
+	ZaController.call(this, appCtxt, container, app, "ZaCosListController");
 	this._evtMgr = new AjxEventMgr();	
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/cos/class_of_service.htm";				
 }

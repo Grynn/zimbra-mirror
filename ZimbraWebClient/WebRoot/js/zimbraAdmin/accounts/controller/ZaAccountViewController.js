@@ -33,8 +33,8 @@
 * @author Greg Solovyev
 **/
 
-function ZaAccountViewController(appCtxt, container, abApp) {
-	ZaController.call(this, appCtxt, container, abApp);
+function ZaAccountViewController(appCtxt, container) {
+	ZaController.call(this, appCtxt, container, "ZaAccountViewController");
 	this._evtMgr = new AjxEventMgr();
 	this._confirmMessageDialog;
 	this._UICreated = false;

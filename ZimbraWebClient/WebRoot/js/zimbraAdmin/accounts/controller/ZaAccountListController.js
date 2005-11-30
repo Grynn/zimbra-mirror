@@ -34,7 +34,7 @@
 * @author Greg Solovyev
 **/
 function ZaAccountListController(appCtxt, container, app) {
-	ZaController.call(this, appCtxt, container, app);
+	ZaController.call(this, appCtxt, container, app, "ZaAccountListController");
 	this._evtMgr = new AjxEventMgr();	
     //Account operations
    	this._toolbarOperations = new Array();
@@ -55,7 +55,8 @@ function ZaAccountListController(appCtxt, container, app) {
 ZaAccountListController.prototype = new ZaController();
 ZaAccountListController.prototype.constructor = ZaAccountListController;
 
-//ZaAccountListController.ACCOUNT_VIEW = "ZaAccountListController.ACCOUNT_VIEW";
+ZaController.initToolbarMethods["ZaAccountListController"] = new Array();
+ZaController.initPopupMenuMethods["ZaAccountListController"] = new Array();
 
 ZaAccountListController.prototype.show = 
 function(searchResult) {
@@ -403,11 +404,10 @@ function (delegateToken, tokenLifetime, mailServer) {
 	form.submit();		
 }
 
-//private and protected methods
 
-ZaAccountListController.prototype._initPopupMenu =
+
+ZaAccountListController.initPopupMenuMethod =
 function () {
-	//TODO: Instrumentation code here
     this._popupOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.ACTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaAccountListController.prototype._editButtonListener)));
 	this._popupOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaAccountListController.prototype._deleteButtonListener)));
 	if(ZaSettings.ACCOUNTS_CHPWD_ENABLED)
@@ -418,13 +418,11 @@ function () {
 
 	if(ZaSettings.ACCOUNTS_MOVE_ALIAS_ENABLED)	
 		this._popupOperations.push(new ZaOperation(ZaOperation.MOVE_ALIAS, ZaMsg.ACTBB_MoveAlias, ZaMsg.ACTBB_MoveAlias_tt, "ReadMailbox", "ReadMailboxDis", new AjxListener(this, ZaAccountListController.prototype._moveAliasListener)));		    	
-	
-	//TODO: Instrumentation code here
 }
+ZaController.initPopupMenuMethods["ZaAccountListController"].push(ZaAccountListController.initPopupMenuMethod);
 
-ZaAccountListController.prototype._initToolbar =
+ZaAccountListController.initToolbarMethod =
 function () {
-	//TODO: Instrumentation code here
 	// first button in the toolbar is a menu.
 	var newMenuOpList = new Array();
 	newMenuOpList.push(new ZaOperation(ZaOperation.NEW_WIZARD, ZaMsg.ACTBB_New_menuItem, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", this._newAcctListener));
@@ -452,7 +450,7 @@ function () {
 	if(ZaSettings.ACCOUNTS_MOVE_ALIAS_ENABLED)	
 		this._toolbarOperations.push(new ZaOperation(ZaOperation.MOVE_ALIAS, ZaMsg.ACTBB_MoveAlias, ZaMsg.ACTBB_MoveAlias_tt, "ReadMailbox", "ReadMailboxDis", new AjxListener(this, ZaAccountListController.prototype._moveAliasListener)));		    	
 	
-	//TODO: Instrumentation code here
+
 	//TODO: Move this code to an external file
 	if(ZaSettings.ACCOUNTS_RESTORE_ENABLED) {
 		var globalConf = this._app.getGlobalConfig();
@@ -460,9 +458,10 @@ function () {
     	if(globalConf && globalConf.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_hotbackup])
 			this._toolbarOperations.push(new ZaOperation(ZaOperation.MAIL_RESTORE, ZaMsg.TBB_RestoreMailbox, ZaMsg.ACTBB_Restore_tt, "RestoreMailbox", "RestoreMailboxDis", new AjxListener(this, ZaAccountListController.prototype._restoreMailListener)));		
 	}
-	
 }
+ZaController.initToolbarMethods["ZaAccountListController"].push(ZaAccountListController.initToolbarMethod);
 
+//private and protected methods
 ZaAccountListController.prototype._createUI = 
 function () {
 	//create accounts list view

@@ -65,7 +65,7 @@ function(resp) {
 			lifetime = el.firstChild.nodeValue;*/
 		else if (el.nodeName=="sessionId")
 			sessionId = el.firstChild.nodeValue;
-		else if (el.nodeName=="a") {
+		else if (el.nodeName=="a") { //TODO: Move this code to an external file
 			if(ZaAccount.A_zimbraIsDomainAdminAccount == el.getAttribute("n")) {
 				var value = el.firstChild.nodeValue;
 				if(value=="true") {

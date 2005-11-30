@@ -33,9 +33,10 @@
 * @param app
 * @author Greg Solovyev
 **/
-function ZaTabView (parent, app) {
+function ZaTabView (parent, app,iKeyName) {
 	if (arguments.length == 0) return;
 	DwtComposite.call(this, parent, "DwtTabView", Dwt.ABSOLUTE_STYLE);	
+	this._iKeyName = iKeyName;
 	this._app = app;
 	this._drawn = false;	
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
@@ -46,6 +47,7 @@ function ZaTabView (parent, app) {
 
 ZaTabView.prototype = new DwtComposite();
 ZaTabView.prototype.constructor = ZaTabView;
+ZaTabView.XFormModifiers = new Object();
 
 ZaTabView.DEFAULT_TAB = 1;
 
@@ -63,6 +65,25 @@ function (xModelMetaData, xFormMetaData) {
 	this._localXForm.setController(this._app);
 	this._localXForm.draw();
 	this._drawn = true;
+}
+
+/**
+* @return XForm definition for this view's XForm
+**/
+ZaTabView.prototype.getMyXForm = function () {
+	var xFormObject = new Object();
+	//Instrumentation code start
+	if(ZaTabView.XFormModifiers[this._iKeyName]) {
+		var methods = ZaTabView.XFormModifiers[this._iKeyName];
+		var cnt = methods.length;
+		for(var i = 0; i < cnt; i++) {
+			if(typeof(methods[i]) == "function") {
+				methods[i].call(this,xFormObject);
+			}
+		}
+	}	
+	//Instrumentation code end	
+	return xFormObject;
 }
 
 /**

@@ -33,7 +33,7 @@
 **/
 function ZaMigrationWizController(appCtxt, container, app) {
 
-	ZaController.call(this, appCtxt, container, app);
+	ZaController.call(this, appCtxt, container, app,"ZaMigrationWizController");
 }
 
 ZaMigrationWizController.prototype = new ZaController();

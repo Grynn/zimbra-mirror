@@ -33,7 +33,7 @@
 */
 function ZaZimbraAdmin(appCtxt) {
 	ZaZimbraAdmin._instance = this;
-	ZaController.call(this, appCtxt, null, null, true);
+	ZaController.call(this, appCtxt, null, null,"ZaZimbraAdmin");
 	this._shell = this._appCtxt.getShell();	
 	this._splashScreen = new ZaSplashScreen(this._shell, "Admin_SplashScreen");
 	

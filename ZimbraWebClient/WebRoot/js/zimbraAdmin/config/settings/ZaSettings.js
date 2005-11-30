@@ -31,7 +31,7 @@ function ZaSettings() {
 **/
 ZaSettings.init = function () {
 	var adminType = AjxCookie.getCookie(document, ZaSettings.ADMIN_TYPE_COOKIE);
-	if(adminType == "domain") {
+	if(adminType == "domain") { //TODO: Move this code to an external file
 		var adminName = AjxCookie.getCookie(document, ZaSettings.ADMIN_NAME_COOKIE);
 		if(adminName) {
 			var emailChunks = adminName .split("@");

@@ -29,7 +29,7 @@
 * This is a singleton object that controls all the user interaction with the list of ZaServer objects
 **/
 function ZaServerListController(appCtxt, container, app) {
-	ZaController.call(this, appCtxt, container, app);
+	ZaController.call(this, appCtxt, container, app,"ZaServerListController");
 	this._evtMgr = new AjxEventMgr();
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_servers/managing_servers.htm";					
 }
