@@ -42,6 +42,7 @@ checkRunning() {
 }
 
 start() {
+	${zimbra_home}/bin/zmmtaconfig perdition
 	${zimbra_home}/perdition/sbin/perdition.imap4 \
 		--config_file=${zimbra_home}/conf/perdition.conf
 }
