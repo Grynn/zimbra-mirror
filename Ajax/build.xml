@@ -185,6 +185,13 @@
 		<!--   NOTE: images now coming from the common "examples" directory -->	
 	</target>
 	
+	<target name="mixingexample2">
+		<copy todir="${build.examples.dir}/mixing2" overwrite="true" >
+			<fileset dir="WebRoot/examples/mixing2" includes="**/*" excludes="**/img,**/img/"/>
+		</copy>
+		<!--   NOTE: images now coming from the common "examples" directory -->	
+	</target>
+	
 	<target name="treeexample">
 		<copy todir="${build.examples.dir}/tree" overwrite="true" >
 			<fileset dir="WebRoot/examples/tree" includes="**/*" excludes="**/img,**/img/"/>
@@ -199,7 +206,7 @@
 		</copy>
 	</target>
 		
-	<target name="examples" depends="images, htmleditorexample, treeexample, dataviewerexample, mixingexample, xformsexample"/>
+	<target name="examples" depends="images, htmleditorexample, treeexample, dataviewerexample, mixingexample, mixingexample2, xformsexample"/>
 	
 	<!-- 
 	This target is meant only to be run after a full deploy has
