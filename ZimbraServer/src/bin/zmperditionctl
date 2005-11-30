@@ -42,8 +42,8 @@ checkRunning() {
 }
 
 start() {
-	{$zimbra_home}/perdition/sbin/perdition.imap4 \
-		-f ${zimbra_home}/conf/perdition.conf
+	${zimbra_home}/perdition/sbin/perdition.imap4 \
+		--config_file=${zimbra_home}/conf/perdition.conf
 }
 
 stop() {
@@ -54,7 +54,7 @@ checkRunning
 
 case "$1" in 
 	start)
-		if [ $STATUS -eq 0 ]; then
+		if [ $STATUS -ne 0 ]; then
 			start
 		else
 			echo "Perdition is already running"
@@ -62,7 +62,7 @@ case "$1" in
 		fi
 	;;
 	stop)
-		if [ $STATUS -ne 0 ]; then
+		if [ $STATUS -eq 0 ]; then
 			stop
 		else
 			echo "Perdition is not running"
