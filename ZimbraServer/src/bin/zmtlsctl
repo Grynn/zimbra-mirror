@@ -44,13 +44,13 @@ updateWebConfig() {
 			/opt/zimbra/tomcat/conf/server.xml > \
 			/tmp/server.xml.$$
 		if [ -f /opt/zimbra/cyrus-sasl/etc/saslauthd.conf.in ]; then
-			sed -e 's/^zimbra_url: http:/zimbra_url: https:/' \
+			sed -e 's/^zimbra_url: https:/zimbra_url: http:/' \
 				/opt/zimbra/cyrus-sasl/etc/saslauthd.conf.in > \
 				/tmp/saslauthd.conf.in.$$
 		fi
 	else
 		if [ -f /opt/zimbra/cyrus-sasl/etc/saslauthd.conf.in ]; then
-			sed -e 's/^zimbra_url: https:/zimbra_url: http:/' \
+			sed -e 's/^zimbra_url: http:/zimbra_url: https:/' \
 				/opt/zimbra/cyrus-sasl/etc/saslauthd.conf.in > \
 				/tmp/saslauthd.conf.in.$$
 		fi
