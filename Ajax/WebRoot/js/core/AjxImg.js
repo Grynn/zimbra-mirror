@@ -96,13 +96,14 @@ function(imageEl) {
 * @param attrStr	additional attributes eg. "id=X748"
 */
 AjxImg.getImageHtml = 
-function(imageName, styleStr, attrStr) {
+function(imageName, styleStr, attrStr, wrapInTable) {
 	attrStr = (!attrStr) ? "" : attrStr;
 	var className = AjxImg.getClassForImage(imageName);
 	styleStr = styleStr ? "style='" + styleStr + "' " : "";
+	var pre = wrapInTable ? "<table style='display:inline' cellpadding=0 cellspacing=0 border=0><tr><td align=center valign=bottom>" : "";
+	var post = wrapInTable ? "</td></tr></table>" : "";
 	if (className) {
-		return ["<div class='", className, "' ", styleStr, " ", attrStr, "></div>"].join("");
+		return [pre, "<div class='", className, "' ", styleStr, " ", attrStr, "></div>", post].join("");
 	}
-	return ["<div ", styleStr, " ", attrStr, "></div>"].join("");
+	return [pre, "<div ", styleStr, " ", attrStr, "></div>", post].join("");
 }
-
