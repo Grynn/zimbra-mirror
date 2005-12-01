@@ -76,7 +76,7 @@ EmailAddr_XFormItem.prototype.items = [
 		}
 	},
 	{type:_OUTPUT_, value:"@"},
-	{type:_OUTPUT_,ref:".",relevant:"ZaSettings.isDomainAdmin", relevantBehavior:_HIDE_,
+	{type:_OUTPUT_,ref:".",relevant:"!ZaSettings.DOMAINS_ENABLED", relevantBehavior:_HIDE_,
 		choices:EmailAddr_XFormItem.domainChoices,
 		getDisplayValue:function (itemVal){
 			var val = null;
@@ -97,7 +97,7 @@ EmailAddr_XFormItem.prototype.items = [
 	},
 	{type:_OSELECT1_, ref:".", labelLocation:_NONE_, relevantBehavior:_HIDE_, 
 	 choices:EmailAddr_XFormItem.domainChoices,
-	 relevant:"!ZaSettings.isDomainAdmin",
+	 relevant:"ZaSettings.DOMAINS_ENABLED",
 	 errorLocation:_PARENT_,
 		getDisplayValue:function (itemVal){
 			var val = null;

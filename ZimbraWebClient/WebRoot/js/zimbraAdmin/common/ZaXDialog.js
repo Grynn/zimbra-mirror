@@ -32,11 +32,17 @@
 * param h (height)
 **/
 
-function ZaXDialog(parent, app, className, title, w, h) {
+function ZaXDialog(parent, app, className, title, w, h,iKeyName) {
 	if (arguments.length == 0) return;
+	this._iKeyName = iKeyName;	
 	var clsName = className || "DwtDialog";
-	var helpButton = new DwtDialog_ButtonDescriptor(ZaXDialog.HELP_BUTTON, ZaMsg.TBB_Help, DwtDialog.ALIGN_LEFT, new AjxCallback(this, this._helpButtonListener));
-	DwtDialog.call(this, parent, clsName, title, [DwtDialog.OK_BUTTON],[helpButton]);
+	if(!this._standardButtons)
+		this._standardButtons = [DwtDialog.OK_BUTTON];
+	if(!this._extraButtons) {
+		var helpButton = new DwtDialog_ButtonDescriptor(ZaXDialog.HELP_BUTTON, ZaMsg.TBB_Help, DwtDialog.ALIGN_LEFT, new AjxCallback(this, this._helpButtonListener));
+		this._extraButtons = [helpButton];
+	}
+	DwtDialog.call(this, parent, clsName, title, this._standardButtons,this._extraButtons);
 	this._app = app;
 	this._localXForm = null;
 	this._localXModel = null;
@@ -62,11 +68,12 @@ function ZaXDialog(parent, app, className, title, w, h) {
 	this._pageDiv.style.overflow = "auto";
 
 	this._createContentHtml();
-
+	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/administration_console_help.htm";	
 }
 
 ZaXDialog.prototype = new DwtDialog;
 ZaXDialog.prototype.constructor = ZaXDialog;
+ZaXDialog.XFormModifiers = new Object();
 ZaXDialog.HELP_BUTTON = 15;
 /**
 * public method _initForm
@@ -100,10 +107,21 @@ function(entry) {
 }
 
 
-//ovewrite this method to implement the XForm
 ZaXDialog.prototype.getMyXForm = 
 function() {	
-	return new Object();;
+	var xFormObject = new Object();
+	//Instrumentation code start
+	if(ZaXDialog.XFormModifiers[this._iKeyName]) {
+		var methods = ZaXDialog.XFormModifiers[this._iKeyName];
+		var cnt = methods.length;
+		for(var i = 0; i < cnt; i++) {
+			if(typeof(methods[i]) == "function") {
+				methods[i].call(this,xFormObject);
+			}
+		}
+	}	
+	//Instrumentation code end	
+	return xFormObject;
 }
 
 ZaXDialog.prototype._createContentHtml =

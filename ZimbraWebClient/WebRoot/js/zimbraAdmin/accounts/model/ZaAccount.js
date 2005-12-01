@@ -86,7 +86,7 @@ ZaAccount.A_zimbraAuthTokenLifetime = "zimbraAuthTokenLifetime";
 ZaAccount.A_zimbraMailMessageLifetime = "zimbraMailMessageLifetime";
 ZaAccount.A_zimbraMailSpamLifetime = "zimbraMailSpamLifetime";
 ZaAccount.A_zimbraMailTrashLifetime = "zimbraMailTrashLifetime";
-ZaAccount.A_zimbraIsDomainAdminAccount = "zimbraIsDomainAdminAccount";
+
 
 //prefs
 ZaAccount.A_zimbraPrefCalendarAlwaysShowMiniCal = "zimbraPrefCalendarAlwaysShowMiniCal";
@@ -736,9 +736,9 @@ function() {
 						ZaAccount._accountStatus(this.attrs[ZaAccount.A_accountStatus]), html, idx);
 		// TODO: COS
 		idx = this._addRow(ZaMsg.NAD_DisplayName, this.attrs[ZaAccount.A_displayname], html, idx);
-		if(!ZaSettings.isDomainAdmin) {
+		/*if(!ZaSettings.isDomainAdmin) {
 			idx = this._addRow(ZaMsg.NAD_ZimbraID, this.attrs[ZaItem.A_zimbraId], html, idx);
-		}
+		}*/
 		if(ZaSettings.SERVERS_ENABLED) {
 			idx = this._addRow(ZaMsg.NAD_MailServer, this.attrs[ZaAccount.A_mailHost], html, idx);
 		}
@@ -888,7 +888,6 @@ ZaAccount.myXModel.items.push({id:ZaAccount.A_zimbraMailQuota, type:_COS_MAILQUO
 ZaAccount.myXModel.items.push({id:ZaAccount.A_mailHost, type:_STRING_, ref:"attrs/"+ZaAccount.A_mailHost});
 ZaAccount.myXModel.items.push({id:ZaAccount.A_COSId, type:_STRING_, ref:"attrs/" + ZaAccount.A_COSId});
 ZaAccount.myXModel.items.push({id:ZaAccount.A_isAdminAccount, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_isAdminAccount});
-ZaAccount.myXModel.items.push({id:ZaAccount.A_zimbraIsDomainAdminAccount, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraIsDomainAdminAccount});
 ZaAccount.myXModel.items.push({id:ZaAccount.A_zimbraMaxPwdLength, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraMaxPwdLength, maxInclusive:2147483647, minInclusive:0});
 ZaAccount.myXModel.items.push({id:ZaAccount.A_zimbraMinPwdLength, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraMinPwdLength, maxInclusive:2147483647, minInclusive:0});
 ZaAccount.myXModel.items.push({id:ZaAccount.A_zimbraMinPwdAge, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraMinPwdAge, maxInclusive:2147483647, minInclusive:0});

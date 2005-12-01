@@ -24,8 +24,7 @@
  */
 
 function ZaNewAccountXWizard (parent, app) {
-	ZaXWizardDialog.call(this, parent, null, ZaMsg.NCD_NewAccTitle, "550px", "300px");
-	this._app = app;
+	ZaXWizardDialog.call(this, parent, app, null, ZaMsg.NCD_NewAccTitle, "550px", "300px","ZaNewAccountXWizard");
 	this.accountStatusChoices = [ZaAccount.ACCOUNT_STATUS_ACTIVE, ZaAccount.ACCOUNT_STATUS_MAINTENANCE, ZaAccount.ACCOUNT_STATUS_LOCKED, ZaAccount.ACCOUNT_STATUS_CLOSED];		
 	this.stepChoices = [
 		{label:ZaMsg.TABT_GeneralPage, value:1},
@@ -62,6 +61,7 @@ function ZaNewAccountXWizard (parent, app) {
 
 ZaNewAccountXWizard.prototype = new ZaXWizardDialog;
 ZaNewAccountXWizard.prototype.constructor = ZaNewAccountXWizard;
+ZaXDialog.XFormModifiers["ZaNewAccountXWizard"] = new Array();
 
 ZaNewAccountXWizard.prototype.handleXFormChange = 
 function () {
@@ -183,15 +183,16 @@ function(entry) {
 	this._containedObject.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
 //	var domainName = this._app._appCtxt.getAppController().getOverviewPanelController().getCurrentDomain();
 	var domainName;
-	if(!ZaSettings.isDomainAdmin) {
+	if(ZaSettings.GLOBAL_CONFIG_ENABLED) {
 		if(!domainName) {
 			//find out what is the default domain
 			domainName = this._app.getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraDefaultDomainName];
-			if(!domainName) {
+			if(!domainName && ZaSettings.DOMAINS_ENABLED) {
 				domainName = this._app.getDomainList().getArray()[0].name;
 			}
 		}
-	} else {
+	} 
+	if(!domainName) {
 		domainName =  ZaSettings.myDomainName;
 	}
 	this._containedObject[ZaAccount.A_name] = "@" + domainName;
@@ -215,13 +216,12 @@ function(value, event, form) {
 	return value;
 }
 
-ZaNewAccountXWizard.prototype.getMyXForm = function() {	
-//	var domainName = this._app._appCtxt.getAppController().getOverviewPanelController().getCurrentDomain();
+ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {	
 	var domainName;
-	if(ZaSettings.isDomainAdmin)
-		domainName = ZaSettings.myDomainName;
-	else 
+	if(ZaSettings.DOMAINS_ENABLED)
 		domainName = this._app.getDomainList().getArray()[0].name;
+	else 
+		domainName = ZaSettings.myDomainName;
 
 	var emptyAlias = "@" + domainName;
 	var cases = new Array();
@@ -471,13 +471,11 @@ ZaNewAccountXWizard.prototype.getMyXForm = function() {
 						]
 					});									
 	}
-	var xFormObject = {
-		items: [
+	xFormObject.items = [
 			{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices},
 			{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
 			{type:_SPACER_,  align:_CENTER_, valign:_TOP_},
 			{type:_SWITCH_, width:400, align:_LEFT_, valign:_TOP_, items:cases}
-		]
-	};	
-	return xFormObject;
+		];
 };
+ZaXDialog.XFormModifiers["ZaNewAccountXWizard"].push(ZaNewAccountXWizard.myXFormModifier);

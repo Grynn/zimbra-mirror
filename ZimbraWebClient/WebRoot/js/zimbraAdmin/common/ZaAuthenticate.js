@@ -29,7 +29,8 @@ function ZaAuthenticate(appCtxt) {
 	this._uname = "";
 }
 
-ZaAuthenticate._isAdmin = true;
+
+ZaAuthenticate.processResponseMethods = new Array();
 
 ZaAuthenticate.prototype.toString = 
 function() {
@@ -49,6 +50,7 @@ function (uname, pword, isPublic) {
 	soapDoc.set("password", pword);
 	var resp = ZmCsfeCommand.invoke(soapDoc, true, null, null, true).firstChild;
 	this._processResponse(resp);	
+	ZaSettings.init();	
 }
 
 ZaAuthenticate.prototype._processResponse =
@@ -65,17 +67,17 @@ function(resp) {
 			lifetime = el.firstChild.nodeValue;*/
 		else if (el.nodeName=="sessionId")
 			sessionId = el.firstChild.nodeValue;
-		else if (el.nodeName=="a") { //TODO: Move this code to an external file
-			if(ZaAccount.A_zimbraIsDomainAdminAccount == el.getAttribute("n")) {
-				var value = el.firstChild.nodeValue;
-				if(value=="true") {
-					AjxCookie.setCookie(document, ZaSettings.ADMIN_TYPE_COOKIE, "domain", null, "/");			    	
-				} else {
-					AjxCookie.setCookie(document, ZaSettings.ADMIN_TYPE_COOKIE, "super", null, "/");			    	
-				}					
-			}
-		}
 	}
 	ZmCsfeCommand.setAuthToken(authToken, -1, sessionId);
-	ZaSettings.init();					
+
+	//Instrumentation code start
+	if(ZaAuthenticate.processResponseMethods) {
+		var cnt = ZaAuthenticate.processResponseMethods.length;
+		for(var i = 0; i < cnt; i++) {
+			if(typeof(ZaAuthenticate.processResponseMethods[i]) == "function") {
+				ZaAuthenticate.processResponseMethods[i].call(this,resp);
+			}
+		}
+	}	
+	//Instrumentation code end		
 }

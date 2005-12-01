@@ -33,7 +33,7 @@
 * @param app
 * @author Greg Solovyev
 **/
-function ZaTabView (parent, app,iKeyName) {
+function ZaTabView (parent, app, iKeyName) {
 	if (arguments.length == 0) return;
 	DwtComposite.call(this, parent, "DwtTabView", Dwt.ABSOLUTE_STYLE);	
 	this._iKeyName = iKeyName;
