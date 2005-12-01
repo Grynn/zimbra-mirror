@@ -40,14 +40,8 @@ fi
 
 DEST=$1
 
-if [ x$DEST = "x" ]; then
-	DEST="${zimbra_home}/backup/ldap"
-fi
+mkdir -p $DEST
 
 D=`date +%Y%m%d%H%M%S`
-BAK_DEST=${DEST}/${D}
-
-mkdir -p $BAK_DEST
-
-${zimbra_home}/openldap/sbin/slapcat > $DEST/ldap.bak
-cp -f $DEST/ldap.bak $BAK_DEST/ldap.bak
+${zimbra_home}/openldap/sbin/slapcat > $DEST/ldap.bak.${D}
+cp -f ${DEST}/ldap.bak.${D} ${DEST}/ldap.bak
