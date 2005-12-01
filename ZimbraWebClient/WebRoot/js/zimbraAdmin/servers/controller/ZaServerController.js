@@ -151,16 +151,6 @@ function(entry) {
 	this._view.setDirty(false);
 	this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
 	this._currentObject = entry;
-
-	//TODO: Move this code to an external file
-	//TODO: instrumentation code here
-	if(entry.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]) {	
-		if(entry[ZaServer.A_showVolumes]) {
-			this._toolBar.enable([ZaOperation.HSM], true);
-		} else {
-			this._toolBar.enable([ZaOperation.HSM], false);
-		}
-	}
 }
 ZaController.setViewMethods["ZaServerController"].push(ZaServerController.setViewMethod);
 
@@ -387,8 +377,9 @@ function (params) {
 			if(params) {
 				params["func"].call(params["obj"], params["params"]);
 			} else {
-				this._currentObject.refresh(false);	
-				this._view.setObject(this._currentObject);				
+				this._setView(this._currentObject);
+				//this._currentObject.refresh(false);	
+				//this._view.setObject(this._currentObject);				
 			}
 		}
 	} catch (ex) {

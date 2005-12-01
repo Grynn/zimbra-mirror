@@ -136,7 +136,7 @@ ZaServer.SLAVE = "slave";
 ZaServer.PRI_MSG = 1;
 ZaServer.SEC_MSG = 2;
 ZaServer.INDEX = 10;
-ZaServer.volumeTypeChoicesNoHSM = new XFormChoices({1:ZaMsg.NAD_HSM_Msg, 10:ZaMsg.NAD_HSM_Index}, XFormChoices.HASH);
+ZaServer.volumeTypeChoices = new XFormChoices({1:ZaMsg.NAD_VOLUME_Msg, 10:ZaMsg.NAD_VOLUME_Index}, XFormChoices.HASH);
 
 		
 ZaServer.myXModel = {

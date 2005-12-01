@@ -28,7 +28,7 @@ if(ZaServer) {
 	ZaServer.A_HSMthreshold = "threshold";
 	ZaServer.A_HSMremainingMailboxes = "remainingMailboxes"
 	
-	ZaServer.volumeTypeChoicesAll = new XFormChoices({1:ZaMsg.NAD_HSM_PrimaryMsg, 2:ZaMsg.NAD_HSM_SecMsg, 10:ZaMsg.NAD_HSM_Index}, XFormChoices.HASH);	
+	ZaServer.volumeTypeChoicesAll = new XFormChoices({1:ZaMsg.NAD_HSM_PrimaryMsg, 2:ZaMsg.NAD_HSM_SecMsg, 10:ZaMsg.NAD_VOLUME_Index}, XFormChoices.HASH);	
 	ZaServer.volumeTypeChoicesHSM = new XFormChoices({1:ZaMsg.NAD_HSM_PrimaryMsg, 2:ZaMsg.NAD_HSM_SecMsg}, XFormChoices.HASH);
 	ZaServer.HSM_StatusChoices = {0:ZaMsg.NAD_HSM_Idle,1:ZaMsg.NAD_HSM_Running};	
 	
@@ -284,3 +284,98 @@ ZaHSM.GlobalConfigXFormModifier = function (xFormObject) {
 		});
 }
 ZaTabView.XFormModifiers["GlobalConfigXFormView"].push(ZaHSM.GlobalConfigXFormModifier);
+
+
+ZaHSM.getVolumeTypeDisplayValue = 
+function(val) {
+	if(!val)
+		return "";
+		
+	var value = parseInt(val);
+	switch(value ) {
+		case ZaServer.PRI_MSG :
+			if(this.getInstance().cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]) {
+				return ZaMsg.NAD_HSM_PrimaryMsg;
+			} else {
+				return ZaMsg.NAD_VOLUME_Msg;
+			}
+		case ZaServer.SEC_MSG:
+			return ZaMsg.NAD_HSM_SecMsg;
+		case ZaServer.INDEX:
+			return ZaMsg.NAD_VOLUME_Index;
+		default :
+			return val;
+	}
+}
+
+ZaHSM.whichVolumeTypeSelect = function() {
+	var model = this.getModel();
+	var instance = this.getInstance();
+	if(instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]) {
+		//HSM is installed
+		if(model.getInstanceValue(instance, (this.__parentItem.refPath + '/' + ZaServer.A_VolumeId))) {
+			//volume exists
+			if(this.getInstanceValue() == ZaServer.INDEX) {
+				//if its an index volume - don't allow changing its type
+		 		return 1;				
+			} else if(ZaServerXFormView.isCurrent.call(this)) {
+				//if its a current volume - don't allow changing its type
+		 		return 1;
+			} else {
+				//allow changing its type to Primary/Secondary
+				return 4;
+			}
+		} else {
+			//allow changing its type to Primary/Secondary/Index
+			return 3;
+		}
+	} else {
+		//HSM not installed, volume can be either Primary msg or Index or new
+	 	if(model.getInstanceValue(instance, (this.__parentItem.refPath + '/' + ZaServer.A_VolumeId))) {
+		 	//volume exists => don't allow changing its type
+	 		return 1;
+	 	} else {
+	 		//allow changing its type to Primary/Index
+	 		return 2;
+	 	}
+	}
+}
+
+ZaHSM.ServerXFormModifier = function(xFormObject) {
+	var HSMXGroup = {type:_GROUP_, numCols:3,
+						relevant:"instance.cos.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM] && instance[ZaServer.A_showVolumes]",
+						relevantBehavior:_HIDE_,
+						items: [
+							{ref:ZaServer.A_zimbraHsmAge, type:_SUPER_LIFETIME_, 
+								msgName:ZaMsg.NAD_HSM_Threshold,
+								label:ZaMsg.NAD_HSM_Threshold, 
+								resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+								labelLocation:_LEFT_, labelCssStyle:"width:190px;",
+								onChange:ZaTabView.onFormFieldChanged
+							},
+							{type:_SPACER_, colSpan:"*"},	
+							{type:_DWT_ALERT_, ref:"progressMsg",content: null,
+								relevant:"instance.hsm.progressMsg!=null",
+								colSpan:"*",
+								relevantBehavior:_HIDE_,
+									iconVisible: true,
+								align:_CENTER_,				
+								style: DwtAlert.INFORMATION
+							}									
+						]
+					};		
+	xFormObject.items[2].items[5].items.splice(0,0,HSMXGroup,{type:_SPACER_, colSpan:"*"});
+	xFormObject.items[2].items[5].items[4].items[2].relevant="ZaHSM.whichVolumeTypeSelect.call(item)==2";
+	xFormObject.items[2].items[5].items[4].items[3].relevant="ZaHSM.whichVolumeTypeSelect.call(item)==1";	
+	xFormObject.items[2].items[5].items[4].items[3].getDisplayValue = ZaHSM.getVolumeTypeDisplayValue;
+	xFormObject.items[2].items[5].items[4].items.splice(3,0,
+								{ref:ZaServer.A_VolumeType, type:_OSELECT1_, choices:ZaServer.volumeTypeChoicesAll,width:"135px", label:null,
+									relevant:"ZaHSM.whichVolumeTypeSelect.call(item)==3",									
+									relevantBehavior:_HIDE_, onChange: ZaServerXFormView.onFormFieldChanged
+								},
+								{ref:ZaServer.A_VolumeType, type:_OSELECT1_, choices:ZaServer.volumeTypeChoicesHSM,width:"135px", label:null,
+									relevant:"ZaHSM.whichVolumeTypeSelect.call(item)==4",
+									relevantBehavior:_HIDE_, onChange: ZaServerXFormView.onFormFieldChanged
+								});
+}
+ZaTabView.XFormModifiers["ZaServerXFormView"].push(ZaHSM.ServerXFormModifier);
