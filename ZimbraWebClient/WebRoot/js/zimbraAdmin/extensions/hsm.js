@@ -259,7 +259,9 @@ if(ZaController.setViewMethods["ZaServerController"]) {
 }
 
 ZaHSM.GlobalConfigXFormModifier = function (xFormObject) {
-	xFormObject.items[1] = {type:_TAB_BAR_,  ref:ZaModel.currentTab,relevantBehavior:_HIDE_,
+	xFormObject.items[1].relevant = "!instance.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]";
+	xFormObject.items.splice(1,0,
+	{type:_TAB_BAR_,  ref:ZaModel.currentTab,relevantBehavior:_HIDE_,
 	 	containerCssStyle: "padding-top:0px",
 	 	relevant:"instance.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]",
 		choices:[
@@ -272,8 +274,8 @@ ZaHSM.GlobalConfigXFormModifier = function (xFormObject) {
 			{value:7, label:ZaMsg.NAD_Tab_AntiVirus},
 			{value:8, label:ZaMsg.NAD_Tab_HSM}					
 		]
-	};
-	xFormObject.items[2].items.push({type:_CASE_, relevant: "instance[ZaModel.currentTab] == 8 && instance.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]", 
+	});
+	xFormObject.items[3].items.push({type:_CASE_, relevant: "instance[ZaModel.currentTab] == 8 && instance.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_HSM]", 
 			items: [
 				{ref:ZaGlobalConfig.A_zimbraHsmAge, type:_LIFETIME_, 
 					msgName:ZaMsg.NAD_HSM_Threshold,label:ZaMsg.NAD_HSM_Threshold, 
