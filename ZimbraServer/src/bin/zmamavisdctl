@@ -87,7 +87,11 @@ case "$1" in
 			cpid=`cat /opt/zimbra/log/amavisd.pid`
 			kill -TERM "$cpid" 2> /dev/null
 			if [ -f /opt/zimbra/log/amavisd.pid ]; then
-				killall -TERM ${zimbra_home}/amavisd/sbin/amavisd
+				if [ "x$platform" = "xMACOSX" ]; then
+					killall -TERM amavisd
+				else
+					killall -TERM ${zimbra_home}/amavisd/sbin/amavisd
+				fi
 			fi
 			sleep 2
 			umount ${zimbra_home}/amavisd/tmp
