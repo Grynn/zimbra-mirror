@@ -27,7 +27,7 @@ function ZmYAddressObjectHandler(appCtxt) {
 	ZmObjectHandler.call(this, appCtxt, ZmYAddressObjectHandler.TYPE);
 }
 
-ZmYAddressObjectHandler.prototype = new ZmObjectHandler;
+ZmYAddressObjectHandler.prototype = new ZmObjectHandler();
 ZmYAddressObjectHandler.prototype.constructor = ZmYAddressObjectHandler;
 
 // Consts
@@ -38,6 +38,9 @@ ZmYAddressObjectHandler.ADDRESS_RE = /[\w]{3,}([A-Za-z]\.)?([ \w]*\#\d+)?(\r\n| 
 
 // Y! Maps Service URL
 ZmYAddressObjectHandler.URL = "http://api.local.yahoo.com/MapsService/V1/mapImage?appid=ZimbraMail&zoom=4&image_height=245&image_width=345&location=";
+
+// Blank GIF
+ZmYAddressObjectHandler.BLANKGIF = "/service/zimlet/com_zimbra_ymaps/blank_pixel.gif";
 
 // Make DOM safe id's
 ZmYAddressObjectHandler.encodeId = function(s) {
@@ -54,6 +57,7 @@ function(line, startIndex) {
 
 ZmYAddressObjectHandler.prototype._getHtmlContent =
 function(html, idx, address, context) {
+	(new Image()).src = ZmYAddressObjectHandler.BLANKGIF;
 	var	url = "http://maps.yahoo.com/beta/#maxp=search&q1="+AjxStringUtil.htmlEncode(address);
     html[idx++] = '<a target="_blank" href="'+url+'">'+AjxStringUtil.htmlEncode(address)+'</a>';	
 	return idx;
@@ -61,7 +65,7 @@ function(html, idx, address, context) {
 
 ZmYAddressObjectHandler.prototype.getToolTipText =
 function(obj, context) {
-	return '<iframe scrolling="no" frameborder="0" marginWidth="0" marginHeight="0" width="345" height="245" src="" id="'+ZmYAddressObjectHandler.encodeId(obj)+'">' + obj + '</iframe>';
+	return '<img width="345" height="245" id="'+ZmYAddressObjectHandler.encodeId(obj)+'" src="'+ZmYAddressObjectHandler.BLANKGIF+'"/>';
 };
 
 ZmYAddressObjectHandler.prototype.populateToolTip =
@@ -78,9 +82,8 @@ function(obj, context) {
 
 ZmYAddressObjectHandler.displayImage = 
 function(img_src, obj) {
-	var element = document.getElementById(ZmYAddressObjectHandler.encodeId(obj));
-	element.src = img_src;
-
+	var imgEl = document.getElementById(ZmYAddressObjectHandler.encodeId(obj));
+	imgEl.style.backgroundImage = "url("+img_src+")";
     if(!ZmYAddressObjectHandler.CACHE[obj+"img"]) {
 		ZmYAddressObjectHandler.CACHE[obj+"img"] = img_src;
 	}
