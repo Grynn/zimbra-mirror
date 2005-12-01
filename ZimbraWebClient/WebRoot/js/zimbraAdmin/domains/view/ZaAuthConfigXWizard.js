@@ -25,7 +25,7 @@
 
 function ZaAuthConfigXWizard (parent, app) {
 	this._app=app;
-	ZaXWizardDialog.call(this, parent, null, ZaMsg.NCD_AuthConfigTitle, "550px", "300px");
+	ZaXWizardDialog.call(this, parent,app, null, ZaMsg.NCD_AuthConfigTitle, "550px", "300px");
 
 	this.stepChoices = [
 		{label:ZaMsg.TABT_AuthMode, value:1},				

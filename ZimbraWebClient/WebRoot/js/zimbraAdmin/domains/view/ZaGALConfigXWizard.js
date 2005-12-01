@@ -32,7 +32,7 @@
 **/
 function ZaGALConfigXWizard (parent, app) {
 	this._app=app;
-	ZaXWizardDialog.call(this, parent, null, ZaMsg.NCD_GALConfigTitle, "550px", "300px");
+	ZaXWizardDialog.call(this, parent,app, null, ZaMsg.NCD_GALConfigTitle, "550px", "300px");
 	this.stepChoices = [
 		{label:ZaMsg.TABT_GALMode, value:1},
 		{label:ZaMsg.TABT_GALonfiguration, value:2}, 

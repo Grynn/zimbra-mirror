@@ -32,7 +32,7 @@
 **/
 function ZaNewDomainXWizard (parent, app) {
 	this._app=app;
-	ZaXWizardDialog.call(this, parent, null, ZaMsg.NDD_Title, "550px", "300px");
+	ZaXWizardDialog.call(this, parent,app, null, ZaMsg.NDD_Title, "550px", "300px");
 
 	this.stepChoices = [
 		{label:ZaMsg.TABT_GeneralPage, value:1},
