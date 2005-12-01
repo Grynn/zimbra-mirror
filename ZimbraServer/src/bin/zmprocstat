@@ -1,0 +1,98 @@
+#!/usr/bin/perl
+
+#
+# Generate CVS file of CPU usage.
+#
+
+use strict;
+use Date::Manip;
+use Getopt::Long;
+use Sys::Hostname;
+$| = 1;
+my $hostname = hostname;
+my ($opt_interval, $opt_help);
+
+GetOptions("interval=i" => \$opt_interval,
+           "help" => \$opt_help) || usage($!);
+
+if (defined($opt_help)) {
+    usage();
+}
+
+if (!defined($opt_interval)) {
+    $opt_interval = 60;
+}
+
+sub usage {
+    my $error = shift;
+    print("Error: ", $error, "\n\n") if (defined($error));
+    print <<EOF;
+Usage: $0
+  -i --interval=secs     Seconds between reports (default 60)
+EOF
+    exit(1) if (defined($error));
+    exit(0);
+}
+procstat();
+
+sub snapshot() {
+    my $result = {};
+    opendir(DIR, "/proc") || die "opendir /proc: $!";
+    while (defined(my $piddir = readdir(DIR))) {
+        next if ($piddir !~ /^[0-9]+$/);
+        open(STAT, "/proc/$piddir/stat") || next;
+        while (<STAT>) {
+            my @stats = split(/\s+/, $_);
+            my $pid = $stats[0];
+            $result->{$pid} = \@stats;
+        }
+        close(STAT);
+    }
+    closedir(DIR);
+    return $result;
+}
+
+my $oldSnapshot = snapshot(); 
+
+sub procstat() {
+    print "time,host,prog,pid,uticks,sticks\n";
+    while (1) {
+        my $newSnapshot = snapshot();
+        my $date = UnixDate(ParseDate("now"), "%m/%d/%Y %H:%M:%S"); 
+        foreach my $pid (keys %{$newSnapshot}) {
+            my $oldStats = $oldSnapshot->{$pid};
+            my $newStats = $newSnapshot->{$pid};
+
+            if (!defined($oldStats)) {
+                # new process we have no prev data
+                next;
+            }
+
+            my $oldprog = $oldStats->[1];
+            my $newprog = $newStats->[1];
+            my $oldutime = $oldStats->[13];
+            my $oldstime = $oldStats->[14];
+            my $newutime = $newStats->[13];
+            my $newstime = $newStats->[14];
+
+            if ($oldprog ne $newprog) {
+                # not the same process
+                next;
+            }
+
+            if ($oldutime >= $newutime && $oldstime >= $newstime) {
+                # process has not consumed any ticks (equal case)
+                # or some new process of same name has the old pid (> case).
+                next;
+            }
+            
+            my $utime = $newutime - $oldutime;
+            my $stime = $newstime - $oldstime;
+            my $prog = $newprog; # could be oldprog also, they are equal
+
+            print join(',', $date, $hostname, $prog, $pid, $utime, $stime), "\n";
+        }
+        sleep($opt_interval);
+        $oldSnapshot = $newSnapshot;
+    }
+}
