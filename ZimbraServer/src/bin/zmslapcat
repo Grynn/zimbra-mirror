@@ -45,8 +45,9 @@ if [ x$DEST = "x" ]; then
 fi
 
 D=`date +%Y%m%d%H%M%S`
-DEST=${DEST}/${D}
+BAK_DEST=${DEST}/${D}
 
-mkdir -p $DEST
+mkdir -p $BAK_DEST
 
 ${zimbra_home}/openldap/sbin/slapcat > $DEST/ldap.bak
+cp -f $DEST/ldap.bak $BAK_DEST/ldap.bak
