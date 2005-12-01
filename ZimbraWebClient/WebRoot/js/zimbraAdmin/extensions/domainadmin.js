@@ -86,6 +86,43 @@ if(ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
 	ZaTabView.XFormModifiers["ZaAccountXFormView"].push(ZaDomainAdmin.AccountXFormModifier);
 }
 
+if(ZaXDialog.XFormModifiers["ZaNewAccountXWizard"]) {
+	ZaDomainAdmin.NewAccountWizXFormModifier = function(xFormObject) {
+		//remove "Is Adminitrator checkbox" from first tab
+		var domainAdminChkBx = {ref:ZaAccount.A_zimbraIsDomainAdminAccount,type:_CHECKBOX_, 
+							msgName:ZaMsg.NAD_IsDomainAdminAccount,label:ZaMsg.NAD_IsDomainAdminAccount,labelLocation:_LEFT_, 
+							trueValue:"TRUE", falseValue:"FALSE",
+							labelCssClass:"xform_label",
+							align:_LEFT_,
+							relevantBehavior:_DISABLE_,
+							relevant:"instance.attrs[ZaAccount.A_isAdminAccount]!=\'TRUE\'"
+						};
+		var tmpItems = xFormObject.items[3].items[0].items;
+		var cnt = tmpItems.length;
+		for(var i = 0; i < cnt; i ++) { 
+			if(tmpItems[i] && tmpItems[i].ref == ZaAccount.A_isAdminAccount) {
+				if(ZaSettings.isDomainAdmin) {
+					//remove "Administrator" checkbox from Domain Admin's view
+					xFormObject.items[3].items[0].items.splice(i,1);
+				} else {
+					//make sure Domain Admin and Administrator checkboxes are mutualy exclusive
+					tmpItems[i].elementChanged = 
+						function(elementValue,instanceValue, event) {
+							if(elementValue == "TRUE") {
+								this.setInstanceValue("FALSE", ZaAccount.A_zimbraIsDomainAdminAccount);
+								}
+								this.getForm().itemChanged(this, elementValue, event);
+						};
+				}
+				//add Domain Admin checkbox
+				xFormObject.items[3].items[0].items.splice(i,0,domainAdminChkBx);
+				break;
+			}
+		}
+	}
+
+	ZaXDialog.XFormModifiers["ZaNewAccountXWizard"].push(ZaDomainAdmin.NewAccountWizXFormModifier);
+}
 if(ZaAuthenticate.processResponseMethods) {
 	ZaDomainAdmin.processAuthResponse = function(resp) {
 		var els = resp.childNodes;
