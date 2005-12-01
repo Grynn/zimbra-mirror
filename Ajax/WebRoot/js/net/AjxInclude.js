@@ -43,11 +43,11 @@
  * @author Mihai Bazon, <mihai@zimbra.com>
  */
 function AjxInclude(includes, baseurl, callback) {
-	var head = document.getElementsByTagName("head")[0];
 	var script = null;
+	var head = document.getElementsByTagName("head")[0];
 
 	function loadNextScript() {
-		if (AjxEnv.isIE && script && script.readyState != "complete")
+		if (AjxEnv.isIE && script && !/loaded|complete/.test(script.readyState))
 			return;
 		if (script) {
 			// Clear the event handler so IE won't leak.  (Did you know
@@ -59,17 +59,30 @@ function AjxInclude(includes, baseurl, callback) {
 		var scripts = AjxInclude.dwhack_scripts.length > 0
 			? AjxInclude.dwhack_scripts
 			: includes;
+		window.status = "";
 		if (scripts.length > 0) {
 			var fullurl = scripts.shift();
-			if (!/^((https?|ftps?):\x2f\x2f|\x2f)/.test(fullurl))
+			if (!/^((https?|ftps?):\x2f\x2f|\x2f)/.test(fullurl)) {
+				// relative URL
 				fullurl = baseurl + fullurl;
+
+				// TODO: Uncomment the code below to use the
+				// ProxyService.  Can't do at this time since
+				// the proxy restricts usage.
+
+// 			} else if (fullurl.indexOf('/') != 0) {
+// 				// fully qualified URL-s will go through our proxy
+// 				fullurl = "/service/proxy?target=" + AjxStringUtil.urlEncode(fullurl);
+			}
+//			dump("Loading: " + fullurl + "\n");
 			script = document.createElement("script");
 			script[AjxInclude.eventName] = loadNextScript;
 			script.type = "text/javascript";
 			script.src = fullurl;
+			window.status = "Zimlet script: " + fullurl;
+			//alert(fullurl);
 			head.appendChild(script);
 		} else if (includes.length == 0) {
-			// braindead cleanup
 			script = null;
 			head = null;
 			if (callback)
