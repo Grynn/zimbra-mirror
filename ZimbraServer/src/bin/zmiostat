@@ -40,9 +40,11 @@ iostat();
 
 sub iostat() {
     open(IOSTAT, "iostat -t -x $opt_interval |");
-    open(CPU, "> $opt_cpufile") if (defined($opt_cpufile)) || die "can't open: $opt_cpufile: $!";
+    if (defined($opt_cpufile)) {
+        open(CPU, "> $opt_cpufile") || die "can't open: $opt_cpufile: $!";
+    }
     CPU->autoflush(1);
-
+    
     my $time;
     my $inDevices = 0;
     my $expectCPU = 0;
