@@ -132,7 +132,7 @@ function(ev) {
 		if (obj._toolTipContent != null) {
 			var shell = DwtShell.getShell(window);
 			var manager = shell.getHoverMgr();
-			if ((manager.getHoverObject != this || !manager.isHovering()) && !DwtMenu.menuShowing()) {
+			if ((manager.getHoverObject() != this || !manager.isHovering()) && !DwtMenu.menuShowing()) {
 				manager.reset();
 				manager.setHoverObject(this);
 				manager.setHoverOverDelay(DwtToolTip.TOOLTIP_DELAY);
