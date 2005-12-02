@@ -24,10 +24,6 @@
 # ***** END LICENSE BLOCK *****
 # 
 
-#
-# Simple SOAP test-harness for the AddMsg API
-#
-
 use Date::Parse;
 use Time::HiRes qw ( time );
 use strict;
@@ -91,4 +87,3 @@ print "\nRESPONSE:\n--------------\n";
 $out =  $response->to_string("pretty")."\n";
 $out =~ s/ns0\://g;
 print $out."\n";
-
