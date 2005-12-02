@@ -606,7 +606,7 @@ DwtPropertyEditor._prop_functions = {
 
 	_displayMsg : function(msg) {
 		var x, y, w, h;
-		var pe  = this._propertyEditor,
+		var pe  = this._propertyEditor;
 		var div = pe._currentMsgDiv;
 
 		if (!div) {
