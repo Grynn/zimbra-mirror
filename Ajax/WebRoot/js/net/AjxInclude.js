@@ -118,9 +118,12 @@ document.write = document.writeln = function() {
 	// the original functions.
 };
 
+
+// XXX: DO NOT REMOVE - PREVENTS MEM LEAK IN IE
 if (AjxEnv.isIE) {
 	AjxInclude._removeWriteln = function() {
 		document.write = document.writeln = null;
+		window.detachEvent("onunload", AjxInclude._removeWriteln);
 	};
 	window.attachEvent("onunload", AjxInclude._removeWriteln);
 }
