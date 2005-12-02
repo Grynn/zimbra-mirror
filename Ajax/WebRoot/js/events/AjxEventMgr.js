@@ -40,6 +40,9 @@ function(eventType, listener) {
 		lv = this._listeners[eventType] = new AjxVector();
 	}         	 
 	if (!lv.contains(listener)) {
+		if (this._notifyingListeners) {
+			lv = this._listeners[eventType] = lv.clone();
+		}
 		lv.add(listener);
 		return true;
 	}
@@ -48,6 +51,7 @@ function(eventType, listener) {
 
 AjxEventMgr.prototype.notifyListeners =
 function(eventType, event) {
+	this._notifyingListeners = true;
 	var lv = this._listeners[eventType];
 	if (lv != null) {
 		var a = lv.getArray();
@@ -57,10 +61,12 @@ function(eventType, event) {
 		for (var i = 0; i < s; i++) {
 			c = a[i];
 			retVal = c.handleEvent ? c.handleEvent(event) : c(event);
-			if (retVal === false)
-				return;
+			if (retVal === false) {
+				break;
+			}
 		}
 	}	
+	this._notifyingListeners = false;
 }
 
 AjxEventMgr.prototype.isListenerRegistered =
@@ -73,6 +79,9 @@ AjxEventMgr.prototype.removeListener =
 function(eventType, listener) {
 	var lv = this._listeners[eventType];
 	if (lv != null) {
+		if (this._notifyingListeners) {
+			lv = this._listeners[eventType] = lv.clone();
+		}
 		lv.remove(listener);
 		return true;
 	}
@@ -83,6 +92,9 @@ AjxEventMgr.prototype.removeAll =
 function(eventType) {
 	var lv = this._listeners[eventType];
 	if (lv != null) {
+		if (this._notifyingListeners) {
+			lv = this._listeners[eventType] = lv.clone();
+		}
 		lv.removeAll();
 		return true;
 	}

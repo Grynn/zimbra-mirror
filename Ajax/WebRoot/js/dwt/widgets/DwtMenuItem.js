@@ -265,35 +265,47 @@ function(imageInfo) {
 
 DwtMenuItem.prototype.getMenu =
 function() {
+	if (this._menu instanceof AjxCallback) {
+		var callback = this._menu;
+		this.setMenu(callback.run());
+	}
 	return this._menu;
 }
 
+/**
+ * Adds a sub-menu to this menu item.
+ *
+ * @param menuOrCallback  The dropdown menu or an AjxCallback object. If a
+ *                        callback is given, it is called the first time the
+ *                        menu is requested. The callback must return a valid 
+ *                        DwtMenu object.
+ */
 DwtMenuItem.prototype.setMenu = 
-function(menu) {
-	if (this._menu == menu) {
+function(menuOrCallback) {
+	if (this._menu == menuOrCallback) {
 		return;
-	} else if (this._menu) {
+	} 
+	if (this._menu && !(this._menu instanceof AjxCallback)) {
 		this._menu.removeDisposeListener(this._menuDisposeListener);
 	}
 
-	if (menu)
-		menu.addDisposeListener(this._menuDisposeListener);
-	
 	if (this._style == DwtMenuItem.CASCADE_STYLE || this._style == DwtMenuItem.CHECK_STYLE
 		|| this._style == DwtMenuItem.RADIO_STYLE) {
-		if (menu) {
+		if (menuOrCallback) {
 			if (!this._menu)
 				this.parent._submenuItemAdded()
 			AjxImg.setImage(this._cascCell, "Cascade");
-		} else if (!menu) {
+		} else if (!menuOrCallback) {
 			if (this._menu)
 				this.parent._submenuItemRemoved();
 			if (this._cascCell)
 				AjxImg.setImage(this._cascCell, "Blank_16");
 		}
 	}
-	this._menu = menu;
-}
+	this._menu = menuOrCallback;
+	if (menuOrCallback && !(menuOrCallback instanceof AjxCallback))
+		menuOrCallback.addDisposeListener(this._menuDisposeListener);
+};
 
 DwtMenuItem.prototype.setSize = 
 function(width, height) {
@@ -439,6 +451,12 @@ function(ev) {
 	this.setMenu(null);
 }
 
+DwtMenuItem.prototype._popupMenu =
+function(delay) {
+	var menu = this.getMenu();
+	menu.popup(delay);
+};
+
 DwtMenuItem.prototype._popdownMenu =
 function() {
 	//if (this._menu && this._menu.isPoppedup())
@@ -455,15 +473,17 @@ function(msec) {
 			this._checkedCell.className = this._checkedAreaClassName;		
 		msec = (msec == null) ? DwtMenuItem._MENU_POPDOWN_DELAY : msec;
 	}
-	if (this._menu)
-		this._menu.popdown(msec);
+	var menu = this.getMenu();
+	if (menu)
+		menu.popdown(msec);
 	this.setClassName(this._origClassName);
 	this.setCursor("default");
 }
 
 DwtMenuItem.prototype._isMenuPoppedup =
 function() {
-	return (this._menu && this._menu.isPoppedup()) ? true : false;
+	var menu = this.getMenu();
+	return (menu && menu.isPoppedup()) ? true : false;
 }
 
 DwtMenuItem.prototype._mouseOverListener = 
@@ -481,14 +501,15 @@ function(ev) {
 			this._iconCell.className = this._iconAreaSelClassName;
 		if (this._checkedCell)
 			this._checkedCell.className = this._checkedAreaSelClassName;
-		if (this._menu)
-			this._menu.popup(DwtMenuItem._MENU_POPUP_DELAY);
+		if (this._menu) {
+			this._popupMenu(DwtMenuItem._MENU_POPUP_DELAY);
+		}
 		this.setSelectedStyle();
 	} else if (this._style == DwtMenuItem.PUSH_STYLE || this._style == DwtMenuItem.SELECT_STYLE) {
 		if (activeItem)
 			activeItem._deselect(0);
 		if (activeItem && this._menu) {
-			this._menu.popup();
+			this._popupMenu();
 			this.setSelectedStyle();
 		} else {
 			this.setSelectedStyle()
@@ -513,7 +534,8 @@ DwtMenuItem.prototype._mouseOutListener =
 function(ev) {
 	if (this._style == DwtMenuItem.SEPARATOR_STYLE)
 		return;
-	if (this._menu == null || !this._menu.isPoppedup())
+	var menu = this.getMenu();
+	if (menu == null || !menu.isPoppedup())
 		this._deselect();
 }
 
@@ -537,12 +559,12 @@ function(ev) {
 		if (!this._itemChecked) {
 			this._setChecked(!this._itemChecked, ev);
 			if (this._menu) {
-				this._menu.popup(0);
+				this._popupMenu(0);
 			} else {
 				DwtMenu.closeActiveMenu();
 			}
 		} else if (this._menu){
-			this._menu.popup(0);
+			this._popupMenu(0);
 		} else {
 			DwtMenu.closeActiveMenu();
 			// at the very least, notify menu item was clicked again
@@ -558,7 +580,7 @@ function(ev) {
 	} else if (this._style != DwtMenuItem.PUSH_STYLE) {
 		if (this._menu) {
 			// We know we have a menu to popup
-			this._menu.popup(0);
+			this._popupMenu(0);
 		} else if (this.isListenerRegistered(DwtEvent.SELECTION)) {
 			this._deselect();
 			var selEv = DwtShell.selectionEvent;
@@ -574,7 +596,7 @@ function(ev) {
 	} else if (this._style == DwtMenuItem.PUSH_STYLE){
 		if (this._menu){
 			if (!this._isMenuPoppedup()){
-				this._menu.popup(0);
+				this._popupMenu(0);
 			} else {
 				this._deselect(0);
 			}

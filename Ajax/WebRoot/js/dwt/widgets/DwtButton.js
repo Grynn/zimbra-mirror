@@ -120,7 +120,7 @@ function() {
 */
 DwtButton.prototype.addDropDownSelectionListener = 
 function(listener) {
-	this._dropDownEvtMgr.addListener(DwtEvent.SELECTION, listener);
+	return this._dropDownEvtMgr.addListener(DwtEvent.SELECTION, listener);
 }
 
 /**
@@ -194,35 +194,42 @@ function (hoverImageInfo) {
 /**
 * Adds a dropdown menu to the button, available through a small down-arrow.
 *
-* @param menu				the dropdown menu
+* @param menuOrCallback		The dropdown menu or an AjxCallback object. If a
+*                           callback is given, it is called the first time the
+*                           menu is requested. The callback must return a valid 
+*                           DwtMenu object.
 * @param shouldToggle
 * @param followIconStyle	style of menu item (should be checked or radio style) for
 *							which the button icon should reflect the menu item icon
 */
 DwtButton.prototype.setMenu =
-	function(menu, shouldToggle, followIconStyle) {
-	this._menu = menu;
+function(menuOrCallback, shouldToggle, followIconStyle) {
+	this._menu = menuOrCallback;
 	this._shouldToggleMenu = (shouldToggle === true);
 	this._followIconStyle = followIconStyle;
-	if (menu && !this._dropDownCell) {
-		var idx = (this._imageCell) ? 1 : 0;
-		if (this._textCell)
-			idx++;
-		this._dropDownCell = this._row.insertCell(idx);
-		this._dropDownCell.id = Dwt.getNextId();
-		this._dropDownCell.className = "dropDownCell";
+	if (this._menu) {
+		if (!this._dropDownCell) {
+			var idx = (this._imageCell) ? 1 : 0;
+			if (this._textCell)
+				idx++;
+			this._dropDownCell = this._row.insertCell(idx);
+			this._dropDownCell.id = Dwt.getNextId();
+			this._dropDownCell.className = "dropDownCell";
+	
+			if (this._dropDownImg == null) this._dropDownImg = "SelectPullDownArrow";
+			if (this._dropDownDisImg == null) this._dropDownDisImg = "SelectPullDownArrowDis";
+			if (this._dropDownHovImg == null) this._dropDownHovImg = "SelectPullDownArrowHover";
+			AjxImg.setImage(this._dropDownCell, this._dropDownImg);
 
-		if (this._dropDownImg == null) this._dropDownImg = "SelectPullDownArrow";
-		if (this._dropDownDisImg == null) this._dropDownDisImg = "SelectPullDownArrowDis";
-		if (this._dropDownHovImg == null) this._dropDownHovImg = "SelectPullDownArrowHover";
-		AjxImg.setImage(this._dropDownCell, this._dropDownImg);
-
-		this._menu.setAssociatedElementId(this._dropDownCell.id);
-		// set event handler if applicable
-		if (this._enabled) {
-			this._setupDropDownCellMouseHandlers();
+			// set event handler if applicable
+			if (this._enabled) {
+				this._setupDropDownCellMouseHandlers();
+			}
 		}
-	} else if (!menu && this._dropDownCell) {
+		if (!(this._menu instanceof AjxCallback)) {
+			this._menu.setAssociatedElementId(this._dropDownCell.id);
+		}
+	} else if (this._dropDownCell) {
 		this._row.deleteCell(Dwt.getCellIndex(this._dropDownCell));
 		this._dropDownCell = null;
 	}
@@ -245,6 +252,10 @@ function() {
 */
 DwtButton.prototype.getMenu =
 function() {
+	if (this._menu instanceof AjxCallback) {
+		var callback = this._menu;
+		this.setMenu(callback.run());
+	}
 	return this._menu;
 }
 
@@ -464,7 +475,12 @@ function(ev) {
 	    }	
 
 		DwtEventManager.notifyListeners(DwtEvent.ONMOUSEDOWN, mouseEv);
-	
+
+		if (obj._menu instanceof AjxCallback) {
+			var menu = obj.getMenu();
+			menu.popup();
+		}	
+
 		if (obj._dropDownEvtMgr.isListenerRegistered(DwtEvent.SELECTION)) {
 	    	var selEv = DwtShell.selectionEvent;
 	    	DwtUiEvent.copy(selEv, mouseEv);
