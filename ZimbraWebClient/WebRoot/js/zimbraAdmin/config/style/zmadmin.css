@@ -71,7 +71,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 }
 .MainShell {
 	background-color: #B7B7B7;
-	background-image:url(/zimbraAdmin/skins/steel/images/bg_steel.gif);
+	background-image:url(/zimbraAdmin/img/loRes/skins/steel/Steel__BG.gif);
 }
 
 
@@ -87,7 +87,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 }
 .ZaSplashScreen, .ZaSplashScreen table {
 	background-color: #B7B7B7;
-	background-image:url(/zimbraAdmin/skins/steel/images/bg_steel.gif);
+	background-image:url(/zimbraAdmin/img/loRes/skins/steel/Steel__BG.gif);
 }
 
 
@@ -97,7 +97,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 .ZmLoginDialog-Transparent {background-color: transparent;}
 .ZmLoginDialog-HeaderPanel, .ZmLoginDialog-MainPanel {width: 448px;}
 .ZmLoginDialog-HeaderPanel {
-	background-image: url("/zimbraAdmin/img/hiRes/logo/Admin_LoginBanner.gif");
+	background-image: url(/zimbraAdmin/img/loRes/logo/Admin_LoginBanner.gif);
 	border: 1px solid rgb(124, 124, 148);
 }
 .ZmLoginDialog-HeaderText, .ZmLoginDialog-SubHeaderText {
@@ -130,7 +130,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 /* Login Panel */
 .ZaLoginDialog {
 	background-color: #b7b7b7; 
-	background-image:url(/zimbraAdmin/skins/steel/images/bg_steel.gif);
+	background-image:url(/zimbraAdmin/img/loRes/skins/steel/Steel__BG.gif);
 	overflow:hidden;
 	align:center;
 }
@@ -138,13 +138,13 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 
 .ZaLoginDialog-MainPanel {
 	width: 447px;
-	background-image:url(/zimbraAdmin/skins/steel/images/bg_pebble.gif);
+	background-image:url(/zimbraAdmin/img/loRes/skins/steel/Pebble__BG.gif);
 }
 
 .ZaLoginDialog-TopPanel {
   border: 2px solid; 
   border-color: #C7C7C7 #3E3E3E #3E3E3E #C7C7C7;
-  background-image:url(/zimbraAdmin/skins/steel/images/bg_pebble.gif);
+  background-image:url(/zimbraAdmin/img/loRes/skins/steel/Pebble__BG.gif);
 }
 
 
@@ -355,7 +355,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 
 .ZaToolBar {
 	width: 100%;
-	background-image:url(/zimbraAdmin/skins/steel/images/bg_pebble.gif);
+	background-image:url(/zimbraAdmin/img/loRes/skins/steel/Pebble__BG.gif);
 	border-style: solid;
 	border-width: 0px 0px 2px 0px;
 	border-bottom-color: #777777;
@@ -406,7 +406,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 
 .HeaderPanel {
 	width:100%;
-	background-image:url(/zimbraAdmin/skins/steel/images/bg_steel.gif);	
+	background-image:url(/zimbraAdmin/img/loRes/skins/steel/Steel__BG.gif);	
 	border-style: solid;
 	border-width: 0px 0px 2px 0px;
 	border-bottom-color: #777777;	
@@ -550,7 +550,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 
 /* Tab button grid */
 .ZaTabBar {
-	background-image:url(/zimbraAdmin/skins/steel/images/bg_pebble.gif);
+	background-image:url(/zimbraAdmin/img/loRes/skins/steel/Pebble__BG.gif);
 }
 
 .AdminTitle {

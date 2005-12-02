@@ -172,7 +172,6 @@ public class ImageMerge {
             if (divFile != null) {
             	OutputStream divFOS = new FileOutputStream(new File(_outputDirName, divFile), true);
             	_divOut = new PrintWriter(divFOS);
-            	_divOut.println("<div style='position:absolute;width:1px;height:1px;visibility:hidden;overflow:hidden;'>");
             }
        } else {
             explainUsageAndExit();
@@ -201,7 +200,6 @@ public class ImageMerge {
 
         _cssOut.close();
         if (_divOut != null) {
-        	_divOut.println("</div>");
         	_divOut.close();
         }
 
@@ -313,6 +311,8 @@ public class ImageMerge {
 				copyImageFiles(inputFilenames, _outputDirName, "jpg", false);
 			}
          }
+        // Just copy over .ico files.
+        copyImageFiles(getFilesOfType(inputDirs, "ico"), _outputDirName, "ico", true);
     }
 
     private static void copyFile(File in, 
@@ -336,6 +336,7 @@ public class ImageMerge {
  		copyImageFiles(getFilesOfType(inputDirs, "gif"), _outputDirName, "gif", true);
 		copyImageFiles(getFilesOfType(inputDirs, "jpg"), _outputDirName, "jpg", true);
 		copyImageFiles(getFilesOfType(inputDirs, "png"), _outputDirName, "png", true);
+		copyImageFiles(getFilesOfType(inputDirs, "ico"), _outputDirName, "ico", true);
     }
 
 
@@ -351,28 +352,6 @@ public class ImageMerge {
         String lastFile = "";
         for (int i = 0; i < filenames.length; i++) {
             String curFile = filenames[i];
-        
-			//MOW: figure out if it's a stretchy image by the filename
-			int layoutStyle = getLayoutStyleFromFilename(curFile, suffix);
-
-            // load the image. GIF's get slightly special treatment.
-            DecodedImage curImage;
-            if (suffix.equalsIgnoreCase("gif")) {
-                curImage = (DecodedImage) new DecodedGifImage(curFile, _cssPath, layoutStyle);
-            } else {
-                curImage = (DecodedImage) new DecodedFullColorImage(curFile, suffix, _cssPath, layoutStyle);
-            }
-
-
-			String debugMsg = "Copying image " + curFile + 
-							(layoutStyle == ImageMerge.HORIZ_LAYOUT ? " as a horizontal border" :
-			 				 layoutStyle == ImageMerge.VERT_LAYOUT ? " as a vertical border" :
-							 layoutStyle == ImageMerge.TILE_LAYOUT ? " as a tiling background image" : ""
-							);
-            System.out.println(debugMsg);
-            curImage.load();
-            curImage.setCombinedColumn(0);
-            curImage.setCombinedRow(0);
 
             // copy it to the destination directory
             // REVISIT: optimize this by passing in File objects...
@@ -397,10 +376,37 @@ public class ImageMerge {
         	    throw new ImageMergeException("unable to create output directory");
         	}
 
-            copyFile(new File(curFile), new File(outputDir, outFilename));
+            // Skip decode for .ico files
+			if (!suffix.equalsIgnoreCase("ico")) {
+				// MOW: figure out if it's a stretchy image by the filename
+				int layoutStyle = getLayoutStyleFromFilename(curFile, suffix);
 
-            // add to the CSS output
-            _cssOut.println(curImage.getCssString(curImage.getWidth(), curImage.getHeight(), combinedFilename));
+				// load the image. GIF's get slightly special treatment.
+				DecodedImage curImage;
+				if (suffix.equalsIgnoreCase("gif")) {
+					curImage = (DecodedImage) new DecodedGifImage(curFile,
+							_cssPath, layoutStyle);
+				} else {
+					curImage = (DecodedImage) new DecodedFullColorImage(
+							curFile, suffix, _cssPath, layoutStyle);
+				}
+
+				String debugMsg = "Copying image " + curFile
+						+ (layoutStyle == ImageMerge.HORIZ_LAYOUT ? " as a horizontal border"
+						 : layoutStyle == ImageMerge.VERT_LAYOUT ? " as a vertical border"
+						 : layoutStyle == ImageMerge.TILE_LAYOUT ? " as a tiling background image"
+						 : "");
+				System.out.println(debugMsg);
+				curImage.load();
+				curImage.setCombinedColumn(0);
+				curImage.setCombinedRow(0);
+				// add to the CSS output
+				_cssOut.println(curImage.getCssString(curImage.getWidth(),
+						curImage.getHeight(), combinedFilename));
+			}
+
+            copyFile(new File(curFile), new File(outputDir, outFilename));
+            // add to the pre-cache div
             String thisFile = _cssPath+combinedFilename;
             if (_divOut != null && !lastFile.equals(thisFile)) {
             	_divOut.println("<img src='"+thisFile+"'>");
@@ -408,7 +414,6 @@ public class ImageMerge {
             }
         }
         System.out.println("Copied " + filenames.length + " " + suffix + " images.");
-
     }
 
     
