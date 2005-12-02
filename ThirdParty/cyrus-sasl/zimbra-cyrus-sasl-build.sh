@@ -19,9 +19,9 @@ rm config/ltconfig config/libtool.m4
 if [ -x /usr/bin/libtoolize ]; then
 	LIBTOOLIZE=/usr/bin/libtoolize
 else
-	if [ -x /usr/bin/glibtoolize ]; then
+	if [ -x /opt/local/bin/glibtoolize ]; then
 		export CPPFLAGS=-DDARWIN
-		LIBTOOLIZE=/usr/bin/glibtoolize
+		LIBTOOLIZE=/opt/local/bin/glibtoolize
 	else
 		echo "Where is libtoolize?"
 		exit 1
