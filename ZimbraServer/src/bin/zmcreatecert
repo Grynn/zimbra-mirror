@@ -23,12 +23,22 @@
 # 
 # ***** END LICENSE BLOCK *****
 # 
+
+source /opt/zimbra/bin/zmshutil || exit 1
+zmsetvars
+
 CONF=/opt/zimbra/conf
 TCONF=/opt/zimbra/tomcat/conf
 B=/opt/zimbra/ssl
 BASE=${B}/ssl
 
-JAVA_HOME=/opt/zimbra/java
+JAVA_HOME=${zimbra_java_home}
+if [ -f "${JAVA_HOME}/lib/security/cacerts" ]; then
+	CACERTS=${JAVA_HOME}/lib/security/cacerts
+else
+	CACERTS=${JAVA_HOME}/jre/lib/security/cacerts
+fi
+
 
 TOMCAT=/opt/zimbra/tomcat/conf
 
@@ -68,10 +78,8 @@ importCA() {
 	echo "** Importing CA"
 	echo
 
-	# rm -f ${JAVA_HOME}/jre/lib/security/cacerts
-
 	keytool -import -noprompt -keystore \
-		${JAVA_HOME}/jre/lib/security/cacerts -file \
+		${CACERTS} -file \
 		${BASE}/ca/ca.pem -alias my_ca -storepass changeit
 }
 
