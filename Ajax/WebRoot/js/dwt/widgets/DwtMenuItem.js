@@ -58,7 +58,7 @@ function DwtMenuItem(parent, style, radioGroupId, index, className, posStyle) {
 	this._iconAreaSelClassname = this._iconAreaClassName + "-" + DwtCssStyle.SELECTED;
 	this._checkedAreaClassName = className + "-CheckedArea";
 	this._checkedAreaSelClassname = this._checkedAreaClassName + "-" + DwtCssStyle.SELECTED;
-	this._table = this.getDocument().createElement("table");
+	this._table = document.createElement("table");
 	this._table.cellSpacing = this._table.cellPadding = 0;
 	this._table.border = 0;
 	this._table.borderCollapse = "separate";

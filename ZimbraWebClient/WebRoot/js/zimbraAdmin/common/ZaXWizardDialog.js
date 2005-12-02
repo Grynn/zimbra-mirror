@@ -66,7 +66,7 @@ function ZaXWizardDialog (parent, app, className, title, w, h,iKeyName) {
 	}
 	
 
-	this._pageDiv = this.getDocument().createElement("div");
+	this._pageDiv = document.createElement("div");
 	this._pageDiv.className = "ZaXWizardDialogPageDiv";
 	this._pageDiv.style.width = this._contentW;
 	this._pageDiv.style.height = this._contentH;
@@ -204,7 +204,7 @@ function(entry) {
 function ZaXWizProgressBar(parent) {
 	if (arguments.length == 0) return;
 	DwtComposite.call(this, parent, "ZaXWizProgressBar", DwtControl.STATIC_STYLE);
-	this._table = this.getDocument().createElement("table");
+	this._table = document.createElement("table");
 	this._table.border = 0;
 	this._table.cellPadding = 0;
 	this._table.cellSpacing = 0;

@@ -279,7 +279,7 @@ function(htmlElement) {
         "</tr></table>"].join("");
     
     this._busyDialog.setContent(html);
-    this._busyDialogTxt = Dwt.getDomObj(document, txtId);
+    this._busyDialogTxt = document.getElementById(txtId);
        
 	this._busyTimedAction = new AjxTimedAction();
 	this._busyTimedAction.obj = this;

@@ -96,12 +96,10 @@ function DwtDialog(parent, className, title, standardButtons, extraButtons, zInd
 	for (var i = 0; i < this._buttonList.length; i++)
 		this._buttonElementId[this._buttonList[i]] = Dwt.getNextId();
 
-	var doc = this.getDocument();
-	
 	DwtBaseDialog.call(this, parent, className, this._title, zIndex, mode, loc);
 	DBG.timePt(AjxDebug.PERF, "DwtBaseDialog constructor");
-	this._titleCell = Dwt.getDomObj(doc, this._titleCellId);
-	this._contentDiv = Dwt.getDomObj(doc, this._contentId);
+	this._titleCell = document.getElementById(this._titleCellId);
+	this._contentDiv = document.getElementById(this._contentId);
 
 	// set up buttons
 	this._button = new Object();
@@ -111,7 +109,7 @@ function DwtDialog(parent, className, title, standardButtons, extraButtons, zInd
 		this._button[buttonId].setText(this._buttonDesc[buttonId].label);
 		this._button[buttonId].buttonId = buttonId;
 		this._button[buttonId].addSelectionListener(new AjxListener(this, this._buttonListener));
-		Dwt.getDomObj(doc, this._buttonElementId[buttonId]).appendChild(this._button[buttonId].getHtmlElement());
+		document.getElementById(this._buttonElementId[buttonId]).appendChild(this._button[buttonId].getHtmlElement());
 	}
 	this.initializeDragging(this._titleHandleId);
 	DBG.timePt(AjxDebug.PERF, "setup buttons and init dragging");

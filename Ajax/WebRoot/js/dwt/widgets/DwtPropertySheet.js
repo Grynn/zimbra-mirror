@@ -33,7 +33,6 @@ function DwtPropertySheet(parent, className, positionType) {
 	this._propertyList = [];
 	this._propertyMap = {};
 	
-	var document = this.getDocument();
 	this._tableEl = document.createElement("TABLE");
 	this._tableEl.border = 0;
 	this._tableEl.cellSpacing = 3;

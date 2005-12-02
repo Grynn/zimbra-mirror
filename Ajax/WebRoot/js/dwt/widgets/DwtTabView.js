@@ -43,7 +43,7 @@ function DwtTabView(parent, className, positionStyle) {
 	this._stateChangeEv = new DwtEvent(true);
 	this._tabs = new Array(); 
 	this._tabIx = 1;
-	this._pageDiv = this.getDocument().createElement("div");
+	this._pageDiv = document.createElement("div");
 	this._pageDiv.className = clsName;
 	this._pageDiv.style.position = DwtControl.STATIC_STYLE;
 	this._tabBar = new DwtTabBar(this);
@@ -177,7 +177,7 @@ function (width, height) {
 **/
 DwtTabView.prototype._createHTML =
 function () {
-	this._table = this.getDocument().createElement("table");
+	this._table = document.createElement("table");
 	this.getHtmlElement().appendChild(this._table);
 	this._table.width = "100%";
 	this._table.border = this._table.cellPadding = this._table.cellSpacing = 0;
@@ -506,7 +506,7 @@ function(type, element, index) {
 
 DwtTabBar.prototype._createSpacerElement = 
 function() {
-	var table = this.getDocument().createElement("table");
+	var table = document.createElement("table");
 	table.width = "100%";
 	table.cellSpacing = table.cellPadding = 0;
 	
@@ -584,9 +584,8 @@ function() {
 
 DwtTabButton.prototype._createHtml = 
 function() {
-	this.table = this.getDocument().createElement("table");
-	this.table.border = 0;
-	this.table.cellPadding = this.table.cellSpacing = 0;
+	this.table = document.createElement("table");
+	this.table.border = this.table.cellPadding = this.table.cellSpacing = 0;
 	this.table.align = "center";
 	this.table.width = "100%";
 
@@ -613,8 +612,6 @@ function() {
 	this._leftBottomCell.className = "DwtTabButtonBL";
 	this._centerBottomCell.className = "DwtTabButtonBM";
 	this._rightBottomCell.className = "DwtTabButtonBR";
-
-	var document = this.getDocument();
 
 	this.leftTopImg = document.createElement("div");
 	this.topImg = document.createElement("div");
@@ -644,7 +641,7 @@ function() {
 	this._rightBottomCell.appendChild(this.rightBottomImg);
 
 	this.getHtmlElement().appendChild(this.table);
-	this.table.className=this._inactiveClassName;
+	this.table.className = this._inactiveClassName;
 };
 
 /**

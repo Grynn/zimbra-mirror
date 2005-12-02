@@ -58,7 +58,7 @@ DwtIframe.prototype = new DwtControl;
 DwtIframe.prototype.constructor = DwtIframe;
 
 DwtIframe.prototype.getIframe = function() {
-	return this.getElementById(this._iframeID);
+	return document.getElementById(this._iframeID);
 };
 
 DwtIframe.prototype.getDocument = function() {

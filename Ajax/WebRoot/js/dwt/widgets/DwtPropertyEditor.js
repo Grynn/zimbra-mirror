@@ -55,14 +55,13 @@ DwtPropertyEditor.prototype.constructor = DwtPropertyEditor;
 DwtPropertyEditor.prototype.toString = function() { return "DwtPropertyEditor"; }
 
 DwtPropertyEditor.prototype._init = function() {
-	var doc = this.getDocument();
-	var div = doc.createElement("div");
+	var div = document.createElement("div");
 	div.id = this._relDivId = Dwt.getNextId();
 	div.style.position = "relative";
-	var table = doc.createElement("table");
+	var table = document.createElement("table");
 	table.id = this._tableId = Dwt.getNextId();
 	table.cellSpacing = table.cellPadding = 0;
-	table.appendChild(doc.createElement("tbody"));
+	table.appendChild(document.createElement("tbody"));
 	div.appendChild(table);
 	this.getHtmlElement().appendChild(div);
 	this.maxLabelWidth = 0;
@@ -73,11 +72,11 @@ DwtPropertyEditor.prototype._init = function() {
 };
 
 DwtPropertyEditor.prototype.getRelDiv = function() {
-	return Dwt.getDomObj(this.getDocument(), this._relDivId);
+	return document.getElementById(this._relDivId);
 };
 
 DwtPropertyEditor.prototype.getTable = function() {
-	return Dwt.getDomObj(this.getDocument(), this._tableId);
+	return document.getElementById(this._tableId);
 };
 
 DwtPropertyEditor.prototype._onMouseDown = function(event) {
@@ -215,10 +214,8 @@ DwtPropertyEditor.prototype.initProperties = function(schema, parent) {
 };
 
 DwtPropertyEditor.prototype._createProperty = function(prop, parent) {
-	var
-		doc   = this.getDocument(),
-		level = parent ? parent._level + 1 : 0,
-		tr    = this.getTable().firstChild.appendChild(doc.createElement("tr"));
+	var level = parent ? parent._level + 1 : 0;
+	var tr = this.getTable().firstChild.appendChild(document.createElement("tr"));
 
 	// Initialize the "prop" object with some interesting attributes...
 	prop._parent = parent;
@@ -242,14 +239,14 @@ DwtPropertyEditor.prototype._createProperty = function(prop, parent) {
 		tr.className += " " + prop.type;
 
 		// this is a simple property, create a label and value cell.
-		var tdLabel = doc.createElement("td");
+		var tdLabel = document.createElement("td");
 		tdLabel.className = "label";
 		tr.appendChild(tdLabel);
 		var html = AjxStringUtil.htmlEncode(prop.label);
 		if (prop.required)
 			html += "<span class='DwtPropertyEditor-required'>*</span>";
 		tdLabel.innerHTML = html;
-		var tdField = doc.createElement("td");
+		var tdField = document.createElement("td");
 		tdField.className = "field";
 		tr.appendChild(tdField);
 
@@ -274,7 +271,7 @@ DwtPropertyEditor.prototype._createProperty = function(prop, parent) {
 		if (tdField.offsetWidth > this.maxFieldWidth)
 			this.maxFieldWidth = tdField.offsetWidth;
 	} else {
-		var td = doc.createElement("td");
+		var td = document.createElement("td");
 		td.colSpan = 2;
 		tr.appendChild(td);
 		td.className = "label";
@@ -429,7 +426,7 @@ DwtPropertyEditor._prop_functions = {
 	},
 
 	_getRowEl : function() {
-		return Dwt.getDomObj(this._propertyEditor.getDocument(), this._rowElId);
+		return document.getElementById(this._rowElId);
 	},
 
 	_makeDisplayValue : function() {
@@ -499,12 +496,10 @@ DwtPropertyEditor._prop_functions = {
 	},
 
 	_createInputField : function() {
-		var
-			pe     = this._propertyEditor,
-			doc    = pe.getDocument(),
-			td     = Dwt.getDomObj(doc, this._fieldCellId),
-			canvas = pe.getRelDiv(),
-			input  = doc.createElement("input");
+		var	pe     = this._propertyEditor;
+		var td     = document.getElementById(this._fieldCellId);
+		var canvas = pe.getRelDiv();
+		var input  = document.createElement("input");
 
 		input.className = "DwtPropertyEditor-input " + this.type;
 		input.setAttribute("autocomplete", "off");
@@ -610,12 +605,12 @@ DwtPropertyEditor._prop_functions = {
 	},
 
 	_displayMsg : function(msg) {
-		var x, y, w, h,
-			pe  = this._propertyEditor,
-			doc = pe.getDocument(),
-			div = pe._currentMsgDiv;
+		var x, y, w, h;
+		var pe  = this._propertyEditor,
+		var div = pe._currentMsgDiv;
+
 		if (!div) {
-			div = doc.createElement("div");
+			div = document.createElement("div");
 			div.className = "DwtPropertyEditor-ErrorMsg";
 			pe.getRelDiv().appendChild(div);
 		} else
@@ -631,7 +626,7 @@ DwtPropertyEditor._prop_functions = {
 		div.style.left = x + "px";
 		div.style.width = w + "px";
 		h = div.offsetHeight;
-		var td = Dwt.getDomObj(doc, this._fieldCellId);
+		var td = document.getElementById(this._fieldCellId);
 		y = td.offsetTop + td.offsetHeight;
 		if (y + h > table.offsetTop + table.offsetHeight)
 			y = td.offsetTop - h;
@@ -645,12 +640,8 @@ DwtPropertyEditor._prop_functions = {
 		var val = this._checkValue(input.value);
 		if (val != null) {
 			this._setValue(val);
-			input.onblur = null;
-			input.onkeyup = null;
-			input.onkeydown = null;
-			input.onkeypress = null;
-			var td = Dwt.getDomObj(this._propertyEditor.getDocument(),
-					       this._fieldCellId);
+			input.onblur = input.onkeyup = input.onkeydown = input.onkeypress = null;
+			var td = document.getElementById(this._fieldCellId);
 			td.innerHTML = this._makeDisplayValue();
 			this._inputField = null;
 			this._propertyEditor._currentInputField = null;

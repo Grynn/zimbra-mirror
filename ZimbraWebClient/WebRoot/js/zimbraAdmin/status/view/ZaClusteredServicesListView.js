@@ -55,7 +55,7 @@ ZaClusteredServicesListView.SELECTED_STYLE_CLASS = "Row" + "-" + DwtCssStyle.SEL
 
 ZaClusteredServicesListView.prototype._createItemHtml = function(item, now, isDndIcon, prevItem) {
 	var html = new Array(50);
-	var	div = this.getDocument().createElement("div");
+	var	div = document.createElement("div");
 	this.associateItemWithElement(item, div, DwtListView.TYPE_LIST_ITEM);
 
 	var idx = 0;

@@ -69,7 +69,7 @@ function DwtMenu(parent, style, className, posStyle, dialog) {
 	
 	// Don't need to create table for color picker and calendar picker styles
 	if (this._style != DwtMenu.COLOR_PICKER_STYLE && this._style != DwtMenu.CALENDAR_PICKER_STYLE) {
-		this._table = this.getDocument().createElement("table");
+		this._table = document.createElement("table");
 		this._table.border = 0;
 		this._table.cellPadding = 0;
 		this._table.cellSpacing = 0;

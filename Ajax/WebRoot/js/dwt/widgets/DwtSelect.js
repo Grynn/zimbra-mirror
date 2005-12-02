@@ -66,7 +66,7 @@ function() {
  */
 DwtSelect.prototype._createTable =
 function() {
-	this._table = this.getDocument().createElement("table");
+	this._table = document.createElement("table");
 	this._table.id = Dwt.getNextId();
 	this._row = this._table.insertRow(-1);
 	this.getHtmlElement().appendChild(this._table);

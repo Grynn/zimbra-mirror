@@ -31,15 +31,14 @@ function DwtListView(parent, className, posStyle, headerList, noMaximize) {
 	DwtComposite.call(this, parent, className, posStyle);
 
 	if (headerList) {
-		var doc = this.getDocument();
 		var htmlElement = this.getHtmlElement();
 
-		this._listColDiv = doc.createElement("div");
+		this._listColDiv = document.createElement("div");
 		this._listColDiv.id = Dwt.getNextId();
 		this._listColDiv.className = "DwtListView-ColHeader";
 		htmlElement.appendChild(this._listColDiv);
 
-		this._listDiv = doc.createElement("div");
+		this._listDiv = document.createElement("div");
 		this._listDiv.id = Dwt.getNextId();
 		this._listDiv.className = "DwtListView-Rows";
 		htmlElement.appendChild(this._listDiv);
@@ -213,7 +212,7 @@ function(defaultColumnSort) {
 
 	// for each sortable column, sets its identifier
 	for (var j = 0; j < this._headerList.length; j++) {
-		var cell = Dwt.getDomObj(this.getDocument(), this._headerList[j]._id);
+		var cell = document.getElementById(this._headerList[j]._id);
 		if (cell == null) continue;
 		
 		var sortable = this._headerList[j]._sortable;
@@ -400,7 +399,7 @@ function() {
 		count--;
 	}
 
-	var lastCell = Dwt.getDomObj(this.getDocument(), this._headerList[lastColIdx]._id);
+	var lastCell = document.getElementById(this._headerList[lastColIdx]._id);
 	var div = lastCell.firstChild;
 	var scrollbarPad = 16;
 	
@@ -470,7 +469,7 @@ DwtListView.prototype._createItemHtml = function(item, now, isDnDIcon) {
 DwtListView.prototype._setNoResultsHtml = 
 function() {
 	var htmlArr = new Array(5);
-	var	div = this.getDocument().createElement("div");
+	var	div = document.createElement("div");
 	var idx = 0;
 
 	htmlArr[idx++] = "<table width='100%' cellspacing='0' cellpadding='1'>";
@@ -899,7 +898,7 @@ function(ev) {
 
 DwtListView.prototype.emulateDblClick = 
 function(item) {
-	var div = Dwt.getDomObj(this.getDocument(), this._getItemId(item));
+	var div = document.getElementById(this._getItemId(item));
 	if (div) {
 		var ev = new Object();
 		ev.target = div;
@@ -1080,12 +1079,10 @@ function(clickedEl, ev, button) {
 DwtListView.prototype._setSortedColStyle = 
 function(columnId) {
 	
-	var doc = this.getDocument();
-	
 	if (this._currentColId != null && columnId != this._currentColId) {
 		// unset current column arrow
 		oldArrowId = DwtListView.HEADERITEM_ARROW + this._currentColId;
-		oldArrowCell = Dwt.getDomObj(doc, oldArrowId);
+		oldArrowCell = document.getElementById(oldArrowId);
 		if (oldArrowCell && oldArrowCell.firstChild) {
 			var imgEl = (AjxImg._mode == AjxImg.SINGLE_IMG) ? oldArrowCell.firstChild : oldArrowCell.firstChild.firstChild;
 			if (imgEl)
@@ -1093,7 +1090,7 @@ function(columnId) {
 		}
 		
 		// reset style for old sorted column
-		var oldSortedCol = Dwt.getDomObj(doc, this._currentColId);
+		var oldSortedCol = document.getElementById(this._currentColId);
 		if (oldSortedCol)
 			oldSortedCol.className = "DwtListView-Column";
 	}
@@ -1101,7 +1098,7 @@ function(columnId) {
 			
 	// set new column arrow
 	var newArrowId = DwtListView.HEADERITEM_ARROW + columnId;
-	var newArrowCell = Dwt.getDomObj(doc, newArrowId);
+	var newArrowCell = document.getElementById(newArrowId);
 	if (newArrowCell) {
 		AjxImg.setImage(newArrowCell, this._bSortAsc ? "ColumnUpArrow" : "ColumnDownArrow");
 		var imgEl = (AjxImg._mode == AjxImg.SINGLE_IMG) ? newArrowCell.firstChild : newArrowCell.firstChild.firstChild;
@@ -1110,7 +1107,7 @@ function(columnId) {
 	}
 	
 	// set new column style
-	var newSortedCol = Dwt.getDomObj(doc, columnId);
+	var newSortedCol = document.getElementById(columnId);
 	if (newSortedCol)
 		newSortedCol.className = "DwtListView-Column DwtListView-ColumnActive";
 }
@@ -1159,8 +1156,7 @@ function(ev) {
 		}
 		
 		// create a clone of the selected column to move
-		var doc = this.getDocument();
-		this._headerClone = doc.createElement("div");
+		this._headerClone = document.createElement("div");
 		var size = Dwt.getSize(this._clickDiv);
 		var width = AjxEnv.isIE ? size.x : size.x - 3;	// browser quirks
 		var height = AjxEnv.isIE ? size.y : size.y - 5;
@@ -1175,7 +1171,7 @@ function(ev) {
 		
 		// XXX: style hacks - improve this later
 		this._headerClone.style.borderTop = "1px solid #777777";
-		var labelCell = Dwt.getDomObj(doc, DwtListView.HEADERITEM_LABEL + this._clickDiv.id);
+		var labelCell = document.getElementById(DwtListView.HEADERITEM_LABEL + this._clickDiv.id);
 		if (labelCell)
 			labelCell.style.color = "white";
 		
@@ -1201,7 +1197,7 @@ DwtListView.prototype._handleColHeaderResize =
 function(ev) {
 
 	if (this._headerSash == null) {
-		this._headerSash = this.getDocument().createElement("div");
+		this._headerSash = document.createElement("div");
 
 		Dwt.setSize(this._headerSash, Dwt.DEFAULT, this.getSize().y);
 		Dwt.setPosition(this._headerSash, Dwt.ABSOLUTE_STYLE); 
@@ -1253,7 +1249,7 @@ function(ev) {
 		this.createHeaderHtml(sortable);
 	} else {
 		// reset styles as necessary
-		var labelCell = Dwt.getDomObj(this.getDocument(), DwtListView.HEADERITEM_LABEL + this._clickDiv.id);
+		var labelCell = document.getElementById(DwtListView.HEADERITEM_LABEL + this._clickDiv.id);
 		if (labelCell)
 			labelCell.style.color = "black";
 	}
@@ -1283,7 +1279,7 @@ function(ev) {
 			// lets actually adjust the next column since this one has a relative width
 			var nextCol = this._headerList[headerIdx+1];
 			if (nextCol && nextCol._width && nextCol._resizeable) {
-				var cell = Dwt.getDomObj(this.getDocument(), nextCol._id);
+				var cell = document.getElementById(nextCol._id);
 				newWidth = cell ? Dwt.getSize(cell).x + delta : null;
 			}
 		}

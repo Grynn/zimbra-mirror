@@ -131,8 +131,6 @@ DwtAlert.prototype._createHTML = function() {
 	//		 programmatically.
 	
 	// create html content
-	var document = this.getDocument();
-
 	this._alertDiv = document.createElement("TABLE");
 	this._alertDiv.width = "90%";
 	this._alertDiv.cellPadding = 0;

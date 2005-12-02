@@ -520,9 +520,15 @@ function() {
 	this.notifyListeners(DwtEvent.DISPOSE, ev);
 }
 
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+// XXX: DEPRACATED
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 DwtControl.prototype.getDocument =
 function() {
-	return document;
+	//return document;
+	alert("DEPRACATED: Please use document instead");
 }
 
 DwtControl.prototype.getData = 
@@ -695,18 +701,11 @@ function(enabled, setHtmlElement) {
 	}
 };
 
-DwtControl.prototype.getElementById = 
-function (anId) {
-    // From my crude testing it seems that getElementById on IE6 is 
-    // faster than document.all[id].
-    return document.getElementById(anId);
-};
-
 DwtControl.prototype.getHtmlElement =
 function() {
 	if (!this._checkState()) return;
 
-	var htmlEl = this.getElementById(this._htmlElId);
+	var htmlEl = document.getElementById(this._htmlElId);
 	if (htmlEl == null) {
 		htmlEl = DwtComposite._pendingElements[this._htmlElId];
 	} else if (!htmlEl._rendered) {
@@ -1044,7 +1043,7 @@ function() {
 DwtControl.prototype._initCtrl = 
 function() {
 	this.shell = this.parent.shell || this.parent;
-	var htmlElement = this.parent.getDocument().createElement("div");
+	var htmlElement = document.createElement("div");
 	this._htmlElId = htmlElement.id = (this._htmlElId == null) ? Dwt.getNextId() : this._htmlElId;
 	DwtComposite._pendingElements[this._htmlElId] = htmlElement;
 	Dwt.associateElementWithObject(htmlElement, this);

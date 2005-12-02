@@ -86,9 +86,15 @@ Dwt.KEY_ID = "_id_";
 
 Dwt._nextId = 1;
 
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+// XXX: DEPRACATED
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 Dwt.getDomObj =
 function(doc, id)  {
-	return doc.getElementById(id);
+	//return doc.getElementById(id);
+	alert("DEPRACATED: Please use document.getElementById instead");
 }
 
 Dwt.getNextId =
@@ -366,9 +372,12 @@ function(text) {
 
 Dwt.getIframeDoc = 
 function(iframeObj) {
-	return AjxEnv.isIE 
-		? (iframeObj ? iframeObj.contentWindow.document : null)
-		: iframeObj.contentDocument;
+	if (iframeObj) {
+		return AjxEnv.isIE 
+			? iframeObj.contentWindow.document
+			: iframeObj.contentDocument;
+	}
+	return null;
 };
 
 Dwt.getIframeWindow = 

@@ -161,7 +161,7 @@ DwtHtmlEditor._KEY2CMDS = {
 DwtHtmlEditor.prototype.focus =
 function() {
 	if (this._mode == DwtHtmlEditor.TEXT) {
-		Dwt.getDomObj(this.getDocument(), this._textAreaId).focus();
+		document.getElementById(this._textAreaId).focus();
 	} else {
 		this._getIframeWin().focus();
 		// Hack to fix IE focusing bug
@@ -192,11 +192,10 @@ function() {
 
 DwtHtmlEditor.prototype.enable =
 function(enable) {
-	var doc = this.getDocument();
 	if (this._textAreaId != null)
-		Dwt.getDomObj(doc, this._textAreaId).disabled = !enable;
+		document.getElementById(this._textAreaId).disabled = !enable;
 	if (this._iFrameId != null)
-		Dwt.getDomObj(doc, this._iframeId).disabled = !enable;
+		document.getElementById(this._iframeId).disabled = !enable;
 }
 
 DwtHtmlEditor.prototype.setBlankIframeSrc = 
@@ -218,7 +217,7 @@ function() {
 		var iframeDoc = this._getIframeDoc();
 		return iframeDoc && iframeDoc.body ? (this._initialStyle + this._getIframeDoc().body.innerHTML) : "";
 	} else {
-		return Dwt.getDomObj(this.getDocument(), this._textAreaId).value;
+		return document.getElementById(this._textAreaId).value;
 	}
 }
 
@@ -242,7 +241,7 @@ function(content) {
 			AjxTimedAction.scheduleAction(ta, DwtHtmlEditor._INITDELAY + 1);
 		}
 	} else {
-		Dwt.getDomObj(this.getDocument(), this._textAreaId).value = (content || "");
+		document.getElementById(this._textAreaId).value = (content || "");
 	}
 }
 
@@ -334,13 +333,12 @@ function(mode, convert) {
 		return;
 	
 	this._mode = mode;
-	var doc = this.getDocument();
 	if (mode == DwtHtmlEditor.HTML) {
-		var textArea = Dwt.getDomObj(doc, this._textAreaId);
+		var textArea = document.getElementById(this._textAreaId);
 		var iFrame;
 		if (this._iFrameId != null) {
 			this._getIframeDoc().body.innerHTML = (convert) ? AjxStringUtil.convertToHtml(textArea.value) : textArea.value;
-			iFrame = Dwt.getDomObj(doc, this._iFrameId);
+			iFrame = document.getElementById(this._iFrameId);
 		} else {
 			iFrame = this._initHtmlMode((convert) ? AjxStringUtil.convertToHtml(textArea.value) : textArea.value);
 		}
@@ -351,7 +349,7 @@ function(mode, convert) {
 			this._enableDesignMode([this._getIframeDoc()]);
 	} else {
 		var textArea = this._textAreaId != null
-			? Dwt.getDomObj(doc, this._textAreaId)
+			? document.getElementById(this._textAreaId)
 			: this._initTextMode(true);
 		
 		// If we have pending content, then an iFrame is being created. This can happen
@@ -360,7 +358,7 @@ function(mode, convert) {
 		var content = (!this._pendingContent) ? this._getIframeDoc().innerHTML : (this._pendingContent || "");
 		textArea.value = (convert) ? this._convertHtml2Text() : this._getIframeDoc().innerHTML;;
 
-		Dwt.setVisible(Dwt.getDomObj(doc, this._iFrameId), false);
+		Dwt.setVisible(document.getElementById(this._iFrameId), false);
 		Dwt.setVisible(textArea, true);	
 	}
 }
@@ -433,15 +431,14 @@ function(style) {
 DwtHtmlEditor.prototype.setSize =
 function(width, height) {
 	DwtComposite.prototype.setSize.call(this, width, height);
-	var doc = this.getDocument();
 	var htmlEl = this.getHtmlElement();
 	
 	if (this._iFrameId != null) {
-		var iFrame = Dwt.getDomObj(this.getDocument(), this._iFrameId);
+		var iFrame = document.getElementById(this._iFrameId);
 		iFrame.width = htmlEl.style.width;
 		iFrame.height = htmlEl.style.height;
 	} else {
-		var textArea = Dwt.getDomObj(this.getDocument(), this._textAreaId);
+		var textArea = document.getElementById(this._textAreaId);
 		textArea.style.width = htmlEl.style.width;
 		textArea.style.height = htmlEl.style.height;
 	}
@@ -449,7 +446,7 @@ function(width, height) {
 
 DwtHtmlEditor.prototype.getIframe = 
 function() {
-	return Dwt.getDomObj(this.getDocument(), this._iFrameId);
+	return document.getElementById(this._iFrameId);
 }
 
 DwtHtmlEditor.prototype._initialize = 
@@ -462,10 +459,9 @@ function() {
 
 DwtHtmlEditor.prototype._initTextMode =
 function(ignorePendingContent) {
-	var doc = this.getDocument();
 	var htmlEl = this.getHtmlElement();
 	this._textAreaId = "textarea_" + Dwt.getNextId();
-	var textArea = doc.createElement("textarea");
+	var textArea = document.createElement("textarea");
 	textArea.className = "DwtHtmlEditorTextArea";
 	textArea.id = this._textAreaId;
 	htmlEl.appendChild(textArea);
@@ -560,10 +556,9 @@ function() {
 
 DwtHtmlEditor.prototype._createIFrameEl = 
 function() {
-	var doc = this.getDocument();
 	var htmlEl = this.getHtmlElement();
 	this._iFrameId  = "iframe_" + Dwt.getNextId();
-	var iFrame = doc.createElement("iframe");
+	var iFrame = document.createElement("iframe");
 	iFrame.id = this._iFrameId;
 	iFrame.className = "DwtHtmlEditorIFrame";
 	iFrame.setAttribute("border", "0", false);
@@ -590,7 +585,7 @@ function(params) {
 	}
 	
 	this._enableDesignMode([doc]);
-	this._registerEditorEventHandlers(Dwt.getDomObj(this.getDocument(), this._iFrameId), doc);
+	this._registerEditorEventHandlers(document.getElementById(this._iFrameId), doc);
 	this.focus();
 	this._updateState();
 	this._htmlModeInited = true;
@@ -598,12 +593,12 @@ function(params) {
 
 DwtHtmlEditor.prototype._getIframeDoc =
 function() {
-	return Dwt.getIframeDoc(Dwt.getDomObj(this.getDocument(), this._iFrameId));
+	return Dwt.getIframeDoc(document.getElementById(this._iFrameId));
 }
 
 DwtHtmlEditor.prototype._getIframeWin =
 function() {
-	return Dwt.getIframeWindow(Dwt.getDomObj(this.getDocument(), this._iFrameId));
+	return Dwt.getIframeWindow(document.getElementById(this._iFrameId));
 }
 
 DwtHtmlEditor.prototype._getParentElement = 

@@ -39,7 +39,7 @@ function ZaErrorDialog(parent, appCtxt) {
 	DwtMessageDialog.call(this, parent, null, null, [detailButton]);
 
 	// setup the detail button
-	this._detailCell = Dwt.getDomObj(this.getDocument(), this._detailCellId);
+	this._detailCell = document.getElementById(this._detailCellId);
 	var detailBtn = this._button[ZaErrorDialog.DETAIL_BUTTON];
 	detailBtn.setImage("SelectPullDownArrow");
 	// arrow icon is too big so hack it to fit (instead of adding new image)

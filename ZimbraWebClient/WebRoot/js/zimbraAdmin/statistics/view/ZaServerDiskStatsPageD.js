@@ -57,31 +57,31 @@ function (item) {
 	if(item) {
 		if(item.attrs && item.attrs[ZaServer.A_ServiceHostname]) {
 			var newSrc = "/service/statsimg/" + item.attrs[ZaServer.A_ServiceHostname] + "/zimbra/d/1";
-			var imgElement = Dwt.getDomObj(this.getDocument(), this._ZimbraImgID);
+			var imgElement = document.getElementById(this._ZimbraImgID);
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}
-			imgElement = Dwt.getDomObj(this.getDocument(), this._DBImgID);	
+			imgElement = document.getElementById(this._DBImgID);	
 			newSrc = "/service/statsimg/" + item.attrs[ZaServer.A_ServiceHostname] + "/db/d/1";			
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}
-			imgElement = Dwt.getDomObj(this.getDocument(), this._StoreImgID);		
+			imgElement = document.getElementById(this._StoreImgID);		
 			newSrc = "/service/statsimg/" + item.attrs[ZaServer.A_ServiceHostname] + "/store/d/1";			
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}			
-			imgElement = Dwt.getDomObj(this.getDocument(), this._IndexImgID);		
+			imgElement = document.getElementById(this._IndexImgID);		
 			newSrc = "/service/statsimg/" + item.attrs[ZaServer.A_ServiceHostname] + "/index/d/1";			
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}			
-			imgElement = Dwt.getDomObj(this.getDocument(), this._LogImgID);		
+			imgElement = document.getElementById(this._LogImgID);		
 			newSrc = "/service/statsimg/" + item.attrs[ZaServer.A_ServiceHostname] + "/log/d/1";			
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}			
-			imgElement = Dwt.getDomObj(this.getDocument(), this._RedologImgID);		
+			imgElement = document.getElementById(this._RedologImgID);		
 			newSrc = "/service/statsimg/" + item.attrs[ZaServer.A_ServiceHostname] + "/redolog/d/1";			
 			if(imgElement) {
 				imgElement.src = newSrc;

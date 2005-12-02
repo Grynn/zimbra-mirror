@@ -51,22 +51,22 @@ ZaServerSpamActivityPage.prototype.setObject =
 function (item) {
 	if(item) {
 		if(item.attrs && item.attrs[ZaServer.A_ServiceHostname]) {
-			var imgElement = Dwt.getDomObj(this.getDocument(), this._hourImgID);
+			var imgElement = document.getElementById(this._hourImgID);
 			var newSrc = "/service/statsimg/amavis." + item.attrs[ZaServer.A_ServiceHostname] + ".hour.Spam_Activity.gif";
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}
-			imgElement = Dwt.getDomObj(this.getDocument(), this._dayImgID);	
+			imgElement = document.getElementById(this._dayImgID);	
 			newSrc = "/service/statsimg/amavis." + item.attrs[ZaServer.A_ServiceHostname] + ".day.Spam_Activity.gif";			
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}
-			imgElement = Dwt.getDomObj(this.getDocument(), this._monthImgID);		
+			imgElement = document.getElementById(this._monthImgID);		
 			newSrc = "/service/statsimg/amavis." + item.attrs[ZaServer.A_ServiceHostname] + ".month.Spam_Activity.gif";			
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}			
-			imgElement = Dwt.getDomObj(this.getDocument(), this._yearImgID);		
+			imgElement = document.getElementById(this._yearImgID);		
 			newSrc = "/service/statsimg/amavis." + item.attrs[ZaServer.A_ServiceHostname] + ".year.Spam_Activity.gif";			
 			if(imgElement) {
 				imgElement.src = newSrc;

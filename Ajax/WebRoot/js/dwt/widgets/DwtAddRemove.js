@@ -308,7 +308,6 @@ DwtAddRemove.prototype._createHTML = function(sourceListClassName, targetListCla
 	var div = this.getHtmlElement();
 	var width = 100; // REVISIT
 
-	var document = this.getDocument();
 	var table = document.createElement("TABLE");
 	table.className = AjxBuffer.concat(this._className, "-", "outerTable");
 	
@@ -390,7 +389,6 @@ DwtAddRemoveListView.prototype = new DwtListView;
 DwtAddRemoveListView.prototype.constructor = DwtAddRemoveListView;
 
 DwtAddRemoveListView.prototype._createItemHtml = function(item, now, isDnDIcon) {
-	var document = this.getDocument();
 	var div = document.createElement("DIV");
 	div.id = Dwt.getNextId();
 	var rowClassName = "DwtAddRemoveListViewRow";

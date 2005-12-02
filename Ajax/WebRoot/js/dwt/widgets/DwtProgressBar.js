@@ -59,44 +59,40 @@ DwtProgressBar.prototype.constructor = DwtProgressBar;
 // Public methods
 //
 DwtProgressBar.prototype.setProgressBgColor = 
-function (val) {
+function(val) {
 	this._progressBgColor = val;
 }
 
 DwtProgressBar.prototype.setWholeBgColor = 
-function (val) {
+function(val) {
 	this._wholeBgColor = val;
 }
 
 DwtProgressBar.prototype.setProgressCssClass = 
-function (val) {
+function(val) {
 	this._progressCssClass = val;
 }
 
 DwtProgressBar.prototype.setWholeCssClass = 
-function (val) {
+function(val) {
 	this._wholeCssClass = val;
 }
 
 DwtProgressBar.prototype.setProgressCssStyle = 
-function (val) {
+function(val) {
 	this._progressCssStyle = val;
 }
 
 DwtProgressBar.prototype.setWholeCssStyle  = 
-function (val) {
+function(val) {
 	this._wholeCssStyle = val;
 }
 
 DwtProgressBar.prototype.setValue = 
-function (val) {
-	var document;
+function(val) {
 	this._value = parseInt(val);
 	var percent = Math.min(Math.round((this._value / this._maxValue) * 100), 100);	
 	
-	if(!this._quotabarDiv || !this._quotausedDiv)
-		document = this.getDocument();
-		
 	if(!this._quotabarDiv) {
 		this._quotabarDiv = document.createElement("div")
 		if(this._wholeCssClass)
@@ -120,15 +116,18 @@ function (val) {
 	this._quotausedDiv.style.width = percent + "%";
 }
 
-DwtProgressBar.prototype.getValue = function () {
+DwtProgressBar.prototype.getValue = 
+function() {
 	return this._value;
 }
 
-DwtProgressBar.prototype.getMaxValue = function () {
+DwtProgressBar.prototype.getMaxValue = 
+function() {
 	return this._maxValue;
 }
 
-DwtProgressBar.prototype.setMaxValue = function (val) {
+DwtProgressBar.prototype.setMaxValue = 
+function(val) {
 	this._maxValue = parseInt(val);
 }
 
@@ -136,15 +135,10 @@ DwtProgressBar.prototype.setMaxValue = function (val) {
 // Protected methods
 //
 
-DwtProgressBar.prototype._createHTML = function() {
-	var document = this.getDocument();
-	
-	var idx = 0;
-	
-	this._table = this.getDocument().createElement("table");
-	this._table.border = 0;	
-	this._table.cellpadding = 0;	
-	this._table.cellspacing = 0;		
+DwtProgressBar.prototype._createHTML = 
+function() {
+	this._table = document.createElement("table");
+	this._table.border = this._table.cellpadding = this._table.cellspacing = 0;	
 
 	this._row = this._table.insertRow(-1);
 

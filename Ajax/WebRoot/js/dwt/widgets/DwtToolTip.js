@@ -28,7 +28,7 @@ function DwtToolTip(shell, className, dialog) {
 
 	this.shell = shell;
 	this._dialog = dialog;
-	this._div = shell.getDocument().createElement("div");
+	this._div = document.createElement("div");
 	this._div.className = className || "DwtToolTip";
 	this._div.style.position = DwtControl.ABSOLUTE_STYLE;
 	this.shell.getHtmlElement().appendChild(this._div);
@@ -57,7 +57,8 @@ function(content) {
 	this._content = content;
 }
 	
-DwtToolTip.prototype.popup = function(x, y) {
+DwtToolTip.prototype.popup = 
+function(x, y) {
 	if (this._content != null) {
 		this._div.innerHTML = this._borderStart + this._content + this._borderEnd;
 
@@ -76,7 +77,8 @@ function() {
 	}
 }
 
-DwtToolTip.prototype._positionElement = function(element, x, y, baseId, clip, dialog) {
+DwtToolTip.prototype._positionElement = 
+function(element, x, y, baseId, clip, dialog) {
 	var WINDOW_GUTTER = 5;
 	var POPUP_OFFSET_X = 8;
 	var POPUP_OFFSET_Y = 8;

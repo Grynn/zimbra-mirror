@@ -37,7 +37,7 @@ function DwtMessageDialog(parent, className, buttons, extraButtons) {
 	buttons = buttons ? buttons : [DwtDialog.OK_BUTTON];
 	DwtDialog.call(this, parent, className, null, buttons, extraButtons);
 	this.setContent(this._contentHtml());
-	this._msgCell = Dwt.getDomObj(this.getDocument(), this._msgCellId);
+	this._msgCell = document.getElementById(this._msgCellId);
 	this.addEnterListener(new AjxListener(this, this._enterListener));
 };
 

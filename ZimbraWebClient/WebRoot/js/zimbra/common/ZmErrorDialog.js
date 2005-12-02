@@ -42,7 +42,7 @@ function ZmErrorDialog(parent, appCtxt, msgs) {
 	DwtMessageDialog.call(this, parent, null, null, [reportButton, detailButton]);
 
 	// setup the detail button
-	this._detailCell = Dwt.getDomObj(this.getDocument(), this._detailCellId);
+	this._detailCell = document.getElementById(this._detailCellId);
 	var detailBtn = this._button[ZmErrorDialog.DETAIL_BUTTON];
 	detailBtn.setImage("SelectPullDownArrow");
 	// arrow icon is too big so hack it to fit (instead of adding new image)
@@ -202,7 +202,7 @@ ZmErrorDialog.prototype._reportCallback =
 function() {
 	// iframe initialization - recreate iframe if IE and reuse if FF
 	if (!this._iframe || AjxEnv.isIE) {
-		this._iframe = this.getDocument().createElement("iframe");
+		this._iframe = document.createElement("iframe");
 		this._iframe.style.width = this._iframe.style.height = 0;
 		this._iframe.style.visibility = "hidden";
 

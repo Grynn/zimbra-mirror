@@ -479,37 +479,36 @@ function() {
 // Banner button click
 ZaZimbraAdmin._bannerBarHdlr =
 function(id, tableId) {
-	var bannerBar = Dwt.getObjectFromElement(Dwt.getDomObj(document,tableId));
+	var bannerBar = Dwt.getObjectFromElement(document.getElementById(tableId));
 	if(!bannerBar)
 		return;
 		
-	var doc = bannerBar.getDocument();
 	switch (id) {
 		case ZaZimbraAdmin._MIGRATION_ID:
-			Dwt.getDomObj(doc, bannerBar._migrationId).blur();
-			Dwt.getDomObj(doc, bannerBar._migrationId2).blur();			
+			document.getElementById(bannerBar._migrationId).blur();
+			document.getElementById(bannerBar._migrationId2).blur();			
 			window.open("http://zimbra.com/downloads/migrationwizard/accept");
 			break;
 			
 		case ZaZimbraAdmin._HELP_ID:
-			Dwt.getDomObj(doc, bannerBar._helpId).blur();
-			Dwt.getDomObj(doc, bannerBar._helpId2).blur();			
+			document.getElementById(bannerBar._helpId).blur();
+			document.getElementById(bannerBar._helpId2).blur();			
 			window.open("/zimbraAdmin/adminhelp/html/WebHelp/administration_console_help.htm");
 			break;
 
 		case ZaZimbraAdmin._PDF_HELP_ID:
-			Dwt.getDomObj(doc, bannerBar._helpId).blur();
-			Dwt.getDomObj(doc, bannerBar._helpId2).blur();			
+			document.getElementById(bannerBar._helpId).blur();
+			document.getElementById(bannerBar._helpId2).blur();			
 			window.open("/zimbraAdmin/adminhelp/pdf/admin.pdf");
 			break;
 						
 		case ZaZimbraAdmin._LOGOFF_ID:
-			Dwt.getDomObj(doc, bannerBar._logOffId).blur();
+			document.getElementById(bannerBar._logOffId).blur();
 			ZaZimbraAdmin.logOff();
 			break;
 		case ZaZimbraAdmin._ABOUT_ID:
-			Dwt.getDomObj(doc, bannerBar._logAboutId).blur();
-			Dwt.getDomObj(doc, bannerBar._logAboutId2).blur();			
+			document.getElementById(bannerBar._logAboutId).blur();
+			document.getElementById(bannerBar._logAboutId2).blur();			
 			//show about screen
 			ZaZimbraAdmin.getInstance().aboutDialog.popup();
 			break;
@@ -543,8 +542,7 @@ function() {
 	html[i++] = "<table align='right' id='" + this._bannerTableId + "'><tr><td>&nbsp;";
 	html[i++] = "</td></tr></table>";
 	this.bannerBar.getHtmlElement().innerHTML = html.join("");
-	var doc = this.bannerBar.getDocument();
-	var t = Dwt.getDomObj(doc, this._bannerTableId);
+	var t = document.getElementById(this._bannerTableId);
 	this.bannerBar.app = this._app;	
 	Dwt.associateElementWithObject(t, this.bannerBar);		
 
@@ -597,41 +595,40 @@ function () {
 	html[i++] = "</td></tr></table>";		
 		
 	this.bannerBar.getHtmlElement().innerHTML = html.join("");
-	var doc = this.bannerBar.getDocument();
-	var t = Dwt.getDomObj(doc, this._bannerTableId);
+	var t = document.getElementById(this._bannerTableId);
 	this.bannerBar.app = this._app;	
 	Dwt.associateElementWithObject(t, this.bannerBar);	
 
 	var a;
 	
-	var a = Dwt.getDomObj(doc, this.bannerBar._helpId);
+	var a = document.getElementById(this.bannerBar._helpId);
 	if(a) {
 		a.href = "javascript: void ZaZimbraAdmin._bannerBarHdlr(" + ZaZimbraAdmin._HELP_ID + ",'" + this._bannerTableId + "');";
 		a.onmouseover = a.onmouseout = ZaZimbraAdmin._bannerBarMouseHdlr;
 	}
 	
-	a = Dwt.getDomObj(doc, this.bannerBar._helpId2);
+	a = document.getElementById(this.bannerBar._helpId2);
 	if(a) {
 		a.href = "javascript: void ZaZimbraAdmin._bannerBarHdlr(" + ZaZimbraAdmin._HELP_ID + ",'" + this._bannerTableId + "');";
 	}	
 			
-	a = Dwt.getDomObj(doc, this.bannerBar._logOffId);
+	a = document.getElementById(this.bannerBar._logOffId);
 	if(a) {
 		a.href = "javascript: void ZaZimbraAdmin._bannerBarHdlr(" + ZaZimbraAdmin._LOGOFF_ID + ",'" + this._bannerTableId + "');";
 		a.onmouseover = a.onmouseout = ZaZimbraAdmin._bannerBarMouseHdlr;
 	}
 
-	a = Dwt.getDomObj(doc, this.bannerBar._logOffId2);
+	a = document.getElementById(this.bannerBar._logOffId2);
 	if(a) {
 		a.href = "javascript: void ZaZimbraAdmin._bannerBarHdlr(" + ZaZimbraAdmin._LOGOFF_ID + ",'" + this._bannerTableId + "');";
 	}
 	
-	a = Dwt.getDomObj(doc, this.bannerBar._logAboutId);
+	a = document.getElementById(this.bannerBar._logAboutId);
 	if(a) {
 		a.href = "javascript: void ZaZimbraAdmin._bannerBarHdlr(" + ZaZimbraAdmin._ABOUT_ID + ",'" + this._bannerTableId + "');";
 	}	
 	
-	a = Dwt.getDomObj(doc, this.bannerBar._logAboutId2);
+	a = document.getElementById(this.bannerBar._logAboutId2);
 	if(a) {
 		a.href = "javascript: void ZaZimbraAdmin._bannerBarHdlr(" + ZaZimbraAdmin._ABOUT_ID + ",'" + this._bannerTableId + "');";
 	}		

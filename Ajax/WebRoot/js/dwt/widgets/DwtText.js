@@ -42,7 +42,7 @@ function() {
 DwtText.prototype.setText =
 function(text) {
 	if (!this._textNode) {
-		 this._textNode = this.getDocument().createTextNode(text);
+		 this._textNode = document.createTextNode(text);
 		 this.getHtmlElement().appendChild(this._textNode);
 	} else {
 		this._textNode.data = text;

@@ -72,7 +72,7 @@ function() {
 ZaServicesListView.prototype._createItemHtml =
 function(item, now, isDndIcon) {
 	var html = new Array(50);
-	var	div = this.getDocument().createElement("div");
+	var	div = document.createElement("div");
 	div._styleClass = "Row";
 	div._selectedStyleClass = div._styleClass + "-" + DwtCssStyle.SELECTED;
 	div.className = div._styleClass;
@@ -115,7 +115,7 @@ function(item, now, isDndIcon) {
 
 ZaServicesListView.prototype._setNoResultsHtml = 
 function() {
-	var	div = this.getDocument().createElement("div");
+	var	div = document.createElement("div");
 	div.innerHTML = "<table width='100%' cellspacing='0' cellpadding='1'><tr><td class='NoResults'><br>Status data is not available.</td></tr></table>";
 	this._parentEl.appendChild(div);
 }

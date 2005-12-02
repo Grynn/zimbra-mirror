@@ -31,7 +31,7 @@ function DwtToolBar(parent, className, posStyle, cellSpacing, cellPadding, style
 	DwtComposite.call(this, parent, className, posStyle);
 	
 	this._style = style ? style : DwtToolBar.HORIZ_STYLE;
-	this._table = this.getDocument().createElement("table");
+	this._table = document.createElement("table");
 	this._table.border = 0;
 	this._table.cellPadding = cellPadding ? cellPadding : 0;
 	this._table.cellSpacing = cellSpacing ? cellSpacing : 0;
@@ -88,8 +88,9 @@ function(size, index) {
 	return el;
 }
 
-DwtToolBar.prototype._createSpacerElement = function() {
-	return this.getDocument().createElement("div");
+DwtToolBar.prototype._createSpacerElement = 
+function() {
+	return document.createElement("div");
 }
 
 DwtToolBar.prototype.addSeparator =
@@ -101,6 +102,7 @@ function(className, index) {
 }
 
 DwtToolBar.prototype._createSeparatorElement = DwtToolBar.prototype._createSpacerElement;
+DwtToolBar.prototype._createFillerElement = DwtToolBar.prototype._createSpacerElement;
 
 DwtToolBar.prototype.addFiller =
 function(className, index) {
@@ -109,8 +111,6 @@ function(className, index) {
 	this._addItem(DwtToolBar.FILLER, el, index);
 	return el;
 }
-
-DwtToolBar.prototype._createFillerElement = DwtToolBar.prototype._createSpacerElement;
 
 DwtToolBar.prototype._addChild =
 function(child, index) {

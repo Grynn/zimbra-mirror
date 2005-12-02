@@ -39,7 +39,7 @@ ZaDLListView.prototype.toString = function() {
 
 ZaDLListView.prototype._setNoResultsHtml = function() {
 	var buffer = new AjxBuffer();
-	var	div = this.getDocument().createElement("div");
+	var	div = document.createElement("div");
 	
 	buffer.append("<table width='100%' cellspacing='0' cellpadding='1'>",
 				  "<tr><td class='NoResults'><br>&nbsp",

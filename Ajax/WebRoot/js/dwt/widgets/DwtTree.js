@@ -159,7 +159,7 @@ function(child) {}
 
 DwtTree.prototype.addSeparator =
 function() {
-	var sep = this.getDocument().createElement("div");
+	var sep = document.createElement("div");
 //	sep.className = "horizSep";
 	sep.className = "vSpace";
 	this.getHtmlElement().appendChild(sep);

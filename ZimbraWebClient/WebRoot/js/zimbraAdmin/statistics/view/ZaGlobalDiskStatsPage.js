@@ -51,7 +51,7 @@ function() {
 ZaGlobalDiskStatsPage.prototype.showMe = 
 function() {
 	if(!this._rendered) {
-		var elem = Dwt.getDomObj(this.getDocument(), this.cellId);
+		var elem = document.getElementById(this.cellId);
 		elem.appendChild(this.internalView.getHtmlElement());
 		this._rendered = true;
 	}	

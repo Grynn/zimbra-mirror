@@ -52,16 +52,16 @@ function (item) {
 	if(item) {
 		if(item.attrs && item.attrs[ZaServer.A_ServiceHostname]) {
 			var newSrc = "/service/statsimg/" + item.attrs[ZaServer.A_ServiceHostname] + "/rcvddata/d/1";
-			var imgElement = Dwt.getDomObj(this.getDocument(), this._1DayImgID);
+			var imgElement = document.getElementById(this._1DayImgID);
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}
-			imgElement = Dwt.getDomObj(this.getDocument(), this._3MonthImgID);	
+			imgElement = document.getElementById(this._3MonthImgID);	
 			newSrc = "/service/statsimg/" + item.attrs[ZaServer.A_ServiceHostname] + "/rcvddata/m/3";			
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}
-			imgElement = Dwt.getDomObj(this.getDocument(), this._12MonthImgID);		
+			imgElement = document.getElementById(this._12MonthImgID);		
 			newSrc = "/service/statsimg/" + item.attrs[ZaServer.A_ServiceHostname] + "/rcvddata/m/12";			
 			if(imgElement) {
 				imgElement.src = newSrc;

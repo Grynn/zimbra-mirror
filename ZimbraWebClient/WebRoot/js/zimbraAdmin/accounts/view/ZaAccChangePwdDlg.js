@@ -56,12 +56,12 @@ function() {
 ZaAccChangePwdDlg.prototype.popup =
 function(mustChange) {
 	DwtDialog.prototype.popup.call(this);
-	var ePassword = Dwt.getDomObj(this.getDocument(), this._fieldIds[ZaAccChangePwdDlg.F_password]);
+	var ePassword = document.getElementById(this._fieldIds[ZaAccChangePwdDlg.F_password]);
 	ePassword.focus();
 	if(this._app) {
 		this._app.getCurrentController().setEnabled(false);	
 	}
-	var eField = Dwt.getDomObj(this.getDocument(), this._fieldIds[ZaAccChangePwdDlg.F_zimbraPasswordMustChange]);
+	var eField = document.getElementById(this._fieldIds[ZaAccChangePwdDlg.F_zimbraPasswordMustChange]);
 	if(!eField)
 		return true;
 		
@@ -73,7 +73,7 @@ function(mustChange) {
 
 ZaAccChangePwdDlg.prototype.getPassword = 
 function () {
-	var ePassword = Dwt.getDomObj(this.getDocument(), this._fieldIds[ZaAccChangePwdDlg.F_password]);
+	var ePassword = document.getElementById(this._fieldIds[ZaAccChangePwdDlg.F_password]);
 	if(ePassword) {
 		return ePassword.value;
 	}
@@ -81,7 +81,7 @@ function () {
 
 ZaAccChangePwdDlg.prototype.getMustChangePassword = 
 function () {
-	var eField = Dwt.getDomObj(this.getDocument(), this._fieldIds[ZaAccChangePwdDlg.F_zimbraPasswordMustChange]);
+	var eField = document.getElementById(this._fieldIds[ZaAccChangePwdDlg.F_zimbraPasswordMustChange]);
 	if(eField) {
 		if(eField.checked) {
 			return true;
@@ -93,7 +93,7 @@ function () {
 
 ZaAccChangePwdDlg.prototype.getConfirmPassword = 
 function () {
-	var eConfPassword = Dwt.getDomObj(this.getDocument(), this._fieldIds[ZaAccChangePwdDlg.F_confirmPassword]);
+	var eConfPassword = document.getElementById(this._fieldIds[ZaAccChangePwdDlg.F_confirmPassword]);
 	if(eConfPassword) {
 		return eConfPassword.value;
 	}

@@ -71,7 +71,7 @@ function() {
 
 DwtLabel.prototype._createTable =
 function() {
-	this._table = this.getDocument().createElement("table");
+	this._table = document.createElement("table");
 	this._table.border = 0;
 	
 	// Left is the default alignment. Note that if we do an explicit align left, Firefox freaks out
@@ -161,7 +161,7 @@ function(text) {
 		}
 	} else {
 		if (this._text == null) {
-		  this._text = this.getDocument().createTextNode(text);
+		  this._text = document.createTextNode(text);
 		}
 		this._text.data = text;
 		var idx;

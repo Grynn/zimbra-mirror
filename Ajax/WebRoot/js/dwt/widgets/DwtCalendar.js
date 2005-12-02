@@ -206,7 +206,7 @@ function(date, skipNotify, forceRollOver, dblClick) {
 		 	if (cellId == this._selectedCellId)
 		 		notify = true;
 
-			var cell = Dwt.getDomObj(this.getDocument(), cellId);
+			var cell = document.getElementById(cellId);
 			if (cell._dayType == DwtCalendar._THIS_MONTH)
 				notify = true;
 			else if (forceRollOver)
@@ -332,10 +332,9 @@ function(dates, enable, clear) {
 		
 	var cell;
 	var aDate;
-	var doc = this.getDocument();
 	if (clear) {
 		for (aDate in this._date2CellId) {
-			cell = Dwt.getDomObj(doc, this._date2CellId[aDate]);
+			cell = document.getElementById(this._date2CellId[aDate]);
 			if (cell._isHilited) {
 				cell._isHilited = false;
 				this._setClassName(cell, DwtCalendar._NORMAL);
@@ -349,7 +348,7 @@ function(dates, enable, clear) {
 		cellId = this._date2CellId[aDate.getFullYear() * 10000 + aDate.getMonth() * 100 + aDate.getDate()];
 
 		if (cellId) {
-			cell = Dwt.getDomObj(doc, cellId);
+			cell = document.getElementById(cellId);
 			if (cell._isHilited != enable) {
 				cell._isHilited = enable;
 				this._setClassName(cell, DwtCalendar._NORMAL);
@@ -366,14 +365,13 @@ function() {
 
 DwtCalendar.prototype.setFirstDayOfWeek =
 function(firstDayOfWeek) {
-	var doc = this.getDocument();
 	for (var i = 0; i < 7; i++) {
 		if (i < firstDayOfWeek)
 			this._weekDays[i] = 6 - (firstDayOfWeek -i - 1);
 		else
 			this._weekDays[i] = i - firstDayOfWeek;
 		
-		var dowCell = Dwt.getDomObj(doc, this._getDOWCellId(i));
+		var dowCell = document.getElementById(this._getDOWCellId(i));
 		dowCell.innerHTML = AjxDateUtil.WEEKDAY_SHORT[(firstDayOfWeek + i) % 7];
 	}
 	this._layout();
@@ -454,7 +452,6 @@ function() {
 	var month  = date.getMonth();
 	var firstDay = date.getDay();
 	var daysInMonth = this._getDaysInMonth(month);
-	var doc = this.getDocument();
 	var day = 1;
 	var nextMoDay = 1;
 
@@ -485,7 +482,7 @@ function() {
 
 	for (var i = 0; i < 6; i++) {
     	for (var j = 0; j < 7; j++) {
- 	   		var dayCell = Dwt.getDomObj(doc, this._getDayCellId(i * 7 + j));
+ 	   		var dayCell = document.getElementById(this._getDayCellId(i * 7 + j));
  	   		
  	   		if (dayCell._isHilited == null)
  	   			dayCell._isHilited = false;
@@ -548,11 +545,10 @@ function() {
 DwtCalendar.prototype._setRange =
 function() {
 	
-	var doc = this.getDocument();
-	var cell = Dwt.getDomObj(doc, this._getDayCellId(0));
+	var cell = document.getElementById(this._getDayCellId(0));
 	var start = new Date(cell._year, cell._month, cell._day, 0, 0, 0, 0);
 
-	cell = Dwt.getDomObj(doc, this._getDayCellId(DwtCalendar._LAST_DAY_CELL_IDX));
+	cell = document.getElementById(this._getDayCellId(DwtCalendar._LAST_DAY_CELL_IDX));
 	
 	var daysInMo = this._getDaysInMonth(cell._month, cell._year);
 	var end;
@@ -587,20 +583,19 @@ function() {
 DwtCalendar.prototype._setToday =
 function() {
 	var cell;
-	var doc = this.getDocument();
 	var today = new Date();
 	var todayDay = today.getDate();
 	
 	if (!this._todayDay || this._todayDay != todayDay) {
 		if (this._todayCellId != null) {
-			cell = Dwt.getDomObj(doc, this._todayCellId);
+			cell = document.getElementById(this._todayCellId);
 			cell._isToday = false;
 			this._setClassName(cell, DwtCalendar._NORMAL);
 		}
 		
 		this._todayCellId = this._date2CellId[(today.getFullYear() * 10000) + (today.getMonth() * 100) + todayDay];
 		if (this._todayCellId != null) {
-			cell = Dwt.getDomObj(doc, this._todayCellId);
+			cell = document.getElementById(this._todayCellId);
 			cell._isToday = true;
 			this._setClassName(cell, DwtCalendar._NORMAL);
 		}
@@ -612,16 +607,15 @@ function() {
 	var day = this._date.getDate();
 	var month = this._date.getMonth();
 	var year = this._date.getFullYear();
-	var doc = this.getDocument();
 	var cell;
 	
 	if (this._selectedDayElId) {
-		cell = Dwt.getDomObj(doc, this._selectedDayElId);
+		cell = document.getElementById(this._selectedDayElId);
 		this._setClassName(cell, DwtCalendar._DESELECTED);
 	}	
 	
 	var cellId = this._date2CellId[(year * 10000) + (month * 100) + day];
-	cell = Dwt.getDomObj(doc, cellId);
+	cell = document.getElementById(cellId);
 	this._selectedDayElId = cellId;
 	this._setClassName(cell, DwtCalendar._SELECTED);
 }
@@ -666,11 +660,10 @@ function(cell, mode) {
 		/* If we are not in day mode, then we need to highlite multiple cells e.g. the whole
 		 * week if we are in week mode */
 		var firstCellIdx = Math.floor(this._getDayCellIndex(this._selectedDayElId) / 7) * 7;
-		var doc = this.getDocument();
 
 		for (var i = 0; i < 7; i++) {
 			className = this._origDayClassName;
-			var aCell = Dwt.getDomObj(doc, this._getDayCellId(firstCellIdx++));
+			var aCell = document.getElementById(this._getDayCellId(firstCellIdx++));
 			aCell.className = this._setCellClassName(aCell, className, mode);
 		}
 		return;
@@ -681,7 +674,7 @@ function(cell, mode) {
 
 DwtCalendar.prototype._setTitle =
 function(month, year) {
-	var cell = Dwt.getDomObj(this.getDocument(), this._monthCell);
+	var cell = document.getElementById(this._monthCell);
 	var formatter = DwtCalendar.getMonthFormatter();
 	var date = new Date(year, month);
 	cell.innerHTML = formatter.format(date);
@@ -768,11 +761,10 @@ function() {
     
     this.getHtmlElement().innerHTML = html.join("");
     if (!this._readOnly) {
-	    var doc = this.getDocument();
-	    Dwt.getDomObj(doc, "b:py:img:" + this._uuid)._origClassName = AjxImg.getClassForImage("FastRevArrowSmall");
-	    Dwt.getDomObj(doc, "b:pm:img:" + this._uuid)._origClassName = AjxImg.getClassForImage("RevArrowSmall");
-	    Dwt.getDomObj(doc, "b:nm:img:" + this._uuid)._origClassName = AjxImg.getClassForImage("FwdArrowSmall");
-	    Dwt.getDomObj(doc, "b:ny:img:" + this._uuid)._origClassName = AjxImg.getClassForImage("FastFwdArrowSmall");
+    	document.getElementById("b:py:img:" + this._uuid)._origClassName = AjxImg.getClassForImage("FastRevArrowSmall");
+	    document.getElementById("b:pm:img:" + this._uuid)._origClassName = AjxImg.getClassForImage("RevArrowSmall");
+	    document.getElementById("b:nm:img:" + this._uuid)._origClassName = AjxImg.getClassForImage("FwdArrowSmall");
+	    document.getElementById("b:ny:img:" + this._uuid)._origClassName = AjxImg.getClassForImage("FastFwdArrowSmall");
     }
 
     this._calWidgetInited = true;

@@ -63,7 +63,7 @@ function () {
 ZaAccountListView.prototype._createItemHtml =
 function(account, now, isDndIcon) {
 	var html = new Array(50);
-	var	div = this.getDocument().createElement("div");
+	var	div = document.createElement("div");
 	div._styleClass = "Row";
 	div._selectedStyleClass = div._styleClass + "-" + DwtCssStyle.SELECTED;
 	div.className = div._styleClass;

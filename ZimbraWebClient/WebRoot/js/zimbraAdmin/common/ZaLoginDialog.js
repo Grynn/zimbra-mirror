@@ -28,7 +28,6 @@ function ZaLoginDialog(parent, zIndex, className) {
     className = className || "ZaLoginDialog";
     DwtComposite.call(this, parent, className, DwtControl.ABSOLUTE_STYLE);
 
-	var doc = this.getDocument();
     this._origClassName = className;
     this._xparentClassName = className + "-Transparent";
     this.setBounds(0, 0, "100%", "100%");
@@ -42,18 +41,18 @@ function ZaLoginDialog(parent, zIndex, className) {
 	var errorCellId = Dwt.getNextId();
 	var licenseCellId = Dwt.getNextId();
 	this.hiddenBtnId = Dwt.getNextId();
-    var form = doc.createElement("form");
+    var form = document.createElement("form");
     form.innerHTML = this._createHtml(unameId, pwordId, okCellId, errorCellId, licenseCellId);
     htmlElement.appendChild(form);
-    this._errorCell = Dwt.getDomObj(doc, errorCellId);
+    this._errorCell = document.getElementById(errorCellId);
     
-   	doc._parentId = this._htmlElId;
+   	document._parentId = this._htmlElId;
    	
-   	this._unameField = Dwt.getDomObj(doc, unameId);
+   	this._unameField = document.getElementById(unameId);
     this._unameField._parentId = this._htmlElId;
     this._unameField.onfocus = ZaLoginDialog.handleFieldFocus;
     
-    this._pwordField = Dwt.getDomObj(doc, pwordId);
+    this._pwordField = document.getElementById(pwordId);
     this._pwordField._parentId = this._htmlElId;
     this._pwordField.onfocus = ZaLoginDialog.handleFieldFocus;
     
@@ -62,7 +61,7 @@ function ZaLoginDialog(parent, zIndex, className) {
     this._loginButton.setData("me", this);
     this._loginButton.addSelectionListener(new AjxListener(this, this._loginSelListener));
     
-    this._okCell = Dwt.getDomObj(doc, okCellId);
+    this._okCell = document.getElementById(okCellId);
 	if (!AjxEnv.isIE){
 		this._hiddenBtn = document.createElement('input');
 		this._hiddenBtn.type='submit';
@@ -73,7 +72,7 @@ function ZaLoginDialog(parent, zIndex, className) {
 
 	}    
 	this._okCell.appendChild(this._loginButton.getHtmlElement());
-	this._licenseCell = Dwt.getDomObj(doc, licenseCellId);
+	this._licenseCell = document.getElementById(licenseCellId);
 	this.resetLicenseWarning();
 }
 
@@ -87,10 +86,9 @@ function() {
 
 ZaLoginDialog.prototype.setUpKeyHandlers = 
 function () {
-	var doc = this.getDocument();
 	this.handleKeyBoard = true;
   	if (AjxEnv.isIE) {
-  		doc.onkeydown = ZaLoginDialog._keyPressHdlr;
+  		document.onkeydown = ZaLoginDialog._keyPressHdlr;
   		this._unameField.onkeydown = ZaLoginDialog._keyPressHdlr;
     	this._pwordField.onkeydown = ZaLoginDialog._keyPressHdlr;
 	} else {
@@ -104,9 +102,8 @@ function () {
 ZaLoginDialog.prototype.clearKeyHandlers = 
 function () {
 	this.handleKeyBoard = false;
-	var doc = this.getDocument();
   	if (AjxEnv.isIE) {
-  		doc.onkeydown = null;
+  		document.onkeydown = null;
   		this._unameField.onkeydown = null;
     	this._pwordField.onkeydown = null;
 	} else {
@@ -118,10 +115,10 @@ function () {
 }
 
 
-ZaLoginDialog.handleFieldFocus = function (ev) {
+ZaLoginDialog.handleFieldFocus = 
+function(ev) {
 	var obj = DwtUiEvent.getTarget(ev);
-	var doc = obj.document ? obj.document : ((obj.ownerDocument)? obj.ownerDocument : window.document);
-	var parent = Dwt.getObjectFromElement(Dwt.getDomObj(doc, obj._parentId));
+	var parent = Dwt.getObjectFromElement(document.getElementById(obj._parentId));
 	parent._loginButton.setActivated(false);	
 }
 
@@ -296,9 +293,9 @@ function(evt) {
 	var doc = obj.document ? obj.document : ((obj.ownerDocument)? obj.ownerDocument : window.document);
 	var parent = null;
 	if(obj._parentId)
-		parent = Dwt.getObjectFromElement(Dwt.getDomObj(doc, obj._parentId));
+		parent = Dwt.getObjectFromElement(document.getElementById(obj._parentId));
 	else 
-		parent = Dwt.getObjectFromElement(Dwt.getDomObj(doc, doc._parentId));
+		parent = Dwt.getObjectFromElement(document.getElementById(doc._parentId));
 	
 	if(!parent || !parent.handleKeyBoard)
 		return;

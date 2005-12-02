@@ -102,7 +102,6 @@ function(checked) {
 			//		 alert(checkbox.checked);
 			if (this._checkBox._ieHack) {
 				if (checked) {
-					var document = this.getDocument();
 					var checkbox = document.createElement("<INPUT type='checkbox' checked>");
 					Dwt.setHandler(checkbox, DwtEvent.ONMOUSEDOWN, DwtTreeItem._checkBoxMouseDownHdlr);
 					Dwt.setHandler(checkbox, DwtEvent.ONMOUSEUP, DwtTreeItem._checkBoxMouseUpHdlr);
@@ -304,12 +303,11 @@ function(index) {
 	 
 	this._setMouseEventHdlrs();
 	
-	var doc = this.getDocument();
-	this._itemDiv = doc.createElement("div");
+	this._itemDiv = document.createElement("div");
 	this._itemDiv.className = this._origClassName;
 	this.getHtmlElement().appendChild(this._itemDiv);
 
-	this._table = doc.createElement("table");
+	this._table = document.createElement("table");
 	this._table.cellSpacing = this._table.cellPadding = 0;
 	this._table.border = 0;
 	this._itemDiv.appendChild(this._table);
@@ -337,7 +335,7 @@ function(index) {
 	if (this._tree._isCheckedStyle()) {
       	this._checkBoxCell = this._row.insertCell(i++);
       	this._checkBoxCell.noWrap = true;
-      	this._checkBox = doc.createElement("input");
+      	this._checkBox = document.createElement("input");
       	this._checkBox.type = "checkbox";
       	if (AjxEnv.isIE) {
       		// NOTE: See note in setChecked method to see why this is here.
@@ -398,7 +396,7 @@ function(item, index) {
 		this._children.add(item, index);
 	
 	if (this._childDiv == null) {
-		this._childDiv = this.getDocument().createElement("div");
+		this._childDiv = document.createElement("div");
 		if (this.parent != this._tree) {
 			this._childDiv.className = "DwtTreeItemChildDiv";
 		} else {
@@ -430,11 +428,9 @@ function(item, index) {
 
 DwtTreeItem.prototype._getDnDIcon =
 function() {
-	var doc = this.getDocument();
-	
-	var icon = doc.createElement("div");
+	var icon = document.createElement("div");
 	Dwt.setPosition(icon, Dwt.ABSOLUTE_STYLE); 
-	var table = doc.createElement("table");
+	var table = document.createElement("table");
 	icon.appendChild(table);
 	table.cellSpacing = table.cellPadding = 0;
 		
@@ -538,7 +534,7 @@ function() {
 	for (var i = 0; i < a.length; i++) {
 		if (!a[i]._initialized) {
 			if (a[i]._isSeparator) {
-				var div = this.getDocument().createElement("div");
+				var div = document.createElement("div");
 				div.className = "vSpace";
 				this._childDiv.appendChild(div);
 				a[i]._initialized = true;

@@ -30,7 +30,6 @@ function DwtGrouper(parent, className, posStyle) {
 	posStyle = posStyle || DwtControl.STATIC_STYLE;
 	DwtComposite.call(this, parent, null, posStyle);
 	
-	var document = this.getDocument();
 	this._labelEl = document.createElement("SPAN");
 	this._insetEl = document.createElement("DIV");
 	this._borderEl = document.createElement("DIV");

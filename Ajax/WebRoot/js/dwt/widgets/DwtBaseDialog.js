@@ -72,8 +72,7 @@ function DwtBaseDialog(parent, className, title, zIndex, mode, loc, optionalView
 	}
 	// make dialog draggable within boundaries of shell
 	var htmlElement = this.getHtmlElement();
-	var doc = this.getDocument();
-	var dHandleId = (optionalDragHandleId)? optionalDragHandleId: (htmlElement.id + "_handle");
+	var dHandleId = optionalDragHandleId ? optionalDragHandleId : (htmlElement.id + "_handle");
 	this.initializeDragging(dHandleId);
 	DBG.timePt(AjxDebug.PERF, "init dragging");
 	
@@ -101,7 +100,8 @@ function() {
 	return "DwtBaseDialog";
 };
 
-DwtBaseDialog.prototype.initializeDragging = function (dragHandleId) {
+DwtBaseDialog.prototype.initializeDragging = 
+function(dragHandleId) {
 	var dragHandle = document.getElementById(dragHandleId);
 	if (dragHandle) {
 		var p = Dwt.getSize(AjxCore.objectWithId(window._dwtShell).getHtmlElement());
@@ -208,7 +208,7 @@ function() {
 }
 
 DwtBaseDialog.prototype.setView =
-function (newView) {
+function(newView) {
 	this.reset();
 	if (newView) this._getContentDiv().appendChild(newView.getHtmlElement());
 };
@@ -308,9 +308,8 @@ function(ev) {
 					} else {
 						ad._tabIndex =  1;
 					}
-					var doc = ad.getDocument();
 					var id = ad._tabIdOrder[ad._tabIndex];
-					doc.getElementById(id).focus();
+					document.getElementById(id).focus();
 					ev.oldTabIndexId = (oldTabIndex == -1) ? oldTabIndex : ad._tabIdOrder[oldTabIndex];
 					ev.isTargetInDialog = true;
 					ev.currentTabIndexId = id;
@@ -361,7 +360,8 @@ function () {
 // Private methods
 // -------------------------------------------------------------------
 
-DwtBaseDialog.prototype._getStartBorder = function () {
+DwtBaseDialog.prototype._getStartBorder = 
+function() {
 	if (!this._titleHandleId) this._titleHandleId = Dwt.getNextId();
 	if (!this._contentId) this._contentId = Dwt.getNextId();
 	if (!this._titleCellId) this._titleCellId = Dwt.getNextId();
@@ -369,11 +369,13 @@ DwtBaseDialog.prototype._getStartBorder = function () {
 												titleId: this._titleHandleId});
 };
 
-DwtBaseDialog.prototype._getEndBorder = function () {
+DwtBaseDialog.prototype._getEndBorder = 
+function() {
 	return DwtBorder.getBorderEndHtml("dialog");
 };
 
-DwtBaseDialog.prototype._getContentHtml = function () {
+DwtBaseDialog.prototype._getContentHtml = 
+function() {
 	return "<div id='" + this._contentId + "'></div>"
 };
 
@@ -392,7 +394,8 @@ function() {
 	this._contentDiv = document.getElementById(this._contentId);
 }
 
-DwtBaseDialog.prototype._setModalEffect = function (){
+DwtBaseDialog.prototype._setModalEffect = 
+function() {
 	// place veil under this dialog
 	var dialogZ = this._shell._veilOverlay.dialogZ;
 	var currentDialogZ = null;

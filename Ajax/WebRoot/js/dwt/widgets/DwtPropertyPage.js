@@ -75,7 +75,7 @@ function(field, func) {
 	if (!field)	return;
 	
 	var e = null;
-	e = Dwt.getDomObj(this.getDocument(), this._fieldIds[field]);
+	e = document.getElementById(this._fieldIds[field]);
 	if (e) {
 		Dwt.setHandler(e, DwtEvent.ONKEYUP, func ? func : this._onKeyUp);
 		e._view = this;
@@ -90,8 +90,7 @@ DwtPropertyPage.prototype._installOnClickHandler =
 function(field, func) {
 	if (!field) return;
 	
-	var e = null;
-	e = Dwt.getDomObj(this.getDocument(), this._fieldIds[field]);
+	var e = document.getElementById(this._fieldIds[field]);
 	if (e) {
 		Dwt.setHandler(e, DwtEvent.ONCLICK, func ? func : this._onClick);
 		e._view = this;
@@ -119,7 +118,7 @@ function(field, func) {
 	if (!field) return;
 	
 	var e = null;
-	e = Dwt.getDomObj(this.getDocument(), this._fieldIds[field]);
+	e = document.getElementById(this._fieldIds[field]);
 	if(e) {
 		Dwt.setHandler(e, DwtEvent.ONCHANGE, func ? func : this._onChange);
 		e._view = this;

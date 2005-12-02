@@ -59,9 +59,9 @@ function DwtWizardDialog (parent, className, title, w, h) {
 	this._pages = new Array(); 
 	this._pageIx = 1;
 	this._currentPage = 1;
-	this._progressDiv = this.getDocument().createElement("div");
+	this._progressDiv = document.createElement("div");
 	this._progressDiv.style.position = DwtControl.STATIC_STYLE;
-	this._pageDiv = this.getDocument().createElement("div");
+	this._pageDiv = document.createElement("div");
 	this._pageDiv.className = "DwtWizardDialogPageDiv";
 	this._pageDiv.style.width = this._contentW;
 	this._pageDiv.style.height = this._contentH;
@@ -234,11 +234,11 @@ function (wizPage, stepTitle) {
 DwtWizardDialog.prototype._createContentHtml =
 function () {
 
-	this._table = this.getDocument().createElement("table");
+	this._table = document.createElement("table");
 	this._table.border = 0;
-	this._table.width=this._contentW;
-	this._table.cellPadding = 0;
-	this._table.cellSpacing = 0;
+	this._table.width = this._contentW;
+	this._table.cellPadding = this._table.cellSpacing = 0;
+
 	Dwt.associateElementWithObject(this._table, this);
 	this._table.backgroundColor = DwtCssStyle.getProperty(this.parent.getHtmlElement(), "background-color");
 	
@@ -267,7 +267,7 @@ function () {
 	colSep.vAlign = "middle";
 	colSep.noWrap = true;	
 	colSep.style.width = this._contentW;
-	var sepDiv = this.getDocument().createElement("div");
+	var sepDiv = document.createElement("div");
 	sepDiv.className = "horizSep";
 	sepDiv.style.width = this._contentW;
 	sepDiv.style.height = "5px";
@@ -386,9 +386,8 @@ function() {
 	DBG.println(AjxDebug.DBG3, "this.parent._contentH: " + this.parent._contentH);					
 	DBG.println(AjxDebug.DBG3, "this.parent._contentW: " + this.parent._contentW);		
 	*/
-	this.getHtmlElement().style.height=this.parent._contentH;
-
-	this.getHtmlElement().style.width=this.parent._contentW;
+	this.getHtmlElement().style.height = this.parent._contentH;
+	this.getHtmlElement().style.width = this.parent._contentW;
 	
 }
 /**
@@ -399,7 +398,7 @@ function() {
 function DwtWizProgressBar(parent) {
 	if (arguments.length == 0) return;
 	DwtComposite.call(this, parent, "DwtWizProgressBar", DwtControl.STATIC_STYLE);
-	this._table = this.getDocument().createElement("table");
+	this._table = document.createElement("table");
 	this._table.border = 0;
 	this._table.cellPadding = 0;
 	this._table.cellSpacing = 0;
