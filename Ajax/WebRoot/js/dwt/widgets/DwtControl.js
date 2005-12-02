@@ -1097,6 +1097,9 @@ function(m, c, d) {
 
 DwtControl.prototype._handleHoverOver =
 function(event) {
+	if (this._eventMgr.isListenerRegistered(DwtEvent.HOVEROVER)) {
+		this._eventMgr.notifyListeners(DwtEvent.HOVEROVER, event);
+	}
 	if (this._toolTipContent != null) {
 		var shell = DwtShell.getShell(window);
 		var tooltip = shell.getToolTip();
@@ -1110,6 +1113,9 @@ function(event) {
 
 DwtControl.prototype._handleHoverOut =
 function(event) {
+	if (this._eventMgr.isListenerRegistered(DwtEvent.HOVEROUT)) {
+		this._eventMgr.notifyListeners(DwtEvent.HOVEROUT, event);
+	}
 	var shell = DwtShell.getShell(window);
 	var tooltip = shell.getToolTip();
 	tooltip.popdown();
