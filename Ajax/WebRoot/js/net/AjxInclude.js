@@ -117,3 +117,10 @@ document.write = document.writeln = function() {
 	// bad--they won't work.  For this reason we don't even care to save
 	// the original functions.
 };
+
+if (AjxEnv.isIE) {
+	AjxInclude._removeWriteln = function() {
+		document.write = document.writeln = null;
+	};
+	window.attachEvent("onunload", AjxInclude._removeWriteln);
+}
