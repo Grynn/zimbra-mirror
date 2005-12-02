@@ -105,6 +105,7 @@ case "$1" in
         sudo ${zimbra_home}/libexec/zmtomcatstart \
             -Xms${jm}m -Xmx${jm}m ${tomcat_java_options} \
             > ${tomcat_directory}/logs/catalina.out 2>&1
+		exit $?
         ;;
 
     'kill')
