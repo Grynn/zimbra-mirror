@@ -37,13 +37,15 @@ AjxSoapDoc._SOAP_URI = "http://www.w3.org/2003/05/soap-envelope";
 AjxSoapDoc._XMLNS_URI = "http://www.w3.org/2000/xmlns";
 
 AjxSoapDoc.create =
-function(method, namespace, namespaceId) {
+function(method, namespace, namespaceId, soapURI) {
 	var sd = new AjxSoapDoc();
 	sd._xmlDoc = AjxXmlDoc.create();
 	var d = sd._xmlDoc.getDoc();
 	var envEl = d.createElement("soap:Envelope");
 
-	envEl.setAttribute("xmlns:soap", AjxSoapDoc._SOAP_URI);
+	if (!soapURI)
+		soapURI = AjxSoapDoc._SOAP_URI;
+	envEl.setAttribute("xmlns:soap", soapURI);
 
 	d.appendChild(envEl);
 
@@ -121,9 +123,16 @@ function(name, value){
  *    </user_auth>
  *
  * Of course, nesting other hashes is allowed and will work as expected.
+ *
+ * NOTE: you can pass null for "name", in which case "value" is expected to be
+ * an object whose properties will be created directly under the method el.
  */
 AjxSoapDoc.prototype.set = function(name, value, parent) {
-	var doc = this.getDoc(), p = doc.createElement(name);
+	var
+		doc = this.getDoc(),
+		p   = ( name == null
+			? doc.createDocumentFragment()
+			: doc.createElement(name) );
 	if (value != null) {
 		if (typeof value == "object")
 			for (i in value)
