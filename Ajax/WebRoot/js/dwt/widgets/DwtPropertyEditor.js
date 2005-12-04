@@ -122,6 +122,9 @@ DwtPropertyEditor.prototype._onMouseDown = function(event) {
  *  }
  */
 DwtPropertyEditor.prototype.getProperties = function() {
+	if (this._currentInputField)
+		// make sure we get the value
+		this._currentInputField.onblur();
 	function rec(schema) {
 		var prop = {}, tmp, n = schema.length;
 		for (var i = 0; i < n; ++i) {
