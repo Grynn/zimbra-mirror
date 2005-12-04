@@ -1,0 +1,13 @@
+.ImgSFORCE-panelIcon {
+  background: url("sforce.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.ImgSFORCE-wait {
+  background: url("/zimbra/img/animated/wait_16.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
