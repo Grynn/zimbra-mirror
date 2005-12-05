@@ -135,6 +135,7 @@ function(ev) {
 			if ((manager.getHoverObject() != this || !manager.isHovering()) && !DwtMenu.menuShowing()) {
 				manager.reset();
 				manager.setHoverObject(this);
+				manager.setHoverOverData(obj);
 				manager.setHoverOverDelay(DwtToolTip.TOOLTIP_DELAY);
 				manager.setHoverOverListener(obj._hoverOverListener);
 				manager.hoverOver(mouseEv.docX, mouseEv.docY);
