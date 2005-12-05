@@ -55,7 +55,6 @@ ZaGlobalConfig.A_zimbraMtaRelayHost = "zimbraMtaRelayHost";
 ZaGlobalConfig.A_zimbraComponentAvailable = "zimbraComponentAvailable";
 
 //TODO: Move this code to an external file
-ZaGlobalConfig.A_zimbraComponentAvailable_convertd = "_"+ZaGlobalConfig.A_zimbraComponentAvailable+"_convertd";
 ZaGlobalConfig.A_zimbraComponentAvailable_replication = "_"+ZaGlobalConfig.A_zimbraComponentAvailable+"_replication";
 ZaGlobalConfig.A_zimbraComponentAvailable_hotbackup = "_"+ZaGlobalConfig.A_zimbraComponentAvailable+"_hotbackup";
 ZaGlobalConfig.A_zimbraComponentAvailable_cluster = "_" + ZaGlobalConfig.A_zimbraComponentAvailable+"_cluster"

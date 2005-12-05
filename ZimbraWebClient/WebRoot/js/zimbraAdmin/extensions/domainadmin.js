@@ -145,7 +145,7 @@ if(ZaAuthenticate.processResponseMethods) {
 	ZaAuthenticate.processResponseMethods.push(ZaDomainAdmin.processAuthResponse);
 }
 
-if(EmailAddr_XFormItem) {
+/*if(EmailAddr_XFormItem) {
 	EmailAddr_XFormItem.prototype.items.splice(2,0,
 		{type:_OUTPUT_,ref:".",relevant:"ZaSettings.isDomainAdmin", relevantBehavior:_HIDE_,
 			choices:EmailAddr_XFormItem.domainChoices,
@@ -167,4 +167,4 @@ if(EmailAddr_XFormItem) {
 			}	
 		});
 	EmailAddr_XFormItem.prototype.items[3].relevant="!ZaSettings.isDomainAdmin";
-}
+}*/

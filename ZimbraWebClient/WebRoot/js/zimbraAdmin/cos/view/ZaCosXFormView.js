@@ -31,13 +31,13 @@
 * @author Greg Solovyev
 **/
 function ZaCosXFormView (parent, app) {
-	ZaTabView.call(this, parent, app);	
-	
+	ZaTabView.call(this, parent, app, "ZaCosXFormView");	
 	this.initForm(ZaCos.myXModel,this.getMyXForm());
 }
 
 ZaCosXFormView.prototype = new ZaTabView();
 ZaCosXFormView.prototype.constructor = ZaCosXFormView;
+ZaTabView.XFormModifiers["ZaCosXFormView"] = new Array();
 
 /**
 * @method setObject sets the object contained in the view
@@ -66,10 +66,9 @@ function(entry) {
 }
 
 
-ZaCosXFormView.prototype.getMyXForm = function() {	
-	var xFormObject = {
-		tableCssStyle:"width:100%;overflow:auto;",
-		items: [
+ZaCosXFormView.myXFormModifier = function(xFormObject) {	
+	xFormObject.tableCssStyle = "width:100%;overflow:auto;";
+	xFormObject.items = [
 			{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", 
 				items: [
 					{type:_GROUP_,	numCols:4,colSizes:["32px","350px","100px","250px"],
@@ -81,13 +80,7 @@ ZaCosXFormView.prototype.getMyXForm = function() {
 					}
 				],
 				cssStyle:"padding-top:5px; padding-left:2px; padding-bottom:5px"
-			},	/*		
-			{type:_GROUP_, cssClass:"AdminTitleBar", colSpan: "*", 
-				items: [
-					{type:_OUTPUT_, ref:ZaCos.A_name, label:ZaMsg.NAD_ClassOfService},
-					{type:_OUTPUT_, ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID}
-				]
-			},*/
+			},	
 			{type:_TAB_BAR_,  ref:ZaModel.currentTab,
 				choices:[
 					{value:1, label:ZaMsg.TABT_GeneralPage},
@@ -160,15 +153,6 @@ ZaCosXFormView.prototype.getMyXForm = function() {
 							{type:_GROUP_, numCols:2,
 								items :[
 									{ref:ZaCos.A_zimbraAttachmentsBlocked, type:_CHECKBOX_,  msgName:ZaMsg.NAD_RemoveAllAttachments,label:ZaMsg.NAD_RemoveAllAttachments, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_},
-									{ref:ZaCos.A_zimbraAttachmentsViewInHtmlOnly, type:_CHECKBOX_, //TODO: Move this code to an external file
-										msgName:ZaMsg.NAD_AttachmentsViewInHtmlOnly,label:ZaMsg.NAD_AttachmentsViewInHtmlOnly, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_,
-										relevant:"instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_convertd]",
-										relevantBehavior:_HIDE_
-									},	//TODO: Move this code to an external file
-									{ref:ZaCos.A_zimbraAttachmentsIndexingEnabled, type:_CHECKBOX_, msgName:ZaMsg.NAD_zimbraAttachmentsIndexingEnabled,label:ZaMsg.NAD_zimbraAttachmentsIndexingEnabled, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_,
-										relevant:"instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_convertd]",
-										relevantBehavior:_HIDE_
-									},
 									{ref:ZaCos.A_zimbraMailQuota, type:_TEXTFIELD_, msgName:ZaMsg.NAD_MailQuota,label:ZaMsg.NAD_MailQuota, labelLocation:_LEFT_, cssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged},
 									{ref:ZaCos.A_zimbraContactMaxNumEntries, type:_INPUT_, msgName:ZaMsg.NAD_ContactMaxNumEntries,label:ZaMsg.NAD_ContactMaxNumEntries, labelLocation:_LEFT_, cssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged},
 									{ref:ZaCos.A_zimbraMinPwdLength, type:_TEXTFIELD_, msgName:ZaMsg.NAD_passMinLength,label:ZaMsg.NAD_passMinLength, labelLocation:_LEFT_, cssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged},
@@ -187,7 +171,6 @@ ZaCosXFormView.prototype.getMyXForm = function() {
 					}
 				]
 			}	
-		]
-	};
-	return xFormObject;
+		];
 };
+ZaTabView.XFormModifiers["ZaCosXFormView"].push(ZaCosXFormView.myXFormModifier);

@@ -89,19 +89,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 						  label: ZaMsg.NAD_Attach_RemoveAllAttachments,
 						  trueValue: "TRUE", falseValue: "FALSE", 
 						  onChange: ZaTabView.onFormFieldChanged
-				    	},
-				    	{ type: _GROUP_, useParentTable: true, //TODO: Move this code to an external file
-						  relevant: "instance.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_convertd]", 
-						  relevantBehavior: _HIDE_,
-				    	  items: [
-							{ ref: ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly, type: _CHECKBOX_, 
-							  relevant: "instance.attrs[ZaGlobalConfig.A_zimbraAttachmentsBlocked] == 'FALSE'", 
-							  relevantBehavior: _DISABLE_,
-							  label: ZaMsg.NAD_Attach_ViewInHtml,
-							  trueValue:"TRUE", falseValue:"FALSE", 
-							  onChange: ZaTabView.onFormFieldChanged
-							}
-				    	]}
+				    	}
 			    	]},
 				  	{ type: _GROUP_, 
 				  	  label: "", labelCssStyle: "vertical-align:top",
