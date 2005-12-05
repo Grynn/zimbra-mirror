@@ -43,8 +43,13 @@ if [ $1 = "start" -o $1 = "reload" ]; then
 fi
 
 if [ $1 = "status" ]; then
-	PID=`ps auxww | grep /opt/zimbra/postfix-2.2.5/libexec/master | grep -v grep`
-	exit $?
+	${zimbra_home}/postfix-2.2.5/sbin/postqueue -p > /dev/null 2>&1
+	R=$?
+	if [ x$R != "x0" ]; then
+		exit 1
+	else
+		exit 0
+	fi
 fi
 
 sudo ${zimbra_home}/postfix-2.2.5/sbin/postalias /etc/aliases
