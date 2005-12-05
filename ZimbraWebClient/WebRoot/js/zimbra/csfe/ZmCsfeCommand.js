@@ -171,10 +171,10 @@ function(params) {
 			}
 		}
 	} catch (ex) {
-		if (!(ex instanceof ZmCsfeException || ex instanceof AjxSoapException || ex instanceof AjxException)) {
+		if (!(ex && (ex instanceof ZmCsfeException || ex instanceof AjxSoapException || ex instanceof AjxException))) {
 			var newEx = new ZmCsfeException();
 			newEx.method = "ZmCsfeCommand.invoke";
-			newEx.detail = ex.toString();
+			newEx.detail = ex ? ex.toString() : "undefined exception";
 			newEx.code = ZmCsfeException.UNKNOWN_ERROR;
 			newEx.msg = "Unknown Error";
 			ex = newEx;
@@ -309,7 +309,12 @@ function(args) {
 	var callback	= args[0];
 	var result		= args[1];
 
-	var response = this._getResponseData(result, true);
+	var response;
+	if (result instanceof ZmCsfeResult) {
+		response = result; // we already got an exception and packaged it
+	} else {
+		response = this._getResponseData(result, true);
+	}
 	this._en = new Date();
 
 	if (!callback) {
