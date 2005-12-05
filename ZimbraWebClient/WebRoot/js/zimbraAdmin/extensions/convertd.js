@@ -53,3 +53,77 @@ if(ZaTabView.XFormModifiers["ZaCosXFormView"]) {
 	 }
 	 ZaTabView.XFormModifiers["ZaCosXFormView"].push(ZaConvertD.CosXFormModifier);
 }
+
+if(ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
+	ZaConvertD.AccountXFormModifier= function (xFormObject) {
+		var cnt = xFormObject.items.length;
+		var i = 0;
+		for(i = 0; i <cnt; i++) {
+			if(xFormObject.items[i].type=="switch") 
+				break;
+		}
+		cnt = xFormObject.items[i].items.length;
+		var j = 0;
+		for(j = 0; j <cnt; j++) {
+			if(xFormObject.items[i].items[j].id=="account_form_advanced_tab") {
+				xFormObject.items[i].items[j].items[0].items.splice(1,0,
+								{ref:ZaAccount.A_zimbraAttachmentsViewInHtmlOnly, type:_SUPER_CHECKBOX_, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_AttachmentsViewInHtmlOnly,
+									label:ZaMsg.NAD_AttachmentsViewInHtmlOnly, 
+									labelLocation:_LEFT_, 
+									trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,
+									relevant:"instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_convertd]",
+									relevantBehavior:_HIDE_
+								});
+				xFormObject.items[i].items[j].items[0].items.splice(2,0,								
+								{ref:ZaAccount.A_zimbraAttachmentsIndexingEnabled, type:_SUPER_CHECKBOX_, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraAttachmentsIndexingEnabled,label:ZaMsg.NAD_zimbraAttachmentsIndexingEnabled, labelLocation:_LEFT_, 
+									trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,									
+									relevant:"instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_convertd]",
+									relevantBehavior:_HIDE_
+								});
+				break;
+			}
+		}
+		
+	}
+	ZaTabView.XFormModifiers["ZaAccountXFormView"].push(ZaConvertD.AccountXFormModifier);
+}
+
+if(ZaXDialog.XFormModifiers["ZaNewAccountXWizard"]) {
+	ZaConvertD.AccountXWizFormModifier= function (xFormObject) {
+		var cnt = xFormObject.items.length;
+		var i = 0;
+		for(i = 0; i <cnt; i++) {
+			if(xFormObject.items[i].type=="switch") 
+				break;
+		}
+		cnt = xFormObject.items[i].items.length;
+		var j = 0;
+		for(j = 0; j <cnt; j++) {
+			if(xFormObject.items[i].items[j].id=="account_form_advanced_step") {
+				xFormObject.items[i].items[j].items[0].items.splice(1,0,
+								{ref:ZaAccount.A_zimbraAttachmentsViewInHtmlOnly, type:_SUPER_CHECKBOX_, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_AttachmentsViewInHtmlOnly,
+									label:ZaMsg.NAD_AttachmentsViewInHtmlOnly,labelLocation:_LEFT_, 
+									labelCssStyle:"width:160px;",
+									trueValue:"TRUE", falseValue:"FALSE", 
+									relevant:"instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_convertd]",
+									relevantBehavior:_HIDE_
+								});
+				xFormObject.items[i].items[j].items[0].items.splice(2,0,								
+								{ref:ZaAccount.A_zimbraAttachmentsIndexingEnabled, type:_SUPER_CHECKBOX_, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraAttachmentsIndexingEnabled,
+									label:ZaMsg.NAD_zimbraAttachmentsIndexingEnabled, labelLocation:_LEFT_, 
+									labelCssStyle:"width:160px;",
+									trueValue:"TRUE", falseValue:"FALSE",
+									relevant:"instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_convertd]",
+									relevantBehavior:_HIDE_
+								});
+				break;
+			}
+		}
+		
+	}
+	ZaXDialog.XFormModifiers["ZaNewAccountXWizard"].push(ZaConvertD.AccountXWizFormModifier);
+}

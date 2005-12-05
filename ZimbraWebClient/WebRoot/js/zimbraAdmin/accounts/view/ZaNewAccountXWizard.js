@@ -191,6 +191,7 @@ function(entry) {
 				domainName = this._app.getDomainList().getArray()[0].name;
 			}
 		}
+		this._containedObject.globalConfig = this._app.getGlobalConfig();
 	} 
 	if(!domainName) {
 		domainName =  ZaSettings.myDomainName;
@@ -417,13 +418,13 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 				});
 	}			
 	if(ZaSettings.ACCOUNTS_ADVANCED_ENABLED) {
-		cases.push({type:_CASE_, numCols:1, relevant:"instance[ZaModel.currentStep]==7", 
+		cases.push({type:_CASE_,id:"account_form_advanced_step", numCols:1, relevant:"instance[ZaModel.currentStep]==7", 
 						items: [
 							{type:_GROUP_, 
 								items :[
-									{ref:ZaAccount.A_zimbraAttachmentsBlocked,labelCssStyle:"width:160px;", type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_RemoveAllAttachments,label:ZaMsg.NAD_RemoveAllAttachments, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE"},
-									{ref:ZaAccount.A_zimbraAttachmentsViewInHtmlOnly,labelCssStyle:"width:160px;", type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_AttachmentsViewInHtmlOnly,label:ZaMsg.NAD_AttachmentsViewInHtmlOnly, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE"},	
-									{ref:ZaAccount.A_zimbraAttachmentsIndexingEnabled,labelCssStyle:"width:160px;", type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraAttachmentsIndexingEnabled,label:ZaMsg.NAD_zimbraAttachmentsIndexingEnabled, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE"}
+									{ref:ZaAccount.A_zimbraAttachmentsBlocked,labelCssStyle:"width:160px;", type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_RemoveAllAttachments,label:ZaMsg.NAD_RemoveAllAttachments, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE"}
+/*									{ref:ZaAccount.A_zimbraAttachmentsViewInHtmlOnly,labelCssStyle:"width:160px;", type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_AttachmentsViewInHtmlOnly,label:ZaMsg.NAD_AttachmentsViewInHtmlOnly, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE"},	
+									{ref:ZaAccount.A_zimbraAttachmentsIndexingEnabled,labelCssStyle:"width:160px;", type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraAttachmentsIndexingEnabled,label:ZaMsg.NAD_zimbraAttachmentsIndexingEnabled, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE"}*/
 								]
 							},
 							{type:_SEPARATOR_, colSpan:"*"},
