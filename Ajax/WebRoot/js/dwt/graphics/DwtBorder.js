@@ -593,7 +593,7 @@ DwtBorder.registerBorder(
 				 "<table class='DialogTable' cellpadding='0' Xborder=1>",
 					// top edge
 					"<tr><td><div style='position:relative'>"+
-							"<div class='ImgSplashScreen_blank'></div>",
+							"<div class='ImgSplashScreen_blank' style='background-color:white'></div>",
 							"<div class=SplashScreenUrl><!--$url--></div>",
 							"<div class=SplashScreenShortVersion><!--$shortVersion--></div>",
 							"<div class=SplashScreenAppName><!--$appName--></div>",
