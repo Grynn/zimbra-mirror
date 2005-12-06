@@ -451,6 +451,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 						{type:_GROUP_, 
 							items: [
 								{ref:ZaAccount.A_zimbraAuthTokenLifetime, labelCssStyle:"width:250px;", type:_SUPER_LIFETIME_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_AuthTokenLifetime,label:ZaMsg.NAD_AuthTokenLifetime,labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},								
+								{ref:ZaAccount.A_zimbraMailIdleSessionTimeout, labelCssStyle:"width:250px;", type:_SUPER_LIFETIME_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_MailIdleSessionTimeout,label:ZaMsg.NAD_MailIdleSessionTimeout,labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},																
 								{ref:ZaAccount.A_zimbraMailMessageLifetime, type:_SUPER_LIFETIME1_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_MailMessageLifetime,label:ZaMsg.NAD_MailMessageLifetime,labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},
 								{ref:ZaAccount.A_zimbraMailTrashLifetime, type:_SUPER_LIFETIME1_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_MailTrashLifetime,label:ZaMsg.NAD_MailTrashLifetime, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},
 								{ref:ZaAccount.A_zimbraMailSpamLifetime, type:_SUPER_LIFETIME1_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_MailSpamLifetime,label:ZaMsg.NAD_MailSpamLifetime, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged}
