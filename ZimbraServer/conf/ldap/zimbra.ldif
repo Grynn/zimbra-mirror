@@ -123,7 +123,8 @@ zimbraCOSInheritedAttr: zimbraPrefForwardReplyInOriginalFormat
 zimbraCOSInheritedAttr: zimbraFeatureHtmlComposeEnabled
 zimbraDomainAdminModifiableAttr: zimbraAccountStatus
 zimbraDomainAdminModifiableAttr: company
-zimbraDomainAdminModifiableAttr: cn 
+zimbraDomainAdminModifiableAttr: cn
+zimbraDomainAdminModifiableAttr: co
 zimbraDomainAdminModifiableAttr: displayName
 zimbraDomainAdminModifiableAttr: gn
 zimbraDomainAdminModifiableAttr: description
