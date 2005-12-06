@@ -152,7 +152,7 @@
 
 <attr name="zimbraForeignPrincipal" type="string"/>
 
-<attr name="zimbraGalLdapAttrMap" type="string" immutable="1"/>
+<attr name="zimbraGalLdapAttrMap" type="string"/>
 
 <attr name="zimbraGalLdapBindDn" type="string" max="256"/>
 
