@@ -70,7 +70,7 @@ $sa_kill_level_deflt = %%range VAR:zimbraSpamKillPercent 0 20%%; # triggers spam
 $sa_dsn_cutoff_level = %%range VAR:zimbraSpamKillPercent 0 20%%;    # spam level beyond which a DSN is not sent
 $sa_quarantine_cutoff_level = %%range VAR:zimbraSpamKillPercent 0 20%%;  # spam level beyond which quarantine is off
 
-$sa_mail_body_size_limit = 0; # don't waste time on SA if mail is larger
+# $sa_mail_body_size_limit = 0; # don't waste time on SA if mail is larger
 $sa_local_tests_only = 0;    # only tests which do not require internet access?
 $sa_auto_whitelist = 1;      # turn on AWL in SA 2.63 or older (irrelevant
                              # for SA 3.0, cf option is 'use_auto_whitelist')
