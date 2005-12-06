@@ -24,7 +24,7 @@
  */
 
 function SingleAccountRestoreXWizard (parent, app) {
-	ZaXWizardDialog.call(this, parent, null, ZaMsg.Restore_WizTitle, "550px", "300px");
+	ZaXWizardDialog.call(this, parent,app, null, ZaMsg.Restore_WizTitle, "550px", "300px");
 	this.addPage("Account Name"); //1
 	this.addPage("Select Servers"); //2
 	this.addPage("Looking for backup labels");	//3

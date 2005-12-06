@@ -449,15 +449,6 @@ function () {
 
 	if(ZaSettings.ACCOUNTS_MOVE_ALIAS_ENABLED)	
 		this._toolbarOperations.push(new ZaOperation(ZaOperation.MOVE_ALIAS, ZaMsg.ACTBB_MoveAlias, ZaMsg.ACTBB_MoveAlias_tt, "ReadMailbox", "ReadMailboxDis", new AjxListener(this, ZaAccountListController.prototype._moveAliasListener)));		    	
-	
-
-	//TODO: Move this code to an external file
-	if(ZaSettings.ACCOUNTS_RESTORE_ENABLED) {
-		var globalConf = this._app.getGlobalConfig();
-
-    	if(globalConf && globalConf.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_hotbackup])
-			this._toolbarOperations.push(new ZaOperation(ZaOperation.MAIL_RESTORE, ZaMsg.TBB_RestoreMailbox, ZaMsg.ACTBB_Restore_tt, "RestoreMailbox", "RestoreMailboxDis", new AjxListener(this, ZaAccountListController.prototype._restoreMailListener)));		
-	}
 }
 ZaController.initToolbarMethods["ZaAccountListController"].push(ZaAccountListController.initToolbarMethod);
 
