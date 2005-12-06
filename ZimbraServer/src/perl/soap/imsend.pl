@@ -54,7 +54,7 @@ if (defined $ARGV[2] && $ARGV[2] ne "") {
 }
 
 my $ACCTNS = "urn:zimbraAccount";
-my $MAILNS = "urn:zimbraMail";
+my $MAILNS = "urn:zimbraIM";
 
 my $url = "http://localhost:7070/service/soap/";
 
