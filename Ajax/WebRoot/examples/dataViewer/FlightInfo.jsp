@@ -36,10 +36,6 @@
         @import url(config/style/dv.css);
        -->
     </style>
-	<script language="JavaScript">
-    	DwtConfigPath = "js/dwt/config";
-    </script>
-    
     <jsp:include page="../Messages.jsp"/>
     <jsp:include page="../Ajax.jsp"/>
     

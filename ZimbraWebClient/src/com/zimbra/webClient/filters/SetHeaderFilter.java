@@ -26,12 +26,14 @@
 package com.zimbra.webClient.filters;
 
 import java.io.IOException;
-import java.util.Enumeration;
-import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Enumeration;
 import java.util.TimeZone;
-import java.util.regex.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -41,29 +43,22 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
-
 public class SetHeaderFilter implements Filter {
     
     // --------------------------------------------------------------
     // Class constants
     // --------------------------------------------------------------
-    private static final String ATTR_JS_VERSION = "jsVersion";
     private static final String FALSE = "false";
     private static final String TRUE = "true";
     private static final String HEADER_VAL_GZIP = "gzip";
     private static final String HEADER_ACCEPT_ENCODING = "Accept-Encoding";
     private static final String ATTR_NAME_VERSION = "version";
     private static final String ATTR_NAME_FILE_EXTENSION = "fileExtension";
-    private static final String ATTR_NAME_PROD_MODE = "isProdMode";
     private static final String HEADER_CACHE_CONTROL = "Cache-control";
-    private static final String NO_CACHE_CONTROL_VALUE = 
-        	"no-cache, must-revalidate, max-age=0";
+    private static final String NO_CACHE_CONTROL_VALUE = "no-cache, must-revalidate, max-age=0";
     private static final String HEADER_EXPIRES = "Expires";
-    private static final String ALREADY_EXPIRED = 
-        	"Tue, 24 Jan 2000 20:46:50 GMT";
+    private static final String ALREADY_EXPIRED = "Tue, 24 Jan 2000 20:46:50 GMT";
     private static final String HEADER_CONTENT_ENCODING= "Content-encoding";
-    private static final String JSP_EXTENSION = ".jsp"; 
     private static final String TIME_FORMAT = "EEE, d MMM yyyy HH:mm:ss";
     private static final String GMT = "GMT";
     
@@ -111,7 +106,7 @@ public class SetHeaderFilter implements Filter {
     }
 
     private void getExtensionsRegex () {
-        String value = getInitParameter("extensions", ".js, .html");
+        String value = getInitParameter("extensions", ".jgz,.cgz");
         String [] fileExtensions = value.split(",");
         StringBuffer extensionRegexSb = new StringBuffer(".*(");
         for (int i = 0; i < fileExtensions.length; ++i){
@@ -150,13 +145,10 @@ public class SetHeaderFilter implements Filter {
      */
     public void init(FilterConfig filterConfig) {
         this.config = filterConfig;
-        String value = null;
         if (filterConfig != null) {
             debug = getInitParameterInt("debug", 0);
-            //int jv = getInitParameterInt("jsVersion", 0);
             jsVersion = getInitParameter("jsVersion", "0");
-            serverSupportsGzip = getInitParameterBool("shouldSupportGzip",
-                                                      true);
+            serverSupportsGzip = getInitParameterBool("shouldSupportGzip",true);
             getExtensionsRegex();
             getNoCachePatternList();
             gzipExtension = getInitParameter("GzipExtension", ".jgz");
@@ -167,13 +159,11 @@ public class SetHeaderFilter implements Filter {
                 System.out.println("Filter variables:");
                 System.out.println("  debug = " + debug);
                 System.out.println("  jsVersion = " + jsVersion);
-                System.out.println("  serverSupportsGzip = " + 
-                                   serverSupportsGzip);
+                System.out.println("  serverSupportsGzip = " + serverSupportsGzip);
                 System.out.println("  gzipExtension = " + gzipExtension);
                 System.out.println("  expiresValue = " + expiresValue);
                 System.out.println("  isProdMoe = " + isProdMode);
-                System.out.println("  extensionRegex = " + 
-                                   extensionPattern.pattern());
+                System.out.println("  extensionRegex = " + extensionPattern.pattern());
                 System.out.println("  noCachPattern = " + noCachePattern.pattern());
             }
         }
@@ -252,7 +242,6 @@ public class SetHeaderFilter implements Filter {
             chain.doFilter(req, resp);
             return;
         } else {
-            boolean setGzipHeaders = false;
             Matcher m = extensionPattern.matcher(uri);
             if (debug > 0) {
                 System.out.println("Seeing if uri " + uri +
@@ -290,9 +279,9 @@ public class SetHeaderFilter implements Filter {
         }
         req.setAttribute("mode", mode);
         
-        String loRes = (String) req.getParameter("loRes");
-        if (loRes != null)
-        	req.setAttribute("loRes", loRes);
+        String hiRes = (String) req.getParameter("hiRes");
+        if (hiRes != null)
+        	req.setAttribute("hiRes", hiRes);
     }
     /**
      * Returns whether the browser supports gzipped content.
@@ -371,17 +360,12 @@ public class SetHeaderFilter implements Filter {
         if (debug > 0){
             System.out.println("URI = " + uri + " ");
         }
-        // TODO: Change hardcoded webapp name
-        if ( isDynamicContent(uri)){
+        if (isDynamicContent(uri)){
             setJspCacheControlHeaders(req, resp);
         } else {
             setStaticResourceCacheControlHeaders(req, resp);
         }
     }
-    
-    private static final String URI_ZIMBRA = "/zimbra/";
-    private static final String URI_MAIL = "/zimbra/mail";
-    private static final String URI_AUTH = "/zimbra/auth/";
     
     private boolean isDynamicContent (String uri) 
     {

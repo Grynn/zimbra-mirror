@@ -23,17 +23,11 @@ Contributor(s):
 ***** END LICENSE BLOCK *****
 -->
 
-<%@ page language="java" 
-         import="java.lang.*, java.util.*" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
     <title>Property Editor test</title>
-    <script language="JavaScript">
-    	DwtConfigPath = "/ajax/js/dwt/config";
-    </script>
-    	
 <% 
    String contextPath = (String)request.getContextPath(); 
    String vers = (String)request.getAttribute("version");

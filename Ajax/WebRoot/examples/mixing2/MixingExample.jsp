@@ -25,9 +25,6 @@
 */
 
 -->
-
-<%@ page language="java" 
-         import="java.lang.*, java.util.*" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -40,10 +37,7 @@
         @import url(MixingExample.css);
       -->
     </style>
-	<script language="JavaScript">
-    	DwtConfigPath = "/ajax/js/dwt/config";
-    </script>
-    	
+   	
     <jsp:include page="../Messages.jsp"/>
     <jsp:include page="../Ajax.jsp"/>
     <script type="text/javascript" src="MixingExample.js"></script>

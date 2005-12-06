@@ -36,10 +36,6 @@ Contributor(s):
         @import url(/zimbra/js/zimbraMail/config/style/zm.css);
       -->
     </style>
-	<script language="JavaScript">
-    	DwtConfigPath = "/zimbra/js/dwt/config";
-    </script>
-    	
     <jsp:include page="../../public/Messages.jsp"/>
     <jsp:include page="../../public/Zimbra.jsp"/>
     <jsp:include page="../../public/Dwt.jsp"/>
