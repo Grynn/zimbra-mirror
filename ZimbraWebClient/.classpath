@@ -8,6 +8,5 @@
 	<classpathentry kind="lib" path="jars/servlet-api.jar"/>
 	<classpathentry kind="lib" path="jars/commons-cli-1.0.jar"/>
 	<classpathentry kind="lib" path="jars/gifencoder.jar"/>
-	<classpathentry kind="lib" path="jars/commons-httpclient-2.0.1.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
