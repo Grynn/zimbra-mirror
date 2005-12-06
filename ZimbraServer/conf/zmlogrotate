@@ -18,3 +18,13 @@
     create 0644 zimbra zimbra
 	compress
 }
+
+/opt/zimbra/log/logger_myslow.log {
+	daily
+	missingok
+	notifempty
+	create 0660 zimbra zimbra
+	compress
+	size 5000k
+	rotate 3
+} 
