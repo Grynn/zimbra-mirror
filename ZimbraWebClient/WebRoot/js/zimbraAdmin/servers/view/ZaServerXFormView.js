@@ -499,10 +499,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 							showAddOnNextRow:true,
 							items: [
 								{ref:ZaServer.A_VolumeName, width:"100px", type:_TEXTFIELD_, label:null,onChange: ZaServerXFormView.onFormFieldChanged},
-								{ref:ZaServer.A_VolumeRootPath, width:"250px", type:_TEXTFIELD_, label:null,
-									relevant:"!(ZaServerXFormView.isCurrent.call(item))",
-									relevantBehavior:_DISABLE_, onChange: ZaServerXFormView.onFormFieldChanged
-								},
+								{ref:ZaServer.A_VolumeRootPath, width:"250px", type:_TEXTFIELD_, label:null,onChange: ZaServerXFormView.onFormFieldChanged},
 								{ref:ZaServer.A_VolumeType, type:_OSELECT1_, choices:ZaServer.volumeTypeChoices,width:"100px", label:null,
 									relevant:"ZaServerXFormView.whichVolumeTypeSelect.call(item)==2"									
 								},
