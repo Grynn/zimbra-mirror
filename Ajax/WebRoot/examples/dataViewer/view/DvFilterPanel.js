@@ -416,13 +416,13 @@ function(attr) {
 		var text = (attr.type == DvAttr.T_STRING_EXACT) ? DvMsg.matches : DvMsg.contains;
 		html[i++] = "<table border='0' cellpadding='0' cellspacing='2'>";
 		html[i++] = "<tr><td>" + text + ":</td></tr>";
-		html[i++] = "<tr><td><input type='text' size='" + tw + "' id='" + idBase + "'></td></tr>";
+		html[i++] = "<tr><td><input type='text' autocomplete='off' size='" + tw + "' id='" + idBase + "'></td></tr>";
 		html[i++] = "</table>";
 		this._fieldIds.push(idBase);
 	// Single number gets a text field
 	} else if (attr.type == DvAttr.T_NUMBER) {
 		html[i++] = "<table border='0' cellpadding='0' cellspacing='2'>";
-		html[i++] = "<tr><td>" + DvMsg.equals + ":</td><td><input type='text' size='" + nw + "' id='" + idBase + "'></td></tr>";
+		html[i++] = "<tr><td>" + DvMsg.equals + ":</td><td><input type='text' autocomplete='off' size='" + nw + "' id='" + idBase + "'></td></tr>";
 		html[i++] = "</table>";
 		this._fieldIds.push(idBase);
 	// Number range gets two text fields
@@ -431,9 +431,9 @@ function(attr) {
 		var fieldId2 = DvFilterPanel.createId(this._user, attr, 2);
 		html[i++] = "<table border='0' cellpadding='0' cellspacing='2'>";
 		html[i++] = "<tr><td align='right'>" + DvMsg.greaterThan + ":</td>";
-		html[i++] = "<td><input type='text' size='" + nw + "' id='" + fieldId1 + "'></td></tr>";
+		html[i++] = "<td><input type='text' autocomplete='off' size='" + nw + "' id='" + fieldId1 + "'></td></tr>";
 		html[i++] = "<tr><td align='right'>" + DvMsg.lessThan + ":</td>";
-		html[i++] = "<td><input type='text' size='" + nw + "' id='" + fieldId2 + "'></td></tr>";
+		html[i++] = "<td><input type='text' autocomplete='off' size='" + nw + "' id='" + fieldId2 + "'></td></tr>";
 		html[i++] = "</table>";
 		this._fieldIds.push(fieldId1, fieldId2);
 	// Bounded number range gets two dropdown lists
@@ -472,9 +472,9 @@ function(attr) {
 		var calId1 = "cal_" + fieldId1;
 		var calId2 = "cal_" + fieldId2;
 		html[i++] = "<table border='0' cellpadding='0' cellspacing='2'>";
-		html[i++] = "<tr><td>" + DvMsg.after + ":</td><td><input type='text' size='" + dw + "' id='" + fieldId1 + "'></td>";
+		html[i++] = "<tr><td>" + DvMsg.after + ":</td><td><input type='text' autocomplete='off' size='" + dw + "' id='" + fieldId1 + "'></td>";
 		html[i++] = "<td><a id='" + calId1 + "' href='javascript:;'>" + AjxImg.getImageHtml("AppointmentIcon") + "</a></td></tr>";
-		html[i++] = "<tr><td>" + DvMsg.before + ":</td><td><input type='text' size='" + dw + "' id='" + fieldId2 + "'></td>";
+		html[i++] = "<tr><td>" + DvMsg.before + ":</td><td><input type='text' autocomplete='off' size='" + dw + "' id='" + fieldId2 + "'></td>";
 		html[i++] = "<td><a id='" + calId2 + "' href='javascript:;'>" + AjxImg.getImageHtml("AppointmentIcon") + "</a></td></tr>";
 		html[i++] = "</table>";
 		this._fieldIds.push(fieldId1, fieldId2);
@@ -485,9 +485,9 @@ function(attr) {
 		var fieldId2 = DvFilterPanel.createId(this._user, attr, 2);
 		html[i++] = "<table border='0' cellpadding='0' cellspacing='2'>";
 		html[i++] = "<tr><td align='right'>" + DvMsg.after + ":</td>";
-		html[i++] = "<td><input type='text' size='" + dw + "' id='" + fieldId1 + "'></td></tr>";
+		html[i++] = "<td><input type='text' autocomplete='off' size='" + dw + "' id='" + fieldId1 + "'></td></tr>";
 		html[i++] = "<tr><td align='right'>" + DvMsg.before + ":</td>";
-		html[i++] = "<td><input type='text' size='" + dw + "' id='" + fieldId2 + "'></td></tr>";
+		html[i++] = "<td><input type='text' autocomplete='off' size='" + dw + "' id='" + fieldId2 + "'></td></tr>";
 		html[i++] = "</table>";
 		this._fieldIds.push(fieldId1, fieldId2);
 	// Checkboxes

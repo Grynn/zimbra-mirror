@@ -260,7 +260,7 @@ function(field, title, html, idx, type, fldsize, tailTitle, titleWidth, withAste
 	if(withAsteric) {
 		html[idx++] = "class='redAsteric' ";		
 	}
-	html[idx++] = "	align='left'><input size='"+fldsize+"' type='"+type+"' id='";	
+	html[idx++] = "	align='left'><input autocomplete='off' size='"+fldsize+"' type='"+type+"' id='";	
 	html[idx++] = id;
 	html[idx++] = "'";
 	if(withAsteric) {

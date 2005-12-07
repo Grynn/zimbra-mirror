@@ -109,7 +109,7 @@ function(field, title, html, idx, type) {
 	html[idx++] = "<td width='30%' align='left'>";
 	html[idx++] = title;
 	html[idx++] = "</td>";
-	html[idx++] = "<td width='70%' align='left'><input style='width:100%;' type='"+type+"' id='";	
+	html[idx++] = "<td width='70%' align='left'><input autocomplete='off' style='width:100%;' type='"+type+"' id='";	
 	html[idx++] = id;
 	html[idx++] = "'/>";
 	html[idx++] = "</td></tr>";

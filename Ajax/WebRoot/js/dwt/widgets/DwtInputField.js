@@ -66,7 +66,7 @@ function DwtInputField(parent, type, initialValue, size, maxLen, errorIconStyle,
 	var errorIconId = Dwt.getNextId();
 	var htmlEl = this.getHtmlElement();
 	if (this._errorIconStyle == DwtInputField.ERROR_ICON_NONE) {
-		htmlEl.innerHTML = ["<input id='", inputFieldId, "' type='",
+		htmlEl.innerHTML = ["<input autocomplete='off' id='", inputFieldId, "' type='",
 			(this._type != DwtInputField.PASSWORD) ? "text" : "password", "'/>"].join("");;
 	} else {
 		var htmlArr = ["<table cellspacing='0' cellpadding='0'><tr>"];
@@ -74,7 +74,7 @@ function DwtInputField(parent, type, initialValue, size, maxLen, errorIconStyle,
 		if (this._errorIconStyle == DwtInputField.ERROR_ICON_LEFT)
 			htmlArr[i++] = ["<td style='padding-right:2px;'id='", errorIconId, "'></td>"].join("");
 
-		htmlArr[i++] = ["<td><input id='", inputFieldId, "' type='",
+		htmlArr[i++] = ["<td><input autocomplete='off' id='", inputFieldId, "' type='",
 			(this._type != DwtInputField.PASSWORD) ? "text" : "password",
 			"'/></td>"].join("");
 

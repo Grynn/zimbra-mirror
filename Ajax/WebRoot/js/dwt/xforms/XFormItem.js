@@ -1772,7 +1772,7 @@ Textfield_XFormItem.prototype.outputHTML = function (html, updateScript, indent,
 	}
 	/***/
 	html.append(indent, 
-			"<input id=\"", this.getId(),"\" type=\"", inputType, "\"", this.getCssString(), 
+			"<input autocomplete='off' id=\"", this.getId(),"\" type=\"", inputType, "\"", this.getCssString(), 
 				this.getChangeHandlerHTML(), this.getFocusHandlerHTML(),
 				(value != null ? " value=\"" + value + "\"" : ""),
 			">");
@@ -1873,7 +1873,7 @@ Checkbox_XFormItem.prototype.outputHTML = function (html, updateScript, indent, 
 		checked = " CHECKED";
 	}
 	html.append(indent, 
-		"<input id=\"", this.getId(),"\" type=\"", this._inputType, "\"", this.getCssString(), 
+		"<input autocomplete='off' id=\"", this.getId(),"\" type=\"", this._inputType, "\"", this.getCssString(), 
 				this.getChangeHandlerHTML(), this.getFocusHandlerHTML(), checked,
 		">");
 }
