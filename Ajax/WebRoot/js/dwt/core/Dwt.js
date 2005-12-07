@@ -428,6 +428,13 @@ function (htmlElId, myZindex, lowThresholdZ, turnOffOverflowScroll, disableSelf)
 				if (!temp._oldOverflow) {
 					var cssDecl = window.getComputedStyle(temp,"");
 					var overflow = cssDecl.getPropertyValue("overflow");
+					// FF 1.5 returns "0px" for the computed overflow value
+					if (AjxEnv.isFirefox1_5up && overflow == "0px") {
+						var overflowX = cssDecl.getPropertyValue("overflow-x");
+						overflow = overflowX == "hidden" 
+								? "-moz-scrollbars-vertical"
+								: "-moz-scrollbars-horizontal"; 
+					}
 					if (overflow != 'hidden') {
 						temp._oldOverflow = overflow;
 						temp._oldScrollTop = temp.scrollTop;

@@ -57,6 +57,7 @@ AjxEnv.reset = function () {
 	AjxEnv.ieScaleFactor = 1;
 	AjxEnv.isFirefox = false;
 	AjxEnv.isFirefox1up = false;
+	AjxEnv.isFirefox1_5up = false;
 	AjxEnv.isMozilla = false;
 	AjxEnv.isMozilla1_4up = false;
 	AjxEnv.isSafari = false;
@@ -166,6 +167,7 @@ AjxEnv.parseUA = function (userAgent) {
 		AjxEnv.isMozilla1_4up = (AjxEnv.isMozilla && (AjxEnv.mozVersion >= 1.4));
 		AjxEnv.isFirefox = ((AjxEnv.isMozilla && AjxEnv.isFirefox));
 		AjxEnv.isFirefox1up = (AjxEnv.isFirefox && AjxEnv.browserVersion >= 1.0);
+		AjxEnv.isFirefox1_5up = (AjxEnv.isFirefox && AjxEnv.browserVersion >= 1.5);
 
 	}
 	// setup some global setting we can check for high resolution
