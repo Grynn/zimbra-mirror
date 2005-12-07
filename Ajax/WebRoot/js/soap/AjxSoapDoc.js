@@ -33,7 +33,8 @@ function() {
 	return "AjxSoapDoc";
 };
 
-AjxSoapDoc._SOAP_URI = "http://www.w3.org/2003/05/soap-envelope";
+// AjxSoapDoc._SOAP_URI = "http://www.w3.org/2003/05/soap-envelope";
+AjxSoapDoc._SOAP_URI = "http://schemas.xmlsoap.org/soap/envelope/";
 AjxSoapDoc._XMLNS_URI = "http://www.w3.org/2000/xmlns";
 
 AjxSoapDoc.create =
@@ -167,14 +168,19 @@ AjxSoapDoc.prototype.getHeader =
 function() {
 	// would love to use getElementsByTagNameNS, but IE does not support it
 	var d = this._xmlDoc.getDoc();
-	var nodeList;
-	if (AjxEnv.isIE)
-		nodeList = d.getElementsByTagName(d.firstChild.prefix + ":Header");
-	else
-		nodeList = d.getElementsByTagNameNS(AjxSoapDoc._SOAP_URI, "Header");
+	var nodeList = d.getElementsByTagName("soap:Header");
 	if (nodeList == null)
 		return null;
 	return nodeList[0];
+};
+
+// gimme a header, no exceptions.
+AjxSoapDoc.prototype.ensureHeader =
+function() {
+	var h = this.getHeader();
+	if (!h)
+		h = this.createHeaderElement();
+	return h;
 };
 
 
@@ -182,11 +188,7 @@ AjxSoapDoc.prototype.getBody =
 function() {
 	// would love to use getElementsByTagNameNS, but IE does not support it
 	var d = this._xmlDoc.getDoc();
-	var nodeList;
-	if (AjxEnv.isIE)
-		nodeList = d.getElementsByTagName(d.firstChild.prefix + ":Body");
-	else
-		nodeList = d.getElementsByTagNameNS(AjxSoapDoc._SOAP_URI, "Body");
+	var nodeList = d.getElementsByTagName("soap:Body");
 	if (nodeList == null)
 		return null;
 	return nodeList[0];
