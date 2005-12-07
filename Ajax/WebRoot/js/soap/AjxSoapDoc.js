@@ -33,8 +33,8 @@ function() {
 	return "AjxSoapDoc";
 };
 
-// AjxSoapDoc._SOAP_URI = "http://www.w3.org/2003/05/soap-envelope";
-AjxSoapDoc._SOAP_URI = "http://schemas.xmlsoap.org/soap/envelope/";
+AjxSoapDoc._SOAP_URI = "http://www.w3.org/2003/05/soap-envelope";
+// AjxSoapDoc._SOAP_URI = "http://schemas.xmlsoap.org/soap/envelope/";
 AjxSoapDoc._XMLNS_URI = "http://www.w3.org/2000/xmlns";
 
 AjxSoapDoc.create =
