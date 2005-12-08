@@ -284,6 +284,8 @@
 
 <attr name="zimbraMtaMaxMessageSize" type="integer" min="0"/>
 
+<attr name="zimbraMtaRecipientDelimiter" type="string" max="256"/>
+
 <attr name="zimbraMtaRelayHost" type="string" max="256"/>
 
 <attr name="zimbraMtaRestriction" type="string" max="256"/>
