@@ -29,11 +29,11 @@
  *
  * See initProperties() below
  */
-function DwtPropertyEditor(parent, useDwtInputField, className, positionType) {
+function DwtPropertyEditor(parent, useDwtInputField, className, positionType, deferred) {
 	if (arguments.length > 0) {
 		if (!className)
 			className = "DwtPropertyEditor";
-		DwtComposite.call(this, parent, className, positionType);
+		DwtComposite.call(this, parent, className, positionType, deferred);
 		this._useDwtInputField = useDwtInputField != null ? useDwtInputField : true;
 		this._schema = null;
 		this._init();
@@ -129,7 +129,7 @@ DwtPropertyEditor.prototype.getProperties = function() {
 		var prop = {}, tmp, n = schema.length;
 		for (var i = 0; i < n; ++i) {
 			tmp = schema[i];
-			if (schema[i].type == "struct")
+			if (tmp.type == "struct")
 				prop[tmp.name] = rec(tmp.children);
 			else
 				prop[tmp.name] = tmp.value;
@@ -137,6 +137,22 @@ DwtPropertyEditor.prototype.getProperties = function() {
 		return prop;
 	};
 	return rec(this._schema);
+};
+
+DwtPropertyEditor.prototype.validateData = function() {
+	var valid = true;
+	function rec(schema) {
+		var tmp, n = schema.length;
+		for (var i = 0; i < n; ++i) {
+			tmp = schema[i];
+			if (tmp.type == "struct")
+				rec(tmp.children);
+			else if (!tmp._validate())
+				valid = false;
+		}
+	};
+	rec(this._schema);
+	return valid;
 };
 
 /** This function will initialize the Property Editor with a given schema and
@@ -234,6 +250,9 @@ DwtPropertyEditor.prototype._createProperty = function(prop, parent) {
 
 	// indent if needed
 	tr.className = "level-" + level;
+
+	if (prop.visible === false)
+		tr.className += " invisible";
 
 	if (prop.readonly)
 		tr.className += " readonly";
@@ -395,6 +414,8 @@ DwtPropertyEditor.prototype._createInputField = function(prop, target) {
 	}
 	if (type == DwtInputField.STRING || type == DwtInputField.PASSWORD)
 		field.setValidStringLengths(prop.minLength, prop.maxLength);
+	if (prop.required)
+		field.setRequired();
 	this._currentFieldCell = null;
 	prop._inputField = field;
 	field.setValue(prop.value);
@@ -695,6 +716,16 @@ DwtPropertyEditor._prop_functions = {
 		tr.className = tr.className.replace(/ dirty/, "");
 		if (this._modified())
 			tr.className += " dirty";
+	},
+
+	_validate : function() {
+		if (this._inputField) {
+			if (this._inputField instanceof DwtInputField)
+				return this._inputField.validate();
+			else
+				return this._inputField.onblur();
+		} else
+			return true;
 	}
 };
 

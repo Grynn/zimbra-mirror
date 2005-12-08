@@ -236,9 +236,14 @@ function(min, max) {
 
 DwtInputField.prototype.setValidStringLengths =
 function(minLen, maxLen) {
-	this._minLen = minLen;
-	this._inputField.maxLength = maxLen;
-	this._maxLen = maxLen;
+	if (minLen != null)
+		this._minLen = minLen;
+	else
+		this._minLen = 0;
+	if (maxLen != null) {
+		this._inputField.maxLength = maxLen;
+		this._maxLen = maxLen;
+	}
 };
 
 DwtInputField.prototype.setNumberPrecision =
@@ -251,6 +256,13 @@ function(readonly) {
 	if (readonly == null)
 		readonly = true;
 	this._inputField.setAttribute("readonly", readonly);
+};
+
+DwtInputField.prototype.setRequired =
+function(required) {
+	if (required == null)
+		required = true;
+	this._required = required;
 };
 
 /**
@@ -306,6 +318,8 @@ function(value) {
 
 DwtInputField.validateFloat =
 function(value) {
+	if (this._required && value == "")
+		throw AjxMsg.valueIsRequired;
 	var n = new Number(value);
 	if (isNaN(n))
 		throw AjxMsg.notANumber;
@@ -329,6 +343,8 @@ function(value) {
 
 DwtInputField.validateString =
 function(value) {
+	if (this._required && value == "")
+		throw AjxMsg.valueIsRequired;
 	if (this._minLen != null && value.length < this._minLen)
 		throw AjxMessageFormat.format(AjxMsg.stringTooShort, this._minLen);
 	if (this._maxLen != null && value.length > this._maxLen)
@@ -338,6 +354,8 @@ function(value) {
 
 DwtInputField.validateAny =
 function(value) {
+	if (this._required && value == "")
+		throw AjxMsg.valueIsRequired;
 	// note that null will always be regarded as invalid. :-) I guess this
 	// is OK.  An input field never has a null value.
 	return value;
@@ -347,6 +365,8 @@ function(value) {
 
 DwtInputField.prototype._validateRegExp =
 function(value) {
+	if (this._required && value == "")
+		throw AjxMsg.valueIsRequired;
 	if (this._regExp && !this._regExp.test(value)) {
 		throw this._errorString;
 	}
