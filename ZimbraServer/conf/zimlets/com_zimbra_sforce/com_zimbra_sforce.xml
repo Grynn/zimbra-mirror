@@ -20,7 +20,8 @@
     </dragSource>
 
     <contextMenu>
-      <menuItem label="Preferences" id="PREFERENCES" />
+      <menuItem label="Login" id="LOGIN" />
+      <menuItem label="Preferences..." id="PREFERENCES" />
       <menuItem />
       <menuItem label="Visit SalesForce" id="WWW.SFORCE.COM" icon="SFORCE-panelIcon">
         <actionUrl target="http://www.sforce.com">
