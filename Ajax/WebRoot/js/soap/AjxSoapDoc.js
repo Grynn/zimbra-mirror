@@ -162,36 +162,56 @@ function() {
 	header = d.createElement("soap:Header")
 	envEl.insertBefore(header, envEl.firstChild);
 	return header;
-}
+};
 
 AjxSoapDoc.prototype.getHeader =
 function() {
 	// would love to use getElementsByTagNameNS, but IE does not support it
 	var d = this._xmlDoc.getDoc();
-	var nodeList = d.getElementsByTagName("soap:Header");
+	var nodeList;
+	if (AjxEnv.isIE)
+		nodeList = d.getElementsByTagName(d.firstChild.prefix + ":Header");
+	else
+		nodeList = d.getElementsByTagNameNS(AjxSoapDoc._SOAP_URI, "Header");
 	if (nodeList == null)
 		return null;
 	return nodeList[0];
 };
-
-// gimme a header, no exceptions.
-AjxSoapDoc.prototype.ensureHeader =
-function() {
-	var h = this.getHeader();
-	if (!h)
-		h = this.createHeaderElement();
-	return h;
-};
-
 
 AjxSoapDoc.prototype.getBody =
 function() {
 	// would love to use getElementsByTagNameNS, but IE does not support it
 	var d = this._xmlDoc.getDoc();
-	var nodeList = d.getElementsByTagName("soap:Body");
+	var nodeList;
+	if (AjxEnv.isIE)
+		nodeList = d.getElementsByTagName(d.firstChild.prefix + ":Body");
+	else
+		nodeList = d.getElementsByTagNameNS(AjxSoapDoc._SOAP_URI, "Body");
 	if (nodeList == null)
 		return null;
 	return nodeList[0];
+};
+
+AjxSoapDoc.prototype.getByTagName =
+function(type) {
+	if (type.indexOf(":") == -1)
+		type = "soap:" + type;
+	var a = this.getDoc().getElementsByTagName(type);
+	if (a.length == 1)
+		return a[0];
+	else if (a.length > 0)
+		return a;
+	else
+		return null;
+};
+
+// gimme a header, no exceptions.
+AjxSoapDoc.prototype.ensureHeader =
+function() {
+	var h = this.getByTagName("Header");
+	if (!h)
+		h = this.createHeaderElement();
+	return h;
 };
 
 AjxSoapDoc.prototype.getDoc =
