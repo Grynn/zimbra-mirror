@@ -285,7 +285,7 @@ Dwt.getAttr =
 function(htmlElement, attr) {
 	// test for tagName so we dont try to eval non-html elements (i.e. document)
 	return htmlElement && htmlElement.tagName
-		? (htmlElement.attr || htmlElement.getAttribute(attr) || htmlElement[attr])
+		? (htmlElement.getAttribute(attr) || htmlElement[attr])
 		: null;
 };
 
