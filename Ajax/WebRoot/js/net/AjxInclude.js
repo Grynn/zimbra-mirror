@@ -42,7 +42,7 @@
  *
  * @author Mihai Bazon, <mihai@zimbra.com>
  */
-function AjxInclude(includes, baseurl, callback) {
+function AjxInclude(includes, baseurl, callback, proxy) {
 	var script = null;
 	var head = document.getElementsByTagName("head")[0];
 
@@ -62,25 +62,19 @@ function AjxInclude(includes, baseurl, callback) {
 		window.status = "";
 		if (scripts.length > 0) {
 			var fullurl = scripts.shift();
+			var orig = fullurl;
 			if (!/^((https?|ftps?):\x2f\x2f|\x2f)/.test(fullurl)) {
 				// relative URL
 				fullurl = baseurl + fullurl;
-
-				// TODO: Uncomment the code below to use the
-				// ProxyService.  Can't do at this time since
-				// the proxy restricts usage.
-
-// 			} else if (fullurl.indexOf('/') != 0) {
-// 				// fully qualified URL-s will go through our proxy
-// 				fullurl = "/service/proxy?target=" + AjxStringUtil.urlEncode(fullurl);
+ 			} else if (proxy && fullurl.indexOf('/') != 0) {
+ 				// fully qualified URL-s will go through our proxy
+ 				fullurl = proxy + AjxStringUtil.urlEncode(fullurl);
 			}
-//			dump("Loading: " + fullurl + "\n");
 			script = document.createElement("script");
 			script[AjxInclude.eventName] = loadNextScript;
 			script.type = "text/javascript";
 			script.src = fullurl;
-			window.status = "Zimlet script: " + fullurl;
-			//alert(fullurl);
+			window.status = "Zimlet script: " + orig;
 			head.appendChild(script);
 		} else if (includes.length == 0) {
 			script = null;
