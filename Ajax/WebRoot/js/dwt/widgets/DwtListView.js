@@ -96,9 +96,9 @@ DwtListView.HEADERITEM_ARROW  	= "arr--";
 DwtListView.HEADER_ID			= "crr--";
 DwtListView.HEADERITEM_LABEL 	= "drr--";
 
-DwtListView.TYPE_HEADER_ITEM 	= 1;
-DwtListView.TYPE_LIST_ITEM 		= 2;
-DwtListView.TYPE_HEADER_SASH 	= 3;
+DwtListView.TYPE_HEADER_ITEM 	= "1";
+DwtListView.TYPE_LIST_ITEM 		= "2";
+DwtListView.TYPE_HEADER_SASH 	= "3";
 
 DwtListView.DEFAULT_LIMIT = 25;
 DwtListView.MAX_REPLENISH_THRESHOLD = 10;
@@ -139,7 +139,8 @@ function(enabled) {
 		for (var i = 0; i < elements.length; i++) {
 			var element = elements[i];
 			element.className = enabled 
-							  ? element._selectedStyleClass : element._selectedDisabledStyleClass;
+				? Dwt.getAttr(element, "_selectedStyleClass") 
+				: Dwt.getAttr(element, "_selectedDisabledStyleClass");
 		}
 	}
 }
@@ -449,7 +450,8 @@ function(row, index) {
 * Default implementation creates a simple div with the innerHTML set to 
 * the string value of the item.
 */
-DwtListView.prototype._createItemHtml = function(item, now, isDnDIcon) {
+DwtListView.prototype._createItemHtml = 
+function(item, now, isDnDIcon) {
 	var div = document.createElement("DIV");
 	div.id = Dwt.getNextId();
 	var rowClassName = AjxBuffer.concat(this._className, "Row");
@@ -457,7 +459,7 @@ DwtListView.prototype._createItemHtml = function(item, now, isDnDIcon) {
 	div._selectedStyleClass = AjxBuffer.concat("Row-", DwtCssStyle.SELECTED, " ", rowClassName);
 	div._selectedDisabledStyleClass = AjxBuffer.concat("Row-", DwtCssStyle.SELECTED, "-" , DwtCssStyle.DISABLED, " ", rowClassName);
 	div.className = div._styleClass;
-	if( typeof (item) == "object") {
+	if (typeof(item) == "object") {
 		div.innerHTML = AjxStringUtil.htmlEncode(item.toString());
 	} else {
 		div.innerHTML = AjxStringUtil.htmlEncode(String(item));
@@ -525,7 +527,7 @@ function() {
 	var a = this._selectedItems.getArray();
 	var sz = this._selectedItems.size();
 	for (var i = 0; i < sz; i++)
-		a[i].className = a[i]._styleClass;
+		a[i].className = Dwt.getAttr(a[i], "_styleClass");
 	this._selectedItems.removeAll();
 	this._selAnchor = null;
 }
@@ -543,12 +545,12 @@ DwtListView.prototype.getSelection =
 function() {
 	var a = new Array();
 	if (this._rightSelItems) {
-		a.push(AjxCore.objectWithId(this._rightSelItems._itemIndex));
+		a.push(AjxCore.objectWithId(Dwt.getAttr(this._rightSelItems, "_itemIndex")));
 	} else {
 		var sa = this._selectedItems.getArray();
 		var saLen = this._selectedItems.size();
 		for (var i = 0; i < saLen; i++)
-			a[i] = AjxCore.objectWithId(sa[i]._itemIndex);
+			a[i] = AjxCore.objectWithId(Dwt.getAttr(sa[i], "_itemIndex"));
 	}
 	return a;
 }
@@ -566,12 +568,15 @@ function(item, skipNotify) {
 		this._deselectAllSelectedItems();
 		this._selectedItems.add(el);
 		this._selAnchor = el;
-		el.className = this.getEnabled() ? el._selectedStyleClass : el._selectedDisabledStyleClass;
+		el.className = this.getEnabled() 
+			? Dwt.getAttr(el, "_selectedStyleClass") 
+			: Dwt.getAttr(el, "_selectedDisabledStyleClass");
+
 		if (!skipNotify && this._evtMgr.isListenerRegistered(DwtEvent.SELECTION)) {
 			var selEv = new DwtSelectionEvent(true);
 			selEv.button = DwtMouseEvent.LEFT;
 			selEv.target = el;
-			selEv.item = AjxCore.objectWithId(el._itemIndex);
+			selEv.item = AjxCore.objectWithId(Dwt.getAttr(el, "_itemIndex"));
 			selEv.detail = DwtListView.ITEM_SELECTED;
 			this._evtMgr.notifyListeners(DwtEvent.SELECTION, selEv);
 		}	
@@ -579,24 +584,26 @@ function(item, skipNotify) {
 }
 
 DwtListView.prototype._deselectAllSelectedItems =
-function () {
+function() {
 	var a = this._selectedItems.getArray();
 	var sz = this._selectedItems.size();
 	for (i = 0; i < sz; i++) {
-		a[i].className = a[i]._styleClass;
+		a[i].className = Dwt.getAttr(a[i], "_styleClass");
 	}
 	this._selectedItems.removeAll();
 };
 
 DwtListView.prototype.setSelectedItems =
-function (selectedArray) {
+function(selectedArray) {
 	this._deselectAllSelectedItems();
 	var i, sz, el;
 	sz = selectedArray.length;
 	for (i = 0; i < sz; ++i) {
 		el = this._getElFromItem(selectedArray[i]);
 		if (el) {
-			el.className = this.getEnabled()? el._selectedStyleClass: el._selectedDisabledStyleClass;
+			el.className = this.getEnabled() 
+				? Dwt.getAttr(el, "_selectedStyleClass")
+				: Dwt.getAttr(el, "_selectedDisabledStyleClass");
 			this._selectedItems.add(el);
 		}
 	}
@@ -611,7 +618,7 @@ DwtListView.prototype.handleActionPopdown =
 function() {
 	// clear out old right click selection
 	if (this._rightSelItems) {
-		this._rightSelItems.className = this._rightSelItems._styleClass;
+		this._rightSelItems.className = Dwt.getAttr(this._rightSelItems, "_styleClass");
 		this._rightSelItems = null;
 	}
 }
@@ -650,20 +657,13 @@ function(item) {
 }
 
 DwtListView.prototype.getItemFromElement =
-function (element){
-	if (element._itemIndex !== void 0){
-		switch (element._type){
-			case DwtListView.TYPE_LIST_ITEM:
-			  return AjxCore.objectWithId(element._itemIndex);
-			case DwtListView.TYPE_HEADER_ITEM:
-			// most users don't want to get the header items this way
-			//return this._headerList[element._itemIndex];
-			default:
-			  return null;
-		}
-	} else {
-		return null;
+function(element) {
+	var itemIdx = Dwt.getAttr(element, "_itemIndex");
+	if (itemIdx !== void 0) {
+		if (Dwt.getAttr(element, "_type") == DwtListView.TYPE_LIST_ITEM)
+			return AjxCore.objectWithId(itemIdx);
 	}
+	return null;
 }
 
 DwtListView.prototype._getViewPrefix = 
@@ -672,7 +672,7 @@ function() {
 }
 
 DwtListView.prototype.associateItemWithElement =
-function (item, element, type, optionalId) {
+function(item, element, type, optionalId) {
 	element.id = optionalId ? optionalId : this._getItemId(item);
 	element._itemIndex = AjxCore.assignId(item);
 	element._type = type;
@@ -701,7 +701,7 @@ function(row) {
 		}
 	}
 	// Don't try and select if we are over a header item
-	if (!row || row._type != DwtListView.TYPE_LIST_ITEM) return;
+	if (!row || Dwt.getAttr(row, "_type") != DwtListView.TYPE_LIST_ITEM) return;
 	
 	// Try and select only if the new row is different from the currently
 	// highlighted row.
@@ -732,11 +732,12 @@ function(row, select) {
 
 DwtListView.prototype._mouseOverAction = 
 function(mouseEv, div) {
-	if (div._type == DwtListView.TYPE_HEADER_ITEM && div._isSortable && this._headerClone == null) {
+	var type = Dwt.getAttr(div, "_type");
+	if (type == DwtListView.TYPE_HEADER_ITEM && div._isSortable && this._headerClone == null) {
 		div.className = "DwtListView-Column DwtListView-ColumnHover";
-	} else if (div._type == DwtListView.TYPE_HEADER_SASH) {
+	} else if (type == DwtListView.TYPE_HEADER_SASH) {
 		div.style.cursor = AjxEnv.isIE ? "col-resize" : "e-resize";
-	} else if (div._type == DwtListView.TYPE_LIST_ITEM) {
+	} else if (type == DwtListView.TYPE_LIST_ITEM) {
 		if (div._hoverStyleClass == null || div == this._rightSelItems) {
 			div.hoverSet = false;
 		} else {
@@ -758,15 +759,16 @@ function(mouseEv, div) {
 
 DwtListView.prototype._mouseOutAction = 
 function(mouseEv, div) {
-	if (div._type == DwtListView.TYPE_HEADER_ITEM && this._headerClone == null) {
+	var type = Dwt.getAttr(div, "_type");
+	if (type == DwtListView.TYPE_HEADER_ITEM && this._headerClone == null) {
 		div.className = div.id != this._currentColId 
 			? "DwtListView-Column" 
 			: "DwtListView-Column DwtListView-ColumnActive";
-	} else if (div._type == DwtListView.TYPE_HEADER_SASH) {
+	} else if (type == DwtListView.TYPE_HEADER_SASH) {
 		div.style.cursor = "auto";
-	} else if (div._type == DwtListView.TYPE_LIST_ITEM) {
+	} else if (type == DwtListView.TYPE_LIST_ITEM) {
 		if (div._hoverStyleClass && div.hoverSet)
-			div.className = div._styleClass;
+			div.className = Dwt.getAttr(div, "_styleClass");
 	}
 
 	return true;
@@ -803,29 +805,29 @@ function(ev) {
 	if (this._clickDiv == null)
 		return;
 
-	if (this._clickDiv._type == DwtListView.TYPE_HEADER_ITEM) {
+	var type = Dwt.getAttr(this._clickDiv, "_type");
+	if (type == DwtListView.TYPE_HEADER_ITEM) {
 		this._handleColHeaderMove(ev);
-	} else if (this._clickDiv._type == DwtListView.TYPE_HEADER_SASH) {
+	} else if (type == DwtListView.TYPE_HEADER_SASH) {
 		this._handleColHeaderResize(ev);
 	}
 }
 
-
 DwtListView.prototype._mouseUpAction = 
-function(mouseEv, div) {return true;}
+function(mouseEv, div) {
+	return true;
+}
 
 DwtListView.prototype._findAncestor =
 function(elem, attr) {
-	while (elem && (elem[attr] == void 0)){
+	while (elem && (Dwt.getAttr(elem, attr) == void 0))
 		elem = elem.parentNode;
-	}
 	return elem;
 }
 
 DwtListView.prototype._mouseDownListener = 
 function(ev) {
 	var div = ev.target;
-
 	div = this._findAncestor(div, "_itemIndex");
 
 	if (div == null){
@@ -833,10 +835,13 @@ function(ev) {
 	} else {
 		this._clickDiv = div;
 
-		if (div._type != DwtListView.TYPE_LIST_ITEM)
+		if (Dwt.getAttr(div, "_type") != DwtListView.TYPE_LIST_ITEM) {
 			this._dndSelection = null;
-		else
-			this._dndSelection = (this._selectedItems.contains(div)) ? this._selectedItems :  div._itemIndex;
+		} else {
+			this._dndSelection = (this._selectedItems.contains(div)) 
+				? this._selectedItems 
+				: Dwt.getAttr(div, "_itemIndex");
+		}
 	}
 }
 
@@ -856,7 +861,8 @@ function(ev) {
 	}
 	delete this._clickDiv;
 
-	if (this._headerList && div._type == DwtListView.TYPE_HEADER_ITEM) {
+	var type = Dwt.getAttr(div, "_type");
+	if (this._headerList && type == DwtListView.TYPE_HEADER_ITEM) {
 		if (div._isSortable && ev.button == DwtMouseEvent.LEFT) {
 			this._columnClicked(div, ev);
 		} else if (ev.button == DwtMouseEvent.RIGHT) {
@@ -864,7 +870,7 @@ function(ev) {
 			if (actionMenu && actionMenu instanceof DwtMenu)
 				actionMenu.popup(0, ev.docX, ev.docY);
 		}
-	} else if (div._type == DwtListView.TYPE_LIST_ITEM) {
+	} else if (type == DwtListView.TYPE_LIST_ITEM) {
 		// set item selection, then hand off to derived class for handling
 		if (ev.button == DwtMouseEvent.LEFT || ev.button == DwtMouseEvent.RIGHT)
 			this._itemClicked(div, ev);
@@ -884,7 +890,7 @@ function(ev) {
 
 	if (!div) return;
 
-	if (div._type == DwtListView.TYPE_LIST_ITEM) {
+	if (Dwt.getAttr(div, "_type") == DwtListView.TYPE_LIST_ITEM) {
 		if (!this._doubleClickAction(ev, div))
 			return;
 		if (this._evtMgr.isListenerRegistered(DwtEvent.SELECTION)) {
@@ -917,7 +923,7 @@ function(clickedEl, ev) {
 
 	// always clear out old right click selection
 	if (this._rightSelItems) {
-		this._rightSelItems.className = this._rightSelItems._styleClass;
+		this._rightSelItems.className = Dwt.getAttr(this._rightSelItems, "_styleClass");
 		this._rightSelItems = null;
 	}
 
@@ -933,33 +939,33 @@ function(clickedEl, ev) {
 			if (this._allowLeftSelection(clickedEl, ev, ev.button)) {
 				// clear out old left click selection(s)
 				for (i = 0; i < numSelectedItems; i++)
-					a[i].className = a[i]._styleClass;
+					a[i].className = Dwt.getAttr(a[i], "_styleClass");
 				this._selectedItems.removeAll();
 				
 				// save new left click selection
 				this._selectedItems.add(clickedEl);
 				this._selAnchor = clickedEl;
-				clickedEl.className = clickedEl._selectedStyleClass;
+				clickedEl.className = Dwt.getAttr(clickedEl, "_selectedStyleClass");
 				this._firstSelIndex = this._list 
-					? this._list.indexOf(AjxCore.objectWithId(clickedEl._itemIndex)) : -1;
+					? this._list.indexOf(AjxCore.objectWithId(Dwt.getAttr(clickedEl, "_itemIndex"))) : -1;
 			}
 		} else if (ev.button == DwtMouseEvent.RIGHT && !bContained) {
 			// save right click selection
 			this._rightSelItems = clickedEl;
-			clickedEl.className = clickedEl._selectedStyleClass + "-right";
+			clickedEl.className = Dwt.getAttr(clickedEl, "_selectedStyleClass") + "-right";
 		}
 		clickedEl.hoverSet = false;
 	} else {
 		if (ev.ctrlKey) {
 			if (this._selectedItems.contains(clickedEl)) {
 				this._selectedItems.remove(clickedEl);
-				clickedEl.className = clickedEl._styleClass;
+				clickedEl.className = Dwt.getAttr(clickedEl, "_styleClass");
 				this._selEv.detail = DwtListView.ITEM_DESELECTED;
 				this._firstSelIndex = this._selectedItems.size() > 0 
-					? this._selectedItems.get(0)._itemIndex : -1;
+					? Dwt.getAttr(this._selectedItems.get(0), "_itemIndex") : -1;
 			} else {
 				this._selectedItems.add(clickedEl);
-				clickedEl.className = clickedEl._selectedStyleClass;
+				clickedEl.className = Dwt.getAttr(clickedEl, "_selectedStyleClass");
 				clickedEl.hoverSet = false;
 				this._selEv.detail = DwtListView.ITEM_SELECTED;
 			}
@@ -986,10 +992,11 @@ function(clickedEl, ev) {
 					 * 2 - means we are out of selection range */
 					state++;
 				}
+				var selStyleClass = Dwt.getAttr(convEl, "_selectedStyleClass");
 				if (convEl == this._selAnchor) {
 					state++;
-					if (convEl.className != convEl._selectedStyleClass) {
-						convEl.className = convEl._selectedStyleClass;
+					if (convEl.className != selStyleClass) {
+						convEl.className = selStyleClass;
 						this._selectedItems.add(convEl);
 					}
 					continue;
@@ -997,12 +1004,12 @@ function(clickedEl, ev) {
 				
 				// If state == 0 or 2 (i.e. we are out of the selection range, 
 				// we have to deselect the node. Else we select it
-				if (state != 1 && convEl.className == convEl._selectedStyleClass && convEl != clickedEl) {
-					convEl.className = convEl._styleClass;
+				if (state != 1 && convEl.className == selStyleClass && convEl != clickedEl) {
+					convEl.className = Dwt.getAttr(convEl, "_styleClass");
 					this._selectedItems.remove(convEl);
 				} else if (state == 1 || convEl == clickedEl) {
-					if (convEl.className != convEl._selectedStyleClass) {
-						convEl.className = convEl._selectedStyleClass;
+					if (convEl.className != selStyleClass) {
+						convEl.className = selStyleClass;
 						convEl.hoverSet = false;
 						this._selectedItems.add(convEl);
 					}
@@ -1021,12 +1028,12 @@ function(clickedEl, ev) {
 	// let derived class call notifyListeners(), since it may want to add to event
 	if (ev.button == DwtMouseEvent.LEFT) {
 		DwtUiEvent.copy(this._selEv, ev);
-		this._selEv.item = AjxCore.objectWithId(clickedEl._itemIndex);
+		this._selEv.item = AjxCore.objectWithId(Dwt.getAttr(clickedEl, "_itemIndex"));
 		if (this.constructor == DwtListView)
 			this._evtMgr.notifyListeners(DwtEvent.SELECTION, this._selEv);
 	} else if (ev.button == DwtMouseEvent.RIGHT) {
 		DwtUiEvent.copy(this._actionEv, ev);
-		this._actionEv.item = AjxCore.objectWithId(clickedEl._itemIndex);
+		this._actionEv.item = AjxCore.objectWithId(Dwt.getAttr(clickedEl, "_itemIndex"));
 		if (this.constructor == DwtListView)
 			this._evtMgr.notifyListeners(DwtEvent.ACTION, this._actionEv);
 	}
@@ -1040,7 +1047,7 @@ function(clickedCol, ev) {
 	var size = list.size();
 	if (!size) return;
 
-	var item = this._headerList[clickedCol._itemIndex];
+	var item = this._headerList[Dwt.getAttr(clickedCol, "_itemIndex")];
 	// reset order by sorting preference
 	this._bSortAsc = item._id == this._currentColId	? !this._bSortAsc : this._getDefaultSortbyForCol(item);
 	
@@ -1131,17 +1138,17 @@ function () {
 	// explicitly remove each child (setting innerHTML causes mem leak)
 	while (this._parentEl.hasChildNodes()) {
 		cDiv = this._parentEl.removeChild(this._parentEl.firstChild);
-		AjxCore.unassignId(cDiv._itemIndex);
+		AjxCore.unassignId(Dwt.getAttr(cDiv, "_itemIndex"));
 	}
 };
 
 DwtListView.prototype._destroyDnDIcon =
 function(icon) {
-	if (icon._itemIndex){
-		AjxCore.unassignId(icon._itemIndex);
-	}
+	var itemIdx = Dwt.getAttr(icon, "_itemIndex");
+	if (itemIdx)
+		AjxCore.unassignId(itemIdx);
 	DwtControl.prototype._destroyDnDIcon.call(this,icon);
-}
+};
 
 DwtListView.prototype._handleColHeaderMove = 
 function(ev) {
@@ -1179,7 +1186,7 @@ function(ev) {
 		this.shell.getHtmlElement().appendChild(this._headerClone);
 	} else {
 		var target = this._findAncestor(ev.target, "_itemIndex");
-		if (target && target._type == DwtListView.TYPE_HEADER_ITEM) {
+		if (target && Dwt.getAttr(target, "_type") == DwtListView.TYPE_HEADER_ITEM) {
 			if (this._headerCloneTarget && this._headerCloneTarget == this._clickDiv)
 				this._headerCloneTarget = null;
 			else if (this._headerCloneTarget != target) {
@@ -1226,7 +1233,9 @@ function(ev) {
 	
 	// did the user drop the column on a valid target?
 	if (this._headerCloneTarget) {
-		this.reIndexColumn(this._clickDiv._itemIndex, this._headerCloneTarget._itemIndex);
+		var divItemIdx = Dwt.getAttr(this._clickDiv, "_itemIndex");
+		var tgtItemIdx = Dwt.getAttr(this._headerCloneTarget, "_itemIndex");
+		this.reIndexColumn(divItemIdx, tgtItemIdx);
 	}
 
 	this._clickDiv.className = this._clickDiv.id != this._currentColId 
@@ -1242,7 +1251,7 @@ function(ev) {
 	}
 	delete this._headerClone;
 	
-	if (this._clickDiv._type != DwtListView.TYPE_HEADER_ITEM) {
+	if (Dwt.getAttr(this._clickDiv, "_type") != DwtListView.TYPE_HEADER_ITEM) {
 		// something is messed up! redraw the header
 		var sortable = this._getSortableFromColId(this._currentColId);
 		this._headerColCreated = false;
@@ -1268,9 +1277,10 @@ function(ev) {
 		
 	// find out where the user dropped the sash and update column width
 	var delta = ev.docX - this._headerSashX;
-	
-	var suffixIdx = this._clickDiv._itemIndex.indexOf("--sash");
-	var headerIdx = parseInt(this._clickDiv._itemIndex.substring(0, suffixIdx));
+
+	var itemIdx = Dwt.getAttr(this._clickDiv, "_itemIndex");
+	var suffixIdx = itemIdx.indexOf("--sash");
+	var headerIdx = parseInt(itemIdx.substring(0, suffixIdx));
 	if (headerIdx >= 0 && headerIdx < this._headerList.length) {
 		var newWidth = null;
 		if (this._headerList[headerIdx]._width)

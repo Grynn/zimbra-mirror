@@ -281,6 +281,14 @@ function(html) {
 	return Dwt.getSize(Dwt._measureDiv);
 };
 
+Dwt.getAttr = 
+function(htmlElement, attr) {
+	// test for tagName so we dont try to eval non-html elements (i.e. document)
+	return htmlElement && htmlElement.tagName
+		? (htmlElement.attr || htmlElement.getAttribute(attr) || htmlElement[attr])
+		: null;
+};
+
 Dwt.getVisible =
 function(htmlElement) {
 	var disp = DwtCssStyle.getProperty(htmlElement, "display");

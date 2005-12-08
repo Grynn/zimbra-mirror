@@ -83,7 +83,7 @@ DwtUiEvent.getTargetWithProp =
 function(ev, prop)  {
 	var htmlEl = DwtUiEvent.getTarget(ev);
 	while (htmlEl) {
-		if (htmlEl[prop] != null) {
+		if (Dwt.getAttr(htmlEl, prop) != null) {
 			return htmlEl;
 		}
 		htmlEl = htmlEl.parentNode;
