@@ -33,35 +33,30 @@
 * @author Greg Solovyev
 **/
 function ZaStatusViewController(appCtxt, container, app) {
-
-	ZaController.call(this, appCtxt, container, app);
+	ZaController.call(this, appCtxt, container, app, "ZaStatusViewController");
+   	this._toolbarOperations = new Array();
+   	this._popupOperations = new Array();
+	this._UICreated = false;	
 }
 
 ZaStatusViewController.prototype = new ZaController();
 ZaStatusViewController.prototype.constructor = ZaStatusViewController;
+ZaStatusViewController.viewClass = null;
+ZaController.initToolbarMethods["ZaStatusViewController"] = new Array();
+ZaController.initPopupMenuMethods["ZaStatusViewController"] = new Array();
 
-
-ZaStatusViewController.prototype.show = function() {
+ZaStatusViewController.prototype.show = function(statusVector) {
 	try {
-		var globalConfig = this._app.getGlobalConfig();
-
-		var mystatusVector = this._getSimpleStatusData();
-	  	//var mystatusVector = this.getDummyVector();
-	
-	    if (!this._contentView) {
-			this._createView();
+	    if (!this._UICreated) {
+			this._createUI();
 		}
-		// if cluster software is installed on the server, get that data ( which will be )
-		// returned sorted.
-		// otherwise just sort the simple data that we have.
-	
-		if (this._clusterSoftwareIsInstalled()) {
-			mystatusVector = this._getClusterStatusData(mystatusVector);
-		} else {
-			mystatusVector.sort(ZaStatus.compare);
+		if(!statusVector) {
+			var statusObj = new ZaStatus(this._app);
+			statusObj.load();
+			statusVector = statusObj.getStatusVector();
 		}
-		this._contentView.set(mystatusVector, globalConfig);
-		this._contentView.addClusterSelectionListener(new AjxListener(this, this._selectionUpdated));
+		this._contentView.set(statusVector);
+//		this._contentView.addClusterSelectionListener(new AjxListener(this, this._selectionUpdated));
 		this._app.pushView(ZaZimbraAdmin._STATUS);
 	} catch (ex) {
 		this._handleException(ex, "ZaStatusViewController.prototype.show", null, false);
@@ -69,6 +64,28 @@ ZaStatusViewController.prototype.show = function() {
 	}	
 };
 
+ZaStatusViewController.prototype._createUI = function () {
+	try {
+		var elements = new Object();
+		this._contentView = new ZaStatusViewController.viewClass(this._container, this._app);
+		this._initToolbar();
+		if(this._toolbarOperations && this._toolbarOperations.length) {
+			this._toolbar = new ZaToolBar(this._container, this._toolbarOperations); 
+			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
+		}
+		this._initPopupMenu();
+		if(this._popupOperations && this._popupOperations.length) {
+			this._acctionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations);
+		}
+		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
+		this._app.createView(ZaZimbraAdmin._STATUS, elements);
+		this._UICreated = true;
+	} catch (ex) {
+		this._handleException(ex, "ZaStatusViewController.prototype._createUI", null, false);
+		return;
+	}	
+}
+/*
 ZaStatusViewController.prototype._getSimpleStatusData = function () {
 	try {
 		return ZaStatus.loadStatusTable().getVector();
@@ -76,7 +93,8 @@ ZaStatusViewController.prototype._getSimpleStatusData = function () {
 		return AjxVector.fromArray([]);
 	}	
 };
-
+*/
+/*
 ZaStatusViewController.prototype._createView = function () {
 	try {
 		var elements = new Object();
@@ -90,6 +108,8 @@ ZaStatusViewController.prototype._createView = function () {
 			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
 		}
 		this._contentView = new ZaStatusView(this._container, this._app);
+		
+		this._contentView = new ZaStatusViewController.viewClass(this._container, this._app);
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 		this._app.createView(ZaZimbraAdmin._STATUS, elements);
 	} catch (ex) {
@@ -97,8 +117,9 @@ ZaStatusViewController.prototype._createView = function () {
 		return;
 	}	
 		
-};
+};*/
 
+/*
 ZaStatusViewController.prototype._getClusterStatusData = function (simpleDataVector) {
 	var retVector = null;
 	try {
@@ -196,7 +217,7 @@ ZaStatusViewController.prototype.getDummyVector = function () {
 	var arr = [i6, i5,i4,i3, i2, i1]; 
 	return AjxVector.fromArray(arr);
 }
-
+*/
 /**
 * @param nextViewCtrlr - the controller of the next view
 * Checks if it is safe to leave this view. Displays warning and Information messages if neccesary.
@@ -205,7 +226,7 @@ ZaStatusViewController.prototype.switchToNextView =
 function (nextViewCtrlr, func, params) {
 	func.call(nextViewCtrlr, params);
 }
-
+/*
 ZaStatusViewController.prototype._failoverListener = function (event) {
 	var btn = event.item;
 	// popup dialog with list of possible servers to fail over to.
@@ -273,3 +294,4 @@ ZaStatusViewController.prototype._doFailover = function (targetService, newServe
 		this._failoverDialog.popdown();
 	}
 }
+*/

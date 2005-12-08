@@ -30,40 +30,72 @@
 * @author Greg Solovyev
 **/
 function ZaStatus(app) {
-	ZaItem.call(this, ZaEvent.S_STATUS);
+	ZaItem.call(this, app, "ZaStatus");
+	this._init(app);	
 }
 
 ZaStatus.prototype = new ZaItem;
 ZaStatus.prototype.constructor = ZaStatus;
+ZaItem.loadMethods["ZaStatus"] = new Array();
+ZaItem.initMethods["ZaStatus"] = new Array();
 
-ZaStatus.loadStatusTable = 
-function() {
-	//TODO: Instrumentation code here
-	var soapDoc = AjxSoapDoc.create("GetServiceStatusRequest", "urn:zimbraAdmin", null);
-	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
-	var list = new ZaItemList(ZaStatus);
-	list.loadFromDom(resp);
-	//TODO: Instrumentation code here	
-	return list;
-}
-
-ZaStatus.prototype.initFromDom =
-function (node) {
-	//TODO: Instrumentation code here
-	this.serverName = node.getAttribute("server");
-	this.serviceName = node.getAttribute("service");
-	this.timestamp = node.getAttribute("t");
-	//this.time = new Date(Number(this.timestamp)*1000).toLocaleString();
-	var formatter = AjxDateFormat.getDateTimeInstance(AjxDateFormat.MEDIUM, AjxDateFormat.SHORT);
-	this.time = formatter.format(new Date(Number(this.timestamp)*1000));
-	this.status = node.firstChild.nodeValue;
-	//TODO: Instrumentation code here
-}
-
+ZaStatus.A_server = "server";
+ZaStatus.A_service = "service";
+ZaStatus.A_timestamp = "t";
 ZaStatus.PRFX_Server = "status_server";
 ZaStatus.PRFX_Service = "status_service";
 ZaStatus.PRFX_Time = "status_time";
 ZaStatus.PRFX_Status = "status_status";
+
+ZaStatus.loadMethod = 
+function(app) {
+	var soapDoc = AjxSoapDoc.create("GetServiceStatusRequest", "urn:zimbraAdmin", null);
+	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	this.initFromDom(resp);
+}
+ZaItem.loadMethods["ZaStatus"].push(ZaStatus.loadMethod);
+
+ZaStatus.initMethod = function (app) {
+	this.serverMap = new Object();
+	this.statusVector = new AjxVector();
+}
+ZaItem.initMethods["ZaStatus"].push(ZaStatus.initMethod);
+
+ZaStatus.prototype.initFromDom =
+function (node) {
+	var children = node.childNodes;
+	var cnt = children.length;
+	var formatter = AjxDateFormat.getDateTimeInstance(AjxDateFormat.MEDIUM, AjxDateFormat.SHORT);
+	for (var i=0; i< cnt;  i++) {
+		var child = children[i];
+		var serverName = child.getAttribute(ZaStatus.A_server);
+		if(serverName) {
+			if(!this.serverMap[serverName]) {
+				this.serverMap[serverName] = new Object();
+				this.serverMap[serverName].name = serverName;
+				this.serverMap[serverName].serviceMap = new Object();
+				this.serverMap[serverName].status = 1;
+				this.statusVector.add(this.serverMap[serverName]);
+			}
+			var serviceName = child.getAttribute(ZaStatus.A_service);
+			if(serviceName) {
+				this.serverMap[serverName].serviceMap[serviceName] = new Object();
+				this.serverMap[serverName].serviceMap[serviceName].status = child.firstChild.nodeValue;
+				var timestamp = child.getAttribute(ZaStatus.A_timestamp);
+				this.serverMap[serverName].serviceMap[serviceName].time = formatter.format(new Date(Number(timestamp)*1000));
+				if(this.serverMap[serverName].serviceMap[serviceName].status != 1) {
+					this.serverMap[serverName].status = 0;
+				}
+			}
+		}
+		
+	}
+}
+
+ZaStatus.prototype.getStatusVector = 
+function() {
+	return this.statusVector;
+}
 
 ZaStatus.compare = function (a,b) {
 	return (a.serverName < b.serverName)? -1: ((a.serverName > b.serverName)? 1: 0);

@@ -162,7 +162,8 @@ function(node) {
 	this.type = node.nodeName;
 	
 	var children = node.childNodes;
-	for (var i=0; i< children.length;  i++) {
+	var cnt = children.length;
+	for (var i=0; i< cnt;  i++) {
 		var child = children[i];
 		if (child.nodeName != 'a') continue;
 		var name = child.getAttribute("n");

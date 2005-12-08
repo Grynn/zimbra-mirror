@@ -108,11 +108,6 @@ function(columnItem, bSortAsc) {
 	this.setUI();
 }
 
-ZaListView.prototype._getFieldId =
-function(item, field, prfx) {
-	return item ? (this._getViewPrefix() + prfx + item.id) : "";
-}
-
 ZaListView.prototype._columnClicked =
 function(clickedCol, ev) {
 	

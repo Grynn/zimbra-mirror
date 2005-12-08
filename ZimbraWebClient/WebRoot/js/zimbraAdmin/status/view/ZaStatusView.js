@@ -32,47 +32,20 @@
 * @author Greg Solovyev
 **/
 function ZaStatusView(parent, app) {
-	this._app = app;
-	DwtComposite.call(this, parent, "ZaStatusView", DwtControl.ABSOLUTE_STYLE);
+	ZaTabView.call(this, parent, app, "ZaStatusView");
 }
 
-ZaStatusView.prototype = new DwtComposite;
+ZaStatusView.prototype = new ZaTabView;
 ZaStatusView.prototype.constructor = ZaStatusView;
+ZaTabView.XFormModifiers["ZaStatusView"] = new Array();
 
 ZaStatusView.prototype.toString = 
 function() {
 	return "ZaStatusView";
 };
 
-ZaStatusView.prototype.setBounds = function (x, y, width, height) {
-
-	// 10 is the hieght of the spacer above the lists.
-	height = height - 10;
-
-	DwtControl.prototype.setBounds.call(this, x , y, width, height);
-
-	var _clusterList = this._view.getItemsById('clusterList');
-	if(_clusterList) {
-		var clusterList = _clusterList[0];
-		if (clusterList != null && clusterList.widget != null) {
-			clusterList.widget.setSize(width,height);
-		};
-	}
-	var _nonClusterList = this._view.getItemsById('nonClusterList');
-	if(_nonClusterList) {		
-		var nonClusterList = _nonClusterList[0];
-		if (nonClusterList != null && nonClusterList.widget != null) {
-			try {	
-				nonClusterList.widget.setSize(width);
-			} catch (ex) {
-				//	throw ex;
-				//swallow this invalid argument exception from IE, bug 4441
-			}
-		};
-	}	
-};
-
-ZaStatusView.prototype.set = function (statusVector, globalConfig) {
+ZaStatusView.prototype.setObject = 
+function (entry) {
 	// TODO  -- make a more appealing data structure here.
 	var instance = {services:statusVector, currentTab:1};
 	instance.globalConfig = globalConfig;
@@ -101,9 +74,8 @@ ZaStatusView.prototype.addClusterSelectionListener = function (listener) {
 };
 
 
-ZaStatusView.prototype.getXForm = function () {
-    if (this._xform == null) {
-	this._xform = {
+ZaStatusView.myXFormModifier = function (xFormObject) {
+	xFormObject = {
 	    width:"100%",
 	    tableCssStyle:"width:100%;xheight:100%;",
 	    itemDefaults:{
@@ -113,16 +85,14 @@ ZaStatusView.prototype.getXForm = function () {
 		   {type:_SPACER_, height: 5},
 		   // This list is read only, so we can just do this little hack of accessing the vector's internal array.
 		   {ref: "services._array", id:"nonClusterList", type:_DWT_LIST_, colSpan:"*", 
-			widgetClass:ZaServicesListView,containerCssStyle:"height:100%",
-			relevant:"AjxUtil.isUndefined(instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster])"},
+			widgetClass:ZaServicesListView,containerCssStyle:"height:100%"},
 		   {ref: "services._array",id:"clusterList",type:_DWT_LIST_, colSpan:"*", widgetClass:ZaClusteredServicesListView,
 			containerCssStyle:"height:100%",
 			relevant:"AjxUtil.isSpecified(instance.globalConfig.attrs[ZaGlobalConfig.A_zimbraComponentAvailable_cluster])"}
- 		  ]
+ 		]
 	}
-    }
-    return this._xform;
 };
+ZaTabView.XFormModifiers["ZaStatusView"].push(ZaStatusView.myXFormModifier);
 
 ZaStatusView.prototype.getSelection = function () {
 	return this._view.getItemsById('clusterList')[0].getSelection();

@@ -57,7 +57,7 @@ ZaGlobalConfig.A_zimbraComponentAvailable = "zimbraComponentAvailable";
 //TODO: Move this code to an external file
 ZaGlobalConfig.A_zimbraComponentAvailable_replication = "_"+ZaGlobalConfig.A_zimbraComponentAvailable+"_replication";
 
-ZaGlobalConfig.A_zimbraComponentAvailable_cluster = "_" + ZaGlobalConfig.A_zimbraComponentAvailable+"_cluster"
+
 
 // --protocol checks
 ZaGlobalConfig.A_zimbraMtaRestriction = "zimbraMtaRestriction";
