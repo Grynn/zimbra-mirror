@@ -2629,30 +2629,48 @@ Repeat_XFormItem.prototype.showAddButton = true;
 Repeat_XFormItem.prototype.alwaysShowAddButton = false;
 Repeat_XFormItem.prototype.showMoveUpButton = false;
 Repeat_XFormItem.prototype.showMoveDownButton = false;
-Repeat_XFormItem.prototype.removeButton = {
-	type:_BUTTON_, 
-	label: AjxMsg.xformRepeatRemove, 
-	//width:20,
-	cssStyle:"margin-left:20px;",
-	onActivate:function (event) {
-		var repeatItem = this.getParentItem().getParentItem();
-		repeatItem.removeRowButtonClicked(this.getParentItem().instanceNum);
-	},
-	relevantBehavior:_HIDE_,
-	relevant: "item.__parentItem.getInstanceCount() != 0"
+
+Repeat_XFormItem.prototype.getRemoveButton = function () {
+	if(!this.removeButton) {
+		this.removeButton = {
+			type:_BUTTON_, 
+			label: AjxMsg.xformRepeatRemove, 
+			//width:20,
+			cssStyle:"margin-left:20px;",
+			onActivate:function (event) {
+				var repeatItem = this.getParentItem().getParentItem();
+				repeatItem.removeRowButtonClicked(this.getParentItem().instanceNum);
+			},
+			relevantBehavior:_HIDE_,
+			relevant: "item.__parentItem.getInstanceCount() != 0"
+		};
+		var label = this.getInheritedProperty("removeButtonLabel");
+		if(label)
+			this.removeButton.label = label;
+	}
+	return this.removeButton;	
 }
-Repeat_XFormItem.prototype.addButton = {
-	ref:".",
-	type:_BUTTON_, 
-	label: AjxMsg.xformRepeatAdd, 
-	//width:20,
-	onActivate:function (event) {
-		var repeatItem = this.getParentItem().getParentItem();
-		repeatItem.addRowButtonClicked(this.getParentItem().instanceNum);
-	},
-	relevantBehavior:_HIDE_,
-	forceUpdate:true
+
+Repeat_XFormItem.prototype.getAddButton = function () {
+	if(!this.addButton) {
+		this.addButton = {
+			ref:".",
+			type:_BUTTON_, 
+			label: AjxMsg.xformRepeatAdd, 
+			onActivate:function (event) {
+				var repeatItem = this.getParentItem().getParentItem();
+				repeatItem.addRowButtonClicked(this.getParentItem().instanceNum);
+			},
+			relevantBehavior:_HIDE_,
+			forceUpdate:true
+		};
+		var label = this.getInheritedProperty("addButtonLabel");
+		if(label)
+			this.addButton.label = label;			
+	}
+	return this.addButton;	
 }
+
 Repeat_XFormItem.prototype.moveUpButton = {
 	type:_BUTTON_, 
 	label:"^", 
@@ -2706,9 +2724,6 @@ Repeat_XFormItem.prototype.initializeItems = function () {
 	// add the add and remove buttons to the original items array, if appropriate
 	if (this.getShowRemoveButton()) {
 		var button = this.getRemoveButton();
-		var label = this.getInheritedProperty("removeButtonLabel");
-		if(label)
-			button.label = label;
 			
 		var removeButtonRelevant = this.cacheInheritedProperty("remove_relevant","_remove_relevant");
 		if(removeButtonRelevant) {
@@ -2719,11 +2734,8 @@ Repeat_XFormItem.prototype.initializeItems = function () {
 	}
 	if (this.getShowAddButton()) {
 		var button = this.getAddButton();
-		var label = this.getInheritedProperty("addButtonLabel");
+	
 		var showAddOnNextRow = this.getInheritedProperty("showAddOnNextRow");
-		if(label)
-			button.label = label;		
-			
 		if (!this.getAlwaysShowAddButton()) {
 			button.relevant = "(item.getInstanceCount()-1) == item.__parentItem.instanceNum";
 		}
