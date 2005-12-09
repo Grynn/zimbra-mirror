@@ -17,3 +17,7 @@ h3.SForce-sec-label {
   margin: 0.5em 0;
   border-bottom: 1px solid #777;
 }
+
+.SForce-icon-right {
+  background: url("sforce.gif") no-repeat 100% 50%;
+}

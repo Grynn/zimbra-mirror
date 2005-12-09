@@ -7,17 +7,9 @@
 
     <toolTipText>Use drag'n'drop to interact with your SalesForce account</toolTipText>
 
-    <dragSource type="ZmContact">
-      <actionJavaScript />
-    </dragSource>
-
-    <dragSource type="ZmMailMsg">
-      <actionJavaScript />
-    </dragSource>
-
-    <dragSource type="ZmConv">
-      <actionJavaScript />
-    </dragSource>
+    <dragSource type="ZmContact" />
+    <dragSource type="ZmMailMsg" />
+    <dragSource type="ZmConv" />
 
     <contextMenu>
       <menuItem label="Login" id="LOGIN" />
