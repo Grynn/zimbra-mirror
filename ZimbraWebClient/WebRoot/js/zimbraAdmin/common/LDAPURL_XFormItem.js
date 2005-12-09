@@ -58,9 +58,15 @@ LDAPURL_XFormItem.prototype.items = [
 			var val = "";
 			if(itemVal) {
 				var URLChunks = itemVal.split(/[:\/]/);
-				if(URLChunks.length >= 4) {
-					val = URLChunks[3];
-				} 
+				if(AjxEnv.isIE) {
+					if(URLChunks.length >= 3) {
+						val = URLChunks[1];
+					} 
+				} else {
+					if(URLChunks.length >= 4) {
+						val = URLChunks[3];
+					} 
+				}
 				this.getParentItem()._serverPart = val;
 			} 
 			return val;	

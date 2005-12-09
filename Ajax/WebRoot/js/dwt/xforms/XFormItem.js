@@ -2811,9 +2811,10 @@ Repeat_XFormItem.prototype.updateElement = function (value) {
 
 		var table = element.getElementsByTagName("table")[0];
 		var tbody = element.getElementsByTagName("tbody")[0];
-
+	
+		var tempDiv;	
 		if (AjxEnv.isIE) {
-			var tempDiv = this.createElement("temp",null,"div","");
+			tempDiv = this.createElement("temp",null,"div","");
 			tempDiv.display = "none";
 		}
 		var updateScript = new AjxBuffer();
@@ -2822,7 +2823,7 @@ Repeat_XFormItem.prototype.updateElement = function (value) {
 			var html = new AjxBuffer();
 			form.outputItemList(newItems, this, html, updateScript, "", this.getNumCols(), 0, true);
 			if (AjxEnv.isIE) {
-				tempDiv.innerHTML = "<table><tr>" + html + "</table>";
+				tempDiv.innerHTML = "<table>" + html.toString() + "</table>";
 				var rows = tempDiv.getElementsByTagName("table")[0].rows;
 				for (var r = 0; r < rows.length; r++) {
 					tbody.appendChild(rows[r]);
@@ -2831,6 +2832,9 @@ Repeat_XFormItem.prototype.updateElement = function (value) {
 				var row = table.insertRow(-1);
 				row.innerHTML = html;
 			}
+			/*	var row = table.insertRow(-1);
+				row.innerHTML = html.toString();*/
+
 		}
 		
 		// update the insert and update scripts so they'll be called next time
