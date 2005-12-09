@@ -392,7 +392,7 @@ function(str) {
 
 AjxStringUtil.xmlAttrEncode =
 function(str) {
-	return str ? str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g, '&quot;').replace(/'/g,"&apos;") : "";
+	return str ? str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/\x22/g, '&quot;').replace(/\x27/g,"&apos;") : "";
 }
 
 AjxStringUtil.xmlAttrDecode =
