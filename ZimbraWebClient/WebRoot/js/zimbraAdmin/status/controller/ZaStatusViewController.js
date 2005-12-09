@@ -41,7 +41,6 @@ function ZaStatusViewController(appCtxt, container, app) {
 
 ZaStatusViewController.prototype = new ZaController();
 ZaStatusViewController.prototype.constructor = ZaStatusViewController;
-ZaStatusViewController.viewClass = null;
 ZaController.initToolbarMethods["ZaStatusViewController"] = new Array();
 ZaController.initPopupMenuMethods["ZaStatusViewController"] = new Array();
 
@@ -67,7 +66,7 @@ ZaStatusViewController.prototype.show = function(statusVector) {
 ZaStatusViewController.prototype._createUI = function () {
 	try {
 		var elements = new Object();
-		this._contentView = new ZaStatusViewController.viewClass(this._container, this._app);
+		this._contentView = new ZaServicesListView(this._container, this._app);
 		this._initToolbar();
 		if(this._toolbarOperations && this._toolbarOperations.length) {
 			this._toolbar = new ZaToolBar(this._container, this._toolbarOperations); 

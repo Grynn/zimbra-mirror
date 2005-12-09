@@ -73,12 +73,16 @@ function (node) {
 			if(!this.serverMap[serverName]) {
 				this.serverMap[serverName] = new Object();
 				this.serverMap[serverName].name = serverName;
-				this.serverMap[serverName].serviceMap = new Object();
+				this.serverMap[serverName].serviceMap = null;
 				this.serverMap[serverName].status = 1;
 				this.statusVector.add(this.serverMap[serverName]);
 			}
 			var serviceName = child.getAttribute(ZaStatus.A_service);
 			if(serviceName) {
+
+				if(!this.serverMap[serverName].serviceMap)
+					this.serverMap[serverName].serviceMap = new Object();
+					
 				this.serverMap[serverName].serviceMap[serviceName] = new Object();
 				this.serverMap[serverName].serviceMap[serviceName].status = child.firstChild.nodeValue;
 				var timestamp = child.getAttribute(ZaStatus.A_timestamp);

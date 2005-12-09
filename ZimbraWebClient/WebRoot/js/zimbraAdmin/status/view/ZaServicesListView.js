@@ -47,9 +47,9 @@ function ZaServicesListView(parent, app, clsName) {
 
 ZaServicesListView.prototype = new ZaListView;
 ZaServicesListView.prototype.constructor = ZaServicesListView;
-ZaStatusViewController.viewClass = ZaServicesListView;
 ZaServicesListView.STYLE_CLASS = "Row";
 ZaServicesListView.SELECTED_STYLE_CLASS = "Row" + "-" + DwtCssStyle.SELECTED;
+
 ZaServicesListView.prototype.toString = 
 function() {
 	return "ZaServicesListView";
@@ -74,17 +74,18 @@ function(item, now, isDndIcon) {
 	div._selectedStyleClass = ZaServicesListView.SELECTED_STYLE_CLASS;
 	div.className = ZaServicesListView.STYLE_CLASS;
 	
-	idx = this._writeElement(html, idx, item, false);
+	idx = ZaServicesListView._writeElement.call(this, html, idx, item, false);
 	if (item.serviceMap != null) {
 		for (var i in item.serviceMap) {
-			idx = this._writeElement(html, idx, item.serviceMap[i], true, i);
+			idx = ZaServicesListView._writeElement.call(this, html, idx, item.serviceMap[i], true, i);
 		}
 	}
 	div.innerHTML = html.join("");
 
 	return div;
 }
-ZaServicesListView.prototype._writeElement =
+
+ZaServicesListView._writeElement =
 function(html, idx, item, onlyServiceInfo, serviceName) {
 	html[idx++] = "<table ";
 	if (onlyServiceInfo) {
@@ -181,7 +182,7 @@ function() {
 ZaServicesListView.prototype._getHeaderList =
 function() {
 	var headerList = [
-		new ZaListHeaderItem(ZaStatus.PRFX_Server, ZaMsg.STV_Server_col, null, 175, false, null, true, true),
+		new ZaListHeaderItem(ZaStatus.PRFX_Server, ZaMsg.STV_Server_col, null, 250, false, null, true, true),
 		new ZaListHeaderItem(ZaStatus.PRFX_Service, ZaMsg.STV_Service_col, null, 100, false, null, true, true),
 		new ZaListHeaderItem(ZaStatus.PRFX_Time, ZaMsg.STV_Time_col, null, null, false, null, true, true)
 	];
@@ -240,3 +241,4 @@ function(columnItem, bSortAsc) {
 	this._resetListView();
 	this._renderList(this.getList());
 };*/
+
