@@ -232,6 +232,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 					]
 				},
 				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 2", 
+					colSizes:["300px","150", "*"],
 					items:[
 						{ type: _GROUP_, label: ZaMsg.NAD_Service_EnabledServices, labelCssStyle: "vertical-align:top",
 						  items: [

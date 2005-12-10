@@ -69,7 +69,9 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 			]
 		},
 		{type:_SWITCH_, items:[
-				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 1", items:[
+				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 1",
+					colSizes:["300px","150", "*"],
+				 	items:[
 						{ ref: ZaGlobalConfig.A_zimbraGalMaxResults, type:_INPUT_, 
 						  label: ZaMsg.NAD_GalMaxResults, width: "5em",
 						  onChange:ZaTabView.onFormFieldChanged
@@ -233,6 +235,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 					]}
 				]},
 				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 4", 
+					colSizes:["300px","150", "*"],
 					items: [
 						{ type: _GROUP_, numCols: 2,
 						  label: ZaMsg.NAD_POP_Service, labelCssStyle: "vertical-align:top",
@@ -267,6 +270,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 					]
 				},
 				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 5",
+					colSizes:["300px","150", "*"],
 					items: [
 						{ type: _GROUP_, numCols: 2,
 						  label: ZaMsg.NAD_IMAP_Service, labelCssStyle: "vertical-align:top",
@@ -328,6 +332,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 				]},
 				// security: anti-virus
 				{ type: _CASE_, relevant: "instance[ZaModel.currentTab] == 7", 
+				colSizes:["300px","150", "*"],
 				  items: [
 				  	{ type: _GROUP_, label: ZaMsg.NAD_Virus_Checking, items: [
 					  	{ ref: ZaGlobalConfig.A_zimbraVirusCheckEnabled, type: _CHECKBOX_,

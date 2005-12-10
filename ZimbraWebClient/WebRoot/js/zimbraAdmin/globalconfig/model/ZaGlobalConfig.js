@@ -54,11 +54,6 @@ ZaGlobalConfig.A_zimbraMtaMaxMessageSize = "zimbraMtaMaxMessageSize";
 ZaGlobalConfig.A_zimbraMtaRelayHost = "zimbraMtaRelayHost";
 ZaGlobalConfig.A_zimbraComponentAvailable = "zimbraComponentAvailable";
 
-//TODO: Move this code to an external file
-ZaGlobalConfig.A_zimbraComponentAvailable_replication = "_"+ZaGlobalConfig.A_zimbraComponentAvailable+"_replication";
-
-
-
 // --protocol checks
 ZaGlobalConfig.A_zimbraMtaRestriction = "zimbraMtaRestriction";
 ZaGlobalConfig.A_zimbraMtaRejectInvalidHostname = "_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_reject_invalid_hostname";

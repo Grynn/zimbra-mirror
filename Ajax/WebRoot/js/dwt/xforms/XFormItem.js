@@ -834,7 +834,10 @@ XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript, inde
 
 		if (forceUpdate != true) {
 			updateScript.append(
-				"var valueStr = ''+String(value);\r",
+				"var valueStr='';\r",
+				"try {\r",
+					"valueStr = ''+String(value);\r",
+				"} catch (ex) {}\r",
 				"if (item.$lastDisplayValue != valueStr) {\r  ",
 					"item.$updateElement(value);\r",
 					"item.$lastDisplayValue = valueStr;\r",
@@ -2653,6 +2656,7 @@ Repeat_XFormItem.prototype.getRemoveButton = function () {
 
 Repeat_XFormItem.prototype.getAddButton = function () {
 	if(!this.addButton) {
+		var showAddOnNextRow = this.getInheritedProperty("showAddOnNextRow");
 		this.addButton = {
 			ref:".",
 			type:_BUTTON_, 
@@ -2667,6 +2671,11 @@ Repeat_XFormItem.prototype.getAddButton = function () {
 		var label = this.getInheritedProperty("addButtonLabel");
 		if(label)
 			this.addButton.label = label;			
+			
+		if(showAddOnNextRow) {
+			this.addButton.colSpan = "*";
+		}
+			
 	}
 	return this.addButton;	
 }
@@ -2800,7 +2809,7 @@ Repeat_XFormItem.prototype.updateElement = function (value) {
 	var form = this.getForm();
 	
 	var element = this.getElement();
-	if (value == null || value == "") value = [];
+	if (value == null || value === "") value = [];
 	var itemsToShow = Math.max(value.length, this.getNumberToShow());
 	var slotsPresent = this.items.length;
 
@@ -2832,9 +2841,6 @@ Repeat_XFormItem.prototype.updateElement = function (value) {
 				var row = table.insertRow(-1);
 				row.innerHTML = html;
 			}
-			/*	var row = table.insertRow(-1);
-				row.innerHTML = html.toString();*/
-
 		}
 		
 		// update the insert and update scripts so they'll be called next time
