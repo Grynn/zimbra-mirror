@@ -33,7 +33,7 @@ function DwtToolTip(shell, className, dialog) {
 	this._div.style.position = DwtControl.ABSOLUTE_STYLE;
 	this.shell.getHtmlElement().appendChild(this._div);
 	Dwt.setZIndex(this._div, Dwt.Z_HIDDEN);
-	
+	Dwt.setLocation(this._div, Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
 	var borderStyle = "hover";
 	var substitutions = { id: "tooltip" };
 	this._borderStart = DwtBorder.getBorderStartHtml(borderStyle, substitutions);
