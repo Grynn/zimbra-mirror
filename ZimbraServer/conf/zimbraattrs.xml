@@ -240,7 +240,7 @@
 
 <attr name="zimbraMailHost" type="string" max="256" callback="MailHost"/>
 
-<attr name="zimbraMailHostPool" type="id"/>
+<attr name="zimbraMailHostPool" type="id" callback="MailHostPool"/>
 
 <attr name="zimbraMailTransport" type="string" max="320" immutable="1"/>
 
