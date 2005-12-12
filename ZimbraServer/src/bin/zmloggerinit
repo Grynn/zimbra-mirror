@@ -76,6 +76,18 @@ echo '*' Loading schema ${zimbra_db_directory}/loggerdb.sql
 ${zimbra_home}/bin/logmysql -u root --password= < \
     ${zimbra_db_directory}/loggerdb.sql
 
+cat > /tmp/logger.sql.$$ <<EOF
+use zimbra_logger;
+INSERT INTO zimbra_logger.config(name, value, description) VALUES
+	('db.version', '1', 'db schema version');
+commit;
+EOF
+
+${zimbra_home}/bin/logmysql -u root --password= < \
+	/tmp/logger.sql.$$
+
+rm -f /tmp/logger.sql.$$
+
 #echo '*' Loading version from ${zimbra_db_directory}/versions-init.sql
 #${zimbra_home}/bin/logmysql -u root --password= < \
 #    ${zimbra_db_directory}/versions-init.sql

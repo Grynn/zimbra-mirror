@@ -29,9 +29,12 @@ use strict;
 #############
 
 my $MYSQL = "/opt/zimbra/bin/mysql";
+my $LOGMYSQL = "/opt/zimbra/bin/logmysql";
 my $DB_USER = "zimbra";
 my $DB_PASSWORD = "zimbra";
+my $LOGGER_DB_PASSWORD = "zimbra";
 my $DATABASE = "zimbra";
+my $LOGGER_DATABASE = "zimbra_logger";
 my $ZIMBRA_HOME = $ENV{ZIMBRA_HOME} || '/opt/zimbra';
 my $ZMLOCALCONFIG = "$ZIMBRA_HOME/bin/zmlocalconfig";
 
@@ -40,10 +43,17 @@ if ($^O !~ /MSWin/i) {
     chomp $DB_PASSWORD;
     $DB_USER = `$ZMLOCALCONFIG -m nokey zimbra_mysql_user`;
     chomp $DB_USER;
+    $LOGGER_DB_PASSWORD = `$ZMLOCALCONFIG -s -m nokey zimbra_logger_mysql_password`;
+    chomp $LOGGER_DB_PASSWORD;
 }
 
 sub getSchemaVersion {
     my $versionInDb = (runSql("SELECT value FROM config WHERE name = 'db.version'"))[0];
+	return $versionInDb;
+}
+
+sub getLoggerSchemaVersion {
+    my $versionInDb = (runLoggerSql("SELECT value FROM config WHERE name = 'db.version'"))[0];
 	return $versionInDb;
 }
 
@@ -55,6 +65,28 @@ sub verifySchemaVersion($) {
         exit(1);
     }
     Migrate::log("Verified schema version $version.");
+}
+
+sub verifyLoggerSchemaVersion($) {
+    my ($version) = @_;
+    my $versionInDb = getLoggerSchemaVersion();
+    if ($version != $versionInDb) {
+        print("Schema version mismatch.  Expected version $version.  Version in the database is $versionInDb.\n");
+        exit(1);
+    }
+    Migrate::log("Verified schema version $version.");
+}
+
+sub updateLoggerSchemaVersion($$) {
+    my ($oldVersion, $newVersion) = @_;
+    verifyLoggerSchemaVersion($oldVersion);
+
+    my $sql = <<SET_SCHEMA_VERSION_EOF;
+UPDATE zimbra_logger.config SET value = '$newVersion' WHERE name = 'db.version';
+SET_SCHEMA_VERSION_EOF
+
+    Migrate::log("Updating logger DB schema version from $oldVersion to $newVersion.");
+    runLoggerSql($sql);
 }
 
 sub updateSchemaVersion($$) {
@@ -104,6 +136,48 @@ sub runSql(@) {
     # Process output
     open(OUTPUT, $tempFile) || die "Could not open $tempFile";
     my @output;
+    while (<OUTPUT>) {
+        s/\s+$//;
+        push(@output, $_);
+    }
+
+    unlink($tempFile);
+    return @output;
+}
+
+sub runLoggerSql(@) {
+    my ($script, $logScript) = @_;
+
+    if (! defined($logScript)) {
+	$logScript = 1;
+    }
+
+    # Write the last script to a text file for debugging
+    # open(LASTSCRIPT, ">lastScript.sql") || die "Could not open lastScript.sql";
+    # print(LASTSCRIPT $script);
+    # close(LASTSCRIPT);
+
+    if ($logScript) {
+	Migrate::log($script);
+    }
+
+    # Run the mysql command and redirect output to a temp file
+    my $tempFile = "/tmp/mysql.out.$$";
+    my $command = "$LOGMYSQL --user=$DB_USER --password=$LOGGER_DB_PASSWORD " .
+        "--database=$LOGGER_DATABASE --batch --skip-column-names";
+    open(MYSQL, "| $command > $tempFile") || die "Unable to run $command";
+    print(MYSQL $script);
+    close(MYSQL);
+
+    my @output;
+    if ($? != 0) {
+		# Hack for missing config
+		push @output, 0;
+		return @output;
+    }
+
+    # Process output
+    open(OUTPUT, $tempFile) || die "Could not open $tempFile";
     while (<OUTPUT>) {
         s/\s+$//;
         push(@output, $_);

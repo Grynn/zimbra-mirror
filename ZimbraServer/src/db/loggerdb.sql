@@ -147,3 +147,11 @@ CREATE TABLE disk_aggregate (
 	total				INTEGER UNSIGNED,
 	available			INTEGER UNSIGNED
 ) ENGINE = MyISAM;
+
+CREATE TABLE config (
+	name        VARCHAR(255) NOT NULL PRIMARY KEY,
+	value       TEXT,
+	description TEXT,
+	modified    TIMESTAMP
+) ENGINE = MyISAM;
+
