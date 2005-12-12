@@ -45,7 +45,7 @@ function(action, timeout){
 	var id = action._id = AjxTimedAction._nextActionId++;
 	AjxTimedAction._pendingActions[id] = action;
 	var actionStr = "AjxTimedAction._exec(" + id + ")";
-	action._tid = window.setTimeout(actionStr, timeout ? timeout : 0);
+	action._tid = window.setTimeout(actionStr, timeout ? timeout : 0); // mac no like null/void
 	return action._id;
 }
 
