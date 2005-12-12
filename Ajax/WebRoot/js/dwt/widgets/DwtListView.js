@@ -1220,7 +1220,7 @@ function(ev) {
 	
 	// always update the sash's position
 	var parent = this._getParentForColResize();
-	var loc = parent.getLocation();
+	var loc = Dwt.toWindow(parent.getHtmlElement(), 0 ,0);
 	Dwt.setLocation(this._headerSash, ev.docX-loc.x);
 }
 
