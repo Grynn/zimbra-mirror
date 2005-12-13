@@ -24,7 +24,7 @@
  */
 
 function ZmBugzObjectHandler(appCtxt) {
-	ZmZimletBase.call(this);
+	ZmZimletBase.call(this, appCtxt, ZmBugzObjectHandler.TYPE);
 };
 
 ZmBugzObjectHandler.TYPE = "bugz";
