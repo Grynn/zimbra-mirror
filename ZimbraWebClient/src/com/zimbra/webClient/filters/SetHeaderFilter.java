@@ -225,7 +225,13 @@ public class SetHeaderFilter implements Filter {
             return;
         }
         
-        String uri = req.getRequestURI();        
+        String uri = req.getRequestURI();
+        
+        if( uri.toLowerCase().indexOf("microsoft-server-activesync") != -1 )
+        {
+			request.getRequestDispatcher( "/service/extension/activesync").forward( request, response );
+			return;
+        }
 
         // before we check whether we can compress, let's check
         // what sort of cache control headers we should use for this
