@@ -402,7 +402,6 @@ function DwtWizProgressBar(parent) {
 	this._table.border = 0;
 	this._table.cellPadding = 0;
 	this._table.cellSpacing = 0;
-	this._menuListeners = new AjxVector();
 	this.getHtmlElement().appendChild(this._table);
 	this._table.backgroundColor = DwtCssStyle.getProperty(this.parent.getHtmlElement(), "background-color");
 	this._stepsNumber = 0; //number of steps

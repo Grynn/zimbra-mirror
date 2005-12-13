@@ -65,7 +65,6 @@ function DwtMenu(parent, style, className, posStyle, dialog) {
 	this._dialog = dialog;
 	
 	var htmlElement = this.getHtmlElement();
-	this._menuListeners = new AjxVector();
 	
 	// Don't need to create table for color picker and calendar picker styles
 	if (this._style != DwtMenu.COLOR_PICKER_STYLE && this._style != DwtMenu.CALENDAR_PICKER_STYLE) {
@@ -118,18 +117,6 @@ DwtMenu.CALENDAR_PICKER_STYLE = 5;
 
 DwtMenu._activeMenuUp = false;
 DwtMenu._activeMenuIds = new AjxVector();
-
-DwtMenu.prototype.addMenuListener = 
-function(listener) {
-  if (!this._menuListeners.contains(listener)) {
-  	this._menuListeners.add(listener);
-  }     	
-}
-
-DwtMenu.prototype.removeMenuListener = 
-function(listener) {
-  this._menuListeners.remove(listener);     	
-}
 
 DwtMenu.prototype.addPopdownListener = 
 function(listener) {
@@ -232,12 +219,12 @@ function(msec) {
  * @see _outsideMouseListener.
  */
 DwtMenu.prototype.setAssociatedObj =
-function (dwtObj) {
+function(dwtObj) {
 	this._associatedObj = dwtObj;
 };
 
 DwtMenu.prototype.setAssociatedElementId =
-function (id){
+function(id){
 	this._associatedElId = id;
 }
 
@@ -262,15 +249,15 @@ function(field, value, skipNotify) {
 }
 
 DwtMenu.prototype.setSelectedItem =
-function (index){
+function(index) {
 	var mi = this._children.get(index);
 	mi.setSelectedStyle();
 	this._externallySelected = mi;
 };
 
 DwtMenu.prototype.clearExternallySelectedItems =
-function () {
-	if (this._externallySelected != null){
+function() {
+	if (this._externallySelected != null) {
 		this._externallySelected._deselect();
 		this._externallySelected = null;
 	}
@@ -283,8 +270,9 @@ function(child) {
 		this._table.rows[0].deleteCell(Dwt.getCellIndex(cell));
 	} else {
 		var sz = this._children.size();
-		/* If the item we are removing is check/radio style, and it is the last such item in the menu, then we 
-		 * must instruct our other children to delete a "checked column" to ensure that things line up */
+		// If item we're removing is check/radio style, and its last such item 
+		// in the menu, then we must instruct our other children to delete a 
+		// "checked column" to ensure that things line up
 		if (sz > 1 && (child._style == DwtMenuItem.CHECK_STYLE || child._style == DwtMenuItem.RADIO_STYLE)) {
 			if (this._numCheckedStyleItems == 1) {
 				var a = this._children.getArray();
@@ -296,8 +284,9 @@ function(child) {
 			this._numCheckedStyleItems--;
 		}
 		
-		/* If the item we are removing has a submenu, and it is the last such item in the menu, then we 
-		 * must instruct our other children to delete their cascade cell to ensure that things line up */	
+		// If item we're removing has a submenu, and its the last such item in 
+		// the menu, then we must instruct our other children to delete their 
+		// cascade cell to ensure that things line up
 		if (sz > 1 && child.getMenu())
 			this._submenuItemRemoved();
 		
@@ -339,8 +328,9 @@ function(item, index) {
 			spc.nowrap = true;
 			spc.width = "7px"
 		} else {
-			/* If the item we are adding is check/radio style, and it is the first such item in the menu, then we 
-			 * must instruct our other children to add a "checked column" to ensure that things line up */
+			// If item we're adding is check/radio style, and its the first such 
+			// item in the menu, then we must instruct our other children to add 
+			// a "checked column" to ensure that things line up
 			if (item._style == DwtMenuItem.CHECK_STYLE || item._style == DwtMenuItem.RADIO_STYLE) { 
 				if (this._numCheckedStyleItems == 0) {
 					var sz = this._children.size();
@@ -381,12 +371,12 @@ function(child, skipNotify) {
 
 DwtMenu.prototype._menuHasCheckedItems =
 function() {
-	return (this._numCheckedStyleItems > 0) ? true : false;
+	return (this._numCheckedStyleItems > 0);
 }
 
 DwtMenu.prototype._menuHasSubmenus =
 function() {
-	return (this._menuItemsWithSubmenus > 0) ? true : false;
+	return (this._menuItemsWithSubmenus > 0);
 }
 
 DwtMenu.prototype._menuHasItemsWithIcons =
