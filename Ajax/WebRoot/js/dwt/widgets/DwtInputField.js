@@ -105,7 +105,7 @@ function DwtInputField(parent, type, initialValue, size, maxLen, errorIconStyle,
 
 	this.setCursor("default");
 
-	this._inputField.value = (initialValue) ? initialValue : "";
+	this._inputField.value = initialValue || "";
 
 	this.setValidatorFunction(validatorCtxtObj, validator);
 	this._setMouseEventHdlrs(false);
@@ -126,10 +126,11 @@ DwtInputField.ONEXIT_VALIDATION    = 2; // validate the field (i.e. after TAB or
 DwtInputField.MANUAL_VALIDATION    = 3; // validate the field  manually
 
 // types
-DwtInputField.INTEGER  = 1; // Integer input field
-DwtInputField.FLOAT    = 2; // Numeric input field
-DwtInputField.STRING   = 3; // String input field
-DwtInputField.PASSWORD = 4; // Password input field
+DwtInputField.INTEGER	= 1; // Integer input field
+DwtInputField.FLOAT		= 2; // Numeric input field
+DwtInputField.STRING	= 3; // String input field
+DwtInputField.PASSWORD	= 4; // Password input field
+DwtInputField.DATE 		= 5; // Date input field
 
 DwtInputField._ERROR_ICON_HTML = AjxImg.getImageHtml("ClearSearch");
 DwtInputField._NOERROR_ICON_HTML = AjxImg.getImageHtml("Blank_9");
@@ -159,6 +160,7 @@ function(obj, validator) {
 		    case DwtInputField.FLOAT:	this._validator = DwtInputField.validateFloat; break;
 		    case DwtInputField.STRING:
 		    case DwtInputField.PASSWORD:this._validator = DwtInputField.validateString;	break;
+		    case DwtInputField.DATE: 	this._validator = DwtInputField.validateDate; break;
 		    default: 					this._validator = DwtInputField.validateAny;
 		}
 	}
@@ -261,6 +263,16 @@ function(required) {
 	this._required = required == null ? true : required;
 };
 
+DwtInputField.prototype.focus = 
+function() {
+	this.getInputElement().focus();
+};
+
+DwtInputField.prototype.blur = 
+function() {
+	this.getInputElement().blur();
+};
+
 /**
  * Checks the validity of the input field's value
  *
@@ -347,6 +359,19 @@ function(value) {
 		throw AjxMessageFormat.format(AjxMsg.stringTooShort, this._minLen);
 	if (this._maxLen != null && value.length > this._maxLen)
 		throw AjxMessageFormat.format(AjxMsg.stringTooLong, this._maxLen);
+	return value;
+};
+
+DwtInputField.validateDate = 
+function(value) {
+	if (this._required && value == "")
+		throw AjxMsg.valueIsRequired;
+	
+	var d = new Date(value);
+	if (isNaN(d)) {
+		throw AjxMsg.invalidDatetimeString;
+	}
+
 	return value;
 };
 
