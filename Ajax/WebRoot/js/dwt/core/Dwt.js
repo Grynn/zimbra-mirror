@@ -38,6 +38,11 @@ Dwt.REPEAT = "repeat";
 Dwt.REPEAT_X = "repeat-x";
 Dwt.REPEAT_Y = "repeat-y";
 
+// display style
+Dwt.DISPLAY_INLINE = "inline";
+Dwt.DISPLAY_BLOCK = "block";
+Dwt.DISPLAY_NONE = "none";
+
 // constants for layout
 Dwt.LEFT = 100;
 Dwt.RIGHT = 101;
@@ -292,12 +297,12 @@ function(htmlElement, attr) {
 Dwt.getVisible =
 function(htmlElement) {
 	var disp = DwtCssStyle.getProperty(htmlElement, "display");
-	return (disp != "none");
+	return (disp != Dwt.DISPLAY_NONE);
 };
 
 Dwt.setVisible =
 function(htmlElement, visible) {
-	htmlElement.style.display = visible ? "block" : "none";
+	htmlElement.style.display = visible ? Dwt.DISPLAY_BLOCK : Dwt.DISPLAY_NONE;
 };
 
 Dwt.getVisibility =
@@ -326,6 +331,16 @@ Dwt.setZIndex =
 function(htmlElement, idx) {
 //DBG.println(AjxDebug.DBG3, "set zindex for " + htmlElement.className + ": " + idx);
 	htmlElement.style.zIndex = idx;
+};
+
+Dwt.getDisplay = 
+function(htmlElement) {
+	DwtCssStyle.getProperty(htmlElement, "display");
+};
+
+Dwt.setDisplay = 
+function(htmlElement, value) {
+	htmlElement.style.display = value;
 };
 
 /**

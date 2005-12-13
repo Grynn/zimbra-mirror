@@ -155,18 +155,11 @@ function(obj, validator) {
 		this._validatorObj = obj;
 	} else {
 		switch (this._type) {
-		    case DwtInputField.INTEGER:
-			this._validator = DwtInputField.validateInteger;
-			break;
-		    case DwtInputField.FLOAT:
-			this._validator = DwtInputField.validateFloat;
-			break;
+		    case DwtInputField.INTEGER:	this._validator = DwtInputField.validateInteger; break;
+		    case DwtInputField.FLOAT:	this._validator = DwtInputField.validateFloat; break;
 		    case DwtInputField.STRING:
-		    case DwtInputField.PASSWORD:
-			this._validator = DwtInputField.validateString;
-			break;
-		    default:
-			this._validator = DwtInputField.validateAny;
+		    case DwtInputField.PASSWORD:this._validator = DwtInputField.validateString;	break;
+		    default: 					this._validator = DwtInputField.validateAny;
 		}
 	}
 };
@@ -181,8 +174,8 @@ DwtInputField.prototype.setValidatorRegExp =
 function(regExp, errorString) {
 	this._validator = regExp;
 	this._validatorObj = null;
-	this._errorString = (errorString) ? errorString : "";
-}
+	this._errorString = errorString || "";
+};
 
 /**
 * Sets a validation callback. This callback is invoked any time
@@ -195,7 +188,17 @@ function(regExp, errorString) {
 DwtInputField.prototype.setValidationCallback =
 function(callback) {
 	this._validationCallback = callback;
-}
+};
+
+/**
+* Gets the internal native input element
+*
+* @return native input element
+*/
+DwtInputField.prototype.getInputElement =
+function() {
+	return this._inputField;
+};
 
 /**
 * Gets the input fields current value
@@ -236,10 +239,7 @@ function(min, max) {
 
 DwtInputField.prototype.setValidStringLengths =
 function(minLen, maxLen) {
-	if (minLen != null)
-		this._minLen = minLen;
-	else
-		this._minLen = 0;
+	this._minLen = minLen || 0;
 	if (maxLen != null) {
 		this._inputField.maxLength = maxLen;
 		this._maxLen = maxLen;
@@ -253,16 +253,12 @@ function(decimals) {
 
 DwtInputField.prototype.setReadOnly =
 function(readonly) {
-	if (readonly == null)
-		readonly = true;
-	this._inputField.setAttribute("readonly", readonly);
+	this._inputField.setAttribute("readonly", (readonly == null ? true : readonly));
 };
 
 DwtInputField.prototype.setRequired =
 function(required) {
-	if (required == null)
-		required = true;
-	this._required = required;
+	this._required = required == null ? true : required;
 };
 
 /**
@@ -302,8 +298,9 @@ function() {
 	if (value != null) {
 		this._inputField.value = value;
 		return true;
-	} else
+	} else {
 		return false;
+	}
 };
 
 /* Built-in validators */
@@ -335,8 +332,9 @@ function(value) {
 		if (pos == -1)
 			pos = str.length;
 		value = n.toPrecision(pos + this._decimals);
-	} else
+	} else {
 		value = n.toString();
+	}
 
 	return value;
 };
@@ -412,12 +410,13 @@ function(value) {
 	var errorStr;
 
 	try {
-		if (typeof this._validator == "function")
+		if (typeof this._validator == "function") {
 			retVal = value = this._validatorObj
 				? this._validator.call(this._validatorObj, value)
 				: this._validator(value);
-		else if (!this._validator.test(value))
+		} else if (!this._validator.test(value)) {
 			errorStr = this._errorString;
+		}
 	} catch(ex) {
 		if (typeof ex == "string")
 			errorStr = ex;
@@ -441,7 +440,7 @@ function(value) {
 	}
 
 	if (this._validationCallback)
-		this._validationCallback.run([value, isValid]);
+		this._validationCallback.run([this, isValid]);
 
 	return retVal;
 };

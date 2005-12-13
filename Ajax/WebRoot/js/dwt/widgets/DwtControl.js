@@ -906,6 +906,13 @@ function(show) {
 	this.setZIndex(show ? Dwt.Z_VIEW : Dwt.Z_HIDDEN);
 }
 
+DwtControl.prototype.setDisplay = 
+function(value) {
+	if (!this._checkState()) return;
+
+	Dwt.setDisplay(this.getHtmlElement(), value);
+}
+
 DwtControl.prototype.preventSelection = 
 function(targetEl) {
 	return !this._isInputEl(targetEl);
