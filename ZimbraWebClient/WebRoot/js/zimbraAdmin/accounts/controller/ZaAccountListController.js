@@ -962,16 +962,4 @@ function (ev) {
 	return;
 }
 
-//TODO: Move this code to an external file
-ZaAccountListController.prototype._restoreMailListener = 
-function (ev) {
-	try {
-		this._newSingleAccountRestoreWizard = new SingleAccountRestoreXWizard(this._container, this._app);		
-		var restore = new ZaRestore(this._app);
-		this._newSingleAccountRestoreWizard.setObject(restore);		
-		this._newSingleAccountRestoreWizard.popup();
-	} catch (ex) {
-		this._handleException(ex, "ZaAccountListController.prototype._restoreMailListener", null, false);
-	}
-	return;
-}
+
