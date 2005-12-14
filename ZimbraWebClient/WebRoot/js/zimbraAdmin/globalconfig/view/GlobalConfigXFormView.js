@@ -334,15 +334,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 				{ type: _CASE_, relevant: "instance[ZaModel.currentTab] == 7", 
 				colSizes:["300px","150", "*"],
 				  items: [
-				  	{ type: _GROUP_, label: ZaMsg.NAD_Virus_Checking, items: [
-					  	{ ref: ZaGlobalConfig.A_zimbraVirusCheckEnabled, type: _CHECKBOX_,
-					  	  label: ZaMsg.NAD_Virus_CheckingEnabled,
-						  trueValue:"TRUE", falseValue:"FALSE", 
-						  onChange: ZaTabView.onFormFieldChanged
-				  	    }
-			  	    ]},
 			  	    { ref: ZaGlobalConfig.A_zimbraVirusDefinitionsUpdateFrequency, type: _INPUT_,
-			   	      relevant: "instance.attrs[ZaGlobalConfig.A_zimbraVirusCheckEnabled] == 'TRUE'", relevantBehavior: _DISABLE_,
 			  	      label: ZaMsg.NAD_Virus_DefUpdateFreq, width: "3em",
 			  	      getDisplayValue: function(value) { return parseInt(value); },
 			  	      elementChanged: function(elementValue, instanceValue, event) {
@@ -353,14 +345,12 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 			  	    },
 			  	    { type: _GROUP_, label: ZaMsg.NAD_Virus_Options, labelCssStyle: "vertical-align:top", items: [
 				  	    { ref: ZaGlobalConfig.A_zimbraVirusBlockEncryptedArchive, type: _CHECKBOX_,
-				   	      relevant: "instance.attrs[ZaGlobalConfig.A_zimbraVirusCheckEnabled] == 'TRUE'", relevantBehavior: _DISABLE_,
-				  	      label: ZaMsg.NAD_Virus_BlockEncrypted,
+				   	      label: ZaMsg.NAD_Virus_BlockEncrypted,
 						  trueValue:"TRUE", falseValue:"FALSE", 
 						  onChange: ZaTabView.onFormFieldChanged
 				  	    },
 
 					  	{ ref: ZaGlobalConfig.A_zimbraVirusWarnRecipient, type: _CHECKBOX_,
-				   	      relevant: "instance.attrs[ZaGlobalConfig.A_zimbraVirusCheckEnabled] == 'TRUE'", relevantBehavior: _DISABLE_,
 					  	  label: ZaMsg.NAD_Virus_NotifyRecipient,
 						  trueValue:"TRUE", falseValue:"FALSE", 
 						  onChange: ZaTabView.onFormFieldChanged

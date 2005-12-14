@@ -101,7 +101,6 @@ ZaGlobalConfig.A_zimbraSpamKillPercent = "zimbraSpamKillPercent";
 ZaGlobalConfig.A_zimbraSpamTagPercent = "zimbraSpamTagPercent";
 ZaGlobalConfig.A_zimbraSpamSubjectTag = "zimbraSpamSubjectTag";
 // anti-virus
-ZaGlobalConfig.A_zimbraVirusCheckEnabled = "zimbraVirusCheckEnabled";
 ZaGlobalConfig.A_zimbraVirusWarnRecipient = "zimbraVirusWarnRecipient";
 ZaGlobalConfig.A_zimbraVirusWarnAdmin = "zimbraVirusWarnAdmin";
 ZaGlobalConfig.A_zimbraVirusDefinitionsUpdateFrequency = "zimbraVirusDefinitionsUpdateFrequency";
