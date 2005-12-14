@@ -66,6 +66,8 @@ function DwtMenu(parent, style, className, posStyle, dialog) {
 	
 	var htmlElement = this.getHtmlElement();
 	
+	Dwt.setLocation(htmlElement, Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
+	
 	// Don't need to create table for color picker and calendar picker styles
 	if (this._style != DwtMenu.COLOR_PICKER_STYLE && this._style != DwtMenu.CALENDAR_PICKER_STYLE) {
 		this._table = document.createElement("table");
@@ -185,8 +187,9 @@ function(msec, x, y) {
 			this._popupActionId = -1;
 		}
 		if (!msec) {
-			this._doPopup({x : x, y : y});
+			this._doPopup(x, y);
 		} else {
+			this._popupAction.params.removeAll();
 			this._popupAction.params.add(x);
 			this._popupAction.params.add(y);
 			this._popupActionId = AjxTimedAction.scheduleAction(this._popupAction, msec);
@@ -425,76 +428,14 @@ function() {
 
 
 DwtMenu.prototype._doPopup =
-function(args) {
-	var pb = this.parent.getBounds();
+function(x, y) {
 	var ws = this.shell.getSize();
 	var s = this.getSize();
-	var x;
-	var y;
-	var vBorder;
-	var hBorder;
-	if (this.parent instanceof DwtMenuItem) {
-		var pp = this.parent.parent;
-		var ppHtmlElement = pp.getHtmlElement();
-		if (pp._style == DwtMenu.BAR_STYLE) {
-   			vBorder = (ppHtmlElement.style.borderLeftWidth == "") ? 0 : parseInt(ppHtmlElement.style.borderLeftWidth);
-			x = pb.x + vBorder;
-			hBorder = (ppHtmlElement.style.borderTopWidth == "") ? 0 : parseInt(ppHtmlElement.style.borderTopWidth);
-			hBorder += (ppHtmlElement.style.borderBottomWidth == "") ? 0 : parseInt(ppHtmlElement.style.borderBottonWidth);
-			y = pb.y + pb.height + hBorder;		
-			x = ((x + s.x) >= ws.x) ? x - (x + s.x - ws.x): x;
-			y = ((y + s.y) >= ws.y) ? y - (y + s.y - ws.y) : y;
-		} else { // Drop Down
-			vBorder = (ppHtmlElement.style.borderLeftWidth == "") ? 0 : parseInt(ppHtmlElement.style.borderLeftWidth);
-			vBorder += (ppHtmlElement.style.borderRightWidth == "") ? 0 : parseInt(ppHtmlElement.style.borderRightWidth);
-			x = pb.x + pb.width + vBorder;
-			hBorder = (ppHtmlElement.style.borderTopWidth == "") ? 0 : parseInt(ppHtmlElement.style.borderTopWidth);
-			y = pb.y + hBorder;
-			x = ((x + s.x) >= ws.x) ? pb.x - s.x - vBorder: x;
-			y = ((y + s.y) >= ws.y) ? y - (y + s.y - ws.y) : y;
-		}
-		this.setLocation(x, y);
-	} else if (this.parent instanceof DwtSelect) {
-		var p = this.parent;
-		var pHtmlElement = p.getHtmlElement();
-		// since buttons are often absolutely positioned, and menus aren't, we need x,y relative to window
-		var ptw = Dwt.toWindow(pHtmlElement, 0, 0);
- 		vBorder = (pHtmlElement.style.borderLeftWidth == "") ? 0 : parseInt(pHtmlElement.style.borderLeftWidth);
-		x = pb.x + vBorder;
-		hBorder = (pHtmlElement.style.borderTopWidth == "") ? 0 : parseInt(pHtmlElement.style.borderTopWidth);
-		hBorder += (pHtmlElement.style.borderBottomWidth == "") ? 0 : parseInt(pHtmlElement.style.borderBottonWidth);
-		y = pb.y + pb.height + hBorder;
-		x = ((x + s.x) >= (ws.x - 5 )) ? x - (x + s.x - ws.x): x;
-		if ( (y + s.y) >= (ws.y - 5 )) {
-			var myEl = this.getHtmlElement();
-			myEl.style.height = ws.y - y - 30;
-			myEl.style.overflow = "auto";
-		}
-		//y = ((y + s.y) >= (ws.y - 30 )) ? y - (y + s.y - ws.y) : y;
 
-		this.setLocation(x, y);
-	} else if (this.parent instanceof DwtButton) { // Parent is DwtButton
-		var p = this.parent;
-		var pHtmlElement = p.getHtmlElement();
-		// since buttons are often absolutely positioned, and menus aren't, we need x,y relative to window
-		var ptw = Dwt.toWindow(pHtmlElement, 0, 0);
- 		vBorder = (pHtmlElement.style.borderLeftWidth == "") ? 0 : parseInt(pHtmlElement.style.borderLeftWidth);
-		x = ptw.x + vBorder;
-		hBorder = (pHtmlElement.style.borderTopWidth == "") ? 0 : parseInt(pHtmlElement.style.borderTopWidth);
-		hBorder += (pHtmlElement.style.borderBottomWidth == "") ? 0 : parseInt(pHtmlElement.style.borderBottonWidth);
-		y = ptw.y + pb.height + hBorder;
-		x = ((x + s.x) >= ws.x) ? x - (x + s.x - ws.x): x;
-		y = ((y + s.y) >= ws.y) ? y - (y + s.y - ws.y) : y;
-
-		this.setLocation(x, y);
-	} else {
-		// Popup menu type
-		x = args.x;
-		y = args.y;
-		var newX = ((x + s.x) >= ws.x) ? x - (x + s.x - ws.x): x;
-		var newY = ((y + s.y) >= ws.y) ? y - (y + s.y - ws.y) : y;	
-		this.setLocation(newX, newY);	
-	}
+	// Popup menu type
+	var newX = ((x + s.x) >= ws.x) ? x - (x + s.x - ws.x): x;
+	var newY = ((y + s.y) >= ws.y) ? y - (y + s.y - ws.y) : y;	
+	this.setLocation(newX, newY);	
 
 	// Hide the tooltip
 	var tooltip = this.shell.getToolTip();

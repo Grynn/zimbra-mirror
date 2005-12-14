@@ -321,15 +321,41 @@ DwtButton.prototype._toggleMenu =
 function () {
 	if (this._shouldToggleMenu){
 		if (!this._menu.isPoppedup()){
-			this._menu.popup();
+			this._popupMenu();
 			this._menuUp = true;
 		} else {
 			this._menu.popdown();
 			this._menuUp = false;
 		}
 	} else {
-		this._menu.popup();
+		this._popupMenu();
 	}
+};
+
+DwtButton.prototype._popupMenu =
+function() {
+	var menu = this.getMenu();
+	var p = menu.parent;
+	var pb = p.getBounds();
+	var ws = menu.shell.getSize();
+	var s = menu.getSize();
+	var x;
+	var y;
+	var vBorder;
+	var hBorder;
+	var pHtmlElement = p.getHtmlElement();
+	// since buttons are often absolutely positioned, and menus aren't, we need x,y relative to window
+	var ptw = Dwt.toWindow(pHtmlElement, 0, 0);
+	vBorder = (pHtmlElement.style.borderLeftWidth == "") ? 0 : parseInt(pHtmlElement.style.borderLeftWidth);
+	x = ptw.x + vBorder;
+	hBorder = (pHtmlElement.style.borderTopWidth == "") ? 0 : parseInt(pHtmlElement.style.borderTopWidth);
+	hBorder += (pHtmlElement.style.borderBottomWidth == "") ? 0 : parseInt(pHtmlElement.style.borderBottonWidth);
+	y = ptw.y + pb.height + hBorder;
+	x = ((x + s.x) >= ws.x) ? x - (x + s.x - ws.x): x;
+	y = ((y + s.y) >= ws.y) ? y - (y + s.y - ws.y) : y;
+
+	//this.setLocation(x, y);
+	menu.popup(0, x, y);
 };
 
 // Activates the button.
@@ -477,8 +503,7 @@ function(ev) {
 		DwtEventManager.notifyListeners(DwtEvent.ONMOUSEDOWN, mouseEv);
 
 		if (obj._menu instanceof AjxCallback) {
-			var menu = obj.getMenu();
-			menu.popup();
+			obj._popupMenu();
 		}	
 
 		if (obj._dropDownEvtMgr.isListenerRegistered(DwtEvent.SELECTION)) {

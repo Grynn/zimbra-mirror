@@ -454,7 +454,39 @@ function(ev) {
 DwtMenuItem.prototype._popupMenu =
 function(delay) {
 	var menu = this.getMenu();
-	menu.popup(delay);
+	var pp = this.parent.parent;
+	var pb = this.getBounds();
+	var ws = menu.shell.getSize();
+	var s = menu.getSize();
+	var x;
+	var y;
+	var vBorder;
+	var hBorder;
+	var ppHtmlElement = pp.getHtmlElement();
+	if (pp._style == DwtMenu.BAR_STYLE) {
+		vBorder = (ppHtmlElement.style.borderLeftWidth == "") ? 0 : parseInt(ppHtmlElement.style.borderLeftWidth);
+		x = pb.x + vBorder;
+		hBorder = (ppHtmlElement.style.borderTopWidth == "") ? 0 : parseInt(ppHtmlElement.style.borderTopWidth);
+		hBorder += (ppHtmlElement.style.borderBottomWidth == "") ? 0 : parseInt(ppHtmlElement.style.borderBottonWidth);
+		y = pb.y + pb.height + hBorder;		
+		x = ((x + s.x) >= ws.x) ? x - (x + s.x - ws.x): x;
+		y = ((y + s.y) >= ws.y) ? y - (y + s.y - ws.y) : y;
+	} else { // Drop Down
+		vBorder = (ppHtmlElement.style.borderLeftWidth == "") ? 0 : parseInt(ppHtmlElement.style.borderLeftWidth);
+		vBorder += (ppHtmlElement.style.borderRightWidth == "") ? 0 : parseInt(ppHtmlElement.style.borderRightWidth);
+		x = pb.x + pb.width + vBorder;
+		hBorder = (ppHtmlElement.style.borderTopWidth == "") ? 0 : parseInt(ppHtmlElement.style.borderTopWidth);
+		y = pb.y + hBorder;
+		x = ((x + s.x) >= ws.x) ? pb.x - s.x - vBorder: x;
+		y = ((y + s.y) >= ws.y) ? y - (y + s.y - ws.y) : y;
+	}
+	//this.setLocation(x, y);
+
+	// So the popup menu knows which operation caused it to appear
+	var opId = this.getData(ZmOperation.KEY_ID);
+	menu.setData(ZmOperation.KEY_ID, opId);
+
+	menu.popup(delay, x, y);
 };
 
 DwtMenuItem.prototype._popdownMenu =
@@ -488,7 +520,12 @@ function() {
 
 DwtMenuItem.prototype._mouseOverListener = 
 function(ev) {
-	this.parent.popup();
+	if (this.parent.__selectedId != this._htmlElId && this._menu) {
+		// NOTE: This ensures menu is repositioned if used by more than one item
+		this._deselect(0);
+	}
+	this.parent.__selectedId = this._htmlElId;
+	//this.parent.popup(); // REVISIT: Why does a rollover popup the parent?
 	if (this._style == DwtMenuItem.SEPARATOR_STYLE)
 		return;
 	var activeItem = this.parent._getActiveItem();
@@ -509,7 +546,7 @@ function(ev) {
 		if (activeItem)
 			activeItem._deselect(0);
 		if (activeItem && this._menu) {
-			this._popupMenu();
+			this._popupMenu(0);
 			this.setSelectedStyle();
 		} else {
 			this.setSelectedStyle()

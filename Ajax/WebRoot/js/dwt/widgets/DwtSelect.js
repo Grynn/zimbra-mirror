@@ -573,3 +573,34 @@ DwtSelectOption.prototype.getIdentifier =
 function() {
 	return this._internalObjectId;
 };
+
+DwtSelect.prototype._popupMenu =
+function() {
+	var menu = this.getMenu();
+	var p = menu.parent;
+	var pb = p.getBounds();
+	var ws = menu.shell.getSize();
+	var s = menu.getSize();
+	var x;
+	var y;
+	var vBorder;
+	var hBorder;
+	var pHtmlElement = p.getHtmlElement();
+	// since buttons are often absolutely positioned, and menus aren't, we need x,y relative to window
+	var ptw = Dwt.toWindow(pHtmlElement, 0, 0);
+	vBorder = (pHtmlElement.style.borderLeftWidth == "") ? 0 : parseInt(pHtmlElement.style.borderLeftWidth);
+	x = pb.x + vBorder;
+	hBorder = (pHtmlElement.style.borderTopWidth == "") ? 0 : parseInt(pHtmlElement.style.borderTopWidth);
+	hBorder += (pHtmlElement.style.borderBottomWidth == "") ? 0 : parseInt(pHtmlElement.style.borderBottonWidth);
+	y = pb.y + pb.height + hBorder;
+	x = ((x + s.x) >= (ws.x - 5 )) ? x - (x + s.x - ws.x): x;
+	if ( (y + s.y) >= (ws.y - 5 )) {
+		var myEl = menu.getHtmlElement();
+		myEl.style.height = ws.y - y - 30;
+		myEl.style.overflow = "auto";
+	}
+	//y = ((y + s.y) >= (ws.y - 30 )) ? y - (y + s.y - ws.y) : y;
+
+	//this.setLocation(x, y);
+	menu.popup(0, x, y);
+};
