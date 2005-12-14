@@ -1,13 +1,16 @@
 <zimlet name="com_zimbra_ymaps" version="1.0" description="Yahoo Maps">
 	<include>http://api.maps.yahoo.com/ajaxymap?v=2.0&amp;appid=ZimbraMail</include>
-	<include>ZmYAddressObjectHandler.js</include>
-	<contentObject>
+	<include>ymaps.js</include>
+	<resource>blank_pixel.gif</resource>
+	<handlerObject>Com_Zimbra_YMaps</handlerObject>
+	
+	<contentObject type="address">
 		<matchOn>
-			<regex>/[\w]{3,}([A-Za-z]\.)?([ \w]*\#\d+)?(\r\n| )[ \w]{3,}\x20[A-Za-z]{2}\x20\d{5}(-\d{4})?\b/ig</regex>
+			<regex>[\w]{3,}([A-Za-z]\.)?([ \w]*\#\d+)?(\r\n| )[ \w]{3,}\x20[A-Za-z]{2}\x20\d{5}(-\d{4})?\b</regex>
 		</matchOn>
 		<onClick>
  		    <canvas style="window"/>
-			<actionUrl method="get" target="http://maps.yahoo.com/beta/#maxp=search&amp;q1=${objectContent}" />
+			<actionUrl target="http://maps.yahoo.com/beta/#maxp=search&amp;q1=${objectContent}"/>
 		</onClick>
 	</contentObject>
 </zimlet>

@@ -1,0 +1,5 @@
+<zimletConfig name="com_zimbra_amzn" version="1.0">
+  <global>
+    <property name="allowedDomains">*.liquidsys.com,*.zimbra.com,*.amazon.com</property>
+  </global>
+</zimletConfig>

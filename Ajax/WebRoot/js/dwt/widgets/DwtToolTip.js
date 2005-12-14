@@ -53,14 +53,19 @@ function() {
 }
 
 DwtToolTip.prototype.setContent =
-function(content) {
+function(content, setInnerHTML) {
 	this._content = content;
+	if(setInnerHTML) {
+		this._div.innerHTML = this._borderStart + this._content + this._borderEnd;
+	}
 }
 	
 DwtToolTip.prototype.popup = 
-function(x, y) {
+function(x, y, skipInnerHTML) {
 	if (this._content != null) {
-		this._div.innerHTML = this._borderStart + this._content + this._borderEnd;
+		if(!skipInnerHTML) {
+			this._div.innerHTML = this._borderStart + this._content + this._borderEnd;
+		}
 
 		var element = this._div;
 		var baseId = "tooltip";
