@@ -1,8 +1,12 @@
 <zimlet name="com_zimbra_url" version="1.0" description="URL">
+	<include>url.js</include>
+	<resource>blank_pixel.gif</resource>
+	<handlerObject>Com_Zimbra_Url</handlerObject>
+
 	<serverExtension hasKeyword="url" extensionClass="com.zimbra.cs.zimlet.handler.URLHandler"/>
-	<contentObject>
+	<contentObject type="url">
 		<matchOn>
-			<regex>/((telnet:)|((https?|ftp|gopher|news|file):\/\/)|(www\.[\w\.\_\-]+))[^\s\xA0\(\)\&lt;\>\[\]\{\}\'\"]*/ig</regex>
+			<regex attrs="ig">((telnet:)|((https?|ftp|gopher|news|file):\/\/)|(www\.[\w\.\_\-]+))[^\s\xA0\(\)\&lt;\>\[\]\{\}\'\"]*</regex>
 		</matchOn>
 
 		<onClick>

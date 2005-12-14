@@ -25,42 +25,28 @@
 
 //////////////////////////////////////////////////////////////
 //  Amazon Zimlet.  Provides hovers for ISBN numbers.       //
-//  @author Kevin Henrikson, <kevinh@zimbra.com>            //
+//  @author Kevin Henrikson                                 //
 //////////////////////////////////////////////////////////////
 
 function Com_Zimbra_Amzn(appCtxt) {
-	ZmZimletBase.call(this, appCtxt, "books");
+	ZmZimletBase.call(this, appCtxt, this.getType());
 	// Pre-load placeholder image
-	(new Image()).src = Com_Zimbra_Amzn.BLANKGIF;
+	(new Image()).src = this.getResource('blank_pixel.gif');
 }
 
 Com_Zimbra_Amzn.prototype = new ZmZimletBase();
 Com_Zimbra_Amzn.prototype.constructor = Com_Zimbra_Amzn;
 
-// Address regex
-//Com_Zimbra_Amzn.ADDRESS_RE = this._zimletContext.contentObject.matchOn[0].regex[0]._content;
-Com_Zimbra_Amzn.RE = /ISBN\x20\d{1,5}[ -]?\d{1,7}[ -]?\d{1,6}[ -]?(\d|X)\b/ig;
-
 // AMZN Service URL
 Com_Zimbra_Amzn.URL = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=1582H242YD2K3JEANR82&Operation=ItemSearch&SearchIndex=Books&ResponseGroup=Medium&Keywords=";
 
-// Blank GIF
-Com_Zimbra_Amzn.BLANKGIF = "/service/zimlet/com_zimbra_amzn/blank_pixel.gif";
-//Com_Zimbra_Amzn.BLANKGIF = this.getResource('blank_pixel.gif');
-
 Com_Zimbra_Amzn.CACHE = new Array();
-
-Com_Zimbra_Amzn.prototype.match =
-function(content, startIndex) {
-	Com_Zimbra_Amzn.RE.lastIndex = startIndex;
-	return Com_Zimbra_Amzn.RE.exec(content);
-};
 
 Com_Zimbra_Amzn.prototype.toolTipPoppedUp =
 function(spanElement, obj, context, canvas) {
-	canvas.innerHTML = '<img width="110" height="170" id="' + ZmZimletBase.encodeId(obj + "_AIMG") + '" src="'+Com_Zimbra_Amzn.BLANKGIF+'"/><div style="width:110px;" id="'+ZmZimletBase.encodeId(obj+"_ATXT")+'"> <br/> </div>';
+	canvas.innerHTML = '<img width="110" height="170" id="' + ZmZimletBase.encodeId(obj + "_AIMG") + '" src="'+this.getResource('blank_pixel.gif')+'"/><div style="width:110px;" id="'+ZmZimletBase.encodeId(obj+"_ATXT")+'"> <br/> </div>';
 	if (Com_Zimbra_Amzn.CACHE[obj]) {
-		Com_Zimbra_Amzn.displayBook(Com_Zimbra_Amzn.CACHE[obj].Image, Com_Zimbra_Amzn.CACHE[obj].Book, obj);
+		Com_Zimbra_Amzn._displayBook(Com_Zimbra_Amzn.CACHE[obj].Image, Com_Zimbra_Amzn.CACHE[obj].Book, obj);
 	} else {
 		var request = new AjxRpcRequest("amazon");
 		var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(Com_Zimbra_Amzn.URL + obj.replace(/[-A-Z ]/ig,''));
@@ -68,7 +54,6 @@ function(spanElement, obj, context, canvas) {
 		request.invoke(null, url, null, new AjxCallback(this, Com_Zimbra_Amzn._callback, obj), true);
 	}	
 };
-
 
 // XXX need support for regex's on sub-var's
 Com_Zimbra_Amzn.prototype._getHtmlContent = 
@@ -80,7 +65,7 @@ function(html, idx, obj, context) {
 	return idx;
 };
 
-Com_Zimbra_Amzn.displayBook = 
+Com_Zimbra_Amzn._displayBook = 
 function(imageInfo, bookInfo, obj) {
 	var imgEl = document.getElementById(ZmZimletBase.encodeId(obj + "_AIMG"));
 	var txtEl = document.getElementById(ZmZimletBase.encodeId(obj + "_ATXT"));
@@ -108,8 +93,8 @@ function(args) {
 		bookInfo.title = result.Items.Item.ItemAttributes.Title;
 		bookInfo.author = result.Items.Item.ItemAttributes.Author;
 		bookInfo.price = result.Items.Item.ItemAttributes.ListPrice.FormattedPrice;
-		Com_Zimbra_Amzn.displayBook(result.Items.Item.ImageSets.ImageSet.MediumImage, bookInfo, args[0]);
+		Com_Zimbra_Amzn._displayBook(result.Items.Item.ImageSets.ImageSet.MediumImage, bookInfo, args[0]);
 	} else {
-		Com_Zimbra_Amzn.displayBook(null, null, args[0]);
+		Com_Zimbra_Amzn._displayBook(null, null, args[0]);
 	}
 };

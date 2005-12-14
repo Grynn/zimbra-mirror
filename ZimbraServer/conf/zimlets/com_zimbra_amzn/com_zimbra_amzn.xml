@@ -5,7 +5,7 @@
 	
 	<contentObject type="isbn">
 		<matchOn>
-			<regex>ISBN\x20\d{1,5}[ -]?\d{1,7}[ -]?\d{1,6}[ -]?(\d|X)\b</regex>
+			<regex attrs="ig">ISBN\x20\d{1,5}[ -]?\d{1,7}[ -]?\d{1,6}[ -]?(\d|X)\b</regex>
 		</matchOn>
 		<onClick>
  		    <canvas style="window"/>
