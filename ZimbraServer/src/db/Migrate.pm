@@ -28,7 +28,7 @@ use strict;
 
 #############
 
-my $MYSQL = "/opt/zimbra/bin/mysql";
+my $MYSQL = "mysql";
 my $LOGMYSQL = "/opt/zimbra/bin/logmysql";
 my $DB_USER = "zimbra";
 my $DB_PASSWORD = "zimbra";
@@ -45,6 +45,7 @@ if ($^O !~ /MSWin/i) {
     chomp $DB_USER;
     $LOGGER_DB_PASSWORD = `$ZMLOCALCONFIG -s -m nokey zimbra_logger_mysql_password`;
     chomp $LOGGER_DB_PASSWORD;
+    $MYSQL = "/opt/zimbra/bin/mysql";
 }
 
 sub getSchemaVersion {
