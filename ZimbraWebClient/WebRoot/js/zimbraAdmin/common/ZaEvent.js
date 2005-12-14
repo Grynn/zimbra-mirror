@@ -37,7 +37,7 @@ function ZaEvent(type) {
 	this.type = type; //source type
 	this.event = null; //event type
 	this.source = null;
-	this._details = new Object();
+	this._details = null;
 }
 
 // Listener types
@@ -109,6 +109,8 @@ function(event, source) {
 */
 ZaEvent.prototype.setDetail =
 function(field, value) {
+	if(!this._details)
+		this._details = new Object();
 	this._details[field] = value;
 }
 
@@ -119,7 +121,10 @@ function(field, value) {
 */
 ZaEvent.prototype.getDetail =
 function(field) {
-	return this._details[field];
+	if(!this._details)
+		return null;
+	else
+		return this._details[field];
 }
 
 /**
