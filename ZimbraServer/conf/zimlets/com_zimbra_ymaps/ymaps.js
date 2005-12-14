@@ -57,7 +57,7 @@ function(content, startIndex) {
 };
 
 Com_Zimbra_YMaps.prototype.toolTipPoppedUp =
-function(spanElement, obj, canvas) {
+function(spanElement, obj, context, canvas) {
 	canvas.innerHTML = '<img width="345" height="245" id="'+ ZmZimletBase.encodeId(obj)+'" src="'+Com_Zimbra_YMaps.BLANKGIF+'"/>';
 	if (Com_Zimbra_YMaps.CACHE[obj+"img"]) {
 		Com_Zimbra_YMaps.displayImage(Com_Zimbra_YMaps.CACHE[obj+"img"], obj);

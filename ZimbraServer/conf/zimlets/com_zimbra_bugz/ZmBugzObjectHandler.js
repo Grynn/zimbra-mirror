@@ -25,13 +25,11 @@
 
 function ZmBugzObjectHandler(appCtxt) {
 	ZmZimletBase.call(this, appCtxt, ZmBugzObjectHandler.TYPE);
-};
+}
 
 ZmBugzObjectHandler.TYPE = "bugz";
 
-//ZmBugzObjectHandler.prototype = new ZmObjectHandler;
-ZmBugzObjectHandler.prototype = new ZmZimletBase;
-//ZmBugzObjectHandler.prototype.constructor = ZmBugzObjectHandler;
+ZmBugzObjectHandler.prototype = new ZmZimletBase();
 
 ZmBugzObjectHandler.bug_re = /\bbug(?:zilla)?:?\s*#?(\d+)\b/g;
 
@@ -45,17 +43,25 @@ ZmBugzObjectHandler.bug_items = new Array(
 	"version",      "Version",
 	"reporter",     "Reporter",
 	"assigned_to",  "Owner",
-	"short_desc",   "Description"
-);
+	"short_desc",   "Description");
 
 ZmBugzObjectHandler.prototype.match =
 function(line, startIndex) {
 	ZmBugzObjectHandler.bug_re.lastIndex = startIndex;
 	var match = ZmBugzObjectHandler.bug_re.exec(line);
-	if (match != null) {
+	if (match) {
 		match.context = match[1];
 	}
 	return match;
+};
+
+ZmBugzObjectHandler.prototype.toolTipPoppedUp =
+function(spanElement, obj, context, canvas) {
+	canvas.innerHTML = ZmBugzObjectHandler.generateTooltipText(context);
+	var request = new AjxRpcRequest("bugzilla");
+	var bug_url = this.getConfig("url")+context;
+	var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(bug_url);
+	request.invoke(null, url, null, new AjxCallback(this, ZmBugzObjectHandler._callback, context), true);
 };
 
 ZmBugzObjectHandler._callback =
@@ -85,17 +91,7 @@ function(obj) {
 	return ret;
 };
 
-ZmBugzObjectHandler.prototype.getToolTipText =
-function(obj, context) {
-	var request = new AjxRpcRequest("bugzilla");
-	var bug_url = this.getConfig("url")+context;
-	var url = "/service/proxy?target="+AjxStringUtil.urlEncode(bug_url);
-	request.invoke(null, url, null, new AjxCallback(this, ZmBugzObjectHandler._callback, context), true);
-	return ZmBugzObjectHandler.generateTooltipText(context);
-};
-
 ZmBugzObjectHandler.encodeId =
 function(obj, key) {
 	return "bugz"+obj+"_"+key;
 };
-

@@ -57,7 +57,7 @@ function(content, startIndex) {
 };
 
 Com_Zimbra_Amzn.prototype.toolTipPoppedUp =
-function(spanElement, obj, canvas) {
+function(spanElement, obj, context, canvas) {
 	canvas.innerHTML = '<img width="110" height="170" id="' + ZmZimletBase.encodeId(obj + "_AIMG") + '" src="'+Com_Zimbra_Amzn.BLANKGIF+'"/><div style="width:110px;" id="'+ZmZimletBase.encodeId(obj+"_ATXT")+'"> <br/> </div>';
 	if (Com_Zimbra_Amzn.CACHE[obj]) {
 		Com_Zimbra_Amzn.displayBook(Com_Zimbra_Amzn.CACHE[obj].Image, Com_Zimbra_Amzn.CACHE[obj].Book, obj);
@@ -83,10 +83,14 @@ function(html, idx, obj, context) {
 Com_Zimbra_Amzn.displayBook = 
 function(imageInfo, bookInfo, obj) {
 	var imgEl = document.getElementById(ZmZimletBase.encodeId(obj + "_AIMG"));
+	var txtEl = document.getElementById(ZmZimletBase.encodeId(obj + "_ATXT"));
+	if(!imageInfo || !bookInfo) {
+		txtEl.innerHTML = "<b><center>Error!</center></b>";
+		return;
+	}
 	imgEl.style.width = imageInfo.Width;
 	imgEl.style.height = imageInfo.Height;
 	imgEl.style.backgroundImage = "url("+imageInfo.URL+")";
-	var txtEl = document.getElementById(ZmZimletBase.encodeId(obj + "_ATXT"));
 	txtEl.style.width = imageInfo.Width;
 	txtEl.innerHTML = bookInfo.title +" by "+ bookInfo.author +" "+ bookInfo.price;
     if(!Com_Zimbra_Amzn.CACHE[obj]) {
@@ -100,8 +104,12 @@ Com_Zimbra_Amzn._callback =
 function(args) {
 	var result = AjxXmlDoc.createFromXml(args[1].text).toJSObject(true, false);
 	var bookInfo = new Object();
-	bookInfo.title = result.Items.Item.ItemAttributes.Title;
-	bookInfo.author = result.Items.Item.ItemAttributes.Author;
-	bookInfo.price = result.Items.Item.ItemAttributes.ListPrice.FormattedPrice;
-	Com_Zimbra_Amzn.displayBook(result.Items.Item.ImageSets.ImageSet.MediumImage, bookInfo, args[0]);
+	if(result.Items.Item.ImageSets && result.Items.Item.ItemAttributes) {
+		bookInfo.title = result.Items.Item.ItemAttributes.Title;
+		bookInfo.author = result.Items.Item.ItemAttributes.Author;
+		bookInfo.price = result.Items.Item.ItemAttributes.ListPrice.FormattedPrice;
+		Com_Zimbra_Amzn.displayBook(result.Items.Item.ImageSets.ImageSet.MediumImage, bookInfo, args[0]);
+	} else {
+		Com_Zimbra_Amzn.displayBook(null, null, args[0]);
+	}
 };
