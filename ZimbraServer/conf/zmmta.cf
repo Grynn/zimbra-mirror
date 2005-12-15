@@ -32,7 +32,9 @@ RESTART antispam mta
 SECTION mta
 	VAR zimbraMtaRestriction
 	VAR zimbraMtaBlockedExtension
+	VAR zimbraMtaRecipientDelimiter
 	REWRITE conf/postfix_header_checks.in conf/postfix_header_checks
+	POSTCONF recipient_delimiter	VAR zimbraMtaRecipientDelimiter
 	POSTCONF smtpd_sasl_auth_enable VAR zimbraMtaAuthEnabled
 	POSTCONF smtpd_tls_auth_only	VAR zimbraMtaTlsAuthOnly
 	POSTCONF disable_dns_lookups	VAR !zimbraMtaDnsLookupsEnabled	
