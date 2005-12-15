@@ -287,11 +287,21 @@ function(html) {
 };
 
 Dwt.getAttr = 
-function(htmlElement, attr) {
+function(htmlEl, attr, recursive) {
 	// test for tagName so we dont try to eval non-html elements (i.e. document)
-	return htmlElement && htmlElement.tagName
-		? (htmlElement.getAttribute(attr) || htmlElement[attr])
-		: null;
+	if (!recursive) {
+		return htmlEl && htmlEl.tagName
+			? (htmlEl.getAttribute(attr) || htmlEl[attr])
+			: null;
+	} else {
+		while (htmlEl) {
+			if (Dwt.getAttr(htmlEl, attr) != null) {
+				return htmlEl;
+			}
+			htmlEl = htmlEl.parentNode;
+		}
+		return null;
+	}
 };
 
 Dwt.getVisible =

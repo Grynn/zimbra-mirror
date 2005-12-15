@@ -70,10 +70,12 @@ function(items) {
 	}
 }
 
+/* Indicates that the underlying component has multiple sub-components */
 DwtDropTarget.prototype.markAsMultiple = 
 function() {
 	this._hasMultiple = true;
 };
+
 DwtDropTarget.prototype.hasMultipleTargets = 
 function () {
 	return this._hasMultiple;

@@ -70,3 +70,21 @@ function(htmlElement, cssPropName) {
 	}
 	return result;
 }
+
+DwtCssStyle.getComputedStyleObject = 
+function(htmlElement) {
+	if (htmlElement.ownerDocument == null) {
+		// IE5.5 does not suppoert ownerDocument
+		for(var parent = htmlElement.parentNode; parent.parentNode != null; parent = parent.parentNode);
+		var doc = parent;
+	} else {
+		var doc = htmlElement.ownerDocument;
+	}
+	
+	if (doc.defaultView && !AjxEnv.isSafari)
+		return doc.defaultView.getComputedStyle(htmlElement, "");
+	else if (htmlElement.currentStyle)
+		return htmlElement.currentStyle;
+	else if (htmlElement.style)
+		return htmlElement.style;
+}

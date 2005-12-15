@@ -81,7 +81,7 @@ function() {
 		this._table.align = "center";
 		this._table.width = "100%";
 	}
-		
+
 	this._row = this._table.insertRow(0);
 	this.getHtmlElement().appendChild(this._table);
 };
@@ -173,13 +173,32 @@ function(text) {
 			}
 			this._textCell = this._row.insertCell(idx);
 			this._textCell.className = this._enabled ? "Text" : "DisabledText";
-
+			if (this._textBackground)
+				this._textCell.style.backgroundColor = this._textBackground;
+			if (this._textForeground)
+				this._textCell.style.color = this._textForeground;
 			this._doAlign();
 			this._textCell.noWrap = true;
+			this._textCell.style.verticalAlign = "middle";
 			this._textCell.appendChild(this._text);
 		}
 	}
 }
+
+DwtLabel.prototype.setTextBackground =
+function(color) {
+	this._textBackground = color;
+	if (this._textCell)
+		this._textCell.style.backgroundColor = color;
+}
+
+DwtLabel.prototype.setTextForeground =
+function(color) {
+	this._textForeground = color;
+	if (this._textCell)
+		this._textCell.style.color = color;
+}
+
 
 DwtLabel.prototype.setAlign =
 function(alignStyle) {

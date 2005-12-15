@@ -24,8 +24,18 @@
 */
 
 
-// TODO - Be more thorough about checked whether setSelected() and setActioned()
-// actually did anything before doing notifying listeners
+/**
+* Creates a Tree widget.
+* @constructor
+* @class
+* This class implements a tree widget. Tree widgets may contain one or more DwtTreeItems.
+*
+* @author Ross Dargahi
+* @param parent		the parent widget
+* @param style 		tree style either: DwtTree.SINGLE_STYLE (single selction) or DwtTree.MULTI_STYLE (multiselection);
+* @param className	CSS class
+* @param posStyle	positioning style (absolute, static, or relative)
+*/
 function DwtTree(parent, style, className, posStyle) {
 
 	if (arguments.length == 0) return;

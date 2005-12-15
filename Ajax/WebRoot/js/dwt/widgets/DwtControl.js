@@ -272,15 +272,17 @@ function(ev) {
 					if (destDwtObj._dropTarget._dragEnter(
 										obj._dragOp, 
 										destDwtObj, 
-										obj._dragSource._getData(), ev)) {
+										obj._dragSource._getData(), mouseEv)) {
 
 						obj._setDnDIconState(true);
 						obj._dropAllowed = true;
-						destDwtObj._dragEnter();
+						destDwtObj._dragEnter(mouseEv);
 					} else {
-						obj._setDnDIconState(false);;
+						obj._setDnDIconState(false);
 						obj._dropAllowed = false;
 					}
+				} else if (obj._dropAllowed) {
+					destDwtObj._dragOver(mouseEv);
 				}
 			} else {
 				obj._setDnDIconState(false);
@@ -290,7 +292,7 @@ function(ev) {
 				&& obj._lastDestDwtObj._dropTarget 
 				&& obj._lastDestDwtObj != obj) {
 
-				obj._lastDestDwtObj._dragLeave();
+				obj._lastDestDwtObj._dragLeave(mouseEv);
 				obj._lastDestDwtObj._dropTarget._dragLeave();
 			}
 			
@@ -319,7 +321,7 @@ function(ev) {
 	var obj = captureObj ? captureObj.targetObj : DwtUiEvent.getDwtObjFromEvent(ev);
 	if (!obj) return false;
 
-//DND
+	//DND
 	if (obj._dndHoverActionId != -1) {
 		AjxTimedAction.cancelAction(obj._dndHoverActionId);
 		obj._dndHoverActionId = -1;
@@ -339,8 +341,8 @@ function(ev) {
 			var destDwtObj = mouseEv.dwtObj;
 			if (destDwtObj != null && destDwtObj._dropTarget != null && 
 				obj._dropAllowed && destDwtObj != obj) {
-				destDwtObj._drop();
-				destDwtObj._dropTarget._drop(obj._dragSource._getData(), ev);
+				destDwtObj._drop(mouseEv);
+				destDwtObj._dropTarget._drop(obj._dragSource._getData(), mouseEv);
 				obj._dragSource._endDrag();
 				obj._destroyDnDIcon(obj._dndIcon);
 				obj._dragging = DwtControl._NO_DRAG;
@@ -1028,24 +1030,24 @@ function(icon) {
  * _drop is called when the item is dropped on the target.
  */
 DwtControl.prototype._dragEnter =
-function() {
+function(ev) {
 }
 
 DwtControl.prototype._dragOver =
-function() {
+function(ev) {
 }
 
 DwtControl.prototype._dragHover =
-function() {
+function(ev) {
 }
 
 
 DwtControl.prototype._dragLeave =
-function() {
+function(ev) {
 }
 
 DwtControl.prototype._drop =
-function() {
+function(ev) {
 }
 
 DwtControl.prototype._initCtrl = 

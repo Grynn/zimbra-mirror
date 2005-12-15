@@ -775,6 +775,20 @@ function(callback) {
 	this._mouseOverDayCB = callback;
 }
 
+/**
+ * This method will return the date value for the last cell that the most recent Dnd operation occured over.
+ * Typically it will be called by a DwtDropTarget listener when an item is dropped onto the mini calendar
+ */
+DwtCalendar.prototype.getDndDate =
+function() {
+	var dayCell = this._lastDndCell;
+	if (dayCell) {
+		return new Date(dayCell._year, dayCell._month, dayCell._day);
+	} else {
+		return null;
+	}
+}
+
 // Temp date used for callback in mouseOverListener
 DwtCalendar._tmpDate = new Date();
 DwtCalendar._tmpDate.setHours(0, 0, 0, 0);
@@ -973,3 +987,27 @@ DwtCalendar.getMonthFormatter = function() {
 	}
 	return DwtCalendar._monthFormatter;
 };
+
+DwtCalendar.prototype._dragEnter =
+function(ev) {
+}
+
+DwtCalendar.prototype._dragHover =
+function(ev) {
+}
+
+DwtCalendar.prototype._dragOver =
+function(ev) {
+	var target = ev.target;
+	if (target.id.charAt(0) == 'c') {
+		this._setClassName(target, DwtCalendar._ACTIVATED);
+		this._lastDndCell = target;
+	} else {
+		this._lastDndCell = null;
+	}
+}
+
+DwtCalendar.prototype._dragLeave =
+function(ev) {
+}
+

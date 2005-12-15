@@ -23,8 +23,21 @@
 * ***** END LICENSE BLOCK *****
 */
 
-
-// NOTE: Where you see the word "deferred", think "uninitialized"
+/**
+* Creates a Tree Item.
+* @constructor
+* @class
+* This class implements a tree item widget.
+*
+* @author Ross Dargahi
+* @param parent		the parent widget
+* @param index		location in siblings (optional)
+* @param text 		label text for the tree item (optional);
+* @param imageInfo	icon for the tree item (optional)
+* @param deferred	if true, then the UI elements of the item are not rendered until needed (i.e. when item becomes visible)
+* @param className	CSS class (optional)
+* @param posStyle	positioning style (absolute, static, or relative - optional defaults to static)
+*/
 function DwtTreeItem(parent, index, text, imageInfo, deferred, className, posStyle) {
 
 	if (parent instanceof DwtTree)
