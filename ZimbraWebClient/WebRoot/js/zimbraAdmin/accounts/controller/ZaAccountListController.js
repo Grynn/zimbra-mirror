@@ -181,8 +181,6 @@ function () {
 ZaAccountListController.prototype._setQuery = 
 function (query) {
 	this._currentQuery = query;
-	searchObj = ZaSearch.getSearchFromQuery(query);
-//	this._searchField.setObject(searchObj);
 }
 
 ZaAccountListController.prototype.getQuery = 
@@ -344,36 +342,6 @@ function () {
 	return this._toolBar;	
 }
 
-
-ZaAccountListController.prototype.moveAlias = 
-function() {
-	//remove alias
-	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getLast()){
-		var alias = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getLast());
-		//make sure this is an alias
-		if(alias.type!=ZaItem.ALIAS) 
-			return;
-		
-		var name = alias.name;
-		try {
-			alias.remove();
-		} catch (ex) {
-			this._handleException(ex, "ZaAccountListController._moveAliasCallback", null, false);
-			return;
-		}
-		try {
-			//get destination account		
-			var srch = this._moveAliasDialog.getObject();
-			if(srch[ZaSearch.A_selected] && srch[ZaSearch.A_selected].addAlias!=null) {
-				//add alias
-				srch[ZaSearch.A_selected].addAlias(name);
-			}
-//			this._moveAliasDialog.popdown();
-		} catch (ex) {
-			this._handleException(ex, "ZaAccountListController._moveAliasCallback", null, false);
-		}
-	}	
-}
 
 /**
 * Launches mail app to view user's email
