@@ -168,7 +168,7 @@ function() {
 ZaApp.prototype.getDistributionListController = 
 function (domain) {
 	if (this._controllers[ZaZimbraAdmin._DL_VIEW] == null) {
-		this._controllers[ZaZimbraAdmin._DL_VIEW] = new ZaDLController(this._appCtxt, this._container, this, this, domain);
+		this._controllers[ZaZimbraAdmin._DL_VIEW] = new ZaDLController(this._appCtxt, this._container, this);
 	}
 	return this._controllers[ZaZimbraAdmin._DL_VIEW];
 };

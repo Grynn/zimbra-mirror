@@ -27,9 +27,8 @@
  * @author EMC
  * Distribution list controller 
  */
-function ZaDLController (appCtxt, container, app, domain) {
+function ZaDLController (appCtxt, container, app) {
 	ZaController.call(this, appCtxt, container, app, "ZaCosListController");
-	this._domain = domain;
 	this._createListeners();
 	this._createToolbars();
 	this.__internalId = AjxCore.assignId(this);
@@ -325,8 +324,7 @@ ZaDLController.prototype._searchListener = function (event, formItem) {
 	var form = formItem.getForm();
 	var searchText = form.getItemsById('searchText')[0].getElement().value;
 	try {
-		var searchQuery = new ZaSearchQuery(ZaSearch.getSearchByNameQuery(searchText), [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS], 
-											this._domain, false);
+		var searchQuery = new ZaSearchQuery(ZaSearch.getSearchByNameQuery(searchText), [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS],false);
 		this._search(searchQuery, 1);
 	} catch (ex) {
 		// Only restart on error if we are not initialized and it isn't a parse error

@@ -120,7 +120,7 @@ function(query, types, pagenum, orderby, isascending, app, attrs, limit, domainN
 
 ZaSearch.searchByDomain = 
 function (domainName, types, pagenum, orderby, isascending, app, attrs, limit) {
-	return ZaSearch.search("", types, pagesnum, orderby, isascending, app, attrs, limit, domainName);
+	return ZaSearch.search("", types, pagenum, orderby, isascending, app, attrs, limit, domainName);
 }
 
 
