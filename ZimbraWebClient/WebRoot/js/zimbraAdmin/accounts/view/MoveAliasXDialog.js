@@ -29,49 +29,53 @@
 * @author Greg Solovyev
 * @param parent
 * param app
-* param alias
 **/
-function MoveAliasXDialog(parent,  app, alias) {
+function MoveAliasXDialog(parent,  app, w, h) {
 	if (arguments.length == 0) return;
-	
 	this._app = app;
-	this._alias = null;		
-	ZaXWizardDialog.call(this, parent, null, ZaMsg.MoveAlias_Title, "500px", "300px");
-
+	this._standardButtons = [DwtDialog.CANCEL_BUTTON];
+	var helpButton = new DwtDialog_ButtonDescriptor(ZaXWizardDialog.HELP_BUTTON, ZaMsg.TBB_Help, DwtDialog.ALIGN_LEFT, new AjxCallback(this, this._helpButtonListener));
+	var moveButton = new DwtDialog_ButtonDescriptor(MoveAliasXDialog.MOVE_BUTTON, ZaMsg._move, DwtDialog.ALIGN_RIGHT, new AjxCallback(this, this.doMove));	
+	var closeButton = new DwtDialog_ButtonDescriptor(MoveAliasXDialog.CLOSE_BUTTON, AjxMsg._close, DwtDialog.ALIGN_RIGHT, new AjxCallback(this, this.closeMe));		
+	this._extraButtons = [helpButton,moveButton,closeButton];	
+	ZaXDialog.call(this, parent, app, null, ZaMsg.MoveAlias_Title, null, null);
 	this._containedObject = new ZaSearch();
-
 	this.initForm(ZaSearch.myXModel,this.getMyXForm());
 }
 
-MoveAliasXDialog.prototype = new ZaXWizardDialog;
+MoveAliasXDialog.prototype = new ZaXDialog;
 MoveAliasXDialog.prototype.constructor = MoveAliasXDialog;
 MoveAliasXDialog.resultChoices = new XFormChoices([], XFormChoices.OBJECT_REFERENCE_LIST, null, "name");
-
+MoveAliasXDialog.MOVE_BUTTON=12;
+MoveAliasXDialog.CLOSE_BUTTON = 13;
 
 MoveAliasXDialog.prototype.popup = 
 function (loc) {
 	ZaXWizardDialog.prototype.popup.call(this, loc);
 	this._containedObject[ZaModel.currentStep] = 1;	
 	this._localXForm.setInstance(this._containedObject);				
-	this._button[DwtWizardDialog.NEXT_BUTTON].setText(ZaMsg._move);
-	this._button[DwtWizardDialog.FINISH_BUTTON].setText(AjxMsg._close);
-	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);		
-	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);	
+	this._button[MoveAliasXDialog.MOVE_BUTTON].setEnabled(true);		
+	this._button[MoveAliasXDialog.CLOSE_BUTTON].setEnabled(false);	
 }
 
-MoveAliasXDialog.prototype.goPrev =
-function () {
-	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
-	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);	
-	this.goPage(1);
+
+MoveAliasXDialog.prototype.closeMe = 
+function() {
+	this.popdown();	
 }
 
-MoveAliasXDialog.prototype.goNext =
+MoveAliasXDialog.prototype.doMove =
 function () {
-	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
-	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+	this._button[MoveAliasXDialog.MOVE_BUTTON].setEnabled(false);
+	this._button[MoveAliasXDialog.CLOSE_BUTTON].setEnabled(true);
 	if(this.moveAlias())
 		this.goPage(2);
+}
+
+MoveAliasXDialog.prototype.goPage = 
+function(pageKey) {
+	this._containedObject[ZaModel.currentStep] = pageKey;
+	this._localXForm.refresh(); //run update script
 }
 
 MoveAliasXDialog.prototype.setAlias = 
