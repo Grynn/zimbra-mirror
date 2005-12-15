@@ -704,8 +704,9 @@ DwtPropertyEditor._prop_functions = {
 	},
 
 	_onDwtInputFieldValidated : function(params) {
-		var value     = params[0];
+		// var field     = params[0];
 		var validated = params[1];
+		var value     = params[2];
 		if (validated)
 			this._setValue(value);
 	},
