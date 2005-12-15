@@ -37,7 +37,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class UserRedirectServlet extends HttpServlet
 {
-    public static final String SERVICE_URL = "/service/user"; 
+    public static final String SERVICE_URL = "/service/home"; 
     
     public void doGet (HttpServletRequest req, HttpServletResponse resp) throws IOException 
     {
