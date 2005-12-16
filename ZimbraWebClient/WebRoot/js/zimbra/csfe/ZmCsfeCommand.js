@@ -304,11 +304,7 @@ function(response, asyncMode) {
 * @param response	[Object]		RPC response object
 */
 ZmCsfeCommand.prototype._runCallback =
-function(args) {
-
-	var callback	= args[0];
-	var result		= args[1];
-
+function(callback, result) {
 	var response;
 	if (result instanceof ZmCsfeResult) {
 		response = result; // we already got an exception and packaged it

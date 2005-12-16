@@ -82,9 +82,7 @@ function(url, windowName, windowArgs, openedCallback, callingObject, asyncCallba
 	} else {
 		newWin = window.open("", windowName, windowArgs);
 		if (openedCallback) {
-			var ta = new AjxTimedAction();
-			ta.obj = callingObject;
-			ta.method = openedCallback;
+			var ta = new AjxTimedAction(callingObject, openedCallback);
 			AjxTimedAction.scheduleAction(ta, 0);
 		}
 	}

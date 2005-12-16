@@ -85,13 +85,9 @@ function DwtMenu(parent, style, className, posStyle, dialog) {
 		DwtMenu._activeMenuIds.add(htmlElement.id);
 		this._isPoppedup = true;
  	}
-	this._popdownAction = new AjxTimedAction();
-	this._popdownAction.method = DwtMenu.prototype._doPopdown;
-	this._popdownAction.obj = this;
+	this._popdownAction = new AjxTimedAction(this, this._doPopdown);
 	this._popdownActionId = -1;
-	this._popupAction = new AjxTimedAction();
-	this._popupAction.method = DwtMenu.prototype._doPopup;
-	this._popupAction.obj = this;
+	this._popupAction = new AjxTimedAction(this, this._doPopup);
 	this._popupActionId = -1;
  	if ((this.parent instanceof DwtMenuItem && this.parent.parent._style == DwtMenu.BAR_STYLE)
 		|| !(this.parent instanceof DwtMenuItem)){
@@ -189,9 +185,7 @@ function(msec, x, y) {
 		if (!msec) {
 			this._doPopup(x, y);
 		} else {
-			this._popupAction.params.removeAll();
-			this._popupAction.params.add(x);
-			this._popupAction.params.add(y);
+			this._popupAction.args = [x, y];
 			this._popupActionId = AjxTimedAction.scheduleAction(this._popupAction, msec);
 		}
 	}

@@ -233,11 +233,7 @@ function(content) {
 			this._pendingContent = content ? ((content instanceof AjxVector) ? content[0] : content) : "";
 			this._setContentOnTimer();
 		} else {
-			var ta = new AjxTimedAction();
-			ta.obj = this;
-			ta.method = DwtHtmlEditor.prototype.setContent;
-			ta.params = new AjxVector();
-			ta.params.add(content);
+			var ta = new AjxTimedAction(this, this.setContent, [content]);
 			AjxTimedAction.scheduleAction(ta, DwtHtmlEditor._INITDELAY + 1);
 		}
 	} else {
@@ -346,7 +342,7 @@ function(mode, convert) {
 		Dwt.setVisible(iFrame, true);
 		// XXX: mozilla hack
 		if (AjxEnv.isGeckoBased)
-			this._enableDesignMode([this._getIframeDoc()]);
+			this._enableDesignMode(this._getIframeDoc());
 	} else {
 		var textArea = this._textAreaId != null
 			? document.getElementById(this._textAreaId)
@@ -483,16 +479,12 @@ function(content) {
 	this._stateEvent = new DwtHtmlEditorStateEvent();
 	this._stateEvent.dwtObj = this;
 	
-	this._updateStateAction = new AjxTimedAction();
-	this._updateStateAction.obj = this;
-	this._updateStateAction.method = DwtHtmlEditor.prototype._updateState;
+	this._updateStateAction = new AjxTimedAction(this, this._updateState);
 
 	this._pendingContent = content || "";
 	
 	// IE can sometimes race ahead and execute script before the underlying component is created
-	var timedAction = new AjxTimedAction();
-	timedAction.obj = this;
-	timedAction.method = DwtHtmlEditor.prototype._finishHtmlModeInit;
+	var timedAction = new AjxTimedAction(this, this._finishHtmlModeInit);
 	AjxTimedAction.scheduleAction(timedAction, DwtHtmlEditor._INITDELAY);
 	
 	return iFrame;
@@ -584,7 +576,7 @@ function(params) {
 		return;
 	}
 	
-	this._enableDesignMode([doc]);
+	this._enableDesignMode(doc);
 	this._registerEditorEventHandlers(document.getElementById(this._iFrameId), doc);
 	this.focus();
 	this._updateState();
@@ -827,26 +819,22 @@ function() {
 			this.notifyListeners(DwtEvent.STATE_CHANGE, ev);
 	} catch (ex) {
 		if (AjxEnv.isGeckoBased) {
-			this._enableDesignMode([iFrameDoc]);
+			this._enableDesignMode(iFrameDoc);
 		}
 	}
 }
 
 DwtHtmlEditor.prototype._enableDesignMode =
-function(params) {
-	if (!params) return;
+function(iFrameDoc) {
+	if (!iFrameDoc) return;
 	
-	var iFrameDoc = params[0];
 	try {
 		//doc.body.contentEditable = true; <= IE
 		iFrameDoc.designMode = "on";
 	} catch (ex) {
 		//Gecko may take some time to enable design mode..
 		if (AjxEnv.isGeckoBased) {
-			var ta = new AjxTimedAction();
-			ta.obj = this;
-			ta.method = this._enableDesignMode;
-			ta.params.add(iFrameDoc);
+			var ta = new AjxTimedAction(this, this._enableDesignMode, [iFrameDoc]);
 			AjxTimedAction.scheduleAction(ta, 10);
 			return true;
 		} else {
@@ -863,11 +851,9 @@ function() {
 		iframeDoc.body.innerHTML = this._pendingContent;
 		// XXX: mozilla hack
 		if (AjxEnv.isGeckoBased)
-			this._enableDesignMode([iframeDoc]);
+			this._enableDesignMode(iframeDoc);
 	} catch (ex) {
-		var ta = new AjxTimedAction();
-		ta.obj = this;
-		ta.method = this._setContentOnTimer;
+		var ta = new AjxTimedAction(this, this._setContentOnTimer);
 		AjxTimedAction.scheduleAction(ta, 10);
 		return true;
 	}
@@ -885,7 +871,7 @@ function(command, option) {
 		this._getIframeDoc().execCommand(command, false, option);	
 	} catch (e) {
 		// perhaps retry the command?
-		this._enableDesignMode([this._getIframeDoc()]);
+		this._enableDesignMode(this._getIframeDoc());
 	}
 	this._updateState();
 }

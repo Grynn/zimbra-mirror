@@ -216,7 +216,7 @@ function (soapDoc, noAuthTokenRequired, serverUri, targetServer, useXml) {
 			: soapDoc.getXml().replace("soap=", "xmlns:soap=");
 			
 		this._st = new Date();
-		this._rpcId = AjxRpc.invoke(requestStr, uri,  {"Content-Type": "application/soap+xml; charset=utf-8"}, new AjxCallback(this, ZmCsfeAsynchCommand.prototype.rpcCallback)); //asynchronous call returns null 
+		this._rpcId = AjxRpc.invoke(requestStr, uri,  {"Content-Type": "application/soap+xml; charset=utf-8"}, new AjxCallback(this, this.rpcCallback)); //asynchronous call returns null 
 	} catch (ex) {
 		//JavaScript error, network error or unknown error may happen
 		var newEx = new ZmCsfeException();

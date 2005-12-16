@@ -24,18 +24,18 @@
 */
 
 
-function AjxTimedAction(obj, method, params) {
-	this.obj = obj;
-	this.method = method;
-	this.params = params ? params : new AjxVector();
+function AjxTimedAction(obj, func, args) {
+	AjxCallback.call(this, obj, func, args);
 	this._tid = -1;
 	this._id = -1;
 }
+AjxTimedAction.prototype = new AjxCallback;
+AjxTimedAction.prototype.constructor = AjxTimedAction;
 
 AjxTimedAction.prototype.toString = 
 function() {
 	return "AjxTimedAction";
-}
+};
 
 AjxTimedAction._pendingActions = new Object();
 AjxTimedAction._nextActionId = 0;
@@ -47,7 +47,7 @@ function(action, timeout){
 	var actionStr = "AjxTimedAction._exec(" + id + ")";
 	action._tid = window.setTimeout(actionStr, timeout ? timeout : 0); // mac no like null/void
 	return action._id;
-}
+};
 
 AjxTimedAction.cancelAction =
 function(actionId) {
@@ -56,16 +56,11 @@ function(actionId) {
 		window.clearTimeout(action._tid);
 		delete AjxTimedAction._pendingActions[actionId];
 	}
-}
+};
 
 AjxTimedAction._exec =
 function(actionId) {
 	var action = AjxTimedAction._pendingActions[actionId];
 	delete AjxTimedAction._pendingActions[actionId];
-	if (action) {
-		if (action.obj)
-			action.method.apply(action.obj, action.params.getArray());
-		else
-			action.method(action.params.getArray());
-	}
-}
+	action.run();
+};

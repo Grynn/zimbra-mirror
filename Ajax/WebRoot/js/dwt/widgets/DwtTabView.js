@@ -568,9 +568,7 @@ function DwtTabButton(parent) {
 
 	this.addListener(DwtEvent.ONMOUSEOVER, this._mouseOverListener);
 	this.addListener(DwtEvent.ONMOUSEOUT, this._mouseOutListener);
-	this._mouseOutAction = new AjxTimedAction();
-	this._mouseOutAction.method = DwtTabButton.prototype._handleMouseOut;
-	this._mouseOutAction.obj = this;
+	this._mouseOutAction = new AjxTimedAction(this, this._handleMouseOut);
 	this._mouseOutActionId = -1;
 }
 

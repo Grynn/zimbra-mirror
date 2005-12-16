@@ -703,9 +703,7 @@ DwtPropertyEditor._prop_functions = {
 		this._dateButton.setText(this._makeDisplayValue());
 	},
 
-	_onDwtInputFieldValidated : function(params) {
-		// var field     = params[0];
-		var validated = params[1];
+	_onDwtInputFieldValidated : function(value, validated) {
 		var value     = params[2];
 		if (validated)
 			this._setValue(value);

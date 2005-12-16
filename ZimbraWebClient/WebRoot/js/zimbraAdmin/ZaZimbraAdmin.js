@@ -198,9 +198,7 @@ function() {
 	window.onbeforeunload = null;
 	var locationStr = location.protocol + "//" + location.hostname + ((location.port == '80')? "" : ":" +location.port) + "/zimbraAdmin";
 	if (AjxEnv.isIE){
-		var act = new AjxTimedAction ();
-		act.method = ZaZimbraAdmin.redir;
-		act.params.add(locationStr);
+		var act = new AjxTimedAction(null, ZaZimbraAdmin.redir, [locationStr]);
 		AjxTimedAction.scheduleAction(act, 1);
 	} else {
 		window.location = locationStr;
@@ -208,8 +206,7 @@ function() {
 }
 
 ZaZimbraAdmin.redir =
-function(args){
-	var locationStr = args[0];
+function(locationStr){
 	window.location = locationStr;
 }
 
@@ -273,17 +270,15 @@ ZaZimbraAdmin.prototype.setStatusMsg =
 function(msg, clear) {
 	this._statusBox.setText(msg);
 	if (msg && clear) {
-		var act = new AjxTimedAction ();
-		act.method = ZmZimbraMail._clearStatus;
-		act.params.add(this._statusBox);
+		var act = new AjxTimedAction(null, ZmZimbraMail._clearStatus, [this._statusBox]);
 		AjxTimedAction.scheduleAction(act, ZmZimbraMail.STATUS_LIFE);
 	}
 }
 
 ZaZimbraAdmin._clearStatus = 
-function(args) {
-	args[0].setText("");
-	args[0].getHtmlElement().className = "statusBox";
+function(statusBox) {
+	statusBox.setText("");
+	statusBox.getHtmlElement().className = "statusBox";
 }
 
 

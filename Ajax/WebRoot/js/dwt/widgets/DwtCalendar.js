@@ -802,7 +802,7 @@ function(ev) {
 		 * do work like setting the tooltip content */
 		if (this._mouseOverDayCB) {
 			DwtCalendar._tmpDate.setFullYear(target._year, target._month, target._day);
-			this._mouseOverDayCB.run([this, DwtCalendar._tmpDate]);
+			this._mouseOverDayCB.run(this, DwtCalendar._tmpDate);
 		}
 	} else if (target.id.charAt(0) == 't') {
 		// Dont activate title for now

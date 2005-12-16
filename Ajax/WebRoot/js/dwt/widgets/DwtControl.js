@@ -262,7 +262,7 @@ function(ev) {
 			if (destDwtObj) {
 				// Set up the drag hover event. we will even let this item hover over itself as there may be
 				// scenarios where that will hold true
-				obj._dndHoverAction.params.replace(0, destDwtObj);
+				obj._dndHoverAction.args = [ destDwtObj ];
 				obj._dndHoverActionId = AjxTimedAction.scheduleAction(obj._dndHoverAction, DwtControl._DND_HOVER_DELAY);
 			}
 
@@ -353,18 +353,12 @@ function(ev) {
 				obj._dragEndX = mouseEv.docX;
 				obj._dragEndY = mouseEv.docY;
 				if (obj._badDropAction == null) {
-					obj._badDropAction = new AjxTimedAction();
-					obj._badDropAction.method = 
-						DwtControl.prototype._badDropEffect;
-					obj._badDropAction.obj = obj;	
+					obj._badDropAction = new AjxTimedAction(obj, obj._badDropEffect);
 				}
-				obj._badDropAction.params.removeAll();
 				
 				// Line equation is y = mx + c. Solve for c, and set up d (direction)
 				var m = (obj._dragEndY - obj._dragStartY) / (obj._dragEndX - obj._dragStartX);
-				obj._badDropAction.params.add(m);
-				obj._badDropAction.params.add(obj._dragStartY - (m * obj._dragStartX));
-				obj._badDropAction.params.add((obj._dragStartX - obj._dragEndX < 0) ? -1 : 1);
+				obj._badDropAction.args = [m, obj._dragStartY - (m * obj._dragStartX), (obj._dragStartX - obj._dragEndX < 0) ? -1 : 1];
 				AjxTimedAction.scheduleAction(obj._badDropAction, 0);
 			}
 			mouseEv._stopPropagation = true;
@@ -671,8 +665,7 @@ function(dragSource) {
 		this._ctrlCaptureObj = new DwtMouseEventCapture(this, DwtControl._mouseOverHdlr,
 				DwtControl._mouseDownHdlr, DwtControl._mouseMoveHdlr, 
 				DwtControl._mouseUpHdlr, DwtControl._mouseOutHdlr);
-		this._dndHoverAction = new AjxTimedAction();
-		this._dndHoverAction.method = this._dndDoHover;
+		this._dndHoverAction = new AjxTimedAction(null, this._dndDoHover);
 	}
 }
 
@@ -970,9 +963,9 @@ function(clear) {
 }
 
 DwtControl.prototype._dndDoHover =
-function(params) {
+function(control) {
 	//TODO Add allow hover?
-	params[0]._dragHover();
+	control._dragHover();
 }
 
 

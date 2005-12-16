@@ -561,11 +561,7 @@ XFormItem.prototype.handleKeyUp = function (ev, domItem) {
 		DwtUiEvent.setBehaviour(ev, true, false);
 		return false;
 	}	
-	var action = new AjxTimedAction();
-	action.obj = this;
-	action.method = this.handleKeyPressDelay;
-	action.params.add(evt);
-	action.params.add(domItem);
+	var action = new AjxTimedAction(this, this.handleKeyPressDelay, [evt, domItem]);
 	//XForm.keyPressDelayHdlr = setTimeout(XForm.handleKeyPressDelay, 250, item, ev, formItem);
 	this.keyPressDelayHdlr = AjxTimedAction.scheduleAction(action, 500);
 };

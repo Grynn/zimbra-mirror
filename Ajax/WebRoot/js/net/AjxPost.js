@@ -53,10 +53,7 @@ function(callback, form, optionalTimeout) {
 	form.target = this._iframeId;
 	this._callback = callback;
 	var req = new AjxPostRequest(form);
-	var failureAction = new AjxTimedAction();
-	failureAction.method = this._onFailure;
-	failureAction.obj = this;
-	failureAction.params.add(req.id);
+	var failureAction = new AjxTimedAction(this, this._onFailure, [req.id]);
 	var timeout = optionalTimeout? optionalTimeout: 5000;
 	AjxPost._outStandingRequests[req.id] = req;
 	req.send(failureAction, timeout);

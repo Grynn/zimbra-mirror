@@ -37,9 +37,7 @@ function ReindexMailboxXDialog(parent,  app, w, h) {
 	this.initForm(ZaReindexMailbox.myXModel,this.getMyXForm());
 	this._button[DwtDialog.OK_BUTTON].setToolTipContent(ZaMsg.Reindex_Mbx_tt);
 	this._containedObject = new ZaReindexMailbox();
-	this.pollAction = new AjxTimedAction();
-	this.pollAction.obj = this;
-	this.pollAction.method = this.getReindexStatus;
+	this.pollAction = new AjxTimedAction(this, this.getReindexStatus);
 	this._pollHandler = null;
 	
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/re-indexing_a_mailbox.htm";		

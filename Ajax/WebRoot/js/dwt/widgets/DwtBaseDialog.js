@@ -107,9 +107,9 @@ function(dragHandleId) {
 		var p = Dwt.getSize(AjxCore.objectWithId(window._dwtShell).getHtmlElement());
 		var dragObj = document.getElementById(this._htmlElId);
 		var size = this.getSize();
-		var dragEndCb = new AjxCallback(this, DwtBaseDialog.prototype._dragEnd);
-		var dragCb = new AjxCallback(this, DwtBaseDialog.prototype._duringDrag);
-		var dragStartCb = new AjxCallback(this, DwtBaseDialog.prototype._dragStart);
+		var dragEndCb = new AjxCallback(this, this._dragEnd);
+		var dragCb = new AjxCallback(this, this._duringDrag);
+		var dragStartCb = new AjxCallback(this, this._dragStart);
 		
  		DwtDraggable.init(dragHandle, dragObj, 0,
  						  document.body.offsetWidth - 10, 0, document.body.offsetHeight - 10, dragStartCb, dragCb, dragEndCb);
@@ -460,12 +460,9 @@ function() {
 }
 
 DwtBaseDialog.prototype._dragStart = 
-function (args){
+function (x, y){
 	// fix for bug 3177
 	if (AjxEnv.isNav) {
-		var x = args[0];
-		var y = args[1];
-
 		this._currSize = this.getSize();
 		DwtDraggable.setDragBoundaries(DwtDraggable._dragEl, 0, document.body.offsetWidth - this._currSize.x, 0, 
 									   document.body.offsetHeight - this._currSize.y);
@@ -473,18 +470,14 @@ function (args){
 };
 
 DwtBaseDialog.prototype._dragEnd =
-function(args) {
- 	var x = args[0];
- 	var y = args[1];
+function(x, y) {
 // 	// save dropped position so popup(null) will not re-center dialog box
 // 	DBG.println("drag end x:", x, " y:", y);
 	this._loc = new DwtPoint(x, y);
 }
 
 DwtBaseDialog.prototype._duringDrag =
-function(args) {
-	//var x = args[0];
-	//var y = args[1];
+function(x, y) {
 // 	DBG.println("during drag x:", x, " y:", y);
 	// overload me
 };

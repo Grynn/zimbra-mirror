@@ -43,7 +43,7 @@ function AjxCallback(obj, func, args) {
 
 	this.obj = obj;
 	this.func = func;
-	this._args = args;
+	this.args = args;
 }
 
 AjxCallback.prototype.toString = 
@@ -52,43 +52,43 @@ function() {
 }
 
 /**
-* Runs the callback function, from within the object if there is one. Passes a single 
-* argument on to the callback function. If you want to pass more than one argument, 
-* collect them in an array and have the called function break it apart. Whatever the
-* called function returns is returned to the caller.
-* <p>
-* If you need to pass in a single array argument that you want to remain an array,
-* wrap it in another array, either when you create the callback, or when you run it:
-* </p><p>
-* <code>var cb = new AjxCallback(this, this._cbMethod, [anArg]);</code>
-* <code>callback.run([anArg]);</code>
-* </p>
+* Runs the callback function, from within the object if there is one. The
+* called function passed arguments are the concatenation of the argument 
+* array passed to this object's constructor and the argument array passed 
+* to the <code>run</code> method. Whatever the called function returns is 
+* returned to the caller.
 *
-* @param args	[primitive or Array]	argument(s) to pass to the called function
+* @param arg1	The first argument which will be appended to the argument
+*				array passed to this object's constructor. Any number of
+*				arguments may be passed to the <code>run</code> method.
 */
 AjxCallback.prototype.run =
-function(args) {
+function(arg1 /* ... argN */) {
 	// combine original args with new ones
-	var args1;
-	if (this._args != undefined && args != undefined) {
-		args1 = new Array();
-		if (this._args instanceof Array) {
-			for (var i = 0; i < this._args.length; i++)
-				args1.push(this._args[i]);
-		} else {
-			args1.push(this._args);
+	var args;
+	if (this.args && arguments.length > 0) {
+		args = [];
+		if (this.args instanceof Array) {
+			for (var i = 0; i < this.args.length; i++) {
+				args.push(this.args[i]);
+			}
 		}
-		if (args instanceof Array) {
-			for (var i = 0; i < args.length; i++)
-				args1.push(args[i]);
-		} else {
-			args1.push(args);
+		else {
+			args.push(this.args);
 		}
-	} else {
-		args1 = args ? args : this._args;
+		for (var i = 0; i < arguments.length; i++) {
+			args.push(arguments[i]);
+		}
 	}
-	if (this.obj)
-		return this.func.call(this.obj, args1);
-	else
-		return this.func(args1);
-}
+	else {
+		if (this.args) {
+			args = this.args instanceof Array ? this.args : [ this.args ];
+		}
+		else {
+			args = arguments;
+		}
+	}
+
+	// invoke function
+	return this.func.apply(this.obj || window, args);
+};

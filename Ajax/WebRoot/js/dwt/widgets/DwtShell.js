@@ -281,9 +281,7 @@ function(htmlElement) {
     this._busyDialog.setContent(html);
     this._busyDialogTxt = document.getElementById(txtId);
        
-	this._busyTimedAction = new AjxTimedAction();
-	this._busyTimedAction.obj = this;
-	this._busyTimedAction.method = this._showBusyDialogAction;
+	this._busyTimedAction = new AjxTimedAction(this, this._showBusyDialogAction);
 	this._busyActionId = {};
 	
 	this._setBusyCount = 0;

@@ -88,7 +88,7 @@ function(enable) {
 ZaController.prototype.popupErrorDialog = 
 function(msg, ex, noExecReset)  {
 	if (!noExecReset)
-		this._execFrame = {method: null, params: null, restartOnError: false};
+		this._execFrame = {func: null, args: null, restartOnError: false};
 	
 	var detailStr = "";
 	if(ex != null) {
@@ -132,7 +132,7 @@ function(msg, ex, noExecReset)  {
 ZaController.prototype.popupMsgDialog = 
 function(msg, noExecReset)  {
 	if (!noExecReset)
-		this._execFrame = {method: null, params: null, restartOnError: false};
+		this._execFrame = {func: null, args: null, restartOnError: false};
 	
 	// popup alert
 	this._msgDialog.setMessage(msg, DwtMessageDialog.INFO_STYLE, ZaMsg.zimbraAdminTitle);
@@ -196,13 +196,7 @@ function(method, params, delay) {
 		delay = 0;
 		this._shell.setBusy(true);
 	}
-	this._action = new AjxTimedAction();
-	this._action.obj = this;
-	this._action.method = ZaController._exec;
-	this._action.params.removeAll();
-	this._action.params.add(method);
-	this._action.params.add(params);
-	this._action.params.add(delay);
+	this._action = new AjxTimedAction(this, ZaController._exec, [method, params, delay]);
 	return AjxTimedAction.scheduleAction(this._action, delay);
 }
 
@@ -242,7 +236,7 @@ function(ex, method, params, restartOnError, obj) {
 		if (ex.code == ZmCsfeException.SVC_AUTH_EXPIRED) 
 		{
 			// remember the last search attempted ONLY for expired auto token exception
-			this._execFrame = {obj: obj, method: method, params: params, restartOnError: restartOnError};
+			this._execFrame = {obj: obj, func: method, args: params, restartOnError: restartOnError};
 			this._loginDialog.registerCallback(this._loginCallback, this);
 			this._loginDialog.setError(ZaMsg.ERROR_SESSION_EXPIRED);
 		} else {
@@ -254,7 +248,7 @@ function(ex, method, params, restartOnError, obj) {
 	} 
 	else 
 	{
-		this._execFrame = {obj: obj, method: method, params: params, restartOnError: restartOnError};
+		this._execFrame = {obj: obj, func: method, args: params, restartOnError: restartOnError};
 		this._errorDialog.registerCallback(DwtDialog.OK_BUTTON, this._errorDialogCallback, this);
 		if (ex.code == ZmCsfeException.SOAP_ERROR) {
 			this.popupMsgDialog(ZaMsg.SOAP_ERROR, ex, true);
@@ -325,8 +319,8 @@ function() {
 /*********** Login dialog Callbacks */
 
 ZaController.prototype._loginCallback =
-function(args) {
-	this._schedule(this._doAuth, {username: args[0], password: args[1]});
+function(name, password) {
+	this._schedule(this._doAuth, {username: name, password: password);
 }
 
 
@@ -337,7 +331,7 @@ function() {
 	this._errorDialog.popdown();
 	if (this._execFrame) {
 		if (this._execFrame.restartOnError && !this._authenticating)
-			this._execFrame.method.call(this, this._execFrame.params);
+			this._execFrame.method.apply(this, this._execFrame.args);
 		this._execFrame = null;
 	}
 }
@@ -347,7 +341,7 @@ function() {
 	this._msgDialog.popdown();
 	if (this._execFrame) {
 		if (this._execFrame.restartOnError && !this._authenticating)
-			this._execFrame.method.call(this, this._execFrame.params);
+			this._execFrame.method.apply(this, this._execFrame.args);
 		this._execFrame = null;
 	}	
 }

@@ -274,7 +274,7 @@ function(selEvt) {
 	}
 
 	if (this._callback)
-		this._callback.run([username, this._pwordField.value]);
+		this._callback.run(username, this._pwordField.value);
 }
 
 
@@ -306,7 +306,7 @@ function(evt) {
 		} else {
 			if (parent._callback) {
 				parent.setCursor("wait");
-				parent._callback.run([parent._unameField.value, parent._pwordField.value]);
+				parent._callback.run(parent._unameField.value, parent._pwordField.value);
 			}
 		}
 		return false;
