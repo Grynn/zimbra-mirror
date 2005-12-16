@@ -296,7 +296,6 @@ zimbraMtaCommonBlockedExtension: xl
 zimbraMtaDnsLookupsEnabled: TRUE
 zimbraMtaMaxMessageSize: 10240000
 zimbraMtaRestriction: reject_invalid_hostname
-zimbraMtaRestriction: reject_non_fqdn_hostname
 zimbraMtaRestriction: reject_non_fqdn_sender
 zimbraMtaTlsAuthOnly: TRUE
 zimbraPop3CleartextLoginEnabled: FALSE
