@@ -50,7 +50,7 @@
     
 -->
 
-<attr name="zimbraAccountClientAttr" type="string">
+<attr name="zimbraAccountClientAttr" type="string"/>
 
 <attr name="zimbraAccountStatus" type="enum" value="active,maintenance,locked,closed" callback="AccountStatus"/>
 
