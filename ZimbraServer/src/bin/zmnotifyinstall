@@ -1,0 +1,61 @@
+#!/usr/bin/perl
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Version: MPL 1.1
+# 
+# The contents of this file are subject to the Mozilla Public License
+# Version 1.1 ("License"); you may not use this file except in
+# compliance with the License. You may obtain a copy of the License at
+# http://www.zimbra.com/license
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+# the License for the specific language governing rights and limitations
+# under the License.
+# 
+# The Original Code is: Zimbra Collaboration Suite Server.
+# 
+# The Initial Developer of the Original Code is Zimbra, Inc.
+# Portions created by Zimbra are Copyright (C) 2005 Zimbra, Inc.
+# All Rights Reserved.
+# 
+# Contributor(s):
+# 
+# ***** END LICENSE BLOCK *****
+# 
+
+use strict;
+
+use lib "/opt/zimbra/zimbramon/lib/zimbrapm";
+use lib "/opt/zimbra/zimbramon/lib/zimbrapm/SOAP";
+use lib "/opt/zimbra/zimbramon/lib";
+
+use LWP::UserAgent;
+
+my $baseDir = "/opt/zimbra";
+
+my $version = $ARGV[0];
+my $email = $ARGV[1];
+
+my $URL = "http://www.zimbra.com/notify.cgi?VER=$version&MAIL=$email";
+
+print "Notifying Zimbra of installation via $URL\n\n";
+
+# Create a user agent object
+my $ua = LWP::UserAgent->new;
+$ua->agent("ZimbraInstaller/0.1 ");
+
+# Create a request
+my $req = HTTP::Request->new(GET => "$URL");
+
+# Pass request to the user agent and get a response back
+my $res = $ua->request($req);
+
+# Check the outcome of the response
+if ($res->is_success) {
+	print "Notification complete\n\n";
+} else {
+	print "ERROR: Notification failed $res->status_line, "\n";
+}
+
+exit (0);
