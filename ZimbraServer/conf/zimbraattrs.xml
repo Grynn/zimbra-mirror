@@ -50,7 +50,7 @@
     
 -->
 
-<attr name="zimbraAccountClientAttr" type="string" immutable="1"/>
+<attr name="zimbraAccountClientAttr" type="string">
 
 <attr name="zimbraAccountStatus" type="enum" value="active,maintenance,locked,closed" callback="AccountStatus"/>
 
@@ -110,7 +110,7 @@
 
 <attr name="zimbraCOSId" type="id"/> <!-- type "cosId" and check for valid COS id? -->
 
-<attr name="zimbraCOSInheritedAttr" type="string" immutable="1" />
+<attr name="zimbraCOSInheritedAttr" type="string"/>
 
 <attr name="zimbraContactMaxNumEntries" type="integer" min="0"/>
 
@@ -118,9 +118,9 @@
 
 <attr name="zimbraDomainDefaultCOSId" type="id"/> <!-- type "cosId" and check for valid COS id? -->
 
-<attr name="zimbraDomainAdminModifiableAttr" type="string" immutable="1"/>
+<attr name="zimbraDomainAdminModifiableAttr" type="string"/>
 
-<attr name="zimbraDomainInheritedAttr" type="string" immutable="1"/>
+<attr name="zimbraDomainInheritedAttr" type="string"/>
 
 <attr name="zimbraDomainName" type="string" immutable="1"/>
 
@@ -160,7 +160,7 @@
 
 <attr name="zimbraGalLdapFilter" type="string" max="4096"/>
 
-<attr name="zimbraGalLdapFilterDef" type="string" immutable="1"/>
+<attr name="zimbraGalLdapFilterDef" type="string"/>
 
 <attr name="zimbraGalLdapSearchBase"  type="string" max="256"/>
 
@@ -444,7 +444,7 @@
 
 <attr name="zimbraServerHostname" type="string" max="256"/>
 
-<attr name="zimbraServerInheritedAttr" type="string" immutable="1"/>
+<attr name="zimbraServerInheritedAttr" type="string"/>
 
 <attr name="zimbraServiceEnabled" type="string" max="256"/>
 
