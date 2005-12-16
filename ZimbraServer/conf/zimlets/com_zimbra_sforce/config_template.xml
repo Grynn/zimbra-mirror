@@ -1,5 +1,5 @@
 <zimletConfig name="com_zimbra_sforce" version="1.0">
   <global>
-    <property name="allowedDomains">*.liquidsys.com,*.zimbra.com,*.salesforce.com,*.sforce.com</property>
+    <property name="allowedDomains">*.salesforce.com,*.sforce.com</property>
   </global>
 </zimletConfig>
