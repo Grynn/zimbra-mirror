@@ -48,13 +48,13 @@ function ZaController(appCtxt, container, app, iKeyName) {
 
 	this._msgDialog = appCtxt.getMsgDialog();
 	this._errorDialog = appCtxt.getErrorDialog();
-	
+	this._confirmMessageDialog = new ZaMsgDialog(this._shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);					
     this._errorDialog.registerCallback(DwtDialog.OK_BUTTON, this._errorDialogCallback, this);
     this._msgDialog.registerCallback(DwtDialog.OK_BUTTON, this._msgDialogCallback, this);    
     if(app) {
     	this._msgDialog.setApp(app);    	
     }	
-    
+    this.objType = ZaEvent.S_ACCOUNT;
     this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/administration_console_help.htm";
 }
 
@@ -373,3 +373,10 @@ ZaController.prototype._initPopupMenu = function () {
 	}	
 	//Instrumentation code end
 }
+
+ZaController.prototype.closeCnfrmDlg = 
+function () {
+	if(this._confirmMessageDialog)
+		this._confirmMessageDialog.popdown();	
+}
+

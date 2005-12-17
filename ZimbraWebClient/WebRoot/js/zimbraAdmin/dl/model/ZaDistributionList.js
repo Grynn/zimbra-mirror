@@ -541,3 +541,57 @@ ZaDistributionListMember.prototype.toString = function () {
 ZaDistributionListMember.prototype.valueOf = function () {
 	return this.id;
 };
+
+ZaDistributionList._validEmailPattern = new RegExp(/^([a-zA-Z0-9_\-])+((\.)?([a-zA-Z0-9_\-])+)*@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/);
+ZaDistributionList.myXModel = {
+	getMemberPool: function (model, instance) {
+		return instance.memberPool;
+	},
+	setMemberPool: function (value, instance, parentValue, ref) {
+		instance.memberPool = value;
+	},
+	// transform a vector into something the list view will be 
+	// able to handle
+	getMembersArray: function (model, instance) {
+		var arr = instance.getMembersArray();
+		var tmpArr = new Array();
+		var tmp;
+		for (var i = 0; i < arr.length; ++i ){
+			tmp = arr[i];
+			if (!AjxUtil.isObject(arr[i])){
+				tmp = new ZaDistributionListMember(arr[i]);
+			}
+			tmpArr.push(tmp);
+		}
+		return tmpArr;
+	},
+	setMembersArray: function (value, instance, parentValue, ref) {
+		instance.setMembers(value);
+	},
+	items: [
+		{id: "memberPool", type:_LIST_, setter:"setMemberPool", setterScope:_MODEL_, getter: "getMemberPool", getterScope:_MODEL_},
+		{id: "optionalAdd", type:_UNTYPED_},
+		{id: "name", type:_STRING_, setter:"setName", setterScope: _INSTANCE_, required:true,
+		 constraints: {type:"method", value:
+					   function (value, form, formItem, instance) {
+						   var parts = value.split('@');
+						   if (parts[0] == null || parts[0] == ""){
+							   // set the name, so that on refresh, we don't display old data.
+							   throw ZaMsg.DLXV_ErrorNoListName;
+						   } else {
+							   var re = ZaDistributionList._validEmailPattern;
+							   if (re.test(value)) {
+								   return value;
+							   } else {
+								   throw ZaMsg.DLXV_ErrorInvalidListName;
+							   }
+						   }
+					   }
+			}
+		},
+		{id: "members", type:_LIST_, getter: "getMembersArray", getterScope:_MODEL_, setter: "setMembersArray", setterScope:_MODEL_},
+		{id: "description", type:_STRING_, setter:"setDescription", setterScope:_INSTANCE_, getter: "getDescription", getterScope: _INSTANCE_},
+		{id: "notes", type:_STRING_, setter:"setNotes", setterScope:_INSTANCE_, getter: "getNotes", getterScope: _INSTANCE_},
+		{id: "zimbraMailStatus", type:_STRING_, setter:"setMailStatus", setterScope:_INSTANCE_, getter: "getMailStatus", getterScope: _INSTANCE_}
+	]
+};

@@ -34,14 +34,15 @@
 **/
 
 function ZaAccountViewController(appCtxt, container, app) {
-	ZaController.call(this, appCtxt, container, app, "ZaAccountViewController");
+	ZaXFormViewController.call(this, appCtxt, container, app, "ZaAccountViewController");
 	this._evtMgr = new AjxEventMgr();
-	this._confirmMessageDialog;
 	this._UICreated = false;
+	this.objType = ZaEvent.S_ACCOUNT;
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/provisioning_accounts.htm";		
+	this.deleteMsg = ZaMsg.Q_DELETE_ACCOUNT;
 }
 
-ZaAccountViewController.prototype = new ZaController();
+ZaAccountViewController.prototype = new ZaXFormViewController();
 ZaAccountViewController.prototype.constructor = ZaAccountViewController;
 
 //public methods
@@ -57,32 +58,6 @@ ZaAccountViewController.prototype.constructor = ZaAccountViewController;
 ZaAccountViewController.prototype.show = 
 function(entry, skipRefresh) {
 	this._setView(entry, skipRefresh);
-//	this._app.setCurrentController(this);
-}
-
-/**
-* @param nextViewCtrlr - the controller of the next view
-* @param func		   - the method to call on the nextViewCtrlr in order to navigate to the next view
-* @param params		   - arguments to pass to the method specified in func parameter
-* Checks if it is safe to leave this view. Displays warning and Information messages if neccesary.
-**/
-ZaAccountViewController.prototype.switchToNextView = 
-function (nextViewCtrlr, func, params) {
-	if(this._view.isDirty()) {
-		//parameters for the confirmation dialog's callback 
-		var args = new Object();		
-		args["params"] = params;
-		args["obj"] = nextViewCtrlr;
-		args["func"] = func;
-		//ask if the user wants to save changes			
-		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);					
-		this._confirmMessageDialog.setMessage(ZaMsg.Q_SAVE_CHANGES,  DwtMessageDialog.INFO_STYLE);
-		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaAccountViewController.prototype._saveAndGoAway, this, args);		
-		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaAccountViewController.prototype._discardAndGoAway, this, args);		
-		this._confirmMessageDialog.popup();
-	} else {
-		func.call(nextViewCtrlr, params);
-	}
 }
 
 /**
@@ -434,11 +409,11 @@ function(entry, skipRefresh) {
 
 		if(!this._UICreated) {
 	   		this._ops = new Array();
-   			this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, ZaAccountViewController.prototype._saveButtonListener)));
-   			this._ops.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.ALTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, ZaAccountViewController.prototype._closeButtonListener)));    	
+   			this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener)));
+   			this._ops.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.ALTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener)));    	
    			this._ops.push(new ZaOperation(ZaOperation.SEP));
 	 		this._ops.push(new ZaOperation(ZaOperation.NEW_WIZARD, ZaMsg.TBB_New, ZaMsg.ALTBB_New_tt, "Account", "AccountDis", new AjxListener(this, ZaAccountViewController.prototype._newButtonListener)));   			    	
-   			this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ALTBB_Delete_tt,"Delete", "DeleteDis", new AjxListener(this, ZaAccountViewController.prototype._deleteButtonListener)));    	    	
+   			this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ALTBB_Delete_tt,"Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener)));    	    	
    			if(ZaSettings.ACCOUNTS_VIEW_MAIL_ENABLED)
 				this._ops.push(new ZaOperation(ZaOperation.VIEW_MAIL, ZaMsg.ACTBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, "ReadMailbox", "ReadMailboxDis", new AjxListener(this, ZaAccountViewController.prototype._viewMailListener)));		
 	
@@ -450,7 +425,6 @@ function(entry, skipRefresh) {
 
 			this._toolBar = new ZaToolBar(this._container, this._ops);
 	
-	  		//this._view = new ZaAccountView(this._container, this._app, entry.id);
 	  		this._view = new ZaAccountXFormView(this._container, this._app);
 			var elements = new Object();
 			elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
@@ -470,16 +444,13 @@ function(entry, skipRefresh) {
 		this._toolBar.getButton(ZaOperation.SAVE).setEnabled(false);
 		if(!entry.id) {
 			this._toolBar.getButton(ZaOperation.DELETE).setEnabled(false);  			
-	//		this._toolBar.getButton(ZaOperation.CHNG_PWD).setEnabled(false);  						
 		} else {
 			this._toolBar.getButton(ZaOperation.DELETE).setEnabled(true);  				
-//			this._toolBar.getButton(ZaOperation.CHNG_PWD).setEnabled(true);  							
 		}	
 		this._view.setDirty(false);
 		entry.attrs[ZaAccount.A_password] = null; //get rid of VALUE-BLOCKED
 		entry[ZaModel.currentTab] = "1"
 		this._view.setObject(entry);
-//	  	this._view.setObject(entry, this._cosChanged, this._domainsChanged);
 		this._currentObject = entry;
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountViewController.prototype._setView", null, false);
@@ -488,143 +459,6 @@ function(entry, skipRefresh) {
 	this._domainsChanged = false;
 	
 }
-
-/**
-* @param params		   - params["params"] - arguments to pass to the method specified in func parameter
-* 					     params["obj"] - the controller of the next view
-*						 params["func"] - the method to call on the nextViewCtrlr in order to navigate to the next view
-* This method saves changes in the current view and calls the method on the controller of the next view
-**/
-ZaAccountViewController.prototype._saveAndGoAway =
-function (params) {
-	try {
-		this._confirmMessageDialog.popdown();			
-		if(this._saveChanges()) {
-			params["func"].call(params["obj"], params["params"]);	
-		}
-	} catch (ex) {
-		//if exception thrown - don' go away
-		if(ex.code == ZmCsfeException.ACCT_EXISTS) {
-			this._errorDialog.setMessage(ZaMsg.ERROR_ACCOUNT_EXISTS, null, DwtMessageDialog.CRITICAL_STYLE, null);
-			this._errorDialog.popup();
-		} else {
-			var mods = null;
-			if(ex.mods) {
-				mods = ex.mods;
-			}
-			this._handleException(ex, "ZaAccountViewController.prototype._saveAndGoAway", mods, false);
-		}
-	}
-}
-
-/**
-* Leaves current view without saving any changes
-**/
-ZaAccountViewController.prototype._discardAndGoAway = 
-function (params) {
-	this._confirmMessageDialog.popdown();
-	params["func"].call(params["obj"], params["params"]);		
-}
-
-/**
-* deletes current ZaAccount and leaves the view
-**/
-ZaAccountViewController.prototype._deleteAndGoAway = 
-function () {
-	try {
-		if(this._currentObject.id) {
-			this._currentObject.remove();
-			this._fireAccountRemovalEvent(this._currentObject);
-		}
-		this._app.getAccountListController().show();
-		this._confirmMessageDialog.popdown();	
-
-	} catch (ex) {
-		this._confirmMessageDialog.popdown();	
-		if(ex.code == ZmCsfeException.SVC_WRONG_HOST) {
-			var szMsg = ZaMsg.ERROR_WRONG_HOST;
-			if(ex.detail) {
-				szMsg +="<br>Details:<br>";
-				szMsg += ex.detail;
-			}
-			this._errorDialog.setMessage(szMsg, null, DwtMessageDialog.CRITICAL_STYLE, null);
-			this._errorDialog.popup();					
-		} else {
-			this._handleException(ex, "ZaAccountViewController.prototype._deleteAndGoAway", null, false);				
-		}	
-	}
-}
-
-
-ZaAccountViewController.prototype._closeCnfrmDlg = 
-function () {
-	this._confirmMessageDialog.popdown();	
-}
-
-//toolbar button listeners 
-
-/**
-* @param 	ev event object
-* This method handles "save" button click
-**/
-ZaAccountViewController.prototype._saveButtonListener =
-function(ev) {
-	try {
-		if(this._saveChanges()) {
-			this._view.setDirty(false);
-			if(this._toolBar)
-				this._toolBar.getButton(ZaOperation.SAVE).setEnabled(false);		
-		
-			this._currentObject.refresh(false);	
-			this._view.setObject(this._currentObject);			
-			this._fireAccountChangeEvent();			
-		}
-	} catch (ex) {
-		this._handleException(ex, "ZaAccountViewController.prototype._saveButtonListener", null, false);
-	}
-	return;
-}
-
-/**
-* handles the Close button click. Returns to the list view.
-**/ 
-ZaAccountViewController.prototype._closeButtonListener =
-function(ev) {
-	//prompt if the user wants to save the changes
-	if(this._view.isDirty()) {
-		//parameters for the confirmation dialog's callback 
-		var args = new Object();		
-		args["params"] = null;
-		args["obj"] = this._app.getAccountListController();
-		args["func"] = ZaAccountListController.prototype.show;
-		//ask if the user wants to save changes		
-		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
-		this._confirmMessageDialog.setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
-		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaAccountViewController.prototype._saveAndGoAway, this, args);		
-		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaAccountViewController.prototype._discardAndGoAway, this, args);		
-		this._confirmMessageDialog.popup();
-	} else {
-		this._app.getAccountListController().show();
-
-	}	
-}
-
-/**
-* This listener is called when the Delete button is clicked. 
-**/
-ZaAccountViewController.prototype._deleteButtonListener =
-function(ev) {
-	if(this._currentObject.id) {
-		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);						
-		this._confirmMessageDialog.setMessage(ZaMsg.Q_DELETE_ACCOUNT, DwtMessageDialog.INFO_STYLE);
-		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaAccountViewController.prototype._deleteAndGoAway, this, null);		
-		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaAccountViewController.prototype._closeCnfrmDlg, this, null);				
-		this._confirmMessageDialog.popup();
-	} else {
-		this._app.getAccountListController().show();
-	}
-}
-
 
 // new button was pressed
 ZaAccountViewController.prototype._newButtonListener =
@@ -658,65 +492,6 @@ function (ev) {
 
 }
 
-//event notifiers
-
-/**
-*	Private method that notifies listeners to that the controlled ZaAccount is changed
-* 	@param details
-*/
-ZaAccountViewController.prototype._fireAccountChangeEvent =
-function() {
-	try {
-		if (this._evtMgr.isListenerRegistered(ZaEvent.E_MODIFY)) {
-			var evt = new ZaEvent(ZaEvent.S_ACCOUNT);
-			evt.set(ZaEvent.E_MODIFY, this);
-			this._evtMgr.notifyListeners(ZaEvent.E_MODIFY, evt);
-		}
-	} catch (ex) {
-		this._handleException(ex, "ZaAccountViewController.prototype._fireAccountChangeEvent", null, false);	
-	}
-		
-}
-
-/**
-*	Private method that notifies listeners to that the controlled ZaAccount is removed
-* 	@param details
-*/
-ZaAccountViewController.prototype._fireAccountRemovalEvent =
-function(details) {
-	try {
-		if (this._evtMgr.isListenerRegistered(ZaEvent.E_REMOVE)) {
-			var evt = new ZaEvent(ZaEvent.S_ACCOUNT);
-			evt.set(ZaEvent.E_REMOVE, this);
-			evt.setDetails(details);
-			this._evtMgr.notifyListeners(ZaEvent.E_REMOVE, evt);
-		}
-	} catch (ex) {
-		this._handleException(ex, "ZaAccountViewController.prototype._fireAccountRemovalEvent", details, false);	
-	}
-}
-
-/**
-*	Private method that notifies listeners that a new ZaAccount is created
-* 	@param details
-*/
-ZaAccountViewController.prototype._fireAccountCreationEvent =
-function(details) {
-	try {
-		if (this._evtMgr.isListenerRegistered(ZaEvent.E_CREATE)) {
-			var evt = new ZaEvent(ZaEvent.S_ACCOUNT);
-			evt.set(ZaEvent.E_CREATE, this);
-			if(details)
-				evt.setDetails(details);
-				
-			this._evtMgr.notifyListeners(ZaEvent.E_CREATE, evt);
-		}
-	} catch (ex) {
-		this._handleException(ex, "ZaAccountViewController.prototype._fireAccountCreationEvent", details, false);	
-	}
-
-}
-
 ZaAccountViewController.prototype._viewMailListener =
 function(ev) {
 	try {
@@ -726,4 +501,22 @@ function(ev) {
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountViewController.prototype._viewMailListener", null, false);			
 	}
+}
+
+ZaAccountViewController.prototype._handleException = 
+function (ex, method, params, restartOnError, obj) {
+	if(ex.code == ZmCsfeException.SVC_WRONG_HOST) {
+		var szMsg = ZaMsg.ERROR_WRONG_HOST;
+		if(ex.detail) {
+			szMsg +="<br>Details:<br>";
+			szMsg += ex.detail;
+		}
+		this._errorDialog.setMessage(szMsg, null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._errorDialog.popup();					
+	} else if(ex.code == ZmCsfeException.ACCT_EXISTS) {
+		this._errorDialog.setMessage(ZaMsg.ERROR_ACCOUNT_EXISTS, null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._errorDialog.popup();
+	} else {
+		ZaController.prototype._handleException.call(ex, method, params, restartOnError, obj);				
+	}	
 }

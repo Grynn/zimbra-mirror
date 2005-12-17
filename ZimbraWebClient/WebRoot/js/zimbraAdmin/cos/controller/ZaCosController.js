@@ -32,17 +32,17 @@
 **/
 
 function ZaCosController(appCtxt, container,app) {
-	ZaController.call(this, appCtxt, container,app, "ZaCosController");
+	ZaXFormViewController.call(this, appCtxt, container,app, "ZaCosController");
 	this._evtMgr = new AjxEventMgr();
 	this._confirmMessageDialog;
 	this._UICreated = false;	
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/cos/class_of_service.htm";		
+	this.deleteMsg = ZaMsg.Q_DELETE_COS;
+	this.objType = ZaEvent.S_COS;
 }
 
-ZaCosController.prototype = new ZaController();
+ZaCosController.prototype = new ZaXFormViewController();
 ZaCosController.prototype.constructor = ZaCosController;
-
-//ZaCosController.VIEW = "ZaCosController.VIEW";
 
 /**
 *	@method show
@@ -52,7 +52,6 @@ ZaCosController.prototype.constructor = ZaCosController;
 ZaCosController.prototype.show = 
 function(entry) {
 	this._setView(entry);
-//	this._app.setCurrentController(this);
 }
 
 
@@ -112,32 +111,6 @@ function(listener) {
 }
 
 /**
-* @param nextViewCtrlr - the controller of the next view
-* @param func		   - the method to call on the nextViewCtrlr in order to navigate to the next view
-* @param params		   - arguments to pass to the method specified in func parameter
-* Checks if it is safe to leave this view. Displays warning and Information messages if neccesary.
-**/
-ZaCosController.prototype.switchToNextView = 
-function (nextViewCtrlr, func, params) {
-	if(this._view.isDirty()) {
-		//parameters for the confirmation dialog's callback 
-		var args = new Object();		
-		args["params"] = params;
-		args["obj"] = nextViewCtrlr;
-		args["func"] = func;
-		//ask if the user wants to save changes			
-		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);					
-		this._confirmMessageDialog.setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
-		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaCosController.prototype._saveAndGoAway, this, args);		
-		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaCosController.prototype._discardAndGoAway, this, args);		
-		this._confirmMessageDialog.popup();
-	} else {
-
-		func.call(nextViewCtrlr, params);
-	}
-}
-
-/**
 * public getToolBar
 * @return reference to the toolbar
 **/
@@ -153,59 +126,6 @@ function (isD) {
 	else
 		this._toolBar.getButton(ZaOperation.SAVE).setEnabled(false);
 }
-/**
-*	Private method that notifies listeners to that the controlled ZaCos is changed
-* 	@param details
-*/
-ZaCosController.prototype._fireCosChangeEvent =
-function(details) {
-	try {
-		if (this._evtMgr.isListenerRegistered(ZaEvent.E_MODIFY)) {
-			var evt = new ZaEvent(ZaEvent.S_COS);
-			evt.set(ZaEvent.E_MODIFY, this);
-			evt.setDetails(details);
-			this._evtMgr.notifyListeners(ZaEvent.E_MODIFY, evt);
-		}
-	} catch (ex) {
-		this._handleException(ex, ZaCosController.prototype._fireCosChangeEvent, details, false);
-	}
-}
-
-/**
-*	Private method that notifies listeners that a new ZaCos is created
-* 	@param details
-*/
-ZaCosController.prototype._fireCosCreationEvent =
-function(details) {
-	try {
-		if (this._evtMgr.isListenerRegistered(ZaEvent.E_CREATE)) {
-			var evt = new ZaEvent(ZaEvent.S_COS);
-			evt.set(ZaEvent.E_CREATE, this);
-			evt.setDetails(details);
-			this._evtMgr.notifyListeners(ZaEvent.E_CREATE, evt);
-		}
-	} catch (ex) {
-		this._handleException(ex, ZaCosController.prototype._fireCosCreationEvent, details, false);	
-	}
-}
-
-/**
-*	Private method that notifies listeners to that the controlled ZaCos is removed
-* 	@param details
-*/
-ZaCosController.prototype._fireCosRemovalEvent =
-function(details) {
-	try {
-		if (this._evtMgr.isListenerRegistered(ZaEvent.E_REMOVE)) {
-			var evt = new ZaEvent(ZaEvent.S_COS);
-			evt.set(ZaEvent.E_REMOVE, this);
-			evt.setDetails(details);
-			this._evtMgr.notifyListeners(ZaEvent.E_REMOVE, evt);
-		}
-	} catch (ex) {
-		this._handleException(ex, ZaCosController.prototype._fireCosRemovalEvent, details, false);	
-	}
-}
 
 /**
 *	@method _setView 
@@ -217,11 +137,11 @@ function(entry) {
 	   	//create toolbar
 		if(!this._UICreated) {
 		   	this._ops = new Array();
-	   		this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.COSTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, ZaCosController.prototype._saveButtonListener)));
-	   		this._ops.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.COSTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, ZaCosController.prototype._closeButtonListener)));    	
+	   		this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.COSTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener)));
+	   		this._ops.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.COSTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener)));    	
    			this._ops.push(new ZaOperation(ZaOperation.SEP));
 	   		this._ops.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.COSTBB_New_tt, "NewCOS", "NewCOSDis", new AjxListener(this, ZaCosController.prototype._newButtonListener)));
-	   		this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.COSTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaCosController.prototype._deleteButtonListener)));    	    	
+	   		this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.COSTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener)));    	    	
 			this._ops.push(new ZaOperation(ZaOperation.NONE));
 			this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));							
 			this._toolBar = new ZaToolBar(this._container, this._ops);
@@ -484,15 +404,15 @@ function () {
 	try {	
 		if(isNew) {
 			this._currentObject.create(tmpObj.name, mods);
-			//if creation took place - fire an CosChangeEvent
-			this._fireCosCreationEvent(this._currentObject);
+			//if creation took place - fire a CreationEvent
+			this.fireCreationEvent(this._currentObject);
 			this._toolBar.getButton(ZaOperation.DELETE).setEnabled(true);	
 		} else {
 			this._currentObject.modify(mods);
-			//if modification took place - fire an CosChangeEvent
+			//if modification took place - fire a ChangeEvent
 			changeDetails["obj"] = this._currentObject;
 			changeDetails["mods"] = mods;
-			this._fireCosChangeEvent(changeDetails);
+			this.fireChangeEvent(changeDetails);
 		}
 	} catch (ex) {
 		if (ex.code == ZmCsfeException.SVC_AUTH_EXPIRED || ex.code == ZmCsfeException.SVC_AUTH_REQUIRED || ex.code == ZmCsfeException.NO_AUTH_TOKEN) {
@@ -518,115 +438,6 @@ function () {
 	}
 	return true;
 	
-}
-/**
-* @param params		   - params["params"] - arguments to pass to the method specified in func parameter
-* 					     params["obj"] - the controller of the next view
-*						 params["func"] - the method to call on the nextViewCtrlr in order to navigate to the next view
-* This method saves changes in the current view and calls the method on the controller of the next view
-**/
-ZaCosController.prototype._saveAndGoAway =
-function (params) {
-	this._confirmMessageDialog.popdown();			
-	try {
-		if(this._saveChanges()) {
-			params["func"].call(params["obj"], params["params"]);	
-
-		}
-	} catch (ex) {
-		this._handleException(ex, ZaCosController.prototype._saveAndGoAway, null, false);
-	}
-}
-
-/**
-* Leaves current view without saving any changes
-**/
-ZaCosController.prototype._discardAndGoAway = 
-function (params) {
-	this._confirmMessageDialog.popdown();
-	try {
-		params["func"].call(params["obj"], params["params"]);		
-
-	} catch (ex) {
-		this._handleException(ex, ZaCosController.prototype._discardAndGoAway, null, false);
-	}
-}
-/**
-* @param 	ev event object
-* This method handles "save" button click
-**/
-ZaCosController.prototype._saveButtonListener =
-function(ev) {
-	try {
-		if(this._saveChanges()) {
-			this._view.setDirty(false);	
-			this._toolBar.getButton(ZaOperation.SAVE).setEnabled(false);					
-			this._view.setObject(this._currentObject, true);				
-		}
-	} catch (ex) {
-		this._handleException(ex, ZaCosController.prototype._saveButtonListener, null, false);
-	}
-}
-
-/**
-* handles the Close button click. Returns to the list view.
-**/ 
-ZaCosController.prototype._closeButtonListener =
-function(ev) {
-	//prompt if the user wants to save the changes
-	if(this._view.isDirty()) {
-		//parameters for the confirmation dialog's callback 
-		var args = new Object();		
-		args["params"] = null;
-		args["obj"] = this._app;
-		args["func"] = ZaApp.prototype.popView;
-		//ask if the user wants to save changes		
-		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
-		this._confirmMessageDialog.setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
-		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaCosController.prototype._saveAndGoAway, this, args);		
-		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaCosController.prototype._discardAndGoAway, this, args);		
-		this._confirmMessageDialog.popup();
-	} else {
-		this._app.popView();
-//		this._app.getCosListController().show();
-	}	
-}
-
-/**
-* This listener is called when the Delete button is clicked. 
-**/
-ZaCosController.prototype._deleteButtonListener =
-function(ev) {
-	if(this._currentObject.id) {
-		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);						
-		this._confirmMessageDialog.setMessage("Are you sure you want to delete this COS?", DwtMessageDialog.INFO_STYLE);
-		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaCosController.prototype._deleteAndGoAway, this, null);		
-		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaCosController.prototype._closeCnfrmDlg, this, null);				
-		this._confirmMessageDialog.popup();
-	} else {
-		this._app.getCosListController().show();
-	}
-}
-
-ZaCosController.prototype._deleteAndGoAway = 
-function () {
-	try {
-		if(this._currentObject.id) {
-			this._currentObject.remove();
-			this._fireCosRemovalEvent(this._currentObject);
-		}
-		this._app.getCosListController().show();
-		this._confirmMessageDialog.popdown();	
-
-	} catch (ex) {
-		this._confirmMessageDialog.popdown();	
-		this._handleException(ex, ZaCosController.prototype._deleteAndGoAway, null, false);				
-	}
-}
-
-ZaCosController.prototype._closeCnfrmDlg = 
-function () {
-	this._confirmMessageDialog.popdown();	
 }
 
 ZaCosController.prototype.newCos = 
@@ -656,7 +467,7 @@ function(ev) {
 		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
 		this._confirmMessageDialog.setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
 		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaCosController.prototype._saveAndGoAway, this, args);		
-		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaCosController.prototype._discardAndGoAway, this, args);		
+		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);		
 		this._confirmMessageDialog.popup();
 	} else {
 		this.newCos();

@@ -32,14 +32,16 @@
 **/
 
 function ZaServerController(appCtxt, container,app) {
-	ZaController.call(this, appCtxt, container,app,"ZaServerController");
+	ZaXFormViewController.call(this, appCtxt, container,app,"ZaServerController");
 	this._evtMgr = new AjxEventMgr();
 	this._UICreated = false;
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_servers/managing_servers.htm";				
 	this._toolbarOperations = new Array();
+	this.deleteMsg = ZaMsg.Q_DELETE_SERVER;	
+	this.objType = ZaEvent.S_SERVER;	
 }
 
-ZaServerController.prototype = new ZaController();
+ZaServerController.prototype = new ZaXFormViewController();
 ZaServerController.prototype.constructor = ZaServerController;
 
 ZaController.initToolbarMethods["ZaServerController"] = new Array();
@@ -111,8 +113,8 @@ function (nextViewCtrlr, func, params) {
 		//ask if the user wants to save changes			
 		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);					
 		this._confirmMessageDialog.setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
-		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaServerController.prototype._validateChanges, this, args);		
-		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaServerController.prototype._discardAndGoAway, this, args);		
+		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, this.validateChanges, this, args);		
+		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);		
 		this._confirmMessageDialog.popup();
 	} else {
 		func.call(nextViewCtrlr, params);
@@ -132,8 +134,8 @@ function (nextViewCtrlr, func, params) {
 **/
 ZaServerController.initToolbarMethod = 
 function () {
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.SERTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, ZaServerController.prototype._saveButtonListener)));
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.SERTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, ZaServerController.prototype._closeButtonListener)));    	
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.SERTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener)));
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.SERTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener)));    	
 }
 ZaController.initToolbarMethods["ZaServerController"].push(ZaServerController.initToolbarMethod);
 
@@ -172,24 +174,6 @@ function () {
 	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolBar;		
     this._app.createView(ZaZimbraAdmin._SERVER_VIEW, elements);
 	this._UICreated = true;
-}
-
-/**
-*	Private method that notifies listeners to that the controlled ZaServer is changed
-* 	@param details
-*/
-ZaServerController.prototype._fireServerChangeEvent =
-function(details) {
-	try {
-		if (this._evtMgr.isListenerRegistered(ZaEvent.E_MODIFY)) {
-			var evt = new ZaEvent(ZaEvent.S_SERVER);
-			evt.set(ZaEvent.E_MODIFY, this);
-			evt.setDetails(details);
-			this._evtMgr.notifyListeners(ZaEvent.E_MODIFY, evt);
-		}
-	} catch (ex) {
-		this._handleException(ex, "ZaServerController.prototype._fireServerChangeEvent", details, false);	
-	}
 }
 
 ZaServerController.prototype._saveChanges =
@@ -329,7 +313,7 @@ function (obj) {
 	//if modification took place - fire an ServerChangeEvent
 	changeDetails["obj"] = this._currentObject;
 	changeDetails["modFields"] = mods;
-	this._fireServerChangeEvent(changeDetails);
+	this.fireChangeEvent(changeDetails);
 	return true;
 }
 
@@ -339,7 +323,7 @@ function (obj) {
 * an argument for the callback function,
 * and an object on which this function will be called
 **/
-ZaServerController.prototype._validateChanges =
+ZaServerController.prototype.validateChanges =
 function (params) {
 	//check if we are removing volumes
 	var obj = this._view.getObject();
@@ -372,14 +356,11 @@ function (params) {
 	try {
 		var obj = this._view.getObject();
 		if(this._saveChanges(obj)) {
-			if(this._confirmMessageDialog)
-				this._confirmMessageDialog.popdown();
+			this.closeCnfrmDlg();
 			if(params) {
 				params["func"].call(params["obj"], params["params"]);
 			} else {
 				this._setView(this._currentObject);
-				//this._currentObject.refresh(false);	
-				//this._view.setObject(this._currentObject);				
 			}
 		}
 	} catch (ex) {
@@ -389,27 +370,17 @@ function (params) {
 }
 
 /**
-* Leaves current view without saving any changes
-**/
-ZaServerController.prototype._discardAndGoAway = 
-function (params) {
-	this._confirmMessageDialog.popdown();
-	params["func"].call(params["obj"], params["params"]);		
-
-}
-
-/**
 * handles "save" button click
 * calls modify or create on the current ZaDomain
 **/
-ZaServerController.prototype._saveButtonListener =
+ZaServerController.prototype.saveButtonListener =
 function(ev) {
 	try {
-		this._validateChanges();
+		this.validateChanges();
 		
 	} catch (ex) {
 		//if exception thrown - don' go away
-		this._handleException(ex, "ZaServerController.prototype._saveButtonListener", null, false);
+		this._handleException(ex, "ZaServerController.prototype.saveButtonListener", null, false);
 	}
 }
 
@@ -418,7 +389,7 @@ function(ev) {
 /**
 * handles the Close button click. Returns to the list view.
 **/ 
-ZaServerController.prototype._closeButtonListener =
+ZaServerController.prototype.closeButtonListener =
 function(ev) {
 	//prompt if the user wants to save the changes
 	if(this._view.isDirty()) {
@@ -431,18 +402,10 @@ function(ev) {
 		//ask if the user wants to save changes		
 		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
 		this._confirmMessageDialog.setMessage(ZaMsg.Q_SAVE_CHANGES,  DwtMessageDialog.INFO_STYLE);
-		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaServerController.prototype._validateChanges, this, args);		
-		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaServerController.prototype._discardAndGoAway, this, args);		
+		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, this.validateChanges, this, args);		
+		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);		
 		this._confirmMessageDialog.popup();
 	} else {
 		this._app.popView();
 	}	
 }
-
-
-
-ZaServerController.prototype._closeCnfrmDlg = 
-function () {
-	this._confirmMessageDialog.popdown();	
-}
-

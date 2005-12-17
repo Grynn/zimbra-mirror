@@ -231,7 +231,7 @@ function(details) {
 *	Private method that notifies listeners to that the controlled ZaDomain (are) removed
 * 	@param details
 */
-ZaDomainListController.prototype._fireDomainRemovalEvent =
+ZaDomainListController.prototype._fireRemovalEvent =
 function(details) {
 	try {
 		if (this._evtMgr.isListenerRegistered(ZaEvent.E_REMOVE)) {
@@ -241,7 +241,7 @@ function(details) {
 			this._evtMgr.notifyListeners(ZaEvent.E_REMOVE, evt);
 		}
 	} catch (ex) {
-		this._handleException(ex, "ZaDomainListController.prototype._fireDomainRemovalEvent", details, false);	
+		this._handleException(ex, "ZaDomainListController.prototype._fireRemovalEvent", details, false);	
 	}
 }
 
@@ -400,7 +400,7 @@ function () {
 		}
 		this._list.remove(this._removeList[key]); //remove from the list
 	}
-	this._fireDomainRemovalEvent(successRemList); 		
+	this._fireRemovalEvent(successRemList); 		
 	this._removeConfirmMessageDialog.popdown();
 	this._contentView.setUI();
 	this.show();

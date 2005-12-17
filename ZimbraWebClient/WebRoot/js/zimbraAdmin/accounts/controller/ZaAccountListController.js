@@ -453,23 +453,6 @@ function () {
 	this._UICreated = true;
 }
 
-/**
-*	Private method that notifies listeners to that the controlled ZaAccount is (are) removed
-* 	@param details
-*/
-ZaAccountListController.prototype._fireAccountRemovalEvent =
-function(details) {
-	try {
-		if (this._evtMgr.isListenerRegistered(ZaEvent.E_REMOVE)) {
-			var evt = new ZaEvent(ZaEvent.S_ACCOUNT);
-			evt.set(ZaEvent.E_REMOVE, this);
-			evt.setDetails(details);
-			this._evtMgr.notifyListeners(ZaEvent.E_REMOVE, evt);
-		}
-	} catch (ex) {
-		this._handleException(ex, ZaAccountListController.prototype._fireAccountRemovalEvent, details, false);	
-	}
-}
 
 // new account button was pressed
 ZaAccountListController.prototype._newAccountListener =
@@ -491,7 +474,7 @@ ZaAccountListController.prototype._newDistributionListListener =
 function(ev) {
 	try {
 		var newDL = new ZaDistributionList(this._app);
-		this._app.getDistributionListController().show(newDL, ZaDLController.MODE_NEW);
+		this._app.getDistributionListController().show(newDL);
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountListController.prototype._newDistributionListListener", null, false);
 	}
@@ -540,7 +523,7 @@ ZaAccountListController.prototype._editItem = function (item) {
 		//this._selectedItem = ev.item;
 		this._app.getAccountViewController().show(item);
 	} else if (type == ZaItem.DL) {
-		this._app.getDistributionListController().show(item, ZaDLController.MODE_EDIT);
+		this._app.getDistributionListController().show(item);
 	} else if(type == ZaItem.ALIAS) {
 		var account = new ZaAccount(this._app);
 		if(item.attrs && item.attrs[ZaAlias.A_AliasTargetId]) {

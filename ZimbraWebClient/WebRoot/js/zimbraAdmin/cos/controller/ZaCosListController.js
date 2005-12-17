@@ -129,7 +129,7 @@ function (ev) {
 	//if any of the data that is currently visible has changed - update the view
 	if(ev) {
 		var details = ev.getDetails();
-		if(details["mods"][ZaCos.A_name] || details["mods"][ZaCos.A_description]) {
+		if(details && (details["mods"][ZaCos.A_name] || details["mods"][ZaCos.A_description])) {
 			this._contentView.setUI();
 			if(this._app.getCurrentController() == this) {
 				this.show();			
@@ -259,7 +259,7 @@ function(ev) {
 		}
 	}
 	if(this._removeList.length) {
-		dlgMsg = ZaMsg.Q_DELETE_COS;
+		dlgMsg = ZaMsg.Q_DELETE_COSES;
 		dlgMsg +=  "<br><ul>";
 		var i=0;
 		for(var key in this._removeList) {

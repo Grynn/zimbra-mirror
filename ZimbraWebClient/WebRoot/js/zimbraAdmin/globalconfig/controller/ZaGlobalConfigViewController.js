@@ -32,14 +32,15 @@
 * @author Greg Solovyev
 **/
 function ZaGlobalConfigViewController(appCtxt, container, app) {
-	ZaController.call(this, appCtxt, container, app,"ZaGlobalConfigViewController");
+	ZaXFormViewController.call(this, appCtxt, container, app,"ZaGlobalConfigViewController");
 	this._evtMgr = new AjxEventMgr();
 	this._UICreated = false;
 	this._confirmMessageDialog;	
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_global_settings/global_settings.htm";			
+	this.objType = ZaEvent.S_GLOBALCONFIG;
 }
 
-ZaGlobalConfigViewController.prototype = new ZaController();
+ZaGlobalConfigViewController.prototype = new ZaXFormViewController();
 ZaGlobalConfigViewController.prototype.constructor = ZaGlobalConfigViewController;
 
 //ZaGlobalConfigViewController.STATUS_VIEW = "ZaGlobalConfigViewController.STATUS_VIEW";
@@ -58,12 +59,11 @@ function(item) {
 
 	if(!this._UICreated) {
   		this._ops = new Array();
-		this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, ZaGlobalConfigViewController.prototype._saveButtonListener)));
+		this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener)));
 		this._ops.push(new ZaOperation(ZaOperation.NONE));
 		this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));							
 		this._toolBar = new ZaToolBar(this._container, this._ops);
 	
-//		this._view = new ZaGlobalConfigView(this._container, this._app);
 		this._view = new GlobalConfigXFormView(this._container, this._app);
 		var elements = new Object();
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
@@ -73,7 +73,6 @@ function(item) {
 	}
 	this._app.pushView(ZaZimbraAdmin._GLOBAL_SETTINGS);
 	this._toolBar.getButton(ZaOperation.SAVE).setEnabled(false);  	
-//	this._app.setCurrentController(this);
 	try {		
 		item[ZaModel.currentTab] = "1"
 		this._view.setDirty(false);
@@ -91,29 +90,6 @@ function(enable) {
 }
 
 /**
-* @param nextViewCtrlr - the controller of the next view
-* Checks if it is safe to leave this view. Displays warning and Information messages if neccesary.
-**/
-ZaGlobalConfigViewController.prototype.switchToNextView = 
-function (nextViewCtrlr, func, params) {
-	if(this._view.isDirty()) {
-		//parameters for the confirmation dialog's callback 
-		var args = new Object();		
-		args["params"] = params;
-		args["obj"] = nextViewCtrlr;
-		args["func"] = func;
-		//ask if the user wants to save changes			
-		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);					
-		this._confirmMessageDialog.setMessage(ZaMsg.Q_SAVE_CHANGES,  DwtMessageDialog.INFO_STYLE);
-		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaCosController.prototype._saveAndGoAway, this, args);		
-		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaCosController.prototype._discardAndGoAway, this, args);		
-		this._confirmMessageDialog.popup();
-	} else {
-		func.call(nextViewCtrlr, params);
-	}
-}
-
-/**
 * public getToolBar
 * @return reference to the toolbar
 **/
@@ -128,49 +104,6 @@ function (isD) {
 		this._toolBar.getButton(ZaOperation.SAVE).setEnabled(true);
 	else
 		this._toolBar.getButton(ZaOperation.SAVE).setEnabled(false);
-}
-
-/**
-* @param params		   - params["params"] - arguments to pass to the method specified in func parameter
-* 					     params["obj"] - the controller of the next view
-*						 params["func"] - the method to call on the nextViewCtrlr in order to navigate to the next view
-* This method saves changes in the current view and calls the method on the controller of the next view
-**/
-ZaGlobalConfigViewController.prototype._saveAndGoAway =
-function (params) {
-	this._confirmMessageDialog.popdown();			
-	try {
-		if(this._saveChanges()) {
-			params["func"].call(params["obj"], params["params"]);	
-		}
-	} catch (ex) {
-		this._handleException(ex, "ZaGlobalConfigViewController.prototype._saveAndGoAway", null, false);
-	}
-}
-
-/**
-* Leaves current view without saving any changes
-**/
-ZaGlobalConfigViewController.prototype._discardAndGoAway = 
-function (params) {
-	this._confirmMessageDialog.popdown();
-	try {
-		params["func"].call(params["obj"], params["params"]);		
-	} catch (ex) {
-		this._handleException(ex, "ZaGlobalConfigViewController.prototype._discardAndGoAway", null, false);
-	}
-}
-
-ZaGlobalConfigViewController.prototype._saveButtonListener = 
-function (ev) {
-	try {
-		if(this._saveChanges()) {
-			this._view.setDirty(false);		
-			this._toolBar.getButton(ZaOperation.SAVE).setEnabled(false); 
-		}
-	} catch (ex) {
-		this._handleException(ex, "ZaGlobalConfigViewController.prototype._saveButtonListener", null, false);
-	}
 }
 
 ZaGlobalConfigViewController.prototype._saveChanges =
@@ -271,24 +204,6 @@ function () {
 	//if modification took place - fire a Settings Change Event
 	changeDetails["obj"] = this._currentObject;
 	changeDetails["modFields"] = mods;
-	this._fireSettingsChangeEvent(changeDetails);
+	this.fireChangeEvent(changeDetails);
 	return true;
-}
-
-/**
-*	Private method that notifies listeners to that the settings are changed
-* 	@param details
-*/
-ZaGlobalConfigViewController.prototype._fireSettingsChangeEvent =
-function(details) {
-	try {
-		if (this._evtMgr.isListenerRegistered(ZaEvent.E_MODIFY)) {
-			var evt = new ZaEvent(ZaEvent.S_GLOBALCONFIG);
-			evt.set(ZaEvent.E_MODIFY, this);
-			evt.setDetails(details);
-			this._evtMgr.notifyListeners(ZaEvent.E_MODIFY, evt);
-		}
-	} catch (ex) {
-		this._handleException(ex, "ZaGlobalConfigViewController.prototype._fireSettingsChangeEvent", details, false);	
-	}
 }

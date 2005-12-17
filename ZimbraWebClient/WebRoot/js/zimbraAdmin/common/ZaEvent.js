@@ -59,13 +59,14 @@ ZaEvent.S_SEARCH		= i++;
 ZaEvent.S_SETTING		= i++;
 
 //Source types for admin
-ZaEvent.S_ACCOUNT		= i++;
-ZaEvent.S_COS			= i++;
-ZaEvent.S_DOMAIN		= i++;
-ZaEvent.S_SERVER		= i++;
-ZaEvent.S_GLOBALCONFIG	= i++;
-ZaEvent.S_STATUS		= i++;
-ZaEvent.S_CLUSTER_STATUS= i++;
+ZaEvent.S_ACCOUNT		 = i++;
+ZaEvent.S_COS			 = i++;
+ZaEvent.S_DOMAIN		 = i++;
+ZaEvent.S_SERVER		 = i++;
+ZaEvent.S_GLOBALCONFIG	 = i++;
+ZaEvent.S_STATUS		 = i++;
+ZaEvent.S_CLUSTER_STATUS = i++;
+ZaEvent.S_DL 			 = i++;
 
 
 // Event types
