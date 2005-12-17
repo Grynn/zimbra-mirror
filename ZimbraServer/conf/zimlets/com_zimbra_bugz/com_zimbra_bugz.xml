@@ -1,4 +1,5 @@
 <zimlet name="com_zimbra_bugz" version="1.0" description="Bugz">
 	<include>ZmBugzObjectHandler.js</include>
+	<resource>bugz.xsl</resource>
 	<handlerObject>ZmBugzObjectHandler</handlerObject>
 </zimlet>

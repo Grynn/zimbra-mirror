@@ -25,25 +25,16 @@
 
 function ZmBugzObjectHandler(appCtxt) {
 	ZmZimletBase.call(this, appCtxt, ZmBugzObjectHandler.TYPE);
+	var stylesheet = appCtxt.getUrl()+"bugz.xsl";  // ctxt based getResource() not available yet.
+	this._processor = AjxXslt.createFromUrl(stylesheet);
 }
 
 ZmBugzObjectHandler.TYPE = "bugz";
 
-ZmBugzObjectHandler.prototype = new ZmZimletBase();
+ZmBugzObjectHandler.prototype = new ZmZimletBase;
+ZmBugzObjectHandler.prototype.constructor = ZmBugzObjectHandler;
 
-ZmBugzObjectHandler.bug_re = /\bbug(?:zilla)?:?\s*#?(\d+)\b/g;
-
-ZmBugzObjectHandler.bug_items = new Array(
-	"bug_id",       "ID",
-	"bug_status",   "Status",
-	"priority",     "Priority",
-	"bug_severity", "Severity",
-	"product",      "Product",
-	"component",    "Component",
-	"version",      "Version",
-	"reporter",     "Reporter",
-	"assigned_to",  "Owner",
-	"short_desc",   "Description");
+ZmBugzObjectHandler.bug_re = /\bbug(?:zilla)?:?\s*#?(\d+)\b/ig;
 
 ZmBugzObjectHandler.prototype.match =
 function(line, startIndex) {
@@ -57,41 +48,18 @@ function(line, startIndex) {
 
 ZmBugzObjectHandler.prototype.toolTipPoppedUp =
 function(spanElement, obj, context, canvas) {
-	canvas.innerHTML = ZmBugzObjectHandler.generateTooltipText(context);
+	canvas.innerHTML = "<b>ID: </b>"+context;
 	var request = new AjxRpcRequest("bugzilla");
 	var bug_url = this.getConfig("url")+context;
 	var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(bug_url);
-	request.invoke(null, url, null, new AjxCallback(this, ZmBugzObjectHandler._callback, context), true);
+	request.invoke(null, url, null, new AjxCallback(this, ZmBugzObjectHandler._callback, canvas), true);
 };
 
 ZmBugzObjectHandler._callback =
-function(args) {
-	var resp = args[1].text;
-	for (i = 0; i < ZmBugzObjectHandler.bug_items.length; i += 2) {
-		// XXX maybe properly parse the xml into DOM
-		var key = ZmBugzObjectHandler.bug_items[i];
-		var item_s = resp.indexOf("<"+key+">");
-		var item_e = resp.indexOf("</"+key+">");
-		var val = "";
-		if (item_s > 0 && item_e > 0) {
-			val = "<b>"+ZmBugzObjectHandler.bug_items[i+1]+": </b>"+resp.substring(item_s+key.length+2, item_e);
-			document.getElementById(ZmBugzObjectHandler.encodeId(args[0], key)).innerHTML=val;
-		}
-	}
+function(canvas, result) {
+	var xslt = this._processor;
+	var resp = result.xml;
+	var html = xslt.transformToString(resp);
+	canvas.innerHTML = html;
 };
 
-ZmBugzObjectHandler.generateTooltipText =
-function(obj) {
-	var ret = "";
-	for (i = 0; i < this.bug_items.length; i += 2) {
-		var key = this.bug_items[i];
-		var text = this.bug_items[i+1];
-		ret += "<div id=\""+this.encodeId(obj, key)+"\"><b>"+text+": </b></div>";
-	}
-	return ret;
-};
-
-ZmBugzObjectHandler.encodeId =
-function(obj, key) {
-	return "bugz"+obj+"_"+key;
-};
