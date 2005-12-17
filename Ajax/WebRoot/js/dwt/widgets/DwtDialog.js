@@ -404,7 +404,7 @@ DwtDialog.prototype._runCallbackForButtonId =
 function(id, args) {
 	var callback = this._buttonDesc[id].callback;
 	if (!callback) return;
-	callback.run.apply(callback, args);
+	callback.run(args);
 };
 
 DwtDialog.prototype._runEnterCallback =
