@@ -28,9 +28,6 @@
 ///  @author Mihai Bazon, <mihai@zimbra.com>                 ///
 ////////////////////////////////////////////////////////////////
 function Com_Zimbra_SForce() {
-	// that's for good practice, though useless for now
-	ZmZimletBase.call(this);
-
 	// Let the framework know that we want to handle 500 and other errors
 	// ourselves (in particular, for a simple "login failure" the SForce
 	// server likes to return 500.  This IMO is dumb, but whatever.
@@ -49,7 +46,7 @@ Com_Zimbra_SForce.prototype = new ZmZimletBase;
 Com_Zimbra_SForce.prototype.constructor = Com_Zimbra_SForce;
 
 /// Store the default SOAP server.  Note that after a successful login, the URL
-/// may change--which is why we store it in an object instance too (this.XMLNS)
+/// may change--which is why we store it in an object instance too (this.SERVER)
 Com_Zimbra_SForce.LOGIN_SERVER = "https://www.salesforce.com/services/Soap/u/6.0";
 
 // SOAP utils
@@ -101,7 +98,7 @@ Com_Zimbra_SForce.prototype.login = function(callback) {
 	var passwd = this.getUserProperty("passwd");
 	if (!user || !passwd) {
 		this.displayStatusMessage("Please fill your SForce credentials first");
-		this.createPropertyEditor(new AjxCallback(this, this.login, callback));
+		this.createPropertyEditor(new AjxCallback(this, this.login, [ callback ]));
 	} else {
 		this._do_login(callback, user, passwd);
 	}
@@ -113,12 +110,10 @@ Com_Zimbra_SForce.prototype._do_login = function(callback, user, passwd) {
 	soap.set("password", passwd);
 	if (callback == null)
 		callback = false;
-	this.rpc(soap, new AjxCallback(this, this.done_login, callback), true);
+	this.rpc(soap, new AjxCallback(this, this.done_login, [ callback ]), true);
 };
 
-Com_Zimbra_SForce.prototype.done_login = function(params) {
-	var callback = params[0];
-	var result = params[1];
+Com_Zimbra_SForce.prototype.done_login = function(callback, result) {
 	var ans = this.xmlToObject(result);
 	if (ans.Body.loginResponse) {
 		ans = ans.Body.loginResponse.result;
@@ -175,7 +170,7 @@ Com_Zimbra_SForce.prototype._do_query = function(query, limit, callback) {
 			  soap.ensureHeader());
 	qo.setAttribute("xmlns", this.XMLNS);
 	// we sure have a lot of indirection going on..
-	this.rpc(soap, new AjxCallback(this, this.done_query, callback));
+	this.rpc(soap, new AjxCallback(this, this.done_query, [ callback ]));
 };
 
 Com_Zimbra_SForce.__query_result_get = function() {
@@ -188,9 +183,7 @@ Com_Zimbra_SForce.__query_result_get = function() {
 	return "";
 };
 
-Com_Zimbra_SForce.prototype.done_query = function(params) {
-	var callback = params[0];
-	var result = params[1];
+Com_Zimbra_SForce.prototype.done_query = function(callback, result) {
 	var xd = this.xmlToObject(result);
 	var qr = xd.Body.queryResponse.result.records;
 	if (qr != null) {
@@ -234,12 +227,10 @@ Com_Zimbra_SForce.prototype.createSFObject = function(props, type, callback) {
 		// el.setAttribute("xmlns:tns", this.XMLNS);
 	}
 	//alert(soap.getXml());
-	this.rpc(soap, new AjxCallback(this, this.done_createSFObject, callback));
+	this.rpc(soap, new AjxCallback(this, this.done_createSFObject, [ callback ]));
 };
 
-Com_Zimbra_SForce.prototype.done_createSFObject = function(params) {
-	var callback = params[0];
-	var result = params[1];
+Com_Zimbra_SForce.prototype.done_createSFObject = function(callback, result) {
 	//alert(result.text);
 	var xd = this.xmlToObject(result);
 	if (callback) {
@@ -565,7 +556,7 @@ Com_Zimbra_SForce.prototype.dlg_addNoteToAccounts = function(records, note) {
 		  "<tr>",
 		  "<td align='right'><label for='", subjectId, "'>Subject:</td>",
 		  "<td>",
-		  "<input autocomplete='off' style='width: 20em' type='text' id='", subjectId, "' value='",
+		  "<input autocomplete='off' style='width: 21em' type='text' id='", subjectId, "' value='",
 		  AjxStringUtil.htmlEncode(note.subject), "'/>",
 		  "</td>",
 		  "</tr>",

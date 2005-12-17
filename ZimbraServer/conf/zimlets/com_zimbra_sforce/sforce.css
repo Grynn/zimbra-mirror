@@ -5,13 +5,6 @@
   overflow: hidden;
 }
 
-.ImgSFORCE-wait {
-  background: url("/zimbra/img/animated/wait_16.gif") no-repeat 0 0;
-  width: 16px;
-  height: 16px;
-  overflow: hidden;
-}
-
 h3.SForce-sec-label {
   font-size: 14px;
   margin: 0.5em 0;

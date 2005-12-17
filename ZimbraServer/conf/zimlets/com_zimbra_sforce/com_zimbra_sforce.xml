@@ -16,6 +16,7 @@
       <menuItem label="Preferences..." id="PREFERENCES" />
       <menuItem />
       <menuItem label="Visit SalesForce" id="WWW.SFORCE.COM" icon="SFORCE-panelIcon">
+        <canvas type="dialog" width="800" height="600" />
         <actionUrl target="http://www.sforce.com">
           <param name="referrer">www.zimbra.com</param>
         </actionUrl>

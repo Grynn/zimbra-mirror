@@ -28,11 +28,14 @@
 //  @author Kevin Henrikson                                 //
 //////////////////////////////////////////////////////////////
 
-function Com_Zimbra_Amzn(appCtxt) {
-	ZmZimletBase.call(this, appCtxt, this.getType());
+function Com_Zimbra_Amzn() {
+}
+
+Com_Zimbra_Amzn.prototype.init =
+function() {
 	// Pre-load placeholder image
 	(new Image()).src = this.getResource('blank_pixel.gif');
-}
+};
 
 Com_Zimbra_Amzn.prototype = new ZmZimletBase();
 Com_Zimbra_Amzn.prototype.constructor = Com_Zimbra_Amzn;

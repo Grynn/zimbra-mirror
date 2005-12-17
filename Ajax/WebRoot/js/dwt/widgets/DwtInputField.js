@@ -465,7 +465,7 @@ function(value) {
 	}
 
 	if (this._validationCallback)
-		this._validationCallback.run([this, isValid, value]);
+		this._validationCallback.run(this, isValid, value);
 
 	return retVal;
 };

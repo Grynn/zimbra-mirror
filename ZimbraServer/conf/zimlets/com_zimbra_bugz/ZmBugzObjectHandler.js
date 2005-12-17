@@ -23,27 +23,16 @@
  * ***** END LICENSE BLOCK *****
  */
 
-function ZmBugzObjectHandler(appCtxt) {
-	ZmZimletBase.call(this, appCtxt, ZmBugzObjectHandler.TYPE);
-	var stylesheet = appCtxt.getUrl()+"bugz.xsl";  // ctxt based getResource() not available yet.
-	this._processor = AjxXslt.createFromUrl(stylesheet);
+function ZmBugzObjectHandler() {
 }
-
-ZmBugzObjectHandler.TYPE = "bugz";
 
 ZmBugzObjectHandler.prototype = new ZmZimletBase;
 ZmBugzObjectHandler.prototype.constructor = ZmBugzObjectHandler;
 
-ZmBugzObjectHandler.bug_re = /\bbug(?:zilla)?:?\s*#?(\d+)\b/ig;
-
-ZmBugzObjectHandler.prototype.match =
-function(line, startIndex) {
-	ZmBugzObjectHandler.bug_re.lastIndex = startIndex;
-	var match = ZmBugzObjectHandler.bug_re.exec(line);
-	if (match) {
-		match.context = match[1];
-	}
-	return match;
+ZmBugzObjectHandler.prototype.init =
+function() {
+	var stylesheet = this.getResource("bugz.xsl");
+	this._processor = AjxXslt.createFromUrl(stylesheet);
 };
 
 ZmBugzObjectHandler.prototype.toolTipPoppedUp =

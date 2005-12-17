@@ -2,4 +2,9 @@
 	<include>ZmBugzObjectHandler.js</include>
 	<resource>bugz.xsl</resource>
 	<handlerObject>ZmBugzObjectHandler</handlerObject>
+	<contentObject type="bugz">
+          <matchOn>
+            <regex attrs="ig">\bbug(?:zilla)?:?\s*#?(\d+)\b</regex>
+          </matchOn>
+        </contentObject>
 </zimlet>

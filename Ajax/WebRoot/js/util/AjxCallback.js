@@ -46,16 +46,16 @@ function AjxCallback(obj, func, args) {
 	this.args = args;
 }
 
-AjxCallback.prototype.toString = 
+AjxCallback.prototype.toString =
 function() {
 	return "AjxCallback";
 }
 
 /**
 * Runs the callback function, from within the object if there is one. The
-* called function passed arguments are the concatenation of the argument 
-* array passed to this object's constructor and the argument array passed 
-* to the <code>run</code> method. Whatever the called function returns is 
+* called function passed arguments are the concatenation of the argument
+* array passed to this object's constructor and the argument array passed
+* to the <code>run</code> method. Whatever the called function returns is
 * returned to the caller.
 *
 * @param arg1	The first argument which will be appended to the argument
@@ -63,31 +63,21 @@ function() {
 *				arguments may be passed to the <code>run</code> method.
 */
 AjxCallback.prototype.run =
-function(arg1 /* ... argN */) {
+function(/* arg1 ... argN */) {
 	// combine original args with new ones
-	var args;
-	if (this.args && arguments.length > 0) {
-		args = [];
-		if (this.args instanceof Array) {
-			for (var i = 0; i < this.args.length; i++) {
-				args.push(this.args[i]);
-			}
-		}
-		else {
+	var args = [];
+
+	// sometimes we want to pass a null or false argument, so simply
+	// checking for if (this.args) won't do.
+	if (typeof this.args != "undefined") {
+		if (this.args instanceof Array)
+			args = this.args;
+		else
 			args.push(this.args);
-		}
-		for (var i = 0; i < arguments.length; i++) {
-			args.push(arguments[i]);
-		}
 	}
-	else {
-		if (this.args) {
-			args = this.args instanceof Array ? this.args : [ this.args ];
-		}
-		else {
-			args = arguments;
-		}
-	}
+
+	for (var i = 0; i < arguments.length; ++i)
+		args.push(arguments[i]);
 
 	// invoke function
 	return this.func.apply(this.obj || window, args);

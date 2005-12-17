@@ -23,11 +23,15 @@
  * ***** END LICENSE BLOCK *****
  */
 
-function Com_Zimbra_Url(appCtxt) {
-	ZmZimletBase.call(this, appCtxt, this.getType());
+function Com_Zimbra_Url() {
+}
+
+Com_Zimbra_Url.prototype.init =
+function() {
 	// Pre-load placeholder image
 	(new Image()).src = this.getResource('blank_pixel.gif');
-}
+};
+
 Com_Zimbra_Url.prototype = new ZmZimletBase();
 Com_Zimbra_Url.prototype.constructor = Com_Zimbra_Url;
 

@@ -28,11 +28,13 @@
 //  @author Kevin Henrikson                                 //
 //////////////////////////////////////////////////////////////
 
-function Com_Zimbra_YMaps(appCtxt) {
-	ZmZimletBase.call(this, appCtxt, this.getType());
-	// Pre-load placeholder image
-	(new Image()).src = this.getResource('blank_pixel.gif');
+function Com_Zimbra_YMaps() {
 }
+
+Com_Zimbra_YMaps.prototype.init =
+function() {
+	(new Image()).src = this.getResource('blank_pixel.gif');
+};
 
 Com_Zimbra_YMaps.prototype = new ZmZimletBase();
 Com_Zimbra_YMaps.prototype.constructor = Com_Zimbra_YMaps;
@@ -66,7 +68,7 @@ function(img_src, obj) {
 };
 
 Com_Zimbra_YMaps._callback = 
-function(args) {
-	var r = args[1].text;
-	Com_Zimbra_YMaps._displayImage(r.substring(r.indexOf("http://img"),r.indexOf("</Result>")), args[0]);
+function(obj, result) {
+	var r = result.text;
+	Com_Zimbra_YMaps._displayImage(r.substring(r.indexOf("http://img"),r.indexOf("</Result>")), obj);
 };
