@@ -97,6 +97,10 @@ function DwtMenu(parent, style, className, posStyle, dialog) {
 	this._numCheckedStyleItems = 0;	
 	this._menuItemsHaveIcons = false;
 	this._menuItemsWithSubmenus = 0;
+	
+	/* The global capture is used to detect mouse down events outside of the popped up menus and specifically
+	 * outside of our scope of influence (particularly when Dwt is being used in existing HTML */
+	this._menuCapObj = new DwtMouseEventCapture(this, "DwtMenu", null, DwtMenu._capMouseDownHdlr, null, null, null, false)
 }
 
 DwtMenu.prototype = new DwtComposite;
@@ -115,6 +119,16 @@ DwtMenu.CALENDAR_PICKER_STYLE = 5;
 
 DwtMenu._activeMenuUp = false;
 DwtMenu._activeMenuIds = new AjxVector();
+
+DwtMenu.prototype.addPopupListener = 
+function(listener) {
+	this.addListener(DwtEvent.POPUP, listener);
+}
+
+DwtMenu.prototype.removePopupListener = 
+function(listener) {
+	this.removeListener(DwtEvent.POPUP, listener);
+}
 
 DwtMenu.prototype.addPopdownListener = 
 function(listener) {
@@ -431,6 +445,8 @@ function(x, y) {
 	var newY = ((y + s.y) >= ws.y) ? y - (y + s.y - ws.y) : y;	
 	this.setLocation(newX, newY);	
 
+	this.notifyListeners(DwtEvent.POPUP, this);
+
 	// Hide the tooltip
 	var tooltip = this.shell.getToolTip();
 	if (tooltip)
@@ -456,7 +472,17 @@ function(x, y) {
 	}
 
 	DwtMenu._activeMenuIds.add(this._htmlElId);
-	DwtMenu._activeMenuIds.sort();		
+	DwtMenu._activeMenuIds.sort();	
+	
+	// Capture events only if we are not a sub-menu. Event capturing is to catch mouse-events outside
+	// of our framework (esp. vital when DWT is being used in existing HTML content)
+	if (!this._menuCapObj.capturing()) {
+		this._menuCapObj.capture();	
+		this._capturing = true;
+	} else {
+		this._capturing = false;
+	}
+
 }
 
 DwtMenu.prototype._doPopdown =
@@ -469,6 +495,7 @@ function() {
 			a[i]._popdownMenu();
 	}
 	this.setZIndex(Dwt.Z_HIDDEN);
+	this.setLocation(Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
 	
 	this.notifyListeners(DwtEvent.POPDOWN, this);
 	
@@ -486,6 +513,11 @@ function() {
 	DwtMenu._activeMenuIds.remove(this._htmlElId);
 	this._popdownActionId = -1;
 	this._isPoppedup = false;
+	
+	if (this._capturing) {
+		this._menuCapObj.release();
+		this._capturing = false;
+	}
 }
 
 DwtMenu.prototype._getActiveItem = 
@@ -499,6 +531,7 @@ function(){
 	return null;
 }
 
+/** NO LONGER USED
 DwtMenu._mouseDownListener =
 function(ev) {
 	if (!DwtMenu._activeMenuUp) return;
@@ -518,6 +551,7 @@ function(ev) {
 	obj.popdown();
 	return true;		
 }
+*/
 
 /* Note that a hack has been added to DwtHtmlEditor to call this method when the editor gets focus. The reason
  * for this is that the editor uses an Iframe whose events are independent of the menu's document. In this case
@@ -530,7 +564,7 @@ function(ev) {
 		var menu = DwtMenu._activeMenu;
 		var nearestDwtObj = DwtUiEvent.getDwtObjFromEvent(ev);
 		if (menu._associatedObj && menu._associatedObj == nearestDwtObj) {
-			return;
+			return false;
 		}
 
 		// assuming that the active menu is the parent of all other menus
@@ -542,7 +576,7 @@ function(ev) {
 			if (htmlEl.id && htmlEl.id != "" && 
 				(htmlEl.id == id || htmlEl.id == menu._associatedElId ||
 				 DwtMenu._activeMenuIds.binarySearch(htmlEl.id) != -1 )) {
-				return;
+				return false;
 			}
 			htmlEl = htmlEl.parentNode;
 		}
@@ -554,7 +588,18 @@ function(ev) {
 	// propagate the event
 	ev._stopPropagation = false;
 	ev._returnValue = true;
+	return true;
 };
+
+DwtMenu._capMouseDownHdlr =
+function(ev) {
+	var menu = DwtMouseEventCapture.getTargetObj();
+	var mouseEv = DwtShell.mouseEvent;
+	mouseEv.setFromDhtmlEvent(ev);
+	DwtMenu._outsideMouseDownListener(mouseEv);
+	DwtUiEvent.setBehaviour(ev, false, true);
+	return true;
+}
 
 /*
 * Returns true if any menu is currently popped up.

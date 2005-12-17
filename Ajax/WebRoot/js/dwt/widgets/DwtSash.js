@@ -41,7 +41,7 @@ function DwtSash(parent, style, className, threshold, posStyle) {
 	}
 	this._threshold = (threshold > 0) ? threshold : 1;
 
-	this._captureObj = new DwtMouseEventCapture(this, DwtSash._mouseOverHdlr,
+	this._captureObj = new DwtMouseEventCapture(this, "DwtSash", DwtSash._mouseOverHdlr,
 			DwtSash._mouseDownHdlr, DwtSash._mouseMoveHdlr, 
 			DwtSash._mouseUpHdlr, DwtSash._mouseOutHdlr);
 	this.setHandler(DwtEvent.ONMOUSEDOWN, DwtSash._mouseDownHdlr);

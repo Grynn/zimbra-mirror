@@ -45,7 +45,7 @@ function(control, style, threshX, threshY, callbackFunc, callbackObj, userData) 
 	ctxt.threshY = (threshY > 0) ? threshY : 1;
 	ctxt.data = { delta: {}, userData: userData};
 
-	ctxt.captureObj = new DwtMouseEventCapture(control, DwtDragTracker._mouseOverHdlr,
+	ctxt.captureObj = new DwtMouseEventCapture(control, null, DwtDragTracker._mouseOverHdlr,
 			DwtDragTracker._mouseDownHdlr, DwtDragTracker._mouseMoveHdlr, 
 			DwtDragTracker._mouseUpHdlr, DwtDragTracker._mouseOutHdlr);
 	control.setHandler(DwtEvent.ONMOUSEDOWN, DwtDragTracker._mouseDownHdlr);

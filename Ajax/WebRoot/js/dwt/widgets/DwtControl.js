@@ -113,7 +113,7 @@ DwtControl._mouseOverHdlr =
 function(ev) {
 	// Check to see if a drag is occurring. If so, don't process the mouse
 	// over events.
-	var captureObj = DwtMouseEventCapture.getCaptureObj();
+	var captureObj = (DwtMouseEventCapture.getId() == "DwtControl") ? DwtMouseEventCapture.getCaptureObj() : null;
 	if (captureObj != null) {
 		ev = DwtUiEvent.getEvent(ev);
 		ev._stopPropagation = true;
@@ -184,8 +184,8 @@ function(ev) {
 	// If captureObj == null, then we are not a Draggable control or a 
 	// mousedown event has not occurred , so do the default behaviour, 
 	// else do the draggable behaviour 
-	var captureObj = DwtMouseEventCapture.getCaptureObj();
-	var obj = captureObj ? captureObj.targetObj : DwtUiEvent.getDwtObjFromEvent(ev);
+	var captureObj = (DwtMouseEventCapture.getId() == "DwtControl") ? DwtMouseEventCapture.getCaptureObj() : null;
+	var obj = (captureObj) ? captureObj.targetObj : DwtUiEvent.getDwtObjFromEvent(ev);
  	if (!obj) return false;
 
 	//DND cancel point
@@ -317,8 +317,8 @@ function(ev) {
 DwtControl._mouseUpHdlr =
 function(ev) {
 	// See if are doing a drag n drop operation
-	var captureObj = DwtMouseEventCapture.getCaptureObj();
-	var obj = captureObj ? captureObj.targetObj : DwtUiEvent.getDwtObjFromEvent(ev);
+	var captureObj = (DwtMouseEventCapture.getId() == "DwtControl") ? DwtMouseEventCapture.getCaptureObj() : null;
+	var obj = (captureObj) ? captureObj.targetObj : DwtUiEvent.getDwtObjFromEvent(ev);
 	if (!obj) return false;
 
 	//DND
@@ -424,7 +424,7 @@ function(ev, eventType, obj, mouseEv) {
 		mouseEv._stopPropagation = false;
 		mouseEv._returnValue = true;	
 	}
-
+	
 	// notify global listeners
 	DwtEventManager.notifyListeners(eventType, mouseEv);
 	// notify widget listeners
@@ -662,7 +662,7 @@ DwtControl.prototype.setDragSource =
 function(dragSource) {
 	this._dragSource = dragSource;
 	if (dragSource != null && this._ctrlCaptureObj == null) {
-		this._ctrlCaptureObj = new DwtMouseEventCapture(this, DwtControl._mouseOverHdlr,
+		this._ctrlCaptureObj = new DwtMouseEventCapture(this, "DwtControl", DwtControl._mouseOverHdlr,
 				DwtControl._mouseDownHdlr, DwtControl._mouseMoveHdlr, 
 				DwtControl._mouseUpHdlr, DwtControl._mouseOutHdlr);
 		this._dndHoverAction = new AjxTimedAction(null, this._dndDoHover);

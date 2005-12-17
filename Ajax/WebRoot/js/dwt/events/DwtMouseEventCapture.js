@@ -23,18 +23,36 @@
 * ***** END LICENSE BLOCK *****
 */
 
-
-function DwtMouseEventCapture(targetObj, mouseOverHdlr, mouseDownHdlr, mouseMoveHdlr, mouseUpHdlr,
-                           mouseOutHdlr, hardCapture) {
+/**
+* Helper class for event capturing
+*
+* @constructor
+* @class DwtMouseEventCapture
+*
+* @author Ross Dargahi
+*
+* @param targetObj [DOM Element:required]	Target element
+* @param id [string:optional]				ID for this capture instance.
+* @param mouseOverHdlr [function:optional]	Browser event handler
+* @param mouseDownHdlr [function:optional]	Browser event handler
+* @param mouseMoveHdlr [function:optional]	Browser event handler
+* @param mouseUpHdlr [function:optional]	Browser event handler
+* @param mouseOutHdlr [function:optional]	Browser event handler
+* @param hardCapture [boolean:optional]		If true, then event propagation is halted at this element
+*/
+function DwtMouseEventCapture(targetObj, id, mouseOverHdlr, mouseDownHdlr, mouseMoveHdlr, mouseUpHdlr,
+                              mouseOutHdlr, hardCapture) {
 	this.targetObj = targetObj;
+	this._id = id
 	this._mouseOverHdlr = (mouseOverHdlr != null) ? mouseOverHdlr : DwtMouseEventCapture.emptyHdlr;
 	this._mouseDownHdlr = (mouseDownHdlr != null) ? mouseDownHdlr : DwtMouseEventCapture.emptyHdlr;
 	this._mouseMoveHdlr = (mouseMoveHdlr != null) ? mouseMoveHdlr : DwtMouseEventCapture.emptyHdlr;
 	this._mouseUpHdlr = (mouseUpHdlr != null) ? mouseUpHdlr : DwtMouseEventCapture.emptyHdlr;
 	this._mouseOutHdlr = (mouseOutHdlr != null) ? mouseOutHdlr : DwtMouseEventCapture.emptyHdlr;
-	this._capturing = false;
 	this._hardCapture = (hardCapture == null || hardCapture == true) ? true : false;
 }
+
+DwtMouseEventCapture._capturing = false;
 
 DwtMouseEventCapture.getCaptureObj =
 function() {
@@ -48,6 +66,13 @@ function() {
 	return null;
 }
 
+DwtMouseEventCapture.getId =
+function() {
+	if (window._mouseEventCaptureObj != null)
+		return window._mouseEventCaptureObj._id;
+	return null;
+}
+
 DwtMouseEventCapture.prototype.toString = 
 function() {
 	return "DwtMouseEventCapture";
@@ -55,7 +80,7 @@ function() {
 
 DwtMouseEventCapture.prototype.capturing =
 function() {
-	return this._capturing;
+	return DwtMouseEventCapture._capturing;
 }
 
 DwtMouseEventCapture.prototype.capture =
@@ -84,7 +109,7 @@ function() {
 		document.body.setCapture();
 	}
 	window._mouseEventCaptureObj = this;
-	this._capturing = true;
+	DwtMouseEventCapture._capturing = true;
 }
 
 
@@ -110,7 +135,7 @@ function() {
 	if (this._hardCapture && document.body && document.body.releaseCapture)
 		document.body.releaseCapture();	
 	window._mouseEventCaptureObj = null;
-	this._capturing = false;
+	DwtMouseEventCapture._capturing = false;
 }
 
 DwtMouseEventCapture.emptyHdlr =

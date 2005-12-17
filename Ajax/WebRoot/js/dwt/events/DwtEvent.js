@@ -63,6 +63,7 @@ DwtEvent.ENTER			= "ENTER";			// enter/return key
 DwtEvent.HOVEROVER		= "HOVEROVER";		// mouseover for X ms
 DwtEvent.HOVEROUT		= "HOVEROUT";
 DwtEvent.POPDOWN		= "POPDOWN";
+DwtEvent.POPUP			= "POPUP";
 DwtEvent.SELECTION		= "SELECTION";		// left-click
 DwtEvent.TREE			= "TREE";
 DwtEvent.STATE_CHANGE	= "STATE_CHANGE";

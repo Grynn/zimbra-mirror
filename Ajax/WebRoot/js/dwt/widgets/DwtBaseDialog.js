@@ -196,7 +196,7 @@ function() {
 		//var myZIndex = this.getZIndex();
 	    var myZIndex = this._zIndex;
 		this.setZIndex(Dwt.Z_HIDDEN);
-		this._positionDialog({x:-10000, y:-10000});
+		this._positionDialog({x:Dwt.LOC_NOWHERE, y:Dwt.LOC_NOWHERE});
 		if (this._mode == DwtBaseDialog.MODAL) {
 			this._undoModality(myZIndex);
 		} else {

@@ -54,10 +54,10 @@
 <script type="text/javascript" src="<%= contextPath %>/js/core/AjxEnv.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/core/AjxImg.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/core/AjxException.js"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/util/AjxCallback.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/util/AjxTimedAction.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/events/AjxEvent.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/events/AjxEventMgr.js"></script>
-<script type="text/javascript" src="<%= contextPath %>/js/util/AjxCallback.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/events/AjxListener.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/util/AjxDateUtil.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/util/AjxStringUtil.js"></script>

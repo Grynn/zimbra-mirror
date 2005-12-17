@@ -248,6 +248,66 @@ function() {
 	return this._toolTip;
 }
 
+DwtShell.prototype.getH = 
+function(incScroll) {
+	return (!this._virtual) ? Dwt.getSize(this.getHtmlElement(), incScroll).y
+	                        : Dwt.getSize(document.body, incScroll).y;
+}
+
+DwtShell.prototype.getW = 
+function(incScroll) {
+	return (!this._virtual) ? Dwt.getSize(this.getHtmlElement(), incScroll).x
+	                        : Dwt.getSize(document.body, incScroll).x;
+}
+
+DwtShell.prototype.getSize = 
+function(incScroll) {
+	return (!this._virtual) ? Dwt.getSize(this.getHtmlElement(), incScroll)
+	                        : Dwt.getSize(document.body, incScroll);
+}
+
+DwtShell.prototype.getLocation =
+function() {
+	return (!this._virtual) ? Dwt.getLocation(this.getHtmlElement())
+	                        : Dwt.getLocation(document.body);
+}
+
+DwtShell.prototype.getX =
+function() {
+	return (!this._virtual) ? Dwt.getLocation(this.getHtmlElement()).x
+	                        : Dwt.getLocation(document.body).x;
+}
+
+DwtShell.prototype.getY =
+function() {
+	return (!this._virtual) ? Dwt.getLocation(this.getHtmlElement()).y
+	                        : Dwt.getLocation(document.body).y;
+}
+
+
+DwtShell.prototype.getBounds = 
+function() {
+	return (!this._virtual) ? Dwt.getBounds(this.getHtmlElement(), incScroll)
+	                        : Dwt.getBounds(document.body, incScroll);
+}
+
+/**
+ * If the shell is set as a virtual shell, then all children that are 
+ * directly added to the shell become childre on the body element. This
+ * is useful in the cases where DWT is to be with existing HTML documents
+ * rather than as the foundation for an application
+ */
+DwtShell.prototype.setVirtual =
+function() {
+	this._virtual = true;
+	this.setVisible(false);
+}
+
+DwtShell.prototype.isVirtual =
+function() {
+	return this._virtual;
+}
+
 
 // Private / protected methods
 

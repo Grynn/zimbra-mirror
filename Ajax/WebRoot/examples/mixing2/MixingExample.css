@@ -134,6 +134,7 @@ DIV.vSpace {
 */
 
 .DwtButton {
+	background-color: purple;
 	border: 1px solid rgb(198, 197, 215);
 }
 .DwtButton-activated {
@@ -151,3 +152,48 @@ DIV.vSpace {
 	border:1px solid;
 	border-color: #555555 #E0E0E0 #E0E0E0 #555555;
 }
+
+.DwtMenu {
+	border: 2px solid;
+	border-color: #C7C7C7 #3E3E3E #3E3E3E #C7C7C7;
+}
+
+.DwtMenu {}
+.DwtMenuItem {
+	background-color: orange;
+	color: white;
+	border:1px solid #EEEEEE;
+}
+
+.DwtMenuItem-selected, .DwtMenuItem-IconArea-selected, .DwtMenuItem-CheckedArea-selected {
+	background-color: orange;
+	color: white;
+	border: 1px solid;
+	border-color: #E0E0E0 #555555 #555555 #E0E0E0;
+}
+
+.DwtMenuItem-triggered, .DwtMenuItem-IconArea-triggered, .DwtMenuItem-CheckedArea-triggered {
+	background-color: orange;
+	color: white;
+	border:1px solid;
+	border-color: #555555 #E0E0E0 #E0E0E0 #555555;
+}
+
+.DwtMenuItem-IconArea, .DwtMenuItem-CheckedArea {}
+
+.DwtMenuItem-Separator {
+	background-color: #999999;
+	padding-left: 5px;
+	white-space:noWrap;
+	width:100%;
+	height:1px;
+}
+
+.DwtMenuItem .Text, .DwtMenuItem .DisabledText,
+.DwtMenuItem-triggered .Text,
+.DwtMenuItem-selected .Text {
+	white-space:nowrap;
+	padding-right:2px;
+	padding-left:5px;
+}
+

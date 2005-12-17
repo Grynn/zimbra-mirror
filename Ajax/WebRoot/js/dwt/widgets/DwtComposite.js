@@ -88,7 +88,13 @@ function() {
 DwtComposite.prototype._addChild =
 function(child) {
 	this._children.add(child);
-	this.getHtmlElement().appendChild(child.getHtmlElement());
+	
+	/* If we are operating in "virtual shell" mode, then children of the shell's html element's
+	 * are actually parented to the body */ 
+	if (this instanceof DwtShell && this.isVirtual())
+		document.body.appendChild(child.getHtmlElement());
+	else
+		this.getHtmlElement().appendChild(child.getHtmlElement());
 }
 
 DwtComposite.prototype._removeChild =
