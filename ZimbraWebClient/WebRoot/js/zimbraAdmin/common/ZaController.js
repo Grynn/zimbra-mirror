@@ -320,7 +320,7 @@ function() {
 
 ZaController.prototype._loginCallback =
 function(name, password) {
-	this._schedule(this._doAuth, {username: name, password: password);
+	this._schedule(this._doAuth, {username: name, password: password});
 }
 
 
