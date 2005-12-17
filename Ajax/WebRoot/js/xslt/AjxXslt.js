@@ -77,14 +77,12 @@ function(doc) {
 
 AjxXslt._finishedLoading =
 function() {
-	DBG.println(AjxDebug.DBG2, "finished loading xsl");
 	var xslt = this._xslt;  // "this" is the document which xsl is being loaded to.
 	xslt.createProcessor(this);
 };
 
 AjxXslt.prototype.loadUrl =
 function(url) {
-	DBG.println(AjxDebug.DBG2, "loading xsl: "+url);
 	var doc = this._doc;
 	
 	if (AjxEnv.isIE) {
@@ -117,13 +115,10 @@ function(dom) {
 	if (AjxEnv.isIE) {
 		return this.transformIE(dom);  // already in str
 	} else if (AjxEnv.isNav) {
-		DBG.println(AjxDebug.DBG1, "transforming..");
 		ret = this.transformNav(dom);
 	} else {
 		DBG.println(AjxDebug.DBG1, "No XSL transformation due to browser incompatibility.");
 	}
-	DBG.println(AjxDebug.DBG1, "ret: "+ret);
-	DBG.println(AjxDebug.DBG1, "ret.documentElement: "+ret.documentElement);
 	return ret.documentElement.innerHTML;
 };
 
