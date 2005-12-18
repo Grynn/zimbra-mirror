@@ -265,7 +265,7 @@ sub getVar {
 	# print STDERR "getVar: @_\n";
 
 	if ($keys[0] =~ m/SERVICE/) {
-		if (! defined ($knownkeys{"SERVICE:$keys[1]"}) && !$SERVICE_SET) {
+		if (! defined ($knownkeys{"SERVICE:$keys[1]"})) {
 			getService($keys[1]);
 		}
 	} elsif ($keys[0] =~ m/VAR/) {
@@ -402,7 +402,7 @@ sub processLine {
 		} else {
 			$cmd = $cmd." $fields[1]='".$fields[2]."'";
 		}
-		if (changedVar("VAR:$fields[3]") || defined ($FORCE{$cursection}) ) {
+		if ($fields[3] eq "" || changedVar("VAR:$fields[3]") || defined ($FORCE{$cursection}) ) {
 			push @{$todo{$cursection}}, $cmd;
 		}
 		return $i+1;
@@ -577,7 +577,8 @@ sub rewriteConfig {
 			if ($sr =~ m/^comment/) {
 				my ($cmd, $key) = ($sr =~ m/comment ([^:]+):(\S+)/);
 				if ($knownkeys{"$cmd:$key"} ne "" &&
-					($knownkeys{"$cmd:$key"} ne "no" ||
+					( ( $knownkeys{"$cmd:$key"} ne "no" &&
+					$knownkeys{"$cmd:$key"} != 0 ) ||
 					$knownkeys{"$cmd:$key"} == 1)
 					) {
 					$rep = "#";
@@ -587,7 +588,8 @@ sub rewriteConfig {
 			} elsif ($sr =~ m/^uncomment/) {
 				my ($cmd, $key) = ($sr =~ m/comment ([^:]+):(\S+)/);
 				if ($knownkeys{"$cmd:$key"} ne "" &&
-					($knownkeys{"$cmd:$key"} ne "no" ||
+					( ( $knownkeys{"$cmd:$key"} ne "no" &&
+					$knownkeys{"$cmd:$key"} != 0 ) ||
 					$knownkeys{"$cmd:$key"} == 1)
 					) {
 					$rep = "";
@@ -708,21 +710,13 @@ sub stopStartServers {
 			}
 		}
 
-		if ($stopstarts{$section} == -1) {
-			foreach (sort keys %{$rewrites{$section}}) {
-				if (! defined($written{$_})) {
-					rewriteConfig ($_, $rewrites{$section}{$_});
-					$written{$_} = $rewrites{$section}{$_};
-				}
-			}
-		} elsif ($stopstarts{$section} == 1) {
-			foreach (sort keys %{$rewrites{$section}}) {
-				if (! defined($written{$_})) {
-					rewriteConfig ($_, $rewrites{$section}{$_});
-					$written{$_} = $rewrites{$section}{$_};
-				}
+		foreach (sort keys %{$rewrites{$section}}) {
+			if (! defined($written{$_})) {
+				rewriteConfig ($_, $rewrites{$section}{$_});
+				$written{$_} = $rewrites{$section}{$_};
 			}
 		}
+
 		controlProcess ($section);
 	}
 }

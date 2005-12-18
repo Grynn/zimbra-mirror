@@ -40,6 +40,7 @@ if [ $1 = "start" -o $1 = "reload" ]; then
 	if [ x$2 = "x" ]; then
 		rewriteconfig
 	fi
+	sudo ${zimbra_home}/postfix-2.2.5/sbin/postsuper -r ALL
 fi
 
 if [ $1 = "status" ]; then
