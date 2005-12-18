@@ -490,23 +490,21 @@ function (htmlElId, myZindex, lowThresholdZ, turnOffOverflowScroll, disableSelf)
 };
 
 /**
- * returns a node for the given tag
- */
+* Creates and returns an element from a string of HTML.
+*
+* @param html	[string]	HTML text
+* @param isRow	[boolean]*	true if the element is a TR
+*/
 Dwt.parseHtmlFragment = 
-function(htmlStr, tagName) {
-	if (!Dwt._divBuffer)
-		Dwt._divBuffer = document.createElement('div');
-
-	var html = htmlStr;
-	if (tagName && tagName == "TR")
-		html = "<table style='table-layout:fixed'>" + htmlStr + "</table>";
-
-	var div = Dwt._divBuffer;
-	div.innerHTML = html;
+function(html, isRow) {
+	if (!Dwt._div)
+		Dwt._div = document.createElement('div');
+	// TR element needs to have surrounding table
+	if (isRow)
+		html = "<table style='table-layout:fixed'>" + html + "</table>";
+	Dwt._div.innerHTML = html;
 	
-	return (tagName && tagName == "TR")
-		? div.firstChild.rows[0]
-		: div.firstChild;
+	return isRow ? Dwt._div.firstChild.rows[0] : Dwt._div.firstChild;
 };
 
 Dwt.contains = 
