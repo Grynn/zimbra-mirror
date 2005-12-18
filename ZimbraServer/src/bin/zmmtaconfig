@@ -510,7 +510,11 @@ sub compareKeys {
 	foreach $section (sort keys %affectedsections) {
 		foreach (@{$restarts{$section}}) {
 			if (!defined $stopstarts{$_}) {
-				$stopstarts{$_} = -1;
+				if ($knownkeys{"SERVICE:$_"}) {
+					$stopstarts{$_} = -1;
+				} else {
+					$stopstarts{$_} = 0;
+				}
 			}
 		}
 	}
@@ -690,8 +694,7 @@ sub stopStartServers {
 	foreach my $section (sort keys %stopstarts) {
 		if ($stopstarts{$section} == 0) {
 			if (defined ($depends{$section}) ) {
-				if ( defined ($stopstarts{$depends{$section}}) &&
-					$stopstarts{$depends{$section}} != 0 && $knownkeys{"SERVICE:$section"}) {
+				if ( $knownkeys{"SERVICE:$depends{$section}"}) {
 					# It's got a dependency that we're not stopping (and is running)
 					# So change our action to a restart
 					print STDERR 
