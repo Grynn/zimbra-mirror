@@ -52,13 +52,14 @@ function AjxDebug(level, name, showTime) {
 	this._enabled = (this._level != AjxDebug.NONE);
 	this._showTiming = false;
 	this._startTimePt = this._lastTimePt = 0;
+	this._dbgWindowInited = false;
 
 	this._msgQueue = new Array();
-	this._debugBoxId = AjxDebug.DEBUG_BOX_ID;
+	AjxDebug._CONTENT_FRAME_ID = AjxDebug._CONTENT_FRAME_ID;
 	this._isPrevWinOpen = false;
 	if (!this._enabled) return;
 
-	this._openContainer();
+	this._openDebugWindow();
 }
 
 
@@ -86,7 +87,12 @@ AjxDebug.GBD[AjxDebug.DBG3] = 3;
 
 AjxDebug.MAX_OUT = 25000; // max length capable of outputting
 
-AjxDebug.DEBUG_BOX_ID = "AjxDebugBox";
+AjxDebug._LINK_FRAME_ID = "AjxDebug_LF";
+AjxDebug._CONTENT_FRAME_ID = "AjxDebug_CF";
+AjxDebug._BUTTON_FRAME_ID = "AjxDebug_BF";
+
+AjxDebug._id = 0;
+AjxDebug._openErrors = 0;
 
 AjxDebug.prototype.toString = 
 function() {
@@ -110,7 +116,7 @@ function(level) {
 	} else {
 		this._enabled = true;
 		if (this._debugWindow == null || this._debugWindow.closed)
-			this._openContainer();
+			this._openDebugWindow();
 	}
 }
 
@@ -154,9 +160,9 @@ function(on, level, msg) {
 * @param msg		the text to display
 */
 AjxDebug.prototype.println = 
-function(level, msg) {
+function(level, msg, linkName) {
 	if (this.isDisabled()) return;
-	var args = this._handleArgs(arguments);
+	var args = this._handleArgs(arguments, linkName);
 	if (!args) return;
 
 	msg = args.join("");
@@ -165,7 +171,7 @@ function(level, msg) {
 		msg = level + ": " + msg;
 	}
 	/*** DEBUG ***/
-	this._add(this._timestamp() + msg + "<br>");
+	this._add(this._timestamp() + msg + "<br>", null, null, null, linkName);
 };
 
 AjxDebug.prototype.isDisabled = 
@@ -184,9 +190,9 @@ function () {
 * @param showFuncs	whether to show props that are functions
 */
 AjxDebug.prototype.dumpObj = 
-function(level, obj, showFuncs) {
+function(level, obj, showFuncs, linkName) {
 	if (this.isDisabled())return;
-	var args = this._handleArgs(arguments);
+	var args = this._handleArgs(arguments, linkName);
 	if (!args) return;
 	obj = args[0];
 	if (!obj) return;
@@ -205,13 +211,13 @@ function(level, obj, showFuncs) {
 * @param text		the text to output as is
 */
 AjxDebug.prototype.printRaw = 
-function(level, text) {
+function(level, text, linkName) {
 	if (this.isDisabled()) return;
-	var args = this._handleArgs(arguments);
+	var args = this._handleArgs(arguments, linkName);
 	if (!args) return;
 	text = args[0];
 	
-	this._add(null,text, false, true);
+	this._add(null, text, false, true);
 }
 
 /**
@@ -221,9 +227,9 @@ function(level, text) {
 * @param text		some XML
 */
 AjxDebug.prototype.printXML = 
-function(level, text) {
+function(level, text, linkName) {
 	if (this.isDisabled()) return;
-	var args = this._handleArgs(arguments);
+	var args = this._handleArgs(arguments, linkName);
 	if (!args) return;
 	text = args[0];
 	if (!text) return;
@@ -317,10 +323,6 @@ function(anObj, isXml, isRaw) {
 			html[idx++] = "</div>";
 			html[idx++] = "</pre>";
 		}
-		html[idx++] = "<p>";
-		html[idx++] = "<a href=\"javascript:;\" onclick='document.getElementById(\"" + this._debugBoxId + "\").innerHTML=\"\"'>Clear Debug Window</a>";
-		html[idx++] = "</p>";
-
 	}
 	return html.join("");
 };
@@ -416,7 +418,7 @@ function(obj, recurse) {
 
 // If the first arg is a debug level, check it and then strip it.
 AjxDebug.prototype._handleArgs =
-function(args) {
+function(args, linkNameSpecified) {
 	if (this._level == AjxDebug.NONE) return;
 	
 	var levelSpecified = false;
@@ -430,7 +432,8 @@ function(args) {
 	
 	// NOTE: Can't just slice the items we want because args is not an Array
 	var array = new Array(args.length);
-	for (var i = 0; i < args.length; i++) {
+	var len = (linkNameSpecified) ? args.length - 1 : args.length;
+	for (var i = 0; i < len; i++) {
 		array[i] = args[i];
 	}
 	if (levelSpecified) { array.shift(); }
@@ -456,25 +459,20 @@ function (cookieName) {
 	return val;
 };
 
-AjxDebug.prototype._openContainer =
-function () {
-	this._enabled = true;
-	this._openDebugWindow();
-};
-
 AjxDebug.prototype._openDebugWindow =
 function() {
+	this._enabled = true;
 	// check if there is a debug window already open
 	this._isPrevWinOpen = this._getCookieVal("AjxDebugWinOpen");
 	if (!this._isPrevWinOpen) {
-		this._debugWindow = AjxWindowOpener.openBlank(this._dbgName, "width=400,height=400,resizable=yes,scrollbars=yes", this._initWindow, this);
+		this._debugWindow = AjxWindowOpener.openBlank(this._dbgName, "width=600,height=400,resizable=yes,scrollbars=yes", this._initWindow, this);
 	} else {
-		this._debugWindow = window.open("" , this._dbgName, "width=400,height=400,resizable=yes,scrollbars=yes");
+		this._debugWindow = window.open("" , this._dbgName, "width=600,height=400,resizable=yes,scrollbars=yes");
 		this._initWindow();
 	}
 };
 
-AjxDebug._openErrors = 0;
+
 AjxDebug.prototype._initWindow =
 function() {
 	if (this._debugWindow == null) {
@@ -487,56 +485,48 @@ function() {
 		this._document.title = "Debug";
 
 		if (!this._isPrevWinOpen) {
-			this._document.body.innerHTML = "";
-
-			this._debugBox = this._document.createElement("div");
-			this._debugBox.id = this._debugBoxId;
-
-			var markBtn = this._document.createElement("BUTTON");
-			markBtn._id = this._debugBoxId;
-			markBtn.onclick = AjxDebug._mark;
-			markBtn.innerHTML = "Mark";
-			var clearBtn = this._document.createElement("BUTTON");
-			clearBtn._id = this._debugBoxId;
-			clearBtn.onclick = AjxDebug._clear;
-			clearBtn.innerHTML = "Clear";
-
-			var controls = this._document.createElement("DIV");
-			controls.appendChild(markBtn);
-			controls.appendChild(this._document.createTextNode(" "));
-			controls.appendChild(clearBtn);
-
-			this._document.body.appendChild(this._debugBox);
-			this._document.body.appendChild(controls);
-			
-			AjxDebug._divBuffer = this._debugWindow.document.createElement('div');
-			
-			// If we're not using a div
-			// Set a cookie telling ourselves that a debug window is already open
-			document.cookie = "AjxDebugWinOpen=true";
-			
-			// setup an onunload method
-			if (!AjxEnv.isIE) {
-				this._debugWindow.onunload = AjxDebug.unloadHandler;
-				window.addEventListener('unload', AjxDebug.myWindowUnloadHandler, true);
-			} else {
-				this._debugWindow.attachEvent('onunload', AjxDebug.unloadHandler);
-				window.attachEvent = AjxDebug.myWindowUnloadHandler;
-			}
+			this._document.write([
+				"<html>",
+					"<head>",
+						"<script>",
+							"function blank() {return [",
+								"'<html><head><style type=\"text/css\">',",
+									"'P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {',",
+											"'font-family: Tahoma, Arial, Helvetica, sans-serif;',",
+											"'font-size:11px;}',",
+									"'.Link {cursor: pointer;color:blue;text-decoration:underline;white-space:nowrap;width:100%;}',",		
+									"'.Mark {color:white; background-color:black; width:100%;font-size:14px;font-weight:bold;}',",
+									"'.MarkLink {cursor: pointer;color:white;background-color:black;text-decoration:underline;font-weight:bold;white-space:nowrap;width:100%;}',",
+									"'.Run {color:black; background-color:red;width:100%;font-size:18px;font-weight:bold;}',",
+									"'.RunLink {cursor: pointer;color:black;background-color:red;text-decoration:underline;font-weight:bold;white-space:nowrap;width:100%;}',",
+								"'</style></head><body></body></html>'].join(\"\");}",
+						"</script>",
+					"</head>",
+					"<frameset cols='125, *'>",
+						"<frameset rows='*,40'>",
+							"<frame name='", AjxDebug._LINK_FRAME_ID, "' id='", AjxDebug._LINK_FRAME_ID, "' src='javascript:parent.parent.blank();'>",
+							"<frame name='", AjxDebug._BUTTON_FRAME_ID, "' id='", AjxDebug._BUTTON_FRAME_ID, "' src='javascript:parent.parent.blank();'>",
+						"</frameset>",
+						"<frame name='", AjxDebug._CONTENT_FRAME_ID, "' id='", AjxDebug._CONTENT_FRAME_ID, "' src='javascript:parent.blank();'>",
+					"</frameset>",
+				"</html>"].join(""));
+			var ta = new AjxTimedAction(this, AjxDebug.prototype._finishInitWindow);
+			AjxTimedAction.scheduleAction(ta, 250);
 		} else {
-			this._debugBox = this._document.getElementById(this._debugBoxId);
-			AjxDebug._divBuffer = this._debugWindow.document.createElement('div');
-			var sepDiv = this._parseHtmlFragment("<div style='width:100%; border:1px solid red;'>Debugging new window</div>");
-			this._debugBox.appendChild(sepDiv);
+			this._contentFrame = this._document.getElementById(AjxDebug._CONTENT_FRAME_ID);
+			this._linkFrame = this._document.getElementById(AjxDebug._LINK_FRAME_ID);
+			AjxDebug._createLinkNContent(this, "RunLink", "NEW RUN", "Run", "NEW RUN");
+			
 			// Firefox allows us to attach an event listener, and runs it even
 			// though the window with the code is gone ... odd, but nice. IE,
 			// though will not run the handler, so we make sure, even if we're
 			// coming back to the window, to attach the onunload handler.
 			if (AjxEnv.isIE)
 				this._debugWindow.attachEvent('onunload', AjxDebug.unloadHandler);
+			this._dbgWindowInited = true;
+			// show any messages that have been queued up, while the window loaded.
+			this._showMessages();
 		}
-		// show any messages that have been queued up, while the window loaded.
-		this._showMessages();
 	} catch (ex) {
 		AjxDebug.deleteWindowCookie();
 		this._debugWindow.close();
@@ -544,10 +534,55 @@ function() {
 		// If we've exceeded a certain # of errors, just close window and bail.
 		if (AjxDebug._openErrors < 5) {
 			AjxDebug._openErrors++;
-			this._openContainer();
+			this._openDebugWindow();
 		}
 	}
-}
+};
+
+AjxDebug.prototype._finishInitWindow =
+function() {
+	this._contentFrame = this._document.getElementById(AjxDebug._CONTENT_FRAME_ID);
+	this._linkFrame = this._document.getElementById(AjxDebug._LINK_FRAME_ID);
+
+	// Create the mark and clear buttons
+	var buttonFrame = this._document.getElementById(AjxDebug._BUTTON_FRAME_ID);
+	var buttonFrameDoc = buttonFrame.contentWindow.document;
+	var buttonFrameBody = buttonFrameDoc.body;
+	
+	var markBtn = buttonFrameDoc.createElement("button");
+	markBtn.innerHTML = "Mark";
+	markBtn._dbg = this;
+	markBtn.onclick = AjxDebug._mark;
+
+	var clearBtn = buttonFrameDoc.createElement("button");
+	clearBtn._contentFrameId = AjxDebug._CONTENT_FRAME_ID;
+	clearBtn._linkFrameId = AjxDebug._LINK_FRAME_ID;
+	clearBtn.innerHTML = "Clear";
+	clearBtn._dbg = this;
+	clearBtn.onclick = AjxDebug._clear;
+	
+	buttonFrameBody.appendChild(markBtn);
+	buttonFrameBody.appendChild(buttonFrameDoc.createTextNode(" "));
+	buttonFrameBody.appendChild(clearBtn);
+
+
+	// If we're not using a div
+	// Set a cookie telling ourselves that a debug window is already open
+	document.cookie = "AjxDebugWinOpen=true";
+	
+	// setup an onunload method
+	if (!AjxEnv.isIE) {
+		this._debugWindow.onunload = AjxDebug.unloadHandler;
+		window.addEventListener('unload', AjxDebug.myWindowUnloadHandler, true);
+	} else {
+		this._debugWindow.attachEvent('onunload', AjxDebug.unloadHandler);
+		window.attachEvent = AjxDebug.myWindowUnloadHandler;
+	}
+
+	this._dbgWindowInited = true;
+	this._showMessages();
+};
+
 
 /**
 * Scrolls to the bottom of the window. How it does that depends on the browser.
@@ -557,9 +592,9 @@ function() {
 AjxDebug.prototype._scrollToBottom = 
 function() {
 	AjxEnv.isIE 
-		? this._debugBox.scrollIntoView(false) 
-		: this._debugWindow.scrollTo(0, this._document.body.offsetHeight);
-}
+		? this._contentFrame.contentWindow.document.body.scrollIntoView(false) 
+		: this._contentFrame.contentWindow.scrollTo(0, this._contentFrame.contentWindow.document.body.offsetHeight);
+};
 
 /**
 * Returns a timestamp string, if we are showing them.
@@ -570,7 +605,7 @@ function() {
 	return this._showTime 
 		? new Date().toLocaleTimeString() + ": " 
 		: "";
-}
+};
 
 AjxDebug.prototype.setShowTimestamps = 
 function(show) {
@@ -664,12 +699,12 @@ function (node, indent) {
 	}
 	
 	return str;
-}
+};
 
 AjxDebug.prototype._createXmlAttribute = 
 function(a) {
 	return " <span style='color: red'>" + a.nodeName + "</span><span style='color: blue'>=\"" + a.nodeValue + "\"</span>";
-}
+};
 
 AjxDebug.prototype._inspect = 
 function(obj) {
@@ -677,17 +712,17 @@ function(obj) {
 	for (var k in obj)
 		str += "obj." + k + " = " + obj[k] + "\n";
 	window.alert(str);
-}
+};
 
 AjxDebug.prototype._add = 
-function (aMsg, extraInfo, isXml, isRaw){
+function (aMsg, extraInfo, isXml, isRaw, linkName){
 	var extraType = typeof(extraInfo);
 
 	if (AjxUtil.isSpecified(extraInfo))
 		extraInfo = this._getHtmlForObject(extraInfo, isXml, isRaw);
 
     // Add the message to our stack
-    this._addMessage(new DebugMessage(aMsg, null, null, null, extraInfo));
+    this._addMessage(new DebugMessage(aMsg, null, null, null, extraInfo, linkName));
 
 };
 
@@ -697,51 +732,67 @@ function (aMsg) {
 	this._showMessages();
 };
 
-AjxDebug.buf = new Array();
-
+donola=false;
 AjxDebug.prototype._showMessages = 
-function (retryNum) {
-	if (!this._document) {
+function () {
+	if (!this._dbgWindowInited) {
 		// For now, don't show the messages-- assuming that this case only 
 		// happens at startup, and many  messages will be written
 		return;
 	}
-	var i = 0;
-	var buf = AjxDebug.buf;
-	buf.length = 0;
-	var idx = 0;
-	var msg;
-	for (i ; i < this._msgQueue.length ; ++i ) {
-		msg = this._msgQueue[i];
-		buf[idx++] = "<div>";
-		buf[idx++] = msg.message;
-		buf[idx++] = msg.eHtml;
-		buf[idx++] = "</div>";
+	
+	if (this._msgQueue.length > 0) {
+		var msg;
+		var contentDiv;
+		var linkDiv;
+		var contentFrameDoc = this._contentFrame.contentWindow.document;
+		var linkFrameDoc = this._linkFrame.contentWindow.document;
+		
+		for (var i = 0 ; i < this._msgQueue.length ; ++i ) {
+			var now = new Date();
+			msg = this._msgQueue[i];
+			contentDiv = contentFrameDoc.createElement('div');
+			contentDiv.innerHTML = [msg.message, msg.eHtml].join("");
+			if (msg.linkName) {
+				linkDiv = linkFrameDoc.createElement('div');
+				linkDiv._targetId = contentDiv.id = [AjxDebug._getNextId(), now.getMilliseconds()].join("");
+				linkDiv._dbg = this;
+				linkDiv.className = "Link";
+				linkDiv.onclick = AjxDebug._linkClicked;
+				linkDiv.innerHTML = msg.linkName  + " - [" + AjxDebug._getTimeStamp(now) + "]";;	
+				linkFrameDoc.body.appendChild(linkDiv);
+				//linkFrameDoc.body.appendChild(linkFrameDoc.createElement("br"));
+			}
+			contentFrameDoc.body.appendChild(contentDiv);		
+		}
 	}
+
 	this._msgQueue.length = 0;
-	if (buf.length > 0){
-		var div = this._parseHtmlFragment(buf.join(""));
-		if (!this.debugBox)
-			this._debugBox = this._document.getElementById(this._debugBoxId);
-		if (this._debugBox)		
-			this._debugBox.appendChild(div);
-	}
 	this._scrollToBottom();
 };
 
+AjxDebug._linkClicked =
+function() {
+	var el = this._dbg._contentFrame.contentWindow.document.getElementById(this._targetId);
+	var y = 0;
+	while (el) {
+		y += el.offsetTop;
+		el = el.offsetParent;
+	}
+	
+	this._dbg._contentFrame.contentWindow.scrollTo(0, y);	
+};
+
+AjxDebug._getNextId =
+function() {
+	return "AjxDebug_" + AjxDebug._id++;
+};
+
 AjxDebug.prototype._parseHtmlFragment = 
-function (htmlStr, tagName) {
-	var html = htmlStr;
-	if (tagName && tagName == "TR"){
-		html = "<table style='table-layout:fixed'>" + htmlStr + "</table>";
-	}
-	var div = AjxDebug._divBuffer;
-	div.innerHTML = html;
-	if (tagName && tagName == "TR"){
-		return div.firstChild.rows[0];
-	} else {
-		return div.firstChild;
-	}
+function (htmlStr) {
+	var div = this._contentFrame.contentWindow.document.createElement('div');	
+	div.innerHTML = htmlStr;
+	return div;
 };
 
 
@@ -749,15 +800,63 @@ function (htmlStr, tagName) {
 
 AjxDebug._mark = 
 function() {
-	var elemId = this._id;
-	var separator = this.ownerDocument.createElement("HR");
-	this.ownerDocument.getElementById(elemId).appendChild(separator);
+	AjxDebug._createLinkNContent(this._dbg, "MarkLink", "MARK", "Mark", "MARK");
+/*	
+	var linkFrameDoc = this._dbg._linkFrame.contentWindow.document
+	var mark = linkFrameDoc.createElement("div");
+	mark.className = "MarkLink";
+	mark.innerHTML = "MARK #" + ++AjxDebug._markNo;
+	var id = "Mark_" + AjxDebug._markNo;
+	mark._targetId = id;
+	mark._dbg = this._dbg;
+	mark.onclick = AjxDebug._linkClicked
+	linkFrameDoc.body.appendChild(mark);
+	//linkFrameDoc.body.appendChild(linkFrameDoc.createElement("br"));
+	
+	var contentFrameDoc = this._dbg._contentFrame.contentWindow.document;
+	mark = contentFrameDoc.createElement("div");
+	mark.className = "Mark";
+	mark.id = id;
+	mark.innerHTML = "MARK #" + AjxDebug._markNo; 
+	mark._dbg = this._dbg;
+	contentFrameDoc.body.appendChild(contentFrameDoc.createElement("p"));
+	contentFrameDoc.body.appendChild(mark);
+	contentFrameDoc.body.appendChild(contentFrameDoc.createElement("p"));
+*/
+};
+
+AjxDebug._createLinkNContent =
+function(ajxDbgObj, linkClass, linkLabel, contentClass, contentLabel) {
+	var now = new Date();
+	var timeStamp = [" - [", AjxDebug._getTimeStamp(now), "]"].join("");
+	var linkFrameDoc = ajxDbgObj._linkFrame.contentWindow.document;
+	var div = linkFrameDoc.createElement("div");
+	div.className = linkClass;
+	div.innerHTML = linkLabel + timeStamp;
+	var id = "Lnk_" + now.getMilliseconds();
+	div._targetId = id;
+	div._dbg = ajxDbgObj;
+	div.onclick = AjxDebug._linkClicked
+	linkFrameDoc.body.appendChild(div);
+	//linkFrameDoc.body.appendChild(linkFrameDoc.createElement("br"));
+	
+	var contentFrameDoc = ajxDbgObj._contentFrame.contentWindow.document;
+	div = contentFrameDoc.createElement("div");
+	div.className = contentClass;
+	div.id = id;
+	div.innerHTML = contentLabel + timeStamp;
+	div._dbg = ajxDbgObj;
+	contentFrameDoc.body.appendChild(contentFrameDoc.createElement("p"));
+	contentFrameDoc.body.appendChild(div);
+	contentFrameDoc.body.appendChild(contentFrameDoc.createElement("p"));
 };
 
 AjxDebug._clear = 
 function() {
-	var elemId = this._id;
-	this.ownerDocument.getElementById(elemId).innerHTML = "";
+	this._dbg._contentFrame.contentWindow.document.body.innerHTML = "";
+	this._dbg._linkFrame.contentWindow.document.body.innerHTML = "";
+	AjxDebug._runNo = 0;
+	AjxDebug._markNo = 0;	
 };
 
 AjxDebug.myWindowUnloadHandler = 
@@ -797,15 +896,21 @@ function(str){
 	return s;
 };
 
+AjxDebug._getTimeStamp =
+function(date) {
+	date = (date) ? date : new Date();
+	return AjxStringUtil.htmlEncode([AjxDateUtil.getTimeStr(date, "%H:%m:%s"), ".", date.getMilliseconds()].join(""), true);
+}
 
 /**
  * Simple wrapper for log messages
  */
-DebugMessage = function(aMsg, aType, aCategory, aTime, extraHtml) {
+DebugMessage = function(aMsg, aType, aCategory, aTime, extraHtml, linkName) {
     this.message = (AjxUtil.isSpecified(aMsg)) ? aMsg : '';
     this.type = aType ? aType : null;
     this.category = aCategory ? aCategory : '';
     this.time = aTime ? aTime : (new Date().getTime());
-    this.eHtml = extraHtml;
+    this.eHtml = extraHtml ? extraHtml : '';
+    this.linkName = linkName;
 };
 

@@ -110,21 +110,22 @@ function(params) {
 
 	if (!params.soapDoc) return;
 
+	var soapDoc = params.soapDoc;
 	// Add the SOAP header and context
-	var hdr = params.soapDoc.createHeaderElement();
-	var context = params.soapDoc.set("context", null, hdr);
+	var hdr = soapDoc.createHeaderElement();
+	var context = soapDoc.set("context", null, hdr);
 	context.setAttribute("xmlns", "urn:zimbra");
 	if (params.noSession)
-		params.soapDoc.set("nosession", null, context);
+		soapDoc.set("nosession", null, context);
 	var sessionId = ZmCsfeCommand.getSessionId();
 	if (sessionId) {
-		var si = params.soapDoc.set("sessionId", null, context);
+		var si = soapDoc.set("sessionId", null, context);
 		si.setAttribute("id", sessionId);
 	}
 	if (params.targetServer)
-		params.soapDoc.set("targetServer", params.targetServer, context);
+		soapDoc.set("targetServer", params.targetServer, context);
 	if (params.changeToken) {
-		var ct = params.soapDoc.set("change", null, context);
+		var ct = soapDoc.set("change", null, context);
 		ct.setAttribute("token", params.changeToken);
 		ct.setAttribute("type", "new");
 	}
@@ -134,26 +135,26 @@ function(params) {
 		var authToken = ZmCsfeCommand.getAuthToken();
 		if (!authToken)
 			throw new ZmCsfeException("AuthToken required", ZmCsfeException.NO_AUTH_TOKEN, "ZmCsfeCommand.invoke");
-		params.soapDoc.set("authToken", authToken, context);
+		soapDoc.set("authToken", authToken, context);
 	}
 	
 	// Tell server what kind of response we want
 	if (!params.useXml) {
-		var js = params.soapDoc.set("format", null, context);
+		var js = soapDoc.set("format", null, context);
 		js.setAttribute("type", "js");
 	}
 
 	var asyncMode = params.asyncMode;
-
-	DBG.println(AjxDebug.DBG1, asyncMode ? "<H4>REQUEST (asynchronous)</H4>" : "<H4>REQUEST</H4>");
-	DBG.printXML(AjxDebug.DBG1, params.soapDoc.getXml());
+	var methodNameStr = soapDoc.getMethod().nodeName;
+	DBG.println(AjxDebug.DBG1, ["<H4>", methodNameStr, (asyncMode) ? " (asynchronous)" : "" ,"</H4>"].join(""), methodNameStr);
+	DBG.printXML(AjxDebug.DBG1, soapDoc.getXml());
 
 	var rpcCallback;
 	try {
 		var uri = params.serverUri || ZmCsfeCommand.serverUri;
 		if (params.logRequest)
-			uri = uri + params.soapDoc._methodEl.nodeName;
-		var requestStr = params.soapDoc.getXml();
+			uri = uri + soapDoc._methodEl.nodeName;
+		var requestStr = soapDoc.getXml();
 		if (AjxEnv.isSafari)
 			requestStr = requestStr.replace("soap=", "xmlns:soap=");
 			
@@ -232,7 +233,8 @@ function(response, asyncMode) {
 		}
 	}
 	
-	DBG.println(AjxDebug.DBG1, asyncMode ? "<H4>RESPONSE (asynchronous)</H4>" : "<H4>RESPONSE</H4>");
+	DBG.println(AjxDebug.DBG1, ["<H4> RESPONSE", (asyncMode) ? " (asynchronous)" : "" ,"</H4>"].join(""), "Response");
+	//DBG.println(AjxDebug.DBG1, asyncMode ? "<H4>RESPONSE (asynchronous)</H4>" : "<H4>RESPONSE</H4>");
 
 	var resp;
 	if (xmlResponse) {
