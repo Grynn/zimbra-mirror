@@ -591,9 +591,13 @@ function() {
 */
 AjxDebug.prototype._scrollToBottom = 
 function() {
-	AjxEnv.isIE 
-		? this._contentFrame.contentWindow.document.body.scrollIntoView(false) 
-		: this._contentFrame.contentWindow.scrollTo(0, this._contentFrame.contentWindow.document.body.offsetHeight);
+	if (AjxEnv.isIE) {
+		this._contentFrame.contentWindow.document.body.scrollIntoView(false);
+		this._linkFrame.contentWindow.document.body.scrollIntoView(false);
+	} else {
+		this._contentFrame.contentWindow.scrollTo(0, this._contentFrame.contentWindow.document.body.offsetHeight);
+		this._linkFrame.contentWindow.scrollTo(0, this._linkFrame.contentWindow.document.body.offsetHeight);
+	}
 };
 
 /**
