@@ -482,11 +482,6 @@ function(delay) {
 	}
 	//this.setLocation(x, y);
 
-	// So the popup menu knows which operation caused it to appear
-	// PLEASE MAKE THIS HORRIBLE CODE GO AWAY!!!!!!
-	var opId = this.getData(ZmOperation.KEY_ID);
-	menu.setData(ZmOperation.KEY_ID, opId);
-
 	menu.popup(delay, x, y);
 };
 
