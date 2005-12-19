@@ -32,7 +32,7 @@
 **/
 function ZaDLXFormView (parent, app) {
 	ZaTabView.call(this, parent, app,"ZaDLXFormView");
-	this.initForm(ZaGlobalConfig.myXModel,this.getMyXForm());
+	this.initForm(ZaDistributionList.myXModel,this.getMyXForm());
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(app.getDistributionListController(), ZaDLController.prototype.handleXFormChange));
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(app.getDistributionListController(), ZaDLController.prototype.handleXFormChange));	
 }
@@ -141,7 +141,7 @@ ZaDLXFormView.shouldEnableMemberPoolListButtons = function() {
 **/
 ZaDLXFormView.shouldEnableFreeFormButtons = function () {
 	var optionalAdd = this.getInstance().optionalAdd;
-	return (optionalAdd && optionalAdd.length);
+	return (optionalAdd && optionalAdd.length > 0);
 };
 
 /**
@@ -206,6 +206,33 @@ function (entry) {
 	this._localXForm.setInstance(this._containedObject);	
 }
 
+ZaDLXFormView.prototype.searchAccounts = 
+function (ev) {
+	try {
+		var  searchQueryHolder = new ZaSearchQuery(ZaSearch.getSearchByNameQuery(this._containedObject["query"]), [ZaSearch.ACCOUNTS], false, "");
+		var result = ZaSearch.searchByQueryHolder(searchQueryHolder, this._containedObject["pagenum"], ZaAccount.A_name, null, this._app);
+		if(result.list) {
+			this._containedObject.memberPool = result.list.getArray();
+		}
+		this._localXForm.refresh();
+
+	} catch (ex) {
+		// Only restart on error if we are not initialized and it isn't a parse error
+		if (ex.code != ZmCsfeException.MAIL_QUERY_PARSE_ERROR) {
+			this._app.getCurrentController()._handleException(ex, "ZaDLXFormView.prototype.searchAccounts", null, (this._inited) ? false : true);
+		} else {
+			this.popupErrorDialog(ZaMsg.queryParseError, ex);
+			this._searchField.setEnabled(true);	
+		}
+	}
+}
+
+ZaDLXFormView.srchButtonHndlr = 
+function(evt) {
+	var fieldObj = this.getForm().parent;
+	fieldObj.searchAccounts(evt);
+}
+
 ZaDLXFormView.myXFormModifier = function(xFormObject) {	
 	xFormObject.tableCssStyle = "width:100%;overflow:auto;";
 	xFormObject.cssClass="ZaDLView";
@@ -256,7 +283,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 						    {type:_OUTPUT_, value:ZaMsg.DLXV_LabelListMembers, width:"100%", colSpan:"*", cssClass:"xform_label_left", 
 								cssStyle:"padding-left:0px"},
 					        {type:_SPACER_, height:"3"},
-							{ref:"members", type:_DWT_LIST_, colSpan:"*", cssClass: "DLTarget", widgetClass:ZaDLListView},
+							{ref:"members", type:_DWT_LIST_, colSpan:"*", height:"338", width:"100%", cssClass: "DLTarget", widgetClass:ZaDLListView},
 					        {type:_SPACER_, height:"8"},
 						    {type:_GROUP_, colSpan:2, width:"100%", numCols:4, colSizes:[85,5, 85,"100%"], 
 								items:[
@@ -266,7 +293,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 									   relevantBehavior:_DISABLE_},
 									{type:_CELLSPACER_},
 									{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemove, width:80, id:"removeButton",
-								      onActivate:"ZaDLXFormView.removeMembers(this,event)",
+								      onActivate:"ZaDLXFormView.removeMembers.call(this,event)",
 								      relevant:"ZaDLXFormView.shouldEnableMemberListButtons.call(this)",
 								      relevantBehavior:_DISABLE_},
 									{type:_CELLSPACER_},
@@ -279,22 +306,23 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 						items:[			      
 					       {type:_GROUP_, label:ZaMsg.DLXV_LabelFind, colSpan:"*", numCols:2, colSizes:["70%","30%"],tableCssStyle:"width:100%", 
 							   items:[
-									{type:_INPUT_, id:"searchText", width:"100%",
+									{type:_INPUT_, ref:ZaSearch.A_query, width:"100%",
 								      elementChanged: function(elementValue,instanceValue, event) {
 										  var charCode = event.charCode;
 										  if (charCode == 13 || charCode == 3) {
-										      this.getFormController()._searchListener(null, this);
+										      ZaDLXFormView.srchButtonHndlr.call(this);
 										  } else {
 										      this.getForm().itemChanged(this, elementValue, event);
 										  }
 							      		}
 									},
 									{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonSearch, width:80,
-									   onActivate:"this.getFormController()._searchListener(event,this)"},
+									   onActivate:ZaDLXFormView.srchButtonHndlr
+									},
 								]
 					       },
 					       {type:_SPACER_, height:"5"},
-						   {ref:"memberPool", type:_DWT_LIST_, colSpan:"*", cssClass: "DLSource", forceUpdate: true, widgetClass:ZaDLListView},
+						   {ref:"memberPool", type:_DWT_LIST_, height:"200", width:"100%",  colSpan:"*", cssClass: "DLSource", forceUpdate: true, widgetClass:ZaDLListView},
 					       {type:_SPACER_, height:"5"},
 					       {type:_GROUP_, width:"100%", colSpan:"*", numCols:4, colSizes:[85,5,85,"100%"],
 							items: [

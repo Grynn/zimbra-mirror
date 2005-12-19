@@ -133,7 +133,7 @@ function() {
 
 	var headerList = new Array();
 	
-	headerList[0] = new ZaListHeaderItem("type", ZaMsg.ALV_Type_col, null, 90, true, "objectClass", true, true);
+	headerList[0] = new ZaListHeaderItem("type", ZaMsg.ALV_Type_col, null, 40, true, "objectClass", true, true);
 
 	headerList[1] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.ALV_Name_col, null, 195, true, ZaAccount.A_name, true, true);
 //idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible

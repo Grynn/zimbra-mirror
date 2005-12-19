@@ -26,16 +26,83 @@
  /**
  * @author EMC
  **/
-function ZaDLListView(parent, className, posStyle, headerList) {
-	DwtListView.call(this, parent, className, posStyle, headerList);
+function ZaDLListView(parent, className, posStyle) {
+	var headerList = this._getHeaderList();
+	ZaListView.call(this, parent, className, posStyle, headerList);
 }
 
-ZaDLListView.prototype = new DwtListView;
+ZaDLListView.prototype = new ZaListView();
 ZaDLListView.prototype.constructor = ZaDLListView;
 
 ZaDLListView.prototype.toString = function() {
 	return "ZaDLListView";
 };
+
+ZaDLListView.prototype._createItemHtml =
+function(account, now, isDndIcon) {
+	var html = new Array(50);
+	var	div = document.createElement("div");
+	div._styleClass = "Row";
+	div._selectedStyleClass = div._styleClass + "-" + DwtCssStyle.SELECTED;
+	div.className = div._styleClass;
+	this.associateItemWithElement(account, div, DwtListView.TYPE_LIST_ITEM);
+	
+	var idx = 0;
+	html[idx++] = "<table width='100%' cellspacing='2' cellpadding='0'>";
+
+	html[idx++] = "<tr>";
+	
+	var cnt = this._headerList.length;
+	for(var i = 0; i < cnt; i++) {
+		var id = this._headerList[i]._id;
+		if(id.indexOf("type")==0) {
+			// type
+			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
+			switch(account.type) {
+				case ZaItem.ACCOUNT:
+					html[idx++] = AjxImg.getImageHtml("Account");
+				break;
+				case ZaItem.DL:
+					html[idx++] = AjxImg.getImageHtml("Group");				
+				break;
+				case ZaItem.ALIAS:
+					html[idx++] = AjxImg.getImageHtml("AccountAlias");				
+				break;								
+				default:
+					html[idx++] = AjxStringUtil.htmlEncode(account.type);
+				break;
+			}
+			html[idx++] = "</td>";
+		} else if(id.indexOf(ZaAccount.A_name)==0) {
+			// name
+			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
+			html[idx++] = AjxStringUtil.htmlEncode(account.name);
+			html[idx++] = "</td>";
+		} else if (id.indexOf(ZaAccount.A_displayname)==0) {
+			// display name
+			html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";
+			html[idx++] = AjxStringUtil.htmlEncode(account.attrs[ZaAccount.A_displayname]);
+			html[idx++] = "</nobr></td>";	
+		} 
+	}
+		html[idx++] = "</tr></table>";
+	div.innerHTML = html.join("");
+	return div;
+}
+
+ZaDLListView.prototype._getHeaderList =
+function() {
+
+	var headerList = new Array();
+	
+	headerList[0] = new ZaListHeaderItem("type", ZaMsg.ALV_Type_col, null, 34, true, "objectClass", true, true);
+
+	headerList[1] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.ALV_Name_col, null, null, true, ZaAccount.A_name, true, true);
+//idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
+	headerList[2] = new ZaListHeaderItem(ZaAccount.A_displayname, ZaMsg.ALV_DspName_col, null, 100, true,ZaAccount.A_displayname, true, true);
+
+	return headerList;
+}
 
 ZaDLListView.prototype._setNoResultsHtml = function() {
 	var buffer = new AjxBuffer();

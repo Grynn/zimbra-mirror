@@ -126,7 +126,7 @@ function (ev) {
 	} catch (ex) {
 		// Only restart on error if we are not initialized and it isn't a parse error
 		if (ex.code != ZmCsfeException.MAIL_QUERY_PARSE_ERROR) {
-			this._app.getCurrentController()._handleException(ex, "ZaAccountListController.prototype.search", null, (this._inited) ? false : true);
+			this._app.getCurrentController()._handleException(ex, "MoveAliasXDialog.prototype.searchAccounts", null, (this._inited) ? false : true);
 		} else {
 			this.popupErrorDialog(ZaMsg.queryParseError, ex);
 			this._searchField.setEnabled(true);	
