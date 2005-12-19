@@ -32,6 +32,7 @@
 function ZaController(appCtxt, container, app, iKeyName) {
 
 	if (arguments.length == 0) return;
+	this._evtMgr = new AjxEventMgr();	
 	this._iKeyName = iKeyName;
 	this._appCtxt = appCtxt;
 	this._container = container;
@@ -380,3 +381,11 @@ function () {
 		this._confirmMessageDialog.popdown();	
 }
 
+/**
+* public getToolBar
+* @return reference to the toolbar
+**/
+ZaController.prototype.getToolBar = 
+function () {
+	return this._toolbar;	
+}

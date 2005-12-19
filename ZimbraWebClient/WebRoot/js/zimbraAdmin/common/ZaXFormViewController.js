@@ -147,8 +147,8 @@ function(ev) {
 	try {
 		if(this._saveChanges()) {
 			this._view.setDirty(false);
-			if(this._toolBar)
-				this._toolBar.getButton(ZaOperation.SAVE).setEnabled(false);		
+			if(this._toolbar)
+				this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);		
 		
 			this._currentObject.refresh(false);	
 			this._view.setObject(this._currentObject);			
@@ -218,3 +218,15 @@ function (nextViewCtrlr, func, params) {
 		func.call(nextViewCtrlr, params);
 	}
 }
+
+ZaXFormViewController.prototype.setDirty = 
+function (isD) {
+	if(!this._toolbar || !this._toolbar.getButton(ZaOperation.SAVE))
+		return;
+		
+	if(isD)
+		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(true);
+	else
+		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
+}
+

@@ -35,7 +35,6 @@
 
 function ZaAccountViewController(appCtxt, container, app) {
 	ZaXFormViewController.call(this, appCtxt, container, app, "ZaAccountViewController");
-	this._evtMgr = new AjxEventMgr();
 	this._UICreated = false;
 	this.objType = ZaEvent.S_ACCOUNT;
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/provisioning_accounts.htm";		
@@ -66,15 +65,15 @@ function(entry, skipRefresh) {
 **/
 ZaAccountViewController.prototype.getToolBar = 
 function () {
-	return this._toolBar;	
+	return this._toolbar;	
 }
 
 ZaAccountViewController.prototype.setDirty = 
 function (isD) {
 	if(isD)
-		this._toolBar.getButton(ZaOperation.SAVE).setEnabled(true);
+		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(true);
 	else
-		this._toolBar.getButton(ZaOperation.SAVE).setEnabled(false);
+		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
 }
 
 /**
@@ -423,12 +422,12 @@ function(entry, skipRefresh) {
 			this._ops.push(new ZaOperation(ZaOperation.NONE));
 			this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));		
 
-			this._toolBar = new ZaToolBar(this._container, this._ops);
+			this._toolbar = new ZaToolBar(this._container, this._ops);
 	
 	  		this._view = new ZaAccountXFormView(this._container, this._app);
 			var elements = new Object();
 			elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
-			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolBar;		  		
+			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		  		
 	    	this._app.createView(ZaZimbraAdmin._ACCOUNT_VIEW, elements);
 	    	this._UICreated = true;
   		}
@@ -441,11 +440,11 @@ function(entry, skipRefresh) {
 				this._handleException(ex, null, null, false);
 			}
 		}
-		this._toolBar.getButton(ZaOperation.SAVE).setEnabled(false);
+		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
 		if(!entry.id) {
-			this._toolBar.getButton(ZaOperation.DELETE).setEnabled(false);  			
+			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
 		} else {
-			this._toolBar.getButton(ZaOperation.DELETE).setEnabled(true);  				
+			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);  				
 		}	
 		this._view.setDirty(false);
 		entry.attrs[ZaAccount.A_password] = null; //get rid of VALUE-BLOCKED

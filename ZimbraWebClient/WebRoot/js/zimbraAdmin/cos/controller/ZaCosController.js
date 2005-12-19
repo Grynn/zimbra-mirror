@@ -33,7 +33,6 @@
 
 function ZaCosController(appCtxt, container,app) {
 	ZaXFormViewController.call(this, appCtxt, container,app, "ZaCosController");
-	this._evtMgr = new AjxEventMgr();
 	this._confirmMessageDialog;
 	this._UICreated = false;	
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/cos/class_of_service.htm";		
@@ -110,22 +109,7 @@ function(listener) {
 	this._evtMgr.removeListener(ZaEvent.E_REMOVE, listener);    	
 }
 
-/**
-* public getToolBar
-* @return reference to the toolbar
-**/
-ZaCosController.prototype.getToolBar = 
-function () {
-	return this._toolBar;	
-}
 
-ZaCosController.prototype.setDirty = 
-function (isD) {
-	if(isD)
-		this._toolBar.getButton(ZaOperation.SAVE).setEnabled(true);
-	else
-		this._toolBar.getButton(ZaOperation.SAVE).setEnabled(false);
-}
 
 /**
 *	@method _setView 
@@ -144,22 +128,22 @@ function(entry) {
 	   		this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.COSTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener)));    	    	
 			this._ops.push(new ZaOperation(ZaOperation.NONE));
 			this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));							
-			this._toolBar = new ZaToolBar(this._container, this._ops);
+			this._toolbar = new ZaToolBar(this._container, this._ops);
 	
 		  	this._view = new ZaCosXFormView(this._container, this._app, entry.id);
 			var elements = new Object();
 			elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
-			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolBar;			  	
+			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;			  	
 		    this._app.createView(ZaZimbraAdmin._COS_VIEW, elements);  	
 		    this._UICreated = true;
 	  	}
 	
 		this._app.pushView(ZaZimbraAdmin._COS_VIEW);
-		this._toolBar.getButton(ZaOperation.SAVE).setEnabled(false);
+		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
 		if(!entry.id) {
-			this._toolBar.getButton(ZaOperation.DELETE).setEnabled(false);  			
+			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
 		} else {
-			this._toolBar.getButton(ZaOperation.DELETE).setEnabled(true);  				
+			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);  				
 		}	
 		this._view.setDirty(false);
 		entry[ZaModel.currentTab] = "1"
@@ -406,7 +390,7 @@ function () {
 			this._currentObject.create(tmpObj.name, mods);
 			//if creation took place - fire a CreationEvent
 			this.fireCreationEvent(this._currentObject);
-			this._toolBar.getButton(ZaOperation.DELETE).setEnabled(true);	
+			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);	
 		} else {
 			this._currentObject.modify(mods);
 			//if modification took place - fire a ChangeEvent

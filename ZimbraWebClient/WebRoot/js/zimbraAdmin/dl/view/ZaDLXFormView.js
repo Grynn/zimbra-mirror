@@ -153,6 +153,7 @@ ZaDLXFormView.addListToMemberList = function (list) {
 	}
 	this.getItemsById("members")[0].widget.setSelectedItems(list);
 	this.getItemsById('removeButton')[0].widget.setEnabled(true);
+	this.parent.setDirty(true);
 };
 
 /**
@@ -234,6 +235,15 @@ function(evt) {
 }
 
 ZaDLXFormView.myXFormModifier = function(xFormObject) {	
+	var sourceHeaderList = new Array();
+	sourceHeaderList[0] = new ZaListHeaderItem("type", ZaMsg.ALV_Type_col, null, 34, true, "objectClass", true, true);
+	sourceHeaderList[1] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.ALV_Name_col, null, null, true, ZaAccount.A_name, true, true);
+	//idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
+	sourceHeaderList[2] = new ZaListHeaderItem(ZaAccount.A_displayname, ZaMsg.ALV_DspName_col, null, 100, true,ZaAccount.A_displayname, true, true);
+
+	var membersHeaderList = new Array();
+	membersHeaderList[0] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.ALV_Name_col, null, null, true, ZaAccount.A_name, true, true);
+
 	xFormObject.tableCssStyle = "width:100%;overflow:auto;";
 	xFormObject.cssClass="ZaDLView";
 	xFormObject.numCols=5;
@@ -276,14 +286,19 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 					 {type:_GROUP_, colSpan:1, width:"100%", colSizes:[70,"auto"],
 						items:[	
 							{ref:"name", type:_EMAILADDR_, xmsgName:ZaMsg.NAD_AccountName, label: ZaMsg.DLXV_LabelListName, 
-							 forceUpdate:true, tableCssStyle:"width:100%", inputWidth:"100%"},
-						    {ref: "description", type:_TEXTFIELD_, label: ZaMsg.DLXV_LabelDescription, width:"100%"},
+								onChange:ZaTabView.onFormFieldChanged, forceUpdate:true, tableCssStyle:"width:100%", inputWidth:"100%"
+							},
+						    {ref: "description", type:_TEXTFIELD_, label: ZaMsg.DLXV_LabelDescription, width:"100%",
+						    	onChange:ZaTabView.onFormFieldChanged
+						    },
 							{ref: "zimbraMailStatus", type:_CHECKBOX_, trueValue:"enabled", falseValue:"disabled", 
-								label:ZaMsg.DLXV_LabelEnabled, cssStyle:"padding-left:0px"},						    
+								label:ZaMsg.DLXV_LabelEnabled, cssStyle:"padding-left:0px", onChange:ZaTabView.onFormFieldChanged
+							},						    
 						    {type:_OUTPUT_, value:ZaMsg.DLXV_LabelListMembers, width:"100%", colSpan:"*", cssClass:"xform_label_left", 
 								cssStyle:"padding-left:0px"},
 					        {type:_SPACER_, height:"3"},
-							{ref:"members", type:_DWT_LIST_, colSpan:"*", height:"338", width:"100%", cssClass: "DLTarget", widgetClass:ZaDLListView},
+							{ref:"members", type:_DWT_LIST_, colSpan:"*", height:"338", width:"100%", cssClass: "DLTarget", 
+								widgetClass:ZaDLListView, headerList:membersHeaderList},
 					        {type:_SPACER_, height:"8"},
 						    {type:_GROUP_, colSpan:2, width:"100%", numCols:4, colSizes:[85,5, 85,"100%"], 
 								items:[
@@ -322,7 +337,8 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 								]
 					       },
 					       {type:_SPACER_, height:"5"},
-						   {ref:"memberPool", type:_DWT_LIST_, height:"200", width:"100%",  colSpan:"*", cssClass: "DLSource", forceUpdate: true, widgetClass:ZaDLListView},
+						   {ref:"memberPool", type:_DWT_LIST_, height:"200", width:"100%",  colSpan:"*", cssClass: "DLSource", 
+						   		forceUpdate: true, widgetClass:ZaDLListView, headerList:sourceHeaderList},
 					       {type:_SPACER_, height:"5"},
 					       {type:_GROUP_, width:"100%", colSpan:"*", numCols:4, colSizes:[85,5,85,"100%"],
 							items: [
@@ -358,13 +374,15 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 				]
 				},
 				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 2", colSizes:[10, "auto"], colSpan:"*",
-				   items:[
-				    {type:_SPACER_, height:5},
-				    {type:_SPACER_, height:5},
-				    {type:_CELLSPACER_, width:10 },
-				    {type: _OUTPUT_, value:ZaMsg.DLXV_LabelNotes, cssStyle:"align:left"},
-				    {type:_CELLSPACER_, width:10 },
-				    {ref: "notes", type:_TEXTAREA_, width:"90%", height:"400", labelCssStyle:"vertical-align: top"}
+					items:[
+					    {type:_SPACER_, height:5},
+					    {type:_SPACER_, height:5},
+					    {type:_CELLSPACER_, width:10 },
+					    {type: _OUTPUT_, value:ZaMsg.DLXV_LabelNotes, cssStyle:"align:left"},
+					    {type:_CELLSPACER_, width:10 },
+					    {ref: "notes", type:_TEXTAREA_, width:"90%", height:"400", labelCssStyle:"vertical-align: top",
+					    	onChange:ZaTabView.onFormFieldChanged
+					    }
 					]
 				 }
 			]

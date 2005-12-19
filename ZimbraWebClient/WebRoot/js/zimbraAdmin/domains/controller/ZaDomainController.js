@@ -33,7 +33,6 @@
 
 function ZaDomainController(appCtxt, container,app) {
 	ZaXFormViewController.call(this, appCtxt, container, app, "ZaDomainController");
-	this._evtMgr = new AjxEventMgr();
 	this._UICreated = false;
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_domains/managing_domains.htm";			
 	this.deleteMsg = ZaMsg.Q_DELETE_DOMAIN;	
@@ -52,15 +51,6 @@ ZaDomainController.prototype.constructor = ZaDomainController;
 ZaDomainController.prototype.show = 
 function(entry) {
 	this._setView(entry);
-}
-
-/**
-* public getToolBar
-* @return reference to the toolbar
-**/
-ZaDomainController.prototype.getToolBar = 
-function () {
-	return this._toolBar;	
 }
 
 /**
@@ -118,16 +108,6 @@ function(listener) {
 }
 
 
-
-ZaDomainController.prototype.setDirty = 
-function (isD) {
-	if(isD)
-		this._toolBar.getButton(ZaOperation.SAVE).setEnabled(true);
-	else
-		this._toolBar.getButton(ZaOperation.SAVE).setEnabled(false);
-}
-
-
 /**
 *	@method _setView 
 *	@param entry - isntance of ZaDomain class
@@ -147,19 +127,19 @@ function(entry) {
    		this._ops.push(new ZaOperation(ZaOperation.AUTH_WIZARD, ZaMsg.DTBB_AuthConfigWiz, ZaMsg.DTBB_AuthConfigWiz_tt, "AuthWizard", "AuthWizardDis", new AjxListener(this, ZaDomainController.prototype._authWizButtonListener)));   		   		
 		this._ops.push(new ZaOperation(ZaOperation.NONE));
 		this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));							
-		this._toolBar = new ZaToolBar(this._container, this._ops);
+		this._toolbar = new ZaToolBar(this._container, this._ops);
 		var elements = new Object();
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
-		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolBar;		
+		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
 	    this._app.createView(ZaZimbraAdmin._DOMAIN_VIEW, elements);
 		this._UICreated = true;
 	} 
 	this._app.pushView(ZaZimbraAdmin._DOMAIN_VIEW);
-	this._toolBar.getButton(ZaOperation.SAVE).setEnabled(false);  		
+	this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);  		
 	if(!entry.id) {
-		this._toolBar.getButton(ZaOperation.DELETE).setEnabled(false);  			
+		this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
 	} else {
-		this._toolBar.getButton(ZaOperation.DELETE).setEnabled(true);  				
+		this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);  				
 	}
 	this._view.setDirty(false);
 	entry[ZaModel.currentTab] = "1"
@@ -304,7 +284,7 @@ function(ev) {
 		if(domain != null) {
 			//if creation took place - fire an DomainChangeEvent
 			this.fireCreationEvent(domain);
-			this._toolBar.getButton(ZaOperation.DELETE).setEnabled(true);	
+			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);	
 			this._newDomainWizard.popdown();		
 		}
 	} catch (ex) {

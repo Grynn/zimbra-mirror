@@ -33,7 +33,6 @@
 
 function ZaServerController(appCtxt, container,app) {
 	ZaXFormViewController.call(this, appCtxt, container,app,"ZaServerController");
-	this._evtMgr = new AjxEventMgr();
 	this._UICreated = false;
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_servers/managing_servers.htm";				
 	this._toolbarOperations = new Array();
@@ -63,15 +62,6 @@ function(enable) {
 }
 
 /**
-* public getToolBar
-* @return reference to the toolbar
-**/
-ZaServerController.prototype.getToolBar = 
-function () {
-	return this._toolBar;	
-}
-
-/**
 * Adds listener to modifications in the contained ZaServer 
 * @param listener
 **/
@@ -87,14 +77,6 @@ function(listener) {
 ZaServerController.prototype.removeServerChangeListener = 
 function(listener) {
 	this._evtMgr.removeListener(ZaEvent.E_MODIFY, listener);    	
-}
-
-ZaServerController.prototype.setDirty = 
-function (isD) {
-	if(isD)
-		this._toolBar.getButton(ZaOperation.SAVE).setEnabled(true);
-	else
-		this._toolBar.getButton(ZaOperation.SAVE).setEnabled(false);
 }
 
 
@@ -167,11 +149,11 @@ function () {
 	//always add Help button at the end of the toolbar
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.NONE));
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));							
-	this._toolBar = new ZaToolBar(this._container, this._toolbarOperations);		
+	this._toolbar = new ZaToolBar(this._container, this._toolbarOperations);		
 	
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
-	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolBar;		
+	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
     this._app.createView(ZaZimbraAdmin._SERVER_VIEW, elements);
 	this._UICreated = true;
 }

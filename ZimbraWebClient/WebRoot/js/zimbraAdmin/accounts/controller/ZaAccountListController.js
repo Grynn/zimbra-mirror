@@ -35,7 +35,6 @@
 **/
 function ZaAccountListController(appCtxt, container, app) {
 	ZaController.call(this, appCtxt, container, app, "ZaAccountListController");
-	this._evtMgr = new AjxEventMgr();	
     //Account operations
    	this._toolbarOperations = new Array();
    	this._popupOperations = new Array();			
@@ -339,7 +338,7 @@ function (nextViewCtrlr, func, params) {
 **/
 ZaAccountListController.prototype.getToolBar = 
 function () {
-	return this._toolBar;	
+	return this._toolbar;	
 }
 
 
@@ -731,6 +730,24 @@ function () {
 	this._fireAccountRemovalEvent(successRemList); 
 	this._removeConfirmMessageDialog.popdown();
 	this.show(ZaSearch.searchByQueryHolder(this._currentQuery, this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app));			
+}
+
+/**
+*	Private method that notifies listeners to that the controlled ZaAccount is (are) removed
+* 	@param details
+*/
+ZaAccountListController.prototype._fireAccountRemovalEvent =
+function(details) {
+	try {
+		if (this._evtMgr.isListenerRegistered(ZaEvent.E_REMOVE)) {
+			var evt = new ZaEvent(ZaEvent.S_ACCOUNT);
+			evt.set(ZaEvent.E_REMOVE, this);
+			evt.setDetails(details);
+			this._evtMgr.notifyListeners(ZaEvent.E_REMOVE, evt);
+		}
+	} catch (ex) {
+		this._handleException(ex, ZaAccountListController.prototype._fireAccountRemovalEvent, details, false);	
+	}
 }
 
 ZaAccountListController.prototype._donotDeleteAccountsCallback = 

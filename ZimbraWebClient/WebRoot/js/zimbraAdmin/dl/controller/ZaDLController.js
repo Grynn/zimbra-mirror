@@ -49,8 +49,6 @@ ZaDLController.prototype.toString = function () {
 ZaDLController.prototype.handleXFormChange = function (ev) {
 	if(ev && ev.form.hasErrors()) { 
 		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
-	} else {
-		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(true);
 	}
 }
 ZaDLController.prototype.show = function(entry) {
@@ -59,11 +57,11 @@ ZaDLController.prototype.show = function(entry) {
 	} 	
 	try {
 		this._app.pushView(ZaZimbraAdmin._DL_VIEW);
-		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
 		if(!entry.id) {
 			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
 		} else {
 			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);  				
+			entry.getMembers(true);
 		}	
 		this._view.setDirty(false);
 		entry[ZaModel.currentTab] = "1"
@@ -115,6 +113,7 @@ ZaDLController.prototype._saveChanges = function () {
 		} else {
 			dl.saveNew();
 		}
+		return true;		
 	} catch (ex) {
 		var handled = false;
 		if (ex.code == ZmCsfeException.SVC_FAILURE) {
@@ -132,5 +131,6 @@ ZaDLController.prototype._saveChanges = function () {
 		if (!handled) {
 			this._handleException(ex, "ZaDLController.prototype._saveChanges", null, false);
 		}
+		return false;
 	}
 };

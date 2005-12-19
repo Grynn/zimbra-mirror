@@ -26,8 +26,8 @@
  /**
  * @author EMC
  **/
-function ZaDLListView(parent, className, posStyle) {
-	var headerList = this._getHeaderList();
+function ZaDLListView(parent, className, posStyle, headerList) {
+	//var headerList = this._getHeaderList();
 	ZaListView.call(this, parent, className, posStyle, headerList);
 }
 
@@ -90,19 +90,6 @@ function(account, now, isDndIcon) {
 	return div;
 }
 
-ZaDLListView.prototype._getHeaderList =
-function() {
-
-	var headerList = new Array();
-	
-	headerList[0] = new ZaListHeaderItem("type", ZaMsg.ALV_Type_col, null, 34, true, "objectClass", true, true);
-
-	headerList[1] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.ALV_Name_col, null, null, true, ZaAccount.A_name, true, true);
-//idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
-	headerList[2] = new ZaListHeaderItem(ZaAccount.A_displayname, ZaMsg.ALV_DspName_col, null, 100, true,ZaAccount.A_displayname, true, true);
-
-	return headerList;
-}
 
 ZaDLListView.prototype._setNoResultsHtml = function() {
 	var buffer = new AjxBuffer();

@@ -112,6 +112,10 @@ ZaDistributionList.prototype.removeMembers = function (arr) {
 	}
 };
 
+ZaDistributionList.prototype.refresh = function () {
+	this.getMembers(true);
+}
+
 /**
  * Adds a list of members
  * This keeps the internal add, and remove lists up to date.
@@ -456,7 +460,11 @@ ZaDistributionList.prototype._addNewMembers = function () {
 	for (var i = 0; i < len; ++i) {
 		addMemberSoapDoc = AjxSoapDoc.create("AddDistributionListMemberRequest", "urn:zimbraAdmin", null);
 		addMemberSoapDoc.set("id", this.id);
-		addMemberSoapDoc.set("dlm", addArray[i].toString());
+		if(typeof(addArray[i]) == "object" && addArray[i].name) {
+			addMemberSoapDoc.set("dlm", addArray[i].name.toString());
+		} else {
+			addMemberSoapDoc.set("dlm", addArray[i].toString());
+		}
 		r = ZmCsfeCommand.invoke(addMemberSoapDoc, null, null, null, false).Body.AddDistributionListMemberResponse;
 	}
 };
@@ -530,13 +538,13 @@ ZaDistributionList.prototype.setMembers = function (list) {
  * The id is needed at a higher level for DwtLists to work correctly.
  */
 function ZaDistributionListMember (name) {
-	this.name = name;
+	this[ZaAccount.A_name] = name;
 	this.id = "ZADLM_" + name;
 
 }
 
 ZaDistributionListMember.prototype.toString = function () {
-	return this.name;
+	return this[ZaAccount.A_name];
 };
 
 /**

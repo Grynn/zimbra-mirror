@@ -33,7 +33,6 @@
 **/
 function ZaGlobalConfigViewController(appCtxt, container, app) {
 	ZaXFormViewController.call(this, appCtxt, container, app,"ZaGlobalConfigViewController");
-	this._evtMgr = new AjxEventMgr();
 	this._UICreated = false;
 	this._confirmMessageDialog;	
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_global_settings/global_settings.htm";			
@@ -62,17 +61,17 @@ function(item) {
 		this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener)));
 		this._ops.push(new ZaOperation(ZaOperation.NONE));
 		this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));							
-		this._toolBar = new ZaToolBar(this._container, this._ops);
+		this._toolbar = new ZaToolBar(this._container, this._ops);
 	
 		this._view = new GlobalConfigXFormView(this._container, this._app);
 		var elements = new Object();
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
-		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolBar;			
+		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;			
 		this._app.createView(ZaZimbraAdmin._GLOBAL_SETTINGS,elements);
 		this._UICreated = true;		
 	}
 	this._app.pushView(ZaZimbraAdmin._GLOBAL_SETTINGS);
-	this._toolBar.getButton(ZaOperation.SAVE).setEnabled(false);  	
+	this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);  	
 	try {		
 		item[ZaModel.currentTab] = "1"
 		this._view.setDirty(false);
@@ -87,23 +86,6 @@ function(item) {
 ZaGlobalConfigViewController.prototype.setEnabled = 
 function(enable) {
 	this._view.setEnabled(enable);
-}
-
-/**
-* public getToolBar
-* @return reference to the toolbar
-**/
-ZaGlobalConfigViewController.prototype.getToolBar = 
-function () {
-	return this._toolBar;	
-}
-
-ZaGlobalConfigViewController.prototype.setDirty = 
-function (isD) {
-	if(isD)
-		this._toolBar.getButton(ZaOperation.SAVE).setEnabled(true);
-	else
-		this._toolBar.getButton(ZaOperation.SAVE).setEnabled(false);
 }
 
 ZaGlobalConfigViewController.prototype._saveChanges =

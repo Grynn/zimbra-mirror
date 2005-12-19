@@ -30,7 +30,6 @@
 **/
 function ZaDomainListController(appCtxt, container, app) {
 	ZaController.call(this, appCtxt, container, app,"ZaDomainListController");
-	this._evtMgr = new AjxEventMgr();
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_domains/managing_domains.htm";				
 }
 
@@ -163,14 +162,6 @@ function (nextViewCtrlr, func, params) {
 	func.call(nextViewCtrlr, params);
 }
 
-/**
-* public getToolBar
-* @return reference to the toolbar
-**/
-ZaDomainListController.prototype.getToolBar = 
-function () {
-	return this._toolBar;	
-}
 
 /**
 * Adds listener to removal of an ZaDomain 

@@ -30,7 +30,6 @@
 **/
 function ZaServerListController(appCtxt, container, app) {
 	ZaController.call(this, appCtxt, container, app,"ZaServerListController");
-	this._evtMgr = new AjxEventMgr();
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_servers/managing_servers.htm";					
 }
 
@@ -170,15 +169,6 @@ function (ev) {
 ZaServerListController.prototype.switchToNextView = 
 function (nextViewCtrlr, func, params) {
 	func.call(nextViewCtrlr, params);
-}
-
-/**
-* public getToolBar
-* @return reference to the toolbar
-**/
-ZaServerListController.prototype.getToolBar = 
-function () {
-	return this._toolBar;	
 }
 
 /**
