@@ -35,6 +35,15 @@ function() {
 	this._processor = AjxXslt.createFromUrl(stylesheet);
 };
 
+ZmBugzObjectHandler.prototype.match =
+function(content, startIndex) {
+	if(!this.RE) {return;}
+	this.RE.lastIndex = startIndex;
+	var match = this.RE.exec(content);
+	if (match) match.context = match[1];
+	return match;
+};
+
 ZmBugzObjectHandler.prototype.toolTipPoppedUp =
 function(spanElement, obj, context, canvas) {
 	canvas.innerHTML = "<b>ID: </b>"+context;
