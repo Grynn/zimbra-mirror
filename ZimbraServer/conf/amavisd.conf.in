@@ -110,7 +110,7 @@ $defang_banned = 1;  # MIME-wrap passed mail containing banned name
 
 # OTHER MORE COMMON SETTINGS (defaults may suffice):
 
-# $myhostname = 'host.example.com';  # must be a fully-qualified domain name!
+ $myhostname = '@@zimbra_server_hostname@@';  # must be a fully-qualified domain name!
 
 # $notify_method  = 'smtp:[127.0.0.1]:10025';
 # $forward_method = 'smtp:[127.0.0.1]:10025';  # set to undef with milter!
