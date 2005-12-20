@@ -230,7 +230,7 @@ function(unameId, pwordId, okCellId, errorCellId, licenseCellId) {
 	html[i++] = "<tr><td colspan=2><table cellpadding=0 cellspacing=0 border=0 width=100%>";
 	html[i++] = "<td id='" + licenseCellId + "' style='visibility:hidden;'></td>";
 	html[i++] = "<td id='" + okCellId + "' align=right></td></tr></table>";
-	html[i++] = "</td></tr></table>";
+	html[i++] = "</td></tr><tr><td colspan=2 style='Xborder:1px solid #eeeeee;font-size:9px;color:#999999;background-color:white;'>" + ZaMsg.splashScreenCopyright + "</td></tr></table>";
 	html[i++] = "</td></tr></table>";
 	html[i++] = "</td></tr></table>";
 /*
@@ -253,7 +253,7 @@ function(unameId, pwordId, okCellId, errorCellId, licenseCellId) {
 	return html.join("");
 }
 
-ZaLoginDialog.prototype._addChild =
+ZaLoginDialog.prototype.addChild =
 function(child, childHtmlElement) {
     this._children.add(child);
 }

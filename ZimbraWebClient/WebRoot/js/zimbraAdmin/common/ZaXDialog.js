@@ -156,7 +156,7 @@ function () {
 * Child elements are added to this control in the _createHTML method.
 * @param child
 **/
-ZaXDialog.prototype._addChild =
+ZaXDialog.prototype.addChild =
 function(child) {
 	this._children.add(child);
 }

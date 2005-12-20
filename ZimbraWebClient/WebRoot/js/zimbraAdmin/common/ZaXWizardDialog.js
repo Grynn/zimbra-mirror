@@ -249,7 +249,7 @@ function (stepKey, stepTitle) {
 	return (++this._stepsNumber);
 }
 
-ZaXWizProgressBar.prototype._addChild =
+ZaXWizProgressBar.prototype.addChild =
 function(child) {
 	this._children.add(child);
 	var row;
