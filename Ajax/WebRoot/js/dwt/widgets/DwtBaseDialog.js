@@ -63,7 +63,7 @@ function DwtBaseDialog(parent, className, title, zIndex, mode, loc, optionalView
 
 	this._mode = mode || DwtBaseDialog.MODAL;
 	this._loc = loc;
-	this._ffHackDisabled = false;
+	this._ffHackDisabled = true;
 
 	this._createHtml();
 	DBG.timePt(AjxDebug.PERF, "DwtBaseDialog#_createHtml");
@@ -72,6 +72,11 @@ function DwtBaseDialog(parent, className, title, zIndex, mode, loc, optionalView
 	}
 	// make dialog draggable within boundaries of shell
 	var htmlElement = this.getHtmlElement();
+	
+	// Workaround for the hidden cursor issue in Gecko based browsers like FireFox
+	if (AjxEnv.isGeckoBased)
+		htmlElement.style.overflow = "auto";
+		
 	var dHandleId = optionalDragHandleId ? optionalDragHandleId : (htmlElement.id + "_handle");
 	this.initializeDragging(dHandleId);
 	DBG.timePt(AjxDebug.PERF, "init dragging");
