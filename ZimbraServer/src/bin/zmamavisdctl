@@ -102,6 +102,7 @@ case "$1" in
 				killall -TERM ${zimbra_home}/amavisd/sbin/amavisd > /dev/null 2>&1
 			fi
 		fi
+		exit 0
         ;;
     
     'restart')
