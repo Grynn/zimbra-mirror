@@ -89,15 +89,15 @@ function(imageInfo, bookInfo, obj) {
 };
 
 Com_Zimbra_Amzn._callback = 
-function(args) {
-	var result = AjxXmlDoc.createFromXml(args[1].text).toJSObject(true, false);
+function(obj, result) {
+	var result = AjxXmlDoc.createFromXml(result.text).toJSObject(true, false);
 	var bookInfo = new Object();
 	if(result.Items.Item.ImageSets && result.Items.Item.ItemAttributes) {
 		bookInfo.title = result.Items.Item.ItemAttributes.Title;
 		bookInfo.author = result.Items.Item.ItemAttributes.Author;
 		bookInfo.price = result.Items.Item.ItemAttributes.ListPrice.FormattedPrice;
-		Com_Zimbra_Amzn._displayBook(result.Items.Item.ImageSets.ImageSet.MediumImage, bookInfo, args[0]);
+		Com_Zimbra_Amzn._displayBook(result.Items.Item.ImageSets.ImageSet.MediumImage, bookInfo, obj);
 	} else {
-		Com_Zimbra_Amzn._displayBook(null, null, args[0]);
+		Com_Zimbra_Amzn._displayBook(null, null, obj);
 	}
 };
