@@ -89,7 +89,7 @@ function(status, reqId, id) {
 	}
 	delete AjxPost._outStandingRequests[reqId];
 	if (this._callback) {
-		this._callback.run([status, id]);
+		this._callback.run(status, id);
 		this._callback = null;
 	}
 };
