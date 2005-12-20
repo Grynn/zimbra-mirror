@@ -41,6 +41,7 @@
 * argument to the constructor to AjxDebug.NONE.
 *
 * @author Conrad Damon
+* @author Ross Dargahi
 * @param level	 	debug level for the current debugger (no window will be displayed for a level of NONE)
 * @param name 		the name of the window. Defaults to "debug_" prepended to the calling window's URL.
 * @param showTime	a boolean that toggles the display of timestamps before debug messages
@@ -161,7 +162,7 @@ function(on, level, msg) {
 */
 AjxDebug.prototype.println = 
 function(level, msg, linkName) {
-	if (this.isDisabled()) return;
+	if (this.isDisabled() || this._debugWindow.closed) return;
 	var args = this._handleArgs(arguments, linkName);
 	if (!args) return;
 
@@ -191,7 +192,7 @@ function () {
 */
 AjxDebug.prototype.dumpObj = 
 function(level, obj, showFuncs, linkName) {
-	if (this.isDisabled())return;
+	if (this.isDisabled() || this._debugWindow.closed)return;
 	var args = this._handleArgs(arguments, linkName);
 	if (!args) return;
 	obj = args[0];
@@ -212,7 +213,7 @@ function(level, obj, showFuncs, linkName) {
 */
 AjxDebug.prototype.printRaw = 
 function(level, text, linkName) {
-	if (this.isDisabled()) return;
+	if (this.isDisabled() || this._debugWindow.closed) return;
 	var args = this._handleArgs(arguments, linkName);
 	if (!args) return;
 	text = args[0];
@@ -228,7 +229,7 @@ function(level, text, linkName) {
 */
 AjxDebug.prototype.printXML = 
 function(level, text, linkName) {
-	if (this.isDisabled()) return;
+	if (this.isDisabled() || this._debugWindow.closed) return;
 	var args = this._handleArgs(arguments, linkName);
 	if (!args) return;
 	text = args[0];
@@ -250,7 +251,7 @@ function(level, text, linkName) {
 */
 AjxDebug.prototype.display =
 function(level, text) {
-	if (this.isDisabled()) return;
+	if (this.isDisabled() || this._debugWindow.closed) return;
 	var args = this._handleArgs(arguments);
 	if (!args) return;
 	text = args[0];
@@ -515,14 +516,19 @@ function() {
 		} else {
 			this._contentFrame = this._document.getElementById(AjxDebug._CONTENT_FRAME_ID);
 			this._linkFrame = this._document.getElementById(AjxDebug._LINK_FRAME_ID);
-			AjxDebug._createLinkNContent(this, "RunLink", "NEW RUN", "Run", "NEW RUN");
+			this._createLinkNContent(this, "RunLink", "NEW RUN", "Run", "NEW RUN");
 			
 			// Firefox allows us to attach an event listener, and runs it even
 			// though the window with the code is gone ... odd, but nice. IE,
 			// though will not run the handler, so we make sure, even if we're
-			// coming back to the window, to attach the onunload handler.
-			if (AjxEnv.isIE)
+			// coming back to the window, to attach the onunload handler. In general
+			// reattach all handlers for IE
+			if (AjxEnv.isIE) {
 				this._debugWindow.attachEvent('onunload', AjxDebug.unloadHandler);
+				this._markBtn.onclick = AjxDebug._mark;
+				this._clearBtn.onclick = AjxDebug._clear;
+			}		
+				
 			this._dbgWindowInited = true;
 			// show any messages that have been queued up, while the window loaded.
 			this._showMessages();
@@ -549,12 +555,12 @@ function() {
 	var buttonFrameDoc = buttonFrame.contentWindow.document;
 	var buttonFrameBody = buttonFrameDoc.body;
 	
-	var markBtn = buttonFrameDoc.createElement("button");
+	var markBtn = this._markBtn = buttonFrameDoc.createElement("button");
 	markBtn.innerHTML = "Mark";
 	markBtn._dbg = this;
 	markBtn.onclick = AjxDebug._mark;
 
-	var clearBtn = buttonFrameDoc.createElement("button");
+	var clearBtn = this._markBtn = buttonFrameDoc.createElement("button");
 	clearBtn._contentFrameId = AjxDebug._CONTENT_FRAME_ID;
 	clearBtn._linkFrameId = AjxDebug._LINK_FRAME_ID;
 	clearBtn.innerHTML = "Clear";
@@ -804,32 +810,10 @@ function (htmlStr) {
 
 AjxDebug._mark = 
 function() {
-	AjxDebug._createLinkNContent(this._dbg, "MarkLink", "MARK", "Mark", "MARK");
-/*	
-	var linkFrameDoc = this._dbg._linkFrame.contentWindow.document
-	var mark = linkFrameDoc.createElement("div");
-	mark.className = "MarkLink";
-	mark.innerHTML = "MARK #" + ++AjxDebug._markNo;
-	var id = "Mark_" + AjxDebug._markNo;
-	mark._targetId = id;
-	mark._dbg = this._dbg;
-	mark.onclick = AjxDebug._linkClicked
-	linkFrameDoc.body.appendChild(mark);
-	//linkFrameDoc.body.appendChild(linkFrameDoc.createElement("br"));
-	
-	var contentFrameDoc = this._dbg._contentFrame.contentWindow.document;
-	mark = contentFrameDoc.createElement("div");
-	mark.className = "Mark";
-	mark.id = id;
-	mark.innerHTML = "MARK #" + AjxDebug._markNo; 
-	mark._dbg = this._dbg;
-	contentFrameDoc.body.appendChild(contentFrameDoc.createElement("p"));
-	contentFrameDoc.body.appendChild(mark);
-	contentFrameDoc.body.appendChild(contentFrameDoc.createElement("p"));
-*/
+	this._dbg._createLinkNContent(this._dbg, "MarkLink", "MARK", "Mark", "MARK");
 };
 
-AjxDebug._createLinkNContent =
+AjxDebug.prototype._createLinkNContent =
 function(ajxDbgObj, linkClass, linkLabel, contentClass, contentLabel) {
 	var now = new Date();
 	var timeStamp = [" - [", AjxDebug._getTimeStamp(now), "]"].join("");
@@ -858,9 +842,7 @@ function(ajxDbgObj, linkClass, linkLabel, contentClass, contentLabel) {
 AjxDebug._clear = 
 function() {
 	this._dbg._contentFrame.contentWindow.document.body.innerHTML = "";
-	this._dbg._linkFrame.contentWindow.document.body.innerHTML = "";
-	AjxDebug._runNo = 0;
-	AjxDebug._markNo = 0;	
+	this._dbg._linkFrame.contentWindow.document.body.innerHTML = "";	
 };
 
 AjxDebug.myWindowUnloadHandler = 
