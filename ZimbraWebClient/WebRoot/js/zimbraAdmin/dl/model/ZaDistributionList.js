@@ -32,14 +32,18 @@ function ZaDistributionList(app, id, name, memberList, description, notes) {
 	this.name = (name != null) ? name: null;
 	this._selfMember = new ZaDistributionListMember(this.name);
 	this._memberList = (memberList != null)? AjxVector.fromArray(memberList): new AjxVector();
+	if (description != null) this.attrs.description = description;
+	if (notes != null) this.attrs.zimbraNotes = notes;
+	//Utility members
 	this._origList = (memberList != null)? AjxVector.fromArray(memberList): new AjxVector();
 	this._addList = new AjxVector();
 	this._removeList = new AjxVector();
 	this._dirty = true;
-	this.pagenum=1;
+	this.poolPagenum=1;
+	this.poolNumPages=1;
+	this.memPagenum=1;
+	this.memNumPages=1;
 	this.query="";
-	if (description != null) this.attrs.description = description;
-	if (notes != null) this.attrs.zimbraNotes = notes;
 }
 
 ZaDistributionList.prototype = new ZaItem;
@@ -582,7 +586,8 @@ ZaDistributionList.myXModel = {
 	},
 	items: [
 		{id:"query", type:_STRING_},
-		{id:"pagenum", type:_NUMBER_, defaultValue:1},
+		{id:"poolPagenum", type:_NUMBER_, defaultValue:1},
+		{id:"poolNumPages", type:_NUMBER_, defaultValue:1},		
 		{id: "memberPool", type:_LIST_, setter:"setMemberPool", setterScope:_MODEL_, getter: "getMemberPool", getterScope:_MODEL_},
 		{id: "optionalAdd", type:_UNTYPED_},
 		{id: "name", type:_STRING_, setter:"setName", setterScope: _INSTANCE_, required:true,

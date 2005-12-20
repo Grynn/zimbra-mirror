@@ -54,6 +54,7 @@ ZaDLXFormView.removeAllMembers = function(event) {
 	form.getInstance().removeAllMembers();
 	form.refresh();
 };
+
 /**
 * method of an XFormItem
 **/
@@ -65,6 +66,38 @@ ZaDLXFormView.removeMembers = function(event) {
 		form.refresh();	
 	}
 };
+
+/**
+* method of an XFormItem
+**/
+ZaDLXFormView.srchButtonHndlr = 
+function(evt) {
+	var fieldObj = this.getForm().parent;
+	fieldObj.searchAccounts(evt);
+}
+
+/**
+* method of an XFormItem
+**/
+ZaDLXFormView.fwdPoolButtonHndlr = 
+function(evt) {
+	var fieldObj = this.getForm().parent;
+	var currentPageNum = this.getInstanceValue("/poolPagenum");
+	this.setInstanceValue(currentPageNum+1,"/poolPagenum");
+	fieldObj.searchAccounts(evt);
+}
+
+/**
+* method of an XFormItem
+**/
+ZaDLXFormView.backPoolButtonHndlr = 
+function(evt) {
+	var fieldObj = this.getForm().parent;
+	var currentPageNum = this.getInstanceValue("/poolPagenum");
+	this.setInstanceValue(currentPageNum-1,"/poolPagenum");
+	fieldObj.searchAccounts(evt);
+}
+
 /**
 * method of the XForm
 **/
@@ -147,6 +180,34 @@ ZaDLXFormView.shouldEnableFreeFormButtons = function () {
 /**
 * method of the XForm
 **/
+ZaDLXFormView.shouldEnablePoolForwardButton = function () {
+	return (this.getInstance().poolPagenum < this.getInstance().poolNumPages);
+};
+
+/**
+* method of the XForm
+**/
+ZaDLXFormView.shouldEnablePoolBackButton = function () {
+	return (this.getInstance().poolPagenum > 1);
+};
+
+/**
+* method of the XForm
+**/
+ZaDLXFormView.shouldEnableMemForwardButton = function () {
+	return (this.getInstance().memPagenum < this.getInstance().memNumPages);
+};
+
+/**
+* method of the XForm
+**/
+ZaDLXFormView.shouldEnableMemBackButton = function () {
+	return (this.getInstance().memPagenum > 1);
+};
+
+/**
+* method of the XForm
+**/
 ZaDLXFormView.addListToMemberList = function (list) {
 	if (this.getInstance().addMembers(list)) {
 		this.refresh();
@@ -210,11 +271,12 @@ function (entry) {
 ZaDLXFormView.prototype.searchAccounts = 
 function (ev) {
 	try {
-		var  searchQueryHolder = new ZaSearchQuery(ZaSearch.getSearchByNameQuery(this._containedObject["query"]), [ZaSearch.ACCOUNTS,ZaSearch.DLS,ZaSearch.ALIASES], false, "");
-		var result = ZaSearch.searchByQueryHolder(searchQueryHolder, this._containedObject["pagenum"], ZaAccount.A_name, null, this._app);
+		var  searchQueryHolder = new ZaSearchQuery(ZaSearch.getSearchByNameQuery(this._containedObject["query"]), [ZaSearch.ACCOUNTS,ZaSearch.DLS,ZaSearch.ALIASES], false, "",null,10);
+		var result = ZaSearch.searchByQueryHolder(searchQueryHolder, this._containedObject["poolPagenum"], ZaAccount.A_name, null, this._app);
 		if(result.list) {
 			this._containedObject.memberPool = result.list.getArray();
 		}
+		this._containedObject.poolNumPages = result.numPages;
 		this._localXForm.refresh();
 
 	} catch (ex) {
@@ -228,11 +290,7 @@ function (ev) {
 	}
 }
 
-ZaDLXFormView.srchButtonHndlr = 
-function(evt) {
-	var fieldObj = this.getForm().parent;
-	fieldObj.searchAccounts(evt);
-}
+
 
 ZaDLXFormView.myXFormModifier = function(xFormObject) {	
 	var sourceHeaderList = new Array();
@@ -313,11 +371,11 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 								      relevantBehavior:_DISABLE_},
 									{type:_CELLSPACER_},
 									{type:_DWT_BUTTON_, label:ZaMsg.Back, width:75, id:"backButton",
-										icon:"LeftArrow", 	relevantBehavior:_DISABLE_
+										icon:"LeftArrow", disIcon:"LeftArrowDis", 	relevantBehavior:_DISABLE_, relevant:"ZaDLXFormView.shouldEnableMemBackButton.call(this)"
 								    },								       
 									{type:_CELLSPACER_},
 									{type:_DWT_BUTTON_, label:ZaMsg.Forward, width:75, id:"fwdButton",
-										icon:"RightArrow", 	relevantBehavior:_DISABLE_
+										icon:"RightArrow", disIcon:"RightArrowDis",	relevantBehavior:_DISABLE_, relevant:"ZaDLXFormView.shouldEnableMemForwardButton.call(this)"
 								    },								       
 									{type:_CELLSPACER_}									
 								]
@@ -360,12 +418,14 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 								relevant:"ZaDLXFormView.shouldEnableAddAllButton.call(this)",
 								relevantBehavior:_DISABLE_},
 								{type:_CELLSPACER_},
-								{type:_DWT_BUTTON_, label:ZaMsg.Back, width:75, id:"backButton",
-										icon:"LeftArrow", 	relevantBehavior:_DISABLE_
+								{type:_DWT_BUTTON_, label:ZaMsg.Back, width:75, id:"backButton", icon:"LeftArrow", disIcon:"LeftArrowDis",
+									relevantBehavior:_DISABLE_, relevant:"ZaDLXFormView.shouldEnablePoolBackButton.call(this)",
+									onActivate:"ZaDLXFormView.backPoolButtonHndlr.call(this,event)"
 								},								       
 								{type:_CELLSPACER_},
-								{type:_DWT_BUTTON_, label:ZaMsg.Forward, width:75, id:"fwdButton",
-										icon:"RightArrow", 	relevantBehavior:_DISABLE_
+								{type:_DWT_BUTTON_, label:ZaMsg.Forward, width:75, id:"fwdButton", icon:"RightArrow", disIcon:"RightArrowDis",
+								 	relevantBehavior:_DISABLE_, relevant:"ZaDLXFormView.shouldEnablePoolForwardButton.call(this)",
+									onActivate:"ZaDLXFormView.fwdPoolButtonHndlr.call(this,event)"									
 								},								       
 								{type:_CELLSPACER_}	
 							  ]
