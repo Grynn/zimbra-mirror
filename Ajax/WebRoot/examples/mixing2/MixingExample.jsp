@@ -50,7 +50,7 @@
 	    	menu = null;
 	    	
 	    	function doIt() {
-	   			// DBG = new AjxDebug(AjxDebug.DBG1, null, false);
+	   			DBG = new AjxDebug(AjxDebug.DBG1, null, false);
 	   			
 	   			/* We always have to create a DwtShell as the root of our component
 	   			 * hierarchy and does some handy things for us.

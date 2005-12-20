@@ -48,7 +48,6 @@ function DvFilterPanel(parent, attrList, user, paginationCallback) {
 	this._treeHash = new Object();
 	this._fieldIds = new Array();
 	this._calIds = new Array();
-	this._doc = this.getDocument();
 	this._internalId = AjxCore.assignId(this);
 	
 	// popup calendar (reuse singleton)
@@ -171,12 +170,12 @@ function(attrs, numItems, numPages) {
 		// The following is for FireFox (Mozilla) focus problems
 		if (AjxEnv.isNav) {
 			if (attr.type == DvAttr.T_STRING_EXACT || attr.type == DvAttr.T_STRING_CONTAINS || attr.type == DvAttr.T_NUMBER) {
-				var el = Dwt.getDomObj(this._doc, DvFilterPanel.createId(this._user, attr));
+				var el = document.getElementById(DvFilterPanel.createId(this._user, attr));
 				el.onmousedown = DvFilterPanel._focus;
 			} else if (attr.type == DvAttr.T_NUMBER_RANGE || attr.type == DvAttr.T_DATE_RANGE || attr.type == DvAttr.T_TIME_RANGE) {
-				var el = Dwt.getDomObj(this._doc, DvFilterPanel.createId(this._user, attr, 1));
+				var el = document.getElementById(DvFilterPanel.createId(this._user, attr, 1));
 				el.onmousedown = DvFilterPanel._focus;
-				el = Dwt.getDomObj(this._doc, DvFilterPanel.createId(this._user, attr, 2));
+				el = document.getElementById(DvFilterPanel.createId(this._user, attr, 2));
 				el.onmousedown = DvFilterPanel._focus;	
 			}
 		}
@@ -284,7 +283,7 @@ function() {
 		
 		if (!checked[m.attrId])	continue;
 		
-		var el = Dwt.getDomObj(this._doc, id);
+		var el = document.getElementById(id);
 		var attr = this._attrList.getById(m.attrId);
 		// Massage the value if necessary
 		var value;
@@ -338,11 +337,11 @@ function() {
 	var pagesId = Dwt.getNextId();
 	this._createLowerPanel(filterButtonId, dataButtonId, totalId, filteredId, pagesId);
 
-	this._filterButtonEl = Dwt.getDomObj(this._doc, filterButtonId);
-	this._dataButtonEl = Dwt.getDomObj(this._doc, dataButtonId);
-	this._totalEl = Dwt.getDomObj(this._doc, totalId);
-	this._filteredEl = Dwt.getDomObj(this._doc, filteredId);
-	this._pagesEl = Dwt.getDomObj(this._doc, pagesId);
+	this._filterButtonEl = document.getElementById(filterButtonId);
+	this._dataButtonEl = document.getElementById(dataButtonId);
+	this._totalEl = document.getElementById(totalId);
+	this._filteredEl = document.getElementById(filteredId);
+	this._pagesEl = document.getElementById(pagesId);
 
 	this._createButtons();
 	this._layout();
@@ -508,7 +507,7 @@ function(attr) {
 // Adds a handler for the given event to the DOM object with the given DOM ID.
 DvFilterPanel.prototype._setEventHandler = 
 function(id, event) {
-	var field = Dwt.getDomObj(this._doc, id);
+	var field = document.getElementById(id);
 	field._filterPanel = this._internalId;
 	var lcEvent = event.toLowerCase();
 	field[lcEvent] = DvFilterPanel["_" + event];
@@ -533,7 +532,7 @@ function(ev) {
 		if (d) {
 			var date = (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear();
 			var fieldId = this._calFieldId.substring(4, this._calFieldId.length);
-			var field = Dwt.getDomObj(this._doc, fieldId);
+			var field = document.getElementById(fieldId);
 			field.value = date;
 		}
 	}

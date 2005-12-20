@@ -94,7 +94,7 @@ function(list) {
 DvListView.prototype._createItemHtml =
 function(item) {
 
-	var	div = this.getDocument().createElement("div");
+	var	div = document.createElement("div");
 	var base = "Row";
 	div._styleClass = base;
 	div._selectedStyleClass = [base, DwtCssStyle.SELECTED].join("-");	// Row-selected
@@ -144,7 +144,7 @@ function(ev) {
 	} else if (ev.event == DvEvent.E_DELETE) {
 		DBG.println(AjxDebug.DBG2, "DvListView: DELETE");
 		for (var i = 0; i < items.length; i++) {
-			var row = Dwt.getDomObj(document, item.id);
+			var row = document.getElementById(item.id);
 			if (row) {
 				this._parentEl.removeChild(row);
 				this._selectedItems.remove(row);
