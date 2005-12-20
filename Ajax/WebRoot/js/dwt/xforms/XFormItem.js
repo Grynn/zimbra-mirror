@@ -3355,6 +3355,11 @@ Dwt_Button_XFormItem.prototype.constructWidget = function () {
 		widget.setImage(icon);
 	}
 	
+	var disIcon = this.getInheritedProperty("disIcon");
+	if(disIcon != null) {
+		widget.setDisabledImage(disIcon);
+	}
+		
 	var toolTipContent = this.getInheritedProperty("toolTipContent");
 	if(toolTipContent != null) {
 		widget.setToolTipContent(toolTipContent);
