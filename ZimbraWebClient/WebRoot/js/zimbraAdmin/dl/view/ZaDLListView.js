@@ -31,7 +31,7 @@ function ZaDLListView(parent, className, posStyle, headerList) {
 	ZaListView.call(this, parent, className, posStyle, headerList);
 }
 
-ZaDLListView.prototype = new ZaListView();
+ZaDLListView.prototype = new ZaListView;
 ZaDLListView.prototype.constructor = ZaDLListView;
 
 ZaDLListView.prototype.toString = function() {

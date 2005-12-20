@@ -210,7 +210,7 @@ function (entry) {
 ZaDLXFormView.prototype.searchAccounts = 
 function (ev) {
 	try {
-		var  searchQueryHolder = new ZaSearchQuery(ZaSearch.getSearchByNameQuery(this._containedObject["query"]), [ZaSearch.ACCOUNTS], false, "");
+		var  searchQueryHolder = new ZaSearchQuery(ZaSearch.getSearchByNameQuery(this._containedObject["query"]), [ZaSearch.ACCOUNTS,ZaSearch.DLS,ZaSearch.ALIASES], false, "");
 		var result = ZaSearch.searchByQueryHolder(searchQueryHolder, this._containedObject["pagenum"], ZaAccount.A_name, null, this._app);
 		if(result.list) {
 			this._containedObject.memberPool = result.list.getArray();
@@ -300,7 +300,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 							{ref:"members", type:_DWT_LIST_, colSpan:"*", height:"338", width:"100%", cssClass: "DLTarget", 
 								widgetClass:ZaDLListView, headerList:membersHeaderList},
 					        {type:_SPACER_, height:"8"},
-						    {type:_GROUP_, colSpan:2, width:"100%", numCols:4, colSizes:[85,5, 85,"100%"], 
+						    {type:_GROUP_, colSpan:2, width:"100%", numCols:8, colSizes:[85,5, 85,"100%",80,5,80,5], 
 								items:[
 									{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemoveAll, width:80, 
 									   relevant:"ZaDLXFormView.shouldEnableRemoveAllButton.call(item)",
@@ -312,6 +312,14 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 								      relevant:"ZaDLXFormView.shouldEnableMemberListButtons.call(this)",
 								      relevantBehavior:_DISABLE_},
 									{type:_CELLSPACER_},
+									{type:_DWT_BUTTON_, label:ZaMsg.Back, width:75, id:"backButton",
+										icon:"LeftArrow", 	relevantBehavior:_DISABLE_
+								    },								       
+									{type:_CELLSPACER_},
+									{type:_DWT_BUTTON_, label:ZaMsg.Forward, width:75, id:"fwdButton",
+										icon:"RightArrow", 	relevantBehavior:_DISABLE_
+								    },								       
+									{type:_CELLSPACER_}									
 								]
 							}
 					    ]
@@ -340,7 +348,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 						   {ref:"memberPool", type:_DWT_LIST_, height:"200", width:"100%",  colSpan:"*", cssClass: "DLSource", 
 						   		forceUpdate: true, widgetClass:ZaDLListView, headerList:sourceHeaderList},
 					       {type:_SPACER_, height:"5"},
-					       {type:_GROUP_, width:"100%", colSpan:"*", numCols:4, colSizes:[85,5,85,"100%"],
+					       {type:_GROUP_, width:"100%", colSpan:"*", numCols:8, colSizes:[85,5, 85,"100%",80,5,80,5],
 							items: [
 							   {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddFromList, width:80,
 								onActivate:"ZaDLXFormView.addAddressesToMembers.call(this,event)",
@@ -351,7 +359,15 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 								onActivate:"ZaDLXFormView.addAllAddressesToMembers(this,event)",
 								relevant:"ZaDLXFormView.shouldEnableAddAllButton.call(this)",
 								relevantBehavior:_DISABLE_},
-							   {type:_CELLSPACER_},
+								{type:_CELLSPACER_},
+								{type:_DWT_BUTTON_, label:ZaMsg.Back, width:75, id:"backButton",
+										icon:"LeftArrow", 	relevantBehavior:_DISABLE_
+								},								       
+								{type:_CELLSPACER_},
+								{type:_DWT_BUTTON_, label:ZaMsg.Forward, width:75, id:"fwdButton",
+										icon:"RightArrow", 	relevantBehavior:_DISABLE_
+								},								       
+								{type:_CELLSPACER_}	
 							  ]
 					       },
 					       
