@@ -164,7 +164,7 @@ function() {
 	return this._selectedItems.size();
 }
 
-DwtTree.prototype._addChild =
+DwtTree.prototype.addChild =
 function(child) {}
 
 DwtTree.prototype.addSeparator =
@@ -187,7 +187,7 @@ function(item, index) {
 	}
 }
 
-DwtTree.prototype._removeChild =
+DwtTree.prototype.removeChild =
 function(child) {
 	this._children.remove(child);
 	this._selectedItems.remove(child);

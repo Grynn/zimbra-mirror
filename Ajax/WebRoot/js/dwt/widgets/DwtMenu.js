@@ -274,7 +274,7 @@ function() {
 	}
 };
 
-DwtMenu.prototype._removeChild =
+DwtMenu.prototype.removeChild =
 function(child) {
 	if (this._style == DwtMenu.BAR_STYLE) {
 		var cell = child.getHtmlElement().parentNode;
@@ -306,8 +306,8 @@ function(child) {
 	this._children.remove(child);
 }
 
-// Override DwtComposite._addChild to do nothing
-DwtMenu.prototype._addChild = function(child) {
+// Override DwtComposite.addChild to do nothing
+DwtMenu.prototype.addChild = function(child) {
 	// Color pickers and calendars are not menu aware so we have to deal with
 	// them acordingly
 	if ((child instanceof DwtColorPicker) || (child instanceof DwtCalendar))

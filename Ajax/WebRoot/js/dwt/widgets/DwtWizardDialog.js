@@ -290,11 +290,11 @@ function () {
 }
 
 /**
-* Override _addChild method. We need internal control over layout of the children in this class.
+* Override addChild method. We need internal control over layout of the children in this class.
 * Child elements are added to this control in the _createHTML method.
 * @param child
 **/
-DwtWizardDialog.prototype._addChild =
+DwtWizardDialog.prototype.addChild =
 function(child) {
 	this._children.add(child);
 }
@@ -442,7 +442,7 @@ function (stepKey, stepTitle) {
 	return (++this._stepsNumber);
 }
 
-DwtWizProgressBar.prototype._addChild =
+DwtWizProgressBar.prototype.addChild =
 function(child) {
 	this._children.add(child);
 	var row;

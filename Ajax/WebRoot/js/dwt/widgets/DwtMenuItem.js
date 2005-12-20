@@ -407,7 +407,7 @@ function() {
 	}
 }
 
-/* This method is explicitly called by DwtMenu._removeChild when the last check/radio item is removed
+/* This method is explicitly called by DwtMenu.removeChild when the last check/radio item is removed
  * from the menu. It allows for the item to remove its "bogus" check column*/
 DwtMenuItem.prototype._checkedItemsRemoved =
 function() {
@@ -425,7 +425,7 @@ function() {
 	}
 }
 
-/* This method is explicitly called by DwtMenu._removeChild when the last submenu is removed
+/* This method is explicitly called by DwtMenu.removeChild when the last submenu is removed
  * from the menu. It allows for the item to remove its "bogus" cascade column*/
 DwtMenuItem.prototype._submenuItemRemoved =
 function() {

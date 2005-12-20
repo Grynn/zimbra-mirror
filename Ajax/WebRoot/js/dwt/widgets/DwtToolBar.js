@@ -111,10 +111,11 @@ function(className, index) {
 	return el;
 }
 
-DwtToolBar.prototype._addChild =
+DwtToolBar.prototype.addChild =
 function(child, index) {
 	this._children.add(child);
-	this._addItem(DwtToolBar.ELEMENT, child.getHtmlElement(), index);
+	var htmlEl = child._removedEl ? child._removedEl : child.getHtmlElement();
+	this._addItem(DwtToolBar.ELEMENT, htmlEl, index);
 }
 
 DwtToolBar.prototype._addItem =

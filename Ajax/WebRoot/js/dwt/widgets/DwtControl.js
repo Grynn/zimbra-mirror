@@ -507,7 +507,7 @@ function() {
 	if (this._disposed) return;
 
 	if (this.parent != null)
-		this.parent._removeChild(this);
+		this.parent.removeChild(this);
 
 	Dwt.disassociateElementFromObject(null, this);
 
@@ -553,9 +553,9 @@ function(newParent) {
 	if (!this._checkState()) return;
 
 	var htmlEl = this.getHtmlElement();
-	this.parent._removeChild(this);
+	this.parent.removeChild(this);
 	DwtComposite._pendingElements[this._htmlElId] = htmlEl;
-	newParent._addChild(this);
+	newParent.addChild(this);
 	this.parent = newParent;
 	// TODO do we need a reparent event?
 }
@@ -1062,7 +1062,7 @@ function() {
 	this._dragging = DwtControl._NO_DRAG;
 	this._ctrlInited = true;
 	// Make sure this is the last thing we do
-	this.parent._addChild(this);
+	this.parent.addChild(this);
 }
 
 DwtControl.prototype.setContent =

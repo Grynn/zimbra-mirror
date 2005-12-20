@@ -285,7 +285,7 @@ function(visible, itemOnly, childOnly) {
 	}
 }
 
-DwtTreeItem.prototype._removeChild =
+DwtTreeItem.prototype.removeChild =
 function(child) {
 	if (child._initialized) {
 		this._tree._deselect(child);
@@ -400,7 +400,7 @@ function(child, index) {
 	this._children.add(child, index);
 }
 
-DwtTreeItem.prototype._addChild =
+DwtTreeItem.prototype.addChild =
 function(child) {}
 
 DwtTreeItem.prototype._addItem =

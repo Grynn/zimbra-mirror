@@ -349,9 +349,9 @@ DwtPropertyEditor.prototype._stopMsgDivTimer = function() {
 // This is bad.  We're messing with internals.  I think there should be an
 // option in DwtComposite to specify the element where to add the child, rather
 // than simply getHtmlElement().appendChild(child).
-DwtPropertyEditor.prototype._addChild = function(child) {
+DwtPropertyEditor.prototype.addChild = function(child) {
 	if (!this._currentFieldCell)
-		DwtComposite.prototype._addChild.call(this, child);
+		DwtComposite.prototype.addChild.call(this, child);
 	else {
 		this._children.add(child);
 		this._currentFieldCell.appendChild(child.getHtmlElement());

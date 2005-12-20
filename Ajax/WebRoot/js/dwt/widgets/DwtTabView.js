@@ -207,11 +207,11 @@ function () {
 }
 
 /**
-* Override _addChild method. We need internal control over layout of the children in this class.
+* Override addChild method. We need internal control over layout of the children in this class.
 * Child elements are added to this control in the _createHTML method.
 * @param child
 **/
-DwtTabView.prototype._addChild =
+DwtTabView.prototype.addChild =
 function(child) {
 	this._children.add(child);
 }
@@ -664,9 +664,9 @@ function() {
 
 /**
 * @param child
-* DwtComposite._addChild method is overriden to to create tab switch graphics
+* DwtComposite.addChild method is overriden to to create tab switch graphics
 **/
-DwtTabButton.prototype._addChild = 
+DwtTabButton.prototype.addChild = 
 function(child) {
 	this._centerMiddleCell.appendChild(child.getHtmlElement());
 	child.addListener(DwtEvent.ONMOUSEOVER, this._mouseOverListener);
