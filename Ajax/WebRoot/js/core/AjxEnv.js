@@ -192,11 +192,11 @@ AjxEnv.parseUA(navigator.userAgent);
 
 // Safari doesn't support string.replace(/regexp/, function);
 if (AjxEnv.isSafari) {
-	if (!String.prototype._ZmOldReplace) {
-		String.prototype._ZmOldReplace = String.prototype.replace;
+	if (!String.prototype._AjxOldReplace) {
+		String.prototype._AjxOldReplace = String.prototype.replace;
 		String.prototype.replace = function(re, val) {
 			if (typeof val != "function")
-				return this._ZmOldReplace(re, val);
+				return this._AjxOldReplace(re, val);
 			else {
 				// TODO: investigate if it's possible to use the array.join approach
 				var str = this.slice(0), v, l, a;
