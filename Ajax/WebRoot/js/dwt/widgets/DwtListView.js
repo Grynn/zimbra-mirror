@@ -1025,19 +1025,29 @@ function(clickedEl, ev) {
 		}
 	}
 
-	// let derived class call notifyListeners(), since it may want to add to event
-	if (ev.button == DwtMouseEvent.LEFT) {
-		DwtUiEvent.copy(this._selEv, ev);
-		this._selEv.item = AjxCore.objectWithId(Dwt.getAttr(clickedEl, "_itemIndex"));
-		if (this.constructor == DwtListView)
+	if (ev.button == DwtMouseEvent.LEFT && this._evtMgr.isListenerRegistered(DwtEvent.SELECTION)) {
+		if (this._setListEvent(ev, this._selEv, clickedEl))
 			this._evtMgr.notifyListeners(DwtEvent.SELECTION, this._selEv);
-	} else if (ev.button == DwtMouseEvent.RIGHT) {
-		DwtUiEvent.copy(this._actionEv, ev);
-		this._actionEv.item = AjxCore.objectWithId(Dwt.getAttr(clickedEl, "_itemIndex"));
-		if (this.constructor == DwtListView)
+	} else if (ev.button == DwtMouseEvent.RIGHT && this._evtMgr.isListenerRegistered(DwtEvent.ACTION)) {
+		if (this._setListEvent(ev, this._actionEv, clickedEl))
 			this._evtMgr.notifyListeners(DwtEvent.ACTION, this._actionEv);
 	}
 }
+
+/*
+* Creates a list event from a mouse event. Returns true if it is okay to notify listeners.
+* Subclasses may override to add more properties to the list event.
+*
+* @param	[DwtEvent]		mouse event
+* @param	[DwtEvent]		list event (selection or action)
+* @param	[element]		HTML element that received mouse click
+*/
+DwtListView.prototype._setListEvent =
+function(ev, listEv, clickedEl) {
+	DwtUiEvent.copy(listEv, ev);
+	listEv.item = AjxCore.objectWithId(Dwt.getAttr(clickedEl, "_itemIndex"));
+	return true;
+};
 
 DwtListView.prototype._columnClicked =
 function(clickedCol, ev) {

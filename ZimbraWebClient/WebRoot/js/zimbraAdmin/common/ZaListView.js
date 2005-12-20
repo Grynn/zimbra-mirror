@@ -82,19 +82,10 @@ function(mouseEv, div) {
 	return true;
 }
 
-ZaListView.prototype._mouseUpAction =
-function(ev, div) {
-	if (ev.button == DwtMouseEvent.LEFT) {
-		if (this._evtMgr.isListenerRegistered(DwtEvent.SELECTION)) {
-			this._selEv.field = ev.target.id.substring(0, 3);
-			this._evtMgr.notifyListeners(DwtEvent.SELECTION, this._selEv);
-		}
-	} else if (ev.button == DwtMouseEvent.RIGHT) {
-		if (this._evtMgr.isListenerRegistered(DwtEvent.ACTION)) {
-			this._actionEv.field = ev.target.id.substring(0, 3);
-			this._evtMgr.notifyListeners(DwtEvent.ACTION, this._actionEv);
-		}
-	}
+ZaListView.prototype._setListEvent =
+function (ev, listEv, clickedEl) {
+	DwtListView.prototype._setListEvent.call(this, ev, listEv, clickedEl);
+	listEv.field = ev.target.id.substring(0, 3);
 	return true;
 }
 
