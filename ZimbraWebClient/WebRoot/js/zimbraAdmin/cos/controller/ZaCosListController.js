@@ -25,6 +25,7 @@
 
 function ZaCosListController(appCtxt, container, app) {
 	ZaController.call(this, appCtxt, container, app, "ZaCosListController");
+	this.objType = ZaEvent.S_COS;	
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/cos/class_of_service.htm";				
 }
 
@@ -144,24 +145,6 @@ function (ev) {
 ZaCosListController.prototype.addCosRemovalListener = 
 function(listener) {
 	this._evtMgr.addListener(ZaEvent.E_REMOVE, listener);
-}
-
-/**
-*	Private method that notifies listeners to that the controlled ZaCos is (are) removed
-* 	@param details
-*/
-ZaCosListController.prototype._fireCOSRemovalEvent =
-function(details) {
-	try {
-		if (this._evtMgr.isListenerRegistered(ZaEvent.E_REMOVE)) {
-			var evt = new ZaEvent(ZaEvent.S_COS);
-			evt.set(ZaEvent.E_REMOVE, this);
-			evt.setDetails(details);
-			this._evtMgr.notifyListeners(ZaEvent.E_REMOVE, evt);
-		}
-	} catch (ex) {
-		this._handleException(ex, ZaCosListController.prototype._fireCOSRemovalEvent, details, false);	
-	}
 }
 
 // refresh button was pressed
@@ -310,7 +293,7 @@ function () {
 		}
 		this._list.remove(this._removeList[key]); //remove from the list
 	}
-	this._fireCOSRemovalEvent(successRemList); 	
+	this.fireRemovalEvent(successRemList); 	
 	this._removeConfirmMessageDialog.popdown();
 	this._contentView.setUI();
 	this.show();

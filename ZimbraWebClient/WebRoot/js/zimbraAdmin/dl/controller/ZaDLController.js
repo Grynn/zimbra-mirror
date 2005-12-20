@@ -82,6 +82,31 @@ function () {
 }
 ZaController.initToolbarMethods["ZaDLController"].push(ZaDLController.initToolbarMethod);
 
+ZaDLController.prototype.newDl = function () {
+	var newDL = new ZaDistributionList(this._app);
+	this.show(newDL);
+}
+
+// new button was pressed
+ZaDLController.prototype.newButtonListener =
+function(ev) {
+	if(this._view.isDirty()) {
+		//parameters for the confirmation dialog's callback 
+		var args = new Object();		
+		args["params"] = null;
+		args["obj"] = this;
+		args["func"] = ZaDLController.prototype.newDl;
+		//ask if the user wants to save changes		
+		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
+		this._confirmMessageDialog.setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
+		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, this.saveAndGoAway, this, args);		
+		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);		
+		this._confirmMessageDialog.popup();
+	} else {
+		this.newDl();
+	}	
+}
+
 //private and protected methods
 ZaDLController.prototype._createUI = 
 function () {
@@ -107,13 +132,15 @@ function () {
 
 ZaDLController.prototype._saveChanges = function () {
 	try { 
-		var dl = this._view.getObject();
-		if (dl.id){
-			dl.saveEdits();
+		this._currentObject = this._view.getObject();
+		if (this._currentObject.id){
+			return this._currentObject.saveEdits();
 		} else {
-			dl.saveNew();
+			if(this._currentObject.saveNew()) {
+				this.fireCreationEvent(this._currentObject);
+				return true;
+			}
 		}
-		return true;		
 	} catch (ex) {
 		var handled = false;
 		if (ex.code == ZmCsfeException.SVC_FAILURE) {
@@ -134,3 +161,4 @@ ZaDLController.prototype._saveChanges = function () {
 		return false;
 	}
 };
+

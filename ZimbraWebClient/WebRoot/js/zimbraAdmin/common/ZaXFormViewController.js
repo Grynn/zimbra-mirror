@@ -230,3 +230,22 @@ function (isD) {
 		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
 }
 
+
+/**
+* Adds listener to modifications in the contained ZaAccount 
+* @param listener
+**/
+ZaXFormViewController.prototype.addChangeListener = 
+function(listener) {
+	this._evtMgr.addListener(ZaEvent.E_MODIFY, listener);
+}
+
+/**
+* Removes listener to modifications in the controlled ZaAccount 
+* @param listener
+**/
+ZaXFormViewController.prototype.removeChangeListener = 
+function(listener) {
+	this._evtMgr.removeListener(ZaEvent.E_MODIFY, listener);    	
+}
+

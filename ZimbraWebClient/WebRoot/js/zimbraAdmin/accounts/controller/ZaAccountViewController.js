@@ -76,60 +76,6 @@ function (isD) {
 		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
 }
 
-/**
-* Adds listener to modifications in the contained ZaAccount 
-* @param listener
-**/
-ZaAccountViewController.prototype.addAccountChangeListener = 
-function(listener) {
-	this._evtMgr.addListener(ZaEvent.E_MODIFY, listener);
-}
-
-/**
-* Removes listener to modifications in the controlled ZaAccount 
-* @param listener
-**/
-ZaAccountViewController.prototype.removeAccountChangeListener = 
-function(listener) {
-	this._evtMgr.removeListener(ZaEvent.E_MODIFY, listener);    	
-}
-
-/**
-* Adds listener to creation of an ZaAccount 
-* @param listener
-**/
-ZaAccountViewController.prototype.addAccountCreationListener = 
-function(listener) {
-	this._evtMgr.addListener(ZaEvent.E_CREATE, listener);
-}
-
-/**
-* Removes listener to creation of an ZaAccount 
-* @param listener
-**/
-ZaAccountViewController.prototype.removeAccountCreationListener = 
-function(listener) {
-	this._evtMgr.removeListener(ZaEvent.E_CREATE, listener);    	
-}
-
-/**
-* Adds listener to removal of an ZaAccount 
-* @param listener
-**/
-ZaAccountViewController.prototype.addAccountRemovalListener = 
-function(listener) {
-	this._evtMgr.addListener(ZaEvent.E_REMOVE, listener);
-}
-
-/**
-* Removes listener to removal of an ZaAccount 
-* @param listener
-**/
-ZaAccountViewController.prototype.removeAccountRemovalListener = 
-function(listener) {
-	this._evtMgr.removeListener(ZaEvent.E_REMOVE, listener);    	
-}
-
 //Private/protected methods
 
 /**

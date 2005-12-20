@@ -49,6 +49,7 @@ function ZaAccountListController(appCtxt, container, app) {
 	this._defaultType = ZaItem.ACCOUNT;
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/provisioning_accounts.htm";	
 	this._UICreated = false;
+	this.objType = ZaEvent.S_ACCOUNT;	
 }
 
 ZaAccountListController.prototype = new ZaController();
@@ -230,15 +231,6 @@ function(searchQuery) {
 			this._searchField.setEnabled(true);	
 		}
 	}	
-}
-
-/**
-* Adds listener to removal of an ZaAccount 
-* @param listener
-**/
-ZaAccountListController.prototype.addAccountRemovalListener = 
-function(listener) {
-	this._evtMgr.addListener(ZaEvent.E_REMOVE, listener);
 }
 
 /*********** Search Field Callback */
@@ -727,28 +719,12 @@ function () {
 			}
 		}
 	}
-	this._fireAccountRemovalEvent(successRemList); 
+	this.fireRemovalEvent(successRemList); 
 	this._removeConfirmMessageDialog.popdown();
 	this.show(ZaSearch.searchByQueryHolder(this._currentQuery, this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app));			
 }
 
-/**
-*	Private method that notifies listeners to that the controlled ZaAccount is (are) removed
-* 	@param details
-*/
-ZaAccountListController.prototype._fireAccountRemovalEvent =
-function(details) {
-	try {
-		if (this._evtMgr.isListenerRegistered(ZaEvent.E_REMOVE)) {
-			var evt = new ZaEvent(ZaEvent.S_ACCOUNT);
-			evt.set(ZaEvent.E_REMOVE, this);
-			evt.setDetails(details);
-			this._evtMgr.notifyListeners(ZaEvent.E_REMOVE, evt);
-		}
-	} catch (ex) {
-		this._handleException(ex, ZaAccountListController.prototype._fireAccountRemovalEvent, details, false);	
-	}
-}
+
 
 ZaAccountListController.prototype._donotDeleteAccountsCallback = 
 function () {

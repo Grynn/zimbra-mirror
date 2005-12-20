@@ -389,3 +389,57 @@ ZaController.prototype.getToolBar =
 function () {
 	return this._toolbar;	
 }
+
+/**
+* Adds listener to creation of an ZaAccount 
+* @param listener
+**/
+ZaController.prototype.addCreationListener = 
+function(listener) {
+	this._evtMgr.addListener(ZaEvent.E_CREATE, listener);
+}
+
+/**
+* Removes listener to creation of an ZaAccount 
+* @param listener
+**/
+ZaController.prototype.removeCreationListener = 
+function(listener) {
+	this._evtMgr.removeListener(ZaEvent.E_CREATE, listener);    	
+}
+
+/**
+* Adds listener to removal of an ZaAccount 
+* @param listener
+**/
+ZaController.prototype.addRemovalListener = 
+function(listener) {
+	this._evtMgr.addListener(ZaEvent.E_REMOVE, listener);
+}
+
+/**
+* Removes listener to removal of an ZaAccount 
+* @param listener
+**/
+ZaController.prototype.removeRemovalListener = 
+function(listener) {
+	this._evtMgr.removeListener(ZaEvent.E_REMOVE, listener);    	
+}
+
+/**
+*	Private method that notifies listeners to that the controlled ZaAccount is (are) removed
+* 	@param details
+*/
+ZaController.prototype.fireRemovalEvent =
+function(details) {
+	try {
+		if (this._evtMgr.isListenerRegistered(ZaEvent.E_REMOVE)) {
+			var evt = new ZaEvent(this.objType);
+			evt.set(ZaEvent.E_REMOVE, this);
+			evt.setDetails(details);
+			this._evtMgr.notifyListeners(ZaEvent.E_REMOVE, evt);
+		}
+	} catch (ex) {
+		this._handleException(ex, "ZaController.prototype.fireRemovalEvent", details, false);	
+	}
+}
