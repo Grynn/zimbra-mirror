@@ -93,11 +93,34 @@ function(evt) {
 ZaDLXFormView.backPoolButtonHndlr = 
 function(evt) {
 	var fieldObj = this.getForm().parent;
-	var currentPageNum = this.getInstanceValue("/poolPagenum");
-	this.setInstanceValue(currentPageNum-1,"/poolPagenum");
+	var currentPageNum = this.getInstanceValue("/poolPagenum")-1;
+	this.setInstanceValue(currentPageNum,"/poolPagenum");
 	fieldObj.searchAccounts(evt);
 }
 
+/**
+* method of an XFormItem
+**/
+ZaDLXFormView.fwdMemButtonHndlr = 
+function(evt) {
+	var fieldObj = this.getForm().parent;
+	var currentPageNum = this.getInstanceValue("/memPagenum")+1;
+	this.setInstanceValue(currentPageNum,"/memPagenum");
+	this.getInstance().getMembers(true, ZaDistributionList.MEMBER_QUERY_LIMIT);
+	this.getForm().refresh();
+}
+
+/**
+* method of an XFormItem
+**/
+ZaDLXFormView.backMemButtonHndlr = 
+function(evt) {
+	var fieldObj = this.getForm().parent;
+	var currentPageNum = this.getInstanceValue("/memPagenum")-1;
+	this.setInstanceValue(currentPageNum,"/memPagenum");
+	this.getInstance().getMembers(true, ZaDistributionList.MEMBER_QUERY_LIMIT);
+	this.getForm().refresh();
+}
 /**
 * method of the XForm
 **/
@@ -356,7 +379,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 								cssStyle:"padding-left:0px"},
 					        {type:_SPACER_, height:"3"},
 							{ref:"members", type:_DWT_LIST_, colSpan:"*", height:"338", width:"100%", cssClass: "DLTarget", 
-								widgetClass:ZaDLListView, headerList:membersHeaderList},
+								widgetClass:ZaDLListView, headerList:null},
 					        {type:_SPACER_, height:"8"},
 						    {type:_GROUP_, colSpan:2, width:"100%", numCols:8, colSizes:[85,5, 85,"100%",80,5,80,5], 
 								items:[
@@ -370,12 +393,14 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 								      relevant:"ZaDLXFormView.shouldEnableMemberListButtons.call(this)",
 								      relevantBehavior:_DISABLE_},
 									{type:_CELLSPACER_},
-									{type:_DWT_BUTTON_, label:ZaMsg.Back, width:75, id:"backButton",
-										icon:"LeftArrow", disIcon:"LeftArrowDis", 	relevantBehavior:_DISABLE_, relevant:"ZaDLXFormView.shouldEnableMemBackButton.call(this)"
+									{type:_DWT_BUTTON_, label:ZaMsg.Back, width:75, id:"backButton", icon:"LeftArrow", disIcon:"LeftArrowDis", 	
+										onActivate:"ZaDLXFormView.backMemButtonHndlr.call(this,event)", 
+										relevantBehavior:_DISABLE_, relevant:"ZaDLXFormView.shouldEnableMemBackButton.call(this)"
 								    },								       
 									{type:_CELLSPACER_},
-									{type:_DWT_BUTTON_, label:ZaMsg.Forward, width:75, id:"fwdButton",
-										icon:"RightArrow", disIcon:"RightArrowDis",	relevantBehavior:_DISABLE_, relevant:"ZaDLXFormView.shouldEnableMemForwardButton.call(this)"
+									{type:_DWT_BUTTON_, label:ZaMsg.Forward, width:75, id:"fwdButton", icon:"RightArrow", disIcon:"RightArrowDis",	
+										onActivate:"ZaDLXFormView.fwdMemButtonHndlr.call(this,event)", 
+										relevantBehavior:_DISABLE_, relevant:"ZaDLXFormView.shouldEnableMemForwardButton.call(this)"
 								    },								       
 									{type:_CELLSPACER_}									
 								]

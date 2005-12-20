@@ -34,6 +34,7 @@ function ZaDistributionList(app, id, name, memberList, description, notes) {
 	this._memberList = (memberList != null)? AjxVector.fromArray(memberList): new AjxVector();
 	if (description != null) this.attrs.description = description;
 	if (notes != null) this.attrs.zimbraNotes = notes;
+	this.numMembers = 0;
 	//Utility members
 	this._origList = (memberList != null)? AjxVector.fromArray(memberList): new AjxVector();
 	this._addList = new AjxVector();
@@ -52,6 +53,7 @@ ZaDistributionList.prototype.constructor = ZaDistributionList;
 ZaDistributionList.EMAIL_ADDRESS = "ZDLEA";
 ZaDistributionList.DESCRIPTION = "ZDLDESC";
 ZaDistributionList.ID = "ZDLID";
+ZaDistributionList.MEMBER_QUERY_LIMIT = 25;
 
 ZaDistributionList.A_mailStatus = "zimbraMailStatus";
 ZaDistributionList.searchAttributes = AjxBuffer.concat(ZaAccount.A_displayname,",",
@@ -100,6 +102,10 @@ ZaDistributionList.prototype.clone = function () {
 	}
 	dl.pagenum = this.pagenum;
 	dl.query = this.query;
+	dl.poolPagenum = this.poolPagenum;
+	dl.poolNumPages = this.poolNumPages;
+	dl.memPagenum = this.memPagenum;
+	dl.memNumPages = this.memNumPages;	
 	return dl;
 };
 
@@ -252,12 +258,18 @@ ZaDistributionList.prototype.getMailStatus = function () {
  * internal list of members is null
  */
 // TODO -- handle dynamic limit and offset
-ZaDistributionList.prototype.getMembers = function (force) {
+ZaDistributionList.prototype.getMembers = function (force, limit) {
 	//DBG.println("Get members: memberList = " , this._memberList, "$");
 	if ((this._memberList == null || (force == true)) && (this.id != null)) {
 		var soapDoc = AjxSoapDoc.create("GetDistributionListRequest", "urn:zimbraAdmin", null);
-		soapDoc.setMethodAttribute("limit", "0");
-		soapDoc.setMethodAttribute("offset", "0");
+		if(!limit)
+			limit = ZaDistributionList.MEMBER_QUERY_LIMIT;
+			
+		soapDoc.setMethodAttribute("limit", limit);
+		
+		var offset = (this.memPagenum-1)*limit;
+		soapDoc.setMethodAttribute("offset", offset);
+			
 		var dl = soapDoc.set("dl", this.id);
 		dl.setAttribute("by", "id");
 		soapDoc.set("name", this.getName());
@@ -266,6 +278,8 @@ ZaDistributionList.prototype.getMembers = function (force) {
 			var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false).Body.GetDistributionListResponse;
 			//DBG.dumpObj(resp);
 			var members = resp.dl[0].dlm;
+			this.numMembers = resp.total;
+			this.memNumPages = Math.ceil(this.numMembers/limit);
 			var len = members ? members.length : 0;
 			if (len > 0) {
 				this._memberList = new AjxVector();
@@ -281,7 +295,7 @@ ZaDistributionList.prototype.getMembers = function (force) {
 			this.id = resp.dl[0].id;
 			this.attrs = resp.dl[0]._attrs;
 		} catch (ex) {
-			app.getCurrentController()._handleException(ex, "ZaDistributionList.prototype.getMembers", null, false);
+			this._app.getCurrentController()._handleException(ex, "ZaDistributionList.prototype.getMembers", null, false);
 			//DBG.dumpObj(ex);
 		}
 	} else if (this._memberList == null){
@@ -588,6 +602,8 @@ ZaDistributionList.myXModel = {
 		{id:"query", type:_STRING_},
 		{id:"poolPagenum", type:_NUMBER_, defaultValue:1},
 		{id:"poolNumPages", type:_NUMBER_, defaultValue:1},		
+		{id:"memPagenum", type:_NUMBER_, defaultValue:1},
+		{id:"memNumPages", type:_NUMBER_, defaultValue:1},	
 		{id: "memberPool", type:_LIST_, setter:"setMemberPool", setterScope:_MODEL_, getter: "getMemberPool", getterScope:_MODEL_},
 		{id: "optionalAdd", type:_UNTYPED_},
 		{id: "name", type:_STRING_, setter:"setName", setterScope: _INSTANCE_, required:true,

@@ -51,41 +51,47 @@ function(account, now, isDndIcon) {
 	html[idx++] = "<table width='100%' cellspacing='2' cellpadding='0'>";
 
 	html[idx++] = "<tr>";
-	
-	var cnt = this._headerList.length;
-	for(var i = 0; i < cnt; i++) {
-		var id = this._headerList[i]._id;
-		if(id.indexOf("type")==0) {
-			// type
-			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
-			switch(account.type) {
-				case ZaItem.ACCOUNT:
-					html[idx++] = AjxImg.getImageHtml("Account");
-				break;
-				case ZaItem.DL:
-					html[idx++] = AjxImg.getImageHtml("Group");				
-				break;
-				case ZaItem.ALIAS:
-					html[idx++] = AjxImg.getImageHtml("AccountAlias");				
-				break;								
-				default:
-					html[idx++] = AjxStringUtil.htmlEncode(account.type);
-				break;
-			}
-			html[idx++] = "</td>";
-		} else if(id.indexOf(ZaAccount.A_name)==0) {
-			// name
-			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
-			html[idx++] = AjxStringUtil.htmlEncode(account.name);
-			html[idx++] = "</td>";
-		} else if (id.indexOf(ZaAccount.A_displayname)==0) {
-			// display name
-			html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";
-			html[idx++] = AjxStringUtil.htmlEncode(account.attrs[ZaAccount.A_displayname]);
-			html[idx++] = "</nobr></td>";	
-		} 
+	if(this._headerList) {
+		var cnt = this._headerList.length;
+		for(var i = 0; i < cnt; i++) {
+			var id = this._headerList[i]._id;
+			if(id.indexOf("type")==0) {
+				// type
+				html[idx++] = "<td width=" + this._headerList[i]._width + ">";
+				switch(account.type) {
+					case ZaItem.ACCOUNT:
+						html[idx++] = AjxImg.getImageHtml("Account");
+					break;
+					case ZaItem.DL:
+						html[idx++] = AjxImg.getImageHtml("Group");				
+					break;
+					case ZaItem.ALIAS:
+						html[idx++] = AjxImg.getImageHtml("AccountAlias");				
+					break;								
+					default:
+						html[idx++] = AjxStringUtil.htmlEncode(account.type);
+					break;
+				}
+				html[idx++] = "</td>";
+			} else if(id.indexOf(ZaAccount.A_name)==0) {
+				// name
+				html[idx++] = "<td width=" + this._headerList[i]._width + ">";
+				html[idx++] = AjxStringUtil.htmlEncode(account.name);
+				html[idx++] = "</td>";
+			} else if (id.indexOf(ZaAccount.A_displayname)==0) {
+				// display name
+				html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";
+				html[idx++] = AjxStringUtil.htmlEncode(account.attrs[ZaAccount.A_displayname]);
+				html[idx++] = "</nobr></td>";	
+			} 
+		}
+	} else {
+		html[idx++] = "<td width=100%>";
+		html[idx++] = AjxStringUtil.htmlEncode(account.name);
+		html[idx++] = "</td>";
 	}
-		html[idx++] = "</tr></table>";
+	
+	html[idx++] = "</tr></table>";
 	div.innerHTML = html.join("");
 	return div;
 }
