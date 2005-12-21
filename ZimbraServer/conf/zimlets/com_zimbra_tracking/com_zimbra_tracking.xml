@@ -1,13 +1,8 @@
-<zimlet name="com_zimbra_tracking" version="1.0" description="Shipment Tracking">
+<zimlet name="com_zimbra_tracking" version="1.0" description="Tracking Number">
 	<serverExtension hasKeyword="tracking" extensionClass="com.zimbra.cs.zimlet.handler.TrackingHandler"/>
 	<contentObject>
 		<matchOn>
 			<regex>/\\b(?:1[zZ]\\s?\\w{3}\\s?\\w{3}\\s?\\w{2}\\s?\\w{4}\\s?\\w{3}\\s?\\w{1}|(\\d{12}|\\d{22}))\\b/ig</regex>
 		</matchOn>
-
-		<onClick>
- 		    <canvas style="window"/>
-			<actionUrl method="get" target="http://wwwapps.ups.com/WebTracking/processInputRequest?sort_by=status&amp;tracknums_displayed=1&amp;TypeOfInquiryNumber=T&amp;loc=en_US&amp;InquiryNumber1=${objectContent}&amp;track.x=0&amp;track.y=0" />
-		</onClick>
 	</contentObject>	
 </zimlet>
