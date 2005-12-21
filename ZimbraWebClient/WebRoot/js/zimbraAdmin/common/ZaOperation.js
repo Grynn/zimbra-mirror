@@ -34,7 +34,7 @@
 * @param lsnr AjxListener
 **/
 
-function ZaOperation(id, caption, tooltip, imgId, disImgId, lsnr, type, menuOpList, className) {
+function ZaOperation(id, caption, tooltip, imgId, disImgId, lsnr, type, menuOpList, className, labelId) {
 	this.id = id;
 	this.caption = caption;
 	this.tt = tooltip;
@@ -44,6 +44,7 @@ function ZaOperation(id, caption, tooltip, imgId, disImgId, lsnr, type, menuOpLi
 	this.type = (type == null)? ZaOperation.TYPE_BUTTON: type;
 	this.menuOpList = menuOpList;
 	this.className = className;	
+	this.labelId = labelId;
 }
 
 ZaOperation.prototype.toString = 
@@ -76,3 +77,4 @@ ZaOperation.MOVE_ALIAS = ++opIndex;
 ZaOperation.NEW_MENU = ++opIndex;
 ZaOperation.HELP = ++opIndex;
 ZaOperation.REINDEX_MAILBOX = ++opIndex;
+ZaOperation.LABEL = ++opIndex;

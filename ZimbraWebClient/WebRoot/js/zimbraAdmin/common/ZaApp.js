@@ -59,15 +59,6 @@ function(appCtxt) {
 		this.getStatusViewController().show();
 	} else if(ZaSettings.ADDRESSES_ENABLED) {
 		this._appCtxt.getAppController()._showAccountsView([ZaItem.ACCOUNT,ZaItem.DL,ZaItem.ALIAS],null);
-		/*var queryHldr = this._getCurrentQueryHolder();
-		queryHldr.isByDomain = false;
-		queryHldr.byValAttr = false;
-		queryHldr.queryString = "";
-		queryHldr.types = [ZaSearch.TYPES[ZaItem.ACCOUNT],ZaSearch.TYPES[ZaItem.DL],ZaSearch.TYPES[ZaItem.ALIAS]];
-
-		this.getAccountListController().setPageNum(1);
-		queryHldr.fetchAttrs = ZaSearch.standardAttributes;
-		this.getAccountListController().search(queryHldr);*/
 	}
 		
 }
@@ -79,15 +70,6 @@ function(active) {
 			this.getStatusViewController().show();	
 		} else if(ZaSettings.ADDRESSES_ENABLED) {
 			this._appCtxt.getAppController()._showAccountsView([ZaItem.ACCOUNT,ZaItem.DL,ZaItem.ALIAS],null);
-			/*var queryHldr = this._getCurrentQueryHolder();
-			queryHldr.isByDomain = false;
-			queryHldr.byValAttr = false;
-			queryHldr.queryString = "";
-			queryHldr.types = [ZaSearch.TYPES[ZaItem.ACCOUNT],ZaSearch.TYPES[ZaItem.DL],ZaSearch.TYPES[ZaItem.ALIAS]];
-	
-			this.getAccountListController().setPageNum(1);
-			queryHldr.fetchAttrs = ZaSearch.standardAttributes;
-			this.getAccountListController().search(queryHldr);		*/
 		}
 	}
 }
@@ -96,13 +78,6 @@ ZaApp.prototype.getAppCtxt =
 function() {
 	return this._appCtxt;
 }
-
-/*
-ZaApp.prototype.setCurrentController = 
-function(ctrlr) {
-	this._currentController = ctrlr;
-}
-*/
 
 ZaApp.prototype.getCurrentController = 
 function(ctrlr) {

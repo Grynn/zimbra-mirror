@@ -44,24 +44,33 @@ ZaStatusViewController.prototype.constructor = ZaStatusViewController;
 ZaController.initToolbarMethods["ZaStatusViewController"] = new Array();
 ZaController.initPopupMenuMethods["ZaStatusViewController"] = new Array();
 
-ZaStatusViewController.prototype.show = function(statusVector) {
+ZaStatusViewController.prototype.show = function() {
 	try {
 	    if (!this._UICreated) {
 			this._createUI();
 		}
-		if(!statusVector) {
-			var statusObj = new ZaStatus(this._app);
-			statusObj.load();
-			statusVector = statusObj.getStatusVector();
-		}
+		var statusObj = new ZaStatus(this._app);
+		statusObj.load();
+		var statusVector = statusObj.getStatusVector();
 		this._contentView.set(statusVector);
-//		this._contentView.addClusterSelectionListener(new AjxListener(this, this._selectionUpdated));
 		this._app.pushView(ZaZimbraAdmin._STATUS);
+		var now = new Date();
+		this._toolbar.getButton("refreshTime").setText(ZaMsg.TBB_LastUpdated + " " + AjxDateUtil.computeTimeString(now));
 	} catch (ex) {
 		this._handleException(ex, "ZaStatusViewController.prototype.show", null, false);
 		return;
 	}	
 };
+
+ZaStatusViewController.initToolbarMethod =
+function () {
+	// first button in the toolbar is a menu.
+	var newMenuOpList = new Array();
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.LABEL, ZaMsg.TBB_LastUpdated, ZaMsg.TBB_LastUpdated_tt, null, null, null,null,null,null,"refreshTime"));	
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.SEP));
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.REFRESH, ZaMsg.TBB_Refresh, ZaMsg.TBB_Refresh_tt, null, null, new AjxListener(this, this.refreshListener)));	
+}
+ZaController.initToolbarMethods["ZaStatusViewController"].push(ZaStatusViewController.initToolbarMethod);
 
 ZaStatusViewController.prototype._createUI = function () {
 	try {
@@ -92,4 +101,8 @@ ZaStatusViewController.prototype._createUI = function () {
 ZaStatusViewController.prototype.switchToNextView = 
 function (nextViewCtrlr, func, params) {
 	func.call(nextViewCtrlr, params);
+}
+
+ZaStatusViewController.prototype.refreshListener = function () {
+	this.show();
 }

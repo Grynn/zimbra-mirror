@@ -45,6 +45,8 @@ function ZaToolBar(parent, opList, posStyle, className) {
 				this._createSeparator();
 			} else if (opList[ix].id == ZaOperation.NONE) {
 				this.addFiller();
+			} else if (opList[ix].id == ZaOperation.LABEL) {
+				this._createLabel(opList[ix].labelId, opList[ix].imageId, opList[ix].caption, opList[ix].disImageId, opList[ix].tt, true, opList[ix].className);
 			} else {
 				this._createButton(opList[ix].id, opList[ix].imageId, opList[ix].caption, opList[ix].disImageId, opList[ix].tt, true, opList[ix].className, opList[ix].type, opList[ix].menuOpList);
 	
@@ -136,6 +138,24 @@ function(buttonId, imageId, text, disImageId, toolTip, enabled, className, type,
 	return b;
 }
 
+
+ZaToolBar.prototype._createLabel =
+function(buttonId, imageId, text, disImageId, toolTip, enabled, className) {
+
+	var b = this._buttons[buttonId] = new DwtLabel(this, null, className);
+	if (imageId)
+		b.setImage(imageId);
+	if (text)
+		b.setText(text);
+	if (toolTip)
+		b.setToolTipContent(toolTip);
+	if (disImageId) 
+		b.setDisabledImage(disImageId);
+	b.setEnabled((enabled) ? true : false);
+	b.setData("_buttonId", buttonId);
+
+	return b;
+}
 ZaToolBar.prototype._createSeparator =
 function() {
 	var ctrl = new DwtControl(this);
