@@ -328,7 +328,7 @@ function(ev) {
 		var arrItems = this._contentView.getSelection();
 		var cnt = arrItems.length;
 		for(var key =0; key < cnt; key++) {
-			var item = DwtListView.prototype.getItemFromElement.call(this, arrDivs[key]);
+			var item = DwtListView.prototype.getItemFromElement.call(this, arrItems[key]);
 			if(arrItems[key]) {
 				this._removeList.push(arrItems[key]);
 			}

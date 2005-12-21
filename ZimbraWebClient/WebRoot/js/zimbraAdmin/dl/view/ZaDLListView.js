@@ -119,7 +119,7 @@ ZaDLListView.prototype._sortColumn = function (columnItem, bSortAsc){
 		this.getList().sort();
 	}
 };
-
+/*
 // Since the base class only notifies for itself, 
 // we need to do this
 ZaDLListView.prototype._itemClicked = function(clickedEl, ev) {
@@ -132,4 +132,4 @@ ZaDLListView.prototype._itemClicked = function(clickedEl, ev) {
 		// setting up of the actionEv has occurred in the base class
 		this._evtMgr.notifyListeners(DwtEvent.ACTION, this._actionEv);
 	}
-}
+}*/

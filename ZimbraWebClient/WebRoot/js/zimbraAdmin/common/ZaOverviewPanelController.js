@@ -117,12 +117,12 @@ function (ev) {
 			if(detls instanceof Array) {
 				for (var key in detls) {
 					if((detls[key] instanceof ZaCos) && this._cosMap[detls[key].id]) {
-						this._cosTi._removeChild(this._cosMap[detls[key].id]);		
+						this._cosTi.removeChild(this._cosMap[detls[key].id]);		
 					}
 				}
 			} else if(detls instanceof ZaCos) {
 				if(this._cosMap[detls.id]) {
-					this._cosTi._removeChild(this._cosMap[detls.id]);		
+					this._cosTi.removeChild(this._cosMap[detls.id]);		
 				}
 			}
 		}
@@ -161,12 +161,12 @@ function (ev) {
 			if(detls instanceof Array) {
 				for (var key in detls) {
 					if((detls[key] instanceof ZaDomain) && this._domainsMap[detls[key].id]) {
-						this._domainsTi._removeChild(this._domainsMap[detls[key].id]);		
+						this._domainsTi.removeChild(this._domainsMap[detls[key].id]);		
 					}
 				}
 			} else if(detls instanceof ZaDomain) {
 				if(this._domainsMap[detls.id]) {
-					this._domainsTi._removeChild(this._domainsMap[detls.id]);		
+					this._domainsTi.removeChild(this._domainsMap[detls.id]);		
 				}
 			}
 		}
@@ -233,20 +233,20 @@ function (ev) {
 				for (var key in detls) {
 					if((detls[key] instanceof ZaServer)) {
 					 	if(this._serversMap[detls[key].id]) {
-							this._serversTi._removeChild(this._serversMap[detls[key].id]);		
+							this._serversTi.removeChild(this._serversMap[detls[key].id]);		
 						}
 					 	if(this._serversStatsMap[detls[key].id]) {
-							this._statisticsTi._removeChild(this._serversStatsMap[detls[key].id]);								
+							this._statisticsTi.removeChild(this._serversStatsMap[detls[key].id]);								
 						}
 						
 					}
 				}
 			} else if(detls instanceof ZaServer) {
 				if(this._serversMap[detls.id]) {
-					this._serversTi._removeChild(this._serversMap[detls.id]);		
+					this._serversTi.removeChild(this._serversMap[detls.id]);		
 				}
 				if(this._serversStatsMap[detls.id]) {
-					this._statisticsTi._removeChild(this._serversStatsMap[detls.id]);		
+					this._statisticsTi.removeChild(this._serversStatsMap[detls.id]);		
 				}				
 			}
 		}
