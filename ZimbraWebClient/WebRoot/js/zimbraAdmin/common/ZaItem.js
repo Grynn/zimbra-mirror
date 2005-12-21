@@ -133,6 +133,11 @@ function () {
 	//abstract
 }
 
+ZaItem.prototype.refresh = 
+function () {
+	this.load();
+}
+
 ZaItem.prototype.copyTo = 
 function (target/*, fullRecursion*/) {
 	for(var a in this) {
