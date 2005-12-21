@@ -295,6 +295,9 @@ objectIdentifier zimbraZimletIsExtension ZimbraAttrType:304
 objectIdentifier zimbraFeatureIMEnabled ZimbraAttrType:305
 objectIdentifier zimbraMtaRecipientDelimiter ZimbraAttrType:306
 objectIdentifier zimbraPreAuthKey ZimbraAttrType:307
+objectIdentifier zimbraMailMode ZimbraAttrType:308
+objectIdentifier zimbraMtaAuthHost ZimbraAttrType:309
+objectIdentifier zimbraMtaAuthURL ZimbraAttrType:310
 
 #################################################################
 # object class OIDs
@@ -1326,6 +1329,18 @@ attributetype ( zimbraMtaTlsAuthOnly
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
+attributetype ( zimbraMtaAuthURL
+	NAME 'zimbraMtaAuthURL'
+	DESC 'URL at which this MTA (via zimbra saslauthd) should authenticate.  Set by setting zimbraMtaAuthHost.'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
+
+attributetype ( zimbraMtaAuthHost
+	NAME 'zimbraMtaAuthHost'
+	DESC 'Host running SOAP service for use by MTA auth.  Setting this sets zimbraMtaAuthURL via attr callback mechanism.'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
+
 attributetype ( zimbraNotes 
 	NAME 'zimbraNotes'
 	DESC 'administrative notes'
@@ -1898,6 +1913,14 @@ attributetype ( zimbraMailSSLPort
 	DESC 'SSL port for end-user UI'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )	
+
+attributetype ( zimbraMailMode
+	NAME 'zimbraMailMode'
+	DESC 'whether to run HTTP or HTTPS or both or mixed mode.  See also related attributes zimbraMailPort and zimbraMailSSLPort'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{64}
 	SINGLE-VALUE )	
 
 attributetype ( zimbraAdminPort
@@ -2595,6 +2618,8 @@ objectclass ( zimbraGlobalConfig
 		zimbraLogSummaryLifetime $
 		zimbraMessageCacheSize $
 		zimbraMtaAuthEnabled $
+		zimbraMtaAuthHost $
+		zimbraMtaAuthURL $
 		zimbraMtaBlockedExtension $
 		zimbraMtaCommonBlockedExtension $
 		zimbraMtaDnsLookupsEnabled $
@@ -2640,6 +2665,7 @@ objectclass ( zimbraGlobalConfig
 		zimbraAuthTokenKey $
 		zimbraMailPort $
 		zimbraMailSSLPort $
+		zimbraMailMode $
 		zimbraAdminPort $
 		zimbraVirusBlockEncryptedArchive $
 		zimbraVirusCheckEnabled $
@@ -2717,7 +2743,7 @@ objectclass ( zimbraServer
 	MUST (zimbraId $ cn)
 	MAY (
 		description $
-                zimbraAttachmentsScanURL $
+		zimbraAttachmentsScanURL $
 		zimbraFileUploadMaxSize $
 		zimbraIsMonitorHost $
 		zimbraLmtpAdvertisedName $
@@ -2736,8 +2762,10 @@ objectclass ( zimbraServer
 		zimbraImapSSLBindOnStartup $
 		zimbraImapSSLServerEnabled $
 		zimbraImapCleartextLoginEnabled $
-                zimbraMessageCacheSize $
+		zimbraMessageCacheSize $
 		zimbraMtaAuthEnabled $
+		zimbraMtaAuthHost $
+		zimbraMtaAuthURL $
 		zimbraMtaDnsLookupsEnabled $
 		zimbraMtaRelayHost $
 		zimbraMtaTlsAuthOnly $
@@ -2776,6 +2804,7 @@ objectclass ( zimbraServer
 		zimbraVirusDefinitionsUpdateFrequency $		
 		zimbraMailPort $
 		zimbraMailSSLPort $
+		zimbraMailMode $
 		zimbraAdminPort $
 		zimbraRedoLogProvider
 	))

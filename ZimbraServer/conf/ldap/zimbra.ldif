@@ -343,6 +343,8 @@ zimbraServerInheritedAttr: zimbraImapSSLBindPort
 zimbraServerInheritedAttr: zimbraImapSSLBindOnStartup
 zimbraServerInheritedAttr: zimbraMessageCacheSize
 zimbraServerInheritedAttr: zimbraMtaAuthEnabled
+zimbraServerInheritedAttr: zimbraMtaAuthHost
+zimbraServerInheritedAttr: zimbraMtaAuthURL
 zimbraServerInheritedAttr: zimbraMtaDnsLookupsEnabled
 zimbraServerInheritedAttr: zimbraMtaRelayHost
 zimbraServerInheritedAttr: zimbraMtaTlsAuthOnly
@@ -371,6 +373,7 @@ zimbraServerInheritedAttr: zimbraTableMaintenanceMaxRows
 zimbraServerInheritedAttr: zimbraTableMaintenanceOperation
 zimbraServerInheritedAttr: zimbraMailPort
 zimbraServerInheritedAttr: zimbraMailSSLPort
+zimbraServerInheritedAttr: zimbraMailMode
 zimbraServerInheritedAttr: zimbraAdminPort
 zimbraServerInheritedAttr: zimbraVirusDefinitionsUpdateFrequency
 zimbraServerInheritedAttr: zimbraRedoLogProvider

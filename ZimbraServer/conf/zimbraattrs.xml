@@ -256,6 +256,8 @@
 
 <attr name="zimbraMailSSLPort" type="port"/>
 
+<attr name="zimbraMailMode" type="enum" value="http,https,both,mixed"/>
+
 <attr name="zimbraMailSieveScript" type="string"/>
 
 <attr name="zimbraMailSpamLifetime" type="duration"/>
@@ -275,6 +277,10 @@
 <attr name="zimbraMimeType" type="string"/>
 
 <attr name="zimbraMtaAuthEnabled" type="boolean"/>
+
+<attr name="zimbraMtaAuthHost" type="string" max="256" callback="MtaAuthHost"/>
+
+<attr name="zimbraMtaAuthURL" type="string" max="256" immutable="1"/>
 
 <attr name="zimbraMtaBlockedExtension" type="string" max="64"/>
 
