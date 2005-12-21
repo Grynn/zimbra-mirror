@@ -116,6 +116,10 @@ function (by, val) {
 	this.initFromDom(resp.firstChild);
 }
 
+ZaCos.prototype.refresh = 
+function () {
+	this.load("name", this.attrs[ZaCos.A_name]);
+}
 /**
 * massage the values into the instace suitable for an XForm
 **/
