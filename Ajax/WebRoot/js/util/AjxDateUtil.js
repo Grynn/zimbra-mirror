@@ -148,6 +148,10 @@ function(date, field, offset) {
 AjxDateUtil.computeDateDelta =
 function(dateMSec) {
 	var deltaMSec = (new Date()).getTime() - dateMSec;
+
+	// bug fix #2203 - if delta is less than zero, dont bother computing
+	if (deltaMSec < 0) return null;
+
 	var years =  Math.floor(deltaMSec / (AjxDateUtil.MSEC_PER_DAY * 365));
 	if (years != 0)
 		deltaMSec -= years * AjxDateUtil.MSEC_PER_DAY * 365;
