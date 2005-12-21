@@ -9,8 +9,12 @@
 			<regex attrs="ig">[\w]{3,}([A-Za-z]\.)?([ \w]*\#\d+)?(\r\n| )[ \w]{3,}\x20[A-Za-z]{2}\x20\d{5}(-\d{4})?\b</regex>
 		</matchOn>
 		<onClick>
- 		    <canvas style="window"/>
-			<actionUrl target="http://maps.yahoo.com/beta/#maxp=search&amp;q1=${objectContent}"/>
+ 		    <canvas type="window" />
+<!--                    <actionUrl target="http://maps.yahoo.com/beta/#maxp=search&amp;q1=${src.objectContent}"/> -->
+                    <actionUrl target="http://maps.yahoo.com/beta/index.php" paramStart="#">
+                      <param name="maxp">search</param>
+                      <param name="q1">${src.objectContent}</param>
+                    </actionUrl>
 		</onClick>
 	</contentObject>
 </zimlet>
