@@ -166,28 +166,32 @@ function(win){
 	return AjxCore.objectWithId(win._dwtShell);
 };
 
-/* Set's the busy overlay. The busy overlay disables input to the application and makes the 
- * cursor a wait cursor. Optionally a work in progress (WIP) dialog may be requested. Since
- * multiple calls to this method may be interleaved, it accepts a unique ID to keep them
- * separate. We also maintain a count of outstanding calls to setBusy(true). When that count
- * changes between 0 and 1, the busy overlay is applied or removed.
- * 
- * @param busy					[boolean]		if true, set the busy overlay, otherwise hide the busy overlay
- * @param id					[int]			a unique ID for this instance
- * @param showbusyDialog 		[boolean]*		if true, show the WIP dialog
- * @param busyDialogDelay 		[int]*			number of ms to delay before popping up the WIP dialog
- * @param cancelBusyCallback	[AjxCallback]*	callback to run when OK button is pressed in WIP dialog
- */ 
+/**
+* Sets the busy overlay. The busy overlay disables input to the application and makes the 
+* cursor a wait cursor. Optionally a work in progress (WIP) dialog may be requested. Since
+* multiple calls to this method may be interleaved, it accepts a unique ID to keep them
+* separate. We also maintain a count of outstanding calls to setBusy(true). When that count
+* changes between 0 and 1, the busy overlay is applied or removed.
+* 
+* @param busy					[boolean]		if true, set the busy overlay, otherwise hide the busy overlay
+* @param id						[int]*			a unique ID for this instance
+* @param showbusyDialog 		[boolean]*		if true, show the WIP dialog
+* @param busyDialogDelay 		[int]*			number of ms to delay before popping up the WIP dialog
+* @param cancelBusyCallback		[AjxCallback]*	callback to run when OK button is pressed in WIP dialog
+*/ 
 DwtShell.prototype.setBusy =
 function(busy, id, showbusyDialog, busyDialogDelay, cancelBusyCallback) {
-	busy ? this._setBusyCount++ : this._setBusyCount--;
+	if (busy)
+		this._setBusyCount++;
+	else if (this._setBusyCount > 0)
+		this._setBusyCount--;
 
     if (!this._setBusy && (this._setBusyCount > 0)) {
 		// transition from non-busy to busy state
 		Dwt.setCursor(this._busyOverlay, "wait");
     	Dwt.setVisible(this._busyOverlay, true);
     	this._setBusy = true;
-    } else if (this._setBusy && (this._setBusyCount == 0)){
+    } else if (this._setBusy && (this._setBusyCount <= 0)) {
 		// transition from busy to non-busy state
 	    Dwt.setCursor(this._busyOverlay, "default");
 	    Dwt.setVisible(this._busyOverlay, false);
