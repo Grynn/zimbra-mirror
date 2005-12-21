@@ -26,11 +26,16 @@
 function ZaSettings() {
 }
 
+ZaSettings.initialized = false;
 ZaSettings.initMethods = new Array();
 /**
 * Look for admin name cookies and admin type cookies
 **/
 ZaSettings.init = function () {
+	if(ZaSettings.initialized)
+		return;
+		
+	DBG.println(AjxDebug.DBG1,"Initializing ZaSettings");		
 	var adminName = AjxCookie.getCookie(document, ZaSettings.ADMIN_NAME_COOKIE);
 	if(adminName) {
 		var emailChunks = adminName .split("@");
@@ -154,6 +159,7 @@ Body: {
 		}
 	}	
 	//Instrumentation code end	
+	ZaSettings.initialized = true;
 }
 /**
 * Static method so that static code can get the default value of a setting if it needs to.
