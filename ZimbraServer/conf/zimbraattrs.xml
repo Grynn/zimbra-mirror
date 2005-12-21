@@ -352,6 +352,8 @@
 
 <attr name="zimbraPop3ServerEnabled" type="boolean"/>
 
+<attr name="zimbraPreAuthKey" type="string"/>
+
 <attr name="zimbraPrefAutoAddAddressEnabled" type="boolean"/>
 
 <attr name="zimbraPrefHtmlEditorDefaultFontFamily" type="string" max="64"/>

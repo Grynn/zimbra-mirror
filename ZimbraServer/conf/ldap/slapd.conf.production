@@ -59,7 +59,7 @@ access to dn.base="cn=Subschema" by * read
 access to dn.base="cn=zimbra" by dn.children="cn=admins,cn=zimbra" write
 
 # don't let anyone but admins access these attrs
-access to attr=zimbraGalLdapBindPassword,zimbraGalLdapBindDn,zimbraAuthTokenKey,zimbraPasswordHistory,zimbraIsAdminAccount,zimbraAuthLdapSearchBindPassword
+access to attr=zimbraGalLdapBindPassword,zimbraGalLdapBindDn,zimbraAuthTokenKey,zimbraPreAuthKey,zimbraPasswordHistory,zimbraIsAdminAccount,zimbraAuthLdapSearchBindPassword
 	by dn.children="cn=admins,cn=zimbra" write
 
 # don't let user's change their own passwords, since we want 
