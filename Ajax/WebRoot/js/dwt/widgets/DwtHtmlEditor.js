@@ -474,15 +474,15 @@ function(ignorePendingContent) {
 DwtHtmlEditor.prototype._initHtmlMode =
 function(content) {
 	var iFrame = this._createIFrameEl();
-	
+
 	this._keyEvent = new DwtKeyEvent();
 	this._stateEvent = new DwtHtmlEditorStateEvent();
 	this._stateEvent.dwtObj = this;
-	
+
 	this._updateStateAction = new AjxTimedAction(this, this._updateState);
 
 	this._pendingContent = content || "";
-	
+
 	// IE can sometimes race ahead and execute script before the underlying component is created
 	var timedAction = new AjxTimedAction(this, this._finishHtmlModeInit);
 	AjxTimedAction.scheduleAction(timedAction, DwtHtmlEditor._INITDELAY);
@@ -549,7 +549,7 @@ function() {
 DwtHtmlEditor.prototype._createIFrameEl = 
 function() {
 	var htmlEl = this.getHtmlElement();
-	this._iFrameId  = "iframe_" + Dwt.getNextId();
+	this._iFrameId = "iframe_" + Dwt.getNextId();
 	var iFrame = document.createElement("iframe");
 	iFrame.id = this._iFrameId;
 	iFrame.className = "DwtHtmlEditorIFrame";
@@ -568,19 +568,27 @@ function() {
 DwtHtmlEditor.prototype._finishHtmlModeInit =
 function(params) {
 	var doc = this._getIframeDoc();	
-	try {	
+	try {
 		doc.body.innerHTML = this._pendingContent || "";
 	} catch (ex) {
-		// TODO Replace
-		alert("Error loading content");
+		DBG.println("XXX: Error initializing HTML mode :XXX");
 		return;
 	}
-	
+
 	this._enableDesignMode(doc);
 	this._registerEditorEventHandlers(document.getElementById(this._iFrameId), doc);
 	this.focus();
 	this._updateState();
 	this._htmlModeInited = true;
+
+	// bug fix #4722 - setting design mode for the first time seems to null 
+	// out iframe doc's body in IE - so create a new body...
+	if (AjxEnv.isIE) {
+		doc.open();
+		doc.write("");
+		doc.close();
+		doc.body.innerHTML = this._pendingContent || "";
+	}
 }
 
 DwtHtmlEditor.prototype._getIframeDoc =
@@ -829,7 +837,6 @@ function(iFrameDoc) {
 	if (!iFrameDoc) return;
 	
 	try {
-		//doc.body.contentEditable = true; <= IE
 		iFrameDoc.designMode = "on";
 	} catch (ex) {
 		//Gecko may take some time to enable design mode..
