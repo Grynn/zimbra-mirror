@@ -5,7 +5,7 @@
       <regex attrs="ig">\[Wikipedia: ([a-zA-Z 0-9_-]+)\]</regex>
     </matchOn>
     <toolTip>
-      <html:span style="font: 120% Georgia;">Lookup “<b>${src.$1}</b>” at Wikipedia</html:span>
+     <html:span style="font: 120% Georgia;">Lookup "<b>${src.$1}</b>" at Wikipedia</html:span>
     </toolTip>
     <onClick>
       <canvas type="window" width="800" height="600" />
