@@ -3,8 +3,12 @@
 	<resource>bugz.xsl</resource>
 	<handlerObject>ZmBugzObjectHandler</handlerObject>
 	<contentObject type="bugz">
-          <matchOn>
-            <regex attrs="ig">\bbug(?:zilla)?:?\s*#?(\d+)\b</regex>
-          </matchOn>
-        </contentObject>
+        <matchOn>
+            <regex attrs="ig">(?:(?:\bbug(?:zilla)?:?\s*#?)|(?:show_bug.cgi\?id=))(\d+)\b</regex>
+        </matchOn>
+		<onClick>
+ 		    <canvas style="window"/>
+			<actionUrl target="${src.config.global[url]}${src.$1}"/>
+		</onClick>
+    </contentObject>
 </zimlet>
