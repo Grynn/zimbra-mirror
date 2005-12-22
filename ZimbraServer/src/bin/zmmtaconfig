@@ -382,9 +382,9 @@ sub processLine {
 		}
 	} elsif ($line =~ m/^POSTCONF/) {
 		my $cmd = $commands{'POSTCONF'};
-		if ($fields[2] eq "VAR") {
+		if ($fields[2] eq "VAR" || $fields[2] eq "LOCAL") {
 			getVar ($fields[2], $fields[3]);
-			$cmd = $cmd." $fields[1]='".$knownkeys{"VAR:$fields[3]"}."'";
+			$cmd = $cmd." $fields[1]='".$knownkeys{"$fields[2]:$fields[3]"}."'";
 		} elsif ($fields[2] eq "FILE") {
 			# Should probably do this with getVar...
 			# print STDERR "Rewriting file conf/$fields[3] /tmp/$fields[3].$$\n";
