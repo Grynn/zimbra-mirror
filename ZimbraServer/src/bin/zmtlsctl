@@ -78,16 +78,12 @@ updateWebConfig() {
 		/opt/zimbra/tomcat/webapps/zimbra/WEB-INF/web.xml > /tmp/web.xml.$$
 	mv -f /tmp/web.xml.$$ /opt/zimbra/tomcat/webapps/zimbra/WEB-INF/web.xml
 	
-	if [ $MODE = "http" ]; then
-		zmprov mcf zimbraMailPort 80 zimbraMailSSLPort 0
-	else
-		if [ $MODE = "https" ]; then
-			zmprov mcf zimbraMailPort 0 zimbraMailSSLPort 443
-		else
-			zmprov mcf zimbraMailPort 80 zimbraMailSSLPort 443
-		fi
-	fi
+}
 
+updateLdap() {
+	h=`zmhostname`
+	zmprov ms $h zimbraMailMode $MODE
 }
 
 updateWebConfig
+updateLdap

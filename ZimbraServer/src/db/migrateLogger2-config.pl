@@ -55,7 +55,8 @@ EOF
     Migrate::runLoggerSql($sql);
 
 	$sql = <<EOF;
-UPDATE zimbra_logger.config SET value = '2' WHERE name = 'db.version';
+DELETE from zimbra_logger.config WHERE name = 'db.version';
+INSERT into zimbra_logger.config (name,value) values ('db.version',2);
 EOF
     Migrate::runLoggerSql($sql);
 }
