@@ -23,7 +23,6 @@
 * ***** END LICENSE BLOCK *****
 */
 
-
 /**
 * Creates an input field.
 * @constructor
@@ -36,31 +35,29 @@
 *
 *
 * @author Ross Dargahi
-* @param parent	[DwtComposite] the parent widget
-* @param type [int]	the type of the input field (e.g. DwtInputField.INTEGER). Required
-* @param initialValue [string] the initial value of the field. Default browser
-* @param size [int] size of the input field (in characters). Default system
-* @param maxLen [int] maximum length (in characters) of the field value. Default browser
-* @param errorIconStyle [int] error icon style. Default DwtInputField.ERROR_ICON_LEFT
-* @param validationStyle [int] validation type. Default DwtInputField.ONEXIT_VALIDATION
-* @param validator [function] validation function. Default built-in validator for <i>type</i>
-* @param validatorCtxtObj [object] validator context object. If presen then the validator will
-*		be called in the context of this object.
-* @param className [string]	a CSS class
-* @param posStyle [string] positioning style
+*
+* @param parent				[DwtComposite]		the parent widget
+* @param type				[constant]			the type of the input field
+* @param initialValue		[string]			the initial value of the field
+* @param size				[int]				size of the input field (in characters)
+* @param maxLen				[int]				maximum length (in characters) of the input
+* @param errorIconStyle		[constant]			error icon style
+* @param validationStyle	[constant]			validation type
+* @param validator			[function]			custom validation function
+* @param validatorCtxtObj	[object]			object context for validation function
+* @param className			[string]			CSS class
+* @param posStyle			[constant]			positioning style
 */
-function DwtInputField(parent, type, initialValue, size, maxLen, errorIconStyle, validationStyle,
-                       validator, validatorCtxtObj, className, posStyle) {
+function DwtInputField(params) {
 
 	if (arguments.length == 0) return;
-	this._origClassName = className ? className : "DwtInputField";
+	this._origClassName = params.className ? params.className : "DwtInputField";
 	this._errorClassName = this._origClassName + "-Error";
+	DwtControl.call(this, params.parent, params.className, params.posStyle);
 
-	DwtControl.call(this, parent, className, posStyle);
-
-	this._type = type ? type : DwtInputField.STRING;
-	this._errorIconStyle = errorIconStyle ? errorIconStyle : DwtInputField.ERROR_ICON_RIGHT;
-	this._validationStyle = validationStyle ? validationStyle : DwtInputField.ONEXIT_VALIDATION;
+	this._type = params.type ? params.type : DwtInputField.STRING;
+	this._errorIconStyle = params.errorIconStyle ? params.errorIconStyle : DwtInputField.ERROR_ICON_RIGHT;
+	this._validationStyle = params.validationStyle ? params.validationStyle : DwtInputField.ONEXIT_VALIDATION;
 
 	var inputFieldId = Dwt.getNextId();
 	var errorIconId = Dwt.getNextId();
@@ -97,20 +94,19 @@ function DwtInputField(parent, type, initialValue, size, maxLen, errorIconStyle,
 	this._inputField.onkeyup = DwtInputField._keyUpHdlr;
 	this._inputField.onblur = DwtInputField._blurHdlr;
 
-	if (size) this._inputField.size = size;
-	if (maxLen) {
-		this._inputField.maxLength = maxLen;
-		this._maxLen = maxLen;
-	}
+	if (params.size)
+		this._inputField.size = params.size;
+	if (params.maxLen)
+		this._inputField.maxLength = this._maxLen = params.maxLen;
 
 	this.setCursor("default");
 
-	this._inputField.value = initialValue || "";
+	this._inputField.value = params.initialValue || "";
 
-	this.setValidatorFunction(validatorCtxtObj, validator);
+	this.setValidatorFunction(params.validatorCtxtObj, params.validator);
 	this._setMouseEventHdlrs(false);
 	this._setKeyPressEventHdlr(false);
-}
+};
 
 DwtInputField.prototype = new DwtControl;
 DwtInputField.prototype.constructor = DwtInputField;
@@ -421,7 +417,7 @@ function(ev) {
 DwtInputField._blurHdlr =
 function(ev) {
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
-	if (obj._validationStyle == DwtInputField.ONEXIT_VALIDATION) {
+	if (obj && obj._validationStyle == DwtInputField.ONEXIT_VALIDATION) {
 		var val = obj._validateInput(obj._inputField.value);
 		if (val != null)
 			obj._inputField.value = val;
