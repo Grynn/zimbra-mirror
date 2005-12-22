@@ -208,10 +208,13 @@ function(response, asyncMode) {
 	} else {
 		try {
 			xmlResponse = true;
+			if (!(response.text || (response.xml && (typeof response.xml) == "string"))) {
+				// If IE can't reach the server, it returns immediately with an empty response rather than waiting and timing out
+				throw new ZmCsfeException("Csfe service error", ZmCsfeException.NETWORK_ERROR, "ZmCsfeCommand.prototype.invoke", "Empty HTTP response");
+			}
 			// responseXML is empty under IE
-			respDoc = (AjxEnv.isIE || response.xml == null)
-				? AjxSoapDoc.createFromXml(response.text) 
-				: AjxSoapDoc.createFromDom(response.xml);
+			respDoc = (AjxEnv.isIE || response.xml == null) ? AjxSoapDoc.createFromXml(response.text) :
+															  AjxSoapDoc.createFromDom(response.xml);
 		} catch (ex) {
 			DBG.dumpObj(AjxDebug.DBG1, ex);
 			if (asyncMode) {
@@ -234,7 +237,6 @@ function(response, asyncMode) {
 	}
 	
 	DBG.println(AjxDebug.DBG1, ["<H4> RESPONSE", (asyncMode) ? " (asynchronous)" : "" ,"</H4>"].join(""), "Response");
-	//DBG.println(AjxDebug.DBG1, asyncMode ? "<H4>RESPONSE (asynchronous)</H4>" : "<H4>RESPONSE</H4>");
 
 	var resp;
 	if (xmlResponse) {
