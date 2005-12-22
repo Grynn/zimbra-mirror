@@ -929,6 +929,9 @@ function() {
 DwtControl.prototype._isInputEl = 
 function(targetEl) {
 	var bIsInput = false;
+	if(!targetEl || !targetEl.tagName) {
+		return bIsInput;
+	}
 	var tagName = targetEl.tagName.toLowerCase();
 	var type = tagName == "input" ? targetEl.type.toLowerCase() : null;
 	
