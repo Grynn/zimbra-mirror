@@ -634,7 +634,7 @@ Com_Zimbra_SForce.prototype.doDrop = function(obj) {
 };
 
 /// Called by the Zimbra framework when the SForce panel item was clicked
-Com_Zimbra_SForce.prototype.panelItemClicked = function() {
+Com_Zimbra_SForce.prototype.singleClicked = function() {
 	this.login();
 };
 
