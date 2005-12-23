@@ -1,0 +1,10 @@
+.ImgYMAPS-panelIcon {
+  background: url("ymaps.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.YMaps-icon-right {
+  background: url("ymaps.gif") no-repeat 100% 50%;
+}

@@ -45,6 +45,25 @@ Com_Zimbra_YMaps.URL = "http://api.local.yahoo.com/MapsService/V1/mapImage?appid
 // Map image URI cache
 Com_Zimbra_YMaps.CACHE = new Array();
 
+
+// Panel Zimlet Methods
+
+/// Called by the Zimbra framework upon an accepted drag'n'drop
+Com_Zimbra_YMaps.prototype.doDrop = 
+function(obj) {
+	switch (obj.TYPE) {
+	    case "ZmContact":
+		this._contactDropped(obj);
+		break;
+
+	    default:
+		this.displayErrorMessage("You somehow managed to drop a \"" + obj.TYPE
+					 + "\" but however the Yahoo Maps Zimlet does't support it for drag'n'drop.");
+	}
+};
+
+// Content Object Methods
+
 Com_Zimbra_YMaps.prototype.toolTipPoppedUp =
 function(spanElement, obj, context, canvas) {
 	canvas.innerHTML = '<img width="345" height="245" id="'+ ZmZimletBase.encodeId(obj)+'" src="'+this.getResource('blank_pixel.gif')+'"/>';
@@ -57,6 +76,8 @@ function(spanElement, obj, context, canvas) {
 		request.invoke(null, url, null, new AjxCallback(this, Com_Zimbra_YMaps._callback, obj), true);
 	}
 };
+
+// Private Methods
 
 Com_Zimbra_YMaps._displayImage = 
 function(img_src, obj) {
@@ -72,3 +93,35 @@ function(obj, result) {
 	var r = result.text;
 	Com_Zimbra_YMaps._displayImage(r.substring(r.indexOf("http://img"),r.indexOf("</Result>")), obj);
 };
+
+// Called when a new contact has been dropped onto the Zimlet panel item.
+Com_Zimbra_YMaps.prototype._contactDropped = 
+function(contact) {
+	var addr = contact.workStreet + ", " + contact.workCity + ", " + contact.workState + " " + contact.workPostalCode;
+	// XXX Ugly hack to check is it's a valid address
+	if(!addr || !addr.indexOf("undefined")) {
+		this.displayErrorMessage("You dropped a contact with an invalid work address: \n" + addr);
+		return;
+	}
+	var view = new DwtComposite(this.getShell());
+	var dialog_args = {
+		view  : view,
+		title : "Yahoo Map"
+	};
+	var dlg = this._createDialog(dialog_args);
+	dlg.popup();
+	dlg.setButtonListener(DwtDialog.OK_BUTTON,
+		      new AjxListener(this, function() {
+			      dlg.popdown();
+			      dlg.dispose();
+		      }));
+	dlg.setButtonListener(DwtDialog.CANCEL_BUTTON,
+		      new AjxListener(this, function() {
+			      dlg.popdown();
+			      dlg.dispose();
+		      }));
+    var el = view.getHtmlElement();
+    var div = document.createElement("div");
+    el.appendChild(div);
+    this.toolTipPoppedUp(null, addr, null, div);
+}
