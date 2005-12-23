@@ -70,11 +70,12 @@ function ZaXDialog(parent, app, className, title, w, h,iKeyName) {
 	this._createContentHtml();
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/administration_console_help.htm";	
 }
+ZA_BTN_INDEX = DwtDialog.NO_BUTTONS;
 
 ZaXDialog.prototype = new DwtDialog;
 ZaXDialog.prototype.constructor = ZaXDialog;
 ZaXDialog.XFormModifiers = new Object();
-ZaXDialog.HELP_BUTTON = 15;
+ZaXDialog.HELP_BUTTON = ++ZA_BTN_INDEX;
 /**
 * public method _initForm
 * @param xModelMetaData

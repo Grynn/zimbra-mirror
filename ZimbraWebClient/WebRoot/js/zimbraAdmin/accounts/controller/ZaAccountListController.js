@@ -697,7 +697,14 @@ function(ev) {
 ZaAccountListController.prototype._deleteAccountsCallback = 
 function () {
 	var successRemList=new Array();
-	for(var key in this._removeList) {
+	if(!this._removeProgressDlg) {
+		this._removeProgressDlg = new DeleteAcctsPgrsDlg(this._container, this._app);
+		this._removeProgressDlg.popup();
+		this._removeProgressDlg.setObject(this._removeList);
+		this._removeConfirmMessageDialog.popdown();		
+		this._removeProgressDlg.startDeletingAccounts();
+	}
+/*	for(var key in this._removeList) {
 		if(this._removeList[key]) {
 			try {
 				this._removeList[key].remove();
@@ -722,6 +729,8 @@ function () {
 	this.fireRemovalEvent(successRemList); 
 	this._removeConfirmMessageDialog.popdown();
 	this.show(ZaSearch.searchByQueryHolder(this._currentQuery, this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app));			
+*/
+		
 }
 
 

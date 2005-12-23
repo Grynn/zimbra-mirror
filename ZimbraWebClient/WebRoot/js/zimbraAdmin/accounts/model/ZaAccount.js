@@ -566,6 +566,19 @@ ZaReindexMailbox.myXModel = {
 	]
 };
 
+ZaAccount.prototype.remove = 
+function(callback) {
+	var soapDoc = AjxSoapDoc.create("DeleteAccountRequest", "urn:zimbraAdmin", null);
+	soapDoc.set("id", this.id);
+	this.deleteCommand = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	if(callback) {
+		params.asyncMode = true;
+		params.callback = callback;
+	}
+	this.deleteCommand.invoke(params);		
+}
 
 ZaAccount.getReindexStatus = 
 function (mbxId, callback) {
@@ -748,16 +761,6 @@ function() {
 	return this._toolTip;
 }
 
-ZaAccount.prototype.remove = 
-function() {
-	var soapDoc = AjxSoapDoc.create("DeleteAccountRequest", "urn:zimbraAdmin", null);
-	soapDoc.set("id", this.id);
-
-	//find out which server I am on
-	var myServer = this._app.getServerByName(this.attrs[ZaAccount.A_mailHost]);
-
-	ZmCsfeCommand.invoke(soapDoc, null, null, myServer.id, true);	
-}
 
 
 ZaAccount.loadMethod = 

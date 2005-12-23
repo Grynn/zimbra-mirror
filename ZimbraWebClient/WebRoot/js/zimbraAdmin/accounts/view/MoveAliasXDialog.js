@@ -46,8 +46,8 @@ function MoveAliasXDialog(parent,  app, w, h) {
 MoveAliasXDialog.prototype = new ZaXDialog;
 MoveAliasXDialog.prototype.constructor = MoveAliasXDialog;
 MoveAliasXDialog.resultChoices = new XFormChoices([], XFormChoices.OBJECT_REFERENCE_LIST, null, "name");
-MoveAliasXDialog.MOVE_BUTTON=12;
-MoveAliasXDialog.CLOSE_BUTTON = 13;
+MoveAliasXDialog.MOVE_BUTTON= ++ZA_BTN_INDEX;
+MoveAliasXDialog.CLOSE_BUTTON = ++ZA_BTN_INDEX;
 
 MoveAliasXDialog.prototype.popup = 
 function (loc) {

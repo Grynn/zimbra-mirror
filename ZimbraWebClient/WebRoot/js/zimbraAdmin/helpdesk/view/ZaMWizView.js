@@ -75,73 +75,21 @@ ZaMigrationWizView.prototype.getMyXForm = function() {
 			_SEPARATOR_: {containerCssStyle:"padding-right:3px;padding-left:3px;"}
 		},
 		items: [
-		/*	{type:_OUTPUT_, label:null, value:ZaMsg.HELP_PAGE_0, colSpan:"*", cssStyle:"font-size:12pt;	font-weight: bold;"},
-			{type:_OUTPUT_, label:null, value:ZaMsg.HELP_PAGE_1, colSpan:"*", cssStyle:"font-size:12px;"},
-
-			{type:_SPACER_, colSpan:"*"},*/
 			{type:_GROUP_, numCols:2, 
 				items: [
-					/*{type:_GROUP_,numCols:2,
-						items: [
-							{type:_OUTPUT_, value:AjxImg.getImageHtml("Help")},
-							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_2, href:"/zimbraAdmin/adminhelp/html/WebHelp/administration_console_help.htm"}
-						]
-					},
-					{type:_GROUP_,numCols:2,
-						items: [
-							{type:_OUTPUT_,  value:AjxImg.getImageHtml("PDFDoc")},
-							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_4, href:"/zimbraAdmin/adminhelp/pdf/Zimbra_Release_Note.pdf"}
-						]
-					},
-					{type:_SPACER_, colSpan:"*"},					
-					{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.HELP_PAGE_3, 
-					 cssStyle:"padding-right:10px;padding-left:10px;"},
-					{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.HELP_PAGE_5,
-					 cssStyle:"padding-right:10px;padding-left:10px;"},
-					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
-					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
-
-
-					{type:_GROUP_,numCols:2,
-						items: [
-								//{type:_OUTPUT_, value:"&nbsp;"},
-							{type:_CELL_SPACER_, width:"24px"},
-							{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.HELP_PAGE_6 }
-						]
-					},					
-					{type:_OUTPUT_, label:null, value:"&nbsp;"},
-					{type:_SPACER_, colSpan:"*"},					
-					{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.HELP_PAGE_7, 
-					 cssStyle:"padding-right:10px;padding-left:10px;"},
-					{type:_OUTPUT_, label:null, value:"&nbsp;", cssStyle:"padding-right:10px;padding-left:10px;"},
-					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
-					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
-
-
-					{type:_GROUP_,numCols:2,
-						items: [
-							{type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
-							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_8,href:"/zimbraAdmin/adminhelp/pdf/admin.pdf"}
-						]
-					},*/
 					{type:_GROUP_,numCols:4,
 						items: [
 							{type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
 							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_10,href:"/zimbraAdmin/adminhelp/pdf/MigrationWizard.pdf"},						
 							{type:_OUTPUT_, value:AjxImg.getImageHtml("MigrationWiz")},
-							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_MIGRATION_WIZ_1,href:"http://www.zimbra.com/downloads/zimbra_migration_wizard_html/MigrationWizardstandalone.html"}
+							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_MIGRATION_WIZ_1,href:"http://www.zimbra..com/community/downloads.php"}
 						]
 					},
 					{type:_SPACER_, colSpan:"*"},					
-/*					{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.HELP_PAGE_9, 
-					 cssStyle:"padding-right:10px;padding-left:10px;"},*/
 					{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.HELP_PAGE_11,
 					 cssStyle:"padding-right:10px;padding-left:10px;"},
-//					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
 					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
-					{type:_SPACER_, height:"10px"}/*,
-					{type:_DWT_BUTTON_, label:"About Zimbra Version",onActivate:"this.getFormController().showAboutDialog()",
-					 width:"125px"}*/
+					{type:_SPACER_, height:"10px"}
 				]
 			}
 		]

@@ -94,12 +94,12 @@ function(msg, ex, noExecReset)  {
 	var detailStr = "";
 	if(ex != null) {
 		if(ex.msg) {
-			detailStr += "Message:  ";
+			detailStr += ZaMsg.ERROR_MESSAGE + "  ";
 		    detailStr += ex.msg;
 		    detailStr += "\n";			    
 		}
 		if(ex.code) {
-			detailStr += "Code:  ";
+			detailStr += ZaMsg.ERROR_CODE + "  ";
 		    detailStr += ex.code;
 		    detailStr += "\n";			    
 		}
@@ -109,7 +109,7 @@ function(msg, ex, noExecReset)  {
 		    detailStr += "\n";			    
 		}
 		if(ex.detail) {
-			detailStr += "Details:  ";
+			detailStr += ZaMsg.ERROR_DETAILS;
 		    detailStr += ex.detail;
 		    detailStr += "\n";			    
 		}

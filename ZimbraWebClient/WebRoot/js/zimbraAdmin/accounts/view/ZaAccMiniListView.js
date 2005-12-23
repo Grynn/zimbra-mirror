@@ -26,19 +26,19 @@
  /**
  * @author EMC
  **/
-function ZaDLListView(parent, className, posStyle, headerList) {
+function ZaAccMiniListView(parent, className, posStyle, headerList) {
 	//var headerList = this._getHeaderList();
 	ZaListView.call(this, parent, className, posStyle, headerList);
 }
 
-ZaDLListView.prototype = new ZaListView;
-ZaDLListView.prototype.constructor = ZaDLListView;
+ZaAccMiniListView.prototype = new ZaListView;
+ZaAccMiniListView.prototype.constructor = ZaAccMiniListView;
 
-ZaDLListView.prototype.toString = function() {
-	return "ZaDLListView";
+ZaAccMiniListView.prototype.toString = function() {
+	return "ZaAccMiniListView";
 };
 
-ZaDLListView.prototype._createItemHtml =
+ZaAccMiniListView.prototype._createItemHtml =
 function(account, now, isDndIcon) {
 	var html = new Array(50);
 	var	div = document.createElement("div");
@@ -97,7 +97,7 @@ function(account, now, isDndIcon) {
 }
 
 
-ZaDLListView.prototype._setNoResultsHtml = function() {
+ZaAccMiniListView.prototype._setNoResultsHtml = function() {
 	var buffer = new AjxBuffer();
 	var	div = document.createElement("div");
 	
@@ -109,7 +109,7 @@ ZaDLListView.prototype._setNoResultsHtml = function() {
 	this._addRow(div);
 };
 
-ZaDLListView.prototype._sortColumn = function (columnItem, bSortAsc){
+ZaAccMiniListView.prototype._sortColumn = function (columnItem, bSortAsc){
 	if (bSortAsc) {
 		var comparator = function (a, b) {
 			return (a < b)? 1 :((a > b)? -1 : 0);
@@ -119,17 +119,3 @@ ZaDLListView.prototype._sortColumn = function (columnItem, bSortAsc){
 		this.getList().sort();
 	}
 };
-/*
-// Since the base class only notifies for itself, 
-// we need to do this
-ZaDLListView.prototype._itemClicked = function(clickedEl, ev) {
-	ev = DwtUiEvent.getEvent(ev);
-	DwtListView.prototype._itemClicked.call(this, clickedEl, ev);	
-	if (ev.button == DwtMouseEvent.LEFT) {
-		// setting up of the selEvent has occurred in the base class
-		this._evtMgr.notifyListeners(DwtEvent.SELECTION, this._selEv);
-	} else if (ev.button == DwtMouseEvent.RIGHT) {
-		// setting up of the actionEv has occurred in the base class
-		this._evtMgr.notifyListeners(DwtEvent.ACTION, this._actionEv);
-	}
-}*/

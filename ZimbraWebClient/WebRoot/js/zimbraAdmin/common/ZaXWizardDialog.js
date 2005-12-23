@@ -46,36 +46,6 @@ function ZaXWizardDialog (parent, app, className, title, w, h,iKeyName) {
 	var finishButton = new DwtDialog_ButtonDescriptor(ZaXWizardDialog.FINISH_BUTTON, AjxMsg._finish, DwtDialog.ALIGN_RIGHT, new AjxCallback(this, this.finishWizard));
 	this._extraButtons = [helpButton,prevButton,nextButton,finishButton];
 	ZaXDialog.call(this, parent,app, className,title, w, h,iKeyName);
-//	DwtDialog.call(this, parent, clsName, null, , );
-
-/*	this._localXForm = null;
-	this._localXModel = null;
-	this._drawn = false;
-	this._containedObject = null;
-
-	if (!w) {
-		this._contentW = "80ex";
-	} else {
-		this._contentW = w;
-	}
-	
-	if(!h) {
-		this._contentH = "100ex";
-	} else {
-		this._contentH = h;
-	}
-	
-
-	this._pageDiv = document.createElement("div");
-	this._pageDiv.className = "ZaXWizardDialogPageDiv";
-	this._pageDiv.style.width = this._contentW;
-	this._pageDiv.style.height = this._contentH;
-	this._pageDiv.style.overflow = "auto";
-	
-	this._createContentHtml();	
-
-	this.setTitle(title);
-*/	
 	this._pageIx = 1;
 	this._currentPage = 1;
 }
@@ -89,10 +59,10 @@ ZaXWizardDialog.Z_HIDDEN_PAGE = Dwt.Z_HIDDEN;
 ZaXWizardDialog.Z_TAB_PANEL = Dwt.Z_VIEW+20;
 ZaXWizardDialog.Z_CURTAIN = Dwt.Z_CURTAIN;
 
-ZaXWizardDialog.NEXT_BUTTON = 12;
-ZaXWizardDialog.PREV_BUTTON = 11;
-ZaXWizardDialog.FINISH_BUTTON = 13;
-ZaXWizardDialog.HELP_BUTTON = 14;
+ZaXWizardDialog.NEXT_BUTTON = ++ZA_BTN_INDEX;
+ZaXWizardDialog.PREV_BUTTON = ++ZA_BTN_INDEX
+ZaXWizardDialog.FINISH_BUTTON = ++ZA_BTN_INDEX;
+ZaXWizardDialog.HELP_BUTTON = ++ZA_BTN_INDEX;
 
 //public methods
 ZaXWizardDialog.prototype.toString = 

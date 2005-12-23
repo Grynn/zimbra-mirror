@@ -379,7 +379,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 								cssStyle:"padding-left:0px"},
 					        {type:_SPACER_, height:"3"},
 							{ref:"members", type:_DWT_LIST_, colSpan:"*", height:"338", width:"100%", cssClass: "DLTarget", 
-								widgetClass:ZaDLListView, headerList:null},
+								widgetClass:ZaAccMiniListView, headerList:null},
 					        {type:_SPACER_, height:"8"},
 						    {type:_GROUP_, colSpan:2, width:"100%", numCols:8, colSizes:[85,5, 85,"100%",80,5,80,5], 
 								items:[
@@ -429,7 +429,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 					       },
 					       {type:_SPACER_, height:"5"},
 						   {ref:"memberPool", type:_DWT_LIST_, height:"200", width:"100%",  colSpan:"*", cssClass: "DLSource", 
-						   		forceUpdate: true, widgetClass:ZaDLListView, headerList:sourceHeaderList},
+						   		forceUpdate: true, widgetClass:ZaAccMiniListView, headerList:sourceHeaderList},
 					       {type:_SPACER_, height:"5"},
 					       {type:_GROUP_, width:"100%", colSpan:"*", numCols:8, colSizes:[85,5, 85,"100%",80,5,80,5],
 							items: [
