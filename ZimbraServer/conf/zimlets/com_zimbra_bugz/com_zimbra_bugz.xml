@@ -8,7 +8,7 @@
         </matchOn>
 		<onClick>
  		    <canvas style="window"/>
-			<actionUrl target="${src.config.global[url]}${src.$1}"/>
+			<actionUrl target="${config.global.url}${src.$1}"/>
 		</onClick>
     </contentObject>
 </zimlet>
