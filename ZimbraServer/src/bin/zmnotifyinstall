@@ -37,7 +37,7 @@ my $baseDir = "/opt/zimbra";
 my $version = $ARGV[0];
 my $email = $ARGV[1];
 
-my $URL = "http://www.zimbra.com/notify.cgi?VER=$version&MAIL=$email";
+my $URL = "http://www.zimbra.com/cgi-bin/notify.cgi?VER=$version&MAIL=$email";
 
 print "Notifying Zimbra of installation via $URL\n\n";
 
