@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
 
    PRIMARY KEY (id),
    INDEX i_type (type),                      # for looking up folders and tags
-   INDEX i_parent_id (parent_id),            # for looking up a parent's children
+   INDEX i_parent_id (parent_id),            # for looking up a parent\'s children
    INDEX i_folder_id_date (folder_id, date), # for looking up by folder and sorting by date
    INDEX i_index_id (index_id),              # for looking up based on search results
    INDEX i_unread (unread),                  # there should be a small number of items with unread=TRUE
