@@ -2489,18 +2489,28 @@ XFormItemFactory.createItemType("_CASE_", "case", Case_XFormItem, Group_XFormIte
 Case_XFormItem.prototype.labelLocation = _NONE_;
 Case_XFormItem.prototype.width = "100%";
 Case_XFormItem.prototype.focusable = false;
+Case_XFormItem.prototype.deferred = true;
 
 Case_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
 	this.getForm().outputItemList([], this, html, updateScript, indent,this.getNumCols(), 0);
 //	this.getForm().outputItemList(this.getItems(), this, html, updateScript, indent + "  ",this.getNumCols(), currentCol);
-	this.deferred = true;
+	this.deferred = this.getInheritedProperty("deferred");
+	if(this.deferred) {
+		this.getForm().outputItemList([], this, html, updateScript, indent,this.getNumCols(), 0);
+	} else {
+		this.getForm().outputItemList(this.getItems(), this, html, updateScript, indent, this.getNumCols(), currentCol);
+	}
 }
 
 Case_XFormItem.prototype._outputHTML = function () {
 	var form = this.getForm();
 	
 	var element = this.getElement();
+	if(!element) {
+		return;
+	}
 	var masterId = this.getId();
+		
 	var table = element.getElementsByTagName("table")[0];
 	var tbody = element.getElementsByTagName("tbody")[0];
 
