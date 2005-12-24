@@ -696,41 +696,42 @@ function(ev) {
 
 ZaAccountListController.prototype._deleteAccountsCallback = 
 function () {
-	var successRemList=new Array();
+
 	if(!this._removeProgressDlg) {
-		this._removeProgressDlg = new DeleteAcctsPgrsDlg(this._container, this._app);
-		this._removeProgressDlg.popup();
-		this._removeProgressDlg.setObject(this._removeList);
-		this._removeConfirmMessageDialog.popdown();		
-		this._removeProgressDlg.startDeletingAccounts();
+		this._removeProgressDlg = new DeleteAcctsPgrsDlg(this._container, this._app,"400px","300px");
 	}
-/*	for(var key in this._removeList) {
-		if(this._removeList[key]) {
-			try {
-				this._removeList[key].remove();
-				successRemList.push(this._removeList[key]);
-			} catch (ex) {
-				this._removeConfirmMessageDialog.popdown();
-				if(ex.code == ZmCsfeException.SVC_WRONG_HOST) {
-					var szMsg = ZaMsg.ERROR_WRONG_HOST;
-					if(ex.detail) {
-						szMsg +="<br>Details:<br>";
-						szMsg += ex.detail;
+	this._removeProgressDlg.popup();
+	this._removeProgressDlg.setObject(this._removeList);
+	this._removeConfirmMessageDialog.popdown();		
+	this._removeProgressDlg.startDeletingAccounts();
+	
+	/*
+		for(var key in this._removeList) {
+			if(this._removeList[key]) {
+				try {
+					this._removeList[key].remove();
+					successRemList.push(this._removeList[key]);
+				} catch (ex) {
+					this._removeConfirmMessageDialog.popdown();
+					if(ex.code == ZmCsfeException.SVC_WRONG_HOST) {
+						var szMsg = ZaMsg.ERROR_WRONG_HOST;
+						if(ex.detail) {
+							szMsg +="<br>Details:<br>";
+							szMsg += ex.detail;
+						}
+						this._errorDialog.setMessage(szMsg, null, DwtMessageDialog.CRITICAL_STYLE, null);
+						this._errorDialog.popup();					
+					} else {
+						this._handleException(ex, "ZaAccountListController.prototype._deleteAccountsCallback", null, false);
 					}
-					this._errorDialog.setMessage(szMsg, null, DwtMessageDialog.CRITICAL_STYLE, null);
-					this._errorDialog.popup();					
-				} else {
-					this._handleException(ex, "ZaAccountListController.prototype._deleteAccountsCallback", null, false);
+					return;
 				}
-				return;
 			}
 		}
-	}
-	this.fireRemovalEvent(successRemList); 
-	this._removeConfirmMessageDialog.popdown();
-	this.show(ZaSearch.searchByQueryHolder(this._currentQuery, this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app));			
-*/
-		
+		this.fireRemovalEvent(successRemList); 
+		this._removeConfirmMessageDialog.popdown();
+		this.show(ZaSearch.searchByQueryHolder(this._currentQuery, this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app));			
+	}*/
 }
 
 

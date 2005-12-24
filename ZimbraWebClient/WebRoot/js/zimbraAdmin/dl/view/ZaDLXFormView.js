@@ -439,7 +439,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 								relevantBehavior:_DISABLE_},
 							   {type:_CELLSPACER_},
 							   {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddAll, width:80,
-								onActivate:"ZaDLXFormView.addAllAddressesToMembers(this,event)",
+								onActivate:"ZaDLXFormView.addAllAddressesToMembers.call(this,event)",
 								relevant:"ZaDLXFormView.shouldEnableAddAllButton.call(this)",
 								relevantBehavior:_DISABLE_},
 								{type:_CELLSPACER_},
