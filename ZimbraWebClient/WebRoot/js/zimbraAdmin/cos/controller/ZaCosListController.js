@@ -96,7 +96,7 @@ ZaCosListController.prototype.handleCosCreation =
 function (ev) {
 	if(ev) {
 		//add the new ZaAccount to the controlled list
-		if(ev.getDetails()) {
+		if(ev.getDetails() && this._list) {
 			this._list.add(ev.getDetails());
 			this._contentView.setUI();
 			if(this._app.getCurrentController() == this) {
@@ -114,7 +114,7 @@ ZaCosListController.prototype.handleCosRemoval =
 function (ev) {
 	if(ev) {
 		//add the new ZaAccount to the controlled list
-		if(ev.getDetails()) {
+		if(ev.getDetails() && this._list) {
 			this._list.remove(ev.getDetails());
 			this._contentView.setUI();
 			if(this._app.getCurrentController() == this) {
