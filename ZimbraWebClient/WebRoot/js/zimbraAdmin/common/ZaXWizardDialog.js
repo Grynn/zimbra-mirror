@@ -59,9 +59,9 @@ ZaXWizardDialog.Z_HIDDEN_PAGE = Dwt.Z_HIDDEN;
 ZaXWizardDialog.Z_TAB_PANEL = Dwt.Z_VIEW+20;
 ZaXWizardDialog.Z_CURTAIN = Dwt.Z_CURTAIN;
 
-ZaXWizardDialog.NEXT_BUTTON = ++ZA_BTN_INDEX;
-ZaXWizardDialog.PREV_BUTTON = ++ZA_BTN_INDEX
-ZaXWizardDialog.FINISH_BUTTON = ++ZA_BTN_INDEX;
+ZaXWizardDialog.NEXT_BUTTON = DwtWizardDialog.NEXT_BUTTON;
+ZaXWizardDialog.PREV_BUTTON = DwtWizardDialog.PREV_BUTTON
+ZaXWizardDialog.FINISH_BUTTON = DwtWizardDialog.FINISH_BUTTON;
 ZaXWizardDialog.HELP_BUTTON = ++ZA_BTN_INDEX;
 
 //public methods

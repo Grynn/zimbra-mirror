@@ -113,21 +113,16 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 	menu.className = this.getMenuCssClass();
 	menu.innerHTML = this.getChoicesHTML();	
 
-	// move the menu underneath the button
-	// LATER THIS SHOULD RESPECT THIS WINDOW SIZE, ETC
 	var bounds = this.getBounds(this.getElement());
-	//alert(bounds.left + ":" + bounds.top+ ":" + bounds.width+ ":" + bounds.height);
 	menu.style.left = bounds.left;
 	menu.style.top = bounds.top + bounds.height - 1;
 	var choices = this.getNormalizedChoices();
 	if(choices && choices.values) {
 		if(choices.values.length > 5) {
 			menu.style.top	= 	parseInt(menu.style.top)+2;
-//			menu.style.height = 90;
 			menu.style.overflow="auto";	
 			menu.style.width = parseInt(bounds.width)+2;
 		} else {
-//			menu.style.height = (choices.values.length * 18) + 4;
 			menu.style.width = bounds.width;
 			menu.style.overflow="hidden";
 		}
@@ -140,10 +135,27 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 	var selectedItemNum = this.getChoiceNum(value);
 	this.__currentHiliteItem = selectedItemNum;
 	this.hiliteChoice(selectedItemNum);
-
-	menu.style.zIndex = 1000000;
+	menu.style.zIndex = Dwt.Z_HIDDEN;
 	menu.style.display = "block";
 
+	var w = DwtShell.getShell(window).getSize();
+	var wh = w.y;
+	var WINDOW_GUTTER = 5;
+/*	var menuHeight = parseInt(DwtCssStyle.getProperty(menu, "height"));
+	var menuHeight2 = DwtCssStyle.getProperty(menu, "height");	
+	var menuTop = parseInt(DwtCssStyle.getProperty(menu, "top"));	*/
+	var mBounds = this.getBounds(menu);
+	var menuHeight = mBounds.height;
+	var menuTop = mBounds.top;
+	DBG.println(AjxDebug.DBG1, "menutop = " + menuTop);
+	DBG.println(AjxDebug.DBG1, "menuHeight= " + menuHeight);	
+//	DBG.println(AjxDebug.DBG1, "menuHeight2= " + menuHeight2);	
+	DBG.println(AjxDebug.DBG1, "wh - WINDOW_GUTTER= " + (wh - WINDOW_GUTTER));	
+	
+	if(menuHeight + menuTop > wh - WINDOW_GUTTER) {
+		menu.style.top = bounds.top - menuHeight;
+	}
+	menu.style.zIndex = 1000000;
 	if (this.$hideListener == null) {
 		this.$hideListener = new AjxListener(this, this.oMouseUp);
 	}
