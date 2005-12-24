@@ -698,7 +698,7 @@ ZaAccountListController.prototype._deleteAccountsCallback =
 function () {
 
 	if(!this._removeProgressDlg) {
-		this._removeProgressDlg = new DeleteAcctsPgrsDlg(this._container, this._app,"400px","300px");
+		this._removeProgressDlg = new DeleteAcctsPgrsDlg(this._container, this._app,"500px","300px");
 	}
 	this._removeProgressDlg.popup();
 	this._removeProgressDlg.setObject(this._removeList);

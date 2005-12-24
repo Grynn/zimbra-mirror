@@ -152,16 +152,24 @@ ZaDistributionList.prototype.dedupMembers = function () {
 	this._dedupList(this._memberList);
 };
 
+/*
 ZaDistributionList.prototype.remove = function () {
 	return this._remove(this.id);
-};
+};*/
 
-ZaDistributionList.prototype._remove = function (id) {
-	var sd = AjxSoapDoc.create("DeleteDistributionListRequest", "urn:zimbraAdmin", null);
-	sd.set("id", id);
-	var resp = ZmCsfeCommand.invoke(sd, null, null, null, false);
-	return resp;
-};
+ZaDistributionList.prototype.remove = 
+function(callback) {
+	var soapDoc = AjxSoapDoc.create("DeleteDistributionListRequest", "urn:zimbraAdmin", null);
+	soapDoc.set("id", this.id);
+	this.deleteCommand = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	if(callback) {
+		params.asyncMode = true;
+		params.callback = callback;
+	}
+	this.deleteCommand.invoke(params);		
+}
 
 /**
  * Saves all changes to a list

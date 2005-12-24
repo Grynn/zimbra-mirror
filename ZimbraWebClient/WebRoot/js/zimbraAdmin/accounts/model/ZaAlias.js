@@ -37,12 +37,28 @@ ZaAlias.A_targetAccount = "targetAccount";
 
 ZaItem._ATTR[ZaAlias.A_targetAccount] = ZaMsg.attrDesc_aliasFor;
 
+/*
 ZaAlias.prototype.remove = 
 function() {
 	var soapDoc = AjxSoapDoc.create("RemoveAccountAliasRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.attrs[ZaAlias.A_AliasTargetId]);
 	soapDoc.set("alias", this.name);	
 	ZmCsfeCommand.invoke(soapDoc, null, null, null, true);	
+}*/
+
+ZaAlias.prototype.remove = 
+function(callback) {
+	var soapDoc = AjxSoapDoc.create("RemoveAccountAliasRequest", "urn:zimbraAdmin", null);
+	soapDoc.set("id", this.attrs[ZaAlias.A_AliasTargetId]);
+	soapDoc.set("alias", this.name);
+	this.deleteCommand = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	if(callback) {
+		params.asyncMode = true;
+		params.callback = callback;
+	}
+	this.deleteCommand.invoke(params);		
 }
 
 /**
