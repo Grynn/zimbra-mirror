@@ -258,7 +258,7 @@ ZaDLXFormView.addAddressesToMembers = function (event) {
 **/
 ZaDLXFormView.addAllAddressesToMembers = function (event) {
 	var form = this.getForm();
-	var pool = form.getInstance().memberPool;
+	var pool = form.get("memberPool");
 	ZaDLXFormView.addListToMemberList.call(form, pool);
 };
 
@@ -300,7 +300,7 @@ function (ev) {
 			this._containedObject.memberPool = result.list.getArray();
 		}
 		this._containedObject.poolNumPages = result.numPages;
-		this._localXForm.refresh();
+		this._localXForm.setInstance(this._containedObject);
 
 	} catch (ex) {
 		// Only restart on error if we are not initialized and it isn't a parse error

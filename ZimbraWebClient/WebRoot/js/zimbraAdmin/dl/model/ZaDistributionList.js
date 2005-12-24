@@ -32,6 +32,7 @@ function ZaDistributionList(app, id, name, memberList, description, notes) {
 	this.name = (name != null) ? name: null;
 	this._selfMember = new ZaDistributionListMember(this.name);
 	this._memberList = (memberList != null)? AjxVector.fromArray(memberList): new AjxVector();
+	this.memberPool = new Array();
 	if (description != null) this.attrs.description = description;
 	if (notes != null) this.attrs.zimbraNotes = notes;
 	this.numMembers = 0;

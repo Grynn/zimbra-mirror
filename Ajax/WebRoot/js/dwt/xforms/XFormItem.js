@@ -3645,19 +3645,19 @@ Dwt_List_XFormItem.prototype.updateWidget = function (newValue) {
 
 Dwt_List_XFormItem.prototype.setItems = function (itemArray){
 	var list = this.widget.getList();
-	var existingArr = null;
+	var existingArr = [];
 	var tmpArr = new Array();
 	if (list) {
 		existingArr = list.getArray();
 	}
 	tmpArr = new Array();
-	if(itemArray) {
+	if(itemArray.toString() != existingArr.toString()) {
 		var cnt=itemArray.length;
 		for(var i = 0; i< cnt; i++) {
 			tmpArr.push(itemArray[i]);		
 		}
+		this.widget.set(AjxVector.fromArray(tmpArr));
 	}
-	this.widget.set(AjxVector.fromArray(tmpArr));
 };
 
 Dwt_List_XFormItem.prototype.appendItems = function (itemArray){ 
