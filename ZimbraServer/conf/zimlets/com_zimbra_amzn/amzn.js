@@ -63,7 +63,7 @@ Com_Zimbra_Amzn.prototype._getHtmlContent =
 function(html, idx, obj, context) {
 	var contentObj = this.xmlObj().getVal('contentObject');
 	html[idx++] = '<a target="_blank" href="';
-	html[idx++] = (contentObj.onClick[0].actionUrl[0].target).replace('${objectContent}', AjxStringUtil.htmlEncode(obj.replace(/[-A-Z ]/ig,'')));
+	html[idx++] = (contentObj.onClick.actionUrl.target).replace('${objectContent}', AjxStringUtil.htmlEncode(obj.replace(/[-A-Z ]/ig,'')));
 	html[idx++] = '">'+AjxStringUtil.htmlEncode(obj)+'</a>';
 	return idx;
 };
