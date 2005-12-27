@@ -23,7 +23,7 @@
 		<toolTipText>Drag'n'drop a contact to display a Yahoo Map</toolTipText>
 		<dragSource type="ZmContact" />
 		<contextMenu>
-			<menuItem label="Visit Yahoo" id="MAPS.YAHOO.COM" icon="YMAPS-panelIcon">
+			<menuItem label="Visit Yahoo Maps" id="MAPS.YAHOO.COM" icon="YMAPS-panelIcon">
 				<canvas type="window" width="800" height="600" />
 				<actionUrl target="http://maps.yahoo.com">
 					<param name="referrer">www.zimbra.com</param>
