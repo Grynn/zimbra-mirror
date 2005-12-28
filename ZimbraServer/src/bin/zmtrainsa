@@ -63,4 +63,14 @@ fi
 
 ${zimbra_home}/bin/sa-learn -p ${zimbra_home}/conf/salocal.cf --dbpath ${zimbra_home}/amavisd/.spamassassin/ --sync
 
+if [ $MODE == "ham" ]; then
+	MODE="innocent"
+fi
+
+echo "Training DSPAM"
+
+/usr/bin/fetchmail -f ${zimbra_home}/conf/.fetchmailrc -n -a -u $USER -r "$FOLDER" -m "/opt/zimbra/dspam/bin/dspam --user zimbra --class=${MODE} --source=corpus --mode=teft --feature=chained,noise --stdout" ${SERVER}
+
+/opt/zimbra/dspam/bin/dspam_clean -p0 $USER
+
 rm -f ${zimbra_home}/conf/.fetchmailrc
