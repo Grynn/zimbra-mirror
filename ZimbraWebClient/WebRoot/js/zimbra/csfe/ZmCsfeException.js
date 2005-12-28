@@ -25,7 +25,7 @@
 
 function ZmCsfeException(msg, code, method, detail) {
 	AjxException.call(this, msg, code, method, detail);
-}
+};
 
 ZmCsfeException.prototype = new AjxException;
 ZmCsfeException.prototype.constructor = ZmCsfeException;
@@ -33,25 +33,20 @@ ZmCsfeException.prototype.constructor = ZmCsfeException;
 ZmCsfeException.prototype.toString = 
 function() {
 	return "ZmCsfeException";
-}
+};
 
 ZmCsfeException._codeToMsg = {};
 
 ZmCsfeException.getErrorMsg =
 function(code) {
 	return ZmCsfeException._codeToMsg[code];
-}
+};
 
 ZmCsfeException.define =
 function(name, code, msg) {
-
-//alert("ZmCsfeException."+name+" = \""+code+"\";");
-// eval("ZmCsfeException."+name+" = \""+code+"\";");
- 
-  ZmCsfeException[name] = code;
-  
-  ZmCsfeException._codeToMsg[code] = msg;
-}
+	ZmCsfeException[name] = code;
+	ZmCsfeException._codeToMsg[code] = msg;
+};
 
 ZmCsfeException.define("CSFE_SVC_ERROR", "CSFE_SVC_ERROR", ZMsg.errorService);
 ZmCsfeException.define("NETWORK_ERROR", "NETWORK_ERROR", ZMsg.errorNetwork);
@@ -96,4 +91,4 @@ ZmCsfeException.define("MAIL_NO_SUCH_PART", "mail.NO_SUCH_PART", ZMsg.errorNoSuc
 ZmCsfeException.define("MAIL_QUOTA_EXCEEDED", "mail.QUOTA_EXCEEDED", ZMsg.errorQuotaExceeded);
 ZmCsfeException.define("MAIL_QUERY_PARSE_ERROR", "mail.QUERY_PARSE_ERROR", ZMsg.errorQueryParse);
 ZmCsfeException.define("MAIL_SEND_FAILURE", "mail.SEND_FAILURE", ZMsg.mailSendFailure);
-
+ZmCsfeException.define("MAIL_TOO_MANY_CONTACTS", "mail.TOO_MANY_CONTACTS", ZMsg.errorTooManyContacts);
