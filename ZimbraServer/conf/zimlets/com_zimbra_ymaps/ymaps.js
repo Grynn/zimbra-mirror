@@ -115,7 +115,7 @@ function(contact) {
 		this.displayErrorMessage("You dropped a contact with an invalid work address: \n" + addr);
 		return;
 	}
-	_displayDialogMap(addr)	;
+	this._displayDialogMap(addr);
 };
 	
 Com_Zimbra_YMaps.prototype._displayDialogMap = 
