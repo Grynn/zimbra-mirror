@@ -259,6 +259,11 @@ function(required) {
 	this._required = required == null ? true : required;
 };
 
+DwtInputField.prototype.disabled = 
+function(disabled) {
+	this.getInputElement().disabled = disabled;
+};
+
 DwtInputField.prototype.focus = 
 function() {
 	this.getInputElement().focus();
