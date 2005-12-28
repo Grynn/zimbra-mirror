@@ -48,7 +48,7 @@ Com_Zimbra_YMaps.CACHE = new Array();
 
 // Panel Zimlet Methods
 
-/// Called by the Zimbra framework upon an accepted drag'n'drop
+// Called by the Zimbra framework upon an accepted drag'n'drop
 Com_Zimbra_YMaps.prototype.doDrop = 
 function(obj) {
 	switch (obj.TYPE) {
@@ -57,10 +57,92 @@ function(obj) {
 		break;
 
 	    default:
-		this.displayErrorMessage("You somehow managed to drop a \"" + obj.TYPE
-					 + "\" but however the Yahoo Maps Zimlet does't support it for drag'n'drop.");
+		this.displayErrorMessage("You somehow managed to drop a \"" + obj.TYPE + "\" but however the Yahoo Maps Zimlet does't support it for drag'n'drop.");
 	}
 };
+
+// Called by the Zimbra framework when the Ymaps panel item was double clicked
+Com_Zimbra_YMaps.prototype.doubleClicked = function() {
+	this.singleClicked();
+};
+
+// Called by the Zimbra framework when the Ymaps panel item was clicked
+Com_Zimbra_YMaps.prototype.singleClicked = function() {
+	var editorProps = [
+		{ label 		 : "Address",
+		  name           : "address",
+		  type           : "string",
+		  minLength      : 10,
+		  maxLength      : 200
+		}
+		];
+	if (!this._dlg_propertyEditor) {
+		var view = new DwtComposite(this.getShell());
+		this._propertyEditor = new DwtPropertyEditor(view, true);
+		var pe = this._propertyEditor;
+		pe.initProperties(editorProps);
+		var dialog_args = {
+			title : "Yahoo Maps: Enter Address",
+			view  : view
+		};
+		this._dlg_propertyEditor = this._createDialog(dialog_args);
+		var dlg = this._dlg_propertyEditor;
+		pe.setFixedLabelWidth();
+		pe.setFixedFieldWidth();
+		dlg.setButtonListener(DwtDialog.OK_BUTTON,
+				      new AjxListener(this, function() {
+				          if (!pe.validateData()) {return;}
+					      this._getDisplayCustomMap();
+				      }));
+	}
+	this._dlg_propertyEditor.popup();
+};
+
+Com_Zimbra_YMaps.prototype._getDisplayCustomMap =
+function() {
+	this._dlg_propertyEditor.popdown();
+	this._displayDialogMap(this._propertyEditor.getProperties().address);
+	this._dlg_propertyEditor.dispose();
+	this._dlg_propertyEditor = null;
+};
+
+// Called when a new contact has been dropped onto the Zimlet panel item.
+Com_Zimbra_YMaps.prototype._contactDropped = 
+function(contact) {
+	var addr = contact.workStreet + ", " + contact.workCity + ", " + contact.workState + " " + contact.workPostalCode;
+	// XXX Ugly hack to check is it's a valid address
+	if(!addr || !addr.indexOf("undefined")) {
+		this.displayErrorMessage("You dropped a contact with an invalid work address: \n" + addr);
+		return;
+	}
+	_displayDialogMap(addr)	;
+};
+	
+Com_Zimbra_YMaps.prototype._displayDialogMap = 
+function(address) {
+	var view = new DwtComposite(this.getShell());
+	var dialog_args = {
+		view  : view,
+		title : "Yahoo Map"
+	};
+	var dlg = this._createDialog(dialog_args);
+	dlg.popup();
+	dlg.setButtonListener(DwtDialog.OK_BUTTON,
+		      new AjxListener(this, function() {
+			      dlg.popdown();
+			      dlg.dispose();
+		      }));
+	dlg.setButtonListener(DwtDialog.CANCEL_BUTTON,
+		      new AjxListener(this, function() {
+			      dlg.popdown();
+			      dlg.dispose();
+		      }));
+    var el = view.getHtmlElement();
+    var div = document.createElement("div");
+    el.appendChild(div);
+    this.toolTipPoppedUp(null, address, null, div);
+};
+
 
 // Content Object Methods
 
@@ -93,35 +175,3 @@ function(obj, result) {
 	var r = result.text;
 	Com_Zimbra_YMaps._displayImage(r.substring(r.indexOf("http://img"),r.indexOf("</Result>")), obj);
 };
-
-// Called when a new contact has been dropped onto the Zimlet panel item.
-Com_Zimbra_YMaps.prototype._contactDropped = 
-function(contact) {
-	var addr = contact.workStreet + ", " + contact.workCity + ", " + contact.workState + " " + contact.workPostalCode;
-	// XXX Ugly hack to check is it's a valid address
-	if(!addr || !addr.indexOf("undefined")) {
-		this.displayErrorMessage("You dropped a contact with an invalid work address: \n" + addr);
-		return;
-	}
-	var view = new DwtComposite(this.getShell());
-	var dialog_args = {
-		view  : view,
-		title : "Yahoo Map"
-	};
-	var dlg = this._createDialog(dialog_args);
-	dlg.popup();
-	dlg.setButtonListener(DwtDialog.OK_BUTTON,
-		      new AjxListener(this, function() {
-			      dlg.popdown();
-			      dlg.dispose();
-		      }));
-	dlg.setButtonListener(DwtDialog.CANCEL_BUTTON,
-		      new AjxListener(this, function() {
-			      dlg.popdown();
-			      dlg.dispose();
-		      }));
-    var el = view.getHtmlElement();
-    var div = document.createElement("div");
-    el.appendChild(div);
-    this.toolTipPoppedUp(null, addr, null, div);
-}
