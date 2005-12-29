@@ -576,7 +576,6 @@ function(params) {
 	}
 
 	this._enableDesignMode(doc);
-	this._registerEditorEventHandlers(document.getElementById(this._iFrameId), doc);
 	this.focus();
 	this._updateState();
 	this._htmlModeInited = true;
@@ -589,6 +588,8 @@ function(params) {
 		doc.close();
 		doc.body.innerHTML = this._pendingContent || "";
 	}
+
+	this._registerEditorEventHandlers(document.getElementById(this._iFrameId), doc);
 }
 
 DwtHtmlEditor.prototype._getIframeDoc =
@@ -670,12 +671,11 @@ function(iFrame, iFrameDoc) {
 DwtHtmlEditor.prototype._handleEditorEvent =
 function(ev) {
 	var retVal = true;
-	
+
 	// If we have a mousedown event, then let DwtMenu know. This is a nasty hack that we have to do since
 	// the iFrame is in a different document etc
 	if (ev.type == "mousedown") {
 		DwtMenu._outsideMouseDownListener(ev);
-		return true;
 	}
 	
 	if (DwtKeyEvent.isKeyPressEvent(ev)) {
@@ -706,7 +706,8 @@ function(ev) {
 					ke._stopPropagation = true;
 					ke._returnValue = false;
 					ke.setToDhtmlEvent(ev);
-					return false;
+					retVal = false;
+					break;
 					
 				default:
 					// IE Has full on keyboard shortcuts
@@ -714,8 +715,8 @@ function(ev) {
 						cmd = DwtHtmlEditor._KEY2CMDS[key];
 					break;
 			}
-			DBG.println("CMD: " + cmd);			
 			if (cmd) {
+				DBG.println("CMD: " + cmd);			
 				this._execCommand(cmd, value);
 				DBG.println("AFTER EXEC");
 				ke._stopPropagation = true;
