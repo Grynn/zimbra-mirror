@@ -122,11 +122,12 @@ DwtInputField.ONEXIT_VALIDATION    = 2; // validate the field (i.e. after TAB or
 DwtInputField.MANUAL_VALIDATION    = 3; // validate the field  manually
 
 // types
-DwtInputField.INTEGER	= 1; // Integer input field
-DwtInputField.FLOAT		= 2; // Numeric input field
-DwtInputField.STRING	= 3; // String input field
-DwtInputField.PASSWORD	= 4; // Password input field
-DwtInputField.DATE 		= 5; // Date input field
+DwtInputField.NUMBER 	= 1; // Integer or float input filed
+DwtInputField.INTEGER	= 2; // Integer input field (no floating point numbers)
+DwtInputField.FLOAT		= 3; // Numeric input field
+DwtInputField.STRING	= 4; // String input field
+DwtInputField.PASSWORD	= 5; // Password input field
+DwtInputField.DATE 		= 6; // Date input field
 
 DwtInputField._ERROR_ICON_HTML = AjxImg.getImageHtml("ClearSearch");
 DwtInputField._NOERROR_ICON_HTML = AjxImg.getImageHtml("Blank_9");
@@ -152,6 +153,7 @@ function(obj, validator) {
 		this._validatorObj = obj;
 	} else {
 		switch (this._type) {
+			case DwtInputField.NUMBER:	this._validator = DwtInputField.validateNumber; break;
 		    case DwtInputField.INTEGER:	this._validator = DwtInputField.validateInteger; break;
 		    case DwtInputField.FLOAT:	this._validator = DwtInputField.validateFloat; break;
 		    case DwtInputField.STRING:
@@ -318,12 +320,20 @@ function() {
 
 /* Built-in validators */
 
-DwtInputField.validateInteger =
+DwtInputField.validateNumber =
 function(value) {
 	var n = new Number(value);
 	if (isNaN(n) || (Math.round(n) != n))
 		throw AjxMsg.notAnInteger;
 	return DwtInputField.validateFloat.call(this, value);
+};
+
+DwtInputField.validateInteger =
+function(value) {
+	var n = new Number(value);
+	if (isNaN(n) || (Math.round(n) != n))
+		throw AjxMsg.notAnInteger;
+	return value;
 };
 
 DwtInputField.validateFloat =
