@@ -82,8 +82,15 @@ unpack_webapps() {
 	fi
 	if [ ! -d "${tomcat_directory}/webapps/zimbra/downloads" ]; then
 		mkdir ${tomcat_directory}/webapps/zimbra/downloads
+		cat >${tomcat_directory}/webapps/zimbra/downloads/index.html<<EOF
+<HTML><BODY>
+EOF
 		for i in /opt/zimbra/migration/*; do
 			filename=`basename $i`
+			cat >>${tomcat_directory}/webapps/zimbra/downloads/index.html<<EOF
+<BR>
+<A HREF="/zimbra/downloads/${filename}">${filename}</A>
+EOF
 			genericname=`echo $filename | sed -e 's/[-_].*\(\..*\)$/\1/g'`;
 			cp /opt/zimbra/migration/${filename} \
 				${tomcat_directory}/webapps/zimbra/downloads/${filename}
@@ -92,6 +99,9 @@ unpack_webapps() {
 					${tomcat_directory}/webapps/zimbra/downloads/${genericname}
 			fi
 		done
+		cat >>${tomcat_directory}/webapps/zimbra/downloads/index.html<<EOF
+</BODY></HTML>
+EOF
 	fi
 }
 
