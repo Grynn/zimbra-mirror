@@ -1,0 +1,120 @@
+<project name="Zimlet" default="jar">
+
+	<property environment="env"/>
+
+	<property name="deploy.dir" value="/opt/zimbra/tomcat/webapps"/>
+	<property name="deploy.lib.path" value="/service/WEB-INF"/>
+	<property name="deploy.jsp.path" value="/service/jsp"/>
+
+	<property name="build.dir" location="build" />
+	<property name="build.classes.dir" location="${build.dir}/classes" />
+	<property name="dist.dir" location="${build.dir}/dist" />
+	<property name="dist.conf.dir" location="${dist.dir}/conf" />
+	<property name="dist.jsp.dir" location="${dist.dir}/jsp" />
+	<property name="dist.lib.dir" location="${dist.dir}/lib" />
+	<property name="dist.zimlet.dir" location="${dist.dir}/zimlets" />
+
+	<property name="jars.dir" location="jars" />
+	<property name="config.dir" location="conf" />
+	<property name="src.dir" location="src" />
+	<property name="src.java.dir" location="${src.dir}/java" />
+	<property name="src.jsp.dir" location="${src.dir}/jsp" />
+
+	<property name="generated.dir" location="${build.dir}/generated" />
+	<property name="generated.java.dir" location="${generated.dir}/src/java" />
+
+	<property name="zimlets" value="com_zimbra_phone,com_zimbra_po,com_zimbra_tracking,com_zimbra_url,com_zimbra_ymaps,com_zimbra_sforce,com_zimbra_amzn,com_zimbra_bugz"/>
+
+	<path id="all.java.path">
+		<pathelement location="${src.java.dir}" />
+		<pathelement location="${generated.java.dir}" />
+	</path>
+	<path id="class.path">
+		<pathelement location="${build.classes.dir}" />
+		<fileset dir="${jars.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+	
+	<target name="dev-sync" depends="jar">
+		<copy verbose="true" todir="${deploy.dir}${deploy.jsp.path}">
+			<fileset dir="${src.jsp.dir}"/>
+		</copy>
+		<copy verbose="true" todir="${deploy.dir}${deploy.lib.path}">
+			<fileset dir="${config.dir}"/>
+		</copy>
+		<copy verbose="true" todir="${deploy.dir}${deploy.lib.path}/lib">
+			<fileset dir="${dist.lib.dir}"/>
+		</copy>
+	</target>
+
+	<target name="clean" description="Removes any temporary files">
+		<delete dir="${build.dir}" />
+	</target>
+
+	<target name="build-init">
+		<mkdir dir="${build.classes.dir}" />
+		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${jars.dir}" />
+		<mkdir dir="${dist.lib.dir}" />
+		<mkdir dir="${dist.zimlet.dir}" />
+		<mkdir dir="${generated.java.dir}" />
+	</target>
+
+	<target name="compile" depends="build-init" description="Compiles the source code">
+		<javac destdir="${build.classes.dir}" debug="true" classpathref="class.path">
+			<src refid="all.java.path" />
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile" description="Creates the jar file">
+		<jar destfile="${dist.lib.dir}/zimbrataglib.jar" basedir="${build.classes.dir}" />
+	</target>
+
+	<target name="reload-zimlets" depends="install-zimlets"/>
+
+	<target name="package-zimlets" depends="package-zimlets-core,package-zimlets-extra"/>
+	<target name="package-zimlets-core">
+		<foreach list="${zimlets}" target="package-zimlet" param="zimlet"/>
+	</target>
+	<target name="package-zimlet">
+		<echo>${zimlet}</echo>
+		<zip destfile="${dist.zimlet.dir}/${zimlet}.zip" update="true" >
+			<fileset dir="${src.dir}/${zimlet}" />
+		</zip>
+	</target>
+
+	<target name="package-zimlets-extra">
+		<!-- todo:  remove these classes from service.jar -->
+		<!-- todo2:  just use RegexHandler instead of creating custom classes -->
+		<zip destfile="${dist.zimlet.dir}/com_zimbra_phone.zip" update="true">
+			<fileset dir="${build.classes.dir}" includes="**/NANPHandler.class"/>
+		</zip>
+		<zip destfile="${dist.zimlet.dir}/com_zimbra_tracking.zip" update="true">
+			<fileset dir="${build.classes.dir}" includes="**/TrackingHandler.class"/>
+		</zip>
+		<zip destfile="${dist.zimlet.dir}/com_zimbra_url.zip" update="true" >
+			<fileset dir="${build.classes.dir}" includes="**/URLHandler.class"/>
+		</zip>
+	</target>
+	
+	<target name="deploy-zimlets" depends="package-zimlets">
+		<foreach list="${zimlets}" target="install-zimlet" param="zimlet">
+			<param name="action" value="deploy"/>
+		</foreach>
+	</target>
+	<target name="install-zimlets" depends="package-zimlets">
+		<foreach list="${zimlets}" target="install-zimlet" param="zimlet">
+			<param name="action" value="install"/>
+		</foreach>
+	</target>
+	<target name="install-zimlet">
+		<echo>${action} ${zimlet}</echo>
+		<java classname="com.zimbra.cs.zimlet.ZimletUtil" fork="true" classpathref="class.path" failonerror="true">
+			<arg line="-q" />
+			<arg line="${action}" />
+			<arg file="${dist.zimlet.dir}/${zimlet}.zip" />
+		</java>
+	</target>
+	
+</project>
