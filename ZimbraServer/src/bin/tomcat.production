@@ -79,7 +79,18 @@ unpack_webapps() {
         echo Info: expanding ${tomcat_directory}/webapps/zimbra.war
         mkdir "${tomcat_directory}/webapps/zimbra"
         (cd ${tomcat_directory}/webapps/zimbra; jar xf ../zimbra.war)
-    fi
+		mkdir ${tomcat_directory}/webapps/zimbra/downloads
+		for i in /opt/zimbra/migration/*; do
+			filename=`basename $i`
+			genericname=`echo $filename | sed -e 's/[-_].*\(\..*\)$/\1/g'`;
+			cp /opt/zimbra/migration/${filename} \
+				${tomcat_directory}/webapps/zimbra/downloads/${filename}
+			if [ $genericname != $filename ]; then
+				cp /opt/zimbra/migration/${filename} \
+					${tomcat_directory}/webapps/zimbra/downloads/${genericname}
+			fi
+		done
+	fi
 }
 
 #
