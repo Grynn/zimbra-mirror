@@ -1,4 +1,4 @@
-<zimlet name="wikipedia" version="0.1" description="Wikipedia"
+<zimlet name="com_zimbra_wikipedia" version="0.1" description="Wikipedia"
         xmlns:html="http://www.w3.org/1999/xhtml">
   <contentObject type="wikipedia">
     <matchOn>
