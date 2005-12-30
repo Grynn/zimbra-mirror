@@ -79,6 +79,8 @@ unpack_webapps() {
         echo Info: expanding ${tomcat_directory}/webapps/zimbra.war
         mkdir "${tomcat_directory}/webapps/zimbra"
         (cd ${tomcat_directory}/webapps/zimbra; jar xf ../zimbra.war)
+	fi
+	if [ ! -d "${tomcat_directory}/webapps/zimbra/downloads" ]; then
 		mkdir ${tomcat_directory}/webapps/zimbra/downloads
 		for i in /opt/zimbra/migration/*; do
 			filename=`basename $i`
