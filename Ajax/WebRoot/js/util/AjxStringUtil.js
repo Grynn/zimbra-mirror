@@ -305,7 +305,8 @@ function(str, values) {
 }
 
 /**
-* URL-encodes a string. Replace spaces with + then escape and any + become %2B for for transport in URL's.
+* URL-encodes a string. Replace + with %2B and space with +, then call escape()
+* for transport in URL's or POST bodies.
 *
 * @param str	the string to encode
 */
@@ -313,7 +314,7 @@ function(str, values) {
 AjxStringUtil.urlEncode =
 function(str) {
 	if (!str) return "";
-	return escape(str.replace(/ /g, '+')).replace(/[+]/g, '%2B');
+	return escape(str.replace(/[+]/g, '%2B').replace(/ /g, '+'));
 }		
 
 /**
