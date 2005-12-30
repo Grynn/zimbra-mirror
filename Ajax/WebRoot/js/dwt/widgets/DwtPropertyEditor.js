@@ -312,11 +312,15 @@ DwtPropertyEditor.prototype._createProperty = function(prop, parent) {
 
 // <FIXME: this will create problems when the first property is a "struct">
 DwtPropertyEditor.prototype.setFixedLabelWidth = function(w) {
-	this.getTable().rows[0].cells[0].style.width = (w || this.maxLabelWidth) + "px";
+	try {
+		this.getTable().rows[0].cells[0].style.width = (w || this.maxLabelWidth) + "px";
+	} catch(ex) {};
 };
 
 DwtPropertyEditor.prototype.setFixedFieldWidth = function(w) {
-	this.getTable().rows[0].cells[1].style.width = (w || this.maxFieldWidth) + "px";
+	try {
+		this.getTable().rows[0].cells[1].style.width = (w || this.maxFieldWidth) + "px";
+	} catch(ex) {};
 };
 // </FIXME>
 
