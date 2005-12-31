@@ -23,6 +23,38 @@
     </attribute>
   </tag>
   <tag>
+    <name>conversation</name>
+    <tagclass>com.zimbra.cs.taglib.Conversation</tagclass>
+    <bodycontent>empty</bodycontent>
+    <info>conversation (array of mail message)</info>
+    <attribute>
+      <name>id</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>index</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>field</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+  <tag>
+    <name>note</name>
+    <tagclass>com.zimbra.cs.taglib.Note</tagclass>
+    <bodycontent>empty</bodycontent>
+    <info>note</info>
+    <attribute>
+      <name>id</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+  <tag>
     <name>contact</name>
     <tagclass>com.zimbra.cs.taglib.Contact</tagclass>
     <bodycontent>empty</bodycontent>

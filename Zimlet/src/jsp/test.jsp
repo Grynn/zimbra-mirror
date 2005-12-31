@@ -5,6 +5,7 @@
   </head>
   <body bgcolor="#ffffff">
     <hr /> 
+      <h3>Message</h3>
       <table border="1">
         <tr>
           <td>id</td>
@@ -33,6 +34,7 @@
 %>
       </table>
 
+      <h3>Raw Message</h3>
       <table border="1">
         <tr>
           <td><z:message id="488" field="raw"/></td>
@@ -40,6 +42,37 @@
       </table>
 
     <hr /> 
+      <h3>Conversation</h3>
+      <table border="1">
+        <tr>
+          <td>cid</td>
+          <td>index</td>
+          <td>subject</td>
+          <td>from</td>
+          <td>to</td>
+          <td>cc</td>
+          <td>bcc</td>
+        </tr>
+<%
+	String cid = "347";
+	for (int index = 0; index < 3; index++) {
+		String i = Integer.toString(index);
+%>
+        <tr>
+          <td><%= cid %></td>
+          <td><z:conversation id='<%= cid %>' index='<%= i %>' field="subject"/></td>
+          <td><z:conversation id='<%= cid %>' index='<%= i %>' field="from"/></td>
+          <td><z:conversation id='<%= cid %>' index='<%= i %>' field="to"/></td>
+          <td><z:conversation id='<%= cid %>' index='<%= i %>' field="cc"/></td>
+          <td><z:conversation id='<%= cid %>' index='<%= i %>' field="bcc"/></td>
+        </tr>
+<%
+	}
+%>
+      </table>
+
+    <hr /> 
+      <h3>Contact</h3>
       <table border="1">
         <tr>
           <td>id</td>
@@ -67,6 +100,7 @@
       </table>
 
     <hr /> 
+      <h3>Property</h3>
       <table border="1">
         <tr>
           <td>name</td>

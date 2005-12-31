@@ -35,8 +35,8 @@ import com.zimbra.cs.service.ServiceException;
 
 public class Message extends ZimbraTag {
 
-    private String mId;
-    private String mField;
+    String mId;
+    String mField;
 
     public void setId(String val) {
         mId = val;
@@ -54,7 +54,7 @@ public class Message extends ZimbraTag {
         return mField;
     }
 
-    public String getAddressHeader(com.zimbra.cs.mailbox.Message msg, String hdr) throws ServiceException {
+    String getAddressHeader(com.zimbra.cs.mailbox.Message msg, String hdr) throws ServiceException {
         MimeMessage mm = msg.getMimeMessage();
         InternetAddress[] addrs = Mime.parseAddressHeader(mm, hdr);
         StringBuffer buf = new StringBuffer();
@@ -76,18 +76,7 @@ public class Message extends ZimbraTag {
         return buf.toString();
     }
     
-    public String getContentStart(Account acct, OperationContext octxt) throws ZimbraTagException, ServiceException {
-        if (mId == null) {
-            throw ZimbraTagException.MISSING_ATTR("id");
-        }
-        if (mField == null) {
-            throw ZimbraTagException.MISSING_ATTR("field");
-        }
-        int mid = Integer.parseInt(mId);
-        String id = acct.getId();
-        Mailbox mbox = Mailbox.getMailboxByAccountId(id);
-        com.zimbra.cs.mailbox.Message msg = mbox.getMessageById(octxt, mid);
-
+    String getMessageContent(com.zimbra.cs.mailbox.Message msg) throws ServiceException {
         if (mField.equals("subject")) {
         	return msg.getSubject();
         } else if (mField.equals("from") ||
@@ -98,6 +87,19 @@ public class Message extends ZimbraTag {
         } else if (mField.equals("raw")) {
         	return new String(msg.getMessageContent());
         }
+    	
         return "unknown";
+    }
+    
+    public String getContentStart(Account acct, OperationContext octxt) throws ZimbraTagException, ServiceException {
+        if (mId == null) {
+            throw ZimbraTagException.MISSING_ATTR("id");
+        }
+        if (mField == null) {
+            throw ZimbraTagException.MISSING_ATTR("field");
+        }
+        int mid = Integer.parseInt(mId);
+        Mailbox mbox = Mailbox.getMailboxByAccountId(acct.getId());
+        return getMessageContent(mbox.getMessageById(octxt, mid));
     }
 }
