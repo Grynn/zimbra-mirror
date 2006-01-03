@@ -67,10 +67,22 @@ case "$1" in
         ;;
 
     'kill')
-		cpid=`cat /opt/zimbra/log/freshclam.pid`
-        kill -TERM "$cpid" 2> /dev/null
-		cpid=`cat /opt/zimbra/log/clamd.pid`
-        kill -TERM "$cpid" 2> /dev/null
+		if [ -f /opt/zimbra/log/freshclam.pid ]; then
+			cpid=`cat /opt/zimbra/log/freshclam.pid`
+			kill -TERM "$cpid" 2> /dev/null
+		fi
+		if [ -f /opt/zimbra/log/clamd.pid ]; then
+			cpid=`cat /opt/zimbra/log/clamd.pid`
+			kill -TERM "$cpid" 2> /dev/null
+		fi
+		if [ "x$platform" = "xMACOSX" ]; then
+			killall -TERM freshclam
+			killall -TERM clamd
+		else
+			killall -TERM ${zimbra_home}/clamav/bin/freshclam
+			killall -TERM ${zimbra_home}/clamav/sbin/clamd
+		fi
+		exit 0
         ;;
 
     'stop')
@@ -83,20 +95,13 @@ case "$1" in
 			kill -TERM "$cpid" 2> /dev/null
 		fi
 		if [ "x$platform" = "xMACOSX" ]; then
-			if [ -f /opt/zimbra/log/freshclam.pid ]; then
-				killall -TERM freshclam
-			fi
-			if [ -f /opt/zimbra/log/clamd.pid ]; then
-				killall -TERM clamd
-			fi
+			killall -TERM freshclam
+			killall -TERM clamd
 		else
-			if [ -f /opt/zimbra/log/freshclam.pid ]; then
-				killall -TERM ${zimbra_home}/clamav/bin/freshclam
-			fi
-			if [ -f /opt/zimbra/log/clamd.pid ]; then
-				killall -TERM ${zimbra_home}/clamav/sbin/clamd
-			fi
+			killall -TERM ${zimbra_home}/clamav/bin/freshclam
+			killall -TERM ${zimbra_home}/clamav/sbin/clamd
 		fi
+		exit 0
         ;;
     
     'restart')
