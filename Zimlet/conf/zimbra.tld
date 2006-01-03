@@ -96,4 +96,25 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
   </tag>
+  <tag>
+    <name>zimletconfig</name>
+    <tagclass>com.zimbra.cs.taglib.ZimletConfig</tagclass>
+    <bodycontent>empty</bodycontent>
+    <info>zimlet configuration</info>
+    <attribute>
+      <name>zimlet</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>name</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>scope</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
 </taglib>

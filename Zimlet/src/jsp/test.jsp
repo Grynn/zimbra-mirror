@@ -122,5 +122,30 @@
       </table>
 
     <hr /> <z:property zimlet="com_zimbra_sforce" name="passwd" action="set" value="foobar"/>
+
+    <hr /> 
+      <h3>Config</h3>
+      <table border="1">
+        <tr>
+          <td>zimlet</td>
+          <td>name</td>
+          <td>value</td>
+        </tr>
+        <tr>
+          <td>com_zimbra_bugz</td>
+          <td>url</td>
+          <td><z:zimletconfig zimlet="com_zimbra_bugz" name="url" scope="global"/></td>
+        </tr>
+        <tr>
+          <td>com_zimbra_bugz</td>
+          <td>url</td>
+          <td><z:zimletconfig zimlet="com_zimbra_bugz" name="url" scope="local"/></td>
+        </tr>
+        <tr>
+          <td>com_zimbra_bugz</td>
+          <td>url</td>
+          <td><z:zimletconfig zimlet="com_zimbra_bugz" name="url"/></td>
+        </tr>
+      </table>
   </body>
 </html>
