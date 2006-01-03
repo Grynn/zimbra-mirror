@@ -55,7 +55,7 @@ my $res = $ua->request($req);
 if ($res->is_success) {
 	print "Notification complete\n\n";
 } else {
-	print "ERROR: Notification failed $res->status_line, "\n";
+	print "ERROR: Notification failed $res->status_line", "\n";
 }
 
 exit (0);
