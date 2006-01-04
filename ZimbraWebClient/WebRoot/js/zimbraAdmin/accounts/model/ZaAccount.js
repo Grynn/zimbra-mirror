@@ -749,9 +749,6 @@ function() {
 						ZaAccount._accountStatus(this.attrs[ZaAccount.A_accountStatus]), html, idx);
 		// TODO: COS
 		idx = this._addRow(ZaMsg.NAD_DisplayName, this.attrs[ZaAccount.A_displayname], html, idx);
-		/*if(!ZaSettings.isDomainAdmin) {
-			idx = this._addRow(ZaMsg.NAD_ZimbraID, this.attrs[ZaItem.A_zimbraId], html, idx);
-		}*/
 		if(ZaSettings.SERVERS_ENABLED) {
 			idx = this._addRow(ZaMsg.NAD_MailServer, this.attrs[ZaAccount.A_mailHost], html, idx);
 		}

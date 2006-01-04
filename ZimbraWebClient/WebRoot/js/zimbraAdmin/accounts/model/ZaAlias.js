@@ -90,10 +90,6 @@ function() {
 			idx = this._addRow(ZaMsg.NAD_AccountStatus, 
 						ZaAccount._accountStatus(account.attrs[ZaAccount.A_accountStatus]), html, idx);		
 			
-			/*if(!ZaSettings.isDomainAdmin) {
-				idx = this._addRow(ZaMsg.NAD_ZimbraID,
-				 account.attrs[ZaAccount.A_zimbraId], html, idx);
-			}*/
 			if(ZaSettings.SERVERS_ENABLED) {
 				idx = this._addRow(ZaMsg.NAD_MailServer, 
 				account.attrs[ZaAccount.A_mailHost], html, idx);

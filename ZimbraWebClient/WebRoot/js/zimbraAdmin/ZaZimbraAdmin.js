@@ -44,7 +44,7 @@ function ZaZimbraAdmin(appCtxt) {
 	this._appFactory = new Object();
 	this._appFactory[ZaZimbraAdmin.ADMIN_APP] = ZaApp;
  
- 	this._schedule(this.startup);								// creates the banner
+ 	this.startup();
 	this.aboutDialog = new ZaAboutDialog(this._shell,null,ZaMsg.about_title);
 }
 
@@ -196,13 +196,17 @@ ZaZimbraAdmin.logOff =
 function() {
 	ZmCsfeCommand.clearAuthToken();
 	window.onbeforeunload = null;
+	
+	// NOTE: Mozilla sometimes handles UI events while the page is
+	//       unloading which references classes and objects that no
+	//       longer exist. So we put up the busy veil and reload
+	//       after a short delay.
+	var shell = DwtShell.getShell(window);
+	shell.setBusy(true);
+	
 	var locationStr = location.protocol + "//" + location.hostname + ((location.port == '80')? "" : ":" +location.port) + "/zimbraAdmin";
-	if (AjxEnv.isIE){
-		var act = new AjxTimedAction(null, ZaZimbraAdmin.redir, [locationStr]);
-		AjxTimedAction.scheduleAction(act, 1);
-	} else {
-		window.location = locationStr;
-	}
+	var act = new AjxTimedAction(null, ZaZimbraAdmin.redir, [locationStr]);
+	AjxTimedAction.scheduleAction(act, 100);
 }
 
 ZaZimbraAdmin.redir =
@@ -224,30 +228,9 @@ function() {
 		
 		//initialize my rights
 		ZaSettings.init();		
-		//draw stuff
-		var elements = new Object();
-		elements[ZaAppViewMgr.C_SASH] = new DwtSash(this._shell, DwtSash.HORIZONTAL_STYLE,"console_inset_app_l", 20);
-		elements[ZaAppViewMgr.C_BANNER] = this._createBanner();		
-		elements[ZaAppViewMgr.C_APP_CHOOSER] = this._createAppChooser();
-		elements[ZaAppViewMgr.C_STATUS] = this._statusBox = new DwtText(this._shell, "statusBox", Dwt.ABSOLUTE_STYLE);
-		this._statusBox.setScrollStyle(Dwt.CLIP);
-		this._setLicenseStatusMessage();
-	// the outer element of the entire skin is hidden until this point
-	// so that the skin won't flash (become briefly visible) during app loading
-		if (skin && skin.showSkin)
-			skin.showSkin(true);		
-		this._appViewMgr.addComponents(elements, true);
-		this._launchApp();
-		
-		elements = new Object();
-		elements[ZaAppViewMgr.C_TREE] = this.getOverviewPanelController().getOverviewPanel();
-		elements[ZaAppViewMgr.C_SEARCH] = this._app.getAccountListController().getSearchPanel();		
-		elements[ZaAppViewMgr.C_CURRENT_APP] = new ZaCurrentAppToolBar(this._shell);
-		this._appViewMgr.addComponents(elements, true);
 	} catch (ex) {
 		this._handleException(ex, "ZaZimbraAdmin.prototype.startup", null, true);
 	}
-	this._schedule(this._killSplash);	// kill splash screen	
 }
 
 ZaZimbraAdmin.prototype._setLicenseStatusMessage = function () {
@@ -438,8 +421,30 @@ function() {
 	if (!this._app)
 		this._createApp();
 
+	//draw stuff
+	var elements = new Object();
+	elements[ZaAppViewMgr.C_SASH] = new DwtSash(this._shell, DwtSash.HORIZONTAL_STYLE,"console_inset_app_l", 20);
+	elements[ZaAppViewMgr.C_BANNER] = this._createBanner();		
+	elements[ZaAppViewMgr.C_APP_CHOOSER] = this._createAppChooser();
+	elements[ZaAppViewMgr.C_STATUS] = this._statusBox = new DwtText(this._shell, "statusBox", Dwt.ABSOLUTE_STYLE);
+	this._statusBox.setScrollStyle(Dwt.CLIP);
+	this._setLicenseStatusMessage();
+	// the outer element of the entire skin is hidden until this point
+	// so that the skin won't flash (become briefly visible) during app loading
+	if (skin && skin.showSkin)
+		skin.showSkin(true);		
+	this._appViewMgr.addComponents(elements, true);
+
 	this._app.launch();
-}
+
+	var elements = new Object();
+	elements[ZaAppViewMgr.C_TREE] = this.getOverviewPanelController().getOverviewPanel();
+	elements[ZaAppViewMgr.C_SEARCH] = this._app.getAccountListController().getSearchPanel();		
+	elements[ZaAppViewMgr.C_CURRENT_APP] = new ZaCurrentAppToolBar(this._shell);
+	this._appViewMgr.addComponents(elements, true);
+
+	this._killSplash();
+};
 
 // Listeners
 
@@ -452,6 +457,7 @@ function(ev) {
 
 ZaZimbraAdmin.prototype._showLoginDialog =
 function(bReloginMode) {
+	this._killSplash();
 	this._authenticating = true;
 	this._loginDialog.setVisible(true, false);
 	this._loginDialog.setUpKeyHandlers();	

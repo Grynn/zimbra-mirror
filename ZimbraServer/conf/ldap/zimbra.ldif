@@ -51,6 +51,7 @@ zimbraAccountClientAttr: zimbraFeatureFiltersEnabled
 zimbraAccountClientAttr: zimbraPasswordMinLength
 zimbraAccountClientAttr: zimbraPasswordMaxLength
 zimbraAccountClientAttr: zimbraId
+zimbraAccountClientAttr: zimbraIsDomainAdminAccount
 zimbraCalendarCompatibilityMode: standard
 zimbraCOSInheritedAttr: zimbraAttachmentsBlocked
 zimbraCOSInheritedAttr: zimbraAttachmentsIndexingEnabled
