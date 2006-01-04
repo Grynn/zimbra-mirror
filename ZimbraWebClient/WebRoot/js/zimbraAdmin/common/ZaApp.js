@@ -55,8 +55,7 @@ function() {
 
 ZaApp.prototype.launch =
 function(appCtxt) {
-	var adminType = AjxCookie.getCookie(document, "ZA_ADMIN_TYPE_COOKIE");
-	if(ZaSettings.STATUS_ENABLED && adminType != "domain") {
+	if(ZaSettings.STATUS_ENABLED) {
 		this.getStatusViewController().show();
 	} else if(ZaSettings.ADDRESSES_ENABLED) {
 		this._appCtxt.getAppController()._showAccountsView([ZaItem.ACCOUNT,ZaItem.DL,ZaItem.ALIAS],null);
@@ -67,8 +66,7 @@ function(appCtxt) {
 ZaApp.prototype.setActive =
 function(active) {
 	if (active) {
-		var adminType = AjxCookie.getCookie(document, "ZA_ADMIN_TYPE_COOKIE");
-		if(ZaSettings.STATUS_ENABLED && adminType != "domain") {
+		if(ZaSettings.STATUS_ENABLED) {
 			this.getStatusViewController().show();	
 		} else if(ZaSettings.ADDRESSES_ENABLED) {
 			this._appCtxt.getAppController()._showAccountsView([ZaItem.ACCOUNT,ZaItem.DL,ZaItem.ALIAS],null);
