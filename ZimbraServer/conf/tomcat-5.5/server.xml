@@ -34,7 +34,7 @@
              resourceName="UserDatabase" />
 
       <Host name="localhost" appBase="webapps" >
-	  <Context path="/" docBase="${catalina.home}/webapps/zimbra" debug="0" >
+	  <Context path="/" docBase="${catalina.home}/webapps/zimbra" debug="0" crossContext="true">
 	      
 	  </Context>
 	  </Host>

@@ -38,10 +38,12 @@ import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.RequestDispatcher;
 
 public class SetHeaderFilter implements Filter {
     
@@ -201,7 +203,7 @@ public class SetHeaderFilter implements Filter {
     // --------------------------------------------------------------
 
     /**
-     * Main filter method.
+     * Main filter method. 
      */
     public void doFilter ( ServletRequest request, ServletResponse response,
                            FilterChain chain ) throws IOException,
@@ -229,8 +231,22 @@ public class SetHeaderFilter implements Filter {
         
         if( uri.toLowerCase().indexOf("microsoft-server-activesync") != -1 )
         {
-			request.getRequestDispatcher( "/service/extension/activesync").forward( request, response );
-			return;
+			if(debug > 0){ System.out.println("ActiveSync client detected..."); }
+			try
+			{
+				String targetContextStr = "/service/";
+				ServletContext myContext = config.getServletContext();
+				ServletContext targetContext = myContext.getContext( targetContextStr );
+				RequestDispatcher dispatcher = targetContext.getRequestDispatcher( "/extension/activesync" );
+				dispatcher.forward( request, response );
+				return;
+			}catch(NullPointerException npe)
+			{
+				//if this happens, make sure in server.xml the context element for the zimbra app
+				//has crossContext=true
+				if(debug >0){System.out.println("unable to forward activesync request");}
+			}
+			
         }
 
         // before we check whether we can compress, let's check
