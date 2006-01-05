@@ -147,6 +147,7 @@ CREATE TABLE disk_aggregate (
 	total				INTEGER UNSIGNED,
 	available			INTEGER UNSIGNED,
 	INDEX i_device (device),
+	INDEX i_host (host),
 	INDEX i_period_start (period_start),
 	INDEX i_period_end (period_end)
 ) ENGINE = MyISAM;

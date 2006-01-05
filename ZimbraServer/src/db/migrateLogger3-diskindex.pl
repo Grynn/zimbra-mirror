@@ -44,6 +44,7 @@ sub addIndices() {
 
 	my $sql = <<EOF;
 alter table disk_aggregate add index i_device (device);
+alter table disk_aggregate add index i_host (host);
 alter table disk_aggregate add index i_period_start (period_start);
 alter table disk_aggregate add index i_period_end (period_end);
 EOF
