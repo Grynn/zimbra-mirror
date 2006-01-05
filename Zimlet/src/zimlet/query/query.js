@@ -38,12 +38,15 @@ function() {
 	stylesheet = this.getResource("google.xsl");
 	processor = AjxXslt.createFromUrl(stylesheet);
 	this._googleXslt = processor;
+	stylesheet = this.getResource("amazon.xsl");
+	processor = AjxXslt.createFromUrl(stylesheet);
+	this._amazonXslt = processor;
 };
 
 query.prototype.queryYahoo =
 function(q, canvas) {
 	var request = new AjxRpcRequest("query");
-	var q_url = this.getConfig("yahoUrl")+q;
+	var q_url = this.getConfig("yhooUrl")+q;
 	var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(q_url);
 	request.invoke(null, url, null, new AjxCallback(this, query._callback, [ canvas, this._yahooXslt ]), true);
 };
@@ -73,6 +76,27 @@ function(q, canvas) {
 	var request = new AjxRpcRequest("query");
 	var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(this.getConfig("googUrl"));
 	request.invoke(reqmsg.join(""), url, {"Content-Type": "text/xml"}, new AjxCallback(this, query._callback, [ canvas, this._googleXslt ]), false);
+};
+
+query.prototype.queryAmazon =
+function(q, canvas) {
+	var request = new AjxRpcRequest("query");
+	var q_url = this.getConfig("amznUrl");
+	var args = { Service: "AWSECommerceService", 
+				 Operation: "ItemSearch", 
+				 SearchIndex: "Music", 
+//				 SearchIndex: "Books", 
+				 ResponseGroup: "Request,Small", 
+				 Version: "2004-11-10" };
+	args.SubscriptionId = this.getConfig("amazonKey");
+	args.Keywords = q;
+	var sep = "?";
+	for (var arg in args) {
+		q_url = q_url + sep + arg + "=" + args[arg];
+		sep = "&";
+	}
+	var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(q_url);
+	request.invoke(null, url, null, new AjxCallback(this, query._callback, [ canvas, this._amazonXslt ]), true);
 };
 
 

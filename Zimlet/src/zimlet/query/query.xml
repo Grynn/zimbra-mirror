@@ -2,6 +2,7 @@
 	<include>query.js</include>
 	<resource>yahoo.xsl</resource>
 	<resource>google.xsl</resource>
+	<resource>amazon.xsl</resource>
 	<handlerObject>query</handlerObject>
 	<contentObject type="query">
         <matchOn>
