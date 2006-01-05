@@ -14,16 +14,19 @@
 	<property name="dist.lib.dir" location="${dist.dir}/lib" />
 	<property name="dist.zimlet.dir" location="${dist.dir}/zimlets" />
 
+	<property name="server.jars.dir" location="../ZimbraServer/jars" />
+	<property name="zimbrastore.jar" location="../ZimbraServer/build/dist/lib/zimbrastore.jar" />
 	<property name="jars.dir" location="jars" />
 	<property name="config.dir" location="conf" />
 	<property name="src.dir" location="src" />
+	<property name="src.zimlet.dir" location="${src.dir}/zimlet" />
 	<property name="src.java.dir" location="${src.dir}/java" />
 	<property name="src.jsp.dir" location="${src.dir}/jsp" />
 
 	<property name="generated.dir" location="${build.dir}/generated" />
 	<property name="generated.java.dir" location="${generated.dir}/src/java" />
 
-	<property name="zimlets" value="com_zimbra_phone,com_zimbra_po,com_zimbra_tracking,com_zimbra_url,com_zimbra_ymaps,com_zimbra_sforce,com_zimbra_amzn,com_zimbra_bugz"/>
+	<property name="zimlets" value="query"/>
 
 	<path id="all.java.path">
 		<pathelement location="${src.java.dir}" />
@@ -34,7 +37,17 @@
 		<fileset dir="${jars.dir}">
 			<include name="**/*.jar" />
 		</fileset>
+		<fileset dir="${server.jars.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset file="${zimbrastore.jar}"/>
 	</path>
+	
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+	   <classpath>
+	     <pathelement location="jars/ant-contrib-1.0b1.jar"/>
+	   </classpath>
+	</taskdef>
 	
 	<target name="dev-sync" depends="jar">
 		<copy verbose="true" todir="${deploy.dir}${deploy.jsp.path}">
@@ -73,31 +86,16 @@
 
 	<target name="reload-zimlets" depends="install-zimlets"/>
 
-	<target name="package-zimlets" depends="package-zimlets-core,package-zimlets-extra"/>
-	<target name="package-zimlets-core">
+	<target name="package-zimlets">
 		<foreach list="${zimlets}" target="package-zimlet" param="zimlet"/>
 	</target>
 	<target name="package-zimlet">
 		<echo>${zimlet}</echo>
 		<zip destfile="${dist.zimlet.dir}/${zimlet}.zip" update="true" >
-			<fileset dir="${src.dir}/${zimlet}" />
+			<fileset dir="${src.zimlet.dir}/${zimlet}" />
 		</zip>
 	</target>
 
-	<target name="package-zimlets-extra">
-		<!-- todo:  remove these classes from service.jar -->
-		<!-- todo2:  just use RegexHandler instead of creating custom classes -->
-		<zip destfile="${dist.zimlet.dir}/com_zimbra_phone.zip" update="true">
-			<fileset dir="${build.classes.dir}" includes="**/NANPHandler.class"/>
-		</zip>
-		<zip destfile="${dist.zimlet.dir}/com_zimbra_tracking.zip" update="true">
-			<fileset dir="${build.classes.dir}" includes="**/TrackingHandler.class"/>
-		</zip>
-		<zip destfile="${dist.zimlet.dir}/com_zimbra_url.zip" update="true" >
-			<fileset dir="${build.classes.dir}" includes="**/URLHandler.class"/>
-		</zip>
-	</target>
-	
 	<target name="deploy-zimlets" depends="package-zimlets">
 		<foreach list="${zimlets}" target="install-zimlet" param="zimlet">
 			<param name="action" value="deploy"/>

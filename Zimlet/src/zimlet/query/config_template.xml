@@ -1,0 +1,8 @@
+<zimletConfig name="query" version="1.0">
+	<global>
+        <property name="allowedDomains">*.yahoo.com,*.google.com</property>
+		<property name="yahoUrl">http://api.search.yahoo.com/WebSearchService/V1/webSearch?appid=zimbra&amp;results=5&amp;query=</property>
+		<property name="googUrl">http://api.google.com/search/beta2</property>
+        <property name="googleKey">ifPB8JNQFHIcFly3fJWKEqZ7MPOj7lur</property>
+    </global>
+</zimletConfig>

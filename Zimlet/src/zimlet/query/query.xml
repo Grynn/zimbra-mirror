@@ -1,0 +1,11 @@
+<zimlet name="query" version="1.0" description="query">
+	<include>query.js</include>
+	<resource>yahoo.xsl</resource>
+	<resource>google.xsl</resource>
+	<handlerObject>query</handlerObject>
+	<contentObject type="query">
+        <matchOn>
+            <regex attrs="ig">zimbra</regex>
+        </matchOn>
+    </contentObject>
+</zimlet>
