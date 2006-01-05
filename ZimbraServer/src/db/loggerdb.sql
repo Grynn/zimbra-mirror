@@ -145,7 +145,10 @@ CREATE TABLE disk_aggregate (
 	period				ENUM ('hour','day','month','year'),
 	device				VARCHAR(64),
 	total				INTEGER UNSIGNED,
-	available			INTEGER UNSIGNED
+	available			INTEGER UNSIGNED,
+	INDEX i_device (device),
+	INDEX i_period_start (period_start),
+	INDEX i_period_end (period_end)
 ) ENGINE = MyISAM;
 
 CREATE TABLE config (
