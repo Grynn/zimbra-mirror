@@ -614,16 +614,18 @@ sub getLastAggPeriod {
 
 		my $ary = $sth->fetchall_arrayref;
 
-		if (@$ary) {
-			return (${$$ary[0]}[0]);
-		}
-
 		# If we don't have a value, we'll return a period 
 		# that has ended directly preceding the oldest time in 
 		# the app table or a $periodType prior to now, whichever is
 		# older
 
 		my $periodAgo = getPeriodAgo($period);
+
+		if (@$ary) {
+			if ( (${$$ary[0]}[0] cmp $periodAgo) < 0 ) {
+				return (${$$ary[0]}[0]);
+			}
+		}
 
 		my $app_table = $app;
 		my $tm = "arrive_time";
@@ -646,8 +648,11 @@ sub getLastAggPeriod {
 
 		return ($periodAgo);
 	} else {
-		# For others, we want to re-aggregate over the whole set of logs 
-		# in the $app_aggregate table
+
+		my $sth = sqlExec("select period_start from ${app}_aggregate ".
+			"where period='".$period."' order by period_start desc limit 1");
+
+		my $ary = $sth->fetchall_arrayref;
 
 		# We'll return a period 
 		# that has ended directly preceding the oldest time in 
@@ -662,6 +667,12 @@ sub getLastAggPeriod {
 		my $periodAgo = getPeriodAgo($period);
 
 		$periodAgo = tsToSqlTime(sqlTimeToTs($periodAgo),1);
+
+		if (@$ary) {
+			if ( (${$$ary[0]}[0] cmp $periodAgo) < 0 ) {
+				return (${$$ary[0]}[0]);
+			}
+		}
 
 		my $sth = sqlExec("select min(period_start) from ${app}_aggregate where ".
 			"period_start != '0000-00-00 00:00:00' ".
