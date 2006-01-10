@@ -57,10 +57,11 @@ function(url) {
 
 AjxXslt.createFromString =
 function(str) {
+		DBG.println(AjxDebug.DBG1, "create from string");
 	var xslt = new AjxXslt();
-	xslt.loadFromString(str);
+	xslt._doc.loadFromString(str);
 	
-	if (AjxEnv.isIE()) {
+	if (AjxEnv.isIE) {
 		return xslt;
 	}
 	
@@ -116,10 +117,31 @@ function(dom) {
 		return this.transformIE(dom);  // already in str
 	} else if (AjxEnv.isNav) {
 		ret = this.transformNav(dom);
+		if (ret == undefined) {
+			DBG.println(AjxDebug.DBG1, "XSL transformation failed. (transformToDocument)");
+			return dom.documentElement.innerHTML;
+		}
+		if (ret.documentElement == undefined) {
+			DBG.println(AjxDebug.DBG1, "XSL transformation failed. (empty documentElement)");
+			return dom.documentElement.innerHTML;
+		}
 	} else {
 		DBG.println(AjxDebug.DBG1, "No XSL transformation due to browser incompatibility.");
+		return dom.documentElement.innerHTML;
 	}
-	return ret.documentElement.innerHTML;
+	
+	var elem = ret.documentElement;
+	if ((elem instanceof HTMLElement) ||
+		(elem instanceof HTMLHtmlElement)) {
+		// good.
+		return elem.innerHTML;
+	} else if (elem instanceof Element) {
+		// XXX construct xml string and return it
+		DBG.println(AjxDebug.DBG1, "Transformation resulted in non-HTML element.");
+		return dom.documentElement.innerHTML;
+	}
+	DBG.println(AjxDebug.DBG1, "Transformation resulted in non-element.");
+	return dom.documentElement.innerHTML;
 };
 
 /**
