@@ -298,6 +298,7 @@ objectIdentifier zimbraPreAuthKey ZimbraAttrType:307
 objectIdentifier zimbraMailMode ZimbraAttrType:308
 objectIdentifier zimbraMtaAuthHost ZimbraAttrType:309
 objectIdentifier zimbraMtaAuthURL ZimbraAttrType:310
+objectIdentifier zimbraMtaMyNetworks ZimbraAttrType:311
 
 #################################################################
 # object class OIDs
@@ -1340,6 +1341,12 @@ attributetype ( zimbraMtaAuthHost
 	DESC 'Host running SOAP service for use by MTA auth.  Setting this sets zimbraMtaAuthURL via attr callback mechanism.'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
+
+attributetype ( zimbraMtaMyNetworks
+	NAME 'zimbraMtaMyNetworks'
+	DESC 'value of postfix mynetworks'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{1024} )
 
 attributetype ( zimbraNotes 
 	NAME 'zimbraNotes'
@@ -2624,6 +2631,7 @@ objectclass ( zimbraGlobalConfig
 		zimbraMtaCommonBlockedExtension $
 		zimbraMtaDnsLookupsEnabled $
 		zimbraMtaMaxMessageSize $
+		zimbraMtaMyNetworks $
 		zimbraMtaRecipientDelimiter $
 		zimbraMtaRelayHost $
 		zimbraMtaRestriction $
@@ -2767,6 +2775,7 @@ objectclass ( zimbraServer
 		zimbraMtaAuthHost $
 		zimbraMtaAuthURL $
 		zimbraMtaDnsLookupsEnabled $
+		zimbraMtaMyNetworks $		
 		zimbraMtaRelayHost $
 		zimbraMtaTlsAuthOnly $
 		zimbraPop3CleartextLoginEnabled $

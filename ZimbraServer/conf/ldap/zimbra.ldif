@@ -352,6 +352,7 @@ zimbraServerInheritedAttr: zimbraMtaAuthEnabled
 zimbraServerInheritedAttr: zimbraMtaAuthHost
 zimbraServerInheritedAttr: zimbraMtaAuthURL
 zimbraServerInheritedAttr: zimbraMtaDnsLookupsEnabled
+zimbraServerInheritedAttr: zimbraMtaMyNetworks
 zimbraServerInheritedAttr: zimbraMtaRelayHost
 zimbraServerInheritedAttr: zimbraMtaTlsAuthOnly
 zimbraServerInheritedAttr: zimbraPop3ServerEnabled
