@@ -350,6 +350,11 @@ function() {
 	return this._selectedOption;
 };
 
+DwtSelect.prototype.getSelectedIndex =
+function() {
+	return this.getIndexForValue(this.getValue());
+};
+
 DwtSelect.prototype.getWidth = 
 function() {
 	return DwtControl.prototype.getSize.call(this).x;
