@@ -41,6 +41,9 @@ function() {
 	stylesheet = this.getResource("amazon.xsl");
 	processor = AjxXslt.createFromUrl(stylesheet);
 	this._amazonXslt = processor;
+	stylesheet = this.getResource("wikipedia.xsl");
+	processor = AjxXslt.createFromUrl(stylesheet);
+	this._wikiXslt = processor;
 };
 
 query.prototype.queryYahoo =
@@ -99,16 +102,28 @@ function(q, canvas) {
 	request.invoke(null, url, null, new AjxCallback(this, query._callback, [ canvas, this._amazonXslt ]), true);
 };
 
+query.prototype.queryWikipedia =
+function(q, canvas) {
+	var request = new AjxRpcRequest("query");
+	var q_url = this.getConfig("wikiUrl")+q;
+	var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(q_url);
+	request.invoke(null, url, null, new AjxCallback(this, query._callback, [ canvas, this._wikiXslt ]), true);
+};
+
 
 query.prototype.toolTipPoppedUp =
 function(spanElement, obj, context, canvas) {
 	canvas.innerHTML = "<b>Query: </b>"+context;
-	this.queryGoogle(context, canvas);
+	this.queryWikipedia(context, canvas);
 };
 
 query._callback =
 function(canvas, processor, result) {
-	var resp = result.xml;
+	var html, resp = result.xml;
+	if (resp == undefined) {
+		var doc = AjxXmlDoc.createFromXml(result.text);
+		resp = doc.getDoc();
+	}
 	var html = processor.transformToString(resp);
 	canvas.innerHTML = html;
 };
