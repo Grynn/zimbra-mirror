@@ -3,12 +3,7 @@
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:amazon="http://webservices.amazon.com/AWSECommerceService/2004-11-10">
   <xsl:output method="html"/>
-  <xsl:template match="amazon:ItemSearchResponse">
-    <html>
-      <xsl:apply-templates select="amazon:Items/amazon:Item"/>
-    </html>
-  </xsl:template>
-  <xsl:template match="amazon:Item">
+  <xsl:template match="amazon:ItemSearchResponse/amazon:Items/amazon:Item">
     <div><b>ASIN: </b>    <xsl:value-of select="amazon:ASIN"/></div>
     <div><b>URL: </b>     <xsl:value-of select="amazon:DetailPageURL"/></div>
     <xsl:apply-templates select="amazon:ItemAttributes"/>
