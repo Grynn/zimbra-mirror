@@ -57,7 +57,6 @@ function(url) {
 
 AjxXslt.createFromString =
 function(str) {
-		DBG.println(AjxDebug.DBG1, "create from string");
 	var xslt = new AjxXslt();
 	xslt._doc.loadFromString(str);
 	
@@ -136,9 +135,8 @@ function(dom) {
 		// good.
 		return elem.innerHTML;
 	} else if (elem instanceof Element) {
-		// XXX construct xml string and return it
-		DBG.println(AjxDebug.DBG1, "Transformation resulted in non-HTML element.");
-		return dom.documentElement.innerHTML;
+		// ok.
+		return elem.xml;
 	}
 	DBG.println(AjxDebug.DBG1, "Transformation resulted in non-element.");
 	return dom.documentElement.innerHTML;
