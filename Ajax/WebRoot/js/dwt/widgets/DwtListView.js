@@ -46,6 +46,7 @@ function DwtListView(parent, className, posStyle, headerList, noMaximize) {
 		// setup vars needed for sorting
 		this._bSortAsc = false;
 		this._currentColId = null;
+		this._sortingEnabled = true;
 	} else {
 		this.setScrollStyle(DwtControl.SCROLL); // auto scroll
 	}
@@ -263,6 +264,7 @@ DwtListView.prototype.set =
 function(list, defaultColumnSort) {
 	
 	this._selectedItems.removeAll();
+	this.enableSorting(true);
 	this._resetList();
 	this._list = list;
 	this._now = new Date();
@@ -733,7 +735,7 @@ function(row, select) {
 DwtListView.prototype._mouseOverAction = 
 function(mouseEv, div) {
 	var type = Dwt.getAttr(div, "_type");
-	if (type == DwtListView.TYPE_HEADER_ITEM && div._isSortable && this._headerClone == null) {
+	if ((type == DwtListView.TYPE_HEADER_ITEM) && this._sortingEnabled && div._isSortable && this._headerClone == null) {
 		div.className = "DwtListView-Column DwtListView-ColumnHover";
 	} else if (type == DwtListView.TYPE_HEADER_SASH) {
 		div.style.cursor = AjxEnv.isIE ? "col-resize" : "e-resize";
@@ -863,7 +865,7 @@ function(ev) {
 
 	var type = Dwt.getAttr(div, "_type");
 	if (this._headerList && type == DwtListView.TYPE_HEADER_ITEM) {
-		if (div._isSortable && ev.button == DwtMouseEvent.LEFT) {
+		if (div._isSortable && this._sortingEnabled && ev.button == DwtMouseEvent.LEFT) {
 			this._columnClicked(div, ev);
 		} else if (ev.button == DwtMouseEvent.RIGHT) {
 			var actionMenu = this._getActionMenuForColHeader();
@@ -1388,6 +1390,11 @@ function(column, bSortByAsc) {
 	if (columnId)
 		this._setSortedColStyle(columnId);
 }
+
+DwtListView.prototype.enableSorting = 
+function(enabled) { 
+	this._sortingEnabled = enabled;
+};
 
 DwtListView.prototype.getOffset = 
 function() { 

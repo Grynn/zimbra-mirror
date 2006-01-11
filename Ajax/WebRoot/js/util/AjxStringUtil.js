@@ -401,6 +401,11 @@ function(str) {
 	return str ? str.replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&quot;/g, '"').replace(/&apos;/g,"'") : "";
 }
 
+AjxStringUtil.regExEscape =
+function(str) {
+	return str.replace(/(\W)/g, "\\$1");
+};
+
 var AjxStringUtil_calcDIV = null; // used by 'clip()' and 'wrap()' functions
 
 AjxStringUtil.calcDIV =
