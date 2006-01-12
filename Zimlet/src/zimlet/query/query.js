@@ -29,21 +29,24 @@ function query() {
 query.prototype = new ZmZimletBase;
 query.prototype.constructor = query;
 
+query.prototype._translations = {
+	yahoo: "yahoo.xsl",
+	google: "google.xsl",
+	amazon: "amazon.xsl",
+	wikipedia: "mediawiki.xsl",
+	wiktionary: "mediawiki.xsl"
+};
+
 query.prototype.init =
 function() {
 	var stylesheet, processor;
-	stylesheet = this.getResource("yahoo.xsl");
-	processor = AjxXslt.createFromUrl(stylesheet);
-	this._yahooXslt = processor;
-	stylesheet = this.getResource("google.xsl");
-	processor = AjxXslt.createFromUrl(stylesheet);
-	this._googleXslt = processor;
-	stylesheet = this.getResource("amazon.xsl");
-	processor = AjxXslt.createFromUrl(stylesheet);
-	this._amazonXslt = processor;
-	stylesheet = this.getResource("mediawiki.xsl");
-	processor = AjxXslt.createFromUrl(stylesheet);
-	this._wikiXslt = processor;
+	this._processors = {};
+	for (var key in this._translations) {
+		stylesheet = this.getResource(this._translations[key]);
+		processor = AjxXslt.createFromUrl(stylesheet);
+		this._processors[key] = processor;
+	}
+	this._query = "yahoo";
 };
 
 query.prototype.queryYahoo =
@@ -51,7 +54,7 @@ function(q, canvas) {
 	var request = new AjxRpcRequest("query");
 	var q_url = this.getConfig("yhooUrl")+q;
 	var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(q_url);
-	request.invoke(null, url, null, new AjxCallback(this, query._callback, [ canvas, this._yahooXslt ]), true);
+	request.invoke(null, url, null, new AjxCallback(this, query._callback, [ canvas, "yahoo" ]), true);
 };
 
 query.prototype.queryGoogle =
@@ -78,7 +81,7 @@ function(q, canvas) {
 
 	var request = new AjxRpcRequest("query");
 	var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(this.getConfig("googUrl"));
-	request.invoke(reqmsg.join(""), url, {"Content-Type": "text/xml"}, new AjxCallback(this, query._callback, [ canvas, this._googleXslt ]), false);
+	request.invoke(reqmsg.join(""), url, {"Content-Type": "text/xml"}, new AjxCallback(this, query._callback, [ canvas, "google" ]), false);
 };
 
 query.prototype.queryAmazon =
@@ -99,7 +102,7 @@ function(q, canvas) {
 		sep = "&";
 	}
 	var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(q_url);
-	request.invoke(null, url, null, new AjxCallback(this, query._callback, [ canvas, this._amazonXslt ]), true);
+	request.invoke(null, url, null, new AjxCallback(this, query._callback, [ canvas, "amazon" ]), true);
 };
 
 query.prototype.queryWiki =
@@ -107,23 +110,52 @@ function(url, q, canvas) {
 	var request = new AjxRpcRequest("query");
 	var q_url = url+q;
 	var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(q_url);
-	request.invoke(null, url, null, new AjxCallback(this, query._callback, [ canvas, this._wikiXslt ]), true);
+	request.invoke(null, url, null, new AjxCallback(this, query._callback, [ canvas, "wikipedia" ]), true);
 };
 
+query.prototype._evListener =
+function(ev) {
+	this._query = ev.target.innerHTML;
+};
+
+
+query.prototype.getActionMenu =
+function(obj, span, context, isDialog) {
+	if (this._menu == null) {
+		var i = 0;
+		this._menu =  new ZmPopupMenu(this._appCtxt.getShell(), "ActionMenu", isDialog);
+		for (var key in this._translations) {
+			this._menu.createMenuItem(i, null, key, null, true);
+			this._menu.addSelectionListener(i, new AjxListener(this, query.prototype._evListener));
+		}
+	}
+	return this._menu;
+};
 
 query.prototype.toolTipPoppedUp =
 function(spanElement, obj, context, canvas) {
 	canvas.innerHTML = "<b>Query: </b>"+context;
-	this.queryWiki(this.getConfig("wiktionaryUrl"), context, canvas);
+	if (this._query == "yahoo") {
+		this.queryYahoo(context, canvas);
+	} else if (this._query == "google") {
+		this.queryGoogle(context, canvas);
+	} else if (this._query == "amazon") {
+		this.queryAmazon(context, canvas);
+	} else if (this._query == "wikipedia") {
+		this.queryWiki(this.getConfig("wikipediaUrl"), context, canvas);
+	} else if (this._query == "wiktionary") {
+		this.queryWiki(this.getConfig("wiktionaryUrl"), context, canvas);
+	}
 };
 
 query._callback =
-function(canvas, processor, result) {
-	var html, resp = result.xml;
+function(canvas, id, result) {
+	var processor, html, resp = result.xml;
 	if (resp == undefined) {
 		var doc = AjxXmlDoc.createFromXml(result.text);
 		resp = doc.getDoc();
 	}
+	processor = this._processors[id];
 	var html = processor.transformToString(resp);
 	canvas.innerHTML = html;
 };
