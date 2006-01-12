@@ -41,7 +41,7 @@ function() {
 	stylesheet = this.getResource("amazon.xsl");
 	processor = AjxXslt.createFromUrl(stylesheet);
 	this._amazonXslt = processor;
-	stylesheet = this.getResource("wikipedia.xsl");
+	stylesheet = this.getResource("mediawiki.xsl");
 	processor = AjxXslt.createFromUrl(stylesheet);
 	this._wikiXslt = processor;
 };
@@ -102,10 +102,10 @@ function(q, canvas) {
 	request.invoke(null, url, null, new AjxCallback(this, query._callback, [ canvas, this._amazonXslt ]), true);
 };
 
-query.prototype.queryWikipedia =
-function(q, canvas) {
+query.prototype.queryWiki =
+function(url, q, canvas) {
 	var request = new AjxRpcRequest("query");
-	var q_url = this.getConfig("wikiUrl")+q;
+	var q_url = url+q;
 	var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(q_url);
 	request.invoke(null, url, null, new AjxCallback(this, query._callback, [ canvas, this._wikiXslt ]), true);
 };
@@ -114,7 +114,7 @@ function(q, canvas) {
 query.prototype.toolTipPoppedUp =
 function(spanElement, obj, context, canvas) {
 	canvas.innerHTML = "<b>Query: </b>"+context;
-	this.queryWikipedia(context, canvas);
+	this.queryWiki(this.getConfig("wiktionaryUrl"), context, canvas);
 };
 
 query._callback =
