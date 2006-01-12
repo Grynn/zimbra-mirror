@@ -68,8 +68,8 @@ my $url = "https://".$hosturl.":7071/service/admin/soap/";
 my $SOAP = $Soap::Soap12;
 my $d = new XmlDoc;
 $d->start('AuthRequest', $ACCTNS);
-$d->add('name', undef, undef, "zimbra");
-$d->add('password', undef, undef, "zimbra");
+$d->add('name', undef, undef, "$userId");
+$d->add('password', undef, undef, "$pw");
 $d->end();
 
 my $authResponse = $SOAP->invoke($url, $d->root());
