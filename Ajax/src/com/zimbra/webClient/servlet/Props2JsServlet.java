@@ -81,7 +81,7 @@ public class Props2JsServlet
     //
     
     private static final String BASENAME_PREFIX = "/msgs/";
-    private static final String COMPRESSED_EXT = ".jgz";
+    private static final String COMPRESSED_EXT = ".zgz";
     
     //
     // Data

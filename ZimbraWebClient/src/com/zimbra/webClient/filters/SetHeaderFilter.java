@@ -108,7 +108,7 @@ public class SetHeaderFilter implements Filter {
     }
 
     private void getExtensionsRegex () {
-        String value = getInitParameter("extensions", ".jgz,.cgz");
+        String value = getInitParameter("extensions", ".zgz");
         String [] fileExtensions = value.split(",");
         StringBuffer extensionRegexSb = new StringBuffer(".*(");
         for (int i = 0; i < fileExtensions.length; ++i){
@@ -153,7 +153,7 @@ public class SetHeaderFilter implements Filter {
             serverSupportsGzip = getInitParameterBool("shouldSupportGzip",true);
             getExtensionsRegex();
             getNoCachePatternList();
-            gzipExtension = getInitParameter("GzipExtension", ".jgz");
+            gzipExtension = getInitParameter("GzipExtension", ".zgz");
             expiresValue = getInitParameterInt("Expires", 0);
             futureCacheControl = "max-age:" + expiresValue + ", must-revalidate";
             isProdMode = getInitParameterBool("ProdMode", true);
