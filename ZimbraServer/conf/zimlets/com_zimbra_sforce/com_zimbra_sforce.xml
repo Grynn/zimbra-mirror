@@ -9,6 +9,7 @@
 
     <dragSource type="ZmContact" />
     <dragSource type="ZmMailMsg" />
+    <dragSource type="ZmAppt" />    
     <dragSource type="ZmConv" />
 
     <contextMenu>
