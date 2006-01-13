@@ -1,6 +1,6 @@
 <zimletConfig name="com_zimbra_bugz" version="1.0">
 	<global>
-		<property name="url">http://bugzilla.zimbra.com/show_bug.cgi?ctype=xml&amp;id=</property>
+		<property name="url">http://bugzilla.zimbra.com/show_bug.cgi</property>
         <property name="allowedDomains">*.zimbra.com</property>
     </global>
 </zimletConfig>

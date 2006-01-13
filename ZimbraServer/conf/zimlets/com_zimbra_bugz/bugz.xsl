@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:template match="bugzilla">
-    <html>
-      <xsl:apply-templates/>
-    </html>
-  </xsl:template>
-  <xsl:template match="bug">
+  <xsl:output method="html"/>
+  <xsl:template match="bugzilla/bug">
     <div><b>ID: </b>          <xsl:value-of select="bug_id"/></div>
     <div><b>Status: </b>      <xsl:value-of select="bug_status"/></div>
     <div><b>Priority: </b>    <xsl:value-of select="priority"/></div>
@@ -17,4 +13,5 @@
     <div><b>Owner: </b>       <xsl:value-of select="assigned_to"/></div>
     <div><b>Description: </b> <xsl:value-of select="short_desc"/></div>
   </xsl:template>
+  <xsl:template match="text()|@*"/>
 </xsl:stylesheet>

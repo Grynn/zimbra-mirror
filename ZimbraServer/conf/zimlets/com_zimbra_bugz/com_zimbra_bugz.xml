@@ -1,14 +1,14 @@
 <zimlet name="com_zimbra_bugz" version="1.0" description="Bugz">
-	<include>ZmBugzObjectHandler.js</include>
 	<resource>bugz.xsl</resource>
-	<handlerObject>ZmBugzObjectHandler</handlerObject>
-	<contentObject type="bugz">
+	<contentObject>
         <matchOn>
             <regex attrs="ig">(?:(?:\bbug(?:zilla)?:?\s*#?)|(?:show_bug.cgi\?id=))(\d+)\b</regex>
         </matchOn>
-		<onClick>
- 		    <canvas style="window"/>
-			<actionUrl target="${config.global.url}${src.$1}"/>
-		</onClick>
+        <toolTip>
+            <actionUrl target="http://bugzilla.zimbra.com/show_bug.cgi" xslt="bugz.xsl">
+                <param name="ctype">xml</param>
+                <param name="id">${src.$1}</param>
+            </actionUrl>
+        </toolTip>
     </contentObject>
 </zimlet>
