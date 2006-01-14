@@ -27,6 +27,8 @@ package XmlDoc;
 use strict;
 use warnings;
 
+use XmlElement; 
+
 BEGIN {
     use Exporter   ();
     our ($VERSION, @ISA, @EXPORT, @EXPORT_OK, %EXPORT_TAGS);

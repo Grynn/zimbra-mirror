@@ -28,83 +28,34 @@
 # Simple SOAP test-harness for the AddMsg API
 #
 
-use Date::Parse;
-use Time::HiRes qw ( time );
 use strict;
-
 use lib '.';
 
 use LWP::UserAgent;
-
+use Getopt::Long;
 use XmlElement;
 use XmlDoc;
 use Soap;
+use ZimbraSoapTest;
 
-my $hosturl;
-my $userId;
-my $pw;
+#standard options
+my ($user, $pw, $host, $help); #standard
+GetOptions("u|user=s" => \$user,
+           "p|port=s" => \$pw,
+           "h|host=s" => \$host,
+           "help|?" => \$help);
 
-
-if (defined $ARGV[2] && $ARGV[2] ne "") {
-    $hosturl = shift(@ARGV);
-    $userId = shift(@ARGV);
-    $pw = shift(@ARGV);
-} else {
-    print "USAGE: dumpsession HOSTNAME USER PW\n";
-    exit 1;
+if (!defined($user)) {
+    die "USAGE: $0 -u USER [-p PASSWD] [-h HOST]";
 }
 
-my $ACCTNS = "urn:zimbraAdmin";
-my $MAILNS = "urn:zimbraAdmin";
+my $z = ZimbraSoapTest->new($user, $host, $pw);
+$z->doAdminAuth();
 
-# If you're using ActivePerl, you'll need to go and install the Crypt::SSLeay
-# module for htps: to work...
-#
-#         ppm install http://theoryx5.uwinnipeg.ca/ppms/Crypt-SSLeay.ppd
-#
-my $url = "https://".$hosturl.":7071/service/admin/soap/";
-
-
-my $SOAP = $Soap::Soap12;
 my $d = new XmlDoc;
-$d->start('AuthRequest', $ACCTNS);
-$d->add('name', undef, undef, "$userId");
-$d->add('password', undef, undef, "$pw");
-$d->end();
+$d->add('DumpSessionsRequest', $Soap::ZIMBRA_ADMIN_NS);
 
-my $authResponse = $SOAP->invoke($url, $d->root());
-
-print "AuthResponse = ".$authResponse->to_string("pretty")."\n";
-
-my $authToken = $authResponse->find_child('authToken')->content;
-print "authToken($authToken)\n";
-
-my $sessionId = $authResponse->find_child('sessionId')->content;
-print "sessionId = $sessionId\n";
-
-my $context = $SOAP->zimbraContext($authToken, $sessionId);
-
-my $contextStr = $context->to_string("pretty");
-print("Context = $contextStr\n");
-
-$d = new XmlDoc;
-
-$d->add('DumpSessionsRequest', $MAILNS);
-
-print "\nOUTGOING XML:\n-------------\n";
-my $out =  $d->to_string("pretty");
-$out =~ s/ns0\://g;
-print $out."\n";
-
-my $start = time;
-my $firstStart = time;
-my $response;
-
-$response = $SOAP->invoke($url, $d->root(), $context);
-
-print "\nRESPONSE:\n--------------\n";
-$out =  $response->to_string("pretty");
-$out =~ s/ns0\://g;
-print $out."\n";
-
+my $response = $z->invokeAdmin($d->root());
+print "REQUEST:\n-------------\n".$z->to_string_simple($d);
+print "RESPONSE:\n--------------\n".$z->to_string_simple($response);
 

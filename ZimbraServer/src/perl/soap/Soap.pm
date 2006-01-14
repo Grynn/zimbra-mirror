@@ -34,9 +34,15 @@ use XmlElement;
 use XmlDoc;
 use Soap12;
 use Soap11;
- 
-#use overload '""' => \&to_string;
 
+#
+# If you're using ActivePerl, you'll need to go and install the Crypt::SSLeay
+# module for https:// to work...
+#
+#         ppm install http://theoryx5.uwinnipeg.ca/ppms/Crypt-SSLeay.ppd
+#
+#
+ 
 BEGIN {
     use Exporter   ();
     our ($VERSION, @ISA, @EXPORT, @EXPORT_OK, %EXPORT_TAGS);
@@ -56,6 +62,20 @@ our @EXPORT_OK;
 
 our $Soap12 = new Soap12;
 our $Soap11 = new Soap11;
+
+our $LogRequest = 0;
+our $LogResponse = 0;
+
+our $ZIMBRA_ACCT_NS = "urn:zimbraAccount";
+our $ZIMBRA_MAIL_NS = "urn:zimbraMail";
+our $ZIMBRA_ADMIN_NS = "urn:zimbraAdmin";
+
+
+sub setLogLevel {
+    shift(); 
+    $LogRequest = shift();
+    $LogResponse = shift();
+}
 
 #
 # given a XmlElement, wrap it in a SOAP envelope and return the envelope
@@ -177,7 +197,82 @@ sub toString {
     my $self = shift;
     return "SOAP ".$self->getVersion();
 }
- 
+
+#
+# Return the URL for the standard mail service  
+#    e.g.  getAdminUrl("http://localhost");
+#
+sub getMailUrl
+{
+    my ($self, $host) = @_;
+
+    return $host."/service/soap";
+}
+
+#
+# Return the URL for the admin service
+#    e.g.  getAdminUrl("https://localhost:7071");
+#
+sub getAdminUrl
+{
+    my ($self, $host) = @_;
+
+    return $host."/service/admin/soap";
+}
+
+#    
+# returns a ZimbraContext
+#
+sub stdAuthByName {
+    my ($self, $url, $acctName, $passwd) = @_;
+    return $self->doAuthByName($url, $ZIMBRA_ACCT_NS, $acctName, $passwd);
+}
+    
+
+#    
+# returns a ZimbraContext
+#
+sub adminAuthByName {
+    my ($self, $url, $acctName, $passwd) = @_;
+    return $self->doAuthByName($url, $ZIMBRA_ADMIN_NS, $acctName, $passwd);
+}
+
+#    
+# You probably want stdAuthByName() or adminAuthByName()
+# 
+sub doAuthByName {
+    my ($self, $url, $namespace, $acctName, $passwd) = @_;
+
+    my $d = new XmlDoc;
+    $d->start('AuthRequest', $namespace);
+    $d->add('account', undef, { by => "name"}, $acctName);
+    $d->add('name', undef, undef, $acctName);
+    $d->add('password', undef, undef, $passwd);
+    $d->add('nonotify');
+    $d->end();
+
+    my $authResponse = $self->invoke($url, $d->root());
+
+    # get auth token
+    my $elt = $authResponse->find_child('authToken');
+    if (!defined($elt)) { 
+        print $d->to_string("pretty")."\n";
+        print $authResponse->to_string("pretty")."\n";
+        die "Could not find AuthToken in AuthResponse";
+    }
+    my $authToken = $elt->content;
+
+    # find sessionId
+    $elt = $authResponse->find_child('sessionId');
+    if (!defined($elt)) {
+        print $authToken."\n";
+        die "Could not find sessionId in AuthToken";
+    }
+    my $sessionId = $elt->content;
+    
+    return $self->zimbraContext($authToken, $sessionId);
+}
+
 sub zimbraContext {
 	my ($self, $authtoken, $session, $wantcontext) = @_;
 	my $context = new XmlElement("context", "urn:zimbra");
@@ -197,37 +292,60 @@ sub zimbraContext {
 	return $context;		
 }
 
-# simple invoke method for now, this will get replaced
-
 sub invoke {
     my ($self, $uri, $doc, $context) = @_;
+
+    my ($toRet, $err, $req, $res);
+
+    my $reqOK = 0;
 
     my $env = $self->soapEnvelope($doc, $context);
     my $soap = $env->to_string();
     my $ua = new LWP::UserAgent();
-    my $req = new HTTP::Request(POST=> $uri);
-
+    $req = new HTTP::Request(POST=> $uri);
     $req->content_type($self->getContentType());
     $req->content_length(length($soap));
     if ($self->hasSOAPActionHeader()) {
-	$req->header("SOAPAction" => $uri);
+        $req->header("SOAPAction" => $uri);
     }
     $req->add_content($soap);
+    
+    eval {
+        $res = $ua->request($req);
+        
+        $reqOK = 1;
 
-#    print $req->content."\n\n";
-    my $res = $ua->request($req);
+        my $xml = XmlElement::parse($res->content);
 
-#    print $res->content;
+        $reqOK = 2;
+        
+        my $rsoap = Soap::determineProtocol($xml);
+        
+        die "unable to determine soap protocol" unless defined $rsoap;
+        die "unexpected soap version in response" unless $rsoap == $self;
 
-    my $xml = XmlElement::parse($res->content);
+        $toRet = $self->getElement($xml);
+    };
 
-    my $rsoap = Soap::determineProtocol($xml);
+    $err = $@;
 
-    die "unable to determine soap protocol" unless defined $rsoap;
-    die "unexpected soap version in response" unless $rsoap == $self;
+    if ( ($err && ($reqOK == 0))  || ($LogRequest > 0)) {
+        print "\nREQUEST: \n\t".$req->content."\n";
+    }
 
-    # FIXME: fault handling here
-    return $self->getElement($xml);
+    if ( ($err && ($reqOK == 2))  || ($LogResponse  > 0)) {
+        print "\nRESPONSE: \n\t".$res->content."\n";
+    }
+
+    if ($err) {
+        if ($reqOK == 0) {
+            $err = "\nError Handling Soap Request".$err;
+        } else {
+            $err = "\nError Handling Soap Response".$err;
+        }
+        die $err;
+    }
+    return $toRet;
 }
 
 1;

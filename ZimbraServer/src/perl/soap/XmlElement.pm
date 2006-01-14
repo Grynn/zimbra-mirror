@@ -31,7 +31,7 @@ use XML::Parser;
 
 #use overload '""' => \&to_string;
 
-BEGIN {
+BEGIN { 
     use Exporter   ();
     our ($VERSION, @ISA, @EXPORT, @EXPORT_OK, %EXPORT_TAGS);
 
@@ -48,7 +48,7 @@ BEGIN {
 
 our @EXPORT_OK;
 
-# 
+#
 # parses XML into a hash of hashes, where 'name' is the name
 # of the tag, 'ns' is the namespace URI,
 # 'attrs' is a hash of the attributes, 'children'

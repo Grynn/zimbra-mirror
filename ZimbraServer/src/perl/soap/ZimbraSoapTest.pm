@@ -1,0 +1,152 @@
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Version: MPL 1.1
+# 
+# The contents of this file are subject to the Mozilla Public License
+# Version 1.1 ("License"); you may not use this file except in
+# compliance with the License. You may obtain a copy of the License at
+# http://www.zimbra.com/license
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+# the License for the specific language governing rights and limitations
+# under the License.
+# 
+# The Original Code is: Zimbra Collaboration Suite Server.
+# 
+# The Initial Developer of the Original Code is Zimbra, Inc.
+# Portions created by Zimbra are Copyright (C) 2005 Zimbra, Inc.
+# All Rights Reserved.
+# 
+# Contributor(s):
+# 
+# ***** END LICENSE BLOCK *****
+#
+
+# ZimbraSoapTest package
+#
+# a bunch of not-general-purpose code to make it easy to write short
+# perl test scripts against the Zimbra server
+package ZimbraSoapTest;
+
+use strict;
+use warnings;
+use XmlElement;
+use XmlDoc;
+use Soap;
+
+sub new {
+    my ($class, $user, $host, $pw) = @_;
+    my $self  = {};
+    $self->{SOAP} = $Soap::Soap12;
+    $self->{USER} = $user;
+
+    if (!defined($pw)) {
+        $self->{PW} = "test123";
+        # check in the environment for a passwd
+        my $pwe = "ZIMBRA_PW_".$self->{USER};
+        if (defined($ENV{$pwe} && $ENV{$pwe} ne "")) {
+            $self->{PW} = $ENV{$pwe};
+        }
+    } else {
+        $self->{PW} = $pw;
+    }
+ 
+    if (!defined($host)) {
+        $self->{BASE_MAIL_URL} = "http://localhost:7070";
+        $self->{BASE_ADMIN_URL} = "https://localhost:7071";
+
+        if (defined($ENV{'ZIMBRA_MAIL_BASEURL'} && $ENV{'ZIMBRA_MAIL_BASEURL'} ne "")) {
+            $self->{BASE_MAIL_URL} = $ENV{'ZIMBRA_MAIL_BASEURL'};
+        }
+
+        if (defined($ENV{'ZIMBRA_ADMIN_BASEURL'} && $ENV{'ZIMBRA_ADMIN_BASEURL'} ne "")) {
+            $self->{BASE_ADMIN_URL} = $ENV{'ZIMBRA_ADMIN_BASEURL'};
+        }
+    } else {
+        $self->{BASE_MAIL_URL} = $host;
+        $self->{BASE_ADMIN_URL} = $host;
+    }
+    
+    $self->{CONTEXT} = undef;
+    $self->{MAIL_URL} = $self->{SOAP}->getMailUrl($self->{BASE_MAIL_URL});
+    $self->{ADMIN_URL} = $self->{SOAP}->getAdminUrl($self->{BASE_ADMIN_URL});
+
+    bless ($self, $class);
+    
+    return $self;
+}
+
+#
+# hacky helper: strip the ns: out for readability
+#
+sub to_string_simple {
+    my ($self, $document) = @_;
+    my $toRet = $document->to_string("pretty")."\n";
+    $toRet =~ s/ns0\://g;
+    return $toRet;
+}
+
+sub invokeMail
+{
+    my ($self, $document) = @_;
+    return $self->soap()->invoke($self->mailUrl(), $document, $self->{CONTEXT});
+}
+
+sub invokeAdmin
+{
+    my ($self, $document) = @_;
+    return $self->soap()->invoke($self->adminUrl(), $document, $self->{CONTEXT});
+}
+
+
+sub doStdAuth
+{
+    my $self = shift;
+    $self->{CONTEXT} = $self->{SOAP}->stdAuthByName($self->mailUrl(),
+                                                    $self->user(),
+                                                    $self->pw());
+}
+
+sub doAdminAuth
+{
+    my $self = shift;
+    $self->{CONTEXT} = $self->{SOAP}->adminAuthByName($self->adminUrl(),
+                                                      $self->user(),
+                                                      $self->pw());
+}
+
+
+##############################
+#
+# Accessors
+#
+sub soap
+{
+    my $self = shift;
+    return $self->{SOAP};
+}
+sub user
+{
+    my $self = shift;
+    return $self->{USER};
+}
+sub pw
+{
+    my $self = shift;
+    return $self->{PW};
+}
+
+sub mailUrl
+{
+    my $self = shift;
+    return $self->{MAIL_URL};
+}
+
+sub adminUrl
+{
+    my $self = shift;
+    return $self->{ADMIN_URL};
+}
+
+1;

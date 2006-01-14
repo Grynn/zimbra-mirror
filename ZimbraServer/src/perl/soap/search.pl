@@ -24,144 +24,71 @@
 # ***** END LICENSE BLOCK *****
 # 
 
-#
-# Simple SOAP test-harness for the AddMsg API
-#
-
-use Time::HiRes qw ( time );
 use strict;
-
 use lib '.';
 
 use LWP::UserAgent;
-
-use XmlElement;
+use Getopt::Long;
 use XmlDoc;
 use Soap;
+use ZimbraSoapTest;
 
-my $ACCTNS = "urn:zimbraAccount";
-my $MAILNS = "urn:zimbraMail";
+# specific to this app
+my ($searchString, $offset, $prevId, $prevSortVal, $limit, $fetch, $sortBy, $types);
+$offset = 0;
+$limit = 5;
+$fetch = 0;
+$sortBy = "dateDesc";
+$types = "message";
 
-my $url = "http://localhost:7070/service/soap/";
-#my $url = "http://dogfood:7070/service/soap/";
+#standard options
+my ($user, $pw, $host, $help); #standard
+GetOptions("u|user=s" => \$user,
+           "p|port=s" => \$pw,
+           "h|host=s" => \$host,
+           "help|?" => \$help,
+           # add specific params below:
+           "query=s" => \$searchString,
+           "sort=s" => \$sortBy,
+           "offset=i" => \$offset,
+           "limit=i" => \$limit,
+           "fetch" => \$fetch,
+           "pi=s" => \$prevId,
+           "ps=s" => \$prevSortVal);
 
-my $user;
-my $searchString;
-my $offset = 0;
 
-my $prevId;
-#my $prevOffset;
-my $prevSortVal;
 
-if (defined $ARGV[1] && $ARGV[1] ne "") {
-    $user = $ARGV[0];
-    $searchString = $ARGV[1];
-    if (defined $ARGV[2]) {
-        $offset = $ARGV[2];
-    }
-    if (defined $ARGV[4]) {
-        $prevId = $ARGV[3];
-        $prevSortVal = $ARGV[4];
-#        $prevOffset = $ARGV[5];
-    }
+if (!defined($user) || !defined($searchString) || defined($help)) {
+    my $usage = <<END_OF_USAGE;
     
-} else {
-    die "Usage search USER QUERYSTR [OFFSET] [PREV-ITEM-ID PREV-SORT-VALUE]";
+USAGE: $0 -u USER -q QUERYSTR [-s SORT] [-t TYPES] [-o OFFSET] [-l LIMIT] [-pi PREV-ITEM-ID -ps PREV-SORT-VALUE]
+    SORT = dateDesc|dateAsc|subjDesc|subjAsc|nameDesc|nameAsc|score
+    TYPES = message|conversation|contact|appointment
+END_OF_USAGE
+    die $usage;
 }
 
+my $z = ZimbraSoapTest->new($user, $host, $pw);
+$z->doStdAuth();
 
-my $SOAP = $Soap::Soap12;
 my $d = new XmlDoc;
-$d->start('AuthRequest', $ACCTNS);
-$d->add('account', undef, { by => "name"}, "$user");
-$d->add('password', undef, undef, "test123");
-$d->end();
-
-my $authResponse = $SOAP->invoke($url, $d->root());
-
-print "AuthResponse = ".$authResponse->to_string("pretty")."\n";
-
-my $authToken = $authResponse->find_child('authToken')->content;
-print "authToken($authToken)\n";
-
-my $sessionId = $authResponse->find_child('sessionId')->content;
-print "sessionId = $sessionId\n";
-
-my $context = $SOAP->zimbraContext($authToken, $sessionId);
-
-my $contextStr = $context->to_string("pretty");
-print("Context = $contextStr\n");
-
-#
-#<SearchRequest xmlns="urn:zimbraMail">
-# <query>tag:\unseen</query>
-#</SearchRequest>
-
-my %msgAttrs;
-#$msgAttrs{'types'} = "conversation";
-$msgAttrs{'types'} = "message";
-$msgAttrs{'sortby'} = "datedesc";
-$msgAttrs{'offset'} = $offset;
-$msgAttrs{'limit'} = "5";
-$msgAttrs{'fetch'} = "0";
-#$msgAttrs{'t'} = "\\unseen ,34 , \\FLAGGED";
-
-$d = new XmlDoc;
-$d->start('SearchRequest', $MAILNS, \%msgAttrs);
-
-if (defined $prevId) {
-    $d->add("cursor", undef, { "id" => $prevId, "sortVal" => $prevSortVal });
-}
-
-$d->start('query', undef, undef, $searchString);
-
-$d->end(); # 'query'
-$d->end(); # 'SearchRequest'
-
-print "\nOUTGOING XML:\n-------------\n";
-my $out =  $d->to_string("pretty"),"\n";
-$out =~ s/ns0\://g;
-print $out."\n";
-
-my $start = time;
-my $firstStart = time;
-my $response;
-
-$response = $SOAP->invoke($url, $d->root(), $context);
-#$avg = ($lastEnd - $firstStart) / $i * 1000;
-print "\nRESPONSE:\n--------------\n";
-$out =  $response->to_string("pretty"),"\n";
-$out =~ s/ns0\://g;
-print $out."\n";
-
-# my $i = 0;
-# my $end;
-# my $avg;
-# my $elapsed;
-
-# do {
-
-#     $start = time;
-#     $msgAttrs{'sortby'} = "dateDesc";
-#     $end = time;
-#     $elapsed = $end - $start;
-#     $avg = $elapsed *1000;
-#     print("Ran iter in $elapsed time ($avg ms)\n");
+$d->start('SearchRequest', $Soap::ZIMBRA_MAIL_NS,
+          { 'types' => "message",
+            'sortBy' => $sortBy,
+            'offset' => $offset,
+            'limit' => $limit,
+            'fetch' => $fetch});
+{
+    if (defined $prevId) {
+        $d->add("cursor", undef, { "id" => $prevId, "sortVal" => $prevSortVal });
+    }
     
-#     $start = time;
-#     $msgAttrs{'sortby'} = "subjdesc";
-# $response = $SOAP->invoke($url, $d->root(), $context);
-#     $end = time;
-#     $elapsed = $end - $start;
-#     $avg = $elapsed *1000;
-#     print("Ran iter in $elapsed time ($avg ms)\n");
+    $d->add('query', undef, undef, $searchString);
+    
+} $d->end(); # 'SearchRequest'
 
-# $i++;
-# } while($i < 50) ;
+my $response = $z->invokeMail($d->root());
 
-# my $lastEnd = time;
-
-#  print("\nRan $i iters in $elapsed time (avg = $avg ms)\n");
-
-
+print "REQUEST:\n-------------\n".$z->to_string_simple($d);
+print "RESPONSE:\n--------------\n".$z->to_string_simple($response);
 
