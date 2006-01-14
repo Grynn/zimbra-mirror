@@ -204,6 +204,16 @@ Com_Zimbra_SForce.prototype.done_query = function(callback, result) {
 // SOAP METHOD: create
 
 Com_Zimbra_SForce.prototype.createSFObject = function(props, type, callback) {
+	// make sure we are logged in first
+	if (!this.sessionId)
+		this.login(function() {
+			this._do_createSFObject(props, type, callback);
+		});
+	else
+		this._do_createSFObject(props, type, callback);
+};
+
+Com_Zimbra_SForce.prototype._do_createSFObject = function(props, type, callback) {
 	if (callback == null)
 		callback = false;
 	var soap = this._makeEnvelope("create");
@@ -246,10 +256,6 @@ Com_Zimbra_SForce.prototype.done_createSFObject = function(callback, result) {
 		callback.call(this, id);
 	}
 };
-
-
-
-
 
 /// Called when a new contact has been dropped onto the Zimlet panel item, this
 /// function will analyze data and take appropriate actions to insert a new
@@ -432,7 +438,6 @@ Com_Zimbra_SForce.prototype.dlg_createAccount = function(acct_data, contact_data
  				contact.AccountId = acct.Id;
 				$create_contact.call(this);
 			} else {
-				// alert("TODO: need implementation of createAccount");
 				delete acct.Id;
 				this.createSFObject(acct, "Account", function(id) {
 					var name = acct.Name || contact.Website || id;
@@ -613,6 +618,35 @@ Com_Zimbra_SForce.prototype.dlg_addNoteToAccounts = function(records, note) {
 			      }));
 };
 
+Com_Zimbra_SForce.toIsoDate = function(theDate) {
+	return AjxDateFormat.format("yyyy-MM-DD", theDate);
+};
+
+Com_Zimbra_SForce.toIsoDateTime = function(theDate) {
+	var ret = AjxDateFormat.format("yyyy-MM-DDThh:mm:ss", theDate);
+	var tz = AjxDateFormat.format("Z", theDate);
+	if (tz.length == 5)
+		tz = tz.substr(0, 3) + ":" + tz.substr(3);
+	return ret + tz;
+};
+
+Com_Zimbra_SForce.prototype.apptDropped = function(obj) {
+	var appt = {
+		ActivityDate      : Com_Zimbra_SForce.toIsoDate(obj.startDate),
+		ActivityDateTime  : Com_Zimbra_SForce.toIsoDateTime(obj.startDate),
+		DurationInMinutes : Math.round((obj.endDate.getTime() - obj.startDate.getTime()) / 60000),
+		Description       : obj.notes,
+		Subject           : obj.subject,
+		// we need to reverse engineer the salesforce SOAP API first :-\
+		// the official docs. are almost useless.
+		// Type              : "Meeting", // obj.type is always null
+		Location          : obj.location
+	};
+	this.createSFObject(appt, "Event", function(id) {
+		this.displayStatusMessage("New event registered at SForce");
+	});
+};
+
 // UI handlers
 
 /// Called by the Zimbra framework upon an accepted drag'n'drop
@@ -625,6 +659,10 @@ Com_Zimbra_SForce.prototype.doDrop = function(obj) {
 
 	    case "ZmContact":
 		this.contactDropped(obj);
+		break;
+
+	    case "ZmAppt":
+		this.apptDropped(obj);
 		break;
 
 	    default:
