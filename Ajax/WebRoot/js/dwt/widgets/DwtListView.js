@@ -574,6 +574,10 @@ function(item, skipNotify) {
 			? Dwt.getAttr(el, "_selectedStyleClass") 
 			: Dwt.getAttr(el, "_selectedDisabledStyleClass");
 
+		// reset the selected index
+		this._firstSelIndex = this._list && this._list.size() > 0
+			? this._list.indexOf(item) : -1;
+
 		if (!skipNotify && this._evtMgr.isListenerRegistered(DwtEvent.SELECTION)) {
 			var selEv = new DwtSelectionEvent(true);
 			selEv.button = DwtMouseEvent.LEFT;
@@ -963,8 +967,6 @@ function(clickedEl, ev) {
 				this._selectedItems.remove(clickedEl);
 				clickedEl.className = Dwt.getAttr(clickedEl, "_styleClass");
 				this._selEv.detail = DwtListView.ITEM_DESELECTED;
-				this._firstSelIndex = this._selectedItems.size() > 0 
-					? Dwt.getAttr(this._selectedItems.get(0), "_itemIndex") : -1;
 			} else {
 				this._selectedItems.add(clickedEl);
 				clickedEl.className = Dwt.getAttr(clickedEl, "_selectedStyleClass");
