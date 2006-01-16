@@ -83,6 +83,8 @@ aggregateAmavis();
 
 aggregateDisk();
 
+pruneLogs();
+
 unlink ( "/opt/zimbra/log/zmlogprocess.pid" );
 
 sub aggregateMta {
@@ -1166,3 +1168,35 @@ sub deleteRawLogs {
     my $sth = sqlExec("delete from raw_logs where app like '".$app."%' and id <= '".$lastId."'");
 	print "Done\n";
 }
+
+sub pruneLogs {
+	my $rawRetention = `zmprov gacf | egrep '^zimbraLogRawLifetime' | sed -e 's/zimbraLogRawLifetime: //'`;
+	chomp $rawRetention;
+	$rawRetention =~ s/d//;
+	print "RAW: $rawRetention\n";
+	my $summaryRetention = `zmprov gacf | egrep '^zimbraLogSummaryLifetime' | sed -e 's/zimbraLogSummaryLifetime: //'`;
+	chomp $summaryRetention;
+	$summaryRetention =~ s/d//;
+	print "SUM: $summaryRetention\n";
+
+	my $now = time();
+
+	my $rawBegin = tsToSqlTime($now - (60*60*24*$rawRetention),1);
+	my $summaryBegin = tsToSqlTime($now - (60*60*24*$summaryRetention),1);
+
+	my $sth;
+
+	print "Pruning raw mta logs from $rawBegin\n";
+	$sth = sqlExec ("delete from mta where arrive_time < '".$rawBegin."'");
+	print "Pruning raw amavis logs from $rawBegin\n";
+	$sth = sqlExec ("delete from amavis where arrive_time < '".$rawBegin."'");
+	print "Pruning raw disk logs from $rawBegin\n";
+	$sth = sqlExec ("delete from disk_status where time < '".$rawBegin."'");
+	print "Pruning summary mta logs from $summaryBegin\n";
+	$sth = sqlExec ("delete from mta_aggregate where period_start < '".$summaryBegin."'");
+	print "Pruning summary amavis logs from $summaryBegin\n";
+	$sth = sqlExec ("delete from amavis_aggregate where period_start < '".$summaryBegin."'");
+	print "Pruning summary disk logs from $summaryBegin\n";
+	$sth = sqlExec ("delete from disk_aggregate where period_start < '".$summaryBegin."'");
+}
+

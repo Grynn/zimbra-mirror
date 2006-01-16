@@ -110,6 +110,7 @@ sub runRemoteCommand {
 sub doStatus {
 	$services = getEnabledServices();
 	if (scalar(keys %$services) == 0) {
+		print "Cannot determine services - exiting";
 		return 1;
 	}
 	my $status = 0;
@@ -240,7 +241,7 @@ sub getLocalConfig {
 }
 
 sub getEnabledServices {
-	if (open (ZMPROV, "/opt/zimbra/bin/zmprov gs $localHostName |")) {
+	if (open (ZMPROV, "/opt/zimbra/bin/zmprov gs $localHostName 2>/dev/null |")) {
 		my @lines = <ZMPROV>;
 		close ZMPROV;
 
@@ -272,11 +273,15 @@ sub displayVersion {
 	if ($platform eq "MACOSX") {
 		my $release = ` basename /Library/Receipts/zimbra-core* | sed -e 's/zimbra-core.//' -e 's/.pkg//'`;
 		chomp $release;
-		print "\nRelease $release\n\n";
+		print "\nRelease $release $platform\n\n";
+	} elsif ($platform =~ /DEBIAN/) {
+		my $release = `dpkg -s zimbra-core | egrep '^Version:' | sed -e 's/Version: //'`;
+		chomp $release;
+		print "\nRelease $release $platform\n\n";
 	} else {
 		my $release = `rpm -q --queryformat "%{version}_%{release}" zimbra-core`;
 		my $inst = localtime (`rpm -q --queryformat "%{installtime}" zimbra-core`);
-		print "\nRelease $release installed $inst\n\n";
+		print "\nRelease $release $platform installed $inst\n\n";
 	}
 }
 

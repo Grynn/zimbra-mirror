@@ -456,7 +456,7 @@ sub readConfig{
 				$depends{$fields[3]} = $cursection;
 			}
 		} elsif ($line =~ m/^REWRITE/) {
-			$rewrites{$cursection}{$fields[1]} = $fields[2];
+			$rewrites{$cursection}{$fields[2]} = $fields[1];
 		} elsif ($line =~ m/^RESTART/) {
 			foreach (@fields) {
 				if ($_ eq "RESTART") {next;}
@@ -672,8 +672,8 @@ sub stopStartServers {
 		$forced = 1;
 		foreach (sort keys %{$rewrites{$section}}) {
 			if (! defined($written{$_})) {
-				rewriteConfig ($_, $rewrites{$section}{$_});
-				$written{$_} = $rewrites{$section}{$_};
+				rewriteConfig ($rewrites{$section}{$_}, $_);
+				$written{$_} = $_;
 			}
 		}
 		foreach (@{$todo{$section}}) {
@@ -715,8 +715,8 @@ sub stopStartServers {
 
 		foreach (sort keys %{$rewrites{$section}}) {
 			if (! defined($written{$_})) {
-				rewriteConfig ($_, $rewrites{$section}{$_});
-				$written{$_} = $rewrites{$section}{$_};
+				rewriteConfig ($rewrites{$section}{$_}, $_);
+				$written{$_} = $_;
 			}
 		}
 
@@ -734,6 +734,7 @@ sub controlProcess {
 			"antispam"	=>	"/opt/zimbra/bin/zmamavisdctl",
 			"antivirus"	=>	"/opt/zimbra/bin/zmclamdctl",
 			"sasl"	=>	"/opt/zimbra/bin/zmsaslauthdctl",
+			"tomcat"	=>	"/opt/zimbra/bin/tomcat",
 			);
 	my $action = ("restart", "stop", "start")[$stopstarts{$section}+1];
 	# Postfix, unique to the end.

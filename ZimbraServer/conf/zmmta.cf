@@ -38,6 +38,10 @@ SECTION mta
 	VAR zimbraMtaRestriction
 	VAR zimbraMtaBlockedExtension
 	VAR zimbraMtaRecipientDelimiter
+	VAR zimbraMtaMyNetworks
+	if VAR zimbraMtaMyNetworks
+		POSTCONF mynetworks VAR zimbraMtaMyNetworks
+	fi
 	LOCAL zimbra_server_hostname
 	REWRITE conf/postfix_header_checks.in conf/postfix_header_checks
 	POSTCONF myhostname		LOCAL zimbra_server_hostname
@@ -53,6 +57,20 @@ SECTION sasl
 	VAR zimbraMtaAuthURL
 REWRITE cyrus-sasl-2.1.21.ZIMBRA/etc/saslauthd.conf.in cyrus-sasl-2.1.21.ZIMBRA/etc/saslauthd.conf
 RESTART mta sasl
+
+SECTION webxml
+	VAR zimbraMailPort
+	VAR zimbraMailSSLPort
+	REWRITE tomcat/conf/zimbra.web.xml.in tomcat/webapps/zimbra/WEB-INF/web.xml
+	REWRITE tomcat/conf/zimbraAdmin.web.xml.in tomcat/webapps/zimbraAdmin/WEB-INF/web.xml
+	REWRITE tomcat/conf/service.web.xml.in tomcat/webapps/service/WEB-INF/web.xml
+RESTART tomcat
+
+SECTION mailbox
+	VAR zimbraMailPort
+	VAR zimbraMailSSLPort
+	REWRITE tomcat/conf/server.xml.in tomcat/conf/server.xml
+RESTART tomcat
 
 SECTION perdition
 	LOCAL ldap_url

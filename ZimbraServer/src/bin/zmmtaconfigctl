@@ -44,13 +44,21 @@ case "$1" in
         ;;
 
     'kill')
-		cpid=`cat /opt/zimbra/log/zmmtaconfig.pid`
-        kill -TERM "$cpid" 2> /dev/null
+		if [ -f "/opt/zimbra/log/zmmtaconfig.pid" ]; then
+			cpid=`cat /opt/zimbra/log/zmmtaconfig.pid`
+			kill -TERM "$cpid" 2> /dev/null
+			rm -f /opt/zimbra/log/zmmtaconfig.pid
+		fi
+		exit 0
         ;;
 
     'stop')
-		cpid=`cat /opt/zimbra/log/zmmtaconfig.pid`
-        kill -TERM "$cpid" 2> /dev/null
+		if [ -f "/opt/zimbra/log/zmmtaconfig.pid" ]; then
+			cpid=`cat /opt/zimbra/log/zmmtaconfig.pid`
+			kill -TERM "$cpid" 2> /dev/null
+			rm -f /opt/zimbra/log/zmmtaconfig.pid
+		fi
+		exit 0
         ;;
     
     'restart')
@@ -59,9 +67,12 @@ case "$1" in
         ;;
 	
 	'status')
-		cpid=`cat /opt/zimbra/log/zmmtaconfig.pid`
-        kill -0 "$cpid" 2> /dev/null
-		exit $?
+		if [ -f "/opt/zimbra/log/zmmtaconfig.pid" ]; then
+			cpid=`cat /opt/zimbra/log/zmmtaconfig.pid`
+			kill -0 "$cpid" 2> /dev/null
+			exit $?
+		fi
+		exit 1
 		;;
     
     *)

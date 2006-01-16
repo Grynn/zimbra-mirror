@@ -64,22 +64,7 @@ isrunning() {
 #
 # Expand war files.
 #
-unpack_webapps() {
-    if [ ! -f ${tomcat_directory}/webapps/service.war ]; then
-        echo Warning: ${tomcat_directory}/webapps/service.war does not exist
-    elif [ ! -d "${tomcat_directory}/webapps/service" ]; then
-        echo Info: expanding ${tomcat_directory}/webapps/service.war
-        mkdir "${tomcat_directory}/webapps/service"
-        (cd ${tomcat_directory}/webapps/service; jar xf ../service.war)
-    fi
-
-    if [ ! -f ${tomcat_directory}/webapps/zimbra.war ]; then
-        echo Warning: ${tomcat_directory}/webapps/zimbra.war does not exist
-    elif [ ! -d "${tomcat_directory}/webapps/zimbra" ]; then
-        echo Info: expanding ${tomcat_directory}/webapps/zimbra.war
-        mkdir "${tomcat_directory}/webapps/zimbra"
-        (cd ${tomcat_directory}/webapps/zimbra; jar xf ../zimbra.war)
-	fi
+mk_download_dir() {
 	if [ ! -d "${tomcat_directory}/webapps/zimbra/downloads" ]; then
 		mkdir ${tomcat_directory}/webapps/zimbra/downloads
 		cat >${tomcat_directory}/webapps/zimbra/downloads/index.html<<EOF
@@ -105,12 +90,25 @@ EOF
 	fi
 }
 
+rewriteconfig() {
+    /opt/zimbra/bin/zmmtaconfig mailbox > /dev/null 2>&1
+}
+
+rewriteWebXml() {
+    /opt/zimbra/bin/zmmtaconfig webxml > /dev/null 2>&1
+}
+
 #
 # Main
 #
 case "$1" in
     'start')
-        unpack_webapps
+        mk_download_dir
+		if [ x$2 = "x" ]; then
+		   rewriteconfig
+		fi
+		rewriteWebXml
+		/opt/zimbra/bin/zmtlsctl
         if [ -s ${tomcat_pidfile} ]; then
             if isrunning; then
                 echo "Error: tomcat already running (pid $pid)"
@@ -169,6 +167,7 @@ case "$1" in
 
 		lines=`wc -l ${tomcat_directory}/logs/catalina.out | awk '{print $1}'`
 		kill -3 $pid
+		sleep 2
 		newlines=`wc -l ${tomcat_directory}/logs/catalina.out | awk '{print $1}'`
 		difflines=`expr $newlines - $lines`
 		tail -${difflines} ${tomcat_directory}/logs/catalina.out > ${tomcat_directory}/logs/stacktrace.$$
