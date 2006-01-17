@@ -470,7 +470,7 @@ function(delay) {
 		hBorder += (ppHtmlElement.style.borderBottomWidth == "") ? 0 : parseInt(ppHtmlElement.style.borderBottonWidth);
 		y = pb.y + pb.height + hBorder;		
 		x = ((x + s.x) >= ws.x) ? x - (x + s.x - ws.x): x;
-		y = ((y + s.y) >= ws.y) ? y - (y + s.y - ws.y) : y;
+		//y = ((y + s.y) >= ws.y) ? y - (y + s.y - ws.y) : y;
 	} else { // Drop Down
 		vBorder = (ppHtmlElement.style.borderLeftWidth == "") ? 0 : parseInt(ppHtmlElement.style.borderLeftWidth);
 		vBorder += (ppHtmlElement.style.borderRightWidth == "") ? 0 : parseInt(ppHtmlElement.style.borderRightWidth);
@@ -478,7 +478,7 @@ function(delay) {
 		hBorder = (ppHtmlElement.style.borderTopWidth == "") ? 0 : parseInt(ppHtmlElement.style.borderTopWidth);
 		y = pb.y + hBorder;
 		x = ((x + s.x) >= ws.x) ? pb.x - s.x - vBorder: x;
-		y = ((y + s.y) >= ws.y) ? y - (y + s.y - ws.y) : y;
+		//y = ((y + s.y) >= ws.y) ? y - (y + s.y - ws.y) : y;
 	}
 	//this.setLocation(x, y);
 

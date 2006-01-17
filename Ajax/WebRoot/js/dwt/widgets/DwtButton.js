@@ -331,7 +331,7 @@ function() {
 	hBorder += (pHtmlElement.style.borderBottomWidth == "") ? 0 : parseInt(pHtmlElement.style.borderBottonWidth);
 	var y = ptw.y + pb.height + hBorder;
 	x = ((x + s.x) >= ws.x) ? x - (x + s.x - ws.x): x;
-	y = ((y + s.y) >= ws.y) ? y - (y + s.y - ws.y) : y;
+	//y = ((y + s.y) >= ws.y) ? y - (y + s.y - ws.y) : y;
 
 	//this.setLocation(x, y);
 	menu.popup(0, x, y);

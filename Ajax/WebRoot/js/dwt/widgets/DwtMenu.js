@@ -440,11 +440,52 @@ function(x, y) {
 	var ws = this.shell.getSize();
 	var s = this.getSize();
 
+	if (((this._style == DwtMenu.POPUP_STYLE || (this._style == DwtMenu.DROPDOWN_STYLE && this.parent instanceof DwtMenuItem)) && s.y >= ws.y) || 
+		(this._style == DwtMenu.DROPDOWN_STYLE && y + s.y >= ws.y)) {
+		var space = this._style == DwtMenu.POPUP_STYLE || (this._style == DwtMenu.DROPDOWN_STYLE && this.parent instanceof DwtMenuItem) ? ws.y : ws.y - y;
+		var rows = this._table.rows;
+		var numRows = rows.length;
+		var height = s.y;
+		for (var i = numRows - 1; i >= 0; i--) {
+			var row = rows[i];
+			height -= Dwt.getSize(row).y;
+			if (height < space) {
+				break;
+			}
+		}
+		var count = i;
+		for (var j = count; j < numRows; j++) {
+			var row = rows[(j - count) % count];
+			var cell = row.insertCell(row.cells.length);
+			cell.className = "DwtMenuCascadeCell";
+			var child = rows[j].cells[0].firstChild;
+			while (child != null) {
+				cell.appendChild(child);
+				child = child.nextSibling;
+			}
+		}
+		for (j = rows.length - 1; j >= count; j--) {
+			this._table.deleteRow(count);
+		}
+		var offset = numRows % count;
+		if (offset > 0) {
+			for (var j = offset; j < count; j++) {
+				var row = rows[j];
+				var cell = row.insertCell(row.cells.length);
+				cell.className = "DwtMenuCascadeCell";
+				cell.empty = true;
+				cell.innerHTML = "&nbsp;";
+			}
+		}
+		
+		s = this.getSize();
+	}
+
 	// Popup menu type
 	var newX = ((x + s.x) >= ws.x) ? x - (x + s.x - ws.x): x;
 	var newY = ((y + s.y) >= ws.y) ? y - (y + s.y - ws.y) : y;	
 	this.setLocation(newX, newY);	
-
+	
 	this.notifyListeners(DwtEvent.POPUP, this);
 
 	// Hide the tooltip
@@ -482,8 +523,7 @@ function(x, y) {
 	} else {
 		this._capturing = false;
 	}
-
-}
+};
 
 DwtMenu.prototype._doPopdown =
 function() {
@@ -518,7 +558,33 @@ function() {
 		this._menuCapObj.release();
 		this._capturing = false;
 	}
-}
+
+	if ((this._style == DwtMenu.POPUP_STYLE || this._style == DwtMenu.DROPDOWN_STYLE) &&
+		this._table.rows.length && this._table.rows[0].cells.length) {
+		var numColumns = this._table.rows[0].cells.length;
+		var numRows = this._table.rows.length;
+		for (var i = 1; i < numColumns; i++) {
+			for (var j = 0; j < numRows; j++) {
+				var cell = this._table.rows[j].cells[i];
+				if (!cell.empty) {
+					var child = cell.firstChild;
+					var row = this._table.insertRow(this._table.rows.length);
+					var cell = row.insertCell(0);
+					while (child != null) {
+						cell.appendChild(child);
+						child = child.nextSibling;
+					}
+				}
+			}
+		}
+		for (var j = 0; j < numRows; j++) {
+			var row = this._table.rows[j];
+			for (var i = row.cells.length - 1; i > 0; i--) {
+				row.deleteCell(i);
+			}
+		}
+	}
+};
 
 DwtMenu.prototype._getActiveItem = 
 function(){
