@@ -68,3 +68,8 @@ ZmCsfeResult.prototype.getException =
 function() {
 	return this._isException ? this._data : null;
 }
+
+ZmCsfeResult.prototype.isException = 
+function() {
+	return this._isException;
+}

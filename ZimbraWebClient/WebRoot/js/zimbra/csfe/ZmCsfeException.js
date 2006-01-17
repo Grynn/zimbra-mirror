@@ -70,6 +70,7 @@ ZmCsfeException.define("ACCT_EXISTS", "account.ACCOUNT_EXISTS");
 ZmCsfeException.define("ACCT_INVALID_PASSWORD", "account.INVALID_PASSWORD", ZMsg.errorInvalidPass);
 ZmCsfeException.define("ACCT_INVALID_PREF_NAME", "account.INVALID_PREF_NAME", ZMsg.errorInvalidPrefName);
 ZmCsfeException.define("ACCT_INVALID_PREF_VALUE", "account.INVALID_PREF_VALUE", ZMsg.errorInvalidPrefValue);
+ZmCsfeException.define("ACCT_MAINTENANCE_MODE", "account.MAINTENANCE_MODE");
 ZmCsfeException.define("ACCT_NO_SUCH_ACCOUNT", "account.NO_SUCH_ACCOUNT");
 ZmCsfeException.define("ACCT_NO_SUCH_SAVED_SEARCH", "account.NO_SUCH_SAVED_SEARCH", ZMsg.errorNoSuchSavedSearch);
 ZmCsfeException.define("ACCT_NO_SUCH_TAG", "account.ACCT_NO_SUCH_TAG", ZMsg.errorNoSuchTag);
