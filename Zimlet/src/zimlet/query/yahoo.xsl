@@ -4,9 +4,8 @@
 	xmlns:yahoo="urn:yahoo:srch">
   <xsl:output method="html"/>
   <xsl:template match="yahoo:ResultSet/yahoo:Result">
-    <div/>
-    <div><b>Title: </b>   <xsl:value-of select="yahoo:Title"/></div>
+    <p/>
+    <div><b>Title: </b>   <a href="{yahoo:ClickUrl}" target="_blank"><xsl:value-of select="yahoo:Title"/></a></div>
     <div><b>Summary: </b> <xsl:value-of select="yahoo:Summary"/></div>
-    <div><b>Url: </b>     <xsl:value-of select="yahoo:Url"/></div>
   </xsl:template>
 </xsl:stylesheet>

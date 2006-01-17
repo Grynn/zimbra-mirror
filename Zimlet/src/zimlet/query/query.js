@@ -31,8 +31,10 @@ query.prototype.constructor = query;
 
 query.prototype._translations = {
 	yahoo: "yahoo.xsl",
+	yahoolocal: "yahoolocal.xsl",
 	google: "google.xsl",
-	amazon: "amazon.xsl",
+	amazonmusic: "amazon.xsl",
+	amazonbooks: "amazon.xsl",
 	wikipedia: "mediawiki.xsl",
 	wiktionary: "mediawiki.xsl"
 };
@@ -51,10 +53,27 @@ function() {
 
 query.prototype.queryYahoo =
 function(q, canvas) {
-	var request = new AjxRpcRequest("query");
-	var q_url = this.getConfig("yhooUrl")+q;
+	var request = new AjxRpcRequest("queryYahoo");
+	var args = {};
+	args.appid = this.getConfig("ywsAppId");
+	args.results = this.getConfig("numResults");
+	args.query = AjxStringUtil.urlEncode(q);
+
+	var q_url;
+	if (this._query == "yahoo") {
+		q_url = this.getConfig("yhooSearchUrl");
+	} else if (this._query == "yahoolocal") {
+		q_url = this.getConfig("yhooLocalUrl");
+		args.zip = this.getConfig("zipcode");
+	}
+	var sep = "?";
+	for (var arg in args) {
+		q_url = q_url + sep + arg + "=" + args[arg];
+		sep = "&";
+	}
+
 	var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(q_url);
-	request.invoke(null, url, null, new AjxCallback(this, query._callback, [ canvas, "yahoo" ]), true);
+	request.invoke(null, url, null, new AjxCallback(this, query._callback, [ canvas, this._query ]), true);
 };
 
 query.prototype.queryGoogle =
@@ -79,36 +98,47 @@ function(q, canvas) {
 	reqmsg[i++] = '<oe xsi:type="xsd:string">UTF-8</oe>';
 	reqmsg[i++] = '</ns1:doGoogleSearch></SOAP-ENV:Body></SOAP-ENV:Envelope>';
 
-	var request = new AjxRpcRequest("query");
+	var request = new AjxRpcRequest("queryGoogle");
 	var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(this.getConfig("googUrl"));
 	request.invoke(reqmsg.join(""), url, {"Content-Type": "text/xml"}, new AjxCallback(this, query._callback, [ canvas, "google" ]), false);
 };
 
 query.prototype.queryAmazon =
 function(q, canvas) {
-	var request = new AjxRpcRequest("query");
+	var searchIndex;
+	if (this._query == "amazonmusic") {
+		searchIndex = "Music";
+	} else if (this._query == "amazonbooks") {
+		searchIndex = "Books";
+	}
+	var request = new AjxRpcRequest("queryAmazon");
 	var q_url = this.getConfig("amznUrl");
 	var args = { Service: "AWSECommerceService", 
 				 Operation: "ItemSearch", 
-				 SearchIndex: "Music", 
-//				 SearchIndex: "Books", 
+				 SearchIndex: searchIndex, 
 				 ResponseGroup: "Request,Small", 
 				 Version: "2004-11-10" };
 	args.SubscriptionId = this.getConfig("amazonKey");
-	args.Keywords = q;
+	args.Keywords = AjxStringUtil.urlEncode(q);
 	var sep = "?";
 	for (var arg in args) {
 		q_url = q_url + sep + arg + "=" + args[arg];
 		sep = "&";
 	}
 	var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(q_url);
-	request.invoke(null, url, null, new AjxCallback(this, query._callback, [ canvas, "amazon" ]), true);
+	request.invoke(null, url, null, new AjxCallback(this, query._callback, [ canvas, this._query ]), true);
 };
 
 query.prototype.queryWiki =
-function(url, q, canvas) {
-	var request = new AjxRpcRequest("query");
-	var q_url = url+q;
+function(q, canvas) {
+	var url;
+	if (this._query == "wikipedia") {
+		url = this.getConfig("wikipediaUrl");
+	} else if (this._query == "wiktionary") {
+		url = this.getConfig("wiktionaryUrl");
+	}
+	var request = new AjxRpcRequest("queryWiki");
+	var q_url = url + AjxStringUtil.urlEncode(q);
 	var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(q_url);
 	request.invoke(null, url, null, new AjxCallback(this, query._callback, [ canvas, "wikipedia" ]), true);
 };
@@ -118,6 +148,61 @@ function(ev) {
 	this._query = ev.target.innerHTML;
 };
 
+query.prototype._buttonListener =
+function(ev) {
+	var el = document.getElementById(this._subjectId);
+	var q = el.value;
+	el = document.getElementById(this._canvasId);
+	this.makeQuery(q, el);
+};
+
+query.prototype.menuItemSelected =
+function(contextMenu, menuItemId, spanElement, contentObjText, canvas) {
+	this._query = menuItemId.id;
+	var view = new DwtComposite(this.getShell());
+	var el = view.getHtmlElement();
+	var div = document.createElement("div");
+	var subjectId = Dwt.getNextId();
+	var canvasId = Dwt.getNextId();
+	
+	div.innerHTML =
+		[ "<table><tbody>",
+		  "<tr>",
+		  "<td align='right'><label for='", subjectId, "'>Search:</td>",
+		  "<td>",
+		  "<input autocomplete='off' style='width: 21em' type='text' id='", subjectId, "' value=''/>",
+		  "</td>",
+		  "</tr>",
+		  "<td colspan='2'>",
+		  "<div id='", canvasId, "'/>",
+		  "</td>",
+		  "<tr>",
+		  "</tr></tbody></table>" ].join("");
+	el.appendChild(div);
+
+	var dialog_args = {
+		title : menuItemId.label,
+		view  : view
+	};
+	var dlg = this._createDialog(dialog_args);
+	dlg.popup();
+
+	el = document.getElementById(subjectId);
+	el.select();
+	el.focus();
+
+	this._subjectId = subjectId;
+	this._canvasId = canvasId;
+	
+	dlg.setButtonListener(DwtDialog.OK_BUTTON,
+		      new AjxListener(this, query.prototype._buttonListener));
+
+	dlg.setButtonListener(DwtDialog.CANCEL_BUTTON,
+		      new AjxListener(this, function() {
+			      dlg.popdown();
+			      dlg.dispose();
+		      }));
+};
 
 query.prototype.getActionMenu =
 function(obj, span, context, isDialog) {
@@ -135,28 +220,38 @@ function(obj, span, context, isDialog) {
 query.prototype.toolTipPoppedUp =
 function(spanElement, obj, context, canvas) {
 	canvas.innerHTML = "<b>Query: </b>"+context;
-	if (this._query == "yahoo") {
-		this.queryYahoo(context, canvas);
+	this.makeQuery(context, canvas);
+};
+
+query.prototype.makeQuery =
+function(query, canvas) {
+	if (this._query == "yahoo" || this._query == "yahoolocal") {
+		this.queryYahoo(query, canvas);
 	} else if (this._query == "google") {
-		this.queryGoogle(context, canvas);
-	} else if (this._query == "amazon") {
-		this.queryAmazon(context, canvas);
-	} else if (this._query == "wikipedia") {
-		this.queryWiki(this.getConfig("wikipediaUrl"), context, canvas);
-	} else if (this._query == "wiktionary") {
-		this.queryWiki(this.getConfig("wiktionaryUrl"), context, canvas);
+		this.queryGoogle(query, canvas);
+	} else if (this._query == "amazonmusic" || this._query == "amazonbooks") {
+		this.queryAmazon(query, canvas);
+	} else if (this._query == "wikipedia" || this._query == "wiktionary") {
+		this.queryWiki(query, canvas);
 	}
 };
 
 query._callback =
 function(canvas, id, result) {
 	var processor, html, resp = result.xml;
+	if (!result.success) {
+		canvas.innerHTML = "<div><b>Web service returned error.</b></div>"+result.text;
+		return;
+	}
 	if (resp == undefined) {
 		var doc = AjxXmlDoc.createFromXml(result.text);
 		resp = doc.getDoc();
 	}
 	processor = this._processors[id];
 	var html = processor.transformToString(resp);
+	if (id == "google") {
+		html = html ? html.replace(/&gt;/g,">").replace(/&lt;/g,"<").replace(/&quot;/g, '"').replace(/&apos;/g,"'") : "";
+	}
 	canvas.innerHTML = html;
 };
 

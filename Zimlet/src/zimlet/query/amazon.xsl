@@ -4,15 +4,15 @@
     xmlns:amazon="http://webservices.amazon.com/AWSECommerceService/2004-11-10">
   <xsl:output method="html"/>
   <xsl:template match="amazon:ItemSearchResponse/amazon:Items/amazon:Item">
-    <div><b>ASIN: </b>    <xsl:value-of select="amazon:ASIN"/></div>
-    <div><b>URL: </b>     <xsl:value-of select="amazon:DetailPageURL"/></div>
+    <p/>
     <xsl:apply-templates select="amazon:ItemAttributes"/>
+    <div><b>ASIN: </b>    <xsl:value-of select="amazon:ASIN"/></div>
   </xsl:template>
   <xsl:template match="amazon:ItemAttributes">
     <xsl:apply-templates select="amazon:Title|amazon:Author|amazon:Artist|amazon:ISBN|amazon:Model|amazon:Publisher"/>
   </xsl:template>
   <xsl:template match="amazon:Title">
-    <div><b>Title: </b><xsl:value-of select="text()"/></div>
+    <div><b>Title: </b><a href="{../../amazon:DetailPageURL}" target="_blank"><xsl:value-of select="text()"/></a></div>
   </xsl:template>
   <xsl:template match="amazon:Author">
     <div><b>Author: </b><xsl:value-of select="text()"/></div>

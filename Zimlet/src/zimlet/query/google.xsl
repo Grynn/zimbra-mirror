@@ -5,8 +5,8 @@
     xmlns:google="urn:GoogleSearch">
   <xsl:output method="html"/>
   <xsl:template match="SOAP-ENV:Envelope/SOAP-ENV:Body/google:doGoogleSearchResponse/return/resultElements/item">
-    <div/>
-    <div><b>Title: </b>   <xsl:value-of select="title"/></div>
+    <p/>
+    <div><b>Title: </b>   <a href="{URL}" target="_blank"><xsl:value-of select="title"/></a></div>
     <div><b>Summary: </b> <xsl:value-of select="snippet"/></div>
     <div><b>Url: </b>     <xsl:value-of select="URL"/></div>
   </xsl:template>
