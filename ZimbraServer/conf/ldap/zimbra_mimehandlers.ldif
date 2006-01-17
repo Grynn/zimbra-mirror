@@ -33,6 +33,16 @@ zimbraMimeFileExtension: text
 zimbraMimeFileExtension: txt
 description: Plain Text Document
 
+dn: cn=text/calendar,cn=mime,cn=config,cn=zimbra
+zimbraMimeType: text/calendar
+cn: text/calendar
+objectclass: zimbraMimeEntry
+zimbraMimeIndexingEnabled: TRUE
+zimbraMimeHandlerClass: TextCalendarHandler
+zimbraMimeFileExtension: ics
+zimbraMimeFileExtension: vcs
+description: iCalendar Document
+
 dn: cn=all,cn=mime,cn=config,cn=zimbra
 zimbraMimeType: all
 cn: all
