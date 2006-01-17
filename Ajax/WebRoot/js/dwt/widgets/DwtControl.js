@@ -869,6 +869,13 @@ function(visible) {
 	Dwt.setVisible(this.getHtmlElement(), visible);
 }
 
+DwtControl.prototype.setVisibility =
+function(visible) {
+	if (!this._checkState()) return;
+		
+	Dwt.setVisibility(this.getHtmlElement(), visible);
+}
+
 DwtControl.prototype.getZIndex =
 function() {
 	if (!this._checkState()) return;
