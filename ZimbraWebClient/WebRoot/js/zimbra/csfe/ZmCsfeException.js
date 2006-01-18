@@ -23,8 +23,32 @@
  * ***** END LICENSE BLOCK *****
  */
 
-function ZmCsfeException(msg, code, method, detail) {
+function ZmCsfeException(msg, code, method, detail, data) {
 	AjxException.call(this, msg, code, method, detail);
+	
+	if (data) {
+		this.data = {};
+		for (var i = 0; i < data.length; i++) {
+			var item = data[i];
+			var key = item.n;
+			if (!this.data[key])
+				this.data[key] = [];
+			this.data[key].push(item._content);
+		}
+	}
+};
+
+ZmCsfeException._codeToMsg = {};
+
+ZmCsfeException.getErrorMsg =
+function(code, args) {
+	return args ? AjxMessageFormat.format(ZmCsfeException._codeToMsg[code], args) : ZmCsfeException._codeToMsg[code];
+};
+
+ZmCsfeException.define =
+function(name, code, msg) {
+	ZmCsfeException[name] = code;
+	ZmCsfeException._codeToMsg[code] = msg;
 };
 
 ZmCsfeException.prototype = new AjxException;
@@ -35,17 +59,9 @@ function() {
 	return "ZmCsfeException";
 };
 
-ZmCsfeException._codeToMsg = {};
-
-ZmCsfeException.getErrorMsg =
-function(code) {
-	return ZmCsfeException._codeToMsg[code];
-};
-
-ZmCsfeException.define =
-function(name, code, msg) {
-	ZmCsfeException[name] = code;
-	ZmCsfeException._codeToMsg[code] = msg;
+ZmCsfeException.prototype.getData =
+function(key) {
+	return this.data ? this.data[key] : null;
 };
 
 ZmCsfeException.define("CSFE_SVC_ERROR", "CSFE_SVC_ERROR", ZMsg.errorService);
@@ -58,10 +74,10 @@ ZmCsfeException.define("SVC_AUTH_EXPIRED", "service.AUTH_EXPIRED");
 ZmCsfeException.define("SVC_AUTH_REQUIRED", "service.AUTH_REQUIRED");
 ZmCsfeException.define("SVC_FAILURE", "service.FAILURE", ZMsg.errorService);
 ZmCsfeException.define("SVC_INVALID_REQUEST", "service.INVALID_REQUEST");
-ZmCsfeException.define("SVC_PARSE_ERROR", "service.PARSE_ERROR");
+ZmCsfeException.define("SVC_PARSE_ERROR", "service.PARSE_ERROR", ZmMsg.errorParse);
 ZmCsfeException.define("SVC_PERM_DENIED", "service.PERM_DENIED", ZMsg.errorPermission);
 ZmCsfeException.define("SVC_RESOURCE_UNREACHABLE", "service.RESOURCE_UNREACHABLE");
-ZmCsfeException.define("SVC_UNKNOWN_DOCUMENT", "service.UNKNOWN_DOCUMENT");
+ZmCsfeException.define("SVC_UNKNOWN_DOCUMENT", "service.UNKNOWN_DOCUMENT", ZmMsg.errorUnknownDoc);
 ZmCsfeException.define("SVC_WRONG_HOST", "service.WRONG_HOST");
 
 ZmCsfeException.define("ACCT_AUTH_FAILED", "account.AUTH_FAILED");
@@ -71,7 +87,7 @@ ZmCsfeException.define("ACCT_INVALID_PASSWORD", "account.INVALID_PASSWORD", ZMsg
 ZmCsfeException.define("ACCT_INVALID_PREF_NAME", "account.INVALID_PREF_NAME", ZMsg.errorInvalidPrefName);
 ZmCsfeException.define("ACCT_INVALID_PREF_VALUE", "account.INVALID_PREF_VALUE", ZMsg.errorInvalidPrefValue);
 ZmCsfeException.define("ACCT_MAINTENANCE_MODE", "account.MAINTENANCE_MODE");
-ZmCsfeException.define("ACCT_NO_SUCH_ACCOUNT", "account.NO_SUCH_ACCOUNT");
+ZmCsfeException.define("ACCT_NO_SUCH_ACCOUNT", "account.NO_SUCH_ACCOUNT", ZmMsg.errorNoSuchAcct);
 ZmCsfeException.define("ACCT_NO_SUCH_SAVED_SEARCH", "account.NO_SUCH_SAVED_SEARCH", ZMsg.errorNoSuchSavedSearch);
 ZmCsfeException.define("ACCT_NO_SUCH_TAG", "account.ACCT_NO_SUCH_TAG", ZMsg.errorNoSuchTag);
 ZmCsfeException.define("ACCT_PASS_CHANGE_TOO_SOON", "account.PASSWORD_CHANGE_TOO_SOON", ZMsg.errorPassChangeTooSoon);
@@ -85,12 +101,17 @@ ZmCsfeException.define("COS_EXISTS", "account.COS_EXISTS");
 ZmCsfeException.define("DOMAIN_EXISTS", "account.DOMAIN_EXISTS");
 
 ZmCsfeException.define("MAIL_INVALID_NAME", "mail.INVALID_NAME", ZMsg.errorInvalidName);
-ZmCsfeException.define("MAIL_NO_SUCH_FOLDER", "mail.NO_SUCH_FOLDER", ZMsg.errorNoSuchFolder);
-ZmCsfeException.define("MAIL_NO_SUCH_TAG", "mail.NO_SUCH_TAG", ZMsg.errorNoSuchTag);
 ZmCsfeException.define("MAIL_NO_SUCH_CONV", "mail.NO_SUCH_CONV", ZMsg.errorNoSuchConv);
+ZmCsfeException.define("MAIL_NO_SUCH_FOLDER", "mail.NO_SUCH_FOLDER", ZMsg.errorNoSuchFolder);
 ZmCsfeException.define("MAIL_NO_SUCH_MSG", "mail.NO_SUCH_MSG", ZMsg.errorNoSuchMsg);
 ZmCsfeException.define("MAIL_NO_SUCH_PART", "mail.NO_SUCH_PART", ZMsg.errorNoSuchPart);
-ZmCsfeException.define("MAIL_QUOTA_EXCEEDED", "mail.QUOTA_EXCEEDED", ZMsg.errorQuotaExceeded);
+ZmCsfeException.define("MAIL_NO_SUCH_TAG", "mail.NO_SUCH_TAG", ZMsg.errorNoSuchTag);
 ZmCsfeException.define("MAIL_QUERY_PARSE_ERROR", "mail.QUERY_PARSE_ERROR", ZMsg.errorQueryParse);
+ZmCsfeException.define("MAIL_QUOTA_EXCEEDED", "mail.QUOTA_EXCEEDED", ZMsg.errorQuotaExceeded);
+ZmCsfeException.define("MAIL_SEND_ABORTED_ADDRESS_FAILURE", "mail.SEND_ABORTED_ADDRESS_FAILURE");
 ZmCsfeException.define("MAIL_SEND_FAILURE", "mail.SEND_FAILURE", ZMsg.mailSendFailure);
 ZmCsfeException.define("MAIL_TOO_MANY_CONTACTS", "mail.TOO_MANY_CONTACTS", ZMsg.errorTooManyContacts);
+
+// structured data keys
+ZmCsfeException.MAIL_SEND_ABORTED_ADDRESS_FAILURE_INVALID = "invalid";
+ZmCsfeException.MAIL_SEND_ABORTED_ADDRESS_FAILURE_UNSENT = "unsent";
