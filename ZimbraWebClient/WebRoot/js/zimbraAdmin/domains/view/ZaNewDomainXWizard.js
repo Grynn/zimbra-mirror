@@ -413,6 +413,11 @@ function() {
 			this.changeButtonStateForStep(9);			
 		}
 	} else if (this._containedObject[ZaModel.currentStep] == 9) {
+		//check if LDAP URL is provided
+		if(!this._containedObject.attrs[ZaDomain.A_AuthLdapURL]) {
+			this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_LDAP_URL_REQUIRED);
+			return false;
+		}
 		if(this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad) {
 			this.goPage(11);		
 			this.changeButtonStateForStep(11);

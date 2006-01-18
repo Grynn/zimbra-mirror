@@ -252,6 +252,10 @@ function() {
  		this.testSetings();
 		this.goPage(5);
 	} else if (this._containedObject[ZaModel.currentStep]==2 && this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad) {
+		if(!this._containedObject.attrs[ZaDomain.A_AuthLdapURL]) {
+			this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_LDAP_URL_REQUIRED);
+			return false;
+		}	
 		this.goPage(4);//skip 3rd step for Active Directory
 	} else if (this._containedObject[ZaModel.currentStep] == 3) {
 			//clear the password if the checkbox is unchecked
