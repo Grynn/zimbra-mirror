@@ -393,7 +393,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 }
 
 .admin_xform_name_input {
-	width:25em;
+	width:200px;
 }
 
 .ZaGlobalAttachExt {
@@ -467,13 +467,6 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 }
 
 .inputBorder { 
-  border-top: 2px solid #848484;
-  border-left: 2px solid #848484;
-  border-bottom: 2px solid #FAFAFA;
-  border-right: 2px solid #FAFAFA;
-}
-
-.ZaDLView .admin_xform_name_input{ 
   border-top: 2px solid #848484;
   border-left: 2px solid #848484;
   border-bottom: 2px solid #FAFAFA;

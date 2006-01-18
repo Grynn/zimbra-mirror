@@ -462,7 +462,7 @@ function(bReloginMode) {
 	this._loginDialog.setVisible(true, false);
 	this._loginDialog.setUpKeyHandlers();	
 	try {
-		this._loginDialog.setFocus(this._appCtxt.getUsername(), bReloginMode);
+		this._loginDialog.setFocus(bReloginMode);
 	} catch (ex) {
 		// something is out of whack... just make the user relogin
 		ZaZimbraAdmin.logOff();

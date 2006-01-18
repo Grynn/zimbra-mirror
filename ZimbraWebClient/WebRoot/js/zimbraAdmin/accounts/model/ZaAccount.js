@@ -180,8 +180,8 @@ function(tmpObj, app) {
 		return false;
 	}
 
-	var emailRegEx = /^([a-zA-Z0-9_\-])+((\.)?([a-zA-Z0-9_\-])+)*@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-	if(!emailRegEx.test(tmpObj.name) ) {
+	//var emailRegEx = /^([a-zA-Z0-9_\-])+((\.)?([a-zA-Z0-9_\-])+)*@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+	if(!AjxUtil.EMAIL_RE.test(tmpObj.name) ) {
 		//show error msg
 		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_ACCOUNT_NAME_INVALID);
 		return false;
@@ -359,9 +359,8 @@ function(tmpObj, app) {
 }
 /**
 * Creates a new ZaAccount. This method makes SOAP request to create a new account record. 
-* @param attrs
-* @param name 
-* @param password
+* @param tmpObj
+* @param app 
 * @return ZaAccount
 **/
 ZaAccount.create =
@@ -859,7 +858,7 @@ function ZaAccountQuery (queryString, byDomain, byVal) {
 **/
 ZaAccount.myXModel = { 
 	items: [
-		{id:ZaAccount.A_name, type:_STRING_, ref:"name", required:true, pattern:/^([a-zA-Z0-9_\-])+((\.)?([a-zA-Z0-9_\-])+)*@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/},
+		{id:ZaAccount.A_name, type:_STRING_, ref:"name", required:true, pattern:AjxUtil.EMAIL_RE},
 		{id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId},
 		{id:ZaAccount.A_uid, type:_STRING_, ref:"attrs/"+ZaAccount.A_uid},
 		{id:ZaAccount.A_accountName, type:_STRING_, ref:"attrs/"+ZaAccount.A_accountName},
@@ -893,7 +892,7 @@ ZaAccount.myXModel = {
 		{id:ZaAccount.A_zimbraMaxPwdAge, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraMaxPwdAge, maxInclusive:2147483647, minInclusive:0},
 		{id:ZaAccount.A_zimbraEnforcePwdHistory, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraEnforcePwdHistory, maxInclusive:2147483647, minInclusive:0},
 		{id:ZaAccount.A_zimbraMailAlias, type:_LIST_, ref:"attrs/"+ZaAccount.A_zimbraMailAlias, listItem:{type:_STRING_}},
-		{id:ZaAccount.A_zimbraMailForwardingAddress, type:_LIST_, ref:"attrs/"+ZaAccount.A_zimbraMailForwardingAddress, listItem:{type:_STRING_, pattern:/^([a-zA-Z0-9_\-])+((\.)?([a-zA-Z0-9_\-])+)*@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/}},
+		{id:ZaAccount.A_zimbraMailForwardingAddress, type:_LIST_, ref:"attrs/"+ZaAccount.A_zimbraMailForwardingAddress, listItem:{type:_STRING_, pattern:AjxUtil.EMAIL_RE}},
 		{id:ZaAccount.A_zimbraPasswordMustChange, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraPasswordMustChange}, 
 		{id:ZaAccount.A_zimbraPasswordLocked, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPasswordLocked, choices:ZaModel.BOOLEAN_CHOICES}, 
 		{id:ZaAccount.A_zimbraDomainName, type:_STRING_, ref:"attrs/"+ZaAccount.A_zimbraDomainName},
