@@ -61,7 +61,7 @@ ZaDLController.prototype.show = function(entry) {
 			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
 		} else {
 			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);  				
-			entry.getMembers(true);
+			entry.getMembers();
 		}	
 		this._view.setDirty(false);
 		entry[ZaModel.currentTab] = "1"
@@ -131,12 +131,47 @@ function () {
 }
 
 ZaDLController.prototype._saveChanges = function () {
+	var retval = false;
+	var newName = null;
 	try { 
-		this._currentObject = this._view.getObject();
+		var obj = this._view.getObject();
+		//check if need to rename
+		if(this._currentObject && obj.name != this._currentObject.name && this._currentObject.id) {
+		//	var emailRegEx = /^([a-zA-Z0-9_\-])+((\.)?([a-zA-Z0-9_\-])+)*@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+			if(!AjxUtil.EMAIL_RE.test(obj.name) ) {
+				//show error msg
+				this._errorDialog.setMessage(ZaMsg.ERROR_ACCOUNT_NAME_INVALID, null, DwtMessageDialog.CRITICAL_STYLE, null);
+				this._errorDialog.popup();		
+				return retval;
+			}
+			newName = obj.name;
+		}		
+		
+		//check if need to rename
+		if(newName) {
+			changeDetails["newName"] = newName;
+			try {
+				this._currentObject.rename(newName);
+			} catch (ex) {
+				if (ex.code == ZmCsfeException.SVC_AUTH_EXPIRED || ex.code == ZmCsfeException.SVC_AUTH_REQUIRED || ex.code == ZmCsfeException.NO_AUTH_TOKEN) {
+						this._showLoginDialog();
+				} else {
+					if(ex.code == ZmCsfeException.DISTRIBUTION_LIST_EXISTS) {
+						this.popupErrorDialog(ZaMsg.FAILED_RENAME_ACCOUNT_1, ex, true);
+					} else {
+						this.popupErrorDialog(ZaMsg.FAILED_RENAME_ACCOUNT, ex, true);
+					}
+				}
+				return retval;
+			}
+		}		
+		
 		if (this._currentObject.id){
-			return this._currentObject.saveEdits();
+			retval = this._currentObject.modify(obj);
+			return retval;
 		} else {
-			if(this._currentObject.saveNew()) {
+			this._currentObject = ZaDistributionList.create(obj, this._app);
+			if(this._currentObject != null) {
 				this.fireCreationEvent(this._currentObject);
 				return true;
 			}

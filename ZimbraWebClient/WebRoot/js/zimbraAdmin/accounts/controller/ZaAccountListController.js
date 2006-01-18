@@ -296,6 +296,8 @@ function (ev) {
 					srchResult = ZaSearch.searchByQueryHolder(this._currentQuery, this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app);
 					if(srchResult.numPages >= this._currentPageNum)
 						break;
+				} else {
+					break;
 				}
 			}
 			if(this._app.getCurrentController() == this) {

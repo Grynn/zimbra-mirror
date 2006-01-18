@@ -203,8 +203,8 @@ Cos_HostNameOrIp_XModelItem = function (){}
 XModelItemFactory.createItemType("_COS_HOSTNAME_OR_IP_", "cos_hostname_or_ip", Cos_HostNameOrIp_XModelItem, Cos_String_XModelItem);
 Cos_HostNameOrIp_XModelItem.prototype.validateType = XModelItem.prototype.validateString;
 Cos_HostNameOrIp_XModelItem.prototype.maxLength = 256;
-Cos_HostNameOrIp_XModelItem.prototype.pattern = [ AjxUtil.HOST_NAME_RE, AjxUtil.IP_ADDRESS_RE ];
-
+//Cos_HostNameOrIp_XModelItem.prototype.pattern = [ AjxUtil.HOST_NAME_RE, AjxUtil.IP_ADDRESS_RE ];
+Cos_HostNameOrIp_XModelItem.prototype.pattern =  [AjxUtil.HOST_NAME_RE, AjxUtil.IP_ADDRESS_RE, AjxUtil.HOST_NAME_WITH_PORT_RE];
 /**
 * _COS_PORT_
 **/
@@ -243,6 +243,8 @@ Super_XFormItem.updateCss = function(levels) {
 	} else {
 		if(this._originalClassName != null)
 			container.className=this._originalClassName;
+		else
+			container.className="xform_field_container";
 	}
 }
 
@@ -283,23 +285,32 @@ Super_Textfield_XFormItem.prototype.initializeItems = function() {
 	var anchorCssStyle = this.getInheritedProperty("anchorCssStyle");
 	if(anchorCssStyle) {
 		this.getItems()[1].cssStyle = anchorCssStyle;
+	} else {
+		this.getItems()[1].cssStyle = "width:200px";
 	}	
 	Composite_XFormItem.prototype.initializeItems.call(this);
 	var textFieldCssClass = this.getInheritedProperty("textFieldCssClass");
 	if(textFieldCssClass) {
-		this.getItems()[0].cssStyle = textFieldCssClass;
+		this.getItems()[0].cssClass = textFieldCssClass;
 	}		
-
+	var textFieldCssStyle = this.getInheritedProperty("textFieldCssStyle");
+	if(textFieldCssStyle) {
+		this.getItems()[0].cssStyle = textFieldCssStyle;
+	}
+	var textFieldWidth = this.getInheritedProperty("textFieldWidth");
+	if(textFieldWidth) {
+		this.getItems()[0].width = textFieldWidth;
+	}	
 }	
 
 Super_Textfield_XFormItem.prototype.items = [
-	{	type:_TEXTFIELD_, ref:".", width:100,
+	{	type:_TEXTFIELD_, ref:".",
 		elementChanged: function(elementValue,instanceValue, event) {
 			this.getForm().itemChanged(this, elementValue, event);
 		},		
 		onChange:Composite_XFormItem.onFieldChange,
 		updateElement:function(value) {
-			Super_XFormItem.updateCss.call(this,1);
+			Super_XFormItem.updateCss.call(this,5);
 			Textfield_XFormItem.prototype.updateElement.call(this, value);
 		},
 		forceUpdate:true
@@ -324,6 +335,8 @@ Super_Checkbox_XFormItem.prototype.initializeItems = function() {
 	var anchorCssStyle = this.getInheritedProperty("anchorCssStyle");
 	if(anchorCssStyle) {
 		this.getItems()[1].cssStyle = anchorCssStyle;
+	} else {
+		this.getItems()[1].cssStyle = "width:200px";
 	}	
 	Composite_XFormItem.prototype.initializeItems.call(this);
 	var checkBoxLabel = this.getInheritedProperty("checkBoxLabel");
@@ -340,17 +353,13 @@ Super_Checkbox_XFormItem.prototype.initializeItems = function() {
 	this.getItems()[0].trueValue = trueValue;
 	this.getItems()[0].falseValue = falseValue;	
 }	
-/*
-Super_Checkbox_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
-	this.getForm().outputItemList(this.getItems(), this, html, updateScript, indent, this.getNumCols(), currentCol);
-}*/
 
 Super_Checkbox_XFormItem.prototype.items = [
 	{	type:_CHECKBOX_, ref:".", align:_LEFT_,
 		//trueValue:"TRUE", falseValue:"FALSE", 
 		onChange:Composite_XFormItem.onFieldChange,
 		updateElement:function(value) {
-			Super_XFormItem.updateCss.call(this,1);
+			Super_XFormItem.updateCss.call(this,5);
 			Checkbox_XFormItem.prototype.updateElement.call(this, value);
 		},
 		relevantBehavior:_PARENT_,
@@ -366,7 +375,31 @@ Super_Checkbox_XFormItem.prototype.items = [
 ];
 
 
+/**
+*	SUPER__HOSTPORT_ form item type
+**/
+Super_HostPort_XFormItem = function () {}
+XFormItemFactory.createItemType("_SUPER_HOSTPORT_", "super_hostport", Super_HostPort_XFormItem, Super_XFormItem);
 
+
+Super_HostPort_XFormItem.prototype.useParentTable = false;
+Super_HostPort_XFormItem.prototype.numCols = 3;
+
+Super_HostPort_XFormItem.prototype.items = [
+	{	type:_HOSTPORT_, ref:".",
+		onChange:Composite_XFormItem.onFieldChange,
+		updateElement:function(value) {
+			Super_XFormItem.updateCss.call(this,5);
+			//HostPort_XFormItem.prototype.updateElement.call(this, value);
+		}
+	},
+	{	
+		type:_SUPER_ANCHOR_HELPER_, ref:".",
+		relevant:"Super_XFormItem.checkIfOverWriten.call(item)",
+		relevantBehavior:_BLOCK_HIDE_,
+		onChange:Composite_XFormItem.onFieldChange,cssStyle:"width:100px"
+	}
+];
 
 
 /**
@@ -384,7 +417,7 @@ Super_Select1_XFormItem.prototype.items = [
 		trueValue:"TRUE", falseValue:"FALSE", 
 		onChange:Composite_XFormItem.onFieldChange,
 		updateElement:function(value) {
-			Super_XFormItem.updateCss.call(this,1);
+			Super_XFormItem.updateCss.call(this,5);
 			OSelect1_XFormItem.prototype.updateElement.call(this, value);
 		}
 	},

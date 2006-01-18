@@ -40,14 +40,17 @@ function ZaLoginDialog(parent, zIndex, className) {
 	var okCellId = Dwt.getNextId();
 	var errorCellId = Dwt.getNextId();
 	var licenseCellId = Dwt.getNextId();
+	var tableId = Dwt.getNextId();
 	this.hiddenBtnId = Dwt.getNextId();
     var form = document.createElement("form");
-    form.innerHTML = this._createHtml(unameId, pwordId, okCellId, errorCellId, licenseCellId);
+    form.innerHTML = this._createHtml(unameId, pwordId, okCellId, errorCellId, licenseCellId,tableId);
     htmlElement.appendChild(form);
     this._errorCell = document.getElementById(errorCellId);
     
    	document._parentId = this._htmlElId;
-   	
+	
+	this._mainTable = document.getElementById(tableId);
+
    	this._unameField = document.getElementById(unameId);
     this._unameField._parentId = this._htmlElId;
     this._unameField.onfocus = ZaLoginDialog.handleFieldFocus;
@@ -129,6 +132,11 @@ function(func, obj) {
 	this._callback = new AjxCallback(obj, func);
 }
 
+ZaLoginDialog.prototype.registerChangePassCallback =
+function(func, obj) {
+	this._changePasswordCallback = new AjxCallback(obj, func);
+}
+
 ZaLoginDialog.prototype.clearAll =
 function() {
 	this._unameField.value = this._pwordField.value = "";
@@ -180,8 +188,18 @@ function(errorStr) {
 	this._errorCell.innerHTML = html;
 }
 
+ZaLoginDialog.prototype.disablePasswordField = 
+function (disabled) {
+	this._pwordField.disabled = disabled;
+}
+
+ZaLoginDialog.prototype.disableUnameField = 
+function (disabled) {
+	this._unameField.disabled = disabled;
+}
+
 ZaLoginDialog.prototype.setFocus =
-function(username, bReloginMode) {
+function(bReloginMode) {
 	if (this._unameField.value.length > 0) {
 		this._pwordField.focus();
 	} else {
@@ -211,7 +229,7 @@ function(visible, transparentBg) {
 }
 
 ZaLoginDialog.prototype._createHtml = 
-function(unameId, pwordId, okCellId, errorCellId, licenseCellId) {
+function(unameId, pwordId, okCellId, errorCellId, licenseCellId,tableId) {
 	var html = new Array();
 	var i = 0;
 
@@ -220,7 +238,7 @@ function(unameId, pwordId, okCellId, errorCellId, licenseCellId) {
 	html[i++] = AjxImg.getImageHtml("Admin_LoginBanner");
  	html[i++] = "</td></tr>";
  	html[i++] = "<tr><td>";
- 	html[i++] = "<table cellspacing=12 class='" + this._className + "-MainPanel'>";
+ 	html[i++] = "<table cellspacing=12 class='" + this._className + "-MainPanel' id='" + tableId + "'>";
  	html[i++] = "<colgroup><col style='width:75px'></col><col style='width:225px'></col></colgroup>";
 	html[i++] = "<tr><td colspan=2 id='" + errorCellId + "'>&nbsp;</td></tr>";
 	html[i++] = "<tr><td align=right>" + ZaMsg.username + ":</td>";
@@ -233,24 +251,40 @@ function(unameId, pwordId, okCellId, errorCellId, licenseCellId) {
 	html[i++] = "</td></tr><tr><td colspan=2 style='Xborder:1px solid #eeeeee;font-size:9px;color:#999999;background-color:white;'>" + ZaMsg.splashScreenCopyright + "</td></tr></table>";
 	html[i++] = "</td></tr></table>";
 	html[i++] = "</td></tr></table>";
-/*
-	html[i++] = "<table align=center border=0 cellspacing=0 cellpadding=0><tr><td>";
-	html[i++] = "<table border=0 cellspacing=0 class='" + this._className + "-HeaderPanel'>";
-	html[i++] = "<tr height=10><td>" + AjxImg.getImageHtml("Admin_LoginBanner") + "</td></tr>";
-	html[i++] = "<tr><td><table border=0 height=32><tr><td class='" + this._className + "-HeaderText'>" + ZaMsg.loginHeader + "</td></tr>";
-	html[i++] = "<tr><td class='" + this._className + "-SubHeaderText'>&nbsp;</td></tr></table></td></tr>";
-	html[i++] = "</table></td></tr><tr><td>";
-	html[i++] = "<table border=0 cellspacing=12 class='" + this._className + "-MainPanel'>";
-	html[i++] = "<colgroup><col style='width:75px'></col><col style='width:225px'></col></colgroup>";
-	html[i++] = "<tr><td colspan=2 id='" + errorCellId + "'>&nbsp;</td></tr><tr><td align=right>" + ZaMsg.username + ":</td>";
-	html[i++] = "<td><input style=\"width:100%; height:22px\" autocomplete=OFF type=text tabIndex=1 id='" + unameId + "'/></td></tr>";
-	html[i++] = "<tr><td align=right>" + ZaMsg.password + ":</td><td><input style=\"width:100%; height:22px\" type=password tabIndex=2 id='" + pwordId + "'/></td></tr>";
-	html[i++] = "<tr>";
-	html[i++] = "<td colspan=2 id='" + okCellId + "' align=right>";
-	html[i++] = "</td></tr></table>";
-	html[i++] = "</td></tr></table></td></tr></table>";
-*/	
 	return html.join("");
+}
+
+ZaLoginDialog.prototype.showChangePass = 
+function(ex) {
+	this.setError(ZaMsg.errorPassChange, true);
+
+	// add new password fields
+	var newPassRow = this._mainTable.insertRow(3);
+	var newPassMsg = newPassRow.insertCell(-1);
+	var newPassFld = newPassRow.insertCell(-1);
+	newPassRow.style.height = "30";
+	newPassMsg.align = "right";
+	newPassMsg.innerHTML = ZaMsg.newPassword + ":";
+	newPassFld.innerHTML = "<input tabindex=10 style='width:100%' type=password id='passNew'>";
+	
+	// add confirm password fields
+	var conPassRow = this._mainTable.insertRow(4);
+	var conPassMsg = conPassRow.insertCell(-1);
+	var conPassFld = conPassRow.insertCell(-1);
+	conPassRow.style.height = "30";
+	conPassMsg.align = "right";
+	conPassMsg.innerHTML = ZaMsg.confirm + ":";
+	conPassFld.innerHTML = "<input tabindex=10 style='width:100%' type=password id='passConfirm'>";
+	
+	// set focus to the new password field
+	var newPassInput = document.getElementById("passNew");
+	newPassInput.focus();
+};
+
+ZaLoginDialog.prototype.removeChangePass = 
+function () {
+	this._mainTable.deleteRow(3);
+	this._mainTable.deleteRow(3); 
 }
 
 ZaLoginDialog.prototype.addChild =
@@ -273,10 +307,38 @@ function(selEvt) {
 		return;
 	}
 
-	if (this._callback)
-		this._callback.run(username, this._pwordField.value);
+	// check if we're trying to change the password
+	if (this._unameField.disabled && this._pwordField.disabled) {
+		var newPassInput = document.getElementById("passNew");
+		var confirmPassInput = document.getElementById("passConfirm");
+		if (this._changePasswordCallback && newPassInput && confirmPassInput)
+			this._changePasswordCallback.run(username, this._pwordField.value, newPassInput.value,confirmPassInput.value);
+	} else {
+		if (this._callback)
+			this._callback.run(username, this._pwordField.value);
+	
+	}
 }
 
+ZaLoginDialog.prototype.runCallBack = 
+function () {
+	var username = this._unameField.value;
+	if (!(username && username.length)) {
+		this.setError(ZaMsg.enterUsername);
+		return;
+	}
+	// check if we're trying to change the password
+	if (this._unameField.disabled && this._pwordField.disabled) {
+		var newPassInput = document.getElementById("passNew");
+		var confirmPassInput = document.getElementById("passConfirm");	
+		if (this._changePasswordCallback && newPassInput && confirmPassInput)
+			this._changePasswordCallback.run(username, this._pwordField.value, newPassInput.value,confirmPassInput.value);
+	} else {
+		if (this._callback)
+			this._callback.run(username, this._pwordField.value);
+	
+	}
+}
 
 
 // -----------------------------------------------------------------
@@ -304,10 +366,12 @@ function(evt) {
 		if (obj == parent._unameField) {
 			parent._pwordField.focus();
 		} else {
-			if (parent._callback) {
+			parent.runCallBack();
+			/*	if (parent._callback) {
 				parent.setCursor("wait");
 				parent._callback.run(parent._unameField.value, parent._pwordField.value);
 			}
+			*/
 		}
 		return false;
 	} else if (charCode == 9) { //TAB

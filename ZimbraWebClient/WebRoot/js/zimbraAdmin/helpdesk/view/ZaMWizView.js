@@ -82,7 +82,7 @@ ZaMigrationWizView.prototype.getMyXForm = function() {
 							{type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
 							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_10,href:"/zimbraAdmin/adminhelp/pdf/MigrationWizard.pdf"},						
 							{type:_OUTPUT_, value:AjxImg.getImageHtml("MigrationWiz")},
-							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_MIGRATION_WIZ_1,href:"http://www.zimbra..com/community/downloads.php"}
+							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_MIGRATION_WIZ_1,href:"http://www.zimbra.com/community/downloads.php"}
 						]
 					},
 					{type:_SPACER_, colSpan:"*"},					

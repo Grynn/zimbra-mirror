@@ -343,7 +343,7 @@ function(ev) {
 				this._stickToGrid(list);
 			}
 			if (deltaWidth) {
-				var list = [ZaAppViewMgr.C_BANNER, ZaAppViewMgr.C_TOOLBAR_TOP, ZaAppViewMgr.C_APP_CONTENT, ZaAppViewMgr.C_TOOLBAR_BOTTOM];
+				var list = [ZaAppViewMgr.C_BANNER, ZaAppViewMgr.C_TOOLBAR_TOP, ZaAppViewMgr.C_APP_CONTENT, ZaAppViewMgr.C_TOOLBAR_BOTTOM,ZaAppViewMgr.C_SEARCH];
 				this._stickToGrid(list);
 			}
 		}

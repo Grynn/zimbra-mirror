@@ -130,8 +130,8 @@ function () {
 	
 	//check if need to rename
 	if(this._currentObject && tmpObj.name != this._currentObject.name) {
-		var emailRegEx = /^([a-zA-Z0-9_\-])+((\.)?([a-zA-Z0-9_\-])+)*@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-		if(!emailRegEx.test(tmpObj.name) ) {
+		//var emailRegEx = /^([a-zA-Z0-9_\-])+((\.)?([a-zA-Z0-9_\-])+)*@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+		if(!AjxUtil.EMAIL_RE.test(tmpObj.name) ) {
 			//show error msg
 			this._errorDialog.setMessage(ZaMsg.ERROR_ACCOUNT_NAME_INVALID, null, DwtMessageDialog.CRITICAL_STYLE, null);
 			this._errorDialog.popup();		
@@ -299,8 +299,15 @@ function () {
 		try {
 			for(var ix=0; ix < tmpObjCnt; ix++) {
 				try {
-					if(tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix])
+					if(tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]) {
+						if(!AjxUtil.EMAIL_RE.test(tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix])) {
+							//show error msg
+							this._errorDialog.setMessage(AjxStringUtil.resolve(ZaMsg.ERROR_ALIAS_INVALID,[tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]]), null, DwtMessageDialog.CRITICAL_STYLE, null);
+							this._errorDialog.popup();		
+							break;						
+						}
 						this._currentObject.addAlias(tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]);
+					}
 				} catch (ex) {
 					if(ex.code == ZmCsfeException.ACCT_EXISTS) {
 						//if failed because account exists just show a warning
@@ -337,7 +344,7 @@ function () {
 }
 
 ZaAccountViewController.prototype._findAlias = function (alias) {
-	var searchQuery = new ZaSearchQuery(ZaSearch.getSearchByNameQuery(alias), [ZaSearch.ACCOUNT], null, false);
+	var searchQuery = new ZaSearchQuery(ZaSearch.getSearchByNameQuery(alias), [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS], null, false);
 	// this search should only return one result
 	var results = ZaSearch.searchByQueryHolder(searchQuery, 1, null, null, this._app);
 	return results.list.getArray()[0];

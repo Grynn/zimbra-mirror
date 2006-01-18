@@ -154,166 +154,163 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 			    	  	}
 			    	]}
 				]},
-				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 3", items:[
-					{ type: _GROUP_, label: ZaMsg.NAD_MTA_Authentication, labelCssStyle: "vertical-align:top",
-					  items: [
+				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 3", width:"100%",colSizes:["100px","400px"], 
+					items:[
 					  	{ ref: ZaGlobalConfig.A_zimbraMtaAuthEnabled, type: _CHECKBOX_,
-					   	  label: ZaMsg.NAD_MTA_AuthenticationEnabled,
+					   	  label:ZaMsg.NAD_MTA_Authentication,labelLocation:_LEFT_,
 					   	  trueValue: "TRUE", falseValue: "FALSE",
-					   	  onChange: ZaTabView.onFormFieldChanged
+					   	  onChange: ZaTabView.onFormFieldChanged,
+					   	  labelCssClass:"xform_label", align:_LEFT_
 				   	    },
 				   	    { ref: ZaGlobalConfig.A_zimbraMtaTlsAuthOnly, type: _CHECKBOX_,
 				   	      relevant: "instance.attrs[ZaGlobalConfig.A_zimbraMtaAuthEnabled] == 'TRUE'", relevantBehavior: _DISABLE_,
-				   	      label: ZaMsg.NAD_MTA_TlsAuthenticationOnly,
+				   	      label: ZaMsg.NAD_MTA_TlsAuthenticationOnly,labelLocation:_LEFT_,
 				   	      trueValue: "TRUE", falseValue: "FALSE",
-					   	  onChange: ZaTabView.onFormFieldChanged
-					   	}
-				   	]},
-					{ type: _SEPARATOR_, numCols: 2 },
-					{ type: _COMPOSITE_, useParentTable: false,
-					  label: ZaMsg.NAD_MTA_WebMailHostname, labelCssStyle: "vertical-align:top",
-					  items: [
-						{ ref: ZaGlobalConfig.A_zimbraSmtpHostname, type: _INPUT_, 
-						  labelLocation: _NONE_, width: "18em",
-						  onChange:ZaTabView.onFormFieldChanged
-						}
-					]},
-					{ type: _COMPOSITE_, useParentTable: false,
-					  label: ZaMsg.NAD_MTA_WebMailPort, labelCssStyle: "vertical-align:top",
-					  items: [
+					   	  onChange: ZaTabView.onFormFieldChanged,
+					   	  labelCssClass:"xform_label", align:_LEFT_
+					   	},
+						{ ref: ZaGlobalConfig.A_zimbraSmtpHostname, type: _TEXTFIELD_, 
+						  onChange:ZaTabView.onFormFieldChanged,
+						  label:ZaMsg.NAD_MTA_WebMailHostname
+						},
 						{ ref: ZaGlobalConfig.A_zimbraSmtpPort, type: _OUTPUT_, 
-						  label: null, labelLocation: _NONE_,labelLocation: _LEFT_, width: "4em"
-					    }
-					]},						
-					{ ref: ZaGlobalConfig.A_zimbraMtaRelayHost, type: _INPUT_,
-					  label: ZaMsg.NAD_MTA_RelayHostname, width: "18em",
-					  onChange:ZaTabView.onFormFieldChanged
-					},
-					{ ref: ZaGlobalConfig.A_zimbraMtaMaxMessageSize, type: _INPUT_, 
-					  label: ZaMsg.NAD_MTA_MaxMsgSize, width: "6em",
+						  label: ZaMsg.NAD_MTA_WebMailPort
+					    },
+//					    { type: _SEPARATOR_, numCols: 2 },
+/*					    {type:_OUTPUT_, ref:ZaGlobalConfig.A_zimbraMtaRelayHost, label:ZaMsg.NAD_MTA_RelayMTA},
+						{ ref: ZaGlobalConfig.A_zimbraMtaRelayHostInternal, type: _TEXTFIELD_,
+						  label: ZaMsg.NAD_MTA_RelayHostname, width: "18em",
+						  onChange:ZaTabView.onFormFieldChanged,
+						  cssClass:"admin_xform_name_input"
+						},
+						{ ref: ZaGlobalConfig.A_zimbraMtaRelayPortInternal, type: _TEXTFIELD_,
+						  label: ZaMsg.NAD_MTA_RelayPort, width: "18em",
+						  onChange:ZaTabView.onFormFieldChanged,
+						  cssClass:"admin_xform_number_input"
+						},								
+						{ type: _SEPARATOR_, numCols: 2 },*/
+						{ref:ZaGlobalConfig.A_zimbraMtaRelayHost,label:ZaMsg.NAD_MTA_RelayMTA,
+							type:_HOSTPORT_,onChange:ZaTabView.onFormFieldChanged
+						},
+						{ ref: ZaGlobalConfig.A_zimbraMtaMaxMessageSize, type: _TEXTFIELD_, 
+						  label: ZaMsg.NAD_MTA_MaxMsgSize, width: "6em",
 						  onChange:ZaTabView.onFormFieldChanged
   						},
-						{ type: _GROUP_, label: ZaMsg.NAD_MTA_Options, labelCssStyle: "vertical-align:top",
-					  items: [
 					  	{ ref: ZaGlobalConfig.A_zimbraMtaDnsLookupsEnabled, type: _CHECKBOX_,
-					  	  label: ZaMsg.NAD_MTA_DnsLookups, labelLocation: _RIGHT_,
+					  	  label: ZaMsg.NAD_MTA_DnsLookups,labelLocation:_LEFT_,
 					  	  trueValue: "TRUE", falseValue: "FALSE",
-						  onChange:ZaTabView.onFormFieldChanged
-					  	}
-					]},
-					{ type: _SEPARATOR_, numCols: 2 },
-					{ type: _GROUP_, label: ZaMsg.NAD_MTA_ProtocolChecks, labelCssStyle: "vertical-align:top",
-					  items: [
-					  	{ ref: ZaGlobalConfig.A_zimbraMtaRejectInvalidHostname, type: _CHECKBOX_,
-					  	  label: ZaMsg.NAD_MTA_reject_invalid_hostname,
-						  onChange: ZaTabView.onFormFieldChanged
-						  
+						  onChange:ZaTabView.onFormFieldChanged,
+						  labelCssClass:"xform_label", align:_LEFT_
 					  	},
-					  	{ ref: ZaGlobalConfig.A_zimbraMtaRejectNonFqdnHostname, type: _CHECKBOX_,
-					  	  label: ZaMsg.NAD_MTA_reject_non_fqdn_hostname,
-						  onChange: ZaTabView.onFormFieldChanged
-					  	},
-					  	{ ref: ZaGlobalConfig.A_zimbraMtaRejectNonFqdnSender, type: _CHECKBOX_,
-					  	  label: ZaMsg.NAD_MTA_reject_non_fqdn_sender,
-						  onChange: ZaTabView.onFormFieldChanged
-					  	}
-					]},
-					{ type: _GROUP_, label: ZaMsg.NAD_MTA_DnsChecks, labelCssStyle: "vertical-align:top",
-					  items: [
-					  	{ ref: ZaGlobalConfig.A_zimbraMtaRejectUnknownClient, type: _CHECKBOX_,
-					  	  label: ZaMsg.NAD_MTA_reject_unknown_client,
-						  onChange: ZaTabView.onFormFieldChanged
-					  	},
-					  	{ ref: ZaGlobalConfig.A_zimbraMtaRejectUnknownHostname, type: _CHECKBOX_,
-					  	  label: ZaMsg.NAD_MTA_reject_unknown_hostname,
-						  onChange: ZaTabView.onFormFieldChanged
-					  	},
-					  	{ ref: ZaGlobalConfig.A_zimbraMtaRejectUnknownSenderDomain, type: _CHECKBOX_,
-					  	  label: ZaMsg.NAD_MTA_reject_unknown_sender_domain,
-						  onChange: ZaTabView.onFormFieldChanged
-					  	}
-					]}
+						{ type: _SEPARATOR_, numCols: 2 },
+						{ type: _GROUP_, label: ZaMsg.NAD_MTA_ProtocolChecks, labelCssStyle: "vertical-align:top",
+						  items: [
+						  	{ ref: ZaGlobalConfig.A_zimbraMtaRejectInvalidHostname, type: _CHECKBOX_,
+						  	  label: ZaMsg.NAD_MTA_reject_invalid_hostname,
+							  onChange: ZaTabView.onFormFieldChanged
+							  
+						  	},
+						  	{ ref: ZaGlobalConfig.A_zimbraMtaRejectNonFqdnHostname, type: _CHECKBOX_,
+						  	  label: ZaMsg.NAD_MTA_reject_non_fqdn_hostname,
+							  onChange: ZaTabView.onFormFieldChanged
+						  	},
+						  	{ ref: ZaGlobalConfig.A_zimbraMtaRejectNonFqdnSender, type: _CHECKBOX_,
+						  	  label: ZaMsg.NAD_MTA_reject_non_fqdn_sender,
+							  onChange: ZaTabView.onFormFieldChanged
+						  	}
+						]},
+						{ type: _GROUP_, label: ZaMsg.NAD_MTA_DnsChecks, labelCssStyle: "vertical-align:top",
+						  items: [
+						  	{ ref: ZaGlobalConfig.A_zimbraMtaRejectUnknownClient, type: _CHECKBOX_,
+						  	  label: ZaMsg.NAD_MTA_reject_unknown_client,
+							  onChange: ZaTabView.onFormFieldChanged
+						  	},
+						  	{ ref: ZaGlobalConfig.A_zimbraMtaRejectUnknownHostname, type: _CHECKBOX_,
+						  	  label: ZaMsg.NAD_MTA_reject_unknown_hostname,
+							  onChange: ZaTabView.onFormFieldChanged
+						  	},
+						  	{ ref: ZaGlobalConfig.A_zimbraMtaRejectUnknownSenderDomain, type: _CHECKBOX_,
+						  	  label: ZaMsg.NAD_MTA_reject_unknown_sender_domain,
+							  onChange: ZaTabView.onFormFieldChanged
+						  	}
+						]}
 				]},
 				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 4", 
-					colSizes:["300px","150", "*"],
+					width:"100%",colSizes:["100px","400px"], 
 					items: [
-						{ type: _GROUP_, numCols: 2,
-						  label: ZaMsg.NAD_POP_Service, labelCssStyle: "vertical-align:top",
-						  items: [
-							{ ref: ZaGlobalConfig.A_zimbraPop3ServerEnabled, type: _CHECKBOX_, 
-							  label: ZaMsg.NAD_POP_Enabled,
-							  trueValue: "TRUE", falseValue: "FALSE", 
-							  onChange: ZaTabView.onFormFieldChanged
-						  	}
-						]},
-						{ type: _GROUP_, numCols: 2,
-						  label: ZaMsg.NAD_POP_SSL, labelCssStyle: "vertical-align:top",
-						  items: [
-							{ ref: ZaGlobalConfig.A_zimbraPop3SSLServerEnabled, type: _CHECKBOX_, 
-					  	  	  relevant: "instance.attrs[ZaGlobalConfig.A_zimbraPop3ServerEnabled] == 'TRUE'", 
-					  	  	  relevantBehavior: _DISABLE_,
-							  label: ZaMsg.NAD_POP_Enabled,
-							  trueValue: "TRUE", falseValue: "FALSE", 
-							  onChange: ZaTabView.onFormFieldChanged
-						  	}
-						]},
-						{ type: _GROUP_, label: ZaMsg.NAD_POP_Options, labelCssStyle: "vertical-align:top",
-						  items: [
-						  	{ ref: ZaGlobalConfig.A_zimbraPop3CleartextLoginEnabled, type: _CHECKBOX_, 
-					  	  	  relevant: "instance.attrs[ZaGlobalConfig.A_zimbraPop3ServerEnabled] == 'TRUE'", 
-					  	  	  relevantBehavior: _DISABLE_,
-						  	  label: ZaMsg.NAD_POP_CleartextLoginEnabled,
-						  	  trueValue: "TRUE", falseValue: "FALSE", 
-						  	  onChange: ZaTabView.onFormFieldChanged
-					  	  	}
-						]}
+						{ type: _DWT_ALERT_,
+						  containerCssStyle: "padding-bottom:0px",
+						  style: DwtAlert.WARNING,
+						  iconVisible: false, 
+						  content: ZaMsg.Alert_ServerRestart
+						},					
+						{ ref: ZaGlobalConfig.A_zimbraPop3ServerEnabled, type: _CHECKBOX_, 
+						  label: ZaMsg.NAD_POP_Service,labelLocation:_LEFT_,
+						  labelCssClass:"xform_label", align:_LEFT_,
+						  trueValue: "TRUE", falseValue: "FALSE", 
+						  onChange: ZaTabView.onFormFieldChanged
+					  	},
+						{ ref: ZaGlobalConfig.A_zimbraPop3SSLServerEnabled, type: _CHECKBOX_, 
+				  	  	  relevant: "instance.attrs[ZaGlobalConfig.A_zimbraPop3ServerEnabled] == 'TRUE'", 
+				  	  	  relevantBehavior: _DISABLE_,
+						  label: ZaMsg.NAD_POP_SSL,labelLocation:_LEFT_,
+						  labelCssClass:"xform_label", align:_LEFT_,
+						  trueValue: "TRUE", falseValue: "FALSE", 
+						  onChange: ZaTabView.onFormFieldChanged
+					  	},
+					  	{ ref: ZaGlobalConfig.A_zimbraPop3CleartextLoginEnabled, type: _CHECKBOX_, 
+				  	  	  relevant: "instance.attrs[ZaGlobalConfig.A_zimbraPop3ServerEnabled] == 'TRUE'", 
+				  	  	  relevantBehavior: _DISABLE_,
+					  	  label: ZaMsg.NAD_POP_CleartextLoginEnabled,labelLocation:_LEFT_,
+						  labelCssClass:"xform_label", align:_LEFT_,
+					  	  trueValue: "TRUE", falseValue: "FALSE", 
+					  	  onChange: ZaTabView.onFormFieldChanged
+				  	  	}
 					]
 				},
 				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 5",
-					colSizes:["300px","150", "*"],
+					width:"100%",colSizes:["100px","400px"], 
 					items: [
-						{ type: _GROUP_, numCols: 2,
-						  label: ZaMsg.NAD_IMAP_Service, labelCssStyle: "vertical-align:top",
-						  items: [
-							{ ref: ZaGlobalConfig.A_zimbraImapServerEnabled, type:_CHECKBOX_, 
-							  label: ZaMsg.NAD_IMAP_Enabled, 
-							  trueValue:"TRUE", falseValue:"FALSE", 
-								  onChange:ZaTabView.onFormFieldChanged
-  							  	}
-			  	  	  	]},
-						{ type: _GROUP_, numCols: 2,
-						  label: ZaMsg.NAD_IMAP_SSLService, labelCssStyle: "vertical-align:top",
-						  items: [
-						  	{ ref: ZaGlobalConfig.A_zimbraImapSSLServerEnabled, type:_CHECKBOX_, 
-					  	  	  relevant: "instance.attrs[ZaGlobalConfig.A_zimbraImapServerEnabled] == 'TRUE'", 
-					  	  	  relevantBehavior: _DISABLE_,
-						  	  label: ZaMsg.NAD_IMAP_Enabled, 
-						  	  trueValue:"TRUE", falseValue:"FALSE", 
-						  	  onChange:ZaTabView.onFormFieldChanged
-					  	  	}
-					  	]},
-					  	{ type: _GROUP_, label: ZaMsg.NAD_IMAP_Options, labelCssStyle: "vertical-align:top",
-					  	  items: [
-							{ ref: ZaGlobalConfig.A_zimbraImapCleartextLoginEnabled, type:_CHECKBOX_, 
-					  	  	  relevant: "instance.attrs[ZaGlobalConfig.A_zimbraImapServerEnabled] == 'TRUE'", 
-					  	  	  relevantBehavior: _DISABLE_,
-							  label: ZaMsg.NAD_IMAP_CleartextLoginEnabled, 
-							  trueValue:"TRUE", falseValue:"FALSE", 
-							  onChange:ZaTabView.onFormFieldChanged
-						  	}
-					  	]}
+						{ type: _DWT_ALERT_,
+						  containerCssStyle: "padding-bottom:0px",
+						  style: DwtAlert.WARNING,
+						  iconVisible: false, 
+						  content: ZaMsg.Alert_ServerRestart
+						},
+						{ ref: ZaGlobalConfig.A_zimbraImapServerEnabled, type:_CHECKBOX_, 
+						  label: ZaMsg.NAD_IMAP_Service, labelLocation:_LEFT_,
+						  labelCssClass:"xform_label", align:_LEFT_,
+						  trueValue:"TRUE", falseValue:"FALSE", 
+						  onChange:ZaTabView.onFormFieldChanged
+  						},
+					  	{ ref: ZaGlobalConfig.A_zimbraImapSSLServerEnabled, type:_CHECKBOX_, 
+				  	  	  relevant: "instance.attrs[ZaGlobalConfig.A_zimbraImapServerEnabled] == 'TRUE'", 
+				  	  	  relevantBehavior: _DISABLE_,
+					  	  label: ZaMsg.NAD_IMAP_SSLService, labelLocation:_LEFT_,
+					 	  labelCssClass:"xform_label", align:_LEFT_,
+					  	  trueValue:"TRUE", falseValue:"FALSE", 
+					  	  onChange:ZaTabView.onFormFieldChanged
+				  	  	},
+						{ ref: ZaGlobalConfig.A_zimbraImapCleartextLoginEnabled, type:_CHECKBOX_, 
+				  	  	  relevant: "instance.attrs[ZaGlobalConfig.A_zimbraImapServerEnabled] == 'TRUE'", 
+				  	  	  relevantBehavior: _DISABLE_,
+						  label: ZaMsg.NAD_IMAP_CleartextLoginEnabled,labelLocation:_LEFT_,
+					 	  labelCssClass:"xform_label", align:_LEFT_, 
+						  trueValue:"TRUE", falseValue:"FALSE", 
+						  onChange:ZaTabView.onFormFieldChanged
+					  	}
 					]
 				},
 				// anti-spam
 				{ type: _CASE_, relevant: "instance[ZaModel.currentTab] == 6", 
+					width:"100%",colSizes:["100px","400px"], 
 				  items: [
-				  	{ type: _GROUP_, label: ZaMsg.NAD_Spam_Checking, items: [
-					  	{ ref: ZaGlobalConfig.A_zimbraSpamCheckEnabled, type: _CHECKBOX_,
-					  	  label: ZaMsg.NAD_Spam_CheckingEnabled,
-						  trueValue:"TRUE", falseValue:"FALSE", 
-						  onChange: ZaTabView.onFormFieldChanged
-				  	    }
-			  	    ]},
+				  	{ ref: ZaGlobalConfig.A_zimbraSpamCheckEnabled, type: _CHECKBOX_,
+				  	  label: ZaMsg.NAD_Spam_Checking,labelLocation:_LEFT_,
+				 	  labelCssClass:"xform_label", align:_LEFT_, 
+					  trueValue:"TRUE", falseValue:"FALSE", 
+					  onChange: ZaTabView.onFormFieldChanged
+			  	    },
 				  	{ ref: ZaGlobalConfig.A_zimbraSpamKillPercent, type: _INPUT_,
 			   	      relevant: "instance.attrs[ZaGlobalConfig.A_zimbraSpamCheckEnabled] == 'TRUE'", relevantBehavior: _DISABLE_,
 				  	  label: ZaMsg.NAD_Spam_KillPercent, width: "4em",

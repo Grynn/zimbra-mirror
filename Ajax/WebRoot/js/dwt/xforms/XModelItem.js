@@ -787,7 +787,7 @@ HostNameOrIp_XModelItem = function() {}
 XModelItemFactory.createItemType("_HOSTNAME_OR_IP_", "hostname_or_ip", HostNameOrIp_XModelItem);
 HostNameOrIp_XModelItem.prototype.validateType = XModelItem.prototype.validateString;
 HostNameOrIp_XModelItem.prototype.maxLength = 256;
-HostNameOrIp_XModelItem.prototype.pattern = [ AjxUtil.HOST_NAME_RE, AjxUtil.IP_ADDRESS_RE ];
+HostNameOrIp_XModelItem.prototype.pattern = [ AjxUtil.HOST_NAME_RE, AjxUtil.IP_ADDRESS_RE,AjxUtil.HOST_NAME_WITH_PORT_RE ];
 
 Port_XModelItem = function() {}
 XModelItemFactory.createItemType("_PORT_", "port", Port_XModelItem);

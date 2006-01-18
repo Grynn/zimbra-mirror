@@ -563,7 +563,7 @@ XFormItem.prototype.handleKeyUp = function (ev, domItem) {
 	}	
 	var action = new AjxTimedAction(this, this.handleKeyPressDelay, [evt, domItem]);
 	//XForm.keyPressDelayHdlr = setTimeout(XForm.handleKeyPressDelay, 250, item, ev, formItem);
-	this.keyPressDelayHdlr = AjxTimedAction.scheduleAction(action, 500);
+	this.keyPressDelayHdlr = AjxTimedAction.scheduleAction(action, 250);
 };
 
 XFormItem.prototype.handleKeyDown = function (ev, domItem) {
@@ -1743,7 +1743,7 @@ XFormItemFactory.createItemType("_TEXTFIELD_", "textfield", Textfield_XFormItem,
 XFormItemFactory.registerItemType("_INPUT_", "input", Textfield_XFormItem);
 
 //	type defaults
-Textfield_XFormItem.prototype.width = 100;
+//Textfield_XFormItem.prototype.width = 100;
 Textfield_XFormItem.prototype._inputType = "text";
 Textfield_XFormItem.prototype.cssClass = "xform_field";
 Textfield_XFormItem.prototype.elementChangeHandler="onkeypress";

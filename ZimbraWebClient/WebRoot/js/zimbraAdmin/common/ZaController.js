@@ -45,7 +45,8 @@ function ZaController(appCtxt, container, app, iKeyName) {
 	this._authenticating = false;
 
 	this._loginDialog = appCtxt.getLoginDialog();
-	this._loginDialog.registerCallback(this._loginCallback, this);
+	this._loginDialog.registerCallback(this.loginCallback, this);
+	this._loginDialog.registerChangePassCallback(this.changePwdCallback, this);
 
 	this._msgDialog = appCtxt.getMsgDialog();
 	this._errorDialog = appCtxt.getErrorDialog();
@@ -216,7 +217,7 @@ function(bReloginMode) {
 	this._loginDialog.setVisible(true, false);
 	this._loginDialog.setUpKeyHandlers();
 	try {
-		this._loginDialog.setFocus(this._appCtxt.getUsername(), bReloginMode);
+		this._loginDialog.setFocus(bReloginMode);
 	} catch (ex) {
 		// something is out of whack... just make the user relogin
 		ZaZimbraAdmin.logOff();
@@ -238,7 +239,8 @@ function(ex, method, params, restartOnError, obj) {
 		{
 			// remember the last search attempted ONLY for expired auto token exception
 			this._execFrame = {obj: obj, func: method, args: params, restartOnError: restartOnError};
-			this._loginDialog.registerCallback(this._loginCallback, this);
+			this._loginDialog.registerCallback(this.loginCallback, this);
+			this._loginDialog.registerChangePassCallback(this.changePwdCallback, this);			
 			this._loginDialog.setError(ZaMsg.ERROR_SESSION_EXPIRED);
 		} else {
 			this._loginDialog.setError(null);
@@ -302,6 +304,10 @@ function(params) {
 		} else if(ex.code == ZmCsfeException.SVC_PERM_DENIED) {
 			this._loginDialog.setError(ZaMsg.ERROR_AUTH_NO_ADMIN_RIGHTS);
 			return;
+		} else if (ex.code == ZmCsfeException.ACCT_CHANGE_PASSWORD) {
+			this._loginDialog.disablePasswordField(true);
+			this._loginDialog.disableUnameField(true);
+			this._loginDialog.showChangePass();
 		} else {
 			this.popupMsgDialog(ZaMsg.SERVER_ERROR, ex); 
 		}
@@ -319,11 +325,65 @@ function() {
 
 /*********** Login dialog Callbacks */
 
-ZaController.prototype._loginCallback =
-function(name, password) {
-	this._schedule(this._doAuth, {username: name, password: password});
+ZaController.prototype.loginCallback =
+function(uname, password) {
+	this._schedule(this._doAuth, {username: uname, password: password});
 }
 
+ZaController.prototype.changePwdCallback =
+function(uname, oldPass, newPass, conPass) {
+	if (newPass == null || newPass == "" || conPass == null || conPass == "") {
+		this._loginDialog.setError(ZaMsg.enterNewPassword);
+		return;
+	}
+	
+	if (newPass != conPass) {
+		this._loginDialog.setError(ZaMsg.bothNewPasswordsMustMatch);
+		return;
+	}
+
+    var soapDoc = AjxSoapDoc.create("ChangePasswordRequest", "urn:zimbraAccount");
+    var el = soapDoc.set("account", uname);
+    el.setAttribute("by", "name");
+    soapDoc.set("oldPassword", oldPass);
+    soapDoc.set("password", newPass);
+    var resp = null;
+    try {
+		var command = new ZmCsfeCommand();
+		resp = command.invoke({soapDoc: soapDoc, noAuthToken: true, noSession: true}).Body.ChangePasswordResponse;
+    } catch (ex) {
+		//DBG.dumpObj(ex);
+		// XXX: for some reason, ZmCsfeException consts are fubar
+		if (ex.code == "account.PASSWORD_RECENTLY_USED" ||
+			ex.code == "account.PASSWORD_CHANGE_TOO_SOON")
+		{
+			var msg = ex.code == ZmCsfeException.ACCT_PASS_RECENTLY_USED
+				? ZaMsg.errorPassRecentlyUsed
+				: (ZaMsg.errorPassChangeTooSoon);
+			this._loginDialog.setError(msg);
+			this._loginDialog.clearPassword();
+			this._loginDialog.setFocus();
+			/*newPassField.value = conPassField.value = "";
+			newPassField.focus();*/
+		}
+		else if (ex.code == "account.PASSWORD_LOCKED")
+		{
+			/*// remove the new password and confirmation fields
+			var passTable = document.getElementById("passTable");
+			passTable.deleteRow(2);
+			passTable.deleteRow(2);
+			*/
+			// re-enable username and password fields
+			this._loginDialog.disablePasswordField(false);
+			this._loginDialog.disableUnameField(false);
+			this._loginDialog.setError(ZaMsg.errorPassLocked);
+		}
+	}
+	
+	if (resp) {
+		this._schedule(this._doAuth, {username: uname, password: newPass});
+	}
+}
 
 /*********** Msg dialog Callbacks */
 

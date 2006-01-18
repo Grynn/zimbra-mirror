@@ -418,24 +418,22 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 				});
 	}			
 	if(ZaSettings.ACCOUNTS_ADVANCED_ENABLED) {
-		cases.push({type:_CASE_,id:"account_form_advanced_step", numCols:1, relevant:"instance[ZaModel.currentStep]==7", 
+		cases.push({type:_CASE_,id:"account_form_advanced_step", numCols:1, width:"100%", relevant:"instance[ZaModel.currentStep]==7", 
 						items: [
-							{type:_GROUP_, 
+							{type:_GROUP_, width:"100%", 
 								items :[
 									{ref:ZaAccount.A_zimbraAttachmentsBlocked,labelCssStyle:"width:160px;", type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_RemoveAllAttachments,label:ZaMsg.NAD_RemoveAllAttachments, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE"}
-/*									{ref:ZaAccount.A_zimbraAttachmentsViewInHtmlOnly,labelCssStyle:"width:160px;", type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_AttachmentsViewInHtmlOnly,label:ZaMsg.NAD_AttachmentsViewInHtmlOnly, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE"},	
-									{ref:ZaAccount.A_zimbraAttachmentsIndexingEnabled,labelCssStyle:"width:160px;", type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraAttachmentsIndexingEnabled,label:ZaMsg.NAD_zimbraAttachmentsIndexingEnabled, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE"}*/
 								]
 							},
 							{type:_SEPARATOR_, colSpan:"*"},
-							{type:_GROUP_, 
+							{type:_GROUP_, width:"100%", 
 								items: [
 									{ref:ZaAccount.A_zimbraMailQuota,labelCssStyle:"width:160px;", type:_SUPER_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_MailQuota,label:ZaMsg.NAD_MailQuota, labelLocation:_LEFT_, textFieldCssClass:"admin_xform_number_input", resetToSuperLabel:ZaMsg.NAD_ResetToCOS},
 									{ref:ZaAccount.A_zimbraContactMaxNumEntries,labelCssStyle:"width:160px;", type:_SUPER_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_ContactMaxNumEntries,label:ZaMsg.NAD_ContactMaxNumEntries, labelLocation:_LEFT_, textFieldCssClass:"admin_xform_number_input"}
 								]
 							},
 							{type:_SEPARATOR_, colSpan:"*"},
-							{type:_GROUP_, 
+							{type:_GROUP_, width:"100%", 
 								items: [
 									{ref:ZaAccount.A_zimbraMinPwdLength,labelCssStyle:"width:160px;", type:_SUPER_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_passMinLength,label:ZaMsg.NAD_passMinLength, labelLocation:_LEFT_, textFieldCssClass:"admin_xform_number_input"},
 									{ref:ZaAccount.A_zimbraMaxPwdLength,labelCssStyle:"width:160px;", type:_SUPER_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_passMaxLength,label:ZaMsg.NAD_passMaxLength, labelLocation:_LEFT_, textFieldCssClass:"admin_xform_number_input"},
@@ -446,7 +444,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 								]
 							},
 							{type:_SEPARATOR_, colSpan:"*"},							
-							{type:_GROUP_, 
+							{type:_GROUP_, width:"100%", 
 								items: [
 									{ref:ZaAccount.A_zimbraAuthTokenLifetime,labelCssStyle:"width:160px;", type:_SUPER_LIFETIME_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_AuthTokenLifetime,label:ZaMsg.NAD_AuthTokenLifetime,labelLocation:_LEFT_},								
 									{ref:ZaAccount.A_zimbraMailIdleSessionTimeout,labelCssStyle:"width:160px;", type:_SUPER_LIFETIME_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_MailIdleSessionTimeout,label:ZaMsg.NAD_MailIdleSessionTimeout,labelLocation:_LEFT_},								
@@ -462,7 +460,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 			{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices},
 			{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
 			{type:_SPACER_,  align:_CENTER_, valign:_TOP_},
-			{type:_SWITCH_, width:400, align:_LEFT_, valign:_TOP_, items:cases}
+			{type:_SWITCH_, width:450, align:_LEFT_, valign:_TOP_, items:cases}
 		];
 };
 ZaXDialog.XFormModifiers["ZaNewAccountXWizard"].push(ZaNewAccountXWizard.myXFormModifier);

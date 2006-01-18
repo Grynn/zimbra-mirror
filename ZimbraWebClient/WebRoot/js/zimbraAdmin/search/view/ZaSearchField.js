@@ -96,10 +96,10 @@ function(evt) {
 
 ZaSearchField.prototype._getMyXForm = function() {	
 	var xFormObject = {
-		tableCssStyle:"width:100%;padding:2px;",numCols:11,
+		tableCssStyle:"width:100%;padding:2px;",numCols:11,width:"100%",
 		items: [
 			{type:_OUTPUT_, value:ZaMsg.searchForAccountsLabel, nowrap:true},
-			{type:_TEXTFIELD_, ref:ZaSearch.A_query, width:"250px",containerCssStyle:"padding-left:2px;padding-right:2px;", label:null, 
+			{type:_TEXTFIELD_, width:"100%", ref:ZaSearch.A_query, containerCssStyle:"padding-left:2px;padding-right:2px;width:100%", label:null, 
 				elementChanged: function(elementValue,instanceValue, event) {
 					var charCode = event.charCode;
 					if (charCode == 13 || charCode == 3) {
@@ -107,7 +107,8 @@ ZaSearchField.prototype._getMyXForm = function() {
 					} else {
 						this.getForm().itemChanged(this, elementValue, event);
 					}
-				}
+				},
+				cssClass:"search_input"
 			},
 			{type:_DWT_BUTTON_, label:ZaMsg.search, toolTipContent:ZaMsg.searchForAccounts, icon:ZaMsg.search, onActivate:ZaSearchField.srchButtonHndlr},
 			{type:_OUTPUT_, value:ZaMsg.Filter+":", label:null},
