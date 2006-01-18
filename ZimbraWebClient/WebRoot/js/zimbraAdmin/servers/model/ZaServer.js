@@ -48,6 +48,7 @@ ZaServer.A_Service = "zimbraService";
 ZaServer.A_ServiceHostname = "zimbraServiceHostname";
 ZaServer.A_zimbraMailPort = "zimbraMailPort";
 ZaServer.A_zimbraMailSSLPort = "zimbraMailSSLPort";
+ZaServer.A_zimbraMailMode = "zimbraMailMode";
 // services
 ZaServer.A_zimbraServiceInstalled = "zimbraServiceInstalled";
 ZaServer.A_zimbraLdapServiceInstalled = "_"+ZaServer.A_zimbraServiceInstalled+"_ldap";
