@@ -321,7 +321,7 @@ function () {
 													{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_AuthADUseSSL, width:"40px"}									
 												]
 											},											
-											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthADURL+":", repeatInstance:"", showAddButton:true, showRemoveButton:true,  
+											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthADURL, repeatInstance:"", showAddButton:true, showRemoveButton:true,  
 												addButtonLabel:ZaMsg.Domain_AddURL, 
 												removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,												
 												showAddOnNextRow:true,											
@@ -342,7 +342,7 @@ function () {
 													{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_AuthLDAPUseSSL, width:"40px"}									
 												]
 											},										
-											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL+":", repeatInstance:"", showAddButton:true, showRemoveButton:true,  
+											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL, repeatInstance:"", showAddButton:true, showRemoveButton:true,  
 												addButtonLabel:ZaMsg.Domain_AddURL, 
 												removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,												
 												showAddOnNextRow:true,											
@@ -386,7 +386,7 @@ function () {
 											{ref:ZaDomain.A_AuthLDAPUseSSL, type:_OUTPUT_, label:ZaMsg.Domain_AuthADUseSSL, labelWrap:true, labelLocation:_LEFT_,choices:ZaModel.BOOLEAN_CHOICES}
 */	
 											{ref:ZaDomain.A_AuthADDomainName, type:_OUTPUT_, label:ZaMsg.Domain_AuthADDomainName, labelLocation:_LEFT_},
-											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL+":", labelLocation:_LEFT_,showAddButton:false, showRemoveButton:false, 
+											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL, labelLocation:_LEFT_,showAddButton:false, showRemoveButton:false, 
 												items:[
 													{type:_OUTPUT_, ref:".", label:null,labelLocation:_NONE_}
 												]
@@ -401,7 +401,7 @@ function () {
 											{ref:ZaDomain.A_AuthLDAPUseSSL, type:_OUTPUT_, label:ZaMsg.Domain_AuthLDAPUseSSL, labelLocation:_LEFT_,choices:ZaModel.BOOLEAN_CHOICES},
 											{ref:ZaDomain.A_AuthLdapURL, type:_OUTPUT_, label:ZaMsg.Domain_AuthLdapURL, labelLocation:_LEFT_},
 */
-											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL+":", labelLocation:_LEFT_,showAddButton:false, showRemoveButton:false, 
+											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL, labelLocation:_LEFT_,showAddButton:false, showRemoveButton:false, 
 												items:[
 													{type:_OUTPUT_, ref:".", label:null,labelLocation:_NONE_}
 												]
@@ -416,8 +416,8 @@ function () {
 							},
 							{type:_SPACER_, height:10},
 							{type:_OUTPUT_,value:ZaMsg.Domain_AuthProvideLoginPwd, align:_CENTER_, colSpan:"*"},
-							{type:_INPUT_, label:ZaMsg.Domain_AuthTestUserName, ref:ZaDomain.A_AuthTestUserName, alignment:_LEFT_},
-							{type:_SECRET_, label:ZaMsg.Domain_AuthTestPassword, ref:ZaDomain.A_AuthTestPassword, alignment:_LEFT_}
+							{type:_TEXTFIELD_, label:ZaMsg.Domain_AuthTestUserName+":", ref:ZaDomain.A_AuthTestUserName, alignment:_LEFT_},
+							{type:_SECRET_, label:ZaMsg.Domain_AuthTestPassword+":", ref:ZaDomain.A_AuthTestPassword, alignment:_LEFT_}
 						]
 					},
 					{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 5 && instance.attrs[ZaDomain.A_AuthMech]!=ZaDomain.AuthMech_zimbra", relevantBehavior:_HIDE_,
