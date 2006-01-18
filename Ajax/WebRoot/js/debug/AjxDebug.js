@@ -61,7 +61,7 @@ function AjxDebug(level, name, showTime) {
 	if (!this._enabled) return;
 
 	this._openDebugWindow();
-}
+};
 
 
 AjxDebug.NONE = "DBG0"; // no debugging (window will not come up)
@@ -119,7 +119,12 @@ function(level) {
 		if (this._debugWindow == null || this._debugWindow.closed)
 			this._openDebugWindow();
 	}
-}
+};
+
+AjxDebug.prototype.getDebugLevel = 
+function(level) {
+	return this._level;
+};
 
 AjxDebug.prototype.isShowTiming = 
 function() {
@@ -152,7 +157,7 @@ function(on, level, msg) {
 		}
 	}
 	this._startTimePt = this._lastTimePt = new Date().getTime();
-}
+};
 
 /**
 * Prints a debug message. Any HTML will be rendered, and a line break is added.
@@ -202,8 +207,7 @@ function(level, obj, showFuncs, linkName) {
 	AjxDebug._visited = new AjxVector();
 	this._add(null, obj);
 	this._showFuncs = null;
-	
-}
+};
 
 /**
 * Dumps a bunch of text into a &lt;textarea&gt;, so that it is wrapped and scrollable. HTML will not be rendered.
@@ -219,7 +223,7 @@ function(level, text, linkName) {
 	text = args[0];
 	
 	this._add(null, text, false, true);
-}
+};
 
 /**
 * Pretty-prints a chunk of XML, doing color highlighting for different types of nodes.
@@ -241,7 +245,7 @@ function(level, text, linkName) {
 		return;
 	}
 	this._add(null, text, true, false);
-}
+};
 
 /**
 * Reveals white space in text by replacing it with tags.
@@ -260,7 +264,7 @@ function(level, text) {
 	text = text.replace(/ /g, '[space]');
 	text = text.replace(/\t/g, '[tab]');
 	this.printRaw(level, text);
-}
+};
 
 AjxDebug.prototype.timePt =
 function(level, msg) {
@@ -285,7 +289,7 @@ function(level, msg) {
     // Add the message to our stack
     this._addMessage(myMsg);
 	return interval;
-}
+};
 
 
 // Private methods
@@ -415,7 +419,7 @@ function(obj, recurse) {
 		}
 	}
 	return text;
-}
+};
 
 // If the first arg is a debug level, check it and then strip it.
 AjxDebug.prototype._handleArgs =
@@ -886,7 +890,7 @@ AjxDebug._getTimeStamp =
 function(date) {
 	date = (date) ? date : new Date();
 	return AjxStringUtil.htmlEncode([AjxDateUtil.getTimeStr(date, "%H:%m:%s"), ".", date.getMilliseconds()].join(""), true);
-}
+};
 
 /**
  * Simple wrapper for log messages
@@ -899,4 +903,3 @@ DebugMessage = function(aMsg, aType, aCategory, aTime, extraHtml, linkName) {
     this.eHtml = extraHtml ? extraHtml : '';
     this.linkName = linkName;
 };
-
