@@ -353,31 +353,6 @@ ZaDistributionList.prototype.setName = function (name) {
 	} 
 };
 
-ZaDistributionList.prototype.setDescription = function (description) {
-	this.attrs.description = description;
-};
-
-ZaDistributionList.prototype.getDescription = function () {
-	return this.attrs.description;
-};
-
-ZaDistributionList.prototype.setNotes = function (notes) {
-	this.attrs.zimbraNotes = notes;
-};
-
-ZaDistributionList.prototype.getNotes = function () {
-	return this.attrs.zimbraNotes;
-};
-
-ZaDistributionList.prototype.setMailStatus = function (status) {
-	this.attrs.zimbraMailStatus = status;
-};
-
-ZaDistributionList.prototype.getMailStatus = function () {
-	return this.attrs.zimbraMailStatus;
-};
-
-
 /**
  * Makes a server call to get the distribution list details, if the
  * internal list of members is null
@@ -691,7 +666,7 @@ ZaDistributionList.myXModel = {
 		{id:"memNumPages", type:_NUMBER_, defaultValue:1},	
 		{id: "memberPool", type:_LIST_, setter:"setMemberPool", setterScope:_MODEL_, getter: "getMemberPool", getterScope:_MODEL_},
 		{id: "optionalAdd", type:_UNTYPED_},
-		{id: "name", type:_STRING_, setter:"setName", setterScope: _INSTANCE_, required:true,
+		{id:ZaAccount.A_name, type:_STRING_, setter:"setName", setterScope: _INSTANCE_, required:true,
 		 constraints: {type:"method", value:
 					   function (value, form, formItem, instance) {
 						   var parts = value.split('@');
@@ -710,8 +685,9 @@ ZaDistributionList.myXModel = {
 			}
 		},
 		{id: "members", type:_LIST_, getter: "getMembersArray", getterScope:_MODEL_, setter: "setMembersArray", setterScope:_MODEL_},
-		{id: "description", type:_STRING_, setter:"setDescription", setterScope:_INSTANCE_, getter: "getDescription", getterScope: _INSTANCE_},
-		{id: "notes", type:_STRING_, setter:"setNotes", setterScope:_INSTANCE_, getter: "getNotes", getterScope: _INSTANCE_},
-		{id: "zimbraMailStatus", type:_STRING_, setter:"setMailStatus", setterScope:_INSTANCE_, getter: "getMailStatus", getterScope: _INSTANCE_}
+		{id:ZaAccount.A_description,ref:"attrs/"+ZaAccount.A_description, type:_STRING_},
+		{id:ZaAccount.A_notes, ref:"attrs/"+ZaAccount.A_notes, type:_STRING_},
+		{id:ZaAccount.A_displayname, type:_STRING_, ref:"attrs/"+ZaAccount.A_displayname},
+		{id:ZaDistributionList.A_mailStatus, ref:"attrs/"+ZaDistributionList.A_mailStatus, type:_STRING_}
 	]
 };

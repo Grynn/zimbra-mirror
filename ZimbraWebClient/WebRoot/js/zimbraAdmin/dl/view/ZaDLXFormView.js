@@ -52,6 +52,7 @@ function () {
 ZaDLXFormView.removeAllMembers = function(event) {
 	var form = this.getForm();
 	form.getInstance().removeAllMembers();
+	form.parent.setDirty(true);
 	form.refresh();
 };
 
@@ -63,6 +64,7 @@ ZaDLXFormView.removeMembers = function(event) {
 	var membersSelection = ZaDLXFormView.getMemberSelection.call(form);
 	if(membersSelection.length) {
 		form.getInstance().removeMembers(membersSelection);
+		form.parent.setDirty(true);
 		form.refresh();	
 	}
 };
@@ -106,7 +108,7 @@ function(evt) {
 	var fieldObj = this.getForm().parent;
 	var currentPageNum = this.getInstanceValue("/memPagenum")+1;
 	this.setInstanceValue(currentPageNum,"/memPagenum");
-	this.getInstance().getMembers(true, ZaDistributionList.MEMBER_QUERY_LIMIT);
+	this.getInstance().getMembers(ZaDistributionList.MEMBER_QUERY_LIMIT);
 	this.getForm().refresh();
 }
 
@@ -118,7 +120,7 @@ function(evt) {
 	var fieldObj = this.getForm().parent;
 	var currentPageNum = this.getInstanceValue("/memPagenum")-1;
 	this.setInstanceValue(currentPageNum,"/memPagenum");
-	this.getInstance().getMembers(true, ZaDistributionList.MEMBER_QUERY_LIMIT);
+	this.getInstance().getMembers(ZaDistributionList.MEMBER_QUERY_LIMIT);
 	this.getForm().refresh();
 }
 /**
@@ -326,19 +328,15 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 	membersHeaderList[0] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.ALV_Name_col, null, null, true, ZaAccount.A_name, true, true);
 
 	xFormObject.tableCssStyle = "width:100%;overflow:auto;";
-//	xFormObject.cssClass="ZaDLView";
 	xFormObject.numCols=5;
-//	xFormObject.X_showBorder = true;
 	xFormObject.colSizes = [10,"auto", 20, "auto", 10];
 	xFormObject.itemDefaults = {
 			_INPUT_: { cssClass:"inputBorder" },
 			_TEXTAREA_: {cssClass: "inputBorder"},
 			_TEXTFIELD_: {cssClass: "inputBorder", containerCssStyle:"width:100%"}
-//			_DWT_BUTTON: {forceUpdate: true}
 	    };
 	    
 	xFormObject.items = [
-	   	{type:_SPACER_, height:10, colSpan:"*" },
 		{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", 
 			items: [
 				{type:_GROUP_,	numCols:4,colSizes:["32px","350px","100px","250px"],
@@ -361,18 +359,21 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 		},
 		{type:_SWITCH_, colSpan:"*", numCols:5,
 			items:[
-				{type:_CASE_,  relevant:"instance[ZaModel.currentTab] == 1",  numCols:2,colSizes:["50%","50%"],
+				{type:_CASE_,  relevant:"instance[ZaModel.currentTab] == 1",  numCols:3,colSizes:["50%","47%", "3%"],
 				  items:[
-					 {type:_GROUP_,  width:"100%", colSizes:[10,70,"auto",20],
+					 {type:_GROUP_,  width:"100%", colSizes:[10,75,"auto",20],
 						items:[	
- 						    {type:_CELLSPACER_, width:10, rowSpan:8},
-							{ref:"name", type:_EMAILADDR_, xmsgName:ZaMsg.NAD_AccountName, label: ZaMsg.DLXV_LabelListName, 
+ 						    {type:_CELLSPACER_, width:10, rowSpan:9},
+							{ref:ZaAccount.A_name, type:_EMAILADDR_, xmsgName:ZaMsg.NAD_AccountName, label: ZaMsg.DLXV_LabelListName, 
 								onChange:ZaTabView.onFormFieldChanged, forceUpdate:true, tableCssStyle:"width:100%", inputWidth:"100%"
 							},
-						    {ref: "description", type:_TEXTFIELD_, label: ZaMsg.DLXV_LabelDescription, width:"100%",
-						    	onChange:ZaTabView.onFormFieldChanged
+						    {ref:ZaAccount.A_displayname, type:_TEXTFIELD_, label:ZaMsg.NAD_DisplayName, width:"100%",
+						    	cssClass:"admin_xform_name_input", onChange:ZaTabView.onFormFieldChanged
+						    },							
+						    {ref:ZaAccount.A_description, type:_TEXTFIELD_, label: ZaMsg.DLXV_LabelDescription, width:"100%",
+						    	cssClass:"admin_xform_name_input", onChange:ZaTabView.onFormFieldChanged
 						    },
-							{ref: "zimbraMailStatus", type:_CHECKBOX_, trueValue:"enabled", falseValue:"disabled", 
+							{ref: "zimbraMailStatus", type:_CHECKBOX_, trueValue:"enabled", falseValue:"disabled", align:_LEFT_,
 								label:ZaMsg.DLXV_LabelEnabled, labelLocation:_LEFT_,labelCssClass:"xform_label", cssStyle:"padding-left:0px", onChange:ZaTabView.onFormFieldChanged
 							},						    
 						    {type:_OUTPUT_, value:ZaMsg.DLXV_LabelListMembers, width:"100%", colSpan:2, cssClass:"xform_label_left", 
@@ -407,8 +408,14 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 							}
 					    ]
 				    },
-					{type:_RADIO_GROUPER_, numCols:1, colSizes:["auto"],label:ZaMsg.DLXV_GroupLabelAddMembers,
+					{type:_GROUP_, numCols:1, width:"100%", colSizes:["auto"], cssClass:"RadioGrouperBorder",/*label:ZaMsg.DLXV_GroupLabelAddMembers,*/
 						items:[			      
+						   {type:_GROUP_, numCols:2, colSizes:["auto", "auto"], 
+						   		items: [
+							   		{type:_OUTPUT_, value:ZaMsg.DLXV_GroupLabelAddMembers, cssClass:"RadioGrouperLabel"},
+								   	{type:_CELLSPACER_}
+								]
+							},
 					       {type:_GROUP_, numCols:3, colSizes:[50, "auto",80], 
 							   items:[
 							   		{type:_OUTPUT_, value:ZaMsg.DLXV_LabelFind, nowrap:true},
@@ -470,8 +477,9 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 								]
 					       }				       
 						]
-				    }
-				]
+				    },
+				    {type:_CELLSPACER_},
+				  ]
 				},
 				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 2", colSizes:[10, "auto"], colSpan:"*",
 					items:[

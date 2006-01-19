@@ -146,6 +146,7 @@ function (domain) {
 		this._controllers[ZaZimbraAdmin._DL_VIEW] = new ZaDLController(this._appCtxt, this._container, this);
 		this._controllers[ZaZimbraAdmin._DL_VIEW].addCreationListener(new AjxListener(this.getAccountListController(), ZaAccountListController.prototype.handleAccountCreation));			
 		this._controllers[ZaZimbraAdmin._DL_VIEW].addRemovalListener(new AjxListener(this.getAccountListController(), ZaAccountListController.prototype.handleAccountRemoval));			
+		this._controllers[ZaZimbraAdmin._DL_VIEW].addChangeListener(new AjxListener(this.getAccountListController(), ZaAccountListController.prototype.handleAccountChange));
 	}
 	return this._controllers[ZaZimbraAdmin._DL_VIEW];
 };
