@@ -29,4 +29,5 @@
   <xsl:template match="amazon:Publisher">
     <div><b>Publisher: </b><xsl:value-of select="text()"/></div>
   </xsl:template>
+  <xsl:template match="text()|@*"/>
 </xsl:stylesheet>

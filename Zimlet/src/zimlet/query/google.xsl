@@ -8,6 +8,7 @@
     <p/>
     <div><b>Title: </b>   <a href="{URL}" target="_blank"><xsl:value-of select="title"/></a></div>
     <div><b>Summary: </b> <xsl:value-of select="snippet"/></div>
-    <div><b>Url: </b>     <xsl:value-of select="URL"/></div>
+    <div><b>URL: </b>     <xsl:value-of select="URL"/></div>
   </xsl:template>
+  <xsl:template match="text()|@*"/>
 </xsl:stylesheet>

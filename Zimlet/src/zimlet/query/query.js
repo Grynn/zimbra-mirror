@@ -45,7 +45,11 @@ function() {
 	this._processors = {};
 	for (var key in this._translations) {
 		stylesheet = this.getResource(this._translations[key]);
-		processor = AjxXslt.createFromUrl(stylesheet);
+		try {
+			processor = AjxXslt.createFromUrl(stylesheet);
+		} catch (ex) {
+			DBG.println(AjxDebug.DBG1, ex.dump());
+		}
 		this._processors[key] = processor;
 	}
 	this._query = "yahoo";
@@ -236,19 +240,37 @@ function(query, canvas) {
 	}
 };
 
+query.prototype.getSanitizedDocFromHtml =
+function(text) {
+	text = text ? text.replace(/&nbsp;/g," ").replace(/&reg;/g,"(R)") : "";
+	var doc = AjxXmlDoc.createFromXml(text);
+	return doc.getDoc();
+};
+
 query._callback =
 function(canvas, id, result) {
-	var processor, html, resp = result.xml;
+	var html, resp;
+	var processor = this._processors[id];
+	
 	if (!result.success) {
 		canvas.innerHTML = "<div><b>Web service returned error.</b></div>"+result.text;
 		return;
 	}
-	if (resp == undefined) {
-		var doc = AjxXmlDoc.createFromXml(result.text);
-		resp = doc.getDoc();
+	
+	try {
+		if (!result.xml || !result.xml.documentElement) {
+			resp = this.getSanitizedDocFromHtml(result.text);
+		} else {
+			resp = result.xml;
+		}
+		html = processor.transformToString(resp);
+	} catch (ex) {
+		DBG.println(AjxDebug.DBG1, ex.dump());
+		canvas.innerHTML = "<div><b>Transformation resulted in error.</b></div>";
+		return;
 	}
-	processor = this._processors[id];
-	var html = processor.transformToString(resp);
+	
+	//DBG.println(AjxDebug.DBG1, "*********"+AjxStringUtil.htmlEncode(html)+"************");
 	if (id == "google") {
 		html = html ? html.replace(/&gt;/g,">").replace(/&lt;/g,"<").replace(/&quot;/g, '"').replace(/&apos;/g,"'") : "";
 	}

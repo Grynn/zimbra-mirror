@@ -9,11 +9,11 @@
   <xsl:template match="yahoo:ResultSet/yahoo:Result">
     <p/>
     <div><b>Title: </b>   <a href="{yahoo:ClickUrl}" target="_blank"><xsl:value-of select="yahoo:Title"/></a></div>
-    <div><b>Address: </b> <xsl:value-of select="yahoo:Address"/></div>
-    <div><b>City: </b> <xsl:value-of select="yahoo:City"/></div>
-    <div><b>State: </b> <xsl:value-of select="yahoo:State"/></div>
-    <div><b>Phone: </b> <xsl:value-of select="yahoo:Phone"/></div>
-    <div><b>Rating: </b> <xsl:value-of select="yahoo:Rating"/></div>
+    <div><b>Address: </b> 
+      <xsl:value-of select="yahoo:Address"/>, <xsl:value-of select="yahoo:City"/>, <xsl:value-of select="yahoo:State"/>
+    </div>
+    <div><b>Phone: </b>    <xsl:value-of select="yahoo:Phone"/></div>
+    <div><b>Rating: </b>   <xsl:value-of select="yahoo:Rating"/></div>
     <div><b>Distance: </b> <xsl:value-of select="yahoo:Distance"/></div>
   </xsl:template>
   <xsl:template match="text()|@*"/>
