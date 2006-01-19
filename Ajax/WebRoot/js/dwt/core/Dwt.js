@@ -32,7 +32,7 @@ Dwt.STATIC_STYLE = "static";
 Dwt.ABSOLUTE_STYLE = "absolute";
 Dwt.RELATIVE_STYLE = "relative";
 
-// Background repeat 
+// Background repeat
 Dwt.NO_REPEAT = "no-repeat";
 Dwt.REPEAT = "repeat";
 Dwt.REPEAT_X = "repeat-x";
@@ -160,7 +160,7 @@ function(htmlElement, x, y, width, height) {
 	Dwt.setSize(htmlElement, width, height);
 };
 
-Dwt.getCursor = 
+Dwt.getCursor =
 function(htmlElement) {
 	return DwtCssStyle.getProperty(htmlElement, "cursor");
 };
@@ -195,7 +195,7 @@ function(htmlElement, x, y) {
 Dwt.checkPxVal =
 function(val, check) {
 	if (val == Dwt.DEFAULT) return false;
-	
+
 	if (check && val < 0 && val != Dwt.LOC_NOWHERE) {
 		DBG.println(AjxDebug.DBG1, "negative pixel value: " + val);
 		val = 0;
@@ -243,7 +243,7 @@ function(htmlElement, scrollStyle) {
 
 // Note: in FireFox, offsetHeight includes border and clientHeight does not;
 // may want to look at clientHeight for FF
-Dwt.getSize = 
+Dwt.getSize =
 function(htmlElement, incScroll) {
 	var p = new DwtPoint(0, 0);
 	if (htmlElement.offsetWidth != null) {
@@ -261,7 +261,7 @@ function(htmlElement, incScroll) {
 	return p;
 };
 
-Dwt.setSize = 
+Dwt.setSize =
 function(htmlElement, width, height) {
 	if (width = Dwt.checkPxVal(width, true))
 		htmlElement.style.width = width;
@@ -286,7 +286,7 @@ function(html) {
 	return Dwt.getSize(Dwt._measureDiv);
 };
 
-Dwt.getAttr = 
+Dwt.getAttr =
 function(htmlEl, attr, recursive) {
 	// test for tagName so we dont try to eval non-html elements (i.e. document)
 	if (!recursive) {
@@ -343,12 +343,12 @@ function(htmlElement, idx) {
 	htmlElement.style.zIndex = idx;
 };
 
-Dwt.getDisplay = 
+Dwt.getDisplay =
 function(htmlElement) {
 	DwtCssStyle.getProperty(htmlElement, "display");
 };
 
-Dwt.setDisplay = 
+Dwt.setDisplay =
 function(htmlElement, value) {
 	htmlElement.style.display = value;
 };
@@ -376,7 +376,7 @@ Dwt.toWindow =
 function(htmlElement, x, y, containerElement) {
 	var p = new DwtPoint(x, y);
 	// EMC 6/3/2005
-	// changed the below line, since it meant we did not 
+	// changed the below line, since it meant we did not
 	// include the given element in our location calculation.
 	//var offsetParent = htmlElement.offsetParent;
 	var offsetParent = htmlElement;
@@ -393,36 +393,36 @@ function(text) {
 	window.status = text;
 };
 
-Dwt.getTitle = 
+Dwt.getTitle =
 function() {
 	return window.document.title;
 };
 
-Dwt.setTitle = 
+Dwt.setTitle =
 function(text) {
 	window.document.title = text;
 };
 
-Dwt.getIframeDoc = 
+Dwt.getIframeDoc =
 function(iframeObj) {
 	if (iframeObj) {
-		return AjxEnv.isIE 
+		return AjxEnv.isIE
 			? iframeObj.contentWindow.document
 			: iframeObj.contentDocument;
 	}
 	return null;
 };
 
-Dwt.getIframeWindow = 
+Dwt.getIframeWindow =
 function(iframeObj) {
 	return iframeObj.contentWindow;
 };
 
-Dwt._ffOverflowHack = 
+Dwt._ffOverflowHack =
 function (htmlElId, myZindex, lowThresholdZ, turnOffOverflowScroll, disableSelf) {
 	if (!AjxEnv.isNav)
 		return;
-		
+
 	var ds = disableSelf? disableSelf: false;
 	var lowThresholdZIndex = lowThresholdZ? lowThresholdZ: -100;
 	var coll = document.getElementsByTagName("div");
@@ -448,7 +448,7 @@ function (htmlElId, myZindex, lowThresholdZ, turnOffOverflowScroll, disableSelf)
 				break;
 		}
 		var divZIndex = parseInt(temp.style.zIndex);
-		// assume that if the value is auto, that we want to shut off the 
+		// assume that if the value is auto, that we want to shut off the
 		// overflow setting.
 		if (isNaN(divZIndex)) {
 			divZIndex = lastGoodZIndex;
@@ -464,9 +464,9 @@ function (htmlElId, myZindex, lowThresholdZ, turnOffOverflowScroll, disableSelf)
 					// FF 1.5 returns "0px" for the computed overflow value
 					if (AjxEnv.isFirefox1_5up && overflow == "0px") {
 						var overflowX = cssDecl.getPropertyValue("overflow-x");
-						overflow = overflowX == "hidden" 
+						overflow = overflowX == "hidden"
 								? "-moz-scrollbars-vertical"
-								: "-moz-scrollbars-horizontal"; 
+								: "-moz-scrollbars-horizontal";
 					}
 					if (overflow != 'hidden') {
 						temp._oldOverflow = overflow;
@@ -495,7 +495,7 @@ function (htmlElId, myZindex, lowThresholdZ, turnOffOverflowScroll, disableSelf)
 * @param html	[string]	HTML text
 * @param isRow	[boolean]*	true if the element is a TR
 */
-Dwt.parseHtmlFragment = 
+Dwt.parseHtmlFragment =
 function(html, isRow) {
 	if (!Dwt._div)
 		Dwt._div = document.createElement('div');
@@ -503,11 +503,11 @@ function(html, isRow) {
 	if (isRow)
 		html = "<table style='table-layout:fixed'>" + html + "</table>";
 	Dwt._div.innerHTML = html;
-	
+
 	return isRow ? Dwt._div.firstChild.rows[0] : Dwt._div.firstChild;
 };
 
-Dwt.contains = 
+Dwt.contains =
 function(parentEl, childEl) {
   	var isContained = false;
   	if (AjxEnv.isSafari) {
@@ -535,7 +535,7 @@ function(htmlEl) {
 *
 * @param cell		TD object we want cell index for
 */
-Dwt.getCellIndex = 
+Dwt.getCellIndex =
 function(cell) {
 	if (AjxEnv.isSafari) {
 		if (cell.tagName && cell.tagName.toLowerCase() == "td") {
@@ -550,4 +550,21 @@ function(cell) {
 		return cell.cellIndex;
 	}
 	return -1;
+};
+
+// remove the "del" class from the element's CSS class names and optionally add
+// "add" class if given.
+Dwt.delClass = function(el, del, add) {
+	var a = el.className.split(/\s+/);
+	for (var i = a.length; --i >= 0;)
+		if (a[i] == del)
+			a.splice(i, 1);
+	if (add)
+		a.push(add);
+	el.className = a.join(" ");
+};
+
+// adds the given class name to the element's CSS class names
+Dwt.addClass = function(el, c) {
+	Dwt.delClass(el, c, c);
 };
