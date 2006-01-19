@@ -40,7 +40,24 @@
 *
 */
 function AjxXslt() {
-	this._doc = AjxXmlDoc.create();
+	var doc = AjxXmlDoc.create();
+	if (AjxEnv.isIE) {
+		var msdoc = null;
+		var vers = ["MSXML2.FreeThreadedDOMDocument.5.0", "MSXML2.FreeThreadedDOMDocument.3.0"];
+		for (var i = 0; i < vers.length; i++) {
+			try {
+				msdoc = new ActiveXObject(vers[i]);
+				break;
+			} catch (ex) {
+			}
+		}
+		if (!msdoc) {
+			throw new AjxException("FreeThreadedDOMDocument", AjxException.UNSUPPORTED, "AjxXslt");
+		}
+		msdoc.async = false;
+		doc._doc = msdoc;
+	}
+	this._doc = doc;
 };
 
 AjxXslt.prototype.toString =
@@ -51,47 +68,76 @@ function() {
 AjxXslt.createFromUrl =
 function(url) {
 	var xslt = new AjxXslt();
+
 	xslt.loadUrl(url);
+
 	return xslt;
 };
 
 AjxXslt.createFromString =
 function(str) {
 	var xslt = new AjxXslt();
+	
 	xslt._doc.loadFromString(str);
-	
-	if (AjxEnv.isIE) {
-		return xslt;
-	}
-	
-	xslt.createProcessor(xslt._doc.getDoc());
+	xslt.createProcessor();
 	
 	return xslt;
 };
 
 AjxXslt.prototype.createProcessor =
-function(doc) {
-	this._processor = new XSLTProcessor();
-	this._processor.importStylesheet(doc);
+function() {
+	var doc = this._doc.getDoc();
+	if (AjxEnv.isNav) {
+		this._processor = new XSLTProcessor();
+		this._processor.importStylesheet(doc);
+	} else if (AjxEnv.isIE) {
+		var err = doc.parseError;
+	    if (err.errorCode != 0) {
+			DBG.println(AjxDebug.DBG1, "Parse error (" + err.reason +
+										") at line " + err.line +
+										", character " + err.linepos +
+										"\n" + err.srcText);
+			throw new AjxException(err.reason, AjxException.INVALID_PARAM, "AjxXslt.createProcessor");
+		}
+
+		var proc = null;
+		var vers = ["MSXML2.XSLTemplate.5.0", "MSXML2.XSLTemplate.3.0"];
+		for (var i = 0; i < vers.length; i++) {
+			try {
+				proc = new ActiveXObject(vers[i]);
+				break;
+			} catch (ex) {
+			}
+		}
+		if (!proc) {
+			throw new AjxException("XSLTemplate", AjxException.UNSUPPORTED, "AjxXslt.createProcessor");
+		}
+        this._processor = proc;
+        this._processor.stylesheet = doc;
+	}
 };
 
 AjxXslt._finishedLoading =
 function() {
 	var xslt = this._xslt;  // "this" is the document which xsl is being loaded to.
-	xslt.createProcessor(this);
+	xslt.createProcessor();
 };
 
 AjxXslt.prototype.loadUrl =
 function(url) {
 	var doc = this._doc;
 	
-	if (AjxEnv.isIE) {
-	} else if (AjxEnv.isNav) {
+	if (AjxEnv.isNav) {
 		var docImpl = doc.getDoc();
 		docImpl._xslt = this;  // for callback
 		docImpl.addEventListener("load", AjxXslt._finishedLoading, false);
 	}
+
 	doc.loadFromUrl(url);
+
+	if (AjxEnv.isIE) {
+		this.createProcessor();
+	}
 };
 
 AjxXslt.prototype.transformToDom =
@@ -116,17 +162,13 @@ function(dom) {
 		return this.transformIE(dom);  // already in str
 	} else if (AjxEnv.isNav) {
 		ret = this.transformNav(dom);
-		if (ret == undefined) {
-			DBG.println(AjxDebug.DBG1, "XSL transformation failed. (transformToDocument)");
-			return dom.documentElement.innerHTML;
-		}
-		if (ret.documentElement == undefined) {
-			DBG.println(AjxDebug.DBG1, "XSL transformation failed. (empty documentElement)");
-			return dom.documentElement.innerHTML;
-		}
 	} else {
 		DBG.println(AjxDebug.DBG1, "No XSL transformation due to browser incompatibility.");
 		return dom.documentElement.innerHTML;
+	}
+	
+	if (!ret || !ret.documentElement) {
+		throw new AjxException("XSL transformation failed.", AjxException.INVALID_PARAM, "AjxXslt.transformToString");
 	}
 	
 	var elem = ret.documentElement;
@@ -147,7 +189,15 @@ function(dom) {
 */
 AjxXslt.prototype.transformIE =
 function(dom) {
-	return dom.transformNode(this._doc.getDoc());
+	try {
+		var xsltProc = this._processor.createProcessor();
+        xsltProc.input = dom;
+        xsltProc.transform();
+		return xsltProc.output;
+	} catch (exception) {
+		DBG.println(AjxDebug.DBG1, "Exception in XSL transformation: "+exception.description);
+		throw new AjxException(exception.description, AjxException.INVALID_PARAM, "AjxXslt.transformIE");
+	}
 };
 
 /**
