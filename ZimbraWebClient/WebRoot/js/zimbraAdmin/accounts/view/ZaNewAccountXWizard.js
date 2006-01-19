@@ -55,14 +55,14 @@ function ZaNewAccountXWizard (parent, app) {
 	this._localXForm.setController(this._app);	
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaNewAccountXWizard.prototype.handleXFormChange));
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(this, ZaNewAccountXWizard.prototype.handleXFormChange));	
-	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/create_an_account.htm";		
+	this._helpURL = ZaNewAccountXWizard.helpURL;
 }
 
 
 ZaNewAccountXWizard.prototype = new ZaXWizardDialog;
 ZaNewAccountXWizard.prototype.constructor = ZaNewAccountXWizard;
 ZaXDialog.XFormModifiers["ZaNewAccountXWizard"] = new Array();
-
+ZaNewAccountXWizard.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/create_an_account.htm";
 ZaNewAccountXWizard.prototype.handleXFormChange = 
 function () {
 	if(this._localXForm.hasErrors()) {

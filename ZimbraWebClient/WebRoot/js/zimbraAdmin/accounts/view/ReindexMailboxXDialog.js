@@ -40,12 +40,12 @@ function ReindexMailboxXDialog(parent,  app, w, h) {
 	this.pollAction = new AjxTimedAction(this, this.getReindexStatus);
 	this._pollHandler = null;
 	
-	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/re-indexing_a_mailbox.htm";		
+	this._helpURL = ReindexMailboxXDialog.helpURL;		
 }
 
 ReindexMailboxXDialog.prototype = new ZaXDialog;
 ReindexMailboxXDialog.prototype.constructor = ReindexMailboxXDialog;
-
+ReindexMailboxXDialog.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/re-indexing_a_mailbox.htm";		
 
 ReindexMailboxXDialog.prototype.popup = 
 function () {

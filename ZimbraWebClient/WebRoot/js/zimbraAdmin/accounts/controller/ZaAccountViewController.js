@@ -37,13 +37,13 @@ function ZaAccountViewController(appCtxt, container, app) {
 	ZaXFormViewController.call(this, appCtxt, container, app, "ZaAccountViewController");
 	this._UICreated = false;
 	this.objType = ZaEvent.S_ACCOUNT;
-	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/provisioning_accounts.htm";		
+	this._helpURL = ZaAccountViewController.helpURL;
 	this.deleteMsg = ZaMsg.Q_DELETE_ACCOUNT;
 }
 
 ZaAccountViewController.prototype = new ZaXFormViewController();
 ZaAccountViewController.prototype.constructor = ZaAccountViewController;
-
+ZaAccountViewController.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/provisioning_accounts.htm";		
 //public methods
 
 /**

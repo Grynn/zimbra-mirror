@@ -32,19 +32,14 @@
 **/
 function ZaHelpView (parent, app) {
 	if (arguments.length == 0) return;
-	DwtComposite.call(this, parent, null, Dwt.ABSOLUTE_STYLE);	
-	this._app = app;
-	this._drawn = false;	
-	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
-	this._containedObject = null;
-	this.setScrollStyle(DwtControl.SCROLL);
+	ZaTabView.call(this, parent, app, "ZaHelpView");
 	this.initForm(new Object(), this.getMyXForm())
 //	this._createHTML();
 }
 
-ZaHelpView.prototype = new DwtComposite();
+ZaHelpView.prototype = new ZaTabView();
 ZaHelpView.prototype.constructor = ZaHelpView;
-
+ZaTabView.XFormModifiers["ZaHelpView"] = new Array();
 /**
 * @param xModelMetaData - XModel metadata that describes data model
 * @param xFormMetaData - XForm metadata that describes the form
@@ -68,13 +63,10 @@ ZaHelpView.prototype.showAboutDialog = function () {
 	this._appCtxt.getAppController().aboutDialog.popup();
 };
 
-ZaHelpView.prototype.getMyXForm = function() {	
-	var xFormObject = {
-		tableCssStyle:"width:100%;overflow:auto;",
-		itemDefaults: {
-			_SEPARATOR_: {containerCssStyle:"padding-right:3px;padding-left:3px;"}
-		},
-		items: [
+ZaHelpView.myXFormModifier = function(xFormObject) {	
+	xFormObject.tableCssStyle="width:100%;overflow:auto;";
+	xFormObject.itemDefaults = {_SEPARATOR_: {containerCssStyle:"padding-right:3px;padding-left:3px;"}};
+	xFormObject.items = [
 			{type:_OUTPUT_, label:null, value:ZaMsg.HELP_PAGE_0, colSpan:"*", cssStyle:"font-size:12pt;	font-weight: bold;"},
 			{type:_OUTPUT_, label:null, value:ZaMsg.HELP_PAGE_1, colSpan:"*", cssStyle:"font-size:12px;"},
 
@@ -138,12 +130,11 @@ ZaHelpView.prototype.getMyXForm = function() {
 					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
 					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
 					{type:_SPACER_, height:"10px"},
-		{type:_DWT_BUTTON_, label:"About Zimbra Version",onActivate:"this.getFormController().showAboutDialog()",
-					 width:"125px"}
+					{type:_DWT_BUTTON_, label:ZaMsg.About_Button_Label, onActivate:"this.getFormController().showAboutDialog()", width:"125px"}
 				]
 			}
-		]
-	}
-	return xFormObject;
+		];
 }
+ZaTabView.XFormModifiers["ZaHelpView"].push(ZaHelpView.myXFormModifier);
+
 

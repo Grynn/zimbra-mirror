@@ -47,14 +47,14 @@ function ZaAccountListController(appCtxt, container, app) {
 	this._searchPanel = null;
 	this._searchField = null;
 	this._defaultType = ZaItem.ACCOUNT;
-	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/provisioning_accounts.htm";	
+	this._helpURL = ZaAccountListController.helpURL;
 	this._UICreated = false;
 	this.objType = ZaEvent.S_ACCOUNT;	
 }
 
 ZaAccountListController.prototype = new ZaController();
 ZaAccountListController.prototype.constructor = ZaAccountListController;
-
+ZaAccountListController.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/provisioning_accounts.htm";
 ZaController.initToolbarMethods["ZaAccountListController"] = new Array();
 ZaController.initPopupMenuMethods["ZaAccountListController"] = new Array();
 

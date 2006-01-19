@@ -68,10 +68,10 @@ function ZaXDialog(parent, app, className, title, w, h,iKeyName) {
 	this._pageDiv.style.overflow = "auto";
 
 	this._createContentHtml();
-	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/administration_console_help.htm";	
+	this._helpURL = ZaXDialog.helpURL;	
 }
 ZA_BTN_INDEX = DwtDialog.NO_BUTTONS;
-
+ZaXDialog.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/administration_console_help.htm";
 ZaXDialog.prototype = new DwtDialog;
 ZaXDialog.prototype.constructor = ZaXDialog;
 ZaXDialog.XFormModifiers = new Object();
