@@ -25,11 +25,14 @@
 
 
 function AjxRpc() {
-}
+};
 
 // pool of RPC contexts
-AjxRpc._rpcCache = new Array();
-AjxRpc._RPC_CACHE_MAX = 10;
+AjxRpc._rpcCache = [];
+
+AjxRpc._RPC_CACHE_MAX = 100;	// maximum number of busy contexts we can have
+AjxRpc._RPC_REAP_COUNT = 5;		// run reaper when number of busy contexts is multiple of this
+AjxRpc._RPC_REAP_AGE = 300000;	// mark any context older than this (in ms) as free
 
 /**
 * Submits a request to a URL. The request is handled through a pool of request
@@ -62,14 +65,14 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet) {
 			newEx.msg = "Unknown Error";
 		}
 		if (!asyncMode)		
-			rpcCtxt.rpcRequestObj.busy = false;
+			rpcCtxt.busy = false;
 		throw newEx;
 	}
 	if (!asyncMode)
-		rpcCtxt.rpcRequestObj.busy = false;
+		rpcCtxt.busy = false;
 
 	return response;
-}
+};
 
 
 /**
@@ -79,8 +82,9 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet) {
 */
 function _RpcCtxt(id) {
 	this.id = id;
-	this.rpcRequestObj = new AjxRpcRequest(id);
-}
+	this.rpcRequestObj = new AjxRpcRequest(id, this);
+	this.busy = false;
+};
 
 /*
 * Factory method for getting context objects.
@@ -93,7 +97,7 @@ function() {
 	// See if we have one in the pool that's now free
 	for (var i = 0; i < AjxRpc._rpcCache.length; i++) {
 		rpcCtxt = AjxRpc._rpcCache[i];
-		if (!rpcCtxt.rpcRequestObj.busy) {
+		if (!rpcCtxt.busy) {
 			DBG.println(AjxDebug.DBG1, "Found free RPC context: " + rpcCtxt.id);
 			break;
 		}
@@ -104,15 +108,19 @@ function() {
 		if (AjxRpc._rpcCache.length == AjxRpc._RPC_CACHE_MAX) {
 			DBG.println(AjxDebug.DBG1, "Out of RPC contexts");
 			throw new AjxException("Out of RPC cache", AjxException.OUT_OF_RPC_CACHE, "ZmCsfeCommand._getRpcCtxt");	
+		} else if (i > 0 && (i % AjxRpc._RPC_REAP_COUNT == 0)) {
+			DBG.println(AjxDebug.DBG1, i + " busy RPC contexts");
+			AjxRpc._reap();
 		}
 		var id = "_rpcCtxt_" + i;
 		rpcCtxt = new _RpcCtxt(id);
 		DBG.println(AjxDebug.DBG1, "Created RPC " + id);
 		AjxRpc._rpcCache.push(rpcCtxt);
 	}
-	rpcCtxt.rpcRequestObj.busy = true;
+	rpcCtxt.busy = true;
+	rpcCtxt.timestamp = (new Date()).getTime();
 	return rpcCtxt;
-}
+};
 
 /**
 * Returns the RPC context with the given ID.
@@ -122,9 +130,25 @@ function() {
 AjxRpc.getRpcCtxt = 
 function(id) {
 	for (var i = 0; i < AjxRpc._rpcCache.length; i++) {
-		rpcCtxt = AjxRpc._rpcCache[i];
+		var rpcCtxt = AjxRpc._rpcCache[i];
 		if (rpcCtxt.id == id)
 			return rpcCtxt.rpcRequestObj;
 	}
 	return null;
-}
+};
+
+/*
+* Frees up busy contexts that are older than a certain age.
+*/
+AjxRpc._reap =
+function() {
+	var time = (new Date()).getTime();
+	for (var i = 0; i < AjxRpc._rpcCache.length; i++) {
+		var rpcCtxt = AjxRpc._rpcCache[i];
+		if (rpcCtxt.timestamp + AjxRpc._RPC_REAP_AGE < time) {
+			DBG.println(AjxDebug.DBG1, "AjxRpc._reap: cleared RPC context " + rpcCtxt.id);
+			rpcCtxt.busy = false;
+		}
+	}
+
+};

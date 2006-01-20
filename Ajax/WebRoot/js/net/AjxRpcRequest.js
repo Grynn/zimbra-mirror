@@ -25,21 +25,28 @@
 
 
 /**
-* class AjxRpcRequest encapsulates XMLHttpRequest as _httpReq
+* Creates a new AjxRpcRequest. The request object is an ActiveX object
+* for IE, and an XMLHttpRequest object otherwise.
+* @constructor
+* @class
+* This class represents an XML HTTP request, hiding differences between
+* browsers. The internal request object depends on the browser.
 *
+* @param id		[string]	unique ID for this request
+* @param ctxt	[_RpcCtxt]	owning context
 **/
-function AjxRpcRequest(id) {
+function AjxRpcRequest(id, ctxt) {
 	if (!AjxRpcRequest._inited) 
-		AjxRpcRequest._init();	
+		AjxRpcRequest._init();
 	
 	this.id = id;
+	this.ctxt = ctxt;
 	if (AjxEnv.isIE) {
 		this._httpReq = new ActiveXObject(AjxRpcRequest._msxmlVers);
 	} else if (AjxEnv.isSafari || AjxEnv.isNav) {
 		this._httpReq =  new XMLHttpRequest();
 	}
-	this.busy = false;
-}
+};
 
 AjxRpcRequest._inited = false;
 AjxRpcRequest._msxmlVers = null;
@@ -47,7 +54,7 @@ AjxRpcRequest._msxmlVers = null;
 AjxRpcRequest.prototype.toString = 
 function() {
 	return "AjxRpcRequest";
-}
+};
 
 /**
 * Sends this request to the target URL. If there is a callback, the request is
@@ -94,7 +101,7 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
 			return {text: this._httpReq.responseText, xml: this._httpReq.responseXML, success: false, status: this._httpReq.status};
 		}
 	}
-}
+};
 
 /*
 * Handler that runs when an asynchronous response has been received. It runs a
@@ -120,15 +127,15 @@ function(req, callback) {
 		} else {
 			callback.run( {text: req._httpReq.responseText, xml: req._httpReq.responseXML, success: false, status: req._httpReq.status} );				
 		}
-		req.busy = false;
+		req.ctxt.busy = false;
 	}
-}
+};
 
 AjxRpcRequest.prototype.cancel =
 function() {
 	DBG.println(AjxDebug.DBG1, "Aborting HTTP request");
 	this._httpReq.abort();
-}
+};
 
 AjxRpcRequest._init =
 function() {
@@ -148,4 +155,4 @@ function() {
 			throw new AjxException("MSXML not installed", AjxException.INTERNAL_ERROR, "AjxRpc._init");
 	}
 	AjxRpcRequest._inited = true;
-}
+};

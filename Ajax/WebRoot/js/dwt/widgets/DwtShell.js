@@ -191,11 +191,13 @@ function(busy, id, showbusyDialog, busyDialogDelay, cancelBusyCallback) {
 		Dwt.setCursor(this._busyOverlay, "wait");
     	Dwt.setVisible(this._busyOverlay, true);
     	this._setBusy = true;
+    	DBG.println(AjxDebug.DBG2, "set busy overlay, id = " + id);
     } else if (this._setBusy && (this._setBusyCount <= 0)) {
 		// transition from busy to non-busy state
 	    Dwt.setCursor(this._busyOverlay, "default");
 	    Dwt.setVisible(this._busyOverlay, false);
 	    this._setBusy = false;
+    	DBG.println(AjxDebug.DBG2, "remove busy overlay, id = " + id);
 	}
 	
 	// handle busy dialog whether we've changed state or not
