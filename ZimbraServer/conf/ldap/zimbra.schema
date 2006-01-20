@@ -299,6 +299,7 @@ objectIdentifier zimbraMailMode ZimbraAttrType:308
 objectIdentifier zimbraMtaAuthHost ZimbraAttrType:309
 objectIdentifier zimbraMtaAuthURL ZimbraAttrType:310
 objectIdentifier zimbraMtaMyNetworks ZimbraAttrType:311
+objectIdentifier zimbraFeatureViewInHtmlEnabled ZimbraAttrType:312
 
 #################################################################
 # object class OIDs
@@ -695,6 +696,13 @@ attributetype ( zimbraFeatureFiltersEnabled
 attributetype ( zimbraFeatureHtmlComposeEnabled
 	NAME 'zimbraFeatureHtmlComposeEnabled'
 	DESC 'enabled html composing'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( zimbraFeatureViewInHtmlEnabled
+	NAME 'zimbraFeatureViewInHtmlEnabled'
+	DESC 'option to view attachments in html'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
@@ -2366,6 +2374,7 @@ objectclass ( zimbraAccount
 		zimbraFeatureChangePasswordEnabled $
 		zimbraFeatureInitialSearchPreferenceEnabled $
 		zimbraFeatureFiltersEnabled $
+		zimbraFeatureViewInHtmlEnabled $
 		zimbraForeignPrincipal $
 		zimbraImapEnabled $
 		zimbraIsAdminAccount $ 
@@ -2515,7 +2524,7 @@ objectclass ( zimbraCOS
 		zimbraFeatureContactsEnabled $
 		zimbraFeatureGalEnabled $
 		zimbraFeatureCalendarEnabled $
-		zimbraFeatureIMEnabled $		
+		zimbraFeatureIMEnabled $
 		zimbraFeatureHtmlComposeEnabled $
 		zimbraFeatureTaggingEnabled $
 		zimbraFeatureAdvancedSearchEnabled $
@@ -2524,7 +2533,8 @@ objectclass ( zimbraCOS
 		zimbraFeatureChangePasswordEnabled $
 		zimbraFeatureInitialSearchPreferenceEnabled $
 		zimbraFeatureFiltersEnabled $
-		zimbraImapEnabled $		
+		zimbraImapEnabled $
+		zimbraFeatureViewInHtmlEnabled $
 		zimbraNotes $
 		zimbraMailHostPool $
 		zimbraMailIdleSessionTimeout $
