@@ -26,7 +26,7 @@
 	<property name="generated.dir" location="${build.dir}/generated" />
 	<property name="generated.java.dir" location="${generated.dir}/src/java" />
 
-	<property name="zimlets" value="query"/>
+	<property name="zimlets" value="com_zimbra_xslt"/>
 
 	<path id="all.java.path">
 		<pathelement location="${src.java.dir}" />

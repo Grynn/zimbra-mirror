@@ -1,0 +1,16 @@
+<zimletConfig name="com_zimbra_xslt" version="1.0">
+	<global>
+        <property name="allowedDomains">*.yahoo.com,*.google.com,*.amazon.com,*.wikipedia.org,*.wiktionary.org</property>
+		<property name="yhooSearchUrl">http://api.search.yahoo.com/WebSearchService/V1/webSearch</property>
+		<property name="yhooLocalUrl">http://api.local.yahoo.com/LocalSearchService/V1/localSearch</property>
+		<property name="googUrl">http://api.google.com/search/beta2</property>
+		<property name="amznUrl">http://webservices.amazon.com/onca/xml</property>
+		<property name="wikipediaUrl">http://en.wikipedia.org/wiki/</property>
+		<property name="wiktionaryUrl">http://en.wiktionary.org/wiki/</property>
+        <property name="googleKey">ifPB8JNQFHIcFly3fJWKEqZ7MPOj7lur</property>
+        <property name="amazonKey">1NFJ1VN7R5TH46K10GR2</property>
+        <property name="zipcode">94404</property>
+        <property name="ywsAppId">zimbra</property>
+        <property name="numResults">5</property>
+    </global>
+</zimletConfig>

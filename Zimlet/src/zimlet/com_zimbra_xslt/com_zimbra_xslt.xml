@@ -1,0 +1,28 @@
+<zimlet name="com_zimbra_xslt" version="1.0" description="XSLT based query Zimlet">
+	<include>com_zimbra_xslt.js</include>
+
+	<include>amazon/amazon.js</include>
+	<resource>amazon/amazon.xsl</resource>
+	<resource>amazon/a.jpg</resource>
+	<includeCSS>amazon/amazon.css</includeCSS>
+
+	<include>google/google.js</include>
+	<resource>google/google.xsl</resource>
+	<resource>google/g.gif</resource>
+	<includeCSS>google/google.css</includeCSS>
+
+	<include>yahoo/yahoo.js</include>
+	<resource>yahoo/yahoo.xsl</resource>
+	<include>yahoo/yahoolocal.js</include>
+	<resource>yahoo/yahoolocal.xsl</resource>
+	<resource>yahoo/y.gif</resource>
+	<includeCSS>yahoo/yahoo.css</includeCSS>
+
+	<include>wiki/wiki.js</include>
+	<resource>wiki/mediawiki.xsl</resource>
+	<resource>wiki/w.jpg</resource>
+	<includeCSS>wiki/wiki.css</includeCSS>
+
+	<handlerObject>com_zimbra_xslt</handlerObject>
+    <zimletPanelItem label="Search"/>
+</zimlet>
