@@ -568,3 +568,54 @@ Dwt.delClass = function(el, del, add) {
 Dwt.addClass = function(el, c) {
 	Dwt.delClass(el, c, c);
 };
+
+// Selects a given range in an input field.  Provide a reference to the input
+// field and start and end position.
+Dwt.setSelectionRange = function(input, start, end) {
+	if (AjxEnv.isGeckoBased) {
+		input.setSelectionRange(start, end);
+	} else if (AjxEnv.isIE) {
+		var range = input.createTextRange();
+		range.collapse(true);
+		range.moveStart("character", start);
+		range.moveEnd("character", end - start);
+		range.select();
+	} else {
+		// FIXME: find solutions for other browsers
+		input.select();
+	}
+};
+
+// Retrieves the start of the selection.  For a collapsed range, this is
+// equivalent to getSelectionEnd.  Based on some reverse engineering that I
+// described here: http://www.bazon.net/mishoo/articles.epl?art_id=1292
+Dwt.getSelectionStart = function(input) {
+	if (AjxEnv.isGeckoBased) {
+		return input.selectionStart;
+	} else if (AjxEnv.isIE) {
+		var range = document.selection.createRange();
+		var isCollapsed = range.compareEndPoints("StartToEnd", range) == 0;
+		if (!isCollapsed)
+			range.collapse(true);
+		var b = range.getBookmark();
+		return b.charCodeAt(2) - 2;
+	}
+	// FIXME: find solutions for other browsers
+	return input.value.length;
+};
+
+// Retrieves the end of the selection in an input field.
+Dwt.getSelectionEnd = function(input) {
+	if (AjxEnv.isGeckoBased) {
+		return input.selectionEnd;
+	} else if (AjxEnv.isIE) {
+		var range = document.selection.createRange();
+		var isCollapsed = range.compareEndPoints("StartToEnd", range) == 0;
+		if (!isCollapsed)
+			range.collapse(false);
+		var b = range.getBookmark();
+		return b.charCodeAt(2) - 2;
+	}
+	// FIXME: find solutions for other browsers
+	return input.value.length;
+};
