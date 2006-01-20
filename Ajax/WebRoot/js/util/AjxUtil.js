@@ -432,9 +432,14 @@ function(node) {
  */
 AjxUtil.createProxy = 
 function(object, level) {
+	var proxy;
 	var proxyCtor = new Function();
 	proxyCtor.prototype = object;
-	var proxy = new proxyCtor;
+	if (object instanceof Array) {
+		proxy  = new Array();
+	} else {
+		proxy = new proxyCtor;
+	}
 	
 	if (level) {
 		for (var prop in object) {
