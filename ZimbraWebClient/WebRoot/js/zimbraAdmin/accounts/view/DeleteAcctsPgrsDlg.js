@@ -62,6 +62,7 @@ function DeleteAcctsPgrsDlg(parent,  app, w, h) {
 	this._currentAccount = null;
 	this.initForm(DeleteAcctsPgrsDlg.myXModel,this.getMyXForm());
 	this._pollHandler = null;	
+	this._aborted = false;
 }
 
 DeleteAcctsPgrsDlg.prototype = new ZaXDialog;
@@ -94,14 +95,17 @@ DeleteAcctsPgrsDlg.prototype.abortDeletingAccounts =
 function(evt) {
 	try {
 		var acc = this._containedObject[this._currentIndex];
-		if(acc && acc.deleteCommand)
+		//cancelling the command does not prevent the account from being deleted BUG: 5452
+		/*if(acc && acc.deleteCommand)
 			acc.deleteCommand.cancel();
-		
+			
+		*/
 		this._button[DeleteAcctsPgrsDlg.ABORT_BUTTON].setEnabled(false);
 		var obj = this._localXForm.getInstance();
-		this._app.getAccountListController().fireRemovalEvent(obj[DeleteAcctsPgrsDlg._DELETED_ACCTS]);			
+//		this._app.getAccountListController().fireRemovalEvent(obj[DeleteAcctsPgrsDlg._DELETED_ACCTS]);			
 		AjxTimedAction.cancelAction(this._pollHandler);
 		this._pollHandler = null;
+		this._aborted = true;
 		this._localXForm.getInstance().status = ZaMsg.NAD_DeletingCancelled;
 		this._localXForm.refresh();
 	} catch (ex) {
@@ -112,6 +116,7 @@ function(evt) {
 DeleteAcctsPgrsDlg.prototype.startDeletingAccounts = 
 function(evt) {
 	try {
+		this._aborted = false;
 		this.pollAction = new AjxTimedAction(this, this.deleteOneAccount);		
 		this._currentIndex=0;
 		var obj = new Object();
@@ -149,16 +154,18 @@ function (result) {
 	} else {
 		obj[DeleteAcctsPgrsDlg._DELETED_ACCTS].push(this._containedObject[this._currentIndex]);
 		this._currentIndex++;
-		if(this._currentIndex < this._containedObject.length) {
+		if((this._currentIndex < this._containedObject.length) && !this._aborted) {
 			obj.status = ZaMsg.NAD_DeleteAccStatus + " " + this._containedObject[this._currentIndex][ZaAccount.A_name];
 			this._pollHandler = AjxTimedAction.scheduleAction(this.pollAction, "50");				
 		} else {
 			//done
-		this._button[DeleteAcctsPgrsDlg.ABORT_BUTTON].setEnabled(false);			
+			this._button[DeleteAcctsPgrsDlg.ABORT_BUTTON].setEnabled(false);			
 			this._app.getAccountListController().fireRemovalEvent(obj[DeleteAcctsPgrsDlg._DELETED_ACCTS]);						
 			AjxTimedAction.cancelAction(this._pollHandler);	
 			this._pollHandler = null;
-			obj.status = ZaMsg.NAD_FinishedDeletingAccounts;
+			if(!this._aborted) {
+				obj.status = ZaMsg.NAD_FinishedDeletingAccounts;
+			}
 		}
 //		this._localXForm.setInstance(obj);		
 		this._localXForm.refresh();
