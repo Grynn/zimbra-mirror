@@ -789,6 +789,12 @@ HostNameOrIp_XModelItem.prototype.validateType = XModelItem.prototype.validateSt
 HostNameOrIp_XModelItem.prototype.maxLength = 256;
 HostNameOrIp_XModelItem.prototype.pattern = [ AjxUtil.HOST_NAME_RE, AjxUtil.IP_ADDRESS_RE,AjxUtil.HOST_NAME_WITH_PORT_RE ];
 
+ShortURL_XModelItem = function() {}
+XModelItemFactory.createItemType("_SHORT_URL_", "short_url", ShortURL_XModelItem);
+ShortURL_XModelItem.prototype.validateType = XModelItem.prototype.validateString;
+ShortURL_XModelItem.prototype.maxLength = 256;
+ShortURL_XModelItem.prototype.pattern = [AjxUtil.SHORT_URL_RE];
+
 Port_XModelItem = function() {}
 XModelItemFactory.createItemType("_PORT_", "port", Port_XModelItem);
 Port_XModelItem.prototype.validateType = XModelItem.prototype.validateNumber;
