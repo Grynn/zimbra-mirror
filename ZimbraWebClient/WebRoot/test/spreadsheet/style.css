@@ -19,10 +19,20 @@
 .ZmSpreadSheet td.LeftSelected div { background-color: #ccc; border-color: #fff; }
 
 .ZmSpreadSheet .InputField { position: absolute; padding: 0 !important; border: 2px solid #000; }
+.ZmSpreadSheet input.InputField { z-index: 10; }
 .ZmSpreadSheet span.InputField { visibility: hidden; border: none; top: 0px; left: 0px; }
 .ZmSpreadSheet .Wrapper { overflow: hidden; white-space: nowrap; }
 
 .ZmSpreadSheet td.hasFormula { color: #555; background-color: #fafafa; }
 
-.ZmSpreadSheet td.SpreadSheet-Type-number { text-align: right; font-family: monospace; }
-.ZmSpreadSheet td.SpreadSheet-Type-currency { text-align: right; font-family: monospace; }
+.ZmSpreadSheet td.SpreadSheet-Type-number { text-align: right; }
+.ZmSpreadSheet td.SpreadSheet-Type-currency { text-align: right; }
+
+.ZmSpreadSheet .ShowRange {
+  z-index: 5;
+  position: absolute; left: 0; top: 0;
+  overflow: hidden; font-size: 1px; line-height: 1px; /* for IE */
+  opacity: 0.3;
+  filter: alpha(opacity=30);
+  background-color: #acf; border: 1px solid #00f;
+}
