@@ -38,7 +38,7 @@ function MoveAliasXDialog(parent,  app, w, h) {
 	var moveButton = new DwtDialog_ButtonDescriptor(MoveAliasXDialog.MOVE_BUTTON, ZaMsg._move, DwtDialog.ALIGN_RIGHT, new AjxCallback(this, this.doMove));	
 	var closeButton = new DwtDialog_ButtonDescriptor(MoveAliasXDialog.CLOSE_BUTTON, AjxMsg._close, DwtDialog.ALIGN_RIGHT, new AjxCallback(this, this.closeMe));		
 	this._extraButtons = [helpButton,moveButton,closeButton];	
-	ZaXDialog.call(this, parent, app, null, ZaMsg.MoveAlias_Title, null, null);
+	ZaXDialog.call(this, parent, app, null, ZaMsg.MoveAlias_Title, w, h);
 	this._containedObject = new ZaSearch();
 	this.initForm(ZaSearch.myXModel,this.getMyXForm());
 }
@@ -162,7 +162,7 @@ function() {
 								}
 							},
 							{type:_DWT_BUTTON_, label:ZaMsg.search, toolTipContent:ZaMsg.searchForAccounts, icon:ZaMsg.search, onActivate:MoveAliasXDialog.srchButtonHndlr},
-							{type:_OSELECT_,width:"350px", colSpan:2,ref:ZaSearch.A_selected, choices:MoveAliasXDialog.resultChoices, label:null,multiple:false}
+							{type:_OSELECT_,width:"450px",height:"300px", colSpan:2,ref:ZaSearch.A_selected, choices:MoveAliasXDialog.resultChoices, label:null,multiple:false}
 						]
 					},
 					{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 2", relevantBehaviorBehavior:_HIDE_,

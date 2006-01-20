@@ -339,7 +339,7 @@ function(ev) {
 				appContent.setSize(ev.newWidth, ev.newHeight - topToolbar.getH());
 		} else {
 			if (deltaHeight) {
-				var list = [ZaAppViewMgr.C_APP_CHOOSER, ZaAppViewMgr.C_SASH, ZaAppViewMgr.C_APP_CONTENT, ZaAppViewMgr.C_STATUS];
+				var list = [ZaAppViewMgr.C_APP_CHOOSER, ZaAppViewMgr.C_SASH, ZaAppViewMgr.C_APP_CONTENT,ZaAppViewMgr.C_TREE, ZaAppViewMgr.C_STATUS];
 				this._stickToGrid(list);
 			}
 			if (deltaWidth) {
