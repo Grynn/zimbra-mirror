@@ -333,9 +333,9 @@ ZmCsfeCommand.prototype.cancel =
 function() {
 	if (!this._rpcId) return;
 	
-	var rpcRequestObj = AjxRpc.getRpcCtxt(this._rpcId);
-	if (rpcRequestObj)
-		rpcRequestObj.cancel();
+	var req = AjxRpc.getRpcRequest(this._rpcId);
+	if (req)
+		req.cancel();
 }
 
 // DEPRECATED - instead, use instance method invoke() above

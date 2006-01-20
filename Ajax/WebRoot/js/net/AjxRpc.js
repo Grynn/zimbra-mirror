@@ -51,7 +51,7 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet) {
 	var rpcCtxt = AjxRpc._getFreeRpcCtxt();
 
 	try {
-	 	var response = rpcCtxt.rpcRequestObj.invoke(requestStr, serverUrl, requestHeaders, callback, useGet);
+	 	var response = rpcCtxt.req.invoke(requestStr, serverUrl, requestHeaders, callback, useGet);
 	} catch (ex) {
 		var newEx = new AjxException();
 		newEx.method = "AjxRpc.prototype._invoke";
@@ -72,18 +72,6 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet) {
 		rpcCtxt.busy = false;
 
 	return response;
-};
-
-
-/**
-* Wrapper for a request context.
-*
-* @param id		unique ID for this context
-*/
-function _RpcCtxt(id) {
-	this.id = id;
-	this.rpcRequestObj = new AjxRpcRequest(id, this);
-	this.busy = false;
 };
 
 /*
@@ -107,7 +95,7 @@ function() {
 	if (i == AjxRpc._rpcCache.length) {
 		if (AjxRpc._rpcCache.length == AjxRpc._RPC_CACHE_MAX) {
 			DBG.println(AjxDebug.DBG1, "Out of RPC contexts");
-			throw new AjxException("Out of RPC cache", AjxException.OUT_OF_RPC_CACHE, "ZmCsfeCommand._getRpcCtxt");	
+			throw new AjxException("Out of RPC cache", AjxException.OUT_OF_RPC_CACHE, "ZmCsfeCommand._getFreeRpcCtxt");
 		} else if (i > 0 && (i % AjxRpc._RPC_REAP_COUNT == 0)) {
 			DBG.println(AjxDebug.DBG1, i + " busy RPC contexts");
 			AjxRpc._reap();
@@ -123,16 +111,16 @@ function() {
 };
 
 /**
-* Returns the RPC context with the given ID.
+* Returns the request from the RPC context with the given ID.
 *
 * @param id		[string]	RPC context ID
 */
-AjxRpc.getRpcCtxt = 
+AjxRpc.getRpcRequest = 
 function(id) {
 	for (var i = 0; i < AjxRpc._rpcCache.length; i++) {
 		var rpcCtxt = AjxRpc._rpcCache[i];
 		if (rpcCtxt.id == id)
-			return rpcCtxt.rpcRequestObj;
+			return rpcCtxt.req;
 	}
 	return null;
 };
@@ -147,8 +135,20 @@ function() {
 		var rpcCtxt = AjxRpc._rpcCache[i];
 		if (rpcCtxt.timestamp + AjxRpc._RPC_REAP_AGE < time) {
 			DBG.println(AjxDebug.DBG1, "AjxRpc._reap: cleared RPC context " + rpcCtxt.id);
+			rpcCtxt.req.cancel();
 			rpcCtxt.busy = false;
 		}
 	}
 
+};
+
+/**
+* Wrapper for a request context.
+*
+* @param id		unique ID for this context
+*/
+function _RpcCtxt(id) {
+	this.id = id;
+	this.req = new AjxRpcRequest(id, this);
+	this.busy = false;
 };

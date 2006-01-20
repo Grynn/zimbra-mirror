@@ -180,9 +180,9 @@ ZmCsfeAsynchCommand.prototype.cancel =
 function() {
 	if (!this._rpcId) return;
 	
-	var rpcRequestObj = AjxRpc.getRpcCtxt(this._rpcId);
-	if (rpcRequestObj)
-		rpcRequestObj.cancel();
+	var req = AjxRpc.getRpcRequest(this._rpcId);
+	if (req)
+		req.cancel();
 }
 
 ZmCsfeAsynchCommand.prototype.invoke = 
