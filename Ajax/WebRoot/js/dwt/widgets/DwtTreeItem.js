@@ -95,8 +95,8 @@ function() {
 }
 
 DwtTreeItem.prototype.setChecked =
-function(checked) {
-	if (this._itemChecked != checked) {
+function(checked, force) {
+	if ((this._itemChecked != checked) || force) {
 		this._itemChecked = checked;
 		if (this._checkBox != null) {
 			this._checkBox.checked = checked;

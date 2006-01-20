@@ -194,6 +194,28 @@ function(child) {
 	this.getHtmlElement().removeChild(child.getHtmlElement());
 }
 
+/**
+* Workaround for IE, which resets checkbox state when an element is appended to the DOM.
+* Go through all tree items recursively. If one is checked, make sure the element is checked.
+*
+* @param treeItem	[DwtTreeItem]	checkbox style tree item
+*/
+DwtTree.prototype.setCheckboxes =
+function(treeItem) {
+	if (!this._isCheckedStyle() || !AjxEnv.isIE) return;
+	
+	var items;
+	if (treeItem) {
+		if (treeItem.getChecked())
+			treeItem.setChecked(true, true);
+		items = treeItem.getItems();
+	} else {
+		items = this.getItems();
+	}
+	for (var i = 0; i < items.length; i++)
+		this.setCheckboxes(items[i]);
+};
+
 DwtTree.prototype._deselect =
 function(item) {
 	if (this._selectedItems.contains(item)) {
