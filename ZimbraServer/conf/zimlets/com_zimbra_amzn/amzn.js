@@ -51,10 +51,9 @@ function(spanElement, obj, context, canvas) {
 	if (Com_Zimbra_Amzn.CACHE[obj]) {
 		Com_Zimbra_Amzn._displayBook(Com_Zimbra_Amzn.CACHE[obj].Image, Com_Zimbra_Amzn.CACHE[obj].Book, obj);
 	} else {
-		var request = new AjxRpcRequest("amazon");
 		var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(Com_Zimbra_Amzn.URL + obj.replace(/[-A-Z ]/ig,''));
 		DBG.println(AjxDebug.DBG2, "Com_Zimbra_Amzn url " + url);
-		request.invoke(null, url, null, new AjxCallback(this, Com_Zimbra_Amzn._callback, obj), true);
+		AjxRpc.invoke(null, url, null, new AjxCallback(this, Com_Zimbra_Amzn._callback, obj), true);
 	}	
 };
 

@@ -73,11 +73,10 @@ function(ev) {
 	var ret = service.getRequest(this, q);
 	
 	var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(ret.url);
-	var request = new AjxRpcRequest("com_zimbra_xslt");
 	if (ret.req) {
-		request.invoke(ret.req, url, {"Content-Type": "text/xml"}, new AjxCallback(this, this.callback, [ canvas, service ]), false);
+		AjxRpc.invoke(ret.req, url, {"Content-Type": "text/xml"}, new AjxCallback(this, this.callback, [ canvas, service ]), false);
 	} else {
-		request.invoke(null, url, null, new AjxCallback(this, this.callback, [ canvas, service ]), true);
+		AjxRpc.invoke(null, url, null, new AjxCallback(this, this.callback, [ canvas, service ]), true);
 	}
 };
 
