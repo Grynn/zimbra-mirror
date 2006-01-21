@@ -317,6 +317,13 @@ function(tmpObj, app) {
 		return false;
 	}
 	
+	if(tmpObj.attrs[ZaAccount.A_zimbraMailIdleSessionTimeout] != "" && tmpObj.attrs[ZaAccount.A_zimbraMailIdleSessionTimeout] !=null && !AjxUtil.isLifeTime(tmpObj.attrs[ZaAccount.A_zimbraMailIdleSessionTimeout])) {
+		//show error msg
+		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_MailIdleSessionTimeout + " ! ");
+
+		return false;
+	}
+		
 	if(tmpObj.attrs[ZaAccount.A_zimbraMailMessageLifetime] != "" && tmpObj.attrs[ZaAccount.A_zimbraMailMessageLifetime] !=null && !AjxUtil.isLifeTime(tmpObj.attrs[ZaAccount.A_zimbraMailMessageLifetime])) {
 		//show error msg
 		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_MailMessageLifetime + " ! ");

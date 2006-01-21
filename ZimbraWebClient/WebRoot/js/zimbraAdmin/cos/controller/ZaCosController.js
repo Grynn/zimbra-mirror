@@ -290,12 +290,19 @@ function () {
 		return false;
 	}
 
-	if(!AjxUtil.isLifeTime(tmpObj.attrs[ZaCos.A_zimbraAdminAuthTokenLifetime])) {
+/*	if(!AjxUtil.isLifeTime(tmpObj.attrs[ZaCos.A_zimbraAdminAuthTokenLifetime])) {
 		//show error msg
 		this._errorDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_AdminAuthTokenLifetime + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
 		this._errorDialog.popup();		
 		return false;
-	}		
+	}		*/
+	if(!AjxUtil.isLifeTime(tmpObj.attrs[ZaCos.A_zimbraMailIdleSessionTimeout])) {
+		//show error msg
+		this._errorDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_MailIdleSessionTimeout + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+		this._errorDialog.popup();		
+		return false;
+	}			
+	
 	
 	if(!AjxUtil.isLifeTime(tmpObj.attrs[ZaCos.A_zimbraMailMessageLifetime])) {
 		//show error msg
