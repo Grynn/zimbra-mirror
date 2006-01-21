@@ -404,6 +404,9 @@ function () {
 		} else {
 			var detailStr = "";
 			for (var prop in ex) {
+				if(ex[prop] instanceof Function) 
+					continue;
+					
 				detailStr = detailStr + prop + " - " + ex[prop] + "\n";				
 			}
 			if(ex.code == ZmCsfeException.COS_EXISTS) {
