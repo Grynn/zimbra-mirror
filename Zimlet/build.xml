@@ -15,7 +15,7 @@
 	<property name="dist.zimlet.dir" location="${dist.dir}/zimlets" />
 
 	<property name="server.jars.dir" location="../ZimbraServer/jars" />
-	<property name="zimbrastore.jar" location="../ZimbraServer/build/dist/lib/zimbrastore.jar" />
+	<property name="zimbrastore.jar" location="../ZimbraServer/build/dist/lib/jars/zimbrastore.jar" />
 	<property name="jars.dir" location="jars" />
 	<property name="config.dir" location="conf" />
 	<property name="src.dir" location="src" />
