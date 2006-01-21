@@ -28,6 +28,7 @@
 function ZaDistributionList(app, id, name, memberList, description, notes) {
 	ZaItem.call(this, app);
 	this.attrs = new Object();
+	this.attrs[ZaDistributionList.A_mailStatus] = "enabled";
 	this.id = (id != null)? id: null;
 	this.name = (name != null) ? name: null;
 	this._selfMember = new ZaDistributionListMember(this.name);

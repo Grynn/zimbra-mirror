@@ -216,12 +216,28 @@ function(searchQuery) {
 			this._appCtxt.getClientCmdHdlr().execute((searchString.substr(5)).split(" "));
 			return;
 		}
-		
 		//this._searchField.setObject(searchString);
 		this.pages = new Object();
 		this._setQuery(searchQuery);
 		this._currentPageNum = 1;
 		this.show(ZaSearch.searchByQueryHolder(searchQuery, this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app));	
+		if(searchQuery.types && searchQuery.types.length > 1) {
+			//not sortable by status in the mixed view
+			this._contentView._headerList[3]._sortable=false;
+			this._contentView.unsetSortedColStyle(this._contentView._headerList[3]._id);
+		} else {
+			if(searchQuery.types[0] == ZaSearch.DLS) {
+				this._contentView._headerList[3]._sortable=true;
+				this._contentView._headerList[3]._sortField = ZaDistributionList.A_mailStatus;
+			} else if (searchQuery.types[0] == ZaSearch.ALIASES) {
+				this._contentView._headerList[3]._sortable=false;
+				this._contentView.unsetSortedColStyle(this._contentView._headerList[3]._id);				
+			} else if(searchQuery.types[0] == ZaSearch.ACCOUNTS) {
+				this._contentView._headerList[3]._sortable=true;
+				this._contentView._headerList[3]._sortField = ZaAccount.A_accountStatus;
+			}
+		}
+
 	} catch (ex) {
 		// Only restart on error if we are not initialized and it isn't a parse error
 		if (ex.code != ZmCsfeException.MAIL_QUERY_PARSE_ERROR) {

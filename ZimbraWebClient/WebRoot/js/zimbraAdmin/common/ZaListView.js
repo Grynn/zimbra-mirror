@@ -98,6 +98,22 @@ function(columnItem, bSortAsc) {
 	}
 	this.setUI();
 }
+ZaListView.prototype.unsetSortedColStyle = 
+function(columnId) {
+		// unset current column arrow
+		oldArrowId = DwtListView.HEADERITEM_ARROW + columnId;
+		oldArrowCell = document.getElementById(oldArrowId);
+		if (oldArrowCell && oldArrowCell.firstChild) {
+			var imgEl = (AjxImg._mode == AjxImg.SINGLE_IMG) ? oldArrowCell.firstChild : oldArrowCell.firstChild.firstChild;
+			if (imgEl)
+				imgEl.style.visibility = "hidden";
+		}
+		
+		// reset style for old sorted column
+		var oldSortedCol = document.getElementById(this._currentColId);
+		if (oldSortedCol)
+			oldSortedCol.className = "DwtListView-Column";
+}
 
 ZaListView.prototype._columnClicked =
 function(clickedCol, ev) {

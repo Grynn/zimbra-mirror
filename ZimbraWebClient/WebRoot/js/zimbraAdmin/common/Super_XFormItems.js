@@ -255,7 +255,31 @@ Super_XFormItem.updateCss = function(levels) {
 * "Reset to *** value" link
 **/
 Super_AnchorHelper_XFormItem = function () {}
-XFormItemFactory.createItemType("_SUPER_ANCHOR_HELPER_", "super_anchor_helper", Super_AnchorHelper_XFormItem, Anchor_XFormItem);
+XFormItemFactory.createItemType("_SUPER_ANCHOR_HELPER_","super_anchor_helper", Super_AnchorHelper_XFormItem, Dwt_Button_XFormItem);
+
+// implement the following to actually construct the instance of your widget
+Super_AnchorHelper_XFormItem.prototype.constructWidget = function () {
+	var widget = this.widget = new DwtButton(this.getForm(), this.getCssClass());
+	var height = this.getHeight();
+	var width = this.getWidth();
+	if(!width) width = "120px";
+	var el = null;
+	if (width != null || height != null){
+		el = widget.getHtmlElement();
+		if (width != null) el.style.width = width;
+		if (height != null) el.style.height = height;
+	} 
+//	this._addCssStylesToDwtWidget();
+	var label = this.getParentItem().getInheritedProperty("resetToSuperLabel");	
+	widget.setText(label);
+
+	var ls = new AjxListener(this, Super_AnchorHelper_XFormItem.prototype.resetToSuperValue);
+	widget.addSelectionListener(ls);
+
+	return widget;
+}
+
+/*XFormItemFactory.createItemType("_SUPER_ANCHOR_HELPER_", "super_anchor_helper", Super_AnchorHelper_XFormItem, Anchor_XFormItem);
 Super_AnchorHelper_XFormItem.prototype.getAnchorTag = function(href, label) {
 	if (href == null) href = this.getHref();
 	if (label == null) label = this.getParentItem().getInheritedProperty("resetToSuperLabel");
@@ -267,7 +291,7 @@ Super_AnchorHelper_XFormItem.prototype.getAnchorTag = function(href, label) {
 			">",
 				label,
 			"</a>");
-}
+}*/
 
 Super_AnchorHelper_XFormItem.prototype.resetToSuperValue = function(event) {
 	this.getForm().itemChanged(this.getParentItem(), null, event);
