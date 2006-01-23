@@ -32,19 +32,14 @@
 **/
 function ZaMigrationWizView (parent, app) {
 	if (arguments.length == 0) return;
-	DwtComposite.call(this, parent, null, Dwt.ABSOLUTE_STYLE);	
-	this._app = app;
-	this._drawn = false;	
-	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
-	this._containedObject = null;
-	this.setScrollStyle(DwtControl.SCROLL);
+	ZaTabView.call(this, parent, app, "ZaMigrationWizView");
 	this.initForm(new Object(), this.getMyXForm())
 //	this._createHTML();
 }
 
-ZaMigrationWizView.prototype = new DwtComposite();
+ZaMigrationWizView.prototype = new ZaTabView();
 ZaMigrationWizView.prototype.constructor = ZaMigrationWizView;
-
+ZaTabView.XFormModifiers["ZaMigrationWizView"] = new Array();
 /**
 * @param xModelMetaData - XModel metadata that describes data model
 * @param xFormMetaData - XForm metadata that describes the form
@@ -64,36 +59,30 @@ function (xModelMetaData, xFormMetaData) {
 	this._drawn = true;
 }
 
-ZaMigrationWizView.prototype.showAboutDialog = function () {
-	this._appCtxt.getAppController().aboutDialog.popup();
-};
+ZaMigrationWizView.myXFormModifier = function(xFormObject) {	
+	xFormObject.tableCssStyle="width:100%;overflow:auto;";
+	xFormObject.itemDefaults = {_SEPARATOR_: {containerCssStyle:"padding-right:3px;padding-left:3px;"}};	
+	xFormObject.items = [
+			{type:_OUTPUT_, label:null, value:ZaMsg.DOWNLOAD_PAGE_0, colSpan:"*", cssStyle:"font-size:12pt;	font-weight: bold;"},
+			{type:_OUTPUT_, label:null, value:ZaMsg.DOWNLOAD_PAGE_1, colSpan:"*", cssStyle:"font-size:12px;"},
 
-ZaMigrationWizView.prototype.getMyXForm = function() {	
-	var xFormObject = {
-		tableCssStyle:"width:100%;overflow:auto;",
-		itemDefaults: {
-			_SEPARATOR_: {containerCssStyle:"padding-right:3px;padding-left:3px;"}
-		},
-		items: [
-			{type:_GROUP_, numCols:2, 
+			{type:_SPACER_, colSpan:"*"},
+			{type:_GROUP_, numCols:2, zName:"DownloadsMainGroup",
 				items: [
-					{type:_GROUP_,numCols:4,
+					{type:_GROUP_,numCols:2,
 						items: [
-							{type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
-							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_10,href:"/zimbraAdmin/adminhelp/pdf/MigrationWizard.pdf"},						
 							{type:_OUTPUT_, value:AjxImg.getImageHtml("MigrationWiz")},
-							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_MIGRATION_WIZ_1,href:"http://www.zimbra.com/community/downloads.php"}
+							{type:_OUTPUT_, cssStyle:"font-size:12px;", labelLocation:_NONE_, label:null, value:ZaMsg.IMPORT_WIZ_DOWNLOAD_LINK}
 						]
 					},
-					{type:_SPACER_, colSpan:"*"},					
-					{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.HELP_PAGE_11,
-					 cssStyle:"padding-right:10px;padding-left:10px;"},
-					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
-					{type:_SPACER_, height:"10px"}
+					{type:_GROUP_,numCols:2,
+						items: [
+							{type:_OUTPUT_,  value:AjxImg.getImageHtml("MigrationWiz")},
+							{type:_OUTPUT_, cssStyle:"font-size:12px;", labelLocation:_NONE_, label:null, value:ZaMsg.MIG_WIZ_DOWNLOAD_LINK}
+						]
+					}
 				]
 			}
-		]
-	}
-	return xFormObject;
+		];
 }
-
+ZaTabView.XFormModifiers["ZaMigrationWizView"].push(ZaMigrationWizView.myXFormModifier);
