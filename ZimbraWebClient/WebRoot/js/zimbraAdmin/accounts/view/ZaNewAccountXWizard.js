@@ -401,7 +401,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 						},							
 						{ref:ZaAccount.A_zimbraPrefMailItemsPerPage,labelCssStyle:"width:150px;", type:_SUPER_TEXTFIELD_, msgName:ZaMsg.NAD_zimbraPrefMailItemsPerPage,label:ZaMsg.NAD_zimbraPrefMailItemsPerPage, labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, textFieldCssClass:"admin_xform_number_input", valueLabel:null},
 						{ref:ZaAccount.A_zimbraPrefMailInitialSearch,labelCssStyle:"width:150px;", type:_SUPER_TEXTFIELD_, msgName:ZaMsg.NAD_zimbraPrefMailInitialSearch,label:ZaMsg.NAD_zimbraPrefMailInitialSearch, labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, textFieldCssClass:"admin_xform_name_input", valueLabel:null},
-						{ref:ZaAccount.A_zimbraPrefMailPollingInterval,labelCssStyle:"width:150px;", type:_SUPER_LIFETIME_, msgName:ZaMsg.NAD_zimbraPrefMailPollingInterval,label:ZaMsg.NAD_zimbraPrefMailPollingInterval, labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS},						
+						{ref:ZaAccount.A_zimbraPrefMailPollingInterval,labelCssStyle:"width:150px;", type:_SUPER_LIFETIME_, msgName:ZaMsg.NAD_zimbraPrefMailPollingInterval,label:ZaMsg.NAD_zimbraPrefMailPollingInterval+":", labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS},						
 						{ref:ZaAccount.A_zimbraPrefShowSearchString,labelCssStyle:"width:150px;", type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefShowSearchString,label:ZaMsg.NAD_zimbraPrefShowSearchString, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE"},
 						{ref:ZaAccount.A_zimbraPrefCalendarAlwaysShowMiniCal,labelCssStyle:"width:150px;", type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_alwaysShowMiniCal,label:ZaMsg.NAD_alwaysShowMiniCal, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE"},							
 						{ref:ZaAccount.A_zimbraPrefCalendarUseQuickAdd,labelCssStyle:"width:150px;", type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_useQuickAdd,label:ZaMsg.NAD_useQuickAdd, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE"},							
@@ -431,7 +431,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 							{type:_SEPARATOR_, colSpan:"*"},
 							{type:_GROUP_, width:"100%", 
 								items: [
-									{ref:ZaAccount.A_zimbraMailQuota,labelCssStyle:"width:160px;", type:_SUPER_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_MailQuota+":",label:ZaMsg.NAD_MailQuota, labelLocation:_LEFT_, textFieldCssClass:"admin_xform_number_input", resetToSuperLabel:ZaMsg.NAD_ResetToCOS},
+									{ref:ZaAccount.A_zimbraMailQuota,labelCssStyle:"width:160px;", type:_SUPER_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_MailQuota,label:ZaMsg.NAD_MailQuota+":", labelLocation:_LEFT_, textFieldCssClass:"admin_xform_number_input", resetToSuperLabel:ZaMsg.NAD_ResetToCOS},
 									{ref:ZaAccount.A_zimbraContactMaxNumEntries,labelCssStyle:"width:160px;", type:_SUPER_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_ContactMaxNumEntries,label:ZaMsg.NAD_ContactMaxNumEntries+":", labelLocation:_LEFT_, textFieldCssClass:"admin_xform_number_input"}
 								]
 							},
