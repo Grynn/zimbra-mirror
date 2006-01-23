@@ -40,11 +40,6 @@ function ZmCsfeException(msg, code, method, detail, data) {
 
 ZmCsfeException._codeToMsg = {};
 
-ZmCsfeException.getErrorMsg =
-function(code, args) {
-	return args ? AjxMessageFormat.format(ZmCsfeException._codeToMsg[code], args) : ZmCsfeException._codeToMsg[code];
-};
-
 ZmCsfeException.define =
 function(name, code, msg) {
 	ZmCsfeException[name] = code;
@@ -57,6 +52,11 @@ ZmCsfeException.prototype.constructor = ZmCsfeException;
 ZmCsfeException.prototype.toString = 
 function() {
 	return "ZmCsfeException";
+};
+
+ZmCsfeException.prototype.getErrorMsg =
+function(args) {
+	return args ? AjxMessageFormat.format(ZmCsfeException._codeToMsg[this.code], args) : ZmCsfeException._codeToMsg[this.code];
 };
 
 ZmCsfeException.prototype.getData =
