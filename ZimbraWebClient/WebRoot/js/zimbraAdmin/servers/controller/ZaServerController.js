@@ -211,7 +211,7 @@ function (obj) {
 	//transfer the fields from the tmpObj to the _currentObject, since _currentObject is an instance of ZaDomain
 	var mods = new Object();
 	for (var a in obj.attrs) {
-		if(a == ZaItem.A_objectClass || /^_/.test(a))
+		if(a == ZaItem.A_objectClass || /^_/.test(a) || a == ZaServer.A_zimbraServiceInstalled)
 			continue;
 		if (this._currentObject.attrs[a] != obj.attrs[a] ) {
 			mods[a] = obj.attrs[a];

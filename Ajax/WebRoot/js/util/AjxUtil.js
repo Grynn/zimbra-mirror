@@ -438,6 +438,10 @@ function(object, level) {
 	proxyCtor.prototype = object;
 	if (object instanceof Array) {
 		proxy  = new Array();
+		var cnt  = object.length;
+		for(var ix = 0; ix < cnt; ix++) {
+			proxy[ix] = object[ix];
+		}
 	} else {
 		proxy = new proxyCtor;
 	}
