@@ -25,7 +25,7 @@
 
 function ZaAuthConfigXWizard (parent, app) {
 	this._app=app;
-	ZaXWizardDialog.call(this, parent,app, null, ZaMsg.NCD_AuthConfigTitle, "550px", "300px");
+	ZaXWizardDialog.call(this, parent,app, null, ZaMsg.NCD_AuthConfigTitle, "550px", "300px","ZaAuthConfigXWizard");
 
 	this.stepChoices = [
 		{label:ZaMsg.TABT_AuthMode, value:1},				
@@ -63,6 +63,7 @@ function ZaAuthConfigXWizard (parent, app) {
 
 ZaAuthConfigXWizard.prototype = new ZaXWizardDialog;
 ZaAuthConfigXWizard.prototype.constructor = ZaAuthConfigXWizard;
+ZaXDialog.XFormModifiers["ZaAuthConfigXWizard"] = new Array();
 
 ZaAuthConfigXWizard.prototype.handleXFormChange = 
 function () {
@@ -295,10 +296,9 @@ function(entry) {
 /**
 * XForm definition
 **/
-ZaAuthConfigXWizard.prototype.getMyXForm = 
-function () {
-	var xFormObject = {
-		items:[
+
+ZaAuthConfigXWizard.myXFormModifier = function(xFormObject) {
+	xFormObject.items = [
 			{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices},
 			{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
 			{type:_SPACER_,  align:_CENTER_, valign:_TOP_},				
@@ -385,10 +385,6 @@ function () {
 								items: [
 									{type:_CASE_, deferred:false, relevant:"instance.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad", useParentTable:true,
 										items:[
-/*											{ref:ZaDomain.A_AuthLDAPServerName, type:_OUTPUT_, label:ZaMsg.Domain_AuthADServerName, labelCssClass:"xform_label_left"},
-											{ref:ZaDomain.A_AuthLDAPServerPort, type:_OUTPUT_, label:ZaMsg.Domain_AuthADServerPort, labelLocation:_LEFT_},
-											{ref:ZaDomain.A_AuthLDAPUseSSL, type:_OUTPUT_, label:ZaMsg.Domain_AuthADUseSSL, labelWrap:true, labelLocation:_LEFT_,choices:ZaModel.BOOLEAN_CHOICES}
-*/	
 											{ref:ZaDomain.A_AuthADDomainName, type:_OUTPUT_, label:ZaMsg.Domain_AuthADDomainName, labelLocation:_LEFT_},
 											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL, labelLocation:_LEFT_,showAddButton:false, showRemoveButton:false, 
 												items:[
@@ -399,12 +395,6 @@ function () {
 									},
 									{type:_CASE_, deferred:false, relevant:"instance.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ldap", useParentTable:true,
 										items:[
-/*										
-											{ref:ZaDomain.A_AuthLDAPServerName, type:_OUTPUT_, label:ZaMsg.Domain_AuthLDAPServerName, labelLocation:_LEFT_},
-											{ref:ZaDomain.A_AuthLDAPServerPort, type:_OUTPUT_, label:ZaMsg.Domain_AuthLDAPServerPort, labelLocation:_LEFT_},							
-											{ref:ZaDomain.A_AuthLDAPUseSSL, type:_OUTPUT_, label:ZaMsg.Domain_AuthLDAPUseSSL, labelLocation:_LEFT_,choices:ZaModel.BOOLEAN_CHOICES},
-											{ref:ZaDomain.A_AuthLdapURL, type:_OUTPUT_, label:ZaMsg.Domain_AuthLdapURL, labelLocation:_LEFT_},
-*/
 											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL, labelLocation:_LEFT_,showAddButton:false, showRemoveButton:false, 
 												items:[
 													{type:_OUTPUT_, ref:".", label:null,labelLocation:_NONE_}
@@ -431,7 +421,6 @@ function () {
 					},
 					{type:_CASE_,  numCols:1, relevant:"instance[ZaModel.currentStep] == 6 && instance.attrs[ZaDomain.A_AuthMech]!=ZaDomain.AuthMech_zimbra", relevantBehavior:_HIDE_,
 						items: [
-//							{type:_OUTPUT_,value:ZaMsg.Domain_AuthTestResults, alignment:_CENTER_},
 							{type:_SWITCH_,
 								items: [
 									{type:_CASE_, deferred:false, relevant:"instance[ZaDomain.A_AuthTestResultCode] == ZaDomain.Check_OK",
@@ -453,8 +442,6 @@ function () {
 					}
 				]
 			}
-		]
-	};
-	return xFormObject;
-};
-
+		];
+}
+ZaXDialog.XFormModifiers["ZaAuthConfigXWizard"].push(ZaAuthConfigXWizard.myXFormModifier);

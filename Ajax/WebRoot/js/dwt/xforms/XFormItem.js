@@ -2428,10 +2428,10 @@ Border_XFormItem.prototype.updateElement = function () {
 
 function Grouper_XFormItem() {}
 XFormItemFactory.createItemType("_GROUPER_", "grouper", Grouper_XFormItem, Group_XFormItem)
-Grouper_XFormItem.prototype.labelCssClass = "GrouperLabel";
+Grouper_XFormItem.prototype.labelCssClass = "xform_grouper_label";
 Grouper_XFormItem.prototype.labelLocation = _INLINE_;		// managed manually by this class
-Grouper_XFormItem.prototype.borderCssClass = "GrouperBorder";
-Grouper_XFormItem.prototype.insetCssClass = "GrouperInset";
+Grouper_XFormItem.prototype.borderCssClass = "xform_grouper_border";
+Grouper_XFormItem.prototype.insetCssClass = "xform_grouper_inset";
 Grouper_XFormItem.prototype.colSpan = "*";
 Grouper_XFormItem.prototype.width = "100%";
 
@@ -2461,9 +2461,9 @@ Grouper_XFormItem.prototype.outputHTMLEnd = function (html, updateScript, indent
 
 function RadioGrouper_XFormItem() {}
 XFormItemFactory.createItemType("_RADIO_GROUPER_", "radiogrouper", RadioGrouper_XFormItem, Grouper_XFormItem)
-RadioGrouper_XFormItem.prototype.labelCssClass = "RadioGrouperLabel";
-RadioGrouper_XFormItem.prototype.borderCssClass = "RadioGrouperBorder";
-RadioGrouper_XFormItem.prototype.insetCssClass = "RadioGrouperInset";
+RadioGrouper_XFormItem.prototype.labelCssClass = "xform_radio_grouper_label";
+RadioGrouper_XFormItem.prototype.borderCssClass = "xform_radio_grouper_border";
+RadioGrouper_XFormItem.prototype.insetCssClass = "xform_radio_grouper_inset";
 RadioGrouper_XFormItem.prototype.width = "100%";
 
 
@@ -2590,7 +2590,7 @@ Case_XFormItem.prototype._outputHTML = function () {
 
 function TopGrouper_XFormItem() {}
 XFormItemFactory.createItemType("_TOP_GROUPER_", "top_grouper", TopGrouper_XFormItem, RadioGrouper_XFormItem)
-TopGrouper_XFormItem.prototype.borderCssClass = "TopGrouperBorder";
+TopGrouper_XFormItem.prototype.borderCssClass = "xform_top_grouper_border";
 
 // output the label
 TopGrouper_XFormItem.prototype.outputHTMLStart = function (html, updateScript, indent, currentCol) {

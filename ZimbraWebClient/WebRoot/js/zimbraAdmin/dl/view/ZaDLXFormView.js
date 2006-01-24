@@ -411,11 +411,11 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 							}
 					    ]
 				    },
-					{type:_GROUP_, numCols:1, width:"100%", colSizes:["auto"], cssClass:"RadioGrouperBorder",/*label:ZaMsg.DLXV_GroupLabelAddMembers,*/
+					{type:_GROUP_, numCols:1, width:"100%", colSizes:["auto"], cssClass:"xform_radio_grouper_border",/*label:ZaMsg.DLXV_GroupLabelAddMembers,*/
 						items:[			      
 						   {type:_GROUP_, numCols:2, colSizes:["auto", "auto"], 
 						   		items: [
-							   		{type:_OUTPUT_, value:ZaMsg.DLXV_GroupLabelAddMembers, cssClass:"RadioGrouperLabel"},
+							   		{type:_OUTPUT_, value:ZaMsg.DLXV_GroupLabelAddMembers, cssClass:"xform_radio_grouper_label"},
 								   	{type:_CELLSPACER_}
 								]
 							},
