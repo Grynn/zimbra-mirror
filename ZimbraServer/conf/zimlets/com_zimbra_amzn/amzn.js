@@ -57,6 +57,25 @@ function(spanElement, obj, context, canvas) {
 	}	
 };
 
+Com_Zimbra_Amzn.prototype.searchAmzn =
+function(obj, canvas) {
+	var i = 0;
+	var html = new Array();
+	html[i++] = '<table cellspacing=4 cellpadding=0 border=0 width=\"330px\"><tr>';
+	html[i++] = '<td><img width="110" height="170" id="' + ZmZimletBase.encodeId(obj + "_AIMG_0") + '" src="'+this.getResource('blank_pixel.gif')+'"/><div style="width:110px;" id="'+ZmZimletBase.encodeId(obj+"_ATXT_0")+'"> <br/> </div></td>';
+	html[i++] = '<td><img width="110" height="170" id="' + ZmZimletBase.encodeId(obj + "_AIMG_1") + '" src="'+this.getResource('blank_pixel.gif')+'"/><div style="width:110px;" id="'+ZmZimletBase.encodeId(obj+"_ATXT_1")+'"> <br/> </div></td>';
+	html[i++] = '<td><img width="110" height="170" id="' + ZmZimletBase.encodeId(obj + "_AIMG_2") + '" src="'+this.getResource('blank_pixel.gif')+'"/><div style="width:110px;" id="'+ZmZimletBase.encodeId(obj+"_ATXT_2")+'"> <br/> </div></td>';
+	html[i++] = '</table></tr>';
+	canvas.innerHTML = html.join('');
+	if (Com_Zimbra_Amzn.CACHE[obj]) {
+		Com_Zimbra_Amzn._displayBooks(Com_Zimbra_Amzn.CACHE[obj], obj);
+	} else {
+		var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(Com_Zimbra_Amzn.URL + obj);
+		DBG.println(AjxDebug.DBG2, "Com_Zimbra_Amzn url " + url);
+		AjxRpc.invoke(null, url, null, new AjxCallback(this, Com_Zimbra_Amzn._searchCallback, obj), true);
+	}	
+};
+
 // XXX need support for regex's on sub-var's
 Com_Zimbra_Amzn.prototype._getHtmlContent = 
 function(html, idx, obj, context) {
@@ -67,19 +86,87 @@ function(html, idx, obj, context) {
 	return idx;
 };
 
+// Called by the Zimbra framework when the panel item was double clicked
+Com_Zimbra_Amzn.prototype.doubleClicked = function() {
+	this.singleClicked();
+};
+
+// Called by the Zimbra framework when the panel item was clicked
+Com_Zimbra_Amzn.prototype.singleClicked = function() {
+	var editorProps = [
+		{ label 		 : "Search",
+		  name           : "search",
+		  type           : "string",
+		  value          : "",
+		  minLength      : 4,
+		  maxLength      : 100
+		}
+		];
+	if (!this._dlg_propertyEditor) {
+		var view = new DwtComposite(this.getShell());
+		this._propertyEditor = new DwtPropertyEditor(view, true);
+		var pe = this._propertyEditor;
+		pe.initProperties(editorProps);
+		var dialog_args = {
+			title : "Search Amazon",
+			view  : view
+		};
+		this._dlg_propertyEditor = this._createDialog(dialog_args);
+		var dlg = this._dlg_propertyEditor;
+		pe.setFixedLabelWidth();
+		pe.setFixedFieldWidth();
+		dlg.setButtonListener(DwtDialog.OK_BUTTON,
+				      new AjxListener(this, function() {
+				          if (!pe.validateData()) {return;}
+					      this._doSearch();
+				      }));
+	}
+	this._dlg_propertyEditor.popup();
+};
+
+Com_Zimbra_Amzn.prototype._doSearch =
+function() {
+	this._dlg_propertyEditor.popdown();
+	this._displaySearchResult(this._propertyEditor.getProperties().search);
+	this._dlg_propertyEditor.dispose();
+	this._dlg_propertyEditor = null;
+};
+
+Com_Zimbra_Amzn.prototype._displaySearchResult = 
+function(search) {
+	var view = new DwtComposite(this.getShell());
+	var dialog_args = {
+		view  : view,
+		title : "Amazon Search Result"
+	};
+	var dlg = this._createDialog(dialog_args);
+	dlg.setButtonVisible(DwtDialog.CANCEL_BUTTON, false);
+	dlg.popup();
+	dlg.setButtonListener(DwtDialog.OK_BUTTON,
+		      new AjxListener(this, function() {
+			      dlg.popdown();
+			      dlg.dispose();
+		      }));
+    var el = view.getHtmlElement();
+    var div = document.createElement("div");
+    el.appendChild(div);
+    this.searchAmzn(search, div);
+};
+
+
 Com_Zimbra_Amzn._displayBook = 
 function(imageInfo, bookInfo, obj) {
 	var imgEl = document.getElementById(ZmZimletBase.encodeId(obj + "_AIMG"));
 	var txtEl = document.getElementById(ZmZimletBase.encodeId(obj + "_ATXT"));
 	if(!imageInfo || !bookInfo) {
-		txtEl.innerHTML = "<b><center>Error!</center></b>";
+		txtEl.innerHTML = "<b><center>Searched for: " + obj + "<br/><br/>Error!</center></b>";
 		return;
 	}
 	imgEl.style.width = imageInfo.Width;
 	imgEl.style.height = imageInfo.Height;
 	imgEl.style.backgroundImage = "url("+imageInfo.URL+")";
 	txtEl.style.width = imageInfo.Width;
-	txtEl.innerHTML = bookInfo.title +" by "+ bookInfo.author +" "+ bookInfo.price;
+	txtEl.innerHTML = "<a target=\"_blank\" href=\"" + bookInfo.url + "\">" + bookInfo.title + "</a> by " + bookInfo.author +" "+ bookInfo.price;
     if(!Com_Zimbra_Amzn.CACHE[obj]) {
     	Com_Zimbra_Amzn.CACHE[obj] = new Object();
 		Com_Zimbra_Amzn.CACHE[obj].Image = imageInfo;
@@ -87,16 +174,62 @@ function(imageInfo, bookInfo, obj) {
 	}
 };
 
+Com_Zimbra_Amzn._displayBooks = 
+function(items, obj) {
+	DBG.dumpObj(items);
+	for(var i=0; i < 3; i++) {
+		DBG.dumpObj(items[i]);
+		var imgEl = document.getElementById(ZmZimletBase.encodeId(obj + "_AIMG_" + i));
+		var txtEl = document.getElementById(ZmZimletBase.encodeId(obj + "_ATXT_" + i));
+		if(!items[i]) {
+			txtEl.innerHTML = "<b><center>Searched for: " + obj + "<br/><br/>Error!</center></b>";
+			continue;
+		}
+
+		var bookInfo = new Object();
+		bookInfo.title = items[i].ItemAttributes.Title;
+		bookInfo.author = items[i].ItemAttributes.Author;
+		bookInfo.price = items[i].ItemAttributes.ListPrice.FormattedPrice;
+		bookInfo.url = items[i].DetailPageURL;
+		DBG.dumpObj(bookInfo);
+
+		var imageInfo = items[i].ImageSets.ImageSet.MediumImage;
+		DBG.dumpObj(imageInfo);
+
+		imgEl.style.width = imageInfo.Width;
+		imgEl.style.height = imageInfo.Height;
+		imgEl.style.backgroundImage = "url("+imageInfo.URL+")";
+		txtEl.style.width = imageInfo.Width;
+		txtEl.innerHTML = "<a target=\"_blank\" href=\"" + bookInfo.url + "\">" + bookInfo.title + "</a> by " + bookInfo.author +" "+ bookInfo.price;
+	}
+    if(!Com_Zimbra_Amzn.CACHE[obj]) {
+    	Com_Zimbra_Amzn.CACHE[obj] = items;
+	}
+};
+
 Com_Zimbra_Amzn._callback = 
-function(obj, result) {
-	var result = AjxXmlDoc.createFromXml(result.text).toJSObject(true, false);
+function(obj, results) {
+	var result = AjxXmlDoc.createFromXml(results.text).toJSObject(true, false);
 	var bookInfo = new Object();
 	if(result.Items.Item.ImageSets && result.Items.Item.ItemAttributes) {
 		bookInfo.title = result.Items.Item.ItemAttributes.Title;
 		bookInfo.author = result.Items.Item.ItemAttributes.Author;
 		bookInfo.price = result.Items.Item.ItemAttributes.ListPrice.FormattedPrice;
+		bookInfo.url = result.Items.Item.DetailPageURL;
 		Com_Zimbra_Amzn._displayBook(result.Items.Item.ImageSets.ImageSet.MediumImage, bookInfo, obj);
 	} else {
 		Com_Zimbra_Amzn._displayBook(null, null, obj);
+	}
+};
+
+Com_Zimbra_Amzn._searchCallback = 
+function(obj, results) {
+	var result = AjxXmlDoc.createFromXml(results.text).toJSObject(true, false);
+	var bookInfo = new Object();
+	DBG.dumpObj(result);
+	if(result.Items.Item) {
+		Com_Zimbra_Amzn._displayBooks(result.Items.Item, obj);
+	} else {
+		Com_Zimbra_Amzn._displayBooks(null, obj);
 	}
 };
