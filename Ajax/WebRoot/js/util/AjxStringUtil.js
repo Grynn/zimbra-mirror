@@ -700,6 +700,8 @@ function(el, text, idx, listType, listLevel, bulletNum, ctxt) {
 		text[idx++] = "\n";
 	} else if (nodeName == "td" && el.parentNode.firstChild != el) {
 		text[idx++] = "\t";
+	} else if (nodeName == "div") {
+		text[idx++] = "\n";
 	} else if (nodeName == "#comment" || nodeName == "script" 
 			   || nodeName == "select") {
 		return idx;
