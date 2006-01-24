@@ -30,7 +30,7 @@
 
   type-of-attr:
     boolean     TRUE|FALSE
-    duration    ^\d+[hmsd]?$
+    duration    ^\d+[hmsd]?$.  If [hmsd] is not specified, the default is milliseconds.
     enum        value attr is comma-separated list of valid values
     email       valid email address. must have a "@" and no personal part.
     emailp      valid email address. must have a "@" and personal part is optional.
