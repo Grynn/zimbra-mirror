@@ -24,6 +24,11 @@
  */
 package com.zimbra.cs.taglib;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.mailbox.Mailbox.OperationContext;
 import com.zimbra.cs.service.ServiceException;
@@ -32,6 +37,8 @@ import com.zimbra.cs.zimlet.ZimletUtil;
 public class ZimletConfig extends ZimbraTag {
 
     private String mZimlet;
+    private String mAction;
+    private String mVar;
     private String mName;
     private String mScope;
 
@@ -41,6 +48,22 @@ public class ZimletConfig extends ZimbraTag {
 
     public String getZimlet() {
         return mZimlet;
+    }
+
+    public void setAction(String val) {
+        mAction = val;
+    }
+
+    public String getAction() {
+        return mAction;
+    }
+
+    public void setVar(String val) {
+        mVar = val;
+    }
+
+    public String getVar() {
+        return mVar;
     }
 
     public void setName(String val) {
@@ -59,10 +82,22 @@ public class ZimletConfig extends ZimbraTag {
         return mScope;
     }
 
-    public String getContentStart(Account acct, OperationContext octxt) throws ZimbraTagException, ServiceException {
-        if (mZimlet == null) {
-            throw ZimbraTagException.MISSING_ATTR("zimlet");
+    public String doListConfig(Account acct, OperationContext octxt) throws ZimbraTagException, ServiceException {
+        if (mVar == null) {
+            throw ZimbraTagException.MISSING_ATTR("var");
         }
+        com.zimbra.cs.zimlet.ZimletConfig config = ZimletUtil.getZimletConfig(mZimlet);
+
+        Map<String,Map> m = new HashMap<String,Map>();
+    	m.put("global", config.getGlobalConfig());
+    	m.put("site", config.getSiteConfig());
+    	m.put("local", config.getSiteConfig());
+    	HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
+    	req.setAttribute(mVar, m);
+    	return "";
+    }
+    
+    public String doGetConfig(Account acct, OperationContext octxt) throws ZimbraTagException, ServiceException {
         if (mName == null) {
             throw ZimbraTagException.MISSING_ATTR("name");
         }
@@ -77,5 +112,15 @@ public class ZimletConfig extends ZimbraTag {
         }
         if (val == null) val = "";
         return val;
+    }
+    
+    public String getContentStart(Account acct, OperationContext octxt) throws ZimbraTagException, ServiceException {
+        if (mZimlet == null) {
+            throw ZimbraTagException.MISSING_ATTR("zimlet");
+        }
+        if (mAction != null && mAction.equals("list")) {
+        	return doListConfig(acct, octxt);
+        }
+        return doGetConfig(acct, octxt);
     }
 }

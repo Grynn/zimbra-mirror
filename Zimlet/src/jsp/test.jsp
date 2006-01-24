@@ -121,31 +121,95 @@
 %>
       </table>
 
-    <hr /> <z:property zimlet="com_zimbra_sforce" name="passwd" action="set" value="foobar"/>
+    <z:property zimlet="com_zimbra_sforce" name="passwd" action="set" value="foobar"/>
+
+    <hr /> <z:property zimlet="com_zimbra_sforce" action="list" var="prop"/>
+      <h3>ListProperty</h3>
+      <table border="1">
+        <tr>
+          <td>name</td>
+          <td>value</td>
+        </tr>
+<%@page import="java.util.Map"%>
+<%@page import="java.util.Iterator"%>
+<%
+	Map prop = (Map) pageContext.getRequest().getAttribute("prop");
+	Iterator iter = prop.keySet().iterator();
+	while (iter.hasNext()) {
+		key = (String)iter.next();
+		String val = (String)prop.get(key);
+%>
+        <tr>
+          <td><%= key %></td>
+          <td><%= val %></td>
+        </tr>
+<%
+	}
+%>
+      </table>
 
     <hr /> 
       <h3>Config</h3>
       <table border="1">
         <tr>
-          <td>zimlet</td>
+          <td>scope</td>
           <td>name</td>
           <td>value</td>
         </tr>
         <tr>
-          <td>com_zimbra_bugz</td>
+          <td>global</td>
           <td>url</td>
           <td><z:zimletconfig zimlet="com_zimbra_bugz" name="url" scope="global"/></td>
         </tr>
         <tr>
-          <td>com_zimbra_bugz</td>
+          <td>local</td>
           <td>url</td>
           <td><z:zimletconfig zimlet="com_zimbra_bugz" name="url" scope="local"/></td>
         </tr>
         <tr>
-          <td>com_zimbra_bugz</td>
+          <td></td>
           <td>url</td>
           <td><z:zimletconfig zimlet="com_zimbra_bugz" name="url"/></td>
         </tr>
+      </table>
+
+    <hr /> <z:zimletconfig zimlet="com_zimbra_bugz" action="list" var="conf"/>
+      <h3>ListConfig</h3>
+      <table border="1">
+        <tr>
+          <td>scope</td>
+          <td>name</td>
+          <td>value</td>
+        </tr>
+<%
+	Map conf = (Map) pageContext.getRequest().getAttribute("conf");
+	Map gconf = (Map) conf.get("global");
+	Map lconf = (Map) conf.get("local");
+	iter = gconf.keySet().iterator();
+	while (iter.hasNext()) {
+		key = (String)iter.next();
+		String val = (String)gconf.get(key);
+%>
+        <tr>
+          <td>global</td>
+          <td><%= key %></td>
+          <td><%= val %></td>
+        </tr>
+<%
+	}
+	iter = lconf.keySet().iterator();
+	while (iter.hasNext()) {
+		key = (String)iter.next();
+		String val = (String)lconf.get(key);
+%>
+        <tr>
+          <td>local</td>
+          <td><%= key %></td>
+          <td><%= val %></td>
+        </tr>
+<%
+	}
+%>
       </table>
   </body>
 </html>

@@ -25,6 +25,10 @@
 package com.zimbra.cs.taglib;
 
 import java.util.Iterator;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.mailbox.Mailbox.OperationContext;
@@ -35,6 +39,7 @@ import com.zimbra.cs.zimlet.ZimletUserProperties;
 public class Property extends ZimbraTag {
 
     private String mZimlet;
+    private String mVar;
     private String mName;
     private String mAction;
     private String mValue;
@@ -45,6 +50,14 @@ public class Property extends ZimbraTag {
 
     public String getZimlet() {
         return mZimlet;
+    }
+
+    public void setVar(String val) {
+        mVar = val;
+    }
+
+    public String getVar() {
+        return mVar;
     }
 
     public void setName(String name) {
@@ -71,6 +84,25 @@ public class Property extends ZimbraTag {
         return mValue;
     }
 
+    private String doListProperty(Account acct, OperationContext octxt) throws ZimbraTagException, ServiceException {
+        if (mVar == null) {
+            throw ZimbraTagException.MISSING_ATTR("var");
+        }
+        ZimletUserProperties props = ZimletUserProperties.getProperties(acct);
+
+    	Iterator iter = props.getAllProperties().iterator();
+    	Map<String,String> m = new HashMap<String,String>();
+    	while (iter.hasNext()) {
+    		ZimletProperty zp = (ZimletProperty) iter.next();
+    		if (zp.getZimletName().equals(mZimlet)) {
+                m.put(zp.getKey(), zp.getValue());
+            }
+    	}
+    	HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
+    	req.setAttribute(mVar, m);
+        return "";
+    }
+
     private String doGetProperty(Account acct, OperationContext octxt) throws ZimbraTagException, ServiceException {
         if (mName == null) {
             throw ZimbraTagException.MISSING_ATTR("name");
@@ -78,18 +110,14 @@ public class Property extends ZimbraTag {
         ZimletUserProperties props = ZimletUserProperties.getProperties(acct);
 
         StringBuffer ret = new StringBuffer("undefined");
-        try {
-        	Iterator iter = props.getAllProperties().iterator();
-        	while (iter.hasNext()) {
-        		ZimletProperty zp = (ZimletProperty) iter.next();
-        		if (zp.getZimletName().equals(mZimlet) &&
-        			zp.getKey().equals(mName)) {
-                    return zp.getValue();
-                }
-        	}
-        } catch (Exception ex) {
-            throw new Error("error", ex);
-        }
+    	Iterator iter = props.getAllProperties().iterator();
+    	while (iter.hasNext()) {
+    		ZimletProperty zp = (ZimletProperty) iter.next();
+    		if (zp.getZimletName().equals(mZimlet) &&
+    			zp.getKey().equals(mName)) {
+                return zp.getValue();
+            }
+    	}
         return ret.toString();
     }
 
@@ -107,11 +135,13 @@ public class Property extends ZimbraTag {
     }
 
     public String getContentStart(Account acct, OperationContext octxt) throws ZimbraTagException, ServiceException {
-        if (mName == null) {
+        if (mZimlet == null) {
             throw ZimbraTagException.MISSING_ATTR("zimlet");
         }
         if (mAction != null && mAction.equals("set")) {
             return doSetProperty(acct, octxt);
+        } else if (mAction != null && mAction.equals("list")) {
+            return doListProperty(acct, octxt);
         }
         return doGetProperty(acct, octxt);
     }
