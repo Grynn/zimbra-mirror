@@ -1,0 +1,7 @@
+<zimletConfig name="com_zimbra_sms" version="1.0">
+  <global>
+    <property name="smsusername">USERNAME</property>
+    <property name="smspassword">PASSWORD</property>
+    <property name="smsfrom">FROM</property>
+  </global>
+</zimletConfig>

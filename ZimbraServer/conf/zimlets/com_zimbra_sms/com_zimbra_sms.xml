@@ -1,0 +1,24 @@
+<zimlet name="com_zimbra_sms" version="1.0" description="SMS Zimlet">
+	<include>sms.js</include>
+	<includeCSS>sms.css</includeCSS>
+	<resource>sms-icon.gif</resource>
+	<handlerObject>Com_Zimbra_sms</handlerObject>
+
+	<zimletPanelItem label="SMS" icon="SMS-panelIcon">
+		<toolTipText>Drag'n'drop a contact, message, appointment or double click</toolTipText>
+		<dragSource type="ZmContact" />
+		<dragSource type="ZmMailMsg" />
+		<dragSource type="ZmConv" />
+		<dragSource type="ZmAppt" />
+		<contextMenu>
+			<menuItem />
+			<menuItem label="Preferences..." id="PREFERENCES" />
+			<menuItem />
+		</contextMenu>
+	</zimletPanelItem>
+
+	<userProperties>
+		<property type="string" name="cellNum" minLength="4" maxLength="32" label="My Cell:" />
+		<property type="string" name="favCellNum" minLength="4" maxLength="32" label="Fav Cell:" />
+	</userProperties>
+</zimlet>
