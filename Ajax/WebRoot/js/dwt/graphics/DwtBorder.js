@@ -599,8 +599,8 @@ DwtBorder.registerBorder(
 							"<div class=SplashScreenAppName><!--$appName--></div>",
 							"<div class=SplashScreenVersion><!--$version--></div>",
 							"<div class=SplashScreenContents><!--$contents--></div>",
-							"<div class=SplashScreenOKButton id='<!--$buttonId-->'><!--$button--></div>",
 							"<div class=SplashScreenLicense><!--$license--></div>",
+							"<div class=SplashScreenOKButton id='<!--$buttonId-->'><!--$button--></div>",
 						"</div></td>",
 						(AjxEnv.useTransparentPNGs ? "<td valign=top class='border_shadow_v'><div class='ImgShadowBig_TR'></div>"+
 														"<div class='ImgShadowBig_R__V' style='height:100%'></div></td>" : ""),

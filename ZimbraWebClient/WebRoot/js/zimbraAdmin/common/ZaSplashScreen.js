@@ -36,7 +36,6 @@ ZaSplashScreen.prototype.getDefaultSubstitutions = function (){
 		var dateFormatter = AjxDateFormat.getDateInstance();
 		ZaSplashScreen._defaultSubstitutions = {
 			url:ZaMsg.splashScreenZimbraUrl,
-			shortVersion: "BETA",
 			appName: ZaMsg.splashScreenAppName,
 			version: AjxBuffer.concat(ZaMsg.splashScreenVersion, " ", ZaServerVersionInfo.version , " " ,
 									  dateFormatter.format(ZaServerVersionInfo.buildDate)),

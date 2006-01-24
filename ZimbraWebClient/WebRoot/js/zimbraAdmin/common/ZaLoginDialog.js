@@ -41,16 +41,17 @@ function ZaLoginDialog(parent, zIndex, className) {
 	var errorCellId = Dwt.getNextId();
 	var licenseCellId = Dwt.getNextId();
 	var tableId = Dwt.getNextId();
+	var bannerCellId = Dwt.getNextId();
 	this.hiddenBtnId = Dwt.getNextId();
     var form = document.createElement("form");
-    form.innerHTML = this._createHtml(unameId, pwordId, okCellId, errorCellId, licenseCellId,tableId);
+    form.innerHTML = this._createHtml(unameId, pwordId, okCellId, errorCellId, licenseCellId,tableId,bannerCellId);
     htmlElement.appendChild(form);
     this._errorCell = document.getElementById(errorCellId);
     
    	document._parentId = this._htmlElId;
 	
 	this._mainTable = document.getElementById(tableId);
-
+	this._bannerCell = document.getElementById(bannerCellId);
    	this._unameField = document.getElementById(unameId);
     this._unameField._parentId = this._htmlElId;
     this._unameField.onfocus = ZaLoginDialog.handleFieldFocus;
@@ -87,6 +88,18 @@ function() {
 	return "ZaLoginDialog";
 }
 
+ZaLoginDialog.prototype.getBannerHtml = function () {
+	var dateFormatter = AjxDateFormat.getDateInstance();
+	var substitutions = {
+		url:ZaMsg.splashScreenZimbraUrl,
+		appName: ZaMsg.splashScreenAppName,
+		version: AjxBuffer.concat(ZaMsg.splashScreenVersion, " ", ZaServerVersionInfo.version , " " ,
+									  dateFormatter.format(ZaServerVersionInfo.buildDate)),
+		license: ZaMsg.splashScreenCopyright	
+	}
+	return DwtBorder.getBorderHtml("LoginBanner", substitutions);	
+}
+
 ZaLoginDialog.prototype.setUpKeyHandlers = 
 function () {
 	this.handleKeyBoard = true;
@@ -94,11 +107,19 @@ function () {
   		document.onkeydown = ZaLoginDialog._keyPressHdlr;
   		this._unameField.onkeydown = ZaLoginDialog._keyPressHdlr;
     	this._pwordField.onkeydown = ZaLoginDialog._keyPressHdlr;
+    	if(this.newPassInput)
+			this.newPassInput.onkeydown = ZaLoginDialog._keyPressHdlr;
+		if(this.confirmPassInput)
+			this.confirmPassInput.onkeydown = ZaLoginDialog._keyPressHdlr;    	
 	} else {
 		window.onkeypress = ZaLoginDialog._keyPressHdlr;	
 	  	this._unameField.onkeypress = ZaLoginDialog._keyPressHdlr;	
     	this._pwordField.onkeypress = ZaLoginDialog._keyPressHdlr;
-		this._hiddenBtn.onkeypress = ZaLoginDialog._keyPressHdlr;		   	
+		this._hiddenBtn.onkeypress = ZaLoginDialog._keyPressHdlr;	
+    	if(this.newPassInput)
+			this.newPassInput.onkeypress = ZaLoginDialog._keyPressHdlr;
+		if(this.confirmPassInput)
+			this.confirmPassInput.onkeypress = ZaLoginDialog._keyPressHdlr;  			   	
 	}
 }
 
@@ -109,11 +130,19 @@ function () {
   		document.onkeydown = null;
   		this._unameField.onkeydown = null;
     	this._pwordField.onkeydown = null;
+    	if(this.newPassInput)
+			this.newPassInput.onkeydown = null;
+		if(this.confirmPassInput)
+			this.confirmPassInput.onkeydown = null;       	
 	} else {
 		window.onkeypress = null;	
 	  	this._unameField.onkeypress = null;	
     	this._pwordField.onkeypress = null;
-		this._hiddenBtn.onkeypress = null;		   	
+		this._hiddenBtn.onkeypress = null;
+    	if(this.newPassInput)
+			this.newPassInput.onkeypress = null;
+		if(this.confirmPassInput)
+			this.confirmPassInput.onkeypress = null;  				   	
 	}
 }
 
@@ -186,6 +215,8 @@ function(errorStr) {
 		html = "&nbsp;";
 	}
 	this._errorCell.innerHTML = html;
+	//have to do this, because IE does not reposition the divs:
+	this._bannerCell.innerHTML = this.getBannerHtml();
 }
 
 ZaLoginDialog.prototype.disablePasswordField = 
@@ -229,14 +260,15 @@ function(visible, transparentBg) {
 }
 
 ZaLoginDialog.prototype._createHtml = 
-function(unameId, pwordId, okCellId, errorCellId, licenseCellId,tableId) {
+function(unameId, pwordId, okCellId, errorCellId, licenseCellId,tableId,bannerCellId) {
 	var html = new Array();
 	var i = 0;
 
 	html[i++] = "<table  align=center valign=middle width=100% height=100% border=0 cellspacing=0 cellpadding=0><tr><td align=center width=100%>";
-	html[i++] = "<table cellspacing=0 cellpadding=0 class='" + this._className + "-TopPanel'><tr><td class='" + this._className + "-HeaderPanel'>";
-	html[i++] = AjxImg.getImageHtml("Admin_LoginBanner");
- 	html[i++] = "</td></tr>";
+	html[i++] = "<table cellspacing=0 cellpadding=0 class='" + this._className + "-TopPanel'>";
+ 	html[i++] = "<tr><td  id='" + bannerCellId + "'>";
+ 	html[i++] = this.getBannerHtml();
+ 	html[i++] = "</tr></td>";
  	html[i++] = "<tr><td>";
  	html[i++] = "<table cellspacing=12 class='" + this._className + "-MainPanel' id='" + tableId + "'>";
  	html[i++] = "<colgroup><col style='width:75px'></col><col style='width:225px'></col></colgroup>";
@@ -248,7 +280,7 @@ function(unameId, pwordId, okCellId, errorCellId, licenseCellId,tableId) {
 	html[i++] = "<tr><td colspan=2><table cellpadding=0 cellspacing=0 border=0 width=100%>";
 	html[i++] = "<td id='" + licenseCellId + "' style='visibility:hidden;'></td>";
 	html[i++] = "<td id='" + okCellId + "' align=right></td></tr></table>";
-	html[i++] = "</td></tr><tr><td colspan=2 style='Xborder:1px solid #eeeeee;font-size:9px;color:#999999;background-color:white;'>" + ZaMsg.splashScreenCopyright + "</td></tr></table>";
+	html[i++] = "</td></tr><tr><td colspan=2 style='Xborder:1px solid #eeeeee;font-size:9px;color:#999999;'>" + ZaMsg.splashScreenCopyright + "</td></tr></table>";
 	html[i++] = "</td></tr></table>";
 	html[i++] = "</td></tr></table>";
 	return html.join("");
@@ -256,6 +288,9 @@ function(unameId, pwordId, okCellId, errorCellId, licenseCellId,tableId) {
 
 ZaLoginDialog.prototype.showChangePass = 
 function(ex) {
+	if(this.changePass)
+		return;
+		
 	this.setError(ZaMsg.errorPassChange, true);
 
 	// add new password fields
@@ -277,14 +312,24 @@ function(ex) {
 	conPassFld.innerHTML = "<input tabindex=10 style='width:100%' type=password id='passConfirm'>";
 	
 	// set focus to the new password field
-	var newPassInput = document.getElementById("passNew");
-	newPassInput.focus();
+	this.newPassInput = document.getElementById("passNew");
+	this.confirmPassInput = document.getElementById("passConfirm");
+	this.newPassInput._parentId = this._htmlElId;
+	this.confirmPassInput._parentId = this._htmlElId;
+	this.newPassInput.focus();
+	this.changePass = true;
+	this.setUpKeyHandlers();
 };
 
 ZaLoginDialog.prototype.removeChangePass = 
 function () {
+	this.newPassInput = null;
+	this.confirmPassInput = null;
 	this._mainTable.deleteRow(3);
 	this._mainTable.deleteRow(3); 
+	this.changePass = false;
+	this.clearKeyHandlers();
+	this.setUpKeyHandlers();
 }
 
 ZaLoginDialog.prototype.addChild =
@@ -309,10 +354,16 @@ function(selEvt) {
 
 	// check if we're trying to change the password
 	if (this._unameField.disabled && this._pwordField.disabled) {
-		var newPassInput = document.getElementById("passNew");
-		var confirmPassInput = document.getElementById("passConfirm");
-		if (this._changePasswordCallback && newPassInput && confirmPassInput)
-			this._changePasswordCallback.run(username, this._pwordField.value, newPassInput.value,confirmPassInput.value);
+		if(!this.newPassInput) {
+			this.newPassInput = document.getElementById("passNew");
+			this.newPassInput._parentId = this._htmlElId;
+		}
+		if(!this.confirmPassInput) {
+			this.confirmPassInput = document.getElementById("passConfirm");
+			this.confirmPassInput._parentId = this._htmlElId;			
+		}
+		if (this._changePasswordCallback && this.newPassInput && this.confirmPassInput)
+			this._changePasswordCallback.run(username, this._pwordField.value, this.newPassInput.value,this.confirmPassInput.value);
 	} else {
 		if (this._callback)
 			this._callback.run(username, this._pwordField.value);
@@ -329,10 +380,16 @@ function () {
 	}
 	// check if we're trying to change the password
 	if (this._unameField.disabled && this._pwordField.disabled) {
-		var newPassInput = document.getElementById("passNew");
-		var confirmPassInput = document.getElementById("passConfirm");	
-		if (this._changePasswordCallback && newPassInput && confirmPassInput)
-			this._changePasswordCallback.run(username, this._pwordField.value, newPassInput.value,confirmPassInput.value);
+		if(!this.newPassInput) {
+			this.newPassInput = document.getElementById("passNew");
+			this.newPassInput._parentId = this._htmlElId;			
+		}
+		if(!this.confirmPassInput) {
+			this.confirmPassInput = document.getElementById("passConfirm");	
+			this.confirmPassInput._parentId = this._htmlElId;			
+		}
+		if (this._changePasswordCallback && this.newPassInput && this.confirmPassInput)
+			this._changePasswordCallback.run(username, this._pwordField.value, this.newPassInput.value,this.confirmPassInput.value);
 	} else {
 		if (this._callback)
 			this._callback.run(username, this._pwordField.value);
@@ -364,7 +421,8 @@ function(evt) {
 	
 	if (charCode == 13 || charCode == 3) {
 		if (obj == parent._unameField) {
-			parent._pwordField.focus();
+			if(!parent._pwordField.disabled)
+				parent._pwordField.focus();
 		} else {
 			parent.runCallBack();
 			/*	if (parent._callback) {
@@ -377,7 +435,8 @@ function(evt) {
 	} else if (charCode == 9) { //TAB
 		if (obj == parent._unameField) {
 			if(!shiftKey)
-				parent._pwordField.focus();
+				if(!parent._pwordField.disabled)
+					parent._pwordField.focus();
 			else {
 				parent._loginButton.setActivated(true);
 				if (AjxEnv.isIE)
@@ -393,14 +452,35 @@ function(evt) {
 				else
 					parent._hiddenBtn.focus();
 			} else {
-				parent._unameField.focus();
+				if(!parent._unameField.disabled)
+					parent._unameField.focus();
 			}
+		} else if(parent.newPassInput && obj == parent.newPassInput) {
+			if(!shiftKey && parent.confirmPassInput)
+				parent.confirmPassInput.focus();
+			else {
+				if (AjxEnv.isIE)
+	 			    parent._loginButton.getHtmlElement().focus();
+				else
+					parent._hiddenBtn.focus();
+			}		
+		} else if(parent.confirmPassInput && obj == parent.confirmPassInput) {
+			if(!shiftKey) {
+				if (AjxEnv.isIE)
+	 			    parent._loginButton.getHtmlElement().focus();
+				else
+					parent._hiddenBtn.focus();
+			} else if (parent.newPassInput) {
+				parent.newPassInput.focus();
+			}		
 		} else {
 			parent._loginButton.setActivated(false);
 			if(!shiftKey) {
-				parent._unameField.focus();
+				if(!parent._unameField.disabled)
+					parent._unameField.focus();
 			} else {
-				parent._pwordField.focus();
+				if(!parent._pwordField.disabled)
+					parent._pwordField.focus();
 			}
 		} 
 		ZaLoginDialog.cancelEvent(evt);
