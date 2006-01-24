@@ -1,12 +1,14 @@
 .ZmSpreadSheet { overflow: auto !important; }
 .ZmSpreadSheet .InputField, .ZmSpreadSheet table { font: 8pt tahoma,verdana,sans-serif; }
-.ZmSpreadSheet table { background-color: #bbb; color: #000; table-layout: fixed; }
-.ZmSpreadSheet table td { background-color: #fff; color: #000; padding: 1px; width: 10em; }
+.ZmSpreadSheet table { background-color: #bbb; color: #000; table-layout: fixed; width: 100%; }
+.ZmSpreadSheet table td { background-color: #fff; color: #000; padding: 1px; overflow: hidden; }
 .ZmSpreadSheet .TopBar td { padding: 0; }
 
 .ZmSpreadSheet .TopBar .TopLeft { background: none; padding: 0; text-align: center; }
 .ZmSpreadSheet .TopBar .TopLeft, .ZmSpreadSheet .LeftBar { padding: 0;
   width: 3em; cursor: default; -moz-user-select: none; user-select: none; }
+
+.ZmSpreadSheet .TopBar .TopLeft a { color: #bbb; }
 
 .ZmSpreadSheet .TopBar div, .ZmSpreadSheet .LeftBar div {
   cursor: default; -moz-user-select: none; user-select: none;
@@ -21,7 +23,7 @@
 .ZmSpreadSheet .InputField { position: absolute; padding: 0 !important; border: 2px solid #000; }
 .ZmSpreadSheet input.InputField { z-index: 10; }
 .ZmSpreadSheet span.InputField { visibility: hidden; border: none; top: 0px; left: 0px; }
-.ZmSpreadSheet .Wrapper { overflow: hidden; white-space: nowrap; }
+.ZmSpreadSheet .Wrapper { white-space: nowrap; display: inline; }
 
 .ZmSpreadSheet td.hasFormula { color: #555; background-color: #fafafa; }
 
@@ -31,8 +33,9 @@
 .ZmSpreadSheet .ShowRange {
   z-index: 5;
   position: absolute; left: 0; top: 0;
-  overflow: hidden; font-size: 1px; line-height: 1px; /* for IE */
-  opacity: 0.3;
-  filter: alpha(opacity=30);
-  background-color: #acf; border: 1px solid #00f;
+/*  overflow: hidden; */ font-size: 1px; line-height: 1px;
+  opacity: 0.4;
+  filter: alpha(opacity=40);
+  background-color: #acf; 
+  border: 1px solid #00c;
 }

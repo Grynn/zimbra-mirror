@@ -619,3 +619,13 @@ Dwt.getSelectionEnd = function(input) {
 	// FIXME: find solutions for other browsers
 	return input.value.length;
 };
+
+Dwt.setSelectionText = function(input, text) {
+	var start = Dwt.getSelectionStart(input);
+	var end = Dwt.getSelectionEnd(input);
+	var str = input.value;
+	input.value = [ str.substr(0, start),
+			text,
+			str.substr(end) ].join("");
+	Dwt.setSelectionRange(input, start, start + text.length);
+};
