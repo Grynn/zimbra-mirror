@@ -87,7 +87,7 @@ function (title, tabView) {
 	this._tabs[tabKey]["title"] = title;
 
 	//add the button to the tab bar
-	this._tabBar.addButton(tabKey, title);
+	this._tabs[tabKey]["button"] = this._tabBar.addButton(tabKey, title);
 	//add the page 
 	if(tabView) {
 		this._tabs[tabKey]["view"] = tabView;
@@ -130,6 +130,19 @@ function (tabKey) {
 	else
 		return null;
 }
+
+DwtTabView.prototype.getTabTitle =
+function(tabKey) {
+	return this._tabs && this._tabs[tabKey] ? this._tabs[tabKey]["title"] : null;
+};
+DwtTabView.prototype.getTabButton =
+function(tabKey) {
+	return this._tabs && this._tabs[tabKey] ? this._tabs[tabKey]["button"] : null;
+};
+DwtTabView.prototype.getTabView =
+function(tabKey) {
+	return this._tabs && this._tabs[tabKey] ? this._tabs[tabKey]["view"] : null;
+};
 
 DwtTabView.prototype.switchToTab = 
 function(tabKey) {

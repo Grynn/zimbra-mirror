@@ -226,6 +226,7 @@ function(imageInfo) {
 		if (this._imageCell) {
 			var cellIndex = Dwt.getCellIndex(this._imageCell);
 			this._row.deleteCell(cellIndex);
+			this._imageCell = null;
 		}
 	} else {
 		var idx;
