@@ -85,7 +85,7 @@ public class SetCookieServlet extends ZCServlet
                 }
 
                 String authCookieVal = getCookieValue(req, "ZM_AUTH_TOKEN");
-                if (authCookieVal == null) {
+                if (!(authToken.equals(authCookieVal))) {
                     Cookie c = new Cookie("ZM_AUTH_TOKEN", authToken);
                     c.setPath("/");
                     c.setMaxAge(lifetime);                
