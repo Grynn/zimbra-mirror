@@ -32,7 +32,18 @@ Contributor(s):
     <title>ZmSpreadSheet test</title>
     <style type="text/css">
       <!--
-        @import url(../common/img/hiRes/dwtimgs.css);
+
+	        @import url(/zimbra/img/loRes/imgs.css?v=060123132725);
+	        @import url(/zimbra/img/loRes/skins/steel/skin.css?v=060123132725);
+	
+	        @import url(/zimbra/js/zimbraMail/config/style/dwt.css?v=060123132725);
+	        @import url(/zimbra/js/zimbraMail/config/style/common.css?v=060123132725);
+	        @import url(/zimbra/js/zimbraMail/config/style/msgview.css?v=060123132725);
+	        @import url(/zimbra/js/zimbraMail/config/style/zm.css?v=060123132725);
+	        @import url(/zimbra/js/zimbraMail/config/style/spellcheck.css?v=060123132725);
+	        @import url(/zimbra/skins/steel/skin.css?v=060123132725);
+
+        @import url("../../js/zimbraMail/config/style/dwt.css");
         @import url(style.css);
       -->
     </style>
@@ -58,6 +69,7 @@ Contributor(s):
 <script type="text/javascript" src="<%= contextPath %>/js/zimbraMail/share/view/spreadsheet/ZmSpreadSheet.js<%= ext %>?v=<%= vers %>"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/zimbraMail/share/view/spreadsheet/ZmSpreadSheetModel.js<%= ext %>?v=<%= vers %>"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/zimbraMail/share/view/spreadsheet/ZmSpreadSheetFormulae.js<%= ext %>?v=<%= vers %>"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/zimbraMail/share/view/spreadsheet/ZmSpreadSheetToolbars.js<%= ext %>?v=<%= vers %>"></script>
 
     <script type="text/javascript" src="test.js"></script>
   </head>
