@@ -383,6 +383,16 @@ function(htmlElement, x, y, containerElement) {
 	while (offsetParent && offsetParent != containerElement) {
 		p.x += offsetParent.offsetLeft;
 		p.y += offsetParent.offsetTop;
+		if (offsetParent.scrollTop) {
+			p.y -= offsetParent.scrollTop;
+		}
+		var parentNode = offsetParent.parentNode;
+		while (parentNode != offsetParent.offsetParent && parentNode != containerElement) {
+			if (parentNode.scrollTop) {
+				p.y -= parentNode.scrollTop;
+			}
+			parentNode = parentNode.parentNode;
+		}
 		offsetParent = offsetParent.offsetParent;
 	}
 	return p;
