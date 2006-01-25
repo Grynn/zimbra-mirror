@@ -2237,8 +2237,8 @@ attributetype ( zimbraZimletPanelItem
 attributetype ( zimbraZimletPriority
 	NAME 'zimbraZimletPriority'
 	DESC 'Object match priority'
-	EQUALITY integerMatch
-	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	EQUALITY caseIgnoreMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32}
 	SINGLE-VALUE )
 
 attributetype ( zimbraZimletScript
