@@ -278,6 +278,8 @@ function(str1, str2) {
 }
 
 /**
+* DEPRECATED
+*
 * Replaces variables in a string with values from a list. The variables are denoted by a '$' followed by a number,
 * starting from 0. For example, a string of "Hello $0, meet $1" with a list of ["Harry", "Sally"] would result in
 * the string "Hello Harry, meet Sally".
@@ -288,7 +290,9 @@ function(str1, str2) {
 */
 AjxStringUtil.resolve =
 function(str, values) {
-
+	DBG.println(AjxDebug.DBG1, "Call to deprecated function AjxStringUtil.resolve");
+	return AjxMessageFormat.format(str, values);
+/*
 	if (!str) return "";
 	if (!(values instanceof Array)) values = [values];
 	if (!AjxEnv.isSafari)
@@ -302,6 +306,7 @@ function(str, values) {
 		str = str.replace(re, values[d]);
 	}
 	return str;
+*/
 }
 
 /**

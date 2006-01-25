@@ -311,7 +311,7 @@ function () {
 
 DwtDialog.prototype._getButtonsAlignStartTemplate =
 function () {
-	return "<td align='$0'><table cellspacing='5' cellpadding='0' border='0'><tr>";
+	return "<td align=\"{0}\"><table cellspacing='5' cellpadding='0' border='0'><tr>";
 };
 
 DwtDialog.prototype._getButtonsAlignEndTemplate =
@@ -321,7 +321,7 @@ function () {
 
 DwtDialog.prototype._getButtonsCellTemplate =
 function () {
-	return "<td id='$0'></td>";
+	return "<td id=\"{0}\"></td>";
 };
 
 DwtDialog.prototype._getButtonsContainerEndTemplate =
@@ -347,37 +347,37 @@ function(html, idx) {
 		html[idx++] = this._getButtonsContainerStartTemplate();
 		
 		if (leftButtons.length) {
-			html[idx++] = AjxStringUtil.resolve(
+			html[idx++] = AjxMessageFormat.format(
 								  this._getButtonsAlignStartTemplate(),
 								  ["left"]);
 			for (var i = 0; i < leftButtons.length; i++) {
 				var buttonId = leftButtons[i];
-		 		html[idx++] = AjxStringUtil.resolve(
+		 		html[idx++] = AjxMessageFormat.format(
 								  this._getButtonsCellTemplate(),
 								  [this._buttonElementId[buttonId]]);
 		 	}
 			html[idx++] = this._getButtonsAlignEndTemplate();
 		}
 		if (centerButtons.length){
-			html[idx++] = AjxStringUtil.resolve(
+			html[idx++] = AjxMessageFormat.format(
 								this._getButtonsAlignStartTemplate(),
 								["center"]);
 			for (var i = 0; i < centerButtons.length; i++) {
 				var buttonId = centerButtons[i];
-		 		html[idx++] = AjxStringUtil.resolve(
+		 		html[idx++] = AjxMessageFormat.format(
 								this._getButtonsCellTemplate(),
 								[this._buttonElementId[buttonId]]);
 		 	}
 			html[idx++] = this._getButtonsAlignEndTemplate();
 		}
 		if (rightButtons.length) {
-			html[idx++] = AjxStringUtil.resolve(
+			html[idx++] = AjxMessageFormat.format(
 								this._getButtonsAlignStartTemplate(),
 								["right"]);
 			for (var i = 0; i < rightButtons.length; i++) {
 				var buttonId = rightButtons[i];
 				var templ = this._getButtonsCellTemplate();
-		 		html[idx++] = AjxStringUtil.resolve(templ,
+		 		html[idx++] = AjxMessageFormat.format(templ,
 											[this._buttonElementId[buttonId]]);
 		 	}
 			html[idx++] = this._getButtonsAlignEndTemplate();

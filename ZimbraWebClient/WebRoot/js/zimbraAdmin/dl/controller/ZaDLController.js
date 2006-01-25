@@ -187,7 +187,7 @@ ZaDLController.prototype._saveChanges = function () {
 				handled = true;
 			}
 		} else if (ex.code == ZmCsfeException.DISTRIBUTION_LIST_EXISTS) {
-			this.popupErrorDialog(AjxStringUtil.resolve(ZaMsg.DLXV_ErrorDistributionListExists,[dl.name]), ex, true);		
+			this.popupErrorDialog(AjxMessageFormat.format(ZaMsg.DLXV_ErrorDistributionListExists,[dl.name]), ex, true);		
 			handled = true;
 		}
 		if (!handled) {

@@ -302,7 +302,7 @@ function () {
 					if(tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]) {
 						if(!AjxUtil.EMAIL_RE.test(tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix])) {
 							//show error msg
-							this._errorDialog.setMessage(AjxStringUtil.resolve(ZaMsg.ERROR_ALIAS_INVALID,[tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]]), null, DwtMessageDialog.CRITICAL_STYLE, null);
+							this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_ALIAS_INVALID,[tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]]), null, DwtMessageDialog.CRITICAL_STYLE, null);
 							this._errorDialog.popup();		
 							break;						
 						}
@@ -312,7 +312,7 @@ function () {
 					if(ex.code == ZmCsfeException.ACCT_EXISTS) {
 						//if failed because account exists just show a warning
 						var account = this._findAlias(tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]);
-						failedAliases += "<br>" +AjxStringUtil.resolve(ZaMsg.WARNING_EACH_ALIAS,[account.name, tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]]);
+						failedAliases += "<br>" +AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS,[account.name, tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]]);
 						failedAliasesCnt++;
 					} else {
 						//if failed for another reason - jump out
