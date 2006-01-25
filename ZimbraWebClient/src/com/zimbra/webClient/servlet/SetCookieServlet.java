@@ -36,7 +36,7 @@ public class SetCookieServlet extends ZCServlet
 {
     
     private static final String PARAM_AUTH_TOKEN = "authToken";
-    private static final String PARAM_PUBLIC_COMPUTER = "publicComputer";
+    private static final String PARAM_REMEMBER_ME = "rememberMe";
     private static final String PARAM_QUERY_STRING_TO_CARRY = "qs";
     private static final String PARAM_AUTH_TOKEN_LIFETIME = "atl";
     private static final String DEFAULT_MAIL_URL = "/zimbra/mail";
@@ -68,16 +68,14 @@ public class SetCookieServlet extends ZCServlet
                 return;
             } else {
                 String atl = getReqParameter(req, PARAM_AUTH_TOKEN_LIFETIME);
-                String publicComputer = getReqParameter(req,
-                                                        PARAM_PUBLIC_COMPUTER);
-                boolean isPublic = false;
-                if (publicComputer != null) {
-                    isPublic = new Boolean(publicComputer).booleanValue();
+                String rememberMe = getReqParameter(req, PARAM_REMEMBER_ME);
+                boolean doRemember = false;
+                if (rememberMe != null) {
+                    doRemember = new Boolean(rememberMe).booleanValue();
                 }
-                
 
                 int lifetime = -1;
-                if (!isPublic){
+                if (doRemember){
                     try {
                         int lifetimeMs = Integer.parseInt(atl);
                         lifetime = lifetimeMs / 1000;
