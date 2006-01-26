@@ -494,8 +494,8 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
 								{ref:".", type:_LDAPURL_, label:null, labelLocation:_NONE_}
 							]
 						},
-						{ref:ZaDomain.A_GalLdapFilter, type:_TEXTAREA_, width:380, height:100, label:ZaMsg.Domain_GalLdapFilter, labelLocation:_LEFT_, relevant:"instance.attrs[ZaDomain.A_GALServerType] == 'ldap'", relevantBehavior:_DISABLE_},
-						{ref:ZaDomain.A_GalLdapSearchBase, type:_TEXTAREA_, width:380, height:100, label:ZaMsg.Domain_GalLdapSearchBase, labelLocation:_LEFT_}
+						{ref:ZaDomain.A_GalLdapFilter, type:_TEXTAREA_, width:380, height:90, label:ZaMsg.Domain_GalLdapFilter, labelLocation:_LEFT_, relevant:"instance.attrs[ZaDomain.A_GALServerType] == 'ldap'", relevantBehavior:_DISABLE_},
+						{ref:ZaDomain.A_GalLdapSearchBase, type:_TEXTAREA_, width:380, height:90, label:ZaMsg.Domain_GalLdapSearchBase, labelLocation:_LEFT_}
 					]
 				},
 				{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 4 && instance.attrs[ZaDomain.A_GalMode]!=ZaDomain.GAL_Mode_internal", relevantBehavior:_HIDE_,
