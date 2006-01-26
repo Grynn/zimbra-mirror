@@ -45,9 +45,6 @@ function ZaController(appCtxt, container, app, iKeyName) {
 	this._authenticating = false;
 
 	this._loginDialog = appCtxt.getLoginDialog();
-	this._loginDialog.registerCallback(this.loginCallback, this);
-	this._loginDialog.registerChangePassCallback(this.changePwdCallback, this);
-
 	this._msgDialog = appCtxt.getMsgDialog();
 	this._errorDialog = appCtxt.getErrorDialog();
 	this._confirmMessageDialog = new ZaMsgDialog(this._shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);					
@@ -318,7 +315,6 @@ function(params) {
 
 ZaController.prototype._hideLoginDialog =
 function() {
-	this._appCtxt.getAppController().createBannerBarHtml();
 	this._loginDialog.setVisible(false);
 	this._loginDialog.setError(null);
 	this._loginDialog.clearPassword();

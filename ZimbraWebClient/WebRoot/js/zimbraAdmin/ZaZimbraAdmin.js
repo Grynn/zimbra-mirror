@@ -34,6 +34,11 @@
 function ZaZimbraAdmin(appCtxt) {
 	ZaZimbraAdmin._instance = this;
 	ZaController.call(this, appCtxt, null, null,"ZaZimbraAdmin");
+
+	this._loginDialog.registerCallback(this.loginCallback, this);
+	this._loginDialog.registerChangePassCallback(this.changePwdCallback, this);
+
+	
 	this._shell = this._appCtxt.getShell();	
 	this._splashScreen = new ZaSplashScreen(this._shell, "Admin_SplashScreen");
 	
@@ -516,7 +521,7 @@ function(id, tableId) {
 		
 	}
 }
-
+/*
 // Creates buttons for general non app-related functions and puts them on the banner.
 ZaZimbraAdmin.prototype._createBannerBar =
 function() {
@@ -633,7 +638,7 @@ function () {
 	if(a) {
 		a.href = "javascript: void ZaZimbraAdmin._bannerBarHdlr(" + ZaZimbraAdmin._ABOUT_ID + ",'" + this._bannerTableId + "');";
 	}		
-}
+}*/
 // This method is called by the window.onbeforeunload method.
 ZaZimbraAdmin._confirmExitMethod =
 function() {

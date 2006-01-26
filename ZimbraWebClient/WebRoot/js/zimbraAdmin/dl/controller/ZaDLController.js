@@ -170,9 +170,10 @@ ZaDLController.prototype._saveChanges = function () {
 			retval = this._currentObject.modify(obj);
 			return retval;
 		} else {
-			this._currentObject = ZaDistributionList.create(obj, this._app);
-			if(this._currentObject != null) {
-				this.fireCreationEvent(this._currentObject);
+			var _tmpObj = ZaDistributionList.create(obj, this._app);
+			if(_tmpObj != null) {
+				this.fireCreationEvent(_tmpObj);
+				this._currentObject = _tmpObj;
 				return true;
 			}
 		}
