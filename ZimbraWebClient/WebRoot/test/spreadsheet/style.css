@@ -92,3 +92,4 @@
 .ZmSpreadSheet-Tooltip .CellName { font-weight: bold; border-bottom: 1px solid #000; margin-bottom: 0.5em; }
 .ZmSpreadSheet-Tooltip .CellExpr { padding: 0 0 0 20px; }
 .ZmSpreadSheet-Tooltip .CellValue { padding: 0 0 0 20px; }
+.ZmSpreadSheet-Tooltip .CellDesc { font-style: italic; text-align: center; }
