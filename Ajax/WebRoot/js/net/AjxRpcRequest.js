@@ -121,7 +121,8 @@ function(req, callback) {
 
 	DBG.println(AjxDebug.DBG3, "Async RPC request: ready state = " + req._httpReq.readyState);
 	if (req._httpReq.readyState == 4) {
-		DBG.println(AjxDebug.DBG3, "Async RPC request: HTTP status = " + req._httpReq.status);
+		if (DBG.getDebugLevel() >= AjxDebug.DBG3)
+			DBG.println("Async RPC request: HTTP status = " + req._httpReq.status);
 		if (req._httpReq.status == 200) {
 			callback.run( {text: req._httpReq.responseText, xml: req._httpReq.responseXML, success: true} );				
 		} else {
