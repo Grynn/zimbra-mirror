@@ -44,6 +44,7 @@ $types = "message";
 #standard options
 my ($user, $pw, $host, $help); #standard
 GetOptions("u|user=s" => \$user,
+           "t|types=s" => \$types,
            "p|port=s" => \$pw,
            "h|host=s" => \$host,
            "help|?" => \$help,
@@ -73,7 +74,7 @@ $z->doStdAuth();
 
 my $d = new XmlDoc;
 $d->start('SearchRequest', $Soap::ZIMBRA_MAIL_NS,
-          { 'types' => "message",
+          { 'types' => $types,
             'sortBy' => $sortBy,
             'offset' => $offset,
             'limit' => $limit,
