@@ -24,7 +24,7 @@
  */
 
 function ZaGlobalConfig(app) {
-	ZaItem.call(this, app);
+	ZaItem.call(this, app, "ZaGlobalConfig");
 	this.attrs = new Object();
 //	this.attrsInternal = new Object();	
 	this.load();
@@ -32,6 +32,7 @@ function ZaGlobalConfig(app) {
 
 ZaGlobalConfig.prototype = new ZaItem;
 ZaGlobalConfig.prototype.constructor = ZaGlobalConfig;
+ZaItem.loadMethods["ZaGlobalConfig"] = new Array();
 
 ZaGlobalConfig.MTA_RESTRICTIONS = [
 	"reject_invalid_hostname", "reject_non_fqdn_hostname", "reject_non_fqdn_sender",
@@ -121,13 +122,21 @@ ZaGlobalConfig.A_zimbraNewExtension = "_zimbraNewExtension";
 ZaGlobalConfig.A_originalMonitorHost = "_originalMonitorHost";
 ZaGlobalConfig.A_currentMonitorHost = "_currentMonitorHost";
 
-
+/*
 ZaGlobalConfig.prototype.load =
 function () {
 	var soapDoc = AjxSoapDoc.create("GetAllConfigRequest", "urn:zimbraAdmin", null);
 	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	this.initFromDom(resp);
 }
+*/
+ZaGlobalConfig.loadMethod = 
+function(by, val, withConfig) {
+	var soapDoc = AjxSoapDoc.create("GetAllConfigRequest", "urn:zimbraAdmin", null);
+	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	this.initFromDom(resp);
+}
+ZaItem.loadMethods["ZaGlobalConfig"].push(ZaGlobalConfig.loadMethod);
 
 ZaGlobalConfig.prototype.initFromDom = function(node) {
 	ZaItem.prototype.initFromDom.call(this, node);

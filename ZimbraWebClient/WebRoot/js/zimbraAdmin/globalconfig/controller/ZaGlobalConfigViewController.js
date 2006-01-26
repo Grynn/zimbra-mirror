@@ -72,6 +72,7 @@ function(item) {
 	}
 	this._app.pushView(ZaZimbraAdmin._GLOBAL_SETTINGS);
 	this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);  	
+	item.load();
 	try {		
 		item[ZaModel.currentTab] = "1"
 		this._view.setDirty(false);
