@@ -110,12 +110,49 @@ DwtIframe.prototype._rawEventHandler = function(ev) {
 //  		" stopPropagation: " + dw._stopPropagation + ", " +
 //  		" returnValue: " + dw._returnValue;
 
-	DwtEventManager.notifyListeners(type, dw);
-	this.parent.notifyListeners(type, dw);
+	var capture = DwtMouseEventCapture.getCaptureObj();
+	if (!capture) {
+		// go for Dwt events
+		DwtEventManager.notifyListeners(type, dw);
+		this.parent.notifyListeners(type, dw);
+	} else {
+		// Satisfy object that holds the mouse capture.  IE seems not
+		// to get here, which is Good.  But let's check, should we ever
+		// have problems at least we know where to debug:
+		if (AjxEnv.isIE)
+			throw "IE is not supported by DwtIframe to dispatch real DOM events.";
+
+		// the following is DOM2
+		var fake = document.createEvent("MouseEvents");
+		fake.initMouseEvent(ev.type,
+				    true, // can bubble
+				    true, // cancellable
+				    document.defaultView, // the view
+				    0, // event detail ("click count")
+				    ev.screenX, // screen X
+				    ev.screenY, // screen Y
+				    dw.docX, // clientX, but translated to page
+				    dw.docY, // clientY, translated
+				    ev.ctrlKey, // key status...
+				    ev.altKey,
+				    ev.shiftKey,
+				    ev.metaKey,
+				    ev.button,
+				    ev.relatedTarget);
+		document.body.dispatchEvent(fake);
+		// capture[DwtIframe._captureEvents[dw.type]](fake);
+	}
 
 	dw.setToDhtmlEvent(ev);
 	return dw._returnValue;
 };
+
+// map event names to the handler name in a DwtMouseEventCapture object
+// DwtIframe._captureEvents = { mousedown : "_mouseDownHdlr",
+// 			     mousemove : "_mouseMoveHdlr",
+// 			     mouseout  : "_mouseOutHdlr",
+// 			     mouseover : "_mouseOverHdlr",
+// 			     mouseup   : "_mouseUpHdlr" };
 
 DwtIframe._forwardEvents = [ DwtEvent.ONCHANGE,
 			     DwtEvent.ONCLICK,
