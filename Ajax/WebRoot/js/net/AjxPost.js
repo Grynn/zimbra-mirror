@@ -39,8 +39,30 @@ function AjxPost(iframeId) {
 	this._iframeId = iframeId;
 }
 
+
+// Globals
+
 AjxPost._reqIds = 0;
 AjxPost._outStandingRequests = new Object();
+
+
+// Consts 
+
+// Common HttpServletResponse error codes
+// - see full list: http://java.sun.com/products/servlet/2.2/javadoc/javax/servlet/http/HttpServletResponse.html
+AjxPost.SC_CONTINUE					= 100;
+AjxPost.SC_OK						= 200;
+AjxPost.SC_ACCEPTED 				= 202;
+AjxPost.SC_BAD_REQUEST				= 400;
+AjxPost.SC_REQUEST_TIMEOUT			= 408;
+AjxPost.SC_CONFLICT					= 409;
+AjxPost.SC_REQUEST_ENTITY_TOO_LARGE = 413;
+AjxPost.SC_INTERNAL_SERVER_ERROR	= 500;
+AjxPost.SC_BAD_GATEWAY 				= 502;
+AjxPost.SC_SERVICE_UNAVAILABLE		= 503;
+
+
+// Public methods
 
 /**
 * Submits the form.
@@ -59,6 +81,9 @@ function(callback, form, optionalTimeout) {
 	req.send(failureAction, timeout);
 };
 
+
+// Private methods
+
 AjxPost.prototype._onFailure =
 function (reqId){
 	var req = AjxPost._outStandingRequests[reqId];
@@ -69,6 +94,8 @@ function (reqId){
 		this._callback = null;
 	}
 };
+
+
 
 /**
 * Processes the HTTP response from the form post. The server needs to make sure this function is
@@ -110,10 +137,6 @@ function AjxPostRequest (form) {
 
 AjxPostRequest.prototype.send =
 function(failureAction, timeout) {
-	// Not sure what a fair timeout is for uploads, so for now,
-	// we won't have a failed callback.
-	//this._timeoutId = AjxTimedAction.scheduleAction(failureAction, timeout);
-	//alert(this._form.innerHTML);
 	this._form.submit();
 };
 
