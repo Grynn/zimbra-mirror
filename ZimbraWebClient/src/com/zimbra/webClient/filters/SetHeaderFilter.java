@@ -155,7 +155,9 @@ public class SetHeaderFilter implements Filter {
             getNoCachePatternList();
             gzipExtension = getInitParameter("GzipExtension", ".zgz");
             expiresValue = getInitParameterInt("Expires", 0);
-            futureCacheControl = "max-age:" + expiresValue + ", must-revalidate";
+            // post-check/pre-check are IE specfic see:
+            // http://msdn.microsoft.com/workshop/author/perf/perftips.asp#Use_Cache-Control_Extensions
+            futureCacheControl = "public, max-age=" + expiresValue + ", post-check=7200, pre-check=" + expiresValue;
             isProdMode = getInitParameterBool("ProdMode", true);
             if (debug > 0) {
                 System.out.println("Filter variables:");
