@@ -64,6 +64,9 @@ AjxEnv.reset = function () {
 	AjxEnv.isGeckoBased = false;
 	AjxEnv.isOpera = false;
 	AjxEnv.useTransparentPNGs = false;
+
+	// screen resolution - ADD MORE RESOLUTION CHECKS AS NEEDED HERE:
+	AjxEnv.is800x600orLower = screen.width <= 800 && screen.height <= 600;
 };
 
 AjxEnv.parseUA = function (userAgent) {
