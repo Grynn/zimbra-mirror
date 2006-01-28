@@ -187,7 +187,7 @@ DwtIframe.prototype._createFrame = function(html) {
 			tmp[i++] = " scrolling='no'";
 		if (self._hidden)
 			tmp[i++] = " style='visibility:hidden'";
-		tmp[i++] = " frameborder='0' width='100%' height='100%' id='";
+		tmp[i++] = " frameborder='0' width='100%' id='";
 		tmp[i++] = self._iframeID;
 		tmp[i++] = "' src='javascript:\"\";'></iframe>";
 		self.setContent(tmp.join(''));
