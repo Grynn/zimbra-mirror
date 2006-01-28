@@ -97,6 +97,9 @@ function(query, types, pagenum, orderby, isascending, app, attrs, limit, domainN
 	var offset = (pagenum-1) * limit;
 	attrs = (attrs != null)? attrs: ZaSearch.standardAttributes;
 	var soapDoc = AjxSoapDoc.create("SearchAccountsRequest", "urn:zimbraAdmin", null);
+	if(query)
+		query = String(query).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
+		
 	soapDoc.set("query", query);
 	if (domainName != null) {
 		soapDoc.getMethod().setAttribute("domain", domainName);
@@ -129,6 +132,8 @@ function(n) {
 	if (n == null || n == "") {
 		return "";
 	} else {
+		
+		n = String(n).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
 		return ("(|(uid=*"+n+"*)(cn=*"+n+"*)(sn=*"+n+"*)(gn=*"+n+"*)(displayName=*"+n+"*)(zimbraMailAlias=*"+n+"*)(zimbraId="+n+")(zimbraMailAddress=*"+n+"*)(zimbraMailDeliveryAddress=*"+n+"*))");
 	}
 }
