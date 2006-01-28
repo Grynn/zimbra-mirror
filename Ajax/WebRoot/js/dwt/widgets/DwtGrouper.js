@@ -69,6 +69,8 @@ DwtGrouper.prototype.setStyle = function(style) {
 
 DwtGrouper.prototype.setLabel = function(htmlContent) {
 	Dwt.setVisible(this._labelEl, Boolean(htmlContent));
+	// HACK: undo block display set by Dwt.setVisible
+	this._labelEl.style.display = "";
 	this._labelEl.innerHTML = htmlContent ? htmlContent : "";
 };
 
