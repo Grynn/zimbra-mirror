@@ -42,6 +42,21 @@ function AjxFormat(pattern) {
 	this._segments = [];
 }
 
+/** Returns string representation of this object. */
+AjxFormat.prototype.toString = function() { 
+	var s = [];
+	s.push("pattern=\"",this._pattern,'"');
+	if (this._segments.length > 0) {
+		s.push(", segments={ ");
+		for (var i = 0; i < this._segments.length; i++) {
+			if (i > 0) { s.push(", "); }
+			s.push(String(this._segments[i]));
+		}
+		s.push(" }");
+	}
+	return s.join("");
+};
+
 // Data
 
 AjxFormat.prototype._pattern;
@@ -60,24 +75,43 @@ AjxFormat.prototype.format = function(object) {
 		s.push(this._segments[i].format(object));
 	}
 	return s.join("");
-}
+};
 
-/** Returns string representation of this object. */
-AjxFormat.prototype.toString = function() { 
-	var s = [];
-	s.push("pattern=\"",this._pattern,'"');
-	if (this._segments.length > 0) {
-		s.push(", segments={ ");
-		for (var i = 0; i < this._segments.length; i++) {
-			if (i > 0) { s.push(", "); }
-			s.push(this._segments[i].toString());
-		}
-		s.push(" }");
+/** 
+ * Parses the given string according to this format's pattern and returns
+ * an object.
+ * <p>
+ * <strong>Note:</strong>
+ * The default implementation of this method assumes that the sub-class
+ * has implemented the <code>_createParseObject</code> method.
+ */
+AjxFormat.prototype.parse = function(s) {
+	var object = this._createParseObject();
+	var index = 0;
+	for (var i = 0; i < this._segments.length; i++) {
+		var segment = this._segments[i];
+		index = segment.parse(object, s, index);
 	}
-	return s.join("");
-}
+	// REVISIT: Should this return null instead?
+	if (index < s.length) {
+		throw new AjxFormat.ParsingException(this, null, "input too long"); // I18n
+	}
+	return object;
+};
 
-// Static methods
+// Protected methods
+
+/**
+ * Creates the object that is initialized by parsing
+ * <p>
+ * <strong>Note:</strong>
+ * This must be implemented by sub-classes.
+ */
+AjxFormat.prototype._createParseObject = function(s) {
+	throw new AjxFormat.ParsingException(this, null, "not implemented"); // I18n
+};
+
+// Protected static methods
 
 AjxFormat._zeroPad = function(s, length, zeroChar, rightSide) {
 	s = typeof s == "string" ? s : String(s);
@@ -102,8 +136,10 @@ AjxFormat._zeroPad = function(s, length, zeroChar, rightSide) {
 AjxFormat.FormatException = function(format, message) {
 	this._format = format;
 	this._message = message;
-}
-AjxFormat.FormatException.prototype.toString = function() { return this.message; }
+};
+AjxFormat.FormatException.prototype.toString = function() { 
+	return this._message; 
+};
 
 // Data
 
@@ -115,9 +151,9 @@ AjxFormat.FormatException.prototype._message;
 //
 
 AjxFormat.FormattingException = function(format, segment, message) {
-	FormatException.call(this, format, message);
+	AjxFormat.FormatException.call(this, format, message);
 	this._segment = segment;
-}
+};
 AjxFormat.FormattingException.prototype = new AjxFormat.FormatException;
 AjxFormat.FormattingException.prototype.constructor = AjxFormat.FormattingException;
 
@@ -126,13 +162,32 @@ AjxFormat.FormattingException.prototype.constructor = AjxFormat.FormattingExcept
 AjxFormat.FormattingException.prototype._segment;
 
 //
+// Parsing exception class
+//
+
+AjxFormat.ParsingException = function(format, segment, message) {
+	AjxFormat.FormatException.call(this, format, message);
+	this._segment = segment;
+};
+AjxFormat.ParsingException.prototype = new AjxFormat.FormatException;
+AjxFormat.ParsingException.prototype.constructor = AjxFormat.ParsingException;
+
+// Data
+
+AjxFormat.ParsingException.prototype._segment;
+
+//
 // Segment class
 //
 
 AjxFormat.Segment = function(format, s) {
 	this._parent = format;
 	this._s = s;
-}
+};
+
+AjxFormat.Segment.prototype.toString = function() { 
+	return "segment: \""+this._s+'"'; 
+};
 
 // Data
 
@@ -143,11 +198,86 @@ AjxFormat.Segment.prototype._s;
 
 AjxFormat.Segment.prototype.format = function(o) { 
 	return this._s; 
-}
+};
 
-AjxFormat.Segment.prototype.toString = function() { 
-	return "segment: \""+this._s+'"'; 
-}
+/**
+ * Parses the string at the given index, initializes the parse object
+ * (as appropriate), and returns the new index within the string for
+ * the next parsing step.
+ * <p>
+ * <strong>Note:</strong>
+ * This method must be implemented by sub-classes.
+ *
+ * @param o     [object] The parse object to be initialized.
+ * @param s     [string] The input string to be parsed.
+ * @param index [number] The index within the string to start parsing.
+ */
+AjxFormat.Segment.prototype.parse = function(o, s, i) {
+	throw new AjxFormat.ParsingException(this._parent, this, "not implemented"); // I18n
+};
+
+// Protected static methods
+
+AjxFormat.Segment._parseLiteral = function(literal, s, index) {
+	if (s.length - index < literal.length) {
+		throw new AjxFormat.ParsingException(this._parent, this, "input too short"); // I18n
+	}
+	for (var i = 0; i < literal.length; i++) {
+		if (literal.charAt(i) != s.charAt(index + i)) {
+			throw new AjxFormat.ParsingException(this._parent, this, "input doesn't match"); // I18n
+		}
+	}
+	return index + literal.length;
+};
+AjxFormat.Segment._parseLiterals = function(literals, s, index) {
+	for (var i = 0; i < literals.length; i++) {
+		try {
+			var literal = literals[i];
+			return AjxFormat.Segment._parseLiteral(literal, s, index);
+		}
+		catch (e) {
+			// ignore. keep trying to find a match
+		}
+	}
+	return -1;
+};
+
+/**
+ * Parses an integer at the offset of the given string and calls a
+ * method on the specified object.
+ *
+ * @param o         [object]   The target object.
+ * @param f         [function] The method to call on the target object.
+ * @param adjust    [number]   The numeric adjustment to make on the
+ *                             value before calling the object method.
+ * @param s         [string]   The string to parse.
+ * @param index     [number]   The index within the string to start parsing.
+ * @param fixedlen  [number]   If specified, specifies the required number
+ *                             of digits to be parsed.
+ */
+AjxFormat.Segment._parseInt = function(o, f, adjust, s, index, fixedlen) {
+	var len = fixedlen || s.length - index;
+	var head = index;
+	for (var i = 0; i < len; i++) {
+		if (!s.charAt(index++).match(/\d/)) {
+			index--;
+			break;
+		}
+	}
+	var tail = index;
+	if (head == tail) {
+		throw new AjxFormat.ParsingException(this._parent, this, "number not present"); // I18n
+	}
+	if (fixedlen && tail - head != fixedlen) {
+		throw new AjxFormat.ParsingException(this._parent, this, "number too short"); // I18n
+	}
+	var value = parseInt(s.substring(head, tail));
+	if (f) {
+		var target = o || window;
+		f.call(target, value + adjust);
+	}
+	return tail;
+};
 
 //
 // Date format class
@@ -249,12 +379,17 @@ function AjxDateFormat(pattern) {
 			case 'Z': segment = new AjxDateFormat.TimezoneSegment(this, field); break;
 		}
 		if (segment != null) {
+			segment._index = this._segments.length;
 			this._segments.push(segment);
 		}
 	}
 }
 AjxDateFormat.prototype = new AjxFormat;
 AjxDateFormat.prototype.constructor = AjxDateFormat;
+
+AjxDateFormat.prototype.toString = function() {
+	return "[AjxDateFormat: "+AjxFormat.prototype.toString.call(this)+"]";
+};
 
 // Constants
 
@@ -288,7 +423,7 @@ AjxDateFormat.getDateInstance = function(style) {
 		AjxDateFormat._DATE_FORMATTERS[style] = new AjxDateFormat(AjxDateFormat._dateFormats[style]);
 	}
 	return AjxDateFormat._DATE_FORMATTERS[style];
-}
+};
 
 AjxDateFormat.getTimeInstance = function(style) {
 	// lazily create formatters
@@ -297,7 +432,7 @@ AjxDateFormat.getTimeInstance = function(style) {
 		AjxDateFormat._TIME_FORMATTERS[style] = new AjxDateFormat(AjxDateFormat._timeFormats[style]);
 	}
 	return AjxDateFormat._TIME_FORMATTERS[style];
-}
+};
 
 AjxDateFormat.getDateTimeInstance = function(dateStyle, timeStyle) {
 	// lazily create formatters
@@ -312,17 +447,34 @@ AjxDateFormat.getDateTimeInstance = function(dateStyle, timeStyle) {
 		AjxDateFormat._DATETIME_FORMATTERS[style] = new AjxDateFormat(dateTimePattern);
 	}
 	return AjxDateFormat._DATETIME_FORMATTERS[style];
-}
+};
 
 AjxDateFormat.format = function(pattern, date) {
 	return new AjxDateFormat(pattern).format(date);
-}
+};
 
 // Public methods
 
-AjxDateFormat.prototype.toString = function() {
-	return "[AjxDateFormat: "+AjxFormat.prototype.toString.call(this)+"]";
-}
+/** 
+ * Parses the given string and returns a date. If the string cannot be
+ * parsed as a date, <code>null</code> is returned.
+ */
+AjxDateFormat.prototype.parse = function(s) {
+	var object = null;
+	try {
+		object = AjxFormat.prototype.parse.call(this, s);
+	}
+	catch (e) {
+		// do nothing
+	}
+	return object;
+};
+
+// Protected methods
+
+AjxDateFormat.prototype._createParseObject = function() {
+	return new Date(0, 0, 1, 0, 0, 0, 0);
+};
 
 //
 // Text segment class
@@ -330,15 +482,19 @@ AjxDateFormat.prototype.toString = function() {
 
 AjxFormat.TextSegment = function(format, s) {
 	AjxFormat.Segment.call(this, format, s);
-}
+};
 AjxFormat.TextSegment.prototype = new AjxFormat.Segment;
 AjxFormat.TextSegment.prototype.constructor = AjxFormat.TextSegment;
 
-// Public methods
-
 AjxFormat.TextSegment.prototype.toString = function() { 
 	return "text: \""+this._s+'"'; 
-}
+};
+
+// Public methods
+
+AjxFormat.TextSegment.prototype.parse = function(o, s, index) {
+	return AjxFormat.Segment._parseLiteral(this._s, s, index);
+};
 
 //
 // Date segment class
@@ -350,6 +506,19 @@ AjxDateFormat.DateSegment = function(format, s) {
 AjxDateFormat.DateSegment.prototype = new AjxFormat.Segment;
 AjxDateFormat.DateSegment.prototype.constructor = AjxDateFormat.DateSegment;
 
+// Protected methods
+
+AjxDateFormat.DateSegment.prototype._getFixedLength = function() {
+	var fixedlen;
+	if (this._index + 1 < this._parent._segments.length) {
+		var nextSegment = this._parent._segments[this._index + 1];
+		if (!(nextSegment instanceof AjxFormat.TextSegment)) {
+			fixedlen = this._s.length;
+		}
+	}
+	return fixedlen;
+};
+
 //
 // Date era segment class
 //
@@ -360,15 +529,15 @@ AjxDateFormat.EraSegment = function(format, s) {
 AjxDateFormat.EraSegment.prototype = new AjxDateFormat.DateSegment;
 AjxDateFormat.EraSegment.prototype.constructor = AjxDateFormat.EraSegment;
 
+AjxDateFormat.EraSegment.prototype.toString = function() { 
+	return "dateEra: \""+this._s+'"'; 
+};
+
 // Public methods
 
 AjxDateFormat.EraSegment.prototype.format = function(date) { 
 	// TODO: Only support current era at the moment...
 	return I18nMsg.eraAD;
-};
-
-AjxDateFormat.EraSegment.prototype.toString = function() { 
-	return "dateEra: \""+this._s+'"'; 
 };
 
 //
@@ -377,20 +546,37 @@ AjxDateFormat.EraSegment.prototype.toString = function() {
 
 AjxDateFormat.YearSegment = function(format, s) {
 	AjxDateFormat.DateSegment.call(this, format, s);
-}
+};
 AjxDateFormat.YearSegment.prototype = new AjxDateFormat.DateSegment;
 AjxDateFormat.YearSegment.prototype.constructor = AjxDateFormat.YearSegment;
+
+AjxDateFormat.YearSegment.prototype.toString = function() { 
+	return "dateYear: \""+this._s+'"'; 
+};
 
 // Public methods
 
 AjxDateFormat.YearSegment.prototype.format = function(date) { 
 	var year = String(date.getFullYear());
 	return this._s.length < 4 ? year.substr(year.length - 2) : AjxFormat._zeroPad(year, this._s.length);
-}
+};
 
-AjxDateFormat.YearSegment.prototype.toString = function() { 
-	return "dateYear: \""+this._s+'"'; 
-}
+AjxDateFormat.YearSegment.prototype.parse = function(date, s, index) {
+	var fixedlen = this._getFixedLength();
+	var nindex = AjxFormat.Segment._parseInt(date, date.setFullYear, 0, s, index, fixedlen);
+	// adjust 2-digit years
+	if (nindex - index == 2) {
+		if (!AjxDateFormat._2digitStartYear) {
+			AjxDateFormat._2digitStartYear = parseInt(AjxMsg.dateParsing2DigitStartYear);
+		}
+		var syear = AjxDateFormat._2digitStartYear;
+		var pyear = parseInt(s.substr(index,2));
+		var century = (Math.floor(syear / 100) + (pyear < (syear % 100) ? 1 : 0)) * 100;
+		var year = century + pyear;
+		date.setFullYear(year);
+	}
+	return nindex;
+};
 
 //
 // Date month segment class
@@ -398,9 +584,13 @@ AjxDateFormat.YearSegment.prototype.toString = function() {
 
 AjxDateFormat.MonthSegment = function(format, s) {
 	AjxDateFormat.DateSegment.call(this, format, s);
-}
+};
 AjxDateFormat.MonthSegment.prototype = new AjxDateFormat.DateSegment;
 AjxDateFormat.MonthSegment.prototype.constructor = AjxDateFormat.MonthSegment;
+
+AjxDateFormat.MonthSegment.prototype.toString = function() { 
+	return "dateMonth: \""+this._s+'"'; 
+};
 
 // Constants
 
@@ -437,9 +627,25 @@ AjxDateFormat.MonthSegment.prototype.format = function(date) {
 	return AjxDateFormat.MonthSegment.MONTHS[AjxDateFormat.LONG][month];
 };
 
-AjxDateFormat.MonthSegment.prototype.toString = function() { 
-	return "dateMonth: \""+this._s+'"'; 
-}
+AjxDateFormat.MonthSegment.prototype.parse = function(date, s, index) {
+	var months;
+	switch (this._s.length) {
+		case 3: 
+			months = AjxDateFormat.MonthSegment.MONTHS[AjxDateFormat.SHORT];
+		case 4: 
+			months = months || AjxDateFormat.MonthSegment.MONTHS[AjxDateFormat.MEDIUM];
+		case 5: {
+			months = months || AjxDateFormat.MonthSegment.MONTHS[AjxDateFormat.LONG];
+			var nindex = AjxFormat.Segment._parseLiterals(months, s, index);
+			if (nindex != -1) {
+				return nindex;
+			}
+			throw new AjxFormat.ParsingException(this._parent, this, "no match"); // I18n
+		}
+	}
+	var fixedlen = this._getFixedLength();
+	return AjxFormat.Segment._parseInt(date, date.setMonth, -1, s, index, fixedlen);
+};
 
 //
 // Date week segment class
@@ -450,6 +656,10 @@ AjxDateFormat.WeekSegment = function(format, s) {
 };
 AjxDateFormat.WeekSegment.prototype = new AjxDateFormat.DateSegment;
 AjxDateFormat.WeekSegment.prototype.constructor = AjxDateFormat.WeekSegment;
+
+AjxDateFormat.WeekSegment.prototype.toString = function() { 
+	return "weekMonth: \""+this._s+'"'; 
+};
 
 // Public methods
 
@@ -471,11 +681,7 @@ AjxDateFormat.WeekSegment.prototype.format = function(date) {
 	}
 
 	return AjxFormat._zeroPad(week, this._s.length);
-}
-
-AjxDateFormat.WeekSegment.prototype.toString = function() { 
-	return "weekMonth: \""+this._s+'"'; 
-}
+};
 
 //
 // Date day segment class
@@ -483,9 +689,13 @@ AjxDateFormat.WeekSegment.prototype.toString = function() {
 
 AjxDateFormat.DaySegment = function(format, s) {
 	AjxDateFormat.DateSegment.call(this, format, s);
-}
+};
 AjxDateFormat.DaySegment.prototype = new AjxDateFormat.DateSegment;
 AjxDateFormat.DaySegment.prototype.constructor = AjxDateFormat.DaySegment;
+
+AjxDateFormat.DaySegment.prototype.toString = function() { 
+	return "dateDay: \""+this._s+'"'; 
+};
 
 // Public methods
 
@@ -504,11 +714,15 @@ AjxDateFormat.DaySegment.prototype.format = function(date) {
 		} while (month > 0);
 	}
 	return AjxFormat._zeroPad(day, this._s.length);
-}
+};
 
-AjxDateFormat.DaySegment.prototype.toString = function() { 
-	return "dateDay: \""+this._s+'"'; 
-}
+AjxDateFormat.DaySegment.prototype.parse = function(date, s, index) {
+	if (/D/.test(this._s)) {
+		date.setMonth(0);
+	}
+	var fixedlen = this._getFixedLength();
+	return AjxFormat.Segment._parseInt(date, date.setDate, 0, s, index, fixedlen);
+};
 
 //
 // Date weekday segment class
@@ -519,6 +733,10 @@ AjxDateFormat.WeekdaySegment = function(format, s) {
 };
 AjxDateFormat.WeekdaySegment.prototype = new AjxDateFormat.DateSegment;
 AjxDateFormat.WeekdaySegment.prototype.constructor = AjxDateFormat.WeekdaySegment;
+
+AjxDateFormat.DaySegment.prototype.toString = function() { 
+	return "dateDay: \""+this._s+'"'; 
+};
 
 // Constants
 
@@ -554,11 +772,7 @@ AjxDateFormat.WeekdaySegment.prototype.format = function(date) {
 		return AjxDateFormat.WeekdaySegment.WEEKDAYS[style][weekday];
 	}
 	return AjxFormat._zeroPad(weekday, this._s.length);
-}
-
-AjxDateFormat.DaySegment.prototype.toString = function() { 
-	return "dateDay: \""+this._s+'"'; 
-}
+};
 
 //
 // Time segment class
@@ -566,7 +780,7 @@ AjxDateFormat.DaySegment.prototype.toString = function() {
 
 AjxDateFormat.TimeSegment = function(format, s) {
 	AjxFormat.Segment.call(this, format, s);
-}
+};
 AjxDateFormat.TimeSegment.prototype = new AjxFormat.Segment;
 AjxDateFormat.TimeSegment.prototype.constructor = AjxDateFormat.TimeSegment;
 
@@ -576,9 +790,13 @@ AjxDateFormat.TimeSegment.prototype.constructor = AjxDateFormat.TimeSegment;
 
 AjxDateFormat.HourSegment = function(format, s) {
 	AjxFormat.Segment.call(this, format, s);
-}
+};
 AjxDateFormat.HourSegment.prototype = new AjxDateFormat.TimeSegment;
 AjxDateFormat.HourSegment.prototype.constructor = AjxDateFormat.HourSegment;
+
+AjxDateFormat.HourSegment.prototype.toString = function() { 
+	return "timeHour: \""+this._s+'"'; 
+};
 
 // Public methods
 
@@ -596,11 +814,7 @@ AjxDateFormat.HourSegment.prototype.format = function(date) {
 	}
 	/***/
 	return AjxFormat._zeroPad(hours, this._s.length);
-}
-
-AjxDateFormat.HourSegment.prototype.toString = function() { 
-	return "timeHour: \""+this._s+'"'; 
-}
+};
 
 //
 // Time minute segment class
@@ -608,20 +822,20 @@ AjxDateFormat.HourSegment.prototype.toString = function() {
 
 AjxDateFormat.MinuteSegment = function(format, s) {
 	AjxFormat.Segment.call(this, format, s);
-}
+};
 AjxDateFormat.MinuteSegment.prototype = new AjxDateFormat.TimeSegment;
 AjxDateFormat.MinuteSegment.prototype.constructor = AjxDateFormat.MinuteSegment;
+
+AjxDateFormat.MinuteSegment.prototype.toString = function() { 
+	return "timeMinute: \""+this._s+'"'; 
+};
 
 // Public methods
 
 AjxDateFormat.MinuteSegment.prototype.format = function(date) {
 	var minutes = date.getMinutes();
 	return AjxFormat._zeroPad(minutes, this._s.length);
-}
-
-AjxDateFormat.MinuteSegment.prototype.toString = function() { 
-	return "timeMinute: \""+this._s+'"'; 
-}
+};
 
 //
 // Time second segment class
@@ -633,16 +847,16 @@ AjxDateFormat.SecondSegment = function(format, s) {
 AjxDateFormat.SecondSegment.prototype = new AjxDateFormat.TimeSegment;
 AjxDateFormat.SecondSegment.prototype.constructor = AjxDateFormat.SecondSegment;
 
+AjxDateFormat.SecondSegment.prototype.toString = function() { 
+	return "timeSecond: \""+this._s+'"'; 
+};
+
 // Public methods
 
 AjxDateFormat.SecondSegment.prototype.format = function(date) {
 	var minutes = /s/.test(this._s) ? date.getSeconds() : date.getMilliseconds();
 	return AjxFormat._zeroPad(minutes, this._s.length);
-}
-
-AjxDateFormat.SecondSegment.prototype.toString = function() { 
-	return "timeSecond: \""+this._s+'"'; 
-}
+};
 
 //
 // Time am/pm segment class
@@ -650,20 +864,20 @@ AjxDateFormat.SecondSegment.prototype.toString = function() {
 
 AjxDateFormat.AmPmSegment = function(format, s) {
 	AjxFormat.Segment.call(this, format, s);
-}
+};
 AjxDateFormat.AmPmSegment.prototype = new AjxDateFormat.TimeSegment;
 AjxDateFormat.AmPmSegment.prototype.constructor = AjxDateFormat.AmPmSegment;
+
+AjxDateFormat.AmPmSegment.prototype.toString = function() { 
+	return "timeAmPm: \""+this._s+'"'; 
+};
 
 // Public methods
 
 AjxDateFormat.AmPmSegment.prototype.format = function(date) {
 	var hours = date.getHours();
 	return hours < 12 ? I18nMsg.periodAm : I18nMsg.periodPm;
-}
-
-AjxDateFormat.AmPmSegment.prototype.toString = function() { 
-	return "timeAmPm: \""+this._s+'"'; 
-}
+};
 
 //
 // Time timezone segment class
@@ -675,6 +889,10 @@ AjxDateFormat.TimezoneSegment = function(format, s) {
 AjxDateFormat.TimezoneSegment.prototype = new AjxDateFormat.TimeSegment;
 AjxDateFormat.TimezoneSegment.prototype.constructor = AjxDateFormat.TimezoneSegment;
 
+AjxDateFormat.TimezoneSegment.prototype.toString = function() { 
+	return "timeTimezone: \""+this._s+'"'; 
+};
+
 // Public methods
 
 AjxDateFormat.TimezoneSegment.prototype.format = function(date) {
@@ -683,10 +901,6 @@ AjxDateFormat.TimezoneSegment.prototype.format = function(date) {
 		return AjxTimezone.getShortName(clientId);
 	}
 	return this._s.length < 4 ? AjxTimezone.getMediumName(clientId) : AjxTimezone.getLongName(clientId);
-};
-
-AjxDateFormat.TimezoneSegment.prototype.toString = function() { 
-	return "timeTimezone: \""+this._s+'"'; 
 };
 
 //
@@ -758,11 +972,15 @@ function AjxMessageFormat(pattern) {
 AjxMessageFormat.prototype = new AjxFormat;
 AjxMessageFormat.prototype.constructor = AjxMessageFormat;
 
+AjxMessageFormat.prototype.toString = function() {
+	return "[AjxMessageFormat: "+AjxFormat.prototype.toString.call(this)+"]";
+};
+
 // Static methods
 
 AjxMessageFormat.format = function(pattern, params) {
 	return new AjxMessageFormat(pattern).format(params);
-}
+};
 
 // Public methods
 
@@ -771,11 +989,7 @@ AjxMessageFormat.prototype.format = function(params) {
 		params = [ params ];
 	}
 	return AjxFormat.prototype.format.call(this, params);
-}
-
-AjxMessageFormat.prototype.toString = function() {
-	return "[AjxMessageFormat: "+AjxFormat.prototype.toString.call(this)+"]";
-}
+};
 
 //
 // AjxMessageFormat.MessageSegment class
@@ -811,9 +1025,17 @@ AjxMessageFormat.MessageSegment = function(format, s) {
 		case "choice": /*TODO*/ break;
 	}
 	
-}
+};
 AjxMessageFormat.MessageSegment.prototype = new AjxFormat.Segment;
 AjxMessageFormat.MessageSegment.prototype.constructor = AjxMessageFormat.MessageSegment;
+
+AjxMessageFormat.MessageSegment.prototype.toString = function() {
+	var a = [ "message: \"", this._s, "\", index: ", this.index ];
+	if (this._type) a.push(", type: ", this._type);
+	if (this._style) a.push(", style: ", this._style);
+	if (this._formatter) a.push(", formatter: ", this._formatter.toString());
+	return a.join("");
+};
 
 // Data
 
@@ -829,14 +1051,6 @@ AjxMessageFormat.MessageSegment.prototype.format = function(args) {
 	var object = args[this._index];
 	return this._formatter ? this._formatter.format(object) : String(object);
 };
-
-AjxMessageFormat.MessageSegment.prototype.toString = function() {
-	var a = [ "message: \"", this._s, "\", index: ", this.index ];
-	if (this._type) a.push(", type: ", this._type);
-	if (this._style) a.push(", style: ", this._style);
-	if (this._formatter) a.push(", formatter: ", this._formatter.toString());
-	return a.join("");
-}
 
 //
 // AjxNumberFormat class
@@ -940,14 +1154,15 @@ AjxNumberFormat.prototype = new AjxFormat;
 AjxNumberFormat.prototype.constructor = AjxNumberFormat;
 
 AjxNumberFormat.prototype.toString = function() {
+	var array = [ 
+		"[AjxNumberFormat: ", 
+		"formatter=", AjxFormat.prototype.toString.call(this) 
+	];
 	if (this._negativeFormatter) {
-		return [ 
-			AjxFormat.prototype.toString.call(this), 
-			" ; ", 
-			this._negativeFormatter.toString()
-		].join("");
+		array.push(", negativeFormatter=", this._negativeFormatter.toString());
 	}
-	return AjxFormat.prototype.toString.call(this);
+	array.push(']');
+	return array.join("");
 };
 
 // Constants
@@ -1064,6 +1279,10 @@ AjxNumberFormat.NumberSegment = function(format, s) {
 AjxNumberFormat.NumberSegment.prototype = new AjxFormat.Segment;
 AjxNumberFormat.NumberSegment.prototype.constructor = AjxNumberFormat.NumberSegment;
 
+AjxNumberFormat.NumberSegment.prototype.toString = function() {
+	return "number: \""+this._s+"\"";
+};
+
 // Public methods
 
 AjxNumberFormat.NumberSegment.prototype.format = function(number) {
@@ -1085,10 +1304,6 @@ AjxNumberFormat.NumberSegment.prototype.format = function(number) {
 	      : number.toFixed(this._parent._maxFracDigits);
 	s = this._normalize(s);
 	return s;
-};
-
-AjxNumberFormat.NumberSegment.prototype.toString = function() {
-	return "number: \""+this._s+"\"";
 };
 
 // Protected methods
@@ -1146,3 +1361,106 @@ AjxNumberFormat.NumberSegment.prototype._normalize = function(s) {
 	return a.join("");
 };
 
+//
+// AjxChoiceFormat class
+//
+
+/**
+ * The arguments passed to this constructor can be either:
+ * <ul>
+ * <li>A single argument that represents a string pattern that specifies the 
+ *     limits and formats separated by pipe characters (|).
+ * <li>Two arguments, an array of limits and and array of format patterns.
+ * </ul>
+ * <p>
+ * For complete details, see the JavaDoc for java.text.ChoiceFormat.
+ */
+function AjxChoiceFormat(pattern) {
+	AjxFormat.call(this, pattern);
+	var choices = pattern.split("|");
+	if (arguments.length == 1) {
+		this._limits = new Array(choices.length);
+		this._lessThan = new Array(choices.length);
+		this._formats = new Array(choices.length);
+		var regex = /^([^#<\u2264]+)([#<\u2264])(.*)$/;
+		for (var i = 0; i < choices.length; i++) {
+			var choice = choices[i];
+			var results = regex.exec(choice);
+			var limit = results[1];
+			var separator = results[2];
+			var message = results[3];
+			// set limit
+			if (limit == '\u221E') {
+				this._limits[i] = Number.POSITIVE_INFINITY;
+			}
+			else if (limit == '-\u221E') {
+				this._limits[i] = Number.NEGATIVE_INFINITY;
+			}
+			else {
+				this._limits[i] = parseFloat(limit);
+			}
+			// set less-than
+			this._lessThan[i] = separator == '#' || separator == '\u2264';
+			// set format
+			this._formats[i] = new AjxMessageFormat(message);
+		}
+	}
+	else {
+		this._limits = arguments[0];
+		this._lessThan = new Array(arguments[0].length);
+		this._formats = arguments[1];
+		for (var i = 0; i < this._formats.length; i++) {
+			this._lessThan[i] = false;
+			this._formats[i] = new AjxMessageFormat(this._formats[i]);
+		}
+	}
+}
+AjxChoiceFormat.prototype = new AjxFormat;
+AjxChoiceFormat.prototype.constructor = AjxChoiceFormat;
+
+AjxChoiceFormat.prototype.toString = function() {
+	return [
+		"[AjxChoiceFormat: ",
+		"limits={ ", this._limits.join(", "), " }, ",
+		"formats={ ", this._formats.join(", "), " }, ",
+		"lessThan={ ", this._lessThan.join(", "), " }]"
+	].join("");
+};
+
+// Data
+
+AjxChoiceFormat.prototype._limits;
+AjxChoiceFormat.prototype._lessThan;
+AjxChoiceFormat.prototype._formats;
+
+// Public methods
+
+AjxChoiceFormat.prototype.getLimits = function() {
+	return this._limits;
+};
+AjxChoiceFormat.prototype.getFormats = function() {
+	return this._formats;
+};
+
+AjxChoiceFormat.prototype.format = function(number) {
+	var formatter;
+	if (isNaN(number) || number < this._limits[0]) {
+		formatter = this._formats[0];
+	}
+	else {
+		for (var i = 0; i < this._limits.length - 1; i++) {
+			var a = this._limits[i];
+			var b = this._limits[i+1];
+			var aGEb = number >= a;
+			var aLTb = this._lessThan[i+1] ? number < b : number <= b;
+			if (aGEb && aLTb) {
+				formatter = this._formats[i];
+				break;
+			}
+		}
+		if (!formatter) {
+			formatter = this._formats[this._formats.length-1];
+		}
+	}
+	return formatter.format(number);
+};
