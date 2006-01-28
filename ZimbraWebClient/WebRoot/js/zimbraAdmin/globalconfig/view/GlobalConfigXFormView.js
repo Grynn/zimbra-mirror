@@ -70,7 +70,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 		},
 		{type:_SWITCH_, items:[
 				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 1",
-					colSizes:["300px","150", "*"],
+					colSizes:["300px","*"],
 				 	items:[
 						{ ref: ZaGlobalConfig.A_zimbraGalMaxResults, type:_INPUT_, 
 						  label: ZaMsg.NAD_GalMaxResults, width: "5em",
