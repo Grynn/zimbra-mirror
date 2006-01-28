@@ -44,7 +44,7 @@ ZaGlobalConfig.A_zimbraLastLogonTimestampFrequency = "zimbraLastLogonTimestampFr
 ZaGlobalConfig.A_zimbraDefaultDomainName = "zimbraDefaultDomainName";
 // attachements
 ZaGlobalConfig.A_zimbraAttachmentsBlocked = "zimbraAttachmentsBlocked";
-ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly = "zimbraAttachmentsViewInHtmlOnly";
+
 ZaGlobalConfig.A_zimbraMtaBlockedExtension = "zimbraMtaBlockedExtension";
 ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension = "zimbraMtaCommonBlockedExtension";
 ZaGlobalConfig.A_zimbraMtaCommonBlockedExtensions = "zimbraMtaCommonBlockedExtensions";
@@ -277,7 +277,7 @@ ZaGlobalConfig.myXModel = {
 		{ id:ZaGlobalConfig.A_currentMonitorHost, ref: "attrs/"+ZaGlobalConfig.A_currentMonitorHost, type: _STRING_ },
 		// attachments
 		{ id:ZaGlobalConfig.A_zimbraAttachmentsBlocked, ref:"attrs/" + ZaGlobalConfig.A_zimbraAttachmentsBlocked, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
-		{ id:ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly, ref:"attrs/" + ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
+
 		{ id:ZaGlobalConfig.A_zimbraMtaBlockedExtension, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaBlockedExtension, type: _LIST_, dataType: _STRING_ },
 		{ id:ZaGlobalConfig.A_zimbraMtaCommonBlockedExtensions, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaCommonBlockedExtensions, type: _STRING_ },
 		{ id:ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension, type: _LIST_, dataType: _STRING_ },

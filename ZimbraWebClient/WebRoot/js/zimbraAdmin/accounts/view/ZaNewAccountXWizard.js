@@ -355,7 +355,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 				});				
 	}	
 	if(ZaSettings.ACCOUNTS_FEATURES_ENABLED) {
-		cases.push({type:_CASE_, relevant:"instance[ZaModel.currentStep] == 5",
+		cases.push({type:_CASE_,id:"account_form_features_step", relevant:"instance[ZaModel.currentStep] == 5",
 					items: [
 						{ref:ZaAccount.A_zimbraFeatureContactsEnabled,labelCssStyle:"width:150px;", type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_FeatureContactsEnabled,label:ZaMsg.NAD_FeatureContactsEnabled, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE"},							
 						{ref:ZaAccount.A_zimbraFeatureCalendarEnabled,labelCssStyle:"width:150px;",type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_FeatureCalendarEnabled,label:ZaMsg.NAD_FeatureCalendarEnabled, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE"},														

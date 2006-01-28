@@ -53,7 +53,7 @@ ZaCos.A_zimbraPasswordLocked = "zimbraPasswordLocked";
 ZaCos.A_name = "cn";
 ZaCos.A_description = "description";
 ZaCos.A_zimbraAttachmentsBlocked = "zimbraAttachmentsBlocked";
-ZaCos.A_zimbraAttachmentsViewInHtmlOnly = "zimbraAttachmentsViewInHtmlOnly";
+
 ZaCos.A_zimbraAuthTokenLifetime = "zimbraAuthTokenLifetime";
 ZaCos.A_zimbraAdminAuthTokenLifetime = "zimbraAdminAuthTokenLifetime";
 ZaCos.A_zimbraMailIdleSessionTimeout = "zimbraMailIdleSessionTimeout";
@@ -97,7 +97,7 @@ ZaCos.A_zimbraFeatureChangePasswordEnabled="zimbraFeatureChangePasswordEnabled";
 ZaCos.A_zimbraFeatureInitialSearchPreferenceEnabled="zimbraFeatureInitialSearchPreferenceEnabled";
 ZaCos.A_zimbraFeatureFiltersEnabled="zimbraFeatureFiltersEnabled";
 ZaCos.A_zimbraFeatureGalEnabled="zimbraFeatureGalEnabled";
-ZaCos.A_zimbraAttachmentsIndexingEnabled = "zimbraAttachmentsIndexingEnabled";
+
 ZaCos.A_zimbraImapEnabled = "zimbraImapEnabled";
 ZaCos.A_zimbraPop3Enabled = "zimbraPop3Enabled";
 ZaCos.A_zimbraFeatureHtmlComposeEnabled = "zimbraFeatureHtmlComposeEnabled";
@@ -299,7 +299,6 @@ ZaCos.myXModel = {
 		{id:ZaCos.A_name, type:_STRING_, ref:"attrs/"+ZaCos.A_name, pattern:/^[A-Za-z0-9]+$/},
 		{id:ZaCos.A_description, type:_STRING_, ref:"attrs/"+ZaCos.A_description},
 		{id:ZaCos.A_zimbraAttachmentsBlocked, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraAttachmentsBlocked},
-		{id:ZaCos.A_zimbraAttachmentsViewInHtmlOnly, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraAttachmentsViewInHtmlOnly},
 		{id:ZaCos.A_zimbraAuthTokenLifetime, type:_STRING_, ref:"attrs/"+ZaCos.A_zimbraAuthTokenLifetime},
 		{id:ZaCos.A_zimbraAdminAuthTokenLifetime, type:_STRING_, ref:"attrs/"+ZaCos.A_zimbraAdminAuthTokenLifetime},
 		{id:ZaCos.A_zimbraMailIdleSessionTimeout, type:_STRING_, ref:"attrs/"+ZaCos.A_zimbraMailIdleSessionTimeout},
@@ -343,7 +342,7 @@ ZaCos.myXModel = {
 		{id:ZaCos.A_zimbraFeatureInitialSearchPreferenceEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeatureInitialSearchPreferenceEnabled, type:_ENUM_},
 		{id:ZaCos.A_zimbraFeatureFiltersEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeatureFiltersEnabled, type:_ENUM_},
 		{id:ZaCos.A_zimbraFeatureGalEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeatureGalEnabled, type:_ENUM_},
-		{id:ZaCos.A_zimbraAttachmentsIndexingEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraAttachmentsIndexingEnabled, type:_ENUM_},																
+
 		{id:ZaCos.A_zimbraImapEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraImapEnabled, type:_ENUM_},
 		{id:ZaCos.A_zimbraFeatureHtmlComposeEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeatureHtmlComposeEnabled, type:_ENUM_},		
 		{id:ZaCos.A_zimbraImapEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraImapEnabled, type:_ENUM_},		

@@ -318,7 +318,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				};
 	cases.push(case2);				
 	if(ZaSettings.ACCOUNTS_FEATURES_ENABLED) {
-		cases.push({type:_CASE_, numCols:1, width:"100%", relevant:"instance[ZaModel.currentTab] == 3",
+		cases.push({type:_CASE_,id:"account_form_features_tab",  numCols:1, width:"100%", relevant:"instance[ZaModel.currentTab] == 3",
 					items: [
 						{ref:ZaAccount.A_zimbraFeatureContactsEnabled,labelCssStyle:"width:150px;", type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_FeatureContactsEnabled,label:ZaMsg.NAD_FeatureContactsEnabled, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged},							
 						{ref:ZaAccount.A_zimbraFeatureCalendarEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_FeatureCalendarEnabled,label:ZaMsg.NAD_FeatureCalendarEnabled, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged},														

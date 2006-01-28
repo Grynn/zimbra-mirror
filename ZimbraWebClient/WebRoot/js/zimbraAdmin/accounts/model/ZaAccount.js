@@ -81,7 +81,7 @@ ZaAccount.A_zimbraPasswordLocked="zimbraPasswordLocked";
 ZaAccount.A_zimbraDomainName = "zimbraDomainName";
 ZaAccount.A_zimbraContactMaxNumEntries = "zimbraContactMaxNumEntries";
 ZaAccount.A_zimbraAttachmentsBlocked = "zimbraAttachmentsBlocked";
-ZaAccount.A_zimbraAttachmentsViewInHtmlOnly = "zimbraAttachmentsViewInHtmlOnly";
+
 ZaAccount.A_zimbraAuthTokenLifetime = "zimbraAuthTokenLifetime";
 ZaAccount.A_zimbraMailMessageLifetime = "zimbraMailMessageLifetime";
 ZaAccount.A_zimbraMailSpamLifetime = "zimbraMailSpamLifetime";
@@ -132,7 +132,7 @@ ZaAccount.A_zimbraFeatureChangePasswordEnabled="zimbraFeatureChangePasswordEnabl
 ZaAccount.A_zimbraFeatureInitialSearchPreferenceEnabled="zimbraFeatureInitialSearchPreferenceEnabled";
 ZaAccount.A_zimbraFeatureFiltersEnabled="zimbraFeatureFiltersEnabled";
 ZaAccount.A_zimbraFeatureGalEnabled="zimbraFeatureGalEnabled";
-ZaAccount.A_zimbraAttachmentsIndexingEnabled = "zimbraAttachmentsIndexingEnabled";
+
 ZaAccount.A_zimbraFeatureHtmlComposeEnabled = "zimbraFeatureHtmlComposeEnabled";
 ZaAccount.A_zimbraImapEnabled = "zimbraImapEnabled";
 ZaAccount.A_zimbraPop3Enabled = "zimbraPop3Enabled";
@@ -912,7 +912,7 @@ ZaAccount.myXModel = {
 		{id:ZaAccount.A_zimbraDomainName, type:_STRING_, ref:"attrs/"+ZaAccount.A_zimbraDomainName},
 		{id:ZaAccount.A_zimbraContactMaxNumEntries, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraContactMaxNumEntries, maxInclusive:2147483647, minInclusive:0},
 		{id:ZaAccount.A_zimbraAttachmentsBlocked, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraAttachmentsBlocked, choices:ZaModel.BOOLEAN_CHOICES}, 
-		{id:ZaAccount.A_zimbraAttachmentsViewInHtmlOnly, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraAttachmentsViewInHtmlOnly, choices:ZaModel.BOOLEAN_CHOICES}, 
+
 		{id:ZaAccount.A_zimbraAuthTokenLifetime, type:_COS_MLIFETIME_, ref:"attrs/"+ZaAccount.A_zimbraAuthTokenLifetime},
 		{id:ZaAccount.A_zimbraMailIdleSessionTimeout, type:_COS_MLIFETIME_, ref:"attrs/"+ZaAccount.A_zimbraMailIdleSessionTimeout},
 		{id:ZaAccount.A_zimbraMailMessageLifetime, type:_COS_MLIFETIME_, ref:"attrs/" + ZaAccount.A_zimbraMailMessageLifetime},
@@ -958,7 +958,6 @@ ZaAccount.myXModel = {
 		{id:ZaAccount.A_zimbraFeatureInitialSearchPreferenceEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureInitialSearchPreferenceEnabled, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaAccount.A_zimbraFeatureFiltersEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureFiltersEnabled, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaAccount.A_zimbraFeatureGalEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureGalEnabled, choices:ZaModel.BOOLEAN_CHOICES},
-		{id:ZaAccount.A_zimbraAttachmentsIndexingEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraAttachmentsIndexingEnabled, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaAccount.A_zimbraFeatureHtmlComposeEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureHtmlComposeEnabled, choices:ZaModel.BOOLEAN_CHOICES},
 		
 		{id:ZaAccount.A_zimbraImapEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraImapEnabled, choices:ZaModel.BOOLEAN_CHOICES},
