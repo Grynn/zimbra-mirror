@@ -229,6 +229,10 @@ DwtDialog.prototype.registerCallback =
 function(buttonId, func, obj, args) {
 	this._buttonDesc[buttonId].callback = new AjxCallback(obj, func, args);
 }
+DwtDialog.prototype.unregisterCallback =
+function(buttonId) {
+	this._buttonDesc[buttonId].callback = null;
+};
 
 /**
 * Makes the given listener the only listener for the given button.
