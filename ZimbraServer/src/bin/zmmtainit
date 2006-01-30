@@ -100,7 +100,7 @@ cat<<EOF > ${confdir}/ldap-transport.cf
 server_host = ${ldap_host}
 server_port = ${ldap_port}
 search_base =
-query_filter = (&(zimbraMailDeliveryAddress=%s)(zimbraMailStatus=enabled))
+query_filter = (&(|(zimbraMailDeliveryAddress=%s)(zimbraDomainName=%s))(zimbraMailStatus=enabled))
 result_attribute = zimbraMailTransport
 version = 3
 bind = no
