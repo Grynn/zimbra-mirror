@@ -373,7 +373,7 @@ function() {
 }
 
 Dwt.toWindow =
-function(htmlElement, x, y, containerElement) {
+function(htmlElement, x, y, containerElement, dontIncScrollTop) {
 	var p = new DwtPoint(x, y);
 	// EMC 6/3/2005
 	// changed the below line, since it meant we did not
@@ -383,15 +383,17 @@ function(htmlElement, x, y, containerElement) {
 	while (offsetParent && offsetParent != containerElement) {
 		p.x += offsetParent.offsetLeft;
 		p.y += offsetParent.offsetTop;
-		if (offsetParent.scrollTop) {
-			p.y -= offsetParent.scrollTop;
-		}
-		var parentNode = offsetParent.parentNode;
-		while (parentNode != offsetParent.offsetParent && parentNode != containerElement) {
-			if (parentNode.scrollTop) {
-				p.y -= parentNode.scrollTop;
+		if (!dontIncScrollTop) {
+			if (offsetParent.scrollTop) {
+				p.y -= offsetParent.scrollTop;
 			}
-			parentNode = parentNode.parentNode;
+			var parentNode = offsetParent.parentNode;
+			while (parentNode != offsetParent.offsetParent && parentNode != containerElement) {
+				if (parentNode.scrollTop) {
+					p.y -= parentNode.scrollTop;
+				}
+				parentNode = parentNode.parentNode;
+			}
 		}
 		offsetParent = offsetParent.offsetParent;
 	}
