@@ -39,6 +39,7 @@ case "$1" in
 				STATUS=$R
 			fi
 		done
+		exit $STATUS
 	;;
 	stop)
 		for i in $SCRIPTS; do
