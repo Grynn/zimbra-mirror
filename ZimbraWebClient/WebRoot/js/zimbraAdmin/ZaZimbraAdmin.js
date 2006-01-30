@@ -229,8 +229,9 @@ function() {
 	try {
 		//var myname = AjxCookie.getCookie(document, ZaSettings.ADMIN_NAME_COOKIE);			    
 		//if we're not logged in we will be thrown out here
-		var testSrch = ZaSearch.search("", [ZaSearch.ACCOUNTS], 1, ZaAccount.A_uid, true, this._app, null, 1); // catch an exception before building the UI
-		
+		//var testSrch = ZaSearch.search("", [ZaSearch.ACCOUNTS], 1, ZaAccount.A_uid, true, this._app, null, 1); // catch an exception before building the UI
+		var soapDoc = AjxSoapDoc.create("GetInfoRequest", "urn:zimbraAccount", null);	
+		var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false);		
 		//initialize my rights
 		ZaSettings.init();		
 	} catch (ex) {
