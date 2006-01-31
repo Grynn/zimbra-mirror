@@ -361,6 +361,7 @@ public class GenerateData {
     
     private static void generateCalendarNames(Properties props, Locale locale) {
         Calendar calendar = Calendar.getInstance(locale);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
         SimpleDateFormat mediumMonthFormatter = new SimpleDateFormat("MMM", locale);
         SimpleDateFormat longMonthFormatter = new SimpleDateFormat("MMMM", locale);
         for (int i = 0; i < 12; i++) {
