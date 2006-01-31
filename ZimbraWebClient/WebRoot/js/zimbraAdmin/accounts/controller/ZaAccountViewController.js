@@ -312,7 +312,25 @@ function () {
 					if(ex.code == ZmCsfeException.ACCT_EXISTS) {
 						//if failed because account exists just show a warning
 						var account = this._findAlias(tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]);
-						failedAliases += "<br>" +AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS,[account.name, tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]]);
+						switch(account.type) {
+							case ZaItem.DL:
+								if(account.name == tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]) {
+									failedAliases += "<br>" +AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS3,[account.name]);								
+								} else {
+									failedAliases += "<br>" +AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS4,[account.name, tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]]);								
+								}
+							break;
+							case ZaItem.ACCOUNT:
+								if(account.name == tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]) {
+									failedAliases += "<br>" +AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS2,[account.name]);								
+								} else {
+									failedAliases += "<br>" +AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS1,[account.name, tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]]);								
+								}							
+							break;							
+							default:
+								failedAliases += "<br>" +AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS0,[tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]]);							
+							break;
+						}
 						failedAliasesCnt++;
 					} else {
 						//if failed for another reason - jump out
