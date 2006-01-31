@@ -81,7 +81,7 @@ ZaMigrationWizView.myXFormModifier = function(xFormObject) {
 						items: [
 							{type:_OUTPUT_,  value:AjxImg.getImageHtml("MigrationWiz")},
 							{type:_OUTPUT_, cssStyle:"font-size:12px;", labelLocation:_NONE_, label:null, value:ZaMsg.MIG_WIZ_DOWNLOAD_LINK},
-							{type:_OUTPUT_, cssStyle:"font-size:12px;", labelLocation:_NONE_, label:null, value:("("+ZaMsg.MIG_WIZ_DOWNLOAD_HELP+")")},
+							{type:_CELLSPACER_},
 							{type:_CELLSPACER_}							
 							
 						]
