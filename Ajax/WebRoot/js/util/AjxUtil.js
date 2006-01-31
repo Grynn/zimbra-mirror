@@ -58,14 +58,14 @@ AjxUtil.isNonNegativeInteger= function(aThing) { return (AjxUtil.isNumeric(aThin
 //			common use that do not follow the RFC patterns (e.g. domain
 //			names that start with digits).
 AjxUtil.IP_ADDRESS_RE = /^\d{1,3}(\.\d{1,3}){3}(\.\d{1,3}\.\d{1,3})?$/;
-AjxUtil.DOMAIN_NAME_SHORT_RE = /^[A-Za-z0-9\-]{2,}$/;
-AjxUtil.DOMAIN_NAME_FULL_RE = /^[A-Za-z0-9\-]{2,}(\.[A-Za-z0-9\-]{2,}){1,}$/;
+AjxUtil.DOMAIN_NAME_SHORT_RE = /^[A-Za-z]+[A-Za-z0-9\-]+$/;
+AjxUtil.DOMAIN_NAME_FULL_RE = /^[A-Za-z]+[A-Za-z0-9\-]+(\.[A-Za-z]+[A-Za-z0-9\-]+){1,}$/;
 AjxUtil.HOST_NAME_RE = /^[A-Za-z0-9\-]{2,}(\.[A-Za-z0-9\-]{2,})*$/;
 AjxUtil.HOST_NAME_WITH_PORT_RE = /^[A-Za-z0-9\-]{2,}(\.[A-Za-z0-9\-]{2,})*:([0-9])+$/;
 AjxUtil.EMAIL_SHORT_RE = /^[^@\s]+$/;
 AjxUtil.EMAIL_FULL_RE = /^[^@\s]+@[A-Za-z0-9\-]{2,}(\.[A-Za-z0-9\-]{2,})*$/;
 AjxUtil.EMAIL_RE = /^([a-zA-Z0-9_\-])+((\.)?([a-zA-Z0-9_\-])+)*@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-AjxUtil.SHORT_URL_RE = /^[A-Za-z0-9]{2,}:\/\/[A-Za-z0-9\-]{2,}(\.[A-Za-z0-9\-]{2,})*(:([0-9])+)*$/;
+AjxUtil.SHORT_URL_RE = /^[A-Za-z0-9]{2,}:\/\/[A-Za-z]+[A-Za-z0-9\-]+(\.[A-Za-z]+[A-Za-z0-9\-]+)*(:([0-9])+)*$/;
 AjxUtil.IP_SHORT_URL_RE = /^[A-Za-z0-9]{2,}:\/\/\d{1,3}(\.\d{1,3}){3}(\.\d{1,3}\.\d{1,3})?(:([0-9])+)*$/;
 
 AjxUtil.isIpAddress 		= function(s) { return AjxUtil.IP_ADDR_RE.test(s); };
