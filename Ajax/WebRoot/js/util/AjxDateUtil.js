@@ -77,10 +77,18 @@ AjxDateUtil._init =
 function() {                                           
 	AjxDateUtil._dateSep = AjxMsg.dateSeparator;
 	AjxDateUtil._timeSep = AjxMsg.timeSeparator;
-	AjxDateUtil._dateFmt = new Array();
-	var tmp = AjxMsg.dateFormat;
-	for (var i = 0; i < tmp.length; i++)
-		AjxDateUtil._dateFmt[i] = tmp.substr(i, 1);
+
+	AjxDateUtil._dateFormat = AjxDateFormat.getDateInstance(AjxDateFormat.SHORT).clone();
+	var segments = AjxDateUtil._dateFormat.getSegments();
+	for (var i = 0; i < segments.length; i++) {
+		if (segments[i] instanceof AjxDateFormat.YearSegment) {
+			segments[i] = new AjxDateFormat.YearSegment(AjxDateUtil._dateFormat, "yyyy");
+		}
+	}
+	AjxDateUtil._dateTimeFormat = 
+		new AjxDateFormat(AjxDateUtil._dateFormat.toPattern() + " " + AjxDateFormat.getTimeInstance(AjxDateFormat.SHORT));
+	
+	AjxDateUtil._dateFormatNoYear = new AjxDateFormat(AjxMsg.formatDateMediumNoYear);
 };
 
 AjxDateUtil._init();                    
@@ -215,36 +223,22 @@ function(dateMSec) {
 
 AjxDateUtil.simpleComputeDateStr = 
 function(date, stringToPrepend) {
-	var dateArr = new Array();
-	var idx = 0;
+	var dateStr = AjxDateUtil._dateFormat.format(date);
+	return stringToPrepend ? stringToPrepend + dateStr : dateStr;
+};
+AjxDateUtil.simpleParseDateStr =
+function(dateStr) {
+	return AjxDateUtil._dateFormat.parse(dateStr);
+};
 
-	var written = false;
-	if (stringToPrepend) {
-		dateArr[idx++] = stringToPrepend;
-		written = true;
-	}
-
-	for (var i = 0; i < AjxDateUtil._dateFmt.length; i++) {
-		switch (AjxDateUtil._dateFmt[i]) {
-			case 'Y':
-				dateArr[idx++] = written ? "/" : "";
-				dateArr[idx++] = date.getFullYear();
-				written = true;
-				break;
-			case 'M':
-				var month = date.getMonth() + 1;
-				dateArr[idx++] = written ? "/" : "";
-				dateArr[idx++] = AjxDateUtil._pad(month);
-				written = true;
-				break;
-			case 'D':
-				dateArr[idx++] = written ? "/" : "";
-				dateArr[idx++] = AjxDateUtil._pad(date.getDate());
-				written = true;
-				break;
-		}
-	}
-	return dateArr.join("");
+AjxDateUtil.simpleComputeDateTimeStr = 
+function(date, stringToPrepend) {
+	var dateTimeStr = AjxDateUtil._dateTimeFormat.format(date);
+	return stringToPrepend ? stringToPrepend + dateTimeStr : dateTimeStr;
+};
+AjxDateUtil.simpleParseDateTimeStr =
+function(dateTimeStr) {
+	return AjxDateUtil._dateTimeFormat.parse(dateTimeStr);
 };
 
 AjxDateUtil.longComputeDateStr = 
@@ -258,53 +252,23 @@ function(now, dateMSec) {
 	if (dateMSec == null)
 		return "";
 
-	var nowMSec = now.getTime();
-	var nowDay = now.getDay();
-	var nowYear = now.getFullYear();
 	var date = new Date(dateMSec);
-	var year = date.getFullYear();
-	var dateStr = "";
-	if (nowMSec - dateMSec < AjxDateUtil.MSEC_PER_DAY && nowDay == date.getDay()) {
-		dateStr = AjxDateUtil.computeTimeString(date);
-	} else if (year == nowYear) {
-		for (var i = 0; i < AjxDateUtil._dateFmt.length; i++) {
-			switch (AjxDateUtil._dateFmt[i]) {
-				case 'M':
-					dateStr = dateStr + ((dateStr != "") ? " " : "") + AjxDateUtil.MONTH_MEDIUM[date.getMonth()];
-					break;
-				case 'D':
-					var day = date.getDate();
-					dateStr = dateStr + ((dateStr != "") ? " " : "") + AjxDateUtil._pad(day);
-					break;
-			}
-		}
-	} else {
-		dateStr = AjxDateUtil.simpleComputeDateStr(date);
+	if (now.getTime() - dateMSec < AjxDateUtil.MSEC_PER_DAY && 
+		now.getDay() == date.getDay()) {
+		return AjxDateUtil.computeTimeString(date);
 	} 
-	return dateStr;
+	
+	if (now.getFullYear() == date.getFullYear()) {
+		return AjxDateUtil._dateFormatNoYear.format(date);
+	}
+	
+	return AjxDateUtil.simpleComputeDateStr(date);
 };
 
 AjxDateUtil.computeTimeString =
 function(date) {
-	var amPm = "";
-	var hours = date.getHours();
-	var mins = date.getMinutes();
-	if (AjxMsg.timeFormat == AjxDateUtil._12hour) {
-		if (hours > 12) {
-			hours -= 12;
-			amPm = " " + AjxMsg.pm;
-		} else if (hours < 12) {
-			if (hours == 0) 
-				hours = 12;
-			amPm = " " + AjxMsg.am;
-		} else {
-			amPm = " " + AjxMsg.pm;
-		}
-	} else {
-		hours = AjxDateUtil._pad(hours);
-	}
-	
-	return hours + AjxMsg.timeSeparator + AjxDateUtil._pad(mins) + amPm;
+	var formatter = AjxDateFormat.getTimeInstance(AjxDateFormat.SHORT);
+	return formatter.format(date);
 };
 
 

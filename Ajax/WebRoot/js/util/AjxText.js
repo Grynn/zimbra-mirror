@@ -99,6 +99,27 @@ AjxFormat.prototype.parse = function(s) {
 	return object;
 };
 
+/** 
+ * Returns an array of segments that comprise this format. 
+ * <p>
+ * <strong>Note:</strong>
+ * This method is specific to this implementation and does not follow
+ * the format classes found in the <code>java.text</code> package.
+ */
+AjxFormat.prototype.getSegments = function() {
+	return this._segments;
+};
+
+/** Returns a string pattern for this format. */
+AjxFormat.prototype.toPattern = function() {
+	return this._pattern;
+};
+
+/** Returns a copy of this format. */
+AjxFormat.prototype.clone = function() {
+	throw new AjxFormat.FormatException(this, "not implemented"); // I18n
+};
+
 // Protected methods
 
 /**
@@ -452,6 +473,9 @@ AjxDateFormat.getDateTimeInstance = function(dateStyle, timeStyle) {
 AjxDateFormat.format = function(pattern, date) {
 	return new AjxDateFormat(pattern).format(date);
 };
+AjxDateFormat.parse = function(pattern, dateStr) {
+	return new AjxDateFormat(pattern).parse(dateStr);
+};
 
 // Public methods
 
@@ -468,6 +492,10 @@ AjxDateFormat.prototype.parse = function(s) {
 		// do nothing
 	}
 	return object;
+};
+
+AjxDateFormat.prototype.clone = function() {
+	return new AjxDateFormat(this._pattern);
 };
 
 // Protected methods
@@ -991,6 +1019,10 @@ AjxMessageFormat.prototype.format = function(params) {
 	return AjxFormat.prototype.format.call(this, params);
 };
 
+AjxMessageFormat.prototype.clone = function() {
+	return new AjxMessageFormat(this._pattern);
+};
+
 //
 // AjxMessageFormat.MessageSegment class
 //
@@ -1227,6 +1259,10 @@ AjxNumberFormat.prototype.format = function(number) {
 	return AjxFormat.prototype.format.call(this, number);
 };
 
+AjxNumberFormat.prototype.clone = function() {
+	return new AjxNumberFormat(this._pattern);
+};
+
 // Private methods
 
 AjxNumberFormat.prototype.__parseStatic = function(s, i) {
@@ -1409,10 +1445,16 @@ function AjxChoiceFormat(pattern) {
 		this._limits = arguments[0];
 		this._lessThan = new Array(arguments[0].length);
 		this._formats = arguments[1];
+		this._pattern = [];
 		for (var i = 0; i < this._formats.length; i++) {
+			if (i > 0) {
+				this._pattern.push("|");
+			}
+			this._pattern.push(this._limits[i], '#', this._formats[i]);
 			this._lessThan[i] = false;
 			this._formats[i] = new AjxMessageFormat(this._formats[i]);
 		}
+		this._pattern = this._pattern.join("");
 	}
 }
 AjxChoiceFormat.prototype = new AjxFormat;
@@ -1463,4 +1505,8 @@ AjxChoiceFormat.prototype.format = function(number) {
 		}
 	}
 	return formatter.format(number);
+};
+
+AjxChoiceFormat.prototype.clone = function() {
+	return new AjxChoiceFormat(this._pattern);
 };
