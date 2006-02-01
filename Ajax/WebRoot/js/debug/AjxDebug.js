@@ -617,7 +617,7 @@ function() {
 AjxDebug.prototype._timestamp = 
 function() {
 	return this._showTime 
-		? new Date().toLocaleTimeString() + ": " 
+		? AjxDateFormat.getTimeInstance().format(new Date()) + ": " 
 		: "";
 };
 
@@ -870,7 +870,7 @@ function() {
 
 AjxDebug.deleteWindowCookie = 
 function() {
-    var expiredDate = new Date('Fri, 31 Dec 1999 23:59:59 GMT');
+    var expiredDate = new Date('Fri, 31 Dec 1999 23:59:59 GMT'); // I18n???
 	document.cookie = "AjxDebugWinOpen=false;expires=" + expiredDate.toGMTString();
 };
 

@@ -117,7 +117,7 @@ AjxFormat.prototype.toPattern = function() {
 
 /** Returns a copy of this format. */
 AjxFormat.prototype.clone = function() {
-	throw new AjxFormat.FormatException(this, "not implemented"); // I18n
+	return new this.constructor(this._pattern);
 };
 
 // Protected methods
@@ -337,7 +337,12 @@ function AjxDateFormat(pattern) {
 			for (i++ ; i < pattern.length; i++) {
 				var c = pattern.charAt(i);
 				if (c == "'") {
-					break;
+					if (i + 1 < pattern.length && pattern.charAt(i + 1) == "'") {
+						pattern = pattern.substr(0, i) + pattern.substr(i + 1);
+					}
+					else {
+						break;
+					}
 				}
 			}
 			if (i == pattern.length) {
@@ -492,10 +497,6 @@ AjxDateFormat.prototype.parse = function(s) {
 		// do nothing
 	}
 	return object;
-};
-
-AjxDateFormat.prototype.clone = function() {
-	return new AjxDateFormat(this._pattern);
 };
 
 // Protected methods
@@ -951,7 +952,12 @@ function AjxMessageFormat(pattern) {
 			for (i++ ; i < pattern.length; i++) {
 				var c = pattern.charAt(i);
 				if (c == "'") {
-					break;
+					if (i + 1 < pattern.length && pattern.charAt(i + 1) == "'") {
+						pattern = pattern.substr(0, i) + pattern.substr(i + 1);
+					}
+					else {
+						break;
+					}
 				}
 			}
 			if (i == pattern.length) {
@@ -1017,10 +1023,6 @@ AjxMessageFormat.prototype.format = function(params) {
 		params = [ params ];
 	}
 	return AjxFormat.prototype.format.call(this, params);
-};
-
-AjxMessageFormat.prototype.clone = function() {
-	return new AjxMessageFormat(this._pattern);
 };
 
 //
@@ -1250,6 +1252,10 @@ AjxNumberFormat.getPercentInstance = function() {
 	return AjxNumberFormat._FORMATTERS[AjxNumberFormat._PERCENT];
 };
 
+AjxNumberFormat.format = function(pattern, number) {
+	return new AjxNumberFormat(pattern).format(number);
+};
+
 // Public methods
 
 AjxNumberFormat.prototype.format = function(number) {
@@ -1257,10 +1263,6 @@ AjxNumberFormat.prototype.format = function(number) {
 		return this._negativeFormatter.format(number);
 	}
 	return AjxFormat.prototype.format.call(this, number);
-};
-
-AjxNumberFormat.prototype.clone = function() {
-	return new AjxNumberFormat(this._pattern);
 };
 
 // Private methods
@@ -1505,8 +1507,4 @@ AjxChoiceFormat.prototype.format = function(number) {
 		}
 	}
 	return formatter.format(number);
-};
-
-AjxChoiceFormat.prototype.clone = function() {
-	return new AjxChoiceFormat(this._pattern);
 };

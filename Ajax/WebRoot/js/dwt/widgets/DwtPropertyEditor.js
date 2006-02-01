@@ -445,7 +445,7 @@ DwtPropertyEditor._prop_functions = {
 				this.value = new Date().getTime();
 			}
 			if (!this.format)
-				this.format = "yyyy/MM/dd";
+				this.format = AjxDateUtil.getSimpleDateFormat().toPattern();
 		}
 	},
 

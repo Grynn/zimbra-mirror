@@ -587,7 +587,7 @@ XModelItem.prototype.validateTime = function (value) {
 
 			var isPM = false;
 			var lastPiece = value[value.length - 1];
-			isPM = (lastPiece.indexOf(AjxMsg.pm.toLowerCase()) > -1);
+			isPM = (lastPiece.indexOf(I18nMsg.periodPm.toLowerCase()) > -1);
 
 			var hour = parseInt(value[0]);
 			var min = parseInt(value[1]);

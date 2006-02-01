@@ -75,9 +75,6 @@ AjxDateUtil._24hour = "24";
 
 AjxDateUtil._init =
 function() {                                           
-	AjxDateUtil._dateSep = AjxMsg.dateSeparator;
-	AjxDateUtil._timeSep = AjxMsg.timeSeparator;
-
 	AjxDateUtil._dateFormat = AjxDateFormat.getDateInstance(AjxDateFormat.SHORT).clone();
 	var segments = AjxDateUtil._dateFormat.getSegments();
 	for (var i = 0; i < segments.length; i++) {
@@ -379,6 +376,11 @@ AjxDateUtil.isInRange =
 function(startTime1, endTime1, startTime2, endTime2) {
 	return (startTime1 < endTime2 && endTime1 > startTime2);
 }
+
+AjxDateUtil.getSimpleDateFormat =
+function() {
+	return AjxDateUtil._dateFormat;
+};
 
 /**
  * The following are helper routines for processing server date/time which comes

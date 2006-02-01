@@ -2950,18 +2950,18 @@ XFormItemFactory.createItemType("_DATE_", "date", Date_XFormItem, Composite_XFor
 
 //	type defaults
 Date_XFormItem.prototype.DATE_MONTH_CHOICES = [
-				{value:1, label:AjxMsg.jan},
-				{value:2, label:AjxMsg.feb},
-				{value:3, label:AjxMsg.mar},
-				{value:4, label:AjxMsg.apr},
-				{value:5, label:AjxMsg.may},
-				{value:6, label:AjxMsg.jun},
-				{value:7, label:AjxMsg.jul},
-				{value:8, label:AjxMsg.aug},
-				{value:9, label:AjxMsg.sep},
-				{value:10, label:AjxMsg.oct},
-				{value:11, label:AjxMsg.nov},
-				{value:12, label:AjxMsg.dec}
+				{value:1, label:I18nMsg.monthJanMedium},
+				{value:2, label:I18nMsg.monthFebMedium},
+				{value:3, label:I18nMsg.monthMarMedium},
+				{value:4, label:I18nMsg.monthAprMedium},
+				{value:5, label:I18nMsg.monthMayMedium},
+				{value:6, label:I18nMsg.monthJunMedium},
+				{value:7, label:I18nMsg.monthJulMedium},
+				{value:8, label:I18nMsg.monthAugMedium},
+				{value:9, label:I18nMsg.monthSepMedium},
+				{value:10, label:I18nMsg.monthOctMedium},
+				{value:11, label:I18nMsg.monthNovMedium},
+				{value:12, label:I18nMsg.monthDecMedium}
 			];
 Date_XFormItem.prototype.DATE_DAY_CHOICES = ["1","2","3","4","5","6","7","8","9","10","11","12",
 						  "13","14","15","16","17","18","19","20","21","22",
@@ -3046,7 +3046,7 @@ XFormItemFactory.createItemType("_TIME_", "time", Time_XFormItem, Composite_XFor
 Time_XFormItem.prototype.numCols = 3;
 Time_XFormItem.prototype.TIME_HOUR_CHOICES = ["1","2","3","4","5", "6","7","8","9","10","11","12"];
 Time_XFormItem.prototype.TIME_MINUTE_CHOICES = ["00","05","10","15","20","25", "30","35","40","45","50","55"];
-Time_XFormItem.prototype.TIME_AMPM_CHOICES = [AjxMsg.am,AjxMsg.pm];
+Time_XFormItem.prototype.TIME_AMPM_CHOICES = [I18nMsg.periodAm,I18nMsg.periodPm];
 
 
 Time_XFormItem.prototype.items = [
@@ -3129,8 +3129,8 @@ Time_XFormItem.prototype.items = [
 		getDisplayValue:function (newValue) {
 			if (!(newValue instanceof Date)) newValue = new Date();
 			var hours = newValue.getHours();
-			if (hours > 11) return AjxMsg.pm;
-			return AjxMsg.am;
+			if (hours > 11) return I18nMsg.periodPm;
+			return I18nMsg.periodAm;
 		},
 		elementChanged:function (ampmStr, currentDate, event) {
 			if (currentDate == null) currentDate = new Date();	//??? should get values of other fields???
@@ -3139,7 +3139,7 @@ Time_XFormItem.prototype.items = [
 			}
 			this.__dummyDate.setTime(currentDate.getTime());
 
-			var isPM = (ampmStr == AjxMsg.pm);
+			var isPM = (ampmStr == I18nMsg.periodPm);
 			var hours = currentDate.getHours() % 12;
 			
 			this.__dummyDate.setHours(hours + (isPM ? 12 : 0));

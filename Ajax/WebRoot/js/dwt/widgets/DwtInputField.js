@@ -378,8 +378,7 @@ function(value) {
 	if (this._required && value == "")
 		throw AjxMsg.valueIsRequired;
 	
-	var d = new Date(value);
-	if (isNaN(d)) {
+	if (AjxDateUtil.simpleParseDateStr(value) == null) {
 		throw AjxMsg.invalidDatetimeString;
 	}
 
