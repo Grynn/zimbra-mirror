@@ -57,6 +57,25 @@ AjxTimezone.getLongName = function(clientId) {
 	return AjxTimezone.getMediumName(clientId)+" ("+I18nMsg["timezoneName"+clientId]+")";
 };
 
+AjxTimezone.getRule = function(clientId) {
+	return AjxTimezone._CLIENT2RULE[clientId];
+};
+
+AjxTimezone.getOffset = function(clientId, date) {
+	var rule = AjxTimezone.getRule(clientId);
+	var offset = rule ? rule.stdOffset : 0;
+	if (rule && rule.dstOffset) {
+		var month = date.getMonth() + 1;
+		var day = date.getDate();
+		if ((month == rule.changeD[1] && day >= rule.changeD[2]) ||
+			(month == rule.changeStd[1] && day < rule.changeStd[2]) ||
+			(month > rule.changeD[1] && month < rule.changeStd[1])) {
+			offset = rule.dstOffset;
+		}
+	}
+	return offset;
+};
+
 // Constants
 
 /** Client identifier for GMT. */
@@ -74,6 +93,7 @@ AjxTimezone._FALLBACK = "(GMT-08.00) Pacific Time (US & Canada) / Tijuana";
 AjxTimezone._CLIENT2SERVER = {};
 AjxTimezone._SERVER2CLIENT = {};
 AjxTimezone._SHORT_NAMES = {};
+AjxTimezone._CLIENT2RULE = {};
 
 /** 
  * The data is specified using the server identifiers for historical
@@ -310,6 +330,7 @@ for (var i = 0; i < lists.length; i++) {
 		hours = hours < 10 ? '0' + hours : hours;
 		minutes = minutes < 10 ? '0' + minutes : minutes;
 		AjxTimezone._SHORT_NAMES[clientId] = sign + hours + minutes;
+		AjxTimezone._CLIENT2RULE[clientId] = rule;
 	}
 }
 AjxTimezone.DEFAULT = AjxTimezone.getClientId(AjxTimezone._guessMachineTimezone());

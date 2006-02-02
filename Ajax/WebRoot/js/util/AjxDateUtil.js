@@ -408,6 +408,9 @@ function(serverStr, date) {
 		var hh = parseInt(serverStr.substr(9,2), 10);
 		var mm = parseInt(serverStr.substr(11,2), 10);
 		var ss = parseInt(serverStr.substr(13,2), 10);
+		if (serverStr.charAt(15) == 'Z') {
+			mm += AjxTimezone.getOffset(AjxTimezone.DEFAULT, date);
+		}
 		date.setHours(hh, mm, ss, 0);
 	}
 	return date;
