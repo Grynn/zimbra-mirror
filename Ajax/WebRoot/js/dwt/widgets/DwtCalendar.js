@@ -451,7 +451,7 @@ function() {
 	var year = date.getFullYear();
 	var month  = date.getMonth();
 	var firstDay = date.getDay();
-	var daysInMonth = this._getDaysInMonth(month);
+	var daysInMonth = this._getDaysInMonth(month, year);
 	var day = 1;
 	var nextMoDay = 1;
 
