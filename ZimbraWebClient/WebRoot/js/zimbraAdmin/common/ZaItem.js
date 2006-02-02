@@ -55,6 +55,16 @@ ZaItem.A_zimbraId = "zimbraId";
 ZaItem._ATTR = new Object();
 ZaItem._ATTR[ZaItem.A_zimbraId] = ZaMsg.attrDesc_zimbraId;
 
+ZaItem.prototype.toString = 
+function() {
+	if(this.name)
+		return this.name;
+	else if (this.id)
+		return this.id;
+	else
+		return "ZaItem "+this.type+": name="+this.name+" id="+this.id;
+}
+
 ZaItem.compareNamesAsc = 
 function(a,b) {
 	var al = a.name.toLowerCase();
@@ -121,11 +131,6 @@ function (type, app) {
 			return new ZaServer(app);
 		break;
 	}
-}
-
-ZaItem.prototype.toString = 
-function() {
-	return "ZaItem "+this.type+": name="+this.name+" id="+this.id;
 }
 
 ZaItem.prototype.remove = 
