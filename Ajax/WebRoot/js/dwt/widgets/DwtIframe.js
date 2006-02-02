@@ -176,7 +176,15 @@ DwtIframe.prototype._createFrame = function(html) {
 	// this is an inner function so that we can access the object (self).
 	// it shouldn't create a memory leak since it doesn't directly "see"
 	// the iframe variable (it's protected below)
-	function rawHandlerProxy(ev) { return self._rawEventHandler(ev); };
+	function rawHandlerProxy(ev) { 
+		var rv = null;
+		try {
+			rv = self._rawEventHandler(ev); 
+		} catch(ex) {
+			// do nothing?
+		}
+		return rv;
+	};
 
 	// closure: protect the reference to the iframe node here.
 	(function() {
