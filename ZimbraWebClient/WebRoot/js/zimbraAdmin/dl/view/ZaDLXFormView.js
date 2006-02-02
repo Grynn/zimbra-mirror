@@ -491,7 +491,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 					    {type:_CELLSPACER_, width:10 },
 					    {type: _OUTPUT_, value:ZaMsg.DLXV_LabelNotes, cssStyle:"align:left"},
 					    {type:_CELLSPACER_, width:10 },
-					    {ref: "notes", type:_TEXTAREA_, width:"90%", height:"400", labelCssStyle:"vertical-align: top",
+					    {ref:ZaAccount.A_notes, type:_TEXTAREA_, width:"90%", height:"400", labelCssStyle:"vertical-align: top",
 					    	onChange:ZaTabView.onFormFieldChanged
 					    }
 					]
