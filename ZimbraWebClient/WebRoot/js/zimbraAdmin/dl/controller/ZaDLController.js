@@ -149,7 +149,6 @@ ZaDLController.prototype._saveChanges = function () {
 		
 		//check if need to rename
 		if(newName) {
-			changeDetails["newName"] = newName;
 			try {
 				this._currentObject.rename(newName);
 			} catch (ex) {
