@@ -54,6 +54,7 @@ AjxPost.SC_CONTINUE					= 100;
 AjxPost.SC_OK						= 200;
 AjxPost.SC_ACCEPTED 				= 202;
 AjxPost.SC_BAD_REQUEST				= 400;
+AjxPost.SC_UNAUTHORIZED				= 401;
 AjxPost.SC_REQUEST_TIMEOUT			= 408;
 AjxPost.SC_CONFLICT					= 409;
 AjxPost.SC_REQUEST_ENTITY_TOO_LARGE = 413;
