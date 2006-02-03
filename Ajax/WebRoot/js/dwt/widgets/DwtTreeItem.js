@@ -98,7 +98,7 @@ DwtTreeItem.prototype.setChecked =
 function(checked, force) {
 	if ((this._itemChecked != checked) || force) {
 		this._itemChecked = checked;
-		if (this._checkBox != null) {
+		if (this._checkBox != null && (this._checkBoxCell && Dwt.getVisible(this._checkBoxCell))) {
 			this._checkBox.checked = checked;
 			
 			// NOTE: This hack is needed because IE actively loses the checked

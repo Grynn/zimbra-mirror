@@ -206,8 +206,7 @@ function(treeItem) {
 	
 	var items;
 	if (treeItem) {
-		if (treeItem.getChecked())
-			treeItem.setChecked(true, true);
+		treeItem.setChecked(treeItem.getChecked(), true);
 		items = treeItem.getItems();
 	} else {
 		items = this.getItems();
