@@ -111,18 +111,14 @@ DwtIframe.prototype._rawEventHandler = function(ev) {
 //  		" returnValue: " + dw._returnValue;
 
 	var capture = DwtMouseEventCapture.getCaptureObj();
-	if (!capture) {
+	if (AjxEnv.isIE || !capture) {
 		// go for Dwt events
 		DwtEventManager.notifyListeners(type, dw);
 		this.parent.notifyListeners(type, dw);
 	} else {
-		// Satisfy object that holds the mouse capture.  IE seems not
-		// to get here, which is Good.  But let's check, should we ever
-		// have problems at least we know where to debug:
-		if (AjxEnv.isIE)
-			throw "IE is not supported by DwtIframe to dispatch real DOM events.";
+		// Satisfy object that holds the mouse capture.
 
-		// the following is DOM2
+		// the following is DOM2, not supported by IE
 		var fake = document.createEvent("MouseEvents");
 		fake.initMouseEvent(ev.type,
 				    true, // can bubble
@@ -176,15 +172,7 @@ DwtIframe.prototype._createFrame = function(html) {
 	// this is an inner function so that we can access the object (self).
 	// it shouldn't create a memory leak since it doesn't directly "see"
 	// the iframe variable (it's protected below)
-	function rawHandlerProxy(ev) { 
-		var rv = null;
-		try {
-			rv = self._rawEventHandler(ev); 
-		} catch(ex) {
-			// do nothing?
-		}
-		return rv;
-	};
+	function rawHandlerProxy(ev) { return self._rawEventHandler(ev); };
 
 	// closure: protect the reference to the iframe node here.
 	(function() {
