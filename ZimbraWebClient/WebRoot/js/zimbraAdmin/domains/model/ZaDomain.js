@@ -166,7 +166,7 @@ function(tmpObj, app) {
 	}
 	tmpObj.name = tmpObj.attrs[ZaDomain.A_domainName];
 	//check values
-	if(!AjxUtil.isNonNegativeInteger(tmpObj.attrs[ZaDomain.A_GalMaxResults])) {
+	if(!AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaDomain.A_GalMaxResults])) {
 		//show error msg
 		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_GalMaxResults + " ! ");
 		return null;

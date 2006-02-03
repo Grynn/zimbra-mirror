@@ -127,7 +127,7 @@ Cos_MailQuota_XModelItem.prototype.getterScope = _MODELITEM_;
 Cos_MailQuota_XModelItem.prototype.setterScope = _MODELITEM_;
 Cos_MailQuota_XModelItem.prototype.getter = "getValue";
 Cos_MailQuota_XModelItem.prototype.setter = "setLocalValue";
-Cos_MailQuota_XModelItem.prototype.maxInclusive = 2047;
+Cos_MailQuota_XModelItem.prototype.maxInclusive = 8796093022207;
 Cos_MailQuota_XModelItem.prototype.minInclusive = 0;
 
 Cos_MailQuota_XModelItem.prototype.getValue = function(instance, current, ref) {

@@ -49,9 +49,9 @@ AjxUtil.isArray 			= function(aThing) { return AjxUtil.isInstance(aThing, Array)
 AjxUtil.isFunction 			= function(aThing) { return (typeof(aThing) == 'function'); };
 AjxUtil.isDate 				= function(aThing) { return AjxUtil.isInstance(aThing, Date); };
 AjxUtil.isLifeTime 			= function(aThing) { return AjxUtil.LIFETIME_FIELD.test(aThing); };
-AjxUtil.isNumeric 			= function(aThing) { return (!isNaN(parseInt(aThing)) && AjxUtil.FLOAT_RE.test(aThing) && !AjxUtil.NOTFLOAT_RE.test(aThing)); };
-AjxUtil.isInteger			= function(aThing) { return (AjxUtil.isNumeric(aThing) && !AjxUtil.NOTINT_RE.test(aThing)); };
-AjxUtil.isNonNegativeInteger= function(aThing) { return (AjxUtil.isNumeric(aThing) && AjxUtil.isInteger(aThing) && (parseInt(aThing) >= 0)); };
+AjxUtil.isNumeric 			= function(aThing) { return (!isNaN(parseFloat(aThing)) && AjxUtil.FLOAT_RE.test(aThing) && !AjxUtil.NOTFLOAT_RE.test(aThing)); };
+AjxUtil.isLong			    = function(aThing) { return (AjxUtil.isNumeric(aThing) && !AjxUtil.NOTINT_RE.test(aThing)); };
+AjxUtil.isNonNegativeLong   = function(aThing) { return (AjxUtil.isNumeric(aThing) && AjxUtil.isLong(aThing) && (parseFloat(aThing) >= 0)); };
 
 
 // REVISIT: Should do more precise checking. However, there are names in

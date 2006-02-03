@@ -37,7 +37,7 @@ MailQuota_XModelItem.prototype.getterScope = _MODELITEM_;
 MailQuota_XModelItem.prototype.setterScope = _MODELITEM_;
 MailQuota_XModelItem.prototype.getter = "getValue";
 MailQuota_XModelItem.prototype.setter = "setValue";
-MailQuota_XModelItem.prototype.maxInclusive = 2047;
+MailQuota_XModelItem.prototype.maxInclusive = 8796093022207;
 MailQuota_XModelItem.prototype.minInclusive = 0;
 
 MailQuota_XModelItem.prototype.getValue =  function(instance, current, ref) {

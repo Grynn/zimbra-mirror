@@ -101,14 +101,14 @@ function () {
 	}
 
 	//check values
-	if(!AjxUtil.isNonNegativeInteger(tmpObj.attrs[ZaGlobalConfig.A_zimbraSmtpPort])) {
+	if(!AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaGlobalConfig.A_zimbraSmtpPort])) {
 		//show error msg
 		this._errorDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_SmtpPort + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
 		this._errorDialog.popup();		
 		return false;
 	}
 		
-	if(!AjxUtil.isNonNegativeInteger(tmpObj.attrs[ZaGlobalConfig.A_zimbraGalMaxResults])) {
+	if(!AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaGlobalConfig.A_zimbraGalMaxResults])) {
 		//show error msg
 		this._errorDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_GalMaxResults + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
 		this._errorDialog.popup();		
