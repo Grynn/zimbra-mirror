@@ -237,6 +237,19 @@ AjxFormat.Segment.prototype.parse = function(o, s, i) {
 	throw new AjxFormat.ParsingException(this._parent, this, "not implemented"); // I18n
 };
 
+// Protected methods
+
+AjxFormat.Segment.prototype._getFixedLength = function() {
+	var fixedlen;
+	if (this._index + 1 < this._parent._segments.length) {
+		var nextSegment = this._parent._segments[this._index + 1];
+		if (!(nextSegment instanceof AjxFormat.TextSegment)) {
+			fixedlen = this._s.length;
+		}
+	}
+	return fixedlen;
+};
+
 // Protected static methods
 
 AjxFormat.Segment._parseLiteral = function(literal, s, index) {
@@ -250,11 +263,22 @@ AjxFormat.Segment._parseLiteral = function(literal, s, index) {
 	}
 	return index + literal.length;
 };
-AjxFormat.Segment._parseLiterals = function(literals, s, index) {
+
+AjxFormat.Segment._parseLiterals = function(o, f, adjust, literals, s, index) {
 	for (var i = 0; i < literals.length; i++) {
 		try {
 			var literal = literals[i];
-			return AjxFormat.Segment._parseLiteral(literal, s, index);
+			var nindex = AjxFormat.Segment._parseLiteral(literal, s, index);
+			if (f) {
+				var target = o || window;
+				if (typeof f == "function") {
+					f.call(target, i + adjust);
+				}
+				else {
+					target[f] = i + adjust;
+				}
+			}
+			return nindex;
 		}
 		catch (e) {
 			// ignore. keep trying to find a match
@@ -268,7 +292,10 @@ AjxFormat.Segment._parseLiterals = function(literals, s, index) {
  * method on the specified object.
  *
  * @param o         [object]   The target object.
- * @param f         [function] The method to call on the target object.
+ * @param f         [function|string] The method to call on the target object.
+ *                             If this parameter is a string, then it is used
+ *                             as the name of the property to set on the
+ *                             target object.
  * @param adjust    [number]   The numeric adjustment to make on the
  *                             value before calling the object method.
  * @param s         [string]   The string to parse.
@@ -295,7 +322,12 @@ AjxFormat.Segment._parseInt = function(o, f, adjust, s, index, fixedlen) {
 	var value = parseInt(s.substring(head, tail));
 	if (f) {
 		var target = o || window;
-		f.call(target, value + adjust);
+		if (typeof f == "function") {
+			f.call(target, value + adjust);
+		}
+		else {
+			target[f] = value + adjust;
+		}
 	}
 	return tail;
 };
@@ -492,6 +524,30 @@ AjxDateFormat.prototype.parse = function(s) {
 	var object = null;
 	try {
 		object = AjxFormat.prototype.parse.call(this, s);
+		
+		// set the date components in proper order
+		var date = new Date(0, 0, 1, 0, 0, 0, 0);
+		if (object.year != null) { date.setFullYear(object.year); }
+		if (object.month != null) { date.setMonth(object.month); }
+		if (object.date != null) { date.setDate(object.date); }
+		else if (object.dayofyear != null) { date.setMonth(0, object.dayofyear); }
+		if (object.hours != null) { date.setHours(object.hours); }
+		if (object.minutes != null) { date.setMinutes(object.minutes); }
+		if (object.seconds != null) { date.setSeconds(object.seconds); }
+		if (object.milliseconds != null) { date.setMilliseconds(object.milliseconds); }
+		if (object.ampm != null) {
+			var hours = date.getHours();
+			if (hours == 12 && object.ampm == 0) {
+				hours = 0;
+			}
+			else if (hours != 12 && object.ampm == 1) {
+				hours += 12;
+			}
+			date.setHours(hours);
+		}
+		// TODO: era, timezone
+		
+		object = date;
 	}
 	catch (e) {
 		// do nothing
@@ -502,7 +558,17 @@ AjxDateFormat.prototype.parse = function(s) {
 // Protected methods
 
 AjxDateFormat.prototype._createParseObject = function() {
-	return new Date(0, 0, 1, 0, 0, 0, 0);
+	// NOTE: An object to hold the parsed parts is returned instead of
+	//       a Date object because setting the day is dependent on which
+	//       year is set. For example, if the user parsed "2/29/2008",
+	//       which is a leap year, with the pattern "M/d/yyyy", then the
+	//       year must be set before the month and date or else the Date
+	//       object will roll it over to Mar 1.
+	return { 
+		year: null, month: null, date: null, dayofyear: null,
+		hours: null, minutes: null, seconds: null, milliseconds: null,
+		ampm: null, era: null, timezone: null
+	};
 };
 
 //
@@ -534,19 +600,6 @@ AjxDateFormat.DateSegment = function(format, s) {
 }
 AjxDateFormat.DateSegment.prototype = new AjxFormat.Segment;
 AjxDateFormat.DateSegment.prototype.constructor = AjxDateFormat.DateSegment;
-
-// Protected methods
-
-AjxDateFormat.DateSegment.prototype._getFixedLength = function() {
-	var fixedlen;
-	if (this._index + 1 < this._parent._segments.length) {
-		var nextSegment = this._parent._segments[this._index + 1];
-		if (!(nextSegment instanceof AjxFormat.TextSegment)) {
-			fixedlen = this._s.length;
-		}
-	}
-	return fixedlen;
-};
 
 //
 // Date era segment class
@@ -590,9 +643,9 @@ AjxDateFormat.YearSegment.prototype.format = function(date) {
 	return this._s.length < 4 ? year.substr(year.length - 2) : AjxFormat._zeroPad(year, this._s.length);
 };
 
-AjxDateFormat.YearSegment.prototype.parse = function(date, s, index) {
+AjxDateFormat.YearSegment.prototype.parse = function(object, s, index) {
 	var fixedlen = this._getFixedLength();
-	var nindex = AjxFormat.Segment._parseInt(date, date.setFullYear, 0, s, index, fixedlen);
+	var nindex = AjxFormat.Segment._parseInt(object, "year", 0, s, index, fixedlen);
 	// adjust 2-digit years
 	if (nindex - index == 2) {
 		if (!AjxDateFormat._2digitStartYear) {
@@ -602,7 +655,7 @@ AjxDateFormat.YearSegment.prototype.parse = function(date, s, index) {
 		var pyear = parseInt(s.substr(index,2));
 		var century = (Math.floor(syear / 100) + (pyear < (syear % 100) ? 1 : 0)) * 100;
 		var year = century + pyear;
-		date.setFullYear(year);
+		object.year = year;
 	}
 	return nindex;
 };
@@ -656,24 +709,24 @@ AjxDateFormat.MonthSegment.prototype.format = function(date) {
 	return AjxDateFormat.MonthSegment.MONTHS[AjxDateFormat.LONG][month];
 };
 
-AjxDateFormat.MonthSegment.prototype.parse = function(date, s, index) {
+AjxDateFormat.MonthSegment.prototype.parse = function(object, s, index) {
 	var months;
 	switch (this._s.length) {
 		case 3: 
-			months = AjxDateFormat.MonthSegment.MONTHS[AjxDateFormat.SHORT];
+			months = AjxDateFormat.MonthSegment.MONTHS[AjxDateFormat.MEDIUM];
 		case 4: 
-			months = months || AjxDateFormat.MonthSegment.MONTHS[AjxDateFormat.MEDIUM];
-		case 5: {
 			months = months || AjxDateFormat.MonthSegment.MONTHS[AjxDateFormat.LONG];
-			var nindex = AjxFormat.Segment._parseLiterals(months, s, index);
-			if (nindex != -1) {
-				return nindex;
+		case 5: {
+			months = months || AjxDateFormat.MonthSegment.MONTHS[AjxDateFormat.SHORT];
+			var nindex = AjxFormat.Segment._parseLiterals(object, "month", 0, months, s, index);
+			if (nindex == -1) {
+				throw new AjxFormat.ParsingException(this._parent, this, "no match"); // I18n
 			}
-			throw new AjxFormat.ParsingException(this._parent, this, "no match"); // I18n
+			return nindex;
 		}
 	}
 	var fixedlen = this._getFixedLength();
-	return AjxFormat.Segment._parseInt(date, date.setMonth, -1, s, index, fixedlen);
+	return AjxFormat.Segment._parseInt(object, "month", -1, s, index, fixedlen);
 };
 
 //
@@ -712,6 +765,11 @@ AjxDateFormat.WeekSegment.prototype.format = function(date) {
 	return AjxFormat._zeroPad(week, this._s.length);
 };
 
+AjxDateFormat.WeekSegment.prototype.parse = function(object, s, index) {
+	var fixedlen = this._getFixedLength();
+	return AjxFormat.Segment._parseInt(null, null, 0, s, index, fixedlen)
+};
+
 //
 // Date day segment class
 //
@@ -745,12 +803,10 @@ AjxDateFormat.DaySegment.prototype.format = function(date) {
 	return AjxFormat._zeroPad(day, this._s.length);
 };
 
-AjxDateFormat.DaySegment.prototype.parse = function(date, s, index) {
-	if (/D/.test(this._s)) {
-		date.setMonth(0);
-	}
+AjxDateFormat.DaySegment.prototype.parse = function(object, s, index) {
 	var fixedlen = this._getFixedLength();
-	return AjxFormat.Segment._parseInt(date, date.setDate, 0, s, index, fixedlen);
+	var pname = /D/.test(this._s) ? "dayofyear" : "date";
+	return AjxFormat.Segment._parseInt(object, pname, 0, s, index, fixedlen);
 };
 
 //
@@ -803,6 +859,26 @@ AjxDateFormat.WeekdaySegment.prototype.format = function(date) {
 	return AjxFormat._zeroPad(weekday, this._s.length);
 };
 
+AjxDateFormat.WeekdaySegment.prototype.parse = function(object, s, index) {
+	var weekdays;
+	switch (this._s.length) {
+		case 3: 
+			weekdays = AjxDateFormat.WeekdaySegment.WEEKDAYS[AjxDateFormat.MEDIUM];
+		case 4: 
+			weekdays = weekdays || AjxDateFormat.WeekdaySegment.WEEKDAYS[AjxDateFormat.LONG];
+		case 5: {
+			weekdays = weekdays || AjxDateFormat.WeekdaySegment.WEEKDAYS[AjxDateFormat.SHORT];
+			var nindex = AjxFormat.Segment._parseLiterals(null, null, 0, weekdays, s, index);
+			if (nindex == -1) {
+				throw new AjxFormat.ParsingException(this._parent, this, "no match"); // I18n
+			}
+			return nindex;
+		}
+	}
+	var fixedlen = this._getFixedLength();
+	return AjxFormat.Segment._parseInt(null, null, 0, s, index, fixedlen);
+};
+
 //
 // Time segment class
 //
@@ -845,6 +921,11 @@ AjxDateFormat.HourSegment.prototype.format = function(date) {
 	return AjxFormat._zeroPad(hours, this._s.length);
 };
 
+AjxDateFormat.HourSegment.prototype.parse = function(object, s, index) {
+	var fixedlen = this._getFixedLength();
+	return AjxFormat.Segment._parseInt(object, "hours", 0, s, index, fixedlen);
+};
+
 //
 // Time minute segment class
 //
@@ -864,6 +945,11 @@ AjxDateFormat.MinuteSegment.prototype.toString = function() {
 AjxDateFormat.MinuteSegment.prototype.format = function(date) {
 	var minutes = date.getMinutes();
 	return AjxFormat._zeroPad(minutes, this._s.length);
+};
+
+AjxDateFormat.MinuteSegment.prototype.parse = function(object, s, index) {
+	var fixedlen = this._getFixedLength();
+	return AjxFormat.Segment._parseInt(object, "minutes", 0, s, index, fixedlen);
 };
 
 //
@@ -887,6 +973,12 @@ AjxDateFormat.SecondSegment.prototype.format = function(date) {
 	return AjxFormat._zeroPad(minutes, this._s.length);
 };
 
+AjxDateFormat.SecondSegment.prototype.parse = function(object, s, index) {
+	var fixedlen = this._getFixedLength();
+	var pname = /s/.test(this._s) ? "seconds" : "milliseconds";
+	return AjxFormat.Segment._parseInt(object, pname, 0, s, index, fixedlen);
+};
+
 //
 // Time am/pm segment class
 //
@@ -906,6 +998,19 @@ AjxDateFormat.AmPmSegment.prototype.toString = function() {
 AjxDateFormat.AmPmSegment.prototype.format = function(date) {
 	var hours = date.getHours();
 	return hours < 12 ? I18nMsg.periodAm : I18nMsg.periodPm;
+};
+
+AjxDateFormat.AmPmSegment.prototype.parse = function(object, s, index) {
+	var periods = [ 
+		I18nMsg.periodAm.toLowerCase(), I18nMsg.periodPm.toLowerCase(),
+		I18nMsg.periodAm.toUpperCase(), I18nMsg.periodPm.toUpperCase()
+	];
+	var nindex = AjxFormat.Segment._parseLiterals(object, "ampm", 0, periods, s, index);
+	if (nindex == -1) {
+		throw new AjxFormat.ParsingException(this._parent, this, "no match"); // I18n
+	}
+	object.ampm = object.ampm % 2;
+	return nindex;
 };
 
 //
