@@ -148,7 +148,7 @@ function(on, level, msg) {
 			a.push(arguments[i]);
 
 		var args = this._handleArgs(a);
-		if (args) {
+		if (args && args.length) {
 			var msgLevel = AjxDebug.DBG1;
 			if (String(level).match(/^DBG|PERF/))
 				msgLevel = level;
