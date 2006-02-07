@@ -98,7 +98,7 @@ function(contextMenu, menuItemId, spanElement, contentObjText, canvas) {
 		  "</td>",
 		  "</tr>",
 		  "<td colspan='2'>",
-		  "<div id='", canvasId, "'/>",
+		  "<div style='width:500px; height:500px; overflow:scroll' id='", canvasId, "'/>",
 		  "</td>",
 		  "<tr>",
 		  "</tr></tbody></table>" ].join("");

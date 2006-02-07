@@ -43,7 +43,9 @@ function _initGoogle() {
 			reqmsg[i++] = q;
 			reqmsg[i++] = '</q>';
 			reqmsg[i++] = '<start xsi:type="xsd:int">0</start>';
-			reqmsg[i++] = '<maxResults xsi:type="xsd:int">5</maxResults>';
+			reqmsg[i++] = '<maxResults xsi:type="xsd:int">';
+			reqmsg[i++] = 10; // ctxt.getConfig("numResults");  // 10 is the limit for google beta api.
+			reqmsg[i++] = '</maxResults>';
 			reqmsg[i++] = '<filter xsi:type="xsd:boolean">true</filter>';
 			reqmsg[i++] = '<restrict xsi:type="xsd:string"/>';
 			reqmsg[i++] = '<safeSearch xsi:type="xsd:boolean">false</safeSearch>';
