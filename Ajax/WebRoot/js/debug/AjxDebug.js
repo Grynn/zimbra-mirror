@@ -42,15 +42,14 @@
 *
 * @author Conrad Damon
 * @author Ross Dargahi
-* @param level	 	debug level for the current debugger (no window will be displayed for a level of NONE)
-* @param name 		the name of the window. Defaults to "debug_" prepended to the calling window's URL.
-* @param showTime	a boolean that toggles the display of timestamps before debug messages
+* @param level	 	[constant]		debug level for the current debugger (no window will be displayed for a level of NONE)
+* @param name 		[string]*		the name of the window. Defaults to "debug_" prepended to the calling window's URL.
+* @param showTime	[boolean]*		if true, display timestamps before debug messages
 */
 function AjxDebug(level, name, showTime) {
 	this._dbgName = "AjxDebugWin_" + location.hostname.replace(/\./g,'_');
 	this._level = level;
 	this._showTime = showTime;
-	this._enabled = (this._level != AjxDebug.NONE);
 	this._showTiming = false;
 	this._startTimePt = this._lastTimePt = 0;
 	this._dbgWindowInited = false;
@@ -58,39 +57,19 @@ function AjxDebug(level, name, showTime) {
 	this._msgQueue = new Array();
 	AjxDebug._CONTENT_FRAME_ID = AjxDebug._CONTENT_FRAME_ID;
 	this._isPrevWinOpen = false;
-	if (!this._enabled) return;
-
-	this._openDebugWindow();
+	this._enable(this._level != AjxDebug.NONE);
 };
 
-
-AjxDebug.NONE = "DBG0"; // no debugging (window will not come up)
-AjxDebug.DBG1 = "DBG1"; // minimal debugging
-AjxDebug.DBG2 = "DBG2"; // moderate debugging
-AjxDebug.DBG3 = "DBG3"; // anything goes
-AjxDebug.PERF = "PERF"; // performance timings
-
-// map from number to debug level
-AjxDebug.DBG = new Object();
-AjxDebug.DBG[-1] = AjxDebug.PERF;
-AjxDebug.DBG[0] = AjxDebug.NONE;
-AjxDebug.DBG[1] = AjxDebug.DBG1;
-AjxDebug.DBG[2] = AjxDebug.DBG2;
-AjxDebug.DBG[3] = AjxDebug.DBG3;
-
-// map from debug level to number
-AjxDebug.GBD = {};
-AjxDebug.GBD[AjxDebug.PERF] = -1;
-AjxDebug.GBD[AjxDebug.NONE] = 0;
-AjxDebug.GBD[AjxDebug.DBG1] = 1;
-AjxDebug.GBD[AjxDebug.DBG2] = 2;
-AjxDebug.GBD[AjxDebug.DBG3] = 3;
+AjxDebug.NONE = 0; // no debugging (window will not come up)
+AjxDebug.DBG1 = 1; // minimal debugging
+AjxDebug.DBG2 = 2; // moderate debugging
+AjxDebug.DBG3 = 3; // anything goes
 
 AjxDebug.MAX_OUT = 25000; // max length capable of outputting
 
-AjxDebug._LINK_FRAME_ID = "AjxDebug_LF";
-AjxDebug._CONTENT_FRAME_ID = "AjxDebug_CF";
-AjxDebug._BUTTON_FRAME_ID = "AjxDebug_BF";
+AjxDebug._LINK_FRAME_ID		= "AjxDebug_LF";
+AjxDebug._CONTENT_FRAME_ID	= "AjxDebug_CF";
+AjxDebug._BUTTON_FRAME_ID	= "AjxDebug_BF";
 
 AjxDebug._id = 0;
 AjxDebug._openErrors = 0;
@@ -98,7 +77,7 @@ AjxDebug._openErrors = 0;
 AjxDebug.prototype.toString = 
 function() {
 	return "AjxDebug";
-}
+};
 
 /**
 * Set debug level. May open or close the debug window if moving to or from level NONE.
@@ -110,53 +89,15 @@ function(level) {
 	if (level == this._level) return;
 
 	this._level = level;
-	if (level == AjxDebug.NONE) {
-		this._enabled = false;
-		this._debugWindow.close();
-		this._debugWindow = null;
-	} else {
-		this._enabled = true;
-		if (this._debugWindow == null || this._debugWindow.closed)
-			this._openDebugWindow();
-	}
-};
-
-AjxDebug.prototype.getDebugLevel = 
-function(level) {
-	return this._level;
-};
-
-AjxDebug.prototype.isShowTiming = 
-function() {
-	return this._showTiming;
+	this._enable(level != AjxDebug.NONE);
 };
 
 /**
-* Turn the display of timing statements on/off. Timing starts over any time it's turned on.
-*
-* @param on		whether to display timing statements
+* Returns the current debug level.
 */
-AjxDebug.prototype.showTiming = 
-function(on, level, msg) {
-	this._showTiming = on;
-
-	if (on) {
-		this._startTimePt = this._lastTimePt = 0;
-
-		var a = [];
-		for (var i = 1; i < arguments.length; i++)
-			a.push(arguments[i]);
-
-		var args = this._handleArgs(a);
-		if (args && args.length) {
-			var msgLevel = AjxDebug.DBG1;
-			if (String(level).match(/^DBG|PERF/))
-				msgLevel = level;
-
-			this.println(msgLevel, " ----- " + args[0] + " ----- ");
-		}
-	}
-	this._startTimePt = this._lastTimePt = new Date().getTime();
+AjxDebug.prototype.getDebugLevel = 
+function() {
+	return this._level;
 };
 
 /**
@@ -172,11 +113,6 @@ function(level, msg, linkName) {
 	if (!args) return;
 
 	msg = args.join("");
-	/*** DEBUG ***
-	if (String(level).match(/^DBG|PERF/)) {
-		msg = level + ": " + msg;
-	}
-	/*** DEBUG ***/
 	this._add(this._timestamp() + msg + "<br>", null, null, null, linkName);
 };
 
@@ -266,21 +202,49 @@ function(level, text) {
 	this.printRaw(level, text);
 };
 
+/**
+* Turn the display of timing statements on/off.
+*
+* @param on			[boolean]		if true, display timing statements
+* @param msg		[string]*		message to show when timing is turned on
+*/
+AjxDebug.prototype.showTiming = 
+function(on, msg) {
+	this._showTiming = on;
+	if (on)
+		this._enable(true);
+
+	var state = on ? "on" : "off";
+	var text = "Turning timing info " + state;
+	if (msg)
+		text = text + ": " + msg;
+	
+	var debugMsg = new DebugMessage(text);
+	this._addMessage(debugMsg);
+
+	this._startTimePt = this._lastTimePt = new Date().getTime();
+};
+
+/**
+* Displays time elapsed since last time point.
+*
+* @param msg		[string]*		text to display with timing info
+* @param restart	[boolean]*		if true, set timer back to zero
+*/
 AjxDebug.prototype.timePt =
-function(level, msg) {
+function(msg, restart) {
 	if (!this._showTiming || !this._enabled || this._debugWindow.closed) return;
 	
-	var args = this._handleArgs(arguments);
-	if (!args) return;
-	var msg = args[0];
+	if (restart)
+		this._startTimePt = this._lastTimePt = new Date().getTime();
 	
 	var now = new Date().getTime();
 	var elapsed = now - this._startTimePt;
 	var interval = now - this._lastTimePt;
 	this._lastTimePt = now;
-	var text = "[" + elapsed + " / " + interval + "]";
-	if (msg)
-		text += " " + msg;
+	var spacer = restart ? "<br/>" : "";
+	msg = msg ? " " + msg : "";
+	var text = [spacer, "[", elapsed, " / ", interval, "]", msg].join("");
 	html = "<div>" + text + "</div>";
 	extraType = typeof(text);
 
@@ -293,6 +257,22 @@ function(level, msg) {
 
 
 // Private methods
+
+AjxDebug.prototype._enable =
+function(enabled) {
+	if (this._enabled == enabled) return;
+
+	this._enabled = enabled;
+	if (enabled) {
+		if (this._debugWindow == null || this._debugWindow.closed)
+			this._openDebugWindow();
+	} else {
+		if (this._debugWindow) {
+			this._debugWindow.close();
+			this._debugWindow = null;
+		}
+	}
+};
 
 AjxDebug.prototype._getHtmlForObject = 
 function(anObj, isXml, isRaw) {
@@ -421,27 +401,36 @@ function(obj, recurse) {
 	return text;
 };
 
-// If the first arg is a debug level, check it and then strip it.
+/*
+* Marshals args to public debug functions. In general, the debug level is an optional
+* first arg. If the first arg is a debug level, check it and then strip it from the args.
+* Returns a normalized list of args.
+*
+* @param args				[array]			arguments list
+* @param linkNameSpecified	[boolean]*		if true, link text for left frame was provided
+*/
 AjxDebug.prototype._handleArgs =
 function(args, linkNameSpecified) {
-	if (this._level == AjxDebug.NONE) return;
+	// don't output anything if debugging is off, or timing is on
+	if (this._level == AjxDebug.NONE || this._showTiming) return;
 	
 	var levelSpecified = false;
-	var curLevel = AjxDebug.GBD[this._level];
-	var msgLevel = AjxDebug.GBD[AjxDebug.DBG1];
-	if (typeof args[0] == "string" && String(args[0]).match(/^DBG|PERF/)) {
-		msgLevel = AjxDebug.GBD[args[0]];
+//	var curLevel = AjxDebug.GBD[this._level];
+	var msgLevel = AjxDebug.DBG1;
+	if (typeof args[0] == "number") {
+		msgLevel = args[0];
 		levelSpecified = true;
 	}
-	if (msgLevel > curLevel) return;
+	if (msgLevel > this._level) return;
 	
-	// NOTE: Can't just slice the items we want because args is not an Array
+	// NOTE: Can't just slice the items we want because args is not a true Array
 	var array = new Array(args.length);
 	var len = (linkNameSpecified) ? args.length - 1 : args.length;
-	for (var i = 0; i < len; i++) {
+	for (var i = 0; i < len; i++)
 		array[i] = args[i];
-	}
-	if (levelSpecified) { array.shift(); }
+	if (levelSpecified)
+		array.shift();
+
 	return array;
 };
 
@@ -564,7 +553,7 @@ function() {
 	markBtn._dbg = this;
 	markBtn.onclick = AjxDebug._mark;
 
-	var clearBtn = this._markBtn = buttonFrameDoc.createElement("button");
+	var clearBtn = this._clearBtn = buttonFrameDoc.createElement("button");
 	clearBtn._contentFrameId = AjxDebug._CONTENT_FRAME_ID;
 	clearBtn._linkFrameId = AjxDebug._LINK_FRAME_ID;
 	clearBtn.innerHTML = "Clear";
@@ -746,7 +735,6 @@ function (aMsg) {
 	this._showMessages();
 };
 
-donola=false;
 AjxDebug.prototype._showMessages = 
 function () {
 	if (!this._dbgWindowInited) {
@@ -773,9 +761,8 @@ function () {
 				linkDiv._dbg = this;
 				linkDiv.className = "Link";
 				linkDiv.onclick = AjxDebug._linkClicked;
-				linkDiv.innerHTML = msg.linkName  + " - [" + AjxDebug._getTimeStamp(now) + "]";;	
+				linkDiv.innerHTML = msg.linkName  + " - [" + this._getTimeStamp(now) + "]";;	
 				linkFrameDoc.body.appendChild(linkDiv);
-				//linkFrameDoc.body.appendChild(linkFrameDoc.createElement("br"));
 			}
 			contentFrameDoc.body.appendChild(contentDiv);		
 		}
@@ -809,6 +796,11 @@ function (htmlStr) {
 	return div;
 };
 
+AjxDebug.prototype._getTimeStamp =
+function(date) {
+	date = (date) ? date : new Date();
+	return AjxStringUtil.htmlEncode([AjxDateUtil.getTimeStr(date, "%H:%m:%s"), ".", date.getMilliseconds()].join(""), true);
+};
 
 // Static methods
 
@@ -820,7 +812,7 @@ function() {
 AjxDebug.prototype._createLinkNContent =
 function(ajxDbgObj, linkClass, linkLabel, contentClass, contentLabel) {
 	var now = new Date();
-	var timeStamp = [" - [", AjxDebug._getTimeStamp(now), "]"].join("");
+	var timeStamp = [" - [", ajxDbgObj._getTimeStamp(now), "]"].join("");
 	var linkFrameDoc = ajxDbgObj._linkFrame.contentWindow.document;
 	var div = linkFrameDoc.createElement("div");
 	div.className = linkClass;
@@ -830,7 +822,6 @@ function(ajxDbgObj, linkClass, linkLabel, contentClass, contentLabel) {
 	div._dbg = ajxDbgObj;
 	div.onclick = AjxDebug._linkClicked
 	linkFrameDoc.body.appendChild(div);
-	//linkFrameDoc.body.appendChild(linkFrameDoc.createElement("br"));
 	
 	var contentFrameDoc = ajxDbgObj._contentFrame.contentWindow.document;
 	div = contentFrameDoc.createElement("div");
@@ -841,16 +832,19 @@ function(ajxDbgObj, linkClass, linkLabel, contentClass, contentLabel) {
 	contentFrameDoc.body.appendChild(contentFrameDoc.createElement("p"));
 	contentFrameDoc.body.appendChild(div);
 	contentFrameDoc.body.appendChild(contentFrameDoc.createElement("p"));
+	
+	ajxDbgObj._scrollToBottom();
 };
 
 AjxDebug._clear = 
 function() {
 	this._dbg._contentFrame.contentWindow.document.body.innerHTML = "";
-	this._dbg._linkFrame.contentWindow.document.body.innerHTML = "";	
+	this._dbg._linkFrame.contentWindow.document.body.innerHTML = "";
 };
 
 AjxDebug.myWindowUnloadHandler = 
 function() {
+	if (!DBG._debugWindow) return;
 	if (AjxEnv.isNav) {
 		DBG._debugWindow.onunload = null;
 	} else {
@@ -884,12 +878,6 @@ function(str){
 	s = s.replace(/\"/g, '&quot;');
 	s = s.replace(/\xA0/g, '&nbsp;');	
 	return s;
-};
-
-AjxDebug._getTimeStamp =
-function(date) {
-	date = (date) ? date : new Date();
-	return AjxStringUtil.htmlEncode([AjxDateUtil.getTimeStr(date, "%H:%m:%s"), ".", date.getMilliseconds()].join(""), true);
 };
 
 /**

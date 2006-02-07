@@ -421,16 +421,16 @@ XForm.prototype.outputForm = function () {
 
 	var updateScript = new AjxBuffer();		// holds the script to populate values and show/hide elements based on relevant attibute
 	
-DBG.timePt(AjxDebug.PERF, "starting outputItemList");
+	DBG.timePt("starting outputItemList");
 	// in initializeItems(), we guaranteed that there was a single outer item
 	//	and that it is a group that sets certain properties that can be set at
 	//	the form level.  Just output that (and it will output all children)
 
 	// output the actual items of the form
 	this.outputItemList(items[0].items, items[0], html, updateScript, indent, this.numCols);
-DBG.timePt(AjxDebug.PERF, "finished outputItemList");
+	DBG.timePt("finished outputItemList");
 	this.makeUpdateScript(updateScript);
-DBG.timePt(AjxDebug.PERF, "finished makeUpdateScript");
+	DBG.timePt("finished makeUpdateScript");
 	html.append("\r</div id=\"", this.__id,"\">");
 
 	// save the HTML in this.__html (for debugging and such)

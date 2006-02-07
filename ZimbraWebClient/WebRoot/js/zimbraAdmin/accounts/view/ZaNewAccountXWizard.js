@@ -50,7 +50,7 @@ function ZaNewAccountXWizard (parent, app) {
 
 
 	this.initForm(ZaAccount.myXModel,this.getMyXForm());	
-//    DBG.timePt(AjxDebug.PERF, "finished initForm");
+//    DBG.timePt("finished initForm");
    
 	this._localXForm.setController(this._app);	
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaNewAccountXWizard.prototype.handleXFormChange));

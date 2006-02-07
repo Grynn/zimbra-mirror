@@ -197,7 +197,7 @@ function(params) {
 ZmCsfeCommand.prototype._getResponseData =
 function(response, asyncMode) {
 	this._en = new Date();
-	DBG.println(AjxDebug.PERF, "ROUND TRIP TIME: " + (this._en.getTime() - this._st.getTime()));
+	DBG.println(AjxDebug.DBG1, "ROUND TRIP TIME: " + (this._en.getTime() - this._st.getTime()));
 
 	var result = new ZmCsfeResult();
 
@@ -236,7 +236,10 @@ function(response, asyncMode) {
 		}
 	}
 	
-	DBG.println(AjxDebug.DBG1, ["<H4> RESPONSE", (asyncMode) ? " (asynchronous)" : "" ,"</H4>"].join(""), "Response");
+	var linkName = "Response";
+	var m = respDoc.match(/\{Body:\{(\w+):/);
+	if (m && m.length) linkName = m[1];
+	DBG.println(AjxDebug.DBG1, ["<H4> RESPONSE", (asyncMode) ? " (asynchronous)" : "" ,"</H4>"].join(""), linkName);
 
 	var resp;
 	if (xmlResponse) {
