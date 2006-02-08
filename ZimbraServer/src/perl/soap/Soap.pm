@@ -224,8 +224,8 @@ sub getAdminUrl
 # returns a ZimbraContext
 #
 sub stdAuthByName {
-    my ($self, $url, $acctName, $passwd) = @_;
-    return $self->doAuthByName($url, $ZIMBRA_ACCT_NS, $acctName, $passwd);
+  my ($self, $url, $acctName, $passwd, $session, $notify) = @_;
+    return $self->doAuthByName($url, $ZIMBRA_ACCT_NS, $acctName, $passwd, $session, $notify);
 }
     
 
@@ -233,44 +233,53 @@ sub stdAuthByName {
 # returns a ZimbraContext
 #
 sub adminAuthByName {
-    my ($self, $url, $acctName, $passwd) = @_;
-    return $self->doAuthByName($url, $ZIMBRA_ADMIN_NS, $acctName, $passwd);
+  my ($self, $url, $acctName, $passwd, $session, $notify) = @_;
+  return $self->doAuthByName($url, $ZIMBRA_ADMIN_NS, $acctName, $passwd, $session, $notify);
 }
 
 #    
 # You probably want stdAuthByName() or adminAuthByName()
 # 
 sub doAuthByName {
-    my ($self, $url, $namespace, $acctName, $passwd) = @_;
+  my ($self, $url, $namespace, $acctName, $passwd, $opts) = @_;
+  
+  my $d = new XmlDoc;
+  $d->start('AuthRequest', $namespace);
+  $d->add('account', undef, { by => "name"}, $acctName);
+  $d->add('name', undef, undef, $acctName);
+  $d->add('password', undef, undef, $passwd);
 
-    my $d = new XmlDoc;
-    $d->start('AuthRequest', $namespace);
-    $d->add('account', undef, { by => "name"}, $acctName);
-    $d->add('name', undef, undef, $acctName);
-    $d->add('password', undef, undef, $passwd);
+  if (!defined($opts) || !defined($opts->{NOTIFY})) {
     $d->add('nonotify');
-    $d->end();
-
-    my $authResponse = $self->invoke($url, $d->root());
-
-    # get auth token
-    my $elt = $authResponse->find_child('authToken');
-    if (!defined($elt)) { 
-        print $d->to_string("pretty")."\n";
-        print $authResponse->to_string("pretty")."\n";
-        die "Could not find AuthToken in AuthResponse";
-    }
-    my $authToken = $elt->content;
-
-    # find sessionId
-    $elt = $authResponse->find_child('sessionId');
-    if (!defined($elt)) {
-        print $authToken."\n";
-        die "Could not find sessionId in AuthToken";
-    }
-    my $sessionId = $elt->content;
+  }
     
-    return $self->zimbraContext($authToken, $sessionId);
+  $d->end();
+
+  my $authResponse = $self->invoke($url, $d->root());
+
+  # get auth token
+  my $elt = $authResponse->find_child('authToken');
+  if (!defined($elt)) { 
+    print $d->to_string("pretty")."\n";
+    print $authResponse->to_string("pretty")."\n";
+    die "Could not find AuthToken in AuthResponse";
+  }
+  my $authToken = $elt->content;
+
+  # find sessionId
+  $elt = $authResponse->find_child('sessionId');
+  if (!defined($elt)) {
+    print $authToken."\n";
+    die "Could not find sessionId in AuthToken";
+  }
+  my $sessionId = $elt->content;
+
+  my $wantcontext;
+  if (defined($opts) && defined($opts->{NOTIFY})) {
+    $wantcontext = 1;
+  }
+  
+  return $self->zimbraContext($authToken, $sessionId, $wantcontext);
 }
 
 sub zimbraContext {
@@ -293,7 +302,7 @@ sub zimbraContext {
 }
 
 sub invoke {
-    my ($self, $uri, $doc, $context) = @_;
+    my ($self, $uri, $doc, $context, $options) = @_;
 
     my ($toRet, $err, $req, $res);
 

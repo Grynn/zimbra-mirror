@@ -101,6 +101,7 @@ function(sessionId) {
 * @param useXml			[boolean]*		If true, an XML response is requested
 * @param noSession		[boolean]*		If true, no session info is included
 * @param changeToken	[string]*		Current change token
+* @param highestNotifySeen [int]*       Sequence # of the highest notification we have processed
 * @param asyncMode		[boolean]*		If true, request sent asynchronously
 * @param callback		[AjxCallback]*	Callback to run when response is received (async mode)
 * @param logRequest		[boolean]*		If true, SOAP command name is appended to server URL
@@ -124,6 +125,10 @@ function(params) {
 	}
 	if (params.targetServer)
 		soapDoc.set("targetServer", params.targetServer, context);
+	if (params.highestNotifySeen) {
+	  	var notify = soapDoc.set("notify", null, context);
+	  	notify.setAttribute("seq", params.highestNotifySeen);
+	}
 	if (params.changeToken) {
 		var ct = soapDoc.set("change", null, context);
 		ct.setAttribute("token", params.changeToken);

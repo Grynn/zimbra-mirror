@@ -36,10 +36,11 @@ use XmlDoc;
 use Soap;
 
 sub new {
-    my ($class, $user, $host, $pw) = @_;
+    my ($class, $user, $host, $pw, $opts) = @_;
     my $self  = {};
     $self->{SOAP} = $Soap::Soap12;
     $self->{USER} = $user;
+    $self->{OPTIONS} = $opts;
 
     if (!defined($pw)) {
         $self->{PW} = "test123";
@@ -77,6 +78,22 @@ sub new {
     return $self;
 }
 
+sub verbose {
+  my ($self, $level) = @_;
+
+  if (!defined($level)) {
+    $self->{SOAP}->setLogLevel(0,0);
+  } elsif ($level == 0) {
+    $self->{SOAP}->setLogLevel(0,0);
+  } elsif ($level == 1) {
+    $self->{SOAP}->setLogLevel(1,0);
+  } elsif ($level == 2) {
+    $self->{SOAP}->setLogLevel(0,1);
+  } else {
+    $self->{SOAP}->setLogLevel(1,1);
+  }
+}
+
 #
 # hacky helper: strip the ns: out for readability
 #
@@ -90,30 +107,32 @@ sub to_string_simple {
 sub invokeMail
 {
     my ($self, $document) = @_;
-    return $self->soap()->invoke($self->mailUrl(), $document, $self->{CONTEXT});
+    return $self->soap()->invoke($self->mailUrl(), $document, $self->{CONTEXT}, $self->{OPTIONS});
 }
 
 sub invokeAdmin
 {
     my ($self, $document) = @_;
-    return $self->soap()->invoke($self->adminUrl(), $document, $self->{CONTEXT});
+    return $self->soap()->invoke($self->adminUrl(), $document, $self->{CONTEXT}, $self->{OPTIONS});
 }
 
 
 sub doStdAuth
 {
-    my $self = shift;
-    $self->{CONTEXT} = $self->{SOAP}->stdAuthByName($self->mailUrl(),
-                                                    $self->user(),
-                                                    $self->pw());
+  my ($self) = @_;
+  $self->{CONTEXT} = $self->{SOAP}->stdAuthByName($self->mailUrl(),
+                                                  $self->user(),
+                                                  $self->pw(),
+                                                  $self->{OPTIONS});
 }
 
 sub doAdminAuth
-{
-    my $self = shift;
-    $self->{CONTEXT} = $self->{SOAP}->adminAuthByName($self->adminUrl(),
-                                                      $self->user(),
-                                                      $self->pw());
+  {
+  my ($self) = @_;
+  $self->{CONTEXT} = $self->{SOAP}->adminAuthByName($self->adminUrl(),
+                                                    $self->user(),
+                                                    $self->pw(),
+                                                    $self->{OPTIONS});                                                    
 }
 
 

@@ -45,7 +45,7 @@ $types = "message";
 my ($user, $pw, $host, $help); #standard
 GetOptions("u|user=s" => \$user,
            "t|types=s" => \$types,
-           "p|port=s" => \$pw,
+           "pw=s" => \$pw,
            "h|host=s" => \$host,
            "help|?" => \$help,
            # add specific params below:
