@@ -47,20 +47,6 @@ Com_Zimbra_YMaps.CACHE = new Array();
 
 
 // Panel Zimlet Methods
-
-// Called by the Zimbra framework upon an accepted drag'n'drop
-Com_Zimbra_YMaps.prototype.doDrop = 
-function(obj) {
-	switch (obj.TYPE) {
-	    case "ZmContact":
-		this._contactDropped(obj);
-		break;
-
-	    default:
-		this.displayErrorMessage("You somehow managed to drop a \"" + obj.TYPE + "\" but however the Yahoo Maps Zimlet does't support it for drag'n'drop.");
-	}
-};
-
 // Called by the Zimbra framework when the Ymaps panel item was double clicked
 Com_Zimbra_YMaps.prototype.doubleClicked = function() {
 	this.singleClicked();
@@ -106,18 +92,6 @@ function() {
 	this._dlg_propertyEditor = null;
 };
 
-// Called when a new contact has been dropped onto the Zimlet panel item.
-Com_Zimbra_YMaps.prototype._contactDropped = 
-function(contact) {
-	var addr = contact.workStreet + ", " + contact.workCity + ", " + contact.workState + " " + contact.workPostalCode;
-	// XXX Ugly hack to check is it's a valid address
-	if(!addr || !addr.indexOf("undefined")) {
-		this.displayErrorMessage("You dropped a contact with an invalid work address: \n" + addr);
-		return;
-	}
-	this._displayDialogMap(addr);
-};
-	
 Com_Zimbra_YMaps.prototype._displayDialogMap = 
 function(address) {
 	var view = new DwtComposite(this.getShell());

@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_ymaps" version="1.0" description="Yahoo Maps">
+<zimlet name="com_zimbra_ymaps" version="1.1" description="Yahoo Maps">
 	<include>ymaps.js</include>
 	<includeCSS>ymaps.css</includeCSS>
 	<resource>blank_pixel.gif</resource>
@@ -20,7 +20,14 @@
 
 	<zimletPanelItem label="Maps" icon="YMAPS-panelIcon">
 		<toolTipText>Drag'n'drop a contact to display a Yahoo Map</toolTipText>
-		<dragSource type="ZmContact" />
+		<dragSource type="ZmContact">
+			<canvas type="window" width="800" height="600" />
+			<actionUrl target="http://maps.yahoo.com/maps_result">
+				<param name="addr">${obj.workStreet}</param>
+				<param name="csz">${obj.workPostalCode}</param>
+				<param name="country">us</param>
+			</actionUrl>
+		</dragSource>
 		<contextMenu>
 			<menuItem label="Visit Yahoo Maps" id="MAPS.YAHOO.COM" icon="YMAPS-panelIcon">
 				<canvas type="window" width="800" height="600" />
