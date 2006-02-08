@@ -73,3 +73,5 @@ createConf
 createKey
 
 createCert
+
+chmod -R 700 ${B}

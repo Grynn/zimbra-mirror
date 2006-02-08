@@ -98,13 +98,16 @@ if [ $? -ne 0 ]; then
 fi
 
 if [ -d "/opt/zimbra/lib/conf/" ]; then
-	for i in /opt/zimbra/lib/conf/*ldif; do
-		${zimbra_home}/openldap/bin/ldapmodify -a -c -H ldap://127.0.0.1:389 -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f $i
+	L=`ls /opt/zimbra/lib/conf/*ldif 2>/dev/null`
+	if [ "x$L" != "x" ]; then
+		for i in $L; do
+			${zimbra_home}/openldap/bin/ldapmodify -a -c -H ldap://127.0.0.1:389 -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f $i
 
-		if [ $? -ne 0 ]; then
-			exit 2
-		fi
-	done
+			if [ $? -ne 0 ]; then
+				exit 2
+			fi
+		done
+	fi
 fi
 
 exit 0

@@ -40,6 +40,7 @@ if [ $1 = "start" -o $1 = "reload" ]; then
 	if [ x$2 = "x" ]; then
 		rewriteconfig
 	fi
+	${zimbra_home}/postfix-2.2.5/sbin/postmap ${zimbra_home}/conf/postfix_header_checks
 	sudo ${zimbra_home}/postfix-2.2.5/sbin/postsuper -r ALL
 fi
 
@@ -54,5 +55,5 @@ if [ $1 = "status" ]; then
 fi
 
 sudo ${zimbra_home}/postfix-2.2.5/sbin/postalias /etc/aliases
-sudo ${zimbra_home}/postfix-2.2.5/sbin/postfix $@
+sudo ${zimbra_home}/postfix-2.2.5/sbin/postfix "$@"
 

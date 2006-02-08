@@ -167,9 +167,9 @@ $banned_filename_re = new_RE(
 
 # qr'\{[0-9a-z]{4,}(-[0-9a-z]{4,}){0,7}\}?'i,  # Class ID extensions - CLSID
 
-  qr'^application/x-msdownload$'i,                  # block these MIME types
-  qr'^application/x-msdos-program$'i,
-  qr'^application/hta$'i,
+#  qr'^application/x-msdownload$'i,                  # block these MIME types
+#  qr'^application/x-msdos-program$'i,
+#  qr'^application/hta$'i,
 
 # qr'^message/partial$'i,         # rfc2046 MIME type
 # qr'^message/external-body$'i,   # rfc2046 MIME type

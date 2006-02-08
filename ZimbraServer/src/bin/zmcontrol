@@ -270,19 +270,26 @@ sub getHostName {
 sub displayVersion {
 	my $platform = `/opt/zimbra/bin/get_plat_tag.sh`;
 	chomp $platform;
+	my $string = "";
 	if ($platform eq "MACOSX") {
 		my $release = ` basename /Library/Receipts/zimbra-core* | sed -e 's/zimbra-core.//' -e 's/.pkg//'`;
 		chomp $release;
-		print "\nRelease $release $platform\n\n";
+		$string = "Release $release $platform";
 	} elsif ($platform =~ /DEBIAN/) {
 		my $release = `dpkg -s zimbra-core | egrep '^Version:' | sed -e 's/Version: //'`;
 		chomp $release;
-		print "\nRelease $release $platform\n\n";
+		$string = "Release $release $platform";
 	} else {
 		my $release = `rpm -q --queryformat "%{version}_%{release}" zimbra-core`;
 		my $inst = localtime (`rpm -q --queryformat "%{installtime}" zimbra-core`);
-		print "\nRelease $release $platform installed $inst\n\n";
+		$string = "Release $release $platform";
 	}
+
+	my $rc = 0xffff & system ("/opt/zimbra/bin/zmprov gacf | grep -q 'zimbraComponentAvailable: hotbackup'");
+	if ($rc) { $string .= " FOSS edition"; }
+	else { $string .= " NETWORK edition"; }
+
+	print "\n\n$string\n\n";
 }
 
 sub usage {

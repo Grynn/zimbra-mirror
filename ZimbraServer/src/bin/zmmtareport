@@ -1,0 +1,484 @@
+#!/usr/bin/perl
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Version: MPL 1.1
+# 
+# The contents of this file are subject to the Mozilla Public License
+# Version 1.1 ("License"); you may not use this file except in
+# compliance with the License. You may obtain a copy of the License at
+# http://www.zimbra.com/license
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+# the License for the specific language governing rights and limitations
+# under the License.
+# 
+# The Original Code is: Zimbra Collaboration Suite Server.
+# 
+# The Initial Developer of the Original Code is Zimbra, Inc.
+# Portions created by Zimbra are Copyright (C) 2005 Zimbra, Inc.
+# All Rights Reserved.
+# 
+# Contributor(s):
+# 
+# ***** END LICENSE BLOCK *****
+# 
+
+use strict;
+
+use lib "/opt/zimbra/zimbramon/lib";
+
+use DBI;
+use Time::Local;
+
+use Getopt::Std;
+
+my %options = ();
+
+unless ( getopts( 'u:t:h', \%options ) ) { usage(); }
+
+if ($options{h}) {usage();}
+my $user = $options{u};
+
+my $dbh = connectDb();
+
+print "Generating report\n";
+if ($user) {
+	print "\tfor $user\n";
+}
+if ($options{t}) {
+	print "\tDuring $options{t}\n";
+}
+print "\n";
+
+my @msgIds;
+
+# We may have a msgId from the middle of the path - get the initial ID
+my $msgs = getMsgIds(\@msgIds);
+
+displayStats($msgs);
+
+sub getMsgIds {
+	my $ids = shift;
+	my $user = $options{u};
+
+	my $startTime;
+	my $endTime;
+
+	if ($options{t}) {
+		($startTime, $endTime) = split (',',$options{t});
+		$startTime = timeToSqlTime($startTime);
+		if ($endTime) {
+			$endTime = timeToSqlTime($endTime);
+		}
+	}
+
+	my $whereClause = "";
+	my @clauses = ();
+	my $statement = "";
+	my $ary;
+
+	my %uniqIds = ();
+	my @clauses = ();
+
+	my $count = 0;
+
+	%uniqIds = ();
+
+	if ($user ne "") {
+		push @clauses, "(sender like '%".$user."%' or recipient like '%".$user."%')";
+	}
+
+	if ($startTime) {
+		push @clauses, "arrive_time >= '".$startTime."'";
+	}
+
+	if ($endTime) {
+		push @clauses, "arrive_time <= '".$endTime."'";
+	}
+
+	$statement = "select distinct(msgid) from mta ";
+
+	if ($#clauses >= 0) {
+		$statement .= " where";
+	}
+	for (my $i = 0; $i <= $#clauses; $i++) {
+		if ($i) { $statement .= " and"; }
+		$statement .= " $clauses[$i]";
+	}
+
+	#print "$statement\n\n";
+
+	$ary = execSelect($statement);
+	foreach my $row (@$ary) {
+		my $id = $$row[0];
+		$uniqIds{$id} = $id;
+	}
+
+	my @msgs = ();
+
+	foreach my $id (sort keys %uniqIds) {
+		#print "Tracing msg: $id\n";
+		$count++;
+		push @msgs, traceProcessedMsg($id);
+	}
+	@msgs = sort {$$a{ARRIVE} cmp $$b{ARRIVE}} @msgs;
+	#foreach (@msgs) {
+	#	displayMsg ($_);
+	#}
+
+	# print "\n$count messages found\n\n";
+
+	return \@msgs;
+
+}
+
+sub displayStats {
+	my $msgs = shift;
+
+	my $msgcount = 0;
+	my $msgbytes = 0;
+	my $numrcpt = 0;
+	my $delaytot = 0;
+	my %statii = ();
+	foreach my $msg (@$msgs) {
+		$msgcount++;
+		$msgbytes += $$msg{BYTES};
+		foreach my $msgId (sort keys %{$msg}) {
+
+			if ($msgId eq "ARRIVE" || $msgId eq "BYTES") {next;}
+			# $msg{$msgId}{$fromIP}{recipList}{$recip}{leaveTime}{$$row[1]}{status}
+			foreach my $fromIP ( sort keys %{$$msg{$msgId}} ) {
+				$numrcpt += scalar (keys %{$$msg{$msgId}{$fromIP}{recipList}});
+				#$msg{$msgId}{$fromIP}{recipList}{$recip}{leaveTime}{$$row[1]}{delay}
+				#$msg{$msgId}{$fromIP}{recipList}{$recip}{leaveTime}{$$row[1]}{status} = $$row[5];
+				foreach my $recip (keys %{$$msg{$msgId}{$fromIP}{recipList}}) {
+					foreach my $lt (keys %{$$msg{$msgId}{$fromIP}{recipList}{$recip}{leaveTime}}){
+						if ($$msg{$msgId}{$fromIP}{recipList}{$recip}{leaveTime}{$lt}{status} ne "sent") {
+							$statii{$$msg{$msgId}{$fromIP}{recipList}{$recip}{leaveTime}{$lt}{status}}++;
+						}
+						$delaytot += $$msg{$msgId}{$fromIP}{recipList}{$recip}{leaveTime}{$lt}{delay};
+					}
+				}
+				last;
+			}
+		}
+	}
+	if (!$msgcount) {
+		print "No messages found\n";
+		return;
+	}
+	my $bytesavg = sprintf ("%02.2f",$msgbytes/$msgcount);
+	my $rcptavg = sprintf ("%02.2f",$numrcpt/$msgcount);
+	my $delayavg = sprintf ("%02.2f",$delaytot/$msgcount);
+	print "\n$msgcount messages found for $numrcpt recipients ($delaytot)\n";
+	print "$msgbytes total bytes\n";
+	print "$bytesavg bytes/msg\n";
+	print "$rcptavg recipients/msg\n";
+	print "$delayavg delay/msg (sec)\n";
+	foreach (sort keys %statii) {
+		print "$statii{$_} $_ deliveries\n";
+	}
+}
+
+sub displayMsg {
+	my $msg = shift;
+	my $indent = shift;
+	my $only = shift;
+
+	my $sender = $options{s};
+	my $recip = $options{r};
+
+	foreach my $msgId (sort keys %{$msg}) {
+
+		if ($msgId eq "ARRIVE") {next;}
+		if ($recip ne "" && $only eq "") {
+			my $found = 0;
+			foreach my $fromIP ( sort keys %{$$msg{$msgId}} ) {
+				foreach my $r ( sort keys %{$$msg{$msgId}{$fromIP}{recipList}} ) {
+					if ($r !~ /$recip/o) {next;}
+					$found = 1; last;
+				}
+				if ($found) {last;}
+			}
+			if (!$found) {next;}
+		} 
+
+		# We need to back trace to see if $fromIP is 
+		# entered as a toIP in $$msg{$msgId}
+		my $firstIP;
+
+		foreach ( keys %{$$msg{$msgId}} ) {
+			# Just grab the first key and backtrack
+			$firstIP = $_;
+			last;
+		}
+
+		my %beenthere = ();
+		my $done = 0;
+		TOP: while (!$done) {
+			$beenthere{$firstIP} = $firstIP;
+
+			foreach ( keys %{$$msg{$msgId}} ) {
+				foreach my $r (keys %{$$msg{$msgId}{$_}{recipList}}) {
+					if ($$msg{$msgId}{$_}{recipList}{$r}{nextIp} eq $firstIP) {
+						$firstIP = $_;
+						if (defined ($beenthere{$firstIP})) {
+							$done=1;
+							next TOP;
+						}
+						$done = 0;
+						next TOP;
+					}
+				}
+			}
+			$done = 1;
+
+		}
+
+		$done = 0;
+
+		if ($sender ne "") {
+			if ($$msg{$msgId}{$firstIP}{sender} !~ /$sender/) {next;}
+		}
+
+		print "\n";
+		print "Message ID $msgId\n";
+		print "$$msg{$msgId}{$firstIP}{sender} -->\n";
+
+		foreach my $r ( sort keys %{$$msg{$msgId}{$firstIP}{recipList}} ) {
+			print "\t\t$r";
+			print $$msg{$msgId}{$firstIP}{recipList}{$r}{origRecip}?
+				" (originally to $$msg{$msgId}{$firstIP}{recipList}{$r}{origRecip})\n":"\n";
+		}
+
+		foreach my $r ( sort keys %{$$msg{$msgId}{$firstIP}{recipList}} ) {
+			if (defined ($recip) && $r !~ /$recip/o) {next;}
+			if (defined ($only) && $r ne $only) {next;}
+
+			my $curIP = $firstIP;
+
+			$indent = "  ";
+
+
+			my %beenthere = ();
+
+			while (defined($$msg{$msgId}{ $curIP })) {
+				$beenthere{$curIP} = $curIP;
+				printMessage($msg, $msgId, $r, $curIP, $indent);
+				if (defined( $$msg{$msgId}{$curIP}{recipList}{$r}{amavisPid} )) {
+
+					$indent = $indent."  ";
+
+					print $indent, $$msg{$msgId}{$curIP}{recipList}{$r}{amavis}{arriveTime},
+						" ", $$msg{$msgId}{$curIP}{recipList}{$r}{amavis}{disposition},
+						" by amavisd on ",$$msg{$msgId}{$curIP}{recipList}{$r}{amavis}{host},
+						" (", $$msg{$msgId}{$curIP}{recipList}{$r}{amavis}{status};
+					print $$msg{$msgId}{$curIP}{recipList}{$r}{amavis}{reason}?
+						" - ".$$msg{$msgId}{$curIP}{recipList}{$r}{amavis}{reason}:"";
+					print ") HITS: ",
+						$$msg{$msgId}{$curIP}{recipList}{$r}{amavis}{hits}," in ",
+						$$msg{$msgId}{$curIP}{recipList}{$r}{amavis}{time}," ms\n";
+
+				}
+				$indent = $indent."  ";
+				$curIP = $$msg{$msgId}{$curIP}{recipList}{$r}{nextIp};
+
+				if (defined ($beenthere{$curIP})) {
+					last;
+				}
+
+			}
+
+		}
+
+	}
+}
+
+sub printMessage {
+	my $msg = shift;
+	my $msgId = shift;
+	my $r = shift;
+	my $curIP = shift;
+	my $indent = shift;
+
+	if ($indent eq "  ") { print "$indent", "Recipient $r\n"; }
+	print "$indent",
+		"$$msg{$msgId}{$curIP}{recipList}{$r}{arriveTime} - $$msg{$msgId}{$curIP}{prevHost} ",
+		"($$msg{$msgId}{$curIP}{prevIp}) --> $$msg{$msgId}{$curIP}{host}\n";
+	foreach my $lt (sort keys %{$$msg{$msgId}{$curIP}{recipList}{$r}{leaveTime}}) {
+
+		print "$indent",
+			"$lt - $$msg{$msgId}{$curIP}{host} --> ",
+			"$$msg{$msgId}{$curIP}{recipList}{$r}{nextHost} ($$msg{$msgId}{$curIP}{recipList}{$r}{nextIp})";
+		print " status $$msg{$msgId}{$curIP}{recipList}{$r}{leaveTime}{$lt}{status}";
+		if ($$msg{$msgId}{$curIP}{recipList}{$r}{leaveTime}{$lt}{status} ne "sent") {
+			print $indent,"\n$indent  $$msg{$msgId}{$curIP}{recipList}{$r}{leaveTime}{$lt}{statusmsg}";
+		}
+
+		print "\n";
+	}
+}
+
+sub traceProcessedMsg {
+	my $msgId = shift;
+
+	#print "Tracing processed msg $msgId\n";
+
+	my %msg = ();
+
+	my $statement = 
+		"select distinct(from_IP) from mta where msgid='".$msgId."'";
+	my $fary = execSelect($statement);
+
+
+	foreach my $f (@$fary) {
+
+		my $fromIP = $$f[0];
+
+		my $statement = 
+			"select distinct(recipient) from mta where msgid='".$msgId;
+
+		if ($fromIP ne "") {
+			$statement .= "' and from_IP='".$fromIP."'";
+		} else {
+			$statement .= "' and from_IP is null";
+		}
+
+		my $rary = execSelect($statement);
+
+		foreach my $r (@$rary) {
+			my $recip = $$r[0];
+
+			my $statement =
+				"select arrive_time, leave_time, host, ".
+				"sender, recipient, status, statusmsg, from_host, from_IP, to_host, to_IP, ".
+				"bytes, amavis_pid ".
+				"from mta where msgid='".$msgId."' and recipient='".$recip."' ";
+
+			if ($fromIP ne "") {
+				$statement .= " and from_IP='".$fromIP."'";
+			} else {
+				$statement .= " and from_IP is null";
+			}
+
+			my $ary = execSelect($statement);
+
+			foreach my $row (@$ary) {
+				$msg{ARRIVE} = $$row[0];
+				$msg{BYTES} = $$row[11];
+				$msg{$msgId}{$fromIP}{recipList}{$recip}{arriveTime} = $$row[0];
+				$msg{$msgId}{$fromIP}{recipList}{$recip}{leaveTime}{$$row[1]} = ();
+				$msg{$msgId}{$fromIP}{host} = $$row[2];
+				$msg{$msgId}{$fromIP}{sender} = $$row[3]?$$row[3]:"postmaster";
+
+				$msg{$msgId}{$fromIP}{recipList}{$recip}{recip} = $recip;
+
+				$msg{$msgId}{$fromIP}{recipList}{$recip}{leaveTime}{$$row[1]}{status} = $$row[5];
+				$msg{$msgId}{$fromIP}{recipList}{$recip}{leaveTime}{$$row[1]}{statusmsg} = $$row[6];
+				$msg{$msgId}{$fromIP}{recipList}{$recip}{leaveTime}{$$row[1]}{delay} = sqlTimeToTs($$row[1])-sqlTimeToTs($$row[0]);
+				$msg{$msgId}{$fromIP}{prevHost} = $$row[7];
+				$msg{$msgId}{$fromIP}{prevIp} = $$row[8];
+				$msg{$msgId}{$fromIP}{recipList}{$recip}{nextHost} = $$row[9];
+				$msg{$msgId}{$fromIP}{recipList}{$recip}{nextIp} = $$row[10];
+				if (defined ($$row[11])) {
+					$msg{$msgId}{$fromIP}{recipList}{$recip}{amavisPid} = $$row[12];
+				}
+			}
+			if (defined ($msg{$msgId}{$fromIP}{recipList}{$recip}{amavisPid})) {
+
+				$statement =
+					"select arrive_time, msgid, disposition, status, reason, hits, time, host ".
+					"from amavis where msgid='".$msgId."' ".
+					"and pid='".$msg{$msgId}{$fromIP}{recipList}{$recip}{amavisPid}."'";
+
+				$ary = execSelect($statement);
+
+				foreach my $row (@$ary) {
+					$msg{$msgId}{$fromIP}{recipList}{$recip}{amavis}{arriveTime} = $$row[0];
+					$msg{$msgId}{$fromIP}{recipList}{$recip}{amavis}{msgid} = $$row[1];
+					$msg{$msgId}{$fromIP}{recipList}{$recip}{amavis}{disposition} = $$row[2];
+					$msg{$msgId}{$fromIP}{recipList}{$recip}{amavis}{status} = $$row[3];
+					$msg{$msgId}{$fromIP}{recipList}{$recip}{amavis}{reason} = $$row[4];
+					$msg{$msgId}{$fromIP}{recipList}{$recip}{amavis}{hits} = $$row[5];
+					$msg{$msgId}{$fromIP}{recipList}{$recip}{amavis}{time} = $$row[6];
+					$msg{$msgId}{$fromIP}{recipList}{$recip}{amavis}{host} = $$row[7];
+				}
+			}
+		}
+
+	}
+
+	return (\%msg);
+}
+
+sub execSelect {
+	my $statement = shift;
+
+	#print "Searching database: \n";
+	#print "\t $statement\n\n";
+
+	my $sth = $dbh->prepare($statement);
+
+	if (!$sth->execute() ) {
+		print STDERR "$0 sql execute failed: ",$sth->errstr,"\n";
+	}
+
+	my $aryref = $sth->fetchall_arrayref;
+
+	return $aryref;
+}
+
+sub usage {
+	print STDERR "Usage: $0 [ -u user ] [ -t start,end ]\n";
+	print STDERR "\ttimes in YYYYMMDD[hhmmss] format\n\n";
+
+	exit (1);
+}
+
+sub connectDb {
+	my $data_source="dbi:mysql:database=zimbra_logger;mysql_read_default_file=/opt/zimbra/conf/my.logger.cnf;mysql_socket=/opt/zimbra/logger/db/mysql.sock";
+
+	my $username="zimbra";
+	my $password = `/opt/zimbra/bin/zmlocalconfig -s -m nokey zimbra_logger_mysql_password`;
+	chomp $password;
+
+	my $dbh = DBI->connect($data_source, $username, $password);
+
+	if (!$dbh) { 
+		print STDERR "DB: Can't connect to $data_source: $DBI::errstr\n";
+		exit 1;
+	}
+
+	return $dbh;
+}
+
+sub timeToSqlTime {
+	my $ts = shift;
+	if ($ts eq "" || !defined($ts)) {
+		return '1000-01-01 00:00:00';
+	}
+
+	# IN: YYYYMMDDHHMMSS
+
+	# OUT: YYYY-MM-DD HH:MM:SS
+	my $dt = sprintf ("%4d-%02d-%02d %02d:%02d:%02d",
+		substr($ts,0,4), substr($ts,4,2), substr($ts,6,2),
+		substr($ts,8,2)?substr($ts,8,2):0, 
+		substr($ts,10,2)?substr($ts,10,2):0, 
+		substr($ts,12,2)?substr($ts,12,2):0);
+
+	return $dt;
+}
+
+sub sqlTimeToTs {
+	my $sqlTime = shift;
+	# 2005-09-18 04:03:33
+	if ($sqlTime ne "") {
+		return timelocal(substr($sqlTime,17,2),substr($sqlTime,14,2),
+		substr($sqlTime,11,2),substr($sqlTime,8,2),
+		(substr($sqlTime,5,2)-1),substr($sqlTime,0,4));
+	}
+	return 0;
+}
+

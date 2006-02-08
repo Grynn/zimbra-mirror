@@ -27,6 +27,9 @@
 source `dirname $0`/zmshutil || exit 1
 zmsetvars mysql_directory mysql_pidfile mysql_mycnf
 
+if [ ! -d ${mysql_directory} ]; then
+	exit 0
+fi
 zmassert -d ${mysql_directory}
 zmassert -x ${mysql_directory}/bin/mysqld_safe
 zmassert -r ${mysql_mycnf}

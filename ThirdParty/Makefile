@@ -34,6 +34,8 @@ DIRS := mysql \
 	apache-httpd \
 	php \
 	pcre \
+	expat \
+	popt \
 	perdition \
 	PostFix/PostFix-$(POSTFIX_VERSION)
 

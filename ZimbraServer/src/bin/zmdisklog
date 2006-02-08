@@ -64,6 +64,7 @@ sub logStatus {
 	@status = <STATUS>;
 	close STATUS;
 	foreach my $s (@status) {
+		chomp $s;
 		if ($s =~ /^Host (.*)/) {
 			$hostname = $1;
 			next;
@@ -79,6 +80,7 @@ sub logDiskUsage {
 	@mounts = <MOUNTS>;
 	close MOUNTS;
 	foreach my $m (@mounts) {
+		chomp $m;
 		my ($dev,undef,$mp) = split ' ',$m;
 		open DF, "$DFCMD $dev | tail -1 |" or die "Can't open $DFCMD: $!";
 		my @df = <DF>;

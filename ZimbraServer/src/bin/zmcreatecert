@@ -151,3 +151,4 @@ createCertReq
 
 signCertReq
 
+chmod -R 700 ${B}

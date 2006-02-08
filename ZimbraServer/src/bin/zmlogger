@@ -122,6 +122,8 @@ while (<>) {
 	my ($log_date, $host, $app, $pid, $msg) =
 		($_ =~ m/(^.{15}) (\S+) ([^[]+)\[(\d+)\]: (.*)$/);
 
+	if ($app eq 'slapd' || $app eq 'master') {next;}
+
 	if ($host eq "") { next;}
 	my $qid = undef;
 
@@ -129,7 +131,7 @@ while (<>) {
 		$qid = $1;
 	} 
 
-	if ($msg =~ /info: ([^,]+), STATUS: (\S+): (\S+): (Running|Stopped)\s*$/) {
+	if ($msg =~ /info: ([^,]+), STATUS: (\S+): (\S+): (Running|Stopped).*$/) {
 		my $tm = $1;
 		my $hostname = $2;
 		my $service = $3;

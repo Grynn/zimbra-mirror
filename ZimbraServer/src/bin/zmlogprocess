@@ -1198,5 +1198,7 @@ sub pruneLogs {
 	$sth = sqlExec ("delete from amavis_aggregate where period_start < '".$summaryBegin."'");
 	print "Pruning summary disk logs from $summaryBegin\n";
 	$sth = sqlExec ("delete from disk_aggregate where period_start < '".$summaryBegin."'");
+	print "Pruning other raw logs from $rawBegin\n";
+	$sth = sqlExec ("delete from raw_logs where log_date < '".$rawBegin."'");
 }
 

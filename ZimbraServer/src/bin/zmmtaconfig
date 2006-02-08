@@ -591,14 +591,11 @@ sub rewriteConfig {
 				}
 			} elsif ($sr =~ m/^uncomment/) {
 				my ($cmd, $key) = ($sr =~ m/comment ([^:]+):(\S+)/);
-				if ($knownkeys{"$cmd:$key"} ne "" &&
-					( ( $knownkeys{"$cmd:$key"} ne "no" &&
-					$knownkeys{"$cmd:$key"} != 0 ) ||
-					$knownkeys{"$cmd:$key"} == 1)
-					) {
-					$rep = "";
-				} else {
+				if ($knownkeys{"$cmd:$key"} eq "" ||
+					$knownkeys{"$cmd:$key"} eq "no") {
 					$rep = "#";
+				} else {
+					$rep = "";
 				}
 			} elsif ($sr =~ m/^binary/) {
 				my ($cmd, $key) = ($sr =~ m/binary ([^:]+):(\S+)/);
