@@ -523,6 +523,24 @@ function(x, y) {
 	} else {
 		this._capturing = false;
 	}
+	
+	// NOTE: This hack is needed for FF/Moz because the containing div
+	//       allows the inner table to overflow. When the menu cascades
+	//       and the menu items get pushed off of the visible area, the
+	//       div's border doesn't surround the menu items. This hack
+	//       forces the outer div's width to surround the table.
+	if (AjxEnv.isGeckoBased && this._table) {
+		var htmlEl = this.getHtmlElement();
+		htmlEl.style.width = s.x + "px";
+	}
+};
+
+DwtMenu.prototype.getSize =
+function(incScroll) {
+	if (this._table) {
+		return Dwt.getSize(this._table, incScroll);
+	}
+	return DwtComposite.prototype.getSize.call(this, incScroll);
 };
 
 DwtMenu.prototype._doPopdown =
