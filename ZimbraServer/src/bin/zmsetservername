@@ -78,3 +78,8 @@ foo=`echo ${ldap_url} | sed -e "s|${zimbra_server_hostname}|${NAME}|g"`
 if [ "x{$foo}" != "x${ldap_url}" ]; then
 	zmlocalconfig -e ldap_url=$foo
 fi
+
+loghost=`zmprov gacf | grep zimbraLogHostname | sed -e 's/zimbraLogHostname: //'`
+if [ "x${loghost}" = "x${zimbra_server_hostname}" ]; then
+	zmprov mcf zimbraLogHostname ${NAME}
+fi
