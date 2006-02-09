@@ -1170,11 +1170,11 @@ sub deleteRawLogs {
 }
 
 sub pruneLogs {
-	my $rawRetention = `zmprov gacf | egrep '^zimbraLogRawLifetime' | sed -e 's/zimbraLogRawLifetime: //'`;
+	my $rawRetention = `/opt/zimbra/bin/zmprov gacf | egrep '^zimbraLogRawLifetime' | sed -e 's/zimbraLogRawLifetime: //'`;
 	chomp $rawRetention;
 	$rawRetention =~ s/d//;
 	print "RAW: $rawRetention\n";
-	my $summaryRetention = `zmprov gacf | egrep '^zimbraLogSummaryLifetime' | sed -e 's/zimbraLogSummaryLifetime: //'`;
+	my $summaryRetention = `/opt/zimbra/bin/zmprov gacf | egrep '^zimbraLogSummaryLifetime' | sed -e 's/zimbraLogSummaryLifetime: //'`;
 	chomp $summaryRetention;
 	$summaryRetention =~ s/d//;
 	print "SUM: $summaryRetention\n";
