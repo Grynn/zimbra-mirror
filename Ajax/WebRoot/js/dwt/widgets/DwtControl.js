@@ -618,6 +618,8 @@ function(x, y, width, height) {
 		this._controlEvent.newY = bds.y;
 		this._controlEvent.newWidth = bds.width;
 		this._controlEvent.newHeight = bds.height;
+		this._controlEvent.requestedWidth = width;
+		this._controlEvent.requestedHeight = height;
 		this.notifyListeners(DwtEvent.CONTROL, this._controlEvent);
 	} else {
 		Dwt.setBounds(htmlElement, x, y, width, height);

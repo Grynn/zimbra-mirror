@@ -2,10 +2,12 @@
 .ZmSpreadSheet .ToolBar { background-color: #eee; border-bottom: 1px solid #000; }
 .ZmSpreadSheet-RelDiv { position: relative !important; overflow: auto !important; background-color: #bbb; }
 .ZmSpreadSheet .InputField, .ZmSpreadSheet table.SpreadSheet { font: 11px tahoma,verdana,sans-serif; }
-.ZmSpreadSheet table.SpreadSheet { background-color: #bbb; color: #000; table-layout: fixed; }
+.ZmSpreadSheet table.SpreadSheet { background-color: #bbb; color: #000; }
 .ZmSpreadSheet table.SpreadSheet td { background-color: #fff; color: #000; padding: 1px; overflow: hidden; cursor: default; }
 .ZmSpreadSheet table.SpreadSheet .TopBar td { padding: 0; }
 
+.ZmSpreadSheet table.Header-ColESize, .ZmSpreadSheet table.Header-ColESize * { cursor: e-resize !important; }
+.ZmSpreadSheet table.Header-ColWSize, .ZmSpreadSheet table.Header-ColWSize * { cursor: w-resize !important; }
 .ZmSpreadSheet table.SpreadSheet .TopBar .TopLeft { background-color: #ddd; padding: 0; text-align: center; }
 .ZmSpreadSheet table.SpreadSheet .TopBar .TopLeft, .ZmSpreadSheet table.SpreadSheet .LeftBar { padding: 0;
   cursor: default; -moz-user-select: none; user-select: none; }
@@ -38,7 +40,7 @@
 .ZmSpreadSheet .InputField { position: absolute; padding: 0 !important; border: 2px solid #000; }
 .ZmSpreadSheet input.InputField { z-index: 10; }
 .ZmSpreadSheet span.InputField { visibility: hidden; border: none; top: 0px; left: 0px; }
-.ZmSpreadSheet .Wrapper { white-space: nowrap; }
+.ZmSpreadSheet .Wrapper { white-space: nowrap; overflow: hidden; }
 
 .ZmSpreadSheet table.SpreadSheet td.hasFormula { color: #555; background-color: #fafafa; }
 
