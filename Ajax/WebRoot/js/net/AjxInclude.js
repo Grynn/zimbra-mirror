@@ -74,7 +74,7 @@ function AjxInclude(includes, baseurl, callback, proxy) {
 			script[AjxInclude.eventName] = loadNextScript;
 			script.type = "text/javascript";
 			script.src = fullurl;
-			window.status = "Zimlet script: " + orig;
+			window.status = "Loading script: " + orig;
 			head.appendChild(script);
 		} else if (includes.length == 0) {
 			script = null;
