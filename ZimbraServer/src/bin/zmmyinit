@@ -55,6 +55,7 @@ mkdir -p ${zimbra_log_directory}
 echo '*' Generating mysql config ${mysql_mycnf}
 rm -f ${mysql_mycnf}
 ${zimbra_home}/bin/zmmycnf > ${mysql_mycnf}
+chmod 644 ${mysql_mycnf}
 
 #
 # Create database
