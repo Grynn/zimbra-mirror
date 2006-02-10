@@ -605,9 +605,7 @@ function() {
 */
 AjxDebug.prototype._timestamp = 
 function() {
-	return this._showTime 
-		? AjxDateFormat.getTimeInstance().format(new Date()) + ": " 
-		: "";
+	return this._showTime ? this._getTimeStamp() + ": " : "";
 };
 
 AjxDebug.prototype.setShowTimestamps = 
@@ -798,8 +796,11 @@ function (htmlStr) {
 
 AjxDebug.prototype._getTimeStamp =
 function(date) {
-	date = (date) ? date : new Date();
-	return AjxStringUtil.htmlEncode([AjxDateUtil.getTimeStr(date, "%H:%m:%s"), ".", date.getMilliseconds()].join(""), true);
+	if (!AjxDebug._timestampFormatter) {
+		AjxDebug._timestampFormatter = new AjxDateFormat("HH:mm:ss.SSS");
+	}
+	date = date || new Date();
+	return AjxStringUtil.htmlEncode(AjxDebug._timestampFormatter.format(date), true);
 };
 
 // Static methods
