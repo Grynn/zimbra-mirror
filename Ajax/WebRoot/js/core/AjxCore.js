@@ -77,8 +77,9 @@ function(eventSource, eventName, action) {
 	if (listenerStruct) {
 		var listenerList = listenerStruct.list;
 		for (var i = 0; i < listenerList.length; i++) {
-			if (listenerList[i] == action)
+			if (listenerList[i] == action) {
 				listenerList[i] = null;
+			}
 		}
 	}
 };
@@ -93,8 +94,9 @@ function(eventSource, eventName) {
 
 	if (listenerStruct) {
 		var listenerList = listenerStruct.list;
-		for (var i = 0; i < listenerList.length; i++)
+		for (var i = 0; i < listenerList.length; i++) {
 			listenerList[i] = null;
+		}
 	}
 	AjxCore.unassignId(listenerStruct.id);
 };
@@ -107,15 +109,17 @@ function(eventSource, eventName) {
 AjxCore.notifyListeners = 
 function(eventSource, eventName, arg1) {
 	eventSource = AjxCore._getEventSource(eventSource);
-	var listenerStruct = AjxCore._getListenerStruct(eventSource, eventName)
-	if (listenerStruct)
+	var listenerStruct = AjxCore._getListenerStruct(eventSource, eventName);
+	if (listenerStruct) {
 		eventSource[eventName](arg1);
+	}
 };
 
 AjxCore._getEventSource = 
 function(eventSource) {
-	if (typeof(eventSource) == 'string')
+	if (typeof(eventSource) == 'string') {
 		eventSource = document.getElementById(eventSource);
+	}
 	return eventSource;
 };
 
