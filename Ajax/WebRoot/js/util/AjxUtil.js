@@ -457,3 +457,18 @@ function(object, level) {
 	proxy._object_ = object;
 	return proxy;
 };
+
+/**
+* Returns a copy of a list with empty members removed.
+*
+* @param list	[array]		original list
+*/
+AjxUtil.collapseList =
+function(list) {
+	var newList = [];
+	for (var i = 0; i < list.length; i++)
+		if (list[i])
+			newList.push(list[i]);
+	return newList;
+};
+
