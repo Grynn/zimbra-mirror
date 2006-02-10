@@ -73,7 +73,7 @@ function(ev) {
 DwtKeyEvent.getCharCode =
 function(ev) {
 	ev = DwtUiEvent.getEvent(ev);
-	return (ev.charCode) ? ev.charCode : ev.keyCode;
+	return AjxEnv.isSafari ? ev.keyCode : (ev.charCode || ev.keyCode);
 }
 
 DwtKeyEvent.copy = 
