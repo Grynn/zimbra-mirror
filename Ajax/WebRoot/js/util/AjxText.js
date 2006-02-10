@@ -326,7 +326,7 @@ AjxFormat.Segment._parseInt = function(o, f, adjust, s, index, fixedlen) {
 	if (fixedlen && tail - head != fixedlen) {
 		throw new AjxFormat.ParsingException(this._parent, this, "number too short"); // I18n
 	}
-	var value = parseInt(s.substring(head, tail));
+	var value = parseInt(s.substring(head, tail).replace(/^0+(\d)/,"$1"));
 	if (f) {
 		var target = o || window;
 		if (typeof f == "function") {
