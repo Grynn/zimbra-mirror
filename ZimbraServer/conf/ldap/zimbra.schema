@@ -300,6 +300,9 @@ objectIdentifier zimbraMtaAuthHost ZimbraAttrType:309
 objectIdentifier zimbraMtaAuthURL ZimbraAttrType:310
 objectIdentifier zimbraMtaMyNetworks ZimbraAttrType:311
 objectIdentifier zimbraFeatureViewInHtmlEnabled ZimbraAttrType:312
+objectIdentifier zimbraAccountCalendarUserType ZimbraAttrType:313
+objectIdentifier zimbraCalResType ZimbraAttrType:314
+objectIdentifier zimbraCalResAutoAcceptDecline ZimbraAttrType:315
 
 #################################################################
 # object class OIDs
@@ -323,6 +326,7 @@ objectIdentifier zimbraMimeEntry ZimbraObjectClass:12
 objectIdentifier zimbraObjectEntry ZimbraObjectClass:13
 objectIdentifier zimbraTimeZone ZimbraObjectClass:14
 objectIdentifier zimbraZimletEntry ZimbraObjectClass:15
+objectIdentifier zimbraCalendarResource ZimbraObjectClass:16
 
 # break glass in case of emergency
 #
@@ -2276,6 +2280,27 @@ attributetype ( zimbraZimletIsExtension
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
+attributetype ( zimbraAccountCalendarUserType
+	NAME 'zimbraAccountCalendarUserType'
+	DESC 'calendar user type - USER (default) or RESOURCE'
+	EQUALITY caseIgnoreMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32}
+	SINGLE-VALUE )
+
+attributetype ( zimbraCalResType
+	NAME 'zimbraCalResType'
+	DESC 'calendar resource type - ROOM, etc.'
+	EQUALITY caseIgnoreMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32}
+	SINGLE-VALUE )
+
+attributetype ( zimbraCalResAutoAcceptDecline
+	NAME 'zimbraCalResAutoAcceptDecline'
+	DESC 'Whether this calendar resource accepts/declines meeting invites automatically; default true'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
 
 #################################################################
 # object class definitions
@@ -2354,6 +2379,7 @@ objectclass ( zimbraAccount
 		description $
 		initials $
 		l $
+		zimbraAccountCalendarUserType $
 		zimbraAttachmentsBlocked $
 		zimbraAttachmentsIndexingEnabled $
 		zimbraAttachmentsViewInHtmlOnly $
@@ -2913,3 +2939,25 @@ objectclass ( zimbraZimletEntry
 		zimbraZimletServerIndexRegex
 		)
 	)	
+
+
+################
+#
+# zimbraCalendarResource is used to represent a calendar resource
+# This objectclass should be mixed in to a zimbraAccount entry.
+#
+################
+objectclass ( zimbraCalendarResource
+	NAME 'zimbraCalendarResource'
+	DESC 'Calendar resource object'
+	SUP top AUXILIARY
+	MUST (	
+		zimbraId $
+		displayName $
+		zimbraAccountCalendarUserType $
+		zimbraCalResType
+		)
+	MAY (
+		zimbraCalResAutoAcceptDecline
+		)
+	)
