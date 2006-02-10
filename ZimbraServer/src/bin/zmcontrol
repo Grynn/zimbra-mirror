@@ -285,10 +285,13 @@ sub displayVersion {
 		$string = "Release $release $platform";
 	}
 
-	my $rc = 0xffff & system ("/opt/zimbra/bin/zmprov gacf | grep -q 'zimbraComponentAvailable: hotbackup'");
-	if ($rc) { $string .= " FOSS edition"; }
-	else { $string .= " NETWORK edition"; }
-
+	my $rc = 0xffff & system ("/opt/zimbra/bin/zmprov gacf > /dev/null 2>&1");
+	if (!$rc) {
+		$rc = 0xffff & system 
+			("/opt/zimbra/bin/zmprov gacf 2> /dev/null | grep -q 'zimbraComponentAvailable: hotbackup'");
+		if ($rc) { $string .= " FOSS edition"; }
+		else { $string .= " NETWORK edition"; }
+	}
 	print "\n\n$string\n\n";
 }
 
