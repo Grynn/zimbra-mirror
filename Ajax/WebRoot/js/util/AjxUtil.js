@@ -472,3 +472,15 @@ function(list) {
 	return newList;
 };
 
+AjxUtil.indexOf =
+function(array, object, strict) {
+	if (array) {
+		for (var i = 0; i < array.length; i++) {
+			var item = array[i];
+			if ((strict && item === object) || (!strict && item == object)) {
+				return i;
+			}
+		}
+	}
+	return -1;
+};

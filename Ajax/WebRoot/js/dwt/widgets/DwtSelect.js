@@ -531,7 +531,8 @@ function DwtSelectOption (value, selected, displayValue, owner, optionalDOMId) {
 
 DwtSelectOption.prototype._calculateWidth = 
 function(str) {
-	return str.length  * 0.9 * 7;
+	var size = Dwt.getHtmlExtent(AjxStringUtil.htmlEncode(str));
+	return size.x;
 };
 
 DwtSelectOption.prototype.setItem = 

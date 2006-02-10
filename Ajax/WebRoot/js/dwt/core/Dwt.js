@@ -274,16 +274,9 @@ function(htmlElement, width, height) {
 */
 Dwt.getHtmlExtent =
 function(html) {
-	if (!Dwt._measureDiv) {
-		var measureDiv = document.createElement("div");
-		measureDiv.id = this._measureDivId = Dwt.getNextId();
-		Dwt.setPosition(measureDiv, Dwt.ABSOLUTE_STYLE);
-		Dwt.setLocation(measureDiv, Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
-		document.body.appendChild(measureDiv);
-		Dwt._measureDiv = measureDiv;
-	}
-	Dwt._measureDiv.innerHTML = html;
-	return Dwt.getSize(Dwt._measureDiv);
+	var div = AjxStringUtil.calcDIV();
+	div.innerHTML = html;
+	return Dwt.getSize(div);
 };
 
 Dwt.getAttr =

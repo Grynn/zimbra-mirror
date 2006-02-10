@@ -237,6 +237,13 @@ AjxFormat.Segment.prototype.parse = function(o, s, i) {
 	throw new AjxFormat.ParsingException(this._parent, this, "not implemented"); // I18n
 };
 
+AjxFormat.Segment.prototype.getFormat = function() {
+	return this._parent;
+};
+AjxFormat.Segment.prototype.toSubPattern = function() {
+	return this._s;
+};
+
 // Protected methods
 
 AjxFormat.Segment.prototype._getFixedLength = function() {
@@ -378,8 +385,7 @@ function AjxDateFormat(pattern) {
 				}
 			}
 			if (i == pattern.length) {
-				// TODO: i18n
-				throw new FormatException(this, "unterminated string literal");
+				throw new FormatException(this, "unterminated string literal"); // I18n
 			}
 			var tail = i;
 			var segment = new AjxFormat.TextSegment(this, pattern.substring(head, tail));
@@ -529,7 +535,7 @@ AjxDateFormat.prototype.parse = function(s) {
 		var date = new Date(0, 0, 1, 0, 0, 0, 0);
 		if (object.year != null) { date.setFullYear(object.year); }
 		if (object.month != null) { date.setMonth(object.month); }
-		if (object.date != null) { date.setDate(object.date); }
+		if (object.dayofmonth != null) { date.setDate(object.dayofmonth); }
 		else if (object.dayofyear != null) { date.setMonth(0, object.dayofyear); }
 		if (object.hours != null) { date.setHours(object.hours); }
 		if (object.minutes != null) { date.setMinutes(object.minutes); }
@@ -565,7 +571,7 @@ AjxDateFormat.prototype._createParseObject = function() {
 	//       year must be set before the month and date or else the Date
 	//       object will roll it over to Mar 1.
 	return { 
-		year: null, month: null, date: null, dayofyear: null,
+		year: null, month: null, dayofmonth: null, dayofyear: null,
 		hours: null, minutes: null, seconds: null, milliseconds: null,
 		ampm: null, era: null, timezone: null
 	};
@@ -618,7 +624,7 @@ AjxDateFormat.EraSegment.prototype.toString = function() {
 // Public methods
 
 AjxDateFormat.EraSegment.prototype.format = function(date) { 
-	// TODO: Only support current era at the moment...
+	// NOTE: Only support current era at the moment...
 	return I18nMsg.eraAD;
 };
 
@@ -805,7 +811,7 @@ AjxDateFormat.DaySegment.prototype.format = function(date) {
 
 AjxDateFormat.DaySegment.prototype.parse = function(object, s, index) {
 	var fixedlen = this._getFixedLength();
-	var pname = /D/.test(this._s) ? "dayofyear" : "date";
+	var pname = /D/.test(this._s) ? "dayofyear" : "dayofmonth";
 	return AjxFormat.Segment._parseInt(object, pname, 0, s, index, fixedlen);
 };
 
@@ -1041,6 +1047,22 @@ AjxDateFormat.TimezoneSegment.prototype.format = function(date) {
 // Message format class
 //
 
+/**
+ * <strong>Note:</strong>
+ * This implementation augments Java's <code>MessageFormat</code> patterns
+ * to support list formatting. The following forms differ from the originals
+ * defined in the JavaDoc for <code>MessageFormat</code>:
+ * <pre>
+ * <i>FormatElement</i>:
+ *       { <i>ArgumentIndex</i> }
+ *       { <i>ArgumentIndex</i> , <i>FormatType</i> }
+ *       { <i>ArgumentIndex</i> , <i>ListFormatType</i> , <i>FormatType</i> }
+ *       { <i>ArgumentIndex</i> , <i>FormatType</i> , <i>FormatStyle</i> }
+ *       { <i>ArgumentIndex</i> , <i>ListFormatType , <i>FormatType</i> , <i>FormatStyle</i> }
+ * <i>ListFormatType</i>:
+ *       list
+ * </pre>
+ */
 function AjxMessageFormat(pattern) {
 	AjxFormat.call(this, pattern);
 	for (var i = 0; i < pattern.length; i++) {
@@ -1066,8 +1088,7 @@ function AjxMessageFormat(pattern) {
 				}
 			}
 			if (i == pattern.length) {
-				// TODO: i18n
-				throw new AjxFormat.FormatException(this, "unterminated string literal");
+				throw new AjxFormat.FormatException(this, "unterminated string literal"); // I18n
 			}
 			var tail = i;
 			var segment = new AjxFormat.TextSegment(this, pattern.substring(head, tail));
@@ -1130,6 +1151,27 @@ AjxMessageFormat.prototype.format = function(params) {
 	return AjxFormat.prototype.format.call(this, params);
 };
 
+AjxMessageFormat.prototype.getFormats = function() {
+	var formats = [];
+	for (var i = 0; i < this._segments.length; i++) {
+		var segment = this._segments[i];
+		if (segment instanceof AjxMessageFormat.MessageSegment) {
+			formats.push(segment.getSegmentFormat());
+		}
+	}
+	return formats;
+};
+AjxMessageFormat.prototype.getFormatsByArgumentIndex = function() {
+	var formats = [];
+	for (var i = 0; i < this._segments.length; i++) {
+		var segment = this._segments[i];
+		if (segment instanceof AjxMessageFormat.MessageSegment) {
+			formats[segment.getIndex()] = segment.getSegmentFormat();
+		}
+	}
+	return formats;
+};
+
 //
 // AjxMessageFormat.MessageSegment class
 //
@@ -1140,6 +1182,11 @@ AjxMessageFormat.MessageSegment = function(format, s) {
 	this._index = Number(parts[0]);
 	this._type = parts[1] || "string";
 	this._style = parts[2];
+	if (this._type == "list") {
+		this._isList = true;
+		this._type = parts[2] || "string";
+		this._style = parts[3];
+	}
 	switch (this._type) {
 		case "number": {
 			switch (this._style) {
@@ -1161,15 +1208,21 @@ AjxMessageFormat.MessageSegment = function(format, s) {
 			}
 			break;
 		}
-		case "choice": /*TODO*/ break;
+		case "choice": {
+			this._formatter = new AjxChoiceFormat(this._style);
+			break;
+		}
 	}
-	
+	if (this._isList) {
+		this._formatter = new AjxListFormat(this._formatter);
+	}	
 };
 AjxMessageFormat.MessageSegment.prototype = new AjxFormat.Segment;
 AjxMessageFormat.MessageSegment.prototype.constructor = AjxMessageFormat.MessageSegment;
 
 AjxMessageFormat.MessageSegment.prototype.toString = function() {
 	var a = [ "message: \"", this._s, "\", index: ", this.index ];
+	if (this._isList) a.push(", list: ", this._isList);
 	if (this._type) a.push(", type: ", this._type);
 	if (this._style) a.push(", style: ", this._style);
 	if (this._formatter) a.push(", formatter: ", this._formatter.toString());
@@ -1182,13 +1235,30 @@ AjxMessageFormat.MessageSegment.prototype._index;
 AjxMessageFormat.MessageSegment.prototype._type;
 AjxMessageFormat.MessageSegment.prototype._style;
 
+AjxMessageFormat.MessageSegment.prototype._isList = false;
 AjxMessageFormat.MessageSegment.prototype._formatter;
 
 // Public methods
 
 AjxMessageFormat.MessageSegment.prototype.format = function(args) {
 	var object = args[this._index];
+	if (this._formatter instanceof AjxChoiceFormat) {
+		return this._formatter.format(args, this._index);
+	}
 	return this._formatter ? this._formatter.format(object) : String(object);
+};
+
+AjxMessageFormat.MessageSegment.prototype.getIndex = function() {
+	return this._index;
+};
+AjxMessageFormat.MessageSegment.prototype.getType = function() {
+	return this._type;
+};
+AjxMessageFormat.MessageSegment.prototype.getStyle = function() {
+	return this._style;
+};
+AjxMessageFormat.MessageSegment.prototype.getSegmentFormat = function() {
+	return this._formatter;
 };
 
 //
@@ -1591,17 +1661,28 @@ AjxChoiceFormat.prototype.getFormats = function() {
 	return this._formats;
 };
 
-AjxChoiceFormat.prototype.format = function(number) {
+/**
+ * @param number [number|Array] Specifies the number to format. If called
+ *                              from a message segment, this argument is
+ *                              the array of arguments passed to the message
+ *                              formatter.
+ * @param index  [number]       Optional. If called from a message format,
+ *                              this argument is the index into the array that
+ *                              is passed as the first argument. The value at
+ *                              the index in the array is the number to format.
+ */
+AjxChoiceFormat.prototype.format = function(number, index) {
+	var num = number instanceof Array ? number[index] : number;
 	var formatter;
-	if (isNaN(number) || number < this._limits[0]) {
+	if (isNaN(num) || num < this._limits[0]) {
 		formatter = this._formats[0];
 	}
 	else {
 		for (var i = 0; i < this._limits.length - 1; i++) {
 			var a = this._limits[i];
 			var b = this._limits[i+1];
-			var aGEb = number >= a;
-			var aLTb = this._lessThan[i+1] ? number < b : number <= b;
+			var aGEb = num >= a;
+			var aLTb = this._lessThan[i+1] ? num < b : num <= b;
 			if (aGEb && aLTb) {
 				formatter = this._formats[i];
 				break;
@@ -1612,4 +1693,56 @@ AjxChoiceFormat.prototype.format = function(number) {
 		}
 	}
 	return formatter.format(number);
+};
+
+//
+// AjxListFormat class
+//
+
+/**
+ * This class allows the user to format a list by applying a specific 
+ * format to each object in an array and joining the results. Each formatted
+ * item in the list is separated by a list separator string.
+ * <p>
+ * <strong>Note:</strong>
+ * This format is <em>not</em> one of the standard formatter classes 
+ * available in Java. 
+ *
+ * @param formatter     [AjxFormat] The formatter.
+ * @param separator     [string]    Optional. The list separator string. If 
+ *                                  not specified, <code>AjxMsg.separatorList</code> 
+ *                                  is used.
+ * @param lastSeparator [string]    Optional. The list separator string for
+ *                                  the last item in the list (e.g. " and ").
+ *                                  If not specified, <code>AjxMsg.separatorListLast</code>
+ *                                  is used.
+ */
+function AjxListFormat(formatter, separator, lastSeparator) {
+	AjxFormat.call(this, formatter.toPattern());
+	this._formatter = formatter;
+	this._separator = separator || AjxMsg.listSeparator;
+	this._lastSeparator = lastSeparator || AjxMsg.listSeparatorLast;
+}
+AjxListFormat.prototype = new AjxFormat;
+AjxListFormat.prototype.constructor = AjxListFormat;
+
+// Data
+
+AjxListFormat.prototype._formatter;
+AjxListFormat.prototype._separator;
+AjxListFormat.prototype._lastSeparator;
+
+// Public methods
+
+AjxListFormat.prototype.format = function(array) {
+	array = array instanceof Array ? array : [ array ];
+	var list = [];
+	for (var i = 0; i < array.length; i++) {
+		if (i > 0) {
+			list.push(i < array.length - 1 ? this._separator : this._lastSeparator);
+		}
+		var item = array[i];
+		list.push(this._formatter ? this._formatter.format(item) : String(item));
+	}
+	return list.join("");
 };
