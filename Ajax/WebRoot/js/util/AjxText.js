@@ -1115,9 +1115,17 @@ function AjxMessageFormat(pattern) {
 		
 		// meta char
 		var head = i + 1;
+		var depth = 0;
 		while(++i < pattern.length) {
-			if (pattern.charAt(i) == '}') {
-				break;
+			var c = pattern.charAt(i);
+			if (c == '{') {
+				depth++;
+			}
+			else if (c == '}') {
+				if (depth == 0) {
+					break;
+				}
+				depth--;
 			}		
 		}
 		var tail = i;
@@ -1178,7 +1186,7 @@ AjxMessageFormat.prototype.getFormatsByArgumentIndex = function() {
 
 AjxMessageFormat.MessageSegment = function(format, s) {
 	AjxFormat.Segment.call(this, format, s);
-	var parts = s.split(',');
+	var parts = AjxMessageFormat.MessageSegment._split(s, ',');
 	this._index = Number(parts[0]);
 	this._type = parts[1] || "string";
 	this._style = parts[2];
@@ -1221,7 +1229,7 @@ AjxMessageFormat.MessageSegment.prototype = new AjxFormat.Segment;
 AjxMessageFormat.MessageSegment.prototype.constructor = AjxMessageFormat.MessageSegment;
 
 AjxMessageFormat.MessageSegment.prototype.toString = function() {
-	var a = [ "message: \"", this._s, "\", index: ", this.index ];
+	var a = [ "message: \"", this._s, "\", index: ", this._index ];
 	if (this._isList) a.push(", list: ", this._isList);
 	if (this._type) a.push(", type: ", this._type);
 	if (this._style) a.push(", style: ", this._style);
@@ -1260,6 +1268,33 @@ AjxMessageFormat.MessageSegment.prototype.getStyle = function() {
 AjxMessageFormat.MessageSegment.prototype.getSegmentFormat = function() {
 	return this._formatter;
 };
+
+// Protected static functions
+
+AjxMessageFormat.MessageSegment._split = function(s, delimiter) {
+	var parts = [];
+	var head = 0;
+	var tail;
+	var depth = 0;
+	for (tail = 0; tail < s.length; tail++) {
+		var c = s.charAt(tail);
+		if (c == '{') {
+			depth++;
+		}
+		else if (c == '}') {
+			depth--;
+		}
+		else if (c == delimiter && depth == 0) {
+			parts.push(s.substring(head, tail));
+			head = tail + 1;
+		}
+	}
+	if (tail > head) {
+		parts.push(s.substring(head, tail));
+	}
+	return parts;
+};
+
 
 //
 // AjxNumberFormat class

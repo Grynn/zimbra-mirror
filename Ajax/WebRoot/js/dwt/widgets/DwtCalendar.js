@@ -975,6 +975,12 @@ DwtCalendar.getDateFullFormatter = function() {
 	}
 	return DwtCalendar._dateFullFormatter;
 };
+DwtCalendar.getHourFormatter = function() {
+	if (!DwtCalendar._hourFormatter) {
+		DwtCalendar._hourFormatter = new AjxMessageFormat(AjxMsg.formatCalHour);
+	}
+	return DwtCalendar._hourFormatter;
+};
 DwtCalendar.getDayFormatter = function() {
 	if (!DwtCalendar._dayFormatter) {
 		DwtCalendar._dayFormatter = new AjxDateFormat(AjxMsg.formatCalDay);
