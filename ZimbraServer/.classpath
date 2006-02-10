@@ -28,7 +28,6 @@
 			<attribute value="http://jakarta.apache.org/commons/collections/apidocs-COLLECTIONS_3_1/" name="javadoc_location"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="jars/commons-httpclient-2.0.1.jar"/>
 	<classpathentry sourcepath="/ThirdParty/junit-3.8.1" kind="lib" path="jars/junit-3.8.1.jar">
 		<attributes>
 			<attribute value="http://junit.sourceforge.net/javadoc/" name="javadoc_location"/>
@@ -66,5 +65,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="jars/ical4j-0.9.16-patched.jar"/>
 	<classpathentry sourcepath="/ThirdParty/mysql-connector-java-3.1.12/src" kind="lib" path="jars/mysql-connector-java-3.1.12-bin.jar"/>
+	<classpathentry sourcepath="/ThirdParty/commons-httpclient-3.0/src" kind="lib" path="jars/commons-httpclient-3.0.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
