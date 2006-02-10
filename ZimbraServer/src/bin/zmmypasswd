@@ -52,6 +52,11 @@ EOF
 #
 # Parse command line
 #
+if [ "x$1" = "x-h" -o "x$1" = "x--help" ]; then
+	usage
+	exit 1
+fi
+
 if [ "x$1" = "x--root" ]; then
     password_key="mysql_root_password"
     shift # lose --root option
