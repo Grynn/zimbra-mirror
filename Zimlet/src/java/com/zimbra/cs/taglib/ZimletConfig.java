@@ -92,11 +92,20 @@ public class ZimletConfig extends ZimbraTag {
 
     	com.zimbra.cs.zimlet.ZimletConfig config = ZimletUtil.getZimletConfig(mZimlet);
 
-        if (config != null) {
-        	m.put("global", config.getGlobalConfig());
-        	m.put("site", config.getSiteConfig());
-        	m.put("local", config.getSiteConfig());
+    	Map gc, sc, lc;
+    	
+        if (config == null) {
+        	gc = new HashMap();
+        	sc = new HashMap();
+        	lc = new HashMap();
+        } else {
+        	gc = config.getGlobalConfig();
+        	sc = config.getSiteConfig();
+        	lc = config.getSiteConfig();
         }
+    	m.put("global", gc);
+    	m.put("site", sc);
+    	m.put("local", lc);
     	return "";
     }
     
