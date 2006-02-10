@@ -54,10 +54,10 @@ AjxStringUtil.TRIM_RE = /^\s+|\s+$/g;
 AjxStringUtil.COMPRESS_RE = /\s+/g;
 AjxStringUtil.ELLIPSIS = " ... ";
 
-AjxStringUtil.trim =
+AjxStringUtil.trim = 
 function (str, compress, space) {
 
-	if (!str) return "";
+	if (!str) {return "";}
 
 	var trim_re = AjxStringUtil.TRIM_RE;
 
@@ -69,11 +69,12 @@ function (str, compress, space) {
 		space = " ";
 	}
 	str = str.replace(trim_re, '');
-	if (compress)
+	if (compress) {
 		str = str.replace(compress_re, space);
+	}
 	
 	return str;		
-}
+};
 
 /**
 * Returns the string repeated the given number of times.
@@ -84,16 +85,17 @@ function (str, compress, space) {
 AjxStringUtil.repeat =
 function(str, num) {
 	var text = "";
-	for (var i = 0; i < num; i++)
+	for (var i = 0; i < num; i++) {
 		text += str;
+	}
 	return text;
-}
+};
 
 AjxStringUtil.getUnitsFromSizeString = 
 function(sizeString) {
 	var units="px";
 	if(typeof(sizeString) == "string") {
-		var digitString=Number(parseInt(sizeString)).toString();
+		var digitString=Number(parseInt(sizeString,10)).toString();
 		if(sizeString.length > digitString.length) {
 			units = sizeString.substr(digitString.length, (sizeString.length-digitString.length));
 			if(!(units=="em" || units=="ex" || units=="px" || units=="in" || units=="cm" == units=="mm" || units=="pt" || units=="pc" || units=="%")) {
@@ -102,7 +104,7 @@ function(sizeString) {
 		}
 	}
 	return units;
-}
+};
 
 /**
 * Splits a string, ignoring delimiters that are in quotes or parentheses. Comma is the default split character, but the
@@ -117,15 +119,16 @@ function(sizeString) {
 AjxStringUtil.split =
 function(str, dels) {
 
-	if (!str) return new Array();
-
+	if (!str) {return new Array();}
+	var i = 0;
 	dels = dels ? dels : ',';
-	var isDel = new Object;
+	var isDel = new Object();
 	if (typeof dels == 'string') {
 		isDel[dels] = 1;
 	} else {
-		for (var i = 0; i < dels.length; i++) 
+		for (i = 0; i < dels.length; i++) {
 			isDel[dels[i]] = 1;
+		}
 	}
 
 	var q = false;
@@ -134,7 +137,7 @@ function(str, dels) {
 	var chunk;
 	var chunks = new Array();
 	var j = 0;
-	for (var i = 0; i < str.length; i++) {
+	for (i = 0; i < str.length; i++) {
 		var c = str.charAt(i);
 		if (c == '"') {
 			q = !q;
@@ -154,7 +157,7 @@ function(str, dels) {
 	chunks[j++] = chunk;
 
 	return chunks;
-}
+};
 
 /**
 * Wraps text to the given length and quotes it, breaking on space when possible. Preserves line breaks. At this point, it 
@@ -172,7 +175,7 @@ function(str, dels) {
 AjxStringUtil.wordWrap = 
 function(text, len, pre, eol, breakOkay, compress) {
 
-	if (!text) return "";
+	if (!text) {return "";}
 
 	len = len ? len : 80;
 	eol = eol ? eol : '\n';
@@ -185,8 +188,9 @@ function(text, len, pre, eol, breakOkay, compress) {
 	// preprocess the text: remove leading/trailing space, space at the end of lines, and set up for wrapping paragraphs
 	text = AjxStringUtil.trim(text, false);
 	text = text.replace(/[ \t]+\n/g, '\n'); // optional tidying, could remove this step
-	if (compress)
+	if (compress) {
 		text = text.replace(/\b\n\b/g, ' ');
+	}
 	var textLen = text.length;
 	// Wrap text by dividing it into chunks. We remember the last space we saw, and use it to begin a chunk when the length
 	// limit is reached.
@@ -219,7 +223,7 @@ function(text, len, pre, eol, breakOkay, compress) {
 		chunks[c++] = pre + text.substring(bk, i);
 	}
 	return chunks.join(eol) + eol;
-}
+};
 
 /**
 * Returns true if the character for the given key is considered printable.
@@ -240,7 +244,7 @@ for (var i = 0; i < l; i++) {
 AjxStringUtil.isPrintKey =
 function(keycode) {
 	return AjxStringUtil.IS_PRINT_CODE[keycode];
-}
+};
 
 /**
 * Returns the character for the given key, taking the shift key into consideration.
@@ -252,12 +256,12 @@ function(keycode) {
 
 AjxStringUtil.SHIFT_CHAR = { 48:')', 49:'!', 50:'@', 51:'#', 52:'$', 53:'%', 54:'^', 55:'&', 56:'*', 57:'(',
 							59:':', 186:':', 187:'+', 188:'<', 189:'_', 190:'>', 191:'?', 192:'~',
-							219:'{', 220:'|', 221:'}', 222:'"' }
+							219:'{', 220:'|', 221:'}', 222:'"' };
 
 AjxStringUtil.shiftChar =
 function(keycode, shifted) {
 	return shifted ? AjxStringUtil.SHIFT_CHAR[keycode] || String.fromCharCode(keycode) : String.fromCharCode(keycode);
-}
+};
 
 /**
 * Does a diff between two strings, returning the index of the first differing character.
@@ -268,14 +272,16 @@ function(keycode, shifted) {
 */
 AjxStringUtil.diffPoint =
 function(str1, str2) {
-	if (!(str1 && str2))
+	if (!(str1 && str2)) {
 		return 0;
+	}
 	var len = Math.min(str1.length, str2.length);
 	var i = 0;
-	while (i < len && (str1.charAt(i) == str2.charAt(i)))
+	while (i < len && (str1.charAt(i) == str2.charAt(i))) {
 		i++;
+	}
 	return i;
-}
+};
 
 /**
 * DEPRECATED
@@ -307,7 +313,7 @@ function(str, values) {
 	}
 	return str;
 */
-}
+};
 
 /**
 * URL-encodes a string. Replace + with %2B and space with +, then call escape()
@@ -318,9 +324,9 @@ function(str, values) {
 
 AjxStringUtil.urlEncode =
 function(str) {
-	if (!str) return "";
+	if (!str) {return "";}
 	return escape(str.replace(/[+]/g, '%2B').replace(/ /g, '+'));
-}		
+};
 
 /**
 * HTML-encodes a string.
@@ -332,23 +338,25 @@ AjxStringUtil.ENCODE_MAP = { '>' : '&gt;', '<' : '&lt;', '&' : '&amp;' };
 
 AjxStringUtil.htmlEncode =
 function(str, includeSpaces) {
-	if (!str) return "";
+	if (!str) {return "";}
 
 	if (!AjxEnv.isSafari) {
-		if (includeSpaces) 
+		if (includeSpaces) {
 			return str.replace(/[<>&]/g, function(htmlChar) { return AjxStringUtil.ENCODE_MAP[htmlChar]; }).replace(/  /g, ' &nbsp;');
-		else
+		} else {
 			return str.replace(/[<>&]/g, function(htmlChar) { return AjxStringUtil.ENCODE_MAP[htmlChar]; });
+		}
 	} else {
-		if (includeSpaces) 
+		if (includeSpaces) {
 			return str.replace(/[&]/g, '&amp;').replace(/  /g, ' &nbsp;').replace(/[<]/g, '&lt;').replace(/[>]/g, '&gt;');
-		else
+		} else {
 			return str.replace(/[&]/g, '&amp;').replace(/[<]/g, '&lt;').replace(/[>]/g, '&gt;');
+		}
 	}
-}		
+};
 
 AjxStringUtil.convertToHtml = function(str) {
-	if (!str) return "";
+	if (!str) {return "";}
 	str = str
 		.replace(/&/mg, "&amp;")
 		.replace(/  /mg, " &nbsp;")
@@ -370,14 +378,14 @@ AjxStringUtil.SPACE_ENCODE_MAP = { ' ' : '&nbsp;', '>' : '&gt;', '<' : '&lt;', '
 
 AjxStringUtil.htmlEncodeSpace =
 function(str) {
-	if (!str) return "";
+	if (!str) {return "";}
 
 	if (!AjxEnv.isSafari) {
 		return str.replace(/[ <>&\n]/g, function(htmlChar) { return AjxStringUtil.SPACE_ENCODE_MAP[htmlChar]; });
 	} else {
 		return str.replace(/[&]/g, '&amp;').replace(/ /g, '&nbsp;').replace(/[<]/g, '&lt;').replace(/[>]/g, '&gt;');
 	}
-}
+};
 
 // this function makes sure a leading space is preservered, takes care of tabs, 
 // then finally takes replaces newlines with <br>'s
@@ -385,26 +393,27 @@ AjxStringUtil.nl2br =
 function(str) {
 	if (!str) return "";
 	return str.replace(/^ /mg, "&nbsp;").replace(/\t/g, "<pre style='display:inline;'>\t</pre>").replace(/\n/g, "<br>");
-}
+};
 
 AjxStringUtil.xmlEncode = 
 function(str) {
 	return str ? str.replace(/&/g,"&amp;").replace(/</g,"&lt;") : "";
-}
+};
+
 AjxStringUtil.xmlDecode =
 function(str) {
 	return str ? str.replace(/&amp;/g,"&").replace(/&lt;/g,"<") : "";
-}
+};
 
 AjxStringUtil.xmlAttrEncode =
 function(str) {
 	return str ? str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/\x22/g, '&quot;').replace(/\x27/g,"&apos;") : "";
-}
+};
 
 AjxStringUtil.xmlAttrDecode =
 function(str) {
 	return str ? str.replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&quot;/g, '"').replace(/&apos;/g,"'") : "";
-}
+};
 
 AjxStringUtil.regExEscape =
 function(str) {
@@ -423,7 +432,7 @@ function() {
 		document.body.appendChild(AjxStringUtil_calcDIV);
 	}
 	return AjxStringUtil_calcDIV;
-}
+};
 
 /**
  * Clips a string at "pixelWidth" using using "className" on hidden 'AjxStringUtil._calcDIV'.
@@ -450,7 +459,7 @@ function(origString, pixelWidth, className) {
 		if (calcDIV.offsetWidth <= pixelWidth) return newString + AjxStringUtil.ELLIPSIS;
 	}
 	return origString;
-}
+};
 
 /**
  * Forces a string to wrap at "pixelWidth" using "className" on hidden 'AjxStringUtil._calcDIV'.
@@ -515,7 +524,7 @@ function(origString, pixelWidth, className) {
 	}
 	newString += newLine;
 	return newString;
-}
+};
 
 // Regexes for finding non-quoted content
 AjxStringUtil.MSG_SEP_RE = new RegExp("^\\s*--+\\s*(" + "Original Message" + "|" + "Forwarded Message" + ")\\s*--+", "i");
@@ -581,7 +590,7 @@ function(text, eol) {
 		chunks.push(AjxStringUtil._trimBlankLines(lines.slice(start, i).join(eol), eol) + eol);
 
 	return chunks;
-}
+};
 
 // Starting at a given line, returns the number of lines that should be skipped because
 // they are quoted (or signature) content.
@@ -617,7 +626,7 @@ function(lines, i) {
 			skip = len - i;
 	}
 	return skip;
-}
+};
 
 // Returns the index of the next non-blank line
 AjxStringUtil._nextNonBlankLineIndex =
@@ -625,7 +634,7 @@ function(lines, i) {
 	while (i < lines.length && AjxStringUtil.BLANK_RE.test(lines[i]))
 		i++;
 	return ((i < lines.length) ? i : -1);
-}
+};
 
 // Removes blank lines from the beginning and end of text
 AjxStringUtil._trimBlankLines =
@@ -643,7 +652,7 @@ function(text, eol) {
 		text = lines.slice(i, j).join(eol) + eol;
 
 	return text;
-}
+};
 
 /**
 * Converts a HTML document represented by a DOM tree  to text
@@ -667,7 +676,7 @@ function(domRoot) {
 	this._traverse(domRoot, text, idx, AjxStringUtil._NO_LIST, 0, 0, ctxt);
 	var textStr = text.join("");
 	return textStr;
-}
+};
 
 AjxStringUtil._traverse =
 function(el, text, idx, listType, listLevel, bulletNum, ctxt) {
@@ -736,5 +745,4 @@ function(el, text, idx, listType, listLevel, bulletNum, ctxt) {
 	
 	ctxt.lastNode = nodeName;
 	return idx;	
-}
-
+};
