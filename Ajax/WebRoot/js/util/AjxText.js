@@ -309,8 +309,10 @@ AjxFormat.Segment._parseLiterals = function(o, f, adjust, literals, s, index) {
  * @param index     [number]   The index within the string to start parsing.
  * @param fixedlen  [number]   If specified, specifies the required number
  *                             of digits to be parsed.
+ * @param radix     [number]   Optional. Specifies the radix of the parse
+ *                             string. Defaults to 10 if not specified.
  */
-AjxFormat.Segment._parseInt = function(o, f, adjust, s, index, fixedlen) {
+AjxFormat.Segment._parseInt = function(o, f, adjust, s, index, fixedlen, radix) {
 	var len = fixedlen || s.length - index;
 	var head = index;
 	for (var i = 0; i < len; i++) {
@@ -326,7 +328,7 @@ AjxFormat.Segment._parseInt = function(o, f, adjust, s, index, fixedlen) {
 	if (fixedlen && tail - head != fixedlen) {
 		throw new AjxFormat.ParsingException(this._parent, this, "number too short"); // I18n
 	}
-	var value = parseInt(s.substring(head, tail).replace(/^0+(\d)/,"$1"));
+	var value = parseInt(s.substring(head, tail), radix || 10);
 	if (f) {
 		var target = o || window;
 		if (typeof f == "function") {
