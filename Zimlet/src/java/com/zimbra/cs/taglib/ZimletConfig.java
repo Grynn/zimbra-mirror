@@ -86,14 +86,17 @@ public class ZimletConfig extends ZimbraTag {
         if (mVar == null) {
             throw ZimbraTagException.MISSING_ATTR("var");
         }
-        com.zimbra.cs.zimlet.ZimletConfig config = ZimletUtil.getZimletConfig(mZimlet);
-
         Map<String,Map> m = new HashMap<String,Map>();
-    	m.put("global", config.getGlobalConfig());
-    	m.put("site", config.getSiteConfig());
-    	m.put("local", config.getSiteConfig());
     	HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
     	req.setAttribute(mVar, m);
+
+    	com.zimbra.cs.zimlet.ZimletConfig config = ZimletUtil.getZimletConfig(mZimlet);
+
+        if (config != null) {
+        	m.put("global", config.getGlobalConfig());
+        	m.put("site", config.getSiteConfig());
+        	m.put("local", config.getSiteConfig());
+        }
     	return "";
     }
     
@@ -104,6 +107,9 @@ public class ZimletConfig extends ZimbraTag {
         com.zimbra.cs.zimlet.ZimletConfig config = ZimletUtil.getZimletConfig(mZimlet);
         String val;
 
+        if (config == null) {
+        	return "zimlet " + mName + "not found";
+        }
         // if scope is not defined, search both global and site config.
        	val = config.getSiteConf(mName);
         if (mScope == null && val == null ||
