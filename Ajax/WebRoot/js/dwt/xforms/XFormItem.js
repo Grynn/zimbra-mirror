@@ -970,21 +970,21 @@ XFormItem.prototype.updateValueInHTMLSelect = function (newValue, element, selec
 	return XFormItem.updateValueInHTMLSelect(newValue, element, selectionIsOpen);
 }
 
-XFormItem.prototype.getChoicesHTML = function(indent) {
+XFormItem.prototype.getChoicesHTML = function() {
 	var choices = this.getNormalizedChoices();
 	if (choices == null) return "";	//throw an error?
 	var html = new AjxBuffer();
-	if (indent == null) indent = "";
+	
 
-	this.outputChoicesHTMLStart(html, indent);
+	this.outputChoicesHTMLStart(html);
 	var values = choices.values;
 	var labels = choices.labels;
 
 	var choiceCssClass = this.getChoiceCssClass();
 	for (var i = 0; i < values.length; i++) {
-		html.append(indent, this.getChoiceHTML(i, values[i], labels[i], choiceCssClass, indent));
+		html.append("", this.getChoiceHTML(i, values[i], labels[i], choiceCssClass, ""));
 	}
-	this.outputChoicesHTMLEnd(html, indent);
+	this.outputChoicesHTMLEnd(html);
 	return html.toString();
 }
 
@@ -1353,6 +1353,25 @@ XFormItem.prototype.getChoiceLabel = function (value) {
 	return value;
 }
 
+// return the "label" in the choices array for this item
+//	(allows us to do lookup of displayed values easily)
+XFormItem.prototype.getChoiceValue = function (label) {
+	function labelComparator (a, b) {
+			return String(a).toLowerCase() < String(b).toLowerCase() ? -1 : (String(a).toLowerCase() > String(b).toLowerCase() ? 1 : 0);
+	 };
+	var choices = this.getNormalizedChoices();
+	if (choices == null) return value;
+	
+	// choices will look like:  {values:[v1, v2, v3...], labels:[l1, l2, l3...]}
+	var labels = choices.labels;
+	var vec = AjxVector.fromArray(labels);
+	vec.sort(labelComparator);
+	var ix = vec.binarySearch(label,labelComparator);
+	if(ix>=0) 
+		return choices.values[ix];
+	else 
+		return choices.values[0];
+}
 
 // return the number of the choice for a particular value
 //	returns -1 if not found
@@ -2196,7 +2215,7 @@ Select1_XFormItem.prototype.outputHTML = function (html, updateScript, indent, c
 			(this.getMultiple() ? "multiple " : ""), 
 			this.getChangeHandlerHTML(), this.getFocusHandlerHTML(),
 		">\r",
-			this.getChoicesHTML(indent),
+			this.getChoicesHTML(),
 		"\r", indent, "</select>"
 		);
 	this.cleanChoiceDisplay();

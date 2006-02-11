@@ -43,6 +43,7 @@ OSelect1_XFormItem.prototype.cssClass = "oselect";
 OSelect1_XFormItem.prototype.multiple = false;
 OSelect1_XFormItem.prototype.writeElementDiv = false;
 OSelect1_XFormItem.prototype.width = "auto";
+OSelect1_XFormItem.prototype.editable = true;
 
 //TODO: get showing check working for the normal SELECT, requires:
 //		* separate notion of hilited row (for mouseover) and selected row(s)
@@ -67,7 +68,11 @@ OSelect1_XFormItem.prototype.updateElement = function (newValue) {
 	if (newValue == null) newValue = "";
 	
 	var el = this.getDisplayElement();
-	if (el) el.innerHTML = newValue;
+	/*if (el) el.innerHTML = newValue;*/
+	if (el) {
+		el.value = newValue;
+		el.readonly = !this.editable;
+	}
 }
 
 
@@ -301,6 +306,10 @@ OSelect1_XFormItem.prototype.onChoiceDoubleClick = function (itemNum, event) {
 	this.choiceSelected(itemNum, true, event);
 }
 
+OSelect1_XFormItem.prototype.onValueTyped = function(label, event) {
+	var value = this.getChoiceValue(label);
+	this.setValue(value, false, event);
+}
 
 OSelect1_XFormItem.prototype.choiceSelected = function (itemNum, clearOldValues, event) {
 	this.onChoiceOut();
@@ -402,10 +411,7 @@ OSelect1_XFormItem.prototype.getChoiceElements = function (itemNum) {
 }
 
 
-
-
-
-OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput, updateScript, indent) {
+/*OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput, updateScript, indent) {
 	var id = this.getId();
 	if (this.getWidth() == "auto") {
 		var element = this.getElement("temp");
@@ -426,6 +432,37 @@ OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput, updateScript, in
 
 			"  <table ", this.getTableCssString(), ">\r", indent,
 				"  <tr><td width=100%><div id=", id, "_display class=", this.getDisplayCssClass(), ">VALUE</div></td>\r", indent,
+					"    <td>", this.getArrowButtonHTML(),"</td>\r", indent,
+				"  </tr>\r", indent,
+			"  </table>\r", indent,
+		"</div>\r"
+	);
+}*/
+
+OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput, updateScript, indent) {
+	var id = this.getId();
+	var ref = this.getFormGlobalRef() + ".getItemById('"+ id + "')";	
+	if (this.getWidth() == "auto") {
+		var element = this.getElement("temp");
+		var element = this.createElement("temp", null, "div", "MENU CONTENTS");
+		element.style.left = -1000;
+		element.style.top = -1000;
+		element.className = this.getMenuCssClass();
+		element.innerHTML = this.getChoicesHTML();
+		this._width = element.offsetWidth+20;
+		element.innerHTML = "";
+	}
+
+	HTMLoutput.append(indent,
+		"<div id=", id, this.getCssString(),
+			" onclick=\"", this.getFormGlobalRef(), ".getItemById('",this.getId(),"').showMenu(this, event)\"",
+			" onselectstart=\"return false\"",
+			">\r", indent,
+
+			"  <table ", this.getTableCssString(), ">\r", indent,
+				"  <tr><td width=100%><input type=text id=", id, "_display class=", this.getDisplayCssClass(), " value='VALUE' ", 
+				" onchange=\"",ref, ".onValueTyped(this.value, event||window.event)\"",
+				"></td>\r", indent,
 					"    <td>", this.getArrowButtonHTML(),"</td>\r", indent,
 				"  </tr>\r", indent,
 			"  </table>\r", indent,
@@ -475,21 +512,7 @@ OSelect1_XFormItem.prototype.outputChoicesHTMLEnd = function(html, indent) {
 }
 
 OSelect1_XFormItem.prototype.getChoiceHTML = function (itemNum, value, label, cssClass, indent) {
-	/*var ref = this.getFormGlobalRef() + ".getItemById('"+ this.getId()+ "')";
-	var checkTdHtml = "";
-	if (this.showCheck == true) {
-		checkTdHtml = "<td width=10 class=" + cssClass + "_check></td>";
-	}
-	return AjxBuffer.concat(indent,
-		"<tr>", checkTdHtml, "<td width='*' class=", cssClass, 
-			" onmouseover=\"",ref, ".onChoiceOver(", itemNum,", event||window.event)\"",
-			" onmouseout=\"",ref, ".onChoiceOut(", itemNum,", event||window.event)\"",
-			" onclick=\"",ref, ".onChoiceClick(", itemNum,", event||window.event)\"",
-			" itemnum = '", itemNum, "'",
-		">",
-				label,
-		"</td></tr>\r"
-	);*/
+
 	//try DIVs
 	
 	var ref = this.getFormGlobalRef() + ".getItemById('"+ this.getId()+ "')";

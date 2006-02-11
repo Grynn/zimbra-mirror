@@ -991,9 +991,9 @@ function(val) {
 /* Translation of Account status values into screen names */
 ZaAccount._ACCOUNT_STATUS = new Object ();
 ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_ACTIVE] = ZaMsg.accountStatus_active;
-ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_MAINTENANCE] = ZaMsg.accountStatus_maintenance;
-ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_LOCKED] = ZaMsg.accountStatus_locked;
 ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_CLOSED] = ZaMsg.accountStatus_closed;
+ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_LOCKED] = ZaMsg.accountStatus_locked;
+ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_MAINTENANCE] = ZaMsg.accountStatus_maintenance;
 
 ZaAccount.initMethod = function (app) {
 	this.attrs = new Object();
