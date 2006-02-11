@@ -303,6 +303,12 @@ objectIdentifier zimbraFeatureViewInHtmlEnabled ZimbraAttrType:312
 objectIdentifier zimbraAccountCalendarUserType ZimbraAttrType:313
 objectIdentifier zimbraCalResType ZimbraAttrType:314
 objectIdentifier zimbraCalResAutoAcceptDecline ZimbraAttrType:315
+objectIdentifier zimbraNotifyServerEnabled ZimbraAttrType:316
+objectIdentifier zimbraNotifyBindAddress ZimbraAttrType:317
+objectIdentifier zimbraNotifyBindPort ZimbraAttrType:318
+objectIdentifier zimbraNotifySSLServerEnabled ZimbraAttrType:319
+objectIdentifier zimbraNotifySSLBindAddress ZimbraAttrType:320
+objectIdentifier zimbraNotifySSLBindPort ZimbraAttrType:321
 
 #################################################################
 # object class OIDs
@@ -1388,6 +1394,49 @@ attributetype ( zimbraNewMailNotificationBody
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{10000} )
+
+attributetype ( zimbraNotifyBindAddress
+	NAME 'zimbraNotifyBindAddress'
+	DESC 'Network interface on which notification server should listen; if empty, binds to all interfaces.'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{128} )
+
+attributetype ( zimbraNotifyBindPort
+	NAME 'zimbraNotifyBindPort'
+	DESC 'Port number on which notification server should listen.'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )
+		
+attributetype ( zimbraNotifyServerEnabled
+	NAME 'zimbraNotifyServerEnabled'
+	DESC 'Whether notification server should be enabled.'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( zimbraNotifySSLBindAddress
+	NAME 'zimbraNotifySSLBindAddress'
+	DESC 'Network interface on which SSL notification server should listen; if empty, binds to all interfaces'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{128} )
+		
+attributetype ( zimbraNotifySSLBindPort
+	NAME 'zimbraNotifySSLBindPort'
+	DESC 'Port number on which notification server should listen.'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )
+		
+attributetype ( zimbraNotifySSLServerEnabled
+	NAME 'zimbraNotifySSLServerEnabled'
+	DESC 'Whether SSL notification server should be enabled.'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
 #
 # number of unique passwords a user must have before being allowed to
 # re-use an old one. A value of 0 means no password history.
@@ -2672,6 +2721,12 @@ objectclass ( zimbraGlobalConfig
 		zimbraMtaRelayHost $
 		zimbraMtaRestriction $
 		zimbraMtaTlsAuthOnly $
+		zimbraNotifyServerEnabled $
+		zimbraNotifyBindAddress $
+		zimbraNotifyBindPort $
+		zimbraNotifySSLServerEnabled $
+		zimbraNotifySSLBindAddress $
+		zimbraNotifySSLBindPort $
 		zimbraPop3CleartextLoginEnabled $
 		zimbraPop3NumThreads $
 		zimbraPop3BindPort $
@@ -2814,6 +2869,12 @@ objectclass ( zimbraServer
 		zimbraMtaMyNetworks $		
 		zimbraMtaRelayHost $
 		zimbraMtaTlsAuthOnly $
+		zimbraNotifyServerEnabled $
+		zimbraNotifyBindAddress $
+		zimbraNotifyBindPort $
+		zimbraNotifySSLServerEnabled $
+		zimbraNotifySSLBindAddress $
+		zimbraNotifySSLBindPort $
 		zimbraPop3CleartextLoginEnabled $
 		zimbraPop3AdvertisedName $
 		zimbraPop3BindAddress $

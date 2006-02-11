@@ -310,6 +310,18 @@
 
 <attr name="zimbraNotes" type="string"/>
 
+<attr name="zimbraNotifyServerEnabled" type="boolean"/>
+
+<attr name="zimbraNotifyBindAddress" type="string" max="128"/>
+
+<attr name="zimbraNotifyBindPort" type="integer"/>
+
+<attr name="zimbraNotifySSLServerEnabled" type="boolean"/>
+
+<attr name="zimbraNotifySSLBindAddress" type="string" max="128"/>
+
+<attr name="zimbraNotifySSLBindPort" type="integer"/>
+
 <attr name="zimbraObjectHandlerClass" type="string"/>
 
 <attr name="zimbraObjectHandlerConfig" type="string"/>
