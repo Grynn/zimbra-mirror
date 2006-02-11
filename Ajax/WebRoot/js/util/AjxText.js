@@ -1632,7 +1632,7 @@ function AjxChoiceFormat(pattern) {
 		this._limits = new Array(choices.length);
 		this._lessThan = new Array(choices.length);
 		this._formats = new Array(choices.length);
-		var regex = /^([^#<\u2264]+)([#<\u2264])(.*)$/;
+		var regex = new RegExp("^([^#<\u2264]+)([#<\u2264])(.*)$");
 		for (var i = 0; i < choices.length; i++) {
 			var choice = choices[i];
 			var results = regex.exec(choice);
