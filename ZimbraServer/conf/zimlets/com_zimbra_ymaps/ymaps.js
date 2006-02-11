@@ -31,20 +31,19 @@
 function Com_Zimbra_YMaps() {
 }
 
+Com_Zimbra_YMaps.prototype = new ZmZimletBase();
+Com_Zimbra_YMaps.prototype.constructor = Com_Zimbra_YMaps;
+
 Com_Zimbra_YMaps.prototype.init =
 function() {
 	(new Image()).src = this.getResource('blank_pixel.gif');
 };
-
-Com_Zimbra_YMaps.prototype = new ZmZimletBase();
-Com_Zimbra_YMaps.prototype.constructor = Com_Zimbra_YMaps;
 
 // Y! Maps Webservice URL
 Com_Zimbra_YMaps.URL = "http://api.local.yahoo.com/MapsService/V1/mapImage?appid=ZimbraMail&zoom=4&image_height=245&image_width=345&location=";
 
 // Map image URI cache
 Com_Zimbra_YMaps.CACHE = new Array();
-
 
 // Panel Zimlet Methods
 // Called by the Zimbra framework when the Ymaps panel item was double clicked

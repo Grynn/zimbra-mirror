@@ -31,14 +31,14 @@
 function Com_Zimbra_Wikipedia() {
 }
 
+Com_Zimbra_Wikipedia.prototype = new ZmZimletBase();
+Com_Zimbra_Wikipedia.prototype.constructor = Com_Zimbra_Wikipedia;
+
 Com_Zimbra_Wikipedia.prototype.init =
 function() {
 	// Pre-load placeholder image
 	(new Image()).src = this.getResource('blank_pixel.gif');
 };
-
-Com_Zimbra_Wikipedia.prototype = new ZmZimletBase();
-Com_Zimbra_Wikipedia.prototype.constructor = Com_Zimbra_Wikipedia;
 
 // Called by the Zimbra framework when the panel item was double clicked
 Com_Zimbra_Wikipedia.prototype.doubleClicked = function() {

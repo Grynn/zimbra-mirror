@@ -26,14 +26,14 @@
 function Com_Zimbra_Url() {
 }
 
+Com_Zimbra_Url.prototype = new ZmZimletBase();
+Com_Zimbra_Url.prototype.constructor = Com_Zimbra_Url;
+
 Com_Zimbra_Url.prototype.init =
 function() {
 	// Pre-load placeholder image
 	(new Image()).src = this.getResource('blank_pixel.gif');
 };
-
-Com_Zimbra_Url.prototype = new ZmZimletBase();
-Com_Zimbra_Url.prototype.constructor = Com_Zimbra_Url;
 
 // Const
 Com_Zimbra_Url.THUMB_URL = "http://pthumbnails.alexa.com/image_server.cgi?id=" + document.domain + "&url=";

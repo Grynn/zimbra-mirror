@@ -11,9 +11,8 @@
 		</matchOn>
 		<onClick>
 			<canvas type="window" />
-			<actionUrl target="http://maps.yahoo.com/beta/index.php" paramStart="#">
-				<param name="maxp">search</param>
-				<param name="q1">${src.objectContent}</param>
+			<actionUrl target="http://maps.yahoo.com/maps_result">
+				<param name="addr">${src.objectContent}</param>
 			</actionUrl>
 		</onClick>
 	</contentObject>
@@ -25,7 +24,6 @@
 			<actionUrl target="http://maps.yahoo.com/maps_result">
 				<param name="addr">${obj.workStreet}</param>
 				<param name="csz">${obj.workPostalCode}</param>
-				<param name="country">us</param>
 			</actionUrl>
 		</dragSource>
 		<contextMenu>
