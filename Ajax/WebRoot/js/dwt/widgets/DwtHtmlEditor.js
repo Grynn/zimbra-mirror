@@ -24,7 +24,7 @@
 */
 
 
-/** 
+/**
  * Html Editor
  *
  * @author Ross Dargahi
@@ -34,7 +34,7 @@ function DwtHtmlEditor(parent, className, posStyle, content, mode, blankIframeSr
 	this.setBlankIframeSrc(blankIframeSrc);
 	className = className || "DwtHtmlEditor";
 	DwtComposite.call(this, parent, className, posStyle);
-	
+
 	this._mode = mode == DwtHtmlEditor.HTML && this.isHtmlEditingSupported()
 		? mode : DwtHtmlEditor.TEXT;
 
@@ -43,7 +43,7 @@ function DwtHtmlEditor(parent, className, posStyle, content, mode, blankIframeSr
 	var initialHtml = "<html><head>" + this._getInitialStyle(false) + "</head><body></body></html>";
 	if (!content)
 		content = this._mode == DwtHtmlEditor.HTML ? initialHtml : "";
-	
+
 	this._pendingContent = content;
 	this._htmlModeInited = false;
 
@@ -145,16 +145,16 @@ DwtHtmlEditor._INITDELAY = 50;
 
 
 DwtHtmlEditor._BLOCK_ELEMENTS = {
-	address:1, body:1, div:1, dl:1, fieldset:1, form:1, h1:1, h2:1, h3:1, h4:1, h5:1, h6:1, 
-	iframe:1, li:1, ol:1, p:1, pre:1, quote:1, table:1, tbody:1, td:1, textarea:1, tfoot: 1, 
+	address:1, body:1, div:1, dl:1, fieldset:1, form:1, h1:1, h2:1, h3:1, h4:1, h5:1, h6:1,
+	iframe:1, li:1, ol:1, p:1, pre:1, quote:1, table:1, tbody:1, td:1, textarea:1, tfoot: 1,
 	thead:1, tr:1, ul:1
 };
 
 DwtHtmlEditor._KEY2CMDS = {
-	"b":DwtHtmlEditor.BOLD_STYLE, "i":DwtHtmlEditor.ITALIC_STYLE, "u":DwtHtmlEditor.UNDERLINE_STYLE, 
-	"s":DwtHtmlEditor.STRIKETHRU_STYLE, "l":DwtHtmlEditor.JUSTIFY_LEFT, "e":DwtHtmlEditor.JUSTIFY_CENTER, 
+	"b":DwtHtmlEditor.BOLD_STYLE, "i":DwtHtmlEditor.ITALIC_STYLE, "u":DwtHtmlEditor.UNDERLINE_STYLE,
+	"s":DwtHtmlEditor.STRIKETHRU_STYLE, "l":DwtHtmlEditor.JUSTIFY_LEFT, "e":DwtHtmlEditor.JUSTIFY_CENTER,
 	"r":DwtHtmlEditor.JUSTIFY_RIGHT, "j":DwtHtmlEditor.JUSTIFY_FULL, "1":DwtHtmlEditor._STYLES[1],
-	"2":DwtHtmlEditor._STYLES[1], "3":DwtHtmlEditor._STYLES[3], "4":DwtHtmlEditor._STYLES[4], 
+	"2":DwtHtmlEditor._STYLES[1], "3":DwtHtmlEditor._STYLES[3], "4":DwtHtmlEditor._STYLES[4],
 	"5":DwtHtmlEditor._STYLES[5], "6":DwtHtmlEditor._STYLES[6], "0":"DUMP"
 };
 
@@ -175,13 +175,13 @@ function() {
 	}
 }
 
-DwtHtmlEditor.prototype.addStateChangeListener = 
+DwtHtmlEditor.prototype.addStateChangeListener =
 function(listener) {
 	this.addListener(DwtEvent.STATE_CHANGE, listener);
 }
 
-DwtHtmlEditor.prototype.removeStateChangeListener = 
-function(listener) { 
+DwtHtmlEditor.prototype.removeStateChangeListener =
+function(listener) {
 	this.removeListener(DwtEvent.STATE_CHANGE, listener);
 }
 
@@ -198,7 +198,7 @@ function(enable) {
 		document.getElementById(this._iframeId).disabled = !enable;
 }
 
-DwtHtmlEditor.prototype.setBlankIframeSrc = 
+DwtHtmlEditor.prototype.setBlankIframeSrc =
 function(src) {
 	this._blankIframeSrc = src;
 };
@@ -246,15 +246,15 @@ function(element) {
 	this._execCommand(element);
 }
 
-/** Inserts a table at the current cursor position 
- * 
+/** Inserts a table at the current cursor position
+ *
  * @param rows [Int] - The number of rows in the table
  * @param cols [Int] - The number of columns in the table
  * @param width [String] - The width of the table. The units should be part of this value e.g. "100%" or "10px"
  * @param cellSpacing [Int] - Cell spacing in the table
  * @param cellPadding [Int] - Cell padding in the table
  * @param alignment [String] - The alignment of the table. This is one of valid alignment values for the HTML
- *    <table> element 
+ *    <table> element
  */
 DwtHtmlEditor.prototype.insertTable =
 function(rows, cols, width, cellSpacing, cellPadding, alignment) {
@@ -266,26 +266,26 @@ DBG.println("CellPadding: " + cellPadding);
 DBG.println("alignment: " + alignment);
 	if (this._mode != DwtHtmlEditor.HTML)
 		return;
-    
+
 	var doc = this._getIframeDoc();
 	var table = doc.createElement("table");
-  
+
 	if (width) table.width = width;
 	if (alignment) table.align = alignment.toLowerCase();
-	if (cellSpacing) table.cellSpacing = cellSpacing; 
+	if (cellSpacing) table.cellSpacing = cellSpacing;
 	if (cellPadding) table.cellPadding = cellPadding;
-	
+
 	table.border = 1;
-	table.style.border = "1px solid #000";   
+	table.style.border = "1px solid #000";
     table.rules = "all";
 	table.style.borderCollapse = "collapse";
-  
+
   	var tdWidth = "";
   	if (1)
   		tdWidth = Math.floor(100 / cols) + "%";
 
 	var tbody = doc.createElement("tbody");
-	table.appendChild(tbody); 		
+	table.appendChild(tbody);
 	for (var i = 0; i < rows; i++) {
 		var tr = doc.createElement("tr");
 		tbody.appendChild(tr);
@@ -298,7 +298,7 @@ DBG.println("alignment: " + alignment);
 			tr.appendChild(td);
     	}
 	}
-  
+
 	this._insertNodeAtSelection(table);
 }
 
@@ -311,7 +311,13 @@ function(node) {
 		range.insertNode(node);
 		range.selectNodeContents(node);
 	} else {
-		this._getRange().pasteHTML(node.outerHTML);
+		var sel = this._getRange();
+		var range = sel.createRange();
+		var id = "FOO-" + Dwt.getNextId();
+		range.pasteHTML("<span id='" + id + "'></span>");
+ 		var el = this._getIframeDoc().getElementById(id);
+ 		el.parentNode.insertBefore(node, el);
+ 		el.parentNode.removeChild(el);
 	}
 }
 
@@ -327,7 +333,7 @@ DwtHtmlEditor.prototype.setMode =
 function(mode, convert) {
 	if (mode == this._mode || (mode != DwtHtmlEditor.HTML && mode != DwtHtmlEditor.TEXT))
 		return;
-	
+
 	this._mode = mode;
 	if (mode == DwtHtmlEditor.HTML) {
 		var textArea = document.getElementById(this._textAreaId);
@@ -347,7 +353,7 @@ function(mode, convert) {
 		var textArea = this._textAreaId != null
 			? document.getElementById(this._textAreaId)
 			: this._initTextMode(true);
-		
+
 		// If we have pending content, then an iFrame is being created. This can happen
 		// if the widget is instantiated and immediate setMode is called w/o getting out
 		// to the event loop where _finishHtmlMode is triggered
@@ -355,7 +361,7 @@ function(mode, convert) {
 		textArea.value = (convert) ? this._convertHtml2Text() : this._getIframeDoc().innerHTML;;
 
 		Dwt.setVisible(document.getElementById(this._iFrameId), false);
-		Dwt.setVisible(textArea, true);	
+		Dwt.setVisible(textArea, true);
 	}
 }
 
@@ -363,15 +369,15 @@ DwtHtmlEditor.prototype.setTextDirection =
 function(direction) {
 	if (this._mode != DwtHtmlEditor.HTML)
 		return;
-		
+
 	var dir = (direction == DwtHtmlEditor.DIRECTION_R2L) ? "rtl" : "ltr";
 	var el = this._getParentElement();
-	
+
 	DBG.println("EL: " + el.tagName.toLowerCase() + " - " + DwtHtmlEditor._BLOCK_ELEMENTS[el.tagName.toLowerCase()]);
 
 	while (el && !DwtHtmlEditor._BLOCK_ELEMENTS[el.tagName.toLowerCase()])
 		el = el.parentNode;
-		
+
 	if (el)
 		el.style.direction = el.style.direction == dir ? "" : dir;
 }
@@ -383,25 +389,25 @@ function(family, style, size, color, hiliteColor) {
 		switch (family) {
 			case DwtHtmlEditor.ARIAL:
 				this._execCommand(DwtHtmlEditor._FONT_NAME, DwtHtmlEditor._ARIAL);
-				break;			
+				break;
 			case DwtHtmlEditor.COURIER:
 				this._execCommand(DwtHtmlEditor._FONT_NAME, DwtHtmlEditor._COURIER);
-				break;			
+				break;
 			case DwtHtmlEditor.TIMES:
 				this._execCommand(DwtHtmlEditor._FONT_NAME, DwtHtmlEditor._TIMES);
-				break;	
+				break;
 			case DwtHtmlEditor.VERDANA:
 				this._execCommand(DwtHtmlEditor._FONT_NAME, DwtHtmlEditor._VERDANA);
-				break;	
+				break;
 		}
 	}
-	
+
 	if (style)
 		this._execCommand(style);
-		
+
 	if (size && size > 0 && size < 8)
 		this._execCommand(DwtHtmlEditor._FONT_SIZE, size);
-		
+
 	if (color)
 		this._execCommand(DwtHtmlEditor._FONT_COLOR, color);
 
@@ -428,7 +434,7 @@ DwtHtmlEditor.prototype.setSize =
 function(width, height) {
 	DwtComposite.prototype.setSize.call(this, width, height);
 	var htmlEl = this.getHtmlElement();
-	
+
 	if (this._iFrameId != null) {
 		var iFrame = document.getElementById(this._iFrameId);
 		iFrame.width = htmlEl.style.width;
@@ -440,14 +446,14 @@ function(width, height) {
 	}
 }
 
-DwtHtmlEditor.prototype.getIframe = 
+DwtHtmlEditor.prototype.getIframe =
 function() {
 	return document.getElementById(this._iFrameId);
 }
 
-DwtHtmlEditor.prototype._initialize = 
+DwtHtmlEditor.prototype._initialize =
 function() {
-	if (this._mode == DwtHtmlEditor.HTML) 
+	if (this._mode == DwtHtmlEditor.HTML)
 		this._initHtmlMode(this._pendingContent);
 	else
 		this._initTextMode();
@@ -461,7 +467,7 @@ function(ignorePendingContent) {
 	textArea.className = "DwtHtmlEditorTextArea";
 	textArea.id = this._textAreaId;
 	htmlEl.appendChild(textArea);
-	
+
 	// We will ignore pending content if we are called from setMode. See setMode for
 	// documentation
 	if (!ignorePendingContent) {
@@ -486,17 +492,17 @@ function(content) {
 	// IE can sometimes race ahead and execute script before the underlying component is created
 	var timedAction = new AjxTimedAction(this, this._finishHtmlModeInit);
 	AjxTimedAction.scheduleAction(timedAction, DwtHtmlEditor._INITDELAY);
-	
+
 	return iFrame;
 }
 
 /**
-* @param useDiv 	Set this to true if prepending to the message body. False is 
-* 					used to set the default settings for compose editor so as 
-* 					you type the fonts appear as they would if the message we 
+* @param useDiv 	Set this to true if prepending to the message body. False is
+* 					used to set the default settings for compose editor so as
+* 					you type the fonts appear as they would if the message we
 * 					being read by the receiver
 */
-DwtHtmlEditor.prototype._getInitialStyle = 
+DwtHtmlEditor.prototype._getInitialStyle =
 function(useDiv) {
 	var initFontFamily = this._getInitialFontFamily();
 	var initFontSize = this._getInitialFontSize();
@@ -504,7 +510,7 @@ function(useDiv) {
 
 	var html = new Array();
 	var i = 0;
-	
+
 	if (useDiv) {
 		html[i++] = "<div style='";
 		html[i++] = "font-family:" + initFontFamily + ";";
@@ -529,24 +535,24 @@ function(useDiv) {
 }
 
 // overload me to initialize to different font family
-DwtHtmlEditor.prototype._getInitialFontFamily = 
+DwtHtmlEditor.prototype._getInitialFontFamily =
 function() {
 	return DwtHtmlEditor._TIMES;
 }
 
 // overload me to initialize to different font size
-DwtHtmlEditor.prototype._getInitialFontSize = 
+DwtHtmlEditor.prototype._getInitialFontSize =
 function() {
 	return "12pt";
 }
 
 // overload me to initialize to different font color
-DwtHtmlEditor.prototype._getInitialFontColor = 
+DwtHtmlEditor.prototype._getInitialFontColor =
 function() {
 	return "black";
 }
 
-DwtHtmlEditor.prototype._createIFrameEl = 
+DwtHtmlEditor.prototype._createIFrameEl =
 function() {
 	var htmlEl = this.getHtmlElement();
 	this._iFrameId = "iframe_" + Dwt.getNextId();
@@ -561,13 +567,13 @@ function() {
 	if (AjxEnv.isIE && location.protocol == "https:")
 		iFrame.src = this._blankIframeSrc || "";
 	htmlEl.appendChild(iFrame);
-	
+
 	return iFrame;
 }
 
 DwtHtmlEditor.prototype._finishHtmlModeInit =
 function(params) {
-	var doc = this._getIframeDoc();	
+	var doc = this._getIframeDoc();
 	try {
 		doc.body.innerHTML = this._pendingContent || "";
 	} catch (ex) {
@@ -580,7 +586,7 @@ function(params) {
 	this._updateState();
 	this._htmlModeInited = true;
 
-	// bug fix #4722 - setting design mode for the first time seems to null 
+	// bug fix #4722 - setting design mode for the first time seems to null
 	// out iframe doc's body in IE - so create a new body...
 	if (AjxEnv.isIE) {
 		doc.open();
@@ -602,7 +608,7 @@ function() {
 	return Dwt.getIframeWindow(document.getElementById(this._iFrameId));
 }
 
-DwtHtmlEditor.prototype._getParentElement = 
+DwtHtmlEditor.prototype._getParentElement =
 function() {
 	if (AjxEnv.isIE) {
 		var iFrameDoc = this._getIframeDoc();
@@ -619,7 +625,7 @@ function() {
 		try {
 			var range = this._getRange();
 			var p = range.commonAncestorContainer;
-			if (!range.collapsed && range.startContainer == range.endContainer 
+			if (!range.collapsed && range.startContainer == range.endContainer
 				&& range.startOffset - range.endOffset <= 1 && range.startContainer.hasChildNodes())
 				p = range.startContainer.childNodes[range.startOffset];
 			while (p.nodeType == 3)
@@ -657,11 +663,11 @@ function(iFrame, iFrameDoc) {
 	var me = this;
 	// TODO - Hopefully this closure doesn't cause a memory leak!!!!
 	var func = function (evt) {return me._handleEditorEvent(AjxEnv.isIE ? iFrame.contentWindow.event : evt);};
-	
+
 	if (AjxEnv.isIE) {
 		for (var i in events)
 			iFrameDoc.attachEvent("on" + events[i], func);
-		
+
 	} else {
 		for (var i in events)
 			iFrameDoc.addEventListener(events[i],  func, true);
@@ -677,14 +683,14 @@ function(ev) {
 	if (ev.type == "mousedown") {
 		DwtMenu._outsideMouseDownListener(ev);
 	}
-	
+
 	if (DwtKeyEvent.isKeyPressEvent(ev)) {
 		var ke = this._keyEvent;
 		ke.setFromDhtmlEvent(ev);
 		if (ke.ctrlKey) {
 			var key = String.fromCharCode(ke.charCode).toLowerCase();
 			var cmd = null;
-			var value = null;	
+			var value = null;
 
 			switch (key) {
 			    case '1':
@@ -696,7 +702,7 @@ function(ev) {
 					cmd = DwtHtmlEditor._FORMAT_BLOCK;
 					value = DwtHtmlEditor._KEY2CMDS[key];
 					break;
-					
+
 				case '0':
 					try {
 						this.setMode((this._mode == DwtHtmlEditor.HTML) ? DwtHtmlEditor.TEXT : DwtHtmlEditor.HTML, true);
@@ -708,7 +714,7 @@ function(ev) {
 					ke.setToDhtmlEvent(ev);
 					retVal = false;
 					break;
-					
+
 				default:
 					// IE Has full on keyboard shortcuts
 					//if (!AjxEnv.isIE)
@@ -716,7 +722,7 @@ function(ev) {
 					break;
 			}
 			if (cmd) {
-				DBG.println("CMD: " + cmd);			
+				DBG.println("CMD: " + cmd);
 				this._execCommand(cmd, value);
 				DBG.println("AFTER EXEC");
 				ke._stopPropagation = true;
@@ -726,7 +732,7 @@ function(ev) {
 			}
 		}
 	}
-	
+
 	// TODO notification for any updates etc
 	// Set's up the a range for the current ins point or selection. This is IE only because the iFrame can
 	// easily lose focus (e.g. by clicking on a button in the toolbar) and we need to be able to get back
@@ -741,10 +747,10 @@ function(ev) {
 			this._currInsPt.text = "";
 		}
 	}
-	
-	if (this._stateUpdateActionId != null) 
+
+	if (this._stateUpdateActionId != null)
 		AjxTimedAction.cancelAction(this._stateUpdateActionId);
-	
+
 	this._stateUpdateActionId = AjxTimedAction.scheduleAction(this._updateStateAction, 100);
 
 	return retVal;
@@ -754,13 +760,13 @@ DwtHtmlEditor.prototype._updateState =
 function() {
 	if (this._mode != DwtHtmlEditor.HTML)
 		return;
-		
+
 	this._stateUpdateActionId = null;
 	var ev = this._stateEvent;
 	ev.reset();
 
 	var iFrameDoc = this._getIframeDoc();
-	try {	
+	try {
 		ev.isBold = iFrameDoc.queryCommandState(DwtHtmlEditor.BOLD_STYLE);
 		ev.isItalic = iFrameDoc.queryCommandState(DwtHtmlEditor.ITALIC_STYLE);
 		ev.isUnderline = iFrameDoc.queryCommandState(DwtHtmlEditor.UNDERLINE_STYLE);
@@ -769,8 +775,8 @@ function() {
 		ev.isSubscript = iFrameDoc.queryCommandState(DwtHtmlEditor.SUBSCRIPT_STYLE);
 		ev.isOrderedList = iFrameDoc.queryCommandState(DwtHtmlEditor.ORDERED_LIST);
 		ev.isUnorderedList = iFrameDoc.queryCommandState(DwtHtmlEditor.UNORDERED_LIST);
-		
-		// Don't futz with the order of the if statements below. They are important due to the 
+
+		// Don't futz with the order of the if statements below. They are important due to the
 		// nature of the RegExs
 		var family = iFrameDoc.queryCommandValue(DwtHtmlEditor._FONT_NAME);
 		if (family) {
@@ -778,19 +784,19 @@ function() {
 			if (family.search(DwtHtmlEditor._VERDANA_RE) != -1)
 				ev.fontFamily = DwtHtmlEditor.VERDANA;
 			else if (family.search(DwtHtmlEditor._ARIAL_RE) != -1)
-				ev.fontFamily = DwtHtmlEditor.ARIAL;		
+				ev.fontFamily = DwtHtmlEditor.ARIAL;
 			else if (family.search(DwtHtmlEditor._TIMES_RE) != -1)
 				ev.fontFamily = DwtHtmlEditor.TIMES;
 			else if (family.search(DwtHtmlEditor._COURIER_RE) != -1)
 				ev.fontFamily = DwtHtmlEditor.COURIER;
 		}
-		
+
 		ev.fontSize = iFrameDoc.queryCommandValue(DwtHtmlEditor._FONT_SIZE);
 		ev.backgroundColor = iFrameDoc.queryCommandValue((AjxEnv.isIE) ? "backcolor" : "hilitecolor");
 		ev.color = iFrameDoc.queryCommandValue("forecolor");
 		ev.justification = null;
 		ev.direction = null;
-		
+
 		var style = iFrameDoc.queryCommandValue(DwtHtmlEditor._FORMAT_BLOCK);
 		if (style) {
 			if (style.search(DwtHtmlEditor._H1_RE) != -1)
@@ -812,7 +818,7 @@ function() {
 			else if (style.search(DwtHtmlEditor._PREFORMATTED_RE) != -1)
 				ev.style = DwtHtmlEditor.PREFORMATTED;
 		}
-		
+
 		if (iFrameDoc.queryCommandState(DwtHtmlEditor.JUSTIFY_LEFT))
 			ev.justification = DwtHtmlEditor.JUSTIFY_LEFT;
 		else if (iFrameDoc.queryCommandState(DwtHtmlEditor.JUSTIFY_CENTER))
@@ -836,7 +842,7 @@ function() {
 DwtHtmlEditor.prototype._enableDesignMode =
 function(iFrameDoc) {
 	if (!iFrameDoc) return;
-	
+
 	try {
 		iFrameDoc.designMode = "on";
 	} catch (ex) {
@@ -852,7 +858,7 @@ function(iFrameDoc) {
 	}
 }
 
-DwtHtmlEditor.prototype._setContentOnTimer = 
+DwtHtmlEditor.prototype._setContentOnTimer =
 function() {
 	var iframeDoc = this._getIframeDoc();
 	try {
@@ -871,12 +877,12 @@ DwtHtmlEditor.prototype._execCommand =
 function(command, option) {
 	if (this._mode != DwtHtmlEditor.HTML)
 		return;
-		
+
 // DBG.println("CMD: " + command + " - Option: " + option);
 
 	try {
 		this.focus();
-		this._getIframeDoc().execCommand(command, false, option);	
+		this._getIframeDoc().execCommand(command, false, option);
 	} catch (e) {
 		// perhaps retry the command?
 		this._enableDesignMode(this._getIframeDoc());
@@ -887,6 +893,6 @@ function(command, option) {
 DwtHtmlEditor.prototype._convertHtml2Text =
 function() {
 	var iFrameDoc = this._getIframeDoc();
-	return iFrameDoc && iFrameDoc.body ? 
+	return iFrameDoc && iFrameDoc.body ?
 		AjxStringUtil.convertHtml2Text(iFrameDoc.body) : "";
 }

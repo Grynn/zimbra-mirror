@@ -292,7 +292,7 @@ function() {
 
 
 DwtShell.prototype.getBounds = 
-function() {
+function(incScroll) {
 	return (!this._virtual) ? Dwt.getBounds(this.getHtmlElement(), incScroll)
 	                        : Dwt.getBounds(document.body, incScroll);
 }
