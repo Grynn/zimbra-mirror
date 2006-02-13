@@ -41,7 +41,7 @@
 	<classpathentry kind="lib" path="jars/lucene-1.4.3.jar"/>
 	<classpathentry kind="lib" path="jars/mail.jar">
 		<attributes>
-			<attribute value="http://java.sun.com/products/javamail/1.3/docs/javadocs/" name="javadoc_location"/>
+			<attribute value="http://java.sun.com/products/javamail/javadocs/" name="javadoc_location"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry sourcepath="/ThirdParty/concurrent-1.3.4-zimbra/src" kind="lib" path="jars/concurrent-1.3.4-zimbra-1.0.0.jar"/>
