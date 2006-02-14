@@ -37,49 +37,42 @@
 * @author Owen Williams
 */
 
-
-//
-//	DwtBorder.js
-//
-//	Class that allows you to draw "interesting" borders
-//		(eg: borders that are composed of multiple images)
-//
-//	Note: you'll use this class statically, like AjxImg
-//
 function DwtBorder() {
 }
 
-
 DwtBorder._borderTemplates = {};
 
-DwtBorder.getBorderTemplate = function(style) {
+DwtBorder.getBorderTemplate = 
+function(style) {
 	return this._borderTemplates[style];
-}
+};
 
-
-DwtBorder.getBorderHtml = function (style, substitutions, innerDivId) {
+DwtBorder.getBorderHtml = 
+function (style, substitutions, innerDivId) {
 	return AjxBuffer.append(
 				this.getBorderStartHtml(style, substitutions),
 				(innerDivId ? "<div id=" + innerDivId + "></div>" : ""),
 				this.getBorderEndHtml(style, substitutions)
 			);
-}
+};
 
-DwtBorder.getBorderStartHtml = function(style, substitutions) {
+DwtBorder.getBorderStartHtml = 
+function(style, substitutions) {
 	var template = this._borderTemplates[style];
 	if (template == null) {
 		DBG.println("DwtBorder.getBorderStartHtml(",style,"): no border template found.");
 		return "";
 	}
-	if (template == null) return "";
+
 	var html = template.start;
 	if (substitutions != null) {
 		html = DwtBorder.performSubstitutions(html, substitutions);
 	}
 	return html;
-}
+};
 
-DwtBorder.getBorderEndHtml = function(style, substitutions) {
+DwtBorder.getBorderEndHtml = 
+function(style, substitutions) {
 	var template = this._borderTemplates[style];
 	if (template == null || template == "") return "";
 
@@ -88,43 +81,40 @@ DwtBorder.getBorderEndHtml = function(style, substitutions) {
 		html = DwtBorder.performSubstitutions(html, substitutions);
 	}
 	return html;
-}
+};
 
-
-DwtBorder.getBorderHeight = function(style) {
+DwtBorder.getBorderHeight = 
+function(style) {
 	var template = this._borderTemplates[style];
-	if (template != null) return template.height;
-	return 0;
-}
+	return template ? template.height : 0;
+};
 
-DwtBorder.getBorderWidth = function(style) {
+DwtBorder.getBorderWidth = 
+function(style) {
 	var template = this._borderTemplates[style];
-	if (template != null) return template.width;
-	return 0;
-}
+	return template ? template.width : 0;
+};
 
-
-DwtBorder.performSubstitutions = function (html, substitutions) {
+DwtBorder.performSubstitutions = 
+function (html, substitutions) {
 	for (var prop in substitutions) {
 		var str = "<!--$" + prop + "-->";
 		if (html.indexOf(str)) {
 			html = html.split(str).join(substitutions[prop]);
 		}
-//MOW: Why is this here?  This will make substitution twice as slow... do we need it?
+		// MOW: Why is this here?  This will make substitution twice as slow... do we need it?
 		var str = "{$"+prop+"}";
 		if (html.indexOf(str)) {
 			html = html.split(str).join(substitutions[prop]);
 		}
 	}
 	return html;
-}
+};
 
-
-DwtBorder.registerBorder = function (style, template) {
-	this._borderTemplates[style] = template
-}
-
-
+DwtBorder.registerBorder = 
+function (style, template) {
+	this._borderTemplates[style] = template;
+};
 
 DwtBorder.registerBorder(
 	"1pxBlack",
@@ -187,8 +177,6 @@ DwtBorder.registerBorder(
 	
 	}
 );
-
-
 
 var dialogPieces = {
 	start:AjxBuffer.concat(
@@ -364,11 +352,6 @@ DwtBorder.registerBorder(
 	}
 );
 
-
-
-
-
-
 DwtBorder.registerBorder(
 	"h_sash",
 	{	
@@ -386,7 +369,6 @@ DwtBorder.registerBorder(
 		height:7
 	}
 );
-
 
 DwtBorder.registerBorder(
 	"calendar_appt",
@@ -417,7 +399,6 @@ DwtBorder.registerBorder(
 		height:7
 	}
 );
-
 
 DwtBorder.registerBorder(
 	"calendar_appt_bottom_only",
@@ -461,7 +442,6 @@ DwtBorder.registerBorder(
 		height:4
 	}
 );
-
 
 DwtBorder.registerBorder(
 	"calendar_appt_allday",
@@ -539,7 +519,7 @@ DwtBorder.registerBorder(
 					"</tr>", 
 					"<tr>",
 						"<td id='{$id}_border_ml' class='ImgSemiModalHeader_L__V'></td>", 
-						"<td class='ImgSemiModalHeader__BG'><div id='{$id}_title' class='DwtStickyToolTipTitle' style='position:relative;top:-3px;left:-10px;'>{$title}</div></td>",
+						"<td class='ImgSemiModalHeader__BG'><div id='{$id}_title' class='DwtStickyToolTipTitle'>{$title}</div></td>",
 						"<td class='ImgSemiModalHeader__BG'><div id='{$id}_close' class='DwtStickyToolTipTitle' style='position:relative;top:-3px;left:20px;align:right;'></div></td>",
 						"<td id='{$id}_border_mr' class=ImgSemiModalHeader_R__V></td>", 
 						(AjxEnv.useTransparentPNGs ? "<td valign=top><div class='ImgCurvedShadow_T2R'></div><div class='ImgCurvedShadow_R__V' style='height:100%;'></div></td>" : ""),
@@ -584,7 +564,6 @@ DwtBorder.registerBorder(
 			)
 	} 
 );
-
 
 DwtBorder.registerBorder( 
 	"SplashScreen", 
