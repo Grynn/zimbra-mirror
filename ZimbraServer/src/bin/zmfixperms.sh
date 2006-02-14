@@ -95,8 +95,8 @@ if [ -d /opt/zimbra/cyrus-sasl-2.1.21.ZIMBRA ]; then
 	chown zimbra:zimbra /opt/zimbra/cyrus-sasl-2.1.21.ZIMBRA/state
 fi
 
-if [ -d /opt/zimbra/clamav-0.87.1 ]; then
-	chown zimbra:zimbra /opt/zimbra/clamav-0.87.1
+if [ -d /opt/zimbra/clamav-0.88 ]; then
+	chown zimbra:zimbra /opt/zimbra/clamav-0.88
 fi
 
 if [ -f /opt/zimbra/openldap/libexec/slapd ]; then
