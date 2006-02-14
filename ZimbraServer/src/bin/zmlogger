@@ -104,7 +104,7 @@ my $statement =
 my $sth = $dbh->prepare($statement);
 
 my $status_statement =
-	"insert into service_status(server, service, time, status) values (?,?,?,?)";
+	"insert into service_status(server, service, time, status, loghostname) values (?,?,?,?,?)";
 
 my $s_sth = $dbh->prepare($status_statement);
 
@@ -152,7 +152,7 @@ while (<>) {
 
 
 		eval {
-			$s_sth->execute($hostname, $service, $tm, $status);
+			$s_sth->execute($hostname, $service, $tm, $status, $host);
 		};
 
 		next;

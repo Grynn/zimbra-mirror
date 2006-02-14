@@ -79,7 +79,7 @@ ${zimbra_home}/bin/logmysql -u root --password= < \
 cat > /tmp/logger.sql.$$ <<EOF
 use zimbra_logger;
 INSERT INTO zimbra_logger.config(name, value, description) VALUES
-	('db.version', '3', 'db schema version');
+	('db.version', '4', 'db schema version');
 commit;
 EOF
 

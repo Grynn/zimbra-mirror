@@ -124,6 +124,7 @@ CREATE TABLE service_status (
 	service     VARCHAR(255) NOT NULL,
 	time        DATETIME,
 	status      BOOL,
+	loghostname      VARCHAR(255) NOT NULL,
 
 	UNIQUE INDEX i_server_service (server(100), service(100))
 ) ENGINE = MyISAM;
