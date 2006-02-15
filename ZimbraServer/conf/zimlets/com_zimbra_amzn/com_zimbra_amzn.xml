@@ -16,7 +16,7 @@
 	</contentObject>
 -->	
 	<zimletPanelItem label="Amazon" icon="AMZN-panelIcon">
-		<toolTipText>Click to open search form.</toolTipText>
+		<toolTipText>${msg.amzn_tooltip}</toolTipText>
 		<contextMenu>
 			<menuItem label="Visit Amazon" id="WWW.AMAZON.COM" icon="AMZN-panelIcon">
 				<canvas type="window" width="800" height="600" />
