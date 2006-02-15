@@ -25,7 +25,13 @@
 
 function ZaNewAccountXWizard (parent, app) {
 	ZaXWizardDialog.call(this, parent, app, null, ZaMsg.NCD_NewAccTitle, "550px", "300px","ZaNewAccountXWizard");
-	this.accountStatusChoices = [ZaAccount.ACCOUNT_STATUS_ACTIVE, ZaAccount.ACCOUNT_STATUS_MAINTENANCE, ZaAccount.ACCOUNT_STATUS_LOCKED, ZaAccount.ACCOUNT_STATUS_CLOSED];		
+	this.accountStatusChoices = [
+		{value:ZaAccount.ACCOUNT_STATUS_ACTIVE, label:ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_ACTIVE]}, 
+		{value:ZaAccount.ACCOUNT_STATUS_CLOSED, label:ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_CLOSED]},
+		{value:ZaAccount.ACCOUNT_STATUS_LOCKED, label: ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_LOCKED]},
+		{value:ZaAccount.ACCOUNT_STATUS_MAINTENANCE, label:ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_MAINTENANCE]}
+	];	
+//	this.accountStatusChoices = [ZaAccount.ACCOUNT_STATUS_ACTIVE, ZaAccount.ACCOUNT_STATUS_MAINTENANCE, ZaAccount.ACCOUNT_STATUS_LOCKED, ZaAccount.ACCOUNT_STATUS_CLOSED];		
 	this.stepChoices = [
 		{label:ZaMsg.TABT_GeneralPage, value:1},
 		{label:ZaMsg.TABT_ContactInfo, value:2}
@@ -50,7 +56,7 @@ function ZaNewAccountXWizard (parent, app) {
 
 
 	this.initForm(ZaAccount.myXModel,this.getMyXForm());	
-//    DBG.timePt("finished initForm");
+//    DBG.timePt(AjxDebug.PERF, "finished initForm");
    
 	this._localXForm.setController(this._app);	
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaNewAccountXWizard.prototype.handleXFormChange));
@@ -298,7 +304,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 	if(ZaSettings.SERVERS_ENABLED) {
 		case1Items.push({type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_MailServer, labelLocation:_LEFT_,
 							items: [
-								{ ref: ZaAccount.A_mailHost, type: _OSELECT1_, label: null, choices: this._app.getServerListChoices2(), 
+								{ ref: ZaAccount.A_mailHost, type: _OSELECT1_, label: null, editable:true, choices: this._app.getServerListChoices2(), 
 									relevant:"instance[ZaAccount.A2_autoMailServer]==\"FALSE\" && form.getController().getServerListChoices2().getChoices().values.length != 0",
 									relevantBehavior:_DISABLE_
 							  	},

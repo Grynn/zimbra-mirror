@@ -43,7 +43,7 @@ OSelect1_XFormItem.prototype.cssClass = "oselect";
 OSelect1_XFormItem.prototype.multiple = false;
 OSelect1_XFormItem.prototype.writeElementDiv = false;
 OSelect1_XFormItem.prototype.width = "auto";
-OSelect1_XFormItem.prototype.editable = true;
+OSelect1_XFormItem.prototype.editable = false;
 
 //TODO: get showing check working for the normal SELECT, requires:
 //		* separate notion of hilited row (for mouseover) and selected row(s)
@@ -71,10 +71,9 @@ OSelect1_XFormItem.prototype.updateElement = function (newValue) {
 	/*if (el) el.innerHTML = newValue;*/
 	if (el) {
 		el.value = newValue;
-		el.readonly = !this.editable;
+		el.readOnly = !this.getInheritedProperty("editable");
 	}
 }
-
 
 OSelect1_XFormItem.prototype.getShowCheck = function () {
 	return this.cacheInheritedProperty("showCheck", "$showCheck");
@@ -117,8 +116,13 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 
 	menu.className = this.getMenuCssClass();
 	menu.innerHTML = this.getChoicesHTML();	
+	var bounds;
+//	if(!AjxEnv.isIE) {
+		bounds = this.getBounds(this.getElement().childNodes[0]);
+	/*} else {
+		bounds = this.getBounds(this.getElement());
+	}*/
 
-	var bounds = this.getBounds(this.getElement());
 	menu.style.left = bounds.left;
 	menu.style.top = bounds.top + bounds.height - 1;
 	var choices = this.getNormalizedChoices();
@@ -127,9 +131,12 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 			menu.style.top	= 	parseInt(menu.style.top)+2;
 			menu.style.overflow="auto";	
 			menu.style.width = parseInt(bounds.width)+2;
+			menu.style.height = parseInt(bounds.height)*5;
 		} else {
+			menu.style.overflow="auto";		
 			menu.style.width = bounds.width;
 			menu.style.overflow="hidden";
+			menu.style.height = parseInt(bounds.height-2)*choices.values.length;
 		}
 	}
 
@@ -204,16 +211,16 @@ OSelect1_XFormItem.prototype.oMouseUp = function (ev) {
 		var htmlEl = DwtUiEvent.getTarget(ev);
 	//	DBG.println(AjxDebug.DBG1, AjxBuffer.concat("oMouseUp; htmlEl.nodeName=",htmlEl.nodeName," htmlEl.localName = ", htmlEl.nodeName));
 		//check if the user clicked on the scrollbar
-		if(htmlEl.localName == "scrollbar" && htmlEl.parentNode && htmlEl.parentNode.id=="___OSELECT_MENU___") { 
-			found = true;
-		}
+			if(htmlEl.localName == "scrollbar" && ( (htmlEl.parentNode && htmlEl.parentNode.id=="___OSELECT_MENU___") || (htmlEl.id && htmlEl.id=="___OSELECT_MENU___"))) { 
+				found = true;
+			} else if (htmlEl.id && htmlEl.id == "___OSELECT_MENU___"){
+				found = true;
+			}
 	}
 
 
 	if(!found)
 		this.hideMenu();
-	/*else
-		AjxCore.removeListener(window, "onmouseup", this.$hideListener);*/
 		
 	return true;
 }
@@ -238,7 +245,7 @@ OSelect1_XFormItem.prototype.onOutsideMouseDown = function (ev) {
 		if(!found) {
 		//	DBG.println(AjxDebug.DBG1, AjxBuffer.concat("onOutsideMouseDown; htmlEl.nodeName=", htmlEl.nodeName," htmlEl.localName = ", htmlEl.localName, " htmlEl.id=", htmlEl.id));
 			//check if the user clicked on the scrollbar
-			if(htmlEl.localName == "scrollbar" && htmlEl.parentNode && htmlEl.parentNode.id=="___OSELECT_MENU___") { 
+			if(htmlEl.localName == "scrollbar" && ( (htmlEl.parentNode && htmlEl.parentNode.id=="___OSELECT_MENU___") || (htmlEl.id && htmlEl.id=="___OSELECT_MENU___"))) { 
 				found = true;
 			} else if (htmlEl.id && htmlEl.id == "___OSELECT_MENU___"){
 				found = true;
@@ -248,10 +255,6 @@ OSelect1_XFormItem.prototype.onOutsideMouseDown = function (ev) {
 	}
 	if(!found)
 		this.hideMenu();
-/*	else {
-		AjxCore.removeListener(document.body, "onmousedown", this.$outsideMouseDownListener);	
-		DwtEventManager.removeListener(DwtEvent.ONMOUSEDOWN, this.$outsideMouseDownListener);
-	}*/
 		
 	return true;
 }
@@ -457,16 +460,15 @@ OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput, updateScript, in
 		"<div id=", id, this.getCssString(),
 			" onclick=\"", this.getFormGlobalRef(), ".getItemById('",this.getId(),"').showMenu(this, event)\"",
 			" onselectstart=\"return false\"",
-			">\r", indent,
-
-			"  <table ", this.getTableCssString(), ">\r", indent,
+			">",
+			"<table ", this.getTableCssString(), ">", 
 				"  <tr><td width=100%><input type=text id=", id, "_display class=", this.getDisplayCssClass(), " value='VALUE' ", 
-				" onchange=\"",ref, ".onValueTyped(this.value, event||window.event)\"",
-				"></td>\r", indent,
-					"    <td>", this.getArrowButtonHTML(),"</td>\r", indent,
-				"  </tr>\r", indent,
-			"  </table>\r", indent,
-		"</div>\r"
+				" onchange=\"",ref, ".onValueTyped(this.value, event||window.event)\"", (this.getInheritedProperty("editable") ? " readOnly=false " : " readOnly=true "),
+				"></td>",
+					"<td>", this.getArrowButtonHTML(),"</td>", 
+				"</tr>", 
+			"</table>", 
+		"</div>"
 	);
 }
 

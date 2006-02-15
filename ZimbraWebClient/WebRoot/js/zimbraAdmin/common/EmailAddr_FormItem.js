@@ -96,7 +96,7 @@ EmailAddr_XFormItem.prototype.items = [
 		}	
 	},
 	{type:_OSELECT1_, ref:".", labelLocation:_NONE_, relevantBehavior:_HIDE_, 
-	 choices:EmailAddr_XFormItem.domainChoices,
+	 choices:EmailAddr_XFormItem.domainChoices,editable:true,
 	 relevant:"ZaSettings.DOMAINS_ENABLED",
 	 errorLocation:_PARENT_,
 		getDisplayValue:function (itemVal){
