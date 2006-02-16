@@ -183,8 +183,13 @@ DwtPropertyEditor.prototype.validateData = function() {
  *              { label : "Street", id: "street", type: "string" },
  *              { label  : "Country",
  *                id     : "country",
- *                type   : "list",
- *                values : [ "US", "UK", "Etc." ] }
+ *                type   : "enum",
+ *                item : [
+ 							{ label : "US", value : "US" },
+ 							{ label : "UK", value : "UK" },
+ 							{ label : "KR", value : "KR" }
+ 						 ] 
+ 				}
  *      ]
  *    },
  *    {
@@ -211,6 +216,10 @@ DwtPropertyEditor.prototype.validateData = function() {
  *     "mustMatch", "mustNotMatch".
  *
  *   - "password" : Same as "string", only it's not displayed.
+ *
+ *   - "enum" : One of the strings listed in the value.
+ *
+ *   - "boolean" : Checkbox that yields string value of "true" and "false".
  *
  *   - "struct" : Composite property; doesn't have a value by itself, but has
  *     child properties (the "children" array) that are defined in the same way
@@ -273,9 +282,10 @@ DwtPropertyEditor.prototype._createProperty = function(prop, parent) {
 		tr.appendChild(tdField);
 
 		switch (prop.type) {
-		    case "select" : this._createDropDown(prop, tdField); break;
-		    case "date"   : this._createCalendar(prop, tdField); break;
-		    default       :
+			case "boolean" : this._createCheckbox(prop, tdField); break;
+		    case "enum"    : this._createDropDown(prop, tdField); break;
+		    case "date"    : this._createCalendar(prop, tdField); break;
+		    default        :
 			if (this._useDwtInputField)
 				this._createInputField(prop, tdField);
 			else {
@@ -360,6 +370,18 @@ DwtPropertyEditor.prototype.addChild = function(child) {
 		this._children.add(child);
 		this._currentFieldCell.appendChild(child.getHtmlElement());
 	}
+};
+
+DwtPropertyEditor.prototype._createCheckbox = function(prop, target) {
+	var checkbox = document.createElement("input");
+	checkbox._prop = prop;
+	checkbox.id = prop.name;
+	checkbox.type = 'checkbox';
+	if (prop.value == 'true')
+		checkbox.checked = prop.value;
+	checkbox.addEventListener("click", prop._onCheckboxChange, false);
+	this._children.add(checkbox);
+	target.appendChild(checkbox);
 };
 
 DwtPropertyEditor.prototype._createDropDown = function(prop, target) {
@@ -696,6 +718,10 @@ DwtPropertyEditor._prop_functions = {
 			this._propertyEditor._clearMsgDiv();
 			input.className = input.className.replace(/ DwtPropertyEditor-input-error/, "");
 		}
+	},
+
+	_onCheckboxChange : function() {
+		this._prop._setValue(this.checked ? "true" : "false");
 	},
 
 	_onSelectChange : function() {
