@@ -73,7 +73,7 @@ function(ev)  {
 }
 
 /**
-* Returns the first element with a non-null value for the given property, working its way up the element chain.
+* Returns the first element with a value for the given property, working its way up the element chain.
 *
 * @param ev		a UI event
 * @param prop	the name of a property
@@ -83,7 +83,7 @@ DwtUiEvent.getTargetWithProp =
 function(ev, prop)  {
 	var htmlEl = DwtUiEvent.getTarget(ev);
 	while (htmlEl) {
-		if (Dwt.getAttr(htmlEl, prop) != null) {
+		if (Dwt.getAttr(htmlEl, prop)) {
 			return htmlEl;
 		}
 		htmlEl = htmlEl.parentNode;
@@ -92,7 +92,7 @@ function(ev, prop)  {
 }
 
 /**
-* Returns the first element with a non-null value for the given properties, working its way up the element chain.
+* Returns the first element with values for all of the given properties, working its way up the element chain.
 *
 * @param ev		a UI event
 * @param props	a list of property names
@@ -104,7 +104,8 @@ function(ev, props)  {
 	while (htmlEl) {
 		var okay = true;
 		for (var i in props) {
-			if (htmlEl[props[i]] == null) {
+			var val = Dwt.getAttr(htmlEl, props[i]);
+			if (!val) {
 				htmlEl = htmlEl.parentNode;
 				okay = false;
 				break;
