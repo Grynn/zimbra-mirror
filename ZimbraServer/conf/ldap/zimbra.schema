@@ -42,7 +42,6 @@ objectIdentifier zimbraMailAddress ZimbraAttrType:3
 objectIdentifier zimbraMailHost ZimbraAttrType:4
 #objectIdentifier zimbraAttr ZimbraAttrType:8
 objectIdentifier zimbraNotes ZimbraAttrType:9
-objectIdentifier zimbraMember ZimbraAttrType:10
 objectIdentifier zimbraMemberOf ZimbraAttrType:11
 objectIdentifier zimbraMailForwardingAddress ZimbraAttrType:12
 objectIdentifier zimbraMailDeliveryAddress ZimbraAttrType:13
@@ -1264,12 +1263,6 @@ attributetype ( zimbraMailTrashLifetime
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32}
 	SINGLE-VALUE )
-
-attributetype ( zimbraMember
-	NAME ( 'zimbraMember' )
-	DESC 'for group membership, included with security group object'
-	EQUALITY caseIgnoreIA5Match
-	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
 
 attributetype ( zimbraMemberOf
 	NAME ( 'zimbraMemberOf' )
@@ -2813,21 +2806,18 @@ objectclass ( zimbraDomain
 		))
 
 ################
-# zimbraSecurityGroup is used to represent a security group in the directory. Each zimbraMember attr
-# is the zimbraId of the account (and/or group if we allow recursive groups) that is a member
-# of this group.
+# zimbraSecurityGroup is used to represent a security group in the directory. Members of this
+# group have a zimbraMemberOf attr with this group's zimbraId. If this group is a member of
+# other groups, then it will have those group's zimbraIds in its own zimbraMemberOf list.
 #
 ################
 objectclass ( zimbraSecurityGroup
 	NAME 'zimbraSecurityGroup'
 	DESC 'Security Group'
-	SUP top STRUCTURAL
-	MUST (	zimbraId $
-		cn)
-	MAY (	zimbraMember $ 
-		zimbraNotes $
-		description))
-	
+	SUP top AUXILIARY
+	MUST ( zimbraId )
+	MAY ( zimbraMemberOf ))
+
 ################
 # zimbraServer is used to represent a defined server within a zimbra install.
 #

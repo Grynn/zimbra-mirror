@@ -113,6 +113,7 @@ index   zimbraForeignPrincipal eq
 index   zimbraId               eq
 index   zimbraMailCatchAllAddress eq,sub
 index   zimbraMailDeliveryAddress eq,sub
+index   zimbraMailForwardingAddress eq
 index   zimbraMailAlias        eq,sub
 index   zimbraDomainName       eq,sub
 index   uid                    pres,eq
