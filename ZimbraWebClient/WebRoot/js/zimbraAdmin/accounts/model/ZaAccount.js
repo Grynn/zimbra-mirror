@@ -41,6 +41,7 @@ ZaAccount.prototype.constructor = ZaAccount;
 
 ZaItem.loadMethods["ZaAccount"] = new Array();
 ZaItem.initMethods["ZaAccount"] = new Array();
+ZaItem.modifyMethods["ZaAccount"] = new Array();
 
 //object attributes
 ZaAccount.A_name = "name";
@@ -381,7 +382,7 @@ ZaAccount.create =
 function(tmpObj, app) {
 	
 	tmpObj.attrs[ZaAccount.A_mail] = tmpObj.name;	
-		
+	var resp;	
 	//create SOAP request
 	var soapDoc = AjxSoapDoc.create("CreateAccountRequest", "urn:zimbraAdmin", null);
 	soapDoc.set(ZaAccount.A_name, tmpObj.name);
@@ -412,7 +413,11 @@ function(tmpObj, app) {
 		}
 	}
 	try {
-		var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+
+		var createAccCommand = new ZmCsfeCommand();
+		var params = new Object();
+		params.soapDoc = soapDoc;	
+		resp = createAccCommand.invoke(params).Body.CreateAccountResponse;
 	} catch (ex) {
 		switch(ex.code) {
 			case ZmCsfeException.ACCT_EXISTS:
@@ -428,8 +433,8 @@ function(tmpObj, app) {
 		return null;
 	}
 	var account = new ZaAccount(app);
-	account.initFromDom(resp.firstChild);
-	
+	//account.initFromDom(resp.firstChild);
+	account.initFromJS(resp.account[0]);		
 	//add aliases
 	if(tmpObj.attrs[ZaAccount.A_zimbraMailAlias].length) {
 		var tmpObjCnt = tmpObj.attrs[ZaAccount.A_zimbraMailAlias].length;
@@ -469,7 +474,7 @@ function(tmpObj, app) {
 * Updates ZaAccount attributes (SOAP)
 * @param mods set of modified attributes and their new values
 */
-ZaAccount.prototype.modify =
+ZaAccount.modifyMethod =
 function(mods) {
 	//update the object
 	var soapDoc = AjxSoapDoc.create("ModifyAccountRequest", "urn:zimbraAdmin", null);
@@ -494,14 +499,15 @@ function(mods) {
 			attr.setAttribute("n", aname);
 		}
 	}
-
-	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
-	//update itseld
-	this.initFromDom(resp.firstChild);
+	var modifyAccCommand = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	resp = modifyAccCommand.invoke(params).Body.ModifyAccountResponse;
+	this.initFromJS(resp.account[0]);
 	this[ZaAccount.A2_confirmPassword] = null;
 	return;
 }
-
+ZaItem.modifyMethods["ZaAccount"].push(ZaAccount.modifyMethod);
 
 /**
 * @param newAlias
@@ -512,7 +518,11 @@ function (newAlias) {
 	var soapDoc = AjxSoapDoc.create("AddAccountAliasRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
 	soapDoc.set("alias", newAlias);	
-	ZmCsfeCommand.invoke(soapDoc, null, null, null, true);	
+	
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	command.invoke(params);
 }
 
 /**
@@ -524,7 +534,10 @@ function (aliasToRemove) {
 	var soapDoc = AjxSoapDoc.create("RemoveAccountAliasRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
 	soapDoc.set("alias", aliasToRemove);	
-	ZmCsfeCommand.invoke(soapDoc, null, null, null, true);	
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	command.invoke(params);	
 }
 
 
@@ -535,18 +548,16 @@ function(accId) {
 	var soapDoc = AjxSoapDoc.create("DelegateAuthRequest", "urn:zimbraAdmin", null);	
 	var attr = soapDoc.set("account", accId);
 	attr.setAttribute("by", "id");
-	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;	
-	var children = resp.childNodes;
-	for (var i=0; i< children.length;  i++) {
-		child = children[i];
-		if(child.nodeName == "authToken") {
-			if(child.firstChild != null)
-				retVal.authToken = child.firstChild.nodeValue;
-		} else if (child.nodeName == "lifetime") {
-			if(child.firstChild != null)
-				retVal.lifetime= child.firstChild.nodeValue;
-		}
-	}
+	
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	command.invoke(params);
+	var resp = command.invoke(params).Body.DelegateAuthResponse;
+	retVal.authToken = resp.authToken;
+	retVal.lifetime = resp.lifetime;
+	
+	
 	return retVal;
 }
 
@@ -628,7 +639,10 @@ function (mbxId) {
 	
 	var resp;
 	try {
-		resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true);
+		var command = new ZmCsfeCommand();
+		var params = new Object();
+		params.soapDoc = soapDoc;	
+		resp = command.invoke(params).Body.ReIndexResponse;
 	} catch (ex) {
 		resp = ex;
 	}
@@ -643,7 +657,10 @@ function (mbxId) {
 	attr.setAttribute("id", mbxId);
 	var resp;
 	try {
-		resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true);
+		var command = new ZmCsfeCommand();
+		var params = new Object();
+		params.soapDoc = soapDoc;	
+		resp = command.invoke(params).Body.ReIndexResponse;	
 	} catch (ex) {
 		resp = ex;
 	}
@@ -733,10 +750,28 @@ function(node) {
 			}
 		}
 	}
-
 }
 
-
+ZaAccount.prototype.initFromJS = 
+function (account) {
+	if(!account)
+		return;
+	this.name = account.name;
+	this.id = account.id;
+	var len = account.a.length;
+	this.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
+	this.attrs[ZaAccount.A_zimbraMailForwardingAddress] = new Array();	
+	for(var ix = 0; ix < len; ix++) {
+		if(!this.attrs[[account.a[ix].n]]) {
+			this.attrs[[account.a[ix].n]] = account.a[ix]._content;
+		} else {
+			if(!(this.attrs[[account.a[ix].n]] instanceof Array)) {
+				this.attrs[[account.a[ix].n]] = [this.attrs[[account.a[ix].n]]];
+			} 
+			this.attrs[[account.a[ix].n]].push(account.a[ix]._content);
+		}
+	}
+}
 
 /**
 * Returns HTML for a tool tip for this account.
@@ -784,18 +819,24 @@ function(by, val, withCos) {
 	var elBy = soapDoc.set("account", val);
 	elBy.setAttribute("by", by);
 
-	var resp = ZmCsfeCommand.invoke(soapDoc, false, null, null, true).firstChild;	
+	var getAccCommand = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	var resp = getAccCommand.invoke(params).Body.GetAccountResponse;
 	this.attrs = new Object();
-	this.initFromDom(resp.firstChild);
-	
-	var soapDoc = AjxSoapDoc.create("GetMailboxRequest", "urn:zimbraAdmin", null);
+	this.initFromJS(resp.account[0]);
+
+	soapDoc = AjxSoapDoc.create("GetMailboxRequest", "urn:zimbraAdmin", null);
 	var mbox = soapDoc.set("mbox", "");
 	mbox.setAttribute("id", this.attrs[ZaItem.A_zimbraId]);
-	//find out which server I am on
 	try {
-		var resp = ZmCsfeCommand.invoke(soapDoc, false, null, null, true);
-		if(resp && resp.firstChild && resp.firstChild.firstChild) {
-			this.attrs[ZaAccount.A2_mbxsize] = resp.firstChild.firstChild.getAttribute("s");
+		var getMbxCommand = new ZmCsfeCommand();
+
+		params = new Object();
+		params.soapDoc = soapDoc;	
+		resp = getMbxCommand.invoke(params).Body.GetMailboxResponse;
+		if(resp && resp.mbox && resp.mbox[0]) {
+			this.attrs[ZaAccount.A2_mbxsize] = resp.mbox[0].s;
 		}
 	} catch (ex) {
 		//show the error and go on
@@ -845,7 +886,10 @@ function (newName) {
 	var soapDoc = AjxSoapDoc.create("RenameAccountRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
 	soapDoc.set("newName", newName);	
-	ZmCsfeCommand.invoke(soapDoc, null, null, null, true);	
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	command.invoke(params);
 }
 
 /**
@@ -857,15 +901,12 @@ function (newPassword) {
 	var soapDoc = AjxSoapDoc.create("SetPasswordRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
 	soapDoc.set("newPassword", newPassword);	
-	ZmCsfeCommand.invoke(soapDoc, null, null, null, true);
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	command.invoke(params);	
 }
 
-/*
-function ZaAccountQuery (queryString, byDomain, byVal) {
-	this.query = queryString;
-	this.isByDomain = byDomain;
-	this.byValAttr = byVal;
-}*/
 
 /**
 * ZaAccount.myXModel - XModel for XForms

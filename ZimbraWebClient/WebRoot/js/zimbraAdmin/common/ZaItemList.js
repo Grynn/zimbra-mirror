@@ -157,6 +157,29 @@ function(respNode) {
 	}
 }
 
+ZaItemList.prototype.loadFromJS =
+function(resp) {
+	if(!resp)
+		return;
+	for(var ix in resp) {
+		if(resp[ix] instanceof Array) {
+			var arr = resp[ix];
+			var len = arr.length;
+			for(var i = 0; i < len; i++) {
+				var item;
+				if(this._constructor) {
+					item = new this._constructor(this._app);
+				} else {
+					item = ZaItem.getFromType(ix, this._app);
+				}
+				item.type = ix;	
+				item.initFromJS(arr[i]);
+				this.add(item);			
+			}
+		}  
+	}
+}
+
 // Grab the IDs out of a list of items, and return them as both a string and a hash.
 ZaItemList.prototype._getIds =
 function(list) {

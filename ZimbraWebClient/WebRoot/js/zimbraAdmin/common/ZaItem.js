@@ -40,6 +40,7 @@ ZaItem.prototype.constructor = ZaItem;
 
 ZaItem.loadMethods = new Object();
 ZaItem.initMethods = new Object();
+ZaItem.modifyMethods = new Object();
 
 ZaItem.ACCOUNT = "account";
 ZaItem.DL = "dl";
@@ -164,6 +165,21 @@ ZaItem.prototype.load = function (by, val, withConfig) {
 	//Instrumentation code end
 }
 
+
+ZaItem.prototype.modify = function (mods) {
+	//Instrumentation code start
+	if(ZaItem.modifyMethods[this._iKeyName]) {
+		var methods = ZaItem.modifyMethods[this._iKeyName];
+		var cnt = methods.length;
+		for(var i = 0; i < cnt; i++) {
+			if(typeof(methods[i]) == "function") {
+				methods[i].call(this, mods);
+			}
+		}
+	}	
+	//Instrumentation code end
+}
+
 ZaItem.prototype.initFromDom =
 function(node) {
 	this.name = node.getAttribute("name");
@@ -188,6 +204,40 @@ function(node) {
 				}
 			} else {
 				this.attrs[name] = value;
+			}
+		}
+	}
+}
+
+ZaItem.prototype.initFromJS = 
+function (obj) {
+	if(!obj)
+		return;
+	this.name = obj.name;
+	this.id = obj.id;
+	this.attrs = new Object();
+	if(obj.a) {
+		var len = obj.a.length;
+		for(var ix = 0; ix < len; ix++) {
+			if(!this.attrs[[obj.a[ix].n]]) {
+				this.attrs[[obj.a[ix].n]] = obj.a[ix]._content;
+			} else {
+				if(!(this.attrs[[obj.a[ix].n]] instanceof Array)) {
+					this.attrs[[obj.a[ix].n]] = [this.attrs[[obj.a[ix].n]]];
+				} 
+				this.attrs[[obj.a[ix].n]].push(obj.a[ix]._content);
+			}
+		}
+	}
+	if(obj._attrs) {
+		for (var ix in obj._attrs) {
+			if(!this.attrs[ix]) {
+				this.attrs[ix] = obj._attrs[ix];
+			} else {
+				if(!(this.attrs[ix] instanceof Array)) {
+					this.attrs[ix] = [this.attrs[ix]];
+				} 
+				this.attrs[ix].push(obj._attrs[ix]);
 			}
 		}
 	}
