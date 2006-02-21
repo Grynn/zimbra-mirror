@@ -136,10 +136,16 @@ ZaDomain.AUTH_MECH_CHOICES = [ZaDomain.AuthMech_ad,ZaDomain.AuthMech_ldap,ZaDoma
 **/
 ZaDomain.getAll =
 function(app) {
-	var soapDoc = AjxSoapDoc.create("GetAllDomainsRequest", "urn:zimbraAdmin", null);	
+	/*
 	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	list.loadFromDom(resp);*/
+	var soapDoc = AjxSoapDoc.create("GetAllDomainsRequest", "urn:zimbraAdmin", null);		
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	var resp = command.invoke(params).Body.GetAllDomainsResponse;	
 	var list = new ZaItemList(ZaDomain, app);
-	list.loadFromDom(resp);
+	list.loadFromJS(resp);		
 	return list;
 }
 
@@ -264,8 +270,14 @@ function(tmpObj, app) {
 		attr.setAttribute("n", ZaDomain.A_domainDefaultCOSId);	
 	}
 	var newDomain = new ZaDomain();
-	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
-	newDomain.initFromDom(resp.firstChild);
+	
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	var resp = command.invoke(params).Body.CreateDomainResponse;	
+	newDomain.initFromJS(resp.domain[0]);
+	/*var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	newDomain.initFromDom(resp.firstChild);*/
 	return newDomain;
 }
 
@@ -368,8 +380,14 @@ function(tmpObj, oldObj) {
 		attr.setAttribute("n", ZaDomain.A_GalMaxResults);	
 	}
 
-	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
-	oldObj.initFromDom(resp.firstChild);
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	var resp = command.invoke(params).Body.ModifyDomainResponse;	
+	oldObj.initFromJS(resp.domain[0]);
+		
+	/*var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	oldObj.initFromDom(resp.firstChild);*/
 }
 
 ZaDomain.modifyAuthSettings = 
@@ -412,8 +430,15 @@ function(tmpObj, oldObj) {
 		*/
 	
 	}
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	var resp = command.invoke(params).Body.ModifyDomainResponse;	
+	oldObj.initFromJS(resp.domain[0]);	
+	/*
 	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	oldObj.initFromDom(resp.firstChild);
+	*/
 }
 
 /**
@@ -429,9 +454,15 @@ function(mods) {
 		attr.setAttribute("n", aname);
 	}
 		
-	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	var resp = command.invoke(params).Body.ModifyDomainResponse;	
+	this.initFromJS(resp.domain[0]);	
+			
+	/*var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	//update itself
-	this.initFromDom(resp.firstChild);
+	this.initFromDom(resp.firstChild);*/
 }
 
 /**
@@ -440,6 +471,55 @@ function(mods) {
 ZaDomain.prototype.initFromDom = 
 function (node) {
 	ZaItem.prototype.initFromDom.call(this, node);
+	if(!this.attrs[ZaDomain.A_AuthMech]) {
+		this.attrs[ZaDomain.A_AuthMech] = ZaDomain.AuthMech_zimbra; //default value
+	}
+	if(!this.attrs[ZaDomain.A_GalMode]) {
+		this.attrs[ZaDomain.A_GalMode] = ZaDomain.GAL_Mode_internal; //default value
+	}
+
+	if(this.attrs[ZaDomain.A_AuthLdapURL]) {
+		/* Split Auth URL into an array */
+		var temp = this.attrs[ZaDomain.A_AuthLdapURL];
+		this.attrs[ZaDomain.A_AuthLdapURL] = temp.split(" ");
+
+	} else this.attrs[ZaDomain.A_AuthLdapURL] = new Array();
+	if(this.attrs[ZaDomain.A_GalLdapURL])	{	
+		var temp = this.attrs[ZaDomain.A_GalLdapURL];
+		this.attrs[ZaDomain.A_GalLdapURL] = temp.split(" ");		
+	} else this.attrs[ZaDomain.A_GalLdapURL] = new Array();
+	
+	if(this.attrs[ZaDomain.A_GalMode]) {
+		if(this.attrs[ZaDomain.A_GalMode] == "ldap" || this.attrs[ZaDomain.A_GalMode] == "both") {
+			if(this.attrs[ZaDomain.A_GalLdapFilter] == "ad") {
+				this.attrs[ZaDomain.A_GALServerType] = "ad";
+			} else {
+				this.attrs[ZaDomain.A_GALServerType] = "ldap";
+			}
+		}
+	} else {
+		this.attrs[ZaDomain.A_GalMode] = "zimbra";
+	}
+	
+	if(this.attrs[ZaDomain.A_GalLdapBindDn] || this.attrs[ZaDomain.A_GalLdapBindPassword]) {
+		this.attrs[ZaDomain.A_UseBindPassword] = "TRUE";
+	} else {
+		this.attrs[ZaDomain.A_UseBindPassword] = "FALSE";
+	}
+	
+	if(this.attrs[ZaDomain.A_AuthLdapSearchBindDn] || this.attrs[ZaDomain.A_AuthLdapSearchBindPassword]) {
+		this[ZaDomain.A_AuthUseBindPassword] = "TRUE";
+	} else {
+		this[ZaDomain.A_AuthUseBindPassword] = "FALSE";
+	}
+		
+	this[ZaDomain.A_GALSampleQuery] = "john";
+
+}
+
+ZaDomain.prototype.initFromJS = 
+function (obj) {
+	ZaItem.prototype.initFromJS.call(this, obj);
 	if(!this.attrs[ZaDomain.A_AuthMech]) {
 		this.attrs[ZaDomain.A_AuthMech] = ZaDomain.AuthMech_zimbra; //default value
 	}
@@ -517,7 +597,12 @@ ZaDomain.prototype.remove =
 function() {
 	var soapDoc = AjxSoapDoc.create("DeleteDomainRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
-	ZmCsfeCommand.invoke(soapDoc, null, null, null, true);	
+		var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	invoke(params);	
+	
+//	ZmCsfeCommand.invoke(soapDoc, null, null, null, true);	
 }
 
 ZaDomain.myXModel = {
