@@ -58,7 +58,7 @@ case "$1" in
 	kill $pid
 	# wait for mysqld pid file to be removed
 	for ((i = 0; i < 30; i++)); do
-	    sleep 1;
+	    sleep 2;
 	    if [ ! -s ${mysql_pidfile} ]; then
 		break;
 	    fi
