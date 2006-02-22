@@ -216,7 +216,7 @@ function () {
 **/
 ZaNewDomainXWizard.prototype.checkGALCallBack = 
 function (arg) {
-	if(arg instanceof AjxException || arg instanceof ZmCsfeException || arg instanceof AjxSoapException) {
+	/*if(arg instanceof AjxException || arg instanceof ZmCsfeException || arg instanceof AjxSoapException) {
 		this._containedObject[ZaDomain.A_GALTestResultCode] = arg.code;
 		this._containedObject[ZaDomain.A_GALTestMessage] = arg.detail;
 		this._containedObject[ZaDomain.A_GALTestSearchResults] = null;	
@@ -252,7 +252,35 @@ function (arg) {
 				}
 			}		
 		}
-	}
+	}*/
+	if(!arg)
+		return;
+	if(arg.isException()) {
+		this._containedObject[ZaDomain.A_GALTestResultCode] = arg.getException().code;
+		this._containedObject[ZaDomain.A_GALTestMessage] = arg.getException().detail+"\n"+arg.getException().msg;
+		this._containedObject[ZaDomain.A_GALTestSearchResults] = null;		
+	} else {
+		var response = arg.getResponse().Body.CheckGalConfigResponse;
+		this._containedObject[ZaDomain.A_GALTestResultCode] = response.code[0]._content;	
+		if(this._containedObject[ZaDomain.A_GALTestResultCode] != ZaDomain.Check_OK) {
+			this._containedObject[ZaDomain.A_GALTestMessage] = response.message[0]._content;		
+			this._containedObject[ZaDomain.A_GALTestSearchResults] = null;			
+		} else {
+			this._containedObject[ZaDomain.A_GALTestSearchResults] = new Array();
+			if(response.cn && response.cn.length) {
+				var len = response.cn.length;
+				for (var ix=0;ix<len;ix++) {
+					var cnObject = new Object();
+					if(response.cn[ix]._attrs) {
+						for (var a in response.cn[ix]._attrs) {
+							cnObject[a] = response.cn[ix]._attrs[a];
+						}
+						this._containedObject[ZaDomain.A_GALTestSearchResults].push(cnObject);						
+					}
+				}
+			}
+		}	
+	}	
 	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
@@ -287,6 +315,7 @@ function () {
 **/
 ZaNewDomainXWizard.prototype.checkAuthCallBack = 
 function (arg) {
+/*
 	if(arg instanceof AjxException || arg instanceof ZmCsfeException || arg instanceof AjxSoapException) {
 		this._containedObject[ZaDomain.A_AuthTestResultCode] = arg.code;
 		this._containedObject[ZaDomain.A_AuthTestMessage] = arg.detail;
@@ -301,7 +330,24 @@ function (arg) {
 			}			
 			//this._containedObject[ZaDomain.A_AuthComputedBindDn] = arg.getBody().firstChild.lastChild.firstChild.nodeValue;		
 		}
-	}
+	}*/
+	if(!arg)
+		return;
+	if(arg.isException()) {
+		this._containedObject[ZaDomain.A_AuthTestResultCode] = arg.getException().code;
+		this._containedObject[ZaDomain.A_AuthTestMessage] = arg.getException().detail+"\n"+arg.getException().msg;
+	} else {
+		var response = arg.getResponse().Body.CheckAuthConfigResponse;
+		this._containedObject[ZaDomain.A_AuthTestResultCode] = response.code[0]._content;
+		if(this._containedObject[ZaDomain.A_AuthTestResultCode] != ZaDomain.Check_OK) {
+			this._containedObject[ZaDomain.A_AuthTestMessage] = response.message[0]._content;		
+			if(response.bindDn != null) {
+				this._containedObject[ZaDomain.A_AuthComputedBindDn] = response.bindDn[0]._content;		
+			} else {
+				this._containedObject[ZaDomain.A_AuthComputedBindDn] = "";
+			}
+		}
+	}	
 	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);

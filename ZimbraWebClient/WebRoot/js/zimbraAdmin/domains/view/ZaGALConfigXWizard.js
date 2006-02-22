@@ -184,6 +184,35 @@ function () {
 **/
 ZaGALConfigXWizard.prototype.checkCallBack = 
 function (arg) {
+	if(!arg)
+		return;
+	if(arg.isException()) {
+		this._containedObject[ZaDomain.A_GALTestResultCode] = arg.getException().code;
+		this._containedObject[ZaDomain.A_GALTestMessage] = arg.getException().detail+"\n"+arg.getException().msg;
+		this._containedObject[ZaDomain.A_GALTestSearchResults] = null;		
+	} else {
+		var response = arg.getResponse().Body.CheckGalConfigResponse;
+		this._containedObject[ZaDomain.A_GALTestResultCode] = response.code[0]._content;	
+		if(this._containedObject[ZaDomain.A_GALTestResultCode] != ZaDomain.Check_OK) {
+			this._containedObject[ZaDomain.A_GALTestMessage] = response.message[0]._content;		
+			this._containedObject[ZaDomain.A_GALTestSearchResults] = null;			
+		} else {
+			this._containedObject[ZaDomain.A_GALTestSearchResults] = new Array();
+			if(response.cn && response.cn.length) {
+				var len = response.cn.length;
+				for (var ix=0;ix<len;ix++) {
+					var cnObject = new Object();
+					if(response.cn[ix]._attrs) {
+						for (var a in response.cn[ix]._attrs) {
+							cnObject[a] = response.cn[ix]._attrs[a];
+						}
+						this._containedObject[ZaDomain.A_GALTestSearchResults].push(cnObject);						
+					}
+				}
+			}
+		}	
+	}
+	/*
 	if(arg instanceof AjxException || arg instanceof ZmCsfeException || arg instanceof AjxSoapException) {
 		this._containedObject[ZaDomain.A_GALTestResultCode] = arg.code;
 		this._containedObject[ZaDomain.A_GALTestMessage] = arg.detail;
@@ -220,7 +249,7 @@ function (arg) {
 				}
 			}
 		}
-	}
+	}*/
 	this.goPage(6);
 }
 

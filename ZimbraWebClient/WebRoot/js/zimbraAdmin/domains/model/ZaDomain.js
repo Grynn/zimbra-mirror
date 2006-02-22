@@ -136,9 +136,6 @@ ZaDomain.AUTH_MECH_CHOICES = [ZaDomain.AuthMech_ad,ZaDomain.AuthMech_ldap,ZaDoma
 **/
 ZaDomain.getAll =
 function(app) {
-	/*
-	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
-	list.loadFromDom(resp);*/
 	var soapDoc = AjxSoapDoc.create("GetAllDomainsRequest", "urn:zimbraAdmin", null);		
 	var command = new ZmCsfeCommand();
 	var params = new Object();
@@ -276,8 +273,7 @@ function(tmpObj, app) {
 	params.soapDoc = soapDoc;	
 	var resp = command.invoke(params).Body.CreateDomainResponse;	
 	newDomain.initFromJS(resp.domain[0]);
-	/*var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
-	newDomain.initFromDom(resp.firstChild);*/
+
 	return newDomain;
 }
 
@@ -313,9 +309,15 @@ function (obj, callback) {
 	attr = soapDoc.set("name", obj[ZaDomain.A_AuthTestUserName]);
 	attr = soapDoc.set("password", obj[ZaDomain.A_AuthTestPassword]);	
 	
-	var asynCommand = new ZmCsfeAsynchCommand();
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	params.asyncMode = true;
+	params.callback = callback;
+	command.invoke(params);	
+/*	var asynCommand = new ZmCsfeAsynchCommand();
 	asynCommand.addInvokeListener(callback);
-	asynCommand.invoke(soapDoc, null, null, null, true);	
+	asynCommand.invoke(soapDoc, null, null, null, true);	*/
 }
 
 ZaDomain.testGALSettings =
@@ -344,10 +346,16 @@ function (obj, callback, sampleQuery) {
 		attr.setAttribute("n", ZaDomain.A_GalLdapBindPassword);
 	}
 	soapDoc.set("query", "*" + sampleQuery + "*");
-
-	var asynCommand = new ZmCsfeAsynchCommand();
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	params.asyncMode = true;
+	params.callback = callback;
+	command.invoke(params);
+	/*var asynCommand = new ZmCsfeAsynchCommand();
 	asynCommand.addInvokeListener(callback);
-	asynCommand.invoke(soapDoc, null, null, null, true);
+	asynCommand.invoke(soapDoc, null, null, null, true);*/
+	
 }
 
 ZaDomain.modifyGalSettings = 
@@ -385,9 +393,6 @@ function(tmpObj, oldObj) {
 	params.soapDoc = soapDoc;	
 	var resp = command.invoke(params).Body.ModifyDomainResponse;	
 	oldObj.initFromJS(resp.domain[0]);
-		
-	/*var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
-	oldObj.initFromDom(resp.firstChild);*/
 }
 
 ZaDomain.modifyAuthSettings = 
@@ -435,10 +440,6 @@ function(tmpObj, oldObj) {
 	params.soapDoc = soapDoc;	
 	var resp = command.invoke(params).Body.ModifyDomainResponse;	
 	oldObj.initFromJS(resp.domain[0]);	
-	/*
-	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
-	oldObj.initFromDom(resp.firstChild);
-	*/
 }
 
 /**
@@ -459,10 +460,6 @@ function(mods) {
 	params.soapDoc = soapDoc;	
 	var resp = command.invoke(params).Body.ModifyDomainResponse;	
 	this.initFromJS(resp.domain[0]);	
-			
-	/*var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
-	//update itself
-	this.initFromDom(resp.firstChild);*/
 }
 
 /**
@@ -601,8 +598,6 @@ function() {
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	invoke(params);	
-	
-//	ZmCsfeCommand.invoke(soapDoc, null, null, null, true);	
 }
 
 ZaDomain.myXModel = {

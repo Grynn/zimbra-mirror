@@ -123,11 +123,6 @@ function(query, types, pagenum, orderby, isascending, app, attrs, limit, domainN
 	var list = new ZaItemList(null, app);	
 	list.loadFromJS(resp);
 		
-	/*resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
-
-	list.loadFromDom(resp);
-	var searchTotal = resp.getAttribute("searchTotal");
-	*/
 	var searchTotal = resp.searchTotal;
 	var numPages = Math.ceil(searchTotal/limit);
 	return {"list":list, "numPages":numPages};

@@ -23,6 +23,13 @@
  * ***** END LICENSE BLOCK *****
  */
 
+/**
+* @class ZaAuthConfigXWizard
+* @contructor
+* @param parent
+* @param app
+* @author Greg Solovyev
+**/
 function ZaAuthConfigXWizard (parent, app) {
 	this._app=app;
 	ZaXWizardDialog.call(this, parent,app, null, ZaMsg.NCD_AuthConfigTitle, "550px", "300px","ZaAuthConfigXWizard");
@@ -115,22 +122,7 @@ function(stepNum) {
 		}
 	}
 }
-/*
-ZaAuthConfigXWizard.prototype.generateLDAPUrl = 
-function () {
-	var ldapURL = "";
-	if(this._containedObject.attrs[ZaDomain.A_AuthLDAPUseSSL] == "TRUE") {
-		ldapURL +="ldaps://";
-	} else {
-		ldapURL +="ldap://";
-	}
-	ldapURL +=this._containedObject.attrs[ZaDomain.A_AuthLDAPServerName];
-	ldapURL +=":";
-	ldapURL +=this._containedObject.attrs[ZaDomain.A_AuthLDAPServerPort];
-	ldapURL +="/";
-	this._containedObject.attrs[ZaDomain.A_AuthLdapURL] = ldapURL;
-}
-*/
+
 ZaAuthConfigXWizard.prototype.testSetings =
 function () {
 	if(this._containedObject.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_ad) {
@@ -146,7 +138,24 @@ function () {
 **/
 ZaAuthConfigXWizard.prototype.checkCallBack = 
 function (arg) {
-	if(arg instanceof AjxException || arg instanceof ZmCsfeException || arg instanceof AjxSoapException) {
+	if(!arg)
+		return;
+	if(arg.isException()) {
+		this._containedObject[ZaDomain.A_AuthTestResultCode] = arg.getException().code;
+		this._containedObject[ZaDomain.A_AuthTestMessage] = arg.getException().detail+"\n"+arg.getException().msg;
+	} else {
+		var response = arg.getResponse().Body.CheckAuthConfigResponse;
+		this._containedObject[ZaDomain.A_AuthTestResultCode] = response.code[0]._content;
+		if(this._containedObject[ZaDomain.A_AuthTestResultCode] != ZaDomain.Check_OK) {
+			this._containedObject[ZaDomain.A_AuthTestMessage] = response.message[0]._content;		
+			if(response.bindDn != null) {
+				this._containedObject[ZaDomain.A_AuthComputedBindDn] = response.bindDn[0]._content;		
+			} else {
+				this._containedObject[ZaDomain.A_AuthComputedBindDn] = "";
+			}
+		}
+	}		
+/*	if(arg instanceof AjxException || arg instanceof ZmCsfeException || arg instanceof AjxSoapException) {
 		this._containedObject[ZaDomain.A_AuthTestResultCode] = arg.code;
 		this._containedObject[ZaDomain.A_AuthTestMessage] = arg.detail;
 	} else {
@@ -160,7 +169,7 @@ function (arg) {
 			}
 		}
 	}
-
+*/
 	this.goPage(6);
 }
 
@@ -170,18 +179,7 @@ function (arg) {
 ZaAuthConfigXWizard.onAuthMechChange = 
 function (value, event, form) {
 	this.setInstanceValue(value);
-	/*
-	if(value == ZaDomain.AuthMech_ldap) {
-		if(!form.getInstance().attrs[ZaDomain.A_AuthLdapUserDn]) {
-			form.getInstance().attrs[ZaDomain.A_AuthLdapUserDn] = "%u,%D";
-		}
-	} */
-	/*
-	if(value == ZaDomain.AuthMech_ldap || value == ZaDomain.AuthMech_ad) {
-		form.getInstance().attrs[ZaDomain.A_AuthLDAPServerPort] = 389;
-		form.getInstance().attrs[ZaDomain.A_AuthLDAPUseSSL] = "FALSE";
-	}
-	*/
+
 	if(value == ZaDomain.AuthMech_ad) {
 		if(!form.getInstance().attrs[ZaDomain.A_AuthADDomainName]) {
 			form.getInstance().attrs[ZaDomain.A_AuthADDomainName] = form.getInstance().attrs[ZaDomain.A_domainName];
@@ -190,31 +188,7 @@ function (value, event, form) {
 	form.parent.changeButtonStateForStep(1);
 
 }
-/*
-ZaAuthConfigXWizard.onLDAPPortChange = 
-function (value, event, form) {
-	this.setInstanceValue(value);
-	form.parent.generateLDAPUrl();
-	
-}
 
-ZaAuthConfigXWizard.onLDAPServerChange = 
-function (value, event, form) {
-	this.setInstanceValue(value);	
-	form.parent.generateLDAPUrl();
-}
-
-ZaAuthConfigXWizard.onLDAPUseSSLChange = 
-function (value, event, form) {
-	if(value == "TRUE") {
-		form.getInstance().attrs[ZaDomain.A_AuthLDAPServerPort] = 636;
-	} else {
-		form.getInstance().attrs[ZaDomain.A_AuthLDAPServerPort] = 389;
-	}	
-	this.setInstanceValue(value);	
-	form.parent.generateLDAPUrl();
-}
-*/
 /**
 * Overwritten methods that control wizard's flow (open, go next,go previous, finish)
 **/
@@ -403,7 +377,7 @@ ZaAuthConfigXWizard.myXFormModifier = function(xFormObject) {
 											{ref:ZaDomain.A_AuthLdapSearchFilter, type:_OUTPUT_, label:ZaMsg.Domain_AuthLdapFilter, labelLocation:_LEFT_},
 											{ref:ZaDomain.A_AuthLdapSearchBase, type:_OUTPUT_, label:ZaMsg.Domain_AuthLdapSearchBase, labelLocation:_LEFT_},
 											{ref:ZaDomain.A_AuthUseBindPassword, type:_OUTPUT_, label:ZaMsg.Domain_AuthUseBindPassword, labelLocation:_LEFT_,choices:ZaModel.BOOLEAN_CHOICES},											
-											{ref:ZaDomain.A_AuthLdapSearchBindDn, type:_INPUT_, label:ZaMsg.Domain_AuthLdapBindDn, labelLocation:_LEFT_, relevant:"instance[ZaDomain.A_AuthUseBindPassword] == 'TRUE'", relevantBehavior:_HIDE_}											
+											{ref:ZaDomain.A_AuthLdapSearchBindDn, type:_OUTPUT_, label:ZaMsg.Domain_AuthLdapBindDn, labelLocation:_LEFT_, relevant:"instance[ZaDomain.A_AuthUseBindPassword] == 'TRUE'", relevantBehavior:_HIDE_}											
 										]
 									}
 								]
