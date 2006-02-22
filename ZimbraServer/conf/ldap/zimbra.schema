@@ -308,6 +308,9 @@ objectIdentifier zimbraNotifyBindPort ZimbraAttrType:318
 objectIdentifier zimbraNotifySSLServerEnabled ZimbraAttrType:319
 objectIdentifier zimbraNotifySSLBindAddress ZimbraAttrType:320
 objectIdentifier zimbraNotifySSLBindPort ZimbraAttrType:321
+objectIdentifier zimbraCalResAutoDeclineIfBusy ZimbraAttrType:322
+objectIdentifier zimbraCalResAutoDeclineRecurring ZimbraAttrType:323
+objectIdentifier zimbraCalResAlwaysFree ZimbraAttrType:324
 
 #################################################################
 # object class OIDs
@@ -2338,7 +2341,28 @@ attributetype ( zimbraCalResType
 
 attributetype ( zimbraCalResAutoAcceptDecline
 	NAME 'zimbraCalResAutoAcceptDecline'
-	DESC 'Whether this calendar resource accepts/declines meeting invites automatically; default true'
+	DESC 'Whether this calendar resource accepts/declines meeting invites automatically; default TRUE'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( zimbraCalResAutoDeclineIfBusy
+	NAME 'zimbraCalResAutoDeclineIfBusy'
+	DESC 'Whether this calendar resource declines invite if already busy; default TRUE'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( zimbraCalResAutoDeclineRecurring
+	NAME 'zimbraCalResAutoDeclineRecurring'
+	DESC 'Whether this calendar resource declines invites to recurring appointments; default FASE'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( zimbraCalResAlwaysFree
+	NAME 'zimbraCalResAlwaysFree'
+	DESC 'Whether resource remains free after accepting invite; default FALSE'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
@@ -3009,6 +3033,9 @@ objectclass ( zimbraCalendarResource
 		zimbraCalResType
 		)
 	MAY (
-		zimbraCalResAutoAcceptDecline
+		zimbraCalResAutoAcceptDecline $
+		zimbraCalResAutoDeclineIfBusy $
+		zimbraCalResAutoDeclineRecurring $
+		zimbraCalResAlwaysFree
 		)
 	)

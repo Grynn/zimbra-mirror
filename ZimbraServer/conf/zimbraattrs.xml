@@ -616,4 +616,10 @@
 
 <attr name="zimbraCalResAutoAcceptDecline" type="boolean"/>
 
+<attr name="zimbraCalResAutoDeclineIfBusy" type="boolean"/>
+
+<attr name="zimbraCalResAutoDeclineRecurring" type="boolean"/>
+
+<attr name="zimbraCalResAlwaysFree" type="boolean"/>
+
 </attrs>
