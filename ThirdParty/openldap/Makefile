@@ -11,6 +11,9 @@ ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
 
+ifeq ($(BUILD_PLATFORM), MACOSXx86)
+	ENVMOD := env LIBS="-lresolv" 
+endif
 ifeq ($(BUILD_PLATFORM), MACOSX)
 	ENVMOD := env LIBS="-lresolv" 
 endif
