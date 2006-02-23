@@ -40,7 +40,7 @@ function AjxListener(obj, method) {
 	AjxCallback.call(this, obj, method);
 }
 
-AjxListener.prototype = AjxCallback;
+AjxListener.prototype = new AjxCallback();
 AjxListener.prototype.constructor = AjxListener;
 
 AjxListener.prototype.toString = 
@@ -55,5 +55,5 @@ function() {
 */
 AjxListener.prototype.handleEvent =
 function(ev) {
-	return AjxCallback.prototype.run.call(this, ev);
+	return this.run(ev);
 }
