@@ -418,8 +418,9 @@ function(ev, eventType, obj, mouseEv) {
 	// By default, we halt event processing. Listeners may override
 	var tn = mouseEv.target.tagName.toLowerCase();
 	if (tn != "input" && tn != "textarea") {
-		mouseEv._stopPropagation = true;
-		mouseEv._returnValue = false;
+		// bug #6003 - Safari seems to follow propagation rules for clicks on scrollbar :(
+		mouseEv._stopPropagation = AjxEnv.isSafari ? false : true;
+		mouseEv._returnValue = AjxEnv.isSafari ? true : false;
 	} else {
 		mouseEv._stopPropagation = false;
 		mouseEv._returnValue = true;	
