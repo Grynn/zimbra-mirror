@@ -25,11 +25,22 @@ function Test() {
 		container.setLocation(20, 20);
 		editor.setSize(800, 600);
 
+		var HAS_EVENTS = false;
 		b.addSelectionListener(function() {
-			editor.focus();
 			var doc = editor._getIframeDoc();
-			if (AjxEnv.isGeckoBased)
-				doc.designMode = "off";
+
+			if (AjxEnv.isGeckoBased && !HAS_EVENTS) {
+				HAS_EVENTS = true;
+				doc.addEventListener("blur", function() {
+					editor._getIframeDoc().designMode = "off";
+				}, true);
+				doc.addEventListener("focus", function() {
+					editor._getIframeDoc().designMode = "on";
+				}, true);
+			}
+
+			editor.focus();
+			doc.designMode = "off";
 			var ifr = doc.createElement("iframe");
 			// ifr.src = "/zimbra/test/spreadsheet/index.jsp";
 			ifr.src = "http://localhost:7070/zimbra/test/spreadsheet/index.jsp";
