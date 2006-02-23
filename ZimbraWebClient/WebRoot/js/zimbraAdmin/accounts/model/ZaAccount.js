@@ -552,7 +552,6 @@ function(accId) {
 	var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	command.invoke(params);
 	var resp = command.invoke(params).Body.DelegateAuthResponse;
 	retVal.authToken = resp.authToken;
 	retVal.lifetime = resp.lifetime;

@@ -357,9 +357,14 @@ function () {
 **/
 ZaAccountListController.launch = 
 function (delegateToken, tokenLifetime, mailServer) {
+	var body = this.document.body;
+	if(!body) {
+		body = this.document.createElement('body');
+		this.document.appendChild(body);
+	}
 	var form = this.document.createElement('form');
 	form.style.display = 'none';
-	this.document.body.appendChild(form);
+	body.appendChild(form);
 	var html = new Array();
 	var i = 0;
 	if(!delegateToken)
