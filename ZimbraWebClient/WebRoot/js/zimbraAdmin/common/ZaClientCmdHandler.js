@@ -28,6 +28,12 @@ function ZaClientCmdHandler(appCtxt) {
 	this._settings = new Object();
 }
 
+/*ZaClientCmdHandler.DBG = new Object();
+ZaClientCmdHandler.DBG[0] = AjxDebug.DBG_NONE;
+ZaClientCmdHandler.DBG[1] = AjxDebug.DBG1;
+ZaClientCmdHandler.DBG[2] = AjxDebug.DBG2;
+ZaClientCmdHandler.DBG[3] = AjxDebug.DBG3;
+*/
 ZaClientCmdHandler.prototype.execute =
 function(argv) {
 	if (argv[0] && argv[0].toLowerCase() == "debug") {
@@ -35,16 +41,17 @@ function(argv) {
 		if (argv[1] == "t") {
 			var on = DBG._showTiming;
 			var newState = on ? "off" : "on";
-			this._alert("Turning timing info " + newState);
+			alert("Turning debug timing info " + newState);
 			DBG.showTiming(!on);
 		} else {
-			var level = Number(argv[1]);
+			//var arg = Number(argv[1]);
+			var level =argv[1];
 			if (level) {
-				this._alert("Setting Debug to level: " + level);
+				alert("Setting Debug to level:" + level);
 				DBG.setDebugLevel(level);
 			} else {
-				this._alert("Invalid debug level", ZmStatusView.LEVEL_WARN);
+				alert("Invalid debug level");
 			}
 		}
-	}
+	} 
 }
