@@ -75,9 +75,9 @@ AjxVector.prototype.addList =
 function(list) {
 	if (!list) return;
 	
-	if ((list instanceof Array) && list.length)
+	if (list.length) // array
 		this._array = this._array.concat(list);
-	else if ((list instanceof AjxVector) && list.size())
+	else if (list.size()) // AjxVector
 		this._array = this._array.concat(list._array);
 };
 
