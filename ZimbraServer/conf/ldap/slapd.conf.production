@@ -110,6 +110,7 @@ directory	"/opt/zimbra/openldap-data"
 # Indices to maintain
 index   objectClass            eq
 index   zimbraForeignPrincipal eq
+index   zimbraGroupId          eq
 index   zimbraId               eq
 index   zimbraMailCatchAllAddress eq,sub
 index   zimbraMailDeliveryAddress eq,sub

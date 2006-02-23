@@ -311,6 +311,7 @@ objectIdentifier zimbraNotifySSLBindPort ZimbraAttrType:321
 objectIdentifier zimbraCalResAutoDeclineIfBusy ZimbraAttrType:322
 objectIdentifier zimbraCalResAutoDeclineRecurring ZimbraAttrType:323
 objectIdentifier zimbraCalResAlwaysFree ZimbraAttrType:324
+objectIdentifier zimbraGroupId ZimbraAttrType:325
 
 #################################################################
 # object class OIDs
@@ -795,6 +796,14 @@ attributetype ( zimbraGalMode
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
 	SINGLE-VALUE )			
+
+attributetype ( zimbraGroupId
+	NAME ( 'zimbraGroupId' )
+	DESC 'Zimbra Systems Unique Group ID'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} 
+	SINGLE-VALUE )
 
 attributetype ( zimbraId
 	NAME ( 'zimbraId' )
@@ -2839,7 +2848,7 @@ objectclass ( zimbraSecurityGroup
 	NAME 'zimbraSecurityGroup'
 	DESC 'Security Group'
 	SUP top AUXILIARY
-	MUST ( zimbraId )
+	MUST ( zimbraGroupId )
 	MAY ( zimbraMemberOf ))
 
 ################

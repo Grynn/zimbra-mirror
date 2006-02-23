@@ -172,6 +172,8 @@
 
 <attr name="zimbraGalMode" type="enum" value="zimbra,both,ldap"/>
 
+<attr name="zimbraGroupId" type="id" immutable="1"/>
+
 <attr name="zimbraId" type="id" immutable="1"/>
 
 <attr name="zimbraImapAdvertisedName" type="string" max="128"/>
