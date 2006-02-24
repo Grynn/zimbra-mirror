@@ -21,6 +21,17 @@ CLAMAV_VERSION ?= clamav-0.88.tar.gz
 MYSQL_VERSION ?= standard-4.1.16-pc-linux-gnu-i686
 MYSQL_CLIENT_VERSION ?= standard-4.1.16-clientlibs
 
+ifeq ($(BUILD_PLATFORM), MACOSX)
+    MYSQL_VERSION := standard-4.1.16-apple-darwin8.2.0-powerpc
+	MYSQL_CLIENT_VERSION := standard-4.1.16-apple-darwin8.2.0-powerpc
+endif
+
+ifeq ($(BUILD_PLATFORM), MACOSXx86)
+	MYSQL_VERSION := standard-4.1.16-apple-darwin8.2.0-i686
+	MYSQL_CLIENT_VERSION := standard-4.1.16-apple-darwin8.2.0-i686
+endif
+
+
 HTTPD_VERSION ?= 2.0.54
 
 POSTFIX_VERSION ?= 2.2.8
