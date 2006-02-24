@@ -12,6 +12,14 @@ BDB_VERSION ?= 4.2.52.4
 BDB_INC ?= $(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/include
 BDB_LIB ?= $(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/lib
 
+MYSQL_INCLUDE := $(ZIMBRA_HOME)/mysql/include
+
+ifeq ($(BUILD_PLATFORM), MACOSX)
+	MYSQL_INCLUDE := $(ZIMBRA_HOME)/mysql/include/mysql
+endif
+ifeq ($(BUILD_PLATFORM), MACOSXx86)
+	MYSQL_INCLUDE := $(ZIMBRA_HOME)/mysql/include/mysql
+endif
 
 # DESTINATIONS
 
@@ -109,7 +117,7 @@ all: $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 	done
 
 	echo "Compiling perl lib DBD::mysql"; \
-	perl -I$(DEST_LIB_DIR) -MCPAN -e 'get DBI; $$CPAN::Config->{makepl_arg}.=" --nocatchstderr --mysql_config=\"/opt/zimbra/mysql/bin/mysql_config\" --libs=\"-L/opt/zimbra/mysql/lib -lmysqlclient -lz -lm\" --cflags=\" -I/opt/zimbra/mysql/include -Os -fno-common\" "; $$CPAN::Config->{make_arg} .=" LD_RUN_PATH=/opt/zimbra/mysql/lib"; force ("install", "DBD::mysql")' ; \
+	perl -I$(DEST_LIB_DIR) -MCPAN -e 'get DBI; $$CPAN::Config->{makepl_arg}.=" --nocatchstderr --mysql_config=\"/opt/zimbra/mysql/bin/mysql_config\" --libs=\"-L/opt/zimbra/mysql/lib -lmysqlclient -lz -lm\" --cflags=\" -I$(MYSQL_INCLUDE) -Os -fno-common\" "; $$CPAN::Config->{make_arg} .=" LD_RUN_PATH=/opt/zimbra/mysql/lib"; force ("install", "DBD::mysql")' ; \
 
 	@for lib in $(SA_PERL_LIBS); do \
 		echo "Compiling perl lib $$lib"; \
@@ -142,7 +150,7 @@ $(DEST_LIB_DIR):
 
 DBD:
 	echo "Compiling perl lib DBD::mysql"; \
-	perl -I$(DEST_LIB_DIR) -MCPAN -e 'get DBI; $$CPAN::Config->{makepl_arg}.=" --nocatchstderr --mysql_config=\"/opt/zimbra/mysql/bin/mysql_config\" --libs=\"-L/opt/zimbra/mysql/lib -lmysqlclient -lz -lm\" --cflags=\" -I/opt/zimbra/mysql/include -Os -fno-common\" "; $$CPAN::Config->{make_arg} .=" LD_RUN_PATH=/opt/zimbra/mysql/lib"; force ("install", "DBD::mysql")' ; \
+	perl -I$(DEST_LIB_DIR) -MCPAN -e 'get DBI; $$CPAN::Config->{makepl_arg}.=" --nocatchstderr --mysql_config=\"/opt/zimbra/mysql/bin/mysql_config\" --libs=\"-L/opt/zimbra/mysql/lib -lmysqlclient -lz -lm\" --cflags=\" -I$(MYSQL_INCLUDE) -Os -fno-common\" "; $$CPAN::Config->{make_arg} .=" LD_RUN_PATH=/opt/zimbra/mysql/lib"; force ("install", "DBD::mysql")' ; \
 
 clean:
 	rm -rf $(CLEAN_TARGETS)
