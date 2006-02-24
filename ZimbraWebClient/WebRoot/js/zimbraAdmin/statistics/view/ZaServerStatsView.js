@@ -38,10 +38,12 @@ function ZaServerStatsView(parent, app) {
 	this._msgsVolumePage = new ZaServerMessageVolumePage(this, app);
 	this._spamPage = new ZaServerSpamActivityPage(this, app);	
 	this._diskPage = new ZaServerDiskStatsPage(this, app);	
+	this._mbxPage = new ZaServerMBXStatsPage (this, app);
 	this.addTab(ZaMsg.TABT_InData, this._msgCountPage);		
 	this.addTab(ZaMsg.TABT_InMsgs, this._msgsVolumePage);			
 	this.addTab(ZaMsg.TABT_Spam_Activity, this._spamPage);
-	this.addTab(ZaMsg.TABT_Disk, this._diskPage)					
+	this.addTab(ZaMsg.TABT_Disk, this._diskPage);
+	this.addTab(ZaMsg.TABT_MBX, this._mbxPage);					
 //	this.setScrollStyle(DwtControl.SCROLL);
 }
 
@@ -52,7 +54,7 @@ ZaServerStatsView.prototype.toString =
 function() {
 	return "ZaServerStatsView";
 }
-
+ 
 /**
 * @method setObject sets the object contained in the view
 * @param entry - ZaServer object to display
@@ -63,6 +65,7 @@ function(entry) {
 	this._msgsVolumePage.setObject(entry);
 	this._spamPage.setObject(entry);
 	this._diskPage.setObject(entry);
+	this._mbxPage.setObject(entry);
 	var szTitle = AjxStringUtil.htmlEncode(ZaMsg.NAD_ServerStatistics);
 	if(entry.name) {
 		szTitle = szTitle + entry.name;
