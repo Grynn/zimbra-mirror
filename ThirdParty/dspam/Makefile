@@ -14,6 +14,15 @@ endif
 ZIMBRA_HOME ?= /opt/zimbra
 DSPAM_VERSION ?= 3.6.2
 
+MYSQL_INCLUDE_DIR := $(ZIMBRA_HOME)/mysql/include 
+
+ifeq ($(BUILD_PLATFORM), MACOSX)
+	$(ZIMBRA_HOME)/mysql/include/mysql
+endif
+ifeq ($(BUILD_PLATFORM), MACOSXx86)
+	$(ZIMBRA_HOME)/mysql/include/mysql
+endif
+
 all: build tar
 
 build:
@@ -23,7 +32,7 @@ build:
 	--sysconfdir=$(ZIMBRA_HOME)/conf --with-logdir=$(ZIMBRA_HOME)/log \
 	--enable-daemon \
 	--enable-large-scale --with-storage-driver=hash_drv,mysql_drv \
-	--with-mysql-includes=$(ZIMBRA_HOME)/mysql/include \
+	--with-mysql-includes=$(MYSQL_INCLUDE_DIR) \
 	--with-mysql-libraries=$(ZIMBRA_HOME)/mysql/lib \
 	--enable-debug --enable-clamav; \
 	make; make install)
