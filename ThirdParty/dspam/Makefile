@@ -17,10 +17,10 @@ DSPAM_VERSION ?= 3.6.2
 MYSQL_INCLUDE_DIR := $(ZIMBRA_HOME)/mysql/include 
 
 ifeq ($(BUILD_PLATFORM), MACOSX)
-	$(ZIMBRA_HOME)/mysql/include/mysql
+	MYSQL_INCLUDE_DIR := $(ZIMBRA_HOME)/mysql/include/mysql
 endif
 ifeq ($(BUILD_PLATFORM), MACOSXx86)
-	$(ZIMBRA_HOME)/mysql/include/mysql
+	MYSQL_INCLUDE_DIR := $(ZIMBRA_HOME)/mysql/include/mysql
 endif
 
 all: build tar
