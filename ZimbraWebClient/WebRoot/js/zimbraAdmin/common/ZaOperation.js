@@ -79,3 +79,4 @@ ZaOperation.NEW_MENU = ++ZA_OP_INDEX;
 ZaOperation.HELP = ++ZA_OP_INDEX;
 ZaOperation.REINDEX_MAILBOX = ++ZA_OP_INDEX;
 ZaOperation.LABEL = ++ZA_OP_INDEX;
+ZaOperation.VIEW = ++ZA_OP_INDEX;
