@@ -6,6 +6,8 @@ PERL_ROOT ?= $(shell pwd)
 P4_ROOT ?= $(shell cd $(PERL_ROOT)/../..; pwd)
 ZIMBRA_HOME ?= /opt/zimbra
 
+BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
+
 PERL 	:= $(shell which perl)
 
 BDB_VERSION ?= 4.2.52.4
