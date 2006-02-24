@@ -46,7 +46,7 @@ echo "----------------"
 /sbin/ifconfig
 echo "----------------"
 
-if [ x$P = "xMACOSX" ]; then
+if [ x$P = "xMACOSX" -o "x$P" = "xMACOSXx86" ]; then
 	ls -ld /Library/Receipts/zimbra-*
 else
 	rpm -qi zimbra-core

@@ -63,7 +63,7 @@ sed -e "s|^rootpw.*|rootpw ${root_sha}|" \
 
 if [ -f "/opt/zimbra/lib/conf/zimbra-ext.schema" ]; then
 	plat=`/opt/zimbra/bin/get_plat_tag.sh`
-	if [ "x$plat" = "xMACOSX" ]; then
+	if [ "x$plat" = "xMACOSX" -o "x$plat" = "xMACOSXx86" ]; then
 		sed -e '\|/opt/zimbra/openldap/etc/openldap/schema/zimbra.schema| a\
 		include "/opt/zimbra/lib/conf/zimbra-ext.schema"' ${config_dir}/slapd.conf > /tmp/slapd.conf
 	else

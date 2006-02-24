@@ -30,7 +30,7 @@ ROOTGROUP=root
 
 PLAT=`/bin/sh /opt/zimbra/bin/get_plat_tag.sh`
 
-if [ "X$PLAT" = "XMACOSX" ]; then
+if [ "X$PLAT" = "XMACOSX" -o "x$PLAT" = "xMACOSXx86" ]; then
 	ROOTGROUP=wheel
 fi
 

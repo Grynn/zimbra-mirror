@@ -63,7 +63,7 @@ case "$1" in
 			kill -TERM "$cpid" 2> /dev/null
 		fi
 		if [ -f ${zimbra_home}/cyrus-sasl-2.1.21.ZIMBRA/state/saslauthd.pid ]; then
-			if [ x$platform = "xMACOSX" ]; then
+			if [ x$platform = "xMACOSX" -o "x$platform" = "xMACOSXx86" ]; then
 				killall -TERM saslauthd
 			else
 				killall -TERM ${zimbra_home}/cyrus-sasl-2.1.21.ZIMBRA/sbin/saslauthd

@@ -271,7 +271,7 @@ sub displayVersion {
 	my $platform = `/opt/zimbra/bin/get_plat_tag.sh`;
 	chomp $platform;
 	my $string = "";
-	if ($platform eq "MACOSX") {
+	if ($platform =~ /MACOSX/) {
 		my $release = ` basename /Library/Receipts/zimbra-core* | sed -e 's/zimbra-core.//' -e 's/.pkg//'`;
 		chomp $release;
 		$string = "Release $release $platform";

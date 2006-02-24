@@ -75,7 +75,7 @@ case "$1" in
 			cpid=`cat /opt/zimbra/log/clamd.pid`
 			kill -TERM "$cpid" 2> /dev/null
 		fi
-		if [ "x$platform" = "xMACOSX" ]; then
+		if [ "x$platform" = "xMACOSX" -o "x$platform" = "xMACOSXx86" ]; then
 			killall -TERM freshclam
 			killall -TERM clamd
 		else
@@ -94,7 +94,7 @@ case "$1" in
 			cpid=`cat /opt/zimbra/log/clamd.pid`
 			kill -TERM "$cpid" 2> /dev/null
 		fi
-		if [ "x$platform" = "xMACOSX" ]; then
+		if [ "x$platform" = "xMACOSX" -o "x$platform" = "xMACOSXx86" ]; then
 			killall -TERM freshclam
 			killall -TERM clamd
 		else

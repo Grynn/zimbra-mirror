@@ -33,7 +33,7 @@ fi
 
 platform=`/opt/zimbra/bin/get_plat_tag.sh`
 
-if [ x$platform = "xMACOSX" ]; then
+if [ x$platform = "xMACOSX" -o "x$platform" = "xMACOSXx86" ]; then
 	logfile="/var/log/zimbra.log"
 	LOCALHOST=`hostname`
 else
