@@ -67,9 +67,9 @@ public class ComparePropsTask
         
         // read source properties
         Properties sourceProps = new Properties();
+        File sourceFile = null;
         try {
-            File sourceFile = new File(this.sourceFilename);
-            System.out.println("Source file: "+sourceFile);
+            sourceFile = new File(this.sourceFilename);
 
             InputStream sourceIn = new FileInputStream(sourceFile);
             sourceProps.load(sourceIn);
@@ -93,7 +93,9 @@ public class ComparePropsTask
         	for (int i = 0; i < filenames.length; i++) {
         		try {
             		File targetFile = new File(basedir, filenames[i]);
-        			System.out.println("Target file: "+targetFile);
+
+            		System.out.println("Source file: "+sourceFile.getName());
+        			System.out.println("Target file: "+targetFile.getName());
 
         			InputStream targetIn = new FileInputStream(targetFile);
         			Properties targetProps = new Properties();
@@ -149,7 +151,7 @@ public class ComparePropsTask
     	int obsoleteCount = obsolete.size();
 
     	if (missingCount == 0 && duplicateCount == 0 && obsoleteCount == 0) {
-    		System.out.print("  OK");
+    		System.out.println("  OK");
     		return;
     	}
 
