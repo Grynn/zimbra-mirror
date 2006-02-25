@@ -2,37 +2,31 @@
 
 	<property environment="env"/>
 	
-	<property name="build.dir"          location="build"/>
-	<property name="build.examples.dir" location="${build.dir}/WebRoot/examples"/>
-	<property name="build.cmn.dir"      location="${build.examples.dir}/common"/>
-	<property name="build.img"          location="${build.dir}/WebRoot/img"/>
-	<property name="dist.dir"           location="build/dist"/>
-	<property name="dist.tomcat.dir"    location="${dist.dir}/tomcat"/>
-	<property name="dist.tomcat.webapps.dir" location="${dist.tomcat.dir}/webapps"/>
-	<property name="dist.tarfile"       value="dev-zimbra.tar"/>
-
-	<property name="warfile"            location="${dist.tomcat.webapps.dir}/ajax.war"/>
+	<property name='name'				value='kabuki'/>
+	<property name='contextPath'		value='/${name}'/>
+	
+	<property name="build.dir"			location="build"/>
+	<property name='build.classes.dir'	location='${build.dir}/classes'/>
+	<property name="build.examples.dir"	location="${build.dir}/WebRoot/examples"/>
+	<property name='build.i18n.dir'		location='${build.dir}/i18n'/>
+	<property name="build.common.dir"	location="${build.examples.dir}/common"/>
+	<property name="build.img"			location="${build.dir}/WebRoot/img"/>
 	
 	<property name="jars.dir"           location="jars"/>
 	<property name="src.dir"            location="src"/>
 	<property name="images.dir"			location="img"/>
 
-	<condition property="deploy.dir" value="${env.DEPLOY_DIR}">
-		<isset property="env.DEPLOY_DIR" />
-	</condition>	
-	<condition property="deploy.dir" value="/opt/zimbra/tomcat/webapps">
-		<not><isset property="env.DEPLOY_DIR"/></not>
-	</condition>	
+	<property name="warfile"            location="${build.dir}/${name}.war"/>
 	
 	<property name="deploy.war" value="${warfile}"/>
 	<property name="deploy.url" value="http://localhost:7070/manager/"/>
-	<property name="deploy.user" value="zimbra"/>
-	<property name="deploy.password" value="zimbra"/>
-	<property name="deploy.path" value="/ajax"/>
+	<property name="deploy.user" value="${env.DEPLOY_USER}"/>
+	<property name="deploy.password" value="${env.DEPLOY_PASSWORD}"/>
+	<property name="deploy.path" value="${contextPath}"/>
 
-	<property name="images.hiRes.destDir" value="${build.cmn.dir}/img/hiRes"/>
-	<property name="images.loRes.destDir" value="${build.cmn.dir}/img/loRes"/>
-	<property name="images.animated.destDir" value="${build.cmn.dir}/img/animated"/>
+	<property name="images.hiRes.destDir" value="${build.common.dir}/img/hiRes"/>
+	<property name="images.loRes.destDir" value="${build.common.dir}/img/loRes"/>
+	<property name="images.animated.destDir" value="${build.common.dir}/img/animated"/>
 	<property name="images.cssFile" value="dwtimgs.css"/>
 
 	<taskdef resource="net/sf/antcontrib/antlib.xml">
@@ -49,8 +43,8 @@
 
 	<target name="compile" depends="build-init" description="compile the filter source" >
 		   <!-- Compile the java code from ${src} into ${build} -->
-		    <mkdir dir='${build.dir}/classes'/>
-		    <javac srcdir="${src.dir}" destdir="${build.dir}/classes" debug="on">
+		    <mkdir dir='${build.classes.dir}'/>
+		    <javac srcdir="${src.dir}" destdir="${build.classes.dir}" debug="on">
 		      <classpath refid="class.path"/>
 		      <include name="**/*.java"/>
 		    </javac>
@@ -58,12 +52,12 @@
 		    <!-- define imagemerge task -->
 		    <pathconvert property='imagemerge.cp' pathsep='${path.separator}'>
 		      <path>
-		        <pathelement location='${build.dir}/classes'/>
+		        <pathelement location='${build.classes.dir}'/>
 		        <fileset dir='${jars.dir}' includes='**/*.jar'/>
 		      </path>
 		    </pathconvert>
 		    <taskdef name='imagemerge' 
-		      classname='com.zimbra.ajax.imagemerge.ImageMergeTask' 
+		      classname='org.apache.kabuki.tools.img.ImageMergeTask' 
 		      classpath='${imagemerge.cp}'
 		      />
 
@@ -72,8 +66,6 @@
 	<taskdef name="deploy" classname="org.apache.catalina.ant.DeployTask" classpathref="class.path"/>
   
 	<target name="build-init">
-		<mkdir dir="${dist.dir}"/>
-		<mkdir dir="${dist.tomcat.webapps.dir}"/>
 		<mkdir dir="${build.dir}/WebRoot/js"/>
 	</target>
 
@@ -83,14 +75,14 @@
 
 	<target name='i18n' depends='i18n-init,compile' unless='i18n-done'>
 		<taskdef name='i18n' 
-				 classname='com.zimbra.ajax.i18n.GenerateDataTask' 
-				 classpath='${build.dir}/classes'
+				 classname='org.apache.kabuki.tools.i18n.GenerateDataTask' 
+				 classpath='${build.classes.dir}'
 		/>
-		<mkdir dir='${build.dir}/i18n/msgs' />
-		<i18n destdir='${build.dir}/i18n/msgs' />
+		<mkdir dir='${build.i18n.dir}/msgs' />
+		<i18n destdir='${build.i18n.dir}/msgs' />
 	</target>
 	<target name='i18n-init'>
-		<available property='i18n-done' file='${build.dir}/i18n/msgs/I18nMsg.properties' />
+		<available property='i18n-done' file='${build.i18n.dir}/msgs/I18nMsg.properties' />
 	</target>
 	
 	<target name="copy-files-to-build-area">
@@ -106,7 +98,7 @@
 
 	<target name='images'>
 		<antcall target='build-images'>
-			<param name="csspathprefix" value="/ajax/examples/common/img/"/>
+			<param name="csspathprefix" value="${contextPath}/examples/common/img/"/>
 		</antcall>    
 	</target>		
 	
@@ -210,16 +202,15 @@
 	
 	<!-- 
 	This target is meant only to be run after a full deploy has
-	been done once. It does not deal with the java code used by the
-	ZimbraWebClient webapp, so if there are any java changes, another
+	been done once. If there are any java changes, another
 	deploy will have to be run.
 	-->
-	<target name="dev-sync">
-		<echo message="Deploy Dir: ${deploy.dir}/${deploy.path}"/>
-		<copy verbose="true" todir="${deploy.dir}${deploy.path}">
+	<target name="dev-sync" depends='deploy-init'>
+		<echo message="Deploy Dir: ${env.DEPLOY_DIR}/${deploy.path}"/>
+		<copy verbose="true" todir="${env.DEPLOY_DIR}${deploy.path}">
 			<fileset dir="WebRoot" includes="js/**,examples/**" excludes="examples/**/img/"/>
 		</copy>
-		<copy verbose="true" todir="${deploy.dir}${deploy.path}/WEB-INF">  	
+		<copy verbose="true" todir="${env.DEPLOY_DIR}${deploy.path}/WEB-INF">  	
 			<fileset dir="${build.dir}/WebRoot/WEB-INF" includes="web.xml"/>
 			<fileset dir="WebRoot/WEB-INF" includes="tlds/*"/>		
 		</copy>
@@ -227,19 +218,25 @@
 
 	<target name="war" depends="build-init, copy-files-to-build-area, i18n, examples">
 		<war warfile="${warfile}" webxml="${build.dir}/WebRoot/WEB-INF/web.xml">
-			<lib dir="${jars.dir}" includes="*.jar" excludes="servlet-api.jar"/>
-			<classes dir="${build.dir}/classes" includes="**/*.class" excludes="**/imagemerge/*,**/build/*"/>
+			<!--lib dir="${jars.dir}" includes="*.jar" excludes="servlet-api.jar"/-->
+			<classes dir="${build.classes.dir}" includes="**/*.class" excludes="**/tools/**"/>
 			<classes dir="WebRoot/js/config" includes="msgs/*.properties"/>
-			<classes dir="${build.dir}/i18n" includes="msgs/*.properties"/>
+			<classes dir="${build.i18n.dir}" includes="msgs/*.properties"/>
 			<webinf dir="WebRoot/WEB-INF" includes="tlds/*"/>
 			<fileset dir="WebRoot" includes="js/**" excludes='js/**/config/msgs/**'/>
 			<fileset dir="${build.dir}/WebRoot" includes="examples/**"/>
 	    </war>
 	  </target>
 
-	<target name="deploy" depends="war">
+	<target name="deploy" depends="deploy-init,war">
 		<deploy url="${deploy.url}" username="${deploy.user}" password="${deploy.password}"
 			    path="${deploy.path}" war="${deploy.war}" update="true"/>
+	</target>
+	
+	<target name='deploy-init'>
+		<fail unless='env.DEPLOY_DIR'>Must set DEPLOY_DIR environment variable.</fail>
+		<fail unless='env.DEPLOY_USER'>Must set DEPLOY_USER environment variable.</fail>
+		<fail unless='env.DEPLOY_PASSWORD'>Must set DEPLOY_PASSWORD environment variable.</fail>
 	</target>
     
 </project>

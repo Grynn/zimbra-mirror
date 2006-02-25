@@ -1,29 +1,19 @@
 /*
-/*
-* ***** BEGIN LICENSE BLOCK *****
-* Version: MPL 1.1
-*
-* The contents of this file are subject to the Mozilla Public
-* License Version 1.1 ("License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.zimbra.com/license
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
-* the License for the specific language governing rights and limitations
-* under the License.
-*
-* The Original Code is: Zimbra AJAX Toolkit.
-*
-* The Initial Developer of the Original Code is Zimbra, Inc.
-* Portions created by Zimbra are Copyright (C) 2005 Zimbra, Inc.
-* All Rights Reserved.
-*
-* Contributor(s):
-*
-* ***** END LICENSE BLOCK *****
-*/
-*/
+ * Copyright (C) 2006, The Apache Software Foundation.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 
 /*
 
@@ -280,7 +270,7 @@
 						{type:_INPUT_, ref:"_location", label:"Location:", width:"100%", colSpan:"*"},
 						
 						{type:_SELECT1_, ref:"_folder", label:"Calendar:", width:"100%", colSpan:1, choices:[
-								"Personal Calendar", "Zimbra Calendar", "Softball Schedule", "Scott Dietzen", "Satish Dharmaraj", "John Robb", "Ross Dargahi"
+								"Personal Calendar", "Company Calendar", "Softball Schedule", "Scott D.", "Satish D.", "John R.", "Ross D."
 							]
 						},
 
@@ -571,7 +561,7 @@
 	var CalTestInstanceProto = {
 		recur:"Daily",
 		_subject:"Weekly UI Review",
-		_organizer:"<a href=# class=subtleAnchor>Ross Dargahi<a>",
+		_organizer:"<a href=# class=subtleAnchor>Ross D.<a>",
 		_time:"Sep 1, 2005 from 10:00am - 11:00am",
 		_seriesTime:"Mondays from 10:00am - 11:00am",
 		_allDay: "F",
@@ -598,11 +588,11 @@
 		_location:"Flex 1 conference room",
 		_reminder:"N",
 		_reminderTime:"min15",
-		_attendees:"<a href=# class=subtleAnchor>Conrad Damon</a>, <a href=# class=subtleAnchor>Andy Clark</a>, <a href=# class=subtleAnchor>Parag Shah</a>, <a href=# class=subtleAnchor>Enrique DelCampo</a>, <a href=# class=subtleAnchor>Owen Williams</a>, <a href=# class=subtleAnchor>Roland Schemers</a>",
-		_accepted:"<a href=# class=subtleAnchor>Conrad Damon</a>, <a href=# class=subtleAnchor>Andy Clark</a>",
-		_tentative:"<a href=# class=subtleAnchor>Parag Shah</a>",
-		_declined:"<a href=# class=subtleAnchor>Enrique DelCampo</a>",
-		_undecided:"<a href=# class=subtleAnchor>Owen Williams</a>, <a href=# class=subtleAnchor>Roland Schemers</a>",
+		_attendees:"<a href=# class=subtleAnchor>Conrad D.</a>, <a href=# class=subtleAnchor>Andy C.</a>, <a href=# class=subtleAnchor>Parag S.</a>, <a href=# class=subtleAnchor>Enrique D.</a>, <a href=# class=subtleAnchor>Owen W.</a>, <a href=# class=subtleAnchor>Roland S.</a>",
+		_accepted:"<a href=# class=subtleAnchor>Conrad D.</a>, <a href=# class=subtleAnchor>Andy C.</a>",
+		_tentative:"<a href=# class=subtleAnchor>Parag S.</a>",
+		_declined:"<a href=# class=subtleAnchor>Enrique D.</a>",
+		_undecided:"<a href=# class=subtleAnchor>Owen W.</a>, <a href=# class=subtleAnchor>Roland S.</a>",
 		
 		_updated:false,
 		_tempStatus:"A",
