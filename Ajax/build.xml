@@ -73,6 +73,18 @@
 		<delete dir="${build.dir}"/>
 	</target>
 
+	<target name='i18n-check' depends='compile'>
+		<taskdef name='i18ncheck' 
+				 classname='org.apache.kabuki.tools.i18n.ComparePropsTask' 
+				 classpath='${build.classes.dir}'
+		/>
+		<property name='msgs.dir' value='WebRoot/js/config/msgs' />
+		<i18ncheck>
+			<sourcefile file='${msgs.dir}/AjxMsg.properties' />
+			<targetfileset dir='${msgs.dir}' includes='AjxMsg_*.properties' />
+		</i18ncheck>
+	</target>
+
 	<target name='i18n' depends='i18n-init,compile' unless='i18n-done'>
 		<taskdef name='i18n' 
 				 classname='org.apache.kabuki.tools.i18n.GenerateDataTask' 
