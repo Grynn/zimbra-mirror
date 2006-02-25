@@ -25,12 +25,17 @@
 
 /**
 * @class ZaXFormViewController base class for all Za***ViewControllers
-* @contructor ZaXFormViewController
+* @extends ZaController
+* @contructor 
 * @param appCtxt
 * @param container
 * @param app
 * @param iKeyName
 * @author Greg Solovyev
+* @see ZaAccountViewController
+* @see ZaCosController
+* @see ZaDomainController
+* @see ZaGlobalConfigViewController
 **/
 
 function ZaXFormViewController(appCtxt, container, app, iKeyName) {
@@ -41,10 +46,9 @@ function ZaXFormViewController(appCtxt, container, app, iKeyName) {
 
 ZaXFormViewController.prototype = new ZaController();
 ZaXFormViewController.prototype.constructor = ZaXFormViewController;
-
 /**
-*	Method that notifies listeners to that the controlled ZaAccount is removed
-* 	@param details
+* Method that notifies listeners to that the controlled ZaAccount is removed
+* @param details {String}
 */
 ZaXFormViewController.prototype.fireRemovalEvent =
 function(details) {
@@ -61,8 +65,9 @@ function(details) {
 }
 
 /**
+* member of ZaXFormViewController
 *	Method that notifies listeners to that the controlled object is changed
-* 	@param details
+* 	@param details {String}
 */
 ZaXFormViewController.prototype.fireChangeEvent =
 function(details) {
@@ -80,6 +85,7 @@ function(details) {
 }
 
 /**
+* member of ZaXFormViewController
 *	Private method that notifies listeners that a new object is created
 * 	@param details
 */
@@ -102,6 +108,8 @@ function(details) {
 
 //Listeners for default toolbar buttons (close, save, delete)
 /**
+* member of ZaXFormViewController
+* @param 	ev event object
 * handles the Close button click. Returns to the list view.
 **/ 
 ZaXFormViewController.prototype.closeButtonListener =
@@ -125,6 +133,8 @@ function(ev) {
 
 /**
 * This listener is called when the Delete button is clicked. 
+* member of ZaXFormViewController
+* @param 	ev event object
 **/
 ZaXFormViewController.prototype.deleteButtonListener =
 function(ev) {
@@ -139,8 +149,9 @@ function(ev) {
 }
 
 /**
-* @param 	ev event object
 * This method handles "save" button click
+* member of ZaXFormViewController
+* @param 	ev event object
 **/
 ZaXFormViewController.prototype.saveButtonListener =
 function(ev) {
@@ -160,6 +171,11 @@ function(ev) {
 	return;
 }
 
+/**
+* member of ZaXFormViewController
+* @param params
+* This method saves the object in the form and calls method specified in params["func"]
+**/
 ZaXFormViewController.prototype.saveAndGoAway =
 function (params) {
 	try {
@@ -172,7 +188,11 @@ function (params) {
 	}
 }
 
-
+/**
+* member of ZaXFormViewController
+* @param params
+* This method deletes the object in the form and closes the form
+**/
 ZaXFormViewController.prototype.deleteAndGoAway = 
 function () {
 	try {
@@ -189,6 +209,7 @@ function () {
 }
 
 /**
+* member of ZaXFormViewController
 * Leaves current view without saving any changes
 **/
 ZaXFormViewController.prototype.discardAndGoAway = 
@@ -197,6 +218,7 @@ function (params) {
 	params["func"].call(params["obj"], params["params"]);		
 }
 /**
+* member of ZaXFormViewController
 * @param nextViewCtrlr - the controller of the next view
 * Checks if it is safe to leave this view. Displays warning and Information messages if neccesary.
 **/
@@ -219,6 +241,12 @@ function (nextViewCtrlr, func, params) {
 	}
 }
 
+/**
+* member of ZaXFormViewController
+* enables/disables "Save" button on this Form's toolbar
+* if there is no Save button, the method just returns
+* @param isD {Boolean}
+**/
 ZaXFormViewController.prototype.setDirty = 
 function (isD) {
 	if(!this._toolbar || !this._toolbar.getButton(ZaOperation.SAVE))
@@ -232,6 +260,7 @@ function (isD) {
 
 
 /**
+* member of ZaXFormViewController
 * Adds listener to modifications in the contained ZaAccount 
 * @param listener
 **/
@@ -241,6 +270,7 @@ function(listener) {
 }
 
 /**
+* member of ZaXFormViewController
 * Removes listener to modifications in the controlled ZaAccount 
 * @param listener
 **/

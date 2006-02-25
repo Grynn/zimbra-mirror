@@ -41,6 +41,7 @@ ZaItem.prototype.constructor = ZaItem;
 ZaItem.loadMethods = new Object();
 ZaItem.initMethods = new Object();
 ZaItem.modifyMethods = new Object();
+ZaItem.createMethods = new Object();
 
 ZaItem.ACCOUNT = "account";
 ZaItem.DL = "dl";
@@ -178,6 +179,28 @@ ZaItem.prototype.modify = function (mods) {
 		}
 	}	
 	//Instrumentation code end
+}
+
+/**
+* Factory method
+* creates a new object of class constructorFunction, then passes the new object to every method in
+* ZaItem.createMethods[key] 
+* @see ZaItem#createMethods
+**/
+ZaItem.create = function (tmpObj, constructorFunction, key,  app) {
+	var item = new constructorFunction(app);
+	//Instrumentation code start
+	if(ZaItem.createMethods[key]) {
+		var methods = ZaItem.createMethods[key];
+		var cnt = methods.length;
+		for(var i = 0; i < cnt; i++) {
+			if(typeof(methods[i]) == "function") {
+				methods[i].call(this, tmpObj, item, app);
+			}
+		}
+	}	
+	//Instrumentation code end
+	return item;
 }
 
 ZaItem.prototype.initFromDom =

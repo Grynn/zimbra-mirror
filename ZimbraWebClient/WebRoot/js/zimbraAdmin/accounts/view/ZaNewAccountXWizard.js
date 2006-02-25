@@ -109,7 +109,7 @@ function() {
 		if(!ZaAccount.checkValues(this._containedObject, this._app)) {
 			return false;
 		}
-		var account = ZaAccount.create(this._containedObject, this._app);
+		var account = ZaItem.create(this._containedObject,ZaAccount,"ZaAccount", this._app);
 		if(account != null) {
 			//if creation took place - fire an DomainChangeEvent
 			this._app.getAccountViewController().fireCreationEvent(account);

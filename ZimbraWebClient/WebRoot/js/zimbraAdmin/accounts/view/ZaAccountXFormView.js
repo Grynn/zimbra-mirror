@@ -24,10 +24,11 @@
  */
 
 /**
+* This class describes a view of a single email Account
 * @class ZaAccountXFormView
 * @contructor
-* @param parent
-* @param app
+* @param parent {DwtComposite}
+* @param app {ZaApp}
 * @author Greg Solovyev
 **/
 function ZaAccountXFormView (parent, app) {
@@ -44,10 +45,10 @@ function ZaAccountXFormView (parent, app) {
 ZaAccountXFormView.prototype = new ZaTabView();
 ZaAccountXFormView.prototype.constructor = ZaAccountXFormView;
 ZaTabView.XFormModifiers["ZaAccountXFormView"] = new Array();
-
+ZaAccountXFormView.TAB_INDEX=0;
 /**
-* @method setObject sets the object contained in the view
-* @param entry - ZaAccount object to display
+* Sets the object contained in the view
+* @param entry - {ZaAccount} object to display
 **/
 ZaAccountXFormView.prototype.setObject =
 function(entry) {
@@ -178,7 +179,11 @@ function (index, form) {
 	list.splice(index, 1);
 	form.parent.setDirty(true);
 }
-
+/**
+* This method is added to the map {@link ZaTabView#XFormModifiers}
+* @param xFormObject {Object} a definition of the form. This method adds/removes/modifies xFormObject to construct
+* an Account view. 
+**/
 ZaAccountXFormView.myXFormModifier = function(xFormObject) {	
 
 	var domainName;
@@ -218,27 +223,35 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 					});
 
 	var tabChoices = new Array();
-	tabChoices.push({value:1, label:ZaMsg.TABT_GeneralPage});
-	tabChoices.push({value:2, label:ZaMsg.TABT_ContactInfo});
+	var _tab1 = ++ZaAccountXFormView.TAB_INDEX;
+	var _tab2 = ++ZaAccountXFormView.TAB_INDEX;	
+	var _tab3 = ++ZaAccountXFormView.TAB_INDEX;	
+	var _tab4 = ++ZaAccountXFormView.TAB_INDEX;	
+	var _tab5 = ++ZaAccountXFormView.TAB_INDEX;		
+	var _tab6 = ++ZaAccountXFormView.TAB_INDEX;			
+	var _tab7 = ++ZaAccountXFormView.TAB_INDEX;				
+	
+	tabChoices.push({value:_tab1, label:ZaMsg.TABT_GeneralPage});
+	tabChoices.push({value:_tab2, label:ZaMsg.TABT_ContactInfo});
 
 	if(ZaSettings.ACCOUNTS_FEATURES_ENABLED)
-		tabChoices.push({value:3, label:ZaMsg.TABT_Features});
+		tabChoices.push({value:_tab3, label:ZaMsg.TABT_Features});
 					
 	if(ZaSettings.ACCOUNTS_PREFS_ENABLED)
-		tabChoices.push({value:4, label:ZaMsg.TABT_Preferences});
+		tabChoices.push({value:_tab4, label:ZaMsg.TABT_Preferences});
 
 	if(ZaSettings.ACCOUNTS_ALIASES_ENABLED)
-		tabChoices.push({value:5, label:ZaMsg.TABT_Aliases});
+		tabChoices.push({value:_tab5, label:ZaMsg.TABT_Aliases});
 
 	if(ZaSettings.ACCOUNTS_FORWARDING_ENABLED)
-		tabChoices.push({value:6, label:ZaMsg.TABT_Forwarding});
+		tabChoices.push({value:_tab6, label:ZaMsg.TABT_Forwarding});
 
 	if(ZaSettings.ACCOUNTS_ADVANCED_ENABLED)
-		tabChoices.push({value:7, label:ZaMsg.TABT_Advanced});
+		tabChoices.push({value:_tab7, label:ZaMsg.TABT_Advanced});
 
 
 	var cases = [];
-	var case1 = {type:_CASE_,  relevant:"instance[ZaModel.currentTab] == 1", height:"400px",  align:_LEFT_, valign:_TOP_};
+	var case1 = {type:_CASE_,  relevant:("instance[ZaModel.currentTab] == " + _tab1), height:"400px",  align:_LEFT_, valign:_TOP_};
 	var case1Items = [{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName, labelLocation:_LEFT_,onChange:ZaTabView.onFormFieldChanged,forceUpdate:true}];
 	if(ZaSettings.COSES_ENABLED) {
 		case1Items.push({ref:ZaAccount.A_COSId, type:_OSELECT1_, msgName:ZaMsg.NAD_ClassOfService,label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_, choices:this._app.getCosListChoices(), onChange:ZaAccountXFormView.onCOSChanged});
@@ -303,7 +316,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	case1Items.push({ref:ZaAccount.A_notes, type:_TEXTAREA_, msgName:ZaMsg.NAD_Notes,label:ZaMsg.NAD_Notes, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", onChange:ZaTabView.onFormFieldChanged, width:"30em"});
 	case1.items = case1Items;
 	cases.push(case1);
-	var case2={type:_CASE_, numCols:1, relevant:"instance[ZaModel.currentTab] == 2",
+	var case2={type:_CASE_, numCols:1, relevant:("instance[ZaModel.currentTab] == " + _tab2),
 					items: [
 						{ref:ZaAccount.A_telephoneNumber, type:_TEXTFIELD_, msgName:ZaMsg.NAD_telephoneNumber,label:ZaMsg.NAD_telephoneNumber, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged, width:150},
 						{ref:ZaAccount.A_company, type:_TEXTFIELD_, msgName:ZaMsg.NAD_company,label:ZaMsg.NAD_company, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged, width:150},
@@ -318,7 +331,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				};
 	cases.push(case2);				
 	if(ZaSettings.ACCOUNTS_FEATURES_ENABLED) {
-		cases.push({type:_CASE_,id:"account_form_features_tab",  numCols:1, width:"100%", relevant:"instance[ZaModel.currentTab] == 3",
+		cases.push({type:_CASE_,id:"account_form_features_tab",  numCols:1, width:"100%", relevant:("instance[ZaModel.currentTab] == " + _tab3),
 					items: [
 						{ref:ZaAccount.A_zimbraFeatureContactsEnabled,labelCssStyle:"width:150px;", type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_FeatureContactsEnabled,label:ZaMsg.NAD_FeatureContactsEnabled, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged},							
 						{ref:ZaAccount.A_zimbraFeatureCalendarEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_FeatureCalendarEnabled,label:ZaMsg.NAD_FeatureCalendarEnabled, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged},														
@@ -337,7 +350,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				});
 	}
 	if(ZaSettings.ACCOUNTS_PREFS_ENABLED) {
-		cases.push({type:_CASE_, width:"100%", relevant:"instance[ZaModel.currentTab] == 4",
+		cases.push({type:_CASE_, width:"100%", relevant:("instance[ZaModel.currentTab] == " + _tab4),
 					colSizes:["300px","300px"],
 					items :[
 						{ref:ZaAccount.A_prefSaveToSent,  type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_prefSaveToSent,label:ZaMsg.NAD_prefSaveToSent, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",onChange:ZaTabView.onFormFieldChanged},
@@ -372,7 +385,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	}
 
 	if(ZaSettings.ACCOUNTS_ALIASES_ENABLED) {
-		cases.push({type:_CASE_, numCols:1, relevant:"instance[ZaModel.currentTab] == 5",
+		cases.push({type:_CASE_, numCols:1, relevant:("instance[ZaModel.currentTab] == " + _tab5),
 					items: [
 						{type:_OUTPUT_, value:ZaMsg.NAD_EditAliasesGroup},
 						{ref:ZaAccount.A_zimbraMailAlias, type:_REPEAT_, label:null, repeatInstance:emptyAlias, showAddButton:true, showRemoveButton:true, 
@@ -388,7 +401,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				});
 	}
 	if(ZaSettings.ACCOUNTS_FORWARDING_ENABLED) {
-		cases.push({type:_CASE_, numCols:1, relevant:"instance[ZaModel.currentTab] == 6", 
+		cases.push({type:_CASE_, numCols:1, relevant:("instance[ZaModel.currentTab] == " + _tab6), 
 					items: [
 						{type:_OUTPUT_, value:ZaMsg.NAD_EditFwdGroup},
 						{ref:ZaAccount.A_zimbraMailForwardingAddress, type:_REPEAT_, label:null, repeatInstance:emptyAlias, showAddButton:true, showRemoveButton:true, 
@@ -404,7 +417,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				});
 	}
 	if(ZaSettings.ACCOUNTS_ADVANCED_ENABLED) {
-		cases.push({type:_CASE_, id:"account_form_advanced_tab", numCols:1, relevant:"instance[ZaModel.currentTab] == 7",
+		cases.push({type:_CASE_, id:"account_form_advanced_tab", numCols:1, relevant:("instance[ZaModel.currentTab] == " + _tab7),
 					items: [
 						{type:_GROUP_, 
 							items :[

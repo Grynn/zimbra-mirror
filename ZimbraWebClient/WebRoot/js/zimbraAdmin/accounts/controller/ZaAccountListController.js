@@ -25,11 +25,11 @@
 
 /**
 * @constructor
-* @class ZaAccountListController
+* @class ZaAccountListController This is a singleton class that controls all the user interaction with the list of ZaAccount objects
 * @param appCtxt
 * @param container
 * @param app
-* This is a singleton class that controls all the user interaction with the list of ZaAccount objects
+* @extends ZaController
 * @author Roland Schemers
 * @author Greg Solovyev
 **/
@@ -403,6 +403,9 @@ function () {
 }
 ZaController.initPopupMenuMethods["ZaAccountListController"].push(ZaAccountListController.initPopupMenuMethod);
 
+/**
+* This method is called from {@link ZaController#_initToolbar}
+**/
 ZaAccountListController.initToolbarMethod =
 function () {
 	// first button in the toolbar is a menu.

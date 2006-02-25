@@ -24,10 +24,10 @@
  */
 
 /**
-* @class ZaServerXFormView
+* @class ZaServerXFormView creates an view of one Server object
 * @contructor
-* @param parent
-* @param app
+* @param parent {DwtComposite}
+* @param app {@link ZaApp}
 * @author Greg Solovyev
 **/
 function ZaServerXFormView (parent, app) {
@@ -82,7 +82,7 @@ ZaServerXFormView.isExistingVolume = function() {
 }
 
 /**
-* @return integer
+* @return {int}
  1 - show read-only label
  2 - Primary/Secondary
  3 - Primary/Secondary/Index
@@ -175,6 +175,11 @@ function(val) {
 	}
 }
 
+/**
+* This method is added to the map {@link ZaTabView#XFormModifiers}
+* @param xFormObject {Object} a definition of the form. This method adds/removes/modifies xFormObject to construct
+* a Server view. 
+**/
 ZaServerXFormView.myXFormModifier = function(xFormObject) {	
 	xFormObject.tableCssStyle="width:100%;position:static;overflow:auto;";
 	

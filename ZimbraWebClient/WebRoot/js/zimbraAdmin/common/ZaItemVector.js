@@ -24,11 +24,10 @@
  */
 
 /**
+* @class This is a Vector that contains ZaItems. Unlike in AjxVector {AjxVector#contains} and
+* {AjxVector#remove} methods compare object ids (@link ZaItem.id) instead of comparing the whole objects.
+* {AjxVector#add} method is overwriten to accept only instances of ZaItem class.
 * @constructor
-* @class ZaItemVector
-* This is a Vector that contains ZaItems. Unlike in AjxVector @link AjxVector.contains and
-@link AjxVector.remove methods compare object ids (@link ZaItem.id) instead of comparing the whole objects.
-@link AjxVector.add method is overwriten to accept only instances of ZaItem class.
 **/
 
 function ZaItemVector() {

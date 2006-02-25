@@ -490,7 +490,6 @@ XFormItem.prototype.getElementValueGetterHTML = function () {
 /**
 * returns the HTML part of an <input > element that is used to set "onchange" 
 * (or whatever is defined by elementChangehandler)  property of the element
-* Greg Solovyev 07/19/05: moved JS creation part into XFormItem.prototype.getChangehandlerJSCode
 **/
 XFormItem.prototype.getChangeHandlerHTML = function() {
 	var elementChangeHandler = this.getElementChangeHandler();
@@ -532,7 +531,7 @@ XFormItem.prototype.getOnActivateHandlerHTML = function() {
 
 
 /**
-* Schedules this.handleKeyPressDelay to fire later when the user finishes typing
+* Schedules {@link #handleKeyPressDelay} to fire later when the user finishes typing
 * @param ev - "onkeypress" event 
 * @param domItem - HTML form element
 * @author Greg Solovyev
@@ -577,8 +576,8 @@ XFormItem.prototype.handleKeyDown = function (ev, domItem) {
 /**
 * Implements delayed handling of "keypress" event. 
 * Calls change handler script on the item.
-* See @link XFormItem.prototype.getChangehandlerJSCode for change handler script.
-* @author Greg Solovyev
+* See {@link XFormItem.#getChangehandlerJSCode} for change handler script.
+
 **/
 XFormItem.prototype.handleKeyPressDelay = function(ev, domItem) {	
 	this.keyPressDelayHdlr = null;
@@ -592,10 +591,7 @@ XFormItem.prototype.handleKeyPressDelay = function(ev, domItem) {
 };
 
 XFormItem.prototype.getKeyPressHandlerHTML = function () {
-	/**
-	 * Greg Solovyev 07/19/05
-	 * added handler for onkeypress event in order to be able to update the form before the field looses focus
-	 **/
+
 	var keydownEv = "onkeydown";
 	if (AjxEnv.isNav) {
 		keydownEv = "onkeypress";
@@ -1693,9 +1689,10 @@ XFormItem.prototype.choicesAreDirty = function () {
 
 
 
-//
-//	XFormItem class: "output"
-//
+/**
+* @class defines XFormItem type _OUTPUT_
+* @contructor
+**/
 function Output_XFormItem() {}
 XFormItemFactory.createItemType("_OUTPUT_", "output", Output_XFormItem, XFormItem);
 
@@ -1744,9 +1741,10 @@ Output_XFormItem.prototype.setElementEnabled = XFormItem.prototype.setElementEna
 
 
 
-//
-//	XFormItem class: "textfield"
-//
+/**
+* @class defines XFormItem type _TEXTFIELD_
+* @contructor
+**/
 function Textfield_XFormItem() {}
 XFormItemFactory.createItemType("_TEXTFIELD_", "textfield", Textfield_XFormItem, XFormItem);
 // aliases for _TEXTFIELD_:  _INPUT_
@@ -1802,9 +1800,10 @@ Textfield_XFormItem.prototype.setElementEnabled = XFormItem.prototype.setElement
 
 
 
-//
-//	XFormItem class: "secret"
-//
+/**
+* @class defines XFormItem type _SECRET_
+* @contructor
+**/
 function Secret_XFormItem() {}
 XFormItemFactory.createItemType("_SECRET_", "secret", Secret_XFormItem, Textfield_XFormItem);
 // alias for the SECRET class:  PASSWORD
@@ -1818,10 +1817,10 @@ Secret_XFormItem.prototype.focusable = true;
 
 
 
-//
-//	XFormItem class: "file"
-//
-
+/**
+* @class defines XFormItem type _FILE_
+* @contructor
+**/
 function File_XFormItem() {}
 XFormItemFactory.createItemType("_FILE_", "file", File_XFormItem, Textfield_XFormItem)
 
@@ -1832,9 +1831,10 @@ File_XFormItem.prototype.focusable = true;
 
 
 
-//
-//	XFormItem class: "textarea"
-//
+/**
+* @class defines XFormItem type _TEXTAREA_
+* @contructor
+**/
 function Textarea_XFormItem() {}
 XFormItemFactory.createItemType("_TEXTAREA_", "textarea", Textarea_XFormItem, Textfield_XFormItem)
 
@@ -1857,9 +1857,10 @@ Textarea_XFormItem.prototype.outputHTML = function (html, updateScript, indent, 
 
 
 
-//
-//	XFormItem class: "checkbox"
-//
+/**
+* @class defines XFormItem type _CHECKBOX_
+* @contructor
+**/
 function Checkbox_XFormItem() {}
 XFormItemFactory.createItemType("_CHECKBOX_", "checkbox", Checkbox_XFormItem, XFormItem)
 
@@ -1933,9 +1934,10 @@ Checkbox_XFormItem.prototype.setElementEnabled = XFormItem.prototype.setElementD
 
 
 
-//
-//	XFormItem class: "radiobutton"
-//
+/**
+* @class defines XFormItem type _RADIO_
+* @contructor
+**/
 function Radio_XFormItem() {}
 XFormItemFactory.createItemType("_RADIO_", "radio", Radio_XFormItem, Checkbox_XFormItem)
 
@@ -1953,9 +1955,11 @@ Radio_XFormItem.prototype.getElementValueGetterHTML = function () {
 
 
 
-//
-//	XFormItem class: "button"
-//
+/**
+* @class defines XFormItem type _BUTTON_
+* this item is a simple HTML <button> element
+* @contructor
+**/
 function Button_XFormItem() {}
 XFormItemFactory.createItemType("_BUTTON_", "button", Button_XFormItem, XFormItem);
 XFormItemFactory.registerItemType("_TRIGGER_", "trigger", Button_XFormItem);
@@ -1983,9 +1987,11 @@ Button_XFormItem.prototype.setElementEnabled = XFormItem.prototype.setElementDis
 
 
 
-//
-//	XFormItem class: "submit"
-//
+/**
+* @class defines XFormItem type _SUBMIT_
+* this item is a simple HTML <input type="submit"> element
+* @contructor
+**/
 function Submit_XFormItem() {}
 XFormItemFactory.createItemType("_SUBMIT_", "submit", Submit_XFormItem, Button_XFormItem)
 
@@ -2005,9 +2011,11 @@ Submit_XFormItem.prototype.outputHTML = function (html, updateScript, indent, cu
 
 
 
-//
-//	XFormItem class: "anchor"
-//
+/**
+* @class defines XFormItem type _ANCHOR_
+* this item is an HTML <a> element
+* @contructor
+**/
 function Anchor_XFormItem() {}
 XFormItemFactory.createItemType("_ANCHOR_", "anchor", Anchor_XFormItem, XFormItem)
 
@@ -2058,9 +2066,11 @@ Anchor_XFormItem.prototype.setElementEnabled = XFormItem.prototype.setElementEna
 
 
 
-//
-// Data anchor -- label is data driven
-//
+/**
+* @class defines XFormItem type _DATA_ANCHOR_
+* this item is an HTML <a> element
+* @contructor
+**/
 function Data_Anchor_XFormItem() {}
 XFormItemFactory.createItemType("_DATA_ANCHOR_", "data_anchor", Data_Anchor_XFormItem, Anchor_XFormItem)
 
@@ -2072,9 +2082,10 @@ Data_Anchor_XFormItem.prototype.updateElement = function (value) {
 
 
 
-//
-//	XFormItem class: "url"
-//
+/**
+* @class defines XFormItem type _URL_
+* @contructor
+**/
 function Url_XFormItem() {}
 XFormItemFactory.createItemType("_URL_", "url", Url_XFormItem, Anchor_XFormItem)
 
@@ -2087,9 +2098,11 @@ Url_XFormItem.prototype.updateElement = function (value) {
 
 
 
-//
-//	XFormItem class: "mailto"
-//
+/**
+* @class defines XFormItem type _MAILTO_
+* this item is an _ANCHOR_ element with "mailto:" link
+* @contructor
+**/
 function Mailto_XFormItem() {}
 XFormItemFactory.createItemType("_MAILTO_", "mailto", Mailto_XFormItem, Anchor_XFormItem)
 Mailto_XFormItem.prototype.updateElement = function (value) {
@@ -2099,9 +2112,10 @@ Mailto_XFormItem.prototype.updateElement = function (value) {
 
 
 
-//
-//	XFormItem class: "image"
-//
+/**
+* @class defines XFormItem type _IMAGE_
+* @contructor
+**/
 function Image_XFormItem() {}
 XFormItemFactory.createItemType("_IMAGE_", "image", Image_XFormItem, XFormItem)
 
@@ -2175,9 +2189,11 @@ Ajx_Image_XFormItem.prototype.updateElement = function (src) {
 
 
 
-//
-//	XFormItem class: "select1"
-//
+/**
+* @class defines XFormItem type _SELECT1_
+* this item is rendered as HTML <select> element
+* @contructor
+**/
 function Select1_XFormItem() {}
 XFormItemFactory.createItemType("_SELECT1_", "select1", Select1_XFormItem, XFormItem)
 
@@ -2246,9 +2262,11 @@ Select1_XFormItem.prototype.setElementEnabled = XFormItem.prototype.setElementDi
 
 
 
-//
-//	XFormItem class: "select"
-//
+/**
+* @class defines XFormItem type _SELECT_
+* this item is rendered as HTML <select> element
+* @contructor
+**/
 function Select_XFormItem() {}
 XFormItemFactory.createItemType("_SELECT_", "select", Select_XFormItem, Select1_XFormItem)
 
@@ -2269,11 +2287,11 @@ Select_XFormItem.prototype.updateElement = function (newValue) {
 
 
 
-//
-//	XFormItem class: "spacer"
-//
-//	Use to output an entire row spacer
-//
+/**
+* @class defines XFormItem type _SPACER_
+* Use to output an entire row spacer
+* @contructor
+**/
 function Spacer_XFormItem() {}
 XFormItemFactory.createItemType("_SPACER_", "spacer", Spacer_XFormItem, XFormItem)
 
@@ -2294,12 +2312,11 @@ Spacer_XFormItem.prototype.outputHTML = function (html, updateScript, indent, cu
 // set up how disabling works for this item type
 Spacer_XFormItem.prototype.setElementEnabled = XFormItem.prototype.setElementEnabledCssClass;
 
-
-//
-//	XFormItem class: "cell_spacer"
-//
-//	Use to output a single cell of space
-//
+/**
+* @class defines XFormItem type _CELL_SPACER_
+* Use to output a single cell of space
+* @contructor
+**/
 function Cell_Spacer_XFormItem() {}
 XFormItemFactory.createItemType("_CELL_SPACER_", "cell_spacer", Cell_Spacer_XFormItem, Spacer_XFormItem)
 XFormItemFactory.registerItemType("_CELLSPACER_", "cell_spacer", Cell_Spacer_XFormItem);
@@ -2308,9 +2325,10 @@ Cell_Spacer_XFormItem.prototype.height = 10;
 Cell_Spacer_XFormItem.prototype.colSpan = 1;
 Cell_Spacer_XFormItem.prototype.focusable = false;
 
-//
-//	XFormItem class: "separator"
-//
+/**
+* @class defines XFormItem type _SEPARATOR_
+* @contructor
+**/
 function Separator_XFormItem() {}
 XFormItemFactory.createItemType("_SEPARATOR_", "separator", Separator_XFormItem, XFormItem)
 
@@ -2345,9 +2363,10 @@ Separator_XFormItem.prototype.setElementEnabled = XFormItem.prototype.setElement
 
 
 
-//
-//	XFormItem class: "group"
-//
+/**
+* @class defines XFormItem type _GROUP_
+* @contructor
+**/
 function Group_XFormItem() {}
 XFormItemFactory.createItemType("_GROUP_", "group", Group_XFormItem, XFormItem)
 
@@ -2365,12 +2384,11 @@ Group_XFormItem.prototype.outputHTML = function (html, updateScript, indent, cur
 //group_XFormItem.prototype.updateElement = function (newValue) {}
 
 
-
-//
-//	XFormItem class: "_BORDER_"
-//
-//	NOTE: dependent on the file DwtBorder.js
-//
+/**
+* @class defines XFormItem type _BORDER_
+* dependent on the file DwtBorder.js
+* @contructor
+**/
 function Border_XFormItem() {}
 XFormItemFactory.createItemType("_BORDER_", "border", Border_XFormItem, Group_XFormItem)
 
@@ -2430,12 +2448,12 @@ Border_XFormItem.prototype.updateElement = function () {
 	}
 }
 
-//
-//	XFormItem class: "grouper"
-//
-//	Draws a simple border around the group, with the label placed over the border
-//
 
+/**
+* @class defines XFormItem type _GROUPER_
+* Draws a simple border around the group, with the label placed over the border
+* @contructor
+**/
 function Grouper_XFormItem() {}
 XFormItemFactory.createItemType("_GROUPER_", "grouper", Grouper_XFormItem, Group_XFormItem)
 Grouper_XFormItem.prototype.labelCssClass = "xform_grouper_label";
@@ -2489,9 +2507,10 @@ CollapsableRadioGrouper_XFormItem.prototype.getLabel = function () {
 
 
 
-//
-//	XFormItem class: "case"
-//
+/**
+* @class defines XFormItem type _CASE_
+* @contructor
+**/
 function Case_XFormItem() {}
 XFormItemFactory.createItemType("_CASE_", "case", Case_XFormItem, Group_XFormItem)
 
@@ -2592,12 +2611,12 @@ Case_XFormItem.prototype._outputHTML = function () {
 }
 
 
-//
-//	XFormItem class: "top_grouper"
-//
-//	Draws a simple border around the group, with the label placed over the border
-//
 
+/**
+* @class defines XFormItem type _TOP_GROUPER_
+* Draws a simple border around the group, with the label placed over the border
+* @contructor
+**/
 function TopGrouper_XFormItem() {}
 XFormItemFactory.createItemType("_TOP_GROUPER_", "top_grouper", TopGrouper_XFormItem, RadioGrouper_XFormItem)
 TopGrouper_XFormItem.prototype.borderCssClass = "xform_top_grouper_border";
@@ -2619,9 +2638,11 @@ TopGrouper_XFormItem.prototype.outputHTMLEnd = function (html, updateScript, ind
 
 
 
-//
-//	XFormItem class: "switch"
-//
+
+/**
+* @class defines XFormItem type _SWITCH_
+* @contructor
+**/
 function Switch_XFormItem() {}
 XFormItemFactory.createItemType("_SWITCH_", "switch", Switch_XFormItem, Group_XFormItem)
 
@@ -2632,9 +2653,10 @@ Switch_XFormItem.prototype.width = "100%";
 Switch_XFormItem.prototype.numCols = 1;
 
 
-//
-//	XFormItem class: "repeat"
-//
+/**
+* @class defines XFormItem type _REPEAT_
+* @contructor
+**/
 function Repeat_XFormItem() {}
 XFormItemFactory.createItemType("_REPEAT_", "repeat", Repeat_XFormItem, Group_XFormItem)
 
@@ -2899,7 +2921,10 @@ Repeat_XFormItem.prototype.getOnRemoveMethod = function() {
 }
 
 
-
+/**
+* @class defines XFormItem type _REPEAT_GRID_
+* @contructor
+**/
 function Repeat_Grid_XFormItem() {}
 XFormItemFactory.createItemType("_REPEAT_GRID_", "repeat_grid", Repeat_Grid_XFormItem, Repeat_XFormItem)
 Repeat_Grid_XFormItem.prototype.showRemoveButton = false;
@@ -2910,9 +2935,10 @@ Repeat_Grid_XFormItem.numCols = 2;
 
 
 
-//
-//	XFormItem class: "composite"
-//
+/**
+* @class defines XFormItem type _COMPOSITE_
+* @contructor
+**/
 function Composite_XFormItem() {}
 XFormItemFactory.createItemType("_COMPOSITE_", "composite", Composite_XFormItem, Group_XFormItem)
 
@@ -2952,9 +2978,10 @@ Composite_XFormItem.onFieldChange = function(value, event, form) {
 
 
 
-//
-//	XFormItem class: "date (composite item)"
-//
+/**
+* @class defines XFormItem type _DATE_
+* @contructor
+**/
 function Date_XFormItem() {}
 XFormItemFactory.createItemType("_DATE_", "date", Date_XFormItem, Composite_XFormItem)
 
@@ -3046,9 +3073,10 @@ Date_XFormItem.prototype.items = [
 
 
 
-//
-//	XFormItem class: "time (composite item)"
-//
+/**
+* @class defines XFormItem type _TIME_
+* @contructor
+**/
 function Time_XFormItem() {}
 XFormItemFactory.createItemType("_TIME_", "time", Time_XFormItem, Composite_XFormItem)
 
@@ -3166,9 +3194,10 @@ Time_XFormItem.prototype.items = [
 
 
 
-//
-//	XFormItem class: "datetime" (composite item)
-//
+/**
+* @class defines XFormItem type _DATETIME_
+* @contructor
+**/
 function Datetime_XFormItem() {}
 XFormItemFactory.createItemType("_DATETIME_", "datetime", Datetime_XFormItem, Composite_XFormItem)
 
@@ -3201,19 +3230,20 @@ Datetime_XFormItem.prototype.items = Datetime_XFormItem._datetimeFormatToItems(
 	{type:_TIME_, ref:".", labelLocation:_NONE_}
 );
 
+/**
+* @class defines XFormItem type _WIDGET_ADAPTOR_
+*	An adaptor for using any random (non-DWT) widget in an xform
+*	NOTE: the generic implementation assumes:
+*			1) you'll create a method called "constructWidget()" which will construct the appropriate widget
+*			2) the widget has a function "insertIntoXForm(form, item, element)"
+*				(overide "this.insertWidget" to change)
+*			3) the widget has a function "updateInXForm(form, item, value, element)"
+*				(overide "this.updateWidget" to change)
+*
+* @contructor
+**/
 
-//
-//	XFormItem class: "widget_adaptor"
-//
-//	An adaptor for using any random (non-DWT) widget in an xform
-//
-//	NOTE: the generic implementation assumes:
-//			1) you'll create a method called "constructWidget()" which will construct the appropriate widget
-//			2) the widget has a function "insertIntoXForm(form, item, element)"
-//				(overide "this.insertWidget" to change)
-//			3) the widget has a function "updateInXForm(form, item, value, element)"
-//				(overide "this.updateWidget" to change)
-//
+
 function WidgetAdaptor_XFormItem() {}
 XFormItemFactory.createItemType("_WIDGET_ADAPTOR_", "widget_adaptor", WidgetAdaptor_XFormItem, XFormItem)
 
@@ -3261,16 +3291,17 @@ WidgetAdaptor_XFormItem.prototype.updateWidget = function (newValue) {
 
 
 
-//
-//	XFormItem class: "dwt_adaptor"
-//
-//	An adaptor for using any random DWT widget in an xform
-//
-//	NOTE: the generic implementation assumes:
-//			1) you'll create a method called "constructWidget()" which will construct the appropriate widget
-//			2) you'll adapt "insertWidget(form,  widget, element)" to insert the widget properly
-//			3) you'll adapt "updateWidget(newValue)" to update the value properly
-//
+/**
+* @class defines XFormItem type _DWT_ADAPTOR_"
+*
+*	An adaptor for using any random DWT widget in an xform
+*
+*	NOTE: the generic implementation assumes:
+*			1) you'll create a method called "constructWidget()" which will construct the appropriate widget
+*			2) you'll adapt "insertWidget(form,  widget, element)" to insert the widget properly
+*			3) you'll adapt "updateWidget(newValue)" to update the value properly
+* @contructor
+**/
 function Dwt_Adaptor_XFormItem() {}
 XFormItemFactory.createItemType("_DWT_ADAPTOR_", "dwt_adaptor", Dwt_Adaptor_XFormItem, WidgetAdaptor_XFormItem)
 
@@ -3339,11 +3370,11 @@ Dwt_Adaptor_XFormItem.prototype._addCssStylesToDwtWidget = function () {
 	}
 };
 
-//
-//	XFormItem class: "dwt_button"
-//
-//	Adapts a DwtButton to work with the XForm
-//
+/**
+* @class defines XFormItem type  _DWT_BUTTON_
+* Adapts a DwtButton to work with the XForm
+* @constructor
+**/
 function Dwt_Button_XFormItem() {}
 XFormItemFactory.createItemType("_DWT_BUTTON_", "dwt_button", Dwt_Button_XFormItem, Dwt_Adaptor_XFormItem)
 
@@ -3403,10 +3434,11 @@ Dwt_Button_XFormItem.prototype.constructWidget = function () {
 
 
 
-//	XFormItem class: "dwt_select"
-//
-//	Adapts a DwtSelect to work with the XForm
-//
+/**	
+* @class defines XFormItem type _DWT_SELECT_
+* Adapts a DwtSelect to work with the XForm
+* @contructor
+**/
 function Dwt_Select_XFormItem() {}
 XFormItemFactory.createItemType("_DWT_SELECT_", "dwt_select", Dwt_Select_XFormItem, Dwt_Adaptor_XFormItem)
 //XFormItemFactory.registerItemType("_SELECT1_", "select1", Dwt_Select_XFormItem)
@@ -3463,11 +3495,11 @@ Dwt_Select_XFormItem.prototype.setElementEnabled = function (enable) {
 
 
 
-
-//	XFormItem class: "dwt_date"
-//
-//	Adapts a DwtDate to work with the XForm
-//
+/**	
+* @class defines XFormItem type _DWT_DATE_
+* Adapts a DwtDate to work with the XForm
+* @contructor
+**/
 function Dwt_Date_XFormItem() {}
 XFormItemFactory.createItemType("_DWT_DATE_", "dwt_date", Dwt_Date_XFormItem, Dwt_Adaptor_XFormItem)
 
@@ -3567,11 +3599,12 @@ function Dwt_Time_XFormItem() {
 Dwt_Time_XFormItem.TIME_MINUTE_CHOICES = ["00","15","30","45"];
 XFormItemFactory.createItemType("_DWT_TIME_", "dwt_time", Dwt_Time_XFormItem, Time_XFormItem);
 
-//
-//	XFormItem class: "dwt_datetime"
-//
-//	Composes a _DWT_DATE_ and a (non-DWT) _TIME_ to make a date/time editor, just for kicks.
-//
+
+/**	
+* @class defines XFormItem type _DWT_DATETIME_
+* Composes a _DWT_DATE_ and a (non-DWT) _TIME_ to make a date/time editor, just for kicks.
+* @contructor
+**/
 function Dwt_Datetime_XFormItem() {}
 XFormItemFactory.createItemType("_DWT_DATETIME_", "dwt_datetime", Dwt_Datetime_XFormItem, Composite_XFormItem)
 
@@ -3596,11 +3629,11 @@ Dwt_Datetime_XFormItem.prototype.items = Datetime_XFormItem._datetimeFormatToIte
 	}
 );
 
-//
-//	XFormItem class: "dwt_list"
-//
-//	Composes a _DWT_DATE_ and a (non-DWT) _TIME_ to make a date/time editor, just for kicks.
-//
+
+/**	
+* @class defines XFormItem type _DWT_LIST_
+* @contructor
+**/
 function Dwt_List_XFormItem() {}
 XFormItemFactory.createItemType("_DWT_LIST_", "dwt_list", Dwt_List_XFormItem, Dwt_Adaptor_XFormItem)
 
@@ -3685,9 +3718,10 @@ Dwt_List_XFormItem.prototype.appendItems = function (itemArray){
 };
 
 
-//
-//	XFormItem class: "button_grid"
-//
+/**	
+* @class defines XFormItem type _BUTTON_GRID_
+* @contructor
+**/
 function Button_Grid_XFormItem() {}
 XFormItemFactory.createItemType("_BUTTON_GRID_", "button_grid", Button_Grid_XFormItem, WidgetAdaptor_XFormItem)
 
@@ -3713,15 +3747,11 @@ Button_Grid_XFormItem.prototype.constructWidget = function () {
 }
 
 
-
-
-
-//
-//	XFormItem class: "tab_bar"
-//
-//	A simple tab (for switching a switch)
-//	Note: right now it just looks like a button, but soon it'll look much cooler
-//
+/**	
+* @class defines XFormItem type _TAB_BAR_
+* A simple tab (for switching a switch)
+* @contructor
+**/
 function Tab_Bar_XFormItem() {}
 XFormItemFactory.createItemType("_TAB_BAR_", "tab_bar", Tab_Bar_XFormItem, Button_Grid_XFormItem)
 
@@ -3736,10 +3766,10 @@ Tab_Bar_XFormItem.prototype.initFormItem = function() {
 	this.numCols = this.getChoices().length;
 }
 
-//
-// XFormItem class: "add_remove"
-//
-
+/**	
+* @class defines XFormItem type _DWT_ADD_REMOVE_
+* @contructor
+**/
 function Dwt_AddRemove_XFormItem() {}
 XFormItemFactory.createItemType("_DWT_ADD_REMOVE_", "add_remove", Dwt_AddRemove_XFormItem, Dwt_Adaptor_XFormItem);
 
@@ -3753,8 +3783,7 @@ Dwt_AddRemove_XFormItem.prototype._setAttributes = function(attributes) {
 	}
 	XFormItem.prototype._setAttributes.call(this, attributes);
 }
-/***/
-
+**/
 Dwt_AddRemove_XFormItem.prototype.getSorted = function() {
 	return this.getInheritedProperty("sorted");
 }

@@ -170,7 +170,7 @@ function() {
 * @param viewName		the name of the view
 * @param appName		the name of the owning app
 * @param elements		an array of elements to display
-* @returns				the app view
+* @return				the app view
 */
 ZaAppViewMgr.prototype.createView =
 function(viewId, elements) {
@@ -183,7 +183,7 @@ function(viewId, elements) {
 * hidden stack.
 *
 * @param viewId	the name of the app view to push
-* @returns			the id of the view that is displayed
+* @return			the id of the view that is displayed
 */
 ZaAppViewMgr.prototype.pushView =
 function(viewId) {
@@ -210,7 +210,7 @@ function(viewId) {
 /**
 * Hides the currently visible view, and makes the view on top of the hidden stack visible.
 *
-* @returns		the id of the view that is displayed
+* @return		the id of the view that is displayed
 */
 ZaAppViewMgr.prototype.popView =
 function() {
@@ -235,7 +235,7 @@ function() {
 * Makes the given view visible, and clears the hidden stack.
 *
 * @param viewName	the name of a view
-* @returns			true if the view was set
+* @return			true if the view was set
 */
 ZaAppViewMgr.prototype.setView =
 function(viewName) {

@@ -24,13 +24,13 @@
  */
 
 /**
-* ZaTabView is an abstract class for creating views that present data in tabs.
+* @class ZaTabView is an abstract class for creating views that present data in tabs.
 * All the tabbed views in the Admin UI should extend ZaTabView.
 * call initForm after calling the constructor
-* @class ZaTabView
 * @contructor
 * @param parent
 * @param app
+* @extends DwtComposite
 * @author Greg Solovyev
 **/
 function ZaTabView (parent, app, iKeyName) {
@@ -47,6 +47,24 @@ function ZaTabView (parent, app, iKeyName) {
 
 ZaTabView.prototype = new DwtComposite();
 ZaTabView.prototype.constructor = ZaTabView;
+
+/**
+* A map of funciton references. Functions in this map are called one after another from 
+* {@link #getMyXForm} method.
+* The functions are called on the current instance of the dialog. 
+* One parameter is passed to each function: a reference to the XForms object defenition.
+* Keys in the map are names of the view classes: ZaAccountXFormView, ZaCosXFormView, ZaDomainXFormView, etc
+* Values in the map are arrays of function references
+* If you have defined your function for modifying a view's XForm definition, you can add it to this map like this:
+* ZaTabView.XFormModifiers["ZaAccountXFormView"].push(ZaAccountXFormView.myXFormModifier);
+* This example adds funciton ZaAccountXFormView.myXFormModifier to the array of functions that will be called to construct UI for ZaAccountXFormView
+*
+* Examples of using this map can be found in {@link ZaAccountXFormView}, {@link ZaCosXFormView}, {@link ZaServerXFormView}
+* @see #getMyXForm
+* @see ZaAccountXFormView#myXFormModifier
+* @see ZaCosXFormView#myXFormModifier
+* @see ZaCosXFormView#ZaServerXFormView
+**/
 ZaTabView.XFormModifiers = new Object();
 
 ZaTabView.DEFAULT_TAB = 1;

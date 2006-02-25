@@ -19,9 +19,9 @@
 * @constructor
 * @class
 * @param attributes
-* @param model - instance of XModel 
-* @param instance - data instance
-* @param dwtContainer - instance of DwtComposite 
+* @param model {XModel} {@link XModel}
+* @param instance {Object} data instance
+* @param dwtContainer - instance of {@link DwtComposite}
 **/
 function XForm(attributes, model, instance, dwtContainer) {
 	if (attributes) {
@@ -59,7 +59,6 @@ XForm.prototype.getId = function () {	return this.__id;	}
 
 /**
 * A global handler for setTimeout/clearTimeout. This handler is used by onKeyPress event of all input fields.
-* Greg Solovyev 07/19/05
 **/
 XForm.keyPressDelayHdlr = null;
 
@@ -115,8 +114,10 @@ var _SCROLL_ = "scroll";
 var _AUTO_ = "auto";
 var _VISIBLE_ = "visible";
 
-// refresh:  update the form with new values
-//  NOTE: this will be done automatically if you do a setInstance()...
+/**
+* update the form with new values
+*  NOTE: this will be done automatically if you do a {@link #setInstance}
+**/
 XForm.prototype.refresh = function () {
 	// EMC 07/31/2005 -- I don't think we want to clear errors on every refresh
 	// since this is called from itemChanged.
@@ -125,7 +126,7 @@ XForm.prototype.refresh = function () {
 }
 
 
-/** THE FOLLOWING CODE SHOULD BE CONVERTED TO DWT **/
+// NOTE: THE FOLLOWING CODE SHOULD BE CONVERTED TO DWT 
 
 XForm.prototype.getGlobalRefString = function() {
 	return "XFG.cacheGet('" + this.__id + "')";
@@ -159,7 +160,7 @@ XForm.prototype.createElement = function (id, parentEl, tagName, contents) {
 	return XFG.createEl(id, parentEl, tagName, contents);
 }
 
-/** END DWT CONVERSION NEEDED **/
+// NOTE: END DWT CONVERSION NEEDED 
 
 XForm.prototype.focusElement = function (id) {
 	var el = this.getElement(id);

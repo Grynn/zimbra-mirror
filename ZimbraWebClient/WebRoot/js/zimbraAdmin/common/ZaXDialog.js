@@ -24,12 +24,13 @@
  */
 
 /**
-* @class ZaXDialog
-* @contructor ZaXDialog
+* @class 
+* @contructor 
+* @extends DwtDialog
 * @author Greg Solovyev
 * @param parent
-* param w (width)
-* param h (height)
+* @param w (width)
+* @param h (height)
 **/
 
 function ZaXDialog(parent, app, className, title, w, h,iKeyName) {
@@ -74,7 +75,19 @@ ZA_BTN_INDEX = DwtDialog.NO_BUTTONS;
 ZaXDialog.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/administration_console_help.htm";
 ZaXDialog.prototype = new DwtDialog;
 ZaXDialog.prototype.constructor = ZaXDialog;
+/**
+* A map of funciton references. Functions in this map are called one after another from 
+* {@link #getMyXForm} method.
+* The functions are called on the current instance of the dialog. 
+* One parameter is passed to each function: a reference to the XForms object defenition
+*  ZaXDialog
+* @see #getMyXForm
+**/
 ZaXDialog.XFormModifiers = new Object();
+
+/**
+* 
+**/
 ZaXDialog.HELP_BUTTON = ++ZA_BTN_INDEX;
 /**
 * public method _initForm
@@ -99,7 +112,7 @@ function () {
 }
 
 /**
-* @method setObject sets the object contained in the view
+* sets the object contained in the view
 **/
 ZaXDialog.prototype.setObject =
 function(entry) {
@@ -107,7 +120,12 @@ function(entry) {
 	this._localXForm.setInstance(this._containedObject);
 }
 
-
+/**
+* This method walks the map {@link #XFormModifiers} and calls each function in the map.
+* The functions are called on the current instance of the dialog. 
+* One parameter is passed to each function: a reference to the XForms object defenition
+*  ZaXDialog
+**/
 ZaXDialog.prototype.getMyXForm = 
 function() {	
 	var xFormObject = new Object();
@@ -125,6 +143,10 @@ function() {
 	return xFormObject;
 }
 
+/**
+*  ZaXDialog
+* @private
+**/
 ZaXDialog.prototype._createContentHtml =
 function () {
 
@@ -153,6 +175,7 @@ function () {
 }
 
 /**
+*  ZaXDialog
 * Override _addChild method. We need internal control over layout of the children in this class.
 * Child elements are added to this control in the _createHTML method.
 * @param child
@@ -162,7 +185,10 @@ function(child) {
 	this._children.add(child);
 }
 
-
+/**
+*  ZaXDialog
+* @private
+**/
 ZaXDialog.prototype._helpButtonListener =
 function() {
 	window.open(this._helpURL);

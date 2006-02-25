@@ -25,13 +25,14 @@
 
 /**
 * Creates a new wizard dialog.
-* @constructor
 * @class
-* @param parent - parent control (shell)
-* @param className - CSS class name
-* @param title - dialog title
-* @param w - content area width
-* @param h - content area height
+* @constructor
+* @extends ZaXDialog
+* @param parent - parent control {shell} 
+* @param className {String} CSS class name
+* @param title {String} dialog title
+* @param w {Number} content area width
+* @param h {Number} content area height
 * This class represents a reusable wizard dialog. 
 * After calling the constructor, define metadata for and call initForm to draw the contents of the dialog
 */
@@ -69,50 +70,66 @@ ZaXWizardDialog.prototype.toString =
 function () {
 	return "ZaXWizardDialog";
 }
-
+/**
+* member of  ZaXWizardDialog
+* closes the wizard dialog
+**/
 ZaXWizardDialog.prototype.popdown = 
 function () {
 	DwtDialog.prototype.popdown.call(this);
 }
 
-/*
+/**
+* pageKey is the value returned from {@link ZaXWizardDialog#addPage} method
+* This method is called by DwtWizardPage#switchToNextPage
+* and DwtWizardPage#switchToPrevPage
 * @param pageKey - key to the page to be shown. 
-* pageKey is the value returned from @link ZaXWizardDialog.prototype.addPage method
-* This method is called by 
-*	@link DwtWizardPage.prototype.switchToNextPage 
-*	and 
-*	@link DwtWizardPage.prototype.switchToPrevPage
-*/
+**/
 ZaXWizardDialog.prototype.goPage = 
 function(pageKey) {
 	this._containedObject[ZaModel.currentStep] = pageKey;
 	this._localXForm.refresh(); //run update script
 }
 
+/**
+* member of  ZaXWizardDialog
+* switches to the next page in the wizard
+**/
 ZaXWizardDialog.prototype.goNext = 
 function() {
 	this.goPage(this._containedObject[ZaModel.currentStep]+1);
 }
 
+/**
+* member of  ZaXWizardDialog
+* switches to the previous page in the wizard
+**/
 ZaXWizardDialog.prototype.goPrev = 
 function() {
 	this.goPage(this._containedObject[ZaModel.currentStep]-1);
 }
 
+/**
+* member of  ZaXWizardDialog
+* called when "Finish" button is clicked. Calls @see #popdown
+**/
 ZaXWizardDialog.prototype.finishWizard = 
 function() {
 	this.popdown();	
 }
-
+/**
+* member of  ZaXWizardDialog
+* @return current step number
+**/
 ZaXWizardDialog.prototype.getCurrentStep = 
 function() {
 	return this._containedObject[ZaModel.currentStep];	
 }
 
 /**
-* public method addPage
+* member of  ZaXWizardDialog
 * @param wizPage - instance of DwtPropertyPage 
-* @return - the key for the added page. This key can be used to retreive the tab using @link getPage.
+* @return the key for the added page. This key can be used to retreive the tab using @link getPage.
 **/
 ZaXWizardDialog.prototype.addPage =
 function (stepTitle) {
@@ -121,7 +138,7 @@ function (stepTitle) {
 }
 
 /**
-* public method _initForm
+* member of  ZaXWizardDialog
 * @param xModelMetaData
 * @param xFormMetaData
 **/
@@ -139,7 +156,8 @@ function (xModelMetaData, xFormMetaData) {
 
 
 /**
-* @method getObject returns the object contained in the view
+* member of  ZaXWizardDialog
+* @return the object contained in the view
 * before returning the object this updates the object attributes with 
 * tha values from the form fields 
 **/
@@ -149,7 +167,8 @@ function() {
 }
 
 /**
-* @method setObject sets the object contained in the view
+* member of  ZaXWizardDialog
+* sets the object contained in the view
 * @param entry - ZaDomain object to display
 **/
 ZaXWizardDialog.prototype.setObject =
@@ -198,6 +217,7 @@ function() {
 }
 
 /**
+* member of  ZaXWizProgressBar
 * @param stepKey
 **/
 ZaXWizProgressBar.prototype.showStep = 
@@ -210,6 +230,7 @@ function(stepKey) {
 }
 
 /**
+* member of  ZaXWizProgressBar
 * @param stepKey
 * @param stepNumber
 **/
@@ -219,6 +240,10 @@ function (stepKey, stepTitle) {
 	return (++this._stepsNumber);
 }
 
+/**
+* member of  ZaXWizProgressBar
+* @param child {dom element}
+**/
 ZaXWizProgressBar.prototype.addChild =
 function(child) {
 	this._children.add(child);
@@ -254,6 +279,10 @@ function() {
 	return "ZaXWizStepLabel";
 }
 
+/**
+* member of  ZaXWizStepLabel
+* @param isActive {Boolean}
+**/
 ZaXWizStepLabel.prototype.setActive = 
 function(isActive) {
 	if (isActive) {

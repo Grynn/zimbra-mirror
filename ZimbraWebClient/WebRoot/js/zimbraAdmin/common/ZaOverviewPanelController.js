@@ -467,10 +467,34 @@ function() {
 			this._handleException(ex, "ZaOverviewPanelController.prototype._buildFolderTree", null, false);
 		}
 		
+		this._postqTi = new DwtTreeItem(this._monitoringTi);
+		this._postqTi.setText(ZaMsg.OVP_statistics);
+		this._postqTi.setImage("Statistics");
+		this._postqTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._POSTQ);
+		
+		try {
+			//add server statistics nodes
+			var serverList = this._app.getServerList().getArray();
+			if(serverList && serverList.length) {
+				var cnt = serverList.length;
+				for(var ix=0; ix< cnt; ix++) {
+					var ti1 = new DwtTreeItem(this._postqTi);			
+					ti1.setText(serverList[ix].name);	
+					ti1.setImage("StatisticsByServer");
+					ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._POSTQ_BY_SERVER);
+					ti1.setData(ZaOverviewPanelController._OBJ_ID, serverList[ix].id);
+					this._serversStatsMap[serverList[ix].id] = ti1;
+				}
+			}
+		} catch (ex) {
+			this._handleException(ex, "ZaOverviewPanelController.prototype._buildFolderTree", null, false);
+		}
+		
 		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._STATUS] = ZaOverviewPanelController.statusTreeListener;		
 		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._STATISTICS] = ZaOverviewPanelController.statsTreeListener;				
 		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._STATISTICS_BY_SERVER] = ZaOverviewPanelController.statsByServerTreeListener;						
-		
+		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._POSTQ] = ZaOverviewPanelController.postqTreeListener;				
+		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._POSTQ_BY_SERVER] = ZaOverviewPanelController.postqByServerTreeListener;						
 	}
 		
 	if(ZaSettings.ADDRESSES_ENABLED)
@@ -629,6 +653,23 @@ ZaOverviewPanelController.cosListTreeListener = function (ev) {
 		this._app.getCurrentController().switchToNextView(this._app.getCosListController(), ZaCosListController.prototype.show, ZaCos.getAll(this._app));
 	} else {
 		this._app.getCosListController().show(ZaCos.getAll(this._app));
+	}
+}
+
+ZaOverviewPanelController.postqTreeListener = function (ev) {
+	if(this._app.getCurrentController()) {
+		this._app.getCurrentController().switchToNextView(this._app.getPostQListController(), ZaPostQListController.prototype.show, ZaServer.getAll(this._app));
+	} else {
+		this._app.getPostQListController().show(ZaServer.getAll(this._app));
+	}
+}
+
+ZaOverviewPanelController.postqByServerTreeListener = function (ev) {
+	var currentServer = this._app.getServerList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID));
+	if(this._app.getCurrentController()) {
+		this._app.getCurrentController().switchToNextView(this._app.getPostQController(), ZaPostQController.prototype.show,currentServer);
+	} else {					
+		this._app.getPostQController().show(currentServer);
 	}
 }
 

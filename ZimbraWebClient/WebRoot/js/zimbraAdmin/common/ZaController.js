@@ -24,15 +24,21 @@
  */
 
 /**
-* @constructor ZaController
-* @class ZaController
+* @class Base class for all Controller classes in ZimbraAdmin UI
 * @author Greg Solovyev
-* Base class for all Controller classes in ZimbraAdmin UI
+* @constructor 
+* @see ZaAccountListController
+* @see ZaCosListController
+* @see ZaDomainListController
+* @see ZaXFormViewController
 */
 function ZaController(appCtxt, container, app, iKeyName) {
 
 	if (arguments.length == 0) return;
-	this._evtMgr = new AjxEventMgr();	
+	this._evtMgr = new AjxEventMgr();
+	/**
+	* The name of the current controller. This name is used as a key in {@link #initToolbarMethods}, {@link #setViewMethods} and {@link #initPopupMenuMethods} maps 
+	**/	
 	this._iKeyName = iKeyName;
 	this._appCtxt = appCtxt;
 	this._container = container;
@@ -56,10 +62,31 @@ function ZaController(appCtxt, container, app, iKeyName) {
     this.objType = ZaEvent.S_ACCOUNT;
     this._helpURL = ZaController.helpURL;
 }
-
+/**
+* A map of funciton references. Functions in this map are called one after another from 
+* {@link #_initToolbar} method.
+* The functions are called on the current instance of the controller. 
+* member of  ZaController
+* @see #_initToolbar
+**/
 ZaController.initToolbarMethods = new Object();
+/**
+* A map of funciton references. Functions in this map are called one after another from 
+* {@link #_initPopupMenu} method.
+* The functions are called on the current instance of the controller. 
+* member of ZaController
+* @see #_initPopupMenu
+**/
 ZaController.initPopupMenuMethods = new Object();
+/**
+* A map of funciton references. Functions in this map are called one after another from 
+* {@link #_setView} method.
+* The functions are called on the current instance of the controller. 
+* member of ZaController
+* @see #_setView
+**/
 ZaController.setViewMethods = new Object();
+
 ZaController.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/administration_console_help.htm";
 // Public methods
 ZaController.prototype.toString = 
@@ -160,6 +187,11 @@ function (nextViewCtrlr, func, params) {
 
 //Private/protected methods
 
+/**
+* This method finds an array of function references in {@link ZaController#setViewMethods} map and calls all the functions for the array.
+* {@link #_iKeyName} is used to lookup the array of function references in the map.
+* @private
+**/
 ZaController.prototype._setView =
 function(entry) {
 	//Instrumentation code start
@@ -180,7 +212,7 @@ ZaController.prototype._helpButtonListener =
 function() {
 	window.open(this._helpURL);
 }
-/*
+/**
 * We do the whole schedule/execute thing to give the shell the opportunity to popup its "busy" 
 * overlay so that user input is blocked. For example, if a search takes a while to complete, 
 * we don't want the user's clicking on the search button to cause it to re-execute repeatedly 
@@ -188,7 +220,8 @@ function() {
 * must be a leaf action (scheduled actions are executed after the calling code returns to the
 * UI loop). You can't schedule something, and then have subsequent code that depends on the 
 * scheduled action. 
-*/
+* @private
+**/
 ZaController.prototype._schedule =
 function(method, params, delay) {
 	if (!delay) {
@@ -405,6 +438,11 @@ function() {
 	}	
 }
 
+/**
+* This method finds an array of function references in {@link ZaController#initToolbarMethods} map and calls all the functions for the array.
+* {@link #_iKeyName} is used to lookup the array of function references in the map.
+* @private
+**/
 ZaController.prototype._initToolbar = function () {
 	//Instrumentation code start
 	if(ZaController.initToolbarMethods[this._iKeyName]) {
@@ -419,6 +457,11 @@ ZaController.prototype._initToolbar = function () {
 	//Instrumentation code end
 }
 
+/**
+* This method finds an array of function references in {@link ZaController#initPopupMenuMethods} map and calls all the functions for the array.
+* {@link #_iKeyName} is used to lookup the array of function references in the map.
+* @private
+**/
 ZaController.prototype._initPopupMenu = function () {
 	//Instrumentation code start
 	if(ZaController.initPopupMenuMethods[this._iKeyName]) {

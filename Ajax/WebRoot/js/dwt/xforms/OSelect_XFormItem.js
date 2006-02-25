@@ -15,9 +15,9 @@
  */
 
 
-//
-//	OSelect class -- lightning fast SELECT type widget
-//
+/**
+*	OSelect class -- lightning fast SELECT type widget
+**/
 function OSelect1_XFormItem(){ this._enabled = true; }
 XFormItemFactory.createItemType("_OSELECT1_", "oselect1", OSelect1_XFormItem, Select1_XFormItem);
 

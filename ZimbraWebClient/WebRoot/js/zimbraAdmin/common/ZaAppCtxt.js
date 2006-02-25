@@ -41,7 +41,7 @@ function() {
 * Gets the app context from the given shell.
 *
 * @param shell		the shell
-* @returns			the app context
+* @return			the app context
 */
 ZaAppCtxt.getFromShell =
 function(shell) {
