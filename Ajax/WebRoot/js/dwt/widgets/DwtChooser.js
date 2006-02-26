@@ -143,34 +143,74 @@ function() {
 	this._targetListViewDivId	= Dwt.getNextId();
 	this._removeButtonDivId		= Dwt.getNextId();
 
-	var html = new Array();
+	var html = [];
 	var idx = 0;
 	
 	html[idx++] = "<div class='DwtChooser'>";
 
-	// start new table for list views
-	html[idx++] = "<table cellspacing=0 cellpadding=0 border=0><tr>";
-	// source list
-	html[idx++] = "<td><div id='";
-	html[idx++] = this._sourceListViewDivId;
-	html[idx++] = "'></div></td>";
-	// transfer buttons
-	html[idx++] = "<td valign='middle'>";
-	for (var i = 0; i < this._buttonInfo.length; i++) {
-		var id = this._buttonInfo[i].id;
-		html[idx++] = "<div id='";
-		html[idx++] = this._buttonDivId[id];
-		html[idx++] = "'></div><br>";
+	if (this._style == DwtChooser.HORIZ_STYLE) {
+		// start new table for list views
+		html[idx++] = "<table cellspacing=0 cellpadding=0 border=0>";
+		html[idx++] = "<tr>";
+
+		// source list
+		html[idx++] = "<td><div id='";
+		html[idx++] = this._sourceListViewDivId;
+		html[idx++] = "'></div></td>";
+
+		// transfer buttons
+		html[idx++] = "<td valign='middle'>";
+		for (var i = 0; i < this._buttonInfo.length; i++) {
+			var id = this._buttonInfo[i].id;
+			html[idx++] = "<div id='";
+			html[idx++] = this._buttonDivId[id];
+			html[idx++] = "'></div><br>";
+		}
+		// remove button
+		html[idx++] = "<br><div id='";
+		html[idx++] = this._removeButtonDivId;
+		html[idx++] = "'></div></td>";
+
+		// target list
+		html[idx++] = "<td><div id='";
+		html[idx++] = this._targetListViewDivId;
+		html[idx++] = "'></div></td>";	
+
+		html[idx++] = "</tr></table>";
+	} else {
+		// start new table for list views
+		html[idx++] = "<table cellspacing=0 cellpadding=0 border=0>";
+
+		// source list
+		html[idx++] = "<tr>";
+		html[idx++] = "<td><div id='";
+		html[idx++] = this._sourceListViewDivId;
+		html[idx++] = "'></div></td></tr>";
+
+		// transfer buttons
+		html[idx++] = "<tr><td align='center'>";
+		html[idx++] = "<table><tr>";
+		for (var i = 0; i < this._buttonInfo.length; i++) {
+			var id = this._buttonInfo[i].id;
+			html[idx++] = "<td id='";
+			html[idx++] = this._buttonDivId[id];
+			html[idx++] = "'></td>";
+		}
+		// remove button
+		html[idx++] = "<td id='";
+		html[idx++] = this._removeButtonDivId;
+		html[idx++] = "'></td>";
+		html[idx++] = "</tr></table>";
+		html[idx++] = "</td></tr>";
+
+		// target list
+		html[idx++] = "<tr><td><div id='";
+		html[idx++] = this._targetListViewDivId;
+		html[idx++] = "'></div></td></tr>";	
+
+		html[idx++] = "</table>";
 	}
-	// remove button
-	html[idx++] = "<br><div id='";
-	html[idx++] = this._removeButtonDivId;
-	html[idx++] = "'></div></td>";
-	// target list
-	html[idx++] = "<td><div id='";
-	html[idx++] = this._targetListViewDivId;
-	html[idx++] = "'></div></td>";	
-	html[idx++] = "</tr></table></div>";
+	html[idx++] = "</div>";
 
 	this.getHtmlElement().innerHTML = html.join("");
 };
@@ -474,7 +514,8 @@ function(item, id) {
 function DwtChooserListView(parent, type, className) {
 	
 	if (arguments.length == 0) return;
-	className = className ? className : "DwtChooserListView";
+	className = className ? className : (parent._style == DwtChooser.HORIZ_STYLE) ?
+				"DwtChooserListView_horiz" : "DwtChooserListView_vert";
 	DwtListView.call(this, parent, className, null, this._getHeaderList(parent));
 
 	this.type = type;
