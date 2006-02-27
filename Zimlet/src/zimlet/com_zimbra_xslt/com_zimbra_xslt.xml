@@ -23,6 +23,6 @@
 	<resource>wiki/w.jpg</resource>
 	<includeCSS>wiki/wiki.css</includeCSS>
 
-	<handlerObject>com_zimbra_xslt</handlerObject>
+	<handlerObject>Com_Zimbra_Xslt</handlerObject>
     <zimletPanelItem label="Search"/>
 </zimlet>

@@ -23,23 +23,23 @@
  * ***** END LICENSE BLOCK *****
  */
 
-function com_zimbra_xslt() {
+function Com_Zimbra_Xslt() {
 }
 
-com_zimbra_xslt.prototype = new ZmZimletBase;
-com_zimbra_xslt.prototype.constructor = com_zimbra_xslt;
+Com_Zimbra_Xslt.prototype = new ZmZimletBase;
+Com_Zimbra_Xslt.prototype.constructor = Com_Zimbra_Xslt;
 
-com_zimbra_xslt.registerService =
+Com_Zimbra_Xslt.registerService =
 function(service) {
 	if (service && service.xsl && service.getRequest && service.id) {
-		if (!com_zimbra_xslt.prototype.services) {
-			com_zimbra_xslt.prototype.services = new Object();
+		if (!Com_Zimbra_Xslt.prototype.services) {
+			Com_Zimbra_Xslt.prototype.services = new Object();
 		}
-		com_zimbra_xslt.prototype.services[service.id] = service;
+		Com_Zimbra_Xslt.prototype.services[service.id] = service;
 	}
 };
 
-com_zimbra_xslt.prototype.init =
+Com_Zimbra_Xslt.prototype.init =
 function() {
 	var ctxt = this.xmlObj();
 	if (!ctxt._panelActionMenu) {
@@ -61,7 +61,7 @@ function() {
 	}
 };
 
-com_zimbra_xslt.prototype.buttonListener =
+Com_Zimbra_Xslt.prototype.buttonListener =
 function(ev) {
 	var el = document.getElementById(this._subjectId);
 	var q = el.value;
@@ -80,7 +80,7 @@ function(ev) {
 	}
 };
 
-com_zimbra_xslt.prototype.menuItemSelected =
+Com_Zimbra_Xslt.prototype.menuItemSelected =
 function(contextMenu, menuItemId, spanElement, contentObjText, canvas) {
 	this._query = menuItemId.id;
 	var view = new DwtComposite(this.getShell());
@@ -128,14 +128,14 @@ function(contextMenu, menuItemId, spanElement, contentObjText, canvas) {
 		      }));
 };
 
-com_zimbra_xslt.prototype.getSanitizedDocFromHtml =
+Com_Zimbra_Xslt.prototype.getSanitizedDocFromHtml =
 function(text) {
 	text = text ? text.replace(/&nbsp;/g," ").replace(/&reg;/g,"(R)") : "";
 	var doc = AjxXmlDoc.createFromXml(text);
 	return doc.getDoc();
 };
 
-com_zimbra_xslt.prototype.callback =
+Com_Zimbra_Xslt.prototype.callback =
 function(canvas, service, result) {
 	var html, resp;
 	var processor = service.processor;
