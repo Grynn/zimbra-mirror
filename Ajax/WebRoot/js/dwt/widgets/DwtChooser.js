@@ -52,7 +52,7 @@ function DwtChooser(parent, buttonInfo, style, noDuplicates) {
 	DwtComposite.call(this, parent, "DwtChooser");
 
 	this._style = style ? style : DwtChooser.HORIZ_STYLE;
-	this._buttonInfo = buttonInfo ? buttonInfo : {};
+	this._buttonInfo = buttonInfo ? buttonInfo : [ { label: AjxMsg.add } ];
 	this._noDuplicates = noDuplicates;
 
 	// create IDs for button elements and their containers
@@ -146,7 +146,7 @@ function() {
 	var html = [];
 	var idx = 0;
 	
-	html[idx++] = "<div class='DwtChooser'>";
+//	html[idx++] = "<div class='DwtChooser'>";
 
 	if (this._style == DwtChooser.HORIZ_STYLE) {
 		// start new table for list views
@@ -154,9 +154,11 @@ function() {
 		html[idx++] = "<tr>";
 
 		// source list
-		html[idx++] = "<td><div id='";
+//		html[idx++] = "<td><div id='";
+		html[idx++] = "<td id='";
 		html[idx++] = this._sourceListViewDivId;
-		html[idx++] = "'></div></td>";
+//		html[idx++] = "'></div></td>";
+		html[idx++] = "'></td>";
 
 		// transfer buttons
 		html[idx++] = "<td valign='middle'>";
@@ -172,9 +174,11 @@ function() {
 		html[idx++] = "'></div></td>";
 
 		// target list
-		html[idx++] = "<td><div id='";
+//		html[idx++] = "<td><div id='";
+		html[idx++] = "<td id='";
 		html[idx++] = this._targetListViewDivId;
-		html[idx++] = "'></div></td>";	
+//		html[idx++] = "'></div></td>";	
+		html[idx++] = "'></td>";	
 
 		html[idx++] = "</tr></table>";
 	} else {
@@ -210,7 +214,7 @@ function() {
 
 		html[idx++] = "</table>";
 	}
-	html[idx++] = "</div>";
+//	html[idx++] = "</div>";
 
 	this.getHtmlElement().innerHTML = html.join("");
 };
