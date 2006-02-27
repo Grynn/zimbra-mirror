@@ -3379,7 +3379,7 @@ function Dwt_Button_XFormItem() {}
 XFormItemFactory.createItemType("_DWT_BUTTON_", "dwt_button", Dwt_Button_XFormItem, Dwt_Adaptor_XFormItem)
 
 //	type defaults
-Dwt_Button_XFormItem.prototype.labelLocation = _NONE_;
+Dwt_Button_XFormItem.prototype.labelLocation = DwtLabel.IMAGE_LEFT | DwtLabel.ALIGN_CENTER;
 Dwt_Button_XFormItem.prototype.writeElementDiv = false;
 //	methods
 
@@ -3389,7 +3389,7 @@ Dwt_Button_XFormItem.prototype.insertWidget = function (form, widget, element) {
 
 // implement the following to actually construct the instance of your widget
 Dwt_Button_XFormItem.prototype.constructWidget = function () {
-	var widget = this.widget = new DwtButton(this.getForm(), this.getCssClass());
+	var widget = this.widget = new DwtButton(this.getForm(), this.getLabelLocation(), this.getCssClass());
 	var height = this.getHeight();
 	var width = this.getWidth();
 	
