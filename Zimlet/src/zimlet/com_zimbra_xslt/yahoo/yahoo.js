@@ -46,7 +46,7 @@ function _initYahoo() {
 			return {"url":q_url, "req":null}
 		};
 		
-	com_zimbra_xslt.registerService(yhoo);
+	Com_Zimbra_Xslt.registerService(yhoo);
 };
 
 _initYahoo();
