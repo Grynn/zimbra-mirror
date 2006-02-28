@@ -2456,12 +2456,12 @@ Border_XFormItem.prototype.updateElement = function () {
 **/
 function Grouper_XFormItem() {}
 XFormItemFactory.createItemType("_GROUPER_", "grouper", Grouper_XFormItem, Group_XFormItem)
-Grouper_XFormItem.prototype.labelCssClass = "xform_grouper_label";
+Grouper_XFormItem.prototype.labelCssClass = "GrouperLabel";
 Grouper_XFormItem.prototype.labelLocation = _INLINE_;		// managed manually by this class
-Grouper_XFormItem.prototype.borderCssClass = "xform_grouper_border";
-Grouper_XFormItem.prototype.insetCssClass = "xform_grouper_inset";
-Grouper_XFormItem.prototype.colSpan = "*";
-Grouper_XFormItem.prototype.width = "100%";
+Grouper_XFormItem.prototype.borderCssClass = "GrouperBorder";
+Grouper_XFormItem.prototype.insetCssClass = "GrouperInset";
+//Grouper_XFormItem.prototype.colSpan = "*";
+//Grouper_XFormItem.prototype.width = "100%";
 
 Grouper_XFormItem.prototype.getBorderCssClass = function () {
 	return this.getInheritedProperty("borderCssClass");
