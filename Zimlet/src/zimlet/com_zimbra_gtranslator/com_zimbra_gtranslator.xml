@@ -1,0 +1,12 @@
+<zimlet name="com_zimbra_gtranslator" version="1.0" description="Google Translator">
+	<include>gtranslator.js</include>
+	<includeCSS>gtranslator.css</includeCSS>
+	<resource>google-icon.gif</resource>
+	<handlerObject>Com_Zimbra_Gtranslator</handlerObject>
+
+	<zimletPanelItem label="Google Translator" icon="Google-panelIcon">
+		<toolTipText>Drag a conversation or message to translate it</toolTipText>
+		<dragSource type="ZmConv" />
+		<dragSource type="ZmMailMsg" />
+	</zimletPanelItem>
+</zimlet>
