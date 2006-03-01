@@ -3704,7 +3704,8 @@ Dwt_List_XFormItem.prototype.setItems = function (itemArray){
 		existingArr = list.getArray();
 	}
 	tmpArr = new Array();
-	if(itemArray.toString() != existingArr.toString()) {
+	//toString() return always same. we compare the object itself instead because join() is too expensive
+	if(itemArray != existingArr ) {
 		var cnt=itemArray.length;
 		for(var i = 0; i< cnt; i++) {
 			tmpArr.push(itemArray[i]);		
