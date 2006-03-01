@@ -460,6 +460,18 @@ function(tabKey, tabTitle) {
 	return b;
 }
 
+/**
+* @param tabKey
+* @return {DwtButton}
+**/
+DwtTabBar.prototype.getButton = 
+function (tabKey) {
+	if(this._buttons[tabKey])
+		return this._buttons[tabKey];
+	else 
+		return null;
+}
+
 DwtTabBar.prototype.openTab = 
 function(tabK) {
 	this._currentTabKey = tabK;

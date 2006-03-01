@@ -93,6 +93,10 @@ XFormChoices.prototype._valueProperty = "value";
 XFormChoices.prototype._labelProperty = "label";
 
 
+XFormChoices.prototype.getChoiceObject = 
+function () {
+	return this._choiceObject;
+}
 
 XFormChoices.prototype.autoDetermineType = function () {
 	var type;

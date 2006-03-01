@@ -3736,8 +3736,8 @@ Button_Grid_XFormItem.prototype.forceUpdate = true;
 Button_Grid_XFormItem.prototype.constructWidget = function () {
 	var changeHandler = this.getExternalChangeHandler();
 	var attributes = {
-		choices:this.getChoices(),
 		numCols:this.getNumCols(),
+		choices:choices.getChoiceObject(),
 		cssClass:this.getCssClass(),
 		onChange:changeHandler,
 		addBracketingCells:(this.getAlign() == _CENTER_)
@@ -3763,8 +3763,46 @@ Tab_Bar_XFormItem.prototype.align = _CENTER_;
 Tab_Bar_XFormItem.prototype.colSpan = "*";
 
 //	methods
+
+Tab_Bar_XFormItem.prototype.constructWidget = function () {
+	var changeHandler = this.getExternalChangeHandler();
+	var attributes = {
+		numCols:this.getNumCols(),
+		cssClass:this.getCssClass(),
+		onChange:changeHandler,
+		addBracketingCells:(this.getAlign() == _CENTER_)
+	}
+
+	var choices = this.getChoices();
+	if(choices.constructor == XFormChoices) {
+		attributes.choices = choices.getChoiceObject();
+	} else {
+		attributes.choices = choices;
+	}
+	var multiple = this.getMultiple();
+	if (multiple !== null) attributes.multiple = multiple;
+	return new ButtonGrid(attributes);
+}
+
 Tab_Bar_XFormItem.prototype.initFormItem = function() {
-	this.numCols = this.getChoices().length;
+	this.choices = this.getChoices();
+
+	if(!this.choices)
+		return;
+	if(this.choices.constructor == XFormChoices) {
+		var listener = new AjxListener(this, this.dirtyDisplay);
+		this.choices.addListener(DwtEvent.XFORMS_CHOICES_CHANGED, listener);	
+		this.numCols = this.getChoices().values.length;
+	} else {
+		this.numCols = this.getChoices().length;
+	}
+}
+
+Tab_Bar_XFormItem.prototype.dirtyDisplay = function(newChoices) {
+	//this.dirtyDisplay();
+	if(this.choices.constructor == XFormChoices) {
+		this.widget.updateChoicesHTML(this.getNormalizedLabels());	
+	}
 }
 
 /**	
@@ -3949,14 +3987,33 @@ Dwt_TabBar_XFormItem.prototype.constructWidget = function() {
 	this._tabkey2value = {};
 	
 	var choices = this.getChoices();
-	for (var i = 0; i < choices.length; i++) {
-		var choice = choices[i];
-		// NOTE: DwtTabView keeps its own internal keys that are numerical
-		this._value2tabkey[choice.value] = i + 1;
-		this._tabkey2value[i + 1] = choice.value;
-//		var page = new DwtTabViewPage(widget);
-		widget.addButton(i+1, choice.label);
-		//widget.addTab(choice.label, page);
+	if(choices.constructor == XFormChoices) {
+		this.choices = choices;
+		var listener = new AjxListener(this, this.dirtyDisplay);
+		choices.addListener(DwtEvent.XFORMS_CHOICES_CHANGED, listener);	
+		
+		var values = this.getNormalizedValues();
+		var labels = this.getNormalizedLabels();
+		var cnt = values.length;
+		for (var i = 0; i < cnt; i++) {
+			// NOTE: DwtTabView keeps its own internal keys that are numerical
+			this._value2tabkey[values[i]] = i + 1;
+			this._tabkey2value[i + 1] = values[i];
+	//		var page = new DwtTabViewPage(widget);
+			widget.addButton(i+1, labels[i]);
+			//widget.addTab(choice.label, page);
+		}			
+	} else {
+		var cnt = choices.length;
+		for (var i = 0; i < cnt; i++) {
+			var choice = choices[i];
+			// NOTE: DwtTabView keeps its own internal keys that are numerical
+			this._value2tabkey[choice.value] = i + 1;
+			this._tabkey2value[i + 1] = choice.value;
+	//		var page = new DwtTabViewPage(widget);
+			widget.addButton(i+1, choice.label);
+			//widget.addTab(choice.label, page);
+		}
 	}
 	
 	return widget;
@@ -3982,6 +4039,23 @@ Dwt_TabBar_XFormItem.prototype.updateWidget = function(newvalue) {
 	}
 
 	this.widget.addStateChangeListener(this._stateChangeListener);
+}
+
+Dwt_TabBar_XFormItem.prototype.dirtyDisplay = function() {
+	if(this.choices && this.choices.constructor == XFormChoices) {
+		var labels = this.getNormalizedLabels();
+		var values = this.getNormalizedValues();
+		var cnt = labels.count;
+		for(var i=0;i<cnt;i++) {
+			var tabKey = this._value2tabkey[values[i]];
+			if(tabKey) {
+				var btn = this.widget.getButton(tabKey);
+				if(btn) {
+					btn.setText(labels[i]);
+				}
+			}
+		}
+	}
 }
 
 //

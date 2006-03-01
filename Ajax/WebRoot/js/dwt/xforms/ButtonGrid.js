@@ -15,10 +15,10 @@
  */
 
 
-//
-//	ButtonGrid class -- example of putting a custom widget in a XForm
-//
-
+/**
+* @class ButtonGrid  example of putting a custom widget in a XForm
+* @constructor
+**/
 
 function ButtonGrid(attributes) {
 	XFG.assignUniqueId(this, "__BUTTON_GRID__");
@@ -177,6 +177,19 @@ BGP.insertIntoXForm = function (form, item, element) {
 	element.innerHTML = this.getHTML();
 }
 
+BGP.updateChoicesHTML = function(labels) {
+	var i = 0;
+	for (var r = 0; r < numRows; r++) {
+		for (var c = 0; c < this.numCols; c++) {
+			var btn = document.getElementById(this.getButtonId(i));
+			if(btn) {
+				btn.innerHTML =labels[i].label;
+			}
+			i++;
+			if (i >= labels.length) break;
+		}
+	}
+}
 
 BGP.updateInXForm = function (form, item, value, element) {
 	var valueStr = (value instanceof Array ? value.join(",") : value);
