@@ -1,0 +1,10 @@
+.ImgYTraffic-panelIcon {
+  background: url("ytraffic.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.YTraffic-icon-right {
+  background: url("ytraffic.gif") no-repeat 100% 50%;
+}
