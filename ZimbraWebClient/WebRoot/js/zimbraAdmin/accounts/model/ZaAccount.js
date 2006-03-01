@@ -471,6 +471,13 @@ function(tmpObj, app) {
 	return account;
 }
 */
+
+/**
+* Creates a new ZaAccount. This method makes SOAP request to create a new account record. 
+* @param tmpObj
+* @param app {ZaApp}
+* @param account {ZaAccount}
+**/
 ZaAccount.createMethod = 
 function (tmpObj, account, app) {
 	tmpObj.attrs[ZaAccount.A_mail] = tmpObj.name;	
@@ -703,14 +710,25 @@ function (mbxId, callback) {
 	attr.setAttribute("id", mbxId);
 	var resp = null;
 	try {
+		var command = new ZmCsfeCommand();
+		var params = new Object();
+		params.soapDoc = soapDoc;	
 		if(callback) {
+			params.asyncMode = true;
+			params.callback = callback;
+			resp = command.invoke(params);	
+		} else {
+			command.invoke(params);	
+		}
+		
+		/*if(callback) {
 			var asynCommand = new ZmCsfeAsynchCommand();
 			asynCommand.addInvokeListener(callback);
 			asynCommand.invoke(soapDoc, null, null, null, true);			
 			return asynCommand;
 		} else {
 			resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true);
-		}
+		}*/
 	} catch (ex) {
 		if(ex.code == "service.NOT_IN_PROGRESS") {
 			resp = null;
@@ -733,7 +751,7 @@ function (mbxId) {
 		var command = new ZmCsfeCommand();
 		var params = new Object();
 		params.soapDoc = soapDoc;	
-		resp = command.invoke(params).Body.ReIndexResponse;
+		resp = command.invoke(params);
 	} catch (ex) {
 		resp = ex;
 	}
@@ -751,13 +769,61 @@ function (mbxId) {
 		var command = new ZmCsfeCommand();
 		var params = new Object();
 		params.soapDoc = soapDoc;	
-		resp = command.invoke(params).Body.ReIndexResponse;	
+		resp = command.invoke(params);	
 	} catch (ex) {
 		resp = ex;
 	}
 	return resp;
 }
 
+ZaAccount.parseReindexResponse =
+function (respObj, instance) {
+	if(!respObj)
+		return;
+	if(respObj.isException && respObj.isException()) {
+		var errCode = respObj.getException().code;
+		if(errCode && errCode == "service.NOT_IN_PROGRESS") {
+			instance.status = null;
+			instance.errorDetail = "";
+			instance.resultMsg = "";	
+			instance.progressMsg = ZaMsg.NAD_ACC_ReindexingNotRunning;
+			if(instance.numRemaining > 0) {
+				instance.numDone = instance.numTotal;
+			}
+		} else {
+			instance.resultMsg = String(ZaMsg.FAILED_REINDEX).replace("{0}", errCode);
+			instance.errorDetail = respObj.getException().detail+"\n"+respObj.getException().msg;
+			instance.status = "error";	
+		
+		}
+	} else  {
+		var resp;
+		if(respObj.getResponse) {
+			resp = respObj.getResponse();
+		} else if(respObj.Body.ReIndexResponse) {
+			resp = respObj;
+		}
+		if(resp && resp.Body.ReIndexResponse) {
+			instance.status = resp.Body.ReIndexResponse.status;
+			if(resp.Body.ReIndexResponse.progress && resp.Body.ReIndexResponse.progress[0]) {
+				var progress = resp.Body.ReIndexResponse.progress[0];
+				instance.numFailed = progress.numFailed;
+				instance.numSucceeded = progress.numSucceeded;				
+				instance.numRemaining = progress.numRemaining;	
+				instance.numTotal = instance.numSucceeded + instance.numFailed + instance.numRemaining;
+				instance.numDone  = instance.numFailed + instance.numSucceeded;					
+				instance.progressMsg = String(ZaMsg.NAD_ACC_ReindexingStatus).replace("{0}", instance.numSucceeded).replace("{1}",instance.numRemaining).replace("{2}", instance.numFailed);				
+				if(instance.status == "cancelled") {
+					instance.progressMsg = instance.progressMsg + "<br>" + ZaMsg.NAD_ACC_ReindexingCancelled;
+				}			
+				if(instance.numRemaining == 0) {
+					instance.numDone = instance.numTotal;
+				}					
+			}
+		}
+	}
+}
+/*
 ZaAccount.parseReindexResponse = 
 function (arg, respObj) {
 //	var numFailed, numSucceeded,numRemaining,numTotal,numDone,resultMsg,errorDetail,status;
@@ -809,12 +875,9 @@ function (arg, respObj) {
 				respObj.numDone = respObj.numTotal;
 			}
 			//temp fix 
-			/*if (respObj.numRemaining > 0)
-				respObj.status = "running";
-			*/
 		}
 	}
-}
+}*/
 
 ZaAccount.prototype.initFromDom =
 function(node) {
