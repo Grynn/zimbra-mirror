@@ -1,0 +1,29 @@
+<zimlet name="com_sidestep_travelagent" version="1.011" description="Search travel reservations across multiple engines">
+<include>com_sidestep_travelagent.js</include>
+<include>SideStepFlightFindView.js</include>
+<include>SideStepCarFindView.js</include>
+<include>SideStepHotelFindView.js</include>
+<include>SideStepAirportLookupDlg.js</include>
+<resource>sidestep.gif</resource>
+<resource>hotel.gif</resource>
+<resource>air.gif</resource>
+<resource>car.gif</resource>
+<!--include>http://www.sidestep.com/common/js/prototype-1.3.1.js</include-->
+<includeCSS>com_sidestep_travelagent.css</includeCSS>	
+<handlerObject>Com_SideStep_TravelAgent</handlerObject>
+	<zimletPanelItem label="Travel agent" icon="SideStep-panelIcon">
+		<dragSource type="ZmContact" />
+		<dragSource type="ZmAppt" />
+		<contextMenu>
+			<menuItem label="Preferences..." id="PREFERENCES" />
+			<menuItem label="Book a flight" id="BOOKAFLIGHT" />
+			<menuItem label="Book a car" id="BOOKACAR" />			
+			<menuItem label="Book a hotel" id="BOOKAHOTEL" />				
+		</contextMenu>		
+		<toolTipText>Search travel reservations across multiple engines</toolTipText>
+	</zimletPanelItem>
+	<userProperties>
+		<property type="string" minLength="3" maxLength="4"  name="myairport" label="My airport" visible="true" value="SFO"/>
+	</userProperties>
+</zimlet>
+

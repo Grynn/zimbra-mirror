@@ -1,0 +1,6 @@
+<zimletConfig name="com_sidestep_travelagent" version="1.00">
+	<global>
+        <property name="allowedDomains">sidestep.com,*.sidestep.com,*.airnav.com,airnav.com</property>	
+    </global>
+</zimletConfig>
+

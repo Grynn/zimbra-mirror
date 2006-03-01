@@ -1,0 +1,21 @@
+.search-results-table-hdr {
+  padding: 4px 10px 4px 0;
+  text-align: right;
+  font-size: 11px;
+  background-color:#D9EBFA;
+}
+
+.search-results-table-data {
+  background-color: #ECF5FC;
+  padding: 4px 0 4px 10px;
+  font-weight: bold;
+  font-size: 11px;
+}
+
+.ImgYMAP-Icon {
+  background: url("ymaps.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+

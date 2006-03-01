@@ -1,0 +1,9 @@
+<zimletConfig name="com_flightexplorer_fasttrack" version="1.08">
+	<global>
+        <property name="allowedDomains">*.flightexplorer.com</property>	
+        <property name="username">GSOLOVYEV</property>
+		<property name="password">ZIMBRA1</property>
+		<property name="GetFlightDataAndImageEx">http://webservices.flightexplorer.com/FastTrack.asmx/GetFlightDataAndImageEx</property>		
+		<property name="GetFlightDataEx">http://webservices.flightexplorer.com/FastTrack.asmx/GetFlightDataEx</property>				
+    </global>
+</zimletConfig>

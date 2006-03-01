@@ -1,0 +1,180 @@
+function Com_SideStep_TravelAgent() {
+	if(!ZmOperation.MSG_KEY[201]) {
+		ZmOperation.MSG_KEY[201] = "travelAgent";
+		var op = new Object();
+		op.id = 201;
+		op.label = "Travel agent";
+		op.image = "SideStep-panelIcon";
+		op.disImage = "SideStep-panelIcon";
+		op.toolTip = "Book Flight, Car or Hotel on the selected day";
+		ZmZimlet.actionMenus["ZmCalViewController"].push(op);
+		ZmZimlet.listeners["ZmCalViewController"][201] = Com_SideStep_TravelAgent.launchMe;
+	}
+	Com_SideStep_TravelAgent._instance = this;
+}
+
+Com_SideStep_TravelAgent.getInstance = function () {
+	return Com_SideStep_TravelAgent._instance;
+}
+Com_SideStep_TravelAgent.prototype = new ZmZimletBase;
+Com_SideStep_TravelAgent.prototype.constructor = Com_SideStep_TravelAgent;
+//Map of airline codes 
+
+
+Com_SideStep_TravelAgent.prototype.singleClicked =
+function () {
+	this.showSideStepDlg();
+}
+
+Com_SideStep_TravelAgent.prototype.menuItemSelected = function(itemId) {
+	switch (itemId) {
+	    case "PREFERENCES":
+			this.createPropertyEditor();
+		break;
+		case "BOOKAFLIGHT":
+			this.showSideStepDlg();
+			this.tabView.switchToTab(this.tabkeys[0]);
+		break;
+		case "BOOKACAR":
+			this.showSideStepDlg();
+			this.tabView.switchToTab(this.tabkeys[1]);
+		break;
+		case "BOOKAHOTEL":
+			this.showSideStepDlg();
+			this.tabView.switchToTab(this.tabkeys[2]);
+		break;		
+   }
+};
+
+Com_SideStep_TravelAgent.prototype.showSideStepDlg = 
+function (homeOptions, workOptions, workZip, homeZip,addr) {
+	var view = new DwtComposite(this._appCtxt.getShell());	
+	this.tabView = new DwtTabView(view,"SideStepTabView");
+	this.flightPage = new SideStepFlightFindView(this.tabView,this._appCtxt, this,homeOptions, workOptions, workZip, homeZip);
+	this.carPage = new SideStepCarFindView(this.tabView,this._appCtxt, this,homeOptions, workOptions, workZip, homeZip);	
+	this.hotelPage = new SideStepHotelFindView(this.tabView,this._appCtxt, this,addr);		
+	view.setSize("500px", "360px");
+	this.tabView.setSize("500px", "360px");	
+	this.flightPage.setSize("500px", "360px");	
+	this.carPage.setSize("500px", "360px");	
+	this.hotelPage.setSize("500px", "360px");	
+	this.tabkeys = [];
+	this.tabkeys.push(this.tabView.addTab("Flight", this.flightPage));
+	this.tabkeys.push(this.tabView.addTab("Car", this.carPage));	
+	this.tabkeys.push(this.tabView.addTab("Hotel", this.hotelPage));		
+	var canvas = new ZmDialog(this._appCtxt.getShell(), null, null, "Search travel reservations across multiple engines",null,view);
+	canvas.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(canvas, canvas.popdown));
+	//canvas._okButtonListener = function () { this.popdown(); };
+	canvas.popup();
+		
+	this.tabView.getTabButton(this.tabkeys[0]).setImage("SideStep-air");
+	this.tabView.getTabButton(this.tabkeys[1]).setImage("SideStep-car");	
+	this.tabView.getTabButton(this.tabkeys[2]).setImage("SideStep-hotel");	
+}
+
+Com_SideStep_TravelAgent.prototype.findAirports = 
+function (zipcode) {
+	zipcode = AjxStringUtil.urlEncode(zipcode).replace(/\+/g, "%20");
+	
+	var url = [ZmZimletBase.PROXY,AjxStringUtil.urlEncode("http://www.airnav.com/cgi-bin/airport-search?fieldtypes=a&length=5000&paved=Y&mindistance=0&maxdistance=40&distanceunits=mi&use=u&place="), AjxStringUtil.urlEncode(zipcode)].join("");
+	var options = new Array();
+	try {
+		var result=AjxRpc.invoke(null, url, null, null, true);
+		if(result.success) {
+//			var myReg = /(<TR><TH width=20><A href=\"\/airport\/)([A-Z]{3})(\"><IMG src=\"http:\/\/[0-9.]+\/airfield\-icons\/a.gif\" width=20 height=20 alt=\"a \"><\/A><\/TH><TD align=center>[A-Z]{3}&nbsp;&nbsp;<\/TD> <TD align=left>)([A-Za-z0-9\s,\-]+)(&nbsp;&nbsp;<\/TD> <TD align=left>)([A-Za-z0-9\s,\-]+)(&nbsp;&nbsp;<\/TD> <TD align=right nowrap>)([0-9a-z\s,]+)([A-Z\s]+)(<BR><\/TD><\/TR>)/g;	
+			var myReg = /(<TD align=center>)([A-Z]{3})(&nbsp;&nbsp;<\/TD> )(<TD align=left>)([A-Z\s,\/\-]+)(&nbsp;&nbsp;<\/TD>)/g;
+			//var matches = result.text.match(RegExp);
+			var matches;
+			try {
+				while ((matches = myReg.exec(result.text)) != null) {
+					var airportName = matches[5];
+					var airportCode = matches[2];
+					var option = new DwtSelectOption(airportCode, false, airportName + " ("+airportCode+")");
+					options.push(option);
+				}
+			} catch (ex) {
+				//
+			}			
+		}
+	} catch (ex){
+			//
+	}
+	return options;	
+}
+
+
+Com_SideStep_TravelAgent.launchMe =
+function () {
+	var d = this._minicalMenu ? this._minicalMenu.__detail : null;
+	if (d != null) 
+		delete this._minicalMenu.__detail;
+	else 
+		d = this._viewMgr ? this._viewMgr.getDate() : null;
+
+	if (d == null) d = new Date();
+	
+	Com_SideStep_TravelAgent.getInstance().showSideStepDlg();
+	Com_SideStep_TravelAgent.getInstance().flightPage.setDepartDate(d);
+	Com_SideStep_TravelAgent.getInstance().carPage.setPickupDate(d);
+	Com_SideStep_TravelAgent.getInstance().hotelPage.setCheckinDate(d);
+}
+
+Com_SideStep_TravelAgent.prototype.doDrop = 
+function(obj) {
+	if (obj.TYPE == "ZmContact") {
+		var workOptions = null;
+		var homeOptions = null;	
+		var addr = "";	
+		var isWorkUS = false;
+		if(!obj.workCountry || String(obj.workCountry).toUpperCase()=="US" || String(obj.workCountry).toUpperCase()=="UNITED STATES" || String(obj.workCountry).toUpperCase()=="USA") {
+			isWorkUS = true;
+		}
+		
+		var isHomeUS = false;
+		if(!obj.homeCountry || String(obj.homeCountry).toUpperCase()=="US" || String(obj.homeCountry).toUpperCase()=="UNITED STATES"  || String(obj.homeCountry).toUpperCase()=="USA") {
+			isHomeUS = true;
+		}
+		var isOtherUS = false;
+		if(!obj.otherCountry || String(obj.otherCountry).toUpperCase()=="US" || String(obj.otherCountry).toUpperCase()=="UNITED STATES" || String(obj.otherCountry).toUpperCase()=="USA") {
+			isOtherUS = true;
+		}		
+		if(obj.homePostalCode && isHomeUS) {
+			homeOptions = this.findAirports(obj.homePostalCode);
+		} else if (obj.otherPostalCode && isOtherUS) {
+			homeOptions = this.findAirports(obj.otherPostalCode);
+		}
+		if(obj.workPostalCode && isWorkUS) {
+			workOptions = this.findAirports(obj.workPostalCode);
+		}	
+	
+		if(obj.workCity && obj.workState && isWorkUS) {
+			addr = obj.workCity + ", " + obj.workState + ", US";
+		} else if(obj.homeCity && obj.homeState && isHomeUS) {
+			addr = obj.homeCity + ", " + obj.homeState + ", US";
+		} else if(obj.otherCity && obj.otherState && isOtherUS) {
+			addr = obj.otherCity + ", " + obj.otherState + ", US";
+		} else if(obj.workCity && !isWorkUS) {
+			addr = obj.workCity + ", " + obj.workCountry;
+		} else if(obj.homeCity && !isHomeUS) {
+			addr = obj.homeCity + ", " + obj.homeCountry;
+		} else if(obj.otherCity && !isOtherUS) {
+			addr = obj.otherCity + ", " + obj.otherCountry;
+		} 
+		
+		this.showSideStepDlg(workOptions,homeOptions,obj.workPostalCode, (obj.homePostalCode ? obj.homePostalCode : obj.otherPostalCode),addr);
+		
+
+//		this.hotelPage.setAddress(addr)
+	} else if(obj.TYPE == "ZmAppt") {
+		this.showSideStepDlg();
+		var startDate = new Date(obj.startDate.getTime()-AjxDateUtil.MSEC_PER_DAY);
+		var endDate = obj.endDate;
+		this.flightPage.setDepartDate(startDate);
+		this.flightPage.setReturnDate(endDate);	
+		this.carPage.setPickupDate(pickupDate);
+		this.carPage.setDropoffDate(dropoffDate);
+		this.hotelPage.setCheckinDate(startDate);
+		this.hotelPage.setCheckoutDate(endDate);	
+		
+	}
+};
