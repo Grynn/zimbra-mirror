@@ -3683,7 +3683,7 @@ Dwt_List_XFormItem.prototype.getSelection = function () {
 };
 
 Dwt_List_XFormItem.prototype._handleSelection = function (event) {
-	this.getForm().refresh();
+	//this.getForm().refresh();
 };
 
 Dwt_List_XFormItem.prototype.insertWidget = function (form, widget, element) {
@@ -3704,8 +3704,8 @@ Dwt_List_XFormItem.prototype.setItems = function (itemArray){
 		existingArr = list.getArray();
 	}
 	tmpArr = new Array();
-	//toString() return always same. we compare the object itself instead because join() is too expensive
-	if(itemArray != existingArr ) {
+	//we have to compare the objects, because XForm calls this method every time an item in the list is selected
+	if(itemArray.join() != existingArr.join() ) {
 		var cnt=itemArray.length;
 		for(var i = 0; i< cnt; i++) {
 			tmpArr.push(itemArray[i]);		
