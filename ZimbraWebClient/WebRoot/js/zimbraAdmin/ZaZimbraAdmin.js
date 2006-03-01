@@ -87,8 +87,8 @@ ZaZimbraAdmin._ALIAS_VIEW = 18;
 ZaZimbraAdmin._DL_VIEW = 19;
 ZaZimbraAdmin._HELP_VIEW = 20;
 ZaZimbraAdmin._MIGRATION_WIZ_VIEW = 21;
-ZaZimbraAdmin._POSTQ = 22;
-ZaZimbraAdmin._POSTQ_BY_SERVER = 23;
+ZaZimbraAdmin._POSTQ_VIEW = 22;
+ZaZimbraAdmin._POSTQ_BY_SERVER_VIEW = 23;
 
 ZaZimbraAdmin.MSG_KEY = new Object();
 ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._ACCOUNTS_LIST_VIEW] = "Accounts_view_title";
@@ -109,8 +109,8 @@ ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._DOMAIN_VIEW] = "Domain_view_title";
 ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._COS_VIEW] = "COS_view_title";
 ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._STATUS] = "Status_view_title";
 ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._MIGRATION_WIZ_VIEW] = "Migration_wiz_title";
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._POSTQ] = "ServerPostQ_title";
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._POSTQ_BY_SERVER] = "PostQ_title";
+ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._POSTQ_VIEW] = "PostQ_title";
+ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._POSTQ_BY_SERVER_VIEW] = "PostQ_title";
 // do not change the name of the cookie! SoapServlet looks for it
 ZaZimbraAdmin._COOKIE_NAME = "ZM_ADMIN_AUTH_TOKEN";
 	

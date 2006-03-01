@@ -185,6 +185,26 @@ function() {
 	return this._controllers[ZaZimbraAdmin._DOMAIN_VIEW];
 }
 
+ZaApp.prototype.getPostQListController =
+function () {
+	if (this._controllers[ZaZimbraAdmin._POSTQ_VIEW] == null) {
+		this._controllers[ZaZimbraAdmin._POSTQ_VIEW] = new ZaPostQListController(this._appCtxt, this._container, this);
+/*		this._controllers[ZaZimbraAdmin._POSTQ_VIEW].addServerRemovalListener(new AjxListener(this, ZaApp.prototype.handleServerRemoval));	
+		this._controllers[ZaZimbraAdmin._POSTQ_VIEW].addServerRemovalListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleServerRemoval));							*/
+	}
+	return this._controllers[ZaZimbraAdmin._POSTQ_VIEW];
+}
+
+ZaApp.prototype.getPostQController =
+function () {
+	if (this._controllers[ZaZimbraAdmin._POSTQ_BY_SERVER_VIEW] == null) {
+		this._controllers[ZaZimbraAdmin._POSTQ_BY_SERVER_VIEW] = new ZaPostQController(this._appCtxt, this._container, this);
+/*		this._controllers[ZaZimbraAdmin._POSTQ_BY_SERVER_VIEW].addServerRemovalListener(new AjxListener(this, ZaApp.prototype.handleServerRemoval));	
+		this._controllers[ZaZimbraAdmin._POSTQ_BY_SERVER_VIEW].addServerRemovalListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleServerRemoval));							*/
+	}
+	return this._controllers[ZaZimbraAdmin._POSTQ_BY_SERVER_VIEW];
+}
+
 ZaApp.prototype.getServerListController =
 function() {
 	if (this._controllers[ZaZimbraAdmin._SERVERS_LIST_VIEW] == null) {
@@ -302,6 +322,14 @@ function(refresh) {
 		this._serverList = ZaServer.getAll(this);
 	}
 	return this._serverList;	
+}
+
+ZaApp.prototype.getPostQList = 
+function (refresh) {
+	if (refresh || this._postqList == null) {
+		this._postqList = ZaPostQ.getAll(this);
+	}
+	return this._postqList;	
 }
 
 ZaApp.prototype.getMailServers =

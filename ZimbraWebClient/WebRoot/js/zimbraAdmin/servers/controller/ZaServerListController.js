@@ -37,8 +37,9 @@ function ZaServerListController(appCtxt, container, app) {
 ZaServerListController.prototype = new ZaController();
 ZaServerListController.prototype.constructor = ZaServerListController;
 
-//ZaServerListController.SERVER_VIEW = "ZaServerListController.SERVER_VIEW";
-
+/**
+* @param list {ZaItemList} a list of ZaServer {@link ZaServer} objects
+**/
 ZaServerListController.prototype.show = 
 function(list) {
     if (!this._contentView) {

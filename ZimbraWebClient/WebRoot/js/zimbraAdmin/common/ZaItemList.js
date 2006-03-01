@@ -22,7 +22,13 @@
  * 
  * ***** END LICENSE BLOCK *****
  */
-
+ 
+/**
+* @class ZaItemList a list of ZaItem {@link ZaItem} objects.
+* @constructor
+* @param constructor {Function) a reference to a constructor function which is called to create a single instance of an object contained in the list.
+* @param app {ZaApp} {@link ZaApp} a reference to an instance of ZaApp. This reference is passed to constructor when a ZaItem object is constructed.
+**/
 function ZaItemList(constructor, app) {
 
 	if (arguments.length == 0) return;
@@ -157,6 +163,11 @@ function(respNode) {
 	}
 }
 
+/**
+* Populates the list with elements created from the response to a SOAP command. 
+* Each property of the resp parameter should contain properties of an item of the list' type.
+* @param resp {Object} 
+*/
 ZaItemList.prototype.loadFromJS =
 function(resp) {
 	if(!resp)
@@ -180,7 +191,9 @@ function(resp) {
 	}
 }
 
-// Grab the IDs out of a list of items, and return them as both a string and a hash.
+/**
+* Grab the IDs out of a list of items, and return them as both a string and a hash.
+**/
 ZaItemList.prototype._getIds =
 function(list) {
 	var idHash = new Object();

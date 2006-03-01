@@ -51,11 +51,11 @@ function(list) {
 		this._toolbar = new ZaToolBar(this._container, this._ops);    
  	
 		//create Servers list view
-		this._contentView = new ZaServerListView(this._container);
+		this._contentView = new ZaPostQListView(this._container);
 		var elements = new Object();
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
-		this._app.createView(ZaZimbraAdmin._SERVERS_LIST_VIEW, elements);
+		this._app.createView(ZaZimbraAdmin._POSTQ_VIEW, elements);
 
     	//context menu
     	this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._ops);
@@ -63,7 +63,7 @@ function(list) {
 		if (list != null)
 			this._contentView.set(list.getVector());
 
-		this._app.pushView(ZaZimbraAdmin._SERVERS_LIST_VIEW);			
+		this._app.pushView(ZaZimbraAdmin._POSTQ_VIEW);			
 		
 		//set a selection listener on the Server list view
 		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
@@ -74,7 +74,7 @@ function(list) {
 		if (list != null)
 			this._contentView.set(list.getVector());	
 			
-		this._app.pushView(ZaZimbraAdmin._SERVERS_LIST_VIEW);
+		this._app.pushView(ZaZimbraAdmin._POSTQ_VIEW);
 	}
 //	this._app.setCurrentController(this);
 	this._removeList = new Array();
@@ -223,7 +223,7 @@ function(ev) {
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
 		if(ev.item) {
 			this._selectedItem = ev.item;
-			this._app.getServerController().show(ev.item);
+			this._app.getPostQController().show(ev.item);
 		}
 	} else {
 		this._changeActionsState();	
@@ -244,7 +244,7 @@ ZaPostQListController.prototype._viewButtonListener =
 function(ev) {
 	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getLast()) {
 		var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getLast());
-		this._app.getServerController().show(item);
+		this._app.getPostQController().show(item);
 	}
 }
 
