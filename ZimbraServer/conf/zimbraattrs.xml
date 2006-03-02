@@ -604,6 +604,10 @@
 
 <attr name="st" type="string"/>
 
+<attr name="street" type="string"/>
+
+<attr name="streetAddress" type="string"/>
+
 <attr name="telphoneNumber" type="string"/>
 
 <attr name="title" type="string"/>
