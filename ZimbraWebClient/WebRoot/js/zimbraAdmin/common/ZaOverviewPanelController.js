@@ -294,6 +294,8 @@ function (appCtxt, container) {
 	
 	if(ZaSettings.COSES_ENABLED)	
 		this._cosMap = new Object();
+	if(ZaSettings.MAILQ_ENABLED)
+		this._mailqMap = new Object();
 }
 
 ZaOverviewPanelController.prototype._setView =
@@ -479,11 +481,11 @@ function() {
 				var cnt = mtaList.length;
 				for(var ix=0; ix< cnt; ix++) {
 					var ti1 = new DwtTreeItem(this._postqTi);			
-					ti1.setText(mtaList[ix].name);	
+					ti1.setText(mtaList[ix][ZaPostQ.A_MTAName]);	
 					ti1.setImage("StatisticsByServer");
 					ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._POSTQ_BY_SERVER_VIEW);
 					ti1.setData(ZaOverviewPanelController._OBJ_ID, mtaList[ix].id);
-					this._serversStatsMap[mtaList[ix].id] = ti1;
+					this._mailqMap[mtaList[ix].id] = ti1;
 				}
 			}
 		} catch (ex) {
@@ -665,7 +667,7 @@ ZaOverviewPanelController.postqTreeListener = function (ev) {
 }
 
 ZaOverviewPanelController.postqByServerTreeListener = function (ev) {
-	var currentServer = this._app.getServerList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID));
+	var currentServer = this._app.getPostQList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID));
 	if(this._app.getCurrentController()) {
 		this._app.getCurrentController().switchToNextView(this._app.getPostQController(), ZaPostQController.prototype.show,currentServer);
 	} else {					

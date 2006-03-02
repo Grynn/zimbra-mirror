@@ -3704,6 +3704,7 @@ Dwt_List_XFormItem.prototype.setItems = function (itemArray){
 		existingArr = list.getArray();
 	}
 	tmpArr = new Array();
+	
 	//we have to compare the objects, because XForm calls this method every time an item in the list is selected
 	if(itemArray.join() != existingArr.join() ) {
 		var cnt=itemArray.length;

@@ -73,7 +73,7 @@ function (entry) {
 		
 	ZaPostQXFormView.tabChoices.setChoices([
 		{value:ZaPostQXFormView._tab1, label:ZaMsg.PQV_Tab_Deferred + " (" + this._containedObject[ZaPostQ.A_DeferredQ][ZaPostQ.A_count] + ")"},
-		{value:ZaPostQXFormView._tab2, label:ZaMsg.PQV_Tab_PQV_Tab_IncomingQ + " (" + this._containedObject[ZaPostQ.A_BounceQ][ZaPostQ.A_count] + ")"},
+		{value:ZaPostQXFormView._tab2, label:ZaMsg.PQV_Tab_PQV_Tab_IncomingQ + " (" + this._containedObject[ZaPostQ.A_IncomingQ][ZaPostQ.A_count] + ")"},
 				{value:ZaPostQXFormView._tab3, label:ZaMsg.PQV_Tab_ActiveQ + " (" + this._containedObject[ZaPostQ.A_ActiveQ][ZaPostQ.A_count] + ")"},
 				{value:ZaPostQXFormView._tab4, label:ZaMsg.PQV_Tab_HoldQ_ + " (" + this._containedObject[ZaPostQ.A_HoldQ][ZaPostQ.A_count] + ")"},					
 				{value:ZaPostQXFormView._tab5, label:ZaMsg.PQV_Tab_CorruptQ + " (" + this._containedObject[ZaPostQ.A_CorruptQ][ZaPostQ.A_count] + ")"}]),
@@ -161,7 +161,7 @@ ZaPostQXFormView.myXFormModifier = function(xFormObject) {
 										{type:_OUTPUT_, value:ZaMsg.PQV_GroupDestinationDomain, cssClass:"RadioGrouperLabel"}
 									]
 								},
-							    {ref:ZaPostQ.A_BounceQ+"/"+ZaPostQ.A_destination, type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource", 
+							    {ref:ZaPostQ.A_IncomingQ+"/"+ZaPostQ.A_destination, type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource", 
 						   		forceUpdate: true, widgetClass:ZaQSummaryListView, headerList:headerList},								
 							]
 						},		
@@ -172,7 +172,7 @@ ZaPostQXFormView.myXFormModifier = function(xFormObject) {
 										{type:_OUTPUT_, value:ZaMsg.PQV_GroupOriginIP, cssClass:"RadioGrouperLabel"}
 									]
 								},
-							    {ref:ZaPostQ.A_BounceQ+"/"+ZaPostQ.A_origin, type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource", 
+							    {ref:ZaPostQ.A_IncomingQ+"/"+ZaPostQ.A_origin, type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource", 
 						   		forceUpdate: true, widgetClass:ZaQSummaryListView, headerList:headerList},								
 							]
 						},					

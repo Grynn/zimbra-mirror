@@ -248,7 +248,7 @@ ZaSettings.SERVERS_ENABLED=true;
 ZaSettings.SERVER_STATS_ENABLED=true;
 ZaSettings.GLOBAL_CONFIG_ENABLED= true;
 ZaSettings.DISTRIBUTION_LISTS_ENABLED = true;
-
+ZaSettings.MAILQ_ENABLED = true;
 ZaSettings.MONITORING_ENABLED = true;
 ZaSettings.SYSTEM_CONFIG_ENABLED = true;
 ZaSettings.ADDRESSES_ENABLED = true;

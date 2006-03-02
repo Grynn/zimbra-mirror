@@ -85,10 +85,10 @@ function(mta, now, isDndIcon) {
 			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
 			html[idx++] = mta[ZaPostQ.A_DeferredQ][ZaPostQ.A_count];
 			html[idx++] = "</td>";
-		} else if(id.indexOf(ZaPostQ.A_BounceQ)==0) {	
+		} else if(id.indexOf(ZaPostQ.A_IncomingQ)==0) {	
 
 			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
-			html[idx++] = mta[ZaPostQ.A_BounceQ][ZaPostQ.A_count];
+			html[idx++] = mta[ZaPostQ.A_IncomingQ][ZaPostQ.A_count];
 			html[idx++] = "</td>";
 		}  else if(id.indexOf(ZaPostQ.A_ActiveQ)==0) {	
 
@@ -122,7 +122,7 @@ function() {
 
 	headerList[1] = new ZaListHeaderItem(ZaPostQ.A_DeferredQ, ZaMsg.PQV_DeferredQ_col, null, 60, false, null, true, true);
 
-	headerList[2] = new ZaListHeaderItem(ZaPostQ.A_BounceQ, ZaMsg.PQV_IncomingQ_col, null, 60, false, null, true, true);		
+	headerList[2] = new ZaListHeaderItem(ZaPostQ.A_IncomingQ, ZaMsg.PQV_IncomingQ_col, null, 60, false, null, true, true);		
 	
 	headerList[3] = new ZaListHeaderItem(ZaPostQ.A_ActiveQ, ZaMsg.PQV_ActiveQ_col, null, 60, false, null, true, true);		
 	
