@@ -320,6 +320,7 @@ objectIdentifier zimbraCalResCapacity ZimbraAttrType:330
 objectIdentifier zimbraCalResContactName ZimbraAttrType:331
 objectIdentifier zimbraCalResContactEmail ZimbraAttrType:332
 objectIdentifier zimbraCalResContactPhone ZimbraAttrType:333
+objectIdentifier zimbraMessageIdDedupeCacheSize ZimbraAttrType:334
 
 #################################################################
 # object class OIDs
@@ -1294,6 +1295,13 @@ attributetype ( zimbraMemberOf
 attributetype ( zimbraMessageCacheSize
 	NAME 'zimbraMessageCacheSize'
 	DESC 'Size limit in number of bytes on the message cache.'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )	
+
+attributetype ( zimbraMessageIdDedupeCacheSize
+	NAME 'zimbraMessageIdDedupeCacheSize'
+	DESC 'Size of cache for delivery time dedupe based on Message-Id header.  Set to 0 to disable this type of deduping.'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )	
@@ -2807,6 +2815,7 @@ objectclass ( zimbraGlobalConfig
 		zimbraLogRawLifetime $
 		zimbraLogSummaryLifetime $
 		zimbraMessageCacheSize $
+		zimbraMessageIdDedupeCacheSize $
 		zimbraMtaAuthEnabled $
 		zimbraMtaAuthHost $
 		zimbraMtaAuthURL $

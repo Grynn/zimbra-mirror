@@ -272,6 +272,7 @@ zimbraImapSSLBindOnStartup: TRUE
 zimbraImapSSLServerEnabled: TRUE
 zimbraImapCleartextLoginEnabled: FALSE
 zimbraMessageCacheSize: 1671168
+zimbraMessageIdDedupeCacheSize: 3000
 zimbraMtaAuthEnabled: TRUE
 zimbraMtaCommonBlockedExtension: asd
 zimbraMtaCommonBlockedExtension: bat
