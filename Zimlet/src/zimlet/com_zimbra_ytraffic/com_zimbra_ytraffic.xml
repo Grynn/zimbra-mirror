@@ -1,7 +1,6 @@
 <zimlet name="com_zimbra_ytraffic" version="1.0" description="Yahoo Traffic">
 	<include>ytraffic.js</include>
 	<includeCSS>ytraffic.css</includeCSS>
-	<resource>blank_pixel.gif</resource>
 	<resource>ytraffic.gif</resource>
 	<handlerObject>Com_Zimbra_YTraffic</handlerObject>
 	
@@ -24,9 +23,7 @@
 		<contextMenu>
 			<menuItem label="Visit Yahoo Maps with Traffic Informat" id="TRAFFIC.YAHOO.COM" icon="YTraffic-panelIcon">
 				<canvas type="window" width="800" height="600" />
-				<actionUrl target="http://maps.yahoo.com/beta/index.php#trf=1">
-				
-				</actionUrl>
+				<actionUrl target="http://maps.yahoo.com/beta/index.php#trf=1"/>
 			</menuItem>
 		</contextMenu>
 	</zimletPanelItem>

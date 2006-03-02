@@ -36,19 +36,18 @@ Com_Zimbra_YTraffic.prototype.constructor = Com_Zimbra_YTraffic;
 
 Com_Zimbra_YTraffic.prototype.init =
 function() {
-	(new Image()).src = this.getResource('blank_pixel.gif');
 };
 
 //TODO Y! Traffic Webservice URL
 Com_Zimbra_YTraffic.URL = "http://api.local.yahoo.com/MapsService/V1/trafficData?appid=ZimbraTraffic";
 
-//Called by the Zimbra framework when the Ymaps panel item was double clicked
+//Called by the Zimbra framework when the panel item was double clicked
 Com_Zimbra_YTraffic.prototype.doubleClicked = function() {
 	var editorProps = [
 		{ label 		 : "Street",
 		  name           : "street",
 		  type           : "string",
-		  value			 : "664 Johanna Ave",
+		  value			 : "",
 		  minLength      : 0,
 		  maxLength      : 50
 		}, 
@@ -56,7 +55,7 @@ Com_Zimbra_YTraffic.prototype.doubleClicked = function() {
 			label		: "City",
 			name		: "city",
 			type		: "string",
-			value		: "Sunnyvale",
+			value		: "",
 			minLength	: 0,
 			maxLength	: 20		
 		}, 
@@ -64,7 +63,7 @@ Com_Zimbra_YTraffic.prototype.doubleClicked = function() {
 			label		: "State",
 			name		: "state",
 			type		: "string",
-			value		: "CA",
+			value		: "",
 			minLength	: 0,
 			maxLength	: 2		
 		}, 
@@ -138,10 +137,7 @@ function(address) {
 
 Com_Zimbra_YTraffic.prototype.toolTipPoppedUp =
 function(spanElement, obj, context, canvas) {
-	//canvas.innerHTML = '<img width="345" height="245" id="'+ ZmZimletBase.encodeId(obj)+'" src="'+this.getResource('blank_pixel.gif')+'"/>';
-	//var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(Com_Zimbra_YTraffic.URL + AjxStringUtil.urlEncode(obj));
-	//for testing
-	
+
 	var addressURL = "";
 	addressURL += obj.street.length > 0 ? "&" + "street=" + AjxStringUtil.urlEncode(obj.street) : "" ;
 	addressURL += obj.city.length > 0 ? "&" + "city=" + AjxStringUtil.urlEncode(obj.city) : "" ;
@@ -163,9 +159,9 @@ function (trafficInfo, obj){
 Com_Zimbra_YTraffic._callback = 
 function(obj, results) {
 
-	var xmlDom = results.xml ;
+	var xmlDom = results.xml;
 		
-	if (xmlDom != null){
+	if (xmlDom){
 		var reportDateElements = xmlDom.getElementsByTagName("ReportDate");
 		var unixTime = null;
 		var humanTime = null;
@@ -193,14 +189,11 @@ function(obj, results) {
 			
 			var xslt = AjxXslt.createFromString(xslStr);
 			rHtml = xslt.transformToString(xmlDom);
-			//rDom = xslt.transformToDom(xmlDom);
-							
 		}else{
 			rHtml = "<h2>Go home now! No hazard traffic on the road.</h2>";
 		}
 	}else{
 		rHtml = results.text;
 	}
-		
 	Com_Zimbra_YTraffic._displayTrafficInfo(rHtml, obj);
 };

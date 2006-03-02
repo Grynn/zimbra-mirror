@@ -1,5 +1,5 @@
-<zimletConfig name="com_zimbra_ymaps" version="1.0">
+<zimletConfig name="com_zimbra_ytraffic" version="1.0">
   <global>
-    <property name="allowedDomains">*.yahoo.com,*.yimg.com</property>
+    <property name="allowedDomains">*.yahoo.com</property>
   </global>
 </zimletConfig>
