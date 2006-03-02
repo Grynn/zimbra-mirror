@@ -25,6 +25,12 @@
 * from, and one that contains the selected items. Between them are buttons 
 * to shuffle items back and forth between the two lists.
 * <p>
+* There are two types of buttons: one or more transfer buttons move items from
+* the source list to the target list, and the remove button moves items from the
+* target list to the source list. The client can specify its transfer buttons.
+* If no specification is given, there will be a single transfer button called 
+* "Add".</p>
+* <p>
 * The parent must implement search(columnItem, ascending) if column sorting
 * is supported. It should also create a subclass of DwtChooser which returns
 * the appropriate source and target list views, themselves subclasses of
@@ -34,11 +40,12 @@
 * @author Conrad Damon
 *
 * @param parent			[DwtComposite]		containing widget
+* @param className		[string]*		CSS class
 * @param buttonInfo		[array]				id/label pairs for transfer buttons
 * @param style			[constant]*			layout style (vertical or horizontal)
 * @param noDuplicates	[boolean]*			if true, no duplicates in target list
 */
-function DwtChooser(parent, buttonInfo, style, noDuplicates) {
+function DwtChooser(parent, className, buttonInfo, style, noDuplicates) {
 
 	if (arguments.length == 0) return;
 	DwtComposite.call(this, parent, "DwtChooser");
@@ -138,18 +145,14 @@ function() {
 	var html = [];
 	var idx = 0;
 	
-//	html[idx++] = "<div class='DwtChooser'>";
-
 	if (this._style == DwtChooser.HORIZ_STYLE) {
 		// start new table for list views
 		html[idx++] = "<table cellspacing=0 cellpadding=0 border=0>";
 		html[idx++] = "<tr>";
 
 		// source list
-//		html[idx++] = "<td><div id='";
 		html[idx++] = "<td id='";
 		html[idx++] = this._sourceListViewDivId;
-//		html[idx++] = "'></div></td>";
 		html[idx++] = "'></td>";
 
 		// transfer buttons
@@ -166,10 +169,8 @@ function() {
 		html[idx++] = "'></div></td>";
 
 		// target list
-//		html[idx++] = "<td><div id='";
 		html[idx++] = "<td id='";
 		html[idx++] = this._targetListViewDivId;
-//		html[idx++] = "'></div></td>";	
 		html[idx++] = "'></td>";	
 
 		html[idx++] = "</tr></table>";
@@ -206,7 +207,6 @@ function() {
 
 		html[idx++] = "</table>";
 	}
-//	html[idx++] = "</div>";
 
 	this.getHtmlElement().innerHTML = html.join("");
 };
@@ -217,11 +217,10 @@ function() {
 DwtChooser.prototype._initialize = 
 function() {
 
-	// create and add source list view
-	this.sourceListView = this._createSourceListView();
-	this._addListView(this.sourceListView, this._sourceListViewDivId);
-	this.sourceListView.addSelectionListener(new AjxListener(this, this._sourceListener));
-	
+	this._chooserSize = this.getSize();
+	DBG.println("***** chooser width = " + this.getSize().x);
+	DBG.println("***** chooser height = " + this.getSize().y);
+
 	// create and add transfer buttons
 	var buttonListener = new AjxListener(this, this._transferButtonListener);
 	this._button = {};
@@ -233,6 +232,11 @@ function() {
 		this._data[id] = new AjxVector();
 	}
 
+	// create and add source list view
+	this.sourceListView = this._createSourceListView();
+	this._addListView(this.sourceListView, this._sourceListViewDivId);
+	this.sourceListView.addSelectionListener(new AjxListener(this, this._sourceListener));
+	
 	// create and add target list view
 	this.targetListView = this._createTargetListView();
 	this._addListView(this.targetListView, this._targetListViewDivId);
@@ -272,8 +276,9 @@ DwtChooser.prototype._addListView =
 function(listView, listViewDivId) {
 	var listDiv = document.getElementById(listViewDivId);
  	listDiv.appendChild(listView.getHtmlElement());
-	var size = Dwt.getSize(listDiv);
-	listView.setSize(size.x, size.y);
+	var ldSize = Dwt.getSize(listDiv);
+	DBG.println("***** list div width = " + ldSize.x + ", height = " + ldSize.y);
+	listView.setSize((this._style == DwtChooser.HORIZ_STYLE) ? ldSize.x : this._chooserSize.x, ldSize.y);
 	listView.setUI();
 	listView._initialized = true;
 };
@@ -510,8 +515,6 @@ function(item, id) {
 function DwtChooserListView(parent, type, className) {
 	
 	if (arguments.length == 0) return;
-	className = className ? className : (parent._style == DwtChooser.HORIZ_STYLE) ?
-				"DwtChooserListView_horiz" : "DwtChooserListView_vert";
 	DwtListView.call(this, parent, className, null, this._getHeaderList(parent));
 
 	this.type = type;
