@@ -122,7 +122,7 @@ function() {
 
 	headerList[1] = new ZaListHeaderItem(ZaPostQ.A_DeferredQ, ZaMsg.PQV_DeferredQ_col, null, 60, false, null, true, true);
 
-	headerList[2] = new ZaListHeaderItem(ZaPostQ.A_BounceQ, ZaMsg.PQV_BounceQ_col, null, 60, false, null, true, true);		
+	headerList[2] = new ZaListHeaderItem(ZaPostQ.A_BounceQ, ZaMsg.PQV_IncomingQ_col, null, 60, false, null, true, true);		
 	
 	headerList[3] = new ZaListHeaderItem(ZaPostQ.A_ActiveQ, ZaMsg.PQV_ActiveQ_col, null, 60, false, null, true, true);		
 	

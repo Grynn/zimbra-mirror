@@ -48,10 +48,10 @@ ZaPostQXFormView.TAB_INDEX=1;
 	ZaPostQXFormView._tab5 = ZaPostQXFormView.TAB_INDEX++;	
 
 ZaPostQXFormView.tabChoices = new XFormChoices([{value:ZaPostQXFormView._tab1, label:ZaMsg.PQV_Tab_Deferred},
-				{value:ZaPostQXFormView._tab2, label:ZaMsg.PQV_Tab_BounceQ_col},
-				{value:ZaPostQXFormView._tab3, label:ZaMsg.PQV_Tab_ActiveQ_col},
-				{value:ZaPostQXFormView._tab4, label:ZaMsg.PQV_Tab_HoldQ_col},					
-				{value:ZaPostQXFormView._tab5, label:ZaMsg.PQV_Tab_CorruptQ_col}],
+				{value:ZaPostQXFormView._tab2, label:ZaMsg.PQV_Tab_IncomingQ},
+				{value:ZaPostQXFormView._tab3, label:ZaMsg.PQV_Tab_ActiveQ},
+				{value:ZaPostQXFormView._tab4, label:ZaMsg.PQV_Tab_HoldQ},					
+				{value:ZaPostQXFormView._tab5, label:ZaMsg.PQV_Tab_CorruptQ}],
 				XFormChoices.OBJECT_LIST, "value", "label");
 
 ZaPostQXFormView.prototype.setObject = 
@@ -73,10 +73,10 @@ function (entry) {
 		
 	ZaPostQXFormView.tabChoices.setChoices([
 		{value:ZaPostQXFormView._tab1, label:ZaMsg.PQV_Tab_Deferred + " (" + this._containedObject[ZaPostQ.A_DeferredQ][ZaPostQ.A_count] + ")"},
-		{value:ZaPostQXFormView._tab2, label:ZaMsg.PQV_Tab_BounceQ_col + " (" + this._containedObject[ZaPostQ.A_BounceQ][ZaPostQ.A_count] + ")"},
-				{value:ZaPostQXFormView._tab3, label:ZaMsg.PQV_Tab_ActiveQ_col + " (" + this._containedObject[ZaPostQ.A_ActiveQ][ZaPostQ.A_count] + ")"},
-				{value:ZaPostQXFormView._tab4, label:ZaMsg.PQV_Tab_HoldQ_col + " (" + this._containedObject[ZaPostQ.A_HoldQ][ZaPostQ.A_count] + ")"},					
-				{value:ZaPostQXFormView._tab5, label:ZaMsg.PQV_Tab_CorruptQ_col + " (" + this._containedObject[ZaPostQ.A_CorruptQ][ZaPostQ.A_count] + ")"}]),
+		{value:ZaPostQXFormView._tab2, label:ZaMsg.PQV_Tab_PQV_Tab_IncomingQ + " (" + this._containedObject[ZaPostQ.A_BounceQ][ZaPostQ.A_count] + ")"},
+				{value:ZaPostQXFormView._tab3, label:ZaMsg.PQV_Tab_ActiveQ + " (" + this._containedObject[ZaPostQ.A_ActiveQ][ZaPostQ.A_count] + ")"},
+				{value:ZaPostQXFormView._tab4, label:ZaMsg.PQV_Tab_HoldQ_ + " (" + this._containedObject[ZaPostQ.A_HoldQ][ZaPostQ.A_count] + ")"},					
+				{value:ZaPostQXFormView._tab5, label:ZaMsg.PQV_Tab_CorruptQ + " (" + this._containedObject[ZaPostQ.A_CorruptQ][ZaPostQ.A_count] + ")"}]),
 
 	ZaPostQXFormView.tabChoices.dirtyChoices();
 	this._localXForm.setInstance(this._containedObject);	
@@ -90,7 +90,7 @@ ZaPostQXFormView.myXFormModifier = function(xFormObject) {
 	
 	
 	var headerList = new Array();
-	headerList[0] = new ZaListHeaderItem(ZaPostQ.A_name, ZaMsg.PQV_name_col, null, 150, true, null, true, true);
+	headerList[0] = new ZaListHeaderItem(ZaPostQ.A_name, ZaMsg.PQV_name_col, null, "80%", true, null, true, true);
 	headerList[1] = new ZaListHeaderItem(ZaPostQ.A_count, ZaMsg.PQV_count_col, null, null, true, null, true, true);
 		
 	xFormObject.items = [
@@ -112,11 +112,11 @@ ZaPostQXFormView.myXFormModifier = function(xFormObject) {
 			cssClass:"ZaTabBar"
 		},
 		{type:_SWITCH_, items:[
-				{type:_CASE_, numCols:5, width:"100%",colSizes:["10", "250","10","250","10"], relevant:"instance[ZaModel.currentTab] == " + ZaPostQXFormView._tab1, 
+				{type:_CASE_, numCols:7, width:"100%",colSizes:["10", "200","10","200","10","200","10"], relevant:"instance[ZaModel.currentTab] == " + ZaPostQXFormView._tab1, 
 					items:[	
 						{type:_SPACER_, height:"15"},						
 						{type:_CELLSPACER_},
-						{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder",  items: [
+						{type:_GROUP_, numCols:1, colSizes:["100%"], tableCssClass:"que_table", cssClass:"RadioGrouperBorder",  items: [
 							   {type:_GROUP_, numCols:1, 
 							   		items: [
 										{type:_OUTPUT_, value:ZaMsg.PQV_GroupDestinationDomain, cssClass:"RadioGrouperLabel"}
@@ -127,7 +127,7 @@ ZaPostQXFormView.myXFormModifier = function(xFormObject) {
 							]
 						},		
 						{type:_CELLSPACER_},
-						{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", items: [
+						{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", tableCssClass:"que_table",  items: [
 							   {type:_GROUP_, numCols:1, 
 							   		items: [
 										{type:_OUTPUT_, value:ZaMsg.PQV_GroupOriginIP, cssClass:"RadioGrouperLabel"}
@@ -137,14 +137,25 @@ ZaPostQXFormView.myXFormModifier = function(xFormObject) {
 						   		forceUpdate: true, widgetClass:ZaQSummaryListView, headerList:headerList},								
 							]
 						},					
-						{type:_CELLSPACER_}												
+						{type:_CELLSPACER_}	,
+						{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", tableCssClass:"que_table", items: [
+							   {type:_GROUP_, numCols:1, 
+							   		items: [
+										{type:_OUTPUT_, value:ZaMsg.PQV_GroupError, cssClass:"RadioGrouperLabel"}
+									]
+								},
+							    {ref:ZaPostQ.A_DeferredQ+"/"+ZaPostQ.A_error, type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource", 
+						   		forceUpdate: true, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							]
+						},					
+						{type:_CELLSPACER_}													
 					]
 				},
 				{type:_CASE_, numCols:5, width:"100%",colSizes:["10", "250","10","250","10"], relevant:"instance[ZaModel.currentTab] == " + ZaPostQXFormView._tab2, 
 					items:[	
 						{type:_SPACER_, height:"15"},						
 						{type:_CELLSPACER_},
-						{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder",  items: [
+						{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", tableCssClass:"que_table",  items: [
 							   {type:_GROUP_, numCols:1, 
 							   		items: [
 										{type:_OUTPUT_, value:ZaMsg.PQV_GroupDestinationDomain, cssClass:"RadioGrouperLabel"}
@@ -155,7 +166,7 @@ ZaPostQXFormView.myXFormModifier = function(xFormObject) {
 							]
 						},		
 						{type:_CELLSPACER_},
-						{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", items: [
+						{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", tableCssClass:"que_table", items: [
 							   {type:_GROUP_, numCols:1, 
 							   		items: [
 										{type:_OUTPUT_, value:ZaMsg.PQV_GroupOriginIP, cssClass:"RadioGrouperLabel"}

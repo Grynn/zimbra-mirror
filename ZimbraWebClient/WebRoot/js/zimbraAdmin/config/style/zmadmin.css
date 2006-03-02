@@ -566,3 +566,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 .ImgAppBanner {
 	cursor:hand;
 }
+
+.que_table {
+	width:100%;
+}
