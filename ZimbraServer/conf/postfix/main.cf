@@ -640,7 +640,7 @@ virtual_mailbox_domains = ldap:/opt/zimbra/conf/ldap-vmd.cf
 
 virtual_alias_maps = ldap:/opt/zimbra/conf/ldap-vam.cf
 
-virtual_alias_domains = ldap://opt/zimbra/conf/ldap-vad.cf
+virtual_alias_domains = ldap:/opt/zimbra/conf/ldap-vad.cf
 
 virtual_transport = error
 
