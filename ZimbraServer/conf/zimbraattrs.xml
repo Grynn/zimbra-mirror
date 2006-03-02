@@ -148,6 +148,8 @@
 
 <attr name="zimbraFeatureSavedSearchesEnabled" type="boolean"/>
 
+<attr name="zimbraFeatureSharingEnabled" type="boolean"/>
+
 <attr name="zimbraFeatureTaggingEnabled" type="boolean"/>
 
 <attr name="zimbraFeatureViewInHtmlEnabled" type="boolean"/>
