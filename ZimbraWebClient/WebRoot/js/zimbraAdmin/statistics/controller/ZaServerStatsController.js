@@ -45,12 +45,29 @@ ZaServerStatsController.prototype.constructor = ZaServerStatsController;
 ZaServerStatsController.prototype.show = 
 function(item) {
     if (!this._contentView) {
-		this._contentView = new ZaServerStatsView(this._container);
+		this._contentView = new ZaServerStatsView(this._container, this._app);
 		var elements = new Object();
 		this._ops = new Array();
 		this._ops.push(new ZaOperation(ZaOperation.NONE));
+		
+		this._ops.push(new ZaOperation(ZaOperation.PAGE_BACK, ZaMsg.Back, ZaMsg.PrevPage_tt, 
+									"LeftArrow", "LeftArrowDis",  
+									new AjxListener(this, ZaServerStatsController.prototype._prevPageListener)));
+		
+		this._ops.push(new ZaOperation(ZaOperation.SEP));								
+		this._ops.push(new ZaOperation(ZaOperation.LABEL, AjxMessageFormat.format (ZaMsg.MBXStats_PAGEINFO, [1,1]),
+														 null, null, null, null,null,null,null,"mbxPageInfo"));	
+		this._ops.push(new ZaOperation(ZaOperation.SEP));							
+		
+		this._ops.push(new ZaOperation(ZaOperation.PAGE_FORWARD, ZaMsg.Forward, ZaMsg.NextPage_tt,
+									"RightArrow", "RightArrowDis", 
+									new AjxListener(this, ZaServerStatsController.prototype._nextPageListener)));
+		
 		this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));				
 		this._toolbar = new ZaToolBar(this._container, this._ops);    		
+		
+		//disable the page_forward and page_back at the beginning
+		this._toolbar.enable([ZaOperation.PAGE_FORWARD, ZaOperation.PAGE_BACK, ZaOperation.LABEL], false);
 		
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;	
@@ -60,6 +77,30 @@ function(item) {
 //	this._app.setCurrentController(this);
 	this._contentView.setObject(item);
 }
+
+ZaServerStatsController.prototype.getToolbar =
+function (){
+	if (this._toolbar != null)
+		return this._toolbar;
+};
+
+ZaServerStatsController.prototype._prevPageListener = 
+function (ev) {
+	var mbxPage = this._contentView._mbxPage ;
+	var xform = mbxPage._view ;
+	var curInst = xform.getInstance();
+	
+	mbxPage.updateMbxLists(curInst, null, curInst.offset - ZaServerMBXStatsPage.MBX_DISPLAY_LIMIT, null, null );	
+};
+
+ZaServerStatsController.prototype._nextPageListener = 
+function (ev) {
+	var mbxPage = this._contentView._mbxPage ;
+	var xform = mbxPage._view ;
+	var curInst = xform.getInstance();
+	
+	mbxPage.updateMbxLists(curInst, null, curInst.offset + ZaServerMBXStatsPage.MBX_DISPLAY_LIMIT, null, null );
+}; 
 
 /**
 * @param nextViewCtrlr - the controller of the next view

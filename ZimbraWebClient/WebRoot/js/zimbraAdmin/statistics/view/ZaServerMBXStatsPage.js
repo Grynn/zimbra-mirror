@@ -25,8 +25,8 @@
 
 /**
 * Display the Mailbox disk usage statistics per serer.
-* 1) Top N diskspace consumer
-* 2) Top N quota consumer
+* 1) Top diskspace consumers
+* 2) Top quota consumers
 * 
 * @class ZaServerMBXStatsPage
 * @contructor ZaServerMBXStatsPage
@@ -37,26 +37,25 @@
 		
 function ZaServerMBXStatsPage (parent, app) {
 	DwtTabViewPage.call(this, parent);
-	//this._fieldIds = new Object(); //stores the ids of all the form elements
-	//this._app = app;
-	//this.initialized=false; //? Why need this ?
+	this._app = app;
 	this._rendered = false;
-	this._startOffset = 0;
+	this._initialized = false ;
 }
 
 ZaServerMBXStatsPage.prototype = new DwtTabViewPage;
 ZaServerMBXStatsPage.prototype.constructor = ZaServerMBXStatsPage;
 
-//operations
-ZaServerMBXStatsPage.QUOTASTATS = 1;
-ZaServerMBXStatsPage.DISKSTATS = 2;
-
-ZaServerMBXStatsPage.MBX_DISPLAY_LIMIT = 25;
+ZaServerMBXStatsPage.MBX_DISPLAY_LIMIT = 20; //default 20
 ZaServerMBXStatsPage.XFORM_ITEM_ACCOUNT = "account";
 ZaServerMBXStatsPage.XFORM_ITEM_DISKUSAGE = "diskUsage";
 ZaServerMBXStatsPage.XFORM_ITEM_QUOTAUSAGE = "quotaUsage";
+ZaServerMBXStatsPage.XFORM_ITEM_QUOTA = "quota";
 ZaServerMBXStatsPage.XFORM_ITEM_DISKMBX = "diskMbx";
 ZaServerMBXStatsPage.XFORM_ITEM_QUOTAMBX = "quotaMbx";
+
+ZaServerMBXStatsPage._offset = 0;
+ZaServerMBXStatsPage._totalPage = 0;
+ZaServerMBXStatsPage._currentPage = 0;
 
 ZaServerMBXStatsPage.prototype.toString = function() {
 	return "ZaServerMBXStatsPage";
@@ -68,52 +67,55 @@ ZaServerMBXStatsPage.prototype.setObject = function (item) {
 };
 
 ZaServerMBXStatsPage.prototype._render = function (server) {
-	if (!this._rendered) {
-		//xform instance/object
-		var instance = {currentTab: ZaServerMBXStatsPage.QUOTASTATS, //used for the intial display
-						diskMbx: 	this.getMbxes(ZaServerMBXStatsPage.DISKSTATS),
-						quotaMbx: 	this.getMbxes(ZaServerMBXStatsPage.QUOTASTATS)
-						};				
-	
-	    this._view = new XForm(this._getXForm(), null, instance, this);
-		this._view.setController(this); //and the later getFormController will refer to this obj
+	if (!this._rendered) {		
+		var modelData = {
+			getMbxPool: function (model, instance) {
+				return instance.mbxPool;
+			},
+			setMbxPool: function (value, instance, parentValue, ref) {
+				instance.mbxPool = value;
+			},
+			items: [
+				{id: "mbxPool", type:_LIST_, setter:"setMbxPool", setterScope:_MODEL_, 
+											 getter: "getMbxPool", getterScope:_MODEL_}
+			]		
+		};
+		var model = new XModel (modelData);
+		var instance = new Array();
+	    this._view = new XForm(this._getXForm(), model, instance, this);
+		this._view.setController(this); 
+		
 		this._view.draw();
 		this._rendered = true;
-	} else {
-		var cTab = this._view.getInstance().currentTab;
-				
-		if (cTab == ZaServerMBXStatsPage.DISKSTATS){
-			var mbxes = this._view.getItemsById(ZaServerMBXStatsPage.XFORM_ITEM_DISKMBX);
-		}else { //by default display the quotaMbx
-			var mbxes = this._view.getItemsById(ZaServerMBXStatsPage.XFORM_ITEM_QUOTAMBX);
-		}
-			
-		for (var i = 0 ; i < mbxes.length; ++i ){
-			mbxes[i].dirtyDisplay(); 
-		}
-		this._view.refresh();
-	}
+	} 
 };
 
 //data instance of the xform
-ZaServerMBXStatsPage.prototype.getMbxes = function (tabId){
-
-	var serverName = this._server.name ;
-	var targetServer = this._server.id ;
-	//var app = this._app ;
-	
+ZaServerMBXStatsPage.getMbxes = function ( targetServer, offset, sortBy, sortAscending  ){
+	var result = { totalPage: 0, curPage:0, mbxes: new Array() };
 	var soapDoc = AjxSoapDoc.create("GetQuotaUsageRequest", "urn:zimbraAdmin", null);
 	
-	if (tabId == ZaServerMBXStatsPage.DISKSTATS) {
-		soapDoc.getMethod().setAttribute("sortBy", "totalUsed");
-	}else if (tabId == ZaServerMBXStatsPage.QUOTASTATS ){
-		soapDoc.getMethod().setAttribute("sortBy", "percentUsed");
+	if (sortBy == null || sortBy == ZaServerMBXStatsPage.XFORM_ITEM_DISKUSAGE) {
+		sortBy = "totalUsed" ;
+	}else if (sortBy == ZaServerMBXStatsPage.XFORM_ITEM_QUOTAUSAGE){
+		sortBy = "percentUsed" ;
+	}else if (sortBy == ZaServerMBXStatsPage.XFORM_ITEM_QUOTA ){
+		sortBy = "quotaLimit";
+	}else {
+		sortBy = "totalUsed";
+	}	
+	soapDoc.getMethod().setAttribute("sortBy", sortBy );
+	if (sortAscending) {
+		soapDoc.getMethod().setAttribute("sortAscending", sortAscending);
 	}
-	
-	soapDoc.getMethod().setAttribute("offset", this._startOffset);
+	soapDoc.getMethod().setAttribute("offset", offset);
 	soapDoc.getMethod().setAttribute("limit", ZaServerMBXStatsPage.MBX_DISPLAY_LIMIT);
 	
 	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, targetServer, true).firstChild; 
+	var more = resp.getAttribute("more");
+	var totalMbxes = resp.getAttribute("searchTotal") ;
+	result.totalPage = parseInt (Math.ceil(totalMbxes / ZaServerMBXStatsPage.MBX_DISPLAY_LIMIT ));
+	result.curPage = offset / ZaServerMBXStatsPage.MBX_DISPLAY_LIMIT + 1 ;
 	
 	var nodes = resp.childNodes ;
 	var accountArr = new Array ();
@@ -121,6 +123,7 @@ ZaServerMBXStatsPage.prototype.getMbxes = function (tabId){
 	var quotaLimit = 0;
 	var percentage = 0 ;
 	var diskUsed = 0;
+
 	for (var i=0; i<nodes.length; i ++){
 		respArr [i] = {  	name: nodes[i].getAttribute("name") ,
 							used: nodes[i].getAttribute("used") ,
@@ -139,142 +142,229 @@ ZaServerMBXStatsPage.prototype.getMbxes = function (tabId){
 						    
 		accountArr [i] = { 	account : respArr[i].name,
 							diskUsage :  AjxMessageFormat.format (ZaMsg.MBXStats_DISK_MSB, [diskUsed]),
-							quotaUsage : AjxMessageFormat.format (ZaMsg.MBXStats_QUOTA_MSG, [diskUsed, quotaLimit, percentage] )
+							quotaUsage : percentage + "\%" ,
+							quota: quotaLimit + " MB"				 
 							};
+		//need to override the toString method, so when XForm does the element comparison, it will return the correct result
+		//it is required when xform list needs to be update.
+		accountArr[i].toString = function (){ return this.account ; };
 	}
+	result.mbxes = accountArr ;
 	
-	return accountArr;	
+	return result;	
 };
 
 ZaServerMBXStatsPage.prototype._getXForm = function () {
 	if (this._xform != null) return this._xform;
-	var accountWidth = "300px";
+	var accountWidth = "200px";
 	var diskUsageWidth = "100px";
-	var quotaUsageWidth = "200px" ;
+	var quotaUsageWidth = "100px" ;
 	var headerStyle = "font-size: 120%; font-weight: bold;";
-	var topN = "25";
-	var startN = this._startOffset ;
-	if (startN == 0){
-		topN = "25";
-	}else{
-		topN =  ( startN + 1 ) + " - " + (startN + ZaServerMBXStatsPage.MBX_DISPLAY_LIMIT );
-	}
+	var sourceHeaderList = new Array();
+											//idPrefix, label, 
+											//iconInfo, width, sortable, sortField, resizeable, visible
+	sourceHeaderList[0] = new ZaListHeaderItem(ZaServerMBXStatsPage.XFORM_ITEM_ACCOUNT, 	ZaMsg.MBXStats_ACCOUNT, 	
+												null, 300, false, null, true, true);
+	sourceHeaderList[1] = new ZaListHeaderItem(ZaServerMBXStatsPage.XFORM_ITEM_QUOTA,   	ZaMsg.MBXStats_QUOTA,   	
+												null, 120,  true,  ZaServerMBXStatsPage.XFORM_ITEM_QUOTA, true, true);
+	sourceHeaderList[2] = new ZaListHeaderItem(ZaServerMBXStatsPage.XFORM_ITEM_DISKUSAGE, 	ZaMsg.MBXStats_DISKUSAGE,	
+												null, 120,  true,  ZaServerMBXStatsPage.XFORM_ITEM_DISKUSAGE, true, true);
+	sourceHeaderList[3] = new ZaListHeaderItem(ZaServerMBXStatsPage.XFORM_ITEM_QUOTAUSAGE,	ZaMsg.MBXStats_QUOTAUSAGE, 	
+												null, null,  true, ZaServerMBXStatsPage.XFORM_ITEM_QUOTAUSAGE, true, true);
+		
 	this._xform = {
 		x_showBorder:1,
 	    numCols:1, 
 	    cssClass:"ZaServerMBXStatsPage", 
 		tableCssStyle:"width:100%",
+		
 	    itemDefaults:{ },
 	    items:[
-		   {type:_SPACER_, height:10, colSpan:"*" },
-		
-		   {type:_TAB_BAR_,  ref:ZaModel.currentTab, colSpan:"*",
-		    choices:[
-			     {value:1, label:AjxMessageFormat.format (ZaMsg.TABT_StatsMBXQuota, [topN])},
-			     {value:2, label:AjxMessageFormat.format (ZaMsg.TABT_StatsMBXDisk, [topN])}
-			    ],
-		    cssClass:"ZaTabBar"
-		   },
-
-		   {type:_SWITCH_, align:_LEFT_, valign:_TOP_, 
-		    items:[
-			   {type:_CASE_,  relevant:"instance[ZaModel.currentTab] == 1", align:_LEFT_, valign:_TOP_, 
-			    items:[
-			    //table header
-			    	{type:_GROUP_, numCols:3, 
-							items: [
-								{ type:_OUTPUT_, label:null, value: ZaMsg.MBXStats_ACCOUNT, cssStyle: headerStyle, width: accountWidth},
-								{ type:_OUTPUT_, label:null, value: ZaMsg.MBXStats_DISKUSAGE, cssStyle: headerStyle, width: diskUsageWidth},
-								{ type:_OUTPUT_, label:null, value: ZaMsg.MBXStats_QUOTAUSAGE, cssStyle: headerStyle, width: quotaUsageWidth}
-							]
-					},
-				   {type:_SPACER_, height:15, colSpan:"*" },
-				   
-				   {ref: ZaServerMBXStatsPage.XFORM_ITEM_QUOTAMBX, type:_REPEAT_ , showAddButton:false, showRemoveButton:false,
-				   			items: [
-				   				{ ref:ZaServerMBXStatsPage.XFORM_ITEM_ACCOUNT, type:_OUTPUT_, width: accountWidth },
-				   				{ ref:ZaServerMBXStatsPage.XFORM_ITEM_DISKUSAGE, type:_OUTPUT_, width: diskUsageWidth },
-				   				{ ref:ZaServerMBXStatsPage.XFORM_ITEM_QUOTAUSAGE, type:_OUTPUT_, width: quotaUsageWidth }	
-				   			]
-				   } 
-				 ]
-			   },
-			   {type:_CASE_,  relevant:"instance[ZaModel.currentTab] == 2", align:_LEFT_, valign:_TOP_, 
-			    items:[
-			    //table header
-			    	{type:_GROUP_, numCols:3,
-							items: [
-								{ type:_OUTPUT_, label:null, value: ZaMsg.MBXStats_ACCOUNT, cssStyle: headerStyle, width: accountWidth},
-								{ type:_OUTPUT_, label:null, value: ZaMsg.MBXStats_DISKUSAGE, cssStyle: headerStyle, width: diskUsageWidth},
-								{ type:_OUTPUT_, label:null, value: ZaMsg.MBXStats_QUOTAUSAGE, cssStyle: headerStyle, width: quotaUsageWidth}
-							]
-					},
-				   {type:_SPACER_, height:15, colSpan:"*" },
-				   {ref:ZaServerMBXStatsPage.XFORM_ITEM_DISKMBX, type:_REPEAT_ , showAddButton:false, showRemoveButton:false,
-				   			items: [
-				   				{ ref: ZaServerMBXStatsPage.XFORM_ITEM_ACCOUNT, type:_OUTPUT_, width: accountWidth },
-				   				{ ref: ZaServerMBXStatsPage.XFORM_ITEM_DISKUSAGE, type:_OUTPUT_, width: diskUsageWidth },
-				   				{ ref: ZaServerMBXStatsPage.XFORM_ITEM_QUOTAUSAGE, type:_OUTPUT_, width: quotaUsageWidth }	
-				   			]
-				   } 
-				 ]
-			   }			   
-			   ]
-		   }
-		   ]
+	    	//Convert to the listview
+	    	{ref:"mbxPool", type:_DWT_LIST_, height:"600", width:"100%", cssClass: "MBXList", 
+						   		forceUpdate: true, widgetClass:ZaServerMbxListView, headerList:sourceHeaderList}
+		]	    
 	};		   
 
 	return this._xform;
 };
 
-/*
-ZaServerMBXStatsPage.prototype._getLocalizedTabString = function (tabId){
-	switch (tabId) {
-	case 1:
-		return ZaMsg.TABT_StatsMBXQuota;
-	case 2:
-		return ZaMsg.TABT_StatsMBXDisk;
+//this function is called when user switch to the mbx quota tab
+ZaServerMBXStatsPage.prototype.showMe = 
+function (){
+	DwtTabViewPage.prototype.showMe.call(this);
+	var instance = null ;
+
+	if ( !this._initialized ) {
+		var mbxesObj = ZaServerMBXStatsPage.getMbxes( this._server.id, 0 ) ;
+		instance = { 	serverid: this._server.id,
+						offset:  0,	
+						sortBy : null ,
+						sortAscending: null,
+						curPage: mbxesObj.curPage ,
+						totalPage: mbxesObj.totalPage,					
+						mbxPool: mbxesObj.mbxes };
+		
+		var xform = this._view ;
+		xform.setInstance( instance );
+		this._initialized = true ;
+	}else{
+		instance = this._view.getInstance();
 	}
-	return null;
+	this.updateToolbar ( instance.curPage, instance.totalPage);	
 };
 
-*/
+ZaServerMBXStatsPage.prototype.hideMe = 
+function (){
+	DwtTabViewPage.prototype.hideMe.call(this);	
+	this.updateToolbar(null, null, true);
+};
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//Controller: enable the buttons on the toolbar
-///////////////////////////////////////////////////////////////////////////////////////////
-/*
-function ZaServerMBXStatsController(appCtxt, container, app) {
-	ZaServerStatsController.call(this, appCtxt, container, app);
-}
-
-ZaServerMBXStatsController.prototype = new ZaServerStatsController();
-ZaServerMBXStatsController.prototype.constructor = ZaServerMBXStatsController;
-
-//ZaServerStatsController.STATUS_VIEW = "ZaServerStatsController.STATUS_VIEW";
-
-ZaServerMBXStatsController.prototype.show = 
-function(item) {
-    if (!this._contentView) {
-		this._contentView = new ZaServerStatsView(this._container);
-		var elements = new Object(); 
-		this._ops = new Array();
-		this._ops.push(new ZaOperation(ZaOperation.NONE));
-		this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));				
-		this._toolbar = new ZaToolBar(this._container, this._ops);    		
-		
-		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
-		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;	
-		this._app.createView(ZaZimbraAdmin._STATISTICS_BY_SERVER, elements);
+//update the mbx list items based ont the offset which is changed when page back/forward
+ZaServerMBXStatsPage.prototype.updateMbxLists =
+function (curInstance, serverid, offset, sortBy, sortAscending) {
+	if (curInstance) {
+		if (serverid == null ) serverid = curInstance.serverid ;
+		if (offset == null) offset = curInstance.offset;
+		if (sortBy == null) sortBy = curInstance.sortBy ;
+		if (sortAscending == null) sortAscending = curInstance.sortAscending ;	
 	}
-	this._app.pushView(ZaZimbraAdmin._STATISTICS_BY_SERVER);
-//	this._app.setCurrentController(this);
-	this._contentView.setObject(item);
+	
+	var mbxesObj = ZaServerMBXStatsPage.getMbxes (serverid, offset, sortBy, sortAscending);
+	
+	curInstance = { 	serverid: serverid,
+						offset:  offset,	
+						sortBy : sortBy ,
+						sortAscending: sortAscending,
+						curPage: mbxesObj.curPage ,
+						totalPage: mbxesObj.totalPage,					
+						mbxPool: mbxesObj.mbxes };
+	
+	var xform = this._view ;
+	xform.parent.updateToolbar(curInstance.curPage, curInstance.totalPage);
+	xform.setInstance(curInstance) ;
+}; 
+
+ZaServerMBXStatsPage.prototype.updateToolbar = 
+function (curPage, totalPage, hide ){
+	var controller = this._app.getCurrentController();
+	try {
+		//enable the page back/forward button
+		if ( controller instanceof ZaServerStatsController ){
+			var toolBar = controller.getToolbar();			
+			if (toolBar){
+				if (! hide) {
+					if (curPage > 1 ){ 
+						toolBar.enable([ZaOperation.PAGE_BACK, ZaOperation.LABEL], true);
+					} else {
+						toolBar.enable([ZaOperation.PAGE_BACK], false);
+					}
+					
+					if (curPage < totalPage  ){ 
+						toolBar.enable([ZaOperation.PAGE_FORWARD, ZaOperation.LABEL], true);
+					} else {
+						toolBar.enable([ZaOperation.PAGE_FORWARD], false);
+					}
+					
+					if (curPage && totalPage) {
+						toolBar.getButton("mbxPageInfo").setText(AjxMessageFormat.format (ZaMsg.MBXStats_PAGEINFO, [curPage, totalPage]));
+					} 
+				}else {
+					toolBar.enable([ZaOperation.PAGE_FORWARD, ZaOperation.PAGE_BACK, ZaOperation.LABEL], false);
+					toolBar.getButton("mbxPageInfo").setText(AjxMessageFormat.format (ZaMsg.MBXStats_PAGEINFO, [1,1]));
+				}
+			}
+		}
+	}catch (ex){
+	
+	}
+};
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+// This is the list view for the display of mbx accounts
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function ZaServerMbxListView(parent, className, posStyle, headerList) {
+	ZaListView.call(this, parent, className, posStyle, headerList);
+}
+
+ZaServerMbxListView.prototype = new ZaListView;
+ZaServerMbxListView.prototype.constructor = ZaServerMbxListView;
+
+ZaServerMbxListView.prototype.toString = function() {
+	return "ZaServerMbxListView";
+};
+
+ZaServerMbxListView.prototype._createItemHtml =
+function(mbx, now, isDndIcon) {
+	var html = new Array(50);
+	var	div = document.createElement("div");
+	div._styleClass = "Row";
+	div._selectedStyleClass = div._styleClass + "-" + DwtCssStyle.SELECTED;
+	div.className = div._styleClass;
+	this.associateItemWithElement(mbx, div, DwtListView.TYPE_LIST_ITEM);
+	
+	var idx = 0;
+	html[idx++] = "<table width='100%' cellspacing='2' cellpadding='0'>";
+
+	html[idx++] = "<tr>";
+	if(this._headerList) {
+		var cnt = this._headerList.length;
+		for(var i = 0; i < cnt; i++) {
+			var id = this._headerList[i]._id;
+			if(id.indexOf(ZaServerMBXStatsPage.XFORM_ITEM_ACCOUNT) == 0) {
+				// account
+				html[idx++] = "<td width=" + this._headerList[i]._width + ">";
+				html[idx++] = AjxStringUtil.htmlEncode(mbx[ZaServerMBXStatsPage.XFORM_ITEM_ACCOUNT]);				
+				html[idx++] = "</td>";
+			} else if (id.indexOf(ZaServerMBXStatsPage.XFORM_ITEM_QUOTAUSAGE) == 0){ //this must before the QUOTA
+				// quota usage
+				html[idx++] = "<td width=" + this._headerList[i]._width + ">";
+				html[idx++] = AjxStringUtil.htmlEncode(mbx[ZaServerMBXStatsPage.XFORM_ITEM_QUOTAUSAGE]);
+				html[idx++] = "</td>";			
+			} else if(id.indexOf(ZaServerMBXStatsPage.XFORM_ITEM_QUOTA) == 0) {
+				// quota
+				html[idx++] = "<td width=" + this._headerList[i]._width + ">";
+				html[idx++] = AjxStringUtil.htmlEncode(mbx[ZaServerMBXStatsPage.XFORM_ITEM_QUOTA]);
+				html[idx++] = "</td>";
+			} else if (id.indexOf(ZaServerMBXStatsPage.XFORM_ITEM_DISKUSAGE) == 0) {
+				// mbx size
+				html[idx++] = "<td width=" + this._headerList[i]._width + ">";
+				html[idx++] = AjxStringUtil.htmlEncode(mbx[ZaServerMBXStatsPage.XFORM_ITEM_DISKUSAGE]);
+				html[idx++] = "</td>";	
+			} 
+		}
+	} else {
+		html[idx++] = "<td width=100%>";
+		html[idx++] = AjxStringUtil.htmlEncode(mbx[ZaServerMBXStatsPage.XFORM_ITEM_ACCOUNT]);
+		html[idx++] = "</td>";
+	}
+	
+	html[idx++] = "</tr></table>";
+	div.innerHTML = html.join("");
+	return div;
 }
 
 
-ZaServerMBXStatsController.prototype.switchToNextView = 
-function (nextViewCtrlr, func, params) {
-	func.call(nextViewCtrlr, params);
-}
-*/
+ZaServerMbxListView.prototype._setNoResultsHtml = function() {
+	var buffer = new AjxBuffer();
+	var	div = document.createElement("div");
+	
+	buffer.append("<table width='100%' cellspacing='0' cellpadding='1'>",
+				  "<tr><td class='NoResults'><br>&nbsp",
+				  "</td></tr></table>");
+	
+	div.innerHTML = buffer.toString();
+	this._addRow(div);
+};
+
+ZaServerMbxListView.prototype._sortColumn = function (columnItem, bSortAsc){
+	var sortAscending = bSortAsc ? 1 : 0 ;
+	var sortBy = columnItem._sortField ;
+	var xform = this.parent ;
+	var curInst = xform.getInstance();
+	var mbxPage = xform.parent ;
+	mbxPage.updateMbxLists(curInst, null, 0, sortBy, sortAscending );
+	
+};
+

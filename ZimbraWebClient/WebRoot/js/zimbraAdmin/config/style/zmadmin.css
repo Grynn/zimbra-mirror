@@ -449,7 +449,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
   overflow:auto;
 }
 
-.DLSource, .DLTarget { 
+.DLSource, .DLTarget, .MBXList { 
   border-top: 2px solid #848484;
   border-left: 2px solid #848484;
   border-bottom: 2px solid #FAFAFA;
