@@ -66,5 +66,15 @@ function(contextMenu, menuItemId, spanElement, contentObjText, canvas) {
 	// XXX: need public way of doing this!
 	var title = "Play " + contextMenu;
 	var dlg = this._createDialog({title:title, view:view});
+	var buttonListener = new AjxListener(this, this._buttonListener);
+	dlg.setButtonListener(DwtDialog.OK_BUTTON, buttonListener);
+	dlg.setButtonListener(DwtDialog.CANCEL_BUTTON, buttonListener);
 	dlg.popup();
+};
+
+Com_Zimbra_Arcade.prototype._buttonListener = 
+function(ev) {
+	// clear out the dialog so the flash game dies (kills the sound)
+	ev.item.parent._contentDiv.innerHTML = "";
+	ev.item.parent.popdown();
 };

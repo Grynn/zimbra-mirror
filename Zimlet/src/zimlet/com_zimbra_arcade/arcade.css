@@ -33,6 +33,13 @@
   overflow: hidden;
 }
 
+.ImgPacman-panelIcon {
+  background: url("pacman-icon.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
 .ImgSimon-panelIcon {
   background: url("simon-icon.gif") no-repeat 0 0;
   width: 16px;

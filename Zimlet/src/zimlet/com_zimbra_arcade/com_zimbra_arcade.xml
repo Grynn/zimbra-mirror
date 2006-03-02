@@ -6,6 +6,7 @@
 	<resource>frogger-icon.gif</resource>
 	<resource>hexxagon-icon.gif</resource>
 	<resource>invaders-icon.gif</resource>
+	<resource>pacman-icon.gif</resource>
 	<resource>simon-icon.gif</resource>
 	<resource>snake-icon.gif</resource>
 	<resource>tetris-icon.gif</resource>
@@ -14,6 +15,7 @@
 	<resource>frogger.swf</resource>
 	<resource>hexxagon.swf</resource>
 	<resource>invaders.swf</resource>
+	<resource>pacman.swf</resource>
 	<resource>simon.swf</resource>
 	<resource>snake.swf</resource>
 	<resource>tetris.swf</resource>
@@ -33,6 +35,10 @@
 			</menuItem>
 			<menuItem label="Hexxagon" id="hexxagon" icon="Hexxagon-panelIcon">
 				<canvas type="dialog" width="465" height="360" title="Hexxagon" />
+				<actionJavaScript />
+			</menuItem>
+			<menuItem label="Pacman" id="pacman" icon="Pacman-panelIcon">
+				<canvas type="dialog" width="465" height="360" title="Pacman" />
 				<actionJavaScript />
 			</menuItem>
 			<menuItem label="Space Invaders" id="invaders" icon="Invaders-panelIcon">
