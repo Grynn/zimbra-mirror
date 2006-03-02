@@ -1,0 +1,16 @@
+<zimlet name="com_zimbra_photo" version="1.0" description="PHOTO">
+	<include>photo.js</include>
+	<resource>blank_pixel.gif</resource>
+	<resource>bill_evans.jpg</resource>
+	<resource>jimmy_smith.jpg</resource>
+ 	<resource>medeski.jpg</resource>
+ 	<resource>monk.jpg</resource>
+ 	<resource>ray_charles.jpg</resource>
+ 	<handlerObject>Com_Zimbra_Photo</handlerObject>
+
+	<contentObject type="photo">
+		<toolTip>
+ 		    <canvas style="inline"/>
+		</toolTip>
+	</contentObject>
+</zimlet>
