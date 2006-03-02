@@ -124,6 +124,12 @@ index   cn                     pres,eq,sub
 index   displayName            pres,eq,sub
 index   sn                     pres,eq,sub
 index   gn                     pres,eq,sub
+# calendar resources
+index   zimbraCalResSite       eq,sub
+index   zimbraCalResBuilding   eq,sub
+index   zimbraCalResFloor      eq,sub
+index   zimbraCalResRoom       eq,sub
+index   zimbraCalResCapacity   eq
 sessionlog 100 100
 TLSCertificateFile /opt/zimbra/conf/slapd.crt
 TLSCertificateKeyFile /opt/zimbra/conf/slapd.key

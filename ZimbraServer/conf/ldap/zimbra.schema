@@ -312,6 +312,14 @@ objectIdentifier zimbraCalResAutoDeclineIfBusy ZimbraAttrType:322
 objectIdentifier zimbraCalResAutoDeclineRecurring ZimbraAttrType:323
 objectIdentifier zimbraCalResAlwaysFree ZimbraAttrType:324
 objectIdentifier zimbraGroupId ZimbraAttrType:325
+objectIdentifier zimbraCalResSite ZimbraAttrType:326
+objectIdentifier zimbraCalResBuilding ZimbraAttrType:327
+objectIdentifier zimbraCalResFloor ZimbraAttrType:328
+objectIdentifier zimbraCalResRoom ZimbraAttrType:329
+objectIdentifier zimbraCalResCapacity ZimbraAttrType:330
+objectIdentifier zimbraCalResContactName ZimbraAttrType:331
+objectIdentifier zimbraCalResContactEmail ZimbraAttrType:332
+objectIdentifier zimbraCalResContactPhone ZimbraAttrType:333
 
 #################################################################
 # object class OIDs
@@ -2343,7 +2351,7 @@ attributetype ( zimbraAccountCalendarUserType
 
 attributetype ( zimbraCalResType
 	NAME 'zimbraCalResType'
-	DESC 'calendar resource type - ROOM, etc.'
+	DESC 'calendar resource type - Location, Equipment, etc.'
 	EQUALITY caseIgnoreMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32}
 	SINGLE-VALUE )
@@ -2374,6 +2382,70 @@ attributetype ( zimbraCalResAlwaysFree
 	DESC 'Whether resource remains free after accepting invite; default FALSE'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( zimbraCalResSite
+	NAME 'zimbraCalResSite'
+	DESC 'site name'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32}
+	SINGLE-VALUE )
+
+attributetype ( zimbraCalResBuilding
+	NAME 'zimbraCalResBuilding'
+	DESC 'building number or name'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32}
+	SINGLE-VALUE )
+
+attributetype ( zimbraCalResFloor
+	NAME 'zimbraCalResFloor'
+	DESC 'floor number or name'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32}
+	SINGLE-VALUE )
+
+attributetype ( zimbraCalResRoom
+	NAME 'zimbraCalResRoom'
+	DESC 'room number or name'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32}
+	SINGLE-VALUE )
+
+attributetype ( zimbraCalResCapacity
+	NAME 'zimbraCalResCapacity'
+	DESC 'capacity'
+	EQUALITY integerMatch
+	ORDERING integerOrderingMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )	
+
+attributetype ( zimbraCalResContactName
+	NAME 'zimbraCalResContactName'
+	DESC 'name of contact in charge of resource'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
+	SINGLE-VALUE )
+
+attributetype ( zimbraCalResContactEmail
+	NAME 'zimbraCalResContactEmail'
+	DESC 'email of contact in charge of resource'
+	EQUALITY caseIgnoreIA5Match
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
+	SINGLE-VALUE )
+
+attributetype ( zimbraCalResContactPhone
+	NAME 'zimbraCalResContactPhone'
+	DESC 'phone number of contact in charge of resource'
+	EQUALITY telephoneNumberMatch
+	SUBSTR telephoneNumberSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.50{32}
 	SINGLE-VALUE )
 
 
@@ -2428,7 +2500,7 @@ objectclass ( zimbraMailRecipient
 # l             - city (locality)
 # ou            - organizational unit
 # physicalDeliveryOfficeName - office
-# postalAddress - street address
+# street        - street address
 # postalCode    - zip code
 # sn            - last name (sir name)
 # st            - state
@@ -3045,6 +3117,14 @@ objectclass ( zimbraCalendarResource
 		zimbraCalResAutoAcceptDecline $
 		zimbraCalResAutoDeclineIfBusy $
 		zimbraCalResAutoDeclineRecurring $
-		zimbraCalResAlwaysFree
+		zimbraCalResAlwaysFree $
+		zimbraCalResSite $
+		zimbraCalResBuilding $
+		zimbraCalResFloor $
+		zimbraCalResRoom $
+		zimbraCalResCapacity $
+		zimbraCalResContactName $
+		zimbraCalResContactEmail $
+		zimbraCalResContactPhone
 		)
 	)

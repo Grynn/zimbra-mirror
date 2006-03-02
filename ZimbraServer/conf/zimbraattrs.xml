@@ -614,7 +614,7 @@
 
 <attr name="zimbraAccountCalendarUserType" type="enum" value="USER,RESOURCE"/>
 
-<attr name="zimbraCalResType" type="enum" value="ROOM"/>
+<attr name="zimbraCalResType" type="string"/>
 
 <attr name="zimbraCalResAutoAcceptDecline" type="boolean"/>
 
@@ -623,5 +623,21 @@
 <attr name="zimbraCalResAutoDeclineRecurring" type="boolean"/>
 
 <attr name="zimbraCalResAlwaysFree" type="boolean"/>
+
+<attr name="zimbraCalResSite" type="string"/>
+
+<attr name="zimbraCalResBuilding" type="string"/>
+
+<attr name="zimbraCalResFloor" type="string"/>
+
+<attr name="zimbraCalResRoom" type="string"/>
+
+<attr name="zimbraCalResCapacity" type="integer"/>
+
+<attr name="zimbraCalResContactName" type="string"/>
+
+<attr name="zimbraCalResContactEmail" type="email"/>
+
+<attr name="zimbraCalResContactPhone" type="string"/>
 
 </attrs>
