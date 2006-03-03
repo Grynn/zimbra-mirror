@@ -115,9 +115,9 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 	}*/
 	var w = DwtShell.getShell(window).getSize();
 	var wh = w.y;
-	var WINDOW_GUTTER = 5;
-	menu.style.left = bounds.left;
-	menu.style.top = bounds.top + bounds.height - 1;
+	var WINDOW_GUTTER = 8;
+	menu.style.left = parseInt(bounds.left);
+	menu.style.top = parseInt(bounds.top) + parseInt(bounds.height) - 1;
 	var choices = this.getNormalizedChoices();
 	if(choices && choices.values) {
 		/*if(choices.values.length > 5) {
@@ -158,7 +158,7 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 		//menu does not fit downwards - check if it fits upwards
 		if((bounds.top - menuHeight) > WINDOW_GUTTER) {
 			//yes - it fits upwards
-			menu.style.top = bounds.top - menuHeight;
+			menu.style.top = parseInt(bounds.top) - menuHeight;
 			
 		} else {
 			/*
@@ -167,12 +167,12 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 			*/
 			if(bounds.top > ((wh - WINDOW_GUTTER*2)/2) ) {
 				//expand upwards
-				menu.style.height = bounds.top - WINDOW_GUTTER;												
+				menu.style.height = parseInt(bounds.top) - WINDOW_GUTTER;												
 				menu.style.top = WINDOW_GUTTER;
 			} else {
 				//expand downwards
 				menu.style.top	= 	parseInt(menu.style.top)+2;				
-				menu.style.height = wh-WINDOW_GUTTER-menu.style.top;								
+				menu.style.height = wh-WINDOW_GUTTER-parseInt(menu.style.top);								
 			}
 						
 			menu.style.overflow="auto";	
