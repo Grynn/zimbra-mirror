@@ -16,7 +16,9 @@
 
 
 /**
-*	OSelect class -- lightning fast SELECT type widget
+* @class OSelect1_XFormItem class -- lightning fast SELECT type widget
+* @constructor
+* @author Owen Williams, Greg Solovyev
 **/
 function OSelect1_XFormItem(){ this._enabled = true; }
 XFormItemFactory.createItemType("_OSELECT1_", "oselect1", OSelect1_XFormItem, Select1_XFormItem);
@@ -59,7 +61,7 @@ OSelect1_XFormItem.prototype.updateElement = function (newValue) {
 	if (newValue == null) newValue = "";
 	
 	var el = this.getDisplayElement();
-	/*if (el) el.innerHTML = newValue;*/
+
 	if (el) {
 		el.value = newValue;
 		el.readOnly = !this.getInheritedProperty("editable");
@@ -103,16 +105,13 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 	}
 
 	var menu = this.getMenuElement();
-	if (menu == null) return; //DBG.println(this,".showMenu() -- couldn't get menu element.");
+	if (menu == null) return; 
 
 	menu.className = this.getMenuCssClass();
 	menu.innerHTML = this.getChoicesHTML();	
 	var bounds;
-//	if(!AjxEnv.isIE) {
-		bounds = this.getBounds(this.getElement().childNodes[0]);
-	/*} else {
-		bounds = this.getBounds(this.getElement());
-	}*/
+	bounds = this.getBounds(this.getElement().childNodes[0]);
+
 	var w = DwtShell.getShell(window).getSize();
 	var wh = w.y;
 	var WINDOW_GUTTER = 8;
@@ -120,16 +119,9 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 	menu.style.top = parseInt(bounds.top) + parseInt(bounds.height) - 1;
 	var choices = this.getNormalizedChoices();
 	if(choices && choices.values) {
-		/*if(choices.values.length > 5) {
-			menu.style.top	= 	parseInt(menu.style.top)+2;
-			menu.style.overflow="auto";	
-			menu.style.width = parseInt(bounds.width)+2;
-			menu.style.height = parseInt(bounds.height)*5;
-		} else {*/
-			menu.style.width = bounds.width;
-			menu.style.overflow="hidden";
-			menu.style.height = (parseInt(bounds.height-3)*choices.values.length)+3;
-//		}
+		menu.style.width = bounds.width;
+		menu.style.overflow="hidden";
+		menu.style.height = (parseInt(bounds.height-3)*choices.values.length)+3;
 	}
 
 	var value = this.getInstanceValue();
@@ -143,17 +135,10 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 	menu.style.display = "block";
 
 
-/*	var menuHeight = parseInt(DwtCssStyle.getProperty(menu, "height"));
-	var menuHeight2 = DwtCssStyle.getProperty(menu, "height");	
-	var menuTop = parseInt(DwtCssStyle.getProperty(menu, "top"));	*/
 	var mBounds = this.getBounds(menu);
 	var menuHeight = mBounds.height;
 	var menuTop = mBounds.top;
 
-/*	DBG.println(AjxDebug.DBG1, "menutop = " + menuTop);
-	DBG.println(AjxDebug.DBG1, "menuHeight= " + menuHeight);	
-	DBG.println(AjxDebug.DBG1, "wh - WINDOW_GUTTER= " + (wh - WINDOW_GUTTER));	
-*/	
 	if(menuHeight + menuTop > wh - WINDOW_GUTTER) {
 		//menu does not fit downwards - check if it fits upwards
 		if((bounds.top - menuHeight) > WINDOW_GUTTER) {
