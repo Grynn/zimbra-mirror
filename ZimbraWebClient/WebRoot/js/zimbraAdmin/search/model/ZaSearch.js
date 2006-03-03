@@ -153,6 +153,112 @@ function (queryHolder, pagenum, orderby, isascending, app) {
 							   queryHolder.limit);	
 	}
 }
+/**
+* static data for temporary use with queue management untill the server part is ready
+**/
+ZaSearch._temporaryMailQSearchResults = {};
+ZaSearch._temporaryMailQSearchResults["deferred"] = {};
+ZaSearch._temporaryMailQSearchResults["deferred"]["yahoo.com"] = [
+	{qid:111, destination:"yahoo.com", origin:"64.23.45.222", toString:function() {return this.qid;}},
+	{qid:112, destination:"yahoo.com", origin:"221.23.45.26", toString:function() {return this.qid;}},
+	{qid:113, destination:"yahoo.com", origin:"121.23.45.123", toString:function() {return this.qid;}},	
+	{qid:114, destination:"yahoo.com", origin:"220.63.45.201", toString:function() {return this.qid;}},		
+	{qid:115, destination:"yahoo.com", origin:"220.63.45.101", toString:function() {return this.qid;}},			
+	{qid:116, destination:"yahoo.com", origin:"62.63.45.101", toString:function() {return this.qid;}},				
+	{qid:117, destination:"yahoo.com", origin:"12.13.15.101", toString:function() {return this.qid;}}					
+]; 
+ZaSearch._temporaryMailQSearchResults["deferred"]["gmail.com"] = [
+	{qid:211, destination:"gmail.com", origin:"64.23.45.222", toString:function() {return this.qid;}},
+	{qid:212, destination:"gmail.com", origin:"221.23.45.26", toString:function() {return this.qid;}},
+	{qid:213, destination:"gmail.com", origin:"121.23.45.123", toString:function() {return this.qid;}},	
+	{qid:214, destination:"gmail.com", origin:"220.63.45.201", toString:function() {return this.qid;}},		
+	{qid:215, destination:"gmail.com", origin:"220.63.45.101", toString:function() {return this.qid;}},			
+	{qid:216, destination:"gmail.com", origin:"62.63.45.101", toString:function() {return this.qid;}},				
+	{qid:217, destination:"gmail.com", origin:"12.13.15.101", toString:function() {return this.qid;}}
+]; 
+ZaSearch._temporaryMailQSearchResults["deferred"]["hotmail.com"] = [
+	{qid:311, destination:"hotmail.com", origin:"64.23.45.222", toString:function() {return this.qid;}},
+	{qid:312, destination:"hotmail.com", origin:"221.23.45.26", toString:function() {return this.qid;}},
+	{qid:313, destination:"hotmail.com", origin:"121.23.45.123", toString:function() {return this.qid;}},	
+	{qid:314, destination:"hotmail.com", origin:"220.63.45.201", toString:function() {return this.qid;}},		
+	{qid:315, destination:"hotmail.com", origin:"220.63.45.101", toString:function() {return this.qid;}},			
+	{qid:316, destination:"hotmail.com", origin:"62.63.45.101", toString:function() {return this.qid;}},				
+	{qid:317, destination:"hotmail.com", origin:"12.13.15.101", toString:function() {return this.qid;}}
+]; 
+ZaSearch._temporaryMailQSearchResults["deferred"]["usa.net"] = [
+	{qid:411, destination:"usa.net", origin:"64.23.45.222", toString:function() {return this.qid;}},
+	{qid:412, destination:"usa.net", origin:"221.23.45.26", toString:function() {return this.qid;}},
+	{qid:413, destination:"usa.net", origin:"121.23.45.123", toString:function() {return this.qid;}},	
+	{qid:414, destination:"usa.net", origin:"220.63.45.201", toString:function() {return this.qid;}},		
+	{qid:415, destination:"usa.net", origin:"220.63.45.101", toString:function() {return this.qid;}},			
+	{qid:416, destination:"usa.net", origin:"62.63.45.101", toString:function() {return this.qid;}},				
+	{qid:417, destination:"usa.net", origin:"12.13.15.101", toString:function() {return this.qid;}}
+]; 
+
+ZaSearch._temporaryMailQSearchResults["incoming"] = {};
+ZaSearch._temporaryMailQSearchResults["incoming"]["yahoo.com"] = [
+	{qid:111, destination:"yahoo.com", origin:"64.23.45.222", toString:function() {return this.qid;}},
+	{qid:112, destination:"yahoo.com", origin:"221.23.45.26", toString:function() {return this.qid;}},
+	{qid:113, destination:"yahoo.com", origin:"121.23.45.123", toString:function() {return this.qid;}},	
+	{qid:114, destination:"yahoo.com", origin:"220.63.45.201", toString:function() {return this.qid;}},		
+	{qid:115, destination:"yahoo.com", origin:"220.63.45.101", toString:function() {return this.qid;}},			
+	{qid:116, destination:"yahoo.com", origin:"62.63.45.101", toString:function() {return this.qid;}},				
+	{qid:117, destination:"yahoo.com", origin:"12.13.15.101", toString:function() {return this.qid;}}					
+]; 
+ZaSearch._temporaryMailQSearchResults["incoming"]["gmail.com"] = [
+	{qid:211, destination:"gmail.com", origin:"64.23.45.222", toString:function() {return this.qid;}},
+	{qid:212, destination:"gmail.com", origin:"221.23.45.26", toString:function() {return this.qid;}},
+	{qid:213, destination:"gmail.com", origin:"121.23.45.123", toString:function() {return this.qid;}},	
+	{qid:214, destination:"gmail.com", origin:"220.63.45.201", toString:function() {return this.qid;}},		
+	{qid:215, destination:"gmail.com", origin:"220.63.45.101", toString:function() {return this.qid;}},			
+	{qid:216, destination:"gmail.com", origin:"62.63.45.101", toString:function() {return this.qid;}},				
+	{qid:217, destination:"gmail.com", origin:"12.13.15.101", toString:function() {return this.qid;}}
+]; 
+ZaSearch._temporaryMailQSearchResults["incoming"]["hotmail.com"] = [
+	{qid:311, destination:"hotmail.com", origin:"64.23.45.222", toString:function() {return this.qid;}},
+	{qid:312, destination:"hotmail.com", origin:"221.23.45.26", toString:function() {return this.qid;}},
+	{qid:313, destination:"hotmail.com", origin:"121.23.45.123", toString:function() {return this.qid;}},	
+	{qid:314, destination:"hotmail.com", origin:"220.63.45.201", toString:function() {return this.qid;}},		
+	{qid:315, destination:"hotmail.com", origin:"220.63.45.101", toString:function() {return this.qid;}},			
+	{qid:316, destination:"hotmail.com", origin:"62.63.45.101", toString:function() {return this.qid;}},				
+	{qid:317, destination:"hotmail.com", origin:"12.13.15.101", toString:function() {return this.qid;}}
+]; 
+ZaSearch._temporaryMailQSearchResults["incoming"]["usa.net"] = [
+	{qid:411, destination:"usa.net", origin:"64.23.45.222", toString:function() {return this.qid;}},
+	{qid:412, destination:"usa.net", origin:"221.23.45.26", toString:function() {return this.qid;}},
+	{qid:413, destination:"usa.net", origin:"121.23.45.123", toString:function() {return this.qid;}},	
+	{qid:414, destination:"usa.net", origin:"220.63.45.201", toString:function() {return this.qid;}},		
+	{qid:415, destination:"usa.net", origin:"220.63.45.101", toString:function() {return this.qid;}},			
+	{qid:416, destination:"usa.net", origin:"62.63.45.101", toString:function() {return this.qid;}},				
+	{qid:417, destination:"usa.net", origin:"12.13.15.101", toString:function() {return this.qid;}}
+]; 
+
+ZaSearch.searchMailQ = function (app, queue, limit, offset,destination,origin,error,sortBy,sortAscending) {
+	var list = new ZaList(ZaPostQItem,app);
+	//Temporary using static data
+	var q =  ZaSearch._temporaryMailQSearchResults[queue];
+	if(q) {
+		var cnt = q.length;
+		for(var i=0;i<cnt;i++) {
+			if(destination && !origin) {
+				if(q[i][ZaPostQ.A_destination] == destination) {
+					list.add(q[i]);
+				}
+			} else if(!destination && origin) {
+				if(q[i][ZaPostQ.A_origin] == origin) {
+					list.add(q[i]);
+				}
+			} else if(destination && origin) {
+				if( (q[i][ZaPostQ.A_origin] == origin) && (q[i][ZaPostQ.A_destination] == destination)){
+					list.add(q[i]);
+				}				
+			} else if(!destination && !origin) {
+				list.add(q[i]);
+			}
+		}
+	} 
+	//end static data
+}
 
 ZaSearch.getSearchFromQuery = function (query) {
 	var searchObj = new ZaSearch();

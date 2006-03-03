@@ -570,3 +570,11 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 .que_table {
 	width:100%;
 }
+
+.container_table {
+	cell-spacing:10px;
+}
+.container {
+	margin-left:2%;
+	margin-right:2%;
+}
