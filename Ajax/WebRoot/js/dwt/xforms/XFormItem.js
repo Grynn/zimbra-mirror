@@ -3683,7 +3683,7 @@ Dwt_List_XFormItem.prototype.getSelection = function () {
 };
 
 Dwt_List_XFormItem.prototype._handleSelection = function (event) {
-	//this.getForm().refresh();
+	this.getForm().refresh();
 };
 
 Dwt_List_XFormItem.prototype.insertWidget = function (form, widget, element) {
