@@ -31,6 +31,8 @@ ifeq ($(BUILD_PLATFORM), MACOSXx86)
 	MYSQL_CLIENT_VERSION := standard-4.1.16-apple-darwin8.2.0-i686
 endif
 
+MYSQL_VERSION ?= standard-4.1.16-pc-linux-gnu-i686
+MYSQL_CLIENT_VERSION ?= standard-4.1.16-clientlibs
 
 HTTPD_VERSION ?= 2.0.54
 

@@ -31,15 +31,12 @@ use lib "/opt/zimbra/zimbramon/lib";
 
 use Zimbra::Mon::Logger;
 
-# Exit if software-only node.
-exit(0) unless (-f '/opt/zimbra/conf/localconfig.xml');
-
 my $platform=`/opt/zimbra/bin/get_plat_tag.sh`;
 chomp $platform;
 
 my $MNTCMD;
 my $DFCMD;
-if ($platform =~ /MACOSX/) {
+if ($platform eq "MACOSX") {
 	$MNTCMD = "mount -t hfs";
 	$DFCMD = "df -ml ";
 } else {
@@ -50,42 +47,40 @@ if ($platform =~ /MACOSX/) {
 my $dt = `date "+%Y-%m-%d %H:%M:%S"`;
 chomp $dt;
 
-my $hostname;
-
-#logStatus();
-
-logDiskUsage();
+checkPid();
+logQueue();
+clearPid();
 
 exit 0;
 
-sub logStatus {
-	my @status = ();
-	open STATUS, "/opt/zimbra/bin/zmcontrol status |" or die "Can't get status: $!";
-	@status = <STATUS>;
-	close STATUS;
-	foreach my $s (@status) {
-		chomp $s;
-		if ($s =~ /^Host (.*)/) {
-			$hostname = $1;
-			next;
+sub checkPid {
+	if (-f "/opt/zimbra/log/zmqueuelog.pid") {
+		my $P = `cat /opt/zimbra/log/zmqueuelog.pid`;
+		chomp $P;
+		if ($P ne "") {
+			my $c = kill, 0, $P;
+			if ($c) {exit 0;}
 		}
-		my ($service, $stat) = split ' ', $s;
-		Zimbra::Mon::Logger::Log( "info", "$dt, STATUS: ${hostname}: $service: $stat" );
 	}
+	`echo $$ > "/opt/zimbra/log/zmqueuelog.pid"`;
 }
 
-sub logDiskUsage {
-	my @mounts = ();
-	open MOUNTS, "$MNTCMD |" or die "Can't open $MNTCMD: $!";
-	@mounts = <MOUNTS>;
-	close MOUNTS;
-	foreach my $m (@mounts) {
-		chomp $m;
-		my ($dev,undef,$mp) = split ' ',$m;
-		open DF, "$DFCMD $dev | tail -1 |" or die "Can't open $DFCMD: $!";
-		my @df = <DF>;
-		close DF;
-		my (undef, $total, undef, $avail) = split ' ', $df[0];
-		Zimbra::Mon::Logger::Log( "info", "$dt, DISK: ${hostname}: dev: $dev, mp: $mp, tot: $total, avail: $avail" );
+sub clearPid {
+	unlink ("/opt/zimbra/log/zmqueuelog.pid");
+}
+
+sub logQueue {
+	my @status = ();
+	open STATUS, "/opt/zimbra/postfix/sbin/postqueue -p |" or die "Can't get status: $!";
+	@status = <STATUS>;
+	close STATUS;
+	my $kb = 0;
+	my $msgs = 0;
+	my $s = $status[$#status];
+	if ($s =~ /^--/) {
+		my @foo = split (' ', $s);
+		$kb = $foo[1];
+		$msgs = $foo[4];
 	}
+	Zimbra::Mon::Logger::Log( "info", "$dt, QUEUE: $kb $msgs" );
 }

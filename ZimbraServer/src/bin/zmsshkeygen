@@ -49,7 +49,7 @@ if [ $keytype != "dsa" -a $keytype != "rsa" ]; then
 	exit 1
 fi
 
-ssh-keygen -f ${keyfile} -N '' \
+ssh-keygen -f ${keyfile} -b 1024 -N '' \
 	-t ${keytype} -C ${zimbra_server_hostname}
 
 pubkey=`cat ${keyfile}.pub`

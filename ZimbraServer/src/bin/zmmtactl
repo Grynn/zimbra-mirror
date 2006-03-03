@@ -29,7 +29,7 @@ SCRIPTS="zmmtaconfigctl postfix zmsaslauthdctl"
 
 case "$1" in 
 	start)
-		/opt/zimbra/bin/zmmtaconfig antispam antivirus mta sasl
+		/opt/zimbra/libexec/zmmtaconfig antispam antivirus mta sasl
 		for i in $SCRIPTS; do
 			/opt/zimbra/bin/$i start norewrite
 		done

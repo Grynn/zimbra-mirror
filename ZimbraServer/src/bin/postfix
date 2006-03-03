@@ -33,7 +33,7 @@ zmsetvars \
 	zimbra_server_hostname 
 
 rewriteconfig() {
-    /opt/zimbra/bin/zmmtaconfig mta > /dev/null 2>&1
+    /opt/zimbra/libexec/zmmtaconfig mta > /dev/null 2>&1
 }
 
 if [ "x$1" = "xstart" -o "x$1" = "xreload" ]; then

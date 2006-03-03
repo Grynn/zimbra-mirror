@@ -58,7 +58,7 @@ replacePubKey() {
 	authkeys=`cat ${tempkeysfile}.new`
 
 	authkeys="${authkeys}
-command=\"/opt/zimbra/bin/zmrcd\" ${key}"
+command=\"/opt/zimbra/libexec/zmrcd\" ${key}"
 	
 	/bin/rm -f ${tempkeysfile} ${tempkeysfile}.new
 

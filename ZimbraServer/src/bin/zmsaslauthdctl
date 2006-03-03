@@ -29,7 +29,7 @@ if [ x`whoami` != xzimbra ]; then
 	exit 1
 fi
 
-platform=`/opt/zimbra/bin/get_plat_tag.sh`
+platform=`/opt/zimbra/libexec/get_plat_tag.sh`
 
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
@@ -37,7 +37,7 @@ zmsetvars \
     zimbra_log_directory
 
 rewriteconfig() {
-	/opt/zimbra/bin/zmmtaconfig sasl > /dev/null 2>&1
+	/opt/zimbra/libexec/zmmtaconfig sasl > /dev/null 2>&1
 }
 
 #
@@ -64,9 +64,9 @@ case "$1" in
 		fi
 		if [ -f ${zimbra_home}/cyrus-sasl-2.1.21.ZIMBRA/state/saslauthd.pid ]; then
 			if [ x$platform = "xMACOSX" -o "x$platform" = "xMACOSXx86" ]; then
-				killall -TERM saslauthd
+				killall -TERM saslauthd > /dev/null 2>&1
 			else
-				killall -TERM ${zimbra_home}/cyrus-sasl-2.1.21.ZIMBRA/sbin/saslauthd
+				killall -TERM ${zimbra_home}/cyrus-sasl-2.1.21.ZIMBRA/sbin/saslauthd > /dev/null 2>&1
 			fi
 		fi
         ;;

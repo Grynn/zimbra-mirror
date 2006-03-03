@@ -89,11 +89,11 @@ EOF
 }
 
 rewriteconfig() {
-    /opt/zimbra/bin/zmmtaconfig mailbox > /dev/null 2>&1
+    /opt/zimbra/libexec/zmmtaconfig mailbox > /dev/null 2>&1
 }
 
 rewriteWebXml() {
-    /opt/zimbra/bin/zmmtaconfig webxml > /dev/null 2>&1
+    /opt/zimbra/libexec/zmmtaconfig webxml > /dev/null 2>&1
 }
 
 #

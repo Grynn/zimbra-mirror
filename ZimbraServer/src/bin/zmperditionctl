@@ -43,7 +43,7 @@ checkRunning() {
 
 start() {
 	if [ ! -f "/opt/zimbra/conf/perdition.conf" ]; then
-		${zimbra_home}/bin/zmmtaconfig perdition
+		${zimbra_home}/libexec/zmmtaconfig perdition
 	fi
 	${zimbra_home}/perdition/sbin/perdition.imap4s \
 		--config_file=${zimbra_home}/conf/perdition.conf

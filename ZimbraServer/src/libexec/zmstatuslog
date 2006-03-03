@@ -39,7 +39,7 @@ chomp $platform;
 
 my $MNTCMD;
 my $DFCMD;
-if ($platform =~ /MACOSX/) {
+if ($platform eq "MACOSX") {
 	$MNTCMD = "mount -t hfs";
 	$DFCMD = "df -ml ";
 } else {

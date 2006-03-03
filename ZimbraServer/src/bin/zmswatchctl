@@ -40,7 +40,7 @@ case "$1" in
 			zmsnmpinit
 		fi
 		if [ -f $CONFIG ]; then
-			$BASE/bin/swatch --config-file=$BASE/conf/swatchrc \
+			$BASE/libexec/swatch --config-file=$BASE/conf/swatchrc \
 			--script-dir=/tmp -t /var/log/zimbra.log >/tmp/swatch.out 2>&1 &
 			PID=$!
 			echo $PID > $PIDFILE
@@ -60,6 +60,12 @@ case "$1" in
 			kill -TERM $PID
 		fi
 		rm -f $PIDFILE
+		if [ "x$platform" = "xMACOSX" ]; then
+				killall -TERM swatch > /dev/null 2>&1
+		else
+				killall -TERM ${zimbra_home}/libexec/swatch > /dev/null 2>&1
+		fi
+		exit 0
 	;;
 	reload)
 		if [ x$PID != 'x' ]; then

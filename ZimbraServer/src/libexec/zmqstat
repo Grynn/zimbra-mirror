@@ -1,0 +1,176 @@
+#!/usr/bin/perl
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Version: MPL 1.1
+# 
+# The contents of this file are subject to the Mozilla Public License
+# Version 1.1 ("License"); you may not use this file except in
+# compliance with the License. You may obtain a copy of the License at
+# http://www.zimbra.com/license
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+# the License for the specific language governing rights and limitations
+# under the License.
+# 
+# The Original Code is: Zimbra Collaboration Suite Server.
+# 
+# The Initial Developer of the Original Code is Zimbra, Inc.
+# Portions created by Zimbra are Copyright (C) 2005 Zimbra, Inc.
+# All Rights Reserved.
+# 
+# Contributor(s):
+# 
+# ***** END LICENSE BLOCK *****
+# 
+
+use strict;
+
+use IO::File;
+use File::Find;
+
+my $readfiles = 0;
+
+my %queue_stats = ();
+
+my $hash_queue_depth;
+my $queue_directory;
+
+sub getLocalConfig {
+	my $key = shift;
+	if (defined ($ENV{zmsetvars})) {
+		return $ENV{$key};
+	}
+	open CONF, "/opt/zimbra/bin/zmlocalconfig -q -m shell |" or die "Can't open local config: $!";
+	my @conf = <CONF>;
+	close CONF;
+
+	chomp @conf;
+
+	foreach (@conf) {
+		my ($key, $val) = split '=', $_, 2;
+		$val =~ s/;$//;
+		$val =~ s/'$//;
+		$val =~ s/^'//;
+		$ENV{$key} = $val;
+	}
+	$ENV{zmsetvars} = 'true';
+	return $ENV{$key};
+}
+
+sub get_record {  # Borrowed from qshape
+	my ($fh) = shift;
+	my $rec = getc($fh) || return;
+	my $len = 0;
+	my $shift = 0;
+	while (defined(my $lb = getc($fh))) {
+		my $dig = ord($lb);
+		$len |= ($dig & 0x7f) << $shift ;
+		last if (($dig & 0x80) == 0);
+		$shift += 7;
+		return if ($shift > 14); # XXX: max rec len of 2097151
+	}
+	my $data = "";
+	return unless ($len == 0 || read($fh,$data,$len) == $len);
+	#print "Returning $rec, $len, $data\n";
+	return ($rec, $len, $data);
+}
+
+
+sub getHashPath {
+	my $fn = shift;
+	my $p = "";
+	for (my $i = 0; $i < $hash_queue_depth; $i++) {
+		$p .= substr($fn, $i, 1);
+		$p .="/";
+	}
+	return $p;
+}
+
+sub processQ {
+	if (! -f $_ ) {return;}
+	if (! m{(^|/)[A-F0-9]{6,}$} ) { return; }
+	my ($cdir) = ($File::Find::dir =~ m|([^/]*)|);
+	#print "Processing $cdir - $_\n";
+	$queue_stats{$cdir}{'COUNT'}++;
+	
+	if ($readfiles) {
+		my @st = lstat($_);
+		if (@st == 0) { return; }
+		my $fh = new IO::File ($_, "r") || return;
+		my ($rec, $len, $data) = get_record($fh);
+		$queue_stats{$cdir}{$_}{'RECIPS'} = ();
+		if ($rec eq "C") { # Size
+			($queue_stats{$cdir}{$_}{'LENGTH'}) = ($data =~ m/\s*(\d+)\s*\d+\s*\d+/);
+			($rec, $len, $data) = get_record($fh);
+			if ($rec eq "T") {
+				$queue_stats{$cdir}{$_}{'TIME'} = $data;
+			} else {
+				return;
+			}
+		} else {
+			return;
+		}
+		while (my ($rec, $len, $data) = get_record($fh)) {
+			#print "got $rec, $len, $data\n";
+			if ($rec eq "R") { push(@{$queue_stats{$cdir}{$_}{'RECIPS'}}, $data); }
+			elsif ($rec eq "S") { $queue_stats{$cdir}{$_}{'SENDER'} = $data?$data:'MAILER-DAEMON'; }
+		}
+		$fh->close();
+		if ($cdir eq "deferred") {
+			my $dfile = getHashPath($_);
+			$fh = new IO::File ("$queue_directory/defer/$dfile/$_","r") || die "Can't open $dfile/$_: $!";
+			my @reasons = grep /^reason=/, <$fh>;
+			$queue_stats{$cdir}{$_}{'REASON'} = $reasons[0];
+			chomp $queue_stats{$cdir}{$_}{'REASON'};
+			$queue_stats{$cdir}{$_}{'REASON'} =~ s/reason=//;
+		}
+
+	}
+}
+
+getLocalConfig('zimbra_home');
+
+$queue_directory = `$ENV{zimbra_home}/bin/postconf -h queue_directory`;
+chomp $queue_directory;
+
+$hash_queue_depth = `$ENV{zimbra_home}/bin/postconf -h hash_queue_depth`;
+chomp $hash_queue_depth;
+
+#print "$queue_directory\n";
+
+my @queues = qw /incoming hold active deferred/;
+
+if ($ARGV[0]) { 
+	@queues = $ARGV[0]; 
+	$readfiles = 1;
+};
+
+map {$queue_stats{$_} = ()} @queues;
+
+foreach (map "$queue_directory/$_", @queues) {
+	chdir $_ or die "Can't chdir to $_";
+}
+
+chdir $queue_directory;
+
+find (\&processQ, @queues);
+
+if ($readfiles) {
+	foreach (sort keys %queue_stats) {
+		foreach my $k (sort keys %{$queue_stats{$_}}) {
+			if ($k eq 'COUNT') {next;}
+			my %qf = %{$queue_stats{$_}{$k}};
+			print sprintf ("%12s %12s, %6d, %48s",$k, $qf{'TIME'}, $qf{'LENGTH'}, $qf{'SENDER'});
+			if ($qf{'REASON'}) {
+				print sprintf (", %64s", $qf{'REASON'});
+			}
+			print map {sprintf ", %48s", $_} @{$qf{'RECIPS'}};
+			print "\n";
+		}
+		print "\n";
+	}
+} else {
+	print map {sprintf "%12s %d\n", $_, $queue_stats{$_}{COUNT}} keys %queue_stats;
+}
+

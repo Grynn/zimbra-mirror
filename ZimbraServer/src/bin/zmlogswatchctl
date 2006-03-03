@@ -38,7 +38,7 @@ source /opt/zimbra/.bashrc
 case "$1" in 
 	start)
 		if [ -f $CONFIG ]; then
-			$BASE/bin/logswatch --config-file=$BASE/conf/logswatchrc \
+			$BASE/libexec/logswatch --config-file=$BASE/conf/logswatchrc \
 			--script-dir=/tmp -t /var/log/zimbra.log >/tmp/logswatch.out 2>&1 &
 			PID=$!
 			chmod 777 /tmp/logswatch.out
@@ -58,6 +58,12 @@ case "$1" in
 		if [ x$PID != 'x' ]; then
 			kill -TERM $PID
 		fi
+		if [ "x$platform" = "xMACOSX" ]; then
+				killall -TERM logswatch > /dev/null 2>&1
+		else
+				killall -TERM ${zimbra_home}/libexec/logswatch > /dev/null 2>&1
+		fi
+		exit 0
 	;;
 	reload)
 		if [ x$PID != 'x' ]; then

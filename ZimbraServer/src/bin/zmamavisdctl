@@ -37,7 +37,7 @@ zmsetvars \
 platform=`/opt/zimbra/bin/get_plat_tag.sh`
 
 rewriteconfig() {
-	/opt/zimbra/bin/zmmtaconfig antispam > /dev/null 2>&1
+	/opt/zimbra/libexec/zmmtaconfig antispam > /dev/null 2>&1
 }
 
 checkRunning() {

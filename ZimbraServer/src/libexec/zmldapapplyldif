@@ -24,7 +24,7 @@
 # ***** END LICENSE BLOCK *****
 # 
 
-source `dirname $0`/zmshutil || exit 1
+source /opt/zimbra/bin/zmshutil || exit 1
 
 source_config_dir=/opt/zimbra/openldap/etc/openldap
 config_dir=/opt/zimbra/conf

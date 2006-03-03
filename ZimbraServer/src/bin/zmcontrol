@@ -28,6 +28,10 @@
 
 use strict;
 
+my $id = `id -u -n`;
+chomp $id;
+if ($id ne "zimbra") {die "Run as the zimbra user!\n";}
+
 BEGIN {
 	our $Basedir = "/opt/zimbra/zimbramon";
 };
@@ -91,7 +95,7 @@ sub runRemoteCommand {
 	my $cmd = shift;
 	my $cstr = "HOST:$GlobalOpts{H} $REMOTECOMMANDS{$cmd}";
 
-	open (REMOTE, "echo $cstr | /opt/zimbra/bin/zmrc $GlobalOpts{H} |") or 
+	open (REMOTE, "echo $cstr | /opt/zimbra/libexec/zmrc $GlobalOpts{H} |") or 
 		die "Can't contact $GlobalOpts{H}";
 
 	while (<REMOTE>) {
@@ -223,7 +227,8 @@ sub getLocalConfig {
 	if (defined ($ENV{zmsetvars})) {
 		return $ENV{$key};
 	}
-	open CONF, "/opt/zimbra/bin/zmlocalconfig -q -m shell |";
+	open CONF, "/opt/zimbra/bin/zmlocalconfig -q -m shell |" or
+		die "Can't open zmlocalconfig: $!";
 	my @conf = <CONF>;
 	close CONF;
 
