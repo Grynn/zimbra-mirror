@@ -62,7 +62,10 @@ function(/* arg1 ... argN */) {
 	// checking for if (this.args) won't do.
 	if (typeof this.args != "undefined") {
 		if (this.args instanceof Array)
-			args = this.args;
+			// NOTE: We must NOT use this.args directly if this method's 
+			//       params are gonna be pushed onto the array because it
+			//       will change the original args!
+			args = arguments.length > 0 ? args.concat(this.args) : this.args;
 		else
 			args.push(this.args);
 	}
