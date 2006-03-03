@@ -58,6 +58,7 @@ function(eventType, event) {
 		}
 	}	
 	this._notifyingListeners = false;
+	return retVal;
 }
 
 AjxEventMgr.prototype.isListenerRegistered =
