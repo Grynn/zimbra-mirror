@@ -99,7 +99,7 @@ ZaSearchField.prototype._getMyXForm = function() {
 		tableCssStyle:"width:100%;padding:2px;",numCols:11,width:"100%",
 		items: [
 			{type:_OUTPUT_, value:ZaMsg.searchForAccountsLabel, nowrap:true},
-			{type:_TEXTFIELD_, width:"100%", ref:ZaSearch.A_query, containerCssStyle:"padding-left:2px;padding-right:2px;width:100%", label:null, 
+			{type:_TEXTFIELD_, width:"100%", ref:ZaSearch.A_query, containerCssClass:"search_field_container", label:null, 
 				elementChanged: function(elementValue,instanceValue, event) {
 					var charCode = event.charCode;
 					if (charCode == 13 || charCode == 3) {

@@ -233,7 +233,7 @@ ZaSearch._temporaryMailQSearchResults["incoming"]["usa.net"] = [
 	{qid:417, destination:"usa.net", origin:"12.13.15.101", toString:function() {return this.qid;}}
 ]; 
 
-ZaSearch.searchMailQ = function (app, queue, limit, offset,destination,origin,error,sortBy,sortAscending) {
+ZaSearch.searchMailQ = function (app, queue, destination,origin,error,limit, offset,sortBy,sortAscending) {
 	var list = new ZaList(ZaPostQItem,app);
 	//Temporary using static data
 	var q =  ZaSearch._temporaryMailQSearchResults[queue];
@@ -258,6 +258,7 @@ ZaSearch.searchMailQ = function (app, queue, limit, offset,destination,origin,er
 		}
 	} 
 	//end static data
+	return list;
 }
 
 ZaSearch.getSearchFromQuery = function (query) {

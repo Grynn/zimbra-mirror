@@ -578,3 +578,20 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 	margin-left:2%;
 	margin-right:2%;
 }
+
+.search_field_container {
+	padding-left:2px;
+	padding-right:2px;
+	width:100%;
+}
+
+.search_field_tableCssClass {
+	width:100%;
+	padding:2px;
+}
+
+.qsearch_field_bar {
+	padding-left:25px;
+	padding-right:10px;
+	margin-bottom:10px;
+}
