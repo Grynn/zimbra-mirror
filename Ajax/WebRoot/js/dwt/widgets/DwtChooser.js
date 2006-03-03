@@ -89,6 +89,11 @@ function() {
 	return "DwtChooser";
 };
 
+DwtChooser.prototype.show =
+function() {
+	this.resize();
+};
+
 /**
 * Populates the source list view with the given list.
 *
@@ -140,6 +145,7 @@ function() {
 
 	this._sourceListViewDivId	= Dwt.getNextId();
 	this._targetListViewDivId	= Dwt.getNextId();
+	this._buttonsTdId			= Dwt.getNextId();
 	this._removeButtonDivId		= Dwt.getNextId();
 
 	var html = [];
@@ -156,7 +162,9 @@ function() {
 		html[idx++] = "'></td>";
 
 		// transfer buttons
-		html[idx++] = "<td valign='middle'>";
+		html[idx++] = "<td valign='middle' id='";
+		html[idx++] = this._buttonsTdId;
+		html[idx++] = "'>";
 		for (var i = 0; i < this._buttonInfo.length; i++) {
 			var id = this._buttonInfo[i].id;
 			html[idx++] = "<div id='";
@@ -185,7 +193,9 @@ function() {
 		html[idx++] = "'></div></td></tr>";
 
 		// transfer buttons
-		html[idx++] = "<tr><td align='center'>";
+		html[idx++] = "<tr><td align='center' id='";
+		html[idx++] = this._buttonsTdId;
+		html[idx++] = "'>";
 		html[idx++] = "<table><tr>";
 		for (var i = 0; i < this._buttonInfo.length; i++) {
 			var id = this._buttonInfo[i].id;
@@ -221,6 +231,9 @@ function() {
 	DBG.println("***** chooser width = " + this.getSize().x);
 	DBG.println("***** chooser height = " + this.getSize().y);
 
+	this._buttonWidth = 0;
+	this._buttonHeight = 0;
+
 	// create and add transfer buttons
 	var buttonListener = new AjxListener(this, this._transferButtonListener);
 	this._button = {};
@@ -230,7 +243,12 @@ function() {
 		this._button[id] = this._setupButton(id, this._buttonId[id], this._buttonDivId[id], this._buttonInfo[i].label);
 		this._button[id].addSelectionListener(buttonListener);
 		this._data[id] = new AjxVector();
+		var sz = this._button[id].getSize();
+		this._buttonWidth = (sz.x > this._buttonWidth) ? sz.x : this._buttonWidth;
+		this._buttonHeight = (sz.y > this._buttonHeight) ? sz.y : this._buttonHeight;
 	}
+	DBG.println("****** button width = " + this._buttonWidth);
+	DBG.println("****** button height = " + this._buttonHeight);
 
 	// create and add source list view
 	this.sourceListView = this._createSourceListView();
@@ -246,6 +264,8 @@ function() {
 	this._removeButtonId = Dwt.getNextId();
 	this._removeButton = this._setupButton(DwtChooser.REMOVE_BTN_ID, this._removeButtonId, this._removeButtonDivId, AjxMsg.remove);
 	this._removeButton.addSelectionListener(new AjxListener(this, this._removeButtonListener));
+
+	
 };
 
 /*
@@ -276,11 +296,28 @@ DwtChooser.prototype._addListView =
 function(listView, listViewDivId) {
 	var listDiv = document.getElementById(listViewDivId);
  	listDiv.appendChild(listView.getHtmlElement());
-	var ldSize = Dwt.getSize(listDiv);
-	DBG.println("***** list div width = " + ldSize.x + ", height = " + ldSize.y);
-	listView.setSize((this._style == DwtChooser.HORIZ_STYLE) ? ldSize.x : this._chooserSize.x, ldSize.y);
-	listView.setUI();
+	listView.setUI(null, true); // renders headers and empty list
 	listView._initialized = true;
+};
+
+DwtChooser.prototype.resize =
+function(width, height) {
+	var buttonsTd = document.getElementById(this._buttonsTdId);
+	var btnSz = Dwt.getSize(buttonsTd);
+	var w, h;
+	if (this._style == DwtChooser.HORIZ_STYLE) {
+		h = height;
+//		var w = ((this._chooserSize.x - this._buttonWidth) / 2) - 10;
+		w = Math.floor(((width - btnSz.x) / 2) - 12);
+	} else {
+		w = width;
+//		var h = ((this._chooserSize.y - this._buttonHeight) / 2) - 10;
+		h = Math.floor(((height - btnSz.y) / 2) - 12);
+//		h = ((height - this._buttonHeight) / 2) - 10;
+	}
+	DBG.println("***** list view width = " + w + ", height = " + h);
+	this.sourceListView.setSize(w, h);
+	this.targetListView.setSize(w, h);
 };
 
 /*
@@ -515,6 +552,7 @@ function(item, id) {
 function DwtChooserListView(parent, type, className) {
 	
 	if (arguments.length == 0) return;
+	className = className ? className : "DwtChooserListView";
 	DwtListView.call(this, parent, className, null, this._getHeaderList(parent));
 
 	this.type = type;
@@ -532,17 +570,6 @@ DwtChooserListView.prototype._getHeaderList = function() {};
 DwtChooserListView.prototype.toString = 
 function() {
 	return "DwtChooserListView";
-};
-
-/*
-* DwtListView override to make sure target list doesn't report "No Results".
-*/
-DwtChooserListView.prototype._setNoResultsHtml = 
-function() {
-	// "no results" only applies to source list
-	if (this._type != DwtChooserListView.TARGET) {
-		DwtListView.prototype._setNoResultsHtml.call(this);
-	}
 };
 
 /*

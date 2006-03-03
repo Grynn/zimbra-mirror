@@ -262,15 +262,21 @@ function(list, defaultColumnSort) {
 	this.setUI(defaultColumnSort);
 }
 
+/**
+* Renders the list view using the current list of items.
+*
+* @param defaultColumnSort		[string]	ID of column that represents default sort order
+* @param noResultsOk			[boolean]*	if true, don't show "No Results" for empty list
+*/
 DwtListView.prototype.setUI =
-function(defaultColumnSort) {
+function(defaultColumnSort, noResultsOk) {
 	this.removeAll();
 	this.createHeaderHtml(defaultColumnSort);
-	this._renderList(this._list);
+	this._renderList(this._list, noResultsOk);
 }
 
 DwtListView.prototype._renderList =
-function (list) {
+function(list, noResultsOk) {
 	if (list instanceof AjxVector && list.size()) {
 		var size = list.size();
 		for (var i = 0; i < size; i++) {
@@ -286,7 +292,7 @@ function (list) {
 				}
 			}
 		}
-	} else {
+	} else if (!noResultsOk) {
 		this._setNoResultsHtml();
 	}
 };
