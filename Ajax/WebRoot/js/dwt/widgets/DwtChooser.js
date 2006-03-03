@@ -227,13 +227,6 @@ function() {
 DwtChooser.prototype._initialize = 
 function() {
 
-	this._chooserSize = this.getSize();
-	DBG.println("***** chooser width = " + this.getSize().x);
-	DBG.println("***** chooser height = " + this.getSize().y);
-
-	this._buttonWidth = 0;
-	this._buttonHeight = 0;
-
 	// create and add transfer buttons
 	var buttonListener = new AjxListener(this, this._transferButtonListener);
 	this._button = {};
@@ -243,12 +236,7 @@ function() {
 		this._button[id] = this._setupButton(id, this._buttonId[id], this._buttonDivId[id], this._buttonInfo[i].label);
 		this._button[id].addSelectionListener(buttonListener);
 		this._data[id] = new AjxVector();
-		var sz = this._button[id].getSize();
-		this._buttonWidth = (sz.x > this._buttonWidth) ? sz.x : this._buttonWidth;
-		this._buttonHeight = (sz.y > this._buttonHeight) ? sz.y : this._buttonHeight;
 	}
-	DBG.println("****** button width = " + this._buttonWidth);
-	DBG.println("****** button height = " + this._buttonHeight);
 
 	// create and add source list view
 	this.sourceListView = this._createSourceListView();
@@ -264,8 +252,6 @@ function() {
 	this._removeButtonId = Dwt.getNextId();
 	this._removeButton = this._setupButton(DwtChooser.REMOVE_BTN_ID, this._removeButtonId, this._removeButtonDivId, AjxMsg.remove);
 	this._removeButton.addSelectionListener(new AjxListener(this, this._removeButtonListener));
-
-	
 };
 
 /*
@@ -306,16 +292,12 @@ function(width, height) {
 	var btnSz = Dwt.getSize(buttonsTd);
 	var w, h;
 	if (this._style == DwtChooser.HORIZ_STYLE) {
-		h = height;
-//		var w = ((this._chooserSize.x - this._buttonWidth) / 2) - 10;
 		w = Math.floor(((width - btnSz.x) / 2) - 12);
+		h = height;
 	} else {
 		w = width;
-//		var h = ((this._chooserSize.y - this._buttonHeight) / 2) - 10;
 		h = Math.floor(((height - btnSz.y) / 2) - 12);
-//		h = ((height - this._buttonHeight) / 2) - 10;
 	}
-	DBG.println("***** list view width = " + w + ", height = " + h);
 	this.sourceListView.setSize(w, h);
 	this.targetListView.setSize(w, h);
 };
@@ -355,7 +337,7 @@ DwtChooser.prototype._sourceListener =
 function(ev) {
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
 		// double-click performs transfer
-		this._transfer(this.sourceListView.getSelection(), this._activeButtonId);
+		this.transfer(this.sourceListView.getSelection(), this._activeButtonId);
 		this.sourceListView.deselectAll();
 	} else if (this._activeButtonId == DwtChooser.REMOVE_BTN_ID) {
 		// single-click activates appropriate transfer button if needed
@@ -393,7 +375,7 @@ function(ev) {
 	var id = button._buttonId;
 	var sel = this.sourceListView.getSelection();
 	if (sel && sel.length) {
-		this._transfer(sel, id);
+		this.transfer(sel, id);
 	} else {
 		this._setActiveButton(id);
 	}
@@ -486,7 +468,7 @@ function(id) {
 * @param items	[array]		list of items to move
 * @param id		[string]	ID of the transfer button that was used
 */
-DwtChooser.prototype._transfer =
+DwtChooser.prototype.transfer =
 function(items, id) {
 	this._setActiveButton(id);
 	for (var i = 0; i < items.length; i++) {
