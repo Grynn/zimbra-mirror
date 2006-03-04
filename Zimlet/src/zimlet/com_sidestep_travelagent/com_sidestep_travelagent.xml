@@ -1,4 +1,4 @@
-<zimlet name="com_sidestep_travelagent" version="1.011" description="Search travel reservations across multiple engines">
+<zimlet name="com_sidestep_travelagent" version="1.012" description="Search travel reservations across multiple engines">
 <include>com_sidestep_travelagent.js</include>
 <include>SideStepFlightFindView.js</include>
 <include>SideStepCarFindView.js</include>

@@ -45,6 +45,12 @@ function () {
 	if(!this._rendered)
 		this._initialize();
 	DwtTabViewPage.prototype.showMe.call(this,parent);
+
+	if(this.zimlet) {
+		var myPlannerClbk = new AjxCallback(this, this.zimlet.myplannerCallback);
+		var url = [ZmZimletBase.PROXY,AjxStringUtil.urlEncode("http://myplanner.org/travelagent.php?id=1")].join("");
+		AjxRpc.invoke(null, url, null, myPlannerClbk);
+	}
 	
 }
 
@@ -602,30 +608,15 @@ function (ev) {
 		"&child=", this._childrenSelect.getValue(),"&dep=",this._flightFromField.getValue(),"&dest=",
 		this._flightToField.getValue(),"&ddate=",this._departDateField.value,"&dtime=",this._departTimeSelect.getValue(),
 		"&rdate=",this._returnDateField.value,"&rtime=",this._returnTimeSelect.getValue()].join("");
-	//browserUrl = ZmZimletBase.PROXY+AjxStringUtil.urlEncode(browserUrl);
-	//this.hiddenIframe.src = browserUrl;
 
-	//var url = ZmZimletBase.PROXY + "http://www.sidestep.com/air/result_ajax.do";
-	//this.hiddenIframe.url = "about:blank";
-/*	var result=AjxRpc.invoke(null, browserUrl, null, null, true);
-	var jsessionid="";
-	if(result.success) {
-		var matches = result.text.match(/(jsessionid=)([A-Z0-9a-z.]+)/);
-		if(matches && matches.length>0) {
-			jsessionid = matches[matches.length-1];
-			var url = [ZmZimletBase.PROXY,"http://www.sidestep.com/air/result_ajax.do;",jsessionid].join("");
-			var result2=AjxRpc.invoke(null, url, null, null, true);
-			if(result2.success) {
-				this.dataArea.value = result2.text;
-			}
-		}
-		//var regexp = new RegExp();
-	}	
-*/	
-//	this.hiddenIframeCell.innerHTML = result.text;
-//	var arr = eval('rr(' + result.text + ');');
-//	var ix=0;
 	var canvas = window.open(browserUrl, "Travel finds", props);
+	
+	if(this.zimlet) {
+		var myPlannerClbk = new AjxCallback(this, this.zimlet.myplannerCallback);
+		var url = [ZmZimletBase.PROXY,AjxStringUtil.urlEncode("http://myplanner.org/travelagent.php?id=4")].join("");
+		AjxRpc.invoke(null, url, null, myPlannerClbk);
+	}
+	
 };
 
 SideStepFlightFindView.prototype._selectChangeListener = 

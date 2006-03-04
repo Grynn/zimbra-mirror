@@ -45,7 +45,12 @@ function () {
 	if(!this._rendered)
 		this._initialize();
 	DwtTabViewPage.prototype.showMe.call(this,parent);
-	
+
+	if(this.zimlet) {
+		var myPlannerClbk = new AjxCallback(this, this.zimlet.myplannerCallback);
+		var url = [ZmZimletBase.PROXY,AjxStringUtil.urlEncode("http://myplanner.org/travelagent.php?id=2")].join("");
+		AjxRpc.invoke(null, url, null, myPlannerClbk);
+	}
 }
 
 SideStepCarFindView.prototype.setHomeAirports = 
@@ -545,6 +550,12 @@ function (ev) {
 		"&dropoffDate=",this._dropoffDateField.value,"&dropoffTime=",this._dropoffTimeSelect.getValue()].join("");
 
 	var canvas = window.open(browserUrl, "Travel finds", props);
+	
+	if(this.zimlet) {
+		var myPlannerClbk = new AjxCallback(this, this.zimlet.myplannerCallback);
+		var url = [ZmZimletBase.PROXY,AjxStringUtil.urlEncode("http://myplanner.org/travelagent.php?id=5")].join("");
+		AjxRpc.invoke(null, url, null, myPlannerClbk);
+	}
 };
 
 SideStepCarFindView.prototype._selectChangeListener = 

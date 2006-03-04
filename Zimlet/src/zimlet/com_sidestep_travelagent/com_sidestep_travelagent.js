@@ -64,7 +64,6 @@ function (homeOptions, workOptions, workZip, homeZip,addr) {
 	this.tabkeys.push(this.tabView.addTab("Hotel", this.hotelPage));		
 	var canvas = new ZmDialog(this._appCtxt.getShell(), null, null, "Search travel reservations across multiple engines",null,view);
 	canvas.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(canvas, canvas.popdown));
-	//canvas._okButtonListener = function () { this.popdown(); };
 	canvas.popup();
 		
 	this.tabView.getTabButton(this.tabkeys[0]).setImage("SideStep-air");
@@ -117,6 +116,11 @@ function () {
 	Com_SideStep_TravelAgent.getInstance().flightPage.setDepartDate(d);
 	Com_SideStep_TravelAgent.getInstance().carPage.setPickupDate(d);
 	Com_SideStep_TravelAgent.getInstance().hotelPage.setCheckinDate(d);
+}
+
+Com_SideStep_TravelAgent.prototype.myplannerCallback = 
+function () {
+	//nothing yet
 }
 
 Com_SideStep_TravelAgent.prototype.doDrop = 

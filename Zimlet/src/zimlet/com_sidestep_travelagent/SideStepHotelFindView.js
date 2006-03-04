@@ -27,6 +27,11 @@ function () {
 		this._initialize();
 	DwtTabViewPage.prototype.showMe.call(this,parent);
 	
+	if(this.zimlet) {
+		var myPlannerClbk = new AjxCallback(this, this.zimlet.myplannerCallback);
+		var url = [ZmZimletBase.PROXY,AjxStringUtil.urlEncode("http://myplanner.org/travelagent.php?id=3")].join("");
+		AjxRpc.invoke(null, url, null, myPlannerClbk);
+	}
 }
 
 SideStepHotelFindView.prototype.setAddress =
@@ -287,4 +292,11 @@ function (ev) {
 	"&city=",this._checkinAddrField.getValue()].join("");
 
 	var canvas = window.open(browserUrl, "Travel finds", props);
+
+	if(this.zimlet) {
+		var myPlannerClbk = new AjxCallback(this, this.zimlet.myplannerCallback);
+		var url = [ZmZimletBase.PROXY,AjxStringUtil.urlEncode("http://myplanner.org/travelagent.php?id=6")].join("");
+		AjxRpc.invoke(null, url, null, myPlannerClbk);
+	}
+	
 };
