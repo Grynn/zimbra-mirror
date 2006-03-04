@@ -87,6 +87,12 @@ ZaPostQXFormView.listSelectionListener = function (ev) {
 	
 	//rebuild the query
 	var query = [];
+	query.push("mta:(");
+	query.push(instance[ZaItem.A_zimbraId]);
+	query.push(") ");
+	query.push("queue:(");
+	query.push(qName);	
+	query.push(") ");
 	for (var key in instance[qName]["_selection_cache"]) {
 		query.push(key);
 		query.push(":(");
@@ -108,6 +114,12 @@ ZaPostQXFormView.listSelectionListener = function (ev) {
 	this.getForm().refresh();
 }
 				
+ZaPostQXFormView.clearFilter = 
+function (ev) {
+	this.setInstanceValue("",this.getRef());
+	this.getForm().refresh();
+}
+
 ZaPostQXFormView.myXFormModifier = function(xFormObject) {	
 	xFormObject.tableCssStyle="width:100%;position:static;overflow:auto;";
 	
@@ -188,7 +200,7 @@ ZaPostQXFormView.myXFormModifier = function(xFormObject) {
 							{type:_CELLSPACER_},
 							{type:_DWT_BUTTON_, label:ZaMsg.PQ_SearchQ},
 							{type:_CELLSPACER_},
-							{type:_DWT_BUTTON_, label:ZaMsg.PQ_ClearFilter}							
+							{type:_DWT_BUTTON_, label:ZaMsg.PQ_ClearFilter, ref:ZaPostQ.A_DeferredQ+"/"+ZaPostQ.A_query, onActivate:ZaPostQXFormView.clearFilter}							
 						]},																		
 						{type:_GROUP_, numCols:1, width:"95%", cssClass:"RadioGrouperBorder container", tableCssClass:"que_table",  items: [
 							   {type:_GROUP_, numCols:1, 
@@ -240,7 +252,7 @@ ZaPostQXFormView.myXFormModifier = function(xFormObject) {
 							{type:_CELLSPACER_},
 							{type:_DWT_BUTTON_, label:ZaMsg.PQ_SearchQ},
 							{type:_CELLSPACER_},
-							{type:_DWT_BUTTON_, label:ZaMsg.PQ_ClearFilter}							
+							{type:_DWT_BUTTON_, label:ZaMsg.PQ_ClearFilter,ref:ZaPostQ.A_IncomingQ+"/"+ZaPostQ.A_query, onActivate:ZaPostQXFormView.clearFilter}							
 						]},																	
 						{type:_GROUP_, numCols:1, width:"95%", cssClass:"RadioGrouperBorder container", tableCssClass:"que_table",  items: [
 							   {type:_GROUP_, numCols:1, 
