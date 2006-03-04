@@ -45,8 +45,13 @@ AjxStringUtil.TRIM_RE = /^\s+|\s+$/g;
 AjxStringUtil.COMPRESS_RE = /\s+/g;
 AjxStringUtil.ELLIPSIS = " ... ";
 
+AjxStringUtil.makeString =
+function(val) {
+	return val ? String(val) : "";
+};
+
 AjxStringUtil.trim = 
-function (str, compress, space) {
+function(str, compress, space) {
 
 	if (!str) {return "";}
 

@@ -51,27 +51,15 @@ function DwtChooser(parent, className, buttonInfo, style, noDuplicates) {
 	DwtComposite.call(this, parent, "DwtChooser");
 
 	this._style = style ? style : DwtChooser.HORIZ_STYLE;
-	this._buttonInfo = buttonInfo ? buttonInfo : [ { label: AjxMsg.add } ];
 	this._noDuplicates = noDuplicates;
 
-	// create IDs for button elements and their containers
-	this._buttonDivId = {};
-	this._buttonId = {};
-	if (this._buttonInfo.length == 1) {
-		if (!this._buttonInfo[0].id) {
-			this._buttonInfo[0].id = Dwt.getNextId();
-		}
-		this._activeButtonId = this._buttonInfo[0].id;
-	}			
-	for (var i = 0; i < this._buttonInfo.length; i++) {
-		var id = this._buttonInfo[i].id;
-		this._buttonDivId[id] = Dwt.getNextId();
-		this._buttonId[id] = Dwt.getNextId();
-	}
-	this._hasMultiButtons = (this._buttonInfo.length > 1);
+	this._handleButtonInfo(buttonInfo);
 
 	this._createHtml();
 	this._initialize();
+
+	this._evt = new ZmEvent(ZmEvent.S_CHOOSER);
+	this._evtMgr = new AjxEventMgr();
 };
 
 DwtChooser.prototype = new DwtComposite;
@@ -134,6 +122,41 @@ function() {
 
 	this._setActiveButton(this._buttonInfo[0].id); // make first button active by default
 	this._enableButtons(true, false);
+};
+
+/**
+* Adds a change listener.
+*
+* @param listener	[AjxListener]	a listener
+*/
+DwtChooser.prototype.addChangeListener = 
+function(listener) {
+	return this._evtMgr.addListener(ZmEvent.L_MODIFY, listener);
+};
+
+/**
+* Removes the given change listener.
+*
+* @param listener	[AjxListener]	a listener
+*/
+DwtChooser.prototype.removeChangeListener = 
+function(listener) {
+	return this._evtMgr.removeListener(ZmEvent.L_MODIFY, listener);    	
+};
+
+/**
+* Notifies listeners of the given change event.
+*
+* @param event		[constant]		event type (see ZmEvent)
+* @param details	[hash]*			additional information
+*/
+DwtChooser.prototype._notify =
+function(event, details) {
+	if (this._evtMgr.isListenerRegistered(ZmEvent.L_MODIFY)) {
+		this._evt.set(event, this);
+		this._evt.setDetails(details);
+		this._evtMgr.notifyListeners(ZmEvent.L_MODIFY, this._evt);
+	}
 };
 
 /*
@@ -219,6 +242,28 @@ function() {
 	}
 
 	this.getHtmlElement().innerHTML = html.join("");
+};
+
+DwtChooser.prototype._handleButtonInfo = 
+function(buttonInfo) {
+
+	this._buttonInfo = buttonInfo ? buttonInfo : [ { label: AjxMsg.add } ];
+
+	// create IDs for button elements and their containers
+	this._buttonDivId = {};
+	this._buttonId = {};
+	if (this._buttonInfo.length == 1) {
+		if (!this._buttonInfo[0].id) {
+			this._buttonInfo[0].id = Dwt.getNextId();
+		}
+		this._activeButtonId = this._buttonInfo[0].id;
+	}			
+	for (var i = 0; i < this._buttonInfo.length; i++) {
+		var id = this._buttonInfo[i].id;
+		this._buttonDivId[id] = Dwt.getNextId();
+		this._buttonId[id] = Dwt.getNextId();
+	}
+	this._hasMultiButtons = (this._buttonInfo.length > 1);
 };
 
 /*
@@ -425,6 +470,8 @@ function(items) {
 		this._enableButtons(true, false);
 		this._setActiveButton(this._activeButtonId);
 	}
+
+	this._notify(ZmEvent.E_MODIFY, {items: this.getItems()});
 };
 
 /*
@@ -481,6 +528,7 @@ function(items, id) {
 		this._data[id].add(item);
 	}
 	this.sourceListView.deselectAll();
+	this._notify(ZmEvent.E_MODIFY, {items: this.getItems()});
 };
 
 DwtChooser.prototype._isDuplicate =
