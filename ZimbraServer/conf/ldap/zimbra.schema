@@ -3045,7 +3045,7 @@ objectclass ( zimbraMimeEntry
 	MAY (description $
 		zimbraMimeFileExtension $
 		zimbraMimeHandlerClass $
-		zimbraMimeHandlerExtension)
+		zimbraMimeHandlerExtension
 	))
 
 ################
@@ -3064,7 +3064,7 @@ objectclass ( zimbraObjectEntry
 		zimbraObjectStoreMatched)
 	MAY (description $
 		zimbraObjectHandlerConfig $
-		zimbraObjectHandlerClass)
+		zimbraObjectHandlerClass
 	))	
 
 ################
