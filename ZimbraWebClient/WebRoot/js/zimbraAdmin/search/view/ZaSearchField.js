@@ -94,11 +94,54 @@ function(evt) {
 	fieldObj.invokeCallback(evt);
 }
 
+
+ZaSearchField.prototype.resetSearchFilter = function () {
+	this._containedObject[ZaSearch.A_fAccounts] = "FALSE";
+	this._containedObject[ZaSearch.A_fdistributionlists] = "FALSE";	
+	this._containedObject[ZaSearch.A_fAliases] = "FALSE";
+}
+
+ZaSearchField.prototype.allFilterSelected = function (ev) {
+	ev.item.parent.parent.setImage(ev.item.getImage());
+	this._containedObject[ZaSearch.A_fAccounts] = "TRUE";
+	this._containedObject[ZaSearch.A_fdistributionlists] = "TRUE";	
+	this._containedObject[ZaSearch.A_fAliases] = "TRUE";
+}
+
+ZaSearchField.prototype.accFilterSelected = function (ev) {
+	this.resetSearchFilter();
+	ev.item.parent.parent.setImage(ev.item.getImage());	
+	this._containedObject[ZaSearch.A_fAccounts] = "TRUE";
+}
+
+ZaSearchField.prototype.aliasFilterSelected = function (ev) {
+	this.resetSearchFilter();
+	ev.item.parent.parent.setImage(ev.item.getImage());
+	this._containedObject[ZaSearch.A_fAliases] = "TRUE";	
+}
+
+ZaSearchField.prototype.dlFilterSelected = function (ev) {
+	this.resetSearchFilter();
+	ev.item.parent.parent.setImage(ev.item.getImage());
+	this._containedObject[ZaSearch.A_fdistributionlists] = "TRUE";	
+}
+
+ZaSearchField.searchChoices = new XFormChoices([],XFormChoices.OBJECT_REFERENCE_LIST, null, "labelId");
 ZaSearchField.prototype._getMyXForm = function() {	
+	var newMenuOpList = new Array();
+
+	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_ACCOUNTS, ZaMsg.SearchFilter_Accounts, ZaMsg.searchForAccounts, "Account", "AccountDis", new AjxListener(this,this.accFilterSelected)));	
+	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_DLS, ZaMsg.SearchFilter_DLs, ZaMsg.searchForDLs, "Group", "GroupDis", new AjxListener(this,this.dlFilterSelected)));		
+	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_ALIASES, ZaMsg.SearchFilter_Aliases, ZaMsg.searchForAliases, "AccountAlias", "AccountAlias", new AjxListener(this, this.aliasFilterSelected)));		
+	newMenuOpList.push(new ZaOperation(ZaOperation.SEP));				
+	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_ALL, ZaMsg.SearchFilter_All, ZaMsg.searchForAll, "SearchAll", "SearchAll", new AjxListener(this, this.allFilterSelected)));		
+	ZaSearchField.searchChoices.setChoices(newMenuOpList);
+	
 	var xFormObject = {
-		tableCssStyle:"width:100%;padding:2px;",numCols:11,width:"100%",
+		tableCssStyle:"width:100%;padding:2px;",numCols:4,width:"100%",
 		items: [
-			{type:_OUTPUT_, value:ZaMsg.searchForAccountsLabel, nowrap:true},
+//			{type:_OUTPUT_, value:ZaMsg.searchForAccountsLabel, nowrap:true},
+			{type:_MENU_BUTTON_, label:null, choices:ZaSearchField.searchChoices, toolTipContent:ZaMsg.searchForAccounts, icon:"SearchAll", cssClass:"TBButtonWhite"},
 			{type:_TEXTFIELD_, width:"100%", ref:ZaSearch.A_query, containerCssClass:"search_field_container", label:null, 
 				elementChanged: function(elementValue,instanceValue, event) {
 					var charCode = event.charCode;
@@ -110,11 +153,11 @@ ZaSearchField.prototype._getMyXForm = function() {
 				},
 				cssClass:"search_input"
 			},
-			{type:_DWT_BUTTON_, label:ZaMsg.search, toolTipContent:ZaMsg.searchForAccounts, icon:ZaMsg.search, onActivate:ZaSearchField.srchButtonHndlr},
-			{type:_OUTPUT_, value:ZaMsg.Filter+":", label:null},
+			{type:_DWT_BUTTON_, label:ZaMsg.search, toolTipContent:ZaMsg.searchForAccounts, icon:ZaMsg.search, onActivate:ZaSearchField.srchButtonHndlr, cssClass:"TBButtonWhite"},
+			/*{type:_OUTPUT_, value:ZaMsg.Filter+":", label:null},
 			{type:_CHECKBOX_, ref:ZaSearch.A_fAccounts,label:ZaMsg.Filter_Accounts, labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"},					
 			{type:_CHECKBOX_, ref:ZaSearch.A_fAliases,label:ZaMsg.Filter_Aliases, labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"},
-			{type:_CHECKBOX_, ref:ZaSearch.A_fdistributionlists,label:ZaMsg.Filter_DLs, labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"}
+			{type:_CHECKBOX_, ref:ZaSearch.A_fdistributionlists,label:ZaMsg.Filter_DLs, labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"}*/
 		]
 	};
 	return xFormObject;
