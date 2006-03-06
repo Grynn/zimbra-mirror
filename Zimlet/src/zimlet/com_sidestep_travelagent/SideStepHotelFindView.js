@@ -286,17 +286,13 @@ SideStepHotelFindView.prototype._searchButtonListener =
 function (ev) {
 	var props = [ "toolbar=no,location=no,status=yes,menubar=yes,scrollbars=yes,resizable=yes" ];
 	props = props.join(",");
-	var browserUrl = ["http://www.sidestep.com/hotel/search_city.do?","tripType=city",
+
+	var browserUrl = ["http://myplanner.org/travel_hotel.php?","tripType=city",
 	"&checkinDate=",this._checkinDateField.value,"&checkoutDate=",this._checkoutDateField.value,
 	"&numberOfAdults=",this._adultSelect.getValue(),"&numberOfRooms=",this._roomsSelect.getValue(),
 	"&city=",this._checkinAddrField.getValue()].join("");
 
+
 	var canvas = window.open(browserUrl, "Travel finds", props);
 
-	if(this.zimlet) {
-		var myPlannerClbk = new AjxCallback(this, this.zimlet.myplannerCallback);
-		var url = [ZmZimletBase.PROXY,AjxStringUtil.urlEncode("http://myplanner.org/travelagent.php?id=6")].join("");
-		AjxRpc.invoke(null, url, null, myPlannerClbk);
-	}
-	
 };

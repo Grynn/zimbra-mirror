@@ -603,19 +603,15 @@ function (ev) {
 	var altap = "on";
 	if(altapChbx && !altapChbx.checked) 
 		altap = "off";
-	var browserUrl = ["http://www.sidestep.com/air/quick_search.do?","ttype=",this._flightTypeSelect.getValue(),
+
+
+	var browserUrl = ["http://myplanner.org/travel_air.php?","ttype=",this._flightTypeSelect.getValue(),
 		"&altap=",altap,"&adult=",this._adultSelect.getValue(),"&youth=",this._youthSelect.getValue(),
 		"&child=", this._childrenSelect.getValue(),"&dep=",this._flightFromField.getValue(),"&dest=",
 		this._flightToField.getValue(),"&ddate=",this._departDateField.value,"&dtime=",this._departTimeSelect.getValue(),
 		"&rdate=",this._returnDateField.value,"&rtime=",this._returnTimeSelect.getValue()].join("");
-
+		
 	var canvas = window.open(browserUrl, "Travel finds", props);
-	
-	if(this.zimlet) {
-		var myPlannerClbk = new AjxCallback(this, this.zimlet.myplannerCallback);
-		var url = [ZmZimletBase.PROXY,AjxStringUtil.urlEncode("http://myplanner.org/travelagent.php?id=4")].join("");
-		AjxRpc.invoke(null, url, null, myPlannerClbk);
-	}
 	
 };
 

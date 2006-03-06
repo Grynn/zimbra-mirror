@@ -544,18 +544,15 @@ SideStepCarFindView.prototype._searchButtonListener =
 function (ev) {
 	var props = [ "toolbar=no,location=no,status=yes,menubar=yes,scrollbars=yes,resizable=yes" ];
 	props = props.join(",");
-	var browserUrl = ["http://www.sidestep.com/car/search_airport.do?","vehicleType=",this._vehicleTypeSelect.getValue(),
+
+	var browserUrl = ["http://myplanner.org/travel_car.php?","vehicleType=",this._vehicleTypeSelect.getValue(),
 		"&pickupAirport=",this._pickupAirportField.getValue(),"&dropoffAirport=",this._dropoffAirportField.getValue(),
 		"&pickupDate=",this._pickupDateField.value,"&pickupTime=",this._pickupTimeSelect.getValue(),
 		"&dropoffDate=",this._dropoffDateField.value,"&dropoffTime=",this._dropoffTimeSelect.getValue()].join("");
 
+	
 	var canvas = window.open(browserUrl, "Travel finds", props);
 	
-	if(this.zimlet) {
-		var myPlannerClbk = new AjxCallback(this, this.zimlet.myplannerCallback);
-		var url = [ZmZimletBase.PROXY,AjxStringUtil.urlEncode("http://myplanner.org/travelagent.php?id=5")].join("");
-		AjxRpc.invoke(null, url, null, myPlannerClbk);
-	}
 };
 
 SideStepCarFindView.prototype._selectChangeListener = 
