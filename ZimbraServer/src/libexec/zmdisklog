@@ -50,7 +50,8 @@ if ($platform eq "MACOSX") {
 my $dt = `date "+%Y-%m-%d %H:%M:%S"`;
 chomp $dt;
 
-my $hostname;
+my $hostname = `/opt/zimbra/bin/zmhostname`;
+chomp $hostname;
 
 #logStatus();
 
