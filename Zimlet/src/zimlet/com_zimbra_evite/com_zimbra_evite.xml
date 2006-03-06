@@ -1,0 +1,25 @@
+<zimlet name="com_zimbra_evite" version="0.9" description="Evite">
+  <include>evite.js</include>
+  <includeCSS>evite.css</includeCSS>
+  <handlerObject>Com_zimbra_evite</handlerObject>
+
+  <zimletPanelItem label="Evite" icon="Evite-panelIcon">
+    <toolTipText>Manage my evite events</toolTipText>
+    <dragSource type="ZmMailMsg" />
+    <dragSource type="ZmAppt" />    
+    <contextMenu>
+      <menuItem label="Sync with Evite" id="sync" />
+      <menuItem label="Preferences..." id="pref" />
+      <menuItem />
+      <menuItem label="My Evite" id="myevite" icon="Evite-panelIcon">
+        <canvas type="window" width="800" height="600" />
+        <actionUrl target="http://www.evite.com/pages/myevite/myEvite.jsp" />
+      </menuItem>
+    </contextMenu>
+  </zimletPanelItem>
+
+  <userProperties>
+    <property type="string" name="user" minLength="4" maxLength="32" label="Evite User ID" />
+    <property type="password" name="passwd" minLength="4" maxLength="32" label="Password" />
+  </userProperties>
+</zimlet>
