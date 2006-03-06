@@ -134,6 +134,7 @@ function() {
 	this._youthSelectId = Dwt.getNextId();
 	this._childrenSelectId = Dwt.getNextId();
 	this._searchButtonId = Dwt.getNextId();
+	this._searchButtonId2 = Dwt.getNextId();
 	this._hiddenIframeId = Dwt.getNextId();
 	
 	this._dep_coa_id = Dwt.getNextId();
@@ -372,9 +373,14 @@ function() {
 	html[i++] = "</tr>";
 	//searh button cell
 	html[i++] = "<tr>";
-	html[i++] = "<td align='center' colspan=3 id='";
+	
+	html[i++] = "<td align='center' id='";
 	html[i++] = this._searchButtonId
-	html[i++] = "'>";
+	html[i++] = "'></td>";
+	html[i++] = "<td align='center' id='";
+	html[i++] = this._searchButtonId2
+	html[i++] = "'></td>";
+	html[i++] = "<td align='center' >&nbsp;</td>";
 	html[i++] = "</tr>";	
 
 	html[i++] = "</table>";
@@ -450,7 +456,7 @@ function () {
 		adultCell.appendChild(this._adultSelect.getHtmlElement());	
 		
 	this._youthSelect = new DwtSelect(this,[new DwtSelectOption("0", true, "0"),
-	new DwtSelectOption("1", true, "1"), 
+	new DwtSelectOption("1", false, "1"), 
 	new DwtSelectOption("2", false, "2"),
 	new DwtSelectOption("3", false, "3"),
 	new DwtSelectOption("4", false, "4")]);
@@ -459,7 +465,7 @@ function () {
 		youthCell.appendChild(this._youthSelect.getHtmlElement());	
 		
 	this._childrenSelect = new DwtSelect(this,[new DwtSelectOption("0", true, "0"),
-	new DwtSelectOption("1", true, "1"), 
+	new DwtSelectOption("1", false, "1"), 
 	new DwtSelectOption("2", false, "2"),
 	new DwtSelectOption("3", false, "3"),
 	new DwtSelectOption("4", false, "4")]);
@@ -474,6 +480,14 @@ function () {
 	var searchButtonCell = document.getElementById(this._searchButtonId);
 	if (searchButtonCell)
 		searchButtonCell.appendChild(searchButton.getHtmlElement());
+
+	var searchButton2 = new DwtButton(this);	
+	searchButton2.setText("Search travelocity.com");
+	searchButton2.setSize("170");
+	searchButton2.addSelectionListener(new AjxListener(this, this._searchButtonListener2));				
+	var searchButtonCell2 = document.getElementById(this._searchButtonId2);
+	if (searchButtonCell2)
+		searchButtonCell2.appendChild(searchButton2.getHtmlElement());
 
 	if(this._departAirportsSelectIdWork && this.hasWorkAddr) {
 		this._departAirportsSelectWork = new DwtSelect(this,this.workAirportOptions);
@@ -606,6 +620,26 @@ function (ev) {
 
 
 	var browserUrl = ["http://myplanner.org/travel_air.php?","ttype=",this._flightTypeSelect.getValue(),
+		"&altap=",altap,"&adult=",this._adultSelect.getValue(),"&youth=",this._youthSelect.getValue(),
+		"&child=", this._childrenSelect.getValue(),"&dep=",this._flightFromField.getValue(),"&dest=",
+		this._flightToField.getValue(),"&ddate=",this._departDateField.value,"&dtime=",this._departTimeSelect.getValue(),
+		"&rdate=",this._returnDateField.value,"&rtime=",this._returnTimeSelect.getValue()].join("");
+		
+	var canvas = window.open(browserUrl, "Travel finds", props);
+	
+};
+
+SideStepFlightFindView.prototype._searchButtonListener2 = 
+function (ev) {
+	var props = [ "toolbar=yes,location=no,status=yes,menubar=yes,scrollbars=yes,resizable=yes" ];
+	props = props.join(",");
+	var altapChbx = document.getElementById(this._altappChbxId);
+	var altap = "on";
+	if(altapChbx && !altapChbx.checked) 
+		altap = "off";
+
+
+	var browserUrl = ["http://myplanner.org/travelocity_air.php?","ttype=",this._flightTypeSelect.getValue(),
 		"&altap=",altap,"&adult=",this._adultSelect.getValue(),"&youth=",this._youthSelect.getValue(),
 		"&child=", this._childrenSelect.getValue(),"&dep=",this._flightFromField.getValue(),"&dest=",
 		this._flightToField.getValue(),"&ddate=",this._departDateField.value,"&dtime=",this._departTimeSelect.getValue(),
