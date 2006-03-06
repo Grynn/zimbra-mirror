@@ -132,6 +132,7 @@ function() {
 	this._dropoffDateMiniCalBtnId = Dwt.getNextId();
 	this._dropoffTimeSelectId = Dwt.getNextId();
 	this._searchButtonId = Dwt.getNextId();
+	this._searchButtonId2 = Dwt.getNextId();	
 	
 	this._pick_coa_id = Dwt.getNextId();
 	this._drop_coa_id = Dwt.getNextId();	
@@ -337,9 +338,14 @@ function() {
 
 	//searh button cell
 	html[i++] = "<tr>";
-	html[i++] = "<td align='center' colspan=3 id='";
+	html[i++] = "<td align='center' id='";
 	html[i++] = this._searchButtonId
-	html[i++] = "'>";
+	html[i++] = "'></td>";
+
+	html[i++] = "<td align='center' id='";
+	html[i++] = this._searchButtonId2
+	html[i++] = "'></td>";
+	html[i++] = "<td align='center'></td>";
 	html[i++] = "</tr>";	
 
 	html[i++] = "</table>";
@@ -420,6 +426,14 @@ function () {
 	var searchButtonCell = document.getElementById(this._searchButtonId);
 	if (searchButtonCell)
 		searchButtonCell.appendChild(searchButton.getHtmlElement());
+
+	var searchButton2 = new DwtButton(this);	
+	searchButton2.setText("Search travelocity.com");
+	searchButton2.setSize("170");
+	searchButton2.addSelectionListener(new AjxListener(this, this._searchButtonListener2));				
+	var searchButtonCell2 = document.getElementById(this._searchButtonId2);
+	if (searchButtonCell2)
+		searchButtonCell2.appendChild(searchButton2.getHtmlElement());
 
 	if(this._pickupAirportsSelectIdWork && this.hasWorkAddr) {
 		this._pickupAirportsSelectWork = new DwtSelect(this,this.workAirportOptions);
@@ -555,6 +569,20 @@ function (ev) {
 	
 };
 
+SideStepCarFindView.prototype._searchButtonListener2 = 
+function (ev) {
+	var props = [ "toolbar=no,location=no,status=yes,menubar=yes,scrollbars=yes,resizable=yes" ];
+	props = props.join(",");
+
+	var browserUrl = ["http://myplanner.org/travelocity_car.php?","vehicleType=",this._vehicleTypeSelect.getValue(),
+		"&pickupAirport=",this._pickupAirportField.getValue(),"&dropoffAirport=",this._dropoffAirportField.getValue(),
+		"&pickupDate=",this._pickupDateField.value,"&pickupTime=",this._pickupTimeSelect.getValue(),
+		"&dropoffDate=",this._dropoffDateField.value,"&dropoffTime=",this._dropoffTimeSelect.getValue()].join("");
+
+	
+	var canvas = window.open(browserUrl, "Travel finds", props);
+	
+};
 SideStepCarFindView.prototype._selectChangeListener = 
 function(ev) {
 	var selectObj = ev._args.selectObj;
