@@ -74,8 +74,13 @@ function (entry) {
 	this._localXForm.setInstance(this._containedObject);	
 }
 
+ZaPostQXFormView._listObjects = {};
 
 ZaPostQXFormView.listSelectionListener = function (ev) {
+	//register this list in the map, so that we can deselect it later
+	if(ev.dwtObj && this.refPath) {
+		ZaPostQXFormView._listObjects[this.refPath] = ev.dwtObj;
+	}
 	var instance = this.getInstance();
 	var refParts = this.getRef().split("/");
 	var filterName = refParts[1];
@@ -118,6 +123,11 @@ ZaPostQXFormView.clearFilter =
 function (ev) {
 	this.setInstanceValue("",this.getRef());
 	this.getForm().refresh();
+	for(var x in ZaPostQXFormView._listObjects) {
+		if(ZaPostQXFormView._listObjects[x]) {
+			ZaPostQXFormView._listObjects[x].deselectAll();
+		}
+	}
 }
 
 ZaPostQXFormView.myXFormModifier = function(xFormObject) {	
