@@ -32,7 +32,7 @@
 	<property name="generated.java.dir" location="${generated.dir}/src/java" />
 
 	<property name="zimlets" value="com_zimbra_xslt"/>
-	<property name="zimlets-extra" value="com_zimbra_bugz"/>
+    <property name="zimlets-extra" value="com_zimbra_po,com_zimbra_bugz,com_flightexplorer_fasttrack,com_sidestep_travelagent,com_zimbra_arcade,com_zimbra_collector,com_zimbra_jspsample,com_zimbra_photo,com_zimbra_reminder,com_zimbra_ytraffic,com_zimbra_gtranslator"/>
 
 	<condition property="is-windows">
 		<os family="windows" />

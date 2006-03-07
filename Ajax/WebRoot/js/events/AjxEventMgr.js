@@ -52,7 +52,7 @@ function(eventType, event) {
 		for (var i = 0; i < s; i++) {
 			c = a[i];
 			retVal = c.handleEvent ? c.handleEvent(event) : c(event);
-			if (retVal === false) {
+			if (!retVal) {
 				break;
 			}
 		}
