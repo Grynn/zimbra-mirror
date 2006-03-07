@@ -48,26 +48,6 @@ ZaController.initPopupMenuMethods["ZaServerListController"] = new Array();
 **/
 ZaServerListController.prototype.show = 
 function(list) {
-    
-/*    	//create toolbar
-    	this._ops = new Array();
-    	this._ops.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.SERTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaServerListController.prototype._editButtonListener)));    	
-    	//this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.SERTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaServerListController.prototype._deleteButtonListener)));    	    	
-		this._ops.push(new ZaOperation(ZaOperation.NONE));
-		this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));				
-		
-		this._toolbar = new ZaToolBar(this._container, this._ops);    
- 	
-		//create Servers list view
-		this._contentView = new ZaServerListView(this._container);
-		var elements = new Object();
-		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
-		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
-		this._app.createView(ZaZimbraAdmin._SERVERS_LIST_VIEW, elements);
-
-    	//context menu
-    	this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._ops);
-*/
     if (!this._UICreated) {
 		this._createUI();
 	} 	
