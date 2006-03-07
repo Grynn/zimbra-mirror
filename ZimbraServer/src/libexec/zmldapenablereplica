@@ -26,6 +26,12 @@
 
 source `dirname $0`/../bin/zmshutil || exit 1
 
+if [ "x$1" != "x" ]; then
+	echo "Usage: $0"
+	echo "	Use $0 to set up this server as an ldap replica"
+	exit 1
+fi
+
 zmsetvars \
 	zimbra_home \
 	zimbra_server_hostname \
