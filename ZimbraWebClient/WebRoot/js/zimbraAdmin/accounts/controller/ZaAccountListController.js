@@ -461,7 +461,7 @@ function () {
 	this._app.createView(ZaZimbraAdmin._ACCOUNTS_LIST_VIEW, elements);
 
 	this._initPopupMenu();
-	this._acctionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations);
+	this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations);
 	
 	//set a selection listener on the account list view
 	this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
@@ -516,7 +516,7 @@ function(ev) {
 ZaAccountListController.prototype._listActionListener =
 function (ev) {
 	this._changeActionsState();
-	this._acctionMenu.popup(0, ev.docX, ev.docY);
+	this._actionMenu.popup(0, ev.docX, ev.docY);
 }
 
 /**
@@ -907,23 +907,23 @@ function () {
 	} else if (cnt > 1){
 		opsArray2 = [ZaOperation.EDIT, ZaOperation.CHNG_PWD, ZaOperation.VIEW_MAIL, ZaOperation.MOVE_ALIAS];
 /*		this._toolbar.enable(opsArray2, false);
-		this._acctionMenu.enable(opsArray2, false);*/
+		this._actionMenu.enable(opsArray2, false);*/
 
 		opsArray1 = [ZaOperation.DELETE];
 /*		this._toolbar.enable(opsArray1, true);
-		this._acctionMenu.enable(opsArray1, true);*/
+		this._actionMenu.enable(opsArray1, true);*/
 	} else {
 		opsArray2 = [ZaOperation.EDIT, ZaOperation.DELETE, ZaOperation.CHNG_PWD, ZaOperation.VIEW_MAIL,ZaOperation.MOVE_ALIAS];
 /*		this._toolbar.enable(opsArray2, false);
-		this._acctionMenu.enable(opsArray2, false);*/
+		this._actionMenu.enable(opsArray2, false);*/
 	}
 	if(opsArray1.length) {
 		this._toolbar.enable(opsArray1, true);
-		this._acctionMenu.enable(opsArray1, true);
+		this._actionMenu.enable(opsArray1, true);
 	}
 	if(opsArray2.length) {
 		this._toolbar.enable(opsArray2, false);
-		this._acctionMenu.enable(opsArray2, false);
+		this._actionMenu.enable(opsArray2, false);
 	}	
 //TODO: Instrumentation code here	
 }

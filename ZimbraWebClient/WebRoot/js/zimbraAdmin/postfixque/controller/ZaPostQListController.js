@@ -30,58 +30,82 @@
 **/
 function ZaPostQListController(appCtxt, container, app) {
 	ZaController.call(this, appCtxt, container, app,"ZaPostQListController");
+   	this._toolbarOperations = new Array();
+   	this._popupOperations = new Array();			
+	
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_servers/managing_servers.htm";					
 }
 
 ZaPostQListController.prototype = new ZaController();
 ZaPostQListController.prototype.constructor = ZaPostQListController;
 
-//ZaPostQListController.SERVER_VIEW = "ZaPostQListController.SERVER_VIEW";
+ZaController.initToolbarMethods["ZaPostQListController"] = new Array();
+ZaController.initPopupMenuMethods["ZaPostQListController"] = new Array();
 
 ZaPostQListController.prototype.show = 
 function(list) {
-    if (!this._contentView) {
-    	//create toolbar
-    	this._ops = new Array();
-    	this._ops.push(new ZaOperation(ZaOperation.VIEW, ZaMsg.TBB_View, ZaMsg.PQTBB_View_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaPostQListController.prototype._viewButtonListener)));    	
-    	//this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.SERTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaPostQListController.prototype._deleteButtonListener)));    	    	
-		this._ops.push(new ZaOperation(ZaOperation.NONE));
-		this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));				
-		
-		this._toolbar = new ZaToolBar(this._container, this._ops);    
- 	
-		//create Servers list view
-		this._contentView = new ZaPostQListView(this._container);
-		var elements = new Object();
-		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
-		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
-		this._app.createView(ZaZimbraAdmin._POSTQ_VIEW, elements);
 
-    	//context menu
-    	this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._ops);
+    if (!this._UICreated) {
+		this._createUI();
+	} 	
+
+	if (list != null)
+		this._contentView.set(list.getVector());
+		
+	this._app.pushView(ZaZimbraAdmin._POSTQ_VIEW);			
 	
-		if (list != null)
-			this._contentView.set(list.getVector());
-
-		this._app.pushView(ZaZimbraAdmin._POSTQ_VIEW);			
-		
-		//set a selection listener on the Server list view
-		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
-		this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
-		this._removeConfirmMessageDialog = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);					
-		//this.refresh();
-	} else {
-		if (list != null)
-			this._contentView.set(list.getVector());	
-			
-		this._app.pushView(ZaZimbraAdmin._POSTQ_VIEW);
-	}
-//	this._app.setCurrentController(this);
 	this._removeList = new Array();
 	if (list != null)
 		this._list = list;
 		
 	this._changeActionsState();		
+}
+
+ZaPostQListController.initToolbarMethod =
+function () {
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.LABEL, ZaMsg.TBB_LastUpdated, ZaMsg.TBB_LastUpdated_tt, null, null, null,null,null,null,"refreshTime"));	
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.SEP));
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.REFRESH, ZaMsg.TBB_Refresh, ZaMsg.TBB_Refresh_tt, null, null, new AjxListener(this, this.refreshListener)));	
+   	this._toolbarOperations.push(new ZaOperation(ZaOperation.VIEW, ZaMsg.TBB_View, ZaMsg.PQTBB_View_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaPostQListController.prototype._viewButtonListener)));    		
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.NONE));
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));				
+   	
+}
+ZaController.initToolbarMethods["ZaPostQListController"].push(ZaPostQListController.initToolbarMethod);
+
+ZaPostQListController.initPopupMenuMethod =
+function () {
+    this._popupOperations.push(new ZaOperation(ZaOperation.VIEW, ZaMsg.TBB_View, ZaMsg.PQTBB_View_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaPostQListController.prototype._viewButtonListener)));
+}
+ZaController.initPopupMenuMethods["ZaPostQListController"].push(ZaPostQListController.initPopupMenuMethod);
+
+ZaPostQListController.prototype._createUI = function () {
+	try {
+		var elements = new Object();
+		this._contentView = new ZaPostQListView(this._container);
+		this._initToolbar();
+		if(this._toolbarOperations && this._toolbarOperations.length) {
+			this._toolbar = new ZaToolBar(this._container, this._toolbarOperations); 
+			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
+		}
+		this._initPopupMenu();
+		if(this._popupOperations && this._popupOperations.length) {
+			this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations);
+		}
+		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
+		this._app.createView(ZaZimbraAdmin._POSTQ_VIEW, elements);
+
+		//set a selection listener on the Server list view
+		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
+		this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
+		this._removeConfirmMessageDialog = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);					
+	
+		
+		this._UICreated = true;
+	} catch (ex) {
+		this._handleException(ex, "ZaPostQListController.prototype._createUI", null, false);
+		return;
+	}	
 }
 
 /**
@@ -242,8 +266,8 @@ function (ev) {
 **/
 ZaPostQListController.prototype._viewButtonListener =
 function(ev) {
-	if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getLast()) {
-		var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getLast());
+	if(this._contentView.getSelectionCount() == 1) {
+		var item = this._contentView.getSelection()[0];
 		this._app.getPostQController().show(item);
 	}
 }
@@ -320,11 +344,6 @@ function () {
 	this.show();
 }
 
-ZaPostQListController.prototype._donotDeleteServersCallback = 
-function () {
-	this._removeList = new Array();
-	this._removeConfirmMessageDialog.popdown();
-}
 
 ZaPostQListController.prototype._changeActionsState = 
 function () {
