@@ -120,12 +120,23 @@ sub doStatus {
 	my $status = 0;
 	print "Host $localHostName\n";
 	foreach (sort keys %{$services}) {
-		my $rc = 0xffff & system ("$allservices{$_} status >/dev/null 2>&1");
+		my $rc = 0xffff & system ("$allservices{$_} status >/tmp/zmcontrol_status.$$ 2>/tmp/zmcontrol_err.$$");
 		$rc = $rc >> 8;
-		if ($rc) {$status = 1;}
+		if ($rc) {
+			$status = 1;
+		}
 		my $stat = sprintf "\t%-20s %10s\n",$_,($rc)?"Stopped":"Running";
 		print "$stat";
+		if ($rc) {
+			open (ST, "/tmp/zmcontrol_status.$$") or next;
+			foreach my $s (<ST>) {
+				print "\t\t$s";
+			}
+			close ST;
+		}
 	}
+	unlink ("/tmp/zmcontrol_status.$$");
+	unlink ("/tmp/zmcontrol_err.$$");
 	return $status;
 }
 
@@ -273,7 +284,7 @@ sub getHostName {
 }
 
 sub displayVersion {
-	my $platform = `/opt/zimbra/bin/get_plat_tag.sh`;
+	my $platform = `/opt/zimbra/libexec/get_plat_tag.sh`;
 	chomp $platform;
 	my $string = "";
 	if ($platform =~ /MACOSX/) {

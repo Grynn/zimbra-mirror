@@ -54,7 +54,7 @@ mkdir -p ${BASE}/ca
 
 getHostInfo() {
 
-	platform=`/opt/zimbra/bin/get_plat_tag.sh`
+	platform=`/opt/zimbra/libexec/get_plat_tag.sh`
 	if [ "x$platform" = "xMACOSX" -o "x$platform" = "xMACOSXx86" ]; then
 		HH=`hostname`
 		return

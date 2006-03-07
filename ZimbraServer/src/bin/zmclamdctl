@@ -29,7 +29,7 @@ if [ x`whoami` != xzimbra ]; then
 	exit 1
 fi
 
-platform=`/opt/zimbra/bin/get_plat_tag.sh`
+platform=`/opt/zimbra/libexec/get_plat_tag.sh`
 
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \

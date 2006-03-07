@@ -34,7 +34,7 @@ zmsetvars \
     zimbra_home \
     zimbra_log_directory
 
-platform=`/opt/zimbra/bin/get_plat_tag.sh`
+platform=`/opt/zimbra/libexec/get_plat_tag.sh`
 
 rewriteconfig() {
 	/opt/zimbra/libexec/zmmtaconfig antispam > /dev/null 2>&1
@@ -113,7 +113,8 @@ case "$1" in
 	'status')
 		cpid=`cat /opt/zimbra/log/amavisd.pid`
         kill -0 "$cpid" 2> /dev/null
-		exit $?
+		R=$?
+		exit $R
 		;;
     
     *)

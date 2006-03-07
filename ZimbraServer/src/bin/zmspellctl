@@ -49,6 +49,7 @@ case "$1" in
 			/opt/zimbra/bin/$i status
 			R=$?
 			if [ $R -ne "0" ]; then
+				echo "$i is not running"
 				STATUS=$R
 			fi
 		done

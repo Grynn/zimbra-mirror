@@ -38,7 +38,7 @@ hostname
 echo "----------------"
 /opt/zimbra/bin/zmhostname
 echo "----------------"
-P=`/opt/zimbra/bin/get_plat_tag.sh`
+P=`/opt/zimbra/libexec/get_plat_tag.sh`
 echo $P
 echo "----------------"
 df -h

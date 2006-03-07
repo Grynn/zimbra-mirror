@@ -53,6 +53,7 @@ case "$1" in
 			fi
 			R=$?
 			if [ $R -ne "0" ]; then
+				echo "$i is not running"
 				STATUS=$R
 			fi
 		done

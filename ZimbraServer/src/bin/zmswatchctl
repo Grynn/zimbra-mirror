@@ -75,8 +75,13 @@ case "$1" in
 	status)
 		if [ x$PID != 'x' ]; then
 			kill -0 $PID
-			exit $?
+			R=$?
+			if [ $R -ne 0 ]; then
+				echo "swatch is not running"
+			fi
+			exit $R
 		else
+			echo "swatch is not running"
 			exit 1
 		fi
 	;;
