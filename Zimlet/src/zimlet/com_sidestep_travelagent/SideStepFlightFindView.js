@@ -135,6 +135,7 @@ function() {
 	this._childrenSelectId = Dwt.getNextId();
 	this._searchButtonId = Dwt.getNextId();
 	this._searchButtonId2 = Dwt.getNextId();
+	this._searchButtonId3 = Dwt.getNextId();	
 	this._hiddenIframeId = Dwt.getNextId();
 	
 	this._dep_coa_id = Dwt.getNextId();
@@ -380,7 +381,10 @@ function() {
 	html[i++] = "<td align='center' id='";
 	html[i++] = this._searchButtonId2
 	html[i++] = "'></td>";
-	html[i++] = "<td align='center' >&nbsp;</td>";
+	html[i++] = "<td align='center' id='";
+	html[i++] = this._searchButtonId3
+	html[i++] = "'></td>";
+
 	html[i++] = "</tr>";	
 
 	html[i++] = "</table>";
@@ -399,8 +403,14 @@ function () {
 	delete this._flightTypeSelectId;	
 	
 	var myAirport="";
+	var searchSideStep=true;
+	var searchTravelocity=true;
+	var searchHotwire=true;
 	try {
 		myAirport = this.zimlet.getUserProperty("myairport")
+		searchSideStep = this.zimlet.getUserProperty("search_sidestep")
+		searchTravelocity = this.zimlet.getUserProperty("search_travelocity")		
+		searchHotwire = this.zimlet.getUserProperty("search_hotwire")				
 	} catch (ex) {
 	//sigh
 	}	
@@ -472,23 +482,39 @@ function () {
 	var childrenCell = document.getElementById(this._childrenSelectId);
 	if (childrenCell)
 		childrenCell.appendChild(this._childrenSelect.getHtmlElement());	
-		
-	var searchButton = new DwtButton(this);	
-	searchButton.setText("Search multiple travel sites");
-	searchButton.setSize("170");
-	searchButton.addSelectionListener(new AjxListener(this, this._searchButtonListener));				
-	var searchButtonCell = document.getElementById(this._searchButtonId);
-	if (searchButtonCell)
-		searchButtonCell.appendChild(searchButton.getHtmlElement());
-
-	var searchButton2 = new DwtButton(this);	
-	searchButton2.setText("Search travelocity.com");
-	searchButton2.setSize("170");
-	searchButton2.addSelectionListener(new AjxListener(this, this._searchButtonListener2));				
-	var searchButtonCell2 = document.getElementById(this._searchButtonId2);
-	if (searchButtonCell2)
-		searchButtonCell2.appendChild(searchButton2.getHtmlElement());
-
+	
+	if(searchSideStep=="true" || searchSideStep===true) {	
+		var searchButton = new DwtButton(this);	
+		searchButton.setText("Search sidestep.com");
+		searchButton.setImage("SideStepIcon");
+		searchButton.setSize("140");
+		searchButton.addSelectionListener(new AjxListener(this, this._searchButtonListener));				
+		var searchButtonCell = document.getElementById(this._searchButtonId);
+		if (searchButtonCell)
+			searchButtonCell.appendChild(searchButton.getHtmlElement());
+	}
+	if(searchTravelocity=="true" || searchTravelocity===true) {
+		var searchButton2 = new DwtButton(this);	
+		searchButton2.setText("Search travelocity.com");
+		searchButton2.setImage("TravelocityIcon");		
+		searchButton2.setSize("140");
+		searchButton2.addSelectionListener(new AjxListener(this, this._searchButtonListener2));				
+		var searchButtonCell2 = document.getElementById(this._searchButtonId2);
+		if (searchButtonCell2)
+			searchButtonCell2.appendChild(searchButton2.getHtmlElement());
+	}
+	
+	if(searchHotwire=="true" || searchHotwire===true) {
+		var searchButton3 = new DwtButton(this);	
+		searchButton3.setText("Search hotwire.com");
+		searchButton3.setImage("HotwireIcon");
+		searchButton3.setSize("140");
+		searchButton3.addSelectionListener(new AjxListener(this, this._searchButtonListener3));				
+		var searchButtonCell3 = document.getElementById(this._searchButtonId3);
+		if (searchButtonCell3)
+			searchButtonCell3.appendChild(searchButton3.getHtmlElement());
+	}
+			
 	if(this._departAirportsSelectIdWork && this.hasWorkAddr) {
 		this._departAirportsSelectWork = new DwtSelect(this,this.workAirportOptions);
 		this._departAirportsSelectWork.addChangeListener(new AjxListener(this, this._selectChangeListener));
@@ -625,7 +651,7 @@ function (ev) {
 		this._flightToField.getValue(),"&ddate=",this._departDateField.value,"&dtime=",this._departTimeSelect.getValue(),
 		"&rdate=",this._returnDateField.value,"&rtime=",this._returnTimeSelect.getValue()].join("");
 		
-	var canvas = window.open(browserUrl, "Travel finds", props);
+	var canvas = window.open(browserUrl, "SideStep.com finds", props);
 	
 };
 
@@ -645,10 +671,29 @@ function (ev) {
 		this._flightToField.getValue(),"&ddate=",this._departDateField.value,"&dtime=",this._departTimeSelect.getValue(),
 		"&rdate=",this._returnDateField.value,"&rtime=",this._returnTimeSelect.getValue()].join("");
 		
-	var canvas = window.open(browserUrl, "Travel finds", props);
+	var canvas = window.open(browserUrl, "Travelocity.com finds", props);
 	
 };
 
+SideStepFlightFindView.prototype._searchButtonListener3 = 
+function (ev) {
+	var props = [ "toolbar=yes,location=no,status=yes,menubar=yes,scrollbars=yes,resizable=yes" ];
+	props = props.join(",");
+	var altapChbx = document.getElementById(this._altappChbxId);
+	var altap = "on";
+	if(altapChbx && !altapChbx.checked) 
+		altap = "off";
+
+
+	var browserUrl = ["http://myplanner.org/hotwire_air.php?","ttype=",this._flightTypeSelect.getValue(),
+		"&altap=",altap,"&adult=",this._adultSelect.getValue(),"&youth=",this._youthSelect.getValue(),
+		"&child=", this._childrenSelect.getValue(),"&dep=",this._flightFromField.getValue(),"&dest=",
+		this._flightToField.getValue(),"&ddate=",this._departDateField.value,"&dtime=",this._departTimeSelect.getValue(),
+		"&rdate=",this._returnDateField.value,"&rtime=",this._returnTimeSelect.getValue()].join("");
+		
+	var canvas = window.open(browserUrl, "Hotwire.com finds", props);
+	
+};
 SideStepFlightFindView.prototype._selectChangeListener = 
 function(ev) {
 	var selectObj = ev._args.selectObj;

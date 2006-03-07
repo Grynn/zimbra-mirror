@@ -94,7 +94,9 @@ function() {
 	this._checkinDateFieldId	= Dwt.getNextId();
 	this._checkinDateMiniCalBtnId	= Dwt.getNextId();
 	this._checkinTimeSelectId	= Dwt.getNextId();
-
+	this._countrySelectId = Dwt.getNextId();
+	this._stateSelectId = Dwt.getNextId();
+	
 	this._checkoutDateFieldId = Dwt.getNextId();
 	this._checkoutDateMiniCalBtnId = Dwt.getNextId();
 	this._checkoutTimeSelectId = Dwt.getNextId();
@@ -102,15 +104,26 @@ function() {
 	this._adultsSelectId = Dwt.getNextId();
 	this._roomsSelectId = Dwt.getNextId();
 	this._searchButtonId = Dwt.getNextId();
-
+	this._searchButtonId2 = Dwt.getNextId();	
+	this._searchButtonId3 = Dwt.getNextId();	
+	this._searchButtonId4 = Dwt.getNextId();		
 
 	html[i++] = "<table border=0 width=450 cellspacing=3>";		
 	html[i++] = "<tr>";
 
-	//address cell	
-	html[i++] = "<td width=100% colSpan=2>"
+	//country	
+	html[i++] = "<td width=50%>"
 	html[i++] = "<table border=0 cellspacing=1 width=100%>";		
-	html[i++] = "<tr><td width=100%><div style='float:left;'>\"City, State, Country\" or \"City, Country\"</div></td>";
+	html[i++] = "<tr><td width=100%><div style='float:left;'>\"Country\"</div></td>";
+	html[i++] = "<tr><td width=100% id='";
+	html[i++] = this._countrySelectId;
+	html[i++] = "'></td></tr></table>";
+	html[i++] = "</td>";
+
+	//address cell	
+	html[i++] = "<td width=50%>"
+	html[i++] = "<table border=0 cellspacing=1 width=100%>";		
+	html[i++] = "<tr><td width=100%><div style='float:left;'>\"City, State\"</div></td>";
 	html[i++] = "<tr><td width=100% id='";
 	html[i++] = this._checkinAddrCellId;
 	html[i++] = "'></td></tr></table>";
@@ -159,18 +172,33 @@ function() {
 	//rooms cell
 	html[i++] = "<td width=50%>";
 	html[i++] = "<table border=0 cellspacing=1>";	
-	html[i++] = "<tr><td>Youth (ages 12-17)</td></tr>";
+	html[i++] = "<tr><td>Rooms</td></tr>";
 	html[i++] = "<tr><td id='";
 	html[i++] = this._roomsSelectId;
 	html[i++] = "'></td></tr></table>";
 	html[i++] = "</td>";
 	html[i++] = "</tr>";	
 
-	//searh button cell
+	//searh buttons
 	html[i++] = "<tr>";
-	html[i++] = "<td align='center' colspan=2 id='";
+	html[i++] = "<td colspan=2 width=100%>";
+	html[i++] = "<table border=0 cellspacing=1>"
+	html[i++] = "<tr>";
+	html[i++] = "<td align='center' id='";
 	html[i++] = this._searchButtonId
-	html[i++] = "'>";
+	html[i++] = "'></td>";
+
+	html[i++] = "<td align='center' id='";
+	html[i++] = this._searchButtonId2
+	html[i++] = "'></td>";
+
+	html[i++] = "<td align='center' id='";
+	html[i++] = this._searchButtonId3
+	html[i++] = "'></td>";
+
+	html[i++] = "</tr>";
+	html[i++] = "</table>";
+	html[i++] = "</td>";
 	html[i++] = "</tr>";	
 
 	html[i++] = "</table>";
@@ -196,14 +224,71 @@ function () {
 									
 	this._checkoutDateButton = ZmApptViewHelper.createMiniCalButton(this, this._checkoutDateMiniCalBtnId, dateButtonListener, dateCalSelectionListener, true);	
 	
-	var searchButton = new DwtButton(this);	
-	searchButton.setText("Search multiple travel sites");
-	searchButton.setSize("170");
-	searchButton.addSelectionListener(new AjxListener(this, this._searchButtonListener));				
-	var searchButtonCell = document.getElementById(this._searchButtonId);
-	if (searchButtonCell)
-		searchButtonCell.appendChild(searchButton.getHtmlElement());
 
+	var searchSideStep=true;
+	var searchTravelocity=true;
+	var searchHotwire=true;
+	try {
+		searchSideStep = this.zimlet.getUserProperty("search_sidestep")
+		searchTravelocity = this.zimlet.getUserProperty("search_travelocity")		
+		searchHotwire = this.zimlet.getUserProperty("search_hotwire")				
+	} catch (ex) {
+	//sigh
+	}	
+	
+	if(searchSideStep=="true") {
+		var searchButton = new DwtButton(this);	
+		searchButton.setText("Search SideStep.com");
+		searchButton.setImage("SideStepIcon");		
+		searchButton.setSize("140");
+		searchButton.addSelectionListener(new AjxListener(this, this._searchButtonListener));				
+		var searchButtonCell = document.getElementById(this._searchButtonId);
+		if (searchButtonCell)
+			searchButtonCell.appendChild(searchButton.getHtmlElement());
+	}
+	
+	if(searchTravelocity=="true") {
+		var searchButton2 = new DwtButton(this);	
+		searchButton2.setText("Search travelocity.com");
+		searchButton2.setImage("TravelocityIcon");			
+		searchButton2.setSize("140");
+		searchButton2.addSelectionListener(new AjxListener(this, this._searchButtonListener2));				
+		var searchButtonCell2 = document.getElementById(this._searchButtonId2);
+		if (searchButtonCell2)
+			searchButtonCell2.appendChild(searchButton2.getHtmlElement());
+	}
+	
+	if(searchHotwire=="true") {
+		var searchButton3 = new DwtButton(this);	
+		searchButton3.setText("Search hotwire.com");
+		searchButton3.setImage("HotwireIcon");		
+		searchButton3.setSize("140");
+		searchButton3.addSelectionListener(new AjxListener(this, this._searchButtonListener3));				
+		var searchButtonCell3 = document.getElementById(this._searchButtonId3);
+		if (searchButtonCell3)
+			searchButtonCell3.appendChild(searchButton3.getHtmlElement());
+	}
+	
+	this._countrySelect = new DwtSelect(this, [	new DwtSelectOption("AG", false, "Antigua and Barbuda"),new DwtSelectOption("AW",false,"Aruba"),
+		new DwtSelectOption("AU",false,"Australia"),new DwtSelectOption("AT",false,"Austria"),
+		new DwtSelectOption("BS",false,"Bahamas"),new DwtSelectOption("BB",false,"Barbados"),new DwtSelectOption("BE",false,"Belgium"),
+		new DwtSelectOption("BM",false,"Bermuda"),new DwtSelectOption("ANB",false,"Bonaire"),new DwtSelectOption("BR",false,"Brazil"),new DwtSelectOption("CA",false,"Canada"),
+		new DwtSelectOption("KY",false,"Cayman Islands"),new DwtSelectOption("CN",false,"China"),new DwtSelectOption("ANC",false,"Curacao"),new DwtSelectOption("CZ",false,"Czech Republic"),
+		new DwtSelectOption("DK",false,"Denmark"),new DwtSelectOption("DO",false,"Dominican Republic"),new DwtSelectOption("GBE",false,"England"),new DwtSelectOption("FI",false,"Finland"),
+		new DwtSelectOption("FR",false,"France"),new DwtSelectOption("DE",false,"Germany"),new DwtSelectOption("GR",false,"Greece"),new DwtSelectOption("HU",false,"Hungary"),
+		new DwtSelectOption("IE",false,"Ireland"),new DwtSelectOption("IT",false,"Italy"),new DwtSelectOption("JM",false,"Jamaica"),new DwtSelectOption("MX",false,"Mexico"),
+		new DwtSelectOption("NL",false,"Netherlands"),new DwtSelectOption("AN",false,"Netherlands Antilles"),new DwtSelectOption("NO",false,"Norway"),new DwtSelectOption("PL",false,"Poland"),
+		new DwtSelectOption("PT",false,"Portugal"),new DwtSelectOption("PR",false,"Puerto Rico"),new DwtSelectOption("ANS",false,"Saba"),new DwtSelectOption("LC",false,"Saint Lucia"),
+		new DwtSelectOption("GBS",false,"Scotland"),new DwtSelectOption("SG",false,"Singapore"),new DwtSelectOption("ES",false,"Spain and Canary Islands"),new DwtSelectOption("KN",false,"St Kitts"),
+		new DwtSelectOption("ANE",false,"St. Eustacius"),new DwtSelectOption("ANM",false,"St. Martin/St. Maarten"),new DwtSelectOption("SE",false,"Sweden"),new DwtSelectOption("CH",false,"Switzerland"),
+		new DwtSelectOption("TW",false,"Taiwan"),new DwtSelectOption("TH",false,"Thailand"),new DwtSelectOption("TT",false,"Trinidad and Tobago"),new DwtSelectOption("TC",false,"Turks and Caicos Islands"),
+		new DwtSelectOption("GB",false,"United Kingdom"),new DwtSelectOption("US",true,"United States"),new DwtSelectOption("VG",false,"Virgin Islands British"),new DwtSelectOption("VI",false,"Virgin Islands US"),
+		new DwtSelectOption(null, false, "All Other Destinations")	
+	]);
+	var countryCell = document.getElementById(this._countrySelectId);
+	if (countryCell)
+		countryCell.appendChild(this._countrySelect.getHtmlElement());	
+	
 	this._adultSelect = new DwtSelect(this,[new DwtSelectOption("1", true, "1"), 
 	new DwtSelectOption("2", false, "2"),
 	new DwtSelectOption("3", false, "3"),
@@ -286,13 +371,52 @@ SideStepHotelFindView.prototype._searchButtonListener =
 function (ev) {
 	var props = [ "toolbar=no,location=no,status=yes,menubar=yes,scrollbars=yes,resizable=yes" ];
 	props = props.join(",");
-
+	var country = this._countrySelect.getValue();
+	
 	var browserUrl = ["http://myplanner.org/travel_hotel.php?","tripType=city",
 	"&checkinDate=",this._checkinDateField.value,"&checkoutDate=",this._checkoutDateField.value,
 	"&numberOfAdults=",this._adultSelect.getValue(),"&numberOfRooms=",this._roomsSelect.getValue(),
-	"&city=",this._checkinAddrField.getValue()].join("");
+	"&city=",this._checkinAddrField.getValue(),(country ? (","+country) : " ") ].join("");
 
+	var canvas = window.open(browserUrl, "SideStep.com finds", props);
 
-	var canvas = window.open(browserUrl, "Travel finds", props);
+};
+
+SideStepHotelFindView.prototype._searchButtonListener2 = 
+function (ev) {
+	var props = [ "toolbar=no,location=no,status=yes,menubar=yes,scrollbars=yes,resizable=yes" ];
+	props = props.join(",");
+	var country = this._countrySelect.getValue();
+	var city = this._checkinAddrField.getValue();
+	var state = ""
+	if(String(city).indexOf(",")>0) {
+		var parts = city.split(",")
+		if(parts.length>0) {
+			state = parts[1];
+			city = parts[0];
+		}
+	}
+	
+	var browserUrl = ["http://myplanner.org/travelocity_hotel.php?",
+	"&checkinDate=",this._checkinDateField.value,"&checkoutDate=",this._checkoutDateField.value,
+	"&numberOfAdults=",this._adultSelect.getValue(),"&city=",city,
+	"&country=",country,"&state=",state].join("");
+
+	var canvas = window.open(browserUrl, "Travelocity.com finds", props);
+
+};
+
+SideStepHotelFindView.prototype._searchButtonListener3 = 
+function (ev) {
+	var props = [ "toolbar=no,location=no,status=yes,menubar=yes,scrollbars=yes,resizable=yes" ];
+	props = props.join(",");
+	var country = this._countrySelect.getValue();
+	
+	var browserUrl = ["http://myplanner.org/hotwire_hotel.php?","tripType=city",
+	"&checkinDate=",this._checkinDateField.value,"&checkoutDate=",this._checkoutDateField.value,
+	"&numberOfAdults=",this._adultSelect.getValue(),"&numberOfRooms=",this._roomsSelect.getValue(),
+	"&city=",this._checkinAddrField.getValue(),(country ? (","+country) : " ") ].join("");
+
+	var canvas = window.open(browserUrl, "Hotwire.com finds", props);
 
 };

@@ -1,4 +1,4 @@
-<zimlet name="com_sidestep_travelagent" version="1.012" description="Search travel reservations across multiple engines">
+<zimlet name="com_sidestep_travelagent" version="2.03" description="Search travel reservations across multiple engines">
 <include>com_sidestep_travelagent.js</include>
 <include>SideStepFlightFindView.js</include>
 <include>SideStepCarFindView.js</include>
@@ -8,6 +8,8 @@
 <resource>hotel.gif</resource>
 <resource>air.gif</resource>
 <resource>car.gif</resource>
+<resource>hotwire.gif</resource>
+<resource>travelocity.gif</resource>
 <!--include>http://www.sidestep.com/common/js/prototype-1.3.1.js</include-->
 <includeCSS>com_sidestep_travelagent.css</includeCSS>	
 <handlerObject>Com_SideStep_TravelAgent</handlerObject>
@@ -24,6 +26,9 @@
 	</zimletPanelItem>
 	<userProperties>
 		<property type="string" minLength="3" maxLength="4"  name="myairport" label="My airport" visible="true" value="SFO"/>
+		<property type="boolean"  name="search_sidestep" label="Show SideStep.com button" visible="true" value="true"/>
+		<property type="boolean"  name="search_travelocity" label="Show Travelocity.com button" visible="true" value="true"/>
+		<property type="boolean"  name="search_hotwire" label="Show Hotwire.com button" visible="true" value="true"/>		
 	</userProperties>
 </zimlet>
 

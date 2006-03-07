@@ -15,12 +15,34 @@
   overflow: hidden;
 }
 
+.ImgSideStepIcon {
+  background: url("sidestep.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.ImgHotwireIcon {
+  background: url("hotwire.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.ImgTravelocityIcon {
+  background: url("travelocity.gif") no-repeat 0 0;
+  width: 18px;
+  height: 16px;
+  overflow: hidden;
+}
+
 .ImgSideStep-air {
   background: url("air.gif") no-repeat 0 0;
   width: 38px;
   height: 16px;
   overflow: hidden;
 }
+
 .ImgSideStep-hotel {
   background: url("hotel.gif") no-repeat 0 0;
   width: 14px;
