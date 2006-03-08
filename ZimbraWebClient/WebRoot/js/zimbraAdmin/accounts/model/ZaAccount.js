@@ -61,7 +61,7 @@ ZaAccount.A_initials = "initials"; //middle initial
 ZaAccount.A_city = "l";
 ZaAccount.A_orgUnit = "ou";
 ZaAccount.A_office = "physicalDeliveryOfficeName";
-ZaAccount.A_postalAddress = "postalAddress";
+ZaAccount.A_street = "street";
 ZaAccount.A_zip = "postalCode";
 ZaAccount.A_state = "st";
 ZaAccount.A_mailDeliveryAddress = "zimbraMailDeliveryAddress";
@@ -1085,7 +1085,7 @@ ZaAccount.myXModel = {
 		{id:ZaAccount.A_city, type:_STRING_, ref:"attrs/"+ZaAccount.A_city},
 		{id:ZaAccount.A_orgUnit, type:_STRING_, ref:"attrs/"+ZaAccount.A_orgUnit},
 		{id:ZaAccount.A_office, type:_STRING_, ref:"attrs/"+ZaAccount.A_office},
-		{id:ZaAccount.A_postalAddress, type:_STRING_, ref:"attrs/"+ZaAccount.A_postalAddress},
+		{id:ZaAccount.A_street, type:_STRING_, ref:"attrs/"+ZaAccount.A_street},
 		{id:ZaAccount.A_zip, type:_STRING_, ref:"attrs/"+ZaAccount.A_zip},
 		{id:ZaAccount.A_state, type:_STRING_, ref:"attrs/"+ZaAccount.A_state},
 		{id:ZaAccount.A_mailDeliveryAddress, type:_STRING_, ref:"attrs/"+ZaAccount.A_mailDeliveryAddress},
