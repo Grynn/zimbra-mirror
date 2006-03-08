@@ -98,8 +98,8 @@ function(list) {
 
 /**
 * Returns the items that have been selected. If there are multiple transfer 
-* buttons, then a hash with a list for each one is returned. Otherwise, a
-* single list is returned.
+* buttons, then a hash with a vector for each one is returned. Otherwise, a
+* single vector is returned.
 */
 DwtChooser.prototype.getItems =
 function() {
