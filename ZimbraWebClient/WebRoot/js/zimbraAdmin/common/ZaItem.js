@@ -134,10 +134,10 @@ function (type, app) {
 			return new ZaServer(app);
 
 		case ZaItem.MAILQ_ITEM:
-			return new ZaPostQItem(app);
+			return new ZaMTAItem(app);
 
 		case ZaItem.MAILQ:
-			return new ZaPostQ(app);
+			return new ZaMTA(app);
 
 	}
 }

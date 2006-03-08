@@ -234,22 +234,22 @@ ZaSearch._temporaryMailQSearchResults["incoming"]["usa.net"] = [
 ]; 
 
 ZaSearch.searchMailQ = function (app, queue, destination,origin,error,limit, offset,sortBy,sortAscending) {
-	var list = new ZaList(ZaPostQItem,app);
+	var list = new ZaList(ZaMTAItem,app);
 	//Temporary using static data
 	var q =  ZaSearch._temporaryMailQSearchResults[queue];
 	if(q) {
 		var cnt = q.length;
 		for(var i=0;i<cnt;i++) {
 			if(destination && !origin) {
-				if(q[i][ZaPostQ.A_destination] == destination) {
+				if(q[i][ZaMTA.A_destination] == destination) {
 					list.add(q[i]);
 				}
 			} else if(!destination && origin) {
-				if(q[i][ZaPostQ.A_origin] == origin) {
+				if(q[i][ZaMTA.A_origin] == origin) {
 					list.add(q[i]);
 				}
 			} else if(destination && origin) {
-				if( (q[i][ZaPostQ.A_origin] == origin) && (q[i][ZaPostQ.A_destination] == destination)){
+				if( (q[i][ZaMTA.A_origin] == origin) && (q[i][ZaMTA.A_destination] == destination)){
 					list.add(q[i]);
 				}				
 			} else if(!destination && !origin) {

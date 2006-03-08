@@ -481,7 +481,7 @@ function() {
 				var cnt = mtaList.length;
 				for(var ix=0; ix< cnt; ix++) {
 					var ti1 = new DwtTreeItem(this._postqTi);			
-					ti1.setText(mtaList[ix][ZaPostQ.A_MTAName]);	
+					ti1.setText(mtaList[ix][ZaMTA.A_MTAName]);	
 					ti1.setImage("StatisticsByServer");
 					ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._POSTQ_BY_SERVER_VIEW);
 					ti1.setData(ZaOverviewPanelController._OBJ_ID, mtaList[ix].id);
@@ -660,7 +660,7 @@ ZaOverviewPanelController.cosListTreeListener = function (ev) {
 
 ZaOverviewPanelController.postqTreeListener = function (ev) {
 	if(this._app.getCurrentController()) {
-		this._app.getCurrentController().switchToNextView(this._app.getPostQListController(), ZaPostQListController.prototype.show, ZaPostQ.getAll(this._app));
+		this._app.getCurrentController().switchToNextView(this._app.getPostQListController(), ZaMTAListController.prototype.show, ZaMTA.getAll(this._app));
 	} else {
 		this._app.getPostQListController().show(ZaServer.getAll(this._app));
 	}
@@ -669,7 +669,7 @@ ZaOverviewPanelController.postqTreeListener = function (ev) {
 ZaOverviewPanelController.postqByServerTreeListener = function (ev) {
 	var currentServer = this._app.getPostQList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID));
 	if(this._app.getCurrentController()) {
-		this._app.getCurrentController().switchToNextView(this._app.getPostQController(), ZaPostQController.prototype.show,currentServer);
+		this._app.getCurrentController().switchToNextView(this._app.getPostQController(), ZaMTAController.prototype.show,currentServer);
 	} else {					
 		this._app.getPostQController().show(currentServer);
 	}
