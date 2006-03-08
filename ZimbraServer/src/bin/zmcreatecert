@@ -51,14 +51,24 @@ mkdir -p ${BASE}/server
 
 mkdir -p ${TCONF}
 
-getHostInfo() {
+hostname=${zimbra_server_hostname}
 
-	H=`/opt/zimbra/bin/zmlocalconfig -m nokey zimbra_server_hostname`;
-
-}
+if [ "x$1" != "x" ]; then
+	hostname=$1
+	shift;
+fi
 
 createConf() {
-	cat ${CONF}/zmssl.cnf.in | sed -e "s/@@HOSTNAME@@/$H/" > ${BASE}/zmssl.cnf
+	ALTNAMES=""
+	for alt in $*; do
+		if [ "x$ALTNAMES" = "x" ]; then
+			ALTNAMES="subjectAltName = DNS:${hostname},DNS:${alt}"
+		else
+			ALTNAMES="${ALTNAMES},DNS:${alt}"
+		fi
+	done
+	cat ${CONF}/zmssl.cnf.in | sed -e "s/@@HOSTNAME@@/$hostname/" \
+		-e "s/@@ALTNAMES@@/$ALTNAMES/" > ${BASE}/zmssl.cnf
 }
 
 createSerial() {
@@ -90,7 +100,7 @@ createKeyStore() {
 
 	rm -f ${TCONF}/keystore
 
-	keytool -genkey -dname "CN=$H, OU=Zimbra, O=Zimbra, L=NA, S=NA, C=US" \
+	keytool -genkey -dname "CN=$hostname, OU=Zimbra, O=Zimbra, L=NA, S=NA, C=US" \
 		-alias tomcat -keyalg RSA -keysize 1024 -keystore ${TCONF}/keystore \
 		-storetype JKS -storepass zimbra -keypass zimbra
 
@@ -127,6 +137,7 @@ signCertReq() {
 
 	openssl x509 -CA ${BASE}/ca/ca.pem -CAkey ${BASE}/ca/ca.key \
 		-CAserial ${BASE}/ca/ca.srl -req -in ${BASE}/server/tomcat.csr \
+		-extensions v3_req -extfile ${BASE}/zmssl.cnf \
 		-out ${BASE}/server/tomcat.crt -days 365
 
 	cp ${BASE}/server/server.crt ${CONF}/slapd.crt
@@ -137,9 +148,7 @@ signCertReq() {
 
 }
 
-getHostInfo
-
-createConf
+createConf $@
 
 createSerial
 

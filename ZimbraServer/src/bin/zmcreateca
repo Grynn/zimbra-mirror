@@ -36,14 +36,26 @@ mkdir -p ${BASE}/ca
 mkdir -p ${BASE}/cert
 mkdir -p ${BASE}/server
 
-getHostInfo() {
+hostname=${zimbra_server_hostname}
 
-	H=`/opt/zimbra/bin/zmlocalconfig -m nokey zimbra_server_hostname`;
-
-}
+if [ "x$1" != "x" ]; then
+	hostname=$1
+	shift;
+fi
 
 createConf() {
-	cat ${CONF}/zmssl.cnf.in | sed -e "s/@@HOSTNAME@@/$H/" > ${BASE}/zmssl.cnf
+
+	ALTNAMES=""
+	for alt in $*; do
+		if [ "x$ALTNAMES" = "x" ]; then
+			ALTNAMES="subjectAltName = DNS:${hostname},DNS:${alt}"
+		else
+			ALTNAMES="${ALTNAMES},DNS:${alt}"
+		fi
+	done
+
+	cat ${CONF}/zmssl.cnf.in | sed -e "s/@@HOSTNAME@@/$hostname/" \
+		-e "s/@@ALTNAMES@@/$ALTNAMES/" > ${BASE}/zmssl.cnf
 }
 
 createKey() {
@@ -66,9 +78,7 @@ createCert() {
 
 }
 
-getHostInfo
-
-createConf
+createConf "$@"
 
 createKey
 
