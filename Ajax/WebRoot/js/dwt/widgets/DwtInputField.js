@@ -22,8 +22,8 @@
 * This class represents an input field..
 *
 * CSS Elements
-*	<className> input - specifies the look of the input field during normal editing
-*   <className>-error input - specifies the look of the input field in an error state
+*	<className> input 			specifies the look of the input field during normal editing
+*   <className>-error input		specifies the look of the input field in an error state
 *
 *
 * @author Ross Dargahi
@@ -48,7 +48,8 @@ function DwtInputField(params) {
 	DwtControl.call(this, params.parent, params.className, params.posStyle);
 
 	this._type = params.type ? params.type : DwtInputField.STRING;
-	this._errorIconStyle = params.errorIconStyle ? params.errorIconStyle : DwtInputField.ERROR_ICON_RIGHT;
+	this._errorIconStyle = params.errorIconStyle ? params.errorIconStyle :
+							params.validator ? DwtInputField.ERROR_ICON_RIGHT : DwtInputField.ERROR_ICON_NONE;
 	this._validationStyle = params.validationStyle ? params.validationStyle : DwtInputField.ONEXIT_VALIDATION;
 
 	var inputFieldId = Dwt.getNextId();
