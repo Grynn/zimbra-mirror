@@ -1180,7 +1180,14 @@ HTML>BODY .RadioGrouperLabel {
 	border-top:1px solid #EEEEEE;
 	border-right:1px solid gray;
 	border-bottom:1px solid gray;
-	padding:0;
+}
+
+.oselect_choice_table_scrolled {
+	border-collapse:collapse;
+	border-left:1px solid #CCCCCC;
+	border-top:0px;
+	border-right:0px;
+	border-bottom:1px solid black;
 }
 
 .oselect_menu {

@@ -147,8 +147,9 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 		//menu does not fit downwards - check if it fits upwards
 		if((bounds.top - menuHeight) > WINDOW_GUTTER) {
 			//yes - it fits upwards
-			menu.style.top = parseInt(bounds.top) - menuHeight;
-			
+			menu.getElementsByTagName("table")[0].style.width = parseInt(bounds.width);
+			menu.style.width = parseInt(bounds.width);	
+			menu.getElementsByTagName("table")[0].className = this.getChoiceTableCssClass();				
 		} else {
 			/*
 			* menu is too big to expand either up or down 
@@ -163,11 +164,14 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 				menu.style.top	= 	parseInt(menu.style.top)+2;				
 				menu.style.height = wh-WINDOW_GUTTER-parseInt(menu.style.top);								
 			}
-						
+			menu.style.width = parseInt(bounds.width)+2;					
 			menu.style.overflow="auto";	
-			//menu.style.width = parseInt(bounds.width)+2;
-		}
-		
+			menu.getElementsByTagName("table")[0].className = this.getChoiceScrollTableCssClass();
+		} 
+	} else {
+		menu.getElementsByTagName("table")[0].style.width = parseInt(bounds.width);
+		menu.style.width = parseInt(bounds.width);	
+		menu.getElementsByTagName("table")[0].className = this.getChoiceTableCssClass();
 	}
 	menu.style.zIndex = 1000000;
 	if (this.$hideListener == null) {
@@ -511,6 +515,10 @@ OSelect1_XFormItem.prototype.getMenuCssClass = function () {
 OSelect1_XFormItem.prototype.getChoiceTableCssClass = function () {
 	return this.cssClass + "_choice_table";
 }
+OSelect1_XFormItem.prototype.getChoiceScrollTableCssClass = function () {
+	return this.cssClass + "_choice_table_scrolled";
+}
+
 OSelect1_XFormItem.prototype.getChoiceCssClass = function () {
 	return this.cssClass + "_choice";
 }
@@ -521,19 +529,19 @@ OSelect1_XFormItem.prototype.getChoiceSelectedCssClass = function () {
 
 
 OSelect1_XFormItem.prototype.outputChoicesHTMLStart = function(html, indent) {
-	//html.append(indent, "<table id=", this.getId(),"_menu_table class=", this.getChoiceTableCssClass(), ">\r");
-	html.append(indent, "<div width=100% style='overflow:visible;' id=", this.getId(),"_menu_table class=", this.getChoiceTableCssClass(), ">\r");
+	html.append(indent, "<table cellspacing=0 cellpadding=0 id=", this.getId(),"_menu_table class=", this.getChoiceTableCssClass(), ">\r");
+	//html.append(indent, "<div width=100% style='overflow:visible;' id=", this.getId(),"_menu_table class=", this.getChoiceTableCssClass(), ">\r");
 }
 OSelect1_XFormItem.prototype.outputChoicesHTMLEnd = function(html, indent) {
-	//html.append(indent, "</table>\r");
-	html.append(indent, "</div>\r");
+	html.append(indent, "</table>\r");
+	//html.append(indent, "</div>\r");
 }
 
 OSelect1_XFormItem.prototype.getChoiceHTML = function (itemNum, value, label, cssClass, indent) {
-
-	//try DIVs
-	
 	var ref = this.getFormGlobalRef() + ".getItemById('"+ this.getId()+ "')";
+	//try DIVs
+	/*
+	
 	return AjxBuffer.concat(indent,
 		"<div width=100% class=", cssClass, 
 			" onmouseover=\"",ref, ".onChoiceOver(", itemNum,", event||window.event)\"",
@@ -543,7 +551,13 @@ OSelect1_XFormItem.prototype.getChoiceHTML = function (itemNum, value, label, cs
 		">",
 				label,
 		"</div>\r"
-	);
+	);*/
+	return AjxBuffer.concat("<tr><td><div class=", cssClass, 
+			" onmouseover=\"",ref, ".onChoiceOver(", itemNum,", event||window.event)\"",
+			" onmouseout=\"",ref, ".onChoiceOut(", itemNum,", event||window.event)\"",
+			" onclick=\"",ref, ".onChoiceClick(", itemNum,", event||window.event)\"",
+			" itemnum = '", itemNum, "'",">",label,	"</div></td></tr>");
+	
 }
 
 
