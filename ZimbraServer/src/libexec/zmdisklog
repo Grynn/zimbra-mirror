@@ -34,7 +34,7 @@ use Zimbra::Mon::Logger;
 # Exit if software-only node.
 exit(0) unless (-f '/opt/zimbra/conf/localconfig.xml');
 
-my $platform=`/opt/zimbra/bin/get_plat_tag.sh`;
+my $platform=`/opt/zimbra/libexec/get_plat_tag.sh`;
 chomp $platform;
 
 my $MNTCMD;

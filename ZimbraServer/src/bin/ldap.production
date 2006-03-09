@@ -57,6 +57,7 @@ start()
 	checkrunning
 	if [ $RUNNING = 0 ]; then
 		# Run db_recover on startup, in case of power failure.
+		/opt/zimbra/libexec/zmconfigure /opt/zimbra/conf/slapd.conf.in /opt/zimbra/conf/slapd.conf
 		if [ -x /opt/zimbra/sleepycat/bin/db_recover ]; then
 			/opt/zimbra/sleepycat/bin/db_recover -h /opt/zimbra/openldap-data -v
 		fi

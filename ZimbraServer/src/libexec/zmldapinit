@@ -59,17 +59,17 @@ zimbra_sha=`/opt/zimbra/openldap/sbin/slappasswd -s ${zimbra_ldap_password}`
 # Update slapd.conf
 
 sed -e "s|^rootpw.*|rootpw ${root_sha}|" \
-	${source_config_dir}/slapd.conf > ${config_dir}/slapd.conf
+	${source_config_dir}/slapd.conf > ${config_dir}/slapd.conf.in
 
 if [ -f "/opt/zimbra/lib/conf/zimbra-ext.schema" ]; then
-	plat=`/opt/zimbra/bin/get_plat_tag.sh`
+	plat=`/opt/zimbra/libexec/get_plat_tag.sh`
 	if [ "x$plat" = "xMACOSX" ]; then
 		sed -e '\|/opt/zimbra/openldap/etc/openldap/schema/zimbra.schema| a\
-		include "/opt/zimbra/lib/conf/zimbra-ext.schema"' ${config_dir}/slapd.conf > /tmp/slapd.conf
+		include "/opt/zimbra/lib/conf/zimbra-ext.schema"' ${config_dir}/slapd.conf.in > /tmp/slapd.conf
 	else
-		sed -e '\|/opt/zimbra/openldap/etc/openldap/schema/zimbra.schema| a include "/opt/zimbra/lib/conf/zimbra-ext.schema"' ${config_dir}/slapd.conf > /tmp/slapd.conf
+		sed -e '\|/opt/zimbra/openldap/etc/openldap/schema/zimbra.schema| a include "/opt/zimbra/lib/conf/zimbra-ext.schema"' ${config_dir}/slapd.conf.in > /tmp/slapd.conf
 	fi
-	mv -f /tmp/slapd.conf ${config_dir}/slapd.conf
+	mv -f /tmp/slapd.conf ${config_dir}/slapd.conf.in
 fi
 
 # Update zimbra.ldif
