@@ -36,17 +36,13 @@ Contributor(s):
     <style type="text/css">
       <!--
 
-	        @import url(/zimbra/img/loRes/imgs.css?v=060123132725);
-	        @import url(/zimbra/img/loRes/skins/steel/skin.css?v=060123132725);
+		@import url(/zimbra/img/loRes/imgs.css?v=060307123104);
+		@import url(/zimbra/img/loRes/skins/steel/skin.css?v=060307123104);
 	
-	        @import url(/zimbra/js/zimbraMail/config/style/dwt.css?v=060123132725);
 	        @import url(/zimbra/js/zimbraMail/config/style/common.css?v=060123132725);
-	        @import url(/zimbra/js/zimbraMail/config/style/msgview.css?v=060123132725);
-	        @import url(/zimbra/js/zimbraMail/config/style/zm.css?v=060123132725);
-	        @import url(/zimbra/js/zimbraMail/config/style/spellcheck.css?v=060123132725);
-	        @import url(/zimbra/skins/steel/skin.css?v=060123132725);
+	        /* @import url(/zimbra/skins/steel/skin.css?v=060123132725); */
 
-        @import url("../../js/zimbraMail/config/style/dwt.css");
+	@import url(/zimbra/js/ajax/config/style/dwt.css?v=060307123104);
         @import url(style.css);
       -->
     </style>

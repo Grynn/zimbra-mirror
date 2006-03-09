@@ -620,8 +620,12 @@ Dwt.setSelectionText = function(input, text) {
 	var start = Dwt.getSelectionStart(input);
 	var end = Dwt.getSelectionEnd(input);
 	var str = input.value;
-	input.value = [ str.substr(0, start),
-			text,
-			str.substr(end) ].join("");
+	var val = [ str.substr(0, start),
+		    text,
+		    str.substr(end) ].join("");
+	if (typeof input.setValue == "function")
+		input.setValue(val);
+	else
+		input.value = val;
 	Dwt.setSelectionRange(input, start, start + text.length);
 };

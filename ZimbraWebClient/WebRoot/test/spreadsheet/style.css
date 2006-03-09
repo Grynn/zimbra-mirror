@@ -100,3 +100,9 @@
   height: 16px;
   overflow: hidden;
 }
+.ImgSpreadSheetSum {
+  background: url("img/sum.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
