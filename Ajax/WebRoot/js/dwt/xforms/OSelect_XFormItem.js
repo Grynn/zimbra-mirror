@@ -123,7 +123,7 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 	menu.style.top = parseInt(bounds.top) + parseInt(bounds.height) - 1;
 	var choices = this.getNormalizedChoices();
 	if(choices && choices.values) {
-		menu.style.width = bounds.width;
+	//	menu.style.width = bounds.width;
 		menu.style.overflow="hidden";
 		menu.style.height = (parseInt(bounds.height-3)*choices.values.length)+3;
 	}
@@ -165,7 +165,7 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 			}
 						
 			menu.style.overflow="auto";	
-			menu.style.width = parseInt(bounds.width)+2;
+			//menu.style.width = parseInt(bounds.width)+2;
 		}
 		
 	}
