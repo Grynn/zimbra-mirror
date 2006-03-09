@@ -30,7 +30,7 @@ build:
 	LD_LIBRARY_PATH=/opt/zimbra/sleepycat-$(BDB_VERSION)/lib \
 	CPPFLAGS=-I/opt/zimbra/sleepycat-$(BDB_VERSION)/include \
 	LDFLAGS=-L/opt/zimbra/sleepycat-$(BDB_VERSION)/lib \
-	$(ENVMOD) ./configure.zimbra --prefix=$(ZIMBRA_HOME)/openldap-$(LDAP_VERSION); \
+	$(ENVMOD) ./configure.zimbra --prefix=$(ZIMBRA_HOME)/openldap-$(LDAP_VERSION) --enable-crypt; \
 	LDFLAGS="-all-static -static" make; make install)
 	(cd $(ZIMBRA_HOME); ln -s openldap-$(LDAP_VERSION) openldap)
 
