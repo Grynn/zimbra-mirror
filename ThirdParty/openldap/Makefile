@@ -19,7 +19,7 @@ ifeq ($(BUILD_PLATFORM), MACOSX)
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
-LDAP_VERSION ?= 2.2.28
+LDAP_VERSION ?= 2.3.20
 
 all: build tar
 
