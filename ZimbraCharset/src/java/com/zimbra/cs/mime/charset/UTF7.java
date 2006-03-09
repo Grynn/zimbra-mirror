@@ -65,7 +65,7 @@ public class UTF7 extends Charset {
 
 		protected CoderResult implFlush(CharBuffer out) {
             if (shifted && decoder != 0)
-                return CoderResult.malformedForLength(1);
+                return CoderResult.malformedForLength(0);
             return CoderResult.UNDERFLOW;
 		}
 
@@ -75,7 +75,7 @@ public class UTF7 extends Charset {
                     return CoderResult.OVERFLOW;
                 byte c = in.get();
                 if (c > MAX_UTF7_CHAR_VALUE)
-                    return CoderResult.malformedForLength(1);
+                    return CoderResult.malformedForLength(0);
                 if (shifted) {
                     byte decodedChar = INVERSE_BASE_64[c];
                     if (decodedChar == NON_BASE_64) {
@@ -83,7 +83,7 @@ public class UTF7 extends Charset {
                         if (first && c == END_SHIFT)
                             out.put(BEGIN_SHIFT);
                         if (decoder != 0)
-                            return CoderResult.malformedForLength(1);
+                            return CoderResult.malformedForLength(0);
                         bits = 0;
                         if (c == END_SHIFT)
                             continue;
