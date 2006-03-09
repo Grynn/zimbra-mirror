@@ -513,10 +513,11 @@ function(id) {
 * Moves items to the target list.
 *
 * @param items	[array]		list of items to move
-* @param id		[string]	ID of the transfer button that was used
+* @param id		[string]*	ID of the transfer button that was used
 */
 DwtChooser.prototype.transfer =
 function(items, id) {
+	id = id ? id : this._activeButtonId;
 	this._setActiveButton(id);
 	for (var i = 0; i < items.length; i++) {
 		var item = items[i];
