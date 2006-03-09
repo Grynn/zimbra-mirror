@@ -20,6 +20,7 @@ Com_SideStep_TravelAgent.prototype = new ZmZimletBase;
 Com_SideStep_TravelAgent.prototype.constructor = Com_SideStep_TravelAgent;
 //Map of airline codes 
 
+Com_SideStep_TravelAgent.ZIPCODE_CACHE = [];
 
 Com_SideStep_TravelAgent.prototype.singleClicked =
 function () {
@@ -73,6 +74,9 @@ function (homeOptions, workOptions, workZip, homeZip,addr) {
 
 Com_SideStep_TravelAgent.prototype.findAirports = 
 function (zipcode) {
+	if(Com_SideStep_TravelAgent.ZIPCODE_CACHE[zipcode]) {
+		return Com_SideStep_TravelAgent.ZIPCODE_CACHE[zipcode];
+	}
 	zipcode = AjxStringUtil.urlEncode(zipcode).replace(/\+/g, "%20");
 	
 	var url = [ZmZimletBase.PROXY,AjxStringUtil.urlEncode("http://www.airnav.com/cgi-bin/airport-search?fieldtypes=a&length=5000&paved=Y&mindistance=0&maxdistance=40&distanceunits=mi&use=u&place="), AjxStringUtil.urlEncode(zipcode)].join("");
@@ -98,6 +102,8 @@ function (zipcode) {
 	} catch (ex){
 			//
 	}
+	// Cache Zip Lookup
+	Com_SideStep_TravelAgent.ZIPCODE_CACHE[zipcode] = options;
 	return options;	
 }
 
