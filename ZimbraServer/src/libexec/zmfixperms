@@ -41,8 +41,8 @@ chown -R zimbra:zimbra /opt/zimbra/a* /opt/zimbra/[c-ot-z]* /opt/zimbra/s[a-su-z
 chown -R root:$ROOTGROUP /opt/zimbra/libexec
 chown -R root:$ROOTGROUP /opt/zimbra/bin
 chown -R root:$ROOTGROUP /opt/zimbra/lib
-if [ -d /opt/zimbra/jdk1.5.0_05 ]; then
-	chown -R root:$ROOTGROUP /opt/zimbra/jdk1.5.0_05
+if [ -d /opt/zimbra/jdk1.5.0_06 ]; then
+	chown -R root:$ROOTGROUP /opt/zimbra/jdk1.5.0_06
 fi
 
 chown root:$ROOTGROUP /opt/zimbra
