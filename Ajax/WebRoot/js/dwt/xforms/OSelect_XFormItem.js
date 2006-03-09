@@ -63,8 +63,12 @@ OSelect1_XFormItem.prototype.updateElement = function (newValue) {
 	var el = this.getDisplayElement();
 
 	if (el) {
-		el.value = newValue;
-		el.readOnly = !this.getInheritedProperty("editable");
+		if(this.getInheritedProperty("editable")) {
+			el.value = newValue;
+		} else {
+			el.innerHTML = newValue;
+		}
+		//el.readOnly = !this.getInheritedProperty("editable");
 	}
 }
 
@@ -454,20 +458,34 @@ OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput, updateScript, in
 		element.innerHTML = "";
 	}
 
-	HTMLoutput.append(indent,
-		"<div id=", id, this.getCssString(),
-			" onclick=\"", this.getFormGlobalRef(), ".getItemById('",this.getId(),"').showMenu(this, event)\"",
-			" onselectstart=\"return false\"",
-			">",
-			"<table ", this.getTableCssString(), ">", 
-				"  <tr><td width=100%><input type=text id=", id, "_display class=", this.getDisplayCssClass(), " value='VALUE' ", 
-				" onchange=\"",ref, ".onValueTyped(this.value, event||window.event)\"", (this.getInheritedProperty("editable") ? " readOnly=false " : " readOnly=true "),
-				"></td>",
-					"<td>", this.getArrowButtonHTML(),"</td>", 
-				"</tr>", 
-			"</table>", 
-		"</div>"
-	);
+	if(this.getInheritedProperty("editable")) {
+		HTMLoutput.append(indent,
+			"<div id=", id, this.getCssString(),
+				" onclick=\"", this.getFormGlobalRef(), ".getItemById('",this.getId(),"').showMenu(this, event)\"",
+				" onselectstart=\"return false\"",
+				">",
+				"<table ", this.getTableCssString(), ">", 
+					"<tr><td width=100%><input type=text id=", id, "_display class=", this.getDisplayCssClass(), " value='VALUE' ", 
+					" onchange=\"",ref, ".onValueTyped(this.value, event||window.event)\"", (this.getInheritedProperty("editable") ? " readOnly=false " : " readOnly=true "),
+					"></td>",
+						"<td>", this.getArrowButtonHTML(),"</td>", 
+					"</tr>", 
+				"</table>", 
+			"</div>"
+		);
+	} else {
+		HTMLoutput.append(indent,
+			"<div id=", id, this.getCssString(),
+				" onclick=\"", this.getFormGlobalRef(), ".getItemById('",this.getId(),"').showMenu(this, event)\"",
+				" onselectstart=\"return false\"",
+				"><table ", this.getTableCssString(), ">",
+					"<tr><td width=100%><div id=", id, "_display class=", this.getDisplayCssClass(), ">VALUE</div></td>",
+						"<td>", this.getArrowButtonHTML(),"</td>", 
+					"</tr>", indent,
+				"</table>", indent,
+			"</div>"
+		);	
+	}
 }
 
 OSelect1_XFormItem.prototype.getArrowButtonHTML = function () {

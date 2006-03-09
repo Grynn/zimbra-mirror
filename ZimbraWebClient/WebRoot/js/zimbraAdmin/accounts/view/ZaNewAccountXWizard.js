@@ -239,8 +239,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 	var case1Items = [{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName, labelLocation:_LEFT_}];
 	if(ZaSettings.COSES_ENABLED) {
 		case1Items.push(
-			{ref:ZaAccount.A_COSId, type:_OSELECT1_, msgName:ZaMsg.NAD_ClassOfService,
-				label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_, 
+			{ref:ZaAccount.A_COSId, type:_OSELECT1_, editable:true, msgName:ZaMsg.NAD_ClassOfService,
+				label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_, editable:true,
 				choices:this._app.getCosListChoices(), onChange:ZaNewAccountXWizard.onCOSChanged
 			}
 		);
@@ -299,12 +299,12 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 								}
 							]
 						});
-	case1Items.push({ref:ZaAccount.A_accountStatus, type:_OSELECT1_, msgName:ZaMsg.NAD_AccountStatus,label:ZaMsg.NAD_AccountStatus, labelLocation:_LEFT_, choices:this.accountStatusChoices});
+	case1Items.push({ref:ZaAccount.A_accountStatus, type:_OSELECT1_, msgName:ZaMsg.NAD_AccountStatus, editable:false, label:ZaMsg.NAD_AccountStatus, labelLocation:_LEFT_, choices:this.accountStatusChoices});
 	case1Items.push({ref:ZaAccount.A_description, type:_INPUT_, msgName:ZaMsg.NAD_Description,label:ZaMsg.NAD_Description, labelLocation:_LEFT_, cssClass:"admin_xform_name_input"});
 	if(ZaSettings.SERVERS_ENABLED) {
 		case1Items.push({type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_MailServer, labelLocation:_LEFT_,
 							items: [
-								{ ref: ZaAccount.A_mailHost, type: _OSELECT1_, label: null, editable:true, choices: this._app.getServerListChoices2(), 
+								{ ref: ZaAccount.A_mailHost, type: _OSELECT1_, label: null, editable:false, choices: this._app.getServerListChoices2(), 
 									relevant:"instance[ZaAccount.A2_autoMailServer]==\"FALSE\" && form.getController().getServerListChoices2().getChoices().values.length != 0",
 									relevantBehavior:_DISABLE_
 							  	},
