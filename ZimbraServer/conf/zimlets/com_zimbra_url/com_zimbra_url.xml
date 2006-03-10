@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_url" version="1.0" description="URL">
+<zimlet name="com_zimbra_url" version="1.1" description="URL">
 	<include>url.js</include>
 	<resource>blank_pixel.gif</resource>
 	<handlerObject>Com_Zimbra_Url</handlerObject>
@@ -8,9 +8,5 @@
 		<matchOn>
 			<regex attrs="ig">((telnet:)|((https?|ftp|gopher|news|file):\/\/)|(www\.[\w\.\_\-]+))[^\s\xA0\(\)\&lt;\>\[\]\{\}\'\"]*</regex>
 		</matchOn>
-		<toolTip width="205" height="150">
- 		    <canvas style="inline"/>
-			<actionUrl target="'http://pthumbnails.alexa.com/image_server.cgi?id=' + document.domain + '&amp;url=' + ${objectContent}" />
-		</toolTip>
 	</contentObject>
 </zimlet>

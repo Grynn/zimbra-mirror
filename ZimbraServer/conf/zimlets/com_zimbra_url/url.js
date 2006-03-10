@@ -43,30 +43,31 @@ Com_Zimbra_Url.prototype.match =
 function(line, startIndex) {
 	this.RE.lastIndex = startIndex;
 	var m = this.RE.exec(line);
-	if (!m) {return null;}
-	
-	var last = m[0].charAt(m[0].length-1);
+	if (!m) {
+		return null;
+	}
+
+	var last = m[0].charAt(m[0].length - 1);
 	if (last == '.' || last == "," || last == '!') {
 		var m2 = {index: m.index };
-		m2[0] = m[0].substring(0, m[0].length-1);
+		m2[0] = m[0].substring(0, m[0].length - 1);
 		return m2;
 	} else {
 		return m;
 	}
 };
 
-// XXX need support for regex's on sub-var's
 Com_Zimbra_Url.prototype._getHtmlContent =
 function(html, idx, obj, context) {
 	var escapedUrl = obj.replace(/\"/g, '\"');
-	if (escapedUrl.substr(0,4) == 'www.') {
-		escapedUrl = "http://"+escapedUrl+"/";
+	if (escapedUrl.substr(0, 4) == 'www.') {
+		escapedUrl = "http://" + escapedUrl + "/";
 	}
-	html[idx++] = '<a target="_blank" href="'+escapedUrl+'">'+AjxStringUtil.htmlEncode(obj)+'</a>';	
+	html[idx++] = '<a target="_blank" href="' + escapedUrl + '">' + AjxStringUtil.htmlEncode(obj) + '</a>';
 	return idx;
 };
 
 Com_Zimbra_Url.prototype.toolTipPoppedUp =
 function(spanElement, obj, context, canvas) {
-	canvas.innerHTML = '<img src="'+this.getResource('blank_pixel.gif')+'" ' + Com_Zimbra_Url.THUMB_SIZE + ' style="background: url(' + Com_Zimbra_Url.THUMB_URL + obj + ')"/>';
+	canvas.innerHTML = '<img src="' + this.getResource('blank_pixel.gif') + '" ' + Com_Zimbra_Url.THUMB_SIZE + ' style="background: url(' + Com_Zimbra_Url.THUMB_URL + obj + ')"/>';
 };

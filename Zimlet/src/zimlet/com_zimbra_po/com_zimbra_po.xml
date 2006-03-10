@@ -4,7 +4,7 @@
 	<includeCSS>po.css</includeCSS>
 	<handlerObject>Com_Zimbra_Po</handlerObject>
 
-	<contentObject>
+	<contentObject type="po">
 		<matchOn>
 			<regex attrs="g">\bGR\w{6}-\w{5}\b</regex>
 		</matchOn>

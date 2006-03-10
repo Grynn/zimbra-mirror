@@ -254,6 +254,7 @@ function(htmlElement, incScroll) {
 
 Dwt.setSize =
 function(htmlElement, width, height) {
+	if(!htmlElement.style) {return;}
 	if (width = Dwt.checkPxVal(width, true))
 		htmlElement.style.width = width;
 	if (height = Dwt.checkPxVal(height, true))
