@@ -112,7 +112,8 @@ function(enable) {
 }
 
 ZaController.prototype.popupErrorDialog = 
-function(msg, ex, noExecReset)  {
+function(msg, ex, noExecReset,style)  {
+	style = style ? style : DwtMessageDialog.CRITICAL_STYLE;
 	if (!noExecReset)
 		this._execFrame = {func: null, args: null, restartOnError: false};
 	
@@ -149,7 +150,7 @@ function(msg, ex, noExecReset)  {
 		}
 	}
 	// popup alert
-	this._errorDialog.setMessage(msg, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+	this._errorDialog.setMessage(msg, detailStr, style, ZaMsg.zimbraAdminTitle);
 	if (!this._errorDialog.isPoppedUp()) {
 		this._errorDialog.popup();
 	}
