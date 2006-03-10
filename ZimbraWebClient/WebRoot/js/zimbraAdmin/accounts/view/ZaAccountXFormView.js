@@ -292,7 +292,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 								this.getForm().itemChanged(this, elementValue, event);
 							}
 						});
-	case1Items.push({type:_GROUP_, numCols:3, nowrap:true, width:200, msgName:ZaMsg.NAD_DisplayName,label:ZaMsg.NAD_DisplayName, labelLocation:_LEFT_, 
+	case1Items.push({type:_GROUP_, numCols:3, nowrap:true, width:200, msgName:ZaMsg.NAD_DisplayName,label:ZaMsg.NAD_DisplayName+":", labelLocation:_LEFT_, 
 							items: [
 								{ref:ZaAccount.A_displayname, type:_TEXTFIELD_, label:null,	cssClass:"admin_xform_name_input", width:150, onChange:ZaTabView.onFormFieldChanged, 
 									relevant:"instance[ZaAccount.A2_autodisplayname] == \"FALSE\"",

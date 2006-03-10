@@ -367,17 +367,17 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 					 {type:_GROUP_,  width:"100%", colSizes:[10,75,"auto",20],
 						items:[	
  						    {type:_CELLSPACER_, width:10, rowSpan:9},
-							{ref:ZaAccount.A_name, type:_EMAILADDR_, xmsgName:ZaMsg.NAD_AccountName, label: ZaMsg.DLXV_LabelListName, 
+							{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.DLXV_LabelListName, label: ZaMsg.DLXV_LabelListName +":", 
 								onChange:ZaTabView.onFormFieldChanged, forceUpdate:true, tableCssStyle:"width:100%", inputWidth:"100%"
 							},
-						    {ref:ZaAccount.A_displayname, type:_TEXTFIELD_, label:ZaMsg.NAD_DisplayName, width:"100%",
+						    {ref:ZaAccount.A_displayname, type:_TEXTFIELD_, label:ZaMsg.NAD_DisplayName+":", msgName:ZaMsg.NAD_DisplayName,width:"100%",
 						    	cssClass:"admin_xform_name_input", onChange:ZaTabView.onFormFieldChanged
 						    },							
-						    {ref:ZaAccount.A_description, type:_TEXTFIELD_, label: ZaMsg.DLXV_LabelDescription, width:"100%",
+						    {ref:ZaAccount.A_description, type:_TEXTFIELD_, label: ZaMsg.DLXV_LabelDescription+":",msgName: ZaMsg.DLXV_LabelDescription, width:"100%",
 						    	cssClass:"admin_xform_name_input", onChange:ZaTabView.onFormFieldChanged
 						    },
 							{ref: "zimbraMailStatus", type:_CHECKBOX_, trueValue:"enabled", falseValue:"disabled", align:_LEFT_,
-								label:ZaMsg.DLXV_LabelEnabled, labelLocation:_LEFT_,labelCssClass:"xform_label", cssStyle:"padding-left:0px", onChange:ZaTabView.onFormFieldChanged
+								label:ZaMsg.DLXV_LabelEnabled, msgName:ZaMsg.DLXV_LabelEnabled, labelLocation:_LEFT_,labelCssClass:"xform_label", cssStyle:"padding-left:0px", onChange:ZaTabView.onFormFieldChanged
 							},						    
 						    {type:_OUTPUT_, value:ZaMsg.DLXV_LabelListMembers, width:"100%", colSpan:2, cssClass:"xform_label_left", 
 								cssStyle:"padding-left:0px"},

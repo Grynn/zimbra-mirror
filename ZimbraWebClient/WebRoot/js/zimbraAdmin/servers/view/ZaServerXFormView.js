@@ -213,7 +213,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 		{type:_SWITCH_, items:[
 				{type:_CASE_, width:"100%",colSizes:["100px","300px"], relevant:"instance[ZaModel.currentTab] == 1", 
 					items:[
-						{ref:ZaServer.A_name, type:_OUTPUT_, label:ZaMsg.NAD_DisplayName, labelLocation:_LEFT_},
+						{ref:ZaServer.A_name, type:_OUTPUT_, label:ZaMsg.NAD_DisplayName+":", labelLocation:_LEFT_},
 						{ ref: ZaServer.A_description, type:_INPUT_, 
 						  label:ZaMsg.NAD_Description,cssClass:"admin_xform_name_input",
 						  onChange:ZaServerXFormView.onFormFieldChanged

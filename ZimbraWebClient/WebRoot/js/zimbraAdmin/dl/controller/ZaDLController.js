@@ -134,16 +134,57 @@ ZaDLController.prototype._saveChanges = function () {
 	var retval = false;
 	var newName = null;
 	try { 
+	if(this._view.getMyForm().hasErrors()) {
+		var errItems = this._view.getMyForm().getItemsInErrorState();
+		var dlgMsg = ZaMsg.CORRECT_ERRORS;
+		dlgMsg +=  "<br><ul>";
+		var i = 0;
+		for(var key in errItems) {
+			if(i > 19) {
+				dlgMsg += "<li>...</li>";
+				break;
+			}
+			if(key == "size") continue;
+			var label = errItems[key].getInheritedProperty("msgName");
+			if (!label && errItems[key].getLabel()) {
+				label = errItems[key].getLabel();
+			} else if(!label && errItems[key].getParentItem()) { //this might be a part of a composite
+				if(errItems[key].getParentItem().getInheritedProperty("msgName")) {
+					label = errItems[key].getParentItem().getInheritedProperty("msgName");
+				} else {
+					label = errItems[key].getParentItem().getLabel();
+				}
+			} 
+			if(label) {
+				if(label.substring(label.length-1,1)==":") {
+					label = label.substring(0, label.length-1);
+				}
+			}			
+			if(label) {
+				dlgMsg += "<li>";
+				dlgMsg +=label;			
+				dlgMsg += "</li>";
+			}
+			i++;
+		}
+		dlgMsg += "</ul>";
+		this.popupMsgDialog(dlgMsg, true);
+		return false;
+	}
 		var obj = this._view.getObject();
+		
+		if(!ZaDistributionList.checkValues(obj, this._app))
+			return retval;
+	
 		//check if need to rename
 		if(this._currentObject && obj.name != this._currentObject.name && this._currentObject.id) {
 		//	var emailRegEx = /^([a-zA-Z0-9_\-])+((\.)?([a-zA-Z0-9_\-])+)*@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-			if(!AjxUtil.EMAIL_RE.test(obj.name) ) {
+		/*	if(!AjxUtil.EMAIL_RE.test(obj.name) ) {
 				//show error msg
 				this._errorDialog.setMessage(ZaMsg.ERROR_ACCOUNT_NAME_INVALID, null, DwtMessageDialog.CRITICAL_STYLE, null);
 				this._errorDialog.popup();		
 				return retval;
-			}
+			}*/
 			newName = obj.name;
 		}		
 		

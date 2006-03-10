@@ -950,7 +950,7 @@ function() {
 		idx = this._addRow(ZaMsg.NAD_AccountStatus, 
 						ZaAccount._accountStatus(this.attrs[ZaAccount.A_accountStatus]), html, idx);
 		// TODO: COS
-		idx = this._addRow(ZaMsg.NAD_DisplayName, this.attrs[ZaAccount.A_displayname], html, idx);
+		idx = this._addRow(ZaMsg.NAD_DisplayName+":", this.attrs[ZaAccount.A_displayname], html, idx);
 		if(ZaSettings.SERVERS_ENABLED) {
 			idx = this._addRow(ZaMsg.NAD_MailServer, this.attrs[ZaAccount.A_mailHost], html, idx);
 		}

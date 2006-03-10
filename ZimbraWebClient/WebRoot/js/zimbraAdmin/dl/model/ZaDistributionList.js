@@ -304,7 +304,21 @@ function(tmpObj, app) {
 	return dl;
 }
 
-
+ZaDistributionList.checkValues = function(tmpObj, app) {
+	if(tmpObj.name == null || tmpObj.name.length < 1) {
+		//show error msg
+		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_DL_NAME_REQUIRED);
+		return false;
+	}
+	
+	//var emailRegEx = /^([a-zA-Z0-9_\-])+((\.)?([a-zA-Z0-9_\-])+)*@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+	if(!AjxUtil.EMAIL_RE.test(tmpObj.name) ) {
+		//show error msg
+		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_DL_NAME_INVALID);
+		return false;
+	}	
+	return true;
+}
 // ==============================================================
 // public accessor methods
 // ==============================================================
