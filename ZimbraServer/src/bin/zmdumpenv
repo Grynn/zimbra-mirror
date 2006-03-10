@@ -59,9 +59,16 @@ echo "----------------"
 memkb=$(zmsysmemkb)
 echo $memkb KB
 echo "----------------"
+if [ x$P != "xMACOSX" -a x$P != "xMACOSXx86" ]; then
+	echo "----------------"
+	freemem=`free -m`
+	echo FREE $freemem KB
+	echo "----------------"
+fi
+echo "----------------"
 cat /etc/hosts
 echo "----------------"
 cat /etc/resolv.conf
 echo "----------------"
-/etc/nsswitch.conf
+cat /etc/nsswitch.conf
 echo "----------------"
