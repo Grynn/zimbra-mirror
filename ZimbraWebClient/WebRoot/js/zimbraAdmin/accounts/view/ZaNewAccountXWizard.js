@@ -74,7 +74,7 @@ function () {
 	if(this._localXForm.hasErrors()) {
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 	} else {
-		if(this._containedObject.attrs[ZaAccount.A_lastName] && this._containedObject[ZaAccount.A_name])
+		if(this._containedObject.attrs[ZaAccount.A_lastName] && this._containedObject[ZaAccount.A_name].indexOf("@") > 0)
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
 	}
 }
