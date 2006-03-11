@@ -230,9 +230,11 @@ XForm.prototype.setController = function(controller) {
 XForm.prototype.getIsDirty = function () {
 	return this._isDirty;
 }
-XForm.prototype.setIsDirty = function(dirty) {
+XForm.prototype.setIsDirty = function(dirty, item) {
 	this._isDirty = (dirty == true);
-	this.notifyListeners(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new DwtXFormsEvent(this, null, this._isDirty));
+	//pass the current dirty XFORM item, so the event object can has the information which item is changed
+	if (typeof item == "undefined") item = null ; //to make it compatible with the previous version. 
+	this.notifyListeners(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new DwtXFormsEvent(this, item, this._isDirty));
 }
 
 
@@ -675,7 +677,7 @@ XForm.prototype.itemChanged = function (id, value, event) {
 	var event = new DwtXFormsEvent(this, item, value);
 	this.notifyListeners(DwtEvent.XFORMS_VALUE_CHANGED, event);
 
-	this.setIsDirty(true);
+	this.setIsDirty(true, item);
 	this.refresh();
 }
 
