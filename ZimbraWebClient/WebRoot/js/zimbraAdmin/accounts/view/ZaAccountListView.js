@@ -89,7 +89,11 @@ function(account, now, isDndIcon) {
 				break;
 				case ZaItem.ALIAS:
 					html[idx++] = AjxImg.getImageHtml("AccountAlias");				
-				break;								
+				break;	
+				//HC: Resource	
+				case ZaItem.RESOURCE:
+					html[idx++] = AjxImg.getImageHtml("Resource");				
+				break;											
 				default:
 					html[idx++] = AjxStringUtil.htmlEncode(account.type);
 				break;
@@ -113,7 +117,9 @@ function(account, now, isDndIcon) {
 				status = ZaAccount._accountStatus(account.attrs[ZaAccount.A_accountStatus]);
 			} else if (account.type == ZaItem.DL) {
 				status = account.attrs.zimbraMailStatus;
-			}
+			}else if ( account.type == ZaItem.RESOURCE) {
+				status = ZaResource.getAccountStatusLabel(account.attrs[ZaAccount.A_accountStatus]);
+			} 
 			html[idx++] = AjxStringUtil.htmlEncode(status);
 			html[idx++] = "</nobr></td>";		
 		} else if (id.indexOf(ZaAccount.A_description)==0) {		

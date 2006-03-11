@@ -40,7 +40,7 @@ function ZaAccountListController(appCtxt, container, app) {
    	this._popupOperations = new Array();			
    	
 	this._currentPageNum = 1;
-	this._currentQuery = new ZaSearchQuery("", [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS], false, "");
+	this._currentQuery = new ZaSearchQuery("", [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES], false, "");
 	this._currentSortField = ZaAccount.A_uid;
 	this._currentSortOrder = true;
 	this.pages = new Object();
@@ -119,6 +119,16 @@ ZaAccountListController.prototype.setDefaultType = function (type) {
 			newButton.addSelectionListener(this._newDLListener);
 			this._toolbar.getButton(ZaOperation.EDIT).setToolTipContent(ZaMsg.DLTBB_Edit_tt);
 			this._toolbar.getButton(ZaOperation.DELETE).setToolTipContent(ZaMsg.DLTBB_Delete_tt);
+		} else if (type == ZaItem.RESOURCE ){
+		  //HC: Resource 
+		  //TODO: need to customize it according to the resource
+			//newButton.setToolTipContent(ZaMsg.DLTBB_New_tt);
+			newButton.setToolTipContent("New Resource Account");
+			newButton.setImage("Resource");
+			newButton.setDisabledImage("ResourceDis");
+			newButton.addSelectionListener(this._newResListener);
+			this._toolbar.getButton(ZaOperation.EDIT).setToolTipContent(ZaMsg.RESBB_Edit_tt);
+			this._toolbar.getButton(ZaOperation.DELETE).setToolTipContent(ZaMsg.RESBB_Delete_tt);
 		}
 	}
 };
@@ -233,6 +243,10 @@ function(searchQuery) {
 				this._contentView._headerList[3]._sortable=false;
 				this._contentView.unsetSortedColStyle(this._contentView._headerList[3]._id);				
 			} else if(searchQuery.types[0] == ZaSearch.ACCOUNTS) {
+				this._contentView._headerList[3]._sortable=true;
+				this._contentView._headerList[3]._sortField = ZaAccount.A_accountStatus;
+			} else if (searchQuery.types[0] == ZaSearch.ACCOUNTS) {
+				//HC:Resource
 				this._contentView._headerList[3]._sortable=true;
 				this._contentView._headerList[3]._sortField = ZaAccount.A_accountStatus;
 			}
@@ -415,15 +429,25 @@ function () {
 	if(ZaSettings.DISTRIBUTION_LISTS_ENABLED) {
 		newMenuOpList.push(new ZaOperation(ZaOperation.NEW, ZaMsg.DLTBB_New_menuItem, ZaMsg.DLTBB_New_tt, "Group", "GroupDis", this._newDLListener));
 	}
+	
+	//HC: Resource
+	if(ZaSettings.RESOURCES_ENABLED) {
+		newMenuOpList.push(new ZaOperation(ZaOperation.NEW, ZaMsg.RESTBB_New_menuItem, ZaMsg.RESTBB_New_tt, "Resource", "ResourceDis", this._newResListener));
+	}
 		
 	if(this._defaultType == ZaItem.ACCOUNT || this._defaultType == ZaItem.ALIAS) {
 		this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", this._newAcctListener, 
 								   ZaOperation.TYPE_MENU, newMenuOpList));
-    } else if(this._defaultType == ZaItem.DL) {
+    } else if(this._defaultType == ZaItem.RESOURCE) {
+    	//HC: Resource
+		this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.RESTBB_New_tt, "Resource", "ResourceDis", this._newResListener, 
+									   ZaOperation.TYPE_MENU, newMenuOpList));
+    	
+    } else if(this._defaultType == ZaItem.DL) {    	
 		this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Group", "GroupDis", this._newDLListener, 
 									   ZaOperation.TYPE_MENU, newMenuOpList));
     	
-    }
+    } 
     this._toolbarOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.ACTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaAccountListController.prototype._editButtonListener)));
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaAccountListController.prototype._deleteButtonListener)));
 	if(ZaSettings.ACCOUNTS_CHPWD_ENABLED)
@@ -445,6 +469,8 @@ function () {
 	this._contentView = new ZaAccountListView(this._container, this._app);
 	this._newDLListener = new AjxListener(this, ZaAccountListController.prototype._newDistributionListListener);
 	this._newAcctListener = new AjxListener(this, ZaAccountListController.prototype._newAccountListener);
+	//HC:Resource
+	this._newResListener = new AjxListener(this, ZaAccountListController.prototype._newResourceListener);
 
     this._initToolbar();
 	//always add Help and navigation buttons at the end of the toolbar    
@@ -498,6 +524,22 @@ function(ev) {
 
 };
 
+//HC:Resource
+ZaAccountListController.prototype._newResourceListener =
+function(ev) {
+	try {
+		var newResource = new ZaResource(this._app);
+		if(!this._app._newResourceWizard)
+			this._app._newResourceWizard = new ZaNewResourceXWizard(this._container, this._app);	
+
+		this._app._newResourceWizard.setObject(newResource);
+		this._app._newResourceWizard.popup();
+	} catch (ex) {
+		this._handleException(ex, "ZaAccountListController.prototype._newResourceListener", null, false);
+	}
+}
+
+
 /**
 * This listener is called when the item in the list is double clicked. It call ZaAccountViewController.show method
 * in order to display the Account View
@@ -547,6 +589,9 @@ ZaAccountListController.prototype._editItem = function (item) {
 			account.load("id", item.attrs[ZaAlias.A_AliasTargetId], (!ZaSettings.COSES_ENABLED));
 			this._app.getAccountViewController().show(account);
 		}
+	} else if (type == ZaItem.RESOURCE ){
+		//HC:resource
+		this._app.getResourceController().show(item);
 	}
 };
 /**

@@ -151,6 +151,18 @@ function (domain) {
 	return this._controllers[ZaZimbraAdmin._DL_VIEW];
 };
 
+//HC:Resource
+ZaApp.prototype.getResourceController = 
+function () {
+	if (this._controllers[ZaZimbraAdmin._RESOURCE_VIEW] == null) {
+		this._controllers[ZaZimbraAdmin._RESOURCE_VIEW] = new ZaResourceController(this._appCtxt, this._container, this);
+		this._controllers[ZaZimbraAdmin._RESOURCE_VIEW].addCreationListener(new AjxListener(this.getAccountListController(), ZaAccountListController.prototype.handleAccountCreation));			
+		this._controllers[ZaZimbraAdmin._RESOURCE_VIEW].addRemovalListener(new AjxListener(this.getAccountListController(), ZaAccountListController.prototype.handleAccountRemoval));			
+		this._controllers[ZaZimbraAdmin._RESOURCE_VIEW].addChangeListener(new AjxListener(this.getAccountListController(), ZaAccountListController.prototype.handleAccountChange));
+	}
+	return this._controllers[ZaZimbraAdmin._RESOURCE_VIEW];
+};
+
 ZaApp.prototype.getDomainListController =
 function() {
 	if (this._controllers[ZaZimbraAdmin._DOMAINS_LIST_VIEW] == null) {

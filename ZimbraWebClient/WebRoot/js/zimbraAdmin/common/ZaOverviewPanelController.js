@@ -335,11 +335,19 @@ function() {
 		ti.setImage("Group");
 		ti.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW);
 	
+		//HC: Resource
+		ti = new DwtTreeItem(this._addressesTi);
+		ti.setText(ZaMsg.OVP_resources);
+		ti.setImage("Resource");
+		ti.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._RESOURCE_VIEW);
+		
 		this._addressesTi.addSeparator();
 		
 		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ACCOUNTS_LIST_VIEW] = ZaOverviewPanelController.accountListTreeListener;
 		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ALIASES_LIST_VIEW] = ZaOverviewPanelController.aliasListTreeListener;
 		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW] = ZaOverviewPanelController.dlListTreeListener;		
+		//HC: Resource
+		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._RESOURCE_VIEW] = ZaOverviewPanelController.resourceListTreeListener;		
 	}
 		
 	if(ZaSettings.SYSTEM_CONFIG_ENABLED) {	
@@ -517,7 +525,7 @@ function() {
 ZaOverviewPanelController.prototype._getCurrentQueryHolder = 
 function () {
 	var srchField = this._app.getAccountListController()._searchField;
-	var curQuery = new ZaSearchQuery("", [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS], false, "");							
+	var curQuery = new ZaSearchQuery("", [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS,ZaSearch.RESOURCES], false, "");							
 	if(srchField) {
 		var obj = srchField.getObject();
 		if(obj) {
@@ -530,7 +538,10 @@ function () {
 			}			
 			if(obj[ZaSearch.A_fAccounts]=="TRUE") {
 				curQuery.types.push(ZaSearch.ACCOUNTS);
-			}			
+			}	
+			if(obj[ZaSearch.A_fResources]=="TRUE") {
+				curQuery.types.push(ZaSearch.RESOURCES);
+			}		
 		}
 	}
 	return curQuery;
@@ -650,6 +661,11 @@ ZaOverviewPanelController.accountListTreeListener = function (ev) {
 	this._showAccountsView(ZaItem.ACCOUNT,ev);
 }
 
+//HC:Resource
+ZaOverviewPanelController.resourceListTreeListener = function (ev) {
+	this._showAccountsView(ZaItem.RESOURCE,ev);
+}
+
 ZaOverviewPanelController.cosListTreeListener = function (ev) {
 	if(this._app.getCurrentController()) {
 		this._app.getCurrentController().switchToNextView(this._app.getCosListController(), ZaCosListController.prototype.show, ZaCos.getAll(this._app));
@@ -682,7 +698,10 @@ ZaOverviewPanelController.prototype._showAccountsView = function (defaultType, e
 	queryHldr.queryString = "";
 	queryHldr.types = [ZaSearch.TYPES[defaultType]];
 	if(defaultType == ZaItem.DL) {
-		queryHldr.fetchAttrs = ZaDistributionList.searchAttributes
+		queryHldr.fetchAttrs = ZaDistributionList.searchAttributes;
+	} else if (defaultType == ZaItem.RESOURCE){
+		//HC:Resource
+		queryHldr.fetchAttrs = ZaResource.searchAttributes;
 	} else {
 		queryHldr.fetchAttrs = ZaSearch.standardAttributes;
 	}

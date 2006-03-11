@@ -79,6 +79,11 @@ function() {
 	if(this._containedObject[ZaSearch.A_fdistributionlists] == "TRUE") {
 		objList.push(ZaSearch.DLS);
 	}
+	//HC:Resource
+	if(this._containedObject[ZaSearch.A_fResources] == "TRUE") {
+		objList.push(ZaSearch.RESOURCES);
+	}
+	
 	var  searchQueryHolder = new ZaSearchQuery(ZaSearch.getSearchByNameQuery(this._containedObject[ZaSearch.A_query]), objList, false, "");
 	if (this._callbackFunc != null) {
 		if (this._callbackObj != null)
@@ -99,6 +104,8 @@ ZaSearchField.prototype.resetSearchFilter = function () {
 	this._containedObject[ZaSearch.A_fAccounts] = "FALSE";
 	this._containedObject[ZaSearch.A_fdistributionlists] = "FALSE";	
 	this._containedObject[ZaSearch.A_fAliases] = "FALSE";
+	//HC:Resource
+	this._containedObject[ZaSearch.A_fResources] = "FALSE";
 }
 
 ZaSearchField.prototype.allFilterSelected = function (ev) {
@@ -106,6 +113,8 @@ ZaSearchField.prototype.allFilterSelected = function (ev) {
 	this._containedObject[ZaSearch.A_fAccounts] = "TRUE";
 	this._containedObject[ZaSearch.A_fdistributionlists] = "TRUE";	
 	this._containedObject[ZaSearch.A_fAliases] = "TRUE";
+	//HC:Resource
+	this._containedObject[ZaSearch.A_fResources] = "TRUE";
 }
 
 ZaSearchField.prototype.accFilterSelected = function (ev) {
@@ -126,6 +135,13 @@ ZaSearchField.prototype.dlFilterSelected = function (ev) {
 	this._containedObject[ZaSearch.A_fdistributionlists] = "TRUE";	
 }
 
+//HC: Resource
+ZaSearchField.prototype.resFilterSelected = function (ev) {
+	this.resetSearchFilter();
+	ev.item.parent.parent.setImage(ev.item.getImage());
+	this._containedObject[ZaSearch.A_fResources] = "TRUE";	
+}
+
 ZaSearchField.searchChoices = new XFormChoices([],XFormChoices.OBJECT_REFERENCE_LIST, null, "labelId");
 ZaSearchField.prototype._getMyXForm = function() {	
 	var newMenuOpList = new Array();
@@ -133,6 +149,8 @@ ZaSearchField.prototype._getMyXForm = function() {
 	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_ACCOUNTS, ZaMsg.SearchFilter_Accounts, ZaMsg.searchForAccounts, "Account", "AccountDis", new AjxListener(this,this.accFilterSelected)));	
 	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_DLS, ZaMsg.SearchFilter_DLs, ZaMsg.searchForDLs, "Group", "GroupDis", new AjxListener(this,this.dlFilterSelected)));		
 	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_ALIASES, ZaMsg.SearchFilter_Aliases, ZaMsg.searchForAliases, "AccountAlias", "AccountAlias", new AjxListener(this, this.aliasFilterSelected)));		
+	//HC:Resource
+	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_RESOURCES, ZaMsg.SearchFilter_Resources, ZaMsg.searchForResources, "Resource", "ResourceDis", new AjxListener(this, this.resFilterSelected)));		
 	newMenuOpList.push(new ZaOperation(ZaOperation.SEP));				
 	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_ALL, ZaMsg.SearchFilter_All, ZaMsg.searchForAll, "SearchAll", "SearchAll", new AjxListener(this, this.allFilterSelected)));		
 	ZaSearchField.searchChoices.setChoices(newMenuOpList);
@@ -157,7 +175,10 @@ ZaSearchField.prototype._getMyXForm = function() {
 			/*{type:_OUTPUT_, value:ZaMsg.Filter+":", label:null},
 			{type:_CHECKBOX_, ref:ZaSearch.A_fAccounts,label:ZaMsg.Filter_Accounts, labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"},					
 			{type:_CHECKBOX_, ref:ZaSearch.A_fAliases,label:ZaMsg.Filter_Aliases, labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"},
-			{type:_CHECKBOX_, ref:ZaSearch.A_fdistributionlists,label:ZaMsg.Filter_DLs, labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"}*/
+			{type:_CHECKBOX_, ref:ZaSearch.A_fdistributionlists,label:ZaMsg.Filter_DLs, labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"}
+			//HC:Resource
+			{type:_CHECKBOX_, ref:ZaSearch.A_fResources,label:ZaMsg.Filter_Resources, labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"}*/
+
 		]
 	};
 	return xFormObject;

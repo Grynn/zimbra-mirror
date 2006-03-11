@@ -34,17 +34,23 @@ function ZaSearch() {
 	this[ZaSearch.A_query] = "";
 	this[ZaSearch.A_fAliases] = "TRUE";
 	this[ZaSearch.A_fAccounts] = "TRUE";	
-	this[ZaSearch.A_fdistributionlists] = "TRUE";	
+	this[ZaSearch.A_fdistributionlists] = "TRUE";
+	//HC:Resource	
+	this[ZaSearch.A_fResources] = "TRUE";
 	this[ZaSearch.A_pagenum]=1;	
 }
 ZaSearch.ALIASES = "aliases";
 ZaSearch.DLS = "distributionlists";
 ZaSearch.ACCOUNTS = "accounts";
+//HC:Resource
+ZaSearch.RESOURCES = "resources";
 
 ZaSearch.TYPES = new Object();
 ZaSearch.TYPES[ZaItem.ALIAS] = ZaSearch.ALIASES;
 ZaSearch.TYPES[ZaItem.DL] = ZaSearch.DLS;
 ZaSearch.TYPES[ZaItem.ACCOUNT] = ZaSearch.ACCOUNTS;
+//HC:Resource
+ZaSearch.TYPES[ZaItem.RESOURCE] = ZaSearch.RESOURCES;
 
 
 ZaSearch.A_query = "query";
@@ -53,13 +59,14 @@ ZaSearch.A_pagenum = "pagenum";
 ZaSearch.A_fAliases = "f_aliases";
 ZaSearch.A_fAccounts = "f_accounts";
 ZaSearch.A_fdistributionlists = "f_distributionlists";
+ZaSearch.A_fResources = "f_resources";
 
 /**
 * @param app reference to ZaApp
 **/
 ZaSearch.getAll =
 function(app) {
-	return ZaSearch.search("", [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS], 1, ZaAccount.A_uid, true, app);
+	return ZaSearch.search("", [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES], 1, ZaAccount.A_uid, true, app);
 }
 
 
@@ -74,7 +81,7 @@ ZaSearch.standardAttributes = AjxBuffer.concat(ZaAccount.A_displayname,",",
 /**
 * Sends SearchAccountsRequest to the SOAP Servlet
 * @param query - query string
-* @param types - array of object types to search for([ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS])
+* @param types - array of object types to search for([ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES])
 * @pagenum - results page number
 * @orderby - attribute to sort by
 * @isascending - sort order (boolean)
@@ -268,6 +275,8 @@ ZaSearch.getSearchFromQuery = function (query) {
 	searchObj[ZaSearch.A_fAliases] = "FALSE";
 	searchObj[ZaSearch.A_fAccounts] = "FALSE";
 	searchObj[ZaSearch.A_fdistributionlists] = "FALSE";
+	//HC:Resource
+	searchObj[ZaSearch.A_fResources] = "FALSE";
 	
 	if (query.types != null) {
 		for (var i = 0; i < query.types.length; ++i) {
@@ -279,6 +288,9 @@ ZaSearch.getSearchFromQuery = function (query) {
 			}
 			if (query.types[i] == ZaSearch.DLS){
 				searchObj[ZaSearch.A_fdistributionlists] = "TRUE";
+			}
+			if (query.types[i] == ZaSearch.RESOURCES){
+				searchObj[ZaSearch.A_fResources] = "TRUE";
 			}
 		}
 	}
