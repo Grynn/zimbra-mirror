@@ -1,24 +1,16 @@
-<zimlet name="com_zimbra_phone" version="1.0" description="Phone Number">
+<zimlet name="com_zimbra_phone" version="1.1" description="Phone Number">
 	<serverExtension hasKeyword="phone" extensionClass="com.zimbra.cs.zimlet.handler.NANPHandler"/>
-	<contentObject>
+	<include>phone.js</include>
+	<includeCSS>phone.css</includeCSS>
+	<handlerObject>Com_Zimbra_Phone</handlerObject>
+	<contentObject typ="phone">
 		<matchOn>
-			<regex>/(^|\W)(?:(?:\(\d{3}\)[-.\s]?|\d{3}[-.\s]))?\d{3}[-.\s]\d{4}(\W|$)/g</regex>
+			<regex attrs="g">(^|\W)(?:\+1\s+)?(?:(?:\(\d{3}\)[-.\s]?|\d{3}[-.\s]))?\d{3}[-.\s]\d{4}(\W|$)</regex>
 		</matchOn>
-
-		<onClick>
-			<canvas type="window" />
-			<actionJavaScript />
-		</onClick>
+		<contextMenu>
+			<menuItem label="Search" icon="PhoneSearchIcon" id="SEARCH"/>
+			<menuItem label="Add to Contacts" icon="PhoneNewContactIcon" id="ADDCONTACT"/>
+			<menuItem label="Skype Call" icon="PhoneCallIcon" id="CALL"/>
+		</contextMenu>
 	</contentObject>
-	<contextMenu>
-		<menuItem label="${msg.search}" icon="search.gif" id="SEARCH">
-			<actionJavaScript/>
-		</menuItem>
-		<menuItem label="${msg.addcontact}" icon="addcontact.gif" id="ADDCONTACT">
-			<actionJavaScript/>
-		</menuItem>
-		<menuItem label="${msg.call}" icon="call.gif" id="CALL">
-			<actionJavaScript/>
-		</menuItem>
-	</contextMenu>
 </zimlet>

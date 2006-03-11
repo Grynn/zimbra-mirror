@@ -381,7 +381,7 @@ FlightStatusDlg.prototype.dataClbk = function(flightInfo) {
 	
 		this.airlineValueCell.innerHTML = flightInfo.AirlineName;
 		if(airphone) {
-			this.airlineValueCell.innerHTML += [" (", this._objectManager.findObjects(airphone, false,ZmPhoneObjectHandler.TYPE)," )"].join("");
+			this.airlineValueCell.innerHTML += [" (", this._objectManager.findObjects(airphone, false,ZmObjectManager.PHONE)," )"].join("");
 		}
 	} catch (ex) {
 		//
