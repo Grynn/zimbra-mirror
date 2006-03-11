@@ -130,14 +130,14 @@ ZaServerMBXStatsPage.getMbxes = function ( targetServer, offset, sortBy, sortAsc
 							limit: nodes[i].getAttribute("limit") 
 						    };	
 		
-		diskUsed = ( respArr[i].used / 1048576 ).toPrecision(3) ;
+		diskUsed = ( respArr[i].used / 1048576 ).toFixed(2) ;
 		
 		if (respArr[i].limit == 0 ){
 			quotaLimit = "unlimited" ;
 			percentage = 0 ;	
 		}else{
-			quotaLimit = ( respArr[i].limit / 1048576 ).toPrecision(3) ;
-			percentage = ((diskUsed * 100) / quotaLimit).toPrecision(2) ;
+			quotaLimit = ( respArr[i].limit / 1048576 ).toFixed() ;
+			percentage = ((diskUsed * 100) / quotaLimit).toFixed() ;
 		}
 						    
 		accountArr [i] = { 	account : respArr[i].name,
