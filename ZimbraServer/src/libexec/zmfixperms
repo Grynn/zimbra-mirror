@@ -80,6 +80,7 @@ if [ -L /opt/zimbra/postfix ]; then
 		chgrp -f postdrop /opt/zimbra/postfix/spool/public
 	fi
 	if [ -d /opt/zimbra/postfix/spool/maildrop ]; then
+		chmod 730 /opt/zimbra/postfix/spool/maildrop
 		chgrp -f postdrop /opt/zimbra/postfix/spool/maildrop
 	fi
 	if [ -d /opt/zimbra/postfix/sbin ]; then
