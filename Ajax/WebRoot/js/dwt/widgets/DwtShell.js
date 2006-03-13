@@ -62,7 +62,21 @@ function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell, us
 		document.body.style.overflow = "hidden";
 
 	//Dwt.setHandler(document, DwtEvent.ONKEYPRESS, DwtShell._keyPressHdlr);
-	Dwt.setHandler(document, DwtEvent.ONKEYUP, DwtShell._keyUpHdlr);
+	Dwt.setHandler(window, DwtEvent.ONKEYUP, DwtShell._keyUpHdlr);
+	Dwt.setHandler(window, DwtEvent.ONKEYDOWN, DwtShell._keyDownHdlr);
+	
+	/* Create our keyboard focus field. This is a dummy input field that will take text
+	 * input for keyboard shortcuts */
+	var kbff = this._kbFocusField = document.createElement("input");
+	kbff.type = "text";
+	kbff.position = Dwt.ABSOLUTE_STYLE;
+	kbff.style.x = this._kbFocusField.style.y = Dwt.LOC_NOWHERE;
+	//kbff.style.x = shell._kbFocusField.style.y = 250;
+	//kbff.style.width = 100;
+	//kbff.style.zIndex = 99999;
+	kbff.onblur = DwtShell._onBlurHdlr;
+	document.body.appendChild(kbff);
+
 
     document.body.onselect = DwtShell._preventDefaultSelectPrt;
 	document.body.onselectstart = DwtShell._preventDefaultSelectPrt;
@@ -157,6 +171,28 @@ DwtShell.getShell =
 function(win){
 	return AjxCore.objectWithId(win._dwtShell);
 };
+
+// Document this. Will also need a push and pop focus frames for thinkgs
+// like dialogs etc
+DwtShell.grabFocus =
+function(focusObj) {
+	var shell = DwtShell.getShell(window);
+	shell._kbFocusField.focus();
+	shell._objWithFocus = focusObj;
+	shell._haveFocus = true;
+	//DBG.println("GAINING FOCUS");
+}
+
+DwtShell.haveFocus =
+function() {
+	return DwtShell.getShell(window)._haveFocus;
+}
+
+DwtShell._onBlurHdlr =
+function(ev) {
+	DwtShell.getShell(window)._haveFocus = false;
+	//DBG.println("LOSING FOCUS");
+}
 
 /**
 * Sets the busy overlay. The busy overlay disables input to the application and makes the 
@@ -399,18 +435,29 @@ function(ev) {
     return evt._returnValue;
 }
 
+DwtShell._keyDownHdlr =
+function(ev) {
+	var shell = AjxCore.objectWithId(window._dwtShell);
+	if (shell.isListenerRegistered(DwtEvent.ONKEYDOWN)) {
+		var keyEvent = DwtShell.keyEvent;
+		keyEvent.setFromDhtmlEvent(ev);
+		shell.notifyListeners(DwtEvent.ONKEYDOWN, keyEvent);
+		keyEvent.setToDhtmlEvent(ev);
+		return keyEvent._returnValue;
+    }
+}
+
 DwtShell._keyUpHdlr =
 function(ev) {
 	var shell = AjxCore.objectWithId(window._dwtShell);
+	if (shell._haveFocus)
+		shell._kbFocusField.value = "";
 	if (shell.isListenerRegistered(DwtEvent.ONKEYUP)) {
 		var keyEvent = DwtShell.keyEvent;
 		keyEvent.setFromDhtmlEvent(ev);
-		//var tagName = (keyEvent.target) ? keyEvent.target.tagName.toLowerCase() : null;
-		//if (tagName != "input" && tagName != "textarea") {
 			shell.notifyListeners(DwtEvent.ONKEYUP, keyEvent);
 			keyEvent.setToDhtmlEvent(ev);
 			return keyEvent._returnValue;
-    	//} 
     }
 }
 
