@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 /**
 * Creates a calendar widget
 * @constructor
