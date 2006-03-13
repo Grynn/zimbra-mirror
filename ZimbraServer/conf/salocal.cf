@@ -9,6 +9,15 @@
 # report_safe 1
 # trusted_networks 212.17.35.
 # lock_method flock
+
+header DSPAM_SPAM X-DSPAM-Result =~ /^Spam$/
+describe DSPAM_SPAM DSPAM claims it is spam
+score DSPAM_SPAM 0.5
+
+header DSPAM_HAM X-DSPAM-Result =~ /^Innocent$/
+describe DSPAM_HAM DSPAM claims it is ham
+score DSPAM_HAM -0.1
+
 rewrite_header Subject *SPAM* _STARS(*)_
 bayes_auto_learn 1
 bayes_min_spam_num 60
