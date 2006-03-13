@@ -24,6 +24,66 @@
 # ***** END LICENSE BLOCK *****
 # 
 
+autoTrainSystem() {
+	spamdir=/tmp/spam.$$
+	hamdir=/tmp/ham.$$
+	mkdir ${spamdir}
+	mkdir ${hamdir}
+	/opt/zimbra/bin/zmspamextract -s -o ${spamdir}
+	/opt/zimbra/bin/zmspamextract -n -o ${hamdir}
+
+	${zimbra_home}/libexec/sa-learn -p ${zimbra_home}/conf/salocal.cf \
+		--dbpath ${zimbra_home}/amavisd/.spamassassin/ --import
+
+	${zimbra_home}/libexec/sa-learn -p ${zimbra_home}/conf/salocal.cf \
+		--dbpath ${zimbra_home}/amavisd/.spamassassin/ -L --no-sync \
+		--spam ${spamdir}
+
+	${zimbra_home}/libexec/sa-learn -p ${zimbra_home}/conf/salocal.cf \
+		--dbpath ${zimbra_home}/amavisd/.spamassassin/ -L --no-sync \
+		--ham ${hamdir}
+
+	${zimbra_home}/libexec/sa-learn -p ${zimbra_home}/conf/salocal.cf \
+		--dbpath ${zimbra_home}/amavisd/.spamassassin/ --sync
+
+	for f in ${spamdir}/*; do
+		test -f ${f} && ${zimbra_home}/dspam/bin/dspam_corpus --addspam zimbra ${f}
+	done
+	for f in ${hamdir}/*; do
+		test -f ${f} && ${zimbra_home}/dspam/bin/dspam_corpus zimbra ${f}
+	done
+
+	/opt/zimbra/dspam/bin/dspam_clean -p0 $USER
+
+	/bin/rm -rf ${spamdir} ${hamdir}
+}
+
+if [ x`whoami` != xzimbra ]; then
+    echo Error: must be run as zimbra user
+	exit 1
+fi
+
+source `dirname $0`/zmshutil || exit 1
+zmsetvars \
+	zimbra_home \
+	zimbra_server_hostname
+
+# No argument mode uses zmspamextract for auto-training.
+if [ x$1 = "x" ]; then
+	autoTrainSystem
+	exit
+fi
+
+if [ x$1 = "x--cleanup" ]; then
+	mydir=/tmp/cleanup.$$
+	mkdir -p ${mydir}
+	/opt/zimbra/bin/zmspamextract -s -o ${mydir} -d
+	/opt/zimbra/bin/zmspamextract -n -o ${mydir} -d
+	/bin/rm -rf ${mydir}
+	exit
+fi
+
+
 SERVER=$1
 USER=$2
 PASS=$3
@@ -35,19 +95,9 @@ if [ x$MODE = "x" -o x$PASS = "x" -o x$USER = "x" -o x$SERVER = "x" ]; then
 	exit 1
 fi
 
-if [ x`whoami` != xzimbra ]; then
-    echo Error: must be run as zimbra user
-	exit 1
-fi
-
 if [ ! -f /usr/bin/fetchmail ]; then
 	exit 1;
 fi
-
-source `dirname $0`/zmshutil || exit 1
-zmsetvars \
-	zimbra_home \
-	zimbra_server_hostname
 
 echo "server $SERVER protocol IMAP user $USER@$SERVER password $PASS keep" > ${zimbra_home}/conf/.fetchmailrc
 chmod 600 ${zimbra_home}/conf/.fetchmailrc
@@ -56,12 +106,12 @@ export HOME=${zimbra_home}/conf
 
 
 if [ "x$FOLDER" != "x" ]; then
-	/usr/bin/fetchmail -f ${zimbra_home}/conf/.fetchmailrc -n -a -u $USER -r "$FOLDER" -m "${zimbra_home}/bin/sa-learn -p ${zimbra_home}/conf/salocal.cf --dbpath ${zimbra_home}/amavisd/.spamassassin/ --no-sync --showdots -L --${MODE}" ${SERVER}
+	/usr/bin/fetchmail -f ${zimbra_home}/conf/.fetchmailrc -n -a -u $USER -r "$FOLDER" -m "${zimbra_home}/libexec/sa-learn -p ${zimbra_home}/conf/salocal.cf --dbpath ${zimbra_home}/amavisd/.spamassassin/ --no-sync --showdots -L --${MODE}" ${SERVER}
 else
-	/usr/bin/fetchmail -f ${zimbra_home}/conf/.fetchmailrc -n -a -u $USER -m "${zimbra_home}/bin/sa-learn -p ${zimbra_home}/conf/salocal.cf --dbpath ${zimbra_home}/amavisd/.spamassassin/ --no-sync --showdots -L --${MODE}" ${SERVER}
+	/usr/bin/fetchmail -f ${zimbra_home}/conf/.fetchmailrc -n -a -u $USER -m "${zimbra_home}/libexec/sa-learn -p ${zimbra_home}/conf/salocal.cf --dbpath ${zimbra_home}/amavisd/.spamassassin/ --no-sync --showdots -L --${MODE}" ${SERVER}
 fi
 
-${zimbra_home}/bin/sa-learn -p ${zimbra_home}/conf/salocal.cf --dbpath ${zimbra_home}/amavisd/.spamassassin/ --sync
+${zimbra_home}/libexec/sa-learn -p ${zimbra_home}/conf/salocal.cf --dbpath ${zimbra_home}/amavisd/.spamassassin/ --sync
 
 if [ $MODE == "ham" ]; then
 	MODE="innocent"
