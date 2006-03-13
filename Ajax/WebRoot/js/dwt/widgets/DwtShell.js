@@ -62,8 +62,8 @@ function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell, us
 		document.body.style.overflow = "hidden";
 
 	//Dwt.setHandler(document, DwtEvent.ONKEYPRESS, DwtShell._keyPressHdlr);
-	Dwt.setHandler(window, DwtEvent.ONKEYUP, DwtShell._keyUpHdlr);
-	Dwt.setHandler(window, DwtEvent.ONKEYDOWN, DwtShell._keyDownHdlr);
+	Dwt.setHandler(document, DwtEvent.ONKEYUP, DwtShell._keyUpHdlr);
+	Dwt.setHandler(document, DwtEvent.ONKEYDOWN, DwtShell._keyDownHdlr);
 	
 	/* Create our keyboard focus field. This is a dummy input field that will take text
 	 * input for keyboard shortcuts */
