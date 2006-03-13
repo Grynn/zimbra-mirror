@@ -659,6 +659,17 @@ function(item) {
 	}
 }
 
+DwtListView.prototype.getAnchorItem =
+function() {
+	var item;
+	
+	if (this._selAnchor)
+		item = AjxCore.objectWithId(Dwt.getAttr(this._selAnchor, "_itemIndex"))
+	
+	return item;
+}
+
+
 DwtListView.prototype.getItemFromElement =
 function(element) {
 	var itemIdx = Dwt.getAttr(element, "_itemIndex");
@@ -918,17 +929,62 @@ function(item) {
 	}
 }
 
+DwtListView.prototype.selectItem =
+function(next) {
+	// If there are no elements in the list, then bail
+	if (!this._list)
+		return;
+		
+	/* if there is currently a selection anchor, then find the next/prev item
+	 * from the anchor */
+	var itemDiv;
+	if (this._selAnchor) {
+		if (next)
+			itemDiv = this._selAnchor.nextSibling ? this._selAnchor.nextSibling : this._selAnchor;
+		else
+			itemDiv = this._selAnchor.previousSibling ? this._selAnchor.previousSibling : this._selAnchor;
+	} else {
+		itemDiv = this._parentEl.firstChild;
+	}
+
+	var item = AjxCore.objectWithId(Dwt.getAttr(itemDiv, "_itemIndex"))
+	this._itemSelected(itemDiv, null);
+	itemDiv.scrollIntoView(!next);
+	this._selEv.reset();
+	this._selEv.item = item
+	this._evtMgr.notifyListeners(DwtEvent.SELECTION, this._selEv);
+}
+
+DwtListView.prototype._itemSelected =
+function(itemDiv, ev) {
+	if (this._allowLeftSelection(itemDiv, ev, (ev) ? ev.button : null)) {
+		// clear out old left click selection(s)
+		var numSelectedItems = this._selectedItems.size();
+		var a = this._selectedItems.getArray();
+		for (var i = 0; i < numSelectedItems; i++)
+			a[i].className = Dwt.getAttr(a[i], "_styleClass");
+		this._selectedItems.removeAll();
+		
+		// save new left click selection
+		this._selectedItems.add(itemDiv);
+		this._selAnchor = itemDiv;
+		itemDiv.className = Dwt.getAttr(itemDiv, "_selectedStyleClass");
+		this._firstSelIndex = this._list 
+					? this._list.indexOf(AjxCore.objectWithId(Dwt.getAttr(itemDiv, "_itemIndex"))) : -1;
+		DwtShell.grabFocus(this);
+	}
+}
+
 DwtListView.prototype._itemClicked =
 function(clickedEl, ev) {
-	var i;
-	var a = this._selectedItems.getArray();
-	var numSelectedItems = this._selectedItems.size();
 
 	// always clear out old right click selection
 	if (this._rightSelItems) {
 		this._rightSelItems.className = Dwt.getAttr(this._rightSelItems, "_styleClass");
 		this._rightSelItems = null;
 	}
+	
+	var numSelectedItems = this._selectedItems.size()
 
 	if ((!ev.shiftKey && !ev.ctrlKey) || !this.isMultiSelectEnabled()) {
 		// always reset detail if left/right click
@@ -939,19 +995,7 @@ function(clickedEl, ev) {
 		var bContained = this._selectedItems.contains(clickedEl);
 		
 		if (ev.button == DwtMouseEvent.LEFT) {
-			if (this._allowLeftSelection(clickedEl, ev, ev.button)) {
-				// clear out old left click selection(s)
-				for (i = 0; i < numSelectedItems; i++)
-					a[i].className = Dwt.getAttr(a[i], "_styleClass");
-				this._selectedItems.removeAll();
-				
-				// save new left click selection
-				this._selectedItems.add(clickedEl);
-				this._selAnchor = clickedEl;
-				clickedEl.className = Dwt.getAttr(clickedEl, "_selectedStyleClass");
-				this._firstSelIndex = this._list 
-					? this._list.indexOf(AjxCore.objectWithId(Dwt.getAttr(clickedEl, "_itemIndex"))) : -1;
-			}
+			this._itemSelected(clickedEl, ev);
 		} else if (ev.button == DwtMouseEvent.RIGHT && !bContained) {
 			// save right click selection
 			this._rightSelItems = clickedEl;
@@ -973,6 +1017,7 @@ function(clickedEl, ev) {
 			// The element that was part of the ctrl action always becomes
 			// the anchor since it gets focus
 			this._selAnchor = clickedEl;
+			DwtShell.grabFocus(this);
 		} else { // SHIFT KEY
 			// Adds to the selection to/from the current node to the selection anchor
 			if (this._selAnchor == null)
@@ -981,7 +1026,7 @@ function(clickedEl, ev) {
 			var numConvEls = convEls.length;
 			var convEl;
 			var state = 0;
-			for (i = 0; i < numConvEls; i++) {
+			for (var i = 0; i < numConvEls; i++) {
 				convEl = convEls[i];
 				if (convEl == this._rightSelItems)
 					this._rightSelItems = null;
