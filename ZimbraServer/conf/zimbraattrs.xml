@@ -634,6 +634,8 @@
 
 <attr name="zimbraCalResAlwaysFree" type="boolean"/>
 
+<attr name="zimbraCalResLocationDisplayName" type="string"/>
+
 <attr name="zimbraCalResSite" type="string"/>
 
 <attr name="zimbraCalResBuilding" type="string"/>
