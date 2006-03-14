@@ -1,0 +1,17 @@
+<zimlet name="com_zimbra_email" version="1.0" description="Email">
+	<include>email.js</include>
+	<handlerObject>Com_Zimbra_Email</handlerObject>
+	<contentObject type="email">
+		<matchOn>
+			<regex attrs="g">\b([0-9a-zA-Z]+[-._+&amp;])*[0-9a-zA-Z]+@([-0-9a-zA-Z]+[.])+[a-zA-Z]{2,6}\b</regex>
+		</matchOn>
+		<contextMenu>
+			<menuItem label="Search" icon="Search" id="SEARCH"/>
+			<menuItem label="Search Builder" icon="NewContact" id="SEARCHBUILDER"/>
+			<menuItem label="New Email" icon="NewMessage" id="NEWEMAIL"/>
+			<menuItem label="Edit Contact" icon="Edit" id="NEWCONTACT"/>
+			<menuItem label="New Filter" icon="Plus" id="NEWFILTER"/>
+			<menuItem label="Go to URL" icon="URL" id="GOTOURL"/>
+		</contextMenu>
+	</contentObject>
+</zimlet>

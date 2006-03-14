@@ -1,16 +1,15 @@
 <zimlet name="com_zimbra_phone" version="1.1" description="Phone Number">
 	<serverExtension hasKeyword="phone" extensionClass="com.zimbra.cs.zimlet.handler.NANPHandler"/>
 	<include>phone.js</include>
-	<includeCSS>phone.css</includeCSS>
 	<handlerObject>Com_Zimbra_Phone</handlerObject>
-	<contentObject typ="phone">
+	<contentObject type="phone">
 		<matchOn>
 			<regex attrs="g">(^|\W)(?:\+1\s+)?(?:(?:\(\d{3}\)[-.\s]?|\d{3}[-.\s]))?\d{3}[-.\s]\d{4}(\W|$)</regex>
 		</matchOn>
 		<contextMenu>
-			<menuItem label="Search" icon="PhoneSearchIcon" id="SEARCH"/>
-			<menuItem label="Add to Contacts" icon="PhoneNewContactIcon" id="ADDCONTACT"/>
-			<menuItem label="Skype Call" icon="PhoneCallIcon" id="CALL"/>
+			<menuItem label="Search" icon="Search" id="SEARCH"/>
+			<menuItem label="Add to Contacts" icon="NewContact" id="ADDCONTACT"/>
+			<menuItem label="Skype Call" icon="Telephone" id="CALL"/>
 		</contextMenu>
 	</contentObject>
 </zimlet>
