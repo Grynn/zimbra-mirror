@@ -22,7 +22,7 @@
  * 
  * ***** END LICENSE BLOCK *****
  */
-
+  
 /**
 * Display the Mailbox disk usage statistics per serer.
 * 1) Top diskspace consumers
@@ -156,10 +156,7 @@ ZaServerMBXStatsPage.getMbxes = function ( targetServer, offset, sortBy, sortAsc
 
 ZaServerMBXStatsPage.prototype._getXForm = function () {
 	if (this._xform != null) return this._xform;
-	var accountWidth = "200px";
-	var diskUsageWidth = "100px";
-	var quotaUsageWidth = "100px" ;
-	var headerStyle = "font-size: 120%; font-weight: bold;";
+	
 	var sourceHeaderList = new Array();
 											//idPrefix, label, 
 											//iconInfo, width, sortable, sortField, resizeable, visible
@@ -175,13 +172,12 @@ ZaServerMBXStatsPage.prototype._getXForm = function () {
 	this._xform = {
 		x_showBorder:1,
 	    numCols:1, 
-	    cssClass:"ZaServerMBXStatsPage", 
-		tableCssStyle:"width:100%",
-		
+	    tableCssStyle:"width:100%;overflow:auto;",
+						
 	    itemDefaults:{ },
 	    items:[
 	    	//Convert to the listview
-	    	{ref:"mbxPool", type:_DWT_LIST_, height:"600", width:"100%", cssClass: "MBXList", 
+	    	{ref:"mbxPool", type:_DWT_LIST_, height:"600", width:"100%", cssClass: "MBXList", 	    	
 						   		forceUpdate: true, widgetClass:ZaServerMbxListView, headerList:sourceHeaderList}
 		]	    
 	};		   
