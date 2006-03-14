@@ -127,7 +127,7 @@ while (<>) {
 	if ($host eq "") { next;}
 	my $qid = undef;
 
-	if ($app =~ /^postfix/ && $msg =~ /^(\S{10,12}): /) {
+	if ($app =~ /^postfix/ && $msg =~ /^(\S{8,12}): /) {
 		$qid = $1;
 	} 
 
