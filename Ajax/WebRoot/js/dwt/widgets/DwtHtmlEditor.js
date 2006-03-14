@@ -154,14 +154,18 @@ function() {
 	if (this._mode == DwtHtmlEditor.TEXT) {
 		document.getElementById(this._textAreaId).focus();
 	} else {
-		this._getIframeWin().focus();
-		// Hack to fix IE focusing bug
-		if (AjxEnv.isIE) {
-			if (this._currInsPt) {
-				if (this._currInsPt.text.length <= 1)
-					this._currInsPt.collapse(false);
-				this._currInsPt.select();
+		try {
+			this._getIframeWin().focus();
+			// Hack to fix IE focusing bug
+			if (AjxEnv.isIE) {
+				if (this._currInsPt) {
+					if (this._currInsPt.text.length <= 1)
+						this._currInsPt.collapse(false);
+					this._currInsPt.select();
+				}
 			}
+		} catch (ex) {
+			// whateva
 		}
 	}
 }
