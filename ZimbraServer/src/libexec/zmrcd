@@ -103,17 +103,20 @@ my %commands = (
 	},
 	"zmqstat" => {
 		"args" => {
+			"all"	=> {
+				"script"	=> [ "sudo /opt/zimbra/libexec/zmqstat" ],
+			},
 			"incoming"	=> {
-				"script"	=> [ "/opt/zimbra/libexec/zmqstat incoming" ],
+				"script"	=> [ "sudo /opt/zimbra/libexec/zmqstat incoming" ],
 			},
 			"hold"	=> {
-				"script"	=> [ "/opt/zimbra/libexec/zmqstat hold" ],
+				"script"	=> [ "sudo /opt/zimbra/libexec/zmqstat hold" ],
 			},
 			"active"	=> {
-				"script"	=> [ "/opt/zimbra/libexec/zmqstat active" ],
+				"script"	=> [ "sudo /opt/zimbra/libexec/zmqstat active" ],
 			},
 			"deferred"	=> {
-				"script"	=> [ "/opt/zimbra/libexec/zmqstat deferred" ],
+				"script"	=> [ "sudo /opt/zimbra/libexec/zmqstat deferred" ],
 			},
 		},
 	},
