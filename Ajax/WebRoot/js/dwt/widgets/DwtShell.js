@@ -69,8 +69,9 @@ function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell, us
 	 * input for keyboard shortcuts */
 	var kbff = this._kbFocusField = document.createElement("input");
 	kbff.type = "text";
-	kbff.position = Dwt.ABSOLUTE_STYLE;
-	kbff.style.x = this._kbFocusField.style.y = Dwt.LOC_NOWHERE;
+	kbff.style.position = Dwt.ABSOLUTE_STYLE;
+	kbff.style.x = Dwt.LOC_NOWHERE;
+	kbff.style.y=Dwt.LOC_NOWHERE;
 	//kbff.style.x = shell._kbFocusField.style.y = 250;
 	//kbff.style.width = 100;
 	//kbff.style.zIndex = 99999;
