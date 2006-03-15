@@ -71,6 +71,22 @@
     </attribute>
   </tag>
   <tag>
+    <name>appointment</name>
+    <tagclass>com.zimbra.cs.taglib.Appointment</tagclass>
+    <bodycontent>empty</bodycontent>
+    <info>calendar appointment</info>
+    <attribute>
+      <name>id</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>field</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+  <tag>
     <name>property</name>
     <tagclass>com.zimbra.cs.taglib.Property</tagclass>
     <bodycontent>empty</bodycontent>

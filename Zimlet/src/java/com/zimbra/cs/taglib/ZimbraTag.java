@@ -88,8 +88,7 @@ public class ZimbraTag extends BodyTagSupport {
     public int doStartTag() throws JspTagException {
         try {
             Account acct = getRequestAccount();
-            String id = acct.getId();
-            OperationContext octxt = new OperationContext(id);
+            OperationContext octxt = new OperationContext(acct);
 
             String content = getContentStart(acct, octxt);
             if (content.length() > 0) {
@@ -107,8 +106,7 @@ public class ZimbraTag extends BodyTagSupport {
     public int doEndTag() throws JspTagException {
         try {
             Account acct = getRequestAccount();
-            String id = acct.getId();
-            OperationContext octxt = new OperationContext(id);
+            OperationContext octxt = new OperationContext(acct);
 
             String content = getContentEnd(acct, octxt);
             JspWriter out = pageContext.getOut();

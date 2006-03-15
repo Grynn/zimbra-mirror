@@ -100,6 +100,35 @@
       </table>
 
     <hr /> 
+      <h3>Appointment</h3>
+      <table border="1">
+        <tr>
+          <td>id</td>
+          <td>starttime</td>
+          <td>endtime</td>
+          <td>name</td>
+          <td>comment</td>
+          <td>status</td>
+        </tr>
+<%
+    String[] apptids = { "481", "483", "485" };
+	for (int i = 0; i < apptids.length; i++) {
+		id = ids[i];
+%>
+        <tr>
+          <td><%= id %></td>
+          <td><z:appointment id='<%= id %>' field="starttime"/></td>
+          <td><z:appointment id='<%= id %>' field="endtime"/></td>
+          <td><z:appointment id='<%= id %>' field="name"/></td>
+          <td><z:appointment id='<%= id %>' field="comment"/></td>
+          <td><z:appointment id='<%= id %>' field="status"/></td>
+        </tr>
+<%
+	}
+%>
+      </table>
+
+    <hr /> 
       <h3>Property</h3>
       <table border="1">
         <tr>
