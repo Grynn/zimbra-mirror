@@ -3652,7 +3652,7 @@ Dwt_List_XFormItem.prototype.constructWidget = function () {
 
 	var widget = new listClass(this.getForm(), this.getCssClass(), null, headerList);
 	var multiselect = this.getInheritedProperty("multiselect");
-	if(multiselect != null) {
+	if(multiselect != undefined) {
 		widget.setMultiSelect(multiselect);
 	}
 	var width = this.getWidth();
@@ -3707,11 +3707,19 @@ Dwt_List_XFormItem.prototype.setItems = function (itemArray){
 	
 	//we have to compare the objects, because XForm calls this method every time an item in the list is selected
 	if(itemArray.join() != existingArr.join() ) {
+		var preserveSelection = this.getInheritedProperty("preserveSelection");
+		var selection = null;
+		if(preserveSelection) {
+			selection = this.widget.getSelection();
+		}		
 		var cnt=itemArray.length;
 		for(var i = 0; i< cnt; i++) {
 			tmpArr.push(itemArray[i]);		
 		}
 		this.widget.set(AjxVector.fromArray(tmpArr));
+		if(preserveSelection && selection) {
+			this.widget.setSelectedItems(selection);
+		}
 	}
 };
 

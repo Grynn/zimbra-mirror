@@ -67,7 +67,7 @@ ZaEvent.S_GLOBALCONFIG	 = i++;
 ZaEvent.S_STATUS		 = i++;
 ZaEvent.S_CLUSTER_STATUS = i++;
 ZaEvent.S_DL 			 = i++;
-
+ZaEvent.S_MTA			 = i++;
 
 // Event types
 i = 1;

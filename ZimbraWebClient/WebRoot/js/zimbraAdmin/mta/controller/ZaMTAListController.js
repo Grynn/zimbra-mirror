@@ -151,7 +151,7 @@ function(ev) {
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
 		if(ev.item) {
 			this._selectedItem = ev.item;
-			this._app.getPostQController().show(ev.item);
+			this._app.getMTAController().show(ev.item);
 		}
 	} else {
 		this._changeActionsState();	
@@ -172,7 +172,7 @@ ZaMTAListController.prototype._viewButtonListener =
 function(ev) {
 	if(this._contentView.getSelectionCount() == 1) {
 		var item = this._contentView.getSelection()[0];
-		this._app.getPostQController().show(item);
+		this._app.getMTAController().show(item);
 	}
 }
 
@@ -193,4 +193,31 @@ function () {
 		this._toolbar.enable(opsArray, false);
 		this._actionMenu.enable(opsArray, false);
 	}
+}
+
+/**
+* @param ev
+* This listener is invoked by ZaMTAController or any other controller that can change a ZaMTA object
+**/
+ZaMTAListController.prototype.handleMTAChange = 
+function (ev) {
+	//if any of the data that is currently visible has changed - update the view
+	if(ev) {
+		this._contentView.setUI();
+		if(this._app.getCurrentController() == this) {
+			this.show();			
+		}
+	}
+}
+
+/**
+* Asynchronously calls ZaMTA.prototype.getMyQCounts {@link ZaMTA#getQCounts}
+**/
+ZaMTAListController.prototype.getQCounts = function () {
+	
+}
+
+ZaMTAListController.prototype.refreshListener = 
+function () {
+	this.getQCounts();
 }

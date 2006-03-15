@@ -676,18 +676,18 @@ ZaOverviewPanelController.cosListTreeListener = function (ev) {
 
 ZaOverviewPanelController.postqTreeListener = function (ev) {
 	if(this._app.getCurrentController()) {
-		this._app.getCurrentController().switchToNextView(this._app.getPostQListController(), ZaMTAListController.prototype.show, ZaMTA.getAll(this._app));
+		this._app.getCurrentController().switchToNextView(this._app.getMTAListController(), ZaMTAListController.prototype.show, ZaMTA.getAll(this._app));
 	} else {
-		this._app.getPostQListController().show(ZaServer.getAll(this._app));
+		this._app.getMTAListController().show(ZaServer.getAll(this._app));
 	}
 }
 
 ZaOverviewPanelController.postqByServerTreeListener = function (ev) {
 	var currentServer = this._app.getPostQList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID));
 	if(this._app.getCurrentController()) {
-		this._app.getCurrentController().switchToNextView(this._app.getPostQController(), ZaMTAController.prototype.show,currentServer);
+		this._app.getCurrentController().switchToNextView(this._app.getMTAController(), ZaMTAController.prototype.show,currentServer);
 	} else {					
-		this._app.getPostQController().show(currentServer);
+		this._app.getMTAController().show(currentServer);
 	}
 }
 

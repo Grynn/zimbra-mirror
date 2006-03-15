@@ -75,7 +75,10 @@ function (entry) {
 }
 
 ZaMTAXFormView._listObjects = {};
-
+/*
+* This is too elaborate for now
+*/
+/*
 ZaMTAXFormView.listSelectionListener = function (ev) {
 	//register this list in the map, so that we can deselect it later
 	if(ev.dwtObj && this.refPath) {
@@ -117,17 +120,43 @@ ZaMTAXFormView.listSelectionListener = function (ev) {
 	if(query.length) 
 		this.setInstanceValue(query.join(""),myPath);
 	this.getForm().refresh();
+}*/
+	
+ZaMTAXFormView.listSelectionListener = function (ev) {
+	//register this list in the map, so that we can deselect it later
+	if(ev.dwtObj && this.refPath) {
+		ZaMTAXFormView._listObjects[this.refPath] = ev.dwtObj;
+	}
+	var instance = this.getInstance();
+	var refParts = this.getRef().split("/");
+	var filterName = refParts[1];
+	var qName = refParts[0];
+	instance[qName][ZaMTA.A_queue_filter_name] = filterName;
+	instance[qName][ZaMTA.A_queue_filter_value] = this.widget.getSelection()[0].name;
+	//deselect other lists
+	for(var x in ZaMTAXFormView._listObjects) {
+		if(x==this.refPath)
+			continue;
+		if(ZaMTAXFormView._listObjects[x]) {
+			ZaMTAXFormView._listObjects[x].deselectAll();
+		}
+	}
 }
 				
 ZaMTAXFormView.clearFilter = 
 function (ev) {
-	this.setInstanceValue("",this.getRef());
+	this.setInstanceValue("",this.getRef()+"/"+ZaMTA.A_queue_filter_name);
+	this.setInstanceValue("",this.getRef()+"/"+ZaMTA.A_queue_filter_value);	
 	this.getForm().refresh();
 	for(var x in ZaMTAXFormView._listObjects) {
 		if(ZaMTAXFormView._listObjects[x]) {
 			ZaMTAXFormView._listObjects[x].deselectAll();
 		}
 	}
+}
+
+ZaMTAXFormView.showAllMsgs = function (ev) {
+	ZaMTAXFormView.clearFilter.call(this,ev);
 }
 
 ZaMTAXFormView.myXFormModifier = function(xFormObject) {	
@@ -178,7 +207,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_destination, type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: true, onSelection:ZaMTAXFormView.listSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: true, preserveSelection:true, multiselect:false,onSelection:ZaMTAXFormView.listSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
 								]
 							},		
 							{type:_CELLSPACER_},
@@ -189,7 +218,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_origin, type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: true, onSelection:ZaMTAXFormView.listSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: true,preserveSelection:true, multiselect:false, onSelection:ZaMTAXFormView.listSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
 								]
 							},		
 							{type:_CELLSPACER_},
@@ -200,18 +229,27 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_error, type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: true, onSelection:ZaMTAXFormView.listSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: true,multiselect:false, onSelection:ZaMTAXFormView.listSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
 								]
 							}											
 						]},
 						{type:_SPACER_, height:"10"},
-						{type:_GROUP_, numCols:6, tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
+						/*
+						* This is too elaborate for now
+						*/
+					/*	{type:_GROUP_, numCols:6, tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
 							{type:_TEXTFIELD_, label:ZaMsg.PQ_searchQuery, ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_query, width:"100%", containerCssClass:"search_field_container"},
 							{type:_CELLSPACER_},
 							{type:_DWT_BUTTON_, label:ZaMsg.PQ_SearchQ},
 							{type:_CELLSPACER_},
 							{type:_DWT_BUTTON_, label:ZaMsg.PQ_ClearFilter, ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_query, onActivate:ZaMTAXFormView.clearFilter}							
-						]},																		
+						]},			
+																					*/
+						{type:_GROUP_, numCols:5, colSizes:["20%","20%","20%","20%","20%"],tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
+							{type:_OUTPUT_, label:ZaMsg.PQ_QueueFilter, ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_queue_filter_name},
+							{type:_OUTPUT_, label:ZaMsg.PQ_QueueFilterVal, ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_queue_filter_value},
+							{type:_DWT_BUTTON_,ref:ZaMTA.A_DeferredQ, label:ZaMsg.PQ_ShowAll,onActivate:ZaMTAXFormView.showAllMsgs}
+						]},																								
 						{type:_GROUP_, numCols:1, width:"95%", cssClass:"RadioGrouperBorder container", tableCssClass:"que_table",  items: [
 							   {type:_GROUP_, numCols:1, 
 							   		items: [
@@ -219,7 +257,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 									]
 								},
 							    {ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_messages, type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource", 
-						   		forceUpdate: true, widgetClass:ZaQMessagesListView, headerList:msgHeaderList},								
+						   		forceUpdate: true,multiselect:true, widgetClass:ZaQMessagesListView, headerList:msgHeaderList},								
 							]
 						}		
 					]

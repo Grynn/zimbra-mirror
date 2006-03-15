@@ -37,7 +37,7 @@ function ZaMTAController(appCtxt, container,app) {
 	this._UICreated = false;
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_servers/managing_servers.htm";				
 	this._toolbarOperations = new Array();
-	this.objType = ZaEvent.S_SERVER;	
+	this.objType = ZaEvent.S_MTA;	
 }
 
 ZaMTAController.prototype = new ZaXFormViewController();
@@ -82,6 +82,9 @@ ZaController.setViewMethods["ZaMTAController"].push(ZaMTAController.setViewMetho
 **/
 ZaMTAController.initToolbarMethod = 
 function () {
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.LABEL, ZaMsg.TBB_LastUpdated, ZaMsg.TBB_LastUpdated_tt, null, null, null,null,null,null,"refreshTime"));	
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.SEP));
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.REFRESH, ZaMsg.TBB_Refresh, ZaMsg.TBB_Refresh_tt, null, null, new AjxListener(this, this.refreshListener)));	
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.SERTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener)));    	
 }
 ZaController.initToolbarMethods["ZaMTAController"].push(ZaMTAController.initToolbarMethod);
@@ -107,3 +110,18 @@ function () {
 }
 
 
+ZaMTAController.prototype.refreshListener = function () {
+	this._currentObject.getMailQStatus();
+}
+
+/**
+* @param ev
+* This listener is invoked by ZaMTAController or any other controller that can change a ZaMTA object
+**/
+ZaMTAListController.prototype.handleMTAChange = 
+function (ev) {
+	//if any of the data that is currently visible has changed - update the view
+	if(ev) {
+		//update "Refresh" label
+	}
+}
