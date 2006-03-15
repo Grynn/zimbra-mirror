@@ -401,16 +401,15 @@ function(contextMenu, menuItemId, spanElement, contentObjText, canvas) {
 	if(contextMenu == ZmZimletBase.PANEL_MENU)
 		return;
 	//no actions for panel menu so far
-	if(menuItemId=="DEP2CAL" || menuItemId=="ARR2CAL") {
-		this.add2CAL(menuItemId, contentObjText);
+	if(menuItemId=="ADD2CAL") {
+		this.add2CAL(menuItemId, this.getFlightData(contentObjText),contentObjText);
 	} else {
 		return;
 	}
 }
 
 Com_Flightexplorer_Fasttrack.prototype.add2CAL = 
-function (menuItemId, contentObjText) {
-	var flightData = this.getFlightData(contentObjText);
+function (menuItemId, flightData,flightCode) {
 	var appt = null;
 	var startDate = new Date();
 	var endDate = new Date();
@@ -437,7 +436,7 @@ function (menuItemId, contentObjText) {
 				//
 			}
 		
-			var departureNotes = ["Flight ", contentObjText, " from ",flightData.OriginLocation," to ", flightData.DestinationLocation, "\nDuration: ",durationStr, "\nDeparture information:\n Airport: ", flightData.OriginName, "\n City: ", flightData.OriginLocation].join("");
+			var departureNotes = ["Flight ", flightCode, " from ",flightData.OriginLocation," to ", flightData.DestinationLocation, "\nDuration: ",durationStr, "\nDeparture information:\n Airport: ", flightData.OriginName, "\n City: ", flightData.OriginLocation].join("");
 			var notesPDT = "";
 			var notesEDT = "";			
 			var notesPTA = "";			
@@ -485,7 +484,7 @@ function (menuItemId, contentObjText) {
 			}
 			notes = [departureNotes,notesPDT,notesEDT,notesDepTemp,notesDepWeath,arrivalNotes,notesPTA,notesETA,notesArrTemp,notesArrWeath].join("");
 		}
-		name = ["Flight ", contentObjText].join("");		
+		name = ["Flight ", flightCode].join("");		
 	} 
 	appt = this.createAppointment(startDate);
 	appt.setEndDate(AjxDateUtil.roundTimeMins(endDate,5));

@@ -364,6 +364,7 @@ FlightStatusDlg.prototype._getSeparatorTemplate = function() {
 FlightStatusDlg.prototype.dataClbk = function(flightInfo) {
 	if(!flightInfo)
 		return;
+	this.flightInfo = flightInfo;
 	this.statusValueCell.innerHTML = flightInfo.Status;	
 	var airphone = null;
 	if(!flightInfo.AirlineName)
@@ -588,6 +589,6 @@ function (ev) {
 }
 FlightStatusDlg.prototype._add2Cal = 
 function () {
-	this.zimlet.add2CAL("ADD2CAL", this.currentFlightCode);
+	this.zimlet.add2CAL("ADD2CAL", this.flightInfo,this.currentFlightCode);
 	this.popdown();
 }
