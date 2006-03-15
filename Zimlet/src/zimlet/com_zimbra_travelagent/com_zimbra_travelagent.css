@@ -1,0 +1,83 @@
+/*************************
+ *  MAIN STYLE ELEMENTS  *
+ *************************/
+
+.SideStepTabView {
+	width: 100%;
+	align: left;	
+	background-color: #EEEEEE;
+}
+    
+.ImgSideStep-panelIcon {
+  background: url("sidestep.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.ImgTravelAgent-panelIcon {
+  background: url("travel_agent.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.ImgSideStepIcon {
+  background: url("sidestep.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.ImgKayakIcon {
+  background: url("kayak.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.ImgHotwireIcon {
+  background: url("hotwire.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.ImgTravelocityIcon {
+  background: url("travelocity.gif") no-repeat 0 0;
+  width: 18px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.ImgSideStep-air {
+  background: url("air.gif") no-repeat 0 0;
+  width: 38px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.ImgSideStep-hotel {
+  background: url("hotel.gif") no-repeat 0 0;
+  width: 14px;
+  height: 16px;
+  overflow: hidden;
+}
+.ImgSideStep-car {
+  background: url("car.gif") no-repeat 0 0;
+  width: 21px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.SideStepLinkButton-activated {
+	color: ff6600;
+	text-decoration: underline;
+	cursor:pointer;
+}
+
+.SideStepLinkButton {
+	color: 0033ff;
+	text-decoration: none;
+	cursor:pointer;
+}

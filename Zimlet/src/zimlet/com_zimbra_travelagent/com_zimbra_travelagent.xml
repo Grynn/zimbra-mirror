@@ -1,0 +1,36 @@
+<zimlet name="com_zimbra_travelagent" version="2.03" description="Search travel reservations across multiple engines">
+<include>com_zimbra_travelagent.js</include>
+<include>TravelAgentFlightFindView.js</include>
+<include>TravelAgentCarFindView.js</include>
+<include>TravelAgentHotelFindView.js</include>
+<include>TravelAgentAirportLookupDlg.js</include>
+<resource>sidestep.gif</resource>
+<resource>hotel.gif</resource>
+<resource>air.gif</resource>
+<resource>car.gif</resource>
+<resource>hotwire.gif</resource>
+<resource>travelocity.gif</resource>
+<resource>kayak.gif</resource>
+<resource>travel_agent.gif</resource>
+<includeCSS>com_zimbra_travelagent.css</includeCSS>	
+<handlerObject>Com_Zimbra_TravelAgent</handlerObject>
+	<zimletPanelItem label="Travel agent" icon="TravelAgent-panelIcon">
+		<dragSource type="ZmContact" />
+		<dragSource type="ZmAppt" />
+		<contextMenu>
+			<menuItem label="Preferences..." id="PREFERENCES" />
+			<menuItem label="Book a flight" id="BOOKAFLIGHT" />
+			<menuItem label="Book a car" id="BOOKACAR" />			
+			<menuItem label="Book a hotel" id="BOOKAHOTEL" />				
+		</contextMenu>		
+		<toolTipText>Search travel reservations across multiple engines</toolTipText>
+	</zimletPanelItem>
+	<userProperties>
+		<property type="string" minLength="3" maxLength="4"  name="myairport" label="My airport" visible="true" value="SFO"/>
+		<property type="boolean"  name="search_sidestep" label="Show SideStep.com button" visible="true" value="true"/>
+		<property type="boolean"  name="search_travelocity" label="Show Travelocity.com button" visible="true" value="true"/>
+		<property type="boolean"  name="search_hotwire" label="Show Hotwire.com button" visible="true" value="true"/>		
+		<property type="boolean"  name="search_kayak" label="Show Kayak.com button" visible="false" value="false"/>				
+	</userProperties>
+</zimlet>
+

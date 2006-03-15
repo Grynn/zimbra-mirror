@@ -1,0 +1,6 @@
+<zimletConfig name="com_zimbra_travelagent" version="2.01">
+	<global>
+        <property name="allowedDomains">sidestep.com,*.sidestep.com,*.airnav.com,airnav.com,myplanner.org,*.myplanner.org</property>	
+    </global>
+</zimletConfig>
+
