@@ -175,10 +175,22 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 	xFormObject.items = [
 		{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", 
 			items: [
-				{type:_GROUP_,	numCols:4,colSizes:["32px","350px","100px","250px"],
+				{type:_GROUP_,	numCols:6,colSizes:["32px","250px","auto", "130px","250px", "auto"],
 					items: [
-						{type:_AJX_IMAGE_, src:"Server_32", label:null, rowSpan:2},
-						{type:_OUTPUT_, ref:ZaMTA.A_Servername, label:null,cssClass:"AdminTitle", rowSpan:2}
+						{type:_AJX_IMAGE_, src:"Server_32", label:null},
+						{type:_OUTPUT_, ref:ZaMTA.A_Servername, label:null,cssClass:"AdminTitle"},
+						{type:_CELLSPACER_},
+						{type:_DWT_PROGRESS_BAR_, label:ZaMsg.PQ_ParsingProgress,
+							maxValue:100,
+							ref:ZaMTA.A_progress,
+							relevant:"instance.status == 'running' || instance.status == 'started'",
+							relevantBehavior:_HIDE_,
+							valign:_CENTER_,
+							align:_CENTER_,	
+							wholeCssClass:"progressbar",
+							progressCssClass:"progressused"
+						},
+						{type:_CELLSPACER_}						
 					]
 				}
 			],
@@ -295,13 +307,22 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 											
 						]},
 						{type:_SPACER_, height:"10"},
+						/*
+						* This is too elaborate for now
+						*/		
+						/*				
 						{type:_GROUP_, numCols:6, tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
 							{type:_TEXTFIELD_, label:ZaMsg.PQ_searchQuery, ref:ZaMTA.A_IncomingQ+"/"+ZaMTA.A_query, width:"100%", containerCssClass:"search_field_container"},
 							{type:_CELLSPACER_},
 							{type:_DWT_BUTTON_, label:ZaMsg.PQ_SearchQ},
 							{type:_CELLSPACER_},
 							{type:_DWT_BUTTON_, label:ZaMsg.PQ_ClearFilter,ref:ZaMTA.A_IncomingQ+"/"+ZaMTA.A_query, onActivate:ZaMTAXFormView.clearFilter}							
-						]},																	
+						]},*/	
+						{type:_GROUP_, numCols:5, colSizes:["20%","20%","20%","20%","20%"],tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
+							{type:_OUTPUT_, label:ZaMsg.PQ_QueueFilter, ref:ZaMTA.A_IncomingQ+"/"+ZaMTA.A_queue_filter_name},
+							{type:_OUTPUT_, label:ZaMsg.PQ_QueueFilterVal, ref:ZaMTA.A_IncomingQ+"/"+ZaMTA.A_queue_filter_value},
+							{type:_DWT_BUTTON_,ref:ZaMTA.A_IncomingQ, label:ZaMsg.PQ_ShowAll,onActivate:ZaMTAXFormView.showAllMsgs}
+						]},																							
 						{type:_GROUP_, numCols:1, width:"95%", cssClass:"RadioGrouperBorder container", tableCssClass:"que_table",  items: [
 							   {type:_GROUP_, numCols:1, 
 							   		items: [
