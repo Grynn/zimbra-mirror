@@ -27,13 +27,13 @@
 * @class ZaResourceController controls display of a single resource
  * @author Charles Cao
  * resource controller 
- */
+ */  
 function ZaResourceController (appCtxt, container, app) {
 	ZaXFormViewController.call(this, appCtxt, container, app, "ZaResourceController");
 	this._UICreated = false;
 	this._toolbarOperations = new Array();
-	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/provisioning_accounts.htm";	
-	this.deleteMsg = ZaMsg.Q_DELETE_DL;
+	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/Provisioning_Accounts.htm";	
+	this.deleteMsg = ZaMsg.Q_DELETE_RES;
 	this.objType = ZaEvent.S_DL;	
 }
 
@@ -236,9 +236,12 @@ function () {
 	}		
 
 	var mods = new Object();
+	
+	if(!ZaResource.checkValues(tmpObj, this._app))
+		return false;
+		
 	var changeDetails = new Object();
 	
-
 	//check if need to rename
 	if(newName) {
 		changeDetails["newName"] = newName;
@@ -247,29 +250,17 @@ function () {
 		} catch (ex) {
 			if (ex.code == ZmCsfeException.SVC_AUTH_EXPIRED || ex.code == ZmCsfeException.SVC_AUTH_REQUIRED || ex.code == ZmCsfeException.NO_AUTH_TOKEN) {
 					this._showLoginDialog();
-			} else {
-				/*var detailStr = "";
-				for (var prop in ex) {
-					detailStr = detailStr + prop + " - " + ex[prop] + "\n";				
-				}*/
+			} else {				
 				if(ex.code == ZmCsfeException.ACCT_EXISTS) {
 					this.popupErrorDialog(ZaMsg.FAILED_RENAME_ACCOUNT_1, ex, true);
-					/*this._errorDialog.setMessage(ZaMsg.FAILED_RENAME_ACCOUNT_1, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
-					this._errorDialog.popup();*/
+					
 				} else {
 					this.popupErrorDialog(ZaMsg.FAILED_RENAME_ACCOUNT, ex, true);
-				/*
-					this._errorDialog.setMessage(ZaMsg.FAILED_RENAME_ACCOUNT, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
-					this._errorDialog.popup();*/
 				}
 			}
 			return false;
 		}
-	}
-
-	if(!ZaResource.checkValues(tmpObj, this._app))
-		return false;
-	
+	}	
 	
 	//transfer the fields from the tmpObj to the _currentObject
 	for (var a in tmpObj.attrs) {
