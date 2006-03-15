@@ -120,10 +120,7 @@ ZaAccountListController.prototype.setDefaultType = function (type) {
 			this._toolbar.getButton(ZaOperation.EDIT).setToolTipContent(ZaMsg.DLTBB_Edit_tt);
 			this._toolbar.getButton(ZaOperation.DELETE).setToolTipContent(ZaMsg.DLTBB_Delete_tt);
 		} else if (type == ZaItem.RESOURCE ){
-		  //HC: Resource 
-		  //TODO: need to customize it according to the resource
-			//newButton.setToolTipContent(ZaMsg.DLTBB_New_tt);
-			newButton.setToolTipContent("New Resource Account");
+		  	newButton.setToolTipContent(ZaMsg.RESTBB_New_tt);
 			newButton.setImage("Resource");
 			newButton.setDisabledImage("ResourceDis");
 			newButton.addSelectionListener(this._newResListener);
@@ -245,13 +242,11 @@ function(searchQuery) {
 			} else if(searchQuery.types[0] == ZaSearch.ACCOUNTS) {
 				this._contentView._headerList[3]._sortable=true;
 				this._contentView._headerList[3]._sortField = ZaAccount.A_accountStatus;
-			} else if (searchQuery.types[0] == ZaSearch.ACCOUNTS) {
-				//HC:Resource
+			} else if (searchQuery.types[0] == ZaSearch.RESOURCES) {
 				this._contentView._headerList[3]._sortable=true;
-				this._contentView._headerList[3]._sortField = ZaAccount.A_accountStatus;
+				this._contentView._headerList[3]._sortField = ZaResource.A_accountStatus;
 			}
 		}
-
 	} catch (ex) {
 		// Only restart on error if we are not initialized and it isn't a parse error
 		if (ex.code != ZmCsfeException.MAIL_QUERY_PARSE_ERROR) {
@@ -430,7 +425,6 @@ function () {
 		newMenuOpList.push(new ZaOperation(ZaOperation.NEW, ZaMsg.DLTBB_New_menuItem, ZaMsg.DLTBB_New_tt, "Group", "GroupDis", this._newDLListener));
 	}
 	
-	//HC: Resource
 	if(ZaSettings.RESOURCES_ENABLED) {
 		newMenuOpList.push(new ZaOperation(ZaOperation.NEW, ZaMsg.RESTBB_New_menuItem, ZaMsg.RESTBB_New_tt, "Resource", "ResourceDis", this._newResListener));
 	}
@@ -439,7 +433,6 @@ function () {
 		this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", this._newAcctListener, 
 								   ZaOperation.TYPE_MENU, newMenuOpList));
     } else if(this._defaultType == ZaItem.RESOURCE) {
-    	//HC: Resource
 		this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.RESTBB_New_tt, "Resource", "ResourceDis", this._newResListener, 
 									   ZaOperation.TYPE_MENU, newMenuOpList));
     	
@@ -469,7 +462,6 @@ function () {
 	this._contentView = new ZaAccountListView(this._container, this._app);
 	this._newDLListener = new AjxListener(this, ZaAccountListController.prototype._newDistributionListListener);
 	this._newAcctListener = new AjxListener(this, ZaAccountListController.prototype._newAccountListener);
-	//HC:Resource
 	this._newResListener = new AjxListener(this, ZaAccountListController.prototype._newResourceListener);
 
     this._initToolbar();
@@ -524,7 +516,6 @@ function(ev) {
 
 };
 
-//HC:Resource
 ZaAccountListController.prototype._newResourceListener =
 function(ev) {
 	try {
@@ -590,7 +581,6 @@ ZaAccountListController.prototype._editItem = function (item) {
 			this._app.getAccountViewController().show(account);
 		}
 	} else if (type == ZaItem.RESOURCE ){
-		//HC:resource
 		this._app.getResourceController().show(item);
 	}
 };

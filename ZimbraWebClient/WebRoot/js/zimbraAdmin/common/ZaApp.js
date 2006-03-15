@@ -151,7 +151,6 @@ function (domain) {
 	return this._controllers[ZaZimbraAdmin._DL_VIEW];
 };
 
-//HC:Resource
 ZaApp.prototype.getResourceController = 
 function () {
 	if (this._controllers[ZaZimbraAdmin._RESOURCE_VIEW] == null) {

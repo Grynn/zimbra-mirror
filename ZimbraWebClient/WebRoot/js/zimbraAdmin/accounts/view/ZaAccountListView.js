@@ -90,7 +90,6 @@ function(account, now, isDndIcon) {
 				case ZaItem.ALIAS:
 					html[idx++] = AjxImg.getImageHtml("AccountAlias");				
 				break;	
-				//HC: Resource	
 				case ZaItem.RESOURCE:
 					html[idx++] = AjxImg.getImageHtml("Resource");				
 				break;											

@@ -334,8 +334,7 @@ function() {
 		ti.setText(ZaMsg.OVP_distributionLists);
 		ti.setImage("Group");
 		ti.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW);
-	
-		//HC: Resource
+		
 		ti = new DwtTreeItem(this._addressesTi);
 		ti.setText(ZaMsg.OVP_resources);
 		ti.setImage("Resource");
@@ -346,7 +345,6 @@ function() {
 		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ACCOUNTS_LIST_VIEW] = ZaOverviewPanelController.accountListTreeListener;
 		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ALIASES_LIST_VIEW] = ZaOverviewPanelController.aliasListTreeListener;
 		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW] = ZaOverviewPanelController.dlListTreeListener;		
-		//HC: Resource
 		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._RESOURCE_VIEW] = ZaOverviewPanelController.resourceListTreeListener;		
 	}
 		
@@ -661,7 +659,6 @@ ZaOverviewPanelController.accountListTreeListener = function (ev) {
 	this._showAccountsView(ZaItem.ACCOUNT,ev);
 }
 
-//HC:Resource
 ZaOverviewPanelController.resourceListTreeListener = function (ev) {
 	this._showAccountsView(ZaItem.RESOURCE,ev);
 }
@@ -700,7 +697,6 @@ ZaOverviewPanelController.prototype._showAccountsView = function (defaultType, e
 	if(defaultType == ZaItem.DL) {
 		queryHldr.fetchAttrs = ZaDistributionList.searchAttributes;
 	} else if (defaultType == ZaItem.RESOURCE){
-		//HC:Resource
 		queryHldr.fetchAttrs = ZaResource.searchAttributes;
 	} else {
 		queryHldr.fetchAttrs = ZaSearch.standardAttributes;

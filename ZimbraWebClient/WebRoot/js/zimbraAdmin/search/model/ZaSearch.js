@@ -35,21 +35,18 @@ function ZaSearch() {
 	this[ZaSearch.A_fAliases] = "TRUE";
 	this[ZaSearch.A_fAccounts] = "TRUE";	
 	this[ZaSearch.A_fdistributionlists] = "TRUE";
-	//HC:Resource	
 	this[ZaSearch.A_fResources] = "TRUE";
 	this[ZaSearch.A_pagenum]=1;	
 }
 ZaSearch.ALIASES = "aliases";
 ZaSearch.DLS = "distributionlists";
 ZaSearch.ACCOUNTS = "accounts";
-//HC:Resource
 ZaSearch.RESOURCES = "resources";
 
 ZaSearch.TYPES = new Object();
 ZaSearch.TYPES[ZaItem.ALIAS] = ZaSearch.ALIASES;
 ZaSearch.TYPES[ZaItem.DL] = ZaSearch.DLS;
 ZaSearch.TYPES[ZaItem.ACCOUNT] = ZaSearch.ACCOUNTS;
-//HC:Resource
 ZaSearch.TYPES[ZaItem.RESOURCE] = ZaSearch.RESOURCES;
 
 
@@ -76,7 +73,8 @@ ZaSearch.standardAttributes = AjxBuffer.concat(ZaAccount.A_displayname,",",
 											   ZaAccount.A_uid ,"," , 
 											   ZaAccount.A_accountStatus , "," , 
 											   ZaAccount.A_description, ",",
-											   ZaDistributionList.A_mailStatus);
+											   ZaDistributionList.A_mailStatus, ",",
+											   ZaResource.A_zimbraCalResType);
 
 /**
 * Sends SearchAccountsRequest to the SOAP Servlet
@@ -275,7 +273,6 @@ ZaSearch.getSearchFromQuery = function (query) {
 	searchObj[ZaSearch.A_fAliases] = "FALSE";
 	searchObj[ZaSearch.A_fAccounts] = "FALSE";
 	searchObj[ZaSearch.A_fdistributionlists] = "FALSE";
-	//HC:Resource
 	searchObj[ZaSearch.A_fResources] = "FALSE";
 	
 	if (query.types != null) {

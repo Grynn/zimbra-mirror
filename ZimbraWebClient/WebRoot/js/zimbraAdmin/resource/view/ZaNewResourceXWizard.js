@@ -23,26 +23,17 @@
  * ***** END LICENSE BLOCK *****
  */
 
+/**
+* @class ZaNewResourceXWizard
+* @contructor ZaNewResourceXWizard
+* @param parent
+* @param ZaApp app
+* This class defines the New Resource Wazards in XForm
+* @author Charles Cao
+**/
 function ZaNewResourceXWizard (parent, app) {
 	ZaXWizardDialog.call(this, parent, app, null, ZaMsg.NCD_NewResTitle, "550px", "300px","ZaNewResourceXWizard");
-	this.accountStatusChoices = [
-		{value:ZaResource.ACCOUNT_STATUS_ACTIVE, label:ZaResource.getAccountStatusLabel(ZaResource.ACCOUNT_STATUS_ACTIVE)}, 
-		{value:ZaResource.ACCOUNT_STATUS_CLOSED, label:ZaResource.getAccountStatusLabel(ZaResource.ACCOUNT_STATUS_CLOSED)},
-		{value:ZaResource.ACCOUNT_STATUS_LOCKED, label: ZaResource.getAccountStatusLabel(ZaResource.ACCOUNT_STATUS_LOCKED)},
-		{value:ZaResource.ACCOUNT_STATUS_MAINTENANCE, label:ZaResource.getAccountStatusLabel(ZaResource.ACCOUNT_STATUS_MAINTENANCE)}
-	];	
 	
-	this.resTypeChoices = [
-		{value:ZaResource.RESOURCE_TYPE_LOCATION, label:ZaResource.getResTypeLabel ( ZaResource.RESOURCE_TYPE_LOCATION)}, 
-		{value:ZaResource.RESOURCE_TYPE_EQUIPMENT, label:ZaResource.getResTypeLabel ( ZaResource.RESOURCE_TYPE_EQUIPMENT)}
-	];	
-	
-	this.schedulePolicyChoices = [
-		{value:ZaResource.SCHEDULE_POLICY_ACCEPT_UNLESS_BUSY, label:ZaResource.getSchedulePolicyLabel ( ZaResource.SCHEDULE_POLICY_ACCEPT_UNLESS_BUSY)},
-		{value:ZaResource.SCHEDULE_POLICY_ACCEPT_ALL, label:ZaResource.getSchedulePolicyLabel ( ZaResource.SCHEDULE_POLICY_ACCEPT_ALL)}
-	];
-	
-//	this.accountStatusChoices = [ZaResource.ACCOUNT_STATUS_ACTIVE, ZaResource.ACCOUNT_STATUS_MAINTENANCE, ZaResource.ACCOUNT_STATUS_LOCKED, ZaResource.ACCOUNT_STATUS_CLOSED];		
 	this.stepChoices = [
 		{label:ZaMsg.TABT_ResourceProperties, value:1},
 		{label:ZaMsg.TABT_ResLocationContact, value:2}
@@ -50,9 +41,7 @@ function ZaNewResourceXWizard (parent, app) {
 	
 	this._lastStep = this.stepChoices.length;
 
-
 	this.initForm(ZaResource.myXModel,this.getMyXForm());	
-//    DBG.timePt(AjxDebug.PERF, "finished initForm");
    
 	this._localXForm.setController(this._app);	
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaNewResourceXWizard.prototype.handleXFormChange));
@@ -64,11 +53,11 @@ function ZaNewResourceXWizard (parent, app) {
 ZaNewResourceXWizard.prototype = new ZaXWizardDialog;
 ZaNewResourceXWizard.prototype.constructor = ZaNewResourceXWizard;
 ZaXDialog.XFormModifiers["ZaNewResourceXWizard"] = new Array();
-ZaNewResourceXWizard.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/create_an_account.htm";
+ZaNewResourceXWizard.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/Managing_Resources.htm";
 
-//HC: Handles the Finish button's change
 ZaNewResourceXWizard.prototype.handleXFormChange = 
 function () {
+	//Enable/disable the finish button
 	if(this._localXForm.hasErrors()) {
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 	} else {
@@ -76,7 +65,6 @@ function () {
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
 	}
 }
-
 
 /**
 * Overwritten methods that control wizard's flow (open, go next,go previous, finish)
@@ -97,7 +85,6 @@ function() {
 		}
 		var resource = ZaItem.create(this._containedObject, ZaResource, "ZaResource", this._app);
 		if(resource != null) {
-			//TODO: ?? if creation took place - fire an DomainChangeEvent
 			this._app.getResourceController().fireCreationEvent(resource);
 			this.popdown();		
 		}
@@ -131,7 +118,7 @@ function() {
 
 /**
 * @method setObject sets the object contained in the view
-* @param entry - ZaAccount object to display
+* @param entry - ZaResource object to display
 **/
 ZaNewResourceXWizard.prototype.setObject =
 function(entry) {
@@ -163,10 +150,11 @@ function(entry) {
 	}
 	//set the default value of resource type and schedule policy
 	this._containedObject.attrs[ZaResource.A_zimbraCalResType] = ZaResource.RESOURCE_TYPE_LOCATION;
-	this._containedObject[ZaResource.A_schedulePolicy] = ZaResource.SCHEDULE_POLICY_ACCEPT_UNLESS_BUSY;
+	this._containedObject[ZaResource.A2_schedulePolicy] = ZaResource.SCHEDULE_POLICY_ACCEPT_UNLESS_BUSY;
 	this._containedObject.attrs[ZaResource.A_accountStatus] = ZaResource.ACCOUNT_STATUS_ACTIVE;
 	this._containedObject[ZaResource.A2_autodisplayname] = "TRUE";
 	this._containedObject[ZaResource.A2_autoMailServer] = "TRUE";
+	this._containedObject[ZaResource.A2_autoLocationName] = "TRUE";	
 	this._containedObject[ZaModel.currentStep] = 1;
 	var domainName;
 	
@@ -215,19 +203,23 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 	
 	var case1 = {type:_CASE_, numCols:1, relevant:"instance[ZaModel.currentStep] == 1", align:_LEFT_, valign:_TOP_};
 	var case1Items = 
-		[	{ref:ZaResource.A_displayname, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ResourceName,label:ZaMsg.NAD_ResourceName, labelLocation:_LEFT_, width: "200px",
+		[	{ref:ZaResource.A_displayname, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ResourceName,label:ZaMsg.NAD_ResourceName, 
+				labelLocation:_LEFT_, width: "200px",
 				elementChanged: function(elementValue,instanceValue, event) {
 								//auto fill the account name when autodisplayname is true
 								if(this.getInstance()[ZaResource.A2_autodisplayname]=="TRUE") {
-									ZaResourceXFormView.generateAccountName(this.getInstance(), elementValue );
+									ZaResource.setAutoAccountName(this.getInstance(), elementValue );
 								}
 								this.getForm().itemChanged(this, elementValue, event);
 							}
 		
 			},			
-			{ref:ZaResource.A_zimbraCalResType, type:_OSELECT1_, msgName:ZaMsg.NAD_ResType,label:ZaMsg.NAD_ResType, labelLocation:_LEFT_, choices:this.resTypeChoices},		
-			{ref:ZaResource.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName, labelLocation:_LEFT_,
-				onChange: function(value, event, form) {
+			{ref:ZaResource.A_zimbraCalResType, type:_OSELECT1_, msgName:ZaMsg.NAD_ResType,label:ZaMsg.NAD_ResType, 
+					labelLocation:_LEFT_, choices:ZaResource.resTypeChoices
+			},		
+			{ref:ZaResource.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_ResAccountName,label:ZaMsg.NAD_ResAccountName, 
+					labelLocation:_LEFT_,
+					onChange: function(value, event, form) {
 								//disable the autodisplayname whenever user does some action on the account name
 								this.getInstance()[ZaResource.A2_autodisplayname] = "FALSE";						
 								this.setInstanceValue(value);
@@ -243,50 +235,88 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 			}
 		);
 	}
-	case1Items.push({ref:ZaResource.A_accountStatus, type:_OSELECT1_, editable:false, msgName:ZaMsg.NAD_AccountStatus,label:ZaMsg.NAD_AccountStatus, labelLocation:_LEFT_, choices:this.accountStatusChoices});
-	/*
-	case1Items.push({ref:ZaResource.A_description, type:_INPUT_, msgName:ZaMsg.NAD_Description,label:ZaMsg.NAD_Description, labelLocation:_LEFT_, cssClass:"admin_xform_name_input"});
-	*/
+	case1Items.push({ref:ZaResource.A_accountStatus, type:_OSELECT1_, editable:false, msgName:ZaMsg.NAD_ResourceStatus,
+					  label:ZaMsg.NAD_ResourceStatus, labelLocation:_LEFT_, choices:ZaResource.accountStatusChoices});
+	
 	//scheduling policy
-	case1Items.push({ref:ZaResource.A_schedulePolicy, type:_OSELECT1_, msgName:ZaMsg.NAD_ResType,label:ZaMsg.NAD_SchedulePolicy, labelLocation:_LEFT_, width: "300px", choices:this.schedulePolicyChoices});	
-	case1Items.push({ref:ZaResource.A_zimbraCalResAutoDeclineRecurring, type:_CHECKBOX_, msgName:ZaMsg.NAD_DeclineRecurring,label:ZaMsg.NAD_DeclineRecurring,relevantBehavior:_HIDE_, 
-					labelCssClass:"xform_label", align:_LEFT_,labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE"});
+	case1Items.push({ref:ZaResource.A2_schedulePolicy, type:_OSELECT1_, msgName:ZaMsg.NAD_ResType,
+						label:ZaMsg.NAD_SchedulePolicy, labelLocation:_LEFT_, width: "300px", 
+						choices:ZaResource.schedulePolicyChoices});	
+	case1Items.push({ref:ZaResource.A_zimbraCalResAutoDeclineRecurring, type:_CHECKBOX_, 
+						msgName:ZaMsg.NAD_DeclineRecurring,label:ZaMsg.NAD_DeclineRecurring,relevantBehavior:_HIDE_, 
+						labelCssClass:"xform_label", align:_LEFT_,labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE"});
 					
 	
 	if(ZaSettings.SERVERS_ENABLED) {		
 		case1Items.push({type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_MailServer, labelLocation:_LEFT_,
 							items: [
-								{ ref: ZaResource.A_mailHost, type: _OSELECT1_, label: null, editable:false, choices: this._app.getServerListChoices2(), 
+								{ ref: ZaResource.A_mailHost, type: _OSELECT1_, label: null, editable:false, 
+									choices: this._app.getServerListChoices2(), 
 									relevant:"instance[ZaResource.A2_autoMailServer]==\"FALSE\" && form.getController().getServerListChoices2().getChoices().values.length != 0",
 									relevantBehavior:_DISABLE_
 							  	},
-								{ref:ZaResource.A2_autoMailServer, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"}
+								{ref:ZaResource.A2_autoMailServer, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,
+									label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"}
 							]
 						}); 
 	}
+	
+	//Description
+	case1Items.push({ref:ZaResource.A_description, type:_INPUT_, msgName:ZaMsg.NAD_Description,
+				label:ZaMsg.NAD_Description, labelLocation:_LEFT_, width: "300px", cssClass:"admin_xform_name_input"});
 	
 	//Notes
 	case1Items.push({ref:ZaResource.A_notes, type:_TEXTAREA_, msgName:ZaMsg.NAD_Notes,label:ZaMsg.NAD_Notes, labelLocation:_LEFT_});
 	
 	case1.items = case1Items;
 	cases.push(case1);
-		
+	var defaultWidth = 200 ;	
 	var case2={type:_CASE_, numCols:2, relevant:"instance[ZaModel.currentStep] == 2",colSizes:["150px","300px"],
 					items: [
-						{ref:ZaResource.A_zimbraCalResSite, type:_TEXTFIELD_, msgName:ZaMsg.NAD_Site,label:ZaMsg.NAD_Site, labelLocation:_LEFT_, width:150},
-						{ref:ZaResource.A_zimbraCalResBuilding, type:_TEXTFIELD_, msgName:ZaMsg.NAD_Building,label:ZaMsg.NAD_Building, labelLocation:_LEFT_, width:150},						
-						{ref:ZaResource.A_zimbraCalResFloor, type:_TEXTFIELD_, msgName:ZaMsg.NAD_Floor,label:ZaMsg.NAD_Floor, labelLocation:_LEFT_, width:150},						
-						{ref:ZaResource.A_zimbraCalResRoom, type:_TEXTFIELD_, msgName:ZaMsg.NAD_Room,label:ZaMsg.NAD_Room, labelLocation:_LEFT_, width:150},
-						{ref:ZaResource.A_locationDisplayName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_LocationDisplayName,label:ZaMsg.NAD_LocationDisplayName, labelLocation:_LEFT_, width:150},
-						{ref:ZaResource.A_street, type:_TEXTFIELD_, msgName:ZaMsg.NAD_Street,label:ZaMsg.NAD_Street, labelLocation:_LEFT_, width:150},
-						{ref:ZaResource.A_city, type:_TEXTFIELD_, msgName:ZaMsg.NAD_city ,label:ZaMsg.NAD_city, labelLocation:_LEFT_, width:150},
-						{ref:ZaResource.A_state, type:_TEXTFIELD_, msgName:ZaMsg.NAD_state ,label:ZaMsg.NAD_state, labelLocation:_LEFT_, width:150},
-						{ref:ZaResource.A_country, type:_TEXTFIELD_, msgName:ZaMsg.country ,label:ZaMsg.NAD_country, labelLocation:_LEFT_, width:150},
-						{ref:ZaResource.A_zip, type:_TEXTFIELD_, msgName:ZaMsg.zip ,label:ZaMsg.NAD_zip, labelLocation:_LEFT_, width:150},
+						{ref:ZaResource.A_zimbraCalResSite, type:_TEXTFIELD_, msgName:ZaMsg.NAD_Site,label:ZaMsg.NAD_Site, 
+								labelLocation:_LEFT_, width:defaultWidth, elementChanged: ZaResource.setAutoLocationName},
+						{ref:ZaResource.A_zimbraCalResBuilding, type:_TEXTFIELD_, msgName:ZaMsg.NAD_Building,label:ZaMsg.NAD_Building, 
+								labelLocation:_LEFT_, width:defaultWidth, elementChanged: ZaResource.setAutoLocationName},						
+						{ref:ZaResource.A_zimbraCalResFloor, type:_TEXTFIELD_, msgName:ZaMsg.NAD_Floor,label:ZaMsg.NAD_Floor, 
+								labelLocation:_LEFT_, width:defaultWidth, elementChanged: ZaResource.setAutoLocationName},						
+						{ref:ZaResource.A_zimbraCalResRoom, type:_TEXTFIELD_, msgName:ZaMsg.NAD_Room,label:ZaMsg.NAD_Room, 
+								labelLocation:_LEFT_, width:defaultWidth, elementChanged: ZaResource.setAutoLocationName},
+						{ref:ZaResource.A_zimbraCalResCapacity, type:_TEXTFIELD_, msgName:ZaMsg.NAD_Capacity,label:ZaMsg.NAD_Capacity, 
+							labelLocation:_LEFT_, width:defaultWidth,
+							relevant: "instance.attrs[ZaResource.A_zimbraCalResType].toLowerCase() ==  ZaResource.RESOURCE_TYPE_LOCATION.toLowerCase( )",
+							relevantBehavior:_HIDE_
+						},
+						{type:_GROUP_, numCols:3, nowrap:true, msgName:ZaMsg.NAD_LocationDisplayName, width:200, 
+							label:ZaMsg.NAD_LocationDisplayName, labelLocation:_LEFT_, 
+							items: [
+								{ref:ZaResource.A_locationDisplayName, type:_TEXTFIELD_, label:null, cssClass:"admin_xform_name_input", 
+									width:defaultWidth,  
+									relevant:"instance[ZaResource.A2_autoLocationName] == \"FALSE\"",
+									relevantBehavior:_DISABLE_
+								},
+								{ref:ZaResource.A2_autoLocationName , type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,
+									label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE",
+									elementChanged: ZaResource.setAutoLocationName
+								 }
+							]
+						},
+						{ref:ZaResource.A_street, type:_TEXTFIELD_, msgName:ZaMsg.NAD_Street,label:ZaMsg.NAD_Street, 
+							labelLocation:_LEFT_, width:defaultWidth},
+						{ref:ZaResource.A_city, type:_TEXTFIELD_, msgName:ZaMsg.NAD_city ,label:ZaMsg.NAD_city, 
+							labelLocation:_LEFT_, width:defaultWidth},
+						{ref:ZaResource.A_state, type:_TEXTFIELD_, msgName:ZaMsg.NAD_state ,label:ZaMsg.NAD_state, 
+							labelLocation:_LEFT_, width:defaultWidth},
+						{ref:ZaResource.A_country, type:_TEXTFIELD_, msgName:ZaMsg.country ,label:ZaMsg.NAD_country, 
+							labelLocation:_LEFT_, width:defaultWidth},
+						{ref:ZaResource.A_zip, type:_TEXTFIELD_, msgName:ZaMsg.zip ,label:ZaMsg.NAD_zip, 
+							labelLocation:_LEFT_, width:defaultWidth},
 						{type:_SEPARATOR_, colSpan: "2"},
-						{ref:ZaResource.A_zimbraCalResContactName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ContactName,label:ZaMsg.NAD_ContactName, labelLocation:_LEFT_, width:150},
-						{ref:ZaResource.A_zimbraCalResContactEmail, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ContactEmail,label:ZaMsg.NAD_ContactEmail, labelLocation:_LEFT_, width:150},
-						{ref:ZaResource.A_zimbraCalResContactPhone, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ContactPhone,label:ZaMsg.NAD_ContactPhone, labelLocation:_LEFT_, width:150}
+						{ref:ZaResource.A_zimbraCalResContactName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ContactName,
+							label:ZaMsg.NAD_ContactName, labelLocation:_LEFT_, width:defaultWidth},
+						{ref:ZaResource.A_zimbraCalResContactEmail, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ContactEmail,
+							label:ZaMsg.NAD_ContactEmail, labelLocation:_LEFT_, width:defaultWidth},
+						{ref:ZaResource.A_zimbraCalResContactPhone, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ContactPhone,
+							label:ZaMsg.NAD_ContactPhone, labelLocation:_LEFT_, width:defaultWidth}
 					]
 				};
 	cases.push(case2);
