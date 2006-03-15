@@ -401,7 +401,8 @@ function(by, val, withCos) {
 	this.attrs = new Object();
 	this.initFromJS(resp.calresource[0]);
 	
-	if(this.attrs[ZaResource.A_locationDisplayName] == null || this.getAutoLocationName() == this.attrs[ZaResource.A_locationDisplayName]) {
+	//if(this.attrs[ZaResource.A_locationDisplayName] == null || this.getAutoLocationName() == this.attrs[ZaResource.A_locationDisplayName]) {
+	if(this.getAutoLocationName() == this.attrs[ZaResource.A_locationDisplayName]) {
 		this[ZaResource.A2_autoLocationName] = "TRUE";
 	} else {
 		this[ZaResource.A2_autoLocationName] = "FALSE";
