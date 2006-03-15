@@ -4,11 +4,14 @@ function Test() {
 // 	sh._setMouseEventHdlrs();
 // 	sh.addListener(DwtEvent.ONMOUSEMOVE, new AjxListener(this, this.func));
 
-	var f1 = new ZmSpreadSheet(sh, null, "absolute");
-	f1.setModel(new ZmSpreadSheetModel(20, 8));
+ 	var f1 = new ZmSpreadSheet(sh, null, "absolute");
+//  	var model = new ZmSpreadSheetModel(0, 0);
+//  	model.deserialize(document.getElementById("testdata").value);
+//	f1.setModel(model);
+	f1.setModel(new ZmSpreadSheetModel(10, 8));
 	new ZmSpreadSheetToolbars(f1, f1);
 	var b = sh.getBounds();
- 	f1.setBounds(b.x, b.y, b.width, b.height);
+ 	f1.setBounds(0, 0, b.width, b.height);
 	f1.setZIndex(Dwt.Z_VIEW);
 
 // 	var f2 = new ZmSpreadSheet(sh, null, "absolute");

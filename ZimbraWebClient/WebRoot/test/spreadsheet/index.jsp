@@ -65,6 +65,7 @@ Contributor(s):
     <jsp:include page="../../public/Ajax.jsp"/>
     <jsp:include page="../../public/Dwt.jsp"/>
 
+<script type="text/javascript" src="<%= contextPath %>/js/zimbraMail/share/view/spreadsheet/msgs.js<%= ext %>?v=<%= vers %>"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/zimbraMail/share/view/spreadsheet/ZmSpreadSheet.js<%= ext %>?v=<%= vers %>"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/zimbraMail/share/view/spreadsheet/ZmSpreadSheetModel.js<%= ext %>?v=<%= vers %>"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/zimbraMail/share/view/spreadsheet/ZmSpreadSheetFormulae.js<%= ext %>?v=<%= vers %>"></script>
@@ -81,6 +82,9 @@ Contributor(s):
 	    }
         AjxCore.addOnloadListener(launch);
     </script>
+<%
+//        <textarea id="testdata" style="display: none">< % @include file="test.json" % ></textarea>
+%>
     </body>
 </html>
 
