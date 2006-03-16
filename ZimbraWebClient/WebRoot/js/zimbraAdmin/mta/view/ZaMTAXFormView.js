@@ -159,6 +159,24 @@ ZaMTAXFormView.showAllMsgs = function (ev) {
 	ZaMTAXFormView.clearFilter.call(this,ev);
 }
 
+ZaMTAXFormView.deleteButtonListener = function (ev) {
+	if(this.getSelectionCount() ==1) {
+		var item = this.getSelection()[0];
+
+	}
+}
+
+ZaMTAXFormView.listActionListener = function (ev) {
+	this.actionMenu.popup(0, ev.docX, ev.docY);	
+}
+
+ZaMTAXFormView.createPopupMenu = function (listWidget) {
+	popupOperations = [new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.PQVTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(listWidget, ZaMTAXFormView.deleteButtonListener))];
+	listWidget.actionMenu = new ZaPopupMenu(listWidget, "ActionMenu", null, popupOperations);
+	listWidget.addActionListener(new AjxListener(listWidget, ZaMTAXFormView.listActionListener));		
+	listWidget.xFormItem = this;
+}
+
 ZaMTAXFormView.myXFormModifier = function(xFormObject) {	
 	xFormObject.tableCssStyle="width:100%;position:static;overflow:auto;";
 	
@@ -219,7 +237,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_destination, type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: true, preserveSelection:true, multiselect:false,onSelection:ZaMTAXFormView.listSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: true,createPopupMenu:ZaMTAXFormView.createPopupMenu, preserveSelection:true, multiselect:false,onSelection:ZaMTAXFormView.listSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
 								]
 							},		
 							{type:_CELLSPACER_},
@@ -230,7 +248,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_origin, type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: true,preserveSelection:true, multiselect:false, onSelection:ZaMTAXFormView.listSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: true,createPopupMenu:ZaMTAXFormView.createPopupMenu,preserveSelection:true, multiselect:false, onSelection:ZaMTAXFormView.listSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
 								]
 							},		
 							{type:_CELLSPACER_},
@@ -241,7 +259,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_error, type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: true,multiselect:false, onSelection:ZaMTAXFormView.listSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: true,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:false, onSelection:ZaMTAXFormView.listSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
 								]
 							}											
 						]},
@@ -269,7 +287,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 									]
 								},
 							    {ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_messages, type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource", 
-						   		forceUpdate: true,multiselect:true, widgetClass:ZaQMessagesListView, headerList:msgHeaderList},								
+						   		forceUpdate: true,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, widgetClass:ZaQMessagesListView, headerList:msgHeaderList},								
 							]
 						}		
 					]
