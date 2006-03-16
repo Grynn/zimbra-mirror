@@ -248,10 +248,10 @@ function(response, asyncMode) {
 	}
 	DBG.println(AjxDebug.DBG1, ["<H4> RESPONSE", (asyncMode) ? " (asynchronous)" : "" ,"</H4>"].join(""), linkName);
 
-	var resp;
+	var data = new Object();	
 	if (xmlResponse) {
 		// could be a good XML response, or a fault
-		DBG.printXML(AjxDebug.DBG1, respDoc.getXml());
+/*		DBG.printXML(AjxDebug.DBG1, respDoc.getXml());
 		var body = respDoc.getBody();
 		var fault = AjxSoapDoc.element2FaultObj(body);
 		if (fault) {
@@ -270,14 +270,23 @@ function(response, asyncMode) {
 		if (hdr)
 			resp += AjxUtil.xmlToJs(hdr) + ",";
 		resp += AjxUtil.xmlToJs(body);
-		resp += "}";
+		resp += "}";*/
+		data = respDoc._xmlDoc.toJSObject(true,false,true);
 	} else {
-		resp = respDoc;	
+		try {	
+			eval("data=" + respDoc);
+		} catch (ex) {
+			DBG.dumpObj(AjxDebug.DBG1, ex);
+			if (asyncMode) {
+				result.set(ex, true);
+				return result;
+			} else {
+				throw ex;
+			}	
+		}
+
 	}
 
-	// At this point we have either a faultless XML response, or an unverified JS response
-	var data = new Object();
-	eval("data=" + resp);
 	DBG.dumpObj(AjxDebug.DBG1, data, -1);
 
 	var fault = data.Body.Fault;

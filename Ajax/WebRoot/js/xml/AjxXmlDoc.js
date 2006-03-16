@@ -144,7 +144,7 @@ function(url) {
  * rather than an array.  And if there is no <item> tag, then obj.item will be
  * undefined.  These are cases that the calling application must take care of.
  */
-AjxXmlDoc.prototype.toJSObject = function(dropns, lowercase) {
+AjxXmlDoc.prototype.toJSObject = function(dropns, lowercase,withAttrs) {
 	function _node() { this.__msh_content = ''; };
 	_node.prototype.toString = function() { return this.__msh_content; };
 	function rec(i, o) {
@@ -164,6 +164,15 @@ AjxXmlDoc.prototype.toJSObject = function(dropns, lowercase) {
 				} else {
 					o[t] = n;
 					tags[t] = 1;
+				}
+				//do attributes
+				if(withAttrs) {
+					if(i.attributes && i.attributes.length) {
+						for(var ix = 0;ix<i.attributes.length;ix++) {
+							attr = i.attributes[ix];
+							n[attr.name] = AjxUtil.isNumeric(attr.value) ? attr.value : String(attr.value);
+						}
+					}
 				}
 				rec(i, n);
 			} else if (i.nodeType == 3)
