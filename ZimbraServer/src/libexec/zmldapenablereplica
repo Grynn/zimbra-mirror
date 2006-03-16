@@ -148,7 +148,7 @@ enableLdapService() {
 
 stopRemoteZimbra() {
 	echo -n "Shutting down Zimbra Services on ${ldap_master_host}..."
-	echo HOST:${ldap_master_host} shutdown | ${zimbra_home}/bin/zmrc ${ldap_master_host} \
+	echo "HOST:${ldap_master_host} shutdown" | ${zimbra_home}/bin/zmrc ${ldap_master_host} \
 		> /dev/null 2>&1
 
 	if [ $? -ne 0 ]; then
@@ -168,7 +168,7 @@ stopZimbra() {
 replicateLdap() {
 	echo -n "Replicating ldap data from ${ldap_master_host}..."
 	echo -n "Copying data..."
-	echo HOST:${ldap_master_host} slapcat | ${zimbra_home}/bin/zmrc ${ldap_master_host} | \
+	echo "HOST:${ldap_master_host} slapcat" | ${zimbra_home}/bin/zmrc ${ldap_master_host} | \
 		grep -v STARTCMD | grep -v ENDCMD > /tmp/repl.ldif
 
 	if [ $? -ne 0 ]; then
@@ -198,7 +198,7 @@ updateLdapHost() {
 
 startRemoteZimbra() {
 	echo -n "Starting remote Zimbra Services on ${ldap_master_host}..."
-	echo HOST:${ldap_master_host} startup | ${zimbra_home}/bin/zmrc ${ldap_master_host} \
+	echo "HOST:${ldap_master_host} startup" | ${zimbra_home}/bin/zmrc ${ldap_master_host} \
 		> /dev/null 2>&1
 
 	if [ $? -ne 0 ]; then
