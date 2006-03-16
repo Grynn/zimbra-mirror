@@ -67,9 +67,9 @@ if [ x$platform = "xSuSE10" ]; then
 	cp -f /etc/syslog-ng/syslog-ng.conf.in /etc/syslog-ng/syslog-ng.conf.in.bak
 	grep -v zimbra /etc/syslog-ng/syslog-ng.conf.in > /tmp/syslog-ng.conf.in
 	echo 'filter f_local0       { facility(local0); }; # zimbra' >> /tmp/syslog-ng.conf.in
-	echo 'destination zmail { file("/var/log/zimbra.log"); }; # zimbra ' >> /tmp/syslog-ng.conf.in
+	echo 'destination zmail { file("/var/log/zimbra.log" owner("zimbra") ); }; # zimbra ' >> /tmp/syslog-ng.conf.in
 	echo 'log { source(src); filter(f_mail); destination(zmail); }; # zimbra' >> /tmp/syslog-ng.conf.in
-	echo 'destination local0 { file("/var/log/zimbra.log"); }; # zimbra' >> /tmp/syslog-ng.conf.in
+	echo 'destination local0 { file("/var/log/zimbra.log" owner("zimbra") ); }; # zimbra' >> /tmp/syslog-ng.conf.in
 	echo 'log { source(src); filter(f_local0); destination(local0); }; # zimbra' >> /tmp/syslog-ng.conf.in
 	mv -f /tmp/syslog-ng.conf.in /etc/syslog-ng/syslog-ng.conf.in
 	/sbin/SuSEconfig --module syslog-ng
