@@ -240,10 +240,11 @@ zimbraGalLdapFilterDef: zimbraResources:(&(|(cn=*%s*)(sn=*%s*)(gn=*%s*)(mail=*%s
 zimbraGalLdapFilterDef: ad:(&(|(cn=*%s*)(sn=*%s*)(gn=*%s*)(mail=*%s*))(!(msExchHideFromAddressLists=TRUE))(mailnickname=*)(|(&(objectCategory=person)(objectClass=user)(!(homeMDB=*))(!(msExchHomeServerName=*)))(&(objectCategory=person)(objectClass=user)(|(homeMDB=*)(msExchHomeServerName=*)))(&(objectCategory=person)(objectClass=contact))(objectCategory=group)(objectCategory=publicFolder)(objectCategory=msExchDynamicDistributionList)))
 zimbraGalLdapAttrMap: co=workCountry
 zimbraGalLdapAttrMap: company=company
-zimbraGalLdapAttrMap: givenName=firstName
+zimbraGalLdapAttrMap: gn=firstName
 zimbraGalLdapAttrMap: sn=lastName
 zimbraGalLdapAttrMap: displayName,cn=fullName
 zimbraGalLdapAttrMap: initials=initials
+zimbraGalLdapAttrMap: description=notes
 zimbraGalLdapAttrMap: l=workCity
 zimbraGalLdapAttrMap: physicalDeliveryOfficeName=office
 zimbraGalLdapAttrMap: ou=department
@@ -259,6 +260,8 @@ zimbraGalLdapAttrMap: whenCreated,createTimeStamp=createTimeStamp
 zimbraGalLdapAttrMap: zimbraId=zimbraId
 zimbraGalLdapAttrMap: objectClass=objectClass
 zimbraGalLdapAttrMap: zimbraMailForwardingAddress=zimbraMailForwardingAddress
+zimbraGalLdapAttrMap: zimbraCalResType=zimbraCalResType
+zimbraGalLdapAttrMap: zimbraCalResLocationDisplayName=zimbraCalResLocationDisplayName
 zimbraGalMaxResults: 100
 zimbraLastLogonTimestampFrequency: 7d
 zimbraLmtpNumThreads: 20
