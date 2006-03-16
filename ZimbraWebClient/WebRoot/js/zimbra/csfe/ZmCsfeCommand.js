@@ -248,29 +248,10 @@ function(response, asyncMode) {
 	}
 	DBG.println(AjxDebug.DBG1, ["<H4> RESPONSE", (asyncMode) ? " (asynchronous)" : "" ,"</H4>"].join(""), linkName);
 
-	var data = new Object();	
+	var data = new Object();
+		
 	if (xmlResponse) {
-		// could be a good XML response, or a fault
-/*		DBG.printXML(AjxDebug.DBG1, respDoc.getXml());
-		var body = respDoc.getBody();
-		var fault = AjxSoapDoc.element2FaultObj(body);
-		if (fault) {
-			var ex = new ZmCsfeException("Csfe service error", fault.errorCode, "ZmCsfeCommand.prototype.invoke", fault.reason);
-			DBG.dumpObj(AjxDebug.DBG1, ex);
-			if (asyncMode) {
-				result.set(ex, true);
-				return result;
-			} else {
-				throw ex;
-			}
-		}
-		// convert XML response to JS
-		resp = "{";
-		var hdr = respDoc.getHeader();
-		if (hdr)
-			resp += AjxUtil.xmlToJs(hdr) + ",";
-		resp += AjxUtil.xmlToJs(body);
-		resp += "}";*/
+		DBG.printXML(AjxDebug.DBG1, respDoc.getXml());	
 		data = respDoc._xmlDoc.toJSObject(true,false,true);
 	} else {
 		try {	
@@ -292,10 +273,33 @@ function(response, asyncMode) {
 	var fault = data.Body.Fault;
 	if (fault) {
 		// JS response with fault
-		var trace = fault.Detail.Error.Trace;
+		var trace = "";
+		if(typeof(fault.Detail.Error.Trace)=='object')
+			trace = fault.Detail.Error.Trace.toString();
+		else
+			trace = fault.Detail.Error.Trace;
+			
+		var faultCode = "";
+		if(typeof(fault.Code.Value) == 'object') 
+			faultCode = fault.Code.Value.toString();
+		else
+			faultCode = fault.Code.Value;
+
+		var errorCode = "";
+		if(typeof(fault.Detail.Error.Code) == 'object') 
+			errorCode = fault.Detail.Error.Code.toString();
+		else
+			errorCode = fault.Detail.Error.Code;
+						
+		var errorDetail = "";
+		if(typeof(fault.Detail.Error.a) == 'object') 
+			errorDetail = fault.Detail.Error.a.toString();
+		else
+			errorDetail = fault.Detail.Error.a;
+									
 		var reasonText = fault.Reason.Text + (trace ? "\n"+trace : "");
-		var ex = new ZmCsfeException(reasonText, fault.Detail.Error.Code, "ZmCsfeCommand.prototype.invoke",
-									 fault.Code.Value, fault.Detail.Error.a);
+		var ex = new ZmCsfeException(reasonText, errorCode, "ZmCsfeCommand.prototype.invoke",
+									 faultCode, fault.Detail.Error.a);
 		DBG.dumpObj(AjxDebug.DBG1, ex);
 		if (asyncMode) {
 			result.set(ex, true);
