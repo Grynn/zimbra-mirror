@@ -721,14 +721,6 @@ function (mbxId, callback) {
 			command.invoke(params);	
 		}
 		
-		/*if(callback) {
-			var asynCommand = new ZmCsfeAsynchCommand();
-			asynCommand.addInvokeListener(callback);
-			asynCommand.invoke(soapDoc, null, null, null, true);			
-			return asynCommand;
-		} else {
-			resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true);
-		}*/
 	} catch (ex) {
 		if(ex.code == "service.NOT_IN_PROGRESS") {
 			resp = null;

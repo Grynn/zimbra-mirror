@@ -315,9 +315,7 @@ function (obj, callback) {
 	params.asyncMode = true;
 	params.callback = callback;
 	command.invoke(params);	
-/*	var asynCommand = new ZmCsfeAsynchCommand();
-	asynCommand.addInvokeListener(callback);
-	asynCommand.invoke(soapDoc, null, null, null, true);	*/
+
 }
 
 ZaDomain.testGALSettings =
@@ -352,10 +350,6 @@ function (obj, callback, sampleQuery) {
 	params.asyncMode = true;
 	params.callback = callback;
 	command.invoke(params);
-	/*var asynCommand = new ZmCsfeAsynchCommand();
-	asynCommand.addInvokeListener(callback);
-	asynCommand.invoke(soapDoc, null, null, null, true);*/
-	
 }
 
 ZaDomain.modifyGalSettings = 
