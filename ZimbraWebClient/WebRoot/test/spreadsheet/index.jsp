@@ -82,9 +82,7 @@ Contributor(s):
 	    }
         AjxCore.addOnloadListener(launch);
     </script>
-<%
-//        <textarea id="testdata" style="display: none">< % @include file="test.json" % ></textarea>
-%>
+<!--        <textarea id="testdata" style="display: none">< % @include file="test.json" %></textarea> -->
     </body>
 </html>
 

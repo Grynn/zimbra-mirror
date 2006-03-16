@@ -1,9 +1,6 @@
 function Test() {
 	var sh = this.shell = new DwtShell("MainShell", false, null, null, false);
 
-// 	sh._setMouseEventHdlrs();
-// 	sh.addListener(DwtEvent.ONMOUSEMOVE, new AjxListener(this, this.func));
-
  	var f1 = new ZmSpreadSheet(sh, null, "absolute");
 //  	var model = new ZmSpreadSheetModel(0, 0);
 //  	model.deserialize(document.getElementById("testdata").value);
