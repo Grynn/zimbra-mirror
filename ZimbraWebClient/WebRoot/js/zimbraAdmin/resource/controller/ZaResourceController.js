@@ -77,7 +77,7 @@ ZaResourceController.prototype.show = function(entry) {
 			entry.load("id", entry.id, null);			
 		}	
 		this._view.setDirty(false);
-		entry[ZaModel.currentTab] = "1"
+		entry[ZaModel.currentTab] = "1" ;
 	
 		this._view.setObject(entry);
 		//disable the save button at the beginning of showing the form
