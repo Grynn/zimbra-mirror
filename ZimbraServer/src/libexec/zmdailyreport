@@ -42,11 +42,6 @@ my $user = $options{u};
 
 my $dbh = connectDb();
 
-print "Generating report\n";
-if ($user) {
-	print "\tfor $user\n";
-}
-
 my $startTime;
 my $endTime;
 
@@ -60,6 +55,16 @@ if ($options{t}) {
 	# default to the previous day
 	$startTime = tsToSqlTime((time() - (60*60*24)),1);
 	$endTime = tsToSqlTime(time(),1);
+}
+
+my $zimbraHost = `zmhostname`;
+chomp $zimbraHost;
+print "From: Zimbra on $zimbraHost\n";
+print "Subject: Daily mail report from $startTime to $endTime\n\n";
+
+print "Generating report\n";
+if ($user) {
+	print "\tfor $user\n";
 }
 print "\tFrom $startTime to $endTime\n";
 print "\n";
