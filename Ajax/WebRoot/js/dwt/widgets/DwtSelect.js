@@ -31,7 +31,6 @@ function DwtSelect(parent, options, className, posStyle, width, height) {
 	this._origClassName = this._className;
 	this._activatedClassName = this._className + "-" + DwtCssStyle.ACTIVATED;
 	this._triggeredClassName = this._className + "-" + DwtCssStyle.TRIGGERED;
-	this.setText(" ");
 	this._width = -1;
 
     // initialize some variables
@@ -358,7 +357,9 @@ function() {
 		return;
 	}
 	var el = this.getHtmlElement();
-	el.style.width = this._width + 29 + "px";
+	// not sure why 29 was added; 18 = 16 (width of dropdown icon) + 2 (padding)
+	//	el.style.width = this._width + 29 + "px";
+ 	el.style.width = this._width + 18 + "px";
 	this._lastSetWidth = this._width;
 };
 
@@ -393,7 +394,16 @@ function(show) {
 		var optArr = this._options.getArray();
 		for (var i = 0 ; i < optArr.length; ++i){
 			var mi = new DwtMenuItem(this._menu, DwtMenuItem.SELECT_STYLE);
-			mi.setText(optArr[i].getDisplayValue());
+ 			var text = optArr[i].getDisplayValue();
+ 			if (text) {
+ 				mi.setText(text);
+ 			}
+ 			var image = optArr[i].getImage();
+ 			if (image) {
+ 				mi.setImage(image);
+ 				// HACK to get image width
+ 				optArr[i]._imageWidth = Dwt.getSize(AjxImg.getImageElement(mi._iconCell)).x;
+ 			}
 			mi.addSelectionListener(new AjxListener(this, this._handleOptionSelection));
 			mi._optionIndex = i;
 			optArr[i].setItem(mi);
@@ -440,8 +450,14 @@ function() {
 DwtSelect.prototype._setSelectedOption = 
 function(option) {
 	var displayValue = option.getDisplayValue();
+	var image = option.getImage();
 	if (this._selectedOption != option) {
-		this.setText(displayValue);
+ 		if (displayValue) {
+ 			this.setText(displayValue);
+ 		}
+ 		if (image) {
+ 			this.setImage(image);
+ 		}
 		this._selectedValue = option._value;
 		this._selectedOption = option;
 		this._menu._selectedOptionId = option.getIdentifier();
@@ -512,18 +528,27 @@ function DwtSelectOptionData (value, displayValue, isSelected) {
  * @param optionalDOMId (string) -- an optional id you want assigned to 
  *                                  the outer most underlying element.
  */
-function DwtSelectOption (value, selected, displayValue, owner, optionalDOMId) {
+function DwtSelectOption (value, selected, displayValue, owner, optionalDOMId, image) {
 	this._value = value;
 	this._selected = selected;
 	this._displayValue = displayValue;
+	this._image = image;
+
 	this._internalObjectId = DwtSelect._assignId(this);
-	this._optionWidth = this._calculateWidth(displayValue);	
+	this._optionWidth = this._calculateWidth();	
 }
 
 DwtSelectOption.prototype._calculateWidth = 
 function(str) {
-	var size = Dwt.getHtmlExtent(AjxStringUtil.htmlEncode(str));
-	return size.x;
+	var textWidth = 0;
+	if (this._displayValue) {
+		var size = Dwt.getHtmlExtent(AjxStringUtil.htmlEncode(this._displayValue));
+		textWidth = size.x;
+	}
+	// HACK - assume it's a 16 x 16 icon if we don't have width yet
+	var imageWidth = this._imageWidth ? this._imageWidth : 16;
+	
+	return textWidth + imageWidth;
 };
 
 DwtSelectOption.prototype.setItem = 
@@ -539,6 +564,11 @@ function(menuItem) {
 DwtSelectOption.prototype.getDisplayValue = 
 function() {
 	return this._displayValue;
+};
+
+DwtSelectOption.prototype.getImage = 
+function() {
+	return this._image;
 };
 
 DwtSelectOption.prototype.getValue = 

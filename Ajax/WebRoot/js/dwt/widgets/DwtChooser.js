@@ -107,18 +107,28 @@ function() {
 };
 
 /**
-* Resets the chooser to its initial state. The list views are cleared.
+* Resets one or both list views.
+*
+* @param viewType	[constant]		source or target list view
 */
 DwtChooser.prototype.reset =
-function() {
-	// cleanup
-	this.targetListView._resetList();
-	this.sourceListView._resetList();
-	for (var i in this._data)
-		this._data[i].removeAll();
+function(viewType) {
 
-	if (this._list && this._list.size())
-		this._list.clear();
+	// clear out source list view and related data
+	if (!viewType || viewType == DwtChooserListView.SOURCE) {
+		this.sourceListView._resetList();
+		if (this._list && this._list.size()) {
+			this._list.clear();
+		}
+	}
+
+	// clear out target list view and related data
+	if (!viewType || viewType == DwtChooserListView.TARGET) {
+		this.targetListView._resetList();
+		for (var i in this._data) {
+			this._data[i].removeAll();
+		}
+	}
 
 	this._setActiveButton(this._buttonInfo[0].id); // make first button active by default
 	this._enableButtons(true, false);
@@ -454,10 +464,13 @@ function(enableTransfer, enableRemove) {
 };
 
 /*
-* Remove any selected items from target list. Also handles button state.
+* Removes items from target list. Also handles button state.
+*
+* @param items		[array]		list of items to remove
+* @param skipNotify	[boolean]*	if true, don't notify listeners
 */
 DwtChooser.prototype._handleRemove =
-function(items) {
+function(items, skipNotify) {
 	// remove the items
 	for (var i = 0; i < items.length; i++) {
 		var item = items[i];
@@ -471,7 +484,9 @@ function(items) {
 		this._setActiveButton(this._activeButtonId);
 	}
 
-	this._notify(ZmEvent.E_MODIFY, {items: this.getItems()});
+	if (!skipNotify) {
+		this._notify(ZmEvent.E_MODIFY, {items: this.getItems()});
+	}
 };
 
 /*
@@ -510,13 +525,14 @@ function(id) {
 };
 
 /*
-* Moves items to the target list.
+* Adds items to the target list.
 *
-* @param items	[array]		list of items to move
-* @param id		[string]*	ID of the transfer button that was used
+* @param items		[array]		list of items to move
+* @param id			[string]*	ID of the transfer button that was used
+* @param skipNotify	[boolean]*	if true, don't notify listeners
 */
 DwtChooser.prototype.transfer =
-function(items, id) {
+function(items, id, skipNotify) {
 	id = id ? id : this._activeButtonId;
 	this._setActiveButton(id);
 	for (var i = 0; i < items.length; i++) {
@@ -529,7 +545,20 @@ function(items, id) {
 		this._data[id].add(item);
 	}
 	this.sourceListView.deselectAll();
-	this._notify(ZmEvent.E_MODIFY, {items: this.getItems()});
+	if (!skipNotify) {
+		this._notify(ZmEvent.E_MODIFY, {items: this.getItems()});
+	}
+};
+
+/*
+* Removes items from the target list.
+*
+* @param items		[array]		list of items to move
+* @param skipNotify	[boolean]*	if true, don't notify listeners
+*/
+DwtChooser.prototype.remove =
+function(items, skipNotify) {
+	this._handleRemove(items, skipNotify);
 };
 
 DwtChooser.prototype._isDuplicate =
