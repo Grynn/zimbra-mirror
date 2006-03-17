@@ -68,13 +68,52 @@ ZaMTA.A_name = "name";
 ZaMTA.A_count = "count";
 ZaMTA.A_Qid = "qid";
 ZaMTA.A_query = "query";
+ZaMTA.A_queue_filter_name = "_queue_filter_name";
+ZaMTA.A_queue_filter_value = "_queue_filter_value";
+ZaMTA.A_progress = "progress";
+
+/**
+* Make a SOAP call to get file counts in queue folders
+**/
+ZaMTA.prototype.getQCounts = function () {
+	
+}
+
+ZaMTA.prototype.QCountsCallback = function () {
+	//update my fields
+	
+	//notify listeners 
+	this._app.getMTAController().fireChangeEvent();
+}
+
 /**
 * @param app {ZaApp}
 * @return {ZaItemList} a list of ZaMTA objects {@link ZaItemList}
 **/
 ZaMTA.getAll = function (app) {
+	var soapDoc = AjxSoapDoc.create("GetAllServersRequest", "urn:zimbraAdmin", null);	
+	
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	var resp = command.invoke(params).Body.GetAllServersResponse;	
+	var list = new ZaItemList(ZaMTA, app);
+	list.loadFromJS(resp);	
+	
+	
+/*	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	var list = new ZaItemList(ZaServer, app);
+	list.loadFromDom(resp);*/
+//	list.sortByName();		
+	return list;	
+//	return ZaMTA.returnTestData1();
+}
+
+ZaMTA.returnTestData1 = function (app) {
 	var list = new ZaItemList(ZaMTA, app);
 	var mta1 = new ZaMTA(app);
+	mta1[ZaMTA.A_Status] = "running";
+	mta1[ZaMTA.A_progress] = 50;
 	mta1[ZaMTA.A_Servername] = "greg-d610.liquidsys.com";
 	mta1[ZaMTA.A_LastError] = null;
 	mta1[ZaMTA.A_MTAName] = "MTA1";
@@ -82,21 +121,21 @@ ZaMTA.getAll = function (app) {
 	mta1.id = "mta1";	
 	mta1[ZaMTA.A_DeferredQ] = {query:("mta:(mta1) queue:("+ZaMTA.A_DeferredQ+")")};
 	mta1[ZaMTA.A_DeferredQ][ZaMTA.A_destination]=[
-			{name:"yahoo.com", count:131, toString:function() {return this.name+this.count} },
-			{name:"gmail.com", count:101, toString:function() {return this.name+this.count}},			
-			{name:"hotmail.com", count:121, toString:function() {return this.name+this.count}},						
-			{name:"usa.net", count:50, toString:function() {return this.name+this.count}}									
+			{id:"deferred_yahoo.com",name:"yahoo.com", count:131, toString:function() {return this.name+this.count} },
+			{id:"deferred_gmail.com",name:"gmail.com", count:101, toString:function() {return this.name+this.count}},			
+			{id:"deferred_hotmail.com",name:"hotmail.com", count:121, toString:function() {return this.name+this.count}},						
+			{id:"deferred_usa.net",name:"usa.net", count:50, toString:function() {return this.name+this.count}}									
 		];
 	mta1[ZaMTA.A_DeferredQ][ZaMTA.A_origin]=[
-			{name:"64.23.45.222", count:231, toString:function() {return this.name+this.count}},
-			{name:"221.23.45.26", count:201, toString:function() {return this.name+this.count}},			
-			{name:"121.23.45.123", count:221, toString:function() {return this.name+this.count}},						
-			{name:"220.63.45.201", count:21, toString:function() {return this.name+this.count}}		
+			{id:"deferred_64.23.45.222",name:"64.23.45.222", count:231, toString:function() {return this.name+this.count}},
+			{id:"deferred_221.23.45.26",name:"221.23.45.26", count:201, toString:function() {return this.name+this.count}},			
+			{id:"deferred_121.23.45.123",name:"121.23.45.123", count:221, toString:function() {return this.name+this.count}},						
+			{id:"deferred_220.63.45.201",name:"220.63.45.201", count:21, toString:function() {return this.name+this.count}}		
 		];
 	mta1[ZaMTA.A_DeferredQ][ZaMTA.A_error]=[
-			{name:"blah-blah", count:331, toString:function() {return this.name+this.count}},
-			{name:"rant-rant", count:301, toString:function() {return this.name+this.count}},			
-			{name:"wait-wait", count:321, toString:function() {return this.name+this.count}}
+			{id:"deferred_blah-blah",name:"blah-blah", count:331, toString:function() {return this.name+this.count}},
+			{id:"deferred_rant-rant",name:"rant-rant", count:301, toString:function() {return this.name+this.count}},			
+			{id:"deferred_wait-wait",name:"wait-wait", count:321, toString:function() {return this.name+this.count}}
 		];
 	mta1[ZaMTA.A_DeferredQ][ZaMTA.A_count]=1001;
 
@@ -104,66 +143,61 @@ ZaMTA.getAll = function (app) {
 	mta1[ZaMTA.A_IncomingQ][ZaMTA.A_count] = 1021;
 
 	mta1[ZaMTA.A_IncomingQ][ZaMTA.A_destination] = [
-			{name:"yahoo.com", count:132, toString:function() {return this.name+this.count}},
-			{name:"gmail.com", count:102, toString:function() {return this.name+this.count}},			
-			{name:"hotmail.com",count:122, toString:function() {return this.name+this.count}},						
-			{name:"usa.net", count:12}									
+			{id:"incoming_yahoo.com",name:"yahoo.com", count:132, toString:function() {return this.name+this.count}},
+			{id:"incoming_gmail.com",name:"gmail.com", count:102, toString:function() {return this.name+this.count}},			
+			{id:"incoming_hotmail.com",name:"hotmail.com",count:122, toString:function() {return this.name+this.count}},						
+			{id:"incoming_usa.net",name:"usa.net", count:12}									
 		];
 	mta1[ZaMTA.A_IncomingQ][ZaMTA.A_origin]=[
-			{name:"64.23.45.222", count:232, toString:function() {return this.name+this.count}},
-			{name:"221.23.45.26", count:202, toString:function() {return this.name+this.count}},			
-			{name:"121.23.45.123", count:222, toString:function() {return this.name+this.count}},						
-			{name:"220.63.45.201", count:22, toString:function() {return this.name+this.count}}		
+			{id:"incoming_64.23.45.222",name:"64.23.45.222", count:232, toString:function() {return this.name+this.count}},
+			{id:"incoming_221.23.45.26",name:"221.23.45.26", count:202, toString:function() {return this.name+this.count}},			
+			{id:"incoming_121.23.45.123",name:"121.23.45.123", count:222, toString:function() {return this.name+this.count}},						
+			{id:"incoming_220.63.45.201",name:"220.63.45.201", count:22, toString:function() {return this.name+this.count}}		
 		];
-	mta1[ZaMTA.A_IncomingQ][ZaMTA.A_error]=[
-			{name:"blah-blah", count:233, toString:function() {return this.name+this.count}},
-			{name:"rant-rant", count:203, toString:function() {return this.name+this.count}},			
-			{name:"wait-wait", count:123, toString:function() {return this.name+this.count}}
-		];		
 
 	mta1[ZaMTA.A_ActiveQ] = {query:("mta:(mta1) queue:("+ZaMTA.A_ActiveQ+")")};
 	mta1[ZaMTA.A_ActiveQ][ZaMTA.A_count]=101;
 	mta1[ZaMTA.A_ActiveQ][ZaMTA.A_destination]=[
-			{name:"yahoo.com", count:233, toString:function() {return this.name+this.count}},
-			{name:"gmail.com", count:203, toString:function() {return this.name+this.count}},			
-			{name:"hotmail.com", count:123, toString:function() {return this.name+this.count}},						
-			{name:"usa.net", count:50, toString:function() {return this.name+this.count}}									
+			{id:"yahoo.com",name:"yahoo.com", count:233, toString:function() {return this.name+this.count}},
+			{id:"gmail.com",name:"gmail.com", count:203, toString:function() {return this.name+this.count}},			
+			{id:"hotmail.com",name:"hotmail.com", count:123, toString:function() {return this.name+this.count}},						
+			{id:"usa.net",name:"usa.net", count:50, toString:function() {return this.name+this.count}}									
 		]
 	mta1[ZaMTA.A_ActiveQ][ZaMTA.A_origin]=[
-			{name:"64.23.45.222", count:233, toString:function() {return this.name+this.count}},
-			{name:"221.23.45.26", count:203, toString:function() {return this.name+this.count}},			
-			{name:"121.23.45.123", count:123, toString:function() {return this.name+this.count}},						
-			{name:"220.63.45.201", count:50, toString:function() {return this.name+this.count}}		
+			{id:"64.23.45.222",name:"64.23.45.222", count:233, toString:function() {return this.name+this.count}},
+			{id:"221.23.45.26",name:"221.23.45.26", count:203, toString:function() {return this.name+this.count}},			
+			{id:"121.23.45.123",name:"121.23.45.123", count:123, toString:function() {return this.name+this.count}},						
+			{id:"220.63.45.201",name:"220.63.45.201", count:50, toString:function() {return this.name+this.count}}		
 		];	
 	
 	mta1[ZaMTA.A_CorruptQ] = {query:("mta:(mta1) queue:("+ZaMTA.A_CorruptQ+")")};
 	mta1[ZaMTA.A_CorruptQ][ZaMTA.A_count]=2131;			
 	mta1[ZaMTA.A_CorruptQ][ZaMTA.A_destination]=[
-			{name:"yahoo.com", count:233, toString:function() {return this.name+this.count}},
-			{name:"gmail.com", count:203, toString:function() {return this.name+this.count}},			
-			{name:"hotmail.com", count:123, toString:function() {return this.name+this.count}},						
-			{name:"usa.net", count:50, toString:function() {return this.name+this.count}}									
+			{id:"yahoo.com",name:"yahoo.com", count:233, toString:function() {return this.name+this.count}},
+			{id:"gmail.com",name:"gmail.com", count:203, toString:function() {return this.name+this.count}},			
+			{id:"hotmail.com",name:"hotmail.com", count:123, toString:function() {return this.name+this.count}},						
+			{id:"usa.net",name:"usa.net", count:50, toString:function() {return this.name+this.count}}									
 		];
 	mta1[ZaMTA.A_CorruptQ][ZaMTA.A_origin]=[
-			{name:"64.23.45.222", count:233, toString:function() {return this.name+this.count}},
-			{name:"221.23.45.26", count:203},			
-			{name:"121.23.45.123", count:123, toString:function() {return this.name+this.count}},						
-			{name:"220.63.45.201", count:50, toString:function() {return this.name+this.count}}		
+			{id:"64.23.45.222",name:"64.23.45.222", count:233, toString:function() {return this.name+this.count}},
+			{id:"221.23.45.26",name:"221.23.45.26", count:203},			
+			{id:"121.23.45.123",name:"121.23.45.123", count:123, toString:function() {return this.name+this.count}},						
+			{id:"220.63.45.201",name:"220.63.45.201", count:50, toString:function() {return this.name+this.count}}		
 		];	
 
 	mta1[ZaMTA.A_HoldQ] = {query:("mta:(mta1) queue:("+ZaMTA.A_HoldQ+")")};
 	mta1[ZaMTA.A_HoldQ][ZaMTA.A_count]=1603;
 	mta1[ZaMTA.A_HoldQ][ZaMTA.A_destination]=[
-			{name:"yahoo.com", count:233, toString:function() {return this.name+this.count}},
-			{name:"gmail.com", count:203, toString:function() {return this.name+this.count}},			
-			{name:"hotmail.com", count:123, toString:function() {return this.name+this.count}},						
-			{name:"usa.net", count:50, toString:function() {return this.name+this.count}}									
+			{id:"yahoo.com",name:"yahoo.com", count:233, toString:function() {return this.name+this.count}},
+			{id:"gmail.com",name:"gmail.com", count:203, toString:function() {return this.name+this.count}},			
+			{id:"hotmail.com",name:"hotmail.com", count:123, toString:function() {return this.name+this.count}},						
+			{id:"usa.net",name:"usa.net", count:50, toString:function() {return this.name+this.count}}									
 		];
 	mta1[ZaMTA.A_HoldQ][ZaMTA.A_origin]=[
-			{name:"64.23.45.222", count:233, toString:function() {return this.name+this.count}},
-			{name:"221.23.45.26", count:203, toString:function() {return this.name+this.count}},			
-			{name:"121.23.45.123", count:123, toString:function() {return this.name+this.count}},						
-			{name:"220.63.45.201", count:50, toString:function() {return this.name+this.count}}		
+			{id:"64.23.45.222",name:"64.23.45.222", count:233, toString:function() {return this.name+this.count}},
+			{id:"221.23.45.26",name:"221.23.45.26", count:203, toString:function() {return this.name+this.count}},			
+			{id:"121.23.45.123",name:"121.23.45.123", count:123, toString:function() {return this.name+this.count}},						
+			{id:"220.63.45.201",name:"220.63.45.201", count:50, toString:function() {return this.name+this.count}}		
 		];	
 
 	var mta2 = new ZaMTA(app);
@@ -175,21 +209,21 @@ ZaMTA.getAll = function (app) {
 	
 	mta2[ZaMTA.A_DeferredQ] = {query:("mta:(mta2) queue:("+ZaMTA.A_DeferredQ+")")};
 	mta2[ZaMTA.A_DeferredQ][ZaMTA.A_destination]=[
-			{name:"yahoo.com", count:233, toString:function() {return this.name+this.count}},
-			{name:"gmail.com", count:203, toString:function() {return this.name+this.count}},			
-			{name:"hotmail.com", count:123, toString:function() {return this.name+this.count}},						
-			{name:"usa.net", count:50, toString:function() {return this.name+this.count}}									
+			{id:"yahoo.com",name:"yahoo.com", count:233, toString:function() {return this.name+this.count}},
+			{id:"gmail.com",name:"gmail.com", count:203, toString:function() {return this.name+this.count}},			
+			{id:"hotmail.com",name:"hotmail.com", count:123, toString:function() {return this.name+this.count}},						
+			{id:"usa.net",name:"usa.net", count:50, toString:function() {return this.name+this.count}}									
 		];
 	mta2[ZaMTA.A_DeferredQ][ZaMTA.A_origin]=[
-			{name:"64.23.45.222", count:233, toString:function() {return this.name+this.count}},
-			{name:"221.23.45.26", count:203, toString:function() {return this.name+this.count}},			
-			{name:"121.23.45.123", count:123, toString:function() {return this.name+this.count}},						
-			{name:"220.63.45.201", count:50, toString:function() {return this.name+this.count}}		
+			{id:"64.23.45.222",name:"64.23.45.222", count:233, toString:function() {return this.name+this.count}},
+			{id:"221.23.45.26",name:"221.23.45.26", count:203, toString:function() {return this.name+this.count}},			
+			{id:"121.23.45.123",name:"121.23.45.123", count:123, toString:function() {return this.name+this.count}},						
+			{id:"220.63.45.201",name:"220.63.45.201", count:50, toString:function() {return this.name+this.count}}		
 		];
 	mta2[ZaMTA.A_DeferredQ][ZaMTA.A_error]=[
-			{name:"blah-blah", count:233, toString:function() {return this.name+this.count}},
-			{name:"rant-rant", count:203, toString:function() {return this.name+this.count}},			
-			{name:"wait-wait", count:123, toString:function() {return this.name+this.count}}
+			{id:"blah-blah",name:"blah-blah", count:233, toString:function() {return this.name+this.count}},
+			{id:"rant-rant",name:"rant-rant", count:203, toString:function() {return this.name+this.count}},			
+			{id:"wait-wait",name:"wait-wait", count:123, toString:function() {return this.name+this.count}}
 		];
 	mta2[ZaMTA.A_DeferredQ][ZaMTA.A_count]=1001;
 
@@ -197,66 +231,66 @@ ZaMTA.getAll = function (app) {
 	mta2[ZaMTA.A_IncomingQ][ZaMTA.A_count] = 1021;
 
 	mta2[ZaMTA.A_IncomingQ][ZaMTA.A_destination] = [
-			{name:"yahoo.com", count:233, toString:function() {return this.name+this.count}},
-			{name:"gmail.com", count:203, toString:function() {return this.name+this.count}},			
-			{name:"hotmail.com",count:123, toString:function() {return this.name+this.count}},						
-			{name:"usa.net", count:50, toString:function() {return this.name+this.count}}									
+			{id:"yahoo.com",name:"yahoo.com", count:233, toString:function() {return this.name+this.count}},
+			{id:"gmail.com",name:"gmail.com", count:203, toString:function() {return this.name+this.count}},			
+			{id:"hotmail.com",name:"hotmail.com",count:123, toString:function() {return this.name+this.count}},						
+			{id:"usa.net",name:"usa.net", count:50, toString:function() {return this.name+this.count}}									
 		];
 	mta2[ZaMTA.A_IncomingQ][ZaMTA.A_origin]=[
-			{name:"64.23.45.222", count:233, toString:function() {return this.name+this.count}},
-			{name:"221.23.45.26", count:203, toString:function() {return this.name+this.count}},			
-			{name:"121.23.45.123", count:123, toString:function() {return this.name+this.count}},						
-			{name:"220.63.45.201", count:50, toString:function() {return this.name+this.count}}		
+			{id:"64.23.45.222",name:"64.23.45.222", count:233, toString:function() {return this.name+this.count}},
+			{id:"221.23.45.26",name:"221.23.45.26", count:203, toString:function() {return this.name+this.count}},			
+			{id:"121.23.45.123",name:"121.23.45.123", count:123, toString:function() {return this.name+this.count}},						
+			{id:"220.63.45.201",name:"220.63.45.201", count:50, toString:function() {return this.name+this.count}}		
 		];
 	mta2[ZaMTA.A_IncomingQ][ZaMTA.A_error]=[
-			{name:"blah-blah", count:233, toString:function() {return this.name+this.count}},
-			{name:"rant-rant", count:203, toString:function() {return this.name+this.count}},			
-			{name:"wait-wait", count:123, toString:function() {return this.name+this.count}}
+			{id:"blah-blah",name:"blah-blah", count:233, toString:function() {return this.name+this.count}},
+			{id:"rant-rant",name:"rant-rant", count:203, toString:function() {return this.name+this.count}},			
+			{id:"wait-wait",name:"wait-wait", count:123, toString:function() {return this.name+this.count}}
 		];		
 
 	mta2[ZaMTA.A_ActiveQ] = {query:("mta:(mta2) queue:("+ZaMTA.A_ActiveQ+")")};
 	mta2[ZaMTA.A_ActiveQ][ZaMTA.A_count]=101;
 	mta2[ZaMTA.A_ActiveQ][ZaMTA.A_destination]=[
-			{name:"yahoo.com", count:233, toString:function() {return this.name+this.count}},
-			{name:"gmail.com", count:203, toString:function() {return this.name+this.count}},			
-			{name:"hotmail.com", count:123, toString:function() {return this.name+this.count}},						
-			{name:"usa.net", count:50}									
+			{id:"yahoo.com",name:"yahoo.com", count:233, toString:function() {return this.name+this.count}},
+			{id:"gmail.com",name:"gmail.com", count:203, toString:function() {return this.name+this.count}},			
+			{id:"hotmail.com",name:"hotmail.com", count:123, toString:function() {return this.name+this.count}},						
+			{id:"usa.net",name:"usa.net", count:50}									
 		]
 	mta2[ZaMTA.A_ActiveQ][ZaMTA.A_origin]=[
-			{name:"64.23.45.222", count:233, toString:function() {return this.name+this.count}},
-			{name:"221.23.45.26", count:203, toString:function() {return this.name+this.count}},			
-			{name:"121.23.45.123", count:123, toString:function() {return this.name+this.count}},						
-			{name:"220.63.45.201", count:50, toString:function() {return this.name+this.count}}		
+			{id:"64.23.45.222",name:"64.23.45.222", count:233, toString:function() {return this.name+this.count}},
+			{id:"221.23.45.26",name:"221.23.45.26", count:203, toString:function() {return this.name+this.count}},			
+			{id:"121.23.45.123",name:"121.23.45.123", count:123, toString:function() {return this.name+this.count}},						
+			{id:"220.63.45.201",name:"220.63.45.201", count:50, toString:function() {return this.name+this.count}}		
 		];	
 
 	mta2[ZaMTA.A_CorruptQ] = {query:("mta:(mta2) queue:("+ZaMTA.A_CorruptQ+")")};
 	mta2[ZaMTA.A_CorruptQ][ZaMTA.A_count]=2131;			
 	mta2[ZaMTA.A_CorruptQ][ZaMTA.A_destination]=[
-			{name:"yahoo.com", count:233, toString:function() {return this.name+this.count}},
-			{name:"gmail.com", count:203, toString:function() {return this.name+this.count}},			
-			{name:"hotmail.com", count:123, toString:function() {return this.name+this.count}},						
-			{name:"usa.net", count:50, toString:function() {return this.name+this.count}}									
+			{id:"yahoo.com",name:"yahoo.com", count:233, toString:function() {return this.name+this.count}},
+			{id:"gmail.com",name:"gmail.com", count:203, toString:function() {return this.name+this.count}},			
+			{id:"hotmail.com",name:"hotmail.com", count:123, toString:function() {return this.name+this.count}},						
+			{id:"usa.net",name:"usa.net", count:50, toString:function() {return this.name+this.count}}									
 		];
 	mta2[ZaMTA.A_CorruptQ][ZaMTA.A_origin]=[
-			{name:"64.23.45.222", count:233, toString:function() {return this.name+this.count}},
-			{name:"221.23.45.26", count:203, toString:function() {return this.name+this.count}},			
-			{name:"121.23.45.123", count:123, toString:function() {return this.name+this.count}},						
-			{name:"220.63.45.201", count:50, toString:function() {return this.name+this.count}}		
+			{id:"64.23.45.222",name:"64.23.45.222", count:233, toString:function() {return this.name+this.count}},
+			{id:"221.23.45.26",name:"221.23.45.26", count:203, toString:function() {return this.name+this.count}},			
+			{id:"121.23.45.123",name:"121.23.45.123", count:123, toString:function() {return this.name+this.count}},						
+			{id:"220.63.45.201",name:"220.63.45.201", count:50, toString:function() {return this.name+this.count}}		
 		];	
 
 	mta2[ZaMTA.A_HoldQ] = {query:("mta:(mta2) queue:("+ZaMTA.A_HoldQ+")")};
 	mta2[ZaMTA.A_HoldQ][ZaMTA.A_count]=1603;
 	mta2[ZaMTA.A_HoldQ][ZaMTA.A_destination]=[
-			{name:"yahoo.com", count:233, toString:function() {return this.name+this.count}},
-			{name:"gmail.com", count:203, toString:function() {return this.name+this.count}},			
-			{name:"hotmail.com", count:123, toString:function() {return this.name+this.count}},						
-			{name:"usa.net", count:50, toString:function() {return this.name+this.count}}									
+			{id:"yahoo.com",name:"yahoo.com", count:233, toString:function() {return this.name+this.count}},
+			{id:"gmail.com",name:"gmail.com", count:203, toString:function() {return this.name+this.count}},			
+			{id:"hotmail.com",name:"hotmail.com", count:123, toString:function() {return this.name+this.count}},						
+			{id:"usa.net",name:"usa.net", count:50, toString:function() {return this.name+this.count}}									
 		];
 	mta2[ZaMTA.A_HoldQ][ZaMTA.A_origin]=[
-			{name:"64.23.45.222", count:233, toString:function() {return this.name+this.count}},
-			{name:"221.23.45.26", count:203, toString:function() {return this.name+this.count}},			
-			{name:"121.23.45.123", count:123, toString:function() {return this.name+this.count}},						
-			{name:"220.63.45.201", count:50, toString:function() {return this.name+this.count}}		
+			{id:"64.23.45.222",name:"64.23.45.222", count:233, toString:function() {return this.name+this.count}},
+			{id:"221.23.45.26",name:"221.23.45.26", count:203, toString:function() {return this.name+this.count}},			
+			{id:"121.23.45.123",name:"121.23.45.123", count:123, toString:function() {return this.name+this.count}},						
+			{id:"220.63.45.201",name:"220.63.45.201", count:50, toString:function() {return this.name+this.count}}		
 		];
 	list.add(mta1);
 	list.add(mta2);
@@ -309,8 +343,29 @@ ZaMTA.myXModel = {
 	]
 };
 
+/**
+* send a MailQStatusRequest 
+**/
+ZaMTA.prototype.getMailQStatus = function () {
+}
+
+/**
+* this method is called when the server returns MailQStatusResponse 
+**/
+ZaMTA.prototype.mailQStatusCallback = function () {
+	//update my fields
+
+	this._app.getMTAController().fireChangeEvent();
+	//if status is "running" call getMailQStatus again
+}
 
 ZaMTAItem = function (app) {
 	ZaItem.call(this, app,"ZaMTAItem");
 	this._init(app);
 }
+
+ZaMTAProgress = function (app) {
+	ZaItem.call(this,app,"ZaMTAProgress");
+	this._init(app);
+}
+
