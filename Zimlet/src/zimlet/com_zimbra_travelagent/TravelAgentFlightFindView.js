@@ -23,22 +23,24 @@ function TravelAgentFlightFindView(parent, appCtxt,zimlet, workAirportOptions, h
 	this.searchSideStep=true;
 	this.searchTravelocity=true;
 	this.searchHotwire=true;
-	this.searchKayak=true;	
-		
+//	this.searchKayak=true;	
+//	this.searchThomasCook=true;	
+			
 	try {
 		this.myAirport = this.zimlet.getUserProperty("myairport");
 		this.searchSideStep = this.zimlet.getUserProperty("search_sidestep");
 		this.searchTravelocity = this.zimlet.getUserProperty("search_travelocity");
 		this.searchHotwire = this.zimlet.getUserProperty("search_hotwire");	
-		this.searchKayak = this.zimlet.getUserProperty("search_kayak");	
+//		this.searchKayak = this.zimlet.getUserProperty("search_kayak");	
+//		this.searchThomasCook = this.zimlet.getUserProperty("search_thomascook");	
 	} catch (ex) {
 	//sigh
 	}
 	
 	this.numCells = 0;
-	if(this.searchKayak === true || this.searchKayak=="true")
+/*	if(this.searchKayak === true || this.searchKayak=="true")
 		this.numCells++;
-		
+*/		
 	if(this.searchHotwire === true || this.searchHotwire=="true")		
 		this.numCells++;
 		
@@ -46,6 +48,9 @@ function TravelAgentFlightFindView(parent, appCtxt,zimlet, workAirportOptions, h
 		this.numCells++;
 
 	if(this.searchSideStep === true || this.searchSideStep=="true")
+		this.numCells++;
+
+	if(this.searchThomasCook === true || this.searchThomasCook=="true")
 		this.numCells++;
 
 	this.numCells = this.numCells < 3 ? 3 : 6;
@@ -537,20 +542,32 @@ function () {
 
 		cellNum++;
 	}
-			
+	/*		
 	if(this.searchKayak=="true" || this.searchKayak===true) {
-		var searchButton3 = new DwtButton(this);	
-		searchButton3.setText("Search kayak.com");
-		searchButton3.setImage("KayakIcon");
-		searchButton3.setSize("140");
-		searchButton3.addSelectionListener(new AjxListener(this, this._searchButtonListener4));				
-		var searchButtonCell3 = document.getElementById(this._searchButtonIds[cellNum]);
-		if (searchButtonCell3)
-			searchButtonCell3.appendChild(searchButton3.getHtmlElement());
+		var searchButton = new DwtButton(this);	
+		searchButton.setText("Search kayak.com");
+		searchButton.setImage("KayakIcon");
+		searchButton.setSize("140");
+		searchButton.addSelectionListener(new AjxListener(this, this._searchButtonListener4));				
+		var searchButtonCell = document.getElementById(this._searchButtonIds[cellNum]);
+		if (searchButtonCell)
+			searchButtonCell.appendChild(searchButton.getHtmlElement());
 
 		cellNum++;
-	}
+	}*/
+	/*
+	if(this.searchThomasCook=="true" || this.searchThomasCook===true) {
+		var searchButton = new DwtButton(this);	
+		searchButton.setText("Search ThomasCook.com");
+		searchButton.setImage("ThomasCookIcon");
+		searchButton.setSize("140");
+		searchButton.addSelectionListener(new AjxListener(this, this._searchButtonListener5));				
+		var searchButtonCell = document.getElementById(this._searchButtonIds[cellNum]);
+		if (searchButtonCell)
+			searchButtonCell.appendChild(searchButton.getHtmlElement());
 
+		cellNum++;
+	}*/
 
 	if(this._departAirportsSelectIdWork && this.hasWorkAddr) {
 		this._departAirportsSelectWork = new DwtSelect(this,this.workAirportOptions);
@@ -732,6 +749,7 @@ function (ev) {
 	
 };
 
+/*
 TravelAgentFlightFindView.prototype._searchButtonListener4 = 
 function (ev) {
 	var props = [ "toolbar=yes,location=no,status=yes,menubar=yes,scrollbars=yes,resizable=yes" ];
@@ -750,7 +768,7 @@ function (ev) {
 		
 	var canvas = window.open(browserUrl, "Hotwire.com finds", props);
 	
-};
+};*/
 
 TravelAgentFlightFindView.prototype._selectChangeListener = 
 function(ev) {

@@ -30,7 +30,6 @@
 		<property type="boolean"  name="search_sidestep" label="Show SideStep.com button" visible="true" value="true"/>
 		<property type="boolean"  name="search_travelocity" label="Show Travelocity.com button" visible="true" value="true"/>
 		<property type="boolean"  name="search_hotwire" label="Show Hotwire.com button" visible="true" value="true"/>		
-		<property type="boolean"  name="search_kayak" label="Show Kayak.com button" visible="false" value="false"/>				
 	</userProperties>
 </zimlet>
 
