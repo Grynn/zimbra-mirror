@@ -1,0 +1,12 @@
+<zimlet name="com_zimbra_date" version="1.0" description="Date">
+	<include>date.js</include>
+	<handlerObject>Com_Zimbra_Date</handlerObject>
+	<contentObject type="date">
+		<contextMenu>
+			<menuItem label="Day" icon="DayView" id="DAYVIEW"/>
+			<menuItem label="New Appointment" icon="NewAppointment" id="NEWAPPT"/>
+			<menuItem/>
+			<menuItem label="Email Messages" icon="SearchMail" id="SEARCHMAIL"/>
+		</contextMenu>
+	</contentObject>
+</zimlet>
