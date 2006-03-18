@@ -26,12 +26,6 @@
 function Com_Zimbra_Asterisk() {
 }
 
-Com_Zimbra_Asterisk.prototype.init =
-function() {
-	// Pre-load placeholder image
-	// (new Image()).src = this.getResource('blank_pixel.gif');
-};
-
 Com_Zimbra_Asterisk.prototype = new ZmZimletBase();
 Com_Zimbra_Asterisk.prototype.constructor = Com_Zimbra_Asterisk;
 
@@ -197,7 +191,7 @@ Com_Zimbra_Asterisk.prototype.setupCall = function(myobj) {
 
 				var j = 1;
 
-				for (var i = 0; i < myobj.length ; i++) {
+				for (i = 0; i < myobj.length ; i++) {
 					var contact = myobj[i];
 					var email = contact.email;
 					if (contact == null) {
@@ -263,7 +257,7 @@ Com_Zimbra_Asterisk.prototype.setupCall = function(myobj) {
 				editorProps[j].item[0].label = "Do not call";
 				editorProps[j].item[0].value = "Do not call";
 
-				var i = 1;
+				i = 1;
 				if (this.getUserProperty("myMobileNum") != null) {
 					editorProps[j].item[i] = {};
 					editorProps[j].item[i].label = "Mobile: "+this.getUserProperty("myMobileNum");
@@ -301,7 +295,7 @@ Com_Zimbra_Asterisk.prototype.setupCall = function(myobj) {
 						item			: [ ]
 					};
 
-				var i = 0;
+				i = 0;
 				for (var p in myobj) {
 					if (p.slice(-5) == "Phone" && myobj[p] != null) {
 						var lb = p.slice(0,-5);
@@ -332,7 +326,7 @@ Com_Zimbra_Asterisk.prototype.setupCall = function(myobj) {
 
 				var j = 1;
 
-				for (var i = 0; i < ar.length ; i++) {
+				for (i = 0; i < ar.length ; i++) {
 					var email = ar[i];
 					var contact = this._contacts.getContactByEmail(email);
 					if (contact == null) {
@@ -398,7 +392,7 @@ Com_Zimbra_Asterisk.prototype.setupCall = function(myobj) {
 				editorProps[j].item[0].label = "Do not call";
 				editorProps[j].item[0].value = "Do not call";
 
-				var i = 1;
+				i = 1;
 				if (this.getUserProperty("myMobileNum") != null) {
 					editorProps[j].item[i] = {};
 					editorProps[j].item[i].label = "Mobile: "+this.getUserProperty("myMobileNum");
@@ -528,4 +522,3 @@ Com_Zimbra_Asterisk.prototype._resultCallback = function(result) {
 	//DBG.println(AjxDebug.DBG2, "result:" + r);
 	this.displayStatusMessage(r); 
 };
-

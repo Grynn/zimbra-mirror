@@ -2,6 +2,6 @@
   <global>
 	<property name="allowedDomains">192.168.1.254</property>
 	<property name="vmURL">http://192.168.1.254/cgi-bin/vmail.cgi</property>
-	<property name="myAddress">10.10.130.54</property>
+	<property name="myAddress">10.10.131.83</property>
   </global>
 </zimletConfig>

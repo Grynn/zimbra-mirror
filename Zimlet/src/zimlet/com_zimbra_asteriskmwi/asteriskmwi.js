@@ -67,11 +67,7 @@ Com_Zimbra_AsteriskMWI.prototype.singleClicked = function() {
 };
 
 Com_Zimbra_AsteriskMWI.prototype.verifyPrefs = function() {
-	if (this.getUserProperty("pbxUname") == null || this.getUserProperty("pbxPass") == null) {
-		return false;
-	} else {
-		return true;
-	}
+	return ((this.getUserProperty("pbxUname")) && (this.getUserProperty("pbxPass")));
 };
 
 Com_Zimbra_AsteriskMWI.prototype.checkVM = function() {
@@ -301,10 +297,10 @@ function( myobj, result ) {
 	embed = embed.replace("autostart=yes","autostart='false' cache='true'");
 	embed = embed.replace(url,ZmZimletBase.PROXY+AjxStringUtil.urlEncode(newurl));
 
-	var mstart=r.indexOf("msgid=");
-	var mstart = mstart+6;
+	var mstart = r.indexOf("msgid=");
+	mstart = mstart+6;
 	var msgID = r.substr(mstart,4); 
-	for (var i = 0; i < myobj._msgs.length; i++) {
+	for (i = 0; i < myobj._msgs.length; i++) {
 		//var rowEl = document.getElementById(myobj._msgs[i].rowID);
 		var mystyle;
 		if (msgID == myobj._msgs[i].id) {
