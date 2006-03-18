@@ -106,11 +106,12 @@ function DwtDialog(parent, className, title, standardButtons, extraButtons, zInd
 DwtDialog.prototype = new DwtBaseDialog;
 DwtDialog.prototype.constructor = DwtDialog;
 
-function DwtDialog_ButtonDescriptor(id, label, align, callback) {
+function DwtDialog_ButtonDescriptor(id, label, align, callback, cellTemplate) {
 	this.id = id;
 	this.label = label;
 	this.align = align;
 	this.callback = callback;
+	this.cellTemplate = cellTemplate;
 }
 
 DwtDialog.prototype.getAlignmentForButton =
@@ -347,8 +348,10 @@ function(html, idx) {
 								  ["left"]);
 			for (var i = 0; i < leftButtons.length; i++) {
 				var buttonId = leftButtons[i];
+				var cellTemplate = this._buttonDesc[buttonId].cellTemplate ? 
+					this._buttonDesc[buttonId].cellTemplate : this._getButtonsCellTemplate();
 		 		html[idx++] = AjxMessageFormat.format(
-								  this._getButtonsCellTemplate(),
+								  cellTemplate,
 								  [this._buttonElementId[buttonId]]);
 		 	}
 			html[idx++] = this._getButtonsAlignEndTemplate();
@@ -359,8 +362,10 @@ function(html, idx) {
 								["center"]);
 			for (var i = 0; i < centerButtons.length; i++) {
 				var buttonId = centerButtons[i];
+				var cellTemplate = this._buttonDesc[buttonId].cellTemplate ? 
+					this._buttonDesc[buttonId].cellTemplate : this._getButtonsCellTemplate();				
 		 		html[idx++] = AjxMessageFormat.format(
-								this._getButtonsCellTemplate(),
+								cellTemplate,
 								[this._buttonElementId[buttonId]]);
 		 	}
 			html[idx++] = this._getButtonsAlignEndTemplate();
@@ -371,15 +376,15 @@ function(html, idx) {
 								["right"]);
 			for (var i = 0; i < rightButtons.length; i++) {
 				var buttonId = rightButtons[i];
-				var templ = this._getButtonsCellTemplate();
-		 		html[idx++] = AjxMessageFormat.format(templ,
-											[this._buttonElementId[buttonId]]);
+				var cellTemplate = this._buttonDesc[buttonId].cellTemplate ? 
+					this._buttonDesc[buttonId].cellTemplate : this._getButtonsCellTemplate();				
+
+		 		html[idx++] = AjxMessageFormat.format(cellTemplate,
+													[this._buttonElementId[buttonId]]);
 		 	}
 			html[idx++] = this._getButtonsAlignEndTemplate();
 		}
-
 		html[idx++] = this._getButtonsContainerEndTemplate();
-
 	}	
 	return idx;
 };

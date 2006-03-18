@@ -327,6 +327,7 @@ objectIdentifier zimbraRemoteManagementUser ZimbraAttrType:337
 objectIdentifier zimbraRemoteManagementPrivateKeyPath ZimbraAttrType:338
 objectIdentifier zimbraRemoteManagementPort ZimbraAttrType:339
 objectIdentifier zimbraMailURL ZimbraAttrType:340
+objectIdentifier zimbraPrefCalendarApptReminderWarningTime ZimbraAttrType:341
 
 #################################################################
 # object class OIDs
@@ -1046,6 +1047,13 @@ attributetype ( zimbraPrefAutoAddAddressEnabled
 	DESC 'whether or not new address in outgoing email are auto added to address book'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( zimbraPrefCalendarApptReminderWarningTime
+	NAME 'zimbraPrefCalendarApptReminderWarningTime'
+	DESC 'number of minutes (0 = never) before appt to show reminder dialog'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )
 
 attributetype ( zimbraPrefCalendarFirstDayOfWeek
@@ -2644,6 +2652,7 @@ objectclass ( zimbraAccount
 		zimbraPrefAutoAddAddressEnabled $
 		zimbraPrefShowFragments $
 		zimbraPrefShowSearchString $
+		zimbraPrefCalendarApptReminderWarningTime $
 		zimbraPrefCalendarFirstDayOfWeek $
 		zimbraPrefCalendarInitialView $
 		zimbraPrefCalendarInitialCheckedCalendars $
@@ -2793,6 +2802,7 @@ objectclass ( zimbraCOS
 		zimbraPrefUseTimeZoneListInCalendar $
 		zimbraPrefShowFragments $
 		zimbraPrefShowSearchString $
+		zimbraPrefCalendarApptReminderWarningTime $
 		zimbraPrefCalendarFirstDayOfWeek $
 		zimbraPrefCalendarInitialView $
 		zimbraPrefCalendarUseQuickAdd $		
