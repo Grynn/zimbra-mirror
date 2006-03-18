@@ -36,27 +36,41 @@
 * the appropriate source and target list views, themselves subclasses of
 * DwtChooserListView. Those subclasses must implement _getHeaderList() and
 * _createItemHtml(item).</p>
+* <p>
+* There are two different layout styles, horizontal (with the list views at the
+* left and right) and vertical (with the list views at the top and bottom). There
+* are two different selection styles, single and multiple, which control how many
+* items may appear in the target list view.</p>
 *
 * @author Conrad Damon
 *
 * @param parent			[DwtComposite]		containing widget
-* @param className		[string]*		CSS class
-* @param buttonInfo		[array]				id/label pairs for transfer buttons
-* @param style			[constant]*			layout style (vertical or horizontal)
-* @param noDuplicates	[boolean]*			if true, no duplicates in target list
+* @param className		[string]*			CSS class
+* @param buttonInfo		[array]*			id/label pairs for transfer buttons
+* @param layoutStyle	[constant]*			layout style (vertical or horizontal)
+* @param selectStyle	[constant]*			multi-select (default) or single-select
+* @param noDuplicates	[boolean]*			if true, prevent duplicates in target list
+* @param rowHeight		[int]*				height of one row in a list view (single select style)
 */
-function DwtChooser(parent, className, buttonInfo, style, noDuplicates) {
+function DwtChooser(params) {
 
 	if (arguments.length == 0) return;
-	DwtComposite.call(this, parent, "DwtChooser");
+	var className = params.className ? params.className : "DwtChooser";
+	DwtComposite.call(this, params.parent, className);
 
-	this._style = style ? style : DwtChooser.HORIZ_STYLE;
-	this._noDuplicates = noDuplicates;
+	this._layoutStyle = params.layoutStyle ? params.layoutStyle : DwtChooser.HORIZ_STYLE;
+	this._selectStyle = params.selectStyle ? params.selectStyle : DwtChooser.MULTI_SELECT
+	this._noDuplicates = params.noDuplicates;
+	this._rowHeight = params.rowHeight ? params.rowHeight : 45; // 45 = header row + row with icon
 
-	this._handleButtonInfo(buttonInfo);
+	this._handleButtonInfo(params.buttonInfo);
 
 	this._createHtml();
 	this._initialize();
+	var parentSz = params.parent.getSize();
+	if (parentSz) {
+		this.resize(parentSz.x, parentSz.y);
+	}
 
 	this._evt = new ZmEvent(ZmEvent.S_CHOOSER);
 	this._evtMgr = new AjxEventMgr();
@@ -70,16 +84,14 @@ DwtChooser.prototype.constructor = DwtChooser;
 DwtChooser.HORIZ_STYLE	= 1;
 DwtChooser.VERT_STYLE	= 2;
 
+DwtChooser.SINGLE_SELECT	= 1;
+DwtChooser.MULTI_SELECT		= 2;
+
 DwtChooser.REMOVE_BTN_ID = "__remove__";
 
 DwtChooser.prototype.toString = 
 function() {
 	return "DwtChooser";
-};
-
-DwtChooser.prototype.show =
-function() {
-	this.resize();
 };
 
 /**
@@ -104,6 +116,41 @@ function(list) {
 DwtChooser.prototype.getItems =
 function() {
 	return this._hasMultiButtons ? this._data : this._data[this._buttonInfo[0].id];
+};
+
+/**
+* Sets the select style to the given style (single or multiple). Performs a resize
+* in order to adjust the layout, and changes the label on the transfer button if it's
+* the default one.
+*/
+DwtChooser.prototype.setSelectStyle =
+function(style, noResize) {
+	if (style == this._selectStyle) return;
+	
+	this._selectStyle = style;
+	if (this._defLabel) {
+		var button = this._button[this._buttonInfo[0].id];
+		button.setText((style == DwtChooser.SINGLE_SELECT) ? AjxMsg.select : AjxMsg.add);
+	}
+	if (!noResize) {
+		var curSz = this.getSize();
+		this.resize(curSz.x, curSz.y);
+	}
+	
+	// if we're going from multi to single, preserve the first target item
+	if (style == DwtChooser.SINGLE_SELECT) {
+		var item = null;
+		for (var i in this._data) {
+			if (this._data[i].size()) {
+				item = this._data[i].get(0);
+				break;
+			}
+		}
+		if (item) {
+			this.reset(DwtChooserListView.TARGET);
+			this.transfer([item]);
+		}
+	}
 };
 
 /**
@@ -184,7 +231,7 @@ function() {
 	var html = [];
 	var idx = 0;
 	
-	if (this._style == DwtChooser.HORIZ_STYLE) {
+	if (this._layoutStyle == DwtChooser.HORIZ_STYLE) {
 		// start new table for list views
 		html[idx++] = "<table cellspacing=0 cellpadding=0 border=0>";
 		html[idx++] = "<tr>";
@@ -257,7 +304,11 @@ function() {
 DwtChooser.prototype._handleButtonInfo = 
 function(buttonInfo) {
 
-	this._buttonInfo = buttonInfo ? buttonInfo : [ { label: AjxMsg.add } ];
+	if (!buttonInfo) {
+		this._defLabel = (this._selectStyle == DwtChooser.SINGLE_SELECT) ? AjxMsg.select : AjxMsg.add;
+		buttonInfo = [ { label: this._defLabel } ];
+	}
+	this._buttonInfo = buttonInfo;
 
 	// create IDs for button elements and their containers
 	this._buttonDivId = {};
@@ -330,7 +381,7 @@ function() {
 /*
 * Adds a list view into the DOM and sets its size to fit in its container.
 *
-* @param listView		[DwtChooserListView]		the list view
+* @param listView		[DwtChooserListView]	the list view
 * @param listViewDivId	[string]				ID of container DIV
 */
 DwtChooser.prototype._addListView = 
@@ -343,18 +394,26 @@ function(listView, listViewDivId) {
 
 DwtChooser.prototype.resize =
 function(width, height) {
+	if (!width || !height) return;
+	if (width == Dwt.DEFAULT && height == Dwt.DEFAULT) return;
+
 	var buttonsTd = document.getElementById(this._buttonsTdId);
 	var btnSz = Dwt.getSize(buttonsTd);
-	var w, h;
-	if (this._style == DwtChooser.HORIZ_STYLE) {
-		w = Math.floor(((width - btnSz.x) / 2) - 12);
-		h = height;
+	var w, sh, th;
+	if (this._layoutStyle == DwtChooser.HORIZ_STYLE) {
+		w = (width == Dwt.DEFAULT) ? width : Math.floor(((width - btnSz.x) / 2) - 12);
+		sh = th = height;
 	} else {
 		w = width;
-		h = Math.floor(((height - btnSz.y) / 2) - 12);
+		if (this._selectStyle == DwtChooser.SINGLE_SELECT) {
+			sh = (height == Dwt.DEFAULT) ? height : height - btnSz.y - this._rowHeight - 30;
+			th = (height == Dwt.DEFAULT) ? height : height - btnSz.y - sh - 30;
+		} else {
+			sh = th = (height == Dwt.DEFAULT) ? height : Math.floor(((height - btnSz.y) / 2) - 12);
+		}
 	}
-	this.sourceListView.setSize(w, h);
-	this.targetListView.setSize(w, h);
+	this.sourceListView.setSize(w, sh);
+	this.targetListView.setSize(w, th);
 };
 
 /*
@@ -369,7 +428,7 @@ DwtChooser.prototype._setupButton =
 function(id, buttonId, buttonDivId, label) {
 	var button = new DwtButton(this);
 	button.setText(label);
-	button.id = buttonId
+	button.id = buttonId;
 	button.setHtmlElementId(buttonId);
 	button._activeClassName = button._origClassName + " DwtChooser-Active";
 	button._nonActiveClassName = button._origClassName;
@@ -535,6 +594,10 @@ DwtChooser.prototype.transfer =
 function(items, id, skipNotify) {
 	id = id ? id : this._activeButtonId;
 	this._setActiveButton(id);
+	if (this._selectStyle == DwtChooser.SINGLE_SELECT) {
+		items = [items[0]];
+		this.reset(DwtChooserListView.TARGET);
+	}
 	for (var i = 0; i < items.length; i++) {
 		var item = items[i];
 		if (this._noDuplicates && this._isDuplicate(item, this._data[id])) {
