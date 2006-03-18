@@ -219,10 +219,12 @@ ZaServer.prototype.toString = function() {
 ZaServer.getAll =
 function(app) {
 	var soapDoc = AjxSoapDoc.create("GetAllServersRequest", "urn:zimbraAdmin", null);	
-	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	var resp = command.invoke(params).Body.GetAllServersResponse;	
 	var list = new ZaItemList(ZaServer, app);
-	list.loadFromDom(resp);
-//	list.sortByName();		
+	list.loadFromJS(resp);	
 	return list;
 }
 
@@ -257,9 +259,11 @@ function(mods) {
 	if(this.attrs[ZaServer.A_zimbraMailboxServiceEnabled]) {
 		targetId = this.id;
 	}
-	var resp = ZmCsfeCommand.invoke(soapDoc, false, null, targetId, true).firstChild;
-	//update itseld
-	this.initFromDom(resp.firstChild);
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	var resp = command.invoke(params).Body.ModifyServerResponse;		
+	this.initFromJS(resp.server[0]);
 }
 
 /**
@@ -314,8 +318,13 @@ function(by, val, withConfig) {
 	}
 	var elBy = soapDoc.set("server", _val);
 	elBy.setAttribute("by", _by);
-	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
-	this.initFromDom(resp.firstChild);
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	params.asyncMode = false;
+	resp = command.invoke(params);		
+	this.initFromJS(resp.Body.GetServerResponse.server[0]);
+	
 	this.cos = this._app.getGlobalConfig();
 
 	if(this.attrs[ZaServer.A_zimbraMailboxServiceEnabled]) {
@@ -327,8 +336,8 @@ function(by, val, withConfig) {
 }
 ZaItem.loadMethods["ZaServer"].push(ZaServer.loadMethod);
 
-ZaServer.prototype.initFromDom = function(node) {
-	ZaItem.prototype.initFromDom.call(this, node);
+ZaServer.prototype.initFromJS = function(server) {
+	ZaItem.prototype.initFromJS.call(this, server);
 	// convert installed/enabled services to hidden fields for xform binding
 	var installed = this.attrs[ZaServer.A_zimbraServiceInstalled];
 	if (installed) {
