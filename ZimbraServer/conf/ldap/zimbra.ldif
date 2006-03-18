@@ -334,6 +334,10 @@ zimbraRedoLogArchiveDir: redolog/archive
 zimbraRedoLogRolloverFileSizeKB: 102400
 zimbraRedoLogDeleteOnRollover: TRUE
 zimbraRedoLogFsyncIntervalMS: 10
+zimbraRemoteManagementCommand: /opt/zimbra/libexec/zmrcd
+zimbraRemoteManagementUser: zimbra
+zimbraRemoteManagementPrivateKeyPath: /opt/zimbra/.ssh/zimbra_identity
+zimbraRemoteManagementPort: 22
 zimbraSmtpHostname: localhost
 zimbraSmtpPort: 25
 zimbraSmtpTimeout: 60
@@ -391,6 +395,10 @@ zimbraServerInheritedAttr: zimbraRedoLogArchiveDir
 zimbraServerInheritedAttr: zimbraRedoLogRolloverFileSizeKB
 zimbraServerInheritedAttr: zimbraRedoLogDeleteOnRollover
 zimbraServerInheritedAttr: zimbraRedoLogFsyncIntervalMS
+zimbraServerInheritedAttr: zimbraRemoteManagementCommand
+zimbraServerInheritedAttr: zimbraRemoteManagementUser
+zimbraServerInheritedAttr: zimbraRemoteManagementPrivateKeyPath
+zimbraServerInheritedAttr: zimbraRemoteManagementPort
 zimbraServerInheritedAttr: zimbraSmtpHostname
 zimbraServerInheritedAttr: zimbraSmtpPort
 zimbraServerInheritedAttr: zimbraSmtpTimeout

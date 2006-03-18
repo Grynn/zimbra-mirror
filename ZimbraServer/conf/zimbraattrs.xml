@@ -476,6 +476,14 @@
 
 <attr name="zimbraRedologRolloverFileSizeKB" type="integer" min="0"/>
 
+<attr name="zimbraRemoteManagementCommand" type="string" max="1024"/>
+
+<attr name="zimbraRemoteManagementUser" type="string" max="256"/>
+
+<attr name="zimbraRemoteManagementPrivateKeyPath" type="string" max="1024"/>
+
+<attr name="zimbraRemoteManagementPort" type="integer"/>
+
 <attr name="zimbraServerHostname" type="string" max="256"/>
 
 <attr name="zimbraServerInheritedAttr" type="string"/>
