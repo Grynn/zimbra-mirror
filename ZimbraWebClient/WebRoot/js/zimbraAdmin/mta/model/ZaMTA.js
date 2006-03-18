@@ -72,21 +72,28 @@ ZaMTA.A_queue_filter_name = "_queue_filter_name";
 ZaMTA.A_queue_filter_value = "_queue_filter_value";
 ZaMTA.A_progress = "progress";
 
-/**
-* Make a SOAP call to get file counts in queue folders
-**/
-ZaMTA.prototype.getQCounts = function () {
-	var callback = new AjxCallback(this, this.QCountsCallback);
-	var soapDoc = AjxSoapDoc.create("GetMailQueueInfoRequest", "urn:zimbraAdmin", null);	
-	var server = soapDoc.set("server", null);
-	server.setAttribute("name", this.name);
-}
-
-ZaMTA.prototype.QCountsCallback = function () {
+ZaMTA.prototype.QCountsCallback = function (resp) {
+	if(!resp) {
+		var ex = new ZmCsfeException(ZMsg.errorEmptyResponse,CSFE_SVC_ERROR,"ZaMTA.prototype.QCountsCallback");
+		this._app.getCurrentController()._handleException(ex, "ZaMTA.prototype.QCountsCallback");
+		this.goPrev();
+		return;		
+	}
+	if(resp.isException && resp.isException()) {
+		this._app.getCurrentController()._handleException(resp.getException(), "ZaMTA.prototype.QCountsCallback");
+		return;
+	} 	
 	//update my fields
-	
+	if(resp.Body && resp.GetMailQueueInfoResponse.server && resp.GetMailQueueInfoResponse.server[0]) {
+		this.initFromJS(resp.Body.GetMailQueueInfoResponse.server[0]);
+	} else {
+		var ex = new ZmCsfeException(ZMsg.errorUnknownDoc,SVC_UNKNOWN_DOCUMENT,"ZaMTA.prototype.QCountsCallback");
+		this._app.getCurrentController()._handleException(ex, "ZaMTA.prototype.QCountsCallback");
+		this.goPrev();
+		return;	
+	}
 	//notify listeners 
-	this._app.getMTAController().fireChangeEvent();
+	this._app.getMTAController().fireChangeEvent(this);
 }
 
 /**
@@ -112,17 +119,21 @@ function() {
 	this.load();	
 }
 
+/**
+* Make a SOAP call to get file counts in queue folders
+**/
 ZaMTA.loadMethod = 
 function(by, val, withConfig) {
 	var soapDoc = AjxSoapDoc.create("GetMailQueueInfoRequest", "urn:zimbraAdmin", null);
 	var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	params.asyncMode = false;
-	resp = command.invoke(params);		
-	this.initFromJS(resp.Body.GetMailQueueInfoResponse.server[0]);
+	params.asyncMode = true;
+	var callback = new AjxCallback(this, this.QCountsCallback);	
+	params.callback = callback;
+	command.invoke(params);		
 }
-ZaItem.loadMethods["ZaMTA"].push(ZaItem.loadMethod);
+ZaItem.loadMethods["ZaMTA"].push(ZaMTA.loadMethod);
 
 
 ZaMTA.returnTestData1 = function (app) {

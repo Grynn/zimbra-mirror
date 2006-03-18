@@ -31,7 +31,7 @@ function ZaMTAListController(appCtxt, container, app) {
 	ZaController.call(this, appCtxt, container, app,"ZaMTAListController");
    	this._toolbarOperations = new Array();
    	this._popupOperations = new Array();			
-	
+	this.MTAPool = [];
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_servers/managing_servers.htm";					
 }
 
@@ -48,9 +48,27 @@ function(list) {
 		this._createUI();
 	} 	
 
-	if (list != null)
+	if (list != null) {
 		this._contentView.set(list.getVector());
+		//start loading queue info
+		this.MTAPool = [];
+		var tmpList = list.getArray();
+		var numMTAs = tmpList.length;
+
+		for(var ix = 0; ix < numMTAs; ix++) {
+			this.MTAPool.push(tmpList[ix]);
+		}
 		
+		var i=0;
+		var tmp = [];
+		var cnt = numMTAs > 5 ? 5 : numMTAs;
+		for(i = 0; i < cnt; i++) {
+			tmp[i] = this.MTAPool.shift();
+		}
+		for(i = cnt-1; i > 0; i--) {
+			tmp[i].load();
+		}
+	}	
 	this._app.pushView(ZaZimbraAdmin._POSTQ_VIEW);			
 	
 	this._removeList = new Array();
@@ -203,18 +221,36 @@ ZaMTAListController.prototype.handleMTAChange =
 function (ev) {
 	//if any of the data that is currently visible has changed - update the view
 	if(ev) {
-		this._contentView.setUI();
-		if(this._app.getCurrentController() == this) {
-			this.show();			
+		if(ev.getDetails()) {
+			this._contentView.setUI();
+			//check if we have any MTAs in the queue waiting to be loaded
+			if(this.MTAPool.length) {
+				var mta = this.MTAPool.shift();
+				mta.load();
+			}
 		}
 	}
 }
 
 /**
-* Asynchronously calls ZaMTA.prototype.getMyQCounts {@link ZaMTA#getQCounts}
+* Asynchronously calls ZaItem.load {@link ZaItem#load}
 **/
 ZaMTAListController.prototype.getQCounts = function () {
-	
+	this.MTAPool = [];
+	var tmpList = this._list.getArray();
+	var numMTAs = tmpList.length;
+	for(var ix = 0; ix < numMTAs; ix++) {
+		this.MTAPool.push(tmpList[ix]);
+	}
+	var cnt = numMTAs > 5 ? 5 : numMTAs;
+	var i=0;
+	var tmp = [];
+	for(i = 0; i < cnt; i++) {
+		tmp[i] = this.MTAPool.shift();
+	}
+	for(i = cnt-1; i > 0; i--) {
+		tmp[i].load();
+	}
 }
 
 ZaMTAListController.prototype.refreshListener = 
