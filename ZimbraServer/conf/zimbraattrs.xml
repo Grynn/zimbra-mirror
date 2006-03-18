@@ -266,6 +266,8 @@
 
 <attr name="zimbraMailMode" type="enum" value="http,https,both,mixed"/>
 
+<attr name="zimbraMailURL" type="string" max="1024"/>
+
 <attr name="zimbraMailSieveScript" type="string"/>
 
 <attr name="zimbraMailSpamLifetime" type="duration"/>

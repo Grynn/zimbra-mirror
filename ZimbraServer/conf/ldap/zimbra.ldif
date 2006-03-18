@@ -353,6 +353,7 @@ zimbraTableMaintenanceMaxRows: 1000000
 zimbraTableMaintenanceOperation: ANALYZE
 zimbraMailPort: 80
 zimbraMailSSLPort: 0
+zimbraMailURL: /zimbra
 zimbraAdminPort: 7071
 zimbraServerInheritedAttr: zimbraAttachmentsScanURL
 zimbraServerInheritedAttr: zimbraFileUploadMaxSize
@@ -411,6 +412,7 @@ zimbraServerInheritedAttr: zimbraTableMaintenanceOperation
 zimbraServerInheritedAttr: zimbraMailPort
 zimbraServerInheritedAttr: zimbraMailSSLPort
 zimbraServerInheritedAttr: zimbraMailMode
+zimbraServerInheritedAttr: zimbraMailURL
 zimbraServerInheritedAttr: zimbraAdminPort
 zimbraServerInheritedAttr: zimbraVirusDefinitionsUpdateFrequency
 zimbraServerInheritedAttr: zimbraRedoLogProvider

@@ -326,6 +326,7 @@ objectIdentifier zimbraRemoteManagementCommand ZimbraAttrType:336
 objectIdentifier zimbraRemoteManagementUser ZimbraAttrType:337
 objectIdentifier zimbraRemoteManagementPrivateKeyPath ZimbraAttrType:338
 objectIdentifier zimbraRemoteManagementPort ZimbraAttrType:339
+objectIdentifier zimbraMailURL ZimbraAttrType:340
 
 #################################################################
 # object class OIDs
@@ -2052,6 +2053,14 @@ attributetype ( zimbraMailMode
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{64}
 	SINGLE-VALUE )	
 
+attributetype ( zimbraMailURL
+	NAME 'zimbraMailURL'
+	DESC 'URL prefix for where the zimbra app resides on this server'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1024}
+	SINGLE-VALUE )	
+
 attributetype ( zimbraAdminPort
 	NAME 'zimbraAdminPort'
 	DESC 'SSL port for admin UI'
@@ -2919,6 +2928,7 @@ objectclass ( zimbraGlobalConfig
 		zimbraMailPort $
 		zimbraMailSSLPort $
 		zimbraMailMode $
+                zimbraMailURL $
 		zimbraAdminPort $
 		zimbraVirusBlockEncryptedArchive $
 		zimbraVirusCheckEnabled $
@@ -3066,6 +3076,7 @@ objectclass ( zimbraServer
 		zimbraMailPort $
 		zimbraMailSSLPort $
 		zimbraMailMode $
+                zimbraMailURL $
 		zimbraAdminPort $
 		zimbraRedoLogProvider
 	))
