@@ -78,7 +78,7 @@ function(mta, now, isDndIcon) {
 		if(id.indexOf(ZaMTA.A_Servername)==0) {	
 			// name
 			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
-			html[idx++] = AjxStringUtil.htmlEncode(mta[ZaMTA.A_Servername]);
+			html[idx++] = AjxStringUtil.htmlEncode(mta[ZaMTA.A_name]);
 			html[idx++] = "</td>";
 		} else if(id.indexOf(ZaMTA.A_DeferredQ)==0) {	
 

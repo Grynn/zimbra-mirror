@@ -76,7 +76,10 @@ ZaMTA.A_progress = "progress";
 * Make a SOAP call to get file counts in queue folders
 **/
 ZaMTA.prototype.getQCounts = function () {
-	
+	var callback = new AjxCallback(this, this.QCountsCallback);
+	var soapDoc = AjxSoapDoc.create("GetMailQueueInfoRequest", "urn:zimbraAdmin", null);	
+	var server = soapDoc.set("server", null);
+	server.setAttribute("name", this.name);
 }
 
 ZaMTA.prototype.QCountsCallback = function () {
@@ -92,22 +95,35 @@ ZaMTA.prototype.QCountsCallback = function () {
 **/
 ZaMTA.getAll = function (app) {
 	var soapDoc = AjxSoapDoc.create("GetAllServersRequest", "urn:zimbraAdmin", null);	
-	
+	soapDoc.getMethod().setAttribute("service", "mta");
 	var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	var resp = command.invoke(params).Body.GetAllServersResponse;	
 	var list = new ZaItemList(ZaMTA, app);
 	list.loadFromJS(resp);	
-	
-	
-/*	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
-	var list = new ZaItemList(ZaServer, app);
-	list.loadFromDom(resp);*/
-//	list.sortByName();		
 	return list;	
 //	return ZaMTA.returnTestData1();
 }
+
+
+ZaMTA.prototype.refresh = 
+function() {
+	this.load();	
+}
+
+ZaMTA.loadMethod = 
+function(by, val, withConfig) {
+	var soapDoc = AjxSoapDoc.create("GetMailQueueInfoRequest", "urn:zimbraAdmin", null);
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	params.asyncMode = false;
+	resp = command.invoke(params);		
+	this.initFromJS(resp.Body.GetMailQueueInfoResponse.server[0]);
+}
+ZaItem.loadMethods["ZaMTA"].push(ZaItem.loadMethod);
+
 
 ZaMTA.returnTestData1 = function (app) {
 	var list = new ZaItemList(ZaMTA, app);
@@ -369,3 +385,14 @@ ZaMTAProgress = function (app) {
 	this._init(app);
 }
 
+ZaMTA.initMethod = function (app) {
+	this.attrs = new Object();
+	this.id = "";
+	this.name="";
+	this[ZaMTA.A_DeferredQ] = {count:"N/A"};
+	this[ZaMTA.A_IncomingQ] = {count:"N/A"};
+	this[ZaMTA.A_ActiveQ] = {count:"N/A"};	
+	this[ZaMTA.A_HoldQ] = {count:"N/A"};	
+	this[ZaMTA.A_CorruptQ] = {count:"N/A"};			
+}
+ZaItem.initMethods["ZaMTA"].push(ZaMTA.initMethod);
