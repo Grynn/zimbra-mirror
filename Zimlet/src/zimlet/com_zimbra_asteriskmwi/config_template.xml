@@ -1,0 +1,7 @@
+<zimletConfig name="com_zimbra_asteriskmwi" version="2.1">
+  <global>
+	<property name="allowedDomains">192.168.1.254</property>
+	<property name="vmURL">http://192.168.1.254/cgi-bin/vmail.cgi</property>
+	<property name="myAddress">10.10.130.54</property>
+  </global>
+</zimletConfig>
