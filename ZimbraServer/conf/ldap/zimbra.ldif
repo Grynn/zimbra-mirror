@@ -260,7 +260,6 @@ zimbraGalLdapAttrMap: postalCode=workPostalCode
 zimbraGalLdapAttrMap: telephoneNumber=workPhone
 zimbraGalLdapAttrMap: st=workState
 zimbraGalLdapAttrMap: zimbraMailDeliveryAddress,mail=email
-zimbraGalLdapAttrMap: zimbraMailAlias=email2
 zimbraGalLdapAttrMap: title=jobTitle
 zimbraGalLdapAttrMap: whenChanged,modifyTimeStamp=modifyTimeStamp
 zimbraGalLdapAttrMap: whenCreated,createTimeStamp=createTimeStamp
