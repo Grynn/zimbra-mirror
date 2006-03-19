@@ -134,6 +134,8 @@
 
 <attr name="zimbraFeatureIMEnabled" type="boolean"/>
 
+<attr name="zimbraFeatureMailForwardingEnabled" type="boolean"/>
+
 <attr name="zimbraFeatureChangePasswordEnabled" type="boolean"/>
 
 <attr name="zimbraFeatureContactsEnabled" type="boolean"/>
@@ -435,6 +437,8 @@
 <attr name="zimbraPrefMailInitialSearch" type="string" max="512"/>
 
 <attr name="zimbraPrefMailItemsPerPage" type="integer"/> <!-- TODO: get min/max? -->
+
+<attr name="zimbraPrefMailForwardingAddress" type="emailp" max="256"/>
 
 <attr name="zimbraPrefMailPollingInterval" type="duration"/>
 
