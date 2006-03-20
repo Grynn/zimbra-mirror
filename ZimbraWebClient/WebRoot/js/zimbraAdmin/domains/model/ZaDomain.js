@@ -588,10 +588,10 @@ ZaDomain.prototype.remove =
 function() {
 	var soapDoc = AjxSoapDoc.create("DeleteDomainRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
-		var command = new ZmCsfeCommand();
+	var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	invoke(params);	
+	command.invoke(params);	
 }
 
 ZaDomain.myXModel = {
