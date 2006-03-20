@@ -370,6 +370,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 						{ref:ZaAccount.A_zimbraPrefCalendarUseQuickAdd, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_useQuickAdd,label:ZaMsg.NAD_useQuickAdd, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",onChange:ZaTabView.onFormFieldChanged},							
 						{ref:ZaAccount.A_zimbraPrefUseTimeZoneListInCalendar, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefUseTimeZoneListInCalendar,label:ZaMsg.NAD_zimbraPrefUseTimeZoneListInCalendar, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",onChange:ZaTabView.onFormFieldChanged},							
 						{ref:ZaAccount.A_zimbraPrefImapSearchFoldersEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefImapSearchFoldersEnabled,label:ZaMsg.NAD_zimbraPrefImapSearchFoldersEnabled, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",onChange:ZaTabView.onFormFieldChanged},														
+						{ref:ZaAccount.A_zimbraPrefMailLocalDeliveryDisabled, type:_SUPER_CHECKBOX_,resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefMailLocalDeliveryDisabled,label:ZaMsg.NAD_zimbraPrefMailLocalDeliveryDisabled, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",onChange:ZaTabView.onFormFieldChanged},						
 						{type:_SEPARATOR_},							
 						{ref:ZaAccount.A_zimbraPrefNewMailNotificationEnabled, type:_CHECKBOX_, msgName:ZaMsg.NAD_zimbraPrefNewMailNotificationEnabled,label:ZaMsg.NAD_zimbraPrefNewMailNotificationEnabled, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_},
 						{ref:ZaAccount.A_zimbraPrefNewMailNotificationAddress, type:_TEXTFIELD_, msgName:ZaMsg.NAD_zimbraPrefNewMailNotificationAddress,label:ZaMsg.NAD_zimbraPrefNewMailNotificationAddress, labelLocation:_LEFT_,  onChange:ZaTabView.onFormFieldChanged},							
@@ -401,12 +402,27 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				});
 	}
 	if(ZaSettings.ACCOUNTS_FORWARDING_ENABLED) {
-		cases.push({type:_CASE_, numCols:1, relevant:("instance[ZaModel.currentTab] == " + _tab6), 
+		cases.push({type:_CASE_, numCols:2, relevant:("instance[ZaModel.currentTab] == " + _tab6), 
 					items: [
-						{type:_OUTPUT_, value:ZaMsg.NAD_EditFwdGroup},
-						{ref:ZaAccount.A_zimbraMailForwardingAddress, type:_REPEAT_, label:null, repeatInstance:emptyAlias, showAddButton:true, showRemoveButton:true, 
-							addButtonLabel:ZaMsg.NAD_AddAddress,
-							showAddOnNextRow:true,
+						{ref:ZaAccount.A_zimbraFeatureMailForwardingEnabled,resetToSuperLabel:ZaMsg.NAD_ResetToCOS, type:_SUPER_CHECKBOX_, 
+							label:ZaMsg.NAD_zimbraFeatureMailForwardingEnabled,  labelCssClass:"xform_label", labelLocation:_LEFT_, 
+							trueValue:"TRUE", falseValue:"FALSE",
+							onChange:ZaTabView.onFormFieldChanged, align:_LEFT_
+						},
+						{ref:ZaAccount.A_zimbraPrefMailForwardingAddress, type:_TEXTFIELD_,width:250,
+							msgName:ZaMsg.NAD_zimbraPrefMailForwardingAddress,label:ZaMsg.NAD_zimbraPrefMailForwardingAddress+":", labelLocation:_LEFT_,  
+							onChange:ZaTabView.onFormFieldChanged,
+							relevantBehavior:_DISABLE_, align:_LEFT_,
+							relevant:"this.getModel().getInstanceValue(this.getInstance(),ZaAccount.A_zimbraFeatureMailForwardingEnabled) == \"TRUE\""
+						},
+						{type:_SPACER_},
+						{type:_SEPARATOR_,colSpan:2},
+						{ref:ZaAccount.A_zimbraMailForwardingAddress,type:_REPEAT_,
+							labelCssClass:"xform_label", label:ZaMsg.NAD_EditFwdGroup,colSpan:"*", labelLocation:_LEFT_, 
+							addButtonLabel:ZaMsg.NAD_AddAddress, 
+							align:_LEFT_,colSpan:"*",
+							repeatInstance:emptyAlias, showAddButton:true, showRemoveButton:true, 
+							showAddOnNextRow:true, 
 							removeButtonLabel:ZaMsg.NAD_RemoveAddress,								
 							items: [
 								{ref:".", type:_TEXTFIELD_, label:null, onChange:ZaTabView.onFormFieldChanged, width:250}
