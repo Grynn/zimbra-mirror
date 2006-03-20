@@ -330,6 +330,7 @@ objectIdentifier zimbraMailURL ZimbraAttrType:340
 objectIdentifier zimbraPrefCalendarApptReminderWarningTime ZimbraAttrType:341
 objectIdentifier zimbraFeatureMailForwardingEnabled ZimbraAttrType:342
 objectIdentifier zimbraPrefMailForwardingAddress ZimbraAttrType:343
+objectIdentifier zimbraPrefMailLocalDeliveryDisabled ZimbraAttrType:344
 
 #################################################################
 # object class OIDs
@@ -1733,6 +1734,13 @@ attributetype ( zimbraPrefMailSignatureEnabled
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
+attributetype ( zimbraPrefMailLocalDeliveryDisabled
+	NAME 'zimbraPrefMailLocalDeliveryDisabled'
+	DESC 'whether or not to deliver mail locally'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
 attributetype ( zimbraPrefMessageViewHtmlPreferred
 	NAME 'zimbraPrefMessageViewHtmlPreferred'
 	DESC 'whether client prefers text/html or text/plain'
@@ -2689,6 +2697,7 @@ objectclass ( zimbraAccount
 		zimbraPrefContactsPerPage $		
 		zimbraPrefMailForwardingAddress $
 		zimbraPrefMessageViewHtmlPreferred $
+		zimbraPrefMailLocalDeliveryDisabled $
 		zimbraPrefMailPollingInterval $
 		zimbraPrefMailSignature $
 		zimbraPrefMailSignatureEnabled $
