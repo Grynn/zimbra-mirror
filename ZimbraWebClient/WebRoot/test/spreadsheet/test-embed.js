@@ -40,7 +40,8 @@ function Test() {
 			}
 
 			editor.focus();
-			doc.designMode = "off";
+			if (AjxEnv.isGeckoBased)
+				doc.designMode = "off";
 			var ifr = doc.createElement("iframe");
 			// ifr.src = "/zimbra/test/spreadsheet/index.jsp";
 			ifr.src = "http://localhost:7070/zimbra/test/spreadsheet/index.jsp";

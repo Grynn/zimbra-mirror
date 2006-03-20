@@ -1,7 +1,7 @@
 <!--
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 -->
-<!-- 
+<!--
 ***** BEGIN LICENSE BLOCK *****
 Version: ZAPL 1.1
 
@@ -26,7 +26,7 @@ Contributor(s):
 ***** END LICENSE BLOCK *****
 -->
 
-<%@ page language="java" 
+<%@ page language="java"
          import="java.lang.*, java.util.*" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -38,7 +38,7 @@ Contributor(s):
 
 		@import url(/zimbra/img/loRes/imgs.css?v=060307123104);
 		@import url(/zimbra/img/loRes/skins/steel/skin.css?v=060307123104);
-	
+
 	        @import url(/zimbra/js/zimbraMail/config/style/common.css?v=060123132725);
 	        /* @import url(/zimbra/skins/steel/skin.css?v=060123132725); */
 
@@ -46,12 +46,8 @@ Contributor(s):
         @import url(style.css);
       -->
     </style>
-	<script language="JavaScript">
-    	DwtConfigPath = "/ajax/js/dwt/config";
-    </script>
-    	
-<% 
-   String contextPath = (String)request.getContextPath(); 
+<%
+   String contextPath = (String)request.getContextPath();
    String vers = (String)request.getAttribute("version");
    String ext = (String)request.getAttribute("fileExtension");
    if (vers == null){
@@ -61,6 +57,11 @@ Contributor(s):
       ext = "";
    }
 %>
+        <script language="JavaScript">
+    	        DwtConfigPath = "/ajax/js/dwt/config";
+                appContextPath = "<%= contextPath %>";
+        </script>
+
     <jsp:include page="../../public/Messages.jsp"/>
     <jsp:include page="../../public/Ajax.jsp"/>
     <jsp:include page="../../public/Dwt.jsp"/>
@@ -75,7 +76,7 @@ Contributor(s):
   </head>
     <body>
     <noscript><p><b>Javascript must be enabled to use this.</b></p></noscript>
-    <script language="JavaScript">   	
+    <script language="JavaScript">
    		function launch() {
    			DBG = new AjxDebug(AjxDebug.NONE, null, false);
  	    	Test.run();

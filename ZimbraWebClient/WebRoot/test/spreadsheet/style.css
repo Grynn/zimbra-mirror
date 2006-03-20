@@ -1,5 +1,6 @@
 .ZmSpreadSheet { border: 1px solid #000; }
-.ZmSpreadSheet .ToolBar { background-color: #eee; border-bottom: 1px solid #000; }
+.ZmSpreadSheet .ToolBar { background-color: #eee; }
+.ZmSpreadSheet .ToolBar2 { border-bottom: 1px solid #000; }
 .ZmSpreadSheet-RelDiv { position: relative !important; overflow: auto !important; background-color: #bbb; }
 .ZmSpreadSheet .InputField, .ZmSpreadSheet table.SpreadSheet { font: 11px tahoma,verdana,sans-serif; }
 .ZmSpreadSheet table.SpreadSheet { background-color: #bbb; color: #000; }
