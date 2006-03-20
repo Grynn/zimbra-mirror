@@ -15,7 +15,7 @@ use strict;
 
 $enable_ldap = 1;
 $default_ldap = {
-	hostname      => '@@ldap_url@@',
+	hostname      => [ split (' ','@@ldap_url@@') ],
 	timeout       => 30,
 	tls           => 0,
 	query_filter  => '(&(objectClass=amavisAccount)(mail=%m))',
