@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.zimbra.zcs</string>
+	<key>Program</key>
+	<string>/opt/zimbra/libexec/zcs</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>zcs</string>
+		<string>start</string>
+	</array>
+	<key>StandardOutPath</key>
+	<string>/opt/zimbra/log/zcs.log</string>
+	<key>OnDemand</key>
+	<false/>
+	<key>UserName</key>
+	<string>zimbra</string>
+	<key>GroupName</key>
+	<string>zimbra</string>
+</dict>
+</plist>
