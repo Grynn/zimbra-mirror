@@ -840,6 +840,10 @@ function(iFrameDoc) {
 
 	try {
 		iFrameDoc.designMode = "on";
+		// Probably a regression of FF 1.5.0.1/Linux requires us to
+		// reset event handlers here (Zimbra bug: 6545).
+		if (AjxEnv.isGeckoBased && AjxEnv.isLinux)
+			this._registerEditorEventHandlers(document.getElementById(this._iFrameId), iFrameDoc);
 	} catch (ex) {
 		//Gecko may take some time to enable design mode..
 		if (AjxEnv.isGeckoBased) {
