@@ -514,9 +514,9 @@ function(val) {
 /* Translation of Account status values into screen names */
 ZaResource._ACCOUNT_STATUS = new Object ();
 ZaResource._ACCOUNT_STATUS[ZaResource.ACCOUNT_STATUS_ACTIVE] = ZaMsg.accountStatus_active;
-ZaResource._ACCOUNT_STATUS[ZaResource.ACCOUNT_STATUS_CLOSED] = ZaMsg.accountStatus_closed;
-ZaResource._ACCOUNT_STATUS[ZaResource.ACCOUNT_STATUS_LOCKED] = ZaMsg.accountStatus_locked;
-ZaResource._ACCOUNT_STATUS[ZaResource.ACCOUNT_STATUS_MAINTENANCE] = ZaMsg.accountStatus_maintenance;
+ZaResource._ACCOUNT_STATUS[ZaResource.ACCOUNT_STATUS_CLOSED] = ZaMsg.resourceStatus_closed;
+//ZaResource._ACCOUNT_STATUS[ZaResource.ACCOUNT_STATUS_LOCKED] = ZaMsg.accountStatus_locked;
+//ZaResource._ACCOUNT_STATUS[ZaResource.ACCOUNT_STATUS_MAINTENANCE] = ZaMsg.accountStatus_maintenance;
 
 ZaResource.getResTypeLabel = 
 function(val) {
@@ -566,9 +566,9 @@ function (instance, newValue) {
 
 ZaResource.accountStatusChoices = [
 		{value:ZaResource.ACCOUNT_STATUS_ACTIVE, label:ZaResource.getAccountStatusLabel(ZaResource.ACCOUNT_STATUS_ACTIVE)}, 
-		{value:ZaResource.ACCOUNT_STATUS_CLOSED, label:ZaResource.getAccountStatusLabel(ZaResource.ACCOUNT_STATUS_CLOSED)},
-		{value:ZaResource.ACCOUNT_STATUS_LOCKED, label: ZaResource.getAccountStatusLabel(ZaResource.ACCOUNT_STATUS_LOCKED)},
-		{value:ZaResource.ACCOUNT_STATUS_MAINTENANCE, label:ZaResource.getAccountStatusLabel(ZaResource.ACCOUNT_STATUS_MAINTENANCE)}
+		{value:ZaResource.ACCOUNT_STATUS_CLOSED, label:ZaResource.getAccountStatusLabel(ZaResource.ACCOUNT_STATUS_CLOSED)}
+		//{value:ZaResource.ACCOUNT_STATUS_LOCKED, label: ZaResource.getAccountStatusLabel(ZaResource.ACCOUNT_STATUS_LOCKED)},
+		//{value:ZaResource.ACCOUNT_STATUS_MAINTENANCE, label:ZaResource.getAccountStatusLabel(ZaResource.ACCOUNT_STATUS_MAINTENANCE)}
 	];	
 
 ZaResource.resTypeChoices = [
