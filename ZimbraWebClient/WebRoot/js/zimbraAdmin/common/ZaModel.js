@@ -30,12 +30,13 @@ function ZaModel(init) {
 }
 
 
-ZaModel.BOOLEAN_CHOICES= [{value:"TRUE", label:"Yes"}, {value:"FALSE", label:"No"}, {value:null, label:"No"}];
-ZaModel.BOOLEAN_CHOICES1= [{value:1, label:"Yes"}, {value:0, label:"No"}, {value:null, label:"No"}];
+ZaModel.BOOLEAN_CHOICES= [{value:"TRUE", label:ZaMsg.Yes}, {value:"FALSE", label:ZaMsg.No}, {value:null, label:ZaMsg.No}];
+ZaModel.BOOLEAN_CHOICES1= [{value:1, label:ZaMsg.Yes}, {value:0, label:ZaMsg.No}, {value:null, label:ZaMsg.No}];
 
-ZaModel.COMPOSE_FORMAT_CHOICES = [{value:"text", label:"Text"}, {value:"html", label:"HTML"}];
-ZaModel.GROUP_MAIL_BY_CHOICES = [{value:"conversation", label:"Conversation"}, {value:"message", label:"Message"}];
-ZaModel.SIGNATURE_STYLE_CHOICES = [{value:"outlook", label:"No"}, {value:"internet", label:"Yes"}];
+ZaModel.COMPOSE_FORMAT_CHOICES = [{value:"text", label:ZaMsg.Text}, {value:"html", label:ZaMsg.HTML}];
+ZaModel.GROUP_MAIL_BY_CHOICES = [{value:"conversation", label:ZaMsg.Conversation}, {value:"message", label:ZaMsg.Message}];
+ZaModel.SIGNATURE_STYLE_CHOICES = [{value:"outlook", label:ZaMsg.No}, {value:"internet", label:ZaMsg.Yes}];
+ZaModel.REMINDER_CHOICES = [{value:"0",label:ZaMsg.never},{value:1,label:"1"},{value:5,label:"5"},{value:10,label:"10"},{value:15,label:"15"},{value:20,label:"20"},{value:25,label:"25"},{value:30,label:"30"},{value:45,label:"45"},{value:50,label:"50"},{value:55,label:"55"},{value:60,label:"60"}];
 ZaModel.ErrorCode = "code";
 ZaModel.ErrorMessage = "error_message";
 ZaModel.currentStep = "currentStep";
