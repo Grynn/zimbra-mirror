@@ -159,8 +159,8 @@ sub runCommand {
 		if (defined ($commands{$command}{args}{$arg}{script})) {
 			$cl = $commands{$command}{args}{$arg}{script};
 		} else {
-			print "ERROR: Unknown command $_\n";
-			return;
+			print STDERR "ERROR: Unknown command $_\n";
+			exit 1;
 		}
 	}
 
@@ -169,14 +169,20 @@ sub runCommand {
 		#my $cmdstr = "$cm $args";
 		my $cmdstr = "$cm";
 		if (open COMMAND, "$cmdstr |") {
-			print "STARTCMD: $host $cmdstr\n";
+			if ($command ne "zmqstat") {
+				# bug 6591
+				print "STARTCMD: $host $cmdstr\n";
+			}
 			while (<COMMAND>) {
 				print $_;
 			}
 			close COMMAND;
-			print "ENDCMD: $host $cmdstr\n";
+			if ($command ne "zmqstat") {
+				# bug 6591
+				print "ENDCMD: $host $cmdstr\n";
+			}
 		} else {
-			print "Can't run $cmdstr: $!\n\n";
+			die "Can't run $cmdstr: $!\n\n";
 		}
 	}
 }
@@ -294,8 +300,8 @@ while (<>) {
 	my $hostlist = getHostList ($host);
 
 	if (!defined ($hostlist)) {
-		print "ERROR: Invalid hostlist\n";
-		last;
+		print STDERR "ERROR: Invalid hostlist\n";
+		exit 1;
 	}
 
 	foreach my $h (@$hostlist) {
