@@ -22,8 +22,8 @@
     <title>Content Mixing Example</title>
     <style type="text/css">
       <!--
-        @import url(../common/img/hiRes/dwtimgs.css);
-        @import url(img/hiRes/imgs.css);
+        @import url(../common/img/loRes/dwtimgs.css);
+        @import url(img/loRes/imgs.css);
         @import url(MixingExample.css);
       -->
     </style>

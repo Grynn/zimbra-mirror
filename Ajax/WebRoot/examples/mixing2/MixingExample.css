@@ -129,17 +129,17 @@ DIV.vSpace {
 	border: 1px solid rgb(198, 197, 215);
 }
 .DwtButton-activated {
-	background-image:url(/ajax/examples/mixing/img/hiRes/img/bg_button_up.gif);
+	background-image:url(/ajax/examples/mixing/img/loRes/img/bg_button_up.gif);
 	border: 1px solid;
 	border-color: #E0E0E0 #555555 #555555 #E0E0E0;
 }
 .DwtButton-triggered {
-	background-image:url(/ajax/examples/mixing/img/hiRes/img/bg_button_down.gif);
+	background-image:url(/ajax/examples/mixing/img/loRes/img/bg_button_down.gif);
 	border:1px solid;
 	border-color: #555555 #E0E0E0 #E0E0E0 #555555;
 }
 .DwtButton-toggled {
-	background-image:url(/ajax/examples/mixing/img/hiRes/img/bg_button_down.gif);
+	background-image:url(/ajax/examples/mixing/img/loRes/img/bg_button_down.gif);
 	border:1px solid;
 	border-color: #555555 #E0E0E0 #E0E0E0 #555555;
 }

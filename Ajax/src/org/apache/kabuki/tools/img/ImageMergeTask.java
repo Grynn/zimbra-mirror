@@ -17,74 +17,81 @@
 
 package org.apache.kabuki.tools.img;
 
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.DirectoryScanner;
+import org.apache.tools.ant.Task;
+import org.apache.tools.ant.types.DirSet;
+
 import java.io.File;
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
-import org.apache.tools.ant.*;
-import org.apache.tools.ant.types.*;
+public class ImageMergeTask
+        extends Task {
 
-public class ImageMergeTask 
-	extends Task {
-    
     //
     // Data
     //
 
     // required
-    
-    private List _inputDirs= new LinkedList();
+
+    private List<DirSet> _inputDirs = new LinkedList<DirSet>();
     private String _outputDir = null;
     private String _cssFile = null;
     private String _cssPath = null;
-    private String _divFile = null;
-    
+    private String _cacheFile = null;
+
     // optional
-    
+
     private String _layoutStyle = "auto";
     private boolean _copy = false;
+    private boolean _disabledCss = false;
 
     //
     // Public methods
     //
-    
+
     // required
-    
+
     public void setDestDir(String dirname) {
         _outputDir = dirname;
     }
-    
+
     public DirSet createDirSet() {
         DirSet dirset = new DirSet();
         _inputDirs.add(dirset);
         return dirset;
     }
-    
+
     public void setCssFile(String filename) {
         _cssFile = filename;
     }
-    
+
     public void setCssPath(String path) {
         _cssPath = path;
     }
-    
-    public void setDivFile(String filename) {
-        _divFile = filename;
+
+    public void setCacheFile(String filename) {
+        _cacheFile = filename;
     }
-    
+
     // optional
-    
     public void setCopy(boolean copy) {
         _copy = copy;
     }
-    
+
     public void setLayout(String layout) {
         _layoutStyle = layout;
     }
-    
+
+    public void setDisable(boolean disable) {
+        _disabledCss = disable;
+    }
     //
     // Task methods
     //
-    
+
     public void execute() throws BuildException {
 
         // check required arguments 
@@ -98,60 +105,60 @@ public class ImageMergeTask
         if (!dir.isDirectory()) {
             throw new BuildException("destination must be a directory");
         }
-        
+
         if (_inputDirs.size() == 0) {
             throw new BuildException("input directories required -- use nested <dirset> element(s)");
         }
-        
+
         if (_cssFile == null || _cssFile.length() == 0) {
             throw new BuildException("css output file required -- use cssfile attribute");
         }
-        
+
         if (_cssPath == null) {
             throw new BuildException("css path prefix required -- use csspath attribute");
         }
-        
-        if (!_layoutStyle.equals("auto") && !_layoutStyle.equals("horizontal") && 
-            !_layoutStyle.equals("vertical") && !_layoutStyle.equals("repeat")) {
+
+        if (!_layoutStyle.equals("auto") && !_layoutStyle.equals("horizontal") &&
+                !_layoutStyle.equals("vertical") && !_layoutStyle.equals("repeat")) {
             throw new BuildException("layout must be specified as 'auto', 'horizontal', 'vertical', or 'repeat'");
         }
 
         // build argument list
-        List argList = new LinkedList();
-        
-        Iterator iter = _inputDirs.iterator();
+        List<String> argList = new LinkedList<String>();
+
+        Iterator<DirSet> iter = _inputDirs.iterator();
         StringBuffer dirs = new StringBuffer();
         while (iter.hasNext()) {
-            DirSet dirset = (DirSet)iter.next();
+            DirSet dirset = iter.next();
             DirectoryScanner scanner = dirset.getDirectoryScanner(getProject());
             File baseDir = scanner.getBasedir();
             String baseDirName = baseDir.getAbsolutePath() + File.separator;
             String[] dirnames = scanner.getIncludedDirectories();
-            for (int i = 0; i < dirnames.length; i++) {
+            for (String dirname : dirnames) {
                 if (dirs.length() > 0) {
                     dirs.append(';');
                 }
-                dirs.append(baseDirName+dirnames[i]);
+                dirs.append(baseDirName).append(dirname);
             }
         }
         argList.add("-i");
         argList.add(dirs.toString());
-        
+
         argList.add("-o");
-        String basedirname = getProject().getBaseDir().getAbsolutePath()+File.separator;
-        argList.add(_outputDir.startsWith(basedirname) ? _outputDir : basedirname+_outputDir);
-        
+        String basedirname = getProject().getBaseDir().getAbsolutePath() + File.separator;
+        argList.add(_outputDir.startsWith(basedirname) ? _outputDir : basedirname + _outputDir);
+
         argList.add("-s");
         argList.add(_cssFile);
-        
+
         argList.add("-p");
         argList.add(_cssPath);
-        
-        if (_divFile != null) {
-        	argList.add("-d");
-        	argList.add(_divFile);
+
+        if (_cacheFile != null) {
+            argList.add("-f");
+            argList.add(_cacheFile);
         }
-        
+
         if (!_layoutStyle.equals("auto")) {
             argList.add("-l");
             argList.add(_layoutStyle);
@@ -160,14 +167,18 @@ public class ImageMergeTask
         if (_copy) {
             argList.add("-c");
         }
-        
+
+        if (_disabledCss) {
+            argList.add("-d");
+        }
+
         // run program
         try {
-            String[] argv = (String[])argList.toArray(new String[0]);
+            String[] argv = argList.toArray(new String[0]);
             System.out.print("ImageMerge");
-            for (int i = 0; i < argv.length; i++) {
+            for (String anArgv : argv) {
                 System.out.print(' ');
-                System.out.print(argv[i]);
+                System.out.print(anArgv);
             }
             System.out.println();
             ImageMerge.main(argv);
@@ -175,7 +186,7 @@ public class ImageMergeTask
         catch (Exception e) {
             throw new BuildException(e);
         }
-        
+
     } // execute()
 
 } // class ImageMergeTask

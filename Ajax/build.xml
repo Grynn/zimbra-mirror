@@ -24,7 +24,6 @@
 	<property name="deploy.password" value="${env.DEPLOY_PASSWORD}"/>
 	<property name="deploy.path" value="${contextPath}"/>
 
-	<property name="images.hiRes.destDir" value="${build.common.dir}/img/hiRes"/>
 	<property name="images.loRes.destDir" value="${build.common.dir}/img/loRes"/>
 	<property name="images.animated.destDir" value="${build.common.dir}/img/animated"/>
 	<property name="images.cssFile" value="dwtimgs.css"/>
@@ -133,18 +132,6 @@
 	      <fileset dir="img/animated"  includes="*"/>
 	    </copy>
 
-	    <!-- copy hiRes images -->
-	    <mkdir dir="${images.hiRes.destDir}"/>
-	    <delete file='${images.hiRes.destDir}/${images.cssFile}'/>
-	    <echo/>
-	    <echo message='Copying high resolution images'/>
-	    <echo/>
-	    <imagemerge destdir='${images.hiRes.destDir}' copy='true'
-	      cssfile='${images.cssFile}' csspath='${csspathprefix}hiRes/'>
-	      <dirset dir='img/hiRes' includes='*'/>
-	    </imagemerge>
-	    <echo/>
-
 	    <!-- merge loRes images -->
 	    <mkdir dir="${images.loRes.destDir}"/>
 	    <delete file='${images.loRes.destDir}/${images.cssFile}'/>
@@ -152,14 +139,14 @@
 
 	    <echo message='Merging low resolution dwt images'/>
 	    <echo/>
-	    <imagemerge destdir='${images.loRes.destDir}' 
+	    <imagemerge destdir='${images.loRes.destDir}' disable='true'
 	      cssfile='${images.cssFile}' csspath='${csspathprefix}loRes/'>
 	      <dirset dir='img/loRes' includes='*' excludes='**/examples,**/shadow_border'/>
 	    </imagemerge>
 
 	    <echo message='Copying non-mergeable low resolution dwt images'/>
 	    <echo/>
-	    <imagemerge destdir='${images.loRes.destDir}' copy='true'
+	    <imagemerge destdir='${images.loRes.destDir}' copy='true' disable='true'
 	      cssfile='${images.cssFile}' csspath='${csspathprefix}loRes/'>
 	      <dirset dir='img/loRes' includes='**/examples,**/shadow_border'/>
 	    </imagemerge>

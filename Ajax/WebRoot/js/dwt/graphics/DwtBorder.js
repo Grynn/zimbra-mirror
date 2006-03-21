@@ -22,9 +22,6 @@
 *
 *	Note that images for the border are used in the same style as AjxImg.
 *
-*
-*	TODO: get the borders working with the AjxImg scheme to do hires/lores images.
-*
 * @author Owen Williams
 */
 

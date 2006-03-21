@@ -43,10 +43,10 @@ public abstract class DecodedImage {
      * expects combinedFilename to be of the form "megaimage.gif".
      */
     public String getCssString(int combinedWidth,
-                                   int combinedHeight,
-                                   String combinedFilename) 
-    {
-    	String filename = mFilename.substring(mFilename.lastIndexOf(File.separator)+1);
+                               int combinedHeight,
+                               String combinedFilename,
+                               boolean includeDisableCss) {
+        String filename = mFilename.substring(mFilename.lastIndexOf(File.separator) + 1);
         String fileNameBase = filename.substring(0, filename.indexOf('.'));
         
         String bgImgStr = "background-image:url(\""+ mPrefix + combinedFilename + "\");";
@@ -75,8 +75,11 @@ public abstract class DecodedImage {
         String backgroundStr = bgImgStr + bgPosStr + bgRptStr;
         String sizeStr = widthStr + heightStr;
         String otherStr = "overflow:hidden;";
-
-        return className + "{" + backgroundStr + sizeStr + otherStr + "}";
+        if(includeDisableCss) {
+            return className + "," + className + "Dis" + "{" + backgroundStr + sizeStr + otherStr + "}\n" + className + "Dis" + "{opacity:.3;filter:alpha(opacity=30);}";
+        } else {
+            return className + "{" + backgroundStr + sizeStr + otherStr + "}";
+        }
     }
     
     public abstract void load() throws java.io.IOException, ImageMergeException;

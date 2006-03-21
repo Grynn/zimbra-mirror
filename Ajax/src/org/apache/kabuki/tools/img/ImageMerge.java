@@ -41,48 +41,45 @@ import org.apache.commons.cli.ParseException;
  * separates the GIFs into those requiring transparency and those that
  * don't require transparency (creating two output files).  
  */
-public class ImageMerge { 
 
-	public static final int STATIC_LAYOUT = 0;
-	public static final int HORIZ_LAYOUT = 1;
-	public static final int VERT_LAYOUT = 2;
-	public static final int TILE_LAYOUT = 3;
-	
-	public static String[] LAYOUT_EXTENSIONS = new String[4];
-	public static String[] LAYOUT_MESSAGES = new String[4];
-	
+public class ImageMerge {
+
+    public static final int STATIC_LAYOUT = 0;
+    public static final int HORIZ_LAYOUT = 1;
+    public static final int VERT_LAYOUT = 2;
+    public static final int TILE_LAYOUT = 3;
+
+    public static String[] LAYOUT_EXTENSIONS = new String[4];
+    public static String[] LAYOUT_MESSAGES = new String[4];
+
     private static Options _mOptions = new Options();
-    private Vector _inputDirs = new Vector();
+    private Vector<File> _inputDirs = new Vector<File>();
     private String _outputDirName;
     private PrintWriter _cssOut;
-    private PrintWriter _divOut;
+    private PrintWriter _cacheFileOut;
     private String _cssPath;
-    private int _layoutStyle;
     private boolean _isCopy;
+    private boolean _incDisableCss;
 
     static {
-    	LAYOUT_EXTENSIONS[STATIC_LAYOUT] = "";
-		LAYOUT_EXTENSIONS[HORIZ_LAYOUT] = "__H";
-		LAYOUT_EXTENSIONS[VERT_LAYOUT] = "__V";
-		LAYOUT_EXTENSIONS[TILE_LAYOUT] = "__BG";
+        LAYOUT_EXTENSIONS[STATIC_LAYOUT] = "";
+        LAYOUT_EXTENSIONS[HORIZ_LAYOUT] = "__H";
+        LAYOUT_EXTENSIONS[VERT_LAYOUT] = "__V";
+        LAYOUT_EXTENSIONS[TILE_LAYOUT] = "__BG";
 
-    	LAYOUT_MESSAGES[STATIC_LAYOUT] = "Aggregating static images for ";
-		LAYOUT_MESSAGES[HORIZ_LAYOUT] = "Aggregating horizontal borders for ";
-		LAYOUT_MESSAGES[VERT_LAYOUT] = "Aggregating vertical borders for ";
-		LAYOUT_MESSAGES[TILE_LAYOUT] = "Copying background images for ";		
-    
-        Option option = new Option("i", "input", true, 
-        		"directories to load all images from. If there are multiple directories "
-        		+ "and we are aggregating images, then the output file will be named by "
-				+ "the directory name of the first input directory");
+        LAYOUT_MESSAGES[STATIC_LAYOUT] = "Aggregating static images for ";
+        LAYOUT_MESSAGES[HORIZ_LAYOUT] = "Aggregating horizontal borders for ";
+        LAYOUT_MESSAGES[VERT_LAYOUT] = "Aggregating vertical borders for ";
+        LAYOUT_MESSAGES[TILE_LAYOUT] = "Copying background images for ";
+
+        Option option = new Option("i", "input", true,
+                "directories to load all images from. If there are multiple directories "
+                        + "and we are aggregating images, then the output file will be named by "
+                        + "the directory name of the first input directory");
         option.setRequired(true);
         _mOptions.addOption(option);
 
         option = new Option("c", "copy", false, "present if in copy (not merge) mode");
-        option.setRequired(false);
-        _mOptions.addOption(option);
-
-        option = new Option("l", "layout", true, " a - automatic [default], v - all vertical, h - all horizontal. r - repeat. Useful for border images.");
         option.setRequired(false);
         _mOptions.addOption(option);
 
@@ -93,14 +90,18 @@ public class ImageMerge {
         option = new Option("p", "css-path", true, "path for background-image:url in CSS file");
         option.setRequired(true);
         _mOptions.addOption(option);
-        
+
         option = new Option("s", "css-file", true, "css file name");
         option.setRequired(true);
-        _mOptions.addOption(option); 
-        
-        option = new Option("d", "div-file", true, "div file name");
+        _mOptions.addOption(option);
+
+        option = new Option("f", "cache-file", true, "cache file name");
         option.setRequired(false);
-        _mOptions.addOption(option); 
+        _mOptions.addOption(option);
+
+        option = new Option("d", "disable-image", false, "Create disabled image CSS");
+        option.setRequired(false);
+        _mOptions.addOption(option);
     }
 
     private static void explainUsageAndExit() {
@@ -109,8 +110,8 @@ public class ImageMerge {
         System.exit(1);
     }
 
-    private void parseArguments(String argv[]) 
-    throws FileNotFoundException {
+    private void parseArguments(String argv[])
+            throws FileNotFoundException {
         CommandLineParser parser = new GnuParser();
         CommandLine cl = null;
         try {
@@ -120,55 +121,39 @@ public class ImageMerge {
             explainUsageAndExit();
         }
 
-        if (cl.hasOption("i")) {
-        String[] dirNames = cl.getOptionValue("i").split("[;,]");
-       	for (int i = 0; i < dirNames.length; i++) {
-        		_inputDirs.add(new File(dirNames[i]));
-        	}
-    	} else {
+        if (cl != null && cl.hasOption("i")) {
+            String[] dirNames = cl.getOptionValue("i").split("[;,]");
+            for (String dirName : dirNames) {
+                _inputDirs.add(new File(dirName));
+            }
+        } else {
             explainUsageAndExit();
-    	}
+        }
 
-        if (cl.hasOption("o"))
+        if (cl != null && cl.hasOption("o"))
             _outputDirName = cl.getOptionValue("o");
         else
             explainUsageAndExit();
 
-       if (cl.hasOption("l")) {
-            String forceLayoutStr = cl.getOptionValue("l").toLowerCase();
-            if (forceLayoutStr.startsWith("v"))
-            	_layoutStyle = VERT_LAYOUT;
-            else if (forceLayoutStr.startsWith("h"))
-            	_layoutStyle = HORIZ_LAYOUT;
-            else if (forceLayoutStr.startsWith("a"))
-            	_layoutStyle = STATIC_LAYOUT;
-            else if (forceLayoutStr.startsWith("r"))
-            	_layoutStyle = TILE_LAYOUT;
-            else
-            	explainUsageAndExit();
-       } else {
-       		_layoutStyle = STATIC_LAYOUT;
-       }
-       
-       if (cl.hasOption("c"))
-        _isCopy = true;
-    
-        
-       if (cl.hasOption("p") && cl.hasOption("s")) {
+        if (cl != null && cl.hasOption("c"))
+            _isCopy = true;
+
+        if (cl != null && cl.hasOption("d"))
+            _incDisableCss = true;
+
+        if (cl != null && cl.hasOption("p") && cl.hasOption("s")) {
             _cssPath = cl.getOptionValue("p");
             String cssFile = cl.getOptionValue("s");
             OutputStream cssFOS = new FileOutputStream(new File(_outputDirName, cssFile), true);
             _cssOut = new PrintWriter(cssFOS);
-            String divFile = cl.getOptionValue("d");
-            if (divFile != null) {
-            	OutputStream divFOS = new FileOutputStream(new File(_outputDirName, divFile), true);
-            	_divOut = new PrintWriter(divFOS);
+            String cacheFile = cl.getOptionValue("f");
+            if (cacheFile != null) {
+                OutputStream cacheFOS = new FileOutputStream(new File(_outputDirName, cacheFile), true);
+                _cacheFileOut = new PrintWriter(cacheFOS);
             }
-       } else {
+        } else {
             explainUsageAndExit();
-       }
-
-
+        }
     }
 
 
@@ -184,240 +169,235 @@ public class ImageMerge {
 
         parseArguments(argv);
         if (_isCopy) {
-           processCopy(_inputDirs);
+            processCopy(_inputDirs);
         } else {
-        	processAggregate(_inputDirs);
+            processAggregate(_inputDirs);
         }
 
         _cssOut.close();
-        if (_divOut != null) {
-        	_divOut.close();
+        if (_cacheFileOut != null) {
+            _cacheFileOut.close();
         }
 
         if (ovalue != null) {
             System.setProperty(PROPERTY, ovalue);
         }
     }
-    
-    private void processAggregate(Collection allInputDirs)
-    throws IOException, ImageMergeException {
-        Map dirmap = new HashMap();
-        
+
+    private void processAggregate(Collection<File> allInputDirs)
+            throws IOException, ImageMergeException {
+        Map<String, List<File>> dirmap = new HashMap<String, List<File>>();
+
         // collect like directories
-        Iterator dirs = allInputDirs.iterator();
+        Iterator<File> dirs = allInputDirs.iterator();
         while (dirs.hasNext()) {
-            File dir = (File)dirs.next();
+            File dir = dirs.next();
             String dirname = dir.getName();
-            java.util.List dirlist = (java.util.List)dirmap.get(dirname);
+            List<File> dirlist = dirmap.get(dirname);
             if (dirlist == null) {
-                dirlist = new LinkedList();
+                dirlist = new LinkedList<File>();
                 dirmap.put(dirname, dirlist);
             }
             dirlist.add(dir);
         }
 
-        
         // process directories
-        Iterator keys = dirmap.keySet().iterator();
+        Iterator<String> keys = dirmap.keySet().iterator();
         while (keys.hasNext()) {
-            String imageFileName = (String)keys.next();
-            Collection inputDirs = (Collection)dirmap.get(imageFileName);
+            String imageFileName = keys.next();
+            Collection<File> inputDirs = dirmap.get(imageFileName);
             processAggregate(inputDirs, imageFileName);
         }
-        
+
     } // processAggregate(Collection)
 
-    private void processAggregate(Collection inputDirs, String imageFileName) 
-    throws IOException, ImageMergeException { 
-    	File aggFile;
-    	DecodedFullColorImage orig[];
-    	String[] inputFilenames = getFilesOfType(inputDirs, "gif");
-    	
-    	int fileCount = inputFilenames.length;
-        if (fileCount> 0) {
-			// put into bins by layoutStyle
-			Object[] sortedFiles = sortByLayoutStyle(inputFilenames, "gif");
-			// aggregate static, horizontal and vertical images
-			for (int layoutStyle = 0; layoutStyle < 3; layoutStyle++) {
-				inputFilenames = (String[]) sortedFiles[layoutStyle];
-				if (inputFilenames == null) continue;
-				System.out.println(ImageMerge.LAYOUT_MESSAGES[layoutStyle] + "'" + imageFileName + "'");
-				
-	           	aggFile = new File(_outputDirName, imageFileName + ImageMerge.LAYOUT_EXTENSIONS[layoutStyle] + ".gif");
-    	       	aggFile.delete();
-	    	    processGIFs(aggFile, inputFilenames, imageFileName, layoutStyle);
-	    	}
+    private void processAggregate(Collection<File> inputDirs, String imageFileName)
+            throws IOException, ImageMergeException {
+        File aggFile;
+        DecodedFullColorImage orig[];
+        String[] inputFilenames = getFilesOfType(inputDirs, "gif");
 
-			// copy background images, since they need to tile
-			inputFilenames = (String[]) sortedFiles[3];
-			if (inputFilenames != null) {
-				System.out.println(ImageMerge.LAYOUT_MESSAGES[3] + "'" + imageFileName + "'");
-				copyImageFiles(inputFilenames, _outputDirName, "gif", false);
-			}
-        }	
-        
- 		inputFilenames = getFilesOfType(inputDirs, "png");
+        int fileCount = inputFilenames.length;
+        if (fileCount > 0) {
+            // put into bins by layoutStyle
+            Object[] sortedFiles = sortByLayoutStyle(inputFilenames, "gif");
+            // aggregate static, horizontal and vertical images
+            for (int layoutStyle = 0; layoutStyle < 3; layoutStyle++) {
+                inputFilenames = (String[]) sortedFiles[layoutStyle];
+                if (inputFilenames == null) continue;
+                System.out.println(ImageMerge.LAYOUT_MESSAGES[layoutStyle] + "'" + imageFileName + "'");
+
+                aggFile = new File(_outputDirName, imageFileName + ImageMerge.LAYOUT_EXTENSIONS[layoutStyle] + ".gif");
+                aggFile.delete();
+                processGIFs(aggFile, inputFilenames, imageFileName, layoutStyle);
+            }
+
+            // copy background images, since they need to tile
+            inputFilenames = (String[]) sortedFiles[3];
+            if (inputFilenames != null) {
+                System.out.println(ImageMerge.LAYOUT_MESSAGES[3] + "'" + imageFileName + "'");
+                copyImageFiles(inputFilenames, _outputDirName, "gif", false);
+            }
+        }
+
+        inputFilenames = getFilesOfType(inputDirs, "png");
         fileCount = inputFilenames.length;
         if (fileCount > 0) {
-			// sort by layoutStyle
-			Object[] sortedFiles = sortByLayoutStyle(inputFilenames, "png");
-			// aggregate static, horizontal and vertical images
-			for (int layoutStyle = 0; layoutStyle < 3; layoutStyle++) {
-				inputFilenames = (String[]) sortedFiles[layoutStyle];
-				if (inputFilenames == null) continue;
-				System.out.println(ImageMerge.LAYOUT_MESSAGES[layoutStyle] + "'" + imageFileName + "'");
+            // sort by layoutStyle
+            Object[] sortedFiles = sortByLayoutStyle(inputFilenames, "png");
+            // aggregate static, horizontal and vertical images
+            for (int layoutStyle = 0; layoutStyle < 3; layoutStyle++) {
+                inputFilenames = (String[]) sortedFiles[layoutStyle];
+                if (inputFilenames == null) continue;
+                System.out.println(ImageMerge.LAYOUT_MESSAGES[layoutStyle] + "'" + imageFileName + "'");
 
-				aggFile = new File(_outputDirName, imageFileName + ImageMerge.LAYOUT_EXTENSIONS[layoutStyle] + ".png");
-				aggFile.delete();
-				orig = new DecodedFullColorImage[fileCount];
-				loadAndProcess(aggFile, inputFilenames, "png", orig, fileCount, imageFileName, layoutStyle);
-			}
+                aggFile = new File(_outputDirName, imageFileName + ImageMerge.LAYOUT_EXTENSIONS[layoutStyle] + ".png");
+                aggFile.delete();
+                orig = new DecodedFullColorImage[fileCount];
+                loadAndProcess(aggFile, inputFilenames, "png", orig, fileCount, imageFileName, layoutStyle);
+            }
 
-			// copy background images, since they need to tile
-			inputFilenames = (String[]) sortedFiles[3];
-			if (inputFilenames != null) {
-				System.out.println(ImageMerge.LAYOUT_MESSAGES[3] + "'" + imageFileName + "'");
-				copyImageFiles(inputFilenames, _outputDirName, "png", false);
-			}
-         }
+            // copy background images, since they need to tile
+            inputFilenames = (String[]) sortedFiles[3];
+            if (inputFilenames != null) {
+                System.out.println(ImageMerge.LAYOUT_MESSAGES[3] + "'" + imageFileName + "'");
+                copyImageFiles(inputFilenames, _outputDirName, "png", false);
+            }
+        }
 
-		inputFilenames = getFilesOfType(inputDirs, "jpg");
+        inputFilenames = getFilesOfType(inputDirs, "jpg");
         fileCount = inputFilenames.length;
         if (fileCount > 0) {
-			Object[] sortedFiles = sortByLayoutStyle(inputFilenames, "jpg");
-			for (int layoutStyle = 0; layoutStyle < 3; layoutStyle++) {
-				inputFilenames = (String[]) sortedFiles[layoutStyle];
-				if (inputFilenames == null) continue;
-				System.out.println(ImageMerge.LAYOUT_MESSAGES[layoutStyle] + "'" + imageFileName + "'");
+            Object[] sortedFiles = sortByLayoutStyle(inputFilenames, "jpg");
+            for (int layoutStyle = 0; layoutStyle < 3; layoutStyle++) {
+                inputFilenames = (String[]) sortedFiles[layoutStyle];
+                if (inputFilenames == null) continue;
+                System.out.println(ImageMerge.LAYOUT_MESSAGES[layoutStyle] + "'" + imageFileName + "'");
 
-				aggFile = new File(_outputDirName, imageFileName + ImageMerge.LAYOUT_EXTENSIONS[layoutStyle] + ".jpg");
-				aggFile.delete();
-				orig = new DecodedFullColorImage[fileCount];
-				loadAndProcess(aggFile, inputFilenames, "jpg", orig, fileCount, imageFileName, layoutStyle);
-	         }
-			// copy background images, since they need to tile
-			inputFilenames = (String[]) sortedFiles[3];
-			if (inputFilenames != null) {
-		    	System.out.println(ImageMerge.LAYOUT_MESSAGES[3] + "'" + imageFileName + "'");
-				copyImageFiles(inputFilenames, _outputDirName, "jpg", false);
-			}
-         }
+                aggFile = new File(_outputDirName, imageFileName + ImageMerge.LAYOUT_EXTENSIONS[layoutStyle] + ".jpg");
+                aggFile.delete();
+                orig = new DecodedFullColorImage[fileCount];
+                loadAndProcess(aggFile, inputFilenames, "jpg", orig, fileCount, imageFileName, layoutStyle);
+            }
+            // copy background images, since they need to tile
+            inputFilenames = (String[]) sortedFiles[3];
+            if (inputFilenames != null) {
+                System.out.println(ImageMerge.LAYOUT_MESSAGES[3] + "'" + imageFileName + "'");
+                copyImageFiles(inputFilenames, _outputDirName, "jpg", false);
+            }
+        }
         // Just copy over .ico files.
         copyImageFiles(getFilesOfType(inputDirs, "ico"), _outputDirName, "ico", true);
     }
 
-    private static void copyFile(File in, 
-                                 File out) 
-    throws IOException 
-    {
-        FileInputStream fis  = new FileInputStream(in);
+    private static void copyFile(File in,
+                                 File out)
+            throws IOException {
+        FileInputStream fis = new FileInputStream(in);
         FileOutputStream fos = new FileOutputStream(out);
         byte[] buf = new byte[8192];
-        int i = 0;
-        while((i = fis.read(buf)) != -1)
+        int i;
+        while ((i = fis.read(buf)) != -1)
             fos.write(buf, 0, i);
         fis.close();
         fos.close();
     }
 
 
-    private void processCopy(Vector inputDirs)
-        throws IOException, ImageMergeException
-    {
- 		copyImageFiles(getFilesOfType(inputDirs, "gif"), _outputDirName, "gif", true);
-		copyImageFiles(getFilesOfType(inputDirs, "jpg"), _outputDirName, "jpg", true);
-		copyImageFiles(getFilesOfType(inputDirs, "png"), _outputDirName, "png", true);
-		copyImageFiles(getFilesOfType(inputDirs, "ico"), _outputDirName, "ico", true);
+    private void processCopy(Vector<File> inputDirs)
+            throws IOException, ImageMergeException {
+        copyImageFiles(getFilesOfType(inputDirs, "gif"), _outputDirName, "gif", true);
+        copyImageFiles(getFilesOfType(inputDirs, "jpg"), _outputDirName, "jpg", true);
+        copyImageFiles(getFilesOfType(inputDirs, "png"), _outputDirName, "png", true);
+        copyImageFiles(getFilesOfType(inputDirs, "ico"), _outputDirName, "ico", true);
     }
 
 
     private void copyImageFiles(String filenames[],
-    								   String outputDirname,
-                                       String suffix,
-                                       boolean createInParentDir
-                               ) 
-        throws IOException, ImageMergeException
-    {
+                                String outputDirname,
+                                String suffix,
+                                boolean createInParentDir
+    )
+            throws IOException, ImageMergeException {
 
-        System.out.println("Copying "+suffix+" files...");
+        System.out.println("Copying " + suffix + " files...");
         String lastFile = "";
         for (int i = 0; i < filenames.length; i++) {
             String curFile = filenames[i];
 
             // copy it to the destination directory
             // REVISIT: optimize this by passing in File objects...
-        	File parentDir = new File(curFile).getParentFile();
-        	String parentDirname = parentDir.getName();
+            File parentDir = new File(curFile).getParentFile();
+            String parentDirname = parentDir.getName();
 
             // create output directory
             // REVISIT: optimize this by creating the output dirs ahead of time...
-			File outputDir;
-        	String outFilename = curFile.substring(curFile.lastIndexOf(File.separator)+1);
-			String combinedFilename;
+            File outputDir;
+            String outFilename = curFile.substring(curFile.lastIndexOf(File.separator) + 1);
+            String combinedFilename;
 
-			if (createInParentDir) {
-	        	outputDir = new File(outputDirname + File.separator + parentDirname);
-	        	combinedFilename = parentDirname + "/" + outFilename;
-	        } else {
-	        	outputDir = new File(outputDirname);
-	        	combinedFilename = outFilename;
-	        }
-	        
-        	if (!outputDir.mkdirs() && !outputDir.exists()) {
-        	    throw new ImageMergeException("unable to create output directory");
-        	}
+            if (createInParentDir) {
+                outputDir = new File(outputDirname + File.separator + parentDirname);
+                combinedFilename = parentDirname + "/" + outFilename;
+            } else {
+                outputDir = new File(outputDirname);
+                combinedFilename = outFilename;
+            }
+
+            if (!outputDir.mkdirs() && !outputDir.exists()) {
+                throw new ImageMergeException("unable to create output directory");
+            }
 
             // Skip decode for .ico files
-			if (!suffix.equalsIgnoreCase("ico")) {
-				// MOW: figure out if it's a stretchy image by the filename
-				int layoutStyle = getLayoutStyleFromFilename(curFile, suffix);
+            if (!suffix.equalsIgnoreCase("ico")) {
+                // MOW: figure out if it's a stretchy image by the filename
+                int layoutStyle = getLayoutStyleFromFilename(curFile, suffix);
 
-				// load the image. GIF's get slightly special treatment.
-				DecodedImage curImage;
-				if (suffix.equalsIgnoreCase("gif")) {
-					curImage = (DecodedImage) new DecodedGifImage(curFile,
-							_cssPath, layoutStyle);
-				} else {
-					curImage = (DecodedImage) new DecodedFullColorImage(
-							curFile, suffix, _cssPath, layoutStyle);
-				}
+                // load the image. GIF's get slightly special treatment.
+                DecodedImage curImage;
+                if (suffix.equalsIgnoreCase("gif")) {
+                    curImage = new DecodedGifImage(curFile,
+                            _cssPath, layoutStyle);
+                } else {
+                    curImage = new DecodedFullColorImage(
+                            curFile, suffix, _cssPath, layoutStyle);
+                }
 
-				String debugMsg = "Copying image " + curFile
-						+ (layoutStyle == ImageMerge.HORIZ_LAYOUT ? " as a horizontal border"
-						 : layoutStyle == ImageMerge.VERT_LAYOUT ? " as a vertical border"
-						 : layoutStyle == ImageMerge.TILE_LAYOUT ? " as a tiling background image"
-						 : "");
-				System.out.println(debugMsg);
-				curImage.load();
-				curImage.setCombinedColumn(0);
-				curImage.setCombinedRow(0);
-				// add to the CSS output
-				_cssOut.println(curImage.getCssString(curImage.getWidth(),
-						curImage.getHeight(), combinedFilename));
-			}
+                String debugMsg = "Copying image " + curFile
+                        + (layoutStyle == ImageMerge.HORIZ_LAYOUT ? " as a horizontal border"
+                        : layoutStyle == ImageMerge.VERT_LAYOUT ? " as a vertical border"
+                        : layoutStyle == ImageMerge.TILE_LAYOUT ? " as a tiling background image"
+                        : "");
+                System.out.println(debugMsg);
+                curImage.load();
+                curImage.setCombinedColumn(0);
+                curImage.setCombinedRow(0);
+                // add to the CSS output
+                _cssOut.println(curImage.getCssString(curImage.getWidth(),
+                        curImage.getHeight(), combinedFilename, _incDisableCss));
+            }
 
             copyFile(new File(curFile), new File(outputDir, outFilename));
             // add to the pre-cache div
-            String thisFile = _cssPath+combinedFilename;
-            if (_divOut != null && !lastFile.equals(thisFile)) {
-            	_divOut.println("<img src='"+thisFile+"'>");
-            	lastFile = thisFile;
+            String thisFile = _cssPath + combinedFilename;
+            if (_cacheFileOut != null && !lastFile.equals(thisFile)) {
+                _cacheFileOut.println("<img src='" + thisFile + "'>");
+                lastFile = thisFile;
             }
         }
         System.out.println("Copied " + filenames.length + " " + suffix + " images.");
     }
 
-    
+
     private void loadAndProcess(File inputDir,
-                                       String inputFilenames[],
-                                       String type,
-                                       DecodedFullColorImage originals[],
-                                       int fileCount,
-									   String imageFileName,
-									   int layoutStyle
-								) 
-        throws java.io.IOException 
-    {
+                                String inputFilenames[],
+                                String type,
+                                DecodedFullColorImage originals[],
+                                int fileCount,
+                                String imageFileName,
+                                int layoutStyle
+    )
+            throws java.io.IOException {
         // load images
         for (int i = 0; i < fileCount; i++) {
             DecodedFullColorImage curImage = new DecodedFullColorImage(inputFilenames[i], type, _cssPath, layoutStyle);
@@ -433,101 +413,100 @@ public class ImageMerge {
     }
 
 
-
-    private static String[] getFilesOfType(Collection inputDirs,
+    private static String[] getFilesOfType(Collection<File> inputDirs,
                                            final String extension) {
-    	ArrayList fileNameList = new ArrayList();
-    	
-    	for (Iterator iter = inputDirs.iterator(); iter.hasNext();) {
-    		File dir = (File)iter.next();
-    		String[] fileNames = dir.list(new FilenameFilter() { 
-                public boolean accept(File dir, String name) { 
-                	int index = name.lastIndexOf("." + extension);
-					if (index == -1 || (index + extension.length() + 1 != name.length())) {
+        ArrayList<String> fileNameList = new ArrayList<String>();
+
+        for (Iterator<File> iter = inputDirs.iterator(); iter.hasNext();) {
+            File dir = iter.next();
+            String[] fileNames = dir.list(new FilenameFilter() {
+                public boolean accept(File dir, String name) {
+                    int index = name.lastIndexOf("." + extension);
+                    if (index == -1 || (index + extension.length() + 1 != name.length())) {
                         return false;
                     } else {
                         return (name.substring(index + 1).compareToIgnoreCase(extension) == 0);
                     }
                 }
-    		});
-    		
-    		if (fileNames == null)
-    			continue;
-    		
-    		String path = dir.getPath();
-    		for (int i = 0; i < fileNames.length; i++) {
-    			fileNameList.add(path + File.separator + fileNames[i]);
-    		}
-    	}
-    	return (String[])fileNameList.toArray(new String[0]);
+            });
+
+            if (fileNames == null)
+                continue;
+
+            String path = dir.getPath();
+            for (int i = 0; i < fileNames.length; i++) {
+                fileNameList.add(path + File.separator + fileNames[i]);
+            }
+        }
+        return fileNameList.toArray(new String[0]);
     }
 
 
-	private static Object[] sortByLayoutStyle (String fileList[], String suffix) {
-		Object[] typeList = new Object[4];
-		ArrayList staticList = new ArrayList();
-		ArrayList vertList = new ArrayList();
-		ArrayList horizList = new ArrayList();
-		ArrayList tileList = new ArrayList();
-		
-		typeList[ImageMerge.STATIC_LAYOUT] = staticList;
-		typeList[ImageMerge.VERT_LAYOUT] = vertList;
-		typeList[ImageMerge.HORIZ_LAYOUT] = horizList;
-		typeList[ImageMerge.TILE_LAYOUT] = tileList;
-		
-		for (int i = 0; i < fileList.length; i++) {
-			String file = fileList[i];
-			int layoutStyle = getLayoutStyleFromFilename(file, suffix);
-			((ArrayList) typeList[layoutStyle]).add(file);
-		}
-		
-		for (int i = 0; i < 4; i++) {
-			ArrayList list = ((ArrayList) typeList[i]);
-			if (list.size() == 0) {
-				typeList[i] = null;
-			} else {
+    private static Object[] sortByLayoutStyle(String fileList[], String suffix) {
+        Object[] typeList = new Object[4];
+        ArrayList staticList = new ArrayList();
+        ArrayList vertList = new ArrayList();
+        ArrayList horizList = new ArrayList();
+        ArrayList tileList = new ArrayList();
 
-				typeList[i] = (String[])list.toArray(new String[0]);
-			}
-		}
-		return typeList;
-	}
+        typeList[ImageMerge.STATIC_LAYOUT] = staticList;
+        typeList[ImageMerge.VERT_LAYOUT] = vertList;
+        typeList[ImageMerge.HORIZ_LAYOUT] = horizList;
+        typeList[ImageMerge.TILE_LAYOUT] = tileList;
+
+        for (int i = 0; i < fileList.length; i++) {
+            String file = fileList[i];
+            int layoutStyle = getLayoutStyleFromFilename(file, suffix);
+            ((ArrayList) typeList[layoutStyle]).add(file);
+        }
+
+        for (int i = 0; i < 4; i++) {
+            ArrayList list = ((ArrayList) typeList[i]);
+            if (list.size() == 0) {
+                typeList[i] = null;
+            } else {
+
+                typeList[i] = list.toArray(new String[0]);
+            }
+        }
+        return typeList;
+    }
 
 
-	/*
-		Given a filename (and file type suffix for convenience), 
-		figure out what layoutStyle we should use for the image.
-		
-		We do this based on the last few characters right before the suffix,
-		matching the following:
-		
-			* HORIZ_LAYOUT =     ".H.[gif|png|jpg]"
-			* VERT_LAYOUT =      ".V.[gif|png|jpg]"
-			* TILE_LAYOUT =    ".BG.[gif|png|jpg]"
-			* all others are STATIC_LAYOUT
-			
-	*/
-	private static int getLayoutStyleFromFilename(	String curFile, 
-													String suffix
-										) {
-			if (curFile.indexOf(LAYOUT_EXTENSIONS[HORIZ_LAYOUT] + "." + suffix) > -1) {
-				return HORIZ_LAYOUT;
-			}
-			
-			if (curFile.indexOf(LAYOUT_EXTENSIONS[VERT_LAYOUT] + "." + suffix) > -1) {
-				return VERT_LAYOUT;
-			}
-			
-			if (curFile.indexOf(LAYOUT_EXTENSIONS[TILE_LAYOUT] + "." + suffix) > -1) {
-				return TILE_LAYOUT;
-			}
-			
-			return STATIC_LAYOUT;
-	}
+    /*
+         Given a filename (and file type suffix for convenience),
+         figure out what layoutStyle we should use for the image.
+
+         We do this based on the last few characters right before the suffix,
+         matching the following:
+
+             * HORIZ_LAYOUT =     ".H.[gif|png|jpg]"
+             * VERT_LAYOUT =      ".V.[gif|png|jpg]"
+             * TILE_LAYOUT =    ".BG.[gif|png|jpg]"
+             * all others are STATIC_LAYOUT
+
+     */
+    private static int getLayoutStyleFromFilename(String curFile,
+                                                  String suffix
+    ) {
+        if (curFile.indexOf(LAYOUT_EXTENSIONS[HORIZ_LAYOUT] + "." + suffix) > -1) {
+            return HORIZ_LAYOUT;
+        }
+
+        if (curFile.indexOf(LAYOUT_EXTENSIONS[VERT_LAYOUT] + "." + suffix) > -1) {
+            return VERT_LAYOUT;
+        }
+
+        if (curFile.indexOf(LAYOUT_EXTENSIONS[TILE_LAYOUT] + "." + suffix) > -1) {
+            return TILE_LAYOUT;
+        }
+
+        return STATIC_LAYOUT;
+    }
 
 
     private static int getMaxHeight(DecodedImage images[],
-            					    int numImages) {
+                                    int numImages) {
         int maxHeight = 0;
 
         for (int i = 0; i < numImages; i++) {
@@ -540,7 +519,7 @@ public class ImageMerge {
 
 
     private static int getMaxWidth(DecodedImage images[],
-                                   int numImages){
+                                   int numImages) {
         int maxWidth = 0;
 
         for (int i = 0; i < numImages; i++) {
@@ -553,45 +532,44 @@ public class ImageMerge {
 
 
     private void writeCSSAndGetOutputFile(String extension,
-                                                 int combinedWidth,
-                                                 int combinedHeight,
-												 String combinedFileName,
-                                                 DecodedImage images[],
-                                                 int numImages) 
-    throws java.io.IOException {
+                                          int combinedWidth,
+                                          int combinedHeight,
+                                          String combinedFileName,
+                                          DecodedImage images[],
+                                          int numImages)
+            throws java.io.IOException {
         // write out a CSS description of the combined image
-    	String lastFile = "";
+        String lastFile = "";
         for (int i = 0; i < numImages; i++) {
-            _cssOut.println(images[i].getCssString(combinedWidth, combinedHeight, combinedFileName));
-            String thisFile = _cssPath+combinedFileName;
-            if (_divOut != null && !lastFile.equals(thisFile)) {
-            	_divOut.println("<img src='"+thisFile+"'>");
-            	lastFile = thisFile;
+            _cssOut.println(images[i].getCssString(combinedWidth, combinedHeight, combinedFileName, _incDisableCss));
+            String thisFile = _cssPath + combinedFileName;
+            if (_cacheFileOut != null && !lastFile.equals(thisFile)) {
+                _cacheFileOut.println("<img src='" + thisFile + "'>");
+                lastFile = thisFile;
             }
-        }        
+        }
     }
 
-    private void processFullColorImages(	   File aggFile,
-    										   DecodedFullColorImage originals[],
-                                               int fileCount,
-											   String imageFileName,
-											   int layoutStyle)
-        throws java.io.IOException
-    {
+    private void processFullColorImages(File aggFile,
+                                        DecodedFullColorImage originals[],
+                                        int fileCount,
+                                        String imageFileName,
+                                        int layoutStyle)
+            throws java.io.IOException {
         if (fileCount == 0)
             return;
 
         String type = originals[0].getSuffix();
-        
+
         // dims[0] - width, dims[1] - height
         int[] dims = new int[2];
         placeImages(dims, originals, fileCount, layoutStyle);
-        
+
         int combinedWidth = dims[0];
         int combinedHeight = dims[1];
 
-        System.out.println("Combining " + fileCount + " images into a " + combinedWidth + "x" + 
-                           combinedHeight + " image...");
+        System.out.println("Combining " + fileCount + " images into a " + combinedWidth + "x" +
+                combinedHeight + " image...");
 
         // create the combined image and write other images into it
         BufferedImage buffImg = new BufferedImage(combinedWidth, combinedHeight, BufferedImage.TYPE_3BYTE_BGR);
@@ -602,11 +580,11 @@ public class ImageMerge {
         // write out the combined image
 
         writeCSSAndGetOutputFile(type, combinedWidth, combinedHeight, aggFile.getName(), originals, fileCount);
-        Iterator iter = ImageIO.getImageWritersBySuffix(type);
-        ImageWriter writer = (ImageWriter) iter.next();
+        Iterator<ImageWriter> iter = ImageIO.getImageWritersBySuffix(type);
+        ImageWriter writer = iter.next();
         writer.setOutput(new FileImageOutputStream(aggFile));
         writer.write(buffImg);
-        writer.dispose(); 
+        writer.dispose();
     }
 
 
@@ -614,9 +592,8 @@ public class ImageMerge {
      * Add the bits from the originalImg into the outputImg.  The originalImg
      * knows where it should go in the combined image.
      */
-    public static void addFullColorImageBits(BufferedImage outputImg, 
-                                             DecodedImage originalImg)
-    {
+    public static void addFullColorImageBits(BufferedImage outputImg,
+                                             DecodedImage originalImg) {
         BufferedImage inputImg = originalImg.getBufferedImage();
         int originalImgWidth = originalImg.getWidth();
         int outputRow = originalImg.getCombinedRow();
@@ -631,61 +608,59 @@ public class ImageMerge {
 
 
     private static void swap(DecodedImage originals[],
-    						 int index) {
-    	DecodedImage temp = originals[index];
-    	originals[index] = originals[index + 1];
-    	originals[index + 1] = temp;
+                             int index) {
+        DecodedImage temp = originals[index];
+        originals[index] = originals[index + 1];
+        originals[index + 1] = temp;
     }
-    
+
     private static void sortImagesByHeight(DecodedImage originals[],
-                                           int fileCount)
-    {
+                                           int fileCount) {
         int flag;
         do {
             /* do...while loop to sort the array */
             flag = 0;
-            for(int z = 0; z < (fileCount-1); z++) {
-            	if (originals[z].getHeight() < originals[z+1].getHeight()) {
-            			swap(originals, z);
-            			flag = 1;
-            	}
+            for (int z = 0; z < (fileCount - 1); z++) {
+                if (originals[z].getHeight() < originals[z + 1].getHeight()) {
+                    swap(originals, z);
+                    flag = 1;
+                }
             }
         } while (flag != 0);
     }
 
 
-    private void placeImages(	int[] dims,
-								DecodedImage[] originals,
-								int fileCount,
-								int layoutStyle
-							) {
-    	if (layoutStyle == STATIC_LAYOUT) {
-    		sortImagesByHeight(originals, fileCount);
-    		// scan to see the size characteristics of the input images
-    		dims[0] = getMaxWidth(originals, fileCount);
-    		dims[1] = placeImagesAuto(originals, fileCount, dims[0]);
-    	} else if (layoutStyle == VERT_LAYOUT) {
-      		dims[0] = placeVerticalImages(originals, fileCount);
-    		dims[1] = getMaxHeight(originals, fileCount);
-    	} else { // _HORIZ_LAYOUT
-    		dims[0] = getMaxWidth(originals, fileCount);
-     		dims[1] = placeHorizontalImages(originals, fileCount);
-    	}
+    private void placeImages(int[] dims,
+                             DecodedImage[] originals,
+                             int fileCount,
+                             int layoutStyle
+    ) {
+        if (layoutStyle == STATIC_LAYOUT) {
+            sortImagesByHeight(originals, fileCount);
+            // scan to see the size characteristics of the input images
+            dims[0] = getMaxWidth(originals, fileCount);
+            dims[1] = placeImagesAuto(originals, fileCount, dims[0]);
+        } else if (layoutStyle == VERT_LAYOUT) {
+            dims[0] = placeVerticalImages(originals, fileCount);
+            dims[1] = getMaxHeight(originals, fileCount);
+        } else { // _HORIZ_LAYOUT
+            dims[0] = getMaxWidth(originals, fileCount);
+            dims[1] = placeHorizontalImages(originals, fileCount);
+        }
 
-    	System.out.println(" Combining " + fileCount + " images into a " + dims[0] + "x" + 
-    			dims[1] + " image...");    	
+        System.out.println(" Combining " + fileCount + " images into a " + dims[0] + "x" +
+                dims[1] + " image...");
     }
 
 
     private static int placeImagesAuto(DecodedImage images[],
                                        int numImages,
-                                       int combinedWidth)
-    {
+                                       int combinedWidth) {
         int currentHeight = images[0].getHeight();   // one more than the bottom-most row of pixels in the
-                                                        //    current image row.  
+        //    current image row.
         int currentTop = 0;                             // the top-most row of pixels in the current image row
         int currentColumn = 0;                          // the current column in the current image row
-        for (int i = 0; i < numImages; ) {
+        for (int i = 0; i < numImages;) {
             if ((currentColumn + images[i].getWidth()) <= combinedWidth) {
                 // fits without exceeding width constraint so place it
                 images[i].setCombinedRow(currentTop);
@@ -703,44 +678,43 @@ public class ImageMerge {
     }
 
     private static int placeVerticalImages(DecodedImage images[],
-		       								 int numImages) {
+                                           int numImages) {
         int currentLeft = 0;
         for (int i = 0; i < numImages; i++) {
-        	images[i].setCombinedRow(0);
-        	images[i].setCombinedColumn(currentLeft);
-        	currentLeft += images[i].getWidth();
+            images[i].setCombinedRow(0);
+            images[i].setCombinedColumn(currentLeft);
+            currentLeft += images[i].getWidth();
         }
         return currentLeft;
     }
-     
+
     private static int placeHorizontalImages(DecodedImage images[],
-    								       int numImages) {
+                                             int numImages) {
         int currentTop = 0;
         for (int i = 0; i < numImages; i++) {
-        	images[i].setCombinedRow(currentTop);
-        	images[i].setCombinedColumn(0);
-        	currentTop += images[i].getHeight();
+            images[i].setCombinedRow(currentTop);
+            images[i].setCombinedColumn(0);
+            currentTop += images[i].getHeight();
         }
         return currentTop;
     }
-     
-    private void processGIFs(		File aggFile,
-    								String[] originals,
-    								String imageFileName,
-    								int layoutStyle
-    						)
-        throws IOException, ImageMergeException
-    {
-		int fileCount = originals.length;
-		
-		if (fileCount == 0)
-			return;
-		
+
+    private void processGIFs(File aggFile,
+                             String[] originals,
+                             String imageFileName,
+                             int layoutStyle
+    )
+            throws IOException, ImageMergeException {
+        int fileCount = originals.length;
+
+        if (fileCount == 0)
+            return;
+
         DecodedGifImage origGIF[] = new DecodedGifImage[fileCount];
 
         // color (not index) of GIF transparency color
         boolean transIsSet = false;
-        int transparencyColor = -1;  
+        int transparencyColor = -1;
 
         // load the GIF images and check that the transparency is the same or not present
         for (int i = 0; i < fileCount; i++) {
@@ -781,7 +755,7 @@ public class ImageMerge {
 
         int[] dims = new int[2];
         placeImages(dims, origGIF, fileCount, layoutStyle);
-        
+
         int combinedWidth = dims[0];
         int combinedHeight = dims[1];
 
@@ -812,20 +786,19 @@ public class ImageMerge {
         fos.close();
     }
 
-    
+
     /*
-     * Place the bits of the image described by decodedImg into the combined 
-     * image represented by combinedImageBits.  We use the colors in colorTable
-     * as the color table for the addition.  This assumes that the colors 
-     * needed by decodedImg are already present in the colorTable.  Top-left of
-     * decodedImg is placed at (0, currentRow) in the combinedImg.
-     */
-    public static  void addImageBits(byte combinedImageBits[][],
-                                     DecodedImage decodedImg,
-                                     Color colorTable[],
-                                     int colorTableCount)
-        throws ImageMergeException
-    {
+    * Place the bits of the image described by decodedImg into the combined
+    * image represented by combinedImageBits.  We use the colors in colorTable
+    * as the color table for the addition.  This assumes that the colors
+    * needed by decodedImg are already present in the colorTable.  Top-left of
+    * decodedImg is placed at (0, currentRow) in the combinedImg.
+    */
+    public static void addImageBits(byte combinedImageBits[][],
+                                    DecodedImage decodedImg,
+                                    Color colorTable[],
+                                    int colorTableCount)
+            throws ImageMergeException {
         int decodedImgWidth = decodedImg.getWidth();
         int outputRow = decodedImg.getCombinedRow();
         BufferedImage buffImg = decodedImg.getBufferedImage();
@@ -834,20 +807,19 @@ public class ImageMerge {
             // for each row in the original image, copy the RGB translation to combined bits
             int columnBase = decodedImg.getCombinedColumn();
             for (int inputCol = 0; inputCol < decodedImgWidth; inputCol++)
-                combinedImageBits[outputRow][columnBase + inputCol] = 
-                    getIndexOf(colorTable, colorTableCount, buffImg.getRGB(inputCol, inputRow));
+                combinedImageBits[outputRow][columnBase + inputCol] =
+                        getIndexOf(colorTable, colorTableCount, buffImg.getRGB(inputCol, inputRow));
         }
     }
-                             
+
 
     /*
-     * Get the index into the colorTable of the RGB color described by color.
-     */
+    * Get the index into the colorTable of the RGB color described by color.
+    */
     private static byte getIndexOf(Color colorTable[],
                                    int colorTableCount,
                                    int color)
-        throws ImageMergeException
-    {
+            throws ImageMergeException {
         /*
          * From what I can tell a getRGB on a pixel of an image will return
          * 0 if that pixel is supposed to be transparent and 0xFF000000 if
@@ -868,5 +840,4 @@ public class ImageMerge {
         System.err.println("ERROR: Cannot find color " + color);
         throw new ImageMergeException("ERROR: Cannot find color " + color);
     }
-
 }

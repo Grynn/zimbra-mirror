@@ -20,7 +20,7 @@
     <title>Tree Example</title>
     <style type="text/css">
       <!--
-        @import url(../common/img/hiRes/dwtimgs.css);
+        @import url(../common/img/loRes/dwtimgs.css);
         @import url(TreeExample.css);
       -->
     </style>

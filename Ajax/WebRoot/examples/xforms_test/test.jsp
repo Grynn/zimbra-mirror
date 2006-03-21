@@ -22,7 +22,7 @@
     <title>Zimbra XForms Test Environment</title>
     <style type="text/css">
       <!--
-        @import url(../common/img/hiRes/dwtimgs.css);
+        @import url(../common/img/loRes/dwtimgs.css);
         @import url(config/style/dv.css);
        -->
     </style>

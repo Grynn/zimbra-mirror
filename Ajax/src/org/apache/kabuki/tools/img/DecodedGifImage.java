@@ -69,15 +69,15 @@ public class DecodedGifImage extends DecodedImage {
     public int addImageColors(Color colorTable[],
                               int combinedColors)
     {
-        for (int i = 0; i < mSortedColorTable.length; i++) {
+        for (int aMSortedColorTable : mSortedColorTable) {
             int j;
             // the 1 starting point skips the transparent color
             for (j = 1; j < combinedColors; j++)
-                if (colorTable[j].getRGB() == mSortedColorTable[i])
+                if (colorTable[j].getRGB() == aMSortedColorTable)
                     break;
             if (j >= combinedColors)
                 // not found so add it
-                colorTable[combinedColors++] = new Color(mSortedColorTable[i]);
+                colorTable[combinedColors++] = new Color(aMSortedColorTable);
         }
         return combinedColors;
     }
@@ -136,8 +136,7 @@ public class DecodedGifImage extends DecodedImage {
 
         // get a sorted list of the colors in the color table
         int ct[] = new int[d.gctSize];
-        for (int i = 0; i < d.gctSize; i++)
-            ct[i] = d.gct[i];
+        System.arraycopy(d.gct, 0, ct, 0, d.gctSize);
         sort(ct, ct.length);
 
         // get a list of the unique colors using the sorted list
@@ -165,7 +164,6 @@ public class DecodedGifImage extends DecodedImage {
                 unique++;
             }
         }
-        
         return result;
     }
 }

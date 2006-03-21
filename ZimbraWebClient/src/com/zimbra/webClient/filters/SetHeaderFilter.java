@@ -102,7 +102,7 @@ public class SetHeaderFilter implements Filter {
         String value = this.config.getInitParameter(key);
         boolean ret = def;
         if (value != null) {
-            ret = (new Boolean(value)).booleanValue();
+            ret = Boolean.valueOf(value);
         }
         return ret;
     }
@@ -215,8 +215,8 @@ public class SetHeaderFilter implements Filter {
             System.out.println("@doFilter");
         }
         // make sure we're dealing with an http request
-        HttpServletRequest req = null;
-        HttpServletResponse resp = null;
+        HttpServletRequest req;
+        HttpServletResponse resp;
         boolean proceed = shouldProcess(request, response);
         if (proceed){
             req = (HttpServletRequest)request;
@@ -256,7 +256,7 @@ public class SetHeaderFilter implements Filter {
         // request.
         setCacheControlHeaders(req, resp);
         
-        boolean supportCompression = false;
+        boolean supportCompression;
         supportCompression = this.supportsGzip(req, resp);
         setRequestAttributes(req, resp, supportCompression);
         if (!supportCompression) {
@@ -264,7 +264,6 @@ public class SetHeaderFilter implements Filter {
                 System.out.println("doFilter gets called wo compression");
             }
             chain.doFilter(req, resp);
-            return;
         } else {
             Matcher m = extensionPattern.matcher(uri);
             if (debug > 0) {
@@ -283,7 +282,6 @@ public class SetHeaderFilter implements Filter {
                 resp.setHeader(HEADER_CONTENT_ENCODING, HEADER_VAL_GZIP);
             }
             chain.doFilter(req, resp);
-            return;
         }
     }
 
@@ -293,7 +291,7 @@ public class SetHeaderFilter implements Filter {
             req.setAttribute(ATTR_NAME_FILE_EXTENSION, gzipExtension);
         }
         req.setAttribute(ATTR_NAME_VERSION, jsVersion);
-        String mode = (String) req.getParameter("mode");
+        String mode = req.getParameter("mode");
         if (!isProdMode){
             if (mode == null){
                 mode = "mjsf";
@@ -302,11 +300,8 @@ public class SetHeaderFilter implements Filter {
             }
         }
         req.setAttribute("mode", mode);
-        
-        String hiRes = (String) req.getParameter("hiRes");
-        if (hiRes != null)
-        	req.setAttribute("hiRes", hiRes);
     }
+
     /**
      * Returns whether the browser supports gzipped content.
      * Checks a query parameter first, then the Accept-Encoding header.
@@ -379,7 +374,7 @@ public class SetHeaderFilter implements Filter {
     
     public void setCacheControlHeaders (HttpServletRequest req,
                                         HttpServletResponse resp){
-        String uri = (String) req.getRequestURI();
+        String uri = req.getRequestURI();
         // is this a request for a jsp page?
         if (debug > 0){
             System.out.println("URI = " + uri + " ");
@@ -427,4 +422,3 @@ public class SetHeaderFilter implements Filter {
         }
     }
 }
-

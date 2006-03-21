@@ -22,7 +22,7 @@
 <link href="kabuki_widgets.css" 	rel="stylesheet" type="text/css">
 <style type="text/css">
   <!--
-        @import url(../common/img/hiRes/dwtimgs.css);
+        @import url(../common/img/loRes/dwtimgs.css);
    -->
 </style>
 <jsp:include page="../Messages.jsp"/>

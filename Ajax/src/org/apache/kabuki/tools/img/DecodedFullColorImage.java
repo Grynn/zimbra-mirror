@@ -55,6 +55,8 @@ public class DecodedFullColorImage extends DecodedImage {
      * Get a JavaScript definition for this piece of the combined image.
      * expects combinedFilename to be of the form "megaimage.gif".
      */
+    // DISABLED: Not used in IE today due to stability problems
+/*
     public String getCssString(int combinedWidth,
                                    int combinedHeight,
                                    String combinedFilename) 
@@ -68,17 +70,18 @@ public class DecodedFullColorImage extends DecodedImage {
 
             String selector = css.substring(0, css.indexOf('{'));
             String bgimage = css.substring(head, tail + 1);
-            
-            String cssAll = css.substring(0, head) + 
-                            "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + mPrefix +  combinedFilename + "',sizingMethod='scale');" + 
+
+            String cssAll = css.substring(0, head) +
+                            "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + mPrefix +  combinedFilename + "',sizingMethod='scale');" +
                             css.substring(tail + 1);
 
             String cssIE = "\nHTML>BODY " + selector + "{" + bgimage + "}";
-            
+
             css = cssAll + cssIE;
         }
         return css;
     }
+*/
 
 
     /*

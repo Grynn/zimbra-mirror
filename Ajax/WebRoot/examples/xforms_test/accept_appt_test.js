@@ -236,7 +236,7 @@
 		_notify:true,
 		_customize:false,
 		_notifyMessage:"I accept this appointment",
-		_attachments:"<table><tr><td><img src=/liquidConsole/img/hiRes/attachment/PDFDocIcon.gif width=16 height=16></td><td><A HREF=#>Plan of action.pdf</A></td></tr></table>",
+		_attachments:"<table><tr><td><img src=/liquidConsole/img/loRes/attachment/PDFDocIcon.gif width=16 height=16></td><td><A HREF=#>Plan of action.pdf</A></td></tr></table>",
 		_notes:"Here is a long message body.  Here is a long message body.  Here is a long message body.  Here is a long message body.  Here is a long message body.  Here is a long message body.  Here is a long message body.  Here is a long message body.  Here is a long message body.  Here is a long message body.  Here is a long message body.  Here is a long message body.  Here is a long message body.  Here is a long message body.  Here is a long message body.  "
 	};
 	function testInstance(props) {
