@@ -236,7 +236,14 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 
 
 	var case1 = {type:_CASE_, numCols:1, relevant:"instance[ZaModel.currentStep] == 1", align:_LEFT_, valign:_TOP_};
-	var case1Items = [{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName, labelLocation:_LEFT_}];
+	var case1Items = [{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName,
+						labelLocation:_LEFT_, 
+						onChange: function(value, event, form) {	
+								//set the cos if domain changed
+								ZaAccount.setEmailChanged.call (this, value, form) ;																										
+								this.setInstanceValue(value);		
+							}						
+						}];
 	if(ZaSettings.COSES_ENABLED) {
 		case1Items.push(
 			{ref:ZaAccount.A_COSId, type:_OSELECT1_, editable:true, msgName:ZaMsg.NAD_ClassOfService,

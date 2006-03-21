@@ -252,7 +252,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 
 	var cases = [];
 	var case1 = {type:_CASE_,  relevant:("instance[ZaModel.currentTab] == " + _tab1), height:"400px",  align:_LEFT_, valign:_TOP_};
-	var case1Items = [{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName, labelLocation:_LEFT_,onChange:ZaTabView.onFormFieldChanged,forceUpdate:true}];
+	var case1Items = [{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName,
+						 labelLocation:_LEFT_,onChange:ZaTabView.onFormFieldChanged,forceUpdate:true}];
 	if(ZaSettings.COSES_ENABLED) {
 		case1Items.push({ref:ZaAccount.A_COSId, type:_OSELECT1_, msgName:ZaMsg.NAD_ClassOfService,label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_, choices:this._app.getCosListChoices(), onChange:ZaAccountXFormView.onCOSChanged});
 	}

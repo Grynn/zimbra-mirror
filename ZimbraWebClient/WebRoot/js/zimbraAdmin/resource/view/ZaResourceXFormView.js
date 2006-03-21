@@ -197,7 +197,16 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject) {
 	var case1Items = 
 		[	{ref:ZaResource.A_displayname, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ResourceName,label:ZaMsg.NAD_ResourceName, labelLocation:_LEFT_, width: "200px" },			
 			{ref:ZaResource.A_zimbraCalResType, type:_OSELECT1_, msgName:ZaMsg.NAD_ResType,label:ZaMsg.NAD_ResType, labelLocation:_LEFT_, choices:ZaResource.resTypeChoices},		
-			{ref:ZaResource.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_ResAccountName,label:ZaMsg.NAD_ResAccountName, labelLocation:_LEFT_}			
+			{ref:ZaResource.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_ResAccountName,label:ZaMsg.NAD_ResAccountName, 
+				labelLocation:_LEFT_,
+				onChange: function(value, event, form) {
+							//disable the autodisplayname whenever user does some action on the account name
+							this.getInstance()[ZaResource.A2_autodisplayname] = "FALSE";
+							//set the cos if domain changed
+							ZaResource.setEmailChanged.call (this, value, form) ;								
+							this.setInstanceValue(value);						
+						}
+			}			
 		];
 	
 	if(ZaSettings.COSES_ENABLED) {

@@ -1196,3 +1196,52 @@ ZaAccount.initMethod = function (app) {
 	this.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
 }
 ZaItem.initMethods["ZaAccount"].push(ZaAccount.initMethod);
+
+//modify the cos when the domain is changed
+ZaAccount.setEmailChanged =
+function (elementValue, form){
+	var instance = this.getInstance() ;
+	var curCosId = instance.attrs [ZaAccount.A_COSId] ;
+	var newDomain ;
+	if ( (ZaSettings.COSES_ENABLED) && 
+				( (newDomain = ZaAccount.getDomain(elementValue)) != ZaAccount.getDomain(instance [ZaAccount.A_name] ))){
+		//send the GetDomainRequest
+		var soapDoc = AjxSoapDoc.create("GetDomainRequest", "urn:zimbraAdmin", null);	
+		var domainEl = soapDoc.set("domain", newDomain);
+		domainEl.setAttribute ("by", "name");
+		var getDomainCommand = new ZmCsfeCommand();
+		var params = new Object();
+		params.soapDoc = soapDoc;	
+		var resp = getDomainCommand.invoke(params).Body.GetDomainResponse;
+		var defaultCosId = resp.domain[0]._attrs["zimbraDomainDefaultCOSId"] ;
+		
+		//when defaultCosId doesn't exist, we always set default cos
+		if (!defaultCosId) {
+			var cosList = form.getController().getCosList().getArray();
+			var cnt = cosList.length;
+			for(var i = 0; i < cnt; i++) {
+				if(cosList[i].name == "default") {
+					instance.cos = cosList[i];
+					instance.attrs[ZaAccount.A_COSId] = cosList[i].id ;
+					break;
+				}
+			}
+		}else if (defaultCosId && (defaultCosId != curCosId)){
+			var cosList = form.getController().getCosList().getArray();
+			var cnt = cosList.length;
+			for(var i = 0; i < cnt; i++) {
+				if(cosList[i].id == defaultCosId) {
+					instance.cos = cosList[i];
+					instance.attrs[ZaAccount.A_COSId] = defaultCosId ;
+					break;
+				}
+			}			
+		}
+	}	
+	form.refresh();
+}
+
+ZaAccount.getDomain =
+function (accountName) {
+	return accountName.substring(accountName.indexOf ("@") + 1 ) ;	
+}
