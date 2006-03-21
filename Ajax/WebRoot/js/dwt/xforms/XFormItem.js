@@ -1295,6 +1295,10 @@ XFormItem.prototype.getValign = function() {
 	return this.getInheritedProperty("valign");
 }
 
+XFormItem.prototype.getName = function () {
+	return this.getInheritedProperty("name");
+}
+
 // NEW TABLE LAYOUT STUFF
 XFormItem.prototype.useParentTable = true;
 XFormItem.prototype.getUseParentTable = function () {
@@ -3432,7 +3436,10 @@ Dwt_Button_XFormItem.prototype.constructWidget = function () {
 	return widget;
 }
 
-
+Dwt_Button_XFormItem.prototype.getWidget =
+function (){
+	return this.widget ;
+}
 
 /**	
 * @class defines XFormItem type _DWT_SELECT_

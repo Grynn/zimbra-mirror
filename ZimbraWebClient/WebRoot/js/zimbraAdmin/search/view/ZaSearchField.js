@@ -98,6 +98,26 @@ function(evt) {
 	fieldObj.invokeCallback(evt);
 }
 
+ZaSearchField.prototype.getItemByName =
+function (name) {
+	var items = this._localXForm.getItems()[0].getItems();
+	var cnt = items.length ;
+	for (var i=0; i < cnt; i++){
+		if (items[i].getName () == name ) 
+			return items[i];	
+	}
+	
+	return null ;
+}
+
+ZaSearchField.prototype.setTooltipForSearchButton =
+function (tooltip){
+	//change the tooltip for the search button
+	var searchButtonItem = this.getItemByName("searchButton") ;
+	if (searchButtonItem) {
+		searchButtonItem.getWidget().setToolTipContent (tooltip);
+	}
+}
 
 ZaSearchField.prototype.resetSearchFilter = function () {
 	this._containedObject[ZaSearch.A_fAccounts] = "FALSE";
@@ -112,30 +132,35 @@ ZaSearchField.prototype.allFilterSelected = function (ev) {
 	this._containedObject[ZaSearch.A_fdistributionlists] = "TRUE";	
 	this._containedObject[ZaSearch.A_fAliases] = "TRUE";
 	this._containedObject[ZaSearch.A_fResources] = "TRUE";
+	this.setTooltipForSearchButton (ZaMsg.searchForAll);	
 }
 
 ZaSearchField.prototype.accFilterSelected = function (ev) {
 	this.resetSearchFilter();
 	ev.item.parent.parent.setImage(ev.item.getImage());	
 	this._containedObject[ZaSearch.A_fAccounts] = "TRUE";
+	this.setTooltipForSearchButton (ZaMsg.searchForAccounts);	
 }
 
 ZaSearchField.prototype.aliasFilterSelected = function (ev) {
 	this.resetSearchFilter();
 	ev.item.parent.parent.setImage(ev.item.getImage());
 	this._containedObject[ZaSearch.A_fAliases] = "TRUE";	
+	this.setTooltipForSearchButton (ZaMsg.searchForAliases);
 }
 
 ZaSearchField.prototype.dlFilterSelected = function (ev) {
 	this.resetSearchFilter();
 	ev.item.parent.parent.setImage(ev.item.getImage());
 	this._containedObject[ZaSearch.A_fdistributionlists] = "TRUE";	
+	this.setTooltipForSearchButton (ZaMsg.searchForDLs);	
 }
 
 ZaSearchField.prototype.resFilterSelected = function (ev) {
 	this.resetSearchFilter();
 	ev.item.parent.parent.setImage(ev.item.getImage());
-	this._containedObject[ZaSearch.A_fResources] = "TRUE";	
+	this._containedObject[ZaSearch.A_fResources] = "TRUE";
+	this.setTooltipForSearchButton (ZaMsg.searchForResources);	
 }
 
 ZaSearchField.searchChoices = new XFormChoices([],XFormChoices.OBJECT_REFERENCE_LIST, null, "labelId");
@@ -154,7 +179,7 @@ ZaSearchField.prototype._getMyXForm = function() {
 		tableCssStyle:"width:100%;padding:2px;",numCols:4,width:"100%",
 		items: [
 //			{type:_OUTPUT_, value:ZaMsg.searchForAccountsLabel, nowrap:true},
-			{type:_MENU_BUTTON_, label:null, choices:ZaSearchField.searchChoices, toolTipContent:ZaMsg.searchForAccounts, icon:"SearchAll", cssClass:"TBButtonWhite"},
+			{type:_MENU_BUTTON_, label:null, choices:ZaSearchField.searchChoices, toolTipContent:ZaMsg.searchToolTip, icon:"SearchAll", cssClass:"TBButtonWhite"},
 			{type:_TEXTFIELD_, width:"100%", ref:ZaSearch.A_query, containerCssClass:"search_field_container", label:null, 
 				elementChanged: function(elementValue,instanceValue, event) {
 					var charCode = event.charCode;
@@ -166,7 +191,8 @@ ZaSearchField.prototype._getMyXForm = function() {
 				},
 				cssClass:"search_input"
 			},
-			{type:_DWT_BUTTON_, label:ZaMsg.search, toolTipContent:ZaMsg.searchForAccounts, icon:ZaMsg.search, onActivate:ZaSearchField.srchButtonHndlr, cssClass:"TBButtonWhite"},
+			{type:_DWT_BUTTON_, label:ZaMsg.search, toolTipContent:ZaMsg.searchForAll, icon:ZaMsg.search, name: "searchButton",
+					onActivate:ZaSearchField.srchButtonHndlr, cssClass:"TBButtonWhite"},
 			/*{type:_OUTPUT_, value:ZaMsg.Filter+":", label:null},
 			{type:_CHECKBOX_, ref:ZaSearch.A_fAccounts,label:ZaMsg.Filter_Accounts, labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"},					
 			{type:_CHECKBOX_, ref:ZaSearch.A_fAliases,label:ZaMsg.Filter_Aliases, labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"},
