@@ -1493,6 +1493,42 @@ function(list) {
 	}
 }
 
+DwtListView.prototype._focus =
+function() {
+	DBG.println("DwtListView: FOCUS");
+	this.getHtmlElement().style.borderStyle = "dashed";
+	this.getHtmlElement().style.borderWidth = "1px";
+}
+
+DwtListView.prototype._blur =
+function() {
+	DBG.println("DwtListView: BLUR");
+	if (AjxEnv.isGecko)
+		this.getHtmlElement().style.borderStyle = "hidden";
+	else
+		this.getHtmlElement().style.borderWidth = "0px";
+}
+
+DwtListView.prototype.handleKeyAction =
+function(action, ev) {
+	DBG.println("DwtListView.handleKeyAction");
+	
+	switch (actionCode) {
+		case DwtKeyMap.NEXT:
+			this.selectItem(true);
+			break;
+			
+		case DwtKeyMap.PREV:
+			this.selectItem(false);
+			break;
+		
+		default:
+			return false;		
+	}
+	
+	return true;
+}
+
 //////////////////////////////////////////////////////////////////////////////
 // DwtListHeaderItem
 // - This is a (optional) "container" class for DwtListView objects which 

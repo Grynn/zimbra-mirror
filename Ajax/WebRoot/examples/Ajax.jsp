@@ -63,6 +63,9 @@
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/core/Dwt.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/core/DwtException.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/core/DwtDraggable.js"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/dwt/core/DwtKeyMap.js"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/dwt/core/DwtKeyMapMgr.js"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/dwt/core/DwtTabGroup.js"></script>
 
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/graphics/DwtCssStyle.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/graphics/DwtPoint.js"></script>

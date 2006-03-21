@@ -540,6 +540,31 @@ function() {
 	return this._ctrlInited;
 }
 
+/** This method should be overridden by derived classes to provide
+ * behaviour for the component losing focus */
+DwtControl.prototype._blur =
+function() {
+}
+
+/** This method should be overridden by derived classes to provide
+ * behaviour for the component gaining focus e.g. providing a border or
+ * highlighting etc...*/
+DwtControl.prototype._focus =
+function() {
+}
+
+/** This method should be overriden by derived classes to provide
+ * behaviour for supported key actions. See DwtKeyMap for more info 
+ *
+ * @param actionCode [int]	Action code on which to act
+ * @param ev [DwtKeyEvent]	keyboard event (last keyboard event in sequence)
+ * @return	true if handled, else false
+ */
+DwtControl.prototype.handleKeyAction =
+function(actionCode, ev) {
+	return false;
+}
+
 DwtControl.prototype.reparent =
 function(newParent) {
 	if (!this._checkState()) return;
