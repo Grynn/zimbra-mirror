@@ -24,22 +24,21 @@
 * @author Ross Dargahi
 */
 function DwtKeyMap(subclassInit) {
-	if (subclassInit) 
-		return;
-		
-	/* Always specify Control, then Alt, then Shift. All Chars must be upper case
+	if (subclassInit) {return;}
+
+    /* Always specify Control, then Alt, then Shift. All Chars must be upper case
 	 * Note that DwtKeyMap.GLOBAL is the global mapping and will be logically appended
 	 * to each defined mapping*/
 	this._map = {};
 	this._map[DwtKeyMap.GLOBAL] = {};
-	this._map["DwtListView"] = {
+	this._map.DwtListView = {
 			"ArrowDown":  DwtKeyMap.NEXT,
 			"N":          DwtKeyMap.NEXT,
 			"ArrowUp":    DwtKeyMap.PREV,
 			"P":          DwtKeyMap.PREV,
-			"Enter": 	  DwtKeyMap.SELECT
+			"Enter":      DwtKeyMap.SELECT
 	};
-};
+}
 
 // Key names
 
@@ -78,4 +77,4 @@ DwtKeyMap.ALIAS = "ALIAS"; // Alias keyword.
 DwtKeyMap.prototype.getMap =
 function() {
 	return this._map;
-}
+};
