@@ -27,6 +27,16 @@
 source `dirname $0`/zmshutil || exit 1
 zmsetvars logger_mysql_directory logger_mysql_pidfile logger_mysql_mycnf
 
+if [ x${logger_mysql_directory} = "x" ]; then
+	echo "Logger appears not to be installed"
+	exit 1
+fi
+
+if [ ! -d "${logger_mysql_directory}" -o ! -x "${logger_mysql_directory}/bin/mysqld_safe" ]; then
+	echo "Logger appears not to be installed"
+	exit 1
+fi
+
 zmassert -d ${logger_mysql_directory}
 zmassert -x ${logger_mysql_directory}/bin/mysqld_safe
 zmassert -r ${logger_mysql_mycnf}
