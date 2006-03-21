@@ -288,8 +288,14 @@ sub displayVersion {
 	chomp $platform;
 	my $string = "";
 	if ($platform =~ /MACOSX/) {
-		my $release = ` basename /Library/Receipts/zimbra-core* | sed -e 's/zimbra-core.//' -e 's/.pkg//'`;
-		chomp $release;
+		my $release = "";
+		foreach (glob ("/Library/Receipts/zimbra-core*")) {
+			s|.*/zimbra-core.||;
+			s/.pkg//;
+			if ( ($_ cmp $release) > 0 || $release eq "") {
+				$release = $_;
+			}
+		}
 		$string = "Release $release $platform";
 	} elsif ($platform =~ /DEBIAN/) {
 		my $release = `dpkg -s zimbra-core | egrep '^Version:' | sed -e 's/Version: //'`;
