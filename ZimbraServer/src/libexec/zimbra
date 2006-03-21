@@ -33,7 +33,7 @@
 
 command()
 {
-	su - zimbra -c "zmcontrol $1"
+	su - zimbra -c "zmcontrol $1 </dev/null >>/opt/zimbra/log/startup.log 2>&1"
 }
 
 case "$1" in
