@@ -759,6 +759,8 @@ if ($fork) {
 	}
 }
 
+close STDIN;
+
 while (1) {
 	readConfig();
 	compareKeys();
