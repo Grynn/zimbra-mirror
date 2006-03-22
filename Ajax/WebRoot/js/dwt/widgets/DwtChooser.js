@@ -201,6 +201,21 @@ function(listener) {
 	return this._evtMgr.removeListener(ZmEvent.L_MODIFY, listener);    	
 };
 
+DwtChooser.prototype.getSourceListView = 
+function() {
+	return document.getElementById(this._sourceListViewDivId);
+};
+
+DwtChooser.prototype.getButtons = 
+function() {
+	return document.getElementById(this._buttonsDivId);
+};
+
+DwtChooser.prototype.getTargetListView = 
+function() {
+	return document.getElementById(this._targetListViewDivId);
+};
+
 /**
 * Notifies listeners of the given change event.
 *
@@ -225,7 +240,7 @@ function() {
 
 	this._sourceListViewDivId	= Dwt.getNextId();
 	this._targetListViewDivId	= Dwt.getNextId();
-	this._buttonsTdId			= Dwt.getNextId();
+	this._buttonsDivId			= Dwt.getNextId();
 	this._removeButtonDivId		= Dwt.getNextId();
 
 	var html = [];
@@ -243,7 +258,7 @@ function() {
 
 		// transfer buttons
 		html[idx++] = "<td valign='middle' id='";
-		html[idx++] = this._buttonsTdId;
+		html[idx++] = this._buttonsDivId;
 		html[idx++] = "'>";
 		for (var i = 0; i < this._buttonInfo.length; i++) {
 			var id = this._buttonInfo[i].id;
@@ -263,18 +278,14 @@ function() {
 
 		html[idx++] = "</tr></table>";
 	} else {
-		// start new table for list views
-		html[idx++] = "<table cellspacing=0 cellpadding=0 border=0>";
-
 		// source list
-		html[idx++] = "<tr>";
-		html[idx++] = "<td><div id='";
+		html[idx++] = "<div id='";
 		html[idx++] = this._sourceListViewDivId;
-		html[idx++] = "'></div></td></tr>";
+		html[idx++] = "'></div>";
 
 		// transfer buttons
-		html[idx++] = "<tr><td align='center' id='";
-		html[idx++] = this._buttonsTdId;
+		html[idx++] = "<div align='center' id='";
+		html[idx++] = this._buttonsDivId;
 		html[idx++] = "'>";
 		html[idx++] = "<table><tr>";
 		for (var i = 0; i < this._buttonInfo.length; i++) {
@@ -287,15 +298,12 @@ function() {
 		html[idx++] = "<td id='";
 		html[idx++] = this._removeButtonDivId;
 		html[idx++] = "'></td>";
-		html[idx++] = "</tr></table>";
-		html[idx++] = "</td></tr>";
+		html[idx++] = "</tr></table></div>";
 
 		// target list
-		html[idx++] = "<tr><td><div id='";
+		html[idx++] = "<div id='";
 		html[idx++] = this._targetListViewDivId;
-		html[idx++] = "'></div></td></tr>";	
-
-		html[idx++] = "</table>";
+		html[idx++] = "'></div>";	
 	}
 
 	this.getHtmlElement().innerHTML = html.join("");
@@ -397,8 +405,8 @@ function(width, height) {
 	if (!width || !height) return;
 	if (width == Dwt.DEFAULT && height == Dwt.DEFAULT) return;
 
-	var buttonsTd = document.getElementById(this._buttonsTdId);
-	var btnSz = Dwt.getSize(buttonsTd);
+	var buttonsDiv = document.getElementById(this._buttonsDivId);
+	var btnSz = Dwt.getSize(buttonsDiv);
 	var w, sh, th;
 	if (this._layoutStyle == DwtChooser.HORIZ_STYLE) {
 		w = (width == Dwt.DEFAULT) ? width : Math.floor(((width - btnSz.x) / 2) - 12);
