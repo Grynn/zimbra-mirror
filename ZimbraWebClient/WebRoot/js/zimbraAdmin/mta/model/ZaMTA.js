@@ -125,6 +125,8 @@ function() {
 ZaMTA.loadMethod = 
 function(by, val, withConfig) {
 	var soapDoc = AjxSoapDoc.create("GetMailQueueInfoRequest", "urn:zimbraAdmin", null);
+	var attr = soapDoc.set("server", "");
+	attr.setAttribute("name", this.name);		
 	var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
