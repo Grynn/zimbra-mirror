@@ -76,3 +76,33 @@ function(/* arg1 ... argN */) {
 	// invoke function
 	return this.func.apply(this.obj || window, args);
 };
+
+/**
+ * The following function is what an AjxCallback should be *all* about.  It
+ * returns a plain function that will call your supplied "func" in the context
+ * of "obj" and pass to it, in this order, any additional arguments that you
+ * pass to simpleClosure and the arguments that were passed to it at the call
+ * time.
+ *
+ * An example should do:
+ *
+ *   div.onclick = AjxCallback.simpleClosure(this.handler, this, "some data");
+ *   ...
+ *   this.handler = function(data, event) {
+ *      // event will be passed for DOM2 compliant browsers
+ *      // and data is "some data"
+ *   };
+ *
+ * [this is one of the most useful functions I ever wrote :D  -mihai@zimbra.com]
+ */
+AjxCallback.simpleClosure = function(func, obj) {
+	var args = [];
+	for (var i = 2; i < arguments.length; ++i)
+		args.push(arguments[i]);
+	return function() {
+		var args2 = [];
+		for (var i = 0; i < arguments.length; ++i)
+			args2.push(arguments[i]);
+		func.apply(obj || this, args.concat(args2));
+	};
+};

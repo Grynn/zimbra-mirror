@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2006, The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,6 +28,8 @@ function DwtHtmlEditor(parent, className, posStyle, content, mode, blankIframeSr
 
 	this._mode = mode == DwtHtmlEditor.HTML && this.isHtmlEditingSupported()
 		? mode : DwtHtmlEditor.TEXT;
+
+	this.__eventClosure = AjxCallback.simpleClosure(this.__eventClosure, this);
 
 	// init content
 	this._initialStyle = this._getInitialStyle(true);
@@ -210,11 +212,19 @@ DwtHtmlEditor.prototype.getContent =
 function() {
 	if (this._mode == DwtHtmlEditor.HTML) {
 		var iframeDoc = this._getIframeDoc();
-		return iframeDoc && iframeDoc.body ? (this._initialStyle + this._getIframeDoc().body.innerHTML) : "";
+		var html = iframeDoc && iframeDoc.body ? (this._initialStyle + this._getIframeDoc().body.innerHTML) : "";
+		return this._embedHtmlContent(html);
 	} else {
 		return document.getElementById(this._textAreaId).value;
 	}
-}
+};
+
+DwtHtmlEditor.prototype._embedHtmlContent =
+function(html) {
+	return [ "<html><body>",
+		 html,
+		 "</body></html>" ].join("");
+};
 
 /**
  * Set the content to be displayed. This can be HTML
@@ -652,22 +662,29 @@ function() {
 	}
 }
 
+// This is transformed into a "simple closure" in the constructor.  Simply
+// dispatch the call to _handleEditorEvent passing the right event depending on
+// the browser.
+DwtHtmlEditor.prototype.__eventClosure =
+function(ev) {
+	return this._handleEditorEvent(AjxEnv.isIE ? this._getIframeWin().event : ev);
+};
+
 DwtHtmlEditor.prototype._registerEditorEventHandlers =
 function(iFrame, iFrameDoc) {
 	var events = ["mouseup", "keydown", "keypress", "drag", "mousedown"];
-	var me = this;
-	// TODO - Hopefully this closure doesn't cause a memory leak!!!!
-	var func = function (evt) {return me._handleEditorEvent(AjxEnv.isIE ? iFrame.contentWindow.event : evt);};
-
-	if (AjxEnv.isIE) {
-		for (var i in events)
-			iFrameDoc.attachEvent("on" + events[i], func);
-
-	} else {
-		for (var i in events)
-			iFrameDoc.addEventListener(events[i],  func, true);
+	// Note that since we're not creating the closure here anymore, it's
+	// safe to call this function any number of times (we do this for
+	// Gecko/Linux to work around bugs).  The browser won't add the same
+	// event if it already exists (DOM2 requirement)
+	for (var i = 0; i < events.length; ++i) {
+		if (AjxEnv.isIE) {
+			iFrameDoc.attachEvent("on" + events[i], this.__eventClosure);
+		} else {
+			iFrameDoc.addEventListener(events[i], this.__eventClosure, true);
+		}
 	}
-}
+};
 
 DwtHtmlEditor.prototype._handleEditorEvent =
 function(ev) {
@@ -857,6 +874,9 @@ function(iFrameDoc) {
 	}
 }
 
+DwtHtmlEditor.prototype._onContentInitialized =
+function() {};
+
 DwtHtmlEditor.prototype._setContentOnTimer =
 function() {
 	var iframeDoc = this._getIframeDoc();
@@ -865,6 +885,7 @@ function() {
 		// XXX: mozilla hack
 		if (AjxEnv.isGeckoBased)
 			this._enableDesignMode(iframeDoc);
+		this._onContentInitialized();
 	} catch (ex) {
 		var ta = new AjxTimedAction(this, this._setContentOnTimer);
 		AjxTimedAction.scheduleAction(ta, 10);
