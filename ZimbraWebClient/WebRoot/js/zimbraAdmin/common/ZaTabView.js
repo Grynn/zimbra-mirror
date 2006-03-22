@@ -197,7 +197,7 @@ function () {
 ZaTabView.onFormFieldChanged = 
 function (value, event, form) {
 	form.parent.setDirty(true);	
-	if (this.type == "emailaddr"){
+	if ((this.type == "emailaddr") && (!(form.getInstance() instanceof ZaDistributionList))){
 		//TODO: test for the DL senario
 		ZaAccount.setEmailChanged.call (this, value, form);
 	}
