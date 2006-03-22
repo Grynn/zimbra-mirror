@@ -55,15 +55,15 @@ function(item) {
 		var cnt = this._headerList.length;
 		for(var i = 0; i < cnt; i++) {
 			var id = this._headerList[i]._id;
-			if(id.indexOf(ZaMTA.A_name)==0) {
+			if(id.indexOf(ZaMTAQSummaryItem.A_text)==0) {
 				// type
 				html[idx++] = "<td width=" + this._headerList[i]._width + ">";
-				html[idx++] = AjxStringUtil.htmlEncode(item[ZaMTA.A_name]);
+				html[idx++] = AjxStringUtil.htmlEncode(item[ZaMTAQSummaryItem.A_text]);
 				html[idx++] = "</td>";
-			} else if(id.indexOf(ZaMTA.A_count)==0) {
+			} else if(id.indexOf(ZaMTAQSummaryItem.A_count)==0) {
 				// name
 				html[idx++] = "<td width=" + this._headerList[i]._width + ">";
-				html[idx++] = item[ZaMTA.A_count];
+				html[idx++] = item[ZaMTAQSummaryItem.A_count];
 				html[idx++] = "</td>";
 			}
 		}

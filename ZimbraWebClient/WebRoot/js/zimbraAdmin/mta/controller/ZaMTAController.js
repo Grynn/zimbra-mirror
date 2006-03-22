@@ -69,6 +69,17 @@ function(entry) {
 	this._view.setDirty(false);
 	this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
 	this._currentObject = entry;
+	if(entry[ZaMTA.A_DeferredQ][ZaMTA.A_refreshTime]=="N/A" &&
+	entry[ZaMTA.A_IncomingQ][ZaMTA.A_refreshTime]=="N/A" &&
+	entry[ZaMTA.A_ActiveQ][ZaMTA.A_refreshTime]=="N/A" && 
+	entry[ZaMTA.A_HoldQ][ZaMTA.A_refreshTime]=="N/A" &&  
+	entry[ZaMTA.A_CorruptQ][ZaMTA.A_refreshTime]=="N/A") {
+		this._currentObject.getMailQStatus(ZaMTA.A_DeferredQ);	
+		this._currentObject.getMailQStatus(ZaMTA.A_IncomingQ);			
+		this._currentObject.getMailQStatus(ZaMTA.A_ActiveQ);	
+		this._currentObject.getMailQStatus(ZaMTA.A_HoldQ);	
+		this._currentObject.getMailQStatus(ZaMTA.A_CorruptQ);							
+	}	
 }
 ZaController.setViewMethods["ZaMTAController"].push(ZaMTAController.setViewMethod);
 
@@ -82,9 +93,9 @@ ZaController.setViewMethods["ZaMTAController"].push(ZaMTAController.setViewMetho
 **/
 ZaMTAController.initToolbarMethod = 
 function () {
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.LABEL, ZaMsg.TBB_LastUpdated, ZaMsg.TBB_LastUpdated_tt, null, null, null,null,null,null,"refreshTime"));	
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.SEP));
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.REFRESH, ZaMsg.TBB_Refresh, ZaMsg.TBB_Refresh_tt, null, null, new AjxListener(this, this.refreshListener)));	
+	//this._toolbarOperations.push(new ZaOperation(ZaOperation.LABEL, ZaMsg.TBB_LastUpdated, ZaMsg.TBB_LastUpdated_tt, null, null, null,null,null,null,"refreshTime"));	
+//	this._toolbarOperations.push(new ZaOperation(ZaOperation.SEP));
+//	this._toolbarOperations.push(new ZaOperation(ZaOperation.REFRESH, ZaMsg.TBB_Refresh, ZaMsg.TBB_Refresh_tt, null, null, new AjxListener(this, this.refreshListener)));	
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.SERTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener)));    	
 }
 ZaController.initToolbarMethods["ZaMTAController"].push(ZaMTAController.initToolbarMethod);
@@ -118,10 +129,12 @@ ZaMTAController.prototype.refreshListener = function () {
 * @param ev
 * This listener is invoked by ZaMTAController or any other controller that can change a ZaMTA object
 **/
-ZaMTAListController.prototype.handleMTAChange = 
+ZaMTAController.prototype.handleMTAChange = 
 function (ev) {
 	//if any of the data that is currently visible has changed - update the view
-	if(ev) {
-		//update "Refresh" label
+	if(ev && this._view) {
+		if(ev.getDetails() && (ev.getDetails() instanceof ZaMTA))
+			if(this._currentObject && this._currentObject[ZaItem.A_zimbraId] == ev.getDetails()[ZaItem.A_zimbraId])
+				this._view.setObject(ev.getDetails()); 
 	}
 }

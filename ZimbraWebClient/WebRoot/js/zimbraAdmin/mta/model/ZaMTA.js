@@ -34,6 +34,7 @@ function ZaMTA(app) {
 	ZaItem.call(this, app,"ZaMTA");
 	this._init(app);
 }
+ZaMTA.RESULTSPERPAGE = 50;
 
 ZaMTA.prototype = new ZaItem;
 ZaMTA.prototype.constructor = ZaMTA;
@@ -46,6 +47,7 @@ ZaMTA.A_Servername = "servername";
 ZaMTA.A_Status = "status";
 ZaMTA.A_LastError = "lasterror";
 ZaMTA.A_MTAName = "mtaname";
+ZaMTA.A_refreshTime = "refreshTime";
 /**
 * names of queues
 **/
@@ -65,7 +67,7 @@ ZaMTA.A_messages = "messages";
 * names of attributes in summary fields fields
 **/
 ZaMTA.A_name = "name";
-ZaMTA.A_count = "count";
+ZaMTA.A_count = "n";
 ZaMTA.A_Qid = "qid";
 ZaMTA.A_query = "query";
 ZaMTA.A_queue_filter_name = "_queue_filter_name";
@@ -83,13 +85,14 @@ ZaMTA.prototype.QCountsCallback = function (resp) {
 		this._app.getCurrentController()._handleException(resp.getException(), "ZaMTA.prototype.QCountsCallback");
 		return;
 	} 	
+	var response = resp.getResponse();
+	var body = response.Body;
 	//update my fields
-	if(resp.Body && resp.GetMailQueueInfoResponse.server && resp.GetMailQueueInfoResponse.server[0]) {
-		this.initFromJS(resp.Body.GetMailQueueInfoResponse.server[0]);
+	if(body && body.GetMailQueueInfoResponse.server && body.GetMailQueueInfoResponse.server[0]) {
+		this.initFromJS(body.GetMailQueueInfoResponse.server[0]);
 	} else {
-		var ex = new ZmCsfeException(ZMsg.errorUnknownDoc,SVC_UNKNOWN_DOCUMENT,"ZaMTA.prototype.QCountsCallback");
+		var ex = new ZmCsfeException(ZMsg.errorUnknownDoc,ZmCsfeException.SVC_UNKNOWN_DOCUMENT,"ZaMTA.prototype.QCountsCallback");
 		this._app.getCurrentController()._handleException(ex, "ZaMTA.prototype.QCountsCallback");
-		this.goPrev();
 		return;	
 	}
 	//notify listeners 
@@ -137,6 +140,27 @@ function(by, val, withConfig) {
 }
 ZaItem.loadMethods["ZaMTA"].push(ZaMTA.loadMethod);
 
+ZaMTA.makeTestData1 = function (obj) {
+//	mta1[ZaMTA.A_DeferredQ] = {query:("mta:(mta1) queue:("+ZaMTA.A_DeferredQ+")")};
+	obj[ZaMTA.A_DeferredQ][ZaMTA.A_destination]=[
+			new ZaMTAQSummaryItem(obj.app, "deferred_yahoo.com", "yahoo.com", 131),
+			new ZaMTAQSummaryItem(obj.app, "deferred_gmail.com", "gmail.com", 101),			
+			new ZaMTAQSummaryItem(obj.app, "deferred_hotmail.com", "hotmail.com", 121),						
+			new ZaMTAQSummaryItem(obj.app, "deferred_usa.net", "usa.net", 50)									
+		];
+	obj[ZaMTA.A_DeferredQ][ZaMTA.A_origin]=[
+			new ZaMTAQSummaryItem(obj.app, null, "64.23.45.222", 231),
+			new ZaMTAQSummaryItem(obj.app, "deferred_221.23.45.26", "221.23.45.26", 201),			
+			new ZaMTAQSummaryItem(obj.app, "deferred_121.23.45.123", "121.23.45.123", 221),						
+			new ZaMTAQSummaryItem(obj.app, "deferred_220.63.45.201", "220.63.45.201", 21)		
+		];
+	obj[ZaMTA.A_DeferredQ][ZaMTA.A_error]=[
+			new ZaMTAQSummaryItem(obj.app, "deferred_blah-blah", "blah-blah", 331),
+			new ZaMTAQSummaryItem(obj.app, "deferred_rant-rant", "rant-rant", 301),			
+			new ZaMTAQSummaryItem(obj.app, "deferred_wait-wait", "wait-wait", 321)
+		];
+	obj[ZaMTA.A_DeferredQ][ZaMTA.A_count]=1001;
+}
 
 ZaMTA.returnTestData1 = function (app) {
 	var list = new ZaItemList(ZaMTA, app);
@@ -150,21 +174,21 @@ ZaMTA.returnTestData1 = function (app) {
 	mta1.id = "mta1";	
 	mta1[ZaMTA.A_DeferredQ] = {query:("mta:(mta1) queue:("+ZaMTA.A_DeferredQ+")")};
 	mta1[ZaMTA.A_DeferredQ][ZaMTA.A_destination]=[
-			{id:"deferred_yahoo.com",name:"yahoo.com", count:131, toString:function() {return this.name+this.count} },
-			{id:"deferred_gmail.com",name:"gmail.com", count:101, toString:function() {return this.name+this.count}},			
-			{id:"deferred_hotmail.com",name:"hotmail.com", count:121, toString:function() {return this.name+this.count}},						
-			{id:"deferred_usa.net",name:"usa.net", count:50, toString:function() {return this.name+this.count}}									
+			new ZaMTAQSummaryItem(app, "deferred_yahoo.com", "yahoo.com", 131),
+			new ZaMTAQSummaryItem(app, "deferred_gmail.com", "gmail.com", 101),			
+			new ZaMTAQSummaryItem(app, "deferred_hotmail.com", "hotmail.com", 121),						
+			new ZaMTAQSummaryItem(app, "deferred_usa.net", "usa.net", 50)									
 		];
 	mta1[ZaMTA.A_DeferredQ][ZaMTA.A_origin]=[
-			{id:"deferred_64.23.45.222",name:"64.23.45.222", count:231, toString:function() {return this.name+this.count}},
-			{id:"deferred_221.23.45.26",name:"221.23.45.26", count:201, toString:function() {return this.name+this.count}},			
-			{id:"deferred_121.23.45.123",name:"121.23.45.123", count:221, toString:function() {return this.name+this.count}},						
-			{id:"deferred_220.63.45.201",name:"220.63.45.201", count:21, toString:function() {return this.name+this.count}}		
+			new ZaMTAQSummaryItem(app, "deferred_64.23.45.222", "64.23.45.222", 231),
+			new ZaMTAQSummaryItem(app, "deferred_221.23.45.26", "221.23.45.26", 201),			
+			new ZaMTAQSummaryItem(app, "deferred_121.23.45.123", "121.23.45.123", 221),						
+			new ZaMTAQSummaryItem(app, "deferred_220.63.45.201", "220.63.45.201", 21)		
 		];
 	mta1[ZaMTA.A_DeferredQ][ZaMTA.A_error]=[
-			{id:"deferred_blah-blah",name:"blah-blah", count:331, toString:function() {return this.name+this.count}},
-			{id:"deferred_rant-rant",name:"rant-rant", count:301, toString:function() {return this.name+this.count}},			
-			{id:"deferred_wait-wait",name:"wait-wait", count:321, toString:function() {return this.name+this.count}}
+			new ZaMTAQSummaryItem(app, "deferred_blah-blah", "blah-blah", 331),
+			new ZaMTAQSummaryItem(app, "deferred_rant-rant", "rant-rant", 301),			
+			new ZaMTAQSummaryItem(app, "deferred_wait-wait", "wait-wait", 321)
 		];
 	mta1[ZaMTA.A_DeferredQ][ZaMTA.A_count]=1001;
 
@@ -172,61 +196,61 @@ ZaMTA.returnTestData1 = function (app) {
 	mta1[ZaMTA.A_IncomingQ][ZaMTA.A_count] = 1021;
 
 	mta1[ZaMTA.A_IncomingQ][ZaMTA.A_destination] = [
-			{id:"incoming_yahoo.com",name:"yahoo.com", count:132, toString:function() {return this.name+this.count}},
-			{id:"incoming_gmail.com",name:"gmail.com", count:102, toString:function() {return this.name+this.count}},			
-			{id:"incoming_hotmail.com",name:"hotmail.com",count:122, toString:function() {return this.name+this.count}},						
-			{id:"incoming_usa.net",name:"usa.net", count:12}									
+			new ZaMTAQSummaryItem(app, "incoming_yahoo.com", "yahoo.com", 132),
+			new ZaMTAQSummaryItem(app, "incoming_gmail.com", "gmail.com", 102),			
+			new ZaMTAQSummaryItem(app, "incoming_hotmail.com", "hotmail.com", 122),						
+			new ZaMTAQSummaryItem(app, "incoming_usa.net", "usa.net", 12)									
 		];
 	mta1[ZaMTA.A_IncomingQ][ZaMTA.A_origin]=[
-			{id:"incoming_64.23.45.222",name:"64.23.45.222", count:232, toString:function() {return this.name+this.count}},
-			{id:"incoming_221.23.45.26",name:"221.23.45.26", count:202, toString:function() {return this.name+this.count}},			
-			{id:"incoming_121.23.45.123",name:"121.23.45.123", count:222, toString:function() {return this.name+this.count}},						
-			{id:"incoming_220.63.45.201",name:"220.63.45.201", count:22, toString:function() {return this.name+this.count}}		
+			new ZaMTAQSummaryItem(app, "incoming_64.23.45.222", "64.23.45.222", 232),
+			new ZaMTAQSummaryItem(app, "incoming_221.23.45.26", "221.23.45.26", 202),			
+			new ZaMTAQSummaryItem(app, "incoming_121.23.45.123", "121.23.45.123", 222),						
+			new ZaMTAQSummaryItem(app, "incoming_220.63.45.201", "220.63.45.201", 22)		
 		];
 
 	mta1[ZaMTA.A_ActiveQ] = {query:("mta:(mta1) queue:("+ZaMTA.A_ActiveQ+")")};
 	mta1[ZaMTA.A_ActiveQ][ZaMTA.A_count]=101;
 	mta1[ZaMTA.A_ActiveQ][ZaMTA.A_destination]=[
-			{id:"yahoo.com",name:"yahoo.com", count:233, toString:function() {return this.name+this.count}},
-			{id:"gmail.com",name:"gmail.com", count:203, toString:function() {return this.name+this.count}},			
-			{id:"hotmail.com",name:"hotmail.com", count:123, toString:function() {return this.name+this.count}},						
-			{id:"usa.net",name:"usa.net", count:50, toString:function() {return this.name+this.count}}									
+			new ZaMTAQSummaryItem(app, "yahoo.com", "yahoo.com", 233),
+			new ZaMTAQSummaryItem(app, "gmail.com", "gmail.com", 203),			
+			new ZaMTAQSummaryItem(app, "hotmail.com", "hotmail.com", 123),						
+			new ZaMTAQSummaryItem(app, "usa.net", "usa.net", 50)									
 		]
 	mta1[ZaMTA.A_ActiveQ][ZaMTA.A_origin]=[
-			{id:"64.23.45.222",name:"64.23.45.222", count:233, toString:function() {return this.name+this.count}},
-			{id:"221.23.45.26",name:"221.23.45.26", count:203, toString:function() {return this.name+this.count}},			
-			{id:"121.23.45.123",name:"121.23.45.123", count:123, toString:function() {return this.name+this.count}},						
-			{id:"220.63.45.201",name:"220.63.45.201", count:50, toString:function() {return this.name+this.count}}		
+			new ZaMTAQSummaryItem(app, "64.23.45.222", "64.23.45.222", 233),
+			new ZaMTAQSummaryItem(app, "221.23.45.26", "221.23.45.26", 203),			
+			new ZaMTAQSummaryItem(app, "121.23.45.123", "121.23.45.123", 123),						
+			new ZaMTAQSummaryItem(app, "220.63.45.201", "220.63.45.201", 50)		
 		];	
 	
 	mta1[ZaMTA.A_CorruptQ] = {query:("mta:(mta1) queue:("+ZaMTA.A_CorruptQ+")")};
 	mta1[ZaMTA.A_CorruptQ][ZaMTA.A_count]=2131;			
 	mta1[ZaMTA.A_CorruptQ][ZaMTA.A_destination]=[
-			{id:"yahoo.com",name:"yahoo.com", count:233, toString:function() {return this.name+this.count}},
-			{id:"gmail.com",name:"gmail.com", count:203, toString:function() {return this.name+this.count}},			
-			{id:"hotmail.com",name:"hotmail.com", count:123, toString:function() {return this.name+this.count}},						
-			{id:"usa.net",name:"usa.net", count:50, toString:function() {return this.name+this.count}}									
+			new ZaMTAQSummaryItem(app, "yahoo.com", "yahoo.com", 233),
+			new ZaMTAQSummaryItem(app, "gmail.com", "gmail.com", 203),			
+			new ZaMTAQSummaryItem(app, "hotmail.com", "hotmail.com", 123),						
+			new ZaMTAQSummaryItem(app, "usa.net", "usa.net", 50)									
 		];
 	mta1[ZaMTA.A_CorruptQ][ZaMTA.A_origin]=[
-			{id:"64.23.45.222",name:"64.23.45.222", count:233, toString:function() {return this.name+this.count}},
-			{id:"221.23.45.26",name:"221.23.45.26", count:203},			
-			{id:"121.23.45.123",name:"121.23.45.123", count:123, toString:function() {return this.name+this.count}},						
-			{id:"220.63.45.201",name:"220.63.45.201", count:50, toString:function() {return this.name+this.count}}		
+			new ZaMTAQSummaryItem(app, "64.23.45.222", "64.23.45.222", 233),
+			new ZaMTAQSummaryItem(app, "221.23.45.26", "221.23.45.26", 203),			
+			new ZaMTAQSummaryItem(app, "121.23.45.123", "121.23.45.123", 123),						
+			new ZaMTAQSummaryItem(app, "220.63.45.201", "220.63.45.201", 50)		
 		];	
 
 	mta1[ZaMTA.A_HoldQ] = {query:("mta:(mta1) queue:("+ZaMTA.A_HoldQ+")")};
 	mta1[ZaMTA.A_HoldQ][ZaMTA.A_count]=1603;
 	mta1[ZaMTA.A_HoldQ][ZaMTA.A_destination]=[
-			{id:"yahoo.com",name:"yahoo.com", count:233, toString:function() {return this.name+this.count}},
-			{id:"gmail.com",name:"gmail.com", count:203, toString:function() {return this.name+this.count}},			
-			{id:"hotmail.com",name:"hotmail.com", count:123, toString:function() {return this.name+this.count}},						
-			{id:"usa.net",name:"usa.net", count:50, toString:function() {return this.name+this.count}}									
+			new ZaMTAQSummaryItem(app, "yahoo.com", "yahoo.com", 233),
+			new ZaMTAQSummaryItem(app, "gmail.com", "gmail.com", 203),			
+			new ZaMTAQSummaryItem(app, "hotmail.com", "hotmail.com", 123),						
+			new ZaMTAQSummaryItem(app, "usa.net", "usa.net", 50)									
 		];
 	mta1[ZaMTA.A_HoldQ][ZaMTA.A_origin]=[
-			{id:"64.23.45.222",name:"64.23.45.222", count:233, toString:function() {return this.name+this.count}},
-			{id:"221.23.45.26",name:"221.23.45.26", count:203, toString:function() {return this.name+this.count}},			
-			{id:"121.23.45.123",name:"121.23.45.123", count:123, toString:function() {return this.name+this.count}},						
-			{id:"220.63.45.201",name:"220.63.45.201", count:50, toString:function() {return this.name+this.count}}		
+			new ZaMTAQSummaryItem(app, "64.23.45.222", "64.23.45.222", 233),
+			new ZaMTAQSummaryItem(app, "221.23.45.26", "221.23.45.26", 203),			
+			new ZaMTAQSummaryItem(app, "121.23.45.123", "121.23.45.123", 123),						
+			new ZaMTAQSummaryItem(app, "220.63.45.201", "220.63.45.201", 50)		
 		];	
 
 	var mta2 = new ZaMTA(app);
@@ -238,21 +262,21 @@ ZaMTA.returnTestData1 = function (app) {
 	
 	mta2[ZaMTA.A_DeferredQ] = {query:("mta:(mta2) queue:("+ZaMTA.A_DeferredQ+")")};
 	mta2[ZaMTA.A_DeferredQ][ZaMTA.A_destination]=[
-			{id:"yahoo.com",name:"yahoo.com", count:233, toString:function() {return this.name+this.count}},
-			{id:"gmail.com",name:"gmail.com", count:203, toString:function() {return this.name+this.count}},			
-			{id:"hotmail.com",name:"hotmail.com", count:123, toString:function() {return this.name+this.count}},						
-			{id:"usa.net",name:"usa.net", count:50, toString:function() {return this.name+this.count}}									
+			new ZaMTAQSummaryItem(app, "yahoo.com", "yahoo.com", 233),
+			new ZaMTAQSummaryItem(app, "gmail.com", "gmail.com", 203),			
+			new ZaMTAQSummaryItem(app, "hotmail.com", "hotmail.com", 123),						
+			new ZaMTAQSummaryItem(app, "usa.net", "usa.net", 50)									
 		];
 	mta2[ZaMTA.A_DeferredQ][ZaMTA.A_origin]=[
-			{id:"64.23.45.222",name:"64.23.45.222", count:233, toString:function() {return this.name+this.count}},
-			{id:"221.23.45.26",name:"221.23.45.26", count:203, toString:function() {return this.name+this.count}},			
-			{id:"121.23.45.123",name:"121.23.45.123", count:123, toString:function() {return this.name+this.count}},						
-			{id:"220.63.45.201",name:"220.63.45.201", count:50, toString:function() {return this.name+this.count}}		
+			new ZaMTAQSummaryItem(app, "64.23.45.222", "64.23.45.222", 233),
+			new ZaMTAQSummaryItem(app, "221.23.45.26", "221.23.45.26", 203),			
+			new ZaMTAQSummaryItem(app, "121.23.45.123", "121.23.45.123", 123),						
+			new ZaMTAQSummaryItem(app, "220.63.45.201", "220.63.45.201", 50)		
 		];
 	mta2[ZaMTA.A_DeferredQ][ZaMTA.A_error]=[
-			{id:"blah-blah",name:"blah-blah", count:233, toString:function() {return this.name+this.count}},
-			{id:"rant-rant",name:"rant-rant", count:203, toString:function() {return this.name+this.count}},			
-			{id:"wait-wait",name:"wait-wait", count:123, toString:function() {return this.name+this.count}}
+			new ZaMTAQSummaryItem(app, "blah-blah", "blah-blah", 233),
+			new ZaMTAQSummaryItem(app, "rant-rant", "rant-rant", 203),			
+			new ZaMTAQSummaryItem(app, "wait-wait", "wait-wait", 123)
 		];
 	mta2[ZaMTA.A_DeferredQ][ZaMTA.A_count]=1001;
 
@@ -260,66 +284,66 @@ ZaMTA.returnTestData1 = function (app) {
 	mta2[ZaMTA.A_IncomingQ][ZaMTA.A_count] = 1021;
 
 	mta2[ZaMTA.A_IncomingQ][ZaMTA.A_destination] = [
-			{id:"yahoo.com",name:"yahoo.com", count:233, toString:function() {return this.name+this.count}},
-			{id:"gmail.com",name:"gmail.com", count:203, toString:function() {return this.name+this.count}},			
-			{id:"hotmail.com",name:"hotmail.com",count:123, toString:function() {return this.name+this.count}},						
-			{id:"usa.net",name:"usa.net", count:50, toString:function() {return this.name+this.count}}									
+			new ZaMTAQSummaryItem(app, "yahoo.com", "yahoo.com", 233),
+			new ZaMTAQSummaryItem(app, "gmail.com", "gmail.com", 203),			
+			new ZaMTAQSummaryItem(app, "hotmail.com", "hotmail.com", 123),						
+			new ZaMTAQSummaryItem(app, "usa.net", "usa.net", 50)									
 		];
 	mta2[ZaMTA.A_IncomingQ][ZaMTA.A_origin]=[
-			{id:"64.23.45.222",name:"64.23.45.222", count:233, toString:function() {return this.name+this.count}},
-			{id:"221.23.45.26",name:"221.23.45.26", count:203, toString:function() {return this.name+this.count}},			
-			{id:"121.23.45.123",name:"121.23.45.123", count:123, toString:function() {return this.name+this.count}},						
-			{id:"220.63.45.201",name:"220.63.45.201", count:50, toString:function() {return this.name+this.count}}		
+			new ZaMTAQSummaryItem(app, "64.23.45.222", "64.23.45.222", 233),
+			new ZaMTAQSummaryItem(app, "221.23.45.26", "221.23.45.26", 203),			
+			new ZaMTAQSummaryItem(app, "121.23.45.123", "121.23.45.123", 123),						
+			new ZaMTAQSummaryItem(app, "220.63.45.201", "220.63.45.201", 50)		
 		];
 	mta2[ZaMTA.A_IncomingQ][ZaMTA.A_error]=[
-			{id:"blah-blah",name:"blah-blah", count:233, toString:function() {return this.name+this.count}},
-			{id:"rant-rant",name:"rant-rant", count:203, toString:function() {return this.name+this.count}},			
-			{id:"wait-wait",name:"wait-wait", count:123, toString:function() {return this.name+this.count}}
+			new ZaMTAQSummaryItem(app, "blah-blah", "blah-blah", 233),
+			new ZaMTAQSummaryItem(app, "rant-rant", "rant-rant", 203),			
+			new ZaMTAQSummaryItem(app, "wait-wait", "wait-wait", 123)
 		];		
 
 	mta2[ZaMTA.A_ActiveQ] = {query:("mta:(mta2) queue:("+ZaMTA.A_ActiveQ+")")};
 	mta2[ZaMTA.A_ActiveQ][ZaMTA.A_count]=101;
 	mta2[ZaMTA.A_ActiveQ][ZaMTA.A_destination]=[
-			{id:"yahoo.com",name:"yahoo.com", count:233, toString:function() {return this.name+this.count}},
-			{id:"gmail.com",name:"gmail.com", count:203, toString:function() {return this.name+this.count}},			
-			{id:"hotmail.com",name:"hotmail.com", count:123, toString:function() {return this.name+this.count}},						
-			{id:"usa.net",name:"usa.net", count:50}									
+			new ZaMTAQSummaryItem(app, "yahoo.com", "yahoo.com", 233),
+			new ZaMTAQSummaryItem(app, "gmail.com", "gmail.com", 203),			
+			new ZaMTAQSummaryItem(app, "hotmail.com", "hotmail.com", 123),						
+			new ZaMTAQSummaryItem(app, "usa.net", "usa.net", 50)									
 		]
 	mta2[ZaMTA.A_ActiveQ][ZaMTA.A_origin]=[
-			{id:"64.23.45.222",name:"64.23.45.222", count:233, toString:function() {return this.name+this.count}},
-			{id:"221.23.45.26",name:"221.23.45.26", count:203, toString:function() {return this.name+this.count}},			
-			{id:"121.23.45.123",name:"121.23.45.123", count:123, toString:function() {return this.name+this.count}},						
-			{id:"220.63.45.201",name:"220.63.45.201", count:50, toString:function() {return this.name+this.count}}		
+			new ZaMTAQSummaryItem(app, "64.23.45.222", "64.23.45.222", 233),
+			new ZaMTAQSummaryItem(app, "221.23.45.26", "221.23.45.26", 203),			
+			new ZaMTAQSummaryItem(app, "121.23.45.123", "121.23.45.123", 123),						
+			new ZaMTAQSummaryItem(app, "220.63.45.201", "220.63.45.201", 50)		
 		];	
 
 	mta2[ZaMTA.A_CorruptQ] = {query:("mta:(mta2) queue:("+ZaMTA.A_CorruptQ+")")};
 	mta2[ZaMTA.A_CorruptQ][ZaMTA.A_count]=2131;			
 	mta2[ZaMTA.A_CorruptQ][ZaMTA.A_destination]=[
-			{id:"yahoo.com",name:"yahoo.com", count:233, toString:function() {return this.name+this.count}},
-			{id:"gmail.com",name:"gmail.com", count:203, toString:function() {return this.name+this.count}},			
-			{id:"hotmail.com",name:"hotmail.com", count:123, toString:function() {return this.name+this.count}},						
-			{id:"usa.net",name:"usa.net", count:50, toString:function() {return this.name+this.count}}									
+			new ZaMTAQSummaryItem(app, "yahoo.com", "yahoo.com", 233),
+			new ZaMTAQSummaryItem(app, "gmail.com", "gmail.com", 203),			
+			new ZaMTAQSummaryItem(app, "hotmail.com", "hotmail.com", 123),						
+			new ZaMTAQSummaryItem(app, "usa.net", "usa.net", 50)									
 		];
 	mta2[ZaMTA.A_CorruptQ][ZaMTA.A_origin]=[
-			{id:"64.23.45.222",name:"64.23.45.222", count:233, toString:function() {return this.name+this.count}},
-			{id:"221.23.45.26",name:"221.23.45.26", count:203, toString:function() {return this.name+this.count}},			
-			{id:"121.23.45.123",name:"121.23.45.123", count:123, toString:function() {return this.name+this.count}},						
-			{id:"220.63.45.201",name:"220.63.45.201", count:50, toString:function() {return this.name+this.count}}		
+			new ZaMTAQSummaryItem(app, "64.23.45.222", "64.23.45.222", 233),
+			new ZaMTAQSummaryItem(app, "221.23.45.26", "221.23.45.26", 203),			
+			new ZaMTAQSummaryItem(app, "121.23.45.123", "121.23.45.123", 123),						
+			new ZaMTAQSummaryItem(app, "220.63.45.201", "220.63.45.201", 50)		
 		];	
 
 	mta2[ZaMTA.A_HoldQ] = {query:("mta:(mta2) queue:("+ZaMTA.A_HoldQ+")")};
 	mta2[ZaMTA.A_HoldQ][ZaMTA.A_count]=1603;
 	mta2[ZaMTA.A_HoldQ][ZaMTA.A_destination]=[
-			{id:"yahoo.com",name:"yahoo.com", count:233, toString:function() {return this.name+this.count}},
-			{id:"gmail.com",name:"gmail.com", count:203, toString:function() {return this.name+this.count}},			
-			{id:"hotmail.com",name:"hotmail.com", count:123, toString:function() {return this.name+this.count}},						
-			{id:"usa.net",name:"usa.net", count:50, toString:function() {return this.name+this.count}}									
+			new ZaMTAQSummaryItem(app, "yahoo.com", "yahoo.com", 233),
+			new ZaMTAQSummaryItem(app, "gmail.com", "gmail.com", 203),			
+			new ZaMTAQSummaryItem(app, "hotmail.com", "hotmail.com", 123),						
+			new ZaMTAQSummaryItem(app, "usa.net", "usa.net", 50)									
 		];
 	mta2[ZaMTA.A_HoldQ][ZaMTA.A_origin]=[
-			{id:"64.23.45.222",name:"64.23.45.222", count:233, toString:function() {return this.name+this.count}},
-			{id:"221.23.45.26",name:"221.23.45.26", count:203, toString:function() {return this.name+this.count}},			
-			{id:"121.23.45.123",name:"121.23.45.123", count:123, toString:function() {return this.name+this.count}},						
-			{id:"220.63.45.201",name:"220.63.45.201", count:50, toString:function() {return this.name+this.count}}		
+			new ZaMTAQSummaryItem(app, "64.23.45.222", "64.23.45.222", 233),
+			new ZaMTAQSummaryItem(app, "221.23.45.26", "221.23.45.26", 203),			
+			new ZaMTAQSummaryItem(app, "121.23.45.123", "121.23.45.123", 123),						
+			new ZaMTAQSummaryItem(app, "220.63.45.201", "220.63.45.201", 50)		
 		];
 	list.add(mta1);
 	list.add(mta2);
@@ -375,7 +399,47 @@ ZaMTA.myXModel = {
 /**
 * send a MailQStatusRequest 
 **/
-ZaMTA.prototype.getMailQStatus = function () {
+ZaMTA.prototype.getMailQStatus = function (qName,query,offset,limit,force) {
+	
+	limit = (limit != null) ? limit: ZaMTA.RESULTSPERPAGE;
+	
+	var soapDoc = AjxSoapDoc.create("GetMailQueueRequest", "urn:zimbraAdmin", null);
+
+	var serverEl = soapDoc.set("server", "");
+	serverEl.setAttribute("name", this.name);		
+
+	var qEl = soapDoc.getDoc().createElement("queue");
+	qEl.setAttribute("name", qName);		
+	
+	if(force) {
+		qEl.setAttribute("scan", 1);		
+	}
+		
+	serverEl.appendChild(qEl);
+	
+	var queryEl = soapDoc.getDoc().createElement("query");
+	if(query != null) {
+		queryEl.appendChild(soapDoc.getDoc().createTextNode(query));
+	}
+	
+	if (offset != null) {
+		queryEl.setAttribute("offset", offset);
+	}
+	
+	if (limit != null) {
+		queryEl.setAttribute("limit", limit);
+	}
+
+
+	qEl.appendChild(queryEl);
+	
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	params.asyncMode = true;
+	var callback = new AjxCallback(this, this.mailQStatusCallback);	
+	params.callback = callback;
+	command.invoke(params);		
 }
 
 /**
@@ -383,8 +447,8 @@ ZaMTA.prototype.getMailQStatus = function () {
 **/
 ZaMTA.prototype.mailQStatusCallback = function () {
 	//update my fields
-
-	this._app.getMTAController().fireChangeEvent();
+	ZaMTA.makeTestData1(this);
+	this._app.getMTAController().fireChangeEvent(this);
 	//if status is "running" call getMailQStatus again
 }
 
@@ -402,10 +466,62 @@ ZaMTA.initMethod = function (app) {
 	this.attrs = new Object();
 	this.id = "";
 	this.name="";
-	this[ZaMTA.A_DeferredQ] = {count:"N/A"};
-	this[ZaMTA.A_IncomingQ] = {count:"N/A"};
-	this[ZaMTA.A_ActiveQ] = {count:"N/A"};	
-	this[ZaMTA.A_HoldQ] = {count:"N/A"};	
-	this[ZaMTA.A_CorruptQ] = {count:"N/A"};			
+	this[ZaItem.A_zimbraId] = "000"
+	this[ZaMTA.A_Status] = ZaMsg.Idle;
+	this[ZaMTA.A_DeferredQ] = {n:"N/A"};
+	this[ZaMTA.A_IncomingQ] = {n:"N/A"};
+	this[ZaMTA.A_ActiveQ] = {n:"N/A"};	
+	this[ZaMTA.A_HoldQ] = {n:"N/A"};	
+	this[ZaMTA.A_CorruptQ] = {n:"N/A"};		
+		
+	this[ZaMTA.A_DeferredQ][ZaMTA.A_refreshTime] = "N/A";
+	this[ZaMTA.A_IncomingQ][ZaMTA.A_refreshTime] = "N/A";	
+	this[ZaMTA.A_ActiveQ][ZaMTA.A_refreshTime] = "N/A";
+	this[ZaMTA.A_HoldQ][ZaMTA.A_refreshTime] = "N/A";
+	this[ZaMTA.A_CorruptQ][ZaMTA.A_refreshTime] = "N/A";	
 }
 ZaItem.initMethods["ZaMTA"].push(ZaMTA.initMethod);
+
+ZaMTAQSummaryItem = function (app, d, t, n) {
+	ZaItem.call(this, app,"ZaMTAQSummaryItem");
+	this._init(app);
+	if(d) 
+		this[ZaMTAQSummaryItem.A_description] = d;
+	if(t)
+		this[ZaMTAQSummaryItem.A_text] = t;
+	if(n)
+		this[ZaMTAQSummaryItem.A_count] = t;
+
+}
+
+
+ZaMTAQSummaryItem.A_text = "t";
+ZaMTAQSummaryItem.A_description = "d";
+ZaMTAQSummaryItem.A_count = "n";
+
+ZaMTAQSummaryItem.prototype = new ZaItem;
+ZaMTAQSummaryItem.prototype.constructor = ZaMTAQSummaryItem;
+ZaItem.loadMethods["ZaMTAQSummaryItem"] = new Array();
+ZaItem.initMethods["ZaMTAQSummaryItem"] = new Array();
+
+ZaMTAQSummaryItem.prototype.toString = function () {
+	return this[ZaMTAQSummaryItem.A_text]+this[ZaMTAQSummaryItem.A_count];
+}
+
+/**
+* Returns HTML for a tool tip for this account.
+*/
+ZaMTAQSummaryItem.prototype.getToolTip =
+function() {
+	if(!this[ZaMTAQSummaryItem.A_description])
+		return null;
+		
+	// update/null if modified
+	if (!this._toolTip) {
+		var html = new Array(20);
+		var idx = 0;
+		html[idx++] = AjxStringUtil.htmlEncode(this[ZaMTAQSummaryItem.A_description]);
+		this._toolTip = html.join("");
+	}
+	return this._toolTip;
+}
