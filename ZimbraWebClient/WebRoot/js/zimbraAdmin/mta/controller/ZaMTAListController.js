@@ -65,7 +65,7 @@ function(list) {
 		for(i = 0; i < cnt; i++) {
 			tmp[i] = this.MTAPool.shift();
 		}
-		for(i = cnt-1; i > 0; i--) {
+		for(i = cnt-1; i >= 0; i--) {
 			tmp[i].load();
 		}
 	}	
