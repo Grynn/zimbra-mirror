@@ -56,7 +56,7 @@ AjxTimezone.getOffset = function(clientId, date) {
 	var rule = AjxTimezone.getRule(clientId);
 	var offset = rule ? rule.stdOffset : 0;
 	if (rule && rule.dstOffset) {
-		var month = date.getMonth() + 1;
+		var month = date.getMonth();
 		var day = date.getDate();
 		if ((month == rule.changeD[1] && day >= rule.changeD[2]) ||
 			(month == rule.changeStd[1] && day < rule.changeStd[2]) ||
