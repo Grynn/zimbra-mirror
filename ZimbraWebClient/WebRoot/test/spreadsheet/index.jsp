@@ -77,13 +77,11 @@ Contributor(s):
     <body>
     <noscript><p><b>Javascript must be enabled to use this.</b></p></noscript>
     <script language="JavaScript">
-   		function launch() {
-   			DBG = new AjxDebug(AjxDebug.NONE, null, false);
- 	    	Test.run();
-	    }
+        function launch() {
+//   	        create();
+        }
         AjxCore.addOnloadListener(launch);
     </script>
-<!--        <textarea id="testdata" style="display: none">< % @include file="test.json" %></textarea> -->
     </body>
 </html>
 
