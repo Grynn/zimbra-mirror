@@ -37,18 +37,7 @@ ZaSettings.init = function () {
 		
 	DBG.println(AjxDebug.DBG1,"Initializing ZaSettings");		
 	
-	var soapDoc = AjxSoapDoc.create("GetInfoRequest", "urn:zimbraAccount", null);	
-	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false);
-	var info = resp.Body.GetInfoResponse;
-	if (info.attrs && info.attrs.attr) {
-		var attr = info.attrs.attr;
-		for (var i = 0; i < attr.length; i++) {
-			if (attr[i].name == 'zimbraIsDomainAdminAccount') {
-				ZaSettings.isDomainAdmin = attr[i]._content == 'TRUE';
-				break;
-			}
-		}
-	}
+
 	
 	var adminName = AjxCookie.getCookie(document, ZaSettings.ADMIN_NAME_COOKIE);
 	if(adminName) {
@@ -63,79 +52,7 @@ ZaSettings.init = function () {
 			//throw new AjxException("Failed to parse login name", AjxException.UNKNOWN, "ZaAuthenticate.prototype._processResponse");
 		}				
 	}
-	/**
-	* Load the extensions
-	Body: {
-  GetZimletsResponse: {
-    _jsns: "urn:zimbraAdmin",
-    zimlets: {
-      zimlet: [
-        0: {
-          zimlet: [
-            0: {
-              description: "HSM Extension",
-              extension: "true",
-              include: [
-                0: {
-                  _content: "/service/zimlet/hsm/hsm.js"
-                 }
-               ],
-              name: "hsm",
-              version: "1.0"
-             }
-           ]
-         }
-       ]
-     }
-   }
- },
-Header: {
-  context: {
-    _jsns: "urn:zimbra",
-    sessionId: [
-      0: {
-        _content: "1",
-        id: "1",
-        type: "admin"
-       }
-     ]
-   }
- },
-_jsns: "urn:zimbraSoap
 
-
-
-
-Body: {
-  GetZimletsResponse: {
-    _jsns: "urn:zimbraAdmin",
-    zimlets: {
-      zimlet: [
-        0: {
-          zimlet: [
-            0: {
-              description: "HSM Extension",
-              extension: "true",
-              include: [
-                0: {
-                  _content: "hsm.js"
-                 }
-               ],
-              name: "hsm",
-              version: "1.0"
-             }
-           ],
-          zimletContext: [
-            0: {
-              baseUrl: "/service/zimlet/hsm/"
-             }
-           ]
-         }
-       ]
-     }
-   }
- },
-	**/
 	var soapDoc = AjxSoapDoc.create("GetZimletsRequest", "urn:zimbraAdmin", null);	
 	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false);
 	var zimlets = null;
@@ -143,33 +60,38 @@ Body: {
 		zimlets = resp.Body.GetZimletsResponse.zimlets.zimlet;
 	}
 	if(zimlets && zimlets.length > 0) {
+		var includes = new Array();	
 		var cnt = zimlets.length;
 		for(var ix = 0; ix < cnt; ix++) {
 			if(zimlets[ix] && zimlets[ix].zimlet && zimlets[ix].zimlet[0] && zimlets[ix].zimletContext && zimlets[ix].zimletContext[0]) {
 				var zimlet = zimlets[ix].zimlet[0];
 				var zimletContext = zimlets[ix].zimletContext[0];
 				if(zimlet.include && zimlet.include.length>0) {
-					var includes = new Array();
+
 					var cnt2 = zimlet.include.length;
 					for (var j=0;j<cnt2;j++) {
 						includes.push(zimletContext.baseUrl + zimlet.include[j]._content);
 					}
-					if(includes.length > 0)
-						AjxInclude(includes);
 				}
 			} else {
 				continue;
 			}
 		}
+		if(includes.length > 0)
+			AjxInclude(includes, null,new AjxCallback(this, ZaSettings.postInit));	
+				
+	} else {
+		ZaSettings.postInit();
 	}
 	
 	// post-processing code
-	DBG.println("+++ document.location.pathname: "+document.location.pathname);
+/*	DBG.println("+++ document.location.pathname: "+document.location.pathname);
 	var files = [ document.location.pathname + "public/adminPost.js" ];
 	AjxInclude(files);
+	*/
 	
-	ZaSettings.initialized = true;
 };
+
 ZaSettings.postInit = function() {
 	//Instrumentation code start	
 	if(ZaSettings.initMethods) {
@@ -181,6 +103,12 @@ ZaSettings.postInit = function() {
 		}
 	}	
 	//Instrumentation code end	
+	var shell = DwtShell.getShell(window);
+	var appCtxt = ZaAppCtxt.getFromShell(shell);
+	var appController = appCtxt.getAppController();
+	
+	appController._launchApp();	
+	ZaSettings.initialized = true;
 };
 /**
 * Static method so that static code can get the default value of a setting if it needs to.
