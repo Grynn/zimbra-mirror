@@ -229,7 +229,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 			cssClass:"ZaTabBar"
 		},
 		{type:_SWITCH_, items:[
-				{type:_CASE_, numCols:1, width:"100%",/*colSizes:["10", "250","10","250","10"], */relevant:"instance[ZaModel.currentTab] == " + ZaMTAXFormView._tab1, 
+				{type:_CASE_, numCols:1, cssClass:(AjxEnv.isIE ? "IEcontainer" : ""), width:"100%",/*colSizes:["10", "250","10","250","10"], */relevant:"instance[ZaModel.currentTab] == " + ZaMTAXFormView._tab1, 
 					items:[	
 						{type:_SPACER_, height:"15"},
 						{type:_GROUP_,numCols:5, colSizes:["15%", "25%","15%", "25%", "20%"],tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
@@ -238,7 +238,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 							{type:_DWT_BUTTON_,ref:ZaMTA.A_DeferredQ, label:ZaMsg.PQ_AnalyzeQueue,onActivate:ZaMTAXFormView.refreshListener}
 						]},								
 						{type:_SPACER_, height:"1"},							
-						{type:_GROUP_, numCols:11, width:"97%", colSizes:["auto","2px", "auto","2px", "auto", "2px", "auto", "2px", "auto", "2px", "auto"],cssClass:"RadioGrouperBorder", items: [						
+						{type:_GROUP_, numCols:11, /*cssStyle:(AjxEnv.isIE ? "width:98%" : ""),*/ colSizes:["auto","2px", "auto","2px", "auto", "2px", "auto", "2px", "auto", "2px", "auto"],cssClass:(AjxEnv.isIE ? "RadioGrouperBorder IEcontainer" : "RadioGrouperBorder FFcontainer"), tableCssStyle:"width:100%", items: [						
 						    {type:_GROUP_, colSpan:11, numCols:1, 
 						   		items: [
 									{type:_OUTPUT_, value:ZaMsg.PQV_Summary, cssClass:(AjxEnv.isIE ? "" : "RadioGrouperLabel"), cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
@@ -324,7 +324,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 						]},			
 																					*/
 																							
-						{type:_GROUP_, numCols:1, width:"97%", cssClass:"RadioGrouperBorder", tableCssClass:"que_table",  items: [
+						{type:_GROUP_, numCols:1, cssClass:(AjxEnv.isIE ? "RadioGrouperBorder IEcontainer" : "RadioGrouperBorder FFcontainer"), tableCssStyle:"width:100%",  items: [
 							   {type:_GROUP_, numCols:1, 
 							   		items: [
 										{type:_OUTPUT_, value:ZaMsg.PQV_Messages, cssClass:(AjxEnv.isIE ? "" : "RadioGrouperLabel"), cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}

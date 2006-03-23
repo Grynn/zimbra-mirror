@@ -424,7 +424,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 								   	{type:_CELLSPACER_}
 								]
 							},
-					       {type:_GROUP_, numCols:3, colSizes:[50, "auto",80], 
+					       {type:_GROUP_, numCols:3, colSizes:[50, "auto",80], width:"98%", 
 							   items:[
 							   		{type:_OUTPUT_, value:ZaMsg.DLXV_LabelFind, nowrap:true},
 									{type:_TEXTFIELD_, width:"100%", cssClass:"admin_xform_name_input", ref:ZaSearch.A_query, label:null,
@@ -443,10 +443,10 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 								]
 					       },
 					       {type:_SPACER_, height:"5"},
-						   {ref:"memberPool", type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource", 
+						   {ref:"memberPool", type:_DWT_LIST_, height:"200", width:"98%", cssClass: "DLSource", 
 						   		forceUpdate: true, widgetClass:ZaAccMiniListView, headerList:sourceHeaderList},
 					       {type:_SPACER_, height:"5"},
-					       {type:_GROUP_, width:"100%", numCols:8, colSizes:[85,5, 85,"100%",80,5,80,5],
+					       {type:_GROUP_, width:"98%", numCols:8, colSizes:[85,5, 85,"100%",80,5,80,5],
 							items: [
 							   {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddFromList, width:80,
 								onActivate:"ZaDLXFormView.addAddressesToMembers.call(this,event)",
@@ -472,9 +472,9 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 					       },
 					       
 					       {type:_OUTPUT_, value:ZaMsg.DLXV_GroupLabelEnterAddressBelow},
-					       {ref:"optionalAdd", type:_TEXTAREA_,width:"100%", height:98},
+					       {ref:"optionalAdd", type:_TEXTAREA_,width:"98%", height:98},
 					       {type:_SPACER_, height:"5"},
-					       {type:_GROUP_, numCols:2, width:"100%", colSizes:[80,"100%"],
+					       {type:_GROUP_, numCols:2, width:"98%", colSizes:[80,"100%"],
 								items: [
 									{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddFromFreeForm, width:"100%",
 										onActivate:"ZaDLXFormView.addFreeFormAddressToMembers.call(this,event)",

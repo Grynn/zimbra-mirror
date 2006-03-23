@@ -574,9 +574,15 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 .container_table {
 	cell-spacing:10px;
 }
-.container {
+.FFcontainer {
 	margin-left:3px;
-	margin-right:3px;
+	padding-right:5px;
+	margin-right:5px;
+}
+
+.IEcontainer {
+	padding-left:3px;
+	padding-right:5px;
 }
 
 .search_field_container {
