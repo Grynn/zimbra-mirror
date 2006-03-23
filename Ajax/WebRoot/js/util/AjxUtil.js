@@ -426,7 +426,7 @@ function(node) {
 AjxUtil.createProxy = 
 function(object, level) {
 	var proxy;
-	var proxyCtor = new Function();
+	var proxyCtor = function(){}; // bug #6517 (Safari doesnt like 'new Function')
 	proxyCtor.prototype = object;
 	if (object instanceof Array) {
 		proxy  = new Array();
