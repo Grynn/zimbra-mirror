@@ -64,6 +64,9 @@ sub logStatus {
 	@status = <STATUS>;
 	close STATUS;
 	foreach my $s (@status) {
+		if ($s =~ /is not/) {
+			next;
+		}
 		chomp $s;
 		if ($s =~ /^Host (.*)/) {
 			$hostname = $1;
