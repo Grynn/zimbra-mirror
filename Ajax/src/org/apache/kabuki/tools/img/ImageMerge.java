@@ -189,9 +189,7 @@ public class ImageMerge {
         Map<String, List<File>> dirmap = new HashMap<String, List<File>>();
 
         // collect like directories
-        Iterator<File> dirs = allInputDirs.iterator();
-        while (dirs.hasNext()) {
-            File dir = dirs.next();
+        for (File dir : allInputDirs) {
             String dirname = dir.getName();
             List<File> dirlist = dirmap.get(dirname);
             if (dirlist == null) {
@@ -202,9 +200,7 @@ public class ImageMerge {
         }
 
         // process directories
-        Iterator<String> keys = dirmap.keySet().iterator();
-        while (keys.hasNext()) {
-            String imageFileName = keys.next();
+        for (String imageFileName : dirmap.keySet()) {
             Collection<File> inputDirs = dirmap.get(imageFileName);
             processAggregate(inputDirs, imageFileName);
         }
@@ -322,9 +318,7 @@ public class ImageMerge {
 
         System.out.println("Copying " + suffix + " files...");
         String lastFile = "";
-        for (int i = 0; i < filenames.length; i++) {
-            String curFile = filenames[i];
-
+        for (String curFile : filenames) {
             // copy it to the destination directory
             // REVISIT: optimize this by passing in File objects...
             File parentDir = new File(curFile).getParentFile();
@@ -381,7 +375,7 @@ public class ImageMerge {
             // add to the pre-cache div
             String thisFile = _cssPath + combinedFilename;
             if (_cacheFileOut != null && !lastFile.equals(thisFile)) {
-                _cacheFileOut.println("<img src='" + thisFile + "'>");
+                _cacheFileOut.println("<img alt=\"\" src='" + thisFile + "'>");
                 lastFile = thisFile;
             }
         }
@@ -544,7 +538,7 @@ public class ImageMerge {
             _cssOut.println(images[i].getCssString(combinedWidth, combinedHeight, combinedFileName, _incDisableCss));
             String thisFile = _cssPath + combinedFileName;
             if (_cacheFileOut != null && !lastFile.equals(thisFile)) {
-                _cacheFileOut.println("<img src='" + thisFile + "'>");
+                _cacheFileOut.println("<img alt=\"\" src='" + thisFile + "'>");
                 lastFile = thisFile;
             }
         }
