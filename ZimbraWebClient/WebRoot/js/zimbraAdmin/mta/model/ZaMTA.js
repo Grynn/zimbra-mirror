@@ -59,8 +59,11 @@ ZaMTA.A_HoldQ = "hold";
 /**
 * names of summary fields
 **/
-ZaMTA.A_destination = "destination";
-ZaMTA.A_origin = "origin";
+ZaMTA.A_rdomain = "rdomain";
+ZaMTA.A_sdomain = "sdomain";
+ZaMTA.A_origip = "origip";
+ZaMTA.A_raddress = "raddress";
+ZaMTA.A_saddress = "saddress";
 ZaMTA.A_error = "error";
 ZaMTA.A_messages = "messages";
 /**
@@ -142,13 +145,31 @@ ZaItem.loadMethods["ZaMTA"].push(ZaMTA.loadMethod);
 
 ZaMTA.makeTestData1 = function (obj) {
 //	mta1[ZaMTA.A_DeferredQ] = {query:("mta:(mta1) queue:("+ZaMTA.A_DeferredQ+")")};
-	obj[ZaMTA.A_DeferredQ][ZaMTA.A_destination]=[
+	obj[ZaMTA.A_DeferredQ][ZaMTA.A_rdomain]=[
 			new ZaMTAQSummaryItem(obj.app, "deferred_yahoo.com", "yahoo.com", 131),
 			new ZaMTAQSummaryItem(obj.app, "deferred_gmail.com", "gmail.com", 101),			
 			new ZaMTAQSummaryItem(obj.app, "deferred_hotmail.com", "hotmail.com", 121),						
 			new ZaMTAQSummaryItem(obj.app, "deferred_usa.net", "usa.net", 50)									
 		];
-	obj[ZaMTA.A_DeferredQ][ZaMTA.A_origin]=[
+	obj[ZaMTA.A_DeferredQ][ZaMTA.A_origip]=[
+			new ZaMTAQSummaryItem(obj.app, null, "64.23.45.222", 231),
+			new ZaMTAQSummaryItem(obj.app, "deferred_221.23.45.26", "221.23.45.26", 201),			
+			new ZaMTAQSummaryItem(obj.app, "deferred_121.23.45.123", "121.23.45.123", 221),						
+			new ZaMTAQSummaryItem(obj.app, "deferred_220.63.45.201", "220.63.45.201", 21)		
+		];
+	obj[ZaMTA.A_DeferredQ][ZaMTA.A_sdomain]=[
+			new ZaMTAQSummaryItem(obj.app, null, "64.23.45.222", 231),
+			new ZaMTAQSummaryItem(obj.app, "deferred_221.23.45.26", "221.23.45.26", 201),			
+			new ZaMTAQSummaryItem(obj.app, "deferred_121.23.45.123", "121.23.45.123", 221),						
+			new ZaMTAQSummaryItem(obj.app, "deferred_220.63.45.201", "220.63.45.201", 21)		
+		];
+	obj[ZaMTA.A_DeferredQ][ZaMTA.A_raddress]=[
+			new ZaMTAQSummaryItem(obj.app, null, "64.23.45.222", 231),
+			new ZaMTAQSummaryItem(obj.app, "deferred_221.23.45.26", "221.23.45.26", 201),			
+			new ZaMTAQSummaryItem(obj.app, "deferred_121.23.45.123", "121.23.45.123", 221),						
+			new ZaMTAQSummaryItem(obj.app, "deferred_220.63.45.201", "220.63.45.201", 21)		
+		];
+	obj[ZaMTA.A_DeferredQ][ZaMTA.A_saddress]=[
 			new ZaMTAQSummaryItem(obj.app, null, "64.23.45.222", 231),
 			new ZaMTAQSummaryItem(obj.app, "deferred_221.23.45.26", "221.23.45.26", 201),			
 			new ZaMTAQSummaryItem(obj.app, "deferred_121.23.45.123", "121.23.45.123", 221),						
@@ -173,13 +194,13 @@ ZaMTA.returnTestData1 = function (app) {
 	mta1[ZaItem.A_zimbraId] = "mta1";
 	mta1.id = "mta1";	
 	mta1[ZaMTA.A_DeferredQ] = {query:("mta:(mta1) queue:("+ZaMTA.A_DeferredQ+")")};
-	mta1[ZaMTA.A_DeferredQ][ZaMTA.A_destination]=[
+	mta1[ZaMTA.A_DeferredQ][ZaMTA.A_rdomain]=[
 			new ZaMTAQSummaryItem(app, "deferred_yahoo.com", "yahoo.com", 131),
 			new ZaMTAQSummaryItem(app, "deferred_gmail.com", "gmail.com", 101),			
 			new ZaMTAQSummaryItem(app, "deferred_hotmail.com", "hotmail.com", 121),						
 			new ZaMTAQSummaryItem(app, "deferred_usa.net", "usa.net", 50)									
 		];
-	mta1[ZaMTA.A_DeferredQ][ZaMTA.A_origin]=[
+	mta1[ZaMTA.A_DeferredQ][ZaMTA.A_origip]=[
 			new ZaMTAQSummaryItem(app, "deferred_64.23.45.222", "64.23.45.222", 231),
 			new ZaMTAQSummaryItem(app, "deferred_221.23.45.26", "221.23.45.26", 201),			
 			new ZaMTAQSummaryItem(app, "deferred_121.23.45.123", "121.23.45.123", 221),						
@@ -195,13 +216,13 @@ ZaMTA.returnTestData1 = function (app) {
 	mta1[ZaMTA.A_IncomingQ] = {query:("mta:(mta1) queue:("+ZaMTA.A_IncomingQ+")")};
 	mta1[ZaMTA.A_IncomingQ][ZaMTA.A_count] = 1021;
 
-	mta1[ZaMTA.A_IncomingQ][ZaMTA.A_destination] = [
+	mta1[ZaMTA.A_IncomingQ][ZaMTA.A_rdomain] = [
 			new ZaMTAQSummaryItem(app, "incoming_yahoo.com", "yahoo.com", 132),
 			new ZaMTAQSummaryItem(app, "incoming_gmail.com", "gmail.com", 102),			
 			new ZaMTAQSummaryItem(app, "incoming_hotmail.com", "hotmail.com", 122),						
 			new ZaMTAQSummaryItem(app, "incoming_usa.net", "usa.net", 12)									
 		];
-	mta1[ZaMTA.A_IncomingQ][ZaMTA.A_origin]=[
+	mta1[ZaMTA.A_IncomingQ][ZaMTA.A_origip]=[
 			new ZaMTAQSummaryItem(app, "incoming_64.23.45.222", "64.23.45.222", 232),
 			new ZaMTAQSummaryItem(app, "incoming_221.23.45.26", "221.23.45.26", 202),			
 			new ZaMTAQSummaryItem(app, "incoming_121.23.45.123", "121.23.45.123", 222),						
@@ -210,13 +231,13 @@ ZaMTA.returnTestData1 = function (app) {
 
 	mta1[ZaMTA.A_ActiveQ] = {query:("mta:(mta1) queue:("+ZaMTA.A_ActiveQ+")")};
 	mta1[ZaMTA.A_ActiveQ][ZaMTA.A_count]=101;
-	mta1[ZaMTA.A_ActiveQ][ZaMTA.A_destination]=[
+	mta1[ZaMTA.A_ActiveQ][ZaMTA.A_rdomain]=[
 			new ZaMTAQSummaryItem(app, "yahoo.com", "yahoo.com", 233),
 			new ZaMTAQSummaryItem(app, "gmail.com", "gmail.com", 203),			
 			new ZaMTAQSummaryItem(app, "hotmail.com", "hotmail.com", 123),						
 			new ZaMTAQSummaryItem(app, "usa.net", "usa.net", 50)									
 		]
-	mta1[ZaMTA.A_ActiveQ][ZaMTA.A_origin]=[
+	mta1[ZaMTA.A_ActiveQ][ZaMTA.A_origip]=[
 			new ZaMTAQSummaryItem(app, "64.23.45.222", "64.23.45.222", 233),
 			new ZaMTAQSummaryItem(app, "221.23.45.26", "221.23.45.26", 203),			
 			new ZaMTAQSummaryItem(app, "121.23.45.123", "121.23.45.123", 123),						
@@ -225,13 +246,13 @@ ZaMTA.returnTestData1 = function (app) {
 	
 	mta1[ZaMTA.A_CorruptQ] = {query:("mta:(mta1) queue:("+ZaMTA.A_CorruptQ+")")};
 	mta1[ZaMTA.A_CorruptQ][ZaMTA.A_count]=2131;			
-	mta1[ZaMTA.A_CorruptQ][ZaMTA.A_destination]=[
+	mta1[ZaMTA.A_CorruptQ][ZaMTA.A_rdomain]=[
 			new ZaMTAQSummaryItem(app, "yahoo.com", "yahoo.com", 233),
 			new ZaMTAQSummaryItem(app, "gmail.com", "gmail.com", 203),			
 			new ZaMTAQSummaryItem(app, "hotmail.com", "hotmail.com", 123),						
 			new ZaMTAQSummaryItem(app, "usa.net", "usa.net", 50)									
 		];
-	mta1[ZaMTA.A_CorruptQ][ZaMTA.A_origin]=[
+	mta1[ZaMTA.A_CorruptQ][ZaMTA.A_origip]=[
 			new ZaMTAQSummaryItem(app, "64.23.45.222", "64.23.45.222", 233),
 			new ZaMTAQSummaryItem(app, "221.23.45.26", "221.23.45.26", 203),			
 			new ZaMTAQSummaryItem(app, "121.23.45.123", "121.23.45.123", 123),						
@@ -240,13 +261,13 @@ ZaMTA.returnTestData1 = function (app) {
 
 	mta1[ZaMTA.A_HoldQ] = {query:("mta:(mta1) queue:("+ZaMTA.A_HoldQ+")")};
 	mta1[ZaMTA.A_HoldQ][ZaMTA.A_count]=1603;
-	mta1[ZaMTA.A_HoldQ][ZaMTA.A_destination]=[
+	mta1[ZaMTA.A_HoldQ][ZaMTA.A_rdomain]=[
 			new ZaMTAQSummaryItem(app, "yahoo.com", "yahoo.com", 233),
 			new ZaMTAQSummaryItem(app, "gmail.com", "gmail.com", 203),			
 			new ZaMTAQSummaryItem(app, "hotmail.com", "hotmail.com", 123),						
 			new ZaMTAQSummaryItem(app, "usa.net", "usa.net", 50)									
 		];
-	mta1[ZaMTA.A_HoldQ][ZaMTA.A_origin]=[
+	mta1[ZaMTA.A_HoldQ][ZaMTA.A_origip]=[
 			new ZaMTAQSummaryItem(app, "64.23.45.222", "64.23.45.222", 233),
 			new ZaMTAQSummaryItem(app, "221.23.45.26", "221.23.45.26", 203),			
 			new ZaMTAQSummaryItem(app, "121.23.45.123", "121.23.45.123", 123),						
@@ -261,13 +282,13 @@ ZaMTA.returnTestData1 = function (app) {
 	mta2.id = "mta2";	
 	
 	mta2[ZaMTA.A_DeferredQ] = {query:("mta:(mta2) queue:("+ZaMTA.A_DeferredQ+")")};
-	mta2[ZaMTA.A_DeferredQ][ZaMTA.A_destination]=[
+	mta2[ZaMTA.A_DeferredQ][ZaMTA.A_rdomain]=[
 			new ZaMTAQSummaryItem(app, "yahoo.com", "yahoo.com", 233),
 			new ZaMTAQSummaryItem(app, "gmail.com", "gmail.com", 203),			
 			new ZaMTAQSummaryItem(app, "hotmail.com", "hotmail.com", 123),						
 			new ZaMTAQSummaryItem(app, "usa.net", "usa.net", 50)									
 		];
-	mta2[ZaMTA.A_DeferredQ][ZaMTA.A_origin]=[
+	mta2[ZaMTA.A_DeferredQ][ZaMTA.A_origip]=[
 			new ZaMTAQSummaryItem(app, "64.23.45.222", "64.23.45.222", 233),
 			new ZaMTAQSummaryItem(app, "221.23.45.26", "221.23.45.26", 203),			
 			new ZaMTAQSummaryItem(app, "121.23.45.123", "121.23.45.123", 123),						
@@ -283,13 +304,13 @@ ZaMTA.returnTestData1 = function (app) {
 	mta2[ZaMTA.A_IncomingQ] = {query:("mta:(mta2) queue:("+ZaMTA.A_IncomingQ+")")};
 	mta2[ZaMTA.A_IncomingQ][ZaMTA.A_count] = 1021;
 
-	mta2[ZaMTA.A_IncomingQ][ZaMTA.A_destination] = [
+	mta2[ZaMTA.A_IncomingQ][ZaMTA.A_rdomain] = [
 			new ZaMTAQSummaryItem(app, "yahoo.com", "yahoo.com", 233),
 			new ZaMTAQSummaryItem(app, "gmail.com", "gmail.com", 203),			
 			new ZaMTAQSummaryItem(app, "hotmail.com", "hotmail.com", 123),						
 			new ZaMTAQSummaryItem(app, "usa.net", "usa.net", 50)									
 		];
-	mta2[ZaMTA.A_IncomingQ][ZaMTA.A_origin]=[
+	mta2[ZaMTA.A_IncomingQ][ZaMTA.A_origip]=[
 			new ZaMTAQSummaryItem(app, "64.23.45.222", "64.23.45.222", 233),
 			new ZaMTAQSummaryItem(app, "221.23.45.26", "221.23.45.26", 203),			
 			new ZaMTAQSummaryItem(app, "121.23.45.123", "121.23.45.123", 123),						
@@ -303,13 +324,13 @@ ZaMTA.returnTestData1 = function (app) {
 
 	mta2[ZaMTA.A_ActiveQ] = {query:("mta:(mta2) queue:("+ZaMTA.A_ActiveQ+")")};
 	mta2[ZaMTA.A_ActiveQ][ZaMTA.A_count]=101;
-	mta2[ZaMTA.A_ActiveQ][ZaMTA.A_destination]=[
+	mta2[ZaMTA.A_ActiveQ][ZaMTA.A_rdomain]=[
 			new ZaMTAQSummaryItem(app, "yahoo.com", "yahoo.com", 233),
 			new ZaMTAQSummaryItem(app, "gmail.com", "gmail.com", 203),			
 			new ZaMTAQSummaryItem(app, "hotmail.com", "hotmail.com", 123),						
 			new ZaMTAQSummaryItem(app, "usa.net", "usa.net", 50)									
 		]
-	mta2[ZaMTA.A_ActiveQ][ZaMTA.A_origin]=[
+	mta2[ZaMTA.A_ActiveQ][ZaMTA.A_origip]=[
 			new ZaMTAQSummaryItem(app, "64.23.45.222", "64.23.45.222", 233),
 			new ZaMTAQSummaryItem(app, "221.23.45.26", "221.23.45.26", 203),			
 			new ZaMTAQSummaryItem(app, "121.23.45.123", "121.23.45.123", 123),						
@@ -318,13 +339,13 @@ ZaMTA.returnTestData1 = function (app) {
 
 	mta2[ZaMTA.A_CorruptQ] = {query:("mta:(mta2) queue:("+ZaMTA.A_CorruptQ+")")};
 	mta2[ZaMTA.A_CorruptQ][ZaMTA.A_count]=2131;			
-	mta2[ZaMTA.A_CorruptQ][ZaMTA.A_destination]=[
+	mta2[ZaMTA.A_CorruptQ][ZaMTA.A_rdomain]=[
 			new ZaMTAQSummaryItem(app, "yahoo.com", "yahoo.com", 233),
 			new ZaMTAQSummaryItem(app, "gmail.com", "gmail.com", 203),			
 			new ZaMTAQSummaryItem(app, "hotmail.com", "hotmail.com", 123),						
 			new ZaMTAQSummaryItem(app, "usa.net", "usa.net", 50)									
 		];
-	mta2[ZaMTA.A_CorruptQ][ZaMTA.A_origin]=[
+	mta2[ZaMTA.A_CorruptQ][ZaMTA.A_origip]=[
 			new ZaMTAQSummaryItem(app, "64.23.45.222", "64.23.45.222", 233),
 			new ZaMTAQSummaryItem(app, "221.23.45.26", "221.23.45.26", 203),			
 			new ZaMTAQSummaryItem(app, "121.23.45.123", "121.23.45.123", 123),						
@@ -333,13 +354,13 @@ ZaMTA.returnTestData1 = function (app) {
 
 	mta2[ZaMTA.A_HoldQ] = {query:("mta:(mta2) queue:("+ZaMTA.A_HoldQ+")")};
 	mta2[ZaMTA.A_HoldQ][ZaMTA.A_count]=1603;
-	mta2[ZaMTA.A_HoldQ][ZaMTA.A_destination]=[
+	mta2[ZaMTA.A_HoldQ][ZaMTA.A_rdomain]=[
 			new ZaMTAQSummaryItem(app, "yahoo.com", "yahoo.com", 233),
 			new ZaMTAQSummaryItem(app, "gmail.com", "gmail.com", 203),			
 			new ZaMTAQSummaryItem(app, "hotmail.com", "hotmail.com", 123),						
 			new ZaMTAQSummaryItem(app, "usa.net", "usa.net", 50)									
 		];
-	mta2[ZaMTA.A_HoldQ][ZaMTA.A_origin]=[
+	mta2[ZaMTA.A_HoldQ][ZaMTA.A_origip]=[
 			new ZaMTAQSummaryItem(app, "64.23.45.222", "64.23.45.222", 233),
 			new ZaMTAQSummaryItem(app, "221.23.45.26", "221.23.45.26", 203),			
 			new ZaMTAQSummaryItem(app, "121.23.45.123", "121.23.45.123", 123),						
@@ -357,7 +378,7 @@ ZaMTA.prototype.getMessages = function(app, queue, destination, origin, error,li
 PostQSummary_XModelItem = function (){}
 XModelItemFactory.createItemType("_POSTQSUMMARY_", "postqsummary", PostQSummary_XModelItem);
 PostQSummary_XModelItem.prototype.items = [
-				{id:ZaMTA.A_destination, type:_LIST_, listItem:
+				{id:ZaMTA.A_rdomain, type:_LIST_, listItem:
 					{type:_OBJECT_, 
 						items: [
 							{id:ZaMTA.A_name, type:_STRING_},
@@ -365,7 +386,7 @@ PostQSummary_XModelItem.prototype.items = [
 						]
 					}
 				},
-				{id:ZaMTA.A_origin, type:_LIST_, listItem:
+				{id:ZaMTA.A_origip, type:_LIST_, listItem:
 					{type:_OBJECT_, 
 						items: [
 							{id:ZaMTA.A_name, type:_STRING_},
@@ -490,7 +511,7 @@ ZaMTAQSummaryItem = function (app, d, t, n) {
 	if(t)
 		this[ZaMTAQSummaryItem.A_text] = t;
 	if(n)
-		this[ZaMTAQSummaryItem.A_count] = t;
+		this[ZaMTAQSummaryItem.A_count] = n;
 
 }
 
