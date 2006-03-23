@@ -126,11 +126,13 @@ AjxSoapDoc.prototype.set = function(name, value, parent) {
 			? doc.createDocumentFragment()
 			: doc.createElement(name) );
 	if (value != null) {
-		if (typeof value == "object")
+		if (typeof value == "object") {
 			for (i in value)
 				this.set(i, value[i], p);
-		else
+		} else {
+			if (AjxEnv.isSafari) value = AjxStringUtil.xmlEncode(value);
 			p.appendChild(doc.createTextNode(value));
+		}
 	}
 	if (!parent)
 		parent = this._methodEl;
