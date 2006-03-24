@@ -331,6 +331,7 @@ objectIdentifier zimbraPrefCalendarApptReminderWarningTime ZimbraAttrType:341
 objectIdentifier zimbraFeatureMailForwardingEnabled ZimbraAttrType:342
 objectIdentifier zimbraPrefMailForwardingAddress ZimbraAttrType:343
 objectIdentifier zimbraPrefMailLocalDeliveryDisabled ZimbraAttrType:344
+objectIdentifier zimbraLocale ZimbraAttrType:345
 
 #################################################################
 # object class OIDs
@@ -2538,6 +2539,14 @@ attributetype ( zimbraCalResContactPhone
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.50{32}
 	SINGLE-VALUE )
 
+attributetype ( zimbraLocale
+	NAME 'zimbraLocale'
+	DESC 'locale of entry, e.g. en_US'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{64}
+	SINGLE-VALUE )
+
 
 #################################################################
 # object class definitions
@@ -2562,7 +2571,8 @@ objectclass ( zimbraMailRecipient
 	NAME 'zimbraMailRecipient'
 	DESC 'Account object'
 	SUP top AUXILIARY
-	MAY (	
+	MAY (
+		zimbraLocale $
 		zimbraMailForwardingAddress $
 		zimbraMailHost $
 		zimbraMailTransport $
@@ -2606,7 +2616,8 @@ objectclass ( zimbraAccount
 		zimbraId $ 
 		zimbraAccountStatus $
 		uid)
-	MAY (	
+	MAY (
+		zimbraLocale $
 		c $
 		co $
 		company $
@@ -2742,6 +2753,7 @@ objectclass ( zimbraAlias
 		zimbraAliasTargetId $
 		zimbraId)
 	MAY (
+		zimbraLocale $
 		uid $
 		cn)
 	)
@@ -2760,6 +2772,7 @@ objectclass ( zimbraDistributionList
 		zimbraId $
 		uid)
 	MAY (
+		zimbraLocale $
 		displayName $
 		description $
 		zimbraNotes $
@@ -2782,6 +2795,7 @@ objectclass ( zimbraCOS
 		cn $
 		zimbraId)
 	MAY (
+		zimbraLocale $
 		description $
 		zimbraAttachmentsBlocked $
 		zimbraAttachmentsIndexingEnabled $
@@ -2871,6 +2885,7 @@ objectclass ( zimbraGlobalConfig
 	DESC 'global config'
 	SUP top AUXILIARY
 	MAY (
+		zimbraLocale $
 		zimbraAttachmentsBlocked $
 		zimbraAttachmentsScanEnabled $
 		zimbraAttachmentsScanClass $
@@ -2938,10 +2953,10 @@ objectclass ( zimbraGlobalConfig
 		zimbraRedoLogRolloverFileSizeKB $
 		zimbraRedoLogDeleteOnRollover $
 		zimbraRedoLogFsyncIntervalMS $
-                zimbraRemoteManagementCommand $
-                zimbraRemoteManagementUser $
-                zimbraRemoteManagementPrivateKeyPath $
-                zimbraRemoteManagementPort $
+		zimbraRemoteManagementCommand $
+		zimbraRemoteManagementUser $
+		zimbraRemoteManagementPrivateKeyPath $
+		zimbraRemoteManagementPort $
 		zimbraServerInheritedAttr $
 		zimbraSmtpHostname $
 		zimbraSmtpPort $
@@ -2991,7 +3006,8 @@ objectclass ( zimbraDomain
 	MUST (	zimbraId $
 		zimbraDomainName $
 		zimbraDomainType)
-	MAY (	
+	MAY (
+		zimbraLocale $
 		description $
 		zimbraNotes $
 		zimbraAuthLdapURL $
@@ -3040,6 +3056,7 @@ objectclass ( zimbraServer
 	SUP top STRUCTURAL
 	MUST (zimbraId $ cn)
 	MAY (
+		zimbraLocale $
 		description $
 		zimbraAttachmentsScanURL $
 		zimbraFileUploadMaxSize $
@@ -3092,10 +3109,10 @@ objectclass ( zimbraServer
 		zimbraRedoLogRolloverFileSizeKB $
 		zimbraRedoLogDeleteOnRollover $
 		zimbraRedoLogFsyncIntervalMS $
-                zimbraRemoteManagementCommand $
-                zimbraRemoteManagementUser $
-                zimbraRemoteManagementPrivateKeyPath $
-                zimbraRemoteManagementPort $
+		zimbraRemoteManagementCommand $
+		zimbraRemoteManagementUser $
+		zimbraRemoteManagementPrivateKeyPath $
+		zimbraRemoteManagementPort $
 		zimbraServiceHostname $
 		zimbraServiceEnabled $
 		zimbraServiceInstalled $
@@ -3223,6 +3240,7 @@ objectclass ( zimbraCalendarResource
 		zimbraCalResType
 		)
 	MAY (
+		zimbraLocale $
 		zimbraCalResAutoAcceptDecline $
 		zimbraCalResAutoDeclineIfBusy $
 		zimbraCalResAutoDeclineRecurring $

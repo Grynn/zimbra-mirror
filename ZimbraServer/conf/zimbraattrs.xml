@@ -60,6 +60,8 @@
 
 <attr name="zimbraAliasTargetId" type="string" immutable="1"/>
 
+<attr name="zimbraLocale" type="string"/>
+
 <attr name="zimbraPrefTimeZoneId" type="string"/>
 
 <attr name="zimbraPrefUseTimeZoneListInCalendar" type="boolean"/>

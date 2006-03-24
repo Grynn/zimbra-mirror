@@ -30,6 +30,7 @@ zimbraAttachmentsBlocked: FALSE
 zimbraAttachmentsScanEnabled: FALSE
 zimbraAttachmentsScanClass: com.zimbra.cs.scan.ClamScanner
 zimbraAttachmentsViewInHtmlOnly: FALSE
+zimbraAccountClientAttr: zimbraLocale
 zimbraAccountClientAttr: displayName
 zimbraAccountClientAttr: zimbraMailAlias
 zimbraAccountClientAttr: zimbraMailForwardingAddress
@@ -57,6 +58,7 @@ zimbraAccountClientAttr: zimbraPasswordMaxLength
 zimbraAccountClientAttr: zimbraId
 zimbraAccountClientAttr: zimbraIsDomainAdminAccount
 zimbraCalendarCompatibilityMode: standard
+zimbraCOSInheritedAttr: zimbraLocale
 zimbraCOSInheritedAttr: zimbraAttachmentsBlocked
 zimbraCOSInheritedAttr: zimbraAttachmentsIndexingEnabled
 zimbraCOSInheritedAttr: zimbraAttachmentsViewInHtmlOnly
@@ -184,6 +186,7 @@ zimbraDomainAdminModifiableAttr: zimbraPasswordMaxAge
 zimbraDomainAdminModifiableAttr: zimbraPasswordEnforceHistory
 zimbraDomainAdminModifiableAttr: zimbraPasswordMustChange
 zimbraDomainAdminModifiableAttr: zimbraPop3Enabled
+zimbraDomainAdminModifiableAttr: zimbraLocale
 zimbraDomainAdminModifiableAttr: zimbraPrefTimeZoneId
 zimbraDomainAdminModifiableAttr: zimbraPrefUseTimeZoneListInCalendar
 zimbraDomainAdminModifiableAttr: zimbraPrefComposeInNewWindow
@@ -361,6 +364,7 @@ zimbraMailPort: 80
 zimbraMailSSLPort: 0
 zimbraMailURL: /zimbra
 zimbraAdminPort: 7071
+zimbraServerInheritedAttr: zimbraLocale
 zimbraServerInheritedAttr: zimbraAttachmentsScanURL
 zimbraServerInheritedAttr: zimbraFileUploadMaxSize
 zimbraServerInheritedAttr: zimbraLmtpNumThreads
