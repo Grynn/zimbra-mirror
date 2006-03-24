@@ -45,12 +45,12 @@ function DwtListView(parent, className, posStyle, headerList, noMaximize) {
 	this._setMouseEventHdlrs();
 	this.setCursor("default");
 
-	this._listenerMouseOver = new AjxListener(this, DwtListView.prototype._mouseOverListener);
-	this._listenerMouseOut = new AjxListener(this, DwtListView.prototype._mouseOutListener);
-	this._listenerMouseDown = new AjxListener(this, DwtListView.prototype._mouseDownListener);
-	this._listenerMouseUp = new AjxListener(this, DwtListView.prototype._mouseUpListener);
-	this._listenerMouseMove = new AjxListener(this, DwtListView.prototype._mouseMoveListener);
-	this._listenerDoubleClick = new AjxListener(this, DwtListView.prototype._doubleClickListener);
+	this._listenerMouseOver = new AjxListener(this, this._mouseOverListener);
+	this._listenerMouseOut = new AjxListener(this, this._mouseOutListener);
+	this._listenerMouseDown = new AjxListener(this, this._mouseDownListener);
+	this._listenerMouseUp = new AjxListener(this, this._mouseUpListener);
+	this._listenerMouseMove = new AjxListener(this, this._mouseMoveListener);
+	this._listenerDoubleClick = new AjxListener(this, this._doubleClickListener);
 	this.addListener(DwtEvent.ONMOUSEOVER, this._listenerMouseOver);
 	this.addListener(DwtEvent.ONMOUSEOUT, this._listenerMouseOut);
 	this.addListener(DwtEvent.ONMOUSEDOWN, this._listenerMouseDown);
