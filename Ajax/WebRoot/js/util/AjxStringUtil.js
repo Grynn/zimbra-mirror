@@ -103,8 +103,9 @@ function(sizeString) {
 };
 
 /**
-* Splits a string, ignoring delimiters that are in quotes or parentheses. Comma is the default split character, but the
-* user can pass in a string of multiple delimiters. It can handle nested parentheses, but not nested quotes.
+* Splits a string, ignoring delimiters that are in quotes or parentheses. Comma 
+* is the default split character, but the user can pass in a string of multiple 
+* delimiters. It can handle nested parentheses, but not nested quotes.
 *
 * <p>TODO: handle escaped quotes</p>
 *
@@ -156,9 +157,10 @@ function(str, dels) {
 };
 
 /**
-* Wraps text to the given length and quotes it, breaking on space when possible. Preserves line breaks. At this point, it 
-* assumes that the text to be wrapped is raw text, not HTML, and that line returns are represented by '\n'. Wrapping is
-* optionally done across line returns that appear in paragraphs.
+* Wraps text to the given length and quotes it, breaking on space when possible. 
+* Preserves line breaks. At this point, it assumes that the text to be wrapped 
+* is raw text, not HTML, and that line returns are represented by '\n'. Wrapping 
+* is optionally done across line returns that appear in paragraphs.
 *
 * @param text 		the text to be wrapped
 * @param len		the desired line length of the wrapped text, defaults to 80
@@ -181,15 +183,16 @@ function(text, len, pre, eol, breakOkay, compress) {
 	var chunks = new Array();
 	var c = 0;
 	
-	// preprocess the text: remove leading/trailing space, space at the end of lines, and set up for wrapping paragraphs
+	// preprocess the text: remove leading/trailing space, space at the end of 
+	// lines, and set up for wrapping paragraphs
 	text = AjxStringUtil.trim(text, false);
 	text = text.replace(/[ \t]+\n/g, '\n'); // optional tidying, could remove this step
 	if (compress) {
 		text = text.replace(/\b\n\b/g, ' ');
 	}
 	var textLen = text.length;
-	// Wrap text by dividing it into chunks. We remember the last space we saw, and use it to begin a chunk when the length
-	// limit is reached.
+	// Wrap text by dividing it into chunks. We remember the last space we saw, 
+	// and use it to begin a chunk when the length limit is reached.
 	for (var i = 0, bk = 0, sp = -1; i < textLen; i++) {
 		var ch = text.charAt(i);
 		if (ch.match(/[ \t]/)) { // found a space
@@ -282,9 +285,10 @@ function(str1, str2) {
 /**
 * DEPRECATED
 *
-* Replaces variables in a string with values from a list. The variables are denoted by a '$' followed by a number,
-* starting from 0. For example, a string of "Hello $0, meet $1" with a list of ["Harry", "Sally"] would result in
-* the string "Hello Harry, meet Sally".
+* Replaces variables in a string with values from a list. The variables are 
+* denoted by a '$' followed by a number, starting from 0. For example, a string 
+* of "Hello $0, meet $1" with a list of ["Harry", "Sally"] would result in the 
+* string "Hello Harry, meet Sally".
 *
 * @param str		the string to resolve
 * @param values	 	an array of values to interpolate
@@ -434,12 +438,13 @@ function() {
  * Clips a string at "pixelWidth" using using "className" on hidden 'AjxStringUtil._calcDIV'.
  * Returns "origString" with "..." appended if clipped.
  *
- * NOTE: The same CSS style ("className") must be assigned to both the intended display area and the
- * hidden 'AjxStringUtil._calcDIV'.  "className" is optional; if supplied, it will be assigned to
- * 'AjxStringUtil._calcDIV' to handle different CSS styles ("className"s) on same page.
+ * NOTE: The same CSS style ("className") must be assigned to both the intended 
+ * display area and the hidden 'AjxStringUtil._calcDIV'.  "className" is 
+ * optional; if supplied, it will be assigned to 'AjxStringUtil._calcDIV' to 
+ * handle different CSS styles ("className"s) on same page.
  *
- * NOTE2: MSIE Benchmark - clipping an average of 17 characters each over 190 iterations
- * averaged 27ms each (5.1 seconds total for 190)
+ * NOTE2: MSIE Benchmark - clipping an average of 17 characters each over 190 
+ * iterations averaged 27ms each (5.1 seconds total for 190)
  */
 AjxStringUtil.clip =
 function(origString, pixelWidth, className) {
@@ -712,8 +717,10 @@ function(el, text, idx, listType, listLevel, bulletNum, ctxt) {
 		text[idx++] = "\t";
 	} else if (nodeName == "div") {
 		text[idx++] = "\n";
-	} else if (nodeName == "#comment" || nodeName == "script" 
-			   || nodeName == "select") {
+	} else if (nodeName == "#comment" || 
+			   nodeName == "script" || 
+			   nodeName == "select" ||
+			   nodeName == "style") {
 		return idx;
 	}
 	
