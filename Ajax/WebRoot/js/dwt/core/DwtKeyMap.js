@@ -24,21 +24,33 @@
 * @author Ross Dargahi
 */
 function DwtKeyMap(subclassInit) {
-	if (subclassInit) {return;}
-
-    /* Always specify Control, then Alt, then Shift. All Chars must be upper case
+	if (subclassInit) 
+		return;
+		
+	/* Always specify Control, then Alt, then Shift. All Chars must be upper case
 	 * Note that DwtKeyMap.GLOBAL is the global mapping and will be logically appended
 	 * to each defined mapping*/
 	this._map = {};
 	this._map[DwtKeyMap.GLOBAL] = {};
-	this._map.DwtListView = {
-			"ArrowDown":  DwtKeyMap.NEXT,
-			"N":          DwtKeyMap.NEXT,
-			"ArrowUp":    DwtKeyMap.PREV,
-			"P":          DwtKeyMap.PREV,
-			"Enter":      DwtKeyMap.SELECT
+	this._map["DwtListView"] = {
+			"Space":			DwtKeyMap.SELECT_CURRENT,
+			"Ctrl+Space":		DwtKeyMap.ADD_SELECT_CURRENT,
+			"ArrowDown":		DwtKeyMap.SELECT_NEXT,
+			"Shift+ArrowDown":	DwtKeyMap.ADD_SELECT_NEXT,
+			"Ctrl+ArrowDown":	DwtKeyMap.NEXT,
+			"N":				DwtKeyMap.NEXT,
+			"Shift+N":			DwtKeyMap.ADD_SELECT_NEXT,
+			"Ctrl+N":			DwtKeyMap.SELECT_NEXT,
+			"ArrowUp":			DwtKeyMap.SELECT_PREV,
+			"Shift+ArrowUp":	DwtKeyMap.ADD_SELECT_PREV,
+			"Ctrl+ArrowUp":		DwtKeyMap.PREV,
+			"P":				DwtKeyMap.SELECT_PREV,
+			"Shift+P":			DwtKeyMap.ADD_SELECT_PREV,
+			"Ctrl+P":			DwtKeyMap.PREV,
+			"Enter":			DwtKeyMap.DBLCLICK,
+			"Ctrl+Enter":		DwtKeyMap.ACTION,
 	};
-}
+};
 
 // Key names
 
@@ -66,7 +78,14 @@ var i = -1;
 
 DwtKeyMap.NEXT = i--;
 DwtKeyMap.PREV = i--;
-DwtKeyMap.SELECT = i--;
+DwtKeyMap.DBLCLICK = i--;
+DwtKeyMap.ACTION = i--;
+DwtKeyMap.SELECT_CURRENT = i--;
+DwtKeyMap.SELECT_NEXT = i--;
+DwtKeyMap.SELECT_PREV = i--;
+DwtKeyMap.ADD_SELECT_CURRENT = i--;
+DwtKeyMap.ADD_SELECT_NEXT = i--;
+DwtKeyMap.ADD_SELECT_PREV = i--;
 
 delete i;
 
@@ -77,4 +96,4 @@ DwtKeyMap.ALIAS = "ALIAS"; // Alias keyword.
 DwtKeyMap.prototype.getMap =
 function() {
 	return this._map;
-};
+}

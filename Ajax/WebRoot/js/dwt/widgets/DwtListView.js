@@ -61,6 +61,7 @@ function DwtListView(parent, className, posStyle, headerList, noMaximize) {
 	this._evtMgr = new AjxEventMgr();
 	this._selectedItems = new AjxVector();
 	this._selAnchor = null; 
+	this._kbAnchor = null; 
 	this._selEv = new DwtSelectionEvent(true);
 	this._actionEv = new DwtListViewActionEvent(true);
 	this._stateChangeEv = new DwtEvent(true);
@@ -97,6 +98,11 @@ DwtListView.MAX_REPLENISH_THRESHOLD = 10;
 DwtListView.MIN_COLUMN_WIDTH = 10;
 DwtListView.COL_MOVE_THRESHOLD = 3;
 
+DwtListView._STYLE_CLASS = "_styleClass";
+DwtListView._SELECTED_STYLE_CLASS = "_selectedStyleClass";
+DwtListView._SELECTED_DIS_STYLE_CLASS = "_selectedDisabledStyleClass"
+DwtListView._KBFOCUS_CLASS = "_kbFocusClass";
+
 DwtListView.prototype = new DwtComposite;
 DwtListView.prototype.constructor = DwtListView;
 
@@ -131,8 +137,8 @@ function(enabled) {
 		for (var i = 0; i < elements.length; i++) {
 			var element = elements[i];
 			element.className = enabled 
-				? Dwt.getAttr(element, "_selectedStyleClass") 
-				: Dwt.getAttr(element, "_selectedDisabledStyleClass");
+				? Dwt.getAttr(element, DwtListView._SELECTED_STYLE_CLASS) 
+				: Dwt.getAttr(element, DwtListView._SELECTED_DIS_STYLE_CLASS);
 		}
 	}
 }
@@ -514,7 +520,7 @@ DwtListView.prototype.removeAll =
 function(skipNotify) {
 	this._parentEl.innerHTML = "";
 	this._selectedItems.removeAll();
-	this._selAnchor = null;
+	this._selAnchor = this._kbAnchor = null;
 		
 	if (!skipNotify && this._evtMgr.isListenerRegistered(DwtEvent.STATE_CHANGE)) {
 		this._evtMgr.notifyListeners(DwtEvent.STATE_CHANGE, this._stateChangeEv);
@@ -526,9 +532,12 @@ function() {
 	var a = this._selectedItems.getArray();
 	var sz = this._selectedItems.size();
 	for (var i = 0; i < sz; i++)
-		a[i].className = Dwt.getAttr(a[i], "_styleClass");
+		a[i].className = Dwt.getAttr(a[i], DwtListView._STYLE_CLASS);
 	this._selectedItems.removeAll();
 	this._selAnchor = null;
+	
+	if (this._kbAnchor != null && DwtShell.objectHasFocus(this))
+		this._kbAnchor.className += " " + Dwt.getAttr(this._kbAnchor, DwtListView._KBFOCUS_CLASS);
 }
 
 DwtListView.prototype.getDnDSelection =
@@ -566,10 +575,13 @@ function(item, skipNotify) {
 		var i;
 		this._deselectAllSelectedItems();
 		this._selectedItems.add(el);
-		this._selAnchor = el;
+		this._selAnchor = this._kbAnchor = el;
 		el.className = this.getEnabled() 
-			? Dwt.getAttr(el, "_selectedStyleClass") 
-			: Dwt.getAttr(el, "_selectedDisabledStyleClass");
+			? Dwt.getAttr(el, DwtListView._SELECTED_STYLE_CLASS) 
+			: Dwt.getAttr(el, DwtListView._SELECTED_DIS_STYLE_CLASS);
+			
+		if (DwtShell.objectHasFocus(this))
+			el.className += " " + Dwt.getAttr(el, DwtListView._KBFOCUS_CLASS);
 
 		// reset the selected index
 		this._firstSelIndex = this._list && this._list.size() > 0
@@ -591,7 +603,9 @@ function() {
 	var a = this._selectedItems.getArray();
 	var sz = this._selectedItems.size();
 	for (i = 0; i < sz; i++) {
-		a[i].className = Dwt.getAttr(a[i], "_styleClass");
+		a[i].className = Dwt.getAttr(a[i], DwtListView._STYLE_CLASS);
+		if (this._kbAnchor == a[i] && DwtShell.objectHasFocus(this))
+			a[i].className += " " + Dwt.getAttr(a[i], DwtListView._KBFOCUS_CLASS);
 	}
 	this._selectedItems.removeAll();
 };
@@ -605,8 +619,10 @@ function(selectedArray) {
 		el = this._getElFromItem(selectedArray[i]);
 		if (el) {
 			el.className = this.getEnabled() 
-				? Dwt.getAttr(el, "_selectedStyleClass")
-				: Dwt.getAttr(el, "_selectedDisabledStyleClass");
+				? Dwt.getAttr(el, DwtListView._SELECTED_STYLE_CLASS)
+				: Dwt.getAttr(el, DwtListView._SELECTED_DIS_STYLE_CLASS);
+			if (this._kbAnchor == el && DwtShell.objectHasFocus(this))
+				el.className += " " + Dwt.getAttr(el, DwtListView._KBFOCUS_CLASS);
 			this._selectedItems.add(el);
 		}
 	}
@@ -619,9 +635,10 @@ function() {
 
 DwtListView.prototype.handleActionPopdown = 
 function() {
+//KBTODO This function is bogus with KB nav since right clicking moves KB focus to the item
 	// clear out old right click selection
 	if (this._rightSelItems) {
-		this._rightSelItems.className = Dwt.getAttr(this._rightSelItems, "_styleClass");
+		this._rightSelItems.className = Dwt.getAttr(this._rightSelItems, DwtListView._STYLE_CLASS);
 		this._rightSelItems = null;
 	}
 }
@@ -658,17 +675,6 @@ function(item) {
 		}
 	}
 }
-
-DwtListView.prototype.getAnchorItem =
-function() {
-	var item;
-	
-	if (this._selAnchor)
-		item = AjxCore.objectWithId(Dwt.getAttr(this._selAnchor, "_itemIndex"))
-	
-	return item;
-}
-
 
 DwtListView.prototype.getItemFromElement =
 function(element) {
@@ -782,7 +788,7 @@ function(mouseEv, div) {
 		div.style.cursor = "auto";
 	} else if (type == DwtListView.TYPE_LIST_ITEM) {
 		if (div._hoverStyleClass && div.hoverSet)
-			div.className = Dwt.getAttr(div, "_styleClass");
+			div.className = Dwt.getAttr(div, DwtListView._STYLE_CLASS);
 	}
 
 	return true;
@@ -867,8 +873,7 @@ function(ev) {
 	var wasDraggingCol = this._handleColHeaderDrop(ev);
 	var wasDraggingSash = this._handleColSashDrop(ev);
 	
-	if (!div || div != this._clickDiv || 
-		wasDraggingCol || wasDraggingSash) 
+	if (!div || div != this._clickDiv || wasDraggingCol || wasDraggingSash) 
 	{
 		delete this._clickDiv;
 		return;
@@ -919,18 +924,22 @@ function(ev) {
 DwtListView.prototype.emulateDblClick = 
 function(item) {
 	var div = document.getElementById(this._getItemId(item));
-	if (div) {
-		var ev = new Object();
-		ev.target = div;
-		ev.button = DwtMouseEvent.LEFT;
-		
-		this._itemClicked(div, ev);
-		this._doubleClickListener(ev);
-	}
+	if (div)
+		this._emulateDblClick(div);
 }
 
-DwtListView.prototype.selectItem =
-function(next) {
+DwtListView.prototype._emulateDblClick = 
+function(target) {
+	var mev = DwtShell.mouseEvent;
+	mev.reset();
+	mev.target = target;
+	mev.button = DwtMouseEvent.LEFT;
+	this._itemClicked(target, mev);
+	this._doubleClickListener(mev);
+}
+
+DwtListView.prototype._selectItem =
+function(next, addSelect) {
 	// If there are no elements in the list, then bail
 	if (!this._list)
 		return;
@@ -938,37 +947,104 @@ function(next) {
 	/* if there is currently a selection anchor, then find the next/prev item
 	 * from the anchor */
 	var itemDiv;
-	if (this._selAnchor) {
+	if (this._kbAnchor) {
 		if (next)
-			itemDiv = this._selAnchor.nextSibling ? this._selAnchor.nextSibling : this._selAnchor;
+			itemDiv = this._kbAnchor.nextSibling ? this._kbAnchor.nextSibling : this._kbAnchor;
 		else
-			itemDiv = this._selAnchor.previousSibling ? this._selAnchor.previousSibling : this._selAnchor;
+			itemDiv = this._kbAnchor.previousSibling ? this._kbAnchor.previousSibling : this._kbAnchor;
 	} else {
 		itemDiv = this._parentEl.firstChild;
 	}
 
-	var item = AjxCore.objectWithId(Dwt.getAttr(itemDiv, "_itemIndex"))
-	this._itemSelected(itemDiv, null);
 	itemDiv.scrollIntoView(!next);
-	this._selEv.reset();
-	this._selEv.item = item
-	this._evtMgr.notifyListeners(DwtEvent.SELECTION, this._selEv);
+	this._emulateSingleClick(itemDiv, DwtMouseEvent.LEFT, false, addSelect);
+	
+	/* Need to figure out the logic here
+	if (addSelect) {
+		if (itemDiv == this._selAnchor) {
+			this._kb
+		} else if (next) {
+			this._unmarkKbAnchorElement();
+			this._kbAnchor = itemDiv;
+			this._kbAnchor.className += " " + Dwt.getAttr(this._kbAnchor, DwtListView._KBFOCUS_CLASS);
+		} else {
+			this._kbAnchor = itemDiv;
+			this._unmarkKbAnchorElement();
+			this._kbAnchor.className += " " + Dwt.getAttr(this._kbAnchor, DwtListView._KBFOCUS_CLASS);
+		}
+	}
+	*/
 }
+
+DwtListView.prototype._emulateSingleClick =
+function(target, button, ctrl, shift, alt, docX, docY) {
+	// Gotta do what mousedown listener does
+	this._clickDiv = this._findAncestor(target, "_itemIndex");
+	var mev = DwtShell.mouseEvent;
+	mev.reset();
+	mev.target = target;
+	mev.button = button;
+	mev.docX = docX;
+	mev.docY = docY;
+	mev.shiftKey = shift;
+	mev.altKey = alt;
+	mev.ctrlKey = ctrl;
+	this._mouseUpListener(mev);
+}
+
+DwtListView.prototype._setKbFocusElement =
+function(next) {
+	// If there are no elements in the list, then bail
+	if (!this._list)
+		return;
+		
+	var orig = this._kbAnchor;
+	if (this._kbAnchor) {
+		if (next && this._kbAnchor.nextSibling)
+			this._kbAnchor = this._kbAnchor.nextSibling;
+		else if (this._kbAnchor.previousSibling)
+			this._kbAnchor = this._kbAnchor.previousSibling;
+	} else {
+		this._kbAnchor = this._parentEl.firstChild;
+	}
+
+	if (this._kbAnchor) {
+		if (this._kbAnchor != orig) {
+			if (orig == this._selAnchor)
+				orig.className = Dwt.getAttr(orig, DwtListView._SELECTED_STYLE_CLASS);
+			else 
+				orig.className = Dwt.getAttr(orig, DwtListView._STYLE_CLASS);
+			this._kbAnchor.className += " " + Dwt.getAttr(this._kbAnchor, DwtListView._KBFOCUS_CLASS);
+		}
+		this._kbAnchor.scrollIntoView(!next);
+	}
+}
+
 
 DwtListView.prototype._itemSelected =
 function(itemDiv, ev) {
 	if (this._allowLeftSelection(itemDiv, ev, (ev) ? ev.button : null)) {
+		/* Unmark the KB focus element. We need to do this because it is
+		 * possible for this element to not be the same as the selection 
+		 * anchor due to NEXT and PREV keyboard actions */
+		if (this._kbAnchor != null)
+			this._unmarkKbAnchorElement();
+
 		// clear out old left click selection(s)
 		var numSelectedItems = this._selectedItems.size();
 		var a = this._selectedItems.getArray();
 		for (var i = 0; i < numSelectedItems; i++)
-			a[i].className = Dwt.getAttr(a[i], "_styleClass");
+			a[i].className = Dwt.getAttr(a[i], DwtListView._STYLE_CLASS);
 		this._selectedItems.removeAll();
 		
 		// save new left click selection
 		this._selectedItems.add(itemDiv);
-		this._selAnchor = itemDiv;
-		itemDiv.className = Dwt.getAttr(itemDiv, "_selectedStyleClass");
+		
+		this._selAnchor = this._kbAnchor = itemDiv;
+		itemDiv.className = Dwt.getAttr(itemDiv, DwtListView._SELECTED_STYLE_CLASS);
+		if (DwtShell.objectHasFocus(this))
+			itemDiv.className += " " + Dwt.getAttr(itemDiv, DwtListView._KBFOCUS_CLASS);
+			
 		this._firstSelIndex = this._list 
 					? this._list.indexOf(AjxCore.objectWithId(Dwt.getAttr(itemDiv, "_itemIndex"))) : -1;
 		DwtShell.grabFocus(this);
@@ -980,7 +1056,7 @@ function(clickedEl, ev) {
 
 	// always clear out old right click selection
 	if (this._rightSelItems) {
-		this._rightSelItems.className = Dwt.getAttr(this._rightSelItems, "_styleClass");
+		this._rightSelItems.className = Dwt.getAttr(this._rightSelItems, DwtListView._STYLE_CLASS);
 		this._rightSelItems = null;
 	}
 	
@@ -993,31 +1069,36 @@ function(clickedEl, ev) {
 		
 		// is this element currently in the selected items list?
 		var bContained = this._selectedItems.contains(clickedEl);
-		
+	
 		if (ev.button == DwtMouseEvent.LEFT) {
 			this._itemSelected(clickedEl, ev);
 		} else if (ev.button == DwtMouseEvent.RIGHT && !bContained) {
-			// save right click selection
+			// save right click selection	
 			this._rightSelItems = clickedEl;
-			clickedEl.className = Dwt.getAttr(clickedEl, "_selectedStyleClass") + "-right";
+			clickedEl.className = Dwt.getAttr(clickedEl, DwtListView._SELECTED_STYLE_CLASS) + "-right";
+			
+			if (this._kbAnchor == clickedEl && DwtShell.objectHasFocus(this))
+				clickedEl.className = " " + Dwt.getAttr(clickedEl, DwtListView._KBFOCUS_CLASS)
 		}
 		clickedEl.hoverSet = false;
-	} else {
+	} else {	
 		if (ev.ctrlKey) {
 			if (this._selectedItems.contains(clickedEl)) {
 				this._selectedItems.remove(clickedEl);
-				clickedEl.className = Dwt.getAttr(clickedEl, "_styleClass");
+				clickedEl.className = Dwt.getAttr(clickedEl, DwtListView._STYLE_CLASS);
 				this._selEv.detail = DwtListView.ITEM_DESELECTED;
 			} else {
 				this._selectedItems.add(clickedEl);
-				clickedEl.className = Dwt.getAttr(clickedEl, "_selectedStyleClass");
+				clickedEl.className = Dwt.getAttr(clickedEl, DwtListView._SELECTED_STYLE_CLASS);
 				clickedEl.hoverSet = false;
 				this._selEv.detail = DwtListView.ITEM_SELECTED;
 			}
+			
 			// The element that was part of the ctrl action always becomes
 			// the anchor since it gets focus
-			this._selAnchor = clickedEl;
-			DwtShell.grabFocus(this);
+			this._selAnchor = this._kbAnchor = clickedEl;
+			this._kbAnchor.className += " " + Dwt.getAttr(this._kbAnchor, DwtListView._KBFOCUS_CLASS);
+			DwtShell.grabFocus(this); // Will cause the kbAnchor element to get the right style
 		} else { // SHIFT KEY
 			// Adds to the selection to/from the current node to the selection anchor
 			if (this._selAnchor == null)
@@ -1038,7 +1119,7 @@ function(clickedEl, ev) {
 					 * 2 - means we are out of selection range */
 					state++;
 				}
-				var selStyleClass = Dwt.getAttr(convEl, "_selectedStyleClass");
+				var selStyleClass = Dwt.getAttr(convEl, DwtListView._SELECTED_STYLE_CLASS);
 				if (convEl == this._selAnchor) {
 					state++;
 					if (convEl.className != selStyleClass) {
@@ -1051,7 +1132,7 @@ function(clickedEl, ev) {
 				// If state == 0 or 2 (i.e. we are out of the selection range, 
 				// we have to deselect the node. Else we select it
 				if (state != 1 && convEl.className == selStyleClass && convEl != clickedEl) {
-					convEl.className = Dwt.getAttr(convEl, "_styleClass");
+					convEl.className = Dwt.getAttr(convEl, DwtListView._STYLE_CLASS);
 					this._selectedItems.remove(convEl);
 				} else if (state == 1 || convEl == clickedEl) {
 					if (convEl.className != selStyleClass) {
@@ -1496,30 +1577,73 @@ function(list) {
 DwtListView.prototype._focus =
 function() {
 	DBG.println("DwtListView: FOCUS");
-	this.getHtmlElement().style.borderStyle = "dashed";
-	this.getHtmlElement().style.borderWidth = "1px";
+	if (this._kbAnchor != null)
+		this._kbAnchor.className += " " + Dwt.getAttr(this._kbAnchor, DwtListView._KBFOCUS_CLASS);
 }
 
 DwtListView.prototype._blur =
 function() {
 	DBG.println("DwtListView: BLUR");
-	if (AjxEnv.isGecko)
-		this.getHtmlElement().style.borderStyle = "hidden";
-	else
-		this.getHtmlElement().style.borderWidth = "0px";
+	this._unmarkKbAnchorElement();
+}
+
+DwtListView.prototype._unmarkKbAnchorElement =
+function() {
+	if (this._kbAnchor != null) {
+		if (this._selectedItems.contains(this._kbAnchor))
+			this._kbAnchor.className = Dwt.getAttr(this._kbAnchor, DwtListView._SELECTED_STYLE_CLASS);
+		else 
+			this._kbAnchor.className = Dwt.getAttr(this._kbAnchor, DwtListView._STYLE_CLASS);
+	}
 }
 
 DwtListView.prototype.handleKeyAction =
 function(action, ev) {
-	DBG.println("DwtListView.handleKeyAction");
-	
 	switch (actionCode) {
-		case DwtKeyMap.NEXT:
-			this.selectItem(true);
+		case DwtKeyMap.SELECT_CURRENT:
+			this._emulateSingleClick(this._kbAnchor, DwtMouseEvent.LEFT);
 			break;
 			
+		case DwtKeyMap.ADD_SELECT_CURRENT:
+			this._emulateSingleClick(this._kbAnchor, DwtMouseEvent.LEFT, true);
+			break;
+			
+		case DwtKeyMap.SELECT_NEXT:
+			this._selectItem(true);
+			break;
+			
+		case DwtKeyMap.SELECT_PREV:
+			this._selectItem(false);
+			break;
+			
+		case DwtKeyMap.ADD_SELECT_NEXT:
+			this._selectItem(true, true);
+			break;
+			
+		case DwtKeyMap.ADD_SELECT_PREV:
+			this._selectItem(false, true);
+			break;
+		
+		
 		case DwtKeyMap.PREV:
-			this.selectItem(false);
+			this._setKbFocusElement(false);
+			break;
+			
+		case DwtKeyMap.NEXT:
+			this._setKbFocusElement(true);
+			break;
+			
+		case DwtKeyMap.DBLCLICK:
+			this.emulateDblClick(this.getItemFromElement(this._kbAnchor));
+			break;
+		
+		case DwtKeyMap.ACTION:
+			if (this._evtMgr.isListenerRegistered(DwtEvent.ACTION)) {
+				var p = Dwt.toWindow(this._kbAnchor);
+				var s = Dwt.getSize(this._kbAnchor);
+				this._emulateSingleClick(this._kbAnchor, DwtMouseEvent.RIGHT,
+						false, false, false, p.x + s.x / 4, p.y + s.y / 2);
+			}
 			break;
 		
 		default:

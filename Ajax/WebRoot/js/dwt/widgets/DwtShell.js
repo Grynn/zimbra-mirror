@@ -163,11 +163,22 @@ function(win){
 // like dialogs etc
 DwtShell.grabFocus =
 function(focusObj) {
-return; // TEMP
+return; // TMP
 	DBG.println("SHELL GRAB FOCUS");
 	var shell = DwtShell.getShell(window);
 	shell._focusObj = focusObj;
 	shell._kbFocusField.focus();
+}
+
+/**
+* Return true if the specified component currently has focus
+*
+* @param obj  [object] Object for which to check focus
+*/
+DwtShell.objectHasFocus =
+function(obj) {
+	var shell = DwtShell.getShell(window);
+	return (shell._haveFocus && shell._focusObj == obj);
 }
 
 /** 
@@ -476,7 +487,7 @@ function() {
 	var kbff = this._kbFocusField = document.createElement("input");
 	kbff.type = "text";
 	kbff.style.position = Dwt.ABSOLUTE_STYLE;
-	kbff.style.x = kbff.style.y = Dwt.LOC_NOWHERE;
+	kbff.style.top = kbff.style.left = Dwt.LOC_NOWHERE;
 	kbff.onblur = DwtShell._onBlurHdlr;
 	kbff.onfocus = DwtShell._onFocusHdlr;
 	document.body.appendChild(kbff);
@@ -523,8 +534,7 @@ function(ev) {
 	var charCode = DwtKeyEvent.getCharCode(ev);
 	var tagName = (ev.target) ? ev.target.tagName.toLowerCase() : null;
 	DBG.println("KEYCODE: " + charCode + " - tagName: " + tagName);
-	if (charCode == DwtKeyMap.ALT || charCode == DwtKeyMap.CTRL
-		|| charCode == DwtKeyMap.SHIFT 
+	if (DwtKeyMapMgr.isModifier(charCode)
 		|| (!shell._haveFocus 
 			&& shell._killKeySeqTimedActionId == -1 && !ev.ctrlKey && !ev.altKey
 			&& DwtKeyMapMgr.isUsableTextInputValue(charCode))) {

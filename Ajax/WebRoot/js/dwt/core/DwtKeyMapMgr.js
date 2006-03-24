@@ -126,7 +126,7 @@ function (keySeq, mappingName) {
 			tmpFsa = tmpFsa[key].subMap;		
 	}
 
-	if (tmpFsa[key].actionCode != null)
+	if (tmpFsa[key] && tmpFsa[key].actionCode != null)
 		return tmpFsa[key].actionCode;
 	else 
 		return null;
@@ -152,7 +152,7 @@ function() {
 	DwtKeyMapMgr._KEYCODES[27]  = DwtKeyMap.ESC;
 	DwtKeyMapMgr._KEYCODES[34]  = DwtKeyMap.PAGE_DOWN;
 	DwtKeyMapMgr._KEYCODES[33]  = DwtKeyMap.PAGE_UP;
-	DwtKeyMapMgr._KEYCODES[145] = DwtKeyMap.SHIFT;
+	DwtKeyMapMgr._KEYCODES[16] = DwtKeyMap.SHIFT;
 	DwtKeyMapMgr._KEYCODES[32]  = DwtKeyMap.SPACE;
 	
 	// Function keys
@@ -187,6 +187,7 @@ function() {
 	DwtKeyMapMgr.isAlphanumeric = DwtKeyMapMgr._isAlphanumericUs;
 	DwtKeyMapMgr.isPunctuation = DwtKeyMapMgr._isPunctuationUs;
 	DwtKeyMapMgr.isUsableTextInputValue = DwtKeyMapMgr.isUsableTextInputValueUs;
+	DwtKeyMapMgr.isModifier = DwtKeyMapMgr._isModifierUs;
 }
 
 DwtKeyMapMgr._isAlphaUs = 
@@ -209,22 +210,36 @@ function(keyCode) {
 DwtKeyMapMgr._isPunctuationUs = 
 function(keyCode) {
 	switch (keyCode) {
-		case 186:
-		case 187:
-		case 188:
-		case 189:
-		case 190:
-		case 191:
-		case 192:
-		case 219:
-		case 220:
-		case 221:
-		case 222:
+		case 186: // ;
+		case 187: // =
+		case 188: // ,
+		case 189: // -
+		case 190: // .
+		case 191: // /
+		case 192: // `
+		case 219: // [
+		case 220: // \
+		case 221: // ]
+		case 222: // '
 			return true;
 		default:
 			return false;		
 	}
 }
+
+DwtKeyMapMgr._isModifierUs = 
+function(keyCode) {
+	switch (keyCode) {
+		case 16: // Shift
+		case 17: // Ctrl
+		case 18: // Alt
+			return true;
+			
+		default:
+			return false;
+	}
+}
+
 
 DwtKeyMapMgr.isUsableTextInputValueUs =
 function(keyCode) {
