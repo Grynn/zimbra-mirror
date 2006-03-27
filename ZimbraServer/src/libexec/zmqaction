@@ -57,13 +57,17 @@ if ($queue !~ /^(incoming|active|deferred|hold|maildrop|corrupt)$/) {
 
 my $ids = $ARGV[2];
 
-my $command = "sudo /opt/zimbra/postfix/sbin/postsuper $paction - $queue";
-if (open(POSTSUPER, "| $command")) {
-    foreach my $id (@ids) {
-        print POSTSUPER $id, "\n";
-    }
-    close(POSTSUPER);
+if ($ids eq "ALL") {
+    system("sudo /opt/zimbra/postfix/sbin/postsuper $paction ALL");
 } else {
-    print STDERR "ERROR: command $command: $!\n";
-    exit(1);
+    my $command = "sudo /opt/zimbra/postfix/sbin/postsuper $paction - $queue";
+    if (open(POSTSUPER, "| $command")) {
+        foreach my $id (@ids) {
+            print POSTSUPER $id, "\n";
+        }
+        close(POSTSUPER);
+    } else {
+        print STDERR "ERROR: command $command: $!\n";
+        exit(1);
+    }
 }
