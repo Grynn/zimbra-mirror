@@ -37,7 +37,7 @@
 	<classpathentry kind="lib" path="jars/jakarta-oro-2.0.7.jar"/>
 	<classpathentry sourcepath="/ThirdParty/jsieve" kind="lib" path="jars/jsieve-0.1.jar"/>
 	<classpathentry sourcepath="/ZimbraNative/src/java" kind="lib" path="jars/zimbra-native.jar"/>
-	<classpathentry kind="lib" path="jars/lucene-1.4.3.jar"/>
+	<classpathentry sourcepath="/ThirdParty/lucene-1.4.3/src/java" kind="lib" path="jars/lucene-1.4.3.jar"/>
 	<classpathentry kind="lib" path="jars/mail.jar">
 		<attributes>
 			<attribute value="http://java.sun.com/products/javamail/javadocs/" name="javadoc_location"/>
