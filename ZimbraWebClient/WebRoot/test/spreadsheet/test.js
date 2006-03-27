@@ -50,6 +50,7 @@ function getHeadHTML() {
 	return [ "<style type='text/css'>",
 		 "td.SpreadSheet-Type-number { text-align: right; }",
 		 "td.SpreadSheet-Type-currency { text-align: right; }",
+		 "td.SpreadSheet-Type-error { text-align: center; color: #f00; }",
 		 "</style>" ].join("");
 };
 
