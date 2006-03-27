@@ -26,101 +26,52 @@
 
 use strict;
 
-# List of authorized commands and their corresponding scripts
 #
+# We allow only a well-known set of commands to be executed with the
+# Zimbra key.  Try to use as few regular expression checked commands
+# as possible, and when you do create them be conservative with what
+# is allowed - specially beware of any shell special characters.
+#
+my %SIMPLE_COMMANDS =
+    (
+     "start mailbox"    => "/opt/zimbra/bin/zmmailboxctl start",
+     "start ldap"       => "/opt/zimbra/bin/ldap start",
+     "start mta"        => "/opt/zimbra/bin/zmmtactl start",
+     "start antispam"   => "/opt/zimbra/bin/zmantispamctl start",
+     "start antivirus"  => "/opt/zimbra/bin/zmantivirusctl start",
+     "start snmp"       => "/opt/zimbra/bin/zmswatchctl start",
+     "start spell"      => "/opt/zimbra/bin/zmspellctl start",
+     
+     "stop mailbox"     => "/opt/zimbra/bin/zmmailboxctl stop",
+     "stop ldap"        => "/opt/zimbra/bin/ldap stop",
+     "stop mta"         => "/opt/zimbra/bin/zmmtactl stop",
+     "stop antispam"    => "/opt/zimbra/bin/zmantispamctl stop",
+     "stop antivirus"   => "/opt/zimbra/bin/zmantivirusctl stop",
+     "stop snmp"        => "/opt/zimbra/bin/zmswatchctl stop",
+     "stop spell"       => "/opt/zimbra/bin/zmspellctl stop",
 
-my %commands = (
-	"start" => {
-		"args" => {
+     "startup"          => "/opt/zimbra/bin/zmcontrol startup",
+     "shutdown"         => "/opt/zimbra/bin/zmcontrol shutdown",
 
-			"mailbox"	=> {
-				"script"	=> [ "/opt/zimbra/bin/zmmailboxctl start" ],
-			},
-			"ldap"	=> {
-				"script"	=> [ "/opt/zimbra/bin/ldap start" ],
-			},
-			"mta"	=> {
-				"script"	=> [ "/opt/zimbra/bin/zmmtactl start" ],
-			},
-			"antispam"	=> {
-				"script"	=> [ "/opt/zimbra/bin/zmantispamctl start" ],
-			},
-			"antivirus"	=> {
-				"script"	=> [ "/opt/zimbra/bin/zmantivirusctl start" ],
-			},
-			"snmp"	=> {
-				"script"	=> [ "/opt/zimbra/bin/zmswatchctl start" ],
-			},
-			"spell"	=> {
-				"script"	=> [ "/opt/zimbra/bin/zmspellctl start" ],
-			},
+     "msgtrace"         => "/opt/zimbra/bin/zmmsgtrace",
+     "flushqueue"       => "/opt/zimbra/postfix/sbin/postqueue -f",
+     "showqueue"        => "/opt/zimbra/postfix/sbin/postqueue -p",
+     "slapcat"          => "/opt/zimbra/openldap/sbin/slapcat -m -f /opt/zimbra/conf/slapd.conf",
 
-		},
-	},
-	"stop" => {
-		"args" => {
-			"mailbox"	=> {
-				"script"	=> [ "/opt/zimbra/bin/zmmailboxctl stop" ],
-			},
-			"ldap"	=> {
-				"script"	=> [ "/opt/zimbra/bin/ldap stop" ],
-			},
-			"mta"	=> {
-				"script"	=> [ "/opt/zimbra/bin/zmmtactl stop" ],
-			},
-			"antispam"	=> {
-				"script"	=> [ "/opt/zimbra/bin/zmantispamctl stop" ],
-			},
-			"antivirus"	=> {
-				"script"	=> [ "/opt/zimbra/bin/zmantivirusctl stop" ],
-			},
-			"snmp"	=> {
-				"script"	=> [ "/opt/zimbra/bin/zmswatchctl stop" ],
-			},
-			"spell"	=> {
-				"script"	=> [ "/opt/zimbra/bin/zmspellctl stop" ],
-			},
+     "zmqstat all"      => "sudo /opt/zimbra/libexec/zmqstat",
+     "zmqstat incoming" => "sudo /opt/zimbra/libexec/zmqstat incoming",
+     "zmqstat hold"     => "sudo /opt/zimbra/libexec/zmqstat hold",
+     "zmqstat active"   => "sudo /opt/zimbra/libexec/zmqstat active",
+     "zmqstat deferred" => "sudo /opt/zimbra/libexec/zmqstat deferred",
+    );
 
-		},
-	},
-	"startup" => {
-		"script"	=> [ "/opt/zimbra/bin/zmcontrol startup" ],
-	},
-	"shutdown" => {
-		"script"	=> [ "/opt/zimbra/bin/zmcontrol shutdown" ],
-	},
-	"msgtrace" => {
-		"script"	=> [ "/opt/zimbra/bin/zmmsgtrace" ],
-	},
-	"flushqueue" => {
-		"script"	=> [ "/opt/zimbra/postfix/sbin/postqueue -f" ],
-	},
-	"showqueue" => {
-		"script"	=> [ "/opt/zimbra/postfix/sbin/postqueue -p" ],
-	},
-	"slapcat" => {
-		"script"	=> [ "/opt/zimbra/openldap/sbin/slapcat -m -f /opt/zimbra/conf/slapd.conf" ],
-	},
-	"zmqstat" => {
-		"args" => {
-			"all"	=> {
-				"script"	=> [ "sudo /opt/zimbra/libexec/zmqstat" ],
-			},
-			"incoming"	=> {
-				"script"	=> [ "sudo /opt/zimbra/libexec/zmqstat incoming" ],
-			},
-			"hold"	=> {
-				"script"	=> [ "sudo /opt/zimbra/libexec/zmqstat hold" ],
-			},
-			"active"	=> {
-				"script"	=> [ "sudo /opt/zimbra/libexec/zmqstat active" ],
-			},
-			"deferred"	=> {
-				"script"	=> [ "sudo /opt/zimbra/libexec/zmqstat deferred" ],
-			},
-		},
-	},
-);
+my %REGEX_CHECKED_COMMANDS =
+    (
+     "zmqaction" => {
+                     regex => '(hold|release|requeue|delete)\s+(incoming|deferred|corrupt|active|maildrop|hold)\s+[A-FL0-9,]+', # A-F allows hex, L allows ALL
+                     program => "/opt/zimbra/libexec/zmqaction"
+                    },
+    );
 
 my %allhosts = ();
 my $gothosts = 0;
@@ -129,159 +80,154 @@ my $thishost = `/opt/zimbra/bin/zmlocalconfig -m nokey zimbra_server_hostname`;
 chomp $thishost;
 
 sub runRemoteCommand {
-	my $host = shift;
-	my $command = shift;
-	my $args = shift;
+    my $host = shift;
+    my $command = shift;
+    my $args = shift;
 
-	print "Remote: HOST:$host $command $args\n";
+    print "Remote: HOST:$host $command $args\n";
 }
 
 sub runCommand {
-	my $host = shift;
-	my $command = shift;
-	my $args = shift;
+    my $host = shift;
+    my $command = shift;
+    my $args = shift;
 
-	if ($host ne $thishost) {
-		runRemoteCommand($host, $command, $args);
-		return;
-	}
+    if ($host ne $thishost) {
+        runRemoteCommand($host, $command, $args);
+        return;
+    }
 
-	my $cl;
+    my $cmdstr;
+    
+    my $smplcmd = $command . " " . $args;
+    if (defined($SIMPLE_COMMANDS{$smplcmd})) {
+        $cmdstr = $SIMPLE_COMMANDS{$smplcmd};
+    } elsif (defined($REGEX_CHECKED_COMMANDS{$command})) {
+        my %spec = %{$REGEX_CHECKED_COMMANDS{$command}};
+        my $regex = $spec{regex};
+        my $program = $spec{program};
+        if (!defined($regex)) {
+            print STDERR "ERROR: internal error (regex undefined)\n";
+            exit 1;
+        }
+        if (!defined($program)) {
+            print STDERR "ERROR: internal error (program undefined)\n";
+            exit 1;
+        }
+        if ($args !~ /^$regex$/) {
+            print STDERR "ERROR: args '$args' not allowed for command '$command'\n";
+            exit 1;
+          }
+        $cmdstr = $program . " " . $args;
+      } else {
+        print STDERR "ERROR: Unknown command: $command\n";
+        exit 1;
+    }
 
-	if (defined ($commands{$command}{script})) {
-		$cl = $commands{$command}{script};
-	} else {
-		my @a = split (' ', $args);
-		my $arg = shift @a;
-		$args = join(' ',@a);
-
-
-		if (defined ($commands{$command}{args}{$arg}{script})) {
-			$cl = $commands{$command}{args}{$arg}{script};
-		} else {
-			print STDERR "ERROR: Unknown command $_\n";
-			exit 1;
-		}
-	}
-
-	foreach my $cm (@$cl) {
-		# Only pass the args that we approve, for security
-		#my $cmdstr = "$cm $args";
-		my $cmdstr = "$cm";
-		if (open COMMAND, "$cmdstr |") {
-			if ($command ne "zmqstat") {
-				# bug 6591
-				print "STARTCMD: $host $cmdstr\n";
-			}
-			while (<COMMAND>) {
-				print $_;
-			}
-			close COMMAND;
-			if ($command ne "zmqstat") {
-				# bug 6591
-				print "ENDCMD: $host $cmdstr\n";
-			}
-		} else {
-			die "Can't run $cmdstr: $!\n\n";
-		}
-	}
+    if (open(COMMAND, "$cmdstr |")) {
+        if ($command ne "zmqstat") {
+            print "STARTCMD: $host $cmdstr\n";
+        }
+        while (<COMMAND>) {
+            print $_;
+        }
+        close COMMAND;
+        if ($command ne "zmqstat") {
+            print "ENDCMD: $host $cmdstr\n";
+        }
+    } else {
+        print STDERR "ERROR: Can't run $cmdstr: $!\n";
+        exit 1;
+    }
 }
 
 sub getHostsByService {
-	my $service = shift;
+    my $service = shift;
 
-	my @hosts = ();
+    my @hosts = ();
 
-	if (!$gothosts) {
-		open CMD, "/opt/zimbra/bin/zmprov gas |" or return undef;
-		my @hl = <CMD>;
-		close CMD;
-		chomp @hl;
-		foreach my $h (@hl) {
-			alarm(120);
-			open CMD, "/opt/zimbra/bin/zmprov gs $h | grep zimbraServiceEnabled | sed -e 's/zimbraServiceEnabled: //'|" or return undef;
-			my @sl = <CMD>;
-			close CMD;
-			chomp @sl;
-			foreach my $s (@sl) {
-				$allhosts{$h}{$s} = $s;
-			}
-			alarm(0);
-		}
-		$gothosts = 1;
-	}
+    if (!$gothosts) {
+        open CMD, "/opt/zimbra/bin/zmprov gas |" or return undef;
+        my @hl = <CMD>;
+        close CMD;
+        chomp @hl;
+        foreach my $h (@hl) {
+            alarm(120);
+            open CMD, "/opt/zimbra/bin/zmprov gs $h | grep zimbraServiceEnabled | sed -e 's/zimbraServiceEnabled: //'|" or return undef;
+            my @sl = <CMD>;
+            close CMD;
+            chomp @sl;
+            foreach my $s (@sl) {
+                $allhosts{$h}{$s} = $s;
+            }
+            alarm(0);
+        }
+        $gothosts = 1;
+    }
 
-	foreach my $h (keys %allhosts) {
-		foreach my $s (keys %{ $allhosts{$h} }) {
-			if ($s eq $service) {
-				push @hosts, $h;
-			}
-		}
-	}
-	return \@hosts;
+    foreach my $h (keys %allhosts) {
+        foreach my $s (keys %{ $allhosts{$h} }) {
+            if ($s eq $service) {
+                push @hosts, $h;
+            }
+        }
+    }
+    return \@hosts;
 }
 
 sub getHostList {
-	my $hstring = shift;
+    my $hstring = shift;
 
-	# Host format is either 
-	#   HOST:h1[,HOST:h2...] and/or
-	#   SERVICE:s1[SERVICE:s2,...]
-	# The script will de-dup hosts
+    # Host format is either 
+    #   HOST:h1[,HOST:h2...] and/or
+    #   SERVICE:s1[SERVICE:s2,...]
+    # The script will de-dup hosts
 
-	my %hosts = ();
+    my %hosts = ();
 
-	my @hspecs = split (',', $hstring);
-	foreach my $spec (@hspecs) {
-		my ($type, $item) = split (':', $spec);
-		if ($type eq "HOST") {
-			if ($item eq "ALL") {
-				getHostsByService();
-				my @h = sort keys %allhosts;
-				return \@h;
-			}
-			$hosts{$item} = $item;
-		} elsif ($type eq "SERVICE") {
-			if ($item eq "ALL") {
-				getHostsByService();
-				my @h = sort keys %allhosts;
-				return \@h;
-			}
-			my $hl = getHostsByService($item);
-			foreach (@$hl) {
-				$hosts{$_} = $_;
-			}
-		} else {
-			return undef;
-		}
-	}
-	my @h = sort keys %hosts;
-	return \@h;
+    my @hspecs = split (',', $hstring);
+    foreach my $spec (@hspecs) {
+        my ($type, $item) = split (':', $spec);
+        if ($type eq "HOST") {
+            if ($item eq "ALL") {
+                getHostsByService();
+                my @h = sort keys %allhosts;
+                return \@h;
+            }
+            $hosts{$item} = $item;
+        } elsif ($type eq "SERVICE") {
+            if ($item eq "ALL") {
+                getHostsByService();
+                my @h = sort keys %allhosts;
+                return \@h;
+            }
+            my $hl = getHostsByService($item);
+            foreach (@$hl) {
+                $hosts{$_} = $_;
+            }
+        } else {
+            return undef;
+        }
+    }
+    my @h = sort keys %hosts;
+    return \@h;
 }
 
 sub doHelp {
-	foreach my $cm (sort keys %commands) {
-		if (defined ($commands{$cm}{args})) {
-			foreach my $arg (sort keys %{ $commands{$cm}{args}}) {
-				print "$cm $arg";
-				foreach my $sc (@{ $commands{$cm}{args}{$arg}{script} }) {
-					print "\t$sc\n";
-				}
-			}
-		} else {
-			print "$cm";
-			foreach my $sc (@{ $commands{$cm}{script} }) {
-				print "\t$sc\n";
-			}
-		}
-	}
+    foreach my $cm (sort keys %SIMPLE_COMMANDS) {
+        print $cm, " -> ", $SIMPLE_COMMANDS{$cm}, "\n";
+    }
+    foreach my $cm (sort keys %REGEX_CHECKED_COMMANDS) {
+        my %cd = %{$REGEX_CHECKED_COMMANDS{$cm}};
+        print $cm, " ", $cd{regex}, " -> ", $cd{program}, " <arg>\n";
+    }
 }
 
 sub handleALRM {
-	print "ENDCMD: Timeout reached!\n";
-	eval {
-		close CMD;
-	};
+    print "ENDCMD: Timeout reached!\n";
+    eval {
+        close CMD;
+    };
 }
 
 $| = 1;
@@ -289,24 +235,24 @@ $| = 1;
 $SIG{ALRM} = \&handleALRM;
 
 while (<>) {
-	chomp;
-	my ($host, $command, $args) = split (' ', $_, 3);
+    chomp;
+    my ($host, $command, $args) = split (' ', $_, 3);
 
-	if ($host eq "?") {
-		doHelp();
-		next;
-	}
+    if ($host eq "?") {
+        doHelp();
+        next;
+    }
 
-	my $hostlist = getHostList ($host);
+    my $hostlist = getHostList ($host);
 
-	if (!defined ($hostlist)) {
-		print STDERR "ERROR: Invalid hostlist\n";
-		exit 1;
-	}
+    if (!defined ($hostlist)) {
+        print STDERR "ERROR: Invalid hostlist\n";
+        exit 1;
+    }
 
-	foreach my $h (@$hostlist) {
-		runCommand ($h, $command, $args);
-	}
-	exit 0;
+    foreach my $h (@$hostlist) {
+        runCommand ($h, $command, $args);
+    }
+    exit 0;
 
 }

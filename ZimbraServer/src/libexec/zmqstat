@@ -36,6 +36,8 @@ my %queue_stats = ();
 my $hash_queue_depth;
 my $queue_directory;
 
+my $qfiles = 0;
+
 sub getLocalConfig {
 	my $key = shift;
 	if (defined ($ENV{zmsetvars})) {
@@ -72,7 +74,7 @@ sub get_record {  # Borrowed from qshape
 	}
 	my $data = "";
 	return unless ($len == 0 || read($fh,$data,$len) == $len);
-	#print "Returning $rec, $len, $data\n";
+	#print STDERR "Returning $rec, $len, $data\n";
 	return ($rec, $len, $data);
 }
 
@@ -90,21 +92,23 @@ sub getHashPath {
 sub processQ {
 	if (! -f $_ ) {return;}
 	if (! m{(^|/)[A-F0-9]{6,}$} ) { return; }
+	$qfiles++;
 	my ($cdir) = ($File::Find::dir =~ m|([^/]*)|);
-	#print "Processing $cdir - $_\n";
-	$queue_stats{$cdir}{'COUNT'}++;
+	#print STDERR "Processing $cdir - $_\n";
+	$queue_stats{$cdir}{COUNT}++;
 	
 	if ($readfiles) {
+		my %qf = ();
 		my @st = lstat($_);
 		if (@st == 0) { return; }
 		my $fh = new IO::File ($_, "r") || return;
 		my ($rec, $len, $data) = get_record($fh);
-		$queue_stats{$cdir}{$_}{'RECIPS'} = ();
+		$qf{TO} = ();
 		if ($rec eq "C") { # Size
-			($queue_stats{$cdir}{$_}{'LENGTH'}) = ($data =~ m/\s*(\d+)\s*\d+\s*\d+/);
+			($qf{SIZE}) = ($data =~ m/\s*(\d+)\s*\d+\s*\d+/);
 			($rec, $len, $data) = get_record($fh);
 			if ($rec eq "T") {
-				$queue_stats{$cdir}{$_}{'TIME'} = $data;
+				$qf{TIME} = $data;
 			} else {
 				return;
 			}
@@ -112,19 +116,44 @@ sub processQ {
 			return;
 		}
 		while (my ($rec, $len, $data) = get_record($fh)) {
-			#print "got $rec, $len, $data\n";
-			if ($rec eq "R") { push(@{$queue_stats{$cdir}{$_}{'RECIPS'}}, $data); }
-			elsif ($rec eq "S") { $queue_stats{$cdir}{$_}{'SENDER'} = $data?$data:'MAILER-DAEMON'; }
+			#print STDERR "got $rec, $len, $data\n";
+			if ($rec eq "R") { 
+                                push(@{$qf{TO}}, $data);
+                        } elsif ($rec eq "S") { 
+                                $qf{FROM} = $data?$data:'MAILER-DAEMON'; 
+                        } elsif ($rec eq "L") {
+                                $qf{FILTER} = $data;
+                        } elsif ($rec eq "A") {
+                                my ($aname, $avalue) = ($data =~ /^([^=]+)=(.*)$/);
+                                if ($aname eq "client_address" && defined($avalue)) {
+                                        $qf{ADDR} = $avalue;
+                                } elsif ($aname eq "client_name" && defined($avalue)) {
+                                        $qf{HOST} = $avalue;
+                                }
+                        }
 		}
 		$fh->close();
 		if ($cdir eq "deferred") {
 			my $dfile = getHashPath($_);
 			$fh = new IO::File ("$queue_directory/defer/$dfile/$_","r") || die "Can't open $dfile/$_: $!";
 			my @reasons = grep /^reason=/, <$fh>;
-			$queue_stats{$cdir}{$_}{'REASON'} = $reasons[0];
-			chomp $queue_stats{$cdir}{$_}{'REASON'};
-			$queue_stats{$cdir}{$_}{'REASON'} =~ s/reason=//;
+			$qf{REASON} = $reasons[0];
+			chomp $qf{REASON};
+			$qf{REASON} =~ s/reason=//;
 		}
+
+		print "id=", $_, "\n";
+		print "time=", $qf{TIME}, "\n";
+		print "size=", $qf{SIZE}, "\n";
+		print "from=", $qf{FROM}, "\n";
+		if (defined $qf{ADDR}) { print "addr=", $qf{ADDR}, "\n"; }
+		if (defined $qf{HOST}) { print "host=", $qf{HOST}, "\n"; }
+		if (defined $qf{FILTER}) { print "filter=", $qf{FILTER},"\n"; }
+		if ($qf{REASON}) {
+			print "reason=", $qf{REASON}, "\n";
+		}
+                print "to=", join(',', @{$qf{TO}}), "\n";
+		print "\n";
 
 	}
 }
@@ -137,9 +166,10 @@ chomp $queue_directory;
 $hash_queue_depth = `$ENV{zimbra_home}/bin/postconf -h hash_queue_depth`;
 chomp $hash_queue_depth;
 
-#print "$queue_directory\n";
+#$queue_directory="/opt/zimbra/postfix/spool";
+#print STDERR "$queue_directory\n";
 
-my @queues = qw /incoming hold active deferred/;
+my @queues = qw/incoming hold active deferred corrupt/;
 
 if ($ARGV[0]) { 
 	@queues = $ARGV[0]; 
@@ -156,21 +186,12 @@ chdir $queue_directory;
 
 find (\&processQ, @queues);
 
-if ($readfiles) {
-	foreach (sort keys %queue_stats) {
-		foreach my $k (sort keys %{$queue_stats{$_}}) {
-			if ($k eq 'COUNT') {next;}
-			my %qf = %{$queue_stats{$_}{$k}};
-			print sprintf ("%12s %12s, %6d, %48s",$k, $qf{'TIME'}, $qf{'LENGTH'}, $qf{'SENDER'});
-			if ($qf{'REASON'}) {
-				print sprintf (", %64s", $qf{'REASON'});
-			}
-			print map {sprintf ", %48s", $_} @{$qf{'RECIPS'}};
-			print "\n";
-		}
-		print "\n";
-	}
-} else {
-	print map {sprintf "%12s %d\n", $_, $queue_stats{$_}{COUNT}} keys %queue_stats;
+if (!$qfiles) {
+	# bug 6591
+	#print STDERR "No files found\n";
+	exit 0;
 }
 
+if (! $readfiles) {
+	map { printf "%s=%d\n", $_, $queue_stats{$_}{COUNT} } keys %queue_stats;
+}
