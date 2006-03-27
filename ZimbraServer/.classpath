@@ -67,5 +67,6 @@
 	<classpathentry sourcepath="/ThirdParty/commons-httpclient-3.0/src" kind="lib" path="jars/commons-httpclient-3.0.jar"/>
 	<classpathentry kind="lib" path="jars/commons-codec-1.3.jar"/>
 	<classpathentry kind="lib" path="jars/tnef.jar"/>
+	<classpathentry sourcepath="/ThirdParty/ganymed-ssh2/ganymed-ssh2-build209/src" kind="lib" path="jars/ganymed-ssh2-build209.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
