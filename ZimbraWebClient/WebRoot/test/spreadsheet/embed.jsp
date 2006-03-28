@@ -1,7 +1,4 @@
 <!--
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
--->
-<!-- 
 ***** BEGIN LICENSE BLOCK *****
 Version: ZAPL 1.1
 
@@ -25,64 +22,33 @@ Contributor(s):
 
 ***** END LICENSE BLOCK *****
 -->
-
-<%@ page language="java" 
-         import="java.lang.*, java.util.*" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
+<% String contextPath = request.getContextPath(); %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>ZmSpreadSheet test</title>
-    <style type="text/css">
-      <!--
-
-	        @import url(/zimbra/img/loRes/imgs.css?v=060123132725);
-	        @import url(/zimbra/img/loRes/skins/steel/skin.css?v=060123132725);
-	
-	        @import url(/zimbra/js/zimbraMail/config/style/dwt.css?v=060123132725);
-	        @import url(/zimbra/js/zimbraMail/config/style/common.css?v=060123132725);
-	        @import url(/zimbra/js/zimbraMail/config/style/msgview.css?v=060123132725);
-	        @import url(/zimbra/js/zimbraMail/config/style/zm.css?v=060123132725);
-	        @import url(/zimbra/js/zimbraMail/config/style/spellcheck.css?v=060123132725);
-	        @import url(/zimbra/skins/steel/skin.css?v=060123132725);
-
-        @import url("../../js/zimbraMail/config/style/dwt.css");
-        @import url(style.css);
-      -->
-    </style>
-	<script language="JavaScript">
-    	DwtConfigPath = "/ajax/js/dwt/config";
-    </script>
-    	
-<% 
-   String contextPath = (String)request.getContextPath(); 
-   String vers = (String)request.getAttribute("version");
-   String ext = (String)request.getAttribute("fileExtension");
-   if (vers == null){
-      vers = "";
-   }
-   if (ext == null){
-      ext = "";
-   }
-%>
+    <title>Zimbra ALE - Prototype</title>
+      <style type="text/css">
+          <!--
+          @import url( <%= contextPath %>/img/loRes/imgs.css );
+          @import url( <%= contextPath %>/img/loRes/skins/steel/skin.css );
+          @import url( <%= contextPath %>/js/zimbraMail/config/style/dwt.css );
+          @import url( <%= contextPath %>/js/zimbraMail/config/style/common.css );
+          @import url( <%= contextPath %>/js/zimbraMail/config/style/msgview.css );
+          @import url( <%= contextPath %>/js/zimbraMail/config/style/zm.css );
+          @import url( <%= contextPath %>/js/zimbraMail/config/style/spellcheck.css );
+          @import url( <%= contextPath %>/skins/steel/skin.css );
+          @import url( <%= contextPath %>/js/zimbraMail/config/style/dwt.css );
+          @import url( style.css );
+          -->
+      </style>
+    <script type="text/javascript" src="<%=contextPath %>/js/msgs/I18nMsg,AjxMsg,ZMsg,ZmMsg.js"></script>
     <jsp:include page="../../public/Messages.jsp"/>
     <jsp:include page="../../public/Ajax.jsp"/>
-    <jsp:include page="../../public/Dwt.jsp"/>
-
-<script type="text/javascript" src="<%= contextPath %>/js/zimbraMail/share/view/htmlEditor/ZmHETablePropsDialog.js<%= ext %>?v=<%= vers %>"></script>
-<script type="text/javascript" src="<%= contextPath %>/js/zimbraMail/share/view/htmlEditor/ZmSpellChecker.js<%= ext %>?v=<%= vers %>"></script>
-<script type="text/javascript" src="<%= contextPath %>/js/zimbraMail/share/view/htmlEditor/ZmHtmlEditor.js<%= ext %>?v=<%= vers %>"></script>
-
-<script type="text/javascript" src="<%= contextPath %>/js/zimbraMail/share/view/spreadsheet/ZmSpreadSheet.js<%= ext %>?v=<%= vers %>"></script>
-<script type="text/javascript" src="<%= contextPath %>/js/zimbraMail/share/view/spreadsheet/ZmSpreadSheetModel.js<%= ext %>?v=<%= vers %>"></script>
-<script type="text/javascript" src="<%= contextPath %>/js/zimbraMail/share/view/spreadsheet/ZmSpreadSheetFormulae.js<%= ext %>?v=<%= vers %>"></script>
-<script type="text/javascript" src="<%= contextPath %>/js/zimbraMail/share/view/spreadsheet/ZmSpreadSheetToolbars.js<%= ext %>?v=<%= vers %>"></script>
-
-    <script type="text/javascript" src="test-embed.js"></script>
+    <jsp:include page="embed_js.jsp"/>
   </head>
     <body>
     <noscript><p><b>Javascript must be enabled to use this.</b></p></noscript>
-    <script language="JavaScript">   	
+    <script type="text/javascript" language="JavaScript">
    		function launch() {
    			DBG = new AjxDebug(AjxDebug.NONE, null, false);
  	    	Test.run();
@@ -91,4 +57,3 @@ Contributor(s):
     </script>
     </body>
 </html>
-
