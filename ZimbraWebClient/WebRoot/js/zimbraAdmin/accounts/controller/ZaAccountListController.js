@@ -278,6 +278,8 @@ function (ev) {
 		this._contentView.setUI();
 		if(this._app.getCurrentController() == this) {
 			this.show();			
+		} else {
+			this._changeActionsState();
 		}
 	}
 }

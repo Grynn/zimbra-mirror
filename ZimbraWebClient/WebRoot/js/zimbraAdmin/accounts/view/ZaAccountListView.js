@@ -164,3 +164,4 @@ function(columnItem, bSortAsc) {
 		this._app.getCurrentController()._handleException(ex);
 	}
 }
+
