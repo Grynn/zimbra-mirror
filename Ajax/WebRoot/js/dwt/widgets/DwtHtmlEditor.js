@@ -91,6 +91,7 @@ DwtHtmlEditor.INDENT = "indent";
 DwtHtmlEditor.HORIZ_RULE = "inserthorizontalrule";
 DwtHtmlEditor.ORDERED_LIST = "insertorderedlist";
 DwtHtmlEditor.UNORDERED_LIST = "insertunorderedlist";
+DwtHtmlEditor.IMAGE = "insertimage";
 
 // Direction
 DwtHtmlEditor.DIRECTION_R2L;
@@ -250,6 +251,11 @@ DwtHtmlEditor.prototype.insertElement =
 function(element) {
 	this._execCommand(element);
 }
+
+DwtHtmlEditor.prototype.insertImage =
+function(src) {
+	this._execCommand(DwtHtmlEditor.IMAGE, src);
+};
 
 /** Inserts a table at the current cursor position
  *

@@ -48,7 +48,7 @@ function DwtKeyMap(subclassInit) {
 			"Shift+P":			DwtKeyMap.ADD_SELECT_PREV,
 			"Ctrl+P":			DwtKeyMap.PREV,
 			"Enter":			DwtKeyMap.DBLCLICK,
-			"Ctrl+Enter":		DwtKeyMap.ACTION,
+			"Ctrl+Enter":		DwtKeyMap.ACTION
 	};
 };
 

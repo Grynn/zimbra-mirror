@@ -703,7 +703,7 @@ function(item, element, type, optionalId) {
 DwtListView.prototype._isValidDragObject =
 function(ev) {
 	var div = ev.target;
-	div = this._findAncestor(div, "_itemIndex");
+	div = Dwt.findAncestor(div, "_itemIndex");
 	return (div != null);
 }
 
@@ -797,7 +797,7 @@ function(mouseEv, div) {
 DwtListView.prototype._mouseOverListener = 
 function(ev) {
 	var div = ev.target;
-	div = this._findAncestor(div, "_itemIndex");
+	div = Dwt.findAncestor(div, "_itemIndex");
 	if (!div)
 		return;
 	
@@ -807,7 +807,7 @@ function(ev) {
 DwtListView.prototype._mouseOutListener = 
 function(ev) {
 	var div = ev.target;
-	div = this._findAncestor(div, "_itemIndex");
+	div = Dwt.findAncestor(div, "_itemIndex");
 	if (!div)
 		return;
 	// NOTE: The DwtListView handles the mouse events on the list items
@@ -838,17 +838,10 @@ function(mouseEv, div) {
 	return true;
 }
 
-DwtListView.prototype._findAncestor =
-function(elem, attr) {
-	while (elem && (Dwt.getAttr(elem, attr) == void 0))
-		elem = elem.parentNode;
-	return elem;
-}
-
 DwtListView.prototype._mouseDownListener = 
 function(ev) {
 	var div = ev.target;
-	div = this._findAncestor(div, "_itemIndex");
+	div = Dwt.findAncestor(div, "_itemIndex");
 
 	if (div == null){
 		this._dndSelection = null;
@@ -868,7 +861,7 @@ function(ev) {
 DwtListView.prototype._mouseUpListener = 
 function(ev) {
 	var div = ev.target;
-	div = this._findAncestor(div, "_itemIndex");
+	div = Dwt.findAncestor(div, "_itemIndex");
 
 	var wasDraggingCol = this._handleColHeaderDrop(ev);
 	var wasDraggingSash = this._handleColSashDrop(ev);
@@ -905,7 +898,7 @@ function(mouseEv, div) {return true;}
 DwtListView.prototype._doubleClickListener =
 function(ev) {
 	var div = ev.target;
-	div = this._findAncestor(div, "_itemIndex");
+	div = Dwt.findAncestor(div, "_itemIndex");
 
 	if (!div) return;
 
@@ -979,7 +972,7 @@ function(next, addSelect) {
 DwtListView.prototype._emulateSingleClick =
 function(target, button, ctrl, shift, alt, docX, docY) {
 	// Gotta do what mousedown listener does
-	this._clickDiv = this._findAncestor(target, "_itemIndex");
+	this._clickDiv = Dwt.findAncestor(target, "_itemIndex");
 	var mev = DwtShell.mouseEvent;
 	mev.reset();
 	mev.target = target;
@@ -1322,7 +1315,7 @@ function(ev) {
 		//this._listColDiv.appendChild(this._headerClone);
 		this.shell.getHtmlElement().appendChild(this._headerClone);
 	} else {
-		var target = this._findAncestor(ev.target, "_itemIndex");
+		var target = Dwt.findAncestor(ev.target, "_itemIndex");
 		if (target && Dwt.getAttr(target, "_type") == DwtListView.TYPE_HEADER_ITEM) {
 			if (this._headerCloneTarget && this._headerCloneTarget == this._clickDiv)
 				this._headerCloneTarget = null;

@@ -113,6 +113,14 @@ function(domElement, jsObject) {
 	}
 };
 
+Dwt.findAncestor =
+function(domElement, attrName) {
+	while (domElement && (Dwt.getAttr(domElement, attrName) == void 0)) {
+		domElement = domElement.parentNode;
+	}
+	return domElement;
+};
+
 Dwt.getObjectFromElement =
 function(domElement) {
 	return AjxCore.objectWithId(domElement.dwtObj);
