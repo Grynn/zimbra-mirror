@@ -29,9 +29,10 @@
 * @author Ross Dargahi
 *
 * @param parent				[DwtComposite]		the parent widget
-* @param type				[constant]			the type of the input field
+* @param type				[constant]			the data type of the input field
 * @param initialValue		[string]			the initial value of the field
 * @param size				[int]				size of the input field (in characters)
+* @param rows				[int]				number of rows (more than 1 means textarea)
 * @param maxLen				[int]				maximum length (in characters) of the input
 * @param errorIconStyle		[constant]			error icon style
 * @param validationStyle	[constant]			validation type
@@ -56,8 +57,13 @@ function DwtInputField(params) {
 	var errorIconId = Dwt.getNextId();
 	var htmlEl = this.getHtmlElement();
 	if (this._errorIconStyle == DwtInputField.ERROR_ICON_NONE) {
-		htmlEl.innerHTML = ["<input autocomplete='off' id='", inputFieldId, "' type='",
-			(this._type != DwtInputField.PASSWORD) ? "text" : "password", "'/>"].join("");;
+		if (params.rows && params.rows > 1) {
+			htmlEl.innerHTML =["<textarea id='", inputFieldId, "' rows=", params.rows, "></textarea"].join("");
+		} else {
+			htmlEl.innerHTML = ["<input autocomplete='off' id='", inputFieldId, "' type='",
+				(this._type != DwtInputField.PASSWORD) ? "text" : "password", "'/>"].join("");
+		}
+				
 	} else {
 		var htmlArr = ["<table cellspacing='0' cellpadding='0'><tr>"];
 		var i = 1;
@@ -205,13 +211,17 @@ function() {
 
 /**
  * Sets a new value for the input field
+ *
+ * XXX: if we're disabled, the validation step messes up the style
  */
 DwtInputField.prototype.setValue =
-function(value) {
+function(value, noValidate) {
 	this._inputField.value = value;
-	value = this._validateInput(value);
-	if (value != null)
-		this._inputField.value = value;
+	if (!noValidate) {
+		value = this._validateInput(value);
+		if (value != null)
+			this._inputField.value = value;
+	}
 };
 
 /**
@@ -259,6 +269,11 @@ function(disabled) {
 	this.getInputElement().disabled = disabled;
 };
 
+DwtInputField.prototype.isDisabled = 
+function() {
+	return this.getInputElement().disabled;
+};
+
 DwtInputField.prototype.focus = 
 function() {
 	this.getInputElement().focus();
@@ -267,6 +282,11 @@ function() {
 DwtInputField.prototype.blur = 
 function() {
 	this.getInputElement().blur();
+};
+
+DwtInputField.prototype.setVisible = 
+function(visible) {
+	Dwt.setVisible(this.getInputElement(), visible);
 };
 
 /**
