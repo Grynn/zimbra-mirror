@@ -342,21 +342,32 @@ function(node) {
 */
 DwtHtmlEditor.prototype.setMode =
 function(mode, convert) {
-	if (mode == this._mode || (mode != DwtHtmlEditor.HTML && mode != DwtHtmlEditor.TEXT))
+	if (mode == this._mode || 
+		(mode != DwtHtmlEditor.HTML && mode != DwtHtmlEditor.TEXT))
+	{
 		return;
+	}
 
 	this._mode = mode;
 	if (mode == DwtHtmlEditor.HTML) {
 		var textArea = document.getElementById(this._textAreaId);
 		var iFrame;
-		if (this._iFrameId != null) {
-			this._getIframeDoc().body.innerHTML = (convert) ? AjxStringUtil.convertToHtml(textArea.value) : textArea.value;
+		var idoc = this._getIframeDoc();
+
+		// bug fix #6788 - Safari seems to lose its document so recreate
+		if (this._iFrameId != null && idoc) {
+			idoc.body.innerHTML = (convert) 
+				? AjxStringUtil.convertToHtml(textArea.value) 
+				: textArea.value;
 			iFrame = document.getElementById(this._iFrameId);
 		} else {
-			iFrame = this._initHtmlMode((convert) ? AjxStringUtil.convertToHtml(textArea.value) : textArea.value);
+			iFrame = this._initHtmlMode((convert) 
+				? AjxStringUtil.convertToHtml(textArea.value) 
+				: textArea.value);
 		}
 		Dwt.setVisible(textArea, false);
 		Dwt.setVisible(iFrame, true);
+
 		// XXX: mozilla hack
 		if (AjxEnv.isGeckoBased)
 			this._enableDesignMode(this._getIframeDoc());
@@ -368,8 +379,13 @@ function(mode, convert) {
 		// If we have pending content, then an iFrame is being created. This can happen
 		// if the widget is instantiated and immediate setMode is called w/o getting out
 		// to the event loop where _finishHtmlMode is triggered
-		var content = (!this._pendingContent) ? this._getIframeDoc().innerHTML : (this._pendingContent || "");
-		textArea.value = (convert) ? this._convertHtml2Text() : this._getIframeDoc().innerHTML;;
+		var content = (!this._pendingContent) 
+			? this._getIframeDoc().innerHTML 
+			: (this._pendingContent || "");
+
+		textArea.value = (convert) 
+			? this._convertHtml2Text() 
+			: this._getIframeDoc().innerHTML;;
 
 		Dwt.setVisible(document.getElementById(this._iFrameId), false);
 		Dwt.setVisible(textArea, true);
