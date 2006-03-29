@@ -62,7 +62,7 @@ ZaMTA.A_Status = "status";
 ZaMTA.A_Stale = "stale";
 ZaMTA.A_LastError = "lasterror";
 ZaMTA.A_MTAName = "mtaname";
-ZaMTA.A_refreshTime = "refreshTime";
+ZaMTA.A_refreshTime = "time";
 /**
 * names of queues
 **/
@@ -165,6 +165,9 @@ ZaMTA.prototype.initFromJS = function (obj, summary) {
 				this[qName][ZaMTA.A_count] = queue[ZaMTA.A_count];
 				ZaMTA._quecountsArr.push(queue[ZaMTA.A_count]);
 			}
+			if(queue[ZaMTA.A_refreshTime] != undefined) {
+				this[qName][ZaMTA.A_refreshTime] = AjxDateUtil.computeDateStr(new Date(), parseInt(queue[ZaMTA.A_refreshTime]));
+			}
 			if(summary)
 				continue;
 				
@@ -244,50 +247,6 @@ function(by, val, withConfig) {
 	command.invoke(params);		
 }
 ZaItem.loadMethods["ZaMTA"].push(ZaMTA.loadMethod);
-
-
-PostQSummary_XModelItem = function (){}
-XModelItemFactory.createItemType("_POSTQSUMMARY_", "postqsummary", PostQSummary_XModelItem);
-PostQSummary_XModelItem.prototype.items = [
-				{id:ZaMTA.A_rdomain, type:_LIST_, listItem:
-					{type:_OBJECT_, 
-						items: [
-							{id:ZaMTA.A_name, type:_STRING_},
-							{id:ZaMTA.A_count, type:_NUMBER_}
-						]
-					}
-				},
-				{id:ZaMTA.A_origip, type:_LIST_, listItem:
-					{type:_OBJECT_, 
-						items: [
-							{id:ZaMTA.A_name, type:_STRING_},
-							{id:ZaMTA.A_count, type:_NUMBER_}
-						]
-					}
-				},
-				{id:ZaMTA.A_error, type:_LIST_, listItem:
-					{type:_OBJECT_, 
-						items: [
-							{id:ZaMTA.A_name, type:_STRING_},
-							{id:ZaMTA.A_count, type:_NUMBER_}
-						]
-					}
-				},
-				{id:ZaMTA.A_count, type:_NUMBER_},
-				{id:ZaMTA.A_pageNum, type:_NUMBER_}
-			];
-ZaMTA.myXModel = {
-	items: [
-		{id:ZaMTA.A_Status, type:_STRING_, ref:ZaMTA.A_Status},
-		{id:ZaMTA.A_MTAName, type:_STRING_, ref:ZaMTA.A_MTAName},
-		{id:ZaMTA.A_LastError, type:_STRING_, ref:ZaMTA.A_LastError},
-		{id:ZaMTA.A_DeferredQ , type:_POSTQSUMMARY_},
-		{id:ZaMTA.A_IncomingQ , type:_POSTQSUMMARY_},
-		{id:ZaMTA.A_ActiveQ , type:_POSTQSUMMARY_},
-		{id:ZaMTA.A_CorruptQ , type:_POSTQSUMMARY_}, 
-		{id:ZaMTA.A_HoldQ , type:_POSTQSUMMARY_}		
-	]
-};
 
 ZaMTA.luceneEscape = function (str) {
 	return String(str).replace(/([\+\&\\!\(\)\{\}\[\]\^\"\~\*\?\:\\])/g, "\\$1");
@@ -570,3 +529,79 @@ function() {
 	}
 	return this._toolTip;
 }
+
+
+
+PostQSummary_XModelItem = function (){}
+XModelItemFactory.createItemType("_POSTQSUMMARY_", "postqsummary", PostQSummary_XModelItem);
+PostQSummary_XModelItem.prototype.items = [
+				{id:ZaMTA.A_rdomain, type:_LIST_, listItem:
+					{type:_OBJECT_, 
+						items: [
+							{id:ZaMTA.A_name, type:_STRING_},
+							{id:ZaMTA.A_count, type:_NUMBER_}
+						]
+					}
+				},
+				{id:ZaMTA.A_origip, type:_LIST_, listItem:
+					{type:_OBJECT_, 
+						items: [
+							{id:ZaMTA.A_name, type:_STRING_},
+							{id:ZaMTA.A_count, type:_NUMBER_}
+						]
+					}
+				},
+				{id:ZaMTA.A_raddress, type:_LIST_, listItem:
+					{type:_OBJECT_, 
+						items: [
+							{id:ZaMTA.A_name, type:_STRING_},
+							{id:ZaMTA.A_count, type:_NUMBER_}
+						]
+					}
+				},		
+				{id:ZaMTA.A_saddress, type:_LIST_, listItem:
+					{type:_OBJECT_, 
+						items: [
+							{id:ZaMTA.A_name, type:_STRING_},
+							{id:ZaMTA.A_count, type:_NUMBER_}
+						]
+					}
+				},						
+				{id:ZaMTA.A_error, type:_LIST_, listItem:
+					{type:_OBJECT_, 
+						items: [
+							{id:ZaMTA.A_name, type:_STRING_},
+							{id:ZaMTA.A_count, type:_NUMBER_}
+						]
+					}
+				},
+				{id:ZaMTA.A_messages, type:_LIST_, listItem:
+					{type:_OBJECT_, 
+						items: [
+							{id:ZaMTAQMsgItem.A_id, type:_STRING_},
+							{id:ZaMTAQMsgItem.A_recipients, type:_STRING_},
+							{id:ZaMTAQMsgItem.A_content_filter, type:_STRING_},
+							{id:ZaMTAQMsgItem.A_origin_host, type:_STRING_},
+							{id:ZaMTAQMsgItem.A_sender, type:_STRING_},
+							{id:ZaMTAQMsgItem.A_origin_ip, type:_STRING_}
+						]
+					}
+				},				
+				{id:ZaMTA.A_count, type:_NUMBER_},
+				{id:ZaMTA.A_pageNum, type:_NUMBER_},
+				{id:ZaMTA.A_query, type:_STRING_},
+				{id:ZaMTA.A_Status, type:_NUMBER_,choices:ZaMTA.SCANNER_STATUS_CHOICES},
+				{id:ZaMTA.A_refreshTime, type:_STRING_}
+			];
+ZaMTA.myXModel = {
+	items: [
+		{id:ZaMTA.A_Status, type:_STRING_, ref:ZaMTA.A_Status},
+		{id:ZaMTA.A_MTAName, type:_STRING_, ref:ZaMTA.A_MTAName},
+		{id:ZaMTA.A_LastError, type:_STRING_, ref:ZaMTA.A_LastError},
+		{id:ZaMTA.A_DeferredQ , type:_POSTQSUMMARY_},
+		{id:ZaMTA.A_IncomingQ , type:_POSTQSUMMARY_},
+		{id:ZaMTA.A_ActiveQ , type:_POSTQSUMMARY_},
+		{id:ZaMTA.A_CorruptQ , type:_POSTQSUMMARY_}, 
+		{id:ZaMTA.A_HoldQ , type:_POSTQSUMMARY_}		
+	]
+};
