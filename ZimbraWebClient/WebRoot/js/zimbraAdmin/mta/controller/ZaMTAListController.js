@@ -32,7 +32,7 @@ function ZaMTAListController(appCtxt, container, app) {
    	this._toolbarOperations = new Array();
    	this._popupOperations = new Array();			
 	this.MTAPool = [];
-	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_servers/managing_servers.htm";					
+	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/Monitoring_Zimbra_MTA_Mail_Queues";					
 }
 
 ZaMTAListController.prototype = new ZaController();
@@ -65,6 +65,7 @@ function(list) {
 		for(i = 0; i < cnt; i++) {
 			tmp[i] = this.MTAPool.shift();
 		}
+		ZaMTA._quecountsArr = new Array();
 		for(i = cnt-1; i >= 0; i--) {
 			tmp[i].load();
 		}
@@ -221,7 +222,7 @@ ZaMTAListController.prototype.handleMTAChange =
 function (ev) {
 	//if any of the data that is currently visible has changed - update the view
 	if(ev && this._contentView) {
-		if(ev.getDetails()) {
+		if(ev.getDetail("obj")) {
 			this._contentView.setUI();
 			//check if we have any MTAs in the queue waiting to be loaded
 			if(this.MTAPool.length) {
@@ -248,6 +249,7 @@ ZaMTAListController.prototype.getQCounts = function () {
 	for(i = 0; i < cnt; i++) {
 		tmp[i] = this.MTAPool.shift();
 	}
+	ZaMTA._quecountsArr = new Array();
 	for(i = cnt-1; i >= 0; i--) {
 		tmp[i].load();
 	}

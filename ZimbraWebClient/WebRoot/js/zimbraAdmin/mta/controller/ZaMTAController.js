@@ -35,7 +35,7 @@
 function ZaMTAController(appCtxt, container,app) {
 	ZaXFormViewController.call(this, appCtxt, container,app,"ZaMTAController");
 	this._UICreated = false;
-	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_servers/managing_servers.htm";				
+	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/Monitoring_Zimbra_MTA_Mail_Queues.htm";				
 	this._toolbarOperations = new Array();
 	this.objType = ZaEvent.S_MTA;	
 }
@@ -69,17 +69,6 @@ function(entry) {
 	this._view.setDirty(false);
 	this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
 	this._currentObject = entry;
-	if(entry[ZaMTA.A_DeferredQ][ZaMTA.A_refreshTime]=="N/A" &&
-	entry[ZaMTA.A_IncomingQ][ZaMTA.A_refreshTime]=="N/A" &&
-	entry[ZaMTA.A_ActiveQ][ZaMTA.A_refreshTime]=="N/A" && 
-	entry[ZaMTA.A_HoldQ][ZaMTA.A_refreshTime]=="N/A" &&  
-	entry[ZaMTA.A_CorruptQ][ZaMTA.A_refreshTime]=="N/A") {
-		this._currentObject.getMailQStatus(ZaMTA.A_DeferredQ);	
-		this._currentObject.getMailQStatus(ZaMTA.A_IncomingQ);			
-		this._currentObject.getMailQStatus(ZaMTA.A_ActiveQ);	
-		this._currentObject.getMailQStatus(ZaMTA.A_HoldQ);	
-		this._currentObject.getMailQStatus(ZaMTA.A_CorruptQ);							
-	}	
 }
 ZaController.setViewMethods["ZaMTAController"].push(ZaMTAController.setViewMethod);
 
@@ -95,7 +84,7 @@ ZaMTAController.initToolbarMethod =
 function () {
 	//this._toolbarOperations.push(new ZaOperation(ZaOperation.LABEL, ZaMsg.TBB_LastUpdated, ZaMsg.TBB_LastUpdated_tt, null, null, null,null,null,null,"refreshTime"));	
 //	this._toolbarOperations.push(new ZaOperation(ZaOperation.SEP));
-//	this._toolbarOperations.push(new ZaOperation(ZaOperation.REFRESH, ZaMsg.TBB_Refresh, ZaMsg.TBB_Refresh_tt, null, null, new AjxListener(this, this.refreshListener)));	
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.FLUSH, ZaMsg.TBB_FlushQs, ZaMsg.TBB_TBB_FlushQs_tt, "Delete", "DeleteDis", new AjxListener(this, this.flushListener)));	
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.SERTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener)));    	
 }
 ZaController.initToolbarMethods["ZaMTAController"].push(ZaMTAController.initToolbarMethod);
@@ -121,8 +110,21 @@ function () {
 }
 
 
-ZaMTAController.prototype.refreshListener = function () {
-	this._currentObject.getMailQStatus();
+ZaMTAController.prototype.flushListener = function () {
+	this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);					
+	this._confirmMessageDialog.setMessage(ZaMsg.Q_FLUSH_QUEUES,  DwtMessageDialog.WARNING_STYLE);
+	this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, this.flushQueues, this);		
+	this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, this.closeCnfrmDlg, this, null);				
+	this._confirmMessageDialog.popup();
+}
+
+ZaMTAController.prototype.flushQueues = function () {
+	try {
+		this._currentObject.flushQueues();
+	} catch (ex) {
+		this._handleException(ex, "ZaMTAController.prototype.flushQueues");
+	}
+	this.closeCnfrmDlg();
 }
 
 /**
@@ -131,10 +133,29 @@ ZaMTAController.prototype.refreshListener = function () {
 **/
 ZaMTAController.prototype.handleMTAChange = 
 function (ev) {
-	//if any of the data that is currently visible has changed - update the view
-	if(ev && this._view) {
-		if(ev.getDetails() && (ev.getDetails() instanceof ZaMTA))
-			if(this._currentObject && this._currentObject[ZaItem.A_zimbraId] == ev.getDetails()[ZaItem.A_zimbraId])
-				this._view.setObject(ev.getDetails()); 
+	if(this._app.getAppViewMgr().getCurrentView() == ZaZimbraAdmin._POSTQ_BY_SERVER_VIEW) {
+		if(ev && this._view) {
+			if(ev.getDetail("obj") && (ev.getDetail("obj") instanceof ZaMTA) ) {
+				if(this._currentObject && this._currentObject[ZaItem.A_zimbraId] == ev.getDetail("obj")[ZaItem.A_zimbraId]) {
+					this._currentObject = ev.getDetail("obj");
+					var qName = ev.getDetail("qName");
+					
+					if(qName && ev.getDetail("poll")) {
+						var pageNum = 0;
+						if(ev.getDetail("offset") != undefined) {
+							if(ev.getDetail("offset") > 0)
+								pageNum = ev.getDetail("offset")/ZaMTA.RESULTSPERPAGE;
+								
+						}
+						this._currentObject[qName][ZaMTA.A_pageNum] = pageNum;
+						if(this._currentObject[qName][ZaMTA.A_Status]==ZaMTA.STATUS_SCANNING) {
+							var ta = new AjxTimedAction(this._currentObject, ZaMTA.prototype.getMailQStatus, qName, ev.getDetail("query"),ev.getDetail("offset"),ev.getDetail("limit"),ev.getDetail("force"));
+							AjxTimedAction.scheduleAction(ta, ZaMTA.POLL_INTERVAL);
+						}
+					}
+					this._view.setObject(this._currentObject); 					
+				}	
+			}
+		}
 	}
 }

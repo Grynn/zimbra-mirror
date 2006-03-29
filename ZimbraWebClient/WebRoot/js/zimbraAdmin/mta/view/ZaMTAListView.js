@@ -57,6 +57,31 @@ ZaMTAListView.prototype.getTitle =
 function () {
 	return ZaMsg.PostQ_title;
 }
+
+ZaMTAListView.prototype.setUI = 
+function () {
+	ZaListView.prototype.setUI.call(this);
+	var list = this._list;
+	var len = list.size();
+	for (var i=0; i < len; i++) {
+		var mta = list.get(i);
+		var itemId = this._getItemId(mta);
+		this.higlightQItem(itemId,ZaMTA.A_DeferredQ, (parseInt(mta[ZaMTA.A_DeferredQ][ZaMTA.A_count]) > parseInt(ZaMTA.threashHold)));
+		this.higlightQItem(itemId,ZaMTA.A_IncomingQ, (parseInt(mta[ZaMTA.A_IncomingQ][ZaMTA.A_count]) > parseInt(ZaMTA.threashHold)));
+		this.higlightQItem(itemId,ZaMTA.A_ActiveQ, (parseInt(mta[ZaMTA.A_ActiveQ][ZaMTA.A_count]) > parseInt(ZaMTA.threashHold)));
+		this.higlightQItem(itemId,ZaMTA.A_CorruptQ, (parseInt(mta[ZaMTA.A_CorruptQ][ZaMTA.A_count]) > parseInt(ZaMTA.threashHold)));
+		this.higlightQItem(itemId,ZaMTA.A_HoldQ, (parseInt(mta[ZaMTA.A_HoldQ][ZaMTA.A_count]) > parseInt(ZaMTA.threashHold)));
+	}
+}
+
+ZaMTAListView.prototype.higlightQItem = function(itemId,queue, higlight) {
+
+	var span = document.getElementById(itemId+"_"+queue);
+	if(span) {
+		span.style.color = higlight ? "#FD4545" : "black";
+		span.style.fontWeight = higlight ? "bold" : "normal";
+	}
+}
 /**
 * Renders a single item as a DIV element.
 */
@@ -68,7 +93,7 @@ function(mta, now, isDndIcon) {
 	div._selectedStyleClass = div._styleClass + "-" + DwtCssStyle.SELECTED;
 	div.className = div._styleClass;
 	this.associateItemWithElement(mta, div, DwtListView.TYPE_LIST_ITEM);
-	
+	var itemId = this._getItemId(mta);
 	var idx = 0;
 	html[idx++] = "<table width='100%' cellspacing='2' cellpadding='0'>";
 	html[idx++] = "<tr>";
@@ -81,30 +106,32 @@ function(mta, now, isDndIcon) {
 			html[idx++] = AjxStringUtil.htmlEncode(mta[ZaMTA.A_name]);
 			html[idx++] = "</td>";
 		} else if(id.indexOf(ZaMTA.A_DeferredQ)==0) {	
+			html[idx++] = "<td width=" + this._headerList[i]._width + "><span id='" + (itemId+"_"+ZaMTA.A_DeferredQ)+ "'>";
 
-			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
+
 			html[idx++] = mta[ZaMTA.A_DeferredQ][ZaMTA.A_count];
-			html[idx++] = "</td>";
+			html[idx++] = "</span></td>";
 		} else if(id.indexOf(ZaMTA.A_IncomingQ)==0) {	
 
-			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
+			html[idx++] = "<td width=" + this._headerList[i]._width + "><span id='" + (itemId+"_"+ZaMTA.A_IncomingQ)+ "'>";
+
 			html[idx++] = mta[ZaMTA.A_IncomingQ][ZaMTA.A_count];
-			html[idx++] = "</td>";
+			html[idx++] = "</span></td>";
 		}  else if(id.indexOf(ZaMTA.A_ActiveQ)==0) {	
 
-			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
+			html[idx++] = "<td width=" + this._headerList[i]._width + "><span id='" + (itemId+"_"+ZaMTA.A_ActiveQ)+ "'>";
 			html[idx++] = mta[ZaMTA.A_ActiveQ][ZaMTA.A_count];
-			html[idx++] = "</td>";
+			html[idx++] = "</span></td>";
 		} else if(id.indexOf(ZaMTA.A_CorruptQ)==0) {	
 
-			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
+			html[idx++] = "<td width=" + this._headerList[i]._width + "><span id='" + (itemId+"_"+ZaMTA.A_CorruptQ)+ "'>";
 			html[idx++] = mta[ZaMTA.A_CorruptQ][ZaMTA.A_count];
-			html[idx++] = "</td>";
+			html[idx++] = "</span></td>";
 		} else if(id.indexOf(ZaMTA.A_HoldQ)==0) {	
 
-			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
+			html[idx++] = "<td width=" + this._headerList[i]._width + "><span id='" + (itemId+"_"+ZaMTA.A_HoldQ)+ "'>";
 			html[idx++] = mta[ZaMTA.A_HoldQ][ZaMTA.A_count];
-			html[idx++] = "</td>";
+			html[idx++] = "</span></td>";
 		}
 	}
 	html[idx++] = "</tr></table>";

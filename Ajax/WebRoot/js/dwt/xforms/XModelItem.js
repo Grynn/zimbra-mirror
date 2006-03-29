@@ -332,18 +332,18 @@ XModelItem.prototype.validateString = function(value) {
     var length = this.getLength();
     if (length !== null) {
         if (value.length !== length) {
-            throw this.getModel().getErrorMessage("stringLenWrong", value, length);
+            throw this.getModel().getErrorMessage("stringLenWrong", length);
         }
     }
     else {
 		var maxLength = this.getMaxLength();
 		if (maxLength !== null && value.length > maxLength) {
-			throw this.getModel().getErrorMessage("stringTooLong", value, maxLength);
+			throw this.getModel().getErrorMessage("stringTooLong", maxLength);
 		}
 	
 		var minLength = this.getMinLength();
 		if (minLength !== null && value.length < minLength) {
-			throw this.getModel().getErrorMessage("stringTooShort", value, minLength);
+			throw this.getModel().getErrorMessage("stringTooShort", minLength);
 		}
     }
     
@@ -452,9 +452,9 @@ XModelItem.prototype.getMaxExclusive = function() { return this.maxExclusive; }
 XModel.registerErrorMessage("notANumber",		 AjxMsg.notANumber);
 XModel.registerErrorMessage("numberTotalExceeded", AjxMsg.numberTotalExceeded);
 XModel.registerErrorMessage("numberFractionExceeded", AjxMsg.numberFractionExceeded);
-XModel.registerErrorMessage("numberMoreThanMax", AjxMsg.xFnumberMoreThanMax);
+XModel.registerErrorMessage("numberMoreThanMax", AjxMsg.numberMoreThanMax);
 XModel.registerErrorMessage("numberMoreThanEqualMax", AjxMsg.numberMoreThanEqualMax);
-XModel.registerErrorMessage("numberLessThanMin", AjxMsg.xFnumberLessThanMin);
+XModel.registerErrorMessage("numberLessThanMin", AjxMsg.numberLessThanMin);
 XModel.registerErrorMessage("numberLessThanEqualMin", AjxMsg.numberLessThanEqualMin);
 
 XModelItem.prototype.validateNumber = function(value) {
@@ -484,22 +484,22 @@ XModelItem.prototype.validateNumber = function(value) {
 
 	var maxInclusive = this.getMaxInclusive();
 	if (maxInclusive !== null && nvalue > maxInclusive) {
-		throw this.getModel().getErrorMessage("numberMoreThanMax", value, maxInclusive);
+		throw this.getModel().getErrorMessage("numberMoreThanMax", maxInclusive);
 	}
 	
 	var maxExclusive = this.getMaxExclusive();
 	if (maxExclusive !== null && nvalue >= maxExclusive) {
-		throw this.getModel().getErrorMessage("numberMoreThanEqualMax", value, maxExclusive);
+		throw this.getModel().getErrorMessage("numberMoreThanEqualMax", maxExclusive);
 	}
 
 	var minInclusive = this.getMinInclusive();
 	if (minInclusive !== null && nvalue < minInclusive) {
-		throw this.getModel().getErrorMessage("numberLessThanMin", value, minInclusive);
+		throw this.getModel().getErrorMessage("numberLessThanMin",  minInclusive);
 	}
 	
 	var minExclusive = this.getMinExclusive();
 	if (minExclusive !== null && nvalue <= minExclusive) {
-		throw this.getModel().getErrorMessage("numberLessThanEqualMin", value, minExclusive);
+		throw this.getModel().getErrorMessage("numberLessThanEqualMin", minExclusive);
 	}
 
 	return value;

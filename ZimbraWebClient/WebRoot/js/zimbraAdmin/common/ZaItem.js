@@ -137,9 +137,6 @@ function (type, app) {
 		case ZaItem.SERVER:
 			return new ZaServer(app);
 
-		case ZaItem.MAILQ_ITEM:
-			return new ZaMTAItem(app);
-
 		case ZaItem.MAILQ:
 			return new ZaMTA(app);
 

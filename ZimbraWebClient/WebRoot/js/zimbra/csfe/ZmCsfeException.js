@@ -70,6 +70,7 @@ ZmCsfeException.define("NO_AUTH_TOKEN", "NO_AUTH_TOKEN");
 ZmCsfeException.define("SOAP_ERROR", "SOAP_ERROR", ZMsg.errorNetwork);
 
 // CSFE Exceptions
+ZmCsfeException.define("SVC_ALREADY_IN_PROGRESS", "service.ALREADY_IN_PROGRESS");
 ZmCsfeException.define("SVC_AUTH_EXPIRED", "service.AUTH_EXPIRED");
 ZmCsfeException.define("SVC_AUTH_REQUIRED", "service.AUTH_REQUIRED");
 ZmCsfeException.define("SVC_FAILURE", "service.FAILURE", ZMsg.errorService);
