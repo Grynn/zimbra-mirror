@@ -124,6 +124,8 @@ zimbraCOSInheritedAttr: zimbraFeatureInitialSearchPreferenceEnabled
 zimbraCOSInheritedAttr: zimbraFeatureFiltersEnabled
 zimbraCOSInheritedAttr: zimbraFeatureSharingEnabled
 zimbraCOSInheritedAttr: zimbraFeatureViewInHtmlEnabled
+zimbraCOSInheritedAttr: zimbraFeatureHtmlComposeEnabled
+zimbraCOSInheritedAttr: zimbraFeatureMobileSyncEnabled
 zimbraCOSInheritedAttr: zimbraNewMailNotificationFrom
 zimbraCOSInheritedAttr: zimbraNewMailNotificationSubject
 zimbraCOSInheritedAttr: zimbraNewMailNotificationBody
@@ -131,7 +133,6 @@ zimbraCOSInheritedAttr: zimbraPop3Enabled
 zimbraCOSInheritedAttr: zimbraImapEnabled
 zimbraCOSInheritedAttr: zimbraPrefComposeFormat
 zimbraCOSInheritedAttr: zimbraPrefForwardReplyInOriginalFormat
-zimbraCOSInheritedAttr: zimbraFeatureHtmlComposeEnabled
 zimbraDomainAdminModifiableAttr: zimbraAccountStatus
 zimbraDomainAdminModifiableAttr: company
 zimbraDomainAdminModifiableAttr: cn
@@ -467,6 +468,7 @@ zimbraFeatureInitialSearchPreferenceEnabled: TRUE
 zimbraFeatureFiltersEnabled: TRUE
 zimbraFeatureSharingEnabled: TRUE
 zimbraFeatureViewInHtmlEnabled: FALSE
+zimbraFeatureMobileSyncEnabled: TRUE
 zimbraImapEnabled: TRUE
 zimbraMailIdleSessionTimeout: 0
 zimbraMailTrashLifetime: 30d

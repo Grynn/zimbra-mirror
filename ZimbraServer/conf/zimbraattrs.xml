@@ -152,6 +152,8 @@
 
 <attr name="zimbraFeatureSavedSearchesEnabled" type="boolean"/>
 
+<attr name="zimbraFeatureMobileSyncEnabled" type="boolean"/>
+
 <attr name="zimbraFileUploadMaxSize" type="long"/>
 
 <attr name="zimbraFeatureSharingEnabled" type="boolean"/>

@@ -332,6 +332,7 @@ objectIdentifier zimbraFeatureMailForwardingEnabled ZimbraAttrType:342
 objectIdentifier zimbraPrefMailForwardingAddress ZimbraAttrType:343
 objectIdentifier zimbraPrefMailLocalDeliveryDisabled ZimbraAttrType:344
 objectIdentifier zimbraLocale ZimbraAttrType:345
+objectIdentifier zimbraFeatureMobileSyncEnabled ZimbraAttrType:346
 
 #################################################################
 # object class OIDs
@@ -749,6 +750,13 @@ attributetype ( zimbraFeatureSharingEnabled
 attributetype ( zimbraFeatureViewInHtmlEnabled
 	NAME 'zimbraFeatureViewInHtmlEnabled'
 	DESC 'option to view attachments in html'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+attributetype ( zimbraFeatureMobileSyncEnabled
+	NAME 'zimbraFeatureMobileSyncEnabled'
+	DESC 'whether to permit mobile sync'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
@@ -2651,6 +2659,7 @@ objectclass ( zimbraAccount
 		zimbraFeatureFiltersEnabled $
 		zimbraFeatureSharingEnabled $		
 		zimbraFeatureViewInHtmlEnabled $
+                zimbraFeatureMobileSyncEnabled $
 		zimbraForeignPrincipal $
 		zimbraImapEnabled $
 		zimbraIsAdminAccount $ 
@@ -2817,8 +2826,9 @@ objectclass ( zimbraCOS
 		zimbraFeatureChangePasswordEnabled $
 		zimbraFeatureInitialSearchPreferenceEnabled $
 		zimbraFeatureFiltersEnabled $
-		zimbraImapEnabled $
 		zimbraFeatureViewInHtmlEnabled $
+                zimbraFeatureMobileSyncEnabled $
+		zimbraImapEnabled $
 		zimbraNotes $
 		zimbraMailHostPool $
 		zimbraMailIdleSessionTimeout $
