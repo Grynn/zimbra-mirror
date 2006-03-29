@@ -285,17 +285,19 @@ function(ex, method, params, restartOnError, obj) {
 		this._execFrame = {obj: obj, func: method, args: params, restartOnError: restartOnError};
 		this._errorDialog.registerCallback(DwtDialog.OK_BUTTON, this._errorDialogCallback, this);
 		if (ex.code == ZmCsfeException.SOAP_ERROR) {
-			this.popupMsgDialog(ZaMsg.SOAP_ERROR, ex, true);
+			this.popupErrorDialog(ZaMsg.SOAP_ERROR, ex, true);
 		} else if (ex.code == ZmCsfeException.NETWORK_ERROR) {
-			this.popupMsgDialog(ZaMsg.NETWORK_ERROR, ex, true);
+			this.popupErrorDialog(ZaMsg.NETWORK_ERROR, ex, true);
 		} else if (ex.code ==  ZmCsfeException.SVC_PARSE_ERROR) {
-			this.popupMsgDialog(ZaMsg.PARSE_ERROR, ex, true);
+			this.popupErrorDialog(ZaMsg.PARSE_ERROR, ex, true);
 		} else if (ex.code ==  ZmCsfeException.SVC_PERM_DENIED) {
-			this.popupMsgDialog(ZaMsg.PERMISSION_DENIED, ex, true);
+			this.popupErrorDialog(ZaMsg.PERMISSION_DENIED, ex, true);
 		} else if (ex.code == ZmCsfeException.ACCT_NO_SUCH_ACCOUNT) {
-			this.popupMsgDialog(ZaMsg.ERROR_NO_SUCH_ACCOUNT, ex, true);
+			this.popupErrorDialog(ZaMsg.ERROR_NO_SUCH_ACCOUNT, ex, true);
 		} else if (ex.code == ZmCsfeException.NO_SUCH_DISTRIBUTION_LIST) {
-			this.popupMsgDialog(ZaMsg.NO_SUCH_DISTRIBUTION_LIST, ex, true);
+			this.popupErrorDialog(ZaMsg.NO_SUCH_DISTRIBUTION_LIST, ex, true);
+		} else if(ex.code == ZmCsfeException.ACCT_EXISTS) {
+			this.popupErrorDialog(ZaMsg.ERROR_ACCOUNT_EXISTS, ex, true);
 		} else if (ex.code == ZmCsfeException.CSFE_SVC_ERROR || 
 					ex.code == ZmCsfeException.SVC_FAILURE || 
 						(typeof(ex.code) == 'string' && ex.code && ex.code.match(/^(service|account|mail)\./))
@@ -307,7 +309,7 @@ function(ex, method, params, restartOnError, obj) {
 			var gotit = false;
 			for(var ix in ZmCsfeException) {
 				if(ZmCsfeException[ix] == ex.code) {
-					this.popupMsgDialog(ZaMsg.SERVER_ERROR, ex, true);
+					this.popupErrorDialog(ZaMsg.SERVER_ERROR, ex, true);
 					gotit = true;
 					break;
 				}

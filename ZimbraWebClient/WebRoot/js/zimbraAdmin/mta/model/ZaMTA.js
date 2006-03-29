@@ -369,7 +369,10 @@ ZaMTA.prototype.mailQueueAction = function (qName, action, by, val) {
 }
 
 ZaMTA.prototype.mailQueueActionClbck = function (qName, resp) {
-
+	this[qName][ZaMTA.A_Status] = ZaMTA.STATUS_STALE;
+	if(resp.isException && resp.isException()) {
+		this._app.getCurrentController()._handleException(resp.getException(), "ZaMTA.prototype.mailQStatusCallback");
+	} 	
 }
 
 ZaMTA.prototype.flushQueues = function () {
