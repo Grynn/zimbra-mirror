@@ -35,7 +35,7 @@
 function ZaMTAController(appCtxt, container,app) {
 	ZaXFormViewController.call(this, appCtxt, container,app,"ZaMTAController");
 	this._UICreated = false;
-	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/Monitoring_Zimbra_MTA_Mail_Queues.htm";				
+	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/monitoring/monitoring_zimbra_mta_mail_queues.htm";				
 	this._toolbarOperations = new Array();
 	this.objType = ZaEvent.S_MTA;	
 }
