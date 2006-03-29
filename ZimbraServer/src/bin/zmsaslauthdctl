@@ -45,6 +45,13 @@ rewriteconfig() {
 #
 case "$1" in
     'start')
+		if [ -f ${zimbra_home}/cyrus-sasl-2.1.21.ZIMBRA/state/saslauthd.pid ]; then
+			cpid=`cat ${zimbra_home}/cyrus-sasl-2.1.21.ZIMBRA/state/saslauthd.pid`
+			kill -0 "$cpid" 2> /dev/null
+			if [ $? -eq 0 ]; then
+				exit 0
+			fi
+		fi
 		mkdir -p ${zimbra_home}/cyrus-sasl-2.1.21.ZIMBRA/state
 		if [ x$2 = "x" ]; then
 			rewriteconfig

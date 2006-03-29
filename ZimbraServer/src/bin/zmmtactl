@@ -30,9 +30,16 @@ SCRIPTS="zmmtaconfigctl postfix zmsaslauthdctl"
 case "$1" in 
 	start)
 		/opt/zimbra/libexec/zmmtaconfig antispam antivirus mta sasl
+		STATUS=0
 		for i in $SCRIPTS; do
 			/opt/zimbra/bin/$i start norewrite
+			R=$?
+			if [ $R -ne "0" ]; then
+				echo "$i failed to start"
+				STATUS=$R
+			fi
 		done
+		exit $STATUS
 	;;
 	stop)
 		for i in $SCRIPTS; do
