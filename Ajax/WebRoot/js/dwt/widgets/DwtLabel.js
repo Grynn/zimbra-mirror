@@ -39,7 +39,7 @@ function DwtLabel(parent, style, className, posStyle) {
 	this._style = style ? style : (DwtLabel.IMAGE_LEFT | DwtLabel.ALIGN_CENTER);
 
 	this._createTable();
-	this.setCursor("default");
+	//MOW:  this.setCursor("default");
 }
 
 DwtLabel.prototype = new DwtComposite;

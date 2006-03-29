@@ -92,7 +92,7 @@ function DwtInputField(params) {
 	if (params.maxLen)
 		this._inputField.maxLength = this._maxLen = params.maxLen;
 
-	this.setCursor("default");
+	//MOW:  this.setCursor("default");
 
 	this._inputField.value = params.initialValue || "";
 

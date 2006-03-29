@@ -33,7 +33,7 @@
 * @param deferred	postpone initialization until needed
 */
 
-function DwtControl(parent, className, posStyle, deferred) {
+function DwtControl(parent, className, posStyle, deferred, id) {
 
 	if (arguments.length == 0) return;
  	this.parent = parent;
@@ -49,6 +49,10 @@ function DwtControl(parent, className, posStyle, deferred) {
 
 	this._className = className ? className : "DwtControl";
 	this._posStyle = posStyle;
+
+	if (id != null) {
+		this._htmlElId = id;
+	}
 	if (!deferred)
 		this._initCtrl();
 		

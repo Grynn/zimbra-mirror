@@ -27,57 +27,23 @@
 *
 */
 
-.DisabledText { 
-	color: #999999; 
+.Text {
+	@Text@
 }
 
-.inactive {
-	background-color: #C6C5D7;
+.Icon {
+	width:16px; height:16px;
+}
+
+.DisabledText,
+.DwtSelect-disabled .Text {
+	@DisabledText@
 }
 
 .nobreak {
-	white-space: nowrap;
-	overflow: hidden;
+	@TextNoWrap@
 }
 
-/*
- * DwtShell
- */
-
-.DwtShellBusyDialog table.DialogContent {
-	width: 300px;
-	height: 75px;
-}
-
-.DwtShellBusyDialog td.WaitIcon {
-	background-image:url(/zimbra/img/animated/wait_64.gif);
-	background-repeat:no-repeat;
-	background-position:center center;
-	width:64px;
-	height:64px;
-}
-
-.DwtWait16Icon {
-	background-image:url(/zimbra/img/animated/wait_16.gif);
-	background-repeat:no-repeat;
-	background-position:center center;
-	width:16px;
-	height:16px;
-}
-
-.DwtWait32Icon {
-	background-image:url(/zimbra/img/animated/wait_32.gif);
-	background-repeat:no-repeat;
-	background-position:center center;
-	width:32px;
-	height:32px;
-}
-
-.DwtShellBusyDialog table td.MsgText {
-	font: 11pt Tahoma, Arial, Helvetica, sans-serif;
-	padding:5px;
-	vertical-align:top;
-}
 
 /*
  *	Tabs
@@ -86,38 +52,37 @@
 .DwtTabView {
 	width: 100%;
 	align: left;	
-	background-color: white;
 }
 
 .DwtTabView .Title {
 }
 
 .DwtTabViewPage {
-	background-color:#EEEEEE;
+	@SkinBodyBg@
 }
 .DwtTabViewPage .TitleBar {
-	background-color: #C6C5D7;
-	filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#FFF0F0F0,endColorStr=#FF9997B5);
+	@SkinBodyBg@
 }
 .DwtTabViewPage .Title {
-	font: bold 12pt Arial, Helvetica, sans-serif;
+	font-size:12pt;
+	font-weight:bold;
 	padding: 3px;
 }
 
-.DwtTabBar {
-	background-color: #CCCCCC;
+.DwtTabBar, 
+.DwtTabTable {
+	@SkinBodyBg@
 }
 
-.DwtTabButton {}
+.DwtTabButton {
+	cursor:pointer;
+}
 
 .DwtTabButton-active {}
 
 .DwtTabButton-inactive {}
 
 
-.DwtTabTable {
-	background-color: #EEEEEE;
-}
 
 .DwtTabButtonTL {}
 .DwtTabButtonTM {}
@@ -129,12 +94,15 @@
 .DwtTabButtonBM {}
 .DwtTabButtonBR {}
 
+
+
+
+
 .DwtPropertyPage {
 	background-color:#EEEEEE;
 }
 .DwtPropertyPage .TitleBar {
 	background-color: #C6C5D7;
-	filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#FFF0F0F0,endColorStr=#FF9997B5);
 }
 .DwtPropertyPage .Title {
 	font: bold 12pt Arial, Helvetica, sans-serif;
@@ -189,7 +157,7 @@
 	cursor: default;
 }
 
-.DwtTreeItem, .DwtTreeItem-selected, .DwtTreeItem-actioned {
+.DwtTreeItem, .DwtTreeItem-actioned {
 	padding-top:1px;
 	padding-left:2px;
 	padding-right:2px;
@@ -203,7 +171,10 @@
 }
 
 .DwtTreeItem-selected {
-	background-color: #ADD6D6;
+	padding-left:2px;
+	padding-right:2px;
+	background-color:@_InsetDarkColor_@;
+	cursor: default;
 }
 
 .DwtTreeItem-actioned {
@@ -237,144 +208,153 @@
 *	-activated	-- mouseover state
 *	-triggered	-- mousedown state
 */
+		
+.DwtButton 						{	@Button@				@ButtonMinWidth@	}
+.DwtButton .Text 				{	@ButtonText@	}
+.DwtButton-activated 			{	@Button-activated@		@ButtonMinWidth@	}
+.DwtButton-activated .Text		{	@ButtonText-activated@	}
+.DwtButton-triggered			{	@Button-triggered@		@ButtonMinWidth@	}	
+.DwtButton-triggered .Text		{	@ButtonText-triggered@	}	
+.DwtButton-toggled				{	@Button-toggled@		@ButtonMinWidth@	}	
+.DwtButton-toggled .Text		{	@ButtonText-toggled@		}	
+.DwtButton-disabled				{	@Button-disabled@		@ButtonMinWidth@	}	
+.DwtButton-disabled .Text		{	@ButtonText-disabled@		}	
 
-.TBButton, TBButtonDefault {
-	border: 1px solid #EEEEEE;
-}
+.TBButton 						{	@ToolbarButton@		}
+.TBButton td 					{	@ToolbarButtonText@	}
+.TBButton-activated 			{	@ToolbarButton-activated@	}
+.TBButton-activated td			{	@ToolbarButtonText-activated@	}
+.TBButton-triggered				{	@ToolbarButton-triggered@	}	
+.TBButton-triggered td			{	@ToolbarButtonText-triggered@	}	
+.TBButton-toggled				{	@ToolbarButton-toggled@		}	
+.TBButton-toggled td			{	@ToolbarButtonText-toggled@		}	
+.TBButton-disabled				{	@ToolbarButton-disabled@		}	
+.TBButton-disabled td			{	@ToolbarButtonText-disabled@		}	
+		
+.InsetTBButton 					{	@InsetButton@		}
+.InsetTBButton td 				{	@InsetButtonText@	}
+.InsetTBButton-activated 		{	@InsetButton-activated@	}
+.InsetTBButton-activated td		{	@InsetButtonText-activated@	}
+.InsetTBButton-triggered		{	@InsetButton-triggered@	}	
+.InsetTBButton-triggered td		{	@InsetButtonText-triggered@	}	
+.InsetTBButton-toggled			{	@InsetButton-toggled@		}	
+.InsetTBButton-toggled td		{	@InsetButtonText-toggled@		}	
+.InsetTBButton-disabled			{	@InsetButton-disabled@		}	
+.InsetTBButton-disabled td		{	@InsetButtonText-disabled@		}	
 
-.TBButtonWhite {
-	border: 1px solid white;
-}
 
-.DwtButton, .ColorButton, .TBButton-activated, .TBButtonWhite-activated {
-	background-image:url(/zimbra/img/loRes/dwt/ButtonUp__H.gif);
-	border: 1px solid;
-	border-color: #E0E0E0 #555555 #555555 #E0E0E0;
-}
 
-.DwtButton-activated, .ColorButton-activated {
-	background-image:url(/zimbra/img/loRes/dwt/ButtonDown__H.gif);
-	border: 1px solid;
-	border-color: #E0E0E0 #555555 #555555 #E0E0E0;
-}
-
-.DwtButton-triggered, .ColorButton-triggered, .TBButton-triggered, .TBButtonWhite-triggered {
-	background-image:url(/zimbra/img/loRes/dwt/ButtonDown__H.gif);
-	border:1px solid;
-	border-color: #555555 #E0E0E0 #E0E0E0 #555555;
-}
-
-.DwtButton-toggled, .ColorButton-toggled, .TBButton-toggled, .TBButtonWhite-toggled {
-	background-image:url(/zimbra/img/loRes/dwt/ButtonDown__H.gif);
-	border:1px solid;
-	border-color: #555555 #E0E0E0 #E0E0E0 #555555;
-}
-
-.TBButtonDefault {
-	background-image:url(/zimbra/img/loRes/dwt/ButtonUpDefault__H.gif);
-	border: 1px solid;
-	border-color: #b6e4e4 #6a9090 #6a9090 #b6e4e4;
-}
-
-.TBButtonDefault-activated {
-	background-image:url(/zimbra/img/loRes/dwt/ButtonDownDefault__H.gif);
-	border: 1px solid;
-	border-color: #b6e4e4 #6a9090 #6a9090 #b6e4e4;
-}
-
-.TBButtonDefault-triggered {
-	background-image:url(/zimbra/img/loRes/dwt/ButtonDownDefault__H.gif);
-	border: 1px solid;
-	border-color: #6a9090 #b6e4e4 #b6e4e4 #6a9090;
-}
 
 /*
  *  DwtSelect 
  */
 
-.DwtSelect {  
-	cursor: default;
-	overflow:hidden;
-	height:20px;
-	background-image:url(/zimbra/img/loRes/dwt/ButtonUp__H.gif);
-	border: 1px solid;
-	border-color: #E0E0E0 #555555 #555555 #E0E0E0;
-	min-width:40px;
-}
-
-.DwtSelect-activated {  
-	cursor: default;
-	overflow:hidden;
-	height:20px;
-	background-image:url(/zimbra/img/loRes/dwt/ButtonDown__H.gif);
-	border: 1px solid;
-	border-color: #E0E0E0 #555555 #555555 #E0E0E0;
-	min-width:40px;
-}
-
-.DwtSelect-triggered {  
-	cursor: default;
-	overflow:hidden;
-	height:20px;
-	background-image:url(/zimbra/img/loRes/dwt/ButtonDown__H.gif);
-	border:1px solid;
-	border-color: #555555 #E0E0E0 #E0E0E0 #555555;
-	min-width:40px;
-}
+/* Default is that the DwtSelect button looks just like the normal button */
+.DwtSelect 						{	@Button@		}
+.DwtSelect .Text 				{	@ButtonText@	}
+.DwtSelect-activated 			{	@Button-activated@	}
+.DwtSelect-activated .Text		{	@ButtonText-activated@	}
+.DwtSelect-triggered			{	@Button-triggered@	}	
+.DwtSelect-triggered .Text		{	@ButtonText-triggered@	}	
+.DwtSelect-toggled				{	@Button-toggled@		}	
+.DwtSelect-toggled .Text		{	@ButtonText-toggled@		}	
+.DwtSelect-disabled				{	@Button-disabled@		}	
+.DwtSelect-disabled .Text		{	@ButtonText-disabled@		}	
 
 
 .DwtSelect table,
 .DwtSelect-activated table,
 .DwtSelect-triggered table,
 .DwtSelect-disabled table {
-	border-spacing:none;
-	border-collapse: collapse;
-	width:100%;
-	text-align:center;
-	table-layout:fixed;
-	padding:0px;
+	@FullWidth@
+	@TableCompact@
+	@TableFixed@
 }
 
 .DwtSelect .Text,
 .DwtSelect-activated .Text,
-.DwtSelect-triggered .Text {
-	padding: 2px;
-	text-align:left;
-	padding-left:4px;
-	overflow:hidden;
-}
-
+.DwtSelect-triggered .Text,
 .DwtSelect-disabled .Text {
-	padding: 2px;
 	text-align:left;
+	padding: 2px;
 	padding-left:4px;
 	overflow:hidden;
-	color:#CCCCCC;
 }
 
-.DwtSelect.disabled {
-	border:1px solid #CCCCCC;
-}
 
 .dropDownCell { 
 	width: 16px;
 }
 
-.DwtSelectMenu { 
-	background-color:white;
-	border:1px solid;
-	border-color:#CCCCCC black black #CCCCCC;
-	position : absolute;
+
+
+/*
+* Menus
+*/
+
+.DwtMenu, .ActionMenu, .DwtSelectMenu {
+	@Menu@
+	@MenuMinWidth@
 }
 
+
+.DwtMenuItem {
+	@MenuItem@
+}
+
+.DwtMenuItem-selected, .DwtMenuItem-IconArea-selected, .DwtMenuItem-CheckedArea-selected {
+	@MenuItem-selected@
+}
+
+.DwtMenuItem-triggered, .DwtMenuItem-IconArea-triggered, .DwtMenuItem-CheckedArea-triggered {
+	@MenuItem-triggered@
+}
+
+.DwtMenuItem .Text {
+	@MenuItemText@
+	@MenuItemTextPadding@
+}
+.DwtMenuItem-selected .Text {
+	@MenuItemText-selected@
+	@MenuItemTextPadding@
+}
+
+.DwtMenuItem-triggered .Text {
+	@MenuItemText-triggered@
+	@MenuItemTextPadding@
+}
+
+.DwtMenuItem .DisabledText {
+	@MenuItemText-disabled@
+	@MenuItemTextPadding@
+}
+
+.DwtMenuItem-IconArea, 
+.DwtMenuItem-CheckedArea {
+
+}
+
+.DwtMenuItem-Separator {
+	background-color: #999999;
+	padding-left: 5px;
+	white-space:noWrap;
+	width:100%;
+	height:1px;
+}
+
+
+
+.DwtSelectMenu table{
+	@FullWidth@
+}
+
+
+
+/*
 .DwtSelectMenu .DwtMenuItem {
 	border: 1px solid white;
 	background-color: white;
 	cursor: default;
-}
-
-.DwtSelectMenu table { 
-	width:99%;
 }
 
 .DwtSelectMenu .DwtMenuItem-text {
@@ -386,15 +366,11 @@
 	width:19px;
 }
 
-.DwtSelectMenu .DwtMenuItem-selected {
-	background-color: #ADD6D6;
-	color:black;
-	cursor: default;
-}
 
 .DwtSelectMenu .DwtMenuItem-selected .DwtMenuItem-text{
 	cursor: default;
 }
+*/
 
 /*
 * List views
@@ -410,10 +386,10 @@
 	width: 100%;
 	height: 100%;
 	overflow: auto;
-	background-color: #FFFFFF;
 }
 
 .DwtListView-Rows td {
+	@Text@
 	padding: 2px;
 }
 
@@ -424,24 +400,23 @@
 }
 
 .DwtListView-ColHeader {
-	background-color: #C6C5D7;
+	@ListHeaderBg@
 	position: relative;
 	height: 24px;
 }
 
 .DwtListView-Column {
 	padding: 0 0 0 2;
-	border-style: solid;
-	border-width: 0 0 2 0;
-	border-bottom-color: #777777;
-	background-color: #EEEEEE;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
 
+.DwtListView-Column td {
+	@Text@
+}
+
 .DwtListView-ColumnEmpty {
-	background-color: #555555;
 }
 
 .DwtListView-ColumnSash {
@@ -449,13 +424,12 @@
 	background-color: #000000;
 }
 
-.DwtListView .DwtListView-ColumnHover {
-	background-color: #D8D8E0;
-	border-bottom-color: #AAAAAA;
+.DwtListView .DwtListView-ColumnHover TD {
+	color:#FFC600;
 }
 
 .DwtListView-ColumnActive {
-	background-color: #EEEEEE;
+
 }
 
 /*
@@ -481,50 +455,7 @@
 }
 
 
-/*
-* Menus
-*/
 
-.DwtMenu, .ActionMenu {
-	background-image:url(/zimbra/img/loRes/skins/steel/Pebble__BG.gif);
-	border: 2px solid;
-	border-color: #C7C7C7 #3E3E3E #3E3E3E #C7C7C7;
-}
-
-.DwtMenu {}
-.DwtMenuItem {
-	border:1px solid #EEEEEE;
-}
-
-.DwtMenuItem-selected, .DwtMenuItem-IconArea-selected, .DwtMenuItem-CheckedArea-selected {
-	background-image:url(/zimbra/img/loRes/dwt/ButtonUp__H.gif);
-	border: 1px solid;
-	border-color: #E0E0E0 #555555 #555555 #E0E0E0;
-}
-
-.DwtMenuItem-triggered, .DwtMenuItem-IconArea-triggered, .DwtMenuItem-CheckedArea-triggered {
-	background-image:url(/zimbra/img/loRes/dwt/ButtonDown__H.gif);
-	border:1px solid;
-	border-color: #555555 #E0E0E0 #E0E0E0 #555555;
-}
-
-.DwtMenuItem-IconArea, .DwtMenuItem-CheckedArea {}
-
-.DwtMenuItem-Separator {
-	background-color: #999999;
-	padding-left: 5px;
-	white-space:noWrap;
-	width:100%;
-	height:1px;
-}
-
-.DwtMenuItem .Text, .DwtMenuItem .DisabledText,
-.DwtMenuItem-triggered .Text,
-.DwtMenuItem-selected .Text {
-	white-space:nowrap;
-	padding-right:2px;
-	padding-left:5px;
-}
 
 /*
  * Dialogs
@@ -547,48 +478,67 @@
 }
 
 .DwtDialog textarea { width: 100%; }
-.DwtDialog .Label { font-size: 10pt; }
-.DwtDialog .Field { width: 290px; }
+.DwtDialog .Label { 
 
-.DwtPropertySheet .Label {
-  color: #666;
-  white-space: nowrap;
-  text-align: right;
+}
+.DwtDialog .Field { 
+	width: 290px; 
 }
 
-.DialogBody 			{	background-color:#EEEEEE;		}
-.DialogTable			{	border-collapse:collapse;		}
-.DialogToolbar 			{	background-image:url(/zimbra/img/loRes/skins/steel/PebbleDark__BG.gif);	}
+/* MERGE WITH ZmFieldLabelLeft ? */
+.DwtPropertySheet .Label {
+	@TextLabel@
+	text-align: right;
+}
+
+.DialogBody 			{
+	background-color:@_ToolbarColor_@;
+}
+
+.DialogBody td {
+	@TextLabel@
+}
+
+.DialogTable			{	
+	@TableCompact@
+}
+
+.DialogToolbar 			{	}
 
 .DialogTitle {
+	@TableCompact@
 	background-color:#3d3d3d; 
 	cursor:move;
 }
 
-.DialogTitleCell {	
+.DialogTitleCell {
 	color:white;
 	width:auto;
 	font-weight:bold;
 }
 
-.DialogTitleText {
-	color:white;
-	width:auto;
-	font-weight:bold;	
+.DialogTitle .Text {
+	@FontBig@
+	font-weight:bold;
+	cursor:move;
 	padding-left:2px;
 	padding-right:2px;
+	position:relative;
+	top:-3px;
 }
 
-/* NEEDED? -- REMOVE FROM BORDER */
-.dialog_shadow_c { width:6;	height:6;		}
-.border_outset_c { width:4;	height:4;		}
-.border_shadow_v { width:6;	height:100%;	}
+
+
+
+
 
 /* 
  * Message dialog 
  */
 .DwtMsgDialog { width: 400px; }
 .DwtMsgArea { padding-left: 12px; }
+
+
 
 /*
  *  DwtAlert
@@ -648,7 +598,7 @@
 .DwtColorPicker table td img { border: 1px none black; }
 
 .DwtResizeGripper {
-	background-image:url(/zimbra/img/loRes/dwt/ResizeGripper.gif);
+	/* background-image:url(/zimbra/img/hiRes/dwt/ResizeGripper.gif); */
 	border: none;
 	width:16px;
 	height:16px;
@@ -659,52 +609,55 @@
  */
 
 .DwtCalendar {
-	background-color: transparent;
+	@SkinInsetBg@
 }
 
 .DwtCalendarTitlebar {
-	background-color: #CCCCCC;
+	@SkinInsetBgDark@
+	@SkinInsetBgDarkColor@
 }
 
 .DwtCalendarButton {
-	border:1px solid #CCCCCC;
+	@InsetButton@
+	border:1px solid @_InsetDarkColor_@
 	text-align:center;
 	width:15px;
 	padding:3px;
 }	
 
 .DwtCalendarButton-activated {
-	background-image:url(/zimbra/img/loRes/dwt/ButtonSmallUp__H.gif);
-	border: 1px solid;
-	border-color: #E0E0E0 #555555 #555555 #E0E0E0;
+	@InsetButton-activated@
 	text-align:center;
 	width:15px;
 	padding:3px;
 }
 
 .DwtCalendarButton-triggered {
-	background-image:url(/zimbra/img/loRes/dwt/ButtonSmallDown__H.gif);
-	border:1px solid;
-	border-color: #555555 #E0E0E0 #E0E0E0 #555555;
+	@InsetButton-triggered@
 	text-align:center;
 	width:15px;
 	padding:3px;
 }
 
 .DwtCalendarDay {
-	border:1px solid #EEEEEE;
+	@ToolbarButton@
 }
 
 .DwtCalendarDay-activated {
-	background-image:url(/zimbra/img/loRes/dwt/ButtonSmallUp__H.gif);
-	border: 1px solid;
-	border-color: #E0E0E0 #555555 #555555 #E0E0E0;
+	@ToolbarButton-activated@
 }
 
 .DwtCalendarDay-triggered {
-	background-image:url(/zimbra/img/loRes/dwt/ButtonSmallDown__H.gif);
-	border:1px solid;
-	border-color: #555555 #E0E0E0 #E0E0E0 #555555;
+	@ToolbarButton-triggered@
+}
+
+.DwtCalendarDay-selected {
+	@ToolbarButton-triggered@
+}
+
+
+.DwtCalendarDay-today {
+	color:#790000;
 }
 
 .DwtCalendarTitleCell {
@@ -712,14 +665,12 @@
 }
 
 .DwtCalendarDow {
-	border-bottom: 1px solid #CCCCCC;
+	border-bottom: 1px solid @_SeparatorColor_@;
+	text-align:center;
 } 
 
-.DwtCalendarDay-selected {
-	border:1px solid #ADD6D6;
-	background-color: #ADD6D6;
-}
 
+/*
 .DwtCalendarDay-activated {
 	background-color: white;
 	border: 1px outset black;
@@ -729,10 +680,8 @@
 	background-color: #FFCC00;
 	border: 1px inset black;
 }
+*/
 
-.DwtCalendarDay-today {
-	border: 1px solid #990000;
-}
 
 .DwtCalendarDay-grey {
 	color: #666666;
@@ -746,13 +695,10 @@
  * DwtInputField
  */
 .DwtInputField input {
-	color: black;
-	background-color: white;
 }
 
 .DwtInputField-Error input {
-	color: black;
-	background-color: #F4FB7F;
+	@InputError@
 }
 
 /*
@@ -806,13 +752,13 @@
 
 .DwtPropertyEditor table tr.expander-collapsed td { cursor: pointer; background-color: #e5e5e5; }
 .DwtPropertyEditor table tr.expander-collapsed td div {
-  background: url("/zimbra/img/loRes/dwt/Expand.gif") no-repeat 100% 50%;
+  background: url("/zimbra/img/hiRes/dwt/Expand.gif") no-repeat 100% 50%;
   padding-right: 15px;
 }
 
 .DwtPropertyEditor table tr.expander-expanded td { cursor: pointer; background-color: #e5e5e5; }
 .DwtPropertyEditor table tr.expander-expanded td div {
-  background: url("/zimbra/img/loRes/dwt/Collapse.gif") no-repeat 100% 50%;
+  background: url("/zimbra/img/hiRes/dwt/Collapse.gif") no-repeat 100% 50%;
   padding-right: 15px;
 }
 
@@ -966,13 +912,13 @@
 }
 
 .xform_button {
-	background-image:url(/zimbra/img/loRes/dwt/ButtonSmallUp__H.gif);
+	/* background-image:url(/zimbra/img/hiRes/dwt/ButtonSmallUp__H.gif); */
 	border:1px outset #999999;	
 	white-space:nowrap;
 }
 
 .xform_button_default {
-	background-image:url(/zimbra/img/loRes/dwt/ButtonSmallUp__H.gif);
+	/* background-image:url(/zimbra/img/hiRes/dwt/ButtonSmallUp__H.gif); */
 	border:2px outset #999999;	
 	white-space:nowrap;
 }
@@ -1111,6 +1057,9 @@ HTML>BODY .RadioGrouperLabel {
 	margin-left:-5px;
 }
 
+
+/* ??? THE FOLLOWING THREE ENTRIES SHOULD NOT BE IN DWT! */
+
 .quotabar {
 	width: 100px;
 	border: 1px solid white;
@@ -1119,7 +1068,7 @@ HTML>BODY .RadioGrouperLabel {
 
 .quotaused {
 	height: 6px;
-	font-size: 6px; /* WEIRD IE QUIRK */
+	@FontMiniscule@	/* WEIRD IE QUIRK */
 }
 
 .percent {
@@ -1142,7 +1091,7 @@ HTML>BODY .RadioGrouperLabel {
 }
 .oselect_table,
 .oselect_check_table {
-	background-image:url(/zimbra/img/loRes/dwt/ButtonUp__H.gif);
+	/* background-image:url(/zimbra/img/hiRes/dwt/ButtonUp__H.gif); */
 	border-collapse:collapse;
 	border:1px solid;
 	border-color:#CCCCCC #333333 #333333 #CCCCCC;
@@ -1160,7 +1109,7 @@ HTML>BODY .RadioGrouperLabel {
 	height:15;
 	border-style:none;
 	border-color:#EEEEEE;
-	background-image:url(/zimbra/img/loRes/dwt/ButtonUp__H.gif);
+	/* background-image:url(/zimbra/img/hiRes/dwt/ButtonUp__H.gif); */
 }
 
 .oselect_display_disabled {
@@ -1212,7 +1161,7 @@ HTML>BODY .RadioGrouperLabel {
 	white-space:nowrap;
 }
 .oselect_choice_selected {
-	background-image:url(/zimbra/img/loRes/dwt/ButtonUp__H.gif);
+	/* background-image:url(/zimbra/img/hiRes/dwt/ButtonUp__H.gif); */
 	border:1px solid;
 	border-color:#CCCCCC black black #CCCCCC;
 	padding-left:4px;
@@ -1261,4 +1210,40 @@ HTML>BODY .RadioGrouperLabel {
 .DwtChooserListView {
 	border: 1px solid #000000;
 	margin: 5 5 5 5;
+}
+
+
+
+
+/*
+ * DwtShellBusyDialog
+ */
+
+.DwtShellBusyDialog table.DialogContent {
+	width: 300px;
+	height: 75px;
+}
+
+.DwtShellBusyDialog td.WaitIcon {
+	background-image:url(/zimbra/img/animated/wait_64.gif);
+	width:64px;
+	height:64px;
+}
+
+.DwtWait16Icon {
+	background-image:url(/zimbra/img/animated/wait_16.gif);
+	width:16px;
+	height:16px;
+}
+
+.DwtWait32Icon {
+	background-image:url(/zimbra/img/animated/wait_32.gif);
+	width:32px;
+	height:32px;
+}
+
+.DwtShellBusyDialog table td.MsgText {
+	@FontDefault@
+	padding:5px;
+	vertical-align:top;
 }

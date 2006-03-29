@@ -59,7 +59,7 @@ function DwtCalendar(parent, className, posStyle, firstDayOfWeek, forceRollOver,
 	
 	if (!this._readOnly)
 		this._installListeners();
-	this.setCursor("default");
+	//MOW:  this.setCursor("default");
 	
 	this._selectionMode = DwtCalendar.DAY;
 	

@@ -462,7 +462,7 @@ DwtBorder.registerBorder(
 						"<td id='{$id}_border_tl' class=ImgHover_TL></td>", 
 						"<td id='{$id}_border_tm' class=ImgHover_T__H></td>", 
 						"<td id='{$id}_border_tr' class=ImgHover_TR></td>", 
-						(AjxEnv.useTransparentPNGs ? "<td class='ImgCurvedShadow_TR'></td>" : ""),
+						(AjxEnv.useTransparentPNGs ? "<td><div class='MOWImgCurvedShadow_TR'></div></td>" : ""),
 					"</tr>", 
 					"<tr>",
 						"<td id='{$id}_border_ml' class=ImgHover_L__V></td>", 
@@ -471,19 +471,19 @@ DwtBorder.registerBorder(
 		end: AjxBuffer.concat(
 						"</div></td>", 
 						"<td id='{$id}_border_mr' class=ImgHover_R__V></td>", 
-						(AjxEnv.useTransparentPNGs ? "<td valign=top><div class='ImgCurvedShadow_T2R'></div><div class='ImgCurvedShadow_R__V' style='height:100%;'></div></td>" : ""),
+						(AjxEnv.useTransparentPNGs ? "<td><div class='MOWImgCurvedShadow_R__V' style='height:100%'></div></td>" : ""),
 					"</tr>", 
 					"<tr>",
-						"<td id='{$id}_border_bl' class=ImgHover_BL></div></td>", 
+						"<td id='{$id}_border_bl'><div class=ImgHover_BL></div></td>", 
 						"<td id='{$id}_border_bm' class=ImgHover_B__H></td>", 
-						"<td id='{$id}_border_br' class=ImgHover_BR></div></td>", 
+						"<td id='{$id}_border_br'><div class=ImgHover_BR></div></td>", 
 						(AjxEnv.useTransparentPNGs ? "<td></td>" : ""),
 					"</tr>", 
 						(AjxEnv.useTransparentPNGs ? 
-							"<tr><td class='ImgCurvedShadow_BL'></td>"
-								+"<td><div id='{$id}_border_shadow_b' class='ImgCurvedShadow_B__H' style='width:100%;'></td>"
+							"<tr><td class='minSize'><div class='MOWImgCurvedShadow_BL'></div></td>"
+								+"<td><div id='{$id}_border_shadow_b' class='MOWImgCurvedShadow_B__H' style='width:100%'></td>"
 								+"<td></td>"
-								+"<td><div style='position:relative;'><div class='ImgCurvedShadow_BR' style='position:absolute;left:-20;top:-14'></div></div></td>"
+								+"<td><div style='position:relative;'><div class='MOWImgCurvedShadow_BR CurvedShadow_BR_offset'></div></div></td>"
 							+"</tr>" 
 							: ""
 						),
@@ -569,8 +569,11 @@ DwtBorder.registerBorder(
 							"<div class=SplashScreenLicense><!--$license--></div>",
 							"<div class=SplashScreenOKButton id='<!--$buttonId-->'><!--$button--></div>",
 						"</div></td>",
-						(AjxEnv.useTransparentPNGs ? "<td valign=top class='border_shadow_v'><div class='ImgShadowBig_TR'></div>"+
-														"<div class='ImgShadowBig_R__V' style='height:100%'></div></td>" : ""),
+
+						(AjxEnv.useTransparentPNGs ? "<td valign=top class='fullHeight'><table cellspacing=0 cellpadding=0 border=0 height=100%>"
+														+"<tr><td height=1><div class='ImgShadowBig_TR'></div></td></tr>"
+														+"<tr><td height=100%><div class='ImgShadowBig_R__V' style='height:100%'></div></td></tr>"
+														+"</table></td>" : ""),
 
 					"</tr>"
 				),

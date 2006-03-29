@@ -110,7 +110,7 @@ DIV.vSpace {
 }
 
 /* Used by the text in the multi-select Icon */
-.MailMultiSelectText {
+.DndIconTextLabel {
 	font-size: 8pt;
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
 	font-weight: bold;

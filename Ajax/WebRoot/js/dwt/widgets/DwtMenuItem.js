@@ -84,7 +84,7 @@ function DwtMenuItem(parent, style, radioGroupId, index, className, posStyle) {
 	this.getHtmlElement().appendChild(this._table);
 	if (parent._addItem)
 		parent._addItem(this, index);
-	this.setCursor("default");
+	this.setCursor("pointer");
 	this._menu = null;
 	this._menuDisposeListener = new AjxListener(this, DwtMenuItem.prototype._menuDisposed)
 }
@@ -112,6 +112,7 @@ DwtMenuItem._IMAGECELL_DIM = "22px";
 DwtMenuItem._CASCADE_DIM = "16px";
 DwtMenuItem._CHECKEDCELL_DIM = "13px";
 DwtMenuItem._FILLCELL_DIM = "7px";
+DwtMenuItem._SEPAARATOR_DIM = "1px";
 DwtMenuItem._MENU_POPUP_DELAY = 250;
 DwtMenuItem._MENU_POPDOWN_DELAY = 250
 
@@ -325,15 +326,17 @@ function(text) {
 
 DwtMenuItem.prototype._createSeparatorStyle =
 function() {
+	var className = this._className + "-Separator";
+	
 	this._table.style.width = "100%";
 	fillCell = this._row.insertCell(0);
-	fillCell.className = this._className + "-Separator";
+	fillCell.className = className;
 	
 	if (this.parent._menuHasCheckedItems())
-		this._checkItemAdded();
+		this._checkItemAdded(className);
 		
 	if (this.parent._menuHasItemsWithIcons()) {
-		this._addIconCell();
+		this._addIconCell(className);
 	}
 }
 
@@ -387,14 +390,16 @@ function(radioGroupId) {
  * is added to the menu and it allows for the menu item to add a column so that it can align with
  * the new checked item */
 DwtMenuItem.prototype._checkItemAdded =
-function() {
+function(className) {
 	if (this._checkedCell == null) {
 		this._checkedCell = this._row.insertCell(0);
 		this._checkedCell.noWrap = true;
 		this._checkedCell.align = "center";
 		this._checkedCell.width = DwtMenuItem._CHECKEDCELL_DIM;
-		this._checkedCell.height = (this._style != DwtMenuItem.SEPARATOR_STYLE) ?  DwtMenuItem._CHECKEDCELL_DIM : 1;
-		this._checkedCell.className = this._checkedAreaClassName;
+		this._checkedCell.height = (this._style != DwtMenuItem.SEPARATOR_STYLE) ?  DwtMenuItem._CHECKEDCELL_DIM : DwtMenuItem._SEPAARATOR_DIM;
+
+		if (className == null) className = this._checkedAreaClassName;
+		this._checkedCell.className = className;
 	}
 }
 
@@ -412,7 +417,7 @@ function() {
 		this._cascCell = this._row.insertCell(-1);
 		this._cascCell.noWrap = true;
 		this._cascCell.style.width = DwtMenuItem._CASCADE_DIM;
-		this._cascCell.style.height = (this._style != DwtMenuItem.SEPARATOR_STYLE) ?  DwtMenuItem._CASCADE_DIM : 1;;
+		this._cascCell.style.height = (this._style != DwtMenuItem.SEPARATOR_STYLE) ?  DwtMenuItem._CASCADE_DIM : DwtMenuItem._SEPAARATOR_DIM;
 	}
 }
 
@@ -425,15 +430,16 @@ function() {
 }
 
 DwtMenuItem.prototype._addIconCell =
-function() {
+function(className) {
 	if (this._iconCell == null) {
 		var i = (!this._checkedCell) ? 0 : 1;
 		this._iconCell = this._row.insertCell(i++);
 		this._iconCell.noWrap = true;
 		this._iconCell.align = "center";
 		this._iconCell.width =  DwtMenuItem._IMAGECELL_DIM;
-		this._iconCell.height = (this._style != DwtMenuItem.SEPARATOR_STYLE) ?  DwtMenuItem._IMAGECELL_DIM : 1;
-		this._iconCell.className = this._iconAreaClassName;	
+		this._iconCell.height = (this._style != DwtMenuItem.SEPARATOR_STYLE) ?  DwtMenuItem._IMAGECELL_DIM : DwtMenuItem._SEPAARATOR_DIM;
+		if (className == null) className = this._iconAreaClassName;	
+		this._iconCell.className = className;
 	}
 }
 
@@ -496,7 +502,7 @@ function(msec) {
 	if (menu)
 		menu.popdown(msec);
 	this.setClassName(this._origClassName);
-	this.setCursor("default");
+	this.setCursor("pointer");
 }
 
 DwtMenuItem.prototype._isMenuPoppedup =

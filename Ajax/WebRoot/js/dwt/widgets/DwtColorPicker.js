@@ -36,7 +36,7 @@ function DwtColorPicker(parent, className, posStyle) {
 
 	this._createColorTable();
 	this._registerEventHdlrs();
-	this.setCursor("default");
+	//MOW:  this.setCursor("default");
 }
 
 DwtColorPicker.prototype = new DwtControl;

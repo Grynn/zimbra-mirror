@@ -43,7 +43,7 @@ function DwtListView(parent, className, posStyle, headerList, noMaximize) {
 	}
 		
 	this._setMouseEventHdlrs();
-	this.setCursor("default");
+	//MOW:  this.setCursor("default");
 
 	this._listenerMouseOver = new AjxListener(this, this._mouseOverListener);
 	this._listenerMouseOut = new AjxListener(this, this._mouseOutListener);

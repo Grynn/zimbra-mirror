@@ -34,8 +34,10 @@ function DwtProgressBar(parent, className, posStyle) {
 	this._value = 0;
 	this._quotabarDiv = null;
 	this._quotausedDiv = null;	
-	this._progressBgColor = "#66cc33";
-	this._progressCssClass = "quotaused";	
+
+	this._progressBgColor = null;// "#66cc33";	//	MOW: removing this so the color can be skinned
+												// 		set the color in the class "quotaused"
+	this._progressCssClass = "quotaused";
 	
 	this._wholeBgColor = null;
 	this._wholeCssClass = "quotabar";	
@@ -49,6 +51,7 @@ DwtProgressBar.prototype.constructor = DwtProgressBar;
 //
 // Public methods
 //
+
 DwtProgressBar.prototype.setProgressBgColor = 
 function(val) {
 	this._progressBgColor = val;
