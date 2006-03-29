@@ -1354,10 +1354,21 @@ XFormItem.prototype.getChoiceValue = function (label) {
 	if (choices == null) return value;
 	
 	// choices will look like:  {values:[v1, v2, v3...], labels:[l1, l2, l3...]}
+	// bug 6738: sort will change the mapping between value and label.
+	/*
 	var labels = choices.labels;
 	var vec = AjxVector.fromArray(labels);
 	vec.sort(labelComparator);
-	var ix = vec.binarySearch(label,labelComparator);
+	var ix = vec.binarySearch(label,labelComparator); */
+	var labels = choices.labels;
+	var ix = -1;
+	for (var i=0; i < labels.length ; i++ ){
+		if (labelComparator (label, labels[i]) == 0) {
+			ix = i ;
+			break;
+		}		
+	}
+	
 	if(ix>=0) 
 		return choices.values[ix];
 	else 
@@ -4061,7 +4072,7 @@ Dwt_TabBar_XFormItem.prototype.dirtyDisplay = function() {
 	if(this.choices && this.choices.constructor == XFormChoices) {
 		var labels = this.getNormalizedLabels();
 		var values = this.getNormalizedValues();
-		var cnt = labels.count;
+		var cnt = labels.length;
 		for(var i=0;i<cnt;i++) {
 			var tabKey = this._value2tabkey[values[i]];
 			if(tabKey) {
@@ -4072,6 +4083,8 @@ Dwt_TabBar_XFormItem.prototype.dirtyDisplay = function() {
 			}
 		}
 	}
+	this._choiceDisplayIsDirty = true;
+	delete this.$normalizedChoices;	
 }
 
 //

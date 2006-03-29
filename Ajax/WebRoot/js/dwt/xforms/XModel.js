@@ -1,18 +1,27 @@
 /*
- * Copyright (C) 2006, The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+* ***** BEGIN LICENSE BLOCK *****
+* Version: MPL 1.1
+*
+* The contents of this file are subject to the Mozilla Public
+* License Version 1.1 ("License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.zimbra.com/license
+*
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+* the License for the specific language governing rights and limitations
+* under the License.
+*
+* The Original Code is: Zimbra AJAX Toolkit.
+*
+* The Initial Developer of the Original Code is Zimbra, Inc.
+* Portions created by Zimbra are Copyright (C) 2005 Zimbra, Inc.
+* All Rights Reserved.
+*
+* Contributor(s):
+*
+* ***** END LICENSE BLOCK *****
+*/
 
 
 var _MODEL_ = "model";
@@ -498,10 +507,10 @@ XModel.prototype.getErrorMessage = function (id, arg0, arg1, arg2, arg3, arg4) {
 		DBG.println("getErrorMessage('", id, "'): message not found.  If this is an actual error message, add it to the XModel error messages so it can be translated.");
 		return id;
 	}
-	if (arg0 !== null) msg = msg.split("$0").join(arg0);
-	if (arg1 !== null) msg = msg.split("$1").join(arg1);
-	if (arg2 !== null) msg = msg.split("$2").join(arg2);
-	if (arg3 !== null) msg = msg.split("$3").join(arg3);
-	if (arg4 !== null) msg = msg.split("$4").join(arg4);
+	if (arg0 !== null) msg = msg.split("{0}").join(arg0);
+	if (arg1 !== null) msg = msg.split("{1}").join(arg1);
+	if (arg2 !== null) msg = msg.split("{2}").join(arg2);
+	if (arg3 !== null) msg = msg.split("{3}").join(arg3);
+	if (arg4 !== null) msg = msg.split("{4}").join(arg4);
 	return msg;
 }
