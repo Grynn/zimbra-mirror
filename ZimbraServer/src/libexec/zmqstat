@@ -186,12 +186,6 @@ chdir $queue_directory;
 
 find (\&processQ, @queues);
 
-if (!$qfiles) {
-	# bug 6591
-	#print STDERR "No files found\n";
-	exit 0;
-}
-
-if (! $readfiles) {
+if (!$readfiles) {
 	map { printf "%s=%d\n", $_, $queue_stats{$_}{COUNT} } keys %queue_stats;
 }
