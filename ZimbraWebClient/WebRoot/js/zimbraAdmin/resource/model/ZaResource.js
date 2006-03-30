@@ -479,7 +479,7 @@ ZaResource.myXModel = {
 		{id:ZaResource.A_zimbraCalResBuilding, type:_STRING_, ref:"attrs/"+ZaResource.A_zimbraCalResBuilding},
 		{id:ZaResource.A_zimbraCalResFloor, type:_STRING_, ref:"attrs/"+ZaResource.A_zimbraCalResFloor},
 		{id:ZaResource.A_zimbraCalResRoom, type:_STRING_, ref:"attrs/"+ZaResource.A_zimbraCalResRoom},
-		{id:ZaResource.A_zimbraCalResCapacity, type:_STRING_, ref:"attrs/"+ZaResource.A_zimbraCalResCapacity},		
+		{id:ZaResource.A_zimbraCalResCapacity, type:_NUMBER_, ref:"attrs/"+ZaResource.A_zimbraCalResCapacity},		
 		{id:ZaResource.A_locationDisplayName, type:_STRING_, ref:"attrs/"+ZaResource.A_locationDisplayName},
 		{id:ZaResource.A_street, type:_STRING_, ref:"attrs/"+ZaResource.A_street},	
 		{id:ZaResource.A_city, type:_STRING_, ref:"attrs/"+ZaResource.A_city},		
