@@ -905,6 +905,9 @@ ZaAccount.prototype.initFromJS =
 function (account) {
 	if(!account)
 		return;
+		
+	this.attrs = new Object();	
+	this.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
 	this.name = account.name;
 	this.id = account.id;
 	var len = account.a.length;

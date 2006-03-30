@@ -94,7 +94,7 @@ function(account, now, isDndIcon) {
 					html[idx++] = AjxImg.getImageHtml("Resource");				
 				break;											
 				default:
-					html[idx++] = AjxStringUtil.htmlEncode(account.type);
+					html[idx++] = account.type;
 				break;
 			}
 			html[idx++] = "</td>";
@@ -119,7 +119,7 @@ function(account, now, isDndIcon) {
 			}else if ( account.type == ZaItem.RESOURCE) {
 				status = ZaResource.getAccountStatusLabel(account.attrs[ZaAccount.A_accountStatus]);
 			} 
-			html[idx++] = AjxStringUtil.htmlEncode(status);
+			html[idx++] = status;
 			html[idx++] = "</nobr></td>";		
 		} else if (id.indexOf(ZaAccount.A_description)==0) {		
 			// description

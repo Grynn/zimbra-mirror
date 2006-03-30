@@ -40,6 +40,7 @@
 
 function ZaXFormViewController(appCtxt, container, app, iKeyName) {
 	if (arguments.length == 0) return;
+	this._currentObject = null;
 	ZaController.call(this, appCtxt, container, app, iKeyName);
 	this.deleteMsg = ZaMsg.Q_DELETE_ACCOUNT;
 }
@@ -181,6 +182,7 @@ function (params) {
 	try {
 		this.closeCnfrmDlg();		
 		if(this._saveChanges()) {
+			this.fireChangeEvent(this._currentObject);			
 			params["func"].call(params["obj"], params["params"]);	
 		}
 	} catch (ex) {
