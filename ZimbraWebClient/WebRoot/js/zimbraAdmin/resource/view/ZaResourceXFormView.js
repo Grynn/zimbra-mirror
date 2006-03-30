@@ -171,7 +171,13 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject) {
 	else 
 		domainName = ZaSettings.myDomainName;
 
-	var headerItems = [{type:_AJX_IMAGE_, src:"Resource_32", label:null, rowSpan:2},{type:_OUTPUT_, ref:ZaResource.A_displayname, label:null,cssClass:"AdminTitle", rowSpan:2}];
+	//get the image according to the type
+	var imgChoices = [ 	{value:ZaResource.RESOURCE_TYPE_LOCATION, label: "Location_32"},
+						{value:ZaResource.RESOURCE_TYPE_EQUIPMENT, label: "Resource_32"}   ];
+						
+	var headerItems = [	{type:_AJX_IMAGE_, ref:ZaResource.A_zimbraCalResType, src:"Resource_32", label:null, rowSpan:2, choices: imgChoices},
+						{type:_OUTPUT_, ref:ZaResource.A_displayname, label:null,cssClass:"AdminTitle", rowSpan:2}];
+						
 	if(ZaSettings.COSES_ENABLED) {
 		headerItems.push({type:_OUTPUT_, ref:ZaResource.A_COSId, labelLocation:_LEFT_, label:ZaMsg.NAD_ClassOfService, choices:this._app.getCosListChoices()});
 	}
