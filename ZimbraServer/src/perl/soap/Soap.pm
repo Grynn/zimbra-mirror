@@ -347,10 +347,11 @@ sub invoke {
     }
 
     if ($err) {
-        if ($reqOK == 0) {
-            $err = "\nError Handling Soap Request".$err;
+      print "\nRESPONSE: \n\t".$res->content."\n";
+      if ($reqOK == 0) {
+          $err = "\nError Handling Soap Request".$err;
         } else {
-            $err = "\nError Handling Soap Response".$err;
+          $err = "\nError Handling Soap Response".$err;
         }
         die $err;
     }
