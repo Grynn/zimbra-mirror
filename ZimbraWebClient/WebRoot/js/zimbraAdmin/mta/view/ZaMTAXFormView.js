@@ -450,15 +450,15 @@ ZaMTAXFormView.refreshListener = function (ev) {
 }
 
 ZaMTAXFormView.createPopupMenu = function (listWidget) {
-	popupOperations = [new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.PQVTBB_Delete_tt, null, null, new AjxListener(listWidget, ZaMTAXFormView.deleteButtonListener)),
-	new ZaOperation(ZaOperation.REQUEUE, ZaMsg.TBB_Requeue, ZaMsg.PQVTBB_Requeue_tt, null, null, new AjxListener(listWidget, ZaMTAXFormView.requeueButtonListener))];
+	popupOperations = [new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.PQ_Delete_tt, null, null, new AjxListener(listWidget, ZaMTAXFormView.deleteButtonListener)),
+	new ZaOperation(ZaOperation.REQUEUE, ZaMsg.TBB_Requeue, ZaMsg.PQ_Requeue_tt, null, null, new AjxListener(listWidget, ZaMTAXFormView.requeueButtonListener))];
 
 	var refParts = this.getRef().split("/");
 	var qName = refParts[0];
 	if(qName == ZaMTA.A_HoldQ) {
-		popupOperations.push(new ZaOperation(ZaOperation.RELEASE, ZaMsg.TBB_Release, ZaMsg.PQVTBB_Release_tt, null, null, new AjxListener(listWidget, ZaMTAXFormView.releaseButtonListener)));
+		popupOperations.push(new ZaOperation(ZaOperation.RELEASE, ZaMsg.TBB_Release, ZaMsg.PQ_Release_tt, null, null, new AjxListener(listWidget, ZaMTAXFormView.releaseButtonListener)));
 	} else {
-		popupOperations.push(new ZaOperation(ZaOperation.HOLD, ZaMsg.TBB_Hold, ZaMsg.PQVTBB_Hold_tt, null, null, new AjxListener(listWidget, ZaMTAXFormView.holdButtonListener)));
+		popupOperations.push(new ZaOperation(ZaOperation.HOLD, ZaMsg.TBB_Hold, ZaMsg.PQ_Hold_tt, null, null, new AjxListener(listWidget, ZaMTAXFormView.holdButtonListener)));
 	}
 	listWidget.actionMenu = new ZaPopupMenu(listWidget, "ActionMenu", null, popupOperations);
 	listWidget.addActionListener(new AjxListener(listWidget, ZaMTAXFormView.listActionListener));		
@@ -537,9 +537,9 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 							{type:_OUTPUT_, label:ZaMsg.TBB_LastUpdated, ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_refreshTime},
 							{type:_OUTPUT_, label:ZaMsg.PQ_AnalyzerStatus, ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_Status,choices:ZaMTA.SCANNER_STATUS_CHOICES},							
 							{type:_DWT_BUTTON_,ref:ZaMTA.A_DeferredQ, label:ZaMsg.PQ_AnalyzeQueue,onActivate:ZaMTAXFormView.refreshListener},{type:_CELLSPACER_},
-							{type:_DWT_BUTTON_,ref:ZaMTA.A_DeferredQ, label:ZaMsg.TBB_Requeue,onActivate:ZaMTAXFormView.requeueButtonListener},{type:_CELLSPACER_},
-							{type:_DWT_BUTTON_,ref:ZaMTA.A_DeferredQ, label:ZaMsg.TBB_Hold,onActivate:ZaMTAXFormView.holdButtonListener},{type:_CELLSPACER_},							
-							{type:_DWT_BUTTON_,ref:ZaMTA.A_DeferredQ, label:ZaMsg.TBB_Delete,onActivate:ZaMTAXFormView.deleteButtonListener}							
+							{type:_DWT_BUTTON_,ref:ZaMTA.A_DeferredQ, label:ZaMsg.TBB_Requeue,onActivate:ZaMTAXFormView.requeueButtonListener,toolTipContent:ZaMsg.PQ_Requeue_tt},{type:_CELLSPACER_},
+							{type:_DWT_BUTTON_,ref:ZaMTA.A_DeferredQ, label:ZaMsg.TBB_Hold,onActivate:ZaMTAXFormView.holdButtonListener,toolTipContent:ZaMsg.PQ_Hold_tt},{type:_CELLSPACER_},							
+							{type:_DWT_BUTTON_,ref:ZaMTA.A_DeferredQ, label:ZaMsg.TBB_Delete,onActivate:ZaMTAXFormView.deleteButtonListener,toolTipContent:ZaMsg.PQ_Delete_tt}							
 						]},								
 						{type:_SPACER_, height:"1"},							
 						{type:_GROUP_, numCols:11, /*cssStyle:(AjxEnv.isIE ? "width:98%" : ""),*/ colSizes:["auto","2px", "auto","2px", "auto", "2px", "auto", "2px", "auto", "2px", "auto"],cssClass:(AjxEnv.isIE ? "RadioGrouperBorder IEcontainer" : "RadioGrouperBorder FFcontainer"), tableCssStyle:"width:100%", items: [						
@@ -671,9 +671,9 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 							{type:_OUTPUT_, label:ZaMsg.TBB_LastUpdated, ref:ZaMTA.A_IncomingQ+"/"+ZaMTA.A_refreshTime},
 							{type:_OUTPUT_, label:ZaMsg.PQ_AnalyzerStatus, ref:ZaMTA.A_IncomingQ+"/"+ZaMTA.A_Status,choices:ZaMTA.SCANNER_STATUS_CHOICES},							
 							{type:_DWT_BUTTON_,ref:ZaMTA.A_IncomingQ, label:ZaMsg.PQ_AnalyzeQueue,onActivate:ZaMTAXFormView.refreshListener},{type:_CELLSPACER_},
-							{type:_DWT_BUTTON_,ref:ZaMTA.A_IncomingQ, label:ZaMsg.TBB_Requeue,onActivate:ZaMTAXFormView.requeueButtonListener},{type:_CELLSPACER_},
-							{type:_DWT_BUTTON_,ref:ZaMTA.A_IncomingQ, label:ZaMsg.TBB_Hold,onActivate:ZaMTAXFormView.holdButtonListener},{type:_CELLSPACER_},	
-							{type:_DWT_BUTTON_,ref:ZaMTA.A_IncomingQ, label:ZaMsg.TBB_Delete,onActivate:ZaMTAXFormView.deleteButtonListener}
+							{type:_DWT_BUTTON_,ref:ZaMTA.A_IncomingQ, label:ZaMsg.TBB_Requeue,onActivate:ZaMTAXFormView.requeueButtonListener,toolTipContent:ZaMsg.PQ_Requeue_tt},{type:_CELLSPACER_},
+							{type:_DWT_BUTTON_,ref:ZaMTA.A_IncomingQ, label:ZaMsg.TBB_Hold,onActivate:ZaMTAXFormView.holdButtonListener,toolTipContent:ZaMsg.PQ_Hold_tt},{type:_CELLSPACER_},	
+							{type:_DWT_BUTTON_,ref:ZaMTA.A_IncomingQ, label:ZaMsg.TBB_Delete,onActivate:ZaMTAXFormView.deleteButtonListener,toolTipContent:ZaMsg.PQ_Delete_tt}
 						]},								
 						{type:_SPACER_, height:"1"},							
 						{type:_GROUP_, numCols:9, /*cssStyle:(AjxEnv.isIE ? "width:98%" : ""),*/ colSizes:["auto","2px", "auto","2px", "auto", "2px", "auto", "2px", "auto"],cssClass:(AjxEnv.isIE ? "RadioGrouperBorder IEcontainer" : "RadioGrouperBorder FFcontainer"), tableCssStyle:"width:100%", items: [						
@@ -791,9 +791,9 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 							{type:_OUTPUT_, label:ZaMsg.TBB_LastUpdated, ref:ZaMTA.A_ActiveQ+"/"+ZaMTA.A_refreshTime},
 							{type:_OUTPUT_, label:ZaMsg.PQ_AnalyzerStatus, ref:ZaMTA.A_ActiveQ+"/"+ZaMTA.A_Status,choices:ZaMTA.SCANNER_STATUS_CHOICES},							
 							{type:_DWT_BUTTON_,ref:ZaMTA.A_ActiveQ, label:ZaMsg.PQ_AnalyzeQueue,onActivate:ZaMTAXFormView.refreshListener},{type:_CELLSPACER_},
-							{type:_DWT_BUTTON_,ref:ZaMTA.A_ActiveQ, label:ZaMsg.TBB_Requeue,onActivate:ZaMTAXFormView.requeueButtonListener},{type:_CELLSPACER_},
-							{type:_DWT_BUTTON_,ref:ZaMTA.A_ActiveQ, label:ZaMsg.TBB_Hold,onActivate:ZaMTAXFormView.holdButtonListener},{type:_CELLSPACER_},	
-							{type:_DWT_BUTTON_,ref:ZaMTA.A_ActiveQ, label:ZaMsg.TBB_Delete,onActivate:ZaMTAXFormView.deleteButtonListener}
+							{type:_DWT_BUTTON_,ref:ZaMTA.A_ActiveQ, label:ZaMsg.TBB_Requeue,onActivate:ZaMTAXFormView.requeueButtonListener,toolTipContent:ZaMsg.PQ_Requeue_tt},{type:_CELLSPACER_},
+							{type:_DWT_BUTTON_,ref:ZaMTA.A_ActiveQ, label:ZaMsg.TBB_Hold,onActivate:ZaMTAXFormView.holdButtonListener,toolTipContent:ZaMsg.PQ_Hold_tt},{type:_CELLSPACER_},	
+							{type:_DWT_BUTTON_,ref:ZaMTA.A_ActiveQ, label:ZaMsg.TBB_Delete,onActivate:ZaMTAXFormView.deleteButtonListener,toolTipContent:ZaMsg.PQ_Delete_tt}
 						]},								
 						{type:_SPACER_, height:"1"},							
 						{type:_GROUP_, numCols:9, colSizes:["auto","2px", "auto","2px", "auto", "2px", "auto", "2px", "auto"],cssClass:(AjxEnv.isIE ? "RadioGrouperBorder IEcontainer" : "RadioGrouperBorder FFcontainer"), tableCssStyle:"width:100%", items: [						
@@ -910,9 +910,9 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 							{type:_OUTPUT_, label:ZaMsg.TBB_LastUpdated, ref:ZaMTA.A_HoldQ+"/"+ZaMTA.A_refreshTime},
 							{type:_OUTPUT_, label:ZaMsg.PQ_AnalyzerStatus, ref:ZaMTA.A_HoldQ+"/"+ZaMTA.A_Status, choices:ZaMTA.SCANNER_STATUS_CHOICES},							
 							{type:_DWT_BUTTON_,ref:ZaMTA.A_HoldQ, label:ZaMsg.PQ_AnalyzeQueue,onActivate:ZaMTAXFormView.refreshListener},{type:_CELLSPACER_},
-							{type:_DWT_BUTTON_,ref:ZaMTA.A_HoldQ, label:ZaMsg.TBB_Requeue,onActivate:ZaMTAXFormView.requeueButtonListener},{type:_CELLSPACER_},
-							{type:_DWT_BUTTON_,ref:ZaMTA.A_HoldQ, label:ZaMsg.TBB_Release,onActivate:ZaMTAXFormView.releaseButtonListener},{type:_CELLSPACER_},	
-							{type:_DWT_BUTTON_,ref:ZaMTA.A_HoldQ, label:ZaMsg.TBB_Delete,onActivate:ZaMTAXFormView.deleteButtonListener}
+							{type:_DWT_BUTTON_,ref:ZaMTA.A_HoldQ, label:ZaMsg.TBB_Requeue,onActivate:ZaMTAXFormView.requeueButtonListener,toolTipContent:ZaMsg.PQ_Requeue_tt},{type:_CELLSPACER_},
+							{type:_DWT_BUTTON_,ref:ZaMTA.A_HoldQ, label:ZaMsg.TBB_Release,onActivate:ZaMTAXFormView.releaseButtonListener,toolTipContent:ZaMsg.PQ_Release_tt},{type:_CELLSPACER_},	
+							{type:_DWT_BUTTON_,ref:ZaMTA.A_HoldQ, label:ZaMsg.TBB_Delete,onActivate:ZaMTAXFormView.deleteButtonListener,toolTipContent:ZaMsg.PQ_Delete_tt}
 						]},								
 						{type:_SPACER_, height:"1"},							
 						{type:_GROUP_, numCols:9, colSizes:["auto","2px", "auto","2px", "auto", "2px", "auto", "2px", "auto"],cssClass:(AjxEnv.isIE ? "RadioGrouperBorder IEcontainer" : "RadioGrouperBorder FFcontainer"), tableCssStyle:"width:100%", items: [						
@@ -1030,9 +1030,9 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 							{type:_OUTPUT_, label:ZaMsg.TBB_LastUpdated, ref:ZaMTA.A_CorruptQ+"/"+ZaMTA.A_refreshTime},
 							{type:_OUTPUT_, label:ZaMsg.PQ_AnalyzerStatus, ref:ZaMTA.A_CorruptQ+"/"+ZaMTA.A_Status,choices:ZaMTA.SCANNER_STATUS_CHOICES},							
 							{type:_DWT_BUTTON_,ref:ZaMTA.A_CorruptQ, label:ZaMsg.PQ_AnalyzeQueue,onActivate:ZaMTAXFormView.refreshListener},{type:_CELLSPACER_},
-							{type:_DWT_BUTTON_,ref:ZaMTA.A_CorruptQ, label:ZaMsg.TBB_Requeue,onActivate:ZaMTAXFormView.requeueButtonListener},{type:_CELLSPACER_},
-							{type:_DWT_BUTTON_,ref:ZaMTA.A_CorruptQ, label:ZaMsg.TBB_Hold,onActivate:ZaMTAXFormView.holdButtonListener},{type:_CELLSPACER_},	
-							{type:_DWT_BUTTON_,ref:ZaMTA.A_CorruptQ, label:ZaMsg.TBB_Delete,onActivate:ZaMTAXFormView.deleteButtonListener}
+							{type:_DWT_BUTTON_,ref:ZaMTA.A_CorruptQ, label:ZaMsg.TBB_Requeue,onActivate:ZaMTAXFormView.requeueButtonListener,toolTipContent:ZaMsg.PQ_Requeue_tt},{type:_CELLSPACER_},
+							{type:_DWT_BUTTON_,ref:ZaMTA.A_CorruptQ, label:ZaMsg.TBB_Hold,onActivate:ZaMTAXFormView.holdButtonListener,toolTipContent:ZaMsg.PQ_Hold_tt},{type:_CELLSPACER_},	
+							{type:_DWT_BUTTON_,ref:ZaMTA.A_CorruptQ, label:ZaMsg.TBB_Delete,onActivate:ZaMTAXFormView.deleteButtonListener,toolTipContent:ZaMsg.PQ_Delete_tt}
 						]},								
 						{type:_SPACER_, height:"1"},							
 						{type:_GROUP_, numCols:9, colSizes:["auto","2px", "auto","2px", "auto", "2px", "auto", "2px", "auto"],cssClass:(AjxEnv.isIE ? "RadioGrouperBorder IEcontainer" : "RadioGrouperBorder FFcontainer"), tableCssStyle:"width:100%", items: [						
