@@ -98,8 +98,14 @@ sub runCommand {
     }
 
     my $cmdstr;
-    
-    my $smplcmd = $command . " " . $args;
+
+	my $smplcmd;
+    if (defined($args)) {  
+	    $smplcmd = $command . " " . $args;
+	} else {
+		$smplcmd = $command;
+	}
+		
     if (defined($SIMPLE_COMMANDS{$smplcmd})) {
         $cmdstr = $SIMPLE_COMMANDS{$smplcmd};
     } elsif (defined($REGEX_CHECKED_COMMANDS{$command})) {
