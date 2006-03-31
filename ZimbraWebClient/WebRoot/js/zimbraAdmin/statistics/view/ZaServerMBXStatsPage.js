@@ -156,18 +156,18 @@ ZaServerMBXStatsPage.getMbxes = function ( targetServer, offset, sortBy, sortAsc
 
 ZaServerMBXStatsPage.prototype._getXForm = function () {
 	if (this._xform != null) return this._xform;
-	
+	var sortable = 1;
 	var sourceHeaderList = new Array();
 											//idPrefix, label, 
 											//iconInfo, width, sortable, sortField, resizeable, visible
 	sourceHeaderList[0] = new ZaListHeaderItem(ZaServerMBXStatsPage.XFORM_ITEM_ACCOUNT, 	ZaMsg.MBXStats_ACCOUNT, 	
-												null, 300, false, null, true, true);
+												null, 300, null, null, true, true);
 	sourceHeaderList[1] = new ZaListHeaderItem(ZaServerMBXStatsPage.XFORM_ITEM_QUOTA,   	ZaMsg.MBXStats_QUOTA,   	
-												null, 120,  true,  ZaServerMBXStatsPage.XFORM_ITEM_QUOTA, true, true);
+												null, 120,  sortable++,  ZaServerMBXStatsPage.XFORM_ITEM_QUOTA, true, true);
 	sourceHeaderList[2] = new ZaListHeaderItem(ZaServerMBXStatsPage.XFORM_ITEM_DISKUSAGE, 	ZaMsg.MBXStats_DISKUSAGE,	
-												null, 120,  true,  ZaServerMBXStatsPage.XFORM_ITEM_DISKUSAGE, true, true);
+												null, 120,  sortable++,  ZaServerMBXStatsPage.XFORM_ITEM_DISKUSAGE, true, true);
 	sourceHeaderList[3] = new ZaListHeaderItem(ZaServerMBXStatsPage.XFORM_ITEM_QUOTAUSAGE,	ZaMsg.MBXStats_QUOTAUSAGE, 	
-												null, null,  true, ZaServerMBXStatsPage.XFORM_ITEM_QUOTAUSAGE, true, true);
+												null, null,  sortable++, ZaServerMBXStatsPage.XFORM_ITEM_QUOTAUSAGE, true, true);
 		
 	this._xform = {
 		x_showBorder:1,

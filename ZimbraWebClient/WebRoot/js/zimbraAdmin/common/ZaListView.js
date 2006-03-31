@@ -51,7 +51,7 @@ ZaListView.ITEM_FLAG_CLICKED = DwtListView._LAST_REASON + 1;
 
 // abstract methods
 ZaListView.prototype._createItemHtml = function(item) {}
-
+/*
 ZaListView.prototype._mouseOverAction =
 function(ev, div) {
 	if (div._type == DwtListView.TYPE_HEADER_ITEM) {
@@ -68,8 +68,9 @@ function(ev, div) {
 		if (item && item.getToolTip)
 			this.setToolTipContent(item.getToolTip());
 	}
-}
+}*/
 
+/*
 ZaListView.prototype._mouseOutAction = 
 function(mouseEv, div) {
 	if (div._type == DwtListView.TYPE_HEADER_ITEM) {
@@ -80,7 +81,7 @@ function(mouseEv, div) {
 		div.style.cursor = "auto";
 	}
 	return true;
-}
+}*/
 
 ZaListView.prototype._setListEvent =
 function (ev, listEv, clickedEl) {
@@ -114,7 +115,7 @@ function(columnId) {
 		if (oldSortedCol)
 			oldSortedCol.className = "DwtListView-Column";
 }
-
+/*
 ZaListView.prototype._columnClicked =
 function(clickedCol, ev) {
 	
@@ -128,7 +129,7 @@ function(clickedCol, ev) {
 			this._currentColId = item._id;			
 		}
 	}
-}
+}*/
 
 ZaListView.prototype._getParentForColResize = 
 function() {
@@ -137,7 +138,7 @@ function() {
 }
 
 function ZaListHeaderItem(idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible) {
-	DwtListHeaderItem.call(this, idPrefix, label, iconInfo, width, sortable, resizeable, visible);
+	DwtListHeaderItem.call(this, idPrefix, label, iconInfo, width, sortable, sortField, visible);
 	this._sortField = sortField;	
 	this._initialized = false;
 }

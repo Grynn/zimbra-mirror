@@ -183,10 +183,11 @@ function () {
 DeleteAcctsPgrsDlg.prototype.getMyXForm = 
 function() {	
 	var sourceHeaderList = new Array();
-	sourceHeaderList[0] = new ZaListHeaderItem("type", ZaMsg.ALV_Type_col, null, 34, true, "objectClass", true, true);
-	sourceHeaderList[1] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.ALV_Name_col, null, null, true, ZaAccount.A_name, true, true);
+	var sortable = 1;
+	sourceHeaderList[0] = new ZaListHeaderItem("type", ZaMsg.ALV_Type_col, null, 34, sortable++, "objectClass", true, true);
+	sourceHeaderList[1] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.ALV_Name_col, null, null, sortable++, ZaAccount.A_name, true, true);
 	//idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
-	sourceHeaderList[2] = new ZaListHeaderItem(ZaAccount.A_displayname, ZaMsg.ALV_DspName_col, null, 100, true,ZaAccount.A_displayname, true, true);
+	sourceHeaderList[2] = new ZaListHeaderItem(ZaAccount.A_displayname, ZaMsg.ALV_DspName_col, null, 100, sortable++,ZaAccount.A_displayname, true, true);
 
 	var xFormObject = {
 		numCols:2, colSizes:[140,140], height:"300px",width:"390px",align:_CENTER_,cssStyle:"text-align:center",

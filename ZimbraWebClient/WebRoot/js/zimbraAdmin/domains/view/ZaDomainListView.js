@@ -98,11 +98,12 @@ ZaDomainListView.prototype._getHeaderList =
 function() {
 
 	var headerList = new Array();
+	var sortable = 1;
 	//idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
-	headerList[0] = new ZaListHeaderItem(ZaDomain.A_domainName , ZaMsg.CLV_Name_col, null, 250, true, ZaDomain.A_domainName, true, true);
+	headerList[0] = new ZaListHeaderItem(ZaDomain.A_domainName , ZaMsg.CLV_Name_col, null, 250, sortable++, ZaDomain.A_domainName, true, true);
 	//headerList[0].initialize(ZaMsg.CLV_Name_col, null, "245", true, ZaDomain.A_domainName);
 
-	headerList[1] = new ZaListHeaderItem(ZaDomain.A_description, ZaMsg.CLV_Description_col, null, null, false, null, true, true);
+	headerList[1] = new ZaListHeaderItem(ZaDomain.A_description, ZaMsg.CLV_Description_col, null, null, null, null, true, true);
 	//headerList[1].initialize(ZaMsg.CLV_Description_col, null, "245", false, ZaDomain.A_description);
 	
 	return headerList;

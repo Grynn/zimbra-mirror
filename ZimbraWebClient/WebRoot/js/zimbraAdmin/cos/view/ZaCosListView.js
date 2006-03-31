@@ -80,13 +80,11 @@ function(cos, no, isDndIcon) {
 			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
 			html[idx++] = AjxStringUtil.htmlEncode(cos.name);
 			html[idx++] = "</td>";
-			html[idx++] = "<td width=2></td>";	
 		} else if (id.indexOf(ZaCos.A_description)==0) {
 			// description
 			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
 			html[idx++] = AjxStringUtil.htmlEncode(cos.attrs[ZaCos.A_description]);
 			html[idx++] = "</td>";	
-			html[idx++] = "<td width=2></td>";	
 		}
 	}
 	html[idx++] = "</tr></table>";
@@ -98,10 +96,11 @@ ZaCosListView.prototype._getHeaderList =
 function() {
 
 	var headerList = new Array();
+	var sortable = 1;
 	//idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
-	headerList[0] = new ZaListHeaderItem(ZaCos.A_name, ZaMsg.CLV_Name_col, null, null, true, ZaCos.A_name, true, true);
+	headerList[0] = new ZaListHeaderItem(ZaCos.A_name, ZaMsg.CLV_Name_col, null, "200px", sortable++, ZaCos.A_name, true, true);
 
-	headerList[1] = new ZaListHeaderItem(ZaCos.A_description, ZaMsg.CLV_Description_col, null, null, false, null, true, true);
+	headerList[1] = new ZaListHeaderItem(ZaCos.A_description, ZaMsg.CLV_Description_col, null, "200px", null, null, true, true);
 	
 	return headerList;
 }

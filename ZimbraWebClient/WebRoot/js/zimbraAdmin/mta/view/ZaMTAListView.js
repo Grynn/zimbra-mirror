@@ -145,17 +145,17 @@ function() {
 	var headerList = new Array();
 //idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
 
-	headerList[0] = new ZaListHeaderItem(ZaMTA.A_Servername, ZaMsg.SLV_ServiceHName_col, null, 195, false, null, true, true);
+	headerList[0] = new ZaListHeaderItem(ZaMTA.A_Servername, ZaMsg.SLV_ServiceHName_col, null, 195, null, null, true, true);
 
-	headerList[1] = new ZaListHeaderItem(ZaMTA.A_DeferredQ, ZaMsg.PQV_DeferredQ_col, null, 60, false, null, true, true);
+	headerList[1] = new ZaListHeaderItem(ZaMTA.A_DeferredQ, ZaMsg.PQV_DeferredQ_col, null, 60, null, null, true, true);
 
-	headerList[2] = new ZaListHeaderItem(ZaMTA.A_IncomingQ, ZaMsg.PQV_IncomingQ_col, null, 60, false, null, true, true);		
+	headerList[2] = new ZaListHeaderItem(ZaMTA.A_IncomingQ, ZaMsg.PQV_IncomingQ_col, null, 60, null, null, true, true);		
 	
-	headerList[3] = new ZaListHeaderItem(ZaMTA.A_ActiveQ, ZaMsg.PQV_ActiveQ_col, null, 60, false, null, true, true);		
+	headerList[3] = new ZaListHeaderItem(ZaMTA.A_ActiveQ, ZaMsg.PQV_ActiveQ_col, null, 60, null, null, true, true);		
 	
-	headerList[4] = new ZaListHeaderItem(ZaMTA.A_CorruptQ, ZaMsg.PQV_CorruptQ_col, null, 60, false, null, true, true);			
+	headerList[4] = new ZaListHeaderItem(ZaMTA.A_CorruptQ, ZaMsg.PQV_CorruptQ_col, null, 60, null, null, true, true);			
 	
-	headerList[5] = new ZaListHeaderItem(ZaMTA.A_HoldQ, ZaMsg.PQV_HoldQ_col, null, 60, false, null, true, true);		
+	headerList[5] = new ZaListHeaderItem(ZaMTA.A_HoldQ, ZaMsg.PQV_HoldQ_col, null, 60, null, null, true, true);		
 		
 	return headerList;
 }

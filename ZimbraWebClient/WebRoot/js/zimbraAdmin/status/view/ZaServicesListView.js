@@ -182,9 +182,9 @@ function() {
 ZaServicesListView.prototype._getHeaderList =
 function() {
 	var headerList = [
-		new ZaListHeaderItem(ZaStatus.PRFX_Server, ZaMsg.STV_Server_col, null, 250, false, null, true, true),
-		new ZaListHeaderItem(ZaStatus.PRFX_Service, ZaMsg.STV_Service_col, null, 100, false, null, true, true),
-		new ZaListHeaderItem(ZaStatus.PRFX_Time, ZaMsg.STV_Time_col, null, null, false, null, true, true)
+		new ZaListHeaderItem(ZaStatus.PRFX_Server, ZaMsg.STV_Server_col, null, 250, null, null, true, true),
+		new ZaListHeaderItem(ZaStatus.PRFX_Service, ZaMsg.STV_Service_col, null, 100, null, null, true, true),
+		new ZaListHeaderItem(ZaStatus.PRFX_Time, ZaMsg.STV_Time_col, null, null, null, null, true, true)
 	];
 	return headerList;
 }
@@ -222,23 +222,4 @@ ZaServicesListView.expand = function (event, domObj) {
 	}
 	
 }
-
-/*
-ZaServicesListView.prototype._sortColumn =
-function(columnItem, bSortAsc) {
-	var f = columnItem.getSortField();
-	var sortFuncDesc = function (a,b) {
-		return (a[f] < b[f])? -1: (( a[f] > b[f])? 1: 0);
-	}
-	var sortFuncAsc = function (a,b) {
-		return (a[f] > b[f])? -1: (( a[f] < b[f])? 1: 0);
-	}
-	if (bSortAsc){
-		this.getList().sort(sortFuncAsc);
-	} else {
-		this.getList().sort(sortFuncDesc);
-	}
-	this._resetListView();
-	this._renderList(this.getList());
-};*/
 

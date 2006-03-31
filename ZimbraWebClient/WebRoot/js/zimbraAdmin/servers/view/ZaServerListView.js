@@ -98,10 +98,10 @@ function() {
 
 	var headerList = new Array();
 //idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
+	var sortable=1;
+	headerList[0] = new ZaListHeaderItem(ZaServer.A_ServiceHostname, ZaMsg.SLV_ServiceHName_col, null, 200, sortable++, ZaServer.A_ServiceHostname, true, true);
 
-	headerList[0] = new ZaListHeaderItem(ZaServer.A_ServiceHostname, ZaMsg.SLV_ServiceHName_col, null, 200, true, ZaServer.A_ServiceHostname, true, true);
-
-	headerList[1] = new ZaListHeaderItem(ZaServer.A_description, ZaMsg.DLV_Description_col, null, null, false, ZaServer.A_description, true, true);
+	headerList[1] = new ZaListHeaderItem(ZaServer.A_description, ZaMsg.DLV_Description_col, null, null, null, ZaServer.A_description, true, true);
 		
 	return headerList;
 }
