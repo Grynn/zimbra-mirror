@@ -1898,7 +1898,7 @@ Checkbox_XFormItem.prototype.outputHTML = function (html, updateScript, indent, 
 		checked = " CHECKED";
 	}
 	html.append(indent, 
-		"<input autocomplete='off' id=\"", this.getId(),"\" type=\"", this._inputType, "\"", this.getCssString(), 
+		"<input autocomplete='off' id=\"", this.getId(),"\" type=\"", this._inputType, "\"",  
 				this.getChangeHandlerHTML(), this.getFocusHandlerHTML(), checked,
 		">");
 }
