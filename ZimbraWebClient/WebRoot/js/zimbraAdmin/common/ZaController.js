@@ -51,6 +51,10 @@ function ZaController(appCtxt, container, app, iKeyName) {
 	this._authenticating = false;
 
 	this._loginDialog = appCtxt.getLoginDialog();
+
+	this._loginDialog.registerCallback(this.loginCallback, this);
+	this._loginDialog.registerChangePassCallback(this.changePwdCallback, this);
+		
 	this._msgDialog = appCtxt.getMsgDialog();
 	this._errorDialog = appCtxt.getErrorDialog();
 	this._confirmMessageDialog = new ZaMsgDialog(this._shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);					
@@ -223,27 +227,9 @@ function() {
 * scheduled action. 
 * @private
 **/
-ZaController.prototype._schedule =
-function(method, params, delay) {
-	if (!delay) {
-		delay = 0;
-		this._shell.setBusy(true);
-	}
-	this._action = new AjxTimedAction(this, ZaController._exec, [method, params, delay]);
-	return AjxTimedAction.scheduleAction(this._action, delay);
-}
-
-ZaController._exec =
-function(method, params, delay) {
-	method.call(this, params);
-	if (!delay)
-		this._shell.setBusy(false);
-}
-
-
-
 ZaController.prototype._showLoginDialog =
 function(bReloginMode) {
+	ZaZimbraAdmin._killSplash();
 	this._authenticating = true;
 	this._loginDialog.setVisible(true, false);
 	this._loginDialog.setUpKeyHandlers();
@@ -321,16 +307,18 @@ function(ex, method, params, restartOnError, obj) {
 }
 
 ZaController.prototype._doAuth = 
-function(params) {
+function(username, password) {
 	ZmCsfeCommand.clearAuthToken();
-	var auth = new ZaAuthenticate(this._appCtxt);
 	try {
-		auth.execute(params.username, params.password);
-    	this._authenticating = false;
-		this._appCtxt.getAppController().startup({bIsRelogin: (this._execFrame != null)}); // restart application after login
-		// Schedule this since we want to make sure the app is built up before we actually hide the login dialog
-		this._schedule(this._hideLoginDialog);
+		//hide login dialog
+		this._hideLoginDialog();
+		//show splash screen
+		ZaZimbraAdmin.showSplash(this._shell);
+		var callback = new AjxCallback(this, this.authCallback);	
+		var auth = new ZaAuthenticate(this._appCtxt);
+		auth.execute(username, password,callback);
 	} catch (ex) {
+		this._showLoginDialog();
 		if (ex.code == ZmCsfeException.ACCT_AUTH_FAILED || 
 			ex.code == ZmCsfeException.INVALID_REQUEST) 
 		{
@@ -350,18 +338,104 @@ function(params) {
 }
 
 ZaController.prototype._hideLoginDialog =
-function() {
+function(clear) {
 	this._loginDialog.setVisible(false);
-	this._loginDialog.setError(null);
-	this._loginDialog.clearPassword();
-	this._loginDialog.clearKeyHandlers();
+	if(clear) {
+		this._loginDialog.setError(null);
+		this._loginDialog.clearPassword();
+		this._loginDialog.clearKeyHandlers();
+	}
 }
 
+
+/**
+* This method is called when we receive AuthResponse
+**/
+ZaController.prototype.authCallback = 
+function (resp) {
+	//auth request came back
+	 ZaController.changePwdCommand = null;
+	//if login failed - hide splash screen, show login dialog
+	if(resp.isException && resp.isException()) {
+		this._showLoginDialog();
+		var ex = resp.getException();
+		if (ex.code == ZmCsfeException.ACCT_AUTH_FAILED || 
+			ex.code == ZmCsfeException.INVALID_REQUEST) 
+		{
+			this._loginDialog.setError(ZaMsg.ERROR_AUTH_FAILED);
+			return;
+		} else if(ex.code == ZmCsfeException.SVC_PERM_DENIED) {
+			this._loginDialog.setError(ZaMsg.ERROR_AUTH_NO_ADMIN_RIGHTS);
+			return;
+		} else if (ex.code == ZmCsfeException.ACCT_CHANGE_PASSWORD) {
+			this._loginDialog.disablePasswordField(true);
+			this._loginDialog.disableUnameField(true);
+			this._loginDialog.showChangePass();
+		} else if (ex.code == ZmCsfeException.PASSWORD_RECENTLY_USED ||
+			ex.code == ZmCsfeException.PASSWORD_CHANGE_TOO_SOON) {
+			var msg = ex.code == ZmCsfeException.ACCT_PASS_RECENTLY_USED ? ZaMsg.errorPassRecentlyUsed : (ZaMsg.errorPassChangeTooSoon);
+			this._loginDialog.setError(msg);
+			this._loginDialog.clearPassword();
+			this._loginDialog.setFocus();
+		} else if (ex.code == ZmCsfeException.PASSWORD_LOCKED) {
+			// re-enable username and password fields
+			this._loginDialog.disablePasswordField(false);
+			this._loginDialog.disableUnameField(false);
+			this._loginDialog.setError(ZaMsg.errorPassLocked);
+		} else {
+			this.popupMsgDialog(ZaMsg.SERVER_ERROR, ex); 
+		}
+	} else {
+		//if login succesful hide splash screen, start application
+/*
+Body: {
+  AuthResponse: {
+    _jsns: "urn:zimbraAdmin",
+    a: [
+      0: {
+        _content: "false",
+        n: "zimbraIsDomainAdminAccount"
+       }
+     ],
+    authToken: "0_054d1f67a9ff4b6e323c98ba66afea6d93033e05_69643d33363a65306661666438392d313336302d313164392d383636312d3030306139356439386566323b6578703d31333a313134333831363230343930353b61646d696e3d313a313b",
+    lifetime: 43200000,
+    sessionId: {
+      _content: "46",
+      id: "46",
+      type: "admin"
+     }
+   }
+ },*/	try {
+			var authToken, sessionId;
+	 		var response = resp.getResponse();
+	 		var body = response.Body;		
+	 		//AjxCookie.setCookie(document, ZaSettings.ADMIN_NAME_COOKIE, this._uname, null, "/");
+	 		
+	 		ZmCsfeCommand.setAuthToken(body.AuthResponse.authToken, -1, body.AuthResponse.sessionId.id);
+	 		
+			//Instrumentation code start
+			if(ZaAuthenticate.processResponseMethods) {
+				var cnt = ZaAuthenticate.processResponseMethods.length;
+				for(var i = 0; i < cnt; i++) {
+					if(typeof(ZaAuthenticate.processResponseMethods[i]) == "function") {
+						ZaAuthenticate.processResponseMethods[i].call(this,resp);
+					}
+				}
+			}	
+			//Instrumentation code end		 		
+			this._hideLoginDialog(true);
+			this._appCtxt.getAppController().startup();
+		} catch (ex) {
+			this._handleException(ex, "ZaController.prototype.authCallback");
+		}
+	}
+}
 /*********** Login dialog Callbacks */
 
 ZaController.prototype.loginCallback =
 function(uname, password) {
-	this._schedule(this._doAuth, {username: uname, password: password});
+	//this._schedule(this._doAuth, {username: uname, password: password});
+	this._doAuth(uname,password);
 }
 
 ZaController.prototype.changePwdCallback =
@@ -383,39 +457,37 @@ function(uname, oldPass, newPass, conPass) {
     soapDoc.set("password", newPass);
     var resp = null;
     try {
-		var command = new ZmCsfeCommand();
-		resp = command.invoke({soapDoc: soapDoc, noAuthToken: true, noSession: true}).Body.ChangePasswordResponse;
+    	if(ZaController.changePwdCommand)
+    		return;
+    		
+		ZaController.changePwdCommand = new ZmCsfeCommand();
+		resp = ZaController.changePwdCommand.invoke({soapDoc: soapDoc, noAuthToken: true, noSession: true}).Body.ChangePasswordResponse;
+	
+		if (resp) {
+			ZaZimbraAdmin.showSplash(this._shell);
+			var callback = new AjxCallback(this, this.authCallback);	
+			var auth = new ZaAuthenticate(this._appCtxt);
+			auth.execute(uname, newPass,callback);
+		}		
     } catch (ex) {
+	    ZaController.changePwdCommand = null;
 		//DBG.dumpObj(ex);
 		// XXX: for some reason, ZmCsfeException consts are fubar
-		if (ex.code == "account.PASSWORD_RECENTLY_USED" ||
-			ex.code == "account.PASSWORD_CHANGE_TOO_SOON")
-		{
+		if (ex.code == ZmCsfeException.ACCT_PASS_RECENTLY_USED ||
+			ex.code == ZmCsfeException.ACCT_PASS_CHANGE_TOO_SOON) {
 			var msg = ex.code == ZmCsfeException.ACCT_PASS_RECENTLY_USED
 				? ZaMsg.errorPassRecentlyUsed
 				: (ZaMsg.errorPassChangeTooSoon);
 			this._loginDialog.setError(msg);
-			this._loginDialog.clearPassword();
 			this._loginDialog.setFocus();
-			/*newPassField.value = conPassField.value = "";
-			newPassField.focus();*/
-		}
-		else if (ex.code == "account.PASSWORD_LOCKED")
-		{
-			/*// remove the new password and confirmation fields
-			var passTable = document.getElementById("passTable");
-			passTable.deleteRow(2);
-			passTable.deleteRow(2);
-			*/
+		} else if (ex.code == ZmCsfeException.ACCT_PASS_LOCKED)	{
 			// re-enable username and password fields
 			this._loginDialog.disablePasswordField(false);
 			this._loginDialog.disableUnameField(false);
 			this._loginDialog.setError(ZaMsg.errorPassLocked);
+		} else {
+			this._handleException(ex, "ZaController.prototype.changePwdCallback");	
 		}
-	}
-	
-	if (resp) {
-		this._schedule(this._doAuth, {username: uname, password: newPass});
 	}
 }
 

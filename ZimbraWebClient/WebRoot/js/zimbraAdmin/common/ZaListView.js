@@ -51,7 +51,7 @@ ZaListView.ITEM_FLAG_CLICKED = DwtListView._LAST_REASON + 1;
 
 // abstract methods
 ZaListView.prototype._createItemHtml = function(item) {}
-/*
+
 ZaListView.prototype._mouseOverAction =
 function(ev, div) {
 	if (div._type == DwtListView.TYPE_HEADER_ITEM) {
@@ -68,9 +68,9 @@ function(ev, div) {
 		if (item && item.getToolTip)
 			this.setToolTipContent(item.getToolTip());
 	}
-}*/
+}
 
-/*
+
 ZaListView.prototype._mouseOutAction = 
 function(mouseEv, div) {
 	if (div._type == DwtListView.TYPE_HEADER_ITEM) {
@@ -81,7 +81,7 @@ function(mouseEv, div) {
 		div.style.cursor = "auto";
 	}
 	return true;
-}*/
+}
 
 ZaListView.prototype._setListEvent =
 function (ev, listEv, clickedEl) {

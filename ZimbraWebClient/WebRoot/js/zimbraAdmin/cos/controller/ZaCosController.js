@@ -140,7 +140,7 @@ function(entry) {
 	
 		this._app.pushView(ZaZimbraAdmin._COS_VIEW);
 		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
-		if(!entry.id) {
+		if(!entry.id || (entry.name == "default")) {
 			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
 		} else {
 			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);  				
@@ -150,7 +150,7 @@ function(entry) {
 	  	this._view.setObject(entry);
 
 	} catch (ex) {
-		this._handleException(ex, ZaCosController.prototype._setView, null, false);	
+		this._handleException(ex, "ZaCosController.prototype._setView", null, false);	
 	}
 	this._currentObject = entry;
 }
@@ -378,20 +378,15 @@ function () {
 			try {
 				this._currentObject.rename(newName);
 			} catch (ex) {
-				if (ex.code == ZmCsfeException.SVC_AUTH_EXPIRED || ex.code == ZmCsfeException.SVC_AUTH_REQUIRED || ex.code == ZmCsfeException.NO_AUTH_TOKEN) {
-						this._showLoginDialog();
+				var detailStr = "";
+				for (var prop in ex) {
+					detailStr = detailStr + prop + " - " + ex[prop] + "\n";				
+				}
+				if(ex.code == ZmCsfeException.COS_EXISTS) {
+					this._errorDialog.setMessage(ZaMsg.FAILED_RENAME_COS_1, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+					this._errorDialog.popup();
 				} else {
-					var detailStr = "";
-					for (var prop in ex) {
-						detailStr = detailStr + prop + " - " + ex[prop] + "\n";				
-					}
-					if(ex.code == ZmCsfeException.COS_EXISTS) {
-						this._errorDialog.setMessage(ZaMsg.FAILED_RENAME_COS_1, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
-						this._errorDialog.popup();
-					} else {
-						this._errorDialog.setMessage(ZaMsg.FAILED_RENAME_COS, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
-						this._errorDialog.popup();
-					}
+					this._handleException(ex, "ZaCosController.prototype._saveChanges", null, false);	
 				}
 				return false;
 			}
@@ -412,27 +407,18 @@ function () {
 			this.fireChangeEvent(changeDetails);
 		}
 	} catch (ex) {
-		if (ex.code == ZmCsfeException.SVC_AUTH_EXPIRED || ex.code == ZmCsfeException.SVC_AUTH_REQUIRED || ex.code == ZmCsfeException.NO_AUTH_TOKEN) {
-				this._showLoginDialog();
+		var detailStr = "";
+		for (var prop in ex) {
+			if(ex[prop] instanceof Function) 
+				continue;
+				
+			detailStr = detailStr + prop + " - " + ex[prop] + "\n";				
+		}
+		if(ex.code == ZmCsfeException.COS_EXISTS) {
+			this._errorDialog.setMessage(ZaMsg.FAILED_CREATE_COS_1, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);				
+			this._errorDialog.popup();
 		} else {
-			var detailStr = "";
-			for (var prop in ex) {
-				if(ex[prop] instanceof Function) 
-					continue;
-					
-				detailStr = detailStr + prop + " - " + ex[prop] + "\n";				
-			}
-			if(ex.code == ZmCsfeException.COS_EXISTS) {
-				this._errorDialog.setMessage(ZaMsg.FAILED_CREATE_COS_1, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);				
-				this._errorDialog.popup();
-			} else {
-				if(isNew) {
-					this._errorDialog.setMessage(ZaMsg.FAILED_CREATE_COS, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
-				} else {
-					this._errorDialog.setMessage(ZaMsg.FAILED_SAVE_COS, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
-				}
-				this._errorDialog.popup();
-			}
+			this._handleException(ex, "ZaCosController.prototype._saveChanges", null, false);	
 		}
 		return false;
 	}

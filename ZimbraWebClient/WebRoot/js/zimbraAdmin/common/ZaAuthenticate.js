@@ -37,20 +37,37 @@ function() {
 	return "ZaAuthenticate";
 }
 
+ZaAuthenticate.prototype.changePassword = 
+function (uname,oldPass,newPass,callback) {
+    var soapDoc = AjxSoapDoc.create("ChangePasswordRequest", "urn:zimbraAccount");
+    var el = soapDoc.set("account", uname);
+    el.setAttribute("by", "name");
+    soapDoc.set("oldPassword", oldPass);
+    soapDoc.set("password", newPass);
+
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	params.asyncMode = true;
+	params.noAuthToken=true;
+	params.callback = callback;
+	command.invoke(params);	
+}
+
 ZaAuthenticate.prototype.execute =
-function (uname, pword, isPublic) {
+function (uname, pword, callback) {
 	var soapDoc = AjxSoapDoc.create("AuthRequest", "urn:zimbraAdmin", null);
-	
-//	var header = soapDoc.createHeaderElement();
-//	var context = soapDoc.set("context", null, header);
-//	context.setAttribute("xmlns", "urn:zimbraAdmin");
-//	soapDoc.set("nosession", null, context);
 	this._uname = uname;
 	soapDoc.set("name", uname);
 	soapDoc.set("password", pword);
-	var resp = ZmCsfeCommand.invoke(soapDoc, true, null, null, true).firstChild;
-	this._processResponse(resp);	
-	ZaSettings.init();	
+	
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	params.asyncMode = true;
+	params.noAuthToken=true;
+	params.callback = callback;
+	command.invoke(params);	
 }
 
 ZaAuthenticate.prototype._processResponse =

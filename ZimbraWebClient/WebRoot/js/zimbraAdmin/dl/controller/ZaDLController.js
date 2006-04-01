@@ -193,14 +193,10 @@ ZaDLController.prototype._saveChanges = function () {
 			try {
 				this._currentObject.rename(newName);
 			} catch (ex) {
-				if (ex.code == ZmCsfeException.SVC_AUTH_EXPIRED || ex.code == ZmCsfeException.SVC_AUTH_REQUIRED || ex.code == ZmCsfeException.NO_AUTH_TOKEN) {
-						this._showLoginDialog();
+				if(ex.code == ZmCsfeException.DISTRIBUTION_LIST_EXISTS) {
+					this.popupErrorDialog(ZaMsg.FAILED_RENAME_ACCOUNT_1, ex, true);
 				} else {
-					if(ex.code == ZmCsfeException.DISTRIBUTION_LIST_EXISTS) {
-						this.popupErrorDialog(ZaMsg.FAILED_RENAME_ACCOUNT_1, ex, true);
-					} else {
-						this.popupErrorDialog(ZaMsg.FAILED_RENAME_ACCOUNT, ex, true);
-					}
+					this._handleException(ex, "ZaDLController.prototype._saveChanges", null, false);	
 				}
 				return retval;
 			}

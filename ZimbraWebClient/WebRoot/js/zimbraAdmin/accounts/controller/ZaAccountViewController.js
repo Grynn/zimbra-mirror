@@ -166,23 +166,10 @@ function () {
 		try {
 			this._currentObject.rename(newName);
 		} catch (ex) {
-			if (ex.code == ZmCsfeException.SVC_AUTH_EXPIRED || ex.code == ZmCsfeException.SVC_AUTH_REQUIRED || ex.code == ZmCsfeException.NO_AUTH_TOKEN) {
-					this._showLoginDialog();
+			if(ex.code == ZmCsfeException.ACCT_EXISTS) {
+				this.popupErrorDialog(ZaMsg.FAILED_RENAME_ACCOUNT_1, ex, true);
 			} else {
-				/*var detailStr = "";
-				for (var prop in ex) {
-					detailStr = detailStr + prop + " - " + ex[prop] + "\n";				
-				}*/
-				if(ex.code == ZmCsfeException.ACCT_EXISTS) {
-					this.popupErrorDialog(ZaMsg.FAILED_RENAME_ACCOUNT_1, ex, true);
-					/*this._errorDialog.setMessage(ZaMsg.FAILED_RENAME_ACCOUNT_1, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
-					this._errorDialog.popup();*/
-				} else {
-					this.popupErrorDialog(ZaMsg.FAILED_RENAME_ACCOUNT, ex, true);
-				/*
-					this._errorDialog.setMessage(ZaMsg.FAILED_RENAME_ACCOUNT, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
-					this._errorDialog.popup();*/
-				}
+				this._handleException(ex, "ZaAccountViewController.prototype._saveChanges", null, false);	
 			}
 			return false;
 		}
@@ -197,13 +184,6 @@ function () {
 			try {
 				this._currentObject.changePassword(tmpObj.attrs[ZaAccount.A_password]);
 			} catch (ex) {
-				/*var detailStr = "";
-				for (var prop in ex) {
-					detailStr = detailStr + prop + " - " + ex[prop] + "\n";				
-				}
-				this._errorDialog.setMessage(ZaMsg.FAILED_SAVE_ACCOUNT, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
-				this._errorDialog.popup();
-				*/
 				this.popupErrorDialog(ZaMsg.FAILED_SAVE_ACCOUNT, ex, true);
 				return false;				
 				
@@ -234,15 +214,10 @@ function () {
 	try {	
 		this._currentObject.modify(mods);
 	} catch (ex) {
-		if (ex.code == ZmCsfeException.SVC_AUTH_EXPIRED || ex.code == ZmCsfeException.SVC_AUTH_REQUIRED || ex.code == ZmCsfeException.NO_AUTH_TOKEN) {
-				this._showLoginDialog();
+		if(ex.code == ZmCsfeException.ACCT_EXISTS) {
+			this.popupErrorDialog(ZaMsg.FAILED_CREATE_ACCOUNT_1, ex, true);
 		} else {
-			if(ex.code == ZmCsfeException.ACCT_EXISTS) {
-				this.popupErrorDialog(ZaMsg.FAILED_CREATE_ACCOUNT_1, ex, true);
-
-			} else {
-				this.popupErrorDialog(ZaMsg.FAILED_SAVE_ACCOUNT, ex, true);			
-			}
+			this._handleException(ex, "ZaAccountViewController.prototype._saveChanges", null, false);	
 		}
 		return false;
 	}
