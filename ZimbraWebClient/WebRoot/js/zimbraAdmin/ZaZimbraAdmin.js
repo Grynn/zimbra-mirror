@@ -452,13 +452,14 @@ function() {
 		skin.showSkin(true);		
 	this._appViewMgr.addComponents(elements, true);
 
-	this._app.launch();
-
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_TREE] = this.getOverviewPanelController().getOverviewPanel();
 	elements[ZaAppViewMgr.C_SEARCH] = this._app.getAccountListController().getSearchPanel();		
 	elements[ZaAppViewMgr.C_CURRENT_APP] = new ZaCurrentAppToolBar(this._shell);
 	this._appViewMgr.addComponents(elements, true);
+
+	this._app.launch();
+
 
 	ZaZimbraAdmin._killSplash();
 };
