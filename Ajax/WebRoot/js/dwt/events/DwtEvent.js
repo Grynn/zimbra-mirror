@@ -42,6 +42,7 @@ DwtEvent.ONMOUSEMOVE	= "onmousemove";
 DwtEvent.ONMOUSEOUT		= "onmouseout";
 DwtEvent.ONMOUSEOVER	= "onmouseover";
 DwtEvent.ONMOUSEUP		= "onmouseup";
+DwtEvent.ONMOUSEWHEEL	= "onmousewheel";
 DwtEvent.ONSELECTSTART	= "onselectstart";
 
 // semantic events

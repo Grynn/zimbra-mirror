@@ -379,6 +379,13 @@ function(ev) {
 	return DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEOUT, obj);
 };
 
+DwtControl._mouseWheelHdlr =
+function(ev) {
+	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+	if (!obj) return false;
+	return DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEWHEEL, obj);
+};
+
 DwtControl._selectStartHdlr = 
 function(ev) {
 	return DwtControl._mouseEvent(ev, DwtEvent.ONSELECTSTART);
@@ -443,6 +450,7 @@ DwtControl.HANDLER[DwtEvent.ONMOUSEMOVE] = DwtControl._mouseMoveHdlr;
 DwtControl.HANDLER[DwtEvent.ONMOUSEOUT] = DwtControl._mouseOutHdlr;
 DwtControl.HANDLER[DwtEvent.ONMOUSEOVER] = DwtControl._mouseOverHdlr;
 DwtControl.HANDLER[DwtEvent.ONMOUSEUP] = DwtControl._mouseUpHdlr;
+DwtControl.HANDLER[DwtEvent.ONMOUSEWHEEL] = DwtControl._mouseWheelHdlr;
 DwtControl.HANDLER[DwtEvent.ONSELECTSTART] = DwtControl._selectStartHdlr;
 DwtControl.HANDLER[DwtEvent.ONKEYPRESS] = DwtControl._keyPressHdlr;
 

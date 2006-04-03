@@ -128,11 +128,23 @@ function(domElement) {
 
 Dwt.setHandler =
 function(htmlElement, event, func) {
+	if (event == DwtEvent.ONMOUSEWHEEL && AjxEnv.isGeckoBased) {
+		Dwt.clearHandler(htmlElement, event);
+	}
 	htmlElement[event] = func;
+	if (event == DwtEvent.ONMOUSEWHEEL && AjxEnv.isGeckoBased) {
+		htmlElement.addEventListener("DOMMouseScroll", func, true);
+	}
 };
 
 Dwt.clearHandler =
 function(htmlElement, event) {
+	if (event == DwtEvent.ONMOUSEWHEEL && AjxEnv.isGeckoBased) {
+		if (htmlElement[event]) {
+			var func = htmlElement[event];
+			htmlElement.removeEventListener("DOMMouseScroll", func, true);
+		}
+	}
 	htmlElement[event] = null;
 };
 

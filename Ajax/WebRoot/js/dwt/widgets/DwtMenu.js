@@ -494,13 +494,15 @@ function(x, y) {
 	this._popupActionId = -1;
 	this._isPoppedup = true;
 	if (this._outsideListener) {
-		this.shell._setEventHdlrs([DwtEvent.ONMOUSEDOWN]);
+		this.shell._setEventHdlrs([DwtEvent.ONMOUSEDOWN,DwtEvent.ONMOUSEWHEEL]);
 		this.shell.addListener(DwtEvent.ONMOUSEDOWN, this._outsideListener);
+		this.shell.addListener(DwtEvent.ONMOUSEWHEEL, this._outsideListener);
 	}
 	if (!DwtMenu._activeMenu) {
 		DwtMenu._activeMenu = this;
 		DwtMenu._activeMenuUp = true;
 		DwtEventManager.addListener(DwtEvent.ONMOUSEDOWN, DwtMenu._outsideMouseDownListener);
+		DwtEventManager.addListener(DwtEvent.ONMOUSEWHEEL, DwtMenu._outsideMouseDownListener);
 	}
 
 	DwtMenu._activeMenuIds.add(this._htmlElId);
@@ -550,14 +552,16 @@ function() {
 	
 	// TODO: release capture if you have it
 	if (this._outsideListener) {
-		this.shell._setEventHdlrs([DwtEvent.ONMOUSEDOWN], true);
+		this.shell._setEventHdlrs([DwtEvent.ONMOUSEDOWN,DwtEvent.ONMOUSEWHEEL], true);
 		this.shell.removeListener(DwtEvent.ONMOUSEDOWN, this._outsideListener);
+		this.shell.removeListener(DwtEvent.ONMOUSEWHEEL, this._outsideListener);
 	}
 
 	if (DwtMenu._activeMenu == this) {
 		DwtMenu._activeMenu = null;
 		DwtMenu._activeMenuUp = false;
 		DwtEventManager.removeListener(DwtEvent.ONMOUSEDOWN, DwtMenu._outsideMouseDownListener);
+		DwtEventManager.removeListener(DwtEvent.ONMOUSEWHEEL, DwtMenu._outsideMouseDownListener);
 	}
 	DwtMenu._activeMenuIds.remove(this._htmlElId);
 	this._popdownActionId = -1;
