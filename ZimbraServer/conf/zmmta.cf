@@ -1,5 +1,6 @@
 SECTION antivirus DEPENDS antispam
 REWRITE conf/amavisd.conf.in conf/amavisd.conf
+REWRITE conf/salocal.cf.in conf/salocal.cf
 REWRITE conf/clamd.conf.in conf/clamd.conf
 REWRITE conf/freshclam.conf.in conf/freshclam.conf
 
@@ -18,6 +19,7 @@ RESTART antivirus mta
 SECTION antispam
 
 REWRITE conf/amavisd.conf.in conf/amavisd.conf
+REWRITE conf/salocal.cf.in conf/salocal.cf
 
 	if SERVICE antivirus
 		POSTCONF content_filter smtp-amavis:[127.0.0.1]:10024
