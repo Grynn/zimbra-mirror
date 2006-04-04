@@ -59,13 +59,9 @@ Com_Zimbra_Date.prototype.getActionMenu =
 		return this._zimletContext._contentActionMenu;
 	};
 
-// needs to be kept in sync with Com_Zimbra_Date.DOW
-var $RE_DOW = "(Mon(?:day)?|Tue(?:s(?:day)?)?|Wed(?:nesday)?|Thu(?:rs(?:day)?)?|Fri(?:day)?|Sat(?:urday)?|Sun(?:day)?)";
 
-Com_Zimbra_Date.DOW = {
-	sunday: 0, sun:0, monday: 1, mon: 1, tuesday: 2, tue: 2, tues: 2, wednesday: 3, wed: 3,
-	thursday: 4, thur: 4, thu: 4, friday: 5, fri: 5, saturday: 6, sat: 6
-};
+var $RE_DOW = "(Mon(?:d(?:ay?)?)?|Tue(?:s(?:d(?:ay?)?)?)?|Wed(?:n(?:e(?:s(?:d(?:ay?)?)?)?)?)?|Thu(?:r(?:s(?:d(?:ay?)?)?)?)?|Fri(?:d(?:ay?)?)?|Sat(?:u(?:r(?:d(?:ay?)?)?)?)?|Sun(?:d(?:ay?)?)?)";
+Com_Zimbra_Date.DOW = {	su: 0, mo: 1, tu: 2, we: 3, th: 4, fr: 5, sa: 6};
 
 var $RE_DOM = "(\\d{1,2})(?:st|nd|rd|th)?";
 
@@ -211,7 +207,7 @@ function(line, startIndex) {
 
 	var d = new Date(this.getCurrentDate().getTime());
 	var dow = d.getDay();
-	var ndow = Com_Zimbra_Date.DOW[result[2].toLowerCase()];
+	var ndow = Com_Zimbra_Date.DOW[result[2].toLowerCase().substring(0,2)];
 	var addDays;
 
 	if (result[1].toLowerCase() == "next") {
