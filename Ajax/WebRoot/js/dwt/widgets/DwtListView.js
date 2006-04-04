@@ -440,6 +440,26 @@ function () {
 	return this._multiSelectEnabled;
 };
 
+// safari breaks w/ clicking on scrollbar in list views so we do this:
+DwtListView.prototype.getPropagationForEvent = 
+function() {
+	if (AjxEnv.isSafari) {
+		return false;
+	} else {
+		return DwtControl.prototype.getPropagationForEvent.call(this);
+	}
+}
+
+// safari breaks w/ clicking on scrollbar in list views so we do this:
+DwtListView.prototype.getReturnValueForEvent = 
+function() {
+	if (AjxEnv.isSafari) {
+		return true;
+	} else {
+		return DwtControl.prototype.getReturnValueForEvent.call(this);
+	}
+}
+
 DwtListView.prototype._addRow =
 function(row, index) {
 	// bug fix #1894 - check for childNodes length otherwise IE barfs

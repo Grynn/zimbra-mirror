@@ -421,8 +421,8 @@ function(ev, eventType, obj, mouseEv) {
 	var tn = mouseEv.target.tagName.toLowerCase();
 	if (tn != "input" && tn != "textarea") {
 		// bug #6003 - Safari seems to follow propagation rules for clicks on scrollbar :(
-		mouseEv._stopPropagation = AjxEnv.isSafari ? false : true;
-		mouseEv._returnValue = AjxEnv.isSafari ? true : false;
+		mouseEv._stopPropagation = obj.getPropagationForEvent();
+		mouseEv._returnValue = obj.getReturnValueForEvent();
 	} else {
 		mouseEv._stopPropagation = false;
 		mouseEv._returnValue = true;	
@@ -575,6 +575,18 @@ function() {
 DwtControl.prototype.handleKeyAction =
 function(actionCode, ev) {
 	return false;
+}
+
+DwtControl.prototype.getPropagationForEvent = 
+function() {
+	// overload me for dealing w/ browsers w/ weird quirks
+	return true;
+}
+
+DwtControl.prototype.getReturnValueForEvent = 
+function() {
+	// overload me for dealing w/ browsers w/ weird quirks
+	reutrn false;
 }
 
 DwtControl.prototype.reparent =
