@@ -453,8 +453,7 @@ function(x, y) {
 			var row = rows[(j - count) % count];
 			var cell = row.insertCell(-1);
 			cell.className = "DwtMenuCascadeCell";
-			var child = rows[j] && rows[j].cells.length 
-				? rows[j].cells[0].firstChild : null;
+			var child = rows[j].cells[0].firstChild;
 			while (child != null) {
 				cell.appendChild(child);
 				child = child.nextSibling;
