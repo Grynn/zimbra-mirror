@@ -75,12 +75,12 @@ function(account, now, isDndIcon) {
 				html[idx++] = "</td>";
 			} else if(id.indexOf(ZaAccount.A_name)==0) {
 				// name
-				html[idx++] = "<td width=" + this._headerList[i]._width + ">";
+				html[idx++] = "<td align='left' width=" + this._headerList[i]._width + ">";
 				html[idx++] = AjxStringUtil.htmlEncode(account.name);
 				html[idx++] = "</td>";
 			} else if (id.indexOf(ZaAccount.A_displayname)==0) {
 				// display name
-				html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";
+				html[idx++] = "<td align='center' width=" + this._headerList[i]._width + "><nobr>";
 				html[idx++] = AjxStringUtil.htmlEncode(account.attrs[ZaAccount.A_displayname]);
 				html[idx++] = "</nobr></td>";	
 			} 
@@ -110,12 +110,15 @@ ZaAccMiniListView.prototype._setNoResultsHtml = function() {
 };
 
 ZaAccMiniListView.prototype._sortColumn = function (columnItem, bSortAsc){
-	if (bSortAsc) {
+	/*if (bSortAsc) {
 		var comparator = function (a, b) {
 			return (a < b)? 1 :((a > b)? -1 : 0);
 		};
 		this.getList().sort(comparator);
 	} else {
 		this.getList().sort();
+	}*/
+	if(this.parent.parent.searchAccounts) {
+		this.parent.parent.searchAccounts(columnItem.getSortField(),bSortAsc);
 	}
 };
