@@ -338,6 +338,8 @@ function(response, asyncMode) {
 */
 ZmCsfeCommand.prototype._runCallback =
 function(callback, result) {
+	if (!result) return;
+	
 	var response;
 	if (result instanceof ZmCsfeResult) {
 		response = result; // we already got an exception and packaged it
