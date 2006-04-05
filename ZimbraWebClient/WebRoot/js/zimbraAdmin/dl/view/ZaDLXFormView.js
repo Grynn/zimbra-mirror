@@ -75,7 +75,7 @@ ZaDLXFormView.removeMembers = function(event) {
 ZaDLXFormView.srchButtonHndlr = 
 function(evt) {
 	var fieldObj = this.getForm().parent;
-	fieldObj.searchAccounts(evt);
+	fieldObj.searchAccounts(null, false);
 }
 
 /**
@@ -86,7 +86,7 @@ function(evt) {
 	var fieldObj = this.getForm().parent;
 	var currentPageNum = this.getInstanceValue("/poolPagenum");
 	this.setInstanceValue(currentPageNum+1,"/poolPagenum");
-	fieldObj.searchAccounts(evt);
+	fieldObj.searchAccounts(null, false);
 }
 
 /**
@@ -97,7 +97,7 @@ function(evt) {
 	var fieldObj = this.getForm().parent;
 	var currentPageNum = this.getInstanceValue("/poolPagenum")-1;
 	this.setInstanceValue(currentPageNum,"/poolPagenum");
-	fieldObj.searchAccounts(evt);
+	fieldObj.searchAccounts(null, false);
 }
 
 /**
@@ -302,10 +302,12 @@ function (entry) {
 }
 
 ZaDLXFormView.prototype.searchAccounts = 
-function (ev) {
+function (orderby, isascending) {
 	try {
+		orderby = (orderby !=null) ? orderby : ZaAccount.A_name;
+		
 		var  searchQueryHolder = new ZaSearchQuery(ZaSearch.getSearchByNameQuery(this._containedObject["query"]), [ZaSearch.ACCOUNTS,ZaSearch.DLS,ZaSearch.ALIASES], false, "",null,10);
-		var result = ZaSearch.searchByQueryHolder(searchQueryHolder, this._containedObject["poolPagenum"], ZaAccount.A_name, null, this._app);
+		var result = ZaSearch.searchByQueryHolder(searchQueryHolder, this._containedObject["poolPagenum"], orderby, isascending, this._app);
 		if(result.list) {
 			this._containedObject.memberPool = result.list.getArray();
 		}
@@ -329,10 +331,10 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 	var sourceHeaderList = new Array();
 	var sortable=1;
 	sourceHeaderList[0] = new ZaListHeaderItem("type", ZaMsg.ALV_Type_col, null, 34, sortable++, "objectClass", true, true);
-	sourceHeaderList[1] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.ALV_Name_col, null, null, sortable++, ZaAccount.A_name, true, true);
+	sourceHeaderList[1] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.ALV_Name_col, null, "auto", sortable++, ZaAccount.A_name, true, true);
 	//idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
-	sourceHeaderList[2] = new ZaListHeaderItem(ZaAccount.A_displayname, ZaMsg.ALV_DspName_col, null, 100, sortable++,ZaAccount.A_displayname, true, true);
-
+	sourceHeaderList[2] = new ZaListHeaderItem(ZaAccount.A_displayname, ZaMsg.ALV_DspName_col, null, "auto", sortable++,ZaAccount.A_displayname, true, true);
+	sourceHeaderList[3] = new ZaListHeaderItem(null, null, null, "10px", null, null, false, true);
 	var membersHeaderList = new Array();
 	membersHeaderList[0] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.ALV_Name_col, null, null, sortable++, ZaAccount.A_name, true, true);
 
