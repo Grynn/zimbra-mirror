@@ -298,7 +298,8 @@ function(child) {
 }
 
 // Override DwtComposite.addChild to do nothing
-DwtMenu.prototype.addChild = function(child) {
+DwtMenu.prototype.addChild = 
+function(child) {
 	// Color pickers and calendars are not menu aware so we have to deal with
 	// them acordingly
 	if ((child instanceof DwtColorPicker) || (child instanceof DwtCalendar))
@@ -326,7 +327,7 @@ function(item, index) {
 			col = row.insertCell(index);
 			col.align = "center";
 			col.vAlign = "middle";
-			var spc = row.insertCell(row.cells.length);
+			var spc = row.insertCell(-1);
 			spc.nowrap = true;
 			spc.width = "7px"
 		} else {
@@ -439,7 +440,10 @@ function(x, y) {
 		var height = s.y;
 		for (var i = numRows - 1; i >= 0; i--) {
 			var row = rows[i];
-			height -= Dwt.getSize(row).y;
+			// bug fix #6904 - safari returns zero for row heights 
+			// (see http://bugzilla.opendarwin.org/show_bug.cgi?id=7242), 
+			// so hardcode for now
+			height -= AjxEnv.isSafari ? 15 : Dwt.getSize(row).y;
 			if (height < space) {
 				break;
 			}
@@ -447,9 +451,10 @@ function(x, y) {
 		var count = i;
 		for (var j = count; j < numRows; j++) {
 			var row = rows[(j - count) % count];
-			var cell = row.insertCell(row.cells.length);
+			var cell = row.insertCell(-1);
 			cell.className = "DwtMenuCascadeCell";
-			var child = rows[j].cells[0].firstChild;
+			var child = rows[j] && rows[j].cells.length 
+				? rows[j].cells[0].firstChild : null;
 			while (child != null) {
 				cell.appendChild(child);
 				child = child.nextSibling;
@@ -462,7 +467,7 @@ function(x, y) {
 		if (offset > 0) {
 			for (var j = offset; j < count; j++) {
 				var row = rows[j];
-				var cell = row.insertCell(row.cells.length);
+				var cell = row.insertCell(-1);
 				cell.className = "DwtMenuCascadeCell";
 				cell.empty = true;
 				cell.innerHTML = "&nbsp;";
@@ -610,31 +615,10 @@ function(){
 	return null;
 }
 
-/** NO LONGER USED
-DwtMenu._mouseDownListener =
-function(ev) {
-	if (!DwtMenu._activeMenuUp) return;
-
-    var obj = DwtMenu._activeMenu;
-    var mi = ev ? ev.dwtObj : null;
-
-	// If we are dealing with a menu item that is itself contained in a menu that is
-	// a menu bar, then don't do a popdown, else if the menu item has a menu with a selection
-	// listener, then continue with a popdown, else let the menu item deal with it.
-	if (obj.parent instanceof DwtMenuItem && obj.parent.parent._style == DwtMenu.BAR_STYLE) {
-		obj.parent.parent._getActiveItem()._deselect();
-		return true;
-	} else if (mi && mi instanceof DwtMenuItem && !mi.isListenerRegistered(DwtEvent.SELECTION) && mi.getMenu() != null) {
-		return true;
-	}
-	obj.popdown();
-	return true;		
-}
-*/
-
-/* Note that a hack has been added to DwtHtmlEditor to call this method when the editor gets focus. The reason
- * for this is that the editor uses an Iframe whose events are independent of the menu's document. In this case
- * event will be null.
+/* Note that a hack has been added to DwtHtmlEditor to call this method when the 
+ * editor gets focus. The reason for this is that the editor uses an Iframe 
+ * whose events are independent of the menu's document. In this case event will 
+ * be null.
  */
 DwtMenu._outsideMouseDownListener =
 function(ev) {
