@@ -552,7 +552,7 @@ sub rewriteConfig {
 		while ($sline =~ m/\@\@([^\@]+)\@\@/g) {
 			# print STDERR "\t$sline";
 			my $sr = $1;
-			$sline =~ s/\@\@$sr\@\@/$knownkeys{"LOCAL:$sr"}/g;
+			$sline =~ s/\@\@$sr\@\@/$knownkeys{"LOCAL:$sr"}/;
 			# print STDERR "\t$sline";
 		}
 
@@ -638,7 +638,7 @@ sub rewriteConfig {
 				$rep=$knownkeys{"VAR:$sr"};
 			}
 			my $qr = quotemeta($sr);
-			$sline =~ s/%%$qr%%/$rep/g;
+			$sline =~ s/%%$qr%%/$rep/;
 			# print STDERR "\t$sline";
 		}
 
