@@ -80,6 +80,8 @@ ZmCsfeException.define("SVC_PERM_DENIED", "service.PERM_DENIED", ZMsg.errorPermi
 ZmCsfeException.define("SVC_RESOURCE_UNREACHABLE", "service.RESOURCE_UNREACHABLE");
 ZmCsfeException.define("SVC_UNKNOWN_DOCUMENT", "service.UNKNOWN_DOCUMENT", ZMsg.errorUnknownDoc);
 ZmCsfeException.define("SVC_WRONG_HOST", "service.WRONG_HOST");
+ZmCsfeException.define("SVC_TEMPORARILY_UNAVAILABLE", "service.TEMPORARILY_UNAVAILABLE");
+
 
 ZmCsfeException.define("ACCT_AUTH_FAILED", "account.AUTH_FAILED");
 ZmCsfeException.define("ACCT_CHANGE_PASSWORD", "account.CHANGE_PASSWORD", ZMsg.errorPassChange);

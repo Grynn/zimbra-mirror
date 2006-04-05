@@ -27,8 +27,8 @@
 * @param obj	(optional) the object to call the function from
 * @param func	the listener function
 */
-function AjxListener(obj, method) {
-	AjxCallback.call(this, obj, method);
+function AjxListener(obj, method, args) {
+	AjxCallback.call(this, obj, method, args);
 }
 
 AjxListener.prototype = new AjxCallback();

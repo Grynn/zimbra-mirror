@@ -98,6 +98,11 @@ ZaMTA.A_queue_filter_value = "_queue_filter_value";
 ZaMTA.A_progress = "progress";
 ZaMTA._quecountsArr = new Array();
 ZaMTA.threashHold;
+ZaMTA.ActionRequeue = "requeue";
+ZaMTA.ActionDelete = "delete";
+ZaMTA.ActionHold = "hold";
+ZaMTA.ActionRelease = "release";
+
 ZaMTA.prototype.QCountsCallback = function (resp) {
 	if(!resp) {
 		var ex = new ZmCsfeException(ZMsg.errorEmptyResponse,CSFE_SVC_ERROR,"ZaMTA.prototype.QCountsCallback");
@@ -319,8 +324,10 @@ ZaMTA.prototype.mailQStatusCallback = function (arg,resp) {
 	}
 	if(resp.isException && resp.isException()) {
 		if(resp.getException().code == ZmCsfeException.SVC_ALREADY_IN_PROGRESS) {
-			var details = {obj:this,qName:qName};
+			var details = {obj:this,qName:qName,poll:true};
 			this._app.getMTAController().fireChangeEvent(details);				
+		} else if (resp.getException().code == ZmCsfeException.SVC_TEMPORARILY_UNAVAILABLE) {
+			this._app.getCurrentController().popupMsgDialog(ZaMsg.ERROR_PQ_SERVICE_UNAVAILABLE);
 		} else {
 			this._app.getCurrentController()._handleException(resp.getException(), "ZaMTA.prototype.mailQStatusCallback");
 		}
@@ -369,10 +376,24 @@ ZaMTA.prototype.mailQueueAction = function (qName, action, by, val) {
 }
 
 ZaMTA.prototype.mailQueueActionClbck = function (qName, resp) {
-	this[qName][ZaMTA.A_Status] = ZaMTA.STATUS_STALE;
+	this[qName][ZaMTA.A_DeferredQ] = ZaMTA.STATUS_STALE;
+	this[qName][ZaMTA.A_IncomingQ] = ZaMTA.STATUS_STALE;
+	this[qName][ZaMTA.A_ActiveQ] = ZaMTA.STATUS_STALE;
+	this[qName][ZaMTA.A_CorruptQ] = ZaMTA.STATUS_STALE;
+	this[qName][ZaMTA.A_HoldQ] = ZaMTA.STATUS_STALE;				
+
 	if(resp.isException && resp.isException()) {
-		this._app.getCurrentController()._handleException(resp.getException(), "ZaMTA.prototype.mailQStatusCallback");
-	} 	
+		if(resp.getException().code == ZmCsfeException.SVC_ALREADY_IN_PROGRESS) {
+			var details = {obj:this,qName:qName};
+			this._app.getMTAController().fireChangeEvent(details);				
+		} else if (resp.getException().code == ZmCsfeException.SVC_TEMPORARILY_UNAVAILABLE) {
+			this._app.getCurrentController().popupMsgDialog(ZaMsg.ERROR_PQ_SERVICE_UNAVAILABLE);
+		} else {
+			this._app.getCurrentController()._handleException(resp.getException(), "ZaMTA.prototype.mailQueueActionClbck");
+		}
+	} else {
+		this.getMailQStatus(qName);
+	}	
 }
 
 ZaMTA.prototype.flushQueues = function () {

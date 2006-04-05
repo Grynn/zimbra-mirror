@@ -403,12 +403,12 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 								      relevant:"ZaDLXFormView.shouldEnableMemberListButtons.call(this)",
 								      relevantBehavior:_DISABLE_},
 									{type:_CELLSPACER_},
-									{type:_DWT_BUTTON_, label:ZaMsg.Back, width:75, id:"backButton", icon:"LeftArrow", disIcon:"LeftArrowDis", 	
+									{type:_DWT_BUTTON_, label:ZaMsg.Previous, width:75, id:"backButton", icon:"LeftArrow", disIcon:"LeftArrowDis", 	
 										onActivate:"ZaDLXFormView.backMemButtonHndlr.call(this,event)", 
 										relevantBehavior:_DISABLE_, relevant:"ZaDLXFormView.shouldEnableMemBackButton.call(this)"
 								    },								       
 									{type:_CELLSPACER_},
-									{type:_DWT_BUTTON_, label:ZaMsg.Forward, width:75, id:"fwdButton", icon:"RightArrow", disIcon:"RightArrowDis",	
+									{type:_DWT_BUTTON_, label:ZaMsg.Next, width:75, id:"fwdButton", icon:"RightArrow", disIcon:"RightArrowDis",	
 										onActivate:"ZaDLXFormView.fwdMemButtonHndlr.call(this,event)", 
 										relevantBehavior:_DISABLE_, relevant:"ZaDLXFormView.shouldEnableMemForwardButton.call(this)"
 								    },								       
@@ -459,12 +459,12 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 								relevant:"ZaDLXFormView.shouldEnableAddAllButton.call(this)",
 								relevantBehavior:_DISABLE_},
 								{type:_CELLSPACER_},
-								{type:_DWT_BUTTON_, label:ZaMsg.Back, width:75, id:"backButton", icon:"LeftArrow", disIcon:"LeftArrowDis",
+								{type:_DWT_BUTTON_, label:ZaMsg.Previous, width:75, id:"backButton", icon:"LeftArrow", disIcon:"LeftArrowDis",
 									relevantBehavior:_DISABLE_, relevant:"ZaDLXFormView.shouldEnablePoolBackButton.call(this)",
 									onActivate:"ZaDLXFormView.backPoolButtonHndlr.call(this,event)"
 								},								       
 								{type:_CELLSPACER_},
-								{type:_DWT_BUTTON_, label:ZaMsg.Forward, width:75, id:"fwdButton", icon:"RightArrow", disIcon:"RightArrowDis",
+								{type:_DWT_BUTTON_, label:ZaMsg.Next, width:75, id:"fwdButton", icon:"RightArrow", disIcon:"RightArrowDis",
 								 	relevantBehavior:_DISABLE_, relevant:"ZaDLXFormView.shouldEnablePoolForwardButton.call(this)",
 									onActivate:"ZaDLXFormView.fwdPoolButtonHndlr.call(this,event)"									
 								},								       

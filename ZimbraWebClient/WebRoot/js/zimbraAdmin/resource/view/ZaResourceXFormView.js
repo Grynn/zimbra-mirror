@@ -46,7 +46,7 @@ ZaResourceXFormView.prototype = new ZaTabView();
 ZaResourceXFormView.prototype.constructor = ZaResourceXFormView;
 ZaTabView.XFormModifiers["ZaResourceXFormView"] = new Array();
 ZaResourceXFormView.TAB_INDEX=0;
-
+ZaResourceXFormView.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/managing_resource.htm";
 /**
 * Sets the object contained in the view
 * @param entry - {ZaResource} object to display

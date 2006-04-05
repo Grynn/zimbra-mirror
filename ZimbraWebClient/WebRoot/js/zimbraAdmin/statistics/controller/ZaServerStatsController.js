@@ -50,7 +50,7 @@ function(item) {
 		this._ops = new Array();
 		this._ops.push(new ZaOperation(ZaOperation.NONE));
 		
-		this._ops.push(new ZaOperation(ZaOperation.PAGE_BACK, ZaMsg.Back, ZaMsg.PrevPage_tt, 
+		this._ops.push(new ZaOperation(ZaOperation.PAGE_BACK, ZaMsg.Previous, ZaMsg.PrevPage_tt, 
 									"LeftArrow", "LeftArrowDis",  
 									new AjxListener(this, ZaServerStatsController.prototype._prevPageListener)));
 		
@@ -59,7 +59,7 @@ function(item) {
 														 null, null, null, null,null,null,null,"mbxPageInfo"));	
 		this._ops.push(new ZaOperation(ZaOperation.SEP));							
 		
-		this._ops.push(new ZaOperation(ZaOperation.PAGE_FORWARD, ZaMsg.Forward, ZaMsg.NextPage_tt,
+		this._ops.push(new ZaOperation(ZaOperation.PAGE_FORWARD, ZaMsg.Next, ZaMsg.NextPage_tt,
 									"RightArrow", "RightArrowDis", 
 									new AjxListener(this, ZaServerStatsController.prototype._nextPageListener)));
 		

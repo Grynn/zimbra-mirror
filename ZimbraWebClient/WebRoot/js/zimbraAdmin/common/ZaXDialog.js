@@ -67,6 +67,8 @@ function ZaXDialog(parent, app, className, title, w, h,iKeyName) {
 	this._pageDiv.style.width = this._contentW;
 	this._pageDiv.style.height = this._contentH;
 	this._pageDiv.style.overflow = "auto";
+	this._pageDiv.style["overflow-y"] = "auto";
+	this._pageDiv.style["overflow-x"] = "auto";	
 
 	this._createContentHtml();
 	this._helpURL = ZaXDialog.helpURL;	

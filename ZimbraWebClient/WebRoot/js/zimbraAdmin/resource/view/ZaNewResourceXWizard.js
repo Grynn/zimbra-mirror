@@ -53,7 +53,7 @@ function ZaNewResourceXWizard (parent, app) {
 ZaNewResourceXWizard.prototype = new ZaXWizardDialog;
 ZaNewResourceXWizard.prototype.constructor = ZaNewResourceXWizard;
 ZaXDialog.XFormModifiers["ZaNewResourceXWizard"] = new Array();
-ZaNewResourceXWizard.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/Managing_Resources.htm";
+ZaNewResourceXWizard.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/managing_resource.htm";
 
 ZaNewResourceXWizard.prototype.handleXFormChange = 
 function () {
