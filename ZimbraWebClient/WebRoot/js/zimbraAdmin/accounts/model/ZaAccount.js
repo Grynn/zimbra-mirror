@@ -607,6 +607,8 @@ function(mods) {
 	resp = modifyAccCommand.invoke(params).Body.ModifyAccountResponse;
 	this.initFromJS(resp.account[0]);
 	this[ZaAccount.A2_confirmPassword] = null;
+	//invalidate the original tooltip
+	this._toolTip = null ;
 	return;
 }
 ZaItem.modifyMethods["ZaAccount"].push(ZaAccount.modifyMethod);
@@ -778,12 +780,15 @@ function (respObj, instance) {
 	if(respObj.isException && respObj.isException()) {
 		var errCode = respObj.getException().code;
 		if(errCode && errCode == "service.NOT_IN_PROGRESS") {
-			instance.status = null;
 			instance.errorDetail = "";
 			instance.resultMsg = "";	
 			instance.progressMsg = ZaMsg.NAD_ACC_ReindexingNotRunning;
-			if(instance.numRemaining > 0) {
+			if(instance.numRemaining > 0 || instance.status == "started") {
 				instance.numDone = instance.numTotal;
+				instance.status = "complete";	
+				instance.progressMsg = ZaMsg.NAD_ACC_ReindexingComplete;			
+			} else {
+				instance.status = null;
 			}
 		} else {
 			instance.resultMsg = String(ZaMsg.FAILED_REINDEX).replace("{0}", errCode);
@@ -800,6 +805,10 @@ function (respObj, instance) {
 		}
 		if(resp && resp.Body.ReIndexResponse) {
 			instance.status = resp.Body.ReIndexResponse.status;
+			if(instance.status == "started") {
+				instance.numDone = 0;
+				instance.progressMsg = ZaMsg.NAD_ACC_ReindexingStarted;							
+			}
 			if(resp.Body.ReIndexResponse.progress && resp.Body.ReIndexResponse.progress[0]) {
 				var progress = resp.Body.ReIndexResponse.progress[0];
 				instance.numFailed = progress.numFailed;
