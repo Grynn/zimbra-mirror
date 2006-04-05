@@ -586,7 +586,7 @@ function() {
 DwtControl.prototype.getReturnValueForEvent = 
 function() {
 	// overload me for dealing w/ browsers w/ weird quirks
-	reutrn false;
+	return false;
 }
 
 DwtControl.prototype.reparent =
