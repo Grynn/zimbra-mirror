@@ -97,7 +97,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 .ZmLoginDialog-Transparent {background-color: transparent;}
 .ZmLoginDialog-HeaderPanel, .ZmLoginDialog-MainPanel {width: 448px;}
 .ZmLoginDialog-HeaderPanel {
-	background-image: url(/zimbraAdmin/img/loRes/logo/Admin_LoginBanner.gif);
+	background-image: url(/zimbraAdmin/img/loRes/logo/LoginBanner_blank.gif);
 	border: 1px solid rgb(124, 124, 148);
 }
 .ZmLoginDialog-HeaderText, .ZmLoginDialog-SubHeaderText {

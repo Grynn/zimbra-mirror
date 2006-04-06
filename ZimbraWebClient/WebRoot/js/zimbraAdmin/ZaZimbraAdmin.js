@@ -36,7 +36,6 @@ function ZaZimbraAdmin(appCtxt) {
 	ZaController.call(this, appCtxt, null, null,"ZaZimbraAdmin");
 
 	ZaZimbraAdmin.showSplash(this._shell);
-	//ZaZimbraAdmin._splashScreen = new ZaSplashScreen(this._shell, "Admin_SplashScreen");
 	
 	appCtxt.setAppController(this);
 	appCtxt.setClientCmdHdlr(new ZaClientCmdHandler(appCtxt));
