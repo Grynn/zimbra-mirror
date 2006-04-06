@@ -672,4 +672,6 @@
 
 <attr name="zimbraCalResContactPhone" type="string"/>
 
+<attr name="zimbraMailboxLocationBeforeMove" type="string"/>
+
 </attrs>

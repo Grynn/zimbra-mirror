@@ -332,7 +332,8 @@ objectIdentifier zimbraFeatureMailForwardingEnabled ZimbraAttrType:342
 objectIdentifier zimbraPrefMailForwardingAddress ZimbraAttrType:343
 objectIdentifier zimbraPrefMailLocalDeliveryDisabled ZimbraAttrType:344
 objectIdentifier zimbraLocale ZimbraAttrType:345
-objectIdentifier zimbraFeatureMobileSyncEnabled ZimbraAttrType:346
+objectIdentifier zimbraMailboxLocationBeforeMove ZimbraAttrType:346
+objectIdentifier zimbraFeatureMobileSyncEnabled ZimbraAttrType:347
 
 #################################################################
 # object class OIDs
@@ -1279,6 +1280,13 @@ attributetype ( zimbraMailCatchAllCanonicalAddress
 attributetype ( zimbraMailHost
 	NAME 'zimbraMailHost'
 	DESC 'the server hosting the accounts mailbox'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
+	SINGLE-VALUE )
+
+attributetype ( zimbraMailboxLocationBeforeMove
+	NAME 'zimbraMailboxLocationBeforeMove'
+	DESC 'serverId:mboxId of mailbox before being moved'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
 	SINGLE-VALUE )
@@ -2735,6 +2743,7 @@ objectclass ( zimbraAccount
 		zimbraZimletAvailableZimlets $
 		zimbraZimletUserProperties $
 		zimbraMemberOf $
+		zimbraMailboxLocationBeforeMove $
 		mail $
 		o $
 		ou $	
