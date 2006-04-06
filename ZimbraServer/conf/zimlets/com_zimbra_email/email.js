@@ -67,6 +67,24 @@ function(spanElement, contentObjText, matchContext, canvas) {
 	canvas.innerHTML = toolTip;
 };
 
+Com_Zimbra_Email.prototype.getActionMenu =
+function(obj, span, context) {
+
+	// call base class first to get the action menu
+	var actionMenu = ZmZimletBase.prototype.getActionMenu.call(this, obj, span, context);
+
+	// bug fix #5262 - Change action menu item for contact depending on whether
+	// email address is found in address book or not.
+	if (this._contacts) {
+		var found = this._contacts.getContactByEmail(obj.getAddress()) != null;
+		var newOp = found ? ZmOperation.EDIT_CONTACT : ZmOperation.NEW_CONTACT;
+		var newText = found ? null : ZmMsg.AB_ADD_CONTACT;
+		ZmOperation.setOperation(actionMenu, "NEWCONTACT", newOp, newText);
+	}
+
+	return actionMenu;
+};
+
 Com_Zimbra_Email.prototype.clicked =
 function(spanElement, contentObjText, matchContext, canvas) {
 	// TODO need a way to get ev so we can use ev.shiftKey below
