@@ -65,6 +65,7 @@ ZaStatusViewController.prototype.show = function() {
 ZaStatusViewController.initToolbarMethod =
 function () {
 	// first button in the toolbar is a menu.
+	var newMenuOpList = new Array();
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.LABEL, ZaMsg.TBB_LastUpdated, ZaMsg.TBB_LastUpdated_tt, null, null, null,null,null,null,"refreshTime"));	
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.SEP));
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.REFRESH, ZaMsg.TBB_Refresh, ZaMsg.TBB_Refresh_tt, null, null, new AjxListener(this, this.refreshListener)));	
@@ -105,3 +106,12 @@ function (nextViewCtrlr, func, params) {
 ZaStatusViewController.prototype.refreshListener = function () {
 	this.show();
 }
+
+ZaStatusViewController.prototype._handleException =
+function(ex, method, params, restartOnError, obj) {
+	if (ex.code && ex.code == ZmCsfeException.SVC_AUTH_REQUIRED) {
+		this.popupErrorDialog(ZaMsg.SERVER_ERROR, ex, true);
+	} else {
+		ZaController.prototype._handleException.call(this, ex, method, params, restartOnError, obj);
+	}
+}	

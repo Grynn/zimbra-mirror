@@ -48,11 +48,61 @@ ZaStatus.PRFX_Time = "status_time";
 ZaStatus.PRFX_Status = "status_status";
 
 ZaStatus.loadMethod = 
-function(app) {
+function() {
+	/*
 	var soapDoc = AjxSoapDoc.create("GetServiceStatusRequest", "urn:zimbraAdmin", null);
 	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	this.initFromDom(resp);
+	*/
+	
+	var soapDoc = AjxSoapDoc.create("GetServiceStatusRequest", "urn:zimbraAdmin", null);	
+	var resp = null;
+	var targetServer = null ;	
+	var serverNo = ZaServer.servers.length ;
+	//send request to the targetServer as ZaServer.monitorHost
+	if (ZaServer.monitorHost != null && ZaServer.monitorHost.id ){
+		try {
+			targetServer = ZaServer.monitorHost.id ;		
+			resp = ZmCsfeCommand.invoke(soapDoc, null, null, targetServer, true).firstChild;
+			this.initFromDom(resp);
+		} catch (ex) {
+			this._app.getStatusViewController()._handleException(ex, "ZaStatus.loadMethod:"+targetServer, null, false);		
+		}
+	} else if (serverNo > 0 ){//send request to the targetServer one by one
+		for (var i =0; i < serverNo; i++){
+			try {
+				targetServer = ZaServer.servers[i].id ;			
+				resp = ZmCsfeCommand.invoke(soapDoc, null, null, targetServer, true).firstChild;
+				this.initFromDom(resp);
+			} catch (ex) {
+				this._app.getStatusViewController()._handleException(ex, "ZaStatus.loadMethod:"+ZaServer.servers[i].id, null, false);		
+			}
+		}	
+	}
+	
+	/* TODO: use the JSON request in the future
+	var soapDoc = AjxSoapDoc.create("GetServiceStatusRequest", "urn:zimbraAdmin", null);
+	var getServiceCommand = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	var resp = null;
+	this.attrs = new Object();
+	
+	var serverNo = ZaServer.servers.length ;
+	//send request to the targetServer as ZaServer.monitorHost
+	if (ZaServer.monitorHost != null && ZaServer.monitorHost.id ){
+		params.targetServer = ZaServer.monitorHost.id ;		
+		resp = getServiceCommand.invoke(params).Body.GetServiceStatusResponse;
+		//this.initFromJS(resp.calresource[0]);
+	}else if (serverNo > 0 ){//send request to the targetServer one by one
+		for (var i =0; i < serverNo; i++){
+			params.targetServer = ZaServer.servers[i].id ;			
+			resp = getServiceCommand.invoke(params).Body.GetServiceStatusResponse;
+			//this.initFromJS(resp.calresource[0]);
+		}	
+	} */	
 }
+
 ZaItem.loadMethods["ZaStatus"].push(ZaStatus.loadMethod);
 
 ZaStatus.initMethod = function (app) {
