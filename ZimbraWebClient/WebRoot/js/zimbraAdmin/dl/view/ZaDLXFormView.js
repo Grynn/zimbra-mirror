@@ -366,7 +366,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 					{value:1, label:ZaMsg.DLXV_TabMembers}, 
 					{value:2, label:ZaMsg.DLXV_TabNotes}
 				], 
-			ref: ZaModel.currentTab, colSpan:"*"
+			ref: ZaModel.currentTab, colSpan:"*",cssClass:"ZaTabBar"
 		},
 		{type:_SWITCH_, colSpan:"*", numCols:5,
 			items:[
