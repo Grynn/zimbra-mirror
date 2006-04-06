@@ -86,7 +86,7 @@ function(el) {
 };
 
 AjxSoapDoc.prototype.setMethodAttribute =
-function(name, value){
+function(name, value) {
 	this._methodEl.setAttribute(name, value);
 };
 
@@ -119,12 +119,13 @@ function(name, value){
  * NOTE: you can pass null for "name", in which case "value" is expected to be
  * an object whose properties will be created directly under the method el.
  */
-AjxSoapDoc.prototype.set = function(name, value, parent) {
-	var
-		doc = this.getDoc(),
-		p   = ( name == null
-			? doc.createDocumentFragment()
-			: doc.createElement(name) );
+AjxSoapDoc.prototype.set = 
+function(name, value, parent) {
+	var	doc = this.getDoc();
+	var	p = name
+		? doc.createElement(name)
+		: doc.createDocumentFragment();
+
 	if (value != null) {
 		if (typeof value == "object") {
 			for (i in value)
@@ -161,50 +162,40 @@ AjxSoapDoc.prototype.getHeader =
 function() {
 	// would love to use getElementsByTagNameNS, but IE does not support it
 	var d = this._xmlDoc.getDoc();
-	var nodeList;
-	if (AjxEnv.isIE)
-		nodeList = d.getElementsByTagName(d.firstChild.prefix + ":Header");
-	else
-		nodeList = d.getElementsByTagNameNS(AjxSoapDoc._SOAP_URI, "Header");
-	if (nodeList == null)
-		return null;
-	return nodeList[0];
+	var nodeList = AjxEnv.isIE
+		? (d.getElementsByTagName(d.firstChild.prefix + ":Header"))
+		: (d.getElementsByTagNameNS(AjxSoapDoc._SOAP_URI, "Header"));
+
+	return nodeList ? nodeList[0] : null;
 };
 
 AjxSoapDoc.prototype.getBody =
 function() {
 	// would love to use getElementsByTagNameNS, but IE does not support it
 	var d = this._xmlDoc.getDoc();
-	var nodeList;
-	if (AjxEnv.isIE)
-		nodeList = d.getElementsByTagName(d.firstChild.prefix + ":Body");
-	else
-		nodeList = d.getElementsByTagNameNS(AjxSoapDoc._SOAP_URI, "Body");
-	if (nodeList == null)
-		return null;
-	return nodeList[0];
+	var nodeList = AjxEnv.isIE
+		? (d.getElementsByTagName(d.firstChild.prefix + ":Body"))
+		: (d.getElementsByTagNameNS(AjxSoapDoc._SOAP_URI, "Body"));
+
+	return nodeList ? nodeList[0] : null;
 };
 
 AjxSoapDoc.prototype.getByTagName =
 function(type) {
 	if (type.indexOf(":") == -1)
 		type = "soap:" + type;
+
 	var a = this.getDoc().getElementsByTagName(type);
-	if (a.length == 1)
-		return a[0];
-	else if (a.length > 0)
-		return a;
-	else
-		return null;
+
+	if (a.length == 1)		return a[0];
+	else if (a.length > 0)	return a;
+	else					return null;
 };
 
 // gimme a header, no exceptions.
 AjxSoapDoc.prototype.ensureHeader =
 function() {
-	var h = this.getByTagName("Header");
-	if (!h)
-		h = this.createHeaderElement();
-	return h;
+	return (this.getByTagName("Header") || this.createHeaderElement());
 };
 
 AjxSoapDoc.prototype.getDoc =
@@ -214,10 +205,9 @@ function() {
 
 AjxSoapDoc.prototype.getXml =
 function() {
-	if (AjxEnv.isSafari)
-		return AjxXmlDoc.getXml(this._xmlDoc.getDoc());
-	else
-		return this._xmlDoc.getDoc().xml;
+	return AjxEnv.isSafari
+		? (AjxXmlDoc.getXml(this._xmlDoc.getDoc()))
+		: this._xmlDoc.getDoc().xml;
 };
 
 // Very simple checking of soap doc. Should be made more comprehensive
@@ -245,5 +235,3 @@ function(xmlDoc) {
 			throw new AjxSoapException("Invalid SOAP PDU", AjxSoapException.INVALID_PDU, "AjxSoapDoc.createFromXml:2");
 	}
 };
-
-

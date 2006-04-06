@@ -16,8 +16,7 @@
 
 
 // Don't directly instantiate AjxXmlDoc, use one of the create factory methods instead
-function AjxXmlDoc(init) {
-	if (arguments.length == 0) return;
+function AjxXmlDoc() {
 	if (!AjxXmlDoc._inited)
 		AjxXmlDoc._init();
 }
@@ -32,7 +31,7 @@ AjxXmlDoc._msxmlVers = null;
 
 AjxXmlDoc.create =
 function() {
-	var xmlDoc = new AjxXmlDoc(true);
+	var xmlDoc = new AjxXmlDoc();
 	var newDoc = null;
 	if (AjxEnv.isIE) {
 		newDoc = new ActiveXObject(AjxXmlDoc._msxmlVers);
@@ -144,7 +143,8 @@ function(url) {
  * rather than an array.  And if there is no <item> tag, then obj.item will be
  * undefined.  These are cases that the calling application must take care of.
  */
-AjxXmlDoc.prototype.toJSObject = function(dropns, lowercase,withAttrs) {
+AjxXmlDoc.prototype.toJSObject = 
+function(dropns, lowercase, withAttrs) {
 	function _node() { this.__msh_content = ''; };
 	_node.prototype.toString = function() { return this.__msh_content; };
 	function rec(i, o) {
@@ -184,14 +184,16 @@ AjxXmlDoc.prototype.toJSObject = function(dropns, lowercase,withAttrs) {
 	return o;
 };
 
-AjxXmlDoc.prototype.getElementsByTagNameNS = function(ns, tag) {
+AjxXmlDoc.prototype.getElementsByTagNameNS = 
+function(ns, tag) {
 	var doc = this.getDoc();
 	return AjxEnv.isIE
 		? doc.getElementsByTagName(ns + ":" + tag)
 		: doc.getElementsByTagNameNS(ns, tag);
 };
 
-AjxXmlDoc.prototype.getFirstElementByTagNameNS = function(ns, tag) {
+AjxXmlDoc.prototype.getFirstElementByTagNameNS = 
+function(ns, tag) {
 	return this.getElementsByTagNameNS(ns, tag)[0];
 };
 
@@ -211,28 +213,39 @@ function() {
 		}
 		if (AjxXmlDoc._msxmlVers == null)
 			throw new AjxException("MSXML not installed", AjxException.INTERNAL_ERROR, "AjxXmlDoc._init");
-	}	else if (AjxEnv.isNav) {
+	} else if (AjxEnv.isNav) {
+		// add loadXML to Document's API
 		Document.prototype.loadXML = function(str) {
 			var domParser = new DOMParser();
 			var domObj = domParser.parseFromString(str, "text/xml");
+			// remove old child nodes since we recycle DOMParser and append new
 			while (this.hasChildNodes())
 				this.removeChild(this.lastChild);
 			for (var i = 0; i < domObj.childNodes.length; i++) {
-					var importedNode = this.importNode(domObj.childNodes[i], true);
-					this.appendChild(importedNode);
+				var importedNode = this.importNode(domObj.childNodes[i], true);
+				this.appendChild(importedNode);
 			}
 		}
 
 		_NodeGetXml = function() {
-	  		var ser = new XMLSerializer();
-	  		return ser.serializeToString(this);
-	 	 }
+			var ser = new XMLSerializer();
+			return ser.serializeToString(this);
+		}
 		Node.prototype.__defineGetter__("xml", _NodeGetXml);
-	}
-
-	if (AjxEnv.isNav || AjxEnv.isSafari) {
+	} else if (AjxEnv.isSafari) {
+		// add loadXML to Document's API
+		document.__proto__.loadXML = function(str) {
+			var domParser = new DOMParser();
+			var domObj = domParser.parseFromString(str, "text/xml");
+			// remove old child nodes since we recycle DOMParser and append new
+			while (this.hasChildNodes())
+				this.removeChild(this.lastChild);
+			for (var i = 0; i < domObj.childNodes.length; i++) {
+				var importedNode = this.importNode(domObj.childNodes[i], true);
+				this.appendChild(importedNode);
+			}
+		}
 	}
 
 	AjxXmlDoc._inited = true;
-}
-
+};
