@@ -73,7 +73,7 @@ ZaServerDiskStatsPage.prototype.writeImageHtml = function (periodInt) {
 	var serverName = this._server.name;
 	var periodString = this._getPeriodString(periodInt);
 	return AjxBuffer.concat("<img src='/service/statsimg/disk." , serverName ,
-							".", periodString,"_0.gif?nodef=1' onload='javascript:ZaServerDiskStatsPage.callMethod(",
+							".", periodString,".Disk_Usage_0.gif?nodef=1' onload='javascript:ZaServerDiskStatsPage.callMethod(",
 							this.__internalId , ",ZaServerDiskStatsPage.prototype.loadNextImage,[this.parentNode," ,
 							periodInt , ", 1])' onerror='javascript:AjxCore.objectWithId(", this.__internalId ,
 							").stopLoadingImages(this,0)'><br>");

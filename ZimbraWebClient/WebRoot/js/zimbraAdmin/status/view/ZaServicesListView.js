@@ -175,7 +175,8 @@ function(html, idx, item, onlyServiceInfo, serviceName) {
 ZaServicesListView.prototype._setNoResultsHtml = 
 function() {
 	var	div = document.createElement("div");
-	div.innerHTML = "<table width='100%' cellspacing='0' cellpadding='1'><tr><td class='NoResults'><br>Status data is not available.</td></tr></table>";
+	div.innerHTML = "<table width='100%' cellspacing='0' cellpadding='1'><tr><td class='NoResults'><br>"
+					+ ZaMsg.ServerStatusUnavailable + "</td></tr></table>";
 	this._parentEl.appendChild(div);
 }
 

@@ -306,6 +306,6 @@ function (ex, method, params, restartOnError, obj) {
 		this._errorDialog.setMessage(ZaMsg.ERROR_DOMAIN_EXISTS, null, DwtMessageDialog.CRITICAL_STYLE, null);
 		this._errorDialog.popup(this._getDialogXY());
 	} else {
-		ZaController.prototype._handleException.call(ex, method, params, restartOnError, obj);				
+		ZaController.prototype._handleException.call(this, ex, method, params, restartOnError, obj);				
 	}	
 }

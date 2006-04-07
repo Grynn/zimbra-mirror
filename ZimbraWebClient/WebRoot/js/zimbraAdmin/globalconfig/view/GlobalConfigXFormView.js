@@ -196,6 +196,10 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 						  label: ZaMsg.NAD_MTA_MaxMsgSize, width: "6em",
 						  onChange:ZaTabView.onFormFieldChanged
   						},
+						{ ref: ZaGlobalConfig.A_zimbraFileUploadMaxSize, type: _TEXTFIELD_, 
+						  label: ZaMsg.NAD_MTA_MaxUploadSize, width: "6em",
+						  onChange:ZaTabView.onFormFieldChanged
+  						},  						
 					  	{ ref: ZaGlobalConfig.A_zimbraMtaDnsLookupsEnabled, type: _CHECKBOX_,
 					  	  label: ZaMsg.NAD_MTA_DnsLookups,labelLocation:_LEFT_,
 					  	  trueValue: "TRUE", falseValue: "FALSE",

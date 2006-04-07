@@ -271,7 +271,11 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject) {
 						{type:_SEPARATOR_, colSpan: "2"},
 						{ref:ZaResource.A_zimbraCalResContactName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ContactName,label:ZaMsg.NAD_ContactName, labelLocation:_LEFT_, width:defaultWidth},
 						{ref:ZaResource.A_zimbraCalResContactEmail, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ContactEmail,label:ZaMsg.NAD_ContactEmail, labelLocation:_LEFT_, width:defaultWidth},
-						{ref:ZaResource.A_zimbraCalResContactPhone, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ContactPhone,label:ZaMsg.NAD_ContactPhone, labelLocation:_LEFT_, width:defaultWidth}
+						{ref:ZaResource.A_zimbraCalResContactPhone, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ContactPhone,label:ZaMsg.NAD_ContactPhone, labelLocation:_LEFT_, width:defaultWidth} ,
+						//add the AutoComplete Feature
+						{ref:ZaResource.A_contactInfoAutoComplete, type: _AUTO_COMPLETE_LIST_, matchValue:"name", 
+							dataClass: ZaContactList , dataLoader: ZaContactList.prototype.getContactList ,
+							inputFieldElementId: ZaResource.A_zimbraCalResContactName   }
 					]
 				};
 	cases.push(case2);

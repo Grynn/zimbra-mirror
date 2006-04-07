@@ -58,11 +58,11 @@ function() {
 	var soapDoc = AjxSoapDoc.create("GetServiceStatusRequest", "urn:zimbraAdmin", null);	
 	var resp = null;
 	var targetServer = null ;	
-	var serverNo = ZaServer.servers.length ;
-	//send request to the targetServer as ZaServer.monitorHost
-	if (ZaServer.monitorHost != null && ZaServer.monitorHost.id ){
+	var serverNo = ZaServer.LoggerServers.length ;
+	//send request to the targetServer as ZaServer.MonitorHost
+	if (ZaServer.MonitorHost != null && ZaServer.MonitorHost.id ){
 		try {
-			targetServer = ZaServer.monitorHost.id ;		
+			targetServer = ZaServer.MonitorHost.id ;		
 			resp = ZmCsfeCommand.invoke(soapDoc, null, null, targetServer, true).firstChild;
 			this.initFromDom(resp);
 		} catch (ex) {
@@ -71,11 +71,11 @@ function() {
 	} else if (serverNo > 0 ){//send request to the targetServer one by one
 		for (var i =0; i < serverNo; i++){
 			try {
-				targetServer = ZaServer.servers[i].id ;			
+				targetServer = ZaServer.LoggerServers[i].id ;			
 				resp = ZmCsfeCommand.invoke(soapDoc, null, null, targetServer, true).firstChild;
 				this.initFromDom(resp);
 			} catch (ex) {
-				this._app.getStatusViewController()._handleException(ex, "ZaStatus.loadMethod:"+ZaServer.servers[i].id, null, false);		
+				this._app.getStatusViewController()._handleException(ex, "ZaStatus.loadMethod:"+ZaServer.LoggerServers[i].id, null, false);		
 			}
 		}	
 	}
@@ -88,15 +88,15 @@ function() {
 	var resp = null;
 	this.attrs = new Object();
 	
-	var serverNo = ZaServer.servers.length ;
-	//send request to the targetServer as ZaServer.monitorHost
-	if (ZaServer.monitorHost != null && ZaServer.monitorHost.id ){
-		params.targetServer = ZaServer.monitorHost.id ;		
+	var serverNo = ZaServer.LoggerServers.length ;
+	//send request to the targetServer as ZaServer.MonitorHost
+	if (ZaServer.MonitorHost != null && ZaServer.MonitorHost.id ){
+		params.targetServer = ZaServer.MonitorHost.id ;		
 		resp = getServiceCommand.invoke(params).Body.GetServiceStatusResponse;
 		//this.initFromJS(resp.calresource[0]);
 	}else if (serverNo > 0 ){//send request to the targetServer one by one
 		for (var i =0; i < serverNo; i++){
-			params.targetServer = ZaServer.servers[i].id ;			
+			params.targetServer = ZaServer.LoggerServers[i].id ;			
 			resp = getServiceCommand.invoke(params).Body.GetServiceStatusResponse;
 			//this.initFromJS(resp.calresource[0]);
 		}	

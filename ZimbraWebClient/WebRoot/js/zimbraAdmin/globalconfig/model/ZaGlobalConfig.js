@@ -81,7 +81,7 @@ ZaGlobalConfig.A_zimbraRedologArchiveDir = "zimbraRedologArchiveDir";
 ZaGlobalConfig.A_zimbraRedologBacklogDir = "zimbraRedologBacklogDir";
 ZaGlobalConfig.A_zimbraRedologRolloverFileSizeKB = "zimbraRedologRolloverFileSizeKB";
 ZaGlobalConfig.A_zimbraRedologFsyncIntervalMS = "zimbraRedologFsyncIntervalMS";
-
+ZaGlobalConfig.A_zimbraFileUploadMaxSize = "zimbraFileUploadMaxSize"
 
 // smtp
 ZaGlobalConfig.A_zimbraSmtpHostname = "zimbraSmtpHostname";
@@ -287,6 +287,7 @@ ZaGlobalConfig.myXModel = {
 		{ id:ZaGlobalConfig.A_zimbraSmtpHostname, ref:"attrs/" + ZaGlobalConfig.A_zimbraSmtpHostname, type:_HOSTNAME_OR_IP_, maxLength: 256 },
 		{ id:ZaGlobalConfig.A_zimbraSmtpPort, ref:"attrs/" + ZaGlobalConfig.A_zimbraSmtpPort, type:_PORT_ },
 		{ id:ZaGlobalConfig.A_zimbraMtaMaxMessageSize, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaMaxMessageSize, type: _FILE_SIZE_, units: AjxUtil.SIZE_KILOBYTES, required: true },
+		{ id:ZaGlobalConfig.A_zimbraFileUploadMaxSize, ref:"attrs/" + ZaGlobalConfig.A_zimbraFileUploadMaxSize, type: _FILE_SIZE_, units: AjxUtil.SIZE_KILOBYTES, required: true },		
 		{ id:ZaGlobalConfig.A_zimbraMtaRelayHost, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaRelayHost, type: _HOSTNAME_OR_IP_, maxLength: 256 },
 //		{ id:ZaGlobalConfig.A_zimbraMtaRelayHostInternal, setterScope:_MODEL_,getterScope:_MODEL_, getter:"getRelayHost", setter:"setRelayHost", ref:"attrsInternal/" + ZaGlobalConfig.A_zimbraMtaRelayHostInternal, type: _HOSTNAME_OR_IP_, maxLength: 256 },		
 //		{ id:ZaGlobalConfig.A_zimbraMtaRelayPortInternal,setterScope:_MODEL_,getterScope:_MODEL_, getter:"getRelayPort", setter:"setRelayPort", ref:"attrsInternal/" + ZaGlobalConfig.A_zimbraMtaRelayPortInternal, type: _PORT_},				

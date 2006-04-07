@@ -105,7 +105,6 @@ ZaCos.A_zimbraImapEnabled = "zimbraImapEnabled";
 ZaCos.A_zimbraPop3Enabled = "zimbraPop3Enabled";
 ZaCos.A_zimbraFeatureHtmlComposeEnabled = "zimbraFeatureHtmlComposeEnabled";
 
-
 //internal attributes - do not send these to the server
 ZaCos.A_zimbraMailAllServersInternal = "allserversarray";
 ZaCos.A_zimbraMailHostPoolInternal = "hostpoolarray";

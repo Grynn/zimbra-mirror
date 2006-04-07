@@ -45,7 +45,7 @@ function ZaServerMBXStatsPage (parent, app) {
 ZaServerMBXStatsPage.prototype = new DwtTabViewPage;
 ZaServerMBXStatsPage.prototype.constructor = ZaServerMBXStatsPage;
 
-ZaServerMBXStatsPage.MBX_DISPLAY_LIMIT = 20; //default 20
+ZaServerMBXStatsPage.MBX_DISPLAY_LIMIT = 25; //default 20
 ZaServerMBXStatsPage.XFORM_ITEM_ACCOUNT = "account";
 ZaServerMBXStatsPage.XFORM_ITEM_DISKUSAGE = "diskUsage";
 ZaServerMBXStatsPage.XFORM_ITEM_QUOTAUSAGE = "quotaUsage";
@@ -168,16 +168,17 @@ ZaServerMBXStatsPage.prototype._getXForm = function () {
 												null, 120,  sortable++,  ZaServerMBXStatsPage.XFORM_ITEM_DISKUSAGE, true, true);
 	sourceHeaderList[3] = new ZaListHeaderItem(ZaServerMBXStatsPage.XFORM_ITEM_QUOTAUSAGE,	ZaMsg.MBXStats_QUOTAUSAGE, 	
 												null, null,  sortable++, ZaServerMBXStatsPage.XFORM_ITEM_QUOTAUSAGE, true, true);
-		
-	this._xform = {
-		x_showBorder:1,
+	
+	var ffTableStyle = "width:100%;overflow:visible;" ;
+	var tableStyle = 	AjxEnv.isIE  ? ffTableStyle + "height:100%;" : ffTableStyle ;
+	
+	this._xform = {		
 	    numCols:1, 
-	    tableCssStyle:"width:100%;overflow:auto;",
-						
-	    itemDefaults:{ },
+		tableCssStyle: tableStyle,
+					
 	    items:[
-	    	//Convert to the listview
-	    	{ref:"mbxPool", type:_DWT_LIST_, height:"600", width:"100%", cssClass: "MBXList", 	    	
+	      	//Convert to the listview
+		   	{ref:"mbxPool", type:_DWT_LIST_, width:"100%",  cssClass: "MBXList", 	    	
 						   		forceUpdate: true, widgetClass:ZaServerMbxListView, headerList:sourceHeaderList}
 		]	    
 	};		   
@@ -265,9 +266,14 @@ function (curPage, totalPage, hide ){
 					if (curPage && totalPage) {
 						toolBar.getButton("mbxPageInfo").setText(AjxMessageFormat.format (ZaMsg.MBXStats_PAGEINFO, [curPage, totalPage]));
 					} 
+					
+					//update the help link for the Mbx Stats
+					controller._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_servers/viewing_mailbox_quotas.htm";
 				}else {
 					toolBar.enable([ZaOperation.PAGE_FORWARD, ZaOperation.PAGE_BACK, ZaOperation.LABEL], false);
 					toolBar.getButton("mbxPageInfo").setText(AjxMessageFormat.format (ZaMsg.MBXStats_PAGEINFO, [1,1]));
+					//change the help link back
+					controller._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/monitoring/checking_usage_statistics.htm";
 				}
 			}
 		}
@@ -281,7 +287,17 @@ function (curPage, totalPage, hide ){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function ZaServerMbxListView(parent, className, posStyle, headerList) {
+	var posStyle = DwtControl.ABSOLUTE_STYLE;
 	ZaListView.call(this, parent, className, posStyle, headerList);
+	
+	//hacking to display the scroll bar for the mbx lists.
+	//it works for FF only. and For IE, need to set the cssTableStyle: height: 100%	
+	//htmlDiv is the MBXList class
+	//var htmlDiv = this.getHtmlElement();	
+	//htmlDiv.style.height = "100%" ;
+	
+	this._listDiv.style.overflow = "auto";
+	this._listDiv.style.height = "97%";	//to display the surround border of the shell
 }
 
 ZaServerMbxListView.prototype = new ZaListView;
