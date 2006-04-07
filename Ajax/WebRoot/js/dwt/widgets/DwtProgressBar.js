@@ -85,8 +85,16 @@ function(val) {
 DwtProgressBar.prototype.setValue = 
 function(val) {
 	this._value = parseInt(val);
-	var percent = Math.min(Math.round((this._value / this._maxValue) * 100), 100);	
-	
+	var percent;
+
+	if(this._value == this._maxValue)
+		percent = 100;
+	else 
+		percent = Math.min(Math.round((this._value / this._maxValue) * 100), 100);	
+
+	if(isNaN(percent))
+		percent = "0";
+			
 	if(!this._quotabarDiv) {
 		this._quotabarDiv = document.createElement("div")
 		if(this._wholeCssClass)
@@ -107,6 +115,7 @@ function(val) {
 			
 		this._quotabarDiv.appendChild(this._quotausedDiv);			
 	}	
+
 	this._quotausedDiv.style.width = percent + "%";
 }
 
