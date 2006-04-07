@@ -190,7 +190,7 @@ ZaMTA.prototype.initFromJS = function (obj, summary) {
 					this[qName][ZaMTA.A_Status] = ZaMTA.STATUS_SCANNING;
 				} else {
 					this[qName][ZaMTA.A_Status] = ZaMTA.STATUS_SCAN_COMPLETE;						 
-					this[qName][ZaMTA.A_totalComplete] = this[qName][ZaMTA.A_count];
+					this[qName][ZaMTA.A_count] = this[qName][ZaMTA.A_totalComplete];
 				}
 			}	
 
