@@ -58,7 +58,7 @@ if ($queue !~ /^(incoming|active|deferred|hold|maildrop|corrupt)$/) {
 my $ids = $ARGV[2];
 
 if ($ids eq "ALL") {
-    system("sudo /opt/zimbra/postfix/sbin/postsuper $paction ALL");
+    system("sudo /opt/zimbra/postfix/sbin/postsuper $paction ALL $queue");
 } else {
     my $command = "sudo /opt/zimbra/postfix/sbin/postsuper $paction - $queue";
     if (open(POSTSUPER, "| $command")) {
