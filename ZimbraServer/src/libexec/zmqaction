@@ -33,7 +33,7 @@ if ($#ARGV != 2) {
 
 my $action = $ARGV[0];
 my $queue = $ARGV[1];
-my @ids = split(',', $ARGV[2]);
+my $idarg = $ARGV[2];
 
 my $paction;
 if ($action eq "hold") {
@@ -55,11 +55,10 @@ if ($queue !~ /^(incoming|active|deferred|hold|maildrop|corrupt)$/) {
     exit(1);
 }
 
-my $ids = $ARGV[2];
-
-if ($ids eq "ALL") {
+if ($idarg eq "ALL") {
     system("sudo /opt/zimbra/postfix/sbin/postsuper $paction ALL $queue");
 } else {
+    my @ids = split(',', $idarg);
     my $command = "sudo /opt/zimbra/postfix/sbin/postsuper $paction - $queue";
     if (open(POSTSUPER, "| $command")) {
         foreach my $id (@ids) {
