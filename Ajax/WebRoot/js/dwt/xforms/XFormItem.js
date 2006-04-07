@@ -4119,6 +4119,8 @@ Dwt_ProgressBar_XFormItem.prototype.constructWidget = function() {
 Dwt_ProgressBar_XFormItem.prototype.updateWidget = function(newvalue) {
 	// nothing
 //	var maxValueRef = this.getInheritedProperty("maxValueRef");
+	if(!newvalue)
+		newvalue=0;
 	if(this.maxValueRef) {
 		maxvalue = this.getModel().getInstanceValue(this.getInstance(), this.maxValueRef)
 		this.getWidget().setMaxValue(maxvalue);	

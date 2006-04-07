@@ -63,6 +63,7 @@ ZaMTA.A_Stale = "stale";
 ZaMTA.A_LastError = "lasterror";
 ZaMTA.A_MTAName = "mtaname";
 ZaMTA.A_refreshTime = "time";
+ZaMTA.A_totalComplete = "total";
 /**
 * names of queues
 **/
@@ -95,7 +96,7 @@ ZaMTA.A_scan = "scan";
 ZaMTA.A_selection_cache = "_selection_cache";
 ZaMTA.A_queue_filter_name = "_queue_filter_name";
 ZaMTA.A_queue_filter_value = "_queue_filter_value";
-ZaMTA.A_progress = "progress";
+
 ZaMTA._quecountsArr = new Array();
 ZaMTA.threashHold;
 ZaMTA.ActionRequeue = "requeue";
@@ -183,7 +184,13 @@ ZaMTA.prototype.initFromJS = function (obj, summary) {
 					this[qName][ZaMTA.A_Status] = ZaMTA.STATUS_SCAN_COMPLETE;						 
 				}
 			}	
-			
+			try {
+				if(queue[ZaMTA.A_totalComplete] != undefined) {
+					this[qName][ZaMTA.A_totalComplete] = parseInt(queue[ZaMTA.A_totalComplete]);
+				}
+			} catch (ex) {
+				this[ZaMTA.A_totalComplete] = null;
+			}
 			if(queue[ZaMTA.A_Stale]) {
 				this[qName][ZaMTA.A_Status] = ZaMTA.STATUS_STALE;
 			} 
@@ -234,6 +241,7 @@ ZaMTA.prototype.initFromJS = function (obj, summary) {
 			}			
 		}
 	}
+
 }
 /**
 * Make a SOAP call to get file counts in queue folders
@@ -254,7 +262,7 @@ function(by, val, withConfig) {
 ZaItem.loadMethods["ZaMTA"].push(ZaMTA.loadMethod);
 
 ZaMTA.luceneEscape = function (str) {
-	return String(str).replace(/([\+\&\\!\(\)\{\}\[\]\^\"\~\*\?\:\\])/g, "\\$1");
+	return String(str).replace(/([\-\+\&\\!\(\)\{\}\[\]\^\"\~\*\?\:\\])/g, "\\$1");
 }
 /**
 * send a MailQStatusRequest 
@@ -266,7 +274,7 @@ ZaMTA.prototype.getMailQStatus = function (qName,query,offset,limit,force) {
 	}
 	limit = (limit != null) ? limit: ZaMTA.RESULTSPERPAGE;
 	offset = (offset != null) ? offset: "0";
-	query = (query != null) ? query: "";	
+	//query = (query != null) ? query: "";	
 	
 	var soapDoc = AjxSoapDoc.create("GetMailQueueRequest", "urn:zimbraAdmin", null);
 
@@ -285,7 +293,18 @@ ZaMTA.prototype.getMailQStatus = function (qName,query,offset,limit,force) {
 	
 	var queryEl = soapDoc.getDoc().createElement("query");
 	if(query != null) {
-		queryEl.appendChild(soapDoc.getDoc().createTextNode(query));
+		for (var key in query) {
+			var arr = query[key];
+			var fieldEl = soapDoc.getDoc().createElement("field");
+			fieldEl.setAttribute("name", key);
+			var cnt = arr.length;	
+			for(var i=0;i<cnt;i++) {
+				var matchEl = soapDoc.getDoc().createElement("match");
+				matchEl.setAttribute("value", arr[i][ZaMTAQSummaryItem.A_text]);
+				fieldEl.appendChild(matchEl);	
+			}	
+			queryEl.appendChild	(fieldEl);	
+		}
 	}
 	
 	if (offset != null) {
@@ -360,9 +379,35 @@ ZaMTA.prototype.mailQueueAction = function (qName, action, by, val) {
 	serverEl.appendChild(qEl);
 	
 	//var actionEl = 	soapDoc.getDoc().createElement("action");
-	var actionEl = soapDoc.set("action", val,qEl);
+	var actionEl;
+	if(by == "id") {
+		actionEl = soapDoc.set("action", val,qEl);
+	} else {
+		actionEl = soapDoc.getDoc().createElement("action");
+		var queryEl = soapDoc.getDoc().createElement("query");
+		if(val != null) {
+			for (var key in val) {
+				var arr = val[key];
+				var fieldEl = soapDoc.getDoc().createElement("field");
+				fieldEl.setAttribute("name", key);
+				var cnt = arr.length;	
+				for(var i=0;i<cnt;i++) {
+					var matchEl = soapDoc.getDoc().createElement("match");
+					matchEl.setAttribute("value", arr[i][ZaMTAQSummaryItem.A_text]);
+					fieldEl.appendChild(matchEl);	
+				}	
+				queryEl.appendChild	(fieldEl);	
+			}
+		}
+		actionEl.appendChild(queryEl);	
+		qEl.appendChild(actionEl);	
+	}
+	
 	actionEl.setAttribute("op", action);
-	actionEl.setAttribute("by", by);	
+	actionEl.setAttribute("by", by);
+	
+
+
 	//qEl.appendChild(actionEl);
 	
 	var command = new ZmCsfeCommand();
@@ -413,17 +458,17 @@ ZaMTA.initMethod = function (app) {
 	this.id = "";
 	this.name="";
 	this[ZaItem.A_zimbraId] = "000"
-	this[ZaMTA.A_DeferredQ] = {n:"N/A"};
-	this[ZaMTA.A_IncomingQ] = {n:"N/A"};
-	this[ZaMTA.A_ActiveQ] = {n:"N/A"};	
-	this[ZaMTA.A_HoldQ] = {n:"N/A"};	
-	this[ZaMTA.A_CorruptQ] = {n:"N/A"};		
+	this[ZaMTA.A_DeferredQ] = {n:ZaMsg.PQ_Loading};
+	this[ZaMTA.A_IncomingQ] = {n:ZaMsg.PQ_Loading};
+	this[ZaMTA.A_ActiveQ] = {n:ZaMsg.PQ_Loading};	
+	this[ZaMTA.A_HoldQ] = {n:ZaMsg.PQ_Loading};	
+	this[ZaMTA.A_CorruptQ] = {n:ZaMsg.PQ_Loading};		
 		
-	this[ZaMTA.A_DeferredQ][ZaMTA.A_refreshTime] = "N/A";
-	this[ZaMTA.A_IncomingQ][ZaMTA.A_refreshTime] = "N/A";	
-	this[ZaMTA.A_ActiveQ][ZaMTA.A_refreshTime] = "N/A";
-	this[ZaMTA.A_HoldQ][ZaMTA.A_refreshTime] = "N/A";
-	this[ZaMTA.A_CorruptQ][ZaMTA.A_refreshTime] = "N/A";	
+	this[ZaMTA.A_DeferredQ][ZaMTA.A_refreshTime] = ZaMsg.PQ_Loading;
+	this[ZaMTA.A_IncomingQ][ZaMTA.A_refreshTime] = ZaMsg.PQ_Loading;	
+	this[ZaMTA.A_ActiveQ][ZaMTA.A_refreshTime] = ZaMsg.PQ_Loading;
+	this[ZaMTA.A_HoldQ][ZaMTA.A_refreshTime] = ZaMsg.PQ_Loading;
+	this[ZaMTA.A_CorruptQ][ZaMTA.A_refreshTime] = ZaMsg.PQ_Loading;	
 	
 	this[ZaMTA.A_DeferredQ][ZaMTA.A_pageNum] = 0;
 	this[ZaMTA.A_IncomingQ][ZaMTA.A_pageNum] = 0;	

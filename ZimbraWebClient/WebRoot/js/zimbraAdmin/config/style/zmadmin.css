@@ -97,7 +97,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 .ZmLoginDialog-Transparent {background-color: transparent;}
 .ZmLoginDialog-HeaderPanel, .ZmLoginDialog-MainPanel {width: 448px;}
 .ZmLoginDialog-HeaderPanel {
-	background-image: url(/zimbraAdmin/img/loRes/logo/LoginBanner_blank.gif);
+	background-image: url(/zimbraAdmin/img/loRes/logo/Admin_LoginBanner.gif);
 	border: 1px solid rgb(124, 124, 148);
 }
 .ZmLoginDialog-HeaderText, .ZmLoginDialog-SubHeaderText {
@@ -167,13 +167,13 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 .ZaLoginButton {
 	font-size: 12px;
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
-	background-image:url(/zimbraAdmin/img/loRes/dwt/ButtonUp__H.gif);
+	background-image:url(/zimbraAdmin/img/hiRes/dwt/ButtonUp__H.gif);
 	border:1px outset #999999;	
 	width:50px;
 }
 
 .ZaLoginButton-activated {
-	background-image:url(/zimbraAdmin/img/loRes/dwt/ButtonDown__H.gif);
+	background-image:url(/zimbraAdmin/img/hiRes/dwt/ButtonDown__H.gif);
 	border:1px outset #999999;	
 	font-size: 12px;
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
@@ -181,7 +181,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 }
 
 .ZaLoginButton-triggered {
-	background-image:url(/zimbraAdmin/img/loRes/dwt/ButtonDown__H.gif);
+	background-image:url(/zimbraAdmin/img/hiRes/dwt/ButtonDown__H.gif);
 	border:1px inset #999999;	
 	font-size: 12px;
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
@@ -355,6 +355,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 
 .ZaToolBar {
 	width: 100%;
+	height: 100%;
 	background-image:url(/zimbraAdmin/img/loRes/skins/steel/Pebble__BG.gif);
 	border-style: solid;
 	border-width: 0px 0px 2px 0px;
@@ -454,7 +455,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
   border-left: 2px solid #848484;
   border-bottom: 2px solid #FAFAFA;
   border-right: 2px solid #FAFAFA;
-  width:auto;
+  width: auto;	
   background-color:#FFFFFF;
 }
 
@@ -464,6 +465,10 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 
 .DLSource { 
   height:200px;
+}
+
+.MBXList{
+  height: 100%;	
 }
 
 .inputBorder { 
@@ -562,6 +567,13 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 	height: 20px;
 	font-size: 20px; /* WEIRD IE QUIRK */
 }
+
+.mtaprogressbar {
+	width: 200px;
+	border: 1px solid #CCCCCC;
+	background-color: #CCCCCC;
+}
+
 
 .ImgAppBanner {
 	cursor:hand;
