@@ -177,20 +177,23 @@ ZaMTA.prototype.initFromJS = function (obj, summary) {
 			if(summary)
 				continue;
 				
-			if(queue[ZaMTA.A_scan] != undefined) {
-				if(queue[ZaMTA.A_scan]) {
-					this[qName][ZaMTA.A_Status] = ZaMTA.STATUS_SCANNING;
-				} else {
-					this[qName][ZaMTA.A_Status] = ZaMTA.STATUS_SCAN_COMPLETE;						 
-				}
-			}	
 			try {
 				if(queue[ZaMTA.A_totalComplete] != undefined) {
 					this[qName][ZaMTA.A_totalComplete] = parseInt(queue[ZaMTA.A_totalComplete]);
 				}
 			} catch (ex) {
-				this[ZaMTA.A_totalComplete] = null;
+				this[qName][ZaMTA.A_totalComplete] = 0;
 			}
+							
+			if(queue[ZaMTA.A_scan] != undefined) {
+				if(queue[ZaMTA.A_scan]) {
+					this[qName][ZaMTA.A_Status] = ZaMTA.STATUS_SCANNING;
+				} else {
+					this[qName][ZaMTA.A_Status] = ZaMTA.STATUS_SCAN_COMPLETE;						 
+					this[qName][ZaMTA.A_totalComplete] = this[qName][ZaMTA.A_count];
+				}
+			}	
+
 			if(queue[ZaMTA.A_Stale]) {
 				this[qName][ZaMTA.A_Status] = ZaMTA.STATUS_STALE;
 			} 
