@@ -344,7 +344,7 @@ function(value) {
 DwtInputField.validateInteger =
 function(value) {
 	var n = new Number(value);
-	if (isNaN(n) || (Math.round(n) != n))
+	if (isNaN(n) || (Math.round(n) != n) || (n.toString() != value))
 		throw AjxMsg.notAnInteger;
 	return value;
 };
