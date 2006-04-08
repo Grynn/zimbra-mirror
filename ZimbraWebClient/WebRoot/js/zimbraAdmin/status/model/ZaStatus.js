@@ -64,7 +64,7 @@ function() {
 		var resp = getConfigCmd.invoke(params).Body.GetConfigResponse ;
 		
 		//if zimbraLogHostname is set
-		if (resp._attrs[ZaServer.A_zimbraLogHostname]) {
+		if (resp._attrs && resp._attrs[ZaServer.A_zimbraLogHostname]) {
 			soapDoc = AjxSoapDoc.create("GetServiceStatusRequest", "urn:zimbraAdmin", null);
 			resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 			this.initFromDom(resp);
