@@ -55,8 +55,7 @@
 function DwtChooser(params) {
 
 	if (arguments.length == 0) return;
-	var className = params.className ? params.className : "DwtChooser";
-	DwtComposite.call(this, params.parent, className);
+	DwtComposite.call(this, params.parent, params.className);
 
 	this._layoutStyle = params.layoutStyle ? params.layoutStyle : DwtChooser.HORIZ_STYLE;
 	this._selectStyle = params.selectStyle ? params.selectStyle : DwtChooser.MULTI_SELECT
