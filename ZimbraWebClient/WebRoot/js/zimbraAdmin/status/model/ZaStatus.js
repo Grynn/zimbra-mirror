@@ -53,54 +53,34 @@ function() {
 	var soapDoc = AjxSoapDoc.create("GetServiceStatusRequest", "urn:zimbraAdmin", null);
 	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	this.initFromDom(resp);
-	*/
-	
-	var soapDoc = AjxSoapDoc.create("GetServiceStatusRequest", "urn:zimbraAdmin", null);	
-	var resp = null;
-	var targetServer = null ;	
-	var serverNo = ZaServer.LoggerServers.length ;
-	//send request to the targetServer as ZaServer.MonitorHost
-	if (ZaServer.MonitorHost != null && ZaServer.MonitorHost.id ){
-		try {
-			targetServer = ZaServer.MonitorHost.id ;		
-			resp = ZmCsfeCommand.invoke(soapDoc, null, null, targetServer, true).firstChild;
+		*/
+	try {
+		var soapDoc = AjxSoapDoc.create("GetConfigRequest", "urn:zimbraAdmin", null);	
+		var attr = soapDoc.set("a", null);
+		attr.setAttribute("n", ZaServer.A_zimbraLogHostname);
+		var getConfigCmd = new ZmCsfeCommand();
+		var params = new Object();	
+		params.soapDoc = soapDoc ;
+		var resp = getConfigCmd.invoke(params).Body.GetConfigResponse ;
+		
+		//if zimbraLogHostname is set
+		if (resp._attrs[ZaServer.A_zimbraLogHostname]) {
+			soapDoc = AjxSoapDoc.create("GetServiceStatusRequest", "urn:zimbraAdmin", null);
+			resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 			this.initFromDom(resp);
-		} catch (ex) {
-			this._app.getStatusViewController()._handleException(ex, "ZaStatus.loadMethod:"+targetServer, null, false);		
-		}
-	} else if (serverNo > 0 ){//send request to the targetServer one by one
-		for (var i =0; i < serverNo; i++){
-			try {
-				targetServer = ZaServer.LoggerServers[i].id ;			
-				resp = ZmCsfeCommand.invoke(soapDoc, null, null, targetServer, true).firstChild;
-				this.initFromDom(resp);
-			} catch (ex) {
-				this._app.getStatusViewController()._handleException(ex, "ZaStatus.loadMethod:"+ZaServer.LoggerServers[i].id, null, false);		
-			}
+			/* TODO: change to the JSON later
+			params = new Object();
+			soapDoc = AjxSoapDoc.create("GetServiceStatusRequest", "urn:zimbraAdmin", null);
+			params.soapDoc = soapDoc ;
+			params.useXml = true ;
+			var getStatusCmd = new ZmCsfeCommand ();
+			resp = getStatusCmd.invoke(params) ;
+			this.initFromJS(resp.Body.GetConfigResponse);
+			* */
 		}	
-	}
-	
-	/* TODO: use the JSON request in the future
-	var soapDoc = AjxSoapDoc.create("GetServiceStatusRequest", "urn:zimbraAdmin", null);
-	var getServiceCommand = new ZmCsfeCommand();
-	var params = new Object();
-	params.soapDoc = soapDoc;	
-	var resp = null;
-	this.attrs = new Object();
-	
-	var serverNo = ZaServer.LoggerServers.length ;
-	//send request to the targetServer as ZaServer.MonitorHost
-	if (ZaServer.MonitorHost != null && ZaServer.MonitorHost.id ){
-		params.targetServer = ZaServer.MonitorHost.id ;		
-		resp = getServiceCommand.invoke(params).Body.GetServiceStatusResponse;
-		//this.initFromJS(resp.calresource[0]);
-	}else if (serverNo > 0 ){//send request to the targetServer one by one
-		for (var i =0; i < serverNo; i++){
-			params.targetServer = ZaServer.LoggerServers[i].id ;			
-			resp = getServiceCommand.invoke(params).Body.GetServiceStatusResponse;
-			//this.initFromJS(resp.calresource[0]);
-		}	
-	} */	
+	} catch (ex) {
+			this._app.getStatusViewController()._handleException(ex, "ZaStatus.loadMethod", null, false);		
+	}	
 }
 
 ZaItem.loadMethods["ZaStatus"].push(ZaStatus.loadMethod);

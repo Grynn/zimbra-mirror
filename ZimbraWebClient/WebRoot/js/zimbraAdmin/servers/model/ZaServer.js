@@ -40,11 +40,6 @@ ZaServer.prototype.constructor = ZaServer;
 ZaItem.loadMethods["ZaServer"] = new Array();
 ZaItem.initMethods["ZaServer"] = new Array();
 
-//Object contains array which holds all the servers name and id
-// [ {id:"id", name:"name"}, {...}, ... ]
-ZaServer.LoggerServers = new Array () ;
-ZaServer.MonitorHost = null;
-
 //attribute name constants, this values are taken from zimbra.schema
 ZaServer.A_name = "cn";
 ZaServer.A_description = "description";
@@ -134,6 +129,7 @@ ZaServer.A_CurrentIndexMsgVolumeId = "current_index_volume_id";
 // other
 ZaServer.A_zimbraIsMonitorHost = "zimbraIsMonitorHost";
 ZaServer.A_showVolumes = "show_volumes"; //this attribute is immutable
+ZaServer.A_zimbraLogHostname = "zimbraLogHostname";
 
 ZaServer.STANDALONE = "standalone";
 ZaServer.MASTER = "master";
