@@ -40,27 +40,22 @@ function DwtKeyMapMgr(keyMap) {
 	for (var key in map) {
 		if (key == DwtKeyMap.GLOBAL)
 			continue;
-			
-		// If this map is aliased to another map, then set up the alias, else
-		// process the FSA
-		if (map[key][DwtKeyMap.ALIAS] == null) {
-			// Start with the global table. We will augment this for each mapping.
-			var newFSA = DwtKeyMapMgr._buildFSA(new Object(), map[DwtKeyMap.GLOBAL]);
-			try {
-				newFSA = DwtKeyMapMgr._buildFSA(newFSA, map[key]);
-				this._fsas[key] = newFSA;
-			} catch (ex) {
-				alert("EX: " + ex);
-			}
-		} else {
-			DBG.println("ALIASING: " + key + " to: " + map[key][DwtKeyMap.ALIAS]);
-			this._fsas[key] = {alias: map[key][DwtKeyMap.ALIAS]};
-		}
 		
+		DBG.println("======== Processing Map Name: " + key);
+		// Start with the global table. We will augment this for each mapping.
+		var newFSA = DwtKeyMapMgr._buildFSA(new Object(), map[DwtKeyMap.GLOBAL]);
+		try {
+			newFSA = DwtKeyMapMgr._buildFSA(newFSA, map[key], key);
+			this._fsas[key] = newFSA;
+		} catch (ex) {
+			alert("EX: " + ex._msg + " - " + ex._keySeqStr);
+		}	
 	}
 
 	DBG.dumpObj(this._fsas);
 };
+
+DwtKeyMapMgr.TAB_KEYCODE = 9;
 
 DwtKeyMapMgr._KEYCODES = new Array(); // Keycode map
 DwtKeyMapMgr._inited = false; // Initialize flag
@@ -73,46 +68,40 @@ function (keySeq, mappingName) {
 	if (!mapping)
 		return true;
 	
-	// If this mapping is an alias, then lookup the alias
-	if (mapping.alias != null) {
-		DBG.println(mappingName + "is aliased to " + mapping.alias);
-		mapping = this._fsas[mapping.alias]
-		if (!mapping)
-			return true;	
-	}
-				
 	var keySeqLen = keySeq.length;
 	var tmpFsa = mapping;
 	var key;
+	var terminal = false;
 	for (var j = 0; j < keySeqLen; j++) {
 		key = keySeq[j];
 
-		if (!tmpFsa[key] || !tmpFsa[key].subMap)
-			return true;
+		if (!tmpFsa[key] || !tmpFsa[key].subMap) {
+			DBG.println("TERMINAL: " + key);
+			terminal = true;
+			break;
+		}
 
 		tmpFsa = tmpFsa[key].subMap;		
 	}
 	
-	return false;
+	// If this mapping is inheriting and we have not had a hit, then lookup the parent
+	if (mapping.INHERIT != null) {
+		DBG.println(mappingName + " is inheriting  from " + mapping.INHERIT);
+		return this.isTerminal(keySeq, mapping.INHERIT);
+	}
+	
+	return terminal;
 }
 
 DwtKeyMapMgr.prototype.getActionCode =
 function (keySeq, mappingName) {
-	var mapping = this._fsas[mappingName];
+DBG.println("Getting action code for: " + keySeq.join("") + " in map: " + mappingName);
+	var mapping =  this._fsas[mappingName];
 	
 	// TODO If there is no such mapping then consider this a terminal?
 	if (!mapping)
-		return true;
-		
-	// If this mapping is an alias, then lookup the alias
-	if (mapping.alias != null) {
-		DBG.println(mappingName + "is aliased to " + mapping.alias);
-		mapping = this._fsas[mapping.alias]
-		if (!mapping)
-			return true;	
-	}
-				
-			
+		return null;
+					
 	var keySeqLen = keySeq.length;
 	var tmpFsa = mapping;
 	var key;
@@ -120,16 +109,23 @@ function (keySeq, mappingName) {
 		key = keySeq[j];
 
 		if (!tmpFsa[key])
-			return null;
+			break;
 		
 		if (j < keySeqLen - 1)
 			tmpFsa = tmpFsa[key].subMap;		
 	}
 
-	if (tmpFsa[key] && tmpFsa[key].actionCode != null)
+	/* If we have a match, then all is well, else if we are inheriting, then 
+	 * let's see if there is a match in the parent.
+	 */
+	if (tmpFsa[key] && tmpFsa[key].actionCode != null) {
 		return tmpFsa[key].actionCode;
-	else 
+	} else if (mapping.INHERIT != null) {
+		DBG.println("getActionCode: " + mappingName + " is inheriting  from " + mapping.INHERIT);
+		return this.getActionCode(keySeq, mapping.INHERIT);
+	} else {
 		return null;
+	}
 }
 
 DwtKeyMapMgr.prototype.keyCode2Char =
@@ -152,8 +148,9 @@ function() {
 	DwtKeyMapMgr._KEYCODES[27]  = DwtKeyMap.ESC;
 	DwtKeyMapMgr._KEYCODES[34]  = DwtKeyMap.PAGE_DOWN;
 	DwtKeyMapMgr._KEYCODES[33]  = DwtKeyMap.PAGE_UP;
-	DwtKeyMapMgr._KEYCODES[16] = DwtKeyMap.SHIFT;
+	DwtKeyMapMgr._KEYCODES[16]  = DwtKeyMap.SHIFT;
 	DwtKeyMapMgr._KEYCODES[32]  = DwtKeyMap.SPACE;
+	DwtKeyMapMgr._KEYCODES[9]   = DwtKeyMap.TAB;
 	
 	// Function keys
 	for (var i = 112; i < 124; i++) 
@@ -265,9 +262,16 @@ function(keyCode) {
 }
 
 DwtKeyMapMgr._buildFSA =
-function(fsa, mapping) {
+function(fsa, mapping, mapName) {
 	for (var i in mapping) {
-		//DBG.println("keySeq: " + i);
+		// DBG.println("_buildFSA - keySeq: " + i);
+		// If this map is inheriting from another map, then set up the inheritence
+		 if (i == DwtKeyMap.INHERIT) {
+			DBG.println("Inheriting from: " + mapping[i]);
+			fsa.INHERIT = mapping[i];
+			continue;
+		}
+		 
 		var keySeq = i.split(DwtKeyMap.SEP);
 		var keySeqLen = keySeq.length;
 		var tmpFsa = fsa;
@@ -284,8 +288,8 @@ function(fsa, mapping) {
 				/* If this key has a submap, then it is illegal for it to also 
 				 * have an action code. Throw an exception!*/
 				 if (tmpFsa[key].subMap)
-				 	throw new ZmMappingException(DwtKeyMapMgrException.NON_TERM_HAS_ACTION, keySeqStr,
-				 		"Attempting to add action code to non-terminal key sequence");
+				 	throw new DwtKeyMapMgrException(DwtKeyMapMgrException.NON_TERM_HAS_ACTION, keySeq,
+				 		"Attempting to add action code to non-terminal key sequence. Map name: " + mapName);
 				
 				/* We are at the last key in the sequence so we can bind the
 				 * action code to it */
@@ -298,8 +302,8 @@ function(fsa, mapping) {
 				 	var tmp = new Array(j)
 				 	for (var k = 0; k <= j; k++)
 				 		tmp[k] = keySeq[k];
-				 	throw new ZmMappingException(DwtKeyMapMgrException.TERM_HAS_SUBMAP, keySeqStr,
-				 		"Attempting to add submapping to terminal key sequence");
+				 	throw new DwtKeyMapMgrException(DwtKeyMapMgrException.TERM_HAS_SUBMAP, tmp.join(""),
+				 		"Attempting to add submap to terminal key sequence. Map name " + mapName);
 				}
 				
 				/* We have more keys in the sequence. If our subMap is null,

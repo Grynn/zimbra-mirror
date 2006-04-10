@@ -122,6 +122,8 @@ function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell, us
 	// tooltip singleton used by all controls in shell
 	this._toolTip = new DwtToolTip(this);
 	this._hoverMgr = new DwtHoverMgr();
+	
+	this._keyboardMgr = new DwtKeyboardMgr();
 }
 
 DwtShell.prototype = new DwtComposite;
@@ -136,11 +138,6 @@ DwtShell.keyEvent 		= new DwtKeyEvent();
 DwtShell.mouseEvent 	= new DwtMouseEvent();
 DwtShell.selectionEvent = new DwtSelectionEvent(true);
 DwtShell.treeEvent 		= new DwtTreeEvent();
-
-// Private constants
-DwtShell._KEYSEQ_NOT_HANDLED = 1;
-DwtShell._KEYSEQ_HANDLED = 2;
-DwtShell._KEYSEQ_PENDING = 3;
 
 // Public methods
 
@@ -159,64 +156,13 @@ function(win){
 	return AjxCore.objectWithId(win._dwtShell);
 };
 
-// Document this. Will also need a push and pop focus frames for thinkgs
-// like dialogs etc
-DwtShell.grabFocus =
-function(focusObj) {
-return; // TMP
-	DBG.println("SHELL GRAB FOCUS");
-	var shell = DwtShell.getShell(window);
-	shell._focusObj = focusObj;
-	shell._kbFocusField.focus();
-}
-
 /**
-* Return true if the specified component currently has focus
-*
-* @param obj  [object] Object for which to check focus
-*/
-DwtShell.objectHasFocus =
-function(obj) {
-	var shell = DwtShell.getShell(window);
-	return (shell._haveFocus && shell._focusObj == obj);
+ * Return's the shell's keyboard manager (see DwtKeybaordMgr)
+ */
+DwtShell.prototype.getKeyboardMgr =
+function() {
+	return this._keyboardMgr;
 }
-
-/** 
-* This method is used to register a global key handler. If registered, this
-* handler must support the following methods:
-* <ul>
-* <li> getKeyMapName: This method returns a string representing the key map 
-* to be used for looking up actions
-* <li> handleKeyAction: This method should handle the key action and return
-* true if it handled it else false. handleKeyAction has two formal parameters
-*    <ul>
-*    <li> actionCode: The action code to be handled
-*    <li> ev: DwtKeyEvent corresponding to the last key event in the sequence
-*    </ul>
-* </ul>
-**/
-DwtShell.prototype.registerGlobalKeyActionHandler =
-function(hdlr) {
-	this._globalKeyActionHdlr = hdlr;
-}
-
-/**
-* This method is used to register a keymap with the shell. A keymap typically
-* is a subclass of DwtKeyMap and defines the mappings from key sequences to
-* actions
-*
-* keyMap [DwtKeyMap] Keymap for the application
-**/
-DwtShell.prototype.registerKeyMap =
-function(keyMap) {
-	// Setup Keyboard handling not initialized, then initialize it
-	if (!this._keyboardHandlingInited) {
-		this._initKeyboardHandling();
-		this._keyboardHandlingInited = true;
-	}
-	this._keyMapMgr = new DwtKeyMapMgr(keyMap);
-}
-
 
 /**
 * Sets the busy overlay. The busy overlay disables input to the application and makes the 
@@ -475,229 +421,6 @@ function(ev) {
 	 	shell.notifyListeners(DwtEvent.CONTROL, evt);
 	} else {
 		shell._currWinSize = Dwt.getWindowSize();
-	}
-};
-
-DwtShell.prototype._initKeyboardHandling =
-function() {
-	DBG.println("INITIALIZING KeyboardHandling");
-	Dwt.setHandler(document, DwtEvent.ONKEYDOWN, DwtShell._keyDownHdlr);
-	/* Create our keyboard focus field. This is a dummy input field that will take text
-	 * input for keyboard shortcuts */
-	var kbff = this._kbFocusField = document.createElement("input");
-	kbff.type = "text";
-	kbff.style.position = Dwt.ABSOLUTE_STYLE;
-	kbff.style.top = kbff.style.left = Dwt.LOC_NOWHERE;
-	kbff.onblur = DwtShell._onBlurHdlr;
-	kbff.onfocus = DwtShell._onFocusHdlr;
-	document.body.appendChild(kbff);
-
-	this._killKeySeqTimedAction = new AjxTimedAction(this, this._killKeySequenceAction);
-	this._killKeySeqTimedActionId = -1;
-	this._keySequence = new Array();
-};
-
-DwtShell._onFocusHdlr =
-function(ev) {
-	DBG.println("DwtShell._onFocusHdlr");
-	var shell = DwtShell.getShell(window);
-	shell._haveFocus = true;
-	var focusObj = shell._focusObj;
-	if (focusObj != null) {
-		if (focusObj._focus != null && (typeof focusObj._focus == "function")) {
-			focusObj._focus();		
-		}
-	}	
-}
-
-DwtShell._onBlurHdlr =
-function(ev) {
-	DBG.println("DwtShell._onBlurHdlr");
-	var shell = DwtShell.getShell(window);
-	var obj = shell._focusObj;
-	if (obj != null) {
-		if (obj._blur != null && (typeof obj._blur == "function")) {
-			obj._blur();		
-		}
-		shell._haveFocus = false;
-	}	
-};
-
-DwtShell._keyDownHdlr =
-function(ev) {
-	var shell = DwtShell.getShell(window);;
-	
-	/* Filter out the following keys: Alt, Shift, Ctrl. Also filter out
-	 * alphanumeric keys if the target of the key event is an input field
-	 * or a text area and there is no pending sequence in play and the key
-	 * is alphanumeric or a punctuation key */
-	var charCode = DwtKeyEvent.getCharCode(ev);
-	var tagName = (ev.target) ? ev.target.tagName.toLowerCase() : null;
-	DBG.println("KEYCODE: " + charCode + " - tagName: " + tagName);
-	if (DwtKeyMapMgr.isModifier(charCode)
-		|| (!shell._haveFocus 
-			&& shell._killKeySeqTimedActionId == -1 && !ev.ctrlKey && !ev.altKey
-			&& DwtKeyMapMgr.isUsableTextInputValue(charCode))) {
-		ev._stopPropagation = false;
-		ev._returnValue = true;
-		return true;
-	}
-	 
-	/* Cancel any pending time action to kill the keysequence */
-	if (shell._killKeySeqTimedActionId != -1) {
-		AjxTimedAction.cancelAction(shell._killKeySeqTimedActionId);
-		shell._killKeySeqTimedActionId = -1;
-	}
-		
- 	var key = "";
-	
-	if (ev.ctrlKey)
-		key += DwtKeyMap.CTRL;
-		
-	if (ev.altKey)
-		key += DwtKeyMap.ALT;
-		
-	if (ev.shiftKey)
-		key += DwtKeyMap.SHIFT;
-	
-	shell._keySequence[shell._keySequence.length] = key + shell._keyMapMgr.keyCode2Char(charCode);
-
-	DBG.println("KEYCODE: " + charCode + " - KEY SEQ: " + shell._keySequence.join(""));
-
-	var obj = (shell._haveFocus) ? shell._focusObj : null;
-	var handled = DwtShell._KEYSEQ_NOT_HANDLED;
-	
-	/* If a DWT component has "focus", then dispatch to that component
-	 * if the component handles the event, then stop, else hand it off
-	 * the global handler if one is registered */
-	//DBG.println("Focus Object: " + obj.toString());
-	if (obj != null && (obj instanceof DwtControl)) {
-		handled = shell._dispatchKeyEvent(obj, obj.toString(), ev);
-	}
-	 	
-	if (handled == DwtShell._KEYSEQ_NOT_HANDLED && shell._globalKeyActionHdlr != null)
-		handled = shell._dispatchKeyEvent(shell._globalKeyActionHdlr, 
-							shell._globalKeyActionHdlr.getKeyMapNameToUse(), ev);
-	
-	switch (handled) {
-		case DwtShell._KEYSEQ_NOT_HANDLED:
-			shell._keySequence.length = 0;
-			ev._stopPropagation = false;
-			ev._returnValue = true;
-			return true;
-			break;
-			
-		case DwtShell._KEYSEQ_HANDLED:
-			shell._keySequence.length = 0;
-		case DwtShell._KEYSEQ_PENDING:
-			ev._stopPropagation = true;
-			ev._returnValue = false;
-			return false;
-			break;
-	}	
-};
-
-DwtShell.prototype._dispatchKeyEvent = 
-function(hdlr, mapName, ev) {
-	actionCode = this._keyMapMgr.getActionCode(this._keySequence, mapName);
-	terminal = this._keyMapMgr.isTerminal(this._keySequence, mapName);
-	if (actionCode != null) {
-		DBG.println("HANDLING ACTION");
-		return (hdlr.handleKeyAction(actionCode, ev)) 
-			? DwtShell._KEYSEQ_HANDLED : DwtShell._KEYSEQ_NOT_HANDLED;
-	} else if (!terminal) {
-		DBG.println("SCHEDULING KILL SEQUENCE ACTION");
-		/* setup a timed action to kill the key sequence in the event
-		 * the user does not press another key in the allotted time */
-		this._killKeySeqTimedActionId = 
-			AjxTimedAction.scheduleAction(this._killKeySeqTimedAction, 1000);
-		return DwtShell._KEYSEQ_PENDING;
-	} else {	
-		DBG.println("TERMINAL W/O ACTION CODE");
-		this._keySequence.length = 0;
-		ev._stopPropagation = false;
-		ev._returnValue = true;
-		return true; // No view etc, so consider it dispatched
-		return DwtShell._KEYSEQ_NOT_HANDLED;
-	}
-};
-
-DwtShell.prototype._killKeySequenceAction =
-function() {
-	//DBG.println("KILLING KEY SEQUENCE");
-	this._killKeySeqTimedActionId = -1;
-	this._keySequence.length = 0;
-};
-
-
-
-
-
-// DEFUNCT
-DwtShell.prototype._XdispatchKeyEvent =
-function(ev) {
-	var mapName;
-	var obj = this._focusObj;
-	var handled = false;
-	var actionCode;
-	var terminal;
-	
-	/* If a DWT component has "focus", then dispatch to that component
-	 * if the component handles the event, then stop, else hand it off
-	 * the global handler if one is registered */
-	if (obj instanceof DwtControl) {
-		actionCode = this._keyMapMgr.getActionCode(this._keySequence, cName);
-		terminal = this._keyMapMgr.isTerminal(this._keySequence, cName)
-		handled = obj._handleKeyAction(action, ev);
-	}
-	 	
-	if (!handled && this._globalKeyActionHdlr != null) {
-	 	var mapName = this._globalKeyActionHdlr.getKeyMapName();
-	 	this._globalKeyActionHdlr.handleKeyAction(action, ev);
-	}
-	
-
-	var actionCode = this._keyMapMgr.getActionCode(this._keySequence, cName);
-	var terminal = this._keyMapMgr.isTerminal(this._keySequence, cName)
-	
-	/* If we have an action code for the key sequence, then execute the action
-	 * and stop event propagation. If the key sequence is not a terminal,
-	 * then halt event propagation since a subsequent key sequence could
-	 * trigger a terminal. Else if this is a terminal & there is no action
-	 * associated with it, then let the event propagate (to the browser) */
-	//DBG.println(AjxDebug.DBG3, "TERMINAL: " + terminal);
-	//DBG.println(AjxDebug.DBG3, "ACTION CODE: " + actionCode);			
-	if (!terminal || actionCode != null) {
-		if (actionCode != null) {
-			/* If a DWT component has "focus", then dispatch to that component
-			 * if the component handles the event, then stop, else hand it off
-			 * the global handler if one is registered */
-			 var obj = this._focusObj;
-			 var handled = false;
-			 if (obj instanceof DwtControl)
-			 	handled = obj._handleKeyAction(action, ev);
-			 	
-			 if (!handled && this._globalKeyActionHdlr != null) {
-			 	var mapName = this._globalKeyActionHdlr.getKeyMapName();
-			 	this._globalKeyActionHdlr.handleKeyAction(action, ev);
-			 }
-			this._keySequence.length = 0;
-		} else {
-			//DBG.println("SCHEDULING KILL SEQUENCE ACTION");
-			/* setup a timed action to kill the key sequence in the event
-			 * the user does not press another key in the allotted time */
-			this._killKeySeqTimedActionId = 
-				AjxTimedAction.scheduleAction(this._killKeySeqTimedAction, 1000);
-		}
-		ev._stopPropagation = true;
-		ev._returnValue = false;
-		return false;
-	} else {	
-		//DBG.println("TERMINAL W/O ACTION CODE OR NO CURRENT VIEW");
-		this._keySequence.length = 0;
-		ev._stopPropagation = false;
-		ev._returnValue = true;
-		return true; // No view etc, so consider it dispatched
 	}
 };
 

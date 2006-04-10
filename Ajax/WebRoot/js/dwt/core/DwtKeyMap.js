@@ -34,19 +34,16 @@ function DwtKeyMap(subclassInit) {
 	this._map[DwtKeyMap.GLOBAL] = {};
 	this._map["DwtListView"] = {
 			"Space":			DwtKeyMap.SELECT_CURRENT,
+			
 			"Ctrl+Space":		DwtKeyMap.ADD_SELECT_CURRENT,
+			"Ctrl+`":			DwtKeyMap.ADD_SELECT_CURRENT, //DeerPark
+			
 			"ArrowDown":		DwtKeyMap.SELECT_NEXT,
 			"Shift+ArrowDown":	DwtKeyMap.ADD_SELECT_NEXT,
 			"Ctrl+ArrowDown":	DwtKeyMap.NEXT,
-			"N":				DwtKeyMap.NEXT,
-			"Shift+N":			DwtKeyMap.ADD_SELECT_NEXT,
-			"Ctrl+N":			DwtKeyMap.SELECT_NEXT,
 			"ArrowUp":			DwtKeyMap.SELECT_PREV,
 			"Shift+ArrowUp":	DwtKeyMap.ADD_SELECT_PREV,
 			"Ctrl+ArrowUp":		DwtKeyMap.PREV,
-			"P":				DwtKeyMap.SELECT_PREV,
-			"Shift+P":			DwtKeyMap.ADD_SELECT_PREV,
-			"Ctrl+P":			DwtKeyMap.PREV,
 			"Enter":			DwtKeyMap.DBLCLICK,
 			"Ctrl+Enter":		DwtKeyMap.ACTION
 	};
@@ -91,7 +88,7 @@ delete i;
 
 DwtKeyMap.SEP = ","; // Key separator
 DwtKeyMap.GLOBAL = "GLOBAL";  // Global submap
-DwtKeyMap.ALIAS = "ALIAS"; // Alias keyword.
+DwtKeyMap.INHERIT = "INHERIT"; // Alias keyword.
 
 DwtKeyMap.prototype.getMap =
 function() {
