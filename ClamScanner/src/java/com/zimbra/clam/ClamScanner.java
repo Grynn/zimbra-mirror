@@ -181,7 +181,7 @@ public class ClamScanner extends UploadScanner implements ZimbraExtension {
                 dataSocket.getOutputStream().write(data);
                 if (mLog.isDebugEnabled()) { mLog.debug("wrote " + data.length + " bytes"); }
             } else {
-                int count = ByteUtil.copy(is, dataSocket.getOutputStream());
+                int count = ByteUtil.copy(is, false, dataSocket.getOutputStream(), false);
                 if (mLog.isDebugEnabled()) { mLog.debug("copied " + count + " bytes"); }
             }
             dataSocket.close();
