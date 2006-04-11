@@ -101,9 +101,8 @@ function() {
 DwtChooser.prototype.setItems =
 function(list) {
 	this.sourceListView.set(list);
-	// if there's only one item, select it
-	if (list.length == 1) {
-		this.sourceListView.setSelection(list[0]);
+	if (list.size() > 0) {
+		this.sourceListView.setSelection(list.get(0));	// select first item
 	}
 };
 
