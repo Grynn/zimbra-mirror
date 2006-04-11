@@ -207,7 +207,9 @@ DwtAddRemove.prototype.addTargetItem = function(item, skipNotify) {
 
 Array_contains = function(array, object) {
 	for (var i = 0; i < array.length; i++) {
-		if (array[i] === object) {
+		if((array[i] instanceof String) && (object instanceof String) && (array[i].toString() == object.toString())) {
+			return true;
+		} else if (array[i] === object) {
 			return true;
 		}
 	}
