@@ -50,432 +50,6 @@
     
 -->
 
-<attr name="zimbraAccountClientAttr" type="string"/>
-
-<attr name="zimbraAccountStatus" type="enum" value="active,maintenance,locked,closed" callback="AccountStatus"/>
-
-<attr name="zimbraAdminAuthTokenLifetime" type="duration"/>
-
-<attr name="zimbraAdminPort" type="port"/>
-
-<attr name="zimbraAliasTargetId" type="string" immutable="1"/>
-
-<attr name="zimbraLocale" type="string"/>
-
-<attr name="zimbraPrefTimeZoneId" type="string"/>
-
-<attr name="zimbraPrefUseTimeZoneListInCalendar" type="boolean"/>
-
-<attr name="zimbraPrefImapSearchFoldersEnabled" type="boolean"/>
-
-<attr name="zimbraAttachmentsBlocked" type="boolean"/>
-
-<attr name="zimbraAttachmentsIndexingEnabled" type="boolean"/>
-
-<attr name="zimbraAttachmentsScanEnabled" type="boolean"/>
-
-<attr name="zimbraAttachmentsScanClass" type="string" max="256"/>
-
-<attr name="zimbraAttachmentsScanURL" type="string" max="256"/>
-
-<attr name="zimbraAttachmentsViewInHtmlOnly" type="boolean"/>
-
-<attr name="zimbraAuthLdapBindDn" type="string"/>
-
-<attr name="zimbraAuthFallbackToLocal" type="boolean"/>
-
-<attr name="zimbraAuthLdapURL" type="string"/>
-
-<attr name="zimbraAuthMech" type="enum" value="zimbra,ldap,ad"/>
-
-<attr name="zimbraAuthLdapSearchBase" type="string"/>
-
-<attr name="zimbraAuthLdapSearchBindDn" type="string"/>
-
-<attr name="zimbraAuthLdapSearchBindPassword" type="string"/>
-
-<attr name="zimbraAuthLdapSearchFilter" type="string"/>
-
-<attr name="zimbraAuthLdapExternalDn" type="string"/>
-
-<attr name="zimbraAuthTokenKey" type="string" immutable="1"/>
-
-<attr name="zimbraAuthTokenLifetime" type="duration"/>
-
-<attr name="zimbraCalendarCompatibilityMode" type="enum" value="standard,exchange"/>
-
-<attr name="zimbraCertAuthorityCertSelfSigned" type="string" max="2048"/>
-
-<attr name="zimbraCertAuthorityKeySelfSigned" type="string" max="2048"/>
-
-<attr name="zimbraComponentAvailable" type="string" max="64"/>
-
-<attr name="zimbraCOSId" type="id"/> <!-- type "cosId" and check for valid COS id? -->
-
-<attr name="zimbraCOSInheritedAttr" type="string"/>
-
-<attr name="zimbraContactMaxNumEntries" type="integer" min="0"/>
-
-<attr name="zimbraDefaultDomainName" type="string" max="256"/>
-
-<attr name="zimbraDomainDefaultCOSId" type="id"/> <!-- type "cosId" and check for valid COS id? -->
-
-<attr name="zimbraDomainAdminModifiableAttr" type="string"/>
-
-<attr name="zimbraDomainInheritedAttr" type="string"/>
-
-<attr name="zimbraDomainName" type="string" immutable="1"/>
-
-<attr name="zimbraDomainType" type="enum" value="local,alias" immutable="1"/>
-
-<attr name="zimbraFeatureAdvancedSearchEnabled" type="boolean"/>
-
-<attr name="zimbraFeatureHtmlComposeEnabled" type="boolean"/>
-
-<attr name="zimbraFeatureCalendarEnabled" type="boolean"/>
-
-<attr name="zimbraFeatureIMEnabled" type="boolean"/>
-
-<attr name="zimbraFeatureMailForwardingEnabled" type="boolean"/>
-
-<attr name="zimbraFeatureChangePasswordEnabled" type="boolean"/>
-
-<attr name="zimbraFeatureContactsEnabled" type="boolean"/>
-
-<attr name="zimbraFeatureConversationsEnabled" type="boolean"/>
-
-<attr name="zimbraFeatureFiltersEnabled" type="boolean"/>
-
-<attr name="zimbraFeatureGalEnabled" type="boolean"/>
-
-<attr name="zimbraFeatureInitialSearchPreferenceEnabled" type="boolean"/>
-
-<attr name="zimbraFeatureSavedSearchesEnabled" type="boolean"/>
-
-<attr name="zimbraFeatureMobileSyncEnabled" type="boolean"/>
-
-<attr name="zimbraFileUploadMaxSize" type="long"/>
-
-<attr name="zimbraFeatureSharingEnabled" type="boolean"/>
-
-<attr name="zimbraFeatureTaggingEnabled" type="boolean"/>
-
-<attr name="zimbraFeatureViewInHtmlEnabled" type="boolean"/>
-
-<attr name="zimbraForeignPrincipal" type="string"/>
-
-<attr name="zimbraGalLdapAttrMap" type="string"/>
-
-<attr name="zimbraGalLdapBindDn" type="string" max="256"/>
-
-<attr name="zimbraGalLdapBindPassword" type="string" max="256"/>
-
-<attr name="zimbraGalLdapFilter" type="string" max="4096"/>
-
-<attr name="zimbraGalLdapFilterDef" type="string"/>
-
-<attr name="zimbraGalLdapSearchBase"  type="string" max="256"/>
-
-<attr name="zimbraGalLdapURL"  type="string" max="256"/>
-
-<attr name="zimbraGalMaxResults" type="integer" min="0"/>
-
-<attr name="zimbraGalMode" type="enum" value="zimbra,both,ldap"/>
-
-<attr name="zimbraGroupId" type="id" immutable="1"/>
-
-<attr name="zimbraId" type="id" immutable="1"/>
-
-<attr name="zimbraImapAdvertisedName" type="string" max="128"/>
-
-<attr name="zimbraImapBindAddress" type="string" max="128"/>
-
-<attr name="zimbraImapBindPort" type="port"/>
-
-<attr name="zimbraImapBindOnStartup" type="boolean"/>
-
-<attr name="zimbraImapCleartextLoginEnabled" type="boolean"/>
-
-<attr name="zimbraImapEnabled" type="boolean"/>
-
-<attr name="zimbraImapNumThreads" type="integer"/>
-
-<attr name="zimbraImapSSLBindAddress" type="string" max="128"/>
-
-<attr name="zimbraImapSSLBindPort" type="port"/>
-
-<attr name="zimbraImapSSLBindOnStartup" type="boolean"/>
-
-<attr name="zimbraImapSSLServerEnabled" type="boolean"/>
-
-<attr name="zimbraImapServerEnabled" type="boolean"/>
-
-<attr name="zimbraIsAdminAccount" type="boolean"/>
-
-<attr name="zimbraIsDomainAdminAccount" type="boolean"/>
-
-<attr name="zimbraIsMonitorHost" type="boolean"/>
-
-<attr name="zimbraLastLogonTimestamp" type="gentime" immutable="1"/>
-
-<attr name="zimbraLastLogonTimestampFrequency" type="duration"/>
-
-<attr name="zimbraLmtpAdvertisedName" type="string" max="128"/>
-
-<attr name="zimbraLmtpBindAddress" type="string" max="128"/>
-
-<attr name="zimbraLmtpBindPort" type="port"/>
-
-<attr name="zimbraLmtpBindOnStartup" type="boolean"/>
-
-<attr name="zimbraLmtpNumThreads" type="integer" min="0"/>
-
-<attr name="zimbraLogHostname" type="string"/>
-
-<attr name="zimbraLogSummaryLifetime" type="duration"/>
-
-<attr name="zimbraLogRawLifetime" type="duration"/>
-
-<attr name="zimbraMailAddress" type="email" max="256" immutable="1"/>
-
-<attr name="zimbraMailAlias" type="email" max="256" immutable="1"/>
-
-<attr name="zimbraMailCanonicalAddress" type="email" max="256"/>
-
-<attr name="zimbraMailCatchAllAddress" type="regex" value="^@[A-Za-z0-9-\.]+$"/>
-
-<attr name="zimbraMailCatchAllForwardingAddress" type="regex" value="^@[A-Za-z0-9-\.]+$"/>
-
-<attr name="zimbraMailCatchAllCanonicalAddress" type="regex" value="^@[A-Za-z0-9-\.]+$"/>
-
-<attr name="zimbraMailDeliveryAddress" type="email" max="256" immutable="1"/>
-
-<attr name="zimbraMailForwardingAddress" type="email" max="256"/>
-
-<attr name="zimbraMailHost" type="string" max="256" callback="MailHost"/>
-
-<attr name="zimbraMailHostPool" type="id" callback="MailHostPool"/>
-
-<attr name="zimbraMailTransport" type="string" max="320"/>
-
-<attr name="zimbraMailIdleSessionTimeout" type="duration"/>
-
-<attr name="zimbraMailMessageLifetime" type="duration"/>
-
-<attr name="zimbraMailMinPollingInterval" type="duration"/> 
-
-<attr name="zimbraMailPort" type="port"/>
-
-<attr name="zimbraMailQuota" type="long"/>
-
-<attr name="zimbraMailSSLPort" type="port"/>
-
-<attr name="zimbraMailMode" type="enum" value="http,https,both,mixed"/>
-
-<attr name="zimbraMailURL" type="string" max="1024"/>
-
-<attr name="zimbraMailSieveScript" type="string"/>
-
-<attr name="zimbraMailSpamLifetime" type="duration"/>
-
-<attr name="zimbraMailStatus" type="enum" value="enabled,disabled"/>
-
-<attr name="zimbraMailTrashLifetime" type="duration"/>
-
-<attr name="zimbraMemberOf" type="id"/>
-
-<attr name="zimbraMessageCacheSize" type="integer"/>
-
-<attr name="zimbraMessageIdDedupeCacheSize" type="integer"/>
-
-<attr name="zimbraMimeFileExtension" type="string"/> 
-
-<attr name="zimbraMimeHandlerClass" type="string"/>
-
-<attr name="zimbraMimeIndexingEnabled" type="boolean"/>
-
-<attr name="zimbraMimeType" type="string"/>
-
-<attr name="zimbraMtaAuthEnabled" type="boolean"/>
-
-<attr name="zimbraMtaAuthHost" type="string" max="256" callback="MtaAuthHost"/>
-
-<attr name="zimbraMtaAuthURL" type="string" max="256" immutable="1"/>
-
-<attr name="zimbraMtaBlockedExtension" type="string" max="64"/>
-
-<attr name="zimbraMtaCommonBlockedExtension" type="string" max="64"/>
-
-<attr name="zimbraMtaDnsLookupsEnabled" type="boolean"/>
-
-<attr name="zimbraMtaMyNetworks" type="string" max="1024"/>
-
-<attr name="zimbraMtaMaxMessageSize" type="integer" min="0"/>
-
-<attr name="zimbraMtaRecipientDelimiter" type="string" max="256"/>
-
-<attr name="zimbraMtaRelayHost" type="string" max="256"/>
-
-<attr name="zimbraMtaRestriction" type="string" max="256"/>
-
-<attr name="zimbraMtaTlsAuthOnly" type="boolean"/>
-
-<attr name="zimbraNewMailNotificationBody" type="string"/>
-
-<attr name="zimbraNewMailNotificationFrom" type="string"/>
-
-<attr name="zimbraNewMailNotificationSubject" type="string"/>
-
-<attr name="zimbraNotes" type="string"/>
-
-<attr name="zimbraNotifyServerEnabled" type="boolean"/>
-
-<attr name="zimbraNotifyBindAddress" type="string" max="128"/>
-
-<attr name="zimbraNotifyBindPort" type="integer"/>
-
-<attr name="zimbraNotifySSLServerEnabled" type="boolean"/>
-
-<attr name="zimbraNotifySSLBindAddress" type="string" max="128"/>
-
-<attr name="zimbraNotifySSLBindPort" type="integer"/>
-
-<attr name="zimbraObjectHandlerClass" type="string"/>
-
-<attr name="zimbraObjectHandlerConfig" type="string"/>
-
-<attr name="zimbraObjectIndexingEnabled" type="boolean"/>
-
-<attr name="zimbraObjectStoreMatched" type="boolean"/>
-
-<attr name="zimbraObjectType" type="string"/>
-
-<attr name="zimbraPasswordEnforceHistory" type="integer" min="0"/>
-
-<attr name="zimbraPasswordHistory" type="string"/>
-
-<attr name="zimbraPasswordLocked" type="boolean"/>
-
-<attr name="zimbraPasswordMaxAge" type="integer" min="0"/>
-
-<attr name="zimbraPasswordMaxLength" type="integer" min="0"/>
-
-<attr name="zimbraPasswordMinAge" type="integer" min="0"/>
-
-<attr name="zimbraPasswordMinLength" type="integer" min="0"/>
-
-<attr name="zimbraPasswordModifiedTime" type="gentime"/>
-
-<attr name="zimbraPasswordMustChange" type="boolean"/>
-
-<attr name="zimbraPop3AdvertisedName" type="string" max="128"/>
-
-<attr name="zimbraPop3BindAddress" type="string" max="128"/>
-
-<attr name="zimbraPop3BindPort" type="port"/>
-
-<attr name="zimbraPop3BindOnStartup" type="boolean"/>
-
-<attr name="zimbraPop3CleartextLoginEnabled" type="boolean"/>
-
-<attr name="zimbraPop3Enabled" type="boolean"/>
-
-<attr name="zimbraPop3NumThreads" type="integer"/>
-
-<attr name="zimbraPop3SSLBindAddress" type="string" max="128"/>
-
-<attr name="zimbraPop3SSLBindPort" type="port"/>
-
-<attr name="zimbraPop3SSLBindOnStartup" type="boolean"/>
-
-<attr name="zimbraPop3SSLServerEnabled" type="boolean"/>
-
-<attr name="zimbraPop3ServerEnabled" type="boolean"/>
-
-<attr name="zimbraPreAuthKey" type="string"/>
-
-<attr name="zimbraPrefAutoAddAddressEnabled" type="boolean"/>
-
-<attr name="zimbraPrefHtmlEditorDefaultFontFamily" type="string" max="64"/>
-
-<attr name="zimbraPrefHtmlEditorDefaultFontColor" type="string" max="32"/>
-
-<attr name="zimbraPrefHtmlEditorDefaultFontSize" type="string" max="32"/>
-
-<attr name="zimbraPrefComposeInNewWindow" type="boolean"/>
-
-<attr name="zimbraPrefComposeFormat" type="enum" value="text,html"/>
-
-<attr name="zimbraPrefForwardReplyInOriginalFormat" type="boolean"/>
-
-<attr name="zimbraPrefContactsInitialView" type="enum" value="cards,list"/>
-
-<attr name="zimbraPrefCalendarApptReminderWarningTime" type="integer" min="0"/>
-
-<attr name="zimbraPrefCalendarFirstDayOfWeek" type="integer" min="0" max="6"/>
-
-<attr name="zimbraPrefCalendarUseQuickAdd" type="boolean"/>
-
-<attr name="zimbraPrefCalendarAlwaysShowMiniCal" type="boolean"/>
-
-<attr name="zimbraPrefCalendarInitialView" type="enum" value="day,week,workWeek,month,schedule"/>
-
-<attr name="zimbraPrefCalendarInitialCheckedCalendars" type="string" max="512"/>
-
-<attr name="zimbraPrefCalendarNotifyDelegatedChanges" type="boolean"/>
-
-<attr name="zimbraPrefContactsPerPage" type="integer"/> <!-- TODO: get min/max? -->
-
-<attr name="zimbraPrefDedupeMessagesSentToSelf" type="enum" value="dedupeNone,secondCopyifOnToOrCC,dedupeAll"/>
-
-<attr name="zimbraPrefForwardIncludeOriginalText" type="enum" value="includeAsAttachment,includeBody,includeBodyWithPrefix"/> 
-
-<attr name="zimbraPrefForwardReplyPrefixChar" type="string"/>
-
-<attr name="zimbraPrefGroupMailBy" type="enum" value="conversation,message"/>
-
-<attr name="zimbraPrefIncludeSpamInSearch" type="boolean"/>
-
-<attr name="zimbraPrefIncludeTrashInSearch" type="boolean"/>
-
-<attr name="zimbraPrefMailInitialSearch" type="string" max="512"/>
-
-<attr name="zimbraPrefMailItemsPerPage" type="integer"/> <!-- TODO: get min/max? -->
-
-<attr name="zimbraPrefMailForwardingAddress" type="emailp" max="256"/>
-
-<attr name="zimbraPrefMailPollingInterval" type="duration"/>
-
-<attr name="zimbraPrefMailSignature" type="string" max="1024"/>
-
-<attr name="zimbraPrefMailSignatureEnabled" type="boolean"/>
-
-<attr name="zimbraPrefMailSignatureStyle" type="enum" value="outlook,internet"/>
-
-<attr name="zimbraPrefMessageViewHtmlPreferred" type="boolean"/>
-
-<attr name="zimbraPrefNewMailNotificationAddress" type="string" max="256"/>
-
-<attr name="zimbraPrefNewMailNotificationEnabled" type="boolean"/>
-
-<attr name="zimbraPrefOutOfOfficeReply" type="string" max="8192" callback="OutOfOfficeCallback"/>
-
-<attr name="zimbraPrefOutOfOfficeReplyEnabled" type="boolean" callback="OutOfOfficeCallback"/>
-
-<attr name="zimbraPrefReplyIncludeOriginalText" type="enum" value="includeAsAttachment,includeBody,includeBodyWithPrefix,includeNone,includeSmart"/>
-
-<attr name="zimbraPrefReplyToAddress" type="string" max="256"/>
-
-<attr name="zimbraPrefSaveToSent" type="boolean"/>
-
-<attr name="zimbraPrefSentMailFolder" type="string" max="256"/>
-
-<attr name="zimbraPrefShowFragments" type="boolean"/>
-
-<attr name="zimbraPrefShowSearchString" type="boolean"/>
-
-<attr name="zimbraPrefUseKeyboardShortcuts" type="boolean"/>
-
 <attr name="zimbraRedologArchiveDir" type="string"/>
 
 <attr name="zimbraRedologBacklogDir" type="string"/>
@@ -488,109 +62,9 @@
 
 <attr name="zimbraRedologRolloverFileSizeKB" type="integer" min="0"/>
 
-<attr name="zimbraRemoteManagementCommand" type="string" max="1024"/>
-
-<attr name="zimbraRemoteManagementUser" type="string" max="256"/>
-
-<attr name="zimbraRemoteManagementPrivateKeyPath" type="string" max="1024"/>
-
-<attr name="zimbraRemoteManagementPort" type="integer"/>
-
 <attr name="zimbraServerHostname" type="string" max="256"/>
 
-<attr name="zimbraServerInheritedAttr" type="string"/>
-
-<attr name="zimbraServiceEnabled" type="string" max="256"/>
-
-<attr name="zimbraServiceInstalled" type="string" max="256"/>
-
-<attr name="zimbraServiceHostname" type="string" max="256"/>
-
-<attr name="zimbraSmtpHostname" type="string" max="256"/>
-
-<attr name="zimbraSmtpPort" type="port"/>
-
-<attr name="zimbraSmtpSendPartial" type="boolean"/>
-
-<attr name="zimbraSmtpTimeout" type="integer" min="0"/>
-
-<attr name="zimbraSpamCheckEnabled" type="boolean"/>
-
-<attr name="zimbraSpamTagPercent" type="integer" min="0"/>
-
-<attr name="zimbraSpamKillPercent" type="integer" min="0"/>
-
-<attr name="zimbraSpamSubjectTag" type="string" max="32"/>
-
-<attr name="zimbraSpamIsSpamAccount" type="email" max="256"/>
-
-<attr name="zimbraSpamIsNotSpamAccount" type="email" max="256"/>
-
-<attr name="zimbraSpellCheckURL" type="string" max="256"/>
-
-<attr name="zimbraSshPublicKey" type="string" max="1024"/>
-
-<attr name="zimbraSslCaCert" type="string" max="2048"/>
-
-<attr name="zimbraSslCaKey" type="string" max="2048"/>
-
-<attr name="zimbraTableMaintenanceGrowthFactor" type="integer" min="0"/>
-
-<attr name="zimbraTableMaintenanceMaxRows" type="integer" min="0"/>
-
-<attr name="zimbraTableMaintenanceMinRows" type="integer" min="0"/>
-
-<attr name="zimbraTableMaintenanceOperation" type="enum" value="ANALYZE,OPTIMIZE"/>
-
-<attr name="zimbraUserServicesEnabled" type="boolean"/>
-
-<attr name="zimbraVirusCheckEnabled" type="boolean"/>
-
-<attr name="zimbraVirusWarnRecipient" type="boolean"/>
-
-<attr name="zimbraVirusWarnAdmin" type="boolean"/>
-
-<attr name="zimbraVirusBlockEncryptedArchive" type="boolean"/>
-
-<attr name="zimbraVirusDefinitionsUpdateFrequency" type="duration"/>
-
 <attr name="zimbraReplicationProvider" type="string" max="256"/>
-
-<attr name="zimbraZimletStoreMatched" type="boolean"/>
-
-<attr name="zimbraZimletIndexingEnabled" type="boolean"/>
-
-<attr name="zimbraZimletKeyword" type="string" max="256"/>
-
-<attr name="zimbraZimletDescription" type="string" max="256"/>
-
-<attr name="zimbraZimletVersion" type="string" max="256"/>
-
-<attr name="zimbraZimletHandlerClass" type="string" max="256"/>
-
-<attr name="zimbraZimletHandlerConfig" type="string" max="10240"/>
-
-<attr name="zimbraZimletContentObject" type="string" max="10240"/>
-
-<attr name="zimbraZimletPanelItem" type="string" max="10240"/>
-
-<attr name="zimbraZimletPriority" type="string" min="32"/>
-
-<attr name="zimbraZimletScript" type="string" max="256"/>
-
-<attr name="zimbraZimletAvailableZimlets" type="string" max="256"/>
-
-<attr name="zimbraZimletServerIndexRegex" type="string" max="256"/>
-
-<attr name="zimbraProxyAllowedDomains" type="string" max="256"/>
-
-<attr name="zimbraProxyCacheableContentTypes" type="string" max="256"/>
-
-<attr name="zimbraZimletUserProperties" type="string" max="1024"/>
-
-<attr name="zimbraZimletEnabled" type="boolean"/>
-
-<attr name="zimbraZimletIsExtension" type="boolean"/>
 
 <attr name="c" type="string"/>
 
@@ -642,36 +116,562 @@
 
 <attr name="userPassword" type="string" immutable="1"/>
 
-<attr name="zimbraAccountCalendarUserType" type="enum" value="USER,RESOURCE"/>
-
-<attr name="zimbraCalResType" type="string"/>
-
-<attr name="zimbraCalResAutoAcceptDecline" type="boolean"/>
-
-<attr name="zimbraCalResAutoDeclineIfBusy" type="boolean"/>
-
-<attr name="zimbraCalResAutoDeclineRecurring" type="boolean"/>
-
 <attr name="zimbraCalResAlwaysFree" type="boolean"/>
 
-<attr name="zimbraCalResLocationDisplayName" type="string"/>
+<attr id="1" name="zimbraId" type="id" immutable="1"/>
 
-<attr name="zimbraCalResSite" type="string"/>
+<attr id="2" name="zimbraAccountStatus" type="enum" value="active,maintenance,locked,closed" callback="AccountStatus"/>
 
-<attr name="zimbraCalResBuilding" type="string"/>
+<attr id="3" name="zimbraMailAddress" type="email" max="256" immutable="1"/>
 
-<attr name="zimbraCalResFloor" type="string"/>
+<attr id="4" name="zimbraMailHost" type="string" max="256" callback="MailHost"/>
 
-<attr name="zimbraCalResRoom" type="string"/>
+<attr id="9" name="zimbraNotes" type="string"/>
 
-<attr name="zimbraCalResCapacity" type="integer"/>
+<attr id="11" name="zimbraMemberOf" type="id"/>
 
-<attr name="zimbraCalResContactName" type="string"/>
+<attr id="12" name="zimbraMailForwardingAddress" type="email" max="256"/>
 
-<attr name="zimbraCalResContactEmail" type="email"/>
+<attr id="13" name="zimbraMailDeliveryAddress" type="email" max="256" immutable="1"/>
 
-<attr name="zimbraCalResContactPhone" type="string"/>
+<attr id="14" name="zimbraCOSId" type="id"/> <!-- type "cosId" and check for valid COS id? -->
 
-<attr name="zimbraMailboxLocationBeforeMove" type="string"/>
+<attr id="15" name="zimbraMailStatus" type="enum" value="enabled,disabled"/>
+
+<attr id="16" name="zimbraMailQuota" type="long"/>
+
+<attr id="17" name="zimbraPrefMailSignature" type="string" max="1024"/>
+
+<attr id="18" name="zimbraPrefMailSignatureEnabled" type="boolean"/>
+
+<attr id="19" name="zimbraDomainName" type="string" immutable="1"/>
+
+<attr id="20" name="zimbraMailAlias" type="email" max="256" immutable="1"/>
+
+<attr id="21" name="zimbraCOSInheritedAttr" type="string"/>
+
+<attr id="22" name="zimbraPrefSaveToSent" type="boolean"/>
+
+<attr id="23" name="zimbraLmtpAdvertisedName" type="string" max="128"/>
+
+<attr id="24" name="zimbraLmtpBindPort" type="port"/>
+
+<attr id="25" name="zimbraLmtpBindAddress" type="string" max="128"/>
+
+<attr id="26" name="zimbraLmtpNumThreads" type="integer" min="0"/>
+
+<attr id="31" name="zimbraIsAdminAccount" type="boolean"/>
+
+<attr id="32" name="zimbraMailSieveScript" type="string"/>
+
+<attr id="33" name="zimbraPasswordMinLength" type="integer" min="0"/>
+
+<attr id="34" name="zimbraPasswordMaxLength" type="integer" min="0"/>
+
+<attr id="35" name="zimbraPasswordMinAge" type="integer" min="0"/>
+
+<attr id="36" name="zimbraPasswordMaxAge" type="integer" min="0"/>
+
+<attr id="37" name="zimbraPasswordEnforceHistory" type="integer" min="0"/>
+
+<attr id="38" name="zimbraPasswordHistory" type="string"/>
+
+<attr id="39" name="zimbraPasswordModifiedTime" type="gentime"/>
+
+<attr id="40" name="zimbraAliasTargetId" type="string" immutable="1"/>
+
+<attr id="41" name="zimbraPasswordMustChange" type="boolean"/>
+
+<attr id="42" name="zimbraAuthMech" type="enum" value="zimbra,ldap,ad"/>
+
+<attr id="43" name="zimbraAuthLdapURL" type="string"/>
+
+<attr id="44" name="zimbraAuthLdapBindDn" type="string"/>
+
+<attr id="45" name="zimbraPasswordLocked" type="boolean"/>
+
+<attr id="46" name="zimbraGalMode" type="enum" value="zimbra,both,ldap"/>
+
+<attr id="47" name="zimbraGalLdapURL"  type="string" max="256"/>
+
+<attr id="48" name="zimbraGalLdapSearchBase"  type="string" max="256"/>
+
+<attr id="49" name="zimbraGalLdapBindDn" type="string" max="256"/>
+
+<attr id="50" name="zimbraGalLdapBindPassword" type="string" max="256"/>
+
+<attr id="51" name="zimbraGalLdapFilter" type="string" max="4096"/>
+
+<attr id="52" name="zimbraGalLdapFilterDef" type="string"/>
+
+<attr id="53" name="zimbraGalMaxResults" type="integer" min="0"/>
+
+<attr id="54" name="zimbraPrefGroupMailBy" type="enum" value="conversation,message"/>
+
+<attr id="55" name="zimbraPrefIncludeSpamInSearch" type="boolean"/>
+
+<attr id="56" name="zimbraPrefIncludeTrashInSearch" type="boolean"/>
+
+<attr id="57" name="zimbraPrefMailItemsPerPage" type="integer"/> <!-- TODO: get min/max? -->
+
+<attr id="58" name="zimbraPrefOutOfOfficeReply" type="string" max="8192" callback="OutOfOfficeCallback"/>
+
+<attr id="59" name="zimbraPrefOutOfOfficeReplyEnabled" type="boolean" callback="OutOfOfficeCallback"/>
+
+<attr id="60" name="zimbraPrefReplyToAddress" type="string" max="256"/>
+
+<attr id="61" name="zimbraPrefUseKeyboardShortcuts" type="boolean"/>
+
+<attr id="62" name="zimbraServerInheritedAttr" type="string"/>
+
+<attr id="63" name="zimbraDomainInheritedAttr" type="string"/>
+
+<attr id="65" name="zimbraServiceHostname" type="string" max="256"/>
+
+<attr id="93" name="zimbraPop3AdvertisedName" type="string" max="128"/>
+
+<attr id="94" name="zimbraPop3BindPort" type="port"/>
+
+<attr id="95" name="zimbraPop3BindAddress" type="string" max="128"/>
+
+<attr id="96" name="zimbraPop3NumThreads" type="integer"/>
+
+<attr id="97" name="zimbraSmtpHostname" type="string" max="256"/>
+
+<attr id="98" name="zimbraSmtpPort" type="port"/>
+
+<attr id="99" name="zimbraSmtpTimeout" type="integer" min="0"/>
+
+<attr id="100" name="zimbraAuthTokenKey" type="string" immutable="1"/>
+
+<attr id="102" name="zimbraPrefMailInitialSearch" type="string" max="512"/>
+
+<attr id="103" name="zimbraPrefSentMailFolder" type="string" max="256"/>
+
+<attr id="104" name="zimbraMailTrashLifetime" type="duration"/>
+
+<attr id="105" name="zimbraMailSpamLifetime" type="duration"/>
+
+<attr id="106" name="zimbraMailMessageLifetime" type="duration"/>
+
+<attr id="107" name="zimbraContactMaxNumEntries" type="integer" min="0"/>
+
+<attr id="108" name="zimbraAuthTokenLifetime" type="duration"/>
+
+<attr id="109" name="zimbraAdminAuthTokenLifetime" type="duration"/>
+
+<attr id="110" name="zimbraMailMinPollingInterval" type="duration"/> 
+
+<attr id="111" name="zimbraPrefMailPollingInterval" type="duration"/>
+
+<attr id="112" name="zimbraAccountClientAttr" type="string"/>
+
+<attr id="113" name="zimbraLastLogonTimestamp" type="gentime" immutable="1"/>
+
+<attr id="114" name="zimbraLastLogonTimestampFrequency" type="duration"/>
+
+<attr id="115" name="zimbraAttachmentsBlocked" type="boolean"/>
+
+<attr id="116" name="zimbraAttachmentsViewInHtmlOnly" type="boolean"/>
+
+<attr id="125" name="zimbraMailHostPool" type="id" callback="MailHostPool"/>
+
+<attr id="126" name="zimbraPrefNewMailNotificationEnabled" type="boolean"/>
+
+<attr id="127" name="zimbraPrefNewMailNotificationAddress" type="string" max="256"/>
+
+<attr id="130" name="zimbraPrefForwardReplyPrefixChar" type="string"/>
+
+<attr id="131" name="zimbraPrefAutoAddAddressEnabled" type="boolean"/>
+
+<attr id="132" name="zimbraIsMonitorHost" type="boolean"/>
+
+<attr id="133" name="zimbraPrefReplyIncludeOriginalText" type="enum" value="includeAsAttachment,includeBody,includeBodyWithPrefix,includeNone,includeSmart"/>
+
+<attr id="134" name="zimbraPrefForwardIncludeOriginalText" type="enum" value="includeAsAttachment,includeBody,includeBodyWithPrefix"/> 
+
+<attr id="135" name="zimbraFeatureContactsEnabled" type="boolean"/>
+
+<attr id="136" name="zimbraFeatureCalendarEnabled" type="boolean"/>
+
+<attr id="137" name="zimbraFeatureTaggingEnabled" type="boolean"/>
+
+<attr id="138" name="zimbraFeatureAdvancedSearchEnabled" type="boolean"/>
+
+<attr id="139" name="zimbraFeatureSavedSearchesEnabled" type="boolean"/>
+
+<attr id="140" name="zimbraFeatureConversationsEnabled" type="boolean"/>
+
+<attr id="141" name="zimbraFeatureChangePasswordEnabled" type="boolean"/>
+
+<attr id="142" name="zimbraFeatureInitialSearchPreferenceEnabled" type="boolean"/>
+
+<attr id="143" name="zimbraFeatureFiltersEnabled" type="boolean"/>
+
+<attr id="144" name="zimbraPrefDedupeMessagesSentToSelf" type="enum" value="dedupeNone,secondCopyifOnToOrCC,dedupeAll"/>
+
+<attr id="145" name="zimbraPrefMessageViewHtmlPreferred" type="boolean"/>
+
+<attr id="146" name="zimbraUserServicesEnabled" type="boolean"/>
+
+<attr id="147" name="zimbraMailIdleSessionTimeout" type="duration"/>
+
+<attr id="148" name="zimbraPrefContactsPerPage" type="integer"/> <!-- TODO: get min/max? -->
+
+<attr id="149" name="zimbraFeatureGalEnabled" type="boolean"/>
+
+<attr id="150" name="zimbraNewMailNotificationFrom" type="string"/>
+
+<attr id="151" name="zimbraNewMailNotificationSubject" type="string"/>
+
+<attr id="152" name="zimbraNewMailNotificationBody" type="string"/>
+
+<attr id="153" name="zimbraGalLdapAttrMap" type="string"/>
+
+<attr id="154" name="zimbraMailPort" type="port"/>
+
+<attr id="155" name="zimbraAdminPort" type="port"/>
+
+<attr id="156" name="zimbraPrefMailSignatureStyle" type="enum" value="outlook,internet"/>
+
+<attr id="157" name="zimbraMimeType" type="string"/>
+
+<attr id="158" name="zimbraMimeIndexingEnabled" type="boolean"/>
+
+<attr id="159" name="zimbraMimeHandlerClass" type="string"/>
+
+<attr id="160" name="zimbraMimeFileExtension" type="string"/> 
+
+<attr id="161" name="zimbraObjectType" type="string"/>
+
+<attr id="162" name="zimbraObjectIndexingEnabled" type="boolean"/>
+
+<attr id="163" name="zimbraObjectStoreMatched" type="boolean"/>
+
+<attr id="164" name="zimbraObjectHandlerClass" type="string"/>
+
+<attr id="165" name="zimbraObjectHandlerConfig" type="string"/>
+
+<attr id="166" name="zimbraMailSSLPort" type="port"/>
+
+<attr id="167" name="zimbraPrefContactsInitialView" type="enum" value="cards,list"/>
+
+<attr id="168" name="zimbraTableMaintenanceMinRows" type="integer" min="0"/>
+
+<attr id="169" name="zimbraTableMaintenanceMaxRows" type="integer" min="0"/>
+
+<attr id="170" name="zimbraTableMaintenanceOperation" type="enum" value="ANALYZE,OPTIMIZE"/>
+
+<attr id="171" name="zimbraTableMaintenanceGrowthFactor" type="integer" min="0"/>
+
+<attr id="172" name="zimbraDefaultDomainName" type="string" max="256"/>
+
+<attr id="173" name="zimbraAttachmentsIndexingEnabled" type="boolean"/>
+
+<attr id="174" name="zimbraImapEnabled" type="boolean"/>
+
+<attr id="175" name="zimbraPop3Enabled" type="boolean"/>
+
+<attr id="176" name="zimbraImapServerEnabled" type="boolean"/>
+
+<attr id="177" name="zimbraPop3ServerEnabled" type="boolean"/>
+
+<attr id="178" name="zimbraImapAdvertisedName" type="string" max="128"/>
+
+<attr id="179" name="zimbraImapBindAddress" type="string" max="128"/>
+
+<attr id="180" name="zimbraImapBindPort" type="port"/>
+
+<attr id="181" name="zimbraImapNumThreads" type="integer"/>
+
+<attr id="182" name="zimbraImapSSLBindAddress" type="string" max="128"/>
+
+<attr id="183" name="zimbraImapSSLBindPort" type="port"/>
+
+<attr id="184" name="zimbraImapSSLServerEnabled" type="boolean"/>
+
+<attr id="185" name="zimbraImapCleartextLoginEnabled" type="boolean"/>
+
+<attr id="186" name="zimbraPop3SSLBindAddress" type="string" max="128"/>
+
+<attr id="187" name="zimbraPop3SSLBindPort" type="port"/>
+
+<attr id="188" name="zimbraPop3SSLServerEnabled" type="boolean"/>
+
+<attr id="189" name="zimbraPop3CleartextLoginEnabled" type="boolean"/>
+
+<attr id="191" name="zimbraVirusDefinitionsUpdateFrequency" type="duration"/>
+
+<attr id="192" name="zimbraPrefShowFragments" type="boolean"/>
+
+<attr id="194" name="zimbraMtaAuthEnabled" type="boolean"/>
+
+<attr id="195" name="zimbraMtaBlockedExtension" type="string" max="64"/>
+
+<attr id="196" name="zimbraMtaCommonBlockedExtension" type="string" max="64"/>
+
+<attr id="197" name="zimbraMtaDnsLookupsEnabled" type="boolean"/>
+
+<attr id="198" name="zimbraMtaMaxMessageSize" type="integer" min="0"/>
+
+<attr id="199" name="zimbraMtaRelayHost" type="string" max="256"/>
+
+<attr id="200" name="zimbraMtaTlsAuthOnly" type="boolean"/>
+
+<attr id="201" name="zimbraSpamCheckEnabled" type="boolean"/>
+
+<attr id="202" name="zimbraSpamKillPercent" type="integer" min="0"/>
+
+<attr id="203" name="zimbraSpamSubjectTag" type="string" max="32"/>
+
+<attr id="204" name="zimbraSpamTagPercent" type="integer" min="0"/>
+
+<attr id="205" name="zimbraVirusBlockEncryptedArchive" type="boolean"/>
+
+<attr id="206" name="zimbraVirusCheckEnabled" type="boolean"/>
+
+<attr id="207" name="zimbraVirusWarnAdmin" type="boolean"/>
+
+<attr id="208" name="zimbraVirusWarnRecipient" type="boolean"/>
+
+<attr id="209" name="zimbraPrefComposeInNewWindow" type="boolean"/>
+
+<attr id="212" name="zimbraDomainType" type="enum" value="local,alias" immutable="1"/>
+
+<attr id="213" name="zimbraMailCanonicalAddress" type="email" max="256"/>
+
+<attr id="214" name="zimbraMailCatchAllAddress" type="regex" value="^@[A-Za-z0-9-\.]+$"/>
+
+<attr id="215" name="zimbraMailCatchAllForwardingAddress" type="regex" value="^@[A-Za-z0-9-\.]+$"/>
+
+<attr id="216" name="zimbraMailCatchAllCanonicalAddress" type="regex" value="^@[A-Za-z0-9-\.]+$"/>
+
+<attr id="217" name="zimbraPrefComposeFormat" type="enum" value="text,html"/>
+
+<attr id="218" name="zimbraPrefForwardReplyInOriginalFormat" type="boolean"/>
+
+<attr id="219" name="zimbraFeatureHtmlComposeEnabled" type="boolean"/>
+
+<attr id="220" name="zimbraServiceEnabled" type="string" max="256"/>
+
+<attr id="221" name="zimbraServiceInstalled" type="string" max="256"/>
+
+<attr id="222" name="zimbraPrefShowSearchString" type="boolean"/>
+
+<attr id="226" name="zimbraMtaRestriction" type="string" max="256"/>
+
+<attr id="227" name="zimbraFileUploadMaxSize" type="long"/>
+
+<attr id="235" name="zimbraPrefTimeZoneId" type="string"/>
+
+<attr id="236" name="zimbraPrefUseTimeZoneListInCalendar" type="boolean"/>
+
+<attr id="237" name="zimbraAttachmentsScanEnabled" type="boolean"/>
+
+<attr id="238" name="zimbraAttachmentsScanClass" type="string" max="256"/>
+
+<attr id="239" name="zimbraAttachmentsScanURL" type="string" max="256"/>
+
+<attr id="240" name="zimbraPrefCalendarInitialView" type="enum" value="day,week,workWeek,month,schedule"/>
+
+<attr id="241" name="zimbraPrefImapSearchFoldersEnabled" type="boolean"/>
+
+<attr id="242" name="zimbraComponentAvailable" type="string" max="64"/>
+
+<attr id="243" name="zimbraCalendarCompatibilityMode" type="enum" value="standard,exchange"/>
+
+<attr id="244" name="zimbraSpamIsSpamAccount" type="email" max="256"/>
+
+<attr id="245" name="zimbraSpamIsNotSpamAccount" type="email" max="256"/>
+
+<attr id="247" name="zimbraMailTransport" type="string" max="320"/>
+
+<attr id="249" name="zimbraSmtpSendPartial" type="boolean"/>
+
+<attr id="250" name="zimbraLogHostname" type="string"/>
+
+<attr id="252" name="zimbraAuthLdapSearchBase" type="string"/>
+
+<attr id="253" name="zimbraAuthLdapSearchBindDn" type="string"/>
+
+<attr id="254" name="zimbraAuthLdapSearchBindPassword" type="string"/>
+
+<attr id="255" name="zimbraAuthLdapSearchFilter" type="string"/>
+
+<attr id="256" name="zimbraAuthLdapExternalDn" type="string"/>
+
+<attr id="257" name="zimbraAuthFallbackToLocal" type="boolean"/>
+
+<attr id="258" name="zimbraPrefHtmlEditorDefaultFontFamily" type="string" max="64"/>
+
+<attr id="259" name="zimbraPrefHtmlEditorDefaultFontSize" type="string" max="32"/>
+
+<attr id="260" name="zimbraPrefHtmlEditorDefaultFontColor" type="string" max="32"/>
+
+<attr id="261" name="zimbraPrefCalendarFirstDayOfWeek" type="integer" min="0" max="6"/>
+
+<attr id="262" name="zimbraSshPublicKey" type="string" max="1024"/>
+
+<attr id="263" name="zimbraLogRawLifetime" type="duration"/>
+
+<attr id="264" name="zimbraLogSummaryLifetime" type="duration"/>
+
+<attr id="267" name="zimbraSpellCheckURL" type="string" max="256"/>
+
+<attr id="268" name="zimbraImapBindOnStartup" type="boolean"/>
+
+<attr id="269" name="zimbraImapSSLBindOnStartup" type="boolean"/>
+
+<attr id="270" name="zimbraLmtpBindOnStartup" type="boolean"/>
+
+<attr id="271" name="zimbraPop3BindOnStartup" type="boolean"/>
+
+<attr id="272" name="zimbraPop3SSLBindOnStartup" type="boolean"/>
+
+<attr id="273" name="zimbraPrefCalendarNotifyDelegatedChanges" type="boolean"/>
+
+<attr id="274" name="zimbraPrefCalendarUseQuickAdd" type="boolean"/>
+
+<attr id="275" name="zimbraPrefCalendarInitialCheckedCalendars" type="string" max="512"/>
+
+<attr id="276" name="zimbraPrefCalendarAlwaysShowMiniCal" type="boolean"/>
+
+<attr id="277" name="zimbraSslCaCert" type="string" max="2048"/>
+
+<attr id="278" name="zimbraSslCaKey" type="string" max="2048"/>
+
+<attr id="279" name="zimbraCertAuthorityKeySelfSigned" type="string" max="2048"/>
+
+<attr id="280" name="zimbraCertAuthorityCertSelfSigned" type="string" max="2048"/>
+
+<attr id="281" name="zimbraZimletKeyword" type="string" max="256"/>
+
+<attr id="282" name="zimbraZimletVersion" type="string" max="256"/>
+
+<attr id="283" name="zimbraZimletDescription" type="string" max="256"/>
+
+<attr id="284" name="zimbraZimletIndexingEnabled" type="boolean"/>
+
+<attr id="285" name="zimbraZimletStoreMatched" type="boolean"/>
+
+<attr id="286" name="zimbraZimletHandlerClass" type="string" max="256"/>
+
+<attr id="287" name="zimbraZimletHandlerConfig" type="string" max="10240"/>
+
+<attr id="288" name="zimbraZimletContentObject" type="string" max="10240"/>
+
+<attr id="289" name="zimbraZimletPanelItem" type="string" max="10240"/>
+
+<attr id="290" name="zimbraZimletScript" type="string" max="256"/>
+
+<attr id="291" name="zimbraZimletAvailableZimlets" type="string" max="256"/>
+
+<attr id="292" name="zimbraZimletServerIndexRegex" type="string" max="256"/>
+
+<attr id="294" name="zimbraProxyAllowedDomains" type="string" max="256"/>
+
+<attr id="295" name="zimbraForeignPrincipal" type="string"/>
+
+<attr id="296" name="zimbraZimletUserProperties" type="string" max="1024"/>
+
+<attr id="297" name="zimbraMessageCacheSize" type="integer"/>
+
+<attr id="298" name="zimbraIsDomainAdminAccount" type="boolean"/>
+
+<attr id="299" name="zimbraDomainDefaultCOSId" type="id"/> <!-- type "cosId" and check for valid COS id? -->
+
+<attr id="300" name="zimbraDomainAdminModifiableAttr" type="string"/>
+
+<attr id="301" name="zimbraZimletEnabled" type="boolean"/>
+
+<attr id="302" name="zimbraZimletPriority" type="string" min="32"/>
+
+<attr id="303" name="zimbraProxyCacheableContentTypes" type="string" max="256"/>
+
+<attr id="304" name="zimbraZimletIsExtension" type="boolean"/>
+
+<attr id="305" name="zimbraFeatureIMEnabled" type="boolean"/>
+
+<attr id="306" name="zimbraMtaRecipientDelimiter" type="string" max="256"/>
+
+<attr id="307" name="zimbraPreAuthKey" type="string"/>
+
+<attr id="308" name="zimbraMailMode" type="enum" value="http,https,both,mixed"/>
+
+<attr id="309" name="zimbraMtaAuthHost" type="string" max="256" callback="MtaAuthHost"/>
+
+<attr id="310" name="zimbraMtaAuthURL" type="string" max="256" immutable="1"/>
+
+<attr id="311" name="zimbraMtaMyNetworks" type="string" max="1024"/>
+
+<attr id="312" name="zimbraFeatureViewInHtmlEnabled" type="boolean"/>
+
+<attr id="313" name="zimbraAccountCalendarUserType" type="enum" value="USER,RESOURCE"/>
+
+<attr id="314" name="zimbraCalResType" type="string"/>
+
+<attr id="315" name="zimbraCalResAutoAcceptDecline" type="boolean"/>
+
+<attr id="316" name="zimbraNotifyServerEnabled" type="boolean"/>
+
+<attr id="317" name="zimbraNotifyBindAddress" type="string" max="128"/>
+
+<attr id="318" name="zimbraNotifyBindPort" type="integer"/>
+
+<attr id="319" name="zimbraNotifySSLServerEnabled" type="boolean"/>
+
+<attr id="320" name="zimbraNotifySSLBindAddress" type="string" max="128"/>
+
+<attr id="321" name="zimbraNotifySSLBindPort" type="integer"/>
+
+<attr id="322" name="zimbraCalResAutoDeclineIfBusy" type="boolean"/>
+
+<attr id="323" name="zimbraCalResAutoDeclineRecurring" type="boolean"/>
+
+<attr id="324" name="zimbraCalResLocationDisplayName" type="string"/>
+
+<attr id="325" name="zimbraGroupId" type="id" immutable="1"/>
+
+<attr id="326" name="zimbraCalResSite" type="string"/>
+
+<attr id="327" name="zimbraCalResBuilding" type="string"/>
+
+<attr id="328" name="zimbraCalResFloor" type="string"/>
+
+<attr id="329" name="zimbraCalResRoom" type="string"/>
+
+<attr id="330" name="zimbraCalResCapacity" type="integer"/>
+
+<attr id="331" name="zimbraCalResContactName" type="string"/>
+
+<attr id="332" name="zimbraCalResContactEmail" type="email"/>
+
+<attr id="333" name="zimbraCalResContactPhone" type="string"/>
+
+<attr id="334" name="zimbraMessageIdDedupeCacheSize" type="integer"/>
+
+<attr id="335" name="zimbraFeatureSharingEnabled" type="boolean"/>
+
+<attr id="336" name="zimbraRemoteManagementCommand" type="string" max="1024"/>
+
+<attr id="337" name="zimbraRemoteManagementUser" type="string" max="256"/>
+
+<attr id="338" name="zimbraRemoteManagementPrivateKeyPath" type="string" max="1024"/>
+
+<attr id="339" name="zimbraRemoteManagementPort" type="integer"/>
+
+<attr id="340" name="zimbraMailURL" type="string" max="1024"/>
+
+<attr id="341" name="zimbraPrefCalendarApptReminderWarningTime" type="integer" min="0"/>
+
+<attr id="342" name="zimbraFeatureMailForwardingEnabled" type="boolean"/>
+
+<attr id="343" name="zimbraPrefMailForwardingAddress" type="emailp" max="256"/>
+
+<attr id="345" name="zimbraLocale" type="string"/>
+
+<attr id="346" name="zimbraMailboxLocationBeforeMove" type="string"/>
+
+<attr id="347" name="zimbraFeatureMobileSyncEnabled" type="boolean"/>
 
 </attrs>
