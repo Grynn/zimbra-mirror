@@ -90,7 +90,7 @@ function(enabled) {
 		if (enabled) {
 			this._setImage(this._imageInfo);
 			if (this._textCell != null)
-				this._textCell.className = "";
+				this._textCell.className = "Text";
 		} else {
 			if (this._disabledImageInfo)
 				this._setImage(this._disabledImageInfo);

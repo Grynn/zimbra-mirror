@@ -31,17 +31,17 @@
 	@Text@
 }
 
+/* ???  USE? DO PADDING HERE?  */
 .Icon {
-	width:16px; height:16px;
+	@SmallIconSize@
 }
 
-.DisabledText,
-.DwtSelect-disabled .Text {
+.DisabledText {
 	@DisabledText@
 }
 
 .nobreak {
-	@TextNoWrap@
+	@NoWrap@
 }
 
 
@@ -50,40 +50,61 @@
  */
 
 .DwtTabView {
-	width: 100%;
+	@FullWidth@
 	align: left;	
 }
 
-.DwtTabView .Title {
-}
+.DwtTabView .Title {}
+
 
 .DwtTabViewPage {
-	@SkinBodyBg@
-}
-.DwtTabViewPage .TitleBar {
-	@SkinBodyBg@
-}
-.DwtTabViewPage .Title {
-	font-size:12pt;
-	font-weight:bold;
-	padding: 3px;
+	@PageBg@
 }
 
+/* ??? USE? */
+.DwtTabViewPage .TitleBar {
+	@PageBg@
+}
+
+/* ??? USE */
+.DwtTabViewPage .Title {
+	@FontBigger@
+	@TextPadding@
+	font-weight:bold;
+}
+
+
+/* ??? USED?  Seems to be old... */
+.DwtPropertyPage {
+	@PageBg@
+}
+.DwtPropertyPage .TitleBar {
+	@PageHeaderBg@
+}
+.DwtPropertyPage .Title {
+	@FontBigger@
+}
+
+/* Actual bar of tabs, not including contents */
 .DwtTabBar, 
 .DwtTabTable {
-	@SkinBodyBg@
+	@PageHeaderBg@
 }
 
-.DwtTabButton {
-	cursor:pointer;
+
+/* Single tab button */
+.DwtTabButton,
+.DwtTabButton-active {
+	@ActiveCursor@
 }
 
-.DwtTabButton-active {}
+.DwtTabButton-inactive {
+	@InactiveCursor@
+}
 
-.DwtTabButton-inactive {}
 
-
-
+/* Graphics that make up the tabs */
+/* ??? 	THIS IS SKIN STUFF!!! GET THIS THE HECK OUT OF HERE! */
 .DwtTabButtonTL {}
 .DwtTabButtonTM {}
 .DwtTabButtonTR {}
@@ -98,16 +119,6 @@
 
 
 
-.DwtPropertyPage {
-	background-color:#EEEEEE;
-}
-.DwtPropertyPage .TitleBar {
-	background-color: #C6C5D7;
-}
-.DwtPropertyPage .Title {
-	font: bold 12pt Arial, Helvetica, sans-serif;
-	padding: 3px;
-}
 
 /*
 * Tool tips
@@ -119,85 +130,92 @@
 .DwtStickyToolTipClose-activated {}
 
 .DwtStickyToolTipTitle {
-	font-weight: bold;
+	@FontBig@
+	@InactiveCursor@
 	padding-bottom: 2px;
-	cursor: default;
 }
 
 .hover_frame_table { 
-	border-collapse:collapse;
-	padding:0;
+	@CompactTable@
 }
 
 .hover_contents {}
 .hover_tip_top 		{	position: absolute;	}
 .hover_tip_bottom 	{	position: relative;	}
 
+
+
 /*
 * Sashes
 */
 
 .DwtSash, .AppSash-horiz, .AppSash-vert { 
-	background-color: #666666;
+	@SashBg@
 }
 
-.AppSash-horiz { width: 5px; }
-.AppSash-vert { 
-	height: 5px;
-	width: 100%;
-	font-size: 5px; /* WEIRD IE QUIRK */
+.AppSash-horiz { 
+	@HSashSize@
 }
+.AppSash-vert { 
+	@VSashSize@
+}
+
+
 
 /*
 * Trees
 */
 
-.DwtTree, .DwtTreeItem {
-	background-color: transparent;
-	cursor: default;
+.DwtTree {
+	@TreeBg@	/* ??? IS THIS THE ENTIRE THING? was TreeItem	*/
 }
 
-.DwtTreeItem, .DwtTreeItem-actioned {
-	padding-top:1px;
-	padding-left:2px;
-	padding-right:2px;
-	cursor: default;
+/* container (div) for each item in the tree */
+.DwtTreeItem {
+	@TreeItem@
 }
 
+/* text style for a normal tree item */
 .DwtTreeItem-Text {
-	padding-top:1px;
-	padding-left:2px;
-	padding-right:2px;
+	@TreeItemText@
+	@TreeItemSpacing@
 }
 
+/* text style for a selected tree item */
 .DwtTreeItem-selected {
-	padding-left:2px;
-	padding-right:2px;
-	background-color:@_InsetDarkColor_@;
-	cursor: default;
+	@SelectedBg@
+	@SelectedText@
+	@TreeItemSpacing@
 }
 
+/* text style for a right-clicked tree item */
 .DwtTreeItem-actioned {
-	background-color: #D6EBEB;
+	@RightClickBg@
+	@RightClickText@
+	@TreeItemSpacing@
 }
 
+/* text style for a tree item when dragged over */
 .DwtTreeItem-DragOver {
-	background-color: #339999;
+	@DropBg@
+	@DropText@
+	@TreeItemSpacing@
 }
 
 .DwtTreeItem .imageCell {
-	padding-right:4px;
-	white-space: nowrap;
+	@ImagePadding@
+	white-space: nowrap;	/* ??? */
 }
 
 .DwtTreeItemChildDiv {
-	padding-left:16px;
+	padding-left:@SmallIconWidth@;
 }
 
 .DwtTreeItemLevel1ChildDiv {
-	padding-left:16px;
-	padding-top:2px;
+	padding-left:@SmallIconWidth@;
+	padding-top:2px;		/* ??? */
 }
+
 
 /*
 * Buttons
@@ -205,42 +223,52 @@
 * The background color is set by a modifier.
 * TBButton - toolbar button, very light border (so we can show a border on mouseover)
 * States for buttons:
-*	-activated	-- mouseover state
-*	-triggered	-- mousedown state
+*
+*	-activated	-- mouseover state	(a.k.a. "hover")
+*	-triggered	-- mousedown state	(a.k.a. "clicked")
+*	-toggled	-- permanently down (currently same appearance as -triggered)
+*
 */
 		
-.DwtButton 						{	@Button@				@ButtonMinWidth@	}
-.DwtButton .Text 				{	@ButtonText@	}
-.DwtButton-activated 			{	@Button-activated@		@ButtonMinWidth@	}
-.DwtButton-activated .Text		{	@ButtonText-activated@	}
-.DwtButton-triggered			{	@Button-triggered@		@ButtonMinWidth@	}	
-.DwtButton-triggered .Text		{	@ButtonText-triggered@	}	
-.DwtButton-toggled				{	@Button-toggled@		@ButtonMinWidth@	}	
-.DwtButton-toggled .Text		{	@ButtonText-toggled@		}	
-.DwtButton-disabled				{	@Button-disabled@		@ButtonMinWidth@	}	
-.DwtButton-disabled .Text		{	@ButtonText-disabled@		}	
+.DwtButton 						{	@NormalButton@					}
+.DwtButton-activated 			{	@NormalButton-hover@			}
+.DwtButton-triggered			{	@NormalButton-clicked@			}	
+.DwtButton-toggled				{	@NormalButton-clicked@			}	
+.DwtButton-disabled				{	@NormalButton-disabled@			}	
+.DwtButton-active				{	@NormalButton-default@			}	
 
-.TBButton 						{	@ToolbarButton@		}
-.TBButton td 					{	@ToolbarButtonText@	}
-.TBButton-activated 			{	@ToolbarButton-activated@	}
-.TBButton-activated td			{	@ToolbarButtonText-activated@	}
-.TBButton-triggered				{	@ToolbarButton-triggered@	}	
-.TBButton-triggered td			{	@ToolbarButtonText-triggered@	}	
-.TBButton-toggled				{	@ToolbarButton-toggled@		}	
-.TBButton-toggled td			{	@ToolbarButtonText-toggled@		}	
+.DwtButton .Text 				{	@NormalButtonText@				}
+.DwtButton-activated .Text		{	@NormalButtonText-hover@		}
+.DwtButton-triggered .Text		{	@NormalButtonText-clicked@		}	
+.DwtButton-toggled .Text		{	@NormalButtonText-clicked@		}	
+.DwtButton-disabled .Text		{	@NormalButtonText-disabled@		}	
+.DwtButton-active .Text			{	@NormalButtonText@				}	
+
+.TBButton 						{	@ToolbarButton@					}
+.TBButton-activated 			{	@ToolbarButton-hover@			}
+.TBButton-triggered				{	@ToolbarButton-clicked@			}	
+.TBButton-toggled				{	@ToolbarButton-clicked@			}	
 .TBButton-disabled				{	@ToolbarButton-disabled@		}	
-.TBButton-disabled td			{	@ToolbarButtonText-disabled@		}	
+
+.TBButton .Text 				{	@ToolbarButtonText@				}
+.TBButton-activated .Text		{	@ToolbarButtonText-hover@		}
+.TBButton-triggered .Text		{	@ToolbarButtonText-clicked@		}	
+.TBButton-toggled .Text			{	@ToolbarButtonText-clicked@		}	
+.TBButton-disabled .Text		{	@ToolbarButtonText-disabled@	}	
 		
-.InsetTBButton 					{	@InsetButton@		}
-.InsetTBButton td 				{	@InsetButtonText@	}
-.InsetTBButton-activated 		{	@InsetButton-activated@	}
-.InsetTBButton-activated td		{	@InsetButtonText-activated@	}
-.InsetTBButton-triggered		{	@InsetButton-triggered@	}	
-.InsetTBButton-triggered td		{	@InsetButtonText-triggered@	}	
-.InsetTBButton-toggled			{	@InsetButton-toggled@		}	
-.InsetTBButton-toggled td		{	@InsetButtonText-toggled@		}	
-.InsetTBButton-disabled			{	@InsetButton-disabled@		}	
-.InsetTBButton-disabled td		{	@InsetButtonText-disabled@		}	
+
+.InsetTBButton 					{	@InsetButton@					}
+.InsetTBButton-activated 		{	@InsetButton-hover@				}
+.InsetTBButton-triggered		{	@InsetButton-clicked@			}	
+.InsetTBButton-toggled			{	@InsetButton-clicked@			}	
+.InsetTBButton-disabled			{	@InsetButton-disabled@			}	
+
+/* ??? SHOTGUN -- CHANGE TO .Text */
+.InsetTBButton .Text 			{	@InsetButtonText@				}
+.InsetTBButton-activated .Text	{	@InsetButtonText-hover@			}
+.InsetTBButton-triggered .Text	{	@InsetButtonText-clicked@		}	
+.InsetTBButton-toggled .Text	{	@InsetButtonText-clicked@		}	
+.InsetTBButton-disabled .Text	{	@InsetButtonText-disabled@		}	
 
 
 
@@ -249,41 +277,31 @@
  *  DwtSelect 
  */
 
-/* Default is that the DwtSelect button looks just like the normal button */
-.DwtSelect 						{	@Button@		}
-.DwtSelect .Text 				{	@ButtonText@	}
-.DwtSelect-activated 			{	@Button-activated@	}
-.DwtSelect-activated .Text		{	@ButtonText-activated@	}
-.DwtSelect-triggered			{	@Button-triggered@	}	
-.DwtSelect-triggered .Text		{	@ButtonText-triggered@	}	
-.DwtSelect-toggled				{	@Button-toggled@		}	
-.DwtSelect-toggled .Text		{	@ButtonText-toggled@		}	
-.DwtSelect-disabled				{	@Button-disabled@		}	
-.DwtSelect-disabled .Text		{	@ButtonText-disabled@		}	
+.DwtSelect 						{	@Select@						}
+.DwtSelect-activated 			{	@Select-hover@		padding:0px;			}
+.DwtSelect-triggered			{	@Select-clicked@				}	
+.DwtSelect-toggled				{	@Select-clicked@				}	
+.DwtSelect-disabled				{	@Select-disabled@				}	
+
+.DwtSelect .Text 				{	@SelectText@					}
+.DwtSelect-activated .Text		{	@SelectText-hover@				}
+.DwtSelect-triggered .Text		{	@SelectText-clicked@			}	
+.DwtSelect-toggled .Text		{	@SelectText-clicked@			}	
+.DwtSelect-disabled .Text		{	@SelectText-disabled@			}	
 
 
+/* ??? SHOTGUN */
 .DwtSelect table,
 .DwtSelect-activated table,
 .DwtSelect-triggered table,
 .DwtSelect-disabled table {
 	@FullWidth@
-	@TableCompact@
+	@CompactTable@
 	@TableFixed@
 }
 
-.DwtSelect .Text,
-.DwtSelect-activated .Text,
-.DwtSelect-triggered .Text,
-.DwtSelect-disabled .Text {
-	text-align:left;
-	padding: 2px;
-	padding-left:4px;
-	overflow:hidden;
-}
-
-
 .dropDownCell { 
-	width: 16px;
+	width: @SmallIconWidth@;
 }
 
 
@@ -292,9 +310,9 @@
 * Menus
 */
 
+/* ??? USE OF DIFFERENT KINDS OF MENUS? */
 .DwtMenu, .ActionMenu, .DwtSelectMenu {
-	@Menu@
-	@MenuMinWidth@
+	@MenuBg@
 }
 
 
@@ -303,11 +321,11 @@
 }
 
 .DwtMenuItem-selected, .DwtMenuItem-IconArea-selected, .DwtMenuItem-CheckedArea-selected {
-	@MenuItem-selected@
+	@MenuItem-hover@
 }
 
 .DwtMenuItem-triggered, .DwtMenuItem-IconArea-triggered, .DwtMenuItem-CheckedArea-triggered {
-	@MenuItem-triggered@
+	@MenuItem-clicked@
 }
 
 .DwtMenuItem .Text {
@@ -315,12 +333,12 @@
 	@MenuItemTextPadding@
 }
 .DwtMenuItem-selected .Text {
-	@MenuItemText-selected@
+	@MenuItemText-hover@
 	@MenuItemTextPadding@
 }
 
 .DwtMenuItem-triggered .Text {
-	@MenuItemText-triggered@
+	@MenuItemText-clicked@
 	@MenuItemTextPadding@
 }
 
@@ -335,102 +353,127 @@
 }
 
 .DwtMenuItem-Separator {
-	background-color: #999999;
-	padding-left: 5px;
-	white-space:noWrap;
-	width:100%;
-	height:1px;
+	@MenuItemSeparator@
+}
+
+
+.DwtMenuCascadeCell {
+	@LeftSeparator@
 }
 
 
 
+
+/* ??? */
 .DwtSelectMenu table{
 	@FullWidth@
 }
 
 
 
-/*
+/* ??? USE */
+
 .DwtSelectMenu .DwtMenuItem {
-	border: 1px solid white;
-	background-color: white;
-	cursor: default;
+	@MenuItem@
 }
 
 .DwtSelectMenu .DwtMenuItem-text {
+	padding-left:@BoxPaddingSize@
 	text-align:left;
-	padding-left:4px;
 }
 
 .DwtSelectMenu .DwtMenuItem-leftFill {
-	width:19px;
+	width:19px;		/* ??? SIZE? */
 }
 
 
 .DwtSelectMenu .DwtMenuItem-selected .DwtMenuItem-text{
-	cursor: default;
+	@ActiveCursor@
 }
-*/
+
+
+
 
 /*
 * List views
 */
 
-/* Common styles */
+/* Entire LV control */
 .DwtListView {
-	width: 100%;
+	@ListBg@
+	@ListBorder@
+	@FullWidth@
 }
 
+/* Data rows container, not including header */
 .DwtListView-Rows {
+	@FullSize@
 	position: relative;
-	width: 100%;
-	height: 100%;
 	overflow: auto;
 }
 
+/* ??? SHOTGUN */
 .DwtListView-Rows td {
 	@Text@
-	padding: 2px;
+	padding-left:@TextPaddingSize@;
+	padding-top:2px;
+	padding-right:2px;
 }
 
+/* ??? USE */
 .DwtListView-Sash {
 	width: 1px; 
 	height: 100%;
 	vertical-align: top;
 }
 
+/* Container for the list header */
 .DwtListView-ColHeader {
 	@ListHeaderBg@
 	position: relative;
-	height: 24px;
 }
 
+/* Header for one column of the list */
 .DwtListView-Column {
-	padding: 0 0 0 2;
-	white-space: nowrap;
-	overflow: hidden;
+	@ListColHeaderBg@
+	padding-left:@TextPaddingSize@;
+	@NoWrap@
 	text-overflow: ellipsis;
 }
 
+/* ??? SHOTGUN */
 .DwtListView-Column td {
-	@Text@
+	@PageHeaderText@
 }
 
+/* Mouse-over look for column header */
+.DwtListView-ColumnHover {
+	@ListColHeaderHoverBg@
+}
+
+/* ??? SHOTGUN */
+.DwtListView-ColumnHover TD {
+	@PageHeaderText@
+}
+
+/* ??? USE */
 .DwtListView-ColumnEmpty {
+
 }
 
+/* Vertical divider btwn 2 columns, allows column to be resized */
+/* ??? COLORS AND SIZE ARE FIXED IN THE CODE -- USE AN IMAGE? */
 .DwtListView-ColumnSash {
-	width: 2px;
+	width: 2px;					/* ??? SIZE */
 	background-color: #000000;
 }
 
-.DwtListView .DwtListView-ColumnHover TD {
-	color:#FFC600;
-}
 
+/* ??? USE */
 .DwtListView-ColumnActive {
 
 }
+
 
 /*
  *  DwtAddRemove
@@ -438,20 +481,22 @@
 
 .DwtAddRemove {}
 .DwtAddRemoveListView {
-	border: solid #777777 1px;
+	@ListBg@
+	@ListBorder@
 }
 
 .DwtAddRemoveListViewRow {
-	padding-left: .25em;
+	@TextPadding@
 }
 
 .DwtAddRemove-outerTable { 
-  border:0px;
-  border-spacing:0px;
+	border:0px;
+	border-spacing:0px;
 }
 
+/* ??? SHOTGUN */
 .DwtAddRemove-outerTable TD{ 
-  padding:4px;
+	@TextPadding@
 }
 
 
@@ -461,304 +506,350 @@
  * Dialogs
  */
 
-.DwtDialog { background-color: transparent; }
-
-.DwtDialog .Title {
-	background: #2557AD;
-	color: white;
-	font-size: 10pt;
-	font-weight: bold;
-	padding: 5px 0 3px 10px;
+/* Container for the entire dialog, including chrome and shadow */
+.DwtDialog { 
+	background-color: transparent; 
 }
 
-.DwtDialog .MainPanel {
-	background-color: #C6C5D7;
-	border: 2px solid #2557AD;
-	padding: 10px;
+/* Outer table for the entire dialog, including chrome */
+.DialogTable			{	
+	@CompactTable@
 }
 
-.DwtDialog textarea { width: 100%; }
+.DialogBg {
+	@DialogBg@
+}
+
+/* Container for the entire titlebar of the dialog */
+.DialogTitle {
+	@CompactTable@
+	cursor:move;
+}
+
+/* Text label in dialog toolbar */
+.DialogTitleText {
+	@DialogTitleText@
+	width:auto;
+	valign:top;
+	padding-bottom:5px;
+}
+
+/* Image cell in dialog toolbar */
+.DialogTitleImage { }
+
+
 .DwtDialog .Label { 
-
+	@Label@
 }
+
 .DwtDialog .Field { 
 	width: 290px; 
 }
 
-/* MERGE WITH ZmFieldLabelLeft ? */
+/* ??? SHOTGUN */
+.DwtDialog textarea { 
+	width: 100%; 
+}
+
+/* Container for the Body of the dialog, inside chrome, including bottom buttons */
+.DialogBody 			{
+
+}
+
+/* ??? SHOTGUN */
+.DialogBody td {
+	@Label@
+}
+
+
+
+
+
+/* MERGE WITH ZmFieldLabelRight ? */
 .DwtPropertySheet .Label {
-	@TextLabel@
+	@Label@
 	text-align: right;
 }
-
-.DialogBody 			{
-	background-color:@_ToolbarColor_@;
-}
-
-.DialogBody td {
-	@TextLabel@
-}
-
-.DialogTable			{	
-	@TableCompact@
-}
-
-.DialogToolbar 			{	}
-
-.DialogTitle {
-	@TableCompact@
-	background-color:#3d3d3d; 
-	cursor:move;
-}
-
-.DialogTitleCell {
-	color:white;
-	width:auto;
-	font-weight:bold;
-}
-
-.DialogTitle .Text {
-	@FontBig@
-	font-weight:bold;
-	cursor:move;
-	padding-left:2px;
-	padding-right:2px;
-	position:relative;
-	top:-3px;
-}
-
-
-
 
 
 
 /* 
  * Message dialog 
  */
-.DwtMsgDialog { width: 400px; }
-.DwtMsgArea { padding-left: 12px; }
+
+/* Outer container for the message dialog */
+.DwtMsgDialog { 
+	width: 400px; 
+}
+
+/* Text area for the message dialog, including icon */
+.DwtMsgArea { 
+	@BoxPadding@
+}
+
+
+/*
+ *  ??? USE
+ */
+.DwtConfirmDialogQuestion {
+	@FontBigger@
+	@BoxMargin@
+}
 
 
 
 /*
- *  DwtAlert
+ *  DwtAlert -- inline alert panel, used in admin   ??? WHERE?
  */
 
-.DwtAlert {
-	border-style: solid;
-	border-width: 1px;
-	margin: .5em 2em;
-	padding: .25em;
+/* Outer container for the alert, mixed in with DwtAlertInfo, DwtAlertWarn, DwtAlertCrit for final appearance */
+.DwtAlert {					/* ??? SKIN ME */
+	@NoticeBorder@
+	@BoxSpacing@	
+	/*	margin: .5em 2em;
+		padding: .25em;	*/
 }
 
-.DwtAlertBare {
+/* ??? USE? */
+.DwtAlertBare {				/* ??? SKIN ME */
 	margin: 0px;
 	padding: 0px;
 	border-style: none;
 	background-color: transparent;
 }
 
+/* Alert appearance for informative message, nothing is wrong */
 .DwtAlertInfo {
-	border-color: #99DD99; /* dark green */
-	background-color: #CCFFCC; /* light green */
+	@InfoBg@
+	@NoticeText@
 } 
 
+/* Alert appearance for warning-level message */
 .DwtAlertWarn {
-	border-color: #DDDD99; /* dark yellow */
-	background-color: #FFFFCC; /* light yellow */
+	@WarningBg@
+	@NoticeText@
 }
 
+/* Alert appearance for critical message */
 .DwtAlertCrit {
-	border-color: #DD9999; /* dark red */
-	background-color: #FFCCCC; /* light red */
+	@CriticalBg@
+	@NoticeText@
 }
 
+/* Spacing around the icon for a DwtAlert */
 .DwtAlertIcon {
-	margin: 0.25em;
-	margin-right: 0.5em;
+	@ImagePadding@
+	/* 	??? WAS:   margin: 0.25em; margin-right: 0.5em; */
 }
 
+/* Title of the alert */
+/* ??? USE? */
 .DwtAlertTitle {
-	font-size: 1.1em;
-	font-weight: bold;
+	@FontBigger@
 }
 
+/* Container for the actual text of the alert */
 .DwtAlertContent {}
 
+
+/* ??? USE? */
 .NoResults {
-	font-size: 10pt;
+	font-size: 10pt;	/* ??? SIZE */
+	@NoWrap@
 	text-align: center;
-	white-space: nowrap;
 }
 
-/* 
- * DwtColorPicker 
- */
-.DwtColorPicker { border: 1px solid #999999; }
-.DwtColorPicker table td img { border: 1px none black; }
 
+
+/* 
+ * DwtColorPicker -- shows a palette of color boxes to choose from
+ */
+
+/* Container for the entire color picker */
+.DwtColorPicker { 
+	border: 1px solid #999999; 		/* ??? SKIN ME */
+}
+
+/* Single image in the picker */
+/* ??? USED? */
+.DwtColorPicker table td img { 
+	border: 1px none black; 
+}
+
+
+/* ??? USED? */
 .DwtResizeGripper {
-	/* background-image:url(/zimbra/img/hiRes/dwt/ResizeGripper.gif); */
+	/* background-image:url(/zimbra/img/loRes/dwt/ResizeGripper.gif); */
 	border: none;
 	width:16px;
 	height:16px;
 }
 
+
+
+
 /* 
- * Calendar
+ * Mini-calendar as shown in the tree and in date widgets
  */
 
+/* Outer container for the entire calendar */
 .DwtCalendar {
-	@SkinInsetBg@
+	@MiniCalBg@
+	@InactiveCursor@
 }
 
+/* Container of the calendar titlebar (arrows and month label, not DOW labels) */
 .DwtCalendarTitlebar {
-	@SkinInsetBgDark@
-	@SkinInsetBgDarkColor@
+	@MiniCalHeaderBg@
 }
 
+/* Arrow buttons in the calendar titlebar in various states */
 .DwtCalendarButton {
-	@InsetButton@
-	border:1px solid @_InsetDarkColor_@
-	text-align:center;
-	width:15px;
-	padding:3px;
+	@MiniCalArrowButton@
 }	
 
 .DwtCalendarButton-activated {
-	@InsetButton-activated@
-	text-align:center;
-	width:15px;
-	padding:3px;
+	@MiniCalArrowButton-hover@
 }
 
 .DwtCalendarButton-triggered {
-	@InsetButton-triggered@
-	text-align:center;
-	width:15px;
-	padding:3px;
+	@MiniCalArrowButton-clicked@
 }
 
-.DwtCalendarDay {
-	@ToolbarButton@
-}
-
-.DwtCalendarDay-activated {
-	@ToolbarButton-activated@
-}
-
-.DwtCalendarDay-triggered {
-	@ToolbarButton-triggered@
-}
-
-.DwtCalendarDay-selected {
-	@ToolbarButton-triggered@
-}
-
-
-.DwtCalendarDay-today {
-	color:#790000;
-}
-
+/* Name of the month in the calendar titlebar */
 .DwtCalendarTitleCell {
-	width: 100%;
+	@FullWidth@
+	@MiniCalHeaderText@
+	@ActiveCursor@
 }
 
+/* Label for the days of the week in calendar titlebar */
 .DwtCalendarDow {
-	border-bottom: 1px solid @_SeparatorColor_@;
-	text-align:center;
+	@MiniCalDOWText@
 } 
 
 
-/*
+
+/* Actual day of the month in the calendar in various states */
+.DwtCalendarDay {
+	@MiniCalDay@
+}
+
 .DwtCalendarDay-activated {
-	background-color: white;
-	border: 1px outset black;
+	@MiniCalDay-hover@
 }
 
 .DwtCalendarDay-triggered {
-	background-color: #FFCC00;
-	border: 1px inset black;
-}
-*/
-
-
-.DwtCalendarDay-grey {
-	color: #666666;
+	@MiniCalDay-clicked@
 }
 
+.DwtCalendarDay-selected {
+	@SelectedBg@
+	@SelectedBorder@
+}
+
+.DwtCalendarDay-today {
+	@MiniCalDay-today@
+}
+
+/* hilited because it has appointments */
 .DwtCalendarDay-hilited {
-	font-weight: bold;
+	@MiniCalDay-hilited@
 }
+
+/* gray because it's not in the current month */
+.DwtCalendarDay-grey {
+	@MiniCalDay-gray@
+}
+
+
 
 /*
- * DwtInputField
+ * DwtInputField - whiz-bang input field that Ross cooked up...
  */
 .DwtInputField input {
+	@InputField@
 }
 
 .DwtInputField-Error input {
-	@InputError@
+	@InputField-error@
 }
 
+
 /*
- *  DwtWizardDialog
+ *  DwtWizardDialog - multi-step "wizard" dialog for creating new things
  */
 
 .DwtWizardDialogPageDiv {
-	background-color:#EEEEEE;
+	@PageBg@
 	position: static;
 }
 
 .DwtStepLabelActive {
-	font-size: 12pt;
-	font-weight: bold;
-	color: black;	
-	padding-right: 2px;
-	padding-left: 2px;	
+	@FontBigger@
+	@Text@
+	@TextPadding@
 }
 
 .DwtStepLabelInactive {
-	font-size: 14pt;
-	font-weight: normal;
-	color: #999999;	
-	padding-right: 2px;
-	padding-left: 2px;	
+	@FontBigger@
+	@DisabledText@
+	@TextPadding@
 }
 
-/* <DwtPropertyEditor> */
+
+/* 
+ * DwtPropertyEditor -- ??? editor for Zimlets 
+ */
+
+/* ??? SHOTGUNNING EVERYWHERE... */
 
 .DwtPropertyEditor table {
-  border-collapse: collapse;
-/*  border: 1px solid #777; background-color: #f5f5f5; color: #000; */
+	border-collapse: collapse;
 }
-.DwtPropertyEditor * { font-size: 11px !important; font-family: Tahoma,Verdana,sans-serif !important; }
+.DwtPropertyEditor * { 
+	@FontDefault@
+	@FontNormal@
+}
 .DwtPropertyEditor table td {
-/*
-  border-bottom: 1px solid #999;
-  border-top: 1px solid #999;
-*/
-  padding: 1px 5px;
+  padding: 1px @BoxPaddingSize@;
 }
-.DwtPropertyEditor table td.label {
-/*
-  border-right: 1px dotted #ddd;
-*/
-  cursor: default; text-align: right;
+
+/* ??? Wrong name -- switch to ZmFieldLabelRight */
+.DwtPropertyEditor table td.label {		
+  cursor: default; 
+  text-align: right;
   font-weight: bold;
 }
-.DwtPropertyEditor table td.label:after { content: ":"; }
-.DwtPropertyEditor table td.field { cursor: text; }
+.DwtPropertyEditor table td.label:after { 
+	content: ":"; 
+}
 
-.DwtPropertyEditor table tr.expander-collapsed td { cursor: pointer; background-color: #e5e5e5; }
+/* ??? Wrong name -- switch to ZmInput */
+.DwtPropertyEditor table td.field { 
+	@InputField@
+}
+
+.DwtPropertyEditor table tr.readonly td.field { 
+	@InputField-disabled@
+}
+
+
+.DwtPropertyEditor table tr.expander-collapsed td,
+.DwtPropertyEditor table tr.expander-expanded td { 
+	@PageBg@
+	cursor: pointer; 
+}
+
+/* ??? USE? NO IMAGE? */
 .DwtPropertyEditor table tr.expander-collapsed td div {
-  background: url("/zimbra/img/hiRes/dwt/Expand.gif") no-repeat 100% 50%;
+  background: url("/zimbra/img/loRes/dwt/Expand.gif") no-repeat 100% 50%;
   padding-right: 15px;
 }
 
-.DwtPropertyEditor table tr.expander-expanded td { cursor: pointer; background-color: #e5e5e5; }
+/* ??? USE? NO IMAGE? */
 .DwtPropertyEditor table tr.expander-expanded td div {
-  background: url("/zimbra/img/hiRes/dwt/Collapse.gif") no-repeat 100% 50%;
+  background: url("/zimbra/img/loRes/dwt/Collapse.gif") no-repeat 100% 50%;
   padding-right: 15px;
 }
 
@@ -772,42 +863,48 @@
 .DwtPropertyEditor table tr.level-8 td.label { padding-left: 125px; }
 .DwtPropertyEditor table tr.level-9 td.label { padding-left: 140px; }
 
-.DwtPropertyEditor table tr.readonly td.field { color: #888; cursor: default; }
-.DwtPropertyEditor table tr.dirty td { color: #42c; }
-.DwtPropertyEditor table tr.invisible { display: none; }
-
-/*
-.DwtPropertyEditor table tr.number td.field,
-.DwtPropertyEditor table tr.integer td.field,
-.DwtPropertyEditor input.number,
-.DwtPropertyEditor input.integer { text-align: right; }
-*/
+/* ??? USE?   COLOR IS BLUE...  */
+.DwtPropertyEditor table tr.dirty td { 
+	color: #42c; 
+}
+.DwtPropertyEditor table tr.invisible { 
+	display: none; 
+}
 
 .DwtPropertyEditor input.DwtPropertyEditor-input {
-  position: absolute;
-  border: 2px solid #000;
-  padding: 0 4px;
+	position: absolute;
+	@InputField@
 }
-.DwtPropertyEditor input.DwtPropertyEditor-input-error { background-color: #fca; border-color: red; }
+.DwtPropertyEditor input.DwtPropertyEditor-input-error { 
+	@InputField-error@
+}
 
 .DwtPropertyEditor .DwtPropertyEditor-ErrorMsg {
-  position: absolute;
-  border: 1px solid red;
-  padding: 5px;
-  font-size: 90%;
-  font-weight: bold;
-  background-color: #ffffcd;
-  color: red;
+	position: absolute;
+	@WarningBg@
+	@NoticeBorder@
+	@NoticeText@
+	@TextPadding@
+	@FontSmaller@
+	@FontImportant@
+	font-weight: bold;
 }
 
-.DwtPropertyEditor span.DwtPropertyEditor-required { font-size: 80%; color: red; }
+.DwtPropertyEditor span.DwtPropertyEditor-required { 
+	@FontSmaller@
+	@FontImportant@
+}
 
-/* </DwtPropertyEditor> */
+
+
 
 /*
  *	Border stuff
  */ 
 
+
+/* "card" and "card_sel" border styles */
+/* ??? DEPRECATING AS THESE ARE NOT BEING USED
 .card_border_table {
 	border-collapse:collapse;
 	padding:0;
@@ -832,6 +929,10 @@
 .card_spacer_B		{ width:100%; 	height:10;		overflow:hidden;	}
 .card_spacer_BR		{ width:10; 	height:10;		overflow:hidden;	}
 
+*/
+
+
+
 /*
  * XForms things
  *
@@ -842,19 +943,17 @@
 
 /* RENAME ME */
 .redAsteric {
-	color: rgb(250, 0, 0);
+	@FontImportant@
 }
 
 
 
 /* widgets */
 .xform_table {
-	border-collapse:collapse;
-	padding:0;
+	@CompactTable@
 }
 .xform_composite_table {
-	border-collapse:collapse;
-	padding:0;
+	@CompactTable@
 }
 
 .xform_field_container,
@@ -876,8 +975,7 @@
 }
 
 .xform_output {
-	padding-left:2px;
-	padding-right:2px;
+	@TextPadding@
 }
 
 .xform_select1 {
@@ -891,36 +989,30 @@
 
 .xform_label,
 .xform_label_left {
-  color:#666666;
-  padding-left:4px;
-  padding-right:2px;
-  white-space:nowrap;
-  text-align:right;
+	@Label@
+	@TextPadding@
+	text-align:right;
 }
 
 .xform_label_left {
-  padding-left:0;
-  text-align:left;
+	@Label@
+	@TextPadding@
+	text-align:left;
 }
 
 
 .xform_separator {
-  width:100%;
-  height:1;
-  border-bottom:1px solid black;
-  font-size:1px;
+	width:100%;
+	height:1;
+	@BottomSeparator@
 }
 
 .xform_button {
-	/* background-image:url(/zimbra/img/hiRes/dwt/ButtonSmallUp__H.gif); */
-	border:1px outset #999999;	
-	white-space:nowrap;
+	@NormalButton@
 }
 
 .xform_button_default {
-	/* background-image:url(/zimbra/img/hiRes/dwt/ButtonSmallUp__H.gif); */
-	border:2px outset #999999;	
-	white-space:nowrap;
+	@NormalButton-default@
 }
 
 
@@ -929,32 +1021,26 @@
 
 .xform_button_grid_small {}
 .xform_button_grid_small_table {
-	border-collapse:collapse;
-	padding:0;
+	@CompactTable@
 }
 .xform_button_grid_small_table td {
 	padding:0;
 }
 
 .xform_button_grid_small_button {
-	cursor:pointer;
-	width:12px;
+	width:12px;				/* ??? SIZE */
 	height:12px;
 	padding:3px;
-	background-color:white;
-	border:1px outset gray;
 	margin:1px;
-	text-align:center;
+	@NormalButton@	
+	
 }
 .xform_button_grid_small_button_selected {
-	cursor:pointer;
-	width:12px;
+	width:12px;				/* ??? SIZE */
 	height:12px;
 	padding:3px;
-	background-color:gray;
-	border:1px inset gray;
 	margin:1px;
-	text-align:center;
+	@NormalButton-clicked@	
 }
 
 
@@ -963,68 +1049,52 @@
 
 .xform_button_grid_medium {}
 .xform_button_grid_medium_table {
-	border-collapse:collapse;
-	padding:2;
+	@CompactTable@
 }
 .xform_button_grid_medium_table td {
 	padding:2;
 }
 .xform_button_grid_medium_button {
-	cursor:pointer;
-	white-space:nowrap;
-	overflow:hidden;
 	width:40px;
-	padding:3px;
-	background-color:white;
-	border:1px outset gray;
-	text-align:center;
+	@NormalButton@	
 }
 .xform_button_grid_medium_button_selected {
-	cursor:pointer;
-	white-space:nowrap;
-	overflow:hidden;
 	width:40px;
-	padding:3px;
-	background-color:gray;
-	border:1px inset gray;
-	text-align:center;
+	@NormalButton-clicked@	
 }
 
 
+/* Groupers -- the xforms way of doing fieldSets... */
 .GrouperBorder,
 .RadioGrouperBorder,
 .TopGrouperBorder {
-	border:1px solid #999999;
-	margin-top:5px;
-	margin-bottom:5px;
-
-	padding-top:5px;
-	padding-left:10px;
+	@FieldSet@
+	padding-left:10px;	/* ??? SIZE */
 	padding-right:10px;
 	padding-bottom:10px;
 
 }
 
 .TopGrouperBorder {
-	border:1px dotted #999999;
+	@FieldSet@
 	border-left:none;
 	border-right:none;
 	border-bottom:none;
 	margin-top:20px;
-	padding-bottom:0px;
 	margin-bottom:0px;
+	padding-bottom:0px;
 }
 
 .GrouperLabel,
 .RadioGrouperLabel {
+	@PageBg@
+	@FontBigger@
+	@TextPadding@
+	@Label@
 	display: inline;
-	font-weight:bold;
-	font-size:13px;
 	position:relative;
-	left:10; 
+	left:10; 					/* ??? SIZE */
 	top:-15;
-	background-color:#EEEEEE;
-	padding-left:2px; padding-right:2px;
 }
 
 .GrouperInset {
@@ -1036,216 +1106,167 @@
 }
 
 .RadioGrouperBorder {
-	border:1px solid #999999;
 	margin-bottom:2px;
 
 }
 
-HTML>BODY .RadioGrouperBorder {
-	border:1px dotted #999999;
-}
-
 .RadioGrouperLabel {
-	margin-left:5px;
-	color:#666666;
-	font-weight:normal;
-	font-size:11px;
+	margin-left:@BoxMarginSize@;
+	@FontNormal@
 }
-
-HTML>BODY .RadioGrouperLabel {
-	margin-left:-5px;
-}
-
-
-/* ??? THE FOLLOWING THREE ENTRIES SHOULD NOT BE IN DWT! */
-
-.quotabar {
-	width: 100px;
-	border: 1px solid white;
-	background-color: white;
-}
-
-.quotaused {
-	height: 6px;
-	@FontMiniscule@	/* WEIRD IE QUIRK */
-}
-
-.percent {
-	white-space: nowrap;
-	font-size: 7pt;
-	color: black;
-}
-
-
 
 
 
 
 /*
- * Xforms -- OSelect FormItem Widget
+ * OSelect FormItem Widget -- similar in funcionality to the DwtSelect, but quick to recalculate itself
  */
 
+/* outer container */
 .oselect, .oselect_check {
-	cursor:pointer;
+	@ActiveCursor@
 }
+
+/* table that acts as the button -- ??? put "select" style on "oselect" container */
 .oselect_table,
 .oselect_check_table {
-	/* background-image:url(/zimbra/img/hiRes/dwt/ButtonUp__H.gif); */
-	border-collapse:collapse;
-	border:1px solid;
-	border-color:#CCCCCC #333333 #333333 #CCCCCC;
-	padding:0;
+	@CompactTable@
+	@Select@
 }
 .oselect_table TD,
 .oselect_check_table TD {
 	padding:0;
 }
+
+.oselect_table_disabled {
+	@CompactTable@
+	@Select-disabled@
+}
+
+
+/* text displaying what's actually selected */
 .oselect_display {
-	white-space:nowrap;
-	overflow:hidden;
-	margin-left:4px;
-	margin-right:4px;
-	height:15;
+	@SelectText@
+	@TextPadding@
 	border-style:none;
-	border-color:#EEEEEE;
-	/* background-image:url(/zimbra/img/hiRes/dwt/ButtonUp__H.gif); */
 }
 
 .oselect_display_disabled {
-    background-color: #EEEEEE;
-	color: #CCCCCC;
-	white-space:nowrap;
-	overflow:hidden;
-	margin-left:4px;
-	margin-right:4px;
+	@SelectText-disabled@
+	@TextPadding@
 }
 
-.oselect_table_disabled {
-	background-color: #EEEEEE;
-	border-collapse:collapse;
-	color: #CCCCCC;
-	border-left:1px solid #EEEEEE;
-	border-top:1px solid #EEEEEE;
-	border-right:1px solid gray;
-	border-bottom:1px solid gray;
-}
 
-.oselect_choice_table_scrolled {
-	border-collapse:collapse;
-	border-left:1px solid #CCCCCC;
-	border-top:0px;
-	border-right:0px;
-	border-bottom:1px solid black;
-}
-
+/* Continer of the menu of items for the oselect widget */
 .oselect_menu {
-	background-color:white;
+	@MenuBg@
 	position:absolute;
 	z-index:10000000000;
-	cursor:pointer;
 }
 .oselect_choice_table,
 .oselect_check_choice_table {
+	@CompactTable@
+	/* ???
 	border-collapse:collapse;
 	border:1px solid;
 	border-color:#CCCCCC black black #CCCCCC;
+	*/
 }
+
+
+/* ??? USE */
+.oselect_choice_table_scrolled {
+	@CompactTable@
+
+	/* ???
+		border-left:1px solid #CCCCCC;
+		border-top:0px;
+		border-right:0px;
+		border-bottom:1px solid black;
+	*/
+}
+
+/* single menu item */
 .oselect_choice {
-	background-color:white;
-	border:1px solid white;
-	padding-left:4px;
-	padding-top:1px;
-	padding-bottom:1px;
-	margin-right:1px;
-	white-space:nowrap;
+	@MenuItem@
+	@MenuItemText@
 }
 .oselect_choice_selected {
-	/* background-image:url(/zimbra/img/hiRes/dwt/ButtonUp__H.gif); */
-	border:1px solid;
-	border-color:#CCCCCC black black #CCCCCC;
-	padding-left:4px;
-	padding-top:1px;
-	padding-bottom:1px;
-	margin-right:1px;
-	white-space:nowrap;
+	@MenuItem-clicked@
+	@MenuItemText-clicked@
 }
 
 .oselect_check_choice {
-	background-color:white;
-	color:black;
-	padding:4px;
-	white-space:nowrap;
+	@MenuItem@
+	@MenuItemText@
+	padding:4px;					/* ??? SIZE */
 }
 .oselect_check_choice_selected {
-	color:black;
-	background-color:FFFF66;
-	padding:4px;
+	@MenuItem-clicked@
+	@MenuItemText-clicked@
+	padding:4px;					/* ??? SIZE */
 }
 
-.xform_error { color: red }
-
-.DwtConfirmDialogQuestion {
-	font-size: 1.2em;
-	margin: .25em;
-	margin-bottom: 0.50em;
+.xform_error { 
+	@FontError@
 }
 
-.DwtMenuCascadeCell {
-	border-left: solid gray 1px;
-}
+
 
 /*
- * DwtChooser
+ * DwtChooser -- pair of list viewers with buttons to add from one to the other
  */
 
 .DwtChooser {
 	width: 100%;
 }
 
-.DwtChooser-Active {
-	border: 1px solid #000000;
-}
 
+/* ??? NECESSARY ? */
 .DwtChooserListView {
-	border: 1px solid #000000;
-	margin: 5 5 5 5;
+	@ListBg@
+	@ListBorder@
+	@BoxMargin@
 }
 
 
 
 
 /*
- * DwtShellBusyDialog
+ * DwtShellBusyDialog - dialog that comes up when the server is taking a long time to respond
  */
 
 .DwtShellBusyDialog table.DialogContent {
-	width: 300px;
+	width: 300px;			/* ??? SIZE */
 	height: 75px;
 }
 
 .DwtShellBusyDialog td.WaitIcon {
-	background-image:url(/zimbra/img/animated/wait_64.gif);
+	background-image:url(@SkinAnimatedImgDir@/wait_64.gif);
 	width:64px;
 	height:64px;
 }
 
 .DwtWait16Icon {
-	background-image:url(/zimbra/img/animated/wait_16.gif);
+	background-image:url(@SkinAnimatedImgDir@/wait_16.gif);
 	width:16px;
 	height:16px;
 }
 
 .DwtWait32Icon {
-	background-image:url(/zimbra/img/animated/wait_32.gif);
+	background-image:url(@SkinAnimatedImgDir@/wait_32.gif);
 	width:32px;
 	height:32px;
 }
 
 .DwtShellBusyDialog table td.MsgText {
 	@FontDefault@
-	padding:5px;
+	@BoxPadding@
 	vertical-align:top;
 }
+
+
+
 
 /* DwtGridSizePicker */
 

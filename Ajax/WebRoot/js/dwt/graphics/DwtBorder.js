@@ -113,6 +113,8 @@ DwtBorder.registerBorder(
 		height:2
 	}
 );	
+
+/* MOW: 03/29/06:  DEPRECATING AS THESE ARE NOT BEING USED... 
 	
 DwtBorder.registerBorder(
 	"card",	
@@ -165,180 +167,66 @@ DwtBorder.registerBorder(
 	
 	}
 );
+*/
 
-var dialogPieces = {
-	start:AjxBuffer.concat(
-				 "<table class='DialogTable' cellpadding='0' Xborder=1>",
-					// top edge
-					"<tr><td class='border_outset_c'><div class='ImgDialogOutset_TL'></div></td>",
-						"<td colspan=3 class='ImgDialogOutset_T__H'></td>",
-						"<td class='border_outset_c'><div class='ImgDialogOutset_TR'></div></td>",
-						(AjxEnv.useTransparentPNGs ? "<td rowspan=2 valign=top class='border_shadow_v'><div class='ImgShadowBig_TR'></div><div class='ImgShadowBig_R__V' style='height:100%'></div></td>" : ""),
-					"</tr>",
-					// titlebar
-					"<tr><td class='ImgDialogOutset_L__V' style='height:100%'></td>",
-						"<td colspan=3 id='<!--$titleId-->' class='DialogTitle'>",
-						  "<table class='dialog_table' cellpadding='0'><tr>",
-							"<td class='DialogTitleCell'><!--$icon--></td>",
-							"<td id='<!--$titleTextId-->' class='DialogTitleCell'><!--$title--></td>",
-							"<td class='DialogTitleCell'><div class='<!--$closeIcon2-->' style='cursor:pointer'></div></td>",
-							"<td class='DialogTitleCell'><div class='<!--$closeIcon1-->' style='cursor:pointer'></div></td>",
-						"</tr></table></td>",
-						"<td class='ImgDialogOutset_R__V' style='height:100%'></td>",
-					"</tr>"
-				),
-	
-	topNoToolbar: AjxBuffer.concat(
-					// top inside edge
-					"<tr><td class='ImgDialogOutset_L__V' style='height:100%'></td>",
-						"<td class='DialogBody'><div class='ImgDialogInset_TL'></div></td>",
-						"<td class='DialogBody' Xstyle='width:100%'><div class='ImgDialogInset_T__H'></div></td>",
-						"<td class='DialogBody'><div class='ImgDialogInset_TR'></div></td>",
-						"<td class='ImgDialogOutset_R__V' style='height:100%'></td>",
-						(AjxEnv.useTransparentPNGs ? "<td class='ImgShadowBig_R__V'></div></td>"  : ""),
-					"</tr>",
-					// dialog center
-					"<tr><td class='ImgDialogOutset_L__V' style='height:100%'></td>",
-						"<td class='DialogBody ImgDialogInset_L__V' style='height:100%'></td>",
-						"<td class='DialogBody'>"
-				),
-	
-	topWithToolbar: AjxBuffer.concat(
-					// top inside edge
-					"<tr><td class='ImgDialogOutset_L__V' style='height:100%'></td>",
-						"<td class='DialogToolbar'><div class='ImgDialogInset_TL'></div></td>",
-						"<td class='DialogToolbar' style='width:100%'><div class='ImgDialogInset_T__H'></div></td>",
-						"<td class='DialogToolbar'><div class='ImgDialogInset_TR'></div></td>",
-						"<td class='ImgDialogOutset_R__V' style='height:100%'></td>",
-						(AjxEnv.useTransparentPNGs ? "<td class='ImgShadowBig_R__V'></div></td>" : ""),
-					"</tr>",
-					// top toolbar
-					"<tr><td class='ImgDialogOutset_L__V' style='height:100%'></td>",
-						"<td class='DialogToolbar'><div class='ImgDialogInset_L__V' style='height:20'></div></td>",
-						"<td class='DialogToolbar'></td>",
-						"<td class='DialogToolbar'><div class='ImgDialogInset_R__V' style='height:20'></div></td>",
-						"<td class='ImgDialogOutset_R__V' style='height:100%'></td>",
-						(AjxEnv.useTransparentPNGs ? "<td class='ImgShadowBig_R__V'></div></td>" : ""),
-					"</tr>",
-					"<tr><td class='ImgDialogOutset_L__V' style='height:100%'></td>",
-						"<td class='ImgDialogToolbarSep_L'></td>",
-						"<td class='ImgDialogToolbarSep__H'></td>",
-						"<td class='ImgDialogToolbarSep_R'></td>",
-						"<td class='ImgDialogOutset_R__V' style='height:100%'></td>",
-						(AjxEnv.useTransparentPNGs ? "<td class='ImgShadowBig_R__V'></div></td>" : ""),
-					"</tr>",
-					// dialog center
-					"<tr><td class='ImgDialogOutset_L__V' style='height:100%'></td>",
-						"<td class='DialogBody ImgDialogInset_L__V' style='height:100%'></td>",
-						"<td class='DialogBody'>"
-				),
-	
-	bottomNoToolbar: AjxBuffer.concat(
-						"</td> ",
-						"<td class='DialogBody ImgDialogInset_R__V' style='height:100%'></td>",
-						"<td class='ImgDialogOutset_R__V' style='height:100%'></td>",
-						(AjxEnv.useTransparentPNGs ? "<td class='ImgShadowBig_R__V'></div></td>" : ""),
-					"</tr>",
-					// bottom inside edge
-					"<tr><td class='ImgDialogOutset_L__V' style='height:100%'></td>",
-						"<td class='DialogBody'><div class='ImgDialogInset_BL'></div></td>",
-						"<td class='DialogBody'><div class='ImgDialogInset_B__H'></div></td>",
-						"<td class='DialogBody'><div class='ImgDialogInset_BR'></div></td>",
-						"<td class='ImgDialogOutset_R__V' style='height:100%'></td>",
-						(AjxEnv.useTransparentPNGs ? "<td class='ImgShadowBig_R__V'></div></td>" : ""),
-					"</tr>"
-				),
-	
-	bottomWithToolbar: AjxBuffer.concat(
-						"</td>",
-						"<td class='DialogBody ImgDialogInset_R__V' style='height:100%'></td>",
-						"<td class='ImgDialogOutset_R__V' style='height:100%'></td>",
-						(AjxEnv.useTransparentPNGs ? "<td class='ImgShadowBig_R__V'></div></td>" : ""),
-					"</tr>",
-					// bottom toolbar
-					"<tr><td class='ImgDialogOutset_L__V' style='height:100%'></td>",
-						"<td class='ImgDialogToolbarSep_L'></td>",
-						"<td class='ImgDialogToolbarSep__H'></td>",
-						"<td class='ImgDialogToolbarSep_R'></td>",
-						"<td class='ImgDialogOutset_R__V' style='height:100%'></td>",
-						(AjxEnv.useTransparentPNGs ? "<td class='ImgShadowBig_R__V'></div></td>" : ""),
-					"</tr>",
-					"<tr><td class='ImgDialogOutset_L__V' style='height:100%'></td>",
-						"<td class='DialogToolbar'><div class='ImgDialogInset_L__V' style='height:20'></td>",
-						"<td class='DialogToolbar'><div id='<!--$id-->_bottom_toolbar'></div></td>",
-						"<td class='DialogToolbar'><div class='ImgDialogInset_R__V' style='height:20'></td>",
-						"<td class='ImgDialogOutset_R__V' style='height:100%'></td>",
-						(AjxEnv.useTransparentPNGs ? "<td class='ImgShadowBig_R__V'></div></td>" : ""),
-					"</tr>",
-					// bottom inside edge
-					"<tr><td class='ImgDialogOutset_L__V' style='height:100%'></td>",
-						"<td class='DialogToolbar'><div class='ImgDialogInset_BL'></div></td>",
-						"<td class='DialogToolbar'><div class='ImgDialogInset_B__H'></div></td>",
-						"<td class='DialogToolbar'><div class='ImgDialogInset_BR'></div></td>",
-						"<td class='ImgDialogOutset_R__V' style='height:100%'></td>",
-						(AjxEnv.useTransparentPNGs ? "<td class='ImgShadowBig_R__V'></div></td>" : ""),
-					"</tr>"	
-				),
-	
-	end: AjxBuffer.concat(
-					// bottom edge
-					"<tr><td><div class='ImgDialogOutset_bl'></div></td>",
-						"<td colspan=3 class='ImgDialogOutset_B__H'></td>",
-						"<td><div class='ImgDialogOutset_br'></div></td>",
-						(AjxEnv.useTransparentPNGs ? "<td class='ImgShadowBig_R__V'></div></td>" : ""),
-					"</tr>",
-					// bottom shadow
-						(AjxEnv.useTransparentPNGs ? 
-							"<tr><td colspan=5><table cellspacing=0 cellpadding=0 border=0><tr><td><div class='ImgShadowBig_BL'></div><td>"+
-									"<td width=100%><div class='ImgShadowBig_B__H' style='width:100%'></div></td></tr></table>"+
-								"</td>"+
-								"<td class=dialog_shadow_c><div class='ImgShadowBig_BR'></div><td>"+
-							"</tr>"
-						  : ""
-						),
-			     "</table>"
-				)
-}
 
 DwtBorder.registerBorder(
 	"dialog",
 	{
-		start:	dialogPieces.start + dialogPieces.topNoToolbar,
-		end: dialogPieces.bottomNoToolbar + dialogPieces.end,
+	start:AjxBuffer.concat(
+		 "<table class='DialogTable' cellpadding='0'>",
+			// top edge
+			"<tr><td class='minSize'><div class='ImgDialog_TL'><\/div><\/td>",
+				"<td id='<!--$titleId-->' class='ImgDialog_T__H' style='width:auto'>",
+					// cell with the titlebar
+					  "<table class='DialogTitle' cellpadding='0' ><tr>",
+						"<td class='DialogTitleImage minWidth'><!--$icon--><\/td>",
+						"<td id='<!--$titleTextId-->' class='DialogTitleText'><!--$title--><\/td>",
+						"<td class='DialogTitleImage minWidth'><div class='<!--$closeIcon2-->' style='cursor:pointer'><\/div><\/td>",
+						"<td class='DialogTitleImage minWidth'><div class='<!--$closeIcon1-->' style='cursor:pointer'><\/div><\/td>",
+					"<\/tr><\/table>",
+				"<\/td>",
+				"<td class='minSize'><div class='ImgDialog_TR'><\/div><\/td>",
+				(AjxEnv.useTransparentPNGs ? "<td valign=top class='fullHeight'>"
+												+"<table class='CompactTable fullSize' cellpadding=0><tr><td><div class='ImgShadowBig_TR'><\/div><\/td><\/tr>"
+												+"<tr><td class='fullHeight'><div class='ImgShadowBig_R__V fullHeight'><\/div><\/td><\/tr><\/table>"
+												+"<\/td>" : ""),
+			"<\/tr>",
+
+			// dialog body
+			"<tr><td class='ImgDialog_L__V fullHeight'><\/td>",
+				"<td class='DialogBody ImgDialog__BG'>"
+		),
+		end:AjxBuffer.concat(	
+				"<\/td> ",
+				"<td class='ImgDialog_R__V fullHeight'><\/td>",
+				(AjxEnv.useTransparentPNGs ? "<td><div class='ImgShadowBig_R__V fullHeight'><\/div><\/td>" : ""),
+			"<\/tr>",
+
+			// bottom edge
+			"<tr><td><div class='ImgDialog_BL'><\/div><\/td>",
+				"<td class='ImgDialog_B__H'><\/td>",
+				"<td><div class='ImgDialog_BR'><\/div><\/td>",
+				(AjxEnv.useTransparentPNGs ? "<td class='ImgShadowBig_R__V'><\/div><\/td>" : ""),
+			"<\/tr>",
+
+			// bottom shadow
+				(AjxEnv.useTransparentPNGs ? 
+					"<tr><td colspan=3><table cellspacing=0 cellpadding=0 border=0><tr><td><div class='ImgShadowBig_BL'><\/div><td>"+
+							"<td width=100%><div class='ImgShadowBig_B__H' style='width:100%'><\/div><\/td><\/tr><\/table>"+
+						"<\/td>"+
+						"<td class=dialog_shadow_c><div class='ImgShadowBig_BR'><\/div><td>"+
+					"<\/tr>"
+				  : ""
+				),
+			"<\/table>"
+		),
 		width:40,
 		height:45
 	}
 );
 
-DwtBorder.registerBorder(
-	"dialogWithTopToolbar",
-	{
-		start:	dialogPieces.start + dialogPieces.topWithToolbar,
-		end: dialogPieces.bottomNoToolbar + dialogPieces.end,
-		width:40,
-		height:45
-	}
-);
 
-DwtBorder.registerBorder(
-	"dialogWithBottomToolbar",
-	{
-		start:	dialogPieces.start + dialogPieces.topNoToolbar,
-		end: dialogPieces.bottomWithToolbar + dialogPieces.end,
-		width:40,
-		height:45
-	}
-);
-
-DwtBorder.registerBorder(
-	"dialogWithBothToolbars",
-	{
-		start:	dialogPieces.start + dialogPieces.topWithToolbar,
-		end: dialogPieces.bottomWithToolbar + dialogPieces.end,
-		width:40,
-		height:45
-	}
-);
 
 DwtBorder.registerBorder(
 	"h_sash",
@@ -559,8 +447,8 @@ DwtBorder.registerBorder(
 		start: AjxBuffer.concat(
 				 "<table class='DialogTable' cellpadding='0' Xborder=1>",
 					// top edge
-					"<tr><td><div style='position:relative'>"+
-							"<div class='ImgSplashScreen_blank' style='background-color:white'></div>",
+					"<tr><td><div style='position:relative' class='SplashScreen'>"+
+							"<div class='ImgSplashScreen_blank'></div>",
 							"<div class=SplashScreenUrl><!--$url--></div>",
 							"<div class=SplashScreenShortVersion><!--$shortVersion--></div>",
 							"<div class=SplashScreenAppName><!--$appName--></div>",

@@ -436,7 +436,7 @@ function(id, buttonId, buttonDivId, label) {
 	button.setText(label);
 	button.id = buttonId;
 	button.setHtmlElementId(buttonId);
-	button._activeClassName = button._origClassName + " DwtChooser-Active";
+	button._activeClassName = button._origClassName + "-" + DwtCssStyle.ACTIVE;
 	button._nonActiveClassName = button._origClassName;
 	button._buttonId = id;
 

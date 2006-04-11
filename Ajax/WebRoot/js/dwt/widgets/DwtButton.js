@@ -41,6 +41,7 @@ function DwtButton(parent, style, className, posStyle, actionTiming) {
 	this._activatedClassName = this._className + "-" + DwtCssStyle.ACTIVATED;
 	this._triggeredClassName = this._className + "-" + DwtCssStyle.TRIGGERED;
 	this._toggledClassName = this._className + "-" + DwtCssStyle.TOGGLED;
+	this._disabledClassName = this._className + "-" + DwtCssStyle.DISABLED;
 
 	// add custom mouse handlers to standard ones
 	var mouseEvents = [DwtEvent.ONCONTEXTMENU, DwtEvent.ONDBLCLICK, DwtEvent.ONMOUSEDOWN,
@@ -160,14 +161,16 @@ function(enabled) {
 	if (enabled != this._enabled) {
 		DwtLabel.prototype.setEnabled.call(this, enabled); // handles image/text
 		if (enabled) {
+			this.setClassName(this._origClassName); // activated or triggered?
 			this._addMouseListeners();
 			// set event handler for pull down menu if applicable
 			if (this._menu) {
 				this._setupDropDownCellMouseHandlers();
 				AjxImg.setImage(this._dropDownCell, this._dropDownImg);
 			}
+			
 		} else {
-			this.setClassName(this._origClassName); // clear activated or triggered
+			this.setClassName(this._disabledClassName);
 			this._removeMouseListeners();
 			// remove event handlers for pull down menu if applicable
 			if (this._menu) {
