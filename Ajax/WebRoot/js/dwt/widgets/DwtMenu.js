@@ -23,7 +23,8 @@
 * DwtMenu.POPUP_STYLE - Popup menu
 * DwtMenu.DROPDOWN_STYLE - Used when a menu is a drop down (e.g. parent is a button or another menu item);
 * DwtMenu.COLOR_PICKER_STYLE - Menu is hosting a single color picker;
-* DwtMenu.CALENDAR_PICKER_STYLE - Menu is hostng a single calendar; 
+* DwtMenu.CALENDAR_PICKER_STYLE - Menu is hostng a single calendar;
+* DwtMenu.GENERIC_WIDGET_STYLE - Menu is hosting a single "DwtInsertTableGrid";
 *
 * @constructor
 * @class
@@ -39,9 +40,12 @@ function DwtMenu(parent, style, className, posStyle, dialog) {
 
 	if (arguments.length == 0) return;
 	if (parent) {
-		if (parent instanceof DwtMenuItem || parent instanceof DwtButton)
-			this._style = DwtMenu.DROPDOWN_STYLE;
-		else
+		if (parent instanceof DwtMenuItem || parent instanceof DwtButton) {
+			if (style == DwtMenu.GENERIC_WIDGET_STYLE)
+				this._style = DwtMenu.GENERIC_WIDGET_STYLE;
+			else
+				this._style = DwtMenu.DROPDOWN_STYLE;
+		} else
 			this._style = style || DwtMenu.POPUP_STYLE;
 		if (!posStyle) 
 			posStyle = (this._style == DwtMenu.BAR_STYLE) ? DwtControl.STATIC_STYLE : DwtControl.ABSOLUTE_STYLE; 
@@ -58,9 +62,11 @@ function DwtMenu(parent, style, className, posStyle, dialog) {
 	var htmlElement = this.getHtmlElement();
 	
 	Dwt.setLocation(htmlElement, Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
-	
+
 	// Don't need to create table for color picker and calendar picker styles
-	if (this._style != DwtMenu.COLOR_PICKER_STYLE && this._style != DwtMenu.CALENDAR_PICKER_STYLE) {
+	if (this._style != DwtMenu.COLOR_PICKER_STYLE &&
+	    this._style != DwtMenu.CALENDAR_PICKER_STYLE &&
+	    this._style != DwtMenu.GENERIC_WIDGET_STYLE) {
 		this._table = document.createElement("table");
 		this._table.border = 0;
 		this._table.cellPadding = 0;
@@ -107,6 +113,7 @@ DwtMenu.POPUP_STYLE = 2;
 DwtMenu.DROPDOWN_STYLE = 3;
 DwtMenu.COLOR_PICKER_STYLE =  4;
 DwtMenu.CALENDAR_PICKER_STYLE = 5;
+DwtMenu.GENERIC_WIDGET_STYLE = 6;
 
 DwtMenu._activeMenuUp = false;
 DwtMenu._activeMenuIds = new AjxVector();
@@ -302,18 +309,22 @@ DwtMenu.prototype.addChild =
 function(child) {
 	// Color pickers and calendars are not menu aware so we have to deal with
 	// them acordingly
-	if ((child instanceof DwtColorPicker) || (child instanceof DwtCalendar))
+	if ((child instanceof DwtColorPicker) || (child instanceof DwtCalendar) ||
+	    (this._style == DwtMenu.GENERIC_WIDGET_STYLE))
 		this._addItem(child);
 }
 
 DwtMenu.prototype._addItem =
 function(item, index) {
-	if (this._style == DwtMenu.COLOR_PICKER_STYLE || this._style == DwtMenu.CALENDAR_PICKER_STYLE) {
+	if (this._style == DwtMenu.COLOR_PICKER_STYLE ||
+	    this._style == DwtMenu.CALENDAR_PICKER_STYLE ||
+	    this._style == DwtMenu.GENERIC_WIDGET_STYLE) {
 		// Item better be a color picker & we better not have any children
 		if (this._children.size() > 0 || !(item.parent instanceof DwtMenu) 
-			|| ((this._style == DwtMenu.COLOR_PICKER_STYLE && !(item instanceof DwtColorPicker))
-			    || (this._style == DwtMenu.CALENDAR_PICKER_STYLE && !(item instanceof DwtCalendar))))
-			new DwtException("Invalid child", DwtException.INVALID_PARAM, "DwtMenu.prototype._addItem");
+		    || ((this._style == DwtMenu.COLOR_PICKER_STYLE && !(item instanceof DwtColorPicker)) ||
+			(this._style == DwtMenu.CALENDAR_PICKER_STYLE && !(item instanceof DwtCalendar)) ||
+			(this._style == DwtMenu.GENERIC_WIDGET_STYLE && !(item instanceof DwtControl))))
+			throw new DwtException("Invalid child", DwtException.INVALID_PARAM, "DwtMenu.prototype._addItem");
 		this._children.add(item);
 		item.reparentHtmlElement(this.getHtmlElement());
 	} else {

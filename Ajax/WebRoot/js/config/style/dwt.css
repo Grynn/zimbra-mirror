@@ -1246,3 +1246,19 @@ HTML>BODY .RadioGrouperLabel {
 	padding:5px;
 	vertical-align:top;
 }
+
+/* DwtGridSizePicker */
+
+.DwtGridSizePicker table {
+  border-collapse: collapse; -moz-user-select: none; user-select: none;
+  border: 1px solid #aaa; /* table-layout: fixed; */cursor: default !important;
+}
+.DwtGridSizePicker table tr.info td { text-align: center; padding: 1px 0; }
+.DwtGridSizePicker table tr.grid td {
+  border: 1px solid #aaa;
+  width: 16px; height: 16px;
+  font-size: 16px; line-height: 16px;
+  padding: 0;
+  background-color: #fff;
+}
+.DwtGridSizePicker table tr.grid td.Hovered { background-color: #add6d6; }

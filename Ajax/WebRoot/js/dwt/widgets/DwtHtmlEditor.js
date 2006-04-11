@@ -269,34 +269,31 @@ function(src) {
  */
 DwtHtmlEditor.prototype.insertTable =
 function(rows, cols, width, cellSpacing, cellPadding, alignment) {
-DBG.println("Rows: " + rows);
-DBG.println("Cols: " + cols);
-DBG.println("Width: " + width);
-DBG.println("CellSpacing: " + cellSpacing);
-DBG.println("CellPadding: " + cellPadding);
-DBG.println("alignment: " + alignment);
 	if (this._mode != DwtHtmlEditor.HTML)
 		return;
 
 	var doc = this._getIframeDoc();
 	var table = doc.createElement("table");
 
-	if (width) table.width = width;
-	if (alignment) table.align = alignment.toLowerCase();
-	if (cellSpacing) table.cellSpacing = cellSpacing;
-	if (cellPadding) table.cellPadding = cellPadding;
+	if (width != null) table.width = width;
+	else table.width = "100%";
 
-	table.border = 1;
+	if (alignment != null) table.align = alignment.toLowerCase();
+
+	if (cellSpacing != null) table.cellSpacing = cellSpacing;
+	else table.cellSpacing = 0;
+
+	if (cellPadding != null) table.cellPadding = cellPadding;
+	else table.cellPadding = 0;
+
 	table.style.border = "1px solid #000";
-    table.rules = "all";
 	table.style.borderCollapse = "collapse";
 
-  	var tdWidth = "";
-  	if (1)
-  		tdWidth = Math.floor(100 / cols) + "%";
+  	var tdWidth = Math.floor(100 / cols) + "%";
 
 	var tbody = doc.createElement("tbody");
 	table.appendChild(tbody);
+
 	for (var i = 0; i < rows; i++) {
 		var tr = doc.createElement("tr");
 		tbody.appendChild(tr);
@@ -306,15 +303,17 @@ DBG.println("alignment: " + alignment);
 				td.style.width = tdWidth;
 			if (AjxEnv.isGeckoBased)
 				td.appendChild(doc.createElement("br"));
+			td.style.border = "1px solid #000";
 			tr.appendChild(td);
-    	}
+		}
 	}
 
 	this._insertNodeAtSelection(table);
-}
+};
 
 DwtHtmlEditor.prototype._insertNodeAtSelection =
 function(node) {
+	this.focus();
 	if (!AjxEnv.isIE) {
 		var range = this._getRange();
 		this._getIframeWin().getSelection().removeAllRanges()
@@ -342,7 +341,7 @@ function(node) {
 */
 DwtHtmlEditor.prototype.setMode =
 function(mode, convert) {
-	if (mode == this._mode || 
+	if (mode == this._mode ||
 		(mode != DwtHtmlEditor.HTML && mode != DwtHtmlEditor.TEXT))
 	{
 		return;
@@ -356,13 +355,13 @@ function(mode, convert) {
 
 		// bug fix #6788 - Safari seems to lose its document so recreate
 		if (this._iFrameId != null && idoc) {
-			idoc.body.innerHTML = (convert) 
-				? AjxStringUtil.convertToHtml(textArea.value) 
+			idoc.body.innerHTML = (convert)
+				? AjxStringUtil.convertToHtml(textArea.value)
 				: textArea.value;
 			iFrame = document.getElementById(this._iFrameId);
 		} else {
-			iFrame = this._initHtmlMode((convert) 
-				? AjxStringUtil.convertToHtml(textArea.value) 
+			iFrame = this._initHtmlMode((convert)
+				? AjxStringUtil.convertToHtml(textArea.value)
 				: textArea.value);
 		}
 		Dwt.setVisible(textArea, false);
@@ -379,12 +378,12 @@ function(mode, convert) {
 		// If we have pending content, then an iFrame is being created. This can happen
 		// if the widget is instantiated and immediate setMode is called w/o getting out
 		// to the event loop where _finishHtmlMode is triggered
-		var content = (!this._pendingContent) 
-			? this._getIframeDoc().innerHTML 
+		var content = (!this._pendingContent)
+			? this._getIframeDoc().innerHTML
 			: (this._pendingContent || "");
 
-		textArea.value = (convert) 
-			? this._convertHtml2Text() 
+		textArea.value = (convert)
+			? this._convertHtml2Text()
 			: this._getIframeDoc().innerHTML;;
 
 		Dwt.setVisible(document.getElementById(this._iFrameId), false);
