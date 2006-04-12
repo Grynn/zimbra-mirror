@@ -290,13 +290,13 @@ function (obj) {
 		}
 	}
 	//save the model
-	var changeDetails = new Object();
+	//var changeDetails = new Object();
 	this._currentObject.modify(mods);
 	this._view.setDirty(false);	
 	//if modification took place - fire an ServerChangeEvent
-	changeDetails["obj"] = this._currentObject;
-	changeDetails["modFields"] = mods;
-	this.fireChangeEvent(changeDetails);
+	//changeDetails["obj"] = this._currentObject;
+	//changeDetails["modFields"] = mods;
+	this.fireChangeEvent(this._currentObject);
 	return true;
 }
 

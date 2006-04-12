@@ -548,8 +548,8 @@ function (ev) {
 				//find the modified COS 
 				var cnt = this._cosList.getArray().length;
 				for(var i = 0; i < cnt; i ++) {
-					if(this._cosList.getArray()[i].id == ev.getDetails()["obj"].id) {
-						this._cosList.getArray()[i] = ev.getDetails()["obj"];
+					if(this._cosList.getArray()[i].id == ev.getDetails().id) {
+						this._cosList.getArray()[i] = ev.getDetails();
 						break;
 					}
 				}

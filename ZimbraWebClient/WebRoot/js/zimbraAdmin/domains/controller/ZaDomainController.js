@@ -242,11 +242,11 @@ function(ev) {
 ZaDomainController.prototype._finishGalButtonListener =
 function(ev) {
 	try {
-		var changeDetails = new Object();
+		//var changeDetails = new Object();
 		ZaDomain.modifyGalSettings(this._galWizard.getObject(),this._currentObject); 
 		//if a modification took place - fire an DomainChangeEvent
-		changeDetails["obj"] = this._currentObject;
-		this.fireChangeEvent(changeDetails);
+		//changeDetails["obj"] = this._currentObject;
+		this.fireChangeEvent(this._currentObject);
 		this._view.setObject(this._currentObject);		
 		this._galWizard.popdown();
 	} catch (ex) {
@@ -259,11 +259,11 @@ ZaDomainController.prototype._finishAuthButtonListener =
 function(ev) {
 	try {
 		ZaDomain.modifyAuthSettings(this._authWizard.getObject(), this._currentObject);
-		var changeDetails = new Object();
+		//var changeDetails = new Object();
 		//if a modification took place - fire an DomainChangeEvent
-		changeDetails["obj"] = this._currentObject;
+		//changeDetails["obj"] = this._currentObject;
 	
-		this.fireChangeEvent(changeDetails);
+		this.fireChangeEvent(this._currentObject);
 		this._view.setObject(this._currentObject);
 		this._authWizard.popdown();
 	} catch (ex) {

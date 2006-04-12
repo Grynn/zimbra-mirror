@@ -63,6 +63,26 @@ function(obj) {
 	return false;
 }
 
+ZaItemVector.prototype.replace =
+function (obj, index) {
+	if(! (obj instanceof ZaItem) ) {
+		throw new DwtException("Invalid parameter", DwtException.INTERNAL_ERROR, "ZaItemVector.prototype.replace", "ZaItemVector can contain only objects of ZaItem class and classes that extend ZaItem.");
+	}
+	
+	if (index == null || index < 0 || index >= this._array.length) {
+		for (var i = 0; i < this._array.length; i++) {
+			if (this._array[i].id == obj.id) {
+				this._array.splice(i,1, obj);
+				return true;
+			}
+		}
+	}else {
+		this._array.splice(index, 1, obj);
+	}
+	
+	//can't find the original item. Do a fresh add
+	return this.add (obj);	
+}
 
 ZaItemVector.prototype.add =
 function(obj, index) {

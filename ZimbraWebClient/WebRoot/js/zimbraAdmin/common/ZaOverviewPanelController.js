@@ -96,10 +96,15 @@ function (ev) {
 ZaOverviewPanelController.prototype.handleCosChange =
 function (ev) {
 	if(ev) {
-		var detls = ev.getDetails();		
-		if(detls && detls["obj"]) {
-			if(this._cosMap[detls["obj"].id])
-				this._cosMap[detls["obj"].id].setText(detls["obj"].name);
+		var detls = ev.getDetails();	
+		if(detls && (detls instanceof Array)) {		
+			if(detls["obj"]) {
+				if(this._cosMap[detls["obj"].id])
+					this._cosMap[detls["obj"].id].setText(detls["obj"].name);
+			}
+		}else if (detls && (detls instanceof ZaCos)){
+			if(this._cosMap[detls.id])
+					this._cosMap[detls.id].setText(detls.name);
 		}
 	}
 }
@@ -114,13 +119,13 @@ function (ev) {
 		//add the new ZaDomain to the controlled list
 		var detls = ev.getDetails();		
 		if(detls) {
-			if(detls instanceof Array) {
+			if(detls && (detls instanceof Array)) {
 				for (var key in detls) {
 					if((detls[key] instanceof ZaCos) && this._cosMap[detls[key].id]) {
 						this._cosTi.removeChild(this._cosMap[detls[key].id]);		
 					}
 				}
-			} else if(detls instanceof ZaCos) {
+			} else if(detls && (detls instanceof ZaCos)) {
 				if(this._cosMap[detls.id]) {
 					this._cosTi.removeChild(this._cosMap[detls.id]);		
 				}
@@ -210,12 +215,19 @@ function (ev) {
 ZaOverviewPanelController.prototype.handleServerChange =
 function (ev) {
 	if(ev) {
-		var detls = ev.getDetails();		
-		if(detls && detls["obj"]) {
-			if(this._serversMap[detls["obj"].id])
-				this._serversMap[detls["obj"].id].setText(detls["obj"].name);
-			if(this._serversStatsMap[detls["obj"].id])
-				this._serversStatsMap[detls["obj"].id].setText(detls["obj"].name);		
+		var detls = ev.getDetails();	
+		if(detls instanceof Array) {	
+			if(detls && detls["obj"]) {
+				if(this._serversMap[detls["obj"].id])
+					this._serversMap[detls["obj"].id].setText(detls["obj"].name);
+				if(this._serversStatsMap[detls["obj"].id])
+					this._serversStatsMap[detls["obj"].id].setText(detls["obj"].name);		
+			}
+		}else if (detls){
+			if(this._serversMap[detls.id])
+				this._serversMap[detls.id].setText(detls.name);
+			if(this._serversStatsMap[detls.id])
+				this._serversStatsMap[detls.id].setText(detls.name);	
 		}
 	}
 }
@@ -572,9 +584,9 @@ ZaOverviewPanelController.cosTreeListener = function (ev) {
 	if(this._app.getCurrentController()) {
 		this._app.getCurrentController().switchToNextView(this._app.getCosController(),
 		 ZaCosController.prototype.show,
-		 this._app.getCosList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
+		 this._app.getCosList(true).getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
 	} else {					
-		this._app.getCosController().show(this._app.getCosList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
+		this._app.getCosController().show(this._app.getCosList(true).getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
 	}	
 }
 
@@ -582,9 +594,9 @@ ZaOverviewPanelController.domainTreeListener = function (ev) {
 	if(this._app.getCurrentController()) {
 		this._app.getCurrentController().switchToNextView(this._app.getDomainController(),
 		 ZaDomainController.prototype.show,
-		 this._app.getDomainList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
+		 this._app.getDomainList(true).getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
 	} else {					
-		this._app.getDomainController().show(this._app.getDomainList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
+		this._app.getDomainController().show(this._app.getDomainList(true).getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
 	}
 }
 
@@ -592,9 +604,9 @@ ZaOverviewPanelController.serverTreeListener = function (ev) {
 	if(this._app.getCurrentController()) {
 		this._app.getCurrentController().switchToNextView(this._app.getServerController(),
 		 ZaServerController.prototype.show,
-		 this._app.getServerList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
+		 this._app.getServerList(true).getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
 	} else {					
-		this._app.getServerController().show(this._app.getServerList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
+		this._app.getServerController().show(this._app.getServerList(true).getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
 	}
 }
 

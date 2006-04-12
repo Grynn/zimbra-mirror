@@ -345,7 +345,7 @@ function () {
 	}	
 		
 	var mods = new Object();
-	var changeDetails = new Object();
+	//var changeDetails = new Object();
 	if(!tmpObj.id)
 		isNew = true;
 		
@@ -374,7 +374,7 @@ function () {
 	if(!isNew) {
 		if(tmpObj.name != this._currentObject.name) {
 			newName=tmpObj.name;
-			changeDetails["newName"] = newName;
+			//changeDetails["newName"] = newName;
 			try {
 				this._currentObject.rename(newName);
 			} catch (ex) {
@@ -402,9 +402,9 @@ function () {
 		} else {
 			this._currentObject.modify(mods);
 			//if modification took place - fire a ChangeEvent
-			changeDetails["obj"] = this._currentObject;
-			changeDetails["mods"] = mods;
-			this.fireChangeEvent(changeDetails);
+			//changeDetails["obj"] = this._currentObject;
+			//changeDetails["mods"] = mods;
+			this.fireChangeEvent(this._currentObject);
 		}
 	} catch (ex) {
 		var detailStr = "";

@@ -39,7 +39,7 @@
 function ZaXWizardDialog (parent, app, className, title, w, h,iKeyName, extraButtons) {
 	if (arguments.length == 0) return;
 
-	this._standardButtons = [DwtDialog.DISMISS_BUTTON];
+	this._standardButtons = [DwtDialog.CANCEL_BUTTON];
 
 	if(extraButtons) {
 		this._extraButtons = extraButtons;

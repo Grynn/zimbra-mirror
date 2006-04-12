@@ -164,7 +164,7 @@ function(ev) {
 		
 			this._currentObject.refresh(false);	
 			this._view.setObject(this._currentObject);			
-			this.fireChangeEvent();			
+			this.fireChangeEvent(this._currentObject);			
 		}
 	} catch (ex) {
 		this._handleException(ex, "ZaXFormViewController.prototype._saveButtonListener", null, false);

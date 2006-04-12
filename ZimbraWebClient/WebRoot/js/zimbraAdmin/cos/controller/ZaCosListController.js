@@ -95,10 +95,9 @@ function() {
 ZaCosListController.prototype.handleCosCreation = 
 function (ev) {
 	if(ev) {
-		//add the new ZaAccount to the controlled list
 		if(ev.getDetails() && this._list) {
-			this._list.add(ev.getDetails());
-			this._contentView.setUI();
+			if (this._list) this._list.add(ev.getDetails());
+			if (this._contentView) this._contentView.setUI();
 			if(this._app.getCurrentController() == this) {
 				this.show();			
 			}
@@ -115,8 +114,8 @@ function (ev) {
 	if(ev) {
 		//add the new ZaAccount to the controlled list
 		if(ev.getDetails() && this._list) {
-			this._list.remove(ev.getDetails());
-			this._contentView.setUI();
+			if (this._list) this._list.remove(ev.getDetails());
+			if (this._contentView) this._contentView.setUI();
 			if(this._app.getCurrentController() == this) {
 				this.show();			
 			}
@@ -129,8 +128,12 @@ function (ev) {
 	//if any of the data that is currently visible has changed - update the view
 	if(ev) {
 		var details = ev.getDetails();
-		if(details && (details["mods"][ZaCos.A_name] || details["mods"][ZaCos.A_description])) {
-			this._contentView.setUI();
+		//if(details && (details["mods"][ZaCos.A_name] || details["mods"][ZaCos.A_description])) {
+		if (details) {
+			if (this._list) {
+				this._list.replace(details);
+			}
+			if (this._contentView) this._contentView.setUI();
 			if(this._app.getCurrentController() == this) {
 				this.show();			
 			}
@@ -158,7 +161,7 @@ function(ev) {
 ZaCosListController.prototype._duplicateButtonListener =
 function(ev) {
 	var newCos = new ZaCos(this._app); //new COS
-	if(this._contentView.getSelectionCount() == 1) {
+	if(this._contentView && (this._contentView.getSelectionCount() == 1)) {
 		var item = this._contentView.getSelection()[0];
 		if(item && item.attrs) { //copy the attributes from the selected COS to the new COS
 			for(var aname in item.attrs) {
@@ -291,11 +294,11 @@ function () {
 				return;
 			}
 		}
-		this._list.remove(this._removeList[key]); //remove from the list
+		if (this._list) this._list.remove(this._removeList[key]); //remove from the list
 	}
 	this.fireRemovalEvent(successRemList); 	
 	this._removeConfirmMessageDialog.popdown();
-	this._contentView.setUI();
+	if (this._contentView) this._contentView.setUI();
 	this.show();
 }
 

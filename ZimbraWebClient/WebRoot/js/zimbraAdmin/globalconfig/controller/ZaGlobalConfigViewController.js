@@ -157,7 +157,7 @@ function () {
 		}
 	}
 	//save the model
-	var changeDetails = new Object();
+	//var changeDetails = new Object();
 	this._currentObject.modify(mods);
 	
 	/*
@@ -185,8 +185,8 @@ function () {
 	}
 	*/
 	//if modification took place - fire a Settings Change Event
-	changeDetails["obj"] = this._currentObject;
-	changeDetails["modFields"] = mods;
-	this.fireChangeEvent(changeDetails);
+	//changeDetails["obj"] = this._currentObject;
+	//changeDetails["modFields"] = mods;
+	this.fireChangeEvent(this._currentObject);
 	return true;
 }
