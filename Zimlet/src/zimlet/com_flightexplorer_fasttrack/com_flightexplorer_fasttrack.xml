@@ -31,6 +31,13 @@
 	</contentObject>	
 	<zimletPanelItem label="Flight status" >
 		<toolTipText>Click to search flight status</toolTipText>
+		<contextMenu>
+			<menuItem label="Preferences..." id="PREFERENCES" />
+		</contextMenu>			
 	</zimletPanelItem>
+	<userProperties>
+		<property type="string" minLength="1" maxLength="256"  name="username" label="Web service username" visible="true" value=""/>
+		<property type="string" minLength="1" maxLength="256"  name="password" label="Web service password" visible="true" value=""/>
+	</userProperties>
 </zimlet>
 

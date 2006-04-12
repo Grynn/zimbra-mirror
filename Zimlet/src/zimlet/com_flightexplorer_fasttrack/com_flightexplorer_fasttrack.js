@@ -397,16 +397,14 @@ function () {
 }
 
 Com_Flightexplorer_Fasttrack.prototype.menuItemSelected = 
-function(contextMenu, menuItemId, spanElement, contentObjText, canvas) {
-	if(contextMenu == ZmZimletBase.PANEL_MENU)
-		return;
-	//no actions for panel menu so far
-	if(menuItemId=="ADD2CAL") {
-		this.add2CAL(menuItemId, this.getFlightData(contentObjText),contentObjText);
-	} else {
-		return;
-	}
+function(itemId) {
+	switch (itemId) {
+	    case "PREFERENCES":
+			this.createPropertyEditor();
+		break;
+   }
 }
+
 
 Com_Flightexplorer_Fasttrack.prototype.add2CAL = 
 function (menuItemId, flightData,flightCode) {
@@ -561,8 +559,13 @@ function(spanElement, contentObjText, matchContext, canvas) {
 
 Com_Flightexplorer_Fasttrack.prototype.getFlightDataAndImage = 
 function(callback,code,ariline) {
-	var password = this._zimletContext.getConfig("password");
-	var username = this._zimletContext.getConfig("username");	
+	var password = password = this.getUserProperty("password");
+	if(!password)
+		this._zimletContext.getConfig("password");
+			
+	var username = this.getUserProperty("username");	
+	if(!username)
+		username = this._zimletContext.getConfig("username");	
 
 	var getUrl = this._zimletContext.getConfig("GetFlightDataAndImageEx");
 	var feUrl = [getUrl,"?Userid=",username,"&Password=",password,"&ACID=",code,
@@ -573,8 +576,14 @@ function(callback,code,ariline) {
 
 Com_Flightexplorer_Fasttrack.prototype.getFlightData = 
 function(code) {
-	var password = this._zimletContext.getConfig("password");
-	var username = this._zimletContext.getConfig("username");	
+	var password = password = this.getUserProperty("password");
+	if(!password)
+		this._zimletContext.getConfig("password");
+			
+	var username = this.getUserProperty("username");	
+	if(!username)
+		username = this._zimletContext.getConfig("username");	
+	
 
 	var getUrl = this._zimletContext.getConfig("GetFlightDataEx");
 	var feUrl = [getUrl,"?Userid=",username,"&Password=",password,"&ACID=",code].join("");
