@@ -43,7 +43,7 @@ function ZaServerStatsView(parent, app) {
 	this.addTab(ZaMsg.TABT_InMsgs, this._msgsVolumePage);			
 	this.addTab(ZaMsg.TABT_Spam_Activity, this._spamPage);
 	this.addTab(ZaMsg.TABT_Disk, this._diskPage);
-	this.addTab(ZaMsg.TABT_MBX, this._mbxPage);	
+	ZaServerMBXStatsPage.TAB_KEY = this.addTab(ZaMsg.TABT_MBX, this._mbxPage);	
 		
 	//this.setScrollStyle(DwtControl.SCROLL);
 }

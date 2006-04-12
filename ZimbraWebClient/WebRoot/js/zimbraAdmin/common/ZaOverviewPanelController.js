@@ -612,10 +612,22 @@ ZaOverviewPanelController.serverTreeListener = function (ev) {
 
 ZaOverviewPanelController.statsByServerTreeListener = function (ev) {
 	var currentServer = this._app.getServerList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID));
-	if(this._app.getCurrentController()) {
-		this._app.getCurrentController().switchToNextView(this._app.getServerStatsController(), ZaServerStatsController.prototype.show,currentServer);
-	} else {					
-		this._app.getServerStatsController().show(currentServer);
+	var curController = this._app.getCurrentController() ;
+	if(curController) {
+		curController.switchToNextView(this._app.getServerStatsController(), ZaServerStatsController.prototype.show,currentServer);
+	} else {
+		curController = this._app.getServerStatsController();			
+		curController.show(currentServer);
+	}
+	//refresh the MbxPage when the server tree item is clicked
+	var mbxPage = curController._contentView._mbxPage ;
+	if (mbxPage) {
+		mbxPage._initialized = false ; //force mbxPage.showMe to query the server again.
+		if (curController._contentView._currentTabKey == ZaServerMBXStatsPage.TAB_KEY) { //MbxPage is the current page
+			//we need to manually call the showMe()
+			DBG.println("Invoke the ZaServerMBXStatsPage.showMe() to update the mbx quotas.");
+			mbxPage.showMe();
+		}
 	}
 }
 

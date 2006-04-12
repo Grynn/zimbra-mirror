@@ -40,6 +40,7 @@ function ZaServerMBXStatsPage (parent, app) {
 	this._app = app;
 	this._rendered = false;
 	this._initialized = false ;
+	this._hide = true ; //indicate that the Mbx Quota Tab is hidden
 }
 
 ZaServerMBXStatsPage.prototype = new DwtTabViewPage;
@@ -52,7 +53,7 @@ ZaServerMBXStatsPage.XFORM_ITEM_QUOTAUSAGE = "quotaUsage";
 ZaServerMBXStatsPage.XFORM_ITEM_QUOTA = "quota";
 ZaServerMBXStatsPage.XFORM_ITEM_DISKMBX = "diskMbx";
 ZaServerMBXStatsPage.XFORM_ITEM_QUOTAMBX = "quotaMbx";
-
+ZaServerMBXStatsPage.TAB_KEY = 0;
 ZaServerMBXStatsPage._offset = 0;
 ZaServerMBXStatsPage._totalPage = 0;
 ZaServerMBXStatsPage._currentPage = 0;
@@ -61,8 +62,9 @@ ZaServerMBXStatsPage.prototype.toString = function() {
 	return "ZaServerMBXStatsPage";
 };
 
-ZaServerMBXStatsPage.prototype.setObject = function (item) {
+ZaServerMBXStatsPage.prototype.setObject = function (item) {	
 	this._server = item;
+	DBG.println ("Set the new Server Name = " + this._server.name);
 	this._render(item);
 };
 
@@ -209,12 +211,14 @@ function (){
 		instance = this._view.getInstance();
 	}
 	this.updateToolbar ( instance.curPage, instance.totalPage);	
+	this._hide = false ;
 };
 
 ZaServerMBXStatsPage.prototype.hideMe = 
 function (){
 	DwtTabViewPage.prototype.hideMe.call(this);	
 	this.updateToolbar(null, null, true);
+	this._hide = true ;
 };
 
 //update the mbx list items based ont the offset which is changed when page back/forward
