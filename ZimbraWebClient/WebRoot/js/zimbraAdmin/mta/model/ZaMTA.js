@@ -96,6 +96,7 @@ ZaMTA.A_scan = "scan";
 ZaMTA.A_selection_cache = "_selection_cache";
 ZaMTA.A_queue_filter_name = "_queue_filter_name";
 ZaMTA.A_queue_filter_value = "_queue_filter_value";
+ZaMTA.MsgIDS = "message_ids";
 
 ZaMTA._quecountsArr = new Array();
 ZaMTA.threashHold;
@@ -167,6 +168,7 @@ ZaMTA.prototype.initFromJS = function (obj, summary) {
 			if(!this[qName])
 				this[qName] = new Object();
 				
+
 			if(queue[ZaMTA.A_count] != undefined) {
 				this[qName][ZaMTA.A_count] = queue[ZaMTA.A_count];
 				ZaMTA._quecountsArr.push(queue[ZaMTA.A_count]);
@@ -177,6 +179,7 @@ ZaMTA.prototype.initFromJS = function (obj, summary) {
 			if(summary)
 				continue;
 				
+			this[qName][ZaMTA.MsgIDS] = null;
 			try {
 				if(queue[ZaMTA.A_totalComplete] != undefined) {
 					this[qName][ZaMTA.A_totalComplete] = parseInt(queue[ZaMTA.A_totalComplete]);
@@ -298,15 +301,19 @@ ZaMTA.prototype.getMailQStatus = function (qName,query,offset,limit,force) {
 	if(query != null) {
 		for (var key in query) {
 			var arr = query[key];
-			var fieldEl = soapDoc.getDoc().createElement("field");
-			fieldEl.setAttribute("name", key);
-			var cnt = arr.length;	
-			for(var i=0;i<cnt;i++) {
-				var matchEl = soapDoc.getDoc().createElement("match");
-				matchEl.setAttribute("value", arr[i][ZaMTAQSummaryItem.A_text]);
-				fieldEl.appendChild(matchEl);	
-			}	
-			queryEl.appendChild	(fieldEl);	
+			if(arr) {
+				var cnt = arr.length;	
+				if(cnt) {
+					var fieldEl = soapDoc.getDoc().createElement("field");
+					fieldEl.setAttribute("name", key);			
+					for(var i=0;i<cnt;i++) {
+						var matchEl = soapDoc.getDoc().createElement("match");
+						matchEl.setAttribute("value", arr[i][ZaMTAQSummaryItem.A_text]);
+						fieldEl.appendChild(matchEl);	
+					}	
+					queryEl.appendChild	(fieldEl);	
+				}
+			}
 		}
 	}
 	
@@ -391,15 +398,19 @@ ZaMTA.prototype.mailQueueAction = function (qName, action, by, val) {
 		if(val != null) {
 			for (var key in val) {
 				var arr = val[key];
-				var fieldEl = soapDoc.getDoc().createElement("field");
-				fieldEl.setAttribute("name", key);
-				var cnt = arr.length;	
-				for(var i=0;i<cnt;i++) {
-					var matchEl = soapDoc.getDoc().createElement("match");
-					matchEl.setAttribute("value", arr[i][ZaMTAQSummaryItem.A_text]);
-					fieldEl.appendChild(matchEl);	
-				}	
-				queryEl.appendChild	(fieldEl);	
+				if(arr) {
+					var cnt = arr.length;	
+					if(cnt) {
+						var fieldEl = soapDoc.getDoc().createElement("field");
+						fieldEl.setAttribute("name", key);				
+						for(var i=0;i<cnt;i++) {
+							var matchEl = soapDoc.getDoc().createElement("match");
+							matchEl.setAttribute("value", arr[i][ZaMTAQSummaryItem.A_text]);
+							fieldEl.appendChild(matchEl);	
+						}	
+						queryEl.appendChild	(fieldEl);	
+					}
+				}
 			}
 		}
 		actionEl.appendChild(queryEl);	
@@ -502,8 +513,10 @@ ZaMTAQSummaryItem = function (app, d, t, n) {
 
 
 ZaMTAQSummaryItem.A_text = "t";
+ZaMTAQSummaryItem.A_text_col = "textColumn";
 ZaMTAQSummaryItem.A_description = "d";
 ZaMTAQSummaryItem.A_count = "n";
+ZaMTAQSummaryItem.A_count_col = "countColumn";
 
 ZaMTAQSummaryItem.prototype = new ZaItem;
 ZaMTAQSummaryItem.prototype.constructor = ZaMTAQSummaryItem;

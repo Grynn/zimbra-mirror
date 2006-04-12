@@ -1964,9 +1964,7 @@ Radio_XFormItem.prototype.focusable = true;
 Radio_XFormItem.prototype.updateElement = function(newValue) {
 	this.getElement().checked = (this.getValue() == newValue);
 }
-Radio_XFormItem.prototype.getElementValueGetterHTML = function () {
-	return "var value = '"+this.getValue()+"';";
-}
+
 
 
 
