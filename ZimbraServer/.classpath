@@ -71,6 +71,5 @@
 	<classpathentry kind="lib" path="jars/xpp3.jar"/>
 	<classpathentry kind="lib" path="jars/lucene-1.4.3.jar"/>
 	<classpathentry kind="lib" path="jars/jzlib.jar"/>
-	<classpathentry kind="lib" path="jars/whack.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
