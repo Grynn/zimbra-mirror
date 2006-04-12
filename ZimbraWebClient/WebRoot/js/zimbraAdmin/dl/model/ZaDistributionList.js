@@ -400,7 +400,7 @@ ZaDistributionList.prototype.getMembers = function (limit) {
 				this._origList.sort();
 			}
 			this.id = resp.dl[0].id;
-			this.attrs = resp.dl[0]._attrs;
+			this.initFromJS(resp.dl[0]);
 		} catch (ex) {
 			this._app.getCurrentController()._handleException(ex, "ZaDistributionList.prototype.getMembers", null, false);
 			//DBG.dumpObj(ex);
