@@ -36,13 +36,13 @@ AjxRpc._RPC_REAP_AGE = 300000;	// mark any context older than this (in ms) as fr
 * @param useGet			[boolean]		if true use get method, else use post
 */
 AjxRpc.invoke =
-function(requestStr, serverUrl, requestHeaders, callback, useGet) {
+function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
 
 	var asyncMode = (callback != null);
 	var rpcCtxt = AjxRpc._getFreeRpcCtxt();
 
 	try {
-	 	var response = rpcCtxt.req.invoke(requestStr, serverUrl, requestHeaders, callback, useGet);
+	 	var response = rpcCtxt.req.invoke(requestStr, serverUrl, requestHeaders, callback, useGet, timeout);
 	} catch (ex) {
 		var newEx = new AjxException();
 		newEx.method = "AjxRpc.prototype._invoke";
@@ -61,7 +61,6 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet) {
 	}
 	if (!asyncMode)
 		rpcCtxt.busy = false;
-
 	return response;
 };
 

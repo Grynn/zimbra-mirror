@@ -20,7 +20,7 @@ function AjxTimedAction(obj, func, args) {
 	this._tid = -1;
 	this._id = -1;
 }
-AjxTimedAction.prototype = new AjxCallback;
+AjxTimedAction.prototype = new AjxCallback();
 AjxTimedAction.prototype.constructor = AjxTimedAction;
 
 AjxTimedAction.prototype.toString = 
@@ -28,7 +28,7 @@ function() {
 	return "AjxTimedAction";
 };
 
-AjxTimedAction._pendingActions = new Object();
+AjxTimedAction._pendingActions = {};
 AjxTimedAction._nextActionId = 0;
 
 AjxTimedAction.scheduleAction =

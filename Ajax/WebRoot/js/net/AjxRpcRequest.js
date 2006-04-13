@@ -27,20 +27,22 @@
 * @param ctxt	[_RpcCtxt]	owning context
 **/
 function AjxRpcRequest(id, ctxt) {
-	if (!AjxRpcRequest._inited) 
+	if (!AjxRpcRequest._inited) {
 		AjxRpcRequest._init();
-	
-	this.id = id;
+    }
+
+    this.id = id;
 	this.ctxt = ctxt;
 	if (AjxEnv.isIE) {
 		this._httpReq = new ActiveXObject(AjxRpcRequest._msxmlVers);
 	} else if (AjxEnv.isSafari || AjxEnv.isNav) {
 		this._httpReq =  new XMLHttpRequest();
 	}
-};
+}
 
 AjxRpcRequest._inited = false;
 AjxRpcRequest._msxmlVers = null;
+AjxRpcRequest.TIMEDOUT = -1000;
 
 AjxRpcRequest.prototype.toString = 
 function() {
@@ -60,14 +62,18 @@ function() {
 AjxRpcRequest.prototype.invoke =
 function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
 
-	var asyncMode = (callback != null);
+	var asyncMode = (callback !== null);
 	
-	// exception here will be caught by AjxRpc.invoke
+	// An exception here will be caught by AjxRpc.invoke
 	this._httpReq.open((useGet) ? "get" : "post", serverUrl, asyncMode);
 
 	if (asyncMode) {
 		this._callback = callback;
-		var tempThis = this;
+        if(timeout) {
+            var action = new AjxTimedAction(this, AjxRpcRequest._handleTimeout, {callback: callback, req: this});
+            callback._timedActionId = AjxTimedAction.scheduleAction(action, timeout);
+        }
+        var tempThis = this;
 		DBG.println(AjxDebug.DBG3, "Async RPC request");
 		this._httpReq.onreadystatechange = function(ev) {AjxRpcRequest._handleResponse(tempThis, callback);};
 	} else {
@@ -95,6 +101,18 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
 };
 
 /*
+* Handler that runs when an asynchronous request timesout.
+*
+* @param callback	[AjxCallback]		callback to run after timeout
+*/
+AjxRpcRequest._handleTimeout =
+function(args) {
+    DBG.println(AjxDebug.DBG3, "Async RPC request: _handleTimeout");
+    args.req.cancel();
+    args.callback.run( {text: null, xml: null, success: false, status: AjxRpcRequest.TIMEDOUT} );
+};
+
+/*
 * Handler that runs when an asynchronous response has been received. It runs a
 * callback to initiate the response handling.
 *
@@ -109,15 +127,16 @@ function(req, callback) {
 		callback.run( {text: null, xml: null, success: false, status: 500} );
 		return;
 	}
-
-	DBG.println(AjxDebug.DBG3, "Async RPC request: ready state = " + req._httpReq.readyState);
+    DBG.println(AjxDebug.DBG3, "Async RPC request: ready state = " + req._httpReq.readyState);
 	if (req._httpReq.readyState == 4) {
-		if (DBG.getDebugLevel() >= AjxDebug.DBG3)
-			DBG.println("Async RPC request: HTTP status = " + req._httpReq.status);
-		if (req._httpReq.status == 200) {
+        if(callback._timedActionId !== null) {
+            AjxTimedAction.cancelAction(callback._timedActionId);
+        }
+		DBG.println(AjxDebug.DBG3, "Async RPC request: HTTP status = " + req._httpReq.status);
+        if (req._httpReq.status == 200) {
 			callback.run( {text: req._httpReq.responseText, xml: req._httpReq.responseXML, success: true} );				
 		} else {
-			callback.run( {text: req._httpReq.responseText, xml: req._httpReq.responseXML, success: false, status: req._httpReq.status} );				
+			callback.run( {text: req._httpReq.responseText, xml: req._httpReq.responseXML, success: false, status: req._httpReq.status} );
 		}
 		req.ctxt.busy = false;
 	}
@@ -143,8 +162,9 @@ function() {
 				// do nothing
 			}
 		}
-		if (AjxRpcRequest._msxmlVers == null)
+		if (!AjxRpcRequest._msxmlVers) {
 			throw new AjxException("MSXML not installed", AjxException.INTERNAL_ERROR, "AjxRpc._init");
-	}
+        }
+    }
 	AjxRpcRequest._inited = true;
 };
