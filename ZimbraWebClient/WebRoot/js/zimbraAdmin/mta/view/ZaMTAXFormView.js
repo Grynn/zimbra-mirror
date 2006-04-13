@@ -293,8 +293,8 @@ ZaMTAXFormView.prototype.showConfirmationDlg = function (action, removelist,qNam
 							break;
 						}
 						dlgMsg += "<li>";
-								dlgMsg += removelist[key][i][ZaMTAQSummaryItem.A_text];
-						dlgMsg += (" (" + removelist[key][i][ZaMTAQSummaryItem.A_count] + " " + ZaMsg.messages + ")");
+								dlgMsg += removelist[key][j][ZaMTAQSummaryItem.A_text];
+						dlgMsg += (" (" + removelist[key][j][ZaMTAQSummaryItem.A_count] + " " + ZaMsg.messages + ")");
 						dlgMsg += "</li>";						
 						i++;
 					}
