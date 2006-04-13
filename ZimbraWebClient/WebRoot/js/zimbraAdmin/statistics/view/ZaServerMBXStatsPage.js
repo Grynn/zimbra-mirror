@@ -291,7 +291,7 @@ function (curPage, totalPage, hide ){
 			}
 		}
 	}catch (ex){
-	
+		controller._handleException (ex, "ZaServerMBXStatsPage.updateToolbar", null, false)
 	}
 };
 
