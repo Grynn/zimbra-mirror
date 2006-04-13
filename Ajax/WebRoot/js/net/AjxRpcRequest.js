@@ -62,7 +62,7 @@ function() {
 AjxRpcRequest.prototype.invoke =
 function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
 
-	var asyncMode = (callback !== null);
+	var asyncMode = (callback != null);
 	
 	// An exception here will be caught by AjxRpc.invoke
 	this._httpReq.open((useGet) ? "get" : "post", serverUrl, asyncMode);
