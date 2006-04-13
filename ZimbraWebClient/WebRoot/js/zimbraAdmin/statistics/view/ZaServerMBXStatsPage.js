@@ -113,36 +113,45 @@ ZaServerMBXStatsPage.getMbxes = function ( targetServer, offset, sortBy, sortAsc
 	soapDoc.getMethod().setAttribute("offset", offset);
 	soapDoc.getMethod().setAttribute("limit", ZaServerMBXStatsPage.MBX_DISPLAY_LIMIT);
 	
-	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, targetServer, true).firstChild; 
+	var getQuotaUsageCmd = new ZmCsfeCommand ();
+	var params = new Object ();
+	params.soapDoc = soapDoc ;
+	params.targetServer = targetServer ;
+	var resp = getQuotaUsageCmd.invoke(params).Body.GetQuotaUsageResponse;
+	/*var resp = ZmCsfeCommand.invoke(soapDoc, null, null, targetServer, true).firstChild; 
 	var more = resp.getAttribute("more");
 	var totalMbxes = resp.getAttribute("searchTotal") ;
+	
+	*/
+	var more = resp.more ;
+	var totalMbxes = resp.searchTotal;
+	
 	result.totalPage = parseInt (Math.ceil(totalMbxes / ZaServerMBXStatsPage.MBX_DISPLAY_LIMIT ));
 	result.curPage = offset / ZaServerMBXStatsPage.MBX_DISPLAY_LIMIT + 1 ;
 	
-	var nodes = resp.childNodes ;
+	var accounts = resp.account ;
 	var accountArr = new Array ();
-	var respArr = new Array ();
 	var quotaLimit = 0;
 	var percentage = 0 ;
 	var diskUsed = 0;
+	var _1MB = 1048576 ;
 
-	for (var i=0; i<nodes.length; i ++){
-		respArr [i] = {  	name: nodes[i].getAttribute("name") ,
-							used: nodes[i].getAttribute("used") ,
-							limit: nodes[i].getAttribute("limit") 
-						    };	
+	for (var i=0; i<accounts.length; i ++){
+		diskUsed = ( accounts[i].used / _1MB ).toFixed(2) ;
 		
-		diskUsed = ( respArr[i].used / 1048576 ).toFixed(2) ;
-		
-		if (respArr[i].limit == 0 ){
+		if (accounts[i].limit == 0 ){
 			quotaLimit = "unlimited" ;
 			percentage = 0 ;	
-		}else{
-			quotaLimit = ( respArr[i].limit / 1048576 ).toFixed() ;
+		}else{			
+			if (accounts[i].limit >= _1MB) {
+				quotaLimit = ( accounts[i].limit / _1MB ).toFixed() ;						
+			}else{ //quota limit is too small, we set it to 1MB. And it also avoid the NaN error when quotaLimit = 0
+				quotaLimit = 1 ;
+			}
 			percentage = ((diskUsed * 100) / quotaLimit).toFixed() ;
 		}
 						    
-		accountArr [i] = { 	account : respArr[i].name,
+		accountArr [i] = { 	account : accounts[i].name,
 							diskUsage :  AjxMessageFormat.format (ZaMsg.MBXStats_DISK_MSB, [diskUsed]),
 							quotaUsage : percentage + "\%" ,
 							quota: quotaLimit + " MB"				 
