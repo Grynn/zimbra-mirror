@@ -30,6 +30,7 @@ use Migrate;
 
 Migrate::verifySchemaVersion(21);
 
+my @mailboxIds = Migrate::getMailboxIds();
 foreach my $id (@mailboxIds) {
     createNotebookFolder($id);
 }
@@ -57,7 +58,7 @@ EOF_RENAME_NOTEBOOK_FOLDER
 INSERT INTO mailbox$mailboxId.mail_item
   (subject, id, type, parent_id, folder_id, mod_metadata, mod_content, metadata, date, change_date)
 VALUES
-  ("Notebook", 11, 1, 1, 1, 1, 1, "d1:ai1e1:vi9e2:vti14ee", $timestamp, $timestamp);
+  ("Notebook", 12, 1, 1, 1, 1, 1, "d1:ai1e1:vi9e2:vti14ee", $timestamp, $timestamp);
 
 EOF_CREATE_NOTEBOOK_FOLDER
     Migrate::runSql($sql);
