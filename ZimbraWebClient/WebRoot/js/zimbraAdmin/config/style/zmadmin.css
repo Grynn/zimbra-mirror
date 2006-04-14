@@ -365,6 +365,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 .userquotaused {
 	height: 6px; 
 	font-size: 6px; /* WEIRD IE QUIRK */
+	background-color: #66cc33;
 }
 
 .userquotabar {
@@ -566,6 +567,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 .progressused {
 	height: 20px;
 	font-size: 20px; /* WEIRD IE QUIRK */
+	background-color:#66cc33;
 }
 
 .mtaprogressbar {
