@@ -114,8 +114,14 @@ function (by, val) {
 	var soapDoc = AjxSoapDoc.create("GetCosRequest", "urn:zimbraAdmin", null);
 	var el = soapDoc.set("cos", val);
 	el.setAttribute("by", by);
-	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
-	this.initFromDom(resp.firstChild);
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	var resp = command.invoke(params).Body.GetCosResponse;
+	this.initFromJS(resp.cos[0]);
+	//var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false);
+	//var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	//this.initFromDom(resp.firstChild);
 }
 
 ZaCos.prototype.refresh = 
@@ -188,8 +194,14 @@ function(name, mods) {
 			attr.setAttribute("n", aname);
 		}	
 	}
-	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
-	this.initFromDom(resp.firstChild);
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	var resp = command.invoke(params).Body.CreateCosResponse;
+	this.initFromJS(resp.cos[0]);
+	
+//	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+//	this.initFromDom(resp.firstChild);
 }
 
 /**
@@ -201,8 +213,13 @@ function(newName) {
 	var soapDoc = AjxSoapDoc.create("RenameCosRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
 	soapDoc.set("newName", newName);	
-	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
-	this.initFromDom(resp.firstChild);
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	var resp = command.invoke(params).Body.RenameCosResponse;
+	this.initFromJS(resp.cos[0]);	
+//	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+//	this.initFromDom(resp.firstChild);
 }
 
 /**
@@ -213,7 +230,11 @@ ZaCos.prototype.remove =
 function() {
 	var soapDoc = AjxSoapDoc.create("DeleteCosRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
-	ZmCsfeCommand.invoke(soapDoc, null, null, null, true);	
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	command.invoke(params);
+//	ZmCsfeCommand.invoke(soapDoc, null, null, null, true);	
 }
 /**
 * public ZaCos.modify
@@ -242,10 +263,13 @@ function (mods) {
 			attr.setAttribute("n", aname);
 		}
 	}
-	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
-	//update itseld
-	this.initFromDom(resp.firstChild);
-		
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	var resp = command.invoke(params).Body.ModifyCosResponse;
+	this.initFromJS(resp.cos[0])
+	//var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	//this.initFromDom(resp.firstChild);
 }
 
 /**
