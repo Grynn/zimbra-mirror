@@ -581,13 +581,11 @@ function() {
 */
 AjxDebug.prototype._scrollToBottom = 
 function() {
-	if (AjxEnv.isIE) {
-		this._contentFrame.contentWindow.document.body.scrollIntoView(false);
-		this._linkFrame.contentWindow.document.body.scrollIntoView(false);
-	} else {
-		this._contentFrame.contentWindow.scrollTo(0, this._contentFrame.contentWindow.document.body.offsetHeight);
-		this._linkFrame.contentWindow.scrollTo(0, this._linkFrame.contentWindow.document.body.offsetHeight);
-	}
+	var contentBody = this._contentFrame.contentWindow.document.body;
+	var linkBody = this._linkFrame.contentWindow.document.body;
+
+	contentBody.scrollTop = contentBody.scrollHeight;
+	linkBody.scrollTop = linkBody.scrollHeight;
 };
 
 /**
