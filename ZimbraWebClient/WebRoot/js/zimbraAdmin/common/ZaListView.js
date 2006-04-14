@@ -36,7 +36,6 @@
 function ZaListView(parent, className, posStyle, headerList) {
 	if (arguments.length == 0) return;
 	DwtListView.call(this, parent, className, posStyle, headerList);
-
 }
 
 ZaListView.prototype = new DwtListView;

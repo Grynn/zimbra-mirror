@@ -145,9 +145,10 @@ function() {
 	var sortable = 1;
 	
 	headerList[0] = new ZaListHeaderItem("type", ZaMsg.ALV_Type_col, null, "40px", sortable++, "objectClass", true, true);
-
+	this._defaultColumnSortable = sortable ;
 	headerList[1] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.ALV_Name_col, null, "220px", sortable++, ZaAccount.A_name, true, true);
-//idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
+	
+//idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible	
 	headerList[2] = new ZaListHeaderItem(ZaAccount.A_displayname, ZaMsg.ALV_DspName_col, null, "220px", sortable++,ZaAccount.A_displayname, true, true);
 
 	headerList[3] = new ZaListHeaderItem(ZaAccount.A_accountStatus, ZaMsg.ALV_Status_col, null, "80px", sortable++,ZaAccount.A_accountStatus, true, true);

@@ -72,7 +72,9 @@ function(searchResult) {
 		if(cnt < 1) {
 			//if the list is empty - go to the previous page
 		}
-		this._contentView.set(AjxVector.fromArray(tmpArr));	
+		//add the default column sortable
+		this._contentView._bSortAsc = this._currentSortOrder ;
+		this._contentView.set(AjxVector.fromArray(tmpArr), this._contentView._defaultColumnSortable);	
 	}
 	this._app.pushView(ZaZimbraAdmin._ACCOUNTS_LIST_VIEW);
 
