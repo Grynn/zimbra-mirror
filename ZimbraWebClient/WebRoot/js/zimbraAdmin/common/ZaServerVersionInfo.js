@@ -35,8 +35,12 @@ ZaServerVersionInfo.load = function () {
 
 		var licenseInfoReq = soapDoc.set("GetLicenseInfoRequest");
 		licenseInfoReq.setAttribute("xmlns", "urn:zimbraAdmin");
-
-		var resp = ZmCsfeCommand.invoke(soapDoc, true, null, null, false).Body.BatchResponse;
+		var command = new ZmCsfeCommand();
+		var params = new Object();
+		params.soapDoc = soapDoc;	
+		params.noAuthToken = true;
+		var resp = command.invoke(params).Body.BatchResponse;		
+		//var resp = ZmCsfeCommand.invoke(soapDoc, true, null, null, false).Body.BatchResponse;
 		var versionResponse = resp.GetVersionInfoResponse[0];
 
 		ZaServerVersionInfo.buildDate = this._parseDateTime(versionResponse.info[0].buildDate);
