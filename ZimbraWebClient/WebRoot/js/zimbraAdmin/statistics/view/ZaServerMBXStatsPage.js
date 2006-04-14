@@ -41,6 +41,8 @@ function ZaServerMBXStatsPage (parent, app) {
 	this._rendered = false;
 	this._initialized = false ;
 	this._hide = true ; //indicate that the Mbx Quota Tab is hidden
+	this._prevSortBy = null ;
+	this._prevAscending = null ;
 }
 
 ZaServerMBXStatsPage.prototype = new DwtTabViewPage;
@@ -93,9 +95,12 @@ ZaServerMBXStatsPage.prototype._render = function (server) {
 };
 
 //data instance of the xform
-ZaServerMBXStatsPage.getMbxes = function ( targetServer, offset, sortBy, sortAscending  ){
+ZaServerMBXStatsPage.prototype.getMbxes = function ( targetServer, offset, sortBy, sortAscending  ){
 	var result = { totalPage: 0, curPage:0, mbxes: new Array() };
 	var soapDoc = AjxSoapDoc.create("GetQuotaUsageRequest", "urn:zimbraAdmin", null);
+	
+	this._prevAscending = sortAscending ;
+	this._prevSortBy = sortBy ;
 	
 	if (sortBy == null || sortBy == ZaServerMBXStatsPage.XFORM_ITEM_DISKUSAGE) {
 		sortBy = "totalUsed" ;
@@ -123,6 +128,7 @@ ZaServerMBXStatsPage.getMbxes = function ( targetServer, offset, sortBy, sortAsc
 	var totalMbxes = resp.getAttribute("searchTotal") ;
 	
 	*/
+		
 	var more = resp.more ;
 	var totalMbxes = resp.searchTotal;
 	
@@ -161,7 +167,7 @@ ZaServerMBXStatsPage.getMbxes = function ( targetServer, offset, sortBy, sortAsc
 		accountArr[i].toString = function (){ return this.account ; };
 	}
 	result.mbxes = accountArr ;
-	
+		
 	return result;	
 };
 
@@ -169,12 +175,14 @@ ZaServerMBXStatsPage.prototype._getXForm = function () {
 	if (this._xform != null) return this._xform;
 	var sortable = 1;
 	var sourceHeaderList = new Array();
+	var defaultColumnSortable = 1;
 											//idPrefix, label, 
 											//iconInfo, width, sortable, sortField, resizeable, visible
 	sourceHeaderList[0] = new ZaListHeaderItem(ZaServerMBXStatsPage.XFORM_ITEM_ACCOUNT, 	ZaMsg.MBXStats_ACCOUNT, 	
 												null, 300, null, null, true, true);
 	sourceHeaderList[1] = new ZaListHeaderItem(ZaServerMBXStatsPage.XFORM_ITEM_QUOTA,   	ZaMsg.MBXStats_QUOTA,   	
-												null, 120,  sortable++,  ZaServerMBXStatsPage.XFORM_ITEM_QUOTA, true, true);
+												null, 120,  sortable++,  ZaServerMBXStatsPage.XFORM_ITEM_QUOTA, true, true);												
+	defaultColumnSortable = sortable ;
 	sourceHeaderList[2] = new ZaListHeaderItem(ZaServerMBXStatsPage.XFORM_ITEM_DISKUSAGE, 	ZaMsg.MBXStats_DISKUSAGE,	
 												null, 120,  sortable++,  ZaServerMBXStatsPage.XFORM_ITEM_DISKUSAGE, true, true);
 	sourceHeaderList[3] = new ZaListHeaderItem(ZaServerMBXStatsPage.XFORM_ITEM_QUOTAUSAGE,	ZaMsg.MBXStats_QUOTAUSAGE, 	
@@ -189,7 +197,7 @@ ZaServerMBXStatsPage.prototype._getXForm = function () {
 					
 	    items:[
 	      	//Convert to the listview
-		   	{ref:"mbxPool", type:_DWT_LIST_, width:"100%",  cssClass: "MBXList", 	    	
+		   	{ref:"mbxPool", type:_DWT_LIST_, width:"100%",  cssClass: "MBXList", defaultColumnSortable: defaultColumnSortable,	    	
 						   		forceUpdate: true, widgetClass:ZaServerMbxListView, headerList:sourceHeaderList}
 		]	    
 	};		   
@@ -204,14 +212,16 @@ function (){
 	var instance = null ;
 
 	if ( !this._initialized ) {
-		var mbxesObj = ZaServerMBXStatsPage.getMbxes( this._server.id, 0 ) ;
+		//reserve the previous sort and ascending information. so the list hearder can display currectly
+		var mbxesObj = this.getMbxes( this._server.id, 0 , this._prevSortBy, this._prevAscending) ;
 		instance = { 	serverid: this._server.id,
 						offset:  0,	
-						sortBy : null ,
-						sortAscending: null,
+						sortBy : this._prevSortBy , //reserve the previous sort and ascending information.
+						sortAscending: this._prevAscending, //so the list hearder can display currectly
 						curPage: mbxesObj.curPage ,
 						totalPage: mbxesObj.totalPage,					
 						mbxPool: mbxesObj.mbxes };
+		
 		
 		var xform = this._view ;
 		xform.setInstance( instance );
@@ -239,8 +249,8 @@ function (curInstance, serverid, offset, sortBy, sortAscending) {
 		if (sortBy == null) sortBy = curInstance.sortBy ;
 		if (sortAscending == null) sortAscending = curInstance.sortAscending ;	
 	}
-	
-	var mbxesObj = ZaServerMBXStatsPage.getMbxes (serverid, offset, sortBy, sortAscending);
+		
+	var mbxesObj = this.getMbxes (serverid, offset, sortBy, sortAscending);
 	
 	curInstance = { 	serverid: serverid,
 						offset:  offset,	
@@ -302,7 +312,6 @@ function (curPage, totalPage, hide ){
 function ZaServerMbxListView(parent, className, posStyle, headerList) {
 	var posStyle = DwtControl.ABSOLUTE_STYLE;
 	ZaListView.call(this, parent, className, posStyle, headerList);
-	
 	//hacking to display the scroll bar for the mbx lists.
 	//it works for FF only. and For IE, need to set the cssTableStyle: height: 100%	
 	//htmlDiv is the MBXList class

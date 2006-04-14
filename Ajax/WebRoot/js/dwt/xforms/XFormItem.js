@@ -3732,7 +3732,8 @@ Dwt_List_XFormItem.prototype.setItems = function (itemArray){
 		for(var i = 0; i< cnt; i++) {
 			tmpArr.push(itemArray[i]);		
 		}
-		this.widget.set(AjxVector.fromArray(tmpArr));
+		//add the default sort column
+		this.widget.set(AjxVector.fromArray(tmpArr), this.getInheritedProperty("defaultColumnSortable"));
 		if(preserveSelection && selection) {
 			this.widget.setSelectedItems(selection);
 		}
