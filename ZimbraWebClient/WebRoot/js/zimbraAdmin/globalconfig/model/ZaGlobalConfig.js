@@ -122,24 +122,21 @@ ZaGlobalConfig.A_zimbraNewExtension = "_zimbraNewExtension";
 ZaGlobalConfig.A_originalMonitorHost = "_originalMonitorHost";
 ZaGlobalConfig.A_currentMonitorHost = "_currentMonitorHost";
 
-/*
-ZaGlobalConfig.prototype.load =
-function () {
-	var soapDoc = AjxSoapDoc.create("GetAllConfigRequest", "urn:zimbraAdmin", null);
-	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
-	this.initFromDom(resp);
-}
-*/
 ZaGlobalConfig.loadMethod = 
 function(by, val, withConfig) {
 	var soapDoc = AjxSoapDoc.create("GetAllConfigRequest", "urn:zimbraAdmin", null);
-	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
-	this.initFromDom(resp);
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	var resp = command.invoke(params).Body.GetAllConfigResponse;
+	this.initFromJS(resp);	
+	//var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	//this.initFromDom(resp);
 }
 ZaItem.loadMethods["ZaGlobalConfig"].push(ZaGlobalConfig.loadMethod);
 
-ZaGlobalConfig.prototype.initFromDom = function(node) {
-	ZaItem.prototype.initFromDom.call(this, node);
+ZaGlobalConfig.prototype.initFromJS = function(obj) {
+	ZaItem.prototype.initFromJS.call(this, obj);
 
 	// convert blocked extension lists to arrays
 	var common = this.attrs[ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension];
@@ -224,7 +221,12 @@ function (mods) {
 			attr.setAttribute("n", aname);
 		}
 	}
-	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	command.invoke(params);
+//	this.initFromJS(resp);		
+	//var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 	var newConfig = this._app.getGlobalConfig(true);
 	if(newConfig.attrs) {
 		for (var aname in newConfig.attrs) {

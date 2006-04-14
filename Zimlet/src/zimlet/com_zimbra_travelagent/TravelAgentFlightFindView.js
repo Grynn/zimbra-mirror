@@ -507,7 +507,7 @@ function () {
 	var cellNum = 0;
 	if(this.searchSideStep=="true" || this.searchSideStep===true) {	
 		var searchButton = new DwtButton(this);	
-		searchButton.setText("Search sidestep.com");
+		searchButton.setText("Search SideStep");
 		searchButton.setImage("SideStepIcon");
 		searchButton.setSize("140");
 		searchButton.addSelectionListener(new AjxListener(this, this._searchButtonListener));				
@@ -519,7 +519,7 @@ function () {
 	}
 	if(this.searchTravelocity=="true" || this.searchTravelocity===true) {
 		var searchButton2 = new DwtButton(this);	
-		searchButton2.setText("Search travelocity.com");
+		searchButton2.setText("Search Travelocity");
 		searchButton2.setImage("TravelocityIcon");		
 		searchButton2.setSize("140");
 		searchButton2.addSelectionListener(new AjxListener(this, this._searchButtonListener2));				
@@ -532,7 +532,7 @@ function () {
 	
 	if(this.searchHotwire=="true" || this.searchHotwire===true) {
 		var searchButton3 = new DwtButton(this);	
-		searchButton3.setText("Search hotwire.com");
+		searchButton3.setText("Search Hotwire");
 		searchButton3.setImage("HotwireIcon");
 		searchButton3.setSize("140");
 		searchButton3.addSelectionListener(new AjxListener(this, this._searchButtonListener3));				
