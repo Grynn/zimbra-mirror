@@ -56,7 +56,11 @@ ZaSettings.init = function () {
 		}*/
 	
 		var soapDoc = AjxSoapDoc.create("GetZimletsRequest", "urn:zimbraAdmin", null);	
-		var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false);
+		var command = new ZmCsfeCommand();
+		var params = new Object();
+		params.soapDoc = soapDoc;	
+		//var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false);
+		var resp = command.invoke(params);
 		var zimlets = null;
 		if(resp && resp.Body && resp.Body.GetZimletsResponse && resp.Body.GetZimletsResponse.zimlets && resp.Body.GetZimletsResponse.zimlets.zimlet) {
 			zimlets = resp.Body.GetZimletsResponse.zimlets.zimlet;
