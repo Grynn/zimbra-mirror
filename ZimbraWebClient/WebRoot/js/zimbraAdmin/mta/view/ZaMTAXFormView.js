@@ -531,7 +531,6 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 								ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_totalComplete,
 								relevant:"instance[ZaMTA.A_DeferredQ][ZaMTA.A_Status] == ZaMTA.STATUS_SCANNING || instance[ZaMTA.A_DeferredQ][ZaMTA.A_Status] == ZaMTA.STATUS_SCAN_COMPLETE",
 								relevantBehavior:_HIDE_,
-								valign:_CENTER_,
 								align:_CENTER_,	
 								wholeCssClass:"mtaprogressbar",
 								progressCssClass:"progressused"
@@ -659,7 +658,6 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 								ref:ZaMTA.A_IncomingQ+"/"+ZaMTA.A_totalComplete,
 								relevant:"instance[ZaMTA.A_IncomingQ][ZaMTA.A_Status] == ZaMTA.STATUS_SCANNING || instance[ZaMTA.A_IncomingQ][ZaMTA.A_Status] == ZaMTA.STATUS_SCAN_COMPLETE",
 								relevantBehavior:_HIDE_,
-								valign:_CENTER_,
 								align:_CENTER_,	
 								wholeCssClass:"mtaprogressbar",
 								progressCssClass:"progressused"
@@ -775,7 +773,6 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 								ref:ZaMTA.A_ActiveQ+"/"+ZaMTA.A_totalComplete,
 								relevant:"instance[ZaMTA.A_ActiveQ][ZaMTA.A_Status] == ZaMTA.STATUS_SCANNING || instance[ZaMTA.A_ActiveQ][ZaMTA.A_Status] == ZaMTA.STATUS_SCAN_COMPLETE",
 								relevantBehavior:_HIDE_,
-								valign:_CENTER_,
 								align:_CENTER_,	
 								wholeCssClass:"mtaprogressbar",
 								progressCssClass:"progressused"
@@ -892,7 +889,6 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 								ref:ZaMTA.A_HoldQ+"/"+ZaMTA.A_totalComplete,
 								relevant:"instance[ZaMTA.A_HoldQ][ZaMTA.A_Status] == ZaMTA.STATUS_SCANNING || instance[ZaMTA.A_HoldQ][ZaMTA.A_Status] == ZaMTA.STATUS_SCAN_COMPLETE",
 								relevantBehavior:_HIDE_,
-								valign:_CENTER_,
 								align:_CENTER_,	
 								wholeCssClass:"mtaprogressbar",
 								progressCssClass:"progressused"
@@ -1010,7 +1006,6 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 								ref:ZaMTA.A_CorruptQ+"/"+ZaMTA.A_totalComplete,
 								relevant:"instance[ZaMTA.A_CorruptQ][ZaMTA.A_Status] == ZaMTA.STATUS_SCANNING || instance[ZaMTA.A_CorruptQ][ZaMTA.A_Status] == ZaMTA.STATUS_SCAN_COMPLETE",
 								relevantBehavior:_HIDE_,
-								valign:_CENTER_,
 								align:_CENTER_,	
 								wholeCssClass:"mtaprogressbar",
 								progressCssClass:"progressused"

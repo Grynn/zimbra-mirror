@@ -1399,18 +1399,43 @@ XFormItem.prototype.getCssString = function () {
 	var style = (this.getCssStyle() || '');
 
 	var width = this.getWidth();
-	if (width != null && width != "auto") style += ";width:" + width;
+	if (width != null && width != "auto") {
+		if(style.length)
+			style += ";";
+			
+		style += "width:" + width;
+	}
 
 	var height = this.getHeight();
-	if (height != null) style += ";height:" + height;
+	if (height != null) {
+		if(style.length)
+			style += ";";
+	
+		style += "height:" + height;
+	}
 
 	var overflow = this.getOverflow();
-	if (overflow != null) style += ";overflow:" + overflow;
+	if (overflow != null) {
+		if(style.length)
+			style += ";";
 	
-	if (this.getNowrap())	style += ";white-space:nowrap;";
+		style += "overflow:" + overflow;
+	}
+	
+	if (this.getNowrap()) {
+		if(style.length)
+			style += ";";
+	
+		style += "white-space:nowrap";
+	}
 
 	var valign = this.getValign();
-	if (valign) style += "vertical-align:"+valign;
+	if (valign) {
+		if(style.length)
+			style += ";";
+	
+		style += "vertical-align:"+valign;
+	}
 	
 	if (style != '') css += " style=\"" + style + ";\"";
 	return css;
@@ -1422,7 +1447,10 @@ XFormItem.prototype.getLabelCssString = function (className, style) {
 	if (css != '' && css != null) css = " class=\"" + css + "\"";
 	var style = (this.getLabelCssStyle(style) || '');
 	if (this.getLabelWrap() == false) {
-		style += ";white-space:nowrap";
+		if(style.length)
+			style += ";";
+
+		style += "white-space:nowrap";
 	}
 	if (style != '') css += " style=\"" + style + ";\"";
 	
@@ -1441,7 +1469,10 @@ XFormItem.prototype.getTableCssString = function () {
 	
 	var colSizes = this.getColSizes();
 	if (colSizes != null) {
-		style += ";table-layout:fixed";
+		if(style.length)
+			style += ";";
+					
+		style += "table-layout:fixed";
 	}
 
 	var width = this.getWidth();
@@ -1451,7 +1482,12 @@ XFormItem.prototype.getTableCssString = function () {
 //	if (height != null)	style += ";height:"+ height;
 	
 	var overflow = this.getOverflow();
-	if (overflow != null) style += ";overflow:" + overflow;
+	if (overflow != null) {
+		if(style.length)
+			style += ";";
+
+		style += "overflow:" + overflow;
+	}
 
 	return css + (style != null ? " style=\"" + style + ";\"" : "");
 }
@@ -1466,27 +1502,48 @@ XFormItem.prototype.getContainerCssString = function () {
 	var align = this.getAlign();
 	if (align != _LEFT_) {
 		if (align == _CENTER_ || align == _MIDDLE_) {
-			style += ";text-align:center";
+			if(style.length)
+				style += ";";
+						
+			style += "text-align:center";
 		} else if (align == _RIGHT_) {
-			style += ";text-align:right";
+			if(style.length)
+				style += ";";			
+		
+			style += "text-align:right";
 		}
 	}
 	var valign = this.getValign();
 	if (valign == _TOP_) {
-		style += ";vertical-align:top";
+		if(style.length)
+			style += ";";
+					
+		style += "vertical-align:top";
 	} else if (valign == _BOTTOM_) {
-		style += ";vertical-align:bottom";
+		if(style.length)
+			style += ";";
+					
+		style += "vertical-align:bottom";
 	} else if (valign == _CENTER_ || valign == _MIDDLE_) {
-		style += ";vertical-align:middle";
+		if(style.length)
+			style += ";";		
+			
+		style += "vertical-align:middle";
 	}
 
 	var relevant = this.getRelevant();
 	if (relevant) {
 		var relevantBehavior = this.getRelevantBehavior();
 		if (relevantBehavior == _HIDE_) {
-			style += ";display:none";
+			if(style.length)
+				style += ";";
+						
+			style += "display:none";
 		} else if(relevantBehavior == _BLOCK_HIDE_) {
-			style += ";display:block";
+			if(style.length)
+				style += ";";			
+		
+			style += "display:block";
 		} 
 	}
 
