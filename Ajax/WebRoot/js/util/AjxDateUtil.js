@@ -388,9 +388,13 @@ function(date) {
 AjxDateUtil.getServerDateTime = 
 function(date) {
 	if (!AjxDateUtil._serverDateTimeFormatter) {
-		AjxDateUtil._serverDateTimeFormatter = new AjxDateFormat("yyyyMMdd'T'HHmmss");
+		AjxDateUtil._serverDateTimeFormatter = new AjxDateFormat("yyyyMMdd'T'HHmmss'Z'");
 	}
-	return AjxDateUtil._serverDateTimeFormatter.format(date);
+
+	// bug fix #6454 - always convert the date to UTC!
+	var utcDate = new Date(date.getTime());
+	utcDate.setMinutes(utcDate.getMinutes() + utcDate.getTimezoneOffset());
+	return AjxDateUtil._serverDateTimeFormatter.format(utcDate);
 };
 
 AjxDateUtil.parseServerTime = 
