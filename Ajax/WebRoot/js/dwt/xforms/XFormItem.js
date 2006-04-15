@@ -2195,7 +2195,8 @@ Ajx_Image_XFormItem.prototype.updateElement = function (src) {
  		// prepend the image path
  		var path = this.getSrcPath();
  		if (path != null) src = path + src;
-		output = AjxImg.getImageHtml(src, "position:relative;" + this.getCssStyle())
+ 		var style = this.getCssStyle();
+		output = AjxImg.getImageHtml(src, "position:relative;" + (style ? style : '' ));
  	}
  	this.getContainer().innerHTML = output;
 };
