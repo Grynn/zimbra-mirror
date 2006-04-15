@@ -484,7 +484,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 	var headerList = new Array();
 	headerList[0] = new ZaListHeaderItem(ZaMTAQSummaryItem.A_text_col, ZaMsg.PQV_name_col, null, null, false, null, false, true);
 	headerList[1] = new ZaListHeaderItem(ZaMTAQSummaryItem.A_count_col, ZaMsg.PQV_count_col, null, "30px", false, null, false, true);
-	headerList[2] = new ZaListHeaderItem(null, null, null, "auto", null, null, false, true);							
+	headerList[2] = new ZaListHeaderItem(null, null, null, null, null, null, false, true);							
 		
 	var msgHeaderList = new Array();
 	msgHeaderList[0] = new ZaListHeaderItem(ZaMTAQMsgItem.A_id, ZaMsg.PQV_qid_col, null, "100px", null, null, false, true);
@@ -495,7 +495,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 	msgHeaderList[5] = new ZaListHeaderItem(ZaMTAQMsgItem.A_fromdomain, ZaMsg.PQV_origin_domain_col, null, "106px", null, null, false, true);		
 	msgHeaderList[6] = new ZaListHeaderItem(ZaMTAQMsgItem.A_content_filter, ZaMsg.PQV_content_filter_col, "103px", null, null, null, false, true);				
 	msgHeaderList[7] = new ZaListHeaderItem(ZaMTAQMsgItem.A_time, ZaMsg.PQV_time_col, null, "78px", null, null, false, true);					
-	msgHeaderList[8] = new ZaListHeaderItem(null, null, null, "auto", null, null, false, true);						
+	msgHeaderList[8] = new ZaListHeaderItem(null, null, null, null, null, null, false, true);						
 
 	xFormObject.items = [
 		{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", 

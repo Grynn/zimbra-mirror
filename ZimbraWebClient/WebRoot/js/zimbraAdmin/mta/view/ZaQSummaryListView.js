@@ -62,7 +62,7 @@ function(item) {
 				html[idx++] = "</td>";
 			} else if(id.indexOf(ZaMTAQSummaryItem.A_count_col)==0) {
 
-				html[idx++] = "<td width='" + this._headerList[i]._width + "' align=center>";
+				html[idx++] = "<td width='" + this._headerList[i]._width + "' align=left>";
 				html[idx++] = item[ZaMTAQSummaryItem.A_count];
 				html[idx++] = "</td>";
 			} 

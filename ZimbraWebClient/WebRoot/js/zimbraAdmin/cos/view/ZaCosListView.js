@@ -77,12 +77,12 @@ function(cos, no, isDndIcon) {
 		var id = this._headerList[i]._id;
 		if(id.indexOf(ZaCos.A_name)==0) {
 		// name
-			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
+			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + ">";
 			html[idx++] = AjxStringUtil.htmlEncode(cos.name);
 			html[idx++] = "</td>";
 		} else if (id.indexOf(ZaCos.A_description)==0) {
 			// description
-			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
+			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + ">";
 			html[idx++] = AjxStringUtil.htmlEncode(cos.attrs[ZaCos.A_description]);
 			html[idx++] = "</td>";	
 		}
@@ -98,9 +98,9 @@ function() {
 	var headerList = new Array();
 	var sortable = 1;
 	//idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
-	headerList[0] = new ZaListHeaderItem(ZaCos.A_name, ZaMsg.CLV_Name_col, null, "200px", sortable++, ZaCos.A_name, true, true);
+	headerList[0] = new ZaListHeaderItem(ZaCos.A_name, ZaMsg.CLV_Name_col, null, 200, sortable++, ZaCos.A_name, true, true);
 
-	headerList[1] = new ZaListHeaderItem(ZaCos.A_description, ZaMsg.CLV_Description_col, null, "200px", null, null, true, true);
+	headerList[1] = new ZaListHeaderItem(ZaCos.A_description, ZaMsg.CLV_Description_col, null, null, null, null, true, true);
 	
 	return headerList;
 }

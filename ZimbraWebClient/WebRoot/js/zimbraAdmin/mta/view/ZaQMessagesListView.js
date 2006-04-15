@@ -72,7 +72,7 @@ function(item) {
 				html[idx++] = "</td>";
 			} else if(id.indexOf(ZaMTAQMsgItem.A_time)==0) {
 				// name
-				html[idx++] = "<td align=right height=20px width=" + this._headerList[i]._width + ">";
+				html[idx++] = "<td align=left height=20px width=" + this._headerList[i]._width + ">";
 				html[idx++] = AjxDateUtil.computeDateStr(new Date(), parseInt(item[ZaMTAQMsgItem.A_time]));
 				html[idx++] = "</td>";
 			} else if(id.indexOf(ZaMTAQMsgItem.A_origin_host)==0) {

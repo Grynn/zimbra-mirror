@@ -166,10 +166,16 @@ function(defaultColumnSort) {
 		htmlArr[idx++] = headerCol._id == this._currentColId
 			? "DwtListView-Column DwtListView-ColumnActive'"
 			: "DwtListView-Column'";
-		htmlArr[idx++] = headerCol._width ? " width=" + headerCol._width + ">" : ">";
+		htmlArr[idx++] = headerCol._width ? " width=" + headerCol._width + (headerCol._widthUnits ? headerCol._widthUnits : "") + ">" : ">";
 		// must add a div to force clipping :(
 		htmlArr[idx++] = "<div";
-		htmlArr[idx++] = headerCol._width ? (" style='width: " + (headerCol._width+2) + "'>") : ">";
+		var headerColWidth = null;
+		if(headerCol._width && headerCol._width != "auto") {
+			headerColWidth = String((headerCol._width + 2)).toString();
+			if(headerCol._widthUnits)
+				headerColWidth +=headerCol._widthUnits;
+		}
+		htmlArr[idx++] = headerColWidth ? (" style='width: " + headerColWidth + "'>") : ">";
 
 		// add new table for icon/label/sorting arrow		
 		htmlArr[idx++] = "<table border=0 cellpadding=0 cellspacing=0 width=100%><tr>";
@@ -1680,7 +1686,17 @@ function DwtListHeaderItem(id, label, iconInfo, width, sortable, resizeable, vis
 	this._id = id + Dwt.getNextId();
 	this._label = label;
 	this._iconInfo = iconInfo;
-	this._width = width;
+	var w = parseInt(width);
+	this._widthUnits = null;
+	if(isNaN(w) || !w) {
+		this._width = "auto";
+	} else if(String(w).toString()==String(width).toString())	{
+		this._width = w;
+	} else {
+		this._width = parseInt(String(width).substr(0,String(w).length));
+		this._widthUnits = AjxStringUtil.getUnitsFromSizeString(width);
+	}
+
 	this._sortable = sortable;
 	this._resizeable = resizeable;
 	// only set visible if explicitly set to false
