@@ -119,6 +119,12 @@ function(val) {
 	this._quotausedDiv.style.width = percent + "%";
 }
 
+DwtProgressBar.prototype.setValueByPercent =
+function (percent){
+	this.setMaxValue(100);
+	this.setValue (percent.replace(/\%/gi, ""));
+}
+
 DwtProgressBar.prototype.getValue = 
 function() {
 	return this._value;
@@ -132,6 +138,14 @@ function() {
 DwtProgressBar.prototype.setMaxValue = 
 function(val) {
 	this._maxValue = parseInt(val);
+}
+
+DwtProgressBar.prototype.setLabel =
+function( text, isRightAlign) {
+	var labelNode = document.createTextNode(text);
+	var position = isRightAlign ? -1 : 0;
+	var labelCell = this._row.insertCell(position) ;
+	labelCell.appendChild (labelNode);
 }
 
 //

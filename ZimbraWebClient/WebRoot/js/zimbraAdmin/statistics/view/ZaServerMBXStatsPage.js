@@ -344,6 +344,11 @@ function(mbx, now, isDndIcon) {
 	html[idx++] = "<tr>";
 	if(this._headerList) {
 		var cnt = this._headerList.length;
+		var progressBar = null ;
+		var progressCssClass = null ;
+		var wholeCssClass = null ;
+		var percent = null ;
+		var percentInt = null ;
 		for(var i = 0; i < cnt; i++) {
 			var id = this._headerList[i]._id;
 			if(id.indexOf(ZaServerMBXStatsPage.XFORM_ITEM_ACCOUNT) == 0) {
@@ -354,7 +359,26 @@ function(mbx, now, isDndIcon) {
 			} else if (id.indexOf(ZaServerMBXStatsPage.XFORM_ITEM_QUOTAUSAGE) == 0){ //this must before the QUOTA
 				// quota usage
 				html[idx++] = "<td width=" + this._headerList[i]._width + ">";
-				html[idx++] = AjxStringUtil.htmlEncode(mbx[ZaServerMBXStatsPage.XFORM_ITEM_QUOTAUSAGE]);
+				//html[idx++] = AjxStringUtil.htmlEncode(mbx[ZaServerMBXStatsPage.XFORM_ITEM_QUOTAUSAGE]);
+				//add the progress bar
+				progressCssClass = "mbxprogressused";
+				wholeCssClass = "mbxprogressbar" ;
+				progressBar = new DwtProgressBar(this);
+				percent = mbx[ZaServerMBXStatsPage.XFORM_ITEM_QUOTAUSAGE] ;
+				percentInt = parseInt(percent) ;
+				if ( percentInt > 85 ) {
+					progressCssClass += "Critical" ; 
+				}else if (percentInt > 65 ) {
+					progressCssClass += "Warning" ;
+				}
+		
+				progressBar.setProgressCssClass(progressCssClass);
+				progressBar.setWholeCssClass(wholeCssClass);	
+				progressBar.setLabel (percent, true) ;
+				progressBar.setValueByPercent (percent);
+							
+				html[idx++] = progressBar.getHtmlElement().innerHTML	;						
+//				html[idx++] = "<div>Add the progress bar</div>";
 				html[idx++] = "</td>";			
 			} else if(id.indexOf(ZaServerMBXStatsPage.XFORM_ITEM_QUOTA) == 0) {
 				// quota
