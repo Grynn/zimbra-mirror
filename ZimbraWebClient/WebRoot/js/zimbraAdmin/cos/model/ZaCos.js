@@ -119,9 +119,6 @@ function (by, val) {
 	params.soapDoc = soapDoc;	
 	var resp = command.invoke(params).Body.GetCosResponse;
 	this.initFromJS(resp.cos[0]);
-	//var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false);
-	//var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
-	//this.initFromDom(resp.firstChild);
 }
 
 ZaCos.prototype.refresh = 
@@ -199,9 +196,6 @@ function(name, mods) {
 	params.soapDoc = soapDoc;	
 	var resp = command.invoke(params).Body.CreateCosResponse;
 	this.initFromJS(resp.cos[0]);
-	
-//	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
-//	this.initFromDom(resp.firstChild);
 }
 
 /**
@@ -218,8 +212,6 @@ function(newName) {
 	params.soapDoc = soapDoc;	
 	var resp = command.invoke(params).Body.RenameCosResponse;
 	this.initFromJS(resp.cos[0]);	
-//	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
-//	this.initFromDom(resp.firstChild);
 }
 
 /**
@@ -234,7 +226,6 @@ function() {
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	command.invoke(params);
-//	ZmCsfeCommand.invoke(soapDoc, null, null, null, true);	
 }
 /**
 * public ZaCos.modify
@@ -268,8 +259,6 @@ function (mods) {
 	params.soapDoc = soapDoc;	
 	var resp = command.invoke(params).Body.ModifyCosResponse;
 	this.initFromJS(resp.cos[0])
-	//var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
-	//this.initFromDom(resp.firstChild);
 }
 
 /**

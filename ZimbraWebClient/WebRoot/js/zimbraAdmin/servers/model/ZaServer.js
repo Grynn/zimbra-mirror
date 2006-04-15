@@ -299,7 +299,11 @@ ZaServer.prototype.remove =
 function() {
 	var soapDoc = AjxSoapDoc.create("DeleteServerRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
-	ZmCsfeCommand.invoke(soapDoc, null, null, null, true);	
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	var resp = command.invoke(params);	
+//	ZmCsfeCommand.invoke(soapDoc, null, null, null, true);	
 }
 
 ZaServer.prototype.refresh = 
@@ -373,6 +377,7 @@ function () {
 	var soapDoc = AjxSoapDoc.create("GetCurrentVolumesRequest", "urn:zimbraAdmin", null);
 	//find out which server I am on
 	var respNode = ZmCsfeCommand.invoke(soapDoc, false, null, this.id, true).firstChild;	
+	
 	
 	var children = respNode.childNodes;
 	for (var i=0; i< children.length;  i++) {
