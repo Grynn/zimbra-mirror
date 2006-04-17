@@ -43,6 +43,8 @@ function() {
 	ZmObjectManager.registerHandler("ZmDate6ObjectHandler", ZmObjectManager.DATE, pri);
 	ZmObjectManager.registerHandler("ZmDate7ObjectHandler", ZmObjectManager.DATE, pri);
 	ZmObjectManager.registerHandler("ZmDate8ObjectHandler", ZmObjectManager.DATE, pri);
+	ZmObjectManager.registerHandler("ZmDate9ObjectHandler", ZmObjectManager.DATE, pri);	
+	ZmObjectManager.registerHandler("ZmDate10ObjectHandler", ZmObjectManager.DATE, pri);
 };
 
 Com_Zimbra_Date.prototype.TYPE = ZmObjectManager.DATE;
@@ -61,6 +63,8 @@ Com_Zimbra_Date.prototype.getActionMenu =
 
 
 var $RE_DOW = "(Mon(?:d(?:ay?)?)?|Tue(?:s(?:d(?:ay?)?)?)?|Wed(?:n(?:e(?:s(?:d(?:ay?)?)?)?)?)?|Thu(?:r(?:s(?:d(?:ay?)?)?)?)?|Fri(?:d(?:ay?)?)?|Sat(?:u(?:r(?:d(?:ay?)?)?)?)?|Sun(?:d(?:ay?)?)?)";
+var $RE_DOW_FULL = "(Mon|Tues|Wednes|Thurs|Fri|Satur|Sun)day";
+
 Com_Zimbra_Date.DOW = {	su: 0, mo: 1, tu: 2, we: 3, th: 4, fr: 5, sa: 6};
 
 var $RE_DOM = "(\\d{1,2})(?:st|nd|rd|th)?";
@@ -410,6 +414,60 @@ function(line, startIndex) {
 	var dom = parseInt(result[3], 10);
 	d.setMonth(month, dom);
 	d.setYear(year);
+	result.context = {date: d, monthOnly: 0};
+	return result;
+};
+
+// {June 2005}
+
+function ZmDate9ObjectHandler(appCtxt) {
+	Com_Zimbra_Date.call(this, appCtxt);
+}
+
+ZmDate9ObjectHandler.prototype = new Com_Zimbra_Date();
+ZmDate9ObjectHandler.prototype.constructor = ZmDate9ObjectHandler;
+ZmDate9ObjectHandler.prototype.name = "com_zimbra_date9";
+ZmDate9ObjectHandler.REGEX = new RegExp("\\b" + $RE_MONTH + $RE_SP + $RE_YEAR4 + "\\b", "ig");
+
+ZmDate9ObjectHandler.prototype.match =
+function(line, startIndex) {
+	ZmDate9ObjectHandler.REGEX.lastIndex = startIndex;
+	var result = ZmDate9ObjectHandler.REGEX.exec(line);
+	if (!result) {return null;}
+
+	var d = new Date(this.getCurrentDate().getTime());
+	var month = Com_Zimbra_Date.MONTH[result[1].toLowerCase()];
+	d.setMonth(month, 1);
+	var year = result[2] ? parseInt(result[2], 10) : null;
+	if (year) d.setYear(year);
+	result.context = {date: d, monthOnly: 1};
+	return result;
+};
+
+
+// {Tuesday}, {Monday}, etc
+
+function ZmDate10ObjectHandler(appCtxt) {
+	Com_Zimbra_Date.call(this, appCtxt);
+}
+
+ZmDate10ObjectHandler.prototype = new Com_Zimbra_Date();
+ZmDate10ObjectHandler.prototype.constructor = ZmDate10ObjectHandler;
+ZmDate10ObjectHandler.prototype.name = "com_zimbra_date10";
+
+ZmDate10ObjectHandler.REGEX = new RegExp("\\b" + $RE_DOW_FULL + "\\b", "ig");
+
+ZmDate10ObjectHandler.prototype.match =
+function(line, startIndex) {
+	ZmDate10ObjectHandler.REGEX.lastIndex = startIndex;
+	var result = ZmDate10ObjectHandler.REGEX.exec(line);
+	if (!result) {return null;}
+	
+	var d = new Date(this.getCurrentDate().getTime());
+	var dow = d.getDay();
+	var ndow = Com_Zimbra_Date.DOW[result[1].toLowerCase().substring(0,2)];
+	var addDays = ndow - dow;
+	d.setDate(d.getDate() + addDays);
 	result.context = {date: d, monthOnly: 0};
 	return result;
 };
