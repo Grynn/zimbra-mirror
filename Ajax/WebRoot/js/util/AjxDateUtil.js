@@ -386,15 +386,26 @@ function(date) {
 };
 
 AjxDateUtil.getServerDateTime = 
-function(date) {
-	if (!AjxDateUtil._serverDateTimeFormatter) {
-		AjxDateUtil._serverDateTimeFormatter = new AjxDateFormat("yyyyMMdd'T'HHmmss'Z'");
+function(date, useUTC) {
+	var newDate = date;
+	var formatter = null;
+
+	if (useUTC) {
+		if (!AjxDateUtil._serverDateTimeFormatterUTC) {
+			AjxDateUtil._serverDateTimeFormatterUTC = new AjxDateFormat("yyyyMMdd'T'HHmmss'Z'");
+		}
+		formatter = AjxDateUtil._serverDateTimeFormatterUTC;
+		// add timezone offset to this UTC date
+		newDate = new Date(date.getTime());
+		newDate.setMinutes(newDate.getMinutes() + newDate.getTimezoneOffset());
+	} else {
+		if (!AjxDateUtil._serverDateTimeFormatter) {
+			AjxDateUtil._serverDateTimeFormatter = new AjxDateFormat("yyyyMMdd'T'HHmmss");
+		}
+		formatter = AjxDateUtil._serverDateTimeFormatter;
 	}
 
-	// bug fix #6454 - always convert the date to UTC!
-	var utcDate = new Date(date.getTime());
-	utcDate.setMinutes(utcDate.getMinutes() + utcDate.getTimezoneOffset());
-	return AjxDateUtil._serverDateTimeFormatter.format(utcDate);
+	return formatter.format(newDate);
 };
 
 AjxDateUtil.parseServerTime = 
