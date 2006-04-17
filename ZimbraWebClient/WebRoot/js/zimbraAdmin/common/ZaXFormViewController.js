@@ -24,7 +24,7 @@
  */
 
 /**
-* @class ZaXFormViewController base class for all Za***ViewControllers
+* @class ZaXFormViewController base class for all Za***ViewControllers (for XForm views only)
 * @extends ZaController
 * @contructor 
 * @param appCtxt

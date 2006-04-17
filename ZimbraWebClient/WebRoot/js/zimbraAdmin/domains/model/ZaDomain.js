@@ -50,7 +50,8 @@ function ZaDomain(app) {
 	}
 	this.attrs[ZaDomain.A_AuthMech] = ZaDomain.AuthMech_zimbra;
 }
-
+ZaDomain.RESULTSPERPAGE = ZaSettings.RESULTSPERPAGE; 
+ZaDomain.MAXSEARCHRESULTS = ZaSettings.MAXSEARCHRESULTS;
 ZaDomain.prototype = new ZaItem;
 ZaDomain.prototype.constructor = ZaDomain;
 
@@ -459,6 +460,7 @@ function(mods) {
 /**
 * Domain configuration is tricky, therefore have to massage the values into the instace
 **/
+/*
 ZaDomain.prototype.initFromDom = 
 function (node) {
 	ZaItem.prototype.initFromDom.call(this, node);
@@ -470,7 +472,7 @@ function (node) {
 	}
 
 	if(this.attrs[ZaDomain.A_AuthLdapURL]) {
-		/* Split Auth URL into an array */
+		// Split Auth URL into an array 
 		var temp = this.attrs[ZaDomain.A_AuthLdapURL];
 		this.attrs[ZaDomain.A_AuthLdapURL] = temp.split(" ");
 
@@ -507,7 +509,7 @@ function (node) {
 	this[ZaDomain.A_GALSampleQuery] = "john";
 
 }
-
+*/
 ZaDomain.prototype.initFromJS = 
 function (obj) {
 	ZaItem.prototype.initFromJS.call(this, obj);
@@ -519,7 +521,7 @@ function (obj) {
 	}
 
 	if(this.attrs[ZaDomain.A_AuthLdapURL]) {
-		/* Split Auth URL into an array */
+		// Split Auth URL into an array 
 		var temp = this.attrs[ZaDomain.A_AuthLdapURL];
 		this.attrs[ZaDomain.A_AuthLdapURL] = temp.split(" ");
 

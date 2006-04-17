@@ -665,9 +665,9 @@ ZaOverviewPanelController.serverListTreeListener = function (ev) {
 
 ZaOverviewPanelController.domainListTreeListener = function (ev) {
 	if(this._app.getCurrentController()) {
-		this._app.getCurrentController().switchToNextView(this._app.getDomainListController(), ZaDomainListController.prototype.show, ZaDomain.getAll(this._app));
+		this._app.getCurrentController().switchToNextView(this._app.getDomainListController(), ZaDomainListController.prototype.show);
 	} else {					
-		this._app.getDomainListController().show(ZaDomain.getAll(this._app));
+		this._app.getDomainListController().show();
 	}
 }
 

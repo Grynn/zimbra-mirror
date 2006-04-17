@@ -165,8 +165,8 @@ ZaAccount.A2_newAlias = "newalias";
 ZaAccount.A2_aliases = "aliases";
 ZaAccount.A2_forwarding = "forwardings";
 
-ZaAccount.MAXSEARCHRESULTS = "500";
-ZaAccount.RESULTSPERPAGE = "25";
+ZaAccount.MAXSEARCHRESULTS = ZaSettings.MAXSEARCHRESULTS;
+ZaAccount.RESULTSPERPAGE = ZaSettings.RESULTSPERPAGE;
 
 ZaAccount.checkValues = 
 function(tmpObj, app) {

@@ -29,15 +29,27 @@
 * This is a singleton object that controls all the user interaction with the list of ZaDomain objects
 **/
 function ZaDomainListController(appCtxt, container, app) {
-	ZaController.call(this, appCtxt, container, app,"ZaDomainListController");
-	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_domains/managing_domains.htm";				
+	ZaListViewController.call(this, appCtxt, container, app,"ZaDomainListController");
+
+   	this._toolbarOperations = new Array();
+   	this._popupOperations = new Array();			
+
+	this._helpURL = ZaDomainListController.helpURL;	
+	this.pages = new Object();
+	this._currentPageNum = 1;	
+	this._currentQuery = new ZaSearchQuery("", [ZaSearch.DOMAINS], false, "");
+	this._currentSortField = ZaDomain.A_domainName;
+	this._currentSortOrder = true;
+	this.objType = ZaEvent.S_DOMAIN;			
 }
 
-ZaDomainListController.prototype = new ZaController();
+ZaDomainListController.prototype = new ZaListViewController();
 ZaDomainListController.prototype.constructor = ZaDomainListController;
-
+ZaDomainListController.helpURL =  "/zimbraAdmin/adminhelp/html/WebHelp/managing_domains/managing_domains.htm";
+ZaController.initToolbarMethods["ZaDomainListController"] = new Array();
+ZaController.initPopupMenuMethods["ZaDomainListController"] = new Array();
 //ZaDomainListController.DOMAIN_VIEW = "ZaDomainListController.DOMAIN_VIEW";
-
+/*
 ZaDomainListController.prototype.show = 
 function(list) {
     if (!this._contentView) {
@@ -83,6 +95,81 @@ function(list) {
 		this._list = list;
 		
 	this._changeActionsState();		
+}*/
+
+ZaDomainListController.prototype.searchCallback =
+function(params, resp) {
+	try {
+		if(!resp) {
+			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaDomainListController.prototype.searchCallback"));
+		}
+		if(resp.isException()) {
+			throw(arg.getException());
+		} else {
+			var response = resp.getResponse().Body.SearchDirectoryResponse;
+			var list = new ZaItemList(ZaDomain, this._app);	
+			list.loadFromJS(response);	
+			var searchTotal = response.searchTotal;
+			var limit = params.limit ? params.limit : ZaDomain.RESULTSPERPAGE; 
+			var numPages = Math.ceil(searchTotal/params.limit);
+			this._show({"list":list, "numPages":numPages});			
+		}
+	} catch (ex) {
+		this._handleException(ex, "ZaDomainListController.prototype.searchCallback");	
+	}
+}
+
+ZaDomainListController.prototype.show = function () {
+	var callback = new AjxCallback(this, this.searchCallback, {limit:ZaDomain.RESULTSPERPAGE});
+	var params = {
+		query:"", 
+		types:[ZaSearch.DOMAINS],
+		sortBy:ZaDomain.A_domainName,
+		offset:"0",
+		sortAscending:"0",
+		limit:ZaDomain.RESULTSPERPAGE,
+		callback:callback
+	};	
+	ZaSearch.searchDirectory(params);
+}
+
+ZaDomainListController.prototype._show = 
+function(searchResult) {
+    if (!this._UICreated) {
+		this._createUI();
+	} 
+	if (searchResult && searchResult.list != null) {
+		var tmpArr = new Array();
+		var cnt = searchResult.list.getArray().length;
+		for(var ix = 0; ix < cnt; ix++) {
+			tmpArr.push(searchResult.list.getArray()[ix]);
+		}
+		if(cnt < 1) {
+			//if the list is empty - go to the previous page
+		}
+		//add the default column sortable
+		this._contentView._bSortAsc = this._currentSortOrder ;
+		this._contentView.set(AjxVector.fromArray(tmpArr), this._contentView._defaultColumnSortable);	
+	}
+	this._app.pushView(ZaZimbraAdmin._DOMAINS_LIST_VIEW);
+
+//	this._app.setCurrentController(this);		
+	this._removeList = new Array();
+	if (searchResult && searchResult.list != null) {
+		this.pages[this._currentPageNum] = searchResult;
+	}
+	this._changeActionsState();
+
+	if(this.pages[this._currentPageNum].numPages <= this._currentPageNum) {
+		this._toolbar.enable([ZaOperation.PAGE_FORWARD], false);
+	} else {
+		this._toolbar.enable([ZaOperation.PAGE_FORWARD], true);
+	}
+	if(this._currentPageNum == 1) {
+		this._toolbar.enable([ZaOperation.PAGE_BACK], false);
+	} else {
+		this._toolbar.enable([ZaOperation.PAGE_BACK], true);
+	}
 }
 
 /**
@@ -184,6 +271,60 @@ function(listener) {
 	this._evtMgr.addListener(ZaEvent.E_CREATE, listener);
 }
 
+ZaDomainListController.initPopupMenuMethod =
+function () {
+   	this._popupOperations.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.DTBB_New_tt, "Domain", "DomainDis", new AjxListener(this, ZaDomainListController.prototype._newButtonListener)));
+   	this._popupOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.DTBB_Edit_tt, "Properties", "PropertiesDis",  new AjxListener(this, ZaDomainListController.prototype._editButtonListener)));    	
+   	this._popupOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.DTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaDomainListController.prototype._deleteButtonListener)));    	    	
+	this._popupOperations.push(new ZaOperation(ZaOperation.GAL_WIZARD, ZaMsg.DTBB_GAlConfigWiz, ZaMsg.DTBB_GAlConfigWiz_tt, "GALWizard", "GALWizardDis", new AjxListener(this, ZaDomainListController.prototype._galWizButtonListener)));   		
+	this._popupOperations.push(new ZaOperation(ZaOperation.AUTH_WIZARD, ZaMsg.DTBB_AuthConfigWiz, ZaMsg.DTBB_AuthConfigWiz_tt, "AuthWizard", "AuthWizardDis", new AjxListener(this, ZaDomainListController.prototype._authWizButtonListener)));   		   		
+
+}
+ZaController.initPopupMenuMethods["ZaDomainListController"].push(ZaDomainListController.initPopupMenuMethod);
+
+/**
+* This method is called from {@link ZaController#_initToolbar}
+**/
+ZaDomainListController.initToolbarMethod =
+function () {
+	// first button in the toolbar is a menu.
+   	this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.DTBB_New_tt, "Domain", "DomainDis", new AjxListener(this, ZaDomainListController.prototype._newButtonListener)));
+   	this._toolbarOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.DTBB_Edit_tt, "Properties", "PropertiesDis",  new AjxListener(this, ZaDomainListController.prototype._editButtonListener)));    	
+   	this._toolbarOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.DTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaDomainListController.prototype._deleteButtonListener)));    	    	
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.GAL_WIZARD, ZaMsg.DTBB_GAlConfigWiz, ZaMsg.DTBB_GAlConfigWiz_tt, "GALWizard", "GALWizardDis", new AjxListener(this, ZaDomainListController.prototype._galWizButtonListener)));   		
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.AUTH_WIZARD, ZaMsg.DTBB_AuthConfigWiz, ZaMsg.DTBB_AuthConfigWiz_tt, "AuthWizard", "AuthWizardDis", new AjxListener(this, ZaDomainListController.prototype._authWizButtonListener)));   		   		
+	
+}
+ZaController.initToolbarMethods["ZaDomainListController"].push(ZaDomainListController.initToolbarMethod);
+
+//private and protected methods
+ZaDomainListController.prototype._createUI = 
+function () {
+	this._contentView = new ZaDomainListView(this._container);
+	// create the menu operations/listeners first	
+    this._initToolbar();
+	//always add Help and navigation buttons at the end of the toolbar    
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.NONE));	
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.PAGE_BACK, ZaMsg.Previous, ZaMsg.PrevPage_tt, "LeftArrow", "LeftArrowDis",  new AjxListener(this, this._prevPageListener)));
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.PAGE_FORWARD, ZaMsg.Next, ZaMsg.NextPage_tt, "RightArrow", "RightArrowDis", new AjxListener(this, this._nextPageListener)));
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));				
+
+	this._toolbar = new ZaToolBar(this._container, this._toolbarOperations);    
+		
+	var elements = new Object();
+	elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
+	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
+	this._app.createView(ZaZimbraAdmin._DOMAINS_LIST_VIEW, elements);
+
+	this._initPopupMenu();
+	this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations);
+	
+	//set a selection listener on the account list view
+	this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
+	this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
+	this._removeConfirmMessageDialog = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);			
+	this._UICreated = true;
+}
 
 /**
 *	Private method that notifies listeners that a new ZaDomain is created

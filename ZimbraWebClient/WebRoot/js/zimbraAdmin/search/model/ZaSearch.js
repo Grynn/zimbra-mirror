@@ -42,12 +42,14 @@ ZaSearch.ALIASES = "aliases";
 ZaSearch.DLS = "distributionlists";
 ZaSearch.ACCOUNTS = "accounts";
 ZaSearch.RESOURCES = "resources";
+ZaSearch.DOMAINS = "domains";
 
 ZaSearch.TYPES = new Object();
 ZaSearch.TYPES[ZaItem.ALIAS] = ZaSearch.ALIASES;
 ZaSearch.TYPES[ZaItem.DL] = ZaSearch.DLS;
 ZaSearch.TYPES[ZaItem.ACCOUNT] = ZaSearch.ACCOUNTS;
 ZaSearch.TYPES[ZaItem.RESOURCE] = ZaSearch.RESOURCES;
+ZaSearch.TYPES[ZaItem.DOMAIN] = ZaSearch.DOMAINS;
 
 
 ZaSearch.A_query = "query";
@@ -75,9 +77,66 @@ ZaSearch.standardAttributes = AjxBuffer.concat(ZaAccount.A_displayname,",",
 											   ZaAccount.A_description, ",",
 											   ZaDistributionList.A_mailStatus, ",",
 											   ZaResource.A_zimbraCalResType);
-
 /**
-* Sends SearchAccountsRequest to the SOAP Servlet
+* Sends SearchDirectoryRequest to the SOAP Servlet
+* params {
+* 	query - query string should be an LDAP-style filter string (RFC 2254)
+* 	sortBy - LDAP attribute name, default is zimbraId
+* 	limit - the number of objects to return (0 is default and means all)
+* 	offset - the starting offset (0, 25, etc)
+* 	domain - the domain name to limit the search to (do not use if searching for domains)
+*	applyCos - whether or not (0/1) to apply the COS policy to account. specify 0 if only
+*	           requesting attrs that aren't inherited from COS
+*	attrs - array of of attributes to return ("displayName", "zimbraId", "zimbraAccountStatus")
+*	sortAscending - whether to sort in ascending order (0/1), 1 is default
+*   types = array of types to return. legal values are: accounts|distributionlists|aliases|resources|domains, 
+* 		default is accounts
+* 	callback - an AjxCallback
+* }
+* */
+ZaSearch.searchDirectory = 
+function (params) {
+	var soapDoc = AjxSoapDoc.create("SearchDirectoryRequest", "urn:zimbraAdmin", null);
+	if(params.query) {
+		soapDoc.set("query", params.query);
+	} else {
+		soapDoc.set("query", "");		
+	}
+
+	var sortBy = (params.sortBy != undefined)? params.sortBy: ZaItem.A_zimbraId;
+	var limit = (params.limit != undefined)? params.limit: ZaAccount.RESULTSPERPAGE;
+	var offset = (params.offset != undefined) ? params.offset : "0";
+	var sortAscending = (params.sortAscending != null)? params.sortAscending : "0";
+	
+	soapDoc.getMethod().setAttribute("offset", offset);
+	soapDoc.getMethod().setAttribute("limit", limit);
+	soapDoc.getMethod().setAttribute("sortBy", sortBy);
+	soapDoc.getMethod().setAttribute("sortAscending", sortAscending);	
+
+	if(params.applyCos)	
+		soapDoc.getMethod().setAttribute("applyCos", params.applyCos);
+	
+	if(params.domain)	
+		soapDoc.getMethod().setAttribute("domain", params.domain);
+
+	if(params.attrs && params.attrs.length>0)
+		soapDoc.getMethod().setAttribute("attrs", params.attrs.toString());
+		
+	if(params.types && params.types.length>0)
+		soapDoc.getMethod().setAttribute("types", params.types.toString());
+		
+	
+	var command = new ZmCsfeCommand();
+	var cmdParams = new Object();
+	cmdParams.soapDoc = soapDoc;	
+	if(params.callback) {
+		cmdParams.asyncMode = true;
+		cmdParams.callback = params.callback;
+	}
+	command.invoke(cmdParams);	
+}
+/**
+* Sends SearchDirectoryRequest to the SOAP Servlet
 * @param query - query string
 * @param types - array of object types to search for([ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES])
 * @pagenum - results page number
@@ -101,7 +160,7 @@ function(query, types, pagenum, orderby, isascending, app, attrs, limit, domainN
 	
 	var offset = (pagenum-1) * limit;
 	attrs = (attrs != null)? attrs: ZaSearch.standardAttributes;
-	var soapDoc = AjxSoapDoc.create("SearchAccountsRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("SearchDirectoryRequest", "urn:zimbraAdmin", null);
 /*	if(query)
 		query = String(query).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
 	*/	
@@ -124,7 +183,7 @@ function(query, types, pagenum, orderby, isascending, app, attrs, limit, domainN
 	var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	var resp = command.invoke(params).Body.SearchAccountsResponse;
+	var resp = command.invoke(params).Body.SearchDirectoryResponse;
 	var list = new ZaItemList(null, app);	
 	list.loadFromJS(resp);
 		
