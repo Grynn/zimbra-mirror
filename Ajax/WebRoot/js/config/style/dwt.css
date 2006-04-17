@@ -475,32 +475,6 @@
 }
 
 
-/*
- *  DwtAddRemove
- */
-
-.DwtAddRemove {}
-.DwtAddRemoveListView {
-	@ListBg@
-	@ListBorder@
-}
-
-.DwtAddRemoveListViewRow {
-	@TextPadding@
-}
-
-.DwtAddRemove-outerTable { 
-	border:0px;
-	border-spacing:0px;
-}
-
-/* ??? SHOTGUN */
-.DwtAddRemove-outerTable TD{ 
-	@TextPadding@
-}
-
-
-
 
 /*
  * Dialogs
@@ -1217,11 +1191,6 @@
  * DwtChooser -- pair of list viewers with buttons to add from one to the other
  */
 
-.DwtChooser {
-	width: 100%;
-}
-
-
 /* ??? NECESSARY ? */
 .DwtChooserListView {
 	@ListBg@
@@ -1229,8 +1198,13 @@
 	@BoxMargin@
 }
 
-
-
+/* simple rows that don't contain tables */
+.DwtChooserListView > div {
+	@Text@
+	padding-left:@TextPaddingSize@;
+	padding-top:2px;
+	padding-right:2px;
+}
 
 /*
  * DwtShellBusyDialog - dialog that comes up when the server is taking a long time to respond

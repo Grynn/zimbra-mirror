@@ -148,8 +148,8 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 					{type:_CASE_, relevant:"instance[ZaModel.currentTab]==4",
 						items: [
 							{ sourceRef: ZaCos.A_zimbraMailAllServersInternal,
-					  	  	  ref: ZaCos.A_zimbraMailHostPoolInternal, type: _DWT_ADD_REMOVE_,
-							  listCssClass: "DwtAddRemoveListView ZaGlobalAttachExt", sorted: true,
+					  	  	  ref: ZaCos.A_zimbraMailHostPoolInternal, type: _DWT_CHOOSER_,
+							  listCssClass: "DwtChooserListView ZaGlobalAttachExt", sorted: true,
 					  	  	  onChange: ZaTabView.onFormFieldChanged,
 					  	  	  forceUpdate:true
 					  	  	}

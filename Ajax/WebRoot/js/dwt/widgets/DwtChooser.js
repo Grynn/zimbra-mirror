@@ -40,29 +40,46 @@
 * There are two different layout styles, horizontal (with the list views at the
 * left and right) and vertical (with the list views at the top and bottom). There
 * are two different selection styles, single and multiple, which control how many
-* items may appear in the target list view.</p>
+* items may appear in the target list view. There are two different transfer modes:
+* one where items are copied between lists, and one where they're moved.</p>
+*
+* TODO: - column sorting
 *
 * @author Conrad Damon
 *
 * @param parent			[DwtComposite]		containing widget
 * @param className		[string]*			CSS class
+* @param slvClassName	[string]*			CSS class for source list view
+* @param tlvClassName	[string]*			CSS class for target list view
 * @param buttonInfo		[array]*			id/label pairs for transfer buttons
 * @param layoutStyle	[constant]*			layout style (vertical or horizontal)
 * @param selectStyle	[constant]*			multi-select (default) or single-select
+* @param mode			[constant]*			items are moved or copied
 * @param noDuplicates	[boolean]*			if true, prevent duplicates in target list
-* @param rowHeight		[int]*				height of one row in a list view (single select style)
+* @param singleHeight	[int]*				height of list view for single select style
+* @param listSize		[int]*				list width (if HORIZ) or height (if VERT)
+* @param sourceEmptyOk	[boolean]*			if true, don't show "No Results" in source list view
+* @param allButtons		[boolean]*			if true, offer "Add All" and "Remove All" buttons
 */
 function DwtChooser(params) {
 
 	if (arguments.length == 0) return;
 	DwtComposite.call(this, params.parent, params.className);
 
+	this._slvClassName = params.slvClassName;
+	this._tlvClassName = params.tlvClassName;
 	this._layoutStyle = params.layoutStyle ? params.layoutStyle : DwtChooser.HORIZ_STYLE;
-	this._selectStyle = params.selectStyle ? params.selectStyle : DwtChooser.MULTI_SELECT
-	this._noDuplicates = params.noDuplicates;
-	this._rowHeight = params.rowHeight ? params.rowHeight : 45; // 45 = header row + row with icon
+	this._selectStyle = params.selectStyle ? params.selectStyle : DwtChooser.MULTI_SELECT;
+	this._mode = params.listStyle ? params.listStyle : DwtChooser.MODE_MOVE;
+	this._noDuplicates = (params.noDuplicates !== false);
+	this._singleHeight = params.singleHeight ? params.singleHeight : 45; // 45 = header row + row with icon
+	this._listSize = params.listSize;
+	this._sourceEmptyOk = params.sourceEmptyOk;
+	this._allButtons = params.allButtons;
 
 	this._handleButtonInfo(params.buttonInfo);
+	this._mode = params.mode ? params.mode :
+						this._hasMultiButtons ? DwtChooser.MODE_COPY : DwtChooser.MODE_MOVE;
 
 	this._createHtml();
 	this._initialize();
@@ -70,9 +87,6 @@ function DwtChooser(params) {
 	if (parentSz) {
 		this.resize(parentSz.x, parentSz.y);
 	}
-
-	this._evt = new ZmEvent(ZmEvent.S_CHOOSER);
-	this._evtMgr = new AjxEventMgr();
 };
 
 DwtChooser.prototype = new DwtComposite;
@@ -80,13 +94,21 @@ DwtChooser.prototype.constructor = DwtChooser;
 
 // Consts
 
+// layout style
 DwtChooser.HORIZ_STYLE	= 1;
 DwtChooser.VERT_STYLE	= 2;
 
+// number of items target list can hold
 DwtChooser.SINGLE_SELECT	= 1;
 DwtChooser.MULTI_SELECT		= 2;
 
+// what happens to source items during transfer
+DwtChooser.MODE_COPY	= 1;
+DwtChooser.MODE_MOVE	= 2;
+
 DwtChooser.REMOVE_BTN_ID = "__remove__";
+DwtChooser.ADD_ALL_BTN_ID = "__addAll__";
+DwtChooser.REMOVE_ALL_BTN_ID = "__removeAll__";
 
 DwtChooser.prototype.toString = 
 function() {
@@ -94,32 +116,142 @@ function() {
 };
 
 /**
-* Populates the source list view with the given list.
+* Populates the given list view with the given list. Defaults to source view.
 *
-* @param list	[AjxVector]		list of items
+* @param items			[object]		list of items (AjxVector, array, or single object), or hash of lists
+* @param view			[constant]*		view to set (source or target)
+* @param clearOtherView	[boolean]*		if true, clear out other view
 */
 DwtChooser.prototype.setItems =
-function(list) {
-	this.sourceListView.set(list);
-	if (list.size() > 0) {
-		this.sourceListView.setSelection(list.get(0));	// select first item
+function(items, view, clearOtherView) {
+	view = view ? view : DwtChooserListView.SOURCE;
+	this._reset(view);
+	this.addItems(items, view, true);
+	this._selectFirst(view);
+	if (clearOtherView) {
+		this._reset((view == DwtChooserListView.SOURCE) ? DwtChooserListView.TARGET : DwtChooserListView.SOURCE);
+	}
+};	
+	
+/**
+* Returns a copy of the items in the given list. If that's the target list and 
+* there are multiple transfer buttons, then a hash with a vector for each one
+* is returned. Otherwise, a single vector is returned. Defaults to target view.
+*
+* @param view	[constant]*		view to get items from (source or target)
+*/
+DwtChooser.prototype.getItems =
+function(view) {
+	view = view ? view : DwtChooserListView.TARGET;
+	if (view == DwtChooserListView.SOURCE) {
+		return this.sourceListView.getList().clone();
+	} else {	
+		if (this._hasMultiButtons) {
+			var data = {};
+			for (var i in this._data) {
+				data[i] = this._data[i].clone();
+			}
+			return data;
+		} else {
+			return this._data[this._buttonInfo[0].id].clone();
+		}
 	}
 };
 
 /**
-* Returns the items that have been selected. If there are multiple transfer 
-* buttons, then a hash with a vector for each one is returned. Otherwise, a
-* single vector is returned.
+* Adds items to the given list view.
+*
+* @param items		[object]		list of items (AjxVector, array, or single object)
+* @param view		[constant]		view to add to (source or target)
+* @param skipNotify	[boolean]*		if true, don't notify listeners
+* @param id			[string]*		button ID
 */
-DwtChooser.prototype.getItems =
-function() {
-	return this._hasMultiButtons ? this._data : this._data[this._buttonInfo[0].id];
+DwtChooser.prototype.addItems =
+function(items, view, skipNotify, id) {
+	view = view ? view : DwtChooserListView.SOURCE;
+	var list = (items instanceof AjxVector) ? items.getArray() : (items instanceof Array) ? items : [items];
+	if (view == DwtChooserListView.SOURCE) {
+		for (var i = 0; i < list.length; i++) {
+			this._addToSource(list[i], null, skipNotify);
+		}
+	} else {
+		var data;
+		if (this._selectStyle == DwtChooser.SINGLE_SELECT) {
+			this.targetListView._resetList();
+			list = (list.length > 0) ? [list[0]] : list;
+		}
+		for (var i = 0; i < list.length; i++) {
+			this._addToTarget(list[i], id, skipNotify);
+			if (this._selectStyle == DwtChooser.SINGLE_SELECT) {
+				return;
+			}
+		}
+	}
+	if (view == DwtChooserListView.SOURCE) {
+		var list = this.sourceListView.getList();
+		this._sourceSize = list ? list.size() : 0;
+	}
+};
+
+/**
+* Removes items from the given list view.
+*
+* @param list		[object]		list of items (AjxVector, array, or single object)
+* @param view		[constant]		view to remove from (source or target)
+* @param skipNotify	[boolean]*		if true, don't notify listeners
+*/
+DwtChooser.prototype.removeItems =
+function(list, view, skipNotify) {
+	list = (list instanceof AjxVector) ? list.getArray() : (list instanceof Array) ? list : [list];
+	for (var i = 0; i < list.length; i++) {
+		(view == DwtChooserListView.SOURCE) ? this._removeFromSource(list[i], skipNotify) : this._removeFromTarget(list[i], skipNotify);
+	}
+};
+
+/*
+* Moves or copies items from the source list to the target list, paying attention
+* to current mode.
+*
+* @param list		[object]	list of items (AjxVector, array, or single object)
+* @param id			[string]*	ID of the transfer button that was used
+* @param skipNotify	[boolean]*	if true, don't notify listeners
+*/
+DwtChooser.prototype.transfer =
+function(list, id, skipNotify) {
+	id = id ? id : this._activeButtonId;
+	this._setActiveButton(id);
+	this.addItems(list, DwtChooserListView.TARGET, skipNotify);
+	if (this._mode == DwtChooser.MODE_MOVE) {
+		this.removeItems(list, DwtChooserListView.SOURCE);
+	}
+	this.sourceListView.deselectAll();
+};
+
+/**
+* Removes items from target list, paying attention to current mode. Also handles button state.
+*
+* @param list		[object]	list of items (AjxVector, array, or single object)
+* @param skipNotify	[boolean]*	if true, don't notify listeners
+*/
+DwtChooser.prototype.remove =
+function(list, skipNotify) {
+	list = (list instanceof AjxVector) ? list.getArray() : (list instanceof Array) ? list : [list];
+	this.removeItems(list, DwtChooserListView.TARGET);
+	if (this._mode == DwtChooser.MODE_MOVE) {
+		for (var i = 0; i < list.length; i++) {
+			var index = this._getInsertionIndex(this.sourceListView, list[i]);
+			this.sourceListView.addItem(list[i], index, true);
+		}
+	}
 };
 
 /**
 * Sets the select style to the given style (single or multiple). Performs a resize
 * in order to adjust the layout, and changes the label on the transfer button if it's
 * the default one.
+*
+* @param style		[constant]		single or multiple select
+* @param noResize	[boolean]*		if true, don't perform resize
 */
 DwtChooser.prototype.setSelectStyle =
 function(style, noResize) {
@@ -135,48 +267,60 @@ function(style, noResize) {
 		this.resize(curSz.x, curSz.y);
 	}
 	
-	// if we're going from multi to single, preserve the first target item
+	// "Add All" and "Remove All" buttons only shown if MULTI_SELECT
+	if (this._allButtons) {
+		this._addAllButton.setVisible(style == DwtChooser.MULTI_SELECT);
+		this._removeAllButton.setVisible(style == DwtChooser.MULTI_SELECT);
+		this._enableButtons();
+	}
+
+	// if we're going from multi to single, preserve only the first target item
 	if (style == DwtChooser.SINGLE_SELECT) {
-		var item = null;
-		for (var i in this._data) {
-			if (this._data[i].size()) {
-				item = this._data[i].get(0);
-				break;
+		var list = this.targetListView.getList();
+		var a = list ? list.clone().getArray() : null;
+		if (a && a.length) {
+			this._reset(DwtChooserListView.TARGET);
+			this.addItems(a[0], DwtChooserListView.TARGET, true);
+			this.targetListView.deselectAll();
+			if (a.length > 1 && this._mode == DwtChooser.MODE_MOVE) {
+				this.addItems(a.slice(1), DwtChooserListView.SOURCE, true);
 			}
-		}
-		if (item) {
-			this.reset(DwtChooserListView.TARGET);
-			this.transfer([item]);
+			this._enableButtons();
 		}
 	}
 };
 
 /**
-* Resets one or both list views.
+* Resets one or both list views, and the buttons. Defaults to resetting both list views.
 *
-* @param viewType	[constant]		source or target list view
+* @param view	[constant]		source or target list view
 */
 DwtChooser.prototype.reset =
-function(viewType) {
+function(view) {
+	this._reset(view);
+	this._setActiveButton(this._buttonInfo[0].id); // make first button active by default
+	this._enableButtons();
+};
 
+/*
+* Resets one or both list views. Defaults to resetting both list views.
+*
+* @param view	[constant]		source or target list view
+*/
+DwtChooser.prototype._reset =
+function(view) {
 	// clear out source list view and related data
-	if (!viewType || viewType == DwtChooserListView.SOURCE) {
+	if (!view || view == DwtChooserListView.SOURCE) {
 		this.sourceListView._resetList();
-		if (this._list && this._list.size()) {
-			this._list.clear();
-		}
 	}
 
 	// clear out target list view and related data
-	if (!viewType || viewType == DwtChooserListView.TARGET) {
+	if (!view || view == DwtChooserListView.TARGET) {
 		this.targetListView._resetList();
 		for (var i in this._data) {
 			this._data[i].removeAll();
 		}
 	}
-
-	this._setActiveButton(this._buttonInfo[0].id); // make first button active by default
-	this._enableButtons(true, false);
 };
 
 /**
@@ -184,9 +328,9 @@ function(viewType) {
 *
 * @param listener	[AjxListener]	a listener
 */
-DwtChooser.prototype.addChangeListener = 
+DwtChooser.prototype.addStateChangeListener = 
 function(listener) {
-	return this._evtMgr.addListener(ZmEvent.L_MODIFY, listener);
+	this.targetListView.addStateChangeListener(listener);
 };
 
 /**
@@ -194,39 +338,33 @@ function(listener) {
 *
 * @param listener	[AjxListener]	a listener
 */
-DwtChooser.prototype.removeChangeListener = 
+DwtChooser.prototype.removeStateChangeListener = 
 function(listener) {
-	return this._evtMgr.removeListener(ZmEvent.L_MODIFY, listener);    	
+	this.targetListView.removeStateChangeListener(listener);
 };
 
+/**
+* Returns the DIV that contains the source list view.
+*/
 DwtChooser.prototype.getSourceListView = 
 function() {
 	return document.getElementById(this._sourceListViewDivId);
 };
 
+/**
+* Returns the DIV that contains the buttons.
+*/
 DwtChooser.prototype.getButtons = 
 function() {
 	return document.getElementById(this._buttonsDivId);
 };
 
+/**
+* Returns the DIV that contains the target list view.
+*/
 DwtChooser.prototype.getTargetListView = 
 function() {
 	return document.getElementById(this._targetListViewDivId);
-};
-
-/**
-* Notifies listeners of the given change event.
-*
-* @param event		[constant]		event type (see ZmEvent)
-* @param details	[hash]*			additional information
-*/
-DwtChooser.prototype._notify =
-function(event, details) {
-	if (this._evtMgr.isListenerRegistered(ZmEvent.L_MODIFY)) {
-		this._evt.set(event, this);
-		this._evt.setDetails(details);
-		this._evtMgr.notifyListeners(ZmEvent.L_MODIFY, this._evt);
-	}
 };
 
 /*
@@ -240,6 +378,10 @@ function() {
 	this._targetListViewDivId	= Dwt.getNextId();
 	this._buttonsDivId			= Dwt.getNextId();
 	this._removeButtonDivId		= Dwt.getNextId();
+	if (this._allButtons) {
+		this._addAllButtonDivId		= Dwt.getNextId();
+		this._removeAllButtonDivId	= Dwt.getNextId();
+	}
 
 	var html = [];
 	var idx = 0;
@@ -258,6 +400,11 @@ function() {
 		html[idx++] = "<td valign='middle' id='";
 		html[idx++] = this._buttonsDivId;
 		html[idx++] = "'>";
+		if (this._allButtons) {
+			html[idx++] = "<div id='";
+			html[idx++] = this._addAllButtonDivId;
+			html[idx++] = "'></div><br>";
+		}
 		for (var i = 0; i < this._buttonInfo.length; i++) {
 			var id = this._buttonInfo[i].id;
 			html[idx++] = "<div id='";
@@ -267,7 +414,13 @@ function() {
 		// remove button
 		html[idx++] = "<br><div id='";
 		html[idx++] = this._removeButtonDivId;
-		html[idx++] = "'></div></td>";
+		html[idx++] = "'></div>";
+		if (this._allButtons) {
+			html[idx++] = "<br><div id='";
+			html[idx++] = this._removeAllButtonDivId;
+			html[idx++] = "'></div><br>";
+		}
+		html[idx++] = "</td>";
 
 		// target list
 		html[idx++] = "<td id='";
@@ -286,6 +439,11 @@ function() {
 		html[idx++] = this._buttonsDivId;
 		html[idx++] = "'>";
 		html[idx++] = "<table><tr>";
+		if (this._allButtons) {
+			html[idx++] = "<td id='";
+			html[idx++] = this._addAllButtonDivId;
+			html[idx++] = "'></td>";
+		}
 		for (var i = 0; i < this._buttonInfo.length; i++) {
 			var id = this._buttonInfo[i].id;
 			html[idx++] = "<td id='";
@@ -296,6 +454,11 @@ function() {
 		html[idx++] = "<td id='";
 		html[idx++] = this._removeButtonDivId;
 		html[idx++] = "'></td>";
+		if (this._allButtons) {
+			html[idx++] = "<td id='";
+			html[idx++] = this._removeAllButtonDivId;
+			html[idx++] = "'></td>";
+		}
 		html[idx++] = "</tr></table></div>";
 
 		// target list
@@ -307,6 +470,9 @@ function() {
 	this.getHtmlElement().innerHTML = html.join("");
 };
 
+/*
+* Takes button info and sets up various bits of internal data for later use.
+*/
 DwtChooser.prototype._handleButtonInfo = 
 function(buttonInfo) {
 
@@ -342,11 +508,13 @@ function() {
 	// create and add transfer buttons
 	var buttonListener = new AjxListener(this, this._transferButtonListener);
 	this._button = {};
+	this._buttonIndex = {};
 	this._data = {};
 	for (var i = 0; i < this._buttonInfo.length; i++) {
 		var id = this._buttonInfo[i].id;
 		this._button[id] = this._setupButton(id, this._buttonId[id], this._buttonDivId[id], this._buttonInfo[i].label);
 		this._button[id].addSelectionListener(buttonListener);
+		this._buttonIndex[id] = i;
 		this._data[id] = new AjxVector();
 	}
 
@@ -360,28 +528,40 @@ function() {
 	this._addListView(this.targetListView, this._targetListViewDivId);
 	this.targetListView.addSelectionListener(new AjxListener(this, this._targetListener));
 	
-	// create and add remove button
+	// create and add the remove button
 	this._removeButtonId = Dwt.getNextId();
 	this._removeButton = this._setupButton(DwtChooser.REMOVE_BTN_ID, this._removeButtonId, this._removeButtonDivId, AjxMsg.remove);
 	this._removeButton.addSelectionListener(new AjxListener(this, this._removeButtonListener));
+
+	if (this._allButtons) {
+		// create and add "Add All" and "Remove All" buttons
+		this._addAllButtonId = Dwt.getNextId();
+		this._addAllButton = this._setupButton(DwtChooser.ADD_ALL_BTN_ID, this._addAllButtonId, this._addAllButtonDivId, AjxMsg.addAll);
+		this._addAllButton.addSelectionListener(new AjxListener(this, this._addAllButtonListener));
+		this._removeAllButtonId = Dwt.getNextId();
+		this._removeAllButton = this._setupButton(DwtChooser.REMOVE_ALL_BTN_ID, this._removeAllButtonId, this._removeAllButtonDivId, AjxMsg.removeAll);
+		this._removeAllButton.addSelectionListener(new AjxListener(this, this._removeAllButtonListener));
+		if (this._selectStyle == DwtChooser.SINGLE_SELECT) {
+			this._addAllButton.setVisible(false);
+			this._removeAllButton.setVisible(false);
+		}
+	}
 };
 
 /*
-* Returns a source list view object. Intended to be overridden, since the
-* one returned by the default implementation is not very useful.
+* Returns a source list view object.
 */
 DwtChooser.prototype._createSourceListView =
 function() {
-	return new DwtChooserListView(this, DwtChooserListView.SOURCE);
+	return new DwtChooserListView(this, DwtChooserListView.SOURCE, this._slvClassName);
 };
 
 /*
-* Returns a target list view object. Intended to be overridden, since the
-* one returned by the default implementation is not very useful.
+* Returns a target list view object.
 */
 DwtChooser.prototype._createTargetListView =
 function() {
-	return new DwtChooserListView(this, DwtChooserListView.TARGET);
+	return new DwtChooserListView(this, DwtChooserListView.TARGET, this._tlvClassName);
 };
 
 /*
@@ -398,6 +578,12 @@ function(listView, listViewDivId) {
 	listView._initialized = true;
 };
 
+/**
+* Sizes the list views based on the given available width and height.
+*
+* @param width	[int]	width in pixels
+* @param height	[int]	height in pixels
+*/
 DwtChooser.prototype.resize =
 function(width, height) {
 	if (!width || !height) return;
@@ -407,15 +593,15 @@ function(width, height) {
 	var btnSz = Dwt.getSize(buttonsDiv);
 	var w, sh, th;
 	if (this._layoutStyle == DwtChooser.HORIZ_STYLE) {
-		w = (width == Dwt.DEFAULT) ? width : Math.floor(((width - btnSz.x) / 2) - 12);
+		w = this._listSize ? this._listSize : (width == Dwt.DEFAULT) ? width : Math.floor(((width - btnSz.x) / 2) - 12);
 		sh = th = height;
 	} else {
 		w = width;
 		if (this._selectStyle == DwtChooser.SINGLE_SELECT) {
-			sh = (height == Dwt.DEFAULT) ? height : height - btnSz.y - this._rowHeight - 30;
+			sh = this._listSize ? this._listSize : (height == Dwt.DEFAULT) ? height : height - btnSz.y - this._singleHeight - 30;
 			th = (height == Dwt.DEFAULT) ? height : height - btnSz.y - sh - 30;
 		} else {
-			sh = th = (height == Dwt.DEFAULT) ? height : Math.floor(((height - btnSz.y) / 2) - 12);
+			sh = th = this._listSize ? this._listSize : (height == Dwt.DEFAULT) ? height : Math.floor(((height - btnSz.y) / 2) - 12);
 		}
 	}
 	this.sourceListView.setSize(w, sh);
@@ -449,7 +635,7 @@ function(id, buttonId, buttonDivId, label) {
 // Listeners
 
 /*
-* Single-click selects an item, double-click moves selected items to target list.
+* Single-click selects an item, double-click adds selected items to target list.
 *
 * @param ev		[DwtEvent]		click event
 */
@@ -464,8 +650,8 @@ function(ev) {
 		var id = this._lastActiveTransferButtonId ? this._lastActiveTransferButtonId : this._buttonInfo[0].id;
 		this._setActiveButton(id);
 	}
-	this._enableButtons(true, false);
 	this.targetListView.deselectAll();
+	this._enableButtons();
 };
 
 /*
@@ -476,11 +662,11 @@ function(ev) {
 DwtChooser.prototype._targetListener =
 function(ev) {
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
-		this._handleRemove(this.targetListView.getSelection());
+		this.remove(this.targetListView.getSelection());
 	} else {
-		this._enableButtons(false, true);
 		this._setActiveButton(DwtChooser.REMOVE_BTN_ID);
 		this.sourceListView.deselectAll();
+		this._enableButtons();
 	}
 };
 
@@ -496,6 +682,12 @@ function(ev) {
 	var sel = this.sourceListView.getSelection();
 	if (sel && sel.length) {
 		this.transfer(sel, id);
+		var list = this.sourceListView.getList();
+		if (list && list.size()) {
+			this._selectFirst(DwtChooserListView.SOURCE);
+		} else {
+			this._enableButtons();
+		}
 	} else {
 		this._setActiveButton(id);
 	}
@@ -508,49 +700,75 @@ function(ev) {
 */
 DwtChooser.prototype._removeButtonListener =
 function(ev) {
-	this._handleRemove(this.targetListView.getSelection());
-}
+	this.remove(this.targetListView.getSelection());
+	var list = this.targetListView.getList();
+	if (list && list.size()) {
+		this._selectFirst(DwtChooserListView.TARGET);
+	} else {
+		this._enableButtons();
+	}
+};
+
+/*
+* Populates the target list with all items.
+*
+* @param ev		[DwtEvent]		click event
+*/
+DwtChooser.prototype._addAllButtonListener =
+function(ev) {
+	this.transfer(this.sourceListView.getList().clone());
+	this._selectFirst(DwtChooserListView.TARGET);
+};
+
+/*
+* Clears the target list.
+*
+* @param ev		[DwtEvent]		click event
+*/
+DwtChooser.prototype._removeAllButtonListener =
+function(ev) {
+	this.remove(this.targetListView.getList().clone());
+	this._selectFirst(DwtChooserListView.SOURCE);
+};
+
+
 
 // Miscellaneous methods
 
 /*
-* Enable/disable the transfer and remove buttons.
-*
-* @param enableTransfer		[boolean]	if true, enable the transfer buttons
-* @param enableRemove		[boolean]	if true, enable the remove button
+* Enable/disable buttons as appropriate.
 */
 DwtChooser.prototype._enableButtons =
-function(enableTransfer, enableRemove) {
+function() {
+	var sourceList = this.sourceListView.getList();
+	var targetList = this.targetListView.getList();
+	var sourceSize = sourceList ? sourceList.size() : 0;
+	var targetSize = targetList ? targetList.size() : 0;
+	var sourceSelCount = this.sourceListView.getSelectionCount();
+	var targetSelCount = this.targetListView.getSelectionCount();
 	for (var i = 0; i < this._buttonInfo.length; i++) {
 		var id = this._buttonInfo[i].id;
-		this._button[id].setEnabled(enableTransfer);
+		this._button[id].setEnabled(sourceSelCount > 0);
 	}
-	this._removeButton.setEnabled(enableRemove);
+	this._removeButton.setEnabled(targetSelCount > 0);
+
+	if (this._allButtons && (this._selectStyle == DwtChooser.MULTI_SELECT)) {
+		this._addAllButton.setEnabled((sourceSize > 0) && (targetSize < this._sourceSize));
+		this._removeAllButton.setEnabled(targetSize > 0);
+	}
 };
 
 /*
-* Removes items from target list. Also handles button state.
+* Selects the first item in the given list view.
 *
-* @param items		[array]		list of items to remove
-* @param skipNotify	[boolean]*	if true, don't notify listeners
+* @param view	[constant]		source or target
 */
-DwtChooser.prototype._handleRemove =
-function(items, skipNotify) {
-	// remove the items
-	for (var i = 0; i < items.length; i++) {
-		var item = items[i];
-		this.targetListView.removeItem(item);
-		this._data[item._buttonId].remove(item);
-	}
-
-	// if the view is empty, disable the Remove button
-	if (!this.targetListView.size()) {
-		this._enableButtons(true, false);
-		this._setActiveButton(this._activeButtonId);
-	}
-
-	if (!skipNotify) {
-		this._notify(ZmEvent.E_MODIFY, {items: this.getItems()});
+DwtChooser.prototype._selectFirst =
+function(view, index) {
+	var listView = (view == DwtChooserListView.SOURCE) ? this.sourceListView : this.targetListView;
+	var list = listView.getList();
+	if (list && list.size() > 0) {
+		listView.setSelection(list.get(0));
 	}
 };
 
@@ -590,80 +808,107 @@ function(id) {
 };
 
 /*
-* Adds items to the target list.
+* Returns true if the list contains the item. Default implementation is identity.
 *
-* @param items		[array]		list of items to move
-* @param id			[string]*	ID of the transfer button that was used
-* @param skipNotify	[boolean]*	if true, don't notify listeners
+* @param item	[object]			item
+* @param list	[AjxVector]			list to check against
 */
-DwtChooser.prototype.transfer =
-function(items, id, skipNotify) {
-	id = id ? id : this._activeButtonId;
-	this._setActiveButton(id);
-	if (this._selectStyle == DwtChooser.SINGLE_SELECT) {
-		items = [items[0]];
-		this.reset(DwtChooserListView.TARGET);
-	}
-	for (var i = 0; i < items.length; i++) {
-		var item = items[i];
-		if (this._noDuplicates && this._isDuplicate(item, this._data[id])) {
-			continue;
-		}
-		item._buttonId = id;
-		this._addToTarget(item, id);
-		this._data[id].add(item);
-	}
-	this.sourceListView.deselectAll();
-	if (!skipNotify) {
-		this._notify(ZmEvent.E_MODIFY, {items: this.getItems()});
-	}
+DwtChooser.prototype._isDuplicate =
+function(item, list) {
+	return list.contains(item);
 };
 
 /*
-* Removes items from the target list.
+* Adds an item to the end of the source list.
 *
-* @param items		[array]		list of items to move
+* @param item		[object]	item to add
 * @param skipNotify	[boolean]*	if true, don't notify listeners
 */
-DwtChooser.prototype.remove =
-function(items, skipNotify) {
-	this._handleRemove(items, skipNotify);
-};
-
-DwtChooser.prototype._isDuplicate =
-function(item, list) {
-	return false;
+DwtChooser.prototype._addToSource =
+function(item, index, skipNotify) {
+	if (!item) return;
+	if (!item._chooserIndex) {
+		var list = this.sourceListView.getList();
+		item._chooserIndex = list ? list.size() + 1 : 1;
+	}
+	this.sourceListView.addItem(item, index, skipNotify);
 };
 
 /*
 * Adds an item to the target list. If there are multiple transfer buttons, it keeps
 * the items grouped depending on which button was used to move them.
 *
-* @param item	[object]	item to move
-* @param id		[string]	ID of the transfer button that was used
+* @param item		[object]	item to add
+* @param id			[string]	ID of the transfer button that was used
+* @param skipNotify	[boolean]*	if true, don't notify listeners
 */
 DwtChooser.prototype._addToTarget =
-function(item, id) {
-	var idx = null;
-	if (this._hasMultiButtons) {
-		// walk target list looking for valid place to insert item based on its button ID
-		var children = this.targetListView._parentEl.childNodes;
-		var len = children.length;
-		var count = 0;
-		var testItem = (len > 0) ? this.targetListView.getItemFromElement(children[count++]) : null;
-	
-		for (var i = 0; i < this._buttonInfo.length; i++) {
-			if (id == this._buttonInfo[i].id) {
-				while (testItem && testItem._buttonId == id)
-					testItem = (len > count) ? this.targetListView.getItemFromElement(children[count++]) : null;
-			}
-		}
-		var idx = (testItem && count <= len) ? (count - 1) : null;
+function(item, id, skipNotify) {
+	if (!item) return;
+	id = id ? id : this._activeButtonId;
+	if (this._noDuplicates && this._data[id] && this._isDuplicate(item, this._data[id])) {
+		return;
 	}
 	
-	this.targetListView.addItem(item, idx);
+	var idx = null;
+	if (this._hasMultiButtons) {
+		// get a list of all the items in order
+		var list = [];
+		for (var i = 0; i < this._buttonInfo.length; i++) {
+			list = list.concat(this._data[this._buttonInfo[i].id].getArray());
+		}
+		// find the first item with a higher button index
+		var buttonIdx = this._buttonIndex[id];
+		for (idx = 0; idx < list.length; idx++) {
+			var testButtonIdx = this._buttonIndex[list[idx]._buttonId];
+			if (testButtonIdx > buttonIdx) {
+				break;
+			}
+		}
+	}
+
+	item._buttonId = id;
+	this._data[id].add(item);
+	this.targetListView.addItem(item, idx, skipNotify);
 };
 
+/*
+* Removes an item from the source list.
+*
+* @param item		[object]	item to remove
+* @param skipNotify	[boolean]*	if true, don't notify listeners
+*/
+DwtChooser.prototype._removeFromSource =
+function(item, skipNotify) {
+	if (!item) return;
+	this.sourceListView.removeItem(item, skipNotify);
+};
+
+/*
+* Removes an item from the target list.
+*
+* @param item		[object]	item to remove
+* @param skipNotify	[boolean]*	if true, don't notify listeners
+*/
+DwtChooser.prototype._removeFromTarget =
+function(item, skipNotify) {
+	if (!item) return;
+	this._data[item._buttonId].remove(item);
+	this.targetListView.removeItem(item, skipNotify);
+};
+
+DwtChooser.prototype._getInsertionIndex =
+function(view, item) {
+	var list = view.getList();
+	if (!list) return null;
+	var a = list.getArray();
+	for (var i = 0; i < a.length; i++) {
+		if (item._chooserIndex && a[i]._chooserIndex && (a[i]._chooserIndex >= item._chooserIndex)) {
+			return i;
+		}
+	}
+	return null;
+};
 
 /**
 * Creates a chooser list view.
@@ -673,7 +918,6 @@ function(item, id) {
 * (source) or to it (target). Subclasses should implement  _getHeaderList(),
 * _sortColumn(), and _createItemHtml().
 *
-* @author Conrad Damon
 * @param parent			[DwtComposite]	containing widget
 * @param type			[constant]		source or target
 * @param className		[string]*		CSS class
@@ -700,6 +944,37 @@ DwtChooserListView.prototype.toString =
 function() {
 	return "DwtChooserListView";
 };
+
+/*
+* Override to handle empty results set. Always omit the "No Results" message if
+* this is a target list view, or if we've been told to ignore it in the source view.
+*/
+DwtChooserListView.prototype.setUI =
+function(defaultColumnSort, noResultsOk) {
+	noResultsOk = noResultsOk ? noResultsOk : ((this.type == DwtChooserListView.TARGET) ||
+												this.parent._sourceEmptyOk);
+	DwtListView.prototype.setUI.call(this, defaultColumnSort, noResultsOk);
+};
+
+/*
+* Creates a row for a simple item that converts to a string.
+*/
+DwtChooserListView.prototype._createItemHtml =
+function(item, now, isDnDIcon) {	
+	var div = document.createElement("div");
+	div._styleClass = "Row";
+	div._selectedStyleClass = [div._styleClass, '-', DwtCssStyle.SELECTED].join("");
+	div.className = div._styleClass;
+
+	var content = (typeof item == "string") ? String(item) : item.toString();
+	div.innerHTML = AjxStringUtil.htmlEncode(content);
+	
+	if (!item.id) {
+		item.id = Dwt.getNextId();
+	}
+	this.associateItemWithElement(item, div, DwtListView.TYPE_LIST_ITEM);
+	return div;
+}
 
 /*
 * DwtListView override to ignore right-clicks in list view.

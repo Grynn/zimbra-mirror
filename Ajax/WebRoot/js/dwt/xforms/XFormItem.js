@@ -3890,16 +3890,16 @@ Tab_Bar_XFormItem.prototype.dirtyDisplay = function(newChoices) {
 }
 
 /**	
-* @class defines XFormItem type _DWT_ADD_REMOVE_
-* @contructor
+* @class defines XFormItem type _DWT_CHOOSER_
+* @constructor
 **/
-function Dwt_AddRemove_XFormItem() {}
-XFormItemFactory.createItemType("_DWT_ADD_REMOVE_", "add_remove", Dwt_AddRemove_XFormItem, Dwt_Adaptor_XFormItem);
+function Dwt_Chooser_XFormItem() {}
+XFormItemFactory.createItemType("_DWT_CHOOSER_", "chooser", Dwt_Chooser_XFormItem, Dwt_Adaptor_XFormItem);
 
 /***
 NOTE: this won't work because attributes.ref is accessed before this
 method is called in XFormItemFactory#createItem.
-Dwt_AddRemove_XFormItem.prototype._setAttributes = function(attributes) {
+Dwt_Chooser_XFormItem.prototype._setAttributes = function(attributes) {
 	// allows "targetRef" alias for "ref" attribute
 	if (!attributes.ref && attributes.targetRef) {
 		attributes.ref = attributes.targetRef;
@@ -3907,49 +3907,52 @@ Dwt_AddRemove_XFormItem.prototype._setAttributes = function(attributes) {
 	XFormItem.prototype._setAttributes.call(this, attributes);
 }
 **/
-Dwt_AddRemove_XFormItem.prototype.getSorted = function() {
+Dwt_Chooser_XFormItem.prototype.getSorted = function() {
 	return this.getInheritedProperty("sorted");
 }
-Dwt_AddRemove_XFormItem.prototype.getListCssClass = function() {
+Dwt_Chooser_XFormItem.prototype.getListCssClass = function() {
 	return this.getInheritedProperty("listCssClass");
 }
 
-Dwt_AddRemove_XFormItem.prototype.getTargetListCssClass = function() {
+Dwt_Chooser_XFormItem.prototype.getTargetListCssClass = function() {
 	return this.getInheritedProperty("targetListCssClass");
 }
 
-Dwt_AddRemove_XFormItem.prototype.getSourceInstanceValue = function() {
+Dwt_Chooser_XFormItem.prototype.getSourceInstanceValue = function() {
 	var items = this.getModel().getInstanceValue(this.getInstance(), this.getInheritedProperty("sourceRef"));
 	return items ? items : [];
 }
 
-Dwt_AddRemove_XFormItem.prototype.getTargetInstanceValue = function() {
+Dwt_Chooser_XFormItem.prototype.getTargetInstanceValue = function() {
 	var items = this.getInstanceValue();
 	return items ? items : [];
 }
 
-Dwt_AddRemove_XFormItem.prototype._handleStateChange = function(event) {
+Dwt_Chooser_XFormItem.prototype._handleStateChange = function(event) {
 	var form = this.getForm();
 	var id = this.getId();
 	var widget = this.getWidget();
-	var value = widget.getTargetItems();
+	var value = widget.getItems();
+	this._skipUpdate = true;
 	form.itemChanged(id, value);
+	this._skipUpdate = false;
 }
 
-Dwt_AddRemove_XFormItem.prototype.constructWidget = function() {
+Dwt_Chooser_XFormItem.prototype.constructWidget = function() {
 	var form = this.getForm();
 	var cssClass = this.getCssClass();
 	var sourceListCssClass = this.getListCssClass();
 	var targetListCssClass = this.getTargetListCssClass();
-	var widget = new DwtAddRemove(form, cssClass, null, sourceListCssClass, targetListCssClass);
-	return widget;
+	if (sourceListCssClass && !targetListCssClass) {
+		targetListCssClass = sourceListCssClass;
+	}
+	var params = {parent: form, className: cssClass, slvClassName: sourceListCssClass,
+				  tlvClassName: targetListCssClass, layoutStyle: DwtChooser.HORIZ_STYLE,
+				  listSize: 100, sourceEmptyOk: true, allButtons: true};
+	return new DwtChooser(params);
 }
 
-Dwt_AddRemove_XFormItem.prototype.updateWidget = function(newvalue) {
-	if (this.widget.isUpdating) {
-		this.widget.isUpdating = false;
-		return;
-	}
+Dwt_Chooser_XFormItem.prototype.updateWidget = function(newvalue) {
 	if (this._skipUpdate) {
 		return;
 	}
@@ -3958,7 +3961,7 @@ Dwt_AddRemove_XFormItem.prototype.updateWidget = function(newvalue) {
 		this.widget.removeStateChangeListener(this._stateChangeListener);
 	}
 	else {
-		this._stateChangeListener = new AjxListener(this, Dwt_AddRemove_XFormItem.prototype._handleStateChange)
+		this._stateChangeListener = new AjxListener(this, Dwt_Chooser_XFormItem.prototype._handleStateChange)
 	}
 
 	var sourceItems = this.getSourceInstanceValue();
@@ -3970,9 +3973,8 @@ Dwt_AddRemove_XFormItem.prototype.updateWidget = function(newvalue) {
 		targetItems = targetItems.sort();
 	}
 
-	this.widget.setSourceItems(sourceItems);
-	this.widget.removeSourceItems(targetItems);
-	this.widget.setTargetItems(targetItems);
+	this.widget.setItems(sourceItems);
+	this.widget.setItems(targetItems, DwtChooserListView.TARGET);
 
 	this.widget.addStateChangeListener(this._stateChangeListener);
 }

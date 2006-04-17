@@ -101,9 +101,9 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 				  	      value: ZaMsg.NAD_Attach_RemoveAttachmentsByExt, colSpan: "*"
 			  	      	},
 				  	  	{ sourceRef: ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension,
-				  	  	  ref: ZaGlobalConfig.A_zimbraMtaBlockedExtension, type: _DWT_ADD_REMOVE_,
-				  	  	  listCssClass: "DwtAddRemoveListView ZaGlobalAttachExt", sorted: true,
-				  	  	  id: "addremove_"+ZaGlobalConfig.A_zimbraMtaBlockedExtension,
+				  	  	  ref: ZaGlobalConfig.A_zimbraMtaBlockedExtension, type: _DWT_CHOOSER_,
+				  	  	  listCssClass: "DwtChooserListView ZaGlobalAttachExt", sorted: true,
+				  	  	  id: "chooser_"+ZaGlobalConfig.A_zimbraMtaBlockedExtension,
 				  	  	  onChange: ZaTabView.onFormFieldChanged
 				  	  	}
 			    	]},
@@ -132,19 +132,19 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 			    	  	  	value.id = "id_"+value;
 			    	  	  	
 			    	  	  	// NOTE: form item's id is prefixed with form's id + underscore
-			    	  	  	var addRemoveId = form.getId()+"_addremove_"+ZaGlobalConfig.A_zimbraMtaBlockedExtension;
-			    	  	  	var addRemoveFormItem = form.getItemById(addRemoveId);
+			    	  	  	var chooserId = form.getId()+"_chooser_"+ZaGlobalConfig.A_zimbraMtaBlockedExtension;
+			    	  	  	var chooserFormItem = form.getItemById(chooserId);
 
 							// NOTE: Need a special way to stop the widget from
 							//		 updating w/o affecting the state change from
 							//		 it. Otherwise, the instance data and the
 							//		 target list won't stay in sync.
-			    	  	  	addRemoveFormItem._skipUpdate = true;
+			    	  	  	chooserFormItem._skipUpdate = true;
 			    	  	  	
-			    	  	  	var addRemoveWidget = addRemoveFormItem .getWidget();
-			    	  	  	addRemoveWidget.addTargetItem(value);
+			    	  	  	var chooserWidget = chooserFormItem.getWidget();
+							chooserWidget.addItems(value, DwtChooserListView.SOURCE, true);
 
-			    	  	  	addRemoveFormItem._skipUpdate = false;
+			    	  	  	chooserFormItem._skipUpdate = false;
 			    	  	  	
 			    	  	  	var newExtId = form.getId()+"_input_"+ZaGlobalConfig.A_zimbraMtaBlockedExtension;
 			    	  	  	var newExtFormItem =form.getItemById(newExtId);
