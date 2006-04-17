@@ -1,5 +1,5 @@
 function Com_Zimbra_TravelAgent() {
-	if(!ZmOperation.MSG_KEY[201]) {
+	/*if(!ZmOperation.MSG_KEY[201]) {
 		ZmOperation.MSG_KEY[201] = "travelAgent";
 		var op = new Object();
 		op.id = 201;
@@ -9,7 +9,7 @@ function Com_Zimbra_TravelAgent() {
 		op.toolTip = "Book Flight, Car or Hotel on the selected day";
 		ZmZimlet.actionMenus["ZmCalViewController"].push(op);
 		ZmZimlet.listeners["ZmCalViewController"][201] = Com_Zimbra_TravelAgent.launchMe;
-	}
+	}*/
 	Com_Zimbra_TravelAgent._instance = this;
 }
 
