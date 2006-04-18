@@ -4,50 +4,89 @@
 
 <!--
 
-  This config file is used by the AttributeManager class for multiple purposes:
+This config file is used by the AttributeManager class for multiple
+purposes:
   
-  1) check the validity of attributes. value types, as well as whether or not a value can be modified.
+  1) check the validity of attributes. value types, as well as whether
+     or not a value can be modified.
   
   2) perform callbacks when certain attributes changes
 
-  The AttributeManager is invoked when entries are created/modified. 
+  3) Generate LDAP schema and defaults file.
+
+The AttributeManager is invoked when entries are created/modified.
   
-  <attr name="{name}"
-  [class="account,config,cos,domain,server,distributionList,calendarResource"]
-  [immutable="*0|1"]
-  [type="{type-of-attr}"]
-  [value="..."]
-  [max="..."]
-  [min="..."]
-  [callback="..." ]
-  />
+<attr name="{name}"
+      [immutable="*0|1"]
+      [type="{type-of-attr}"]
+      [value="..."]
+      [max="..."]
+      [min="..."]
+      [callback="..." ] 
+      [id="{oid-integer"
+       cadinality="single|multi"
+       requiredIn="{class-names-comma-seperated}"
+       optionalIn="{class-names-comma-seperated}"]
+      [flags="{flag-names-comma-seperated}"]>
+   <desc>Documentation</desc>
+</attr>
 
-  attr-name: name of attribute
+  name: name of attribute
 
-  immutable: 1 means attribute can never be changed directly by end-user actions. i.e., it is an attribute that is maintined
-             by the server and shouldn't be changed by SOAP/command-line/APIs. The Entry.modifyAttrs(attrs, checkImmutable) call
-             should be used with checkImmutable set to true for all data obtained outside the server.
+  immutable: 1 means attribute can never be changed directly by
+             end-user actions. i.e., it is an attribute that is
+             maintined by the server and shouldn't be changed by
+             SOAP/command-line/APIs. The Entry.modifyAttrs(attrs,
+             checkImmutable) call should be used with checkImmutable
+             set to true for all data obtained outside the server.
 
-  type-of-attr:
-    boolean     TRUE|FALSE
-    duration    ^\d+[hmsd]?$.  If [hmsd] is not specified, the default is milliseconds.
-    enum        value attr is comma-separated list of valid values
-    email       valid email address. must have a "@" and no personal part.
-    emailp      valid email address. must have a "@" and personal part is optional.
-    id          ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-    integer     32 bit signed, min/max checked
-    port        0-65535
-    regex       value attr is a regular expression. Should explicitely add ^ to front and $ at the end
-    string      currently just checks max length if specified
+  type:
+    boolean.....TRUE|FALSE
+    duration....^\d+[hmsd]?$.  If [hmsd] is not specified, the default
+                is milliseconds.
+    enum........value attr is comma-separated list of valid values
+    email.......valid email address. must have a "@" and no personal
+                part.
+    emailp......valid email address. must have a "@" and personal part
+                is optional.
+    id..........^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+    integer.....32 bit signed, min/max checked
+    port........0-65535
+    regex.......value attr is a regular expression. Should explicitly
+                add ^ to front and $ at the end
+    string......currently just checks max length if specified
 
   value: used with enum and regex
-  
-  min:  min value for integers. defaults to Integer.MIN_VALUE
-  max:  max value for integers, max length for strings/email. defaults to Integer.MAX_VALUE
 
-  callback: class name of AttributeCallback object to invoke on changes to attribute. If package is not specified, defaults
-            to "com.zimbra.cs.account.callback".
-    
+  min: min value for integers. defaults to Integer.MIN_VALUE
+
+  max: max value for integers, max length for strings/email. defaults
+       to Integer.MAX_VALUE
+
+  callback: class name of AttributeCallback object to invoke on
+            changes to attribute. If package is not specified,
+            defaults to "com.zimbra.cs.account.callback".
+  
+  id: the integer OID of this attribute if it is a Zimbra defined
+      attribute.
+
+  cardinality: whether this a multi-value attribute or not
+
+  requiredIn: 
+  optionalIn: whether this a required attribute or not.  A
+              comma-seperated list containing some combination of:
+              mailRecipient, account, alias, distributionList, cos,
+              globalConfig, domain, securityGroup, server, mimeEntry,
+              objectEntry, timeZone, zimletEntry, calendarResource;
+              attribute
+
+  flags:
+    accountInfo..............returned as part of the GetInfo call
+    inheritFromCOS...........if not set on acct, inherit from COS
+    domainAdminModifiable....modifiable by a domain admin
+    inheritFromDomain........if not set on acct, inherit from domain
+    inheritFromGlobalConfig..if not set on server, inherit from global
+                             config
 -->
 
 <attr name="zimbraRedologArchiveDir" type="string"/>
@@ -72,21 +111,21 @@
 
 <attr name="company" type="string" optionalIn="account" flags="domainAdminModifiable"/>
 
-<attr name="cn" type="string" optionalIn="account,alias" requiredIn="cos,server,mimeentry,objectentry,timezone,zimletentry" flags="domainAdminModifiable"/>
+<attr name="cn" type="string" optionalIn="account,alias" requiredIn="cos,server,mimeEntry,objectEntry,timeZone,zimletEntry" flags="domainAdminModifiable"/>
 
-<attr name="displayName" type="string" optionalIn="account,dl" requiredIn="calresource" flags="accountInfo,domainAdminModifiable"/>
+<attr name="displayName" type="string" optionalIn="account,distributionList" requiredIn="calendarResource" flags="accountInfo,domainAdminModifiable"/>
 
 <attr name="gn" type="string" optionalIn="account" flags="domainAdminModifiable"/>
 
 <attr name="givenName" type="string" flags="domainAdminModifiable"/>
 
-<attr name="description" type="string" optionalIn="account,dl,cos,domain,server,mimeentry,objectentry" flags="domainAdminModifiable"/>
+<attr name="description" type="string" optionalIn="account,distributionList,cos,domain,server,mimeEntry,objectEntry" flags="domainAdminModifiable"/>
 
 <attr name="initials" type="string" optionalIn="account" flags="domainAdminModifiable"/>
 
 <attr name="l" type="string" optionalIn="account" flags="domainAdminModifiable"/>
 
-<attr name="mail" type="string" immutable="1" optionalIn="account,dl"/>
+<attr name="mail" type="string" immutable="1" optionalIn="account,distributionList"/>
 
 <attr name="objectClass" type="string" immutable="1"/>
 
@@ -112,13 +151,13 @@
 
 <attr name="title" type="string" optionalIn="account" flags="domainAdminModifiable"/>
 
-<attr name="uid" type="string" immutable="1" optionalIn="alias" requiredIn="account,dl"/>
+<attr name="uid" type="string" immutable="1" optionalIn="alias" requiredIn="account,distributionList"/>
 
 <attr name="userPassword" type="string" immutable="1" optionalIn="account"/>
 
 <attr name="zimbraCalResAlwaysFree" type="boolean"/>
 
-<attr id="1" name="zimbraId" type="id" immutable="1" cardinality="single" requiredIn="account,alias,dl,cos,domain,server,calresource" flags="accountInfo">
+<attr id="1" name="zimbraId" type="id" immutable="1" cardinality="single" requiredIn="account,alias,distributionList,cos,domain,server,calendarResource" flags="accountInfo">
   <desc>Zimbra Systems Unique ID</desc>
 </attr>
 
@@ -126,35 +165,35 @@
   <desc>account status (TODO: enumerate valid values here)</desc>
 </attr>
 
-<attr id="3" name="zimbraMailAddress" type="email" max="256" immutable="1" cardinality="multi" optionalIn="mailrecipient">
+<attr id="3" name="zimbraMailAddress" type="email" max="256" immutable="1" cardinality="multi" optionalIn="mailRecipient">
   <desc>RFC822 email address of this recipient for accepting mail</desc>
 </attr>
 
-<attr id="4" name="zimbraMailHost" type="string" max="256" callback="MailHost" cardinality="single" optionalIn="mailrecipient">
+<attr id="4" name="zimbraMailHost" type="string" max="256" callback="MailHost" cardinality="single" optionalIn="mailRecipient">
   <desc>the server hosting the accounts mailbox</desc>
 </attr>
 
-<attr id="9" name="zimbraNotes" type="string" cardinality="single" optionalIn="account,dl,cos,domain,server" flags="domainAdminModifiable">
+<attr id="9" name="zimbraNotes" type="string" cardinality="single" optionalIn="account,distributionList,cos,domain,server" flags="domainAdminModifiable">
   <desc>administrative notes</desc>
 </attr>
 
-<attr id="11" name="zimbraMemberOf" type="id" cardinality="multi" optionalIn="account,group">
+<attr id="11" name="zimbraMemberOf" type="id" cardinality="multi" optionalIn="account,securityGroup">
   <desc>for group membership, included with person object</desc>
 </attr>
 
-<attr id="12" name="zimbraMailForwardingAddress" type="email" max="256" cardinality="multi" optionalIn="mailrecipient" flags="accountInfo,domainAdminModifiable">
+<attr id="12" name="zimbraMailForwardingAddress" type="email" max="256" cardinality="multi" optionalIn="mailRecipient" flags="accountInfo,domainAdminModifiable">
   <desc>RFC822 forwarding address for an account</desc>
 </attr>
 
-<attr id="13" name="zimbraMailDeliveryAddress" type="email" max="256" immutable="1" cardinality="multi" optionalIn="mailrecipient">
+<attr id="13" name="zimbraMailDeliveryAddress" type="email" max="256" immutable="1" cardinality="multi" optionalIn="mailRecipient">
   <desc>RFC822 email address of this recipient for local delivery</desc>
 </attr>
 
-<attr id="14" name="zimbraCOSId" type="id"> <!-- type "cosId" cardinality="single" optionalIn="account" and check for valid COS id? -->
+<attr id="14" name="zimbraCOSId" type="id"> cardinality="single" optionalIn="account"> <!-- should we set type to cosID and check for valid COS id? -->
   <desc>COS zimbraID</desc>
 </attr>
 
-<attr id="15" name="zimbraMailStatus" type="enum" value="enabled,disabled" cardinality="single" optionalIn="mailrecipient" flags="domainAdminModifiable">
+<attr id="15" name="zimbraMailStatus" type="enum" value="enabled,disabled" cardinality="single" optionalIn="mailRecipient" flags="domainAdminModifiable">
   <desc>mail delivery status (enabled/disabled)</desc>
 </attr>
 
@@ -174,11 +213,11 @@
   <desc>name of the domain</desc>
 </attr>
 
-<attr id="20" name="zimbraMailAlias" type="email" max="256" immutable="1" cardinality="multi" optionalIn="mailrecipient" flags="accountInfo">
+<attr id="20" name="zimbraMailAlias" type="email" max="256" immutable="1" cardinality="multi" optionalIn="mailRecipient" flags="accountInfo">
   <desc>RFC822 email address of this recipient for accepting mail</desc>
 </attr>
 
-<attr id="21" name="zimbraCOSInheritedAttr" type="string" cardinality="multi" optionalIn="config">
+<attr id="21" name="zimbraCOSInheritedAttr" type="string" cardinality="multi" optionalIn="globalConfig">
   <desc>zimbraCOS attrs that get inherited in a zimbraAccount</desc>
 </attr>
 
@@ -190,7 +229,7 @@
   <desc>name to use in greeting and sign-off; if empty, uses hostname</desc>
 </attr>
 
-<attr id="24" name="zimbraLmtpBindPort" type="port" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="24" name="zimbraLmtpBindPort" type="port" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>port number on which LMTP server should listen</desc>
 </attr>
 
@@ -198,7 +237,7 @@
   <desc>interface address(es) on which LMTP server should listen; if empty, binds to all interfaces</desc>
 </attr>
 
-<attr id="26" name="zimbraLmtpNumThreads" type="integer" min="0" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="26" name="zimbraLmtpNumThreads" type="integer" min="0" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>number of handler threads, should match MTA concurrency setting for this server</desc>
 </attr>
 
@@ -286,11 +325,11 @@
   <desc>LDAP search filter for external GAL queries</desc>
 </attr>
 
-<attr id="52" name="zimbraGalLdapFilterDef" type="string" cardinality="multi" optionalIn="config">
+<attr id="52" name="zimbraGalLdapFilterDef" type="string" cardinality="multi" optionalIn="globalConfig">
   <desc>LDAP search filter definitions for GAL queries</desc>
 </attr>
 
-<attr id="53" name="zimbraGalMaxResults" type="integer" min="0" cardinality="single" optionalIn="config,domain" flags="inheritFromDomain">
+<attr id="53" name="zimbraGalMaxResults" type="integer" min="0" cardinality="single" optionalIn="globalConfig,domain" flags="inheritFromDomain">
   <desc>maximum number of gal entries to return from a search</desc>
 </attr>
 
@@ -326,11 +365,11 @@
   <desc>whether or not keyboard shortcuts are enabled</desc>
 </attr>
 
-<attr id="62" name="zimbraServerInheritedAttr" type="string" cardinality="multi" optionalIn="config">
+<attr id="62" name="zimbraServerInheritedAttr" type="string" cardinality="multi" optionalIn="globalConfig">
   <desc>zimbraServer attrs that get inherited from global config</desc>
 </attr>
 
-<attr id="63" name="zimbraDomainInheritedAttr" type="string" cardinality="multi" optionalIn="config">
+<attr id="63" name="zimbraDomainInheritedAttr" type="string" cardinality="multi" optionalIn="globalConfig">
   <desc>zimbraDomain attrs that get inherited from global config</desc>
 </attr>
 
@@ -342,7 +381,7 @@
   <desc>name to use in greeting and sign-off; if empty, uses hostname</desc>
 </attr>
 
-<attr id="94" name="zimbraPop3BindPort" type="port" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="94" name="zimbraPop3BindPort" type="port" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>port number on which POP3 server should listen</desc>
 </attr>
 
@@ -350,23 +389,23 @@
   <desc>interface address(es) on which POP3 server should listen; if empty, binds to all interfaces</desc>
 </attr>
 
-<attr id="96" name="zimbraPop3NumThreads" type="integer" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="96" name="zimbraPop3NumThreads" type="integer" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>number of handler threads</desc>
 </attr>
 
-<attr id="97" name="zimbraSmtpHostname" type="string" max="256" cardinality="multi" optionalIn="config,server" flags="inheritFromServer">
+<attr id="97" name="zimbraSmtpHostname" type="string" max="256" cardinality="multi" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>the SMTP server to connect to when sending mail</desc>
 </attr>
 
-<attr id="98" name="zimbraSmtpPort" type="port" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="98" name="zimbraSmtpPort" type="port" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>the SMTP server port to connect to when sending mail</desc>
 </attr>
 
-<attr id="99" name="zimbraSmtpTimeout" type="integer" min="0" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="99" name="zimbraSmtpTimeout" type="integer" min="0" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>timeout value in seconds</desc>
 </attr>
 
-<attr id="100" name="zimbraAuthTokenKey" type="string" immutable="1" cardinality="multi" optionalIn="config">
+<attr id="100" name="zimbraAuthTokenKey" type="string" immutable="1" cardinality="multi" optionalIn="globalConfig">
   <desc>auth token secret key</desc>
 </attr>
 
@@ -410,7 +449,7 @@
   <desc>configured mail polling interval (nnnnn[hmsd])</desc>
 </attr>
 
-<attr id="112" name="zimbraAccountClientAttr" type="string" cardinality="multi" optionalIn="config">
+<attr id="112" name="zimbraAccountClientAttr" type="string" cardinality="multi" optionalIn="globalConfig">
   <desc>additional account attrs that get returned to a client</desc>
 </attr>
 
@@ -418,15 +457,15 @@
   <desc>rough estimate of when the user last logged in. see zimbraLastLogonTimestampFrequency</desc>
 </attr>
 
-<attr id="114" name="zimbraLastLogonTimestampFrequency" type="duration" cardinality="single" optionalIn="config">
+<attr id="114" name="zimbraLastLogonTimestampFrequency" type="duration" cardinality="single" optionalIn="globalConfig">
   <desc>how often (nnnnn[hmsd]) the zimbraLastLogonTimestamp is updated</desc>
 </attr>
 
-<attr id="115" name="zimbraAttachmentsBlocked" type="boolean" cardinality="single" optionalIn="account,cos,config" flags="inheritFromCOS,domainAdminModifiable">
+<attr id="115" name="zimbraAttachmentsBlocked" type="boolean" cardinality="single" optionalIn="account,cos,globalConfig" flags="inheritFromCOS,domainAdminModifiable">
   <desc>block all attachment downloading</desc>
 </attr>
 
-<attr id="116" name="zimbraAttachmentsViewInHtmlOnly" type="boolean" cardinality="single" optionalIn="account,cos,config" flags="inheritFromCOS,domainAdminModifiable">
+<attr id="116" name="zimbraAttachmentsViewInHtmlOnly" type="boolean" cardinality="single" optionalIn="account,cos,globalConfig" flags="inheritFromCOS,domainAdminModifiable">
   <desc>view all attachments in html only</desc>
 </attr>
 
@@ -534,15 +573,15 @@
   <desc>template used to construct the body of an email notification message</desc>
 </attr>
 
-<attr id="153" name="zimbraGalLdapAttrMap" type="string" cardinality="multi" optionalIn="config,domain" flags="inheritFromDomain">
+<attr id="153" name="zimbraGalLdapAttrMap" type="string" cardinality="multi" optionalIn="globalConfig,domain" flags="inheritFromDomain">
   <desc>LDAP Gal attribute to contact attr mapping</desc>
 </attr>
 
-<attr id="154" name="zimbraMailPort" type="port" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="154" name="zimbraMailPort" type="port" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>HTTP port for end-user UI</desc>
 </attr>
 
-<attr id="155" name="zimbraAdminPort" type="port" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="155" name="zimbraAdminPort" type="port" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>SSL port for admin UI</desc>
 </attr>
 
@@ -550,27 +589,27 @@
   <desc>mail signature style outlook|internet</desc>
 </attr>
 
-<attr id="157" name="zimbraMimeType" type="string" cardinality="single" requiredIn="mimeentry">
+<attr id="157" name="zimbraMimeType" type="string" cardinality="single" requiredIn="mimeEntry">
   <desc>the MIME type (type/substype)</desc>
 </attr>
 
-<attr id="158" name="zimbraMimeIndexingEnabled" type="boolean" cardinality="single" requiredIn="mimeentry">
+<attr id="158" name="zimbraMimeIndexingEnabled" type="boolean" cardinality="single" requiredIn="mimeEntry">
   <desc>whether or not indexing is enabled for this type</desc>
 </attr>
 
-<attr id="159" name="zimbraMimeHandlerClass" type="string" cardinality="single" optionalIn="mimeentry">
+<attr id="159" name="zimbraMimeHandlerClass" type="string" cardinality="single" optionalIn="mimeEntry">
   <desc>the handler class for the mime type</desc>
 </attr>
 
-<attr id="160" name="zimbraMimeFileExtension" type="string" cardinality="multi" optionalIn="mimeentry"> 
+<attr id="160" name="zimbraMimeFileExtension" type="string" cardinality="multi" optionalIn="mimeEntry"> 
   <desc>the file extension (without the .)</desc>
 </attr>
 
-<attr id="161" name="zimbraObjectType" type="string" cardinality="single" requiredIn="objectentry">
+<attr id="161" name="zimbraObjectType" type="string" cardinality="single" requiredIn="objectEntry">
   <desc>the object type</desc>
 </attr>
 
-<attr id="162" name="zimbraObjectIndexingEnabled" type="boolean" cardinality="single" requiredIn="objectentry">
+<attr id="162" name="zimbraObjectIndexingEnabled" type="boolean" cardinality="single" requiredIn="objectEntry">
   <desc>whether or not indexing is enabled for this type</desc>
 </attr>
 
@@ -578,15 +617,15 @@
   <desc>whether or not store is matched for this type</desc>
 </attr>
 
-<attr id="164" name="zimbraObjectHandlerClass" type="string" cardinality="single" optionalIn="objectentry">
+<attr id="164" name="zimbraObjectHandlerClass" type="string" cardinality="single" optionalIn="objectEntry">
   <desc>the handler class for the object type</desc>
 </attr>
 
-<attr id="165" name="zimbraObjectHandlerConfig" type="string" cardinality="single" optionalIn="objectentry">
+<attr id="165" name="zimbraObjectHandlerGlobalConfig" type="string" cardinality="single" optionalIn="objectEntry">
   <desc>config for this type</desc>
 </attr>
 
-<attr id="166" name="zimbraMailSSLPort" type="port" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="166" name="zimbraMailSSLPort" type="port" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>SSL port for end-user UI</desc>
 </attr>
 
@@ -594,23 +633,23 @@
   <desc>initial contact view to use</desc>
 </attr>
 
-<attr id="168" name="zimbraTableMaintenanceMinRows" type="integer" min="0" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="168" name="zimbraTableMaintenanceMinRows" type="integer" min="0" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>minimum number of rows required for database table maintenance</desc>
 </attr>
 
-<attr id="169" name="zimbraTableMaintenanceMaxRows" type="integer" min="0" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="169" name="zimbraTableMaintenanceMaxRows" type="integer" min="0" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>maximum number of rows required for database table maintenance</desc>
 </attr>
 
-<attr id="170" name="zimbraTableMaintenanceOperation" type="enum" value="ANALYZE,OPTIMIZE" cardinality="multi" optionalIn="config,server" flags="inheritFromServer">
+<attr id="170" name="zimbraTableMaintenanceOperation" type="enum" value="ANALYZE,OPTIMIZE" cardinality="multi" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>table maintenance operation that will be performed.  Valid options: "ANALYZE", "OPTIMIZE"</desc>
 </attr>
 
-<attr id="171" name="zimbraTableMaintenanceGrowthFactor" type="integer" min="0" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="171" name="zimbraTableMaintenanceGrowthFactor" type="integer" min="0" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>table maintenance will be performed if the number of rows grows by this factor</desc>
 </attr>
 
-<attr id="172" name="zimbraDefaultDomainName" type="string" max="256" cardinality="single" optionalIn="config">
+<attr id="172" name="zimbraDefaultDomainName" type="string" max="256" cardinality="single" optionalIn="globalConfig">
   <desc>name of the default domain for accounts when authenticating without a domain</desc>
 </attr>
 
@@ -626,11 +665,11 @@
   <desc>whether POP3 is enabled for an account</desc>
 </attr>
 
-<attr id="176" name="zimbraImapServerEnabled" type="boolean" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="176" name="zimbraImapServerEnabled" type="boolean" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>whether IMAP server is enabled for a given server</desc>
 </attr>
 
-<attr id="177" name="zimbraPop3ServerEnabled" type="boolean" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="177" name="zimbraPop3ServerEnabled" type="boolean" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>whether IMAP is enabled for a server</desc>
 </attr>
 
@@ -642,11 +681,11 @@
   <desc>interface address(es) on which IMAP server should listen; if empty, binds to all interfaces</desc>
 </attr>
 
-<attr id="180" name="zimbraImapBindPort" type="port" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="180" name="zimbraImapBindPort" type="port" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>port number on which IMAP server should listen</desc>
 </attr>
 
-<attr id="181" name="zimbraImapNumThreads" type="integer" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="181" name="zimbraImapNumThreads" type="integer" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>number of handler threads</desc>
 </attr>
 
@@ -654,15 +693,15 @@
   <desc>interface address(es) on which IMAP server should listen; if empty, binds to all interfaces</desc>
 </attr>
 
-<attr id="183" name="zimbraImapSSLBindPort" type="port" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="183" name="zimbraImapSSLBindPort" type="port" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>port number on which IMAP SSL server should listen on</desc>
 </attr>
 
-<attr id="184" name="zimbraImapSSLServerEnabled" type="boolean" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="184" name="zimbraImapSSLServerEnabled" type="boolean" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>whether IMAP SSL server is enabled for a given server</desc>
 </attr>
 
-<attr id="185" name="zimbraImapCleartextLoginEnabled" type="boolean" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="185" name="zimbraImapCleartextLoginEnabled" type="boolean" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>whether or not to allow cleartext logins over a non SSL/TLS connection</desc>
 </attr>
 
@@ -670,19 +709,19 @@
   <desc>interface address(es) on which POP3 server should listen; if empty, binds to all interfaces</desc>
 </attr>
 
-<attr id="187" name="zimbraPop3SSLBindPort" type="port" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="187" name="zimbraPop3SSLBindPort" type="port" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>port number on which POP3 server should listen</desc>
 </attr>
 
-<attr id="188" name="zimbraPop3SSLServerEnabled" type="boolean" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="188" name="zimbraPop3SSLServerEnabled" type="boolean" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>whether IMAP is enabled for a server</desc>
 </attr>
 
-<attr id="189" name="zimbraPop3CleartextLoginEnabled" type="boolean" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="189" name="zimbraPop3CleartextLoginEnabled" type="boolean" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>whether or not to allow cleartext logins over a non SSL/TLS connection</desc>
 </attr>
 
-<attr id="191" name="zimbraVirusDefinitionsUpdateFrequency" type="duration" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="191" name="zimbraVirusDefinitionsUpdateFrequency" type="duration" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>how often (nnnnn[hmsd]) the virus definitions are updated</desc>
 </attr>
 
@@ -690,63 +729,63 @@
   <desc>show fragments in conversation and message lists</desc>
 </attr>
 
-<attr id="194" name="zimbraMtaAuthEnabled" type="boolean" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="194" name="zimbraMtaAuthEnabled" type="boolean" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>Value for postconf smtpd_use_tls</desc>
 </attr>
 
-<attr id="195" name="zimbraMtaBlockedExtension" type="string" max="64" cardinality="multi" optionalIn="config">
+<attr id="195" name="zimbraMtaBlockedExtension" type="string" max="64" cardinality="multi" optionalIn="globalConfig">
   <desc>Attachment file extensions that are blocked</desc>
 </attr>
 
-<attr id="196" name="zimbraMtaCommonBlockedExtension" type="string" max="64" cardinality="multi" optionalIn="config">
+<attr id="196" name="zimbraMtaCommonBlockedExtension" type="string" max="64" cardinality="multi" optionalIn="globalConfig">
   <desc>Commonly blocked attachment file extensions</desc>
 </attr>
 
-<attr id="197" name="zimbraMtaDnsLookupsEnabled" type="boolean" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="197" name="zimbraMtaDnsLookupsEnabled" type="boolean" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>Value for postconf disable_dns_lookups (note enable v. disable)</desc>
 </attr>
 
-<attr id="198" name="zimbraMtaMaxMessageSize" type="integer" min="0" cardinality="single" optionalIn="config">
+<attr id="198" name="zimbraMtaMaxMessageSize" type="integer" min="0" cardinality="single" optionalIn="globalConfig">
   <desc>Value for postconf message_size_limit</desc>
 </attr>
 
-<attr id="199" name="zimbraMtaRelayHost" type="string" max="256" cardinality="multi" optionalIn="config,server" flags="inheritFromServer">
+<attr id="199" name="zimbraMtaRelayHost" type="string" max="256" cardinality="multi" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>Value for postconf relayhost</desc>
 </attr>
 
-<attr id="200" name="zimbraMtaTlsAuthOnly" type="boolean" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="200" name="zimbraMtaTlsAuthOnly" type="boolean" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>Value for postconf smtpd_tls_auth_only</desc>
 </attr>
 
-<attr id="201" name="zimbraSpamCheckEnabled" type="boolean" cardinality="single" optionalIn="config">
+<attr id="201" name="zimbraSpamCheckEnabled" type="boolean" cardinality="single" optionalIn="globalConfig">
   <desc>Whether to enable spam checking</desc>
 </attr>
 
-<attr id="202" name="zimbraSpamKillPercent" type="integer" min="0" cardinality="single" optionalIn="config">
+<attr id="202" name="zimbraSpamKillPercent" type="integer" min="0" cardinality="single" optionalIn="globalConfig">
   <desc>Spaminess percentage beyond which a message is dropped</desc>
 </attr>
 
-<attr id="203" name="zimbraSpamSubjectTag" type="string" max="32" cardinality="single" optionalIn="config">
+<attr id="203" name="zimbraSpamSubjectTag" type="string" max="32" cardinality="single" optionalIn="globalConfig">
   <desc>Subject prefix for spam messages</desc>
 </attr>
 
-<attr id="204" name="zimbraSpamTagPercent" type="integer" min="0" cardinality="single" optionalIn="config">
+<attr id="204" name="zimbraSpamTagPercent" type="integer" min="0" cardinality="single" optionalIn="globalConfig">
   <desc>Spaminess percentage beyound which a message is marked as spam</desc>
 </attr>
 
-<attr id="205" name="zimbraVirusBlockEncryptedArchive" type="boolean" cardinality="single" optionalIn="config">
+<attr id="205" name="zimbraVirusBlockEncryptedArchive" type="boolean" cardinality="single" optionalIn="globalConfig">
   <desc>Whether to block archive files that are password protected or encrypted</desc>
 </attr>
 
-<attr id="206" name="zimbraVirusCheckEnabled" type="boolean" cardinality="single" optionalIn="config">
+<attr id="206" name="zimbraVirusCheckEnabled" type="boolean" cardinality="single" optionalIn="globalConfig">
   <desc>Whether to enable virus checking</desc>
 </attr>
 
-<attr id="207" name="zimbraVirusWarnAdmin" type="boolean" cardinality="single" optionalIn="config">
+<attr id="207" name="zimbraVirusWarnAdmin" type="boolean" cardinality="single" optionalIn="globalConfig">
   <desc>Whether to email admin on virus detection</desc>
 </attr>
 
-<attr id="208" name="zimbraVirusWarnRecipient" type="boolean" cardinality="single" optionalIn="config">
+<attr id="208" name="zimbraVirusWarnRecipient" type="boolean" cardinality="single" optionalIn="globalConfig">
   <desc>Whether to email recipient on virus detection</desc>
 </attr>
 
@@ -758,19 +797,19 @@
   <desc>should be one of: local, alias</desc>
 </attr>
 
-<attr id="213" name="zimbraMailCanonicalAddress" type="email" max="256" cardinality="single" optionalIn="mailrecipient">
+<attr id="213" name="zimbraMailCanonicalAddress" type="email" max="256" cardinality="single" optionalIn="mailRecipient">
   <desc>RFC822 email address for senders outbound messages</desc>
 </attr>
 
-<attr id="214" name="zimbraMailCatchAllAddress" type="regex" value="^@[A-Za-z0-9-\.]+$" cardinality="multi" optionalIn="mailrecipient">
+<attr id="214" name="zimbraMailCatchAllAddress" type="regex" value="^@[A-Za-z0-9-\.]+$" cardinality="multi" optionalIn="mailRecipient">
   <desc>Address to catch all messages to specified domain</desc>
 </attr>
 
-<attr id="215" name="zimbraMailCatchAllForwardingAddress" type="regex" value="^@[A-Za-z0-9-\.]+$" cardinality="single" optionalIn="mailrecipient">
+<attr id="215" name="zimbraMailCatchAllForwardingAddress" type="regex" value="^@[A-Za-z0-9-\.]+$" cardinality="single" optionalIn="mailRecipient">
   <desc>Address to deliver catch all messages to</desc>
 </attr>
 
-<attr id="216" name="zimbraMailCatchAllCanonicalAddress" type="regex" value="^@[A-Za-z0-9-\.]+$" cardinality="single" optionalIn="mailrecipient">
+<attr id="216" name="zimbraMailCatchAllCanonicalAddress" type="regex" value="^@[A-Za-z0-9-\.]+$" cardinality="single" optionalIn="mailRecipient">
   <desc>Catch all address to rewrite to</desc>
 </attr>
 
@@ -798,11 +837,11 @@
   <desc>whether to show search box or not</desc>
 </attr>
 
-<attr id="226" name="zimbraMtaRestriction" type="string" max="256" cardinality="multi" optionalIn="config">
+<attr id="226" name="zimbraMtaRestriction" type="string" max="256" cardinality="multi" optionalIn="globalConfig">
   <desc>restrictions to reject some suspect SMTP clients</desc>
 </attr>
 
-<attr id="227" name="zimbraFileUploadMaxSize" type="long" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="227" name="zimbraFileUploadMaxSize" type="long" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>Maximum size in bytes for attachments</desc>
 </attr>
 
@@ -814,15 +853,15 @@
   <desc>whether list of well known time zones is displayed in calendar UI</desc>
 </attr>
 
-<attr id="237" name="zimbraAttachmentsScanEnabled" type="boolean" cardinality="single" optionalIn="config">
+<attr id="237" name="zimbraAttachmentsScanEnabled" type="boolean" cardinality="single" optionalIn="globalConfig">
   <desc>Whether to scan attachments during compose</desc>
 </attr>
 
-<attr id="238" name="zimbraAttachmentsScanClass" type="string" max="256" cardinality="single" optionalIn="config">
+<attr id="238" name="zimbraAttachmentsScanClass" type="string" max="256" cardinality="single" optionalIn="globalConfig">
   <desc>Class to use to scan attachments during compose</desc>
 </attr>
 
-<attr id="239" name="zimbraAttachmentsScanURL" type="string" max="256" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="239" name="zimbraAttachmentsScanURL" type="string" max="256" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>Data for class that scans attachments during compose</desc>
 </attr>
 
@@ -834,31 +873,31 @@
   <desc>whether or not the IMAP server exports search folders</desc>
 </attr>
 
-<attr id="242" name="zimbraComponentAvailable" type="string" max="64" cardinality="multi" optionalIn="config">
+<attr id="242" name="zimbraComponentAvailable" type="string" max="64" cardinality="multi" optionalIn="globalConfig">
   <desc>Names of additonal components that have been installed</desc>
 </attr>
 
-<attr id="243" name="zimbraCalendarCompatibilityMode" type="enum" value="standard,exchange" cardinality="single" optionalIn="config">
+<attr id="243" name="zimbraCalendarCompatibilityMode" type="enum" value="standard,exchange" cardinality="single" optionalIn="globalConfig">
   <desc>compatibility mode for calendar server</desc>
 </attr>
 
-<attr id="244" name="zimbraSpamIsSpamAccount" type="email" max="256" cardinality="single" optionalIn="config">
+<attr id="244" name="zimbraSpamIsSpamAccount" type="email" max="256" cardinality="single" optionalIn="globalConfig">
   <desc>When user classifies a message as spam forward message via SMTP to this account</desc>
 </attr>
 
-<attr id="245" name="zimbraSpamIsNotSpamAccount" type="email" max="256" cardinality="single" optionalIn="config">
+<attr id="245" name="zimbraSpamIsNotSpamAccount" type="email" max="256" cardinality="single" optionalIn="globalConfig">
   <desc>When user classifies a message as not spam forward message via SMTP to this account</desc>
 </attr>
 
-<attr id="247" name="zimbraMailTransport" type="string" max="320" cardinality="single" optionalIn="mailrecipient">
+<attr id="247" name="zimbraMailTransport" type="string" max="320" cardinality="single" optionalIn="mailRecipient">
   <desc>where to deliver parameter for use in postfix transport_maps</desc>
 </attr>
 
-<attr id="249" name="zimbraSmtpSendPartial" type="boolean" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="249" name="zimbraSmtpSendPartial" type="boolean" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>Value of the mail.smtp.sendpartial property</desc>
 </attr>
 
-<attr id="250" name="zimbraLogHostname" type="string" cardinality="multi" optionalIn="config">
+<attr id="250" name="zimbraLogHostname" type="string" cardinality="multi" optionalIn="globalConfig">
   <desc>destination for syslog messages</desc>
 </attr>
 
@@ -906,35 +945,35 @@
   <desc>Public key of this server, used by other hosts to authorize this server to login.</desc>
 </attr>
 
-<attr id="263" name="zimbraLogRawLifetime" type="duration" cardinality="single" optionalIn="config">
+<attr id="263" name="zimbraLogRawLifetime" type="duration" cardinality="single" optionalIn="globalConfig">
   <desc>lifetime (nnnnn[hmsd]) of raw log rows in consolidated logger tables</desc>
 </attr>
 
-<attr id="264" name="zimbraLogSummaryLifetime" type="duration" cardinality="single" optionalIn="config">
+<attr id="264" name="zimbraLogSummaryLifetime" type="duration" cardinality="single" optionalIn="globalConfig">
   <desc>lifetime (nnnnn[hmsd]) of summarized log rows in consolidated logger tables</desc>
 </attr>
 
-<attr id="267" name="zimbraSpellCheckURL" type="string" max="256" cardinality="multi" optionalIn="config,server" flags="inheritFromServer">
+<attr id="267" name="zimbraSpellCheckURL" type="string" max="256" cardinality="multi" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>URL of the server running the spell checking service</desc>
 </attr>
 
-<attr id="268" name="zimbraImapBindOnStartup" type="boolean" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="268" name="zimbraImapBindOnStartup" type="boolean" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>Whether to bind to port on startup irrespective of whether the server is enabled.  Useful when port to bind is privileged and must be bound early.</desc>
 </attr>
 
-<attr id="269" name="zimbraImapSSLBindOnStartup" type="boolean" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="269" name="zimbraImapSSLBindOnStartup" type="boolean" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>Whether to bind to port on startup irrespective of whether the server is enabled.  Useful when port to bind is privileged and must be bound early.</desc>
 </attr>
 
-<attr id="270" name="zimbraLmtpBindOnStartup" type="boolean" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="270" name="zimbraLmtpBindOnStartup" type="boolean" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>Whether to bind to port on startup irrespective of whether the server is enabled.  Useful when port to bind is privileged and must be bound early.</desc>
 </attr>
 
-<attr id="271" name="zimbraPop3BindOnStartup" type="boolean" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="271" name="zimbraPop3BindOnStartup" type="boolean" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>Whether to bind to port on startup irrespective of whether the server is enabled.  Useful when port to bind is privileged and must be bound early.</desc>
 </attr>
 
-<attr id="272" name="zimbraPop3SSLBindOnStartup" type="boolean" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="272" name="zimbraPop3SSLBindOnStartup" type="boolean" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>Whether to bind to port on startup irrespective of whether the server is enabled.  Useful when port to bind is privileged and must be bound early.</desc>
 </attr>
 
@@ -954,35 +993,35 @@
   <desc>always show the mini calendar</desc>
 </attr>
 
-<attr id="277" name="zimbraSslCaCert" type="string" max="2048" cardinality="single" optionalIn="config">
+<attr id="277" name="zimbraSslCaCert" type="string" max="2048" cardinality="single" optionalIn="globalConfig">
   <desc>CA Cert used to sign all self signed certs</desc>
 </attr>
 
-<attr id="278" name="zimbraSslCaKey" type="string" max="2048" cardinality="single" optionalIn="config">
+<attr id="278" name="zimbraSslCaKey" type="string" max="2048" cardinality="single" optionalIn="globalConfig">
   <desc>CA Key used to sign all self signed certs</desc>
 </attr>
 
-<attr id="279" name="zimbraCertAuthorityKeySelfSigned" type="string" max="2048" cardinality="single" optionalIn="config">
+<attr id="279" name="zimbraCertAuthorityKeySelfSigned" type="string" max="2048" cardinality="single" optionalIn="globalConfig">
   <desc>Please see the documentation for the attribute zimbraCertAuthorityCertSelfSigned.  In addition, please note that this attribute is provided at install for convenience during a test install without real certs issued by well known CAs.  If you choose to create your own CA for your production uses, please note that it is a bad idea to store your CA-s private key in LDAP, as this data maybe read from zimbraGlobalConfig in the clear.</desc>
 </attr>
 
-<attr id="280" name="zimbraCertAuthorityCertSelfSigned" type="string" max="2048" cardinality="single" optionalIn="config">
+<attr id="280" name="zimbraCertAuthorityCertSelfSigned" type="string" max="2048" cardinality="single" optionalIn="globalConfig">
   <desc>When creating self-signed SSL certs during an install, we also create a local Certificate Authority (CA) to sign these SSL certs.  This local CA-s own cert is then added to different applications "trusted CA-s" list/store.  This attribute should not be used in a system with real certs issued by well known CAs.</desc>
 </attr>
 
-<attr id="281" name="zimbraZimletKeyword" type="string" max="256" cardinality="single" optionalIn="zimletentry">
+<attr id="281" name="zimbraZimletKeyword" type="string" max="256" cardinality="single" optionalIn="zimletEntry">
   <desc>Server side object keyword used for indexing and search for this Zimlet</desc>
 </attr>
 
-<attr id="282" name="zimbraZimletVersion" type="string" max="256" cardinality="single" requiredIn="zimletentry">
+<attr id="282" name="zimbraZimletVersion" type="string" max="256" cardinality="single" requiredIn="zimletEntry">
   <desc>Version of the Zimlet</desc>
 </attr>
 
-<attr id="283" name="zimbraZimletDescription" type="string" max="256" cardinality="single" optionalIn="zimletentry">
+<attr id="283" name="zimbraZimletDescription" type="string" max="256" cardinality="single" optionalIn="zimletEntry">
   <desc>Zimlet description</desc>
 </attr>
 
-<attr id="284" name="zimbraZimletIndexingEnabled" type="boolean" cardinality="single" optionalIn="zimletentry">
+<attr id="284" name="zimbraZimletIndexingEnabled" type="boolean" cardinality="single" optionalIn="zimletEntry">
   <desc>Whether server side keyword indexing enabled</desc>
 </attr>
 
@@ -990,11 +1029,11 @@
   <desc>Whether store is matched for this type</desc>
 </attr>
 
-<attr id="286" name="zimbraZimletHandlerClass" type="string" max="256" cardinality="single" optionalIn="zimletentry">
+<attr id="286" name="zimbraZimletHandlerClass" type="string" max="256" cardinality="single" optionalIn="zimletEntry">
   <desc>The handler class for server side Zimlet extension</desc>
 </attr>
 
-<attr id="287" name="zimbraZimletHandlerConfig" type="string" max="10240" cardinality="multi" optionalIn="zimletentry">
+<attr id="287" name="zimbraZimletHandlerConfig" type="string" max="10240" cardinality="multi" optionalIn="zimletEntry">
   <desc>The global config for the Zimlet</desc>
 </attr>
 
@@ -1006,7 +1045,7 @@
   <desc>The panel item section in the Zimlet description</desc>
 </attr>
 
-<attr id="290" name="zimbraZimletScript" type="string" max="256" cardinality="multi" optionalIn="zimletentry">
+<attr id="290" name="zimbraZimletScript" type="string" max="256" cardinality="multi" optionalIn="zimletEntry">
   <desc>URL of extra scripts used by the Zimlet</desc>
 </attr>
 
@@ -1014,7 +1053,7 @@
   <desc>List of Zimlets available to this COS</desc>
 </attr>
 
-<attr id="292" name="zimbraZimletServerIndexRegex" type="string" max="256" cardinality="single" optionalIn="zimletentry">
+<attr id="292" name="zimbraZimletServerIndexRegex" type="string" max="256" cardinality="single" optionalIn="zimletEntry">
   <desc>Regex of content object</desc>
 </attr>
 
@@ -1030,7 +1069,7 @@
   <desc>User properties for Zimlets</desc>
 </attr>
 
-<attr id="297" name="zimbraMessageCacheSize" type="integer" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="297" name="zimbraMessageCacheSize" type="integer" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>Size limit in number of bytes on the message cache.</desc>
 </attr>
 
@@ -1038,19 +1077,19 @@
   <desc>set to true for domain admin accounts</desc>
 </attr>
 
-<attr id="299" name="zimbraDomainDefaultCOSId" type="id"> <!-- type "cosId" cardinality="single" optionalIn="domain" and check for valid COS id? -->
+<attr id="299" name="zimbraDomainDefaultCOSId" type="id" cardinality="single" optionalIn="domain"> <!-- should we set type to cosId and and check for valid COS id? -->
   <desc>COS zimbraID</desc>
 </attr>
 
-<attr id="300" name="zimbraDomainAdminModifiableAttr" type="string" cardinality="multi" optionalIn="config">
+<attr id="300" name="zimbraDomainAdminModifiableAttr" type="string" cardinality="multi" optionalIn="globalConfig">
   <desc>account attributes that a domain administrator is allowed to modify</desc>
 </attr>
 
-<attr id="301" name="zimbraZimletEnabled" type="boolean" cardinality="single" requiredIn="zimletentry">
+<attr id="301" name="zimbraZimletEnabled" type="boolean" cardinality="single" requiredIn="zimletEntry">
   <desc>whether this Zimlet is enabled</desc>
 </attr>
 
-<attr id="302" name="zimbraZimletPriority" type="string" min="32" cardinality="single" optionalIn="zimletentry">
+<attr id="302" name="zimbraZimletPriority" type="string" min="32" cardinality="single" optionalIn="zimletEntry">
   <desc>Object match priority</desc>
 </attr>
 
@@ -1058,7 +1097,7 @@
   <desc>Content types that can be cached by proxy servlet</desc>
 </attr>
 
-<attr id="304" name="zimbraZimletIsExtension" type="boolean" cardinality="single" optionalIn="zimletentry">
+<attr id="304" name="zimbraZimletIsExtension" type="boolean" cardinality="single" optionalIn="zimletEntry">
   <desc>Whether this zimlet is an extension</desc>
 </attr>
 
@@ -1066,7 +1105,7 @@
   <desc>IM features</desc>
 </attr>
 
-<attr id="306" name="zimbraMtaRecipientDelimiter" type="string" max="256" cardinality="multi" optionalIn="config">
+<attr id="306" name="zimbraMtaRecipientDelimiter" type="string" max="256" cardinality="multi" optionalIn="globalConfig">
   <desc>Value for postconf recipient_delimiter.  Also used by ZCS LMTP server to check if it should accept messages to addresses with extensions.</desc>
 </attr>
 
@@ -1074,19 +1113,19 @@
   <desc>preauth secret key</desc>
 </attr>
 
-<attr id="308" name="zimbraMailMode" type="enum" value="http,https,both,mixed" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="308" name="zimbraMailMode" type="enum" value="http,https,both,mixed" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>whether to run HTTP or HTTPS or both or mixed mode.  See also related attributes zimbraMailPort and zimbraMailSSLPort</desc>
 </attr>
 
-<attr id="309" name="zimbraMtaAuthHost" type="string" max="256" callback="MtaAuthHost" cardinality="multi" optionalIn="config,server" flags="inheritFromServer">
+<attr id="309" name="zimbraMtaAuthHost" type="string" max="256" callback="MtaAuthHost" cardinality="multi" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>Host running SOAP service for use by MTA auth.  Setting this sets zimbraMtaAuthURL via attr callback mechanism.</desc>
 </attr>
 
-<attr id="310" name="zimbraMtaAuthURL" type="string" max="256" immutable="1" cardinality="multi" optionalIn="config,server" flags="inheritFromServer">
+<attr id="310" name="zimbraMtaAuthURL" type="string" max="256" immutable="1" cardinality="multi" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>URL at which this MTA (via zimbra saslauthd) should authenticate.  Set by setting zimbraMtaAuthHost.</desc>
 </attr>
 
-<attr id="311" name="zimbraMtaMyNetworks" type="string" max="1024" cardinality="multi" optionalIn="config,server" flags="inheritFromServer">
+<attr id="311" name="zimbraMtaMyNetworks" type="string" max="1024" cardinality="multi" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>value of postfix mynetworks</desc>
 </attr>
 
@@ -1094,91 +1133,91 @@
   <desc>option to view attachments in html</desc>
 </attr>
 
-<attr id="313" name="zimbraAccountCalendarUserType" type="enum" value="USER,RESOURCE" cardinality="single" optionalIn="account" requiredIn="calresource">
+<attr id="313" name="zimbraAccountCalendarUserType" type="enum" value="USER,RESOURCE" cardinality="single" optionalIn="account" requiredIn="calendarResource">
   <desc>calendar user type - USER (default) or RESOURCE</desc>
 </attr>
 
-<attr id="314" name="zimbraCalResType" type="string" cardinality="single" requiredIn="calresource">
+<attr id="314" name="zimbraCalResType" type="string" cardinality="single" requiredIn="calendarResource">
   <desc>calendar resource type - Location, Equipment, etc.</desc>
 </attr>
 
-<attr id="315" name="zimbraCalResAutoAcceptDecline" type="boolean" cardinality="single" optionalIn="calresource">
+<attr id="315" name="zimbraCalResAutoAcceptDecline" type="boolean" cardinality="single" optionalIn="calendarResource">
   <desc>Whether this calendar resource accepts/declines meeting invites automatically; default TRUE</desc>
 </attr>
 
-<attr id="316" name="zimbraNotifyServerEnabled" type="boolean" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="316" name="zimbraNotifyServerEnabled" type="boolean" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>Whether notification server should be enabled.</desc>
 </attr>
 
-<attr id="317" name="zimbraNotifyBindAddress" type="string" max="128" cardinality="multi" optionalIn="config,server" flags="inheritFromServer">
+<attr id="317" name="zimbraNotifyBindAddress" type="string" max="128" cardinality="multi" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>Network interface on which notification server should listen; if empty, binds to all interfaces.</desc>
 </attr>
 
-<attr id="318" name="zimbraNotifyBindPort" type="integer" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="318" name="zimbraNotifyBindPort" type="integer" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>Port number on which notification server should listen.</desc>
 </attr>
 
-<attr id="319" name="zimbraNotifySSLServerEnabled" type="boolean" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="319" name="zimbraNotifySSLServerEnabled" type="boolean" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>Whether SSL notification server should be enabled.</desc>
 </attr>
 
-<attr id="320" name="zimbraNotifySSLBindAddress" type="string" max="128" cardinality="multi" optionalIn="config,server" flags="inheritFromServer">
+<attr id="320" name="zimbraNotifySSLBindAddress" type="string" max="128" cardinality="multi" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>Network interface on which SSL notification server should listen; if empty, binds to all interfaces</desc>
 </attr>
 
-<attr id="321" name="zimbraNotifySSLBindPort" type="integer" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="321" name="zimbraNotifySSLBindPort" type="integer" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>Port number on which notification server should listen.</desc>
 </attr>
 
-<attr id="322" name="zimbraCalResAutoDeclineIfBusy" type="boolean" cardinality="single" optionalIn="calresource">
+<attr id="322" name="zimbraCalResAutoDeclineIfBusy" type="boolean" cardinality="single" optionalIn="calendarResource">
   <desc>Whether this calendar resource declines invite if already busy; default TRUE</desc>
 </attr>
 
-<attr id="323" name="zimbraCalResAutoDeclineRecurring" type="boolean" cardinality="single" optionalIn="calresource">
+<attr id="323" name="zimbraCalResAutoDeclineRecurring" type="boolean" cardinality="single" optionalIn="calendarResource">
   <desc>Whether this calendar resource declines invites to recurring appointments; default FASE</desc>
 </attr>
 
-<attr id="324" name="zimbraCalResLocationDisplayName" type="string" cardinality="single" optionalIn="calresource">
+<attr id="324" name="zimbraCalResLocationDisplayName" type="string" cardinality="single" optionalIn="calendarResource">
   <desc>display name for resource location</desc>
 </attr>
 
-<attr id="325" name="zimbraGroupId" type="id" immutable="1" cardinality="single" requiredIn="group">
+<attr id="325" name="zimbraGroupId" type="id" immutable="1" cardinality="single" requiredIn="securityGroup">
   <desc>Zimbra Systems Unique Group ID</desc>
 </attr>
 
-<attr id="326" name="zimbraCalResSite" type="string" cardinality="single" optionalIn="calresource">
+<attr id="326" name="zimbraCalResSite" type="string" cardinality="single" optionalIn="calendarResource">
   <desc>site name</desc>
 </attr>
 
-<attr id="327" name="zimbraCalResBuilding" type="string" cardinality="single" optionalIn="calresource">
+<attr id="327" name="zimbraCalResBuilding" type="string" cardinality="single" optionalIn="calendarResource">
   <desc>building number or name</desc>
 </attr>
 
-<attr id="328" name="zimbraCalResFloor" type="string" cardinality="single" optionalIn="calresource">
+<attr id="328" name="zimbraCalResFloor" type="string" cardinality="single" optionalIn="calendarResource">
   <desc>floor number or name</desc>
 </attr>
 
-<attr id="329" name="zimbraCalResRoom" type="string" cardinality="single" optionalIn="calresource">
+<attr id="329" name="zimbraCalResRoom" type="string" cardinality="single" optionalIn="calendarResource">
   <desc>room number or name</desc>
 </attr>
 
-<attr id="330" name="zimbraCalResCapacity" type="integer" cardinality="single" optionalIn="calresource">
+<attr id="330" name="zimbraCalResCapacity" type="integer" cardinality="single" optionalIn="calendarResource">
   <desc>capacity</desc>
 </attr>
 
-<attr id="331" name="zimbraCalResContactName" type="string" cardinality="single" optionalIn="calresource">
+<attr id="331" name="zimbraCalResContactName" type="string" cardinality="single" optionalIn="calendarResource">
   <desc>name of contact in charge of resource</desc>
 </attr>
 
-<attr id="332" name="zimbraCalResContactEmail" type="email" cardinality="single" optionalIn="calresource">
+<attr id="332" name="zimbraCalResContactEmail" type="email" cardinality="single" optionalIn="calendarResource">
   <desc>email of contact in charge of resource</desc>
 </attr>
 
-<attr id="333" name="zimbraCalResContactPhone" type="string" cardinality="single" optionalIn="calresource">
+<attr id="333" name="zimbraCalResContactPhone" type="string" cardinality="single" optionalIn="calendarResource">
   <desc>phone number of contact in charge of resource</desc>
 </attr>
 
-<attr id="334" name="zimbraMessageIdDedupeCacheSize" type="integer" cardinality="single" optionalIn="config">
+<attr id="334" name="zimbraMessageIdDedupeCacheSize" type="integer" cardinality="single" optionalIn="globalConfig">
   <desc>Size of cache for delivery time dedupe based on Message-Id header.  Set to 0 to disable this type of deduping.</desc>
 </attr>
 
@@ -1186,23 +1225,23 @@
   <desc>enabled sharing</desc>
 </attr>
 
-<attr id="336" name="zimbraRemoteManagementCommand" type="string" max="1024" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="336" name="zimbraRemoteManagementCommand" type="string" max="1024" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>Path to remote management command to execute on this server</desc>
 </attr>
 
-<attr id="337" name="zimbraRemoteManagementUser" type="string" max="256" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="337" name="zimbraRemoteManagementUser" type="string" max="256" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>Login name of user allowed to execute remote management command</desc>
 </attr>
 
-<attr id="338" name="zimbraRemoteManagementPrivateKeyPath" type="string" max="1024" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="338" name="zimbraRemoteManagementPrivateKeyPath" type="string" max="1024" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>Private key this server should use to access another server</desc>
 </attr>
 
-<attr id="339" name="zimbraRemoteManagementPort" type="integer" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="339" name="zimbraRemoteManagementPort" type="integer" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>Port on which remote management sshd listening on this server.</desc>
 </attr>
 
-<attr id="340" name="zimbraMailURL" type="string" max="1024" cardinality="single" optionalIn="config,server" flags="inheritFromServer">
+<attr id="340" name="zimbraMailURL" type="string" max="1024" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
   <desc>URL prefix for where the zimbra app resides on this server</desc>
 </attr>
 
@@ -1218,7 +1257,7 @@
   <desc>RFC822 forwarding address for an account</desc>
 </attr>
 
-<attr id="345" name="zimbraLocale" type="string" cardinality="single" optionalIn="mailrecipient,account,alias,dl,cos,config,domain,server,calresource" flags="accountInfo,inheritFromCOS,domainAdminModifiable,inheritFromServer">
+<attr id="345" name="zimbraLocale" type="string" cardinality="single" optionalIn="mailRecipient,account,alias,distributionList,cos,globalConfig,domain,server,calendarResource" flags="accountInfo,inheritFromCOS,domainAdminModifiable,inheritFromGlobalConfig">
   <desc>locale of entry, e.g. en_US</desc>
 </attr>
 
