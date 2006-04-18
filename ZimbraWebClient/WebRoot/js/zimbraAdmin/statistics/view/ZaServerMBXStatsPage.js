@@ -379,7 +379,8 @@ function(mbx, now, isDndIcon) {
 							
 				html[idx++] = progressBar.getHtmlElement().innerHTML	;						
 //				html[idx++] = "<div>Add the progress bar</div>";
-				html[idx++] = "</td>";			
+				html[idx++] = "</td>";	
+				progressBar.dispose ();		
 			} else if(id.indexOf(ZaServerMBXStatsPage.XFORM_ITEM_QUOTA) == 0) {
 				// quota
 				html[idx++] = "<td width=" + this._headerList[i]._width + ">";
