@@ -54,11 +54,11 @@ function (homeOptions, workOptions, workZip, homeZip,addr) {
 	this.flightPage = new TravelAgentFlightFindView(this.tabView,this._appCtxt, this,homeOptions, workOptions, workZip, homeZip);
 	this.carPage = new TravelAgentCarFindView(this.tabView,this._appCtxt, this,homeOptions, workOptions, workZip, homeZip);	
 	this.hotelPage = new TravelAgentHotelFindView(this.tabView,this._appCtxt, this,addr);		
-	view.setSize("500px", "360px");
-	this.tabView.setSize("500px", "360px");	
-	this.flightPage.setSize("500px", "360px");	
-	this.carPage.setSize("500px", "360px");	
-	this.hotelPage.setSize("500px", "360px");	
+	view.setSize("550px", "400px");
+	this.tabView.setSize("550px", "400px");	
+	this.flightPage.setSize("550px", "400px");	
+	this.carPage.setSize("550px", "400px");	
+	this.hotelPage.setSize("550px", "400px");	
 	this.tabkeys = [];
 	this.tabkeys.push(this.tabView.addTab("Flight", this.flightPage));
 	this.tabkeys.push(this.tabView.addTab("Car", this.carPage));	

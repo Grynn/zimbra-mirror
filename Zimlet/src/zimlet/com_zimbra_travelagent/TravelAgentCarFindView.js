@@ -376,10 +376,10 @@ function () {
 	var searchTravelocity=true;
 	var searchHotwire=true;
 	try {
-		myAirport = this.zimlet.getUserProperty("myairport")
-		searchSideStep = this.zimlet.getUserProperty("search_sidestep")
-		searchTravelocity = this.zimlet.getUserProperty("search_travelocity")		
-		searchHotwire = this.zimlet.getUserProperty("search_hotwire")				
+		myAirport = this.zimlet.getUserProperty("myairport");
+		searchSideStep = this.zimlet.getUserProperty("search_sidestep");
+		searchTravelocity = this.zimlet.getUserProperty("search_travelocity");		
+		searchHotwire = this.zimlet.getUserProperty("search_hotwire");				
 	} catch (ex) {
 	//sigh
 	}	

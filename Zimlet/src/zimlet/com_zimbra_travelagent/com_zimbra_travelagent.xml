@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_travelagent" version="2.03" description="Search travel reservations across multiple engines">
+<zimlet name="com_zimbra_travelagent" version="2.04" description="Search travel reservations across multiple engines">
 <include>com_zimbra_travelagent.js</include>
 <include>TravelAgentFlightFindView.js</include>
 <include>TravelAgentCarFindView.js</include>
