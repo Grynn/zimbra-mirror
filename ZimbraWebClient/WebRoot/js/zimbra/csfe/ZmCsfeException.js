@@ -116,6 +116,7 @@ ZmCsfeException.define("MAIL_QUOTA_EXCEEDED", "mail.QUOTA_EXCEEDED", ZMsg.errorQ
 ZmCsfeException.define("MAIL_SEND_ABORTED_ADDRESS_FAILURE", "mail.SEND_ABORTED_ADDRESS_FAILURE");
 ZmCsfeException.define("MAIL_SEND_FAILURE", "mail.SEND_FAILURE", ZMsg.mailSendFailure);
 ZmCsfeException.define("MAIL_TOO_MANY_CONTACTS", "mail.TOO_MANY_CONTACTS", ZMsg.errorTooManyContacts);
+ZmCsfeException.define("MAIL_TOO_MANY_TERMS", "mail.TOO_MANY_QUERY_TERMS_EXPANDED", ZMsg.errorTooManyTerms);
 
 // structured data keys
 ZmCsfeException.MAIL_SEND_ADDRESS_FAILURE_INVALID = "invalid";
