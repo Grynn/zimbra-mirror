@@ -117,6 +117,8 @@ function(dragHandleId) {
 DwtBaseDialog.prototype.popup =
 function(loc) {
 	
+	if (this._poppedUp) return;
+	
 	this.cleanup(true);
 
 	var thisZ = this._zIndex;
