@@ -60,7 +60,7 @@ function ZaLoginDialog(parent, zIndex, className) {
     this._pwordField._parentId = this._htmlElId;
     this._pwordField.onfocus = ZaLoginDialog.handleFieldFocus;
     
-    this._loginButton = new DwtButton(this, "", "ZaLoginButton");
+    this._loginButton = new DwtButton(this, "");
     this._loginButton.setText(ZaMsg.login);
     this._loginButton.setData("me", this);
     this._loginButton.addSelectionListener(new AjxListener(this, this._loginSelListener));
@@ -270,17 +270,17 @@ function(unameId, pwordId, okCellId, errorCellId, licenseCellId,tableId,bannerCe
  	html[i++] = this.getBannerHtml();
  	html[i++] = "</tr></td>";
  	html[i++] = "<tr><td>";
- 	html[i++] = "<table cellspacing=12 class='" + this._className + "-MainPanel' id='" + tableId + "'>";
- 	html[i++] = "<colgroup><col style='width:75px'></col><col style='width:225px'></col></colgroup>";
+ 	html[i++] = "<table cellspacing=4 class='" + this._className + "-MainPanel' id='" + tableId + "' border=0>";
+ 	html[i++] = "<colgroup><col style='width:100px'></col><col style='width:225px'></col></colgroup>";
 	html[i++] = "<tr><td colspan=2 id='" + errorCellId + "'>&nbsp;</td></tr>";
 	html[i++] = "<tr><td align=right>" + ZaMsg.username + ":</td>";
-	html[i++] = "<td><input style=\"width:100%; height:22px\" autocomplete=OFF type=text tabIndex=1 id='" + unameId + "'/></td></tr>";	
+	html[i++] = "<td colspan=2><input style=\"width:250; height:20px\" autocomplete=OFF type=text tabIndex=1 id='" + unameId + "'/></td></tr>";	
 	html[i++] = "<tr><td align=right>" + ZaMsg.password + ":</td>";
-	html[i++] = "<td><input style=\"width:100%; height:22px\" type=password tabIndex=2 id='" + pwordId + "'/></td></tr>";	
+	html[i++] = "<td colspan=2><input style=\"width:250; height:20px\" type=password tabIndex=2 id='" + pwordId + "'/></td></tr>";	
 	html[i++] = "<tr><td colspan=2><table cellpadding=0 cellspacing=0 border=0 width=100%>";
 	html[i++] = "<td id='" + licenseCellId + "' style='visibility:hidden;'></td>";
-	html[i++] = "<td id='" + okCellId + "' align=right></td></tr></table>";
-	html[i++] = "</td></tr><tr><td colspan=2 style='Xborder:1px solid #eeeeee;font-size:9px;color:#999999;'>" + ZaMsg.splashScreenCopyright + "</td></tr></table>";
+	html[i++] = "<td id='" + okCellId + "' align=right style='padding-right:59px'></td></tr></table>";
+	html[i++] = "</td></tr><tr><td colspan=3 id='LoginBannerLicense'>" + ZaMsg.splashScreenCopyright + "</td></tr></table>";
 	html[i++] = "</td></tr></table>";
 	html[i++] = "</td></tr></table>";
 	return html.join("");

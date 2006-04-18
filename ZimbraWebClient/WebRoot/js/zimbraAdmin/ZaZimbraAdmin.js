@@ -323,7 +323,7 @@ function(shell) {
 	if(ZaZimbraAdmin._splashScreen)
 		ZaZimbraAdmin._splashScreen.setVisible(true);
 	else {
-		ZaZimbraAdmin._splashScreen = new ZaSplashScreen(shell, "Admin_SplashScreen");
+		ZaZimbraAdmin._splashScreen = new ZaSplashScreen(shell);
 	}
 }
 ZaZimbraAdmin.prototype._appButtonListener =

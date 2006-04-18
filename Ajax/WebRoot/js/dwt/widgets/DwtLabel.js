@@ -171,6 +171,7 @@ function(text) {
 			this._doAlign();
 			this._textCell.noWrap = true;
 			this._textCell.style.verticalAlign = "middle";
+//			this._textCell.style.width = "auto";
 			this._textCell.appendChild(this._text);
 		}
 	}
@@ -228,6 +229,7 @@ function(imageInfo) {
 				idx = this._textCell ? 1 : 0;
 			}
 			this._imageCell = this._row.insertCell(idx);
+			this._imageCell.className = "Icon";
 			this._doAlign();
 		}
 		AjxImg.setImage(this._imageCell, imageInfo);

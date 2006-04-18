@@ -55,13 +55,12 @@ public class DecodedFullColorImage extends DecodedImage {
      * Get a JavaScript definition for this piece of the combined image.
      * expects combinedFilename to be of the form "megaimage.gif".
      */
-    // DISABLED: Not used in IE today due to stability problems
-/*
     public String getCssString(int combinedWidth,
-                                   int combinedHeight,
-                                   String combinedFilename) 
+                               int combinedHeight,
+                               String combinedFilename,
+                               boolean includeDisableCss) 
     {
-        String css = super.getCssString(combinedWidth, combinedHeight, combinedFilename);
+        String css = super.getCssString(combinedWidth, combinedHeight, combinedFilename, includeDisableCss);
         // NOTE: This is an IE hack to make it use the AlphaImageLoader filter
         //		 instead of background-image for PNG files.
         if (mSuffix.equalsIgnoreCase("png")) {
@@ -81,7 +80,6 @@ public class DecodedFullColorImage extends DecodedImage {
         }
         return css;
     }
-*/
 
 
     /*

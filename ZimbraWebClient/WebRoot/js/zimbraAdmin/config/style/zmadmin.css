@@ -129,7 +129,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 
 /* Login Panel */
 .ZaLoginDialog {
-	background-color: #b7b7b7; 
+	background-color: #eeeeee; 
 	background-image:url(/zimbraAdmin/img/loRes/skins/steel/Steel__BG.gif);
 	overflow:hidden;
 	align:center;
@@ -148,13 +148,63 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 }
 
 
+/* "appName" substitution:  eg:  "Collaboration Suite" */
+#LoginBannerAppName {
+	position:absolute;
+	left:60;
+	top:85;
+	width:350;
+	height:30;
+	text-align:right;
+	@FontBiggest@
+	font-weight:normal;
+}
+
+/* "version" substitution:  eg:  "V 1.23 * 'Birdseye' * Wed Oct 12, 2005" */
+#LoginBannerVersion {
+	position:absolute;
+	left:60;
+	top:110;
+	width:350;
+	height:30;
+	font-weight:normal;
+	text-align:right;
+}
+
+
+
+#LoginBannerUrl {
+	position:absolute;
+	left:50;
+	top:130px;
+	width:350;
+	height:30;
+}
+#LoginBannerUrl a {
+	@FontBigger@
+	font-weight:normal;
+	text-align:right;
+}
+
+#LoginBannerLicense {
+	@FontSmaller@
+	@DisabledText@
+	height:40px;
+	text-align:center;
+	vertical-align:bottom;
+	padding-top:@BoxPaddingSize@;
+	padding-bottom:@BoxPaddingSize@;
+}
+
+
+
 .ZaLoginDialog-ErrorPanel {
   background-color: rgb(255, 255, 204);
-  width:417px;
+  width:400px;
 }
 
 .ZaLoginDialog-HeaderPanel {
-	width: 447px;
+	width: 400px;
 }
 
 .ZaLoginDialog-HeaderText, .ZaLoginDialog-SubHeaderText {

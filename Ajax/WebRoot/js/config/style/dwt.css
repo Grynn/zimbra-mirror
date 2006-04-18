@@ -33,7 +33,11 @@
 
 /* ???  USE? DO PADDING HERE?  */
 .Icon {
-	@SmallIconSize@
+	width:16px;
+}
+
+.dropDownCell { 
+	width: 12px;
 }
 
 .DisabledText {
@@ -92,15 +96,15 @@
 }
 
 
-/* Single tab button */
+/* Single tab button 
+	- Note: "inactive" means 'not selected' in this case
+*/
 .DwtTabButton,
-.DwtTabButton-active {
+.DwtTabButton-active,
+.DwtTabButton-inactive {
 	@ActiveCursor@
 }
 
-.DwtTabButton-inactive {
-	@InactiveCursor@
-}
 
 
 /* Graphics that make up the tabs */
@@ -300,9 +304,6 @@
 	@TableFixed@
 }
 
-.dropDownCell { 
-	width: @SmallIconWidth@;
-}
 
 
 
@@ -532,7 +533,7 @@
 
 /* ??? SHOTGUN */
 .DialogBody td {
-	@Label@
+	@LabelWrap@
 }
 
 
@@ -562,11 +563,9 @@
 }
 
 
-/*
- *  ??? USE
- */
+/* Font for confirmation dialogs ('Are you sure you want to delete?') */
 .DwtConfirmDialogQuestion {
-	@FontBigger@
+	@FontBig@
 	@BoxMargin@
 }
 
@@ -1199,11 +1198,9 @@
 }
 
 /* simple rows that don't contain tables */
+/* ??? SHOTGUN */
 .DwtChooserListView > div {
-	@Text@
-	padding-left:@TextPaddingSize@;
-	padding-top:2px;
-	padding-right:2px;
+	@Label@
 }
 
 /*
@@ -1215,7 +1212,8 @@
 	height: 75px;
 }
 
-.DwtShellBusyDialog td.WaitIcon {
+.DwtShellBusyDialog .WaitIcon,
+.DwtWait64Icon {
 	background-image:url(@SkinAnimatedImgDir@/wait_64.gif);
 	width:64px;
 	height:64px;
@@ -1234,11 +1232,18 @@
 }
 
 .DwtShellBusyDialog table td.MsgText {
-	@FontDefault@
+	@FontBig@
 	@BoxPadding@
+	white-space:normal;
 	vertical-align:top;
 }
 
+.DwtShellBusyDialog .DwtButton,
+.DwtShellBusyDialog .DwtButton-triggered,
+.DwtShellBusyDialog .DwtButton-activated,
+.DwtShellBusyDialog .DwtButton-active {
+	width:100px;
+}
 
 
 

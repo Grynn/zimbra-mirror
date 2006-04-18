@@ -339,7 +339,7 @@ function(htmlElement) {
     var txtId = Dwt.getNextId();
     var html = [
         "<table xborder=1 class='DialogContent'><tr>",
-            "<td class='WaitIcon'></td><td class='MsgText' id='", txtId, "'>&nbsp;</td>",
+            "<td><div class='WaitIcon'></div></td><td class='MsgText' id='", txtId, "'>&nbsp;</td>",
         "</tr></table>"].join("");
     
     this._busyDialog.setContent(html);
