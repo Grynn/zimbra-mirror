@@ -100,14 +100,15 @@ function Com_Zimbra_Arcade_Asst(appCtxt) {
 	// XXX: localize later (does NOT belong in ZmMsg.properties)
 	ZmAssistant.call(this, appCtxt, "Play Game", "play");
 
-	this._validGames = ["asteroids", "frogger", "hexxagon", "invaders", 
-						"space invaders", "pacman", "pac man", "simon", 
-						"simon says", "snake", "tetris", "tictactoe", 
-						"tic tac toe"];
+	this._validGames = ["asteroids", "frogger", "hexxagon", "pacman",
+						"simon", "snake", "space invaders",
+						"tetris", "tictactoe"] ;
+
 };
 
 Com_Zimbra_Arcade_Asst.prototype = new ZmAssistant();
 Com_Zimbra_Arcade_Asst.prototype.constructor = Com_Zimbra_Arcade_Asst;
+
 
 Com_Zimbra_Arcade_Asst.prototype.okHandler =
 function(dialog) {
@@ -125,18 +126,27 @@ function(dialog) {
 
 Com_Zimbra_Arcade_Asst.prototype.handle =
 function(dialog, verb, args) {
-
-	var isValidGame = false;
+	
 	this._game = null;
 
+	var matched = [];
 	// this seems inefficient but its the best way to guarantee a valid game name
-	for (var i = 0; i < this._validGames.length; i++) {
-		if (this._validGames[i] == args) {
-			this._game = args;
-			isValidGame = true;
-			break;
+	if (args.length >0) {
+		for (var i = 0; i < this._validGames.length; i++) {
+			if (args == this._validGames[i]) {
+				matched = [ this._validGames[i] ];
+				break;				
+			} else if (this._validGames[i].substring(0, args.length) == args) {
+				matched.push(this._validGames[i]);
+			}
 		}
 	}
-
+	var isValidGame = matched.length == 1;
+	if (isValidGame) this._game = matched[0];
+	if (matched.length == 0) matched = this._validGames;
+	
+	var games = matched.join(", ");
+	this._setField("Game", games, !isValidGame, true);	
 	dialog._setOkButton(AjxMsg.ok, true, isValidGame);
 };
+
