@@ -623,7 +623,7 @@ The AttributeManager is invoked when entries are created/modified.
   <desc>the handler class for the object type</desc>
 </attr>
 
-<attr id="165" name="zimbraObjectHandlerGlobalConfig" type="string" cardinality="single" optionalIn="objectEntry">
+<attr id="165" name="zimbraObjectHandlerConfig" type="string" cardinality="single" optionalIn="objectEntry">
   <desc>config for this type</desc>
 </attr>
 
@@ -859,6 +859,30 @@ The AttributeManager is invoked when entries are created/modified.
   <desc>Maximum size in bytes for attachments</desc>
 </attr>
 
+<attr id="229" name="zimbraTimeZoneStandardDtStart" type="string" max="256" cardinality="multi" optionalIn="timeZone">
+  <desc>Start date for standard time</desc>
+</attr>
+
+<attr id="230" name="zimbraTimeZoneStandardOffset" type="string" max="5" cardinality="multi" optionalIn="timeZone">
+  <desc>Offset in standard time</desc>
+</attr>
+
+<attr id="231" name="zimbraTimeZoneStandardRRule" type="string" max="256" cardinality="multi" optionalIn="timeZone">
+  <desc>iCalendar recurrence rule for onset of standard time</desc>
+</attr>
+
+<attr id="232" name="zimbraTimeZoneDaylightDtStart" type="string" max="256" cardinality="multi" optionalIn="timeZone">
+  <desc>Start date for daylight time</desc>
+</attr>
+
+<attr id="233" name="zimbraTimeZoneDaylightOffset" type="string" max="5" cardinality="multi" optionalIn="timeZone">
+  <desc>Offset in daylight time</desc>
+</attr>
+
+<attr id="234" name="zimbraTimeZoneDaylightRRule" type="string" max="256" cardinality="multi" optionalIn="timeZone">
+  <desc>iCalendar recurrence rule for onset of daylight time</desc>
+</attr>
+
 <attr id="235" name="zimbraPrefTimeZoneId" type="string" cardinality="multi" optionalIn="account,cos" flags="inheritFromCOS,domainAdminModifiable">
   <desc>time zone of user or COS</desc>
 </attr>
@@ -1075,6 +1099,10 @@ The AttributeManager is invoked when entries are created/modified.
   <desc>Regex of content object</desc>
 </attr>
 
+<attr id="293" name="zimbraMimeHandlerExtension" type="string" cardinality="single" optionalIn="mimeEntry">
+  <desc>the name of the zimbra extension where the handler class for the mime type lives</desc>
+</attr>
+
 <attr id="294" name="zimbraProxyAllowedDomains" type="string" max="256" cardinality="multi" optionalIn="account,cos">
   <desc>Allowed domains for Proxy servlet</desc>
 </attr>
@@ -1273,6 +1301,10 @@ The AttributeManager is invoked when entries are created/modified.
 
 <attr id="343" name="zimbraPrefMailForwardingAddress" type="emailp" max="256" cardinality="single" optionalIn="account" flags="domainAdminModifiable">
   <desc>RFC822 forwarding address for an account</desc>
+</attr>
+
+<attr id="344" name="zimbraPrefMailLocalDeliveryDisabled" type="boolean" cardinality="single" optionalIn="account">
+  <desc>whether or not to deliver mail locally</desc>
 </attr>
 
 <attr id="345" name="zimbraLocale" type="string" cardinality="single" optionalIn="mailRecipient,account,alias,distributionList,cos,globalConfig,domain,server,calendarResource" flags="accountInfo,inheritFromCOS,domainAdminModifiable,inheritFromGlobalConfig">
