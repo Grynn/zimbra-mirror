@@ -795,6 +795,14 @@ The AttributeManager is invoked when entries are created/modified.
   <desc>whether or not compose messages in a new windows by default</desc>
 </attr>
 
+<attr id="210" name="zimbraSpamHeader" type="string" cardinality="single" optionalIn="globalConfig">
+  <desc>mail header name for flagging spam</desc>
+</attr>
+
+<attr id="211" name="zimbraSpamHeaderValue" type="string" cardinality="single" optionalIn="globalConfig">
+  <desc>regular expression for matching the spam header</desc>
+</attr>
+
 <attr id="212" name="zimbraDomainType" type="enum" value="local,alias" immutable="1" cardinality="single" requiredIn="domain">
   <desc>should be one of: local, alias</desc>
 </attr>
