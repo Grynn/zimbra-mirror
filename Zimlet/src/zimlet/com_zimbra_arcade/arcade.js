@@ -35,14 +35,24 @@ function Com_Zimbra_Arcade() {
 Com_Zimbra_Arcade.prototype = new ZmZimletBase();
 Com_Zimbra_Arcade.prototype.constructor = Com_Zimbra_Arcade;
 
+ZmZimletBase.prototype.init = 
+function() {
+	ZmAssistant.register(new Com_Zimbra_Arcade_Asst(this._appCtxt));
+};
+
 // Called by the Zimlet framework when the game panel item was double clicked
 Com_Zimbra_Arcade.prototype.menuItemSelected = 
 function(contextMenu, menuItemId, spanElement, contentObjText, canvas) {
+	this.showDialog(contextMenu);
+};
+
+Com_Zimbra_Arcade.prototype.showDialog = 
+function(game) {
 	var view = new DwtComposite(this.getShell());
 	view.setSize("465", "360");
 
 	// find out which arcade game was selected
-	var resource = contextMenu + ".swf";
+	var resource = game + ".swf";
 
 	var html = new Array();
 	var i = 0;
@@ -64,7 +74,7 @@ function(contextMenu, menuItemId, spanElement, contentObjText, canvas) {
 	view.getHtmlElement().innerHTML = html.join("");
 
 	// XXX: need public way of doing this!
-	var title = "Play " + contextMenu;
+	var title = "Play " + game;
 	var dlg = this._createDialog({title:title, view:view});
 	var buttonListener = new AjxListener(this, this._buttonListener);
 	dlg.setButtonListener(DwtDialog.OK_BUTTON, buttonListener);
@@ -77,4 +87,56 @@ function(ev) {
 	// clear out the dialog so the flash game dies (kills the sound)
 	ev.item.parent._contentDiv.innerHTML = "";
 	ev.item.parent.popdown();
+};
+
+
+
+//////////////////////////////////////////////////////////////////////////
+// Zimlet assistant class
+// - used by the Assistant dialog to run games via "command-line"
+//////////////////////////////////////////////////////////////////////////
+function Com_Zimbra_Arcade_Asst(appCtxt) {
+	if (arguments.length == 0) return;
+	// XXX: localize later (does NOT belong in ZmMsg.properties)
+	ZmAssistant.call(this, appCtxt, "Play Game", "play");
+
+	this._validGames = ["asteroids", "frogger", "hexxagon", "invaders", 
+						"space invaders", "pacman", "pac man", "simon", 
+						"simon says", "snake", "tetris", "tictactoe", 
+						"tic tac toe"];
+};
+
+Com_Zimbra_Arcade_Asst.prototype = new ZmAssistant();
+Com_Zimbra_Arcade_Asst.prototype.constructor = Com_Zimbra_Arcade_Asst;
+
+Com_Zimbra_Arcade_Asst.prototype.okHandler =
+function(dialog) {
+	// get reference to the arcade zimlet
+	var zm = this._appCtxt.getSettings().getZimletManager();
+	var arcadeZimlet = zm ? zm._ZIMLETS_BY_ID["com_zimbra_arcade"] : null;
+
+	if (arcadeZimlet && this._game) {
+		arcadeZimlet.handlerObject.showDialog(this._game);
+	}
+
+	// return true to close the assistant dialog
+	return true;
+};
+
+Com_Zimbra_Arcade_Asst.prototype.handle =
+function(dialog, verb, args) {
+
+	var isValidGame = false;
+	this._game = null;
+
+	// this seems inefficient but its the best way to guarantee a valid game name
+	for (var i = 0; i < this._validGames.length; i++) {
+		if (this._validGames[i] == args) {
+			this._game = args;
+			isValidGame = true;
+			break;
+		}
+	}
+
+	dialog._setOkButton(AjxMsg.ok, true, isValidGame);
 };
