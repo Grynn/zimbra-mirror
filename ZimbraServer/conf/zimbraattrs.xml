@@ -89,22 +89,6 @@ The AttributeManager is invoked when entries are created/modified.
                              config
 -->
 
-<attr name="zimbraRedologArchiveDir" type="string"/>
-
-<attr name="zimbraRedologBacklogDir" type="string"/>
-
-<attr name="zimbraRedologEnabled" type="boolean"/>
-
-<attr name="zimbraRedologFsyncIntervalMS" type="integer" min="0"/>
-
-<attr name="zimbraRedologLogPath" type="string"/>
-
-<attr name="zimbraRedologRolloverFileSizeKB" type="integer" min="0"/>
-
-<attr name="zimbraServerHostname" type="string" max="256"/>
-
-<attr name="zimbraReplicationProvider" type="string" max="256"/>
-
 <attr name="c" type="string" optionalIn="account"/>
 
 <attr name="co" type="string" optionalIn="account" flags="domainAdminModifiable"/>
@@ -154,8 +138,6 @@ The AttributeManager is invoked when entries are created/modified.
 <attr name="uid" type="string" immutable="1" optionalIn="alias" requiredIn="account,distributionList"/>
 
 <attr name="userPassword" type="string" immutable="1" optionalIn="account"/>
-
-<attr name="zimbraCalResAlwaysFree" type="boolean"/>
 
 <attr id="1" name="zimbraId" type="id" immutable="1" cardinality="single" requiredIn="account,alias,distributionList,cos,domain,server,calendarResource" flags="accountInfo">
   <desc>Zimbra Systems Unique ID</desc>
@@ -375,6 +357,26 @@ The AttributeManager is invoked when entries are created/modified.
 
 <attr id="65" name="zimbraServiceHostname" type="string" max="256" cardinality="single" optionalIn="server">
   <desc>public hostname of the host</desc>
+</attr>
+
+<attr id="74" name="zimbraRedoLogEnabled" type="boolean" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
+  <desc>whether redo logging is enabled</desc>
+</attr>
+
+<attr id="75" name="zimbraRedoLogLogPath" type="string" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
+  <desc>name and location of the redolog file</desc>
+</attr>
+
+<attr id="76" name="zimbraRedoLogArchiveDir" type="string" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
+  <desc>redolog rollover destination</desc>
+</attr>
+
+<attr id="78" name="zimbraRedoLogRolloverFileSizeKB" type="integer" min="0" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
+  <desc>redo.log file rolls over when it gets to this size</desc>
+</attr>
+
+<attr id="79" name="zimbraRedoLogFsyncIntervalMS" type="integer" min="0" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
+  <desc>how frequently writes to redo log get fsynced to disk</desc>
 </attr>
 
 <attr id="93" name="zimbraPop3AdvertisedName" type="string" max="128" cardinality="single" optionalIn="server">
@@ -837,6 +839,10 @@ The AttributeManager is invoked when entries are created/modified.
   <desc>whether to show search box or not</desc>
 </attr>
 
+<attr id="225" name="zimbraRedoLogProvider" type="string" min="256" cardinality="multi" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
+  <desc>provider class name for redo logging</desc>
+</attr>
+
 <attr id="226" name="zimbraMtaRestriction" type="string" max="256" cardinality="multi" optionalIn="globalConfig">
   <desc>restrictions to reject some suspect SMTP clients</desc>
 </attr>
@@ -899,6 +905,10 @@ The AttributeManager is invoked when entries are created/modified.
 
 <attr id="250" name="zimbraLogHostname" type="string" cardinality="multi" optionalIn="globalConfig">
   <desc>destination for syslog messages</desc>
+</attr>
+
+<attr id="251" name="zimbraRedoLogDeleteOnRollover" type="boolean" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
+  <desc>whether logs are delete on rollover or archived</desc>
 </attr>
 
 <attr id="252" name="zimbraAuthLdapSearchBase" type="string" cardinality="single" optionalIn="domain">
