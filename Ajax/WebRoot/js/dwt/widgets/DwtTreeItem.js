@@ -112,9 +112,8 @@ function(checked, force) {
 					Dwt.setHandler(checkbox, DwtEvent.ONMOUSEUP, DwtTreeItem._checkBoxMouseUpHdlr);
 					this._checkBox.parentNode.replaceChild(checkbox, this._checkBox);
 					this._checkBox = checkbox;
-				}
-				else {
-					delete this._checkBox._ieHack;
+				} else {
+					this._checkBox._ieHack = false;
 				}
 			}
 		}
