@@ -128,17 +128,14 @@ function(member, dontNotify) {
 	 * member index. If the tab group is empty as a result of the removal
 	 */
 	var root = this._getRootTabGroup();
-	var focusMember = false;
-
-	if (root._currFocusMember != null) 
-		focusMember = (!(member instanceof DwtTabGroup) && root._currFocusMember == member)
-			? true : this.contains(root._currFocusMember);
+	var focusMember = (root._currFocusMember == member)
+				? true : this.contains(root._currFocusMember);
 
 	if (focusMember) {
 		root._currFocusMember = this._getPrevMember(member);
 		
 		if (!root._currFocusMember)
-			root._currFocusMember =  this._getNextMember(this, member);
+			root._currFocusMember =  this._getNextMember(member);
 			
 		if (!dontNotify)
 			this._notifyListeners(root._currFocusMember);
@@ -155,19 +152,23 @@ function(member, dontNotify) {
  * @return	true if the tab group contains member
  */
 DwtTabGroup.prototype.contains =
+function(member) {	
+	return (this._getTabGroupForMember(member)) ? true : false;
+}
+
+DwtTabGroup.prototype._getTabGroupForMember =
 function(member) {
-	
 	var sz = this._members.size();
 	var a = this._members.getArray();
 	var m;
 	for (var i = 0; i < sz; i++) {
 		m = a[i]
-		if (!(m instanceof DwtTabGroup) && m == member)
-			return true;
-		else if (m.contains(member))
-			return true;
+		if (m instanceof DwtTabGroup && (m = m._getTabGroupForMember(member)))
+			return m;
+		else if (m == member)
+			return this;
 	}
-	return false;
+	return null;
 }
 
 DwtTabGroup.prototype._isFocusMember =
@@ -196,13 +197,21 @@ function(){
  * 		must be a member of the tab group hierarchy
  * @param dontNotify [Boolean]	optional, true notification is not fired. This flag
  * 		typically set by Dwt tag mangement framework when it is calling into this method
+ * 
+ * @return true if member was part of the tab group hierarchy, else false
  */
 DwtTabGroup.prototype.setFocusMember =
 function(member, dontNotify) {
 	if (this._parent != null)
 		throw DwtTabGroup.NOT_ROOT_TABGROUP;
-	this._currFocusMember = member;
-	// TODO NOTIFY!!!!!
+	var tg = this._getTabGroupForMember(member);
+	if (tg != null) {
+		this._currFocusMember = member;
+		if (!dontNotify)
+			this._notifyListeners(this._currFocusMember);
+		return true;	
+	}
+	return false;
 }
 
 /**
@@ -243,21 +252,32 @@ function(dontNotify) {
 
 DwtTabGroup.prototype._setFocusMember =
 function(next, dontNotify) {
-	var m = (next) ? this._getNextMember() : this._getPrevMember();
+DBG.println("_setFocusMember");
+
+	// If there is currently no focus member, then reset to the first member
+	// and return
+	if (this._currFocusMember == null)
+		return this.resetFocusMember(dontNotify);
+	
+	var tabGroup = this._getTabGroupForMember(this._currFocusMember);
+DBG.println("tabGroup: " + tabGroup._name);
+	var m = (next) ? tabGroup._getNextMember(this._currFocusMember) : tabGroup._getPrevMember(this._currFocusMember);
+DBG.println("m1: " + m);
 	
 	if (m == null) {
-		m = (next) ? this._getLeftMostMember(): this._getRightMostMember();
+		m = (next) ? tabGroup._getLeftMostMember(this): tabGroup._getRightMostMember(this);
+DBG.println("m1: " + m);
 
 		// Test for the case where there is only one member in the tabgroup
 		if (m == this._currFocusMember)
 			return null;
-	} else {
-		this._currFocusMember = m
 	}
+
+	this._currFocusMember = m;
 	
 	if (!dontNotify)
 		this._notifyListeners(this._currFocusMember);
-	
+DBG.println("DONE in _setFocus");
 	return this._currFocusMember;
 }
 
@@ -275,17 +295,12 @@ function(dontNotify) {
 	if (this._parent != null)
 		throw DwtTabGroup.NOT_ROOT_TABGROUP;
 	
-	m = this._getLeftMostMember();	
-	
-	// If the reset was to the current focus member, then do nothing
-	if (this._currFocusMember != m) {
-		this._currFocusMember = m;
-		if (!dontNotify)
-			this._notifyListeners(this._currFocusMember);
-	}
-	
-	return m;
+	this._currFocusMember = this._getLeftMostMember();
 
+	if (!dontNotify)
+		this._notifyListeners(this._currFocusMember);
+	
+	return this._currFocusMember;
 }
 
 /**
@@ -302,12 +317,15 @@ function(tg, level) {
 	for (var i = 0; i < levelIndent; i++)
 		levelIndent += "+++";
 	
+	DBG.println(levelIndent + " TABGROUP: " + this._name);
+	levelIndent += "+++";
+	
 	var sz = tg._members.size();
 	var a = tg._members.getArray();
 	for (var i = 0; i < sz; i++) {
 		if (a[i] instanceof DwtTabGroup) {
-			DBG.println(levelIndent + "   === TABGROUP ===");
-			tg._dump(level+1, a[i]);
+			DBG.println(levelIndent + " TABGROUP: " + a[i]._name);
+			tg._dump(a[i], level+1);
 		} else if (a[i] instanceof DwtControl) {
 			DBG.println(levelIndent + "   " + a[i].toString());
 		} else {
@@ -339,16 +357,17 @@ function(member) {
 	return (this._parent != null) ? this._parent._getPrevMember(this) : null;
 }
 
-/* Gets the previous member in the tag group.
+/* Gets the next member in the tag group.
  */
 DwtTabGroup.prototype._getNextMember =
 function(member) {
 	var a = this._members.getArray();
 	var sz = this._members.size();
+DBG.println("index of member: " + this._members.indexOf(member));
 	// Start working from the member to the immediate left of <member> leftwards
 	for (var i = this._members.indexOf(member) + 1; i < sz; i++) {
 		var nextMember = a[i];
-		/* if sibling is not a tabgroup, then it is the nextious child. If the
+		/* if sibling is not a tabgroup, then it is the next child. If the
 		 * sibling is a tabgroup, get it's rightmost member if the tab group is
 		 * not empty.*/
 		if (!(nextMember instanceof DwtTabGroup))
@@ -358,8 +377,8 @@ function(member) {
 	}
 	
 	/* If we have fallen through to here it is because the tag group only has 
-	 * one member. So we roll up to the parent, unless we are at the root in 
-	 * which case we return null; */
+	 * one member or we are at the end of the list. So we roll up to the parent, 
+	 * unless we are at the root in which case we return null; */
 	return (this._parent != null) ? this._parent._getNextMember(this) : null;
 }
 
@@ -417,7 +436,7 @@ function(newFocusMember) {
 		var evt = DwtTabGroup._changeEvt;
 		evt.reset();
 		evt.tabGroup = this;
-		evt.newFocusMember = rootTg._currFocusMember;
+		evt.newFocusMember = newFocusMember;
 		rootTg._evtMgr.notifyListeners(DwtEvent.STATE_CHANGE, evt);
 	}
 }
