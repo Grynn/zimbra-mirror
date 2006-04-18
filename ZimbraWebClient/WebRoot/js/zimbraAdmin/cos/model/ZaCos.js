@@ -292,9 +292,12 @@ function() {
 ZaCos.getAll =
 function(app) {
 	var soapDoc = AjxSoapDoc.create("GetAllCosRequest", "urn:zimbraAdmin", null);	
-	var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+	var getAllCosCmd = new ZmCsfeCommand ();
+	var params = new Object ();
+	params.soapDoc = soapDoc ;
+	var resp = getAllCosCmd.invoke(params).Body.GetAllCosResponse;
 	var list = new ZaItemList(ZaCos, app);
-	list.loadFromDom(resp);
+	list.loadFromJS(resp);
 	//list.sortByName();		
 	return list;
 }
