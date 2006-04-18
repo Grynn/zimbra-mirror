@@ -121,9 +121,8 @@ DBG.println("_doGrabFocus");
 		}
 	} else {
 		// dealing with a type of HTML input field
-		DBG.println("focusObj is instance of input field: " + focusObj);
-		DBG.println("oldFocusObj is: " + this._focusObj);
-		this._oldFocusObj = this._focusObj;
+		if (this._focusObj instanceof DwtControl)
+			this._oldFocusObj = this._focusObj;
 		this._focusObj = focusObj;
 		focusObj.focus();
 	}
@@ -135,11 +134,11 @@ DBG.println("_doGrabFocus");
 * @param ctrl  [DwtControl] Object for which to check focus
 */
 DwtKeyboardMgr.prototype.dwtControlHasFocus =
-function(ctrl) {
+function(control) {
 	if (!this._keyboardHandlingInited)
 		return false;
 		
-	return (this._dwtCtrlHasFocus && this._focusObj == obj);
+	return (this._dwtCtrlHasFocus && this._focusObj == control);
 }
 
 /** 
@@ -234,13 +233,13 @@ function(ev) {
 // Currently not being used
 DwtKeyboardMgr._keyUpHdlr =
 function(ev) {
-	DBG.println("KU HDLR");
+	//DBG.println("KU HDLR");
 	var kev = DwtShell.keyEvent;
 	kev.setFromDhtmlEvent(ev);
 	var keyCode = kev.keyCode;
 	
 	if (kbMgr._kbEventStatus != DwtKeyboardMgr._KEYSEQ_NOT_HANDLED) {
-		DBG.println("KE BEING BLOCKED IN KU HDLR");
+		//DBG.println("KE BEING BLOCKED IN KU HDLR");
 		kev._stopPropagation = true;
 		kev._returnValue = false;
 		kev.setToDhtmlEvent(ev);
@@ -250,17 +249,16 @@ function(ev) {
 
 DwtKeyboardMgr._keyPressHdlr =
 function(ev) {
-	DBG.println("KP HDLR");
 	var kbMgr = DwtShell.getShell(window).getKeyboardMgr();
 	var kev = DwtShell.keyEvent;
 	kev.setFromDhtmlEvent(ev);
 	var keyCode = kev.keyCode;
 	
-	DBG.println("KP HDLR CHECKING");
-	DBG.println("STATUS: " + kbMgr._kbEventStatus);
+	//DBG.println("KP HDLR CHECKING");
+	//DBG.println("STATUS: " + kbMgr._kbEventStatus);
 	
 	if (kbMgr._kbEventStatus != DwtKeyboardMgr._KEYSEQ_NOT_HANDLED) {
-		DBG.println("KE BEING BLOCKED IN KP HDLR");
+		//DBG.println("KE BEING BLOCKED IN KP HDLR");
 		kev._stopPropagation = true;
 		kev._returnValue = false;
 		kev.setToDhtmlEvent(ev);

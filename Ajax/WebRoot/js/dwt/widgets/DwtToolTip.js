@@ -19,6 +19,7 @@ function DwtToolTip(shell, className, dialog) {
 
 	this.shell = shell;
 	this._dialog = dialog;
+	this._poppedUp = false;
 	this._div = document.createElement("div");
 	this._div.className = className || "DwtToolTip";
 	this._div.style.position = DwtControl.ABSOLUTE_STYLE;
@@ -63,13 +64,15 @@ function(x, y, skipInnerHTML) {
 		var clip = true;
 		var dialog = this._dialog;	
 		this._positionElement(element, x, y, baseId, clip, dialog);
+		this._poppedUp = true;
 	}
 }
 
 DwtToolTip.prototype.popdown = 
 function() {
-	if (this._content != null) {
+	if (this._content != null && this._poppedUp) {
 		Dwt.setLocation(this._div, Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
+		this._poppedUp = false;
 	}
 }
 

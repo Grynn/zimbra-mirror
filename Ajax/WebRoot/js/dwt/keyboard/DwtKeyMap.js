@@ -33,20 +33,23 @@ function DwtKeyMap(subclassInit) {
 	this._map = {};
 	this._map[DwtKeyMap.GLOBAL] = {};
 	this._map["DwtListView"] = {
-			"Space":			DwtKeyMap.SELECT_CURRENT,
+		"Space":			DwtKeyMap.SELECT_CURRENT,
 			
-			"Ctrl+Space":		DwtKeyMap.ADD_SELECT_CURRENT,
-			"Ctrl+`":			DwtKeyMap.ADD_SELECT_CURRENT, // Mac FF
+		"Ctrl+Space":		DwtKeyMap.ADD_SELECT_CURRENT,
+		"Ctrl+`":			DwtKeyMap.ADD_SELECT_CURRENT, // Mac FF
 			
-			"ArrowDown":		DwtKeyMap.SELECT_NEXT,
-			"Shift+ArrowDown":	DwtKeyMap.ADD_SELECT_NEXT,
-			"Ctrl+ArrowDown":	DwtKeyMap.NEXT,
-			"ArrowUp":			DwtKeyMap.SELECT_PREV,
-			"Shift+ArrowUp":	DwtKeyMap.ADD_SELECT_PREV,
-			"Ctrl+ArrowUp":		DwtKeyMap.PREV,
-			"Enter":			DwtKeyMap.DBLCLICK,
-			"Ctrl+Enter":		DwtKeyMap.ACTION,
-			"Ctrl+M":			DwtKeyMap.ACTION  // Mac FF
+		"ArrowDown":		DwtKeyMap.SELECT_NEXT,
+		"Shift+ArrowDown":	DwtKeyMap.ADD_SELECT_NEXT,
+		"Ctrl+ArrowDown":	DwtKeyMap.NEXT,
+		"ArowUp":			DwtKeyMap.SELECT_PREV,
+		"Shift+ArrowUp":	DwtKeyMap.ADD_SELECT_PREV,
+		"Ctrl+ArrowUp":		DwtKeyMap.PREV,
+		"Enter":			DwtKeyMap.DBLCLICK,
+		"Ctrl+Enter":		DwtKeyMap.ACTION,
+		"Ctrl+M":			DwtKeyMap.ACTION  // Mac FF
+	};
+	this._map["DwtButton"] = {
+		"Enter":	DwtKeyMap.SELECT_CURRENT	
 	};
 };
 

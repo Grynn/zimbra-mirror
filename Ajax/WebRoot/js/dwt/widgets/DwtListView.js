@@ -562,7 +562,7 @@ function() {
 	this._selectedItems.removeAll();
 	this._selAnchor = null;
 	
-	if (this._kbAnchor != null && DwtKeyboardMgr.objectHasFocus(this))
+	if (this._kbAnchor != null && this.haveFocus())
 		this._kbAnchor.className += " " + Dwt.getAttr(this._kbAnchor, DwtListView._KBFOCUS_CLASS);
 }
 
@@ -606,7 +606,7 @@ function(item, skipNotify) {
 			? Dwt.getAttr(el, DwtListView._SELECTED_STYLE_CLASS) 
 			: Dwt.getAttr(el, DwtListView._SELECTED_DIS_STYLE_CLASS);
 			
-		if (DwtKeyboardMgr.objectHasFocus(this))
+		if (this.haveFocus())
 			el.className += " " + Dwt.getAttr(el, DwtListView._KBFOCUS_CLASS);
 
 		// reset the selected index
@@ -630,7 +630,7 @@ function() {
 	var sz = this._selectedItems.size();
 	for (i = 0; i < sz; i++) {
 		a[i].className = Dwt.getAttr(a[i], DwtListView._STYLE_CLASS);
-		if (this._kbAnchor == a[i] && DwtKeyboardMgr.objectHasFocus(this))
+		if (this._kbAnchor == a[i] && this.haveFocus())
 			a[i].className += " " + Dwt.getAttr(a[i], DwtListView._KBFOCUS_CLASS);
 	}
 	this._selectedItems.removeAll();
@@ -647,7 +647,7 @@ function(selectedArray) {
 			el.className = this.getEnabled() 
 				? Dwt.getAttr(el, DwtListView._SELECTED_STYLE_CLASS)
 				: Dwt.getAttr(el, DwtListView._SELECTED_DIS_STYLE_CLASS);
-			if (this._kbAnchor == el && DwtKeyboardMgr.objectHasFocus(this))
+			if (this._kbAnchor == el && this.haveFocus())
 				el.className += " " + Dwt.getAttr(el, DwtListView._KBFOCUS_CLASS);
 			this._selectedItems.add(el);
 		}
@@ -1046,12 +1046,12 @@ function(itemDiv, ev) {
 		
 		this._selAnchor = this._kbAnchor = itemDiv;
 		itemDiv.className = Dwt.getAttr(itemDiv, DwtListView._SELECTED_STYLE_CLASS);
-		if (DwtKeyboardMgr.objectHasFocus(this))
+		if (this.haveFocus())
 			itemDiv.className += " " + Dwt.getAttr(itemDiv, DwtListView._KBFOCUS_CLASS);
 			
 		this._firstSelIndex = this._list 
 					? this._list.indexOf(AjxCore.objectWithId(Dwt.getAttr(itemDiv, "_itemIndex"))) : -1;
-		DwtKeyboardMgr.grabFocus(this);
+		//DwtKeyboardMgr.grabFocus(this);
 	}
 }
 
@@ -1081,7 +1081,7 @@ function(clickedEl, ev) {
 			this._rightSelItems = clickedEl;
 			clickedEl.className = Dwt.getAttr(clickedEl, DwtListView._SELECTED_STYLE_CLASS) + "-right";
 			
-			if (this._kbAnchor == clickedEl && DwtKeyboardMgr.objectHasFocus(this))
+			if (this._kbAnchor == clickedEl)
 				clickedEl.className = " " + Dwt.getAttr(clickedEl, DwtListView._KBFOCUS_CLASS)
 		}
 		clickedEl.hoverSet = false;
@@ -1102,7 +1102,7 @@ function(clickedEl, ev) {
 			// the anchor since it gets focus
 			this._selAnchor = this._kbAnchor = clickedEl;
 			this._kbAnchor.className += " " + Dwt.getAttr(this._kbAnchor, DwtListView._KBFOCUS_CLASS);
-			DwtKeyboardMgr.grabFocus(this); // Will cause the kbAnchor element to get the right style
+			//DwtKeyboardMgr.grabFocus(this); // Will cause the kbAnchor element to get the right style
 		} else { // SHIFT KEY
 			// Adds to the selection to/from the current node to the selection anchor
 			if (this._selAnchor == null)
@@ -1149,7 +1149,7 @@ function(clickedEl, ev) {
 			
 			this._kbAnchor = clickedEl;
 			this._kbAnchor.className += " " + Dwt.getAttr(this._kbAnchor, DwtListView._KBFOCUS_CLASS);
-			DwtKeyboardMgr.grabFocus(this); // Will cause the kbAnchor element to get the right style
+			//DwtKeyboardMgr.grabFocus(this); // Will cause the kbAnchor element to get the right style
 			
 			var newSelectedItems = this._selectedItems.size();
 			if (numSelectedItems < newSelectedItems)
@@ -1585,14 +1585,14 @@ function(list) {
 
 DwtListView.prototype._focus =
 function() {
-	//DBG.println("DwtListView: FOCUS");
+	DBG.println("DwtListView: FOCUS");
 	if (this._kbAnchor != null)
 		this._kbAnchor.className += " " + Dwt.getAttr(this._kbAnchor, DwtListView._KBFOCUS_CLASS);
 }
 
 DwtListView.prototype._blur =
 function() {
-	//DBG.println("DwtListView: BLUR");
+	DBG.println("DwtListView: BLUR");
 	this._unmarkKbAnchorElement();
 }
 

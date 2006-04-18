@@ -323,6 +323,7 @@ function(ev) {
 	}
 	
 	if (!obj._dragSource || !captureObj) {
+		obj._focusByMouseUpEvent();
 		return DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEUP, obj);
 	} else {
 		captureObj.release();
@@ -330,6 +331,7 @@ function(ev) {
 		mouseEv.setFromDhtmlEvent(ev);
 		if (obj._dragging != DwtControl._DRAGGING) {
 			obj._dragging = DwtControl._NO_DRAG;
+			obj._focusByMouseUpEvent();
 			return DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEUP, obj, mouseEv);
 		} else {
 			obj._lastDestDwtObj = null;
@@ -552,19 +554,22 @@ function() {
 	return this._ctrlInited;
 }
 
-/** This method should be overridden by derived classes to provide
- * behaviour for the component losing focus */
-DwtControl.prototype._blur =
-function() {
-}
-
-/** This method should be overridden by derived classes to provide
- * behaviour for the component gaining focus e.g. providing a border or
- * highlighting etc...*/
-DwtControl.prototype._focus =
-function() {
-}
-
+/** 
+ * This method is called to explicitly set focus to this component.
+ */
+ DwtControl.prototype.focus =
+ function() {
+ 	DwtShell.getShell(window).getKeyboardMgr().grabFocus(this);
+ }
+ 
+ /**
+  * This method returns true if this control has keyboard focus
+  */
+  DwtControl.prototype.haveFocus =
+  function() {
+  	return DwtShell.getShell(window).getKeyboardMgr().dwtControlHasFocus(this)
+  }
+ 
 /** This method should be overriden by derived classes to provide
  * behaviour for supported key actions. See DwtKeyMap for more info 
  *
@@ -976,6 +981,19 @@ function() {
 	return true;
 }
 
+/* This method should be overridden by derived classes to provide
+ * behaviour for the component losing focus */
+DwtControl.prototype._blur =
+function() {
+}
+
+/* This method should be overridden by derived classes to provide
+ * behaviour for the component gaining focus e.g. providing a border or
+ * highlighting etc...*/
+DwtControl.prototype._focus =
+function() {
+}
+
 DwtControl.prototype._isInputEl = 
 function(targetEl) {
 	var bIsInput = false;
@@ -990,6 +1008,16 @@ function(targetEl) {
 	
 	return bIsInput;
 }
+
+ /* This method is called from mouseUpHdl. Subclasses may override this method
+  * if they have their own specialized focus management code
+  */
+  DwtControl.prototype._focusByMouseUpEvent =
+  function()  {
+	// DBG.println("_focusByMouseUpEvent");
+  	this.focus();
+  }
+
 
 DwtControl.prototype._setEventHdlrs =
 function(events, clear) {

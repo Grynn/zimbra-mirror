@@ -124,6 +124,9 @@ function(index, newObj) {
 */
 AjxVector.prototype.indexOf = 
 function(obj) {
+	if (obj == null)
+		return -1;
+		
 	for (var i = 0; i < this._array.length; i++) {
 		if (this._array[i] == obj)
 			return i;

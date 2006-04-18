@@ -51,10 +51,10 @@ function DwtButton(parent, style, className, posStyle, actionTiming) {
 	else
 		mouseEvents.push(DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT);
 	this._setEventHdlrs(mouseEvents);
-	this._mouseOverListener = new AjxListener(this, DwtButton.prototype._mouseOverListener);
-	this._mouseOutListener = new AjxListener(this, DwtButton.prototype._mouseOutListener);
-	this._mouseDownListener = new AjxListener(this, DwtButton.prototype._mouseDownListener);
-	this._mouseUpListener = new AjxListener(this, DwtButton.prototype._mouseUpListener);
+	this._mouseOverListenerObj = new AjxListener(this, DwtButton.prototype._mouseOverListener);
+	this._mouseOutListenerObj = new AjxListener(this, DwtButton.prototype._mouseOutListener);
+	this._mouseDownListenerObj = new AjxListener(this, DwtButton.prototype._mouseDownListener);
+	this._mouseUpListenerObj = new AjxListener(this, DwtButton.prototype._mouseUpListener);
 	this._addMouseListeners();
 	
 	this._dropDownEvtMgr = new AjxEventMgr();
@@ -134,18 +134,18 @@ DwtButton.prototype.setDropDownImages = function (enabledImg, disImg, hovImg, de
 
 DwtButton.prototype._addMouseListeners = 
 function() {
-	this.addListener(DwtEvent.ONMOUSEOVER, this._mouseOverListener);
-	this.addListener(DwtEvent.ONMOUSEOUT, this._mouseOutListener);
-	this.addListener(DwtEvent.ONMOUSEDOWN, this._mouseDownListener);
-	this.addListener(DwtEvent.ONMOUSEUP, this._mouseUpListener);
+	this.addListener(DwtEvent.ONMOUSEOVER, this._mouseOverListenerObj);
+	this.addListener(DwtEvent.ONMOUSEOUT, this._mouseOutListenerObj);
+	this.addListener(DwtEvent.ONMOUSEDOWN, this._mouseDownListenerObj);
+	this.addListener(DwtEvent.ONMOUSEUP, this._mouseUpListenerObj);
 };
 
 DwtButton.prototype._removeMouseListeners =
 function() {
-	this.removeListener(DwtEvent.ONMOUSEOVER, this._mouseOverListener);
-	this.removeListener(DwtEvent.ONMOUSEOUT, this._mouseOutListener);
-	this.removeListener(DwtEvent.ONMOUSEDOWN, this._mouseDownListener);
-	this.removeListener(DwtEvent.ONMOUSEUP, this._mouseUpListener);
+	this.removeListener(DwtEvent.ONMOUSEOVER, this._mouseOverListenerObj);
+	this.removeListener(DwtEvent.ONMOUSEOUT, this._mouseOutListenerObj);
+	this.removeListener(DwtEvent.ONMOUSEDOWN, this._mouseDownListenerObj);
+	this.removeListener(DwtEvent.ONMOUSEUP, this._mouseUpListenerObj);
 };
 
 /**
@@ -331,8 +331,62 @@ function() {
 	menu.popup(0, x, y);
 };
 
+DwtButton.prototype.handleKeyAction =
+function(action, ev) {
+	switch (actionCode) {
+		case DwtKeyMap.SELECT_CURRENT:
+			this._emulateSingleClick(this._kbAnchor, DwtMouseEvent.LEFT);
+			break;
+		default:
+			return false;		
+	}
+	
+	return true;
+}
 
 // Private methods
+
+DwtButton.prototype._emulateSingleClick =
+function(target, button, docX, docY) {
+	this.trigger();
+	var htmlEl = this.getHtmlElement();
+	var p = Dwt.toWindow(htmlEl);
+	// Gotta do what mousedown listener does
+	var mev = DwtShell.mouseEvent;
+	mev.reset();
+	mev.target = htmlEl;
+	mev.button = DwtMouseEvent.LEFT;
+	mev.docX = p.x;
+	mev.docY = p.y;
+	if (this._actionTiming == DwtButton.ACTION_MOUSEDOWN)
+		this._mouseDownListener(mev);
+	else
+		this._mouseUpListener(mev);
+}
+
+
+ /*DwtButton.prototype._focusByMouseUpEvent =
+  function()  {
+DBG.println("DwtButton.prototype._focusByMouseUpEvent");
+	// Do Nothing
+  }
+*/
+DwtButton.prototype._focus =
+function() {
+	DBG.println("DwtButton.prototype._focus");
+	// ROSSD MOVE TO CSS
+	this.getHtmlElement().style.border = "1px dotted black";
+	//this._mouseOverListener(DwtShell.mouseEvent);
+}
+
+DwtButton.prototype._blur =
+function() {
+	DBG.println("DwtButton.prototype._blur");
+	// ROSSD MOVE TO CSS
+	this.getHtmlElement().style.border = "0px dotted black";
+	//this._mouseOutListener(DwtShell.mouseEvent);
+}
+
 
 DwtButton.prototype._toggleMenu =
 function () {
@@ -359,7 +413,8 @@ function(ev) {
     if (this._dropDownCell && this._dropDownHovImg && !this.noMenuBar && this.isListenerRegistered(DwtEvent.SELECTION)) {
 		AjxImg.setImage(this._dropDownCell, this._dropDownHovImg);
     }
-    ev._stopPropagation = true;
+
+    ev._topPropagation = true;
 }
 
 // Triggers the button.
@@ -373,7 +428,6 @@ function(ev) {
     }
 	switch (this._actionTiming) {
 	  case DwtButton.ACTION_MOUSEDOWN:
-		var el = this.getHtmlElement();
 		this.trigger();
 		if (this.isListenerRegistered(DwtEvent.SELECTION)) {
 			var selEv = DwtShell.selectionEvent;

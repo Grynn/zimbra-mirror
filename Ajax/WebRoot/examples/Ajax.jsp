@@ -63,10 +63,6 @@
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/core/Dwt.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/core/DwtException.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/core/DwtDraggable.js"></script>
-<script type="text/javascript" src="<%= contextPath %>/js/dwt/core/DwtKeyMap.js"></script>
-<script type="text/javascript" src="<%= contextPath %>/js/dwt/core/DwtKeyMapMgr.js"></script>
-<script type="text/javascript" src="<%= contextPath %>/js/dwt/core/DwtKeyboardMgr.js"></script>
-<script type="text/javascript" src="<%= contextPath %>/js/dwt/core/DwtTabGroup.js"></script>
 
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/graphics/DwtCssStyle.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/graphics/DwtPoint.js"></script>
@@ -85,9 +81,14 @@
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/events/DwtListViewActionEvent.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/events/DwtSelectionEvent.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/events/DwtHtmlEditorStateEvent.js"></script>
-<script type="text/javascript" src="<%= contextPath %>/js/dwt/events/DwtTabGroupEvent.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/events/DwtTreeEvent.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/events/DwtHoverEvent.js"></script>
+
+<script type="text/javascript" src="<%= contextPath %>/js/dwt/keyboard/DwtTabGroupEvent.js"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/dwt/keyboard/DwtKeyMap.js"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/dwt/keyboard/DwtKeyMapMgr.js"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/dwt/keyboard/DwtKeyboardMgr.js"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/dwt/keyboard/DwtTabGroup.js"></script>
 
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/dnd/DwtDragEvent.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/dnd/DwtDragSource.js"></script>
