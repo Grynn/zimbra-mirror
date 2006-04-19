@@ -265,7 +265,7 @@ DwtPropertyEditor.prototype._createProperty = function(prop, parent) {
 		var tdLabel = document.createElement("td");
 		tdLabel.className = "label";
 		tr.appendChild(tdLabel);
-		var html = AjxStringUtil.htmlEncode(prop.label);
+		var html = AjxStringUtil.htmlEncode(prop.label || prop.name);
 		if (prop.required)
 			html += "<span class='DwtPropertyEditor-required'>*</span>";
 		tdLabel.innerHTML = html;
