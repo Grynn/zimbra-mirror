@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<attrs>
+<attrs group="ZimbraAttrType" groupid="1">
 
 <!--
 
@@ -8,14 +8,38 @@ This config file is used by the AttributeManager class for multiple
 purposes:
   
   1) check the validity of attributes. value types, as well as whether
-     or not a value can be modified.
-  
+     or not a value can be modified. AttributeManager is invoked when
+     entries are created/modified.
+
   2) perform callbacks when certain attributes changes
 
-  3) Generate LDAP schema and defaults file.
+  3) used by the Zimbra build system to generate LDAP schema and
+     default value LDIFs
 
-The AttributeManager is invoked when entries are created/modified.
-  
+Please do not modify the attribute files unless you are doing it in
+the code tree before the product is released.  Modifying attrs has
+serious implications for upgrades.
+
+Zimbra devs - things to keep in mind when adding new attributes:
+
+ 1) Always add the new attribute at the end of the list, adding one to
+    the highest attr id (the one that corresponds to the OID) number
+    in use.  Do not sort by name - it will break OID allocation.
+
+ 2) When defining new attributes, try and use descriptive names. The
+    name should *always* start with zimbra*.  When defining
+    multiple-attributes use a standard prefix for all related
+    attributes. For example, if you are defining multiple attrs all
+    related to the blob store, then prefix them all with zimbraBlob*.
+
+ 3) Never change/re-use numbers after the product released.
+
+ 4) Prefix attrs that are user-settable prefs with zimbraPref*.
+
+Here is the syntax for declaring attributes:
+
+TODO - add support for multi-line values in globalConfigValue and defaultCOSValue
+
 <attr name="{name}"
       [immutable="*0|1"]
       [type="{type-of-attr}"]
@@ -23,12 +47,14 @@ The AttributeManager is invoked when entries are created/modified.
       [max="..."]
       [min="..."]
       [callback="..." ] 
-      [id="{oid-integer"
+      [id="{oid-integer}"
        cadinality="single|multi"
        requiredIn="{class-names-comma-seperated}"
-       optionalIn="{class-names-comma-seperated}"]
-      [flags="{flag-names-comma-seperated}"]>
+       optionalIn="{class-names-comma-seperated}"
+       [flags="{flag-names-comma-seperated}"]]>
    <desc>Documentation</desc>
+   [<globalConfigValue>{initial-value-in-global-config}</globalConfigValue>]*
+   [<defaultCOSValue>{initial-value-in-default-cos}</defaultCOSValue>]*
 </attr>
 
   name: name of attribute
@@ -171,7 +197,7 @@ The AttributeManager is invoked when entries are created/modified.
   <desc>RFC822 email address of this recipient for local delivery</desc>
 </attr>
 
-<attr id="14" name="zimbraCOSId" type="id"> cardinality="single" optionalIn="account"> <!-- should we set type to cosID and check for valid COS id? -->
+<attr id="14" name="zimbraCOSId" type="id" cardinality="single" optionalIn="account"> <!-- should we set type to cosID and check for valid COS id? -->
   <desc>COS zimbraID</desc>
 </attr>
 
