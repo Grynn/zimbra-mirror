@@ -59,14 +59,6 @@ function(entry, skipRefresh) {
 	this._setView(entry, skipRefresh);
 }
 
-/**
-* public getToolBar
-* @return reference to the toolbar
-**/
-ZaAccountViewController.prototype.getToolBar = 
-function () {
-	return this._toolbar;	
-}
 
 ZaAccountViewController.prototype.setDirty = 
 function (isD) {

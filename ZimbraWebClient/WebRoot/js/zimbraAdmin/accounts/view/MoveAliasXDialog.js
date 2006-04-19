@@ -102,7 +102,7 @@ function() {
 				//throw	
 				throw (new AjxException(ZaMsg.FAILED_MOVE_ALIAS, AjxException.UNKNOWN_ERROR, "MoveAliasXDialog.prototype.moveAlias", "Alias name is not available"));
 			}
-			this._app.getAccountListController().search(this._app.getAccountListController().getQuery());							
+			this._app.getAccountListController().show();							
 		}
 	} catch (ex) {
 		this._app.getCurrentController()._handleException(ex, "MoveAliasXDialog.prototype.moveAlias", null, false);

@@ -25,12 +25,12 @@
 
 /**
 * @constructor
-* @class ZaAccountListView
+* @class ZaSearchListView
 * @param parent
 * @author Roland Schemers
 * @author Greg Solovyev
 **/
-function ZaAccountListView(parent, app) {
+function ZaSearchListView(parent, app) {
 	this._app = app;
 	var className = null;
 	var posStyle = DwtControl.ABSOLUTE_STYLE;
@@ -44,23 +44,23 @@ function ZaAccountListView(parent, app) {
 	this.setScrollStyle(DwtControl.SCROLL);
 }
 
-ZaAccountListView.prototype = new ZaListView;
-ZaAccountListView.prototype.constructor = ZaAccountListView;
+ZaSearchListView.prototype = new ZaListView;
+ZaSearchListView.prototype.constructor = ZaSearchListView;
 
 
-ZaAccountListView.prototype.toString = 
+ZaSearchListView.prototype.toString = 
 function() {
-	return "ZaAccountListView";
+	return "ZaSearchListView";
 }
 
-ZaAccountListView.prototype.getTitle = 
+ZaSearchListView.prototype.getTitle = 
 function () {
 	return ZaMsg.Accounts_view_title;
 }
 /**
 * Renders a single item as a DIV element.
 */
-ZaAccountListView.prototype._createItemHtml =
+ZaSearchListView.prototype._createItemHtml =
 function(account, now, isDndIcon) {
 	var html = new Array(50);
 	var	div = document.createElement("div");
@@ -138,7 +138,7 @@ function(account, now, isDndIcon) {
 	return div;
 }
 
-ZaAccountListView.prototype._getHeaderList =
+ZaSearchListView.prototype._getHeaderList =
 function() {
 
 	var headerList = new Array();
@@ -159,7 +159,7 @@ function() {
 }
 
 
-ZaAccountListView.prototype._sortColumn = 
+ZaSearchListView.prototype._sortColumn = 
 function(columnItem, bSortAsc) {
 	try {
 		this._app.getAccountListController().setSortOrder(bSortAsc);

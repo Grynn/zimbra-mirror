@@ -665,9 +665,9 @@ ZaOverviewPanelController.serverListTreeListener = function (ev) {
 
 ZaOverviewPanelController.domainListTreeListener = function (ev) {
 	if(this._app.getCurrentController()) {
-		this._app.getCurrentController().switchToNextView(this._app.getDomainListController(), ZaDomainListController.prototype.show);
+		this._app.getCurrentController().switchToNextView(this._app.getDomainListController(), ZaDomainListController.prototype.show, true);
 	} else {					
-		this._app.getDomainListController().show();
+		this._app.getDomainListController().show(true);
 	}
 }
 
@@ -713,7 +713,7 @@ ZaOverviewPanelController.postqByServerTreeListener = function (ev) {
 }
 
 ZaOverviewPanelController.prototype._showAccountsView = function (defaultType, ev) {
-	var queryHldr = this._getCurrentQueryHolder();
+/*	var queryHldr = this._getCurrentQueryHolder();
 	queryHldr.isByDomain = false;
 	queryHldr.byValAttr = false;
 	queryHldr.queryString = "";
@@ -725,13 +725,27 @@ ZaOverviewPanelController.prototype._showAccountsView = function (defaultType, e
 	} else {
 		queryHldr.fetchAttrs = ZaSearch.standardAttributes;
 	}
+*/
+	  
 	var acctListController = this._app.getAccountListController();
 	acctListController.setPageNum(1);	
-	if(this._app.getCurrentController()) {
-		this._app.getCurrentController().switchToNextView(acctListController, ZaAccountListController.prototype.search,queryHldr);
-	} else {					
-		acctListController.search(queryHldr);
-	}
+	acctListController.setQuery("");
+	acctListController.setSortOrder("0");
+	acctListController.setSortField(ZaAccount.A_uid);
+	acctListController.setSearchTypes([ZaSearch.TYPES[defaultType]]);
 	acctListController.setDefaultType(defaultType);
+	if(defaultType == ZaItem.DL) {
+		acctListController.setFetchAttrs(ZaDistributionList.searchAttributes);
+	} else if (defaultType == ZaItem.RESOURCE){
+		acctListController.setFetchAttrs(ZaResource.searchAttributes);
+	} else {
+		acctListController.setFetchAttrs(ZaSearch.standardAttributes);
+	}	
+	
+	if(this._app.getCurrentController()) {
+		this._app.getCurrentController().switchToNextView(acctListController, ZaAccountListController.prototype.show,true);
+	} else {					
+		acctListController.show(true);
+	}
 };
 

@@ -53,60 +53,6 @@ function(entry) {
 	this._setView(entry);
 }
 
-/**
-* Adds listener to modifications in the contained ZaDomain 
-* @param listener
-**/
-ZaDomainController.prototype.addDomainChangeListener = 
-function(listener) {
-	this._evtMgr.addListener(ZaEvent.E_MODIFY, listener);
-}
-
-/**
-* Removes listener to modifications in the controlled ZaDomain 
-* @param listener
-**/
-ZaDomainController.prototype.removeDomainChangeListener = 
-function(listener) {
-	this._evtMgr.removeListener(ZaEvent.E_MODIFY, listener);    	
-}
-
-/**
-* Adds listener to creation of an ZaDomain 
-* @param listener
-**/
-ZaDomainController.prototype.addDomainCreationListener = 
-function(listener) {
-	this._evtMgr.addListener(ZaEvent.E_CREATE, listener);
-}
-
-/**
-* Removes listener to creation of an ZaDomain 
-* @param listener
-**/
-ZaDomainController.prototype.removeDomainCreationListener = 
-function(listener) {
-	this._evtMgr.removeListener(ZaEvent.E_CREATE, listener);    	
-}
-
-/**
-* Adds listener to removal of an ZaDomain 
-* @param listener
-**/
-ZaDomainController.prototype.addDomainRemovalListener = 
-function(listener) {
-	this._evtMgr.addListener(ZaEvent.E_REMOVE, listener);
-}
-
-/**
-* Removes listener to removal of an ZaDomain 
-* @param listener
-**/
-ZaDomainController.prototype.removeDomainRemovalListener = 
-function(listener) {
-	this._evtMgr.removeListener(ZaEvent.E_REMOVE, listener);    	
-}
-
 
 /**
 *	@method _setView 

@@ -68,8 +68,9 @@ function() {
 		this._app.getAppCtxt().getClientCmdHdlr().execute((this._containedObject[ZaSearch.A_query].substr(5)).split(" "));
 		return;
 	}
-//	if (this._searchField.value.search(ZaSearchField.UNICODE_CHAR_		return;\
+
 	var objList = new Array();
+	var params = {};
 	if(this._containedObject[ZaSearch.A_fAccounts] == "TRUE") {
 		objList.push(ZaSearch.ACCOUNTS);
 	}
@@ -82,13 +83,17 @@ function() {
 	if(this._containedObject[ZaSearch.A_fResources] == "TRUE") {
 		objList.push(ZaSearch.RESOURCES);
 	}
+	if(this._containedObject[ZaSearch.A_fDomains] == "TRUE") {
+		objList.push(ZaSearch.DOMAINS);
+	}	
+	params.types = objList;
+	params.query = ZaSearch.getSearchByNameQuery(this._containedObject[ZaSearch.A_query]);
 	
-	var  searchQueryHolder = new ZaSearchQuery(ZaSearch.getSearchByNameQuery(this._containedObject[ZaSearch.A_query]), objList, false, "");
 	if (this._callbackFunc != null) {
 		if (this._callbackObj != null)
-			this._callbackFunc.call(this._callbackObj, this, searchQueryHolder);
+			this._callbackFunc.call(this._callbackObj, this, params);
 		else 
-			this._callbackFunc(this, searchQueryHolder);
+			this._callbackFunc(this, params);
 	}
 }
 
@@ -124,6 +129,7 @@ ZaSearchField.prototype.resetSearchFilter = function () {
 	this._containedObject[ZaSearch.A_fdistributionlists] = "FALSE";	
 	this._containedObject[ZaSearch.A_fAliases] = "FALSE";
 	this._containedObject[ZaSearch.A_fResources] = "FALSE";
+	this._containedObject[ZaSearch.A_fDomains] = "FALSE";		
 }
 
 ZaSearchField.prototype.allFilterSelected = function (ev) {
@@ -132,6 +138,7 @@ ZaSearchField.prototype.allFilterSelected = function (ev) {
 	this._containedObject[ZaSearch.A_fdistributionlists] = "TRUE";	
 	this._containedObject[ZaSearch.A_fAliases] = "TRUE";
 	this._containedObject[ZaSearch.A_fResources] = "TRUE";
+	this._containedObject[ZaSearch.A_fDomains] = "TRUE";	
 	this.setTooltipForSearchButton (ZaMsg.searchForAll);	
 }
 
@@ -163,6 +170,13 @@ ZaSearchField.prototype.resFilterSelected = function (ev) {
 	this.setTooltipForSearchButton (ZaMsg.searchForResources);	
 }
 
+ZaSearchField.prototype.domainFilterSelected = function (ev) {
+	this.resetSearchFilter();
+	ev.item.parent.parent.setImage(ev.item.getImage());
+	this._containedObject[ZaSearch.A_fDomains] = "TRUE";
+	this.setTooltipForSearchButton (ZaMsg.searchForDomains);	
+}
+
 ZaSearchField.searchChoices = new XFormChoices([],XFormChoices.OBJECT_REFERENCE_LIST, null, "labelId");
 ZaSearchField.prototype._getMyXForm = function() {	
 	var newMenuOpList = new Array();
@@ -171,6 +185,7 @@ ZaSearchField.prototype._getMyXForm = function() {
 	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_DLS, ZaMsg.SearchFilter_DLs, ZaMsg.searchForDLs, "Group", "GroupDis", new AjxListener(this,this.dlFilterSelected)));		
 	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_ALIASES, ZaMsg.SearchFilter_Aliases, ZaMsg.searchForAliases, "AccountAlias", "AccountAlias", new AjxListener(this, this.aliasFilterSelected)));		
 	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_RESOURCES, ZaMsg.SearchFilter_Resources, ZaMsg.searchForResources, "Resource", "ResourceDis", new AjxListener(this, this.resFilterSelected)));		
+	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_DOMAINS, ZaMsg.SearchFilter_Resources, ZaMsg.searchForDomains, "Domain", "DomainDis", new AjxListener(this, this.domainFilterSelected)));			
 	newMenuOpList.push(new ZaOperation(ZaOperation.SEP));				
 	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_ALL, ZaMsg.SearchFilter_All, ZaMsg.searchForAll, "SearchAll", "SearchAll", new AjxListener(this, this.allFilterSelected)));		
 	ZaSearchField.searchChoices.setChoices(newMenuOpList);

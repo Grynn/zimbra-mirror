@@ -30,17 +30,12 @@
 **/
 function ZaDomainListController(appCtxt, container, app) {
 	ZaListViewController.call(this, appCtxt, container, app,"ZaDomainListController");
-
-   	this._toolbarOperations = new Array();
-   	this._popupOperations = new Array();			
-
 	this._helpURL = ZaDomainListController.helpURL;	
-	this.pages = new Object();
-	this._currentPageNum = 1;	
 	this._currentQuery = new ZaSearchQuery("", [ZaSearch.DOMAINS], false, "");
 	this._currentSortField = ZaDomain.A_domainName;
-	this._currentSortOrder = true;
-	this.objType = ZaEvent.S_DOMAIN;			
+	this.objType = ZaEvent.S_DOMAIN;	
+	this.RESULTSPERPAGE = ZaDomain.RESULTSPERPAGE; 
+	this.MAXSEARCHRESULTS = ZaDomain.MAXSEARCHRESULTS;	
 }
 
 ZaDomainListController.prototype = new ZaListViewController();
@@ -97,80 +92,27 @@ function(list) {
 	this._changeActionsState();		
 }*/
 
-ZaDomainListController.prototype.searchCallback =
-function(params, resp) {
-	try {
-		if(!resp) {
-			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaDomainListController.prototype.searchCallback"));
-		}
-		if(resp.isException()) {
-			throw(arg.getException());
-		} else {
-			var response = resp.getResponse().Body.SearchDirectoryResponse;
-			var list = new ZaItemList(ZaDomain, this._app);	
-			list.loadFromJS(response);	
-			var searchTotal = response.searchTotal;
-			var limit = params.limit ? params.limit : ZaDomain.RESULTSPERPAGE; 
-			var numPages = Math.ceil(searchTotal/params.limit);
-			this._show({"list":list, "numPages":numPages});			
-		}
-	} catch (ex) {
-		this._handleException(ex, "ZaDomainListController.prototype.searchCallback");	
+ZaDomainListController.prototype.show = function (doPush) {
+	var callback = new AjxCallback(this, this.searchCallback, {limit:ZaDomain.RESULTSPERPAGE,CONS:ZaDomain,show:doPush});
+	var searchParams = {
+			query:"", 
+			types:[ZaSearch.DOMAINS],
+			sortBy:ZaDomain.A_domainName,
+			offset:this.RESULTSPERPAGE*(this._currentPageNum-1),
+			sortAscending:"0",
+			limit:this.RESULTSPERPAGE,
+			callback:callback
 	}
-}
-
-ZaDomainListController.prototype.show = function () {
-	var callback = new AjxCallback(this, this.searchCallback, {limit:ZaDomain.RESULTSPERPAGE});
-	var params = {
-		query:"", 
-		types:[ZaSearch.DOMAINS],
-		sortBy:ZaDomain.A_domainName,
-		offset:"0",
-		sortAscending:"0",
-		limit:ZaDomain.RESULTSPERPAGE,
-		callback:callback
-	};	
-	ZaSearch.searchDirectory(params);
+	ZaSearch.searchDirectory(searchParams);
 }
 
 ZaDomainListController.prototype._show = 
-function(searchResult) {
-    if (!this._UICreated) {
-		this._createUI();
-	} 
-	if (searchResult && searchResult.list != null) {
-		var tmpArr = new Array();
-		var cnt = searchResult.list.getArray().length;
-		for(var ix = 0; ix < cnt; ix++) {
-			tmpArr.push(searchResult.list.getArray()[ix]);
-		}
-		if(cnt < 1) {
-			//if the list is empty - go to the previous page
-		}
-		//add the default column sortable
-		this._contentView._bSortAsc = this._currentSortOrder ;
-		this._contentView.set(AjxVector.fromArray(tmpArr), this._contentView._defaultColumnSortable);	
-	}
+function (list) {
+	this._updateUI(list);
 	this._app.pushView(ZaZimbraAdmin._DOMAINS_LIST_VIEW);
-
-//	this._app.setCurrentController(this);		
-	this._removeList = new Array();
-	if (searchResult && searchResult.list != null) {
-		this.pages[this._currentPageNum] = searchResult;
-	}
-	this._changeActionsState();
-
-	if(this.pages[this._currentPageNum].numPages <= this._currentPageNum) {
-		this._toolbar.enable([ZaOperation.PAGE_FORWARD], false);
-	} else {
-		this._toolbar.enable([ZaOperation.PAGE_FORWARD], true);
-	}
-	if(this._currentPageNum == 1) {
-		this._toolbar.enable([ZaOperation.PAGE_BACK], false);
-	} else {
-		this._toolbar.enable([ZaOperation.PAGE_BACK], true);
-	}
 }
+
+
 
 /**
 * @return ZaItemList - the list currently displaid in the list view
@@ -207,41 +149,6 @@ function (ev) {
 	}
 }
 
-/**
-* @param ev
-* This listener is invoked by ZaDomainController or any other controller that can create an ZaDomain object
-**/
-ZaDomainListController.prototype.handleDomainCreation = 
-function (ev) {
-	if(ev) {
-		//add the new ZaDomain to the controlled list
-		if(ev.getDetails()) {
-			if (this._list) this._list.add(ev.getDetails());
-			if (this._contentView) this._contentView.setUI();
-			if(this._app.getCurrentController() == this) {
-				this.show();			
-			}
-		}
-	}
-}
-
-/**
-* @param ev
-* This listener is invoked by ZaDomainController or any other controller that can remove an ZaDomain object
-**/
-ZaDomainListController.prototype.handleDomainRemoval = 
-function (ev) {
-	if(ev) {
-		//add the new ZaAccount to the controlled list
-		if(ev.getDetails()) {
-			if (this._list) this._list.remove(ev.getDetails());
-			if (this._contentView) this._contentView.setUI();
-			if(this._app.getCurrentController() == this) {
-				this.show();			
-			}
-		}
-	}
-}
 
 /**
 * @param nextViewCtrlr - the controller of the next view
@@ -253,23 +160,6 @@ function (nextViewCtrlr, func, params) {
 }
 
 
-/**
-* Adds listener to removal of an ZaDomain 
-* @param listener
-**/
-ZaDomainListController.prototype.addDomainRemovalListener = 
-function(listener) {
-	this._evtMgr.addListener(ZaEvent.E_REMOVE, listener);
-}
-
-/**
-* Adds listener to creation of an ZaDomain 
-* @param listener
-**/
-ZaDomainListController.prototype.addDomainCreationListener = 
-function(listener) {
-	this._evtMgr.addListener(ZaEvent.E_CREATE, listener);
-}
 
 ZaDomainListController.initPopupMenuMethod =
 function () {
@@ -580,7 +470,7 @@ function(ev) {
 			var evt = new ZaEvent(ZaEvent.S_DOMAIN);
 			evt.set(ZaEvent.E_CREATE, this);
 			evt.setDetails(domain);
-			this.handleDomainCreation(evt);
+			this.handleCreation(evt);
 			
 			this._newDomainWizard.popdown();		
 		}

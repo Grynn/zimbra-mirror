@@ -73,6 +73,7 @@ ZaZimbraAdmin._MONITORING = 10;
 ZaZimbraAdmin._STATUS = 11;
 ZaZimbraAdmin._STATISTICS = 12;
 ZaZimbraAdmin._STATISTICS_BY_SERVER = 13;
+ZaZimbraAdmin._SEARCH_LIST_VIEW = 14;
 
 ZaZimbraAdmin._SERVER_VIEW = 14;
 ZaZimbraAdmin._DOMAIN_VIEW = 15;
@@ -88,6 +89,7 @@ ZaZimbraAdmin._RESOURCE_VIEW = 24;
 
 ZaZimbraAdmin.MSG_KEY = new Object();
 ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._ACCOUNTS_LIST_VIEW] = "Accounts_view_title";
+ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._SEARCH_LIST_VIEW] = "Search_view_title";
 ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._ACCOUNT_VIEW] = "Accounts_view_title";
 ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._ALIASES_LIST_VIEW] = "Aliases_view_title";
 ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._ALIAS_VIEW] = "Aliases_view_title";
@@ -347,7 +349,7 @@ function(ev) {
 			}
 			break;		
 		case ZaAppChooser.B_ADDRESSES:
-			this._showAccountsView([ZaItem.ACCOUNT,ZaItem.DL,ZaItem.ALIAS],ev);
+			this._showAccountsView([ZaItem.ACCOUNT,ZaItem.DL,ZaItem.ALIAS, ZaItem.RESOURCE],ev);
 			break;	
 		case ZaAppChooser.B_HELP:
 			if(this._app.getCurrentController()) {
@@ -371,7 +373,7 @@ function(ev) {
 }
 
 ZaZimbraAdmin.prototype._showAccountsView = function (defaultType, ev){
-	var queryHldr = this._getCurrentQueryHolder();
+/*	var queryHldr = this._getCurrentQueryHolder();
 	queryHldr.isByDomain = false;
 	queryHldr.byValAttr = false;
 	queryHldr.queryString = "";
@@ -391,10 +393,37 @@ ZaZimbraAdmin.prototype._showAccountsView = function (defaultType, ev){
 		this._app.getCurrentController().switchToNextView(acctListController, ZaAccountListController.prototype.search,queryHldr);
 	} else {					
 		acctListController.search(queryHldr);
+	}*/
+
+	var acctListController = this._app.getAccountListController();
+	acctListController.setPageNum(1);	
+	acctListController.setQuery("");
+	acctListController.setSortOrder("0");
+	acctListController.setSortField(ZaAccount.A_uid);
+	var types = [];
+	if(typeof(defaultType) == 'object' && defaultType.length) {
+		for(var i = 0; i < defaultType.length; i++) {
+			types.push(ZaSearch.TYPES[defaultType[i]]);
+		}
+	} else {
+		types.push(ZaSearch.TYPES[defaultType]);
+	}	
+	
+	acctListController.setSearchTypes(types);
+
+	if(defaultType == ZaItem.DL) {
+		acctListController.setFetchAttrs(ZaDistributionList.searchAttributes);
+	} else if (defaultType == ZaItem.RESOURCE){
+		acctListController.setFetchAttrs(ZaResource.searchAttributes);
+	} else {
+		acctListController.setFetchAttrs(ZaSearch.standardAttributes);
+	}	
+	
+	if(this._app.getCurrentController()) {
+		this._app.getCurrentController().switchToNextView(acctListController, ZaAccountListController.prototype.show,true);
+	} else {					
+		acctListController.show(true);
 	}
-	/*
-	acctListController.setDefaultType(defaultType);
-	*/
 };
 
 ZaZimbraAdmin.prototype._getCurrentQueryHolder = 
@@ -453,7 +482,7 @@ function() {
 
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_TREE] = this.getOverviewPanelController().getOverviewPanel();
-	elements[ZaAppViewMgr.C_SEARCH] = this._app.getAccountListController().getSearchPanel();		
+	elements[ZaAppViewMgr.C_SEARCH] = this._app.getSearchListController().getSearchPanel();		
 	elements[ZaAppViewMgr.C_CURRENT_APP] = new ZaCurrentAppToolBar(this._shell);
 	this._appViewMgr.addComponents(elements, true);
 

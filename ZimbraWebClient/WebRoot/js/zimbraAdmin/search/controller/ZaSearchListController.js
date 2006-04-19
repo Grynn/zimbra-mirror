@@ -1,0 +1,380 @@
+/*
+ * ***** BEGIN LICENSE BLOCK *****
+ * Version: ZPL 1.1
+ * 
+ * The contents of this file are subject to the Zimbra Public License
+ * Version 1.1 ("License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.zimbra.com/license
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+ * the License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is: Zimbra Collaboration Suite Web Client
+ * 
+ * The Initial Developer of the Original Code is Zimbra, Inc.
+ * Portions created by Zimbra are Copyright (C) 2005 Zimbra, Inc.
+ * All Rights Reserved.
+ * 
+ * Contributor(s):
+ * 
+ * ***** END LICENSE BLOCK *****
+ */
+
+/**
+* @constructor
+* @class ZaSearchListController This is a singleton class that controls all the user interaction with the list of ZaAccount objects
+* @param appCtxt
+* @param container
+* @param app
+* @extends ZaController
+* @author Greg Solovyev
+**/
+function ZaSearchListController(appCtxt, container, app) {
+	ZaListViewController.call(this, appCtxt, container, app, "ZaSearchListController");
+    //Account operations
+   	this._toolbarOperations = new Array();
+   	this._popupOperations = new Array();			
+   	
+	this._currentPageNum = 1;
+	this._currentQuery = "";
+	this._currentSortField = ZaAccount.A_uid;
+	this._currentSortOrder = "1";
+	this.searchTypes = [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES, ZaSearch.DOMAINS];
+	this.pages = new Object();
+	this._searchPanel = null;
+	this._searchField = null;
+	this._helpURL = ZaSearchListController.helpURL;
+	this._UICreated = false;
+	this.objType = null;	
+	this.fetchAttrs = ZaSearch.standardAttributes;
+}
+
+ZaSearchListController.prototype = new ZaListViewController();
+ZaSearchListController.prototype.constructor = ZaSearchListController;
+ZaSearchListController.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/provisioning_accounts.htm";
+ZaController.initToolbarMethods["ZaSearchListController"] = new Array();
+ZaController.initPopupMenuMethods["ZaSearchListController"] = new Array();
+
+
+
+ZaSearchListController.prototype.show = function (doPush) {
+	var callback = new AjxCallback(this, this.searchCallback, {limit:this.RESULTSPERPAGE,CONS:ZaAccount,show:doPush});
+	var searchParams = {
+			query:this._currentQuery, 
+			types:this.searchTypes,
+			sortBy:this._currentSortField,
+			offset:this.RESULTSPERPAGE*(this._currentPageNum-1),
+			sortAscending:this._currentSortOrder,
+			limit:this.RESULTSPERPAGE,
+			attrs:this.fetchAttrs,
+			callback:callback
+	}
+	ZaSearch.searchDirectory(searchParams);
+}
+
+ZaSearchListController.prototype._show = 
+function (list) {
+	this._updateUI(list);
+	this._app.pushView(ZaZimbraAdmin._SEARCH_LIST_VIEW);
+}
+
+/**
+* searh panel
+*/	
+ZaSearchListController.prototype.getSearchPanel = 
+function () {
+	if(!this._searchPanel) {
+	    this._searchPanel = new DwtComposite(this._app.getAppCtxt().getShell(), "SearchPanel", DwtControl.ABSOLUTE_STYLE);
+	    
+		// Create search toolbar and setup browse tool bar button handlers
+		this._searchToolBar = new ZaSearchToolBar(this._searchPanel, null, this._app);
+	    
+		// Setup search field handler
+		this._searchField = this._searchToolBar.getSearchField();
+		this._searchField.registerCallback(ZaSearchListController.prototype._searchFieldCallback, this);	
+		this._searchPanel.zShow(true);		
+	}
+	return this._searchPanel;
+}
+
+ZaSearchListController.prototype.set = 
+function(accountList) {
+	this.show(accountList);
+}
+
+ZaSearchListController.prototype.setPageNum = 
+function (pgnum) {
+	this._currentPageNum = Number(pgnum);
+}
+
+ZaSearchListController.prototype.getPageNum = 
+function () {
+	return this._currentPageNum;
+}
+
+ZaSearchListController.prototype.getTotalPages = 
+function () {
+	return this.numPages;
+}
+
+ZaSearchListController.prototype.setFetchAttrs = 
+function (fetchAttrs) {
+	this.fetchAttrs = fetchAttrs;
+}
+
+ZaSearchListController.prototype.getFetchAttrs = 
+function () {
+	return this.fetchAttrs;
+}
+
+ZaSearchListController.prototype.setQuery = 
+function (query) {
+	this._currentQuery = query;
+}
+
+ZaSearchListController.prototype.getQuery = 
+function () {
+	return this._currentQuery;
+}
+
+ZaSearchListController.prototype.setSearchTypes = 
+function (searchTypes) {
+	this.searchTypes = searchTypes;
+}
+
+ZaSearchListController.prototype.geSearchTypes = 
+function () {
+	return this.searchTypes;
+}
+
+ZaSearchListController.prototype.setSortOrder = 
+function (sortOrder) {
+	this._currentSortOrder = sortOrder;
+}
+
+ZaSearchListController.prototype.getSortOrder = 
+function () {
+	return this._currentSortOrder;
+}
+
+ZaSearchListController.prototype.setSortField = 
+function (sortField) {
+	this._currentSortField = sortField;
+}
+
+ZaSearchListController.prototype.getSortField = 
+function () {
+	return this._currentSortField;
+}
+
+/*********** Search Field Callback */
+ZaSearchListController.prototype._searchFieldCallback =
+function(searchField, params) {
+	var callback;
+	var controller = this;
+	if(AjxUtil.indexOf(params.types,ZaSearch.DOMAINS) && 
+			(AjxUtil.indexOf(params.types,ZaSearch.ACCOUNTS) || 
+				AjxUtil.indexOf(params.types,ZaSearch.ALIASES) || 
+				AjxUtil.indexOf(params.types,ZaSearch.RESOURCES) ||
+				AjxUtil.indexOf(params.types,ZaSearch.DLS))) {
+
+			callback = new AjxCallback(this, this.searchCallback, {limit:this.RESULTSPERPAGE,show:true});			
+	} else if (AjxUtil.indexOf(params.types,ZaSearch.DOMAINS)) {
+		controller = this._app.getDistributionListController();
+	} else if(AjxUtil.indexOf(params.types,ZaSearch.ACCOUNTS) || 
+				AjxUtil.indexOf(params.types,ZaSearch.ALIASES) || 
+				AjxUtil.indexOf(params.types,ZaSearch.RESOURCES) ||
+				AjxUtil.indexOf(params.types,ZaSearch.DLS)) {
+		
+		controller = this._app.getAccountListController();
+	}
+		
+	var callback = new AjxCallback(controller, controller.searchCallback, {limit:controller.RESULTSPERPAGE,show:true});
+	var searchParams = {
+			query:params.query, 
+			types:params.types,
+			sortBy:params.sortBy,
+			offset:this.RESULTSPERPAGE*(this._currentPageNum-1),
+			sortAscending:this._currentSortOrder,
+			limit:this.RESULTSPERPAGE,
+			attrs:ZaSearch.standardAttributes,
+			callback:callback
+	}
+	ZaSearch.searchDirectory(searchParams);
+}
+
+
+ZaSearchListController.initPopupMenuMethod =
+function () {
+    this._popupOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.ACTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaSearchListController.prototype._editButtonListener)));
+	this._popupOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaSearchListController.prototype._deleteButtonListener)));
+}
+ZaController.initPopupMenuMethods["ZaSearchListController"].push(ZaSearchListController.initPopupMenuMethod);
+
+/**
+* This method is called from {@link ZaController#_initToolbar}
+**/
+ZaSearchListController.initToolbarMethod =
+function () {
+	// first button in the toolbar is a menu.
+    this._toolbarOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.ACTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaSearchListController.prototype._editButtonListener)));
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaSearchListController.prototype._deleteButtonListener)));
+}
+ZaController.initToolbarMethods["ZaSearchListController"].push(ZaSearchListController.initToolbarMethod);
+
+//private and protected methods
+ZaSearchListController.prototype._createUI = 
+function () {
+	//create accounts list view
+	// create the menu operations/listeners first	
+	this._contentView = new ZaSearchListView(this._container, this._app);
+	this._newDLListener = new AjxListener(this, ZaSearchListController.prototype._newDistributionListListener);
+	this._newAcctListener = new AjxListener(this, ZaSearchListController.prototype._newAccountListener);
+	this._newResListener = new AjxListener(this, ZaSearchListController.prototype._newResourceListener);
+
+    this._initToolbar();
+	//always add Help and navigation buttons at the end of the toolbar    
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.NONE));	
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.PAGE_BACK, ZaMsg.Previous, ZaMsg.PrevPage_tt, "LeftArrow", "LeftArrowDis",  new AjxListener(this, this._prevPageListener)));
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.PAGE_FORWARD, ZaMsg.Next, ZaMsg.NextPage_tt, "RightArrow", "RightArrowDis", new AjxListener(this, this._nextPageListener)));
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));				
+
+	this._toolbar = new ZaToolBar(this._container, this._toolbarOperations);    
+		
+	var elements = new Object();
+	elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
+	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
+	this._app.createView(ZaZimbraAdmin._SEARCH_LIST_VIEW, elements);
+
+	this._initPopupMenu();
+	this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations);
+	
+	//set a selection listener on the account list view
+	this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
+	this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
+	this._removeConfirmMessageDialog = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);			
+	this._UICreated = true;
+}
+
+
+// new account button was pressed
+ZaSearchListController.prototype._newAccountListener =
+function(ev) {
+
+	try {
+		var newAccount = new ZaAccount(this._app);
+		if(!this._app._newAccountWizard)
+			this._app._newAccountWizard = new ZaNewAccountXWizard(this._container, this._app);	
+
+		this._app._newAccountWizard.setObject(newAccount);
+		this._app._newAccountWizard.popup();
+	} catch (ex) {
+		this._handleException(ex, "ZaSearchListController.prototype._newAccountListener", null, false);
+	}
+}
+
+ZaSearchListController.prototype._newDistributionListListener =
+function(ev) {
+	try {
+		var newDL = new ZaDistributionList(this._app);
+		this._app.getDistributionListController().show(newDL);
+	} catch (ex) {
+		this._handleException(ex, "ZaSearchListController.prototype._newDistributionListListener", null, false);
+	}
+
+};
+
+ZaSearchListController.prototype._newResourceListener =
+function(ev) {
+	try {
+		var newResource = new ZaResource(this._app);
+		if(!this._app._newResourceWizard)
+			this._app._newResourceWizard = new ZaNewResourceXWizard(this._container, this._app);	
+
+		this._app._newResourceWizard.setObject(newResource);
+		this._app._newResourceWizard.popup();
+	} catch (ex) {
+		this._handleException(ex, "ZaSearchListController.prototype._newResourceListener", null, false);
+	}
+}
+
+
+/**
+* This listener is called when the item in the list is double clicked. It call ZaAccountViewController.show method
+* in order to display the Account View
+**/
+ZaSearchListController.prototype._listSelectionListener =
+function(ev) {
+	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
+		if(ev.item) {
+			this._editItem(ev.item);
+		}
+	} else {
+		this._changeActionsState();
+	}
+}
+
+ZaSearchListController.prototype._listActionListener =
+function (ev) {
+	this._changeActionsState();
+	this._actionMenu.popup(0, ev.docX, ev.docY);
+}
+
+/**
+* This listener is called when the Edit button is clicked. 
+* It call ZaAccountViewController.show method
+* in order to display the Account View
+**/
+ZaSearchListController.prototype._editButtonListener =
+function(ev) {
+	if(this._contentView.getSelectionCount() == 1) {
+		var item = this._contentView.getSelection()[0];
+		this._editItem(item);
+	}
+}
+
+ZaSearchListController.prototype._editItem = function (item) {
+	var type = item.type;
+	if (type == ZaItem.ACCOUNT) {
+		this._app.getAccountViewController().show(item);
+	} else if (type == ZaItem.DL) {
+		this._app.getDistributionListController().show(item);
+	} else if(type == ZaItem.ALIAS) {
+		var account = new ZaAccount(this._app);
+		if(item.attrs && item.attrs[ZaAlias.A_AliasTargetId]) {
+			account.load("id", item.attrs[ZaAlias.A_AliasTargetId], (!ZaSettings.COSES_ENABLED));
+			this._app.getAccountViewController().show(account);
+		}
+	} else if (type == ZaItem.RESOURCE ){
+		this._app.getResourceController().show(item);
+	} else if (type==ZaItem.DOMAIN) {
+		this._app.getDomainController().show(item);
+	}
+};
+
+
+
+ZaSearchListController.prototype._changeActionsState = 
+function () {
+	var cnt = this._contentView.getSelectionCount();
+	if(cnt == 1) {
+		var opsArray = [ZaOperation.EDIT, ZaOperation.DELETE];
+		this._toolbar.enable(opsArray, true);
+		this._actionMenu.enable(opsArray, true);
+	} else if (cnt > 1){
+		var opsArray1 = [ZaOperation.EDIT];
+		this._toolbar.enable(opsArray1, false);
+		this._actionMenu.enable(opsArray1, false);
+
+		var opsArray2 = [ZaOperation.DELETE];
+		this._toolbar.enable(opsArray2, true);
+		this._actionMenu.enable(opsArray2, true);
+	} else {
+		var opsArray = [ZaOperation.EDIT, ZaOperation.DELETE];
+		this._toolbar.enable(opsArray, false);
+		this._actionMenu.enable(opsArray, false);
+	}
+}

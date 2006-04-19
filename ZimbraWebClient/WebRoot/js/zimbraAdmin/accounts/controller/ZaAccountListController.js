@@ -40,9 +40,11 @@ function ZaAccountListController(appCtxt, container, app) {
    	this._popupOperations = new Array();			
    	
 	this._currentPageNum = 1;
-	this._currentQuery = new ZaSearchQuery("", [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES], false, "");
+//	this._currentQuery = new ZaSearchQuery("", [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES], false, "");
+	this._currentQuery = "";
 	this._currentSortField = ZaAccount.A_uid;
-	this._currentSortOrder = true;
+	this._currentSortOrder = "1";
+	this.searchTypes = [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES];
 	this.pages = new Object();
 	this._searchPanel = null;
 	this._searchField = null;
@@ -50,6 +52,7 @@ function ZaAccountListController(appCtxt, container, app) {
 	this._helpURL = ZaAccountListController.helpURL;
 	this._UICreated = false;
 	this.objType = ZaEvent.S_ACCOUNT;	
+	this.fetchAttrs = ZaSearch.standardAttributes;
 }
 
 ZaAccountListController.prototype = new ZaListViewController();
@@ -58,43 +61,28 @@ ZaAccountListController.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_
 ZaController.initToolbarMethods["ZaAccountListController"] = new Array();
 ZaController.initPopupMenuMethods["ZaAccountListController"] = new Array();
 
-ZaAccountListController.prototype.show = 
-function(searchResult) {
-    if (!this._UICreated) {
-		this._createUI();
-	} 
-	if (searchResult && searchResult.list != null) {
-		var tmpArr = new Array();
-		var cnt = searchResult.list.getArray().length;
-		for(var ix = 0; ix < cnt; ix++) {
-			tmpArr.push(searchResult.list.getArray()[ix]);
-		}
-		if(cnt < 1) {
-			//if the list is empty - go to the previous page
-		}
-		//add the default column sortable
-		this._contentView._bSortAsc = this._currentSortOrder ;
-		this._contentView.set(AjxVector.fromArray(tmpArr), this._contentView._defaultColumnSortable);	
+
+
+ZaAccountListController.prototype.show = function (doPush) {
+	var callback = new AjxCallback(this, this.searchCallback, {limit:this.RESULTSPERPAGE,CONS:ZaAccount,show:doPush});
+	var searchParams = {
+			query:this._currentQuery, 
+			types:this.searchTypes,
+			sortBy:this._currentSortField,
+			offset:this.RESULTSPERPAGE*(this._currentPageNum-1),
+			sortAscending:this._currentSortOrder,
+			limit:this.RESULTSPERPAGE,
+			attrs:this.fetchAttrs,
+			callback:callback
 	}
+	ZaSearch.searchDirectory(searchParams);
+}
+
+ZaAccountListController.prototype._show = 
+function (list) {
+	this._updateUI(list);
 	this._app.pushView(ZaZimbraAdmin._ACCOUNTS_LIST_VIEW);
-
-//	this._app.setCurrentController(this);		
-	this._removeList = new Array();
-	if (searchResult && searchResult.list != null) {
-		this.pages[this._currentPageNum] = searchResult;
-	}
-	this._changeActionsState();
-
-	if(this.pages[this._currentPageNum].numPages <= this._currentPageNum) {
-		this._toolbar.enable([ZaOperation.PAGE_FORWARD], false);
-	} else {
-		this._toolbar.enable([ZaOperation.PAGE_FORWARD], true);
-	}
-	if(this._currentPageNum == 1) {
-		this._toolbar.enable([ZaOperation.PAGE_BACK], false);
-	} else {
-		this._toolbar.enable([ZaOperation.PAGE_BACK], true);
-	}
+//	this._app.setCurrentController(this);	
 }
 
 ZaAccountListController.prototype.setDefaultType = function (type) {
@@ -132,41 +120,6 @@ ZaAccountListController.prototype.setDefaultType = function (type) {
 	}
 };
 
-/**
-* searh panel
-*/	
-ZaAccountListController.prototype.getSearchPanel = 
-function () {
-	if(!this._searchPanel) {
-	    this._searchPanel = new DwtComposite(this._app.getAppCtxt().getShell(), "SearchPanel", DwtControl.ABSOLUTE_STYLE);
-	    
-		// Create search toolbar and setup browse tool bar button handlers
-		this._searchToolBar = new ZaSearchToolBar(this._searchPanel, null, this._app);
-	    
-		// Setup search field handler
-		this._searchField = this._searchToolBar.getSearchField();
-		this._searchField.registerCallback(ZaAccountListController.prototype._searchFieldCallback, this);	
-		this._searchPanel.zShow(true);		
-	}
-	return this._searchPanel;
-}
-
-ZaAccountListController.prototype.preloadNextPage = 
-function() {
-	if((this._currentPageNum + 1) <= this.pages[this._currentPageNum].numPages && !this.pages[this._currentPageNum+1]) {
-		this.pages[this._currentPageNum+1] = ZaSearch.searchByQueryHolder(this._currentQuery,this._currentPageNum+1, this._currentSortField, this._currentSortOrder, this._app)
-	}		
-	this._app.getAppCtxt().getShell().setBusy(false);
-}
-/**
-* @return ZaItemList - the list currently displaid in the list view
-**/
-ZaAccountListController.prototype.getList = 
-function() {
-	return this.pages[this._currentPageNum];
-}
-
-
 ZaAccountListController.prototype.set = 
 function(accountList) {
 	this.show(accountList);
@@ -184,10 +137,20 @@ function () {
 
 ZaAccountListController.prototype.getTotalPages = 
 function () {
-	return this.pages[this._currentPageNum].numPages;
+	return this.numPages;
 }
 
-ZaAccountListController.prototype._setQuery = 
+ZaAccountListController.prototype.setFetchAttrs = 
+function (fetchAttrs) {
+	this.fetchAttrs = fetchAttrs;
+}
+
+ZaAccountListController.prototype.getFetchAttrs = 
+function () {
+	return this.fetchAttrs;
+}
+
+ZaAccountListController.prototype.setQuery = 
 function (query) {
 	this._currentQuery = query;
 }
@@ -195,6 +158,16 @@ function (query) {
 ZaAccountListController.prototype.getQuery = 
 function () {
 	return this._currentQuery;
+}
+
+ZaAccountListController.prototype.setSearchTypes = 
+function (searchTypes) {
+	this.searchTypes = searchTypes;
+}
+
+ZaAccountListController.prototype.geSearchTypes = 
+function () {
+	return this.searchTypes;
 }
 
 ZaAccountListController.prototype.setSortOrder = 
@@ -217,152 +190,6 @@ function () {
 	return this._currentSortField;
 }
 
-ZaAccountListController.prototype.search =
-function(searchQuery) {
-	try {
-		// if the search string starts with "$set:" then it is a command to the client 
-		if (searchQuery.queryString.indexOf("$set:") == 0) {
-			this._appCtxt.getClientCmdHdlr().execute((searchString.substr(5)).split(" "));
-			return;
-		}
-		//this._searchField.setObject(searchString);
-		this.pages = new Object();
-		this._setQuery(searchQuery);
-		this._currentPageNum = 1;
-		this.show(ZaSearch.searchByQueryHolder(searchQuery, this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app));	
-		if(searchQuery.types && searchQuery.types.length > 1) {
-			//not sortable by status in the mixed view
-			this._contentView._headerList[3]._sortable=false;
-			this._contentView.unsetSortedColStyle(this._contentView._headerList[3]._id);
-		} else {
-			if(searchQuery.types[0] == ZaSearch.DLS) {
-				this._contentView._headerList[3]._sortable=true;
-				this._contentView._headerList[3]._sortField = ZaDistributionList.A_mailStatus;
-			} else if (searchQuery.types[0] == ZaSearch.ALIASES) {
-				this._contentView._headerList[3]._sortable=false;
-				this._contentView.unsetSortedColStyle(this._contentView._headerList[3]._id);				
-			} else if(searchQuery.types[0] == ZaSearch.ACCOUNTS) {
-				this._contentView._headerList[3]._sortable=true;
-				this._contentView._headerList[3]._sortField = ZaAccount.A_accountStatus;
-			} else if (searchQuery.types[0] == ZaSearch.RESOURCES) {
-				this._contentView._headerList[3]._sortable=true;
-				this._contentView._headerList[3]._sortField = ZaResource.A_accountStatus;
-			}
-		}
-	} catch (ex) {
-		// Only restart on error if we are not initialized and it isn't a parse error
-		if (ex.code != ZmCsfeException.MAIL_QUERY_PARSE_ERROR) {
-			this._handleException(ex, "ZaAccountListController.prototype.search", null, (this._inited) ? false : true);
-		} else {
-			this.popupErrorDialog(ZaMsg.queryParseError, ex);
-			this._searchField.setEnabled(true);	
-		}
-	}	
-}
-
-/*********** Search Field Callback */
-
-ZaAccountListController.prototype._searchFieldCallback =
-function(searchField, searchQuery) {
-	this.search(searchQuery);
-}
-
-
-
-/**
-* @param ev
-* This listener is invoked by ZaAccountViewController or any other controller that can change an ZaAccount object
-**/
-ZaAccountListController.prototype.handleAccountChange = 
-function (ev) {
-	//if any of the data that is currently visible has changed - update the view
-	if(ev) {
-		this._contentView.setUI();
-		if(this._app.getCurrentController() == this) {
-			this.show();			
-		} else {
-			this._changeActionsState();
-		}
-	}
-}
-
-/**
-* This listener is invoked by ZaAccountViewController or any other controller that can create an ZaAccount object
-**/
-ZaAccountListController.prototype.handleAccountCreation = 
-function () {
-	this.pages=new Object();
-	if(this._app.getCurrentController() == this) {
-		this.show(ZaSearch.searchByQueryHolder(this._currentQuery, this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app));			
-	} else {
-		var searchResult = ZaSearch.searchByQueryHolder(this._currentQuery, this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app);
-		if (searchResult && searchResult.list != null) {
-			var tmpArr = new Array();
-			var cnt = searchResult.list.getArray().length;
-			for(var ix = 0; ix < cnt; ix++) {
-				tmpArr.push(searchResult.list.getArray()[ix]);
-			}
-			this._contentView.set(AjxVector.fromArray(tmpArr));	
-			this.pages[this._currentPageNum] = searchResult;
-		}			
-	}
-}
-
-/**
-* @param ev
-* This listener is invoked by ZaAccountViewController or any other controller that can remove an ZaAccount object
-**/
-ZaAccountListController.prototype.handleAccountRemoval = 
-function (ev) {
-	if(ev) {
-		//add the new ZaAccount to the controlled list
-		if(ev.getDetails()) {
-			this.pages=new Object();
-			var srchResult = ZaSearch.searchByQueryHolder(this._currentQuery, this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app);
-			while(this._currentPageNum > 1) { 
-				if(srchResult.numPages < this._currentPageNum) {
-					this._currentPageNum--;
-					srchResult = ZaSearch.searchByQueryHolder(this._currentQuery, this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app);
-					if(srchResult.numPages >= this._currentPageNum)
-						break;
-				} else {
-					break;
-				}
-			}
-			if(this._app.getCurrentController() == this) {
-				this.show(srchResult);			
-			} else {
-				if (srchResult && srchResult.list != null) {
-					var tmpArr = new Array();
-					var cnt = srchResult.list.getArray().length;
-					for(var ix = 0; ix < cnt; ix++) {
-						tmpArr.push(srchResult.list.getArray()[ix]);
-					}
-					this._contentView.set(AjxVector.fromArray(tmpArr));	
-					this.pages[this._currentPageNum] = srchResult;
-				}					
-			}
-		}
-	}
-}
-
-/**
-* @param nextViewCtrlr - the controller of the next view
-* Checks if it is safe to leave this view. Displays warning and Information messages if neccesary.
-**/
-ZaAccountListController.prototype.switchToNextView = 
-function (nextViewCtrlr, func, params) {
-	func.call(nextViewCtrlr, params);
-}
-
-/**
-* public getToolBar
-* @return reference to the toolbar
-**/
-ZaAccountListController.prototype.getToolBar = 
-function () {
-	return this._toolbar;	
-}
 
 
 /**
@@ -660,31 +487,6 @@ function(ev) {
 		this._handleException(ex, "ZaAccountListController.prototype._viewMailListener", null, false);			
 	}
 }
-
-/*
-ZaAccountListController.prototype._nextPageListener = 
-function (ev) {
-	if(this._currentPageNum < this.pages[this._currentPageNum].numPages) {
-		this._currentPageNum++;
-		if(this.pages[this._currentPageNum]) {
-			this.show(this.pages[this._currentPageNum])
-		} else {
-			this.show(ZaSearch.searchByQueryHolder(this._currentQuery,this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app));	
-		}
-	} 
-}
-
-ZaAccountListController.prototype._prevPageListener = 
-function (ev) {
-	if(this._currentPageNum > 1) {
-		this._currentPageNum--;
-		if(this.pages[this._currentPageNum]) {
-			this.show(this.pages[this._currentPageNum])
-		} else {
-			this.show(ZaSearch.searchByQueryHolder(this._currentQuery,this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app));
-		}
-	} 
-}*/
 
 /**
 * This listener is called when the Delete button is clicked. 

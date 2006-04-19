@@ -30,14 +30,14 @@
 * @author Greg Solovyev
 **/
 function ZaServerListController(appCtxt, container, app) {
-	ZaController.call(this, appCtxt, container, app,"ZaServerListController");
+	ZaListViewController.call(this, appCtxt, container, app,"ZaServerListController");
    	this._toolbarOperations = new Array();
    	this._popupOperations = new Array();			
 	
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_servers/managing_servers.htm";					
 }
 
-ZaServerListController.prototype = new ZaController();
+ZaServerListController.prototype = new ZaListViewController();
 ZaServerListController.prototype.constructor = ZaServerListController;
 
 ZaController.initToolbarMethods["ZaServerListController"] = new Array();
@@ -107,13 +107,7 @@ ZaServerListController.prototype._createUI = function () {
 		return;
 	}	
 }
-/**
-* @return ZaItemList - the list currently displaid in the list view
-**/
-ZaServerListController.prototype.getList = 
-function() {
-	return this._list;
-}
+
 
 /*
 ZaServerListController.prototype.refresh = 
