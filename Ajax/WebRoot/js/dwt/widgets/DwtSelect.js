@@ -157,7 +157,7 @@ function (options) {
     // setup our arrow button
 	this.setDropDownImages(	"SelectPullDownArrow",				// normal
 							"SelectPullDownArrowDis",			// disabled
-							"SelectPullDownArrowHover",		// hover
+							"SelectPullDownArrowHover",			// hover
 						   	"SelectPullDownArrowSel"			// down
 	);
 	var menu = new DwtMenu(this, null, "DwtSelectMenu", null, true);
