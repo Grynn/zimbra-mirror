@@ -37,6 +37,7 @@ OSelect1_XFormItem.prototype.multiple = false;
 OSelect1_XFormItem.prototype.writeElementDiv = false;
 OSelect1_XFormItem.prototype.width = "auto";
 OSelect1_XFormItem.prototype.editable = false;
+OSelect1_XFormItem.prototype.menuUp = false;
 
 //TODO: get showing check working for the normal SELECT, requires:
 //		* separate notion of hilited row (for mouseover) and selected row(s)
@@ -46,6 +47,17 @@ OSelect1_XFormItem.prototype.editable = false;
 OSelect1_XFormItem.prototype.showCheck = false;
 OSelect1_XFormItem.prototype.checkHTML = "&radic;";
 
+
+//	methods
+OSelect1_XFormItem.prototype.initFormItem = function () {
+	// if we're dealing with an XFormChoices object...
+	var choices = this.getChoices();
+	if (choices == null || choices.constructor != XFormChoices) return;
+
+	//	...set up to receive notification when its choices change
+	var listener = new AjxListener(this, this.choicesChangeLsnr);
+	choices.addListener(DwtEvent.XFORMS_CHOICES_CHANGED, listener);
+}
 
 OSelect1_XFormItem.prototype.updateElement = function (newValue) {
 	// hack: if this item can display multiple values and there's a comma in the value
@@ -185,7 +197,21 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 	AjxCore.addListener(window, "onmouseup", this.$hideListener);
 	AjxCore.addListener(document.body, "onmousedown", this.$outsideMouseDownListener);
 	DwtEventManager.addListener(DwtEvent.ONMOUSEDOWN, this.$outsideMouseDownListener);	
-	
+	this.menuUp = true;
+}
+
+OSelect1_XFormItem.prototype.choicesChangeLsnr = function () {
+	this._choiceDisplayIsDirty = true;
+	delete this.$normalizedChoices;
+	if(this.menuUp)
+		this.showMenu();
+}
+
+OSelect1_XFormItem.prototype.redrawChoices = function () {
+	var menu = this.getMenuElement();
+	if (menu == null) return; 
+
+	menu.innerHTML = this.getChoicesHTML();		
 }
 
 OSelect1_XFormItem.prototype.hideMenu = function () {
@@ -206,6 +232,7 @@ OSelect1_XFormItem.prototype.hideMenu = function () {
 			OSelect1_XFormItem._mouseWheelCurrentSelect = null;
 		}
 	}
+	this.menuUp = false;
 }
 
 OSelect1_XFormItem.prototype.oMouseUp = function (ev) {
@@ -318,6 +345,16 @@ OSelect1_XFormItem.prototype.onChoiceDoubleClick = function (itemNum, event) {
 OSelect1_XFormItem.prototype.onValueTyped = function(label, event) {
 	var value = this.getChoiceValue(label);
 	this.setValue(value, false, event);
+}
+
+OSelect1_XFormItem.prototype.onKeyUp = function(value, event) {
+	var method = this.getKeyUpMethod();
+	if(method)
+		method.call(this, value, event);
+}
+
+OSelect1_XFormItem.prototype.getKeyUpMethod = function () {
+	return this.cacheInheritedMethod("keyUp","$keyUp","elementValue, event");
 }
 
 OSelect1_XFormItem.prototype.choiceSelected = function (itemNum, clearOldValues, event) {
@@ -470,7 +507,8 @@ OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput, updateScript, in
 				">",
 				"<table ", this.getTableCssString(), ">", 
 					"<tr><td width=100%><input type=text id=", id, "_display class=", this.getDisplayCssClass(), " value='VALUE' ", 
-					" onchange=\"",ref, ".onValueTyped(this.value, event||window.event)\"", (this.getInheritedProperty("editable") ? " readOnly=false " : " readOnly=true "),
+					" onchange=\"",ref, ".onValueTyped(this.value, event||window.event)\"",
+					" onkeyup=\"",ref, ".onKeyUp(this.value, event||window.event)\"",
 					"></td>",
 						"<td>", this.getArrowButtonHTML(),"</td>", 
 					"</tr>", 

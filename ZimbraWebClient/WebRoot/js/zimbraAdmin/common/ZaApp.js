@@ -297,12 +297,49 @@ function() {
 	return this._controllers[ZaZimbraAdmin._MIGRATION_WIZ_VIEW];
 }
 
+ZaApp.prototype.searchDomains = function(query) {
+	var callback = new AjxCallback(this, this.domainSearchCallback);
+	var searchParams = {
+			query:query, 
+			types:[ZaSearch.DOMAINS],
+			sortBy:ZaDomain.A_domainName,
+			offset:"0",
+			sortAscending:"0",
+			limit:"50",
+			callback:callback
+	}
+	ZaSearch.searchDirectory(searchParams);
+}
+
+ZaApp.prototype.domainSearchCallback = 
+function (resp) {
+	try {
+		if(!resp) {
+			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaListViewController.prototype.searchCallback"));
+		}
+		if(resp.isException()) {
+			throw(resp.getException());
+		} else {
+			var response = resp.getResponse().Body.SearchDirectoryResponse;
+			var list = new ZaItemList(ZaDomain, this._app);	
+			list.loadFromJS(response);
+			EmailAddr_XFormItem.domainChoices.setChoices(list.getArray());
+			EmailAddr_XFormItem.domainChoices.dirtyChoices();
+		}
+	} catch (ex) {
+		if (ex.code != ZmCsfeException.MAIL_QUERY_PARSE_ERROR) {
+			this.getCurrentController()._handleException(ex, "ZaListViewController.prototype.searchCallback");	
+		} else {
+			this.getCurrentController().popupErrorDialog(ZaMsg.queryParseError, ex);
+		}		
+	}
+}
 ZaApp.prototype.getDomainList =
 function(refresh) {
 	if (refresh || this._domainList == null) {
 		this._domainList = ZaDomain.getAll(this);
-		EmailAddr_XFormItem.domainChoices.setChoices(this._domainList.getArray());
-		EmailAddr_XFormItem.domainChoices.dirtyChoices();
+		/*EmailAddr_XFormItem.domainChoices.setChoices(this._domainList.getArray());
+		EmailAddr_XFormItem.domainChoices.dirtyChoices();*/
 	}
 	return this._domainList;	
 }
@@ -508,14 +545,14 @@ function (ev) {
 				this._domainList=ZaDomain.getAll(this);
 			}
 			this._domainList.add(ev.getDetails());
-			EmailAddr_XFormItem.domainChoices.setChoices(this._domainList.getArray());
+		/*	EmailAddr_XFormItem.domainChoices.setChoices(this._domainList.getArray());
 			EmailAddr_XFormItem.domainChoices.dirtyChoices();	
 			if(this._domainListChoices == null) {
 				this._domainListChoices = new XFormChoices(this._domainList.getArray(), XFormChoices.OBJECT_LIST, "name", "name");	
 			} else {
 				this._domainListChoices.setChoices(this._domainList.getArray());
 				this._domainListChoices.dirtyChoices();			
-			}					
+			}					*/
 		}
 	}
 }
@@ -734,14 +771,14 @@ function (ev) {
 				this._domainList.remove(ev.getDetails());
 			}
 		}
-		EmailAddr_XFormItem.domainChoices.setChoices(this._domainList.getArray());
+	/*	EmailAddr_XFormItem.domainChoices.setChoices(this._domainList.getArray());
 		EmailAddr_XFormItem.domainChoices.dirtyChoices();		
 		if(this._domainListChoices == null) {
 			this._domainListChoices = new XFormChoices(this._domainList.getArray(), XFormChoices.OBJECT_LIST, "name", "name");	
 		} else {
 			this._domainListChoices.setChoices(this._domainList.getArray());
 			this._domainListChoices.dirtyChoices();			
-		}			
+		}			*/
 	}
 }
 

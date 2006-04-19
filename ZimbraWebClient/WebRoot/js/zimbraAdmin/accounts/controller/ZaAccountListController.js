@@ -172,7 +172,12 @@ function () {
 
 ZaAccountListController.prototype.setSortOrder = 
 function (sortOrder) {
-	this._currentSortOrder = sortOrder;
+	if(sortOrder===true)
+		this._currentSortOrder = "1";
+	else if(sortOrder===false)
+		this._currentSortOrder = "0";
+	else
+		this._currentSortOrder = sortOrder;
 }
 
 ZaAccountListController.prototype.getSortOrder = 

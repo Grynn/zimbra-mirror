@@ -153,7 +153,7 @@ function (xModelMetaData, xFormMetaData) {
 		
 	this._localXModel = new XModel(xModelMetaData);
 	this._localXForm = new XForm(xFormMetaData, this._localXModel, null, this);
-
+	this._localXForm.setController(this._app);
 	this._localXForm.draw(this._pageDiv);
 	this._drawn = true;
 }

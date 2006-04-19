@@ -49,6 +49,9 @@ function () {
 			}	
 		}
 	}
+	if(ZaSettings.DOMAINS_ENABLED) {
+		this.getForm().getController().searchDomains("");
+	}
 };
 
 EmailAddr_XFormItem.prototype.items = [
@@ -88,7 +91,8 @@ EmailAddr_XFormItem.prototype.items = [
 				} 
 			}
 			if(!val) {
-				val = this.getChoices()._choiceObject[0].name;
+				if(this.getChoices() && this.getChoices()._choiceObject && this.getChoices()._choiceObject[0])
+					val = this.getChoices()._choiceObject[0].name;
 			}	
 			this.getParentItem()._domainPart = val;
 			
@@ -122,7 +126,25 @@ EmailAddr_XFormItem.prototype.items = [
 			} else {
 				val = "@" + domainPart;
 			}
+			if(domainPart) {
+				var el = this.getDisplayElement();
+				if (el) {
+					if(this.getInheritedProperty("editable")) {
+						el.value = domainPart;
+					} else {
+						el.innerHTML = domainPart;
+					}
+				}	
+			}
 			this.getForm().itemChanged(this.getParentItem(), val, event);
+		},
+		keyUp:function(newValue,ev) {
+			var n = "";
+			if(newValue)
+				n = String(newValue).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
+				
+			var query = "(zimbraDomainName="+n+"*)";
+			this.getForm().getController().searchDomains(query);
 		}
 	}
 ];

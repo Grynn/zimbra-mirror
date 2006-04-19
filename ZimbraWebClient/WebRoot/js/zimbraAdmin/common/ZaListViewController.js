@@ -41,7 +41,7 @@ function ZaListViewController(appCtxt, container, app, iKeyName) {
    	this._toolbarOperations = new Array();
    	this._popupOperations = new Array();	
 	//this.pages = new Object();
-	this._currentSortOrder = true;
+	this._currentSortOrder = "1";
 	ZaController.call(this, appCtxt, container, app, iKeyName);
 	this.RESULTSPERPAGE = ZaSettings.RESULTSPERPAGE; 
 	this.MAXSEARCHRESULTS = ZaSettings.MAXSEARCHRESULTS;
@@ -93,7 +93,7 @@ function(list) {
 			//if the list is empty - go to the previous page
 		}
 		//add the default column sortable
-		this._contentView._bSortAsc = this._currentSortOrder ;
+		this._contentView._bSortAsc = (this._currentSortOrder=="1");
 		this._contentView.set(AjxVector.fromArray(tmpArr), this._contentView._defaultColumnSortable);	
 	}
 	this._removeList = new Array();
@@ -118,7 +118,7 @@ function(params, resp) {
 			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaListViewController.prototype.searchCallback"));
 		}
 		if(resp.isException()) {
-			throw(arg.getException());
+			throw(resp.getException());
 		} else {
 			var response = resp.getResponse().Body.SearchDirectoryResponse;
 			var list = new ZaItemList(params.CONS, this._app);	

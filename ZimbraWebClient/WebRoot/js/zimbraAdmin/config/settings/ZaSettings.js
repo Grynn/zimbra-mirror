@@ -43,20 +43,6 @@ ZaSettings.init = function () {
 	
 
 	try {
-		/*var adminName = AjxCookie.getCookie(document, ZaSettings.ADMIN_NAME_COOKIE);
-		if(adminName) {
-			var emailChunks = adminName .split("@");
-			var tmpDomain = new ZaDomain();
-			if(emailChunks.length > 1 ) {
-				tmpDomain.name = emailChunks[1];
-				ZaSettings.myDomainName = emailChunks[1];
-				EmailAddr_XFormItem.domainChoices.setChoices([tmpDomain]);
-				EmailAddr_XFormItem.domainChoices.dirtyChoices();							    
-			} else {
-				//throw new AjxException("Failed to parse login name", AjxException.UNKNOWN, "ZaAuthenticate.prototype._processResponse");
-			}				
-		}*/
-	
 		var soapDoc = AjxSoapDoc.create("GetZimletsRequest", "urn:zimbraAdmin", null);	
 		var command = new ZmCsfeCommand();
 		var params = new Object();

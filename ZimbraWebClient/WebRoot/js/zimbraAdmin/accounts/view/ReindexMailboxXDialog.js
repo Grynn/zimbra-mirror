@@ -96,7 +96,7 @@ function(evt) {
 		}		
 		this.getForm().refresh();
 	} catch (ex) {
-		this.getForm().getController()._handleException(ex, "ReindexMailboxXDialog.abortReindexMailbox", null, false);
+		this.getForm().getController().getCurrentController()._handleException(ex, "ReindexMailboxXDialog.abortReindexMailbox", null, false);
 	}
 }
 
@@ -117,7 +117,7 @@ function(evt) {
 		}
 		//this.getForm().parent._pollHandler = AjxTimedAction.scheduleAction(this.getForm().parent.pollAction, instance.pollInterval);	
 	} catch (ex) {
-		this.getForm().getController()._handleException(ex, "ReindexMailboxXDialog.startReindexMailbox", null, false);	
+		this.getForm().getController().getCurrentController()._handleException(ex, "ReindexMailboxXDialog.startReindexMailbox", null, false);	
 	}
 }
 
