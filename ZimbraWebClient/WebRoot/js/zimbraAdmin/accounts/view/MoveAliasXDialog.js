@@ -39,6 +39,9 @@ function MoveAliasXDialog(parent,  app, w, h) {
 	var closeButton = new DwtDialog_ButtonDescriptor(MoveAliasXDialog.CLOSE_BUTTON, AjxMsg._close, DwtDialog.ALIGN_RIGHT, new AjxCallback(this, this.closeMe));		
 	this._extraButtons = [helpButton,moveButton,closeButton];	
 	ZaXDialog.call(this, parent, app, null, ZaMsg.MoveAlias_Title, w, h);
+	if (this._button[MoveAliasXDialog.MOVE_BUTTON]) {
+		this._button[MoveAliasXDialog.MOVE_BUTTON].setEnabled (false);
+	}
 	this._containedObject = new ZaSearch();
 	this.initForm(ZaSearch.myXModel,this.getMyXForm());
 }
@@ -54,7 +57,7 @@ function (loc) {
 	ZaXWizardDialog.prototype.popup.call(this, loc);
 	this._containedObject[ZaModel.currentStep] = 1;	
 	this._localXForm.setInstance(this._containedObject);				
-	this._button[MoveAliasXDialog.MOVE_BUTTON].setEnabled(true);		
+	//this._button[MoveAliasXDialog.MOVE_BUTTON].setEnabled(false);		
 	this._button[MoveAliasXDialog.CLOSE_BUTTON].setEnabled(false);	
 }
 
@@ -91,7 +94,7 @@ function() {
 		if(this._containedObject[ZaSearch.A_selected] && this._containedObject[ZaSearch.A_selected].addAlias!=null) {	
 			try {
 				name = this._alias.name;
-				this._alias.remove();
+				ZaAlias.prototype.remove.call(this._alias);
 			} catch (ex) {
 				this._app.getCurrentController()._handleException(ex, "MoveAliasXDialog.prototype.moveAlias:_alias.remove", null, false);
 				return false;
@@ -122,7 +125,7 @@ function (ev) {
 			MoveAliasXDialog.resultChoices.dirtyChoices();
 		}
 		this._localXForm.refresh();
-
+		this._button[MoveAliasXDialog.MOVE_BUTTON].setEnabled(false);
 	} catch (ex) {
 		// Only restart on error if we are not initialized and it isn't a parse error
 		if (ex.code != ZmCsfeException.MAIL_QUERY_PARSE_ERROR) {
@@ -162,7 +165,16 @@ function() {
 								}
 							},
 							{type:_DWT_BUTTON_, label:ZaMsg.search, toolTipContent:ZaMsg.searchForAccounts, icon:ZaMsg.search, onActivate:MoveAliasXDialog.srchButtonHndlr},
-							{type:_OSELECT_,width:"450px",height:"300px", colSpan:2,ref:ZaSearch.A_selected, choices:MoveAliasXDialog.resultChoices, label:null,multiple:false}
+							{type:_OSELECT_,width:"450px",height:"300px", colSpan:2,ref:ZaSearch.A_selected, 
+									choices:MoveAliasXDialog.resultChoices, label:null,multiple:false,
+									onChange: function(value, event, form){
+										DBG.println(AjxDebug.DBG1, "event happens. value = " + value );
+										if (( value instanceof ZaAccount)  && (value.id)){ //an account is selected
+											form.parent._button[MoveAliasXDialog.MOVE_BUTTON].setEnabled(true);
+										}
+										this.setInstanceValue(value);	
+									}									
+							}
 						]
 					},
 					{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 2", relevantBehaviorBehavior:_HIDE_,
