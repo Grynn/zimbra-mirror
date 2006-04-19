@@ -207,6 +207,7 @@ ZaDLController.prototype._saveChanges = function () {
 			return retval;
 		} else {
 			var _tmpObj = ZaDistributionList.create(obj, this._app);
+			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true); 
 			if(_tmpObj != null) {
 				this.fireCreationEvent(_tmpObj);
 				this._currentObject = _tmpObj;
