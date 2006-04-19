@@ -36,6 +36,7 @@ function ZaSearch() {
 	this[ZaSearch.A_fAccounts] = "TRUE";	
 	this[ZaSearch.A_fdistributionlists] = "TRUE";
 	this[ZaSearch.A_fResources] = "TRUE";
+	this[ZaSearch.A_fDomains] = "TRUE";
 	this[ZaSearch.A_pagenum]=1;	
 }
 ZaSearch.ALIASES = "aliases";
@@ -66,18 +67,19 @@ ZaSearch.A_fResources = "f_resources";
 **/
 ZaSearch.getAll =
 function(app) {
-	return ZaSearch.search("", [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES], 1, ZaAccount.A_uid, true, app);
+	return ZaSearch.search("", [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES,ZaSearch.DOMAINS], 1, ZaAccount.A_uid, true, app);
 }
 
 
-ZaSearch.standardAttributes = AjxBuffer.concat(ZaAccount.A_displayname,",",
-											   ZaItem.A_zimbraId,  "," , 
-											   ZaAccount.A_mailHost , "," , 
-											   ZaAccount.A_uid ,"," , 
-											   ZaAccount.A_accountStatus , "," , 
-											   ZaAccount.A_description, ",",
-											   ZaDistributionList.A_mailStatus, ",",
-											   ZaResource.A_zimbraCalResType);
+ZaSearch.standardAttributes = [ZaAccount.A_displayname, 
+							ZaItem.A_zimbraId,
+							ZaAccount.A_mailHost, 
+							ZaAccount.A_uid ,
+							ZaAccount.A_accountStatus,
+							ZaAccount.A_description,
+							ZaDistributionList.A_mailStatus,
+							ZaResource.A_zimbraCalResType,
+							ZaDomain.A_domainName].join();
 /**
 * Sends SearchDirectoryRequest to the SOAP Servlet
 * params {

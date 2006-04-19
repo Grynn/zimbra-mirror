@@ -183,7 +183,7 @@ function(searchField, params) {
 
 			callback = new AjxCallback(this, this.searchCallback, {limit:this.RESULTSPERPAGE,show:true});			
 	} else if (AjxUtil.indexOf(params.types,ZaSearch.DOMAINS)) {
-		controller = this._app.getDistributionListController();
+		controller = this._app.getDomainListController();
 	} else if(AjxUtil.indexOf(params.types,ZaSearch.ACCOUNTS) || 
 				AjxUtil.indexOf(params.types,ZaSearch.ALIASES) || 
 				AjxUtil.indexOf(params.types,ZaSearch.RESOURCES) ||

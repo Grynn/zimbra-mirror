@@ -97,7 +97,10 @@ function(account, now, isDndIcon) {
 						html[idx++] = AjxImg.getImageHtml("Resource");	
 					}	
 					//html[idx++] = AjxImg.getImageHtml("Resource");				
-				break;											
+				break;	
+				case ZaItem.DOMAIN:
+					html[idx++] = AjxImg.getImageHtml("Domain");		
+				break;									
 				default:
 					html[idx++] = account.type;
 				break;
@@ -106,7 +109,11 @@ function(account, now, isDndIcon) {
 		} else if(id.indexOf(ZaAccount.A_name)==0) {
 			// name
 			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
-			html[idx++] = AjxStringUtil.htmlEncode(account.name);
+			if(account.type == ZaItem.DOMAIN) {
+				html[idx++] = AjxStringUtil.htmlEncode(account.attrs[ZaDomain.A_domainName]);
+			} else {
+				html[idx++] = AjxStringUtil.htmlEncode(account.name);
+			}
 			html[idx++] = "</td>";
 		} else if (id.indexOf(ZaAccount.A_displayname)==0) {
 			// display name
@@ -146,12 +153,12 @@ function() {
 	
 	headerList[0] = new ZaListHeaderItem("type", ZaMsg.ALV_Type_col, null, "40px", sortable++, "objectClass", true, true);
 	this._defaultColumnSortable = sortable ;
-	headerList[1] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.ALV_Name_col, null, "220px", sortable++, ZaAccount.A_name, true, true);
+	headerList[1] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.CLV_Name_col, null, "220px", null,  null, true, true);
 	
 //idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible	
-	headerList[2] = new ZaListHeaderItem(ZaAccount.A_displayname, ZaMsg.ALV_DspName_col, null, "220px", sortable++,ZaAccount.A_displayname, true, true);
+	headerList[2] = new ZaListHeaderItem(ZaAccount.A_displayname, ZaMsg.ALV_DspName_col, null, "220px",  null, null, true, true);
 
-	headerList[3] = new ZaListHeaderItem(ZaAccount.A_accountStatus, ZaMsg.ALV_Status_col, null, "80px", sortable++,ZaAccount.A_accountStatus, true, true);
+	headerList[3] = new ZaListHeaderItem(ZaAccount.A_accountStatus, ZaMsg.ALV_Status_col, null, "80px",  null, null, true, true);
 
 	headerList[4] = new ZaListHeaderItem(ZaAccount.A_description, ZaMsg.ALV_Description_col, null, null, null, null,true, true );
 	
