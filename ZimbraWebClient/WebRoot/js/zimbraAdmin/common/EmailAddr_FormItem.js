@@ -113,7 +113,8 @@ EmailAddr_XFormItem.prototype.items = [
 				} 
 			}
 			if(!val) {
-				val = this.getChoices()._choiceObject[0].name;
+				if(this.getChoices() && this.getChoices()._choiceObject && this.getChoices()._choiceObject[0])
+					val = this.getChoices()._choiceObject[0].name;
 			}	
 			this.getParentItem()._domainPart = val;
 			
