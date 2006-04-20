@@ -1,0 +1,148 @@
+<style type="text/css">
+	@import url(../config/style/zlogin.css);
+</style>
+
+<style type="text/css">
+
+* {font-family:Verdana; font-size:11px;}
+
+/* Images */
+.ImgLoginBanner {
+	width:349px;
+	height:92px;
+	background-image:url(http://localhost:7070/zimbra/img/loRes/logo/LoginBanner.gif);
+}
+.ImgLoginError {
+	width:32px;
+	height:32px;
+	background-image:url(http://localhost:7070/zimbra/img/loRes/dwt/Critical_32.gif);
+}
+
+
+
+/* REMOVE THIS */
+.DwtButton 						{	border: 1px solid; border-color:#cccccc black black #cccccc;					background-color:#cccccc; color: black; text-align:center;	white-space:nowrap; overflow:hidden;	width:60px; height:20px; 	 cursor: pointer;					}
+.DwtButton-activated 			{	border: 1px solid; border-color:#cccccc black black #cccccc;					background-image:url(/zimbra/img/loRes/dwt/ButtonDown__H.gif);			color: black;			width:60px; height:20px; 	 cursor: pointer;			}
+.DwtButton-triggered			{	border: 1px solid; border-color:black #cccccc #cccccc black;					background-image:url(/zimbra/img/loRes/dwt/ButtonDown__H.gif);			color: black;		width:60px; height:20px; 	 cursor: pointer;			}	
+.DwtButton-toggled				{	border: 1px solid; border-color:black #cccccc #cccccc black;					background-image:url(/zimbra/img/loRes/dwt/ButtonDown__H.gif);			color: black;		width:60px; height:20px; 	 cursor: pointer;			}	
+.DwtButton-disabled				{	border: 1px solid #cccccc; 	background-color:#dddddd; 	color: #666666;		width:60px; height:20px; 	 cursor: not-allowed;			}	
+.DwtButton-active				{	border: 1px solid; border-color:#cccccc black black #cccccc; border-width:2px;			background-color:#cccccc; background-image:url(/zimbra/img/loRes/dwt/ButtonUpDefault__H.gif);	color: black; text-align:center;	white-space:nowrap; overflow:hidden;	width:60px; height:20px; 	 cursor: pointer;			}	
+
+.DwtButton .Text 				{	color: black; text-align:center;	white-space:nowrap; overflow:hidden;				}
+.DwtButton-activated .Text		{	color: black; text-align:center;	white-space:nowrap; overflow:hidden;		}
+.DwtButton-triggered .Text		{	color: black; text-align:center;	white-space:nowrap; overflow:hidden;		}	
+.DwtButton-toggled .Text		{	color: black; text-align:center;	white-space:nowrap; overflow:hidden;		}	
+.DwtButton-disabled .Text		{	color: #666666; text-align:center;	white-space:nowrap; overflow:hidden;		}	
+.DwtButton-active .Text			{	color: black; text-align:center;	white-space:nowrap; overflow:hidden;				}	
+/* END REMOVE */
+
+
+h2	{
+	font-size:24px;  
+	border-top:1px solid black; 
+	border-bottom:1px solid black; 
+	margin-top:50px; 
+	margin-bottom:20px;
+}
+
+</style>
+
+
+<script language="javascript">
+
+	/////////////  TESTS
+	////////////////////////
+	
+	// hard code some ZmMsg items
+ZmMsg = {
+	splashScreenAppName : "Collaboration Suite",
+	username : "Username",
+	password : "Password",
+	newPassword :	"New Password",
+	confirmPassword : "Confirm Password",
+	rememberMe : "Remember me on this computer",
+	login : "Log In",
+	splashScreenCopyright : "Copyright &copy; 2005-2006 Zimbra, Inc. 'Zimbra' and the Zimbra logos are trademarks of Zimbra, Inc."
+}
+
+</script>
+
+<script src="ZLoginFactory.js" language="javascript"></script>
+
+<script language='JavaScript'>
+
+	/////////////  TESTS
+	////////////////////////
+	
+
+	// Test setting the shortVersion for all the below to 'BETA'
+	ZLoginFactory.setDefaultParam("shortVersion", "BETA");
+
+
+
+	// Test the display in different configurations
+
+	document.write("<h2>Normal login dialog<\/h2>")
+	var params = {
+		showForm:true,
+		showUserField:true,
+		showPasswordField:true,
+		showRememberMeCheckbox:true,
+		showButton:true
+	};
+	document.write(ZLoginFactory.getLoginDialogHTML(params));
+
+
+
+	document.write("<h2>Can't start at all login<\/h2>")
+	var params = {
+		showError:true,
+		errorMsg:"I need a break"
+	};
+	document.write(ZLoginFactory.getLoginDialogHTML(params));
+
+	document.write("<h2>Splash screen<\/h2>")
+	var params = {
+		showLoading:true,
+		loadingMsg:"Loading... hold on!"
+	};
+	document.write(ZLoginFactory.getLoginDialogHTML(params));
+
+
+	document.write("<h2>About box<\/h2>")
+	var params = {
+		showAbout:true,
+		aboutMsg:"About this app:  <a href=''>Link<\/a>",
+		showForm:true,
+		showButton:true,
+		buttonName:"OK"
+	};
+	document.write(ZLoginFactory.getLoginDialogHTML(params));
+
+
+	document.write("<h2>Admin login<\/h2>")
+	var params = {
+		showForm:true,
+		showUserField:true,
+		showPasswordField:true,
+		showLicenseMsg:true,
+		productName:"Administration Console",
+		licenseMsg:"Your license is about to expire!",
+		showButton:true
+	};
+	document.write(ZLoginFactory.getLoginDialogHTML(params));
+
+
+	document.write("<h2>Admin force new password login<\/h2>")
+	var params = {
+		showForm:true,
+		showUserField:true,
+		showPasswordField:true,
+		showNewPasswordFields:true,
+		showLicenseMsg:true,
+		productName:"Administration Console",
+		showButton:true
+	};
+	document.write(ZLoginFactory.getLoginDialogHTML(params));
+
+</script>
