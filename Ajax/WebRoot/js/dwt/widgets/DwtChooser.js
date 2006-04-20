@@ -881,6 +881,10 @@ function(item, id, skipNotify) {
 DwtChooser.prototype._removeFromSource =
 function(item, skipNotify) {
 	if (!item) return;
+	var list = this.sourceListView.getList();
+	if (!list) return;
+	if (!list.contains(item)) return;
+	
 	this.sourceListView.removeItem(item, skipNotify);
 };
 
@@ -893,6 +897,10 @@ function(item, skipNotify) {
 DwtChooser.prototype._removeFromTarget =
 function(item, skipNotify) {
 	if (!item) return;
+	var list = this.targetListView.getList();
+	if (!list) return;
+	if (!list.contains(item)) return;
+	
 	this._data[item._buttonId].remove(item);
 	this.targetListView.removeItem(item, skipNotify);
 };
