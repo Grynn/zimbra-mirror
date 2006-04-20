@@ -146,19 +146,21 @@ public class ComparePropsTask
     	}
     	
     	// print results
-    	int missingCount = missing.size();
+		int sourceCount = source.size();
+		int missingCount = missing.size();
     	int duplicateCount = duplicate.size();
     	int obsoleteCount = obsolete.size();
+		int percent = sourceCount > 0 ? 100*(sourceCount-missingCount-duplicateCount)/sourceCount : 0;
 
-    	if (missingCount == 0 && duplicateCount == 0 && obsoleteCount == 0) {
+		if (missingCount == 0 && duplicateCount == 0 && obsoleteCount == 0) {
     		System.out.println("  OK");
     		return;
     	}
 
-    	print("missing", missing);
-    	print("duplicate", duplicate);
-    	print("obsolete", obsolete);
-    	System.out.println("  Summary: "+missingCount+" missing, "+duplicateCount+" duplicate, "+obsoleteCount+" obsolete");
+    	print("Missing - source key not present in target", missing);
+    	print("Duplicate - target value identical to source", duplicate);
+    	print("Obsolete - target key not present in source", obsolete);
+    	System.out.println("  Summary: "+sourceCount+" source, "+missingCount+" missing, "+duplicateCount+" duplicate, "+obsoleteCount+" obsolete, approx "+percent+"% complete");
     }
     
     static void print(String header, List list) {
