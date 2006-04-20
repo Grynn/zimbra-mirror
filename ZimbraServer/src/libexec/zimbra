@@ -33,6 +33,9 @@
 
 command()
 {
+	if [ -f /opt/zimbra/redolog/redo.log ]; then
+		chown -f zimbra:zimbra /opt/zimbra/redolog/redo.log
+	fi
 	su - zimbra -c "zmcontrol $1 </dev/null >>/opt/zimbra/log/startup.log 2>&1"
 }
 
