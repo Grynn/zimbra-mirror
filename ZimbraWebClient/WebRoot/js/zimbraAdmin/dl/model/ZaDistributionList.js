@@ -30,6 +30,7 @@ function ZaDistributionList(app, id, name, memberList, description, notes) {
 	this.attrs = new Object();
 	this.attrs[ZaDistributionList.A_mailStatus] = "enabled";
 	this.id = (id != null)? id: null;
+	this.type = ZaItem.DL;
 	this.name = (name != null) ? name: null;
 	this._selfMember = new ZaDistributionListMember(this.name);
 	this._memberList = (memberList != null)? AjxVector.fromArray(memberList): new AjxVector();

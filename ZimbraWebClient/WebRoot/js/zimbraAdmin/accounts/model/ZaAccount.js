@@ -34,6 +34,7 @@
 function ZaAccount(app) {
 	ZaItem.call(this, app,"ZaAccount");
 	this._init(app);
+	this.type = ZaItem.ACCOUNT;
 }
 
 ZaAccount.prototype = new ZaItem;

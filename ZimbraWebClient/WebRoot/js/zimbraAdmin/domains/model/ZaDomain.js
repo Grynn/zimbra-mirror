@@ -36,6 +36,7 @@ function ZaDomain(app) {
 	this.attrs = new Object();
 	this.id = "";
 	this.name="";
+	this.type=ZaItem.DOMAIN;
 	this._app = app;
 	//default attributes
 	this.attrs[ZaDomain.A_GalMode] = ZaDomain.GAL_Mode_internal;

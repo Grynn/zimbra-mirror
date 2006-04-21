@@ -37,6 +37,7 @@ function ZaCos(app) {
 	this.id = "";
 	this.name="";
 	this._app = app;	
+	this.type = ZaItem.COS;
 }
 
 ZaCos.prototype = new ZaItem;

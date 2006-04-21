@@ -28,6 +28,7 @@ function ZaAlias(app) {
 	this.attrs = new Object();
 	this.id = "";
 	this.name="";
+	this.type=ZaItem.ALIAS;
 }
 
 ZaAlias.prototype = new ZaItem;
