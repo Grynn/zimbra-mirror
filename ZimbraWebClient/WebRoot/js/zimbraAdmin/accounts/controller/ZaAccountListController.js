@@ -64,7 +64,7 @@ ZaController.initPopupMenuMethods["ZaAccountListController"] = new Array();
 
 
 ZaAccountListController.prototype.show = function (doPush) {
-	var callback = new AjxCallback(this, this.searchCallback, {limit:this.RESULTSPERPAGE,CONS:ZaAccount,show:doPush});
+	var callback = new AjxCallback(this, this.searchCallback, {limit:this.RESULTSPERPAGE,CONS:null,show:doPush});
 	var searchParams = {
 			query:this._currentQuery, 
 			types:this.searchTypes,
