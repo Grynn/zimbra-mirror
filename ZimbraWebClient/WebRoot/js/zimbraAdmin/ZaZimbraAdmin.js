@@ -54,38 +54,34 @@ ZaZimbraAdmin._instance = null;
 
 ZaZimbraAdmin.ADMIN_APP = "admin";
 
-ZaZimbraAdmin._MIGRATION_ID = 1;
-ZaZimbraAdmin._HELP_ID = 2;
-ZaZimbraAdmin._LOGOFF_ID = 3;
-ZaZimbraAdmin._PDF_HELP_ID = 4;
-ZaZimbraAdmin._ABOUT_ID = 5;
+ZaZimbraAdmin.VIEW_INDEX = 0;
 
-ZaZimbraAdmin._ADDRESSES = 1;
-ZaZimbraAdmin._ACCOUNTS_LIST_VIEW = 2;
-ZaZimbraAdmin._ALIASES_LIST_VIEW = 3;
-ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW = 4;
-ZaZimbraAdmin._SYS_CONFIG = 5;
-ZaZimbraAdmin._GLOBAL_SETTINGS = 6;
-ZaZimbraAdmin._SERVERS_LIST_VIEW = 7;
-ZaZimbraAdmin._DOMAINS_LIST_VIEW = 8;
-ZaZimbraAdmin._COS_LIST_VIEW = 9;
-ZaZimbraAdmin._MONITORING = 10;
-ZaZimbraAdmin._STATUS = 11;
-ZaZimbraAdmin._STATISTICS = 12;
-ZaZimbraAdmin._STATISTICS_BY_SERVER = 13;
-ZaZimbraAdmin._SEARCH_LIST_VIEW = 14;
+ZaZimbraAdmin._ADDRESSES = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._ACCOUNTS_LIST_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._ALIASES_LIST_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._SYS_CONFIG = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._GLOBAL_SETTINGS = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._SERVERS_LIST_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._DOMAINS_LIST_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._COS_LIST_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._MONITORING = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._STATUS = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._STATISTICS = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._STATISTICS_BY_SERVER = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._SEARCH_LIST_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 
-ZaZimbraAdmin._SERVER_VIEW = 14;
-ZaZimbraAdmin._DOMAIN_VIEW = 15;
-ZaZimbraAdmin._COS_VIEW = 16;
-ZaZimbraAdmin._ACCOUNT_VIEW = 17;
-ZaZimbraAdmin._ALIAS_VIEW = 18;
-ZaZimbraAdmin._DL_VIEW = 19;
-ZaZimbraAdmin._HELP_VIEW = 20;
-ZaZimbraAdmin._MIGRATION_WIZ_VIEW = 21;
-ZaZimbraAdmin._POSTQ_VIEW = 22;
-ZaZimbraAdmin._POSTQ_BY_SERVER_VIEW = 23;
-ZaZimbraAdmin._RESOURCE_VIEW = 24;
+ZaZimbraAdmin._SERVER_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._DOMAIN_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._COS_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._ACCOUNT_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._ALIAS_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._DL_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._HELP_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._MIGRATION_WIZ_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._POSTQ_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._POSTQ_BY_SERVER_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._RESOURCE_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 
 ZaZimbraAdmin.MSG_KEY = new Object();
 ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._ACCOUNTS_LIST_VIEW] = "Accounts_view_title";
@@ -502,163 +498,6 @@ function(ev) {
 }
 
 
-// Banner button click
-ZaZimbraAdmin._bannerBarHdlr =
-function(id, tableId) {
-	var bannerBar = Dwt.getObjectFromElement(document.getElementById(tableId));
-	if(!bannerBar)
-		return;
-		
-	switch (id) {
-		case ZaZimbraAdmin._MIGRATION_ID:
-			document.getElementById(bannerBar._migrationId).blur();
-			document.getElementById(bannerBar._migrationId2).blur();			
-			window.open("http://zimbra.com/downloads/migrationwizard/accept");
-			break;
-			
-		case ZaZimbraAdmin._HELP_ID:
-			document.getElementById(bannerBar._helpId).blur();
-			document.getElementById(bannerBar._helpId2).blur();			
-			window.open("/zimbraAdmin/adminhelp/html/WebHelp/administration_console_help.htm");
-			break;
-
-		case ZaZimbraAdmin._PDF_HELP_ID:
-			document.getElementById(bannerBar._helpId).blur();
-			document.getElementById(bannerBar._helpId2).blur();			
-			window.open("/zimbraAdmin/adminhelp/pdf/admin.pdf");
-			break;
-						
-		case ZaZimbraAdmin._LOGOFF_ID:
-			document.getElementById(bannerBar._logOffId).blur();
-			ZaZimbraAdmin.logOff();
-			break;
-		case ZaZimbraAdmin._ABOUT_ID:
-			document.getElementById(bannerBar._logAboutId).blur();
-			document.getElementById(bannerBar._logAboutId2).blur();			
-			//show about screen
-			ZaZimbraAdmin.getInstance().aboutDialog.popup();
-			break;
-		
-	}
-}
-/*
-// Creates buttons for general non app-related functions and puts them on the banner.
-ZaZimbraAdmin.prototype._createBannerBar =
-function() {
-
-	this.bannerBar = new DwtComposite(this._headerPanel, "BannerBar", DwtControl.RELATIVE_STYLE);
-	
-	this._bannerTableId = Dwt.getNextId();
-	
-	this.bannerBar._migrationId = Dwt.getNextId();
-	this.bannerBar._helpId = Dwt.getNextId();
-	this.bannerBar._pdfHelpId = Dwt.getNextId();	
-	this.bannerBar._logOffId = Dwt.getNextId();
-	this.bannerBar._logAboutId = Dwt.getNextId();
-	
-	this.bannerBar._migrationId2 = Dwt.getNextId();
-	this.bannerBar._helpId2 = Dwt.getNextId();
-	this.bannerBar._pdfHelpId2 = Dwt.getNextId();	
-	this.bannerBar._logOffId2 = Dwt.getNextId();
-	this.bannerBar._logAboutId2 = Dwt.getNextId();
-	
-	var html = new Array();
-	var i = 0;
-	
-	html[i++] = "<table align='right' id='" + this._bannerTableId + "'><tr><td>&nbsp;";
-	html[i++] = "</td></tr></table>";
-	this.bannerBar.getHtmlElement().innerHTML = html.join("");
-	var t = document.getElementById(this._bannerTableId);
-	this.bannerBar.app = this._app;	
-	Dwt.associateElementWithObject(t, this.bannerBar);		
-
-	this._createBannerBarHtml();
-}
-ZaZimbraAdmin.prototype._createBannerBarHtml =
-function () {
-
-	if(!this.bannerBar || !this.bannerBar._helpId ||  !this.bannerBar._pdfHelpId || !this.bannerBar._logOffId || !this.bannerBar._helpId2 ||  !this.bannerBar._pdfHelpId2 || !this.bannerBar._logOffId2)
-		return;
-		
-	var html = new Array();
-	var i = 0;
-
-	html[i++] = "<table width=100% id='" + this._bannerTableId + "'><tr>";
-	html[i++] = "<td valign='middle' nowrap align='left'>";
-	html[i++] = AjxImg.getImageHtml("AppBanner");
-	html[i++] = "</td>";
-	html[i++] = "<td valign='middle' align='right'>";
-		html[i++] = "<table align='right'><tr>";
-		html[i++] = "<td align=right><a id='" + this.bannerBar._migrationId + "'  target=\"_blank\" href=\"http://zimbra.com/downloads/migrationwizard/accept\">";
-		html[i++] = AjxImg.getImageHtml("MigrationWiz", "cursor:hand");
-		html[i++] = "</a></td>";
-		html[i++] = "<td align=right><a id='" + this.bannerBar._migrationId2 + "' style='cursor: hand' target=\"_blank\" href=\"http://zimbra.com/downloads/migrationwizard/accept\">";
-		html[i++] = ZaMsg.migrationWiz + "</a></td>";	
-	
-		html[i++] = "<td align=right><a id='" + this.bannerBar._helpId + "'>";
-		html[i++] = AjxImg.getImageHtml("Help", "cursor:hand");
-		html[i++] = "</a></td>";
-		html[i++] = "<td align=right><a id='" + this.bannerBar._helpId2 + "'>";
-		html[i++] = ZaMsg.help + "</a></td>";		
-	
-		html[i++] = "<td align=right><a id='" + this.bannerBar._logAboutId + "'>";
-		html[i++] = AjxImg.getImageHtml("ZimbraIcon", "cursor:hand");
-		html[i++] = "</a></td>";
-		html[i++] = "<td align=right><a id='" + this.bannerBar._logAboutId2 + "'>";
-		html[i++] = ZaMsg.about + "</a></td>";		
-	
-		html[i++] = "<td align=right><a id='" + this.bannerBar._pdfHelpId + "' target=\"_blank\" href=\"/zimbraAdmin/adminhelp/pdf/admin.pdf\">";
-		html[i++] = AjxImg.getImageHtml("PDFDoc", "cursor:hand");
-		html[i++] = "</a></td>";	
-		html[i++] = "<td align=right><a id='" + this.bannerBar._pdfHelpId2 + "' target=\"_blank\" href=\"/zimbraAdmin/adminhelp/pdf/admin.pdf\">";
-		html[i++] = ZaMsg.adminGuide + "</a></td>";	
-	
-		html[i++] = "<td align=right><a id='" + this.bannerBar._logOffId + "'>";
-		html[i++] = AjxImg.getImageHtml("Logoff", "cursor:hand");		
-		html[i++] = "</a></td>";
-		html[i++] = "<td align=right><a id='" + this.bannerBar._logOffId2 + "'>";		
-		html[i++] = ZaMsg.logOff + "</a></td></tr></table>";
-	html[i++] = "</td></tr></table>";		
-		
-	this.bannerBar.getHtmlElement().innerHTML = html.join("");
-	var t = document.getElementById(this._bannerTableId);
-	this.bannerBar.app = this._app;	
-	Dwt.associateElementWithObject(t, this.bannerBar);	
-
-	var a;
-	
-	var a = document.getElementById(this.bannerBar._helpId);
-	if(a) {
-		a.href = "javascript: void ZaZimbraAdmin._bannerBarHdlr(" + ZaZimbraAdmin._HELP_ID + ",'" + this._bannerTableId + "');";
-		a.onmouseover = a.onmouseout = ZaZimbraAdmin._bannerBarMouseHdlr;
-	}
-	
-	a = document.getElementById(this.bannerBar._helpId2);
-	if(a) {
-		a.href = "javascript: void ZaZimbraAdmin._bannerBarHdlr(" + ZaZimbraAdmin._HELP_ID + ",'" + this._bannerTableId + "');";
-	}	
-			
-	a = document.getElementById(this.bannerBar._logOffId);
-	if(a) {
-		a.href = "javascript: void ZaZimbraAdmin._bannerBarHdlr(" + ZaZimbraAdmin._LOGOFF_ID + ",'" + this._bannerTableId + "');";
-		a.onmouseover = a.onmouseout = ZaZimbraAdmin._bannerBarMouseHdlr;
-	}
-
-	a = document.getElementById(this.bannerBar._logOffId2);
-	if(a) {
-		a.href = "javascript: void ZaZimbraAdmin._bannerBarHdlr(" + ZaZimbraAdmin._LOGOFF_ID + ",'" + this._bannerTableId + "');";
-	}
-	
-	a = document.getElementById(this.bannerBar._logAboutId);
-	if(a) {
-		a.href = "javascript: void ZaZimbraAdmin._bannerBarHdlr(" + ZaZimbraAdmin._ABOUT_ID + ",'" + this._bannerTableId + "');";
-	}	
-	
-	a = document.getElementById(this.bannerBar._logAboutId2);
-	if(a) {
-		a.href = "javascript: void ZaZimbraAdmin._bannerBarHdlr(" + ZaZimbraAdmin._ABOUT_ID + ",'" + this._bannerTableId + "');";
-	}		
-}*/
 // This method is called by the window.onbeforeunload method.
 ZaZimbraAdmin._confirmExitMethod =
 function() {
