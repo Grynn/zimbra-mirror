@@ -129,18 +129,7 @@ function(dialog, verb, args) {
 	
 	this._game = null;
 
-	var matched = [];
-	// this seems inefficient but its the best way to guarantee a valid game name
-	if (args.length >0) {
-		for (var i = 0; i < this._validGames.length; i++) {
-			if (args == this._validGames[i]) {
-				matched = [ this._validGames[i] ];
-				break;				
-			} else if (this._validGames[i].substring(0, args.length) == args) {
-				matched.push(this._validGames[i]);
-			}
-		}
-	}
+	var matched = ZmAssistant.matchWord(args, this._validGames);
 	var isValidGame = matched.length == 1;
 	if (isValidGame) this._game = matched[0];
 	if (matched.length == 0) matched = this._validGames;
