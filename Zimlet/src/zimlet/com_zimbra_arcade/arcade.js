@@ -37,7 +37,7 @@ Com_Zimbra_Arcade.prototype.constructor = Com_Zimbra_Arcade;
 
 Com_Zimbra_Arcade.prototype.init = 
 function() {
-	ZmAssistant.register(new Com_Zimbra_Arcade_Asst(this._appCtxt));
+	if (ZmAssistant && ZmAssistant.register) ZmAssistant.register(new Com_Zimbra_Arcade_Asst(this._appCtxt));
 };
 
 // Called by the Zimlet framework when the game panel item was double clicked

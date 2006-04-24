@@ -37,6 +37,7 @@ Com_Zimbra_YMaps.prototype.constructor = Com_Zimbra_YMaps;
 Com_Zimbra_YMaps.prototype.init =
 function() {
 	(new Image()).src = this.getResource('blank_pixel.gif');
+	if (ZmAssistant && ZmAssistant.register) ZmAssistant.register(new Com_Zimbra_YMaps_Asst(this._appCtxt));
 };
 
 // Y! Maps Webservice URL
@@ -146,4 +147,39 @@ Com_Zimbra_YMaps._callback =
 function(obj, result) {
 	var r = result.text;
 	Com_Zimbra_YMaps._displayImage(r.substring(r.indexOf("http://img"),r.indexOf("</Result>")), obj);
+};
+
+
+//////////////////////////////////////////////////////////////////////////
+// Zimlet assistant class
+// - used by the Assistant dialog to run games via "command-line"
+//////////////////////////////////////////////////////////////////////////
+function Com_Zimbra_YMaps_Asst(appCtxt) {
+	if (arguments.length == 0) return;
+	// XXX: localize later (does NOT belong in ZmMsg.properties)
+	ZmAssistant.call(this, appCtxt, "Yahoo Maps", "map");
+};
+
+Com_Zimbra_YMaps_Asst.prototype = new ZmAssistant();
+Com_Zimbra_YMaps_Asst.prototype.constructor = Com_Zimbra_YMaps_Asst;
+
+Com_Zimbra_YMaps_Asst.prototype.okHandler =
+function(dialog) {
+	// get reference to the ymaps zimlet
+	var zm = this._appCtxt.getSettings().getZimletManager();
+	var zimlet = zm ? zm._ZIMLETS_BY_ID["com_zimbra_ymaps"] : null;
+
+	if (zimlet && this._address) {
+		zimlet.handlerObject._displayDialogMap(this._address);
+	}
+	// return true to close the assistant dialog
+	return true;
+};
+
+Com_Zimbra_YMaps_Asst.prototype.handle =
+function(dialog, verb, args) {
+	this._address = args;
+	var valid = args.length > 0;
+	this._setField("Address", valid ? args : "type an address", !valid, true);	
+	dialog._setOkButton(AjxMsg.ok, true, valid);
 };
