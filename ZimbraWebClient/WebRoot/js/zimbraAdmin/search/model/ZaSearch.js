@@ -136,7 +136,8 @@ function (params) {
 		cmdParams.asyncMode = true;
 		cmdParams.callback = params.callback;
 	}
-	command.invoke(cmdParams);	
+	var resp = command.invoke(cmdParams);
+	return resp ;	
 }
 /**
 * Sends SearchDirectoryRequest to the SOAP Servlet
@@ -208,6 +209,17 @@ function(n) {
 	} else {
 		n = String(n).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
 		return ("(|(uid=*"+n+"*)(cn=*"+n+"*)(sn=*"+n+"*)(gn=*"+n+"*)(displayName=*"+n+"*)(zimbraId="+n+")(mail=*"+n+"*)(zimbraMailAlias=*"+n+"*)(zimbraMailDeliveryAddress=*"+n+"*)(zimbraDomainName=*"+n+"*))");
+	}
+}
+
+ZaSearch.getSearchByDisplayNameQuery =
+function(n) {
+	if (n == null || n == "") {
+		return "";
+	} else {
+		n = String(n).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
+		//return ("(|(uid=*"+n+"*)(cn=*"+n+"*)(sn=*"+n+"*)(gn=*"+n+"*)(displayName=*"+n+"*)(zimbraId="+n+")(mail=*"+n+"*)(zimbraMailAlias=*"+n+"*)(zimbraMailDeliveryAddress=*"+n+"*)(zimbraDomainName=*"+n+"*))");
+		return ("(displayName=*"+n+"*)");
 	}
 }
 

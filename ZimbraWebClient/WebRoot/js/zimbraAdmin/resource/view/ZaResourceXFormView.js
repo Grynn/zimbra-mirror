@@ -261,21 +261,30 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject) {
 									elementChanged: ZaResource.setAutoLocationName								
 								}
 							]
-						},
-						
+						},						
 						{ref:ZaResource.A_street, type:_TEXTFIELD_, msgName:ZaMsg.NAD_Street,label:ZaMsg.NAD_Street, labelLocation:_LEFT_, width:defaultWidth},
 						{ref:ZaResource.A_city, type:_TEXTFIELD_, msgName:ZaMsg.NAD_city ,label:ZaMsg.NAD_city, labelLocation:_LEFT_, width:defaultWidth},
 						{ref:ZaResource.A_state, type:_TEXTFIELD_, msgName:ZaMsg.NAD_state ,label:ZaMsg.NAD_state, labelLocation:_LEFT_, width:defaultWidth},
 						{ref:ZaResource.A_country, type:_TEXTFIELD_, msgName:ZaMsg.country ,label:ZaMsg.NAD_country, labelLocation:_LEFT_, width:defaultWidth},
 						{ref:ZaResource.A_zip, type:_TEXTFIELD_, msgName:ZaMsg.zip ,label:ZaMsg.NAD_zip, labelLocation:_LEFT_, width:defaultWidth},
 						{type:_SEPARATOR_, colSpan: "2"},
-						{ref:ZaResource.A_zimbraCalResContactName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ContactName,label:ZaMsg.NAD_ContactName, labelLocation:_LEFT_, width:defaultWidth},
+						/*
+						{type:_GROUP_, 
+							items: [					
+								
+							]
+						},*/
+						{ref:ZaResource.A_zimbraCalResContactName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ContactName,label:ZaMsg.NAD_ContactName, labelLocation:_LEFT_, width:defaultWidth},	
 						{ref:ZaResource.A_zimbraCalResContactEmail, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ContactEmail,label:ZaMsg.NAD_ContactEmail, labelLocation:_LEFT_, width:defaultWidth},
-						{ref:ZaResource.A_zimbraCalResContactPhone, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ContactPhone,label:ZaMsg.NAD_ContactPhone, labelLocation:_LEFT_, width:defaultWidth} ,
+						{ref:ZaResource.A_zimbraCalResContactPhone, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ContactPhone,label:ZaMsg.NAD_ContactPhone, labelLocation:_LEFT_, width:defaultWidth},
 						//add the AutoComplete Feature
-						{ref:ZaResource.A_contactInfoAutoComplete, type: _AUTO_COMPLETE_LIST_, matchValue:"name", 
-							dataClass: ZaContactList , dataLoader: ZaContactList.prototype.getContactList ,
-							inputFieldElementId: ZaResource.A_zimbraCalResContactName   }
+						{ref:ZaResource.A_contactInfoAutoComplete, type: _AUTO_COMPLETE_LIST_, 
+									matchValue:ZaContactList.matchValue, matchText: ZaContactList.matchText,
+									dataClass: ZaContactList , dataLoader: ZaContactList.prototype.getContactList ,
+									//reparent: this.getForm().shell,
+									compCallback: ZaContactList.prototype._autocompleteCallback,
+									inputFieldElementId: ZaResource.A_zimbraCalResContactName   }
+						
 					]
 				};
 	cases.push(case2);

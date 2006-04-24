@@ -690,3 +690,8 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 	padding-right:10px;
 	margin-bottom:5px;
 }
+
+.autoCompleteList {
+	background-color: white;
+	border: outset 1px #91c8c8;
+}
