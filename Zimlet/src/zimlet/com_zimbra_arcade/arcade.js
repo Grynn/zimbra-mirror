@@ -35,7 +35,7 @@ function Com_Zimbra_Arcade() {
 Com_Zimbra_Arcade.prototype = new ZmZimletBase();
 Com_Zimbra_Arcade.prototype.constructor = Com_Zimbra_Arcade;
 
-ZmZimletBase.prototype.init = 
+Com_Zimbra_Arcade.prototype.init = 
 function() {
 	ZmAssistant.register(new Com_Zimbra_Arcade_Asst(this._appCtxt));
 };
