@@ -126,7 +126,7 @@ function(spanElement, obj, context, canvas) {
 	if (Com_Zimbra_YMaps.CACHE[obj+"img"]) {
 		Com_Zimbra_YMaps._displayImage(Com_Zimbra_YMaps.CACHE[obj+"img"], obj);
 	} else {
-		var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(Com_Zimbra_YMaps.URL + AjxStringUtil.urlEncode(obj));
+		var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(Com_Zimbra_YMaps.URL + escape(obj));
 		DBG.println(AjxDebug.DBG2, "Com_Zimbra_YMaps URL: " + url);
 		AjxRpc.invoke(null, url, null, new AjxCallback(this, Com_Zimbra_YMaps._callback, obj), true);
 	}
