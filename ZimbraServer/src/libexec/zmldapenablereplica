@@ -68,10 +68,9 @@ createLdapConfig() {
 	echo -n "Creating LDAP config in ${zimbra_home}/conf/slapd.conf..."
 	root_sha=`${zimbra_home}/openldap/sbin/slappasswd -s ${ldap_root_password}`
 	sed -e "s|^rootpw.*|rootpw ${root_sha}|" \
-		${zimbra_home}/openldap/etc/openldap/slapd.conf > ${zimbra_home}/conf/slapd.conf
-	grep -v replogfile ${zimbra_home}/conf/slapd.conf > /tmp/slapd.conf
-	grep -v sessionlog /tmp/slapd.conf > ${zimbra_home}/conf/slapd.conf
-	mv -f /tmp/slapd.conf ${zimbra_home}/conf/slapd.conf
+		${zimbra_home}/openldap/etc/openldap/slapd.conf > ${zimbra_home}/conf/slapd.conf.in
+	grep -v replogfile ${zimbra_home}/conf/slapd.conf.in > /tmp/slapd.conf.in
+	grep -v sessionlog /tmp/slapd.conf.in > ${zimbra_home}/conf/slapd.conf.in
 
 	if [ $? -ne 0 ]; then
 		echo "FAILED"
@@ -79,8 +78,8 @@ createLdapConfig() {
 	fi
 
 	if [ -f "/opt/zimbra/lib/conf/zimbra-ext.schema" ]; then
-		sed -e '\|/opt/zimbra/openldap/etc/openldap/schema/zimbra.schema| a include "/opt/zimbra/lib/conf/zimbra-ext.schema"' ${zimbra_home}/conf/slapd.conf > /tmp/slapd.conf
-		mv -f /tmp/slapd.conf ${zimbra_home}/conf/slapd.conf
+		sed -e '\|/opt/zimbra/openldap/etc/openldap/schema/zimbra.schema| a include "/opt/zimbra/lib/conf/zimbra-ext.schema"' ${zimbra_home}/conf/slapd.conf.in > /tmp/slapd.conf.in
+		mv -f /tmp/slapd.conf.in ${zimbra_home}/conf/slapd.conf.in
 	fi
 
 	if [ $? -ne 0 ]; then
@@ -88,7 +87,7 @@ createLdapConfig() {
 		echo "ERROR - LDAP config creation failed - exiting"
 	fi
 
-	cat >> ${zimbra_home}/conf/slapd.conf <<EOF
+	cat >> ${zimbra_home}/conf/slapd.conf.in <<EOF
 syncrepl rid=100
 	provider=${ldap_master_url}
 	type=refreshAndPersist
@@ -100,11 +99,15 @@ syncrepl rid=100
 updateref  ${ldap_master_url}
 EOF
 
+	/opt/zimbra/libexec/zmconfigure /opt/zimbra/conf/slapd.conf.in /opt/zimbra/conf/slapd.conf
+
 	echo "succeeded"
 }
 
 createReplicaUser() {
 	echo -n "Setting up replication ldap user..."
+
+	touch /opt/zimbra/openldap-data/DB_CONFIG
 
 	root_sha=`${zimbra_home}/openldap/sbin/slappasswd -s ${ldap_root_password}`
 	
@@ -148,7 +151,7 @@ enableLdapService() {
 
 stopRemoteZimbra() {
 	echo -n "Shutting down Zimbra Services on ${ldap_master_host}..."
-	echo "HOST:${ldap_master_host} shutdown" | ${zimbra_home}/bin/zmrc ${ldap_master_host} \
+	echo "HOST:${ldap_master_host} shutdown" | ${zimbra_home}/libexec/zmrc ${ldap_master_host} \
 		> /dev/null 2>&1
 
 	if [ $? -ne 0 ]; then
@@ -168,7 +171,7 @@ stopZimbra() {
 replicateLdap() {
 	echo -n "Replicating ldap data from ${ldap_master_host}..."
 	echo -n "Copying data..."
-	echo "HOST:${ldap_master_host} slapcat" | ${zimbra_home}/bin/zmrc ${ldap_master_host} | \
+	echo "HOST:${ldap_master_host} slapcat" | ${zimbra_home}/libexec/zmrc ${ldap_master_host} | \
 		grep -v STARTCMD | grep -v ENDCMD > /tmp/repl.ldif
 
 	if [ $? -ne 0 ]; then
@@ -179,7 +182,7 @@ replicateLdap() {
 
 	echo -n "Writing data..."
 
-	${zimbra_home}/openldap/sbin/slapadd -p -w -f ${zimbra_home}/conf/slapd.conf -l /tmp/repl.ldif
+	${zimbra_home}/openldap/sbin/slapadd -w -f ${zimbra_home}/conf/slapd.conf -l /tmp/repl.ldif
 	if [ $? -ne 0 ]; then
 		echo "FAILED"
 		echo "Ldap replication failed - exiting"
@@ -198,7 +201,7 @@ updateLdapHost() {
 
 startRemoteZimbra() {
 	echo -n "Starting remote Zimbra Services on ${ldap_master_host}..."
-	echo "HOST:${ldap_master_host} startup" | ${zimbra_home}/bin/zmrc ${ldap_master_host} \
+	echo "HOST:${ldap_master_host} startup" | ${zimbra_home}/libexec/zmrc ${ldap_master_host} \
 		> /dev/null 2>&1
 
 	if [ $? -ne 0 ]; then

@@ -56,7 +56,7 @@ my %SIMPLE_COMMANDS =
      "msgtrace"         => "/opt/zimbra/bin/zmmsgtrace",
      "flushqueue"       => "/opt/zimbra/postfix/sbin/postqueue -f",
      "showqueue"        => "/opt/zimbra/postfix/sbin/postqueue -p",
-     "slapcat"          => "/opt/zimbra/openldap/sbin/slapcat -m -f /opt/zimbra/conf/slapd.conf",
+     "slapcat"          => "/opt/zimbra/openldap/sbin/slapcat -f /opt/zimbra/conf/slapd.conf",
 
      "zmqstat all"      => "sudo /opt/zimbra/libexec/zmqstat",
      "zmqstat incoming" => "sudo /opt/zimbra/libexec/zmqstat incoming",
