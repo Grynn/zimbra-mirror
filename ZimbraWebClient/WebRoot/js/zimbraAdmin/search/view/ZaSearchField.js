@@ -90,10 +90,14 @@ function() {
 	params.query = ZaSearch.getSearchByNameQuery(this._containedObject[ZaSearch.A_query]);
 	
 	if (this._callbackFunc != null) {
-		if (this._callbackObj != null)
-			this._callbackFunc.call(this._callbackObj, this, params);
-		else 
-			this._callbackFunc(this, params);
+		if (this._callbackObj != null) {
+			//this._callbackFunc.call(this._callbackObj, this, params);
+			this._app.getCurrentController().switchToNextView(this._callbackObj,
+		 this._callbackFunc, params);
+		} else {
+			this._app.getCurrentController().switchToNextView(this._app.getSearchListController(), this._callbackFunc, params);
+//			this._callbackFunc(this, params);
+		}
 	}
 }
 

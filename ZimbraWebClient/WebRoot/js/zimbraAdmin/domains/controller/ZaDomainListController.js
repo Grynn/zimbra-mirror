@@ -150,17 +150,6 @@ function (ev) {
 }
 
 
-/**
-* @param nextViewCtrlr - the controller of the next view
-* Checks if it is safe to leave this view. Displays warning and Information messages if neccesary.
-**/
-ZaDomainListController.prototype.switchToNextView = 
-function (nextViewCtrlr, func, params) {
-	func.call(nextViewCtrlr, params);
-}
-
-
-
 ZaDomainListController.initPopupMenuMethod =
 function () {
    	this._popupOperations.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.DTBB_New_tt, "Domain", "DomainDis", new AjxListener(this, ZaDomainListController.prototype._newButtonListener)));

@@ -172,7 +172,7 @@ function () {
 
 /*********** Search Field Callback */
 ZaSearchListController.prototype._searchFieldCallback =
-function(searchField, params) {
+function(params) {
 	var callback;
 	var controller = this;
 	if(AjxUtil.indexOf(params.types,ZaSearch.DOMAINS) && 

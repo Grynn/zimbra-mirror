@@ -75,14 +75,6 @@ function(list) {
 	this._changeActionsState();			
 }
 
-/**
-* @param nextViewCtrlr - the controller of the next view
-* Checks if it is safe to leave this view. Displays warning and Information messages if neccesary.
-**/
-ZaCosListController.prototype.switchToNextView = 
-function (nextViewCtrlr, func, params) {
-	func.call(nextViewCtrlr, params);
-}
 
 ZaCosListController.prototype.refresh = 
 function() {

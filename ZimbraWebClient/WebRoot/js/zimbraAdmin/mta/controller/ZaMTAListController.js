@@ -150,17 +150,6 @@ function(serverList) {
 	this.show(serverList);
 }
 
-
-/**
-* @param nextViewCtrlr - the controller of the next view
-* Checks if it is safe to leave this view. Displays warning and Information messages if neccesary.
-**/
-ZaMTAListController.prototype.switchToNextView = 
-function (nextViewCtrlr, func, params) {
-	func.call(nextViewCtrlr, params);
-}
-
-
 /**
 * This listener is called when the item in the list is double clicked. It call ZaMTAController.show method
 * in order to display the MailQ View
