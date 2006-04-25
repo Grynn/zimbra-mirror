@@ -260,20 +260,23 @@ sub doAuthByName {
   # get auth token
   my $elt = $authResponse->find_child('authToken');
   if (!defined($elt)) { 
-    print $d->to_string("pretty")."\n";
-    print $authResponse->to_string("pretty")."\n";
+    print "AuthRequest: ".$d->to_string("pretty")."\n";
+    print "AuthResponse: ".$authResponse->to_string("pretty")."\n";
     die "Could not find AuthToken in AuthResponse";
   }
   my $authToken = $elt->content;
 
   # find sessionId
   $elt = $authResponse->find_child('sessionId');
+  my $sessionId;
   if (!defined($elt)) {
-    print $authToken."\n";
-    die "Could not find sessionId in AuthToken";
+    print "AuthRequest: ".$d->to_string("pretty")."\n";
+    print "AuthResponse: ".$authResponse->to_string("pretty")."\n";
+#    die "Could not find sessionId in AuthToken";
+  } else {
+    $sessionId = $elt->content;
   }
-  my $sessionId = $elt->content;
-
+  
   my $wantcontext;
   if (defined($opts) && defined($opts->{NOTIFY})) {
     $wantcontext = 1;
