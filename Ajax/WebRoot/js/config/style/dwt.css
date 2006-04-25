@@ -1200,7 +1200,7 @@
 /* simple rows that don't contain tables */
 /* ??? SHOTGUN */
 .DwtChooserListView > div {
-	@Label@
+	@_LabelColor_@
 }
 
 /*
