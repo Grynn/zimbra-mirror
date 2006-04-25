@@ -554,7 +554,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
 				}, 
 				{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 5", relevantBehavior:_HIDE_,
 					items: [
-						{type:_OUTPUT_, value:ZaMsg.Domain_GAL_ConfigSummary}, 
+						//{type:_OUTPUT_, value:ZaMsg.Domain_GAL_ConfigSummary}, 
 						{ref:ZaDomain.A_GalMode, type:_OUTPUT_, label:ZaMsg.Domain_GalMode, choices:this.GALModes},
 						{ref:ZaDomain.A_GalMaxResults, type:_OUTPUT_, label:ZaMsg.NAD_GalMaxResults},
 						{type:_SWITCH_, 
