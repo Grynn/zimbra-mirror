@@ -334,6 +334,10 @@ objectIdentifier zimbraPrefMailLocalDeliveryDisabled ZimbraAttrType:344
 objectIdentifier zimbraLocale ZimbraAttrType:345
 objectIdentifier zimbraMailboxLocationBeforeMove ZimbraAttrType:346
 objectIdentifier zimbraFeatureMobileSyncEnabled ZimbraAttrType:347
+objectIdentifier zimbraImapProxyBindPort ZimbraAttrType:348
+objectIdentifier zimbraImapSSLProxyBindPort ZimbraAttrType:349
+objectIdentifier zimbraPop3ProxyBindPort ZimbraAttrType:350
+objectIdentifier zimbraPop3SSLProxyBindPort ZimbraAttrType:351
 
 #################################################################
 # object class OIDs
@@ -941,6 +945,34 @@ attributetype ( zimbraImapCleartextLoginEnabled
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
+
+attributetype ( zimbraImapProxyBindPort
+        NAME ( 'zimbraImapProxyBindPort' )
+        DESC 'port number on which IMAP proxy server should listen'
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+        EQUALITY integerMatch
+        SINGLE-VALUE)
+
+attributetype ( zimbraImapSSLProxyBindPort
+        NAME ( 'zimbraImapSSLProxyBindPort' )
+        DESC 'port number on which IMAPS proxy server should listen'
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+        EQUALITY integerMatch
+        SINGLE-VALUE)
+
+attributetype ( zimbraPop3ProxyBindPort
+        NAME ( 'zimbraPop3ProxyBindPort' )
+        DESC 'port number on which POP3 proxy server should listen'
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+        EQUALITY integerMatch
+        SINGLE-VALUE)
+
+attributetype ( zimbraPop3SSLProxyBindPort
+        NAME ( 'zimbraPop3SSLProxyBindPort' )
+        DESC 'port number on which POP3S proxy server should listen'
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+        EQUALITY integerMatch
+        SINGLE-VALUE)
 
 attributetype ( zimbraIsAdminAccount
 	NAME 'zimbraIsAdminAccount'
@@ -2932,8 +2964,10 @@ objectclass ( zimbraGlobalConfig
 		zimbraImapServerEnabled $
 		zimbraImapNumThreads $
 		zimbraImapBindPort $
+		zimbraImapProxyBindPort $
 		zimbraImapBindOnStartup $
 		zimbraImapSSLBindPort $
+		zimbraImapSSLProxyBindPort $
 		zimbraImapSSLBindOnStartup $
 		zimbraImapSSLServerEnabled $
 		zimbraImapCleartextLoginEnabled $
@@ -2967,9 +3001,11 @@ objectclass ( zimbraGlobalConfig
 		zimbraPop3CleartextLoginEnabled $
 		zimbraPop3NumThreads $
 		zimbraPop3BindPort $
+                zimbraPop3ProxyBindPort $
 		zimbraPop3BindOnStartup $
 		zimbraPop3ServerEnabled $
 		zimbraPop3SSLBindPort $
+                zimbraPop3SSLProxyBindPort $
 		zimbraPop3SSLBindOnStartup $
 		zimbraPop3SSLServerEnabled $
 		zimbraRedoLogEnabled $
@@ -3103,10 +3139,12 @@ objectclass ( zimbraServer
 		zimbraImapAdvertisedName $
 		zimbraImapBindAddress $
 		zimbraImapBindPort $
+		zimbraImapProxyBindPort $
 		zimbraImapBindOnStartup $
 		zimbraImapNumThreads $
 		zimbraImapSSLBindAddress $
 		zimbraImapSSLBindPort $
+		zimbraImapSSLProxyBindPort $
 		zimbraImapSSLBindOnStartup $
 		zimbraImapSSLServerEnabled $
 		zimbraImapCleartextLoginEnabled $
@@ -3128,11 +3166,13 @@ objectclass ( zimbraServer
 		zimbraPop3AdvertisedName $
 		zimbraPop3BindAddress $
 		zimbraPop3BindPort $
+		zimbraPop3ProxyBindPort $
 		zimbraPop3BindOnStartup $
 		zimbraPop3NumThreads $
 		zimbraPop3ServerEnabled $
 		zimbraPop3SSLBindAddress $
 		zimbraPop3SSLBindPort $
+		zimbraPop3SSLProxyBindPort $
 		zimbraPop3SSLBindOnStartup $
 		zimbraPop3SSLServerEnabled $
 		zimbraNotes $

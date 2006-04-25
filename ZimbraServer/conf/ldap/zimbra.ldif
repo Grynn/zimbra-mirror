@@ -282,8 +282,10 @@ zimbraLogSummaryLifetime: 730d
 zimbraImapServerEnabled: TRUE
 zimbraImapNumThreads: 200
 zimbraImapBindPort: 7143
+zimbraImapProxyBindPort: 143
 zimbraImapBindOnStartup: TRUE
 zimbraImapSSLBindPort: 7993
+zimbraImapSSLProxyBindPort: 993
 zimbraImapSSLBindOnStartup: TRUE
 zimbraImapSSLServerEnabled: TRUE
 zimbraImapCleartextLoginEnabled: FALSE
@@ -333,9 +335,11 @@ zimbraNotifySSLBindPort: 7036
 zimbraPop3CleartextLoginEnabled: FALSE
 zimbraPop3NumThreads: 20
 zimbraPop3BindPort: 7110
+zimbraPop3ProxyBindPort: 110
 zimbraPop3BindOnStartup: TRUE
 zimbraPop3ServerEnabled: TRUE
 zimbraPop3SSLBindPort: 7995
+zimbraPop3SSLProxyBindPort: 995
 zimbraPop3SSLBindOnStartup: TRUE
 zimbraPop3SSLServerEnabled: TRUE
 zimbraRedoLogEnabled: TRUE
@@ -374,10 +378,12 @@ zimbraServerInheritedAttr: zimbraLmtpBindOnStartup
 zimbraServerInheritedAttr: zimbraImapServerEnabled
 zimbraServerInheritedAttr: zimbraImapNumThreads
 zimbraServerInheritedAttr: zimbraImapBindPort
+zimbraServerInheritedAttr: zimbraImapProxyBindPort
 zimbraServerInheritedAttr: zimbraImapBindOnStartup
 zimbraServerInheritedAttr: zimbraImapSSLServerEnabled
 zimbraServerInheritedAttr: zimbraImapCleartextLoginEnabled
 zimbraServerInheritedAttr: zimbraImapSSLBindPort
+zimbraServerInheritedAttr: zimbraImapSSLProxyBindPort
 zimbraServerInheritedAttr: zimbraImapSSLBindOnStartup
 zimbraServerInheritedAttr: zimbraMessageCacheSize
 zimbraServerInheritedAttr: zimbraMtaAuthEnabled
@@ -396,9 +402,11 @@ zimbraServerInheritedAttr: zimbraNotifySSLBindPort
 zimbraServerInheritedAttr: zimbraPop3ServerEnabled
 zimbraServerInheritedAttr: zimbraPop3NumThreads
 zimbraServerInheritedAttr: zimbraPop3BindPort
+zimbraServerInheritedAttr: zimbraPop3ProxyBindPort
 zimbraServerInheritedAttr: zimbraPop3BindOnStartup
 zimbraServerInheritedAttr: zimbraPop3SSLServerEnabled
 zimbraServerInheritedAttr: zimbraPop3SSLBindPort
+zimbraServerInheritedAttr: zimbraPop3SSLProxyBindPort
 zimbraServerInheritedAttr: zimbraPop3SSLBindOnStartup
 zimbraServerInheritedAttr: zimbraPop3CleartextLoginEnabled
 zimbraServerInheritedAttr: zimbraRedoLogEnabled

@@ -1551,4 +1551,24 @@ TODO - add support for multi-line values in globalConfigValue and defaultCOSValu
   <desc>whether to permit mobile sync</desc>
 </attr>
 
+<attr id="348" name="zimbraImapProxyBindPort" type="port" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
+  <globalConfigValue>143</globalConfigValue>
+  <desc>port number on which IMAP proxy server should listen</desc>
+</attr>
+
+<attr id="349" name="zimbraImapSSLProxyBindPort" type="port" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
+  <globalConfigValue>993</globalConfigValue>
+  <desc>port number on which IMAPS proxy server should listen</desc>
+</attr>
+
+<attr id="350" name="zimbraPop3ProxyBindPort" type="port" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
+  <globalConfigValue>110</globalConfigValue>
+  <desc>port number on which POP3 proxy server should listen</desc>
+</attr>
+
+<attr id="351" name="zimbraPop3SSLProxyBindPort" type="port" cardinality="single" optionalIn="globalConfig,server" flags="inheritFromGlobalConfig">
+  <globalConfigValue>995</globalConfigValue>
+  <desc>port number on which POP3S proxy server should listen</desc>
+</attr>
+
 </attrs>
