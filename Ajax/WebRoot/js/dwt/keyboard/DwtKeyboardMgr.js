@@ -451,7 +451,7 @@ function(ev) {
 		kev._returnValue = false;
 		kev.setToDhtmlEvent(ev);
 		return false;
-	 } else if (!focusInTGMember && kev.target instanceof HTMLHtmlElement) {
+	 } else if (!focusInTGMember && AjxEnv.isGecko && kev.target instanceof HTMLHtmlElement) {
 	 	/* With FF we focus get set to the <html> element when tabbing in
 	 	 * from the address or search fields. What we want to do is capture
 	 	 * this here and reset the focus to the first element in the tabgroup
