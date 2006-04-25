@@ -34,7 +34,7 @@ function ZaDLController (appCtxt, container, app) {
 	this._toolbarOperations = new Array();
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/provisioning_accounts.htm";	
 	this.deleteMsg = ZaMsg.Q_DELETE_DL;
-	this.objType = ZaEvent.S_DL;	
+	this.objType = ZaEvent.S_ACCOUNT;	
 }
 
 ZaDLController.prototype = new ZaXFormViewController();

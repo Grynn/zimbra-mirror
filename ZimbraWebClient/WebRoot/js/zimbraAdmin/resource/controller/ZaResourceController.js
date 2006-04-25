@@ -34,7 +34,7 @@ function ZaResourceController (appCtxt, container, app) {
 	this._toolbarOperations = new Array();
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/Provisioning_Accounts.htm";	
 	this.deleteMsg = ZaMsg.Q_DELETE_RES;
-	this.objType = ZaEvent.S_DL;	
+	this.objType = ZaEvent.S_ACCOUNT;	
 }
 
 ZaResourceController.prototype = new ZaXFormViewController();
