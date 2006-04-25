@@ -227,12 +227,12 @@ function() {
  */
 DwtKeyboardMgr.prototype.__doGrabFocus =
 function(focusObj) {
-	DBG.println(AjxDebug.DBG3, "_doGrabFocus");
+	//DBG.println(AjxDebug.DBG3, "_doGrabFocus");
 	if (!focusObj)
 		return;
 		
 	if (focusObj instanceof DwtControl) {
-		DBG.println(AjxDebug.DBG3, "focusObj is instance of DwtControl: " + focusObj);
+		//DBG.println(AjxDebug.DBG3, "focusObj is instance of DwtControl: " + focusObj);
 		/* If the current focus of obj and the one grabbing focus are both DwtControls
 		 * then we need to simulate a blur on the control losing focus */
 		if (this.__dwtCtrlHasFocus && this.__focusObj instanceof DwtControl) {
@@ -261,7 +261,7 @@ function(focusObj) {
 
 DwtKeyboardMgr.__onFocusHdlr =
 function(ev) {
-	DBG.println(AjxDebug.DBG3, "DwtKeyboardMgr.__onFocusHdlr");
+	//DBG.println(AjxDebug.DBG3, "DwtKeyboardMgr.__onFocusHdlr");
 	var kbMgr = DwtShell.getShell(window).getKeyboardMgr();
 	kbMgr.__dwtCtrlHasFocus = true;
 	var focusObj = kbMgr.__focusObj;
@@ -271,7 +271,7 @@ function(ev) {
 
 DwtKeyboardMgr.__onBlurHdlr =
 function(ev) {
-	DBG.println(AjxDebug.DBG3, "DwtKeyboardMgr.__onBlurHdlr");
+	//DBG.println(AjxDebug.DBG3, "DwtKeyboardMgr.__onBlurHdlr");
 	var kbMgr = DwtShell.getShell(window).getKeyboardMgr();
 	var focusObj;
 	
@@ -504,7 +504,7 @@ function(ev) {
 	
 	kbMgr.__keySequence[kbMgr.__keySequence.length] = key + kbMgr.__keyMapMgr.keyCode2Char(keyCode);
 
-	DBG.println("KEYCODE: " + keyCode + " - KEY SEQ: " + kbMgr.__keySequence.join(""));
+	//DBG.println("KEYCODE: " + keyCode + " - KEY SEQ: " + kbMgr.__keySequence.join(""));
 	
 	/* If a DWT component has "focus", then dispatch to that component
 	 * if the component handles the event, then stop, else hand it off
