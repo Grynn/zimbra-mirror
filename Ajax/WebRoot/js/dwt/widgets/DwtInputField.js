@@ -264,19 +264,22 @@ function(required) {
 	this._required = required == null ? true : required;
 };
 
-DwtInputField.prototype.disabled = 
-function(disabled) {
-	this.getInputElement().disabled = disabled;
+DwtInputField.prototype.getEnabled = 
+function() {
+	return !this.getInputElement().disabled;
 };
 
-DwtInputField.prototype.isDisabled = 
-function() {
-	return this.getInputElement().disabled;
+DwtInputField.prototype.setEnabled = 
+function(enabled) {
+	DwtControl.prototype.setEnabled.call(this, enabled);
+	this.getInputElement().disabled = !enabled;
 };
 
 DwtInputField.prototype.focus = 
 function() {
-	this.getInputElement().focus();
+	if (this.getEnabled()) {
+		this.getInputElement().focus();
+	}
 };
 
 DwtInputField.prototype.blur = 

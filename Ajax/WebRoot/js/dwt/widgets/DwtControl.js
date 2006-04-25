@@ -1185,15 +1185,16 @@ DwtControl.prototype._focus =
 function() {
 };
  
- /** 
-  * This method is called from mouseUpHdl. Subclasses may override this method
-  * if they have their own specialized focus management code
-  */
-  DwtControl.prototype._focusByMouseUpEvent =
-  function()  {
-	// DBG.println("_focusByMouseUpEvent");
-  	this.focus();
- };
+/** 
+ * This method is called from mouseUpHdl. Subclasses may override this method
+ * if they have their own specialized focus management code
+ */
+DwtControl.prototype._focusByMouseUpEvent =
+function()  {
+	if (this.getEnabled()) {
+		this.focus();
+	}
+};
 
 /** 
  * Subclasses may override this method to return an HTML element that will represent
