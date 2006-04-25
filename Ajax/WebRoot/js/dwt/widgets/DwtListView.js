@@ -447,22 +447,22 @@ function () {
 };
 
 // safari breaks w/ clicking on scrollbar in list views so we do this:
-DwtListView.prototype.getPropagationForEvent = 
+DwtListView.prototype._getPropagationForEvent = 
 function() {
 	if (AjxEnv.isSafari) {
 		return false;
 	} else {
-		return DwtControl.prototype.getPropagationForEvent.call(this);
+		return DwtControl.prototype._getPropagationForEvent.call(this);
 	}
 }
 
 // safari breaks w/ clicking on scrollbar in list views so we do this:
-DwtListView.prototype.getReturnValueForEvent = 
+DwtListView.prototype._getReturnValueForEvent = 
 function() {
 	if (AjxEnv.isSafari) {
 		return true;
 	} else {
-		return DwtControl.prototype.getReturnValueForEvent.call(this);
+		return DwtControl.prototype._getReturnValueForEvent.call(this);
 	}
 }
 

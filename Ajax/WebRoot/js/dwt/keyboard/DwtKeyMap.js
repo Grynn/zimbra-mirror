@@ -41,7 +41,7 @@ function DwtKeyMap(subclassInit) {
 		"ArrowDown":		DwtKeyMap.SELECT_NEXT,
 		"Shift+ArrowDown":	DwtKeyMap.ADD_SELECT_NEXT,
 		"Ctrl+ArrowDown":	DwtKeyMap.NEXT,
-		"ArowUp":			DwtKeyMap.SELECT_PREV,
+		"ArrowUp":			DwtKeyMap.SELECT_PREV,
 		"Shift+ArrowUp":	DwtKeyMap.ADD_SELECT_PREV,
 		"Ctrl+ArrowUp":		DwtKeyMap.PREV,
 		"Enter":			DwtKeyMap.DBLCLICK,

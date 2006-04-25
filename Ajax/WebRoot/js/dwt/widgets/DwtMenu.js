@@ -503,7 +503,7 @@ function(x, y) {
 	// EMC -- changed this to Z_DIALOG_MENU so that you don't have to pass 
 	// dialog object. This helps if you are adding an object to a dialog -- 
 	// where the object doesn't know anything about its container.
-	// var zIndex = this._dialog ? this._dialog.getZIndex() + Dwt.Z_INC : Dwt.Z_MENU;
+	// var zIndex = this._dialog ? this._dialog.getZIndex() + Dwt._Z_INC : Dwt.Z_MENU;
 	var zIndex = this._dialog ? Dwt.Z_DIALOG_MENU : Dwt.Z_MENU;
 	this.setZIndex(zIndex);
 	this._popupActionId = -1;

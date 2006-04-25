@@ -38,7 +38,7 @@ function DwtKeyMapMgr(keyMap) {
 	// Builds key mapping FSA for each mapping
 	this._fsas = new Object();
 	for (var key in map) {
-		DBG.println("======== Processing Map Name: " + key);
+		DBG.println(AjxDebug.DBG3, "======== Processing Map Name: " + key);
 		try {
 			newFSA = DwtKeyMapMgr._buildFSA(new Object(), map[key], key);
 			this._fsas[key] = newFSA;
@@ -47,7 +47,7 @@ function DwtKeyMapMgr(keyMap) {
 		}	
 	}
 
-	DBG.dumpObj(this._fsas);
+	DBG.dumpObj(AjxDebug.DBG3, this._fsas);
 };
 
 DwtKeyMapMgr.NOT_A_TERMINAL = -999;
@@ -83,10 +83,10 @@ function (keySeq, mappingName) {
 												 : DwtKeyMapMgr.NOT_A_TERMINAL;
 		
 	} else if (mapping.INHERIT != null) {
-		//DBG.println("getActionCode: " + mappingName + " is inheriting  from " + mapping.INHERIT);
+		//DBG.println(AjxDebug.DBG3, "getActionCode: " + mappingName + " is inheriting  from " + mapping.INHERIT);
 		return this.getActionCode(keySeq, mapping.INHERIT);
 	}  else if (mappingName != DwtKeyMap.GLOBAL) {
-		//DBG.println("Checking GLOBAL map");
+		//DBG.println(AjxDebug.DBG3, "Checking GLOBAL map");
 		return this.getActionCode(keySeq, DwtKeyMap.GLOBAL);		
 	} else {
 		return null;
@@ -98,10 +98,10 @@ function (keySeq, mappingName) {
 	if (tmpFsa[key] && tmpFsa[key].actionCode != null) {
 		return tmpFsa[key].actionCode;
 	} else if (mapping.INHERIT != null) {
-		//DBG.println("getActionCode: " + mappingName + " is inheriting  from " + mapping.INHERIT);
+		//DBG.println(AjxDebug.DBG3, "getActionCode: " + mappingName + " is inheriting  from " + mapping.INHERIT);
 		return this.getActionCode(keySeq, mapping.INHERIT);
 	}  else if (mappingName != DwtKeyMap.GLOBAL) {
-		//DBG.println("Checking GLOBAL map");
+		//DBG.println(AjxDebug.DBG3, "Checking GLOBAL map");
 		return this.getActionCode(keySeq, DwtKeyMap.GLOBAL);		
 	} else {
 		return null;
@@ -244,10 +244,10 @@ function(keyCode) {
 DwtKeyMapMgr._buildFSA =
 function(fsa, mapping, mapName) {
 	for (var i in mapping) {
-		// DBG.println("_buildFSA - keySeq: " + i);
+		// DBG.println(AjxDebug.DBG3, "_buildFSA - keySeq: " + i);
 		// If this map is inheriting from another map, then set up the inheritence
 		 if (i == DwtKeyMap.INHERIT) {
-			//DBG.println("Inheriting from: " + mapping[i]);
+			//DBG.println(AjxDebug.DBG3, "Inheriting from: " + mapping[i]);
 			fsa.INHERIT = mapping[i];
 			continue;
 		}
@@ -257,7 +257,7 @@ function(fsa, mapping, mapName) {
 		var tmpFsa = fsa;
 		for (var j = 0; j < keySeqLen; j++) {
 			var key = keySeq[j];
-			//DBG.println("Processing: " + key);
+			//DBG.println(AjxDebug.DBG3, "Processing: " + key);
 			
 			/* If we have not visited this key before we will need to create a
 			 * new _DwtKeyMapMgrItem object */
@@ -273,7 +273,7 @@ function(fsa, mapping, mapName) {
 				
 				/* We are at the last key in the sequence so we can bind the
 				 * action code to it */
-				//DBG.println("BINDING: " + mapping[i]);
+				//DBG.println(AjxDebug.DBG3, "BINDING: " + mapping[i]);
 				tmpFsa[key].actionCode = mapping[i];
 			} else {
 				/* If this key has an action code, then it is illegal for it to also 

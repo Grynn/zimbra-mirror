@@ -14,20 +14,49 @@
  * limitations under the License.
  */
 
+/**
+ * @constructor
+ * @class
+ * Dwt is a static class that defines a number of contants and helper methods that
+ * support the Dwt package, as well as client's using Dwt
+ * 
+ * @author Ross Dargahi
+ * @author Conrad Damon
+ */
 
 function Dwt() {
-}
+};
 
 // Constants for positioning
+/**  Static position style 
+ * @type String */
 Dwt.STATIC_STYLE = "static";
+
+/** Absolute position style
+ * @type String*/
 Dwt.ABSOLUTE_STYLE = "absolute";
+
+/** Relative position style 
+ * @type String*/
 Dwt.RELATIVE_STYLE = "relative";
 
 // Background repeat
+/** Don't repeat background image
+ * @type String */
 Dwt.NO_REPEAT = "no-repeat";
+
+/** Repeat background image
+ * @type String */
 Dwt.REPEAT = "repeat";
+
+/** Repeat background image horizontally
+ * @type String */
 Dwt.REPEAT_X = "repeat-x";
+
+/** Repeat background image vertically
+ * @type String */
 Dwt.REPEAT_Y = "repeat-y";
+
 
 // display style
 Dwt.DISPLAY_INLINE = "inline";
@@ -35,6 +64,7 @@ Dwt.DISPLAY_BLOCK = "block";
 Dwt.DISPLAY_NONE = "none";
 
 // constants for layout
+/*
 Dwt.LEFT = 100;
 Dwt.RIGHT = 101;
 Dwt.TOP = 102;
@@ -45,28 +75,78 @@ Dwt.BELOW = 105;
 
 Dwt.WIDTH = 106;
 Dwt.HEIGHT = 107;
+*/
 
 // Scroll constants
+/** Clip on overflow 
+ * @type Int*/
 Dwt.CLIP = 1;
+
+/** Allow overflow to be visible
+ * @type Int*/
 Dwt.VISIBLE = 2;
+
+/** Automatically create scrollbars if content overflows 
+ * @type Int*/
 Dwt.SCROLL = 3;
+
+/** Always have scrollbars whether content overflows or not 
+ * @type Int*/
 Dwt.FIXED_SCROLL = 4;
 
+
 // z-index order
-Dwt.Z_HIDDEN = 100;		// hide the display
-Dwt.Z_CURTAIN = 200;	// not used; could be used if there is leakage
-Dwt.Z_VIEW = 300;		// make visible
-Dwt.Z_MENU = 500;		// popup menus
-Dwt.Z_VEIL = 600;		// goes below dialogs to make them modal
-Dwt.Z_DIALOG = 700;		// dialogs
-Dwt.Z_DIALOG_MENU = 750;// menus in dialogs
-Dwt.Z_TOOLTIP = 775;	// tool tips
+/** hidden layer. Elements at this layer will be hidden from view
+ * @type Int*/
+Dwt.Z_HIDDEN = 100;
+
+/** Curtain layer.
+ * @type Int
+ * @see DwtShell*/
+Dwt.Z_CURTAIN = 200;
+
+/** Visible layer. Elements at this layer will be in view
+ * @type Int*/
+Dwt.Z_VIEW = 300;
+
+/** Popup menu layer. Used by the menu components
+ * @type Int*/
+Dwt.Z_MENU = 500;
+
+/** Veil layer. The veil appears just behind modal dialogs render other components
+ * unable to receive mouse input
+ * @type Int*/
+Dwt.Z_VEIL = 600;
+
+/** Dialog layer. Dialogs are positioned at this layer
+ * @type Int*/
+Dwt.Z_DIALOG = 700;
+
+/** Used by menus that are part of a dialog
+ * @type Int*/
+Dwt.Z_DIALOG_MENU = 750;
+
+/** Tooltips layer
+ * @type Int*/
+Dwt.Z_TOOLTIP = 775;
+
+/** Drag and Drop (DnD) icon layer. DnD icons are positioned at this layer so they
+ * move across the top of other components
+ * @type Int*/
 Dwt.Z_DND = 800;		// Drag N Drop icons
-Dwt.Z_BUSY = 900;		// used to block user input
-Dwt.Z_SPLASH = 1000;    // used for splash screens
 
-Dwt.Z_INC = 1;			// atomic amount to bump z-index if needed
+/** This layer appears in front of other layers to block all user mouse input
+ * @type Int*/
+Dwt.Z_BUSY = 900;
 
+/** Used by the splash screens
+ * @type Int*/
+Dwt.Z_SPLASH = 1000;
+
+/** Default value. Used when setting such things as size and bounds to indicate a
+ * component should not be set. For example if setting size and not wishing to set
+ * the height; Dwt.setSize(htmlElement, 100, Dwt.DEFAULT)
+ */
 Dwt.DEFAULT = -123456789;
 
 Dwt.LOC_NOWHERE = -10000; // for positioning an element offscreen
@@ -80,29 +160,61 @@ Dwt.DND_DROP_MOVE = 2;
 Dwt.KEY_OBJECT = "_object_";
 Dwt.KEY_ID = "_id_";
 
-Dwt._nextId = 1;
+/** z-index increment unit. Used by compenets if they need to bump their z-index
+ * @type Int
+ */
+Dwt._Z_INC = 1;
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-// XXX: DEPRACATED
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+
+/** @private */
+Dwt.__nextId = 1;
+
+/**
+ * This method is deprecated. use <i>document.getElementById()</i> instead
+ * @deprecated
+ */
 Dwt.getDomObj =
 function(doc, id)  {
-	//return doc.getElementById(id);
-	alert("DEPRACATED: Please use document.getElementById instead");
+	return doc.getElementById(id);
 }
 
+/**
+ * This method is used to generate a unique id to be used for an HTML element's id
+ * attribute. 
+ * 
+ * @return the next available element ID.
+ * @type String
+ */
 Dwt.getNextId =
 function() {
-	return "DWT" + Dwt._nextId++;
+	return "DWT" + Dwt.__nextId++;
 }
-
+/**
+ * This method builds an indirect association between a DOM object and a JavaScript
+ * object. This indirection is important to prevent memory leaks (particularly in IE) by
+ * not directly creating a circular reference between a DOM object 
+ * 
+ * @param {DOMElement} domElement The DOM element (typically an HTML element)
+ * @param {Object} jsObject The JavaScript object
+ * 
+ * @see #disassociateElementFromObject
+ * @see #getObjectFromElement
+ */
 Dwt.associateElementWithObject =
 function(domElement, jsObject) {
 	domElement.dwtObj = jsObject.__internalId = AjxCore.assignId(jsObject);
 };
 
+/**
+ * This method breaks the indirect association between a DOM object and a JavaScript
+ * object that was created by the <code>Dwt.associateElementWithObject</code>method
+ * 
+ * @param {DOMElement} domElement The DOM element (typically an HTML element)
+ * @param {Object} jsObject The JavaScript object
+ * 
+ * @see #associateElementWithObject
+ * @see #getObjectFromElement
+ */
 Dwt.disassociateElementFromObject =
 function(domElement, jsObject) {
 	if (domElement){
@@ -113,6 +225,11 @@ function(domElement, jsObject) {
 	}
 };
 
+Dwt.getObjectFromElement =
+function(domElement) {
+	return AjxCore.objectWithId(domElement.dwtObj);
+};
+
 Dwt.findAncestor =
 function(domElement, attrName) {
 	while (domElement && (Dwt.getAttr(domElement, attrName) == void 0)) {
@@ -121,10 +238,6 @@ function(domElement, attrName) {
 	return domElement;
 };
 
-Dwt.getObjectFromElement =
-function(domElement) {
-	return AjxCore.objectWithId(domElement.dwtObj);
-};
 
 Dwt.setHandler =
 function(htmlElement, event, func) {
@@ -158,30 +271,87 @@ function(htmlElement, style) {
 	htmlElement.style.backgroundRepeat = style;
 };
 
+/**
+ * Get the bounds of an htmlElement
+ * 
+ * @param {HTMLElement} htmlElement
+ * 
+ * @return The elements bounds
+ * @type DwtRectangle
+ * 
+ * @see #setBounds
+ * @see #getLocation
+ * @see #getSize
+ */
 Dwt.getBounds =
-function(htmlElement, incScroll) {
+function(htmlElement) {
 	var loc = Dwt.getLocation(htmlElement);
-	var size = Dwt.getSize(htmlElement, incScroll);
+	var size = Dwt.getSize(htmlElement);
 	return new DwtRectangle(loc.x, loc.y, size.x, size.y);
 };
 
+/**
+ * Sets the bounds of an HTML element. The position type of the element must
+ * be absolute or else an exception is thrown. To omit setting a value set the 
+ * actual parameter value to <i>Dwt.DEFAULT</i>
+ * 
+ * @param {HTMLElement} htmlElement absolutely positioned HTML element
+ * @param {Int|String} x x coordinate of the element. e.g. 10, "10px", Dwt.DEFAULT
+ * @param {Int|String} y y coordinate of the element. e.g. 10, "10px", Dwt.DEFAULT
+ * @param {Int} width width of the element e.g. 100, "100px", "75%", Dwt.DEFAULT
+ * @param {Int} height height of the element  e.g. 100, "100px", "75%", Dwt.DEFAULT
+ * 
+ * @throws DwtException
+ * 
+ * @see #getBounds
+ * @see #setLocation
+ * @see #setSize
+ */
 Dwt.setBounds =
 function(htmlElement, x, y, width, height) {
 	Dwt.setLocation(htmlElement, x, y);
 	Dwt.setSize(htmlElement, width, height);
 };
 
+/**
+ * Given an html element returns the element's cursor
+ * 
+ * @param {HTMLElement} htmlElement
+ * 
+ * @return the html elements cursor
+ * @type String
+ * 
+ * @see #setCursor
+ */
 Dwt.getCursor =
 function(htmlElement) {
 	return DwtCssStyle.getProperty(htmlElement, "cursor");
 };
 
+/**
+ * Sets an HTML element's cursor
+ * 
+ * @param {HTMLElement} htmlElement element for which to set the cursor
+ * @param {String} cursorName name of the new cursor
+ * 
+ * @see #setCursor
+ */
 Dwt.setCursor =
 function(htmlElement, cursorName) {
 	htmlElement.style.cursor = cursorName;
 };
 
-
+/**
+ * Returns the location of an html element
+ * 
+ * @param {HTMLElement} htmlElement
+ * 
+ * @return the location of <code>htmlElement</code>
+ * 
+ * @see #setLocation
+ * @see #getBounds
+ * @see #getSize
+ */
 Dwt.getLocation =
 function(htmlElement) {
 	if (htmlElement.style.position == Dwt.ABSOLUTE_STYLE)
@@ -191,30 +361,32 @@ function(htmlElement) {
 		return Dwt.toWindow(htmlElement, 0, 0);
 };
 
+/**
+ * Sets the location of an HTML element. The position type of the element must
+ * be absolute or else an exception is thrown. To only set one of the coordinates,
+ * pass in a value of <i>Dwt.DEFAULT</i> for the coordinate for which the value is 
+ * not to be set
+ * 
+ * @param {HTMLElement} htmlElement absolutely positioned HTML element
+ * @param {Int|String} x x coordinate of the element. e.g. 10, "10px", Dwt.DEFAULT
+ * @param {Int|String} y y coordinate of the element. e.g. 10, "10px", Dwt.DEFAULT
+ * 
+ * @throws DwtException
+ * 
+ * @see #getLocation
+ * @see #setBounds
+ * @see #setSize
+ */
 Dwt.setLocation =
 function(htmlElement, x, y) {
 	if (htmlElement.style.position != Dwt.ABSOLUTE_STYLE) {
 		DBG.println(AjxDebug.DBG1, "Cannot position static widget " + htmlElement.className);
 		throw new DwtException("Static widgets may not be positioned", DwtException.INVALID_OP, "Dwt.setLocation");
 	}
-	if (x = Dwt.checkPxVal(x))
+	if (x = Dwt.__checkPxVal(x))
 		htmlElement.style.left = x;
-	if (y = Dwt.checkPxVal(y))
+	if (y = Dwt.__checkPxVal(y))
 		htmlElement.style.top = y;
-};
-
-Dwt.checkPxVal =
-function(val, check) {
-	if (val == Dwt.DEFAULT) return false;
-
-	if (check && val < 0 && val != Dwt.LOC_NOWHERE) {
-		DBG.println(AjxDebug.DBG1, "negative pixel value: " + val);
-		val = 0;
-	}
-	if (typeof(val) == "number")
-		val = val + "px";
-
-	return val;
 };
 
 Dwt.getPosition =
@@ -227,6 +399,21 @@ function(htmlElement, posStyle) {
 	htmlElement.style.position = posStyle;
 };
 
+/**
+ * Returns <code>htmlElement</code>'s scroll style. The scroll style determines the element's
+ * behaviour when content overflows its boundries. Possible values are:
+ * <ul>
+ * <li><i>Dwt.CLIP</i> - Clip on overflow</li>
+ * <li><i>Dwt.VISIBLE</i> - Allow overflow to be visible</li>
+ * <li><i>Dwt.SCROLL</i> - Automatically create scrollbars if content overflows</li>
+ * <li><i>Dwt.FIXED_SCROLL</i> - Always have scrollbars whether content overflows or not</li>
+ * </ul>
+ * 
+ * @param {HTMLElement} htmlElement HTML element
+ * 
+ * @return the elements scroll style
+ * @type Int
+ */
 Dwt.getScrollStyle =
 function(htmlElement) {
 	var overflow =  DwtCssStyle.getProperty(htmlElement, "overflow");
@@ -239,6 +426,20 @@ function(htmlElement) {
 	else
 		return Dwt.VISIBLE;
 };
+
+/**
+ * Sets the <code>htmlElement</code>'s scroll style. The scroll style determines the elements's
+ * behaviour when content overflows its div's boundries. Possible values are:
+ * <ul>
+ * <li><i>Dwt.CLIP</i> - Clip on overflow</li>
+ * <li><i>Dwt.VISIBLE</i> - Allow overflow to be visible</li>
+ * <li><i>Dwt.SCROLL</i> - Automatically create scrollbars if content overflows</li>
+ * <li><i>Dwt.FIXED_SCROLL</i> - Always have scrollbars whether content overflows or not</li>
+ * </ul>
+ * 
+ * @param {HTMLElement} htmlElement HTML element 
+ * @param {Int} scrollStyle the elements's new scroll style
+ */
 
 Dwt.setScrollStyle =
 function(htmlElement, scrollStyle) {
@@ -255,7 +456,7 @@ function(htmlElement, scrollStyle) {
 // Note: in FireFox, offsetHeight includes border and clientHeight does not;
 // may want to look at clientHeight for FF
 Dwt.getSize =
-function(htmlElement, incScroll) {
+function(htmlElement) {
 	var p = new DwtPoint(0, 0);
 	if (htmlElement.offsetWidth != null) {
 		p.x = htmlElement.offsetWidth;
@@ -275,14 +476,22 @@ function(htmlElement, incScroll) {
 Dwt.setSize =
 function(htmlElement, width, height) {
 	if(!htmlElement.style) {return;}
-	if (width = Dwt.checkPxVal(width, true))
+	if (width = Dwt.__checkPxVal(width, true))
 		htmlElement.style.width = width;
-	if (height = Dwt.checkPxVal(height, true))
+	if (height = Dwt.__checkPxVal(height, true))
 		htmlElement.style.height = height;
 };
 
 /**
-* Measure the extent in pixels of a section of html
+* Measure the extent in pixels of a section of html. This is not the worlds cheapest
+* method to invoke so do so judiciously
+* 
+* @param {String} html html content for which that extents are to be calculated
+* 
+* @return the extent of the content
+* @type DwtPoint
+* 
+* @see DwtPoint
 */
 Dwt.getHtmlExtent =
 function(html) {
@@ -435,6 +644,186 @@ function(iframeObj) {
 	return iframeObj.contentWindow;
 };
 
+/**
+* Creates and returns an element from a string of HTML.
+*
+* @param {String} html HTML text
+* @param {Boolean} isRow true if the element is a TR (optional)
+* 
+* @return an HTMLElement with the <code>html</code> as its content. if <code>isRow</code.
+* 		is true, then the element will be a table
+* @type HTMLElement
+*/
+Dwt.parseHtmlFragment =
+function(html, isRow) {
+	if (!Dwt._div)
+		Dwt._div = document.createElement('div');
+	// TR element needs to have surrounding table
+	if (isRow)
+		html = "<table style='table-layout:fixed'>" + html + "</table>";
+	Dwt._div.innerHTML = html;
+
+	return isRow ? Dwt._div.firstChild.rows[0] : Dwt._div.firstChild;
+};
+
+Dwt.contains =
+function(parentEl, childEl) {
+  	var isContained = false;
+  	if (AjxEnv.isSafari) {
+  		return false;
+  	} else if (parentEl.compareDocumentPosition) {
+		var relPos = parentEl.compareDocumentPosition(childEl);
+		if ((relPos == (document.DOCUMENT_POSITION_CONTAINED_BY | document.DOCUMENT_POSITION_FOLLOWING))) {
+			isContained = true;
+		}
+
+  	} else if (parentEl.contains) {
+  		isContained = parentEl.contains(childEl);
+  	}
+  	return isContained;
+};
+
+Dwt.removeChildren =
+function(htmlEl) {
+	while (htmlEl.hasChildNodes())
+		htmlEl.removeChild(htmlEl.firstChild);
+};
+
+/**
+* Safari always returns zero for cellIndex property of TD element :(
+*
+* @param cell		TD object we want cell index for
+*/
+Dwt.getCellIndex =
+function(cell) {
+	if (AjxEnv.isSafari) {
+		if (cell.tagName && cell.tagName.toLowerCase() == "td") {
+			// get the cells collection from the TD's parent TR
+			var cells = cell.parentNode.cells;
+			for (var i = 0; i < cells.length; i++) {
+				if (cells[i] == cell)
+					return i;
+			}
+		}
+	} else {
+		return cell.cellIndex;
+	}
+	return -1;
+};
+
+/** 
+ * Remove the <code>del</code> class name from the element's CSS class names and 
+ * optionally add <code>add</code> class name if given provided
+ * 
+ * @param {HTMLElement} el HTML Element to which to add/delete class names
+ * @param {String} del Class name to delete (optional)
+ * @param {String} add Class name to add (optional)
+ */
+Dwt.delClass = function(el, del, add) {
+	var a = el.className.split(/\s+/);
+	for (var i = a.length; --i >= 0;)
+		if (a[i] == del)
+			a.splice(i, 1);
+	if (add)
+		a.push(add);
+	el.className = a.join(" ");
+};
+
+/**
+ * Adds the given class name to the element's CSS class names
+ * 
+ * @param {HTMLElement} el HTML Element to which to add the class name
+ * @param {String} c Class name
+ * 
+ * @see #delClass
+ */
+Dwt.addClass = function(el, c) {
+	Dwt.delClass(el, c, c);
+};
+
+// Selects a given range in an input field.  Provide a reference to the input
+// field and start and end position.
+Dwt.setSelectionRange = function(input, start, end) {
+	if (AjxEnv.isGeckoBased) {
+		input.setSelectionRange(start, end);
+	} else if (AjxEnv.isIE) {
+		var range = input.createTextRange();
+		range.collapse(true);
+		range.moveStart("character", start);
+		range.moveEnd("character", end - start);
+		range.select();
+	} else {
+		// FIXME: find solutions for other browsers
+		input.select();
+	}
+};
+
+// Retrieves the start of the selection.  For a collapsed range, this is
+// equivalent to getSelectionEnd.  Based on some reverse engineering that I
+// described here: http://www.bazon.net/mishoo/articles.epl?art_id=1292
+Dwt.getSelectionStart = function(input) {
+	if (AjxEnv.isGeckoBased) {
+		return input.selectionStart;
+	} else if (AjxEnv.isIE) {
+		var range = document.selection.createRange();
+		var isCollapsed = range.compareEndPoints("StartToEnd", range) == 0;
+		if (!isCollapsed)
+			range.collapse(true);
+		var b = range.getBookmark();
+		return b.charCodeAt(2) - 2;
+	}
+	// FIXME: find solutions for other browsers
+	return input.value.length;
+};
+
+// Retrieves the end of the selection in an input field.
+Dwt.getSelectionEnd = function(input) {
+	if (AjxEnv.isGeckoBased) {
+		return input.selectionEnd;
+	} else if (AjxEnv.isIE) {
+		var range = document.selection.createRange();
+		var isCollapsed = range.compareEndPoints("StartToEnd", range) == 0;
+		if (!isCollapsed)
+			range.collapse(false);
+		var b = range.getBookmark();
+		return b.charCodeAt(2) - 2;
+	}
+	// FIXME: find solutions for other browsers
+	return input.value.length;
+};
+
+Dwt.setSelectionText = function(input, text) {
+	var start = Dwt.getSelectionStart(input);
+	var end = Dwt.getSelectionEnd(input);
+	var str = input.value;
+	var val = [ str.substr(0, start),
+		    text,
+		    str.substr(end) ].join("");
+	if (typeof input.setValue == "function")
+		input.setValue(val);
+	else
+		input.value = val;
+	Dwt.setSelectionRange(input, start, start + text.length);
+};
+
+/** @private */
+Dwt.__checkPxVal =
+function(val, check) {
+	if (val == Dwt.DEFAULT) return false;
+
+	if (check && val < 0 && val != Dwt.LOC_NOWHERE) {
+		DBG.println(AjxDebug.DBG1, "negative pixel value: " + val);
+		val = 0;
+	}
+	if (typeof(val) == "number")
+		val = val + "px";
+
+	return val;
+};
+
+/**
+ * @private
+ */
 Dwt._ffOverflowHack =
 function (htmlElId, myZindex, lowThresholdZ, turnOffOverflowScroll, disableSelf) {
 	if (!AjxEnv.isNav)
@@ -506,147 +895,4 @@ function (htmlElId, myZindex, lowThresholdZ, turnOffOverflowScroll, disableSelf)
 	}
 };
 
-/**
-* Creates and returns an element from a string of HTML.
-*
-* @param html	[string]	HTML text
-* @param isRow	[boolean]*	true if the element is a TR
-*/
-Dwt.parseHtmlFragment =
-function(html, isRow) {
-	if (!Dwt._div)
-		Dwt._div = document.createElement('div');
-	// TR element needs to have surrounding table
-	if (isRow)
-		html = "<table style='table-layout:fixed'>" + html + "</table>";
-	Dwt._div.innerHTML = html;
 
-	return isRow ? Dwt._div.firstChild.rows[0] : Dwt._div.firstChild;
-};
-
-Dwt.contains =
-function(parentEl, childEl) {
-  	var isContained = false;
-  	if (AjxEnv.isSafari) {
-  		return false;
-  	} else if (parentEl.compareDocumentPosition) {
-		var relPos = parentEl.compareDocumentPosition(childEl);
-		if ((relPos == (document.DOCUMENT_POSITION_CONTAINED_BY | document.DOCUMENT_POSITION_FOLLOWING))) {
-			isContained = true;
-		}
-
-  	} else if (parentEl.contains) {
-  		isContained = parentEl.contains(childEl);
-  	}
-  	return isContained;
-};
-
-Dwt.removeChildren =
-function(htmlEl) {
-	while (htmlEl.hasChildNodes())
-		htmlEl.removeChild(htmlEl.firstChild);
-};
-
-/**
-* Safari always returns zero for cellIndex property of TD element :(
-*
-* @param cell		TD object we want cell index for
-*/
-Dwt.getCellIndex =
-function(cell) {
-	if (AjxEnv.isSafari) {
-		if (cell.tagName && cell.tagName.toLowerCase() == "td") {
-			// get the cells collection from the TD's parent TR
-			var cells = cell.parentNode.cells;
-			for (var i = 0; i < cells.length; i++) {
-				if (cells[i] == cell)
-					return i;
-			}
-		}
-	} else {
-		return cell.cellIndex;
-	}
-	return -1;
-};
-
-// remove the "del" class from the element's CSS class names and optionally add
-// "add" class if given.
-Dwt.delClass = function(el, del, add) {
-	var a = el.className.split(/\s+/);
-	for (var i = a.length; --i >= 0;)
-		if (a[i] == del)
-			a.splice(i, 1);
-	if (add)
-		a.push(add);
-	el.className = a.join(" ");
-};
-
-// adds the given class name to the element's CSS class names
-Dwt.addClass = function(el, c) {
-	Dwt.delClass(el, c, c);
-};
-
-// Selects a given range in an input field.  Provide a reference to the input
-// field and start and end position.
-Dwt.setSelectionRange = function(input, start, end) {
-	if (AjxEnv.isGeckoBased) {
-		input.setSelectionRange(start, end);
-	} else if (AjxEnv.isIE) {
-		var range = input.createTextRange();
-		range.collapse(true);
-		range.moveStart("character", start);
-		range.moveEnd("character", end - start);
-		range.select();
-	} else {
-		// FIXME: find solutions for other browsers
-		input.select();
-	}
-};
-
-// Retrieves the start of the selection.  For a collapsed range, this is
-// equivalent to getSelectionEnd.  Based on some reverse engineering that I
-// described here: http://www.bazon.net/mishoo/articles.epl?art_id=1292
-Dwt.getSelectionStart = function(input) {
-	if (AjxEnv.isGeckoBased) {
-		return input.selectionStart;
-	} else if (AjxEnv.isIE) {
-		var range = document.selection.createRange();
-		var isCollapsed = range.compareEndPoints("StartToEnd", range) == 0;
-		if (!isCollapsed)
-			range.collapse(true);
-		var b = range.getBookmark();
-		return b.charCodeAt(2) - 2;
-	}
-	// FIXME: find solutions for other browsers
-	return input.value.length;
-};
-
-// Retrieves the end of the selection in an input field.
-Dwt.getSelectionEnd = function(input) {
-	if (AjxEnv.isGeckoBased) {
-		return input.selectionEnd;
-	} else if (AjxEnv.isIE) {
-		var range = document.selection.createRange();
-		var isCollapsed = range.compareEndPoints("StartToEnd", range) == 0;
-		if (!isCollapsed)
-			range.collapse(false);
-		var b = range.getBookmark();
-		return b.charCodeAt(2) - 2;
-	}
-	// FIXME: find solutions for other browsers
-	return input.value.length;
-};
-
-Dwt.setSelectionText = function(input, text) {
-	var start = Dwt.getSelectionStart(input);
-	var end = Dwt.getSelectionEnd(input);
-	var str = input.value;
-	var val = [ str.substr(0, start),
-		    text,
-		    str.substr(end) ].join("");
-	if (typeof input.setValue == "function")
-		input.setValue(val);
-	else
-		input.value = val;
-	Dwt.setSelectionRange(input, start, start + text.length);
-};

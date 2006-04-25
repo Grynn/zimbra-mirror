@@ -14,11 +14,7 @@
  * limitations under the License.
  */
 
-
-// Cannot be subclassed
-
-/**
-* Creates a shell. 
+/** 
 * @constructor
 * @class
 * This class represents a shell, the first widget that must be instantiated in a Dwt based 
@@ -28,6 +24,7 @@
 * DwtShell should <b>NOT</b> be subclassed</p>
 *
 * @author Ross Dargahi
+* 
 * @param className			[string]*		CSS class name
 * @param docBodyScrollable	[boolean]*		if true, then the document body is set to be scrollable
 * @param confirmExitMethod	[function]*		method which is called when the user attempts to navigate away from 
@@ -129,11 +126,14 @@ function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell, us
 DwtShell.prototype = new DwtComposite;
 DwtShell.prototype.constructor = DwtShell;
 
-// DwtDialog not defined yet, can't base ID on it
+/** DwtDialog not defined yet, can't base ID on it
+ * @private
+ */
 DwtShell.CANCEL_BUTTON = -1;
 
 // Event objects used to populate events so we dont need to create them for each event
 DwtShell.controlEvent 	= new DwtControlEvent();
+DwtShell.focusEvent 	= new DwtFocusEvent();
 DwtShell.keyEvent 		= new DwtKeyEvent();
 DwtShell.mouseEvent 	= new DwtMouseEvent();
 DwtShell.selectionEvent = new DwtSelectionEvent(true);
@@ -297,8 +297,8 @@ function(incScroll) {
 
 /**
  * If the shell is set as a virtual shell, then all children that are 
- * directly added to the shell become childre on the body element. This
- * is useful in the cases where DWT is to be with existing HTML documents
+ * directly added to the shell become children on the page's body element. This
+ * is useful in the cases where Dwt is to beused  with existing HTML documents
  * rather than as the foundation for an application
  */
 DwtShell.prototype.setVirtual =
@@ -307,6 +307,10 @@ function() {
 	this.setVisible(false);
 }
 
+/**
+ * @return true if the shell is virtual
+ * @type Boolean
+ */
 DwtShell.prototype.isVirtual =
 function() {
 	return this._virtual;

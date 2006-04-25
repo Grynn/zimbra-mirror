@@ -75,6 +75,7 @@
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/events/DwtDisposeEvent.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/events/DwtUiEvent.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/events/DwtControlEvent.js"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/dwt/events/DwtFocusEvent.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/events/DwtKeyEvent.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/events/DwtMouseEvent.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/events/DwtMouseEventCapture.js"></script>

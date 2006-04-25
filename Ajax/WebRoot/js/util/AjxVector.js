@@ -117,6 +117,17 @@ function(index, newObj) {
 	return oldObj;
 };
 
+AjxVector.prototype.replaceObject = 
+function(obj, newObj) {
+	for (var i = 0; i < this._array.length; i++) {
+		if (this._array[i] == obj) {
+			this._array[i] = newObj;
+			return obj;
+		}
+	}
+	return null;
+};
+
 /**
 * Returns the index of the obj given w/in vector
 *

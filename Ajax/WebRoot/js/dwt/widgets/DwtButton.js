@@ -16,20 +16,45 @@
 
 
 /**
-* Creates a button.
 * @constructor
 * @class
 * This class represents a button, which is basically a smart label that can handle
 * various UI events. It knows when it has been activated (the mouse is over it),
 * when it has been triggered (mouse down), and when it has been pressed (mouse up).
 * In addition to a label's image and/or text, a button may have a dropdown menu.
+* 
+* There are several different types of button:
+* <ul>
+* <li> Push - this is the standard push button </li>
+* <li> Toggle - This is a button that exhibits toggle behaviour when clicked 
+* 		e.g. on/off. To make a button toggle style "or" <i>DwtButton.TOGGLE_STYLE<i>
+* 		to the consturctor's style parameter</li>
+* <li> Menu - By setting a mene via the <i>setMenu</i> method a button will become
+* 		a drop down or menu button.</li>
+* </ul>
+*
+* <b>CSS</b>
+* <i>className-DwtCssStyle.ACTIVATED</i> - activated style
+* <i>className-DwtCssStyle.TRIGGERED</i> - triggered style
+* <i>className-DwtCssStyle.TOGGLED</i> - toggled style (for toggle buttons)
+* <i>className-DwtCssStyle.DISABLED</i> - disabled style
+* 
+* <b>Keyboard Actions</b>
+* DwtKeyMap.SELECT_CURRENT - triggers the button
 *
 * @author Ross Dargahi
 * @author Conrad Damon
-* @param parent		the parent widget
-* @param style		the label style (see DwtLabel)
-* @param className	a CSS class
-* @param posStyle	positioning style
+* 
+* @param parent	{DwtControl} Parent widget (required)
+* @param style	{String} the label style. This is an "or'ed" set of attributes (see DwtLabel)
+* @param className {String} CSS class. If not provided defaults to the class name (optional)
+* @param posStyle {String} Positioning style (absolute, static, or relative). If
+* 		not provided defaults to DwtControl.STATIC_STYLE (optional)
+* @param actionTiming {Enum} if DwtButton.ACTION_MOUSEUP, then the button is triggered
+* 		on mouseup events, else if DwtButton.ACTION_MOUSEDOWN, then the button is
+* 		triggered on mousedown events
+*  
+* @extends DwtLabel
 */
 function DwtButton(parent, style, className, posStyle, actionTiming) {
 	if (arguments.length == 0) return;
@@ -70,6 +95,8 @@ DwtButton.prototype.constructor = DwtButton;
 DwtButton.TOGGLE_STYLE = DwtLabel._LAST_STYLE * 2;
 DwtButton.ACTION_MOUSEUP = 1;
 DwtButton.ACTION_MOUSEDOWN = 2;
+
+
 // Public methods
 
 DwtButton.prototype.toString = 
@@ -365,15 +392,19 @@ function(target, button, docX, docY) {
 }
 
 
- /*DwtButton.prototype._focusByMouseUpEvent =
+/**
+ * This method is called from mouseUpHdl. in <i>DwtControl</i>. We
+ * override it to do nothing
+ */
+DwtButton.prototype._focusByMouseUpEvent =
   function()  {
 DBG.println("DwtButton.prototype._focusByMouseUpEvent");
 	// Do Nothing
   }
-*/
+
 DwtButton.prototype._focus =
 function() {
-	DBG.println("DwtButton.prototype._focus");
+	DBG.println(AjxDebug.DBG3, "DwtButton.prototype._focus");
 	// ROSSD MOVE TO CSS
 	this.getHtmlElement().style.border = "1px dotted black";
 	//this._mouseOverListener(DwtShell.mouseEvent);
@@ -381,7 +412,7 @@ function() {
 
 DwtButton.prototype._blur =
 function() {
-	DBG.println("DwtButton.prototype._blur");
+	DBG.println(AjxDebug.DBG3, "DwtButton.prototype._blur");
 	// ROSSD MOVE TO CSS
 	this.getHtmlElement().style.border = "0px dotted black";
 	//this._mouseOutListener(DwtShell.mouseEvent);

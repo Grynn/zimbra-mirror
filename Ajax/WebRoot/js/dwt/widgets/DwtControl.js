@@ -14,78 +14,1339 @@
  * limitations under the License.
  */
 
-
 /**
-* Creates a control. A control may be created in "deferred" mode, meaning that the UI portion of the control
-* will be created "Just In Time". This is useful for widgets which may want to defer construction
-* of elements (e.g. DwtTreeItem) until such time as is needed, in the interest of efficiency. Note that if 
-* the control is a child of the shell, it won't become visible until its z-index is set.
 * @constructor
 * @class
-* This class represents a control, the highest-level useable widget. A control is a displayable element with
-* a set of attributes (size, location, etc) and behaviors (event handlers). A control does not have child
-* elements.
-*
+* Creates a control. <i>DwtControl</i> is the root class of the Dwt component hierarchy. All
+* Dwt compononents either directly or indirectly inherit from this class. 
+* 
+* A <i>DwtContro</i>l may also be directly instantiated. In this case it is essentially
+* a div into which any content may be "drawn"
+* 
+* A control may be created in "deferred" mode, meaning that the UI portion of the control
+* will be created "Just In Time". This is useful for widgets which may want to defer construction
+* of elements (e.g. <i>DwtTreeItem</i>) until such time as is needed, in the interest of efficiency. 
+* Note that if the control is a child of the shell, it won't become visible until its z-index is set.
+* 
+* <h4>CSS</h4>
+* None
+* 
+* <h4>Keyboard Actions</h4>
+* None
+* 
+* <h4>Events</h4><ul>
+* <li><i>DwtEvent.CONTROL</i></li>
+* <li><i>DwtEvent.DISPOSE</i></li>
+* <li><i>DwtEvent.ENTER</i></li>
+* <li><i>DwtEvent.HOVEROVER</i></li>
+* <li><i>DwtEvent.HOVEROUT</i></li>
+* <li><i>DwtEvent.ONCONTEXTMENU</i></li>
+* <li><i>DwtEvent.ONDBLCLICK</i></li>
+* <li><i>DwtEvent.ONFOCUS</i></li>
+* <li><i>DwtEvent.ONBLUR</i></li>
+* <li><i>DwtEvent.ONMOUSEDOWN</i></li>
+* <li><i>DwtEvent.ONMOUSEENTER</i></li>
+* <li><i>DwtEvent.ONMOUSELEAVE</i></li>
+* <li><i>DwtEvent.ONMOUSEMOVE</i></li>
+* <li><i>DwtEvent.ONMOUSEOUT</i></li>
+* <li><i>DwtEvent.ONMOUSEOVER</i></li>
+* <li><i>DwtEvent.ONMOUSEUP</i></li>
+* <li><i>DwtEvent.ONMOUSEWHEEL</i></li>
+* <li><i>DwtEvent.ONSELECTSTART</i></li>
+* <li><i>DwtEvent.ONCONTEXTMENU</i></li>
+* </ul>
+* 
 * @author Ross Dargahi
-* @param parent		the parent widget
-* @param className	CSS class
-* @param posStyle	positioning style (absolute, static, or relative)
-* @param deferred	postpone initialization until needed
+* 
+* @param {DwtComposite} parent Parent widget. Except in the case of <i>DwtShell</i> the
+* 		parent will be a control that has subclassed from <i>DwtComposite</i> 
+* @param {String} className CSS class. If not provided defaults to the class name (optional)
+* @param {String} posStyle Positioning style (absolute, static, or relative). If
+* 		not provided defaults to <i>DwtControl.STATIC_STYLE</i> (optional)
+* @param {Boolean} deferred If true, postpone initialization until needed. If not
+* 		specified defaults to false (optional)
+* @param {Int} id An explicit ID to use for the control's HTML element. If not
+* 		specified defaults to an auto-generated id (optional)
 */
-
 function DwtControl(parent, className, posStyle, deferred, id) {
 
 	if (arguments.length == 0) return;
+	
+	/** parent component. Read-Only */
  	this.parent = parent;
 	if (parent != null && !(parent instanceof DwtComposite))
 		throw new DwtException("Parent must be a subclass of Composite", DwtException.INVALIDPARENT, "DwtWidget");
 
+	/** the control's <i>DwtShell</i>*/
+	this.shell = null;
+	
+	/** @private */
 	this._data = new Object();
+	/** @private */
 	this._eventMgr = new AjxEventMgr();
+	/** @private */
 	this._disposed = false;
     
  	if (parent == null) 
  		return;
 
+	/** CSS class name*/
 	this._className = className ? className : "DwtControl";
+	/** @private */
 	this._posStyle = posStyle;
 
 	if (id != null) {
+	/** @private */
 		this._htmlElId = id;
 	}
 	if (!deferred)
-		this._initCtrl();
+		this.__initCtrl();
 		
-	this._hoverOverListener = new AjxListener(this, this._handleHoverOver);
-	this._hoverOutListener = new AjxListener(this, this._handleHoverOut);
+	/** @private */
+	this._hoverOverListener = new AjxListener(this, this.__handleHoverOver);
+	/** @private */
+	this._hoverOutListener = new AjxListener(this, this.__handleHoverOut);
 }
 
-// static properties
 
+// Position styles
+/**  Static position style 
+ * @type String */
 DwtControl.STATIC_STYLE = Dwt.STATIC_STYLE;
+
+/** Absolute position style
+ * @type String*/
 DwtControl.ABSOLUTE_STYLE = Dwt.ABSOLUTE_STYLE;
+
+/** Relative position style 
+ * @type String*/
 DwtControl.RELATIVE_STYLE = Dwt.RELATIVE_STYLE;
 
+/** Clip on overflow 
+ * @type Int*/
 DwtControl.CLIP = Dwt.CLIP;
+
+/** Allow overflow to be visible
+ * @type Int*/
 DwtControl.VISIBLE = Dwt.VISIBLE;
+
+/** Automatically create scrollbars if content overflows 
+ * @type Int*/
 DwtControl.SCROLL = Dwt.SCROLL;
+
+/** Always have scrollbars whether content overflows or not 
+ * @type Int*/
 DwtControl.FIXED_SCROLL = Dwt.FIXED_SCROLL;
 
+/** Default value for sizing/position methods */
 DwtControl.DEFAULT = Dwt.DEFAULT;
 
+/** @private */
 DwtControl._NO_DRAG = 1;
+
+/** @private */
 DwtControl._DRAGGING = 2;
+
+/** @private */
 DwtControl._DRAG_REJECTED = 3;
 
+/** @private */
 DwtControl._DRAG_THRESHOLD = 3;
 
-DwtControl.TOOLTIP_THRESHOLD = 5;
+/** @private */
+DwtControl._TOOLTIP_THRESHOLD = 5;
 
+/** @private */
 DwtControl._DND_HOVER_DELAY = 750;
 
-// static methods
 
-DwtControl._keyPressHdlr =
+/**
+ * This method returns the actual class name for the component. Subclasses will
+ * override this method to return their own name
+ * 
+ * @return class name
+ * @type String
+ */
+DwtControl.prototype.toString = 
+function() {
+	return "DwtControl";
+};
+
+/**
+ * Registers a control event listener for control events. Control events are essentially
+ * resize and coordinate change events
+ *
+ * @param {AjxListener} listener Listener to be registered (required)
+ * 
+ * @see DwtControlEvent
+ * @see AjxListener
+ * @see #removeControlListener
+ * @see #removeAllListeners
+ */
+DwtControl.prototype.addControlListener = 
+function(listener) {
+	this.addListener(DwtEvent.CONTROL, listener);
+};
+
+/**
+ * Removes a control event listener for control events. Control events are essentially
+ * resize and coordinate change events
+ * 
+ * @param {AjxListener} listener Listener to be removed
+ * 
+ * @see DwtControlEvent
+ * @see AjxListener
+ * 
+ * @see #addControlListener
+ * @see #removeAllListeners
+ */
+DwtControl.prototype.removeControlListener = 
+function(listener) { 
+	this.removeListener(DwtEvent.CONTROL, listener);
+};
+
+/**
+ * Registers a dispose listener for control events. Dispose events are fired when
+ * a component is "destroyed" via the <i>dispose</i> method call
+ *
+ * @param {AjxListener} listener Listener to be registered (required)
+ * 
+ * @see DwtDisposeEvent
+ * @see AjxListener
+ * @see #removeDisposeListener
+ * @see #removeAllListeners
+ * @see #dispose
+ * @see #isDisposed
+ */
+DwtControl.prototype.addDisposeListener = 
+function(listener) {
+	this.addListener(DwtEvent.DISPOSE, listener);
+};
+
+/**
+ * Removes a dispose event listener for control events. Dispose events are fired when
+ * a component is "destroyed" via the <i>dispose</i> method call
+ * 
+ * @param {AjxListener} listener Listener to be removed
+ * 
+ * @see DwtDisposeEvent
+ * @see AjxListener
+ * @see #addDisposeListener
+ * @see #removeAllListeners
+ * @see #dispose
+ * @see #isDisposed
+ */
+DwtControl.prototype.removeDisposeListener = 
+function(listener) { 
+	this.removeListener(DwtEvent.DISPOSE, listener);
+};
+
+/**
+ * Registers a listener with the control. The listener will be call when events
+ * of type <code>eventType</code> fire
+ *
+ * @param {String} eventType Event type for which to listen (required)
+ * @param {AjxListener} listener Listener to be registered (required)
+ * 
+ * @see DwtEvent
+ * @see AjxListener
+ * @see #removeListener
+ * @see #removeAllListeners
+ * @see #notifyListeners
+ */
+DwtControl.prototype.addListener =
+function(eventType, listener) {
+	return this._eventMgr.addListener(eventType, listener); 	
+};
+
+/**
+ * Removes a listener from the control.
+ *
+ * @param {String} eventType Event type for which to remove the listener (required)
+ * @param {AjxListener} listener Listener to be removed (required)
+ * 
+ * @see DwtEvent
+ * @see AjxListener
+ * @see #addListener
+ * @see #removeAllListeners
+ */
+DwtControl.prototype.removeListener = 
+function(eventType, listener) {
+	return this._eventMgr.removeListener(eventType, listener);
+};
+
+
+/**
+ * Removes all listeners for a particular event type.
+ *
+ * @param {String} eventType Event type for which to remove listeners (required)
+ * 
+ * @see DwtEvent
+ * @see AjxListener
+ * @see #addListener
+ * @see #removeListener
+ */
+DwtControl.prototype.removeAllListeners = 
+function(eventType) {
+	return this._eventMgr.removeAll(eventType);
+};
+
+/**
+ * Queries to see if there are any listeners registered for a particular event type
+ * 
+ * @param {String} eventType Event type for which to check for listener registration (required)
+ * 
+ * @return True if there is an listener registered for the specified event type
+ * 
+ * @see DwtEvent
+ */
+DwtControl.prototype.isListenerRegistered =
+function(eventType) {
+	return this._eventMgr.isListenerRegistered(eventType);
+};
+
+/**
+ * Notifys all listeners of type <code>eventType</code> with <code>event</code>
+ * 
+ * @param {String} eventType Event type for which to send notifications (required)
+ * @param {DwtEvent} event Event with which to notify. Typically a subclass of
+ * 		DwtEvent
+ * 
+ * @see DwtEvent
+ */
+DwtControl.prototype.notifyListeners =
+function(eventType, event) {
+	return this._eventMgr.notifyListeners(eventType, event);
+};
+
+/**
+ * Disposes of the control. This method will remove the control from under the
+ * control of it's parent and release any resources associate with the compontent
+ * it will also notify any event listeners on registered  <i>DwtEvent.DISPOSE</i> event type
+ * 
+ * Subclasses may override this method to perform their own dispose functionality but
+ * should generallly call up to the parent method
+ * 
+ * @see #isDisposed
+ * @see #addDisposeListener
+ * @see #removeDisposeListener
+ */
+DwtControl.prototype.dispose =
+function() {
+	if (this._disposed) return;
+
+	if (this.parent != null)
+		this.parent.removeChild(this);
+
+	Dwt.disassociateElementFromObject(null, this);
+
+	this._disposed = true;
+	var ev = new DwtDisposeEvent();
+	ev.dwtObj = this;
+	this.notifyListeners(DwtEvent.DISPOSE, ev);
+};
+
+/**
+ * This method is deprecated. Please use "document" directly in
+ * @deprecated
+ */
+DwtControl.prototype.getDocument =
+function() {
+	return document;
+};
+
+/**
+ * return the data associated with <code>key</code>. This data is set with the 
+ * <i>setData</i> 
+ * method
+ * 
+ * @param {String} key 
+ * 
+ * @return data associated with <code>key</code>
+ * @type Object
+ * 
+ * @see #setData
+ */
+DwtControl.prototype.getData = 
+function(key) {
+	return this._data[key];
+};
+
+/**
+ * Associate data with a key. This method is useful for hanging client data off of
+ * a control.
+ * 
+ * @param {String} key The key with which to associate data
+ * @param {Object} value The data 
+ * 
+ * @see #getData
+ */
+DwtControl.prototype.setData = 
+function(key, value) {
+  this._data[key] = value;
+};
+
+/**
+ * @return true if the control is in a disposed state, else return false
+ * @type Boolean
+ * 
+ * @see #dispose
+ * @see #addDisposeListener
+ * @see #removeDisposeListener
+ */
+DwtControl.prototype.isDisposed =
+function() {
+	return this._isDisposed;
+};
+
+/**
+ * @return true if the control is in a initialized, else return false. In general
+ * 		a control will not be initialized if it has been created in deffered mode
+ * 		and has not yet been initialized
+ * @type Boolean
+ */
+DwtControl.prototype.isInitialized =
+function() {
+	return this._ctrlInited;
+};
+
+/** 
+ * This method is called to explicitly set keyboard focus to this component.
+ */
+ DwtControl.prototype.focus =
+ function() {
+ 	DwtShell.getShell(window).getKeyboardMgr().grabFocus(this);
+ };
+ 
+ /**
+  * @return true if this control has keyboard focus, else return false
+  * @type Boolean
+  */
+  DwtControl.prototype.haveFocus =
+  function() {
+  	return DwtShell.getShell(window).getKeyboardMgr().dwtControlHasFocus(this)
+  };
+ 
+/** 
+ * This method is called by the keyboard navigation framework. It should be overriden
+ * by derived classes to provide behaviour for supported key actions. 
+ *
+ * @param {Int}	actionCode Action code on which to act. Action codes are typically
+ * 		defined the the appropriate keymap
+ * @param {DwtKeyEvent}	ev keyboard event (last keyboard event in sequence)
+ * 
+ * @return true if handled, else false
+ * @type Boolean
+ * 
+ * @see DwtKeyMap
+ * @see DwtKeyEvent
+ */
+DwtControl.prototype.handleKeyAction =
+function(actionCode, ev) {
+	return false;
+};
+
+/**
+ * Reparents the control within the component hierarchy. Unlike <i>reparentHtmlElement</i>
+ * which reparents the controls <i>div</i> within the DOM hierarchy, this method reparents
+ * the whole control
+ * 
+ * @param {DwtComposite} newParent The control's new parent
+ *
+ * @see #reparentHtmlElement
+ */
+DwtControl.prototype.reparent =
+function(newParent) {
+	if (!this._checkState()) return;
+
+	var htmlEl = this.getHtmlElement();
+	this.parent.removeChild(this);
+	DwtComposite._pendingElements[this._htmlElId] = htmlEl;
+	newParent.addChild(this);
+	this.parent = newParent;
+	// TODO do we need a reparent event?
+};
+
+/**
+ * Reparents the HTML element of the control to the html element supplied as the
+ * parameter to this method. Note this method only reparents the control's <i>div</i>
+ * element and does not effect the component hierarchy. To reparent the control within
+ * the component hierarchy, use the <i>reparent</i> method
+ *
+ * @param {String|HTMLElement} htmlEl Either a string representing an ID, or an html element
+ *
+ * @see #reparent
+ */
+DwtControl.prototype.reparentHtmlElement =
+function(htmlEl) {
+
+	/* If htmlEl is a string, then it is an ID so lookup the html element that has
+	 * the corresponding ID */
+	if (typeof htmlEl == "string")
+		htmlEl = document.getElementById(htmlEl);
+
+	htmlEl.appendChild(this.getHtmlElement());
+};
+
+/**
+ * This method set's the event handling function for a given event type. This method
+ * should be used judiciously as it can lead to unexpected results (for example if
+ * overriding the control's mouse handlers). This method calls through to <i>Dwt.setHandler</i>
+ * 
+ * @param {String} eventType Event type to override. Most of these are defined in
+ * 		<i>DwtEvent</i>
+ * @param {function} hdlrFunc Event handler function
+ * 
+ * @see DwtEvent
+ */
+DwtControl.prototype.setHandler =
+function(eventType, hdlrFunc) {
+	if (!this._checkState()) return;
+
+	var htmlElement = this.getHtmlElement();
+	Dwt.setHandler(htmlElement, eventType, hdlrFunc);
+};
+
+/**
+ * This method set's the event handling function for a given event type. This method
+ * should be used judiciously as it can lead to unexpected results (for example if
+ * overriding the control's mouse handlers)
+ * 
+ * @param {String} eventType Event type to override. Most of these are defined in
+ * 		DwtEvent
+ * @param {function} hdlrFunc Event handler function
+ * 
+ * @see DwtEvent
+ */
+DwtControl.prototype.clearHandler =
+function(eventType) {
+	if (!this._checkState()) return;
+		
+	var htmlElement = this.getHtmlElement();
+	Dwt.clearHandler(htmlElement, eventType);
+};
+
+/**
+ * Gets the bounds of the component. Bounds includes the location (not relevant for
+ * statically position elements) and dimensions of the control (i.e. it's <i>div</i>
+ * element). 
+ * 
+ * @return The control's bounds
+ * @type DwtRectangle
+ * 
+ * @see DwtRectangle
+ * @see #getSize
+ * @see #getLocation
+ * @see #getH
+ * @see #getW
+ * @see #getX
+ * @see #getXW
+ * @see #getY
+ * @see #getYH
+ * @see #setBounds
+ * @see #setSize
+ * @see #setLocation
+ */
+DwtControl.prototype.getBounds =
+function() {
+	if (!this._checkState()) return;
+		
+	return Dwt.getBounds(this.getHtmlElement());
+};
+
+/**
+ * Sets the bounds of a control. The position type of the control must
+ * be absolute or else an exception is thrown. To omit setting a value set the 
+ * actual parameter value to <i>Dwt.DEFAULT</i>
+ * 
+ * @param {Int|String} x x coordinate of the element. e.g. 10, "10px", Dwt.DEFAULT
+ * @param {Int|String} y y coordinate of the element. e.g. 10, "10px", Dwt.DEFAULT
+ * @param {Int} width width of the element e.g. 100, "100px", "75%", Dwt.DEFAULT
+ * @param {Int} height height of the element  e.g. 100, "100px", "75%", Dwt.DEFAULT
+ * 
+ * @throws DwtException
+ *
+ * @see DwtRectangle
+ * @see #getBounds
+ * @see #setSize
+ * @see #setLocation
+ * @see #getSize
+ * @see #getLocation
+ * @see #getH
+ * @see #getW
+ * @see #getX
+ * @see #getXW
+ * @see #getY
+ * @see #getYH
+ */
+DwtControl.prototype.setBounds =
+function(x, y, width, height) {
+	if (!this._checkState()) return;
+		
+	var htmlElement = this.getHtmlElement();
+	if (this.isListenerRegistered(DwtEvent.CONTROL)) {
+		this._controlEvent.reset();
+		var bds = Dwt.getBounds(htmlElement);
+		this._controlEvent.oldX = bds.x;
+		this._controlEvent.oldY = bds.y;
+		this._controlEvent.oldWidth = bds.width;
+		this._controlEvent.oldHeight = bds.height;
+		Dwt.setBounds(htmlElement, x, y, width, height);
+		bds = Dwt.getBounds(htmlElement);
+		this._controlEvent.newX = bds.x;
+		this._controlEvent.newY = bds.y;
+		this._controlEvent.newWidth = bds.width;
+		this._controlEvent.newHeight = bds.height;
+		this._controlEvent.requestedWidth = width;
+		this._controlEvent.requestedHeight = height;
+		this.notifyListeners(DwtEvent.CONTROL, this._controlEvent);
+	} else {
+		Dwt.setBounds(htmlElement, x, y, width, height);
+	}
+	
+	return this;
+}
+
+/**
+ * Return's the class name of this control. The class name may be set
+ * when constructing the control. If it is not passed into the constructor, it
+ * defaults to the control's class name. The class name is generally used as the 
+ * CSS class name for the control, although control's that change visual behaviour
+ * based on state may append (or even use different) class names. See the documentation
+ * of the specific component for detals
+ * 
+ * @return control's class name
+ * @type String
+ * 
+ * @see #setClassName
+ */
+DwtControl.prototype.getClassName =
+function() {
+	return this._className;
+};
+
+/**
+ * Set's the control's classname. This also autmatically sets the control's CSS
+ * class name (i.e. the control's htmlElement's class name). Subclasses of <i>DwtControl</i>
+ * may override this method to perform a different behaviour. 
+ * 
+ * @param {String} className The new class name for the control
+ * 
+ * @see #getClassName
+ */
+DwtControl.prototype.setClassName =
+function(className) {
+	if (!this._checkState()) return;
+		
+	this._className = className;
+	this.getHtmlElement().className = className;
+};
+
+/**
+ * @return the control's cursor
+ * @type String
+ * 
+ * @see #setCursor
+ */
+DwtControl.prototype.getCursor = 
+function() {
+	if (!this._checkState()) return;
+		
+	return Dwt.getCursor(this.getHtmlElement());
+};
+
+/**
+ * Sets the control's cursor
+ * 
+ * @param {String} cursorName name of the new cursor
+ * 
+ * @see #getCursor
+ */
+DwtControl.prototype.setCursor =
+function(cursorName) {
+	if (!this._checkState()) return;
+		
+	Dwt.setCursor(this.getHtmlElement(), cursorName);
+};
+
+/**
+ * @return the controls drag source. May be null
+ * @type DwtDragSource
+ * 
+ * @see #setDragSource
+ * @see DwtDragSource
+ */
+DwtControl.prototype.getDragSource =
+function() {
+	return this._dragSource;
+};
+
+/**
+ * Set the drag source for the control. The drag source binds the Drag drop system with
+ * an application. Setting a control's drag source makes the control draggable
+ * 
+ * @param {DwtDragSource} dragSource the control's drag source
+ * 
+ * @see #getDragSource
+ * @see DwtDragSource
+ */
+DwtControl.prototype.setDragSource =
+function(dragSource) {
+	this._dragSource = dragSource;
+	if (dragSource != null && this._ctrlCaptureObj == null) {
+		this._ctrlCaptureObj = new DwtMouseEventCapture(this, "DwtControl", DwtControl.__mouseOverHdlr,
+				DwtControl.__mouseDownHdlr, DwtControl.__mouseMoveHdlr, 
+				DwtControl.__mouseUpHdlr, DwtControl.__mouseOutHdlr);
+		this._dndHoverAction = new AjxTimedAction(null, this._dndDoHover);
+	}
+};
+
+/**
+ * @return the controls drop target. May be null
+ * @type DwtDropTarget
+ * 
+ * @see #setDropTarget
+ * @see DwtDropTarget
+ */
+DwtControl.prototype.getDropTarget =
+function() {
+	return this._dropTarget;
+};
+
+/**
+ * Set the drop target for the control. The drop target binds the Drag drop system with
+ * an application. Setting a control's drop target makes the control a potential drop
+ * target within an application
+ * 
+ * @param {DwtDropTarget} dropTarget the control's drop target
+ * 
+ * @see #getDropTarget
+ * @see DwtDropTarget
+ */
+DwtControl.prototype.setDropTarget =
+function(dropTarget) {
+	this._dropTarget = dropTarget;
+};
+
+/**
+ * @return The enabled state of the control
+ * @type Boolean
+ * 
+ * @see #setEnabled
+ */
+DwtControl.prototype.getEnabled =
+function() {
+	if (!this._checkState()) return;
+		
+	return this._enabled;
+};
+
+/**
+ * Set's the control's enabled state. If <code>setHtmlElement</code> is true, then 
+ * this method will also set the control's html element disabled attribute
+ * 
+ * @param {Boolean} enabled true the control is enabled
+ * @param {Boolean} setHtmlElement true, then set the control's html element 
+ * 		disabled attribute (optional)
+ */
+DwtControl.prototype.setEnabled =
+function(enabled, setHtmlElement) {
+	if (!this._checkState()) return;
+		
+	if (enabled != this._enabled) {
+		this._enabled = enabled;
+		if (setHtmlElement)
+			this.getHtmlElement().disabled = !enabled;
+	}
+};
+
+/**
+ * Returns the control's containing HTML element. By default this is a div element
+ * 
+ * @return The control's containing HTML element
+ * @type HTMLElement
+ */
+DwtControl.prototype.getHtmlElement =
+function() {
+	if (!this._checkState()) return;
+
+	var htmlEl = document.getElementById(this._htmlElId);
+	if (htmlEl == null) {
+		htmlEl = DwtComposite._pendingElements[this._htmlElId];
+	} else if (!htmlEl._rendered) {
+		delete DwtComposite._pendingElements[this._htmlElId];
+		htmlEl._rendered = true;
+	}	
+	return htmlEl;
+};
+
+/**
+ * Sets the control's  HTML element's id attribute
+ * 
+ * @param {String} id New id
+ */
+DwtControl.prototype.setHtmlElementId =
+function(id) {
+	if (this._disposed) return;
+	
+	if (this._ctrlInited) {
+		var htmlEl = this.getHtmlElement();
+		if (!htmlEl._rendered) {
+			delete DwtComposite._pendingElements[this._htmlElId];
+			DwtComposite._pendingElements[id] = htmlEl;
+		}
+		htmlEl.id = id;
+	}
+	this._htmlElId = id;
+};
+
+/**
+ * @return the x coordinate of the control (if it is absolutely positioned)
+ * @type Int
+ * 
+ * @see #getBounds
+ * @see #getSize
+ * @see #getLocation
+ * @see #getH
+ * @see #getW
+ * @see #getXW
+ * @see #getY
+ * @see #getYH
+ * @see #setBounds
+ * @see #setSize
+ * @see #setLocation
+ */
+DwtControl.prototype.getX =
+function() {
+	if (!this._checkState()) return;
+		
+	return Dwt.getLocation(this.getHtmlElement()).x;
+};
+
+/**
+ * @return the horizontal extent of the control (if it is absolutely positioned)
+ * @type Int
+ * 
+ * @see #getBounds
+ * @see #getSize
+ * @see #getLocation
+ * @see #getH
+ * @see #getW
+ * @see #getX
+ * @see #getY
+ * @see #getYH
+ * @see #setBounds
+ * @see #setSize
+ * @see #setLocation
+ */
+DwtControl.prototype.getXW =
+function() {
+	if (!this._checkState()) return;
+		
+    var bounds = this.getBounds();
+	return bounds.x+bounds.width;
+};
+
+/**
+ * @return the y coordinate of the control (if it is absolutely positioned)
+ * @type Int
+ * 
+ * @see #getBounds
+ * @see #getSize
+ * @see #getLocation
+ * @see #getH
+ * @see #getW
+ * @see #getX
+ * @see #getXW
+ * @see #getYH
+ * @see #setBounds
+ * @see #setSize
+ * @see #setLocation
+ */
+DwtControl.prototype.getY =
+function() {
+	if (!this._checkState()) return;
+		
+	return Dwt.getLocation(this.getHtmlElement()).y;
+};
+
+/**
+ * @return the vertical extent of the control (if it is absolutely positioned)
+ * @type Int
+ * 
+ * @see #getBounds
+ * @see #getSize
+ * @see #getLocation
+ * @see #getH
+ * @see #getW
+ * @see #getX
+ * @see #getXW
+ * @see #getY
+ * @see #setBounds
+ * @see #setSize
+ * @see #setLocation
+ */
+DwtControl.prototype.getYH =
+function() {
+	if (!this._checkState()) return;
+		
+    var bounds = this.getBounds();
+	return bounds.y+bounds.height;
+};
+
+/**
+ * TODO
+ */
+DwtControl.prototype.getLocation =
+function() {
+	if (!this._checkState()) return;
+		
+	return Dwt.getLocation(this.getHtmlElement());
+};
+
+/**
+ * Sets the location of the control. The position style of the control must
+ * be absolute or else an exception is thrown. To only set one of the coordinates,
+ * pass in a value of <i>Dwt.DEFAULT</i> for the coordinate for which the value is 
+ * not to be set.
+ * 
+ * If there are any <i>DwtEvent.CONTROL</i> listeners registered on the control, they
+ * will be called.
+ * 
+ * @param {Int|String} x x coordinate of the element. e.g. 10, "10px", Dwt.DEFAULT
+ * @param {Int|String} y y coordinate of the element. e.g. 10, "10px", Dwt.DEFAULT
+ * 
+ * @throws DwtException
+ */
+DwtControl.prototype.setLocation =
+function(x, y) {
+	if (!this._checkState()) return;
+		
+	if (this.isListenerRegistered(DwtEvent.CONTROL)) {
+		var htmlElement = this.getHtmlElement();
+		this._controlEvent.reset();
+		var loc = Dwt.getLocation(htmlElement);
+		this._controlEvent.oldX = loc.x;
+		this._controlEvent.oldY = loc.y;
+		Dwt.setLocation(htmlElement, x, y);
+		loc = Dwt.getLocation(htmlElement);
+		this._controlEvent.newX = loc.x;
+		this._controlEvent.newY = loc.y;
+		this.notifyListeners(DwtEvent.CONTROL, this._controlEvent);
+	} else {
+		Dwt.setLocation(this.getHtmlElement(), x, y);
+	}
+	return this;
+};
+
+/**
+ * Returns the control's scroll style. The scroll style determines the control's
+ * behaviour when content overflows its div's boundries. Possible values are:
+ * <ul>
+ * <li><i>Dwt.CLIP</i> - Clip on overflow</li>
+ * <li><i>Dwt.VISIBLE</i> - Allow overflow to be visible</li>
+ * <li><i>Dwt.SCROLL</i> - Automatically create scrollbars if content overflows</li>
+ * <li><i>Dwt.FIXED_SCROLL</i> - Always have scrollbars whether content overflows or not</li>
+ * </ul>
+ * 
+ * @return the control's scroll style
+ * @type Int
+ */
+DwtControl.prototype.getScrollStyle =
+function() {
+	if (!this._checkState()) return;
+		
+	return Dwt.getScrollStyle(this.getHtmlElement());
+};
+
+/**
+ * Sets the control's scroll style. The scroll style determines the control's
+ * behaviour when content overflows its div's boundries. Possible values are:
+ * <ul>
+ * <li><i>Dwt.CLIP</i> - Clip on overflow</li>
+ * <li><i>Dwt.VISIBLE</i> - Allow overflow to be visible</li>
+ * <li><i>Dwt.SCROLL</i> - Automatically create scrollbars if content overflows</li>
+ * <li><i>Dwt.FIXED_SCROLL</i> - Always have scrollbars whether content overflows or not</li>
+ * </ul>
+ * 
+ * @param {Int} scrollStyle the control's new scroll style
+ */
+DwtControl.prototype.setScrollStyle =
+function(scrollStyle) {
+	if (!this._checkState()) return;
+		
+	Dwt.setScrollStyle(this.getHtmlElement(), scrollStyle);
+};
+
+/**
+ * TODO
+ */
+DwtControl.prototype.getW = 
+function(incScroll) {
+	if (!this._checkState()) return;
+		
+	return Dwt.getSize(this.getHtmlElement(), incScroll).x;
+};
+
+/**
+ * TODO
+ */
+DwtControl.prototype.getH = 
+function(incScroll) {
+	if (!this._checkState()) return;
+		
+	return Dwt.getSize(this.getHtmlElement(), incScroll).y;
+};
+
+/**
+ * TODO
+ */
+DwtControl.prototype.getSize = 
+function(incScroll) {
+	if (!this._checkState()) return;
+		
+	return Dwt.getSize(this.getHtmlElement(), incScroll);
+};
+
+/**
+ * TODO
+ */
+DwtControl.prototype.setSize = 
+function(width, height) {
+	if (!this._checkState()) return;
+		
+	if (this.isListenerRegistered(DwtEvent.CONTROL)) {
+		var htmlElement = this.getHtmlElement();
+		this._controlEvent.reset();
+		var sz = Dwt.getSize(htmlElement);
+		this._controlEvent.oldWidth = sz.x;
+		this._controlEvent.oldHeight = sz.y;
+		Dwt.setSize(htmlElement, width, height);
+		sz = Dwt.getSize(htmlElement);
+		this._controlEvent.newWidth = sz.x;
+		this._controlEvent.newHeight = sz.y;
+		this.notifyListeners(DwtEvent.CONTROL, this._controlEvent);
+	} else {
+		Dwt.setSize(this.getHtmlElement(), width, height);
+	}
+	return this;
+};
+
+/**
+ * TODO
+ */
+DwtControl.prototype.getToolTipContent =
+function() {
+	if (this._disposed) return;
+
+	return this._toolTipContent;
+};
+
+/**
+ * TODO
+ */
+DwtControl.prototype.setToolTipContent =
+function(text) {
+	if (this._disposed) return;
+
+	this._toolTipContent = text;
+};
+
+/**
+ * TODO
+ */
+DwtControl.prototype.getVisible =
+function() {
+	if (!this._checkState()) return;
+		
+	return Dwt.getVisible(this.getHtmlElement());
+};
+
+/**
+ * TODO
+ */
+DwtControl.prototype.setVisible =
+function(visible) {
+	if (!this._checkState()) return;
+		
+	Dwt.setVisible(this.getHtmlElement(), visible);
+};
+
+/**
+ * TODO
+ */
+DwtControl.prototype.setVisibility =
+function(visible) {
+	if (!this._checkState()) return;
+		
+	Dwt.setVisibility(this.getHtmlElement(), visible);
+};
+
+/**
+ * Returns the control's containing HTML Element's z-index value.
+ * 
+ * @return z-index value
+ * @type Int
+ */
+DwtControl.prototype.getZIndex =
+function() {
+	if (!this._checkState()) return;
+		
+	return Dwt.getZIndex(this.getHtmlElement());
+};
+
+/**
+ * Sets the z-index for the control's HTML element. Since z-index is only relevant among peer
+ * elements, we make sure that all elements that are being displayed via z-index hang off the
+ * main shell.
+ *
+ * @param {Int} idx The new z-index for this element
+ */
+DwtControl.prototype.setZIndex =
+function(idx) {
+	if (!this._checkState()) return;
+		
+	Dwt.setZIndex(this.getHtmlElement(), idx);
+};
+
+/**
+ * Convenience function to toggle visibility using z-index. It uses the two lowest level
+ * z-indexes (<i>Dwt.Z_VIEW</i> and <i>Dwt.Z_HIDDEN</i> respectively). Any further 
+ * stacking will have to use setZIndex() directly.
+ *
+ * @param {Boolean} show true if we want to show the element, false if we want to hide it
+ * 
+ * @see Dwt
+ */
+DwtControl.prototype.zShow =
+function(show) {
+	this.setZIndex(show ? Dwt.Z_VIEW : Dwt.Z_HIDDEN);
+};
+
+/**
+ * TODO
+ */
+DwtControl.prototype.setDisplay = 
+function(value) {
+	if (!this._checkState()) return;
+
+	Dwt.setDisplay(this.getHtmlElement(), value);
+};
+
+/**
+ * TODO
+ */
+DwtControl.prototype.preventSelection = 
+function(targetEl) {
+	return !this.__isInputEl(targetEl);
+};
+
+/**
+ * TODO
+ */
+DwtControl.prototype.preventContextMenu = 
+function(targetEl) {
+	return targetEl ? (!this.__isInputEl(targetEl)) : true;
+};
+
+/**
+ * TODO
+ */
+DwtControl.prototype.setContent =
+function(content) {
+	if (content)
+		this.getHtmlElement().innerHTML = content;
+};
+
+/**
+ * TODO
+ */
+DwtControl.prototype.clearContent =
+function() {
+	this.getHtmlElement().innerHTML = "";
+};
+ 
+ 
+ 
+/**
+ * This method is called by the keyboard navigate infrastructure when a control 
+ * gains focus. This method should be overridden by derived classes to provide
+ * behaviour for the component losing focus 
+ */
+DwtControl.prototype._blur =
+function() {
+};
+
+/** 
+ * This method should be overridden by derived classes to provide
+ * behaviour for the component gaining focus e.g. providing a border or
+ * highlighting etc...*/
+DwtControl.prototype._focus =
+function() {
+};
+ 
+ /** 
+  * This method is called from mouseUpHdl. Subclasses may override this method
+  * if they have their own specialized focus management code
+  */
+  DwtControl.prototype._focusByMouseUpEvent =
+  function()  {
+	// DBG.println("_focusByMouseUpEvent");
+  	this.focus();
+ };
+
+/** 
+ * Subclasses may override this method to return an HTML element that will represent
+ * the dragging icon. The icon must be created on the DwtShell widget. If this method returns
+ * null, it indicates that the drag failed
+ */
+DwtControl.prototype._getDnDIcon =
+function(dragOp) {
+	DBG.println("DwtControl.prototype._getDnDIcon");
+	return null;
+};
+
+/* Subclasses may override this method to set the DnD icon properties based on whether drops are
+ * allowed */
+DwtControl.prototype._setDnDIconState =
+function(dropAllowed) {
+	this._dndIcon.className = (dropAllowed) ? "DropAllowed" : "DropNotAllowed";
+};
+
+
+/** @private */
+DwtControl._junkIconId = 0;
+/* Subclasses may override this method to destroy the Dnd icon HTML element. */
+DwtControl.prototype._destroyDnDIcon =
+function(icon) {
+	if (icon != null) {
+		// not sure why there is no parent node, but if there isn't one,
+		// let's try and do our best to get rid of the icon
+		if (icon.parentNode) {
+			icon.parentNode.removeChild(icon);
+		} else {
+			// at least hide the icon, and change the id so we can't get it
+			// back later
+			icon.style.zIndex = -100;
+			icon.id = "DwtJunkIcon" + DwtControl._junkIconId++;
+			icon = void 0;
+		}
+	}
+};
+
+/**
+ * Subclasses may override this method to provide feedback as to whether a possibly
+ * valid capture is taking place. For example, there are instances such as when a mouse
+ * down happens on a scroll bar in a DwtListView that are reported in the context of
+ * the DwtListView, but which are not really a valid mouse down i.e. on a list item. In
+ * such cases this function would return false 
+ * 
+ * @return True if the object is a valid drag obejct
+ * @type Boolean 
+ */
+ DwtControl.prototype._isValidDragObject =
+ function(ev) {
+ 	return true;
+ };
+
+/**
+ * Subclasses may override the following  functions to provide UI behaviour for DnD operations.
+ * _dragEnter is called when a drag operation enters a control. _dragOver is called multiple times
+ * as an item crossed over the control. _dragHover is called multiple times as the user hover's over
+ * the control. _dragLeave is called when the drag operation exits the control. 
+ * _drop is called when the item is dropped on the target.
+ */
+DwtControl.prototype._dragEnter =
+function(ev) {
+};
+
+DwtControl.prototype._dragOver =
+function(ev) {
+};
+
+DwtControl.prototype._dragHover =
+function(ev) {
+};
+
+
+DwtControl.prototype._dragLeave =
+function(ev) {
+};
+
+DwtControl.prototype._drop =
+function(ev) {
+};
+
+
+DwtControl.prototype._setMouseEventHdlrs =
+function(clear) {
+	this._setEventHdlrs(DwtEvent.MOUSE_EVENTS, clear);
+};
+
+
+DwtControl.prototype._setKeyPressEventHdlr =
+function(clear) {
+	this._setEventHdlrs([DwtEvent.ONKEYPRESS], clear);
+};
+
+DwtControl.prototype._getPropagationForEvent = 
+function() {
+	// overload me for dealing w/ browsers w/ weird quirks
+	return true;
+};
+
+DwtControl.prototype._getReturnValueForEvent = 
+function() {
+	// overload me for dealing w/ browsers w/ weird quirks
+	return false;
+};
+
+
+
+/**
+ * TODO
+ */
+DwtControl.prototype._checkState =
+function() {
+	if (this._disposed) return false;
+	if (!this._ctrlInited) 
+		this.__initCtrl();
+	return true;
+};
+
+
+/**
+ * @private
+ */
+DwtControl.prototype._setEventHdlrs =
+function(events, clear) {
+	if (!this._checkState()) return;
+		
+	var htmlElement = this.getHtmlElement();
+	for (var i = 0; i < events.length; i++) {
+		if (clear !== true)
+			Dwt.setHandler(htmlElement, events[i], DwtControl.__HANDLER[events[i]]);
+		else
+			Dwt.clearHandler(htmlElement, events[i]);
+	}
+};
+
+
+/**
+ * @private
+ */
+DwtControl.prototype._dndDoHover =
+function(control) {
+	//TODO Add allow hover?
+	control._dragHover();
+};
+
+
+
+/**
+ * @private
+ */
+DwtControl.__keyPressHdlr =
 function(ev) {
 	var obj = obj ? obj : DwtUiEvent.getDwtObjFromEvent(ev);
 	if (!obj) return false;
@@ -97,14 +1358,57 @@ function(ev) {
 		manager.hoverOut();
 		obj._tooltipClosed = false;
 	}
-}
+};
 
-DwtControl._dblClickHdlr = 
+/**
+ * This "private" method is actually called by <i>DwtKeyboardMgr</i> to indicate
+ * that the control is being blurred. Subclasses should override the <i>_blur</i>
+ * method
+ * 
+ * @private
+ */
+DwtControl.prototype.__doBlur =
+function() {
+	if (this.isListenerRegistered(DwtEvent.ONBLUR)) {
+		var ev = DwtShell.focusEvent;
+		ev.dwtObj = this;
+		ev.state = DwtFocusEvent.BLUR;
+		obj.notifyListeners(DwtEvent.ONBLUR, mouseEv);
+	}
+	this._blur();
+};
+
+/**
+ * This "private" method is actually called by <i>DwtKeyboardMgr</i> to indicate
+ * that the control is being focused. Subclasses should override the <i>_focus</i>
+ * method
+ * 
+ * @private
+ */
+DwtControl.prototype.__doFocus =
+function() {
+	if (this.isListenerRegistered(DwtEvent.ONFOCUS)) {
+		var ev = DwtShell.focusEvent;
+		ev.dwtObj = this;
+		ev.state = DwtFocusEvent.FOCUS;
+		obj.notifyListeners(DwtEvent.ONFOCUS, mouseEv);
+	}
+	this._focus();
+};
+ 
+
+/**
+ * @private
+ */
+DwtControl.__dblClickHdlr = 
 function(ev) {
-	return DwtControl._mouseEvent(ev, DwtEvent.ONDBLCLICK);
-}
+	return DwtControl.__mouseEvent(ev, DwtEvent.ONDBLCLICK);
+};
 
-DwtControl._mouseOverHdlr =
+/**
+ * @private
+ */
+DwtControl.__mouseOverHdlr =
 function(ev) {
 	// Check to see if a drag is occurring. If so, don't process the mouse
 	// over events.
@@ -143,7 +1447,10 @@ function(ev) {
 	return false;
 };
 
-DwtControl._mouseDownHdlr =
+/**
+ * @private
+ */
+DwtControl.__mouseDownHdlr =
 function(ev) {
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
 	if (!obj) return false;
@@ -171,10 +1478,13 @@ function(ev) {
 		obj._dragStartY = mouseEv.docY;
 	}
 	
-	return DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEDOWN, obj, mouseEv);
-}
+	return DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEDOWN, obj, mouseEv);
+};
 
-DwtControl._mouseMoveHdlr =
+/**
+ * @private
+ */
+DwtControl.__mouseMoveHdlr =
 function(ev) {
 	// If captureObj == null, then we are not a Draggable control or a 
 	// mousedown event has not occurred , so do the default behaviour, 
@@ -220,15 +1530,15 @@ function(ev) {
 			} else {
 				var deltaX = obj._lastTooltipX ? Math.abs(mouseEv.docX - obj._lastTooltipX) : null;
 				var deltaY = obj._lastTooltipY ? Math.abs(mouseEv.docY - obj._lastTooltipY) : null;
-				if ((deltaX != null && deltaX > DwtControl.TOOLTIP_THRESHOLD) || 
-					(deltaY != null && deltaY > DwtControl.TOOLTIP_THRESHOLD)) {
+				if ((deltaX != null && deltaX > DwtControl._TOOLTIP_THRESHOLD) || 
+					(deltaY != null && deltaY > DwtControl._TOOLTIP_THRESHOLD)) {
 					manager.setHoverOutListener(obj._hoverOutListener);
 					manager.hoverOut();
 					obj._tooltipClosed = true; // prevent tooltip popup during moves in this object
 				}
 			}
 		}
-		return DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEMOVE, obj, mouseEv);
+		return DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEMOVE, obj, mouseEv);
 	} else {
 		// Deal with mouse moving out of the window etc...
 		
@@ -300,16 +1610,19 @@ function(ev) {
 			// in the code
 		} else {
 			// XXX: confirm w/ ROSS!
-			DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEMOVE, obj, mouseEv);
+			DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEMOVE, obj, mouseEv);
 		}
 		mouseEv._stopPropagation = true;
 		mouseEv._returnValue = false;
 		mouseEv.setToDhtmlEvent(ev);
 		return false;
 	}
-}
+};
 
-DwtControl._mouseUpHdlr =
+/**
+ * @private
+ */
+DwtControl.__mouseUpHdlr =
 function(ev) {
 	// See if are doing a drag n drop operation
 	var captureObj = (DwtMouseEventCapture.getId() == "DwtControl") ? DwtMouseEventCapture.getCaptureObj() : null;
@@ -324,7 +1637,7 @@ function(ev) {
 	
 	if (!obj._dragSource || !captureObj) {
 		obj._focusByMouseUpEvent();
-		return DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEUP, obj);
+		return DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEUP, obj);
 	} else {
 		captureObj.release();
 		var mouseEv = DwtShell.mouseEvent;
@@ -332,7 +1645,7 @@ function(ev) {
 		if (obj._dragging != DwtControl._DRAGGING) {
 			obj._dragging = DwtControl._NO_DRAG;
 			obj._focusByMouseUpEvent();
-			return DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEUP, obj, mouseEv);
+			return DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEUP, obj, mouseEv);
 		} else {
 			obj._lastDestDwtObj = null;
 			var destDwtObj = mouseEv.dwtObj;
@@ -350,7 +1663,7 @@ function(ev) {
 				obj._dragEndX = mouseEv.docX;
 				obj._dragEndY = mouseEv.docY;
 				if (obj._badDropAction == null) {
-					obj._badDropAction = new AjxTimedAction(obj, obj._badDropEffect);
+					obj._badDropAction = new AjxTimedAction(obj, obj.__badDropEffect);
 				}
 				
 				// Line equation is y = mx + c. Solve for c, and set up d (direction)
@@ -364,9 +1677,12 @@ function(ev) {
 			return false;
 		}
 	}
-}
+};
 
-DwtControl._mouseOutHdlr =
+/**
+ * @private
+ */
+DwtControl.__mouseOutHdlr =
 function(ev) {
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
 	if (!obj) return false;
@@ -378,37 +1694,49 @@ function(ev) {
 		manager.hoverOut();
 		obj._tooltipClosed = false;
 	}
-	return DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEOUT, obj);
+	return DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEOUT, obj);
 };
 
-DwtControl._mouseWheelHdlr =
+/**
+ * @private
+ */
+DwtControl.__mouseWheelHdlr =
 function(ev) {
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
 	if (!obj) return false;
-	return DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEWHEEL, obj);
+	return DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEWHEEL, obj);
 };
 
-DwtControl._selectStartHdlr = 
+/**
+ * @private
+ */
+DwtControl.__selectStartHdlr = 
 function(ev) {
-	return DwtControl._mouseEvent(ev, DwtEvent.ONSELECTSTART);
-}
+	return DwtControl.__mouseEvent(ev, DwtEvent.ONSELECTSTART);
+};
 
-DwtControl._contextMenuHdlr = 
+/**
+ * @private
+ */
+DwtControl.__contextMenuHdlr = 
 function(ev) {
 	// for Safari, we have to fake a right click
 	if (AjxEnv.isSafari) {
 		var obj = DwtUiEvent.getDwtObjFromEvent(ev);
 		var prevent = obj ? obj.preventContextMenu() : true;
 		if (prevent) {
-			DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEDOWN);
-			DwtControl._mouseEvent(ev, DwtEvent.ONMOUSEUP);
+			DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEDOWN);
+			DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEUP);
 			return;
 		}
 	}
-	return DwtControl._mouseEvent(ev, DwtEvent.ONCONTEXTMENU);
-}
+	return DwtControl.__mouseEvent(ev, DwtEvent.ONCONTEXTMENU);
+};
 
-DwtControl._mouseEvent = 
+/**
+ * @private
+ */
+DwtControl.__mouseEvent = 
 function(ev, eventType, obj, mouseEv) {
 
 	var obj = obj ? obj : DwtUiEvent.getDwtObjFromEvent(ev);
@@ -423,8 +1751,8 @@ function(ev, eventType, obj, mouseEv) {
 	var tn = mouseEv.target.tagName.toLowerCase();
 	if (tn != "input" && tn != "textarea") {
 		// bug #6003 - Safari seems to follow propagation rules for clicks on scrollbar :(
-		mouseEv._stopPropagation = obj.getPropagationForEvent();
-		mouseEv._returnValue = obj.getReturnValueForEvent();
+		mouseEv._stopPropagation = obj._getPropagationForEvent();
+		mouseEv._returnValue = obj._getReturnValueForEvent();
 	} else {
 		mouseEv._stopPropagation = false;
 		mouseEv._returnValue = true;	
@@ -439,692 +1767,28 @@ function(ev, eventType, obj, mouseEv) {
 	// publish our settings to the DOM
 	mouseEv.setToDhtmlEvent(ev);
 	return mouseEv._returnValue;
-}
+};
 
 // need to populate this hash after methods are defined
-DwtControl.HANDLER = new Object();
-DwtControl.HANDLER[DwtEvent.ONCONTEXTMENU] = DwtControl._contextMenuHdlr;
-DwtControl.HANDLER[DwtEvent.ONDBLCLICK] = DwtControl._dblClickHdlr;
-DwtControl.HANDLER[DwtEvent.ONMOUSEDOWN] = DwtControl._mouseDownHdlr;
-DwtControl.HANDLER[DwtEvent.ONMOUSEENTER] = DwtControl._mouseOverHdlr;
-DwtControl.HANDLER[DwtEvent.ONMOUSELEAVE] = DwtControl._mouseOutHdlr;
-DwtControl.HANDLER[DwtEvent.ONMOUSEMOVE] = DwtControl._mouseMoveHdlr;
-DwtControl.HANDLER[DwtEvent.ONMOUSEOUT] = DwtControl._mouseOutHdlr;
-DwtControl.HANDLER[DwtEvent.ONMOUSEOVER] = DwtControl._mouseOverHdlr;
-DwtControl.HANDLER[DwtEvent.ONMOUSEUP] = DwtControl._mouseUpHdlr;
-DwtControl.HANDLER[DwtEvent.ONMOUSEWHEEL] = DwtControl._mouseWheelHdlr;
-DwtControl.HANDLER[DwtEvent.ONSELECTSTART] = DwtControl._selectStartHdlr;
-DwtControl.HANDLER[DwtEvent.ONKEYPRESS] = DwtControl._keyPressHdlr;
-
-// instance methods
-
-DwtControl.prototype.toString = 
-function() {
-	return "DwtControl";
-}
-
-DwtControl.prototype.addControlListener = 
-function(listener) {
-	this.addListener(DwtEvent.CONTROL, listener);
-}
-
-DwtControl.prototype.removeControlListener = 
-function(listener) { 
-	this.removeListener(DwtEvent.CONTROL, listener);
-}
-
-DwtControl.prototype.addDisposeListener = 
-function(listener) {
-	this.addListener(DwtEvent.DISPOSE, listener);
-}
-
-DwtControl.prototype.removeDisposeListener = 
-function(listener) { 
-	this.removeListener(DwtEvent.DISPOSE, listener);
-}
-
-DwtControl.prototype.addListener =
-function(eventType, listener) {
-	return this._eventMgr.addListener(eventType, listener); 	
-}
-
-DwtControl.prototype.notifyListeners =
-function(eventType, event) {
-	return this._eventMgr.notifyListeners(eventType, event);
-}
-
-DwtControl.prototype.isListenerRegistered =
-function(eventType) {
-	return this._eventMgr.isListenerRegistered(eventType);
-}
-
-DwtControl.prototype.removeListener = 
-function(eventType, listener) {
-	return this._eventMgr.removeListener(eventType, listener);
-}
-
-DwtControl.prototype.removeAllListeners = 
-function(eventType) {
-	return this._eventMgr.removeAll(eventType);
-}
-
-DwtControl.prototype.dispose =
-function() {
-	if (this._disposed) return;
-
-	if (this.parent != null)
-		this.parent.removeChild(this);
-
-	Dwt.disassociateElementFromObject(null, this);
-
-	this._disposed = true;
-	var ev = new DwtDisposeEvent();
-	ev.dwtObj = this;
-	this.notifyListeners(DwtEvent.DISPOSE, ev);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-// XXX: DEPRACATED
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-DwtControl.prototype.getDocument =
-function() {
-	//return document;
-	alert("DEPRACATED: Please use document instead");
-}
-
-DwtControl.prototype.getData = 
-function(key) {
-	return this._data[key];
-}
-
-DwtControl.prototype.setData = 
-function(key, value) {
-  this._data[key] = value;
-}
-
-DwtControl.prototype.isDisposed =
-function() {
-	return this._isDisposed;
-}
-
-DwtControl.prototype.isInitialized =
-function() {
-	return this._ctrlInited;
-}
-
-/** 
- * This method is called to explicitly set focus to this component.
- */
- DwtControl.prototype.focus =
- function() {
- 	DwtShell.getShell(window).getKeyboardMgr().grabFocus(this);
- }
- 
- /**
-  * This method returns true if this control has keyboard focus
-  */
-  DwtControl.prototype.haveFocus =
-  function() {
-  	return DwtShell.getShell(window).getKeyboardMgr().dwtControlHasFocus(this)
-  }
- 
-/** This method should be overriden by derived classes to provide
- * behaviour for supported key actions. See DwtKeyMap for more info 
- *
- * @param actionCode [int]	Action code on which to act
- * @param ev [DwtKeyEvent]	keyboard event (last keyboard event in sequence)
- * @return	true if handled, else false
- */
-DwtControl.prototype.handleKeyAction =
-function(actionCode, ev) {
-	return false;
-}
-
-DwtControl.prototype.getPropagationForEvent = 
-function() {
-	// overload me for dealing w/ browsers w/ weird quirks
-	return true;
-}
-
-DwtControl.prototype.getReturnValueForEvent = 
-function() {
-	// overload me for dealing w/ browsers w/ weird quirks
-	return false;
-}
-
-DwtControl.prototype.reparent =
-function(newParent) {
-	if (!this._checkState()) return;
-
-	var htmlEl = this.getHtmlElement();
-	this.parent.removeChild(this);
-	DwtComposite._pendingElements[this._htmlElId] = htmlEl;
-	newParent.addChild(this);
-	this.parent = newParent;
-	// TODO do we need a reparent event?
-}
+/** @private */
+DwtControl.__HANDLER = new Object();
+DwtControl.__HANDLER[DwtEvent.ONCONTEXTMENU] = DwtControl.__contextMenuHdlr;
+DwtControl.__HANDLER[DwtEvent.ONDBLCLICK] = DwtControl.__dblClickHdlr;
+DwtControl.__HANDLER[DwtEvent.ONMOUSEDOWN] = DwtControl.__mouseDownHdlr;
+DwtControl.__HANDLER[DwtEvent.ONMOUSEENTER] = DwtControl.__mouseOverHdlr;
+DwtControl.__HANDLER[DwtEvent.ONMOUSELEAVE] = DwtControl.__mouseOutHdlr;
+DwtControl.__HANDLER[DwtEvent.ONMOUSEMOVE] = DwtControl.__mouseMoveHdlr;
+DwtControl.__HANDLER[DwtEvent.ONMOUSEOUT] = DwtControl.__mouseOutHdlr;
+DwtControl.__HANDLER[DwtEvent.ONMOUSEOVER] = DwtControl.__mouseOverHdlr;
+DwtControl.__HANDLER[DwtEvent.ONMOUSEUP] = DwtControl.__mouseUpHdlr;
+DwtControl.__HANDLER[DwtEvent.ONMOUSEWHEEL] = DwtControl.__mouseWheelHdlr;
+DwtControl.__HANDLER[DwtEvent.ONSELECTSTART] = DwtControl.__selectStartHdlr;
+DwtControl.__HANDLER[DwtEvent.ONKEYPRESS] = DwtControl.__keyPressHdlr;
 
 /**
-* Reparents the HTML element of the control to the html element supplied as the
-* parameter to this method. 
-*
-* @param htmlEl Either a string representing an ID, or an html element
-*/
-DwtControl.prototype.reparentHtmlElement =
-function(htmlEl) {
-
-	/* If htmlEl is a string, then it is an ID so lookup the html element that has
-	 * the corresponding ID */
-	if (typeof htmlEl == "string")
-		htmlEl = document.getElementById(htmlEl);
-
-	htmlEl.appendChild(this.getHtmlElement());
-}
-
-DwtControl.prototype.setHandler =
-function(event, func) {
-	if (!this._checkState()) return;
-
-	var htmlElement = this.getHtmlElement();
-	Dwt.setHandler(htmlElement, event, func);
-};
-
-DwtControl.prototype.clearHandler =
-function(event) {
-	if (!this._checkState()) return;
-		
-	var htmlElement = this.getHtmlElement();
-	Dwt.clearHandler(htmlElement, event);
-};
-
-DwtControl.prototype.getBounds =
-function(incScroll) {
-	if (!this._checkState()) return;
-		
-	return Dwt.getBounds(this.getHtmlElement(), incScroll);
-}
-
-DwtControl.prototype.setBounds =
-function(x, y, width, height) {
-	if (!this._checkState()) return;
-		
-	var htmlElement = this.getHtmlElement();
-	if (this.isListenerRegistered(DwtEvent.CONTROL)) {
-		this._controlEvent.reset();
-		var bds = Dwt.getBounds(htmlElement);
-		this._controlEvent.oldX = bds.x;
-		this._controlEvent.oldY = bds.y;
-		this._controlEvent.oldWidth = bds.width;
-		this._controlEvent.oldHeight = bds.height;
-		Dwt.setBounds(htmlElement, x, y, width, height);
-		bds = Dwt.getBounds(htmlElement);
-		this._controlEvent.newX = bds.x;
-		this._controlEvent.newY = bds.y;
-		this._controlEvent.newWidth = bds.width;
-		this._controlEvent.newHeight = bds.height;
-		this._controlEvent.requestedWidth = width;
-		this._controlEvent.requestedHeight = height;
-		this.notifyListeners(DwtEvent.CONTROL, this._controlEvent);
-	} else {
-		Dwt.setBounds(htmlElement, x, y, width, height);
-	}
-	
-	return this;
-}
-
-DwtControl.prototype.getClassName =
-function() {
-	return this._className;
-}
-
-DwtControl.prototype.setClassName =
-function(className) {
-	if (!this._checkState()) return;
-		
-	this._className = className;
-	this.getHtmlElement().className = className;
-}
-
-DwtControl.prototype.getCursor = 
-function() {
-	if (!this._checkState()) return;
-		
-	return Dwt.getCursor(this.getHtmlElement());
-}
-
-DwtControl.prototype.setCursor =
-function(cursorName) {
-	if (!this._checkState()) return;
-		
-	Dwt.setCursor(this.getHtmlElement(), cursorName);
-}
-
-DwtControl.prototype.getDragSource =
-function() {
-	return this._dragSource;
-}
-
-DwtControl.prototype.setDragSource =
-function(dragSource) {
-	this._dragSource = dragSource;
-	if (dragSource != null && this._ctrlCaptureObj == null) {
-		this._ctrlCaptureObj = new DwtMouseEventCapture(this, "DwtControl", DwtControl._mouseOverHdlr,
-				DwtControl._mouseDownHdlr, DwtControl._mouseMoveHdlr, 
-				DwtControl._mouseUpHdlr, DwtControl._mouseOutHdlr);
-		this._dndHoverAction = new AjxTimedAction(null, this._dndDoHover);
-	}
-}
-
-DwtControl.prototype.getDropTarget =
-function() {
-	return this._dropTarget;
-}
-
-DwtControl.prototype.setDropTarget =
-function(dropTarget) {
-	this._dropTarget = dropTarget;
-}
-
-DwtControl.prototype.getEnabled =
-function() {
-	if (!this._checkState()) return;
-		
-	return this._enabled;
-}
-
-DwtControl.prototype.setEnabled =
-function(enabled, setHtmlElement) {
-	if (!this._checkState()) return;
-		
-	if (enabled != this._enabled) {
-		this._enabled = enabled;
-		if (setHtmlElement)
-			this.getHtmlElement().disabled = !enabled;
-	}
-};
-
-DwtControl.prototype.getHtmlElement =
-function() {
-	if (!this._checkState()) return;
-
-	var htmlEl = document.getElementById(this._htmlElId);
-	if (htmlEl == null) {
-		htmlEl = DwtComposite._pendingElements[this._htmlElId];
-	} else if (!htmlEl._rendered) {
-		delete DwtComposite._pendingElements[this._htmlElId];
-		htmlEl._rendered = true;
-	}
-	
-	return htmlEl;
-}
-
-DwtControl.prototype.setHtmlElementId =
-function(id) {
-	if (this._disposed) return;
-	
-	if (this._ctrlInited) {
-		var htmlEl = this.getHtmlElement();
-		if (!htmlEl._rendered) {
-			delete DwtComposite._pendingElements[this._htmlElId];
-			DwtComposite._pendingElements[id] = htmlEl;
-		}
-		htmlEl.id = id;
-	}
-	this._htmlElId = id;
-}
-
-DwtControl.prototype.getX =
-function() {
-	if (!this._checkState()) return;
-		
-	return Dwt.getLocation(this.getHtmlElement()).x;
-}
-
-DwtControl.prototype.getXW =
-function() {
-	if (!this._checkState()) return;
-		
-    var bounds = this.getBounds();
-	return bounds.x+bounds.width;
-}
-
-DwtControl.prototype.getY =
-function() {
-	if (!this._checkState()) return;
-		
-	return Dwt.getLocation(this.getHtmlElement()).y;
-}
-
-DwtControl.prototype.getYH =
-function() {
-	if (!this._checkState()) return;
-		
-    var bounds = this.getBounds();
-	return bounds.y+bounds.height;
-}
-
-DwtControl.prototype.getLocation =
-function() {
-	if (!this._checkState()) return;
-		
-	return Dwt.getLocation(this.getHtmlElement());
-}
-
-DwtControl.prototype.setLocation =
-function(x, y) {
-	if (!this._checkState()) return;
-		
-	if (this.isListenerRegistered(DwtEvent.CONTROL)) {
-		var htmlElement = this.getHtmlElement();
-		this._controlEvent.reset();
-		var loc = Dwt.getLocation(htmlElement);
-		this._controlEvent.oldX = loc.x;
-		this._controlEvent.oldY = loc.y;
-		Dwt.setLocation(htmlElement, x, y);
-		loc = Dwt.getLocation(htmlElement);
-		this._controlEvent.newX = loc.x;
-		this._controlEvent.newY = loc.y;
-		this.notifyListeners(DwtEvent.CONTROL, this._controlEvent);
-	} else {
-		Dwt.setLocation(this.getHtmlElement(), x, y);
-	}
-	return this;
-}
-
-DwtControl.prototype.getScrollStyle =
-function() {
-	if (!this._checkState()) return;
-		
-	return Dwt.getScrollStyle(this.getHtmlElement());
-}
-
-DwtControl.prototype.setScrollStyle =
-function(scrollStyle) {
-	if (!this._checkState()) return;
-		
-	Dwt.setScrollStyle(this.getHtmlElement(), scrollStyle);
-}
-
-DwtControl.prototype.getW = 
-function(incScroll) {
-	if (!this._checkState()) return;
-		
-	return Dwt.getSize(this.getHtmlElement(), incScroll).x;
-}
-
-DwtControl.prototype.getH = 
-function(incScroll) {
-	if (!this._checkState()) return;
-		
-	return Dwt.getSize(this.getHtmlElement(), incScroll).y;
-}
-
-DwtControl.prototype.getSize = 
-function(incScroll) {
-	if (!this._checkState()) return;
-		
-	return Dwt.getSize(this.getHtmlElement(), incScroll);
-}
-
-DwtControl.prototype.setSize = 
-function(width, height) {
-	if (!this._checkState()) return;
-		
-	if (this.isListenerRegistered(DwtEvent.CONTROL)) {
-		var htmlElement = this.getHtmlElement();
-		this._controlEvent.reset();
-		var sz = Dwt.getSize(htmlElement);
-		this._controlEvent.oldWidth = sz.x;
-		this._controlEvent.oldHeight = sz.y;
-		Dwt.setSize(htmlElement, width, height);
-		sz = Dwt.getSize(htmlElement);
-		this._controlEvent.newWidth = sz.x;
-		this._controlEvent.newHeight = sz.y;
-		this.notifyListeners(DwtEvent.CONTROL, this._controlEvent);
-	} else {
-		Dwt.setSize(this.getHtmlElement(), width, height);
-	}
-	return this;
-}
-
-DwtControl.prototype.getToolTipContent =
-function() {
-	if (this._disposed) return;
-
-	return this._toolTipContent;
-}
-
-DwtControl.prototype.setToolTipContent =
-function(text) {
-	if (this._disposed) return;
-
-	this._toolTipContent = text;
-}
-
-DwtControl.prototype.getVisible =
-function() {
-	if (!this._checkState()) return;
-		
-	return Dwt.getVisible(this.getHtmlElement());
-}
-
-DwtControl.prototype.setVisible =
-function(visible) {
-	if (!this._checkState()) return;
-		
-	Dwt.setVisible(this.getHtmlElement(), visible);
-}
-
-DwtControl.prototype.setVisibility =
-function(visible) {
-	if (!this._checkState()) return;
-		
-	Dwt.setVisibility(this.getHtmlElement(), visible);
-}
-
-DwtControl.prototype.getZIndex =
-function() {
-	if (!this._checkState()) return;
-		
-	return Dwt.getZIndex(this.getHtmlElement());
-}
-
-/**
-* Sets the z-index for this object's HTML element. Since z-index is only relevant among peer
-* elements, we make sure that all elements that are being displayed via z-index hang off the
-* main shell.
-*
-* @param idx	the new z-index for this element
-*/
-DwtControl.prototype.setZIndex =
-function(idx) {
-	if (!this._checkState()) return;
-		
-	Dwt.setZIndex(this.getHtmlElement(), idx);
-}
-
-/**
-* Convenience function to toggle visibility using z-index. It uses the two lowest level
-* z-indexes. Any further stacking will have to use setZIndex() directly.
-*
-* @param show	true if we want to show the element, false if we want to hide it
-*/
-DwtControl.prototype.zShow =
-function(show) {
-	this.setZIndex(show ? Dwt.Z_VIEW : Dwt.Z_HIDDEN);
-}
-
-DwtControl.prototype.setDisplay = 
-function(value) {
-	if (!this._checkState()) return;
-
-	Dwt.setDisplay(this.getHtmlElement(), value);
-}
-
-DwtControl.prototype.preventSelection = 
-function(targetEl) {
-	return !this._isInputEl(targetEl);
-}
-
-DwtControl.prototype.preventContextMenu = 
-function(targetEl) {
-	return targetEl ? (!this._isInputEl(targetEl)) : true;
-}
-
-DwtControl.prototype._checkState =
-function() {
-	if (this._disposed) return false;
-	if (!this._ctrlInited) 
-		this._initCtrl();
-	return true;
-}
-
-/* This method should be overridden by derived classes to provide
- * behaviour for the component losing focus */
-DwtControl.prototype._blur =
-function() {
-}
-
-/* This method should be overridden by derived classes to provide
- * behaviour for the component gaining focus e.g. providing a border or
- * highlighting etc...*/
-DwtControl.prototype._focus =
-function() {
-}
-
-DwtControl.prototype._isInputEl = 
-function(targetEl) {
-	var bIsInput = false;
-	if(!targetEl || !targetEl.tagName) {
-		return bIsInput;
-	}
-	var tagName = targetEl.tagName.toLowerCase();
-	var type = tagName == "input" ? targetEl.type.toLowerCase() : null;
-	
-	if (tagName == "textarea" || (type && (type == "text" || type == "password")))
-		bIsInput = true;
-	
-	return bIsInput;
-}
-
- /* This method is called from mouseUpHdl. Subclasses may override this method
-  * if they have their own specialized focus management code
-  */
-  DwtControl.prototype._focusByMouseUpEvent =
-  function()  {
-	// DBG.println("_focusByMouseUpEvent");
-  	this.focus();
-  }
-
-
-DwtControl.prototype._setEventHdlrs =
-function(events, clear) {
-	if (!this._checkState()) return;
-		
-	var htmlElement = this.getHtmlElement();
-	for (var i = 0; i < events.length; i++) {
-		if (clear !== true)
-			Dwt.setHandler(htmlElement, events[i], DwtControl.HANDLER[events[i]]);
-		else
-			Dwt.clearHandler(htmlElement, events[i]);
-	}
-}
-
-DwtControl.prototype._setMouseEventHdlrs =
-function(clear) {
-	this._setEventHdlrs(DwtEvent.MOUSE_EVENTS, clear);
-}
-
-
-DwtControl.prototype._setKeyPressEventHdlr =
-function(clear) {
-	this._setEventHdlrs([DwtEvent.ONKEYPRESS], clear);
-}
-
-DwtControl.prototype._dndDoHover =
-function(control) {
-	//TODO Add allow hover?
-	control._dragHover();
-}
-
-
-
-/* Subclasses may override this method to return an HTML element that will represent
- * the dragging icon. The icon must be created on the DwtShell widget. If this method returns
- * null, it indicates that the drag failed*/
-DwtControl.prototype._getDnDIcon =
-function(dragOp) {
-	DBG.println("DwtControl.prototype._getDnDIcon");
-	return null;
-}
-
-/* Subclasses may override this method to set the DnD icon properties based on whether drops are
- * allowed */
-DwtControl.prototype._setDnDIconState =
-function(dropAllowed) {
-	this._dndIcon.className = (dropAllowed) ? "DropAllowed" : "DropNotAllowed";
-}
-
-
-/* Subclasses may override this method to destroy the Dnd icon HTML element. */
-DwtControl._junkIconId = 0;
-DwtControl.prototype._destroyDnDIcon =
-function(icon) {
-	if (icon != null) {
-		// not sure why there is no parent node, but if there isn't one,
-		// let's try and do our best to get rid of the icon
-		if (icon.parentNode) {
-			icon.parentNode.removeChild(icon);
-		} else {
-			// at least hide the icon, and change the id so we can't get it
-			// back later
-			icon.style.zIndex = -100;
-			icon.id = "DwtJunkIcon" + DwtControl._junkIconId++;
-			icon = void 0;
-		}
-	}
-}
-
-/* Subclasses may override this method to provide feedback as to whether a possibly
- * valid capture is taking place. For example, there are instances such as when a mouse
- * down happens on a scroll bar in a DwtListView that are reported in the context of
- * the DwtListView, but which are not really a valid mouse down i.e. on a list item. In
- * such cases this function would return false */
- DwtControl.prototype._isValidDragObject =
- function(ev) {
- 	return true;
- }
-
-/* subclasses may override the following  functions to provide UI behaviour for DnD operations.
- * _dragEnter is called when a drag operation enters a control. _dragOver is called multiple times
- * as an item crossed over the control. _dragHover is called multiple times as the user hover's over
- * the control. _dragLeave is called when the drag operation exits the control. 
- * _drop is called when the item is dropped on the target.
+ * @private
  */
-DwtControl.prototype._dragEnter =
-function(ev) {
-}
-
-DwtControl.prototype._dragOver =
-function(ev) {
-}
-
-DwtControl.prototype._dragHover =
-function(ev) {
-}
-
-
-DwtControl.prototype._dragLeave =
-function(ev) {
-}
-
-DwtControl.prototype._drop =
-function(ev) {
-}
-
-DwtControl.prototype._initCtrl = 
+DwtControl.prototype.__initCtrl = 
 function() {
 	this.shell = this.parent.shell || this.parent;
 	var htmlElement = document.createElement("div");
@@ -1144,20 +1808,12 @@ function() {
 	this._ctrlInited = true;
 	// Make sure this is the last thing we do
 	this.parent.addChild(this);
-}
+};
 
-DwtControl.prototype.setContent =
-function(content) {
-	if (content)
-		this.getHtmlElement().innerHTML = content;
-}
-
-DwtControl.prototype.clearContent =
-function() {
-	this.getHtmlElement().innerHTML = "";
-}
-
-DwtControl.prototype._badDropEffect =
+/**
+ * @private
+ */
+DwtControl.prototype.__badDropEffect =
 function(m, c, d) {
 	var usingX = (Math.abs(m) <= 1);
 	// Use the bigger delta to control the snap effect
@@ -1177,9 +1833,12 @@ function(m, c, d) {
   		this._destroyDnDIcon(this._dndIcon);
 		this._dragging = DwtControl._NO_DRAG;
   	}
-}
+};
 
-DwtControl.prototype._handleHoverOver =
+/**
+ * @private
+ */
+DwtControl.prototype.__handleHoverOver =
 function(event) {
 	if (this._eventMgr.isListenerRegistered(DwtEvent.HOVEROVER)) {
 		this._eventMgr.notifyListeners(DwtEvent.HOVEROVER, event);
@@ -1193,9 +1852,12 @@ function(event) {
 		this._lastTooltipY = event.y;
 		this._tooltipClosed = false;
 	}
-}
+};
 
-DwtControl.prototype._handleHoverOut =
+/**
+ * @private
+ */
+DwtControl.prototype.__handleHoverOut =
 function(event) {
 	if (this._eventMgr.isListenerRegistered(DwtEvent.HOVEROUT)) {
 		this._eventMgr.notifyListeners(DwtEvent.HOVEROUT, event);
@@ -1205,4 +1867,19 @@ function(event) {
 	tooltip.popdown();
 	this._lastTooltipX = null;
 	this._lastTooltipY = null;
-}
+};
+
+DwtControl.prototype.__isInputEl = 
+function(targetEl) {
+	var bIsInput = false;
+	if(!targetEl || !targetEl.tagName) {
+		return bIsInput;
+	}
+	var tagName = targetEl.tagName.toLowerCase();
+	var type = tagName == "input" ? targetEl.type.toLowerCase() : null;
+	
+	if (tagName == "textarea" || (type && (type == "text" || type == "password")))
+		bIsInput = true;
+	
+	return bIsInput;
+};

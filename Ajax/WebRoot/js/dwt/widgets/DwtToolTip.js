@@ -195,6 +195,6 @@ function(element, x, y, baseId, clip, dialog) {
 	}
 
 	Dwt.setLocation(element, px, py);
-	var zIndex = dialog ? dialog.getZIndex() + Dwt.Z_INC : Dwt.Z_TOOLTIP;
+	var zIndex = dialog ? dialog.getZIndex() + Dwt._Z_INC : Dwt.Z_TOOLTIP;
 	Dwt.setZIndex(element, zIndex);
 }
