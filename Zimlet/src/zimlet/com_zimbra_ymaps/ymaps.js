@@ -163,35 +163,20 @@ function Com_Zimbra_YMaps_Asst(appCtxt) {
 Com_Zimbra_YMaps_Asst.prototype = new ZmAssistant();
 Com_Zimbra_YMaps_Asst.prototype.constructor = Com_Zimbra_YMaps_Asst;
 
-Com_Zimbra_YMaps_Asst.prototype.extraButtonHandler =
-function(dialog) {
-	// get reference to the ymaps zimlet
-	var zm = this._appCtxt.getSettings().getZimletManager();
-	var zimlet = zm ? zm._ZIMLETS_BY_ID["com_zimbra_ymaps"] : null;
-	if (zimlet && this._address) {
-		//zimlet.handlerObject._displayDialogMap(this._address);
-		zimlet.handlerObject.toolTipPoppedUp(null, this._address, null, dialog.getAssistantDiv());
-	}
-	return false;
-};
-
 Com_Zimbra_YMaps_Asst.prototype.okHandler =
 function(dialog) {
 	// get reference to the ymaps zimlet
 	var zm = this._appCtxt.getSettings().getZimletManager();
 	var zimlet = zm ? zm._ZIMLETS_BY_ID["com_zimbra_ymaps"] : null;
-
 	if (zimlet && this._address) {
-		zimlet.handlerObject._displayDialogMap(this._address);
+		zimlet.handlerObject.toolTipPoppedUp(null, this._address, null, dialog.getAssistantDiv());
 	}
-	// return true to close the assistant dialog
-	return true;
+	return false;
 };
 
 Com_Zimbra_YMaps_Asst.prototype.handle =
 function(dialog, verb, args) {
 	this._address = args;
 	var valid = args.length > 0;
-	dialog._setOkButton(AjxMsg.ok, true, valid);
-	dialog._setExtraButton("Map", true, valid);
+	dialog._setOkButton("Map", true, valid);
 };
