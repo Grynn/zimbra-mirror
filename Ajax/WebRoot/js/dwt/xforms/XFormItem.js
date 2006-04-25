@@ -3779,22 +3779,27 @@ Dwt_List_XFormItem.prototype.setItems = function (itemArray){
 	}
 	tmpArr = new Array();
 	
-	//we have to compare the objects, because XForm calls this method every time an item in the list is selected
-	if(itemArray.join() != existingArr.join() ) {
-		var preserveSelection = this.getInheritedProperty("preserveSelection");
-		var selection = null;
-		if(preserveSelection) {
-			selection = this.widget.getSelection();
-		}		
-		var cnt=itemArray.length;
-		for(var i = 0; i< cnt; i++) {
-			tmpArr.push(itemArray[i]);		
+	if (itemArray && itemArray.length > 0) {	
+		//we have to compare the objects, because XForm calls this method every time an item in the list is selected
+		if(itemArray.join() != existingArr.join() ) {
+			var preserveSelection = this.getInheritedProperty("preserveSelection");
+			var selection = null;
+			if(preserveSelection) {
+				selection = this.widget.getSelection();
+			}		
+			var cnt=itemArray.length;
+			for(var i = 0; i< cnt; i++) {
+				tmpArr.push(itemArray[i]);		
+			}
+			//add the default sort column
+			this.widget.set(AjxVector.fromArray(tmpArr), this.getInheritedProperty("defaultColumnSortable"));
+			if(preserveSelection && selection) {
+				this.widget.setSelectedItems(selection);
+			}
 		}
-		//add the default sort column
-		this.widget.set(AjxVector.fromArray(tmpArr), this.getInheritedProperty("defaultColumnSortable"));
-		if(preserveSelection && selection) {
-			this.widget.setSelectedItems(selection);
-		}
+	}else{
+		//display the empty list (no result html)
+		this.widget.set([]); 
 	}
 };
 

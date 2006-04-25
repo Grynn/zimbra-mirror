@@ -128,46 +128,49 @@ ZaServerMBXStatsPage.prototype.getMbxes = function ( targetServer, offset, sortB
 	var totalMbxes = resp.getAttribute("searchTotal") ;
 	
 	*/
-		
-	var more = resp.more ;
-	var totalMbxes = resp.searchTotal;
 	
-	result.totalPage = parseInt (Math.ceil(totalMbxes / ZaServerMBXStatsPage.MBX_DISPLAY_LIMIT ));
-	result.curPage = offset / ZaServerMBXStatsPage.MBX_DISPLAY_LIMIT + 1 ;
-	
-	var accounts = resp.account ;
-	var accountArr = new Array ();
-	var quotaLimit = 0;
-	var percentage = 0 ;
-	var diskUsed = 0;
-	var _1MB = 1048576 ;
-
-	for (var i=0; i<accounts.length; i ++){
-		diskUsed = ( accounts[i].used / _1MB ).toFixed(2) ;
+	if ((resp.account && resp.account.length > 0) && (resp.searchTotal && resp.searchTotal > 0)){	
+		var more = resp.more ;
+		var totalMbxes = resp.searchTotal;
 		
-		if (accounts[i].limit == 0 ){
-			quotaLimit = "unlimited" ;
-			percentage = 0 ;	
-		}else{			
-			if (accounts[i].limit >= _1MB) {
-				quotaLimit = ( accounts[i].limit / _1MB ).toFixed() ;						
-			}else{ //quota limit is too small, we set it to 1MB. And it also avoid the NaN error when quotaLimit = 0
-				quotaLimit = 1 ;
+		result.totalPage = parseInt (Math.ceil(totalMbxes / ZaServerMBXStatsPage.MBX_DISPLAY_LIMIT ));
+		result.curPage = offset / ZaServerMBXStatsPage.MBX_DISPLAY_LIMIT + 1 ;
+		
+		var accounts = resp.account ;		
+		var quotaLimit = 0;
+		var percentage = 0 ;
+		var diskUsed = 0;
+		var _1MB = 1048576 ;
+		var accountArr = new Array ();
+		
+		for (var i=0; i<accounts.length; i ++){
+			diskUsed = ( accounts[i].used / _1MB ).toFixed(2) ;
+			
+			if (accounts[i].limit == 0 ){
+				quotaLimit = "unlimited" ;
+				percentage = 0 ;	
+			}else{			
+				if (accounts[i].limit >= _1MB) {
+					quotaLimit = ( accounts[i].limit / _1MB ).toFixed() ;						
+				}else{ //quota limit is too small, we set it to 1MB. And it also avoid the NaN error when quotaLimit = 0
+					quotaLimit = 1 ;
+				}
+				percentage = ((diskUsed * 100) / quotaLimit).toFixed() ;
 			}
-			percentage = ((diskUsed * 100) / quotaLimit).toFixed() ;
+							    
+			accountArr [i] = { 	account : accounts[i].name,
+								diskUsage :  AjxMessageFormat.format (ZaMsg.MBXStats_DISK_MSB, [diskUsed]),
+								quotaUsage : percentage + "\%" ,
+								quota: quotaLimit + " MB"				 
+								};
+			//need to override the toString method, so when XForm does the element comparison, it will return the correct result
+			//it is required when xform list needs to be update.
+			accountArr[i].toString = function (){ return this.account ; };
 		}
-						    
-		accountArr [i] = { 	account : accounts[i].name,
-							diskUsage :  AjxMessageFormat.format (ZaMsg.MBXStats_DISK_MSB, [diskUsed]),
-							quotaUsage : percentage + "\%" ,
-							quota: quotaLimit + " MB"				 
-							};
-		//need to override the toString method, so when XForm does the element comparison, it will return the correct result
-		//it is required when xform list needs to be update.
-		accountArr[i].toString = function (){ return this.account ; };
-	}
-	result.mbxes = accountArr ;
 		
+		result.mbxes = accountArr ;
+	}	
+	
 	return result;	
 };
 
@@ -212,8 +215,17 @@ function (){
 	var instance = null ;
 
 	if ( !this._initialized ) {
-		//reserve the previous sort and ascending information. so the list hearder can display currectly
-		var mbxesObj = this.getMbxes( this._server.id, 0 , this._prevSortBy, this._prevAscending) ;
+		//check whether the targetServer has the zimbra store enabled
+		var serverAttrs = this._server.attrs ;
+		var mbxesObj = {};
+		if (serverAttrs && (!(serverAttrs[ZaServer.A_zimbraMailboxServiceInstalled] && serverAttrs[ZaServer.A_zimbraMailboxServiceEnabled]))){
+			mbxesObj.mbxes = [] ;
+		}else{
+			//reserve the previous sort and ascending information. so the list hearder can display currectly
+			//mbxesObj.mbxes = [] ;
+			mbxesObj = this.getMbxes( this._server.id, 0 , this._prevSortBy, this._prevAscending) ;
+		}
+		
 		instance = { 	serverid: this._server.id,
 						offset:  0,	
 						sortBy : this._prevSortBy , //reserve the previous sort and ascending information.
@@ -410,7 +422,8 @@ ZaServerMbxListView.prototype._setNoResultsHtml = function() {
 	var	div = document.createElement("div");
 	
 	buffer.append("<table width='100%' cellspacing='0' cellpadding='1'>",
-				  "<tr><td class='NoResults'><br>&nbsp",
+				  "<tr><td class='NoResults'>",
+				  AjxStringUtil.htmlEncode(ZaMsg.MBXStats_NoMbx),
 				  "</td></tr></table>");
 	
 	div.innerHTML = buffer.toString();

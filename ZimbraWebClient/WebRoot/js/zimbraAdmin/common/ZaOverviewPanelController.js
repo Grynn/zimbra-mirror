@@ -660,7 +660,7 @@ ZaOverviewPanelController.statsByServerTreeListener = function (ev) {
 		curController.show(currentServer);
 	}
 	//refresh the MbxPage when the server tree item is clicked
-	var mbxPage = curController._contentView._mbxPage ;
+	var mbxPage = curController._contentView ? curController._contentView._mbxPage : null ;
 	if (mbxPage) {
 		mbxPage._initialized = false ; //force mbxPage.showMe to query the server again.
 		if (curController._contentView._currentTabKey == ZaServerMBXStatsPage.TAB_KEY) { //MbxPage is the current page
