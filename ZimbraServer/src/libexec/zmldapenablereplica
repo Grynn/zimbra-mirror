@@ -69,8 +69,8 @@ createLdapConfig() {
 	root_sha=`${zimbra_home}/openldap/sbin/slappasswd -s ${ldap_root_password}`
 	sed -e "s|^rootpw.*|rootpw ${root_sha}|" \
 		${zimbra_home}/openldap/etc/openldap/slapd.conf > ${zimbra_home}/conf/slapd.conf.in
-	grep -v replogfile ${zimbra_home}/conf/slapd.conf.in > /tmp/slapd.conf.in
-	grep -v sessionlog /tmp/slapd.conf.in > ${zimbra_home}/conf/slapd.conf.in
+	grep -v syncprov ${zimbra_home}/conf/slapd.conf.in > /tmp/slapd.conf.in
+	mv -f /tmp/slapd.conf.in ${zimbra_home}/conf/slapd.conf.in
 
 	if [ $? -ne 0 ]; then
 		echo "FAILED"
