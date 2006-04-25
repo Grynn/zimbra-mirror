@@ -469,7 +469,8 @@ function() {
 DwtListView.prototype._addRow =
 function(row, index) {
 	// bug fix #1894 - check for childNodes length otherwise IE barfs
-	if (index != null && this._parentEl.childNodes.length > 0)
+	var len = this._parentEl.childNodes.length;
+	if (index != null && len > 0 && index != len)
 		this._parentEl.insertBefore(row, this._parentEl.childNodes[index]);
 	else
 		this._parentEl.appendChild(row);
