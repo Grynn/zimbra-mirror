@@ -3799,7 +3799,7 @@ Dwt_List_XFormItem.prototype.setItems = function (itemArray){
 		}
 	}else{
 		//display the empty list (no result html)
-		this.widget.set([]); 
+		this.widget.set(AjxVector.fromArray([])); 
 	}
 };
 
