@@ -1571,4 +1571,8 @@ TODO - add support for multi-line values in globalConfigValue and defaultCOSValu
   <desc>port number on which POP3S proxy server should listen</desc>
 </attr>
 
+<attr id="352" name="zimbraVirtualHostname" type="string" max="256" cardinality="multi" optionalIn="domain">
+  <desc>An alias for this domain, used to determine default login domain based on URL client is visiting</desc>
+</attr>
+
 </attrs>

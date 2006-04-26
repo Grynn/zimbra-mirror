@@ -338,6 +338,7 @@ objectIdentifier zimbraImapProxyBindPort ZimbraAttrType:348
 objectIdentifier zimbraImapSSLProxyBindPort ZimbraAttrType:349
 objectIdentifier zimbraPop3ProxyBindPort ZimbraAttrType:350
 objectIdentifier zimbraPop3SSLProxyBindPort ZimbraAttrType:351
+objectIdentifier zimbraVirtualHostname ZimbraAttrType:352
 
 #################################################################
 # object class OIDs
@@ -2266,6 +2267,13 @@ attributetype ( zimbraTableMaintenanceGrowthFactor
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )
 
+attributetype ( zimbraVirtualHostname
+	NAME ( 'zimbraVirtualHostname' )
+	DESC 'An alias for this domain, used to determine default login domain based on URL client is visiting'
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch)
+
 attributetype ( zimbraVirusCheckEnabled
 	NAME 'zimbraVirusCheckEnabled'
 	DESC 'Whether to enable virus checking'
@@ -3089,7 +3097,8 @@ objectclass ( zimbraDomain
 		zimbraGalLdapBindPassword $
 		zimbraGalLdapAttrMap $
 		zimbraGalLdapFilter $
-		zimbraPreAuthKey
+		zimbraPreAuthKey $
+		zimbraVirtualHostname
 	))
 
 ################
