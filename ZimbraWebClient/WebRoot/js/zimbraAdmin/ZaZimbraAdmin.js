@@ -230,7 +230,12 @@ function() {
 	try {
 		//if we're not logged in we will be thrown out here
 		var soapDoc = AjxSoapDoc.create("GetInfoRequest", "urn:zimbraAccount", null);	
-		var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false);		
+		var command = new ZmCsfeCommand();
+		var params = new Object();
+		params.soapDoc = soapDoc;	
+		params.noSession = true;
+		var resp = command.invoke(params);
+		//var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false);		
 		//initialize my rights
 		ZaSettings.init();		
 	} catch (ex) {
