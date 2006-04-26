@@ -660,6 +660,7 @@ ZaOverviewPanelController.statsByServerTreeListener = function (ev) {
 		curController.show(currentServer);
 	}
 	//refresh the MbxPage when the server tree item is clicked
+	/* It should be done in the ZaServerMBXStatsPage._render method.
 	var mbxPage = curController._contentView ? curController._contentView._mbxPage : null ;
 	if (mbxPage) {
 		mbxPage._initialized = false ; //force mbxPage.showMe to query the server again.
@@ -668,7 +669,7 @@ ZaOverviewPanelController.statsByServerTreeListener = function (ev) {
 			DBG.println("Invoke the ZaServerMBXStatsPage.showMe() to update the mbx quotas.");
 			mbxPage.showMe();
 		}
-	}
+	}*/
 }
 
 ZaOverviewPanelController.globalSettingsTreeListener = function (ev) {

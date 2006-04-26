@@ -91,7 +91,9 @@ ZaServerMBXStatsPage.prototype._render = function (server) {
 		
 		this._view.draw();
 		this._rendered = true;
-	} 
+	} else{
+		this.showMe(true); //always refresh when user click on the server list
+	}
 };
 
 //data instance of the xform
@@ -210,11 +212,11 @@ ZaServerMBXStatsPage.prototype._getXForm = function () {
 
 //this function is called when user switch to the mbx quota tab
 ZaServerMBXStatsPage.prototype.showMe = 
-function (){
+function (refresh){
 	DwtTabViewPage.prototype.showMe.call(this);
 	var instance = null ;
 
-	if ( !this._initialized ) {
+	if ( !this._initialized || refresh) {
 		//check whether the targetServer has the zimbra store enabled
 		var serverAttrs = this._server.attrs ;
 		var mbxesObj = {};
