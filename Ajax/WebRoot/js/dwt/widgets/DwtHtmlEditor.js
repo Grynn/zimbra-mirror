@@ -445,9 +445,9 @@ function(direction) {
 	var dir = (direction == DwtHtmlEditor.DIRECTION_R2L) ? "rtl" : "ltr";
 	var el = this._getParentElement();
 
-	DBG.println("EL: " + el.tagName.toLowerCase() + " - " + DwtHtmlEditor._BLOCK_ELEMENTS[el.tagName.toLowerCase()]);
+	DBG.println("EL: " + el.nodeName.toLowerCase() + " - " + DwtHtmlEditor._BLOCK_ELEMENTS[el.nodeName.toLowerCase()]);
 
-	while (el && !DwtHtmlEditor._BLOCK_ELEMENTS[el.tagName.toLowerCase()])
+	while (el && !DwtHtmlEditor._BLOCK_ELEMENTS[el.nodeName.toLowerCase()])
 		el = el.parentNode;
 
 	if (el)
@@ -715,7 +715,7 @@ function(tagName) {
 	try {
 		var p = this._getParentElement();
 		tagName = tagName.toLowerCase();
-		while (p && p.tagName.toLowerCase() != tagName)
+		while (p && p.nodeName.toLowerCase() != tagName)
 			p = p.parentNode;
 		return p;
 	} catch(ex) {
@@ -791,7 +791,7 @@ DwtHtmlEditor.prototype.getSelectedCells = function() {
 
 DwtHtmlEditor.prototype._splitCells = function(td) {
 	var table = td;
-	while (table && table.tagName.toLowerCase() != "table")
+	while (table && table.nodeName.toLowerCase() != "table")
 		table = table.parentNode;
 	var mozbr = AjxEnv.isGeckoBased ? "<br />" : "";
 	function splitRow(td) {
