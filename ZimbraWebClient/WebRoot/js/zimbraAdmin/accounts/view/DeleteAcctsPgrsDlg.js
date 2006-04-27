@@ -141,16 +141,16 @@ function (result) {
 	}
 	if(stopForError) {
 		//stop deleting
-		var strBuffer = new AjxBuffer(ZaMsg.FAILED_DELETE_ACCOUNT, " ",this._containedObject[this._currentIndex][ZaAccount.A_name],"<br>",
+	/*	var strBuffer = new AjxBuffer(ZaMsg.FAILED_DELETE_ACCOUNT, " ",this._containedObject[this._currentIndex][ZaAccount.A_name],"<br>",
 			ZaMsg.ERROR_CODE, " ", result.getException().code, "<br>",
 			ZaMsg.ERROR_MESSAGE, " ",result.getException().msg, "<br>",
 			ZaMsg.ERROR_DETAILS, " ",result.getException().detail, "<br>");
-		obj[DeleteAcctsPgrsDlg._ERROR_MSG] = strBuffer.toString();
+		obj[DeleteAcctsPgrsDlg._ERROR_MSG] = strBuffer.toString();*/
 		AjxTimedAction.cancelAction(this._pollHandler);	
 		this._pollHandler = null;	
 //		this._localXForm.setInstance(obj);	
 		this._localXForm.refresh();	
-//		this._app.getCurrentController()._handleException(result.getException(), "DeleteAcctsPgrsDlg.prototype.deleteOneAccountCallback", null, false);		
+		this._app.getCurrentController()._handleException(ex, "DeleteAcctsPgrsDlg.prototype.deleteOneAccountCallback", null, false);		
 	} else {
 		obj[DeleteAcctsPgrsDlg._DELETED_ACCTS].push(this._containedObject[this._currentIndex]);
 		this._currentIndex++;
