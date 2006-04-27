@@ -1135,6 +1135,8 @@
 	@MenuBg@
 	position:absolute;
 	z-index:10000000000;
+	border-bottom-width:1px;
+	border-right-width:1px;
 }
 .oselect_choice_table,
 .oselect_check_choice_table {

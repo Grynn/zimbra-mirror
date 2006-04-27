@@ -161,6 +161,7 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 			//yes - it fits upwards
 			menu.getElementsByTagName("table")[0].style.width = parseInt(bounds.width);
 			menu.style.width = parseInt(bounds.width);	
+			menu.style.top = bounds.top - menuHeight;			
 			menu.getElementsByTagName("table")[0].className = this.getChoiceTableCssClass();				
 		} else {
 			/*
