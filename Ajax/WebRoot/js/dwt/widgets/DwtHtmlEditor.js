@@ -275,8 +275,11 @@ function(rows, cols, width, cellSpacing, cellPadding, alignment) {
 	var doc = this._getIframeDoc();
 	var table = doc.createElement("table");
 
-	if (width != null) table.width = width;
-	else table.width = "100%";
+	if (width != null) table.style.width = width;
+	else table.style.width = "100%";
+
+	table.style.textAlign = "left";
+	table.style.verticalAlign = "middle";
 
 	if (alignment != null) table.align = alignment.toLowerCase();
 
@@ -289,17 +292,20 @@ function(rows, cols, width, cellSpacing, cellPadding, alignment) {
 	table.style.border = "1px solid #000";
 	table.style.borderCollapse = "collapse";
 
-  	var tdWidth = Math.floor(100 / cols) + "%";
+	var tdWidth;
+	// tdWidth = Math.floor(100 / cols) + "%";
+	tdWidth = null;		// disale for now--produces problems
 
 	var tbody = doc.createElement("tbody");
 	table.appendChild(tbody);
+	table.style.tableLayout = "fixed";
 
 	for (var i = 0; i < rows; i++) {
 		var tr = doc.createElement("tr");
 		tbody.appendChild(tr);
 		for (var j = 0; j < cols; j++) {
 			var td = doc.createElement("td");
-			if (tdWidth)
+			if (i == 0 && tdWidth)
 				td.style.width = tdWidth;
 			if (AjxEnv.isGeckoBased)
 				td.appendChild(doc.createElement("br"));
@@ -311,12 +317,52 @@ function(rows, cols, width, cellSpacing, cellPadding, alignment) {
 	this._insertNodeAtSelection(table);
 };
 
+DwtHtmlEditor.prototype.applyTableProperties =
+function(table, props) {
+	var doc = this._getIframeDoc();
+	for (var i in props) {
+		var val = AjxStringUtil.trim(props[i]);
+		var is_set = val != "";
+		switch (i) {
+		    case "caption":
+			var caption = table.getElementsByTagName("caption");
+			caption = caption.length > 0 ? caption[0] : null;
+			if (is_set && !caption) {
+				caption = doc.createElement("caption");
+				table.insertBefore(caption, table.firstChild);
+			}
+			if (!is_set && caption)
+				caption.parentNode.removeChild(caption);
+			if (caption)
+				caption.innerHTML = val;
+			break;
+
+		    case "summary":
+		    case "align":
+		    case "cellSpacing":
+		    case "cellPadding":
+			if (!is_set)
+				table.removeAttribute(i, 0);
+			else
+				table[i] = val;
+			break;
+
+		    default :
+			// TODO: remove unnecessary style (when is_set is false)
+			table.style[i] = val;
+			break;
+		}
+	}
+	if (AjxEnv.isGeckoBased)
+		this._forceRedraw();
+};
+
 DwtHtmlEditor.prototype._insertNodeAtSelection =
 function(node) {
 	this.focus();
 	if (!AjxEnv.isIE) {
 		var range = this._getRange();
-		this._getIframeWin().getSelection().removeAllRanges()
+		this._getIframeWin().getSelection().removeAllRanges();
 		range.deleteContents();
 		range.insertNode(node);
 		range.selectNodeContents(node);
@@ -588,6 +634,7 @@ function() {
 	iFrame.setAttribute("border", "0", false);
 	iFrame.setAttribute("frameborder", "0", false);
 	iFrame.setAttribute("vspace", "0", false);
+	iFrame.setAttribute("autocomplete", "off", false);
 // 	iFrame.setAttribute("marginwidth", "0", false);
 // 	iFrame.setAttribute("marginheight", "0", false);
 	if (AjxEnv.isIE && location.protocol == "https:")
@@ -663,6 +710,236 @@ function() {
 	}
 }
 
+DwtHtmlEditor.prototype.getNearestElement =
+function(tagName) {
+	try {
+		var p = this._getParentElement();
+		tagName = tagName.toLowerCase();
+		while (p && p.tagName.toLowerCase() != tagName)
+			p = p.parentNode;
+		return p;
+	} catch(ex) {
+		return null;
+	}
+};
+
+DwtHtmlEditor.prototype.selectNodeContents =
+function(node, pos, inclusive) {
+	var range;
+	var collapsed = (typeof pos == "boolean");
+	if (AjxEnv.isIE) {
+		range = this._getIframeDoc().body.createTextRange();
+		range.moveToElementText(node);
+		(collapsed) && range.collapse(pos);
+		range.select();
+	} else {
+		var sel = this._getSelection();
+		range = this._getIframeDoc().createRange();
+		if (inclusive)
+			range.selectNode(node);
+		else
+			range.selectNodeContents(node);
+		(collapsed) && range.collapse(pos);
+		sel.removeAllRanges();
+		sel.addRange(range);
+	}
+};
+
+DwtHtmlEditor.prototype._forceRedraw = function() {
+// this doesn't work :(
+// 	var save_collapse = table.style.borderCollapse;
+// 	table.style.borderCollapse = "collapse";
+// 	table.style.borderCollapse = "separate";
+// 	table.style.borderCollapse = save_collapse;
+
+// this works but wrecks the caret position
+//	var body = this._getIframeDoc().body;
+//	body.innerHTML = body.innerHTML;
+
+	var body = this._getIframeDoc().body;
+	body.style.display = "none";
+	setTimeout(function() {
+		body.style.display = "";
+	}, 10);
+};
+
+DwtHtmlEditor.prototype.getSelectedCells = function() {
+	var cells = null;
+	var sel = this._getSelection();
+	var range, i = 0;
+	var rows = [];
+	var row = null;
+	if (!AjxEnv.isIE) {
+		try {
+			while (range = sel.getRangeAt(i++)) {
+				var td = range.startContainer.childNodes[range.startOffset];
+				if (td.parentNode != row) {
+					row = td.parentNode;
+					(cells) && rows.push(cells);
+					cells = [];
+				}
+				cells.push(td);
+			}
+		} catch(ex) {}
+		rows.push(cells);
+	} else {
+		alert("Merging cells is not yet supported in Internet Explorer -- track bug #7400");
+		return [ [ this.getNearestElement("td") ] ];
+	}
+	return rows;
+};
+
+DwtHtmlEditor.prototype._splitCells = function(td) {
+	var table = td;
+	while (table && table.tagName.toLowerCase() != "table")
+		table = table.parentNode;
+	var mozbr = AjxEnv.isGeckoBased ? "<br />" : "";
+	function splitRow(td) {
+		var n = td.rowSpan;
+		var nc = td.colSpan;
+		td.rowSpan = 1;
+		tr = td.parentNode;
+		var itr = tr.rowIndex;
+		var trs = tr.parentNode.rows;
+		var index = td.cellIndex;
+		while (--n > 0) {
+			tr = trs[++itr];
+			var otd = td.cloneNode(false);
+			otd.removeAttribute("rowspan");
+			otd.colSpan = td.colSpan;
+			otd.innerHTML = mozbr;
+			tr.insertBefore(otd, tr.cells[index]);
+		}
+	};
+
+	function splitCol(td) {
+		var nc = td.colSpan;
+		td.colSpan = 1;
+		tr = td.parentNode;
+		var ref = td.nextSibling;
+		while (--nc > 0) {
+			var otd = td.cloneNode(false);
+			otd.removeAttribute("colspan");
+			otd.rowSpan = td.rowSpan;
+			otd.innerHTML = mozbr;
+			tr.insertBefore(otd, ref);
+		}
+	};
+
+	function splitCell(td) {
+		var nc = td.colSpan;
+		splitCol(td);
+		var items = td.parentNode.cells;
+		var index = td.cellIndex;
+		while (nc-- > 0) {
+			splitRow(items[index++]);
+		}
+	};
+	splitCell(td);
+};
+
+DwtHtmlEditor.prototype.doTableOperation =
+function(cmd, params) {
+	var table = this.getNearestElement("table");
+	var td = this.getNearestElement("td");
+	if (td) {
+		var cellIndex = td.cellIndex;
+		var tr = td.parentNode;
+		var rowIndex = tr.rowIndex;
+	}
+	while (true) {
+		switch (cmd) {
+		    case "insertRow":
+			var new_row = tr.cloneNode(true);
+			tr.parentNode.insertBefore(new_row, tr);
+			for (var i = 0; i < new_row.cells.length; ++i)
+				new_row.cells[i].innerHTML = AjxEnv.isGeckoBased ? "<br />" : "";
+			this.selectNodeContents(new_row.cells[cellIndex], true);
+			break;
+
+		    case "insertColumn":
+			for (var i = 0; i < table.rows.length; ++i) {
+				var row = table.rows[i];
+				td = row.cells[cellIndex];
+				var new_cell = td.cloneNode(true);
+				row.insertBefore(new_cell, td);
+				new_cell.innerHTML = AjxEnv.isGeckoBased ? "<br />" : "";
+			}
+			this.selectNodeContents(tr.cells[cellIndex]);
+			break;
+
+		    case "deleteRow":
+			var next_tr = null;
+			try {
+				next_tr = table.rows[rowIndex + 1];
+				if (!next_tr)
+					next_tr = table.rows[rowIndex - 1];
+			} catch(ex) {/* Gecko throws an exception if index isn't in collection bounds*/};
+			if (!next_tr) {
+				// if user wants to remove the last row, the whole table goes away
+				cmd = "deleteTable";
+				continue;
+			} else {
+				tr.parentNode.removeChild(tr);
+				this.selectNodeContents(next_tr.cells[cellIndex], true);
+			}
+			break;
+
+		    case "deleteColumn":
+			if (tr.cells.length == 1) {
+				cmd = "deleteTable";
+				continue;
+			}
+			var next_td = null;
+			try {
+				next_td = tr.cells[cellIndex + 1];
+				if (!next_td)
+					next_td = tr.cells[cellIndex - 1];
+			} catch(ex) {};
+			for (var i = 0; i < table.rows.length; ++i) {
+				var row = table.rows[i];
+				td = row.cells[cellIndex];
+				row.removeChild(td);
+			}
+			this.selectNodeContents(next_td, true);
+			break;
+
+		    case "mergeCells":
+			var cells = params.cells;
+			td = cells[0][0];
+			for (var i = 0; i < cells.length; ++i) {
+				var row = cells[i];
+				for (var j = 0; j < row.length; ++j) {
+					if (i || j)
+						row[j].parentNode.removeChild(row[j]);
+				}
+			}
+			td.colSpan = cells[0].length;
+			td.rowSpan = cells.length;
+			this.selectNodeContents(td, true);
+			break;
+
+		    case "splitCells":
+			this._splitCells(td);
+			break;
+
+		    case "deleteTable":
+			if (!AjxEnv.isIE) {
+				// this is better for Gecko because it places
+				// the caret where it has to be.
+				this.selectNodeContents(table, null, true);
+				this.deleteSelectedNodes();
+			} else
+				table.parentNode.removeChild(table);
+			break;
+		}
+		break;
+	}
+	if (AjxEnv.isGeckoBased)
+		this._forceRedraw();
+	this._updateState();
+};
+
 DwtHtmlEditor.prototype._getRange =
 function() {
 	var iFrameDoc = this._getIframeDoc();
@@ -681,7 +958,25 @@ function() {
 			return iFrameDoc.createRange();
 		}
 	}
-}
+};
+
+DwtHtmlEditor.prototype.deleteSelectedNodes =
+function() {
+	var sel = this._getSelection();
+	if (AjxEnv.isGeckoBased)
+		sel.deleteFromDocument();
+	else
+		sel.clear();
+};
+
+DwtHtmlEditor.prototype._getSelection =
+function() {
+	if (AjxEnv.isIE) {
+		return this._getIframeDoc().selection;
+	} else {
+		return this._getIframeWin().getSelection();
+	}
+};
 
 // This is transformed into a "simple closure" in the constructor.  Simply
 // dispatch the call to _handleEditorEvent passing the right event depending on
