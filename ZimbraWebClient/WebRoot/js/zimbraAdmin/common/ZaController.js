@@ -54,15 +54,15 @@ function ZaController(appCtxt, container, app, iKeyName) {
 
 	this._loginDialog.registerCallback(this.loginCallback, this);
 	this._loginDialog.registerChangePassCallback(this.changePwdCallback, this);
-		
-	this._msgDialog = appCtxt.getMsgDialog();
-	this._errorDialog = appCtxt.getErrorDialog();
-	this._confirmMessageDialog = new ZaMsgDialog(this._shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);					
-    this._errorDialog.registerCallback(DwtDialog.OK_BUTTON, this._errorDialogCallback, this);
-    this._msgDialog.registerCallback(DwtDialog.OK_BUTTON, this._msgDialogCallback, this);    
-    if(app) {
-    	this._msgDialog.setApp(app);    	
-    }	
+	if(this._app) {
+		this._msgDialog = this._app.dialogs["msgDialog"] = appCtxt.getMsgDialog();
+		this._msgDialog.setApp(app);
+		this._errorDialog = this._app.dialogs["errorDialog"] = appCtxt.getErrorDialog();
+		this._confirmMessageDialog = this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);					
+	    this._errorDialog.registerCallback(DwtDialog.OK_BUTTON, this._errorDialogCallback, this);
+    	this._msgDialog.registerCallback(DwtDialog.OK_BUTTON, this._msgDialogCallback, this);    
+	}
+
     this.objType = ZaEvent.S_ACCOUNT;
     this._helpURL = ZaController.helpURL;
 }
@@ -154,9 +154,9 @@ function(msg, ex, noExecReset,style)  {
 		}
 	}
 	// popup alert
-	this._errorDialog.setMessage(msg, detailStr, style, ZaMsg.zimbraAdminTitle);
-	if (!this._errorDialog.isPoppedUp()) {
-		this._errorDialog.popup();
+	this._app.dialogs["errorDialog"].setMessage(msg, detailStr, style, ZaMsg.zimbraAdminTitle);
+	if (!this._app.dialogs["errorDialog"].isPoppedUp()) {
+		this._app.dialogs["errorDialog"].popup();
 	}
 }
 
@@ -255,6 +255,12 @@ function(ex, method, params, restartOnError, obj) {
 		if (ex.code == ZmCsfeException.SVC_AUTH_EXPIRED) 
 		{
 			// remember the last search attempted ONLY for expired auto token exception
+			if(this._app) {
+				var dlgs = this._app.dialogs;
+				for (var dlg in dlgs) {
+					dlgs[dlg].popdown();
+				}
+			}
 			this._execFrame = {obj: obj, func: method, args: params, restartOnError: restartOnError};
 			this._loginDialog.registerCallback(this.loginCallback, this);
 			this._loginDialog.registerChangePassCallback(this.changePwdCallback, this);			
@@ -269,7 +275,7 @@ function(ex, method, params, restartOnError, obj) {
 	else 
 	{
 		this._execFrame = {obj: obj, func: method, args: params, restartOnError: restartOnError};
-		this._errorDialog.registerCallback(DwtDialog.OK_BUTTON, this._errorDialogCallback, this);
+		this._app.dialogs["errorDialog"].registerCallback(DwtDialog.OK_BUTTON, this._errorDialogCallback, this);
 		if (ex.code == ZmCsfeException.SOAP_ERROR) {
 			this.popupErrorDialog(ZaMsg.SOAP_ERROR, ex, true);
 		} else if (ex.code == ZmCsfeException.NETWORK_ERROR) {
@@ -495,7 +501,7 @@ function(uname, oldPass, newPass, conPass) {
 
 ZaController.prototype._errorDialogCallback =
 function() {
-	this._errorDialog.popdown();
+	this._app.dialogs["errorDialog"].popdown();
 	if (this._execFrame) {
 		if (this._execFrame.restartOnError && !this._authenticating)
 			this._execFrame.method.apply(this, this._execFrame.args);

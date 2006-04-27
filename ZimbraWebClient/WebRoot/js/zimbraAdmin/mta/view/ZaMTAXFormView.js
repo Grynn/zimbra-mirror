@@ -193,7 +193,7 @@ ZaMTAXFormView.actionButtonListener = function (action) {
 		break;
 	}		
 	var view = form.parent;
-	view.selectActionDialog = new ZaMTAActionDialog(app.getAppCtxt().getShell(), app, dlgTitle);	
+	view.selectActionDialog = app.dialogs["selectActionDialog"] = new ZaMTAActionDialog(app.getAppCtxt().getShell(), app, dlgTitle);	
 	obj[ZaMTAActionDialog.MSG_IDS] = instance[qName][ZaMTA.MsgIDS];
 	obj[ZaMTAActionDialog.FLTR_ITEMS] = instance[qName][ZaMTA.A_selection_cache];	
 	obj[ZaMTAActionDialog.ANSWER] = ZaMTAActionDialog.SELECTED_MSGS; //default is selected messages
@@ -239,7 +239,7 @@ ZaMTAXFormView.prototype.actionDlgCallback = function(args)  {
 }
 
 ZaMTAXFormView.prototype.showConfirmationDlg = function (action, removelist,qName, field) {
-	this.confirmMessageDialog = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);			
+	this.confirmMessageDialog = this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);			
 	if(removelist) {
 		if(field == ZaMTA.A_messages) {
 			var subst = "0";

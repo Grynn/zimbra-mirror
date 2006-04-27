@@ -111,7 +111,7 @@ function () {
 
 
 ZaMTAController.prototype.flushListener = function () {
-	this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);					
+	this._confirmMessageDialog = this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);					
 	this._confirmMessageDialog.setMessage(ZaMsg.Q_FLUSH_QUEUES,  DwtMessageDialog.WARNING_STYLE);
 	this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, this.flushQueues, this);		
 	this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, this.closeCnfrmDlg, this, null);				

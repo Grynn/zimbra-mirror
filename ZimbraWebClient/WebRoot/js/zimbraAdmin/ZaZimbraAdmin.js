@@ -183,7 +183,7 @@ function() {
 ZaZimbraAdmin.prototype.getOverviewPanelController =
 function() {
 	if (this._overviewPanelController == null)
-		this._overviewPanelController = new ZaOverviewPanelController(this._appCtxt, this._shell);
+		this._overviewPanelController = new ZaOverviewPanelController(this._appCtxt, this._shell, this._app);
 	return this._overviewPanelController;
 }
 
@@ -237,7 +237,11 @@ function() {
 		var resp = command.invoke(params);
 		//var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false);		
 		//initialize my rights
-		ZaSettings.init();		
+		if(!ZaSettings.initialized)
+			ZaSettings.init();
+		else
+			ZaZimbraAdmin._killSplash();
+		
 	} catch (ex) {
 		this._handleException(ex, "ZaZimbraAdmin.prototype.startup", null, true);
 	}

@@ -266,11 +266,11 @@ function(ev) {
 
 	try {
 		var newAccount = new ZaAccount(this._app);
-		if(!this._app._newAccountWizard)
-			this._app._newAccountWizard = new ZaNewAccountXWizard(this._container, this._app);	
+		if(!this._app.dialogs["newAccountWizard"])
+			this._app.dialogs["newAccountWizard"] = new ZaNewAccountXWizard(this._container, this._app);	
 
-		this._app._newAccountWizard.setObject(newAccount);
-		this._app._newAccountWizard.popup();
+		this._app.dialogs["newAccountWizard"].setObject(newAccount);
+		this._app.dialogs["newAccountWizard"].popup();
 	} catch (ex) {
 		this._handleException(ex, "ZaSearchListController.prototype._newAccountListener", null, false);
 	}
@@ -291,11 +291,11 @@ ZaSearchListController.prototype._newResourceListener =
 function(ev) {
 	try {
 		var newResource = new ZaResource(this._app);
-		if(!this._app._newResourceWizard)
-			this._app._newResourceWizard = new ZaNewResourceXWizard(this._container, this._app);	
+		if(!this._app.dialogs["newResourceWizard"])
+			this._app.dialogs["newResourceWizard"] = new ZaNewResourceXWizard(this._container, this._app);	
 
-		this._app._newResourceWizard.setObject(newResource);
-		this._app._newResourceWizard.popup();
+		this._app.dialogs["newResourceWizard"].setObject(newResource);
+		this._app.dialogs["newResourceWizard"].popup();
 	} catch (ex) {
 		this._handleException(ex, "ZaSearchListController.prototype._newResourceListener", null, false);
 	}

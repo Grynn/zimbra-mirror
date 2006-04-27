@@ -30,8 +30,8 @@
 * @author Roland Schemers
 * @author Greg Solovyev
 **/
-function ZaOverviewPanelController(appCtxt, container) {
-	ZaController.call(this, appCtxt, container,"ZaOverviewPanelController");
+function ZaOverviewPanelController(appCtxt, container, app) {
+	ZaController.call(this, appCtxt, container, app, "ZaOverviewPanelController");
 
 	this._init(appCtxt, container);
 	

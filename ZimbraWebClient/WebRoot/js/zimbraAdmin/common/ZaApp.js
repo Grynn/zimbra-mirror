@@ -44,6 +44,7 @@ function ZaApp(appCtxt, container) {
 	this._serverChoices2 = null; 	
 	this._serverMap = null;
 	this._controllers = new Object();
+	this.dialogs = {};
 }
 
 ZaApp.prototype.constructor = ZaApp;

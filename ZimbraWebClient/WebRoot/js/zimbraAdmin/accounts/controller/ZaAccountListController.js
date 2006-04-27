@@ -320,7 +320,7 @@ function () {
 	//set a selection listener on the account list view
 	this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 	this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
-	this._removeConfirmMessageDialog = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);			
+	this._app.dialogs["ConfirmMessageDialog"] = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);			
 	this._UICreated = true;
 }
 
@@ -331,11 +331,11 @@ function(ev) {
 
 	try {
 		var newAccount = new ZaAccount(this._app);
-		if(!this._app._newAccountWizard)
-			this._app._newAccountWizard = new ZaNewAccountXWizard(this._container, this._app);	
+		if(!this._app.dialogs["newAccountWizard"])
+			this._app.dialogs["newAccountWizard"] = new ZaNewAccountXWizard(this._container, this._app);	
 
-		this._app._newAccountWizard.setObject(newAccount);
-		this._app._newAccountWizard.popup();
+		this._app.dialogs["newAccountWizard"].setObject(newAccount);
+		this._app.dialogs["newAccountWizard"].popup();
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountListController.prototype._newAccountListener", null, false);
 	}
@@ -356,11 +356,11 @@ ZaAccountListController.prototype._newResourceListener =
 function(ev) {
 	try {
 		var newResource = new ZaResource(this._app);
-		if(!this._app._newResourceWizard)
-			this._app._newResourceWizard = new ZaNewResourceXWizard(this._container, this._app);	
+		if(!this._app.dialogs["newResourceWizard"])
+			this._app.dialogs["newResourceWizard"] = new ZaNewResourceXWizard(this._container, this._app);	
 
-		this._app._newResourceWizard.setObject(newResource);
-		this._app._newResourceWizard.popup();
+		this._app.dialogs["newResourceWizard"].setObject(newResource);
+		this._app.dialogs["newResourceWizard"].popup();
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountListController.prototype._newResourceListener", null, false);
 	}
@@ -559,23 +559,23 @@ function(ev) {
 			i++;
 		}
 		dlgMsg += "</ul>";
-		this._removeConfirmMessageDialog.setMessage(dlgMsg,  DwtMessageDialog.INFO_STYLE);
-		this._removeConfirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaAccountListController.prototype._deleteAccountsCallback, this);
-		this._removeConfirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaAccountListController.prototype._donotDeleteAccountsCallback, this);		
-		this._removeConfirmMessageDialog.popup();
+		this._app.dialogs["ConfirmMessageDialog"].setMessage(dlgMsg,  DwtMessageDialog.INFO_STYLE);
+		this._app.dialogs["ConfirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, ZaAccountListController.prototype._deleteAccountsCallback, this);
+		this._app.dialogs["ConfirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, ZaAccountListController.prototype._donotDeleteAccountsCallback, this);		
+		this._app.dialogs["ConfirmMessageDialog"].popup();
 	}
 }
 
 ZaAccountListController.prototype._deleteAccountsCallback = 
 function () {
 
-	if(!this._removeProgressDlg) {
-		this._removeProgressDlg = new DeleteAcctsPgrsDlg(this._container, this._app,"500px","300px");
+	if(!this._app.dialogs["removeProgressDlg"]) {
+		this._app.dialogs["removeProgressDlg"] = new DeleteAcctsPgrsDlg(this._container, this._app,"500px","300px");
 	}
-	this._removeProgressDlg.popup();
-	this._removeProgressDlg.setObject(this._removeList);
-	this._removeConfirmMessageDialog.popdown();		
-	this._removeProgressDlg.startDeletingAccounts();
+	this._app.dialogs["removeProgressDlg"].popup();
+	this._app.dialogs["removeProgressDlg"].setObject(this._removeList);
+	this._app.dialogs["ConfirmMessageDialog"].popdown();		
+	this._app.dialogs["removeProgressDlg"].startDeletingAccounts();
 	
 	/*
 		for(var key in this._removeList) {
@@ -584,15 +584,15 @@ function () {
 					this._removeList[key].remove();
 					successRemList.push(this._removeList[key]);
 				} catch (ex) {
-					this._removeConfirmMessageDialog.popdown();
+					this._app.dialogs["ConfirmMessageDialog"].popdown();
 					if(ex.code == ZmCsfeException.SVC_WRONG_HOST) {
 						var szMsg = ZaMsg.ERROR_WRONG_HOST;
 						if(ex.detail) {
 							szMsg +="<br>Details:<br>";
 							szMsg += ex.detail;
 						}
-						this._errorDialog.setMessage(szMsg, null, DwtMessageDialog.CRITICAL_STYLE, null);
-						this._errorDialog.popup();					
+						this._app.dialogs["errorDialog"].setMessage(szMsg, null, DwtMessageDialog.CRITICAL_STYLE, null);
+						this._app.dialogs["errorDialog"].popup();					
 					} else {
 						this._handleException(ex, "ZaAccountListController.prototype._deleteAccountsCallback", null, false);
 					}
@@ -601,7 +601,7 @@ function () {
 			}
 		}
 		this.fireRemovalEvent(successRemList); 
-		this._removeConfirmMessageDialog.popdown();
+		this._app.dialogs["ConfirmMessageDialog"].popdown();
 		this.show(ZaSearch.searchByQueryHolder(this._currentQuery, this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app));			
 	}*/
 }
@@ -611,7 +611,7 @@ function () {
 ZaAccountListController.prototype._donotDeleteAccountsCallback = 
 function () {
 	this._removeList = new Array();
-	this._removeConfirmMessageDialog.popdown();
+	this._app.dialogs["ConfirmMessageDialog"].popdown();
 }
 
 
@@ -621,13 +621,13 @@ function (item) {
 	if(this._chngPwdDlg) {
 		try {
 			if(!this._chngPwdDlg.getPassword() || this._chngPwdDlg.getPassword().length < 1) {
-				this._errorMsgDlg = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.OK_BUTTON], this._app);							
-				this._errorMsgDlg.setMessage(ZaMsg.ERROR_PASSWORD_REQUIRED, null, DwtMessageDialog.CRITICAL_STYLE);
-				this._errorMsgDlg.popup();				
+				this._app.dialogs["errorMsgDlg"] = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.OK_BUTTON], this._app);							
+				this._app.dialogs["errorMsgDlg"].setMessage(ZaMsg.ERROR_PASSWORD_REQUIRED, null, DwtMessageDialog.CRITICAL_STYLE);
+				this._app.dialogs["errorMsgDlg"].popup();				
 			} else if(this._chngPwdDlg.getPassword() != this._chngPwdDlg.getConfirmPassword()) {
-				this._errorMsgDlg = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.OK_BUTTON], this._app);							
-				this._errorMsgDlg.setMessage(ZaMsg.ERROR_PASSWORD_MISMATCH, null, DwtMessageDialog.CRITICAL_STYLE);
-				this._errorMsgDlg.popup();				
+				this._app.dialogs["errorMsgDlg"] = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.OK_BUTTON], this._app);							
+				this._app.dialogs["errorMsgDlg"].setMessage(ZaMsg.ERROR_PASSWORD_MISMATCH, null, DwtMessageDialog.CRITICAL_STYLE);
+				this._app.dialogs["errorMsgDlg"].popup();				
 			} else {
 				//check password
 				var myCos = null;
@@ -681,15 +681,15 @@ function (item) {
 				if(szPwd.length < minPwdLen || AjxStringUtil.trim(szPwd).length < minPwdLen) { 
 					//show error msg
 					//this._chngPwdDlg.popdown();
-					this._errorMsgDlg = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.OK_BUTTON], this._app);												
-					this._errorMsgDlg.setMessage(ZaMsg.ERROR_PASSWORD_TOOSHORT + "<br>" + String(ZaMsg.NAD_passMinLengthMsg).replace("{0}",minPwdLen), null, DwtMessageDialog.CRITICAL_STYLE, null);
-					this._errorMsgDlg.popup();
+					this._app.dialogs["errorMsgDlg"] = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.OK_BUTTON], this._app);												
+					this._app.dialogs["errorMsgDlg"].setMessage(ZaMsg.ERROR_PASSWORD_TOOSHORT + "<br>" + String(ZaMsg.NAD_passMinLengthMsg).replace("{0}",minPwdLen), null, DwtMessageDialog.CRITICAL_STYLE, null);
+					this._app.dialogs["errorMsgDlg"].popup();
 				} else if(AjxStringUtil.trim(szPwd).length > maxPwdLen) { 
 					//show error msg
 					//this._chngPwdDlg.popdown();
-					this._errorMsgDlg = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.OK_BUTTON], this._app);																	
-					this._errorMsgDlg.setMessage(ZaMsg.ERROR_PASSWORD_TOOLONG+ "<br>" + String(ZaMsg.NAD_passMaxLengthMsg).replace("{0}",maxPwdLen), null, DwtMessageDialog.CRITICAL_STYLE, null);
-					this._errorMsgDlg.popup();
+					this._app.dialogs["errorMsgDlg"] = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.OK_BUTTON], this._app);																	
+					this._app.dialogs["errorMsgDlg"].setMessage(ZaMsg.ERROR_PASSWORD_TOOLONG+ "<br>" + String(ZaMsg.NAD_passMaxLengthMsg).replace("{0}",maxPwdLen), null, DwtMessageDialog.CRITICAL_STYLE, null);
+					this._app.dialogs["errorMsgDlg"].popup();
 				} else {		
 					item.changePassword(szPwd);
 					this._chngPwdDlg.popdown();	//close the dialog
@@ -709,8 +709,8 @@ function (item) {
 					szMsg +="<br>Details:<br>";
 					szMsg += ex.detail;
 				}
-				this._errorDialog.setMessage(szMsg, null, DwtMessageDialog.CRITICAL_STYLE, null);
-				this._errorDialog.popup();
+				this._app.dialogs["errorDialog"].setMessage(szMsg, null, DwtMessageDialog.CRITICAL_STYLE, null);
+				this._app.dialogs["errorDialog"].popup();
 			} else {
 				this._handleException(ex, "ZaAccountListController._changePwdOKCallback", null, false);			
 			}
@@ -788,11 +788,11 @@ function (ev) {
 		if(!alias || alias.type!=ZaItem.ALIAS) {
 			return;			
 		}
-		if(!this._moveAliasDialog) {
-			this._moveAliasDialog = new MoveAliasXDialog(this._container, this._app);
+		if(!this._app.dialogs["moveAliasDialog"]) {
+			this._app.dialogs["moveAliasDialog"] = new MoveAliasXDialog(this._container, this._app);
 		}
-		this._moveAliasDialog.setAlias(alias);
-		this._moveAliasDialog.popup();
+		this._app.dialogs["moveAliasDialog"].setAlias(alias);
+		this._app.dialogs["moveAliasDialog"].popup();
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountListController.prototype._moveAliasListener", null, false);
 	}

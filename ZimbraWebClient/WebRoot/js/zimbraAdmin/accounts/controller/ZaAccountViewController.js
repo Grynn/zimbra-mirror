@@ -416,13 +416,13 @@ ZaAccountViewController.prototype._reindexMbxListener =
 function (ev) {
 	try {
 
-		if(!this._reindexWizard)
-			this._reindexWizard = new ReindexMailboxXDialog(this._container, this._app);	
+		if(!this._app.dialogs["reindexWizard"])
+			this._app.dialogs["reindexWizard"] = new ReindexMailboxXDialog(this._container, this._app);	
 
 		var obj = new ZaReindexMailbox();
 		obj.mbxId = this._currentObject.id;
-		this._reindexWizard.setObject(obj);
-		this._reindexWizard.popup();
+		this._app.dialogs["reindexWizard"].setObject(obj);
+		this._app.dialogs["reindexWizard"].popup();
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountViewController.prototype._reindexMbxListener", null, false);
 	}

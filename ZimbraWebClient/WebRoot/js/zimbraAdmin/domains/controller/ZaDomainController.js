@@ -130,7 +130,7 @@ function () {
 ZaDomainController.prototype._showNewDomainWizard = 
 function () {
 	try {
-		this._newDomainWizard = new ZaNewDomainXWizard(this._container, this._app);	
+		this._newDomainWizard = this._app.dialogs["newDomainWizard"] = new ZaNewDomainXWizard(this._container, this._app);	
 		this._newDomainWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainController.prototype._finishNewButtonListener, this, null);			
 		this._newDomainWizard.setObject(this._currentObject);
 		this._newDomainWizard.popup();
@@ -149,7 +149,7 @@ function(ev) {
 		args["obj"] = this._app.getDomainController();
 		args["func"] = ZaDomainController.prototype.newDomain;
 		//ask if the user wants to save changes		
-		this._confirmMessageDialog = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
+		this._confirmMessageDialog = this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
 		this._confirmMessageDialog.setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
 		this._confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, this.saveAndGoAway, this, args);		
 		this._confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);		
@@ -163,7 +163,7 @@ function(ev) {
 ZaDomainController.prototype._galWizButtonListener =
 function(ev) {
 	try {
-		this._galWizard = new ZaGALConfigXWizard(this._container, this._app);	
+		this._galWizard = this._app.dialogs["galWizard"] = new ZaGALConfigXWizard(this._container, this._app);	
 		this._galWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainController.prototype._finishGalButtonListener, this, null);			
 		this._galWizard.setObject(this._currentObject);
 		this._galWizard.popup();
@@ -176,7 +176,7 @@ function(ev) {
 ZaDomainController.prototype._authWizButtonListener =
 function(ev) {
 	try {
-		this._authWizard = new ZaAuthConfigXWizard(this._container, this._app);	
+		this._authWizard = this._app.dialogs["authWizard"] =  new ZaAuthConfigXWizard(this._container, this._app);	
 		this._authWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainController.prototype._finishAuthButtonListener, this, null);			
 		this._authWizard.setObject(this._currentObject);
 		this._authWizard.popup();
