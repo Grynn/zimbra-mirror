@@ -433,7 +433,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 									{type:_TEXTFIELD_, width:"100%", cssClass:"admin_xform_name_input", ref:ZaSearch.A_query, label:null,
 								      elementChanged: function(elementValue,instanceValue, event) {
 										  var charCode = event.charCode;
-										  if (charCode == 13 || charCode == 3) {1
+										  if (charCode == 13 || charCode == 3) {
 										      ZaDLXFormView.srchButtonHndlr.call(this);
 										  } else {
 										      this.getForm().itemChanged(this, elementValue, event);
