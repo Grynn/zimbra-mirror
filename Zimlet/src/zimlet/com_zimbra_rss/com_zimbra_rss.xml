@@ -1,0 +1,22 @@
+<zimlet name="com_zimbra_rss" version="1.0" description="Get RSS feeds live!">
+    <include>rss.js</include>
+    <includeCSS>rss.css</includeCSS>
+    <resource>rss.gif</resource>
+    <handlerObject>Com_Zimbra_RSS</handlerObject>
+
+    <zimletPanelItem label="RSS live!" icon="RSS-panelIcon">
+        <toolTipText>Right click and add your fav RSS feed URL to watch it come alive!</toolTipText>
+        <contextMenu>
+            <menuItem label="Preferences..." id="PREFERENCES"/>
+        </contextMenu>
+    </zimletPanelItem>
+
+    <userProperties>
+        <property type="string" name="defaultRSSUrl" maxLength="1" label="Select feed to use:"/>
+        <property type="string" name="Feed1" maxLength="1024" label="Feed 1"/>
+        <property type="string" name="Feed2" maxLength="1024" label="Feed 2"/>
+        <property type="string" name="Feed3" maxLength="1024" label="Feed 3"/>
+        <property type="string" name="Feed4" maxLength="1024" label="Feed 4"/>
+        <property type="string" name="Feed5" maxLength="1024" label="Feed 5"/>
+    </userProperties>
+</zimlet>

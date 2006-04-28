@@ -1,0 +1,5 @@
+<zimletConfig name="com_zimbra_rss" version="1.0">
+  <global>
+    <property name="allowedDomains">*,*.google.com,*.yahoo.com,*.yimg.com,*.flickr.com,news.google.com</property>
+  </global>
+</zimletConfig>

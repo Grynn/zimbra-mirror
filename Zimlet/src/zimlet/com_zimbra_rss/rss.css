@@ -1,0 +1,43 @@
+.ImgRSS-panelIcon {
+  background: url("rss.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.RSS-icon-right {
+  background: url("rss.gif") no-repeat 100% 50%;
+}
+.dropcontent{
+	display:none;
+}
+.bbcclass{
+width: 155px;
+padding: 1px;
+background-color: lightyellow;
+
+}
+
+.rsstitle{ /*shared class for all title elements in an RSS feed*/
+font: normal normal bold 8pt verdana;
+color: blue;
+cursor : pointer; 
+
+}
+
+.rssdate{ /*shared class for all date elements in an RSS feed*/
+color: gray;
+font-size: 80%;
+}
+
+.rssdescription{ /*shared class for all description elements in an RSS feed*/
+font: normal normal normal 8pt verdana;
+padding: 2px;
+
+}
+
+
+.loading{ /*shared class for all date elements in an RSS feed*/
+color: red;
+font: normal normal normal 10pt arial;
+}
