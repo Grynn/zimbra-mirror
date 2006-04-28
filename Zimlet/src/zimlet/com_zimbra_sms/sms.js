@@ -59,6 +59,11 @@ function(obj) {
 };
 
 // Called by the Zimlet framework when the SMS panel item was double clicked
+Com_Zimbra_sms.prototype.init = function() {
+	if (ZmAssistant && ZmAssistant.register) ZmAssistant.register(new Com_Zimbra_sms_Asst(this._appCtxt, this));
+};
+
+// Called by the Zimlet framework when the SMS panel item was double clicked
 Com_Zimbra_sms.prototype.doubleClicked = function() {
 	this.singleClicked();
 };
@@ -191,4 +196,49 @@ function(result) {
 	var r = result.text;
 	DBG.println(AjxDebug.DBG2, "result:" + r);
 	this.displayStatusMessage(r);
+};
+
+
+//////////////////////////////////////////////////////////////////////////
+// Zimlet assistant class
+// - used by the Assistant dialog to run games via "command-line"
+//////////////////////////////////////////////////////////////////////////
+function Com_Zimbra_sms_Asst(appCtxt, zimlet) {
+	if (arguments.length == 0) return;
+	// XXX: localize later (does NOT belong in ZmMsg.properties)
+	ZmAssistant.call(this, appCtxt, "Send SMS", "sms");
+	this._zimlet = zimlet;
+};
+
+Com_Zimbra_sms_Asst.prototype = new ZmAssistant();
+Com_Zimbra_sms_Asst.prototype.constructor = Com_Zimbra_sms_Asst;
+
+Com_Zimbra_sms_Asst.prototype.okHandler =
+function(dialog) {
+	// get reference to the sms zimlet
+	var zm = this._appCtxt.getSettings().getZimletManager();
+	var zimlet = zm ? zm._ZIMLETS_BY_ID["com_zimbra_sms"] : null;
+	if (zimlet && this._body) {
+		var toValue = (this._to != null) ? this._to : zimlet.handlerObject.getUserProperty("cellNum");		
+		//alert(toValue+":"+this._body);
+		zimlet.handlerObject._sendSMS(toValue, this._address);
+	}
+	return true;
+};
+
+Com_Zimbra_sms_Asst.prototype.handle =
+function(dialog, verb, args) {
+
+	var match = this._objectManager.findMatch(args, ZmObjectManager.PHONE);
+	if (match != null && match != "") {
+		this._to = match[0];
+		args = args.replace(match[0], " ");	
+	} else {
+		this._to = this._zimlet.getUserProperty("cellNum");
+	}
+	this._body = args.replace(/^\s+/, '').replace(/\s+$/, '');
+
+	dialog._setOkButton("Send SMS", true, this._body != "");
+	this._setField("Cell", this._to == null ? "enter a phone number" : this._to, this._to == null, true, 0);
+	this._setField("Text", this._body == "" ? "just type to enter text message": this._body, this._body == null, true, 1);	
 };
