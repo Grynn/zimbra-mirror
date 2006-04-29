@@ -69,6 +69,9 @@ function(entry) {
 	this._containedObject.name = entry.name;
 	if(entry.id)
 		this._containedObject.id = entry.id;
+	
+	//add the member group
+	this._containedObject[ZaAccount.A2_memberOf] = entry [ZaAccount.A2_memberOf];
 		
 	if(ZaSettings.COSES_ENABLED) {	
 		var cosList = this._app.getCosList().getArray();
@@ -229,25 +232,27 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	var _tab4 = ++ZaAccountXFormView.TAB_INDEX;	
 	var _tab5 = ++ZaAccountXFormView.TAB_INDEX;		
 	var _tab6 = ++ZaAccountXFormView.TAB_INDEX;			
-	var _tab7 = ++ZaAccountXFormView.TAB_INDEX;				
+	var _tab7 = ++ZaAccountXFormView.TAB_INDEX;	
+	var _tab8 = ++ZaAccountXFormView.TAB_INDEX;			
 	
 	tabChoices.push({value:_tab1, label:ZaMsg.TABT_GeneralPage});
 	tabChoices.push({value:_tab2, label:ZaMsg.TABT_ContactInfo});
+	tabChoices.push({value:_tab3, label:ZaMsg.TABT_MemberOf});
 
 	if(ZaSettings.ACCOUNTS_FEATURES_ENABLED)
-		tabChoices.push({value:_tab3, label:ZaMsg.TABT_Features});
+		tabChoices.push({value:_tab4, label:ZaMsg.TABT_Features});
 					
 	if(ZaSettings.ACCOUNTS_PREFS_ENABLED)
-		tabChoices.push({value:_tab4, label:ZaMsg.TABT_Preferences});
+		tabChoices.push({value:_tab5, label:ZaMsg.TABT_Preferences});
 
 	if(ZaSettings.ACCOUNTS_ALIASES_ENABLED)
-		tabChoices.push({value:_tab5, label:ZaMsg.TABT_Aliases});
+		tabChoices.push({value:_tab6, label:ZaMsg.TABT_Aliases});
 
 	if(ZaSettings.ACCOUNTS_FORWARDING_ENABLED)
-		tabChoices.push({value:_tab6, label:ZaMsg.TABT_Forwarding});
+		tabChoices.push({value:_tab7, label:ZaMsg.TABT_Forwarding});
 
 	if(ZaSettings.ACCOUNTS_ADVANCED_ENABLED)
-		tabChoices.push({value:_tab7, label:ZaMsg.TABT_Advanced});
+		tabChoices.push({value:_tab8, label:ZaMsg.TABT_Advanced});
 
 
 	var cases = [];
@@ -330,9 +335,124 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 						{ref:ZaAccount.A_country, type:_TEXTFIELD_, msgName:ZaMsg.NAD_country,label:ZaMsg.NAD_country, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged, width:150}
 					]
 				};
-	cases.push(case2);				
+	cases.push(case2);
+	
+	var directMemberOfHeaderList = new ZaAccountMemberOfsourceHeaderList(ZaAccountMemberOfsourceHeaderList.DIRECT);
+	var indirectMemberOfHeaderList = new ZaAccountMemberOfsourceHeaderList(ZaAccountMemberOfsourceHeaderList.INDIRECT);
+	var nonMemberOfHeaderList = new ZaAccountMemberOfsourceHeaderList(ZaAccountMemberOfsourceHeaderList.NON);
+	
+	//TODO: MemberOf Tab
+	var case3={type:_CASE_, numCols:4, relevant:("instance[ZaModel.currentTab] == " + _tab3), colSizes: [450, 20, 420, 30],
+					items: [
+						//isgroup checkbox
+						{type:_GROUP_, width: "100%", colSpan: 4, 
+							items: [
+								{type:_GROUP_, width: 120, numCols: 1,
+									items: [
+											{ref: ZaAccount.A2_isgroup, type: _CHECKBOX_, align:_LEFT_, colSpan: 3,msgName:ZaMsg.NAD_ShowGroupOnly,
+												label:ZaMsg.NAD_ShowGroupOnly,labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",
+												onChange:ZaAccountMemberOfListView.onShowGroupOnlyChanged,labelCssClass:"xform_label"}
+										]
+								}
+							]
+						},
+													
+						{type:_SPACER_, height:"10"},
+						//layout rapper around the direct/indrect list						
+						{type: _GROUP_, width: "98%", numCols: 1, //colSizes: ["auto", 20],
+							items: [
+								//direct member group
+								{type:_GROUP_, numCols:1, cssClass: "RadioGrouperBorder", width: "100%", colSizes:["auto"], //height: 400,
+									items:[
+										{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
+									   		items: [
+												{type:_OUTPUT_, value:ZaMsg.Account_DirectGroupLabel, cssClass:"RadioGrouperLabel"},
+												{type:_CELLSPACER_}
+											]
+										},
+										//{type:_SPACER_, height:"5"},
+										{ref: ZaAccount.A2_directMemberList, type: _S_DWT_LIST_, width: "100%", 
+											cssClass: "DLSource", widgetClass: ZaAccountMemberOfListView, 
+											headerList: directMemberOfHeaderList, defaultColumnSortable: 0,
+											forceUpdate: true }		
+									]
+								},	
+								//{type:_CELLSPACER_},	
+								{type:_SPACER_, height:"10"},	
+								//indirect member group
+								{type:_GROUP_, numCols:1, cssClass: "RadioGrouperBorder", width: "100%", //colSizes:["auto"], height: "48%",
+									items:[
+										{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
+									   		items: [
+												{type:_OUTPUT_, value:ZaMsg.Account_IndirectGroupLabel, cssClass:"RadioGrouperLabel"},
+												{type:_CELLSPACER_}
+											]
+										},
+										//{type:_SPACER_, height:"5"},
+										{ref: ZaAccount.A2_indirectMemberList, type: _S_DWT_LIST_, width: "100%", //height: "50%",
+											cssClass: "DLSource", widgetClass: ZaAccountMemberOfListView, 
+											headerList: indirectMemberOfHeaderList, defaultColumnSortable: 0,
+											forceUpdate: true }		
+									]
+								}
+								//{type:_CELLSPACER_}	
+							]
+						},
+						{type: _GROUP_, width: "100%", items: [
+								{type:_CELLSPACER_},
+							]
+						},
+						//non member group
+						{type:_GROUP_, numCols:1, cssClass: "RadioGrouperBorder", width: "98%", //colSizes:["auto"], height: "98%",
+							items:[
+								{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
+							   		items: [
+										{type:_OUTPUT_, value:ZaMsg.Account_NonGroupLabel, cssClass:"RadioGrouperLabel"},
+										{type:_CELLSPACER_}
+									]
+								},
+								{type:_GROUP_, numCols:5, colSizes:[30, "auto",60, 150,15], width:"98%", 
+								   items:[
+								   		{type:_OUTPUT_, value:ZaMsg.DLXV_LabelFind, nowrap:true},
+										{ref:"query", type:_TEXTFIELD_, width:"100%", cssClass:"admin_xform_name_input",  label:null,
+									      elementChanged: function(elementValue,instanceValue, event) {
+											  var charCode = event.charCode;
+											  if (charCode == 13 || charCode == 3) {
+											      ZaAccountMemberOfListView.prototype.srchButtonHndlr.call(this);
+											  } else {
+											      this.getForm().itemChanged(this, elementValue, event);
+											  }
+								      		}
+										},
+										{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonSearch, width:80,
+										   onActivate:ZaAccountMemberOfListView.prototype.srchButtonHndlr
+										},
+										{ref: ZaAccount.A2_showSameDomain, type: _CHECKBOX_, align:_RIGHT_, msgName:ZaMsg.NAD_SearchSameDomain,
+												label:ZaMsg.NAD_SearchSameDomain,labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",
+												labelCssClass:"xform_label" //, onChange:ZaAccountMemberOfListView.onShowGroupOnlyChanged,
+										}										
+									]
+						         },
+						        {type:_SPACER_, height:"5"},
+								
+								{ref: ZaAccount.A2_nonMemberList, type: _S_DWT_LIST_, width: "100%", height: 420,
+									cssClass: "DLSource", widgetClass: ZaAccountMemberOfListView, 
+									headerList: nonMemberOfHeaderList, defaultColumnSortable: 0,
+									forceUpdate: true }		
+							]
+						},
+						{type: _GROUP_, width: "100%", items: [
+								{type:_CELLSPACER_},
+							]
+						}
+						
+						//{type:_CELLSPACER_}		
+					]
+				};
+	cases.push(case3);		
+					
 	if(ZaSettings.ACCOUNTS_FEATURES_ENABLED) {
-		cases.push({type:_CASE_,id:"account_form_features_tab",  numCols:1, width:"100%", relevant:("instance[ZaModel.currentTab] == " + _tab3),
+		cases.push({type:_CASE_,id:"account_form_features_tab",  numCols:1, width:"100%", relevant:("instance[ZaModel.currentTab] == " + _tab4),
 					items: [
 						{ref:ZaAccount.A_zimbraFeatureContactsEnabled,labelCssStyle:"width:150px;", type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_FeatureContactsEnabled,label:ZaMsg.NAD_FeatureContactsEnabled, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged},							
 						{ref:ZaAccount.A_zimbraFeatureCalendarEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_FeatureCalendarEnabled,label:ZaMsg.NAD_FeatureCalendarEnabled, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged},														
@@ -352,7 +472,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				});
 	}
 	if(ZaSettings.ACCOUNTS_PREFS_ENABLED) {
-		cases.push({type:_CASE_, width:"100%", relevant:("instance[ZaModel.currentTab] == " + _tab4),
+		cases.push({type:_CASE_, width:"100%", relevant:("instance[ZaModel.currentTab] == " + _tab5),
 					colSizes:["300px","300px"],
 					items :[
 						{ref:ZaAccount.A_prefSaveToSent,  type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_prefSaveToSent,label:ZaMsg.NAD_prefSaveToSent, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",onChange:ZaTabView.onFormFieldChanged},
@@ -389,7 +509,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	}
 
 	if(ZaSettings.ACCOUNTS_ALIASES_ENABLED) {
-		cases.push({type:_CASE_, numCols:1, relevant:("instance[ZaModel.currentTab] == " + _tab5),
+		cases.push({type:_CASE_, numCols:1, relevant:("instance[ZaModel.currentTab] == " + _tab6),
 					items: [
 						{type:_OUTPUT_, value:ZaMsg.NAD_EditAliasesGroup},
 						{ref:ZaAccount.A_zimbraMailAlias, type:_REPEAT_, label:null, repeatInstance:emptyAlias, showAddButton:true, showRemoveButton:true, 
@@ -405,7 +525,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				});
 	}
 	if(ZaSettings.ACCOUNTS_FORWARDING_ENABLED) {
-		cases.push({type:_CASE_, numCols:2, relevant:("instance[ZaModel.currentTab] == " + _tab6), 
+		cases.push({type:_CASE_, numCols:2, relevant:("instance[ZaModel.currentTab] == " + _tab7), 
 					items: [
 						{ref:ZaAccount.A_zimbraFeatureMailForwardingEnabled,resetToSuperLabel:ZaMsg.NAD_ResetToCOS, type:_SUPER_CHECKBOX_, 
 							label:ZaMsg.NAD_zimbraFeatureMailForwardingEnabled,  labelCssClass:"xform_label", labelLocation:_LEFT_, 
@@ -436,7 +556,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				});
 	}
 	if(ZaSettings.ACCOUNTS_ADVANCED_ENABLED) {
-		cases.push({type:_CASE_, id:"account_form_advanced_tab", numCols:1, relevant:("instance[ZaModel.currentTab] == " + _tab7),
+		cases.push({type:_CASE_, id:"account_form_advanced_tab", numCols:1, relevant:("instance[ZaModel.currentTab] == " + _tab8),
 					items: [
 						{type:_GROUP_, 
 							items :[

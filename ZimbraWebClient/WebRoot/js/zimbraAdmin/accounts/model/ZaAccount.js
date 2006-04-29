@@ -166,6 +166,14 @@ ZaAccount.A2_newAlias = "newalias";
 ZaAccount.A2_aliases = "aliases";
 ZaAccount.A2_forwarding = "forwardings";
 
+//Group (Member Of tab needed)
+ZaAccount.A2_memberOf = "memberOf" ;
+ZaAccount.A2_isgroup = "isgroup" ;
+ZaAccount.A2_directMemberList = "directMemberList" ;
+ZaAccount.A2_indirectMemberList = "indirectMemberList";
+ZaAccount.A2_nonMemberList = "nonMemberList" ;
+ZaAccount.A2_showSameDomain = "showSameDomain" ;
+
 ZaAccount.MAXSEARCHRESULTS = ZaSettings.MAXSEARCHRESULTS;
 ZaAccount.RESULTSPERPAGE = ZaSettings.RESULTSPERPAGE;
 
@@ -1032,6 +1040,11 @@ function(by, val, withCos) {
 	} else {
 		this[ZaAccount.A2_autodisplayname] = "FALSE";
 	}
+	
+	//Make a GetAccountMembershipRequest
+	this[ZaAccount.A2_memberOf] = ZaAccountMemberOfListView.getAccountMemberShip(this._app, val, by ) ;
+	//this[ZaAccount.A2_memberOf][ZaAccount.A2_isgroup] 
+	
 }
 ZaItem.loadMethods["ZaAccount"].push(ZaAccount.loadMethod);
 
@@ -1178,7 +1191,15 @@ ZaAccount.myXModel = {
 		{id:ZaAccount.A2_mbxsize, type:_NUMBER_, ref:"attrs/"+ZaAccount.A2_mbxsize},
 		{id:ZaAccount.A2_quota, type:_MAILQUOTA_2_, ref:"attrs/"+ZaAccount.A_zimbraMailQuota},
 		{id:ZaAccount.A2_autodisplayname, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
-		{id:ZaAccount.A2_autoMailServer, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES}
+		{id:ZaAccount.A2_autoMailServer, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
+		
+		{id:ZaAccount.A2_isgroup, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaAccount.A2_memberOf + "/" + ZaAccount.A2_isgroup},
+		{id:ZaAccount.A2_directMemberList, type: _DWT_LIST_, ref:ZaAccount.A2_memberOf + "/" + ZaAccount.A2_directMemberList},
+		{id:ZaAccount.A2_indirectMemberList, type: _DWT_LIST_, ref:ZaAccount.A2_memberOf + "/" + ZaAccount.A2_indirectMemberList},
+		{id:ZaAccount.A2_nonMemberList, type: _DWT_LIST_, ref:ZaAccount.A2_memberOf + "/" + ZaAccount.A2_nonMemberList},
+		{id:ZaAccount.A2_showSameDomain, type: _ENUM_, choices:ZaModel.BOOLEAN_CHOICES, 
+			ref:ZaAccount.A2_memberOf + "/" + ZaAccount.A2_showSameDomain },
+		{id:"query", type:_STRING_}
 	]
 };
 
