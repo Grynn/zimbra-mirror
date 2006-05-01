@@ -2835,6 +2835,7 @@ objectclass ( zimbraDistributionList
 		uid
 	)
 	MAY (
+		zimbraGroupId $
 		zimbraLocale $
 		displayName $
 		description $

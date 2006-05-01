@@ -1449,7 +1449,7 @@ TODO - add support for multi-line values in globalConfigValue and defaultCOSValu
   <desc>display name for resource location</desc>
 </attr>
 
-<attr id="325" name="zimbraGroupId" type="id" immutable="1" cardinality="single" requiredIn="securityGroup">
+<attr id="325" name="zimbraGroupId" type="id" immutable="1" cardinality="single" requiredIn="securityGroup" optionalIn="distributionList">
   <desc>Zimbra Systems Unique Group ID</desc>
 </attr>
 
