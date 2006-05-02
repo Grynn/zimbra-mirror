@@ -81,7 +81,7 @@ function(item, now, isDndIcon) {
 		}
 	}
 	div.innerHTML = html.join("");
-
+	div.style.height="auto";
 	return div;
 }
 
