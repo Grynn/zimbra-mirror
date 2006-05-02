@@ -54,6 +54,14 @@ function ZaDomainXFormView (parent, app) {
 ZaDomainXFormView.prototype = new ZaTabView();
 ZaDomainXFormView.prototype.constructor = ZaDomainXFormView;
 ZaTabView.XFormModifiers["ZaDomainXFormView"] = new Array();
+
+ZaDomainXFormView.onRepeatRemove = 
+function (index, form) {
+	var list = this.getInstanceValue();
+	if (list == null || typeof(list) == "string" || index >= list.length || index<0) return;
+	list.splice(index, 1);
+	form.parent.setDirty(true);
+}
 /**
 * @method setObject sets the object contained in the view
 * @param entry - ZaDomain object to display
@@ -64,7 +72,15 @@ function(entry) {
 	this._containedObject.attrs = new Object();
 
 	for (var a in entry.attrs) {
-		this._containedObject.attrs[a] = entry.attrs[a];
+		if(entry.attrs[a] instanceof Array) {
+			this._containedObject.attrs[a] = new Array();
+			var cnt = entry.attrs[a].length;
+			for(var ix = 0; ix < cnt; ix++) {
+				this._containedObject.attrs[a][ix]=entry.attrs[a][ix];
+			}
+		} else {
+			this._containedObject.attrs[a] = entry.attrs[a];
+		}
 	}
 
 	if(!entry[ZaModel.currentTab])
@@ -94,7 +110,8 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 			choices:[
 				{value:1, label:ZaMsg.Domain_Tab_General},
 				{value:2, label:ZaMsg.Domain_Tab_GAL},
-				{value:3, label:ZaMsg.Domain_Tab_Authentication}
+				{value:3, label:ZaMsg.Domain_Tab_Authentication},
+				{value:4, label:ZaMsg.Domain_Tab_VirtualHost}
 			],cssClass:"ZaTabBar"
 		},
 		{type:_SWITCH_, items:[
@@ -139,7 +156,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 					]						
 				}, 
 				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 3", 
-				colSizes:["300px","*"],
+					colSizes:["300px","*"],
 					items: [
 						{ref:ZaDomain.A_AuthMech, type:_OUTPUT_, label:ZaMsg.Domain_AuthMech, choices:this.AuthMechs},
 						{type:_GROUP_,useParentTable:true, colSpan:"*", relevant:"instance.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad",
@@ -167,6 +184,19 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 							]
 						}
 					]						
+				},
+				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 4", 
+					items:[
+						{ref:ZaDomain.A_zimbraVirtualHostname, type:_REPEAT_, label:null, repeatInstance:"", showAddButton:true, showRemoveButton:true, 
+								addButtonLabel:ZaMsg.NAD_AddVirtualHost, 
+								showAddOnNextRow:true,
+								removeButtonLabel:ZaMsg.NAD_RemoveVirtualHost,
+								items: [
+									{ref:".", type:_TEXTFIELD_, label:null, onChange:ZaTabView.onFormFieldChanged}
+								],
+								onRemove:ZaDomainXFormView.onRepeatRemove
+						}
+					]
 				}
 			]
 		}	

@@ -112,7 +112,7 @@ ZaDomain.A_AuthTestResultCode = "authtestresutcode";
 ZaDomain.A_AuthComputedBindDn = "authcomputedbinddn";
 ZaDomain.A_AuthUseBindPassword = "authusebindpassword";
 ZaDomain.A_AuthLdapSearchBindPasswordConfirm = "authldapsearchBindpasswordconfirm";
-
+ZaDomain.A_zimbraVirtualHostname = "A_zimbraVirtualHostname";
 //server value constants
 ZaDomain.AuthMech_ad = "ad";
 ZaDomain.AuthMech_ldap = "ldap";
@@ -447,8 +447,24 @@ function(mods) {
 	var soapDoc = AjxSoapDoc.create("ModifyDomainRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
 	for (var aname in mods) {
-		var attr = soapDoc.set("a", mods[aname]);
-		attr.setAttribute("n", aname);
+		//multy value attribute
+		if(mods[aname] instanceof Array) {
+			var cnt = mods[aname].length;
+			if(cnt) {
+				for(var ix=0; ix <cnt; ix++) {
+					if(mods[aname][ix]) { //if there is an empty element in the array - don't send it
+						var attr = soapDoc.set("a", mods[aname][ix]);
+						attr.setAttribute("n", aname);
+					}
+				}
+			} else {
+				var attr = soapDoc.set("a", "");
+				attr.setAttribute("n", aname);
+			}
+		} else {		
+			var attr = soapDoc.set("a", mods[aname]);
+			attr.setAttribute("n", aname);
+		}
 	}
 		
 	var command = new ZmCsfeCommand();
@@ -514,6 +530,12 @@ function (node) {
 ZaDomain.prototype.initFromJS = 
 function (obj) {
 	ZaItem.prototype.initFromJS.call(this, obj);
+	if(!(this.attrs[ZaDomain.A_zimbraVirtualHostname] instanceof Array)) {
+		if(this.attrs[ZaDomain.A_zimbraVirtualHostname])
+			this.attrs[ZaDomain.A_zimbraVirtualHostname] = [this.attrs[ZaDomain.A_zimbraVirtualHostname]];	
+		else
+			this.attrs[ZaDomain.A_zimbraVirtualHostname] = new Array();
+	}
 	if(!this.attrs[ZaDomain.A_AuthMech]) {
 		this.attrs[ZaDomain.A_AuthMech] = ZaDomain.AuthMech_zimbra; //default value
 	}
@@ -601,6 +623,7 @@ ZaDomain.myXModel = {
 	items: [
 		{id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId},
 		{id:ZaDomain.A_domainName, type:_STRING_, ref:"attrs/" + ZaDomain.A_domainName, pattern:AjxUtil.DOMAIN_NAME_FULL_RE},
+		{id:ZaDomain.A_zimbraVirtualHostname, type:_LIST_, listItem:{type:_STRING_, pattern:AjxUtil.DOMAIN_NAME_FULL_RE}, ref:"attrs/" + ZaDomain.A_zimbraVirtualHostname},		
 		{id:ZaDomain.A_description, type:_STRING_, ref:"attrs/" + ZaDomain.A_description}, 
 		{id:ZaDomain.A_notes, type:_STRING_, ref:"attrs/" + ZaDomain.A_notes},
 		{id:ZaDomain.A_domainDefaultCOSId, type:_STRING_, ref:"attrs/" + ZaDomain.A_domainDefaultCOSId},

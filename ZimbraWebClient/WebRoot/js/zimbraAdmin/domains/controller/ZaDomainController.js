@@ -110,6 +110,10 @@ function () {
 		mods[ZaDomain.A_domainDefaultCOSId] = tmpObj.attrs[ZaDomain.A_domainDefaultCOSId] ;
 		haveSmth = true;
 	}	
+	if(tmpObj.attrs[ZaDomain.A_zimbraVirtualHostname].join(",").valueOf() !=  this._currentObject.attrs[ZaDomain.A_zimbraVirtualHostname].join(",").valueOf()) {
+		mods[ZaDomain.A_zimbraVirtualHostname] = tmpObj.attrs[ZaDomain.A_zimbraVirtualHostname] ;
+		haveSmth = true;		
+	}
 	if(!haveSmth)
 		return true;
 	
