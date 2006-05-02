@@ -15,59 +15,70 @@
  */
 
 /**
-* @constructor
-* @class
-* Creates a control. <i>DwtControl</i> is the root class of the Dwt component hierarchy. All
-* Dwt compononents either directly or indirectly inherit from this class. 
-* 
-* A <i>DwtContro</i>l may also be directly instantiated. In this case it is essentially
-* a div into which any content may be "drawn"
-* 
-* A control may be created in "deferred" mode, meaning that the UI portion of the control
-* will be created "Just In Time". This is useful for widgets which may want to defer construction
-* of elements (e.g. <i>DwtTreeItem</i>) until such time as is needed, in the interest of efficiency. 
-* Note that if the control is a child of the shell, it won't become visible until its z-index is set.
-* 
-* <h4>CSS</h4>
-* None
-* 
-* <h4>Keyboard Actions</h4>
-* None
-* 
-* <h4>Events</h4><ul>
-* <li><i>DwtEvent.CONTROL</i></li>
-* <li><i>DwtEvent.DISPOSE</i></li>
-* <li><i>DwtEvent.ENTER</i></li>
-* <li><i>DwtEvent.HOVEROVER</i></li>
-* <li><i>DwtEvent.HOVEROUT</i></li>
-* <li><i>DwtEvent.ONCONTEXTMENU</i></li>
-* <li><i>DwtEvent.ONDBLCLICK</i></li>
-* <li><i>DwtEvent.ONFOCUS</i></li>
-* <li><i>DwtEvent.ONBLUR</i></li>
-* <li><i>DwtEvent.ONMOUSEDOWN</i></li>
-* <li><i>DwtEvent.ONMOUSEENTER</i></li>
-* <li><i>DwtEvent.ONMOUSELEAVE</i></li>
-* <li><i>DwtEvent.ONMOUSEMOVE</i></li>
-* <li><i>DwtEvent.ONMOUSEOUT</i></li>
-* <li><i>DwtEvent.ONMOUSEOVER</i></li>
-* <li><i>DwtEvent.ONMOUSEUP</i></li>
-* <li><i>DwtEvent.ONMOUSEWHEEL</i></li>
-* <li><i>DwtEvent.ONSELECTSTART</i></li>
-* <li><i>DwtEvent.ONCONTEXTMENU</i></li>
-* </ul>
-* 
-* @author Ross Dargahi
-* 
-* @param {DwtComposite} parent Parent widget. Except in the case of <i>DwtShell</i> the
-* 		parent will be a control that has subclassed from <i>DwtComposite</i> 
-* @param {String} className CSS class. If not provided defaults to the class name (optional)
-* @param {String} posStyle Positioning style (absolute, static, or relative). If
-* 		not provided defaults to <i>DwtControl.STATIC_STYLE</i> (optional)
-* @param {Boolean} deferred If true, postpone initialization until needed. If not
-* 		specified defaults to false (optional)
-* @param {Int} id An explicit ID to use for the control's HTML element. If not
-* 		specified defaults to an auto-generated id (optional)
-*/
+ * @constructor
+ * @class
+ * Creates a control. <i>DwtControl</i> is the root class of the Dwt component hierarchy. All
+ * Dwt components either directly or indirectly inherit from this class.
+ * 
+ * A <i>DwtControl</i> may also be directly instantiated. In this case it is essentially
+ * a div into which any content may be "drawn"
+ * 
+ * A control may be created in "deferred" mode, meaning that the UI portion of the control
+ * will be created "Just In Time". This is useful for widgets which may want to defer construction
+ * of elements (e.g. <i>DwtTreeItem</i>) until such time as is needed, in the interest of efficiency. 
+ * Note that if the control is a child of the shell, it won't become visible until its z-index is set.
+ * 
+ * <h4>CSS</h4>
+ * None
+ * 
+ * <h4>Keyboard Actions</h4>
+ * None
+ * 
+ * <h4>Events</h4><ul>
+ * <li><i>DwtEvent.CONTROL</i></li>
+ * <li><i>DwtEvent.DISPOSE</i></li>
+ * <li><i>DwtEvent.HOVEROVER</i></li>
+ * <li><i>DwtEvent.HOVEROUT</i></li>
+ * <li><i>DwtEvent.ONCONTEXTMENU</i></li>
+ * <li><i>DwtEvent.ONDBLCLICK</i></li>
+ * <li><i>DwtEvent.ONFOCUS</i></li>
+ * <li><i>DwtEvent.ONBLUR</i></li>
+ * <li><i>DwtEvent.ONMOUSEDOWN</i></li>
+ * <li><i>DwtEvent.ONMOUSEENTER</i></li>
+ * <li><i>DwtEvent.ONMOUSELEAVE</i></li>
+ * <li><i>DwtEvent.ONMOUSEMOVE</i></li>
+ * <li><i>DwtEvent.ONMOUSEOUT</i></li>
+ * <li><i>DwtEvent.ONMOUSEOVER</i></li>
+ * <li><i>DwtEvent.ONMOUSEUP</i></li>
+ * <li><i>DwtEvent.ONMOUSEWHEEL</i></li>
+ * <li><i>DwtEvent.ONSELECTSTART</i></li>
+ * <li><i>DwtEvent.ONCONTEXTMENU</i></li>
+ * </ul>
+ * 
+ * @author Ross Dargahi
+ * 
+ * @param {DwtComposite} parent Parent widget. Except in the case of <i>DwtShell</i> the
+ * 		parent will be a control that has subclassed from <i>DwtComposite</i> 
+ * @param {String} className CSS class. If not provided defaults to the class name (optional)
+ * @param {String} posStyle Positioning style (absolute, static, or relative). If
+ * 		not provided defaults to <i>DwtControl.STATIC_STYLE</i> (optional)
+ * @param {Boolean} deferred If true, postpone initialization until needed. If not
+ * 		specified defaults to false (optional)
+ * @param {Int} id An explicit ID to use for the control's HTML element. If not
+ * 		specified defaults to an auto-generated id (optional)
+ * 
+ * @requires AjxCallback
+ * @requires AjxEventMgr
+ * @requires AjxListener
+ * @requires AjxTimedAction
+ * @requires Dwt
+ * @requires DwtDragSource
+ * @requires DwtDropTarget
+ * @requires DwtMouseEvent
+ * @requires DwtMouseEventCapture
+ * @requires DwtShell
+ * @requires DwtToolTip
+ */
 function DwtControl(parent, className, posStyle, deferred, id) {
 
 	if (arguments.length == 0) return;
@@ -111,57 +122,70 @@ function DwtControl(parent, className, posStyle, deferred, id) {
 
 // Position styles
 /**  Static position style 
- * @type String */
+ * @type String
+ * @see  Dwt#STATIC_STYLE*/
 DwtControl.STATIC_STYLE = Dwt.STATIC_STYLE;
 
 /** Absolute position style
- * @type String*/
+ * @type String
+ * @see Dwt#ABSOLUTE_STYLE*/
 DwtControl.ABSOLUTE_STYLE = Dwt.ABSOLUTE_STYLE;
 
 /** Relative position style 
- * @type String*/
+ * @type String
+ * @see Dwt#RELATIVE_STYLE*/
 DwtControl.RELATIVE_STYLE = Dwt.RELATIVE_STYLE;
 
+
+// Overflow style
 /** Clip on overflow 
- * @type Int*/
+ * @type Int
+ * @see Dwt#CLIP*/
 DwtControl.CLIP = Dwt.CLIP;
 
 /** Allow overflow to be visible
- * @type Int*/
+ * @type Int
+ * @see Dwt#VISIBLE*/
 DwtControl.VISIBLE = Dwt.VISIBLE;
 
 /** Automatically create scrollbars if content overflows 
- * @type Int*/
+ * @type Int
+ * @see Dwt#SCROLL*/
 DwtControl.SCROLL = Dwt.SCROLL;
 
 /** Always have scrollbars whether content overflows or not 
- * @type Int*/
+ * @type Int
+ * @see Dwt#FIXED_SCROLL*/
 DwtControl.FIXED_SCROLL = Dwt.FIXED_SCROLL;
 
-/** Default value for sizing/position methods */
+
+/** Default value for sizing/position methods 
+ * @type Int
+ * @see Dwt#DEFAULT*/
 DwtControl.DEFAULT = Dwt.DEFAULT;
 
+// DnD states
 /** @private */
-DwtControl._NO_DRAG = 1;
+DwtControl.__NO_DRAG = 1;
 
 /** @private */
-DwtControl._DRAGGING = 2;
+DwtControl.__DRAGGING = 2;
 
 /** @private */
-DwtControl._DRAG_REJECTED = 3;
+DwtControl.__DRAG_REJECTED = 3;
 
 /** @private */
-DwtControl._DRAG_THRESHOLD = 3;
+DwtControl.__DRAG_THRESHOLD = 3;
 
 /** @private */
-DwtControl._TOOLTIP_THRESHOLD = 5;
+DwtControl.__TOOLTIP_THRESHOLD = 5;
 
 /** @private */
-DwtControl._DND_HOVER_DELAY = 750;
+DwtControl.__DND_HOVER_DELAY = 750;
 
 
 /**
- * This method returns the actual class name for the component. Subclasses will
+ * This method returns the actual class name for the control. Subclasses will
  * override this method to return their own name
  * 
  * @return class name
@@ -207,7 +231,7 @@ function(listener) {
 
 /**
  * Registers a dispose listener for control events. Dispose events are fired when
- * a component is "destroyed" via the <i>dispose</i> method call
+ * a control is "destroyed" via the <i>dispose</i> method call
  *
  * @param {AjxListener} listener Listener to be registered (required)
  * 
@@ -225,7 +249,7 @@ function(listener) {
 
 /**
  * Removes a dispose event listener for control events. Dispose events are fired when
- * a component is "destroyed" via the <i>dispose</i> method call
+ * a control is "destroyed" via the <i>dispose</i> method call
  * 
  * @param {AjxListener} listener Listener to be removed
  * 
@@ -561,8 +585,11 @@ function() {
  * 
  * @param {Int|String} x x coordinate of the element. e.g. 10, "10px", Dwt.DEFAULT
  * @param {Int|String} y y coordinate of the element. e.g. 10, "10px", Dwt.DEFAULT
- * @param {Int} width width of the element e.g. 100, "100px", "75%", Dwt.DEFAULT
- * @param {Int} height height of the element  e.g. 100, "100px", "75%", Dwt.DEFAULT
+ * @param {Int|String} width width of the element e.g. 100, "100px", "75%", Dwt.DEFAULT
+ * @param {Int|String} height height of the element  e.g. 100, "100px", "75%", Dwt.DEFAULT
+ * 
+ * @return this
+ * @type DwtControl
  * 
  * @throws DwtException
  *
@@ -697,7 +724,7 @@ function(dragSource) {
 		this._ctrlCaptureObj = new DwtMouseEventCapture(this, "DwtControl", DwtControl.__mouseOverHdlr,
 				DwtControl.__mouseDownHdlr, DwtControl.__mouseMoveHdlr, 
 				DwtControl.__mouseUpHdlr, DwtControl.__mouseOutHdlr);
-		this._dndHoverAction = new AjxTimedAction(null, this._dndDoHover);
+		this._dndHoverAction = new AjxTimedAction(null, this.__dndDoHover);
 	}
 };
 
@@ -736,8 +763,7 @@ function(dropTarget) {
  */
 DwtControl.prototype.getEnabled =
 function() {
-	if (!this._checkState()) return;
-		
+	if (!this._checkState()) return;	
 	return this._enabled;
 };
 
@@ -895,7 +921,21 @@ function() {
 };
 
 /**
- * TODO
+ * Returns the location of the control
+ *
+ * @return the location of <code>htmlElement</code>
+ * 
+ * @see #getBounds
+ * @see #getSize
+ * @see #setLocation
+ * @see #getH
+ * @see #getW
+ * @see #getX
+ * @see #getXW
+ * @see #getY
+ * @see #setBounds
+ * @see #setSize
+ * @see Dwt
  */
 DwtControl.prototype.getLocation =
 function() {
@@ -916,7 +956,22 @@ function() {
  * @param {Int|String} x x coordinate of the element. e.g. 10, "10px", Dwt.DEFAULT
  * @param {Int|String} y y coordinate of the element. e.g. 10, "10px", Dwt.DEFAULT
  * 
+ * @return this
+ * @type DwtControl
+ * 
  * @throws DwtException
+ *
+ * @see #getBounds
+ * @see #getSize
+ * @see #getLocation
+ * @see #getH
+ * @see #getW
+ * @see #getX
+ * @see #getXW
+ * @see #getY
+ * @see #setBounds
+ * @see #setSize
+ * @see Dwt
  */
 DwtControl.prototype.setLocation =
 function(x, y) {
@@ -979,37 +1034,94 @@ function(scrollStyle) {
 };
 
 /**
- * TODO
+ * @return the width of the control
+ * @type Int
+ * 
+ * @see #getBounds
+ * @see #getSize
+ * @see #getLocation
+ * @see #getH
+ * @see #getX
+ * @see #getXW
+ * @see #getY
+ * @see #getYH
+ * @see #setBounds
+ * @see #setSize
+ * @see #setLocation
  */
 DwtControl.prototype.getW = 
-function(incScroll) {
+function() {
 	if (!this._checkState()) return;
 		
-	return Dwt.getSize(this.getHtmlElement(), incScroll).x;
+	return Dwt.getSize(this.getHtmlElement()).x;
 };
 
 /**
- * TODO
+ * @return the height of the control
+ * @type Int
+ * 
+ * @see #getBounds
+ * @see #getSize
+ * @see #getLocation
+ * @see #getW
+ * @see #getX
+ * @see #getXW
+ * @see #getY
+ * @see #getYH
+ * @see #setBounds
+ * @see #setLocation
+ * @see #setSize
  */
 DwtControl.prototype.getH = 
-function(incScroll) {
+function() {
 	if (!this._checkState()) return;
 		
-	return Dwt.getSize(this.getHtmlElement(), incScroll).y;
+	return Dwt.getSize(this.getHtmlElement()).y;
 };
 
 /**
- * TODO
+ * @return The size of the control. The x value of the returned point is the width
+ * 		and the y is the height
+ * @type DwtPoint
+ * 
+ * @see #getBounds
+ * @see #getLocation
+ * @see #getH
+ * @see #getW
+ * @see #getX
+ * @see #getXW
+ * @see #getY
+ * @see #getYH
+ * @see #setBounds
+ * @see #setSize
+ * @see #setLocation
  */
 DwtControl.prototype.getSize = 
-function(incScroll) {
+function() {
 	if (!this._checkState()) return;
 		
-	return Dwt.getSize(this.getHtmlElement(), incScroll);
+	return Dwt.getSize(this.getHtmlElement());
 };
 
 /**
- * TODO
+ * Sets the size of the control
+ * 
+ * @param {Int|String} width width of the control e.g. 100, "100px", "75%", Dwt.DEFAULT
+ * @param {Int|String} height height of the control  e.g. 100, "100px", "75%", Dwt.DEFAULT
+ * 
+ * @return this
+ * @type DwtControl
+ * 
+ * @see #getBounds
+ * @see #getSize
+ * @see #setLocation
+ * @see #getH
+ * @see #getW
+ * @see #getX
+ * @see #getXW
+ * @see #getY
+ * @see #getYH
+ * @see #setBounds
  */
 DwtControl.prototype.setSize = 
 function(width, height) {
@@ -1033,7 +1145,8 @@ function(width, height) {
 };
 
 /**
- * TODO
+ * @return the tooltip content set for the control
+ * @type String
  */
 DwtControl.prototype.getToolTipContent =
 function() {
@@ -1043,7 +1156,9 @@ function() {
 };
 
 /**
- * TODO
+ * Sets the tooltip content for the control. The content may be plain text of HTML
+ * 
+ * @param {String} text
  */
 DwtControl.prototype.setToolTipContent =
 function(text) {
@@ -1053,7 +1168,11 @@ function(text) {
 };
 
 /**
- * TODO
+ * @return true if the control is visible (i.e. it's HTML elements display style 
+ * 		attribute is not none)
+ * @type Boolean
+ * 
+ * @see Dwt#getVisibile
  */
 DwtControl.prototype.getVisible =
 function() {
@@ -1063,9 +1182,18 @@ function() {
 };
 
 /**
- * TODO
+ * Sets the the visible state of the control's HTML element.
+ * 
+ * @param {String} visible The visible state may be one of <br>
+ * 		<ul>
+ * 		<li><i>Dwt.DISPLAY_INLINE</i></li>
+ * 		<li><i>Dwt.DISPLAY_BLOCK</i></li>
+ * 		<li><i>Dwt.DISPLAY_BONE</i></li>
+ * 		</ul>
+ * 
+ * @see Dwt#setVisibile
  */
-DwtControl.prototype.setVisible =
+ DwtControl.prototype.setVisible =
 function(visible) {
 	if (!this._checkState()) return;
 		
@@ -1073,7 +1201,11 @@ function(visible) {
 };
 
 /**
- * TODO
+ * Sets the visibility of the control's HTML element
+ * 
+ * @param {Boolean} visible If true then the control is visible
+ * 
+ * @see Dwt#setVisibility 
  */
 DwtControl.prototype.setVisibility =
 function(visible) {
@@ -1083,7 +1215,22 @@ function(visible) {
 };
 
 /**
- * Returns the control's containing HTML Element's z-index value.
+ * @return true if the control is visible (i.e. it's HTML elements visibility play style 
+ * 		attribute is not hiddeen)
+ * @type Boolean
+ * 
+ * @see Dwt#getVisibility 
+ */
+DwtControl.prototype.getVisibility =
+function() {
+	if (!this._checkState()) return;
+		
+	return Dwt.getVisiblility(this.getHtmlElement());
+};
+
+
+/**
+ * Returns the control's z-index value.
  * 
  * @return z-index value
  * @type Int
@@ -1116,7 +1263,7 @@ function(idx) {
  *
  * @param {Boolean} show true if we want to show the element, false if we want to hide it
  * 
- * @see Dwt
+ * @see #setZIndex
  */
 DwtControl.prototype.zShow =
 function(show) {
@@ -1150,7 +1297,13 @@ function(targetEl) {
 };
 
 /**
- * TODO
+ * This method sets the content of the control's HTML element to the provided 
+ * content. Care should be taken when using this method as it can blow away all
+ * the content of the control which can be particularly bad if the control is
+ * a <i>DwtComposite</i> with children. Generally this method should be used 
+ * controls which are being directly instantiated and used as a canvas
+ * 
+ * @param {String} content HTML content
  */
 DwtControl.prototype.setContent =
 function(content) {
@@ -1159,7 +1312,11 @@ function(content) {
 };
 
 /**
- * TODO
+ * This method clears the content of the control's HTML element.
+ * Care should be taken when using this method as it can blow away all
+ * the content of the control which can be particularly bad if the control is
+ * a <i>DwtComposite</i> with children. Generally this method should be used 
+ * controls which are being directly instantiated and used as a canvas
  */
 DwtControl.prototype.clearContent =
 function() {
@@ -1167,27 +1324,39 @@ function() {
 };
  
  
- 
 /**
- * This method is called by the keyboard navigate infrastructure when a control 
+ * This protected method is called by the keyboard navigate infrastructure when a control 
  * gains focus. This method should be overridden by derived classes to provide
- * behaviour for the component losing focus 
+ * the visual behaviour for the component losing focus 
+ * 
+ * @see #_focus
+ * @see #_focusByMouseUpEvent
+ * @see #focus
  */
 DwtControl.prototype._blur =
 function() {
 };
 
 /** 
- * This method should be overridden by derived classes to provide
+ * This protected method should be overridden by derived classes to provide
  * behaviour for the component gaining focus e.g. providing a border or
- * highlighting etc...*/
+ * highlighting etc...
+ *  
+ * @see #_blur
+ * @see #_focusByMouseUpEvent
+ * @see #focus
+ */
 DwtControl.prototype._focus =
 function() {
 };
  
 /** 
- * This method is called from mouseUpHdl. Subclasses may override this method
- * if they have their own specialized focus management code
+ * This protected method is called from mouseUpHdl. Subclasses may override this method
+ * if they have their own specialized focus management code.
+ * 
+ * @see #_blur
+ * @see #_focus
+ * @see #focus
  */
 DwtControl.prototype._focusByMouseUpEvent =
 function()  {
@@ -1197,9 +1366,26 @@ function()  {
 };
 
 /** 
- * Subclasses may override this method to return an HTML element that will represent
- * the dragging icon. The icon must be created on the DwtShell widget. If this method returns
- * null, it indicates that the drag failed
+ * Subclasses may override this protected method to return an HTML element that will represent
+ * the dragging icon. The icon must be created on the DwtShell widget. This means that the 
+ * icon must be a child of the shells HTML component If this method returns
+ * null, it indicates that the drag failed. This method is called when a control is
+ * being dragged and it has a valid drag source
+ * 
+ * @return The DnD dragging icon. This is typically a div element
+ * @type HTMLElement
+ *
+ * @see #_setDndIconState
+ * @see #_destroyDnDIcon
+ * @see #_isValidDragObject
+ * @see #_dragEnter
+ * @see #_dragOver
+ * @see #_dragHover
+ * @see #_dragLeave
+ * @see #_drop
+ * @see #setDragSource
+ * @see DwtDropTarget
+ * @see DwtDragSource
  */
 DwtControl.prototype._getDnDIcon =
 function(dragOp) {
@@ -1207,8 +1393,27 @@ function(dragOp) {
 	return null;
 };
 
-/* Subclasses may override this method to set the DnD icon properties based on whether drops are
- * allowed */
+/**
+ * Subclasses may override this method to set the DnD icon properties based on whether drops are
+ * allowed. The default implementation set's the class on the HTML element obtained
+ * from <code>_getDnDIcon</code> to "DropAllowed" if <code>dropAllowed</code> is true and
+ * to "DropNotAllowed" if false
+ * 
+ * @param {Boolean} dropAllowed If true, then dropping is allowed on the drop zone so set 
+ * 		DnD icon to the visually reflect this
+ * 
+ * @see #_getDnDIcon
+ * @see #_destroyDnDIcon
+ * @see #_isValidDragObject
+ * @see #_dragEnter
+ * @see #_dragOver
+ * @see #_dragHover
+ * @see #_dragLeave
+ * @see #_drop
+ * @see #setDragSource
+ * @see DwtDropTarget
+ * @see DwtDragSource
+ */
 DwtControl.prototype._setDnDIconState =
 function(dropAllowed) {
 	this._dndIcon.className = (dropAllowed) ? "DropAllowed" : "DropNotAllowed";
@@ -1216,8 +1421,23 @@ function(dropAllowed) {
 
 
 /** @private */
-DwtControl._junkIconId = 0;
-/* Subclasses may override this method to destroy the Dnd icon HTML element. */
+DwtControl.__junkIconId = 0;
+
+/**
+ * Subclasses may override this method to destroy the DnD icon HTML element
+ * 
+ * @see #_getDnDIcon
+ * @see #_setDndIconState
+ * @see #_isValidDragObject
+ * @see #_dragEnter
+ * @see #_dragOver
+ * @see #_dragHover
+ * @see #_dragLeave
+ * @see #_drop
+ * @see #setDragSource
+ * @see DwtDropTarget
+ * @see DwtDragSource
+ */
 DwtControl.prototype._destroyDnDIcon =
 function(icon) {
 	if (icon != null) {
@@ -1229,7 +1449,7 @@ function(icon) {
 			// at least hide the icon, and change the id so we can't get it
 			// back later
 			icon.style.zIndex = -100;
-			icon.id = "DwtJunkIcon" + DwtControl._junkIconId++;
+			icon.id = "DwtJunkIcon" + DwtControl.__junkIconId++;
 			icon = void 0;
 		}
 	}
@@ -1244,6 +1464,18 @@ function(icon) {
  * 
  * @return True if the object is a valid drag obejct
  * @type Boolean 
+ * 
+ * @see #_getDnDIcon
+ * @see #_setDndIconState
+ * @see #_destroyDnDIcon
+ * @see #_dragEnter
+ * @see #_dragOver
+ * @see #_dragHover
+ * @see #_dragLeave
+ * @see #_drop
+ * @see #setDragSource
+ * @see DwtDropTarget
+ * @see DwtDragSource
  */
  DwtControl.prototype._isValidDragObject =
  function(ev) {
@@ -1251,73 +1483,177 @@ function(icon) {
  };
 
 /**
- * Subclasses may override the following  functions to provide UI behaviour for DnD operations.
- * _dragEnter is called when a drag operation enters a control. _dragOver is called multiple times
- * as an item crossed over the control. _dragHover is called multiple times as the user hover's over
+ . _dragHover is called multiple times as the user hover's over
  * the control. _dragLeave is called when the drag operation exits the control. 
  * _drop is called when the item is dropped on the target.
  */
+ 
+ /** 
+  * This protected method is called when a drag operation enters a control. Subclasses
+  * supporting drop targets should implement this method to visual indicate that they are a 
+  * drop target. This could be by changing the background etc. Note that it is the
+  * responsibility of the drag source (the control being dragged) to change its icon state
+  * to reflect whether the drop target is valid for the drag source
+  * 
+  * @param {DwtMouseEvent} ev mouse event that is associated with the drag op
+  * 
+  * @see #_getDnDIcon
+  * @see #_setDndIconState
+  * @see #_destroyDnDIcon
+  * @see #_isValidDragObject
+  * @see #_dragOver
+  * @see #_dragHover
+  * @see #_dragLeave
+  * @see #_drop
+  * @see #setDragSource
+  * @see DwtDropTarget
+  * @see DwtDragSource
+  */
 DwtControl.prototype._dragEnter =
 function(ev) {
 };
 
+ /** 
+  * This protected method is called multiple times as a dragged control crosses over this control
+  * Subclasses supporting drop targets may implement this method for additional visual 
+  * indication, such as indicating "landing zones" in the control for drop operations
+  * 
+  * @param {DwtMouseEvent} ev mouse event that is associated with the drag op
+  * 
+  * @see #_getDnDIcon
+  * @see #_setDndIconState
+  * @see #_destroyDnDIcon
+  * @see #_isValidDragObject
+  * @see #_dragEnter
+  * @see #_dragHover
+  * @see #_dragLeave
+  * @see #_drop
+  * @see #setDragSource
+  * @see DwtDropTarget
+  * @see DwtDragSource
+  */
 DwtControl.prototype._dragOver =
 function(ev) {
 };
 
+ /** 
+  * This protected method is called every 750ms as an item hovers over this control
+  * Subclasses supporting drop targets may implement this method for additional visual 
+  * indication or actions, such as expanding a collapsed tree node if the user hovers
+  * over the node for a period of time.
+  * 
+  * @param {DwtMouseEvent} ev mouse event that is associated with the drag op
+  * 
+  * @see #_getDnDIcon
+  * @see #_setDndIconState
+  * @see #_destroyDnDIcon
+  * @see #_isValidDragObject
+  * @see #_dragEnter
+  * @see #_dragHover
+  * @see #_dragLeave
+  * @see #_drop
+  * @see #setDragSource
+  * @see DwtDropTarget
+  * @see DwtDragSource
+  */
 DwtControl.prototype._dragHover =
 function(ev) {
 };
 
-
+ /** 
+  * This protected method is called when the drag operation exits the control
+  * Subclasses supporting drop targets should implement this method to reset the
+  * visual to the default (i.e. reset the actions performed as part of the
+  * <code>_dragEnter</code> method.
+  * 
+  * @param {DwtMouseEvent} ev mouse event that is associated with the drag op
+  * 
+  * @see #_getDnDIcon
+  * @see #_setDndIconState
+  * @see #_destroyDnDIcon
+  * @see #_isValidDragObject
+  * @see #_dragEnter
+  * @see #_dragHover
+  * @see #_drop
+  * @see #setDragSource
+  * @see DwtDropTarget
+  * @see DwtDragSource
+  */
 DwtControl.prototype._dragLeave =
 function(ev) {
 };
 
+
+/** 
+  * This protected method is called when the a drop occurs on the control
+  * Subclasses supporting drop targets may implement this method to provide a 
+  * visual indication that the drop succeeded (e.g. an animation such as flashing
+  * the drop target).
+  * 
+  * @param {DwtMouseEvent} ev mouse event that is associated with the drag op
+  * 
+  * @see #_getDnDIcon
+  * @see #_setDndIconState
+  * @see #_destroyDnDIcon
+  * @see #_isValidDragObject
+  * @see #_dragEnter
+  * @see #_dragHover
+  * @see #_dragLeave
+  * @see #setDragSource
+  * @see DwtDropTarget
+  * @see DwtDragSource
+  */
 DwtControl.prototype._drop =
 function(ev) {
 };
 
-
-DwtControl.prototype._setMouseEventHdlrs =
-function(clear) {
-	this._setEventHdlrs(DwtEvent.MOUSE_EVENTS, clear);
-};
-
-
+/**
+ * This convenience methods sets or clears the control's event handler for key
+ * press events as defined by <i>DwtEvent.ONKEYPRESS</i>
+ * 
+ * @param {Boolean} clear true the keypress events handler is cleared
+ */
 DwtControl.prototype._setKeyPressEventHdlr =
 function(clear) {
 	this._setEventHdlrs([DwtEvent.ONKEYPRESS], clear);
 };
 
-DwtControl.prototype._getPropagationForEvent = 
-function() {
-	// overload me for dealing w/ browsers w/ weird quirks
-	return true;
-};
-
-DwtControl.prototype._getReturnValueForEvent = 
-function() {
-	// overload me for dealing w/ browsers w/ weird quirks
-	return false;
-};
-
-
-
 /**
- * TODO
+ * This convenience methods sets or clears the control's event handlers for mouse
+ * events as defined by <i>DwtEvent.MOUSE_EVENTS</i>
+ * 
+ * @param {Boolean} clear true the mouse events handlers are cleared
  */
-DwtControl.prototype._checkState =
-function() {
-	if (this._disposed) return false;
-	if (!this._ctrlInited) 
-		this.__initCtrl();
-	return true;
+DwtControl.prototype._setMouseEventHdlrs =
+function(clear) {
+	this._setEventHdlrs(DwtEvent.MOUSE_EVENTS, clear);
 };
 
-
 /**
- * @private
+ * This protected method will set or clear the event handlers for the provided array
+ * of events.
+ * 
+ * @param {Array} events This is an array of events for which to set or clear the
+ * 		control's event handlers. The set of events supported by the control are:
+ * 		<ul>
+ * 		<li><i>DwtEvent.ONCONTEXTMENU</i></li>
+ * 		<li><i>DwtEvent.ONDBLCLICK</i></li>
+ * 		<li><i>DwtEvent.ONMOUSEDOWN</i></li>
+ * 		<li><i>DwtEvent.ONMOUSEENTER</i></li>
+ * 		<li><i>DwtEvent.ONMOUSELEAVE</i></li>
+ * 		<li><i>DwtEvent.ONMOUSEMOVE</i></li>
+ * 		<li><i>DwtEvent.ONMOUSEOUT</i></li>
+ * 		<li><i>DwtEvent.ONMOUSEOVER</i></li>
+ * 		<li><i>DwtEvent.ONMOUSEUP</i></li>
+ * 		<li><i>DwtEvent.ONMOUSEWHEEL</i></li>
+ * 		<li><i>DwtEvent.ONSELECTSTART</i></li>
+ * 		<li><i>DwtEvent.ONKEYPRESS</i></li>
+ * 		</ul>
+ * @param {Boolean} clear if present and true, then the event handlers are cleared
+ * 		for the set of events. Else they are set
+ * 
+ * @see Dwt#setHandler
+ * @see Dwt#clearHandler
  */
 DwtControl.prototype._setEventHdlrs =
 function(events, clear) {
@@ -1332,15 +1668,42 @@ function(events, clear) {
 	}
 };
 
+/**
+ * TODO 
+ */
+DwtControl.prototype._getStopPropagationValForMouseEv = 
+function(ev) {
+	// overload me for dealing w/ browsers w/ weird quirks
+	return true;
+};
 
 /**
- * @private
+ * TODO
  */
-DwtControl.prototype._dndDoHover =
-function(control) {
-	//TODO Add allow hover?
-	control._dragHover();
+DwtControl.prototype._getEventReturnValForMouseEv = 
+function(ev) {
+	// overload me for dealing w/ browsers w/ weird quirks
+	return false;
 };
+
+
+/**
+ * Check the state of the control, if it is not disposed and is not initialized, then
+ * as a side-effect it will initialize it (meaning it will create the HTML element
+ * for the control and insert it into the DOM. This is pertinent for controls that
+ * were created <i>deferred</i> (see the contructor documentation)
+ * 
+ * @return true if the control is not disposed, else false
+ * @type Boolean
+ */
+DwtControl.prototype._checkState =
+function() {
+	if (this._disposed) return false;
+	if (!this._ctrlInited) 
+		this.__initCtrl();
+	return true;
+};
+
 
 
 
@@ -1423,7 +1786,7 @@ function(ev) {
 	if (!obj) return false;
 	
 	var mouseEv = DwtShell.mouseEvent;
-	if (obj._dragging == DwtControl._NO_DRAG) {
+	if (obj._dragging == DwtControl.__NO_DRAG) {
 		mouseEv.setFromDhtmlEvent(ev);
 		if (obj.isListenerRegistered(DwtEvent.ONMOUSEOVER))
 			obj.notifyListeners(DwtEvent.ONMOUSEOVER, mouseEv);
@@ -1515,11 +1878,11 @@ function(ev) {
 	// If we are not draggable or if we have not started dragging and are 
 	// within the Drag threshold then simply handle it as a move.
 	if (obj._dragSource == null || captureObj == null
-		|| (obj != null && obj._dragging == DwtControl._NO_DRAG 
+		|| (obj != null && obj._dragging == DwtControl.__NO_DRAG 
 			&& Math.abs(obj._dragStartX - mouseEv.docX) < 
-			   DwtControl._DRAG_THRESHOLD 
+			   DwtControl.__DRAG_THRESHOLD 
 			&& Math.abs(obj._dragStartY - mouseEv.docY) < 
-			   DwtControl._DRAG_THRESHOLD)) {
+			   DwtControl.__DRAG_THRESHOLD)) {
 		if (obj._toolTipContent != null) {
 			var shell = DwtShell.getShell(window);
 			var manager = shell.getHoverMgr();
@@ -1531,8 +1894,8 @@ function(ev) {
 			} else {
 				var deltaX = obj._lastTooltipX ? Math.abs(mouseEv.docX - obj._lastTooltipX) : null;
 				var deltaY = obj._lastTooltipY ? Math.abs(mouseEv.docY - obj._lastTooltipY) : null;
-				if ((deltaX != null && deltaX > DwtControl._TOOLTIP_THRESHOLD) || 
-					(deltaY != null && deltaY > DwtControl._TOOLTIP_THRESHOLD)) {
+				if ((deltaX != null && deltaX > DwtControl.__TOOLTIP_THRESHOLD) || 
+					(deltaY != null && deltaY > DwtControl.__TOOLTIP_THRESHOLD)) {
 					manager.setHoverOutListener(obj._hoverOutListener);
 					manager.hoverOut();
 					obj._tooltipClosed = true; // prevent tooltip popup during moves in this object
@@ -1545,16 +1908,16 @@ function(ev) {
 		
 		// If we are not dragging, then see if we can drag. 
 		// If we cannot drag this control, then
-		// we will set dragging status to DwtControl._DRAG_REJECTED 
-		if (obj._dragging == DwtControl._NO_DRAG) {
+		// we will set dragging status to DwtControl.__DRAG_REJECTED 
+		if (obj._dragging == DwtControl.__NO_DRAG) {
 			obj._dragOp = obj._dragSource._beginDrag(obj._dragOp, obj);
 			if (obj._dragOp != Dwt.DND_DROP_NONE) {
-				obj._dragging = DwtControl._DRAGGING;
+				obj._dragging = DwtControl.__DRAGGING;
 				obj._dndIcon = obj._getDnDIcon(obj._dragOp);
 				if (obj._dndIcon == null)
-					obj._dragging = DwtControl._DRAG_REJECTED;
+					obj._dragging = DwtControl.__DRAG_REJECTED;
 			} else {
-				obj._dragging = DwtControl._DRAG_REJECTED;
+				obj._dragging = DwtControl.__DRAG_REJECTED;
 			}
 		}
 		
@@ -1563,13 +1926,13 @@ function(ev) {
 		// This is done by (a) making sure that the drag source data type
 		// can be dropped onto the target, and (b) that the application 
 		// will allow it (i.e. via the listeners on the DropTarget
-		if (obj._dragging != DwtControl._DRAG_REJECTED) {
+		if (obj._dragging != DwtControl.__DRAG_REJECTED) {
 			var destDwtObj = mouseEv.dwtObj;
 			if (destDwtObj) {
 				// Set up the drag hover event. we will even let this item hover over itself as there may be
 				// scenarios where that will hold true
 				obj._dndHoverAction.args = [ destDwtObj ];
-				obj._dndHoverActionId = AjxTimedAction.scheduleAction(obj._dndHoverAction, DwtControl._DND_HOVER_DELAY);
+				obj._dndHoverActionId = AjxTimedAction.scheduleAction(obj._dndHoverAction, DwtControl.__DND_HOVER_DELAY);
 			}
 
 			if (destDwtObj && destDwtObj._dropTarget && destDwtObj != obj) {
@@ -1643,8 +2006,8 @@ function(ev) {
 		captureObj.release();
 		var mouseEv = DwtShell.mouseEvent;
 		mouseEv.setFromDhtmlEvent(ev);
-		if (obj._dragging != DwtControl._DRAGGING) {
-			obj._dragging = DwtControl._NO_DRAG;
+		if (obj._dragging != DwtControl.__DRAGGING) {
+			obj._dragging = DwtControl.__NO_DRAG;
 			obj._focusByMouseUpEvent();
 			return DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEUP, obj, mouseEv);
 		} else {
@@ -1656,7 +2019,7 @@ function(ev) {
 				destDwtObj._dropTarget._drop(obj._dragSource._getData(), mouseEv);
 				obj._dragSource._endDrag();
 				obj._destroyDnDIcon(obj._dndIcon);
-				obj._dragging = DwtControl._NO_DRAG;
+				obj._dragging = DwtControl.__NO_DRAG;
 			} else {
 				// The following code sets up the drop effect for when an 
 				// item is dropped onto an invalid target. Basically the 
@@ -1752,8 +2115,8 @@ function(ev, eventType, obj, mouseEv) {
 	var tn = mouseEv.target.tagName.toLowerCase();
 	if (tn != "input" && tn != "textarea") {
 		// bug #6003 - Safari seems to follow propagation rules for clicks on scrollbar :(
-		mouseEv._stopPropagation = obj._getPropagationForEvent();
-		mouseEv._returnValue = obj._getReturnValueForEvent();
+		mouseEv._stopPropagation = obj._getStopPropagationValForMouseEv(mouseEv);
+		mouseEv._returnValue = obj._getEventReturnValForMouseEv(mouseEv);
 	} else {
 		mouseEv._stopPropagation = false;
 		mouseEv._returnValue = true;	
@@ -1805,13 +2168,25 @@ function() {
 	htmlElement.style.overflow = "visible";
 	this._enabled = true;
 	this._controlEvent = new DwtControlEvent();
-	this._dragging = DwtControl._NO_DRAG;
+	this._dragging = DwtControl.__NO_DRAG;
 	this._ctrlInited = true;
 	// Make sure this is the last thing we do
 	this.parent.addChild(this);
 };
 
+
 /**
+ * @private
+ */
+DwtControl.prototype.__dndDoHover =
+function(control) {
+	//TODO Add allow hover?
+	control._dragHover();
+};
+
+/**
+ * This method is called when a drop happens on an invalid target. The code will
+ * animate the Drag icon back to its source before destroying it via <code>_destroyDnDIcon</code>
  * @private
  */
 DwtControl.prototype.__badDropEffect =
@@ -1832,7 +2207,7 @@ function(m, c, d) {
 		AjxTimedAction.scheduleAction(this._badDropAction, 0);
  	} else {
   		this._destroyDnDIcon(this._dndIcon);
-		this._dragging = DwtControl._NO_DRAG;
+		this._dragging = DwtControl.__NO_DRAG;
   	}
 };
 
@@ -1870,6 +2245,7 @@ function(event) {
 	this._lastTooltipY = null;
 };
 
+/**@private*/
 DwtControl.prototype.__isInputEl = 
 function(targetEl) {
 	var bIsInput = false;
