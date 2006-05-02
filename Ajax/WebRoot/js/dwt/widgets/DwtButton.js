@@ -53,13 +53,14 @@
 * @param actionTiming {Enum} if DwtButton.ACTION_MOUSEUP, then the button is triggered
 * 		on mouseup events, else if DwtButton.ACTION_MOUSEDOWN, then the button is
 * 		triggered on mousedown events
+* @param index	[int]*		index at which to add this control (among parent's children)
 *  
 * @extends DwtLabel
 */
-function DwtButton(parent, style, className, posStyle, actionTiming) {
+function DwtButton(parent, style, className, posStyle, actionTiming, index) {
 	if (arguments.length == 0) return;
 	className = className || "DwtButton";
-	DwtLabel.call(this, parent, style, className, posStyle);
+	DwtLabel.call(this, parent, style, className, posStyle, index);
 
 	// CSS classes to handle activated/triggered states
 	this._origClassName = className;

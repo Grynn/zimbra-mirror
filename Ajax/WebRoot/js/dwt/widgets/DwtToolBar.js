@@ -72,7 +72,7 @@ DwtToolBar.prototype.addSpacer =
 function(size, index) {
 	var el = this._createSpacerElement();
 	var dimension = this._style == DwtToolBar.HORIZ_STYLE ? "width" : "height";
-	el.style[dimension] = size || DwtToolBar.DEFAULT_SPACER;
+	el.style[dimension] = size ? size : DwtToolBar.DEFAULT_SPACER;
 
 	this._addItem(DwtToolBar.SPACER, el, index);
 	return el;
@@ -97,14 +97,14 @@ DwtToolBar.prototype._createFillerElement = DwtToolBar.prototype._createSpacerEl
 DwtToolBar.prototype.addFiller =
 function(className, index) {
 	var el = this._createFillerElement();
-	el.className = className || this._defaultFillClass;
+	el.className = className ? className : this._defaultFillClass;
 	this._addItem(DwtToolBar.FILLER, el, index);
 	return el;
 }
 
 DwtToolBar.prototype.addChild =
 function(child, index) {
-	this._children.add(child);
+	this._children.add(child, index);
 	var htmlEl = child._removedEl ? child._removedEl : child.getHtmlElement();
 	this._addItem(DwtToolBar.ELEMENT, htmlEl, index);
 }
@@ -118,7 +118,7 @@ function(type, element, index) {
 		row.align = "center";
 		row.vAlign = "middle";
 		
-		var cellIndex = index || row.cells.length;
+		var cellIndex = index ? index : row.cells.length;
 		col = row.insertCell(cellIndex);
 		col.align = "center";
 		col.vAlign = "middle";

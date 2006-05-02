@@ -18,9 +18,9 @@
  * @constructor
  * @class
  * Creates a control. <i>DwtControl</i> is the root class of the Dwt component hierarchy. All
- * Dwt components either directly or indirectly inherit from this class.
+ * Dwt components either directly or indirectly inherit from this class. 
  * 
- * A <i>DwtControl</i> may also be directly instantiated. In this case it is essentially
+ * A <i>DwtControl</i>l may also be directly instantiated. In this case it is essentially
  * a div into which any content may be "drawn"
  * 
  * A control may be created in "deferred" mode, meaning that the UI portion of the control
@@ -66,7 +66,8 @@
  * 		specified defaults to false (optional)
  * @param {Int} id An explicit ID to use for the control's HTML element. If not
  * 		specified defaults to an auto-generated id (optional)
- * 
+ * @param index	[int]*		index at which to add this control (among parent's children)
+ *
  * @requires AjxCallback
  * @requires AjxEventMgr
  * @requires AjxListener
@@ -79,7 +80,7 @@
  * @requires DwtShell
  * @requires DwtToolTip
  */
-function DwtControl(parent, className, posStyle, deferred, id) {
+function DwtControl(parent, className, posStyle, deferred, id, index) {
 
 	if (arguments.length == 0) return;
 	
@@ -110,6 +111,7 @@ function DwtControl(parent, className, posStyle, deferred, id) {
 	/** @private */
 		this._htmlElId = id;
 	}
+	this._index = index;
 	if (!deferred)
 		this.__initCtrl();
 		
@@ -2171,7 +2173,7 @@ function() {
 	this._dragging = DwtControl.__NO_DRAG;
 	this._ctrlInited = true;
 	// Make sure this is the last thing we do
-	this.parent.addChild(this);
+	this.parent.addChild(this, this._index);
 };
 
 

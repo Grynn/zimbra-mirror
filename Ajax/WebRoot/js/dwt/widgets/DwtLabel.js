@@ -29,12 +29,13 @@
 * @param style		the label style (a bitsum of constants)
 * @param className	a CSS class
 * @param posStyle	positioning style
+* @param index	[int]*		index at which to add this control (among parent's children)
 */
-function DwtLabel(parent, style, className, posStyle) {
+function DwtLabel(parent, style, className, posStyle, index) {
 
 	if (arguments.length == 0) return;
 	className = className ? className : "DwtLabel";
-	DwtComposite.call(this, parent, className, posStyle);
+	DwtComposite.call(this, parent, className, posStyle, false, index);
 
 	this._style = style ? style : (DwtLabel.IMAGE_LEFT | DwtLabel.ALIGN_CENTER);
 

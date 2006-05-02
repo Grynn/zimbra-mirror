@@ -15,11 +15,11 @@
  */
 
 
-function DwtComposite(parent, className, posStyle, deferred) {
+function DwtComposite(parent, className, posStyle, deferred, index) {
 
 	if (arguments.length == 0) return;
 	className = className || "DwtComposite";
-	DwtControl.call(this, parent, className, posStyle, deferred);
+	DwtControl.call(this, parent, className, posStyle, deferred, null, index);
 
 	this._children = new AjxVector();
 	this._updating = false;
@@ -79,23 +79,30 @@ function() {
 /**
 * Adds the given child control to this control.
 *
-* @param child	[DwtControl]	the child control to add
+* @param child		[DwtControl]	the child control to add
+* @param index		[int]*			index at which to add the child
 */
 DwtComposite.prototype.addChild =
-function(child) {
-	this._children.add(child);
+function(child, index) {
+	this._children.add(child, index);
 	
 	// check for a previously removed element
-	var htmlEl = child._removedEl ? child._removedEl : child.getHtmlElement();
+	var childHtmlEl = child._removedEl ? child._removedEl : child.getHtmlElement();
 	if (this instanceof DwtShell && this.isVirtual()) {
 		// If we are operating in "virtual shell" mode, then children of the shell's html elements
 	 	// are actually parented to the body
-		document.body.appendChild(htmlEl);
+		document.body.appendChild(childHtmlEl);
 	} else {
-		this.getHtmlElement().appendChild(htmlEl);
+		var htmlEl = this.getHtmlElement();
+		if (index && (index < htmlEl.childNodes.length)) {
+			htmlEl.insertBefore(childHtmlEl, htmlEl.childNodes[index]);	
+		} else {
+			htmlEl.appendChild(childHtmlEl);
+		}
 	}
-	if (child._removedEl)
+	if (child._removedEl) {
 		child._removedEl = null;
+	}
 }
 
 /**
