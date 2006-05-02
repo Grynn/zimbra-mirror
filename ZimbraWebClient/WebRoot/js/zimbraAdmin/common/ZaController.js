@@ -66,6 +66,7 @@ function ZaController(appCtxt, container, app, iKeyName) {
     this.objType = ZaEvent.S_ACCOUNT;
     this._helpURL = ZaController.helpURL;
 }
+
 /**
 * A map of funciton references. Functions in this map are called one after another from 
 * {@link #_initToolbar} method.
@@ -276,7 +277,10 @@ function(ex, method, params, restartOnError, obj) {
 	{
 		this._execFrame = {obj: obj, func: method, args: params, restartOnError: restartOnError};
 		this._app.dialogs["errorDialog"].registerCallback(DwtDialog.OK_BUTTON, this._errorDialogCallback, this);
-		if (ex.code == ZmCsfeException.SOAP_ERROR) {
+		if(!ex.code) {
+			this.popupErrorDialog(ZaMsg.JAVASCRIPT_ERROR + " in method " + method, ex, true);
+		
+		} else if (ex.code == ZmCsfeException.SOAP_ERROR) {
 			this.popupErrorDialog(ZaMsg.SOAP_ERROR, ex, true);
 		} else if (ex.code == ZmCsfeException.NETWORK_ERROR) {
 			this.popupErrorDialog(ZaMsg.NETWORK_ERROR, ex, true);
@@ -290,6 +294,8 @@ function(ex, method, params, restartOnError, obj) {
 			this.popupErrorDialog(ZaMsg.NO_SUCH_DISTRIBUTION_LIST, ex, true);
 		} else if(ex.code == ZmCsfeException.ACCT_EXISTS) {
 			this.popupErrorDialog(ZaMsg.ERROR_ACCOUNT_EXISTS, ex, true);
+		} else if(ex.code == ZmCsfeException.VOLUME_NO_SUCH_PATH) {
+			this.popupErrorDialog(ZaMsg.ERROR_INVALID_VOLUME_PATH, ex, true);
 		} else if (ex.code == ZmCsfeException.CSFE_SVC_ERROR || 
 					ex.code == ZmCsfeException.SVC_FAILURE || 
 						(typeof(ex.code) == 'string' && ex.code && ex.code.match(/^(service|account|mail)\./))
@@ -306,8 +312,8 @@ function(ex, method, params, restartOnError, obj) {
 					break;
 				}
 			}
-			if(!gotit)
-				this.popupErrorDialog(ZaMsg.JAVASCRIPT_ERROR + " in method " + method, ex, true);
+			if(!gotit)	
+				this.popupErrorDialog(ZaMsg.SERVER_ERROR, ex, true);		
 		}
 	}
 }

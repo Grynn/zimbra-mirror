@@ -119,6 +119,7 @@ ZmCsfeException.define("MAIL_TOO_MANY_CONTACTS", "mail.TOO_MANY_CONTACTS", ZMsg.
 ZmCsfeException.define("MAIL_TOO_MANY_TERMS", "mail.TOO_MANY_QUERY_TERMS_EXPANDED", ZMsg.errorTooManyTerms);
 ZmCsfeException.define("MAIL_UNABLE_TO_IMPORT_CONTACTS", "mail.UNABLE_TO_IMPORT_CONTACTS", ZMsg.errorUnableToImport);
 
+ZmCsfeException.define("VOLUME_NO_SUCH_PATH", "volume.NO_SUCH_PATH");
 // structured data keys
 ZmCsfeException.MAIL_SEND_ADDRESS_FAILURE_INVALID = "invalid";
 ZmCsfeException.MAIL_SEND_ADDRESS_FAILURE_UNSENT = "unsent";
