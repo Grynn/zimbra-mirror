@@ -320,6 +320,7 @@ function(rows, cols, width, cellSpacing, cellPadding, alignment) {
 DwtHtmlEditor.prototype.applyTableProperties =
 function(table, props) {
 	var doc = this._getIframeDoc();
+	var all_cells_props = [];
 	for (var i in props) {
 		var val = AjxStringUtil.trim(props[i]);
 		var is_set = val != "";
@@ -347,10 +348,26 @@ function(table, props) {
 				table[i] = val;
 			break;
 
+		    case "borderWidth":
+		    case "borderStyle":
+		    case "borderColor":
+			// save these attributes to apply them to each cell
+			table.style[i] = val;
+			all_cells_props.push([ i, val ]);
+			break;
+
 		    default :
 			// TODO: remove unnecessary style (when is_set is false)
 			table.style[i] = val;
 			break;
+		}
+	}
+	if (all_cells_props.length > 0) {
+		var tds = table.getElementsByTagName("td");
+		for (var i = tds.length; --i >= 0;) {
+			var td = tds[i];
+			for (var j = all_cells_props.length; --j >= 0;)
+				td.style[all_cells_props[j][0]] = all_cells_props[j][1];
 		}
 	}
 	if (AjxEnv.isGeckoBased)
