@@ -240,12 +240,12 @@ function(tmpObj, app) {
 		attr.setAttribute("n", ZaDomain.A_AuthLdapUserDn);	
 	} else if(tmpObj.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_ldap) {
 	
-		if(tmpObj.attrs[ZaDomain.A_AuthLdapSearchFilter] ==null || tmpObj.attrs[ZaDomain.A_AuthLdapSearchFilter].length < 1) {
+	/*	if(tmpObj.attrs[ZaDomain.A_AuthLdapSearchFilter] ==null || tmpObj.attrs[ZaDomain.A_AuthLdapSearchFilter].length < 1) {
 			//show error msg
 			app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_SEARCH_FILTER_REQUIRED);
 			return null;
 		}
-	
+	*/
 		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_AuthLdapSearchFilter]);
 		attr.setAttribute("n", ZaDomain.A_AuthLdapSearchFilter);
 			
@@ -269,6 +269,18 @@ function(tmpObj, app) {
 		attr.setAttribute("n", ZaDomain.A_domainDefaultCOSId);	
 	}
 	var newDomain = new ZaDomain();
+	if(tmpObj.attrs[ZaDomain.A_zimbraVirtualHostname]) {
+		if(tmpObj.attrs[ZaDomain.A_zimbraVirtualHostname] instanceof Array) {
+			var cnt = tmpObj.attrs[ZaDomain.A_zimbraVirtualHostname].length;
+			for(var ix=0; ix<cnt; ix++) {
+				attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraVirtualHostname][ix]);
+				attr.setAttribute("n", ZaDomain.A_zimbraVirtualHostname);					
+			}
+		} else {
+			attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraVirtualHostname]);
+			attr.setAttribute("n", ZaDomain.A_zimbraVirtualHostname);					
+		}
+	}
 	
 	var command = new ZmCsfeCommand();
 	var params = new Object();

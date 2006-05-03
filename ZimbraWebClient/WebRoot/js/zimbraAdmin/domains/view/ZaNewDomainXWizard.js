@@ -48,7 +48,8 @@ function ZaNewDomainXWizard (parent, app) {
 		{label:ZaMsg.TABT_AuthSettings, value:11},								
 		{label:ZaMsg.TABT_TestAuthSettings, value:12},				
 		{label:ZaMsg.TABT_AuthTestResult, value:13},
-		{label:ZaMsg.TABT_DomainConfigComplete, value:14}		
+		{label:ZaMsg.Domain_Tab_VirtualHost, value:14},
+		{label:ZaMsg.TABT_DomainConfigComplete, value:15}		
 	];
 		
 	this.GALModes = [
@@ -138,7 +139,7 @@ function(stepNum) {
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
-		} else if(stepNum == 14) {
+		} else if(stepNum == 15) {
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
@@ -348,9 +349,9 @@ function (arg) {
 			}
 		}
 	}	
-	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
+	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
-	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 	this.goPage(13);
 }
 
@@ -743,7 +744,19 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
 						}
 					]
 				},
-				{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 14", relevantBehavior:_HIDE_,
+				{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 14",relevantBehavior:_HIDE_, 
+					items:[
+						{ref:ZaDomain.A_zimbraVirtualHostname, type:_REPEAT_, label:null, repeatInstance:"", showAddButton:true, showRemoveButton:true, 
+								addButtonLabel:ZaMsg.NAD_AddVirtualHost, 
+								showAddOnNextRow:true,
+								removeButtonLabel:ZaMsg.NAD_RemoveVirtualHost,
+								items: [
+									{ref:".", type:_TEXTFIELD_, label:null,width:250}
+								]
+						}
+					]
+				},
+				{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 15", relevantBehavior:_HIDE_,
 					items: [
 						{type:_OUTPUT_, value:ZaMsg.Domain_Config_Complete}
 					]
