@@ -112,7 +112,7 @@ ZaDomain.A_AuthTestResultCode = "authtestresutcode";
 ZaDomain.A_AuthComputedBindDn = "authcomputedbinddn";
 ZaDomain.A_AuthUseBindPassword = "authusebindpassword";
 ZaDomain.A_AuthLdapSearchBindPasswordConfirm = "authldapsearchBindpasswordconfirm";
-ZaDomain.A_zimbraVirtualHostname = "A_zimbraVirtualHostname";
+ZaDomain.A_zimbraVirtualHostname = "zimbraVirtualHostname";
 //server value constants
 ZaDomain.AuthMech_ad = "ad";
 ZaDomain.AuthMech_ldap = "ldap";
