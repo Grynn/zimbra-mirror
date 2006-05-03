@@ -33,7 +33,7 @@
 function ZaCos(app) {
 	ZaItem.call(this, ZaEvent.S_COS);
 	this.attrs = new Object();
-	this[ZaCos.A_zimbraMailHostPoolInternal] = new Array();
+	this[ZaCos.A_zimbraMailHostPoolInternal] = new AjxVector();
 	this.id = "";
 	this.name="";
 	this._app = app;	
@@ -128,6 +128,7 @@ function () {
 /**
 * massage the values into the instace suitable for an XForm
 **/
+/*
 ZaCos.prototype.initFromDom =
 function (node) {
 	ZaItem.prototype.initFromDom.call(this, node);
@@ -155,17 +156,40 @@ function (node) {
 			hostVector.add(newServer);
 		}
 	}
-	
-	/*var sourceArray = this._app.getServerList().getVector().getArray();
-	var sourceVector = new ZaItemVector();
-	for(var ix in sourceArray) {
-		if(!hostVector.contains(sourceArray[ix])) {
-			sourceVector.add(sourceArray[ix]);
-		}
-	}*/	
+
 	this[ZaCos.A_zimbraMailHostPoolInternal] = hostVector.getArray();
 }
+*/
 
+ZaCos.prototype.initFromJS =
+function (obj) {
+	ZaItem.prototype.initFromJS.call(this, obj);
+	
+	this[ZaCos.A_zimbraMailAllServersInternal] = new AjxVector();
+	this[ZaCos.A_zimbraMailHostPoolInternal] = new AjxVector();
+		
+	var hostVector = new ZaItemVector();
+	if(this.attrs[ZaCos.A_zimbraMailHostPool] instanceof Array) {	
+		for(sname in this.attrs[ZaCos.A_zimbraMailHostPool]) {
+			if(this._app.getServerMap()[this.attrs[ZaCos.A_zimbraMailHostPool][sname]]) {
+				hostVector.add(this._app.getServerMap()[this.attrs[ZaCos.A_zimbraMailHostPool][sname]]);
+			} else {
+				var newServer = new ZaServer(this._app);
+				newServer.load("id", this.attrs[ZaCos.A_zimbraMailHostPool][sname]);
+				hostVector.add(newServer);
+			}
+		}
+	} else if(typeof(this.attrs[ZaCos.A_zimbraMailHostPool]) == 'string'){
+		if(this._app.getServerMap()[this.attrs[ZaCos.A_zimbraMailHostPool]]) {
+			hostVector.add(this._app.getServerMap()[this.attrs[ZaCos.A_zimbraMailHostPool]]);
+		} else {
+			var newServer = new ZaServer(this._app);
+			newServer.load("id", this.attrs[ZaCos.A_zimbraMailHostPool]);
+			hostVector.add(newServer);
+		}
+	}
+	this[ZaCos.A_zimbraMailHostPoolInternal] = hostVector;
+}
 
 /**
 * public ZaCos.rename
@@ -304,8 +328,8 @@ function(app) {
 ZaCos.myXModel = {
 	items: [
 		{id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId},
-		{id:ZaCos.A_zimbraMailAllServersInternal, type:_LIST_, ref:ZaCos.A_zimbraMailAllServersInternal},
-		{id:ZaCos.A_zimbraMailHostPoolInternal, type:_LIST_, ref:ZaCos.A_zimbraMailHostPoolInternal},
+		{id:ZaCos.A_zimbraMailAllServersInternal, type:_OBJECT_, ref:ZaCos.A_zimbraMailAllServersInternal},
+		{id:ZaCos.A_zimbraMailHostPoolInternal, type:_OBJECT_, ref:ZaCos.A_zimbraMailHostPoolInternal},
 		{id:ZaCos.A_zimbraNotes, type:_STRING_, ref:"attrs/"+ZaCos.A_zimbraNotes},
 		{id:ZaCos.A_zimbraMailQuota, type:_MAILQUOTA_, ref:"attrs."+ZaCos.A_zimbraMailQuota}, 
 		{id:ZaCos.A_zimbraMinPwdLength, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraMinPwdLength, maxInclusive:2147483647, minInclusive:0}, 

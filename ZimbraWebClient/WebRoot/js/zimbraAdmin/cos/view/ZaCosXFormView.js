@@ -53,8 +53,9 @@ function(entry) {
 	for (var a in entry.attrs) {
 		this._containedObject.attrs[a] = entry.attrs[a];
 	}
-	this._containedObject[ZaCos.A_zimbraMailHostPoolInternal] = entry[ZaCos.A_zimbraMailHostPoolInternal];
-	this._containedObject[ZaCos.A_zimbraMailAllServersInternal] = this._app.getMailServers();
+	this._containedObject[ZaCos.A_zimbraMailHostPoolInternal] = entry[ZaCos.A_zimbraMailHostPoolInternal].clone();
+
+	this._containedObject[ZaCos.A_zimbraMailAllServersInternal] = AjxVector.fromArray(this._app.getMailServers());
   	this._containedObject.globalConfig = this._app.getGlobalConfig();
   	
 	if(!entry[ZaModel.currentTab])

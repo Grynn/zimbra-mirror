@@ -359,12 +359,13 @@ function () {
 	}
 	//check if host pool has been changed
 	var poolServerIds = new Array();
-	if(tmpObj[ZaCos.A_zimbraMailHostPoolInternal]) {
-		var cnt = tmpObj[ZaCos.A_zimbraMailHostPoolInternal].length;
+	if(tmpObj[ZaCos.A_zimbraMailHostPoolInternal] && tmpObj[ZaCos.A_zimbraMailHostPoolInternal].size()) {
+		var cnt = tmpObj[ZaCos.A_zimbraMailHostPoolInternal].size();
+		
 		for(var i = 0; i < cnt; i ++) {
-			poolServerIds.push(tmpObj[ZaCos.A_zimbraMailHostPoolInternal][i].id);
+			poolServerIds.push(tmpObj[ZaCos.A_zimbraMailHostPoolInternal].get(i).id);
 		}
-		if(poolServerIds.toString() != this._currentObject[ZaCos.A_zimbraMailHostPoolInternal].toString()) {
+		if(poolServerIds.join(",") != this._currentObject[ZaCos.A_zimbraMailHostPoolInternal].getArray().join(",")) {
 			mods[ZaCos.A_zimbraMailHostPool] = poolServerIds;
 		}
 	}

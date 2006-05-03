@@ -3925,12 +3925,12 @@ Dwt_Chooser_XFormItem.prototype.getTargetListCssClass = function() {
 
 Dwt_Chooser_XFormItem.prototype.getSourceInstanceValue = function() {
 	var items = this.getModel().getInstanceValue(this.getInstance(), this.getInheritedProperty("sourceRef"));
-	return items ? items : [];
+	return items ? items : new AjxVector();
 }
 
 Dwt_Chooser_XFormItem.prototype.getTargetInstanceValue = function() {
 	var items = this.getInstanceValue();
-	return items ? items : [];
+	return items ? items : new AjxVector();
 }
 
 Dwt_Chooser_XFormItem.prototype._handleStateChange = function(event) {
@@ -3972,10 +3972,13 @@ Dwt_Chooser_XFormItem.prototype.updateWidget = function(newvalue) {
 	var sourceItems = this.getSourceInstanceValue();
 	var targetItems = this.getTargetInstanceValue();
 
+	if(sourceItems instanceof Array) sourceItems = AjxVector.fromArray(sourceItems);
+	if(targetItems instanceof Array) sourceItems = AjxVector.fromArray(targetItems);	
+	
 	var sorted = this.getSorted();
 	if (sorted) {
-		sourceItems = sourceItems.sort();
-		targetItems = targetItems.sort();
+		sourceItems.sort();
+		targetItems.sort();
 	}
 
 	this.widget.setItems(sourceItems);
