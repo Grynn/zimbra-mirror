@@ -60,6 +60,7 @@ my %allservices = (
 	"snmp" => "/opt/zimbra/bin/zmswatchctl", 
 	"ldap" => "/opt/zimbra/bin/ldap",
 	"spell" => "/opt/zimbra/bin/zmspellctl",
+	"imapproxy" => "/opt/zimbra/bin/zmperditionctl",
 );
 
 my %GlobalOpts = ();
@@ -175,6 +176,7 @@ sub doStartup {
 		my $ldapStopped = 0xffff & system("/opt/zimbra/bin/ldap status > /dev/null 2>&1");
 		if ($ldapStopped) {
 			$rrc = startLdap();
+			sleep 3;
 		}
 	}
 	if ($rrc) {
@@ -210,7 +212,7 @@ sub doShutdown {
 	my $rrc = 0;
 	foreach (sort keys %allservices) {
 		Zimbra::Mon::Logger::Log ("info", "Stopping $_");
-		if ($_ eq "ldap" && !(-d "/opt/zimbra/openldap-2.3.20/libexec") ) { next; }
+		if ($_ eq "ldap" && !(-d "/opt/zimbra/openldap-2.3.21/libexec") ) { next; }
 		if ($_ eq "mta" && !(-d "/opt/zimbra/postfix-2.2.9/libexec") ) { next; }
 		if ($_ eq "snmp" && !(-f "/opt/zimbra/bin/zmswatchctl") ) { next; }
 		print "\tStopping $_...";

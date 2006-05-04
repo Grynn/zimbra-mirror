@@ -19,18 +19,18 @@ ifeq ($(BUILD_PLATFORM), MACOSX)
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
-LDAP_VERSION ?= 2.3.20
+LDAP_VERSION ?= 2.3.21
 
 all: build tar
 
 build:
 	(tar xzf openldap-$(LDAP_VERSION).tgz; \
 	cd openldap-$(LDAP_VERSION); \
-	cp $(OPENLDAP_ROOT)/configure.zimbra $(OPENLDAP_ROOT)/openldap-$(LDAP_VERSION); \
 	LD_LIBRARY_PATH=/opt/zimbra/sleepycat-$(BDB_VERSION)/lib \
 	CPPFLAGS=-I/opt/zimbra/sleepycat-$(BDB_VERSION)/include \
 	LDFLAGS=-L/opt/zimbra/sleepycat-$(BDB_VERSION)/lib \
-	$(ENVMOD) ./configure.zimbra --prefix=$(ZIMBRA_HOME)/openldap-$(LDAP_VERSION) --enable-crypt; \
+	$(ENVMOD) ./configure --prefix=$(ZIMBRA_HOME)/openldap-$(LDAP_VERSION) \
+	--enable-overlays --enable-debug --enable-crypt; \
 	LDFLAGS="-all-static -static" make; make install)
 	(cd $(ZIMBRA_HOME); ln -s openldap-$(LDAP_VERSION) openldap)
 

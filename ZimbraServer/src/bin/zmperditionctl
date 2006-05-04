@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/perl
 # 
 # ***** BEGIN LICENSE BLOCK *****
 # Version: MPL 1.1
@@ -24,63 +24,108 @@
 # ***** END LICENSE BLOCK *****
 # 
 
-source `dirname $0`/zmshutil || exit 1
-zmsetvars 
+use strict;
 
-PIDFILE="/opt/zimbra/log/perdition.pid"
+my %proxyKeys = (
+	"imap4"	=> "zimbraImapProxyBindPort",
+	"imap4s" => "zimbraImapSSLProxyBindPort",
+	"pop3"	=> "zimbraPop3ProxyBindPort",
+	"pop3s"	=> "zimbraPop3SSLProxyBindPort"
+	);
 
-checkRunning() {
-	if [ -f "$PIDFILE" ]; then
-		PID=`cat /opt/zimbra/log/perdition.pid`
-		if [ "x$PID" != "x" ]; then
-			kill -0 $PID
-			STATUS=$?
-		fi
-	else
-		STATUS=1
-	fi
+my %serverKeys = (
+	"imap4"	=> "zimbraImapBindPort",
+	"imap4s" => "zimbraImapSSLBindPort",
+	"pop3"	=> "zimbraPop3BindPort",
+	"pop3s"	=> "zimbraPop3SSLBindPort"
+	);
+
+my $cmd = shift;
+
+foreach my $i (`/opt/zimbra/bin/zmlocalconfig -m shell`) {
+	chomp $i;
+	my ($k,$v) = split ('=',$i,2);
+	$v =~ s/';$//;
+	$v =~ s/^'//;
+	$ENV{$k} = $v;
 }
 
-start() {
-	if [ ! -f "/opt/zimbra/conf/perdition.conf" ]; then
-		${zimbra_home}/libexec/zmmtaconfig perdition
-	fi
-	${zimbra_home}/perdition/sbin/perdition.imap4s \
-		--config_file=${zimbra_home}/conf/perdition.conf
+foreach my $i (`/opt/zimbra/bin/zmprov gs $ENV{zimbra_server_hostname}`) {
+	chomp $i;
+	my ($k,$v) = split (':',$i,2);
+	$v =~ s/^ //;
+	$ENV{$k} = $v;
 }
 
-stop() {
-	kill -TERM ${PID}
+sub start {
+	if ( ! -f "/opt/zimbra/conf/perdition.conf" ) {
+		`$ENV{zimbra_home}/libexec/zmmtaconfig perdition`;
+	}
+	foreach my $k (sort keys %proxyKeys) {
+		if ($ENV{$proxyKeys{$k}} ne "" && $ENV{$proxyKeys{$k}} > 0) {
+			print "Starting $k\n";
+			my $cmd = "$ENV{zimbra_home}/perdition/sbin/perdition -P $k ".
+				"--config_file=$ENV{zimbra_home}/conf/perdition.conf -p $ENV{$serverKeys{$k}} ".
+				"-l $ENV{$proxyKeys{$k}} -s localhost ".
+				"--pid_file $ENV{zimbra_home}/log/perdition.$k.pid -u zimbra -g zimbra";
+			#print "Running sudo $cmd\n";
+			system ("sudo $cmd");
+		}
+	}
 }
 
-checkRunning
+sub stop {
+	foreach my $k (sort keys %proxyKeys) {
+		my $p = getPid($k);
+		print "Stopping $k\n";
+		if ($p) { kill "TERM", $p; }
+	}
+}
 
-case "$1" in 
-	start)
-		if [ $STATUS -ne 0 ]; then
-			start
-		else
-			echo "Perdition is already running"
-			exit 0
-		fi
-	;;
-	stop)
-		if [ $STATUS -eq 0 ]; then
-			stop
-		else
-			echo "Perdition is not running"
-			exit 0
-		fi
-	;;
-	restart)
-		$0 stop
-		$0 start
-	;;
-	status)
-		exit $STATUS
-	;;
-	*)
-		echo "$0 start|stop|restart|status"
-		exit 1
-	;;
-esac
+sub status {
+	my $status = 0;
+	foreach my $k (sort keys %proxyKeys) {
+		if ($ENV{$proxyKeys{$k}} ne "" && $ENV{$proxyKeys{$k}} > 0) {
+			my $p = getPid($k);
+			my $r = 0;
+			if ($p) {
+				$r = kill (0,$p);
+			}
+			if (!$p || !$r) {
+				print "$k is not running\n";
+				$status = 1;
+			} else {
+				print "$k is running\n";
+			}
+		}
+	}
+	return $status;
+}
+
+sub getPid {
+	my $service = shift;
+	if ( -f "/opt/zimbra/log/perdition.$service.pid" ) {
+		my $pid = `cat /opt/zimbra/log/perdition.$service.pid`;
+		chomp $pid;
+		return $pid;
+	}
+	return 0;
+}
+
+if ($cmd eq "start") {
+	start();
+} elsif ($cmd eq "stop") {
+	stop();
+	exit 0;
+} elsif ($cmd eq "restart") {
+	stop();
+	sleep 1;
+	start();
+} elsif ($cmd eq "status") {
+} else {
+	print "$0 start|stop|restart|status\n";
+	exit 1
+}
+
+sleep 1;
+exit (status());

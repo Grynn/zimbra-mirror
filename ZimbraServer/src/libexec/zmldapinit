@@ -70,6 +70,7 @@ if [ -f "/opt/zimbra/lib/conf/zimbra-ext.schema" ]; then
 		sed -e '\|/opt/zimbra/openldap/etc/openldap/schema/zimbra.schema| a include "/opt/zimbra/lib/conf/zimbra-ext.schema"' ${config_dir}/slapd.conf.in > /tmp/slapd.conf
 	fi
 	mv -f /tmp/slapd.conf ${config_dir}/slapd.conf.in
+	sed -i ${config_dir}/slapd.conf.in -e '/syncprov/ s/^/#/'
 fi
 
 # Update zimbra.ldif
@@ -109,5 +110,9 @@ if [ -d "/opt/zimbra/lib/conf/" ]; then
 		done
 	fi
 fi
+
+${zimbra_home}/bin/ldap stop
+sed -i ${config_dir}/slapd.conf.in -e '/syncprov/ s/#//g'
+${zimbra_home}/bin/ldap start
 
 exit 0

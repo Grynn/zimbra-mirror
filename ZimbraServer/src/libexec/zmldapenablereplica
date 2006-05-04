@@ -64,6 +64,12 @@ verifyLdap() {
 	echo "succeeded"
 }
 
+enableSyncProv() {
+	echo -n "Enabling sync provider..."
+	sed -i ${zimbra_home}/conf/slapd.conf.in -e '/syncprov/ s/#//g'
+	echo "succeeded"
+}
+
 createLdapConfig() {
 	echo -n "Creating LDAP config in ${zimbra_home}/conf/slapd.conf..."
 	root_sha=`${zimbra_home}/openldap/sbin/slappasswd -s ${ldap_root_password}`
@@ -94,6 +100,7 @@ syncrepl rid=100
 	type=refreshAndPersist
 	schemachecking=off
 	updatedn="uid=zimbrareplication,cn=admins,cn=zimbra"
+	searchbase=""
 	bindmethod=simple
 	binddn="uid=zimbra,cn=admins,cn=zimbra"
 	credentials=${ldap_root_password}
@@ -213,21 +220,29 @@ startRemoteZimbra() {
 	echo "done"
 }
 
-startZimbra() {
-	echo -n "Starting Zimbra Services on ${zimbra_server_hostname}..."
-	zmcontrol start > /dev/null 2>&1
+startLdap() {
+	echo -n "Starting LDAP on ${zimbra_server_hostname}..."
+	${zimbra_home}/bin/ldap start > /dev/null 2>&1
 	echo "done"
 }
+
+if [ $ldap_master_host = $zimbra_server_hostname ]; then
+	enableSyncProv
+	${zimbra_home}/bin/ldap stop
+	sleep 5;
+	${zimbra_home}/bin/ldap start
+	exit 0
+fi
 
 verifyLdapInstalled
 verifyLdap
 createLdapConfig
 createReplicaUser
 enableLdapService
-stopZimbra
-stopRemoteZimbra
-replicateLdap
+#stopZimbra
+#stopRemoteZimbra
+#replicateLdap
 updateLdapHost
-startRemoteZimbra
+#startRemoteZimbra
 zmsetvars -f ldap_url
-startZimbra
+startLdap

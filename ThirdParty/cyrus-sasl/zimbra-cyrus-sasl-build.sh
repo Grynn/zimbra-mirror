@@ -45,5 +45,6 @@ cd ..
 ./configure --enable-zimbra --prefix=/opt/zimbra/${src} \
             --with-saslauthd=/opt/zimbra/${src}/state \
             --with-plugindir=/opt/zimbra/${src}/lib/sasl2 \
-	    --enable-login
+			--with-dblib=no \
+			--enable-login
 make

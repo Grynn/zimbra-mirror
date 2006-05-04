@@ -31,6 +31,14 @@ if [ "x$NAME" = "x" ]; then
 	exit 1
 fi
 
+echo $NAME | egrep '^-' > /dev/null 2>&1
+
+if [ $? -eq 0 ]; then
+	echo "Usage: $0 <servername>"
+	echo "Change the name of the Zimbra server"
+	exit 1
+fi
+
 source /opt/zimbra/bin/zmshutil || exit 1
 zmsetvars -f zimbra_home
 

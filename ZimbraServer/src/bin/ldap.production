@@ -29,6 +29,13 @@ PIDFILE="/opt/zimbra/openldap/var/run/slapd.pid"
 
 mkdir -p "/opt/zimbra/openldap/var/run/"
 
+source /opt/zimbra/bin/zmshutil || exit 1
+zmsetvars ldap_is_master
+
+if [ x$ldap_is_master = "xfalse" ]; then
+	COOKIE="-c rid=100"
+fi
+
 getpid()
 {
 	if [ -f $PIDFILE ]; then
@@ -59,13 +66,11 @@ start()
 		if [ ! -f /opt/zimbra/openldap-data/DB_CONFIG ]; then
 			touch /opt/zimbra/openldap-data/DB_CONFIG
 		fi 
-		# Run db_recover on startup, in case of power failure.
+		# Run db_recover on startup, in case of power failure. Removed for ldap 2.3
 		/opt/zimbra/libexec/zmconfigure /opt/zimbra/conf/slapd.conf.in /opt/zimbra/conf/slapd.conf
-		if [ -x /opt/zimbra/sleepycat/bin/db_recover ]; then
-			/opt/zimbra/sleepycat/bin/db_recover -h /opt/zimbra/openldap-data -v
-		fi
 		sudo /opt/zimbra/openldap-2.3.20/libexec/slapd -l LOCAL0 -4 -u zimbra -h "ldaps:// ldap://:389/" \
-			-f /opt/zimbra/conf/slapd.conf
+		sudo /opt/zimbra/openldap-2.3.20/libexec/slapd -l LOCAL0 -4 -u zimbra -h "ldap://:389/" \
+			-f /opt/zimbra/conf/slapd.conf 
 		sleep 2
 		getpid
 		if [ "x$PID" = "x" ]; then

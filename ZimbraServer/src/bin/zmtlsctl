@@ -30,9 +30,9 @@ TOMCAT=/opt/zimbra/tomcat/conf
 
 MODE=$1
 
-h=`zmhostname`
+h=`/opt/zimbra/bin/zmhostname`
 if [ "x$MODE" = "x" ]; then
-	MODE=`zmprov gs $h | grep zimbraMailMode | sed -e 's/zimbraMailMode: //'`
+	MODE=`/opt/zimbra/bin/zmprov gs $h | grep zimbraMailMode | sed -e 's/zimbraMailMode: //'`
 	if [ "x$MODE" = "x" ]; then
 		MODE="http"
 	fi
@@ -88,7 +88,7 @@ updateWebConfig() {
 }
 
 updateLdap() {
-	zmprov ms $h zimbraMailMode $MODE
+	/opt/zimbra/bin/zmprov ms $h zimbraMailMode $MODE
 }
 
 updateWebConfig

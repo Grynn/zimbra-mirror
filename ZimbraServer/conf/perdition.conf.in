@@ -68,7 +68,6 @@
 ######################################################################
 C
 d
-l 9999
 F mail
 M /opt/zimbra/perdition/lib/libperditiondb_ldap.so
 m '@@ldap_url@@/?zimbraMailDeliveryAddress%2CzimbraMailHost?sub?(&(objectClass=zimbraAccount)(zimbraMailDeliveryAddress=%25s))' 

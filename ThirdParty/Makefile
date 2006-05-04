@@ -8,7 +8,7 @@ ifeq ($(BUILD_PLATFORM), )
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
-LDAP_VERSION ?= 2.3.20
+LDAP_VERSION ?= 2.3.21
 
 BDB_VERSION ?= 4.2.52.4
 
@@ -40,8 +40,8 @@ POSTFIX_VERSION ?= 2.2.9
 
 DIRS := mysql \
 	sleepycat \
-	openldap \
 	cyrus-sasl \
+	openldap \
 	aspell \
 	clamav \
 	apache-httpd \
