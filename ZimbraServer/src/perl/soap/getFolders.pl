@@ -60,7 +60,10 @@ END_OF_USAGE
     my $d = new XmlDoc;
     
     if (defined($root)) {
-      $d->add('GetFolderRequest', $Soap::ZIMBRA_MAIL_NS, { 'l' => $root });
+      $d->start('GetFolderRequest', $Soap::ZIMBRA_MAIL_NS);
+      {
+        $d->add('folder', undef,  { 'l' => $root });
+      } $d->end();
     } else {
       $d->add('GetFolderRequest', $Soap::ZIMBRA_MAIL_NS);
     }
