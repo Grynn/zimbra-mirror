@@ -455,7 +455,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 												label:AjxMessageFormat.format (ZaMsg.NAD_SearchSameDomain),
 												//ZaMsg.NAD_SearchSameDomain,
 												labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",
-												labelCssClass:"xform_label"
+												labelCssClass:"xform_label", relevantBehavior: _HIDE_, 
+												relevant: "ZaSettings.DOMAINS_ENABLED"
 										}										
 									]
 						         },

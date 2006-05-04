@@ -437,10 +437,17 @@ function (){
 			var sortby = ZaAccount.A_name ; 
 			var searchByDomain = (memberOfObj [ZaAccount.A2_showSameDomain] == "TRUE") ? true : false ;
 			var domainName = null;
-			if (searchByDomain){
-				var curEmail = xform.parent._containedObject.name ;
-				domainName = curEmail.substring (curEmail.indexOf("@")+1);
+			
+			
+			if (ZaSettings.DOMAINS_ENABLED){
+				if (searchByDomain){
+					var curEmail = xform.parent._containedObject.name ;
+					domainName = curEmail.substring (curEmail.indexOf("@")+1);
+				}
+			}else{
+				domainName = ZaSettings.myDomainName;
 			}
+			
 			var attrs = [ZaAccount.A_name, ZaItem.A_zimbraId];
 			//var attrs = [""];
 			var valStr = curInstance[ZaSearch.A_query];
