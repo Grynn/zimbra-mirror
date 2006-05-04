@@ -42,6 +42,9 @@ ZaAccountMemberOfListView.prototype.toString = function (){
 ZaAccountMemberOfListView.A_name = "name" ;
 ZaAccountMemberOfListView.A_isgroup = "isgroup" ;
 ZaAccountMemberOfListView.A_via = "via" ;
+ZaAccountMemberOfListView._addList = [];
+ZaAccountMemberOfListView._removeList = [];
+//ZaAccountMemberOfListView._toBeConfirmedList = [];
 
 /**
  * @param app
@@ -126,6 +129,299 @@ function(value, event, form){
 	instance[ZaAccount.A2_memberOf]["showGroupOnlyAction"] = false ; //turn off the flag
 	return value;
 }
+
+
+ZaAccountMemberOfListView.backButtonHndlr = 
+function (event){
+	
+};
+
+
+ZaAccountMemberOfListView.fwdButtonHndlr =
+function(event){
+	
+};
+
+
+ZaAccountMemberOfListView.removeAllGroups =
+function(event, listId){
+	var form = this.getForm();
+	var allSelections = ZaAccountMemberOfListView._getAllInList(form, listId);
+	ZaAccountMemberOfListView._removeSelectedLists(form, allSelections);
+};
+
+ZaAccountMemberOfListView.removeGroups =
+function (event, listId){
+	var form = this.getForm();
+	var selections = ZaAccountMemberOfListView._getSelections(form, listId);
+	ZaAccountMemberOfListView._removeSelectedLists(form, selections);	
+};
+
+ZaAccountMemberOfListView._removeSelectedLists =
+function (form, listArr){
+	var instance = form.getInstance();
+	//var directMemberList = form.getItemsById(ZaAccount.A2_directMemberList)[0].getList();
+	var directMemberList = instance[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList];
+	var indirectMemberList = instance[ZaAccount.A2_memberOf][ZaAccount.A2_indirectMemberList];	
+		
+	//add the removed lists to the _removedList
+	var j = -1;	
+	var dlName = null ;
+	var indirectArrFound = null;
+	
+	for(var i=0; i<listArr.length; i++) {
+		dlName = listArr[i][ZaAccountMemberOfListView.A_name] ;
+		j = ZaAccountMemberOfListView._find(directMemberList, dlName);
+		if (j >= 0 ) {
+			//check whether there is derived indirect list, and display warning is yes
+			indirectArrFound = ZaAccountMemberOfListView._findIndirect(indirectMemberList, dlName);
+			if (indirectArrFound.length > 0){
+				
+				//ZaAccountMemberOfListView._toBeConfirmedList.push([directDlName, indirectArrFound]);
+				var indirectDls = indirectArrFound.join("<br />");			
+				msg = AjxMessageFormat.format (ZaMsg.Q_REMOVE_INDIRECT_GROUP, [dlName, indirectDls]);
+				
+				var confirmMessageDialog =  new ZaMsgDialog(form.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], form.parent._app);					
+				
+				confirmMessageDialog.setMessage(msg,  DwtMessageDialog.WARNING_STYLE);
+				confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaAccountMemberOfListView._removeConfirmedList, null ,
+														[form, confirmMessageDialog, dlName, indirectArrFound]) ;		
+				confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaAccountMemberOfListView._closeConfirmDialog, null, [form, confirmMessageDialog]);				
+				confirmMessageDialog.popup();
+				/*
+				confirmMessageDialog =  new ZaMsgDialog(form.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], form.parent._app);		
+				confirmMessageDialog.setMessage("abc",  DwtMessageDialog.WARNING_STYLE);
+				confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, null) ;		
+				confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaAccountMemberOfListView._closeConfirmDialog, null, [form, confirmMessageDialog]);				
+				confirmMessageDialog.popup();	*/		
+				//splice the entry in the callback method.
+				continue;
+			}			
+			directMemberList.splice(j, 1);			
+		}
+				
+		j = ZaAccountMemberOfListView._find(ZaAccountMemberOfListView._addList, dlName);
+		if (j >= 0){ //found in _addedList
+			ZaAccountMemberOfListView._addList.splice(j, 1);
+		}else{
+			ZaAccountMemberOfListView._removeList = ZaAccountMemberOfListView._removeList.concat(listArr[i]);
+			form.parent.setDirty(true);
+		}
+	}
+	
+	form.refresh();	
+};
+
+ZaAccountMemberOfListView._closeConfirmDialog =
+function (form, dialog){
+	if (dialog)
+		dialog.popdown();
+	
+	if (form) 
+		form.refresh();	
+};
+
+ZaAccountMemberOfListView._removeConfirmedList = 
+function (form, dialog, directDlName, indirectDlsNameArr){
+	if (dialog) {
+		var instance = form.getInstance();
+		//var directMemberList = form.getItemsById(ZaAccount.A2_directMemberList)[0].getList();
+		var directMemberList = instance[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList];
+		var indirectMemberList = instance[ZaAccount.A2_memberOf][ZaAccount.A2_indirectMemberList];	
+		var j = -1;
+		var m = -1;
+		//remove from directMemberList
+		j = ZaAccountMemberOfListView._find(directMemberList, directDlName);
+		if (j >= 0){		
+			m = ZaAccountMemberOfListView._find(ZaAccountMemberOfListView._addList, directDlName);
+			if (m >= 0){ //found in _addedList
+				ZaAccountMemberOfListView._addList.splice(m, 1);
+			}else{
+				ZaAccountMemberOfListView._removeList = ZaAccountMemberOfListView._removeList.concat(directMemberList[j]);
+			}
+			directMemberList.splice(j, 1);
+		}
+		
+		for(var i=0; i<indirectDlsNameArr.length; i++) {
+			j = ZaAccountMemberOfListView._find(indirectMemberList, indirectDlsNameArr[i]);
+			if (j>=0) 
+				indirectMemberList.splice(j, 1);			
+		}		
+		form.parent.setDirty(true);		
+		ZaAccountMemberOfListView._closeConfirmDialog(form, dialog);
+	}
+}
+
+/**
+ * find first property value match of an array element  
+ */
+ZaAccountMemberOfListView._find =
+function (arr, value, property){
+	if (!property) property = ZaAccountMemberOfListView.A_name ;
+	   
+	for(var i=0; i<arr.length; i++) {
+		if (arr[i][property] == value){
+			return i ;
+		}
+	}	
+	return -1;
+}
+
+ZaAccountMemberOfListView._findIndirect  =
+function(arr, value, foundArr){
+	var j = -1 ;
+	if (!foundArr) {
+		foundArr = new Array();
+	}
+	for(var i=0; i<arr.length; i++) {
+		if (arr[i][ZaAccountMemberOfListView.A_via] == value) {		
+			//j = ZaAccountMemberOfListView._find(arr, value, ZaAccountMemberOfListView.A_via) ;
+			foundArr.push (arr[i][ZaAccountMemberOfListView.A_name]) ;
+			foundArr = ZaAccountMemberOfListView._findIndirect(arr, arr[i][ZaAccountMemberOfListView.A_name], foundArr);
+		}
+	}
+	return foundArr;			
+}
+
+/**
+ * find all the value matching indexes in an array.
+ */
+ZaAccountMemberOfListView._foundIndexArr =
+function(arr, value){
+	
+}
+
+
+ZaAccountMemberOfListView.addGroups=
+function (event, listId){
+	var form = this.getForm();
+	var selections = ZaAccountMemberOfListView._getSelections(form, listId);
+	ZaAccountMemberOfListView._addSelectedLists(form, selections);
+};
+
+
+ZaAccountMemberOfListView.addAllGroups =
+function(event, listId){
+	var form = this.getForm ();
+	var allSelections = ZaAccountMemberOfListView._getAllInList(form, listId);
+	ZaAccountMemberOfListView._addSelectedLists(form, allSelections);
+};
+
+ZaAccountMemberOfListView._addSelectedLists=
+function (form, listArr){
+	//var directMemberListItem = form.getItemsById(ZaAccount.A2_directMemberList)[0];
+	var instance = form.getInstance();
+	var memberOf = instance[ZaAccount.A2_memberOf];
+	memberOf[ZaAccount.A2_directMemberList] = memberOf[ZaAccount.A2_directMemberList].concat(listArr);
+	
+	//add the added lists to the _addList	
+	ZaAccountMemberOfListView._addList = ZaAccountMemberOfListView._addList.concat(listArr);
+	form.parent.setDirty(true);
+	
+	//form.setInstance(instance);
+	form.refresh();	
+};
+
+
+ZaAccountMemberOfListView._getSelections =
+function (form, listId){
+	var selections = form.getItemsById(listId)[0].getSelection();
+	return (selections) ? selections : [] ;
+};
+
+ZaAccountMemberOfListView._getAllInList =
+function (form, listId){
+	//set selections
+	var dwtListItem = form.getItemsById(listId)[0].widget ;
+	var allListArr =  dwtListItem.getList().getArray() ;
+	dwtListItem.setSelectedItems(allListArr); //get all the lists	
+	return allListArr ;	
+}
+
+/**
+ * Enable/Disable Add Button or remove button based on the itemId
+ */
+ZaAccountMemberOfListView.shouldEnableAddRemoveButton =
+function (listId){
+	return  (ZaAccountMemberOfListView._getSelections(this, listId).length > 0);
+};
+
+/**
+ * Enable/Diable "Add All" or "Remove All" buttons based on the itemId
+ */
+ZaAccountMemberOfListView.shouldEnableAllButton =
+function (listItemId){
+	var list = this.getItemsById(listItemId)[0].widget.getList();
+	if (list != null) return ( list.size() > 0);
+	return false;
+};
+
+/*
+ * Add the current account/dl to the new groups/dls 
+ * @param addArray new groups/dls
+ */
+ZaAccountMemberOfListView.addNewGroupsBySoap = 
+function (account, addArray) {	
+	var len = addArray.length;
+	var addMemberSoapDoc, r, addMemberSoapDoc;
+	var command = new ZmCsfeCommand();
+	for (var i = 0; i < len; ++i) {
+		addMemberSoapDoc = AjxSoapDoc.create("AddDistributionListMemberRequest", "urn:zimbraAdmin", null);
+		addMemberSoapDoc.set("id", addArray[i].id); //group id 
+		addMemberSoapDoc.set("dlm", account.name); //account name
+		var params = new Object();
+		params.soapDoc = addMemberSoapDoc;	
+		r=command.invoke(params).Body.AddDistributionListMemberResponse;
+	}
+};
+
+/**
+ * remove the current account from groups
+ * @params removeArray
+ */
+ZaAccountMemberOfListView.removeGroupsBySoap = 
+function (account, removeArray){
+	var len = removeArray.length;
+	var addMemberSoapDoc, r, removeMemberSoapDoc;
+	var command = new ZmCsfeCommand();	
+	for (var i = 0; i < len; ++i) {
+		removeMemberSoapDoc = AjxSoapDoc.create("RemoveDistributionListMemberRequest", "urn:zimbraAdmin", null);
+		removeMemberSoapDoc.set("id", removeArray[i].id);
+		removeMemberSoapDoc.set("dlm", account.name);
+		var params = new Object();
+		params.soapDoc = removeMemberSoapDoc;	
+		r=command.invoke(params).Body.RemoveDistributionListMemberResponse;		
+	}
+}
+
+ZaAccountMemberOfListView.shouldEnableBackButton =
+function(){
+	
+};
+
+ZaAccountMemberOfListView.shouldEnableForwardButton =
+function (){
+
+
+};
+/*
+ZaAccountMemberOfListView.popMenu =
+function (listWidget){
+	popupOperations = [new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.PQ_Delete_tt, null, null, new AjxListener(listWidget, ZaMTAXFormView.popupMenuListener, ZaMTA.ActionDelete)),
+	new ZaOperation(ZaOperation.REQUEUE, ZaMsg.TBB_Requeue, ZaMsg.PQ_Requeue_tt, null, null, new AjxListener(listWidget, ZaMTAXFormView.popupMenuListener,ZaMTA.ActionRequeue ))];
+
+	var refParts = this.getRef().split("/");
+	var qName = refParts[0];
+	if(qName == ZaMTA.A_HoldQ) {
+		popupOperations.push(new ZaOperation(ZaOperation.RELEASE, ZaMsg.TBB_Release, ZaMsg.PQ_Release_tt, null, null, new AjxListener(listWidget, ZaMTAXFormView.popupMenuListener,ZaMTA.ActionRelease)));
+	} else {
+		popupOperations.push(new ZaOperation(ZaOperation.HOLD, ZaMsg.TBB_Hold, ZaMsg.PQ_Hold_tt, null, null, new AjxListener(listWidget, ZaMTAXFormView.popupMenuListener,ZaMTA.ActionHold )));
+	}
+	listWidget.actionMenu = new ZaPopupMenu(listWidget, "ActionMenu", null, popupOperations);
+	listWidget.addActionListener(new AjxListener(listWidget, ZaMTAXFormView.listActionListener));		
+	listWidget.xFormItem = this;
+	
+} */
 
 /**
  * search the directory for all the distribution lists when the search button is clicked.
@@ -243,7 +539,7 @@ ZaAccountMemberOfListView.prototype._setNoResultsHtml = function() {
 	this._addRow(div);
 };
 
-ZaAccMiniListView.prototype._sortColumn = function (columnItem, bSortAsc) {
+ZaAccountMemberOfListView.prototype._sortColumn = function (columnItem, bSortAsc) {
 	
 };
 
@@ -256,6 +552,16 @@ ZaAccMiniListView.prototype._sortColumn = function (columnItem, bSortAsc) {
  */
 function S_Dwt_List_XFormItem(){}
 XFormItemFactory.createItemType("_S_DWT_LIST_", "s_dwt_list", S_Dwt_List_XFormItem, Dwt_List_XFormItem);
+
+/*
+S_Dwt_List_XFormItem.prototype.updateWidget =
+function (newValue) {
+	// Dwt_List_XFormItem.prototype.updateWidget call mess up the selection if the client side checkboxes
+	// such as "show only distribution list" are check. The client side filtering
+	if (typeof (newValue) != 'undefined') {
+		this.setItems(newValue);
+	}
+} */
 
 /**
  * This function overrides the Dwt_List_XFormItem.prototype.setItems
@@ -274,15 +580,72 @@ S_Dwt_List_XFormItem.prototype.setItems = function (itemArray){
 	var isGroupOnly = instance[ZaAccount.A2_memberOf][ZaAccountMemberOfListView.A_isgroup];
 	
 	if (itemArray && itemArray.length > 0) {	
+		
+		//filter out the itemArray first based on the checkboxes
+		var filteredItemArray = new Array();
+		var j = -1;
+		//if (isGroupOnlyCkbAction || (this.id.indexOf(ZaAccount.A2_nonMemberList) >= 0)){
+				for(var i=0; i<itemArray.length; i++) {					
+					if (isGroupOnly == "TRUE" ){
+						if (! itemArray[i][ZaAccountMemberOfListView.A_isgroup]) {
+							continue;
+						}
+					}
+					
+					if (this.id.indexOf(ZaAccount.A2_nonMemberList) >= 0){ //filter out the directMember in nonMemberList
+						j = ZaAccountMemberOfListView._find(
+								instance[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList], 
+								itemArray[i][ZaAccountMemberOfListView.A_name]);
+						if (j >= 0) {
+							continue ;
+						}
+					}
+					
+					filteredItemArray.push(itemArray[i]);					
+				}
+			/*
+		}else{
+			filteredItemArray = itemArray ;
+		}*/
+				
 		//we have to compare the objects, because XForm calls this method every time an item in the list is selected
+		if(filteredItemArray.join() != existingArr.join() ) {
+			var preserveSelection = this.getInheritedProperty("preserveSelection");
+			var selection = null;
+			if(preserveSelection) {
+				selection = this.widget.getSelection();
+			}		
+			var cnt=filteredItemArray.length;
+			for(var i = 0; i< cnt; i++) {
+				tmpArr.push(filteredItemArray[i]);		
+			}
+			//add the default sort column
+			this.widget.set(AjxVector.fromArray(tmpArr), this.getInheritedProperty("defaultColumnSortable"));
+			if(preserveSelection && selection) {
+				this.widget.setSelectedItems(selection);
+			}
+		}
+		/*
 		if((itemArray.join() != existingArr.join()) || (isGroupOnlyCkbAction)) {
 			var preserveSelection = this.getInheritedProperty("preserveSelection");
 			var selection = null;
 			if(preserveSelection) {
 				selection = this.widget.getSelection();
 			}		
-			var cnt=itemArray.length;
+			var cnt=itemArray.length;			
 			for(var i = 0; i< cnt; i++) {
+				//check wether it is the nonMemberList
+				//we will not display the lists inside the directMemberList
+				var j = -1;
+				//TODO: this if statement cause the nonMemberList can't be selected
+				if (this.id.indexOf(ZaAccount.A2_nonMemberList) >= 0){
+					j = ZaAccountMemberOfListView._find(
+							instance[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList], 
+							itemArray[i][ZaAccountMemberOfListView.A_name]);
+					if (j >= 0) 
+						continue ;					
+				}
+				
 				//check whether the group only is applied
 				if (isGroupOnly == "TRUE" ){
 					if (itemArray[i][ZaAccountMemberOfListView.A_isgroup]) {
@@ -297,7 +660,7 @@ S_Dwt_List_XFormItem.prototype.setItems = function (itemArray){
 			if(preserveSelection && selection) {
 				this.widget.setSelectedItems(selection);
 			}
-		}
+		}*/
 	}else{
 		//display the empty list (no result html)
 		this.widget.set(AjxVector.fromArray([])); 
@@ -318,7 +681,7 @@ function ZaAccountMemberOfsourceHeaderList (type) {
 	sourceHeaderList[0] = new ZaListHeaderItem(ZaAccountMemberOfListView.A_name, 	ZaMsg.CLV_Name_col, 	
 												null, 200, sortable++, ZaAccountMemberOfListView.A_name, true, true);
 	
-	var isgroupWidth = (type == ZaAccountMemberOfsourceHeaderList.INDIRECT) ? 50 : null ;
+	var isgroupWidth = (type == ZaAccountMemberOfsourceHeaderList.INDIRECT) ? 80 : null ;
 	sourceHeaderList[1] = new ZaListHeaderItem(ZaAccountMemberOfListView.A_isgroup,   	ZaMsg.Account_Group,   	
 	 											null, isgroupWidth,  null,  ZaAccountMemberOfListView.A_isgroup, true, true);
 	

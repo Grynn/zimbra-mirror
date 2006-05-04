@@ -588,6 +588,17 @@ ZaItem.createMethods["ZaAccount"].push(ZaAccount.createMethod);
 */
 ZaAccount.modifyMethod =
 function(mods) {
+	//update the member of first
+	if (ZaAccountMemberOfListView._addList.length >0) { //you have new membership to be added.
+		ZaAccountMemberOfListView.addNewGroupsBySoap(this, ZaAccountMemberOfListView._addList);
+	}	
+	ZaAccountMemberOfListView._addList = []; //reset
+	
+	if (ZaAccountMemberOfListView._removeList.length >0){//you have membership to be removed
+		ZaAccountMemberOfListView.removeGroupsBySoap(this, ZaAccountMemberOfListView._removeList);
+	}
+	ZaAccountMemberOfListView._removeList = []; //reset
+	
 	//update the object
 	var soapDoc = AjxSoapDoc.create("ModifyAccountRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);

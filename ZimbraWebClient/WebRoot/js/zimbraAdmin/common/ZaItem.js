@@ -246,6 +246,11 @@ function (obj) {
 		return;
 	this.name = obj.name;
 	this.id = obj.id;
+	if (obj.isgroup == false) {
+		this.isgroup = 0 ;
+	}else if (obj.isgroup == true){
+		this.isgroup = 1 ;
+	}
 	this.attrs = new Object();
 	if(obj.a) {
 		var len = obj.a.length;

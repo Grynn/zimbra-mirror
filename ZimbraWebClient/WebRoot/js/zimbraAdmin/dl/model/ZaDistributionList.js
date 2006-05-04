@@ -57,6 +57,8 @@ ZaDistributionList.EMAIL_ADDRESS = "ZDLEA";
 ZaDistributionList.DESCRIPTION = "ZDLDESC";
 ZaDistributionList.ID = "ZDLID";
 ZaDistributionList.MEMBER_QUERY_LIMIT = 25;
+ZaDistributionList.A_isgroup = "isgroup";
+ZaDistributionList.A_zimbraGroupId = "zimbraGroupId";
 
 ZaDistributionList.A_mailStatus = "zimbraMailStatus";
 ZaDistributionList.searchAttributes = AjxBuffer.concat(ZaAccount.A_displayname,",",
@@ -109,6 +111,7 @@ ZaDistributionList.prototype.clone = function () {
 	dl.poolNumPages = this.poolNumPages;
 	dl.memPagenum = this.memPagenum;
 	dl.memNumPages = this.memNumPages;	
+	dl.isgroup = this.isgroup ;
 	return dl;
 };
 
@@ -201,8 +204,15 @@ function(tmpObj) {
 	//update the object
 	var soapDoc = AjxSoapDoc.create("ModifyDistributionListRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
+	if (tmpObj[ZaDistributionList.A_isgroup]) {//either 0 or null
+		 soapDoc.set(ZaDistributionList.A_isgroup, tmpObj[ZaDistributionList.A_isgroup]);
+	}else {
+		soapDoc.set(ZaDistributionList.A_isgroup, 0); //might have issue
+	}
 	for (var aname in tmpObj.attrs) {
-		if(aname == ZaItem.A_objectClass || aname==ZaAccount.A_mail || aname == ZaItem.A_zimbraId || aname == ZaAccount.A_uid) {
+		if(aname == ZaItem.A_objectClass || aname==ZaAccount.A_mail 
+			|| aname == ZaItem.A_zimbraId || aname == ZaAccount.A_uid
+			|| aname == ZaDistributionList.A_zimbraGroupId) {
 			continue;
 		}		
 		//multi-value attribute
@@ -254,6 +264,11 @@ function(tmpObj, app) {
 	//create SOAP request
 	var soapDoc = AjxSoapDoc.create("CreateDistributionListRequest", "urn:zimbraAdmin", null);
 	soapDoc.set(ZaAccount.A_name, tmpObj.name);
+	if (tmpObj[ZaDistributionList.A_isgroup] != null) {
+		soapDoc.set(ZaDistributionList.A_isgroup, tmpObj[ZaDistributionList.A_isgroup]);
+	}else{
+		soapDoc.set(ZaDistributionList.A_isgroup, 0);
+	}
 	var resp;
 	for (var aname in tmpObj.attrs) {
 		if(aname == ZaItem.A_objectClass || aname == ZaAccount.A_mail || aname == ZaItem.A_zimbraId || aname == ZaAccount.A_uid) {
@@ -704,6 +719,7 @@ ZaDistributionList.myXModel = {
 		{id:ZaAccount.A_description,ref:"attrs/"+ZaAccount.A_description, type:_STRING_},
 		{id:ZaAccount.A_notes, ref:"attrs/"+ZaAccount.A_notes, type:_STRING_},
 		{id:ZaAccount.A_displayname, type:_STRING_, ref:"attrs/"+ZaAccount.A_displayname},
-		{id:ZaDistributionList.A_mailStatus, ref:"attrs/"+ZaDistributionList.A_mailStatus, type:_STRING_}
+		{id:ZaDistributionList.A_mailStatus, ref:"attrs/"+ZaDistributionList.A_mailStatus, type:_STRING_},
+		{id:ZaDistributionList.A_isgroup, ref:ZaDistributionList.A_isgroup, type: _ENUM_, choices:ZaModel.BOOLEAN_CHOICES1}
 	]
 };
