@@ -157,7 +157,7 @@ function(obj, result) {
 function Com_Zimbra_YMaps_Asst(appCtxt) {
 	if (arguments.length == 0) return;
 	// XXX: localize later (does NOT belong in ZmMsg.properties)
-	ZmAssistant.call(this, appCtxt, "Yahoo Maps", "map");
+	ZmAssistant.call(this, appCtxt, "Yahoo Maps", "map", "Map an address using Yahoo Maps");
 };
 
 Com_Zimbra_YMaps_Asst.prototype = new ZmAssistant();
