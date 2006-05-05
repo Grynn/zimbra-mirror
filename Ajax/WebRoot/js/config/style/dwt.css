@@ -800,7 +800,7 @@
 
 /* ??? Wrong name -- switch to ZmInput */
 .DwtPropertyEditor table td.field { 
-	@InputField@
+	
 }
 
 .DwtPropertyEditor table tr.readonly td.field { 
