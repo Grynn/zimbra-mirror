@@ -66,7 +66,7 @@
  * 		specified defaults to false (optional)
  * @param {Int} id An explicit ID to use for the control's HTML element. If not
  * 		specified defaults to an auto-generated id (optional)
- * @param index	[int]*		index at which to add this control (among parent's children)
+ * @param {int} index index at which to add this control among parent's children (optional)
  *
  * @requires AjxCallback
  * @requires AjxEventMgr

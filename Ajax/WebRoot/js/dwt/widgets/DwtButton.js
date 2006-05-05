@@ -33,34 +33,39 @@
 * 		a drop down or menu button.</li>
 * </ul>
 *
-* <b>CSS</b>
-* <i>className-DwtCssStyle.ACTIVATED</i> - activated style
-* <i>className-DwtCssStyle.TRIGGERED</i> - triggered style
-* <i>className-DwtCssStyle.TOGGLED</i> - toggled style (for toggle buttons)
-* <i>className-DwtCssStyle.DISABLED</i> - disabled style
+* <h4>CSS</h4>
+* <ul>
+* <li><i>className</i>-<i>DwtCssStyle.ACTIVATED</i> - activated style
+* <li><i>className</i>-<i>DwtCssStyle.TRIGGERED</i> - triggered style
+* <li><i>className</i>-<i>DwtCssStyle.TOGGLED</i> - toggled style (for toggle buttons)
+* <li><i>className</i>-<i>DwtCssStyle.DISABLED</i> - disabled style
+* </ul>
 * 
-* <b>Keyboard Actions</b>
-* DwtKeyMap.SELECT_CURRENT - triggers the button
-*
+* <h4>Keyboard Actions</h4>
+* <ul>
+* <li>DwtKeyMap.SELECT_CURRENT - triggers the button
+* </ul>
 * @author Ross Dargahi
 * @author Conrad Damon
 * 
 * @param parent	{DwtControl} Parent widget (required)
-* @param style	{String} the label style. This is an "or'ed" set of attributes (see DwtLabel)
-* @param className {String} CSS class. If not provided defaults to the class name (optional)
-* @param posStyle {String} Positioning style (absolute, static, or relative). If
+* @param style	{string} the label style. This is an "or'ed" set of attributes (see DwtLabel)
+* @param className {string} CSS class. If not provided defaults to the class name (optional)
+* @param posStyle {string} Positioning style (absolute, static, or relative). If
 * 		not provided defaults to DwtControl.STATIC_STYLE (optional)
-* @param actionTiming {Enum} if DwtButton.ACTION_MOUSEUP, then the button is triggered
+* @param actionTiming {enum} if DwtButton.ACTION_MOUSEUP, then the button is triggered
 * 		on mouseup events, else if DwtButton.ACTION_MOUSEDOWN, then the button is
 * 		triggered on mousedown events
-* @param index	[int]*		index at which to add this control (among parent's children)
+* @param {int} id An explicit ID to use for the control's HTML element. If not
+* 		specified defaults to an auto-generated id (optional)
+* @param {int} index index at which to add this control among parent's children (optional)
 *  
 * @extends DwtLabel
 */
-function DwtButton(parent, style, className, posStyle, actionTiming, index) {
+function DwtButton(parent, style, className, posStyle, actionTiming, id, index) {
 	if (arguments.length == 0) return;
 	className = className || "DwtButton";
-	DwtLabel.call(this, parent, style, className, posStyle, index);
+	DwtLabel.call(this, parent, style, className, posStyle, id, index);
 
 	// CSS classes to handle activated/triggered states
 	this._origClassName = className;
@@ -360,7 +365,7 @@ function() {
 };
 
 DwtButton.prototype.handleKeyAction =
-function(action, ev) {
+function(actionCode, ev) {
 	switch (actionCode) {
 		case DwtKeyMap.SELECT_CURRENT:
 			this._emulateSingleClick(this._kbAnchor, DwtMouseEvent.LEFT);

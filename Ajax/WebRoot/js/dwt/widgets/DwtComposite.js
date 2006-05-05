@@ -14,12 +14,50 @@
  * limitations under the License.
  */
 
+/**
+ * @constructor
+ * @class
+ * Creates a control. <i>DwtControl</i> is the root class of the Dwt component hierarchy. All
+ * Dwt components either directly or indirectly inherit from this class. 
+ * 
+ * A <i>DwtControl</i>l may also be directly instantiated. In this case it is essentially
+ * a div into which any content may be "drawn"
+ * 
+ * A control may be created in "deferred" mode, meaning that the UI portion of the control
+ * will be created "Just In Time". This is useful for widgets which may want to defer construction
+ * of elements (e.g. <i>DwtTreeItem</i>) until such time as is needed, in the interest of efficiency. 
+ * Note that if the control is a child of the shell, it won't become visible until its z-index is set.
+ * 
+ * <h4>CSS</h4>
+ * None
+ * 
+ * <h4>Keyboard Actions</h4>
+ * None
+ * 
+ * <h4>Events</h4>
+ * None
+ * 
+ * @author Ross Dargahi
+ * 
+ * @param {DwtComposite} parent Parent widget. Except in the case of <i>DwtShell</i> the
+ * 		parent will be a control that has subclassed from <i>DwtComposite</i> 
+ * @param {string} className CSS class. If not provided defaults to the class name (optional)
+ * @param {string} posStyle Positioning style (absolute, static, or relative). If
+ * 		not provided defaults to <i>DwtControl.STATIC_STYLE</i> (optional)
+ * @param {boolean} deferred If true, postpone initialization until needed. If not
+ * 		specified defaults to false (optional)
+ * @param {int} id An explicit ID to use for the control's HTML element. If not
+ * 		specified defaults to an auto-generated id (optional)
+ * @param {int} index index at which to add this control among parent's children (optional)
+ *
+ * @requires DwtControl
+ */
 
-function DwtComposite(parent, className, posStyle, deferred, index) {
+function DwtComposite(parent, className, posStyle, deferred, id, index) {
 
 	if (arguments.length == 0) return;
 	className = className || "DwtComposite";
-	DwtControl.call(this, parent, className, posStyle, deferred, null, index);
+	DwtControl.call(this, parent, className, posStyle, deferred, id, index);
 
 	this._children = new AjxVector();
 	this._updating = false;
