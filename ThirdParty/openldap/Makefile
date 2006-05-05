@@ -27,7 +27,7 @@ build:
 	(tar xzf openldap-$(LDAP_VERSION).tgz; \
 	cd openldap-$(LDAP_VERSION); \
 	LD_LIBRARY_PATH=/opt/zimbra/sleepycat-$(BDB_VERSION)/lib \
-	CPPFLAGS=-I/opt/zimbra/sleepycat-$(BDB_VERSION)/include \
+	CPPFLAGS="-I/opt/zimbra/sleepycat-$(BDB_VERSION)/include -I/usr/kerberos/include" \
 	LDFLAGS=-L/opt/zimbra/sleepycat-$(BDB_VERSION)/lib \
 	$(ENVMOD) ./configure --prefix=$(ZIMBRA_HOME)/openldap-$(LDAP_VERSION) \
 	--enable-overlays --enable-debug --enable-crypt; \

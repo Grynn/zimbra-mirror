@@ -50,7 +50,8 @@ DIRS := mysql \
 	expat \
 	popt \
 	perdition \
-	PostFix/PostFix-$(POSTFIX_VERSION)
+	PostFix/PostFix-$(POSTFIX_VERSION) \
+	dspam
 
 all: $(ZIMBRA_HOME) build 
 

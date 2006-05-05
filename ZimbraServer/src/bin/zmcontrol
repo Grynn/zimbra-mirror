@@ -303,6 +303,10 @@ sub displayVersion {
 		my $release = `dpkg -s zimbra-core | egrep '^Version:' | sed -e 's/Version: //'`;
 		chomp $release;
 		$string = "Release $release $platform";
+	} elsif ($platform =~ /RPL/) {
+		my $release = `conary q zimbra-core | cut -d= -f2`;
+		$string = "Release $release $platform";
+
 	} else {
 		my $release = `rpm -q --queryformat "%{version}_%{release}" zimbra-core`;
 		my $inst = localtime (`rpm -q --queryformat "%{installtime}" zimbra-core`);
