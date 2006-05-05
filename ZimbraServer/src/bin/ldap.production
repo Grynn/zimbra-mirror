@@ -68,8 +68,8 @@ start()
 		fi 
 		# Run db_recover on startup, in case of power failure. Removed for ldap 2.3
 		/opt/zimbra/libexec/zmconfigure /opt/zimbra/conf/slapd.conf.in /opt/zimbra/conf/slapd.conf
-		sudo /opt/zimbra/openldap-2.3.20/libexec/slapd -l LOCAL0 -4 -u zimbra -h "ldaps:// ldap://:389/" \
-		sudo /opt/zimbra/openldap-2.3.20/libexec/slapd -l LOCAL0 -4 -u zimbra -h "ldap://:389/" \
+		sudo /opt/zimbra/openldap/libexec/slapd -l LOCAL0 -4 -u zimbra -h "ldaps:// ldap://:389/" \
+		sudo /opt/zimbra/openldap/libexec/slapd -l LOCAL0 -4 -u zimbra -h "ldap://:389/" \
 			-f /opt/zimbra/conf/slapd.conf 
 		sleep 2
 		getpid
