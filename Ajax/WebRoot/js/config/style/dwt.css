@@ -1264,3 +1264,38 @@
   background-color: #fff;
 }
 .DwtGridSizePicker table tr.grid td.Hovered { background-color: #add6d6; }
+
+/* DwtSpinner */
+
+.DwtSpinner { border: 1px solid #000; border-collapse: collapse;
+  @InputField@
+  background-color: #fff;
+}
+.DwtSpinner td { padding: 0; margin: 0; }
+.DwtSpinner-inputCell input { margin: 0; border: none; font: 11px tahoma,verdana,sans-serif; padding: 1px 2px; text-align: right; }
+.DwtSpinner-btnCell { position: relative; width: 12px; height: 18px; }
+.DwtSpinner-upBtn {
+  position: absolute;
+  top: 0;
+  font-size: 1px;
+  line-height: 1px;
+  width: 11px;
+  height: 50%;
+  -moz-user-select: none; user-select: none;
+  background: #eee url("/zimbra/js/ajax/config/style/arrow-up.gif") no-repeat 50% 50%;
+  border-left: 1px solid #000;
+}
+.DwtSpinner-downBtn {
+  position: absolute;
+  top: 50%;
+  font-size: 1px;
+  line-height: 1px;
+  width: 11px;
+  height: 50%;
+  -moz-user-select: none; user-select: none;
+  background: #eee url("/zimbra/js/ajax/config/style/arrow-down.gif") no-repeat 50% 50%;
+  border-left: 1px solid #000;
+}
+
+.DwtSpinner-up-pressed { background-color: #a6cccc; }
+.DwtSpinner-down-pressed { background-color: #a6cccc; }

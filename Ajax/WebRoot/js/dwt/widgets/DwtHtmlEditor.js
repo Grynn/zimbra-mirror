@@ -322,7 +322,7 @@ function(table, props) {
 	var doc = this._getIframeDoc();
 	var all_cells_props = [];
 	for (var i in props) {
-		var val = AjxStringUtil.trim(props[i]);
+		var val = AjxStringUtil.trim(props[i].toString());
 		var is_set = val != "";
 		switch (i) {
 		    case "caption":
