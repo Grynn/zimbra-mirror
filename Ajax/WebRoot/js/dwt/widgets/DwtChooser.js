@@ -182,9 +182,9 @@ function(items, view, skipNotify, id) {
 		}
 		for (var i = 0; i < list.length; i++) {
 			this._addToTarget(list[i], id, skipNotify);
-			if (this._selectStyle == DwtChooser.SINGLE_SELECT) {
-				return;
-			}
+//			if (this._selectStyle == DwtChooser.SINGLE_SELECT) {
+//				return;
+//			}
 		}
 	}
 	if (view == DwtChooserListView.SOURCE) {
@@ -220,10 +220,16 @@ DwtChooser.prototype.transfer =
 function(list, id, skipNotify) {
 	id = id ? id : this._activeButtonId;
 	this._setActiveButton(id);
-	this.addItems(list, DwtChooserListView.TARGET, skipNotify);
 	if (this._mode == DwtChooser.MODE_MOVE) {
-		this.removeItems(list, DwtChooserListView.SOURCE);
+		if (this._selectStyle == DwtChooser.SINGLE_SELECT) {
+			var tlist = this.targetListView.getList();
+			if (tlist && tlist.size()) {
+				this.remove(tlist, true);
+			}
+		}
+		this.removeItems(list, DwtChooserListView.SOURCE, true);
 	}
+	this.addItems(list, DwtChooserListView.TARGET, skipNotify);
 	this.sourceListView.deselectAll();
 };
 
@@ -236,13 +242,13 @@ function(list, id, skipNotify) {
 DwtChooser.prototype.remove =
 function(list, skipNotify) {
 	list = (list instanceof AjxVector) ? list.getArray() : (list instanceof Array) ? list : [list];
-	this.removeItems(list, DwtChooserListView.TARGET);
 	if (this._mode == DwtChooser.MODE_MOVE) {
 		for (var i = 0; i < list.length; i++) {
 			var index = this._getInsertionIndex(this.sourceListView, list[i]);
 			this.sourceListView.addItem(list[i], index, true);
 		}
 	}
+	this.removeItems(list, DwtChooserListView.TARGET);
 };
 
 /**
@@ -288,6 +294,9 @@ function(style, noResize) {
 			this._enableButtons();
 		}
 	}
+	
+	this.sourceListView.setMultiSelect(style == DwtChooser.MULTI_SELECT);
+	this.targetListView.setMultiSelect(style == DwtChooser.MULTI_SELECT);
 };
 
 /**
@@ -546,6 +555,11 @@ function() {
 			this._removeAllButton.setVisible(false);
 		}
 	}
+	
+	if (this._selectStyle == DwtChooser.SINGLE_SELECT) {
+		this.sourceListView.setMultiSelect(false);
+		this.targetListView.setMultiSelect(false);
+	}	
 };
 
 /*

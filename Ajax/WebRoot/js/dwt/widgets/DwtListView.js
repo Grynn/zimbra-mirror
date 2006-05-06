@@ -1586,14 +1586,14 @@ function(list) {
 
 DwtListView.prototype._focus =
 function() {
-	DBG.println("DwtListView: FOCUS");
+	DBG.println(AjxDebug.DBG2, "DwtListView: FOCUS");
 	if (this._kbAnchor != null)
 		this._kbAnchor.className += " " + Dwt.getAttr(this._kbAnchor, DwtListView._KBFOCUS_CLASS);
 }
 
 DwtListView.prototype._blur =
 function() {
-	DBG.println("DwtListView: BLUR");
+	DBG.println(AjxDebug.DBG2, "DwtListView: BLUR");
 	this._unmarkKbAnchorElement();
 }
 

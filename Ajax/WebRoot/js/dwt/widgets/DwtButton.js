@@ -404,7 +404,7 @@ function(target, button, docX, docY) {
  */
 DwtButton.prototype._focusByMouseUpEvent =
   function()  {
-DBG.println("DwtButton.prototype._focusByMouseUpEvent");
+	DBG.println(AjxDebug.DBG3, "DwtButton.prototype._focusByMouseUpEvent");
 	// Do Nothing
   }
 
