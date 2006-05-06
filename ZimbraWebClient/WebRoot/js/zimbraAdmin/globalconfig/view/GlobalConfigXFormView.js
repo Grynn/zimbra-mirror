@@ -62,8 +62,8 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 				{value:1, label:ZaMsg.NAD_Tab_General},
 				{value:2, label:ZaMsg.NAD_Tab_Attachments},
 				{value:3, label:ZaMsg.NAD_Tab_MTA},
-				{value:4, label:ZaMsg.NAD_Tab_POP},
-				{value:5, label:ZaMsg.NAD_Tab_IMAP},
+				{value:4, label:ZaMsg.NAD_Tab_IMAP},
+				{value:5, label:ZaMsg.NAD_Tab_POP},
 				{value:6, label:ZaMsg.NAD_Tab_AntiSpam},
 				{value:7, label:ZaMsg.NAD_Tab_AntiVirus}
 			]
@@ -239,40 +239,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 						  	}
 						]}
 				]},
-				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 4", 
-					width:"100%",colSizes:["100px","400px"], 
-					items: [
-						{ type: _DWT_ALERT_,
-						  containerCssStyle: "padding-bottom:0px",
-						  style: DwtAlert.WARNING,
-						  iconVisible: false, 
-						  content: ZaMsg.Alert_ServerRestart
-						},					
-						{ ref: ZaGlobalConfig.A_zimbraPop3ServerEnabled, type: _CHECKBOX_, 
-						  label: ZaMsg.NAD_POP_Service,labelLocation:_LEFT_,
-						  labelCssClass:"xform_label", align:_LEFT_,
-						  trueValue: "TRUE", falseValue: "FALSE", 
-						  onChange: ZaTabView.onFormFieldChanged
-					  	},
-						{ ref: ZaGlobalConfig.A_zimbraPop3SSLServerEnabled, type: _CHECKBOX_, 
-				  	  	  relevant: "instance.attrs[ZaGlobalConfig.A_zimbraPop3ServerEnabled] == 'TRUE'", 
-				  	  	  relevantBehavior: _DISABLE_,
-						  label: ZaMsg.NAD_POP_SSL,labelLocation:_LEFT_,
-						  labelCssClass:"xform_label", align:_LEFT_,
-						  trueValue: "TRUE", falseValue: "FALSE", 
-						  onChange: ZaTabView.onFormFieldChanged
-					  	},
-					  	{ ref: ZaGlobalConfig.A_zimbraPop3CleartextLoginEnabled, type: _CHECKBOX_, 
-				  	  	  relevant: "instance.attrs[ZaGlobalConfig.A_zimbraPop3ServerEnabled] == 'TRUE'", 
-				  	  	  relevantBehavior: _DISABLE_,
-					  	  label: ZaMsg.NAD_POP_CleartextLoginEnabled,labelLocation:_LEFT_,
-						  labelCssClass:"xform_label", align:_LEFT_,
-					  	  trueValue: "TRUE", falseValue: "FALSE", 
-					  	  onChange: ZaTabView.onFormFieldChanged
-				  	  	}
-					]
-				},
-				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 5",
+				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 4",
 					width:"100%",colSizes:["100px","400px"], 
 					items: [
 						{ type: _DWT_ALERT_,
@@ -302,7 +269,91 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 					 	  labelCssClass:"xform_label", align:_LEFT_, 
 						  trueValue:"TRUE", falseValue:"FALSE", 
 						  onChange:ZaTabView.onFormFieldChanged
-					  	}
+					  	},  						
+						{ ref: ZaGlobalConfig.A_zimbraImapBindPort, type:_TEXTFIELD_, 
+						  label: ZaMsg.NAD_IMAP_Port,
+						  width: "5em",
+						  onChange:ZaTabView.onFormFieldChanged
+					  	},		
+						{ ref: ZaGlobalConfig.A_zimbraImapSSLBindPort, type:_TEXTFIELD_, 
+						  label: ZaMsg.NAD_IMAP_SSLPort,
+						  width: "5em",
+						  onChange:ZaTabView.onFormFieldChanged
+					  	},					  	
+						{ ref: ZaGlobalConfig.A_zimbraImapProxyBindPort, type:_TEXTFIELD_, 
+						  label: ZaMsg.NAD_IMAP_Proxy_Port,
+						  width: "5em",
+						  onChange:ZaTabView.onFormFieldChanged
+					  	},	
+						{ ref: ZaGlobalConfig.A_zimbraImapSSLProxyBindPort, type:_TEXTFIELD_, 
+						  label: ZaMsg.NAD_IMAP_SSL_Proxy_Port,
+						  width: "5em",
+						  onChange:ZaTabView.onFormFieldChanged
+					  	},	
+						{ ref: ZaGlobalConfig.A_zimbraImapNumThreads, type:_TEXTFIELD_, 
+						  label: ZaMsg.NAD_IMAP_NumThreads,
+						  width: "5em",
+						  onChange:ZaTabView.onFormFieldChanged
+					  	}					  						
+
+					]
+				},
+				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 5", 
+					width:"100%",colSizes:["100px","400px"], 
+					items: [
+						{ type: _DWT_ALERT_,
+						  containerCssStyle: "padding-bottom:0px",
+						  style: DwtAlert.WARNING,
+						  iconVisible: false, 
+						  content: ZaMsg.Alert_ServerRestart
+						},					
+						{ ref: ZaGlobalConfig.A_zimbraPop3ServerEnabled, type: _CHECKBOX_, 
+						  label: ZaMsg.NAD_POP_Service,labelLocation:_LEFT_,
+						  labelCssClass:"xform_label", align:_LEFT_,
+						  trueValue: "TRUE", falseValue: "FALSE", 
+						  onChange: ZaTabView.onFormFieldChanged
+					  	},
+					  							{ ref: ZaGlobalConfig.A_zimbraPop3SSLServerEnabled, type: _CHECKBOX_, 
+				  	  	 // relevant: "instance.attrs[ZaGlobalConfig.A_zimbraPop3ServerEnabled] == 'TRUE'", 
+				  	  	  //relevantBehavior: _DISABLE_,
+						  label: ZaMsg.NAD_POP_SSL,labelLocation:_LEFT_,
+						  labelCssClass:"xform_label", align:_LEFT_,
+						  trueValue: "TRUE", falseValue: "FALSE", 
+						  onChange: ZaTabView.onFormFieldChanged
+					  	},
+					  	{ ref: ZaGlobalConfig.A_zimbraPop3CleartextLoginEnabled, type: _CHECKBOX_, 
+				  	  	  relevant: "instance.attrs[ZaGlobalConfig.A_zimbraPop3ServerEnabled] == 'TRUE'", 
+				  	  	  relevantBehavior: _DISABLE_,
+					  	  label: ZaMsg.NAD_POP_CleartextLoginEnabled,labelLocation:_LEFT_,
+						  labelCssClass:"xform_label", align:_LEFT_,
+					  	  trueValue: "TRUE", falseValue: "FALSE", 
+					  	  onChange: ZaTabView.onFormFieldChanged
+				  	  	},
+						{ ref: ZaGlobalConfig.A_zimbraPop3BindPort, type:_TEXTFIELD_, 
+						  label: ZaMsg.NAD_POP_Port,
+						  width: "5em",
+						  onChange:ZaTabView.onFormFieldChanged
+					  	},		
+						{ ref: ZaGlobalConfig.A_zimbraPop3SSLBindPort, type:_TEXTFIELD_, 
+						  label: ZaMsg.NAD_POP_Port,
+						 width: "5em",
+						  onChange:ZaTabView.onFormFieldChanged
+					  	},					  	
+						{ ref: ZaGlobalConfig.A_zimbraPop3ProxyBindPort, type:_TEXTFIELD_, 
+						  label: ZaMsg.NAD_POP_proxy_Port,
+						  width: "5em",
+						  onChange:ZaTabView.onFormFieldChanged
+					  	},	
+						{ ref: ZaGlobalConfig.A_zimbraPop3SSLProxyBindPort, type:_TEXTFIELD_, 
+						  label: ZaMsg.NAD_POP_Port,
+						 width: "5em",
+						  onChange:ZaTabView.onFormFieldChanged
+					  	},	
+						{ ref: ZaGlobalConfig.A_zimbraPop3NumThreads, type:_TEXTFIELD_, 
+						  label: ZaMsg.NAD_POP_NumThreads, width: "5em",
+						  onChange: ZaTabView.onFormFieldChanged
+						}					  						  							  	
+
 					]
 				},
 				// anti-spam

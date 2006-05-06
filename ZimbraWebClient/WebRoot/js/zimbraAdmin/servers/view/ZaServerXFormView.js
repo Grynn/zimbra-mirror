@@ -387,7 +387,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 						  label: ZaMsg.NAD_IMAP_Proxy_Port, width: "5em",
 						  onChange: ZaServerXFormView.onFormFieldChanged
 						},							
-						{ ref: ZaServer.A_zimbraImapNumThreads, type:_INPUT_, 
+						{ ref: ZaServer.A_zimbraImapNumThreads, type:_SUPER_TEXTFIELD_, 
 						  relevant: "ZaServerXFormView.getIMAPEnabled.call(item)",
 						  relevantBehavior: _DISABLE_,
 						  label: ZaMsg.NAD_IMAP_NumThreads, width: "5em",
@@ -466,7 +466,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 						  label: ZaMsg.NAD_POP_AdvertisedName, width: "18em",
 						  onChange: ZaServerXFormView.onFormFieldChanged
 						},
-						{ ref: ZaServer.A_zimbraPop3NumThreads, type:_INPUT_, 
+						{ ref: ZaServer.A_zimbraPop3NumThreads, type:_SUPER_TEXTFIELD_, 
 						  relevant: "ZaServerXFormView.getPOP3Enabled.call(item)",
 						  relevantBehavior: _DISABLE_,
 						  label: ZaMsg.NAD_POP_NumThreads, width: "5em",
