@@ -116,6 +116,12 @@ ZaGlobalConfig.A_zimbraDomainInheritedAttr = "zimbraDomainInheritedAttr";
 ZaGlobalConfig.A_zimbraCOSInheritedAttr = "zimbraCOSInheritedAttr";
 ZaGlobalConfig.A_zimbraGalLdapAttrMap = "zimbraGalLdapAttrMap";
 ZaGlobalConfig.A_zimbraGalLdapFilterDef = "zimbraGalLdapFilterDef";
+
+//mailproxy
+ZaGlobalConfig.A_zimbraImapProxyBindPort="zimbraImapProxyBindPort";
+ZaGlobalConfig.A_zimbraImapSSLProxyBindPort="zimbraImapSSLProxyBindPort";
+ZaGlobalConfig.A_zimbraPop3ProxyBindPort="zimbraPop3ProxyBindPort";
+ZaGlobalConfig.A_zimbraPop3SSLProxyBindPort="zimbraPop3SSLProxyBindPort";
 // others
 ZaGlobalConfig.A_zimbraNewExtension = "_zimbraNewExtension";
 
@@ -321,6 +327,15 @@ ZaGlobalConfig.myXModel = {
 	  	{ id:ZaGlobalConfig.A_zimbraVirusDefinitionsUpdateFrequency, ref:"attrs/" + ZaGlobalConfig.A_zimbraVirusDefinitionsUpdateFrequency, type: _LIFETIME_NUMBER_, minInclusive: 0, fractionDigits: 0 },
 	  	{ id:ZaGlobalConfig.A_zimbraVirusBlockEncryptedArchive, ref:"attrs/" + ZaGlobalConfig.A_zimbraVirusBlockEncryptedArchive, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES},
 	  	{ id:ZaGlobalConfig.A_zimbraVirusWarnAdmin, ref:"attrs/" + ZaGlobalConfig.A_zimbraVirusWarnAdmin, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES},
-	  	{ id:ZaGlobalConfig.A_zimbraVirusWarnRecipient, ref:"attrs/" + ZaGlobalConfig.A_zimbraVirusWarnRecipient, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES}
+	  	{ id:ZaGlobalConfig.A_zimbraVirusWarnRecipient, ref:"attrs/" + ZaGlobalConfig.A_zimbraVirusWarnRecipient, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES},
+	  	//proxy
+		{ id:ZaGlobalConfig.A_zimbraImapProxyBindPort, ref:"attrs/" + ZaGlobalConfig.A_zimbraImapProxyBindPort, type:_PORT_ },
+		{ id:ZaGlobalConfig.A_zimbraImapSSLProxyBindPort, ref:"attrs/" + ZaGlobalConfig.A_zimbraImapSSLProxyBindPort, type:_PORT_ },
+		{ id:ZaGlobalConfig.A_zimbraPop3ProxyBindPort, ref:"attrs/" + ZaGlobalConfig.A_zimbraPop3ProxyBindPort, type:_PORT_ },
+		{ id:ZaGlobalConfig.A_zimbraPop3SSLProxyBindPort, ref:"attrs/" + ZaGlobalConfig.A_zimbraPop3SSLProxyBindPort, type:_PORT_ },
+		{ id:ZaGlobalConfig.A_zimbraLmtpBindPort, ref:"attrs/" + ZaGlobalConfig.A_zimbraLmtpBindPort, type:_PORT_ },
+		{ id:ZaGlobalConfig.A_zimbraLmtpNumThreads, ref:"attrs/" + ZaGlobalConfig.A_zimbraLmtpNumThreads, type:_PORT_ }		
+		
+
 	]	
 }
