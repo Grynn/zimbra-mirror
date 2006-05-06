@@ -550,7 +550,7 @@ function(ev) {
 DwtKeyboardMgr.prototype.__dispatchKeyEvent = 
 function(hdlr, mapName, ev) {
 	
-	actionCode = this.__keyMapMgr.getActionCode(this.__keySequence, mapName);
+	var actionCode = this.__keyMapMgr.getActionCode(this.__keySequence, mapName);
 	if (actionCode == DwtKeyMapMgr.NOT_A_TERMINAL) {
 		//DBG.println(AjxDebug.DBG3, "SCHEDULING KILL SEQUENCE ACTION");
 		/* setup a timed action to kill the key sequence in the event

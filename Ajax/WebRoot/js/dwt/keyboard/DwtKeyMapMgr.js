@@ -36,11 +36,11 @@ function DwtKeyMapMgr(keyMap) {
 	var map = keyMap.getMap();
 	
 	// Builds key mapping FSA for each mapping
-	this._fsas = new Object();
+	this._fsas = {};
 	for (var key in map) {
 		DBG.println(AjxDebug.DBG3, "======== Processing Map Name: " + key);
 		try {
-			newFSA = DwtKeyMapMgr._buildFSA(new Object(), map[key], key);
+			var newFSA = DwtKeyMapMgr._buildFSA({}, map[key], key);
 			this._fsas[key] = newFSA;
 		} catch (ex) {
 			alert("EX: " + ex._msg + " - " + ex._keySeqStr);
@@ -53,7 +53,7 @@ function DwtKeyMapMgr(keyMap) {
 DwtKeyMapMgr.NOT_A_TERMINAL = -999;
 DwtKeyMapMgr.TAB_KEYCODE = 9;
 
-DwtKeyMapMgr._KEYCODES = new Array(); // Keycode map
+DwtKeyMapMgr._KEYCODES = []; // Keycode map
 DwtKeyMapMgr._inited = false; // Initialize flag
 
 DwtKeyMapMgr.prototype.getActionCode =
@@ -75,7 +75,7 @@ function (keySeq, mappingName) {
 			break;
 		
 		if (j < keySeqLen - 1)
-			tmpFsa = tmpFsa[key].subMap;		
+			tmpFsa = tmpFsa[key].subMap;
 	}
 	
 	if (tmpFsa[key]) {

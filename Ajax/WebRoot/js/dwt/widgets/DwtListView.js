@@ -1608,7 +1608,7 @@ function() {
 }
 
 DwtListView.prototype.handleKeyAction =
-function(action, ev) {
+function(actionCode, ev) {
 	switch (actionCode) {
 		case DwtKeyMap.SELECT_CURRENT:
 			this._emulateSingleClick(this._kbAnchor, DwtMouseEvent.LEFT);
