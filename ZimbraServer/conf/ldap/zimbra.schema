@@ -339,6 +339,7 @@ objectIdentifier zimbraImapSSLProxyBindPort ZimbraAttrType:349
 objectIdentifier zimbraPop3ProxyBindPort ZimbraAttrType:350
 objectIdentifier zimbraPop3SSLProxyBindPort ZimbraAttrType:351
 objectIdentifier zimbraVirtualHostname ZimbraAttrType:352
+objectIdentifier zimbraHideInGal ZimbraAttrType:353
 
 #################################################################
 # object class OIDs
@@ -850,6 +851,13 @@ attributetype ( zimbraGroupId
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} 
+	SINGLE-VALUE )
+
+attributetype ( zimbraHideInGal
+	NAME 'zimbraHideInGal'
+	DESC 'hide entry in Global Address List'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
 attributetype ( zimbraId
@@ -2639,6 +2647,7 @@ objectclass ( zimbraMailRecipient
 		zimbraMailCatchAllAddress $
 		zimbraMailCatchAllForwardingAddress $
 		zimbraMailCatchAllCanonicalAddress $
+		zimbraHideInGal $
 		zimbraMailStatus
 	))
 
