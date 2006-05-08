@@ -56,6 +56,16 @@ DwtKeyMapMgr.TAB_KEYCODE = 9;
 DwtKeyMapMgr._KEYCODES = []; // Keycode map
 DwtKeyMapMgr._inited = false; // Initialize flag
 
+DwtKeyMapMgr.prototype.inheritsGlobalMap =
+function(mappingName) {
+	var mapping =  this._fsas[mappingName];
+	
+	if (!mapping)
+		return false;
+	
+	return (mapping.GLOBAL_NOINHERIT) ? false : true;
+}
+
 DwtKeyMapMgr.prototype.getActionCode =
 function (keySeq, mappingName) {
 	//DBG.println("Getting action code for: " + keySeq.join("") + " in map: " + mappingName);
@@ -78,7 +88,12 @@ function (keySeq, mappingName) {
 			tmpFsa = tmpFsa[key].subMap;
 	}
 	
-	if (tmpFsa[key]) {
+	if (!tmpFsa) {
+		// This is essentially an illegal condition.
+		DBG.println("tmpFsa is null. mapping name: " + mappingName + ", key: " + key 
+					+ " - keyseq: " + keySeq);
+		return null;
+	} else if (tmpFsa[key]) {
 		return (tmpFsa[key].actionCode != null) ? tmpFsa[key].actionCode
 												 : DwtKeyMapMgr.NOT_A_TERMINAL;
 		
@@ -250,6 +265,8 @@ function(fsa, mapping, mapName) {
 			//DBG.println(AjxDebug.DBG3, "Inheriting from: " + mapping[i]);
 			fsa.INHERIT = mapping[i];
 			continue;
+		} else if (i == DwtKeyMap.GLOBAL_NOINHERIT) {
+			fsa.GLOBAL_NOINHERIT = true;
 		}
 		 
 		var keySeq = i.split(DwtKeyMap.SEP);

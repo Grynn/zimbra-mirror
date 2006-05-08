@@ -21,18 +21,34 @@
 * the stat of DwtTabGroups (e.g. member addition and deletion). 
 * 
 * @author Ross Dargahi
-*
+* 
+* @see DwtTabGroup
 */
-
 function DwtTabGroupEvent() {
+	/** Tab group for which the event is being generated
+	 * @type DwtTabGroup
+	 */
+	this.tabGroup = null;
+	
+	/** New focus memeber 
+	 * @type {DwtControl|HTMLElement}
+	 */
+	this.newFocusMember = null;
 }
 
-
+/**
+ * @return return a string version of the class' name
+ * @type String
+ */
 DwtTabGroupEvent.prototype.toString = 
 function() {
 	return "DwtTabGroupEvent";
 }
 
+
+/**
+ * Resets the members of the event
+ */
 DwtTabGroupEvent.prototype.reset =
 function() {
 	this.tabGroup = null;

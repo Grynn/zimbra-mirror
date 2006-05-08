@@ -16,10 +16,10 @@
 
 
 /**
-* Base class for Keymaps.
-*
 * @constructor
 * @class
+* This class provides the basic keyboard mappings for Dwt components. It is also
+* the base class for application keymaps. 
 * 
 * @author Ross Dargahi
 */
@@ -28,8 +28,8 @@ function DwtKeyMap(subclassInit) {
 		return;
 		
 	/* Always specify Control, then Alt, then Shift. All Chars must be upper case
-	 * Note that DwtKeyMap.GLOBAL is the global mapping and will be logically appended
-	 * to each defined mapping*/
+	 * Note that DwtKeyMap.GLOBAL is the global mapping and will be inherited by
+	 * all mappings unless explicitly requested not to*/
 	this._map = {};
 	this._map[DwtKeyMap.GLOBAL] = {};
 	this._map["DwtListView"] = {
@@ -51,7 +51,28 @@ function DwtKeyMap(subclassInit) {
 	this._map["DwtButton"] = {
 		"Enter":	DwtKeyMap.SELECT_CURRENT	
 	};
+	
+	this._map["DwtMenu"] = {
+		"NOINHERIT_GLOBAL": true,
+		"Esc":        DwtKeyMap.POPDOWN,
+		"Enter":	  DwtKeyMap.SELECT_CURRENT,	
+		"ArrowDown":  DwtKeyMap.SELECT_NEXT,
+		"ArrowUp":    DwtKeyMap.SELECT_PREV,
+		"ArrowLeft":  DwtKeyMap.SELECT_PARENTMENU,
+		"ArrowRight": DwtKeyMap.SELECT_SUBMENU
+	};
 };
+
+
+DwtKeyMap.deserialize =
+function(keymap) {
+	alert("DwtKeyMap.deserialize: NOT IMPLEMENTED");
+}
+
+DwtKeyMap.serialize =
+function(keymap) {
+	alert("DwtKeyMap.serialize: NOT IMPLEMENTED");
+}
 
 // Key names
 
@@ -87,12 +108,16 @@ DwtKeyMap.SELECT_PREV = i--;
 DwtKeyMap.ADD_SELECT_CURRENT = i--;
 DwtKeyMap.ADD_SELECT_NEXT = i--;
 DwtKeyMap.ADD_SELECT_PREV = i--;
+DwtKeyMap.SELECT_SUBMENU = i--;
+DwtKeyMap.SELECT_PARENTMENU = i--;
+DwtKeyMap.POPDOWN = i--;
 
 delete i;
 
 DwtKeyMap.SEP = ","; // Key separator
 DwtKeyMap.GLOBAL = "GLOBAL";  // Global submap
 DwtKeyMap.INHERIT = "INHERIT"; // Alias keyword.
+DwtKeyMap.GLOBAL_NOINHERIT = "NOINHERIT_GLOBAL";  // Don't inherit global
 
 DwtKeyMap.prototype.getMap =
 function() {
