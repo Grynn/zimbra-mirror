@@ -128,6 +128,7 @@ ZaGlobalConfig.A_zimbraNewExtension = "_zimbraNewExtension";
 ZaGlobalConfig.A_originalMonitorHost = "_originalMonitorHost";
 ZaGlobalConfig.A_currentMonitorHost = "_currentMonitorHost";
 
+
 ZaGlobalConfig.loadMethod = 
 function(by, val, withConfig) {
 	var soapDoc = AjxSoapDoc.create("GetAllConfigRequest", "urn:zimbraAdmin", null);

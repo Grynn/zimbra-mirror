@@ -59,8 +59,13 @@ function(item) {
 	if(!this._UICreated) {
   		this._ops = new Array();
 		this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener)));
+		if (ZaOperation.UPDATELICENSE) {
+			this._ops.push(new ZaOperation(ZaOperation.UPDATELICENSE, ZaMsg.TBB_UpdateLicense, ZaMsg.ALTBB_UpdateLicense_tt, "Save", "SaveDis",
+						new AjxListener(this, this.updateLicenseButtonListener)));
+		}
 		this._ops.push(new ZaOperation(ZaOperation.NONE));
 		this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));							
+		
 		this._toolbar = new ZaToolBar(this._container, this._ops);
 	
 		this._view = new GlobalConfigXFormView(this._container, this._app);
@@ -72,6 +77,7 @@ function(item) {
 	}
 	this._app.pushView(ZaZimbraAdmin._GLOBAL_SETTINGS);
 	this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);  	
+	this._toolbar.getButton(ZaOperation.UPDATELICENSE).setEnabled(false);
 	item.load();
 	try {		
 		item[ZaModel.currentTab] = "1"
@@ -190,3 +196,5 @@ function () {
 	this.fireChangeEvent(this._currentObject);
 	return true;
 }
+
+

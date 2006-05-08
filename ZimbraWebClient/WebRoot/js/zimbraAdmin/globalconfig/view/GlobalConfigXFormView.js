@@ -44,7 +44,6 @@ function () {
 	return ZaMsg.GlobalConfig_view_title;
 }
 
-
 GlobalConfigXFormView.myXFormModifier = function(xFormObject) {	
 	xFormObject.tableCssStyle = "width:100%;overflow:auto;";
 	
@@ -57,7 +56,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 		  content: ZaMsg.Alert_GlobalConfig
 		},
 		{type:_TAB_BAR_,  ref:ZaModel.currentTab,relevantBehavior:_HIDE_,
-		 	containerCssStyle: "padding-top:0px",
+		 	containerCssStyle: "padding-top:0px", 
 			choices:[
 				{value:1, label:ZaMsg.NAD_Tab_General},
 				{value:2, label:ZaMsg.NAD_Tab_Attachments},
