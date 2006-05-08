@@ -198,6 +198,24 @@ function() {
 		? null : this._array[this._array.length-1];
 };
 
+AjxVector.prototype.getNext =
+function(obj) {
+	var idx = this.indexOf(obj);
+	if (idx == -1)
+		return null;
+	return this.get(++idx);
+};
+
+AjxVector.prototype.getPrev =
+function(obj) {
+	var idx = this.indexOf(obj);
+	if (idx == -1)
+		return null;
+	return this.get(--idx);
+};
+
+
+
 AjxVector.prototype.sort =
 function(sortFunc) {
 	if (!sortFunc) {
