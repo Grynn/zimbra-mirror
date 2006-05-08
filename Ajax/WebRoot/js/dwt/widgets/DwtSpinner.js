@@ -130,6 +130,8 @@ DwtSpinner.prototype._createElements = function() {
 		input.value = this._getValidValue(this._origValue);
 
 	input.onblur = AjxCallback.simpleClosure(this.setValue, this, null);
+	input[(AjxEnv.isIE || AjxEnv.isOpera) ? "onkeydown" : "onkeypress"]
+		= AjxCallback.simpleClosure(this.__onKeyPress, this);
 };
 
 DwtSpinner.prototype._getValidValue = function(val) {
@@ -233,4 +235,23 @@ DwtSpinner.prototype._stopCapture = function() {
 	var input = this.getInputElement();
 	input.focus();
 	Dwt.setSelectionRange(input, 0, input.value.length);
+};
+
+DwtSpinner.prototype.__onKeyPress = function(ev) {
+	if (AjxEnv.isIE)
+		ev = window.event;
+	var dir = null;
+	switch (ev.keyCode) {
+	    case 38:
+		dir = "up";
+		break;
+	    case 40:
+		dir = "down";
+		break;
+	}
+	if (dir) {
+		this._rotateVal(dir);
+		var input = this.getInputElement();
+		Dwt.setSelectionRange(input, 0, input.value.length);
+	}
 };
