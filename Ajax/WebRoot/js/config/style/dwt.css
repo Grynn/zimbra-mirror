@@ -1299,3 +1299,19 @@
 
 .DwtSpinner-up-pressed { background-color: #a6cccc; }
 .DwtSpinner-down-pressed { background-color: #a6cccc; }
+
+/* DwtButtonColorPicker styles */
+
+.DwtButtonColorPicker-display {
+  width: 14px;
+  height: 14px;
+  font-size: 1px;
+  line-height: 1px;
+  -moz-user-select: none; user-select: none;
+  border: 1px solid;
+  border-color: #000 #fff #fff #000;
+}
+
+.DwtButtonColorPicker-display-disable {
+  background: url("/zimbra/js/ajax/config/style/disable.gif") no-repeat 50% 50%;
+}

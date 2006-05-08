@@ -470,7 +470,7 @@ function(ev) {
 			var selEv = DwtShell.selectionEvent;
                        DwtUiEvent.copy(selEv, ev);
                        selEv.item = this;
-                       selEv.detail = 0;
+                       selEv.detail = typeof this.__detail == "undefined" ? 0 : this.__detail;
                        this.notifyListeners(DwtEvent.SELECTION, selEv);
 		} else if (this._menu) {
 			this._toggleMenu();
@@ -534,7 +534,7 @@ function(ev) {
 				var selEv = DwtShell.selectionEvent;
 				DwtUiEvent.copy(selEv, ev);
 				selEv.item = this;
-				selEv.detail = 0;
+				selEv.detail = typeof this.__detail == "undefined" ? 0 : this.__detail;
 				this.notifyListeners(DwtEvent.SELECTION, selEv);
 			} else if (this._menu) {
 				this._toggleMenu();
