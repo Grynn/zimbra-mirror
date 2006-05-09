@@ -55,13 +55,12 @@ function(listener) {
 
 ZaGlobalConfigViewController.prototype.show = 
 function(item) {
-
 	if(!this._UICreated) {
   		this._ops = new Array();
 		this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener)));
 		if (ZaOperation.UPDATELICENSE) {
 			this._ops.push(new ZaOperation(ZaOperation.UPDATELICENSE, ZaMsg.TBB_UpdateLicense, ZaMsg.ALTBB_UpdateLicense_tt, "Save", "SaveDis",
-						new AjxListener(this, this.updateLicenseButtonListener)));
+						new AjxListener(this, this.updateLicenseButtonListener)));		   
 		}
 		this._ops.push(new ZaOperation(ZaOperation.NONE));
 		this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));							
@@ -77,7 +76,12 @@ function(item) {
 	}
 	this._app.pushView(ZaZimbraAdmin._GLOBAL_SETTINGS);
 	this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);  	
-	this._toolbar.getButton(ZaOperation.UPDATELICENSE).setEnabled(false);
+	if (ZaOperation.UPDATELICENSE){
+		var updateLicenseButton = this._toolbar.getButton(ZaOperation.UPDATELICENSE) ;
+		updateLicenseButton.setEnabled(false);
+		 var divEl = updateLicenseButton.getHtmlElement();
+		 divEl.style.visibility = "hidden";	
+	}
 	item.load();
 	try {		
 		item[ZaModel.currentTab] = "1"
@@ -88,7 +92,6 @@ function(item) {
 	}
 	this._currentObject = item;		
 }
-
 
 ZaGlobalConfigViewController.prototype.setEnabled = 
 function(enable) {
