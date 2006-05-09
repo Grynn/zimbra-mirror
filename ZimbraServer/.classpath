@@ -69,7 +69,7 @@
 	<classpathentry kind="lib" path="jars/tnef.jar"/>
 	<classpathentry sourcepath="/ThirdParty/ganymed-ssh2/ganymed-ssh2-build209/src" kind="lib" path="jars/ganymed-ssh2-build209.jar"/>
 	<classpathentry kind="lib" path="jars/xpp3.jar"/>
-	<classpathentry kind="lib" path="jars/lucene-1.4.3.jar"/>
+	<classpathentry sourcepath="/ThirdParty/lucene-1.4.3/src/java" kind="lib" path="jars/lucene-1.4.3.jar"/>
 	<classpathentry kind="lib" path="jars/jzlib.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
