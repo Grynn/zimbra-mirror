@@ -231,25 +231,32 @@ public class SetHeaderFilter implements Filter {
         
         String uri = req.getRequestURI();
         
-        if( uri.toLowerCase().indexOf("microsoft-server-activesync") != -1 )
-        {
-			if(debug > 0){ System.out.println("ActiveSync client detected..."); }
-			try
-			{
+        //if (true) throw new RuntimeException("URI="+uri);
+            
+        if (uri.toLowerCase().indexOf("microsoft-server-activesync") != -1 ) {
+			if (debug > 0) { System.out.println("ActiveSync client detected..."); }
+			try {
 				String targetContextStr = "/service/";
 				ServletContext myContext = config.getServletContext();
 				ServletContext targetContext = myContext.getContext( targetContextStr );
 				RequestDispatcher dispatcher = targetContext.getRequestDispatcher( "/extension/activesync" );
 				dispatcher.forward( request, response );
 				return;
-			}catch(NullPointerException npe)
-			{
+			} catch(NullPointerException npe) {
 				//if this happens, make sure in server.xml the context element for the zimbra app
 				//has crossContext=true
-				if(debug >0){System.out.println("unable to forward activesync request");}
+				if (debug >0) { System.out.println("unable to forward activesync request"); }
 			}
-			
+        } else if (uri.startsWith("/home/") || uri.startsWith("/~")) {
+            if (uri.startsWith("/~")) uri = "/home"+uri;
+            String targetContextStr = "/service/";
+            ServletContext myContext = config.getServletContext();
+            ServletContext targetContext = myContext.getContext( targetContextStr );
+            RequestDispatcher dispatcher = targetContext.getRequestDispatcher(uri);
+            dispatcher.forward( request, response );
+            return;
         }
+        
 
         // before we check whether we can compress, let's check
         // what sort of cache control headers we should use for this
