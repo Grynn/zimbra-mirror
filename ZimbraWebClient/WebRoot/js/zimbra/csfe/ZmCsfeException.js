@@ -89,7 +89,7 @@ ZmCsfeException.define("ACCT_EXISTS", "account.ACCOUNT_EXISTS");
 ZmCsfeException.define("ACCT_INVALID_PASSWORD", "account.INVALID_PASSWORD", ZMsg.errorInvalidPass);
 ZmCsfeException.define("ACCT_INVALID_PREF_NAME", "account.INVALID_PREF_NAME", ZMsg.errorInvalidPrefName);
 ZmCsfeException.define("ACCT_INVALID_PREF_VALUE", "account.INVALID_PREF_VALUE", ZMsg.errorInvalidPrefValue);
-ZmCsfeException.define("ACCT_MAINTENANCE_MODE", "account.MAINTENANCE_MODE", ZmMsg.errorMaintenanceMode);
+ZmCsfeException.define("ACCT_MAINTENANCE_MODE", "account.MAINTENANCE_MODE", ZMsg.errorMaintenanceMode);
 ZmCsfeException.define("ACCT_NO_SUCH_ACCOUNT", "account.NO_SUCH_ACCOUNT", ZMsg.errorNoSuchAcct);
 ZmCsfeException.define("NO_SUCH_DISTRIBUTION_LIST", "account.NO_SUCH_DISTRIBUTION_LIST");
 ZmCsfeException.define("ACCT_NO_SUCH_SAVED_SEARCH", "account.NO_SUCH_SAVED_SEARCH", ZMsg.errorNoSuchSavedSearch);
@@ -113,7 +113,7 @@ ZmCsfeException.define("MAIL_NO_SUCH_PART", "mail.NO_SUCH_PART", ZMsg.errorNoSuc
 ZmCsfeException.define("MAIL_NO_SUCH_TAG", "mail.NO_SUCH_TAG", ZMsg.errorNoSuchTag);
 ZmCsfeException.define("MAIL_QUERY_PARSE_ERROR", "mail.QUERY_PARSE_ERROR", ZMsg.errorQueryParse);
 ZmCsfeException.define("MAIL_QUOTA_EXCEEDED", "mail.QUOTA_EXCEEDED", ZMsg.errorQuotaExceeded);
-ZmCsfeException.define("MAIL_SEND_ABORTED_ADDRESS_FAILURE", "mail.SEND_ABORTED_ADDRESS_FAILURE", ZmMsg.mailSendAddressFailure);
+ZmCsfeException.define("MAIL_SEND_ABORTED_ADDRESS_FAILURE", "mail.SEND_ABORTED_ADDRESS_FAILURE", ZMsg.mailSendAddressFailure);
 ZmCsfeException.define("MAIL_SEND_FAILURE", "mail.SEND_FAILURE", ZMsg.mailSendFailure);
 ZmCsfeException.define("MAIL_TOO_MANY_CONTACTS", "mail.TOO_MANY_CONTACTS", ZMsg.errorTooManyContacts);
 ZmCsfeException.define("MAIL_TOO_MANY_TERMS", "mail.TOO_MANY_QUERY_TERMS_EXPANDED", ZMsg.errorTooManyTerms);
