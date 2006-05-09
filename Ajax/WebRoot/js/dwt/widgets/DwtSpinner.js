@@ -94,18 +94,24 @@ DwtSpinner.prototype._createElements = function() {
 	this._idField = id;
 	this._idUpButton = id + "-up";
 	this._idDownButton = id + "-down";
-	var html = [ "<table class='DwtSpinner' cellspacing='0' cellpadding='0'><tr>",
-		     "<td class='DwtSpinner-inputCell'><input id='", id, "' autocomplete='off' /></td>",
-		     "<td><div class='DwtSpinner-btnCell'>",
-		     "<div unselectable class='DwtSpinner-upBtn' id='", this._idUpButton, "'>&nbsp;</div>",
-		     "<div unselectable class='DwtSpinner-downBtn' id='", this._idDownButton, "'>&nbsp;</div>",
-		     "</div></td></tr></table>" ];
+	var html = [ "<table class='DwtSpinner' cellspacing='0' cellpadding='0'>",
+		     "<tr><td rowspan='2' class='DwtSpinner-inputCell'><input id='", id, "' autocomplete='off' /></td>",
+		     "<td unselectable id='", this._idUpButton, "' class='DwtSpinner-upBtn'><div class='ImgUpArrowSmall'>&nbsp;</div></td>",
+		     "</tr><tr>",
+		     "<td unselectable id='", this._idDownButton, "' class='DwtSpinner-downBtn'><div class='ImgDownArrowSmall'>&nbsp;</div></td>",
+		     "</tr></table>" ];
+
+		     
+// 		     "<td><div class='DwtSpinner-btnCell'>",
+// 		     "<div unselectable class='DwtSpinner-upBtn' id='", this._idUpButton, "'><div class='ImgUpArrowSmall'>&nbsp;</div></div>",
+// 		     "<div unselectable class='DwtSpinner-downBtn' id='", this._idDownButton, "'><div class='ImgDownArrowSmall'>&nbsp;</div></div>",
+// 		     "</div></td></tr></table>" ];
 	div.innerHTML = html.join("");
 
 	var b1 = this._getUpButton();
-	b1.onmousedown = AjxCallback.simpleClosure(this._btnPressed, this, "up");
+	b1.onmousedown = AjxCallback.simpleClosure(this._btnPressed, this, "Up");
 	var b2 = this._getDownButton();
-	b2.onmousedown = AjxCallback.simpleClosure(this._btnPressed, this, "down");
+	b2.onmousedown = AjxCallback.simpleClosure(this._btnPressed, this, "Down");
 // 	if (AjxEnv.isIE) {
 // 		b1.ondblclick = b1.onmousedown;
 // 		b2.ondblclick = b2.onmousedown;
@@ -127,7 +133,7 @@ DwtSpinner.prototype._createElements = function() {
 	if (this._align)
 		input.style.textAlign = this._align;
 	if (this._origValue != null)
-		input.value = this._getValidValue(this._origValue);
+		this.setValue(this._origValue);
 
 	input.onblur = AjxCallback.simpleClosure(this.setValue, this, null);
 	input[(AjxEnv.isIE || AjxEnv.isOpera) ? "onkeydown" : "onkeypress"]
@@ -166,8 +172,19 @@ DwtSpinner.prototype._getDownButton = function() {
 
 DwtSpinner.prototype._getButton = function(direction) {
 	switch (direction) {
-	    case "up"   : return this._getUpButton();
-	    case "down" : return this._getDownButton();
+	    case "Up"   : return this._getUpButton();
+	    case "Down" : return this._getDownButton();
+	}
+};
+
+DwtSpinner.prototype._setBtnState = function(dir, disabled) {
+	var btn = this._getButton(dir);
+	if (disabled) {
+		Dwt.addClass(btn, "DwtSpinner-" + dir + "-disabled");
+		btn.firstChild.className = "Img" + dir + "ArrowSmallDis";
+	} else {
+		Dwt.delClass(btn, "DwtSpinner-" + dir + "-disabled");
+		btn.firstChild.className = "Img" + dir + "ArrowSmall";
 	}
 };
 
@@ -178,7 +195,11 @@ DwtSpinner.prototype.getValue = function() {
 DwtSpinner.prototype.setValue = function(val) {
 	if (val == null)
 		val = this.getInputElement().value;
-	this.getInputElement().value = this._getValidValue(val);
+	val = this._getValidValue(val);
+	this.getInputElement().value = val;
+	val = parseFloat(val);
+	this._setBtnState("Down", this._minValue != null && this._minValue == val);
+	this._setBtnState("Up", this._maxValue != null && this._maxValue == val);
 };
 
 DwtSpinner.prototype.setEnabled = function(enabled) {
@@ -194,8 +215,8 @@ DwtSpinner.prototype.setEnabled = function(enabled) {
 DwtSpinner.prototype._rotateVal = function(direction) {
 	var val = this.getValue();
 	switch (direction) {
-	    case "up"   : val += this._step; break;
-	    case "down" : val -= this._step; break;
+	    case "Up"   : val += this._step; break;
+	    case "Down" : val -= this._step; break;
 	}
 	this.setValue(val);
 };
@@ -243,10 +264,10 @@ DwtSpinner.prototype.__onKeyPress = function(ev) {
 	var dir = null;
 	switch (ev.keyCode) {
 	    case 38:
-		dir = "up";
+		dir = "Up";
 		break;
 	    case 40:
-		dir = "down";
+		dir = "Down";
 		break;
 	}
 	if (dir) {

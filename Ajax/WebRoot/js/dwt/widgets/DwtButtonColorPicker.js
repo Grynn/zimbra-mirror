@@ -34,7 +34,7 @@
  * @extends DwtButton
  * @author Mihai Bazon, <mihai@zimbra.com>
  */
-function DwtButtonColorPicker(parent, style, className, posStyle, id, index) {
+function DwtButtonColorPicker(parent, style, className, posStyle, id, index, noFillLabel) {
 	DwtButton.call(this, parent, style, className, posStyle, DwtButton.ACTION_MOUSEUP, id, index);
 
 	// WARNING: we pass boolean instead of a DwtDialog because (1) we don't
@@ -43,7 +43,7 @@ function DwtButtonColorPicker(parent, style, className, posStyle, id, index) {
 	// unnecessarily complex :-(
 	var m = new DwtMenu(this, DwtMenu.COLOR_PICKER_STYLE, null, null, true);
 	this.setMenu(m);
-	var cp = new DwtColorPicker(m);
+	var cp = new DwtColorPicker(m, null, null, noFillLabel);
 	cp.addSelectionListener(new AjxListener(this, this._colorPicked));
 
 	// no color initially selected

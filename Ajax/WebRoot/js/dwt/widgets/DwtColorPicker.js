@@ -29,11 +29,12 @@
 * @param className	a CSS class
 * @param posStyle	positioning style
 */
-function DwtColorPicker(parent, className, posStyle) {
+function DwtColorPicker(parent, className, posStyle, noFillLabel) {
 	if (arguments.length == 0) return;
 	className = className || "DwtColorPicker";
 	DwtControl.call(this, parent, className, posStyle);
 
+	this._noFillLabel = noFillLabel;
 	this._createColorTable();
 	this._registerEventHdlrs();
 	//MOW:  this.setCursor("default");
@@ -102,7 +103,8 @@ function() {
 				Dwt.setHandler(cell, DwtEvent.ONMOUSEENTER, DwtColorPicker._mouseOverHdlr);
 				Dwt.setHandler(cell, DwtEvent.ONMOUSELEAVE, DwtColorPicker._mouseOutHdlr);
 			}
-			cell.style.border = "2px outset " + cell.style.backgroundColor;
+			if (cell.className != "NoFill")
+				cell.style.border = "2px outset " + cell.style.backgroundColor;
 		}
 	}
 }
@@ -114,7 +116,9 @@ function() {
 	var i = 0;
 	
 	html[i++] = "<table cellpadding='0' cellspacing='0' border='0' align='center'>";
-	html[i++] = "<tr>"
+	if (this._noFillLabel)
+		html[i++] = "<tr><td colspan='10' class='NoFill'>" + this._noFillLabel + "</td></tr>";
+	html[i++] = "<tr>";
 	html[i++] = "<td id='" + this._tdId + "#FFFFFF' style='background-color:#FFFFFF' width='12' height='14'><img height='1' width='1'/></td>";
 	html[i++] = "<td id='" + this._tdId + "#FFCCCC' style='background-color:#FFCCCC' width='12' height='14'><img height='1' width='1'/></td>";
 	html[i++] = "<td id='" + this._tdId + "#FFCC99' style='background-color:#FFCC99' width='12' height='14'><img height='1' width='1'/></td>";
@@ -207,8 +211,9 @@ function(ev) {
 	if (mouseEv.dwtObj._downTdId == target.id) {
 		var tmp = target.style.backgroundColor;
 		target.style.backgroundColor = mouseEv.dwtObj._swappedColor;
-		mouseEv.dwtObj._swappedColor = tmp
-		target.style.border = "2px inset " + tmp;
+		mouseEv.dwtObj._swappedColor = tmp;
+		target.style.borderStyle = "inset";
+		target.style.borderColor = tmp;
 	}
 
 	this._stopPropagation = true;
@@ -228,8 +233,9 @@ function(ev) {
 	if (mouseEv.dwtObj._downTdId == target.id) {
 		var tmp = target.style.backgroundColor;
 		target.style.backgroundColor = mouseEv.dwtObj._swappedColor;
-		mouseEv.dwtObj._swappedColor = tmp
-		target.style.border = "2px outset " + tmp;
+		mouseEv.dwtObj._swappedColor = tmp;
+		target.style.borderStyle = "outset";
+		target.style.borderColor = tmp;
 		mouseEv.dwtObj._downTdId = null;
 	}
 
@@ -246,7 +252,7 @@ function(ev) {
 	var target = mouseEv.target;
 	if (target.nodeName.toLowerCase() == "img")
 		target = target.parentNode;
-	
+
 	// Make a depressed button color darker than the original color to get
 	// a true depressed effect
 	var colorStr = mouseEv.target.style.backgroundColor;
@@ -255,23 +261,26 @@ function(ev) {
 	
 	mouseEv.dwtObj._downTdId = target.id;
 	mouseEv.dwtObj._swappedColor = colorStr;
-	target.style.border = "2px inset " + colorStr;
+	// target.style.border = "2px inset " + colorStr;
+	target.style.borderStyle = "inset";
 
-	// IE refuses to convert Hex 2 rgb
-	if (colorStr.substr(0, 1) == "#") {
-		rgb = colorStr.match(DwtColorPicker._HEX_RE);
-		rgb[1] = DwtColorPicker._hexConv(rgb[1]); 
-		rgb[2] = DwtColorPicker._hexConv(rgb[2]); 
-		rgb[3] = DwtColorPicker._hexConv(rgb[3]); 
-	} else {
-		rgb = colorStr.match(DwtColorPicker._RGB_RE);
-	}
+	if (target.className != "NoFill") {
+		// IE refuses to convert Hex 2 rgb
+		if (colorStr.substr(0, 1) == "#") {
+			rgb = colorStr.match(DwtColorPicker._HEX_RE);
+			rgb[1] = DwtColorPicker._hexConv(rgb[1]); 
+			rgb[2] = DwtColorPicker._hexConv(rgb[2]); 
+			rgb[3] = DwtColorPicker._hexConv(rgb[3]); 
+		} else {
+			rgb = colorStr.match(DwtColorPicker._RGB_RE);
+		}
 	
-	r = Math.max(Math.floor(rgb[1] - (rgb[1] * 0.25)), 0);
-	g = Math.max(Math.floor(rgb[2] - (rgb[2] * 0.25)), 0);
-	b = Math.max(Math.floor(rgb[3] - (rgb[3] * 0.25)), 0);
-	colorStr = "rgb(" + r + "," + g + "," + b + ")";
-	target.style.backgroundColor = colorStr;
+		r = Math.max(Math.floor(rgb[1] - (rgb[1] * 0.25)), 0);
+		g = Math.max(Math.floor(rgb[2] - (rgb[2] * 0.25)), 0);
+		b = Math.max(Math.floor(rgb[3] - (rgb[3] * 0.25)), 0);
+		colorStr = "rgb(" + r + "," + g + "," + b + ")";
+		target.style.backgroundColor = colorStr;
+	}
 	
 	mouseEv._stopPropagation = true;
 	mouseEv._returnValue = false;
@@ -308,7 +317,8 @@ function(ev) {
 		target = target.parentNode;
 	
 	if (me._downTdId == target.id) {
-		target.style.border = "2px outset " + mouseEv.dwtObj._swappedColor;
+		target.style.borderStyle = "outset";
+		target.style.borderColor = mouseEv.dwtObj._swappedColor;
 		target.style.backgroundColor = mouseEv.dwtObj._swappedColor;
 	}
 	

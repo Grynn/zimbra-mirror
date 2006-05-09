@@ -22,7 +22,7 @@
     <title>DwtSpinner Example</title>
     <style type="text/css">
       <!--
-        @import url(../common/img/loRes/dwtimgs.css);
+        @import url(/zimbra/img/loRes/imgs.css);
         @import url(/zimbra/js/ajax/config/style/dwt.css);
       -->
     </style>
