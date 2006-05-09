@@ -253,7 +253,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 		);
 
 	}
-
+	case1Items.push({ref:ZaAccount.A_zimbraPasswordMustChange,align:_LEFT_, type:_CHECKBOX_,msgName:ZaMsg.NAD_MustChangePwd,label:ZaMsg.NAD_MustChangePwd+":",labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label"});
 	case1Items.push({ref:ZaAccount.A_password, type:_SECRET_, msgName:ZaMsg.NAD_Password,label:ZaMsg.NAD_Password, labelLocation:_LEFT_, cssClass:"admin_xform_name_input"});
 	case1Items.push({ref:ZaAccount.A2_confirmPassword, type:_SECRET_, msgName:ZaMsg.NAD_ConfirmPassword,label:ZaMsg.NAD_ConfirmPassword, labelLocation:_LEFT_, cssClass:"admin_xform_name_input"});														
 	case1Items.push({ref:ZaAccount.A_zimbraPasswordMustChange,align:_LEFT_, type:_CHECKBOX_,msgName:ZaMsg.NAD_MustChangePwd,label:ZaMsg.NAD_MustChangePwd+":",labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label"});
@@ -263,7 +263,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 								trueValue:"TRUE", falseValue:"FALSE",relevantBehavior:_HIDE_,
 								labelCssClass:"xform_label"
 					});
-
+	case1Items.push({ref:ZaAccount.A_zimbraHideInGal,align:_LEFT_, type:_CHECKBOX_,msgName:ZaMsg.NAD_zimbraHideInGal,label:ZaMsg.NAD_zimbraHideInGal,labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label"});
 	case1Items.push({ref:ZaAccount.A_firstName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_FirstName,label:ZaMsg.NAD_FirstName, labelLocation:_LEFT_, cssClass:"admin_xform_name_input",
 							elementChanged: function(elementValue,instanceValue, event) {
 								if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {

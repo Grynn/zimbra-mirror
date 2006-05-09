@@ -272,8 +272,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 							labelCssClass:"xform_label",
 							onChange:ZaTabView.onFormFieldChanged
 						});
-
-	case1Items.push();
+	case1Items.push({ref:ZaAccount.A_zimbraHideInGal, align:_LEFT_, type:_CHECKBOX_,  msgName:ZaMsg.NAD_zimbraHideInGal,label:ZaMsg.NAD_zimbraHideInGal,labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label"});								
 	case1Items.push({ref:ZaAccount.A_firstName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_FirstName,label:ZaMsg.NAD_FirstName, labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:150, onChange:ZaTabView.onFormFieldChanged,
 							elementChanged: function(elementValue,instanceValue, event) {
 								if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
@@ -663,7 +662,15 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 								{ref:ZaAccount.A_zimbraMailTrashLifetime, type:_SUPER_LIFETIME1_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_MailTrashLifetime,label:ZaMsg.NAD_MailTrashLifetime+":", labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},
 								{ref:ZaAccount.A_zimbraMailSpamLifetime, type:_SUPER_LIFETIME1_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_MailSpamLifetime,label:ZaMsg.NAD_MailSpamLifetime, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged}
 							]
+						},
+						{type:_SEPARATOR_, colSpan:"*"},	
+						{type:_GROUP_, 
+							items :[
+								
+							]
 						}
+						
+						
 					]
 				});
 	}
