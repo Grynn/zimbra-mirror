@@ -24,7 +24,7 @@
  */
 
 function ZmCsfeCommand() {
-}
+};
 
 // Static properties
 
@@ -44,17 +44,17 @@ function() {
 	var authToken = AjxCookie.getCookie(document, ZmCsfeCommand._COOKIE_NAME)
 	ZmCsfeCommand._authToken = authToken;
 	return authToken;
-}
+};
 
 ZmCsfeCommand.setCookieName =
 function(cookieName) {
 	ZmCsfeCommand._COOKIE_NAME = cookieName;
-}
+};
 
 ZmCsfeCommand.setServerUri =
 function(uri) {
 	ZmCsfeCommand.serverUri = uri;
-}
+};
 
 ZmCsfeCommand.setAuthToken =
 function(authToken, lifetimeMs, sessionId) {
@@ -72,24 +72,24 @@ function(authToken, lifetimeMs, sessionId) {
 	}
 	if (sessionId)
 		ZmCsfeCommand.setSessionId(sessionId);
-}
+};
 
 ZmCsfeCommand.clearAuthToken =
 function() {
 	ZmCsfeCommand._authToken = null;
 	AjxCookie.deleteCookie(document, ZmCsfeCommand._COOKIE_NAME, "/");
-}
+};
 
 ZmCsfeCommand.getSessionId =
 function() {
 	return ZmCsfeCommand._sessionId;
-}
+};
 
 ZmCsfeCommand.setSessionId =
 function(sessionId) {
 	var id = (sessionId instanceof Array) ? sessionId[0].id : sessionId;
 	ZmCsfeCommand._sessionId = parseInt(id);
-}
+};
 
 /*
 * Sends a SOAP request to the server and processes the response.
@@ -170,7 +170,7 @@ function(params) {
 			this._rpcId = AjxRpc.invoke(requestStr, uri, {"Content-Type": "application/soap+xml; charset=utf-8"}, rpcCallback);
 		} else {
 			var response = AjxRpc.invoke(requestStr, uri, {"Content-Type": "application/soap+xml; charset=utf-8"});
-			if(!params.returnXml) {
+			if (!params.returnXml) {
 				return this._getResponseData(response, false);
 			} else {
 				return response;
@@ -191,7 +191,7 @@ function(params) {
 			throw ex;
 		}
 	}
-}
+};
 
 /*
 * Takes the response to an RPC request and returns a JS object with the response data.
@@ -248,11 +248,11 @@ function(response, asyncMode) {
 	}
 	DBG.println(AjxDebug.DBG1, ["<H4> RESPONSE", (asyncMode) ? " (asynchronous)" : "" ,"</H4>"].join(""), linkName);
 
-	var data = new Object();
+	var data = {};
 		
 	if (xmlResponse) {
 		DBG.printXML(AjxDebug.DBG1, respDoc.getXml());	
-		data = respDoc._xmlDoc.toJSObject(true,false,true);
+		data = respDoc._xmlDoc.toJSObject(true, false, true);
 	} else {
 		try {	
 			eval("data=" + respDoc);
@@ -273,36 +273,14 @@ function(response, asyncMode) {
 	var fault = data.Body.Fault;
 	if (fault) {
 		// JS response with fault
-		var trace = "";
-		if(typeof(fault.Detail.Error.Trace)=='object')
-			trace = fault.Detail.Error.Trace.toString();
-		else
-			trace = fault.Detail.Error.Trace;
-			
-		var faultCode = "";
-		if(typeof(fault.Code.Value) == 'object') 
-			faultCode = fault.Code.Value.toString();
-		else
-			faultCode = fault.Code.Value;
-
-		var errorCode = "";
-		if(typeof(fault.Detail.Error.Code) == 'object') 
-			errorCode = fault.Detail.Error.Code.toString();
-		else
-			errorCode = fault.Detail.Error.Code;
-						
-		var errorDetail = "";
-		if(typeof(fault.Detail.Error.a) == 'object') 
-			errorDetail = fault.Detail.Error.a.toString();
-		else
-			errorDetail = fault.Detail.Error.a;
-									
-		var reasonText = fault.Reason.Text + (trace ? "\n"+trace : "");
+		var trace = this._getAsString(fault.Detail.Error.Trace);
+		var faultCode = this._getAsString(fault.Code.Value);
+		var errorCode = this._getAsString(fault.Detail.Error.Code);
+		var reasonText = fault.Reason.Text + (trace ? "\n" + trace : "");
 		var ex = new ZmCsfeException(reasonText, errorCode, "ZmCsfeCommand.prototype.invoke",
 									 faultCode, fault.Detail.Error.a);
-		DBG.dumpObj(AjxDebug.DBG1, ex);
 		if (asyncMode) {
-			result.set(ex, true);
+			result.set(ex, true, data.Header);
 			return result;
 		} else {
 			throw ex;
@@ -311,7 +289,6 @@ function(response, asyncMode) {
 		// bad XML or JS response that had no fault
 		var ex = new ZmCsfeException("Csfe service error", ZmCsfeException.CSFE_SVC_ERROR,
 									 "ZmCsfeCommand.prototype.invoke", "HTTP response status " + response.status);
-		DBG.dumpObj(AjxDebug.DBG1, ex);
 		if (asyncMode) {
 			result.set(ex, true);
 			return result;
@@ -328,7 +305,7 @@ function(response, asyncMode) {
 		ZmCsfeCommand.setSessionId(data.Header.context.sessionId);
 
 	return asyncMode ? result : data;
-}
+};
 
 /*
 * Runs the callback that was passed to invoke() for an async command.
@@ -354,7 +331,7 @@ function(callback, result) {
 	}
 
 	if (callback) callback.run(response);
-}
+};
 
 /**
 * Cancels this request (which must be async).
@@ -366,7 +343,17 @@ function() {
 	var req = AjxRpc.getRpcRequest(this._rpcId);
 	if (req)
 		req.cancel();
-}
+};
+
+/**
+ * Returns the given object/string as a string.
+ * 
+ * @param o		[object|string]		an object or string
+ */
+ZmCsfeCommand.prototype._getAsString =
+function(o) {
+	return !o ? "" : (typeof(o) == 'object') ? o.toString() : o;
+};
 
 // DEPRECATED - instead, use instance method invoke() above
 ZmCsfeCommand.invoke =
@@ -476,4 +463,5 @@ function(soapDoc, noAuthTokenRequired, serverUri, targetServer, useXml, noSessio
 		ZmCsfeCommand.setSessionId(data.Header.context.sessionId);
 
 	return data;
-}
+};
+

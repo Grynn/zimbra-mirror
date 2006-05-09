@@ -28,27 +28,31 @@
 * @constructor
 * @class
 * This class represents the result of a CSFE request. The data is either the 
-* response that was received, or an exception.
+* response that was received, or an exception. If the request resulted in a 
+* SOAP fault from the server, there will also be a SOAP header present.
 *
 * @author Conrad Damon
 * @param data			[Object]	response data
 * @param isException	[boolean]	true if the data is an exception object
+* @param header			[object]	the SOAP header
 */
-function ZmCsfeResult(data, isException) {
-	this.set(data, isException);
-}
+function ZmCsfeResult(data, isException, header) {
+	this.set(data, isException, header);
+};
 
 /**
 * Sets the content of the result.
 *
 * @param data			[Object]	response data
 * @param isException	[boolean]	true if the data is an exception object
+* @param header			[object]	the SOAP header
 */
 ZmCsfeResult.prototype.set =
-function(data, isException) {
+function(data, isException, header) {
 	this._data = data;
 	this._isException = (isException === true);
-}
+	this._header = header;
+};
 
 /**
 * Returns the response data. If there was an exception, throws the exception.
@@ -59,7 +63,7 @@ function() {
 		throw this._data;
 	else
 		return this._data;
-}
+};
 
 /**
 * Returns the exception object, if any.
@@ -67,9 +71,17 @@ function() {
 ZmCsfeResult.prototype.getException =
 function() {
 	return this._isException ? this._data : null;
-}
+};
 
 ZmCsfeResult.prototype.isException = 
 function() {
 	return this._isException;
-}
+};
+
+/**
+* Returns the SOAP header that came with a SOAP fault.
+*/
+ZmCsfeResult.prototype.getHeader =
+function() {
+	return this._header;
+};
