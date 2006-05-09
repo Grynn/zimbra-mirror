@@ -34,7 +34,6 @@
 function ZaGlobalConfigViewController(appCtxt, container, app) {
 	ZaXFormViewController.call(this, appCtxt, container, app,"ZaGlobalConfigViewController");
 	this._UICreated = false;
-	this._confirmMessageDialog;	
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_global_settings/global_settings.htm";			
 	this.objType = ZaEvent.S_GLOBALCONFIG;
 }
