@@ -969,7 +969,7 @@
 	text-align:right;
 }
 
-.xform_label_left {
+.xform_label_right {
 	@Label@
 	@TextPadding@
 	text-align:left;
