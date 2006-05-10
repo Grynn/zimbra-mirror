@@ -1296,6 +1296,9 @@
 .DwtSpinner-Up-disabled { background-color: #eee; }
 .DwtSpinner-Down-disabled { background-color: #eee; }
 
+.DwtSpinner-disabled .DwtSpinner-UpBtn,
+.DwtSpinner-disabled .DwtSpinner-DownBtn { opacity:.3; filter:alpha(opacity=30); }
+
 /* DwtButtonColorPicker styles */
 
 .DwtButtonColorPicker-display {
