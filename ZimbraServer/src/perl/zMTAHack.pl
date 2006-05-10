@@ -1,3 +1,5 @@
+#!/usr/bin/perl
+
 use Net::SMTP::Server;
 use Net::SMTP::Server::Client;
 use Net::SMTP::Server::Relay;
