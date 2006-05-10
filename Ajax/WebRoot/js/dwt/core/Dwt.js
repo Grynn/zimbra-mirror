@@ -59,9 +59,21 @@ Dwt.REPEAT_Y = "repeat-y";
 
 
 // display style
+/** Inline display style
+ * @type String
+ */
 Dwt.DISPLAY_INLINE = "inline";
+
+/** Block display style
+ * @type String
+ */
 Dwt.DISPLAY_BLOCK = "block";
+
+/** No display style
+ * @type String
+ */
 Dwt.DISPLAY_NONE = "none";
+
 
 // constants for layout
 /*
@@ -143,20 +155,39 @@ Dwt.Z_BUSY = 900;
  * @type Int*/
 Dwt.Z_SPLASH = 1000;
 
+
 /** Default value. Used when setting such things as size and bounds to indicate a
  * component should not be set. For example if setting size and not wishing to set
  * the height; Dwt.setSize(htmlElement, 100, Dwt.DEFAULT)
+ * @type Int
  */
 Dwt.DEFAULT = -123456789;
 
-Dwt.LOC_NOWHERE = -10000; // for positioning an element offscreen
+
+/** Offscreen position. Used when setting a elements position
+ * @type Int
+ */
+Dwt.LOC_NOWHERE = -10000;
 
 // Drag N Drop action constants
+/** No drag and drop operation
+ * @type Int
+ */
 Dwt.DND_DROP_NONE = 0;
+
+/** Copy drag and drop operation
+ * @type Int
+ */
 Dwt.DND_DROP_COPY = 1;
+
+/** Move drag and drop operation
+ * @type Int
+ */
 Dwt.DND_DROP_MOVE = 2;
 
+
 // Keys used for retrieving data
+// TODO JSDoc
 Dwt.KEY_OBJECT = "_object_";
 Dwt.KEY_ID = "_id_";
 
@@ -741,8 +772,19 @@ Dwt.addClass = function(el, c) {
 	Dwt.delClass(el, c, c);
 };
 
-// Selects a given range in an input field.  Provide a reference to the input
-// field and start and end position.
+/** 
+ * Sets the selection range. 
+ * 
+ * @param {input|iframe} input input for which to find the selection start point. This
+ * 		may be a text input field or an iframe in design mode
+ * @param {Int} start starting position
+ * @param {Int} end ending position
+ * 
+ * 
+ * @see #getSelectionStart
+ * @see #getSelectionEnd
+ * @see #setSelectionText
+ */
 Dwt.setSelectionRange = function(input, start, end) {
 	if (AjxEnv.isGeckoBased) {
 		input.setSelectionRange(start, end);
@@ -758,9 +800,21 @@ Dwt.setSelectionRange = function(input, start, end) {
 	}
 };
 
-// Retrieves the start of the selection.  For a collapsed range, this is
-// equivalent to getSelectionEnd.  Based on some reverse engineering that I
-// described here: http://www.bazon.net/mishoo/articles.epl?art_id=1292
+/** 
+ * Retrieves the start of the selection.  For a collapsed range, this is
+ * equivalent to getSelectionEnd.  Based on some reverse engineering that I
+ * described here: http://www.bazon.net/mishoo/articles.epl?art_id=1292
+ * 
+ * @param {input|iframe} input input for which to find the selection start point. This
+ * 		may be a text input field or an iframe in design mode
+ * 
+ * @return starting position of the selection
+ * @type Int
+ * 
+ * @see #getSelectionEnd
+ * @see #setSelectionText
+ * @see #setSelectionRange
+ */
 Dwt.getSelectionStart = function(input) {
 	if (AjxEnv.isGeckoBased) {
 		return input.selectionStart;
@@ -776,7 +830,19 @@ Dwt.getSelectionStart = function(input) {
 	return input.value.length;
 };
 
-// Retrieves the end of the selection in an input field.
+/** 
+ * Retrieves the end of the selection.
+ * 
+ * @param {input|iframe} input input for which to find the selection start point. This
+ * 		may be a text input field or an iframe in design mode
+ * 
+ * @return starting position of the selection
+ * @type Int
+ * 
+ * @see #getSelectionStart
+ * @see #setSelectionText
+ * @see #setSelectionRange
+ */
 Dwt.getSelectionEnd = function(input) {
 	if (AjxEnv.isGeckoBased) {
 		return input.selectionEnd;
@@ -792,6 +858,17 @@ Dwt.getSelectionEnd = function(input) {
 	return input.value.length;
 };
 
+/** 
+ * Sets the selection text
+ * 
+ * @param {input|iframe} input input for which to find the selection start point. This
+ * 		may be a text input field or an iframe in design mode
+ * @param {String} text Text to set as the selection
+ * 
+ * @see #getSelectionStart
+ * @see #getSelectionEnd
+ * @see #setSelectionRange
+ */
 Dwt.setSelectionText = function(input, text) {
 	var start = Dwt.getSelectionStart(input);
 	var end = Dwt.getSelectionEnd(input);
@@ -805,6 +882,11 @@ Dwt.setSelectionText = function(input, text) {
 		input.value = val;
 	Dwt.setSelectionRange(input, start, start + text.length);
 };
+
+
+//////////////////////////////////////////////////////////////////////////////////
+// PRIVATE METHODS
+//////////////////////////////////////////////////////////////////////////////////
 
 /** @private */
 Dwt.__checkPxVal =

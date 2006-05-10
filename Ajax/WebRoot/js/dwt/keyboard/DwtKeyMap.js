@@ -54,7 +54,7 @@ function DwtKeyMap(subclassInit) {
 	
 	this._map["DwtMenu"] = {
 		"NOINHERIT_GLOBAL": true,
-		"Esc":        DwtKeyMap.POPDOWN,
+		"Esc":        DwtKeyMap.CANCEL,
 		"Enter":	  DwtKeyMap.SELECT_CURRENT,	
 		"ArrowDown":  DwtKeyMap.SELECT_NEXT,
 		"ArrowUp":    DwtKeyMap.SELECT_PREV,
@@ -110,7 +110,7 @@ DwtKeyMap.ADD_SELECT_NEXT = i--;
 DwtKeyMap.ADD_SELECT_PREV = i--;
 DwtKeyMap.SELECT_SUBMENU = i--;
 DwtKeyMap.SELECT_PARENTMENU = i--;
-DwtKeyMap.POPDOWN = i--;
+DwtKeyMap.CANCEL = i--;
 
 delete i;
 

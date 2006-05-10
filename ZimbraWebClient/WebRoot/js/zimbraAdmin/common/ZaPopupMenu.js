@@ -71,7 +71,7 @@ function(menuItemId, listener) {
 }
 
 ZaPopupMenu.prototype.popup =
-function(delay, x, y) {
+function(delay, x, y, kbGenerated) {
 	if (delay == null)
 		delay = 0;
 	if (x == null) 
@@ -79,7 +79,7 @@ function(delay, x, y) {
 	if (y == null)
 		y = Dwt.DEFAULT;
 	this.setLocation(x, y);
-	DwtMenu.prototype.popup.call(this, delay);
+	DwtMenu.prototype.popup.call(this, delay, null, null, kbGenerated);
 }
 
 /**

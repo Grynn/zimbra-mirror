@@ -73,14 +73,14 @@ function DwtMenuItem(parent, style, radioGroupId, index, className, posStyle) {
 			this._createCascadeStyle();
 	}
 
-	this._mouseOverListener = new AjxListener(this, DwtMenuItem.prototype._mouseOverListener);
-	this._mouseOutListener = new AjxListener(this, DwtMenuItem.prototype._mouseOutListener);
-	this._mouseUpListener = new AjxListener(this, DwtMenuItem.prototype._mouseUpListener);
-	this._mouseDownListener = new AjxListener(this, DwtMenuItem.prototype._mouseDownListener);
-	this.addListener(DwtEvent.ONMOUSEOVER, this._mouseOverListener);
-	this.addListener(DwtEvent.ONMOUSEOUT, this._mouseOutListener);
-	this.addListener(DwtEvent.ONMOUSEUP, this._mouseUpListener);
-	this.addListener(DwtEvent.ONMOUSEDOWN, this._mouseDownListener);
+	this._mouseOverListenerObj = new AjxListener(this, DwtMenuItem.prototype._mouseOverListener);
+	this._mouseOutListenerObj = new AjxListener(this, DwtMenuItem.prototype._mouseOutListener);
+	this._mouseUpListenerObj = new AjxListener(this, DwtMenuItem.prototype._mouseUpListener);
+	this._mouseDownListenerObj = new AjxListener(this, DwtMenuItem.prototype._mouseDownListener);
+	this.addListener(DwtEvent.ONMOUSEOVER, this._mouseOverListenerObj);
+	this.addListener(DwtEvent.ONMOUSEOUT, this._mouseOutListenerObj);
+	this.addListener(DwtEvent.ONMOUSEUP, this._mouseUpListenerObj);
+	this.addListener(DwtEvent.ONMOUSEDOWN, this._mouseDownListenerObj);
 	this.getHtmlElement().appendChild(this._table);
 	if (parent._addItem)
 		parent._addItem(this, index);
@@ -191,19 +191,19 @@ function(enabled) {
 	if (enabled != this._enabled) {
 		DwtControl.prototype.setEnabled.call(this, enabled);
 		if (enabled) {
-			this.addListener(DwtEvent.ONMOUSEOVER, this._mouseOverListener);
-			this.addListener(DwtEvent.ONMOUSEOUT, this._mouseOutListener);
-			this.addListener(DwtEvent.ONMOUSEUP, this._mouseUpListener);
-			this.addListener(DwtEvent.ONMOUSEDOWN, this._mouseDownListener);
+			this.addListener(DwtEvent.ONMOUSEOVER, this._mouseOverListenerObj);
+			this.addListener(DwtEvent.ONMOUSEOUT, this._mouseOutListenerObj);
+			this.addListener(DwtEvent.ONMOUSEUP, this._mouseUpListenerObj);
+			this.addListener(DwtEvent.ONMOUSEDOWN, this._mouseDownListenerObj);
 			if (this._imageInfo)
 				this._setImage(this._imageInfo);
 			if (this._textCell)
 				this._textCell.className = "Text";
 		} else {
-			this.removeListener(DwtEvent.ONMOUSEOVER, this._mouseOverListener);
-			this.removeListener(DwtEvent.ONMOUSEOUT, this._mouseOutListener);
-			this.removeListener(DwtEvent.ONMOUSEUP, this._mouseUpListener);
-			this.removeListener(DwtEvent.ONMOUSEDOWN, this._mouseDownListener);
+			this.removeListener(DwtEvent.ONMOUSEOVER, this._mouseOverListenerObj);
+			this.removeListener(DwtEvent.ONMOUSEOUT, this._mouseOutListenerObj);
+			this.removeListener(DwtEvent.ONMOUSEUP, this._mouseUpListenerObj);
+			this.removeListener(DwtEvent.ONMOUSEDOWN, this._mouseDownListenerObj);
 			if (this._disabledImageInfo)
 				this._setImage(this._disabledImageInfo);
 			if (this._textCell)
@@ -316,6 +316,11 @@ DwtMenuItem.prototype.getText =
 function() {
 	if ((this._style == DwtMenuItem.SEPARATOR_STYLE) != 0) return null;
 	return this._textCell.innerHTML;
+}
+
+DwtMenuItem.prototype.getStyle =
+function() {
+	return this._style;
 }
 
 DwtMenuItem.prototype.setText =
@@ -449,7 +454,7 @@ function(ev) {
 }
 
 DwtMenuItem.prototype._popupMenu =
-function(delay) {
+function(delay, kbGenerated) {
 	var menu = this.getMenu();
 	var pp = this.parent.parent;
 	var pb = this.getBounds();
@@ -478,8 +483,7 @@ function(delay) {
 		//y = ((y + s.y) >= ws.y) ? y - (y + s.y - ws.y) : y;
 	}
 	//this.setLocation(x, y);
-
-	menu.popup(delay, x, y);
+	menu.popup(delay, x, y, kbGenerated);
 };
 
 DwtMenuItem.prototype._popdownMenu =
@@ -523,6 +527,7 @@ function(ev) {
 		return;
 	var activeItem = this.parent._getActiveItem();
 	this.parent.clearExternallySelectedItems();
+	this.parent.setCurrentItem(this);
 	if (this._style == DwtMenuItem.CASCADE_STYLE || this._style == DwtMenuItem.CHECK_STYLE
 		|| this._style == DwtMenuItem.RADIO_STYLE) {
 		if (activeItem)
@@ -531,14 +536,14 @@ function(ev) {
 			this._iconCell.className = this._iconAreaSelClassName;
 		if (this._checkedCell)
 			this._checkedCell.className = this._checkedAreaSelClassName;
-		if (this._menu) {
+		if (this._menu && !ev.ersatz) {
 			this._popupMenu(DwtMenuItem._MENU_POPUP_DELAY);
 		}
 		this.setSelectedStyle();
 	} else if (this._style == DwtMenuItem.PUSH_STYLE || this._style == DwtMenuItem.SELECT_STYLE) {
 		if (activeItem)
 			activeItem._deselect(0);
-		if (activeItem && this._menu) {
+		if (activeItem && this._menu && !ev.ersatz) {
 			this._popupMenu(0);
 			this.setSelectedStyle();
 		} else {

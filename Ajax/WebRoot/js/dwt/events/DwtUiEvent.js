@@ -41,6 +41,7 @@ function() {
 	this.docY = -1;
 	this.elementX = -1;
 	this.elementY = -1;
+	this.ersatz = false; // True means this event was manufactured
 	this._stopPropagation = false;
 	this._returnValue = true;
 }
@@ -132,6 +133,7 @@ function(dest, src) {
 	dest.docY = src.docY;
 	dest.elementX = src.elementX;
 	dest.elementY = src.elementY;
+	dest.ersatz = src.ersatz;
 	dest._stopPropagation = src._stopPropagation;
 	dest._returnValue = src._returnValue;
 }
@@ -178,6 +180,8 @@ function(ev) {
 		this.elementX = Dwt.DEFAULT;
 		this.elementY = Dwt.DEFAULT;
 	}
+	
+	this.ersatz = false;
 	return ev;
 }
 

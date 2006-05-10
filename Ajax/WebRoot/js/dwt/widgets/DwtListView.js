@@ -954,6 +954,7 @@ function(target) {
 	mev.reset();
 	mev.target = target;
 	mev.button = DwtMouseEvent.LEFT;
+	mev.ersatz = true;
 	this._itemClicked(target, mev);
 	this._doubleClickListener(mev);
 }
@@ -994,6 +995,7 @@ function(target, button, ctrl, shift, alt, docX, docY) {
 	mev.shiftKey = shift;
 	mev.altKey = alt;
 	mev.ctrlKey = ctrl;
+	mev.ersatz = true;
 	this._mouseUpListener(mev);
 }
 
@@ -1648,8 +1650,11 @@ function(actionCode, ev) {
 		
 		case DwtKeyMap.ACTION:
 			if (this._evtMgr.isListenerRegistered(DwtEvent.ACTION)) {
-				var p = Dwt.toWindow(this._kbAnchor);
+				var p = Dwt.toWindow(this._kbAnchor, 0, 0);
 				var s = Dwt.getSize(this._kbAnchor);
+DBG.println("p: (" + p.x + ", " + p.y + ")");
+DBG.println("s: (" + s.x + ", " + s.y + ")");
+DBG.println("_KBANCHOR: " + this._kbAnchor + " - ACTION EMULATE: " + (p.x + s.x/4) + ", " + (p.y + s.y / 2));
 				this._emulateSingleClick(this._kbAnchor, DwtMouseEvent.RIGHT,
 						false, false, false, p.x + s.x / 4, p.y + s.y / 2);
 			}
