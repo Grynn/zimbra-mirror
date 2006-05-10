@@ -44,7 +44,24 @@ ZaAccountMemberOfListView.A_isgroup = "isgroup" ;
 ZaAccountMemberOfListView.A_via = "via" ;
 ZaAccountMemberOfListView._addList = [];
 ZaAccountMemberOfListView._removeList = [];
-ZaAccountMemberOfListView.SEARCH_LIMIT = 2 ;
+ZaAccountMemberOfListView.SEARCH_LIMIT = 25 ;
+
+//modify the ZaAccount and ZaDistributionList model
+ZaAccountMemberOfListView.modelItems = [
+		{id:ZaAccount.A2_isgroup, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaAccount.A2_memberOf + "/" + ZaAccount.A2_isgroup},
+		{id:ZaAccount.A2_directMemberList, type: _DWT_LIST_, ref:ZaAccount.A2_memberOf + "/" + ZaAccount.A2_directMemberList},
+		{id:ZaAccount.A2_indirectMemberList, type: _DWT_LIST_, ref:ZaAccount.A2_memberOf + "/" + ZaAccount.A2_indirectMemberList},
+		{id:ZaAccount.A2_nonMemberList, type: _DWT_LIST_, ref:ZaAccount.A2_memberOf + "/" + ZaAccount.A2_nonMemberList},
+		{id:ZaAccount.A2_directMemberList + "_offset", type:_NUMBER_, defaultValue: 0},
+		{id:ZaAccount.A2_nonMemberList + "_offset", type:_NUMBER_, defaultValue: 0},
+		{id:ZaAccount.A2_directMemberList + "_more", type:_NUMBER_, defaultValue: 0},
+		{id:ZaAccount.A2_nonMemberList + "_more", type:_NUMBER_, defaultValue: 0},
+		{id:ZaAccount.A2_showSameDomain, type: _ENUM_, choices:ZaModel.BOOLEAN_CHOICES, 
+			ref:ZaAccount.A2_memberOf + "/" + ZaAccount.A2_showSameDomain, defaultValue: "FALSE" },
+		{id:"query", type:_STRING_}
+]
+ZaAccount.myXModel.items = ZaAccount.myXModel.items.concat(ZaAccountMemberOfListView.modelItems);
+ZaDistributionList.myXModel.items = ZaDistributionList.myXModel.items.concat(ZaAccountMemberOfListView.modelItems);
 /*
 ZaAccountMemberOfListView.NONMEMBERPAGEBACK_OFFSET = 0; 
 ZaAccountMemberOfListView.NONMEMBER_MORE = false;
@@ -96,7 +113,48 @@ function (app, val, by){
 		}
 
 	}catch (ex){
-		app.getCurrentController()._handleException(ex, "ZaAccount.prototype.load", null, false);
+		app.getCurrentController()._handleException(ex, "ZaAccountMemberOfListView.getAccountMemberShip", null, false);
+	}
+	
+	var memberOf = {	directMemberList: directML,
+						indirectMemberList: indirectML,
+						nonMemberList: nonML
+					};
+	return memberOf ;
+}
+
+ZaAccountMemberOfListView.getDlMemberShip = 
+function (app, val, by){
+	var directML = [];
+	var indirectML = [];
+	var nonML = [];
+		 
+	try {
+		soapDoc = AjxSoapDoc.create("GetDistributionListMembershipRequest", "urn:zimbraAdmin", null);
+		var elBy = soapDoc.set("dl", val);
+		elBy.setAttribute("by", by);
+
+		var getDlMemberShipCommand = new ZmCsfeCommand();
+		var params = new Object();
+		params.soapDoc = soapDoc;	
+		var resp = getDlMemberShipCommand.invoke(params).Body.GetDistributionListMembershipResponse;
+		if (resp.dl && (resp.dl instanceof Array)){
+			var dls = resp.dl ;
+			var n = resp.dl.length ;
+			for (var i=0, d=0, m=0; m < n; m++ ){
+				//if (dls[m].isgroup) {
+				if (dls[m].via && (dls[m].via.length >0)){ //indirect dl
+					indirectML[i] = { name: dls[m].name, id: dls[m].id, via: dls[m].via, isgroup: dls[m].isgroup} ;
+					i ++ ;
+				}else{
+					directML[d] = { name: dls[m].name, id: dls[m].id, isgroup: dls[m].isgroup } ;
+					d ++ ;
+				}
+			}
+		}
+
+	}catch (ex){
+		app.getCurrentController()._handleException(ex, "ZaAccountMemberOfListView.getDlMemberShip", null, false);
 	}
 	
 	var memberOf = {	directMemberList: directML,
@@ -666,7 +724,11 @@ S_Dwt_List_XFormItem.prototype.setItems = function (itemArray){
 						}
 					}
 					
-					if (this.id.indexOf(ZaAccount.A2_nonMemberList) >= 0){ //filter out the directMember in nonMemberList
+					if (this.id.indexOf(ZaAccount.A2_nonMemberList) >= 0){ 
+						//filter out the dl itself in the DL View
+						if (instance.id == itemArray[i].id) continue ;
+						
+						//filter out the directMember in nonMemberList
 						j = ZaAccountMemberOfListView._find(
 								instance[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList], 
 								itemArray[i][ZaAccountMemberOfListView.A_name]);

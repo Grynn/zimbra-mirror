@@ -347,7 +347,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	var indirectMemberOfHeaderList = new ZaAccountMemberOfsourceHeaderList(ZaAccountMemberOfsourceHeaderList.INDIRECT);
 	var nonMemberOfHeaderList = new ZaAccountMemberOfsourceHeaderList(ZaAccountMemberOfsourceHeaderList.NON);
 	
-	//TODO: MemberOf Tab
+	//MemberOf Tab
 	var case3={type:_CASE_, numCols:4, relevant:("instance[ZaModel.currentTab] == " + _tab3), colSizes: [450, 20, 420, 30],
 					items: [
 						//isgroup checkbox

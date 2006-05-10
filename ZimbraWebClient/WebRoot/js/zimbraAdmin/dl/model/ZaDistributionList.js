@@ -48,6 +48,17 @@ function ZaDistributionList(app, id, name, memberList, description, notes) {
 	this.memPagenum=1;
 	this.memNumPages=1;
 	this.query="";
+	//membership related instance variables
+	this[ZaAccount.A2_memberOf] = {	directMemberList: [],
+									indirectMemberList: [],
+									nonMemberList: []
+								};
+	this[ZaAccount.A2_directMemberList + "_more"] = 0;
+	this[ZaAccount.A2_directMemberList + "_offset"] = 0;
+	this[ZaAccount.A2_indirectMemberList + "_more"] = 0;
+	this[ZaAccount.A2_indirectMemberList + "_offset"] = 0;	
+	this[ZaAccount.A2_nonMemberList + "_more"] = 0;
+	this[ZaAccount.A2_nonMemberList + "_offset"] = 0;
 }
 
 ZaDistributionList.prototype = new ZaItem;
@@ -112,6 +123,9 @@ ZaDistributionList.prototype.clone = function () {
 	dl.memPagenum = this.memPagenum;
 	dl.memNumPages = this.memNumPages;	
 	dl.isgroup = this.isgroup ;
+	
+	//clone the membership information
+	dl[ZaAccount.A2_memberOf] = this [ZaAccount.A2_memberOf];	
 	return dl;
 };
 
@@ -247,6 +261,28 @@ function(tmpObj) {
 	if(tmpObj._removeList)		
 		this.removeDeletedMembers(tmpObj._removeList);
 		
+	//add the membership information
+	//update the member of first
+	try {
+		if (ZaAccountMemberOfListView._addList.length >0) { //you have new membership to be added.
+			ZaAccountMemberOfListView.addNewGroupsBySoap(this, ZaAccountMemberOfListView._addList);
+		}	
+		ZaAccountMemberOfListView._addList = []; //reset
+	}catch (ex){
+		ZaAccountMemberOfListView._addList = []; //reset
+		this._app.getCurrentController()._handleException(ex, "ZaDistributionList.prototype.modify: add group failed", null, false);	//try not to halt the account modification	
+	}
+	//remvoe may not needed during the creation time.
+	try {
+		if (ZaAccountMemberOfListView._removeList.length >0){//you have membership to be removed
+			ZaAccountMemberOfListView.removeGroupsBySoap(this, ZaAccountMemberOfListView._removeList);
+		}
+		ZaAccountMemberOfListView._removeList = []; //reset
+	}catch (ex){
+		ZaAccountMemberOfListView._removeList = []; //reset
+		this._app.getCurrentController()._handleException(ex, "ZaDistributionList.prototype.modify: remove group failed", null, false);		
+	}
+		
 	this.refresh();
 	this.markClean();
 	return true;
@@ -312,10 +348,34 @@ function(tmpObj, app) {
 	var dl = new ZaDistributionList(app);
 	dl.initFromJS(resp.dl[0]);
 	//dl.initFromDom(resp.firstChild);
+		
 	if(tmpObj._addList) {
 		dl.addNewMembers(tmpObj._addList);
 		dl.refresh();
 	}
+	
+	//add the membership information
+	//update the member of first
+	try {
+		if (ZaAccountMemberOfListView._addList.length >0) { //you have new membership to be added.
+			ZaAccountMemberOfListView.addNewGroupsBySoap(dl, ZaAccountMemberOfListView._addList);
+		}	
+		ZaAccountMemberOfListView._addList = []; //reset
+	}catch (ex){
+		ZaAccountMemberOfListView._addList = []; //reset
+		this._app.getCurrentController()._handleException(ex, "ZaDistributionList.create: add group failed", null, false);	//try not to halt the account modification	
+	}
+	//remvoe may not needed during the creation time.
+	try {
+		if (ZaAccountMemberOfListView._removeList.length >0){//you have membership to be removed
+			ZaAccountMemberOfListView.removeGroupsBySoap(dl, ZaAccountMemberOfListView._removeList);
+		}
+		ZaAccountMemberOfListView._removeList = []; //reset
+	}catch (ex){
+		ZaAccountMemberOfListView._removeList = []; //reset
+		this._app.getCurrentController()._handleException(ex, "ZaDistributionList.create: remove group failed", null, false);		
+	}
+	
 	dl.markClean();	
 	return dl;
 }
@@ -417,6 +477,14 @@ ZaDistributionList.prototype.getMembers = function (limit) {
 			}
 			this.id = resp.dl[0].id;
 			this.initFromJS(resp.dl[0]);
+			
+			//Make a GetAccountMembershipRequest
+	this[ZaAccount.A2_memberOf] = ZaAccountMemberOfListView.getDlMemberShip(this._app, this.id, "id" ) ;
+	this[ZaAccount.A2_directMemberList + "_more"] = 
+			(this[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList].length > ZaAccountMemberOfListView.SEARCH_LIMIT) ? 1: 0;
+	this[ZaAccount.A2_indirectMemberList + "_more"] = 
+			(this[ZaAccount.A2_memberOf][ZaAccount.A2_indirectMemberList].length > ZaAccountMemberOfListView.SEARCH_LIMIT) ? 1: 0;
+			
 		} catch (ex) {
 			this._app.getCurrentController()._handleException(ex, "ZaDistributionList.prototype.getMembers", null, false);
 			//DBG.dumpObj(ex);
