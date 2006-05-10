@@ -44,6 +44,13 @@ ZaAccountMemberOfListView.A_isgroup = "isgroup" ;
 ZaAccountMemberOfListView.A_via = "via" ;
 ZaAccountMemberOfListView._addList = [];
 ZaAccountMemberOfListView._removeList = [];
+ZaAccountMemberOfListView.SEARCH_LIMIT = 2 ;
+/*
+ZaAccountMemberOfListView.NONMEMBERPAGEBACK_OFFSET = 0; 
+ZaAccountMemberOfListView.NONMEMBER_MORE = false;
+ZaAccountMemberOfListView.DIRECTMEMBERPAGEBACK_OFFSET = 0;
+ZaAccountMemberOfListView.DIRECTMEMBER_MORE = false;
+*/
 //ZaAccountMemberOfListView._toBeConfirmedList = [];
 
 /**
@@ -129,19 +136,6 @@ function(value, event, form){
 	instance[ZaAccount.A2_memberOf]["showGroupOnlyAction"] = false ; //turn off the flag
 	return value;
 }
-
-
-ZaAccountMemberOfListView.backButtonHndlr = 
-function (event){
-	
-};
-
-
-ZaAccountMemberOfListView.fwdButtonHndlr =
-function(event){
-	
-};
-
 
 ZaAccountMemberOfListView.removeAllGroups =
 function(event, listId){
@@ -308,7 +302,7 @@ function(event, listId){
 };
 
 ZaAccountMemberOfListView._addSelectedLists=
-function (form, listArr){
+function (form, listArr){	
 	//var directMemberListItem = form.getItemsById(ZaAccount.A2_directMemberList)[0];
 	var instance = form.getInstance();
 	var memberOf = instance[ZaAccount.A2_memberOf];
@@ -319,7 +313,7 @@ function (form, listArr){
 	form.parent.setDirty(true);
 	
 	//form.setInstance(instance);
-	form.refresh();	
+	form.refresh();		
 };
 
 
@@ -354,6 +348,18 @@ function (listItemId){
 	var list = this.getItemsById(listItemId)[0].widget.getList();
 	if (list != null) return ( list.size() > 0);
 	return false;
+};
+
+ZaAccountMemberOfListView.shouldEnableBackButton =
+function(listItemId){
+	var offset = this.getInstance()[listItemId + "_offset"] ;
+	return ((offset && offset > 0) ? true : false) ;	
+};
+
+ZaAccountMemberOfListView.shouldEnableForwardButton =
+function (listItemId){
+	var more = this.getInstance()[listItemId + "_more"] ;
+	return ((more && more > 0) ? true : false) ;		
 };
 
 /*
@@ -394,50 +400,75 @@ function (account, removeArray){
 	}
 }
 
-ZaAccountMemberOfListView.shouldEnableBackButton =
-function(){
-	
-};
-
-ZaAccountMemberOfListView.shouldEnableForwardButton =
-function (){
-
-
-};
-/*
-ZaAccountMemberOfListView.popMenu =
-function (listWidget){
-	popupOperations = [new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.PQ_Delete_tt, null, null, new AjxListener(listWidget, ZaMTAXFormView.popupMenuListener, ZaMTA.ActionDelete)),
-	new ZaOperation(ZaOperation.REQUEUE, ZaMsg.TBB_Requeue, ZaMsg.PQ_Requeue_tt, null, null, new AjxListener(listWidget, ZaMTAXFormView.popupMenuListener,ZaMTA.ActionRequeue ))];
-
-	var refParts = this.getRef().split("/");
-	var qName = refParts[0];
-	if(qName == ZaMTA.A_HoldQ) {
-		popupOperations.push(new ZaOperation(ZaOperation.RELEASE, ZaMsg.TBB_Release, ZaMsg.PQ_Release_tt, null, null, new AjxListener(listWidget, ZaMTAXFormView.popupMenuListener,ZaMTA.ActionRelease)));
-	} else {
-		popupOperations.push(new ZaOperation(ZaOperation.HOLD, ZaMsg.TBB_Hold, ZaMsg.PQ_Hold_tt, null, null, new AjxListener(listWidget, ZaMTAXFormView.popupMenuListener,ZaMTA.ActionHold )));
-	}
-	listWidget.actionMenu = new ZaPopupMenu(listWidget, "ActionMenu", null, popupOperations);
-	listWidget.addActionListener(new AjxListener(listWidget, ZaMTAXFormView.listActionListener));		
-	listWidget.xFormItem = this;
-	
-} */
-
 /**
  * search the directory for all the distribution lists when the search button is clicked.
  */
 ZaAccountMemberOfListView.prototype.srchButtonHndlr =
 function (){
+	var item = this ;
+	ZaAccountMemberOfListView.doSearch(item, 0) ;
+}
+
+ZaAccountMemberOfListView.backButtonHndlr = 
+function (event, listItemId){
+	var currentOffset = this.getInstanceValue("/" + listItemId + "_offset") ;
+	if (currentOffset == null) currentOffset = 0;
+	var nextOffset = 0;
+	if (listItemId == ZaAccount.A2_nonMemberList) {		
+		nextOffset = currentOffset - ZaAccountMemberOfListView.SEARCH_LIMIT ;  
+		ZaAccountMemberOfListView.doSearch(this, nextOffset) ;
+	}else{ //directMemmberList // if (listItemId == ZaAccount.A2_directMemberList)
+		nextOffset = currentOffset - ZaAccountMemberOfListView.SEARCH_LIMIT ;
+		this.setInstanceValue(nextOffset, "/" + listItemId + "_offset" );
+		this.setInstanceValue(1, "/" + listItemId + "_more");	
+		this.getForm().refresh() ;
+	}
+};
+
+ZaAccountMemberOfListView.fwdButtonHndlr =
+function(event, listItemId){
+	var instance = this.getInstance();
+	var currentOffset = this.getInstanceValue("/" + listItemId + "_offset") ;	
+	if (currentOffset == null) currentOffset = 0;
+	var nextOffset = 0;
+		
+	if (listItemId == ZaAccount.A2_nonMemberList) {		
+		nextOffset = currentOffset + ZaAccountMemberOfListView.SEARCH_LIMIT ;  
+		ZaAccountMemberOfListView.doSearch(this, nextOffset) ;
+	}else{ // if (listItemId == ZaAccount.A2_directMemberList){ //directMemmberList
+		nextOffset = currentOffset + ZaAccountMemberOfListView.SEARCH_LIMIT ;
+				
+		if ((nextOffset + ZaAccountMemberOfListView.SEARCH_LIMIT) 
+				< instance[ZaAccount.A2_memberOf][listItemId].length){
+			
+			this.setInstanceValue(1, "/" + listItemId + "_more");
+		}else{
+			this.setInstanceValue(0, "/" + listItemId + "_more");
+		}
+		this.setInstanceValue(nextOffset, "/" + listItemId + "_offset");
+		this.getForm().refresh();
+	}
+};
+
+/**
+ * search for the dls or groups
+ * 
+ */
+ZaAccountMemberOfListView.doSearch=
+function (item, offset){
+	var arr = [] ;
 	//the preassumption is that both memberOf is the name of the attr of the instance 
-	var xform = this.getForm() ; //this refers to a xform item
+	var xform = item.getForm() ; //item refers to a xform item
 	if (xform){
 		var curInstance = xform.getInstance();
+		
+		if (! offset) offset = 0 ;
+		
 		var memberOfObj = curInstance[ZaAccount.A2_memberOf] ;
 		try {
 			var sortby = ZaAccount.A_name ; 
-			var searchByDomain = (memberOfObj [ZaAccount.A2_showSameDomain] == "TRUE") ? true : false ;
-			var domainName = null;
-			
+			var searchByDomain = (memberOfObj [ZaAccount.A2_showSameDomain] && (memberOfObj [ZaAccount.A2_showSameDomain] == "TRUE")) ? true : false ;
+			var domainName = null;			
 			
 			if (ZaSettings.DOMAINS_ENABLED){
 				if (searchByDomain){
@@ -454,22 +485,22 @@ function (){
 			var query = ZaSearch.getSearchByNameQuery(valStr);
 			var params = { 	query: query ,
 							sortBy: sortby,
-							limit : 0,
-							offset: 0,
+							limit : ZaAccountMemberOfListView.SEARCH_LIMIT,
+							offset: offset,
 							domain: domainName,
 							applyCos: 0,
 							attrs: attrs,
 							types: [ZaSearch.DLS]
-						 }
+						 } ;
 					
 			var result = ZaSearch.searchDirectory(params).Body.SearchDirectoryResponse;
-		
+			curInstance [ZaAccount.A2_nonMemberList + "_more"] = (result.more ? 1 : 0) ;
+			
 			var list = new ZaItemList(ZaDistributionList, null);
 			list.loadFromJS(result);
-			var arr = list.getArray();
-			
+			arr = list.getArray();		
 			var nonMemberList = new Array();
-			for(var i=0; i<arr.length; i++) {
+			for(var i=0; i<arr.length; i++) {				
 				nonMemberList.push({
 									name: arr[i].name,
 									id: arr[i].id,
@@ -477,17 +508,32 @@ function (){
 									});
 			}
 				
-			memberOfObj[ZaAccount.A2_nonMemberList] = nonMemberList ;			
-			xform.setInstance(curInstance) ;
+			memberOfObj[ZaAccount.A2_nonMemberList] = nonMemberList ;	
+			
+			//set the instance variable listItemId_offset & listItemId_more 
+			curInstance [ZaAccount.A2_nonMemberList + "_offset"] = offset;			
+					
+			//xform.setInstance(curInstance) ;
+			xform.refresh();
 		}catch (ex){
-			xfrom.parent._app.getCurrentController()._handleException(
+			xform.parent._app.getCurrentController()._handleException(
 				ex, "ZaAccountMemberOfListView.prototype.srchButtonHndlr");
 		}	
-		
-		return true;
 	}
+		
+	return true;	
 }
 
+ZaAccountMemberOfListView.join =
+function (memberListArr){
+	var result = [];
+	for(var i=0; i<memberListArr.length; i++) {
+		if (memberListArr[i].name) {
+			result.push(memberListArr[i].name);
+		}
+	}
+	return result.join();
+}
 ZaAccountMemberOfListView.prototype._createItemHtml = function (group, now, isDndIcon){
 	var html = new Array(50);
 	var	div = document.createElement("div");
@@ -587,12 +633,33 @@ S_Dwt_List_XFormItem.prototype.setItems = function (itemArray){
 	var isGroupOnly = instance[ZaAccount.A2_memberOf][ZaAccountMemberOfListView.A_isgroup];
 	
 	if (itemArray && itemArray.length > 0) {	
+		var offset = 0 ;
+		var more = 0;
+		var len = itemArray.length ;
+		if (this.id.indexOf(ZaAccount.A2_indirectMemberList) >= 0){
+			offset = instance [ZaAccount.A2_indirectMemberList + "_offset"] ;
+			if (offset == null) offset = 0;
+			more = instance [ ZaAccount.A2_indirectMemberList + "_more"] ;
+			if (more == null) more = 0;
+			if (more > 0) {
+				len = offset + ZaAccountMemberOfListView.SEARCH_LIMIT ;
+			}
+		}else if (this.id.indexOf(ZaAccount.A2_directMemberList) >= 0){
+			offset = instance [ZaAccount.A2_directMemberList + "_offset"] ;
+			if (offset == null) offset = 0;
+			more = instance [ ZaAccount.A2_directMemberList + "_more"] ;
+			if (more == null) more = 0;
+			if (more > 0) {
+				len = offset + ZaAccountMemberOfListView.SEARCH_LIMIT ;
+			}
+		}
+		
 		
 		//filter out the itemArray first based on the checkboxes
 		var filteredItemArray = new Array();
 		var j = -1;
 		//if (isGroupOnlyCkbAction || (this.id.indexOf(ZaAccount.A2_nonMemberList) >= 0)){
-				for(var i=0; i<itemArray.length; i++) {					
+				for(var i=offset; i<len; i++) {					
 					if (isGroupOnly == "TRUE" ){
 						if (! itemArray[i][ZaAccountMemberOfListView.A_isgroup]) {
 							continue;
@@ -616,7 +683,7 @@ S_Dwt_List_XFormItem.prototype.setItems = function (itemArray){
 		}*/
 				
 		//we have to compare the objects, because XForm calls this method every time an item in the list is selected
-		if(filteredItemArray.join() != existingArr.join() ) {
+		if(ZaAccountMemberOfListView.join(filteredItemArray) != ZaAccountMemberOfListView.join (existingArr) ) {
 			var preserveSelection = this.getInheritedProperty("preserveSelection");
 			var selection = null;
 			if(preserveSelection) {

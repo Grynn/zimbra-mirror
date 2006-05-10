@@ -72,7 +72,14 @@ function(entry) {
 	
 	//add the member group
 	this._containedObject[ZaAccount.A2_memberOf] = entry [ZaAccount.A2_memberOf];
-		
+	//add the memberList page information
+	this._containedObject[ZaAccount.A2_directMemberList + "_offset"] = entry[ZaAccount.A2_directMemberList + "_offset"];
+	this._containedObject[ZaAccount.A2_directMemberList + "_more"] = entry[ZaAccount.A2_directMemberList + "_more"];
+	this._containedObject[ZaAccount.A2_indirectMemberList + "_offset"] = entry[ZaAccount.A2_indirectMemberList + "_offset"];
+	this._containedObject[ZaAccount.A2_indirectMemberList + "_more"] = entry[ZaAccount.A2_indirectMemberList + "_more"];
+	this._containedObject[ZaAccount.A2_nonMemberList + "_offset"] = entry[ZaAccount.A2_nonMemberList + "_offset"];
+	this._containedObject[ZaAccount.A2_nonMemberList + "_more"] = entry[ZaAccount.A2_nonMemberList + "_more"];
+					
 	if(ZaSettings.COSES_ENABLED) {	
 		var cosList = this._app.getCosList().getArray();
 		
@@ -387,13 +394,14 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 											      relevantBehavior:_DISABLE_},
 												{type:_CELLSPACER_},
 												{type:_DWT_BUTTON_, label:ZaMsg.Previous, width:75, id:"backButton", icon:"LeftArrow", disIcon:"LeftArrowDis", 	
-													onActivate:"ZaAccountMemberOfListView.backButtonHndlr.call(this,event)", 
-													relevantBehavior:_DISABLE_, relevant:"ZaAccountMemberOfListView.shouldEnableBackButton.call(this)"
+													onActivate:"ZaAccountMemberOfListView.backButtonHndlr.call(this,event, ZaAccount.A2_directMemberList)", 
+													relevantBehavior:_DISABLE_, relevant:"ZaAccountMemberOfListView.shouldEnableBackButton.call(this, ZaAccount.A2_directMemberList)"
 											    },								       
 												{type:_CELLSPACER_},
 												{type:_DWT_BUTTON_, label:ZaMsg.Next, width:75, id:"fwdButton", icon:"RightArrow", disIcon:"RightArrowDis",	
-													onActivate:"ZaAccountMemberOfListView.fwdButtonHndlr.call(this,event)", 
-													relevantBehavior:_DISABLE_, relevant:"ZaAccountMemberOfListView.shouldEnableForwardButton.call(this)"
+													onActivate:"ZaAccountMemberOfListView.fwdButtonHndlr.call(this,event, ZaAccount.A2_directMemberList)", 
+													relevantBehavior:_DISABLE_, 
+													relevant:"ZaAccountMemberOfListView.shouldEnableForwardButton.call(this, ZaAccount.A2_directMemberList)"
 											    },								       
 												{type:_CELLSPACER_}									
 											]
@@ -415,7 +423,27 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 										{ref: ZaAccount.A2_indirectMemberList, type: _S_DWT_LIST_, width: "100%", height: 200,
 											cssClass: "DLSource", widgetClass: ZaAccountMemberOfListView, 
 											headerList: indirectMemberOfHeaderList, defaultColumnSortable: 0,
-											forceUpdate: true }	
+											forceUpdate: true }	,
+										{type:_SPACER_, height:"5"},
+										{type:_GROUP_, width:"100%", numCols:8, colSizes:[85,5, 85,"100%",80,5,80,5], 
+											items:[
+												{type:_CELLSPACER_},
+												{type:_CELLSPACER_},
+												{type:_CELLSPACER_},
+												{type:_CELLSPACER_},
+												{type:_DWT_BUTTON_, label:ZaMsg.Previous, width:75, id:"backButton", icon:"LeftArrow", disIcon:"LeftArrowDis", 	
+													onActivate:"ZaAccountMemberOfListView.backButtonHndlr.call(this,event, ZaAccount.A2_indirectMemberList)", 
+													relevantBehavior:_DISABLE_, relevant:"ZaAccountMemberOfListView.shouldEnableBackButton.call(this, ZaAccount.A2_indirectMemberList)"
+											    },								       
+												{type:_CELLSPACER_},
+												{type:_DWT_BUTTON_, label:ZaMsg.Next, width:75, id:"fwdButton", icon:"RightArrow", disIcon:"RightArrowDis",	
+													onActivate:"ZaAccountMemberOfListView.fwdButtonHndlr.call(this,event, ZaAccount.A2_indirectMemberList)", 
+													relevantBehavior:_DISABLE_, 
+													relevant:"ZaAccountMemberOfListView.shouldEnableForwardButton.call(this, ZaAccount.A2_indirectMemberList)"
+											    },								       
+												{type:_CELLSPACER_}									
+											]
+										}
 									]
 								}
 								//{type:_CELLSPACER_}	
@@ -461,7 +489,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 						         },
 						        {type:_SPACER_, height:"5"},
 								
-								{ref: ZaAccount.A2_nonMemberList, type: _S_DWT_LIST_, width: "100%", height: 420,
+								{ref: ZaAccount.A2_nonMemberList, type: _S_DWT_LIST_, width: "100%", height: 455,
 									cssClass: "DLSource", widgetClass: ZaAccountMemberOfListView, 
 									headerList: nonMemberOfHeaderList, defaultColumnSortable: 0,
 									//createPopupMenu: 
@@ -482,13 +510,13 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 										relevantBehavior:_DISABLE_},
 										{type:_CELLSPACER_},
 										{type:_DWT_BUTTON_, label:ZaMsg.Previous, width:75, id:"backButton", icon:"LeftArrow", disIcon:"LeftArrowDis",
-											relevantBehavior:_DISABLE_, relevant:"ZaAccountMemberOfListView.shouldEnableBackButton.call(this)",
-											onActivate:"ZaAccountMemberOfListView.backButtonHndlr.call(this,event)"
+											relevantBehavior:_DISABLE_, relevant:"ZaAccountMemberOfListView.shouldEnableBackButton.call(this, ZaAccount.A2_nonMemberList)",
+											onActivate:"ZaAccountMemberOfListView.backButtonHndlr.call(this,event, ZaAccount.A2_nonMemberList)"
 										},								       
 										{type:_CELLSPACER_},
 										{type:_DWT_BUTTON_, label:ZaMsg.Next, width:75, id:"fwdButton", icon:"RightArrow", disIcon:"RightArrowDis",
-										 	relevantBehavior:_DISABLE_, relevant:"ZaAccountMemberOfListView.shouldEnableForwardButton.call(this)",
-											onActivate:"ZaAccountMemberOfListView.fwdButtonHndlr.call(this,event)"									
+										 	relevantBehavior:_DISABLE_, relevant:"ZaAccountMemberOfListView.shouldEnableForwardButton.call(this, ZaAccount.A2_nonMemberList)",
+											onActivate:"ZaAccountMemberOfListView.fwdButtonHndlr.call(this,event, ZaAccount.A2_nonMemberList)"									
 										},								       
 										{type:_CELLSPACER_}	
 									  ]

@@ -590,15 +590,25 @@ ZaItem.createMethods["ZaAccount"].push(ZaAccount.createMethod);
 ZaAccount.modifyMethod =
 function(mods) {
 	//update the member of first
-	if (ZaAccountMemberOfListView._addList.length >0) { //you have new membership to be added.
-		ZaAccountMemberOfListView.addNewGroupsBySoap(this, ZaAccountMemberOfListView._addList);
-	}	
-	ZaAccountMemberOfListView._addList = []; //reset
-	
-	if (ZaAccountMemberOfListView._removeList.length >0){//you have membership to be removed
-		ZaAccountMemberOfListView.removeGroupsBySoap(this, ZaAccountMemberOfListView._removeList);
+	try {
+		if (ZaAccountMemberOfListView._addList.length >0) { //you have new membership to be added.
+			ZaAccountMemberOfListView.addNewGroupsBySoap(this, ZaAccountMemberOfListView._addList);
+		}	
+		ZaAccountMemberOfListView._addList = []; //reset
+	}catch (ex){
+		ZaAccountMemberOfListView._addList = []; //reset
+		this._app.getCurrentController()._handleException(ex, "ZaAccount.modifyMethod: add group failed", null, false);	//try not to halt the account modification	
 	}
-	ZaAccountMemberOfListView._removeList = []; //reset
+	
+	try {
+		if (ZaAccountMemberOfListView._removeList.length >0){//you have membership to be removed
+			ZaAccountMemberOfListView.removeGroupsBySoap(this, ZaAccountMemberOfListView._removeList);
+		}
+		ZaAccountMemberOfListView._removeList = []; //reset
+	}catch (ex){
+		ZaAccountMemberOfListView._removeList = []; //reset
+		this._app.getCurrentController()._handleException(ex, "ZaAccount.modifyMethod: remove group failed", null, false);		
+	}
 	
 	//update the object
 	var soapDoc = AjxSoapDoc.create("ModifyAccountRequest", "urn:zimbraAdmin", null);
@@ -1055,9 +1065,12 @@ function(by, val, withCos) {
 	
 	//Make a GetAccountMembershipRequest
 	this[ZaAccount.A2_memberOf] = ZaAccountMemberOfListView.getAccountMemberShip(this._app, val, by ) ;
-	//this[ZaAccount.A2_memberOf][ZaAccount.A2_isgroup] 
-	
+	this[ZaAccount.A2_directMemberList + "_more"] = 
+			(this[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList].length > ZaAccountMemberOfListView.SEARCH_LIMIT) ? 1: 0;
+	this[ZaAccount.A2_indirectMemberList + "_more"] = 
+			(this[ZaAccount.A2_memberOf][ZaAccount.A2_indirectMemberList].length > ZaAccountMemberOfListView.SEARCH_LIMIT) ? 1: 0;
 }
+
 ZaItem.loadMethods["ZaAccount"].push(ZaAccount.loadMethod);
 
 ZaAccount.prototype.refresh = 
@@ -1209,8 +1222,12 @@ ZaAccount.myXModel = {
 		{id:ZaAccount.A2_directMemberList, type: _DWT_LIST_, ref:ZaAccount.A2_memberOf + "/" + ZaAccount.A2_directMemberList},
 		{id:ZaAccount.A2_indirectMemberList, type: _DWT_LIST_, ref:ZaAccount.A2_memberOf + "/" + ZaAccount.A2_indirectMemberList},
 		{id:ZaAccount.A2_nonMemberList, type: _DWT_LIST_, ref:ZaAccount.A2_memberOf + "/" + ZaAccount.A2_nonMemberList},
+		{id:ZaAccount.A2_directMemberList + "_offset", type:_NUMBER_, defaultValue: 0},
+		{id:ZaAccount.A2_nonMemberList + "_offset", type:_NUMBER_, defaultValue: 0},
+		{id:ZaAccount.A2_directMemberList + "_more", type:_NUMBER_, defaultValue: 0},
+		{id:ZaAccount.A2_nonMemberList + "_more", type:_NUMBER_, defaultValue: 0},
 		{id:ZaAccount.A2_showSameDomain, type: _ENUM_, choices:ZaModel.BOOLEAN_CHOICES, 
-			ref:ZaAccount.A2_memberOf + "/" + ZaAccount.A2_showSameDomain },
+			ref:ZaAccount.A2_memberOf + "/" + ZaAccount.A2_showSameDomain, defaultValue: "FALSE" },
 		{id:"query", type:_STRING_}
 	]
 };
