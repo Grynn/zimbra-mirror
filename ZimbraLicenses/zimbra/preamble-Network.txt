@@ -3,4 +3,6 @@
 Copyright (C) 2005 Zimbra, Inc.
 All Rights Reserved.
 
+The Original Code is: Zimbra Network
+
 ***** END LICENSE BLOCK *****
