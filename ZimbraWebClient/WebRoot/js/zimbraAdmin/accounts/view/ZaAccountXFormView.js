@@ -640,7 +640,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	if(ZaSettings.ACCOUNTS_ADVANCED_ENABLED) {
 		cases.push({type:_CASE_, id:"account_form_advanced_tab", numCols:1, relevant:("instance[ZaModel.currentTab] == " + _tab8),
 					items: [
-						{type:_GROUP_, 
+						{type:_GROUP_, id:"account_attachment_settings",
 							items :[
 								{ref:ZaAccount.A_zimbraAttachmentsBlocked, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.NAD_RemoveAllAttachments,label:ZaMsg.NAD_RemoveAllAttachments, 
@@ -651,7 +651,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 							]
 						},
 						{type:_SEPARATOR_, colSpan:"*"},
-						{type:_GROUP_, 
+						{type:_GROUP_, id:"account_quota_settings",
 							items: [
 								{ref:ZaAccount.A_zimbraMailQuota, type:_SUPER_TEXTFIELD_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
@@ -665,7 +665,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 							]
 						},
 						{type:_SEPARATOR_, colSpan:"*"},
-						{type:_GROUP_, 
+						{type:_GROUP_,id:"account_password_settings",
 							items: [
 								{ref:ZaAccount.A_zimbraMinPwdLength, labelCssStyle:"width:250px;", 
 									type:_SUPER_TEXTFIELD_, 
@@ -690,15 +690,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 								{ref:ZaAccount.A_zimbraMailTrashLifetime, type:_SUPER_LIFETIME1_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_MailTrashLifetime,label:ZaMsg.NAD_MailTrashLifetime+":", labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},
 								{ref:ZaAccount.A_zimbraMailSpamLifetime, type:_SUPER_LIFETIME1_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_MailSpamLifetime,label:ZaMsg.NAD_MailSpamLifetime, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged}
 							]
-						},
-						{type:_SEPARATOR_, colSpan:"*"},	
-						{type:_GROUP_, 
-							items :[
-								
-							]
 						}
-						
-						
 					]
 				});
 	}
