@@ -724,9 +724,9 @@ function (aMsg) {
 
 AjxDebug.prototype._showMessages = 
 function () {
-	if (!this._dbgWindowInited) {
+	if (!this._dbgWindowInited || !this._contentFrame || !this._linkFrame) {
 		// For now, don't show the messages-- assuming that this case only 
-		// happens at startup, and many  messages will be written
+		// happens at startup, and many messages will be written
 		return;
 	}
 	
