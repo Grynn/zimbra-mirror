@@ -53,6 +53,8 @@ zimbraAccountClientAttr: zimbraFeatureInitialSearchPreferenceEnabled
 zimbraAccountClientAttr: zimbraFeatureFiltersEnabled
 zimbraAccountClientAttr: zimbraFeatureSharingEnabled
 zimbraAccountClientAttr: zimbraFeatureViewInHtmlEnabled
+zimbraAccountClientAttr: zimbraFeatureSkinChangeEnabled
+zimbraAccountClientAttr: zimbraFeatureNotebookEnabled
 zimbraAccountClientAttr: zimbraPasswordMinLength
 zimbraAccountClientAttr: zimbraPasswordMaxLength
 zimbraAccountClientAttr: zimbraId
@@ -110,6 +112,7 @@ zimbraCOSInheritedAttr: zimbraPrefReplyIncludeOriginalText
 zimbraCOSInheritedAttr: zimbraPrefForwardIncludeOriginalText
 zimbraCOSInheritedAttr: zimbraPrefForwardReplyPrefixChar
 zimbraCOSInheritedAttr: zimbraPrefAutoAddAddressEnabled
+zimbraCOSInheritedAttr: zimbraPrefSkin
 zimbraCOSInheritedAttr: zimbraFeatureContactsEnabled
 zimbraCOSInheritedAttr: zimbraFeatureGalEnabled
 zimbraCOSInheritedAttr: zimbraFeatureCalendarEnabled
@@ -123,6 +126,8 @@ zimbraCOSInheritedAttr: zimbraFeatureChangePasswordEnabled
 zimbraCOSInheritedAttr: zimbraFeatureInitialSearchPreferenceEnabled
 zimbraCOSInheritedAttr: zimbraFeatureFiltersEnabled
 zimbraCOSInheritedAttr: zimbraFeatureSharingEnabled
+zimbraCOSInheritedAttr: zimbraFeatureSkinChangeEnabled
+zimbraCOSInheritedAttr: zimbraFeatureNotebookEnabled
 zimbraCOSInheritedAttr: zimbraFeatureViewInHtmlEnabled
 zimbraCOSInheritedAttr: zimbraFeatureHtmlComposeEnabled
 zimbraCOSInheritedAttr: zimbraFeatureMobileSyncEnabled
@@ -477,6 +482,8 @@ zimbraFeatureChangePasswordEnabled: TRUE
 zimbraFeatureInitialSearchPreferenceEnabled: TRUE
 zimbraFeatureFiltersEnabled: TRUE
 zimbraFeatureSharingEnabled: TRUE
+zimbraFeatureSkinChangeEnabled: TRUE
+zimbraFeatureNotebookEnabled: TRUE
 zimbraFeatureViewInHtmlEnabled: FALSE
 zimbraFeatureMobileSyncEnabled: TRUE
 zimbraImapEnabled: TRUE
@@ -531,6 +538,7 @@ zimbraPrefForwardReplyPrefixChar: >
 zimbraPrefAutoAddAddressEnabled: FALSE
 zimbraPrefComposeFormat: text
 zimbraPrefForwardReplyInOriginalFormat: FALSE
+zimbraPrefSkin: steel
 zimbraNewMailNotificationFrom: Postmaster <postmaster@${RECIPIENT_DOMAIN}>
 zimbraNewMailNotificationSubject: New message received at ${RECIPIENT_ADDRESS}
 zimbraNewMailNotificationBody: New message received at ${RECIPIENT_ADDRESS}.${NEWLINE}

@@ -1581,4 +1581,19 @@ TODO - add support for multi-line values in globalConfigValue and defaultCOSValu
   <desc>hide entry in Global Address List</desc>
 </attr>
 
+<attr id="354" name="zimbraFeatureSkinChangeEnabled" type="boolean" cardinality="single" optionalIn="account,cos" flags="accountInfo,inheritFromCOS,domainAdminModifiable">
+  <defaultCOSValue>TRUE</defaultCOSValue>
+  <desc>Whether changing skin is allowed for this account or in this cos</desc>
+</attr>
+
+<attr id="355" name="zimbraPrefSkin" type="string" max="80" cardinality="single" optionalIn="account,cos" flags="inheritFromCOS">
+  <defaultCOSValue>steel</defaultCOSValue>
+  <desc>Skin to use for this account</desc>
+</attr>
+
+<attr id="356" name="zimbraFeatureNotebookEnabled" type="boolean" cardinality="single" optionalIn="account,cos" flags="accountInfo,inheritFromCOS,domainAdminModifiable">
+  <defaultCOSValue>TRUE</defaultCOSValue>
+  <desc>Whether notebook feature should be allowed for this account or in this cos</desc>
+</attr>
+
 </attrs>
