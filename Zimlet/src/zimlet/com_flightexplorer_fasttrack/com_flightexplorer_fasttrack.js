@@ -561,7 +561,7 @@ Com_Flightexplorer_Fasttrack.prototype.getFlightDataAndImage =
 function(callback,code,ariline) {
 	var password = password = this.getUserProperty("password");
 	if(!password)
-		this._zimletContext.getConfig("password");
+		password = this._zimletContext.getConfig("password");
 			
 	var username = this.getUserProperty("username");	
 	if(!username)
