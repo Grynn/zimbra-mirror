@@ -535,7 +535,7 @@ zimbraPrefUseKeyboardShortcuts: FALSE
 zimbraPrefReplyIncludeOriginalText: includeBody
 zimbraPrefforwardIncludeOriginalText: includeBody
 zimbraPrefForwardReplyPrefixChar: >
-zimbraPrefAutoAddAddressEnabled: FALSE
+zimbraPrefAutoAddAddressEnabled: TRUE
 zimbraPrefComposeFormat: text
 zimbraPrefForwardReplyInOriginalFormat: FALSE
 zimbraPrefSkin: steel

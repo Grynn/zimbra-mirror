@@ -561,7 +561,7 @@ TODO - add support for multi-line values in globalConfigValue and defaultCOSValu
 </attr>
 
 <attr id="131" name="zimbraPrefAutoAddAddressEnabled" type="boolean" cardinality="single" optionalIn="account,cos" flags="inheritFromCOS,domainAdminModifiable">
-  <defaultCOSValue>FALSE</defaultCOSValue>
+  <defaultCOSValue>TRUE</defaultCOSValue>
   <desc>whether or not new address in outgoing email are auto added to address book</desc>
 </attr>
 
