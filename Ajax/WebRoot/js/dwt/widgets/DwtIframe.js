@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2006, The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -178,6 +178,14 @@ DwtIframe.prototype._createFrame = function(html) {
 		tmp[i++] = self._iframeID;
 		tmp[i++] = "' src='javascript:\"\";'></iframe>";
 		self.setContent(tmp.join(''));
+
+		// Bug 7523: @import url() lines will make Gecko report
+		// document.body is undefined until "onload" (unacceptable) so
+		// we drop these lines now.
+		html = html.replace(/(<style[^>]*>)[\s\t\u00A0]*(.*?)[\s\t\u00A0]*<\x2fstyle>/mgi,
+				    function(s, p1, p2) {
+					    return p1 + p2.replace(/@import.*?(;|[\s\t\u00A0]*$)/gi, "") + "</style>";
+				    });
 
 		iframe = self.getIframe();
 		idoc = Dwt.getIframeDoc(iframe);
