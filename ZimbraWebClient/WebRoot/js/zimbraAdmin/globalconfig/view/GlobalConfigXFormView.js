@@ -55,7 +55,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 		  iconVisible: false, 
 		  content: ZaMsg.Alert_GlobalConfig
 		},
-		{type:_TAB_BAR_,  ref:ZaModel.currentTab,relevantBehavior:_HIDE_,
+		{type:_TAB_BAR_,  ref:ZaModel.currentTab,
 		 	containerCssStyle: "padding-top:0px", 
 			choices:[
 				{value:1, label:ZaMsg.NAD_Tab_General},
