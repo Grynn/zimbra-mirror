@@ -803,7 +803,7 @@ AjxDebug.prototype._createLinkNContent =
 function(ajxDbgObj, linkClass, linkLabel, contentClass, contentLabel) {
 	var now = new Date();
 	var timeStamp = [" - [", ajxDbgObj._getTimeStamp(now), "]"].join("");
-	if (ajxDbgObj._linkFrame) {
+	if (ajxDbgObj._linkFrame && ajxDbgObj._contentFrame) {
 		var linkFrameDoc = ajxDbgObj._linkFrame.contentWindow.document;
 		var div = linkFrameDoc.createElement("div");
 		div.className = linkClass;
@@ -813,9 +813,7 @@ function(ajxDbgObj, linkClass, linkLabel, contentClass, contentLabel) {
 		div._dbg = ajxDbgObj;
 		div.onclick = AjxDebug._linkClicked
 		linkFrameDoc.body.appendChild(div);
-	}
 
-	if (ajxDbgObj._contentFrame) {
 		var contentFrameDoc = ajxDbgObj._contentFrame.contentWindow.document;
 		div = contentFrameDoc.createElement("div");
 		div.className = contentClass;
@@ -825,9 +823,9 @@ function(ajxDbgObj, linkClass, linkLabel, contentClass, contentLabel) {
 		contentFrameDoc.body.appendChild(contentFrameDoc.createElement("p"));
 		contentFrameDoc.body.appendChild(div);
 		contentFrameDoc.body.appendChild(contentFrameDoc.createElement("p"));
-	}
 
-	ajxDbgObj._scrollToBottom();
+		ajxDbgObj._scrollToBottom();
+	}
 };
 
 AjxDebug._clear = 
