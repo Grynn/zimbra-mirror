@@ -246,12 +246,14 @@ zimbraDomainAdminModifiableAttr: title
 zimbraDomainInheritedAttr: zimbraGalMaxResults
 zimbraDomainInheritedAttr: zimbraGalLdapAttrMap
 zimbraFileUploadMaxSize: 10485760
+zimbraGalLdapFilterDef: zimbraAccountAutoComplete:(&(|(cn=%s*)(sn=%s*)(gn=%s*)(mail=%s*)(zimbraMailDeliveryAddress=%s*)(zimbraMailAlias=%s*))(|(objectclass=zimbraAccount)(objectclass=zimbraDistributionList))(!(objectclass=zimbraCalendarResource)))
 zimbraGalLdapFilterDef: zimbraAccounts:(&(|(cn=*%s*)(sn=*%s*)(gn=*%s*)(mail=*%s*)(zimbraMailDeliveryAddress=*%s*)(zimbraMailAlias=*%s*))(|(objectclass=zimbraAccount)(objectclass=zimbraDistributionList))(!(objectclass=zimbraCalendarResource)))
 zimbraGalLdapFilterDef: zimbraResources:(&(|(cn=*%s*)(sn=*%s*)(gn=*%s*)(mail=*%s*)(zimbraMailDeliveryAddress=*%s*)(zimbraMailAlias=*%s*))(objectclass=zimbraCalendarResource))
+zimbraGalLdapFilterDef: zimbraResourceAutoComplete:(&(|(cn=%s*)(sn=%s*)(gn=%s*)(mail=%s*)(zimbraMailDeliveryAddress=%s*)(zimbraMailAlias=%s*))(objectclass=zimbraCalendarResource))
 zimbraGalLdapFilterDef: ad:(&(|(cn=*%s*)(sn=*%s*)(gn=*%s*)(mail=*%s*))(!(msExchHideFromAddressLists=TRUE))(mailnickname=*)(|(&(objectCategory=person)(objectClass=user)(!(homeMDB=*))(!(msExchHomeServerName=*)))(&(objectCategory=person)(objectClass=user)(|(homeMDB=*)(msExchHomeServerName=*)))(&(objectCategory=person)(objectClass=contact))(objectCategory=group)(objectCategory=publicFolder)(objectCategory=msExchDynamicDistributionList)))
 zimbraGalLdapAttrMap: co=workCountry
 zimbraGalLdapAttrMap: company=company
-zimbraGalLdapAttrMap: gn=firstName
+zimbraGalLdapAttrMap: givenName,gn=firstName
 zimbraGalLdapAttrMap: sn=lastName
 zimbraGalLdapAttrMap: displayName,cn=fullName
 zimbraGalLdapAttrMap: initials=initials
