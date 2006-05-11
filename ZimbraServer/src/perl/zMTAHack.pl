@@ -40,7 +40,7 @@ while(my $conn = $server->accept()) {
 
     foreach my $to (@{$client->{TO}}) {
 
-        if ($to =~ /.*\@$zimbra_hostname/) {
+        if ($to =~ /.*\@$zimbra_hostname/i) {
             my $lmtp = Net::LMTP->new('localhost', 7025);
 
             print "Got a local message from ".$client->{FROM}." to ".$to."\n";
