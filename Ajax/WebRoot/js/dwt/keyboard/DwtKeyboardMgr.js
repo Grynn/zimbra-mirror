@@ -220,7 +220,8 @@ function() {
 	Dwt.setHandler(document, DwtEvent.ONKEYDOWN, DwtKeyboardMgr.__keyDownHdlr);
 	Dwt.setHandler(document, DwtEvent.ONKEYUP, DwtKeyboardMgr.__keyUpHdlr);
 	Dwt.setHandler(document, DwtEvent.ONKEYPRESS, DwtKeyboardMgr.__keyPressHdlr);
-	/* Create our keyboard focus field. This is a dummy input field that will take text
+
+;	/* Create our keyboard focus field. This is a dummy input field that will take text
 	 * input for keyboard shortcuts */
 	var kbff = this._kbFocusField = document.createElement("input");
 	kbff.type = "text";
@@ -318,21 +319,20 @@ function(ev) {
 	kbMgr.__dwtCtrlHasFocus = false;	
 };
 
+
 /**
- * Currently unused
- * 
  * @private
  */
 DwtKeyboardMgr.__keyUpHdlr =
 function(ev) {
-	//DBG.println(AjxDebug.DBG3, "KU HDLR");
+	//DBG.println(AjxDebug.DBG1, "DwtKeyboardMgr.__keyUpHdlr");
 	var kbMgr = DwtShell.getShell(window).getKeyboardMgr();
 	var kev = DwtShell.keyEvent;
 	kev.setFromDhtmlEvent(ev);
 	var keyCode = kev.keyCode;
 	
 	if (kbMgr._kbEventStatus != DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED) {
-		//DBG.println(AjxDebug.DBG3, "KE BEING BLOCKED IN KU HDLR");
+		//DBG.println(AjxDebug.DBG1, "DwtKeyboardMgr.__keyUpHdlr: KEY UP BLOCKED");
 		kev._stopPropagation = true;
 		kev._returnValue = false;
 		kev.setToDhtmlEvent(ev);
@@ -345,16 +345,14 @@ function(ev) {
  */
 DwtKeyboardMgr.__keyPressHdlr =
 function(ev) {
+	//DBG.println(AjxDebug.DBG1, "DwtKeyboardMgr.__keyPressHdlr");
 	var kbMgr = DwtShell.getShell(window).getKeyboardMgr();
 	var kev = DwtShell.keyEvent;
 	kev.setFromDhtmlEvent(ev);
 	var keyCode = kev.keyCode;
 	
-	//DBG.println(AjxDebug.DBG3, "KP HDLR CHECKING");
-	//DBG.println(AjxDebug.DBG3, "STATUS: " + kbMgr._kbEventStatus);
-	
 	if (kbMgr._kbEventStatus != DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED) {
-		//DBG.println(AjxDebug.DBG3, "KE BEING BLOCKED IN KP HDLR");
+		//DBG.println(AjxDebug.DBG1, "DwtKeyboardMgr.__keyPressHdlr: KEY PRESS BLOCKED");
 		kev._stopPropagation = true;
 		kev._returnValue = false;
 		kev.setToDhtmlEvent(ev);
@@ -461,26 +459,19 @@ function(ev) {
 	 	// If a menu is popped up then don't act on the Tab
 	 	if (!DwtMenu.menuShowing()) {
 		 	//DBG.println(AjxDebug.DBG3, "TAB HIT!");
-		 	// If the tab hit is in an element
-			if (focusInTGMember) {
+		 	// If the tab hit is in an element or if the current tab group has
+		 	// a focus member
+			if (focusInTGMember || kbMgr.__currTabGroup.getFocusMember()) {
 			 	if (!kev.shiftKey)
 			 		kbMgr.__currTabGroup.getNextFocusMember(true);
 			 	else
 			 		kbMgr.__currTabGroup.getPrevFocusMember(true);
 		 	} else {
-		 		DBG.println(AjxDebug.DBG1, "RESETTING TO CURRENT OR FIRST");
-		 		/* Focus was not in a tab group member. First check to see if the current
-		 		 * tab group has a focus member. If it does, then set focus to that again
-		 		 * so that the right thing happens visually. If there is no current focus
-		 		 * member, then reset */
-		 		var focusMember = kbMgr.__currTabGroup.getFocusMember();
-		 		if (focusMember) 
-		 			kbMgr.__currTabGroup.setFocusMember(focusMember, true);
-		 		else 
-			 		kbMgr.__currTabGroup.resetFocusMember(true);
+		 		//DBG.println(AjxDebug.DBG1, "RESETTING TO FIRST");
+		 		// If there is no current focus member, then reset
+		 		kbMgr.__currTabGroup.resetFocusMember(true);
 		 	}
 	 	}
-		//DBG.println(AjxDebug.DBG3, "SENTINEL");	
 		kbMgr._kbEventStatus = DwtKeyboardMgr.__KEYSEQ_HANDLED;
 		kev._stopPropagation = true;
 		kev._returnValue = false;
@@ -506,8 +497,9 @@ function(ev) {
 	 * alphanumeric keys if the target of the key event is an input field
 	 * or a text area and there is no pending sequence in play and the key
 	 * is alphanumeric or a punctuation key */
-	//var tagName = (kev.target) ? kev.target.tagName.toLowerCase() : null;
-	//DBG.println("KEYCODE: " + keyCode + " - tagName: " + tagName);
+	/* TODO not all inputs accept the same values (e.g. text vs radio etc) so 
+	 * we need to differentiate. Should change isUsableTextInputValue(keyCode) to 
+	 * isUsableInputValue(keyCode, inputType) where inputType is the type of input*/
 	if (DwtKeyMapMgr.isModifier(keyCode)
 		|| (!kbMgr.__dwtCtrlHasFocus 
 			&& kbMgr.__killKeySeqTimedActionId == -1 && !kev.ctrlKey && !kev.altKey
@@ -556,10 +548,10 @@ function(ev) {
 	}
 	 	
 	if (useGlobalMap && handled == DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED && kbMgr.__globalKeyActionHdlr != null) {
-		//DBG.println(jxDebug.DBG3, "GLOBAL HANDLER CALLED");
+		//DBG.println(jxDebug.DBG1, "GLOBAL HANDLER CALLED");
 		handled = kbMgr.__dispatchKeyEvent(kbMgr.__globalKeyActionHdlr, 
 							kbMgr.__globalKeyActionHdlr.getKeyMapNameToUse(), kev);
-		//DBG.println(AjxDebug.DBG3, "GLOBAL HANDLER RETURNED: " + handled);
+		DBG.println(AjxDebug.DBG1, "GLOBAL HANDLER RETURNED: " + handled);
 	}
 	
 	kbMgr._kbEventStatus = handled;
@@ -588,7 +580,6 @@ function(ev) {
  */
 DwtKeyboardMgr.prototype.__dispatchKeyEvent = 
 function(hdlr, mapName, ev) {
-	
 	var actionCode = this.__keyMapMgr.getActionCode(this.__keySequence, mapName);
 	if (actionCode == DwtKeyMapMgr.NOT_A_TERMINAL) {
 		//DBG.println("SCHEDULING KILL SEQUENCE ACTION");
@@ -598,9 +589,11 @@ function(hdlr, mapName, ev) {
 			AjxTimedAction.scheduleAction(this.__killKeySeqTimedAction, 1000);
 		return DwtKeyboardMgr.__KEYSEQ_PENDING;	
 	} else if (actionCode != null) {
+		/* It is possible that the component may not handle a valid action
+		 * particulary actions defined in the global map */
 		//DBG.println("HANDLING ACTION: " + actionCode);
-		return (hdlr.handleKeyAction(actionCode, ev)) 
-			? DwtKeyboardMgr.__KEYSEQ_HANDLED : DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
+		return (hdlr.handleKeyAction(actionCode, ev)) ? DwtKeyboardMgr.__KEYSEQ_HANDLED
+													   : DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
 	} else {	
 		//DBG.println("TERMINAL W/O ACTION CODE");
 		return DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;

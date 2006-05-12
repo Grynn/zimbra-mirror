@@ -17,16 +17,9 @@
 /**
  * @constructor
  * @class
- * Creates a control. <i>DwtControl</i> is the root class of the Dwt component hierarchy. All
- * Dwt components either directly or indirectly inherit from this class. 
- * 
- * A <i>DwtControl</i>l may also be directly instantiated. In this case it is essentially
- * a div into which any content may be "drawn"
- * 
- * A control may be created in "deferred" mode, meaning that the UI portion of the control
- * will be created "Just In Time". This is useful for widgets which may want to defer construction
- * of elements (e.g. <i>DwtTreeItem</i>) until such time as is needed, in the interest of efficiency. 
- * Note that if the control is a child of the shell, it won't become visible until its z-index is set.
+ * Creates a composite class. A composite class may contain other controls. All controls
+ * that need to contain child controls (such as menus, trees) should inherit from this
+ * class.
  * 
  * <h4>CSS</h4>
  * None
@@ -35,7 +28,7 @@
  * None
  * 
  * <h4>Events</h4>
- * None
+ * See <i>DwtControl</i>
  * 
  * @author Ross Dargahi
  * 
@@ -49,35 +42,57 @@
  * @param {int} id An explicit ID to use for the control's HTML element. If not
  * 		specified defaults to an auto-generated id (optional)
  * @param {int} index index at which to add this control among parent's children (optional)
- *
- * @requires DwtControl
  */
-
 function DwtComposite(parent, className, posStyle, deferred, id, index) {
 
 	if (arguments.length == 0) return;
 	className = className || "DwtComposite";
 	DwtControl.call(this, parent, className, posStyle, deferred, id, index);
 
+	/** Vector of child elements
+	 * @type AjxVector */
 	this._children = new AjxVector();
-	this._updating = false;
 }
 
 DwtComposite.prototype = new DwtControl;
 DwtComposite.prototype.constructor = DwtComposite;
 
-// Pending elements hash (i.e. elements that have not yet been realized)
+/** Pending elements hash (i.e. elements that have not yet been realized)
+ * @type object */
 DwtComposite._pendingElements = new Object();
 
+
+/**
+ * This method returns this objects real class name
+ * 
+ * @return class name
+ * @type String
+ */
 DwtComposite.prototype.toString = 
 function() {
 	return "DwtComposite";
 }
 
+/**
+ * Disposes of the control. This method will remove the control from under the
+ * control of it's parent and release any resources associate with the compontent
+ * it will also notify any event listeners on registered  <i>DwtEvent.DISPOSE</i> event type
+ * 
+ * In the case of <i>DwtComposite</i> this method will also dispose of all of the composite's
+ * children
+ * 
+ * Subclasses may override this method to perform their own dispose functionality but
+ * should generallly call up to the parent method
+ * 
+ * @see DwtControl#isDisposed
+ * @see DwtControl#addDisposeListener
+ * @see DwtControl#removeDisposeListener
+ */
 DwtComposite.prototype.dispose =
 function() {
 	if (this._disposed) return;
-DBG.println(AjxDebug.DBG3, "DwtComposite.prototype.dispose: " + this.toString() + " - " + this._htmlElId);
+	
+	DBG.println(AjxDebug.DBG3, "DwtComposite.prototype.dispose: " + this.toString() + " - " + this._htmlElId);
 	var sz = this._children.size();
 	if (sz > 0) {
 		// Dup the array since disposing the children will result in removeChild
@@ -91,16 +106,27 @@ DBG.println(AjxDebug.DBG3, "DwtComposite.prototype.dispose: " + this.toString() 
 	DwtControl.prototype.dispose.call(this);
 }
 
+/**
+ * @return
+ * @type array
+ */
 DwtComposite.prototype.getChildren =
 function() {
 	return this._children.getArray().slice(0);
 }
 
+/**
+ * @return the composite's number of children
+ * @type number
+ */
 DwtComposite.prototype.getNumChildren =
 function() {
 	return this._children.size();
 }
 
+/**
+ * Disposes of all of the composite's children
+ */
 DwtComposite.prototype.removeChildren =
 function() {
 	var a = this._children.getArray();
@@ -108,6 +134,12 @@ function() {
 		a[0].dispose();
 }
 
+/**
+ * Removes all of the composite's child by calling <code>removeChildren</code> and
+ * also clears out the composite's HTML element of any content
+ * 
+ * @see #removeChildren
+ */
 DwtComposite.prototype.clear =
 function() {
 	this.removeChildren();
@@ -115,10 +147,10 @@ function() {
 }
 
 /**
-* Adds the given child control to this control.
+* Adds the given child control to this composite.
 *
-* @param child		[DwtControl]	the child control to add
-* @param index		[int]*			index at which to add the child
+* @param {DwtControl} child	The child control to add
+* @param {number} index index at which to add the child (optional)
 */
 DwtComposite.prototype.addChild =
 function(child, index) {
@@ -132,24 +164,24 @@ function(child, index) {
 		document.body.appendChild(childHtmlEl);
 	} else {
 		var htmlEl = this.getHtmlElement();
-		if (index && (index < htmlEl.childNodes.length)) {
+		if (index && (index < htmlEl.childNodes.length))
 			htmlEl.insertBefore(childHtmlEl, htmlEl.childNodes[index]);	
-		} else {
+		else
 			htmlEl.appendChild(childHtmlEl);
-		}
 	}
-	if (child._removedEl) {
+	if (child._removedEl)
 		child._removedEl = null;
-	}
 }
 
 /**
 * Removes the given child control from this control. A removed child is no longer retrievable via
-* getHtmlElement(), so there is an option to save a reference to the removed child. That way it can
-* be added later using addChild().
+* <code>getHtmlElement()</code>, so there is an option to save a reference to the removed child. 
+* That way it can be added later using <code>addChild()</code>.
 *
-* @param child				[DwtControl]	the child control to remove
-* @param preserveElement	[boolean]		if true, the child will save a reference to its removed element
+* @param {DwtConrol} child the child control to remove
+* @param {boolean} preserveElement if true, the child will save a reference to its removed element
+* 
+* @see #addChild
 */
 DwtComposite.prototype.removeChild =
 function(child, preserveElement) {
@@ -169,5 +201,3 @@ function(child, preserveElement) {
 		}
 	}
 }
-
-DwtComposite.prototype._update = function() {}

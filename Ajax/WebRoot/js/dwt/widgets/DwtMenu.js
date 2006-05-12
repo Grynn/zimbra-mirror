@@ -239,7 +239,7 @@ function(actionCode, ev) {
 			break;
 			
 		default:
-			return true;
+			return false;
 	}
 
 	switch (actionCode) {
@@ -257,7 +257,7 @@ function(actionCode, ev) {
 			
 			// Deal with case that we are at the bottom or the top of the list
 			if (!currItem)
-				return true;
+				return;
 
 			/* While the current item is not enabled or is a separator get the 
 			 * next child*/

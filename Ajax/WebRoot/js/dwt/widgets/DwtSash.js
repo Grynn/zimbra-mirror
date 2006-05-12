@@ -112,7 +112,7 @@ function(ev) {
 			delta = sash._callbackFunc(delta);		
 		sash._startCoord += delta;
 		// If movement happened, then shift our location by the actual amount of movement
-		if (delta != 0 && sash._posStyle == Dwt.ABSOLUTE_STYLE) {
+		if (delta != 0 && sash.getHtmlElement().style.position == Dwt.ABSOLUTE_STYLE) {
 			if (sash._style == DwtSash.HORIZONTAL_STYLE)
 				sash.setLocation(sash.getLocation().x + delta, Dwt.DEFAULT);
 			else

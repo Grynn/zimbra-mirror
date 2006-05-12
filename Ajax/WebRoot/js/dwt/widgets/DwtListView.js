@@ -843,7 +843,7 @@ function(ev) {
 	//		 a mouse out event. This will prevent the tooltip from
 	//		 being displayed when we re-enter the listview even though
 	//		 we're not over a list item.
-	this._toolTipContent = null;
+	this.setToolTipContent(null);
 	this._mouseOutAction(ev, div);
 }
 
@@ -1652,9 +1652,6 @@ function(actionCode, ev) {
 			if (this._evtMgr.isListenerRegistered(DwtEvent.ACTION)) {
 				var p = Dwt.toWindow(this._kbAnchor, 0, 0);
 				var s = Dwt.getSize(this._kbAnchor);
-DBG.println("p: (" + p.x + ", " + p.y + ")");
-DBG.println("s: (" + s.x + ", " + s.y + ")");
-DBG.println("_KBANCHOR: " + this._kbAnchor + " - ACTION EMULATE: " + (p.x + s.x/4) + ", " + (p.y + s.y / 2));
 				this._emulateSingleClick(this._kbAnchor, DwtMouseEvent.RIGHT,
 						false, false, false, p.x + s.x / 4, p.y + s.y / 2);
 			}

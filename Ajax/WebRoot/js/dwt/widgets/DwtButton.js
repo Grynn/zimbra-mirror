@@ -410,7 +410,7 @@ DwtButton.prototype._focusByMouseUpEvent =
 
 DwtButton.prototype._focus =
 function() {
-	DBG.println(AjxDebug.DBG3, "DwtButton.prototype._focus");
+	//DBG.println(AjxDebug.DBG3, "DwtButton.prototype._focus");
 	// ROSSD MOVE TO CSS
 	this.getHtmlElement().style.border = "1px dotted black";
 	//this._mouseOverListener(DwtShell.mouseEvent);
@@ -418,7 +418,7 @@ function() {
 
 DwtButton.prototype._blur =
 function() {
-	DBG.println(AjxDebug.DBG3, "DwtButton.prototype._blur");
+	//DBG.println(AjxDebug.DBG3, "DwtButton.prototype._blur");
 	// ROSSD MOVE TO CSS
 	this.getHtmlElement().style.border = "0px dotted black";
 	//this._mouseOutListener(DwtShell.mouseEvent);

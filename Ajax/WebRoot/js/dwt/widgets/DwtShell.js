@@ -47,7 +47,7 @@ function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell, us
 
     // HACK! This is a hack to make sure that the control methods work 
     // with DwtShell since the parent of DwtShell is null. 
-	this._ctrlInited = true;
+	this.__ctrlInited = true;
 
 	window._dwtShell = AjxCore.assignId(this);
 

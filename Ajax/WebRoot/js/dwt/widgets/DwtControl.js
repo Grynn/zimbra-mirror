@@ -68,17 +68,6 @@
  * 		specified defaults to an auto-generated id (optional)
  * @param {int} index index at which to add this control among parent's children (optional)
  *
- * @requires AjxCallback
- * @requires AjxEventMgr
- * @requires AjxListener
- * @requires AjxTimedAction
- * @requires Dwt
- * @requires DwtDragSource
- * @requires DwtDropTarget
- * @requires DwtMouseEvent
- * @requires DwtMouseEventCapture
- * @requires DwtShell
- * @requires DwtToolTip
  */
 function DwtControl(parent, className, posStyle, deferred, id, index) {
 
@@ -92,34 +81,72 @@ function DwtControl(parent, className, posStyle, deferred, id, index) {
 	/** the control's <i>DwtShell</i>*/
 	this.shell = null;
 	
-	/** @private */
+	/** Data object used to store "client data" on the widget via the 
+	 * <code>setData</code> and <code>getData</code> methods
+	 * @type object */
 	this._data = new Object();
-	/** @private */
+	
+	/** The event manager controls the mapping between event types and the
+	 * registered listeners
+	 * @type AjxEventMgr */
 	this._eventMgr = new AjxEventMgr();
-	/** @private */
+	
+	/** true if the control is disposed, else false. The public api to this 
+	 * member is <code>isDisposed</code>. 
+	 * @type boolean */
 	this._disposed = false;
     
  	if (parent == null) 
  		return;
 
-	/** CSS class name*/
+	/** CSS class name
+	 * @type string*/
 	this._className = className ? className : "DwtControl";
-	/** @private */
-	this._posStyle = posStyle;
+	
+	/** @type private */
+	this.__posStyle = posStyle;
 
 	if (id != null) {
-	/** @private */
+	/** id of the control's HTML element
+	 * @type string */
 		this._htmlElId = id;
 	}
-	this._index = index;
+	
+	/** @private */
+	this.__index = index;
+	
+	/** enabled state of this control. Public APIs to this member are
+	 * <code>getEnabled</code> and <code>setEnabled</code>
+	 * @type boolean
+	 */
+	this._enabled = false;
+	
+	/** Indicates the drag state of the control. Valid values are:<ul>
+	 * <li>DwtControl._NO_DRAG<li>
+	 * <li>DwtControl._DRAGGING<li>
+	 * <li>DwtControl._DRAG_REJECTED<li></ul>
+	 * @type number
+	 */
+	this._dragging = null;
+	
+	/** Drag n drop icon. Valid when a drag and drop operation is ocurring
+	 * @type HTMLElement
+	 */
+	this._dndIcon
+	
 	if (!deferred)
 		this.__initCtrl();
 		
-	/** @private */
+	/** Hover over listener
+	 * @type AjxListener */
 	this._hoverOverListener = new AjxListener(this, this.__handleHoverOver);
-	/** @private */
+
+	/** Hover out listener
+	 * @type AjxListener */
 	this._hoverOutListener = new AjxListener(this, this.__handleHoverOut);
 }
+
+
 
 
 // Position styles
@@ -167,14 +194,18 @@ DwtControl.FIXED_SCROLL = Dwt.FIXED_SCROLL;
 DwtControl.DEFAULT = Dwt.DEFAULT;
 
 // DnD states
-/** @private */
-DwtControl.__NO_DRAG = 1;
+/** No drag in progress
+ * @type number */
+DwtControl._NO_DRAG = 1;
 
-/** @private */
-DwtControl.__DRAGGING = 2;
+/** Drag in progress
+ * @type number */
+DwtControl._DRAGGING = 2;
 
-/** @private */
-DwtControl.__DRAG_REJECTED = 3;
+/** Drag rejected
+ * @type number */
+DwtControl._DRAG_REJECTED = 3;
+
 
 /** @private */
 DwtControl.__DRAG_THRESHOLD = 3;
@@ -185,6 +216,8 @@ DwtControl.__TOOLTIP_THRESHOLD = 5;
 /** @private */
 DwtControl.__DND_HOVER_DELAY = 750;
 
+/** @private */
+DwtControl.__controlEvent = new DwtControlEvent();
 
 /**
  * This method returns the actual class name for the control. Subclasses will
@@ -433,7 +466,7 @@ function() {
  */
 DwtControl.prototype.isInitialized =
 function() {
-	return this._ctrlInited;
+	return this.__ctrlInited;
 };
 
 /** 
@@ -461,8 +494,7 @@ function() {
  * 		defined the the appropriate keymap
  * @param {DwtKeyEvent}	ev keyboard event (last keyboard event in sequence)
  * 
- * @return true if handled, else false
- * @type Boolean
+ * @return true if the action is handled else return false
  * 
  * @see DwtKeyMap
  * @see DwtKeyEvent
@@ -614,21 +646,21 @@ function(x, y, width, height) {
 		
 	var htmlElement = this.getHtmlElement();
 	if (this.isListenerRegistered(DwtEvent.CONTROL)) {
-		this._controlEvent.reset();
+		this.__controlEvent.reset();
 		var bds = Dwt.getBounds(htmlElement);
-		this._controlEvent.oldX = bds.x;
-		this._controlEvent.oldY = bds.y;
-		this._controlEvent.oldWidth = bds.width;
-		this._controlEvent.oldHeight = bds.height;
+		this.__controlEvent.oldX = bds.x;
+		this.__controlEvent.oldY = bds.y;
+		this.__controlEvent.oldWidth = bds.width;
+		this.__controlEvent.oldHeight = bds.height;
 		Dwt.setBounds(htmlElement, x, y, width, height);
 		bds = Dwt.getBounds(htmlElement);
-		this._controlEvent.newX = bds.x;
-		this._controlEvent.newY = bds.y;
-		this._controlEvent.newWidth = bds.width;
-		this._controlEvent.newHeight = bds.height;
-		this._controlEvent.requestedWidth = width;
-		this._controlEvent.requestedHeight = height;
-		this.notifyListeners(DwtEvent.CONTROL, this._controlEvent);
+		this.__controlEvent.newX = bds.x;
+		this.__controlEvent.newY = bds.y;
+		this.__controlEvent.newWidth = bds.width;
+		this.__controlEvent.newHeight = bds.height;
+		this.__controlEvent.requestedWidth = width;
+		this.__controlEvent.requestedHeight = height;
+		this.notifyListeners(DwtEvent.CONTROL, this.__controlEvent);
 	} else {
 		Dwt.setBounds(htmlElement, x, y, width, height);
 	}
@@ -817,7 +849,7 @@ DwtControl.prototype.setHtmlElementId =
 function(id) {
 	if (this._disposed) return;
 	
-	if (this._ctrlInited) {
+	if (this.__ctrlInited) {
 		var htmlEl = this.getHtmlElement();
 		if (!htmlEl._rendered) {
 			delete DwtComposite._pendingElements[this._htmlElId];
@@ -981,15 +1013,15 @@ function(x, y) {
 		
 	if (this.isListenerRegistered(DwtEvent.CONTROL)) {
 		var htmlElement = this.getHtmlElement();
-		this._controlEvent.reset();
+		this.__controlEvent.reset();
 		var loc = Dwt.getLocation(htmlElement);
-		this._controlEvent.oldX = loc.x;
-		this._controlEvent.oldY = loc.y;
+		this.__controlEvent.oldX = loc.x;
+		this.__controlEvent.oldY = loc.y;
 		Dwt.setLocation(htmlElement, x, y);
 		loc = Dwt.getLocation(htmlElement);
-		this._controlEvent.newX = loc.x;
-		this._controlEvent.newY = loc.y;
-		this.notifyListeners(DwtEvent.CONTROL, this._controlEvent);
+		this.__controlEvent.newX = loc.x;
+		this.__controlEvent.newY = loc.y;
+		this.notifyListeners(DwtEvent.CONTROL, this.__controlEvent);
 	} else {
 		Dwt.setLocation(this.getHtmlElement(), x, y);
 	}
@@ -1131,15 +1163,15 @@ function(width, height) {
 		
 	if (this.isListenerRegistered(DwtEvent.CONTROL)) {
 		var htmlElement = this.getHtmlElement();
-		this._controlEvent.reset();
+		this.__controlEvent.reset();
 		var sz = Dwt.getSize(htmlElement);
-		this._controlEvent.oldWidth = sz.x;
-		this._controlEvent.oldHeight = sz.y;
+		this.__controlEvent.oldWidth = sz.x;
+		this.__controlEvent.oldHeight = sz.y;
 		Dwt.setSize(htmlElement, width, height);
 		sz = Dwt.getSize(htmlElement);
-		this._controlEvent.newWidth = sz.x;
-		this._controlEvent.newHeight = sz.y;
-		this.notifyListeners(DwtEvent.CONTROL, this._controlEvent);
+		this.__controlEvent.newWidth = sz.x;
+		this.__controlEvent.newHeight = sz.y;
+		this.notifyListeners(DwtEvent.CONTROL, this.__controlEvent);
 	} else {
 		Dwt.setSize(this.getHtmlElement(), width, height);
 	}
@@ -1154,7 +1186,7 @@ DwtControl.prototype.getToolTipContent =
 function() {
 	if (this._disposed) return;
 
-	return this._toolTipContent;
+	return this.__toolTipContent;
 };
 
 /**
@@ -1166,7 +1198,7 @@ DwtControl.prototype.setToolTipContent =
 function(text) {
 	if (this._disposed) return;
 
-	this._toolTipContent = text;
+	this.__toolTipContent = text;
 };
 
 /**
@@ -1325,7 +1357,7 @@ function() {
 	this.getHtmlElement().innerHTML = "";
 };
  
- 
+
 /**
  * This protected method is called by the keyboard navigate infrastructure when a control 
  * gains focus. This method should be overridden by derived classes to provide
@@ -1701,7 +1733,7 @@ function(ev) {
 DwtControl.prototype._checkState =
 function() {
 	if (this._disposed) return false;
-	if (!this._ctrlInited) 
+	if (!this.__ctrlInited) 
 		this.__initCtrl();
 	return true;
 };
@@ -1717,12 +1749,12 @@ function(ev) {
 	var obj = obj ? obj : DwtUiEvent.getDwtObjFromEvent(ev);
 	if (!obj) return false;
 	
-	if (obj._toolTipContent != null) {
+	if (obj.__toolTipContent != null) {
 		var shell = DwtShell.getShell(window);
 		var manager = shell.getHoverMgr();
 		manager.setHoverOutListener(obj._hoverOutListener);
 		manager.hoverOut();
-		obj._tooltipClosed = false;
+		obj.__tooltipClosed = false;
 	}
 };
 
@@ -1788,13 +1820,13 @@ function(ev) {
 	if (!obj) return false;
 	
 	var mouseEv = DwtShell.mouseEvent;
-	if (obj._dragging == DwtControl.__NO_DRAG) {
+	if (obj._dragging == DwtControl._NO_DRAG) {
 		mouseEv.setFromDhtmlEvent(ev);
 		if (obj.isListenerRegistered(DwtEvent.ONMOUSEOVER))
 			obj.notifyListeners(DwtEvent.ONMOUSEOVER, mouseEv);
 		// Call the tooltip after the listeners to give them a 
 		// chance to change the tooltip text.
-		if (obj._toolTipContent != null) {
+		if (obj.__toolTipContent != null) {
 			var shell = DwtShell.getShell(window);
 			var manager = shell.getHoverMgr();
 			if ((manager.getHoverObject() != this || !manager.isHovering()) && !DwtMenu.menuShowing()) {
@@ -1821,7 +1853,7 @@ function(ev) {
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
 	if (!obj) return false;
 	
-	if (obj._toolTipContent != null) {
+	if (obj.__toolTipContent != null) {
 		var shell = DwtShell.getShell(window);
 		var manager = shell.getHoverMgr();
 		manager.setHoverOutListener(obj._hoverOutListener);
@@ -1840,8 +1872,8 @@ function(ev) {
 			DBG.dumpObj(ex);
 		}
 		obj._dragOp = (mouseEv.ctrlKey) ? Dwt.DND_DROP_COPY : Dwt.DND_DROP_MOVE;
-		obj._dragStartX = mouseEv.docX;
-		obj._dragStartY = mouseEv.docY;
+		obj.__dragStartX = mouseEv.docX;
+		obj.__dragStartY = mouseEv.docY;
 	}
 	
 	return DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEDOWN, obj, mouseEv);
@@ -1860,9 +1892,9 @@ function(ev) {
  	if (!obj) return false;
 
 	//DND cancel point
-	if (obj._dndHoverActionId != -1) {
-		AjxTimedAction.cancelAction(obj._dndHoverActionId);
-		obj._dndHoverActionId = -1;
+	if (obj.__dndHoverActionId != -1) {
+		AjxTimedAction.cancelAction(obj.__dndHoverActionId);
+		obj.__dndHoverActionId = -1;
 	}
 
 	var mouseEv = DwtShell.mouseEvent;
@@ -1880,27 +1912,27 @@ function(ev) {
 	// If we are not draggable or if we have not started dragging and are 
 	// within the Drag threshold then simply handle it as a move.
 	if (obj._dragSource == null || captureObj == null
-		|| (obj != null && obj._dragging == DwtControl.__NO_DRAG 
-			&& Math.abs(obj._dragStartX - mouseEv.docX) < 
+		|| (obj != null && obj._dragging == DwtControl._NO_DRAG 
+			&& Math.abs(obj.__dragStartX - mouseEv.docX) < 
 			   DwtControl.__DRAG_THRESHOLD 
-			&& Math.abs(obj._dragStartY - mouseEv.docY) < 
+			&& Math.abs(obj.__dragStartY - mouseEv.docY) < 
 			   DwtControl.__DRAG_THRESHOLD)) {
-		if (obj._toolTipContent != null) {
+		if (obj.__toolTipContent != null) {
 			var shell = DwtShell.getShell(window);
 			var manager = shell.getHoverMgr();
-			if (!manager.isHovering() && !obj._tooltipClosed && !DwtMenu.menuShowing()) {
+			if (!manager.isHovering() && !obj.__tooltipClosed && !DwtMenu.menuShowing()) {
 				// NOTE: mouseOver already init'd other hover settings
 				// We do hoverOver() here since the mouse may have moved during
 				// the delay, and we want to use latest x,y
 				manager.hoverOver(mouseEv.docX, mouseEv.docY);
 			} else {
-				var deltaX = obj._lastTooltipX ? Math.abs(mouseEv.docX - obj._lastTooltipX) : null;
-				var deltaY = obj._lastTooltipY ? Math.abs(mouseEv.docY - obj._lastTooltipY) : null;
+				var deltaX = obj.__lastTooltipX ? Math.abs(mouseEv.docX - obj.__lastTooltipX) : null;
+				var deltaY = obj.__lastTooltipY ? Math.abs(mouseEv.docY - obj.__lastTooltipY) : null;
 				if ((deltaX != null && deltaX > DwtControl.__TOOLTIP_THRESHOLD) || 
 					(deltaY != null && deltaY > DwtControl.__TOOLTIP_THRESHOLD)) {
 					manager.setHoverOutListener(obj._hoverOutListener);
 					manager.hoverOut();
-					obj._tooltipClosed = true; // prevent tooltip popup during moves in this object
+					obj.__tooltipClosed = true; // prevent tooltip popup during moves in this object
 				}
 			}
 		}
@@ -1910,16 +1942,16 @@ function(ev) {
 		
 		// If we are not dragging, then see if we can drag. 
 		// If we cannot drag this control, then
-		// we will set dragging status to DwtControl.__DRAG_REJECTED 
-		if (obj._dragging == DwtControl.__NO_DRAG) {
+		// we will set dragging status to DwtControl._DRAG_REJECTED 
+		if (obj._dragging == DwtControl._NO_DRAG) {
 			obj._dragOp = obj._dragSource._beginDrag(obj._dragOp, obj);
 			if (obj._dragOp != Dwt.DND_DROP_NONE) {
-				obj._dragging = DwtControl.__DRAGGING;
+				obj._dragging = DwtControl._DRAGGING;
 				obj._dndIcon = obj._getDnDIcon(obj._dragOp);
 				if (obj._dndIcon == null)
-					obj._dragging = DwtControl.__DRAG_REJECTED;
+					obj._dragging = DwtControl._DRAG_REJECTED;
 			} else {
-				obj._dragging = DwtControl.__DRAG_REJECTED;
+				obj._dragging = DwtControl._DRAG_REJECTED;
 			}
 		}
 		
@@ -1928,17 +1960,17 @@ function(ev) {
 		// This is done by (a) making sure that the drag source data type
 		// can be dropped onto the target, and (b) that the application 
 		// will allow it (i.e. via the listeners on the DropTarget
-		if (obj._dragging != DwtControl.__DRAG_REJECTED) {
+		if (obj._dragging != DwtControl._DRAG_REJECTED) {
 			var destDwtObj = mouseEv.dwtObj;
 			if (destDwtObj) {
 				// Set up the drag hover event. we will even let this item hover over itself as there may be
 				// scenarios where that will hold true
 				obj._dndHoverAction.args = [ destDwtObj ];
-				obj._dndHoverActionId = AjxTimedAction.scheduleAction(obj._dndHoverAction, DwtControl.__DND_HOVER_DELAY);
+				obj.__dndHoverActionId = AjxTimedAction.scheduleAction(obj._dndHoverAction, DwtControl.__DND_HOVER_DELAY);
 			}
 
 			if (destDwtObj && destDwtObj._dropTarget && destDwtObj != obj) {
-				if (destDwtObj != obj._lastDestDwtObj || 
+				if (destDwtObj != obj.__lastDestDwtObj || 
 					destDwtObj._dropTarget.hasMultipleTargets()) {
 					if (destDwtObj._dropTarget._dragEnter(
 										obj._dragOp, 
@@ -1946,28 +1978,28 @@ function(ev) {
 										obj._dragSource._getData(), mouseEv)) {
 
 						obj._setDnDIconState(true);
-						obj._dropAllowed = true;
+						obj.__dropAllowed = true;
 						destDwtObj._dragEnter(mouseEv);
 					} else {
 						obj._setDnDIconState(false);
-						obj._dropAllowed = false;
+						obj.__dropAllowed = false;
 					}
-				} else if (obj._dropAllowed) {
+				} else if (obj.__dropAllowed) {
 					destDwtObj._dragOver(mouseEv);
 				}
 			} else {
 				obj._setDnDIconState(false);
 			}
 			
-			if (obj._lastDestDwtObj && obj._lastDestDwtObj != destDwtObj 
-				&& obj._lastDestDwtObj._dropTarget 
-				&& obj._lastDestDwtObj != obj) {
+			if (obj.__lastDestDwtObj && obj.__lastDestDwtObj != destDwtObj 
+				&& obj.__lastDestDwtObj._dropTarget 
+				&& obj.__lastDestDwtObj != obj) {
 
-				obj._lastDestDwtObj._dragLeave(mouseEv);
-				obj._lastDestDwtObj._dropTarget._dragLeave();
+				obj.__lastDestDwtObj._dragLeave(mouseEv);
+				obj.__lastDestDwtObj._dropTarget._dragLeave();
 			}
 			
-			obj._lastDestDwtObj = destDwtObj;
+			obj.__lastDestDwtObj = destDwtObj;
 					
 			Dwt.setLocation(obj._dndIcon, mouseEv.docX + 2, mouseEv.docY + 2);
 			// TODO set up timed event to fire off another mouseover event. 
@@ -1996,9 +2028,9 @@ function(ev) {
 	if (!obj) return false;
 
 	//DND
-	if (obj._dndHoverActionId != -1) {
-		AjxTimedAction.cancelAction(obj._dndHoverActionId);
-		obj._dndHoverActionId = -1;
+	if (obj.__dndHoverActionId != -1) {
+		AjxTimedAction.cancelAction(obj.__dndHoverActionId);
+		obj.__dndHoverActionId = -1;
 	}
 	
 	if (!obj._dragSource || !captureObj) {
@@ -2008,34 +2040,34 @@ function(ev) {
 		captureObj.release();
 		var mouseEv = DwtShell.mouseEvent;
 		mouseEv.setFromDhtmlEvent(ev);
-		if (obj._dragging != DwtControl.__DRAGGING) {
-			obj._dragging = DwtControl.__NO_DRAG;
+		if (obj._dragging != DwtControl._DRAGGING) {
+			obj._dragging = DwtControl._NO_DRAG;
 			obj._focusByMouseUpEvent();
 			return DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEUP, obj, mouseEv);
 		} else {
-			obj._lastDestDwtObj = null;
+			obj.__lastDestDwtObj = null;
 			var destDwtObj = mouseEv.dwtObj;
 			if (destDwtObj != null && destDwtObj._dropTarget != null && 
-				obj._dropAllowed && destDwtObj != obj) {
+				obj.__dropAllowed && destDwtObj != obj) {
 				destDwtObj._drop(mouseEv);
 				destDwtObj._dropTarget._drop(obj._dragSource._getData(), mouseEv);
 				obj._dragSource._endDrag();
 				obj._destroyDnDIcon(obj._dndIcon);
-				obj._dragging = DwtControl.__NO_DRAG;
+				obj._dragging = DwtControl._NO_DRAG;
 			} else {
 				// The following code sets up the drop effect for when an 
 				// item is dropped onto an invalid target. Basically the 
 				// drag icon will spring back to its starting location.
-				obj._dragEndX = mouseEv.docX;
-				obj._dragEndY = mouseEv.docY;
-				if (obj._badDropAction == null) {
-					obj._badDropAction = new AjxTimedAction(obj, obj.__badDropEffect);
+				obj.__dragEndX = mouseEv.docX;
+				obj.__dragEndY = mouseEv.docY;
+				if (obj.__badDropAction == null) {
+					obj.__badDropAction = new AjxTimedAction(obj, obj.__badDropEffect);
 				}
 				
 				// Line equation is y = mx + c. Solve for c, and set up d (direction)
-				var m = (obj._dragEndY - obj._dragStartY) / (obj._dragEndX - obj._dragStartX);
-				obj._badDropAction.args = [m, obj._dragStartY - (m * obj._dragStartX), (obj._dragStartX - obj._dragEndX < 0) ? -1 : 1];
-				AjxTimedAction.scheduleAction(obj._badDropAction, 0);
+				var m = (obj.__dragEndY - obj.__dragStartY) / (obj.__dragEndX - obj.__dragStartX);
+				obj.__badDropAction.args = [m, obj.__dragStartY - (m * obj.__dragStartX), (obj.__dragStartX - obj.__dragEndX < 0) ? -1 : 1];
+				AjxTimedAction.scheduleAction(obj.__badDropAction, 0);
 			}
 			mouseEv._stopPropagation = true;
 			mouseEv._returnValue = false;
@@ -2053,12 +2085,12 @@ function(ev) {
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
 	if (!obj) return false;
 
-	if (obj._toolTipContent != null) {
+	if (obj.__toolTipContent != null) {
 		var shell = DwtShell.getShell(window);
 		var manager = shell.getHoverMgr();
 		manager.setHoverOutListener(obj._hoverOutListener);
 		manager.hoverOut();
-		obj._tooltipClosed = false;
+		obj.__tooltipClosed = false;
 	}
 	return DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEOUT, obj);
 };
@@ -2161,19 +2193,19 @@ function() {
 	this._htmlElId = htmlElement.id = (this._htmlElId == null) ? Dwt.getNextId() : this._htmlElId;
 	DwtComposite._pendingElements[this._htmlElId] = htmlElement;
 	Dwt.associateElementWithObject(htmlElement, this);
-	if (this._posStyle == null || this._posStyle == DwtControl.STATIC_STYLE) {
+	if (this.__posStyle == null || this.__posStyle == DwtControl.STATIC_STYLE) {
         htmlElement.style.position = DwtControl.STATIC_STYLE;
 	} else {
-        htmlElement.style.position = this._posStyle;
+        htmlElement.style.position = this.__posStyle;
 	}
 	htmlElement.className = this._className;
 	htmlElement.style.overflow = "visible";
 	this._enabled = true;
-	this._controlEvent = new DwtControlEvent();
-	this._dragging = DwtControl.__NO_DRAG;
-	this._ctrlInited = true;
+	this.__controlEvent = DwtControl.__controlEvent;
+	this._dragging = DwtControl._NO_DRAG;
+	this.__ctrlInited = true;
 	// Make sure this is the last thing we do
-	this.parent.addChild(this, this._index);
+	this.parent.addChild(this, this.__index);
 };
 
 
@@ -2195,21 +2227,21 @@ DwtControl.prototype.__badDropEffect =
 function(m, c, d) {
 	var usingX = (Math.abs(m) <= 1);
 	// Use the bigger delta to control the snap effect
-	var delta = usingX ? this._dragStartX - this._dragEndX : this._dragStartY - this._dragEndY;
+	var delta = usingX ? this.__dragStartX - this.__dragEndX : this.__dragStartY - this.__dragEndY;
 	if (delta * d > 0) {
 		if (usingX) {
-			this._dragEndX += (30 * d);
-			this._dndIcon.style.top = m * this._dragEndX + c;
-			this._dndIcon.style.left = this._dragEndX;
+			this.__dragEndX += (30 * d);
+			this._dndIcon.style.top = m * this.__dragEndX + c;
+			this._dndIcon.style.left = this.__dragEndX;
 		} else {
-			this._dragEndY += (30 * d);
-			this._dndIcon.style.top = this._dragEndY;
-			this._dndIcon.style.left = (this._dragEndY - c) / m;
+			this.__dragEndY += (30 * d);
+			this._dndIcon.style.top = this.__dragEndY;
+			this._dndIcon.style.left = (this.__dragEndY - c) / m;
 		}	
-		AjxTimedAction.scheduleAction(this._badDropAction, 0);
+		AjxTimedAction.scheduleAction(this.__badDropAction, 0);
  	} else {
   		this._destroyDnDIcon(this._dndIcon);
-		this._dragging = DwtControl.__NO_DRAG;
+		this._dragging = DwtControl._NO_DRAG;
   	}
 };
 
@@ -2221,14 +2253,14 @@ function(event) {
 	if (this._eventMgr.isListenerRegistered(DwtEvent.HOVEROVER)) {
 		this._eventMgr.notifyListeners(DwtEvent.HOVEROVER, event);
 	}
-	if (this._toolTipContent != null) {
+	if (this.__toolTipContent != null) {
 		var shell = DwtShell.getShell(window);
 		var tooltip = shell.getToolTip();
-		tooltip.setContent(this._toolTipContent);
+		tooltip.setContent(this.__toolTipContent);
 		tooltip.popup(event.x, event.y);
-		this._lastTooltipX = event.x;
-		this._lastTooltipY = event.y;
-		this._tooltipClosed = false;
+		this.__lastTooltipX = event.x;
+		this.__lastTooltipY = event.y;
+		this.__tooltipClosed = false;
 	}
 };
 
@@ -2243,8 +2275,8 @@ function(event) {
 	var shell = DwtShell.getShell(window);
 	var tooltip = shell.getToolTip();
 	tooltip.popdown();
-	this._lastTooltipX = null;
-	this._lastTooltipY = null;
+	this.__lastTooltipX = null;
+	this.__lastTooltipY = null;
 };
 
 /**@private*/
