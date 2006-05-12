@@ -710,6 +710,7 @@ ZaOverviewPanelController.domainListTreeListener = function (ev) {
 	} else {					
 		this._app.getDomainListController().show(true);
 	}
+	this.searchDomains();
 }
 
 ZaOverviewPanelController.aliasListTreeListener = function (ev) {

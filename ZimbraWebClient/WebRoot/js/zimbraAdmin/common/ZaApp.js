@@ -540,21 +540,7 @@ function(refresh) {
 ZaApp.prototype.handleDomainCreation = 
 function (ev) {
 	if(ev) {
-		//add the new ZaDomain to the controlled list
-		if(ev.getDetails()) {
-			if(!this._domainList) {
-				this._domainList=ZaDomain.getAll(this);
-			}
-			this._domainList.add(ev.getDetails());
-		/*	EmailAddr_XFormItem.domainChoices.setChoices(this._domainList.getArray());
-			EmailAddr_XFormItem.domainChoices.dirtyChoices();	
-			if(this._domainListChoices == null) {
-				this._domainListChoices = new XFormChoices(this._domainList.getArray(), XFormChoices.OBJECT_LIST, "name", "name");	
-			} else {
-				this._domainListChoices.setChoices(this._domainList.getArray());
-				this._domainListChoices.dirtyChoices();			
-			}					*/
-		}
+		this._appCtxt.getAppController().getOverviewPanelController().searchDomains();
 	}
 }
 
