@@ -1,11 +1,11 @@
-<zimlet name="com_zimbra_sforce" version="1.0" description="Salesforce INTEGRATION">
+<zimlet name="com_zimbra_sforce" version="1.0" description="Salesforce">
   <include>sforce.js</include>
   <includeCSS>sforce.css</includeCSS>
   <handlerObject>Com_Zimbra_SForce</handlerObject>
 
   <zimletPanelItem label="Salesforce" icon="SFORCE-panelIcon">
 
-    <toolTipText>Use drag'n'drop to interact with your SalesForce account</toolTipText>
+    <toolTipText>Use drag'n'drop to interact with your Salesforce account</toolTipText>
 
     <dragSource type="ZmContact" />
     <dragSource type="ZmMailMsg" />
@@ -18,7 +18,7 @@
       <menuItem />
       <menuItem label="Visit Salesforce" id="WWW.SFORCE.COM" icon="SFORCE-panelIcon">
         <canvas type="dialog" title="Salesforce Website" width="800" height="600" />
-        <actionUrl target="http://www.sforce.com">
+        <actionUrl target="http://www.salesforce.com">
           <param name="referrer">www.zimbra.com</param>
         </actionUrl>
       </menuItem>

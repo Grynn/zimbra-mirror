@@ -122,7 +122,7 @@ function(address) {
 
 Com_Zimbra_YMaps.prototype.toolTipPoppedUp =
 function(spanElement, obj, context, canvas) {
-	canvas.innerHTML = '<img width="345" height="245" id="'+ ZmZimletBase.encodeId(obj)+'" src="'+this.getResource('blank_pixel.gif')+'"/>';
+	canvas.innerHTML = '<center><img width="345" height="245" id="'+ ZmZimletBase.encodeId(obj)+'" src="'+this.getResource('blank_pixel.gif')+'"/></center>';
 	if (Com_Zimbra_YMaps.CACHE[obj+"img"]) {
 		Com_Zimbra_YMaps._displayImage(Com_Zimbra_YMaps.CACHE[obj+"img"], obj);
 	} else {
