@@ -82,12 +82,12 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 						}
 					]
 				},
-				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 2", items:[
-				  	{ type: _GROUP_, 
+				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 2", id:"gs_form_attachment_tab", items:[
+				  	{ type: _GROUP_, id:"attachment_settings",
 				  	  label: ZaMsg.NAD_Attach_IncomingAttachments, labelCssStyle: "vertical-align:top",
 				  	  items: [
 						{ ref: ZaGlobalConfig.A_zimbraAttachmentsBlocked, type: _CHECKBOX_, 
-						  label: ZaMsg.NAD_Attach_RemoveAllAttachments,
+						  label: ZaMsg.NAD_GlobalRemoveAllAttachments,
 						  trueValue: "TRUE", falseValue: "FALSE", 
 						  onChange: ZaTabView.onFormFieldChanged
 				    	}

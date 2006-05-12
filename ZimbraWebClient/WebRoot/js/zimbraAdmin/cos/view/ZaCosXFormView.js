@@ -155,7 +155,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 					  	  	}
 						]
 					},
-					{type:_CASE_, relevant:"instance[ZaModel.currentTab]==5",
+					{type:_CASE_, relevant:"instance[ZaModel.currentTab]==5", id:"cos_form_advanced_tab",
 						colSizes:["300px","*"],
 						items: [
 							{ref:ZaCos.A_zimbraAttachmentsBlocked, type:_CHECKBOX_,  msgName:ZaMsg.NAD_RemoveAllAttachments,label:ZaMsg.NAD_RemoveAllAttachments, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_},
