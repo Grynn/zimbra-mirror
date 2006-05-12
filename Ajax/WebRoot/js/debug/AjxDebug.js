@@ -724,7 +724,7 @@ function (aMsg) {
 
 AjxDebug.prototype._showMessages = 
 function () {
-	if (!this._dbgWindowInited || !this._contentFrame || !this._linkFrame) {
+	if (!this._dbgWindowInited) {
 		// For now, don't show the messages-- assuming that this case only 
 		// happens at startup, and many messages will be written
 		return;
@@ -803,29 +803,28 @@ AjxDebug.prototype._createLinkNContent =
 function(ajxDbgObj, linkClass, linkLabel, contentClass, contentLabel) {
 	var now = new Date();
 	var timeStamp = [" - [", ajxDbgObj._getTimeStamp(now), "]"].join("");
-	if (ajxDbgObj._linkFrame && ajxDbgObj._contentFrame) {
-		var linkFrameDoc = ajxDbgObj._linkFrame.contentWindow.document;
-		var div = linkFrameDoc.createElement("div");
-		div.className = linkClass;
-		div.innerHTML = linkLabel + timeStamp;
-		var id = "Lnk_" + now.getMilliseconds();
-		div._targetId = id;
-		div._dbg = ajxDbgObj;
-		div.onclick = AjxDebug._linkClicked
-		linkFrameDoc.body.appendChild(div);
 
-		var contentFrameDoc = ajxDbgObj._contentFrame.contentWindow.document;
-		div = contentFrameDoc.createElement("div");
-		div.className = contentClass;
-		div.id = id;
-		div.innerHTML = contentLabel + timeStamp;
-		div._dbg = ajxDbgObj;
-		contentFrameDoc.body.appendChild(contentFrameDoc.createElement("p"));
-		contentFrameDoc.body.appendChild(div);
-		contentFrameDoc.body.appendChild(contentFrameDoc.createElement("p"));
+	var linkFrameDoc = ajxDbgObj._linkFrame.contentWindow.document;
+	var div = linkFrameDoc.createElement("div");
+	div.className = linkClass;
+	div.innerHTML = linkLabel + timeStamp;
+	var id = "Lnk_" + now.getMilliseconds();
+	div._targetId = id;
+	div._dbg = ajxDbgObj;
+	div.onclick = AjxDebug._linkClicked
+	linkFrameDoc.body.appendChild(div);
 
-		ajxDbgObj._scrollToBottom();
-	}
+	var contentFrameDoc = ajxDbgObj._contentFrame.contentWindow.document;
+	div = contentFrameDoc.createElement("div");
+	div.className = contentClass;
+	div.id = id;
+	div.innerHTML = contentLabel + timeStamp;
+	div._dbg = ajxDbgObj;
+	contentFrameDoc.body.appendChild(contentFrameDoc.createElement("p"));
+	contentFrameDoc.body.appendChild(div);
+	contentFrameDoc.body.appendChild(contentFrameDoc.createElement("p"));
+
+	ajxDbgObj._scrollToBottom();
 };
 
 AjxDebug._clear = 
