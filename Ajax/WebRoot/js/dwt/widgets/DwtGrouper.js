@@ -21,13 +21,11 @@ function DwtGrouper(parent, className, posStyle) {
 	posStyle = posStyle || DwtControl.STATIC_STYLE;
 	DwtComposite.call(this, parent, null, posStyle);
 	
-	this._labelEl = document.createElement("SPAN");
+	this._labelEl = document.createElement("LEGEND");
 	this._insetEl = document.createElement("DIV");
-	this._borderEl = document.createElement("DIV");
+	this._borderEl = document.createElement("FIELDSET");
 	this._borderEl.appendChild(this._labelEl);
 	this._borderEl.appendChild(this._insetEl);
-	
-	this.setStyle(DwtGrouper.SOLID);
 	
 	var element = this.getHtmlElement();
 	element.appendChild(this._borderEl);
@@ -36,13 +34,6 @@ function DwtGrouper(parent, className, posStyle) {
 DwtGrouper.prototype = new DwtComposite;
 DwtGrouper.prototype.constructor = DwtGrouper;
 
-// Constants
-
-DwtGrouper.SOLID = "solid";
-
-DwtGrouper._STYLES = {};
-DwtGrouper._STYLES[DwtGrouper.SOLID] = [ "GrouperBorder", "GrouperLabel", "GrouperInset" ];
-
 // Data
 
 DwtGrouper.prototype._borderEl;
@@ -50,13 +41,6 @@ DwtGrouper.prototype._labelEl;
 DwtBorder.prototype._insetEl;
 
 // Public methods
-
-DwtGrouper.prototype.setStyle = function(style) {
-	var cssClasses = DwtGrouper._STYLES[style];
-	this._borderEl.className = cssClasses[0];
-	this._labelEl.className = cssClasses[1];
-	this._insetEl.className = cssClasses[2];
-};
 
 DwtGrouper.prototype.setLabel = function(htmlContent) {
 	Dwt.setVisible(this._labelEl, Boolean(htmlContent));
