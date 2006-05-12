@@ -230,6 +230,9 @@ Super_XFormItem.checkIfOverWriten = function() {
 
 Super_XFormItem.updateCss = function(levels) {
 	var container = this.getContainer();
+	if(this.getParentItem().getInheritedProperty("useParentTable"))
+		levels = levels-4;
+	
 	for(var ix=0; ix < levels; ix++) {
 		container = container.parentNode;
 	}
@@ -269,8 +272,12 @@ Super_AnchorHelper_XFormItem.prototype.constructWidget = function () {
 		if (width != null) el.style.width = width;
 		if (height != null) el.style.height = height;
 	} 
-//	this._addCssStylesToDwtWidget();
-	var label = this.getParentItem().getInheritedProperty("resetToSuperLabel");	
+
+	var label = this.getLabel();
+	
+	if(!label)
+		label = this.getParentItem().getInheritedProperty("resetToSuperLabel");		
+		
 	widget.setText(label);
 
 	var ls = new AjxListener(this, Super_AnchorHelper_XFormItem.prototype.resetToSuperValue);
