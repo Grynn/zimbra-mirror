@@ -230,7 +230,7 @@ function(msec) {
 
 DwtMenu.prototype.handleKeyAction =
 function(actionCode, ev) {
-	DBG.println("DwtMenu.prototype.handleKeyAction: " + this + " id: " + this.getHtmlElement().id);
+	//DBG.println("DwtMenu.prototype.handleKeyAction: " + this + " id: " + this.getHtmlElement().id);
 	// For now don't deal with anything but BAR, POPUP, and DROPDOWN style menus
 	switch (this._style) {
 		case DwtMenu.BAR_STYLE:
@@ -319,7 +319,7 @@ function(actionCode, ev) {
  */
 DwtMenu.prototype.setCurrentItem =
 function(currItem) {
-	DBG.println("DwtMenu.prototype.setCurrentItem: " + currItem);
+	//DBG.println("DwtMenu.prototype.setCurrentItem: " + currItem);
 	this.__currentItem = currItem;
 }
 
@@ -340,12 +340,12 @@ function(mev, ersatz, dwtObj, button, ctrl, shift, alt, docX, docY) {
 
 DwtMenu.prototype._focus =
 function() {
-	DBG.println(AjxDebug.DBG1, "DwtMenu.prototype._focus");
+	//DBG.println(AjxDebug.DBG1, "DwtMenu.prototype._focus");
 }
 
 DwtMenu.prototype._blur =
 function() {
-	DBG.println(AjxDebug.DBG1, "DwtMenu.prototype._blur");
+	//DBG.println(AjxDebug.DBG1, "DwtMenu.prototype._blur");
 }
 
 
@@ -677,7 +677,6 @@ function(x, y, kbGenerated) {
 	
 	/* If the popup was keyboard generated, then pick the first enabled child item
 	 * we do this by simulating a DwtKeyMap.SELECT_NEXT keyboard action */
-DBG.println("KBG: " + kbGenerated);
 	 if (kbGenerated)
 	 	this.handleKeyAction(DwtKeyMap.SELECT_NEXT);
 	
