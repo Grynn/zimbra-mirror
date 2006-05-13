@@ -255,7 +255,7 @@ function () {
 	//set a selection listener on the account list view
 	this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 	this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
-	this._removeConfirmMessageDialog = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);			
+	this._removeConfirmMessageDialog = this._app.dialogs["ConfirmMessageDialog"] = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);			
 	this._UICreated = true;
 }
 
@@ -335,6 +335,17 @@ function(ev) {
 		this._editItem(item);
 	}
 }
+
+/**
+* This listener is called when the Delete button is clicked. 
+* It call ZaAccountViewController.show method
+* in order to display the Account View
+**/
+ZaSearchListController.prototype._deleteButtonListener =
+function(ev) {
+	ZaAccountListController.prototype._deleteButtonListener.call(this, ev);
+}
+
 
 ZaSearchListController.prototype._editItem = function (item) {
 	var type = item.type;
