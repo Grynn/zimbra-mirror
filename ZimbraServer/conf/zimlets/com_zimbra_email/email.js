@@ -76,7 +76,8 @@ function(obj, span, context) {
 	// bug fix #5262 - Change action menu item for contact depending on whether
 	// email address is found in address book or not.
 	if (this._contacts) {
-		var found = this._contacts.getContactByEmail(obj.getAddress()) != null;
+		var addr = (obj instanceof ZmEmailAddress) ? obj.getAddress() : obj;
+		var found = (this._contacts.getContactByEmail(addr) != null);
 		var newOp = found ? ZmOperation.EDIT_CONTACT : ZmOperation.NEW_CONTACT;
 		var newText = found ? null : ZmMsg.AB_ADD_CONTACT;
 		ZmOperation.setOperation(actionMenu, "NEWCONTACT", newOp, newText);
