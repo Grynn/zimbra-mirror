@@ -304,7 +304,7 @@ Com_Zimbra_SForce.prototype.contactDropped = function(contact) {
 			var props = {
 				Name     : contact.get("company"),
 				Website  : acct_Website,
-				Phone    : contact.get("workPhone", "workPhone2"),
+				Phone    : contact.get("workPhone"),
 
 				// utility function
 				get      : Com_Zimbra_SForce.__query_result_get
@@ -366,7 +366,7 @@ Com_Zimbra_SForce.prototype.dlg_createAccount = function(acct_data, contact_data
             name      : "_reuse",
             type      : "enum",
             value     : "yes",
-            item      : [ { label : "Yes, please",  value : "yes" },
+            item      : [ { label : "Yes",  value : "yes" },
                           { label : "No, create a new one", value : "no" }
                         ] },
 
@@ -419,7 +419,7 @@ Com_Zimbra_SForce.prototype.dlg_createAccount = function(acct_data, contact_data
 		{ label    : "Phone",
 		  name     : "Phone",
 		  type     : "string",
-		  value    : contact_data.get("phone") }
+		  value    : contact_data.get("workPhone") }
 
 	];
 	pe_contact.initProperties(pe_props);
@@ -698,15 +698,16 @@ Com_Zimbra_SForce.prototype.dlg_addNoteToAccounts = function(accounts, note) {
 };
 
 Com_Zimbra_SForce.toIsoDate = function(theDate) {
-	return AjxDateFormat.format("yyyy-MM-DD", theDate);
+	return AjxDateFormat.format("yyyy-MM-dd", theDate);
 };
 
 Com_Zimbra_SForce.toIsoDateTime = function(theDate) {
-	var ret = AjxDateFormat.format("yyyy-MM-DDThh:mm:ss", theDate);
-	var tz = AjxDateFormat.format("Z", theDate);
-	if (tz.length == 5)
-		tz = tz.substr(0, 3) + ":" + tz.substr(3);
-	return ret + tz;
+    var ret = AjxDateFormat.format("yyyy-MM-ddTkk:mm:ss", theDate);
+    var tz = AjxDateFormat.format("Z", theDate);
+    DBG.println(AjxDebug.DBG3, "ret: " + ret + " tz: " + tz);
+    if (tz.length == 5)
+        tz = tz.substr(0, 3) + ":" + tz.substr(3);
+    return ret + tz;
 };
 
 Com_Zimbra_SForce.prototype.apptDropped = function(obj) {
@@ -721,7 +722,8 @@ Com_Zimbra_SForce.prototype.apptDropped = function(obj) {
 		// Type              : "Meeting", // obj.type is always null
 		Location          : obj.location
 	};
-	this.createSFObject(appt, "Event", function(id) {
+    DBG.dumpObj(appt);
+    this.createSFObject(appt, "Event", function(id) {
 		this.displayStatusMessage("New event registered at Salesforce");
 	});
 };
