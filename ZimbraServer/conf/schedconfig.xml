@@ -6,10 +6,7 @@
    The schedconfig.xml file should be formatted like this:
    
    <scheduler>
-      <config schedulers="NUM_SCHEDULERS" maxops="MAXOPS">
-          <maxload pri="PRIORITY" load="MAXLOAD"/>
-           ...(1 for each priority level)...
-       </config>
+      <config schedulers="NUM_SCHEDULERS" maxops="MAXOPS" maxload="MAXLOAD"/>
        
        NUM_SCHEDULERS is the number of Scheduler objects.  If it turns out that contention in 
                    the Scheduler is a systemwide bottleneck, then increase the # schedulers here
@@ -20,18 +17,10 @@
        MAXOPS is the maximum # simultaneous ops allowed to be running at one time.  This value
                  allows some coarse-grained concurrency control.
                  
-       MAXLOAD: one entry for each Priority level, where priority level is one of
-                 { "admin", "interactive_high", "interactive_low", "batch", "low" }
-                 The maxload for each priority tells the system the cutoff load level
-                 (where system load is the sum of the load of all the running ops) above 
-                 which the system will no longer schedule operations.
-                 
-                  We use different max loads by priority to help aleviate priority inversion
-                  problems...the higher-priority (e.g. "admin") levels should have higher
-                  max loads than the lower priority levels - this effectively causes
-                  the system to leave some "headroom" when scheduling low-priority operations
-                  just in case new higher-priority operations come in.
-       
+       MAXLOAD: Tells the system the cutoff load level (where system load is the sum of the 
+                load of all the running ops) above which the system will no longer schedule 
+                operations.
+
        <op name="CLASSNAME" load="LOAD" scale="SCALE" maxload="MAXLOAD"/>
        ......(many ops).....
        
