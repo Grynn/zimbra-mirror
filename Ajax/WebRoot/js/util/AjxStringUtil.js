@@ -316,16 +316,26 @@ function(str, values) {
 };
 
 /**
-* URL-encodes a string. Replace + with %2B and space with +, then call escape()
-* for transport in URL's or POST bodies.
+* URL-encodes a string. Replace + with %2B and space with +.
 *
 * @param str	the string to encode
 */
-
 AjxStringUtil.urlEncode =
 function(str) {
-	if (!str) {return "";}
-	return escape(str.replace(/[+]/g, '%2B').replace(/ /g, '+'));
+	if (!str) return "";
+	var func = window.encodeURL || window.encodeURI;
+	return func(str).replace(/%20/g,"+");
+};
+
+/**
+ * Encodes a string as if it were a <em>part</em> of a URL. The
+ * difference between this function and {@link AjxStringUtil.urlEncode}
+ * is that this will also encode forward slashes.
+ */
+AjxStringUtil.urlComponentEncode = function(str) {
+	if (!str) return "";
+	var func = window.encodeURLComponent || window.encodeURIComponent;
+	return func(str).replace(/%20/g,"+");
 };
 
 /**
