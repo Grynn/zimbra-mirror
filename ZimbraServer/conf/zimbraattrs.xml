@@ -1596,4 +1596,8 @@ TODO - add support for multi-line values in globalConfigValue and defaultCOSValu
   <desc>Whether notebook feature should be allowed for this account or in this cos</desc>
 </attr>
 
+<attr id="357" name="zimbraShareInfo" type="string" max="1024" cardinality="multi" optionalIn="account">
+  <desc>items an account has shared</desc>
+</attr>
+
 </attrs>

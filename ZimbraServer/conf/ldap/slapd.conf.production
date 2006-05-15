@@ -115,6 +115,7 @@ index   zimbraMailCatchAllAddress eq,sub
 index   zimbraMailDeliveryAddress eq,sub
 index   zimbraMailAlias        eq,sub
 index   zimbraDomainName       eq,sub
+index   zimbraShareInfo        sub
 index   uid                    pres,eq
 # white pages
 index   mail                   pres,eq,sub
