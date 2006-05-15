@@ -14,62 +14,109 @@
  * limitations under the License.
  */
 
-
+/**
+ * @constructor
+ * @class
+ * A drag source is registered with a control to indicate that the control is 
+ * draggable. The drag source is the mechanism by which the DnD framework provides 
+ * the binding between the UI components and the application.
+ * 
+ * Application developers instantiate <i>DwtDragSource</i> and register it with the control
+ * which is to be draggable (via <code>DwtControl.prototype.setDragSource</code>). The
+ * application should then register a listener with the <i>DwtDragSource</i>. This way
+ * when drag events occur the application will be notified and may act on them 
+ * accordingly
+ * 
+ * @author Ross Dargahi
+ * 
+ * @param {int} supportedOps Supported operations. This is an arithmatic ORing of
+ * 		the operations supported by the drag source. Supported values are: <ul>
+ * 			<li><i>Dwt.DND_DROP_NONE</i></li>
+ * 			<li><i>Dwt.DND_DROP_COPY</i></li>
+ * 			<li><i>Dwt.DND_DROP_MOVE</i></li></ul> 
+ * 
+ * @see DwtDragEvent
+ * @see DwtControl
+ * @see DwtControl#setDragSource
+ */
 function DwtDragSource(supportedOps) {
-	this._supportedOps = supportedOps
-	this._evtMgr = new AjxEventMgr();
-}
+	this.__supportedOps = supportedOps
+	this.__evtMgr = new AjxEventMgr();
+};
 
-DwtDragSource._DRAG_LISTENER = "DwtDragSource._DRAG_LISTENER";
+/**@private*/
+DwtDragSource.__DRAG_LISTENER = "DwtDragSource.__DRAG_LISTENER";
 
-DwtDragSource._dragEvent = new DwtDragEvent();
+/**@private*/
+DwtDragSource.__dragEvent = new DwtDragEvent();
 
+/**
+ * @return The name of this class
+ * @type String
+ */
 DwtDragSource.prototype.toString = 
 function() {
 	return "DwtDragSource";
-}
+};
 
+
+/**
+ * Registers a listener for <i>DwtDragEvent</i> events.
+ *
+ * @param {AjxListener} dragSourceListener Listener to be registered 
+ * 
+ * @see DwtDragEvent
+ * @see AjxListener
+ * @see #removeDragListener
+ */
 DwtDragSource.prototype.addDragListener =
 function(dragSourceListener) {
-	this._evtMgr.addListener(DwtDragSource._DRAG_LISTENER, dragSourceListener);
-}
+	this.__evtMgr.addListener(DwtDragSource.__DRAG_LISTENER, dragSourceListener);
+};
 
+/**
+ * Removes a registered event listener.
+ * 
+ * @param {AjxListener} dragSourceListener Listener to be removed
+ * 
+ * @see AjxListener
+ * @see #addDragListener
+ */
 DwtDragSource.prototype.removeDragListener =
 function(dragSourceListener) {
-	this._evtMgr.removeListener(DwtDragSource._DRAG_LISTENER, dragSourceListener);
-}
+	this.__evtMgr.removeListener(DwtDragSource.__DRAG_LISTENER, dragSourceListener);
+};
 
+// The following methods are called by DwtControl during the drag lifecycle 
 
-/* 
-* The following  methods are called by DwtControl during the Drag lifecycle 
-*/
-
-
+/** @private */
 DwtDragSource.prototype._beginDrag =
 function(operation, srcControl) {
-	if (!(this._supportedOps & operation))
+	if (!(this.__supportedOps & operation))
 		return Dwt.DND_DROP_NONE;
 		
-	DwtDragSource._dragEvent.operation = operation;
-	DwtDragSource._dragEvent.srcControl = srcControl;
-	DwtDragSource._dragEvent.action = DwtDragEvent.DRAG_START;
-	DwtDragSource._dragEvent.srcData = null;
-	DwtDragSource._dragEvent.doit = true;
-	this._evtMgr.notifyListeners(DwtDragSource._DRAG_LISTENER, DwtDragSource._dragEvent);
-	return DwtDragSource._dragEvent.operation;
-}
+	DwtDragSource.__dragEvent.operation = operation;
+	DwtDragSource.__dragEvent.srcControl = srcControl;
+	DwtDragSource.__dragEvent.action = DwtDragEvent.DRAG_START;
+	DwtDragSource.__dragEvent.srcData = null;
+	DwtDragSource.__dragEvent.doit = true;
+	this.__evtMgr.notifyListeners(DwtDragSource.__DRAG_LISTENER, DwtDragSource.__dragEvent);
+	return DwtDragSource.__dragEvent.operation;
+};
 
+/** @private */
 DwtDragSource.prototype._getData =
 function() {
-	DwtDragSource._dragEvent.action = DwtDragEvent.SET_DATA;
-	this._evtMgr.notifyListeners(DwtDragSource._DRAG_LISTENER, DwtDragSource._dragEvent);
-	return DwtDragSource._dragEvent.srcData;
-}
+	DwtDragSource.__dragEvent.action = DwtDragEvent.SET_DATA;
+	this.__evtMgr.notifyListeners(DwtDragSource.__DRAG_LISTENER, DwtDragSource.__dragEvent);
+	return DwtDragSource.__dragEvent.srcData;
+};
 
+/** @private */
 DwtDragSource.prototype._endDrag =
 function() {
-	DwtDragSource._dragEvent.action = DwtDragEvent.DRAG_END;
-	DwtDragSource._dragEvent.doit = false;
-	this._evtMgr.notifyListeners(DwtDragSource._DRAG_LISTENER, DwtDragSource._dragEvent);
-	return DwtDragSource._dragEvent.doit;
-}
+	DwtDragSource.__dragEvent.action = DwtDragEvent.DRAG_END;
+	DwtDragSource.__dragEvent.doit = false;
+	this.__evtMgr.notifyListeners(DwtDragSource.__DRAG_LISTENER, DwtDragSource.__dragEvent);
+	return DwtDragSource.__dragEvent.doit;
+};

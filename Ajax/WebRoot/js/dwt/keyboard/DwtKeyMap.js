@@ -28,10 +28,21 @@ function DwtKeyMap(subclassInit) {
 		return;
 		
 	/* Always specify Control, then Alt, then Shift. All Chars must be upper case
-	 * Note that DwtKeyMap.GLOBAL is the global mapping and will be inherited by
-	 * all mappings unless explicitly requested not to*/
+	 */
 	this._map = {};
-	this._map[DwtKeyMap.GLOBAL] = {};
+	
+	this._map["DwtBaseDialog"] = {
+		"Enter":	DwtKeyMap.ENTER
+	};
+
+	this._map["DwtDialog"] = {"INHERIT": "DwtBaseDialog"};
+	this._map["DwtMessageDialog"] = {"INHERIT": "DwtDialog"	};
+	
+	this._map["DwtButton"] = {
+		"Enter": DwtKeyMap.SELECT_CURRENT,
+		"ArrowDown": DwtKeyMap.SELECT_SUBMENU	
+	};
+	
 	this._map["DwtListView"] = {
 		"Space":			DwtKeyMap.SELECT_CURRENT,
 			
@@ -48,12 +59,8 @@ function DwtKeyMap(subclassInit) {
 		"Ctrl+Enter":		DwtKeyMap.ACTION,
 		"Ctrl+M":			DwtKeyMap.ACTION  // Mac FF
 	};
-	this._map["DwtButton"] = {
-		"Enter":	DwtKeyMap.SELECT_CURRENT	
-	};
 	
 	this._map["DwtMenu"] = {
-		"NOINHERIT_GLOBAL": true,
 		"Esc":        DwtKeyMap.CANCEL,
 		"Enter":	  DwtKeyMap.SELECT_CURRENT,	
 		"ArrowDown":  DwtKeyMap.SELECT_NEXT,
@@ -98,26 +105,25 @@ DwtKeyMap.SPACE = "Space";
 // your codes positive integers
 var i = -1;
 
-DwtKeyMap.NEXT = i--;
-DwtKeyMap.PREV = i--;
-DwtKeyMap.DBLCLICK = i--;
 DwtKeyMap.ACTION = i--;
-DwtKeyMap.SELECT_CURRENT = i--;
-DwtKeyMap.SELECT_NEXT = i--;
-DwtKeyMap.SELECT_PREV = i--;
 DwtKeyMap.ADD_SELECT_CURRENT = i--;
 DwtKeyMap.ADD_SELECT_NEXT = i--;
 DwtKeyMap.ADD_SELECT_PREV = i--;
+DwtKeyMap.CANCEL = i--;
+DwtKeyMap.DBLCLICK = i--;
+DwtKeyMap.DONE = i--
+DwtKeyMap.NEXT = i--;
+DwtKeyMap.PREV = i--;
+DwtKeyMap.SELECT_CURRENT = i--;
+DwtKeyMap.SELECT_NEXT = i--;
+DwtKeyMap.SELECT_PREV = i--;
 DwtKeyMap.SELECT_SUBMENU = i--;
 DwtKeyMap.SELECT_PARENTMENU = i--;
-DwtKeyMap.CANCEL = i--;
 
 delete i;
 
 DwtKeyMap.SEP = ","; // Key separator
-DwtKeyMap.GLOBAL = "GLOBAL";  // Global submap
-DwtKeyMap.INHERIT = "INHERIT"; // Alias keyword.
-DwtKeyMap.GLOBAL_NOINHERIT = "NOINHERIT_GLOBAL";  // Don't inherit global
+DwtKeyMap.INHERIT = "INHERIT"; // Inherit keyword.
 
 DwtKeyMap.prototype.getMap =
 function() {

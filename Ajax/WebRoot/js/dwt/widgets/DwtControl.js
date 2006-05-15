@@ -76,8 +76,8 @@ function DwtControl(parent, className, posStyle, deferred, id, index) {
 	/** parent component. Read-Only */
  	this.parent = parent;
 	if (parent != null && !(parent instanceof DwtComposite))
-		throw new DwtException("Parent must be a subclass of Composite", DwtException.INVALIDPARENT, "DwtWidget");
-
+		throw new DwtException("Parent must be a subclass of Composite", DwtException.INVALIDPARENT, "DwtControl");
+		
 	/** the control's <i>DwtShell</i>*/
 	this.shell = null;
 	
@@ -117,22 +117,23 @@ function DwtControl(parent, className, posStyle, deferred, id, index) {
 	
 	/** enabled state of this control. Public APIs to this member are
 	 * <code>getEnabled</code> and <code>setEnabled</code>
-	 * @type boolean
-	 */
+	 * @type boolean */
 	this._enabled = false;
 	
 	/** Indicates the drag state of the control. Valid values are:<ul>
 	 * <li>DwtControl._NO_DRAG<li>
 	 * <li>DwtControl._DRAGGING<li>
 	 * <li>DwtControl._DRAG_REJECTED<li></ul>
-	 * @type number
-	 */
+	 * @type number */
 	this._dragging = null;
 	
 	/** Drag n drop icon. Valid when a drag and drop operation is ocurring
-	 * @type HTMLElement
-	 */
-	this._dndIcon
+	 * @type HTMLElement*/
+	this._dndIcon;
+	
+	/** Flag indicating whether the control has keyboard focus or not
+	 * @type boolean*/
+	this._haveFocus = false;
 	
 	if (!deferred)
 		this.__initCtrl();
@@ -145,9 +146,6 @@ function DwtControl(parent, className, posStyle, deferred, id, index) {
 	 * @type AjxListener */
 	this._hoverOutListener = new AjxListener(this, this.__handleHoverOut);
 }
-
-
-
 
 // Position styles
 /**  Static position style 
@@ -483,7 +481,8 @@ function() {
   */
   DwtControl.prototype.haveFocus =
   function() {
-  	return DwtShell.getShell(window).getKeyboardMgr().dwtControlHasFocus(this)
+  	//return DwtShell.getShell(window).getKeyboardMgr().dwtControlHasFocus(this);
+  	return this._haveFocus;
   };
  
 /** 
@@ -1767,6 +1766,7 @@ function(ev) {
  */
 DwtControl.prototype.__doBlur =
 function() {
+	this._haveFocus = false;
 	if (this.isListenerRegistered(DwtEvent.ONBLUR)) {
 		var ev = DwtShell.focusEvent;
 		ev.dwtObj = this;
@@ -1785,6 +1785,7 @@ function() {
  */
 DwtControl.prototype.__doFocus =
 function() {
+	this._haveFocus = true;
 	if (this.isListenerRegistered(DwtEvent.ONFOCUS)) {
 		var ev = DwtShell.focusEvent;
 		ev.dwtObj = this;

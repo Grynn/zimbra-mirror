@@ -618,12 +618,12 @@ function(ev) {
 			this._popupMenu(0);
 		} else if (this.isListenerRegistered(DwtEvent.SELECTION)) {
 			this._deselect();
+			DwtMenu.closeActiveMenu();
 			var selEv = DwtShell.selectionEvent;
 			DwtUiEvent.copy(selEv, ev);
 			selEv.item = selEv.dwtObj;
 			selEv.detail = 0;
 			this.notifyListeners(DwtEvent.SELECTION, selEv);
-			DwtMenu.closeActiveMenu();
 		}  else {
 			this._deselect();
 			DwtMenu.closeActiveMenu();

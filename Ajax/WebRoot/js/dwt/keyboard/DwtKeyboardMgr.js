@@ -41,7 +41,11 @@
 */
 function DwtKeyboardMgr() {
 	/**@private*/
-	this.__tabGrpStack = new Array();
+	this.__tabGrpStack = [];
+	/**@private*/
+	this.__blockHandlingStack = [];
+	/**@private*/
+	this.__blockGlobalHandling = false;
 	/**@private*/
 	this.__tabGroupChangeListenerObj = new AjxListener(this, this.__tabGrpChangeListener);
 };
@@ -68,27 +72,50 @@ function() {
 }
 
 /**
- * Pushes <code>tabGroup</code> onto the stack and makes it the active tab group
+ * Blocks/unblocks actions being delivered to the global key action handler.
+ * This is useful when global key action  handling is to be blocked, 
+ * for example in the case of dialogs and menus
+ * 
+ * @param {boolean} block if true will block the global handling of key actions
+ */
+ DwtKeyboardMgr.prototype.blockGlobalHandling =
+ function(block) {
+ 	this.__blockGlobalHandling = block;
+ }
+ 
+/**
+ * Pushes <code>tabGroup</code> onto the stack and makes it the active tab group.
+ * This method also pushes the current "block global handling" state on to the stack
  * 
  * @param {DwtTabGroup} tabGroup tab group to push onto the stack
+ * @param {boolean} blockGlobalHandling if true, then key actions are not dispatched
+ * 		to the global key action handler for this tab group. (optional)
+ * 
+ * @see #popTabGroup
+ * @see #blockGlobalHandling
  */
 DwtKeyboardMgr.prototype.pushTabGroup =
-function(tabGroup) {
+function(tabGroup, blockGlobalHandling) {
 	if (!this.__keyboardHandlingInited)
 		throw DwtKeyboardMgr.KEYMAP_NOT_REGISTERED;
 		
 	this.__tabGrpStack.push(tabGroup);
+	this.__blockHandlingStack.push(this.__blockGlobalHandling);
 	var focusMember = tabGroup.getFocusMember();
 	if (!focusMember)
 		focusMember = tabGroup.resetFocusMember(true);
 	tabGroup.addFocusChangeListener(this.__tabGroupChangeListenerObj);
 	this.grabFocus(focusMember);
 	this.__currTabGroup = tabGroup;	
+	
+	if (blockGlobalHandling != null)
+		this.__blockGlobalHandling = blockGlobalHandling;
 };
 
 /**
  * Pops the current tab group off the top of the tab group stack. The previous 
- * tab group (if there is one) then becomes the current tab group
+ * tab group (if there is one) then becomes the current tab group. The previous
+ * value for "block global handling" is also reinstated
  * 
  * @return the popped tab group
  * @type DwtTabGroup
@@ -104,8 +131,10 @@ function() {
 		tabGroup.removeFocusChangeListener(this.__tabGroupChangeListenerObj);
 	
 	var currTg = null;
+	var blockHandling = false;
 	if (this.__tabGrpStack.length > 0) {
 		currTg = this.__tabGrpStack[this.__tabGrpStack.length-1];
+		blockHandling = this.__blockHandlingStack[this.__blockHandlingStack.length-1];
 		var focusMember = currTg.getFocusMember();
 		if (!focusMember)
 			focusMember = currTg.resetFocusMember(true);
@@ -113,7 +142,8 @@ function() {
 			this.grabFocus(focusMember);
 	}
 	this.__currTabGroup = currTg;
-	return tabGroup;	
+	this.__blockGlobalHandling = blockHandling;
+	return tabGroup;
 };
 
 /**
@@ -458,7 +488,7 @@ function(ev) {
 	 if (keyCode == DwtKeyMapMgr.TAB_KEYCODE) {
 	 	// If a menu is popped up then don't act on the Tab
 	 	if (!DwtMenu.menuShowing()) {
-		 	//DBG.println(AjxDebug.DBG3, "TAB HIT!");
+		 	DBG.println(AjxDebug.DBG3, "TAB HIT!");
 		 	// If the tab hit is in an element or if the current tab group has
 		 	// a focus member
 			if (focusInTGMember || kbMgr.__currTabGroup.getFocusMember()) {
@@ -467,7 +497,7 @@ function(ev) {
 			 	else
 			 		kbMgr.__currTabGroup.getPrevFocusMember(true);
 		 	} else {
-		 		//DBG.println(AjxDebug.DBG1, "RESETTING TO FIRST");
+		 		DBG.println(AjxDebug.DBG1, "RESETTING TO FIRST");
 		 		// If there is no current focus member, then reset
 		 		kbMgr.__currTabGroup.resetFocusMember(true);
 		 	}
@@ -538,20 +568,17 @@ function(ev) {
 	 * the global handler if one is registered */
 	var handled = DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
 	var obj = (kbMgr.__dwtCtrlHasFocus) ? kbMgr.__focusObj : null;
-	var useGlobalMap = true;
 
 	if (obj != null && (obj instanceof DwtControl)) {
 		var mapName = obj.toString();
+		//DBG.println("Dispatching to map: " + mapName);
 		handled = kbMgr.__dispatchKeyEvent(obj, mapName, kev);
-		if (handled == DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED)
-			useGlobalMap = kbMgr.__keyMapMgr.inheritsGlobalMap(mapName);
 	}
-	 	
-	if (useGlobalMap && handled == DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED && kbMgr.__globalKeyActionHdlr != null) {
-		//DBG.println(jxDebug.DBG1, "GLOBAL HANDLER CALLED");
+	
+	if (!kbMgr.__blockGlobalHandling && handled == DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED && kbMgr.__globalKeyActionHdlr != null) {
 		handled = kbMgr.__dispatchKeyEvent(kbMgr.__globalKeyActionHdlr, 
 							kbMgr.__globalKeyActionHdlr.getKeyMapNameToUse(), kev);
-		DBG.println(AjxDebug.DBG1, "GLOBAL HANDLER RETURNED: " + handled);
+		//DBG.println(AjxDebug.DBG1, "GLOBAL HANDLER RETURNED: " + handled);
 	}
 	
 	kbMgr._kbEventStatus = handled;

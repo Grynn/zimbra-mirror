@@ -16,28 +16,32 @@
 
 
 /**
-* Creates a new dialog container without displaying it. The shell must be provided.
-
 * @constructor
 * @class
 * This is a base class for dialogs. Given content, this class will take care of 
 * showing, and hiding the dialog, as well as dragging it.
 * <p>
-* Content that is draggable ( classes that override _createHtml ), need to create
+* Content that is draggable (classes that override <code>_createHtml</code>), need to create
 * an element with an id of this.getHtmlElement().id + "_handle".
 * <p>
 * Dialogs always hang off the main shell since their stacking order is managed through z-index.
 *
 * @author Ross Dargahi
 * @author Conrad Damon
-* @param parent				parent widget (the shell)
-* @param classname			a CSS class
-* @param zIndex				z-index when the dialog is visible
-* @param mode				modal or modeless
-* @param loc				where to popup
+* 
+* @param {DwtShell} parent	parent widget
+* @param {string} classname	CSS class name for the instance. Defaults to the this classes
+* 		name (optional)
+* @param {number} zIndex The z-index to set for this dialog when it is visible. Defaults
+* 		to <i>Dwt.Z_DIALOG</i> (optional)
+* @param {number} mode The modality of the dialog. One of: DwtBaseDialog.MODAL or 
+* 		DwtBaseDialog.MODELESS. Defaults to DwtBaseDialog.MODAL (optional)
+* @param {DwtPoint} loc	Location at which to popup the dialog. Defaults to being 
+* 		centered (optional)
+* @param {DwtControl} view Control whose element is to be reparented. (optional)
+* @param {string} dragHandleId
 */
-function DwtBaseDialog(parent, className, title, zIndex, mode, loc, optionalView, optionalDragHandleId) {
-
+function DwtBaseDialog(parent, className, title, zIndex, mode, loc, view, dragHandleId) {
 	if (arguments.length == 0) return;
 	if (!(parent instanceof DwtShell)) {
 		throw new DwtException("DwtBaseDialog parent must be a DwtShell", 
@@ -52,13 +56,26 @@ function DwtBaseDialog(parent, className, title, zIndex, mode, loc, optionalView
 	this._zIndex = zIndex || Dwt.Z_DIALOG;
 
 	this._mode = mode || DwtBaseDialog.MODAL;
-	this._loc = loc;
+	
+	this._loc = new DwtPoint();
+	if (loc) {
+		this._loc.x = loc.x;
+		this._loc.y = loc.y
+	} else {
+		this._loc.x = this._loc.y = Dwt.LOC_NOWHERE;
+	}
+	
 	this._ffHackDisabled = false;
+	
+	/** Dialog tab group. Subclasses may add their elements to this tab group.
+	 * <i>DwtBaseDialog</i> manages the pushing and popping of this tabgroup
+	 * @type DwtTabGroup */
+	this._tabGroup = new DwtTabGroup();
 
 	this._createHtml();
-	if (optionalView != null) {
-		this.setView(optionalView);
-	}
+	if (view != null)
+		this.setView(view);
+
 	// make dialog draggable within boundaries of shell
 	var htmlElement = this.getHtmlElement();
 	
@@ -66,21 +83,29 @@ function DwtBaseDialog(parent, className, title, zIndex, mode, loc, optionalView
 	//if (AjxEnv.isGeckoBased)
 	//	htmlElement.style.overflow = "auto";
 		
-	var dHandleId = optionalDragHandleId ? optionalDragHandleId : (htmlElement.id + "_handle");
-	this.initializeDragging(dHandleId);
+	var dHandleId = dragHandleId ? dragHandleId : (htmlElement.id + "_handle");
+	this._initializeDragging(dHandleId);
 	
 	// reset tab index
-	this._tabIndex = 0;
+	// REMOVE this._tabIndex = 0;
     this.setZIndex(Dwt.Z_HIDDEN); // not displayed until popup() called
-	this._positionDialog({x:-10000, y:-10000});
+	this._positionDialog(DwtBaseDialog.__nowhereLoc);
 }
 
 DwtBaseDialog.prototype = new DwtComposite;
 DwtBaseDialog.prototype.constructor = DwtBaseDialog;
 
 // modes
+/** Modeless dialog
+ * @type number */
 DwtBaseDialog.MODELESS = 1;
+
+/** Modelal dialog
+ * @type number */
 DwtBaseDialog.MODAL = 2;
+
+/**@private*/
+DwtBaseDialog.__nowhereLoc = new DwtPoint(Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
 
 
 // -------------------------------------------------------------------
@@ -92,7 +117,7 @@ function() {
 	return "DwtBaseDialog";
 };
 
-DwtBaseDialog.prototype.initializeDragging = 
+DwtBaseDialog.prototype._initializeDragging = 
 function(dragHandleId) {
 	var dragHandle = document.getElementById(dragHandleId);
 	if (dragHandle) {
@@ -110,17 +135,17 @@ function(dragHandleId) {
 
 /**
 * Makes the dialog visible, and places it. Everything under the dialog will become veiled
-* if we are modal.
+* if we are modal. Note also that popping up a dialog will block keyboard actions from
+* being delivered to the global key action handler (if one is registered). To unblock
+* this call <code>DwtKeyboadManager.prototype.
 *
 * @param loc	the desired location
 */
 DwtBaseDialog.prototype.popup =
 function(loc) {
-	
 	if (this._poppedUp) return;
 	
 	this.cleanup(true);
-
 	var thisZ = this._zIndex;
 	// if we're modal, setup the veil effect,
 	// and track which dialogs are open
@@ -128,22 +153,29 @@ function(loc) {
 		thisZ = this._setModalEffect(thisZ);
 	}
 
-	// add the listener functions for key events that
-	// we're interested in
-	this.addKeyListeners();
 	this._shell._veilOverlay.activeDialogs.push(this);
 
+	
 	// Deal with Firefox's horrible bug with absolutely 
 	// positioned divs and inputs floating over them.
 	if (!this._ffHackDisabled) Dwt._ffOverflowHack(this._htmlElId, thisZ, null, false);
 	
 	// use whichever has a value, local has precedence
-	loc = this._loc = loc || this._loc; 
+	if (loc) {
+		this._loc.x = loc.x;
+		this._loc.y = loc.y;
+		this._positionDialog(loc);
+	} else {
+		this._positionDialog();
+	}
 	
-	this._positionDialog(loc);
 	this.setZIndex(thisZ);
 	this._poppedUp = true;
-	this.focus();
+	// REMOVE this.focus();
+	// Push our tab group
+	var kbMgr = this._shell.getKeyboardMgr();
+	kbMgr.pushTabGroup(this._tabGroup, true);
+	this._tabGroup.resetFocusMember(true);
 }
 
 DwtBaseDialog.prototype._disableFFhack = 
@@ -170,8 +202,9 @@ function () {
 	return this._poppedUp;
 };
 
+
 /**
-* Hides the dialog.
+* Hides the dialog
 */
 DwtBaseDialog.prototype.popdown =
 function() {
@@ -183,30 +216,43 @@ function() {
 		//var myZIndex = this.getZIndex();
 	    var myZIndex = this._zIndex;
 		this.setZIndex(Dwt.Z_HIDDEN);
-		this._positionDialog({x:Dwt.LOC_NOWHERE, y:Dwt.LOC_NOWHERE});
+		//TODO we should not create an object everytime we popdown a dialog (ditto w/popup)
+		this._positionDialog(DwtBaseDialog.__nowhereLoc);
 		if (this._mode == DwtBaseDialog.MODAL) {
 			this._undoModality(myZIndex);
 		} else {
 			if (!this._ffHackDisabled) Dwt._ffOverflowHack(this._htmlElId, myZIndex, null, false);
 			this._shell._veilOverlay.activeDialogs.pop();
 		}
-		this.removeKeyListeners();
+		//this.removeKeyListeners();
+		
+		// Pop our tab group
+		var kbMgr = this._shell.getKeyboardMgr();
+		kbMgr.popTabGroup();
+		
 	}
 }
 
+/**
+ * Sets the content of the dialog to a new view (DwtControl). Essentially reparents
+ * The supplied control's HTML element to the dialogs HTML element
+ * 
+ * @param {DwtControl} newView Control whose element is to be reparented.
+ */
 DwtBaseDialog.prototype.setView =
 function(newView) {
 	this.reset();
-	if (newView) this._getContentDiv().appendChild(newView.getHtmlElement());
+	if (newView)
+		this._getContentDiv().appendChild(newView.getHtmlElement());
 };
 
 /**
-* Sets the dialog back to its original state after being constructed, by clearing any
-* detail message and resetting the standard button callbacks.
+* Sets the dialog back to its original state. Subclasses should override this method
+* to add any additional behaviour, but should still call up into this method.
 */
 DwtBaseDialog.prototype.reset =
 function() {
-	this._loc = null;
+	this._loc.x = this._loc.y = Dwt.LOC_NOWHERE;
 }
 
 /**
@@ -214,7 +260,7 @@ function() {
 */
 DwtBaseDialog.prototype.cleanup =
 function(bPoppedUp) {
-
+	//TODO handle different types of input fields e.g. checkboxes etc
 	var inputFields = this._getInputFields();
 	
 	if (inputFields) {
@@ -247,14 +293,7 @@ DwtBaseDialog.prototype._getContentDiv =
 function (){
 	return this._contentDiv;
 };
-/** 
- * @param listenerFunc -- takes an event when the tab key
- * has been pressed for an element inside of this dialog.
- */
-DwtBaseDialog.prototype.addTabListener =
-function(listener) {
-	this.addListener(DwtEvent.TAB, listener);
-};
+
 
 DwtBaseDialog.prototype.addEnterListener =
 function(listener) {
@@ -274,74 +313,14 @@ function() {
 	return dialog;
 };
 
-DwtBaseDialog.prototype.handleKeys = 
-function(ev) {
-	var ad = DwtBaseDialog.getActiveDialog();
-	var dialogEl = ad.getHtmlElement();
-	var target = DwtUiEvent.getTarget(ev);
-	var keyCode = DwtKeyEvent.getCharCode(ev);
-	switch (keyCode) {
-	case DwtKeyEvent.KEY_TAB:
-		if (ad && ad._mode == DwtBaseDialog.MODAL) {
-			ev.item = ad;
-			var isContained = ad._doesContainElement(target);
-			if (isContained) {
-				ev.isTargetInDialog = true;
-				if (ad._tabIdOrder) {
-					var oldTabIndex = -1;
-					if (ad._tabIndex != null ) {
-						oldTabIndex = ad._tabIndex;
-						ad._tabIndex = ++ad._tabIndex % ad._tabIdOrder.length;
-					} else {
-						ad._tabIndex =  1;
-					}
-					var id = ad._tabIdOrder[ad._tabIndex];
-					document.getElementById(id).focus();
-					ev.oldTabIndexId = (oldTabIndex == -1) ? oldTabIndex : ad._tabIdOrder[oldTabIndex];
-					ev.isTargetInDialog = true;
-					ev.currentTabIndexId = id;
-				} 
-			} else {
-				ev.oldTabIndexId = -1;
-				ev.isTargetInDialog = false;
-				ev.currentTabIndexId = -1;
-			}
-			ad.notifyListeners(DwtEvent.TAB, ev);
-			DwtUiEvent.setBehaviour(ev, true, false);
-		}
-		break;
-	case DwtKeyEvent.KEY_ENTER:
-		ad.notifyListeners(DwtEvent.ENTER, ev);
-		break;
+DwtBaseDialog.prototype.handleKeyAction =
+function(actionCode, ev) {
+	switch (actionCode) {
+		case DwtKeyMap.DONE:
+			ad.notifyListeners(DwtEvent.ENTER, ev);
+			break;
 	}
-};
-
-DwtBaseDialog.prototype.setTabOrder = 
-function(elementIdArray) {
-	this._tabIdOrder = elementIdArray;
-};
-
-DwtBaseDialog.prototype.addKeyListeners =
-function() {
-	if (this._shell._veilOverlay.activeDialogs.length == 0 ) {
-		if (window.addEventListener) {
-			window.addEventListener('keypress', this.handleKeys, false);
-		} else if (document.body.attachEvent) {
-			document.body.attachEvent('onkeydown', this.handleKeys);
-		}
-	}
-};
-
-DwtBaseDialog.prototype.removeKeyListeners =
-function () {
-	if (this._shell._veilOverlay.activeDialogs.length == 0 ) {
-		if (window.removeEventListener) {
-			window.removeEventListener('keypress', this.handleKeys, false);
-		} else if (document.body.detachEvent) {
-			document.body.detachEvent('onkeydown', this.handleKeys);
-		}
-	}
-};
+}
 
 // -------------------------------------------------------------------
 // Private methods
@@ -437,7 +416,13 @@ function (loc) {
 	this.setLocation(x, y);
 };
 
-// returns a list of input fields in dialog
+/**
+ * Subclasses should implement this method to return an array of input fields that
+ * they want to be cleaned up between instances of the dialog being popped up and
+ * down
+ * 
+ * @return An array of the input fields to be reset
+ */
 DwtBaseDialog.prototype._getInputFields = 
 function() {
 	// overload me
@@ -448,16 +433,16 @@ function (x, y){
 	// fix for bug 3177
 	if (AjxEnv.isNav) {
 		this._currSize = this.getSize();
-		DwtDraggable.setDragBoundaries(DwtDraggable._dragEl, 0, document.body.offsetWidth - this._currSize.x, 0, 
+		DwtDraggable.setDragBoundaries(DwtDraggable.dragEl, 0, document.body.offsetWidth - this._currSize.x, 0, 
 									   document.body.offsetHeight - this._currSize.y);
 	}
 };
 
 DwtBaseDialog.prototype._dragEnd =
 function(x, y) {
-// 	// save dropped position so popup(null) will not re-center dialog box
-// 	DBG.println("drag end x:", x, " y:", y);
-	this._loc = new DwtPoint(x, y);
+ 	// save dropped position so popup(null) will not re-center dialog box
+	this._loc.x = x;
+	this._loc.y = y;
 }
 
 DwtBaseDialog.prototype._duringDrag =
@@ -470,3 +455,76 @@ DwtBaseDialog.prototype._doesContainElement =
 function (element) {
 	return Dwt.contains(this.getHtmlElement(), element);
 };
+
+
+
+/*
+DwtBaseDialog.prototype.handleKeys = 
+function(ev) {
+	var ad = DwtBaseDialog.getActiveDialog();
+	var dialogEl = ad.getHtmlElement();
+	var target = DwtUiEvent.getTarget(ev);
+	var keyCode = DwtKeyEvent.getCharCode(ev);
+	switch (keyCode) {
+		case DwtKeyEvent.KEY_TAB:
+			if (ad && ad._mode == DwtBaseDialog.MODAL) {
+				ev.item = ad;
+				var isContained = ad._doesContainElement(target);
+				if (isContained) {
+					ev.isTargetInDialog = true;
+					if (ad._tabIdOrder) {
+						var oldTabIndex = -1;
+						if (ad._tabIndex != null ) {
+							oldTabIndex = ad._tabIndex;
+							ad._tabIndex = ++ad._tabIndex % ad._tabIdOrder.length;
+						} else {
+							ad._tabIndex =  1;
+						}
+						var id = ad._tabIdOrder[ad._tabIndex];
+						document.getElementById(id).focus();
+						ev.oldTabIndexId = (oldTabIndex == -1) ? oldTabIndex : ad._tabIdOrder[oldTabIndex];
+						ev.isTargetInDialog = true;
+						ev.currentTabIndexId = id;
+					} 
+				} else {
+					ev.oldTabIndexId = -1;
+					ev.isTargetInDialog = false;
+					ev.currentTabIndexId = -1;
+				}
+				ad.notifyListeners(DwtEvent.TAB, ev);
+				DwtUiEvent.setBehaviour(ev, true, false);
+			}
+			break;
+		case DwtKeyEvent.KEY_ENTER:
+			ad.notifyListeners(DwtEvent.ENTER, ev);
+			break;
+	}
+};
+
+DwtBaseDialog.prototype.setTabOrder = 
+function(elementIdArray) {
+	this._tabIdOrder = elementIdArray;
+};
+
+DwtBaseDialog.prototype.addKeyListeners =
+function() {
+	if (this._shell._veilOverlay.activeDialogs.length == 0 ) {
+		if (window.addEventListener) {
+			window.addEventListener('keypress', this.handleKeys, false);
+		} else if (document.body.attachEvent) {
+			document.body.attachEvent('onkeydown', this.handleKeys);
+		}
+	}
+};
+
+DwtBaseDialog.prototype.removeKeyListeners =
+function () {
+	if (this._shell._veilOverlay.activeDialogs.length == 0 ) {
+		if (window.removeEventListener) {
+			window.removeEventListener('keypress', this.handleKeys, false);
+		} else if (document.body.detachEvent) {
+			document.body.detachEvent('onkeydown', this.handleKeys);
+		}
+	}
+};
+*/

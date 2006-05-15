@@ -14,28 +14,28 @@
  * limitations under the License.
  */
 
-/**
- * @constructor
- * @class
- * Represents a point. A point has an x-coordinate and y-coordinate
- * 
- * @author Ross Dargahi
- * 
- * @param {number} x x coordinate
- * @param {number} y y coordinate
- */
-function DwtPoint(x, y) {
-	this.x = x;
-	this.y = y;
-}
 
 /**
- * This method returns this class' name.
- * 
- * @return class name
- * @type String
- */
-DwtPoint.prototype.toString = 
+* @constructor
+* @class
+* The Keymap manager exception class.
+* 
+* @author Ross Dargahi
+*
+* @see DwtKeyMapMgr
+*/
+function DwtKeyMapMgrException(msg, code, method, keySeqStr) {
+	DwtException.call(this, msg, code, method, detail);
+	this._keySeqStr = keySeqStr;
+}
+
+DwtKeyMapMgrException.prototype = new DwtException;
+DwtKeyMapMgrException.prototype.constructor = DwtKeyMapMgrException;
+
+DwtKeyMapMgrException.NON_TERM_HAS_ACTION = 1;
+DwtKeyMapMgrException.TERM_HAS_SUBMAP = 2;
+
+DwtException.prototype.toString = 
 function() {
-	return "DwtPoint";
+	return "DwtKeyMapMgrException";
 }

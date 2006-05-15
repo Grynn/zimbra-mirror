@@ -35,16 +35,18 @@
 *
 * <h4>CSS</h4>
 * <ul>
-* <li><i>className</i>-<i>DwtCssStyle.ACTIVATED</i> - activated style
-* <li><i>className</i>-<i>DwtCssStyle.TRIGGERED</i> - triggered style
-* <li><i>className</i>-<i>DwtCssStyle.TOGGLED</i> - toggled style (for toggle buttons)
-* <li><i>className</i>-<i>DwtCssStyle.DISABLED</i> - disabled style
+* <li><i>className</i>-activated - activated style
+* <li><i>className</i>-triggered - triggered style
+* <li><i>className</i>-toggled - toggled style (for toggle buttons)
+* <li><i>className</i>-disabled - disabled style
 * </ul>
 * 
 * <h4>Keyboard Actions</h4>
 * <ul>
-* <li>DwtKeyMap.SELECT_CURRENT - triggers the button
+* <li>DwtKeyMap.SELECT_CURRENT - triggers the button</li>
+* <li>DwtKeyMap.SELECT_SUBMENU - display's the button's submenu if one is set
 * </ul>
+* 
 * @author Ross Dargahi
 * @author Conrad Damon
 * 
@@ -99,9 +101,9 @@ DwtButton.prototype = new DwtLabel;
 DwtButton.prototype.constructor = DwtButton;
 
 DwtButton.TOGGLE_STYLE = DwtLabel._LAST_STYLE * 2;
+
 DwtButton.ACTION_MOUSEUP = 1;
 DwtButton.ACTION_MOUSEDOWN = 2;
-
 
 // Public methods
 
@@ -194,7 +196,7 @@ function(enabled) {
 	if (enabled != this._enabled) {
 		DwtLabel.prototype.setEnabled.call(this, enabled); // handles image/text
 		if (enabled) {
-			this.setClassName(this._origClassName); // activated or triggered?
+			this.__setClassName(this._origClassName); // activated or triggered?
 			this._addMouseListeners();
 			// set event handler for pull down menu if applicable
 			if (this._menu) {
@@ -203,7 +205,7 @@ function(enabled) {
 			}
 			
 		} else {
-			this.setClassName(this._disabledClassName);
+			this.__setClassName(this._disabledClassName);
 			this._removeMouseListeners();
 			// remove event handlers for pull down menu if applicable
 			if (this._menu) {
@@ -291,7 +293,7 @@ function() {
 */
 DwtButton.prototype.resetClassName = 
 function() {
-	this.setClassName(this._origClassName);	
+	this.__setClassName(this._origClassName);	
 }
 /*
  * Sets whether actions for this button should occur on mouse up or mouse
@@ -312,9 +314,9 @@ function(actionTiming) {
 DwtButton.prototype.setActivated =
 function(activated) {
 	if (activated) {
-		this.setClassName(this._activatedClassName);
+		this.__setClassName(this._activatedClassName);
 	} else {
-		this.setClassName(this._origClassName);
+		this.__setClassName(this._origClassName);
 	}
 }
 
@@ -333,7 +335,7 @@ DwtButton.prototype.setToggled =
 function(toggled) {
 	if ((this._style & DwtButton.TOGGLE_STYLE) && this._toggled != toggled) {
 		this._toggled = toggled;
-		this.setClassName((toggled) ? this._toggledClassName : this._origClassName);
+		this.__setClassName((toggled) ? this._toggledClassName : this._origClassName);
 	}
 }
 
@@ -345,6 +347,10 @@ function() {
 DwtButton.prototype.popup =
 function() {
 	var menu = this.getMenu();
+	
+	if (!menu)
+		return;
+		
 	var p = menu.parent;
 	var pb = p.getBounds();
 	var ws = menu.shell.getSize();
@@ -355,21 +361,26 @@ function() {
 	var vBorder = (pHtmlElement.style.borderLeftWidth == "") ? 0 : parseInt(pHtmlElement.style.borderLeftWidth);
 	var x = ptw.x + vBorder;
 	var hBorder = (pHtmlElement.style.borderTopWidth == "") ? 0 : parseInt(pHtmlElement.style.borderTopWidth);
-	hBorder += (pHtmlElement.style.borderBottomWidth == "") ? 0 : parseInt(pHtmlElement.style.borderBottonWidth);
+	hBorder += (pHtmlElement.style.borderBottomWidth == "") ? 0 : parseInt(pHtmlElement.style.borderBottomWidth);
 	var y = ptw.y + pb.height + hBorder;
 	x = ((x + s.x) >= ws.x) ? x - (x + s.x - ws.x): x;
 	//y = ((y + s.y) >= ws.y) ? y - (y + s.y - ws.y) : y;
-
 	//this.setLocation(x, y);
 	menu.popup(0, x, y);
 };
 
 DwtButton.prototype.handleKeyAction =
 function(actionCode, ev) {
+    DBG.println("DwtButton.prototype.handleKeyAction");
 	switch (actionCode) {
 		case DwtKeyMap.SELECT_CURRENT:
 			this._emulateSingleClick(this._kbAnchor, DwtMouseEvent.LEFT);
 			break;
+			
+		case DwtKeyMap.SELECT_SUBMENU:
+			this.popup();
+			break;
+			
 		default:
 			return false;		
 	}
@@ -408,20 +419,22 @@ DwtButton.prototype._focusByMouseUpEvent =
 	// Do Nothing
   }
 
+// NOTE: _focus and _blur will be reworked to reflect styles correctly
 DwtButton.prototype._focus =
 function() {
 	//DBG.println(AjxDebug.DBG3, "DwtButton.prototype._focus");
 	// ROSSD MOVE TO CSS
-	this.getHtmlElement().style.border = "1px dotted black";
+	//this.__setClassName(this.getClassName());
 	//this._mouseOverListener(DwtShell.mouseEvent);
+	this.__oldBorder = this.getHtmlElement().style.border;
+	this.getHtmlElement().style.border = "1px dotted black";
 }
 
 DwtButton.prototype._blur =
 function() {
 	//DBG.println(AjxDebug.DBG3, "DwtButton.prototype._blur");
-	// ROSSD MOVE TO CSS
-	this.getHtmlElement().style.border = "0px dotted black";
-	//this._mouseOutListener(DwtShell.mouseEvent);
+//	this.__setClassName(this.getClassName());
+	this.getHtmlElement().style.border = this.__oldBorder;
 }
 
 
@@ -446,7 +459,7 @@ function(ev) {
     if (this._hoverImageInfo) {
         this.setImage(this._hoverImageInfo);
     }
-    this.setClassName(this._activatedClassName);
+    this.__setClassName(this._activatedClassName);
     if (this._dropDownCell && this._dropDownHovImg && !this.noMenuBar && this.isListenerRegistered(DwtEvent.SELECTION)) {
 		AjxImg.setImage(this._dropDownCell, this._dropDownHovImg);
     }
@@ -495,7 +508,7 @@ function (){
     if (this._depressedImageInfo) {
         this.setImage(this._depressedImageInfo);
     }
-	this.setClassName(this._triggeredClassName);
+	this.__setClassName(this._triggeredClassName);
 	this.isTriggered = true;	
 };
 
@@ -508,7 +521,7 @@ function (){
 	if (this._style & DwtButton.TOGGLE_STYLE){
 		this._toggled = !this._toggled;
 	}
-	this.setClassName((!this._toggled) ? this._activatedClassName : 
+	this.__setClassName((!this._toggled) ? this._activatedClassName : 
 					  this._toggledClassName);
 };
 
@@ -552,7 +565,7 @@ function(ev) {
 
 DwtButton.prototype._setMouseOutClassName =
 function() {
-    this.setClassName((this._toggled) ? this._toggledClassName : this._origClassName);
+    this.__setClassName((this._toggled) ? this._toggledClassName : this._origClassName);
 }
 
 // Button no longer activated/triggered.
@@ -621,4 +634,22 @@ function(ev) {
 	mouseEv.setToDhtmlEvent(ev);
 	return false;
 }
+
+/**
+ * Set's the class name for this button. Note that this method overrides <i>DwtControl</i>'s
+ * <code>setClassName</code> method in that it will check if the button has keyboard focus
+ * and will append "-" + DwtCssStyle.KBFOCUS to <code>className</code>
+ * 
+ * @private
+ */
+ DwtButton.prototype.__setClassName =
+ function(className) {
+ // NOTE this is going to be reworked for the keyboard nav stuff
+ //	if (this.haveFocus()) {
+ //		className += "-" + DwtCssStyle.KBFOCUS;
+ //	}
+ 	this.setClassName(className);
+ }
+
+
 

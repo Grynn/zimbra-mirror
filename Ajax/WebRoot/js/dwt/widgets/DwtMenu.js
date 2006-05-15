@@ -673,7 +673,7 @@ function(x, y, kbGenerated) {
 	}
 	
 	// Put our tabgroup in play
-	DwtShell.getShell(window).getKeyboardMgr().pushTabGroup(this._tabGroup);
+	DwtShell.getShell(window).getKeyboardMgr().pushTabGroup(this._tabGroup, true);
 	
 	/* If the popup was keyboard generated, then pick the first enabled child item
 	 * we do this by simulating a DwtKeyMap.SELECT_NEXT keyboard action */

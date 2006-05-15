@@ -14,20 +14,63 @@
  * limitations under the License.
  */
 
-
+/**
+ * @constructor
+ * @class
+ * DwtCssStyle is a static class that defines a number of contants and helper methods that
+ * support the working with CSS
+ * 
+ * @author Ross Dargahi
+ */
 function DwtCssStyle() {
 }
 
-DwtCssStyle.SELECTED	= "selected";	// selected item (left-click) in a list or tree
-DwtCssStyle.ACTIONED	= "actioned";	// actioned item (right-click) in a list or tree
-DwtCssStyle.MATCHED		= "matched";	// matched item in a list
-DwtCssStyle.DND			= "dnd";		// DnD icon version of a list item
-DwtCssStyle.ACTIVE		= "active";		// a button that is the default for some action
-DwtCssStyle.ACTIVATED	= "activated";	// a button that has the focus
-DwtCssStyle.TRIGGERED	= "triggered";	// a button that has been pressed
-DwtCssStyle.TOGGLED		= "toggled";	// a button that has been toggled on
-DwtCssStyle.INACTIVE	= "inactive";	// a button that is inactive (closed tab button)
-DwtCssStyle.DISABLED	= "disabled";	// a disabled item
+// Common class name constants used in Dwt
+
+/** UI component has been selected e.g a left-click in a list or tree
+ * @type string*/
+DwtCssStyle.SELECTED = "selected";
+
+/** UI component has been actioned e.g. a right-click in a list or tree
+ * @type string*/
+DwtCssStyle.ACTIONED = "actioned";
+
+/** TODO: Should this be here matched item in a list
+ * @type string*/
+DwtCssStyle.MATCHED	 = "matched";
+
+/** DnD icon version of an item
+ * @type string*/
+DwtCssStyle.DND = "dnd";
+
+/** actioned item (right-click) in a list or tree
+ * @type string*/
+DwtCssStyle.ACTIVE = "active";		// a button that is the default for some action
+
+/** actioned item (right-click) in a list or tree
+ * @type string*/
+DwtCssStyle.ACTIVATED = "activated";	// a button that has the focus
+
+/** UI component has been triggered e.g. a button being pressed (but not yet released)
+ * @type string*/
+DwtCssStyle.TRIGGERED = "triggered";
+
+/** actioned item (right-click) in a list or tree
+ * @type string*/
+DwtCssStyle.TOGGLED = "toggled";	// a button that has been toggled on
+
+/** actioned item (right-click) in a list or tree
+ * @type string*/
+DwtCssStyle.INACTIVE = "inactive";	// a button that is inactive (closed tab button)
+
+/** actioned item (right-click) in a list or tree
+ * @type string*/
+DwtCssStyle.DISABLED = "disabled";	// a disabled item
+
+/** item has keyboard focus
+ * @type string */
+ DwtCssStyle.KBFOCUS = "kbfocus";
+
 
 DwtCssStyle.getProperty = 
 function(htmlElement, cssPropName) {
@@ -39,6 +82,7 @@ function(htmlElement, cssPropName) {
 	} else {
 		var doc = htmlElement.ownerDocument;
 	}
+	
 	if (doc.defaultView && !AjxEnv.isSafari) {
 		var cssDecl = doc.defaultView.getComputedStyle(htmlElement, "");
 		result = cssDecl.getPropertyValue(cssPropName);
@@ -60,7 +104,7 @@ function(htmlElement, cssPropName) {
 				result = htmlElement.style[propName];
 	}
 	return result;
-}
+};
 
 DwtCssStyle.getComputedStyleObject = 
 function(htmlElement) {
@@ -78,4 +122,4 @@ function(htmlElement) {
 		return htmlElement.currentStyle;
 	else if (htmlElement.style)
 		return htmlElement.style;
-}
+};

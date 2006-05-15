@@ -58,8 +58,6 @@
 <script type="text/javascript" src="<%= contextPath %>/js/util/AjxCache.js"></script>
 
 <!-- DWT classes -->
-<script type="text/javascript" src="<%= contextPath %>/js/dwt/core/DwtImg.js"></script>
-
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/core/Dwt.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/core/DwtException.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/core/DwtDraggable.js"></script>
@@ -88,6 +86,7 @@
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/keyboard/DwtTabGroupEvent.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/keyboard/DwtKeyMap.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/keyboard/DwtKeyMapMgr.js"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/dwt/keyboard/DwtKeyMapMgrException.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/keyboard/DwtKeyboardMgr.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/keyboard/DwtTabGroup.js"></script>
 

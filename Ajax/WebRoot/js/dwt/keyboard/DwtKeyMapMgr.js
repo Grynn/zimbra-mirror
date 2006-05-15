@@ -56,16 +56,6 @@ DwtKeyMapMgr.TAB_KEYCODE = 9;
 DwtKeyMapMgr._KEYCODES = []; // Keycode map
 DwtKeyMapMgr._inited = false; // Initialize flag
 
-DwtKeyMapMgr.prototype.inheritsGlobalMap =
-function(mappingName) {
-	var mapping =  this._fsas[mappingName];
-	
-	if (!mapping)
-		return false;
-	
-	return (mapping.GLOBAL_NOINHERIT) ? false : true;
-}
-
 DwtKeyMapMgr.prototype.getActionCode =
 function (keySeq, mappingName) {
 	//DBG.println("Getting action code for: " + keySeq.join("") + " in map: " + mappingName);
@@ -94,31 +84,28 @@ function (keySeq, mappingName) {
 					+ " - keyseq: " + keySeq);
 		return null;
 	} else if (tmpFsa[key]) {
+		// Found the action code the mapping
 		return (tmpFsa[key].actionCode != null) ? tmpFsa[key].actionCode
 												 : DwtKeyMapMgr.NOT_A_TERMINAL;
-		
 	} else if (mapping.INHERIT != null) {
-		//DBG.println(AjxDebug.DBG3, "getActionCode: " + mappingName + " is inheriting  from " + mapping.INHERIT);
-		return this.getActionCode(keySeq, mapping.INHERIT);
-	}  else if (mappingName != DwtKeyMap.GLOBAL) {
-		//DBG.println(AjxDebug.DBG3, "Checking GLOBAL map");
-		return this.getActionCode(keySeq, DwtKeyMap.GLOBAL);		
+		var inherited = mapping.INHERIT;
+		/* In the case of multiple inheritence, the INHERIT attribute will be an
+		 * array, else it will be a string */
+		if (typeof(inherited) == "string") {
+			//DBG.println("Inheriting from: " + inherited);
+			return this.getActionCode(keySeq, inherited);			
+		} else {
+			var actionCode = null;
+			var len = inherited.length;
+			for (var i = 0; i < len; i++) {
+				//DBG.println("(MULTI) Inheriting from: " + inherited[i]);
+				actionCode = this.getActionCode(keySeq, inherited[i]);
+				if (actionCode != null)
+					return actionCode;
+			}		
+		}
 	} else {
-		return null;
-	}
-
-	/* If we have a match, then all is well, else if we are inheriting, then 
-	 * let's see if there is a match in the parent.
-	 */
-	if (tmpFsa[key] && tmpFsa[key].actionCode != null) {
-		return tmpFsa[key].actionCode;
-	} else if (mapping.INHERIT != null) {
-		//DBG.println(AjxDebug.DBG3, "getActionCode: " + mappingName + " is inheriting  from " + mapping.INHERIT);
-		return this.getActionCode(keySeq, mapping.INHERIT);
-	}  else if (mappingName != DwtKeyMap.GLOBAL) {
-		//DBG.println(AjxDebug.DBG3, "Checking GLOBAL map");
-		return this.getActionCode(keySeq, DwtKeyMap.GLOBAL);		
-	} else {
+		// No match
 		return null;
 	}
 }
@@ -247,7 +234,6 @@ function(keyCode) {
 		case 46:
 		case 35:
 		case 13:
-		case 27:
 		case 32:
 			return true;
 			
@@ -265,8 +251,6 @@ function(fsa, mapping, mapName) {
 			//DBG.println(AjxDebug.DBG3, "Inheriting from: " + mapping[i]);
 			fsa.INHERIT = mapping[i];
 			continue;
-		} else if (i == DwtKeyMap.GLOBAL_NOINHERIT) {
-			fsa.GLOBAL_NOINHERIT = true;
 		}
 		 
 		var keySeq = i.split(DwtKeyMap.SEP);
@@ -285,8 +269,8 @@ function(fsa, mapping, mapName) {
 				/* If this key has a submap, then it is illegal for it to also 
 				 * have an action code. Throw an exception!*/
 				 if (tmpFsa[key].subMap)
-				 	throw new DwtKeyMapMgrException(DwtKeyMapMgrException.NON_TERM_HAS_ACTION, keySeq,
-				 		"Attempting to add action code to non-terminal key sequence. Map name: " + mapName);
+				 	throw new DwtKeyMapMgrException("Attempting to add action code to non-terminal key sequence. Map name: " + mapName, 
+				 			DwtKeyMapMgrException.NON_TERM_HAS_ACTION, "DwtKeyMapMgr._buildFSA[1]", keySeq);
 				
 				/* We are at the last key in the sequence so we can bind the
 				 * action code to it */
@@ -299,8 +283,8 @@ function(fsa, mapping, mapName) {
 				 	var tmp = new Array(j)
 				 	for (var k = 0; k <= j; k++)
 				 		tmp[k] = keySeq[k];
-				 	throw new DwtKeyMapMgrException(DwtKeyMapMgrException.TERM_HAS_SUBMAP, tmp.join(""),
-				 		"Attempting to add submap to terminal key sequence. Map name " + mapName);
+				 	throw new DwtKeyMapMgrException("Attempting to add submap to terminal key sequence. Map name " + mapName,
+				 		DwtKeyMapMgrException.TERM_HAS_SUBMAP, "DwtKeyMapMgr._buildFSA[2]", tmp.join(""));
 				}
 				
 				/* We have more keys in the sequence. If our subMap is null,
@@ -314,18 +298,10 @@ function(fsa, mapping, mapName) {
 	return fsa;
 };
 
-// Helper class
+/** Helper class
+ * @private
+ */
 function _DwtKeyMapMgrItem() {
 	this.actionCode = null;
 	this.subMap = null;
 };
-
-function DwtKeyMapMgrException(errorCode, keySeqStr, msg) {
-	this.errorCode = errorCode;
-	this._keySeqStr = keySeqStr;
-	this._msg = msg;
-}
-
-DwtKeyMapMgrException.NON_TERM_HAS_ACTION = 1;
-DwtKeyMapMgrException.TERM_HAS_SUBMAP = 2;
-

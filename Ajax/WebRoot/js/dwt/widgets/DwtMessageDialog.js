@@ -21,6 +21,8 @@
 * @class
 * This class represents a reusable message dialog box. Messages can be informational, warning, or
 * critical.
+* 
+* @author Ross Dargahi
 */
 function DwtMessageDialog(parent, className, buttons, extraButtons) {
 	if (arguments.length == 0) return;

@@ -14,121 +14,211 @@
  * limitations under the License.
  */
 
-
+/**
+ * @constructor
+ * @class
+ * A drop target is registered with a control to indicate that the control is 
+ * a drop target. Thedrop target is the mechanism by which the DnD framework provides 
+ * the binding between the UI components and the application.
+ * 
+ * Application developers instantiate <i>DwtDropTarget</i> and register it with the control
+ * which is to be a drop taget (via <code>DwtControl.prototype.setDropTarget</code>). The
+ * application should then register a listener with the <i>DwtDropTarget</i>. This way
+ * when drop events occur the application will be notified and may act on them 
+ * accordingly
+ * 
+ * @author Ross Dargahi
+ * 
+ * @param {function...} transferType A list of supported object types that may be dropped onto
+ * 		this drop target. Typically the items repreent classes (i.e. functions) whose 
+ * 		instances may be dropped on this drop target e.g. 
+ * 		<code>new DwtDropTarget(MailItem, AppointmentItme)</code>
+ * 
+ * @see DwtDropEvent
+ * @see DwtControl
+ * @see DwtControl#setDropTarget
+ */
 function DwtDropTarget(transferType) {
-	this._transferTypes = new Array();
-	this._hasMultiple = false;
+	/** @private */
+	this._evtMgr = new AjxEventMgr();
+
+	/** @private */
+	this.__hasMultiple = false;
+	
+	/**@private*/
+	this.__transferTypes = new Array();
 	if (transferType) {
 		for (var i = 0; i < arguments.length; i++)
-			this._transferTypes[i] = arguments[i];
+			this.__transferTypes[i] = arguments[i];
 			
-		this._transferTypes.length = i;
+		this.__transferTypes.length = i;
 	}
-	this._evtMgr = new AjxEventMgr();
 }
 
-DwtDropTarget._DROP_LISTENER = "DwtDropTarget._DROP_LISTENER";
+/** @private */
+DwtDropTarget.__DROP_LISTENER = "DwtDropTarget.__DROP_LISTENER";
 
-DwtDropTarget._dropEvent = new DwtDropEvent();
+/** @private */
+DwtDropTarget.__dropEvent = new DwtDropEvent();
 
+/**
+ * @return The name of this class
+ * @type String
+ */
 DwtDropTarget.prototype.toString = 
 function() {
 	return "DwtDropTarget";
 }
 
+/**
+ * Registers a listener for <i>DwtDragEvent</i> events.
+ *
+ * @param {AjxListener} dropTargetListener Listener to be registered 
+ * 
+ * @see DwtDropEvent
+ * @see AjxListener
+ * @see #removeDropListener
+ */
 DwtDropTarget.prototype.addDropListener =
 function(dropTargetListener) {
-	this._evtMgr.addListener(DwtDropTarget._DROP_LISTENER, dropTargetListener);
+	this._evtMgr.addListener(DwtDropTarget.__DROP_LISTENER, dropTargetListener);
 }
 
+/**
+ * Removes a registered event listener.
+ * 
+ * @param {AjxListener} dropTargetListener Listener to be removed
+ * 
+ * @see AjxListener
+ * @see #addDropListener
+ */
 DwtDropTarget.prototype.removeDropListener =
 function(dropTargetListener) {
-	this._evtMgr.removeListener(DwtDropTarget._DROP_LISTENER, dropTargetListener);
+	this._evtMgr.removeListener(DwtDropTarget.__DROP_LISTENER, dropTargetListener);
 }
 
-/* Check to see if transferType is a valid target. Note that transferType can be an array of items
- * or just an single item */
+/**
+ *  Check to see if the types in <code>items</code> can be dropped on this drop target
+ *
+ * @param {object|array} items an array of objects or single object whose types are
+ * 		to be checked against the set of transfer types supported by this drop target
+ * 
+ * @return true if all of the objects in <code>items</code> may legally be dropped on 
+ * 		this drop target
+ * @type boolean
+ */
 DwtDropTarget.prototype.isValidTarget =
 function(items) {
 	if (items instanceof Array) {
 		for (var i = 0; i < items.length; i++) {
-			if (!this._checkTarget(items[i]))
+			if (!this.__checkTarget(items[i]))
 				return false;
 		}
 		return true;
 	} else {
-		return this._checkTarget(items);
+		return this.__checkTarget(items);
 	}
 }
 
-/* Indicates that the underlying component has multiple sub-components */
+/**
+ * Calling this method indicates that the UI component backing this drop target has multiple 
+ * sub-components
+ */
 DwtDropTarget.prototype.markAsMultiple = 
 function() {
-	this._hasMultiple = true;
+	this.__hasMultiple = true;
 };
 
+/**
+ * @return true if the UI component backing this drop target has multiple sub-components
+ * @type boolean
+ */
 DwtDropTarget.prototype.hasMultipleTargets = 
 function () {
-	return this._hasMultiple;
+	return this.__hasMultiple;
 };
 
-DwtDropTarget.prototype._checkTarget =
-function(item) {
-	for (var i = 0; i < this._transferTypes.length; i++) {
-		if (item instanceof this._transferTypes[i])
-			return true;
-	}	
-	if (i == this._transferTypes.length)
-		return false;
-}
-
+/**
+ * @return the list of transfer types supported by this drop target
+ * @type array
+ * 
+ * @see #setTransferTypes
+ */
 DwtDropTarget.prototype.getTransferTypes =
 function() {
-	return this._transferTypes;
+	return this.__transferTypes;
 }
 
-/* variable length parameter */
+/** 
+ * Sets the transfer types supported by this drop target
+ * 
+ * @param {function..} transferType An list of supported object types that may be dropped onto
+ * 		this drop target. Typically the items repreent classes (i.e. functions) whose 
+ * 		instances may be dropped on this drop target e.g. 
+ * 		<code>dropTarget.setTransferTypes(MailItem, AppointmentItme)</code>
+ * 
+ * @see #getTransferTypes
+ */
 DwtDropTarget.prototype.setTransferTypes =
 function(transferType) {
 	for (var i = 0; i < arguments.length; i++)
-		this._transferTypes[i] = arguments[i];
-	this._transferTypes.length = i;
+		this.__transferTypes[i] = arguments[i];
+	this.__transferTypes.length = i;
 }
 
-/* 
-* The following methods are called by DwtControl during the Drag lifecycle 
-*/
+// The following methods are called by DwtControl during the Drag lifecycle 
+
+/** @private */
 DwtDropTarget.prototype._dragEnter =
 function(operation, targetControl, srcData, ev) {
-	DwtDropTarget._dropEvent.operation = operation;
-	DwtDropTarget._dropEvent.targetControl = targetControl;
-	DwtDropTarget._dropEvent.action = DwtDropEvent.DRAG_ENTER;
-	DwtDropTarget._dropEvent.srcData = srcData;
-	DwtDropTarget._dropEvent.uiEvent = ev;
-	DwtDropTarget._dropEvent.doIt = true;
-	this._evtMgr.notifyListeners(DwtDropTarget._DROP_LISTENER, DwtDropTarget._dropEvent);
-	return DwtDropTarget._dropEvent.doIt;
+	DwtDropTarget.__dropEvent.operation = operation;
+	DwtDropTarget.__dropEvent.targetControl = targetControl;
+	DwtDropTarget.__dropEvent.action = DwtDropEvent.DRAG_ENTER;
+	DwtDropTarget.__dropEvent.srcData = srcData;
+	DwtDropTarget.__dropEvent.uiEvent = ev;
+	DwtDropTarget.__dropEvent.doIt = true;
+	this._evtMgr.notifyListeners(DwtDropTarget.__DROP_LISTENER, DwtDropTarget.__dropEvent);
+	return DwtDropTarget.__dropEvent.doIt;
 }
 
+/** @private */
 DwtDropTarget.prototype._dragLeave =
 function() {
-	DwtDropTarget._dropEvent.action = DwtDropEvent.DRAG_LEAVE;
-	this._evtMgr.notifyListeners(DwtDropTarget._DROP_LISTENER, DwtDropTarget._dropEvent);
+	DwtDropTarget.__dropEvent.action = DwtDropEvent.DRAG_LEAVE;
+	this._evtMgr.notifyListeners(DwtDropTarget.__DROP_LISTENER, DwtDropTarget.__dropEvent);
 }
 
+/** @private */
 DwtDropTarget.prototype._dragOpChanged =
 function(newOperation) {
-	DwtDropTarget._dropEvent.operation = newOperation;
-	DwtDropTarget._dropEvent.action = DwtDropEvent.DRAG_OP_CHANGED;
-	this._evtMgr.notifyListeners(DwtDropTarget._DROP_LISTENER, DwtDropTarget._dropEvent);
-	return DwtDropTarget._dropEvent.doIt;
+	DwtDropTarget.__dropEvent.operation = newOperation;
+	DwtDropTarget.__dropEvent.action = DwtDropEvent.DRAG_OP_CHANGED;
+	this._evtMgr.notifyListeners(DwtDropTarget.__DROP_LISTENER, DwtDropTarget.__dropEvent);
+	return DwtDropTarget.__dropEvent.doIt;
 }
 
+/** @private */
 DwtDropTarget.prototype._drop =
 function(srcData, ev) {
-	DwtDropTarget._dropEvent.action = DwtDropEvent.DRAG_DROP;
-	DwtDropTarget._dropEvent.srcData = srcData;
-	DwtDropTarget._dropEvent.uiEvent = ev;
-	this._evtMgr.notifyListeners(DwtDropTarget._DROP_LISTENER, DwtDropTarget._dropEvent);
-	return DwtDropTarget._dropEvent.doIt;
+	DwtDropTarget.__dropEvent.action = DwtDropEvent.DRAG_DROP;
+	DwtDropTarget.__dropEvent.srcData = srcData;
+	DwtDropTarget.__dropEvent.uiEvent = ev;
+	this._evtMgr.notifyListeners(DwtDropTarget.__DROP_LISTENER, DwtDropTarget.__dropEvent);
+	return DwtDropTarget.__dropEvent.doIt;
 }
+
+
+// Private methods
+
+/**@private*/
+DwtDropTarget.prototype.__checkTarget =
+function(item) {
+	for (var i = 0; i < this.__transferTypes.length; i++) {
+		if (item instanceof this.__transferTypes[i])
+			return true;
+	}	
+	if (i == this.__transferTypes.length)
+		return false;
+}
+
+

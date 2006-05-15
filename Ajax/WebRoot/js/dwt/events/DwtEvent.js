@@ -32,7 +32,7 @@ function DwtEvent(__init) {
 }
 
 /**
- * @return The name of this classe
+ * @return The name of this class
  * @type String
  */
 DwtEvent.prototype.toString = 

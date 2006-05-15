@@ -16,8 +16,6 @@
 
 
 /**
-* Creates a new dialog, without displaying it. The shell must be provided, and a 
-* title should be provided as well. Everything else has a reasonable default.
 * @constructor
 * @class
 * This class represents a popup dialog which has at least a title and up to 
@@ -29,14 +27,35 @@
 * @author Ross Dargahi
 * @author Conrad Damon
 *
-* @param parent				parent widget (the shell)
-* @param classname			a CSS class
-* @param title				a title for the dialog
-* @param standardButtons	a list of standard button IDs
-* @param extraButtons		a list of button descriptors
-* @param zIndex				z-index when the dialog is visible
-* @param mode				modal or modeless
-* @param loc				where to popup
+* @param {DwtShell} parent	parent widget
+* @param {string} classname	CSS class name for the instance. Defaults to the this classes
+* 		name (optional)
+* @param {string} title The title of the dialog (optional)
+* @param {array|number} standardButtons. The following are the possible values if
+* 		passing in an array (Note that the first button value passed in is bound
+* 		to the enter key):<ul>
+* 		<li>DwtDialog.CANCEL_BUTTON</li>
+* 		<li>DwtDialog.OK_BUTTON</li>
+* 		<li>DwtDialog.DISMISS_BUTTON</li>
+* 		<li>DwtDialog.NO_BUTTON</li>
+* 		<li>DwtDialog.YES_BUTTON</li>
+* 		</ul>
+* 		The following are passed in as individual items: <ul>
+* 		<li>DwtDialog.ALL_BUTTONS - Show all buttons</li>
+* 		<li>DwtDialog.NO_BUTTONS - Show no buttons</li></ul>
+* 		This parameter defaults to <code>[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]</code> if
+* 		no value is provided
+* @param {array} extraButtons Array of <i>DwtDialog_ButtonDescriptor</i> objects describing
+* 		The extra buttons to add to the dialog
+* @param {number} zIndex The z-index to set for this dialog when it is visible. Defaults
+* 		to <i>Dwt.Z_DIALOG</i> (optional)
+* @param {number} mode The modality of the dialog. One of: DwtBaseDialog.MODAL or 
+* 		DwtBaseDialog.MODELESS. Defaults to DwtBaseDialog.MODAL (optional)
+* @param {DwtPoint} loc	Location at which to popup the dialog. Defaults to being 
+* 		centered (optional)
+* 
+* @see DwtBaseDialog
+* @see DwtDialog_ButtonDescriptor
 */
 function DwtDialog(parent, className, title, standardButtons, extraButtons, zIndex, mode, loc) {
 
@@ -94,13 +113,14 @@ function DwtDialog(parent, className, title, standardButtons, extraButtons, zInd
 	this._button = new Object();
 	for (var i = 0; i < this._buttonList.length; i++) {
 		var buttonId = this._buttonList[i];
-		this._button[buttonId] = new DwtButton(this);
-		this._button[buttonId].setText(this._buttonDesc[buttonId].label);
-		this._button[buttonId].buttonId = buttonId;
-		this._button[buttonId].addSelectionListener(new AjxListener(this, this._buttonListener));
-		document.getElementById(this._buttonElementId[buttonId]).appendChild(this._button[buttonId].getHtmlElement());
+		var b = this._button[buttonId] = new DwtButton(this);
+		b.setText(this._buttonDesc[buttonId].label);
+		b.buttonId = buttonId;
+		b.addSelectionListener(new AjxListener(this, this._buttonListener));
+		this._tabGroup.addMember(b);
+		document.getElementById(this._buttonElementId[buttonId]).appendChild(b.getHtmlElement());
 	}
-	this.initializeDragging(this._titleHandleId);
+	this._initializeDragging(this._titleHandleId);
 }
 
 DwtDialog.prototype = new DwtBaseDialog;

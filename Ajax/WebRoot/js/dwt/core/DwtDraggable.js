@@ -22,168 +22,182 @@
 *
 * @author Ross Dargahi
 */
-
 function DwtDraggable() {
 }
 
-DwtDraggable._dragEl = null;
+DwtDraggable.dragEl = null;
 
 /**
-* @param dragEl	Element being dragged, can also be a handle e.g. the title bar in a dialog
-* @param rootEl The actual element that will be moved. This will be a
-* parent element of <i>dragEl</i> (optional) 
-* @param minX	Minimum x coord to which we can drag (optional)
-* @param maxX	Maximum x coord to which we can drag (optional)
-* @param minY	Minimum y coord to which we can drag (optional)
-* @param maxY	Maximum x coord to which we can drag (optional)
-* @param dragStartCB AjxCallback that is called when dragging is started
-* @param dragCB AjxCallback that is called when dragging
-* @param dragEndCB AjxCallback that is called when dragging is ended
-* @param swapHorizRef If true, then mouse motion to the right will move element left (optional)
-* @param swapVertRef If true, then mouse motion to the bottom will move element up (optional)
-* @param fXMapper function that overides this classes x coordinate transformations (optional)
-* @param fYMapper function that overides this classes y coordinate transformations (optional)
-*/
+ * Initializes dragging for <code>dragEl</code>
+ * 
+ * @param {HTMLElement} dragEl Element being dragged, can also be a handle e.g. the
+ * 		title bar in a dialog
+ * @param {HTMLElement} rootEl The actual element that will be moved. This will be a
+ * 		parent element of <i>dragEl</i> (optional) 
+ * @param {number} minX Minimum x coord to which we can drag (optional)
+ * @param {number} maxX Maximum x coord to which we can drag (optional)
+ * @param {number} minY Minimum y coord to which we can drag (optional)
+ * @param {number} maxY Maximum x coord to which we can drag (optional)
+ * @param {AjxCallback} dragStartCB callback that is called when dragging is started
+ * @param {AjxCallback}dragCB callback that is called when dragging
+ * @param {AjxCallback}dragEndCB callback that is called when dragging is ended
+ * @param {boolean} swapHorizRef If true, then mouse motion to the right will move element left (optional)
+ * @param {boolean} swapVertRef If true, then mouse motion to the bottom will move element up (optional)
+ * @param {function} fXMapper function that overides this classes x coordinate transformations (optional)
+ * @param {function} fYMapper function that overides this classes y coordinate transformations (optional)
+ */
 DwtDraggable.init = 
 function(dragEl, rootEl, minX, maxX, minY, maxY, dragStartCB, dragCB, dragEndCB, 
 		 swapHorizRef, swapVertRef, fXMapper, fYMapper) {
-	dragEl.onmousedown = DwtDraggable._start;
+	dragEl.onmousedown = DwtDraggable.__start;
 
-	dragEl._hMode = swapHorizRef ? false : true;
-	dragEl._vMode = swapVertRef ? false : true;
+	dragEl.__hMode = swapHorizRef ? false : true;
+	dragEl.__vMode = swapVertRef ? false : true;
 
-	dragEl._root = (rootEl && rootEl != null) ? rootEl : dragEl ;
+	dragEl.__root = (rootEl && rootEl != null) ? rootEl : dragEl ;
 
-	if (dragEl._hMode && isNaN(parseInt(dragEl._root.style.left))) 
-		dragEl._root.style.left = "0px";
-	if (dragEl._vMode && isNaN(parseInt(dragEl._root.style.top))) 
-		dragEl._root.style.top = "0px";
+	if (dragEl.__hMode && isNaN(parseInt(dragEl.__root.style.left))) 
+		dragEl.__root.style.left = "0px";
+	if (dragEl.__vMode && isNaN(parseInt(dragEl.__root.style.top))) 
+		dragEl.__root.style.top = "0px";
 		
-	if (!dragEl._hMode && isNaN(parseInt(dragEl._root.style.right))) 
-		dragEl._root.style.right = "0px";
-	if (!dragEl._vMode && isNaN(parseInt(dragEl._root.style.bottom))) 
-		dragEl._root.style.bottom = "0px";
+	if (!dragEl.__hMode && isNaN(parseInt(dragEl.__root.style.right))) 
+		dragEl.__root.style.right = "0px";
+	if (!dragEl.__vMode && isNaN(parseInt(dragEl.__root.style.bottom))) 
+		dragEl.__root.style.bottom = "0px";
 
-	dragEl._minX = (typeof minX != 'undefined') ? minX : null;
-	dragEl._minY = (typeof minY != 'undefined') ? minY : null;
-	dragEl._maxX = (typeof maxX != 'undefined') ? maxX : null;
-	dragEl._maxY = (typeof maxY != 'undefined') ? maxY : null;
+	dragEl.__minX = (typeof minX != 'undefined') ? minX : null;
+	dragEl.__minY = (typeof minY != 'undefined') ? minY : null;
+	dragEl.__maxX = (typeof maxX != 'undefined') ? maxX : null;
+	dragEl.__maxY = (typeof maxY != 'undefined') ? maxY : null;
 
-	dragEl._xMapper = fXMapper ? fXMapper : null;
-	dragEl._yMapper = fYMapper ? fYMapper : null;
+	dragEl.__xMapper = fXMapper ? fXMapper : null;
+	dragEl.__yMapper = fYMapper ? fYMapper : null;
 
-	dragEl._root.onDragStart = dragStartCB
-	dragEl._root.onDragEnd = dragEndCB
-	dragEl._root.onDrag = dragCB;
+	dragEl.__root.onDragStart = dragStartCB
+	dragEl.__root.onDragEnd = dragEndCB
+	dragEl.__root.onDrag = dragCB;
 }
 
-
+/**
+ * Sets the minimum and maximum drag boundries
+ * 
+ * @param {HTMLElement} dragEl Element being dragged, can also be a handle e.g. the
+ * 		title bar in a dialog
+ * @param {number} minX Minimum x coordinate
+ * @param {number} maxX Maximum x coordinate
+ * @param {number} minY Minimum y coordinate
+ * @param {number} maxY Maximum y coordinate
+ */
 DwtDraggable.setDragBoundaries =
 function (dragEl ,minX, maxX, minY, maxY) {
 	if (dragEl != null) {
-		if (minX != null) dragEl._minX = minX;
-		if (maxX != null) dragEl._maxX = maxX;
-		if (minY != null) dragEl._minY = minY;
-		if (maxY != null) dragEl._maxY = maxY;
+		if (minX != null) dragEl.__minX = minX;
+		if (maxX != null) dragEl.__maxX = maxX;
+		if (minY != null) dragEl.__minY = minY;
+		if (maxY != null) dragEl.__maxY = maxY;
 	}
 };
 
-DwtDraggable._start =
+/** @private */
+DwtDraggable.__start =
 function(e)	{
-	var dragEl = DwtDraggable._dragEl = this;
-	e = DwtDraggable._fixE(e);
-	var x = parseInt(dragEl._hMode ? dragEl._root.style.left : dragEl._root.style.right );
-	var y = parseInt(dragEl._vMode ? dragEl._root.style.top  : dragEl._root.style.bottom);
-	if (dragEl._root.onDragStart)
-		dragEl._root.onDragStart.run([x, y]);
+	var dragEl = DwtDraggable.dragEl = this;
+	e = DwtDraggable.__fixE(e);
+	var x = parseInt(dragEl.__hMode ? dragEl.__root.style.left : dragEl.__root.style.right );
+	var y = parseInt(dragEl.__vMode ? dragEl.__root.style.top  : dragEl.__root.style.bottom);
+	if (dragEl.__root.onDragStart)
+		dragEl.__root.onDragStart.run([x, y]);
 
-	dragEl._lastMouseX = e.clientX;
-	dragEl._lastMouseY = e.clientY;
+	dragEl.__lastMouseX = e.clientX;
+	dragEl.__lastMouseY = e.clientY;
 
-	if (dragEl._hMode) {
-		if (dragEl._minX != null)	
-			dragEl._minMouseX = e.clientX - x + dragEl._minX;
-		if (dragEl._maxX != null)
-			dragEl._maxMouseX = dragEl._minMouseX + dragEl._maxX - dragEl._minX;
+	if (dragEl.__hMode) {
+		if (dragEl.__minX != null)	
+			dragEl.__minMouseX = e.clientX - x + dragEl.__minX;
+		if (dragEl.__maxX != null)
+			dragEl.__maxMouseX = dragEl.__minMouseX + dragEl.__maxX - dragEl.__minX;
 	} else {
-		if (dragEl._minX != null)
-			dragEl._maxMouseX = -dragEl._minX + e.clientX + x;
-		if (dragEl._maxX != null)
-			dragEl._minMouseX = -dragEl._maxX + e.clientX + x;
+		if (dragEl.__minX != null)
+			dragEl.__maxMouseX = -dragEl.__minX + e.clientX + x;
+		if (dragEl.__maxX != null)
+			dragEl.__minMouseX = -dragEl.__maxX + e.clientX + x;
 	}
 
-	if (dragEl._vMode) {
-		if (dragEl._minY != null)
-			dragEl._minMouseY = e.clientY - y + dragEl._minY;
-		if (dragEl._maxY != null)
-			dragEl._maxMouseY = dragEl._minMouseY + dragEl._maxY - dragEl._minY;
+	if (dragEl.__vMode) {
+		if (dragEl.__minY != null)
+			dragEl.__minMouseY = e.clientY - y + dragEl.__minY;
+		if (dragEl.__maxY != null)
+			dragEl.__maxMouseY = dragEl.__minMouseY + dragEl.__maxY - dragEl.__minY;
 	} else {
-		if (dragEl._minY != null)
-			dragEl._maxMouseY = -dragEl._minY + e.clientY + y;
-		if (dragEl._maxY != null)
-			dragEl._minMouseY = -dragEl._maxY + e.clientY + y;
+		if (dragEl.__minY != null)
+			dragEl.__maxMouseY = -dragEl.__minY + e.clientY + y;
+		if (dragEl.__maxY != null)
+			dragEl.__minMouseY = -dragEl.__maxY + e.clientY + y;
 	}
 
-	document.onmousemove = DwtDraggable._drag;
-	document.onmouseup = DwtDraggable._end;
+	document.onmousemove = DwtDraggable.__drag;
+	document.onmouseup = DwtDraggable.__end;
 
 	return false;
 }
 
-
-DwtDraggable._drag =
+/** @private */
+DwtDraggable.__drag =
 function(e)	{
-	e = DwtDraggable._fixE(e);
-	var dragEl = DwtDraggable._dragEl;
+	e = DwtDraggable.__fixE(e);
+	var dragEl = DwtDraggable.dragEl;
 
 	var ey	= e.clientY;
 	var ex	= e.clientX;
-	var x = parseInt(dragEl._hMode ? dragEl._root.style.left : dragEl._root.style.right );
-	var y = parseInt(dragEl._vMode ? dragEl._root.style.top  : dragEl._root.style.bottom);
+	var x = parseInt(dragEl.__hMode ? dragEl.__root.style.left : dragEl.__root.style.right );
+	var y = parseInt(dragEl.__vMode ? dragEl.__root.style.top  : dragEl.__root.style.bottom);
 	var nx, ny;
 
-	if (!dragEl._xMapper) {
-		if (dragEl._minX != null)
-			ex = dragEl._hMode ? Math.max(ex, dragEl._minMouseX) : Math.min(ex, dragEl._maxMouseX);
-		if (dragEl._maxX != null)
-			ex = dragEl._hMode ? Math.min(ex, dragEl._maxMouseX) : Math.max(ex, dragEl._minMouseX);
-		nx = x + ((ex - dragEl._lastMouseX) * (dragEl._hMode ? 1 : -1));
+	if (!dragEl.__xMapper) {
+		if (dragEl.__minX != null)
+			ex = dragEl.__hMode ? Math.max(ex, dragEl.__minMouseX) : Math.min(ex, dragEl.__maxMouseX);
+		if (dragEl.__maxX != null)
+			ex = dragEl.__hMode ? Math.min(ex, dragEl.__maxMouseX) : Math.max(ex, dragEl.__minMouseX);
+		nx = x + ((ex - dragEl.__lastMouseX) * (dragEl.__hMode ? 1 : -1));
 	} else {
-		nx = dragEl._xMapper(x, ex);
+		nx = dragEl.__xMapper(x, ex);
 	}
 
-	if (!dragEl._yMapper) {
-		if (dragEl._minY != null)
-			ey = dragEl._vMode ? Math.max(ey, dragEl._minMouseY) : Math.min(ey, dragEl._maxMouseY);
-		if (dragEl._maxY != null)
-			ey = dragEl._vMode ? Math.min(ey, dragEl._maxMouseY) : Math.max(ey, dragEl._minMouseY);
-		ny = y + ((ey - dragEl._lastMouseY) * (dragEl._vMode ? 1 : -1));
+	if (!dragEl.__yMapper) {
+		if (dragEl.__minY != null)
+			ey = dragEl.__vMode ? Math.max(ey, dragEl.__minMouseY) : Math.min(ey, dragEl.__maxMouseY);
+		if (dragEl.__maxY != null)
+			ey = dragEl.__vMode ? Math.min(ey, dragEl.__maxMouseY) : Math.max(ey, dragEl.__minMouseY);
+		ny = y + ((ey - dragEl.__lastMouseY) * (dragEl.__vMode ? 1 : -1));
 	} else {
-		ny = dragEl._yMapper(y, ey);
+		ny = dragEl.__yMapper(y, ey);
 	}
 
-	DwtDraggable._dragEl._root.style[dragEl._hMode ? "left" : "right"] = nx + "px";
-	DwtDraggable._dragEl._root.style[dragEl._vMode ? "top" : "bottom"] = ny + "px";
-	DwtDraggable._dragEl._lastMouseX = ex;
-	DwtDraggable._dragEl._lastMouseY = ey;
+	DwtDraggable.dragEl.__root.style[dragEl.__hMode ? "left" : "right"] = nx + "px";
+	DwtDraggable.dragEl.__root.style[dragEl.__vMode ? "top" : "bottom"] = ny + "px";
+	DwtDraggable.dragEl.__lastMouseX = ex;
+	DwtDraggable.dragEl.__lastMouseY = ey;
 
-	if (DwtDraggable._dragEl._root.onDrag)
-		DwtDraggable._dragEl._root.onDrag.run([nx, ny]);
+	if (DwtDraggable.dragEl.__root.onDrag)
+		DwtDraggable.dragEl.__root.onDrag.run([nx, ny]);
 		
 	return false;
 }
 
-DwtDraggable._end =
+/** @private */
+DwtDraggable.__end =
 function() {
 	document.onmousemove = null;
 	document.onmouseup   = null;
-	if (DwtDraggable._dragEl._root.onDragEnd)
-		DwtDraggable._dragEl._root.onDragEnd.run([parseInt(DwtDraggable._dragEl._root.style[DwtDraggable._dragEl._hMode ? "left" : "right"]), 
-											 	 parseInt(DwtDraggable._dragEl._root.style[DwtDraggable._dragEl._vMode ? "top" : "bottom"])]);
-	DwtDraggable._dragEl = null;
+	if (DwtDraggable.dragEl.__root.onDragEnd)
+		DwtDraggable.dragEl.__root.onDragEnd.run([parseInt(DwtDraggable.dragEl.__root.style[DwtDraggable.dragEl.__hMode ? "left" : "right"]), 
+											 	  parseInt(DwtDraggable.dragEl.__root.style[DwtDraggable.dragEl.__vMode ? "top" : "bottom"])]);
+	DwtDraggable.dragEl = null;
 }
 
-DwtDraggable._fixE =
+/** @private */
+DwtDraggable.__fixE =
 function(e) {
 	if (typeof e == 'undefined')
 		e = window.event;
