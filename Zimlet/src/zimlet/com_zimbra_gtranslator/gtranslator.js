@@ -154,7 +154,7 @@ function() {
 	this._langSelect.reparentHtmlElement(selectId);
 	this._langSelect.addChangeListener(new AjxListener(this, this._langChangeListener));
 
-	for (var i = 0; i < this._languages.length; i++) {
+	for (i = 0; i < this._languages.length; i++) {
 		var option = this._languages[i];
 		this._langSelect.addOption(option.label, i==0, option.value);
 	}

@@ -139,12 +139,12 @@ Com_Zimbra_YTraffic.prototype.toolTipPoppedUp =
 function(spanElement, obj, context, canvas) {
 
 	var addressURL = "";
-	addressURL += obj.street.length > 0 ? "&" + "street=" + AjxStringUtil.urlEncode(obj.street) : "" ;
-	addressURL += obj.city.length > 0 ? "&" + "city=" + AjxStringUtil.urlEncode(obj.city) : "" ;
-	addressURL += obj.state.length > 0 ? "&" + "state=" + AjxStringUtil.urlEncode(obj.state) : "" ;
-	addressURL += obj.zip.length > 0 ? "&" + "zip=" + AjxStringUtil.urlEncode(obj.zip) : "" ;
+	addressURL += obj.street.length > 0 ? "&" + "street=" + AjxStringUtil.urlComponentEncode(obj.street) : "" ;
+	addressURL += obj.city.length > 0 ? "&" + "city=" + AjxStringUtil.urlComponentEncode(obj.city) : "" ;
+	addressURL += obj.state.length > 0 ? "&" + "state=" + AjxStringUtil.urlComponentEncode(obj.state) : "" ;
+	addressURL += obj.zip.length > 0 ? "&" + "zip=" + AjxStringUtil.urlComponentEncode(obj.zip) : "" ;
 	canvas.innerHTML = "<div id='" + ZmZimletBase.encodeId("YahooTrafficElement") + "'>Retriving the traffic data ....</div>";
-	var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(Com_Zimbra_YTraffic.URL + addressURL);
+	var url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(Com_Zimbra_YTraffic.URL + addressURL);
 	DBG.println(AjxDebug.DBG2, "Com_Zimbra_YTraffic URL: " + url);
 	AjxRpc.invoke(null, url, null, new AjxCallback(this, Com_Zimbra_YTraffic._callback, obj), true);
 };

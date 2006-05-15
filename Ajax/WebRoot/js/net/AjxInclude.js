@@ -56,9 +56,13 @@ function AjxInclude(includes, baseurl, callback, proxy) {
 			var fullurl = scripts.shift();
 			var orig = fullurl;
 			if (!/^((https?|ftps?):\x2f\x2f|\x2f)/.test(fullurl)) {
-				// relative URL
-				fullurl = baseurl + fullurl;
- 			} else if (proxy && fullurl.indexOf('/') != 0) {
+				// relative URL, add cache param
+                if(cacheKillerVersion) {
+                    fullurl = baseurl + fullurl + "?v=" + cacheKillerVersion;
+                } else {
+                    fullurl = baseurl + fullurl;
+                }
+             } else if (proxy && fullurl.indexOf('/') != 0) {
  				// fully qualified URL-s will go through our proxy
  				fullurl = proxy + AjxStringUtil.urlEncode(fullurl);
 			}

@@ -53,10 +53,15 @@ function(zimlet) {
 
 FlightStatusDlg.prototype.setFlight = 
 function(code,airline,airlinecode,number) {
-	if(airlinecode && airlinecode.length==2 && Com_Flightexplorer_Fasttrack.mapIATA2ICAO[airlinecode]) {
+    DBG.println(AjxDebug.DBG3, "FlightStatusDlg.setFlight code:" + code + " air: " + airline + " aircode: " + airlinecode + " num: " + number);
+    if(airlinecode && airlinecode.length==2 && Com_Flightexplorer_Fasttrack.mapIATA2ICAO[airlinecode]) {
 		airlinecode = Com_Flightexplorer_Fasttrack.mapIATA2ICAO[airlinecode];
 	}
-	this.setAirline(airline,airlinecode);
+    // No flight number? Pull it from the code.
+    if (!number || number < 0) {
+        number = parseInt(code.replace(/[a-z]/ig, ""), 10);
+    }
+    this.setAirline(airline,airlinecode);
 	this.setFlightNumber(number);
 	this.setFlightCode(airlinecode+number);
 	this.airlineValueCell.innerHTML = airline;
