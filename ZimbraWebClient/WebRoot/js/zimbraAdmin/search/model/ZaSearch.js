@@ -62,6 +62,8 @@ ZaSearch.A_fDomains = "f_domains";
 ZaSearch.A_fdistributionlists = "f_distributionlists";
 ZaSearch.A_fResources = "f_resources";
 
+ZaSearch._currentQuery = null;
+
 /**
 * @param app reference to ZaApp
 **/
@@ -102,8 +104,10 @@ function (params) {
 	var soapDoc = AjxSoapDoc.create("SearchDirectoryRequest", "urn:zimbraAdmin", null);
 	if(params.query) {
 		soapDoc.set("query", params.query);
+		ZaSearch._currentQuery = params.query ;
 	} else {
 		soapDoc.set("query", "");		
+		ZaSearch._currentQuery = "";
 	}
 
 	var sortBy = (params.sortBy != undefined)? params.sortBy: ZaItem.A_zimbraId;

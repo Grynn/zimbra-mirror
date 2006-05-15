@@ -39,7 +39,7 @@ function ZaSearchListController(appCtxt, container, app) {
    	this._popupOperations = new Array();			
    	
 	this._currentPageNum = 1;
-	this._currentQuery = "";
+	this._currentQuery = null;
 	this._currentSortField = ZaAccount.A_uid;
 	this._currentSortOrder = "1";
 	this.searchTypes = [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES, ZaSearch.DOMAINS];
@@ -48,7 +48,7 @@ function ZaSearchListController(appCtxt, container, app) {
 	this._searchField = null;
 	this._helpURL = ZaSearchListController.helpURL;
 	this._UICreated = false;
-	this.objType = null;	
+	this.objType = ZaEvent.S_ACCOUNT;	
 	this.fetchAttrs = ZaSearch.standardAttributes;
 }
 
@@ -63,7 +63,7 @@ ZaController.initPopupMenuMethods["ZaSearchListController"] = new Array();
 ZaSearchListController.prototype.show = function (doPush) {
 	var callback = new AjxCallback(this, this.searchCallback, {limit:this.RESULTSPERPAGE,CONS:null,show:doPush});
 	var searchParams = {
-			query:this._currentQuery, 
+			query: this._currentQuery ? this._currentQuery : (ZaSearch._currentQuery ? ZaSearch._currentQuery : ""), 
 			types:this.searchTypes,
 			sortBy:this._currentSortField,
 			offset:this.RESULTSPERPAGE*(this._currentPageNum-1),
@@ -341,11 +341,11 @@ function(ev) {
 * It call ZaAccountViewController.show method
 * in order to display the Account View
 **/
+
 ZaSearchListController.prototype._deleteButtonListener =
 function(ev) {
 	ZaAccountListController.prototype._deleteButtonListener.call(this, ev);
 }
-
 
 ZaSearchListController.prototype._editItem = function (item) {
 	var type = item.type;

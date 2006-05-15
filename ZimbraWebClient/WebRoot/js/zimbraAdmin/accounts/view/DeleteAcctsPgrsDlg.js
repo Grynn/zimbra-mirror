@@ -160,7 +160,7 @@ function (result) {
 		} else {
 			//done
 			this._button[DeleteAcctsPgrsDlg.ABORT_BUTTON].setEnabled(false);			
-			this._app.getAccountListController().fireRemovalEvent(obj[DeleteAcctsPgrsDlg._DELETED_ACCTS]);						
+			this._app.getCurrentController().fireRemovalEvent(obj[DeleteAcctsPgrsDlg._DELETED_ACCTS]);						
 			AjxTimedAction.cancelAction(this._pollHandler);	
 			this._pollHandler = null;
 			if(!this._aborted) {

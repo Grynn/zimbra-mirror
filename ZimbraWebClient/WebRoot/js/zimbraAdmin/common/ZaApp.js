@@ -122,8 +122,9 @@ function() {
 	if (this._controllers[ZaZimbraAdmin._SEARCH_LIST_VIEW] == null) {
 		this._controllers[ZaZimbraAdmin._SEARCH_LIST_VIEW] = new ZaSearchListController(this._appCtxt, this._container, this);
 		this._controllers[ZaZimbraAdmin._SEARCH_LIST_VIEW].addRemovalListener(new AjxListener(this, ZaApp.prototype.handleAccountRemoval));					
-		this._controllers[ZaZimbraAdmin._SEARCH_LIST_VIEW].addRemovalListener(new AjxListener(this.getAccountListController(), this.getAccountListController().handleRemoval));							
-		this._controllers[ZaZimbraAdmin._SEARCH_LIST_VIEW].addRemovalListener(new AjxListener(this.getDomainListController(), this.getDomainListController().handleRemoval));									
+		this._controllers[ZaZimbraAdmin._SEARCH_LIST_VIEW].addRemovalListener(new AjxListener(this.getSearchListController(), this.getSearchListController().handleRemoval));							
+		//the view of the search list is only controlled by the searchlistcontroller, no need to add the domainlistcontroller listener
+		//this._controllers[ZaZimbraAdmin._SEARCH_LIST_VIEW].addRemovalListener(new AjxListener(this.getDomainListController(), this.getDomainListController().handleRemoval));									
 	}
 	return this._controllers[ZaZimbraAdmin._SEARCH_LIST_VIEW]
 }
