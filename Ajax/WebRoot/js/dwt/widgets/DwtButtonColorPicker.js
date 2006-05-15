@@ -138,11 +138,15 @@ DwtButtonColorPicker.prototype.setColor = function(color) {
 /// When the color display DIV is hovered, we show a small "X" icon to suggest
 /// the end user that the selected color can be cleared.
 DwtButtonColorPicker.prototype.__colorDisplay_onMouseOver = function(ev, div) {
+	if (!this.getEnabled())
+		return;
 // 	div.style.backgroundColor = "";
 	Dwt.addClass(div, "DwtButtonColorPicker-display-disable");
 };
 
 DwtButtonColorPicker.prototype.__colorDisplay_onMouseOut = function(ev, div) {
+	if (!this.getEnabled())
+		return;
 // 	if (this.__color)
 // 		div.style.backgroundColor = this.__color;
 	Dwt.delClass(div, "DwtButtonColorPicker-display-disable");
@@ -151,6 +155,8 @@ DwtButtonColorPicker.prototype.__colorDisplay_onMouseOut = function(ev, div) {
 /// Clears the selected color.  This function is called when the color display
 /// DIV is clicked.
 DwtButtonColorPicker.prototype.__colorDisplay_onMouseDown = function(ev, div) {
+	if (!this.getEnabled())
+		return;
 	var dwtev = DwtShell.mouseEvent;
 	dwtev.setFromDhtmlEvent(ev);
 	this.__color = this.__detail = div.style.backgroundColor = "";

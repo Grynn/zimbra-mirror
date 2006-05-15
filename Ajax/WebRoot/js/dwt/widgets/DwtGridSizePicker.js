@@ -22,10 +22,11 @@
  *
  * @author Mihai Bazon <mihai@zimbra.com>
  */
-function DwtGridSizePicker(parent) {
+function DwtGridSizePicker(parent, title) {
 	if (arguments.length == 0)
 		return;
 	DwtControl.call(this, parent, "DwtGridSizePicker");
+	this._title = title;
 	if (parent instanceof DwtMenu)
 		parent.addPopupListener(new AjxListener(this, this._reset));
 	this._reset();
@@ -60,7 +61,7 @@ function(listener) {
 DwtGridSizePicker.prototype._createGrid = function() {
 	var el = this.getHtmlElement();
 	var html = [ "<table cellpadding='0' border='0' cellspacing='0'>",
-		     "<tr class='info'><td colspan='", this.maxCols, "'>", ZmMsg.insertTable, "</td></tr>" ];
+		     "<tr class='info'><td colspan='", this.maxCols, "'>", this._title, "</td></tr>" ];
 	var row = [ "<tr class='grid'>" ];
 	for (var i = 0; i < this.maxCols; ++i) {
 		// row.push("<td unselectable='unselectable'>&nbsp;</td>");
@@ -206,7 +207,7 @@ DwtGridSizePicker.prototype._update = function() {
 	if (this._rows > 0 && this._cols > 0)
 		header.innerHTML = this._rows + " x " + this._cols;
 	else
-		header.innerHTML = ZmMsg.insertTable;
+		header.innerHTML = this._title;
 	for (var i = 0; i < this.maxRows; ++i) {
 		var row = table.rows[i+1];
 		for (var j = 0; j < this.maxCols; ++j) {
