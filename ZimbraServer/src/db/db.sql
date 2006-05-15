@@ -107,7 +107,8 @@ CREATE TABLE mailbox (
    item_id_checkpoint INTEGER UNSIGNED NOT NULL DEFAULT 0,
    size_checkpoint    BIGINT UNSIGNED NOT NULL DEFAULT 0,
    change_checkpoint  INTEGER UNSIGNED NOT NULL DEFAULT 0,
-   tracking_sync      BOOLEAN NOT NULL DEFAULT 0,
+   tracking_sync      INTEGER UNSIGNED NOT NULL DEFAULT 0,
+   tracking_imap      BOOLEAN NOT NULL DEFAULT 0,
    config             TEXT,
    comment            VARCHAR(255),               # usually the main email address originally associated with the mailbox
 
