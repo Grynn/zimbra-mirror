@@ -1287,6 +1287,7 @@
   background-color: #eee;
   cursor: default;
   vertical-align: middle;
+  height: 10px;
 }
 
 .DwtSpinner-UpBtn div, .DwtSpinner-DownBtn div { margin-left: auto; margin-right: auto; vertical-align: middle; }

@@ -101,7 +101,7 @@ DwtSpinner.prototype._createElements = function() {
 		     "<td unselectable id='", this._idDownButton, "' class='DwtSpinner-downBtn'><div class='ImgDownArrowSmall'>&nbsp;</div></td>",
 		     "</tr></table>" ];
 
-		     
+
 // 		     "<td><div class='DwtSpinner-btnCell'>",
 // 		     "<div unselectable class='DwtSpinner-upBtn' id='", this._idUpButton, "'><div class='ImgUpArrowSmall'>&nbsp;</div></div>",
 // 		     "<div unselectable class='DwtSpinner-downBtn' id='", this._idDownButton, "'><div class='ImgDownArrowSmall'>&nbsp;</div></div>",
@@ -275,4 +275,14 @@ DwtSpinner.prototype.__onKeyPress = function(ev) {
 		var input = this.getInputElement();
 		Dwt.setSelectionRange(input, 0, input.value.length);
 	}
+};
+
+DwtSpinner.prototype.focus = function() {
+	this.getInputElement().focus();
+};
+
+DwtSpinner.prototype.select = function() {
+	var input = this.getInputElement();
+	input.focus();
+	Dwt.setSelectionRange(input, 0, input.value.length);
 };

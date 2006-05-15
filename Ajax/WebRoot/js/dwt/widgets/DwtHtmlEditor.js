@@ -97,6 +97,14 @@ DwtHtmlEditor.IMAGE = "insertimage";
 DwtHtmlEditor.DIRECTION_R2L;
 DwtHtmlEditor.DIRECTION_L2R;
 
+// Borders (for table/cell props)
+DwtHtmlEditor.BORDER_TOP    = 0;
+DwtHtmlEditor.BORDER_MIDDLE = 1;
+DwtHtmlEditor.BORDER_BOTTOM = 2;
+DwtHtmlEditor.BORDER_LEFT   = 3;
+DwtHtmlEditor.BORDER_CENTER = 4;
+DwtHtmlEditor.BORDER_RIGHT  = 5;
+
 // PRIVATE Class Attributes
 
 // Font Family Definitions & RegExs
@@ -309,7 +317,7 @@ function(rows, cols, width, cellSpacing, cellPadding, alignment) {
 				td.style.width = tdWidth;
 			if (AjxEnv.isGeckoBased)
 				td.appendChild(doc.createElement("br"));
-			td.style.border = "1px solid #000";
+			td.style.borderTop = td.style.borderLeft = "1px solid #000";
 			tr.appendChild(td);
 		}
 	}
@@ -370,6 +378,108 @@ function(table, props) {
 			for (var j = all_cells_props.length; --j >= 0;)
 				td.style[all_cells_props[j][0]] = all_cells_props[j][1];
 		}
+	}
+	if (AjxEnv.isGeckoBased)
+		this._forceRedraw();
+};
+
+DwtHtmlEditor.prototype.applyCellProperties = function(table, cells, props) {
+	var last_row = true;
+	for (var row_i = cells.length; --row_i >= 0;) {
+		var row = cells[row_i];
+		var first_row = (row_i == 0);
+		var last_col = true;
+		for (var cell_i = row.length; --cell_i >= 0;) {
+			var first_col = (cell_i == 0);
+			var td = row[cell_i];
+
+			if (props.backgroundColor != null)
+				td.style.backgroundColor = props.backgroundColor;
+
+			if (props.color != null)
+				td.style.color = props.color;
+
+			if (props.textAlign != null)
+				td.style.textAlign = props.textAlign;
+
+			if (props.verticalAlign != null)
+				td.style.verticalAlign = props.verticalAlign;
+
+			if (props.width != null) {
+				if (props.width)
+					td.style.width = props.width + "px";
+				else
+					td.style.width = "";
+			}
+
+			if (props.height != null) {
+				if (props.height)
+					td.style.height = props.height + "px";
+				else
+					td.style.height = "";
+			}
+
+			if (props.vertPadding != null) {
+				if (props.vertPadding)
+					td.style.paddingTop = td.style.paddingBottom = props.vertPadding + "px";
+				else
+					td.style.paddingTop = td.style.paddingBottom = "";
+			}
+
+			if (props.horizPadding != null) {
+				if (props.horizPadding)
+					td.style.paddingLeft = td.style.paddingRight = props.horizPadding + "px";
+				else
+					td.style.paddingLeft = td.style.paddingRight = "";
+			}
+
+			var borders = props.borders, b;
+
+			// horiz. borders
+
+			b = borders[DwtHtmlEditor.BORDER_TOP];
+			if (b != null && first_row) {
+				td.style.borderTop = b.width + " " + b.style + " " + b.color;
+			}
+
+ 			b = borders[DwtHtmlEditor.BORDER_MIDDLE];
+ 			if (b != null) {
+				b = b.width + " " + b.style + " " + b.color;
+				if (!last_row)
+					td.style.borderBottom = b;
+				if (!first_row)
+					td.style.borderTop = b;
+ 			}
+
+			b = borders[DwtHtmlEditor.BORDER_BOTTOM];
+			if (b != null && last_row) {
+				td.style.borderBottom = b.width + " " + b.style + " " + b.color;
+			}
+
+			// vertical borders
+
+			b = borders[DwtHtmlEditor.BORDER_LEFT];
+			if (b != null && first_col) {
+				td.style.borderLeft = b.width + " " + b.style + " " + b.color;
+			}
+
+ 			b = borders[DwtHtmlEditor.BORDER_CENTER];
+ 			if (b != null) {
+				b = b.width + " " + b.style + " " + b.color;
+				if (!last_col)
+					td.style.borderRight = b;
+				if (!first_col)
+					td.style.borderLeft = b;
+ 			}
+
+			b = borders[DwtHtmlEditor.BORDER_RIGHT];
+			if (b != null && last_col) {
+				td.style.borderRight = b.width + " " + b.style + " " + b.color;
+			}
+
+			last_col = false;
+		}
+		last_row = false;
 	}
 	if (AjxEnv.isGeckoBased)
 		this._forceRedraw();
@@ -776,8 +886,11 @@ DwtHtmlEditor.prototype._forceRedraw = function() {
 
 	var body = this._getIframeDoc().body;
 	body.style.display = "none";
+	var self = this;
 	setTimeout(function() {
 		body.style.display = "";
+		self.focus();
+		self = null;
 	}, 10);
 };
 
@@ -796,13 +909,16 @@ DwtHtmlEditor.prototype.getSelectedCells = function() {
 					(cells) && rows.push(cells);
 					cells = [];
 				}
-				cells.push(td);
+				if (td.tagName && /^td$/i.test(td.tagName))
+					cells.push(td);
 			}
 		} catch(ex) {}
 		rows.push(cells);
-	} else {
-		alert("Merging cells is not yet supported in Internet Explorer -- track bug #7400");
-		return [ [ this.getNearestElement("td") ] ];
+	}
+	if (rows.length == 0 || rows[0].length == 0) {
+		cells = this.getNearestElement("td");
+		if (cells)
+			rows = [[cells]];
 	}
 	return rows;
 };

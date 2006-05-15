@@ -1,13 +1,13 @@
 function EditorTest() {};
 
 EditorTest.content = [ "<h1>Test</h1><p>a paragraph here</p>",
-		       "<table width='100%' style='border: 1px solid #000'>",
-		       "<tr> <td style='border: 1px solid #000'><br /></td> <td style='border: 1px solid #000'><br /></td> <td style='border: 1px solid #000'><br /></td> </tr>",
-		       "<tr> <td style='border: 1px solid #000'><br /></td> <td style='border: 1px solid #000'><br /></td> <td style='border: 1px solid #000'><br /></td> </tr>",
-		       "<tr> <td style='border: 1px solid #000'><br /></td> <td style='border: 1px solid #000'><br /></td> <td style='border: 1px solid #000'><br /></td> </tr>",
-		       "<tr> <td style='border: 1px solid #000'><br /></td> <td style='border: 1px solid #000'><br /></td> <td style='border: 1px solid #000'><br /></td> </tr>",
-		       "<tr> <td style='border: 1px solid #000'><br /></td> <td style='border: 1px solid #000'><br /></td> <td style='border: 1px solid #000'><br /></td> </tr>",
-		       "<tr> <td style='border: 1px solid #000'><br /></td> <td style='border: 1px solid #000'><br /></td> <td style='border: 1px solid #000'><br /></td> </tr>",
+		       "<table width='100%' style='border: 1px solid #aaf; border-collapse: collapse;'>",
+		       "<tr> <td style='border: 1px solid #aaf'><br /></td> <td style='border: 1px solid #aaf'><br /></td> <td style='border: 1px solid #aaf'><br /></td> </tr>",
+		       "<tr> <td style='border: 1px solid #aaf'><br /></td> <td style='border: 1px solid #aaf'><br /></td> <td style='border: 1px solid #aaf'><br /></td> </tr>",
+		       "<tr> <td style='border: 1px solid #aaf'><br /></td> <td style='border: 1px solid #aaf'><br /></td> <td style='border: 1px solid #aaf'><br /></td> </tr>",
+		       "<tr> <td style='border: 1px solid #aaf'><br /></td> <td style='border: 1px solid #aaf'><br /></td> <td style='border: 1px solid #aaf'><br /></td> </tr>",
+		       "<tr> <td style='border: 1px solid #aaf'><br /></td> <td style='border: 1px solid #aaf'><br /></td> <td style='border: 1px solid #aaf'><br /></td> </tr>",
+		       "<tr> <td style='border: 1px solid #aaf'><br /></td> <td style='border: 1px solid #aaf'><br /></td> <td style='border: 1px solid #aaf'><br /></td> </tr>",
 		       "</table>",
 		       "<p>another paragraph here</p>" ].join("");
 
