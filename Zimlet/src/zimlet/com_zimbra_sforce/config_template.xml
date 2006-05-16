@@ -1,5 +1,11 @@
 <zimletConfig name="com_zimbra_sforce" version="1.0">
-  <global>
-    <property name="allowedDomains">*.salesforce.com,*.sforce.com</property>
-  </global>
+    <global>
+        <property name="allowedDomains">*.salesforce.com,*.sforce.com</property>
+        <property name="preauthDomainKey">48cde8d64c45ecf6718212103b147fc8c4ebd53eaf33eeb0034dc2ad824d741c</property>
+        <property name="redirectUser">user1@kk.zimbra.com</property>
+    </global>
 </zimletConfig>
+        <!--
+        localhost "48cde8d64c45ecf6718212103b147fc8c4ebd53eaf33eeb0034dc2ad824d741c"
+        roadshow "3f22c69abb92ce8d0b5bd30bd4cc3acd4ecd535783490e8722f9903ced6c61ee"
+        -->
