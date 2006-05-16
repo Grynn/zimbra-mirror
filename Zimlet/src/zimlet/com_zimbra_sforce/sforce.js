@@ -702,12 +702,11 @@ Com_Zimbra_SForce.toIsoDate = function(theDate) {
 };
 
 Com_Zimbra_SForce.toIsoDateTime = function(theDate) {
-    var ret = AjxDateFormat.format("yyyy-MM-ddTkk:mm:ss", theDate);
-    var tz = AjxDateFormat.format("Z", theDate);
-    DBG.println(AjxDebug.DBG3, "ret: " + ret + " tz: " + tz);
-    if (tz.length == 5)
-        tz = tz.substr(0, 3) + ":" + tz.substr(3);
-    return ret + tz;
+    var zDate = new Date(theDate.getTime());
+    zDate.setMinutes(zDate.getMinutes()+zDate.getTimezoneOffset());
+    var ret = AjxDateFormat.format("yyyy-MM-ddTHH:mm:ss'Z'", zDate);
+    DBG.println(AjxDebug.DBG3, "ret: " + ret);
+    return ret;
 };
 
 Com_Zimbra_SForce.prototype.apptDropped = function(obj) {
