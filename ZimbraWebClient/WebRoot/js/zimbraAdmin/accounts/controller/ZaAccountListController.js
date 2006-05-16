@@ -320,7 +320,9 @@ function () {
 	//set a selection listener on the account list view
 	this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 	this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
-	this._app.dialogs["ConfirmMessageDialog"] = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);			
+	if(!this._app.dialogs["ConfirmMessageDialog"])
+		this._app.dialogs["ConfirmMessageDialog"] = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);			
+	
 	this._UICreated = true;
 }
 
@@ -572,38 +574,11 @@ function () {
 	if(!this._app.dialogs["removeProgressDlg"]) {
 		this._app.dialogs["removeProgressDlg"] = new DeleteAcctsPgrsDlg(this._container, this._app,"500px","300px");
 	}
+	this._app.dialogs["ConfirmMessageDialog"].popdown();
 	this._app.dialogs["removeProgressDlg"].popup();
 	this._app.dialogs["removeProgressDlg"].setObject(this._removeList);
-	this._app.dialogs["ConfirmMessageDialog"].popdown();		
 	this._app.dialogs["removeProgressDlg"].startDeletingAccounts();
-	
-	/*
-		for(var key in this._removeList) {
-			if(this._removeList[key]) {
-				try {
-					this._removeList[key].remove();
-					successRemList.push(this._removeList[key]);
-				} catch (ex) {
-					this._app.dialogs["ConfirmMessageDialog"].popdown();
-					if(ex.code == ZmCsfeException.SVC_WRONG_HOST) {
-						var szMsg = ZaMsg.ERROR_WRONG_HOST;
-						if(ex.detail) {
-							szMsg +="<br>Details:<br>";
-							szMsg += ex.detail;
-						}
-						this._app.dialogs["errorDialog"].setMessage(szMsg, null, DwtMessageDialog.CRITICAL_STYLE, null);
-						this._app.dialogs["errorDialog"].popup();					
-					} else {
-						this._handleException(ex, "ZaAccountListController.prototype._deleteAccountsCallback", null, false);
-					}
-					return;
-				}
-			}
-		}
-		this.fireRemovalEvent(successRemList); 
-		this._app.dialogs["ConfirmMessageDialog"].popdown();
-		this.show(ZaSearch.searchByQueryHolder(this._currentQuery, this._currentPageNum, this._currentSortField, this._currentSortOrder, this._app));			
-	}*/
+
 }
 
 

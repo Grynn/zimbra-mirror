@@ -49,7 +49,7 @@ function DwtKeyboardMgr() {
 	/**@private*/
 	this.__tabGroupChangeListenerObj = new AjxListener(this, this.__tabGrpChangeListener);
 	
-	this.__currTabGroup  = new DwtTabGroup("ROOT");
+	this.__currTabGroup  = new DwtTabGroup();
 };
 
 /** This constant is thrown as an exeption
@@ -143,7 +143,7 @@ function() {
 		if (focusMember)
 			this.grabFocus(focusMember);
 	}
-	this.__currTabGroup = currTg;
+	this.__crrTabGroup = currTg ? currTg : 	new DwtTabGroup();
 	this.__blockGlobalHandling = blockHandling;
 	return tabGroup;
 };
