@@ -28,8 +28,8 @@ function ZaAccChangePwdDlg(parent,  app) {
 	this._fieldIds = new Object();
 	this._app = app;
 	this.setContent(this._contentHtml());
-	this.setTabOrder([this._fieldIds[ZaAccChangePwdDlg.F_password], this._fieldIds[ZaAccChangePwdDlg.F_confirmPassword], 
-					  this._fieldIds[ZaAccChangePwdDlg.F_zimbraPasswordMustChange]]);
+	/*this.setTabOrder([this._fieldIds[ZaAccChangePwdDlg.F_password], this._fieldIds[ZaAccChangePwdDlg.F_confirmPassword], 
+					  this._fieldIds[ZaAccChangePwdDlg.F_zimbraPasswordMustChange]]);*/
 	
 }
 
