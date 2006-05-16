@@ -392,9 +392,9 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 							{ref: "zimbraMailStatus", type:_CHECKBOX_, trueValue:"enabled", falseValue:"disabled", align:_LEFT_,
 								label:ZaMsg.DLXV_LabelEnabled, msgName:ZaMsg.DLXV_LabelEnabled, labelLocation:_LEFT_,labelCssClass:"xform_label", cssStyle:"padding-left:0px", onChange:ZaTabView.onFormFieldChanged
 							},	
-							{ref:ZaDistributionList.A_isgroup, type:_CHECKBOX_, trueValue:1, falseValue:0, align:_LEFT_,
+							/*{ref:ZaDistributionList.A_isgroup, type:_CHECKBOX_, trueValue:1, falseValue:0, align:_LEFT_,
 								label:ZaMsg.DLXV_LabelIsgroup, msgName:ZaMsg.DLXV_LabelIsgroup, labelLocation:_LEFT_,labelCssClass:"xform_label", cssStyle:"padding-left:0px", onChange:ZaTabView.onFormFieldChanged
-							},					    
+							},*/					    
 							{ref:ZaAccount.A_zimbraHideInGal, type:_CHECKBOX_, trueValue:"TRUE", falseValue:"FALSE", align:_LEFT_,
 								label:ZaMsg.NAD_zimbraHideInGal, msgName:ZaMsg.NAD_zimbraHideInGal, labelLocation:_LEFT_,labelCssClass:"xform_label", cssStyle:"padding-left:0px", onChange:ZaTabView.onFormFieldChanged
 							},									
@@ -519,6 +519,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 				{type:_CASE_, numCols:4, colSpan:"*", relevant:("instance[ZaModel.currentTab] == 3"), colSizes: [450, 20, 420, 30],
 					items: [
 						//isgroup checkbox
+						/*
 						{type:_GROUP_, width: "100%", colSpan: 4, 
 							items: [
 								{type:_GROUP_, width: 120, numCols: 1,
@@ -529,7 +530,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 										]
 								}
 							]
-						},
+						},*/
 													
 						{type:_SPACER_, height:"10"},
 						//layout rapper around the direct/indrect list						

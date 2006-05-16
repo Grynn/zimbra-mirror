@@ -351,6 +351,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	var case3={type:_CASE_, numCols:4, relevant:("instance[ZaModel.currentTab] == " + _tab3), colSizes: [450, 20, 420, 30],
 					items: [
 						//isgroup checkbox
+						/*
 						{type:_GROUP_, width: "100%", colSpan: 4, 
 							items: [
 								{type:_GROUP_, width: 120, numCols: 1,
@@ -361,7 +362,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 										]
 								}
 							]
-						},
+						}, */
 													
 						{type:_SPACER_, height:"10"},
 						//layout rapper around the direct/indrect list						

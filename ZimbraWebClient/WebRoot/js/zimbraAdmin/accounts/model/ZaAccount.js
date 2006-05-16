@@ -169,7 +169,7 @@ ZaAccount.A2_forwarding = "forwardings";
 
 //Group (Member Of tab needed)
 ZaAccount.A2_memberOf = "memberOf" ;
-ZaAccount.A2_isgroup = "isgroup" ;
+//ZaAccount.A2_isgroup = "isgroup" ;
 ZaAccount.A2_directMemberList = "directMemberList" ;
 ZaAccount.A2_indirectMemberList = "indirectMemberList";
 ZaAccount.A2_nonMemberList = "nonMemberList" ;

@@ -40,7 +40,7 @@ ZaAccountMemberOfListView.prototype.toString = function (){
 };
 
 ZaAccountMemberOfListView.A_name = "name" ;
-ZaAccountMemberOfListView.A_isgroup = "isgroup" ;
+//ZaAccountMemberOfListView.A_isgroup = "isgroup" ;
 ZaAccountMemberOfListView.A_via = "via" ;
 ZaAccountMemberOfListView._addList = [];
 ZaAccountMemberOfListView._removeList = [];
@@ -48,7 +48,7 @@ ZaAccountMemberOfListView.SEARCH_LIMIT = 25 ;
 
 //modify the ZaAccount and ZaDistributionList model
 ZaAccountMemberOfListView.modelItems = [
-		{id:ZaAccount.A2_isgroup, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaAccount.A2_memberOf + "/" + ZaAccount.A2_isgroup},
+		//{id:ZaAccount.A2_isgroup, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaAccount.A2_memberOf + "/" + ZaAccount.A2_isgroup},
 		{id:ZaAccount.A2_directMemberList, type: _DWT_LIST_, ref:ZaAccount.A2_memberOf + "/" + ZaAccount.A2_directMemberList},
 		{id:ZaAccount.A2_indirectMemberList, type: _DWT_LIST_, ref:ZaAccount.A2_memberOf + "/" + ZaAccount.A2_indirectMemberList},
 		{id:ZaAccount.A2_nonMemberList, type: _DWT_LIST_, ref:ZaAccount.A2_memberOf + "/" + ZaAccount.A2_nonMemberList},
@@ -62,23 +62,15 @@ ZaAccountMemberOfListView.modelItems = [
 ]
 ZaAccount.myXModel.items = ZaAccount.myXModel.items.concat(ZaAccountMemberOfListView.modelItems);
 ZaDistributionList.myXModel.items = ZaDistributionList.myXModel.items.concat(ZaAccountMemberOfListView.modelItems);
-/*
-ZaAccountMemberOfListView.NONMEMBERPAGEBACK_OFFSET = 0; 
-ZaAccountMemberOfListView.NONMEMBER_MORE = false;
-ZaAccountMemberOfListView.DIRECTMEMBERPAGEBACK_OFFSET = 0;
-ZaAccountMemberOfListView.DIRECTMEMBER_MORE = false;
-*/
-//ZaAccountMemberOfListView._toBeConfirmedList = [];
 
 /**
  * @param app
  * @param val {account value corresponding to by}
  * @param by  {either by id or name} 
  * @return the memberOf object 
- * 				{ 	directMemberList: [ { name: dl1@test.com, id: 394394, isgroup: true } , {..}, ...] ,
- * 					indirectMemberList: [ { name: dl1@test.com, id: 394394, via: dl2@test.com, isgroup: true } , {..}, ...] ,
- * 					nonMemberList: [ { name: dl1@test.com, id: 394394, isgroup: false } , {..}, ...],
- * 					isgroup: true  
+ * 				{ 	directMemberList: [ { name: dl1@test.com, id: 394394 } , {..}, ...] ,
+ * 					indirectMemberList: [ { name: dl1@test.com, id: 394394, via: dl2@test.com} , {..}, ...] ,
+ * 					nonMemberList: [ { name: dl1@test.com, id: 394394 } , {..}, ...]
  * 				}
  * 					
  */
@@ -103,10 +95,10 @@ function (app, val, by){
 			for (var i=0, d=0, m=0; m < n; m++ ){
 				//if (dls[m].isgroup) {
 				if (dls[m].via && (dls[m].via.length >0)){ //indirect dl
-					indirectML[i] = { name: dls[m].name, id: dls[m].id, via: dls[m].via, isgroup: dls[m].isgroup} ;
+					indirectML[i] = { name: dls[m].name, id: dls[m].id, via: dls[m].via} ;
 					i ++ ;
 				}else{
-					directML[d] = { name: dls[m].name, id: dls[m].id, isgroup: dls[m].isgroup } ;
+					directML[d] = { name: dls[m].name, id: dls[m].id } ;
 					d ++ ;
 				}
 			}
@@ -144,10 +136,10 @@ function (app, val, by){
 			for (var i=0, d=0, m=0; m < n; m++ ){
 				//if (dls[m].isgroup) {
 				if (dls[m].via && (dls[m].via.length >0)){ //indirect dl
-					indirectML[i] = { name: dls[m].name, id: dls[m].id, via: dls[m].via, isgroup: dls[m].isgroup} ;
+					indirectML[i] = { name: dls[m].name, id: dls[m].id, via: dls[m].via} ;
 					i ++ ;
 				}else{
-					directML[d] = { name: dls[m].name, id: dls[m].id, isgroup: dls[m].isgroup } ;
+					directML[d] = { name: dls[m].name, id: dls[m].id } ;
 					d ++ ;
 				}
 			}
@@ -162,37 +154,6 @@ function (app, val, by){
 						nonMemberList: nonML
 					};
 	return memberOf ;
-}
-
-
-/**
- * When the showGroupOnly is checked, only the group shows. Otherwise, all the DLs will be displayed.
- */
-ZaAccountMemberOfListView.onShowGroupOnlyChanged =
-function(value, event, form){
-	//change the memberOf instance
-	var instance = form.getInstance();
-	var isOnlyShowGroup = (value == "TRUE") ? true : false ;
-	var memberOf = null ;
-	/*
-	instance.memberOf = {	directMemberList: [],
-						indirectMemberList: [],
-						nonMemberList: []						
-						}; */
-						
-	//the list value must be changed to update the lists
-	/*
-	if (isOnlyShowGroup){
-		instance [ZaAccount.A2_memberOf] = ZaAccountMemberOfListView.getGroupOnly(instance [ZaAccount.A2_memberOf]) ;
-	} else { //need to retrieve the value from server again
-		
-	}*/
-	//instance[ZaAccount.A2_memberOf][ZaAccountMemberOfListView.A_isgroup] =  isOnlyShowGroup;
-	instance[ZaAccount.A2_memberOf]["showGroupOnlyAction"] = true ; //turn on the flag
-	this.setInstanceValue(value);
-	form.setInstance(instance);
-	instance[ZaAccount.A2_memberOf]["showGroupOnlyAction"] = false ; //turn off the flag
-	return value;
 }
 
 ZaAccountMemberOfListView.removeAllGroups =
@@ -212,7 +173,6 @@ function (event, listId){
 ZaAccountMemberOfListView._removeSelectedLists =
 function (form, listArr){
 	var instance = form.getInstance();
-	//var directMemberList = form.getItemsById(ZaAccount.A2_directMemberList)[0].getList();
 	var directMemberList = instance[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList];
 	var indirectMemberList = instance[ZaAccount.A2_memberOf][ZaAccount.A2_indirectMemberList];	
 		
@@ -240,12 +200,7 @@ function (form, listArr){
 														[form, confirmMessageDialog, dlName, indirectArrFound]) ;		
 				confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaAccountMemberOfListView._closeConfirmDialog, null, [form, confirmMessageDialog]);				
 				confirmMessageDialog.popup();
-				/*
-				confirmMessageDialog =  new ZaMsgDialog(form.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], form.parent._app);		
-				confirmMessageDialog.setMessage("abc",  DwtMessageDialog.WARNING_STYLE);
-				confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, null) ;		
-				confirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaAccountMemberOfListView._closeConfirmDialog, null, [form, confirmMessageDialog]);				
-				confirmMessageDialog.popup();	*/		
+				
 				//splice the entry in the callback method.
 				continue;
 			}			
@@ -277,7 +232,6 @@ ZaAccountMemberOfListView._removeConfirmedList =
 function (form, dialog, directDlName, indirectDlsNameArr){
 	if (dialog) {
 		var instance = form.getInstance();
-		//var directMemberList = form.getItemsById(ZaAccount.A2_directMemberList)[0].getList();
 		var directMemberList = instance[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList];
 		var indirectMemberList = instance[ZaAccount.A2_memberOf][ZaAccount.A2_indirectMemberList];	
 		var j = -1;
@@ -335,15 +289,6 @@ function(arr, value, foundArr){
 	return foundArr;			
 }
 
-/**
- * find all the value matching indexes in an array.
- */
-ZaAccountMemberOfListView._foundIndexArr =
-function(arr, value){
-	
-}
-
-
 ZaAccountMemberOfListView.addGroups=
 function (event, listId){
 	var form = this.getForm();
@@ -361,7 +306,6 @@ function(event, listId){
 
 ZaAccountMemberOfListView._addSelectedLists=
 function (form, listArr){	
-	//var directMemberListItem = form.getItemsById(ZaAccount.A2_directMemberList)[0];
 	var instance = form.getInstance();
 	var memberOf = instance[ZaAccount.A2_memberOf];
 	memberOf[ZaAccount.A2_directMemberList] = memberOf[ZaAccount.A2_directMemberList].concat(listArr);
@@ -561,8 +505,7 @@ function (item, offset){
 			for(var i=0; i<arr.length; i++) {				
 				nonMemberList.push({
 									name: arr[i].name,
-									id: arr[i].id,
-									isgroup: arr[i].isgroup					
+									id: arr[i].id			
 									});
 			}
 				
@@ -613,12 +556,12 @@ ZaAccountMemberOfListView.prototype._createItemHtml = function (group, now, isDn
 				html[idx++] = "<td width=" + this._headerList[i]._width + ">";
 				html[idx++] = AjxStringUtil.htmlEncode(group[ZaAccountMemberOfListView.A_name]);				
 				html[idx++] = "</td>";			
-			}  
+			}  /*
 			else if(id.indexOf(ZaAccountMemberOfListView.A_isgroup) == 0) {
 				html[idx++] = "<td width=" + this._headerList[i]._width + ">";
 				html[idx++] = AjxStringUtil.htmlEncode(group[ZaAccountMemberOfListView.A_isgroup] ? ZaMsg.Yes : ZaMsg.No);
 				html[idx++] = "</td>";
-			}
+			}*/
 			else if(id.indexOf(ZaAccountMemberOfListView.A_via) == 0) {
 				html[idx++] = "<td width=" + this._headerList[i]._width + ">";
 				html[idx++] = AjxStringUtil.htmlEncode(group[ZaAccountMemberOfListView.A_via]);
@@ -650,12 +593,6 @@ ZaAccountMemberOfListView.prototype._setNoResultsHtml = function() {
 	this._addRow(div);
 };
 
-ZaAccountMemberOfListView.prototype._sortColumn = function (columnItem, bSortAsc) {
-	
-};
-
-
-
 /**
  * Customized Dwt_list for MemberShip list view. It is specialized, so the show group only check box can filter
  * the non group dls. 
@@ -664,15 +601,6 @@ ZaAccountMemberOfListView.prototype._sortColumn = function (columnItem, bSortAsc
 function S_Dwt_List_XFormItem(){}
 XFormItemFactory.createItemType("_S_DWT_LIST_", "s_dwt_list", S_Dwt_List_XFormItem, Dwt_List_XFormItem);
 
-/*
-S_Dwt_List_XFormItem.prototype.updateWidget =
-function (newValue) {
-	// Dwt_List_XFormItem.prototype.updateWidget call mess up the selection if the client side checkboxes
-	// such as "show only distribution list" are check. The client side filtering
-	if (typeof (newValue) != 'undefined') {
-		this.setItems(newValue);
-	}
-} */
 
 /**
  * This function overrides the Dwt_List_XFormItem.prototype.setItems
@@ -715,34 +643,23 @@ S_Dwt_List_XFormItem.prototype.setItems = function (itemArray){
 		
 		//filter out the itemArray first based on the checkboxes
 		var filteredItemArray = new Array();
-		var j = -1;
-		//if (isGroupOnlyCkbAction || (this.id.indexOf(ZaAccount.A2_nonMemberList) >= 0)){
-				for(var i=offset; i<len; i++) {					
-					if (isGroupOnly == "TRUE" ){
-						if (! itemArray[i][ZaAccountMemberOfListView.A_isgroup]) {
-							continue;
-						}
-					}
-					
-					if (this.id.indexOf(ZaAccount.A2_nonMemberList) >= 0){ 
-						//filter out the dl itself in the DL View
-						if (instance.id == itemArray[i].id) continue ;
-						
-						//filter out the directMember in nonMemberList
-						j = ZaAccountMemberOfListView._find(
-								instance[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList], 
-								itemArray[i][ZaAccountMemberOfListView.A_name]);
-						if (j >= 0) {
-							continue ;
-						}
-					}
-					
-					filteredItemArray.push(itemArray[i]);					
+		var j = -1;		
+		for(var i=offset; i<len; i++) {					
+			if (this.id.indexOf(ZaAccount.A2_nonMemberList) >= 0){ 
+				//filter out the dl itself in the DL View
+				if (instance.id == itemArray[i].id) continue ;
+				
+				//filter out the directMember in nonMemberList
+				j = ZaAccountMemberOfListView._find(
+						instance[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList], 
+						itemArray[i][ZaAccountMemberOfListView.A_name]);
+				if (j >= 0) {
+					continue ;
 				}
-			/*
-		}else{
-			filteredItemArray = itemArray ;
-		}*/
+			}
+			
+			filteredItemArray.push(itemArray[i]);					
+		}
 				
 		//we have to compare the objects, because XForm calls this method every time an item in the list is selected
 		if(ZaAccountMemberOfListView.join(filteredItemArray) != ZaAccountMemberOfListView.join (existingArr) ) {
@@ -760,43 +677,7 @@ S_Dwt_List_XFormItem.prototype.setItems = function (itemArray){
 			if(preserveSelection && selection) {
 				this.widget.setSelectedItems(selection);
 			}
-		}
-		/*
-		if((itemArray.join() != existingArr.join()) || (isGroupOnlyCkbAction)) {
-			var preserveSelection = this.getInheritedProperty("preserveSelection");
-			var selection = null;
-			if(preserveSelection) {
-				selection = this.widget.getSelection();
-			}		
-			var cnt=itemArray.length;			
-			for(var i = 0; i< cnt; i++) {
-				//check wether it is the nonMemberList
-				//we will not display the lists inside the directMemberList
-				var j = -1;
-				//TODO: this if statement cause the nonMemberList can't be selected
-				if (this.id.indexOf(ZaAccount.A2_nonMemberList) >= 0){
-					j = ZaAccountMemberOfListView._find(
-							instance[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList], 
-							itemArray[i][ZaAccountMemberOfListView.A_name]);
-					if (j >= 0) 
-						continue ;					
-				}
-				
-				//check whether the group only is applied
-				if (isGroupOnly == "TRUE" ){
-					if (itemArray[i][ZaAccountMemberOfListView.A_isgroup]) {
-						tmpArr.push(itemArray[i]);
-					}
-				}else {
-					tmpArr.push(itemArray[i]);		
-				}
-			}
-			//add the default sort column
-			this.widget.set(AjxVector.fromArray(tmpArr), this.getInheritedProperty("defaultColumnSortable"));
-			if(preserveSelection && selection) {
-				this.widget.setSelectedItems(selection);
-			}
-		}*/
+		}		
 	}else{
 		//display the empty list (no result html)
 		this.widget.set(AjxVector.fromArray([])); 
@@ -814,15 +695,17 @@ function ZaAccountMemberOfsourceHeaderList (type) {
 	var sortable = 0;
 	
 //	defaultColumnSortable = sortable ;
+	var nameWidth = (type == ZaAccountMemberOfsourceHeaderList.INDIRECT) ? 230 : null ;
 	sourceHeaderList[0] = new ZaListHeaderItem(ZaAccountMemberOfListView.A_name, 	ZaMsg.CLV_Name_col, 	
-												null, 200, sortable++, ZaAccountMemberOfListView.A_name, true, true);
+												null, nameWidth, null, ZaAccountMemberOfListView.A_name, true, true);
 	
+	/*
 	var isgroupWidth = (type == ZaAccountMemberOfsourceHeaderList.INDIRECT) ? 80 : null ;
 	sourceHeaderList[1] = new ZaListHeaderItem(ZaAccountMemberOfListView.A_isgroup,   	ZaMsg.Account_Group,   	
 	 											null, isgroupWidth,  null,  ZaAccountMemberOfListView.A_isgroup, true, true);
-	
+	*/
 	if (type == ZaAccountMemberOfsourceHeaderList.INDIRECT) { 																							
-		sourceHeaderList[2] = new ZaListHeaderItem(ZaAccountMemberOfListView.A_via,   	ZaMsg.Group_via,   	
+		sourceHeaderList[1] = new ZaListHeaderItem(ZaAccountMemberOfListView.A_via,   	ZaMsg.Group_via,   	
 	 											null, null,  null,  ZaAccountMemberOfListView.A_via, true, true);
 	}
 	
