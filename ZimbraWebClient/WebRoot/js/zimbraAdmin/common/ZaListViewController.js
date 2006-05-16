@@ -121,15 +121,15 @@ function(params, resp) {
 			throw(resp.getException());
 		} else {
 			var response = resp.getResponse().Body.SearchDirectoryResponse;
-			var list = new ZaItemList(params.CONS, this._app);	
-			list.loadFromJS(response);	
+			this._list = new ZaItemList(params.CONS, this._app);	
+			this._list.loadFromJS(response);	
 			var searchTotal = response.searchTotal;
 			var limit = params.limit ? params.limit : this.RESULTSPERPAGE; 
 			this.numPages = Math.ceil(searchTotal/params.limit);
 			if(params.show)
-				this._show(list);			
+				this._show(this._list);			
 			else
-				this._updateUI(list);
+				this._updateUI(this._list);
 		}
 	} catch (ex) {
 		if (ex.code != ZmCsfeException.MAIL_QUERY_PARSE_ERROR) {
