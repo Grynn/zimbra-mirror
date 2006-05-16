@@ -385,6 +385,14 @@ function(tmpObj, app) {
 	}	
 	if(tmpObj.attrs[ZaAccount.A_passEnforceHistory])
 		tmpObj.attrs[ZaAccount.A_passEnforceHistory] = parseInt(tmpObj.attrs[ZaAccount.A_passEnforceHistory]);
+		
+	if((!tmpObj.attrs[ZaAccount.A_zimbraMailForwardingAddress] || tmpObj.attrs[ZaAccount.A_zimbraMailForwardingAddress].length<1) && !tmpObj.attrs[ZaAccount.A_zimbraPrefMailForwardingAddress] && tmpObj.attrs[ZaAccount.A_zimbraPrefMailLocalDeliveryDisabled]=="TRUE") {
+		//show error msg
+		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_NO_FWD_REQ_LOCALDELIV);
+
+		return false;
+		
+	}
 	return true;
 }
 /**
