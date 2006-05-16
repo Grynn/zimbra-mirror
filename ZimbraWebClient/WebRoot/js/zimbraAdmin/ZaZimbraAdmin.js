@@ -135,15 +135,26 @@ function(domain) {
 
 	// Create the shell
 	var userShell = window.document.getElementById(ZaSettings.get(ZaSettings.SKIN_SHELL_ID));
-	//var shell = new DwtShell(null, false, ZaZimbraAdmin._confirmExitMethod, userShell);
-	//don't set the exit confirm before the login time
 	var shell = new DwtShell(null, false, null, userShell);
     appCtxt.setShell(shell);    
-
+	
+	/* Register our keymap and global key action handler with the shell's keyboard manager 
+	 * CURRENTLY use $set: kbnav. 
+	 */
+	this._kbMgr = shell.getKeyboardMgr();
+	this._kbMgr.registerKeyMap(new ZaKeyMap());
+	this._kbMgr.registerGlobalKeyActionHandler(this);
+	
     // Go!
     var lm = new ZaZimbraAdmin(appCtxt);
 }
+ZaZimbraAdmin.prototype.getKeymapNameToUse = function () {
+	return null;
+}
 
+ZaZimbraAdmin.prototype.handleKeyAction = function () {
+	return false;
+}
 ZaZimbraAdmin.getInstance = function() {
 	if(ZaZimbraAdmin._instance) {
 		return ZaZimbraAdmin._instance;

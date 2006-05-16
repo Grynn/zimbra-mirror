@@ -48,6 +48,8 @@ function DwtKeyboardMgr() {
 	this.__blockGlobalHandling = false;
 	/**@private*/
 	this.__tabGroupChangeListenerObj = new AjxListener(this, this.__tabGrpChangeListener);
+	
+	this.__currTabGroup  = new DwtTabGroup("ROOT");
 };
 
 /** This constant is thrown as an exeption
