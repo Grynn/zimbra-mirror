@@ -3973,7 +3973,7 @@ Dwt_Chooser_XFormItem.prototype.updateWidget = function(newvalue) {
 	var targetItems = this.getTargetInstanceValue();
 
 	if(sourceItems instanceof Array) sourceItems = AjxVector.fromArray(sourceItems);
-	if(targetItems instanceof Array) sourceItems = AjxVector.fromArray(targetItems);	
+	if(targetItems instanceof Array) targetItems = AjxVector.fromArray(targetItems);	
 	
 	var sorted = this.getSorted();
 	if (sorted) {
