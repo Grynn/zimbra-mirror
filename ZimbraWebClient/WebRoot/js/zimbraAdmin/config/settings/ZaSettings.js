@@ -30,7 +30,7 @@ ZaSettings.initialized = false;
 ZaSettings.initializing = false
 ZaSettings.initMethods = new Array();
 ZaSettings.RESULTSPERPAGE = "25";
-ZaSettings.MAXSEARCHRESULTS = "500";
+ZaSettings.MAXSEARCHRESULTS = "50";
 /**
 * Look for admin name cookies and admin type cookies
 **/

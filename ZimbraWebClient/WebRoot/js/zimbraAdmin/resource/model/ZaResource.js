@@ -101,8 +101,8 @@ ZaResource.A2_autoMailServer = "automailserver";
 ZaResource.A2_autoLocationName = "autolocationname";
 ZaResource.A2_myCOS = "mycos";
 
-ZaResource.MAXSEARCHRESULTS = "500";
-ZaResource.RESULTSPERPAGE = "25";
+ZaResource.MAXSEARCHRESULTS = ZaSettings.MAXSEARCHRESULTS;
+ZaResource.RESULTSPERPAGE = ZaSettings.RESULTSPERPAGE;
 
 ZaResource.searchAttributes = AjxBuffer.concat(ZaResource.A_displayname,",",
 											   ZaItem.A_zimbraId,  "," , 

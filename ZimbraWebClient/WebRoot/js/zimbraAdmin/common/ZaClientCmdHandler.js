@@ -47,5 +47,8 @@ function(argv) {
 				alert("Invalid debug level");
 			}
 		}
-	} 
+	} else if (argv[0] && argv[0].toLowerCase() == "domainsrch") {
+		ZaDomain.MAXSEARCHRESULTS = argv[1];
+		alert("Setting domain search limit to:" + argv[1]);
+	}
 }

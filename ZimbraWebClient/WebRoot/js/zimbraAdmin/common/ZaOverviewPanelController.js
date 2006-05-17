@@ -143,7 +143,7 @@ ZaOverviewPanelController.prototype.searchDomains = function() {
 			sortBy:ZaDomain.A_domainName,
 			offset:"0",
 			sortAscending:"0",
-			limit:ZaDomain.RESULTSPERPAGE,
+			limit:ZaDomain.MAXSEARCHRESULTS,
 			callback:callback
 	}
 	ZaSearch.searchDirectory(searchParams);
