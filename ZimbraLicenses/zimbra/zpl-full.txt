@@ -1,5 +1,5 @@
                         Zimbra Public License (ZPL)
-                                Version 1.1
+                                Version 1.2
                               ---------------
 
 1. Definitions.
@@ -439,7 +439,7 @@
 EXHIBIT A -Zimbra Public License.
 
      The contents of this file are subject to the Zimbra Public License
-     Version 1.1 ("License"); you may not use this file except in
+     Version 1.2 ("License"); you may not use this file except in
      compliance with the License. You may obtain a copy of the License at
      http://www.zimbra.com/license
   
@@ -470,17 +470,23 @@ EXHIBIT B -Zimbra Public License.
      and the "Zimbra" logos even if such marks are included in the Original
      Code or Modifications.
 
-     However, in addition to the other notice obligations, all copies of
-     the JavaScript User Interface Covered Code in Executable and Source
-     Code form distributed must, as a form of attribution of the original
-     author, include on each user interface screen (i) the "Zimbra Inside"
-     logo (http://www.zimbra.com/license/zimbra_inside_logo.html) and once
-     for each user session (ii) the copyright notice in the same form as
-     the latest version of the Covered Code distributed by Zimbra, Inc. at
-     the time of distribution of such copy. In addition, the "Zimbra
-     Inside" logo must be visible to all users, must appear in each user
-     interface screen, and must be at least as large as the Zimbra logo is
-     within the original Zimbra user interface. When users click on the
-     "Zimbra Inside" logo it must direct them back to
-     http://www.zimbra.com.
-
+     However, in addition to the other notice obligations, (1) all copies
+     of the Original Code in Executable and Source Code form must, as a
+     form of attribution of the original author, include on each user
+     interface screen (i) the original Zimbra logo, and once for each user
+     session (ii) the copyright notice as it appears in the Original Code;
+     and (2) all derivative works and copies of derivative works of the
+     Covered Code in Executable and Source Code form must include on each
+     user interface screen (i) the "Zimbra Inside" logo, and once for each
+     user session (ii) the copyright notice from the version of the Covered
+     Code from which the copy or the derivative work was made. In addition,
+     the original Zimbra logo or the "Zimbra Inside" logo, as appropriate,
+     must be visible to all users, must appear in each user interface
+     screen, and must be in the same position as and at least as large as
+     the Zimbra logo is within the Original Code. When users click on the
+     original Zimbra logo it must direct them to http://www.zimbra.com, and
+     when users click on the "Zimbra Inside" logo it must direct them to
+     http://www.zimbra.com/inside.  This obligation shall also apply to any
+     copies or derivative works which are distributed under the alternative
+     terms of Section 3.6 and this obligation must be included in any such
+     license.
