@@ -759,3 +759,57 @@ function(el, text, idx, listType, listLevel, bulletNum, ctxt) {
 	ctxt.lastNode = nodeName;
 	return idx;	
 };
+
+/**
+ * Sets the given name/value pair into the given query string.
+ * 
+ * @param qs	[string]	a query string
+ * @param name	[string]	arg name
+ * @param value	[string]	arg value
+ */
+AjxStringUtil.queryStringSet =
+function(qs, name, value) {
+	qs = qs ? qs : "";
+	if (qs.indexOf("?") == 0) {
+		qs = qs.substr(1);
+	}
+	var pairs = qs.split("&");
+	var pairs1 = [];
+	var found = false;
+	for (var i = 0; i < pairs.length; i++) {
+		if (pairs[i].indexOf(name) == 0) {
+			found = true;
+			pairs1.push([name, value].join("="));
+		} else {
+			pairs1.push(pairs[i]);
+		}
+	}
+	if (!found) {
+		pairs1.push([name, value].join("="));
+	}
+	
+	return "?" + pairs1.join("&");
+};
+
+/**
+ * Removes the given arg from the query string.
+ * 
+ * @param qs	[string]	a query string
+ * @param name	[string]	arg name
+ */
+AjxStringUtil.queryStringRemove =
+function(qs, name) {
+	qs = qs ? qs : "";
+	if (qs.indexOf("?") == 0) {
+		qs = qs.substr(1);
+	}
+	var pairs = qs.split("&");
+	var pairs1 = [];
+	for (var i = 0; i < pairs.length; i++) {
+		if (pairs[i].indexOf(name) != 0) {
+			pairs1.push(pairs[i]);
+		}
+	}
+
+	return "?" + pairs1.join("&");
+};
