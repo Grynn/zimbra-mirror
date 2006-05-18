@@ -77,8 +77,6 @@ function() {
 */
 AjxDebug.prototype.setDebugLevel = 
 function(level) {
-	if (level == this._level) return;
-
 	this._level = level;
 	this._enable(level != AjxDebug.NONE);
 };
@@ -251,8 +249,6 @@ function(msg, restart) {
 
 AjxDebug.prototype._enable =
 function(enabled) {
-	if (this._enabled == enabled) return;
-
 	this._enabled = enabled;
 	if (enabled) {
 		if (this._debugWindow == null || this._debugWindow.closed)
