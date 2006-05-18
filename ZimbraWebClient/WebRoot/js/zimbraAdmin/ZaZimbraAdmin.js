@@ -38,14 +38,15 @@ function ZaZimbraAdmin(appCtxt) {
 	ZaZimbraAdmin.showSplash(this._shell);
 	
 	appCtxt.setAppController(this);
-	appCtxt.setClientCmdHdlr(new ZaClientCmdHandler(appCtxt));
+
 		
 	// handles to various apps
 	this._appFactory = new Object();
 	this._appFactory[ZaZimbraAdmin.ADMIN_APP] = ZaApp;
  
  	this.startup();
-	this.aboutDialog = new ZaAboutDialog(this._shell,null,ZaMsg.about_title);
+
+    this.aboutDialog = new ZaAboutDialog(this._shell,null,ZaMsg.about_title);
 }
 
 ZaZimbraAdmin.prototype = new ZaController;
@@ -482,7 +483,8 @@ function() {
 	if (!this._app)
 		this._createApp();
 
-	//draw stuff
+    this._appCtxt.setClientCmdHdlr(new ZaClientCmdHandler(this._app));
+    //draw stuff
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_SASH] = new DwtSash(this._shell, DwtSash.HORIZONTAL_STYLE,"console_inset_app_l", 20);
 	elements[ZaAppViewMgr.C_BANNER] = this._createBanner();		

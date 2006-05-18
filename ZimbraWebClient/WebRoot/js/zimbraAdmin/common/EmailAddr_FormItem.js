@@ -49,9 +49,7 @@ function () {
 			}	
 		}
 	}
-	if(ZaSettings.DOMAINS_ENABLED) {
-		this.getForm().getController().searchDomains("");
-	}
+
 };
 
 EmailAddr_XFormItem.prototype.items = [

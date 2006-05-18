@@ -61,7 +61,10 @@ function(appCtxt) {
 	} else if(ZaSettings.ADDRESSES_ENABLED) {
 		this._appCtxt.getAppController()._showAccountsView([ZaItem.ACCOUNT,ZaItem.DL,ZaItem.ALIAS],null);
 	}
-		
+
+	if(ZaSettings.DOMAINS_ENABLED) {
+		this.searchDomains("");
+	}
 }
 
 ZaApp.prototype.setActive =

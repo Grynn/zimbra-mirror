@@ -77,8 +77,16 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 						},
 						{ ref: ZaGlobalConfig.A_zimbraDefaultDomainName, type:_OSELECT1_, 
 						  label: ZaMsg.NAD_DefaultDomainName, //width: "10em",
-						  choices: this._app.getDomainListChoices(), 
-						  onChange:ZaTabView.onFormFieldChanged
+						  choices:EmailAddr_XFormItem.domainChoices,editable:true,
+						  onChange:ZaTabView.onFormFieldChanged,
+                            keyUp:function(newValue, ev) {
+                                var n = "";
+                                if (newValue)
+                                    n = String(newValue).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
+
+                                var query = "(zimbraDomainName=" + n + "*)";
+                                this.getForm().getController().searchDomains(query);
+                            }
 						}
 					]
 				},
