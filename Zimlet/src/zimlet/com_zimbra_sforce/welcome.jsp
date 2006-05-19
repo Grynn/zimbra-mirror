@@ -82,14 +82,17 @@
             sb.append("<tr><td class='zimbraIcon'><div class='zimbraAppt'></div></td><td class='zimbraSubject'><a target=\"_new\" href=\"");
             sb.append(request.getParameter("url"));
             sb.append("&app=calendar\">");
-            sb.append(appt.getDefaultInvite().getName());
+            String n = appt.getDefaultInvite().getName();
+            sb.append(n.substring(0, Math.min(55, n.length())));
             sb.append(" (Location: ");
-            sb.append(appt.getDefaultInvite().getLocation());
+            String l = appt.getDefaultInvite().getLocation();
+            sb.append(l.substring(0, Math.min(55, l.length())));
             sb.append(") ");
             sb.append("</a></td><td class='zimbraTime'>");
             sb.append(df.format(appt.getDefaultInvite().getStartTime().getDate()));
             sb.append("</td></tr><tr><td colspan=3 class=zimbraFragment>&nbsp;");
-            sb.append(appt.getDefaultInvite().getFragment());
+            String f = appt.getDefaultInvite().getFragment();
+            sb.append(f.substring(0, Math.min(100, f.length())));
             sb.append("</td></tr>");
             i++;
         }
