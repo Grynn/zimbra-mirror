@@ -30,10 +30,11 @@ use strict;
 use lib '.';
 
 use LWP::UserAgent;
-
+use Getopt::Long;
 use XmlElement;
 use XmlDoc;
 use Soap;
+use ZimbraSoapTest;
 
 my $ACCTNS = "urn:zimbraAdmin";
 my $MAILNS = "urn:zimbraAdmin";
@@ -43,43 +44,30 @@ my $MAILNS = "urn:zimbraAdmin";
 #
 #         ppm install http://theoryx5.uwinnipeg.ca/ppms/Crypt-SSLeay.ppd
 #
-my $url = "https://localhost:7071/service/admin/soap/";
 
-my $acct;
-my $action;
+# app-specific options
+my ($mbox, $action);
 
-if (defined $ARGV[1] && $ARGV[1] ne "") {
-    $acct = $ARGV[0];
-    $action = $ARGV[1];
-} else {
-    die "Usage reindex MBOX ACTION";
+#standard options
+my ($user, $pw, $host, $help);  #standard
+GetOptions("u|user=s" => \$user,
+           "p|port=s" => \$pw,
+           "h|host=s" => \$host,
+           "m|mbox=s" => \$mbox,
+           "a|action=s" => \$action,
+           "help|?" => \$help);
+
+if (!defined($user)) {
+  die "USAGE: $0 -u USER -m MAILBOXID -a ACTION [-p PASSWD] [-h HOST]";
 }
 
-my $SOAP = $Soap::Soap12;
+my $z = ZimbraSoapTest->new($user, $host, $pw);
+$z->doAdminAuth();
+
 my $d = new XmlDoc;
-$d->start('AuthRequest', $ACCTNS);
-$d->add('name', undef, undef, "zimbra");
-$d->add('password', undef, undef, "zimbra");
-$d->end();
-
-my $authResponse = $SOAP->invoke($url, $d->root());
-
-print "AuthResponse = ".$authResponse->to_string("pretty")."\n";
-
-my $authToken = $authResponse->find_child('authToken')->content;
-print "authToken($authToken)\n";
-
-my $sessionId = $authResponse->find_child('sessionId')->content;
-print "sessionId = $sessionId\n";
-
-my $context = $SOAP->zimbraContext($authToken, $sessionId);
-
-my $contextStr = $context->to_string("pretty");
-print("Context = $contextStr\n");
-
 $d = new XmlDoc;
 $d->start('ReIndexRequest', $MAILNS, { "action" => $action }); {
-    $d->add('mbox', $MAILNS, { "id" => $acct, });
+    $d->add('mbox', $MAILNS, { "id" => $mbox, });
 } $d->end();
 
 print "\nOUTGOING XML:\n-------------\n";
@@ -89,9 +77,8 @@ print $out."\n";
 
 my $start = time;
 my $firstStart = time;
-my $response;
 
-$response = $SOAP->invoke($url, $d->root(), $context);
+my $response = $z->invokeAdmin($d->root());
 
 print "\nRESPONSE:\n--------------\n";
 $out =  $response->to_string("pretty");
