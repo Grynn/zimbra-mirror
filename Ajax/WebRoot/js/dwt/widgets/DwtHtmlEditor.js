@@ -258,7 +258,13 @@ function(content) {
 DwtHtmlEditor.prototype.insertElement =
 function(element) {
 	this._execCommand(element);
-}
+};
+
+DwtHtmlEditor.prototype.insertText =
+function(text) {
+	var node = document.createTextNode(text); 
+	this._insertNodeAtSelection(node);
+};
 
 DwtHtmlEditor.prototype.insertImage =
 function(src) {
