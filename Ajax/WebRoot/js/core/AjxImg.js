@@ -83,14 +83,16 @@ function(imageEl) {
 /**
 * Gets the "image" as an HTML string. 
 *
-* @param styleStr	additional style info e.g. "display:inline"
-* @param attrStr	additional attributes eg. "id=X748"
+* @param imageName		the image you want to render
+* @param styleStr		optional style info e.g. "display:inline"
+* @param attrStr		optional attributes eg. "id=X748"
+* @param wrapInTable	surround the resulting code in a table
 */
 AjxImg.getImageHtml = 
 function(imageName, styleStr, attrStr, wrapInTable) {
-	attrStr = (!attrStr) ? "" : attrStr;
+	attrStr = attrStr || "";
 	var className = AjxImg.getClassForImage(imageName);
-	styleStr = styleStr ? "style='" + styleStr + "' " : "";
+	styleStr = styleStr ? ("style='" + styleStr + "' ") : "";
 	var pre = wrapInTable ? "<table style='display:inline' cellpadding=0 cellspacing=0 border=0><tr><td align=center valign=bottom>" : "";
 	var post = wrapInTable ? "</td></tr></table>" : "";
 	if (className) {
@@ -98,3 +100,30 @@ function(imageName, styleStr, attrStr, wrapInTable) {
 	}
 	return [pre, "<div ", styleStr, " ", attrStr, "></div>", post].join("");
 }
+
+/**
+* Gets the "image" as an HTML string.
+*
+* @param imageName		the image you want to render
+* @param styleStr		optional style info e.g. "display:inline"
+* @param attrStr		optional attributes eg. "id=X748"
+* @param label			the text that follows this image
+*/
+AjxImg.getImageSpanHtml =
+function(imageName, styleStr, attrStr, label) {
+	var className = AjxImg.getClassForImage(imageName);
+
+	var html = [];
+	var i = 0;
+	html[i++] = "<span style='white-space:nowrap'>";
+	html[i++] = "<span class='";
+	html[i++] = className;
+	html[i++] = " inlineIcon'";
+	html[i++] = styleStr ? (" style='" + styleStr + "' ") : "";
+	html[i++] = attrStr ? (" " + attrStr) : "";
+	html[i++] = ">&nbsp;&nbsp;&nbsp;</span>";
+	html[i++] = (label || "");
+	html[i++] = "</span>";
+
+	return html.join("");
+};
