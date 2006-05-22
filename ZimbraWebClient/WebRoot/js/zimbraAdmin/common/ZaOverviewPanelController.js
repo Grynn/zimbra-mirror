@@ -41,7 +41,7 @@ function ZaOverviewPanelController(appCtxt, container, app) {
 ZaOverviewPanelController.prototype = new ZaController;
 ZaOverviewPanelController.prototype.constructor = ZaOverviewPanelController;
 ZaOverviewPanelController.overviewTreeListeners = new Object();
-
+ZaOverviewPanelController.treeModifiers = new Array();
 ZaOverviewPanelController._TID = "TID";
 ZaOverviewPanelController._OBJ_ID = "OBJ_ID";
 
@@ -438,18 +438,6 @@ function() {
 	
 		try {
 			//add domain nodes
-		/*	var domainList = this._app.getDomainList().getArray();
-			if(domainList && domainList.length) {
-				var cnt = domainList.length;
-				for(var ix=0; ix< cnt; ix++) {
-					var ti1 = new DwtTreeItem(this._domainsTi);			
-					ti1.setText(domainList[ix].name);	
-					ti1.setImage("Domain");
-					ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DOMAIN_VIEW);
-					ti1.setData(ZaOverviewPanelController._OBJ_ID, domainList[ix].id);
-					this._domainsMap[domainList[ix].id] = ti1;
-				}
-			}*/
 			this.searchDomains();
 		} catch (ex) {
 			this._handleException(ex, "ZaOverviewPanelController.prototype._buildFolderTree", null, false);
@@ -569,6 +557,17 @@ function() {
 	if(this._statusTi)
 		tree.setSelection(this._statusTi, true);	
 		
+	//Instrumentation code start
+	if(ZaOverviewPanelController.treeModifiers) {
+		var methods = ZaOverviewPanelController.treeModifiers;
+		var cnt = methods.length;
+		for(var i = 0; i < cnt; i++) {
+			if(typeof(methods[i]) == "function") {
+				methods[i].call(this,tree);
+			}
+		}
+	}	
+	//Instrumentation code end			
 }
 
 

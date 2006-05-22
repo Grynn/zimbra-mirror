@@ -151,6 +151,10 @@ function (nextViewCtrlr, func, params) {
 	func.call(nextViewCtrlr, params);
 }
 
+ZaListViewController.prototype._changeActionsState =
+function () {
+	
+}
 /**
 * @param ev
 * This listener is invoked by any other controller that can change an object in this controller
