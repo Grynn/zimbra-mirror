@@ -39,8 +39,8 @@ function ZaServerStatsView(parent, app) {
 	this._spamPage = new ZaServerSpamActivityPage(this, app);	
 	this._diskPage = new ZaServerDiskStatsPage(this, app);	
 	this._mbxPage = new ZaServerMBXStatsPage (this, app);
-	this.addTab(ZaMsg.TABT_InData, this._msgCountPage);		
-	this.addTab(ZaMsg.TABT_InMsgs, this._msgsVolumePage);			
+	this.addTab(ZaMsg.TABT_InMsgs, this._msgCountPage);		
+	this.addTab(ZaMsg.TABT_InData, this._msgsVolumePage);			
 	this.addTab(ZaMsg.TABT_Spam_Activity, this._spamPage);
 	this.addTab(ZaMsg.TABT_Disk, this._diskPage);
 	ZaServerMBXStatsPage.TAB_KEY = this.addTab(ZaMsg.TABT_MBX, this._mbxPage);	
