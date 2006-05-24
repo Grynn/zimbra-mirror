@@ -261,7 +261,11 @@ function(readonly) {
 
 DwtInputField.prototype.setRequired =
 function(required) {
-	this._required = required == null ? true : required;
+	var nrequired = required == null ? true : required;
+	if (this._required != nrequired) {
+		this._required = nrequired;
+		this.validate();
+	}
 };
 
 DwtInputField.prototype.getEnabled = 
