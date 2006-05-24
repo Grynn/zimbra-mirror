@@ -146,13 +146,14 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 							{ref:ZaCos.A_zimbraPrefImapSearchFoldersEnabled, type:_CHECKBOX_, msgName:ZaMsg.NAD_zimbraPrefImapSearchFoldersEnabled,label:ZaMsg.NAD_zimbraPrefImapSearchFoldersEnabled, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_}
 						]
 					},
-					{type:_CASE_, relevant:"instance[ZaModel.currentTab]==4",
+					{type:_CASE_, relevant:"instance[ZaModel.currentTab]==4", numCols:2, colSizes:["10px", "400px"],
 						items: [
+							{type:_CELLSPACER_},
 							{ sourceRef: ZaCos.A_zimbraMailAllServersInternal,
 					  	  	  ref: ZaCos.A_zimbraMailHostPoolInternal, type: _DWT_CHOOSER_,
-							  listCssClass: "DwtChooserListView ZaGlobalAttachExt", sorted: true,
-					  	  	  onChange: ZaTabView.onFormFieldChanged,
-					  	  	  forceUpdate:true
+							  listCssClass: "DwtChooserListView ZaCosServerPool", sorted: true,
+					  	  	  onChange: ZaTabView.onFormFieldChanged, widgetClass:ZaCosServerPoolChooser,
+					  	  	  listSize:"90%", forceUpdate:true
 					  	  	}
 						]
 					},

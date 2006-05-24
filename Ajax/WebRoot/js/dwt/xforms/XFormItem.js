@@ -3900,7 +3900,8 @@ Tab_Bar_XFormItem.prototype.dirtyDisplay = function(newChoices) {
 **/
 function Dwt_Chooser_XFormItem() {}
 XFormItemFactory.createItemType("_DWT_CHOOSER_", "chooser", Dwt_Chooser_XFormItem, Dwt_Adaptor_XFormItem);
-
+Dwt_Chooser_XFormItem.prototype.widgetClass = DwtChooser;
+Dwt_Chooser_XFormItem.prototype.listSize = 100;
 /***
 NOTE: this won't work because attributes.ref is accessed before this
 method is called in XFormItemFactory#createItem.
@@ -3948,13 +3949,15 @@ Dwt_Chooser_XFormItem.prototype.constructWidget = function() {
 	var cssClass = this.getCssClass();
 	var sourceListCssClass = this.getListCssClass();
 	var targetListCssClass = this.getTargetListCssClass();
+	var widgetClass = this.getInheritedProperty("widgetClass");
 	if (sourceListCssClass && !targetListCssClass) {
 		targetListCssClass = sourceListCssClass;
 	}
+	var listSize = this.getInheritedProperty("listSize");
 	var params = {parent: form, className: cssClass, slvClassName: sourceListCssClass,
 				  tlvClassName: targetListCssClass, layoutStyle: DwtChooser.HORIZ_STYLE,
-				  listSize: 100, sourceEmptyOk: true, allButtons: true};
-	return new DwtChooser(params);
+				  listSize: listSize, sourceEmptyOk: true, allButtons: true};
+	return new widgetClass(params);
 }
 
 Dwt_Chooser_XFormItem.prototype.updateWidget = function(newvalue) {
