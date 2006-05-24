@@ -190,7 +190,31 @@ function(params) {
 				(AjxUtil.indexOf(params.types,ZaSearch.DLS)>-1)) {
 		
 		controller = this._app.getAccountListController();
+		
+		if((AjxUtil.indexOf(params.types,ZaSearch.ACCOUNTS)>-1)&& 
+				!(AjxUtil.indexOf(params.types,ZaSearch.ALIASES)>-1) && 
+				!(AjxUtil.indexOf(params.types,ZaSearch.RESOURCES)>-1) &&
+				!(AjxUtil.indexOf(params.types,ZaSearch.DLS)>-1) ) {
+			controller.setDefaultType(ZaItem.ACCOUNT);
+		} else if(!(AjxUtil.indexOf(params.types,ZaSearch.ACCOUNTS)>-1)&& 
+				(AjxUtil.indexOf(params.types,ZaSearch.ALIASES)>-1) && 
+				!(AjxUtil.indexOf(params.types,ZaSearch.RESOURCES)>-1) &&
+				!(AjxUtil.indexOf(params.types,ZaSearch.DLS)>-1)) { 
+			controller.setDefaultType(ZaItem.ALIAS);
+		} else if(!(AjxUtil.indexOf(params.types,ZaSearch.ACCOUNTS)>-1)&& 
+				!(AjxUtil.indexOf(params.types,ZaSearch.ALIASES)>-1) && 
+				(AjxUtil.indexOf(params.types,ZaSearch.RESOURCES)>-1) &&
+				!(AjxUtil.indexOf(params.types,ZaSearch.DLS)>-1)) { 
+			controller.setDefaultType(ZaItem.RESOURCE);
+		} else if(!(AjxUtil.indexOf(params.types,ZaSearch.ACCOUNTS)>-1)&& 
+				!(AjxUtil.indexOf(params.types,ZaSearch.ALIASES)>-1) && 
+				!(AjxUtil.indexOf(params.types,ZaSearch.RESOURCES)>-1) &&
+				(AjxUtil.indexOf(params.types,ZaSearch.DLS)>-1)) { 
+			controller.setDefaultType(ZaItem.DL);
+		} 
 	}
+	if(controller.setSearchTypes)
+		controller.setSearchTypes(params.types);
 		
 	var callback = new AjxCallback(controller, controller.searchCallback, {limit:controller.RESULTSPERPAGE,show:true});
 	var searchParams = {
