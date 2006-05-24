@@ -365,7 +365,7 @@ function() {
 	// place veil under this dialog
 	var dialogZ = this._shell._veilOverlay.dialogZ;
 	var currentDialogZ = null;
-	var veilZ;
+	var thisZ, veilZ;
 	if (dialogZ.length)
 		currentDialogZ = dialogZ[dialogZ.length - 1];
 	if (currentDialogZ) {
