@@ -74,7 +74,8 @@ CREATE TABLE mta (
 	amavis_pid			VARCHAR(16),
 	bytes				INTEGER,
 	INDEX i_msgid (msgid),
-	INDEX i_arrive_time (arrive_time)
+	INDEX i_arrive_time (arrive_time),
+	INDEX i_qid (qid)
 ) ENGINE = MyISAM;
 
 CREATE TABLE amavis (
