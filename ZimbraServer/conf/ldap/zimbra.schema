@@ -344,6 +344,7 @@ objectIdentifier zimbraFeatureSkinChangeEnabled ZimbraAttrType:354
 objectIdentifier zimbraPrefSkin ZimbraAttrType:355
 objectIdentifier zimbraFeatureNotebookEnabled ZimbraAttrType:356
 objectIdentifier zimbraShareInfo ZimbraAttrType:357
+objectIdentifier zimbraGalInternalSearchBase ZimbraAttrType:358
 
 #################################################################
 # object class OIDs
@@ -793,6 +794,14 @@ attributetype ( zimbraForeignPrincipal
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} 
 	)
+
+attributetype ( zimbraGalInternalSearchBase
+	NAME 'zimbraGalInternalSearchBase'
+	DESC 'LDAP search base for interal GAL queries (special values: "ROOT" for top, "DOMAIN" for domain only, "SUBDOMAINS" for domain and subdomains)'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
+	SINGLE-VALUE )				
 
 attributetype ( zimbraGalLdapBindDn
 	NAME 'zimbraGalLdapBindDn'
@@ -3015,6 +3024,7 @@ objectclass ( zimbraGlobalConfig
 		zimbraDefaultDomainName $
 		zimbraDomainAdminModifiableAttr $
 		zimbraDomainInheritedAttr $
+		zimbraGalInternalSearchBase	$		
 		zimbraGalLdapFilterDef $
 		zimbraGalLdapAttrMap $
 		zimbraGalMaxResults $
@@ -3139,6 +3149,7 @@ objectclass ( zimbraDomain
 		zimbraAuthMech $
 		zimbraAuthFallbackToLocal	$
 		zimbraDomainDefaultCOSId $
+		zimbraGalInternalSearchBase	$
 		zimbraGalMaxResults $
 		zimbraGalMode $
 		zimbraGalLdapURL $
