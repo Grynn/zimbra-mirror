@@ -151,7 +151,7 @@ function() {
 	var headerList = new Array();
 	var sortable = 1;
 	
-	headerList[0] = new ZaListHeaderItem("type", ZaMsg.ALV_Type_col, null, "40px", sortable++, "objectClass", true, true);
+	headerList[0] = new ZaListHeaderItem("type", ZaMsg.ALV_Type_col, null, "40px", null, null, true, true);
 	this._defaultColumnSortable = sortable ;
 	headerList[1] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.CLV_Name_col, null, "220px", null,  null, true, true);
 	
