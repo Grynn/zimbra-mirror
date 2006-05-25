@@ -81,6 +81,9 @@ TODO - add support for multi-line values in globalConfigValue and defaultCOSValu
     regex.......value attr is a regular expression. Should explicitly
                 add ^ to front and $ at the end
     string......currently just checks max length if specified
+    astring.....IA5 string (almost ascii)
+    cstring.....case sensitive string
+    ostring.....octect string defined in LDAP
 
   value: used with enum and regex
 
@@ -286,7 +289,7 @@ TODO - add support for multi-line values in globalConfigValue and defaultCOSValu
   <desc>whether or not to enforce password history.  Number of unique passwords a user must have before being allowed to re-use an old one. A value of 0 means no password history.</desc>
 </attr>
 
-<attr id="38" name="zimbraPasswordHistory" type="string" cardinality="multi" optionalIn="account">
+<attr id="38" name="zimbraPasswordHistory" type="ostring" max="128" cardinality="multi" optionalIn="account">
   <desc>historical password values</desc>
 </attr>
 
@@ -394,7 +397,7 @@ TODO - add support for multi-line values in globalConfigValue and defaultCOSValu
   <desc>whether or not keyboard shortcuts are enabled</desc>
 </attr>
 
-<attr id="62" name="zimbraServerInheritedAttr" type="string" max="256" cardinality="multi" optionalIn="globalConfig">
+<attr id="62" name="zimbraServerInheritedAttr" type="string" max="1024" cardinality="multi" optionalIn="globalConfig">
   <desc>zimbraServer attrs that get inherited from global config</desc>
 </attr>
 
@@ -464,7 +467,7 @@ TODO - add support for multi-line values in globalConfigValue and defaultCOSValu
   <desc>timeout value in seconds</desc>
 </attr>
 
-<attr id="100" name="zimbraAuthTokenKey" type="string" immutable="1" cardinality="multi" optionalIn="globalConfig">
+<attr id="100" name="zimbraAuthTokenKey" type="ostring" max="128" immutable="1" cardinality="multi" optionalIn="globalConfig">
   <desc>auth token secret key</desc>
 </attr>
 
@@ -555,7 +558,7 @@ TODO - add support for multi-line values in globalConfigValue and defaultCOSValu
   <desc>RFC822 email address for email notifications</desc>
 </attr>
 
-<attr id="130" name="zimbraPrefForwardReplyPrefixChar" type="astring" cardinality="single" optionalIn="account,cos" flags="accountInherited,domainAdminModifiable">
+<attr id="130" name="zimbraPrefForwardReplyPrefixChar" type="astring" max="1" cardinality="single" optionalIn="account,cos" flags="accountInherited,domainAdminModifiable">
   <defaultCOSValue>&gt;</defaultCOSValue>
   <desc>prefix character to use during forward/reply</desc>
 </attr>
@@ -671,7 +674,7 @@ TODO - add support for multi-line values in globalConfigValue and defaultCOSValu
 <attr id="153" name="zimbraGalLdapAttrMap" type="string" max="4096" cardinality="multi" optionalIn="globalConfig,domain" flags="domainInherited">
   <globalConfigValue>co=workCountry</globalConfigValue>
   <globalConfigValue>company=company</globalConfigValue>
-  <globalConfigValue>giveName,gn=firstName</globalConfigValue>
+  <globalConfigValue>givenName,gn=firstName</globalConfigValue>
   <globalConfigValue>sn=lastName</globalConfigValue>
   <globalConfigValue>displayName,cn=fullName</globalConfigValue>
   <globalConfigValue>initials=initials</globalConfigValue>
@@ -718,7 +721,7 @@ TODO - add support for multi-line values in globalConfigValue and defaultCOSValu
   <desc>whether or not indexing is enabled for this type</desc>
 </attr>
 
-<attr id="159" name="zimbraMimeHandlerClass" type="string" cardinality="single" optionalIn="mimeEntry">
+<attr id="159" name="zimbraMimeHandlerClass" type="cstring" cardinality="single" optionalIn="mimeEntry">
   <desc>the handler class for the mime type</desc>
 </attr>
 
@@ -738,7 +741,7 @@ TODO - add support for multi-line values in globalConfigValue and defaultCOSValu
   <desc>whether or not store is matched for this type</desc>
 </attr>
 
-<attr id="164" name="zimbraObjectHandlerClass" type="string" cardinality="single" optionalIn="objectEntry">
+<attr id="164" name="zimbraObjectHandlerClass" type="cstring" cardinality="single" optionalIn="objectEntry">
   <desc>the handler class for the object type</desc>
 </attr>
 
@@ -1036,11 +1039,11 @@ TODO - add support for multi-line values in globalConfigValue and defaultCOSValu
   <desc>whether to show search box or not</desc>
 </attr>
 
-<attr id="225" name="zimbraRedoLogProvider" type="string" min="256" cardinality="multi" optionalIn="globalConfig,server" flags="serverInherited">
+<attr id="225" name="zimbraRedoLogProvider" type="string" max="256" cardinality="multi" optionalIn="globalConfig,server" flags="serverInherited">
   <desc>provider class name for redo logging</desc>
 </attr>
 
-<attr id="226" name="zimbraMtaRestriction" type="string" max="256" cardinality="multi" optionalIn="globalConfig">
+<attr id="226" name="zimbraMtaRestriction" type="string" max="64" cardinality="multi" optionalIn="globalConfig">
   <globalConfigValue>reject_invalid_hostname</globalConfigValue>
   <globalConfigValue>reject_non_fqdn_sender</globalConfigValue>
   <desc>restrictions to reject some suspect SMTP clients</desc>
@@ -1090,7 +1093,7 @@ TODO - add support for multi-line values in globalConfigValue and defaultCOSValu
   <desc>Whether to scan attachments during compose</desc>
 </attr>
 
-<attr id="238" name="zimbraAttachmentsScanClass" type="string" max="256" cardinality="single" optionalIn="globalConfig">
+<attr id="238" name="zimbraAttachmentsScanClass" type="cstring" max="256" cardinality="single" optionalIn="globalConfig">
   <globalConfigValue>com.zimbra.cs.scan.ClamScanner</globalConfigValue>
   <desc>Class to use to scan attachments during compose</desc>
 </attr>
@@ -1135,7 +1138,7 @@ TODO - add support for multi-line values in globalConfigValue and defaultCOSValu
   <desc>Value of the mail.smtp.sendpartial property</desc>
 </attr>
 
-<attr id="250" name="zimbraLogHostname" type="astring" cardinality="multi" optionalIn="globalConfig">
+<attr id="250" name="zimbraLogHostname" type="astring" max="256" cardinality="multi" optionalIn="globalConfig">
   <desc>destination for syslog messages</desc>
 </attr>
 
@@ -1286,7 +1289,7 @@ TODO - add support for multi-line values in globalConfigValue and defaultCOSValu
   <desc>Whether store is matched for this type</desc>
 </attr>
 
-<attr id="286" name="zimbraZimletHandlerClass" type="string" max="256" cardinality="single" optionalIn="zimletEntry">
+<attr id="286" name="zimbraZimletHandlerClass" type="cstring" max="256" cardinality="single" optionalIn="zimletEntry">
   <desc>The handler class for server side Zimlet extension</desc>
 </attr>
 
@@ -1302,7 +1305,7 @@ TODO - add support for multi-line values in globalConfigValue and defaultCOSValu
   <desc>The panel item section in the Zimlet description</desc>
 </attr>
 
-<attr id="290" name="zimbraZimletScript" type="string" max="256" cardinality="multi" optionalIn="zimletEntry">
+<attr id="290" name="zimbraZimletScript" type="cstring" max="256" cardinality="multi" optionalIn="zimletEntry">
   <desc>URL of extra scripts used by the Zimlet</desc>
 </attr>
 
@@ -1310,11 +1313,11 @@ TODO - add support for multi-line values in globalConfigValue and defaultCOSValu
   <desc>List of Zimlets available to this COS</desc>
 </attr>
 
-<attr id="292" name="zimbraZimletServerIndexRegex" type="string" max="256" cardinality="single" optionalIn="zimletEntry">
+<attr id="292" name="zimbraZimletServerIndexRegex" type="cstring" max="256" cardinality="single" optionalIn="zimletEntry">
   <desc>Regex of content object</desc>
 </attr>
 
-<attr id="293" name="zimbraMimeHandlerExtension" type="string" cardinality="single" optionalIn="mimeEntry">
+<attr id="293" name="zimbraMimeHandlerExtension" type="cstring" cardinality="single" optionalIn="mimeEntry">
   <desc>the name of the zimbra extension where the handler class for the mime type lives</desc>
 </attr>
 
@@ -1326,7 +1329,7 @@ TODO - add support for multi-line values in globalConfigValue and defaultCOSValu
   <desc>mapping to foreign principal identifier</desc>
 </attr>
 
-<attr id="296" name="zimbraZimletUserProperties" type="string" max="1024" cardinality="multi" optionalIn="account" flags="domainAdminModifiable">
+<attr id="296" name="zimbraZimletUserProperties" type="cstring" max="1024" cardinality="multi" optionalIn="account" flags="domainAdminModifiable">
   <desc>User properties for Zimlets</desc>
 </attr>
 
@@ -1374,7 +1377,7 @@ TODO - add support for multi-line values in globalConfigValue and defaultCOSValu
   <desc>Value for postconf recipient_delimiter.  Also used by ZCS LMTP server to check if it should accept messages to addresses with extensions.</desc>
 </attr>
 
-<attr id="307" name="zimbraPreAuthKey" type="string" cardinality="single" optionalIn="domain">
+<attr id="307" name="zimbraPreAuthKey" type="ostring" max="128" cardinality="single" optionalIn="domain">
   <desc>preauth secret key</desc>
 </attr>
 
@@ -1483,7 +1486,7 @@ TODO - add support for multi-line values in globalConfigValue and defaultCOSValu
   <desc>email of contact in charge of resource</desc>
 </attr>
 
-<attr id="333" name="zimbraCalResContactPhone" type="string" cardinality="single" optionalIn="calendarResource">
+<attr id="333" name="zimbraCalResContactPhone" type="phone" max="32" cardinality="single" optionalIn="calendarResource">
   <desc>phone number of contact in charge of resource</desc>
 </attr>
 
@@ -1544,7 +1547,7 @@ TODO - add support for multi-line values in globalConfigValue and defaultCOSValu
   <desc>locale of entry, e.g. en_US</desc>
 </attr>
 
-<attr id="346" name="zimbraMailboxLocationBeforeMove" type="astring" cardinality="single" optionalIn="account">
+<attr id="346" name="zimbraMailboxLocationBeforeMove" type="astring" max="256" cardinality="single" optionalIn="account">
   <desc>serverId:mboxId of mailbox before being moved</desc>
 </attr>
 
