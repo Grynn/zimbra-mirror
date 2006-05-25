@@ -1466,9 +1466,7 @@ attributetype ( zimbraMtaMaxMessageSize
 
 attributetype ( zimbraMtaRecipientDelimiter
 	NAME 'zimbraMtaRecipientDelimiter'
-	DESC 'Value for postconf recipient_delimiter.  Also used by ZCS LMTP
-	      server to check if it should accept messages to addresses with
-	      extensions.'
+	DESC 'Value for postconf recipient_delimiter.  Also used by ZCS LMTP server to check if it should accept messages to addresses with extensions.'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
 
@@ -1581,13 +1579,9 @@ attributetype ( zimbraNotifySSLServerEnabled
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE )
 
-#
-# number of unique passwords a user must have before being allowed to
-# re-use an old one. A value of 0 means no password history.
-#
 attributetype ( zimbraPasswordEnforceHistory
 	NAME 'zimbraPasswordEnforceHistory'
-	DESC 'whether or not to enforce password history'
+	DESC 'whether or not to enforce password history.  Number of unique passwords a user must have before being allowed to re-use an old one. A value of 0 means no password history.'
 	EQUALITY integerMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE )	
@@ -2116,26 +2110,14 @@ attributetype ( zimbraSslCaKey
 
 attributetype ( zimbraCertAuthorityCertSelfSigned
 	NAME 'zimbraCertAuthorityCertSelfSigned'
-	DESC 'When creating self-signed SSL certs during an install,
-              we also create a local Certificate Authority (CA) to
-              sign these SSL certs.  This local CA-s own cert is then
-              added to different applications "trusted CA-s"
-              list/store.  This attribute should not be used in a
-              system with real certs issued by well known CAs.'
+	DESC 'When creating self-signed SSL certs during an install, we also create a local Certificate Authority (CA) to sign these SSL certs.  This local CA-s own cert is then added to different applications "trusted CA-s" list/store.  This attribute should not be used in a system with real certs issued by well known CAs.'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{2048}
 	SINGLE-VALUE )
 
 attributetype ( zimbraCertAuthorityKeySelfSigned
 	NAME 'zimbraCertAuthorityKeySelfSigned'
-	DESC 'Please see the documentation for the attribute
-              zimbraCertAuthorityCertSelfSigned.  In addition, please
-              note that this attribute is provided at install for
-              convenience during a test install without real certs
-              issued by well known CAs.  If you choose to create your
-              own CA for your production uses, please note that it is
-              a bad idea to store your CA-s private key in LDAP, as this
-              data maybe read from zimbraGlobalConfig in the clear.'
+	DESC 'Please see the documentation for the attribute zimbraCertAuthorityCertSelfSigned.  In addition, please note that this attribute is provided at install for convenience during a test install without real certs issued by well known CAs.  If you choose to create your own CA for your production uses, please note that it is a bad idea to store your CA-s private key in LDAP, as this data maybe read from zimbraGlobalConfig in the clear.'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{2048}
 	SINGLE-VALUE )
@@ -2308,7 +2290,7 @@ attributetype ( zimbraTableMaintenanceOperation
 	NAME 'zimbraTableMaintenanceOperation'
 	DESC 'table maintenance operation that will be performed.  Valid options: "ANALYZE", "OPTIMIZE"'
 	EQUALITY caseIgnoreIA5Match
-	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{20} )
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{32} )
 
 attributetype ( zimbraTableMaintenanceGrowthFactor
 	NAME 'zimbraTableMaintenanceGrowthFactor'
@@ -2419,7 +2401,7 @@ attributetype ( zimbraPrefUseTimeZoneListInCalendar
 # sent and so on.
 attributetype ( zimbraSpellCheckURL
 	NAME 'zimbraSpellCheckURL'
-	DESC 'URL of the server running the spell checking service'
+	DESC 'URL of the server running the spell checking service.  Multi-valued attribute that allows multiple spell check servers to be specified.  If the request to the first server fails, a request to the second server is sent and so on.'
 	EQUALITY caseIgnoreIA5Match
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
 
