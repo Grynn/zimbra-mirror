@@ -91,6 +91,15 @@ function(sessionId) {
 	ZmCsfeCommand._sessionId = parseInt(id);
 };
 
+ZmCsfeCommand.faultToEx =
+function(fault, method) {
+	var trace = AjxStringUtil.getAsString(fault.Detail.Error.Trace);
+	var faultCode = AjxStringUtil.getAsString(fault.Code.Value);
+	var errorCode = AjxStringUtil.getAsString(fault.Detail.Error.Code);
+	var reasonText = fault.Reason.Text + (trace ? "\n" + trace : "");
+	return new ZmCsfeException(reasonText, errorCode, method, faultCode, fault.Detail.Error.a);
+};
+
 /*
 * Sends a SOAP request to the server and processes the response.
 *
@@ -273,12 +282,7 @@ function(response, asyncMode) {
 	var fault = data.Body.Fault;
 	if (fault) {
 		// JS response with fault
-		var trace = this._getAsString(fault.Detail.Error.Trace);
-		var faultCode = this._getAsString(fault.Code.Value);
-		var errorCode = this._getAsString(fault.Detail.Error.Code);
-		var reasonText = fault.Reason.Text + (trace ? "\n" + trace : "");
-		var ex = new ZmCsfeException(reasonText, errorCode, "ZmCsfeCommand.prototype.invoke",
-									 faultCode, fault.Detail.Error.a);
+		var ex = ZmCsfeCommand.faultToEx(fault, "ZmCsfeCommand.prototype.invoke");
 		if (asyncMode) {
 			result.set(ex, true, data.Header);
 			return result;
@@ -343,16 +347,6 @@ function() {
 	var req = AjxRpc.getRpcRequest(this._rpcId);
 	if (req)
 		req.cancel();
-};
-
-/**
- * Returns the given object/string as a string.
- * 
- * @param o		[object|string]		an object or string
- */
-ZmCsfeCommand.prototype._getAsString =
-function(o) {
-	return !o ? "" : (typeof(o) == 'object') ? o.toString() : o;
 };
 
 // DEPRECATED - instead, use instance method invoke() above

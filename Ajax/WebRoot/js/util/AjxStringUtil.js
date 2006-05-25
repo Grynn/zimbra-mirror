@@ -813,3 +813,14 @@ function(qs, name) {
 
 	return "?" + pairs1.join("&");
 };
+
+/**
+ * Returns the given object/primitive as a string.
+ * 
+ * @param o		[object|primitive]		an object or primitive
+ */
+AjxStringUtil.getAsString =
+function(o) {
+	return !o ? "" : (typeof(o) == 'object') ? o.toString() : o;
+};
+
