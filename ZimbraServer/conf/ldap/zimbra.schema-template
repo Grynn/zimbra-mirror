@@ -89,6 +89,12 @@ objectIdentifier zimbraCalendarResource ZimbraObjectClass:16
 #	SUBSTR caseIgnoreSubstringsMatch
 #	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32} )
 
+#### From Microsoft Schema
+attributetype ( 1.2.840.113556.1.2.146
+        NAME 'company'
+        SYNTAX '1.3.6.1.4.1.1466.115.121.1.15'
+        SINGLE-VALUE )
+
 ${ATTRIBUTE_DEFINITIONS}
 
 ###########################################################################
@@ -174,7 +180,7 @@ objectclass ( zimbraGlobalConfig
 	NAME 'zimbraGlobalConfig'
 	DESC 'global config'
 	SUP top AUXILIARY
-${CLASS_MEMBERS_COS})
+${CLASS_MEMBERS_GLOBALCONFIG})
 
 # zimbraDomain is used to represent a domain in the directory. For
 # example, if we created the foo.com domain, then the dc=foo,dc=com
@@ -185,7 +191,7 @@ objectclass ( zimbraDomain
 	NAME 'zimbraDomain'
 	DESC 'Domain object'
 	SUP zimbraMailRecipient AUXILIARY	
-${CLASS_MEMBERS_COS})
+${CLASS_MEMBERS_DOMAIN})
 
 # zimbraSecurityGroup is used to represent a security group in the
 # directory. Members of this group have a zimbraMemberOf attr with
@@ -196,7 +202,7 @@ objectclass ( zimbraSecurityGroup
 	NAME 'zimbraSecurityGroup'
 	DESC 'Security Group'
 	SUP top AUXILIARY
-${CLASS_MEMBERS_COS})
+${CLASS_MEMBERS_SECURITYGROUP})
 
 # zimbraServer is used to represent a defined server within a zimbra
 # install.  server-specific configuration information will be added
@@ -207,7 +213,7 @@ objectclass ( zimbraServer
 	NAME 'zimbraServer'
 	DESC 'Server in the cluster'
 	SUP top STRUCTURAL
-${CLASS_MEMBERS_COS})
+${CLASS_MEMBERS_SERVER})
 	
 # zimbraMimeEntry is used to represent status about mime types
 objectclass ( zimbraMimeEntry
