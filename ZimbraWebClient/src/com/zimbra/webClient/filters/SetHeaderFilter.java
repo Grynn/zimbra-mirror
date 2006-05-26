@@ -234,18 +234,18 @@ public class SetHeaderFilter implements Filter {
         //if (true) throw new RuntimeException("URI="+uri);
             
         if (uri.toLowerCase().indexOf("microsoft-server-activesync") != -1 ) {
-			if (debug > 0) { System.out.println("ActiveSync client detected..."); }
+			if (debug > 0) { System.out.println("ZimbraSync client detected..."); }
 			try {
 				String targetContextStr = "/service/";
 				ServletContext myContext = config.getServletContext();
 				ServletContext targetContext = myContext.getContext( targetContextStr );
-				RequestDispatcher dispatcher = targetContext.getRequestDispatcher( "/extension/activesync" );
+				RequestDispatcher dispatcher = targetContext.getRequestDispatcher( "/extension/zimbrasync" );
 				dispatcher.forward( request, response );
 				return;
 			} catch(NullPointerException npe) {
 				//if this happens, make sure in server.xml the context element for the zimbra app
 				//has crossContext=true
-				if (debug >0) { System.out.println("unable to forward activesync request"); }
+				if (debug >0) { System.out.println("unable to forward zimbrasync request"); }
 			}
         } else if (uri.startsWith("/home/") || uri.startsWith("/~")) {
             if (uri.startsWith("/~")) uri = "/home"+uri;
