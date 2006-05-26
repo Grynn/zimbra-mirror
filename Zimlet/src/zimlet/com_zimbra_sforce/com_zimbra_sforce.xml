@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_sforce" version="1.0" description="Salesforce">
+<zimlet name="com_zimbra_sforce" version="2.0" description="Salesforce">
   <include>sforce.js</include>
   <includeCSS>sforce.css</includeCSS>
   <handlerObject>Com_Zimbra_SForce</handlerObject>
