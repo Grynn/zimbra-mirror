@@ -55,6 +55,8 @@ sed -e "s|^userPassword.*|userPassword: ${zimbra_sha}|" \
 ldap start
 
 ldapmodify -a -c -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${config_dir}/zimbra.ldif
+ldapmodify -a -c -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${config_dir}/zimbra_globalconfig.ldif 
+ldapmodify -a -c -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${config_dir}/zimbra_defaultcos.ldif
 ldapmodify -a -c -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${source_config_dir}/zimbra_mimehandlers.ldif
 
 #ldapmodify -c -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${config_dir}/zimbra.ldif
