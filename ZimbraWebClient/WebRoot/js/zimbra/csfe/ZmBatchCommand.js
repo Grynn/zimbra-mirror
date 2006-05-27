@@ -77,9 +77,11 @@ function(cmd) {
 /**
  * Issues the batch request. For each individual request, either a response or an
  * error callback will be called.
+ * 
+ * @param callback	[AjxCallback]*		callback to run after entire batch request has completed
  */
 ZmBatchCommand.prototype.run =
-function() {
+function(callback) {
 	
 	// Invoke each command so that it hands us its SOAP doc, response callback, and
 	// error callback
@@ -100,16 +102,15 @@ function() {
 		reqEl.setAttribute("id", i);
 		batchSoapDoc.getMethod().appendChild(reqEl);
 	}
-	DBG.printXML(AjxDebug.DBG1, batchSoapDoc.getXml());
 	
 	// Issue the BatchRequest
-	var respCallback = new AjxCallback(this, this._handleResponseRun);
+	var respCallback = new AjxCallback(this, this._handleResponseRun, [callback]);
 	this._appCtxt.getAppController().sendRequest({soapDoc: batchSoapDoc, asyncMode: true,
 												  callback: respCallback});
 };
 
 ZmBatchCommand.prototype._handleResponseRun =
-function(result) {
+function(callback, result) {
 	var batchResponse = result.getResponse();
 	if (!batchResponse.BatchResponse) {
 		DBG.println(AjxDebug.DBG1, "Missing batch response!");
@@ -117,6 +118,9 @@ function(result) {
 	}
 	for (var method in batchResponse.BatchResponse) {
 		this._processResponse(method, batchResponse.BatchResponse[method]);
+	}
+	if (callback) {
+		callback.run(result);
 	}
 };
 
