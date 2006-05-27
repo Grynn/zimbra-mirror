@@ -357,14 +357,14 @@ function(ev) {
  */
 DwtKeyboardMgr.__keyUpHdlr =
 function(ev) {
-	//DBG.println(AjxDebug.DBG1, "DwtKeyboardMgr.__keyUpHdlr");
+	DBG.println(AjxDebug.DBG1, "DwtKeyboardMgr.__keyUpHdlr");
 	var kbMgr = DwtShell.getShell(window).getKeyboardMgr();
 	var kev = DwtShell.keyEvent;
 	kev.setFromDhtmlEvent(ev);
 	var keyCode = kev.keyCode;
 	
 	if (kbMgr._kbEventStatus != DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED) {
-		//DBG.println(AjxDebug.DBG1, "DwtKeyboardMgr.__keyUpHdlr: KEY UP BLOCKED");
+		DBG.println(AjxDebug.DBG1, "DwtKeyboardMgr.__keyUpHdlr: KEY UP BLOCKED");
 		kev._stopPropagation = true;
 		kev._returnValue = false;
 		kev.setToDhtmlEvent(ev);
@@ -377,13 +377,13 @@ function(ev) {
  */
 DwtKeyboardMgr.__keyPressHdlr =
 function(ev) {
-	//DBG.println(AjxDebug.DBG1, "DwtKeyboardMgr.__keyPressHdlr");
+	DBG.println(AjxDebug.DBG1, "DwtKeyboardMgr.__keyPressHdlr");
 	var kbMgr = DwtShell.getShell(window).getKeyboardMgr();
 	var kev = DwtShell.keyEvent;
 	kev.setFromDhtmlEvent(ev);
 	var keyCode = kev.keyCode;
 	
-	if (kbMgr._kbEventStatus != DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED) {
+	if (kbMgr._kbEventStatus != undefined && kbMgr._kbEventStatus != DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED) {
 		//DBG.println(AjxDebug.DBG1, "DwtKeyboardMgr.__keyPressHdlr: KEY PRESS BLOCKED");
 		kev._stopPropagation = true;
 		kev._returnValue = false;
