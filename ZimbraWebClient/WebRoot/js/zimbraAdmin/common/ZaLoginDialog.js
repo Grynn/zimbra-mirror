@@ -23,7 +23,7 @@
  * ***** END LICENSE BLOCK *****
  */
 
-function ZaLoginDialog(parent, zIndex, className) { 
+function ZaLoginDialog(parent, zIndex, className, appCtxt) { 
 
     className = className || "ZaLoginDialog";
     DwtComposite.call(this, parent, className, DwtControl.ABSOLUTE_STYLE);
@@ -78,6 +78,12 @@ function ZaLoginDialog(parent, zIndex, className) {
 	this._okCell.appendChild(this._loginButton.getHtmlElement());
 	this._licenseCell = document.getElementById(licenseCellId);
 	this.resetLicenseWarning();
+	this._appCtxt = appCtxt;
+	if(this._appCtxt) {
+		this._tabGroup = new DwtTabGroup(this.toString());
+		var rootTg = this._appCtxt.getRootTabGroup();
+		rootTg.addMember(this._tabGroup);	
+	}	
 }
 
 ZaLoginDialog.prototype = new DwtComposite;
@@ -88,6 +94,11 @@ function() {
 	return "ZaLoginDialog";
 }
 
+ZaLoginDialog.prototype.getTabGroup = 
+function () {
+	
+	
+} 
 ZaLoginDialog.prototype.getBannerHtml = function () {
 	var dateFormatter = AjxDateFormat.getDateInstance();
 	var substitutions = {
@@ -318,7 +329,7 @@ function(ex) {
 	this.confirmPassInput._parentId = this._htmlElId;
 	this.newPassInput.focus();
 	this.changePass = true;
-	this.setUpKeyHandlers();
+//	this.setUpKeyHandlers();
 };
 
 ZaLoginDialog.prototype.removeChangePass = 
@@ -328,8 +339,8 @@ function () {
 	this._mainTable.deleteRow(3);
 	this._mainTable.deleteRow(3); 
 	this.changePass = false;
-	this.clearKeyHandlers();
-	this.setUpKeyHandlers();
+//	this.clearKeyHandlers();
+//	this.setUpKeyHandlers();
 }
 
 ZaLoginDialog.prototype.addChild =

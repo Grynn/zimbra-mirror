@@ -89,7 +89,7 @@ function() {
 ZaAppCtxt.prototype.getLoginDialog =
 function() {
 	if (!this._loginDialog)
-		this._loginDialog = new ZaLoginDialog(this.getShell(), null, null);
+		this._loginDialog = new ZaLoginDialog(this.getShell(), null, null, this);
 	return this._loginDialog;
 }
 
@@ -160,4 +160,11 @@ function() {
 ZaAppCtxt.prototype.setSettings = 
 function(settings) {
 	this._settings = settings;
+}
+
+ZaAppCtxt.prototype.getRootTabGroup =
+function() {
+	if (!this._rootTabGrp)
+		this._rootTabGrp = new DwtTabGroup("ROOT");
+	return this._rootTabGrp;
 }

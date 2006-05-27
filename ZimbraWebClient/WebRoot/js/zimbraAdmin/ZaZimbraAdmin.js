@@ -150,11 +150,49 @@ function(domain) {
     var lm = new ZaZimbraAdmin(appCtxt);
 }
 ZaZimbraAdmin.prototype.getKeymapNameToUse = function () {
-	return null;
+	if (this._app && this._app.getCurrentController()) {
+		var c = this._app.getCurrentController();
+		if (c && c.handleKeyAction)
+			return c.toString();
+	}
+	return "ZaGlobal";
 }
 
 ZaZimbraAdmin.prototype.handleKeyAction = function () {
-	return false;
+	switch (actionCode) {
+		case ZaKeyMap.DBG_NONE:
+			alert("Setting domain search limit to:" + AjxDebug.NONE);
+			DBG.setDebugLevel(AjxDebug.NONE);
+			break;
+			
+		case ZaKeyMap.DBG_1:
+						alert("Setting domain search limit to:" + AjxDebug.DBG1);
+			DBG.setDebugLevel(AjxDebug.DBG1);
+			break;
+			
+		case ZaKeyMap.DBG_2:
+			alert("Setting domain search limit to:" + AjxDebug.DBG2);
+			DBG.setDebugLevel(AjxDebug.DBG2);
+			break;
+			
+		case ZaKeyMap.DBG_3:
+			alert("Setting domain search limit to:" + AjxDebug.DBG3);
+			DBG.setDebugLevel(AjxDebug.DBG3);
+			break;
+			
+		default: {
+			
+			if (this._app && this._app.getCurrentController()) {
+				var c = this._app.getCurrentController();
+				if (c && c.handleKeyAction)
+					return c.handleKeyAction(actionCode, ev);
+			} else {
+				return false;
+			}
+			break;
+		}
+	}
+	return true;
 }
 ZaZimbraAdmin.getInstance = function() {
 	if(ZaZimbraAdmin._instance) {
