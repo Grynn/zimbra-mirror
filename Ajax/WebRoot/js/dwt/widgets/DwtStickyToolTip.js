@@ -26,6 +26,8 @@ function DwtStickyToolTip(shell, className, posStyle) {
 DwtStickyToolTip.prototype = new DwtBaseDialog;
 DwtStickyToolTip.prototype.constructor = DwtStickyToolTip;
 
+DwtStickyToolTip.prototype._borderStyle = "DwtSemiModalDialog";
+
 DwtStickyToolTip.prototype.setTitle = function(title) {
 	this._title = title;
 	var element = document.getElementById(this._htmlElId+"_title");
@@ -72,16 +74,14 @@ DwtStickyToolTip.prototype._getStartBorder = function () {
 	if (!this._contentId) this._contentId = Dwt.getNextId();
 	if (!this._titleCellId) this._titleCellId = Dwt.getNextId();
 	
-	var borderStyle = "SemiModalDialog";
 	//var substitutions = {title : this._title, titleTextId: this._titleCellId, titleId: this._titleHandleId};
 	var substitutions = { id: this._htmlElId, title: this._title };
-	return DwtBorder.getBorderStartHtml(borderStyle, substitutions);
+	return DwtBorder.getBorderStartHtml(this._borderStyle, substitutions);
 };
 
 DwtStickyToolTip.prototype._getEndBorder = function () {
-	var borderStyle = "SemiModalDialog";
 	var substitutions = { id: this._htmlElId };
-	return DwtBorder.getBorderEndHtml(borderStyle, substitutions);
+	return DwtBorder.getBorderEndHtml(this._borderStyle, substitutions);
 };
 
 DwtStickyToolTip.prototype._getContentHtml = function () {

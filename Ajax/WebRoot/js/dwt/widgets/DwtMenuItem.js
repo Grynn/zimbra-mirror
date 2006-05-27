@@ -335,14 +335,9 @@ function() {
 	
 	this._table.style.width = "100%";
 	fillCell = this._row.insertCell(0);
-	fillCell.className = className;
-	
-	if (this.parent._menuHasCheckedItems())
-		this._checkItemAdded(className);
-		
-	if (this.parent._menuHasItemsWithIcons()) {
-		this._addIconCell(className);
-	}
+	// MOW:  Just have one cell that goes the entire width 
+	//			-- no need to bother with icon or check columns
+	fillCell.innerHTML = "<div class='" + className + "'></div>";
 }
 
 DwtMenuItem.prototype._createPushStyle =

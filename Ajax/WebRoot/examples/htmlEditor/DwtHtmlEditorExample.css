@@ -162,20 +162,20 @@ DIV.vSpace {
 * Buttons
 */
 
-.TBButton {
+.DwtToolbarButton {
 	border: 1px solid rgb(198, 197, 215);
 }
-.TBButton-activated {
+.DwtToolbarButton-activated {
 	background-image:url(/ajax/examples/common/img/loRes/dwt/ButtonUp__H.gif);
 	border: 1px solid;
 	border-color: #E0E0E0 #555555 #555555 #E0E0E0;
 }
-.TBButton-triggered {
+.DwtToolbarButton-triggered {
 	background-image:url(/ajax/examples/common/img/loRes/dwt/ButtonDown__H.gif);
 	border:1px solid;
 	border-color: #555555 #E0E0E0 #E0E0E0 #555555;
 }
-.TBButton-toggled {
+.DwtToolbarButton-toggled {
 	background-image:url(/ajax/examples/common/img/loRes/dwt/ButtonDown__H.gif);
 	border:1px solid;
 	border-color: #555555 #E0E0E0 #E0E0E0 #555555;

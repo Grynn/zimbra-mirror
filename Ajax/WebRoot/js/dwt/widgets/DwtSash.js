@@ -24,11 +24,12 @@ function DwtSash(parent, style, className, threshold, posStyle) {
     var htmlElement = this.getHtmlElement();
 	if (style == null || style != DwtSash.HORIZONTAL_STYLE) {
 		this._style = DwtSash.VERTICAL_STYLE;
-		htmlElement.style.cursor = AjxEnv.isIE ? "row-resize" : "n-resize";
-		htmlElement.innerHTML = DwtBorder.getBorderHtml("h_sash");
+		htmlElement.style.cursor = AjxEnv.isIE ? "row-resize" : "s-resize";
+		htmlElement.innerHTML = DwtBorder.getBorderHtml("DwtVerticalSash");
 	} else {
 		this._style = DwtSash.HORIZONTAL_STYLE;
-		htmlElement.style.cursor = AjxEnv.isIE ? "col-resize" : "e-resize";
+		htmlElement.style.cursor = AjxEnv.isIE ? "col-resize" : "w-resize";
+		htmlElement.innerHTML = DwtBorder.getBorderHtml("DwtHorizontalSash");
 	}
 	this._threshold = (threshold > 0) ? threshold : 1;
 

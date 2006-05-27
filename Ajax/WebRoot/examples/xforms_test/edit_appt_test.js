@@ -223,7 +223,7 @@
 					colSpan:"*", numCols:3, colSizes:[100,"100%", 100], width:500,items: [
 						{type:_SEPARATOR_, height:20},
 						
-						{type:_BUTTON_, label:"<nobr>Edit This Meeting</nobr>", width:95, cssClass:"TBButtonDefault"},
+						{type:_BUTTON_, label:"<nobr>Edit This Meeting</nobr>", width:95, cssClass:"DwtToolbarButton-default"},
 						{type:_BUTTON_, label:"Edit This and Future Meetings", width:160},
 						{type:_BUTTON_, label:"Done", align:"right", width:70}
 				  ]
@@ -232,7 +232,7 @@
 				{type:_GROUP_, relevant:"get('_status') == 'O' && get('_state') == 'VS'",
 					colSpan:"*", numCols:3, colSizes:[160,"100%", 100], width:500,items: [
 						{type:_SEPARATOR_, height:20},
-						{type:_BUTTON_, label:"<nobr>Edit This and Future Meetings</nobr>", width:160, cssClass:"TBButtonDefault"},
+						{type:_BUTTON_, label:"<nobr>Edit This and Future Meetings</nobr>", width:160, cssClass:"DwtToolbarButton-default"},
 						{type:_OUTPUT_},						
 						{type:_BUTTON_, label:"Done", align:"right", width:70}
 				  ]

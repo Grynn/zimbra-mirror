@@ -84,7 +84,7 @@ DwtListView._LAST_REASON 		= 3;
 
 DwtListView._TOOLTIP_DELAY 		= 250;
 
-DwtListView.HEADERITEM_HEIGHT 	= 24;
+DwtListView.HEADERITEM_HEIGHT 	= 23;
 DwtListView.HEADERITEM_ARROW  	= "arr--";
 DwtListView.HEADER_ID			= "crr--";
 DwtListView.HEADERITEM_LABEL 	= "drr--";
@@ -157,7 +157,8 @@ function(defaultColumnSort) {
 	htmlArr[idx++] = "<table id='" + this._headerTableId + "' cellpadding=0 cellspacing=0 border=0 height=100%";
 	htmlArr[idx++] = this._noMaximize ? ">" : " width=100%>";
 	htmlArr[idx++] = "<tr>";
-	for (i = 0; i < this._headerList.length; i++) {
+	var numCols = this._headerList.length;
+	for (i = 0; i < numCols; i++) {
 		var headerCol = this._headerList[i];
 		if (!headerCol._visible)
 			continue;
@@ -200,12 +201,14 @@ function(defaultColumnSort) {
 		}
 		
 		// ALWAYS add "sash" separators
-		htmlArr[idx++] = "<td width=4>";
-		htmlArr[idx++] = "<table align=right border=0 cellpadding=0 cellspacing=0 width=2 height=100%><tr>";
-		htmlArr[idx++] = "<td class='DwtListView-Sash'><div style='width: 1px; height: " + (DwtListView.HEADERITEM_HEIGHT-2) + "px; background-color: #8A8A8A'></div></td>";
-		htmlArr[idx++] = "<td class='DwtListView-Sash'><div style='width: 1px; height: " + (DwtListView.HEADERITEM_HEIGHT-2) + "px; background-color: #FFFFFF'></div></td>";
-		htmlArr[idx++] = "</tr></table>";
-		htmlArr[idx++] = "</td>";
+		if (i < (numCols - 1)) {
+			htmlArr[idx++] = "<td width=4>";
+			htmlArr[idx++] = "<table align=right border=0 cellpadding=0 cellspacing=0 width=2 height=100%><tr>";
+			htmlArr[idx++] = "<td class='DwtListView-Sash'><div style='width: 1px; height: " + (DwtListView.HEADERITEM_HEIGHT-2) + "px; background-color: #8A8A8A'></div></td>";
+			htmlArr[idx++] = "<td class='DwtListView-Sash'><div style='width: 1px; height: " + (DwtListView.HEADERITEM_HEIGHT-2) + "px; background-color: #FFFFFF'></div></td>";
+			htmlArr[idx++] = "</tr></table>";
+			htmlArr[idx++] = "</td>";
+		}
 
 		htmlArr[idx++] = "</tr></table>";
 		htmlArr[idx++] = "</div></td>";

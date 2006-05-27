@@ -723,9 +723,11 @@ function() {
 	
 	html[idx++] = "<table cellspacing='0' cellpadding='1' width='100%'>";
 	
-	html[idx++] = "<tr><td width='2%'></td>";
+	html[idx++] = "<tr>";
 	for (var i = 0; i < 7; i++) {
-		html[idx++] = "<td align='right' class='DwtCalendarDow' width='14%' id='";
+		html[idx++] = "<td class='DwtCalendarDow' width='";
+		html[idx++] = (i < 5 ? "14%" : "15%");
+		html[idx++] = "' id='";
 		html[idx++] = this._getDOWCellId(i);
 		html[idx++] = "'>&nbsp;</td>";
 	}
@@ -734,13 +736,15 @@ function() {
 	// bug fix #3355
 	var style = AjxEnv.isLinux ? " style='line-height: 12px'" : "";
     for (var i = 0; i < 6; i++) {
- 		html[idx++] = "<tr" + style + "><td width='2%' id='w:";
- 		html[idx++] = i;
- 		html[idx++] = ":"; 
- 		html[idx++] = this._uuid; 
- 		html[idx++] = "'</td>";
+ 		html[idx++] = "<tr" + style + ">";
+// MOW: skipping this cell (is it used?) because it's messing up spacings
+// 		html[idx++] = "<td width='2%' id='w:";
+// 		html[idx++] = i;
+// 		html[idx++] = ":"; 
+// 		html[idx++] = this._uuid; 
+// 		html[idx++] = "'</td>";
     	for (var j = 0; j < 7; j++) {
-    		html[idx++] = "<td align='right' width='14%' id='";
+    		html[idx++] = "<td id='";
     		html[idx++] = this._getDayCellId(i * 7 + j);
     		html[idx++] = "'>&nbsp;</td>";
      	}

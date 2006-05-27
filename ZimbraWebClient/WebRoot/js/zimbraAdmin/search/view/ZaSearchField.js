@@ -198,7 +198,7 @@ ZaSearchField.prototype._getMyXForm = function() {
 		tableCssStyle:"width:100%;padding:2px;",numCols:4,width:"100%",
 		items: [
 //			{type:_OUTPUT_, value:ZaMsg.searchForAccountsLabel, nowrap:true},
-			{type:_MENU_BUTTON_, label:null, choices:ZaSearchField.searchChoices, toolTipContent:ZaMsg.searchToolTip, icon:"SearchAll", cssClass:"InsetTBButton"},
+			{type:_MENU_BUTTON_, label:null, choices:ZaSearchField.searchChoices, toolTipContent:ZaMsg.searchToolTip, icon:"SearchAll", cssClass:"DwtToolbarButton"},
 			{type:_TEXTFIELD_, width:"100%", ref:ZaSearch.A_query, containerCssClass:"search_field_container", label:null, 
 				elementChanged: function(elementValue,instanceValue, event) {
 					var charCode = event.charCode;
@@ -211,7 +211,7 @@ ZaSearchField.prototype._getMyXForm = function() {
 				cssClass:"search_input"
 			},
 			{type:_DWT_BUTTON_, label:ZaMsg.search, toolTipContent:ZaMsg.searchForAll, icon:ZaMsg.search, name: "searchButton",
-					onActivate:ZaSearchField.srchButtonHndlr, cssClass:"InsetTBButton"},
+					onActivate:ZaSearchField.srchButtonHndlr, cssClass:"DwtToolbarButton"},
 			/*{type:_OUTPUT_, value:ZaMsg.Filter+":", label:null},
 			{type:_CHECKBOX_, ref:ZaSearch.A_fAccounts,label:ZaMsg.Filter_Accounts, labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"},					
 			{type:_CHECKBOX_, ref:ZaSearch.A_fAliases,label:ZaMsg.Filter_Aliases, labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"},

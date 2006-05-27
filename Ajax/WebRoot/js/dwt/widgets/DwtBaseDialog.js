@@ -95,6 +95,8 @@ function DwtBaseDialog(parent, className, title, zIndex, mode, loc, view, dragHa
 DwtBaseDialog.prototype = new DwtComposite;
 DwtBaseDialog.prototype.constructor = DwtBaseDialog;
 
+DwtBaseDialog.prototype._borderStyle = "DwtDialog";
+
 // modes
 /** Modeless dialog
  * @type number */
@@ -282,9 +284,10 @@ function(text) {
 	var d = this._getContentDiv();
 	if (d) {
 		var content =
-			DwtBorder.getBorderStartHtml("dialog") + 
+			DwtBorder.getBorderStartHtml(this._borderStyle) + 
 			text + 
-			DwtBorder.getBorderEndHtml("dialog");
+			DwtBorder.getBorderEndHtml(this._borderStyle)
+		;
 		d.innerHTML = text;
 	}
 }
@@ -331,13 +334,20 @@ function() {
 	if (!this._titleHandleId) this._titleHandleId = Dwt.getNextId();
 	if (!this._contentId) this._contentId = Dwt.getNextId();
 	if (!this._titleCellId) this._titleCellId = Dwt.getNextId();
-	return DwtBorder.getBorderStartHtml("dialog", {title : this._title, titleTextId: this._titleCellId,
-												titleId: this._titleHandleId});
+	return DwtBorder.getBorderStartHtml(this._borderStyle, 
+				{	title : this._title, 
+					titleTextId: this._titleCellId,
+					titleId: this._titleHandleId,
+					icon:"",
+					closeIcon1:"",
+					closeIcon2:""
+				}
+		);
 };
 
 DwtBaseDialog.prototype._getEndBorder = 
 function() {
-	return DwtBorder.getBorderEndHtml("dialog");
+	return DwtBorder.getBorderEndHtml(this._borderStyle);
 };
 
 DwtBaseDialog.prototype._getContentHtml = 

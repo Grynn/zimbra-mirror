@@ -492,7 +492,7 @@ function(checkEnabled) {
  */
 DwtTabGroup.prototype.__getLeftMostMember =
 function(checkEnabled) {
-	
+return;	
 	var sz = this.__members.size();
 	var a = this.__members.getArray();
 	var member = null;

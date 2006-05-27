@@ -118,7 +118,7 @@ function(enabled) {
 ZaToolBar.prototype._createButton =
 function(buttonId, imageId, text, disImageId, toolTip, enabled, className, type, menuOpList) {
 	if (!className)
-		className = "TBButton"
+		className = "DwtToolbarButton"
 	var b = this._buttons[buttonId] = new DwtButton(this, null, className);
 	if (imageId)
 		b.setImage(imageId);
