@@ -489,7 +489,8 @@ function(htmlElement, scrollStyle) {
 Dwt.getSize =
 function(htmlElement) {
 	var p = new DwtPoint(0, 0);
-	if (htmlElement.offsetWidth != null) {
+    if(!htmlElement) {return p;}
+    if (htmlElement.offsetWidth != null) {
 		p.x = htmlElement.offsetWidth;
 		p.y = htmlElement.offsetHeight;
 	} else if (htmlElement.clip && htmlElement.clip.width != null) {

@@ -120,7 +120,7 @@ Com_Zimbra_SForce.prototype.login = function(callback) {
     var user = this.getUserProperty("user");
 	var passwd = this.getUserProperty("passwd");
 	if (!user || !passwd) {
-		this.displayStatusMessage("Please fill your SForce credentials first");
+		this.displayStatusMessage("Please fill your Salesforce credentials first");
 		this.createPropertyEditor(new AjxCallback(this, this.login, [ callback ]));
 	} else {
 		this._do_login(callback, user, passwd);
@@ -383,7 +383,7 @@ Com_Zimbra_SForce.prototype.dlg_createAccount = function(acct_data, contact_data
 	}
 	pe_acct.initProperties(pe_props);
 	var dialog_args = {
-		title : "Create Account/Contact at SForce",
+		title : "Create Account/Contact in Salesforce",
 		view  : view
 	};
 
