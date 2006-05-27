@@ -483,16 +483,20 @@ Com_Zimbra_SForce.prototype.dlg_createAccount = function(acct_data, contact_data
 
 Com_Zimbra_SForce.prototype.noteDropped = function(note) {
     if(!note) {return;}
-    // check out some domains
-	var emails = [];
+    // check out some domains, exclude user's domain
+    var ignoreDomain = this.getUserProperty("ignoreDomain");
+    var emails = [];
 	function addEmails(a) {
 		if (a) {
 			if (typeof a == "string") {
-				emails.push(a);
+                if(ignoreDomain == a) {return;}
+                emails.push(a);
 			} else if (a instanceof Array) {
-				for (var i = 0; i < a.length; ++i)
+				for (var i = 0; i < a.length; ++i) {
+                    if(ignoreDomain == a[i]) {continue;}
 					emails.push(a[i]);
-			}
+                }
+            }
 		}
 	};
     if(note._addrs && note._addrs.length > 0) {
@@ -531,7 +535,9 @@ Com_Zimbra_SForce.prototype.noteDropped = function(note) {
         var c = Com_Zimbra_SForce._RECENT.Contacts;
         for (var i = 0; i < c.length; ++i) {
             c[i].TYPE = "C";
-            acctsSorted[c[i].AccountId].Con.push(c[i]);
+            if(acctsSorted[c[i].AccountId]) {
+                acctsSorted[c[i].AccountId].Con.push(c[i]);
+            }
         }
         var o = records;
         for (var i = 0; i < o.length; ++i) {
@@ -572,6 +578,7 @@ Com_Zimbra_SForce.prototype.noteDropped = function(note) {
 		this.displayErrorMessage("No email addresses or domains found.<br />"
 					 + "We can't determine an Account to add this note to.");
 	} else {
+
         var q = [ "select Id, FirstName, LastName, Email, AccountId from Contact where Email like '%",
                 domains.join("%' or Email like '%"),
                 "%'" ].join("");
@@ -640,8 +647,8 @@ Com_Zimbra_SForce.prototype.dlg_addNoteToAccounts = function(accounts, note) {
 		  "<tr>",
 		  "<td align='right'><label for='", subjectId, "'>Subject:</td>",
 		  "<td>",
-		  "<input autocomplete='off' style='width: 25em' type='text' id='", subjectId, "' value='",
-		  AjxStringUtil.htmlEncode(note.subject), "'/>",
+		  "<input style='width: 25em' type='text' id='", subjectId, "' value='",
+		  AjxStringUtil.htmlEncode(note.subject), "' autocomplete='off' />",
 		  "</td>",
 		  "</tr>",
 		  "<td colspan='2'>",

@@ -434,9 +434,12 @@ DwtButton.prototype._blur =
 function() {
 	//DBG.println(AjxDebug.DBG3, "DwtButton.prototype._blur");
 //	this.__setClassName(this.getClassName());
-	this.getHtmlElement().style.border = this.__oldBorder;
+    // Check that the Html Element is not null
+    var el = this.getHtmlElement();
+    if(el && el.style) {
+        el.style.border = this.__oldBorder;
+    }
 }
-
 
 DwtButton.prototype._toggleMenu =
 function () {
