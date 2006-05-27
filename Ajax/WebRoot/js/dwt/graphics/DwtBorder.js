@@ -114,137 +114,151 @@ DwtBorder.registerBorder(
 	}
 );	
 
-/* MOW: 03/29/06:  DEPRECATING AS THESE ARE NOT BEING USED... 
-	
+
 DwtBorder.registerBorder(
-	"card",	
+	"DwtDialog", 
 	{
-		start:"<table class=card_border_table cellspacing=0 cellpadding=0>"+
-				"<tr><td class=card_spacer_TL><div class=ImgCard_TL></div></td>"+
-					"<td class=ImgCard_T__H></td>"+
-					"<td class=card_spacer_TR><div class=ImgCard_TR></div></td>"+
-				"</tr>"+
-				"<tr><td class=ImgCard_L__V></td>"+
-					"<td class=card_spacer_BG>"+
-						"<div class=card_contents>",
-		end:			"</div class=card_contents>"+
-					"</td>"+
-					"<td class=ImgCard_R__V></td>"+
-				"</tr>"+
-				"<tr><td class=card_spacer_BL><div class=ImgCard_BL></div></td>"+
-					"<td class=ImgCard_B__H></td>"+
-					"<td class=card_spacer_BR><div class=ImgCard_BR></div></td>"+
-				"</tr>"+
-			"</table>",
+		start: AjxBuffer.concat(
+			"<div class='DwtDialog WindowOuterContainer'>",
+				"<table cellspacing=0 cellpadding=0 style='cursor:move;'>",
+					"<tr id='{$titleId}'>",
+						"<td class='minWidth'><!--$icon--><\/td>",
+						"<td id='{$titleTextId}' class='DwtDialogTitle'>{$title}</td>",
+						"<td class='minWidth'><div class='{$closeIcon2}'></div></td>",
+						"<td class='minWidth'><div class='{$closeIcon1}'></div></td>",
+					"</tr>",
+					"<tr>",
+						"<td class='DwtDialogBody WindowInnerContainer' colspan='3'>"
+		),
+		
+		end: AjxBuffer.concat(
+						"</td>",
+					"</tr>",
+				"</table>",
+			"</div>"
+		),
 		width:20,
-		height:20
-	
+		height:32
 	}
 );
 
 DwtBorder.registerBorder(
-	"cardSel",
+	"DwtSemiModalDialog", 
 	{
-		start:"<table class=card_border_table cellspacing=0 cellpadding=0>"+
-				"<tr><td class=card_spacer_TL><div class=ImgCardSel_TL></div></td>"+
-					"<td class=ImgCardSel_T__H></td>"+
-					"<td class=card_spacer_TR><div class=ImgCardSel_TR></div></td>"+
-				"</tr>"+
-				"<tr><td class=ImgCardSel_L__V></td>"+
-					"<td class=card_spacer_BG>"+
-						"<div class=card_contents>",
-		end:			"</div class=card_contents>"+
-					"</td>"+
-					"<td class=ImgCardSel_R__V></td>"+
-				"</tr>"+
-				"<tr><td class=card_spacer_BL><div class=ImgCardSel_BL></div></td>"+
-					"<td class=ImgCardSel_B__H></td>"+
-					"<td class=card_spacer_BR><div class=ImgCardSel_BR></div></td>"+
-				"</tr>"+
-			"</table>",
-		width:19,
-		height:18
-	
+		start: AjxBuffer.concat(
+			"<div class='DwtDialog LightWindowOuterContainer'>",
+				"<table class='full_size' cellspacing=0 cellpadding=0 style='cursor:move;'>",
+					"<tr id='{$id}'>",
+						"<td class='minWidth'><!--$icon--></td>",
+						"<td id='{$id}_title' class='DwtDialogTitle' width='*'>{$title}</td>",
+						"<td id='{$id}_close' class='minWidth'></td>",
+					"</tr>",
+					"<tr>",
+						"<td id='{$id}_contents' class='DwtDialogBody LIghtWindowInnerContainer full_size' colspan='3'>"
+		),
+		
+		end: AjxBuffer.concat(
+						"</td>",
+					"</tr>",
+				"</table>",
+			"</div>"
+		),
+		width:20,
+		height:32
 	}
 );
-*/
 
 
 DwtBorder.registerBorder(
-	"dialog",
+	"DwtToolTip", 
 	{
-	start:AjxBuffer.concat(
-		 "<table class='DialogTable' cellpadding='0'>",
-			// top edge
-			"<tr><td class='minSize'><div class='ImgDialog_TL'><\/div><\/td>",
-				"<td id='<!--$titleId-->' class='ImgDialog_T__H' style='width:auto'>",
-					// cell with the titlebar
-					  "<table class='DialogTitle' cellpadding='0' ><tr>",
-						"<td class='DialogTitleImage minWidth'><!--$icon--><\/td>",
-						"<td id='<!--$titleTextId-->' class='DialogTitleText'><!--$title--><\/td>",
-						"<td class='DialogTitleImage minWidth'><div class='<!--$closeIcon2-->' style='cursor:pointer'><\/div><\/td>",
-						"<td class='DialogTitleImage minWidth'><div class='<!--$closeIcon1-->' style='cursor:pointer'><\/div><\/td>",
-					"<\/tr><\/table>",
-				"<\/td>",
-				"<td class='minSize'><div class='ImgDialog_TR'><\/div><\/td>",
-				(AjxEnv.useTransparentPNGs ? "<td valign=top class='fullHeight'>"
-												+"<table class='CompactTable fullSize' cellpadding=0><tr><td><div class='ImgShadowBig_TR'><\/div><\/td><\/tr>"
-												+"<tr><td class='fullHeight'><div class='ImgShadowBig_R__V fullHeight'><\/div><\/td><\/tr><\/table>"
-												+"<\/td>" : ""),
-			"<\/tr>",
-
-			// dialog body
-			"<tr><td class='ImgDialog_L__V fullHeight'><\/td>",
-				"<td class='DialogBody ImgDialog__BG'>"
+		start: AjxBuffer.concat(
+			"<div class='DwtToolTip LightWindowOuterContainer'>",
+				"<div id='{$id}TopPointer' class='DwtToolTipTopPointer'>",
+					"<center>",
+						"<div class='DwtToolTipPointerRow' style='width:1px;'>&nbsp;</div>",
+						"<div class='DwtToolTipPointerRow' style='width:3px;'>&nbsp;</div>",
+						"<div class='DwtToolTipPointerRow' style='width:5px;'>&nbsp;</div>",
+						"<div class='DwtToolTipPointerRow' style='width:7px;'>&nbsp;</div>",
+						"<div class='DwtToolTipPointerRow' style='width:9px;'>&nbsp;</div>",
+						"<div class='DwtToolTipPointerRow' style='width:11px;'>&nbsp;</div>",
+						"<div class='DwtToolTipPointerRow' style='width:13px;'>&nbsp;</div>",
+					"</center>",
+				"</div>",
+				"<div id='{$id}Contents' class='DwtToolTipBody'>"
 		),
-		end:AjxBuffer.concat(	
-				"<\/td> ",
-				"<td class='ImgDialog_R__V fullHeight'><\/td>",
-				(AjxEnv.useTransparentPNGs ? "<td><div class='ImgShadowBig_R__V fullHeight'><\/div><\/td>" : ""),
-			"<\/tr>",
-
-			// bottom edge
-			"<tr><td><div class='ImgDialog_BL'><\/div><\/td>",
-				"<td class='ImgDialog_B__H'><\/td>",
-				"<td><div class='ImgDialog_BR'><\/div><\/td>",
-				(AjxEnv.useTransparentPNGs ? "<td class='ImgShadowBig_R__V'><\/div><\/td>" : ""),
-			"<\/tr>",
-
-			// bottom shadow
-				(AjxEnv.useTransparentPNGs ? 
-					"<tr><td colspan=3><table cellspacing=0 cellpadding=0 border=0><tr><td><div class='ImgShadowBig_BL'><\/div><td>"+
-							"<td width=100%><div class='ImgShadowBig_B__H' style='width:100%'><\/div><\/td><\/tr><\/table>"+
-						"<\/td>"+
-						"<td class=dialog_shadow_c><div class='ImgShadowBig_BR'><\/div><td>"+
-					"<\/tr>"
-				  : ""
-				),
-			"<\/table>"
+		
+		end: AjxBuffer.concat(
+				"</div>",
+				"<div id='{$id}BottomPointer' class='DwtToolTipBottomPointer'>",
+					"<center>",
+						"<div class='DwtToolTipPointerRow' style='width:13px;'>&nbsp;</div>",
+						"<div class='DwtToolTipPointerRow' style='width:11px;'>&nbsp;</div>",
+						"<div class='DwtToolTipPointerRow' style='width:9px;'>&nbsp;</div>",
+						"<div class='DwtToolTipPointerRow' style='width:7px;'>&nbsp;</div>",
+						"<div class='DwtToolTipPointerRow' style='width:5px;'>&nbsp;</div>",
+						"<div class='DwtToolTipPointerRow' style='width:3px;'>&nbsp;</div>",
+						"<div class='DwtToolTipPointerRow' style='width:1px;'>&nbsp;</div>",
+					"</center>",
+				"</div>",
+			"</div>"
 		),
-		width:40,
-		height:45
+		width:5,	// pointer should be at least this many pixels away from ends of the body
+		height:5
 	}
 );
 
 
-
 DwtBorder.registerBorder(
-	"h_sash",
+	"DwtVerticalSash",
 	{	
 		start: AjxBuffer.concat(
-				"<table width=100% cellspacing=0 cellpadding=0><tr>",
-					"<td><div  class=ImgHSash_L></div></td>",
-					"<td class=ImgHSash__H style='width:50%'></td>",
-					"<td><div class=ImgHSashGrip></div></td>",
-					"<td class=ImgHSash__H style='width:50%'></td>",
-					"<td><div  class=ImgHSash_TR></div></td>",
-				"</tr></table>"
+			"<div class='DwtVerticalSash'>",
+				"<center>",
+					"<table cellspacing=0 width=20><tr>",
+						"<td class='DwtVerticalSashContents'>&deg;</td>",
+						"<td class='DwtVerticalSashContents'>&deg;</td>",
+						"<td class='DwtVerticalSashContents'>&deg;</td>",
+						"<td class='DwtVerticalSashContents'>&deg;</td>",
+						"<td class='DwtVerticalSashContents'>&deg;</td>",
+					"</tr></table>",
+				"</center>",
+			"</div>"
 			),
 		end:"",
-		width:10,	//NOT ACCURATE
-		height:7
+		width:0,
+		height:0
 	}
 );
+
+
+DwtBorder.registerBorder(
+	"DwtHorizontalSash",
+	{	
+		start: AjxBuffer.concat(
+			"<div class='DwtHorizontalSash'>",
+				"<table cellspacing=0 cellpadding=1 height='90%'>",
+					"<tr><td height='50%' class='DwtHorizonalSashContents'>&nbsp;</td></tr>",
+					"<tr><td class='DwtHorizonalSashContents'>&deg;</td></tr>",
+					"<tr><td class='DwtHorizonalSashContents'>&deg;</td></tr>",
+					"<tr><td class='DwtHorizonalSashContents'>&deg;</td></tr>",
+					"<tr><td class='DwtHorizonalSashContents'>&deg;</td></tr>",
+					"<tr><td class='DwtHorizonalSashContents'>&deg;</td></tr>",
+					"<tr><td height='50%' class='DwtHorizonalSashContents'>&nbsp;</td></tr>",
+				"</table>",
+			"</div>"
+			),
+		end:"",
+		width:0,
+		height:0
+	}
+);
+
+
+		
+
+		
+	
 
 DwtBorder.registerBorder(
 	"calendar_appt",
@@ -332,120 +346,19 @@ DwtBorder.registerBorder(
 				"</table>",
 			"</div>"
 		),
-		end:	"",
+		end:"",
 		width:4,
 		height:4
 	}
 );
 
-// NOTE:  For the hover border, we show a PNG transparency shadow if the platform supports it cleanly
-//			(eg: in FF, not in IE or Linux)
-DwtBorder.registerBorder( 
-	"hover", 
-	{ 
-		start: AjxBuffer.concat(
-				"<div id='{$id}_tip_t' class='hover_tip_top ImgHoverTip_T'></div>",
-				"<table class=hover_frame_table border=0 cellspacing=0 cellpadding=0>", 
-					"<tr>", 
-						"<td id='{$id}_border_tl' class=ImgHover_TL></td>", 
-						"<td id='{$id}_border_tm' class=ImgHover_T__H></td>", 
-						"<td id='{$id}_border_tr' class=ImgHover_TR></td>", 
-						(AjxEnv.useTransparentPNGs ? "<td><div class='MOWImgCurvedShadow_TR'></div></td>" : ""),
-					"</tr>", 
-					"<tr>",
-						"<td id='{$id}_border_ml' class=ImgHover_L__V></td>", 
-						"<td id='{$id}_border_mm' class=ImgHover__BG><div id='{$id}_contents' class=hover_contents>"
-			),
-		end: AjxBuffer.concat(
-						"</div></td>", 
-						"<td id='{$id}_border_mr' class=ImgHover_R__V></td>", 
-						(AjxEnv.useTransparentPNGs ? "<td><div class='MOWImgCurvedShadow_R__V' style='height:100%'></div></td>" : ""),
-					"</tr>", 
-					"<tr>",
-						"<td id='{$id}_border_bl'><div class=ImgHover_BL></div></td>", 
-						"<td id='{$id}_border_bm' class=ImgHover_B__H></td>", 
-						"<td id='{$id}_border_br'><div class=ImgHover_BR></div></td>", 
-						(AjxEnv.useTransparentPNGs ? "<td></td>" : ""),
-					"</tr>", 
-						(AjxEnv.useTransparentPNGs ? 
-							"<tr><td class='minSize'><div class='MOWImgCurvedShadow_BL'></div></td>"
-								+"<td><div id='{$id}_border_shadow_b' class='MOWImgCurvedShadow_B__H' style='width:100%'></td>"
-								+"<td></td>"
-								+"<td><div style='position:relative;'><div class='MOWImgCurvedShadow_BR CurvedShadow_BR_offset'></div></div></td>"
-							+"</tr>" 
-							: ""
-						),
-				"</table>",
-				"<div id='{$id}_tip_b' class='hover_tip_bottom ImgHoverTip_B'></div>"
-			)
-	} 
-);
 
-DwtBorder.registerBorder( 
-	"SemiModalDialog", 
-	{ 
-		start: AjxBuffer.concat(
-//				"<div id='{$id}_tip_t' class='hover_tip_top ImgSemiModalTip_T'></div>",
-				"<table class=hover_frame_table border=0 cellspacing=0 cellpadding=0>", 
-					"<tr>", 
-						"<td id='{$id}_border_tl' class=ImgSemiModalHeader_TL></td>", 
-						"<td id='{$id}_border_tm' class=ImgSemiModalHeader_T__H colspan=2></td>", 
-						"<td id='{$id}_border_tr' class=ImgSemiModalHeader_TR></td>", 
-						(AjxEnv.useTransparentPNGs ? "<td class='ImgCurvedShadow_TR'></td>" : ""),
-					"</tr>", 
-					"<tr>",
-						"<td id='{$id}_border_ml' class='ImgSemiModalHeader_L__V'></td>", 
-						"<td class='ImgSemiModalHeader__BG'><div id='{$id}_title' class='DwtStickyToolTipTitle'>{$title}</div></td>",
-						"<td class='ImgSemiModalHeader__BG'><div id='{$id}_close' class='DwtStickyToolTipTitle' style='position:relative;top:-3px;left:20px;align:right;'></div></td>",
-						"<td id='{$id}_border_mr' class=ImgSemiModalHeader_R__V></td>", 
-						(AjxEnv.useTransparentPNGs ? "<td valign=top><div class='ImgCurvedShadow_T2R'></div><div class='ImgCurvedShadow_R__V' style='height:100%;'></div></td>" : ""),
-					"</tr>",
-					"<tr>",
-						"<td id='{$id}_border_ml' class='ImgSemiModalBody_TL'></td>", 
-						"<td id='{$id}_title' class='ImgSemiModalBody_T__H' colspan=2></td>",
-						"<td id='{$id}_border_mr' class=ImgSemiModalBody_TR></td>", 
-						(AjxEnv.useTransparentPNGs ? "<td><div class='ImgCurvedShadow_R__V' style='height:100%;'></div></td>" : ""),
-					"</tr>",
-					"<tr>",
-						"<td id='{$id}_border_ml' class=ImgSemiModalBody_L__V></td>", 
-						"<td id='{$id}_border_mm' class=ImgSemiModalBody__BG colspan=2><div id='{$id}_contents'>"
-			),
-		end: AjxBuffer.concat(
-						"</div></td>", 
-						"<td id='{$id}_border_mr' class=ImgSemiModalBody_R__V></td>", 
-						(AjxEnv.useTransparentPNGs ? "<td valign=top><div class='ImgCurvedShadow_R__V' style='height:100%;'></div></td>" : ""),
-					"</tr>", 
-					"<tr>",
-						"<td class=ImgSemiModalBody_B1L></div></td>", 
-						"<td class=ImgSemiModalBody__BG colspan=2></td>", 
-						"<td class=ImgSemiModalBody_B1R></div></td>", 
-						(AjxEnv.useTransparentPNGs ? "<td><div class='ImgCurvedShadow_R__V' style='height:100%;'></div></td>" : ""),
-					"</tr>", 
-					"<tr>",
-						"<td id='{$id}_border_bl' class=ImgSemiModalBody_B2L></div></td>", 
-						"<td id='{$id}_border_bm' class=ImgSemiModalBody_B2__H colspan=2></td>", 
-						"<td id='{$id}_border_br' class=ImgSemiModalBody_B2R></div></td>", 
-						(AjxEnv.useTransparentPNGs ? "<td></td>" : ""),
-					"</tr>", 
-						(AjxEnv.useTransparentPNGs ? 
-							"<tr><td class='ImgCurvedShadow_BL'></td>"
-								+"<td colspan=2><div id='{$id}_border_shadow_b' class='ImgCurvedShadow_B__H' style='width:100%;'></td>"
-								+"<td></td>"
-								+"<td><div style='position:relative;'><div class='ImgCurvedShadow_BR' style='position:absolute;left:-20;top:-14'></div></div></td>"
-							+"</tr>" 
-							: ""
-						),
-				"</table>",
-				"<div id='{$id}_tip_b' class='hover_tip_bottom ImgSemiModalBodyTip_B'></div>"
-			)
-	} 
-);
 
 DwtBorder.registerBorder( 
 	"SplashScreen", 
 	{ 
 		start: AjxBuffer.concat(
-				 "<table class='DialogTable' cellpadding='0' Xborder=1>",
+				 "<table class='DialogTable LightWindowOuterContainer' cellspacing=0 cellpadding='0' Xborder=1>",
 					// top edge
 					"<tr><td><div style='position:relative' class='SplashScreen'>"+
 							"<div class='ImgSplashScreen_blank'></div>",
@@ -457,28 +370,10 @@ DwtBorder.registerBorder(
 							"<div class=SplashScreenLicense><!--$license--></div>",
 							"<div class=SplashScreenOKButton id='<!--$buttonId-->'><!--$button--></div>",
 						"</div></td>",
-
-						(AjxEnv.useTransparentPNGs ? "<td valign=top class='fullHeight'><table cellspacing=0 cellpadding=0 border=0 height=100%>"
-														+"<tr><td height=1><div class='ImgShadowBig_TR'></div></td></tr>"
-														+"<tr><td height=100%><div class='ImgShadowBig_R__V' style='height:100%'></div></td></tr>"
-														+"</table></td>" : ""),
-
 					"</tr>"
 				),
 
 		end: AjxBuffer.concat(
-					// bottom shadow
-						(AjxEnv.useTransparentPNGs ? 
-							"<tr><td>"+
-									"<table cellspacing=0 cellpadding=0 Xborder=1 width=100%><tr>"+
-										"<td><div class='ImgShadowBig_BL'></div><td>"+
-										"<td width=100%><div class='ImgShadowBig_B__H' style='width:100%'></div></td>"+
-									"</tr></table>"+
-								"</td>"+
-						        "<td class='dialog_shadow_c'><div class='ImgShadowBig_BR'></div></td>"+
-							"</tr>"
-						  : ""
-						),
 			     "</table>"
 				)
 	}
