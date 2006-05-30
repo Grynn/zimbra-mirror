@@ -33,23 +33,27 @@ function(method, namespace, namespaceId, soapURI) {
 	var sd = new AjxSoapDoc();
 	sd._xmlDoc = AjxXmlDoc.create();
 	var d = sd._xmlDoc.getDoc();
-	var envEl = d.createElement("soap:Envelope");
 
 	if (!soapURI)
 		soapURI = AjxSoapDoc._SOAP_URI;
-	envEl.setAttribute("xmlns:soap", soapURI);
+	sd._soapURI = soapURI;		
+	
+	var useNS = d.createElementNS && !AjxEnv.isSafari;
+	var envEl = useNS ?  d.createElementNS(soapURI, "soap:Envelope") : d.createElement("soap:Envelope");
+	if (!useNS) envEl.setAttribute("xmlns:soap", soapURI);
 
 	d.appendChild(envEl);
 
-	var bodyEl = d.createElement("soap:Body");
+	var bodyEl = useNS ? d.createElementNS(soapURI, "soap:Body") : d.createElement("soap:Body");
 	envEl.appendChild(bodyEl);
 
-	sd._methodEl = d.createElement(method);
-	if (namespaceId == null)
-		sd._methodEl.setAttribute("xmlns", namespace);
-	else
-		sd._methodEl.setAttribute("xmlns:" + namespaceId, namespace);
-
+	sd._methodEl = namespace && useNS ?  d.createElementNS(namespace, method) : d.createElement(method);
+	if (namespace != null && !useNS) {
+		if (namespaceId == null)
+			sd._methodEl.setAttribute("xmlns", namespace);
+		else
+			sd._methodEl.setAttribute("xmlns:" + namespaceId, namespace);
+	}
 	bodyEl.appendChild(sd._methodEl);
 	return sd;
 };
@@ -120,12 +124,17 @@ function(name, value) {
  * an object whose properties will be created directly under the method el.
  */
 AjxSoapDoc.prototype.set = 
-function(name, value, parent) {
+function(name, value, parent, namespace) {
 	var	doc = this.getDoc();
+	
+	var useNS = doc.createElementNS && !AjxEnv.isSafari;
+		
 	var	p = name
-		? doc.createElement(name)
+		? (namespace && useNS ? doc.createElementNS(namespace, name) : doc.createElement(name))
 		: doc.createDocumentFragment();
 
+	if (namespace && !useNS) p.setAttribute("xmlns", namespace);
+		
 	if (value != null) {
 		if (typeof value == "object") {
 			for (i in value)
@@ -153,7 +162,8 @@ function() {
 	if (header != null) {
 		throw new AjxSoapException("SOAP header already exists", AjxSoapException.ELEMENT_EXISTS, "AjxSoapDoc.prototype.createHeaderElement");
 	}
-	header = d.createElement("soap:Header")
+	var useNS = d.createElementNS && !AjxEnv.isSafari;	
+	header = useNS ? d.createElementNS(this._soapURI, "soap:Header") : d.createElement("soap:Header")
 	envEl.insertBefore(header, envEl.firstChild);
 	return header;
 };

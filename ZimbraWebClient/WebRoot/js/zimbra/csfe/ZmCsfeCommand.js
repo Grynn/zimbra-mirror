@@ -123,8 +123,8 @@ function(params) {
 	var soapDoc = params.soapDoc;
 	// Add the SOAP header and context
 	var hdr = soapDoc.createHeaderElement();
-	var context = soapDoc.set("context", null, hdr);
-	context.setAttribute("xmlns", "urn:zimbra");
+	var context = soapDoc.set("context", null, hdr, "urn:zimbra");
+
 	if (params.noSession)
 		soapDoc.set("nosession", null, context);
 	var sessionId = ZmCsfeCommand.getSessionId();
@@ -353,8 +353,8 @@ function() {
 ZmCsfeCommand.invoke =
 function(soapDoc, noAuthTokenRequired, serverUri, targetServer, useXml, noSession, changeToken) {
 	var hdr = soapDoc.createHeaderElement();
-	var context = soapDoc.set("context", null, hdr);
-	context.setAttribute("xmlns", "urn:zimbra");
+	var context = soapDoc.set("context", null, hdr, "urn:zimbra");
+
 	if (noSession)
 		soapDoc.set("nosession", null, context);
 	var sessionId = ZmCsfeCommand.getSessionId();
