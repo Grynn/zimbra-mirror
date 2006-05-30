@@ -262,7 +262,7 @@ function(element) {
 
 DwtHtmlEditor.prototype.insertText =
 function(text) {
-	var node = document.createTextNode(text); 
+	var node = document.createTextNode(text);
 	this._insertNodeAtSelection(node);
 };
 
@@ -497,9 +497,15 @@ function(node) {
 	if (!AjxEnv.isIE) {
 		var range = this._getRange();
 		this._getIframeWin().getSelection().removeAllRanges();
-		range.deleteContents();
-		range.insertNode(node);
-		range.selectNodeContents(node);
+		try {
+			range.deleteContents();
+			range.insertNode(node);
+			range.selectNodeContents(node);
+		}
+		catch (e) {
+			DBG.println("DwtHtmlEditor#_insertNodeAtSelect");
+			DBG.println("&nbsp;&nbsp;"+e);
+		}
 	} else {
 		var sel = this._getRange();
 		var range = sel.createRange();
