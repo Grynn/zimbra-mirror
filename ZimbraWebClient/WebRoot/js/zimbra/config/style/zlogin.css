@@ -23,6 +23,47 @@
  * ***** END LICENSE BLOCK *****
  */
 
+ 
+ 
+P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON, A {
+	@FontFamily-default@
+}
+
+HTML {
+	@FullSize@
+}
+
+BODY {
+	@ChromeBg@
+	@FullSize@
+	margin: 0px;
+}
+
+FORM {
+	margin: 0;
+	padding: 0;
+}
+
+
+
+.DwtButton 								{	@NormalButton@					}
+.DwtButton-activated 					{	@NormalButton-hover@			}
+.DwtButton-triggered					{	@NormalButton-clicked@			}	
+.DwtButton-toggled						{	@NormalButton-toggled@			}	
+.DwtButton-disabled						{	@NormalButton-disabled@			}	
+.DwtButton-active						{	@NormalButton-default@			}	
+.DwtButton-focused						{	@NormalButton-focused@			}	
+		
+.DwtButton .Text 						{	@NormalButtonText@				}
+.DwtButton-activated .Text				{	@NormalButtonText-hover@		}
+.DwtButton-triggered .Text				{	@NormalButtonText-clicked@		}	
+.DwtButton-toggled .Text				{	@NormalButtonText-clicked@		}	
+.DwtButton-disabled .Text				{	@NormalButtonText-disabled@		}	
+.DwtButton-active .Text					{	@NormalButtonText-default@		}	
+.DwtButton-focused .Text				{	@NormalButtonText-focused@		}	
+
+
+
 
 /* Outer panel for the entire login/splash dialog */
 #ZLoginPanel {
