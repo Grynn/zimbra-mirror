@@ -134,7 +134,8 @@
 
 /* Body container (div) for the tooltip. */
 .DwtToolTipBody {
-		padding:2px;	
+	@PageBg@
+	padding:2px;	
 }
 
 /* Containers (divs) for the top and bottom pointers of the tooltips.
