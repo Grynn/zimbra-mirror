@@ -86,8 +86,8 @@ if [ $? -ne 0 ]; then
 fi
 
 ${zimbra_home}/openldap/bin/ldapmodify -a -c -H ldap://127.0.0.1:389 -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${config_dir}/zimbra.ldif
-${zimbra_home}/openldap/bin/ldapmodify -a -c -H ldap://127.0.0.1:389 -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${config_dir}/zimbra_globalconfig.ldif 
-${zimbra_home}/openldap/bin/ldapmodify -a -c -H ldap://127.0.0.1:389 -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${config_dir}/zimbra_defaultcos.ldif
+${zimbra_home}/openldap/bin/ldapmodify -a -c -H ldap://127.0.0.1:389 -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${source_config_dir}/zimbra_globalconfig.ldif 
+${zimbra_home}/openldap/bin/ldapmodify -a -c -H ldap://127.0.0.1:389 -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${source_config_dir}/zimbra_defaultcos.ldif
 
 if [ $? -ne 0 ]; then
 	exit 2
