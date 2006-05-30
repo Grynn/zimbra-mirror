@@ -26,11 +26,14 @@ function DwtToolTip(shell, className, dialog) {
 	this.shell.getHtmlElement().appendChild(this._div);
 	Dwt.setZIndex(this._div, Dwt.Z_HIDDEN);
 	Dwt.setLocation(this._div, Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
-	var borderStyle = "hover";
 	var substitutions = { id: "tooltip" };
-	this._borderStart = DwtBorder.getBorderStartHtml(borderStyle, substitutions);
-	this._borderEnd = DwtBorder.getBorderEndHtml(borderStyle, substitutions);	
+	this._borderStart = DwtBorder.getBorderStartHtml(this._borderStyle, substitutions);
+	this._borderEnd = DwtBorder.getBorderEndHtml(this._borderStyle, substitutions);
+	this._borderWidth = DwtBorder.getBorderWidth(this._borderStyle);
+	this._borderHeight = DwtBorder.getBorderHeight(this._borderStyle);
 }
+
+DwtToolTip.prototype._borderStyle = "DwtToolTip";
 
 DwtToolTip.TOOLTIP_DELAY = 750;
 
@@ -77,124 +80,129 @@ function() {
 }
 
 DwtToolTip.prototype._positionElement = 
-function(element, x, y, baseId, clip, dialog) {
+function(element, startX, startY, baseId, clip, dialog) {
 	var WINDOW_GUTTER = 5;
 	var POPUP_OFFSET_X = 8;
 	var POPUP_OFFSET_Y = 8;
 
-	var tt = document.getElementById(baseId+'_tip_t');
-	var tb = document.getElementById(baseId+'_tip_b');
-	var t = tt;
+	var topPointer = document.getElementById(baseId+'TopPointer'),
+		size = Dwt.getSize(topPointer),
+		topPointerWidth = size.x,
+		topPointerHeight = size.y
+	;
 
-	var ex = x;
-	var ey = y;
+	var bottomPointer = document.getElementById(baseId+'BottomPointer'),
+		size = Dwt.getSize(bottomPointer)
+		bottomPointerWidth = size.x,
+		bottomPointerHeight = size.y
+	;
 
-	var w = DwtShell.getShell(window).getSize();
-	var ww = w.x;
-	var wh = w.y;
+	var pointer = topPointer;
 
-	var p = Dwt.getSize(element);
-	var pw = p.x;
-	var ph = p.y;
+	var wdSize = DwtShell.getShell(window).getSize(),
+		wdWidth = wdSize.x,
+		wdHeight = wdSize.y
+	;
 
-	var btEl = document.getElementById(baseId+'_border_tm');
-	var blEl = document.getElementById(baseId+'_border_ml');
-	var brEl = document.getElementById(baseId+'_border_mr');
-	var bbEl = document.getElementById(baseId+'_border_bm');
+	var popupSize = Dwt.getSize(element),
+		popupWidth = popupSize.x,
+		popupHeight = popupSize.y
+	;
 
-	var bth = Dwt.getSize(btEl).y;
-	var blw = Dwt.getSize(blEl).x;
-	var brw = Dwt.getSize(brEl).x;
-	var bbh = Dwt.getSize(bbEl).y;
+	var topBorderHeight = this._borderHeight,
+		bottomBorderHeight = this._borderHeight,
+		leftBorderWidth = this._borderWidth,
+		rightBorderWidth = this._borderWidth
+	;
 
-	var ttw = Dwt.getSize(tt).x;
-	var tth = Dwt.getSize(tt).y;
-	var tbw = Dwt.getSize(tb).x;
-	var tbh = Dwt.getSize(tb).y;
 
+/*
 	if (AjxEnv.useTransparentPNGs) {
 		var bsEl = document.getElementById(baseId+'_border_shadow_b');
 		var bsh = Dwt.getSize(bsEl).y;
 	}
+*/
 
 	/***
 	DBG.println(
 		"---<br>"+
-	    "event: &lt;"+ex+","+ey+"><br>"+
-		"window: "+ww+"x"+wh+"<br>"+
-	    "popup: "+pw+"x"+ph+"<br>"+
+	    "event: &lt;"+startX+","+startY+"><br>"+
+		"window: "+wdWidth+"x"+wdHeight+"<br>"+
+	    "popup: "+popupWidth+"x"+popupHeight+"<br>"+
 	    "borders: top="+btEl+", left="+blEl+", right="+brEl+", bottom="+bbEl+"<br>"+
-	    "borders: top="+bth+", left="+blw+", right="+brw+", bottom="+bbh+"<br>"+
-	    "tip: top="+ttw+"x"+tth+", bottom="+tbw+"x"+tbh
+	    "borders: top="+topBorderHeight+", left="+leftBorderWidth+", right="+rightBorderWidth+", bottom="+bottomBorderHeight+"<br>"+
+	    "tip: top="+topPointerWidth+"x"+topPointerHeight+", bottom="+bottomPointerWidth+"x"+bottomPointerHeight
     );
     /***/
 
-	var px = ex - pw / 2 - POPUP_OFFSET_X;
-	var py;
+	var popupX = startX - popupWidth / 2 - POPUP_OFFSET_X,
+		popupY
+	;
 	
-	var ty;
-	var tw;
+	var pointerY,
+		pointerX,
+		pointerWidth
+	;
 
-	// tip up
-	var adjust = tbh; // NOTE: because bottom tip is relative
-	if (ph + ey + tth - bth + POPUP_OFFSET_Y < wh - WINDOW_GUTTER + adjust) {
-		py = ey + tth - bth + POPUP_OFFSET_Y;
-		tb.style.display = "none";
-		ty = bth - tth;
-		tw = ttw;
-		t = tt;
+	// top pointer
+	// NOTE: bottomPointerHeight added sbecause bottom pointer is relative
+	if (popupHeight + startY + topPointerHeight - topBorderHeight + POPUP_OFFSET_Y < wdHeight - WINDOW_GUTTER + bottomPointerHeight) {
+		popupY = startY + topPointerHeight - topBorderHeight + POPUP_OFFSET_Y;
+		bottomPointer.style.display = "none";
+		pointerY = topBorderHeight - topPointerHeight;
+		pointerWidth = topPointerWidth;
+		pointer = topPointer;
 	}
 	
-	// tip down
+	// bottom pointer
 	else {
-		py = ey - ph - tbh + bbh - POPUP_OFFSET_Y;
-		py += tbh; // NOTE: because bottom tip is relative
-		tt.style.display = "none";
-		ty = -bbh;
+		popupY = startY - popupHeight - bottomPointerHeight + bottomBorderHeight - POPUP_OFFSET_Y;
+		popupY += bottomPointerHeight; // NOTE: because bottom pointer is relative
+		topPointer.style.display = "none";
+		pointerY = -bottomBorderHeight;
 		if (AjxEnv.useTransparentPNGs) {
-			ty -= bsh;
+			pointerY -= bsh;
 		}
-		tw = tbw;
-		t = tb;
+		pointerWidth = bottomPointerWidth;
+		pointer = bottomPointer;
 	}
 
-	// make sure popup is wide enough for tip graphic
-	if (pw - blw - brw < tw) {
-		var contentEl = document.getElementById(baseId+"_contents");
-		contentEl.width = tw; // IE
-		contentEl.style.width = String(tw)+"px"; // everyone else
+	// make sure popup is wide enough for pointer
+	if (popupWidth - leftBorderWidth - rightBorderWidth < pointerWidth) {
+		var contentEl = document.getElementById(baseId+"Contents");
+		contentEl.width = pointerWidth; // IE
+		contentEl.style.width = String(pointerWidth)+"popupX"; // everyone else
 	}
 	
 	// adjust popup x-location
-	if (px < WINDOW_GUTTER) {
-		px = WINDOW_GUTTER;
+	if (popupX < WINDOW_GUTTER) {
+		popupX = WINDOW_GUTTER;
 	}
-	else if (px + pw > ww - WINDOW_GUTTER) {
-		px = ww - WINDOW_GUTTER - pw;
+	else if (popupX + popupWidth > wdWidth - WINDOW_GUTTER) {
+		popupX = wdWidth - WINDOW_GUTTER - popupWidth;
 	}
 	
-	// adjust tip x-location
-	var tx = ex - px - tw / 2;
-	if (tx + tw > pw - brw) {
-		tx = pw - brw - tw;
+	// adjust pointer x-location
+	pointerX = startX - popupX - pointerWidth / 2;
+	if (pointerX + pointerWidth > popupWidth - rightBorderWidth) {
+		pointerX = popupWidth - rightBorderWidth - pointerWidth;
 	}
-	if (tx < blw) {
-		tx = blw;
+	if (pointerX < leftBorderWidth) {
+		pointerX = leftBorderWidth;
 	}
 
-	t.style.left = tx;
-	t.style.top = ty;
+	pointer.style.left = pointerX;
+	pointer.style.top = pointerY;
 	if (clip) {
-		if (t == tb) {
-			var y = t.offsetTop;
-			element.style.clip = "rect(auto,auto,"+(y + tbh)+",auto)";
+		if (pointer == bottomPointer) {
+			element.style.clip = "rect(auto,auto,"+(pointer.offsetTop + bottomPointerHeight)+",auto)";
 		}
 		else {
 			element.style.clip = "rect(auto,auto,auto,auto)";
 		}
 	}
 
-	Dwt.setLocation(element, px, py);
+	Dwt.setLocation(element, popupX, popupY);
 	var zIndex = dialog ? dialog.getZIndex() + Dwt._Z_INC : Dwt.Z_TOOLTIP;
 	Dwt.setZIndex(element, zIndex);
 }
