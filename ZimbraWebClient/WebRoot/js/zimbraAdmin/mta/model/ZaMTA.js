@@ -565,6 +565,7 @@ ZaMTAQMsgItem.A_id = "id";
 ZaMTAQMsgItem.A_recipients = "to";
 ZaMTAQMsgItem.A_size = "size";
 ZaMTAQMsgItem.A_origin_ip = "addr";
+ZaMTAQMsgItem.A_error = "reason";
 
 ZaMTAQMsgItem.prototype = new ZaItem;
 ZaMTAQMsgItem.prototype.constructor = ZaMTAQMsgItem;
@@ -609,6 +610,8 @@ function() {
 		html[idx++] = AjxStringUtil.htmlEncode(ZaMsg.PQ_ContentFilter + " " + this[ZaMTAQMsgItem.A_content_filter]);		
 		html[idx++] = "<br>";
 		html[idx++] = AjxStringUtil.htmlEncode(ZaMsg.PQ_Size + " " + this[ZaMTAQMsgItem.A_size]);		
+		html[idx++] = "<br>";
+		html[idx++] = AjxStringUtil.htmlEncode(ZaMsg.PQ_Reason + " " + this[ZaMTAQMsgItem.A_error]);				
 
 		this._toolTip = html.join("");
 	}
