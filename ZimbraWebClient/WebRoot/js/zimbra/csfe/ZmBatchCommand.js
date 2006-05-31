@@ -64,6 +64,11 @@ function ZmBatchCommand(appCtxt, continueOnError) {
 	this._errorCallbacks = [];
 };
 
+ZmBatchCommand.prototype.toString =
+function() {
+	return "ZmBatchCommand";
+};
+
 /**
  * Adds a command to the list of commands to run as part of this batch request.
  * 
@@ -72,6 +77,11 @@ function ZmBatchCommand(appCtxt, continueOnError) {
 ZmBatchCommand.prototype.add =
 function(cmd) {
 	this._cmds.push(cmd);
+};
+
+ZmBatchCommand.prototype.size =
+function() {
+	return this._cmds.length;
 };
 
 /**
