@@ -342,7 +342,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 						  onChange:ZaTabView.onFormFieldChanged
 					  	},		
 						{ ref: ZaGlobalConfig.A_zimbraPop3SSLBindPort, type:_TEXTFIELD_, 
-						  label: ZaMsg.NAD_POP_Port,
+						  label: ZaMsg.NAD_POP_SSL_Port,
 						 width: "5em",
 						  onChange:ZaTabView.onFormFieldChanged
 					  	},					  	
@@ -352,7 +352,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 						  onChange:ZaTabView.onFormFieldChanged
 					  	},	
 						{ ref: ZaGlobalConfig.A_zimbraPop3SSLProxyBindPort, type:_TEXTFIELD_, 
-						  label: ZaMsg.NAD_POP_Port,
+						  label: ZaMsg.NAD_POP_SSL_proxy_Port,
 						 width: "5em",
 						  onChange:ZaTabView.onFormFieldChanged
 					  	},	
