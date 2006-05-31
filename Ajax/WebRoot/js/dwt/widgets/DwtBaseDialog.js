@@ -174,6 +174,7 @@ function(loc) {
 	this.setZIndex(thisZ);
 	this._poppedUp = true;
 	// REMOVE this.focus();
+
 	// Push our tab group
 	var kbMgr = this._shell.getKeyboardMgr();
 	kbMgr.pushTabGroup(this._tabGroup, true);
@@ -230,7 +231,7 @@ function() {
 		
 		// Pop our tab group
 		var kbMgr = this._shell.getKeyboardMgr();
-		kbMgr.popTabGroup();
+		kbMgr.popTabGroup(this._tabGroup);
 		
 	}
 }

@@ -301,7 +301,7 @@ function(member, checkEnabled, dontNotify) {
 	
 	if (!this.__checkEnabled(member, checkEnabled))
 		return false;
-		
+
 	var tg = this.__getTabGroupForMember(member);
 	if (tg != null) {
 		this.__currFocusMember = member;
@@ -439,7 +439,7 @@ function(member, checkEnabled) {
 	var a = this.__members.getArray();
 	var sz = this.__members.size();
 
-	// Start working from the member to the immediate left of <member> leftwards
+	// Start working from the member to the immediate left of <member> rightwards
 	for (var i = this.__members.indexOf(member) + 1; i < sz; i++) {
 		var nextMember = a[i];
 		/* if sibling is not a tabgroup, then it is the next child. If the
@@ -453,7 +453,7 @@ function(member, checkEnabled) {
 				return nextMember;
 		}
 	}
-	
+
 	/* If we have fallen through to here it is because the tag group only has 
 	 * one member or we are at the end of the list. So we roll up to the parent, 
 	 * unless we are at the root in which case we return null; */
@@ -475,14 +475,19 @@ function(checkEnabled) {
 	 * rightmost element */
 	for (var i = this.__members.size() - 1; i >= 0; i--) {
 		var member = a[i]
-		if (!(member instanceof DwtTabGroup) && this.__checkEnabled(member, checkEnabled))
+		if (!(member instanceof DwtTabGroup)) {
+			if (this.__checkEnabled(member, checkEnabled))
+				break;
+		} else if (((member = member.__getRightMostMember(checkEnabled)) != null)
+				&& this.__checkEnabled(member, checkEnabled)) {
 			break;
-		else if (((member = member.__getRightMostMember(checkEnabled)) != null)
-				&& this.__checkEnabled(member, checkEnabled))
-			break;
+		}
 	}
 
-	return member;	
+	if (member && this.__checkEnabled(member, checkEnabled))
+		return member;
+	else
+		return null;
 }
 
 /**
@@ -492,24 +497,28 @@ function(checkEnabled) {
  */
 DwtTabGroup.prototype.__getLeftMostMember =
 function(checkEnabled) {
-return;	
 	var sz = this.__members.size();
 	var a = this.__members.getArray();
 	var member = null;
-	
-	/* Work backwards from the rightmost member. If the member is a tabgroup, then
+
+	/* Work forwards from the leftmost member. If the member is a tabgroup, then
 	 * recurse into it. If member is not a tabgroup, return it as it is the 
 	 * rightmost element */
 	for (var i = 0; i < sz; i++) {
 		var member = a[i]
-		if (!(member instanceof DwtTabGroup) && this.__checkEnabled(member, checkEnabled)) 
+		if (!(member instanceof DwtTabGroup)) {
+			if  (this.__checkEnabled(member, checkEnabled)) 
+				break;
+		} else if (((member = member.__getLeftMostMember(checkEnabled)) != null)
+				&& this.__checkEnabled(member, checkEnabled)) {
 			break;
-		else if (((member = member.__getLeftMostMember(checkEnabled)) != null)
-				&& this.__checkEnabled(member, checkEnabled))
-			break;
+		}
 	}
 
-	return member;	
+	if (member && this.__checkEnabled(member, checkEnabled))
+		return member;
+	else
+		return null;
 }
 
 

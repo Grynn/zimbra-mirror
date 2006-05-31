@@ -48,8 +48,10 @@ function DwtKeyboardMgr() {
 	this.__blockGlobalHandling = false;
 	/**@private*/
 	this.__tabGroupChangeListenerObj = new AjxListener(this, this.__tabGrpChangeListener);
+	/**@private*/
+	this._kbEventStatus = DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
 	
-	this.__currTabGroup  = new DwtTabGroup();
+	this.__currTabGroup  = null;
 };
 
 /** This constant is thrown as an exeption
@@ -119,31 +121,67 @@ function(tabGroup, blockGlobalHandling) {
  * tab group (if there is one) then becomes the current tab group. The previous
  * value for "block global handling" is also reinstated
  * 
- * @return the popped tab group
+ * @param {DwtTabGroup} tabGroup Tab group to pop. If supplied, then the tab group
+ * 		stack is searched for the tab group and it is removed. If null, then the
+ * 		top of the tab group stack is popped
+ * 
+ * @return the popped tab group, or null if there is one or less tab groups
  * @type DwtTabGroup
  */
 DwtKeyboardMgr.prototype.popTabGroup =
-function() {
+function(tabGroup) {
 	if (!this.__keyboardHandlingInited)
 		throw DwtKeyboardMgr.KEYMAP_NOT_REGISTERED;
-		
-	var tabGroup = this.__tabGrpStack.pop();
 	
-	if (tabGroup)
-		tabGroup.removeFocusChangeListener(this.__tabGroupChangeListenerObj);
+	if (this.__tabGrpStack.length <= 1)
+		return null;
+	
+	/* If we are popping a tab group that is not on the top of the stack then 
+	 * we need to find it and remove it. We also need to move the blockHandling
+	 * value to the item that is on top of it in the stack */
+	if (tabGroup && this.__tabGrpStack[this.__tabGrpStack.length-1] != tabGroup) {
+		var a = this.__tabGrpStack;
+		var len = a.length;
+		for (var i = len - 1; i >= 0; i--) {
+			if (tabGroup == a[i]) {
+				a[i].dump();
+				break;
+			}
+		}
+		
+		/* If there is no match in the stack for tabGroup, then simply return null,
+		 * else if the match is not the top item on the stack, then remove it from 
+		 * the stack and transfer its blockHandling state to the item on top of it.
+		 * Else we are dealing with the topmost item on the stack so handle it 
+		 * as a simple pop */
+		if (i < 0) { // No match
+			return null;
+		} else if (i != len - 1) { // item is not on top
+			// Adjust the block handling stack
+			var bhs = this.__blockHandlingStack;
+			bhs[i + 1] = bhs[i];
+			bhs.splice(i, 1);
+			// Remove tabGroup
+			a.splice(i, 1);
+			return tabGroup;
+		}
+	} 
+
+	var tabGroup = this.__tabGrpStack.pop();
+	tabGroup.removeFocusChangeListener(this.__tabGroupChangeListenerObj);
 	
 	var currTg = null;
 	var blockHandling = false;
 	if (this.__tabGrpStack.length > 0) {
 		currTg = this.__tabGrpStack[this.__tabGrpStack.length-1];
-		blockHandling = this.__blockHandlingStack[this.__blockHandlingStack.length-1];
+		blockHandling = this.__blockHandlingStack.pop();
 		var focusMember = currTg.getFocusMember();
 		if (!focusMember)
 			focusMember = currTg.resetFocusMember(true);
 		if (focusMember)
 			this.grabFocus(focusMember);
 	}
-	this.__crrTabGroup = currTg ? currTg : 	new DwtTabGroup();
+	this.__currTabGroup = currTg;
 	this.__blockGlobalHandling = blockHandling;
 	return tabGroup;
 };
@@ -152,18 +190,21 @@ function() {
  * Replaces the current tab group with <code>tabGroup</code>
  * 
  * @param {DwtTagGroup} tabGroup Tab group to use
+ * @param {boolean} blockGlobalHandling if true, then key actions are not dispatched
+ * 		to the global key action handler for this tab group. (optional)
  * 
  * @return old tab group
  * @type DwtTabGroup
+ * 
+ * @see #blockGlobalHandling
  */
 DwtKeyboardMgr.prototype.setTabGroup =
-function(tabGroup) {
+function(tabGroup, blockGlobalHandling) {
 	if (!this.__keyboardHandlingInited)
 		throw DwtKeyboardMgr.KEYMAP_NOT_REGISTERED;
 	
 	var otg = this.popTabGroup();
-	this.pushTabGroup(tabGroup);
-	this.__currTabGroup = tabGroup;
+	this.pushTabGroup(tabGroup, blockGlobalHandling);
 	return otg;
 };
 
@@ -278,12 +319,11 @@ function() {
  */
 DwtKeyboardMgr.prototype.__doGrabFocus =
 function(focusObj) {
-	//DBG.println(AjxDebug.DBG3, "_doGrabFocus");
 	if (!focusObj)
 		return;
 		
 	if (focusObj instanceof DwtControl) {
-		//DBG.println(AjxDebug.DBG3, "focusObj is instance of DwtControl: " + focusObj);
+		//DBG.println("focusObj is instance of DwtControl: " + focusObj);
 		/* If the current focus of obj and the one grabbing focus are both DwtControls
 		 * then we need to simulate a blur on the control losing focus */
 		if (this.__dwtCtrlHasFocus && this.__focusObj instanceof DwtControl) {
@@ -357,14 +397,14 @@ function(ev) {
  */
 DwtKeyboardMgr.__keyUpHdlr =
 function(ev) {
-	DBG.println(AjxDebug.DBG1, "DwtKeyboardMgr.__keyUpHdlr");
+	//DBG.println(AjxDebug.DBG1, "DwtKeyboardMgr.__keyUpHdlr");
 	var kbMgr = DwtShell.getShell(window).getKeyboardMgr();
 	var kev = DwtShell.keyEvent;
 	kev.setFromDhtmlEvent(ev);
 	var keyCode = kev.keyCode;
 	
 	if (kbMgr._kbEventStatus != DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED) {
-		DBG.println(AjxDebug.DBG1, "DwtKeyboardMgr.__keyUpHdlr: KEY UP BLOCKED");
+		//DBG.println(AjxDebug.DBG1, "DwtKeyboardMgr.__keyUpHdlr: KEY UP BLOCKED");
 		kev._stopPropagation = true;
 		kev._returnValue = false;
 		kev.setToDhtmlEvent(ev);
@@ -377,13 +417,13 @@ function(ev) {
  */
 DwtKeyboardMgr.__keyPressHdlr =
 function(ev) {
-	DBG.println(AjxDebug.DBG1, "DwtKeyboardMgr.__keyPressHdlr");
+	//DBG.println(AjxDebug.DBG1, "DwtKeyboardMgr.__keyPressHdlr");
 	var kbMgr = DwtShell.getShell(window).getKeyboardMgr();
 	var kev = DwtShell.keyEvent;
 	kev.setFromDhtmlEvent(ev);
 	var keyCode = kev.keyCode;
 	
-	if (kbMgr._kbEventStatus != undefined && kbMgr._kbEventStatus != DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED) {
+	if (kbMgr._kbEventStatus != DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED) {
 		//DBG.println(AjxDebug.DBG1, "DwtKeyboardMgr.__keyPressHdlr: KEY PRESS BLOCKED");
 		kev._stopPropagation = true;
 		kev._returnValue = false;
@@ -441,7 +481,7 @@ function(kbMgr, obj) {
 		//DBG.println(AjxDebug.DBG1, "CONTROL NOT FOCUS: _focusObj: " + kbMgr.__focusObj + " - obj: " + obj);
 		if (kbMgr.__focusObj != obj) {
 			//DBG.println(AjxDebug.DBG1, "FOCUS OBJECT NOT THE TAB OBJECT FOCUS");
-			if (kbMgr.__currTabGroup.setFocusMember(obj)) {
+			if (kbMgr.__currTabGroup && kbMgr.__currTabGroup.setFocusMember(obj)) {
 				kbMgr.__focusObj = obj;
 				kbMgr.__oldFocusObj = null;
 			} else {
@@ -488,28 +528,37 @@ function(ev) {
 	 * focus to the current focus object in the tab hierarchy i.e. grab back control
 	 */
 	 if (keyCode == DwtKeyMapMgr.TAB_KEYCODE) {
-	 	// If a menu is popped up then don't act on the Tab
-	 	if (!DwtMenu.menuShowing()) {
-		 	DBG.println(AjxDebug.DBG3, "TAB HIT!");
-		 	// If the tab hit is in an element or if the current tab group has
-		 	// a focus member
-			if (focusInTGMember || kbMgr.__currTabGroup.getFocusMember()) {
-			 	if (!kev.shiftKey)
-			 		kbMgr.__currTabGroup.getNextFocusMember(true);
-			 	else
-			 		kbMgr.__currTabGroup.getPrevFocusMember(true);
-		 	} else {
-		 		DBG.println(AjxDebug.DBG1, "RESETTING TO FIRST");
-		 		// If there is no current focus member, then reset
-		 		kbMgr.__currTabGroup.resetFocusMember(true);
+	 	if (kbMgr.__currTabGroup != null) {
+		 	// If a menu is popped up then don't act on the Tab
+		 	if (!DwtMenu.menuShowing()) {
+			 	//DBG.println(AjxDebug.DBG1, "TAB HIT!");
+			 	// If the tab hit is in an element or if the current tab group has
+			 	// a focus member
+				if (focusInTGMember || kbMgr.__currTabGroup.getFocusMember()) {
+				 	if (!kev.shiftKey)
+				 		kbMgr.__currTabGroup.getNextFocusMember(true);
+				 	else
+				 		kbMgr.__currTabGroup.getPrevFocusMember(true);
+			 	} else {
+			 		//DBG.println(AjxDebug.DBG1, "RESETTING TO FIRST");
+			 		// If there is no current focus member, then reset
+			 		kbMgr.__currTabGroup.resetFocusMember(true);
+			 	}
 		 	}
+			kbMgr._kbEventStatus = DwtKeyboardMgr.__KEYSEQ_HANDLED;
+			kev._stopPropagation = true;
+			kev._returnValue = false;
+			kev.setToDhtmlEvent(ev);
+			return false;
+	 	} else {
+	 		// No tab groups registered. Let the browser deal with tabs
+			kbMgr._kbEventStatus = DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
+			kev._stopPropagation = false;
+			kev._returnValue = true;
+			kev.setToDhtmlEvent(ev);
+			return true;	 		
 	 	}
-		kbMgr._kbEventStatus = DwtKeyboardMgr.__KEYSEQ_HANDLED;
-		kev._stopPropagation = true;
-		kev._returnValue = false;
-		kev.setToDhtmlEvent(ev);
-		return false;
-	 } else if (!focusInTGMember && AjxEnv.isGecko && kev.target instanceof HTMLHtmlElement) {
+	 } else if (kbMgr.__currTabGroup && !focusInTGMember && AjxEnv.isGecko && kev.target instanceof HTMLHtmlElement) {
 	 	/* With FF we focus get set to the <html> element when tabbing in
 	 	 * from the address or search fields. What we want to do is capture
 	 	 * this here and reset the focus to the first element in the tabgroup
@@ -576,7 +625,7 @@ function(ev) {
 		//DBG.println("Dispatching to map: " + mapName);
 		handled = kbMgr.__dispatchKeyEvent(obj, mapName, kev);
 	}
-	
+
 	if (!kbMgr.__blockGlobalHandling && handled == DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED && kbMgr.__globalKeyActionHdlr != null) {
 		handled = kbMgr.__dispatchKeyEvent(kbMgr.__globalKeyActionHdlr, 
 							kbMgr.__globalKeyActionHdlr.getKeyMapNameToUse(), kev);

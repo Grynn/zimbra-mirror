@@ -1104,6 +1104,16 @@ function(clickedEl, ev) {
 				this._selEv.detail = DwtListView.ITEM_SELECTED;
 			}
 			
+			// Remove the keyboard hilite from the current anchor
+			if (this._kbAnchor != clickedEl) {
+				var kbAnchor = this._kbAnchor;
+				var selClass = Dwt.getAttr(kbAnchor, DwtListView._SELECTED_STYLE_CLASS)
+				if (kbAnchor.className.indexOf(selClass) != -1)
+					kbAnchor.className = selClass;
+				else 
+					kbAnchor.className = Dwt.getAttr(kbAnchor, DwtListView._STYLE_CLASS);
+			}
+			
 			// The element that was part of the ctrl action always becomes
 			// the anchor since it gets focus
 			this._selAnchor = this._kbAnchor = clickedEl;
