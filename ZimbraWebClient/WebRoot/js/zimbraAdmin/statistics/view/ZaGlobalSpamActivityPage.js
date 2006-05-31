@@ -49,9 +49,6 @@ function() {
 
 ZaGlobalSpamActivityPage.prototype._createHTML = 
 function () {
-	var logHost = this._app.getGlobalConfig().attrs[ZaServer.A_zimbraLogHostname];
-	if(logHost)
-		logHost=["https://",logHost,":7071"].join("");	
 	var idx = 0;
 	var html = new Array(50);
 	html[idx++] = "<div style='width:70ex;'>";	
@@ -59,31 +56,23 @@ function () {
 	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsHour) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";
 	html[idx++] = "<img src='";
-	if(logHost)
-		html[idx++] = logHost;	
 	html[idx++] = "/service/statsimg/amavis.ALL.hour.Spam_Activity.gif'>";
 	html[idx++] = "</td></tr>";
 	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsDay) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";
 	html[idx++] = "<img src='";
-	if(logHost)
-		html[idx++] = logHost;	
 	html[idx++] = "/service/statsimg/amavis.ALL.day.Spam_Activity.gif'>";
 	html[idx++] = "</td></tr>";
 	html[idx++] = "<tr valign='top'><td align='left'>&nbsp;&nbsp;</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsMonth) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";
 	html[idx++] = "<img src='";
-	if(logHost)
-		html[idx++] = logHost;	
 	html[idx++] = "/service/statsimg/amavis.ALL.month.Spam_Activity.gif'>";
 	html[idx++] = "</td></tr>";
 	html[idx++] = "<tr valign='top'><td align='left'>&nbsp;&nbsp;</td></tr>";		
 	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsYear) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";
 	html[idx++] = "<img src='";
-	if(logHost)
-		html[idx++] = logHost;	
 	html[idx++] = "/service/statsimg/amavis.ALL.year.Spam_Activity.gif'>";
 	html[idx++] = "</td></tr>";
 	html[idx++] = "</table>";

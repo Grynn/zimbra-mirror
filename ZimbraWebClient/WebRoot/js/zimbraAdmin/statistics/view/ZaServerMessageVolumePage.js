@@ -49,29 +49,26 @@ function() {
 
 ZaServerMessageVolumePage.prototype.setObject =
 function (item) {
-	this._logHost = this._app.getGlobalConfig().attrs[ZaServer.A_zimbraLogHostname];
-	if(this._logHost)
-		this._logHost=["https://",this._logHost,":7071"].join("");	
-			
+
 	if(item) {
 		if(item.attrs && item.attrs[ZaServer.A_ServiceHostname]) {
 			var imgElement = document.getElementById(this._hourImgID);
-			var newSrc =this._logHost +  "/service/statsimg/mta." + item.name + ".hour.Message_Bytes.gif";
+			var newSrc = "/service/statsimg/mta." + item.name + ".hour.Message_Bytes.gif";
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}
 			imgElement = document.getElementById(this._dayImgID);	
-			newSrc = this._logHost + "/service/statsimg/mta." + item.name + ".day.Message_Bytes.gif";			
+			newSrc = "/service/statsimg/mta." + item.name + ".day.Message_Bytes.gif";			
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}
 			imgElement = document.getElementById(this._monthImgID);		
-			newSrc = this._logHost + "/service/statsimg/mta." + item.name + ".month.Message_Bytes.gif";			
+			newSrc = "/service/statsimg/mta." + item.name + ".month.Message_Bytes.gif";			
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}			
 			imgElement = document.getElementById(this._yearImgID);		
-			newSrc =this._logHost +  "/service/statsimg/mta." + item.name + ".year.Message_Bytes.gif";			
+			newSrc = "/service/statsimg/mta." + item.name + ".year.Message_Bytes.gif";			
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}			

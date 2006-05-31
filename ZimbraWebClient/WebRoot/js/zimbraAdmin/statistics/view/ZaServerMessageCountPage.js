@@ -49,29 +49,26 @@ function() {
 
 ZaServerMessageCountPage.prototype.setObject =
 function (item) {
-	this._logHost = this._app.getGlobalConfig().attrs[ZaServer.A_zimbraLogHostname];
-	if(this._logHost)
-		this._logHost=["https://",this._logHost,":7071"].join("");	
-			
+		
 	if(item) {
 		if(item.attrs && item.attrs[ZaServer.A_ServiceHostname]) {
 			var imgElement = document.getElementById(this._hourImgID);
-			var newSrc = this._logHost + "/service/statsimg/mta." + item.name + ".hour.Message_Count.gif";
+			var newSrc = "/service/statsimg/mta." + item.name + ".hour.Message_Count.gif";
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}
 			imgElement = document.getElementById(this._dayImgID);	
-			newSrc = this._logHost + "/service/statsimg/mta." + item.name + ".day.Message_Count.gif";			
+			newSrc = "/service/statsimg/mta." + item.name + ".day.Message_Count.gif";			
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}
 			imgElement = document.getElementById(this._monthImgID);		
-			newSrc = this._logHost + "/service/statsimg/mta." + item.name + ".month.Message_Count.gif";			
+			newSrc = "/service/statsimg/mta." + item.name + ".month.Message_Count.gif";			
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}			
 			imgElement = document.getElementById(this._yearImgID);		
-			newSrc = this._logHost + "/service/statsimg/mta." + item.name + ".year.Message_Count.gif";			
+			newSrc = "/service/statsimg/mta." + item.name + ".year.Message_Count.gif";			
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}			
