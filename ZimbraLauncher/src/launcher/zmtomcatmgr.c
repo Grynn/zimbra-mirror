@@ -27,6 +27,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/ioctl.h>
+#include <sys/wait.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <signal.h>
@@ -37,6 +38,7 @@
 #include <unistd.h>
 #include <syslog.h>
 #include <pwd.h>
+#include <time.h>
 #ifdef DARWIN
 #include <malloc/malloc.h>
 #else
@@ -356,7 +358,6 @@ StartTomcat()
 {
     FILE *fp;
     struct passwd *pw;
-    int tfd;
 
     if ((TomcatPid = fork()) != 0) {
 	/* In parent process (manager) */
@@ -393,10 +394,13 @@ StartTomcat()
     umask(027);
   
 #ifdef DARWIN
-    setpgrp(0, getpid());
-    if ((tfd = open("/dev/tty", O_RDWR)) >= 0) {
-	ioctl(tfd, TIOCNOTTY, (char *)0); /* lose control tty */
-	close(tfd);
+    {
+	int tfd;
+	setpgrp(0, getpid());
+	if ((tfd = open("/dev/tty", O_RDWR)) >= 0) {
+	    ioctl(tfd, TIOCNOTTY, (char *)0); /* lose control tty */
+	    close(tfd);
+	}
     }
 #else
     setpgrp();
