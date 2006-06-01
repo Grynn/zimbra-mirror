@@ -29,7 +29,7 @@ ZLoginFactory.defaultParams = {
 	companyURL : ZmMsg.splashScreenCompanyURL,
 
 	shortVersion : "",
-	longVersion : "Version 3.1 (April 15, 2006)",
+	longVersion : "",
 
 	appName : ZmMsg.splashScreenAppName,
 	productName : "",
@@ -73,7 +73,7 @@ ZLoginFactory.defaultParams = {
 	
 	loginBannerImageWidth : "349px;",
 	loginBannerImageHeight : "92px;",
-	loginBannerImageURL : "http://localhost:7070/zimbra/img/loRes/logo/LoginBanner.gif"
+	loginBannerImageURL : appContextPath + "/img/loRes/logo/LoginBanner_blank.png"
 };
 
 ZLoginFactory.setDefaultParam = function (name, value) {
@@ -420,11 +420,10 @@ function(button) {
 ZLoginFactory._flickerErrorMessagePanel =
 function() {
 	ZLoginFactory.getErrorMsgPanel().style.visibility = "hidden";
-	window.setTimeout(ZLoginFactory._showErrorMessagePanel, 5);
+	window.setTimeout(ZLoginFactory._showErrorMessagePanel, 8);
 };
 
 ZLoginFactory._showErrorMessagePanel =
 function() {
 	ZLoginFactory.getErrorMsgPanel().style.visibility = "visible";
 };
-
