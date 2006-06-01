@@ -90,13 +90,13 @@ Com_Zimbra_sms.prototype.singleClicked = function(toValue, bodyValue) {
 		  "<tr>",
 		  "<td align='right'><label for='", toId, "'>Cell:</td>",
 		  "<td>",
-		  "<input autocomplete='off' style='width: 21em' type='text' id='", toId, "' value='", toValue, "'/>",
+		  "<input autocomplete='off' style='width:21em' type='text' id='", toId, "' value='", toValue, "'/>",
 		  "</td>",
 		  "</tr>",
+          "<tr>",
 		  "<td colspan='2'>",
-		  "<textarea rows='7' style='width: 25em' id='", bodyId, "'>", bodyValue,  "</textarea>",
+		  "<textarea style='width:25em;height:50px' id='", bodyId, "'>", bodyValue,  "</textarea>",
 		  "</td>",
-		  "<tr>",
 		  "</tr></tbody></table>" ].join("");
 	el.appendChild(div);
 
