@@ -1973,15 +1973,16 @@ function(ev) {
 			if (destDwtObj && destDwtObj._dropTarget && destDwtObj != obj) {
 				if (destDwtObj != obj.__lastDestDwtObj || 
 					destDwtObj._dropTarget.hasMultipleTargets()) {
-					if (destDwtObj._dropTarget._dragEnter(
-										obj._dragOp, 
-										destDwtObj, 
-										obj._dragSource._getData(), mouseEv)) {
-
+					if (destDwtObj._dropTarget._dragEnter(obj._dragOp, destDwtObj,
+														obj._dragSource._getData(), 
+														mouseEv, obj._dndIcon))
+					{
 						obj._setDnDIconState(true);
 						obj.__dropAllowed = true;
 						destDwtObj._dragEnter(mouseEv);
-					} else {
+					}
+					else
+					{
 						obj._setDnDIconState(false);
 						obj.__dropAllowed = false;
 					}
