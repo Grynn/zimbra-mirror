@@ -174,7 +174,7 @@ function() {
 	var d = this._xmlDoc.getDoc();
 	var nodeList = AjxEnv.isIE
 		? (d.getElementsByTagName(d.firstChild.prefix + ":Header"))
-		: (d.getElementsByTagNameNS(AjxSoapDoc._SOAP_URI, "Header"));
+		: (d.getElementsByTagNameNS(this._soapURI, "Header"));
 
 	return nodeList ? nodeList[0] : null;
 };
@@ -185,7 +185,7 @@ function() {
 	var d = this._xmlDoc.getDoc();
 	var nodeList = AjxEnv.isIE
 		? (d.getElementsByTagName(d.firstChild.prefix + ":Body"))
-		: (d.getElementsByTagNameNS(AjxSoapDoc._SOAP_URI, "Body"));
+		: (d.getElementsByTagNameNS(this._soapURI, "Body"));
 
 	return nodeList ? nodeList[0] : null;
 };
@@ -205,7 +205,7 @@ function(type) {
 // gimme a header, no exceptions.
 AjxSoapDoc.prototype.ensureHeader =
 function() {
-	return (this.getByTagName("Header") || this.createHeaderElement());
+	return (this.getHeader() || this.createHeaderElement());
 };
 
 AjxSoapDoc.prototype.getDoc =

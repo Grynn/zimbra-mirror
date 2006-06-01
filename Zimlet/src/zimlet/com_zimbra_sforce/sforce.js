@@ -152,7 +152,7 @@ Com_Zimbra_SForce.prototype.done_login = function(callback, result) {
         if (ans && ans.Body && ans.Body.Fault && ans.Body.Fault.faultstring) {
             fault = ans.Body.Fault.faultstring + "<br />";
         }
-        this.displayErrorMessage("<b>Login to SalesForce failed!</b><br />&nbsp;&nbsp;&nbsp;&nbsp;" + fault + "Check your internet connection and review your preferences.");
+        this.displayErrorMessage("<b>Login to Salesforce failed!</b><br />&nbsp;&nbsp;&nbsp;&nbsp;" + fault + "<br />Check your internet connection and review your preferences.");
     }
 };
 
@@ -647,14 +647,14 @@ Com_Zimbra_SForce.prototype.dlg_addNoteToAccounts = function(accounts, note) {
 		  "<tr>",
 		  "<td align='right'><label for='", subjectId, "'>Subject:</td>",
 		  "<td>",
-		  "<input style='width: 25em' type='text' id='", subjectId, "' value='",
+		  "<input style='width:35em' type='text' id='", subjectId, "' value='",
 		  AjxStringUtil.htmlEncode(note.subject), "' autocomplete='off' />",
 		  "</td>",
 		  "</tr>",
 		  "<td colspan='2'>",
-		  "<textarea rows='5' style='width: 30em' id='", messageId, "'>",
-		  body, "</textarea>",
-		  "</td>",
+          "<textarea style='width:40em;height:200px' id='", messageId, "'>",
+           body, "</textarea>",
+          "</td>",
 		  "<tr>",
 		  "</tr></tbody></table>" ].join("");
 	el.appendChild(div);
