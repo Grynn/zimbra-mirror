@@ -583,15 +583,31 @@ ZaAccountMemberOfListView.prototype._createItemHtml = function (group, now, isDn
 ZaAccountMemberOfListView.prototype._setNoResultsHtml = function() {
 	var buffer = new AjxBuffer();
 	var	div = document.createElement("div");
+	var msg = "";
+	if (this.getCurrentListId().indexOf(ZaAccount.A2_indirectMemberList) >= 0) {
+		msg = ZaMsg.Account_Group_NoInDirectMember;
+	}else if (this.getCurrentListId().indexOf(ZaAccount.A2_directMemberList) >= 0){
+		msg = ZaMsg.Account_Group_NoDirectMember;
+	}
 	
 	buffer.append("<table width='100%' cellspacing='0' cellpadding='1'>",
 				  "<tr><td class='NoResults'>",
-				  AjxStringUtil.htmlEncode(ZaMsg.Account_Group_NoMember),
+				  AjxStringUtil.htmlEncode(msg),
 				  "</td></tr></table>");
 	
 	div.innerHTML = buffer.toString();
 	this._addRow(div);
 };
+
+ZaAccountMemberOfListView.prototype.setCurrentListId =
+function(id){
+	this._currentListId = id;
+}
+
+ZaAccountMemberOfListView.prototype.getCurrentListId =
+function(){
+	return this._currentListId;
+}
 
 /**
  * Customized Dwt_list for MemberShip list view. It is specialized, so the show group only check box can filter
@@ -617,6 +633,9 @@ S_Dwt_List_XFormItem.prototype.setItems = function (itemArray){
 	var instance = this.getForm().getInstance();
 	var isGroupOnlyCkbAction = instance[ZaAccount.A2_memberOf]["showGroupOnlyAction"];
 	var isGroupOnly = instance[ZaAccount.A2_memberOf][ZaAccountMemberOfListView.A_isgroup];
+	
+	//set the current list id in widget which is used to display the proper noResultMessage
+	this.widget.setCurrentListId(this.id);
 	
 	if (itemArray && itemArray.length > 0) {	
 		var offset = 0 ;
