@@ -319,7 +319,7 @@
 /* ??? USE OF DIFFERENT KINDS OF MENUS? */
 .DwtMenu, .ActionMenu, .DwtSelectMenu {
 	@MenuContainer@
-	@MenuSize@
+/*	@MenuSize@  /* This breaks display of (at least) DwtColorPicker and DwtGridSizePicker -- do we need it? */
 }
 
 
