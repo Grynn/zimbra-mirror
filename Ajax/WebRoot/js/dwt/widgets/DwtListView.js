@@ -1288,7 +1288,7 @@ function() {
 };
 
 DwtListView.prototype._resetModelList =
-function () {
+function() {
 	// clear out old list to force GC
 	if (this._list && this._list.size()) {
 		this._list.removeAll();
@@ -1296,8 +1296,9 @@ function () {
 };
 
 DwtListView.prototype._resetListView =
-function () {
+function() {
 	// explicitly remove each child (setting innerHTML causes mem leak)
+	var cDiv;
 	while (this._parentEl.hasChildNodes()) {
 		cDiv = this._parentEl.removeChild(this._parentEl.firstChild);
 		AjxCore.unassignId(Dwt.getAttr(cDiv, "_itemIndex"));
