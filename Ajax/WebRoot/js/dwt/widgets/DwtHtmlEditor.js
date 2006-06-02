@@ -201,7 +201,7 @@ function(enable) {
 	if (this._textAreaId != null)
 		document.getElementById(this._textAreaId).disabled = !enable;
 	if (this._iFrameId != null)
-		document.getElementById(this._iframeId).disabled = !enable;
+		document.getElementById(this._iFrameId).disabled = !enable;
 }
 
 DwtHtmlEditor.prototype.setBlankIframeSrc =
@@ -1134,7 +1134,7 @@ function(ev) {
 
 DwtHtmlEditor.prototype._registerEditorEventHandlers =
 function(iFrame, iFrameDoc) {
-	var events = ["mouseup", "keydown", "keypress", "drag", "mousedown"];
+	var events = ["mouseup", "keydown", "keypress", "drag", "mousedown", "contextmenu"];
 	// Note that since we're not creating the closure here anymore, it's
 	// safe to call this function any number of times (we do this for
 	// Gecko/Linux to work around bugs).  The browser won't add the same
@@ -1156,6 +1156,26 @@ function(ev) {
 	// the iFrame is in a different document etc
 	if (ev.type == "mousedown") {
 		DwtMenu._outsideMouseDownListener(ev);
+	}
+
+	if (ev.type == "contextmenu") {
+		// context menu event; we want to translate the event
+		// coordinates from iframe to parent document coords,
+		// before notifying listeners.
+		var mouseEv = DwtShell.mouseEvent;
+		mouseEv.setFromDhtmlEvent(ev);
+		var pos = Dwt.getLocation(document.getElementById(this._iFrameId));
+		if (!AjxEnv.isIE) {
+			var doc = this._getIframeDoc();
+			var sl = doc.documentElement.scrollLeft || doc.body.scrollLeft;
+			var st = doc.documentElement.scrollTop || doc.body.scrollTop;
+			pos.x -= sl;
+			pos.y -= st;
+		}
+		mouseEv.docX += pos.x;
+		mouseEv.docY += pos.y;
+		DwtControl.__mouseEvent(ev, DwtEvent.ONCONTEXTMENU, this, mouseEv);
+		retVal = mouseEv._returnValue;
 	}
 
 	if (DwtKeyEvent.isKeyPressEvent(ev)) {
