@@ -25,61 +25,6 @@
 
 ZLoginFactory = function() {}
 
-ZLoginFactory.defaultParams = {
-	companyURL : ZmMsg.splashScreenCompanyURL,
-
-	shortVersion : "",
-	longVersion : "",
-
-	appName : ZmMsg.splashScreenAppName,
-	productName : "",
-
-	showError : false,
-	errorMsg : "",
-
-	showAbout : false,
-	aboutMsg : "",
-
-	showLoading : false,
-	loadingMsg : "",
-	
-	showForm : false,
-	
-	showUserField : false,
-	userNameMsg : ZmMsg.username,
-	
-	showPasswordField : false,
-	passwordMsg : ZmMsg.password,
-	
-	showNewPasswordFields : false,
-	newPassword1Msg : ZmMsg.newPassword,
-	newPassword2Msg : ZmMsg.confirmPassword,
-
-	showLicenseMsg : false,
-	licenseMsg : "",
-	
-	showRememberMeCheckbox : false,
-	rememberMeMsg : ZmMsg.rememberMe,
-
-	showLogOff : false,
-	logOffMsg : ZmMsg.loginAsDiff,
-	logOffAction : "",
-	
-	showButton : false,
-	loginAction : "ZmLogin.handleLogin();",
-	buttonName : ZmMsg.login,
-	
-	copyrightText : ZmMsg.splashScreenCopyright,
-	
-	loginBannerImageWidth : "349px;",
-	loginBannerImageHeight : "92px;",
-	loginBannerImageURL : appContextPath + "/img/loRes/logo/LoginBanner_blank.png"
-};
-
-ZLoginFactory.setDefaultParam = function (name, value) {
-	this.defaultParams[name] = value;
-}
-
 ZLoginFactory.USER_ID = "ZLoginUserName";
 ZLoginFactory.PASSWORD_ID = "ZLoginPassword";
 ZLoginFactory.REMEMBER_ME_ID = "rememberMe";
@@ -105,7 +50,64 @@ ZLoginFactory.TAB_TYPE = [ZLoginFactory.TEXT_TYPE, ZLoginFactory.TEXT_TYPE,
 					ZLoginFactory.TEXT_TYPE, ZLoginFactory.TEXT_TYPE,
 					ZLoginFactory.CHECKBOX_TYPE, ZLoginFactory.BUTTON_TYPE];
 				
-
+/*
+ * Creates a copy of the default login parameters.
+ * 
+ * @param msgs	The class where localized messages are defined. ZmMsg for example.
+ */
+ZLoginFactory.copyDefaultParams = 
+function(msgs) {
+	return {
+		companyURL : msgs["splashScreenCompanyURL"] || "",
+	
+		shortVersion : "",
+		longVersion : "",
+	
+		appName : msgs["splashScreenAppName"] || "",
+		productName : "",
+	
+		showError : false,
+		errorMsg : "",
+	
+		showAbout : false,
+		aboutMsg : "",
+	
+		showLoading : false,
+		loadingMsg : "",
+		
+		showForm : false,
+		
+		showUserField : false,
+		userNameMsg : msgs["username"] || "",
+		
+		showPasswordField : false,
+		passwordMsg : msgs["password"] || "",
+		
+		showNewPasswordFields : false,
+		newPassword1Msg : msgs["newPassword"] || "",
+		newPassword2Msg : msgs["confirmPassword"] || "",
+	
+		showLicenseMsg : false,
+		licenseMsg : "",
+		
+		showRememberMeCheckbox : false,
+		rememberMeMsg : msgs["rememberMe"] || "",
+	
+		showLogOff : false,
+		logOffMsg : msgs["loginAsDiff"] || "",
+		logOffAction : "",
+		
+		showButton : false,
+		loginAction : "ZmLogin.handleLogin();",
+		buttonName : msgs["login"] || "",
+		
+		copyrightText : msgs["splashScreenCopyright"] || "",
+		
+		loginBannerImageWidth : "349px;",
+		loginBannerImageHeight : "92px;",
+		loginBannerImageURL : appContextPath + "/img/loRes/logo/LoginBanner_blank.png"
+	};
+};
 
 // show and hide various things
 ZLoginFactory.getLoginPanel = function () 			{												return this.get("ZLoginPanel");	}
@@ -157,9 +159,6 @@ ZLoginFactory.getLoginButton = function () 		{	return this.get(ZLoginFactory.LOG
 
 
 ZLoginFactory.getLoginDialogHTML = function (params) {
-	if (params == null) params = {};
-	var defaults = this.defaultParams;
-
 	var html = [
 		 "<div id='ZLoginPanel'>",
 			"<table class='zLoginTable' width='100%' cellpadding=0 cellspacing=0>",
@@ -168,15 +167,15 @@ ZLoginFactory.getLoginDialogHTML = function (params) {
 							"<tr><td id='ZLoginBannerContainer'>",
 									"<div id='ZLoginBannerPanel'>",
 										"<table class='zLoginTable'><tr>",
-											"<td><div id='ZLoginBannerImage' style='width:", (params.loginBannerImageWidth || defaults.loginBannerImageWidth),
-																				 ";height:", (params.loginBannerImageHeight || defaults.loginBannerImageHeight),
-																				 ";background-image:url(", (params.loginBannerImageURL || defaults.loginBannerImageURL), ")'", 
-													" onclick='window.open(\"", (params.companyURL || defaults.companyURL), "\", \"_blank\")'></div></td>",
-											"<td valign=top id='ZLoginShortVersion'>", (params.shortVersion || defaults.shortVersion), "</td>",
+											"<td><div id='ZLoginBannerImage' style='width:", params.loginBannerImageWidth,
+																				 ";height:", params.loginBannerImageHeight,
+																				 ";background-image:url(", params.loginBannerImageURL, ")'", 
+													" onclick='window.open(\"", params.companyURL, "\", \"_blank\")'></div></td>",
+											"<td valign=top id='ZLoginShortVersion'>", params.shortVersion, "</td>",
 										"</tr></table>",
-										"<div id='ZLoginAppName'>", (params.appName || defaults.appName), "</div>",
-										"<div id='ZLoginProductName'>", (params.productName || defaults.productName), "</div>",
-										"<div id='ZLoginLongVersion'>", (params.longVersion || defaults.longVersion), "</div>",
+										"<div id='ZLoginAppName'>", params.appName, "</div>",
+										"<div id='ZLoginProductName'>", params.productName, "</div>",
+										"<div id='ZLoginLongVersion'>", params.longVersion, "</div>",
 									"</div>",
 								"</td>",
 							"</tr>",
@@ -187,55 +186,55 @@ ZLoginFactory.getLoginDialogHTML = function (params) {
 						"<div id='ZLoginErrorPanel' ", (params.showError ? "" : "style='display:none'"), ">",
 							"<table>",
 								"<tr><td valign='top' width='40'><div id='ZLoginErrorIcon' class='ImgZLoginError'></td>",
-									"<td valign='top' width='*' id='ZLoginErrorMsg' class='errorText'>", (params.errorMsg || defaults.errorMsg), "</td>",
+									"<td valign='top' width='*' id='ZLoginErrorMsg' class='errorText'>", params.errorMsg, "</td>",
 								"</tr>",
 							"</table>",
 						"</div>",
 						"",
-						"<div id='ZLoginAboutPanel' ", (params.showAbout ? "" : "style='display:none'"), ">", (params.aboutMsg || defaults.aboutMsg),
+						"<div id='ZLoginAboutPanel' ", (params.showAbout ? "" : "style='display:none'"), ">", params.aboutMsg,
 						"</div>",
 						"<div id='ZLoginLoadingPanel' ", (params.showLoading ? "" : "style='display:none'"), ">",
-							"<table><tr><td>[icon]</td><td id='ZLoginLoadingMsg'>", (params.loadingMsg || defaults.loadingMsg), "</td></tr></table>",
+							"<table><tr><td>[icon]</td><td id='ZLoginLoadingMsg'>", params.loadingMsg, "</td></tr></table>",
 						"</div>",
 						"<div id='ZLoginFormPanel' ", (params.showForm ? "" : "style='display:none'"), ">",
 							"<table class='zLoginTable' width='100%' cellpadding=4>",
-								"<tr id='ZLoginUserTr'", (params.showUserField ? "" : "style='display:none'"), "><td class='zLoginLabelContainer'>", (params.userNameMsg || defaults.userNameMsg), "</td>",
+								"<tr id='ZLoginUserTr'", (params.showUserField ? "" : "style='display:none'"), "><td class='zLoginLabelContainer'>", params.userNameMsg, "</td>",
 									"<td class='zLoginFieldContainer' colspan=2>",
 										"<input id='", ZLoginFactory.USER_ID, "' class='zLoginField' autocomplete=OFF type=text tabIndex=1>",
 									"</td>",
 								"</tr>",
-								"<tr id='ZLoginPasswordTr' ", (params.showPasswordField ? "" : "style='display:none'"), "><td class='zLoginLabelContainer'>", (params.passwordMsg || defaults.passwordMsg), "</td>",
+								"<tr id='ZLoginPasswordTr' ", (params.showPasswordField ? "" : "style='display:none'"), "><td class='zLoginLabelContainer'>", params.passwordMsg, "</td>",
 									"<td class='zLoginFieldContainer' colspan=2>",
 										"<input id='", ZLoginFactory.PASSWORD_ID, "' class='zLoginField' autocomplete=OFF type=password tabIndex=2>",
 									"</td>",
 								"</tr>",
-								"<tr id='", ZLoginFactory.NEW_PASSWORD_TR_ID, "' ", (params.showNewPasswordFields ? "" : "style='display:none'"), "><td class='zLoginLabelContainer'>", (params.newPassword1Msg || defaults.newPassword1Msg), "</td>",
+								"<tr id='", ZLoginFactory.NEW_PASSWORD_TR_ID, "' ", (params.showNewPasswordFields ? "" : "style='display:none'"), "><td class='zLoginLabelContainer'>", params.newPassword1Msg, "</td>",
 									"<td class='zLoginFieldContainer' colspan=2>",
 										"<input id='", ZLoginFactory.NEW_PASSWORD_ID, "' class='zLoginField' autocomplete=OFF type=password tabIndex=2>",
 									"</td>",
 								"</tr>",
-								"<tr id='", ZLoginFactory.PASSWORD_CONFIRM_TR_ID, "' ", (params.showNewPasswordFields ? "" : "style='display:none'"), "><td class='zLoginLabelContainer'>", (params.newPassword2Msg || defaults.newPassword2Msg), "</td>",
+								"<tr id='", ZLoginFactory.PASSWORD_CONFIRM_TR_ID, "' ", (params.showNewPasswordFields ? "" : "style='display:none'"), "><td class='zLoginLabelContainer'>", params.newPassword2Msg, "</td>",
 									"<td class='zLoginFieldContainer' colspan=2>",
 										"<input id='", ZLoginFactory.PASSWORD_CONFIRM_ID, "' class='zLoginField' autocomplete=OFF type=password tabIndex=2>",
 									"</td>",
 								"</tr>",
 								"<tr id='ZLoginLicenseMsgContainer' ", (params.showLicenseMsg ? "" : "style='display:none'"), ">",
-									"<td colspan=3 id='ZLoginLicenseMsg'>", (params.licenseMsg || defaults.licenseMsg), "</td>",
+									"<td colspan=3 id='ZLoginLicenseMsg'>", params.licenseMsg, "</td>",
 								"</tr>",
 								"<tr><td class='zLoginLabelContainer'>&nbsp;</td>",
 									"<td class='zLoginFieldContainer' id='", ZLoginFactory.REMEMBER_ME_CONTAINER_ID, "' ", (params.showRememberMeCheckbox ? "" : "style='display:none'"), ">",
 										"<table class='zLoginTable' width=100%>",
 											"<tr><td width=1><input id='", ZLoginFactory.REMEMBER_ME_ID, "' type='checkbox'></td>",
-												"<td class='zLoginCheckboxLabelContainer'>", (params.rememberMeMsg || defaults.rememberMeMsg), "</td>",
+												"<td class='zLoginCheckboxLabelContainer'>", params.rememberMeMsg, "</td>",
 											"</tr>",
 										"</table>",
 									"</td>",
 									"<td class='zLoginFieldContainer' id='ZLoginLogOffContainer' ", (params.showLogOff ? "" : "style='display:none'"), ">",
-										"<a href='' onclick='javascript:" + (params.logOffAction || defaults.logOffAction) + ";'>" + (params.logOffMsg || defaults.logOffMsg) + "</a>",
+										"<a href='' onclick='javascript:" + params.logOffAction + ";'>" + params.logOffMsg + "</a>",
 									"</td>",
 									"<td class='zLoginButtonContainer' align='right'", (params.showButton ? "" : "style='display:none'"), ">",
 										"<div id='", ZLoginFactory.LOGIN_BUTTON_ID, "' class='DwtButton'",
-											"onclick='", (params.loginAction || defaults.loginAction), ";return false'",
+											"onclick='", params.loginAction, ";return false'",
 											"onmouseover='javascript:this.className=\"DwtButton-activated\"'",
 											"onmouseout='javascript:this.className=\"DwtButton\"'",
 											"onmousedown='javascript:this.className=\"DwtButton-triggered\";return false'",
@@ -247,7 +246,7 @@ ZLoginFactory.getLoginDialogHTML = function (params) {
 										">",
 											"<table style='width:100%;height:100%' cellspacing=0>",
 												"<tr><td align='center' class='Text' id='ZLoginButtonText'>",
-														(params.buttonName || defaults.buttonName),
+														params.buttonName,
 												"</td></tr>",
 											"</table>",
 										"</div>",
@@ -261,7 +260,7 @@ ZLoginFactory.getLoginDialogHTML = function (params) {
 					"</td>",
 				"</tr>",
 				"<tr><td id='ZLoginLicenseContainer'>",
-						(params.copyrightText || defaults.copyrightText),
+						params.copyrightText,
 					"</td>",
 				"</tr>",
 			"</table>",
