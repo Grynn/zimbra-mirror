@@ -48,9 +48,7 @@ jm=`expr $memkb '*' ${tomcat_java_heap_memory_percent} / 100 / 1024`
 # passed down to tomcat scripts which do the actual writing of the pid
 # file.
 #
-if [ x${tomcat_pidfile} = "x" ]; then
 	tomcat_pidfile="/opt/zimbra/log/zmtomcatmgr.pid"
-fi
 
 export CATALINA_PID=${tomcat_pidfile}
 
