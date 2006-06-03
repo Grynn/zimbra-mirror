@@ -121,8 +121,7 @@ case "$1" in
         mkdir -p ${tomcat_directory}/work/Catalina/localhost/manager
                 
         # export ZIMBRA_TOMCAT_START_DEBUG=1
-        sudo ${zimbra_home}/libexec/zmtomcatstart \
-            -Xms${jm}m -Xmx${jm}m ${tomcat_java_options} \
+        sudo ${zimbra_home}/libexec/zmtomcatmgr start \
             > ${tomcat_directory}/logs/catalina.out 2>&1
 		exit $?
         ;;
@@ -174,6 +173,7 @@ case "$1" in
 
         while true; do
             # Every n seconds we send invoke one of these
+			sudo ${zimbra_home}/libexec/zmtomcatmgr stop
             ${tomcat_directory}/bin/catalina.sh stop
             echo -n "Waiting "
             for ((i = 0; i < 5; i++)); do
