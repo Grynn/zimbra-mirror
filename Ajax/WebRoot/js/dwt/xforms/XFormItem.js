@@ -513,7 +513,10 @@ XFormItem.prototype.getFocusHandlerHTML = function () {
 		itemId = this.getId()
 	;
 	return AjxBuffer.concat(
-		" onfocus=\"", formId, ".onFocus('", itemId, "')\"",
+		//" onfocus=\"", formId, ".onFocus('", itemId, "')\"",
+		//HC: unflexible hacking way to support the License Portal text field onFocus event
+		" onfocus=\"", formId, ".onFocus('", itemId, "'); ",
+		this.getInheritedProperty("onFocus"), ".call(",  this.getGlobalRef(), ", event )\"",		
 		" onblur=\"", formId, ".onBlur('", itemId, "')\""
 	);
 }
