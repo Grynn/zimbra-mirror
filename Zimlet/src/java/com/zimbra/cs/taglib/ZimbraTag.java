@@ -78,7 +78,7 @@ public class ZimbraTag extends BodyTagSupport {
         	throw ZimbraTagException.AUTH_FAILURE("authtoken expired");
         }
         Provisioning prov = Provisioning.getInstance();
-        Account acct = prov.get(Provisioning.AccountBy.ID, token.getAccountId());
+        Account acct = prov.get(Provisioning.AccountBy.id, token.getAccountId());
         if (acct == null) {
         	throw ZimbraTagException.AUTH_FAILURE("account not found "+token.getAccountId());
         }
