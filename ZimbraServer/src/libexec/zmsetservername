@@ -48,9 +48,9 @@ if [ "x${ldap_is_master}" = "xtrue" ]; then
 	ldap start
 fi
 
-/opt/zimbra/openldap/bin/ldapsearch -H ldap://127.0.0.1:389 -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x "(cn=${zimbra_server_hostname})" -LLL | sed -e "s/${zimbra_server_hostname}/${NAME}/g" > /tmp/server.ldif
+/opt/zimbra/openldap/bin/ldapsearch -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x "(cn=${zimbra_server_hostname})" -LLL | sed -e "s/${zimbra_server_hostname}/${NAME}/g" > /tmp/server.ldif
 
-/opt/zimbra/openldap/bin/ldapsearch -H ldap://127.0.0.1:389 -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x "(zimbraMailHost=${zimbra_server_hostname})" -LLL dn > /tmp/users.ldif
+/opt/zimbra/openldap/bin/ldapsearch -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x "(zimbraMailHost=${zimbra_server_hostname})" -LLL dn > /tmp/users.ldif
 
 cat /dev/null > /tmp/newusers.ldif
 while read i; do
@@ -69,11 +69,11 @@ EOF
 fi
 done < /tmp/users.ldif
 
-/opt/zimbra/openldap/bin/ldapmodify -c -H ldap://127.0.0.1:389 -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f /tmp/newusers.ldif -v
+/opt/zimbra/openldap/bin/ldapmodify -c -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f /tmp/newusers.ldif -v
 
-/opt/zimbra/openldap/bin/ldapdelete -H ldap://127.0.0.1:389 -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x "cn=${zimbra_server_hostname},cn=servers,cn=zimbra"
+/opt/zimbra/openldap/bin/ldapdelete -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x "cn=${zimbra_server_hostname},cn=servers,cn=zimbra"
 
-/opt/zimbra/openldap/bin/ldapadd -a -H ldap://127.0.0.1:389 -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f /tmp/server.ldif
+/opt/zimbra/openldap/bin/ldapadd -a -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f /tmp/server.ldif
 
 zmlocalconfig -e zimbra_server_hostname=${NAME}
 
