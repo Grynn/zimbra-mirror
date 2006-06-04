@@ -45,6 +45,16 @@ rewriteconfig() {
 #
 case "$1" in
     'start')
+		if [ -f /opt/zimbra/log/clamd.pid ]; then
+			cpid=`cat /opt/zimbra/log/clamd.pid`
+			kill -0 "$cpid" 2> /dev/null
+			if [ $? -eq 0 ]; then
+				echo "Clamd already running";
+				exit 0
+			else 
+				rm -f /opt/zimbra/log/clamd.pid
+			fi
+		fi
 		if [ ! -f ${zimbra_home}/clamav/db/daily.cvd ]; then
 			# Start with the files we ship.
 			cp -f ${zimbra_home}/clamav/db/daily.cvd.init \
