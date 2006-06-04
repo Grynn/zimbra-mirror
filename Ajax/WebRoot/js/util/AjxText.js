@@ -1746,7 +1746,7 @@ AjxChoiceFormat.prototype.format = function(number, index) {
  *                                  is used.
  */
 function AjxListFormat(formatter, separator, lastSeparator) {
-	AjxFormat.call(this, formatter.toPattern());
+	AjxFormat.call(this, formatter ? formatter.toPattern() : "");
 	this._formatter = formatter;
 	this._separator = separator || AjxMsg.listSeparator;
 	this._lastSeparator = lastSeparator || AjxMsg.listSeparatorLast;
