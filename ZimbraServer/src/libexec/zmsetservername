@@ -75,6 +75,11 @@ done < /tmp/users.ldif
 
 /opt/zimbra/openldap/bin/ldapadd -a -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f /tmp/server.ldif
 
+LHN=`/opt/zimbra/bin/zmprov gcf zimbraLogHostName | sed -e 's/zimbraLogHostName: //'`
+if [ x$LHN = x${zimbra_server_hostname} ]; then
+	/opt/zimbra/bin/zmprov mcf zimbraLogHostName ${NAME}
+fi
+
 zmlocalconfig -e zimbra_server_hostname=${NAME}
 
 foo=`echo ${ldap_master_url} | sed -e "s|${zimbra_server_hostname}|${NAME}|g"`
