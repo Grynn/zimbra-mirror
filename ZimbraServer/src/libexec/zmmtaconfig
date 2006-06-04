@@ -77,8 +77,6 @@ if ($HOSTNAME eq "") {
 	$HOSTNAME=$knownkeys{'LOCAL:zimbra_server_hostname'};
 }
 
-setVar();
-
 my $fork = 1;
 my %FORCE = ();
 while ($_ = shift) {
@@ -172,6 +170,7 @@ sub setLocal {
 sub setVar {
 	my $var = shift;
 
+	if ($VARS_SET && $SERVICE_SET) {return;}
 	$VARS_SET=1;
 
 	$SERVICE_SET=1;
@@ -266,7 +265,7 @@ sub getVar {
 
 	if ($keys[0] =~ m/SERVICE/) {
 		if (! defined ($knownkeys{"SERVICE:$keys[1]"})) {
-			getService($keys[1]);
+			setVar($keys[1]);
 		}
 	} elsif ($keys[0] =~ m/VAR/) {
 		# Use temp var to handle negation
@@ -758,6 +757,8 @@ if ($fork) {
 		exit (0);
 	}
 }
+
+setVar();
 
 close STDIN;
 

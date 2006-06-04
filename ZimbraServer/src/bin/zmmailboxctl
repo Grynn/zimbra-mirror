@@ -31,7 +31,9 @@ STATUS=0
 
 case "$1" in 
 	start)
-		/opt/zimbra/libexec/zmmtaconfig mailbox
+		if [ x$2 = "x" ]; then
+			/opt/zimbra/libexec/zmmtaconfig mailbox
+		fi
 		for i in $SCRIPTS; do
 			/opt/zimbra/bin/$i start norewrite
 			R=$?

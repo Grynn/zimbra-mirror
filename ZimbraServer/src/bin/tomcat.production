@@ -103,9 +103,9 @@ case "$1" in
     'start')
         mk_download_dir
 		if [ x$2 = "x" ]; then
-		   rewriteconfig
+			rewriteconfig
+			rewriteWebXml
 		fi
-		rewriteWebXml
 		/opt/zimbra/bin/zmtlsctl
         if [ -s ${tomcat_pidfile} ]; then
             if isrunning; then

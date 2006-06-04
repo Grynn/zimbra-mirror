@@ -106,3 +106,4 @@ SECTION perdition
 	LOCAL ldap_url
 	REWRITE conf/perdition.conf.in conf/perdition.conf
 RESTART perdition
+

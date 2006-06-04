@@ -51,6 +51,7 @@ my $localHostName = getHostName();
 my $ldapMasterHere = isLdapMaster();
 
 my $services;
+
 my %allservices = ( 
 	"antivirus" => "/opt/zimbra/bin/zmantivirusctl", 
 	"antispam" => "/opt/zimbra/bin/zmantispamctl", 
@@ -61,6 +62,14 @@ my %allservices = (
 	"ldap" => "/opt/zimbra/bin/ldap",
 	"spell" => "/opt/zimbra/bin/zmspellctl",
 	"imapproxy" => "/opt/zimbra/bin/zmperditionctl",
+);
+
+my %rewrites = ( 
+	"antivirus" => "antivirus", 
+	"antispam" => "antispam", 
+	"mta" => "antispam antivirus mta sasl", 
+	"mailbox" => "webxml mailbox", 
+	"perdition" => "perdition",
 );
 
 my %GlobalOpts = ();
@@ -149,6 +158,17 @@ sub startLdap {
 	return $rc;
 }
 
+sub doRewrite {
+	my $rew = "";
+	foreach (@_) {
+		$rew .= " $rewrites{$_}";
+	}
+	#print "Rewriting for $rew\n";
+	my $rc = 0xffff & system("/opt/zimbra/libexec/zmmtaconfig $rew > /tmp/zmcontrol.out.$$ 2>&1");
+	$rc = $rc >> 8;
+	return $rc;
+}
+
 sub doStartup {
 	Zimbra::Mon::Logger::Log ("info", "Starting services");
 	print "Host $localHostName\n";
@@ -186,11 +206,14 @@ sub doStartup {
 		print "$out\n\n";
 		exit (1);
 	}
+
+	doRewrite (sort keys %{$services});
+
 	foreach (sort keys %{$services}) {
 		if ($_ eq "ldap") {next;}
 		Zimbra::Mon::Logger::Log ("info", "Starting $_");
 		print "\tStarting $_...";
-		$rrc = 0xffff & system ("$allservices{$_} start > /tmp/zmcontrol.out.$$ 2>&1");
+		$rrc = 0xffff & system ("$allservices{$_} start norewrite > /tmp/zmcontrol.out.$$ 2>&1");
 		$rrc = $rrc >> 8;
 		if ($rrc) {
 			$rc = 1;
