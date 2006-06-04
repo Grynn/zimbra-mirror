@@ -38,6 +38,10 @@ if [ ! -L ${zimbra_home}/openldap ]; then
 	exit 0
 fi
 
+if [ x$1 = "x" -o $1 = "-h" -o $1 = "--help" ]; then
+	echo "USAGE: zmslapcat <DIR>"
+	exit 1
+fi
 DEST=$1
 
 mkdir -p $DEST
