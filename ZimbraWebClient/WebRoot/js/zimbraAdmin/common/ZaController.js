@@ -233,9 +233,11 @@ function(bReloginMode) {
 	ZaZimbraAdmin._killSplash();
 	this._authenticating = true;
 	this._loginDialog.setVisible(true, false);
-//	this._loginDialog.setUpKeyHandlers();
 	try {
-		this._loginDialog.setFocus(bReloginMode);
+		var uname = "";
+		if(this.auth)
+			uname = this.auth.uname;
+		this._loginDialog.setFocus(uname,bReloginMode);
 	} catch (ex) {
 		// something is out of whack... just make the user relogin
 		ZaZimbraAdmin.logOff();
@@ -255,7 +257,6 @@ function(ex, method, params, restartOnError, obj) {
 		var bReloginMode = true;
 		if (ex.code == ZmCsfeException.SVC_AUTH_EXPIRED) 
 		{
-			// remember the last search attempted ONLY for expired auto token exception
 			if(this._app) {
 				var dlgs = this._app.dialogs;
 				for (var dlg in dlgs) {
@@ -270,7 +271,7 @@ function(ex, method, params, restartOnError, obj) {
 			this._loginDialog.setError(null);
 			bReloginMode = false;
 		}
-		this._loginDialog.setReloginMode(bReloginMode, this._appCtxt.getAppController(), this);
+		this._loginDialog.setReloginMode(bReloginMode);
 		this._showLoginDialog(bReloginMode);
 	} 
 	else 
@@ -327,8 +328,8 @@ function(username, password) {
 		//show splash screen
 		ZaZimbraAdmin.showSplash(this._shell);
 		var callback = new AjxCallback(this, this.authCallback);	
-		var auth = new ZaAuthenticate(this._appCtxt);
-		auth.execute(username, password,callback);
+		this.auth = new ZaAuthenticate(this._appCtxt);
+		this.auth.execute(username, password,callback);
 	} catch (ex) {
 		this._showLoginDialog();
 		if (ex.code == ZmCsfeException.ACCT_AUTH_FAILED || 
@@ -399,29 +400,10 @@ function (resp) {
 		}
 	} else {
 		//if login succesful hide splash screen, start application
-/*
-Body: {
-  AuthResponse: {
-    _jsns: "urn:zimbraAdmin",
-    a: [
-      0: {
-        _content: "false",
-        n: "zimbraIsDomainAdminAccount"
-       }
-     ],
-    authToken: "0_054d1f67a9ff4b6e323c98ba66afea6d93033e05_69643d33363a65306661666438392d313336302d313164392d383636312d3030306139356439386566323b6578703d31333a313134333831363230343930353b61646d696e3d313a313b",
-    lifetime: 43200000,
-    sessionId: {
-      _content: "46",
-      id: "46",
-      type: "admin"
-     }
-   }
- },*/	try {
+		try {
 			var authToken, sessionId;
 	 		var response = resp.getResponse();
 	 		var body = response.Body;		
-	 		//AjxCookie.setCookie(document, ZaSettings.ADMIN_NAME_COOKIE, this._uname, null, "/");
 	 		
 	 		ZmCsfeCommand.setAuthToken(body.AuthResponse.authToken, -1, body.AuthResponse.sessionId.id);
 	 		
@@ -478,8 +460,8 @@ function(uname, oldPass, newPass, conPass) {
 		if (resp) {
 			ZaZimbraAdmin.showSplash(this._shell);
 			var callback = new AjxCallback(this, this.authCallback);	
-			var auth = new ZaAuthenticate(this._appCtxt);
-			auth.execute(uname, newPass,callback);
+			this.auth = new ZaAuthenticate(this._appCtxt);
+			this.auth.execute(uname, newPass,callback);
 		}		
     } catch (ex) {
 	    ZaController.changePwdCommand = null;

@@ -26,7 +26,7 @@
 function ZaAuthenticate(appCtxt) {
 	if (arguments.length == 0) return;
 	this._appCtxt = appCtxt;
-	this._uname = "";
+	this.uname = "";
 }
 
 
@@ -57,7 +57,7 @@ function (uname,oldPass,newPass,callback) {
 ZaAuthenticate.prototype.execute =
 function (uname, pword, callback) {
 	var soapDoc = AjxSoapDoc.create("AuthRequest", "urn:zimbraAdmin", null);
-	this._uname = uname;
+	this.uname = uname;
 	soapDoc.set("name", uname);
 	soapDoc.set("password", pword);
 	
@@ -75,7 +75,7 @@ function(resp) {
 	var els = resp.childNodes;
 	var len = els.length;
 	var el, authToken, sessionId;
-	AjxCookie.setCookie(document, ZaSettings.ADMIN_NAME_COOKIE, this._uname, null, "/");			    	
+	AjxCookie.setCookie(document, ZaSettings.ADMIN_NAME_COOKIE, this.uname, null, "/");			    	
 	for (var i = 0; i < len; i++) {
 		el = els[i];
 		if (el.nodeName == "authToken")
