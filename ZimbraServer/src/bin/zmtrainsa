@@ -32,8 +32,8 @@ autoTrainSystem() {
 	/opt/zimbra/bin/zmspamextract -s -o ${spamdir}
 	/opt/zimbra/bin/zmspamextract -n -o ${hamdir}
 
-	${zimbra_home}/libexec/sa-learn -p ${zimbra_home}/conf/salocal.cf \
-		--dbpath ${zimbra_home}/amavisd/.spamassassin/ --import
+#	${zimbra_home}/libexec/sa-learn -p ${zimbra_home}/conf/salocal.cf \
+#		--dbpath ${zimbra_home}/amavisd/.spamassassin/ --import
 
 	${zimbra_home}/libexec/sa-learn -p ${zimbra_home}/conf/salocal.cf \
 		--dbpath ${zimbra_home}/amavisd/.spamassassin/ -L --no-sync \
