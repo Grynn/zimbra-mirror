@@ -491,7 +491,7 @@ CheckJavaBinaryExists()
 /* This signal handler shuts down the tomcat/JVM process.  When it
  * returns the tomcat/JVM process should not be running. */
 static void
-SignalHandler(int signal) 
+StopHandler(int signal) 
 {
     if (signal == SIGTERM) {
 	ShutdownRequested = 1;
@@ -504,6 +504,15 @@ SignalHandler(int signal)
     StopTomcat();
 }
 
+static void
+ThreadDumpHandler(int signal)
+{
+    syslog(LOG_INFO, "sending SIQUIT to tomcat/JVM process %d", TomcatPid);
+    if (kill(TomcatPid, SIGQUIT) < 0) {
+	syslog(LOG_INFO, "tomcat/JVM process is not running (kill: %s)", strerror(errno));
+	return;
+    }
+}
 
 static void
 Start(int nextArg, int argc, char *argv[])
@@ -567,11 +576,16 @@ Start(int nextArg, int argc, char *argv[])
     RecordManagerPid();
     
     /* On SIGTERM, we set ShutdownRequested to true. */
-    signal(SIGTERM, SignalHandler);
+    signal(SIGTERM, StopHandler);
     
-    /* On SIGHUP, we go ahead and shutdown tomcat, but do not set ShutdownRequested to true. */
-    signal(SIGHUP, SignalHandler);
+    /* On SIGHUP, we go ahead and shutdown tomcat, but do not set
+       ShutdownRequested to true. */
+    signal(SIGHUP, StopHandler);
     
+    /* On SIGQUIT, we forward the SIGQUIT on to the tomcat/JVM
+       process. */
+    signal(SIGQUIT, ThreadDumpHandler);
+
     while (1) {
 	StartTomcat();
 	
@@ -586,7 +600,8 @@ Start(int nextArg, int argc, char *argv[])
 	if (BounceRequested) {
 	    BounceRequested = 0;
 	    lastExit = 0;
-	    /* Pretend as though the process has never crashed before, by not setting lastExit. */
+	    /* Pretend as though the process has never crashed before,
+	       by not setting lastExit. */
 	    continue;
 	}
 	
@@ -608,7 +623,7 @@ Start(int nextArg, int argc, char *argv[])
 
 static void
 Usage(const char *progname) {
-    syslog(LOG_ERR, "Incorrect arguments. Usage: %s [%sseconds] [%sseconds] [%s] { start | stop | restart } [allowed JVM options ... ]  ",
+    syslog(LOG_ERR, "Incorrect arguments. Usage: %s [%sseconds] [%sseconds] [%s] { start | stop | restart | status | threaddump } [allowed JVM options ... ]  ",
 	   progname, DOUBLE_EXIT_INTERVAL_OPTION, GRACE_INTERVAL_OPTION, VERBOSE_OPTION);
     exit(1);
 }
@@ -621,7 +636,7 @@ Stop()
 
     managerPid = GetPidOfRunningManagerInstance();
     if (managerPid == -1) {
-	syslog(LOG_ERR|LOG_PERROR, "no manager process is running");
+	syslog(LOG_ERR, "no manager process is running");
 	exit(1);
     }
     if (kill(managerPid, SIGTERM) < 0) {
@@ -645,11 +660,42 @@ Restart()
 {
     pid_t managerPid = GetPidOfRunningManagerInstance();
     if (managerPid == -1) {
-	syslog(LOG_ERR|LOG_PERROR, "no manager process is running");
+	syslog(LOG_ERR, "no manager process is running");
 	exit(1);
     }
     if (kill(managerPid, SIGHUP) < 0) {
 	syslog(LOG_ERR, "could not send SIGHUP to manager process (pid=%d): %s", managerPid, strerror(errno));
+	exit(1);
+    }
+}
+
+/* Exit 0 or 1 based on whether manager is running */
+static void
+Status()
+{
+    pid_t managerPid = GetPidOfRunningManagerInstance();
+    if (managerPid == -1) {
+	syslog(LOG_ERR, "no manager process is running");
+	exit(1);
+    }
+    if (kill(managerPid, 0) < 0) {
+	syslog(LOG_ERR, "could not send signal 0 to manager process (pid=%d): %s", managerPid, strerror(errno));
+	exit(1);
+    }
+    syslog(LOG_INFO, "status OK");
+    exit(0);
+}
+
+static void
+ThreadDump()
+{
+    pid_t managerPid = GetPidOfRunningManagerInstance();
+    if (managerPid == -1) {
+	syslog(LOG_ERR, "no manager process is running");
+	exit(1);
+    }
+    if (kill(managerPid, SIGQUIT) < 0) {
+	syslog(LOG_ERR, "could not send SIGQUIT to manager process (pid=%d): %s", managerPid, strerror(errno));
 	exit(1);
     }
 }
@@ -710,6 +756,12 @@ main(int argc, char *argv[])
     } else if (strcmp(action, "restart") == 0) {
 	syslog(LOG_INFO, "restart requested");
 	Restart();
+    } else  if (strcmp(action, "status") == 0) {
+	syslog(LOG_INFO, "status requested");
+	Status();
+    } else  if (strcmp(action, "threaddump") == 0) {
+	syslog(LOG_INFO, "threaddump requested");
+	ThreadDump();
     } else {
 	syslog(LOG_ERR, "unknown action %s requested", action);
 	exit(1);
