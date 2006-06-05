@@ -78,10 +78,10 @@ function(msgs) {
 		showForm : false,
 		
 		showUserField : false,
-		userNameMsg : msgs["username"] || "",
+		userNameMsg : msgs["username"] ? msgs["username"] + ':' : "",
 		
 		showPasswordField : false,
-		passwordMsg : msgs["password"] || "",
+		passwordMsg : msgs["password"] ? msgs["password"] + ':' : "",
 		
 		showNewPasswordFields : false,
 		newPassword1Msg : msgs["newPassword"] || "",
