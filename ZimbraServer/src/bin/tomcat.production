@@ -163,7 +163,7 @@ case "$1" in
         # pretend that it did something.
 
 		lines=`wc -l ${tomcat_directory}/logs/catalina.out | awk '{print $1}'`
-		kill -3 $pid
+		sudo ${zimbra_home}/libexec/zmtomcatmgr threaddump
 		sleep 2
 		newlines=`wc -l ${tomcat_directory}/logs/catalina.out | awk '{print $1}'`
 		difflines=`expr $newlines - $lines`
@@ -204,7 +204,7 @@ case "$1" in
         ;;
     
     'status')
-        kill -0 "$pid" 2> /dev/null
+		sudo ${zimbra_home}/libexec/zmtomcatmgr status
         exit $?
         ;;
 
