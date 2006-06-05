@@ -54,11 +54,11 @@ function ZaLoginDialog(parent, zIndex, className, appCtxt) {
 	this._bannerCell = document.getElementById(bannerCellId);
    	this._unameField = document.getElementById(unameId);
     this._unameField._parentId = this._htmlElId;
-    this._unameField.onfocus = ZaLoginDialog.handleFieldFocus;
+  //  this._unameField.onfocus = ZaLoginDialog.handleFieldFocus;
     
     this._pwordField = document.getElementById(pwordId);
     this._pwordField._parentId = this._htmlElId;
-    this._pwordField.onfocus = ZaLoginDialog.handleFieldFocus;
+   // this._pwordField.onfocus = ZaLoginDialog.handleFieldFocus;
     
     this._loginButton = new DwtButton(this, "");
     this._loginButton.setText(ZaMsg.login);
@@ -66,7 +66,7 @@ function ZaLoginDialog(parent, zIndex, className, appCtxt) {
     this._loginButton.addSelectionListener(new AjxListener(this, this._loginSelListener));
     
     this._okCell = document.getElementById(okCellId);
-	if (!AjxEnv.isIE){
+	/*if (!AjxEnv.isIE){
 		this._hiddenBtn = document.createElement('input');
 		this._hiddenBtn.type='submit';
 		this._hiddenBtn.style.display="none";
@@ -74,7 +74,7 @@ function ZaLoginDialog(parent, zIndex, className, appCtxt) {
 		this._hiddenBtn._parentId = this._htmlElId;
 		this._okCell.appendChild(this._hiddenBtn);
 
-	}    
+	} */   
 	this._okCell.appendChild(this._loginButton.getHtmlElement());
 	this._licenseCell = document.getElementById(licenseCellId);
 	this.resetLicenseWarning();
@@ -110,7 +110,7 @@ ZaLoginDialog.prototype.getBannerHtml = function () {
 	}
 	return DwtBorder.getBorderHtml("LoginBanner", substitutions);	
 }
-
+/*
 ZaLoginDialog.prototype.setUpKeyHandlers = 
 function () {
 	this.handleKeyBoard = true;
@@ -132,8 +132,8 @@ function () {
 		if(this.confirmPassInput)
 			this.confirmPassInput.onkeypress = ZaLoginDialog._keyPressHdlr;  			   	
 	}
-}
-
+}*/
+/*
 ZaLoginDialog.prototype.clearKeyHandlers = 
 function () {
 	this.handleKeyBoard = false;
@@ -156,7 +156,7 @@ function () {
 			this.confirmPassInput.onkeypress = null;  				   	
 	}
 }
-
+*/
 
 ZaLoginDialog.handleFieldFocus = 
 function(ev) {

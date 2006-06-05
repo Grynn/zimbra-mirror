@@ -233,7 +233,7 @@ function(bReloginMode) {
 	ZaZimbraAdmin._killSplash();
 	this._authenticating = true;
 	this._loginDialog.setVisible(true, false);
-	this._loginDialog.setUpKeyHandlers();
+//	this._loginDialog.setUpKeyHandlers();
 	try {
 		this._loginDialog.setFocus(bReloginMode);
 	} catch (ex) {
@@ -355,7 +355,7 @@ function(clear) {
 	if(clear) {
 		this._loginDialog.setError(null);
 		this._loginDialog.clearPassword();
-		this._loginDialog.clearKeyHandlers();
+//		this._loginDialog.clearKeyHandlers();
 	}
 }
 
