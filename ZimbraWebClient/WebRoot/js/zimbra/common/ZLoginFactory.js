@@ -101,11 +101,7 @@ function(msgs) {
 		loginAction : "ZmLogin.handleLogin();",
 		buttonName : msgs["login"] || "",
 		
-		copyrightText : msgs["splashScreenCopyright"] || "",
-		
-		loginBannerImageWidth : "349px;",
-		loginBannerImageHeight : "92px;",
-		loginBannerImageURL : appContextPath + "/img/loRes/logo/LoginBanner_blank.png"
+		copyrightText : msgs["splashScreenCopyright"] || ""
 	};
 };
 
@@ -167,9 +163,7 @@ ZLoginFactory.getLoginDialogHTML = function (params) {
 							"<tr><td id='ZLoginBannerContainer'>",
 									"<div id='ZLoginBannerPanel'>",
 										"<table class='zLoginTable'><tr>",
-											"<td><div id='ZLoginBannerImage' style='width:", params.loginBannerImageWidth,
-																				 ";height:", params.loginBannerImageHeight,
-																				 ";background-image:url(", params.loginBannerImageURL, ")'", 
+											"<td><div id='ZLoginBannerImage' class='ImgLoginBanner'", 
 													" onclick='window.open(\"", params.companyURL, "\", \"_blank\")'></div></td>",
 											"<td valign=top id='ZLoginShortVersion'>", params.shortVersion, "</td>",
 										"</tr></table>",

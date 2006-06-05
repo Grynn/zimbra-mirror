@@ -134,7 +134,6 @@
 
 /* Body container (div) for the tooltip. */
 .DwtToolTipBody {
-	@PageBg@
 	padding:2px;	
 }
 
@@ -390,7 +389,6 @@
 .DwtListView-Rows td {
 	@Text@
 	padding-left:@TextPaddingSize@;
-	padding-top:2px;
 	padding-right:2px;
 }
 
@@ -489,7 +487,7 @@
 	width: 100%; 
 }
 .DwtDialogBody td {
-	@Label-wrap@
+	/* @Label-wrap@ */
 }
 
 
