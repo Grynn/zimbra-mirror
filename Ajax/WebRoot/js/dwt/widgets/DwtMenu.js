@@ -96,6 +96,7 @@ function DwtMenu(parent, style, className, posStyle, dialog) {
 	this._menuItemsHaveIcons = false;
 	this._menuItemsWithSubmenus = 0;
 	this.__currentItem = null;
+	this._dontStealFocus = false;
 	
 	/* The global capture is used to detect mouse down events outside of the popped up menus and specifically
 	 * outside of our scope of influence (particularly when Dwt is being used in existing HTML */
@@ -567,6 +568,11 @@ function() {
 	this._menuItemsWithSubmenus--;
 }
 
+DwtMenu.prototype.dontStealFocus = function(val) {
+	if (val == null)
+		val = true;
+	this._dontStealFocus = !!val;
+};
 
 DwtMenu.prototype._doPopup =
 function(x, y, kbGenerated) {
@@ -673,7 +679,8 @@ function(x, y, kbGenerated) {
 	}
 	
 	// Put our tabgroup in play
-	DwtShell.getShell(window).getKeyboardMgr().pushTabGroup(this._tabGroup, true);
+	if (!this._dontStealFocus)
+		DwtShell.getShell(window).getKeyboardMgr().pushTabGroup(this._tabGroup, true);
 	
 	/* If the popup was keyboard generated, then pick the first enabled child item
 	 * we do this by simulating a DwtKeyMap.SELECT_NEXT keyboard action */
