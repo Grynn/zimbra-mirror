@@ -39,8 +39,10 @@ rewriteconfig() {
 if [ "x$1" = "xstatus" -o "x$1" = "xstart" ]; then
 	${zimbra_home}/postfix-${postfix_version}/sbin/postqueue -p > /dev/null 2>&1
 	R=$?
-	if [ "x$1" = "xstart" -a x$R = "x0" ]; then
-		exit 0
+	if [ "x$1" = "xstart" ]; then
+		if [ "x$R" = "x0" ]; then
+			exit 0
+		fi
 	else
 		if [ x$R != "x0" ]; then
 			exit 1
