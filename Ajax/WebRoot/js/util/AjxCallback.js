@@ -103,6 +103,6 @@ AjxCallback.simpleClosure = function(func, obj) {
 		var args2 = [];
 		for (var i = 0; i < arguments.length; ++i)
 			args2.push(arguments[i]);
-		func.apply(obj || this, args.concat(args2));
+		return func.apply(obj || this, args.concat(args2));
 	};
 };
