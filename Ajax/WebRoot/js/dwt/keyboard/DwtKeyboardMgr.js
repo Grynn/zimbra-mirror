@@ -49,8 +49,10 @@ function DwtKeyboardMgr() {
 	/**@private*/
 	this.__tabGroupChangeListenerObj = new AjxListener(this, this.__tabGrpChangeListener);
 	/**@private*/
-	this._kbEventStatus = DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
-	
+	this.__kbEventStatus = DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
+	/**@private*/
+	this.__keyTimeout = 1000;	
+	/**@private*/
 	this.__currTabGroup  = null;
 };
 
@@ -283,6 +285,16 @@ function(keyMap) {
 	this.__keyMapMgr = new DwtKeyMapMgr(keyMap);
 };
 
+/**
+ * Sets the timout (in milliseconds) between key presses for handling multi-keypress
+ * sequences
+ * 
+ * @param {number} timout Timout in milliseconds
+ */
+DwtKeyboardMgr.prototype.setKeyTimeout =
+function(timeout) {
+	this.__keyTimeout = timeout;
+}
 
 /**
  * @private
@@ -403,7 +415,7 @@ function(ev) {
 	kev.setFromDhtmlEvent(ev);
 	var keyCode = kev.keyCode;
 	
-	if (kbMgr._kbEventStatus != DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED) {
+	if (kbMgr.__kbEventStatus != DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED) {
 		//DBG.println(AjxDebug.DBG1, "DwtKeyboardMgr.__keyUpHdlr: KEY UP BLOCKED");
 		kev._stopPropagation = true;
 		kev._returnValue = false;
@@ -423,7 +435,7 @@ function(ev) {
 	kev.setFromDhtmlEvent(ev);
 	var keyCode = kev.keyCode;
 	
-	if (kbMgr._kbEventStatus != DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED) {
+	if (kbMgr.__kbEventStatus != DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED) {
 		//DBG.println(AjxDebug.DBG1, "DwtKeyboardMgr.__keyPressHdlr: KEY PRESS BLOCKED");
 		kev._stopPropagation = true;
 		kev._returnValue = false;
@@ -545,14 +557,14 @@ function(ev) {
 			 		kbMgr.__currTabGroup.resetFocusMember(true);
 			 	}
 		 	}
-			kbMgr._kbEventStatus = DwtKeyboardMgr.__KEYSEQ_HANDLED;
+			kbMgr.__kbEventStatus = DwtKeyboardMgr.__KEYSEQ_HANDLED;
 			kev._stopPropagation = true;
 			kev._returnValue = false;
 			kev.setToDhtmlEvent(ev);
 			return false;
 	 	} else {
 	 		// No tab groups registered. Let the browser deal with tabs
-			kbMgr._kbEventStatus = DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
+			kbMgr.__kbEventStatus = DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
 			kev._stopPropagation = false;
 			kev._returnValue = true;
 			kev.setToDhtmlEvent(ev);
@@ -586,7 +598,7 @@ function(ev) {
 			&& kbMgr.__killKeySeqTimedActionId == -1 && !kev.ctrlKey && !kev.altKey
 			&& DwtKeyMapMgr.isUsableTextInputValue(keyCode))) {
 		//DBG.println(AjxDebug.DBG3, "valid input field data");
-		kbMgr._kbEventStatus = DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
+		kbMgr.__kbEventStatus = DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
 		kev._stopPropagation = false;
 		kev._returnValue = true;
 		kev.setToDhtmlEvent(ev);
@@ -623,16 +635,17 @@ function(ev) {
 	if (obj != null && (obj instanceof DwtControl)) {
 		var mapName = obj.toString();
 		//DBG.println("Dispatching to map: " + mapName);
-		handled = kbMgr.__dispatchKeyEvent(obj, mapName, kev);
+		handled = kbMgr.__dispatchKeyEvent(obj, mapName, kev, false);
 	}
 
 	if (!kbMgr.__blockGlobalHandling && handled == DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED && kbMgr.__globalKeyActionHdlr != null) {
+		//DBG.println("Dispatching to global map: " + kbMgr.__globalKeyActionHdlr.getKeyMapNameToUse());
 		handled = kbMgr.__dispatchKeyEvent(kbMgr.__globalKeyActionHdlr, 
-							kbMgr.__globalKeyActionHdlr.getKeyMapNameToUse(), kev);
+							kbMgr.__globalKeyActionHdlr.getKeyMapNameToUse(), kev, false);
 		//DBG.println(AjxDebug.DBG1, "GLOBAL HANDLER RETURNED: " + handled);
 	}
 	
-	kbMgr._kbEventStatus = handled;
+	kbMgr.__kbEventStatus = handled;
 	switch (handled) {
 		case DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED:
 			kbMgr.__keySequence.length = 0;
@@ -654,17 +667,22 @@ function(ev) {
 };
 
 /**
+ * Handles event dispatching
+ * 
  * @private
  */
 DwtKeyboardMgr.prototype.__dispatchKeyEvent = 
-function(hdlr, mapName, ev) {
-	var actionCode = this.__keyMapMgr.getActionCode(this.__keySequence, mapName);
+function(hdlr, mapName, ev, forceActionCode) {
+	var actionCode = this.__keyMapMgr.getActionCode(this.__keySequence, mapName, forceActionCode);
 	if (actionCode == DwtKeyMapMgr.NOT_A_TERMINAL) {
 		//DBG.println("SCHEDULING KILL SEQUENCE ACTION");
-		/* setup a timed action to kill the key sequence in the event
+		/* setup a timed action to redispatch/kill the key sequence in the event
 		 * the user does not press another key in the allotted time */
+		this.__hdlr = hdlr;
+		this.__mapName = mapName;
+		this.__ev = ev;
 		this.__killKeySeqTimedActionId = 
-			AjxTimedAction.scheduleAction(this.__killKeySeqTimedAction, 1000);
+			AjxTimedAction.scheduleAction(this.__killKeySeqTimedAction, this.__keyTimeout);
 		return DwtKeyboardMgr.__KEYSEQ_PENDING;	
 	} else if (actionCode != null) {
 		/* It is possible that the component may not handle a valid action
@@ -680,11 +698,15 @@ function(hdlr, mapName, ev) {
 };
 
 /**
+ * This method will reattempt to handle the event in the case that the intermediate
+ * node in the keymap may have an action code associated with it.
+ * 
  * @private
  */
 DwtKeyboardMgr.prototype.__killKeySequenceAction =
 function() {
-	//DBG.println("KILLING KEY SEQUENCE");
+	//DBG.println("KILLING KEY SEQUENCE: " + this.__mapName);
+	this.__dispatchKeyEvent(this.__hdlr, this.__mapName, this.__ev, true);
 	this.__killKeySeqTimedActionId = -1;
 	this.__keySequence.length = 0;
 };
