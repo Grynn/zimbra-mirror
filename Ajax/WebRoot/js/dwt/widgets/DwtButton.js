@@ -369,6 +369,11 @@ function() {
 	menu.popup(0, x, y);
 };
 
+DwtButton.prototype.getKeyMapName = 
+function() {
+	return "DwtButton";
+};
+
 DwtButton.prototype.handleKeyAction =
 function(actionCode, ev) {
     DBG.println("DwtButton.prototype.handleKeyAction");
@@ -648,7 +653,7 @@ function(ev) {
  DwtButton.prototype.__setClassName =
  function(className) {
  // NOTE this is going to be reworked for the keyboard nav stuff
- //	if (this.haveFocus()) {
+ //	if (this.hasFocus()) {
  //		className += "-" + DwtCssStyle.KBFOCUS;
  //	}
  	this.setClassName(className);

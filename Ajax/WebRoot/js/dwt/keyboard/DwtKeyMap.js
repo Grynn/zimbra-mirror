@@ -35,9 +35,6 @@ function DwtKeyMap(subclassInit) {
 		"Enter":	DwtKeyMap.ENTER
 	};
 
-	this._map["DwtDialog"] = {"INHERIT": "DwtBaseDialog"};
-	this._map["DwtMessageDialog"] = {"INHERIT": "DwtDialog"	};
-	
 	this._map["DwtButton"] = {
 		"Enter": DwtKeyMap.SELECT_CURRENT,
 		"ArrowDown": DwtKeyMap.SELECT_SUBMENU	

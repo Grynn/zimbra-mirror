@@ -133,7 +133,7 @@ function DwtControl(parent, className, posStyle, deferred, id, index) {
 	
 	/** Flag indicating whether the control has keyboard focus or not
 	 * @type boolean*/
-	this._haveFocus = false;
+	this._hasFocus = false;
 	
 	if (!deferred)
 		this.__initCtrl();
@@ -479,10 +479,10 @@ function() {
   * @return true if this control has keyboard focus, else return false
   * @type Boolean
   */
-  DwtControl.prototype.haveFocus =
+  DwtControl.prototype.hasFocus =
   function() {
   	//return DwtShell.getShell(window).getKeyboardMgr().dwtControlHasFocus(this);
-  	return this._haveFocus;
+  	return this._hasFocus;
   };
  
 /** 
@@ -1766,7 +1766,7 @@ function(ev) {
  */
 DwtControl.prototype.__doBlur =
 function() {
-	this._haveFocus = false;
+	this._hasFocus = false;
 	if (this.isListenerRegistered(DwtEvent.ONBLUR)) {
 		var ev = DwtShell.focusEvent;
 		ev.dwtObj = this;
@@ -1785,7 +1785,7 @@ function() {
  */
 DwtControl.prototype.__doFocus =
 function() {
-	this._haveFocus = true;
+	this._hasFocus = true;
 	if (this.isListenerRegistered(DwtEvent.ONFOCUS)) {
 		var ev = DwtShell.focusEvent;
 		ev.dwtObj = this;

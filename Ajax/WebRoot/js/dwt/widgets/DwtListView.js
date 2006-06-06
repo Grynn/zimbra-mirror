@@ -566,7 +566,7 @@ function() {
 	this._selectedItems.removeAll();
 	this._selAnchor = null;
 	
-	if (this._kbAnchor != null && this.haveFocus())
+	if (this._kbAnchor != null && this.hasFocus())
 		this._kbAnchor.className += " " + Dwt.getAttr(this._kbAnchor, DwtListView._KBFOCUS_CLASS);
 }
 
@@ -610,7 +610,7 @@ function(item, skipNotify) {
 			? Dwt.getAttr(el, DwtListView._SELECTED_STYLE_CLASS) 
 			: Dwt.getAttr(el, DwtListView._SELECTED_DIS_STYLE_CLASS);
 			
-		if (this.haveFocus())
+		if (this.hasFocus())
 			el.className += " " + Dwt.getAttr(el, DwtListView._KBFOCUS_CLASS);
 
 		// reset the selected index
@@ -634,7 +634,7 @@ function() {
 	var sz = this._selectedItems.size();
 	for (i = 0; i < sz; i++) {
 		a[i].className = Dwt.getAttr(a[i], DwtListView._STYLE_CLASS);
-		if (this._kbAnchor == a[i] && this.haveFocus())
+		if (this._kbAnchor == a[i] && this.hasFocus())
 			a[i].className += " " + Dwt.getAttr(a[i], DwtListView._KBFOCUS_CLASS);
 	}
 	this._selectedItems.removeAll();
@@ -651,7 +651,7 @@ function(selectedArray) {
 			el.className = this.getEnabled() 
 				? Dwt.getAttr(el, DwtListView._SELECTED_STYLE_CLASS)
 				: Dwt.getAttr(el, DwtListView._SELECTED_DIS_STYLE_CLASS);
-			if (this._kbAnchor == el && this.haveFocus())
+			if (this._kbAnchor == el && this.hasFocus())
 				el.className += " " + Dwt.getAttr(el, DwtListView._KBFOCUS_CLASS);
 			this._selectedItems.add(el);
 		}
@@ -1052,7 +1052,7 @@ function(itemDiv, ev) {
 		
 		this._selAnchor = this._kbAnchor = itemDiv;
 		itemDiv.className = Dwt.getAttr(itemDiv, DwtListView._SELECTED_STYLE_CLASS);
-		if (this.haveFocus())
+		if (this.hasFocus())
 			itemDiv.className += " " + Dwt.getAttr(itemDiv, DwtListView._KBFOCUS_CLASS);
 			
 		this._firstSelIndex = this._list 
@@ -1622,6 +1622,11 @@ function() {
 			this._kbAnchor.className = Dwt.getAttr(this._kbAnchor, DwtListView._STYLE_CLASS);
 	}
 }
+
+DwtListView.prototype.getKeyMapName = 
+function() {
+	return "DwtListView";
+};
 
 DwtListView.prototype.handleKeyAction =
 function(actionCode, ev) {

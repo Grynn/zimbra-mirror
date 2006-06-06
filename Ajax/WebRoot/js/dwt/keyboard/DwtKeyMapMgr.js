@@ -16,17 +16,19 @@
 
 
 /**
-* The Keymap manager is responsible for building a FSA from a keymap and
-* providing methods for resolving key sequences against that map.
-* @constructor
-* @class
-* 
-* @author Ross Dargahi
-* @param keyMap [Object, optional]
-*
-* @throws
-*	DwtKeyMapMgrException
-*/
+ * Creates and initializes a manager for the given keymap.
+ * @constructor
+ * @class
+ * A keymap manager parses the keymap into a form that is easily used for 
+ * translating key codes into actions. It also provides some static methods
+ * that map the available keyboard to key codes, and which qualify certain
+ * keys as punctuation, etc.
+ * 
+ * @author Ross Dargahi
+ *
+ * @param keyMap [Object]		a keymap
+ *
+ */
 function DwtKeyMapMgr(keyMap) {
 	if (!DwtKeyMapMgr._inited) {
 		DwtKeyMapMgr._initUsKeyCodeMap();
@@ -35,37 +37,33 @@ function DwtKeyMapMgr(keyMap) {
 		
 	var map = keyMap.getMap();
 	
-	// Builds key mapping FSA for each mapping
+	// build FSA for each mapping
 	this._fsas = {};
 	for (var key in map) {
-		DBG.println(AjxDebug.DBG3, "======== Processing Map Name: " + key);
-		try {
-			var newFSA = DwtKeyMapMgr.__buildFSA({}, map[key], key);
-			this._fsas[key] = newFSA;
-		} catch (ex) {
-			alert("EX: " + ex._msg + " - " + ex._keySeqStr);
-		}	
+		DBG.println(AjxDebug.DBG3, "building FSA for key: " + key);
+		this._fsas[key] = DwtKeyMapMgr.__buildFSA({}, map[key], key);
 	}
-
 	DBG.dumpObj(AjxDebug.DBG3, this._fsas);
 };
 
 DwtKeyMapMgr.NOT_A_TERMINAL = -999;
 DwtKeyMapMgr.TAB_KEYCODE = 9;
 
-DwtKeyMapMgr._KEYCODES = []; // Keycode map
-DwtKeyMapMgr._inited = false; // Initialize flag
+DwtKeyMapMgr._KEYCODES = [];	// Keycode map
+
+DwtKeyMapMgr._inited = false;	// Initialization flag
 
 /**
- * This method will attempt to lookup the action code for a given key sequence in
+ * This method will attempt to look up the action code for a given key sequence in
  * a given key map. 
  * 
- * @param {string} keySeq Key sequence to lookup
- * @param {string} mappingName keymap name in which to search
- * @param {boolean} forceActionCode If true, then if the key sequence contains both
- * 		a submap and an action code, then return the action code. If this parameter is
- * 		false or omitted, then <i>DwtKeyMapMgr.NOT_A_TERMINAL</i> will be returned for
- * 		a key sequence that contains both a submap and an action code.
+ * @param {string}		keySeq				key sequence to lookup
+ * @param {string}		mappingName			keymap name in which to search
+ * @param {boolean}		forceActionCode		if true, then if the key sequence contains both
+ * 											a submap and an action code, then return the action code.
+ * 											If this parameter is false or omitted, then
+ * 											<i>DwtKeyMapMgr.NOT_A_TERMINAL</i> will be returned for
+ * 											a key sequence that contains both a submap and an action code.
  * 
  * @return The action code for the provided key map name, null if there is no action code
  * 		or <i>DwtKeyMapMgr.NOT_A_TERMINAL</i> if the key sequence is an intermediate
@@ -77,8 +75,7 @@ function (keySeq, mappingName, forceActionCode) {
 	//DBG.println("Getting action code for: " + keySeq.join("") + " in map: " + mappingName);
 	var mapping =  this._fsas[mappingName];
 	
-	if (!mapping)
-		return null;
+	if (!mapping) return null;
 					
 	var keySeqLen = keySeq.length;
 	var tmpFsa = mapping;
@@ -86,16 +83,16 @@ function (keySeq, mappingName, forceActionCode) {
 	for (var j = 0; j < keySeqLen && tmpFsa; j++) {
 		key = keySeq[j];
 
-		if (!tmpFsa[key])
-			break;
+		if (!tmpFsa[key]) break;
 		
-		if (j < keySeqLen - 1)
+		if (j < keySeqLen - 1) {
 			tmpFsa = tmpFsa[key].subMap;
+		}
 	}
 	
 	if (!tmpFsa) {
 		// This is essentially an illegal condition.
-		DBG.println("tmpFsa is null. mapping name: " + mappingName + ", key: " + key 
+		DBG.println(AjxDebug.DBG1, "***** tmpFsa is null! mapping name: " + mappingName + ", key: " + key 
 					+ " - keyseq: " + keySeq);
 		return null;
 	} else if (tmpFsa[key]) {
@@ -103,38 +100,27 @@ function (keySeq, mappingName, forceActionCode) {
 		/* If the bunding does not have a submap, then it must have an action code
 		 * so return it. Else if the binding does not have an action code (i.e. it
 		 * has a submap only) or if forceActionCode is false, then return DwtKeyMapMgr.NOT_A_TERMINAL
-		 * since we are to behave like an intermediate node. Else return the action code */
+		 * since we are to behave like an intermediate node. Else return the action code. */
 		if (!binding.subMap || forceActionCode)
 			return binding.actionCode;
 		else
 			return DwtKeyMapMgr.NOT_A_TERMINAL;
-	} else if (mapping.INHERIT != null) {
-		var inherited = mapping.INHERIT;
-		/* In the case of multiple inheritence, the INHERIT attribute will be an
-		 * array, else it will be a string */
-		if (typeof(inherited) == "string") {
-			//DBG.println("Inheriting from: " + inherited);
-			return this.getActionCode(keySeq, inherited, forceActionCode);			
-		} else {
-			var actionCode = null;
-			var len = inherited.length;
-			for (var i = 0; i < len; i++) {
-				//DBG.println("(MULTI) Inheriting from: " + inherited[i]);
-				actionCode = this.getActionCode(keySeq, inherited[i], forceActionCode);
-				if (actionCode != null)
-					return actionCode;
-			}		
+	} else if (mapping.inherit && mapping.inherit.length) {
+		var actionCode = null;
+		for (var i = 0; i < mapping.inherit.length; i++) {
+			//DBG.println(AjxDebug.DBG3, "checking inherited map: " + mapping.inherit[i]);
+			actionCode = this.getActionCode(keySeq, mapping.inherit[i], forceActionCode);
+			if (actionCode) return actionCode;
 		}
 	} else {
-		// No match
-		return null;
+		return null;	// no match
 	}
-}
+};
 
 DwtKeyMapMgr.prototype.keyCode2Char =
 function(keyCode) {
 	return DwtKeyMapMgr._KEYCODES[keyCode];
-}
+};
 
 DwtKeyMapMgr._initUsKeyCodeMap =
 function() {
@@ -188,24 +174,22 @@ function() {
 	DwtKeyMapMgr.isPunctuation = DwtKeyMapMgr._isPunctuationUs;
 	DwtKeyMapMgr.isUsableTextInputValue = DwtKeyMapMgr.isUsableTextInputValueUs;
 	DwtKeyMapMgr.isModifier = DwtKeyMapMgr._isModifierUs;
-}
+};
 
 DwtKeyMapMgr._isAlphaUs = 
 function(keyCode) {
-	if (keyCode > 64 && keyCode < 91)
-		return true;
-}
+	return (keyCode > 64 && keyCode < 91);
+};
 
 DwtKeyMapMgr._isNumericUs = 
 function(keyCode) {
-	if (keyCode > 47 && keyCode < 58)
-		return true;
-}
+	return (keyCode > 47 && keyCode < 58);
+};
 
 DwtKeyMapMgr._isAlphanumericUs = 
 function(keyCode) {
 	return (DwtKeyMapMgr._isNumericUs(keyCode) || DwtKeyMapMgr._isAlphaUs(keyCode));
-}
+};
 
 DwtKeyMapMgr._isPunctuationUs = 
 function(keyCode) {
@@ -225,7 +209,7 @@ function(keyCode) {
 		default:
 			return false;		
 	}
-}
+};
 
 DwtKeyMapMgr._isModifierUs = 
 function(keyCode) {
@@ -238,8 +222,7 @@ function(keyCode) {
 		default:
 			return false;
 	}
-}
-
+};
 
 DwtKeyMapMgr.isUsableTextInputValueUs =
 function(keyCode) {
@@ -261,16 +244,14 @@ function(keyCode) {
 		default:
 			return false;
 	}	
-}
+};
 
 DwtKeyMapMgr.__buildFSA =
 function(fsa, mapping, mapName) {
 	for (var i in mapping) {
-		// DBG.println(AjxDebug.DBG3, "_buildFSA - keySeq: " + i);
-		// If this map is inheriting from another map, then set up the inheritence
-		 if (i == DwtKeyMap.INHERIT) {
-			//DBG.println(AjxDebug.DBG3, "Inheriting from: " + mapping[i]);
-			fsa.INHERIT = mapping[i];
+		// check for inheritance from other maps (in CSV list)
+		if (i == DwtKeyMap.INHERIT) {
+			fsa.inherit = mapping[i].split(/\s*,\s*/);
 			continue;
 		}
 		 
@@ -279,24 +260,23 @@ function(fsa, mapping, mapName) {
 		var tmpFsa = fsa;
 		for (var j = 0; j < keySeqLen; j++) {
 			var key = keySeq[j];
-			DBG.println("Processing: " + key);
+			DBG.println(AjxDebug.DBG3, "Processing: " + key);
 			
-			/* If we have not visited this key before we will need to create a
-			 * new _DwtKeyMapMgrItem object */
-			if (!tmpFsa[key])
-				tmpFsa[key] = new _DwtKeyMapMgrItem();
+			if (!tmpFsa[key]) {
+				tmpFsa[key] = {};	// first time visiting this key
+			}
 
 			if (j == keySeqLen - 1) {
 				/* We are at the last key in the sequence so we can bind the
 				 * action code to it */
-				DBG.println("BINDING: " + mapping[i]);
+				DBG.println(AjxDebug.DBG3, "BINDING: " + mapping[i]);
 				tmpFsa[key].actionCode = mapping[i];
 			} else {
 				/* We have more keys in the sequence. If our subMap is null,
 				 * then we need to create it to hold the new key sequences */
 				if (!tmpFsa[key].subMap) {
-					tmpFsa[key].subMap = new Object();
-					DBG.println("NEW SUBMAP");
+					tmpFsa[key].subMap = {};
+					DBG.println(AjxDebug.DBG3, "NEW SUBMAP");
 				}
 					
 				tmpFsa = tmpFsa[key].subMap;
@@ -304,12 +284,4 @@ function(fsa, mapping, mapName) {
 		}
 	}
 	return fsa;
-};
-
-/** Helper class
- * @private
- */
-function _DwtKeyMapMgrItem() {
-	this.actionCode = null;
-	this.subMap = null;
 };

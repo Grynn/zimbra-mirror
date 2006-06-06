@@ -29,17 +29,21 @@
 * within it's membership. It is also the place where focus listener may be
 * registered (see method documentation)
 * 
-* @param {String} name [String]  name of this tab group (optional). 
+* @param {String}	name					name of this tab group
+* @param {boolean}	blockGlobalHandling		if true, don't fall back to global key
+* 											handler for this tab group
 * 
 * @author Ross Dargahi
 */
-function DwtTabGroup(name) {
+function DwtTabGroup(name, blockGlobalHandling) {
 	/**@private*/
 	this.__members = new AjxVector();
 	/**@private*/
 	this.__parent = null;
 	/**@private*/
 	this.__name = name
+	/**@private*/
+	this.__blockGlobalHandling = blockGlobalHandling;
 	/**@private*/
 	this.__currFocusMember = null;
 }
@@ -385,6 +389,16 @@ function(checkEnabled, dontNotify) {
 	
 	return this.__currFocusMember;
 }
+
+DwtTabGroup.prototype.blockGlobalHandling =
+function(block) {
+	this.__blockGlobalHandling = blockGlobalHandling;
+};
+
+DwtTabGroup.prototype.isGlobalHandlingBlocked =
+function(block) {
+	return this.__blockGlobalHandling;
+};
 
 /**
  * Recrusively dumps the contents of the tab group

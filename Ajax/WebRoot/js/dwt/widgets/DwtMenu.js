@@ -228,6 +228,10 @@ function(msec) {
 	}
 }
 
+DwtMenu.prototype.getKeyMapName = 
+function() {
+	return "DwtMenu";
+};
 
 DwtMenu.prototype.handleKeyAction =
 function(actionCode, ev) {

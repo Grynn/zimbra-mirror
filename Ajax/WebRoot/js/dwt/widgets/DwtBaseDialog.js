@@ -317,6 +317,11 @@ function() {
 	return dialog;
 };
 
+DwtBaseDialog.prototype.getKeyMapName = 
+function() {
+	return "DwtBaseDialog";
+};
+
 DwtBaseDialog.prototype.handleKeyAction =
 function(actionCode, ev) {
 	switch (actionCode) {
