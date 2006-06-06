@@ -73,7 +73,8 @@ function() {
 
 ZaLoginDialog.prototype.setError =
 function(errorStr) {
-	ZLoginFactory.showErrorMsg(errorStr);
+	if(errorStr)
+		ZLoginFactory.showErrorMsg(errorStr);
 }
 
 ZaLoginDialog.prototype.setFocus =
