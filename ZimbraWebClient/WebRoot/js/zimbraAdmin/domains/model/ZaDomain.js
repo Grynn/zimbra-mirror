@@ -71,6 +71,8 @@ ZaDomain.A_GalLdapBindDn = "zimbraGalLdapBindDn";
 ZaDomain.A_GalLdapBindPassword = "zimbraGalLdapBindPassword";
 ZaDomain.A_GalLdapBindPasswordConfirm = "zimbraGalLdapBindPasswordConfirm";
 ZaDomain.A_GalLdapFilter = "zimbraGalLdapFilter";
+ZaDomain.A_zimbraGalAutoCompleteLdapFilter = "zimbraGalAutoCompleteLdapFilter";
+
 //Auth
 ZaDomain.A_AuthMech = "zimbraAuthMech";
 ZaDomain.A_AuthLdapURL = "zimbraAuthLdapURL";
@@ -232,6 +234,9 @@ function(tmpObj, app) {
 
 		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_GalLdapFilter]);
 		attr.setAttribute("n", ZaDomain.A_GalLdapFilter);	
+		
+		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraGalAutoCompleteLdapFilter]);
+		attr.setAttribute("n", ZaDomain.A_zimbraGalAutoCompleteLdapFilter);			
 	}
 
 	if(tmpObj.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_ad) {
@@ -390,6 +395,9 @@ function(tmpObj, oldObj) {
 
 		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_GalLdapFilter]);
 		attr.setAttribute("n", ZaDomain.A_GalLdapFilter);	
+		
+		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraGalAutoCompleteLdapFilter]);
+		attr.setAttribute("n", ZaDomain.A_zimbraGalAutoCompleteLdapFilter);		
 	}
 	if(oldObj[ZaDomain.A_GalMaxResults] != tmpObj.attrs[ZaDomain.A_GalMaxResults]) {
 		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_GalMaxResults]);
@@ -591,7 +599,8 @@ function (obj) {
 	}
 		
 	this[ZaDomain.A_GALSampleQuery] = "john";
-
+	if(!this.attrs[ZaDomain.A_zimbraGalAutoCompleteLdapFilter])
+		this.attrs[ZaDomain.A_zimbraGalAutoCompleteLdapFilter] = "(|(cn=%s*)(sn=%s*)(gn=%s*)(mail=%s*))";
 }
 /**
 * Returns HTML for a tool tip for this domain.
@@ -643,6 +652,7 @@ ZaDomain.myXModel = {
 		{id:ZaDomain.A_GalMaxResults, type:_NUMBER_, ref:"attrs/" + ZaDomain.A_GalMaxResults, maxInclusive:2147483647, minInclusive:1},					
 		{id:ZaDomain.A_GALServerType, type:_STRING_, ref:"attrs/" + ZaDomain.A_GALServerType},
 		{id:ZaDomain.A_GalLdapFilter, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapFilter,required:true},
+		{id:ZaDomain.A_zimbraGalAutoCompleteLdapFilter, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraGalAutoCompleteLdapFilter},		
 		{id:ZaDomain.A_GalLdapSearchBase, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapSearchBase},
 		{id:ZaDomain.A_UseBindPassword, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_UseBindPassword},
 		{id:ZaDomain.A_GalLdapURL, type:_LIST_,  listItem:{type:_SHORT_URL_}, ref:"attrs/" + ZaDomain.A_GalLdapURL},
