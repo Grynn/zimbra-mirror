@@ -62,7 +62,7 @@ extends HttpServlet {
 	private static final String N_SKIN = "skin";
 
 	private static final String DEFAULT_SKIN = "steel";
-	private static final String SKIN_MANIFEST_FILENAME = N_SKIN + ".xml";
+	private static final String SKIN_MANIFEST_EXT = ".xml";
 
 	private static final Pattern RE_IFDEF = Pattern.compile("^\\s*#ifdef\\s+(.*?)\\s*$", Pattern.CASE_INSENSITIVE);
 	private static final Pattern RE_ENDIF = Pattern.compile("^\\s*#endif(\\s+.*)?$", Pattern.CASE_INSENSITIVE);
@@ -182,7 +182,7 @@ extends HttpServlet {
 		int slash = uri.lastIndexOf('/');
 		if (slash != -1) {
 			filenames = uri.substring(slash + 1);
-			uri = uri.substring(0, slash + 1) + SKIN_MANIFEST_FILENAME;
+			uri = uri.substring(0, slash + 1) + skin + SKIN_MANIFEST_EXT;
 		}
 
 		int dot = filenames.lastIndexOf('.');
@@ -197,7 +197,7 @@ extends HttpServlet {
 		File fileDir = new File(fileDirname);
 		String skinDirname = context.getRealPath("/skins/" + skin);
 		File skinDir = new File(skinDirname);
-		File manifestFile = new File(skinDir, SKIN_MANIFEST_FILENAME);
+		File manifestFile = new File(skinDir, skin + SKIN_MANIFEST_EXT);
 
 		// load manifest
 		Manifest manifest = new Manifest(manifestFile, macros);
