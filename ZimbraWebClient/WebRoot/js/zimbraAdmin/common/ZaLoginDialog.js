@@ -55,11 +55,6 @@ function(func, obj) {
 	this._callback = new AjxCallback(obj, func);
 }
 
-ZaLoginDialog.prototype.registerChangePassCallback =
-function(func, obj) {
-	this._changePasswordCallback = new AjxCallback(obj, func);
-}
-
 ZaLoginDialog.prototype.clearAll =
 function() {
 	ZLoginFactory.get(ZLoginFactory.USER_ID).value = "";
@@ -69,6 +64,22 @@ function() {
 ZaLoginDialog.prototype.clearPassword =
 function() {
 	ZLoginFactory.get(ZLoginFactory.PASSWORD_ID).value = "";
+}
+
+ZaLoginDialog.prototype.showNewPasswordFields = function () {
+	ZLoginFactory.showNewPasswordFields();
+}
+
+ZaLoginDialog.prototype.hideNewPasswordFields = function () {
+	ZLoginFactory.hideNewPasswordFields();
+}
+
+ZaLoginDialog.prototype.disableUnameField = function () {
+	ZLoginFactory.get(ZLoginFactory.USER_ID).disabled = true;
+}
+
+ZaLoginDialog.prototype.disablePasswordField = function () {
+	ZLoginFactory.get(ZLoginFactory.PASSWORD_ID).disabled = true;
 }
 
 ZaLoginDialog.prototype.setError =
@@ -134,7 +145,14 @@ function() {
 	}
 	if (this._callback) {
 		var password = ZLoginFactory.get(ZLoginFactory.PASSWORD_ID).value;
-		this._callback.run(username, password);		
+		var newPassword = "";
+		var confPassword = "";
+		if(ZLoginFactory.isShown(ZLoginFactory.NEW_PASSWORD_ID) && ZLoginFactory.isShown(ZLoginFactory.PASSWORD_CONFIRM_ID)) {
+			newPassword = ZLoginFactory.get(ZLoginFactory.NEW_PASSWORD_ID).value;
+			confPassword = ZLoginFactory.get(ZLoginFactory.PASSWORD_CONFIRM_ID).value; 
+		}
+			
+		this._callback.run(username, password,newPassword,confPassword);		
 	}
 }
 

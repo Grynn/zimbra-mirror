@@ -53,7 +53,7 @@ function ZaController(appCtxt, container, app, iKeyName) {
 	this._loginDialog = appCtxt.getLoginDialog();
 
 	this._loginDialog.registerCallback(this.loginCallback, this);
-	this._loginDialog.registerChangePassCallback(this.changePwdCallback, this);
+	
 	if(this._app) {
 		this._msgDialog = this._app.dialogs["msgDialog"] = appCtxt.getMsgDialog();
 		this._msgDialog.setApp(app);
@@ -265,7 +265,6 @@ function(ex, method, params, restartOnError, obj) {
 			}
 			this._execFrame = {obj: obj, func: method, args: params, restartOnError: restartOnError};
 			this._loginDialog.registerCallback(this.loginCallback, this);
-			this._loginDialog.registerChangePassCallback(this.changePwdCallback, this);			
 			this._loginDialog.setError(ZaMsg.ERROR_SESSION_EXPIRED);
 		} else {
 			this._loginDialog.setError(null);
@@ -343,7 +342,8 @@ function(username, password) {
 		} else if (ex.code == ZmCsfeException.ACCT_CHANGE_PASSWORD) {
 			this._loginDialog.disablePasswordField(true);
 			this._loginDialog.disableUnameField(true);
-			this._loginDialog.showChangePass();
+			this._loginDialog.showNewPasswordFields();
+			this._loginDialog.registerCallback(this.changePwdCallback, this);
 		} else {
 			this.popupMsgDialog(ZaMsg.SERVER_ERROR, ex); 
 		}
@@ -383,7 +383,8 @@ function (resp) {
 		} else if (ex.code == ZmCsfeException.ACCT_CHANGE_PASSWORD) {
 			this._loginDialog.disablePasswordField(true);
 			this._loginDialog.disableUnameField(true);
-			this._loginDialog.showChangePass();
+			this._loginDialog.showNewPasswordFields();
+			this._loginDialog.registerCallback(this.changePwdCallback, this);
 		} else if (ex.code == ZmCsfeException.PASSWORD_RECENTLY_USED ||
 			ex.code == ZmCsfeException.PASSWORD_CHANGE_TOO_SOON) {
 			var msg = ex.code == ZmCsfeException.ACCT_PASS_RECENTLY_USED ? ZaMsg.errorPassRecentlyUsed : (ZaMsg.errorPassChangeTooSoon);
