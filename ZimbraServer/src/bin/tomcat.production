@@ -98,9 +98,9 @@ case "$1" in
         mkdir -p ${tomcat_directory}/work/Catalina/localhost/zimbraAdmin/org/apache/jsp/public_
         mkdir -p ${tomcat_directory}/work/Catalina/localhost/manager
                 
-        # export ZIMBRA_TOMCAT_START_DEBUG=1
-        sudo ${zimbra_home}/libexec/zmtomcatmgr start 
-		exit $?
+        sudo ${zimbra_home}/libexec/zmtomcatmgr start \
+	       -Xms${jm}m -Xmx${jm}m ${tomcat_java_options}
+	exit $?
         ;;
 
     'kill')
