@@ -16,7 +16,7 @@
 # The Original Code is: Zimbra Collaboration Suite Server.
 # 
 # The Initial Developer of the Original Code is Zimbra, Inc.
-# Portions created by Zimbra are Copyright (C) 2005, 2006 Zimbra, Inc.
+# Portions created by Zimbra are Copyright (C) 2005 Zimbra, Inc.
 # All Rights Reserved.
 # 
 # Contributor(s):
@@ -40,6 +40,13 @@ my %serverKeys = (
 	"pop3s"	=> "zimbraPop3SSLBindPort"
 	);
 
+my %serverOpts = (
+	"imap4"	=> "",
+	"imap4s" => "--ssl_mode ssl_all",
+	"pop3"	=> "",
+	"pop3s"	=> "--ssl_mode ssl_all"
+	);
+
 my $cmd = shift;
 
 foreach my $i (`/opt/zimbra/bin/zmlocalconfig -m shell`) {
@@ -50,19 +57,21 @@ foreach my $i (`/opt/zimbra/bin/zmlocalconfig -m shell`) {
 	$ENV{$k} = $v;
 }
 
-if ($ENV{zimbraImapCleartextLoginEnabled} eq "TRUE") {
-	$serverKeys{imap4s} = $serverKeys{imap4};
-}
-
-if ($ENV{zimbraPop3CleartextLoginEnabled} eq "TRUE") {
-	$serverKeys{pop3s} = $serverKeys{pop3};
-}
-
 foreach my $i (`/opt/zimbra/bin/zmprov gs $ENV{zimbra_server_hostname}`) {
 	chomp $i;
 	my ($k,$v) = split (':',$i,2);
 	$v =~ s/^ //;
 	$ENV{$k} = $v;
+}
+
+if ($ENV{zimbraImapCleartextLoginEnabled} eq "TRUE") {
+	$serverKeys{imap4s} = $serverKeys{imap4};
+	$serverOpts{imap4s} = "--ssl_mode ssl_listen";
+}
+
+if ($ENV{zimbraPop3CleartextLoginEnabled} eq "TRUE") {
+	$serverKeys{pop3s} = $serverKeys{pop3};
+	$serverOpts{pop3s} = "--ssl_mode ssl_listen";
 }
 
 sub start {
@@ -74,6 +83,7 @@ sub start {
 			print "Starting $k\n";
 			my $cmd = "$ENV{zimbra_home}/perdition/sbin/perdition -P $k ".
 				"--config_file=$ENV{zimbra_home}/conf/perdition.conf -p $ENV{$serverKeys{$k}} ".
+				"$serverOpts{$k} ".
 				"-l $ENV{$proxyKeys{$k}} -s localhost ".
 				"--pid_file $ENV{zimbra_home}/log/perdition.$k.pid -u zimbra -g zimbra";
 			#print "Running sudo $cmd\n";
