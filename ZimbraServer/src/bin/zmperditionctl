@@ -50,6 +50,14 @@ foreach my $i (`/opt/zimbra/bin/zmlocalconfig -m shell`) {
 	$ENV{$k} = $v;
 }
 
+if ($ENV{zimbraImapCleartextLoginEnabled} eq "TRUE") {
+	$serverKeys{imap4s} = $serverKeys{imap4};
+}
+
+if ($ENV{zimbraPop3CleartextLoginEnabled} eq "TRUE") {
+	$serverKeys{pop3s} = $serverKeys{pop3};
+}
+
 foreach my $i (`/opt/zimbra/bin/zmprov gs $ENV{zimbra_server_hostname}`) {
 	chomp $i;
 	my ($k,$v) = split (':',$i,2);
