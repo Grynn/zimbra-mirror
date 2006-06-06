@@ -216,7 +216,7 @@ sub getHostList {
 }
 
 my $base = "/opt/zimbra/zimbramon/rrdtool";
-my $work = "${base}/work";
+my $work = "/opt/zimbra/logger/db/work";
 my $rrd = "${base}/bin/rrdtool";
 
 if (! -d $work) {mkdir ($work, 0777);}
