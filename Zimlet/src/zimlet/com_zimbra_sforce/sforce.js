@@ -486,19 +486,23 @@ Com_Zimbra_SForce.prototype.noteDropped = function(note) {
     // check out some domains, exclude user's domain
     var ignoreDomain = this.getUserProperty("ignoreDomain");
     var emails = [];
-	function addEmails(a) {
-		if (a) {
-			if (typeof a == "string") {
-                if(ignoreDomain == a) {return;}
+    function addEmails(a) {
+        if (a) {
+            if (typeof a == "string") {
+                if (a.indexOf(ignoreDomain) != -1) {
+                    return;
+                }
                 emails.push(a);
-			} else if (a instanceof Array) {
-				for (var i = 0; i < a.length; ++i) {
-                    if(ignoreDomain == a[i]) {continue;}
-					emails.push(a[i]);
+            } else if (a instanceof Array) {
+                for (var i = 0; i < a.length; ++i) {
+                    if(a[i].address && a[i].address.indexOf(ignoreDomain) == -1) {
+                        emails.push(a[i].address);
+                    }
                 }
             }
-		}
-	};
+        }
+    }
+    ;
     if(note._addrs && note._addrs.length > 0) {
         for(var i=1; i < note._addrs.length; i++) {
             addEmails(note._addrs[i]._array);
@@ -616,8 +620,14 @@ Com_Zimbra_SForce.prototype.dlg_addNoteToAccounts = function(accounts, note) {
                 chkContact = false;
             }
         }
-        if (acct.Con && acct.Con.length > 0) {
-            for (i = 0; i < acct.Con.length; i++) {
+        // Limit the number of contacts shown to 10
+        var displayLimit = acct.Con.length;
+        if(displayLimit > 10) {
+            displayLimit = 10;
+            DBG.println(AjxDebug.DBG3, "Setting contact limit to 10 returned " + acct.Con.length);
+        }
+        if (acct.Con && displayLimit > 0) {
+            for (i = 0; i < displayLimit; i++) {
                 cbid = Dwt.getNextId();
                 checkboxes.push(cbid);
                 html = this._checkBoxHtml(acct.Con[i], cbid, 2, chkContact, html);
@@ -639,8 +649,10 @@ Com_Zimbra_SForce.prototype.dlg_addNoteToAccounts = function(accounts, note) {
     var body;
     if (note.body) {
         body = AjxStringUtil.htmlEncode(note.body);
-    } else if (note._topPart && note._topPart.node) {
+    } else if (note._topPart && note._topPart.node && !note.isHtmlMail()) {
         body = AjxStringUtil.htmlEncode(note._topPart.node.content);
+    } else if (note._topPart && note._topPart.node && note.isHtmlMail()) {
+        body = AjxStringUtil.htmlEncode(note._topPart.getContentForType(ZmMimeTable.TEXT_PLAIN));
     }
     div.innerHTML =
 		[ "<table><tbody>",
