@@ -478,7 +478,7 @@ function(ev) {
 	var kev = DwtShell.keyEvent;
 	kev.setFromDhtmlEvent(ev);
 	var keyCode = kev.keyCode;
-DBG.println("***** key code: " + keyCode);
+
 	// Popdown any tooltip
 	shell.getToolTip().popdown();
 	
@@ -507,7 +507,7 @@ DBG.println("***** key code: " + keyCode);
 	 	if (kbMgr.__currTabGroup) {
 		 	// If a menu is popped up then don't act on the Tab
 		 	if (!DwtMenu.menuShowing()) {
-			 	//DBG.println(AjxDebug.DBG1, "TAB HIT!");
+			 	DBG.println(AjxDebug.DBG3, "Tab");
 			 	// If the tab hit is in an element or if the current tab group has
 			 	// a focus member
 				if (focusInTGMember || kbMgr.__currTabGroup.getFocusMember()) {
@@ -595,22 +595,7 @@ DBG.println("***** key code: " + keyCode);
 	 * the global handler if one is registered */
 	var handled = DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
 	var obj = (kbMgr.__dwtCtrlHasFocus) ? kbMgr.__focusObj : null;
-
-	if (obj != null && (obj instanceof DwtControl)) {
-		var mapName = obj.getKeyMapName ? obj.getKeyMapName() : obj.toString();
-		DBG.println("object " + obj.toString() + " dispatching to map: " + mapName);
-		handled = kbMgr.__dispatchKeyEvent(obj, mapName, kev, false);
-	}
-
-	if ((handled == DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED) && kbMgr.__globalKeyActionHdlr &&
-		!(kbMgr.__currTabGroup && kbMgr.__currTabGroup.isGlobalHandlingBlocked())) {
-		//DBG.println("Dispatching to global map: " + kbMgr.__globalKeyActionHdlr.getKeyMapNameToUse());
-		handled = kbMgr.__dispatchKeyEvent(kbMgr.__globalKeyActionHdlr, 
-							kbMgr.__globalKeyActionHdlr.getKeyMapNameToUse(), kev, false);
-		//DBG.println(AjxDebug.DBG1, "GLOBAL HANDLER RETURNED: " + handled);
-	}
-	
-	kbMgr.__kbEventStatus = handled;
+	kbMgr.__kbEventStatus = handled = kbMgr.__handleKeyEvent(obj, kev);
 	switch (handled) {
 		case DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED:
 			kbMgr.__keySequence.length = 0;
@@ -632,6 +617,32 @@ DBG.println("***** key code: " + keyCode);
 };
 
 /**
+ * Tries to get the key event handled, first by the object with focus, then
+ * by the global handler (if it's not blocked).
+ * 
+ * @private
+ */
+DwtKeyboardMgr.prototype.__handleKeyEvent =
+function(obj, kev, mapName, forceActionCode) {
+	var handled = DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
+	if (obj != null && (obj instanceof DwtControl)) {
+		mapName = mapName ? mapName : obj.getKeyMapName ? obj.getKeyMapName() : obj.toString();
+		DBG.println(AjxDebug.DBG3, "object " + obj.toString() + " dispatching to map: " + mapName);
+		handled = this.__dispatchKeyEvent(obj, mapName, kev, forceActionCode);
+	}
+
+	if ((handled == DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED) && this.__globalKeyActionHdlr &&
+		!(this.__currTabGroup && this.__currTabGroup.isGlobalHandlingBlocked())) {
+		DBG.println(AjxDebug.DBG3, "Dispatching to global map: " + this.__globalKeyActionHdlr.getKeyMapNameToUse());
+		handled = this.__dispatchKeyEvent(this.__globalKeyActionHdlr, 
+							this.__globalKeyActionHdlr.getKeyMapNameToUse(), kev, forceActionCode);
+		//DBG.println(AjxDebug.DBG1, "GLOBAL HANDLER RETURNED: " + handled);
+	}
+
+	return handled;
+};
+
+/**
  * Handles event dispatching
  * 
  * @private
@@ -640,7 +651,7 @@ DwtKeyboardMgr.prototype.__dispatchKeyEvent =
 function(hdlr, mapName, ev, forceActionCode) {
 	var actionCode = this.__keyMapMgr.getActionCode(this.__keySequence, mapName, forceActionCode);
 	if (actionCode == DwtKeyMapMgr.NOT_A_TERMINAL) {
-		//DBG.println("SCHEDULING KILL SEQUENCE ACTION");
+		DBG.println(AjxDebug.DBG3, "SCHEDULING KILL SEQUENCE ACTION");
 		/* setup a timed action to redispatch/kill the key sequence in the event
 		 * the user does not press another key in the allotted time */
 		this.__hdlr = hdlr;
@@ -652,11 +663,11 @@ function(hdlr, mapName, ev, forceActionCode) {
 	} else if (actionCode != null) {
 		/* It is possible that the component may not handle a valid action
 		 * particulary actions defined in the global map */
-		//DBG.println("HANDLING ACTION: " + actionCode);
+		DBG.println(AjxDebug.DBG3, "HANDLING ACTION: " + actionCode);
 		return (hdlr.handleKeyAction(actionCode, ev)) ? DwtKeyboardMgr.__KEYSEQ_HANDLED
 													   : DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
 	} else {	
-		//DBG.println("TERMINAL W/O ACTION CODE");
+		DBG.println(AjxDebug.DBG3, "TERMINAL W/O ACTION CODE");
 		return DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
 	}
 	
@@ -670,8 +681,8 @@ function(hdlr, mapName, ev, forceActionCode) {
  */
 DwtKeyboardMgr.prototype.__killKeySequenceAction =
 function() {
-	//DBG.println("KILLING KEY SEQUENCE: " + this.__mapName);
-	this.__dispatchKeyEvent(this.__hdlr, this.__mapName, this.__ev, true);
+	DBG.println(AjxDebug.DBG3, "KILLING KEY SEQUENCE: " + this.__mapName);
+	this.__handleKeyEvent(this.__hdlr, this.__ev, this.__mapName, true);
 	this.__killKeySeqTimedActionId = -1;
 	this.__keySequence.length = 0;
 };

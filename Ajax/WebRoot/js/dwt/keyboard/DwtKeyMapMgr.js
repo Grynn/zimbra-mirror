@@ -72,10 +72,13 @@ DwtKeyMapMgr._inited = false;	// Initialization flag
  */
 DwtKeyMapMgr.prototype.getActionCode =
 function (keySeq, mappingName, forceActionCode) {
-	//DBG.println("Getting action code for: " + keySeq.join("") + " in map: " + mappingName);
+	DBG.println(AjxDebug.DBG3, "Getting action code for: " + keySeq.join("") + " in map: " + mappingName);
 	var mapping =  this._fsas[mappingName];
 	
-	if (!mapping) return null;
+	if (!mapping) {
+		DBG.println(AjxDebug.DBG3, "No keymap for: " + mappingName);
+		return null;
+	}
 					
 	var keySeqLen = keySeq.length;
 	var tmpFsa = mapping;
@@ -101,17 +104,17 @@ function (keySeq, mappingName, forceActionCode) {
 		 * so return it. Else if the binding does not have an action code (i.e. it
 		 * has a submap only) or if forceActionCode is false, then return DwtKeyMapMgr.NOT_A_TERMINAL
 		 * since we are to behave like an intermediate node. Else return the action code. */
-		if (!binding.subMap || forceActionCode)
-			return binding.actionCode;
-		else
-			return DwtKeyMapMgr.NOT_A_TERMINAL;
+		return (!binding.subMap || forceActionCode) ? binding.actionCode : DwtKeyMapMgr.NOT_A_TERMINAL;
 	} else if (mapping.inherit && mapping.inherit.length) {
 		var actionCode = null;
 		for (var i = 0; i < mapping.inherit.length; i++) {
-			//DBG.println(AjxDebug.DBG3, "checking inherited map: " + mapping.inherit[i]);
-			actionCode = this.getActionCode(keySeq, mapping.inherit[i], forceActionCode);
-			if (actionCode) return actionCode;
+			DBG.println(AjxDebug.DBG3, "checking inherited map: " + mapping.inherit[i]);
+			this.getActionCode(keySeq, mapping.inherit[i], forceActionCode);
+			if (actionCode != null) {
+				return actionCode;
+			}
 		}
+		return null;
 	} else {
 		return null;	// no match
 	}

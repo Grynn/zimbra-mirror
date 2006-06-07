@@ -32,12 +32,12 @@ function DwtKeyMap(subclassInit) {
 	this._map = {};
 	
 	this._map["DwtBaseDialog"] = {
-		"Enter":	DwtKeyMap.ENTER
+		"Enter":			DwtKeyMap.ENTER
 	};
 
 	this._map["DwtButton"] = {
-		"Enter": DwtKeyMap.SELECT_CURRENT,
-		"ArrowDown": DwtKeyMap.SELECT_SUBMENU	
+		"Enter":			DwtKeyMap.SELECT_CURRENT,
+		"ArrowDown":		DwtKeyMap.SELECT_SUBMENU	
 	};
 	
 	this._map["DwtListView"] = {
@@ -58,12 +58,12 @@ function DwtKeyMap(subclassInit) {
 	};
 	
 	this._map["DwtMenu"] = {
-		"Esc":        DwtKeyMap.CANCEL,
-		"Enter":	  DwtKeyMap.SELECT_CURRENT,	
-		"ArrowDown":  DwtKeyMap.SELECT_NEXT,
-		"ArrowUp":    DwtKeyMap.SELECT_PREV,
-		"ArrowLeft":  DwtKeyMap.SELECT_PARENTMENU,
-		"ArrowRight": DwtKeyMap.SELECT_SUBMENU
+		"Esc":				DwtKeyMap.CANCEL,
+		"Enter":			DwtKeyMap.SELECT_CURRENT,	
+		"ArrowDown":		DwtKeyMap.SELECT_NEXT,
+		"ArrowUp":			DwtKeyMap.SELECT_PREV,
+		"ArrowLeft":		DwtKeyMap.SELECT_PARENTMENU,
+		"ArrowRight":		DwtKeyMap.SELECT_SUBMENU
 	};
 };
 
@@ -80,42 +80,42 @@ function(keymap) {
 
 // Key names
 
-DwtKeyMap.CTRL  = "Ctrl+";
-DwtKeyMap.ALT   = "Alt+";
-DwtKeyMap.SHIFT = "Shift+";
+DwtKeyMap.CTRL			= "Ctrl+";
+DwtKeyMap.ALT			= "Alt+";
+DwtKeyMap.SHIFT			= "Shift+";
 
-DwtKeyMap.ARROW_DOWN = "ArrowDown";
-DwtKeyMap.ARROW_LEFT = "ArrowLeft";
-DwtKeyMap.ARROW_RIGHT = "ArrowRight";
-DwtKeyMap.ARROW_UP = "ArrowUp";
-DwtKeyMap.BACKSPACE = "Backspace";
-DwtKeyMap.DELETE = "Del";
-DwtKeyMap.END = "End";
-DwtKeyMap.ENTER = "Enter";
-DwtKeyMap.ESC = "Esc";
-DwtKeyMap.HOME = "Home";
-DwtKeyMap.PAGE_DOWN = "PgDown";
-DwtKeyMap.PAGE_UP = "PgUp";
-DwtKeyMap.SPACE = "Space";
+DwtKeyMap.ARROW_DOWN	= "ArrowDown";
+DwtKeyMap.ARROW_LEFT	= "ArrowLeft";
+DwtKeyMap.ARROW_RIGHT	= "ArrowRight";
+DwtKeyMap.ARROW_UP		= "ArrowUp";
+DwtKeyMap.BACKSPACE		= "Backspace";
+DwtKeyMap.DELETE		= "Del";
+DwtKeyMap.END			= "End";
+DwtKeyMap.ENTER			= "Enter";
+DwtKeyMap.ESC			= "Esc";
+DwtKeyMap.HOME			= "Home";
+DwtKeyMap.PAGE_DOWN		= "PgDown";
+DwtKeyMap.PAGE_UP		= "PgUp";
+DwtKeyMap.SPACE			= "Space";
 
 // Key map action code contants. If providing your own key map then make
 // your codes positive integers
 var i = -1;
 
-DwtKeyMap.ACTION = i--;
-DwtKeyMap.ADD_SELECT_CURRENT = i--;
-DwtKeyMap.ADD_SELECT_NEXT = i--;
-DwtKeyMap.ADD_SELECT_PREV = i--;
-DwtKeyMap.CANCEL = i--;
-DwtKeyMap.DBLCLICK = i--;
-DwtKeyMap.DONE = i--
-DwtKeyMap.NEXT = i--;
-DwtKeyMap.PREV = i--;
-DwtKeyMap.SELECT_CURRENT = i--;
-DwtKeyMap.SELECT_NEXT = i--;
-DwtKeyMap.SELECT_PREV = i--;
-DwtKeyMap.SELECT_SUBMENU = i--;
-DwtKeyMap.SELECT_PARENTMENU = i--;
+DwtKeyMap.ACTION				= i--;
+DwtKeyMap.ADD_SELECT_CURRENT	= i--;
+DwtKeyMap.ADD_SELECT_NEXT		= i--;
+DwtKeyMap.ADD_SELECT_PREV		= i--;
+DwtKeyMap.CANCEL				= i--;
+DwtKeyMap.DBLCLICK				= i--;
+DwtKeyMap.DONE					= i--;
+DwtKeyMap.NEXT					= i--;
+DwtKeyMap.PREV					= i--;
+DwtKeyMap.SELECT_CURRENT		= i--;
+DwtKeyMap.SELECT_NEXT			= i--;
+DwtKeyMap.SELECT_PREV			= i--;
+DwtKeyMap.SELECT_SUBMENU		= i--;
+DwtKeyMap.SELECT_PARENTMENU		= i--;
 
 delete i;
 
