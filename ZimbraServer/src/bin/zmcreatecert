@@ -142,6 +142,8 @@ signCertReq() {
 
 	cp ${BASE}/server/server.crt ${CONF}/slapd.crt
 	cp ${BASE}/server/server.key ${CONF}/slapd.key
+	cp ${BASE}/server/server.crt ${CONF}/perdition.pem
+	cp ${BASE}/server/server.key ${CONF}/perdition.key
 	mkdir -p ${CONF}/ca
 	cp ${BASE}/ca/ca.key ${CONF}/ca/ca.key
 	cp ${BASE}/ca/ca.pem ${CONF}/ca/ca.pem
