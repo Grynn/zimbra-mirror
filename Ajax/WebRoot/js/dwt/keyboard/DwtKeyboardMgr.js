@@ -557,6 +557,10 @@ function(ev) {
 	/* TODO not all inputs accept the same values (e.g. text vs radio etc) so 
 	 * we need to differentiate. Should change isUsableTextInputValue(keyCode) to 
 	 * isUsableInputValue(keyCode, inputType) where inputType is the type of input*/
+	// Note that FF on the mac has an issue reporting the ALT+<keycode> it
+	// always ends up reporting undefined for the <keycode>. For this reason I
+	// have added Ctrl analogs below	
+	/* TODO translate Ctl on FF Mac into Alt */ 
 	if (DwtKeyMapMgr.isModifier(keyCode)
 		|| (!kbMgr.__dwtCtrlHasFocus 
 			&& kbMgr.__killKeySeqTimedActionId == -1 && !kev.ctrlKey && !kev.altKey
