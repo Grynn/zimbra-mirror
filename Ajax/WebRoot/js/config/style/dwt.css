@@ -286,17 +286,19 @@
  */
 
 .DwtSelect 								{	@Select@						}
-.DwtSelect-activated 					{	@Select-hover@		padding:0px;			}
+.DwtSelect-activated 					{	@Select-hover@		padding:0px;	}
 .DwtSelect-triggered					{	@Select-clicked@				}	
 .DwtSelect-toggled						{	@Select-clicked@				}	
 .DwtSelect-disabled						{	@Select-disabled@				}	
-		
+.DwtSelect-focused						{	@Select-focused@				}	
+	
 .DwtSelect .Text 						{	@SelectText@					}
 .DwtSelect-activated .Text				{	@SelectText-hover@				}
 .DwtSelect-triggered .Text				{	@SelectText-clicked@			}	
 .DwtSelect-toggled .Text				{	@SelectText-clicked@			}	
 .DwtSelect-disabled .Text				{	@SelectText-disabled@			}	
-		
+.DwtSelect-focused .Text				{	@SelectText-focused@		}	
+	
 
 /* ??? SHOTGUN */
 .DwtSelect table,
