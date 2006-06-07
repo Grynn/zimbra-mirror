@@ -70,6 +70,7 @@ ZaGlobalConfig.A_zimbraMtaRejectUnknownSenderDomain = "_"+ZaGlobalConfig.A_zimbr
 //Domain
 ZaGlobalConfig.A_zimbraGalLdapFilterDef = "zimbraGalLdapFilterDef";
 ZaGlobalConfig.A_zimbraGalMaxResults = "zimbraGalMaxResults";
+ZaGlobalConfig.A_zimbraNotebookAccount = "zimbraNotebookAccount";
 //Server
 ZaGlobalConfig.A_zimbraLmtpNumThreads = "zimbraLmtpNumThreads";
 ZaGlobalConfig.A_zimbraLmtpBindPort = "zimbraLmtpBindPort";

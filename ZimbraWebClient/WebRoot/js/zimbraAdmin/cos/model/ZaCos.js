@@ -64,6 +64,7 @@ ZaCos.A_zimbraMailMessageLifetime = "zimbraMailMessageLifetime";
 ZaCos.A_zimbraMailTrashLifetime = "zimbraMailTrashLifetime";
 ZaCos.A_zimbraMailSpamLifetime = "zimbraMailSpamLifetime";
 ZaCos.A_zimbraMailHostPool = "zimbraMailHostPool";
+ZaCos.A_zimbraAvailableSkin = "zimbraAvailableSkin";
 //prefs
 ZaCos.A_zimbraPrefCalendarAlwaysShowMiniCal = "zimbraPrefCalendarAlwaysShowMiniCal";
 ZaCos.A_zimbraPrefCalendarUseQuickAdd = "zimbraPrefCalendarUseQuickAdd";
@@ -87,6 +88,7 @@ ZaCos.A_zimbraPrefMailSignatureStyle = "zimbraPrefMailSignatureStyle";
 ZaCos.A_zimbraPrefUseTimeZoneListInCalendar = "zimbraPrefUseTimeZoneListInCalendar";
 ZaCos.A_zimbraPrefImapSearchFoldersEnabled = "zimbraPrefImapSearchFoldersEnabled";
 ZaCos.A_zimbraPrefCalendarApptReminderWarningTime = "zimbraPrefCalendarApptReminderWarningTime";
+ZaCos.A_zimbraPrefSkin = "zimbraPrefSkin";
 //features
 ZaCos.A_zimbraFeatureContactsEnabled="zimbraFeatureContactsEnabled";
 ZaCos.A_zimbraFeatureCalendarEnabled="zimbraFeatureCalendarEnabled";
@@ -105,6 +107,7 @@ ZaCos.A_zimbraImapEnabled = "zimbraImapEnabled";
 ZaCos.A_zimbraPop3Enabled = "zimbraPop3Enabled";
 ZaCos.A_zimbraFeatureHtmlComposeEnabled = "zimbraFeatureHtmlComposeEnabled";
 ZaCos.A_zimbraFeatureGalAutoCompleteEnabled = "zimbraFeatureGalAutoCompleteEnabled";
+ZaCos.A_zimbraFeatureSkinChangeEnabled = "zimbraFeatureSkinChangeEnabled";
 //internal attributes - do not send these to the server
 ZaCos.A_zimbraMailAllServersInternal = "allserversarray";
 ZaCos.A_zimbraMailHostPoolInternal = "hostpoolarray";

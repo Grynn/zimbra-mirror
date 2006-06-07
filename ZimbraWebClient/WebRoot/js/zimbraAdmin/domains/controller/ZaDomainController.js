@@ -235,6 +235,10 @@ function(ev) {
 			//if creation took place - fire an DomainChangeEvent
 			this.fireCreationEvent(domain);
 			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);	
+			if(this._newDomainWizard.getObject()[ZaDomain.A_CreateNotebook]=="TRUE") {
+				ZaDomain.initNotebook(this._newDomainWizard.getObject()) ;
+				
+			}
 			this._newDomainWizard.popdown();		
 		}
 	} catch (ex) {

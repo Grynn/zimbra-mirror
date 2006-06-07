@@ -90,7 +90,7 @@ ZaAccount.A_zimbraMailMessageLifetime = "zimbraMailMessageLifetime";
 ZaAccount.A_zimbraMailSpamLifetime = "zimbraMailSpamLifetime";
 ZaAccount.A_zimbraMailTrashLifetime = "zimbraMailTrashLifetime";
 ZaAccount.A_zimbraMailIdleSessionTimeout = "zimbraMailIdleSessionTimeout";
-
+ZaAccount.A_zimbraAvailableSkin = "zimbraAvailableSkin";
 //prefs
 ZaAccount.A_zimbraPrefCalendarAlwaysShowMiniCal = "zimbraPrefCalendarAlwaysShowMiniCal";
 ZaAccount.A_zimbraPrefCalendarUseQuickAdd = "zimbraPrefCalendarUseQuickAdd";
@@ -126,6 +126,7 @@ ZaAccount.A_zimbraPrefImapSearchFoldersEnabled = "zimbraPrefImapSearchFoldersEna
 ZaAccount.A_zimbraPrefMailForwardingAddress = "zimbraPrefMailForwardingAddress";
 ZaAccount.A_zimbraPrefMailLocalDeliveryDisabled = "zimbraPrefMailLocalDeliveryDisabled";
 ZaAccount.A_zimbraPrefCalendarApptReminderWarningTime = "zimbraPrefCalendarApptReminderWarningTime";
+ZaAccount.A_zimbraPrefSkin = "zimbraPrefSkin";
 //features
 ZaAccount.A_zimbraFeatureMailForwardingEnabled = "zimbraFeatureMailForwardingEnabled";
 ZaAccount.A_zimbraFeatureContactsEnabled="zimbraFeatureContactsEnabled";
@@ -144,6 +145,7 @@ ZaAccount.A_zimbraFeatureHtmlComposeEnabled = "zimbraFeatureHtmlComposeEnabled";
 ZaAccount.A_zimbraFeatureGalAutoCompleteEnabled = "zimbraFeatureGalAutoCompleteEnabled";
 ZaAccount.A_zimbraImapEnabled = "zimbraImapEnabled";
 ZaAccount.A_zimbraPop3Enabled = "zimbraPop3Enabled";
+ZaAccount.A_zimbraFeatureSkinChangeEnabled = "zimbraFeatureSkinChangeEnabled";
 ZaAccount.A_zimbraHideInGal = "zimbraHideInGal";
 
 //readonly

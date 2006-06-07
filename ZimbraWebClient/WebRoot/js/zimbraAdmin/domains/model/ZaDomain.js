@@ -93,7 +93,11 @@ ZaDomain.A_GALTestResultCode = "galtestresutcode";
 ZaDomain.A_GALSampleQuery = "samplequery";
 ZaDomain.A_UseBindPassword = "usebindpassword";
 ZaDomain.A_GALTestSearchResults = "galtestsearchresults";
-
+ZaDomain.A_NotebookTemplateDir = "templatedir";
+ZaDomain.A_NotebookTemplateFolder = "templatefolder";
+ZaDomain.A_NotebookAccountName = "noteBookAccountName";
+ZaDomain.A_NotebookAccountPassword = "noteBookAccountPassword";
+ZaDomain.A_CreateNotebook = "createNotebook";
 //values
 ZaDomain.GAL_Mode_internal = "zimbra";
 ZaDomain.GAL_Mode_external = "ldap";
@@ -119,6 +123,7 @@ ZaDomain.A_zimbraVirtualHostname = "zimbraVirtualHostname";
 ZaDomain.AuthMech_ad = "ad";
 ZaDomain.AuthMech_ldap = "ldap";
 ZaDomain.AuthMech_zimbra = "zimbra";
+ZaDomain.A_zimbraNotebookAccount = "zimbraNotebookAccount";
 
 //result codes returned from Check* requests
 ZaDomain.Check_OK = "check.OK";
@@ -335,6 +340,31 @@ function (obj, callback) {
 	params.callback = callback;
 	command.invoke(params);	
 
+}
+ZaDomain.initNotebook = function (obj, callback) {
+	var soapDoc = AjxSoapDoc.create("InitNotebookRequest", "urn:zimbraAdmin", null);
+	if(obj[ZaDomain.A_NotebookTemplateDir]) {
+		var attr = soapDoc.set("template", obj[ZaDomain.A_NotebookTemplateDir]);
+		if(obj[ZaDomain.A_NotebookTemplateFolder]) {
+			attr.setAttribute("dest", obj[ZaDomain.A_NotebookTemplateFolder]);			
+		}
+	}
+	
+	if(obj[ZaDomain.A_NotebookAccountName]) {
+		var attr = soapDoc.set("name", obj[ZaDomain.A_NotebookAccountName]);
+		if(obj[ZaDomain.A_NotebookAccountPassword]) {
+			attr.setAttribute("password", obj[ZaDomain.A_NotebookAccountPassword]);			
+		}
+	}
+	var attr = soapDoc.set("domain", obj.attrs[ZaDomain.A_domainName]);
+	attr.setAttribute("by", "name");
+	
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	params.asyncMode = true;
+	params.callback = callback;
+	command.invoke(params);	
 }
 
 ZaDomain.testGALSettings =
@@ -692,6 +722,12 @@ ZaDomain.myXModel = {
 					{id:"lastName", type:_STRING_}														
 				]
 			}
-		}
+		},
+		
+		{id:ZaDomain.A_NotebookTemplateDir, type:_STRING_},
+		{id:ZaDomain.A_NotebookTemplateFolder, type:_STRING_},
+		{id:ZaDomain.A_NotebookAccountName, type:_STRING_},
+		{id:ZaDomain.A_NotebookAccountPassword, type:_STRING_},
+		{id:ZaDomain.A_CreateNotebook, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES}
 	]
 };

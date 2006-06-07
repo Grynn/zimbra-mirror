@@ -453,6 +453,11 @@ function(ev) {
 	try {
 		var domain = ZaDomain.create(this._newDomainWizard.getObject(), this._app);
 		if(domain != null) {
+			if(this._newDomainWizard.getObject()[ZaDomain.A_CreateNotebook]=="TRUE") {
+				ZaDomain.initNotebook(this._newDomainWizard.getObject()) ;
+				
+			}			
+			this._newDomainWizard.popdown();
 			//if creation took place - fire an DomainChangeEvent
 			this._fireDomainCreationEvent(domain);
 			
@@ -460,8 +465,6 @@ function(ev) {
 			evt.set(ZaEvent.E_CREATE, this);
 			evt.setDetails(domain);
 			this.handleCreation(evt);
-			
-			this._newDomainWizard.popdown();		
 		}
 	} catch (ex) {
 		if(ex.code == ZmCsfeException.DOMAIN_EXISTS) {

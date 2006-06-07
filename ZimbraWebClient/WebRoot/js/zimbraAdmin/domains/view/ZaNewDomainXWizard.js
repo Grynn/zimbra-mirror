@@ -49,7 +49,8 @@ function ZaNewDomainXWizard (parent, app) {
 		{label:ZaMsg.TABT_TestAuthSettings, value:12},				
 		{label:ZaMsg.TABT_AuthTestResult, value:13},
 		{label:ZaMsg.Domain_Tab_VirtualHost, value:14},
-		{label:ZaMsg.TABT_DomainConfigComplete, value:15}		
+		{label:ZaMsg.Domain_Tab_Notebook, value:15},		
+		{label:ZaMsg.TABT_DomainConfigComplete, value:16}		
 	];
 		
 	this.GALModes = [
@@ -760,6 +761,16 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
 					]
 				},
 				{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 15", relevantBehavior:_HIDE_,
+					items: [
+						{ref:ZaDomain.A_CreateNotebook, type:_CHECKBOX_, label:ZaMsg.Domain_CreateNotebook, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_},
+						{ref:ZaDomain.A_NotebookTemplateDir, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookTemplateDir, labelLocation:_LEFT_, relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE'", relevantBehavior:_DISABLE_},
+						{ref:ZaDomain.A_NotebookTemplateFolder, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookTemplateFolder, labelLocation:_LEFT_, relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE'", relevantBehavior:_DISABLE_},
+						{ref:ZaDomain.A_NotebookAccountName, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookAccountName, labelLocation:_LEFT_, relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE'", relevantBehavior:_DISABLE_},						
+						{ref:ZaDomain.A_NotebookAccountPassword, type:_SECRET_, label:ZaMsg.Domain_NotebookAccountPassword, labelLocation:_LEFT_, relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE'", relevantBehavior:_DISABLE_}												
+
+					]
+				},				
+				{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 16", relevantBehavior:_HIDE_,
 					items: [
 						{type:_OUTPUT_, value:ZaMsg.Domain_Config_Complete}
 					]
