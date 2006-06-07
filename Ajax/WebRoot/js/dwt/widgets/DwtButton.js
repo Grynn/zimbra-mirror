@@ -71,6 +71,7 @@ function DwtButton(parent, style, className, posStyle, actionTiming, id, index) 
 
 	// CSS classes to handle activated/triggered states
 	this._origClassName = className;
+	this._origClassNameFocused = className + DwtButton.__KBFOCUS_STR;
 	this._activatedClassName = this._className + "-" + DwtCssStyle.ACTIVATED;
 	this._triggeredClassName = this._className + "-" + DwtCssStyle.TRIGGERED;
 	this._toggledClassName = this._className + "-" + DwtCssStyle.TOGGLED;
@@ -104,6 +105,8 @@ DwtButton.TOGGLE_STYLE = DwtLabel._LAST_STYLE * 2;
 
 DwtButton.ACTION_MOUSEUP = 1;
 DwtButton.ACTION_MOUSEDOWN = 2;
+
+ DwtButton.__KBFOCUS_STR = "-" + DwtCssStyle.FOCUSED;
 
 // Public methods
 
@@ -427,23 +430,14 @@ DwtButton.prototype._focusByMouseUpEvent =
 // NOTE: _focus and _blur will be reworked to reflect styles correctly
 DwtButton.prototype._focus =
 function() {
-	//DBG.println(AjxDebug.DBG3, "DwtButton.prototype._focus");
-	// ROSSD MOVE TO CSS
-	//this.__setClassName(this.getClassName());
-	//this._mouseOverListener(DwtShell.mouseEvent);
-	this.__oldBorder = this.getHtmlElement().style.border;
-	this.getHtmlElement().style.border = "1px dotted black";
+	//DBG.println("DwtButton.prototype._focus");
+	this.__setClassName(this.getClassName());
 }
 
 DwtButton.prototype._blur =
 function() {
-	//DBG.println(AjxDebug.DBG3, "DwtButton.prototype._blur");
-//	this.__setClassName(this.getClassName());
-    // Check that the Html Element is not null
-    var el = this.getHtmlElement();
-    if(el && el.style) {
-        el.style.border = this.__oldBorder;
-    }
+	//DBG.println("DwtButton.prototype._blur");
+	this.__setClassName(this.getClassName());
 }
 
 DwtButton.prototype._toggleMenu =
@@ -646,16 +640,19 @@ function(ev) {
 /**
  * Set's the class name for this button. Note that this method overrides <i>DwtControl</i>'s
  * <code>setClassName</code> method in that it will check if the button has keyboard focus
- * and will append "-" + DwtCssStyle.KBFOCUS to <code>className</code>
+ * and will append "-" + DwtCssStyle.FOCUSED to <code>className</code>
  * 
  * @private
  */
  DwtButton.prototype.__setClassName =
  function(className) {
- // NOTE this is going to be reworked for the keyboard nav stuff
- //	if (this.hasFocus()) {
- //		className += "-" + DwtCssStyle.KBFOCUS;
- //	}
+	if (this.haveFocus()) {
+		if (className == this._origClassName)
+			className += DwtButton.__KBFOCUS_STR;
+	} else {
+		if (className == this._origClassNameFocused)
+			className = this._origClassName;
+	}
  	this.setClassName(className);
  }
 

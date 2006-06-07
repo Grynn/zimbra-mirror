@@ -69,7 +69,7 @@ DwtCssStyle.DISABLED = "disabled";	// a disabled item
 
 /** item has keyboard focus
  * @type string */
- DwtCssStyle.KBFOCUS = "kbfocus";
+ DwtCssStyle.FOCUSED = "focused";
 
 
 DwtCssStyle.getProperty = 
