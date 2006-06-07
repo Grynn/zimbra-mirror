@@ -41,9 +41,9 @@ my %serverKeys = (
 	);
 
 my %serverOpts = (
-	"imap4"	=> "",
+	"imap4"	=> "--ssl_mode tls_listen",
 	"imap4s" => "--ssl_mode ssl_all",
-	"pop3"	=> "",
+	"pop3"	=> "--ssl_mode tls_listen",
 	"pop3s"	=> "--ssl_mode ssl_all"
 	);
 
