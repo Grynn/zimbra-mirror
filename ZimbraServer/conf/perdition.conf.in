@@ -73,8 +73,8 @@ M /opt/zimbra/perdition/lib/libperditiondb_ldap.so
 m '@@ldap_url@@/?zimbraMailDeliveryAddress%2CzimbraMailHost?sub?(&(objectClass=zimbraAccount)(zimbraMailDeliveryAddress=%25s))' 
 pid_file /opt/zimbra/log/perdition.pid
 ssl_cert_accept_self_signed
-ssl_cert_file /opt/zimbra/conf/slapd.crt
-ssl_key_file  /opt/zimbra/conf/slapd.key
+ssl_cert_file /opt/zimbra/conf/perdition.pem
+ssl_key_file  /opt/zimbra/conf/perdition.key
 
 # A|add_domain STATE[,STATE...][,STRIP_DEPTH]:
 # Appends a domain to the USER based on the IP address connected to in
