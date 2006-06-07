@@ -91,18 +91,11 @@ function() {
 DwtComposite.prototype.dispose =
 function() {
 	if (this._disposed) return;
-	
-	DBG.println(AjxDebug.DBG3, "DwtComposite.prototype.dispose: " + this.toString() + " - " + this._htmlElId);
-	var sz = this._children.size();
-	if (sz > 0) {
-		// Dup the array since disposing the children will result in removeChild
-		// being called which will modify the array
-		var a = this._children.getArray().slice(0);
-		for (var i = 0; i < sz; i++) {
-			if (a[i].dispose)
-				a[i].dispose();
-		}
-	}		
+
+	var children = this._children.getArray();
+	while (children.length > 0)
+		children[0].dispose();
+
 	DwtControl.prototype.dispose.call(this);
 }
 
@@ -130,7 +123,7 @@ function() {
 DwtComposite.prototype.removeChildren =
 function() {
 	var a = this._children.getArray();
-	while (this._children.size() > 0)
+	while (a.length > 0)
 		a[0].dispose();
 }
 
