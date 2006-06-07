@@ -739,6 +739,9 @@ extends HttpServlet {
 			// substitute and return
 			String pvalue = substitutions.getProperty(pname);
 			pvalue = replace(stack, pvalue);
+			if (stack != null) {
+				stack.pop();
+			}
 			substitutions.setProperty(pname, pvalue);
 			return pvalue;
 		}
