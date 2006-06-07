@@ -109,7 +109,7 @@ function (keySeq, mappingName, forceActionCode) {
 		var actionCode = null;
 		for (var i = 0; i < mapping.inherit.length; i++) {
 			DBG.println(AjxDebug.DBG3, "checking inherited map: " + mapping.inherit[i]);
-			this.getActionCode(keySeq, mapping.inherit[i], forceActionCode);
+			actionCode = this.getActionCode(keySeq, mapping.inherit[i], forceActionCode);
 			if (actionCode != null) {
 				return actionCode;
 			}
