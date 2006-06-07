@@ -61,7 +61,7 @@ extends HttpServlet {
 
 	private static final String N_SKIN = "skin";
 
-	private static final String DEFAULT_SKIN = "steel";
+	private static final String DEFAULT_SKIN = "sand";
 	private static final String SKIN_MANIFEST_EXT = ".xml";
 
 	private static final Pattern RE_IFDEF = Pattern.compile("^\\s*#ifdef\\s+(.*?)\\s*$", Pattern.CASE_INSENSITIVE);
@@ -101,6 +101,7 @@ extends HttpServlet {
 		String browserType = getMacroNames(macros.keySet());
 
 		System.err.println("DEBUG: browserType="+browserType);
+		System.err.println("DEBUG: uri="+uri);
 
 		// generate buffer
 		Map<String,String> buffers = cache.get(browserType);
@@ -629,6 +630,7 @@ extends HttpServlet {
 			for (File file : substList) {
 				System.err.println("DEBUG: subst file = "+file);
 				try {
+					/***
 					CharArrayWriter out = new CharArrayWriter(4096); // 4K
 					SkinResources.preprocess(file, out, macros, null, "#", "#", "#");
 					String content = out.toString();
@@ -639,6 +641,23 @@ extends HttpServlet {
 					InputStream in = new ByteArrayInputStream(bytes);
 
 					substitutions.load(in);
+					/***
+					 InputStream in = new FileInputStream(file);
+					 substitutions.load(in);
+					 in.close();
+					 /***/
+					InputStream in = new FileInputStream(file);
+					Properties p = new Properties();
+					p.load(in);
+					in.close();
+
+					Enumeration pnames = p.propertyNames();
+					while (pnames.hasMoreElements()) {
+						String pname = (String)pnames.nextElement();
+						String pvalue = p.getProperty(pname);
+						substitutions.setProperty(pname, pvalue);
+					}
+					/***/
 				}
 				catch (Throwable t) {
 					System.err.println("ERROR loading subst file!");
@@ -649,16 +668,21 @@ extends HttpServlet {
 
 			Stack<String> stack = new Stack<String>();
 			Enumeration substKeys = substitutions.propertyNames();
+			System.err.println("DEBUG: InsetBg (before) = "+substitutions.getProperty("InsetBg"));
 			while (substKeys.hasMoreElements()) {
 				stack.removeAllElements();
 
 				String substKey = (String)substKeys.nextElement();
+				if (substKey.equals("InsetBg")) {
+					System.err.println("DEBUG: InsetBg (loop) = "+substitutions.getProperty("InsetBg"));
+				}
 				String substValue = getProperty(stack, substKey);
 
 				/*** NOTE: This is done implicitly in getProperty
 				substitutions.setProperty(substKey, substValue);
 				/***/
 			}
+			System.err.println("DEBUG: InsetBg (after) = "+substitutions.getProperty("InsetBg"));
 
 			System.err.println("DEBUG: _SkinName_ = "+substitutions.getProperty("_SkinName_"));
 		}
