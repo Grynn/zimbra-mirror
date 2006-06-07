@@ -627,21 +627,24 @@ extends HttpServlet {
 
 			// process substitutions
 			for (File file : substList) {
-				/***
-				InputStream in = new FileInputStream(file);
-				substitutions.load(in);
-				in.close();
-				/***/
-				CharArrayWriter out = new CharArrayWriter(4096); // 4K
-				SkinResources.preprocess(file, out, macros, null, "#", "#", "#");
-				String content = out.toString();
-				// NOTE: properties files should be ASCII with
-				//       escaped Unicode char sequences.
-				byte[] bytes = content.getBytes("US-ASCII");
+				System.err.println("DEBUG: subst file = "+file);
+				try {
+					CharArrayWriter out = new CharArrayWriter(4096); // 4K
+					SkinResources.preprocess(file, out, macros, null, "#", "#", "#");
+					String content = out.toString();
+					// NOTE: properties files should be ASCII with
+					//       escaped Unicode char sequences.
+					byte[] bytes = content.getBytes("US-ASCII");
 
-				InputStream in = new ByteArrayInputStream(bytes);
-				substitutions.load(in);
-				/***/
+					InputStream in = new ByteArrayInputStream(bytes);
+
+					substitutions.load(in);
+				}
+				catch (Throwable t) {
+					System.err.println("ERROR loading subst file!");
+				}
+
+				System.err.println("DEBUG: _SkinName_ = "+substitutions.getProperty("_SkinName_"));
 			}
 
 			Stack<String> stack = new Stack<String>();
@@ -657,6 +660,7 @@ extends HttpServlet {
 				/***/
 			}
 
+			System.err.println("DEBUG: _SkinName_ = "+substitutions.getProperty("_SkinName_"));
 		}
 
 		//
