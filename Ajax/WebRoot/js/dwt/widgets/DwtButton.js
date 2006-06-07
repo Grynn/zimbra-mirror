@@ -638,7 +638,7 @@ function(ev) {
 }
 
 /**
- * Set's the class name for this button. Note that this method overrides <i>DwtControl</i>'s
+ * Sets the class name for this button. Note that this method overrides <i>DwtControl</i>'s
  * <code>setClassName</code> method in that it will check if the button has keyboard focus
  * and will append "-" + DwtCssStyle.FOCUSED to <code>className</code>
  * 
@@ -646,7 +646,7 @@ function(ev) {
  */
  DwtButton.prototype.__setClassName =
  function(className) {
-	if (this.haveFocus()) {
+	if (this.hasFocus()) {
 		if (className == this._origClassName)
 			className += DwtButton.__KBFOCUS_STR;
 	} else {
