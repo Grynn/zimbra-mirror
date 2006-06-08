@@ -112,6 +112,7 @@ case "$1" in
 		tail -${difflines} ${tomcat_directory}/logs/catalina.out > ${tomcat_directory}/logs/stacktrace.$$
 
         sudo ${zimbra_home}/libexec/zmtomcatmgr stop 
+		exit 0
         ;;
 
     'stop')
@@ -124,6 +125,7 @@ case "$1" in
 		tail -${difflines} ${tomcat_directory}/logs/catalina.out > ${tomcat_directory}/logs/stacktrace.$$
 
 		sudo ${zimbra_home}/libexec/zmtomcatmgr stop
+		exit 0
         ;;
     
     'restart')
