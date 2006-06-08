@@ -400,6 +400,7 @@ extends HttpServlet {
 
 		// parse user agent
 		String agt = agent.toLowerCase();
+		//System.err.println("USER-AGENT: "+agt);
 		StringTokenizer agtArr = new StringTokenizer(agt, " ");
 		int i = 0;
 		int index = -1;
@@ -419,6 +420,7 @@ extends HttpServlet {
 				isNav = true;
 			}
 			do {
+				//System.err.println("TOKEN: "+token);
 				if (token.indexOf("compatible") != -1 ) {
 					isCompatible = true;
 					isNav = false;
@@ -428,6 +430,7 @@ extends HttpServlet {
 					if (agtArr.hasMoreTokens()) {
 						browserVersion = parseFloat(agtArr.nextToken());
 					}
+					token = agtArr.hasMoreTokens() ? agtArr.nextToken() : null;
 					continue;
 				} else if ((token.indexOf("spoofer")) != -1){
 					isSpoofer = true;
@@ -443,6 +446,7 @@ extends HttpServlet {
 					if (agtArr.hasMoreTokens()) {
 						browserVersion = parseFloat(agtArr.nextToken());
 					}
+					token = agtArr.hasMoreTokens() ? agtArr.nextToken() : null;
 					continue;
 				} else if ((index = token.indexOf("gecko/")) != -1){
 					isGeckoBased = true;
