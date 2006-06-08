@@ -44,7 +44,8 @@ function() {
 	ZmObjectManager.registerHandler("ZmDate7ObjectHandler", ZmObjectManager.DATE, pri);
 	ZmObjectManager.registerHandler("ZmDate8ObjectHandler", ZmObjectManager.DATE, pri);
 	ZmObjectManager.registerHandler("ZmDate9ObjectHandler", ZmObjectManager.DATE, pri);	
-//	ZmObjectManager.registerHandler("ZmDate10ObjectHandler", ZmObjectManager.DATE, pri);
+// don't register this one by default, though it is used by the assistant.	
+//ZmObjectManager.registerHandler("ZmDate10ObjectHandler", ZmObjectManager.DATE, pri);
 };
 
 Com_Zimbra_Date.prototype.TYPE = ZmObjectManager.DATE;
