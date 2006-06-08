@@ -376,7 +376,7 @@ extends HttpServlet {
 		boolean isNav  = false;
 		boolean isIE = false;
 		boolean isNav4 = false;
-		boolean trueNs = true;
+		boolean trueNs = false;
 		boolean isNav6 = false;
 		boolean isNav6up = false;
 		boolean isNav7 = false;
@@ -401,7 +401,7 @@ extends HttpServlet {
 		// parse user agent
 		String agt = agent.toLowerCase();
 		//System.err.println("USER-AGENT: "+agt);
-		StringTokenizer agtArr = new StringTokenizer(agt, " ");
+		StringTokenizer agtArr = new StringTokenizer(agt, " ;()");
 		int i = 0;
 		int index = -1;
 		boolean isSpoofer = false;
@@ -430,8 +430,6 @@ extends HttpServlet {
 					if (agtArr.hasMoreTokens()) {
 						browserVersion = parseFloat(agtArr.nextToken());
 					}
-					token = agtArr.hasMoreTokens() ? agtArr.nextToken() : null;
-					continue;
 				} else if ((token.indexOf("spoofer")) != -1){
 					isSpoofer = true;
 					isNav = false;
@@ -446,8 +444,6 @@ extends HttpServlet {
 					if (agtArr.hasMoreTokens()) {
 						browserVersion = parseFloat(agtArr.nextToken());
 					}
-					token = agtArr.hasMoreTokens() ? agtArr.nextToken() : null;
-					continue;
 				} else if ((index = token.indexOf("gecko/")) != -1){
 					isGeckoBased = true;
 					geckoDate = Float.parseFloat(token.substring(index + 6));
@@ -497,13 +493,10 @@ extends HttpServlet {
 							(browserVersion == 7.0));
 
 			isIE3 = (isIE && (browserVersion < 4));
-			isIE4 = (isIE && (browserVersion == 4) &&
-						 (browserVersion == 4.0));
+			isIE4 = (isIE && (browserVersion == 4.0));
 			isIE4up = (isIE && (browserVersion >= 4));
-			isIE5 = (isIE && (browserVersion == 4) &&
-						 (browserVersion == 5.0));
-			isIE5_5 = (isIE && (browserVersion == 4) &&
-							 (browserVersion == 5.5));
+			isIE5 = (isIE && (browserVersion == 5.0));
+			isIE5_5 = (isIE && (browserVersion == 5.5));
 			isIE5up = (isIE && (browserVersion >= 5.0));
 			isIE5_5up =(isIE && (browserVersion >= 5.5));
 			isIE6  = (isIE && (browserVersion == 6.0));
