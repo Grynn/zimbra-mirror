@@ -15,30 +15,39 @@
  */
 
 /**
-* @constructor
-* @class
-* This class is reponsible for managing keyboard events. This includes dispatching
-* keyboard events, as well as managing focus and tab groups. It is at the heart of the
-* Dwt keyboard navigation framework.
-* 
-* <i>DwtKeyboardMgr</i> is responsible for intercepting key strokes and translating
-* them into actions which it then dispatches to the component with focus. It is
-* also reponsible for interecepting tab/shift+tab in order to nagivate focus according
-* to the tab groups that are registered with it. 
-* 
-* A <i>DwtShell</i> instantiates it's own <i>DwtKeyboardMgr</i> at construction
-* The keyboard manager may then be retrieved via the a shell's <code>getKeyboardMgr()</code>
-* function. i.e. developers do not have to directly intantiate a keyboard manager.
-* Once a handle to the shell's keyboard manager is retrieved, then the user is free
-* to register keymaps and handlers with the keyboard manager
-* 
-* @author Ross Dargahi
-*
-* @see DwtShell
-* @see DwtTabGroup
-* @see DwtKeyMap
-* @see DwtKeyMapMgr
-*/
+ * Creates an empty keyboard manager. Tab groups must be added for it to do
+ * anything.
+ * @constructor
+ * @class
+ * This class is responsible for managing keyboard events. That includes dispatching
+ * keyboard events, as well as managing focus and tab groups. It is at the heart of the
+ * Dwt keyboard navigation framework.
+ * <p>
+ * <i>DwtKeyboardMgr</i> is responsible for intercepting key strokes and translating
+ * them into actions which it then dispatches to the component with focus. It is
+ * also reponsible for interecepting tab/shift+tab in order to nagivate focus according
+ * to the tab groups that are registered with it. 
+ * </p><p>
+ * A <i>DwtShell</i> instantiates its own <i>DwtKeyboardMgr</i> at construction.
+ * The keyboard manager may then be retrieved via the a shell's <code>getKeyboardMgr()</code>
+ * function. Once a handle to the shell's keyboard manager is retrieved, then the user is free
+ * to add tab groups and register keymaps and handlers with the keyboard manager.
+ * </p><p>
+ * Focus is managed among a stack of tab groups. The TAB button will move the focus within the
+ * current tab group. When a non-TAB is received, we first check if the control can handle it.
+ * In general, such key events simulate something the user could do with the mouse, and change
+ * the state/appearance of the control. For example, ENTER on a DwtButton simulates a button
+ * press. If the control does not handle the key event, the event is handed to the application,
+ * which handles it based on its current state. The application key event handler is in a sense
+ * global, since it does not matter which control received the event.
+ * </p>
+ * @author Ross Dargahi
+ *
+ * @see DwtShell
+ * @see DwtTabGroup
+ * @see DwtKeyMap
+ * @see DwtKeyMapMgr
+ */
 function DwtKeyboardMgr() {
 	/**@private*/
 	this.__tabGrpStack = [];
@@ -71,7 +80,7 @@ DwtKeyboardMgr.__KEYSEQ_PENDING = 3;
 DwtKeyboardMgr.prototype.toString = 
 function() {
 	return "DwtKeyboardMgr";
-}
+};
 
 /**
  * Pushes <code>tabGroup</code> onto the stack and makes it the active tab group.
@@ -209,7 +218,7 @@ function(control) {
 };
 
 /** 
- * This method is used to register a global key handler. If registered, this
+ * This method is used to register an application key handler. If registered, this
  * handler must support the following methods:
  * <ul>
  * <li> getKeyMapName: This method returns a string representing the key map 
@@ -227,15 +236,15 @@ function(control) {
  * 
  * @see DwtKeyEvent
  */
-DwtKeyboardMgr.prototype.registerGlobalKeyActionHandler =
+DwtKeyboardMgr.prototype.registerApplicationKeyActionHandler =
 function(hdlr) {
-	this.__globalKeyActionHdlr = hdlr;
+	this.__applicationKeyActionHdlr = hdlr;
 };
 
 /**
 * This method is used to register a keymap with the shell. A keymap typically
 * is a subclass of <i>DwtKeyMap</i> and defines the mappings from key sequences to
-* actions
+* actions.
 *
 * @param {DwtKeyMap} keyMap keyMap to be registered
 * 
@@ -594,12 +603,28 @@ function(ev) {
 
 	DBG.println(AjxDebug.DBG3, "KEYCODE: " + keyCode + " - KEY SEQ: " + kbMgr.__keySequence.join(""));
 	
-	/* If a DWT component has "focus", then dispatch to that component
-	 * if the component handles the event, then stop, else hand it off
-	 * the global handler if one is registered */
 	var handled = DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
+
+	// First see if the control that currently has focus can handle the key event
 	var obj = (kbMgr.__dwtCtrlHasFocus) ? kbMgr.__focusObj : null;
-	kbMgr.__kbEventStatus = handled = kbMgr.__handleKeyEvent(obj, kev);
+	if (obj && (obj instanceof DwtControl)) {
+		var mapName = obj.getKeyMapName ? obj.getKeyMapName() : obj.toString();
+		DBG.println(AjxDebug.DBG3, "object " + obj.toString() + " handling " + kbMgr.__keySequence + " for map: " + mapName);
+		handled = kbMgr.__dispatchKeyEvent(obj, mapName, kev, false);
+	}
+
+	// If the currently focused control didn't handle the event, hand it to the application key
+	// event handler
+	if ((handled == DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED) && kbMgr.__applicationKeyActionHdlr &&
+		!(kbMgr.__currTabGroup && kbMgr.__currTabGroup.isApplicationHandlingBlocked())) {
+		DBG.println(AjxDebug.DBG3, "Dispatching to global map: " + kbMgr.__applicationKeyActionHdlr.getKeyMapName());
+		handled = kbMgr.__dispatchKeyEvent(kbMgr.__applicationKeyActionHdlr, 
+							kbMgr.__applicationKeyActionHdlr.getKeyMapName(), kev, false);
+		//DBG.println(AjxDebug.DBG1, "APPLICATION HANDLER RETURNED: " + handled);
+	}
+
+	kbMgr.__kbEventStatus = handled;
+
 	switch (handled) {
 		case DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED:
 			kbMgr.__keySequence.length = 0;
@@ -618,32 +643,6 @@ function(ev) {
 			return false;
 			break;
 	}
-};
-
-/**
- * Tries to get the key event handled, first by the object with focus, then
- * by the global handler (if it's not blocked).
- * 
- * @private
- */
-DwtKeyboardMgr.prototype.__handleKeyEvent =
-function(obj, kev, mapName, forceActionCode) {
-	var handled = DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
-	if (obj != null && (obj instanceof DwtControl)) {
-		mapName = mapName ? mapName : obj.getKeyMapName ? obj.getKeyMapName() : obj.toString();
-		DBG.println(AjxDebug.DBG3, "object " + obj.toString() + " dispatching to map: " + mapName);
-		handled = this.__dispatchKeyEvent(obj, mapName, kev, forceActionCode);
-	}
-
-	if ((handled == DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED) && this.__globalKeyActionHdlr &&
-		!(this.__currTabGroup && this.__currTabGroup.isGlobalHandlingBlocked())) {
-		DBG.println(AjxDebug.DBG3, "Dispatching to global map: " + this.__globalKeyActionHdlr.getKeyMapNameToUse());
-		handled = this.__dispatchKeyEvent(this.__globalKeyActionHdlr, 
-							this.__globalKeyActionHdlr.getKeyMapNameToUse(), kev, forceActionCode);
-		//DBG.println(AjxDebug.DBG1, "GLOBAL HANDLER RETURNED: " + handled);
-	}
-
-	return handled;
 };
 
 /**
@@ -666,15 +665,14 @@ function(hdlr, mapName, ev, forceActionCode) {
 		return DwtKeyboardMgr.__KEYSEQ_PENDING;	
 	} else if (actionCode != null) {
 		/* It is possible that the component may not handle a valid action
-		 * particulary actions defined in the global map */
+		 * particulary actions defined in the application map */
 		DBG.println(AjxDebug.DBG3, "HANDLING ACTION: " + actionCode);
 		return (hdlr.handleKeyAction(actionCode, ev)) ? DwtKeyboardMgr.__KEYSEQ_HANDLED
 													   : DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
 	} else {	
-		DBG.println(AjxDebug.DBG3, "TERMINAL W/O ACTION CODE");
+		DBG.println(AjxDebug.DBG3, "NO ACTION CODE FOUND FOR " + this.__keySequence);
 		return DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
 	}
-	
 };
 
 /**
@@ -686,7 +684,7 @@ function(hdlr, mapName, ev, forceActionCode) {
 DwtKeyboardMgr.prototype.__killKeySequenceAction =
 function() {
 	DBG.println(AjxDebug.DBG3, "KILLING KEY SEQUENCE: " + this.__mapName);
-	this.__handleKeyEvent(this.__hdlr, this.__ev, this.__mapName, true);
+	this.__dispatchKeyEvent(this.__hdlr, this.__mapName, this.__ev, true);
 	this.__killKeySeqTimedActionId = -1;
 	this.__keySequence.length = 0;
 };

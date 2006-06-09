@@ -30,12 +30,12 @@
 * registered (see method documentation)
 * 
 * @param {String}	name					name of this tab group
-* @param {boolean}	blockGlobalHandling		if true, don't fall back to global key
+* @param {boolean}	blockApplicationHandling		if true, don't fall back to global key
 * 											handler for this tab group
 * 
 * @author Ross Dargahi
 */
-function DwtTabGroup(name, blockGlobalHandling) {
+function DwtTabGroup(name, blockApplicationHandling) {
 	/**@private*/
 	this.__members = new AjxVector();
 	/**@private*/
@@ -43,7 +43,7 @@ function DwtTabGroup(name, blockGlobalHandling) {
 	/**@private*/
 	this.__name = name
 	/**@private*/
-	this.__blockGlobalHandling = blockGlobalHandling;
+	this.__blockApplicationHandling = blockApplicationHandling;
 	/**@private*/
 	this.__currFocusMember = null;
 }
@@ -390,14 +390,14 @@ function(checkEnabled, dontNotify) {
 	return this.__currFocusMember;
 }
 
-DwtTabGroup.prototype.blockGlobalHandling =
+DwtTabGroup.prototype.blockApplicationHandling =
 function(block) {
-	this.__blockGlobalHandling = blockGlobalHandling;
+	this.__blockApplicationHandling = blockApplicationHandling;
 };
 
-DwtTabGroup.prototype.isGlobalHandlingBlocked =
+DwtTabGroup.prototype.isApplicationHandlingBlocked =
 function(block) {
-	return this.__blockGlobalHandling;
+	return this.__blockApplicationHandling;
 };
 
 /**
