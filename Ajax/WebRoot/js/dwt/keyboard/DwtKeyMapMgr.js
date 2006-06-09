@@ -71,8 +71,8 @@ DwtKeyMapMgr._inited = false;	// Initialization flag
  * @type string|number
  */
 DwtKeyMapMgr.prototype.getActionCode =
-function (keySeq, mappingName, forceActionCode) {
-	DBG.println(AjxDebug.DBG3, "Getting action code for: " + keySeq.join("") + " in map: " + mappingName);
+function(keySeq, mappingName, forceActionCode) {
+	DBG.println(AjxDebug.DBG3, "Getting action code for: " + keySeq + " in map: " + mappingName);
 	var mapping =  this._fsas[mappingName];
 	
 	if (!mapping) {
