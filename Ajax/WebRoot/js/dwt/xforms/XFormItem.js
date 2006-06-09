@@ -512,11 +512,17 @@ XFormItem.prototype.getFocusHandlerHTML = function () {
 	var formId = this.getFormGlobalRef(),
 		itemId = this.getId()
 	;
+	var onFocusAction = null;
+	if (this.getInheritedProperty("onFocus") != null) {
+		onFocusAction = AjxBuffer.concat(" onfocus=\"", formId, ".onFocus('", itemId, "'); " ,
+				 this.getInheritedProperty("onFocus") , ".call(" ,   this.getGlobalRef(), ", event )\"");
+	}else{
+		onFocusAction = AjxBuffer.concat(" onfocus=\"", formId, ".onFocus('", itemId, "')\"");
+	}
 	return AjxBuffer.concat(
 		//" onfocus=\"", formId, ".onFocus('", itemId, "')\"",
 		//HC: unflexible hacking way to support the License Portal text field onFocus event
-		" onfocus=\"", formId, ".onFocus('", itemId, "'); ",
-		this.getInheritedProperty("onFocus"), ".call(",  this.getGlobalRef(), ", event )\"",		
+		onFocusAction ,		
 		" onblur=\"", formId, ".onBlur('", itemId, "')\""
 	);
 }

@@ -528,8 +528,15 @@ XModelItem.prototype.validateDate = function(value) {
 			if (value.length == 3) {
 				var month = parseInt(value[0]);
 				var day = parseInt(value[1]);
-				var year = parseInt(value[2]);
+				var year = parseInt(value[2]);							
+				
 				if (!isNaN(month) && !isNaN(day) && !isNaN(year)) {
+					month -= 1;
+					date.setFullYear(year, month, day);
+					date.setHours(0,0,0,0);
+					return date; 
+										
+					/*
 					month -= 1;
 					if (year < 1900) {
 						if (year < 50) year += 2000;
@@ -537,7 +544,7 @@ XModelItem.prototype.validateDate = function(value) {
 					}
 					date.setFullYear(year, month, day);
 					date.setHours(0,0,0,0);
-					return date;
+					return date; */
 				}
 			}
 		} else {
@@ -550,7 +557,7 @@ XModelItem.prototype.validateDate = function(value) {
 				date.setTime(date.getTime() - this.msecInOneDay);
 				return date;
 			} else if (value == AjxMsg.tomorrow) {
-				date.setTiem(date.getTime() + this.msecInOneDay);
+				date.setTime(date.getTime() + this.msecInOneDay);
 				return date;
 			}
 		}
