@@ -15,10 +15,12 @@
  */
 
 
-function DwtPropertySheet(parent, className, positionType) {
+function DwtPropertySheet(parent, className, positionType, labelSide) {
 	if (arguments.length == 0) return;
 	className = className || "DwtPropertySheet";
 	DwtComposite.call(this, parent, className, positionType);
+
+	this._labelSide = labelSide || DwtPropertySheet.DEFAULT;
 
 	this._propertyIdCount = 0;
 	this._propertyList = [];
@@ -41,7 +43,15 @@ function() {
 	return "DwtPropertySheet";
 }
 
+// Constants
+
+DwtPropertySheet.RIGHT = "right";
+DwtPropertySheet.LEFT = "left";
+DwtPropertySheet.DEFAULT = DwtPropertySheet.LEFT;
+
 // Data
+
+DwtPropertySheet.prototype._labelSide;
 
 DwtPropertySheet.prototype._labelCssClass = "Label";
 DwtPropertySheet.prototype._valueCssClass = "Field";
@@ -72,17 +82,40 @@ DwtPropertySheet.prototype.addProperty = function(label, value, required) {
 
 	var row = this._tableEl.insertRow(index);
 	row.vAlign = "top";
+
+	if (this._labelSide == DwtPropertySheet.LEFT) {
+		this._insertLabel(row, label, required);
+		this._insertValue(row, value, required);
+	}
+	else {
+		this._insertValue(row, value, required);
+		this._insertLabel(row, label, required);
+	}
 	
-	var labelCell = row.insertCell(row.cells.length);
+	var id = this._propertyIdCount++;
+	var property = { id: id, index: index, row: row, visible: true };
+	this._propertyList.push(property);
+	this._propertyMap[id] = property;
+	return id;
+};
+
+DwtPropertySheet.prototype._insertLabel = function(row, label, required) {
+	var labelCell = row.insertCell(-1);
 	labelCell.className = this._labelCssClass;
+	if (this._labelSide != DwtPropertySheet.LEFT) {
+		labelCell.width = "100%";
+		labelCell.style.textAlign = "left";
+	}
 	labelCell.innerHTML = label;
 	if (required) {
 		var asterisk = this._tableEl.ownerDocument.createElement("SUP");
 		asterisk.innerHTML = "*";
 		labelCell.insertBefore(asterisk, labelCell.firstChild);
 	}
-	
-	var valueCell = row.insertCell(row.cells.length);
+};
+
+DwtPropertySheet.prototype._insertValue = function(row, value, required) {
+	var valueCell = row.insertCell(-1);
 	valueCell.className = this._valueCssClass;
 	if (value instanceof DwtControl) {
 		valueCell.appendChild(value.getHtmlElement());
@@ -97,12 +130,6 @@ DwtPropertySheet.prototype.addProperty = function(label, value, required) {
 	else {
 		valueCell.innerHTML = String(value);
 	}
-	
-	var id = this._propertyIdCount++;
-	var property = { id: id, index: index, row: row, visible: true };
-	this._propertyList.push(property);
-	this._propertyMap[id] = property;
-	return id;
 };
 
 DwtPropertySheet.prototype.removeProperty = function(id) {
