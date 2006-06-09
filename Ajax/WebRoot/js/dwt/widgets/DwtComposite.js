@@ -194,3 +194,88 @@ function(child, preserveElement) {
 		}
 	}
 }
+
+/**
+ * Allows the user to use the mouse to select text on the control.
+ */
+DwtComposite.prototype._setAllowSelection =
+function() {
+	if (!this._allowSelection) {
+		this._allowSelection = true;
+		this.addListener(DwtEvent.ONMOUSEDOWN, new AjxListener(this, this._mouseDownListener));
+		this.addListener(DwtEvent.ONCONTEXTMENU, new AjxListener(this, this._contextMenuListener));
+	}
+};
+
+/**
+ * Determines whether to prevent the browser from displaying its context menu.
+ * 
+ * @see DwtControl#preventContextMenu
+ */
+DwtComposite.prototype.preventContextMenu =
+function(target) {
+	if (!this._allowSelection) {
+		return DwtControl.prototype.preventContextMenu.apply(this, arguments);
+	}
+	
+	if (AjxEnv.isSafari) {
+		// XXX: for some reason Safari is returning false on getSelection()
+		//      even when something is selected w/in msg view. Just return false
+		//      to allow copying text :(
+		return true;
+	} else {
+		var bObjFound = target.id.indexOf("OBJ_") == 0;
+		var bSelection = false;
+
+		// determine if anything has been selected (IE and mozilla do it differently)
+		if (document.selection) {			// IE
+			bSelection = document.selection.type == "Text";
+		} else if (getSelection()) {		// mozilla
+			bSelection = getSelection().toString().length > 0;
+		}
+
+		// if something has been selected and target is not a custom object,
+		return bSelection && !bObjFound ? false : true;
+	}
+};
+
+/**
+ * Handles focus control when the mouse button is released
+ * 
+ * @see DwtControl#_focusByMouseUpEvent
+ */
+DwtComposite.prototype._focusByMouseUpEvent =
+function()  {
+	if (!this._allowSelection) {
+		DwtControl.prototype._focusByMouseUpEvent.apply(this, arguments);
+	}
+	// ...Else do nothing....
+	// When text is being selected, we don't want the superclass
+	// to give focus to the keyboard input control.
+};
+
+/**
+ * Event listener that is only registered when this control allows selection
+ * 
+ * @see _allowSelection
+ */
+DwtComposite.prototype._mouseDownListener =
+function(ev) {
+	if (ev.button == DwtMouseEvent.LEFT) {
+		// reset mouse event to propagate event to browser (allows text selection)
+		ev._stopPropagation = false;
+		ev._returnValue = true;
+	}
+};
+
+/**
+ * Event listener that is only registered when this control allows selection
+ * 
+ * @see _allowSelection
+ */
+DwtComposite.prototype._contextMenuListener =
+function(ev) {
+	// reset mouse event to propagate event to browser (allows context menu)
+	ev._stopPropagation = false;
+	ev._returnValue = true;
+};
