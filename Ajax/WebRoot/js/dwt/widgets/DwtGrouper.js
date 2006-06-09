@@ -63,3 +63,7 @@ DwtGrouper.prototype.setElement = function(htmlElement) {
 DwtGrouper.prototype.setView = function(control) {
 	this.setElement(control.getHtmlElement());
 };
+
+DwtGrouper.prototype.getInsetHtmlElement = function() {
+	return this._insetEl;
+};

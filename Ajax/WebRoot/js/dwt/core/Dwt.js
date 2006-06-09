@@ -163,6 +163,8 @@ Dwt.Z_SPLASH = 1000;
  */
 Dwt.DEFAULT = -123456789;
 
+/** Used to clear a value. */
+Dwt.CLEAR = -20000;
 
 /** Offscreen position. Used when setting a elements position
  * @type Int
@@ -508,9 +510,13 @@ function(htmlElement) {
 Dwt.setSize =
 function(htmlElement, width, height) {
 	if(!htmlElement.style) {return;}
-	if (width = Dwt.__checkPxVal(width, true))
+	if (width == Dwt.CLEAR)
+		htmlElement.style.width = null;
+	else if (width = Dwt.__checkPxVal(width, true))
 		htmlElement.style.width = width;
-	if (height = Dwt.__checkPxVal(height, true))
+	if (height == Dwt.CLEAR)
+		htmlElement.style.height = null;
+	else if (height = Dwt.__checkPxVal(height, true))
 		htmlElement.style.height = height;
 };
 
