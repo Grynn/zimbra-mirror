@@ -91,3 +91,4 @@ ZaOperation.FLUSH = ++ZA_OP_INDEX;
 ZaOperation.HOLD = ++ZA_OP_INDEX;
 ZaOperation.REQUEUE = ++ZA_OP_INDEX;
 ZaOperation.RELEASE = ++ZA_OP_INDEX;
+ZaOperation.INIT_NOTEBOOK = ++ZA_OP_INDEX;

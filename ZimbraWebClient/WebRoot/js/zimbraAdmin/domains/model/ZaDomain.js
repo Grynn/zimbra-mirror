@@ -730,6 +730,7 @@ ZaDomain.myXModel = {
 		{id:ZaDomain.A_NotebookTemplateFolder, type:_STRING_},
 		{id:ZaDomain.A_NotebookAccountName, type:_STRING_},
 		{id:ZaDomain.A_NotebookAccountPassword, type:_STRING_},
-		{id:ZaDomain.A_CreateNotebook, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES}
+		{id:ZaDomain.A_CreateNotebook, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
+		{id:ZaDomain.A_zimbraNotebookAccount, type:_STRING_, ref:"attrs/" +ZaDomain.A_zimbraNotebookAccount}
 	]
 };

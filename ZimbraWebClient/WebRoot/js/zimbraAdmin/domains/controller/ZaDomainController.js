@@ -71,6 +71,7 @@ function(entry) {
 		this._ops.push(new ZaOperation(ZaOperation.SEP));
    		this._ops.push(new ZaOperation(ZaOperation.GAL_WIZARD, ZaMsg.DTBB_GAlConfigWiz, ZaMsg.DTBB_GAlConfigWiz_tt, "GALWizard", "GALWizardDis", new AjxListener(this, ZaDomainController.prototype._galWizButtonListener)));   		
    		this._ops.push(new ZaOperation(ZaOperation.AUTH_WIZARD, ZaMsg.DTBB_AuthConfigWiz, ZaMsg.DTBB_AuthConfigWiz_tt, "AuthWizard", "AuthWizardDis", new AjxListener(this, ZaDomainController.prototype._authWizButtonListener)));   		   		
+   		this._ops.push(new ZaOperation(ZaOperation.INIT_NOTEBOOK, ZaMsg.DTBB_InitNotebook, ZaMsg.DTBB_InitNotebook_tt, "NewNotebook", "NewNotebookDis", new AjxListener(this, ZaDomainController.prototype._initNotebookButtonListener)));   		   		   		
 		this._ops.push(new ZaOperation(ZaOperation.NONE));
 		this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));							
 		this._toolbar = new ZaToolBar(this._container, this._ops);
@@ -88,7 +89,12 @@ function(entry) {
 		this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);  				
 	}
 	this._view.setDirty(false);
-	entry[ZaModel.currentTab] = "1"
+	entry[ZaModel.currentTab] = "1";
+	if(entry.attrs[ZaDomain.A_zimbraNotebookAccount])
+		this._toolbar.getButton(ZaOperation.INIT_NOTEBOOK).setEnabled(false);
+	else
+		this._toolbar.getButton(ZaOperation.INIT_NOTEBOOK).setEnabled(true);
+		
 	this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
 	this._currentObject = entry;
 }
@@ -114,6 +120,10 @@ function () {
 		mods[ZaDomain.A_zimbraVirtualHostname] = tmpObj.attrs[ZaDomain.A_zimbraVirtualHostname] ;
 		haveSmth = true;		
 	}
+	if(tmpObj.attrs[ZaDomain.A_zimbraNotebookAccount] != this._currentObject.attrs[ZaDomain.A_zimbraNotebookAccount]) {
+		mods[ZaDomain.A_zimbraNotebookAccount] = tmpObj.attrs[ZaDomain.A_zimbraNotebookAccount] ;
+		haveSmth = true;
+	}	
 	if(!haveSmth)
 		return true;
 	
@@ -249,6 +259,11 @@ function(ev) {
 		}
 	}
 	return;
+}
+
+ZaDomainController.prototype._initNotebookButtonListener = 
+function (ev) {
+	
 }
 
 ZaDomainController.prototype._handleException = 

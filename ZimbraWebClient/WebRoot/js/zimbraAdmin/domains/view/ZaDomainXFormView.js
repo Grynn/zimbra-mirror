@@ -111,7 +111,8 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 				{value:1, label:ZaMsg.Domain_Tab_General},
 				{value:2, label:ZaMsg.Domain_Tab_GAL},
 				{value:3, label:ZaMsg.Domain_Tab_Authentication},
-				{value:4, label:ZaMsg.Domain_Tab_VirtualHost}
+				{value:4, label:ZaMsg.Domain_Tab_VirtualHost},
+				{value:5, label:ZaMsg.Domain_Tab_Notebook}				
 			],cssClass:"ZaTabBar"
 		},
 		{type:_SWITCH_, items:[
@@ -205,6 +206,31 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 									{ref:".", type:_TEXTFIELD_, label:null, onChange:ZaTabView.onFormFieldChanged}
 								],
 								onRemove:ZaDomainXFormView.onRepeatRemove
+						}
+					]
+				}, 
+				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 5",
+					items : [
+						{type: _DWT_ALERT_,
+						  containerCssStyle: "padding-bottom:0px",
+						  style: DwtAlert.WARNING,
+						  iconVisible: true, 
+						  content: ZaMsg.Alert_NotebookNotInitialized,
+						  relevant:"instance.attrs[ZaDomain.A_zimbraNotebookAccount] == null",
+						  relevantBehavior:_HIDE_
+						},
+						{type:_GROUP_, numCols:4, 
+							relevant:"instance.attrs[ZaDomain.A_zimbraNotebookAccount] != null",
+							relevantBehavior:_HIDE_,
+							items: [
+								{ref:ZaDomain.A_zimbraNotebookAccount, type:_TEXTFIELD_, 
+									label:ZaMsg.Domain_NotebookAccountName, labelLocation:_LEFT_,
+									width:250,onChange:ZaTabView.onFormFieldChanged
+								},
+								{ ref: ZaDomain.A_domainName, type:_OUTPUT_, 
+								  label:"@", labelLocation:_LEFT_
+								}
+							]
 						}
 					]
 				}
