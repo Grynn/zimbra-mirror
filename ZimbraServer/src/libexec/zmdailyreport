@@ -442,7 +442,7 @@ sub traceProcessedMsg {
 				"select arrive_time, leave_time, host, ".
 				"sender, recipient, status, statusmsg, from_host, from_IP, to_host, to_IP, ".
 				"bytes, amavis_pid ".
-				"from mta where msgid='".$msgId."' and recipient='".$recip."' ";
+				"from mta where msgid='".$msgId."' and recipient=\"".$recip."\" ";
 
 			if ($fromIP ne "") {
 				$statement .= " and from_IP='".$fromIP."'";
