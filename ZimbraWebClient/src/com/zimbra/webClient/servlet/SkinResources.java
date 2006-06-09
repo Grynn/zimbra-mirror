@@ -352,7 +352,7 @@ extends HttpServlet {
 		}
 		index = uri.lastIndexOf('/');
 		String type = index != -1 ? uri.substring(index + 1) : "plain";
-		return "text/" + uri;
+		return "text/" + type;
 	}
 
 	private static String getUserAgent(HttpServletRequest req) {
