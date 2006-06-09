@@ -750,6 +750,15 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
 				},
 				{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 14",relevantBehavior:_HIDE_, 
 					items:[
+						{type:_DWT_ALERT_,content:null,ref:ZaDomain.A_domainName,
+							getDisplayValue: function (itemVal) {
+								return AjxMessageFormat.format(ZaMsg.Domain_VH_Explanation,itemVal);
+							},
+							colSpan:"*",
+							iconVisible: false,
+							align:_CENTER_,				
+							style: DwtAlert.INFORMATION
+						},
 						{ref:ZaDomain.A_zimbraVirtualHostname, type:_REPEAT_, label:null, repeatInstance:"", showAddButton:true, showRemoveButton:true, 
 								addButtonLabel:ZaMsg.NAD_AddVirtualHost, 
 								showAddOnNextRow:true,

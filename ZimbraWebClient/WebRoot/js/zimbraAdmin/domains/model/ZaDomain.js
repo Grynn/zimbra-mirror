@@ -361,9 +361,11 @@ ZaDomain.initNotebook = function (obj, callback) {
 	
 	var command = new ZmCsfeCommand();
 	var params = new Object();
-	params.soapDoc = soapDoc;	
-	params.asyncMode = true;
-	params.callback = callback;
+	params.soapDoc = soapDoc;
+	if(callback) {
+		params.asyncMode = true;
+		params.callback = callback;
+	}
 	command.invoke(params);	
 }
 
