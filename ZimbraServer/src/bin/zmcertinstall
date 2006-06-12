@@ -40,7 +40,7 @@ CERTFILE=$1
 KEYFILE=$2
 
 if [ "x$CERTFILE" = "x" ]; then
-	CERTFILE=${BASE}/server/server.crt
+	CERTFILE=${BASE}/server/tomcat.crt
 fi
 
 if [ ! -f $CERTFILE ]; then
