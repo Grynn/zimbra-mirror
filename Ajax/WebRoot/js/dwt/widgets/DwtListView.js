@@ -1654,6 +1654,12 @@ function(actionCode, ev) {
 		case DwtKeyMap.ADD_SELECT_PREV:
 			this._selectItem(false, true);
 			break;
+		
+		case DwtKeyMap.SELECT_ALL:
+			if (this._list && this._list.size()) {
+				this.setSelectedItems(this._list.getArray());
+			}
+			break;
 			
 		case DwtKeyMap.PREV:
 			this._setKbFocusElement(false);

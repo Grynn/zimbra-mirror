@@ -52,6 +52,9 @@ function DwtKeyMap(subclassInit) {
 		"ArrowUp":			DwtKeyMap.SELECT_PREV,
 		"Shift+ArrowUp":	DwtKeyMap.ADD_SELECT_PREV,
 		"Ctrl+ArrowUp":		DwtKeyMap.PREV,
+
+		"Ctrl+A":			DwtKeyMap.SELECT_ALL,
+		
 		"Enter":			DwtKeyMap.DBLCLICK,
 		"Ctrl+Enter":		DwtKeyMap.ACTION,
 		"Ctrl+M":			DwtKeyMap.ACTION  // Mac FF
@@ -111,6 +114,7 @@ DwtKeyMap.DBLCLICK				= i--;
 DwtKeyMap.DONE					= i--;
 DwtKeyMap.NEXT					= i--;
 DwtKeyMap.PREV					= i--;
+DwtKeyMap.SELECT_ALL			= i--;
 DwtKeyMap.SELECT_CURRENT		= i--;
 DwtKeyMap.SELECT_NEXT			= i--;
 DwtKeyMap.SELECT_PREV			= i--;
