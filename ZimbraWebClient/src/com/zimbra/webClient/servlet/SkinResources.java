@@ -67,6 +67,8 @@ extends HttpServlet {
 	private static final Pattern RE_IFDEF = Pattern.compile("^\\s*#ifdef\\s+(.*?)\\s*$", Pattern.CASE_INSENSITIVE);
 	private static final Pattern RE_ENDIF = Pattern.compile("^\\s*#endif(\\s+.*)?$", Pattern.CASE_INSENSITIVE);
 
+	private static final boolean DEBUG = false;
+
 	//
 	// Data
 	//
@@ -99,26 +101,32 @@ extends HttpServlet {
 		String userAgent = getUserAgent(req);
 		Map<String,String> macros = parseUserAgent(userAgent);
 		String browserType = getMacroNames(macros.keySet());
+		String skin = getSkin(req);
 
-		System.err.println("DEBUG: browserType="+browserType);
-		System.err.println("DEBUG: uri="+uri);
+		String cacheId = skin+": "+browserType;
+
+		if (DEBUG) {
+			System.err.println("DEBUG: browserType="+browserType);
+			System.err.println("DEBUG: uri="+uri);
+			System.err.println("DEBUG: cacheId="+cacheId);
+		}
 
 		// generate buffer
-		Map<String,String> buffers = cache.get(browserType);
+		Map<String,String> buffers = cache.get(cacheId);
 		String buffer = buffers != null && !debug ? buffers.get(uri) : null;
 		if (buffer == null) {
-			System.err.println("DEBUG: generating buffer");
+			if (DEBUG) System.err.println("DEBUG: generating buffer");
 			buffer = generate(req, macros, type);
 			if (!debug) {
 				if (buffers == null) {
 					buffers = new HashMap<String,String>();
-					cache.put(browserType, buffers);
+					cache.put(cacheId, buffers);
 				}
 				buffers.put(uri, buffer);
 			}
 		}
 		else {
-			System.err.println("DEBUG: using previous buffer");
+			if (DEBUG) System.err.println("DEBUG: using previous buffer");
 		}
 
 		// write buffer
@@ -625,7 +633,7 @@ extends HttpServlet {
 
 			// process substitutions
 			for (File file : substList) {
-				System.err.println("DEBUG: subst file = "+file);
+				if (DEBUG) System.err.println("DEBUG: subst file = "+file);
 				try {
 					/***
 					CharArrayWriter out = new CharArrayWriter(4096); // 4K
@@ -657,21 +665,21 @@ extends HttpServlet {
 					/***/
 				}
 				catch (Throwable t) {
-					System.err.println("ERROR loading subst file!");
+					System.err.println("ERROR loading subst file: "+file);
 				}
 
-				System.err.println("DEBUG: _SkinName_ = "+substitutions.getProperty("_SkinName_"));
+				if (DEBUG) System.err.println("DEBUG: _SkinName_ = "+substitutions.getProperty("_SkinName_"));
 			}
 
 			Stack<String> stack = new Stack<String>();
 			Enumeration substKeys = substitutions.propertyNames();
-			System.err.println("DEBUG: InsetBg (before) = "+substitutions.getProperty("InsetBg"));
+			if (DEBUG) System.err.println("DEBUG: InsetBg (before) = "+substitutions.getProperty("InsetBg"));
 			while (substKeys.hasMoreElements()) {
 				stack.removeAllElements();
 
 				String substKey = (String)substKeys.nextElement();
 				if (substKey.equals("InsetBg")) {
-					System.err.println("DEBUG: InsetBg (loop) = "+substitutions.getProperty("InsetBg"));
+					if (DEBUG) System.err.println("DEBUG: InsetBg (loop) = "+substitutions.getProperty("InsetBg"));
 				}
 				String substValue = getProperty(stack, substKey);
 
@@ -679,9 +687,9 @@ extends HttpServlet {
 				substitutions.setProperty(substKey, substValue);
 				/***/
 			}
-			System.err.println("DEBUG: InsetBg (after) = "+substitutions.getProperty("InsetBg"));
+			if (DEBUG) System.err.println("DEBUG: InsetBg (after) = "+substitutions.getProperty("InsetBg"));
 
-			System.err.println("DEBUG: _SkinName_ = "+substitutions.getProperty("_SkinName_"));
+			if (DEBUG) System.err.println("DEBUG: _SkinName_ = "+substitutions.getProperty("_SkinName_"));
 		}
 
 		//
