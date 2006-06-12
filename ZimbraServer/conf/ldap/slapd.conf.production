@@ -140,4 +140,3 @@ timelimit unlimited
 TLSCertificateFile /opt/zimbra/conf/slapd.crt
 TLSCertificateKeyFile /opt/zimbra/conf/slapd.key
 TLSVerifyClient never
-TLSCACertificateFile /opt/zimbra/conf/ca/ca.pem
