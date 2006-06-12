@@ -518,20 +518,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 				 //MemberOf Tab
 				{type:_CASE_, numCols:4, colSpan:"*", relevant:("instance[ZaModel.currentTab] == 3"), colSizes: [450, 20, 420, 30],
 					items: [
-						//isgroup checkbox
-						/*
-						{type:_GROUP_, width: "100%", colSpan: 4, 
-							items: [
-								{type:_GROUP_, width: 120, numCols: 1,
-									items: [
-											{ref: ZaAccount.A2_isgroup, type: _CHECKBOX_, align:_LEFT_, colSpan: 3,msgName:ZaMsg.NAD_ShowGroupOnly,
-												label:ZaMsg.NAD_ShowGroupOnly,labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",
-												onChange:ZaAccountMemberOfListView.onShowGroupOnlyChanged,labelCssClass:"xform_label"}
-										]
-								}
-							]
-						},*/
-													
+								
 						{type:_SPACER_, height:"10"},
 						//layout rapper around the direct/indrect list						
 						{type: _GROUP_, width: "98%", numCols: 1, //colSizes: ["auto", 20],
@@ -627,7 +614,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 							items:[
 								{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
 							   		items: [
-										{type:_OUTPUT_, value:ZaMsg.Account_NonGroupLabel, cssClass:"RadioGrouperLabel"},
+										{type:_OUTPUT_, value:ZaMsg.DL_NonGroupLabel, cssClass:"RadioGrouperLabel"},
 										{type:_CELLSPACER_}
 									]
 								},
