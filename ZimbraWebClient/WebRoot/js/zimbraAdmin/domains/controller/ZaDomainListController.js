@@ -407,16 +407,15 @@ function(ev) {
 		var domain = ZaDomain.create(this._newDomainWizard.getObject(), this._app);
 		if(domain != null) {
 			this._newDomainWizard.popdown();
-
+			//if creation took place - fire an DomainChangeEvent
+			this._fireDomainCreationEvent(domain);
 			if(this._newDomainWizard.getObject()[ZaDomain.A_CreateNotebook]=="TRUE") {
 				var callback = new AjxCallback(this, this.initNotebookCallback);
 				ZaDomain.initNotebook(this._newDomainWizard.getObject(),callback) ;
 			}			
 			
-			//if creation took place - fire an DomainChangeEvent
-			
-			this._fireDomainCreationEvent(domain);
-			
+
+		
 			var evt = new ZaEvent(ZaEvent.S_DOMAIN);
 			evt.set(ZaEvent.E_CREATE, this);
 			evt.setDetails(domain);

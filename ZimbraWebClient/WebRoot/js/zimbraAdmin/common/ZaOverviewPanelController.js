@@ -136,17 +136,21 @@ function (ev) {
 
 
 ZaOverviewPanelController.prototype.searchDomains = function() {
-	var callback = new AjxCallback(this, this.domainSearchCallback);
-	var searchParams = {
-			query:"", 
-			types:[ZaSearch.DOMAINS],
-			sortBy:ZaDomain.A_domainName,
-			offset:"0",
-			sortAscending:"0",
-			limit:ZaDomain.MAXSEARCHRESULTS,
-			callback:callback
+	if(this._app) {
+		this._app.searchDomains();
+	} else {	
+		var callback = new AjxCallback(this, this.domainSearchCallback);
+		var searchParams = {
+				query:"", 
+				types:[ZaSearch.DOMAINS],
+				sortBy:ZaDomain.A_domainName,
+				offset:"0",
+				sortAscending:"0",
+				limit:ZaDomain.MAXSEARCHRESULTS,
+				callback:callback
+		}
+		ZaSearch.searchDirectory(searchParams);
 	}
-	ZaSearch.searchDirectory(searchParams);
 }
 
 ZaOverviewPanelController.prototype.domainSearchCallback = 
@@ -162,22 +166,7 @@ function (resp) {
 			var list = new ZaItemList(ZaDomain, this._app);	
 			list.loadFromJS(response);
 
-			var domainList = list.getArray();
-			for (var key in this._domainsMap) {
-				this._domainsTi.removeChild(this._domainsMap[key]);		
-			}
-			//add domain nodes
-			if(domainList && domainList.length) {
-				var cnt = domainList.length;
-				for(var ix=0; ix< cnt; ix++) {
-					var ti1 = new DwtTreeItem(this._domainsTi);			
-					ti1.setText(domainList[ix].name);	
-					ti1.setImage("Domain");
-					ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DOMAIN_VIEW);
-					ti1.setData(ZaOverviewPanelController._OBJ_ID, domainList[ix].id);
-					this._domainsMap[domainList[ix].id] = ti1;
-				}
-			}
+			this.updateDomainList(list);
 		}
 	} catch (ex) {
 		if (ex.code != ZmCsfeException.MAIL_QUERY_PARSE_ERROR) {
@@ -188,31 +177,22 @@ function (resp) {
 	}
 }
 
-/**
-* @param ev
-* This listener is invoked by any controller that can create an ZaDomain object
-**/
-ZaOverviewPanelController.prototype.handleDomainCreation = 
-function (ev) {
-	if(ev) {
-		//add the new ZaDomain to the controlled list
-		if(ev.getDetails()) {
-			this.searchDomains();
-		}
+ZaOverviewPanelController.prototype.updateDomainList = 
+function (list) {
+	var domainList = list.getArray();
+	for (var key in this._domainsMap) {
+		this._domainsTi.removeChild(this._domainsMap[key]);		
 	}
-}
-
-/**
-* @param ev
-* This listener is invoked by ZaDomainController or any other controller that can remove an ZaDomain object
-**/
-ZaOverviewPanelController.prototype.handleDomainRemoval = 
-function (ev) {
-	if(ev) {
-		//add the new ZaDomain to the controlled list
-		var detls = ev.getDetails();		
-		if(detls) {
-			this.searchDomains();
+	//add domain nodes
+	if(domainList && domainList.length) {
+		var cnt = domainList.length;
+		for(var ix=0; ix< cnt; ix++) {
+			var ti1 = new DwtTreeItem(this._domainsTi);			
+			ti1.setText(domainList[ix].name);	
+			ti1.setImage("Domain");
+			ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DOMAIN_VIEW);
+			ti1.setData(ZaOverviewPanelController._OBJ_ID, domainList[ix].id);
+			this._domainsMap[domainList[ix].id] = ti1;
 		}
 	}
 }
@@ -633,9 +613,9 @@ ZaOverviewPanelController.domainTreeListener = function (ev) {
 	if(this._app.getCurrentController()) {
 		this._app.getCurrentController().switchToNextView(this._app.getDomainController(),
 		 ZaDomainController.prototype.show,
-		 this._app.getDomainList(true).getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
+		 this._app.getDomainList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
 	} else {					
-		this._app.getDomainController().show(this._app.getDomainList(true).getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
+		this._app.getDomainController().show(this._app.getDomainList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
 	}
 }
 

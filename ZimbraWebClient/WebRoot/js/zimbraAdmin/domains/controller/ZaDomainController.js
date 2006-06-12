@@ -285,7 +285,7 @@ function(ev) {
 ZaDomainController.prototype._initNotebookButtonListener = 
 function (ev) {
 	try {
-		this._initDomainNotebookDlg = this._app.dialogs["initDomainNotebook"] = new ZaDomainNotebookXDialog(this._container, this._app);	
+		this._initDomainNotebookDlg = this._app.dialogs["initDomainNotebook"] = new ZaDomainNotebookXDialog(this._container, this._app, "550px", "300px");	
 		this._initDomainNotebookDlg.registerCallback(DwtDialog.OK_BUTTON, ZaDomainController.prototype._okDomainNotebookListener, this, null);			
 		this._initDomainNotebookDlg.setObject(this._currentObject);
 		this._initDomainNotebookDlg.popup();

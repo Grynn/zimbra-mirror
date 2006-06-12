@@ -219,16 +219,13 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 						  relevant:"instance.attrs[ZaDomain.A_zimbraNotebookAccount] == null",
 						  relevantBehavior:_HIDE_
 						},
-						{type:_GROUP_, numCols:4, 
+						{type:_GROUP_,  
 							relevant:"instance.attrs[ZaDomain.A_zimbraNotebookAccount] != null",
 							relevantBehavior:_HIDE_,
 							items: [
-								{ref:ZaDomain.A_zimbraNotebookAccount, type:_TEXTFIELD_, 
+								{ref:ZaDomain.A_zimbraNotebookAccount, type:_EMAILADDR_, 
 									label:ZaMsg.Domain_NotebookAccountName, labelLocation:_LEFT_,
 									width:250,onChange:ZaTabView.onFormFieldChanged
-								},
-								{ ref: ZaDomain.A_domainName, type:_OUTPUT_, 
-								  label:"@", labelLocation:_LEFT_
 								}
 							]
 						}

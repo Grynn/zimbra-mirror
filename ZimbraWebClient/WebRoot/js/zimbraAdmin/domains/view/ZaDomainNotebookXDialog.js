@@ -61,7 +61,7 @@ function() {
 		items:[
 			{ref:ZaDomain.A_NotebookTemplateDir, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookTemplateDir, labelLocation:_LEFT_},
 			{ref:ZaDomain.A_NotebookTemplateFolder, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookTemplateFolder, labelLocation:_LEFT_},
-			{ref:ZaDomain.A_NotebookAccountName, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookAccountName, labelLocation:_LEFT_},						
+			{ref:ZaDomain.A_NotebookAccountName, type:_EMAILADDR_, label:ZaMsg.Domain_NotebookAccountName, labelLocation:_LEFT_},						
 			{ref:ZaDomain.A_NotebookAccountPassword, type:_SECRET_, label:ZaMsg.Domain_NotebookAccountPassword, labelLocation:_LEFT_}												
 		]		
 	}

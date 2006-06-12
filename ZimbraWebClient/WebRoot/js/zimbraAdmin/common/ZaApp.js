@@ -184,10 +184,10 @@ function() {
 		this._controllers[ZaZimbraAdmin._DOMAINS_LIST_VIEW] = new ZaDomainListController(this._appCtxt, this._container, this);
 		
 		this._controllers[ZaZimbraAdmin._DOMAINS_LIST_VIEW].addCreationListener(new AjxListener(this, ZaApp.prototype.handleDomainCreation));					
-		this._controllers[ZaZimbraAdmin._DOMAINS_LIST_VIEW].addCreationListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleDomainCreation));							
+//		this._controllers[ZaZimbraAdmin._DOMAINS_LIST_VIEW].addCreationListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleDomainCreation));							
 
 		this._controllers[ZaZimbraAdmin._DOMAINS_LIST_VIEW].addRemovalListener(new AjxListener(this, ZaApp.prototype.handleDomainRemoval));							
-		this._controllers[ZaZimbraAdmin._DOMAINS_LIST_VIEW].addRemovalListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleDomainRemoval));						
+//		this._controllers[ZaZimbraAdmin._DOMAINS_LIST_VIEW].addRemovalListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleDomainRemoval));						
 		
 	}
 	return this._controllers[ZaZimbraAdmin._DOMAINS_LIST_VIEW];
@@ -202,11 +202,11 @@ function() {
 
 		this._controllers[ZaZimbraAdmin._DOMAIN_VIEW].addCreationListener(new AjxListener(this, ZaApp.prototype.handleDomainCreation));					
 		this._controllers[ZaZimbraAdmin._DOMAIN_VIEW].addCreationListener(new AjxListener(this.getDomainListController(), ZaDomainListController.prototype.handleCreation));	
-		this._controllers[ZaZimbraAdmin._DOMAIN_VIEW].addCreationListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleDomainCreation));				
+//		this._controllers[ZaZimbraAdmin._DOMAIN_VIEW].addCreationListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleDomainCreation));				
 
 		this._controllers[ZaZimbraAdmin._DOMAIN_VIEW].addRemovalListener(new AjxListener(this.getDomainListController(), this.getDomainListController().handleRemoval));			
 		this._controllers[ZaZimbraAdmin._DOMAIN_VIEW].addRemovalListener(new AjxListener(this, ZaApp.prototype.handleDomainRemoval));							
-		this._controllers[ZaZimbraAdmin._DOMAIN_VIEW].addRemovalListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleDomainRemoval));						
+	//	this._controllers[ZaZimbraAdmin._DOMAIN_VIEW].addRemovalListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleDomainRemoval));						
 	}
 
 	return this._controllers[ZaZimbraAdmin._DOMAIN_VIEW];
@@ -326,9 +326,10 @@ function (resp) {
 			throw(resp.getException());
 		} else {
 			var response = resp.getResponse().Body.SearchDirectoryResponse;
-			var list = new ZaItemList(ZaDomain, this._app);	
-			list.loadFromJS(response);
-			EmailAddr_XFormItem.domainChoices.setChoices(list.getArray());
+			this._domainList = new ZaItemList(ZaDomain, this._app);	
+			this._domainList.loadFromJS(response);
+			this._appCtxt.getAppController().getOverviewPanelController().updateDomainList(this._domainList);				
+			EmailAddr_XFormItem.domainChoices.setChoices(this._domainList.getArray());
 			EmailAddr_XFormItem.domainChoices.dirtyChoices();
 		}
 	} catch (ex) {
@@ -544,7 +545,7 @@ function(refresh) {
 ZaApp.prototype.handleDomainCreation = 
 function (ev) {
 	if(ev) {
-		this._appCtxt.getAppController().getOverviewPanelController().searchDomains();
+		this.searchDomains();
 	}
 }
 
@@ -749,27 +750,7 @@ function (ev) {
 ZaApp.prototype.handleDomainRemoval = 
 function (ev) {
 	if(ev) {
-		if(!this._domainList) {
-			this._domainList=ZaDomain.getAll(this);
-		} else {
-			//remove the ZaDomain from the controlled list
-			var detls = ev.getDetails();
-			if(detls && (detls instanceof Array)) {
-				for (var key in detls) {
-					this._domainList.remove(detls[key]);
-				}
-			} else if(detls && (detls instanceof ZaDomain)) {
-				this._domainList.remove(ev.getDetails());
-			}
-		}
-	/*	EmailAddr_XFormItem.domainChoices.setChoices(this._domainList.getArray());
-		EmailAddr_XFormItem.domainChoices.dirtyChoices();		
-		if(this._domainListChoices == null) {
-			this._domainListChoices = new XFormChoices(this._domainList.getArray(), XFormChoices.OBJECT_LIST, "name", "name");	
-		} else {
-			this._domainListChoices.setChoices(this._domainList.getArray());
-			this._domainListChoices.dirtyChoices();			
-		}			*/
+		this.searchDomains();
 	}
 }
 
