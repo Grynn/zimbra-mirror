@@ -245,11 +245,11 @@ function(ev) {
 			//if creation took place - fire an DomainChangeEvent
 			this.fireCreationEvent(domain);
 			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);	
-			if(this._newDomainWizard.getObject()[ZaDomain.A_CreateNotebook]=="TRUE") {
-				ZaDomain.initNotebook(this._newDomainWizard.getObject()) ;
-				
-			}
 			this._newDomainWizard.popdown();		
+			if(this._newDomainWizard.getObject()[ZaDomain.A_CreateNotebook]=="TRUE") {
+				var callback = new AjxCallback(this, this.initNotebookCallback);
+				ZaDomain.initNotebook(this._newDomainWizard.getObject(),callback) ;
+			}
 		}
 	} catch (ex) {
 		if(ex.code == ZmCsfeException.DOMAIN_EXISTS) {
@@ -261,9 +261,37 @@ function(ev) {
 	return;
 }
 
+ZaDomainController.prototype.initNotebookCallback = 
+function (arg) {
+	if(!arg)
+		return;
+	if(arg.isException()) {
+		this._handleException(arg.getException(), "ZaDomainController.prototype._initNotebookCallback", null, false);
+	} 
+}
+
+ZaDomainController.prototype._okDomainNotebookListener =
+function(ev) {
+	try {
+		this._initDomainNotebookDlg.popdown();
+		var callback = new AjxCallback(this, this.initNotebookCallback);
+		ZaDomain.initNotebook(this._initDomainNotebookDlg.getObject(),callback) ;
+	} catch (ex) {
+		this._handleException(ex, "ZaDomainController.prototype._okDomainNotebookListener", null, false);
+	}
+	return;
+}
+
 ZaDomainController.prototype._initNotebookButtonListener = 
 function (ev) {
-	
+	try {
+		this._initDomainNotebookDlg = this._app.dialogs["initDomainNotebook"] = new ZaDomainNotebookXDialog(this._container, this._app);	
+		this._initDomainNotebookDlg.registerCallback(DwtDialog.OK_BUTTON, ZaDomainController.prototype._okDomainNotebookListener, this, null);			
+		this._initDomainNotebookDlg.setObject(this._currentObject);
+		this._initDomainNotebookDlg.popup();
+	} catch (ex) {
+		this._handleException(ex, "ZaDomainController.prototype._initNotebookButtonListener", null, false);
+	}	
 }
 
 ZaDomainController.prototype._handleException = 

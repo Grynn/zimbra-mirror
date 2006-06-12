@@ -43,54 +43,7 @@ ZaDomainListController.prototype.constructor = ZaDomainListController;
 ZaDomainListController.helpURL =  "/zimbraAdmin/adminhelp/html/WebHelp/managing_domains/managing_domains.htm";
 ZaController.initToolbarMethods["ZaDomainListController"] = new Array();
 ZaController.initPopupMenuMethods["ZaDomainListController"] = new Array();
-//ZaDomainListController.DOMAIN_VIEW = "ZaDomainListController.DOMAIN_VIEW";
-/*
-ZaDomainListController.prototype.show = 
-function(list) {
-    if (!this._contentView) {
-    	//create toolbar
-    	this._ops = new Array();
-    	this._ops.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.DTBB_New_tt, "Domain", "DomainDis", new AjxListener(this, ZaDomainListController.prototype._newButtonListener)));
-    	this._ops.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.DTBB_Edit_tt, "Properties", "PropertiesDis",  new AjxListener(this, ZaDomainListController.prototype._editButtonListener)));    	
-    	this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.DTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaDomainListController.prototype._deleteButtonListener)));    	    	
-   		this._ops.push(new ZaOperation(ZaOperation.GAL_WIZARD, ZaMsg.DTBB_GAlConfigWiz, ZaMsg.DTBB_GAlConfigWiz_tt, "GALWizard", "GALWizardDis", new AjxListener(this, ZaDomainListController.prototype._galWizButtonListener)));   		
-   		this._ops.push(new ZaOperation(ZaOperation.AUTH_WIZARD, ZaMsg.DTBB_AuthConfigWiz, ZaMsg.DTBB_AuthConfigWiz_tt, "AuthWizard", "AuthWizardDis", new AjxListener(this, ZaDomainListController.prototype._authWizButtonListener)));   		   		
-		this._ops.push(new ZaOperation(ZaOperation.NONE));
-		this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));				
 
-		this._toolbar = new ZaToolBar(this._container, this._ops);
-
-		//create Domains list view
-		this._contentView = new ZaDomainListView(this._container);
-		var elements = new Object();
-		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
-		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
-		this._app.createView(ZaZimbraAdmin._DOMAINS_LIST_VIEW, elements);
-		if (list != null)
-			this._contentView.set(list.getVector());
-
-    	//context menu
-    	this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._ops);
-
-		this._app.pushView(ZaZimbraAdmin._DOMAINS_LIST_VIEW);			
-		
-		//set a selection listener on the Domain list view
-		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
-		this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
-		this._removeConfirmMessageDialog = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);					
-	} else {
-		if (list != null)
-			this._contentView.set(list.getVector());	
-			
-		this._app.pushView(ZaZimbraAdmin._DOMAINS_LIST_VIEW);
-	}
-//	this._app.setCurrentController(this);
-	this._removeList = new Array();
-	if (list != null)
-		this._list = list;
-		
-	this._changeActionsState();		
-}*/
 
 ZaDomainListController.prototype.show = function (doPush) {
 	var callback = new AjxCallback(this, this.searchCallback, {limit:ZaDomain.RESULTSPERPAGE,CONS:ZaDomain,show:doPush});
@@ -453,12 +406,15 @@ function(ev) {
 	try {
 		var domain = ZaDomain.create(this._newDomainWizard.getObject(), this._app);
 		if(domain != null) {
-			if(this._newDomainWizard.getObject()[ZaDomain.A_CreateNotebook]=="TRUE") {
-				ZaDomain.initNotebook(this._newDomainWizard.getObject()) ;
-				
-			}			
 			this._newDomainWizard.popdown();
+
+			if(this._newDomainWizard.getObject()[ZaDomain.A_CreateNotebook]=="TRUE") {
+				var callback = new AjxCallback(this, this.initNotebookCallback);
+				ZaDomain.initNotebook(this._newDomainWizard.getObject(),callback) ;
+			}			
+			
 			//if creation took place - fire an DomainChangeEvent
+			
 			this._fireDomainCreationEvent(domain);
 			
 			var evt = new ZaEvent(ZaEvent.S_DOMAIN);
@@ -504,4 +460,13 @@ function(ev) {
 		this._handleException(ex, "ZaDomainListController.prototype._finishGalButtonListener", null, false);
 	}
 	return;
+}
+
+ZaDomainListController.prototype.initNotebookCallback = 
+function (arg) {
+	if(!arg)
+		return;
+	if(arg.isException()) {
+		this._handleException(arg.getException(), "ZaDomainController.prototype._initNotebookCallback", null, false);
+	} 
 }
