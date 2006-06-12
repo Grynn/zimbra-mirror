@@ -143,6 +143,7 @@ function() {
 	DwtKeyMapMgr._KEYCODES[16]  = DwtKeyMap.SHIFT;
 	DwtKeyMapMgr._KEYCODES[32]  = DwtKeyMap.SPACE;
 	DwtKeyMapMgr._KEYCODES[9]   = DwtKeyMap.TAB;
+	DwtKeyMapMgr._KEYCODES[188] = DwtKeyMap.COMMA;
 	
 	// Function keys
 	for (var i = 112; i < 124; i++) 
@@ -160,7 +161,6 @@ function() {
 	// punctuation
 	DwtKeyMapMgr._KEYCODES[222] = "'";
 	DwtKeyMapMgr._KEYCODES[189] = "-";
-	DwtKeyMapMgr._KEYCODES[188] = ",";
 	DwtKeyMapMgr._KEYCODES[190] = ".";
 	DwtKeyMapMgr._KEYCODES[191] = "/";
 	DwtKeyMapMgr._KEYCODES[186] = ";";

@@ -47,6 +47,7 @@ function DwtKeyMap(subclassInit) {
 		"Ctrl+`":			DwtKeyMap.ADD_SELECT_CURRENT, // Mac FF
 			
 		"ArrowDown":		DwtKeyMap.SELECT_NEXT,
+		"Space":			DwtKeyMap.SELECT_NEXT,
 		"Shift+ArrowDown":	DwtKeyMap.ADD_SELECT_NEXT,
 		"Ctrl+ArrowDown":	DwtKeyMap.NEXT,
 		"ArrowUp":			DwtKeyMap.SELECT_PREV,
@@ -56,6 +57,9 @@ function DwtKeyMap(subclassInit) {
 		"Ctrl+A":			DwtKeyMap.SELECT_ALL,
 		
 		"Enter":			DwtKeyMap.DBLCLICK,
+		
+		"Comma":			DwtKeyMap.ACTION,
+		"Shift+Comma":		DwtKeyMap.ACTION,
 		"Ctrl+Enter":		DwtKeyMap.ACTION,
 		"Ctrl+M":			DwtKeyMap.ACTION  // Mac FF
 	};
@@ -74,12 +78,12 @@ function DwtKeyMap(subclassInit) {
 DwtKeyMap.deserialize =
 function(keymap) {
 	alert("DwtKeyMap.deserialize: NOT IMPLEMENTED");
-}
+};
 
 DwtKeyMap.serialize =
 function(keymap) {
 	alert("DwtKeyMap.serialize: NOT IMPLEMENTED");
-}
+};
 
 // Key names
 
@@ -92,6 +96,7 @@ DwtKeyMap.ARROW_LEFT	= "ArrowLeft";
 DwtKeyMap.ARROW_RIGHT	= "ArrowRight";
 DwtKeyMap.ARROW_UP		= "ArrowUp";
 DwtKeyMap.BACKSPACE		= "Backspace";
+DwtKeyMap.COMMA			= "Comma";
 DwtKeyMap.DELETE		= "Del";
 DwtKeyMap.END			= "End";
 DwtKeyMap.ENTER			= "Enter";
@@ -129,4 +134,4 @@ DwtKeyMap.INHERIT = "INHERIT"; // Inherit keyword.
 DwtKeyMap.prototype.getMap =
 function() {
 	return this._map;
-}
+};
