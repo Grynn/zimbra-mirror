@@ -347,7 +347,7 @@ function () {
 
 DwtDialog.prototype._addButtonsHtml =
 function(html, idx) {
-	if (this._buttonList) {
+	if (this._buttonList && this._buttonList.length) {
 		var leftButtons = new Array();
 		var rightButtons = new Array();
 		var centerButtons = new Array();
