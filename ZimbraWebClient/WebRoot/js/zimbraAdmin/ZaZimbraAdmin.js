@@ -144,7 +144,7 @@ function(domain) {
 	 */
 	this._kbMgr = shell.getKeyboardMgr();
 	this._kbMgr.registerKeyMap(new ZaKeyMap());
-	this._kbMgr.registerGlobalKeyActionHandler(this);
+	this._kbMgr.registerApplicationKeyActionHandler(this);
 	
     // Go!
     var lm = new ZaZimbraAdmin(appCtxt);
