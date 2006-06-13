@@ -82,7 +82,8 @@ function(entry) {
 			this._containedObject.attrs[a] = entry.attrs[a];
 		}
 	}
-
+	this._containedObject[ZaDomain.A_AuthUseBindPassword] = entry[ZaDomain.A_AuthUseBindPassword];
+	
 	if(!entry[ZaModel.currentTab])
 		this._containedObject[ZaModel.currentTab] = "1";
 	else
