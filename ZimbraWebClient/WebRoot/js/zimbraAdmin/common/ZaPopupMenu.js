@@ -78,8 +78,7 @@ function(delay, x, y, kbGenerated) {
 		x = Dwt.DEFAULT;
 	if (y == null)
 		y = Dwt.DEFAULT;
-	this.setLocation(x, y);
-	DwtMenu.prototype.popup.call(this, delay, null, null, kbGenerated);
+	DwtMenu.prototype.popup.call(this, delay, x, y, kbGenerated);
 }
 
 /**
