@@ -283,6 +283,29 @@ function(id) {
 	this._enterButtonId = id;
 };
 
+DwtDialog.prototype.getKeyMapName = 
+function() {
+	return "DwtDialog";
+};
+
+DwtDialog.prototype.handleKeyAction =
+function(actionCode, ev) {
+	switch (actionCode) {
+		
+		case DwtKeyMap.ENTER:
+			this.notifyListeners(DwtEvent.ENTER, ev);
+			break;
+			
+		case DwtKeyMap.CANCEL:
+			this.popdown();
+			break;
+			
+		default:
+			return false;
+	}
+	return true;
+};
+
 
 // Private methods
 

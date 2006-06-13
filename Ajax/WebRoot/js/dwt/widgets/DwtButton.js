@@ -388,9 +388,6 @@ function(actionCode, ev) {
 		case DwtKeyMap.SELECT_SUBMENU:
 			this.popup();
 			break;
-			
-		default:
-			return false;		
 	}
 	
 	return true;

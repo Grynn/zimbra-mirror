@@ -608,19 +608,18 @@ function(ev) {
 	// First see if the control that currently has focus can handle the key event
 	var obj = (kbMgr.__dwtCtrlHasFocus) ? kbMgr.__focusObj : null;
 	if (obj && (obj instanceof DwtControl)) {
-		var mapName = obj.getKeyMapName ? obj.getKeyMapName() : obj.toString();
-		DBG.println(AjxDebug.DBG3, "object " + obj.toString() + " handling " + kbMgr.__keySequence + " for map: " + mapName);
-		handled = kbMgr.__dispatchKeyEvent(obj, mapName, kev, false);
+		handled = kbMgr.__dispatchKeyEvent(obj, kev);
+		while ((handled == DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED) && obj.parent && obj.parent.getKeyMapName) {
+			obj = obj.parent;
+			handled = kbMgr.__dispatchKeyEvent(obj, kev);
+		}
 	}
 
 	// If the currently focused control didn't handle the event, hand it to the application key
 	// event handler
 	if ((handled == DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED) && kbMgr.__applicationKeyActionHdlr &&
 		!(kbMgr.__currTabGroup && kbMgr.__currTabGroup.isApplicationHandlingBlocked())) {
-		DBG.println(AjxDebug.DBG3, "Dispatching to global map: " + kbMgr.__applicationKeyActionHdlr.getKeyMapName());
-		handled = kbMgr.__dispatchKeyEvent(kbMgr.__applicationKeyActionHdlr, 
-							kbMgr.__applicationKeyActionHdlr.getKeyMapName(), kev, false);
-		//DBG.println(AjxDebug.DBG1, "APPLICATION HANDLER RETURNED: " + handled);
+		handled = kbMgr.__dispatchKeyEvent(kbMgr.__applicationKeyActionHdlr, kev);
 	}
 
 	kbMgr.__kbEventStatus = handled;
@@ -651,7 +650,12 @@ function(ev) {
  * @private
  */
 DwtKeyboardMgr.prototype.__dispatchKeyEvent = 
-function(hdlr, mapName, ev, forceActionCode) {
+function(hdlr, ev, forceActionCode) {
+	var mapName = hdlr.getKeyMapName ? hdlr.getKeyMapName() : null;
+	if (!mapName) {
+		return DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
+	}
+	DBG.println(AjxDebug.DBG3, "handler " + hdlr.toString() + " handling " + this.__keySequence + " for map: " + mapName);
 	var actionCode = this.__keyMapMgr.getActionCode(this.__keySequence, mapName, forceActionCode);
 	if (actionCode == DwtKeyMapMgr.NOT_A_TERMINAL) {
 		DBG.println(AjxDebug.DBG3, "SCHEDULING KILL SEQUENCE ACTION");

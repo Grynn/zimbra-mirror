@@ -27,12 +27,12 @@ function DwtKeyMap(subclassInit) {
 	if (subclassInit) 
 		return;
 		
-	/* Always specify Control, then Alt, then Shift. All Chars must be upper case
-	 */
+	// Always specify Control, then Alt, then Shift. All Chars must be upper case
 	this._map = {};
 	
-	this._map["DwtBaseDialog"] = {
-		"Enter":			DwtKeyMap.ENTER
+	this._map["DwtDialog"] = {
+		"Enter":			DwtKeyMap.ENTER,
+		"Esc":				DwtKeyMap.CANCEL
 	};
 
 	this._map["DwtButton"] = {

@@ -317,20 +317,6 @@ function() {
 	return dialog;
 };
 
-DwtBaseDialog.prototype.getKeyMapName = 
-function() {
-	return "DwtBaseDialog";
-};
-
-DwtBaseDialog.prototype.handleKeyAction =
-function(actionCode, ev) {
-	switch (actionCode) {
-		case DwtKeyMap.DONE:
-			ad.notifyListeners(DwtEvent.ENTER, ev);
-			break;
-	}
-}
-
 // -------------------------------------------------------------------
 // Private methods
 // -------------------------------------------------------------------
@@ -471,76 +457,3 @@ DwtBaseDialog.prototype._doesContainElement =
 function (element) {
 	return Dwt.contains(this.getHtmlElement(), element);
 };
-
-
-
-/*
-DwtBaseDialog.prototype.handleKeys = 
-function(ev) {
-	var ad = DwtBaseDialog.getActiveDialog();
-	var dialogEl = ad.getHtmlElement();
-	var target = DwtUiEvent.getTarget(ev);
-	var keyCode = DwtKeyEvent.getCharCode(ev);
-	switch (keyCode) {
-		case DwtKeyEvent.KEY_TAB:
-			if (ad && ad._mode == DwtBaseDialog.MODAL) {
-				ev.item = ad;
-				var isContained = ad._doesContainElement(target);
-				if (isContained) {
-					ev.isTargetInDialog = true;
-					if (ad._tabIdOrder) {
-						var oldTabIndex = -1;
-						if (ad._tabIndex != null ) {
-							oldTabIndex = ad._tabIndex;
-							ad._tabIndex = ++ad._tabIndex % ad._tabIdOrder.length;
-						} else {
-							ad._tabIndex =  1;
-						}
-						var id = ad._tabIdOrder[ad._tabIndex];
-						document.getElementById(id).focus();
-						ev.oldTabIndexId = (oldTabIndex == -1) ? oldTabIndex : ad._tabIdOrder[oldTabIndex];
-						ev.isTargetInDialog = true;
-						ev.currentTabIndexId = id;
-					} 
-				} else {
-					ev.oldTabIndexId = -1;
-					ev.isTargetInDialog = false;
-					ev.currentTabIndexId = -1;
-				}
-				ad.notifyListeners(DwtEvent.TAB, ev);
-				DwtUiEvent.setBehaviour(ev, true, false);
-			}
-			break;
-		case DwtKeyEvent.KEY_ENTER:
-			ad.notifyListeners(DwtEvent.ENTER, ev);
-			break;
-	}
-};
-
-DwtBaseDialog.prototype.setTabOrder = 
-function(elementIdArray) {
-	this._tabIdOrder = elementIdArray;
-};
-
-DwtBaseDialog.prototype.addKeyListeners =
-function() {
-	if (this._shell._veilOverlay.activeDialogs.length == 0 ) {
-		if (window.addEventListener) {
-			window.addEventListener('keypress', this.handleKeys, false);
-		} else if (document.body.attachEvent) {
-			document.body.attachEvent('onkeydown', this.handleKeys);
-		}
-	}
-};
-
-DwtBaseDialog.prototype.removeKeyListeners =
-function () {
-	if (this._shell._veilOverlay.activeDialogs.length == 0 ) {
-		if (window.removeEventListener) {
-			window.removeEventListener('keypress', this.handleKeys, false);
-		} else if (document.body.detachEvent) {
-			document.body.detachEvent('onkeydown', this.handleKeys);
-		}
-	}
-};
-*/
