@@ -278,12 +278,13 @@ ZaDLXFormView.addFreeFormAddressToMembers = function (event) {
 	var cnt = values.length;
  	var members = new Array();
 	for (var i = 0; i < cnt; i++) {
-		if(!AjxUtil.EMAIL_RE.test(values[i]) ) {
+		var tmpval = AjxStringUtil.trim(values[i],true);
+		if(!AjxUtil.EMAIL_RE.test(tmpval) ) {
 			//show error msg
 			form.parent._app.getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.WARNING_DL_INVALID_EMAIL,[values[i]]),null,null,DwtMessageDialog.WARNING_STYLE);
 			return false;
 		}
-		members.push(new ZaDistributionListMember(values[i]));
+		members.push(new ZaDistributionListMember(tmpval));
 	}
 	ZaDLXFormView.addListToMemberList.call(form, members);
 	form.getInstance().optionalAdd = null;
