@@ -31,17 +31,11 @@ function ZaSplashScreen(shell, imageInfo, className) {
 ZaSplashScreen.prototype = new ZmBaseSplashScreen;
 ZaSplashScreen.prototype.constructor = ZaSplashScreen;
 
-ZaSplashScreen.prototype.getDefaultSubstitutions = function (){
-	if (ZaSplashScreen._defaultSubstitutions == null) {
-		var dateFormatter = AjxDateFormat.getDateInstance();
-		ZaSplashScreen._defaultSubstitutions = {
-			url:ZaMsg.splashScreenZimbraUrl,
-			appName: ZaMsg.splashScreenAppName,
-			version: AjxBuffer.concat(ZaMsg.splashScreenVersion, " ", ZaServerVersionInfo.version , " " ,
-									  dateFormatter.format(ZaServerVersionInfo.buildDate)),
-			contents: AjxBuffer.concat("<br>", ZaMsg.splashScreenLoading, "<br><br>", AjxImg.getImageHtml("BarberPole_216")),
-			license: ZaMsg.splashScreenCopyright	
-		}
-	}
-	return ZaSplashScreen._defaultSubstitutions;
+ZaSplashScreen.prototype.getHtml = 
+function() {
+	var params = ZLoginFactory.copyDefaultParams(ZaMsg);
+	params.showForm = false;
+	params.showLicenseMsg = true;
+	params.showLoading = true;
+	return ZLoginFactory.getLoginDialogHTML(params);
 };

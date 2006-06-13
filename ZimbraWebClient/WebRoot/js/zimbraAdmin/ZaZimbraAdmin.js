@@ -575,26 +575,28 @@ function(msg) {
 function ZaAboutDialog(parent, className, title, w, h) {
 	if (arguments.length == 0) return;
  	var clsName = className || "DwtDialog";
- 	DwtBaseDialog.call(this, parent, clsName);
+ 	DwtDialog.call(this, parent, clsName,  ZaMsg.about_title, [DwtDialog.OK_BUTTON]);
 }
 
-ZaAboutDialog.prototype = new DwtBaseDialog;
+ZaAboutDialog.prototype = new DwtDialog;
 ZaAboutDialog.prototype.constructor = ZaAboutDialog;
 
 ZaAboutDialog.prototype.popup = function () {
+	// Set the content of the dialog before popping it up.
+	// This is done here because of the global IDs used by ZLoginFactory.
+	var date = AjxDateFormat.getDateInstance().format(ZaServerVersionInfo.buildDate);
+    var params = ZLoginFactory.copyDefaultParams(ZaMsg);
+	params.showAbout = true,
+	params.showPanelBorder = false;
+	params.longVersion = AjxBuffer.concat(ZaMsg.splashScreenVersion, " ", ZaServerVersionInfo.version , " " , date);
+    var html = ZLoginFactory.getLoginDialogHTML(params);
+    this.setContent(html);
+
  	DwtBaseDialog.prototype.popup.call(this);
 };
 
-ZaAboutDialog.prototype._createHtml = function () {
-	var substitutions = ZaSplashScreen.prototype.getDefaultSubstitutions.call(this);
-	substitutions.buttonId = (this._buttonId = Dwt.getNextId());
-	substitutions.contents = "";
-	this.getHtmlElement().innerHTML = ZmBaseSplashScreen.getHtml(substitutions);	
-	var btnContainer = document.getElementById(this._buttonId);
-	if (btnContainer != null) {
-		var btn = new DwtButton(this);
-		btn.setText("OK");
-		btnContainer.appendChild(btn.getHtmlElement());
-		btn.addSelectionListener(new AjxListener(this, this.popdown));
-	}
-}
+ZaAboutDialog.prototype.popdown =
+function() {
+ 	DwtBaseDialog.prototype.popdown.call(this);
+    this.setContent("");
+};

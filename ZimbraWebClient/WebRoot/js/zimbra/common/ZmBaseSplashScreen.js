@@ -55,14 +55,4 @@ ZmBaseSplashScreen.prototype = new DwtControl;
 ZmBaseSplashScreen.prototype.constructor = ZmBaseSplashScreen;
 
 /** abstract **/
-ZmBaseSplashScreen.prototype.getDefaultSubstitutions = function() {};
-
-ZmBaseSplashScreen.getHtml = 
-function(substitutions) {
-	return DwtBorder.getBorderHtml("SplashScreen", substitutions);	
-}
-
-ZmBaseSplashScreen.prototype.getHtml = 
-function() {
-	return ZmBaseSplashScreen.getHtml(this.getDefaultSubstitutions());
-}
+ZmBaseSplashScreen.prototype.getHtml = function() { }
