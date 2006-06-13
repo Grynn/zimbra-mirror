@@ -140,7 +140,7 @@ function(stepNum) {
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
-		} else if(stepNum == 15) {
+		} else if(stepNum == 16) {
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
@@ -494,6 +494,13 @@ function() {
 		this.goPage(12);
  		this.testAuthSettings();
 		this.changeButtonStateForStep(12);
+	} else if(this._containedObject[ZaModel.currentStep] == 15) {
+		if(this._containedObject[ZaDomain.A_NotebookAccountPassword] != this._containedObject[ZaDomain.A_NotebookAccountPassword2]) {
+			this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
+		} else {		
+			this.goPage(this._containedObject[ZaModel.currentStep] + 1);
+			this.changeButtonStateForStep(this._containedObject[ZaModel.currentStep]);
+		}
 	} else {
 		this.goPage(this._containedObject[ZaModel.currentStep] + 1);
 		this.changeButtonStateForStep(this._containedObject[ZaModel.currentStep]);
@@ -774,13 +781,15 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
 						{ref:ZaDomain.A_CreateNotebook, type:_CHECKBOX_, label:ZaMsg.Domain_CreateNotebook, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_,
 							onChange:function(value, event, form){
 								this.setInstanceValue(value);
-								this.getInstance()[ZaDomain.A_NotebookAccountName]="@"+this.getInstance().attrs[ZaDomain.A_domainName];
+								if(!this.getInstance()[ZaDomain.A_NotebookAccountName])
+									this.getInstance()[ZaDomain.A_NotebookAccountName]=ZaDomain.DEF_WIKI_ACC+"@"+this.getInstance().attrs[ZaDomain.A_domainName];
 							}
 						},
 						{ref:ZaDomain.A_NotebookTemplateDir, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookTemplateDir, labelLocation:_LEFT_, relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE'", relevantBehavior:_DISABLE_},
 						{ref:ZaDomain.A_NotebookTemplateFolder, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookTemplateFolder, labelLocation:_LEFT_, relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE'", relevantBehavior:_DISABLE_},
 						{ref:ZaDomain.A_NotebookAccountName, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookAccountName, labelLocation:_LEFT_, relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE'", relevantBehavior:_DISABLE_},						
-						{ref:ZaDomain.A_NotebookAccountPassword, type:_SECRET_, label:ZaMsg.Domain_NotebookAccountPassword, labelLocation:_LEFT_, relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE'", relevantBehavior:_DISABLE_}												
+						{ref:ZaDomain.A_NotebookAccountPassword, type:_SECRET_, label:ZaMsg.Domain_NotebookAccountPassword, labelLocation:_LEFT_, relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE'", relevantBehavior:_DISABLE_},
+						{ref:ZaDomain.A_NotebookAccountPassword2, type:_SECRET_, label:ZaMsg.NAD_ConfirmPassword, labelLocation:_LEFT_, relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE'", relevantBehavior:_DISABLE_}												
 
 					]
 				},				

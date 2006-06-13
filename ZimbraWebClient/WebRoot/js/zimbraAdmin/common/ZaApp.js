@@ -754,6 +754,17 @@ function (ev) {
 	}
 }
 
+/**
+* @param ev
+* This listener is invoked by ZaDomainController or any other controller that can remove an ZaDomain object
+**/
+ZaApp.prototype.handleDomainChange = 
+function (ev) {
+	if(ev) {
+		this.searchDomains();
+	}
+}
+
 ZaApp.prototype.handleSettingsChange = 
 function(ev) {
 	if(ev) {

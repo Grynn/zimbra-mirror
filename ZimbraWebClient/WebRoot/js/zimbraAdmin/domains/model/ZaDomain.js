@@ -32,7 +32,7 @@
 **/
 
 function ZaDomain(app) {
-	ZaItem.call(this, "domain");
+	ZaItem.call(this, app, "ZaDomain");
 	this.attrs = new Object();
 	this.id = "";
 	this.name="";
@@ -51,10 +51,14 @@ function ZaDomain(app) {
 	}
 	this.attrs[ZaDomain.A_AuthMech] = ZaDomain.AuthMech_zimbra;
 }
+ZaDomain.DEF_WIKI_ACC = "wiki";
 ZaDomain.RESULTSPERPAGE = ZaSettings.RESULTSPERPAGE; 
 ZaDomain.MAXSEARCHRESULTS = ZaSettings.MAXSEARCHRESULTS;
 ZaDomain.prototype = new ZaItem;
 ZaDomain.prototype.constructor = ZaDomain;
+
+ZaItem.loadMethods["ZaDomain"] = new Array();
+ZaItem.initMethods["ZaDomain"] = new Array();
 
 //attribute name constants, this values are taken from zimbra.schema
 ZaDomain.A_description = "description";
@@ -97,6 +101,7 @@ ZaDomain.A_NotebookTemplateDir = "templatedir";
 ZaDomain.A_NotebookTemplateFolder = "templatefolder";
 ZaDomain.A_NotebookAccountName = "noteBookAccountName";
 ZaDomain.A_NotebookAccountPassword = "noteBookAccountPassword";
+ZaDomain.A_NotebookAccountPassword2 = "noteBookAccountPassword2";
 ZaDomain.A_CreateNotebook = "createNotebook";
 //values
 ZaDomain.GAL_Mode_internal = "zimbra";
@@ -672,6 +677,20 @@ function() {
 	command.invoke(params);	
 }
 
+ZaDomain.loadMethod = 
+function() {
+	var soapDoc = AjxSoapDoc.create("GetDomainRequest", "urn:zimbraAdmin", null);
+	var elBy = soapDoc.set("domain", this.attrs[ZaDomain.A_domainName]);
+	elBy.setAttribute("by", "name");
+
+	var getDomainCommand = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	var resp = getDomainCommand.invoke(params).Body.GetDomainResponse;
+	this.initFromJS(resp.domain[0]);
+}
+ZaItem.loadMethods["ZaDomain"].push(ZaDomain.loadMethod);
+
 ZaDomain.myXModel = {
 	items: [
 		{id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId},
@@ -730,6 +749,7 @@ ZaDomain.myXModel = {
 		{id:ZaDomain.A_NotebookTemplateFolder, type:_STRING_},
 		{id:ZaDomain.A_NotebookAccountName, type:_STRING_},
 		{id:ZaDomain.A_NotebookAccountPassword, type:_STRING_},
+		{id:ZaDomain.A_NotebookAccountPassword2, type:_STRING_},		
 		{id:ZaDomain.A_CreateNotebook, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaDomain.A_zimbraNotebookAccount, type:_STRING_, ref:"attrs/" +ZaDomain.A_zimbraNotebookAccount}
 	]

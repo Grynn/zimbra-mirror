@@ -267,16 +267,25 @@ function (arg) {
 		return;
 	if(arg.isException()) {
 		this._handleException(arg.getException(), "ZaDomainController.prototype._initNotebookCallback", null, false);
+		return;
 	} 
+	this._currentObject.refresh();
+	this.show(this._currentObject);
 }
 
 ZaDomainController.prototype._okDomainNotebookListener =
 function(ev) {
 	try {
+		var obj = this._initDomainNotebookDlg.getObject();
+		if(obj[ZaDomain.A_NotebookAccountPassword] != obj[ZaDomain.A_NotebookAccountPassword2]) {
+			this.popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
+			return;
+		}
 		this._initDomainNotebookDlg.popdown();
 		var callback = new AjxCallback(this, this.initNotebookCallback);
 		ZaDomain.initNotebook(this._initDomainNotebookDlg.getObject(),callback) ;
 	} catch (ex) {
+		this._initDomainNotebookDlg.popdown();
 		this._handleException(ex, "ZaDomainController.prototype._okDomainNotebookListener", null, false);
 	}
 	return;

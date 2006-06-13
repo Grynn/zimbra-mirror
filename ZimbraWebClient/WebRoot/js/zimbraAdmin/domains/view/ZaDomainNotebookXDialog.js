@@ -48,6 +48,12 @@ function (loc) {
 	ZaXWizardDialog.prototype.popup.call(this, loc);
 }
 
+ZaDomainNotebookXDialog.prototype.setObject = function (entry) {
+	this._containedObject = entry;
+	if(!this._containedObject[ZaDomain.A_NotebookAccountName] && this._containedObject.attrs[ZaDomain.A_domainName])
+		this._containedObject[ZaDomain.A_NotebookAccountName] = ZaDomain.DEF_WIKI_ACC + "@" + this._containedObject.attrs[ZaDomain.A_domainName];
+	this._localXForm.setInstance(this._containedObject);
+}
 
 ZaDomainNotebookXDialog.prototype.closeMe = 
 function() {
@@ -62,7 +68,8 @@ function() {
 			{ref:ZaDomain.A_NotebookTemplateDir, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookTemplateDir, labelLocation:_LEFT_},
 			{ref:ZaDomain.A_NotebookTemplateFolder, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookTemplateFolder, labelLocation:_LEFT_},
 			{ref:ZaDomain.A_NotebookAccountName, type:_EMAILADDR_, label:ZaMsg.Domain_NotebookAccountName, labelLocation:_LEFT_},						
-			{ref:ZaDomain.A_NotebookAccountPassword, type:_SECRET_, label:ZaMsg.Domain_NotebookAccountPassword, labelLocation:_LEFT_}												
+			{ref:ZaDomain.A_NotebookAccountPassword, type:_SECRET_, label:ZaMsg.Domain_NotebookAccountPassword, labelLocation:_LEFT_},
+			{ref:ZaDomain.A_NotebookAccountPassword2, type:_SECRET_, label:ZaMsg.NAD_ConfirmPassword, labelLocation:_LEFT_}																											
 		]		
 	}
 	return xFormObject;
