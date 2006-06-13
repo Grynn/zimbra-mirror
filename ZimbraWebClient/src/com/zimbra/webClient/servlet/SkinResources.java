@@ -635,7 +635,7 @@ extends HttpServlet {
 			for (File file : substList) {
 				if (DEBUG) System.err.println("DEBUG: subst file = "+file);
 				try {
-					/***
+					/***/
 					CharArrayWriter out = new CharArrayWriter(4096); // 4K
 					SkinResources.preprocess(file, out, macros, null, "#", "#", "#");
 					String content = out.toString();
@@ -650,7 +650,7 @@ extends HttpServlet {
 					 InputStream in = new FileInputStream(file);
 					 substitutions.load(in);
 					 in.close();
-					 /***/
+					 /***
 					InputStream in = new FileInputStream(file);
 					Properties p = new Properties();
 					p.load(in);
