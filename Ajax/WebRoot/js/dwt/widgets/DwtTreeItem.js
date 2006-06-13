@@ -81,6 +81,8 @@ function() {
 
 DwtTreeItem._NODECELL_DIM = "16px";
 
+DwtTreeItem.__NOP = function() {}
+
 DwtTreeItem.prototype.getChecked =
 function() {
 	return this._itemChecked;
@@ -255,6 +257,7 @@ function(index) {
 	var child = new Object();
 	child._isSeparator = true;
 	child._initialized = false;
+	child.dispose = DwtTreeItem.__NOP; // NOTE: needed for DwtComposite#dispose
 	this._children.add(child, index);
 }
 
