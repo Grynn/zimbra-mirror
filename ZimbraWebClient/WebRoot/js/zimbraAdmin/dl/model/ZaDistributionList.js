@@ -227,7 +227,7 @@ function(tmpObj) {
 	for (var aname in tmpObj.attrs) {
 		if(aname == ZaItem.A_objectClass || aname==ZaAccount.A_mail 
 			|| aname == ZaItem.A_zimbraId || aname == ZaAccount.A_uid
-			|| aname == ZaDistributionList.A_zimbraGroupId) {
+			|| aname == ZaDistributionList.A_zimbraGroupId || aname == ZaAccount.A_zimbraMailAlias) {
 			continue;
 		}		
 		//multi-value attribute
