@@ -160,9 +160,9 @@ function(element, startX, startY, baseId, clip, dialog) {
 		popupY += bottomPointerHeight; // NOTE: because bottom pointer is relative
 		topPointer.style.display = "none";
 		pointerY = -bottomBorderHeight;
-		if (AjxEnv.useTransparentPNGs) {
-			pointerY -= bsh;
-		}
+//		if (AjxEnv.useTransparentPNGs) {
+//			pointerY -= bsh;
+//		}
 		pointerWidth = bottomPointerWidth;
 		pointer = bottomPointer;
 	}
