@@ -52,6 +52,6 @@ function(argv) {
 	} else if (argv[0] && argv[0].toLowerCase() == "domainsrch") {
 		ZaDomain.MAXSEARCHRESULTS = argv[1];
 		alert("Setting domain search limit to:" + argv[1]);
-        this._app.searchDomains("");
+        this._app.searchDomains();
     }
 }

@@ -183,6 +183,7 @@ function (list) {
 	for (var key in this._domainsMap) {
 		this._domainsTi.removeChild(this._domainsMap[key]);		
 	}
+	this._domainsMap = new Object();	
 	//add domain nodes
 	if(domainList && domainList.length) {
 		var cnt = domainList.length;
