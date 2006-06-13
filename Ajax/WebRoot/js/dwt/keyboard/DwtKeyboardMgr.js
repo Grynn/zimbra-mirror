@@ -279,7 +279,7 @@ function() {
 	Dwt.setHandler(document, DwtEvent.ONKEYUP, DwtKeyboardMgr.__keyUpHdlr);
 	Dwt.setHandler(document, DwtEvent.ONKEYPRESS, DwtKeyboardMgr.__keyPressHdlr);
 
-;	/* Create our keyboard focus field. This is a dummy input field that will take text
+	/* Create our keyboard focus field. This is a dummy input field that will take text
 	 * input for keyboard shortcuts */
 	var kbff = this._kbFocusField = document.createElement("input");
 	kbff.type = "text";
