@@ -192,17 +192,23 @@ function(ev) {
 
 DwtUiEvent.setBehaviour =
 function(ev, stopPropagation, allowDefault) {
-	ev = DwtUiEvent.getEvent(ev);
-	
+	var dhtmlEv = DwtUiEvent.getEvent(ev);
+	DwtUiEvent.setDhtmlBehaviour(dhtmlEv, stopPropagation, allowDefault);
+};
+
+DwtUiEvent.setDhtmlBehaviour =
+function(dhtmlEv, stopPropagation, allowDefault) {
+	dhtmlEv = dhtmlEv || window.event;
+
 	// stopPropagation is referring to the function found in Mozilla's event object
-	if (ev.stopPropagation != null) {
+	if (dhtmlEv.stopPropagation != null) {
 		if (stopPropagation)
-			ev.stopPropagation();
+			dhtmlEv.stopPropagation();
 		if (!allowDefault)
-			ev.preventDefault();
+			dhtmlEv.preventDefault();
 	} else {
 		// IE only..
-		ev.returnValue = allowDefault; 
-		ev.cancelBubble = stopPropagation;
+		dhtmlEv.returnValue = allowDefault;
+		dhtmlEv.cancelBubble = stopPropagation;
 	}
-}
+};
