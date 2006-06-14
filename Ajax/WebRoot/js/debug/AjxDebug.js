@@ -65,7 +65,7 @@ AjxDebug._BUTTON_FRAME_ID	= "AjxDebug_BF";
 AjxDebug._id = 0;
 AjxDebug._openErrors = 0;
 
-AjxDebug.prototype.toString = 
+AjxDebug.prototype.toString =
 function() {
 	return "AjxDebug";
 };
@@ -75,7 +75,7 @@ function() {
 *
 * @param level	 	debug level for the current debugger
 */
-AjxDebug.prototype.setDebugLevel = 
+AjxDebug.prototype.setDebugLevel =
 function(level) {
 	this._level = level;
 	this._enable(level != AjxDebug.NONE);
@@ -84,7 +84,7 @@ function(level) {
 /**
 * Returns the current debug level.
 */
-AjxDebug.prototype.getDebugLevel = 
+AjxDebug.prototype.getDebugLevel =
 function() {
 	return this._level;
 };
@@ -95,7 +95,7 @@ function() {
 * @param level	 	debug level for the current debugger
 * @param msg		the text to display
 */
-AjxDebug.prototype.println = 
+AjxDebug.prototype.println =
 function(level, msg, linkName) {
 	if (this.isDisabled() || this._debugWindow.closed) return;
 	var args = this._handleArgs(arguments, linkName);
@@ -105,22 +105,22 @@ function(level, msg, linkName) {
 	this._add(this._timestamp() + msg + "<br>", null, null, null, linkName);
 };
 
-AjxDebug.prototype.isDisabled = 
+AjxDebug.prototype.isDisabled =
 function () {
 	return !this._enabled;
 };
 
 /**
 * Prints an object into a table, with a column for properties and a column for values. Above the table is a header with the object
-* class and the CSS class (if any). The properties are sorted (numerically if they're all numbers). Creating and appending table 
-* elements worked in Mozilla but not IE. Using the insert* methods works for both. Properties that are function 
+* class and the CSS class (if any). The properties are sorted (numerically if they're all numbers). Creating and appending table
+* elements worked in Mozilla but not IE. Using the insert* methods works for both. Properties that are function
 * definitions are skipped.
 *
 * @param level	 	debug level for the current debugger
 * @param obj		the object to be printed
 * @param showFuncs	whether to show props that are functions
 */
-AjxDebug.prototype.dumpObj = 
+AjxDebug.prototype.dumpObj =
 function(level, obj, showFuncs, linkName) {
 	if (this.isDisabled() || this._debugWindow.closed)return;
 	var args = this._handleArgs(arguments, linkName);
@@ -140,13 +140,13 @@ function(level, obj, showFuncs, linkName) {
 * @param level	 	debug level for the current debugger
 * @param text		the text to output as is
 */
-AjxDebug.prototype.printRaw = 
+AjxDebug.prototype.printRaw =
 function(level, text, linkName) {
 	if (this.isDisabled() || this._debugWindow.closed) return;
 	var args = this._handleArgs(arguments, linkName);
 	if (!args) return;
 	text = args[0];
-	
+
 	this._add(null, text, false, true);
 };
 
@@ -156,14 +156,14 @@ function(level, text, linkName) {
 * @param level	 	debug level for the current debugger
 * @param text		some XML
 */
-AjxDebug.prototype.printXML = 
+AjxDebug.prototype.printXML =
 function(level, text, linkName) {
 	if (this.isDisabled() || this._debugWindow.closed) return;
 	var args = this._handleArgs(arguments, linkName);
 	if (!args) return;
 	text = args[0];
 	if (!text) return;
-	
+
 	// skip generating pretty xml if theres too much data
 	if (AjxEnv.isSafari || text.length > AjxDebug.MAX_OUT) {
 		this.printRaw(text);
@@ -197,7 +197,7 @@ function(level, text) {
 * @param on			[boolean]		if true, display timing statements
 * @param msg		[string]*		message to show when timing is turned on
 */
-AjxDebug.prototype.showTiming = 
+AjxDebug.prototype.showTiming =
 function(on, msg) {
 	this._showTiming = on;
 	if (on)
@@ -207,7 +207,7 @@ function(on, msg) {
 	var text = "Turning timing info " + state;
 	if (msg)
 		text = text + ": " + msg;
-	
+
 	var debugMsg = new DebugMessage(text);
 	this._addMessage(debugMsg);
 
@@ -223,10 +223,10 @@ function(on, msg) {
 AjxDebug.prototype.timePt =
 function(msg, restart) {
 	if (!this._showTiming || !this._enabled || this._debugWindow.closed) return;
-	
+
 	if (restart)
 		this._startTimePt = this._lastTimePt = new Date().getTime();
-	
+
 	var now = new Date().getTime();
 	var elapsed = now - this._startTimePt;
 	var interval = now - this._lastTimePt;
@@ -238,7 +238,7 @@ function(msg, restart) {
 	extraType = typeof(text);
 
     var myMsg = new DebugMessage(html);
-	
+
     // Add the message to our stack
     this._addMessage(myMsg);
 	return interval;
@@ -261,7 +261,7 @@ function(enabled) {
 	}
 };
 
-AjxDebug.prototype._getHtmlForObject = 
+AjxDebug.prototype._getHtmlForObject =
 function(anObj, isXml, isRaw) {
 	var html = new Array();
 	var idx = 0;
@@ -320,11 +320,11 @@ function(obj, recurse) {
 			return "[visited object]";
 		else
 			AjxDebug._visited.add(obj);
-	}	
+	}
 
 	var indent = AjxStringUtil.repeat(" ", indentLevel);
 	var text = "";
-	
+
 	if (AjxUtil.isUndefined(obj)) {
 		text += "[undefined]";
 	} else if (AjxUtil.isNull(obj)) {
@@ -348,8 +348,8 @@ function(obj, recurse) {
 			for (var i in obj)
 				keys.push(i);
 
-			isArray ? keys.sort(function(a,b) {return a - b;}) : keys.sort();	
-	
+			isArray ? keys.sort(function(a,b) {return a - b;}) : keys.sort();
+
 
 			if (showBraces)
 				text += isArray ? "[" : "{";
@@ -362,7 +362,7 @@ function(obj, recurse) {
 				// traverse the node, I do want to know what the attribute is.
 				if (nextObj == window || nextObj == document || (!AjxEnv.isIE && nextObj instanceof Node)){
 					value = nextObj.toString();
-				} 
+				}
 				if ((typeof(nextObj) == "function")){
 					if (this._showFuncs) {
 						value = "[function]";
@@ -400,7 +400,7 @@ AjxDebug.prototype._handleArgs =
 function(args, linkNameSpecified) {
 	// don't output anything if debugging is off, or timing is on
 	if (this._level == AjxDebug.NONE || this._showTiming) return;
-	
+
 	var levelSpecified = false;
 //	var curLevel = AjxDebug.GBD[this._level];
 	var msgLevel = AjxDebug.DBG1;
@@ -409,7 +409,7 @@ function(args, linkNameSpecified) {
 		levelSpecified = true;
 	}
 	if (msgLevel > this._level) return;
-	
+
 	// NOTE: Can't just slice the items we want because args is not a true Array
 	var array = new Array(args.length);
 	var len = (linkNameSpecified) ? args.length - 1 : args.length;
@@ -460,7 +460,7 @@ function() {
 		this._enabled = false;
 		return;
 	}
-	
+
 	try {
 		this._document = this._debugWindow.document;
 		this._document.title = "Debug";
@@ -475,7 +475,7 @@ function() {
 									"'P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {',",
 											"'font-family: Tahoma, Arial, Helvetica, sans-serif;',",
 											"'font-size:11px;}',",
-									"'.Link {cursor: pointer;color:blue;text-decoration:underline;white-space:nowrap;width:100%;}',",		
+									"'.Link {cursor: pointer;color:blue;text-decoration:underline;white-space:nowrap;width:100%;}',",
 									"'.Mark {color:white; background-color:black; width:100%;font-size:14px;font-weight:bold;}',",
 									"'.MarkLink {cursor: pointer;color:white;background-color:black;text-decoration:underline;font-weight:bold;white-space:nowrap;width:100%;}',",
 									"'.Run {color:black; background-color:red;width:100%;font-size:18px;font-weight:bold;}',",
@@ -497,7 +497,7 @@ function() {
 			this._contentFrame = this._document.getElementById(AjxDebug._CONTENT_FRAME_ID);
 			this._linkFrame = this._document.getElementById(AjxDebug._LINK_FRAME_ID);
 			this._createLinkNContent(this, "RunLink", "NEW RUN", "Run", "NEW RUN");
-			
+
 			// Firefox allows us to attach an event listener, and runs it even
 			// though the window with the code is gone ... odd, but nice. IE,
 			// though will not run the handler, so we make sure, even if we're
@@ -507,8 +507,8 @@ function() {
 				this._debugWindow.attachEvent('onunload', AjxDebug.unloadHandler);
 				this._markBtn.onclick = AjxDebug._mark;
 				this._clearBtn.onclick = AjxDebug._clear;
-			}		
-				
+			}
+
 			this._dbgWindowInited = true;
 			// show any messages that have been queued up, while the window loaded.
 			this._showMessages();
@@ -534,7 +534,7 @@ function() {
 	var buttonFrame = this._document.getElementById(AjxDebug._BUTTON_FRAME_ID);
 	var buttonFrameDoc = buttonFrame.contentWindow.document;
 	var buttonFrameBody = buttonFrameDoc.body;
-	
+
 	var markBtn = this._markBtn = buttonFrameDoc.createElement("button");
 	markBtn.innerHTML = "Mark";
 	markBtn._dbg = this;
@@ -546,7 +546,7 @@ function() {
 	clearBtn.innerHTML = "Clear";
 	clearBtn._dbg = this;
 	clearBtn.onclick = AjxDebug._clear;
-	
+
 	buttonFrameBody.appendChild(markBtn);
 	buttonFrameBody.appendChild(buttonFrameDoc.createTextNode(" "));
 	buttonFrameBody.appendChild(clearBtn);
@@ -555,7 +555,7 @@ function() {
 	// If we're not using a div
 	// Set a cookie telling ourselves that a debug window is already open
 	document.cookie = "AjxDebugWinOpen=true";
-	
+
 	// setup an onunload method
 	if (!AjxEnv.isIE) {
 		this._debugWindow.onunload = AjxDebug.unloadHandler;
@@ -575,7 +575,7 @@ function() {
 *
 * @private
 */
-AjxDebug.prototype._scrollToBottom = 
+AjxDebug.prototype._scrollToBottom =
 function() {
 	var contentBody = this._contentFrame.contentWindow.document.body;
 	var linkBody = this._linkFrame.contentWindow.document.body;
@@ -588,12 +588,12 @@ function() {
 * Returns a timestamp string, if we are showing them.
 * @private
 */
-AjxDebug.prototype._timestamp = 
+AjxDebug.prototype._timestamp =
 function() {
 	return this._showTime ? this._getTimeStamp() + ": " : "";
 };
 
-AjxDebug.prototype.setShowTimestamps = 
+AjxDebug.prototype.setShowTimestamps =
 function(show) {
 	this._showTime = show;
 };
@@ -601,98 +601,98 @@ function(show) {
 // this function takes an xml node and returns an html string that displays that node
 // the indent argument is used to describe what depth the node is at so that
 // the html code can create a nice indention
-AjxDebug.prototype._createXmlTree = 
+AjxDebug.prototype._createXmlTree =
 function (node, indent) {
 
 	if (node == null)
 		return "";
 	var str = "";
-	
+
 	switch (node.nodeType) {
 		case 1:	// Element
 			str += "<div style='color: blue; padding-left: 16px;'>&lt;<span style='color: DarkRed;'>" + node.nodeName + "</span>";
-			
+
 			var attrs = node.attributes;
 			for (var i = 0; i < attrs.length; i++)
 				str += this._createXmlAttribute(attrs[i]);
-			
+
 			if (!node.hasChildNodes())
 				return str + "/&gt;</div>";
-			
+
 			str += "&gt;<br />";
-			
+
 			var cs = node.childNodes;
 			for (var i = 0; i < cs.length; i++)
 				str += this._createXmlTree(cs[i], indent + 3);
-			
+
 			str += "&lt;/<span style='color: DarkRed;'>" + node.nodeName + "</span>&gt;</div>";
 			break;
-	
+
 		case 9:	// Document
 			var cs = node.childNodes;
 			for (var i = 0; i < cs.length; i++)
 				str += this._createXmlTree(cs[i], indent);
 			break;
-	
+
 		case 3:	// Text
 			if (!/^\s*$/.test(node.nodeValue)) {
 				var val = node.nodeValue.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 				str += "<span style='color: WindowText; padding-left: 16px;'>" + val + "</span><br />";
 			}
 			break;
-	
+
 		case 7:	// ProcessInstruction
 			str += "&lt;?" + node.nodeName;
-		
+
 			var attrs = node.attributes;
 			for (var i = 0; i < attrs.length; i++)
 				str += this._createXmlAttribute(attrs[i]);
-			
+
 			str+= "?&gt;<br />"
 			break;
-	
+
 		case 4:	// CDATA
-			str = "<div style=''>&lt;![CDATA[<span style='color: WindowText; font-family: \"Courier New\"; white-space: pre; display: block; border-left: 1px solid Gray; padding-left: 16px;'>" + 
+			str = "<div style=''>&lt;![CDATA[<span style='color: WindowText; font-family: \"Courier New\"; white-space: pre; display: block; border-left: 1px solid Gray; padding-left: 16px;'>" +
 				node.nodeValue +
 			"</span>]" + "]></div>";
 			break;
-			
+
 		case 8:	// Comment
-			str = "<div style='color: blue; padding-left: 16px;'>&lt;!--<span style='white-space: pre; font-family: \"Courier New\"; color: Gray; display: block;'>" + 
+			str = "<div style='color: blue; padding-left: 16px;'>&lt;!--<span style='white-space: pre; font-family: \"Courier New\"; color: Gray; display: block;'>" +
 				node.nodeValue +
 			"</span>--></div>";
 			break;
-		
+
 		case 10:
 				str = "<div style='color: blue; padding-left: 16px'>&lt;!DOCTYPE " + node.name;
 				if (node.publicId) {
 					str += " PUBLIC \"" + node.publicId + "\"";
-					if (node.systemId) 
+					if (node.systemId)
 						str += " \"" + node.systemId + "\"";
 				}
 				else if (node.systemId) {
 					str += " SYSTEM \"" + node.systemId + "\"";
 				}
 				str += "&gt;</div>";
-				
+
 				// TODO: Handle custom DOCTYPE declarations (ELEMENT, ATTRIBUTE, ENTITY)
-				
+
 				break;
-		
+
 		default:
 			//alert(node.nodeType + "\n" + node.nodeValue);
 			this._inspect(node);
 	}
-	
+
 	return str;
 };
 
-AjxDebug.prototype._createXmlAttribute = 
+AjxDebug.prototype._createXmlAttribute =
 function(a) {
 	return " <span style='color: red'>" + a.nodeName + "</span><span style='color: blue'>=\"" + a.nodeValue + "\"</span>";
 };
 
-AjxDebug.prototype._inspect = 
+AjxDebug.prototype._inspect =
 function(obj) {
 	var str = "";
 	for (var k in obj)
@@ -700,7 +700,7 @@ function(obj) {
 	window.alert(str);
 };
 
-AjxDebug.prototype._add = 
+AjxDebug.prototype._add =
 function (aMsg, extraInfo, isXml, isRaw, linkName){
 	var extraType = typeof(extraInfo);
 
@@ -712,20 +712,20 @@ function (aMsg, extraInfo, isXml, isRaw, linkName){
 
 };
 
-AjxDebug.prototype._addMessage = 
+AjxDebug.prototype._addMessage =
 function (aMsg) {
 	this._msgQueue[this._msgQueue.length] = aMsg;
 	this._showMessages();
 };
 
-AjxDebug.prototype._showMessages = 
+AjxDebug.prototype._showMessages =
 function () {
 	if (!this._dbgWindowInited) {
-		// For now, don't show the messages-- assuming that this case only 
+		// For now, don't show the messages-- assuming that this case only
 		// happens at startup, and many messages will be written
 		return;
 	}
-	
+
 	if (this._msgQueue.length > 0) {
 		var msg;
 		var contentDiv;
@@ -832,7 +832,7 @@ function() {
 AjxDebug.myWindowUnloadHandler = 
 function() {
 	if (!DBG._debugWindow) return;
-	if (AjxEnv.isNav) {
+	if (AjxEnv.isNav || AjxEnv.isSafari) {
 		DBG._debugWindow.onunload = null;
 	} else {
 		DBG._debugWindow.detachEvent('onunload', AjxDebug.unloadHandler);
