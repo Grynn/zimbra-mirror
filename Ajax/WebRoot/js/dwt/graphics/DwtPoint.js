@@ -39,3 +39,16 @@ DwtPoint.prototype.toString =
 function() {
 	return "DwtPoint";
 }
+
+/**
+ * This method sets the values of a point
+ * 
+ * @param {number} x x coordinate
+ * @param {number} y y coordinate
+ */
+ DwtPoint.prototype.set =
+ function(x, y) {
+ 	this.x = x;
+ 	this.y = y;
+ }
+ 

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 function DwtListView(parent, className, posStyle, headerList, noMaximize) {
 
 	if (arguments.length == 0) return;
@@ -73,6 +72,7 @@ function DwtListView(parent, className, posStyle, headerList, noMaximize) {
 	this._offset = 0;
 	this._headerColCreated = false;
 	this._firstSelIndex = -1;
+	this._tmpPoint = new DwtPoint(0, 0);
 
 	this.setMultiSelect(true);
 }
@@ -980,9 +980,33 @@ function(next, addSelect) {
 		itemDiv = this._parentEl.firstChild;
 	}
 
-	itemDiv.scrollIntoView(!next);
+	this._scrollList(itemDiv);
 	this._emulateSingleClick(itemDiv, DwtMouseEvent.LEFT, false, addSelect);
+}
+
+/**
+ * This method will scroll the list to ensure that <code>itemDiv</code> is scrolled
+ * into view. 
+ * @private
+ */
+DwtListView.prototype._scrollList =
+function(itemDiv) {
+	// TODO might be able to cache some of these values
+	var parentNode = itemDiv.parentNode;
+	var point = this._tmpPoint;
+	var itemDivTop = Dwt.getLocation(itemDiv, point).y;
+	var parentTop = Dwt.getLocation(parentNode, point).y;
 	
+	var diff = itemDivTop - (parentNode.scrollTop + parentTop);
+	if (diff < 0)
+		parentNode.scrollTop += diff;
+	else {
+		var parentH = Dwt.getSize(parentNode, point).y;
+		var itemDivH = Dwt.getSize(itemDiv, point).y;
+		diff = (itemDivTop + itemDivH) - (parentTop + parentH + parentNode.scrollTop);
+		if (diff > 0)
+			parentNode.scrollTop += diff;		
+	}
 }
 
 DwtListView.prototype._emulateSingleClick =
@@ -1027,7 +1051,7 @@ function(next) {
 		this._kbAnchor.className += " " + Dwt.getAttr(this._kbAnchor, DwtListView._KBFOCUS_CLASS);
 	}
 	
-	this._kbAnchor.scrollIntoView(!next);
+	this._scrollList(this._kbAnchor);
 }
 
 

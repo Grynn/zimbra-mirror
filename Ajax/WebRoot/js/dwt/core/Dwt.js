@@ -317,10 +317,23 @@ function(htmlElement, style) {
  * @see #getSize
  */
 Dwt.getBounds =
-function(htmlElement) {
-	var loc = Dwt.getLocation(htmlElement);
-	var size = Dwt.getSize(htmlElement);
-	return new DwtRectangle(loc.x, loc.y, size.x, size.y);
+function(htmlElement, rect) {
+	if (!Dwt.__tmpPoint)
+		Dwt.__tmpPoint = new DwtPoint(0, 0);
+	var tmpPt = Dwt.__tmpPoint;	
+	
+	Dwt.getLocation(htmlElement, tmpPt);
+	var locX = tmpPt.x;
+	var locY = tmpPt.y;
+	
+	Dwt.getSize(htmlElement, tmpPt);
+
+	if (!rect) {
+		return new DwtRectangle(locX, locY, tmpPt.x, tmpPt.y);
+	} else {
+		rect.set(locX, locY, tmpPt.x, tmpPt.y);
+		return rect;
+	}
 };
 
 /**
@@ -386,12 +399,15 @@ function(htmlElement, cursorName) {
  * @see #getSize
  */
 Dwt.getLocation =
-function(htmlElement) {
-	if (htmlElement.style.position == Dwt.ABSOLUTE_STYLE)
-		return new DwtPoint(parseInt(DwtCssStyle.getProperty(htmlElement, "left")),
-		                    parseInt(DwtCssStyle.getProperty(htmlElement, "top")));
-	else
-		return Dwt.toWindow(htmlElement, 0, 0);
+function(htmlElement, point) {
+	var point = (point) ? point : new DwtPoint(0, 0);
+	if (htmlElement.style.position == Dwt.ABSOLUTE_STYLE) {
+		point.set(parseInt(DwtCssStyle.getProperty(htmlElement, "left")),
+		          parseInt(DwtCssStyle.getProperty(htmlElement, "top")));
+		return point;
+	} else {
+		return Dwt.toWindow(htmlElement, 0, 0, null, null, point);
+	}
 };
 
 /**
@@ -489,8 +505,15 @@ function(htmlElement, scrollStyle) {
 // Note: in FireFox, offsetHeight includes border and clientHeight does not;
 // may want to look at clientHeight for FF
 Dwt.getSize =
-function(htmlElement) {
-	var p = new DwtPoint(0, 0);
+function(htmlElement, point) {
+	var p;
+	if (!point) {
+		p = new DwtPoint(0, 0);
+	} else {
+		p = point;
+		p.set(0, 0);
+	}
+		
     if(!htmlElement) {return p;}
     if (htmlElement.offsetWidth != null) {
 		p.x = htmlElement.offsetWidth;
@@ -609,8 +632,8 @@ function(htmlElement, value) {
 * Returns the window size of the browser
 */
 Dwt.getWindowSize =
-function() {
-	var p = new DwtPoint(0, 0);
+function(point) {
+	var p = (!point) ? new DwtPoint(0, 0) : point;
 	if (window.innerWidth) {
 		p.x = window.innerWidth;
 		p.y = window.innerHeight;
@@ -625,8 +648,14 @@ function() {
 }
 
 Dwt.toWindow =
-function(htmlElement, x, y, containerElement, dontIncScrollTop) {
-	var p = new DwtPoint(x, y);
+function(htmlElement, x, y, containerElement, dontIncScrollTop, point) {
+	var p;
+	if (!point) {
+		p = new DwtPoint(x, y);
+	} else {
+		p = point;
+		p.set(x, y);
+	}
 	// EMC 6/3/2005
 	// changed the below line, since it meant we did not
 	// include the given element in our location calculation.

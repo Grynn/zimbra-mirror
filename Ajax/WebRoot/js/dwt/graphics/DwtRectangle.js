@@ -27,3 +27,15 @@ DwtRectangle.prototype.toString =
 function() {
 	return "DwtRectangle";
 }
+
+/**
+ * This method sets the values of a point
+ * 
+ * @param {number} x x coordinate
+ * @param {number} y y coordinate
+ */
+ DwtRectangle.prototype.set =
+ function(x, y, width, height) {
+ 	this.x = x;
+ 	this.y = y;
+ }
