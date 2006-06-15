@@ -706,8 +706,16 @@
 	@InputField@
 }
 
-.DwtInputField-Error input {
+.DwtInputField-error input {
 	@InputField-error@
+}
+
+.DwtInputField-focused input {
+	@InputField-focused@
+}
+
+.DwtInputField-disabled input {
+	@InputField-disabled@
 }
 
 
