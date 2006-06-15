@@ -133,17 +133,18 @@ function() {
 	DwtKeyMapMgr._KEYCODES[39]  = DwtKeyMap.ARROW_RIGHT;
 	DwtKeyMapMgr._KEYCODES[38]  = DwtKeyMap.ARROW_UP;
 	DwtKeyMapMgr._KEYCODES[8]   = DwtKeyMap.BACKSPACE;
+	DwtKeyMapMgr._KEYCODES[188] = DwtKeyMap.COMMA;
 	DwtKeyMapMgr._KEYCODES[17]  = DwtKeyMap.CTRL;
 	DwtKeyMapMgr._KEYCODES[46]  = DwtKeyMap.DELETE;
 	DwtKeyMapMgr._KEYCODES[35]  = DwtKeyMap.END;
 	DwtKeyMapMgr._KEYCODES[13]  = DwtKeyMap.ENTER;
 	DwtKeyMapMgr._KEYCODES[27]  = DwtKeyMap.ESC;
+	DwtKeyMapMgr._KEYCODES[36]  = DwtKeyMap.HOME;
 	DwtKeyMapMgr._KEYCODES[34]  = DwtKeyMap.PAGE_DOWN;
 	DwtKeyMapMgr._KEYCODES[33]  = DwtKeyMap.PAGE_UP;
 	DwtKeyMapMgr._KEYCODES[16]  = DwtKeyMap.SHIFT;
 	DwtKeyMapMgr._KEYCODES[32]  = DwtKeyMap.SPACE;
 	DwtKeyMapMgr._KEYCODES[9]   = DwtKeyMap.TAB;
-	DwtKeyMapMgr._KEYCODES[188] = DwtKeyMap.COMMA;
 	
 	// Function keys
 	for (var i = 112; i < 124; i++) 

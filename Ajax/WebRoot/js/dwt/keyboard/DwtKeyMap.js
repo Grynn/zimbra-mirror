@@ -106,27 +106,22 @@ DwtKeyMap.PAGE_DOWN		= "PgDown";
 DwtKeyMap.PAGE_UP		= "PgUp";
 DwtKeyMap.SPACE			= "Space";
 
-// Key map action code contants. If providing your own key map then make
-// your codes positive integers
-var i = -1;
-
-DwtKeyMap.ACTION				= i--;
-DwtKeyMap.ADD_SELECT_CURRENT	= i--;
-DwtKeyMap.ADD_SELECT_NEXT		= i--;
-DwtKeyMap.ADD_SELECT_PREV		= i--;
-DwtKeyMap.CANCEL				= i--;
-DwtKeyMap.DBLCLICK				= i--;
-DwtKeyMap.DONE					= i--;
-DwtKeyMap.NEXT					= i--;
-DwtKeyMap.PREV					= i--;
-DwtKeyMap.SELECT_ALL			= i--;
-DwtKeyMap.SELECT_CURRENT		= i--;
-DwtKeyMap.SELECT_NEXT			= i--;
-DwtKeyMap.SELECT_PREV			= i--;
-DwtKeyMap.SELECT_SUBMENU		= i--;
-DwtKeyMap.SELECT_PARENTMENU		= i--;
-
-delete i;
+// Action codes
+DwtKeyMap.ACTION				= "DwtAction";
+DwtKeyMap.ADD_SELECT_CURRENT	= "DwtAddCurrent";
+DwtKeyMap.ADD_SELECT_NEXT		= "DwtAddNext";
+DwtKeyMap.ADD_SELECT_PREV		= "DwtAddPrevious";
+DwtKeyMap.CANCEL				= "DwtCancel";
+DwtKeyMap.DBLCLICK				= "DwtDoubleClick";
+DwtKeyMap.DONE					= "DwtDone";
+DwtKeyMap.NEXT					= "DwtNext";
+DwtKeyMap.PREV					= "DwtPrevious";
+DwtKeyMap.SELECT_ALL			= "DwtSelectAll";
+DwtKeyMap.SELECT_CURRENT		= "DwtSelectCurrent";
+DwtKeyMap.SELECT_NEXT			= "DwtSelectNext";
+DwtKeyMap.SELECT_PREV			= "DwtSelectPrevious";
+DwtKeyMap.SELECT_SUBMENU		= "DwtSubMenu";
+DwtKeyMap.SELECT_PARENTMENU		= "DwtParentMenu";
 
 DwtKeyMap.SEP = ","; // Key separator
 DwtKeyMap.INHERIT = "INHERIT"; // Inherit keyword.

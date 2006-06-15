@@ -56,7 +56,7 @@ function DwtKeyboardMgr() {
 	/**@private*/
 	this.__kbEventStatus = DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
 	/**@private*/
-	this.__keyTimeout = 1000;	
+	this.__keyTimeout = 750;	
 	/**@private*/
 	this.__currTabGroup  = null;
 };
@@ -340,7 +340,7 @@ function(focusObj) {
  */
 DwtKeyboardMgr.__onFocusHdlr =
 function(ev) {
-	//DBG.println(AjxDebug.DBG3, "DwtKeyboardMgr.__onFocusHdlr");
+	DBG.println(AjxDebug.DBG3, "DwtKeyboardMgr.__onFocusHdlr" + ", ev: " + ev);
 	var kbMgr = DwtShell.getShell(window).getKeyboardMgr();
 	kbMgr.__dwtCtrlHasFocus = true;
 	var focusObj = kbMgr.__focusObj;
@@ -353,7 +353,7 @@ function(ev) {
  */
 DwtKeyboardMgr.__onBlurHdlr =
 function(ev) {
-	//DBG.println(AjxDebug.DBG3, "DwtKeyboardMgr.__onBlurHdlr");
+	DBG.println(AjxDebug.DBG3, "DwtKeyboardMgr.__onBlurHdlr" + ", ev: " + ev);
 	var kbMgr = DwtShell.getShell(window).getKeyboardMgr();
 	var focusObj;
 	
@@ -513,7 +513,7 @@ function(ev) {
 	 * focus to the current focus object in the tab hierarchy i.e. grab back control
 	 */
 	 if (keyCode == DwtKeyMapMgr.TAB_KEYCODE) {
-	 	if (kbMgr.__currTabGroup) {
+	 	if (kbMgr.__currTabGroup && !kev.ctrlKey && !kev.altKey) {
 		 	// If a menu is popped up then don't act on the Tab
 		 	if (!DwtMenu.menuShowing()) {
 			 	DBG.println(AjxDebug.DBG3, "Tab");
@@ -536,7 +536,7 @@ function(ev) {
 			kev.setToDhtmlEvent(ev);
 			return false;
 	 	} else {
-	 		// No tab groups registered. Let the browser deal with tabs
+	 		// No tab groups registered, or Alt or Ctrl was down. Let the browser handle it.
 			kbMgr.__kbEventStatus = DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
 			kev._stopPropagation = false;
 			kev._returnValue = true;

@@ -110,6 +110,11 @@ DwtTabView.prototype.getCurrentTab = function() {
 	return this._currentTabKey;
 }
 
+DwtTabView.prototype.getNumTabs =
+function() {
+	return (this._tabs.length - 1);
+};
+
 /**
 * @param tabKey  -  key for the tab, returned from @link addTab
 * @return - the view tab (DwtTabViewpage) 
