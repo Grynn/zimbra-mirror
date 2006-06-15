@@ -55,6 +55,8 @@ function DwtKeyMap(subclassInit) {
 		"Ctrl+ArrowUp":		DwtKeyMap.PREV,
 
 		"Ctrl+A":			DwtKeyMap.SELECT_ALL,
+		"Home":				DwtKeyMap.SELECT_FIRST,
+		"End":				DwtKeyMap.SELECT_LAST,
 		
 		"Enter":			DwtKeyMap.DBLCLICK,
 		
@@ -118,6 +120,8 @@ DwtKeyMap.NEXT					= "DwtNext";
 DwtKeyMap.PREV					= "DwtPrevious";
 DwtKeyMap.SELECT_ALL			= "DwtSelectAll";
 DwtKeyMap.SELECT_CURRENT		= "DwtSelectCurrent";
+DwtKeyMap.SELECT_FIRST			= "DwtSelectFirst";
+DwtKeyMap.SELECT_LAST			= "DwtSelectLast";
 DwtKeyMap.SELECT_NEXT			= "DwtSelectNext";
 DwtKeyMap.SELECT_PREV			= "DwtSelectPrevious";
 DwtKeyMap.SELECT_SUBMENU		= "DwtSubMenu";

@@ -1062,7 +1062,7 @@ function(itemDiv, ev) {
 		 * possible for this element to not be the same as the selection 
 		 * anchor due to NEXT and PREV keyboard actions */
 		if (this._kbAnchor != null)
-			this._unmarkKbAnchorElement();
+			this._unmarkKbAnchorElement(true);
 
 		// clear out old left click selection(s)
 		var numSelectedItems = this._selectedItems.size();
@@ -1637,13 +1637,21 @@ function() {
 	this._unmarkKbAnchorElement();
 }
 
+/**
+ * Removes the "focus style" from the current KB anchor.
+ * 
+ * @param clear		[boolean]*		if true, clear KB anchor
+ */
 DwtListView.prototype._unmarkKbAnchorElement =
-function() {
+function(clear) {
 	if (this._kbAnchor != null) {
 		if (this._selectedItems.contains(this._kbAnchor))
 			this._kbAnchor.className = Dwt.getAttr(this._kbAnchor, DwtListView._SELECTED_STYLE_CLASS);
 		else 
 			this._kbAnchor.className = Dwt.getAttr(this._kbAnchor, DwtListView._STYLE_CLASS);
+	}
+	if (clear){
+		this._kbAnchor = null;
 	}
 }
 
@@ -1684,7 +1692,23 @@ function(actionCode, ev) {
 				this.setSelectedItems(this._list.getArray());
 			}
 			break;
-			
+		
+		case DwtKeyMap.SELECT_FIRST:
+			var a = this._list.getArray();
+			if (a && a.length > 1) {
+				this._unmarkKbAnchorElement(true);
+				this.setSelection(a[0]);
+			}
+			break;
+
+		case DwtKeyMap.SELECT_LAST:
+			var a = this._list.getArray();
+			if (a && a.length > 1) {
+				this._unmarkKbAnchorElement(true);
+				this.setSelection(a[a.length - 1]);
+			}
+			break;
+
 		case DwtKeyMap.PREV:
 			this._setKbFocusElement(false);
 			break;
