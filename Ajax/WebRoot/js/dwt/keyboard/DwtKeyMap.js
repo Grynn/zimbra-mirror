@@ -74,6 +74,14 @@ function DwtKeyMap(subclassInit) {
 		"ArrowLeft":		DwtKeyMap.SELECT_PARENTMENU,
 		"ArrowRight":		DwtKeyMap.SELECT_SUBMENU
 	};
+	
+	this._map["DwtToolBar"] = {
+
+		"INHERIT":			"DwtButton",
+
+		"ArrowLeft":		DwtKeyMap.PREV,
+		"ArrowRight":		DwtKeyMap.NEXT
+	};
 };
 
 
