@@ -31,6 +31,15 @@ function DwtToolBar(parent, className, posStyle, cellSpacing, cellPadding, style
 
 	this._numFillers = 0;
 	this._curFocusIndex = 0;
+
+	if (this._style == DwtToolBar.VERT_STYLE) {
+		var kmm = this.shell.getKeyboardMgr().__keyMapMgr;
+		kmm.replaceMapping("DwtToolBar", "ArrowLeft", "ArrowUp");
+		kmm.replaceMapping("DwtToolBar", "ArrowRight", "ArrowDown");
+		kmm.reloadMap("DwtToolBar");
+		kmm.replaceMapping("DwtButton", "ArrowDown", "ArrowRight");
+		kmm.reloadMap("DwtButton");
+	}
 };
 
 DwtToolBar.prototype = new DwtComposite;

@@ -35,7 +35,7 @@ function DwtKeyMapMgr(keyMap) {
 		DwtKeyMapMgr._inited = true;
 	}
 		
-	var map = keyMap.getMap();
+	var map = this._map = keyMap.getMap();
 	
 	// build FSA for each mapping
 	this._fsas = {};
@@ -123,6 +123,28 @@ function(keySeq, mappingName, forceActionCode) {
 DwtKeyMapMgr.prototype.keyCode2Char =
 function(keyCode) {
 	return DwtKeyMapMgr._KEYCODES[keyCode];
+};
+
+DwtKeyMapMgr.prototype.setMapping =
+function(mapName, keySeq, action) {
+	this._map[mapName][keySeq] = action;
+};
+
+DwtKeyMapMgr.prototype.removeMapping =
+function(mapName, keySeq) {
+	delete this._map[mapName][keySeq];
+};
+
+DwtKeyMapMgr.prototype.replaceMapping =
+function(mapName, oldKeySeq, newKeySeq) {
+	var action = this._map[mapName][oldKeySeq];
+	this.removeMapping(mapName, oldKeySeq);
+	this.setMapping(mapName, newKeySeq, action);
+};
+
+DwtKeyMapMgr.prototype.reloadMap =
+function(key) {
+	this._fsas[key] = DwtKeyMapMgr.__buildFSA({}, this._map[key], key);
 };
 
 DwtKeyMapMgr._initUsKeyCodeMap =
