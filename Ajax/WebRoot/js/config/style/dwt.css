@@ -1138,12 +1138,6 @@
 	@BoxMargin@
 }
 
-/* simple rows that don't contain tables */
-/* ??? SHOTGUN */
-.DwtChooserListView > div {
-	@Label@
-}
-
 /*
  * DwtShellBusyDialog - dialog that comes up when the server is taking a long time to respond
  */
