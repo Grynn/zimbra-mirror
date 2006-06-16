@@ -821,17 +821,17 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
 							relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE' && instance[ZaDomain.A_OverwriteTemplates] == 'TRUE'", relevantBehavior:_DISABLE_},
 						{ref:ZaDomain.A_NotebookTemplateFolder, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookTemplateFolder, labelLocation:_LEFT_, 
 							relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE' && instance[ZaDomain.A_OverwriteTemplates] == 'TRUE'", relevantBehavior:_DISABLE_},*/
-						{ref:ZaDomain.A_OverwriteNotebookACLs, type:_CHECKBOX_, label:ZaMsg.Domain_OverwriteNotebookACLs, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_,
-							relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE'", relevantBehavior:_DISABLE_},
+						/*{ref:ZaDomain.A_OverwriteNotebookACLs, type:_CHECKBOX_, label:ZaMsg.Domain_OverwriteNotebookACLs, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_,
+							relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE'", relevantBehavior:_DISABLE_},*/
 						{ref:ZaDomain.A_NotebookDomainACLs, type:_ACL_, label:ZaMsg.ACL_Dom,labelLocation:_LEFT_,
-							relevant:"instance[ZaDomain.A_OverwriteNotebookACLs] == 'TRUE'", relevantBehavior:_DISABLE_},
+							relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE'", relevantBehavior:_DISABLE_},
 						{type:_SPACER_, height:10},
 						{ref:ZaDomain.A_NotebookAllACLs, type:_ACL_, label:ZaMsg.ACL_All,labelLocation:_LEFT_,
-							relevant:"instance[ZaDomain.A_OverwriteNotebookACLs] == 'TRUE'", relevantBehavior:_DISABLE_},
+							relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE'", relevantBehavior:_DISABLE_},
 						{type:_SPACER_, height:10},
 						{ref:ZaDomain.A_NotebookPublicACLs, type:_ACL_, label:ZaMsg.ACL_Public,labelLocation:_LEFT_,
 							visibleBoxes:{r:true,w:false,a:false,i:false,d:false,x:false},
-							relevant:"instance[ZaDomain.A_OverwriteNotebookACLs] == 'TRUE'", relevantBehavior:_DISABLE_}
+							relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE'", relevantBehavior:_DISABLE_}
 
 					]
 				},				

@@ -361,6 +361,29 @@ function (obj, callback) {
 
 }
 
+ZaDomain.getNotebookACLsRequest = function (obj, soapDoc) {
+	if(obj.notebookAcls) {
+		for(var gt in obj.notebookAcls) {
+			var folderActionRequest = soapDoc.set("FolderActionRequest");
+			folderActionRequest.setAttribute("xmlns", "urn:zimbraMail");				
+			var actionEl = soapDoc.set("action", "",folderActionRequest);
+			actionEl.setAttribute("id", ZaDomain.WIKI_FOLDER_ID);	
+			actionEl.setAttribute("op", "grant");	
+			var grantEl = 	soapDoc.set("grant", "",actionEl,folderActionRequest);	
+			grantEl.setAttribute("gt", gt);
+			if(gt==ZaDomain.A_NotebookDomainACLs) {
+				grantEl.setAttribute("d", obj.attrs[ZaDomain.A_domainName]);
+			}
+			var perms = "";
+			for(var a in obj.notebookAcls[gt]) {
+				if(obj.notebookAcls[gt][a]==1)
+					perms+=a;
+			}
+			grantEl.setAttribute("perm", perms);					
+		}
+	}
+}
+
 ZaDomain.setNotebookACLs = function (obj, callback) {
 	if(obj.notebookAcls) {
 		for(var gt in obj.notebookAcls) {
@@ -554,7 +577,7 @@ function(tmpObj, oldObj) {
 * modifies object's information in the database
 **/
 ZaDomain.prototype.modify =
-function(mods) {
+function(mods,overWriteACLs) {
 	var soapDoc = AjxSoapDoc.create("ModifyDomainRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
 	for (var aname in mods) {
@@ -564,20 +587,23 @@ function(mods) {
 			if(cnt) {
 				for(var ix=0; ix <cnt; ix++) {
 					if(mods[aname][ix]) { //if there is an empty element in the array - don't send it
-						var attr = soapDoc.set("a", mods[aname][ix]);
+						var attr = soapDoc.set("a", mods[aname][ix],modifyDomainRequest);
 						attr.setAttribute("n", aname);
 					}
 				}
 			} else {
-				var attr = soapDoc.set("a", "");
+				var attr = soapDoc.set("a", "",modifyDomainRequest);
 				attr.setAttribute("n", aname);
 			}
 		} else {		
-			var attr = soapDoc.set("a", mods[aname]);
+			var attr = soapDoc.set("a", mods[aname],modifyDomainRequest);
 			attr.setAttribute("n", aname);
 		}
 	}
+	if(overWriteACLs) {
 		
+		
+	}
 	var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	

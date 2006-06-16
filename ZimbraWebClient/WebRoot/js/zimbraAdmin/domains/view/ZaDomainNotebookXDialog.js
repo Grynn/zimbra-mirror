@@ -49,7 +49,56 @@ function (loc) {
 }
 
 ZaDomainNotebookXDialog.prototype.setObject = function (entry) {
-	this._containedObject = entry;
+	this._containedObject = new Object();
+	this._containedObject.attrs = new Object();
+
+	for (var a in entry.attrs) {
+		if(entry.attrs[a] instanceof Array) {
+			this._containedObject.attrs[a] = new Array();
+			var cnt = entry.attrs[a].length;
+			for(var ix = 0; ix < cnt; ix++) {
+				this._containedObject.attrs[a][ix]=entry.attrs[a][ix];
+			}
+		} else {
+			this._containedObject.attrs[a] = entry.attrs[a];
+		}
+	}
+	this._containedObject[ZaDomain.A_AuthUseBindPassword] = entry[ZaDomain.A_AuthUseBindPassword];
+	
+	if(!entry[ZaModel.currentTab])
+		this._containedObject[ZaModel.currentTab] = "1";
+	else
+		this._containedObject[ZaModel.currentTab] = entry[ZaModel.currentTab];
+
+	this._containedObject[ZaDomain.A_NotebookTemplateFolder]=entry[ZaDomain.A_NotebookTemplateFolder];
+	this._containedObject[ZaDomain.A_NotebookTemplateDir]=entry[ZaDomain.A_NotebookTemplateDir];	
+
+/*	this._containedObject[ZaDomain.A_NotebookAllACLs] = new Object();
+	for (var a in entry[ZaDomain.A_NotebookAllACLs]) {
+		this._containedObject[ZaDomain.A_NotebookAllACLs][a] = entry[ZaDomain.A_NotebookAllACLs][a];
+	}
+	
+	this._containedObject[ZaDomain.A_NotebookPublicACLs] = new Object();
+	for (var a in entry[ZaDomain.A_NotebookPublicACLs]) {
+		this._containedObject[ZaDomain.A_NotebookPublicACLs][a] = entry[ZaDomain.A_NotebookPublicACLs][a];
+	}
+
+	this._containedObject[ZaDomain.A_NotebookDomainACLs] = new Object();
+	for (var a in entry[ZaDomain.A_NotebookDomainACLs]) {
+		this._containedObject[ZaDomain.A_NotebookDomainACLs][a] = entry[ZaDomain.A_NotebookDomainACLs][a];
+	}*/
+
+	this._containedObject.notebookAcls = {};
+
+	if(entry.notebookAcls) {
+		for(var gt in entry.notebookAcls) {
+			this._containedObject.notebookAcls[gt] = {r:0,w:0,i:0,d:0,a:0,x:0};
+			for (var a in entry.notebookAcls[gt]) {
+				this._containedObject.notebookAcls[gt][a] = entry.notebookAcls[gt][a];
+			}
+		}
+	}	
+			
 	if(!this._containedObject[ZaDomain.A_NotebookAccountName] && this._containedObject.attrs[ZaDomain.A_domainName])
 		this._containedObject[ZaDomain.A_NotebookAccountName] = ZaDomain.DEF_WIKI_ACC + "@" + this._containedObject.attrs[ZaDomain.A_domainName];
 	this._localXForm.setInstance(this._containedObject);
@@ -74,17 +123,17 @@ function() {
 				relevant:"instance[ZaDomain.A_OverwriteTemplates] == 'TRUE'", relevantBehavior:_DISABLE_},
 			{ref:ZaDomain.A_NotebookTemplateFolder, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookTemplateFolder, labelLocation:_LEFT_, 
 				relevant:"instance[ZaDomain.A_OverwriteTemplates] == 'TRUE'", relevantBehavior:_DISABLE_},*/
-			{ref:ZaDomain.A_OverwriteNotebookACLs, type:_CHECKBOX_, label:ZaMsg.Domain_OverwriteNotebookACLs, labelLocation:_LEFT_,
-				trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_},
+			/*{ref:ZaDomain.A_OverwriteNotebookACLs, type:_CHECKBOX_, label:ZaMsg.Domain_OverwriteNotebookACLs, labelLocation:_LEFT_,
+				trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_},*/
 			{ref:ZaDomain.A_NotebookDomainACLs, type:_ACL_, label:ZaMsg.ACL_Dom,labelLocation:_LEFT_,
-				relevant:"instance[ZaDomain.A_OverwriteNotebookACLs] == 'TRUE'", relevantBehavior:_DISABLE_},
+				relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE'", relevantBehavior:_DISABLE_},
 			{type:_SPACER_, height:10},
 			{ref:ZaDomain.A_NotebookAllACLs, type:_ACL_, label:ZaMsg.ACL_All,labelLocation:_LEFT_,
-				relevant:"instance[ZaDomain.A_OverwriteNotebookACLs] == 'TRUE'", relevantBehavior:_DISABLE_},
+				relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE'", relevantBehavior:_DISABLE_},
 			{type:_SPACER_, height:10},
 			{ref:ZaDomain.A_NotebookPublicACLs, type:_ACL_, label:ZaMsg.ACL_Public,labelLocation:_LEFT_,
 				visibleBoxes:{r:true,w:false,a:false,i:false,d:false,x:false},
-				relevant:"instance[ZaDomain.A_OverwriteNotebookACLs] == 'TRUE'", relevantBehavior:_DISABLE_}
+				relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE'", relevantBehavior:_DISABLE_}
 
 		]		
 	}
