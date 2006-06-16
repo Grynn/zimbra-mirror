@@ -32,14 +32,8 @@ function DwtToolBar(parent, className, posStyle, cellSpacing, cellPadding, style
 	this._numFillers = 0;
 	this._curFocusIndex = 0;
 
-	if (this._style == DwtToolBar.VERT_STYLE) {
-		var kmm = this.shell.getKeyboardMgr().__keyMapMgr;
-		kmm.replaceMapping("DwtToolBar", "ArrowLeft", "ArrowUp");
-		kmm.replaceMapping("DwtToolBar", "ArrowRight", "ArrowDown");
-		kmm.reloadMap("DwtToolBar");
-		kmm.replaceMapping("DwtButton", "ArrowDown", "ArrowRight");
-		kmm.reloadMap("DwtButton");
-	}
+	var suffix = (this._style == DwtToolBar.HORIZ_STYLE) ? "horiz" : "vert";
+	this._keyMapName = ["DwtToolBar", suffix].join("-");
 };
 
 DwtToolBar.prototype = new DwtComposite;
@@ -169,6 +163,17 @@ function(type, element, index) {
 // transfer focus to the current item
 DwtToolBar.prototype._focus =
 function() {
+	// make sure the key for expanding a button submenu matches our style
+	var kmm = this.shell.getKeyboardMgr().__keyMapMgr;
+	if (this._style == DwtToolBar.HORIZ_STYLE) {
+		kmm.removeMapping("DwtButton", "ArrowRight");
+		kmm.setMapping("DwtButton", "ArrowDown", DwtKeyMap.SELECT_SUBMENU);
+	} else {
+		kmm.removeMapping("DwtButton", "ArrowDown");
+		kmm.setMapping("DwtButton", "ArrowRight", DwtKeyMap.SELECT_SUBMENU);
+	}
+	kmm.reloadMap("DwtButton");
+
 	var item = this._getFocusItem(this._curFocusIndex);
 	if (item) {
 		item._hasFocus = true;	// so that focus class is set
@@ -195,7 +200,7 @@ function(index) {
 
 DwtToolBar.prototype.getKeyMapName = 
 function() {
-	return "DwtToolBar";
+	return this._keyMapName;
 };
 
 DwtToolBar.prototype.handleKeyAction =
@@ -206,7 +211,7 @@ function(actionCode, ev) {
 	if (numItems < 2) {
 		return true;
 	}
-	
+
 	switch (actionCode) {
 
 		case DwtKeyMap.PREV:

@@ -75,12 +75,20 @@ function DwtKeyMap(subclassInit) {
 		"ArrowRight":		DwtKeyMap.SELECT_SUBMENU
 	};
 	
-	this._map["DwtToolBar"] = {
+	this._map["DwtToolBar-horiz"] = {
 
 		"INHERIT":			"DwtButton",
 
 		"ArrowLeft":		DwtKeyMap.PREV,
 		"ArrowRight":		DwtKeyMap.NEXT
+	};
+
+	this._map["DwtToolBar-vert"] = {
+
+		"INHERIT":			"DwtButton",
+
+		"ArrowUp":			DwtKeyMap.PREV,
+		"ArrowDown":		DwtKeyMap.NEXT
 	};
 };
 
