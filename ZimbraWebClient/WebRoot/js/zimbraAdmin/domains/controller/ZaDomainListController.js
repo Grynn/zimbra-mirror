@@ -221,6 +221,7 @@ ZaDomainListController.prototype._listSelectionListener =
 function(ev) {
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
 		if(ev.item) {
+			ev.item.refresh();
 			this._app.getDomainController().show(ev.item);
 		}
 	} else {
@@ -410,7 +411,14 @@ function(ev) {
 			//if creation took place - fire an DomainChangeEvent
 			this._fireDomainCreationEvent(domain);
 			if(this._newDomainWizard.getObject()[ZaDomain.A_CreateNotebook]=="TRUE") {
-				var callback = new AjxCallback(this, this.initNotebookCallback);
+				var params = new Object();
+				if(this._newDomainWizard.getObject()[ZaDomain.A_OverwriteNotebookACLs]) {
+					params[ZaDomain.A_OverwriteNotebookACLs] = true;
+					params.obj = this._newDomainWizard.getObject();
+				} else
+					params[ZaDomain.A_OverwriteNotebookACLs] = false;
+					
+				var callback = new AjxCallback(this, this.initNotebookCallback, params);				
 				ZaDomain.initNotebook(this._newDomainWizard.getObject(),callback) ;
 			}			
 			
@@ -462,10 +470,26 @@ function(ev) {
 }
 
 ZaDomainListController.prototype.initNotebookCallback = 
-function (arg) {
-	if(!arg)
+function (params, resp) {
+	if(!resp)
 		return;
-	if(arg.isException()) {
-		this._handleException(arg.getException(), "ZaDomainController.prototype._initNotebookCallback", null, false);
+	if(resp.isException()) {
+		this._handleException(resp.getException(), "ZaDomainListController.prototype.initNotebookCallback", null, false);
+		return;
+	} 
+	if(params[ZaDomain.A_OverwriteNotebookACLs] && params.obj!=null) {
+		var callback = new AjxCallback(this, this.setNotebookAclsCallback);				
+		ZaDomain.setNotebookACLs(params.obj, callback) ;
+	}
+	
+}
+
+ZaDomainListController.prototype.setNotebookAclsCallback = 
+function (resp) {
+	if(!resp)
+		return;
+	if(resp.isException()) {
+		this._handleException(resp.getException(), "ZaDomainListController.prototype.setNotebookAclsCallback", null, false);
+		return;
 	} 
 }

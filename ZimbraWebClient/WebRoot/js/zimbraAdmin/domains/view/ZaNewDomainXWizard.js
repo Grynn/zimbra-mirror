@@ -140,6 +140,12 @@ function(stepNum) {
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+		} 
+		else if(stepNum == 15) {
+			this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
+			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 		} else if(stepNum == 16) {
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
@@ -163,7 +169,28 @@ function(entry) {
 	for (var a in entry.attrs) {
 		this._containedObject.attrs[a] = entry.attrs[a];
 	}
-	
+	this._containedObject[ZaDomain.A_NotebookTemplateFolder]=entry[ZaDomain.A_NotebookTemplateFolder];
+	this._containedObject[ZaDomain.A_NotebookTemplateDir]=entry[ZaDomain.A_NotebookTemplateDir];	
+
+	this._containedObject.notebookAcls = {};
+
+	if(entry.notebookAcls) {
+		for(var gt in entry.notebookAcls) {
+			this._containedObject.notebookAcls[gt] = {r:0,w:0,i:0,d:0,a:0,x:0};
+			for (var a in entry.notebookAcls[gt]) {
+				this._containedObject.notebookAcls[gt][a] = entry.notebookAcls[gt][a];
+			}
+		}
+	}
+/*	this._containedObject.notebookAcls[ZaDomain.A_NotebookPublicACLs] = new Object();
+	for (var a in entry.notebookAcls[ZaDomain.A_NotebookPublicACLs]) {
+		this._containedObject.notebookAcls[ZaDomain.A_NotebookPublicACLs][a] = entry.notebookAcls[ZaDomain.A_NotebookPublicACLs][a];
+	}
+
+	this._containedObject.notebookAcls[ZaDomain.A_NotebookDomainACLs] = new Object();
+	for (var a in entry.notebookAcls[ZaDomain.A_NotebookDomainACLs]) {
+		this._containedObject.notebookAcls[ZaDomain.A_NotebookDomainACLs][a] = entry.notebookAcls[ZaDomain.A_NotebookDomainACLs][a];
+	}*/
 	this._containedObject[ZaModel.currentStep] = 1;
 	this._localXForm.setInstance(this._containedObject);	
 }
@@ -785,12 +812,25 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
 									this.getInstance()[ZaDomain.A_NotebookAccountName]=ZaDomain.DEF_WIKI_ACC+"@"+this.getInstance().attrs[ZaDomain.A_domainName];
 							}
 						},
-						{ref:ZaDomain.A_NotebookTemplateDir, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookTemplateDir, labelLocation:_LEFT_, relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE'", relevantBehavior:_DISABLE_},
-						{ref:ZaDomain.A_NotebookTemplateFolder, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookTemplateFolder, labelLocation:_LEFT_, relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE'", relevantBehavior:_DISABLE_},
 						{ref:ZaDomain.A_NotebookAccountName, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookAccountName, labelLocation:_LEFT_, relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE'", relevantBehavior:_DISABLE_},						
 						{ref:ZaDomain.A_NotebookAccountPassword, type:_SECRET_, label:ZaMsg.Domain_NotebookAccountPassword, labelLocation:_LEFT_, relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE'", relevantBehavior:_DISABLE_},
-						{ref:ZaDomain.A_NotebookAccountPassword2, type:_SECRET_, label:ZaMsg.NAD_ConfirmPassword, labelLocation:_LEFT_, relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE'", relevantBehavior:_DISABLE_}												
-
+						{ref:ZaDomain.A_NotebookAccountPassword2, type:_SECRET_, label:ZaMsg.NAD_ConfirmPassword, labelLocation:_LEFT_, relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE'", relevantBehavior:_DISABLE_},												
+						{ref:ZaDomain.A_OverwriteTemplates, type:_CHECKBOX_, label:ZaMsg.Domain_OverwriteTemplates, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_,
+							relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE'", relevantBehavior:_DISABLE_},						
+						{ref:ZaDomain.A_NotebookTemplateDir, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookTemplateDir, labelLocation:_LEFT_,
+							relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE' && instance[ZaDomain.A_OverwriteTemplates] == 'TRUE'", relevantBehavior:_DISABLE_},
+						{ref:ZaDomain.A_NotebookTemplateFolder, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookTemplateFolder, labelLocation:_LEFT_, 
+							relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE' && instance[ZaDomain.A_OverwriteTemplates] == 'TRUE'", relevantBehavior:_DISABLE_},
+						{ref:ZaDomain.A_OverwriteNotebookACLs, type:_CHECKBOX_, label:ZaMsg.Domain_OverwriteNotebookACLs, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_,
+							relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE'", relevantBehavior:_DISABLE_},
+						{ref:ZaDomain.A_NotebookAllACLs, type:_ACL_, label:ZaMsg.ACL_All,labelLocation:_LEFT_,
+							relevant:"instance[ZaDomain.A_OverwriteNotebookACLs] == 'TRUE'", relevantBehavior:_DISABLE_},
+						{type:_SPACER_, height:10},
+						{ref:ZaDomain.A_NotebookPublicACLs, type:_ACL_, label:ZaMsg.ACL_Public,labelLocation:_LEFT_,
+							relevant:"instance[ZaDomain.A_OverwriteNotebookACLs] == 'TRUE'", relevantBehavior:_DISABLE_},
+						{type:_SPACER_, height:10},
+						{ref:ZaDomain.A_NotebookDomainACLs, type:_ACL_, label:ZaMsg.ACL_Dom,labelLocation:_LEFT_,
+							relevant:"instance[ZaDomain.A_OverwriteNotebookACLs] == 'TRUE'", relevantBehavior:_DISABLE_}							
 					]
 				},				
 				{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 16", relevantBehavior:_HIDE_,

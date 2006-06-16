@@ -144,6 +144,15 @@ function(params) {
 		ct.setAttribute("type", "new");
 	}
 	
+	if(params.accountId) {
+		var acc=soapDoc.set("account", params.accountId, context);
+		acc.setAttribute("by", "id");
+	} else if(params.accountName) {
+		var acc=soapDoc.set("account", params.accountName, context);
+		acc.setAttribute("by", "name");
+		
+	}
+	
 	// Get auth token from cookie if required
 	if (!params.noAuthToken) {
 		var authToken = ZmCsfeCommand.getAuthToken();

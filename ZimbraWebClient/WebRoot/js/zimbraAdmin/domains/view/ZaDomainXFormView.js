@@ -88,7 +88,36 @@ function(entry) {
 		this._containedObject[ZaModel.currentTab] = "1";
 	else
 		this._containedObject[ZaModel.currentTab] = entry[ZaModel.currentTab];
-		
+
+	this._containedObject[ZaDomain.A_NotebookTemplateFolder]=entry[ZaDomain.A_NotebookTemplateFolder];
+	this._containedObject[ZaDomain.A_NotebookTemplateDir]=entry[ZaDomain.A_NotebookTemplateDir];	
+
+/*	this._containedObject[ZaDomain.A_NotebookAllACLs] = new Object();
+	for (var a in entry[ZaDomain.A_NotebookAllACLs]) {
+		this._containedObject[ZaDomain.A_NotebookAllACLs][a] = entry[ZaDomain.A_NotebookAllACLs][a];
+	}
+	
+	this._containedObject[ZaDomain.A_NotebookPublicACLs] = new Object();
+	for (var a in entry[ZaDomain.A_NotebookPublicACLs]) {
+		this._containedObject[ZaDomain.A_NotebookPublicACLs][a] = entry[ZaDomain.A_NotebookPublicACLs][a];
+	}
+
+	this._containedObject[ZaDomain.A_NotebookDomainACLs] = new Object();
+	for (var a in entry[ZaDomain.A_NotebookDomainACLs]) {
+		this._containedObject[ZaDomain.A_NotebookDomainACLs][a] = entry[ZaDomain.A_NotebookDomainACLs][a];
+	}*/
+
+	this._containedObject.notebookAcls = {};
+
+	if(entry.notebookAcls) {
+		for(var gt in entry.notebookAcls) {
+			this._containedObject.notebookAcls[gt] = {r:0,w:0,i:0,d:0,a:0,x:0};
+			for (var a in entry.notebookAcls[gt]) {
+				this._containedObject.notebookAcls[gt][a] = entry.notebookAcls[gt][a];
+			}
+		}
+	}	
+			
 	this._localXForm.setInstance(this._containedObject);
 }
 
@@ -224,10 +253,26 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 							relevant:"instance.attrs[ZaDomain.A_zimbraNotebookAccount] != null",
 							relevantBehavior:_HIDE_,
 							items: [
-								{ref:ZaDomain.A_zimbraNotebookAccount, type:_EMAILADDR_, 
+								{ref:ZaDomain.A_OverwriteTemplates, type:_CHECKBOX_, label:ZaMsg.Domain_OverwriteTemplates, labelLocation:_LEFT_,
+									trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_,onChange:ZaTabView.onFormFieldChanged},						
+								{ref:ZaDomain.A_NotebookTemplateDir, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookTemplateDir, labelLocation:_LEFT_,
+									relevant:"instance[ZaDomain.A_OverwriteTemplates] == 'TRUE'", relevantBehavior:_DISABLE_,onChange:ZaTabView.onFormFieldChanged},
+								{ref:ZaDomain.A_NotebookTemplateFolder, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookTemplateFolder, labelLocation:_LEFT_, 
+									relevant:"instance[ZaDomain.A_OverwriteTemplates] == 'TRUE'", relevantBehavior:_DISABLE_,onChange:ZaTabView.onFormFieldChanged},
+								{ref:ZaDomain.A_OverwriteNotebookACLs, type:_CHECKBOX_, label:ZaMsg.Domain_OverwriteNotebookACLs, labelLocation:_LEFT_,
+									trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_,onChange:ZaTabView.onFormFieldChanged},
+								{ref:ZaDomain.A_NotebookAllACLs, type:_ACL_, label:ZaMsg.ACL_All,labelLocation:_LEFT_,
+									relevant:"instance[ZaDomain.A_OverwriteNotebookACLs] == 'TRUE'", relevantBehavior:_DISABLE_,onChange:ZaTabView.onFormFieldChanged},
+								{type:_SPACER_, height:10},
+								{ref:ZaDomain.A_NotebookPublicACLs, type:_ACL_, label:ZaMsg.ACL_Public,labelLocation:_LEFT_,
+									relevant:"instance[ZaDomain.A_OverwriteNotebookACLs] == 'TRUE'", relevantBehavior:_DISABLE_,onChange:ZaTabView.onFormFieldChanged},
+								{type:_SPACER_, height:10},
+								{ref:ZaDomain.A_NotebookDomainACLs, type:_ACL_, label:ZaMsg.ACL_Dom,labelLocation:_LEFT_,
+									relevant:"instance[ZaDomain.A_OverwriteNotebookACLs] == 'TRUE'", relevantBehavior:_DISABLE_,onChange:ZaTabView.onFormFieldChanged}							
+							/*	{ref:ZaDomain.A_zimbraNotebookAccount, type:_EMAILADDR_, 
 									label:ZaMsg.Domain_NotebookAccountName, labelLocation:_LEFT_,
 									width:250,onChange:ZaTabView.onFormFieldChanged
-								}
+								}*/
 							]
 						}
 					]

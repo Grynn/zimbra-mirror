@@ -1875,7 +1875,10 @@ Textfield_XFormItem.prototype.updateElement = function(newValue) {
 }
 
 // set up how disabling works for this item type
-Textfield_XFormItem.prototype.setElementEnabled = XFormItem.prototype.setElementDisabledProperty;
+Textfield_XFormItem.prototype.setElementEnabled  = function (enabled) {
+	this.setElementDisabledProperty(enabled);
+	this.setElementEnabledCssClass(enabled);
+}
 
 
 

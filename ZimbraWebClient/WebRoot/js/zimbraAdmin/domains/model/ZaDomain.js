@@ -50,8 +50,15 @@ function ZaDomain(app) {
 		this.attrs[ZaDomain.A_GalMaxResults] = 100;
 	}
 	this.attrs[ZaDomain.A_AuthMech] = ZaDomain.AuthMech_zimbra;
+	this.notebookAcls = {};
+	this[ZaDomain.A_NotebookTemplateFolder] = "Template";
+	this[ZaDomain.A_NotebookTemplateDir] = "/opt/zimbra/wiki/Template";
+	this.notebookAcls[ZaDomain.A_NotebookAllACLs] = {r:0,w:0,i:0,d:0,a:0,x:0};
+	this.notebookAcls[ZaDomain.A_NotebookPublicACLs] = {r:0,w:0,i:0,d:0,a:0,x:0};
+	this.notebookAcls[ZaDomain.A_NotebookDomainACLs] = {r:1,w:1,i:1,d:1,a:0,x:0};
 }
 ZaDomain.DEF_WIKI_ACC = "wiki";
+ZaDomain.WIKI_FOLDER_ID = "12";
 ZaDomain.RESULTSPERPAGE = ZaSettings.RESULTSPERPAGE; 
 ZaDomain.MAXSEARCHRESULTS = ZaSettings.MAXSEARCHRESULTS;
 ZaDomain.prototype = new ZaItem;
@@ -103,6 +110,13 @@ ZaDomain.A_NotebookAccountName = "noteBookAccountName";
 ZaDomain.A_NotebookAccountPassword = "noteBookAccountPassword";
 ZaDomain.A_NotebookAccountPassword2 = "noteBookAccountPassword2";
 ZaDomain.A_CreateNotebook = "createNotebook";
+ZaDomain.A_OverwriteTemplates = "overwritetemplates";
+ZaDomain.A_OverwriteNotebookACLs = "overwritenotebookacls";
+ZaDomain.A_NotebookPublicACLs = "pub";
+ZaDomain.A_NotebookAllACLs = "all";
+ZaDomain.A_NotebookDomainACLs = "dom";
+ZaDomain.A_NotebookUserACLs = "usr";
+ZaDomain.A_NotebookGuestACLs = "guest";
 //values
 ZaDomain.GAL_Mode_internal = "zimbra";
 ZaDomain.GAL_Mode_external = "ldap";
@@ -346,6 +360,46 @@ function (obj, callback) {
 	command.invoke(params);	
 
 }
+
+ZaDomain.setNotebookACLs = function (obj, callback) {
+	if(obj.notebookAcls) {
+		for(var gt in obj.notebookAcls) {
+			var soapDoc = AjxSoapDoc.create("FolderActionRequest", "urn:zimbraMail", null);
+			
+			var command = new ZmCsfeCommand();
+			var params = new Object();
+			params.soapDoc = soapDoc;
+			params.accountName = obj[ZaDomain.A_NotebookAccountName] ? obj[ZaDomain.A_NotebookAccountName] : obj.attrs[ZaDomain.A_zimbraNotebookAccount];
+			
+			var actionEl = soapDoc.set("action", "");
+			actionEl.setAttribute("id", ZaDomain.WIKI_FOLDER_ID);	
+			actionEl.setAttribute("op", "grant");	
+			var grantEl = 	soapDoc.set("grant", "",actionEl);	
+			grantEl.setAttribute("gt", gt);
+			if(gt==ZaDomain.A_NotebookDomainACLs) {
+				grantEl.setAttribute("d", obj.attrs[ZaDomain.A_domainName]);
+			}
+			var perms = "";
+			for(var a in obj.notebookAcls[gt]) {
+				if(obj.notebookAcls[gt][a]==1)
+					perms+=a;
+			}
+			grantEl.setAttribute("perm", perms);					
+			if(callback) {
+				params.asyncMode = true;
+				params.callback = callback;
+			}
+			command.invoke(params);				
+		}
+	}
+
+	
+/*	this[ZaDomain.A_NotebookPublicACLs] = {r:1,w:0,i:0,d:0,a:0,x:0};
+	this[ZaDomain.A_NotebookDomainACLs] = {r:1,w:0,i:0,d:0,a:0,x:0};*/
+	
+	
+}
+
 ZaDomain.initNotebook = function (obj, callback) {
 	var soapDoc = AjxSoapDoc.create("InitNotebookRequest", "urn:zimbraAdmin", null);
 	if(obj[ZaDomain.A_NotebookTemplateDir]) {
@@ -639,6 +693,41 @@ function (obj) {
 	if(!this.attrs[ZaDomain.A_zimbraGalAutoCompleteLdapFilter])
 		this.attrs[ZaDomain.A_zimbraGalAutoCompleteLdapFilter] = "(|(cn=%s*)(sn=%s*)(gn=%s*)(mail=%s*))";
 }
+
+ZaDomain.prototype.parseNotebookFolderAcls = function (resp) {
+	try {
+		if(resp.isException && resp.isException()) {
+			throw(resp.getException());
+		}
+		
+		var response;
+		if(resp.getResponse)
+			response = resp.getResponse().Body.GetFolderResponse;
+		else
+			response = resp.Body.GetFolderResponse;
+			
+		if(response && response.folder && response.folder[0] && response.folder[0].acl
+			&& response.folder[0].acl.grant) {
+			var grants = response.folder[0].acl.grant;
+			var cnt = grants.length;
+			for (var gi = 0; gi < cnt; gi++) {
+				var grant = grants[gi];
+				this.notebookAcls[grant.gt] ={
+					r:grant.perm.indexOf("r")>=0 ? 1 : 0,
+					w:grant.perm.indexOf("w")>=0 ? 1 : 0,
+					i:grant.perm.indexOf("i")>=0 ? 1 : 0,
+					d:grant.perm.indexOf("d")>=0 ? 1 : 0,
+					a:grant.perm.indexOf("a")>=0 ? 1 : 0,
+					x:grant.perm.indexOf("x")>=0 ? 1 : 0
+				};
+				
+			}
+			
+		}
+	} catch (ex) {
+		this._app.getCurrentController()._handleException(ex, "ZaDomain.prototype.parseNotebookFolderAcls", null, false);	
+	}
+}
 /**
 * Returns HTML for a tool tip for this domain.
 */
@@ -688,6 +777,21 @@ function() {
 	params.soapDoc = soapDoc;	
 	var resp = getDomainCommand.invoke(params).Body.GetDomainResponse;
 	this.initFromJS(resp.domain[0]);
+	
+	if(this.attrs[ZaDomain.A_zimbraNotebookAccount]) {
+		var soapDoc = AjxSoapDoc.create("GetFolderRequest", "urn:zimbraMail", null);
+		var getFolderCommand = new ZmCsfeCommand();
+		var params = new Object();
+		//var callback = new AjxCallback(this, this.parseNotebookFolderAcls);
+		params.soapDoc = soapDoc;
+		//params.asyncMode = true;
+		//params.callback = callback;
+		params.accountName = this.attrs[ZaDomain.A_zimbraNotebookAccount];
+	
+		var folderEl = soapDoc.set("folder", "");
+		folderEl.setAttribute("l", ZaDomain.WIKI_FOLDER_ID);	
+		this.parseNotebookFolderAcls(getFolderCommand.invoke(params));
+	}	
 }
 ZaItem.loadMethods["ZaDomain"].push(ZaDomain.loadMethod);
 
@@ -745,12 +849,45 @@ ZaDomain.myXModel = {
 			}
 		},
 		
-		{id:ZaDomain.A_NotebookTemplateDir, type:_STRING_},
-		{id:ZaDomain.A_NotebookTemplateFolder, type:_STRING_},
+		{id:ZaDomain.A_NotebookTemplateDir, type:_STRING_, ref:ZaDomain.A_NotebookTemplateDir},
+		{id:ZaDomain.A_NotebookTemplateFolder, type:_STRING_, ref:ZaDomain.A_NotebookTemplateFolder},
 		{id:ZaDomain.A_NotebookAccountName, type:_STRING_},
 		{id:ZaDomain.A_NotebookAccountPassword, type:_STRING_},
 		{id:ZaDomain.A_NotebookAccountPassword2, type:_STRING_},		
 		{id:ZaDomain.A_CreateNotebook, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
-		{id:ZaDomain.A_zimbraNotebookAccount, type:_STRING_, ref:"attrs/" +ZaDomain.A_zimbraNotebookAccount}
+		{id:ZaDomain.A_OverwriteTemplates, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
+		{id:ZaDomain.A_zimbraNotebookAccount, type:_STRING_, ref:"attrs/" +ZaDomain.A_zimbraNotebookAccount},
+		{id:ZaDomain.A_NotebookAllACLs, ref:"notebookAcls/"+ZaDomain.A_NotebookAllACLs, type:_OBJECT_,
+			items: [
+				{id:"r", type:_NUMBER_},
+				{id:"w", type:_NUMBER_},
+				{id:"d", type:_NUMBER_},
+				{id:"i", type:_NUMBER_},
+				{id:"a", type:_NUMBER_},				
+				{id:"x", type:_NUMBER_}
+			]
+		},
+		{id:ZaDomain.A_NotebookDomainACLs, ref:"notebookAcls/"+ZaDomain.A_NotebookDomainACLs, type:_OBJECT_,
+			items: [
+				{id:"r", type:_NUMBER_},
+				{id:"w", type:_NUMBER_},
+				{id:"d", type:_NUMBER_},
+				{id:"i", type:_NUMBER_},
+				{id:"a", type:_NUMBER_},				
+				{id:"x", type:_NUMBER_}
+			]
+		},
+		{id:ZaDomain.A_NotebookPublicACLs, ref:"notebookAcls/"+ZaDomain.A_NotebookPublicACLs, type:_OBJECT_,
+			items: [
+				{id:"r", type:_NUMBER_},
+				{id:"w", type:_NUMBER_},
+				{id:"d", type:_NUMBER_},
+				{id:"i", type:_NUMBER_},
+				{id:"a", type:_NUMBER_},				
+				{id:"x", type:_NUMBER_}
+			]
+		}
+		
+		
 	]
 };
