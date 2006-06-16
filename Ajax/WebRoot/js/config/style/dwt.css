@@ -702,19 +702,23 @@
 /*
  * DwtInputField - whiz-bang input field that Ross cooked up...
  */
-.DwtInputField input {
+.DwtInputField input,
+.DwtSimpleInput {
 	@InputField@
 }
 
-.DwtInputField-error input {
+.DwtInputField-error input,
+.DwtSimpleInput-error {
 	@InputField-error@
 }
 
-.DwtInputField-focused input {
+.DwtInputField-focused input,
+.DwtSimpleInput-focused {
 	@InputField-focused@
 }
 
-.DwtInputField-disabled input {
+.DwtInputField-disabled input,
+.DwtSimpleInput-disabled {
 	@InputField-disabled@
 }
 
