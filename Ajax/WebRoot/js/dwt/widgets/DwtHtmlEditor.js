@@ -33,11 +33,7 @@ function DwtHtmlEditor(parent, className, posStyle, content, mode, blankIframeSr
 
 	// init content
 	this._initialStyle = this._getInitialStyle(true);
-	var initialHtml = "<html><head>" + this._getInitialStyle(false) + "</head><body></body></html>";
-	if (!content)
-		content = this._mode == DwtHtmlEditor.HTML ? initialHtml : "";
-
-	this._pendingContent = content;
+	this._pendingContent = content || "";
 	this._htmlModeInited = false;
 
 	this._initialize();
@@ -784,11 +780,21 @@ function() {
 	return iFrame;
 }
 
+DwtHtmlEditor.prototype._initializeContent =
+function(content) {
+	var style = this._getInitialStyle(false);
+	var initHtml = "<html><head>" + style + "</head><body>" + (content || "") + "</body></html>";
+	var doc = this._getIframeDoc();
+	doc.open();
+	doc.write(initHtml);
+	doc.close();
+};
+
 DwtHtmlEditor.prototype._finishHtmlModeInit =
 function(params) {
 	var doc = this._getIframeDoc();
 	try {
-		doc.body.innerHTML = this._pendingContent || "";
+		this._initializeContent(this._pendingContent);
 	} catch (ex) {
 		DBG.println("XXX: Error initializing HTML mode :XXX");
 		return;
@@ -802,10 +808,7 @@ function(params) {
 	// bug fix #4722 - setting design mode for the first time seems to null
 	// out iframe doc's body in IE - so create a new body...
 	if (AjxEnv.isIE) {
-		doc.open();
-		doc.write("");
-		doc.close();
-		doc.body.innerHTML = this._pendingContent || "";
+		this._initializeContent(this._pendingContent);
 	}
 
 	this._registerEditorEventHandlers(document.getElementById(this._iFrameId), doc);
