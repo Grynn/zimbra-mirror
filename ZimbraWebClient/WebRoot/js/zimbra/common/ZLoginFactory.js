@@ -190,7 +190,7 @@ ZLoginFactory.getLoginDialogHTML = function (params) {
 						"<div id='ZLoginAboutPanel' ", (params.showAbout ? "" : "style='display:none'"), ">", params.aboutMsg,
 						"</div>",
 						"<div id='ZLoginLoadingPanel' ", (params.showLoading ? "" : "style='display:none'"), ">",
-							"<table><tr><td>[icon]</td><td id='ZLoginLoadingMsg'>", params.loadingMsg, "</td></tr></table>",
+							"<table><tr><td></td><td id='ZLoginLoadingMsg'>", params.loadingMsg, "</td></tr></table>",
 						"</div>",
 						"<div id='ZLoginFormPanel' ", (params.showForm ? "" : "style='display:none'"), ">",
 							"<table class='zLoginTable' width='100%' cellpadding=4>",
