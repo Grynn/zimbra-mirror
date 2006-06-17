@@ -221,7 +221,6 @@ ZaDomainListController.prototype._listSelectionListener =
 function(ev) {
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
 		if(ev.item) {
-			ev.item.refresh();
 			this._app.getDomainController().show(ev.item);
 		}
 	} else {

@@ -50,6 +50,7 @@ ZaDomainController.prototype.constructor = ZaDomainController;
 
 ZaDomainController.prototype.show = 
 function(entry) {
+	entry.refresh();
 	this._setView(entry);
 }
 
@@ -118,6 +119,7 @@ function () {
 	var tmpObj = this._view.getObject();
 	var mods = new Object();
 	var haveSmth = false;
+	var renameNotebookAccount = false;
 	if(tmpObj.attrs[ZaDomain.A_notes] != this._currentObject.attrs[ZaDomain.A_notes]) {
 		mods[ZaDomain.A_notes] = tmpObj.attrs[ZaDomain.A_notes] ;
 		haveSmth = true;
@@ -137,6 +139,7 @@ function () {
 	if(tmpObj.attrs[ZaDomain.A_zimbraNotebookAccount] != this._currentObject.attrs[ZaDomain.A_zimbraNotebookAccount]) {
 		mods[ZaDomain.A_zimbraNotebookAccount] = tmpObj.attrs[ZaDomain.A_zimbraNotebookAccount] ;
 		haveSmth = true;
+		renameNotebookAccount = true;
 	}	
 
 	var overWriteACLs = false;	
@@ -157,10 +160,12 @@ function () {
 		try { 
 			var soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
 			soapDoc.setMethodAttribute("onerror", "stop");		
+			if(renameNotebookAccount) {
+				var account = new ZaAccount(this._app);
+				account.load(ZaAccount.A_name,this._currentObject.attrs[ZaDomain.A_zimbraNotebookAccount]);
+				account.rename(tmpObj.attrs[ZaDomain.A_zimbraNotebookAccount]);
+			}
 			if(haveSmth) {
-	//			this._currentObject.modify(mods,overWriteACLs);
-		
-			
 				var modifyDomainRequest = soapDoc.set("ModifyDomainRequest");
 				modifyDomainRequest.setAttribute("xmlns", "urn:zimbraAdmin");
 			

@@ -262,7 +262,12 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 									onChange:ZaTabView.onFormFieldChanged},
 								{type:_SPACER_, height:10},
 								{ref:ZaDomain.A_NotebookPublicACLs, type:_ACL_, label:ZaMsg.ACL_Public,labelLocation:_LEFT_,visibleBoxes:{r:true,w:false,a:false,i:false,d:false,x:false},
-									onChange:ZaTabView.onFormFieldChanged}/*,
+									onChange:ZaTabView.onFormFieldChanged},
+								{type:_SPACER_, height:10},
+								{ref:ZaDomain.A_zimbraNotebookAccount, type:_EMAILADDR_, 
+									label:ZaMsg.Domain_NotebookAccountName, labelLocation:_LEFT_,
+									width:250,onChange:ZaTabView.onFormFieldChanged
+								}/*,
 								{type:_SPACER_, height:10},
 								{ref:ZaDomain.A_OverwriteTemplates, type:_CHECKBOX_, label:ZaMsg.Domain_OverwriteTemplates, labelLocation:_LEFT_,
 									trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_,onChange:ZaTabView.onFormFieldChanged},						

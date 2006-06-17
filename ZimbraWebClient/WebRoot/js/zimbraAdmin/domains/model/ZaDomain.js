@@ -369,7 +369,7 @@ ZaDomain.getNotebookACLsRequest = function (obj, soapDoc) {
 			var actionEl = soapDoc.set("action", "",folderActionRequest);
 			actionEl.setAttribute("id", ZaDomain.WIKI_FOLDER_ID);	
 			actionEl.setAttribute("op", "grant");	
-			var grantEl = 	soapDoc.set("grant", "",actionEl,folderActionRequest);	
+			var grantEl = soapDoc.set("grant", "",actionEl);	
 			grantEl.setAttribute("gt", gt);
 			if(gt==ZaDomain.A_NotebookDomainACLs) {
 				grantEl.setAttribute("d", obj.attrs[ZaDomain.A_domainName]);
@@ -416,11 +416,6 @@ ZaDomain.setNotebookACLs = function (obj, callback) {
 		}
 	}
 
-	
-/*	this[ZaDomain.A_NotebookPublicACLs] = {r:1,w:0,i:0,d:0,a:0,x:0};
-	this[ZaDomain.A_NotebookDomainACLs] = {r:1,w:0,i:0,d:0,a:0,x:0};*/
-	
-	
 }
 
 ZaDomain.initNotebook = function (obj, callback) {
