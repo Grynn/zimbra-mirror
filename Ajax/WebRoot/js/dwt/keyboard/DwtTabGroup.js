@@ -187,7 +187,8 @@ function(member, checkEnabled, dontNotify) {
  * @return replaced member. This may be null if <code>oldMember</code> is not in the
  * 		tab groups hierarchy
  * @type DwtControl|DwtTabGroup|HTMLElement
- */DwtTabGroup.prototype.replaceMember =
+ */
+DwtTabGroup.prototype.replaceMember =
 function(oldMember, newMember, checkEnabled, dontNotify) {
 	var tg = this.__getTabGroupForMember(oldMember);
 
@@ -634,15 +635,17 @@ function(member) {
  */
 DwtTabGroup.prototype.__getTabGroupForMember =
 function(member) {
+	if (!member) return null;
 	var sz = this.__members.size();
 	var a = this.__members.getArray();
 	var m;
 	for (var i = 0; i < sz; i++) {
-		m = a[i]
-		if (m == member)
-			return this
-		else if (m instanceof DwtTabGroup && (m = m.__getTabGroupForMember(member)))
+		m = a[i];
+		if (m == member) {
+			return this;
+		} else if (m instanceof DwtTabGroup && (m = m.__getTabGroupForMember(member))) {
 			return m;
+		}
 	}
 	return null;
 }

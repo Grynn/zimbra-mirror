@@ -162,8 +162,9 @@ function(type, element, index) {
 
 // transfer focus to the current item
 DwtToolBar.prototype._focus =
-function() {
-	// make sure the key for expanding a button submenu matches our style
+function(item) {
+	DBG.println(AjxDebug.DBG3, "DwtToolBar: FOCUS");
+	// make sure the key for expanding a button ubmenu matches our style
 	var kmm = this.shell.getKeyboardMgr().__keyMapMgr;
 	if (this._style == DwtToolBar.HORIZ_STYLE) {
 		kmm.removeMapping("DwtButton", "ArrowRight");
@@ -174,7 +175,7 @@ function() {
 	}
 	kmm.reloadMap("DwtButton");
 
-	var item = this._getFocusItem(this._curFocusIndex);
+	item = item ? item : this._getFocusItem(this._curFocusIndex);
 	if (item) {
 		item._hasFocus = true;	// so that focus class is set
 		item._focus();
@@ -183,19 +184,49 @@ function() {
 
 // blur the current item
 DwtToolBar.prototype._blur =
-function() {
-	var item = this._getFocusItem(this._curFocusIndex);
+function(item) {
+	DBG.println(AjxDebug.DBG3, "DwtToolBar: BLUR");
+	item = item ? item : this._getFocusItem(this._curFocusIndex);
 	if (item) {
 		item._hasFocus = false;
 		item._blur();
 	}
 };
 
-// for now, don't include sub-toolbars as focus items
+/**
+ * Returns the item at the given index, as long as it can accept focus.
+ * For now, we only move focus to simple components like buttons. Also,
+ * the item must be enabled and visible.
+ * 
+ * @param index		[int]		index of item within toolbar
+ */
 DwtToolBar.prototype._getFocusItem =
 function(index) {
 	var item = this.getItem(index);
-	return (item && !(item instanceof DwtToolBar)) ? item : null;
+	if (!item || (item instanceof DwtToolBar)) return null;
+	if (item.getEnabled && !item.getEnabled()) return null;
+	if (item.getVisible && !item.getVisible()) return null;
+	return item;
+};
+
+/**
+ * Moves focus to next or previous item that can take focus.
+ * 
+ * @param back		[boolean]*		if true, move focus to previous item
+ */
+DwtToolBar.prototype._moveFocus =
+function(back) {
+	var index = this._curFocusIndex;
+	var item = null;
+	while (!item) {
+		index = back ? index - 1 : index + 1;
+		item = this._getFocusItem(index);
+	}
+	if (item) {
+		this._blur();
+		this._curFocusIndex = index;
+		this._focus(item);
+	}
 };
 
 DwtToolBar.prototype.getKeyMapName = 
@@ -216,27 +247,13 @@ function(actionCode, ev) {
 
 		case DwtKeyMap.PREV:
 			if (this._curFocusIndex > 0) {
-				// make sure we can actually transfer focus
-				var oldItem = this._getFocusItem(this._curFocusIndex);
-				var newItem = this._getFocusItem(this._curFocusIndex - 1);
-				if (oldItem && newItem) {
-					this._blur();
-					this._curFocusIndex--;
-					this._focus();
-				}
+				this._moveFocus(true);
 			}
 			break;
 			
 		case DwtKeyMap.NEXT:
 			if (this._curFocusIndex < (numItems - 1)) {
-				// make sure we can actually transfer focus
-				var oldItem = this._getFocusItem(this._curFocusIndex);
-				var newItem = this._getFocusItem(this._curFocusIndex + 1);
-				if (oldItem && newItem) {
-					this._blur();
-					this._curFocusIndex++;
-					this._focus();
-				}
+				this._moveFocus();
 			}
 			break;
 			
