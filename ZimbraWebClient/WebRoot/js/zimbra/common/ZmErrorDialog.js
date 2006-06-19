@@ -138,6 +138,7 @@ function() {
 	for (var i in navigator) {
 		// Skip functions
 		if(typeof navigator[i] == "function") {continue;}
+		if(typeof navigator[i] == "unknown") {continue;}	// IE7
 		strNav[idx++] = i + ": " + navigator[i] + "\n";
 	}
 	return strNav.join("");
