@@ -34,6 +34,7 @@ function() {
 	this.dwtObj = null
 	this.altKey = false;
 	this.ctrlKey = false;
+	this.metaKey = false;
 	this.shiftKey = false;
 	this.target = null;
 	this.type = null;
@@ -125,6 +126,7 @@ DwtUiEvent.copy =
 function(dest, src) {
 	dest.altKey = src.altKey;
 	dest.ctrlKey = src.ctrlKey;
+	dest.metaKey = src.metaKey;
 	dest.shiftKey = src.shiftKey;
 	dest.target = src.target;
 	dest.type = src.type;
@@ -144,6 +146,7 @@ function(ev) {
 	if (!ev) return;
 	this.altKey = ev.altKey;
 	this.ctrlKey = ev.ctrlKey;
+	this.metaKey = ev.metaKey;
 	this.shiftKey = ev.shiftKey;
 	this.type = ev.type;
 	this.target = DwtUiEvent.getTarget(ev);

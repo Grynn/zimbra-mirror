@@ -120,21 +120,49 @@ function(keySeq, mappingName, forceActionCode) {
 	}
 };
 
+/**
+ * Converts the given keycode to a character
+ * 
+ * @param {number} keyCode Keycode to convert
+ * 
+ * @return character representation of the keyCode
+ * @type string
+ */
 DwtKeyMapMgr.prototype.keyCode2Char =
 function(keyCode) {
 	return DwtKeyMapMgr._KEYCODES[keyCode];
 };
 
+/**
+ * Allow the programatic setting of a key sequence mapping for a given map
+ * 
+ * @param {string} mapName map name to effect
+ * @param {string} keySeq the key sequence to set
+ * @param {string|number} action the action code for the key sequence
+ */
 DwtKeyMapMgr.prototype.setMapping =
 function(mapName, keySeq, action) {
 	this._map[mapName][keySeq] = action;
 };
 
+/**
+ * Allow the programatting removal of a key sequence mapping for a given map
+ * 
+ * @param {string} mapName map name to effect
+ * @param {string} keySeq the key sequence to remove
+ */
 DwtKeyMapMgr.prototype.removeMapping =
 function(mapName, keySeq) {
 	delete this._map[mapName][keySeq];
 };
 
+/**
+ * Replace the key sequence for a given action in a keymap 
+ * 
+ * @param {string} mapName map name to effect
+ * @param {string} oldKeySeq the key sequence to replace
+ * @param {string} newKeySeq the new key sequence
+ */
 DwtKeyMapMgr.prototype.replaceMapping =
 function(mapName, oldKeySeq, newKeySeq) {
 	var action =this._map[mapName][oldKeySeq];
@@ -143,9 +171,14 @@ function(mapName, oldKeySeq, newKeySeq) {
 	this.setMapping(mapName, newKeySeq, action);
 };
 
+/**
+ * Reloads a given keymap
+ * 
+ * @param {string} mapName Name of the keymap to releoad
+ */
 DwtKeyMapMgr.prototype.reloadMap =
-function(key) {
-	this._fsas[key] = DwtKeyMapMgr.__buildFSA({}, this._map[key], key);
+function(mapName) {
+	this._fsas[mapName] = DwtKeyMapMgr.__buildFSA({}, this._map[mapName], mapName);
 };
 
 DwtKeyMapMgr._initUsKeyCodeMap =
@@ -163,6 +196,7 @@ function() {
 	DwtKeyMapMgr._KEYCODES[13]  = DwtKeyMap.ENTER;
 	DwtKeyMapMgr._KEYCODES[27]  = DwtKeyMap.ESC;
 	DwtKeyMapMgr._KEYCODES[36]  = DwtKeyMap.HOME;
+	DwtKeyMapMgr._KEYCODES[91]  = DwtKeyMap.META;
 	DwtKeyMapMgr._KEYCODES[34]  = DwtKeyMap.PAGE_DOWN;
 	DwtKeyMapMgr._KEYCODES[33]  = DwtKeyMap.PAGE_UP;
 	DwtKeyMapMgr._KEYCODES[16]  = DwtKeyMap.SHIFT;
@@ -244,6 +278,7 @@ function(keyCode) {
 		case 16: // Shift
 		case 17: // Ctrl
 		case 18: // Alt
+		case 91: // Meta (Apple)
 			return true;
 			
 		default:

@@ -589,6 +589,9 @@ function(ev) {
 	}
 		
  	var key = "";
+ 	
+ 	if (kev.metaKey)
+ 		key += DwtKeyMap.META;
 	
 	if (kev.ctrlKey)
 		key += DwtKeyMap.CTRL;

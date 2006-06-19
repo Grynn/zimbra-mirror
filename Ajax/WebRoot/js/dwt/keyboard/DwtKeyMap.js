@@ -106,6 +106,7 @@ function(keymap) {
 // Key names
 
 DwtKeyMap.CTRL			= "Ctrl+";
+DwtKeyMap.META			= "Meta+";
 DwtKeyMap.ALT			= "Alt+";
 DwtKeyMap.SHIFT			= "Shift+";
 
