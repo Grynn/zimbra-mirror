@@ -114,9 +114,9 @@ function() {
 	var xFormObject = {
 		numCols:2,
 		items:[
-			{ref:ZaDomain.A_NotebookAccountName, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookAccountName, labelLocation:_LEFT_, },						
-			{ref:ZaDomain.A_NotebookAccountPassword, type:_SECRET_, label:ZaMsg.Domain_NotebookAccountPassword, labelLocation:_LEFT_, },
-			{ref:ZaDomain.A_NotebookAccountPassword2, type:_SECRET_, label:ZaMsg.NAD_ConfirmPassword, labelLocation:_LEFT_, },												
+			{ref:ZaDomain.A_NotebookAccountName, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookAccountName, labelLocation:_LEFT_ },						
+			{ref:ZaDomain.A_NotebookAccountPassword, type:_SECRET_, label:ZaMsg.Domain_NotebookAccountPassword, labelLocation:_LEFT_ },
+			{ref:ZaDomain.A_NotebookAccountPassword2, type:_SECRET_, label:ZaMsg.NAD_ConfirmPassword, labelLocation:_LEFT_ },												
 			/*{ref:ZaDomain.A_OverwriteTemplates, type:_CHECKBOX_, label:ZaMsg.Domain_OverwriteTemplates, labelLocation:_LEFT_,
 				trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_},						
 			{ref:ZaDomain.A_NotebookTemplateDir, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookTemplateDir, labelLocation:_LEFT_,
