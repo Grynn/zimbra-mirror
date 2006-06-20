@@ -598,7 +598,7 @@ sub tsToSqlTime {
 	my @tm = localtime($ts);
 
 	# Truncate at hours.
-	if (defined($dayTrunc)) {
+	if (defined($dayTrunc) && $dayTrunc) {
 		return sprintf ("%4d-%02d-%02d %02d:%02d:%02d",
 			$tm[5]+1900,$tm[4]+1,$tm[3],0,0,0);
 	} else {
@@ -639,7 +639,7 @@ sub getLastAggPeriod {
 		my $periodAgo = getPeriodAgo($period);
 
 		if (@$ary) {
-			if ( (${$$ary[0]}[0] cmp $periodAgo) < 0 ) {
+			if ( (${$$ary[0]}[0] cmp $periodAgo) < 1 ) {
 				return (${$$ary[0]}[0]);
 			}
 		}
@@ -689,6 +689,7 @@ sub getLastAggPeriod {
 			if ( (${$$ary[0]}[0] cmp $periodAgo) < 0 ) {
 				return (${$$ary[0]}[0]);
 			}
+			return $periodAgo;
 		}
 
 		my $sth = sqlExec("select min(period_start) from ${app}_aggregate where ".
@@ -714,9 +715,11 @@ sub getPeriodAgo {
 	my $period = shift;
 	my $then = $NOW;
 
+	my $trunc = 1;
 	#print "Getting period ago ($period)\n";
 	if ($period eq "hour") {
 		$then-=(60*(60+1));
+		$trunc = 0;
 	} elsif ($period eq "day") {
 		$then-=(60*60*(24+1));
 	} elsif ($period eq "month") {
@@ -726,7 +729,7 @@ sub getPeriodAgo {
 		$then-=(60*60*24*(365+1));
 	}
 
-	return tsToSqlTime($then,1);
+	return tsToSqlTime($then,$trunc);
 }
 
 sub processMta {
