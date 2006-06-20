@@ -34,6 +34,34 @@ function ZmBaseSplashScreen(shell, imageInfo, className) {
  	className = className || "ZmSplashScreen";
  	DwtControl.call(this, shell, className, Dwt.ABSOLUTE_STYLE);
 
+	this.__createContents();
+}
+
+ZmBaseSplashScreen.prototype = new DwtControl;
+ZmBaseSplashScreen.prototype.constructor = ZmBaseSplashScreen;
+
+/** abstract **/
+ZmBaseSplashScreen.prototype.getHtml = function() { }
+
+ZmBaseSplashScreen.prototype.setVisible =
+function(visible) {
+	if (visible == this.getVisible()) {
+		return;
+	}
+	
+	if (visible) {
+		this.__createContents();
+	}		
+
+	DwtControl.prototype.setVisible.call(this, visible);	
+	
+	if (!visible) {
+		this.getHtmlElement().innerHTML = "";
+	}
+};
+
+ZmBaseSplashScreen.prototype.__createContents =
+function() {
 	var htmlEl = this.getHtmlElement();
  	htmlEl.style.zIndex = Dwt.Z_SPLASH;
 	
@@ -46,13 +74,6 @@ function ZmBaseSplashScreen(shell, imageInfo, className) {
  	cell.vAlign = "middle";
  	cell.align = "center";
 	cell.innerHTML = this.getHtml();
-	var htmlEl = this.getHtmlElement();
  	htmlEl.appendChild(myTable);
 	htmlEl.style.cursor = "wait";
-}
-
-ZmBaseSplashScreen.prototype = new DwtControl;
-ZmBaseSplashScreen.prototype.constructor = ZmBaseSplashScreen;
-
-/** abstract **/
-ZmBaseSplashScreen.prototype.getHtml = function() { }
+};
