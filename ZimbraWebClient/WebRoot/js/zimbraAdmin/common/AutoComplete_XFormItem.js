@@ -42,19 +42,18 @@ AutoCompleteList_XFormItem.prototype.constructWidget = function () {
 //	var locCallback = new AjxCallback (this, AutoCompleteList_XFormItem.prototype._getAcListLoc);
 	var locCallback = new AjxCallback (this, this._getAcListLoc);
 	var compCallback = new AjxCallback(this, this.getInheritedProperty("compCallback"));
-	var dataClass = this.getInheritedProperty("dataClass") ;
-	var dataLoadCallback = new AjxCallback (this, dataClass.prototype._getDataCallback);
+	//var dataLoadCallback = new AjxCallback (this, dataLoaderClass.prototype._getDataCallback);
 	
 	var params = { 	//parent: this.getForm() ,
 					parent: this.getForm().shell,					
 					className: this.getCssClass(),
-					dataClass: dataClass,
-					dataLoader: this.getInheritedProperty("dataLoader"), //method that searches for matches (e.g. sends search request to server)
+					dataLoaderClass: this.getInheritedProperty("dataLoaderClass"),
+					dataLoaderMethod: this.getInheritedProperty("dataLoaderMethod"), //method that searches for matches (e.g. sends search request to server)
 					matchValue: this.getInheritedProperty("matchValue"), //the name of the property in the match list to be used to do the comparison
 					matchText: this.getInheritedProperty("matchText"),//the name of the property in the match list to be displayed in the field
 					//inputFieldElement: this.getForm().getItemsById (this.getInheritedProperty("inputFieldElementId"))[0].getElement(),
 					inputFieldXFormItem: this.getForm().getItemsById (this.getInheritedProperty("inputFieldElementId"))[0],
-					dataLoadCallback: dataLoadCallback,
+					//dataLoadCallback: dataLoadCallback,
 					locCallback: locCallback, 
 					compCallback: compCallback,//called when a value is selected from the list of suggestions
 					separator: ""  					

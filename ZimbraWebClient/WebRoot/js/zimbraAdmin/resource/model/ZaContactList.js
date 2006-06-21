@@ -27,17 +27,16 @@
   * This is the list containing the auto complete match contact lists
   * @author Charles Cao
   */
-function ZaContactList () {
+function ZaContactList (app) {
 	this._list = [];	//this is the array holds all the match objects
-	this._matchStr = ""; 	//this is the string used to match the list.
+	this._app = app;
 }
 
 ZaContactList.matchValue = ZaAccount.A_name; //the property name of the match ZaContactList
 ZaContactList.matchText =  ZaAccount.A_displayname; //the property name of the match text of ZaContactList
 
 ZaContactList.prototype.getContactList =
-function (str){
-	var dataInstance = new ZaContactList();
+function (str, callback){
 	try {
 		var params = {};
 		
@@ -46,22 +45,12 @@ function (str){
 		params.sortBy = ZaAccount.A_displayname;
 		params.query = ZaSearch.getSearchByDisplayNameQuery(str) ;
 		params.applyCos = "0";
-		var searchResult = ZaSearch.searchDirectory(params).Body.SearchDirectoryResponse ;
-		var list = new ZaItemList (ZaAccount, null);
-		list.loadFromJS(searchResult) ;
-		var arr = list.getArray();
-	
-		for (var i=0; i<arr.length; i++) {
-			dataInstance._list[i] = {};
-			dataInstance._list[i][ZaAccount.A_displayname] = arr[i].attrs[ZaAccount.A_displayname]; 
-			dataInstance._list[i][ZaAccount.A_name ] = arr[i][ZaAccount.A_name]; 			
-			dataInstance._list[i][ZaAccount.A_telephoneNumber ] = arr[i].attrs[ZaAccount.A_telephoneNumber]; 						
-		} 
-		dataInstance._matchStr = str ;
-	}catch (e){
-		DBG.println(AjxDebug.DBG1, "ZaContactList.prototype.getContactList: "+ e.message);
+		myCallback = new AjxCallback(this, this.getDataCallback, callback);
+		params.callback = myCallback;
+		ZaSearch.searchDirectory(params);
+	}	catch (ex){
+		this._app.getCurrentController()._handleException(ex, "ZaContactList.prototype.getContactList");	
 	}
-	return dataInstance; //
 }
 
 ZaContactList.prototype.autocompleteMatch = 
@@ -69,14 +58,11 @@ function (str) {
 	var lists = new Array () ;
 	var j = 0;
 	for (var i=0; i < this._list.length; i++ ) {
-
-	//	if (this._list[i].name.indexOf (str) >= 0) {
-			lists[j] = { 	contact: this._list[i], 
-							text: this._list[i].name  + " <" + this._list[i].email + ">", 
-							value: this._list[i].name 
-						};
-			j++ ;
-	//		}		
+		lists[j] = { 	contact: this._list[i], 
+						text: this._list[i].name  + " <" + this._list[i].email + ">", 
+						value: this._list[i].name 
+					};
+		j++ ;
 	}
 
 	return lists ;
@@ -93,9 +79,32 @@ function(match, inputFieldXFormItem) {
 	xform.refresh();
 }; 
 
-ZaContactList.prototype._getDataCallback = 
-function(){
-	return new ZaContactList() ;
+ZaContactList.prototype.getDataCallback = 
+function(callback, resp){
+	try {
+		if(!resp) {
+			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaContactList.prototype.getDataCallback"));
+		}
+		if(resp.isException()) {
+			throw(resp.getException());
+		} else {
+			var response = resp.getResponse().Body.SearchDirectoryResponse;
+			var list = new ZaItemList(null, this._app);	
+			list.loadFromJS(response);
+			var arr = list.getArray();
+			var data = [];
+			for (var i=0; i<arr.length; i++) {
+				data[i] = {};
+				data[i][ZaAccount.A_displayname] = arr[i].attrs[ZaAccount.A_displayname]; 
+				data[i][ZaAccount.A_name ] = arr[i][ZaAccount.A_name]; 			
+				data[i][ZaAccount.A_telephoneNumber ] = arr[i].attrs[ZaAccount.A_telephoneNumber]; 						
+			} 
+			callback.run(data);			
+		}
+	} catch (ex) {
+		this._app.getCurrentController()._handleException(ex, "ZaContactList.prototype.getDataCallback");	
+	}		
+	
 };
 
 ZaContactList.prototype.isUniqueValue =

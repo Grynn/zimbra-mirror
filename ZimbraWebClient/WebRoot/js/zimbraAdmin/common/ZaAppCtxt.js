@@ -62,8 +62,8 @@ function() {
 
 
 ZaAppCtxt.prototype.getApp =
-function(appName) {
-	return this._appController.getApp(appName);
+function() {
+	return this._appController.getApp();
 }
 
 ZaAppCtxt.prototype.getAppViewMgr =

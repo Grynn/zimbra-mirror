@@ -209,7 +209,7 @@ ZaZimbraAdmin.getInstance = function() {
 * @param appName	an app name
 */
 ZaZimbraAdmin.prototype.getApp =
-function(appName) {
+function() {
 	return this._app;	
 }
 

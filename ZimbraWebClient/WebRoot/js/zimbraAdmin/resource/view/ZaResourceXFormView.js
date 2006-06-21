@@ -280,7 +280,7 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject) {
 						//add the AutoComplete Feature
 						{ref:ZaResource.A_contactInfoAutoComplete, type: _AUTO_COMPLETE_LIST_, 
 									matchValue:ZaContactList.matchValue, matchText: ZaContactList.matchText,
-									dataClass: ZaContactList , dataLoader: ZaContactList.prototype.getContactList ,
+									dataLoaderClass: ZaContactList , dataLoaderMethod: ZaContactList.prototype.getContactList ,
 									//reparent: this.getForm().shell,
 									compCallback: ZaContactList.prototype._autocompleteCallback,
 									inputFieldElementId: ZaResource.A_zimbraCalResContactName   }

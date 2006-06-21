@@ -52,15 +52,15 @@
 * </p>
 * 
 * @author Conrad Damon
-* @param parent			the element that created this list
-* @param className		CSS class
-* @param dataClass		the class that has the data loader
-* @param dataLoader		a method of dataClass that returns data to match against
-* @param matchValue		name of field in match result to use for completion
+* @param parent				the element that created this list
+* @param className			CSS class
+* @param dataLoaderClass			the class that has the data loader
+* @param dataLoaderMethod	a method of dataLoaderClass that returns data to match against
+* @param matchValue			name of field in match result to use for completion
 * @param inputFieldElement	(HTMLTextAreaElement) the input field element which autocomplete is used for
-* @param locCallback	callback into client to get desired location of autocomplete list
-* @param compCallback	callback into client to notify it that completion happened
-* @param separator		separator (gets added to the end of a match)
+* @param locCallback		callback into client to get desired location of autocomplete list
+* @param compCallback		callback into client to notify it that completion happened
+* @param separator			separator (gets added to the end of a match)
 */
 var i = 1 ;
 ZaSettings.AC_TIMER_INTERVAL = i ++;
@@ -71,16 +71,16 @@ function ZaAutoCompleteListView(params) {
 	DwtComposite.call(this, params.parent, className, DwtControl.ABSOLUTE_STYLE);
 	
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
-	this._dataClass = params.dataClass;
-	this._dataLoader = params.dataLoader;
-	this._dataLoaded = false;
+	var _dataLoaderClass = params.dataLoaderClass;
+	this._dataLoaderObject = new _dataLoaderClass(this._appCtxt.getApp());
+	this._dataLoaderMethod = params.dataLoaderMethod;
+	this._dataLoading = false;
 	this._data = null ;
 	this._matchValue = params.matchValue ? params.matchValue : "email";
 	this._matchText = params.matchText ? params.matchText : "name" ;
 	this._inputFieldXFormItem = params.inputFieldXFormItem ;
 	this._inputFieldXForm = this._inputFieldXFormItem.getForm() ;
 	this._inputFieldElement = this._inputFieldXFormItem.getElement() ;
-	this._dataLoadCallback = params.dataLoadCallback ;
 	this._locCallback = params.locCallback;
 	this._compCallback = params.compCallback;
 	this._separator = (params.separator != null) ? params.separator : ";";
@@ -93,7 +93,6 @@ function ZaAutoCompleteListView(params) {
 	this._outsideListener = new AjxListener(this, this._outsideMouseDownListener);
 
 	// only trigger matching after a sufficient pause
-	//this._acInterval = this._appCtxt.get(ZaSettings.AC_TIMER_INTERVAL);
 	this._acInterval = 300 ;
 	this._acAction = new AjxTimedAction(null, this._autocompleteAction);
 	this._acActionId = -1;
@@ -262,13 +261,7 @@ function(element, loc) {
 	this._loc = loc;
 	var text = element.value;
 
-	var info = {text: text, start: 0};
-	while (info.start < info.text.length) {
-		var chunk = this._nextChunk(info.text, info.start);
-		info = this._autocomplete(chunk);
-	}
-	if (info.text != text)
-		this._updateField(info.text);
+	this._autocomplete(text);
 }
 
 /**
@@ -302,7 +295,7 @@ function(key, isDelim) {
 	DBG.println(AjxDebug.DBG2, "autocomplete handleAction for key " + key + " / " + isDelim);
 
 	if (isDelim) {
-		this._update(true);
+		this._update();
 	} else if (key == 38 || key == 40) {
 		// handle up and down arrow keys
 		var idx = this._getSelectedIndex();
@@ -378,57 +371,23 @@ function(text, start) {
 // immediately (if the string was followed by a delimiter). The chunk object that we get has
 // information that allows us to do the replacement if we are performing completion.
 ZaAutoCompleteListView.prototype._autocomplete =
-function(chunk) {
-
-	var str = chunk.str;
-
+function(str) {
 	// if string is empty or already a delimited address, no reason to look for matches
 	if (!(str && str.length) || (this._done[str]))
-		return {text: chunk.text, start: chunk.end + 1};
-
-	this._start = chunk.start;
-	this._end = chunk.end;	
-	
-	var text = chunk.text;
-	var start = chunk.end; // move beyond the current chunk
+		return;
 
 	// do matching
 	this._removeAll();
-
-	var list = this._getMatches(str).getList();
-	if (list && list.length == 1 && this._data.isUniqueValue(str)) {
-		DBG.println(AjxDebug.DBG2, "unique match, hiding autocomplete list");
-		return {text: text, start: start};
-	}
-
-	if (list && list.length > 0) {
-		var len = list.length;
-		DBG.println(AjxDebug.DBG2, "found " + len + " match" + len > 1 ? "es" : "");
-		for (var i = 0; i < len; i++) {
-			var match = list[i];
-			this._append(match);
-		}
-	} else {
-		return {text: text, start: start};
-	}
-	
-	this._set(); // populate the list view
-
-	// if the current segment ends in a delimiter, complete immediately without showing the list
-	if (chunk.delim) {
-		var result = this._complete(text, true);
-		text = result.text;
-		start = result.start;
-	}
-	// show the list (unless we're doing completion)
-	this.show(!chunk.delim, this._loc);
-	
-	return {text: text, start: start};
+	if (!this._dataLoading) {
+		var callback = new AjxCallback(this, this.dataLoadedCallback);
+		this._dataLoading = true;
+		this._dataLoaderMethod.call (this._dataLoaderObject, str, callback);
+	}	
 }
 
 // Replaces a string within some text from the selected address match.
 ZaAutoCompleteListView.prototype._complete =
-function(text, hasDelim) {
+function(text) {
 	DBG.println(AjxDebug.DBG3, "complete: selected is " + this._selected);
 	var match = this._getSelected();
 	if (!match)	return;
@@ -437,7 +396,7 @@ function(text, hasDelim) {
 	var end = hasDelim ? this._end + 1 : this._end;
 	DBG.println(AjxDebug.DBG2, "update replace range: " + start + " - " + end);
 	var value = match[this._matchValue];
-	var newText = [text.substring(0, start), value, this._separator, text.substring(end, text.length)].join("");
+//	var newText = [text.substring(0, start), value, this._separator, text.substring(end, text.length)].join("");
 	this._done[value] = true;
 	DBG.display(AjxDebug.DBG2, newText);
 	return {text: newText, start: start + value.length + this._separator.length, match: match};
@@ -445,21 +404,22 @@ function(text, hasDelim) {
 
 // Resets the value of an element to the given text.
 ZaAutoCompleteListView.prototype._updateField =
-function(text, match) {
+function(match) {
 	var el = this._element;
-	el.value = text;
+	el.value = match[this._matchValue];
 	el.focus();
 	this.reset();
-	this._inputFieldXFormItem.setInstanceValue(text);	
+	this._inputFieldXFormItem.setInstanceValue(match[this._matchValue]);	
 	if (this._compCallback)
 		this._compCallback.run(match, this._inputFieldXFormItem);
 }
 
 // Updates the element with the currently selected match.
 ZaAutoCompleteListView.prototype._update =
-function(hasDelim) {
-	var result = this._complete(this._element.value, hasDelim);
-	this._updateField(result.text, result.match);
+function() {
+	var match = this._getSelected();
+	if (!match)	return;	
+	this._updateField(match);
 }
 
 // Listeners
@@ -503,7 +463,7 @@ function(listener) {
 
 ZaAutoCompleteListView.prototype._listSelectionListener = 
 function(ev) {
-	this._update(true);
+	this._update();
 };
 
 // Layout
@@ -610,24 +570,29 @@ function() {
 	return this._matches.get(this._selected);
 }
 
-// Calls the data class's matching function to get a list of matches for the given string. The data
-// is loaded lazily here.
-ZaAutoCompleteListView.prototype._getMatches =
-function(str) {
-	if (this._data && (str.indexOf (this._data._matchStr) < 0)){ //match string changed and need to make a new request
-		this._dataLoaded = false ;
+/**
+ * This method is called by this._dataLoaderObject when the data arrives
+ * @param list - parsed array of data 
+ */
+ZaAutoCompleteListView.prototype.dataLoadedCallback = function (list) {
+	if (list && list.length > 0) {
+		var len = list.length;
+		DBG.println(AjxDebug.DBG2, "found " + len + " match" + len > 1 ? "es" : "");
+		for (var i = 0; i < len; i++) {
+			var match = list[i];
+			this._append(match);
+		}
+	} else {
+		this._dataLoading = false;
+		return;
 	}
 	
-	if (!this._dataLoaded) {
-//		this._data = this._dataLoader.call(this._dataClass);
-//		this._dataInstance = this._dataLoadCallback.run(str);
-		this._data = this._dataLoader.call (this._dataClass, str);
-		this._dataLoaded = true;
-	}
-//	return this._data.autocompleteMatch(str);
-	return this._data;
-}
+	this._set(); // populate the list view
 
+	// show the list (unless we're doing completion)
+	this.show(true, this._loc);
+	this._dataLoading = false;
+}
 // Force the focus to the element
 ZaAutoCompleteListView.prototype._focus =
 function(htmlEl) {
