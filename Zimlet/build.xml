@@ -37,8 +37,8 @@
 	<property name="generated.dir" location="${build.dir}/generated" />
 	<property name="generated.java.dir" location="${generated.dir}/src/java" />
 
-	<property name="zimlets" value="com_zimbra_xslt,com_zimbra_ymaps"/>
-    <property name="zimlets-extra" value="com_zimbra_rss,com_zimbra_evite,com_zimbra_po,com_zimbra_bugz,com_flightexplorer_fasttrack,com_zimbra_travelagent,com_zimbra_arcade,com_zimbra_collector,com_zimbra_jspsample,com_zimbra_photo,com_zimbra_ytraffic,com_zimbra_gtranslator,com_zimbra_sforce,com_zimbra_sms,com_zimbra_amzn,com_zimbra_wikipedia,com_zimbra_asterisk,com_zimbra_asteriskmwi"/>
+	<property name="zimlets" value=""/>
+    <property name="zimlets-extra" value="com_zimbra_tracking,com_zimbra_xslt,com_zimbra_ymaps,com_zimbra_rss,com_zimbra_evite,com_zimbra_po,com_zimbra_bugz,com_flightexplorer_fasttrack,com_zimbra_travelagent,com_zimbra_arcade,com_zimbra_collector,com_zimbra_jspsample,com_zimbra_photo,com_zimbra_ytraffic,com_zimbra_gtranslator,com_zimbra_sforce,com_zimbra_sms,com_zimbra_amzn,com_zimbra_wikipedia,com_zimbra_asterisk,com_zimbra_asteriskmwi"/>
 
 	<condition property="is-windows">
 		<os family="windows" />
