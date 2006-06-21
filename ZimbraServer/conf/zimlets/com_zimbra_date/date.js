@@ -35,17 +35,19 @@ function() {
 	Com_Zimbra_Date.prototype._zimletContext = this._zimletContext;
 	Com_Zimbra_Date.prototype._className = "Object";
 	var pri = this._zimletContext.priority;
-	ZmObjectManager.registerHandler("ZmDate1ObjectHandler", ZmObjectManager.DATE, pri);
-	ZmObjectManager.registerHandler("ZmDate2ObjectHandler", ZmObjectManager.DATE, pri);
-	ZmObjectManager.registerHandler("ZmDate3ObjectHandler", ZmObjectManager.DATE, pri);
-	ZmObjectManager.registerHandler("ZmDate4ObjectHandler", ZmObjectManager.DATE, pri);
-	ZmObjectManager.registerHandler("ZmDate5ObjectHandler", ZmObjectManager.DATE, pri);
-	ZmObjectManager.registerHandler("ZmDate6ObjectHandler", ZmObjectManager.DATE, pri);
-	ZmObjectManager.registerHandler("ZmDate7ObjectHandler", ZmObjectManager.DATE, pri);
-	ZmObjectManager.registerHandler("ZmDate8ObjectHandler", ZmObjectManager.DATE, pri);
-	ZmObjectManager.registerHandler("ZmDate9ObjectHandler", ZmObjectManager.DATE, pri);	
+	if (this._appCtxt.get(ZmSetting.CALENDAR_ENABLED)) {
+		ZmObjectManager.registerHandler("ZmDate1ObjectHandler", ZmObjectManager.DATE, pri);
+		ZmObjectManager.registerHandler("ZmDate2ObjectHandler", ZmObjectManager.DATE, pri);
+		ZmObjectManager.registerHandler("ZmDate3ObjectHandler", ZmObjectManager.DATE, pri);
+		ZmObjectManager.registerHandler("ZmDate4ObjectHandler", ZmObjectManager.DATE, pri);
+		ZmObjectManager.registerHandler("ZmDate5ObjectHandler", ZmObjectManager.DATE, pri);
+		ZmObjectManager.registerHandler("ZmDate6ObjectHandler", ZmObjectManager.DATE, pri);
+		ZmObjectManager.registerHandler("ZmDate7ObjectHandler", ZmObjectManager.DATE, pri);
+		ZmObjectManager.registerHandler("ZmDate8ObjectHandler", ZmObjectManager.DATE, pri);
+		ZmObjectManager.registerHandler("ZmDate9ObjectHandler", ZmObjectManager.DATE, pri);	
 // don't register this one by default, though it is used by the assistant.	
 //ZmObjectManager.registerHandler("ZmDate10ObjectHandler", ZmObjectManager.DATE, pri);
+	}
 };
 
 Com_Zimbra_Date.prototype.TYPE = ZmObjectManager.DATE;
