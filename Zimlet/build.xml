@@ -7,8 +7,8 @@
 		
 	-->
 	<property environment="env"/>
-
-	<property name="deploy.dir" value="/opt/zimbra/tomcat/webapps"/>
+	<property name="zimbra.home.dir" location="/opt/zimbra" />
+	<property name="deploy.dir" value="${zimbra.home.dir}/tomcat/webapps"/>
 	<property name="deploy.lib.path" value="/service/WEB-INF"/>
 	<property name="deploy.jsp.path" value="/service/jsp"/>
 
