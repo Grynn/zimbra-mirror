@@ -137,7 +137,8 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 	if(choices && choices.values) {
 	//	menu.style.width = bounds.width;
 		menu.style.overflow="hidden";
-		menu.style.height = (parseInt(bounds.height-3)*choices.values.length)+3;
+//		menu.style.height = (parseInt(bounds.height-3)*choices.values.length)+3;
+		menu.style.height = (17*choices.values.length)+3;
 	}
 
 	var value = this.getInstanceValue();
