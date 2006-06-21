@@ -190,7 +190,7 @@ function(tabGroup) {
  */ 
 DwtKeyboardMgr.prototype.grabFocus =
 function(focusObj) {
-	//DBG.println(AjxDebug.DBG3, "GRAB FOCUS");
+	DBG.println(AjxDebug.DBG3, "GRAB FOCUS: " + focusObj.toString() + ", id: " + focusObj.id);
 	if (!this.__keyboardHandlingInited)
 		return;
 
@@ -328,10 +328,14 @@ function(focusObj) {
 		}
 	} else {
 		// dealing with a type of HTML input field
-		if (this.__focusObj instanceof DwtControl)
+		if (this.__focusObj instanceof DwtControl) {
 			this.__oldFocusObj = this.__focusObj;
+		}
 		this.__focusObj = focusObj;
-		focusObj.focus();
+		// IE throws JS error if you try to focus a disabled input
+		if (!(AjxEnv.isIE && focusObj.disabled)) {
+			focusObj.focus();
+		}
 	}
 };
 
