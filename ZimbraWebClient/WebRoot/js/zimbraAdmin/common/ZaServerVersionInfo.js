@@ -55,6 +55,11 @@ ZaServerVersionInfo.load = function () {
 				var now = new Date();
 				ZaServerVersionInfo.licenseExpired = (now.getTime() > ZaServerVersionInfo.licenseExpirationDate.getTime());
 			}
+			//HC: Testing purpose only
+			ZaServerVersionInfo.licenseExists = true ;
+			ZaServerVersionInfo.licenseExpired = true ;
+			ZaServerVersionInfo.licenseExpirationDate = ZaServerVersionInfo._parseDate("20060501") ;
+			///END TESTING
 		} else {
 			ZaServerVersionInfo.licenseExpired = false;
 			ZaServerVersionInfo.licenseExists = false;
