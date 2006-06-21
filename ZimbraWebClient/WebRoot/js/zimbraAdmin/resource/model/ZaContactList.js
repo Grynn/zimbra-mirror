@@ -32,8 +32,8 @@ function ZaContactList () {
 	this._matchStr = ""; 	//this is the string used to match the list.
 }
 
-ZaContactList.matchValue = "value"; //the property name of the match ZaContactList
-ZaContactList.matchText = "text"; //the property name of the match text of ZaContactList
+ZaContactList.matchValue = ZaAccount.A_name; //the property name of the match ZaContactList
+ZaContactList.matchText =  ZaAccount.A_displayname; //the property name of the match text of ZaContactList
 
 ZaContactList.prototype.getContactList =
 function (str){
@@ -52,11 +52,10 @@ function (str){
 		var arr = list.getArray();
 	
 		for (var i=0; i<arr.length; i++) {
-			dataInstance._list[i] = {
-				name: arr[i].attrs[ZaAccount.A_displayname],
-				phone: arr[i].attrs[ZaAccount.A_telephoneNumber],
-				email: arr[i].name //arr[i].attrs[A_mail] can be an object containing alias.
-			} ;
+			dataInstance._list[i] = {};
+			dataInstance._list[i][ZaAccount.A_displayname] = arr[i].attrs[ZaAccount.A_displayname]; 
+			dataInstance._list[i][ZaAccount.A_name ] = arr[i][ZaAccount.A_name]; 			
+			dataInstance._list[i][ZaAccount.A_telephoneNumber ] = arr[i].attrs[ZaAccount.A_telephoneNumber]; 						
 		} 
 		dataInstance._matchStr = str ;
 	}catch (e){
@@ -70,13 +69,14 @@ function (str) {
 	var lists = new Array () ;
 	var j = 0;
 	for (var i=0; i < this._list.length; i++ ) {
-		if (this._list[i].name.indexOf (str) >= 0) {
+
+	//	if (this._list[i].name.indexOf (str) >= 0) {
 			lists[j] = { 	contact: this._list[i], 
 							text: this._list[i].name  + " <" + this._list[i].email + ">", 
 							value: this._list[i].name 
 						};
 			j++ ;
-		}		
+	//		}		
 	}
 
 	return lists ;
@@ -88,8 +88,8 @@ function(match, inputFieldXFormItem) {
 	var xform = inputFieldXFormItem.getForm();
 	var contact_email = xform.getItemsById(ZaResource.A_zimbraCalResContactEmail) [0];
 	var contact_phone = xform.getItemsById(ZaResource.A_zimbraCalResContactPhone) [0];
-	contact_email.setInstanceValue (match.contact.email);
-	contact_phone.setInstanceValue (match.contact.phone);
+	contact_email.setInstanceValue (match[ZaAccount.A_name]);
+	contact_phone.setInstanceValue (match[ZaAccount.A_telephoneNumber]);
 	xform.refresh();
 }; 
 
@@ -101,6 +101,10 @@ function(){
 ZaContactList.prototype.isUniqueValue =
 function(str){
 	
+}
+
+ZaContactList.prototype.getList = function () {
+	return this._list;
 }
 
 

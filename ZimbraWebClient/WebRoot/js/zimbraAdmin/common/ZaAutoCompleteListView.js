@@ -75,8 +75,8 @@ function ZaAutoCompleteListView(params) {
 	this._dataLoader = params.dataLoader;
 	this._dataLoaded = false;
 	this._data = null ;
-	this._matchValue = params.matchValue ? params.matchValue : "value";
-	this._matchText = params.matchText ? params.matchText : "text" ;
+	this._matchValue = params.matchValue ? params.matchValue : "email";
+	this._matchText = params.matchText ? params.matchText : "name" ;
 	this._inputFieldXFormItem = params.inputFieldXFormItem ;
 	this._inputFieldXForm = this._inputFieldXFormItem.getForm() ;
 	this._inputFieldElement = this._inputFieldXFormItem.getElement() ;
@@ -395,7 +395,7 @@ function(chunk) {
 	// do matching
 	this._removeAll();
 
-	var list = this._getMatches(str);
+	var list = this._getMatches(str).getList();
 	if (list && list.length == 1 && this._data.isUniqueValue(str)) {
 		DBG.println(AjxDebug.DBG2, "unique match, hiding autocomplete list");
 		return {text: text, start: start};
@@ -523,7 +523,7 @@ function(sel) {
 			div._styleClass = "Row";
 			div._selectedStyleClass = div._styleClass + "-" + DwtCssStyle.SELECTED;
 			div.className = div._styleClass;
-			div.innerHTML = AjxStringUtil.htmlEncode (match[this._matchText]);
+			div.innerHTML = AjxStringUtil.htmlEncode (match[this._matchText] + "<" + match[this._matchValue] + ">");
 			thisHtmlElement.appendChild(div);
 		}
 	}
@@ -624,7 +624,8 @@ function(str) {
 		this._data = this._dataLoader.call (this._dataClass, str);
 		this._dataLoaded = true;
 	}
-	return this._data.autocompleteMatch(str);
+//	return this._data.autocompleteMatch(str);
+	return this._data;
 }
 
 // Force the focus to the element
