@@ -2028,13 +2028,29 @@ XFormItemFactory.createItemType("_RADIO_", "radio", Radio_XFormItem, Checkbox_XF
 //	type defaults
 Radio_XFormItem.prototype._inputType = "radio";
 Radio_XFormItem.prototype.focusable = true;
+Radio_XFormItem.prototype.groupname=null;
 //	methods
 
 Radio_XFormItem.prototype.updateElement = function(newValue) {
 	this.getElement().checked = (this.getValue() == newValue);
 }
 
-
+//	methods
+Radio_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
+	// figure out how to show the checkbox as checked or not
+	var checked = "";
+	if (this.getInstanceValue() == this.getTrueValue()) {
+		checked = " CHECKED";
+	}
+	html.append(indent, 
+		"<input autocomplete='off' id=\"", this.getId(),"\" type=\"", this._inputType, "\"",  
+				this.getChangeHandlerHTML(), this.getFocusHandlerHTML(), checked);
+	var groupname = this.getInheritedProperty("groupname");
+	if(groupname) {
+			html.append(" name='",groupname,"'");
+	}
+	html.append(">");
+}
 
 
 /**
