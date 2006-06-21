@@ -512,12 +512,22 @@ XFormItem.prototype.getFocusHandlerHTML = function () {
 	var formId = this.getFormGlobalRef(),
 		itemId = this.getId()
 	;
+	
+	var inputHelp =  this.getInheritedProperty("inputHelp");
+	var clearInputHelpScript = "";
+	if (inputHelp != null) {
+		clearInputHelpScript = "if (this.value == '" + inputHelp + "') this.value=''; ";
+		DBG.println("ClearnInputHelpScript = " + clearInputHelpScript);
+	}
+	
 	var onFocusAction = null;
 	if (this.getInheritedProperty("onFocus") != null) {
-		onFocusAction = AjxBuffer.concat(" onfocus=\"", formId, ".onFocus('", itemId, "'); " ,
+		onFocusAction = AjxBuffer.concat(" onfocus=\"", formId, ".onFocus('", itemId, "'); " ,	
+				 clearInputHelpScript ,			 	
 				 this.getInheritedProperty("onFocus") , ".call(" ,   this.getGlobalRef(), ", event )\"");
 	}else{
-		onFocusAction = AjxBuffer.concat(" onfocus=\"", formId, ".onFocus('", itemId, "')\"");
+		onFocusAction = AjxBuffer.concat(" onfocus=\"", formId, ".onFocus('", itemId, "');",
+										clearInputHelpScript, "\"" );
 	}
 	return AjxBuffer.concat(
 		//" onfocus=\"", formId, ".onFocus('", itemId, "')\"",
@@ -1844,6 +1854,7 @@ Textfield_XFormItem.prototype.outputHTML = function (html, updateScript, indent,
 	var inputType = this._inputType;
 	var value = this.getValue();
 	var modelItem = this.getModelItem();
+	var inputHelp = this.getInheritedProperty("inputHelp");
 
 
 	/***
@@ -1862,13 +1873,22 @@ Textfield_XFormItem.prototype.outputHTML = function (html, updateScript, indent,
 	html.append(indent, 
 			"<input autocomplete='off' id=\"", this.getId(),"\" type=\"", inputType, "\"", this.getCssString(), 
 				this.getChangeHandlerHTML(), this.getFocusHandlerHTML(),
-				(value != null ? " value=\"" + value + "\"" : ""),
+				(value != null ? " value=\"" + value + "\"" :""), //: (inputHelp != null ? " value=\"" + inputHelp + "\""
 			">");
 }
 
 Textfield_XFormItem.prototype.updateElement = function(newValue) {
 	if (newValue == null) newValue = this.getValue();
-	if (newValue == null) newValue = "";
+	var inputHelp = this.getInheritedProperty("inputHelp");
+	/*
+	DBG.println("In updateElement: " + "newValue=" + newValue + "###" 
+				+ "elementValue=" + this.getElement().value);	*/
+	if ((newValue == null) && (inputHelp != null)) {
+		 newValue = inputHelp ;
+	}else if (newValue == null){
+		 newValue = "";
+	}
+	
 	if (this.getElement().value != newValue) {
 		this.getElement().value = newValue;
 	}
