@@ -194,7 +194,8 @@ function(child) {
 DwtTree.prototype.setCheckboxes =
 function(treeItem) {
 	if (!this._isCheckedStyle() || !AjxEnv.isIE) return;
-	
+	if (treeItem && treeItem._isSeparator) return;
+
 	var items;
 	if (treeItem) {
 		treeItem.setChecked(treeItem.getChecked(), true);
