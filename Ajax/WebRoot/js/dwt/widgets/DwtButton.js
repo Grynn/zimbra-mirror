@@ -382,11 +382,11 @@ function(actionCode, ev) {
     DBG.println("DwtButton.prototype.handleKeyAction");
 	switch (actionCode) {
 		case DwtKeyMap.SELECT_CURRENT:
-			this._emulateSingleClick(this._kbAnchor, DwtMouseEvent.LEFT);
+			this._emulateSingleClick();
 			break;
 			
 		case DwtKeyMap.SELECT_SUBMENU:
-			this.popup();
+			this._emulateDropDownClick();
 			break;
 	}
 	
@@ -396,7 +396,7 @@ function(actionCode, ev) {
 // Private methods
 
 DwtButton.prototype._emulateSingleClick =
-function(target, button, docX, docY) {
+function() {
 	this.trigger();
 	var htmlEl = this.getHtmlElement();
 	var p = Dwt.toWindow(htmlEl);
@@ -411,8 +411,22 @@ function(target, button, docX, docY) {
 		this._mouseDownListener(mev);
 	else
 		this._mouseUpListener(mev);
-}
+};
 
+DwtButton.prototype._emulateDropDownClick =
+function() {
+	this.trigger();
+	var htmlEl = this._dropDownCell;
+	var p = Dwt.toWindow(htmlEl);
+	// Gotta do what mousedown listener does
+	var mev = DwtShell.mouseEvent;
+	mev.reset();
+	mev.target = htmlEl;
+	mev.button = DwtMouseEvent.LEFT;
+	mev.docX = p.x;
+	mev.docY = p.y;
+	DwtButton._dropDownCellMouseDownHdlr(mev);
+};
 
 /**
  * This method is called from mouseUpHdl. in <i>DwtControl</i>. We
@@ -605,7 +619,6 @@ function(ev) {
 	    	DwtUiEvent.copy(selEv, mouseEv);
 	    	selEv.item = obj;
 	    	obj._dropDownEvtMgr.notifyListeners(DwtEvent.SELECTION, selEv);
-	        
 	    } else if (mouseEv.button == DwtMouseEvent.LEFT) {
 			obj._toggleMenu();
 		}
