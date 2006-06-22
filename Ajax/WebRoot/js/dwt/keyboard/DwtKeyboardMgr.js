@@ -190,7 +190,7 @@ function(tabGroup) {
  */ 
 DwtKeyboardMgr.prototype.grabFocus =
 function(focusObj) {
-	DBG.println(AjxDebug.DBG3, "GRAB FOCUS: " + focusObj.toString() + ", id: " + focusObj.id);
+	//DBG.println(AjxDebug.DBG3, "GRAB FOCUS: " + focusObj.toString() + ", id: " + focusObj.id);
 	if (!this.__keyboardHandlingInited)
 		return;
 
