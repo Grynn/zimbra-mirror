@@ -110,7 +110,7 @@ all: $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 
 	@for lib in $(PERL_LIBS); do \
 		echo "Compiling perl lib $$lib"; \
-		BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) perl -I$(DEST_LIB_DIR) -MCPAN -e "force (\"install\", \"$$lib\")" ; \
+		LDFLAGS="-fPIC" CFLAGS="-fPIC" BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) perl -I$(DEST_LIB_DIR) -MCPAN -e "$$CPAN::Config->{make_arg}.='CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; $$CPAN::Config->{makepl_arg}.='CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; force (\"install\", \"$$lib\")" ; \
 	done
 
 	@for lib in $(DBFILE_PERL_LIBS); do \
