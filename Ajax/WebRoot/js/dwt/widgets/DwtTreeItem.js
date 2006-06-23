@@ -81,8 +81,6 @@ function() {
 
 DwtTreeItem._NODECELL_DIM = "16px";
 
-DwtTreeItem.__NOP = function() {}
-
 DwtTreeItem.prototype.getChecked =
 function() {
 	return this._itemChecked;
@@ -254,12 +252,9 @@ function(enable) {
 */
 DwtTreeItem.prototype.addSeparator =
 function(index) {
-	var child = new Object();
-	child._isSeparator = true;
-	child._initialized = false;
-	child.dispose = DwtTreeItem.__NOP; // NOTE: needed for DwtComposite#dispose
+	var child = new DwtTreeItemSeparator(this);
 	this._children.add(child, index);
-}
+};
 
 /**
 * Makes this tree item, or just part of it, visible or hidden.
@@ -541,7 +536,7 @@ function() {
 	for (var i = 0; i < a.length; i++) {
 		if (!a[i]._initialized) {
 			if (a[i]._isSeparator) {
-				var div = document.createElement("div");
+				var div = a[i].div = document.createElement("div");
 				div.className = "vSpace";
 				this._childDiv.appendChild(div);
 				a[i]._initialized = true;
@@ -663,3 +658,35 @@ function(ev) {
 		mouseEv.dwtObj._tree._itemActioned(mouseEv.dwtObj, mouseEv);
 	}
 }
+
+
+
+/**
+ * Minimal class for a separator (some vertical space) between other tree items.
+ * The functions it has are to handle a dispose() call when the containing tree
+ * is disposed.
+ * 
+ * TODO: At some point we should just make this a DwtControl, or find some other
+ * 		 way of keeping it minimal.
+ */
+function DwtTreeItemSeparator(parent) {
+	this.parent = parent;
+	this._isSeparator = true;
+	this._initialized = false;
+};
+
+DwtTreeItemSeparator.prototype.dispose =
+function() {
+	DwtComposite.prototype.removeChild.call(this.parent, this);
+};
+
+DwtTreeItemSeparator.prototype.isInitialized =
+function() {
+	return this._initialized;
+};
+
+DwtTreeItemSeparator.prototype.getHtmlElement =
+function() {
+	return this.div;
+};
+
