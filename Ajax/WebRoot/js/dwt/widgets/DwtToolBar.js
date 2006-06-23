@@ -217,8 +217,9 @@ function(index) {
 DwtToolBar.prototype._moveFocus =
 function(back) {
 	var index = this._curFocusIndex;
+	var maxIndex = this.getItemCount() - 1;
 	var item = null;
-	while (!item) {
+	while (!item && index >= 0 && index <= maxIndex) {
 		index = back ? index - 1 : index + 1;
 		item = this._getFocusItem(index);
 	}
