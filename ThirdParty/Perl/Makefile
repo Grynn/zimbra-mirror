@@ -53,7 +53,6 @@ PERL_LIBS 	:= \
 	Convert::ASN1 \
 	Crypt::SSLeay \
 	Net::Server \
-	Net::Server \
 	Unix::Syslog \
 	Compress::Zlib \
 	BerkeleyDB \
