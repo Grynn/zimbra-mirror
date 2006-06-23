@@ -445,10 +445,12 @@ function() {
 	this._enabled = true;
 	// check if there is a debug window already open
 	this._isPrevWinOpen = this._getCookieVal("AjxDebugWinOpen");
+	var args = "width=600,height=400,resizable=yes,scrollbars=yes";
 	if (!this._isPrevWinOpen) {
-		this._debugWindow = AjxWindowOpener.openBlank(this._dbgName, "width=600,height=400,resizable=yes,scrollbars=yes", this._initWindow, this);
+		var callback = new AjxCallback(this, this._initWindow);
+		this._debugWindow = AjxWindowOpener.openBlank(this._dbgName, args, callback, this);
 	} else {
-		this._debugWindow = window.open("" , this._dbgName, "width=600,height=400,resizable=yes,scrollbars=yes");
+		this._debugWindow = window.open("" , this._dbgName, args);
 		this._initWindow();
 	}
 };
