@@ -417,27 +417,23 @@ function (resp) {
 	this.fireChangeEvent(this._currentObject);			
 }
 
-ZaDomainController.prototype._okDomainNotebookListener =
+ZaDomainController.prototype._finishDomainNotebookListener =
 function(ev) {
 	try {
-		var obj = this._initDomainNotebookDlg.getObject();
+		var obj = this._initDomainNotebookWiz.getObject();
 		if(obj[ZaDomain.A_NotebookAccountPassword] != obj[ZaDomain.A_NotebookAccountPassword2]) {
 			this.popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
 			return;
 		}
-		this._initDomainNotebookDlg.popdown();
+		this._initDomainNotebookWiz.popdown();
 		var params = new Object();
-		if(obj[ZaDomain.A_OverwriteNotebookACLs]) {
-			params[ZaDomain.A_OverwriteNotebookACLs] = true;
-			params.obj = obj;
-		} else
-			params[ZaDomain.A_OverwriteNotebookACLs] = false;
+		params.obj = obj;
 			
 		var callback = new AjxCallback(this, this.initNotebookCallback, params);
-		ZaDomain.initNotebook(this._initDomainNotebookDlg.getObject(),callback) ;
+		ZaDomain.initNotebook(this._initDomainNotebookWiz.getObject(),callback) ;
 	} catch (ex) {
-		this._initDomainNotebookDlg.popdown();
-		this._handleException(ex, "ZaDomainController.prototype._okDomainNotebookListener", null, false);
+		this._initDomainNotebookWiz.popdown();
+		this._handleException(ex, "ZaDomainController.prototype._finishDomainNotebookListener", null, false);
 	}
 	return;
 }
@@ -445,10 +441,10 @@ function(ev) {
 ZaDomainController.prototype._initNotebookButtonListener = 
 function (ev) {
 	try {
-		this._initDomainNotebookDlg = this._app.dialogs["initDomainNotebook"] = new ZaDomainNotebookXDialog(this._container, this._app, "550px", "300px");	
-		this._initDomainNotebookDlg.registerCallback(DwtDialog.OK_BUTTON, ZaDomainController.prototype._okDomainNotebookListener, this, null);			
-		this._initDomainNotebookDlg.setObject(this._currentObject);
-		this._initDomainNotebookDlg.popup();
+		this._initDomainNotebookWiz = this._app.dialogs["initDomainNotebookWiz"] = new ZaDomainNotebookXWizard(this._container, this._app);	
+		this._initDomainNotebookWiz.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainController.prototype._finishDomainNotebookListener, this, null);			
+		this._initDomainNotebookWiz.setObject(this._currentObject);
+		this._initDomainNotebookWiz.popup();
 	} catch (ex) {
 		this._handleException(ex, "ZaDomainController.prototype._initNotebookButtonListener", null, false);
 	}	
