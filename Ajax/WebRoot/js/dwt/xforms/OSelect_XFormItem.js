@@ -38,7 +38,7 @@ OSelect1_XFormItem.prototype.writeElementDiv = false;
 OSelect1_XFormItem.prototype.width = "auto";
 OSelect1_XFormItem.prototype.editable = false;
 OSelect1_XFormItem.prototype.menuUp = false;
-
+OSelect1_XFormItem.prototype.inputSize = 25;
 //TODO: get showing check working for the normal SELECT, requires:
 //		* separate notion of hilited row (for mouseover) and selected row(s)
 //		* teach select1 that more than one value may be selected (same as select)
@@ -500,7 +500,8 @@ OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput, updateScript, in
 		this._width = element.offsetWidth+20;
 		element.innerHTML = "";
 	}
-
+	var inputSize = this.getInheritedProperty("inputSize");
+	
 	if(this.getInheritedProperty("editable")) {
 		HTMLoutput.append(indent,
 			"<div id=", id, this.getCssString(),
@@ -510,7 +511,7 @@ OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput, updateScript, in
 				"<table ", this.getTableCssString(), ">", 
 					"<tr><td width=100%><input type=text id=", id, "_display class=", this.getDisplayCssClass(), " value='VALUE' ", 
 					" onchange=\"",ref, ".onValueTyped(this.value, event||window.event)\"",
-					" onkeyup=\"",ref, ".onKeyUp(this.value, event||window.event)\"",
+					" onkeyup=\"",ref, ".onKeyUp(this.value, event||window.event)\"", "size=",inputSize,
 					"></td>",
 						"<td>", this.getArrowButtonHTML(),"</td>", 
 					"</tr>", 

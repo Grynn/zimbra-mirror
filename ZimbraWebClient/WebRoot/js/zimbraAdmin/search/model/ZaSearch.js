@@ -29,7 +29,10 @@
 * this is a static class taht provides method for searching LDAP
 * @author Greg Solovyev
 **/
-function ZaSearch() {
+function ZaSearch(app) {
+	if(app)
+		this._app = app;
+		
 	this[ZaSearch.A_selected] = null;
 	this[ZaSearch.A_query] = "";
 	this[ZaSearch.A_fAliases] = "TRUE";
@@ -142,6 +145,55 @@ function (params) {
 	}
 	var resp = command.invoke(cmdParams);
 	return resp ;	
+}
+
+ZaSearch.prototype.dynSelectDataCallback = function (callback, resp) {
+	if(!callback)	
+		return;
+	try {
+		if(!resp) {
+			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaListViewController.prototype.searchCallback"));
+		}
+		if(resp.isException()) {
+			throw(resp.getException());
+		} else {
+			var response = resp.getResponse().Body.SearchDirectoryResponse;
+			var list = new ZaItemList(null, this._app);	
+			list.loadFromJS(response);	
+			callback.run(list.getArray());
+		}
+	} catch (ex) {
+		this._app.getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectDataCallback");	
+	}
+	
+}
+
+ZaSearch.prototype.dynSelectSearchAccounts = function (value, event, callback) {
+	try {
+		var params = new Object();
+		dataCallback = new AjxCallback(this, this.dynSelectDataCallback, callback);
+		params.types = [ZaSearch.ACCOUNTS];
+		params.callback = dataCallback;
+		params.sortBy = ZaAccount.A_name;
+		params.query = ZaSearch.getSearchByNameQuery(value);
+		ZaSearch.searchDirectory(params);
+	} catch (ex) {
+		this._app.getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectDataFetcher");		
+	}
+}
+
+ZaSearch.prototype.dynSelectSearchGroups = function (value, event, callback) {
+	try {
+		var params = new Object();
+		dataCallback = new AjxCallback(this, this.dynSelectDataCallback, callback);
+		params.types = [ZaSearch.DLS];
+		params.callback = dataCallback;
+		params.sortBy = ZaAccount.A_name;
+		params.query = ZaSearch.getSearchByNameQuery(value);
+		ZaSearch.searchDirectory(params);
+	} catch (ex) {
+		this._app.getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectDataFetcher");		
+	}
 }
 /**
 * Sends SearchDirectoryRequest to the SOAP Servlet

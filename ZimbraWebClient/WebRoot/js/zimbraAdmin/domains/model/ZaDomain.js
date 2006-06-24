@@ -56,6 +56,12 @@ function ZaDomain(app) {
 	this.notebookAcls[ZaDomain.A_NotebookAllACLs] = {r:0,w:0,i:0,d:0,a:0,x:0};
 	this.notebookAcls[ZaDomain.A_NotebookPublicACLs] = {r:0,w:0,i:0,d:0,a:0,x:0};
 	this.notebookAcls[ZaDomain.A_NotebookDomainACLs] = {r:1,w:1,i:1,d:1,a:0,x:0};
+	this.notebookAcls[ZaDomain.A_NotebookUserACLs] = [/*{name:"", acl:{r:0,w:0,i:0,d:0,a:0,x:0}}*/];
+	this.notebookAcls[ZaDomain.A_NotebookGroupACLs] = [/*{name:"", acl:{r:0,w:0,i:0,d:0,a:0,x:0}, 
+			toString:function () {
+				return [this.name,this.acl[r],this.acl[w],this.acl[i],this.acl[d],this.acl[a],this.acl[x]].join();
+			}
+		}*/];
 }
 ZaDomain.DEF_WIKI_ACC = "wiki";
 ZaDomain.WIKI_FOLDER_ID = "12";
@@ -116,6 +122,7 @@ ZaDomain.A_NotebookPublicACLs = "pub";
 ZaDomain.A_NotebookAllACLs = "all";
 ZaDomain.A_NotebookDomainACLs = "dom";
 ZaDomain.A_NotebookUserACLs = "usr";
+ZaDomain.A_NotebookGroupACLs = "grp";
 ZaDomain.A_NotebookGuestACLs = "guest";
 //values
 ZaDomain.GAL_Mode_internal = "zimbra";
@@ -364,58 +371,65 @@ function (obj, callback) {
 ZaDomain.getNotebookACLsRequest = function (obj, soapDoc) {
 	if(obj.notebookAcls) {
 		for(var gt in obj.notebookAcls) {
-			var folderActionRequest = soapDoc.set("FolderActionRequest");
-			folderActionRequest.setAttribute("xmlns", "urn:zimbraMail");				
-			var actionEl = soapDoc.set("action", "",folderActionRequest);
-			actionEl.setAttribute("id", ZaDomain.WIKI_FOLDER_ID);	
-			actionEl.setAttribute("op", "grant");	
-			var grantEl = soapDoc.set("grant", "",actionEl);	
-			grantEl.setAttribute("gt", gt);
-			if(gt==ZaDomain.A_NotebookDomainACLs) {
-				grantEl.setAttribute("d", obj.attrs[ZaDomain.A_domainName]);
+			if(obj.notebookAcls[gt] instanceof Array) {
+				var grants = obj.notebookAcls[gt];
+				var cnt = grants.length;
+				for (var i =0; i < cnt; i++) {
+					var grantObj = grants[i];
+					if(!grantObj.name || !grantObj.acl)
+						continue;
+						
+					var folderActionRequest = soapDoc.set("FolderActionRequest");
+					folderActionRequest.setAttribute("xmlns", "urn:zimbraMail");
+					var actionEl = soapDoc.set("action", "",folderActionRequest);	
+					actionEl.setAttribute("id", ZaDomain.WIKI_FOLDER_ID);	
+					actionEl.setAttribute("op", "grant");					
+					var grantEl = soapDoc.set("grant", "",actionEl);
+					grantEl.setAttribute("gt", gt);
+					grantEl.setAttribute("d", grantObj.name);
+					var perms = "";
+					for(var a in grantObj.acl) {
+						if(grantObj.acl[a]==1)
+							perms+=a;
+					}	
+					grantEl.setAttribute("perm", perms);				
+				}
+			} else {
+				var folderActionRequest = soapDoc.set("FolderActionRequest");
+				folderActionRequest.setAttribute("xmlns", "urn:zimbraMail");				
+				var actionEl = soapDoc.set("action", "",folderActionRequest);
+				actionEl.setAttribute("id", ZaDomain.WIKI_FOLDER_ID);	
+				actionEl.setAttribute("op", "grant");	
+				var grantEl = soapDoc.set("grant", "",actionEl);	
+				grantEl.setAttribute("gt", gt);
+				if(gt==ZaDomain.A_NotebookDomainACLs) {
+					grantEl.setAttribute("d", obj.attrs[ZaDomain.A_domainName]);
+				}
+				var perms = "";
+				for(var a in obj.notebookAcls[gt]) {
+					if(obj.notebookAcls[gt][a]==1)
+						perms+=a;
+				}
+				grantEl.setAttribute("perm", perms);					
 			}
-			var perms = "";
-			for(var a in obj.notebookAcls[gt]) {
-				if(obj.notebookAcls[gt][a]==1)
-					perms+=a;
-			}
-			grantEl.setAttribute("perm", perms);					
 		}
 	}
 }
 
 ZaDomain.setNotebookACLs = function (obj, callback) {
-	if(obj.notebookAcls) {
-		for(var gt in obj.notebookAcls) {
-			var soapDoc = AjxSoapDoc.create("FolderActionRequest", "urn:zimbraMail", null);
+	var soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
+	soapDoc.setMethodAttribute("onerror", "stop");
+	ZaDomain.getNotebookACLsRequest	(obj,soapDoc);			
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;
+	params.accountName = obj[ZaDomain.A_NotebookAccountName] ? obj[ZaDomain.A_NotebookAccountName] : obj.attrs[ZaDomain.A_zimbraNotebookAccount];
 			
-			var command = new ZmCsfeCommand();
-			var params = new Object();
-			params.soapDoc = soapDoc;
-			params.accountName = obj[ZaDomain.A_NotebookAccountName] ? obj[ZaDomain.A_NotebookAccountName] : obj.attrs[ZaDomain.A_zimbraNotebookAccount];
-			
-			var actionEl = soapDoc.set("action", "");
-			actionEl.setAttribute("id", ZaDomain.WIKI_FOLDER_ID);	
-			actionEl.setAttribute("op", "grant");	
-			var grantEl = 	soapDoc.set("grant", "",actionEl);	
-			grantEl.setAttribute("gt", gt);
-			if(gt==ZaDomain.A_NotebookDomainACLs) {
-				grantEl.setAttribute("d", obj.attrs[ZaDomain.A_domainName]);
-			}
-			var perms = "";
-			for(var a in obj.notebookAcls[gt]) {
-				if(obj.notebookAcls[gt][a]==1)
-					perms+=a;
-			}
-			grantEl.setAttribute("perm", perms);					
-			if(callback) {
-				params.asyncMode = true;
-				params.callback = callback;
-			}
-			command.invoke(params);				
-		}
+	if(callback) {
+		params.asyncMode = true;
+		params.callback = callback;
 	}
-
+	command.invoke(params);				
 }
 
 ZaDomain.initNotebook = function (obj, callback) {
@@ -733,7 +747,7 @@ ZaDomain.prototype.parseNotebookFolderAcls = function (resp) {
 			var cnt = grants.length;
 			for (var gi = 0; gi < cnt; gi++) {
 				var grant = grants[gi];
-				this.notebookAcls[grant.gt] ={
+				var grantObj = {
 					r:grant.perm.indexOf("r")>=0 ? 1 : 0,
 					w:grant.perm.indexOf("w")>=0 ? 1 : 0,
 					i:grant.perm.indexOf("i")>=0 ? 1 : 0,
@@ -741,6 +755,11 @@ ZaDomain.prototype.parseNotebookFolderAcls = function (resp) {
 					a:grant.perm.indexOf("a")>=0 ? 1 : 0,
 					x:grant.perm.indexOf("x")>=0 ? 1 : 0
 				};
+				if(this.notebookAcls[grant.gt] && (this.notebookAcls[grant.gt] instanceof Array)) {
+					this.notebookAcls[grant.gt].push({acl:grantObj, name:grant.d});
+				} else {
+					this.notebookAcls[grant.gt] = grantObj;
+				}
 				
 			}
 			
@@ -789,10 +808,23 @@ function() {
 
 ZaDomain.loadMethod = 
 function() {
+	this.notebookAcls[ZaDomain.A_NotebookAllACLs] = {r:0,w:0,i:0,d:0,a:0,x:0};
+	this.notebookAcls[ZaDomain.A_NotebookPublicACLs] = {r:0,w:0,i:0,d:0,a:0,x:0};
+	this.notebookAcls[ZaDomain.A_NotebookDomainACLs] = {r:1,w:1,i:1,d:1,a:0,x:0};
+	this.notebookAcls[ZaDomain.A_NotebookUserACLs] = [/*{name:"", acl:{r:0,w:0,i:0,d:0,a:0,x:0}, 
+			toString:function () {
+				return [this.name,this.acl[r],this.acl[w],this.acl[i],this.acl[d],this.acl[a],this.acl[x]].join();
+			}}*/];
+	this.notebookAcls[ZaDomain.A_NotebookGroupACLs] = [/*{name:"", acl:{r:0,w:0,i:0,d:0,a:0,x:0}, 
+			toString:function () {
+				return [this.name,this.acl[r],this.acl[w],this.acl[i],this.acl[d],this.acl[a],this.acl[x]].join();
+			}
+		}*/];
+
 	var soapDoc = AjxSoapDoc.create("GetDomainRequest", "urn:zimbraAdmin", null);
 	var elBy = soapDoc.set("domain", this.attrs[ZaDomain.A_domainName]);
 	elBy.setAttribute("by", "name");
-
+	
 	var getDomainCommand = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
@@ -907,8 +939,46 @@ ZaDomain.myXModel = {
 				{id:"a", type:_NUMBER_},				
 				{id:"x", type:_NUMBER_}
 			]
+		}, 
+		{id:ZaDomain.A_NotebookGroupACLs, ref:"notebookAcls/"+ZaDomain.A_NotebookGroupACLs, type:_LIST_,
+			listItem:{type:_OBJECT_,
+				items: [
+					{id:"acl", type:_LIST_, 
+						listItem:{
+							type:_OBJECT_,
+							items: [
+								{id:"r", type:_NUMBER_},
+								{id:"w", type:_NUMBER_},
+								{id:"d", type:_NUMBER_},
+								{id:"i", type:_NUMBER_},
+								{id:"a", type:_NUMBER_},				
+								{id:"x", type:_NUMBER_}
+							]
+						}
+					},
+					{id:"name", type:_STRING_}
+				]
+			}
+		}, 
+		{id:ZaDomain.A_NotebookUserACLs, ref:"notebookAcls/"+ZaDomain.A_NotebookUserACLs, type:_LIST_,
+			listItem:{type:_OBJECT_,
+				items: [
+					{id:"acl", type:_LIST_, 
+						listItem:{
+							type:_OBJECT_,
+							items: [
+								{id:"r", type:_NUMBER_},
+								{id:"w", type:_NUMBER_},
+								{id:"d", type:_NUMBER_},
+								{id:"i", type:_NUMBER_},
+								{id:"a", type:_NUMBER_},				
+								{id:"x", type:_NUMBER_}
+							]
+						}
+					},
+					{id:"name", type:_STRING_}
+				]
+			}
 		}
-		
-		
 	]
 };

@@ -58,5 +58,6 @@ DynSelect_XFormItem.prototype.onKeyUp = function(value, event) {
 			
 		var callback = new AjxCallback(this, this.changeChoicesCallback);
 		this.dataFetcherMethod.call(this.dataFetcherObject, value, event, callback);
+		this.getForm().itemChanged(this, value, event);
 	}
 }

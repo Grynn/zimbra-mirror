@@ -411,12 +411,12 @@ function(ev) {
 			this._fireDomainCreationEvent(domain);
 			if(this._newDomainWizard.getObject()[ZaDomain.A_CreateNotebook]=="TRUE") {
 				var params = new Object();
-				if(this._newDomainWizard.getObject()[ZaDomain.A_OverwriteNotebookACLs]) {
-					params[ZaDomain.A_OverwriteNotebookACLs] = true;
+/*				if(this._newDomainWizard.getObject()[ZaDomain.A_OverwriteNotebookACLs]) {
+					params[ZaDomain.A_OverwriteNotebookACLs] = true;*/
 					params.obj = this._newDomainWizard.getObject();
-				} else
+/*				} else
 					params[ZaDomain.A_OverwriteNotebookACLs] = false;
-					
+*/					
 				var callback = new AjxCallback(this, this.initNotebookCallback, params);				
 				ZaDomain.initNotebook(this._newDomainWizard.getObject(),callback) ;
 			}			
@@ -476,10 +476,10 @@ function (params, resp) {
 		this._handleException(resp.getException(), "ZaDomainListController.prototype.initNotebookCallback", null, false);
 		return;
 	} 
-	if(params[ZaDomain.A_OverwriteNotebookACLs] && params.obj!=null) {
-		var callback = new AjxCallback(this, this.setNotebookAclsCallback);				
-		ZaDomain.setNotebookACLs(params.obj, callback) ;
-	}
+//	if(params[ZaDomain.A_OverwriteNotebookACLs] && params.obj!=null) {
+	var callback = new AjxCallback(this, this.setNotebookAclsCallback);				
+	ZaDomain.setNotebookACLs(params.obj, callback) ;
+//	}
 	
 }
 

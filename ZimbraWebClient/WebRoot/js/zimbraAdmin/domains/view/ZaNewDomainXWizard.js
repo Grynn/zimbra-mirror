@@ -50,7 +50,8 @@ function ZaNewDomainXWizard (parent, app) {
 		{label:ZaMsg.TABT_AuthTestResult, value:13},
 		{label:ZaMsg.Domain_Tab_VirtualHost, value:14},
 		{label:ZaMsg.Domain_Tab_Notebook, value:15},		
-		{label:ZaMsg.TABT_DomainConfigComplete, value:16}		
+		{label:ZaMsg.TABT_Notebook_Access_Control, value:16},			
+		{label:ZaMsg.TABT_DomainConfigComplete, value:17}		
 	];
 		
 	this.GALModes = [
@@ -147,6 +148,11 @@ function(stepNum) {
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 		} else if(stepNum == 16) {
+			this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
+			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+		} else if(stepNum == 17) {
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
@@ -176,12 +182,27 @@ function(entry) {
 
 	if(entry.notebookAcls) {
 		for(var gt in entry.notebookAcls) {
-			this._containedObject.notebookAcls[gt] = {r:0,w:0,i:0,d:0,a:0,x:0};
-			for (var a in entry.notebookAcls[gt]) {
-				this._containedObject.notebookAcls[gt][a] = entry.notebookAcls[gt][a];
+			if(!entry.notebookAcls[gt] instanceof Array) {
+				this._containedObject.notebookAcls[gt] = {r:0,w:0,i:0,d:0,a:0,x:0};
+				for (var a in entry.notebookAcls[gt]) {
+					this._containedObject.notebookAcls[gt][a] = entry.notebookAcls[gt][a];
+				}
+			} else {
+				this._containedObject.notebookAcls[gt] = [];
+				var cnt = entry.notebookAcls[gt].length;
+				for(var i = 0; i < cnt; i++) {
+					var aclObj = entry.notebookAcls[gt][i];
+					var _newAclObj = {};
+					_newAclObj.name = aclObj.name;
+					_newAclObj.acl = {r:0,w:0,i:0,d:0,a:0,x:0};
+					for (var a in aclObj.acl) {
+						_newAclObj.acl[a] = aclObj.acl[a];
+					}					
+					this._containedObject.notebookAcls[gt][i] = _newAclObj;
+				}
 			}
 		}
-	}
+	}	
 /*	this._containedObject.notebookAcls[ZaDomain.A_NotebookPublicACLs] = new Object();
 	for (var a in entry.notebookAcls[ZaDomain.A_NotebookPublicACLs]) {
 		this._containedObject.notebookAcls[ZaDomain.A_NotebookPublicACLs][a] = entry.notebookAcls[ZaDomain.A_NotebookPublicACLs][a];
@@ -427,6 +448,11 @@ function () {
 			this.goPage(10);
 			this.changeButtonStateForStep(10);
 		}
+	} else if(this._containedObject[ZaModel.currentStep] == 17) {
+		if (this._containedObject[ZaDomain.A_CreateNotebook] != "TRUE") {
+			this.goPage(15);
+			this.changeButtonStateForStep(15);	
+		}
 	} else {
 		this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
 		if(this._containedObject[ZaModel.currentStep] == 2) {
@@ -522,7 +548,10 @@ function() {
  		this.testAuthSettings();
 		this.changeButtonStateForStep(12);
 	} else if(this._containedObject[ZaModel.currentStep] == 15) {
-		if(this._containedObject[ZaDomain.A_NotebookAccountPassword] != this._containedObject[ZaDomain.A_NotebookAccountPassword2]) {
+		if (this._containedObject[ZaDomain.A_CreateNotebook] != "TRUE") {
+			this.goPage(this._containedObject[ZaModel.currentStep] + 2);
+			this.changeButtonStateForStep(this._containedObject[ZaModel.currentStep]);
+		} else if(this._containedObject[ZaDomain.A_NotebookAccountPassword] != this._containedObject[ZaDomain.A_NotebookAccountPassword2]) {
 			this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
 		} else {		
 			this.goPage(this._containedObject[ZaModel.currentStep] + 1);
@@ -823,7 +852,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
 							relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE' && instance[ZaDomain.A_OverwriteTemplates] == 'TRUE'", relevantBehavior:_DISABLE_},*/
 						/*{ref:ZaDomain.A_OverwriteNotebookACLs, type:_CHECKBOX_, label:ZaMsg.Domain_OverwriteNotebookACLs, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_,
 							relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE'", relevantBehavior:_DISABLE_},*/
-						{ref:ZaDomain.A_NotebookDomainACLs, type:_ACL_, label:ZaMsg.ACL_Dom,labelLocation:_LEFT_,
+/*						{ref:ZaDomain.A_NotebookDomainACLs, type:_ACL_, label:ZaMsg.ACL_Dom,labelLocation:_LEFT_,
 							relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE'", relevantBehavior:_DISABLE_},
 						{type:_SPACER_, height:10},
 						{ref:ZaDomain.A_NotebookAllACLs, type:_ACL_, label:ZaMsg.ACL_All,labelLocation:_LEFT_,
@@ -831,11 +860,101 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
 						{type:_SPACER_, height:10},
 						{ref:ZaDomain.A_NotebookPublicACLs, type:_ACL_, label:ZaMsg.ACL_Public,labelLocation:_LEFT_,
 							visibleBoxes:{r:true,w:false,a:false,i:false,d:false,x:false},
-							relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE'", relevantBehavior:_DISABLE_}
+							relevant:"instance[ZaDomain.A_CreateNotebook] == 'TRUE'", relevantBehavior:_DISABLE_}*/
 
 					]
-				},				
+				},	
 				{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 16", relevantBehavior:_HIDE_,
+					items: [
+						{type:_GROUP_, numCols:1, colSpan:2, cssClass: "RadioGrouperBorder", width: "95%",  //colSizes:["auto"], height: "98%",
+							items:[
+								{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
+							   		items: [
+										{type:_OUTPUT_, value:ZaMsg.Domain_GlobalAcl, cssClass:"RadioGrouperLabel"},
+										{type:_CELLSPACER_}
+									]
+								},
+								{type:_GROUP_, numCols:2, width:"100%", 
+								   items:[								
+										{ref:ZaDomain.A_NotebookDomainACLs, type:_ACL_, label:ZaMsg.ACL_Dom,labelLocation:_LEFT_},							
+										{type:_SPACER_, height:10},
+										{ref:ZaDomain.A_NotebookAllACLs, type:_ACL_, label:ZaMsg.ACL_All,labelLocation:_LEFT_},
+										{type:_SPACER_, height:10},
+										{ref:ZaDomain.A_NotebookPublicACLs, type:_ACL_, label:ZaMsg.ACL_Public,labelLocation:_LEFT_,
+											visibleBoxes:{r:true,w:false,a:false,i:false,d:false,x:false}
+										},
+										{type:_SPACER_, height:10},
+									]
+								}
+							]
+						},
+						{type:_SPACER_, height:10},
+						{type:_GROUP_, numCols:1, colSpan:2, cssClass: "RadioGrouperBorder", width: "95%", //colSizes:["auto"], height: "98%",
+							items:[
+								{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
+							   		items: [
+										{type:_OUTPUT_, value:ZaMsg.Domain_PerGrp_Acl, cssClass:"RadioGrouperLabel"},
+										{type:_CELLSPACER_}
+									]
+								},
+								{type:_GROUP_, numCols:2, width:"100%", 
+								   items:[									
+										{type:_REPEAT_, ref:ZaDomain.A_NotebookGroupACLs,
+											label:null, 
+											repeatInstance:{name:"test@test.com",acl:{r:0,w:0,i:0,d:0,a:0,x:0}}, 
+											showAddButton:true, showRemoveButton:true, 
+											addButtonLabel:ZaMsg.Domain_AddGrpAcl, 
+											showAddOnNextRow:true,
+											removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,								
+											items: [
+												{ref:".", type:_ADDR_ACL_, label:null, labelLocation:_NONE_,
+													visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false},
+													onChange:null,
+													//forceUpdate:true,
+													dataFetcherMethod:ZaSearch.prototype.dynSelectSearchGroups
+												}
+											]
+										}
+									]
+								}
+							]
+						},
+						{type:_SPACER_, height:10},
+						{type:_GROUP_, numCols:1, colSpan:2, cssClass: "RadioGrouperBorder", width: "95%", //colSizes:["auto"], height: "98%",
+							items:[
+								{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
+							   		items: [
+										{type:_OUTPUT_, value:ZaMsg.Domain_PerUsr_Acl, cssClass:"RadioGrouperLabel"},
+										{type:_CELLSPACER_}
+									]
+								},
+								{type:_GROUP_, numCols:2, width:"100%", 
+								   items:[													
+										{type:_SPACER_, height:10},
+										{type:_REPEAT_, ref:ZaDomain.A_NotebookUserACLs,
+											label:null, 
+											repeatInstance:{name:"test@test.com",acl:{r:0,w:0,i:0,d:0,a:0,x:0}}, 
+											showAddButton:true, showRemoveButton:true, 
+											addButtonLabel:ZaMsg.Domain_AddUsrAcl, 
+											showAddOnNextRow:true,
+											removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,								
+											items: [
+												{ref:".", type:_ADDR_ACL_, label:null, labelLocation:_NONE_,
+													visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false},
+													onChange:null,
+													forceUpdate:true,
+													dataFetcherMethod:ZaSearch.prototype.dynSelectSearchAccounts
+												}
+											]
+										},
+										{type:_SPACER_, height:10}
+									]
+								}
+							]
+						}					
+					]
+				},							
+				{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 17", relevantBehavior:_HIDE_,
 					items: [
 						{type:_OUTPUT_, value:ZaMsg.Domain_Config_Complete}
 					]

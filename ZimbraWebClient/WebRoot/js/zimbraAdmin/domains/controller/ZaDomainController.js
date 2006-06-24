@@ -342,10 +342,10 @@ function(ev) {
 			this._newDomainWizard.popdown();		
 			if(this._newDomainWizard.getObject()[ZaDomain.A_CreateNotebook]=="TRUE") {
 				var params = new Object();
-				if(this._newDomainWizard.getObject()[ZaDomain.A_OverwriteNotebookACLs]) {
+			//	if(this._newDomainWizard.getObject()[ZaDomain.A_OverwriteNotebookACLs]) {
 					params[ZaDomain.A_OverwriteNotebookACLs] = true;
 					params.obj = this._newDomainWizard.getObject();
-				} else
+			//	} else
 					params[ZaDomain.A_OverwriteNotebookACLs] = false;
 					
 				var callback = new AjxCallback(this, this.initNotebookCallback, params);				
@@ -370,10 +370,10 @@ function (params, resp) {
 		this._handleException(resp.getException(), "ZaDomainController.prototype._initNotebookCallback", null, false);
 		return;
 	} 
-	if(params[ZaDomain.A_OverwriteNotebookACLs] && params.obj!=null) {
+//	if(params[ZaDomain.A_OverwriteNotebookACLs] && params.obj!=null) {
 		var callback = new AjxCallback(this, this.setNotebookAclsCallback);				
 		ZaDomain.setNotebookACLs(params.obj, callback) ;
-	}	
+//	}	
 	this._currentObject.refresh();
 	this.show(this._currentObject);
 }

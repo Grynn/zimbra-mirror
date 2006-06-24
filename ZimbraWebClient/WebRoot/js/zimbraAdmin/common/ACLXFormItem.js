@@ -44,16 +44,21 @@ function () {
 			{type:_CHECKBOX_,width:"40px",containerCssStyle:"width:40px", forceUpdate:true, ref:".", 
 				labelLocation:_RIGHT_, label:ZaMsg.ACL_R, relevantBehavior:_PARENT_,
 				getDisplayValue:function (itemval) {
-					return (itemval["r"]==1);
+					return (itemval && itemval["r"]==1);
 				},
 				elementChanged:function(isChecked, instanceValue, event) {
 					var newVal = Object();
+
+					if(instanceValue) {
+						newVal["w"] = instanceValue["w"];
+						newVal["a"] = instanceValue["a"];
+						newVal["i"] = instanceValue["i"];
+						newVal["d"] = instanceValue["d"];			
+						newVal["x"] = instanceValue["x"];			
+					} else {
+						newVal = {r:0,w:0,i:0,d:0,a:0,x:0};
+					}
 					newVal["r"] = isChecked ? 1 : 0;
-					newVal["w"] = instanceValue["w"];
-					newVal["a"] = instanceValue["a"];
-					newVal["i"] = instanceValue["i"];
-					newVal["d"] = instanceValue["d"];			
-					newVal["x"] = instanceValue["x"];			
 					this.getForm().itemChanged(this.getParentItem(), newVal, event);
 				}
 			}
@@ -64,16 +69,20 @@ function () {
 			{type:_CHECKBOX_,width:"40px",containerCssStyle:"width:40px", forceUpdate:true, ref:".", 
 				labelLocation:_RIGHT_, label:ZaMsg.ACL_W, relevantBehavior:_PARENT_,
 				getDisplayValue:function (itemval) {
-					return (itemval["w"]==1);
+					return (itemval && itemval["w"]==1);
 				},
 				elementChanged:function(isChecked, instanceValue, event) {
 					var newVal = Object();
+					if(instanceValue) {					
+						newVal["r"] = instanceValue["r"];
+						newVal["a"] = instanceValue["a"];
+						newVal["i"] = instanceValue["i"];
+						newVal["d"] = instanceValue["d"];			
+						newVal["x"] = instanceValue["x"];			
+					} else {
+						newVal = {r:0,w:0,i:0,d:0,a:0,x:0};
+					}
 					newVal["w"] = isChecked ? 1 : 0;
-					newVal["r"] = instanceValue["r"];
-					newVal["a"] = instanceValue["a"];
-					newVal["i"] = instanceValue["i"];
-					newVal["d"] = instanceValue["d"];			
-					newVal["x"] = instanceValue["x"];			
 					this.getForm().itemChanged(this.getParentItem(), newVal, event);
 				}
 			}
@@ -84,16 +93,21 @@ function () {
 			{type:_CHECKBOX_,width:"40px",containerCssStyle:"width:40px", forceUpdate:true, ref:".", 
 				labelLocation:_RIGHT_, label:ZaMsg.ACL_D, relevantBehavior:_PARENT_,
 				getDisplayValue:function (itemval) {
-					return (itemval["d"]==1);
+					return (itemval && itemval["d"]==1);
 				},
 				elementChanged:function(isChecked, instanceValue, event) {
 					var newVal = Object();
+
+					if(instanceValue) {										
+						newVal["w"] = instanceValue["w"];
+						newVal["a"] = instanceValue["a"];
+						newVal["i"] = instanceValue["i"];
+						newVal["r"] = instanceValue["r"];			
+						newVal["x"] = instanceValue["x"];			
+					} else {
+						newVal = {r:0,w:0,i:0,d:0,a:0,x:0};
+					}
 					newVal["d"] = isChecked ? 1 : 0;
-					newVal["w"] = instanceValue["w"];
-					newVal["a"] = instanceValue["a"];
-					newVal["i"] = instanceValue["i"];
-					newVal["r"] = instanceValue["r"];			
-					newVal["x"] = instanceValue["x"];			
 					this.getForm().itemChanged(this.getParentItem(), newVal, event);
 				}
 			}
@@ -104,16 +118,21 @@ function () {
 			{type:_CHECKBOX_,width:"40px",containerCssStyle:"width:40px", forceUpdate:true, ref:".", 
 				labelLocation:_RIGHT_, label:ZaMsg.ACL_I, relevantBehavior:_PARENT_,
 				getDisplayValue:function (itemval) {
-					return (itemval["i"]==1);
+					return (itemval && itemval["i"]==1);
 				},
 				elementChanged:function(isChecked, instanceValue, event) {
 					var newVal = Object();
+
+					if(instanceValue) {				
+						newVal["w"] = instanceValue["w"];
+						newVal["a"] = instanceValue["a"];
+						newVal["r"] = instanceValue["r"];
+						newVal["d"] = instanceValue["d"];			
+						newVal["x"] = instanceValue["x"];			
+					} else {
+						newVal = {r:0,w:0,i:0,d:0,a:0,x:0};
+					}
 					newVal["i"] = isChecked ? 1 : 0;
-					newVal["w"] = instanceValue["w"];
-					newVal["a"] = instanceValue["a"];
-					newVal["r"] = instanceValue["r"];
-					newVal["d"] = instanceValue["d"];			
-					newVal["x"] = instanceValue["x"];			
 					this.getForm().itemChanged(this.getParentItem(), newVal, event);
 				}
 			}
@@ -124,16 +143,20 @@ function () {
 			{type:_CHECKBOX_,width:"40px",containerCssStyle:"width:40px", forceUpdate:true, ref:".", 
 				labelLocation:_RIGHT_, label:ZaMsg.ACL_X, relevantBehavior:_PARENT_,
 				getDisplayValue:function (itemval) {
-					return (itemval["x"]==1);
+					return (itemval && itemval["x"]==1);
 				},
 				elementChanged:function(isChecked, instanceValue, event) {
 					var newVal = Object();
+					if(instanceValue) {				
+						newVal["w"] = instanceValue["w"];
+						newVal["a"] = instanceValue["a"];
+						newVal["i"] = instanceValue["i"];
+						newVal["d"] = instanceValue["d"];			
+						newVal["r"] = instanceValue["r"];			
+					} else {
+						newVal = {r:0,w:0,i:0,d:0,a:0,x:0};
+					}
 					newVal["x"] = isChecked ? 1 : 0;
-					newVal["w"] = instanceValue["w"];
-					newVal["a"] = instanceValue["a"];
-					newVal["i"] = instanceValue["i"];
-					newVal["d"] = instanceValue["d"];			
-					newVal["r"] = instanceValue["r"];			
 					this.getForm().itemChanged(this.getParentItem(), newVal, event);
 				}
 			}
@@ -144,16 +167,20 @@ function () {
 			{type:_CHECKBOX_,width:"40px",containerCssStyle:"width:40px", forceUpdate:true, ref:".", 
 				labelLocation:_RIGHT_, label:ZaMsg.ACL_A, relevantBehavior:_PARENT_,
 				getDisplayValue:function (itemval) {
-					return (itemval["a"]==1);
+					return (itemval && itemval["a"]==1);
 				},
 				elementChanged:function(isChecked, instanceValue, event) {
 					var newVal = Object();
+					if(instanceValue) {				
+						newVal["w"] = instanceValue["w"];
+						newVal["r"] = instanceValue["r"];
+						newVal["i"] = instanceValue["i"];
+						newVal["d"] = instanceValue["d"];			
+						newVal["x"] = instanceValue["x"];			
+					} else {
+						newVal = {r:0,w:0,i:0,d:0,a:0,x:0};
+					}
 					newVal["a"] = isChecked ? 1 : 0;
-					newVal["w"] = instanceValue["w"];
-					newVal["r"] = instanceValue["r"];
-					newVal["i"] = instanceValue["i"];
-					newVal["d"] = instanceValue["d"];			
-					newVal["x"] = instanceValue["x"];			
 					this.getForm().itemChanged(this.getParentItem(), newVal, event);
 				}
 			}
