@@ -34,9 +34,6 @@ case "$1" in
 		for i in $SCRIPTS; do
 			/opt/zimbra/bin/$i start $2
 		done
-		# Hack for amavis timing - if you start it twice quickly, it kills it's own pid file.
-		# Bug in Net::Server, I believe
-		sleep 1
 	;;
 	stop)
 		for i in $SCRIPTS; do
