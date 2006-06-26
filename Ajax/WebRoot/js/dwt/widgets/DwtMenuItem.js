@@ -413,11 +413,13 @@ function() {
 
 DwtMenuItem.prototype._submenuItemAdded =
 function() {
-	if (this._cascCell == null) {
-		this._cascCell = this._row.insertCell(-1);
-		this._cascCell.noWrap = true;
-		this._cascCell.style.width = DwtMenuItem._CASCADE_DIM;
-		this._cascCell.style.height = (this._style != DwtMenuItem.SEPARATOR_STYLE) ?  DwtMenuItem._CASCADE_DIM : DwtMenuItem._SEPAARATOR_DIM;
+	if (this._style != DwtMenuItem.SEPARATOR_STYLE) { // Separator row only needs 1 cell.
+		if (this._cascCell == null) {
+			this._cascCell = this._row.insertCell(-1);
+			this._cascCell.noWrap = true;
+			this._cascCell.style.width = DwtMenuItem._CASCADE_DIM;
+			this._cascCell.style.height = (this._style != DwtMenuItem.SEPARATOR_STYLE) ?  DwtMenuItem._CASCADE_DIM : DwtMenuItem._SEPAARATOR_DIM;
+		}
 	}
 }
 
@@ -425,8 +427,10 @@ function() {
  * from the menu. It allows for the item to remove its "bogus" cascade column*/
 DwtMenuItem.prototype._submenuItemRemoved =
 function() {
-	this._row.deleteCell(this._row.cells.length - 1);
-	this._cascCell = null;
+	if (this._style != DwtMenuItem.SEPARATOR_STYLE) {
+		this._row.deleteCell(this._row.cells.length - 1);
+		this._cascCell = null;
+	}
 }
 
 DwtMenuItem.prototype._addIconCell =
