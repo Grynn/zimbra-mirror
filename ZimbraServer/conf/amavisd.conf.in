@@ -50,14 +50,21 @@ $lock_file = "$MYHOME/var/amavisd.lock";
 $log_level = 1;              # verbosity 0..5 - 1 is the minimum for msg tracing
 $log_recip_templ = undef;    # disable by-recipient level-0 log entries
 $DO_SYSLOG = 1;              # log via syslogd (preferred)
-$SYSLOG_LEVEL = 'local0.info';
-$LOGFILE = "/opt/zimbra/log/amavisd.log";
+$syslog_facility = 'local0';   # Syslog facility as a string
+           # e.g.: mail, daemon, user, local0, ... local7
+$syslog_priority = 'info';  # Syslog base (minimal) priority as a string,
+           # choose from: emerg, alert, crit, err, warning, notice, info, debug
 
 $enable_db = 1;              # enable use of BerkeleyDB/libdb (SNMP and nanny)
 $enable_global_cache = 1;    # enable use of libdb-based cache if $enable_db=1
 
 $inet_socket_port = 10024;   # listen on this local TCP port(s) (see $protocol)
-# $unix_socketname = "$MYHOME/amavisd.sock";  # when using sendmail milter
+$unix_socketname = "$MYHOME/amavisd.sock";  # amavisd-release or amavis-milter
+
+$interface_policy{'SOCK'}='AM.PDP-SOCK';  # only relevant with $unix_socketname
+# Use with amavis-release over a socket or with Petr Rehor's amavis-milter.c
+# (with amavis-milter.c from this package or old amavis.c client use 'AM.CL'):
+$policy_bank{'AM.PDP-SOCK'} = { protocol=>'AM.PDP' };
 
 # $sa_debug = 1;
 $sa_rules_file = '/opt/zimbra/conf/salocal.cf';
@@ -70,10 +77,8 @@ $sa_kill_level_deflt = %%range VAR:zimbraSpamKillPercent 0 20%%; # triggers spam
 $sa_dsn_cutoff_level = %%range VAR:zimbraSpamKillPercent 0 20%%;    # spam level beyond which a DSN is not sent
 $sa_quarantine_cutoff_level = %%range VAR:zimbraSpamKillPercent 0 20%%;  # spam level beyond which quarantine is off
 
-$sa_mail_body_size_limit = 65536; # don't waste time on SA if mail is larger
+$sa_mail_body_size_limit = 512*1024; # don't waste time on SA if mail is larger
 $sa_local_tests_only = 0;    # only tests which do not require internet access?
-$sa_auto_whitelist = 1;      # turn on AWL in SA 2.63 or older (irrelevant
-                             # for SA 3.0, cf option is 'use_auto_whitelist')
 
 # @lookup_sql_dsn =
 #   ( ['DBI:mysql:database=mail;host=127.0.0.1;port=3306', 'user1', 'passwd1'],
@@ -120,6 +125,13 @@ $myhostname = '@@zimbra_server_hostname@@';  # must be a fully-qualified domain 
 # $final_spam_destiny       = D_BOUNCE;
 # $final_bad_header_destiny = D_PASS;
 
+# $os_fingerprint_method = 'p0f:127.0.0.1:2345';  # to query p0f-analyzer.pl
+
+## hierarchy by which a final setting is chosen:
+##   policy bank (based on port or IP address) -> *_by_ccat
+##   *_by_ccat (based on mail contents) -> *_maps
+##   *_maps (based on recipient address) -> final configuration value
+
 
 $warnvirusrecip = %%binary VAR:zimbraVirusWarnRecipient%%;
 # SOME OTHER VARIABLES WORTH CONSIDERING (see amavisd.conf-default for all)
@@ -135,19 +147,13 @@ $warnvirusrecip = %%binary VAR:zimbraVirusWarnRecipient%%;
 #
 # @blacklist_sender_maps, @score_sender_maps,
 #
-# $virus_quarantine_to, $banned_quarantine_to,
+# $clean_quarantine_method, $virus_quarantine_to, $banned_quarantine_to,
 # $bad_header_quarantine_to, $spam_quarantine_to,
 #
 # $defang_bad_header, $defang_undecipherable, $defang_spam
 
 
 # REMAINING IMPORTANT VARIABLES ARE LISTED HERE BECAUSE OF LONGER ASSIGNMENTS
-
-@viruses_that_fake_sender_maps = (new_RE(
-# [qr'\bEICAR\b'i => 0],            # av test pattern name
-# [qr'^(WM97|OF97|Joke\.)'i => 0],  # adjust names to match your AV scanner
-  [qr/^/ => 1],  # true for everything else
-));
 
 @keep_decoded_original_maps = (new_RE(
 # qr'^MAIL$',   # retain full original message for virus checking (can be slow)
@@ -170,6 +176,9 @@ $banned_filename_re = new_RE(
 #  qr'^application/x-msdownload$'i,                  # block these MIME types
 #  qr'^application/x-msdos-program$'i,
 #  qr'^application/hta$'i,
+
+# qr'^(application/x-msmetafile|image/x-wmf)$'i,    # Windows Metafile MIME
+# qr'^\.wmf$',                            # Windows Metafile file(1) type
 
 # qr'^message/partial$'i,         # rfc2046 MIME type
 # qr'^message/external-body$'i,   # rfc2046 MIME type
@@ -303,7 +312,6 @@ $banned_filename_re = new_RE(
 # ['Sophos SAVI', \&sophos_savi ],
 
 # ### http://www.clamav.net/
-#  \&ask_daemon, ["CONTSCAN {}\n", "/opt/zimbra/clamav/clamav.sock"],
 ['ClamAV-clamd',
   \&ask_daemon, ["CONTSCAN {}\n", '127.0.0.1:3310'],
   qr/\bOK$/, qr/\bFOUND$/,
@@ -362,7 +370,7 @@ $banned_filename_re = new_RE(
 # # NOTE: If using amavis-milter, change length to:
 # # length("$TEMPBASE/amavis-milter-xxxxxxxxxxxxxx/parts/pxxx").
 
-  ### http://www.kaspersky.com/  (in the 'file server version')
+  ### http://www.kaspersky.com/  (kav4mailservers)
   ['KasperskyLab AVP - aveclient',
     ['/usr/local/kav/bin/aveclient','/usr/local/share/kav/bin/aveclient',
      '/opt/kav/bin/aveclient','aveclient'],
@@ -444,6 +452,17 @@ $banned_filename_re = new_RE(
     '--dumb --mime --archive {}', [0], [3,8],
     qr/(?:infection|Infected|Suspected): (.+)/ ],
 
+# ### http://www.avast.com/
+# ['avast! Antivirus daemon',
+#   \&ask_daemon,	# greets with 220, terminate with QUIT
+#   ["SCAN {}\015\012QUIT\015\012", '/var/run/avast4/mailscanner.sock'],
+#   qr/\t\[\+\]/, qr/\t\[L\]\t/, qr/\t\[L\]\t([^[ \t\015\012]+)/ ],
+
+# ### http://www.avast.com/
+# ['avast! Antivirus - Client/Server Version', 'avastlite',
+#   '-a /var/run/avast4/mailscanner.sock -n {}', [0], [1],
+#   qr/\t\[L\]\t([^[ \t\015\012]+)/ ],
+
   ['CAI InoculateIT', 'inocucmd',  # retired product
     '-sec -nex {}', [0], [100],
     qr/was infected by virus (.+)/ ],
@@ -467,16 +486,17 @@ $banned_filename_re = new_RE(
     qr/^... (\S+)/ ],
 
   ### http://www.nod32.com/
-  ['ESET Software NOD32', 'nod32',
-    '--arch --mail {}', [0], [1,10], qr/^object=.*, virus="(.*?)",/ ],
-  # with old versions use:
-  #   '-all -subdir+ {}', [0], [1,2],
-  #   qr/^.+? - (.+?)\s*(?:backdoor|joke|trojan|virus|worm)/ ],
+  ['ESET Software NOD32 Command Line Interface v 2.51', 'nod32cli',
+    '--subdir {}', [0,3], [1,2], qr/virus="([^"]+)"/ ],
 
-  ### http://www.nod32.com/
-  ['ESET Software NOD32 - Client/Server Version', 'nod32cli',
-    '-a -r -d recurse --heur standard {}', [0], [10,11],
-    qr/^\S+\s+infected:\s+(.+)/ ],
+# ### http://www.nod32.com/   old
+# ['ESET Software NOD32 - Client/Server Version', 'nod32cli',
+#   '-a -r -d recurse --heur standard {}', [0], [10,11],
+#   qr/^\S+\s+infected:\s+(.+)/ ],
+
+# ### http://www.nod32.com/   old
+# ['ESET Software NOD32', 'nod32',
+#   '--arch --mail {}', [0], [1,10], qr/^object=.*, virus="(.*?)",/ ],
 
 # Experimental, based on posting from Rado Dibarbora (Dibo) on 2002-05-31
 # ['ESET Software NOD32 Client/Server (NOD32SS)',
@@ -514,7 +534,7 @@ $banned_filename_re = new_RE(
     '--secure -rv --mime --summary --noboot - {}', [0], [13],
     qr/(?x) Found (?:
         \ the\ (.+)\ (?:virus|trojan)  |
-        \ (?:virus|trojan)\ or\ variant\ ([^ ]+)  |
+        \ (?:virus|trojan)\ or\ variant\ (.+?)\s*! |
         :\ (.+)\ NOT\ a\ virus)/,
   # sub {$ENV{LD_PRELOAD}='/lib/libc.so.6'},
   # sub {delete $ENV{LD_PRELOAD}},
@@ -547,15 +567,21 @@ $banned_filename_re = new_RE(
   # sub {$ENV{VSTK_HOME}='/usr/lib/vstk'},
   ],
 
+  ### http://www.avast.com/
+  ['avast! Antivirus', ['/usr/bin/avastcmd','avastcmd'],
+    '-a -i -n -t=A {}', [0], [1], qr/\binfected by:\s+([^ \t\n\[\]]+)/ ],
+
   ### http://www.ikarus-software.com/
   ['Ikarus AntiVirus for Linux', 'ikarus',
     '{}', [0], [40], qr/Signature (.+) found/ ],
 
   ### http://www.bitdefender.com/
   ['BitDefender', 'bdc',
-    '--all --arc --mail {}', qr/^Infected files *:0+(?!\d)/,
+    '--arc --mail {}', qr/^Infected files *:0+(?!\d)/,
     qr/^(?:Infected files|Identified viruses|Suspect files) *:0*[1-9]/,
     qr/(?:suspected|infected): (.*)(?:\033|$)/ ],
+  # consider also: --all --nowarn --alev=15 --flev=15.  The --all argument may
+  # not apply to your version of bdc, check documentation and see 'bdc --help'
 
 # ['File::Scan', sub {Amavis::AV::ask_av(sub{
 #   use File::Scan; my($fn)=@_;
@@ -579,8 +605,8 @@ $banned_filename_re = new_RE(
 
   ### http://www.clamav.net/   - backs up clamd or Mail::ClamAV
   ['ClamAV-clamscan', 'clamscan',
-    "--stdout --disable-summary -r --tempdir=$TEMPBASE {}", [0], [1],
-    qr/^.*?: (?!Infected Archive)(.*) FOUND$/ ],
+    "--stdout --disable-summary -r --tempdir=$TEMPBASE {}",
+    [0], qr/:.*\sFOUND$/, qr/^.*?: (?!Infected Archive)(.*) FOUND$/ ],
 
   ### http://www.f-prot.com/   - backs up F-Prot Daemon
   ['FRISK F-Prot Antivirus', ['f-prot','f-prot.sh'],
