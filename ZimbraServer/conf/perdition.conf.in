@@ -73,6 +73,7 @@ M /opt/zimbra/perdition/lib/libperditiondb_ldap.so
 m '@@ldap_url@@/?zimbraMailDeliveryAddress%2CzimbraMailHost?sub?(&(objectClass=zimbraAccount)(zimbraMailDeliveryAddress=%25s))' 
 pid_file /opt/zimbra/log/perdition.pid
 ssl_cert_accept_self_signed
+ssl_no_cert_verify
 ssl_cert_file /opt/zimbra/conf/perdition.pem
 ssl_key_file  /opt/zimbra/conf/perdition.key
 
