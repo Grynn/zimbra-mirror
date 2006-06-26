@@ -128,7 +128,7 @@ DwtBorder.registerBorder(
 						"<td class='minWidth'><div class='{$closeIcon1}'></div></td>",
 					"</tr>",
 					"<tr>",
-						"<td class='DwtDialogBody WindowInnerContainer' colspan='3'>"
+						"<td class='DwtDialogBody WindowInnerContainer' colspan='3'  style='cursor:default;'>"
 		),
 		
 		end: AjxBuffer.concat(
