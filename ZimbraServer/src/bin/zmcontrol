@@ -313,7 +313,7 @@ sub getEnabledServices {
 }
 
 sub isLdapMaster {
-	return (getLocalConfig("ldap_is_master") eq "true");
+	return (getLocalConfig("ldap_is_master") =~ /true/i);
 }
 
 sub getHostName {
