@@ -51,6 +51,10 @@ function(eventType, event) {
 		var c = null;
 		for (var i = 0; i < s; i++) {
 			c = a[i];
+			// listener must be an AjxListener or a function
+			if (!(c && (c.handleEvent || (typeof c == "function")))) {
+				continue;
+			}
 			retVal = c.handleEvent ? c.handleEvent(event) : c(event);
 			if (retVal === false) {
 				break;
