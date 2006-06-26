@@ -28,12 +28,14 @@ function ZaLoginDialog(parent, zIndex, className, appCtxt) {
     className = className || "ZaLoginDialog";
     DwtDialog.call(this, parent, className, ZaMsg.login, DwtDialog.NO_BUTTONS);
 
+	var licenseStatus = ZaZimbraAdmin.getLicenseStatus();
 	var params = ZLoginFactory.copyDefaultParams(ZaMsg);
 	params.showPanelBorder = false;
 	params.showForm = true;
 	params.showUserField = true;
 	params.showPasswordField = true;
-	params.showLicenseMsg = true;
+	params.showLicenseMsg = licenseStatus.licenseExists;
+	params.licenseMsg = licenseStatus.message;
 	params.showRememberMeCheckbox = false;
 	params.showLogOff = true;
 	params.logOffAction = "ZaLoginDialog._loginDiffListener()";

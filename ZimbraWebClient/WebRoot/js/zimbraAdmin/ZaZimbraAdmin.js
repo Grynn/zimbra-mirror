@@ -297,19 +297,37 @@ function() {
 	}
 }
 
-ZaZimbraAdmin.prototype._setLicenseStatusMessage = function () {
+ZaZimbraAdmin.getLicenseStatus = function () {
+	
+	var result = { 
+		licenseExists: ZaServerVersionInfo.licenseExists, 
+		message: "", 
+		className: "" 
+	};
+	
+	// TODO: these classNames below do not exists in any style sheet.
+	// Consider using the ZmStausView to show status messages.
 	if (ZaServerVersionInfo.licenseExists) {
 		var licenseInfoText = null;
 		if (ZaServerVersionInfo.licenseExpired) {
 			licenseInfoText = ZaMsg.consoleLicenseExpired;
-			this._statusBox.getHtmlElement().className = "consoleLicenseExpired";
+			result.className = "consoleLicenseExpired";
 		} else {
 			licenseInfoText = ZaMsg.licenseWillExpire;
-			this._statusBox.getHtmlElement().className = "consoleLicenseWillExpire";
+			result.className = "consoleLicenseWillExpire";
 		}
 		var formatter = AjxDateFormat.getDateInstance(AjxDateFormat.SHORT);
-		this.setStatusMsg(AjxBuffer.concat(licenseInfoText," ",
-										   formatter.format(ZaServerVersionInfo.licenseExpirationDate)));
+		result.message =  AjxBuffer.concat(licenseInfoText," ",
+										   formatter.format(ZaServerVersionInfo.licenseExpirationDate));
+	}
+	return result;
+};
+
+ZaZimbraAdmin.prototype._setLicenseStatusMessage = function () {
+	var licenseStatus = ZaZimbraAdmin.getLicenseStatus();
+	if (licenseStatus.licenseExists) {
+		this._statusBox.getHtmlElement().className = licenseStatus.className;
+		this.setStatusMsg(licenseStatus.message);
 	}
 };
 
