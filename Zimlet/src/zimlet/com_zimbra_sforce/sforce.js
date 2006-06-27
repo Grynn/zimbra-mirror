@@ -919,11 +919,11 @@ function(dialog) {
 
     // Throw the note data in an array to add it.
     var ids = [];
-    ids.push({ ParentId: this._zimlet._parentId});
-    ids[0].Title = this._zimlet._note;
-    ids[0].Body = this._zimlet._note;
-    DBG.dumpObj(ids);
-    this._zimlet.createSFObject(ids, "Note", function() {
+    ids.push({ WhoId: this._zimlet._parentId});
+    ids[0].Subject = this._zimlet._note;
+    ids[0].Description = this._zimlet._note;
+	ids[0].Status = 'Completed';
+	this._zimlet.createSFObject(ids, "Task", function() {
         this.displayStatusMessage("Saved " + ids.length + " note to " + this._contactEmail);
     });
     return true;
