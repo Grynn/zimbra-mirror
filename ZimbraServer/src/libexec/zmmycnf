@@ -87,7 +87,6 @@ log-slow-queries = ${zimbra_log_directory}/myslow.log
 long-query-time  = 1
 log-long-format
 log-queries-not-using-indexes
-log-bin
 
 thread_cache      = ${computed_max_connections}
 max_connections   = ${computed_max_connections}
