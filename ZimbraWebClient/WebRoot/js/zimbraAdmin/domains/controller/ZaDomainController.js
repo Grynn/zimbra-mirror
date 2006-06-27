@@ -146,10 +146,34 @@ function () {
 	//check if any notebook permissions are changed
 	if(this._currentObject.notebookAcls) {
 		for(var gt in this._currentObject.notebookAcls) {
-			for (var a in this._currentObject.notebookAcls[gt]) {
-				if(this._currentObject.notebookAcls[gt][a] != tmpObj.notebookAcls[gt][a]) {
+			if(!(this._currentObject.notebookAcls[gt] instanceof Array)) {
+				for (var a in this._currentObject.notebookAcls[gt]) {
+					if(this._currentObject.notebookAcls[gt][a] != tmpObj.notebookAcls[gt][a]) {
+						overWriteACLs = true;
+						break;
+					}
+				}
+			} else {
+				var cnt1 = this._currentObject.notebookAcls[gt].length;
+				var cnt2 = tmpObj.notebookAcls[gt].length;
+				if(cnt1 != cnt2) {
 					overWriteACLs = true;
 					break;
+				} else {
+					for (var i=0; i< cnt1; i++) {
+						if(typeof (tmpObj.notebookAcls[gt][i]) == "object" && typeof(this._currentObject.notebookAcls[gt][i]) == "object") {
+							for (var a in tmpObj.notebookAcls[gt][i]) {
+								if(this._currentObject.notebookAcls[gt][i][a] != tmpObj.notebookAcls[gt][i][a])	{
+									overWriteACLs = true;
+									break;
+								}
+								if(overWriteACLs)
+									break;
+							}
+						}
+						if(overWriteACLs)
+							break;
+					}
 				}
 			}
 			if(overWriteACLs)

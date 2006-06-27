@@ -111,7 +111,7 @@ function(entry) {
 
 	if(entry.notebookAcls) {
 		for(var gt in entry.notebookAcls) {
-			if(!entry.notebookAcls[gt] instanceof Array) {
+			if(!(entry.notebookAcls[gt] instanceof Array)) {
 				this._containedObject.notebookAcls[gt] = {r:0,w:0,i:0,d:0,a:0,x:0};
 				for (var a in entry.notebookAcls[gt]) {
 					this._containedObject.notebookAcls[gt][a] = entry.notebookAcls[gt][a];
