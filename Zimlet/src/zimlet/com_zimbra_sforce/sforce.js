@@ -596,7 +596,8 @@ Com_Zimbra_SForce.prototype.dlg_addNoteToAccounts = function(accounts, note) {
 	var h3 = document.createElement("h3");
     var i;
     h3.className = "SForce-sec-label SForce-icon-right";
-	h3.innerHTML = "A = Account, O = Opportunity, C = Contact";
+	//h3.innerHTML = "A = Account, O = Opportunity, C = Contact";
+	h3.innerHTML = "A = Account or O = Opportunity";
 	el.appendChild(h3);
 
 	var checkboxes = [];
@@ -621,6 +622,8 @@ Com_Zimbra_SForce.prototype.dlg_addNoteToAccounts = function(accounts, note) {
             }
         }
         // Limit the number of contacts shown to 10
+		// REMOVE LISTING OF CONTACTS, just list acctount/opportunity
+/*
         var displayLimit = acct.Con.length;
         if(displayLimit > 10) {
             displayLimit = 10;
@@ -633,6 +636,7 @@ Com_Zimbra_SForce.prototype.dlg_addNoteToAccounts = function(accounts, note) {
                 html = this._checkBoxHtml(acct.Con[i], cbid, 2, chkContact, html);
             }
         }
+*/
     }
     html.push("</tbody></table>");
 	div.innerHTML = html.join("");
@@ -684,25 +688,28 @@ Com_Zimbra_SForce.prototype.dlg_addNoteToAccounts = function(accounts, note) {
 
 	dlg.setButtonListener(DwtDialog.OK_BUTTON,
 			      new AjxListener(this, function() {
-				      var acct_ids = [];
+				      var ids = [];
 				      for (i = 0; i < checkboxes.length; ++i) {
 					      var cb = document.getElementById(checkboxes[i]);
-					      if (cb.checked)
-						      acct_ids.push({ ParentId: cb.value });
+					      if (cb.checked) {
+							  ids.push({ WhatId: cb.value });
+						  }
 				      }
-				      if (acct_ids.length == 0) {
+				      if (ids.length == 0) {
 					      this.displayErrorMessage("You must select at least Account, Opportunity, or Contact!");
 				      } else {
 					      var props = {
 						      Title : document.getElementById(subjectId).value,
 						      Body  : document.getElementById(messageId).value
 					      };
-					      for (i = 0; i < acct_ids.length; ++i) {
-						      acct_ids[i].Title = props.Title;
-						      acct_ids[i].Body = props.Body;
+					      for (i = 0; i < ids.length; ++i) {
+							  ids[i].Subject = props.Title;
+						      ids[i].Description = props.Body;
+							  // Might need to make this a config item
+							  ids[i].Status = 'Completed';
 					      }
-					      this.createSFObject(acct_ids, "Note", function() {
-						      this.displayStatusMessage("Saved " + acct_ids.length + " notes");
+					      this.createSFObject(ids, "Task", function() {
+						      this.displayStatusMessage("Saved " + ids.length + " notes.");
 					      });
 					      dlg.popdown();
 					      dlg.dispose();
