@@ -433,8 +433,10 @@ function(child) {
 		// cascade cell to ensure that things line up
 		if (sz > 1 && child.getMenu())
 			this._submenuItemRemoved();
-		
-		this._table.deleteRow(child.getHtmlElement().parentNode.parentNode.rowIndex);
+
+		var el = child.getHtmlElement();
+		if (el)
+			this._table.deleteRow(el.parentNode.parentNode.rowIndex);
 	}
 	this._children.remove(child);
 }
