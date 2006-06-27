@@ -163,7 +163,7 @@ DwtButtonColorPicker.prototype.__colorDisplay_onMouseDown = function(ev, div) {
 
  	if (this.isListenerRegistered(DwtEvent.SELECTION)) {
  		var selEv = DwtShell.selectionEvent;
- 		DwtUiEvent.copy(selEv, ev);
+ 		// DwtUiEvent.copy(selEv, ev);
  		selEv.item = this;
  		selEv.detail = "";
  		this.notifyListeners(DwtEvent.SELECTION, selEv);
