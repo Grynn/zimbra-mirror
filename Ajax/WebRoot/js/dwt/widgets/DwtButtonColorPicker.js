@@ -89,7 +89,7 @@ DwtButtonColorPicker.prototype._colorPicked = function(ev) {
 	}
 	if (this.isListenerRegistered(DwtEvent.SELECTION)) {
 		var selEv = DwtShell.selectionEvent;
-		DwtUiEvent.copy(selEv, ev);
+		// DwtUiEvent.copy(selEv, ev);
 		selEv.item = this;
 		selEv.detail = color;
 		this.notifyListeners(DwtEvent.SELECTION, selEv);
