@@ -785,9 +785,11 @@ function(content) {
 	var style = this._getInitialStyle(false);
 	var initHtml = "<html><head>" + style + "</head><body>" + (content || "") + "</body></html>";
 	var doc = this._getIframeDoc();
-	doc.open();
-	doc.write(initHtml);
-	doc.close();
+	try {
+		doc.write(initHtml);
+	} finally {
+		doc.close();
+	}
 };
 
 DwtHtmlEditor.prototype._finishHtmlModeInit =
