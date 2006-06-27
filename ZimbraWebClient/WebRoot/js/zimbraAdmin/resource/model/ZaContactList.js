@@ -32,8 +32,8 @@ function ZaContactList (app) {
 	this._app = app;
 }
 
-ZaContactList.matchValue = ZaAccount.A_name; //the property name of the match ZaContactList
-ZaContactList.matchText =  ZaAccount.A_displayname; //the property name of the match text of ZaContactList
+ZaContactList.matchValue = ZaAccount.A_displayname; //the property name of the match ZaContactList
+ZaContactList.matchText =  "matchListFieldText"; //the property name of the match text of ZaContactList
 
 ZaContactList.prototype.getContactList =
 function (str, callback){
@@ -53,6 +53,7 @@ function (str, callback){
 	}
 }
 
+/*
 ZaContactList.prototype.autocompleteMatch = 
 function (str) {
 	var lists = new Array () ;
@@ -67,15 +68,15 @@ function (str) {
 
 	return lists ;
 
-}
+} */
 
 ZaContactList.prototype._autocompleteCallback =
 function(match, inputFieldXFormItem) {
 	var xform = inputFieldXFormItem.getForm();
 	var contact_email = xform.getItemsById(ZaResource.A_zimbraCalResContactEmail) [0];
 	var contact_phone = xform.getItemsById(ZaResource.A_zimbraCalResContactPhone) [0];
-	contact_email.setInstanceValue (match[ZaAccount.A_name]);
-	contact_phone.setInstanceValue (match[ZaAccount.A_telephoneNumber]);
+	contact_email.setInstanceValue (match["contact"][ZaAccount.A_name]);
+	contact_phone.setInstanceValue (match["contact"][ZaAccount.A_telephoneNumber]);
 	xform.refresh();
 }; 
 
@@ -94,11 +95,22 @@ function(callback, resp){
 			var arr = list.getArray();
 			var data = [];
 			for (var i=0; i<arr.length; i++) {
-				data[i] = {};
-				data[i][ZaAccount.A_displayname] = arr[i].attrs[ZaAccount.A_displayname]; 
-				data[i][ZaAccount.A_name ] = arr[i][ZaAccount.A_name]; 			
-				data[i][ZaAccount.A_telephoneNumber ] = arr[i].attrs[ZaAccount.A_telephoneNumber]; 						
+				data[i] = { contact: {}};
+				data[i]["contact"][ZaAccount.A_displayname] = arr[i].attrs[ZaAccount.A_displayname]; 
+				data[i]["contact"][ZaAccount.A_name ] = arr[i][ZaAccount.A_name]; 			
+				data[i]["contact"][ZaAccount.A_telephoneNumber ] = arr[i].attrs[ZaAccount.A_telephoneNumber]; 						
+				data[i][ZaContactList.matchText] = data[i]["contact"][ZaAccount.A_displayname] + "< " + data[i]["contact"][ZaAccount.A_name ] + ">";
+				data[i][ZaContactList.matchValue] = data[i]["contact"][ZaAccount.A_displayname] ; ;
 			} 
+			/**
+			 * data is an array contains all the matching items.
+			 * Each matching item has the following attributes:
+			 * 1) objectReference name: here it is called "contact" which represents a contact object
+			 * 2) matchTextReference: (required) Here it is called ZaContactList.matchText. 
+			 * 							Its value is used to be displayed in the match list item
+			 * 3) matchValueReference: (required) Here it is called ZaContactList.matchValue. 
+			 * 							Its value is used to do the comparison
+			 */
 			callback.run(data);			
 		}
 	} catch (ex) {

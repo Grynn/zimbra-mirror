@@ -63,7 +63,7 @@
 * @param separator			separator (gets added to the end of a match)
 */
 var i = 1 ;
-ZaSettings.AC_TIMER_INTERVAL = i ++;
+//ZaSettings.AC_TIMER_INTERVAL = i ++;
 
 function ZaAutoCompleteListView(params) {
 
@@ -76,8 +76,8 @@ function ZaAutoCompleteListView(params) {
 	this._dataLoaderMethod = params.dataLoaderMethod;
 	this._dataLoading = false;
 	this._data = null ;
-	this._matchValue = params.matchValue ? params.matchValue : "email";
-	this._matchText = params.matchText ? params.matchText : "name" ;
+	this._matchValue = params.matchValue ? params.matchValue : "inputFieldCompleteValue";
+	this._matchText = params.matchText ? params.matchText : "matchListFieldText" ;
 	this._inputFieldXFormItem = params.inputFieldXFormItem ;
 	this._inputFieldXForm = this._inputFieldXFormItem.getForm() ;
 	this._inputFieldElement = this._inputFieldXFormItem.getElement() ;
@@ -483,7 +483,7 @@ function(sel) {
 			div._styleClass = "Row";
 			div._selectedStyleClass = div._styleClass + "-" + DwtCssStyle.SELECTED;
 			div.className = div._styleClass;
-			div.innerHTML = AjxStringUtil.htmlEncode (match[this._matchText] + "<" + match[this._matchValue] + ">");
+			div.innerHTML = AjxStringUtil.htmlEncode (match[this._matchText]);
 			thisHtmlElement.appendChild(div);
 		}
 	}
