@@ -587,7 +587,17 @@ function(x, y, kbGenerated) {
 
 	if (((this._style == DwtMenu.POPUP_STYLE || (this._style == DwtMenu.DROPDOWN_STYLE && this.parent instanceof DwtMenuItem)) && s.y >= ws.y) || 
 		(this._style == DwtMenu.DROPDOWN_STYLE && y + s.y >= ws.y)) {
-		var space = this._style == DwtMenu.POPUP_STYLE || (this._style == DwtMenu.DROPDOWN_STYLE && this.parent instanceof DwtMenuItem) ? ws.y : ws.y - y;
+		var space = ws.y;
+		var newY = null;
+		if (this._style == DwtMenu.DROPDOWN_STYLE && !(this.parent instanceof DwtMenuItem)) {
+			space = ws.y - y;
+			var above = this.parent.getBounds().y;
+			var below = space;
+			if (space < 50 || (s.y > below && s.y < above && above / below > 2)) {
+				space = above;
+				newY = above;
+			}
+		}
 		var rows = this._table.rows;
 		var numRows = rows.length;
 		var height = s.y;
@@ -601,7 +611,7 @@ function(x, y, kbGenerated) {
 				break;
 			}
 		}
-		var count = i;
+		var count = i + 1;
 		for (var j = count; j < numRows; j++) {
 			var row = rows[(j - count) % count];
 			var cell = row.insertCell(-1);
@@ -627,6 +637,9 @@ function(x, y, kbGenerated) {
 		}
 		
 		s = this.getSize();
+		if (newY) {
+			y = newY - s.y;
+		}
 	}
 
 	// Popup menu type
