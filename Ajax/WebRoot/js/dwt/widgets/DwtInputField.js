@@ -499,3 +499,11 @@ function(value) {
 
 	return retVal;
 };
+
+/** 
+ * Overriding default implementation in DwtControl
+ */
+DwtInputField.prototype._focusByMouseUpEvent =
+function()  {
+};
+

@@ -466,6 +466,16 @@ function(ev) {
  */
 DwtKeyboardMgr.__syncFocus =
 function(kbMgr, obj) {
+	
+	/* (BUG 8588) If obj is not the hidden input field (i.e. some other input field, and if
+	 * a control has focus, then we have a focus mismatch and we need to blur the
+	 * control that thinks it has focus. Note this can happen due to the way focus
+	 * can be set in input fields*/ 
+	if (kbMgr._kbFocusField != obj && kbMgr.__dwtCtrlHasFocus) {
+		DBG.println(AjxDebug.DBG1, "CONTROL DOES NOT HAVE FOCUS: RESETTING");
+		kbMgr.__onBlurHdlr(null);
+	}
+	
 	if (!kbMgr.__dwtCtrlHasFocus) {
 		//DBG.println(AjxDebug.DBG1, "CONTROL NOT FOCUS: _focusObj: " + kbMgr.__focusObj + " - obj: " + obj);
 		if (kbMgr.__focusObj != obj) {
@@ -567,13 +577,10 @@ function(ev) {
 	 * alphanumeric keys if the target of the key event is an input field
 	 * or a text area and there is no pending sequence in play and the key
 	 * is alphanumeric or a punctuation key */
+	 
 	/* TODO not all inputs accept the same values (e.g. text vs radio etc) so 
 	 * we need to differentiate. Should change isUsableTextInputValue(keyCode) to 
-	 * isUsableInputValue(keyCode, inputType) where inputType is the type of input*/
-	// Note that FF on the mac has an issue reporting the ALT+<keycode> it
-	// always ends up reporting undefined for the <keycode>. For this reason I
-	// have added Ctrl analogs below	
-	/* TODO translate Ctl on FF Mac into Alt */ 
+	 * isUsableInputValue(keyCode, inputType) where inputType is the type of input*/ 
 	if (DwtKeyMapMgr.isModifier(keyCode)
 		|| (!kbMgr.__dwtCtrlHasFocus 
 			&& kbMgr.__killKeySeqTimedActionId == -1 && !kev.ctrlKey && !kev.altKey
