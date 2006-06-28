@@ -123,7 +123,9 @@ ZaGlobalConfig.A_zimbraImapProxyBindPort="zimbraImapProxyBindPort";
 ZaGlobalConfig.A_zimbraImapSSLProxyBindPort="zimbraImapSSLProxyBindPort";
 ZaGlobalConfig.A_zimbraPop3ProxyBindPort="zimbraPop3ProxyBindPort";
 ZaGlobalConfig.A_zimbraPop3SSLProxyBindPort="zimbraPop3SSLProxyBindPort";
+
 // others
+ZaGlobalConfig.A_zimbraInstalledSkin = "zimbraInstalledSkin";
 ZaGlobalConfig.A_zimbraNewExtension = "_zimbraNewExtension";
 
 ZaGlobalConfig.A_originalMonitorHost = "_originalMonitorHost";
@@ -336,8 +338,8 @@ ZaGlobalConfig.myXModel = {
 		{ id:ZaGlobalConfig.A_zimbraPop3ProxyBindPort, ref:"attrs/" + ZaGlobalConfig.A_zimbraPop3ProxyBindPort, type:_PORT_ },
 		{ id:ZaGlobalConfig.A_zimbraPop3SSLProxyBindPort, ref:"attrs/" + ZaGlobalConfig.A_zimbraPop3SSLProxyBindPort, type:_PORT_ },
 		{ id:ZaGlobalConfig.A_zimbraLmtpBindPort, ref:"attrs/" + ZaGlobalConfig.A_zimbraLmtpBindPort, type:_PORT_ },
-		{ id:ZaGlobalConfig.A_zimbraLmtpNumThreads, ref:"attrs/" + ZaGlobalConfig.A_zimbraLmtpNumThreads, type:_PORT_ }		
-		
+		{ id:ZaGlobalConfig.A_zimbraLmtpNumThreads, ref:"attrs/" + ZaGlobalConfig.A_zimbraLmtpNumThreads, type:_PORT_ },		
+		{ id:ZaGlobalConfig.A_zimbraInstalledSkin, ref:"attrs/" + ZaGlobalConfig.A_zimbraInstalledSkin, type:_LIST_, listItem:{type:_STRING_}}
 
 	]	
 }

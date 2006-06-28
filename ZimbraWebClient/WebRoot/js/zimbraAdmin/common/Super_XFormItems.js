@@ -118,6 +118,33 @@ Cos_Enum_XModelItem.prototype.validateType = function (value) {
 	throw this.getModel().getErrorMessage("didNotMatchChoice", value);
 }
 
+Cos_List_XModelItem = function (){}
+XModelItemFactory.createItemType("_COS_LIST_", "list_enum", Cos_List_XModelItem, Cos_String_XModelItem);
+Cos_List_XModelItem.prototype.outputType = List_XModelItem.prototype.outputType;
+Cos_List_XModelItem.prototype.itemDelimiter = List_XModelItem.prototype.itemDelimiter;
+Cos_List_XModelItem.prototype.listItem = List_XModelItem.prototype.listItem;
+Cos_List_XModelItem.prototype.getOutputType  = List_XModelItem.prototype.getOutputType;
+Cos_List_XModelItem.prototype.getItemDelimiter = List_XModelItem.prototype.getItemDelimiter;
+Cos_List_XModelItem.prototype.getListItem  = List_XModelItem.prototype.getListItem;
+Cos_List_XModelItem.prototype.initializeItems = List_XModelItem.prototype.initializeItems;
+Cos_List_XModelItem.prototype.validateType = List_XModelItem.prototype.validateType;
+
+
+
+//	methods
+
+List_XModelItem.prototype.initializeItems = function () {
+	var listItem = this.listItem;
+	listItem.ref = listItem.id = "#";	
+	this.listItem = XModelItemFactory.createItem(listItem, this, this.getModel());
+	this.listItem.initializeItems();
+}
+
+
+List_XModelItem.prototype.validateType = function (value) {
+	return value;
+//XXX REWORK THIS TO USE THE listItem MODEL ITEM FOR EACH SUB-ITEM
+}
 /**
 * _COS_MAILQUOTA_ XModel item type
 **/
@@ -438,6 +465,30 @@ Super_HostPort_XFormItem.prototype.items = [
 **/
 Super_Select1_XFormItem = function () {}
 XFormItemFactory.createItemType("_SUPER_SELECT1_", "super_select1", Super_Select1_XFormItem, Super_XFormItem);
+Super_Select1_XFormItem.prototype.trueValue = "TRUE";
+Super_Select1_XFormItem.prototype.falseValue = "FALSE";
+Super_Select1_XFormItem.prototype.initializeItems = function() {
+	var anchorCssStyle = this.getInheritedProperty("anchorCssStyle");
+	if(anchorCssStyle) {
+		this.getItems()[1].cssStyle = anchorCssStyle;
+	} else {
+		this.getItems()[1].cssStyle = "width:200px";
+	}	
+
+	var trueValue = this.getInheritedProperty("trueValue");
+	var falseValue = this.getInheritedProperty("falseValue");	
+	var choices = this.getInheritedProperty("choices");	
+	
+	this.getItems()[0].trueValue = trueValue;
+	this.getItems()[0].falseValue = falseValue;	
+
+	Composite_XFormItem.prototype.initializeItems.call(this);
+	
+	if(choices)
+		this.getItems()[0].choices = choices;		
+		
+
+}	
 
 
 Super_Select1_XFormItem.prototype.useParentTable = false;
@@ -445,7 +496,6 @@ Super_Select1_XFormItem.prototype.numCols = 3;
 
 Super_Select1_XFormItem.prototype.items = [
 	{	type:_OSELECT1_, ref:".",
-		trueValue:"TRUE", falseValue:"FALSE", 
 		onChange:Composite_XFormItem.onFieldChange,
 		updateElement:function(value) {
 			Super_XFormItem.updateCss.call(this,5);

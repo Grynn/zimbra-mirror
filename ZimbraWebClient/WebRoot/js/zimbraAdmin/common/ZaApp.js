@@ -537,6 +537,10 @@ function(refresh) {
 	return this._globalConfig;	
 }
 
+ZaApp.prototype.getInstalledSkins = 
+function(refresh) {
+	return this.getGlobalConfig(refresh).attrs[ZaGlobalConfig.A_zimbraInstalledSkin];
+}
 
 /**
 * @param ev
