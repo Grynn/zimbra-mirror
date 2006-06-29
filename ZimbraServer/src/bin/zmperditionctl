@@ -40,11 +40,16 @@ my %serverKeys = (
 	"pop3s"	=> "zimbraPop3SSLBindPort"
 	);
 
+my $imapCapabilities = "--imap_capability \"IMAP4rev1 STARTTLS BINARY CHILDREN ID LITERAL+ LOGIN-REFERRALS NAMESPACE QUOTA SASL-IR UIDPLUS UNSELECT\"";
+
+# NOTE  - the double spaces in this string are significant
+my $popCapabilities = "--pop_capability \"TOP  USER  UIDL  STLS  EXPIRE 31 USER\"";
+
 my %serverOpts = (
-	"imap4"	=> "--ssl_mode tls_listen",
-	"imap4s" => "--ssl_mode ssl_all",
-	"pop3"	=> "--ssl_mode tls_listen",
-	"pop3s"	=> "--ssl_mode ssl_all"
+	"imap4"	=> "--ssl_mode tls_listen $imapCapabilities",
+	"imap4s" => "--ssl_mode ssl_all $popCapabilities",
+	"pop3"	=> "--ssl_mode tls_listen $imapCapabilities",
+	"pop3s"	=> "--ssl_mode ssl_all $popCapabilities"
 	);
 
 my $cmd = shift;
@@ -66,12 +71,12 @@ foreach my $i (`/opt/zimbra/bin/zmprov gs $ENV{zimbra_server_hostname}`) {
 
 if ($ENV{zimbraImapCleartextLoginEnabled} eq "TRUE") {
 	$serverKeys{imap4s} = $serverKeys{imap4};
-	$serverOpts{imap4s} = "--ssl_mode ssl_listen";
+	$serverOpts{imap4s} = "--ssl_mode ssl_listen $imapCapabilities";
 }
 
 if ($ENV{zimbraPop3CleartextLoginEnabled} eq "TRUE") {
 	$serverKeys{pop3s} = $serverKeys{pop3};
-	$serverOpts{pop3s} = "--ssl_mode ssl_listen";
+	$serverOpts{pop3s} = "--ssl_mode ssl_listen $imapCapabilities";
 }
 
 sub start {
