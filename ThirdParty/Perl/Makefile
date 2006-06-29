@@ -40,7 +40,7 @@ PERL_LIBS 	:= \
 	IO::Stringy \
 	MIME::Lite \
 	Mail::Mailer \
-	MIME::Tools \
+	DSKOLL/MIME-tools-5.420.tar.gz \
 	SOAP::Lite \
 	XML::Parser \
 	Net::Telnet \
