@@ -70,9 +70,15 @@ function ZaAutoCompleteListView(params) {
 	var className = params.className ? params.className : "autoCompleteList";
 	DwtComposite.call(this, params.parent, className, DwtControl.ABSOLUTE_STYLE);
 	
-	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
+//	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
+	var app = null;
+	try {
+		this.shell.getData(ZaAppCtxt.LABEL).getApp();
+	}catch (e){
+		DBG.println(e.message);
+	}
 	var _dataLoaderClass = params.dataLoaderClass;
-	this._dataLoaderObject = new _dataLoaderClass(this._appCtxt.getApp());
+	this._dataLoaderObject = new _dataLoaderClass(app);
 	this._dataLoaderMethod = params.dataLoaderMethod;
 	this._dataLoading = false;
 	this._data = null ;
