@@ -1058,15 +1058,19 @@ function(cmd, params) {
 		    case "mergeCells":
 			var cells = params.cells;
 			td = cells[0][0];
+			var html = [ td.innerHTML.replace(/<br>$/i, "") ];
 			for (var i = 0; i < cells.length; ++i) {
 				var row = cells[i];
 				for (var j = 0; j < row.length; ++j) {
-					if (i || j)
+					if (i || j) {
+						html.push(row[j].innerHTML.replace(/<br>$/i, ""));
 						row[j].parentNode.removeChild(row[j]);
+					}
 				}
 			}
 			td.colSpan = cells[0].length;
 			td.rowSpan = cells.length;
+			td.innerHTML = html.join(" ");
 			this.selectNodeContents(td, true);
 			break;
 
