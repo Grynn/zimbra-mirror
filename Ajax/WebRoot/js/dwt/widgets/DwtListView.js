@@ -972,10 +972,7 @@ function(next, addSelect) {
 	 * from the anchor */
 	var itemDiv;
 	if (this._kbAnchor) {
-		if (next)
-			itemDiv = this._kbAnchor.nextSibling ? this._kbAnchor.nextSibling : this._kbAnchor;
-		else
-			itemDiv = this._kbAnchor.previousSibling ? this._kbAnchor.previousSibling : this._kbAnchor;
+		itemDiv = this._getSiblingElement(this._kbAnchor, next);
 	} else {
 		itemDiv = this._parentEl.firstChild;
 	}
@@ -983,6 +980,12 @@ function(next, addSelect) {
 	this._scrollList(itemDiv);
 	this._emulateSingleClick(itemDiv, DwtMouseEvent.LEFT, false, addSelect);
 }
+
+DwtListView.prototype._getSiblingElement =
+function(element, next){
+	var el = next ? element.nextSibling : element.previousSibling;
+	return el ? el : element;
+};
 
 /**
  * This method will scroll the list to ensure that <code>itemDiv</code> is scrolled
@@ -1034,10 +1037,7 @@ function(next) {
 		
 	var orig = this._kbAnchor;
 	if (this._kbAnchor) {
-		if (next && this._kbAnchor.nextSibling)
-			this._kbAnchor = this._kbAnchor.nextSibling;
-		else if (this._kbAnchor.previousSibling)
-			this._kbAnchor = this._kbAnchor.previousSibling;
+		this._kbAnchor = this._getSiblingElement(this._kbAnchor, next);
 	} else {
 		this._kbAnchor = this._parentEl.firstChild;
 	}
