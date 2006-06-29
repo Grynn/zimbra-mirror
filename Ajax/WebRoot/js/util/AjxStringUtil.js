@@ -324,7 +324,7 @@ AjxStringUtil.urlEncode =
 function(str) {
 	if (!str) return "";
 	var func = window.encodeURL || window.encodeURI;
-	return func(str).replace(/%20/g,"+");
+	return func(str);
 };
 
 /**
@@ -335,7 +335,7 @@ function(str) {
 AjxStringUtil.urlComponentEncode = function(str) {
 	if (!str) return "";
 	var func = window.encodeURLComponent || window.encodeURIComponent;
-	return func(str).replace(/%20/g,"+");
+	return func(str);
 };
 
 /**
