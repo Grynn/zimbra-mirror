@@ -62,6 +62,7 @@ PERL_LIBS 	:= \
 	Archive::Tar \
 	Net::IP \
 	Net::DNS \
+	File::Tail \
 	Archive::Zip 
 
 DBFILE_PERL_LIBS := \
