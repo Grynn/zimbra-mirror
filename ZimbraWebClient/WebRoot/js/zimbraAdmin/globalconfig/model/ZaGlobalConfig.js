@@ -47,7 +47,7 @@ ZaGlobalConfig.A_zimbraAttachmentsBlocked = "zimbraAttachmentsBlocked";
 
 ZaGlobalConfig.A_zimbraMtaBlockedExtension = "zimbraMtaBlockedExtension";
 ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension = "zimbraMtaCommonBlockedExtension";
-ZaGlobalConfig.A_zimbraMtaCommonBlockedExtensions = "zimbraMtaCommonBlockedExtensions";
+
 // MTA
 ZaGlobalConfig.A_zimbraMtaAuthEnabled = "zimbraMtaAuthEnabled";
 ZaGlobalConfig.A_zimbraMtaTlsAuthOnly = "zimbraMtaTlsAuthOnly";
@@ -216,7 +216,13 @@ function (mods) {
 			var cnt = mods[aname].length;
 			if(cnt > 0) {
 				for(var ix=0; ix <cnt; ix++) {
-					var attr = soapDoc.set("a", mods[aname][ix].toString());
+					if(mods[aname][ix] instanceof String)
+						var attr = soapDoc.set("a", mods[aname][ix].toString());
+					else if(mods[aname][ix] instanceof Object)
+						var attr = soapDoc.set("a", mods[aname][ix].toString());
+					else 
+						var attr = soapDoc.set("a", mods[aname][ix]);
+						
 					attr.setAttribute("n", aname);
 				}
 			} 
@@ -287,7 +293,6 @@ ZaGlobalConfig.myXModel = {
 		{ id:ZaGlobalConfig.A_zimbraAttachmentsBlocked, ref:"attrs/" + ZaGlobalConfig.A_zimbraAttachmentsBlocked, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
 
 		{ id:ZaGlobalConfig.A_zimbraMtaBlockedExtension, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaBlockedExtension, type: _LIST_, dataType: _STRING_ },
-		{ id:ZaGlobalConfig.A_zimbraMtaCommonBlockedExtensions, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaCommonBlockedExtensions, type: _STRING_ },
 		{ id:ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension, type: _LIST_, dataType: _STRING_ },
 		// MTA
 		{ id:ZaGlobalConfig.A_zimbraMtaAuthEnabled, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaAuthEnabled, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES },

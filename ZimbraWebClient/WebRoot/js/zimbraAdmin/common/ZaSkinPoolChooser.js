@@ -52,7 +52,7 @@ function() {
 	html[idx++] = "<table cellspacing=0 cellpadding=0 border=0>";
 	html[idx++] = "<colgroup><col width='300px'/><col width='300px'/></colgroup>";
 	html[idx++] = "<tbody>";
-	html[idx++] = "<tr><td style='text-align:right' class='xform_label'>" + ZaMsg.ServerPool_AllServers + "</td>";
+	html[idx++] = "<tr><td style='text-align:right' class='xform_label'>" + ZaMsg.NAD_zimbraInstalledSkin + "</td>";
 	// source list
 	html[idx++] = "<td class='xform_field_container' id='";
 	html[idx++] = this._sourceListViewDivId;
@@ -88,7 +88,7 @@ function() {
 	html[idx++] = "</td></tr>";
 
 
-	html[idx++] = "<tr><td style='text-align:right' class='xform_label'>" + ZaMsg.ServerPool_AllServers + "</td>";
+	html[idx++] = "<tr><td style='text-align:right' class='xform_label'>" + ZaMsg.NAD_zimbraAvailableSkin + "</td>";
 	// target list
 	html[idx++] = "<td class='xform_field_container' id='";
 	html[idx++] = this._targetListViewDivId;

@@ -381,6 +381,8 @@ function () {
 		|| (skinIds.join("") != this._currentObject.attrs[ZaCos.A_zimbraAvailableSkin].join(""))) {
 			mods[ZaCos.A_zimbraAvailableSkin] = skinIds;
 		} 
+		if(cnt==0)
+			mods[ZaCos.A_zimbraAvailableSkin] = "";
 	}	
 	//check if need to rename
 	if(!isNew) {

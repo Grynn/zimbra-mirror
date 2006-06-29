@@ -157,13 +157,28 @@ function () {
 		if(a == ZaItem.A_objectClass || a == ZaGlobalConfig.A_zimbraAccountClientAttr || 
 		a == ZaGlobalConfig.A_zimbraServerInheritedAttr || a == ZaGlobalConfig.A_zimbraDomainInheritedAttr ||
 		a == ZaGlobalConfig.A_zimbraCOSInheritedAttr || a == ZaGlobalConfig.A_zimbraGalLdapAttrMap || 
-		a == ZaGlobalConfig.A_zimbraGalLdapFilterDef || /^_/.test(a))
+		a == ZaGlobalConfig.A_zimbraGalLdapFilterDef || /^_/.test(a) || a == ZaGlobalConfig.A_zimbraMtaBlockedExtension || a == ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension)
 			continue;
 
 		if (this._currentObject.attrs[a] != tmpObj.attrs[a] ) {
 			mods[a] = tmpObj.attrs[a];
 		}
 	}
+	//check if blocked extensions are changed
+	var extIds = new Array();
+	if((tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension] instanceof AjxVector) && tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension] && tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension].size()) {
+		var cnt = tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension].size();
+		for(var i = 0; i < cnt; i ++) {
+			extIds.push(tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension].get(i));
+		}
+		if((cnt > 0 && (!this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension] || !this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension].length))
+		|| (extIds.join("") != this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension].join(""))) {
+			mods[ZaGlobalConfig.A_zimbraMtaBlockedExtension] = extIds;
+		} 
+		if(cnt==0)
+			mods[ZaGlobalConfig.A_zimbraMtaBlockedExtension] = "";	
+	}		
+	
 	//save the model
 	//var changeDetails = new Object();
 	this._currentObject.modify(mods);
