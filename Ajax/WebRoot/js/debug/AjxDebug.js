@@ -97,7 +97,7 @@ function() {
 */
 AjxDebug.prototype.println =
 function(level, msg, linkName) {
-	if (this.isDisabled() || this._debugWindow.closed) return;
+	if (!this._isWriteable()) return;
 	var args = this._handleArgs(arguments, linkName);
 	if (!args) return;
 
@@ -122,7 +122,7 @@ function () {
 */
 AjxDebug.prototype.dumpObj =
 function(level, obj, showFuncs, linkName) {
-	if (this.isDisabled() || this._debugWindow.closed)return;
+	if (!this._isWriteable()) return;
 	var args = this._handleArgs(arguments, linkName);
 	if (!args) return;
 	obj = args[0];
@@ -142,7 +142,7 @@ function(level, obj, showFuncs, linkName) {
 */
 AjxDebug.prototype.printRaw =
 function(level, text, linkName) {
-	if (this.isDisabled() || this._debugWindow.closed) return;
+	if (!this._isWriteable()) return;
 	var args = this._handleArgs(arguments, linkName);
 	if (!args) return;
 	text = args[0];
@@ -158,7 +158,7 @@ function(level, text, linkName) {
 */
 AjxDebug.prototype.printXML =
 function(level, text, linkName) {
-	if (this.isDisabled() || this._debugWindow.closed) return;
+	if (!this._isWriteable()) return;
 	var args = this._handleArgs(arguments, linkName);
 	if (!args) return;
 	text = args[0];
@@ -180,7 +180,7 @@ function(level, text, linkName) {
 */
 AjxDebug.prototype.display =
 function(level, text) {
-	if (this.isDisabled() || this._debugWindow.closed) return;
+	if (!this._isWriteable()) return;
 	var args = this._handleArgs(arguments);
 	if (!args) return;
 	text = args[0];
@@ -222,7 +222,7 @@ function(on, msg) {
 */
 AjxDebug.prototype.timePt =
 function(msg, restart) {
-	if (!this._showTiming || !this._enabled || this._debugWindow.closed) return;
+	if (!this._showTiming || !this._isWriteable()) return;
 
 	if (restart)
 		this._startTimePt = this._lastTimePt = new Date().getTime();
@@ -259,6 +259,11 @@ function(enabled) {
 			this._debugWindow = null;
 		}
 	}
+};
+
+AjxDebug.prototype._isWriteable =
+function() {
+	return (!this.isDisabled() && this._debugWindow && !this._debugWindow.closed);
 };
 
 AjxDebug.prototype._getHtmlForObject =
@@ -448,7 +453,7 @@ function() {
 	var args = "width=600,height=400,resizable=yes,scrollbars=yes";
 	if (!this._isPrevWinOpen) {
 		var callback = new AjxCallback(this, this._initWindow);
-		this._debugWindow = AjxWindowOpener.openBlank(this._dbgName, args, callback, this);
+		this._debugWindow = AjxWindowOpener.openBlank(this._dbgName, args, callback, true);
 	} else {
 		this._debugWindow = window.open("" , this._dbgName, args);
 		this._initWindow();
