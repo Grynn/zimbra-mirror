@@ -1070,7 +1070,10 @@ function(cmd, params) {
 			}
 			td.colSpan = cells[0].length;
 			td.rowSpan = cells.length;
-			td.innerHTML = html.join(" ");
+			html = html.join(" ");
+			if (AjxEnv.isGeckoBased)
+				html += "<br/>";
+			td.innerHTML = html;
 			this.selectNodeContents(td, true);
 			break;
 
