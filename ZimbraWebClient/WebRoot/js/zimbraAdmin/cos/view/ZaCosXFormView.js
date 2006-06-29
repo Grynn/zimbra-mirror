@@ -56,22 +56,7 @@ function(entry) {
 	this._containedObject[ZaCos.A_zimbraMailHostPoolInternal] = entry[ZaCos.A_zimbraMailHostPoolInternal].clone();
 	
 	//convert strings to objects
-	var skins = this._app.getInstalledSkins();
-	var _tmpSkins = [];
-	if(skins == null) {
-		skins = [];
-	} else if (AjxUtil.isString(skins))	 {
-		skins = [skins];
-	}
-	
-	for(var i=0; i<skins.length; i++) {
-		var skin = skins[i];
-		_tmpSkins[i] = new String(skin);
-		_tmpSkins[i].id = "id_"+skin+"_installed";
-	}
-	this._containedObject[ZaCos.A_zimbraInstalledSkinPool] = _tmpSkins;
-		
-	//convert strings to objects
+	var _tmpSkinMap = {};
 	var skins = entry.attrs[ZaCos.A_zimbraAvailableSkin];
 	_tmpSkins = [];
 	if(skins == null) {
@@ -83,9 +68,31 @@ function(entry) {
 	for(var i=0; i<skins.length; i++) {
 		var skin = skins[i];
 		_tmpSkins[i] = new String(skin);
-		_tmpSkins[i].id = "id_"+skin+"_available";
+		_tmpSkins[i].id = "id_"+skin;
+		_tmpSkinMap[skin] = _tmpSkins[i];		
 	}
 	this._containedObject.attrs[ZaCos.A_zimbraAvailableSkin] = _tmpSkins;
+	
+	//convert strings to objects
+	var skins = this._app.getInstalledSkins();
+	var _tmpSkins = [];
+	if(skins == null) {
+		skins = [];
+	} else if (AjxUtil.isString(skins))	 {
+		skins = [skins];
+	}
+	
+	for(var i=0; i<skins.length; i++) {
+		var skin = skins[i];
+		if(_tmpSkinMap[skin])		
+			continue;
+			
+		_tmpSkins[i] = new String(skin);
+		_tmpSkins[i].id = "id_"+skin;
+	}
+	this._containedObject[ZaCos.A_zimbraInstalledSkinPool] = _tmpSkins;
+		
+
 
 
 	

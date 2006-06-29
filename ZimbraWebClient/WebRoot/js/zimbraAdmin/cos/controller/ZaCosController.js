@@ -377,6 +377,9 @@ function () {
 		for(var i = 0; i < cnt; i ++) {
 			skinIds.push(tmpObj.attrs[ZaCos.A_zimbraAvailableSkin].get(i));
 		}
+		if(!(this._currentObject.attrs[ZaCos.A_zimbraAvailableSkin] instanceof Array)) {
+			this._currentObject.attrs[ZaCos.A_zimbraAvailableSkin] = [this._currentObject.attrs[ZaCos.A_zimbraAvailableSkin]];
+		}
 		if((cnt > 0 && (!this._currentObject.attrs[ZaCos.A_zimbraAvailableSkin] || !this._currentObject.attrs[ZaCos.A_zimbraAvailableSkin].length))
 		|| (skinIds.join("") != this._currentObject.attrs[ZaCos.A_zimbraAvailableSkin].join(""))) {
 			mods[ZaCos.A_zimbraAvailableSkin] = skinIds;
