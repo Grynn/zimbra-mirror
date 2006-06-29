@@ -31,14 +31,17 @@
 * @author Greg Solovyev
 **/
 function ZaCos(app) {
-	ZaItem.call(this, ZaEvent.S_COS);
+	ZaItem.call(this, app, "ZaCos");
 	this.attrs = new Object();
 	this[ZaCos.A_zimbraMailHostPoolInternal] = new AjxVector();
 	this.id = "";
 	this.name="";
 	this._app = app;	
 	this.type = ZaItem.COS;
+	this[ZaCos.A_zimbraInstalledSkin] = this._app.getInstalledSkins();
 }
+ZaItem.loadMethods["ZaCos"] = new Array();
+ZaItem.modifyMethods["ZaCos"] = new Array();
 
 ZaCos.prototype = new ZaItem;
 ZaCos.prototype.constructor = ZaCos;
@@ -114,8 +117,9 @@ ZaCos.A_zimbraFeatureNewMailNotificationEnabled = "zimbraFeatureNewMailNotificat
 //internal attributes - do not send these to the server
 ZaCos.A_zimbraMailAllServersInternal = "allserversarray";
 ZaCos.A_zimbraMailHostPoolInternal = "hostpoolarray";
+ZaCos.A_zimbraInstalledSkin = "zimbraInstalledSkin";
 
-ZaCos.prototype.load =
+ZaCos.loadMethod =
 function (by, val) {
 	var soapDoc = AjxSoapDoc.create("GetCosRequest", "urn:zimbraAdmin", null);
 	var el = soapDoc.set("cos", val);
@@ -126,46 +130,12 @@ function (by, val) {
 	var resp = command.invoke(params).Body.GetCosResponse;
 	this.initFromJS(resp.cos[0]);
 }
+ZaItem.loadMethods["ZaCos"].push(ZaCos.loadMethod);
 
 ZaCos.prototype.refresh = 
 function () {
 	this.load("name", this.attrs[ZaCos.A_name]);
 }
-/**
-* massage the values into the instace suitable for an XForm
-**/
-/*
-ZaCos.prototype.initFromDom =
-function (node) {
-	ZaItem.prototype.initFromDom.call(this, node);
-	
-	this[ZaCos.A_zimbraMailAllServersInternal] = new Array();
-	this[ZaCos.A_zimbraMailHostPoolInternal] = new Array();
-		
-	var hostVector = new ZaItemVector();
-	if(this.attrs[ZaCos.A_zimbraMailHostPool] instanceof Array) {	
-		for(sname in this.attrs[ZaCos.A_zimbraMailHostPool]) {
-			if(this._app.getServerMap()[this.attrs[ZaCos.A_zimbraMailHostPool][sname]]) {
-				hostVector.add(this._app.getServerMap()[this.attrs[ZaCos.A_zimbraMailHostPool][sname]]);
-			} else {
-				var newServer = new ZaServer(this._app);
-				newServer.load("id", this.attrs[ZaCos.A_zimbraMailHostPool][sname]);
-				hostVector.add(newServer);
-			}
-		}
-	} else if(typeof(this.attrs[ZaCos.A_zimbraMailHostPool]) == 'string'){
-		if(this._app.getServerMap()[this.attrs[ZaCos.A_zimbraMailHostPool]]) {
-			hostVector.add(this._app.getServerMap()[this.attrs[ZaCos.A_zimbraMailHostPool]]);
-		} else {
-			var newServer = new ZaServer(this._app);
-			newServer.load("id", this.attrs[ZaCos.A_zimbraMailHostPool]);
-			hostVector.add(newServer);
-		}
-	}
-
-	this[ZaCos.A_zimbraMailHostPoolInternal] = hostVector.getArray();
-}
-*/
 
 ZaCos.prototype.initFromJS =
 function (obj) {
@@ -173,7 +143,10 @@ function (obj) {
 	
 	this[ZaCos.A_zimbraMailAllServersInternal] = new AjxVector();
 	this[ZaCos.A_zimbraMailHostPoolInternal] = new AjxVector();
-		
+	this[ZaCos.A_zimbraInstalledSkin] = this._app.getInstalledSkins();
+	if(!(this.attrs[ZaCos.A_zimbraAvailableSkin] instanceof Array)) {
+		this.attrs[ZaCos.A_zimbraAvailableSkin] = [this.attrs[ZaCos.A_zimbraAvailableSkin]];
+	}
 	var hostVector = new ZaItemVector();
 	if(this.attrs[ZaCos.A_zimbraMailHostPool] instanceof Array) {	
 		for(sname in this.attrs[ZaCos.A_zimbraMailHostPool]) {
@@ -258,10 +231,10 @@ function() {
 	command.invoke(params);
 }
 /**
-* public ZaCos.modify
+* public ZaCos.modifyMethod
 * @param mods - map of modified attributes
 **/
-ZaCos.prototype.modify = 
+ZaCos.modifyMethod = 
 function (mods) {
 	var soapDoc = AjxSoapDoc.create("ModifyCosRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
@@ -290,7 +263,7 @@ function (mods) {
 	var resp = command.invoke(params).Body.ModifyCosResponse;
 	this.initFromJS(resp.cos[0])
 }
-
+ZaItem.modifyMethods["ZaCos"].push(ZaCos.modifyMethod);
 /**
 * Returns HTML for a tool tip for this cos.
 */
@@ -381,6 +354,7 @@ ZaCos.myXModel = {
 		{id:ZaCos.A_zimbraPrefCalendarApptReminderWarningTime, choices:ZaModel.REMINDER_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefCalendarApptReminderWarningTime, type:_ENUM_},				
 		{id:ZaCos.A_zimbraPrefSkin, ref:"attrs/"+ZaCos.A_zimbraPrefSkin, type:_STRING_},				
 		{id:ZaCos.A_zimbraAvailableSkin, ref:"attrs/" + ZaCos.A_zimbraAvailableSkin, type:_LIST_, listItem:{type:_STRING_}},
+		{id:ZaCos.A_zimbraInstalledSkin, ref:ZaCos.A_zimbraInstalledSkin, type:_LIST_, listItem:{type:_STRING_}},
 //features
 		{id:ZaCos.A_zimbraFeatureContactsEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeatureContactsEnabled, type:_ENUM_},
 		{id:ZaCos.A_zimbraFeatureCalendarEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeatureCalendarEnabled, type:_ENUM_},

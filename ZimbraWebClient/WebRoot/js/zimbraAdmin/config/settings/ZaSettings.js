@@ -49,8 +49,12 @@ ZaSettings.init = function () {
 		params.soapDoc = soapDoc;	
 		var resp = command.invoke(params);
 		var zimlets = null;
-		if(resp && resp.Body && resp.Body.GetZimletsResponse && resp.Body.GetZimletsResponse.zimlets && resp.Body.GetZimletsResponse.zimlets.zimlet) {
-			zimlets = resp.Body.GetZimletsResponse.zimlets.zimlet;
+		try {
+			if(resp && resp.Body && resp.Body.GetZimletsResponse && resp.Body.GetZimletsResponse.zimlets && resp.Body.GetZimletsResponse.zimlets.zimlet) {
+				zimlets = resp.Body.GetZimletsResponse.zimlets.zimlet;
+			}
+		} catch (ex) {
+			//go on
 		}
 		if(zimlets && zimlets.length > 0) {
 			var includes = new Array();	
@@ -70,16 +74,20 @@ ZaSettings.init = function () {
 					continue;
 				}
 			}
-			if(includes.length > 0)
-				AjxInclude(includes, null,new AjxCallback(this, ZaSettings.postInit));	
+			try {
+				if(includes.length > 0)
+					AjxInclude(includes, null,new AjxCallback(this, ZaSettings.postInit));	
+			} catch (ex) {
+				//go on
+			}
 					
 		} else {
 			ZaSettings.postInit();
 		}
-	}catch (ex) {
+	} catch (ex) {
 		ZaSettings.initializing = false ;
-		DBG.dumpObj(ex);
-		throw new AjxException("Failed to initialize the application", AjxException.UNKNOWN, "ZaSettings.init");	
+//		DBG.dumpObj(ex);
+		throw ex;	
 	}
 	
 	// post-processing code

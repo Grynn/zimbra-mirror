@@ -167,7 +167,7 @@ function(ev) {
 			this.fireChangeEvent(this._currentObject);			
 		}
 	} catch (ex) {
-		this._handleException(ex, "ZaXFormViewController.prototype._saveButtonListener", null, false);
+		this._handleException(ex, "ZaXFormViewController.prototype.saveButtonListener", null, false);
 	}
 	return;
 }

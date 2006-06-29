@@ -370,6 +370,18 @@ function () {
 		}
 	}
 	
+	//check if zimbraAvailableSkin has been changed
+	var skinIds = new Array();
+	if((tmpObj.attrs[ZaCos.A_zimbraAvailableSkin] instanceof AjxVector) && tmpObj.attrs[ZaCos.A_zimbraAvailableSkin] && tmpObj.attrs[ZaCos.A_zimbraAvailableSkin].size()) {
+		var cnt = tmpObj.attrs[ZaCos.A_zimbraAvailableSkin].size();
+		for(var i = 0; i < cnt; i ++) {
+			skinIds.push(tmpObj.attrs[ZaCos.A_zimbraAvailableSkin].get(i));
+		}
+		if((cnt > 0 && (!this._currentObject.attrs[ZaCos.A_zimbraAvailableSkin] || !this._currentObject.attrs[ZaCos.A_zimbraAvailableSkin].length))
+		|| (skinIds.join("") != this._currentObject.attrs[ZaCos.A_zimbraAvailableSkin].join(""))) {
+			mods[ZaCos.A_zimbraAvailableSkin] = skinIds;
+		} 
+	}	
 	//check if need to rename
 	if(!isNew) {
 		if(tmpObj.name != this._currentObject.name) {

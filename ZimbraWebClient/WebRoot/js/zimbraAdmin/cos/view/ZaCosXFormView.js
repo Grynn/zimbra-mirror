@@ -54,6 +54,12 @@ function(entry) {
 		this._containedObject.attrs[a] = entry.attrs[a];
 	}
 	this._containedObject[ZaCos.A_zimbraMailHostPoolInternal] = entry[ZaCos.A_zimbraMailHostPoolInternal].clone();
+	
+	this._containedObject[ZaCos.A_zimbraInstalledSkin] = [];
+	var cnt = entry[ZaCos.A_zimbraInstalledSkin].length;
+	for(var i = 0; i < cnt; i++) {
+		this._containedObject[ZaCos.A_zimbraInstalledSkin][i] = entry[ZaCos.A_zimbraInstalledSkin][i];
+	}
 
 	this._containedObject[ZaCos.A_zimbraMailAllServersInternal] = AjxVector.fromArray(this._app.getMailServers());
   	this._containedObject.globalConfig = this._app.getGlobalConfig();
@@ -148,7 +154,13 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 							{ref:ZaCos.A_zimbraPrefCalendarUseQuickAdd, type:_CHECKBOX_, msgName:ZaMsg.NAD_useQuickAdd,label:ZaMsg.NAD_useQuickAdd, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_},							
 							{ref:ZaCos.A_zimbraPrefUseTimeZoneListInCalendar, type:_CHECKBOX_, msgName:ZaMsg.NAD_zimbraPrefUseTimeZoneListInCalendar,label:ZaMsg.NAD_zimbraPrefUseTimeZoneListInCalendar, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_},
 							{ref:ZaCos.A_zimbraPrefImapSearchFoldersEnabled, type:_CHECKBOX_, msgName:ZaMsg.NAD_zimbraPrefImapSearchFoldersEnabled,label:ZaMsg.NAD_zimbraPrefImapSearchFoldersEnabled, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_},
-							{ref:ZaCos.A_zimbraPrefSkin, type:_OSELECT1_, msgName:ZaMsg.NAD_zimbraPrefSkin,label:ZaMsg.NAD_zimbraPrefSkin, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged,choices:this._app.getInstalledSkins()}
+							{type:_SEPARATOR_},	
+							{ref:ZaCos.A_zimbraPrefSkin, type:_OSELECT1_, msgName:ZaMsg.NAD_zimbraPrefSkin,label:ZaMsg.NAD_zimbraPrefSkin, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged,choices:this._app.getInstalledSkins()},
+							{sourceRef: ZaCos.A_zimbraInstalledSkin, ref:ZaCos.A_zimbraAvailableSkin, 
+								type:_DWT_CHOOSER_, sorted: true, layoutStyle: DwtChooser.VERT_STYLE,
+					  	  		onChange: ZaTabView.onFormFieldChanged,
+					  	  	  	forceUpdate:true,colSpan:2,widgetClass:ZaSkinPoolChooser
+					  	  	}
 						]
 					},
 					{type:_CASE_, relevant:"instance[ZaModel.currentTab]==4", numCols:2, colSizes:["10px", "400px"],

@@ -4002,9 +4002,14 @@ Dwt_Chooser_XFormItem.prototype.constructWidget = function() {
 		targetListCssClass = sourceListCssClass;
 	}
 	var listSize = this.getInheritedProperty("listSize");
-	var params = {parent: form, className: cssClass, slvClassName: sourceListCssClass,
-				  tlvClassName: targetListCssClass, layoutStyle: DwtChooser.HORIZ_STYLE,
-				  listSize: listSize, sourceEmptyOk: true, allButtons: true};
+	var params = {parent: form, 
+				className: cssClass, 
+				slvClassName: sourceListCssClass,
+				tlvClassName: targetListCssClass, 
+				layoutStyle: (this.getInheritedProperty("layoutStyle") ? this.getInheritedProperty("layoutStyle") : DwtChooser.HORIZ_STYLE),
+				listSize: listSize, 
+				sourceEmptyOk: true, allButtons: true};
+	
 	return new widgetClass(params);
 }
 
