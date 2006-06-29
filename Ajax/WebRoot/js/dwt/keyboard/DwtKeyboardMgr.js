@@ -473,7 +473,7 @@ function(kbMgr, obj) {
 	 * can be set in input fields*/ 
 	if (kbMgr._kbFocusField != obj && kbMgr.__dwtCtrlHasFocus) {
 		DBG.println(AjxDebug.DBG1, "CONTROL DOES NOT HAVE FOCUS: RESETTING");
-		kbMgr.__onBlurHdlr(null);
+		DwtKeyboardMgr.__onBlurHdlr();
 	}
 	
 	if (!kbMgr.__dwtCtrlHasFocus) {
