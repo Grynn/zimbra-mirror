@@ -932,7 +932,7 @@ DwtHtmlEditor.prototype.getSelectedCells = function() {
 		} catch(ex) {}
 		rows.push(cells);
 	}
-	if (rows.length == 0 || rows[0].length == 0) {
+	if (rows.length == 0 || !rows[0] || rows[0].length == 0) {
 		cells = this.getNearestElement("td");
 		if (cells)
 			rows = [[cells]];
