@@ -41,7 +41,7 @@ function DwtTabGroup(name, blockApplicationHandling) {
 	/**@private*/
 	this.__parent = null;
 	/**@private*/
-	this.__name = name
+	this.__name = name;
 	/**@private*/
 	this.__blockApplicationHandling = blockApplicationHandling;
 	/**@private*/

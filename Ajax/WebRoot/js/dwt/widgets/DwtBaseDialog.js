@@ -67,10 +67,10 @@ function DwtBaseDialog(parent, className, title, zIndex, mode, loc, view, dragHa
 	
 	this._ffHackDisabled = false;
 	
-	/** Dialog tab group. Subclasses may add their elements to this tab group.
-	 * <i>DwtBaseDialog</i> manages the pushing and popping of this tabgroup
-	 * @type DwtTabGroup */
-	this._tabGroup = new DwtTabGroup();
+	// Default dialog tab group. Note that we disable application handling of
+	// keyboard shortcuts, since we don't want the view underneath reacting to
+	// keystrokes in the dialog.
+	this._tabGroup = new DwtTabGroup(this.toString(), true);
 
 	this._createHtml();
 	if (view != null)
@@ -177,7 +177,7 @@ function(loc) {
 
 	// Push our tab group
 	var kbMgr = this._shell.getKeyboardMgr();
-	kbMgr.pushTabGroup(this._tabGroup, true);
+	kbMgr.pushTabGroup(this._tabGroup);
 	this._tabGroup.resetFocusMember(true);
 }
 

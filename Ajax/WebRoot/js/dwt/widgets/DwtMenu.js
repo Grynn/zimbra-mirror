@@ -102,8 +102,10 @@ function DwtMenu(parent, style, className, posStyle, dialog) {
 	 * outside of our scope of influence (particularly when Dwt is being used in existing HTML */
 	this._menuCapObj = new DwtMouseEventCapture(this, "DwtMenu", null, DwtMenu._capMouseDownHdlr, null, null, null, false)
 	
-	/* Create the tab group for this menu*/
-	this._tabGroup = new DwtTabGroup();
+	// Default menu tab group. Note that we disable application handling of
+	// keyboard shortcuts, since we don't want the view underneath reacting to
+	// keystrokes in the menu.
+	this._tabGroup = new DwtTabGroup(this.toString(), true);
 	this._tabGroup.addMember(this);
 }
 
@@ -699,7 +701,7 @@ function(x, y, kbGenerated) {
 	
 	// Put our tabgroup in play
 	if (!this._dontStealFocus)
-		DwtShell.getShell(window).getKeyboardMgr().pushTabGroup(this._tabGroup, true);
+		DwtShell.getShell(window).getKeyboardMgr().pushTabGroup(this._tabGroup);
 	
 	/* If the popup was keyboard generated, then pick the first enabled child item
 	 * we do this by simulating a DwtKeyMap.SELECT_NEXT keyboard action */
