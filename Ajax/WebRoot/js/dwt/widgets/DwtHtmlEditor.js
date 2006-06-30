@@ -317,8 +317,11 @@ function(rows, cols, width, cellSpacing, cellPadding, alignment) {
 			var td = doc.createElement("td");
 			if (i == 0 && tdWidth)
 				td.style.width = tdWidth;
-			if (AjxEnv.isGeckoBased)
+			if (AjxEnv.isGeckoBased) {
 				td.appendChild(doc.createElement("br"));
+			} else if (AjxEnv.isIE) {
+				td.innerHTML = "&nbsp;";
+			}
 			td.style.borderTop = td.style.borderLeft = "1px solid #000";
 			tr.appendChild(td);
 		}
