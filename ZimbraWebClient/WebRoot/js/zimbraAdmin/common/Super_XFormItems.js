@@ -497,7 +497,9 @@ Super_DwtChooser_XFormItem.prototype.initializeItems = function() {
 	this.getItems()[0].layoutStyle = layoutStyle;	
 	this.getItems()[0].sourceRef = sourceRef;
 	this.getItems()[0].widgetClass = widgetClass;	
-	
+	this.getItems()[0].tableWidth = (this.getInheritedProperty("tableWidth") ? this.getInheritedProperty("tableWidth") : null);
+	this.getItems()[0].labelWidth = (this.getInheritedProperty("labelWidth") ? this.getInheritedProperty("labelWidth") : null);
+	this.getItems()[0].splitButtons = this.getInheritedProperty("splitButtons");
 	Composite_XFormItem.prototype.initializeItems.call(this);
 }	
 Super_DwtChooser_XFormItem.getElemValue = function () {

@@ -4008,7 +4008,12 @@ Dwt_Chooser_XFormItem.prototype.constructWidget = function() {
 				tlvClassName: targetListCssClass, 
 				layoutStyle: (this.getInheritedProperty("layoutStyle") ? this.getInheritedProperty("layoutStyle") : DwtChooser.HORIZ_STYLE),
 				listSize: listSize, 
-				sourceEmptyOk: true, allButtons: true};
+				sourceEmptyOk: true, 
+				allButtons: true,
+				tableWidth: (this.getInheritedProperty("tableWidth") ? this.getInheritedProperty("tableWidth") : null),
+				labelWidth: (this.getInheritedProperty("labelWidth") ? this.getInheritedProperty("labelWidth") : null),
+				splitButtons:this.getInheritedProperty("splitButtons")	
+				};
 	
 	return new widgetClass(params);
 }

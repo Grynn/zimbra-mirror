@@ -421,6 +421,21 @@ function (tmpObj, account, app) {
 	if(tmpObj[ZaAccount.A2_autoMailServer] == "TRUE") {
 		tmpObj.attrs[ZaAccount.A_mailHost] = null;
 	}
+	//check if zimbraAvailableSkin has been changed
+	var skinIds = new Array();
+	if((tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] instanceof AjxVector) && tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] && tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin].size()) {
+		var cnt = tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin].size();
+		for(var i = 0; i < cnt; i ++) {
+			skinIds.push(tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin].get(i).toString());
+		}
+		if(cnt > 0 ) {
+			tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] = skinIds;
+		} else 
+			tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] = "";
+			
+	} else
+		tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] = "";
+	
 	for (var aname in tmpObj.attrs) {
 		if(aname == ZaAccount.A_password || aname == ZaAccount.A_zimbraMailAlias || aname == ZaItem.A_objectClass || aname == ZaAccount.A2_mbxsize || aname == ZaAccount.A_mail) {
 			continue;

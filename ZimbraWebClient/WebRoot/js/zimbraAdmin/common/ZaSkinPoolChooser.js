@@ -25,6 +25,19 @@
 
 function ZaSkinPoolChooser(params) {
  	if (arguments.length == 0) return;
+
+ 	this.splitButtons = params.splitButtons;
+ 	
+ 	if(params.labelWidth)
+ 		this.labelWidth = params.labelWidth;
+ 	else
+ 		this.labelWidth = "300px"
+ 	
+ 	if(params.tableWidth)
+ 		this.tableWidth = params.tableWidth;
+ 	else
+ 		this.tableWidth = "300px";
+ 		
  	DwtChooser.call(this, params);
 }
  
@@ -50,39 +63,81 @@ function() {
 	
 	// start new table for list views
 	html[idx++] = "<table cellspacing=0 cellpadding=0 border=0>";
-	html[idx++] = "<colgroup><col width='300px'/><col width='300px'/></colgroup>";
+	html[idx++] = "<colgroup><col width='";
+	html[idx++] = this.labelWidth;
+	html[idx++] = "'/><col width='";
+	html[idx++] = this.tableWidth;
+	html[idx++] = "'/></colgroup>";
 	html[idx++] = "<tbody>";
-	html[idx++] = "<tr><td style='text-align:right' class='xform_label'>" + ZaMsg.NAD_zimbraInstalledSkin + "</td>";
+	html[idx++] = "<tr><td style='text-align:right;width:";
+	html[idx++] = this.labelWidth;
+	html[idx++] = "' class='xform_label'";
+	html[idx++] = ">" + ZaMsg.NAD_zimbraInstalledSkin + "</td>";
 	// source list
 	html[idx++] = "<td class='xform_field_container' id='";
 	html[idx++] = this._sourceListViewDivId;
-	html[idx++] = "' width='300px'></td>";
+	html[idx++] = "' width='";
+	html[idx++] = this.tableWidth;
+	html[idx++] = "'></td>";
 	html[idx++] = "<tr>";
 
 	// transfer buttons
-	html[idx++] = "<tr><td style='text-align:right' class='xform_label'>&nbsp;</td>";
-	html[idx++] = "<td valign='middle' style='text-align:center' id='";
+	html[idx++] = "<tr><td style='text-align:right;width:";
+	html[idx++] = this.labelWidth;	
+	html[idx++] = "' class='xform_label'";
+	html[idx++] = "'>&nbsp;</td>";
+	html[idx++] = "<td valign='middle' style='text-align:center;width:";
+	html[idx++] = this.tableWidth;	
+	html[idx++] = "' id='";
 	html[idx++] = this._buttonsDivId;
-	html[idx++] = "' width='300px'><table cellspacing=2 cellpadding=0 border=0><tr>";
-	if (this._allButtons) {
+	html[idx++] = "' ";
+	html[idx++] = "'><table cellspacing=2 cellpadding=0 border=0><tr>";
+	if(this.splitButtons) {
+		for (var i = 0; i < this._buttonInfo.length; i++) {
+			var id = this._buttonInfo[i].id;
+			html[idx++] = "<td><div id='";
+			html[idx++] = this._buttonDivId[id];
+			html[idx++] = "'></div></td>";
+		}
+		if (this._allButtons) {
+			html[idx++] = "<td><div id='";
+			html[idx++] = this._addAllButtonDivId;
+			html[idx++] = "'></div></td>";
+		}
+	
+		html[idx++] = "</tr><tr>";
+		// remove button
 		html[idx++] = "<td><div id='";
-		html[idx++] = this._addAllButtonDivId;
+		html[idx++] = this._removeButtonDivId;
 		html[idx++] = "'></div></td>";
-	}
-	for (var i = 0; i < this._buttonInfo.length; i++) {
-		var id = this._buttonInfo[i].id;
+		if (this._allButtons) {
+			html[idx++] = "<td><div id='";
+			html[idx++] = this._removeAllButtonDivId;
+			html[idx++] = "'></div></td>";
+		}
+	} else {
+		if (this._allButtons) {
+			html[idx++] = "<td><div id='";
+			html[idx++] = this._addAllButtonDivId;
+			html[idx++] = "'></div></td>";
+		}
+		for (var i = 0; i < this._buttonInfo.length; i++) {
+			var id = this._buttonInfo[i].id;
+			html[idx++] = "<td><div id='";
+			html[idx++] = this._buttonDivId[id];
+			html[idx++] = "'></div></td>";
+		}
+	
+
+		// remove button
 		html[idx++] = "<td><div id='";
-		html[idx++] = this._buttonDivId[id];
+		html[idx++] = this._removeButtonDivId;
 		html[idx++] = "'></div></td>";
-	}
-	// remove button
-	html[idx++] = "<td><div id='";
-	html[idx++] = this._removeButtonDivId;
-	html[idx++] = "'></div></td>";
-	if (this._allButtons) {
-		html[idx++] = "<td><div id='";
-		html[idx++] = this._removeAllButtonDivId;
-		html[idx++] = "'></div></td>";
+		if (this._allButtons) {
+			html[idx++] = "<td><div id='";
+			html[idx++] = this._removeAllButtonDivId;
+			html[idx++] = "'></div></td>";
+		}
 	}
 	html[idx++] = "</tr></table>";
 	html[idx++] = "</td></tr>";
