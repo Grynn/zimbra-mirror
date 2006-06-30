@@ -184,7 +184,7 @@ function () {
 	}
 	//transfer the fields from the tmpObj to the _currentObject
 	for (var a in tmpObj.attrs) {
-		if(a == ZaAccount.A_password || a==ZaAccount.A_zimbraMailAlias || a == ZaItem.A_objectClass || a==ZaAccount.A2_mbxsize || a==ZaAccount.A_mail || a == ZaItem.A_zimbraId) {
+		if(a == ZaAccount.A_password || a==ZaAccount.A_zimbraMailAlias || a == ZaItem.A_objectClass || a==ZaAccount.A2_mbxsize || a==ZaAccount.A_mail || a == ZaItem.A_zimbraId || a == ZaAccount.A_zimbraAvailableSkin) {
 			continue;
 		}	
 		//check if the value has been modified
@@ -202,6 +202,25 @@ function () {
 		}
 	}
 
+	//check if zimbraAvailableSkin has been changed
+	var skinIds = new Array();
+	if((tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] instanceof AjxVector) && tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] && tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin].size()) {
+		var cnt = tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin].size();
+		for(var i = 0; i < cnt; i ++) {
+			skinIds.push(tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin].get(i));
+		}
+		if(!(this._currentObject.attrs[ZaAccount.A_zimbraAvailableSkin] instanceof Array)) {
+			this._currentObject.attrs[ZaAccount.A_zimbraAvailableSkin] = [this._currentObject.attrs[ZaAccount.A_zimbraAvailableSkin]];
+		}
+		if((cnt > 0 && (!this._currentObject.attrs[ZaAccount.A_zimbraAvailableSkin] || !this._currentObject.attrs[ZaAccount.A_zimbraAvailableSkin].length))
+		|| (skinIds.join("") != this._currentObject.attrs[ZaAccount.A_zimbraAvailableSkin].join(""))) {
+			mods[ZaAccount.A_zimbraAvailableSkin] = skinIds;
+		} 
+		if(cnt==0)
+			mods[ZaAccount.A_zimbraAvailableSkin] = "";
+	} else
+		mods[ZaAccount.A_zimbraAvailableSkin] = "";	
+	
 	//save changed fields
 	try {	
 		this._currentObject.modify(mods);

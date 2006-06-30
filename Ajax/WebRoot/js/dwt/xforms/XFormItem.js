@@ -4013,7 +4013,7 @@ Dwt_Chooser_XFormItem.prototype.constructWidget = function() {
 	return new widgetClass(params);
 }
 
-Dwt_Chooser_XFormItem.prototype.updateWidget = function(newvalue) {
+Dwt_Chooser_XFormItem.prototype.updateWidget = function(newvalue, dedup, compareFunc) {
 	if (this._skipUpdate) {
 		return;
 	}
@@ -4026,10 +4026,26 @@ Dwt_Chooser_XFormItem.prototype.updateWidget = function(newvalue) {
 	}
 
 	var sourceItems = this.getSourceInstanceValue();
-	var targetItems = this.getTargetInstanceValue();
-
 	if(sourceItems instanceof Array) sourceItems = AjxVector.fromArray(sourceItems);
+
+	var targetItems = this.getTargetInstanceValue();
 	if(targetItems instanceof Array) targetItems = AjxVector.fromArray(targetItems);	
+	if(dedup) {
+		var cnt = targetItems.size();
+		for(var i=0; i < cnt; i++) {
+			if(compareFunc) {
+			 	var ix=sourceItems.indexOfLike(targetItems.get(i),compareFunc);
+			 	if(ix > -1) {
+					sourceItems.removeAt(ix);
+			 	}
+			} else {
+			 	var ix=sourceItems.indexOf(targetItems.get(i));
+			 	if(ix > -1) {
+					sourceItems.removeAt(ix);
+			 	}
+			}
+		}
+	}
 	
 	var sorted = this.getSorted();
 	if (sorted) {

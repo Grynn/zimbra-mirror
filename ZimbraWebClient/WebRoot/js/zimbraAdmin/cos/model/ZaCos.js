@@ -279,14 +279,16 @@ function (mods) {
 			var cnt = mods[aname].length;
 			if(cnt) {
 				for(var ix=0; ix <cnt; ix++) {
+					var attr = null;
 					if(mods[aname][ix] instanceof String)
 						var attr = soapDoc.set("a", mods[aname][ix].toString());
 					else if(mods[aname][ix] instanceof Object)
 						var attr = soapDoc.set("a", mods[aname][ix].toString());
-					else 
+					else if(mods[aname][ix])
 						var attr = soapDoc.set("a", mods[aname][ix]);
 						
-					attr.setAttribute("n", aname);
+					if(attr)
+						attr.setAttribute("n", aname);
 				}
 			} else {
 				//set empty values

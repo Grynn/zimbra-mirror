@@ -252,7 +252,16 @@ Cos_Port_XModelItem.prototype.maxInclusive = 65535;
 Super_XFormItem = function () { }
 XFormItemFactory.createItemType("_SUPER_FIELD_", "cos_field", Super_XFormItem, Composite_XFormItem);
 Super_XFormItem.checkIfOverWriten = function() {
-	return (this.getModelItem().getLocalValue(this.getInstance()) != null);
+	if(this.getModelItem().getLocalValue(this.getInstance())==null)
+		return false;
+	else if ( (this.getModelItem().getLocalValue(this.getInstance()) instanceof Array) && 
+	(this.getModelItem().getLocalValue(this.getInstance()).length==0) )	
+		return false;
+	else if ( (this.getModelItem().getLocalValue(this.getInstance()) instanceof AjxVector) && 
+	(this.getModelItem().getLocalValue(this.getInstance()).size==0) )	
+		return false;
+	else 
+		return true;
 }
 
 Super_XFormItem.updateCss = function(levels) {

@@ -145,6 +145,24 @@ function(obj) {
 	return -1;
 };
 
+/**
+* Returns the index of the obj given w/in vector
+*
+* @param obj			the object being looked for
+* @param compareFunc	a function for comparing objects
+*/
+AjxVector.prototype.indexOfLike = 
+function(obj, compareFunc) {
+	var value = compareFunc.call(obj);
+		
+	for (var i = 0; i < this._array.length; i++) {
+		var test = compareFunc.call(this._array[i]);
+		if (test == value)
+			return i;
+	}
+	return -1;
+};
+
 AjxVector.prototype.clone =
 function() {
 	var vec = new AjxVector();
@@ -160,6 +178,7 @@ function(obj) {
 	}
 	return false;
 };
+
 
 /**
 * Returns true if the vector contains the given object, using the given 

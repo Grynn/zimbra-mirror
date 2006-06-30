@@ -535,10 +535,16 @@ function(mods) {
 			var cnt = mods[aname].length;
 			if(cnt) {
 				for(var ix=0; ix <cnt; ix++) {
-					if(mods[aname][ix]) { //if there is an empty element in the array - don't send it
+					var attr = null;
+					if(mods[aname][ix] instanceof String)
+						var attr = soapDoc.set("a", mods[aname][ix].toString());
+					else if(mods[aname][ix] instanceof Object)
+						var attr = soapDoc.set("a", mods[aname][ix].toString());
+					else if(mods[aname][ix])
 						var attr = soapDoc.set("a", mods[aname][ix]);
+	
+					if(attr)
 						attr.setAttribute("n", aname);
-					}
 				}
 			} else {
 				var attr = soapDoc.set("a", "");
