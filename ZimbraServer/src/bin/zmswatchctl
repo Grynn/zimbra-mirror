@@ -41,6 +41,7 @@ case "$1" in
 		fi
 		if [ -f $CONFIG ]; then
 			$BASE/libexec/swatch --config-file=$BASE/conf/swatchrc \
+			--use-cpan-file-tail \
 			--script-dir=/tmp -t /var/log/zimbra.log >/tmp/swatch.out 2>&1 &
 			PID=$!
 			echo $PID > $PIDFILE

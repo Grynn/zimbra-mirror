@@ -39,6 +39,7 @@ case "$1" in
 	start)
 		if [ -f $CONFIG ]; then
 			$BASE/libexec/logswatch --config-file=$BASE/conf/logswatchrc \
+			--use-cpan-file-tail \
 			--script-dir=/tmp -t /var/log/zimbra.log >/tmp/logswatch.out 2>&1 &
 			PID=$!
 			chmod 777 /tmp/logswatch.out
