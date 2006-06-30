@@ -329,6 +329,7 @@ function(rows, cols, width, cellSpacing, cellPadding, alignment) {
 
 	this._insertNodeAtSelection(table);
 	this.selectNodeContents(table.rows[0].cells[0], true);
+	return table;
 };
 
 DwtHtmlEditor.prototype.applyTableProperties =
