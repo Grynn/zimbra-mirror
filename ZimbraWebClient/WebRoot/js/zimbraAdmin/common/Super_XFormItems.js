@@ -558,6 +558,7 @@ Super_Select1_XFormItem.prototype.numCols = 3;
 Super_Select1_XFormItem.prototype.items = [
 	{	type:_OSELECT1_, ref:".",
 		onChange:Composite_XFormItem.onFieldChange,
+		forceUpdate:true,
 		updateElement:function(value) {
 			Super_XFormItem.updateCss.call(this,5);
 			OSelect1_XFormItem.prototype.updateElement.call(this, value);
