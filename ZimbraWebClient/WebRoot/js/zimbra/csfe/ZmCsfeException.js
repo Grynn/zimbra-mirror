@@ -38,7 +38,30 @@ function ZmCsfeException(msg, code, method, detail, data) {
 	}
 };
 
+ZmCsfeException.prototype = new AjxException;
+ZmCsfeException.prototype.constructor = ZmCsfeException;
+
+ZmCsfeException.prototype.toString =
+function() {
+	return "ZmCsfeException";
+};
+
+//
+// Constants
+//
+
+// structured data keys
+ZmCsfeException.MAIL_SEND_ADDRESS_FAILURE_INVALID = "invalid";
+ZmCsfeException.MAIL_SEND_ADDRESS_FAILURE_UNSENT = "unsent";
+
+//
+// Static data
+
 ZmCsfeException._codeToMsg = {};
+
+//
+// Static functions
+//
 
 ZmCsfeException.define =
 function(name, code, msg) {
@@ -46,23 +69,27 @@ function(name, code, msg) {
 	ZmCsfeException._codeToMsg[code] = msg;
 };
 
-ZmCsfeException.prototype = new AjxException;
-ZmCsfeException.prototype.constructor = ZmCsfeException;
-
-ZmCsfeException.prototype.toString = 
-function() {
-	return "ZmCsfeException";
+ZmCsfeException.getErrorMsg = function(code, args) {
+	return args ? AjxMessageFormat.format(ZmCsfeException._codeToMsg[code], args) : ZmCsfeException._codeToMsg[code];
 };
+
+//
+// Public methods
+//
 
 ZmCsfeException.prototype.getErrorMsg =
 function(args) {
-	return args ? AjxMessageFormat.format(ZmCsfeException._codeToMsg[this.code], args) : ZmCsfeException._codeToMsg[this.code];
+	return ZmCsfeException.getErrorMsg(this.code, args);
 };
 
 ZmCsfeException.prototype.getData =
 function(key) {
 	return this.data ? this.data[key] : null;
 };
+
+//
+// Static initializer
+//
 
 ZmCsfeException.define("CSFE_SVC_ERROR", "CSFE_SVC_ERROR", ZMsg.errorService);
 ZmCsfeException.define("NETWORK_ERROR", "NETWORK_ERROR", ZMsg.errorNetwork);
@@ -121,6 +148,3 @@ ZmCsfeException.define("MAIL_TOO_MANY_TERMS", "mail.TOO_MANY_QUERY_TERMS_EXPANDE
 ZmCsfeException.define("MAIL_UNABLE_TO_IMPORT_CONTACTS", "mail.UNABLE_TO_IMPORT_CONTACTS", ZMsg.errorUnableToImport);
 
 ZmCsfeException.define("VOLUME_NO_SUCH_PATH", "volume.NO_SUCH_PATH");
-// structured data keys
-ZmCsfeException.MAIL_SEND_ADDRESS_FAILURE_INVALID = "invalid";
-ZmCsfeException.MAIL_SEND_ADDRESS_FAILURE_UNSENT = "unsent";
