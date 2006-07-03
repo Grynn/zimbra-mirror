@@ -274,6 +274,12 @@ function() {
  */
 DwtMenuItem.prototype.setMenu = 
 function(menuOrCallback) {
+	if ((this.parent instanceof DwtMenu) &&
+	    (this.parent.__preventMenuFocus != null) &&
+	    (menuOrCallback instanceof DwtMenu))
+	{
+		menuOrCallback.dontStealFocus(this.parent.__preventMenuFocus);
+	}
 	if (this._menu == menuOrCallback) {
 		return;
 	} 
