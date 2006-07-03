@@ -106,3 +106,5 @@ AjxCallback.simpleClosure = function(func, obj) {
 		return func.apply(obj || this, args.concat(args2));
 	};
 };
+
+AjxCallback.returnFalse = function() { return false; };

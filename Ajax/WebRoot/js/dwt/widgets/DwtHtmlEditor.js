@@ -815,6 +815,9 @@ function(params) {
 	// out iframe doc's body in IE - so create a new body...
 	if (AjxEnv.isIE) {
 		this._initializeContent(this._pendingContent);
+		// these 2 seem to be no-ops.
+		// this._execCommand("2D-Position", false);
+		// this._execCommand("MultipleSelection", true);
 	}
 
 	this._registerEditorEventHandlers(document.getElementById(this._iFrameId), doc);
