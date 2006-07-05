@@ -17,7 +17,7 @@
       <menuItem label="Preferences..." id="PREFERENCES" />
       <menuItem />
       <menuItem label="Visit Salesforce" id="WWW.SFORCE.COM" icon="SFORCE-panelIcon">
-        <canvas type="dialog" title="Salesforce Website" width="800" height="600" />
+        <canvas type="window" title="Salesforce Website" width="800" height="600" />
         <actionUrl target="http://www.salesforce.com">
           <param name="referrer">www.zimbra.com</param>
         </actionUrl>
@@ -31,5 +31,4 @@
     <property type="password" name="passwd" minLength="4" maxLength="32" label="Password" />
     <property type="string" name="ignoreDomain" minLength="4" maxLength="64" label="Ignore Domain" />
   </userProperties>
-
 </zimlet>
