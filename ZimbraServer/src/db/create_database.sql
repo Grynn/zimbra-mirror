@@ -27,10 +27,6 @@ DROP DATABASE IF EXISTS ${DATABASE_NAME};
 CREATE DATABASE ${DATABASE_NAME}
 DEFAULT CHARACTER SET utf8;
 
-GRANT ALL ON ${DATABASE_NAME}.* TO 'zimbra';
-GRANT ALL ON ${DATABASE_NAME}.* TO 'zimbra'@'localhost';
-GRANT ALL ON ${DATABASE_NAME}.* TO 'zimbra'@'localhost.localdomain';
-
 CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    id            INTEGER UNSIGNED NOT NULL,
    type          TINYINT NOT NULL,           # 1 = folder, 3 = tag, etc.
