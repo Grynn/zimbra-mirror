@@ -214,7 +214,7 @@ function (newName) {
 * @param mods set of modified attributes and their new values
 */
 ZaDistributionList.prototype.modify =
-function(tmpObj) {
+function(tmpObj, callback) {
 	//update the object
 	var soapDoc = AjxSoapDoc.create("ModifyDistributionListRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
@@ -252,40 +252,14 @@ function(tmpObj) {
 	var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	var resp = command.invoke(params).Body.ModifyDistributionListResponse;	
-	
-	this.initFromJS(resp.dl[0]);
-	
-	if(tmpObj._addList) 
-		this.addNewMembers(tmpObj._addList);
-	
-	if(tmpObj._removeList)		
-		this.removeDeletedMembers(tmpObj._removeList);
-		
-	//add the membership information
-	//update the member of first
-	try {
-		if (ZaAccountMemberOfListView._addList.length >0) { //you have new membership to be added.
-			ZaAccountMemberOfListView.addNewGroupsBySoap(this, ZaAccountMemberOfListView._addList);
-		}	
-		ZaAccountMemberOfListView._addList = []; //reset
-	}catch (ex){
-		ZaAccountMemberOfListView._addList = []; //reset
-		this._app.getCurrentController()._handleException(ex, "ZaDistributionList.prototype.modify: add distribution list failed", null, false);	//try not to halt the account modification	
+	if(callback) {
+		params.asyncMode = true;
+		params.callback = callback;
+		command.invoke(params);
+	} else {
+		var resp = command.invoke(params).Body.ModifyDistributionListResponse;	
+		this.initFromJS(resp.dl[0]);		
 	}
-	//remvoe may not needed during the creation time.
-	try {
-		if (ZaAccountMemberOfListView._removeList.length >0){//you have membership to be removed
-			ZaAccountMemberOfListView.removeGroupsBySoap(this, ZaAccountMemberOfListView._removeList);
-		}
-		ZaAccountMemberOfListView._removeList = []; //reset
-	}catch (ex){
-		ZaAccountMemberOfListView._removeList = []; //reset
-		this._app.getCurrentController()._handleException(ex, "ZaDistributionList.prototype.modify: remove distribution list failed", null, false);		
-	}
-		
-	this.refresh();
-	this.markClean();
 	return true;
 }
 
@@ -635,10 +609,45 @@ ZaDistributionList.prototype._dedupList = function (vector) {
 	}
 };
 
+ZaDistributionList.prototype.addMemberCallback = function (params, resp) {
+	if(resp.isException && resp.isException()) {
+		if(params.finishedCallback)
+			params.finishedCallback.run(false, resp.getException());
+			
+		return;
+	} 
+	if(this.stopAddingMembers) {
+		if(params.finishedCallback)
+			params.finishedCallback.run(false);
+		return;
+	} else if(params.list && (params.list instanceof Array) && params.list.length) {
+		this.addNewMembersAsync(params.list,params.finishedCallback);
+	} else {
+		if(params.finishedCallback)
+			params.finishedCallback.run(true);
+	}
+};
+
+ZaDistributionList.prototype.addNewMembersAsync = function (list, finishedCallback) {
+	var addMemberSoapDoc, r;
+	var command = new ZmCsfeCommand();
+	var member = list.getLast();
+	addMemberSoapDoc = AjxSoapDoc.create("AddDistributionListMemberRequest", "urn:zimbraAdmin", null);
+	addMemberSoapDoc.set("id", this.id);
+	addMemberSoapDoc.set("dlm", member.toString());
+	var params = new Object();
+	params.soapDoc = addMemberSoapDoc;	
+	params.asyncMode = true;
+	params.callback = finishedCallback;
+	//params.callback = new AjxCallback(this, this.addMemberCallback, {list:list,finishedCallback:finishedCallback});
+	list.removeLast();
+	command.invoke(params);
+};
+
 ZaDistributionList.prototype.addNewMembers = function (list) {
 	var addArray = list.getArray();
 	var len = addArray.length;
-	var addMemberSoapDoc, r, addMemberSoapDoc;
+	var addMemberSoapDoc, r;
 	var command = new ZmCsfeCommand();
 	for (var i = 0; i < len; ++i) {
 		addMemberSoapDoc = AjxSoapDoc.create("AddDistributionListMemberRequest", "urn:zimbraAdmin", null);
@@ -649,6 +658,22 @@ ZaDistributionList.prototype.addNewMembers = function (list) {
 		r=command.invoke(params).Body.AddDistributionListMemberResponse;
 
 	}
+};
+
+ZaDistributionList.prototype.removeDeletedMembersAsync = function (list, finishedCallback) {
+	var removeMemberSoapDoc, r;
+	var command = new ZmCsfeCommand();
+	var member = list.getLast();
+	removeMemberSoapDoc = AjxSoapDoc.create("RemoveDistributionListMemberRequest", "urn:zimbraAdmin", null);
+	removeMemberSoapDoc.set("id", this.id);
+	removeMemberSoapDoc.set("dlm", member.toString());
+	var params = new Object();
+	params.soapDoc = removeMemberSoapDoc;	
+	params.asyncMode = true;
+	params.callback = finishedCallback;
+	//params.callback = new AjxCallback(this, this.addMemberCallback, {list:list,finishedCallback:finishedCallback});
+	list.removeLast();
+	command.invoke(params);
 };
 
 ZaDistributionList.prototype.removeDeletedMembers = function (list) {

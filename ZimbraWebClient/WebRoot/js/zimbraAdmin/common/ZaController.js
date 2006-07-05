@@ -100,6 +100,13 @@ function() {
 }
 
 
+ZaController.prototype.getProgressDialog =
+function() {
+	if (!this._app.dialogs["progressDialog"])
+		this._app.dialogs["progressDialog"] = new ZaXProgressDialog(this._appCtxt.getShell(), this._app, "300px", "300px");
+	return this._app.dialogs["progressDialog"];
+}
+
 ZaController.prototype.setDirty = 
 function (isD) {
 	//overwrite this method to disable toolbar buttons, for example, Save button

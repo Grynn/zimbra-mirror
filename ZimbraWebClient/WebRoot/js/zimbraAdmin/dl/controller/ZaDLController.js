@@ -107,6 +107,21 @@ function(ev) {
 	}	
 }
 
+/**
+* This method handles "save" button click
+* member of ZaDLController
+* @param 	ev event object
+**/
+ZaDLController.prototype.saveButtonListener =
+function(ev) {
+	try {
+		this._saveChanges();
+	} catch (ex) {
+		this._handleException(ex, "ZaXFormViewController.prototype.saveButtonListener", null, false);
+	}
+	return;
+}
+
 //private and protected methods
 ZaDLController.prototype._createUI = 
 function () {
@@ -129,63 +144,167 @@ function () {
 	this._removeConfirmMessageDialog = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);			
 	this._UICreated = true;
 }
+/**
+ * This method is called by an asynchronous command when
+ * AddDistributionListMemberRequest or ModifyDistributionListRequest return
+ */
+ZaDLController.prototype.saveChangesCallback = function (obj, resp) {
+	try {
+		if(!resp) {
+			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaListViewController.prototype.searchCallback"));
+		}
+		if(resp.isException()) {
+			throw(resp.getException());
+		} else {
+
+			if (resp.getResponse() && resp.getResponse().Body) {
+				if(resp.getResponse().Body.ModifyDistributionListResponse) {
+					this.getProgressDialog().setProgress({numTotal:100,numDone:100,progressMsg:ZaMsg.MSG_SAVING_DL})
+					this.getProgressDialog().popup();	
+					var response = resp.getResponse().Body.ModifyDistributionListResponse;
+					this._currentObject.initFromJS(response.dl[0]);	
+				} else if (resp.getResponse().Body.RemoveDistributionListMemberResponse && obj._removeList) {
+					this.getProgressDialog().setProgress({numTotal:this._totalToRemove,numDone:(this._totalToRemove-obj._removeList.size()),progressMsg:ZaMsg.MSG_REMOVING_DL_MEMBERS});					
+					this.getProgressDialog().enableOk(false);
+				} else if (resp.getResponse().Body.AddDistributionListMemberResponse && obj._addList) {
+					this.getProgressDialog().setProgress({numTotal:this._totalToAdd,numDone:(this._totalToAdd-obj._addList.size()),progressMsg:ZaMsg.MSG_ADDING_DL_MEMBERS});				
+					this.getProgressDialog().enableOk(false);
+				}
+			}
+			
+			
+
+			if(obj._addList && obj._addList.size()) {
+				//the list of new members is reduced by each call to addNewMembersAsync
+//				this.getProgressDialog().setProgress({numTotal:this._totalToAdd,numDone:(this._totalToAdd-obj._addList.size()),progressMsg:ZaMsg.MSG_ADDING_DL_MEMBERS})
+	//			this.getProgressDialog().popup();
+		//		this.getProgressDialog().enableOk(false);
+
+				var finishedCallback = new AjxCallback(this,this.saveChangesCallback, obj);
+				this._currentObject.addNewMembersAsync(obj._addList,finishedCallback);
+			} else if(obj._removeList && obj._removeList.size()) {
+				//the list of members to be removed is reduced by each call to addNewMembersAsync
+			//	this.getProgressDialog().setProgress({numTotal:this._totalToRemove,numDone:(this._totalToRemove-obj._removeList.size()),progressMsg:ZaMsg.MSG_REMOVING_DL_MEMBERS})
+				//this.getProgressDialog().popup();				
+//				this.getProgressDialog().enableOk(false);
+				var finishedCallback = new AjxCallback(this,this.saveChangesCallback, obj);
+				this._currentObject.removeDeletedMembersAsync(obj._removeList,finishedCallback);
+			} else {	
+				this.getProgressDialog().enableOk(true);	
+				//add the membership information
+				//update the member of first
+				try {
+					if (ZaAccountMemberOfListView._addList.length >0) { //you have new membership to be added.
+						ZaAccountMemberOfListView.addNewGroupsBySoap(this._currentObject, ZaAccountMemberOfListView._addList);
+					}	
+					ZaAccountMemberOfListView._addList = []; //reset
+				} catch (ex){
+					ZaAccountMemberOfListView._addList = []; //reset
+					this._handleException(ex, "ZaDistributionList.prototype.modify: add distribution list failed", null, false);	//try not to halt the account modification	
+				}
+				//remove may not needed during the creation time.
+				try {
+					if (ZaAccountMemberOfListView._removeList.length >0){//you have membership to be removed
+						ZaAccountMemberOfListView.removeGroupsBySoap(this._currentObject, ZaAccountMemberOfListView._removeList);
+					}
+					ZaAccountMemberOfListView._removeList = []; //reset
+				} catch (ex){
+					ZaAccountMemberOfListView._removeList = []; //reset
+					this._handleException(ex, "ZaDistributionList.prototype.modify: remove distribution list failed", null, false);		
+				}
+				this._currentObject.refresh();
+				this._currentObject.markClean();	
+			
+				this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true); 
+				this._view.setDirty(false);
+				if(this._toolbar)
+					this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);		
+			
+				this._currentObject.refresh(false);	
+				this._view.setObject(this._currentObject);			
+				this.fireChangeEvent(this._currentObject);	
+				this.getProgressDialog().popdown();				
+			}				
+		
+		}
+	} catch (ex) {
+		this.getProgressDialog().popdown();	
+		this._handleException(ex, "ZaDLController.prototype.saveChangesCallback", null, false);	
+	}
+	return;
+}
+
+ZaDLController.prototype.createNewDLCallback = function (sucess, obj) {
+	if(success) {
+		this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true); 
+		if(obj != null) {
+			this.fireCreationEvent(obj);
+			this._currentObject = obj;
+		}
+	} else {
+		if(obj instanceof AjxException)
+			this._handleException(obj, "ZaDLController.prototype.createNewDLCallback", null, false);	
+		else
+			this._handleException(new ZmCsfeException("Unknown error", AjxException.UNKNOWN_ERROR, "ZaDLController.prototype.createNewDLCallback", "Unknown error"), "ZaDLController.prototype.createNewDLCallback", null, false);	
+	}
+}
 
 ZaDLController.prototype._saveChanges = function () {
 	var retval = false;
 	var newName = null;
 	try { 
-	if(this._view.getMyForm().hasErrors()) {
-		var errItems = this._view.getMyForm().getItemsInErrorState();
-		var dlgMsg = ZaMsg.CORRECT_ERRORS;
-		dlgMsg +=  "<br><ul>";
-		var i = 0;
-		for(var key in errItems) {
-			if(i > 19) {
-				dlgMsg += "<li>...</li>";
-				break;
-			}
-			if(key == "size") continue;
-			var label = errItems[key].getInheritedProperty("msgName");
-			if (!label && errItems[key].getLabel()) {
-				label = errItems[key].getLabel();
-			} else if(!label && errItems[key].getParentItem()) { //this might be a part of a composite
-				if(errItems[key].getParentItem().getInheritedProperty("msgName")) {
-					label = errItems[key].getParentItem().getInheritedProperty("msgName");
-				} else {
-					label = errItems[key].getParentItem().getLabel();
+		if(this._view.getMyForm().hasErrors()) {
+			var errItems = this._view.getMyForm().getItemsInErrorState();
+			var dlgMsg = ZaMsg.CORRECT_ERRORS;
+			dlgMsg +=  "<br><ul>";
+			var i = 0;
+			for(var key in errItems) {
+				if(i > 19) {
+					dlgMsg += "<li>...</li>";
+					break;
 				}
-			} 
-			if(label) {
-				if(label.substring(label.length-1,1)==":") {
-					label = label.substring(0, label.length-1);
+				if(key == "size") continue;
+				var label = errItems[key].getInheritedProperty("msgName");
+				if (!label && errItems[key].getLabel()) {
+					label = errItems[key].getLabel();
+				} else if(!label && errItems[key].getParentItem()) { //this might be a part of a composite
+					if(errItems[key].getParentItem().getInheritedProperty("msgName")) {
+						label = errItems[key].getParentItem().getInheritedProperty("msgName");
+					} else {
+						label = errItems[key].getParentItem().getLabel();
+					}
+				} 
+				if(label) {
+					if(label.substring(label.length-1,1)==":") {
+						label = label.substring(0, label.length-1);
+					}
+				}			
+				if(label) {
+					dlgMsg += "<li>";
+					dlgMsg +=label;			
+					dlgMsg += "</li>";
 				}
-			}			
-			if(label) {
-				dlgMsg += "<li>";
-				dlgMsg +=label;			
-				dlgMsg += "</li>";
+				i++;
 			}
-			i++;
+			dlgMsg += "</ul>";
+			this.popupMsgDialog(dlgMsg, true);
+			return false;
 		}
-		dlgMsg += "</ul>";
-		this.popupMsgDialog(dlgMsg, true);
-		return false;
-	}
 		var obj = this._view.getObject();
-		
+			
 		if(!ZaDistributionList.checkValues(obj, this._app))
 			return retval;
-	
-		//check if need to rename
+		
+			//check if need to rename
 		if(this._currentObject && obj.name != this._currentObject.name && this._currentObject.id) {
-		//	var emailRegEx = /^([a-zA-Z0-9_\-])+((\.)?([a-zA-Z0-9_\-])+)*@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-		/*	if(!AjxUtil.EMAIL_RE.test(obj.name) ) {
-				//show error msg
-				this._errorDialog.setMessage(ZaMsg.ERROR_ACCOUNT_NAME_INVALID, null, DwtMessageDialog.CRITICAL_STYLE, null);
-				this._errorDialog.popup();		
-				return retval;
-			}*/
-			newName = obj.name;
+			//	var emailRegEx = /^([a-zA-Z0-9_\-])+((\.)?([a-zA-Z0-9_\-])+)*@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+			/*	if(!AjxUtil.EMAIL_RE.test(obj.name) ) {
+					//show error msg
+					this._errorDialog.setMessage(ZaMsg.ERROR_ACCOUNT_NAME_INVALID, null, DwtMessageDialog.CRITICAL_STYLE, null);
+					this._errorDialog.popup();		
+					return retval;
+				}*/
+				newName = obj.name;
 		}		
 		
 		//check if need to rename
@@ -203,16 +322,23 @@ ZaDLController.prototype._saveChanges = function () {
 		}		
 		
 		if (this._currentObject.id){
-			retval = this._currentObject.modify(obj);
-			return retval;
+			this.getProgressDialog().setProgress({numTotal:100,numDone:0,progressMsg:"Saving changes. Please wait..."})
+			this.getProgressDialog().popup();			
+			this.getProgressDialog().enableOk(false);			
+			this._totalToAdd = obj._addList.size();
+			this._totalToRemove = obj._removeList.size();			
+			this._currentObject.modify(obj,new AjxCallback(this, this.saveChangesCallback,obj ));
+			
+			return true;			
 		} else {
-			var _tmpObj = ZaDistributionList.create(obj, this._app);
-			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true); 
+			var _tmpObj = ZaDistributionList.create(obj, this._app, new AjxCallback(this, this.createNewDLCallback));
+			return true;
+			/*this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true); 
 			if(_tmpObj != null) {
 				this.fireCreationEvent(_tmpObj);
 				this._currentObject = _tmpObj;
 				return true;
-			}
+			}*/
 		}
 	} catch (ex) {
 		var handled = false;
