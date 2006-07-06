@@ -169,6 +169,10 @@ ZaDLController.prototype.saveChangesCallback = function (obj, resp) {
 				} else if (resp.getResponse().Body.AddDistributionListMemberResponse && obj._addList) {
 					this.getProgressDialog().setProgress({numTotal:this._totalToAdd,numDone:(this._totalToAdd-obj._addList.size()),progressMsg:ZaMsg.MSG_ADDING_DL_MEMBERS});				
 					this.getProgressDialog().enableOk(false);
+				} else if (resp.getResponse().Body.CreateDistributionListResponse) {
+					var dl = new ZaDistributionList(this._app);
+					dl.initFromJS(resp.getResponse().Body.CreateDistributionListResponse.dl[0]);
+					this._currentObject = dl;
 				}
 			}
 			
@@ -232,21 +236,6 @@ ZaDLController.prototype.saveChangesCallback = function (obj, resp) {
 		this._handleException(ex, "ZaDLController.prototype.saveChangesCallback", null, false);	
 	}
 	return;
-}
-
-ZaDLController.prototype.createNewDLCallback = function (sucess, obj) {
-	if(success) {
-		this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true); 
-		if(obj != null) {
-			this.fireCreationEvent(obj);
-			this._currentObject = obj;
-		}
-	} else {
-		if(obj instanceof AjxException)
-			this._handleException(obj, "ZaDLController.prototype.createNewDLCallback", null, false);	
-		else
-			this._handleException(new ZmCsfeException("Unknown error", AjxException.UNKNOWN_ERROR, "ZaDLController.prototype.createNewDLCallback", "Unknown error"), "ZaDLController.prototype.createNewDLCallback", null, false);	
-	}
 }
 
 ZaDLController.prototype._saveChanges = function () {
@@ -331,7 +320,12 @@ ZaDLController.prototype._saveChanges = function () {
 			
 			return true;			
 		} else {
-			var _tmpObj = ZaDistributionList.create(obj, this._app, new AjxCallback(this, this.createNewDLCallback));
+			this.getProgressDialog().setProgress({numTotal:100,numDone:0,progressMsg:"Saving changes. Please wait..."})
+			this.getProgressDialog().popup();			
+			this.getProgressDialog().enableOk(false);			
+			this._totalToAdd = obj._addList.size();
+			this._totalToRemove = obj._removeList.size();				
+			ZaDistributionList.create(obj,new AjxCallback(this, this.saveChangesCallback,obj ));
 			return true;
 			/*this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true); 
 			if(_tmpObj != null) {

@@ -270,7 +270,7 @@ function(tmpObj, callback) {
 * @return ZaDistributionList
 **/
 ZaDistributionList.create =
-function(tmpObj, app) {
+function(tmpObj, callback) {
 	
 	//create SOAP request
 	var soapDoc = AjxSoapDoc.create("CreateDistributionListRequest", "urn:zimbraAdmin", null);
@@ -305,8 +305,13 @@ function(tmpObj, app) {
 	try {
 		var command = new ZmCsfeCommand();
 		var params = new Object();
+		params.asyncMode = true;
+		params.callback = callback;
+		command.invoke(params);		
 		params.soapDoc = soapDoc;	
-		resp = command.invoke(params).Body.CreateDistributionListResponse;	
+		command.invoke(params);
+		return true;
+		//resp = command.invoke(params).Body.CreateDistributionListResponse;	
 	} catch (ex) {
 		switch(ex.code) {
 			case ZmCsfeException.DISTRIBUTION_LIST_EXISTS:
@@ -321,7 +326,7 @@ function(tmpObj, app) {
 		}
 		return null;
 	}
-	var dl = new ZaDistributionList(app);
+	/*var dl = new ZaDistributionList(app);
 	dl.initFromJS(resp.dl[0]);
 	//dl.initFromDom(resp.firstChild);
 		
@@ -353,7 +358,7 @@ function(tmpObj, app) {
 	}
 	
 	dl.markClean();	
-	return dl;
+	return dl;*/
 }
 
 ZaDistributionList.checkValues = function(tmpObj, app) {
