@@ -92,6 +92,7 @@ ZaCos.A_zimbraPrefUseTimeZoneListInCalendar = "zimbraPrefUseTimeZoneListInCalend
 ZaCos.A_zimbraPrefImapSearchFoldersEnabled = "zimbraPrefImapSearchFoldersEnabled";
 ZaCos.A_zimbraPrefCalendarApptReminderWarningTime = "zimbraPrefCalendarApptReminderWarningTime";
 ZaCos.A_zimbraPrefSkin = "zimbraPrefSkin";
+ZaCos.A_zimbraPrefGalAutoCompleteEnabled = "zimbraPrefGalAutoCompleteEnabled";
 //features
 ZaCos.A_zimbraFeatureContactsEnabled="zimbraFeatureContactsEnabled";
 ZaCos.A_zimbraFeatureCalendarEnabled="zimbraFeatureCalendarEnabled";
@@ -395,7 +396,8 @@ ZaCos.myXModel = {
 		{id:ZaCos.A_zimbraPrefCalendarUseQuickAdd, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefCalendarUseQuickAdd, type:_ENUM_},		
 		{id:ZaCos.A_zimbraPrefCalendarAlwaysShowMiniCal, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefCalendarAlwaysShowMiniCal, type:_ENUM_},		
 		{id:ZaCos.A_zimbraPrefCalendarApptReminderWarningTime, choices:ZaModel.REMINDER_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefCalendarApptReminderWarningTime, type:_ENUM_},				
-		{id:ZaCos.A_zimbraPrefSkin, ref:"attrs/"+ZaCos.A_zimbraPrefSkin, type:_STRING_},				
+		{id:ZaCos.A_zimbraPrefSkin, ref:"attrs/"+ZaCos.A_zimbraPrefSkin, type:_STRING_},	
+		{id:ZaCos.A_zimbraPrefGalAutoCompleteEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefGalAutoCompleteEnabled, type:_ENUM_},							
 		{id:ZaCos.A_zimbraAvailableSkin, ref:"attrs/" + ZaCos.A_zimbraAvailableSkin, type:_LIST_, dataType: _STRING_},
 		{id:ZaCos.A_zimbraInstalledSkin, ref:ZaCos.A_zimbraInstalledSkin, type:_LIST_, dataType: _STRING_},
 		{id:ZaCos.A_zimbraInstalledSkinPool, ref:ZaCos.A_zimbraInstalledSkinPool, type:_LIST_, dataType: _STRING_},		

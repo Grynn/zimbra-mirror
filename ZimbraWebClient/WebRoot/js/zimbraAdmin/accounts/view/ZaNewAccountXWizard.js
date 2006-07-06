@@ -479,6 +479,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 							labelLocation:_LEFT_
 						},							
 						{ref:ZaAccount.A_zimbraPrefAutoAddAddressEnabled,labelCssStyle:"width:190px;", type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefAutoAddAddressEnabled,label:ZaMsg.NAD_zimbraPrefAutoAddAddressEnabled, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE"},							
+						{ref:ZaAccount.A_zimbraPrefGalAutoCompleteEnabled, labelCssStyle:"width:190px;", type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefGalAutoCompleteEnabled,label:ZaMsg.NAD_zimbraPrefGalAutoCompleteEnabled, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE"},																				
 						{type:_SEPARATOR_},
 						{ref:ZaAccount.A_zimbraPrefGroupMailBy,labelCssStyle:"width:190px;", type:_SUPER_SELECT1_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefGroupMailBy,label:ZaMsg.NAD_zimbraPrefGroupMailBy, labelLocation:_LEFT_},							
 						{ref:ZaAccount.A_zimbraPrefContactsPerPage,
