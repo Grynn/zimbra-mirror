@@ -53,9 +53,9 @@ case "$1" in
 		done
 		exit $STATUS
 	;;
-	reload)
+	restart)
 		for i in $SCRIPTS; do
-			/opt/zimbra/bin/$i reload
+			/opt/zimbra/bin/$i restart
 			R=$?
 			if [ $R -ne "0" ]; then
 				STATUS=$R
@@ -79,7 +79,7 @@ case "$1" in
 		exit $STATUS
 	;;
 	*)
-		echo "$0 start|stop|reload|status"
+		echo "$0 start|stop|restart|status"
 		exit 1
 	;;
 esac
