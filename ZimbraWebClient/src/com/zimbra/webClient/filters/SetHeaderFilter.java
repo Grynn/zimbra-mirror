@@ -57,7 +57,10 @@ public class SetHeaderFilter implements Filter {
     private static final String ATTR_NAME_VERSION = "version";
     private static final String ATTR_NAME_FILE_EXTENSION = "fileExtension";
     private static final String HEADER_CACHE_CONTROL = "Cache-control";
-    private static final String NO_CACHE_CONTROL_VALUE = "no-cache, must-revalidate, max-age=0";
+    private static final String NO_CACHE_CONTROL_VALUE = "no-store, no-cache, must-revalidate, max-age=0";
+    private static final String NO_CACHE_CONTROL_IE_VALUE = "post-check=0, pre-check=0";
+    private static final String NO_CACHE_PRAGMA_VALUE = "no-cache";
+    private static final String HEADER_PRAGMA = "Pragma";
     private static final String HEADER_EXPIRES = "Expires";
     private static final String ALREADY_EXPIRED = "Tue, 24 Jan 2000 20:46:50 GMT";
     private static final String HEADER_CONTENT_ENCODING= "Content-encoding";
@@ -410,8 +413,10 @@ public class SetHeaderFilter implements Filter {
     
     private void setJspCacheControlHeaders(HttpServletRequest req, 
                                            HttpServletResponse resp){
-        resp.setHeader(HEADER_CACHE_CONTROL, NO_CACHE_CONTROL_VALUE);
         resp.setHeader(HEADER_EXPIRES, ALREADY_EXPIRED);
+        resp.setHeader(HEADER_CACHE_CONTROL, NO_CACHE_CONTROL_VALUE);
+        resp.addHeader(HEADER_CACHE_CONTROL, NO_CACHE_CONTROL_IE_VALUE);
+        resp.setHeader(HEADER_PRAGMA, NO_CACHE_PRAGMA_VALUE);
     }
     
     
