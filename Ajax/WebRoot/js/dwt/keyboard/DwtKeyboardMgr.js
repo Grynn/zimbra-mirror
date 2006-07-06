@@ -90,6 +90,8 @@ function() {
  */
 DwtKeyboardMgr.prototype.pushTabGroup =
 function(tabGroup) {
+	if (!tabGroup) return;
+	DBG.println(AjxDebug.DBG2, "PUSH tab group " + tabGroup.__name);
 	if (!this.__keyboardHandlingInited) {
 		throw DwtKeyboardMgr.KEYMAP_NOT_REGISTERED;
 	}
@@ -98,6 +100,10 @@ function(tabGroup) {
 	var focusMember = tabGroup.getFocusMember();
 	if (!focusMember) {
 		focusMember = tabGroup.resetFocusMember(true);
+	}
+	if (!focusMember) {
+		DBG.println(AjxDebug.DBG1, "tab group " + tabGroup.__name + " has no members!");
+		return;
 	}
 	tabGroup.addFocusChangeListener(this.__tabGroupChangeListenerObj);
 	this.grabFocus(focusMember);
@@ -117,6 +123,8 @@ function(tabGroup) {
  */
 DwtKeyboardMgr.prototype.popTabGroup =
 function(tabGroup) {
+	var tgName = tabGroup ? tabGroup.__name : "";
+	DBG.println(AjxDebug.DBG2, "POP tab group " + tgName);
 	if (!this.__keyboardHandlingInited) {
 		throw DwtKeyboardMgr.KEYMAP_NOT_REGISTERED;
 	}
@@ -196,6 +204,7 @@ function(tabGroup) {
  */ 
 DwtKeyboardMgr.prototype.grabFocus =
 function(focusObj) {
+	if (!focusObj) return;
 	DBG.println(AjxDebug.DBG3, "GRAB FOCUS: " + focusObj.toString() + ", id: " + focusObj.id);
 	if (!this.__keyboardHandlingInited) {
 		return;
