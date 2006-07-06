@@ -551,7 +551,19 @@ sub rewriteConfig {
 		while ($sline =~ m/\@\@([^\@]+)\@\@/g) {
 			# print STDERR "\t$sline";
 			my $sr = $1;
-			$sline =~ s/\@\@$sr\@\@/$knownkeys{"LOCAL:$sr"}/;
+			my $key = $sr;
+			my $func = "";
+			if ( $sr =~ / / ) {
+				($func, $key) = split (' ', $sr, 2);
+			}
+			my $val = $knownkeys{"LOCAL:$key"};
+			if ($func ne "") {
+				if ($func eq "SPLIT") {
+					$val = (split (' ', $knownkeys{"LOCAL:$key"}, 2))[0];
+				} else {
+				}
+			}
+			$sline =~ s/\@\@$sr\@\@/$val/;
 			# print STDERR "\t$sline";
 		}
 
