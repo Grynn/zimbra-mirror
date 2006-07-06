@@ -32,17 +32,24 @@
  * @param processHtmlCallback - (optional) AjxCallback that will be called
  *   immediately after the HTML code was inserted.  A ref. to the document object
  *   will be passed.
+ * @param useKbMgmt	[boolean]*		if true, participate in keyboard mgmt
  */
-function DwtIframe(parent, className, hidden, html, styles, noscroll, posStyle, processHtmlCallback) {
-	if (!posStyle)
-		posStyle = DwtControl.STATIC_STYLE;
-	DwtControl.call(this, parent, className || "DwtIframe", posStyle, false);
-	this._styles = styles;
-	this._noscroll = noscroll;
+function DwtIframe(params) {
+	var posStyle = params.posStyle ? params.posStyle : DwtControl.STATIC_STYLE;
+	DwtControl.call(this, params.parent, params.className || "DwtIframe", posStyle, false);
+	this._styles = params.styles;
+	this._noscroll = params.noscroll;
 	this._iframeID = Dwt.getNextId();
-	this._processHtmlCallback = processHtmlCallback;
-	this._hidden = hidden;
-	this._createFrame(html);
+	this._processHtmlCallback = params.processHtmlCallback;
+	this._hidden = params.hidden;
+	this._createFrame(params.html);
+	
+	if (params.useKbMgmt) {
+		var doc = this.getDocument();
+		Dwt.setHandler(doc, DwtEvent.ONKEYDOWN, DwtKeyboardMgr.__keyDownHdlr);
+		Dwt.setHandler(doc, DwtEvent.ONKEYUP, DwtKeyboardMgr.__keyUpHdlr);
+		Dwt.setHandler(doc, DwtEvent.ONKEYPRESS, DwtKeyboardMgr.__keyPressHdlr);
+	}
 };
 
 DwtIframe.prototype = new DwtControl;
@@ -69,6 +76,9 @@ DwtIframe.prototype._rawEventHandler = function(ev) {
 		dw = new DwtMouseEvent(true);
 	else
 		dw = new DwtUiEvent(true);
+	if (/^key/i.test(ev.type)) {
+		var s = 1;
+	}
 	dw.setFromDhtmlEvent(ev);
 
 	// HACK! who would have know.. :-(

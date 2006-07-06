@@ -287,7 +287,10 @@ function(keyCode) {
 };
 
 DwtKeyMapMgr.isUsableTextInputValueUs =
-function(keyCode) {
+function(keyCode, element) {
+
+	if (element.tagName.toUpperCase() != "INPUT") return false;
+	
 	if (DwtKeyMapMgr._isAlphanumericUs(keyCode) || DwtKeyMapMgr._isPunctuationUs(keyCode) 
 		|| DwtKeyMapMgr._isAlphanumericUs(keyCode))
 		return true;
