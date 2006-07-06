@@ -731,12 +731,12 @@ function(useDiv) {
 		html[i++] = "'>";
 	} else {
 		html[i++] = "<style type='text/css'>";
-		html[i++] = "p { ";
-		html[i++] = "font-family:" + initFontFamily + ";";
-		html[i++] = "font-size:" + initFontSize + ";";
-		html[i++] = "color:" + initFontColor + ";";
-		html[i++] = " } ";
-		html[i++] = "body { ";
+// 		html[i++] = "p { ";
+// 		html[i++] = "font-family:" + initFontFamily + ";";
+// 		html[i++] = "font-size:" + initFontSize + ";";
+// 		html[i++] = "color:" + initFontColor + ";";
+// 		html[i++] = " } ";
+		html[i++] = "body, table { ";
 		html[i++] = "font-family:" + initFontFamily + ";";
 		html[i++] = "font-size:" + initFontSize + ";";
 		html[i++] = "color:" + initFontColor + ";";
