@@ -128,7 +128,9 @@ ZaZimbraAdmin.run =
 function(domain) {
 	if(window._dwtShell)
 		return;
-
+	if(!DBG)
+		DBG = new AjxDebug(AjxDebug.NONE, null, false);
+		
 	ZmCsfeCommand.setServerUri(location.protocol+"//" + domain + ZaSettings.CSFE_SERVER_URI);
 	ZmCsfeCommand.setCookieName(ZaZimbraAdmin._COOKIE_NAME);
 	

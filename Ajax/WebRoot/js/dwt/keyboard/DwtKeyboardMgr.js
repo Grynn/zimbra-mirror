@@ -430,9 +430,6 @@ function(ev) {
  */
 DwtKeyboardMgr.__keyPressHdlr =
 function(ev) {
-	if (ev.type && ev.type == "keypress") {
-		DBG.println(AjxDebug.DBG3, "DwtKeyboardMgr.__keyPressHdlr");
-	}
 	return DwtKeyboardMgr.__keyUpHdlr(ev);
 };
 
