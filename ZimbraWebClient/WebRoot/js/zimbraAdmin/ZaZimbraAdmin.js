@@ -126,6 +126,8 @@ function() {
 */
 ZaZimbraAdmin.run =
 function(domain) {
+	if(window._dwtShell)
+		return;
 
 	ZmCsfeCommand.setServerUri(location.protocol+"//" + domain + ZaSettings.CSFE_SERVER_URI);
 	ZmCsfeCommand.setCookieName(ZaZimbraAdmin._COOKIE_NAME);

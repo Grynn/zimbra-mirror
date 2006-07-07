@@ -97,6 +97,38 @@ function(username, bReloginMode) {
 	this.setReloginMode(username && username.length && bReloginMode);
  }
  
+ZaLoginDialog.prototype.popup =
+function(loc) {
+	if (this._poppedUp) return;
+	
+	this.cleanup(true);
+	var thisZ = this._zIndex;
+	// if we're modal, setup the veil effect,
+	// and track which dialogs are open
+	if (this._mode == DwtBaseDialog.MODAL) {
+		thisZ = this._setModalEffect(thisZ);
+	}
+
+	this._shell._veilOverlay.activeDialogs.push(this);
+
+	
+	// Deal with Firefox's horrible bug with absolutely 
+	// positioned divs and inputs floating over them.
+	if (!this._ffHackDisabled) Dwt._ffOverflowHack(this._htmlElId, thisZ, null, false);
+	
+	// use whichever has a value, local has precedence
+	if (loc) {
+		this._loc.x = loc.x;
+		this._loc.y = loc.y;
+		this._positionDialog(loc);
+	} else {
+		this._positionDialog();
+	}
+	
+	this.setZIndex(thisZ);
+	this._poppedUp = true;
+}
+
 
 ZaLoginDialog.prototype.setVisible = 
 function(visible, transparentBg) {

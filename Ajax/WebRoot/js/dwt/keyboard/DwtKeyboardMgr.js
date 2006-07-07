@@ -91,7 +91,7 @@ function() {
 DwtKeyboardMgr.prototype.pushTabGroup =
 function(tabGroup) {
 	if (!tabGroup) return;
-	DBG.println(AjxDebug.DBG2, "PUSH tab group " + tabGroup.__name);
+//	DBG.println(AjxDebug.DBG2, "PUSH tab group " + tabGroup.__name);
 	if (!this.__keyboardHandlingInited) {
 		throw DwtKeyboardMgr.KEYMAP_NOT_REGISTERED;
 	}
@@ -102,7 +102,7 @@ function(tabGroup) {
 		focusMember = tabGroup.resetFocusMember(true);
 	}
 	if (!focusMember) {
-		DBG.println(AjxDebug.DBG1, "tab group " + tabGroup.__name + " has no members!");
+//		DBG.println(AjxDebug.DBG1, "tab group " + tabGroup.__name + " has no members!");
 		return;
 	}
 	tabGroup.addFocusChangeListener(this.__tabGroupChangeListenerObj);
@@ -124,7 +124,7 @@ function(tabGroup) {
 DwtKeyboardMgr.prototype.popTabGroup =
 function(tabGroup) {
 	var tgName = tabGroup ? tabGroup.__name : "";
-	DBG.println(AjxDebug.DBG2, "POP tab group " + tgName);
+//	DBG.println(AjxDebug.DBG2, "POP tab group " + tgName);
 	if (!this.__keyboardHandlingInited) {
 		throw DwtKeyboardMgr.KEYMAP_NOT_REGISTERED;
 	}
@@ -430,7 +430,7 @@ function(ev) {
  */
 DwtKeyboardMgr.__keyPressHdlr =
 function(ev) {
-	if (ev.type == "keypress") {
+	if (ev.type && ev.type == "keypress") {
 		DBG.println(AjxDebug.DBG3, "DwtKeyboardMgr.__keyPressHdlr");
 	}
 	return DwtKeyboardMgr.__keyUpHdlr(ev);

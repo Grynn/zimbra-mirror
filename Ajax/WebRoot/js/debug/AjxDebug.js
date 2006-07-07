@@ -97,12 +97,17 @@ function() {
 */
 AjxDebug.prototype.println =
 function(level, msg, linkName) {
-	if (!this._isWriteable()) return;
-	var args = this._handleArgs(arguments, linkName);
-	if (!args) return;
+	try {
+		if (!this._isWriteable()) return;
+		var args = this._handleArgs(arguments, linkName);
+		if (!args) return;
 
-	msg = args.join("");
-	this._add(this._timestamp() + msg + "<br>", null, null, null, linkName);
+		msg = args.join("");
+		this._add(this._timestamp() + msg + "<br>", null, null, null, linkName);
+	} catch (ex) {
+		//
+	}
+	return;
 };
 
 AjxDebug.prototype.isDisabled =

@@ -73,8 +73,12 @@ function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell, us
 
 	// if there is a user shell (body content), move it below this shell
 	// into a container that's absolutely positioned
-	if (userShell)
-		document.body.removeChild(userShell);
+	try {
+		if (userShell)
+			document.body.removeChild(userShell);
+	} catch (ex)	 {
+		//
+	}
 	document.body.appendChild(htmlElement);
 	if (userShell) {
 		var userShellContainer = new DwtControl(this, null, Dwt.ABSOLUTE_STYLE);
