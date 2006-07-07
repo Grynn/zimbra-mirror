@@ -136,59 +136,61 @@ function(entry) {
 		this._containedObject[ZaModel.currentTab] = "1";
 	else
 		this._containedObject[ZaModel.currentTab] = entry[ZaModel.currentTab];
+	
+	if(ZaSettings.SKIN_PREFS_ENABLED) {
+		//convert strings to objects
+		var _tmpSkinMap = {};
+		var skins = entry.attrs[ZaAccount.A_zimbraAvailableSkin];
+		_tmpSkins = [];
+		if(skins == null) {
+			skins = [];
+		} else if (AjxUtil.isString(skins))	 {
+			skins = [skins];
+		}
 		
-	//convert strings to objects
-	var _tmpSkinMap = {};
-	var skins = entry.attrs[ZaAccount.A_zimbraAvailableSkin];
-	_tmpSkins = [];
-	if(skins == null) {
-		skins = [];
-	} else if (AjxUtil.isString(skins))	 {
-		skins = [skins];
+		for(var i=0; i<skins.length; i++) {
+			var skin = skins[i];
+			_tmpSkins[i] = new String(skin);
+			_tmpSkins[i].id = "id_"+skin;
+			_tmpSkinMap[skin] = _tmpSkins[i];		
+		}
+		this._containedObject.attrs[ZaAccount.A_zimbraAvailableSkin] = _tmpSkins;
+		
+		//convert strings to objects
+		var skins = this._app.getInstalledSkins();
+		var _tmpSkins = [];
+		if(skins == null) {
+			skins = [];
+		} else if (AjxUtil.isString(skins))	 {
+			skins = [skins];
+		}
+		
+		for(var i=0; i<skins.length; i++) {
+			var skin = skins[i];
+			if(_tmpSkinMap[skin])		
+				continue;
+				
+			_tmpSkins[i] = new String(skin);
+			_tmpSkins[i].id = "id_"+skin;
+		}
+		this._containedObject[ZaAccount.A_zimbraInstalledSkinPool] = _tmpSkins;
+		
+		//convert strings to objects
+		var skins = this._containedObject.cos.attrs[ZaAccount.A_zimbraAvailableSkin];
+		_tmpSkins = [];
+		if(skins == null) {
+			skins = [];
+		} else if (AjxUtil.isString(skins))	 {
+			skins = [skins];
+		}
+		
+		for(var i=0; i<skins.length; i++) {
+			var skin = skins[i];
+			_tmpSkins[i] = new String(skin);
+			_tmpSkins[i].id = "id_"+skin;
+		}
+		this._containedObject.cos.attrs[ZaAccount.A_zimbraAvailableSkin] = _tmpSkins;
 	}
-	
-	for(var i=0; i<skins.length; i++) {
-		var skin = skins[i];
-		_tmpSkins[i] = new String(skin);
-		_tmpSkins[i].id = "id_"+skin;
-		_tmpSkinMap[skin] = _tmpSkins[i];		
-	}
-	this._containedObject.attrs[ZaAccount.A_zimbraAvailableSkin] = _tmpSkins;
-	
-	//convert strings to objects
-	var skins = this._app.getInstalledSkins();
-	var _tmpSkins = [];
-	if(skins == null) {
-		skins = [];
-	} else if (AjxUtil.isString(skins))	 {
-		skins = [skins];
-	}
-	
-	for(var i=0; i<skins.length; i++) {
-		var skin = skins[i];
-		if(_tmpSkinMap[skin])		
-			continue;
-			
-		_tmpSkins[i] = new String(skin);
-		_tmpSkins[i].id = "id_"+skin;
-	}
-	this._containedObject[ZaAccount.A_zimbraInstalledSkinPool] = _tmpSkins;
-	
-	//convert strings to objects
-	var skins = this._containedObject.cos.attrs[ZaAccount.A_zimbraAvailableSkin];
-	_tmpSkins = [];
-	if(skins == null) {
-		skins = [];
-	} else if (AjxUtil.isString(skins))	 {
-		skins = [skins];
-	}
-	
-	for(var i=0; i<skins.length; i++) {
-		var skin = skins[i];
-		_tmpSkins[i] = new String(skin);
-		_tmpSkins[i].id = "id_"+skin;
-	}
-	this._containedObject.cos.attrs[ZaAccount.A_zimbraAvailableSkin] = _tmpSkins;
 	this._localXForm.setInstance(this._containedObject);
 }
 
@@ -612,9 +614,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				});
 	}
 	if(ZaSettings.ACCOUNTS_PREFS_ENABLED) {
-		cases.push({type:_CASE_, width:"100%", relevant:("instance[ZaModel.currentTab] == " + _tab5),
-					colSizes:["300px","450px"],
-					items :[
+		var prefItems = [
 						{ref:ZaAccount.A_prefSaveToSent,  type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_prefSaveToSent,label:ZaMsg.NAD_prefSaveToSent, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",onChange:ZaTabView.onFormFieldChanged},
 						{ref:ZaAccount.A_zimbraPrefMessageViewHtmlPreferred, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefMessageViewHtmlPreferred,label:ZaMsg.NAD_zimbraPrefMessageViewHtmlPreferred, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",onChange:ZaTabView.onFormFieldChanged},
 						{ref:ZaAccount.A_zimbraPrefComposeInNewWindow, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefComposeInNewWindow,label:ZaMsg.NAD_zimbraPrefComposeInNewWindow, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",onChange:ZaTabView.onFormFieldChanged},							
@@ -644,16 +644,19 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 						{ref:ZaAccount.A_prefMailSignature, type:_TEXTAREA_, msgName:ZaMsg.NAD_prefMailSignature,label:ZaMsg.NAD_prefMailSignature, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", onChange:ZaTabView.onFormFieldChanged, colSpan:3, width:"30em"},
 						{type:_SEPARATOR_},
 						{ref:ZaAccount.A_zimbraPrefOutOfOfficeReplyEnabled, type:_CHECKBOX_, msgName:ZaMsg.NAD_zimbraPrefOutOfOfficeReplyEnabled,label:ZaMsg.NAD_zimbraPrefOutOfOfficeReplyEnabled, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_},
-						{ref:ZaAccount.A_zimbraPrefOutOfOfficeReply, type:_TEXTAREA_, msgName:ZaMsg.NAD_zimbraPrefOutOfOfficeReply,label:ZaMsg.NAD_zimbraPrefOutOfOfficeReply, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", onChange:ZaTabView.onFormFieldChanged, colSpan:3, width:"30em"},
-						{type:_SEPARATOR_},
-						{ref:ZaAccount.A_zimbraPrefSkin, type:_SUPER_SELECT1_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefSkin,label:ZaMsg.NAD_zimbraPrefSkin, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged,choices:this._app.getInstalledSkins()},
-						{sourceRef: ZaAccount.A_zimbraInstalledSkinPool, ref:ZaCos.A_zimbraAvailableSkin, 
+						{ref:ZaAccount.A_zimbraPrefOutOfOfficeReply, type:_TEXTAREA_, msgName:ZaMsg.NAD_zimbraPrefOutOfOfficeReply,label:ZaMsg.NAD_zimbraPrefOutOfOfficeReply, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", onChange:ZaTabView.onFormFieldChanged, colSpan:3, width:"30em"}
+					];
+		if(ZaSettings.SKIN_PREFS_ENABLED) {
+						prefItems.push({type:_SEPARATOR_});
+						prefItems.push({ref:ZaAccount.A_zimbraPrefSkin, type:_SUPER_SELECT1_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefSkin,label:ZaMsg.NAD_zimbraPrefSkin, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged,choices:this._app.getInstalledSkins()});
+						prefItems.push({sourceRef: ZaAccount.A_zimbraInstalledSkinPool, ref:ZaCos.A_zimbraAvailableSkin, 
 							type:_SUPER_DWT_CHOOSER_, sorted: true, layoutStyle: DwtChooser.VERT_STYLE,
 				  	  		onChange: ZaTabView.onFormFieldChanged,resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
 				  	  	  	forceUpdate:true,colSpan:2,widgetClass:ZaSkinPoolChooser
-				  	  	}						
-					]
-				});
+				  	  	});						
+		}
+		cases.push({type:_CASE_, width:"100%", relevant:("instance[ZaModel.currentTab] == " + _tab5),
+					colSizes:["300px","450px"], items :prefItems});
 	}
 
 	if(ZaSettings.ACCOUNTS_ALIASES_ENABLED) {

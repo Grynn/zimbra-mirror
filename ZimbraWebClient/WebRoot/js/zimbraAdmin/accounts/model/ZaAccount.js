@@ -127,6 +127,7 @@ ZaAccount.A_zimbraPrefMailForwardingAddress = "zimbraPrefMailForwardingAddress";
 ZaAccount.A_zimbraPrefMailLocalDeliveryDisabled = "zimbraPrefMailLocalDeliveryDisabled";
 ZaAccount.A_zimbraPrefCalendarApptReminderWarningTime = "zimbraPrefCalendarApptReminderWarningTime";
 ZaAccount.A_zimbraPrefSkin = "zimbraPrefSkin";
+ZaAccount.A_zimbraPrefGalAutoCompleteEnabled = "zimbraPrefGalAutoCompleteEnabled";
 //features
 ZaAccount.A_zimbraFeatureMailForwardingEnabled = "zimbraFeatureMailForwardingEnabled";
 ZaAccount.A_zimbraFeatureContactsEnabled="zimbraFeatureContactsEnabled";
@@ -422,20 +423,21 @@ function (tmpObj, account, app) {
 		tmpObj.attrs[ZaAccount.A_mailHost] = null;
 	}
 	//check if zimbraAvailableSkin has been changed
-	var skinIds = new Array();
-	if((tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] instanceof AjxVector) && tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] && tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin].size()) {
-		var cnt = tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin].size();
-		for(var i = 0; i < cnt; i ++) {
-			skinIds.push(tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin].get(i).toString());
-		}
-		if(cnt > 0 ) {
-			tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] = skinIds;
-		} else 
+	if(ZaSettings.SKIN_PREFS_ENABLED) {
+		var skinIds = new Array();
+		if((tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] instanceof AjxVector) && tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] && tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin].size()) {
+			var cnt = tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin].size();
+			for(var i = 0; i < cnt; i ++) {
+				skinIds.push(tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin].get(i).toString());
+			}
+			if(cnt > 0 ) {
+				tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] = skinIds;
+			} else 
+				tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] = "";
+				
+		} else
 			tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] = "";
-			
-	} else
-		tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] = "";
-	
+	}	
 	for (var aname in tmpObj.attrs) {
 		if(aname == ZaAccount.A_password || aname == ZaAccount.A_zimbraMailAlias || aname == ZaItem.A_objectClass || aname == ZaAccount.A2_mbxsize || aname == ZaAccount.A_mail) {
 			continue;
@@ -1132,6 +1134,7 @@ ZaAccount.myXModel = {
 		{id:ZaAccount.A_zimbraPrefSkin, type:_COS_STRING_, ref:"attrs/"+ZaAccount.A_zimbraPrefSkin},
 		{id:ZaAccount.A_zimbraAvailableSkin, type:_COS_LIST_, ref:"attrs/" + ZaAccount.A_zimbraAvailableSkin, dataType: _STRING_},
 		{id:ZaAccount.A_zimbraInstalledSkinPool, ref:ZaAccount.A_zimbraInstalledSkinPool, type:_LIST_, dataType: _STRING_},				
+		{id:ZaAccount.A_zimbraPrefGalAutoCompleteEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraPrefGalAutoCompleteEnabled},
 		//features
 		{id:ZaAccount.A_zimbraFeatureContactsEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureContactsEnabled, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaAccount.A_zimbraFeatureCalendarEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureCalendarEnabled, choices:ZaModel.BOOLEAN_CHOICES},

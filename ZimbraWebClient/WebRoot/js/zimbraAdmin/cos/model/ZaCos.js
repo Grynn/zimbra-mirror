@@ -38,7 +38,9 @@ function ZaCos(app) {
 	this.name="";
 	this._app = app;	
 	this.type = ZaItem.COS;
-	this[ZaCos.A_zimbraInstalledSkin] = this._app.getInstalledSkins();
+	if(ZaSettings.SKIN_PREFS_ENABLED) {	
+		this[ZaCos.A_zimbraInstalledSkin] = this._app.getInstalledSkins();
+	}
 }
 ZaItem.loadMethods["ZaCos"] = new Array();
 ZaItem.modifyMethods["ZaCos"] = new Array();
