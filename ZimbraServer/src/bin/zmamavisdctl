@@ -58,10 +58,19 @@ checkRunning() {
 case "$1" in
     'start')
 		checkRunning
+		if [ ! -d /opt/zimbra/amavisd/quarantine ]; then
+			mkdir /opt/zimbra/amavisd/quarantine
+		fi
+		if [ ! -d /opt/zimbra/amavisd/tmp ]; then
+			mkdir /opt/zimbra/amavisd/tmp
+		fi
+		if [ ! -d /opt/zimbra/amavisd/var ]; then
+			mkdir /opt/zimbra/amavisd/var
+		fi
 		if [ "x$platform" != "xMACOSX" -a "x$platform" != "xMACOSXx86" ]; then
-			mount -t tmpfs | grep ${zimbra_home}/amavisd-new-2.3.3/tmp > /dev/null 2>&1
+			mount -t tmpfs | grep ${zimbra_home}/amavisd-new-2.4.1/tmp > /dev/null 2>&1
 			if [ $? != 0 ]; then
-				mount ${zimbra_home}/amavisd-new-2.3.3/tmp
+				mount ${zimbra_home}/amavisd-new-2.4.1/tmp
 			fi
 		fi
 		if [ x$2 = "x" ]; then
@@ -81,7 +90,7 @@ case "$1" in
 		cpid=`cat /opt/zimbra/log/amavisd.pid`
         kill -TERM "$cpid" 2> /dev/null
 		sleep 2
-		umount ${zimbra_home}/amavisd-new-2.3.3/tmp
+		umount ${zimbra_home}/amavisd-new-2.4.1/tmp
         ;;
 
     'stop')
@@ -96,7 +105,7 @@ case "$1" in
 				fi
 			fi
 			sleep 2
-			umount ${zimbra_home}/amavisd-new-2.3.3/tmp
+			umount ${zimbra_home}/amavisd-new-2.4.1/tmp
 		else
 			if [ "x$platform" = "xMACOSX" -o "x$platform" = "xMACOSXx86" ]; then
 				killall -TERM amavisd > /dev/null 2>&1
