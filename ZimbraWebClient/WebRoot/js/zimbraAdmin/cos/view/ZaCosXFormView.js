@@ -107,6 +107,9 @@ function(entry) {
 	this._localXForm.setInstance(this._containedObject);
 }
 
+ZaCosXFormView.gotSkins = function () {
+	return ((this.parent._app.getInstalledSkins() != null) && (this.parent._app.getInstalledSkins().length > 0));
+}
 
 ZaCosXFormView.myXFormModifier = function(xFormObject) {	
 	xFormObject.tableCssStyle = "width:100%;overflow:auto;";
@@ -191,11 +194,15 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 							{ref:ZaCos.A_zimbraPrefUseTimeZoneListInCalendar, type:_CHECKBOX_, msgName:ZaMsg.NAD_zimbraPrefUseTimeZoneListInCalendar,label:ZaMsg.NAD_zimbraPrefUseTimeZoneListInCalendar, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_},
 							{ref:ZaCos.A_zimbraPrefImapSearchFoldersEnabled, type:_CHECKBOX_, msgName:ZaMsg.NAD_zimbraPrefImapSearchFoldersEnabled,label:ZaMsg.NAD_zimbraPrefImapSearchFoldersEnabled, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_},
 							{type:_SEPARATOR_},	
-							{ref:ZaCos.A_zimbraPrefSkin, type:_OSELECT1_, msgName:ZaMsg.NAD_zimbraPrefSkin,label:ZaMsg.NAD_zimbraPrefSkin, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged,choices:this._app.getInstalledSkins()},
+							{ref:ZaCos.A_zimbraPrefSkin, type:_OSELECT1_, msgName:ZaMsg.NAD_zimbraPrefSkin,label:ZaMsg.NAD_zimbraPrefSkin, labelLocation:_LEFT_, 
+								onChange:ZaTabView.onFormFieldChanged,choices:this._app.getInstalledSkins(),
+								relevant:"ZaCosXFormView.gotSkins.call(this)"
+								},
 							{sourceRef: ZaCos.A_zimbraInstalledSkinPool, ref:ZaCos.A_zimbraAvailableSkin, 
 								type:_DWT_CHOOSER_, sorted: true, layoutStyle: DwtChooser.VERT_STYLE,
 					  	  		onChange: ZaTabView.onFormFieldChanged,
-					  	  	  	forceUpdate:true,colSpan:2,widgetClass:ZaSkinPoolChooser
+					  	  	  	forceUpdate:true,colSpan:2,widgetClass:ZaSkinPoolChooser,
+					  	  	  	relevant:"ZaCosXFormView.gotSkins.call(this)"
 					  	  	}
 						]
 					},

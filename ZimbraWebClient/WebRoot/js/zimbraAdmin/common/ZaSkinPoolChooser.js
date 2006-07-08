@@ -74,12 +74,12 @@ function() {
 	html[idx++] = "' class='xform_label'";
 	html[idx++] = ">" + ZaMsg.NAD_zimbraInstalledSkin + "</td>";
 	// source list
-	html[idx++] = "<td class='xform_field_container' id='";
-	html[idx++] = this._sourceListViewDivId;
-	html[idx++] = "' width='";
+	html[idx++] = "<td class='xform_field_container' width='";
 	html[idx++] = this.tableWidth;
-	html[idx++] = "'></td>";
-	html[idx++] = "<tr>";
+	html[idx++] = "'><div id='";
+	html[idx++] = this._sourceListViewDivId;
+	html[idx++] = "'></div></td>";
+	html[idx++] = "</tr>";
 
 	// transfer buttons
 	html[idx++] = "<tr><td style='text-align:right;width:";
@@ -88,10 +88,10 @@ function() {
 	html[idx++] = "'>&nbsp;</td>";
 	html[idx++] = "<td valign='middle' style='text-align:center;width:";
 	html[idx++] = this.tableWidth;	
-	html[idx++] = "' id='";
+	html[idx++] = "'><div id='";
 	html[idx++] = this._buttonsDivId;
-	html[idx++] = "' ";
-	html[idx++] = "'><table cellspacing=2 cellpadding=0 border=0><tr>";
+	html[idx++] = "'>";
+	html[idx++] = "<table cellspacing=2 cellpadding=0 border=0><tr>";
 	if(this.splitButtons) {
 		for (var i = 0; i < this._buttonInfo.length; i++) {
 			var id = this._buttonInfo[i].id;
@@ -140,14 +140,16 @@ function() {
 		}
 	}
 	html[idx++] = "</tr></table>";
-	html[idx++] = "</td></tr>";
+	html[idx++] = "</div></td></tr>";
 
 
 	html[idx++] = "<tr><td style='text-align:right' class='xform_label'>" + ZaMsg.NAD_zimbraAvailableSkin + "</td>";
 	// target list
-	html[idx++] = "<td class='xform_field_container' id='";
+	html[idx++] = "<td class='xform_field_container' width='";
+	html[idx++] = this.tableWidth;
+	html[idx++] = "'><div id='";
 	html[idx++] = this._targetListViewDivId;
-	html[idx++] = "'></td>";
+	html[idx++] = "'></div></td>";
 	html[idx++] = "</tr></tbody></table>";
 
 

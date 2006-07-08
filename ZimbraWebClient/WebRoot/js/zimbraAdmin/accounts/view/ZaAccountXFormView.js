@@ -194,6 +194,13 @@ function(entry) {
 	this._localXForm.setInstance(this._containedObject);
 }
 
+ZaAccountXFormView.gotSkins = function () {
+	if(!ZaSettings.SKIN_PREFS_ENABLED)
+		return false;
+	else 
+		return ((this.parent._app.getInstalledSkins() != null) && (this.parent._app.getInstalledSkins().length > 0));
+}
+
 ZaAccountXFormView.generateDisplayName =
 function (instance, firstName, lastName, initials) {
 	var oldDisplayName = instance.attrs[ZaAccount.A_displayname];
@@ -648,11 +655,13 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 					];
 		if(ZaSettings.SKIN_PREFS_ENABLED) {
 						prefItems.push({type:_SEPARATOR_});
-						prefItems.push({ref:ZaAccount.A_zimbraPrefSkin, type:_SUPER_SELECT1_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefSkin,label:ZaMsg.NAD_zimbraPrefSkin, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged,choices:this._app.getInstalledSkins()});
-						prefItems.push({sourceRef: ZaAccount.A_zimbraInstalledSkinPool, ref:ZaCos.A_zimbraAvailableSkin, 
+						prefItems.push({ref:ZaAccount.A_zimbraPrefSkin, type:_SUPER_SELECT1_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefSkin,label:ZaMsg.NAD_zimbraPrefSkin, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged,choices:this._app.getInstalledSkins(),
+						relevant:"ZaAccountXFormView.gotSkins.call(this)"});
+						prefItems.push({sourceRef: ZaAccount.A_zimbraInstalledSkinPool, ref:ZaAccount.A_zimbraAvailableSkin, 
 							type:_SUPER_DWT_CHOOSER_, sorted: true, layoutStyle: DwtChooser.VERT_STYLE,
 				  	  		onChange: ZaTabView.onFormFieldChanged,resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
-				  	  	  	forceUpdate:true,colSpan:2,widgetClass:ZaSkinPoolChooser
+				  	  	  	forceUpdate:true,colSpan:2,widgetClass:ZaSkinPoolChooser,
+				  	  	  	relevant:"ZaAccountXFormView.gotSkins.call(this)"
 				  	  	});						
 		}
 		cases.push({type:_CASE_, width:"100%", relevant:("instance[ZaModel.currentTab] == " + _tab5),

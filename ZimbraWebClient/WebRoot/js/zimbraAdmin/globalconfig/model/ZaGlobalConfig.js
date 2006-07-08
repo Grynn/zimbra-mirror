@@ -205,6 +205,9 @@ ZaGlobalConfig.prototype.initFromJS = function(obj) {
 			this.attrs["_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_"+restriction] = true;
 		}
 	}
+	if(this.attrs[ZaGlobalConfig.A_zimbraInstalledSkin] != null && !(this.attrs[ZaGlobalConfig.A_zimbraInstalledSkin] instanceof Array)) {
+		this.attrs[ZaGlobalConfig.A_zimbraInstalledSkin] = [this.attrs[ZaGlobalConfig.A_zimbraInstalledSkin]];
+	}
 }
 
 ZaGlobalConfig.prototype.modify = 
