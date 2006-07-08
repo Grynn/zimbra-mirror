@@ -250,12 +250,16 @@ public class SetHeaderFilter implements Filter {
 				//has crossContext=true
 				if (debug >0) { System.out.println("unable to forward zimbrasync request"); }
 			}
-        } else if (uri.startsWith("/home/") || uri.startsWith("/~")) {
+        } else if (uri.startsWith("/~") ||
+        		uri.startsWith("/home/")        || uri.startsWith("/user/") || 
+        		uri.startsWith("/zimbra/home/") || uri.startsWith("/zimbra/user/") ) {
             if (uri.startsWith("/~")) uri = "/home"+uri;
+            if (uri.startsWith("/zimbra")) uri = uri.substring(7);
             String targetContextStr = "/service/";
             ServletContext myContext = config.getServletContext();
             ServletContext targetContext = myContext.getContext( targetContextStr );
             RequestDispatcher dispatcher = targetContext.getRequestDispatcher(uri);
+            request.setAttribute("zimbra-internal-dispatch", "yes");
             dispatcher.forward( request, response );
             return;
         }
