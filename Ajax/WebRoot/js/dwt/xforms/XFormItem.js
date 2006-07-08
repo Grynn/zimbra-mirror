@@ -3826,7 +3826,7 @@ Dwt_List_XFormItem.prototype.setItems = function (itemArray){
 		existingArr = list.getArray();
 	}
 	tmpArr = new Array();
-	
+	var defaultColumnSort = this.getInheritedProperty("defaultColumnSortable") ;
 	if (itemArray && itemArray.length > 0) {	
 		//we have to compare the objects, because XForm calls this method every time an item in the list is selected
 		if(itemArray.join() != existingArr.join() ) {
@@ -3840,14 +3840,14 @@ Dwt_List_XFormItem.prototype.setItems = function (itemArray){
 				tmpArr.push(itemArray[i]);		
 			}
 			//add the default sort column
-			this.widget.set(AjxVector.fromArray(tmpArr), this.getInheritedProperty("defaultColumnSortable"));
+			this.widget.set(AjxVector.fromArray(tmpArr), defaultColumnSort);
 			if(preserveSelection && selection) {
 				this.widget.setSelectedItems(selection);
 			}
 		}
 	}else{
 		//display the empty list (no result html)
-		this.widget.set(AjxVector.fromArray([])); 
+		this.widget.set(AjxVector.fromArray([]), defaultColumnSort); 
 	}
 };
 
