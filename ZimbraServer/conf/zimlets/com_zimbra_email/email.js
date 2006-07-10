@@ -128,14 +128,19 @@ function(obj) {
 
 Com_Zimbra_Email.prototype._contactListener =
 function() {
-	var cc = this._appCtxt.getApp(ZmZimbraMail.CONTACTS_APP).getContactController();
-	if (this._actionContact) {
-		cc.show(this._actionContact);
+	var contact;
+	var capp = this._appCtxt.getApp(ZmZimbraMail.CONTACTS_APP);
+
+	if (this._actionObject) {
+		contact = (this._actionObject instanceof ZmContact)
+			? this._actionObject
+			: capp.getContactList().getContactByEmail(this._actionObject.address);
 	} else {
-		var contact = new ZmContact(this._appCtxt);
+		contact = new ZmContact(this._appCtxt);
 		contact.initFromEmail(this._actionObject);
-		cc.show(contact);
 	}
+
+	capp.getContactController().show(contact);
 };
 
 Com_Zimbra_Email.prototype._composeListener =
