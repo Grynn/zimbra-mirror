@@ -81,7 +81,7 @@ sub run_maint_command {
 sub get_auth_token {
 	my $host = "localhost";
 	my $user = "zimbra";
-	my $pass = `zmlocalconfig -s -m nokey zimbra_ldap_password`;
+	my $pass = `/opt/zimbra/bin/zmlocalconfig -s -m nokey zimbra_ldap_password`;
 	chomp $pass;
 
 	# print "Authenticating to $host as $user/$pass\n";
