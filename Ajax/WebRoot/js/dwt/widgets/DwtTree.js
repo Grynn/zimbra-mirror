@@ -65,6 +65,10 @@ DwtTree.ITEM_DBL_CLICKED = 4;
 DwtTree.ITEM_EXPANDED = 1;
 DwtTree.ITEM_COLLAPSED = 2;
 
+DwtTree.prototype.getStyle = function() {
+	return this._style;
+};
+
 DwtTree.prototype.addSelectionListener = 
 function(listener) {
 	this.addListener(DwtEvent.SELECTION, listener);
