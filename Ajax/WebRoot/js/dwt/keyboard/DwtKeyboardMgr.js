@@ -354,8 +354,8 @@ function(focusObj) {
 			this.__oldFocusObj = this.__focusObj;
 		}
 		this.__focusObj = focusObj;
-		// IE throws JS error if you try to focus a disabled input
-		if (!(AjxEnv.isIE && focusObj.disabled)) {
+		// IE throws JS error if you try to focus a disabled or invisible input
+		if (!(AjxEnv.isIE && (focusObj.disabled || !Dwt.getVisible(focusObj)))) {
 			focusObj.focus();
 		}
 	}
