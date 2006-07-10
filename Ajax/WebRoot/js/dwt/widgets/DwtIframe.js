@@ -76,9 +76,6 @@ DwtIframe.prototype._rawEventHandler = function(ev) {
 		dw = new DwtMouseEvent(true);
 	else
 		dw = new DwtUiEvent(true);
-	if (/^key/i.test(ev.type)) {
-		var s = 1;
-	}
 	dw.setFromDhtmlEvent(ev);
 
 	// HACK! who would have know.. :-(
