@@ -3,6 +3,7 @@
 	<name>ZimbraWebClient</name>
 	<comment></comment>
 	<projects>
+		<project>Catalina</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

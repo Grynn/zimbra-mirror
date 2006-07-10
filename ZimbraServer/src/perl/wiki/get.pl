@@ -5,10 +5,10 @@ use LWP::UserAgent;
 use HTTP::Request;
 use Time::HiRes qw(gettimeofday);
 
-my @buckets = (0,0,0,0,0,0,0,0,0,0,0);
+my @buckets = (0,0,0,0,0,0,0,0,0,0);
 my $num_threads = 0;
 my $iteration = 0;
-my $username = 'wikiuser';
+my $username = 'wikitest';
 my $password = 'test123';
 
 sub sendRequest($) {
@@ -25,7 +25,7 @@ sub sendRequest($) {
 }
 
 sub runTests() {
-    my $s0, $usec0, $s1, $usec1, $url, $resp;
+    my $s0, $usec0, $s1, $usec1, $url, $resp, $nerror = 0, $min = 999999999, $max = 0, $sum = 0;
 
     for (my $i = 0; $i < $iteration; $i++) {
 	$url = int(rand(10)) . "/" . int(rand(10)) . "/" . int(rand(10));
@@ -34,8 +34,7 @@ sub runTests() {
 	($s1, $usec1) = gettimeofday();
 
 	if ($resp->code() != 200) {
-	    lock($buckets);
-	    $buckets[0]++;
+		$nerror++;
 	}
 
 	my $interval;
@@ -45,12 +44,18 @@ sub runTests() {
 	    $interval = $interval + 1000000;
 	}
 
+	$sum += $interval;
+	if ($interval < $min) {
+		$min = $interval;
+	}
+	if ($interval > $max) {
+		$max = $interval;
+	}
+	
 	$interval = int ($interval / 20000);
 	if ($interval > 9) {
 	    $interval = 9;
 	}
-
-	$interval++;
 
 	{
 	    lock($buckets);
@@ -61,18 +66,18 @@ sub runTests() {
         }
     }
 
-#    tabulate($buckets);
+    tabulate($nerror, $min / 1000, $max / 1000, ($sum / $iteration) / 1000, $buckets);
 }
 
-sub tabulate($) {
-    my ($buckets) = @_;
-    printf "\nerror  200  400  600  800 1000 1200 1400 1600 1800 2000\n";
-    printf "\n-------------------------------------------------------\n";
-
+sub tabulate($$$$$) {
+    my ($nerror, $min, $max, $avg, $buckets) = @_;
+    printf "\nerror  min  max  avg | Latency   20   40   60   80  100  120  140  160  180  200\n";
+    printf "\n--------------------------------------------------------------------------------\n";
+	printf(" %4d %4d %4d %4d |        ", $nerror, $min, $max, $avg);
     foreach (@buckets) {
 	printf(" %4d", $_);
     }
-    printf "\n-------------------------------------------------------\n";
+    printf "\n--------------------------------------------------------------------------------\n";
 }
 
 sub mergeArrays($$) {
@@ -98,4 +103,4 @@ for (my $i = 0; $i < $num_threads; $i++) {
     $th[$i]->join();
 }
 
-tabulate($buckets);
+#tabulate($buckets);
