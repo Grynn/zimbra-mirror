@@ -153,13 +153,13 @@ sub getHostsByService {
     my @hosts = ();
 
     if (!$gothosts) {
-        open CMD, "/opt/zimbra/bin/zmprov gas |" or return undef;
+        open CMD, "/opt/zimbra/bin/zmprov -l gas |" or return undef;
         my @hl = <CMD>;
         close CMD;
         chomp @hl;
         foreach my $h (@hl) {
             alarm(120);
-            open CMD, "/opt/zimbra/bin/zmprov gs $h | grep zimbraServiceEnabled | sed -e 's/zimbraServiceEnabled: //'|" or return undef;
+            open CMD, "/opt/zimbra/bin/zmprov -l gs $h | grep zimbraServiceEnabled | sed -e 's/zimbraServiceEnabled: //'|" or return undef;
             my @sl = <CMD>;
             close CMD;
             chomp @sl;

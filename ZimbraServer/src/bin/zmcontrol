@@ -294,7 +294,7 @@ sub getLocalConfig {
 }
 
 sub getEnabledServices {
-	if (open (ZMPROV, "/opt/zimbra/bin/zmprov gs $localHostName 2>/dev/null |")) {
+	if (open (ZMPROV, "/opt/zimbra/bin/zmrov -l gs $localHostName 2>/dev/null |")) {
 		my @lines = <ZMPROV>;
 		close ZMPROV;
 
@@ -348,10 +348,10 @@ sub displayVersion {
 		$string = "Release $release $platform";
 	}
 
-	my $rc = 0xffff & system ("/opt/zimbra/bin/zmprov gacf > /dev/null 2>&1");
+	my $rc = 0xffff & system ("/opt/zimbra/bin/zmrov -l gacf > /dev/null 2>&1");
 	if (!$rc) {
 		$rc = 0xffff & system 
-			("/opt/zimbra/bin/zmprov gacf 2> /dev/null | grep -q 'zimbraComponentAvailable: hotbackup'");
+			("/opt/zimbra/bin/zmrov -l gacf 2> /dev/null | grep -q 'zimbraComponentAvailable: hotbackup'");
 		if ($rc) { $string .= " FOSS edition"; }
 		else { $string .= " NETWORK edition"; }
 	}

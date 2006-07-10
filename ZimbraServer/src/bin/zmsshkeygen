@@ -31,7 +31,7 @@ zmsetvars \
 
 keyattr="zimbraSshPublicKey"
 
-zmprov="/opt/zimbra/bin/zmprov"
+zmprov="/opt/zimbra/bin/zmprov -l"
 
 keyfile="${zimbra_home}/.ssh/zimbra_identity"
 

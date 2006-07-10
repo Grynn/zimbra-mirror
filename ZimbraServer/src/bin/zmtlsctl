@@ -32,7 +32,7 @@ MODE=$1
 
 h=`/opt/zimbra/bin/zmhostname`
 if [ "x$MODE" = "x" ]; then
-	MODE=`/opt/zimbra/bin/zmprov gs $h | grep zimbraMailMode | sed -e 's/zimbraMailMode: //'`
+	MODE=`/opt/zimbra/bin/zmprov -l gs $h | grep zimbraMailMode | sed -e 's/zimbraMailMode: //'`
 	if [ "x$MODE" = "x" ]; then
 		MODE="http"
 	fi
@@ -88,7 +88,7 @@ updateWebConfig() {
 }
 
 updateLdap() {
-	/opt/zimbra/bin/zmprov ms $h zimbraMailMode $MODE
+	/opt/zimbra/bin/zmprov -l ms $h zimbraMailMode $MODE
 }
 
 updateWebConfig

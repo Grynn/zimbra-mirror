@@ -90,13 +90,13 @@ foreach my $sline (@slines) {
 					$host=`/opt/zimbra/bin/zmlocalconfig -q -m nokey zimbra_server_hostname`;
 					chomp $host;
 				}
-				$rep = `/opt/zimbra/bin/zmprov gs $host | sed -e 's/[^ ]* //' | grep $pattern`;
+				$rep = `/opt/zimbra/bin/zmprov -l gs $host | sed -e 's/[^ ]* //' | grep $pattern`;
 				if ($rep ne "") {
 					$rep = "#";
 				}
 			}
 		} else {
-			$rep=`/opt/zimbra/bin/zmprov gcf $sr | sed -e 's/[^ ]* //'`;
+			$rep=`/opt/zimbra/bin/zmprov -l gcf $sr | sed -e 's/[^ ]* //'`;
 			chomp $rep;
 		}
 		$sline =~ s/%%$sr%%/$rep/g;

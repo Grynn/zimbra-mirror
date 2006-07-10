@@ -62,7 +62,7 @@ foreach my $i (`/opt/zimbra/bin/zmlocalconfig -m shell`) {
 	$ENV{$k} = $v;
 }
 
-foreach my $i (`/opt/zimbra/bin/zmprov gs $ENV{zimbra_server_hostname}`) {
+foreach my $i (`/opt/zimbra/bin/zmprov -l gs $ENV{zimbra_server_hostname}`) {
 	chomp $i;
 	my ($k,$v) = split (':',$i,2);
 	$v =~ s/^ //;
