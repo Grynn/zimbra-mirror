@@ -38,7 +38,6 @@
 
       <Host name="localhost" appBase="webapps" >
 	    <Context path="/" docBase="${catalina.home}/webapps/zimbra" debug="0" crossContext="true"/>
-	    <Context path="/zimbra" docBase="${catalina.home}/webapps/zimbra" debug="0" crossContext="true"/>
 	  </Host>
 
       <Valve className="org.apache.catalina.valves.AccessLogValve"
