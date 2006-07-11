@@ -33,7 +33,11 @@ function DwtHtmlEditor(parent, className, posStyle, content, mode, blankIframeSr
 
 	// init content
 	this._initialStyle = this._getInitialStyle(true);
-	this._pendingContent = content || "";
+	var initialHtml = "<html><head>" + this._getInitialStyle(false) + "</head><body></body></html>";
+	if (!content)
+		content = this._mode == DwtHtmlEditor.HTML ? initialHtml : "";
+
+	this._pendingContent = content;
 	this._htmlModeInited = false;
 
 	this._initialize();
@@ -800,7 +804,7 @@ DwtHtmlEditor.prototype._finishHtmlModeInit =
 function(params) {
 	var doc = this._getIframeDoc();
 	try {
-		this._initializeContent(this._pendingContent);
+		doc.body.innerHTML = this._pendingContent || "";
 	} catch (ex) {
 		DBG.println("XXX: Error initializing HTML mode :XXX");
 		return;
@@ -814,7 +818,10 @@ function(params) {
 	// bug fix #4722 - setting design mode for the first time seems to null
 	// out iframe doc's body in IE - so create a new body...
 	if (AjxEnv.isIE) {
-		this._initializeContent(this._pendingContent);
+		doc.open();
+		doc.write("");
+		doc.close();
+		doc.body.innerHTML = this._pendingContent || "";
 		// these 2 seem to be no-ops.
 		// this._execCommand("2D-Position", false);
 		// this._execCommand("MultipleSelection", true);
