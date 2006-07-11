@@ -65,6 +65,22 @@ AjxPost.SC_SERVICE_UNAVAILABLE		= 503;
 */
 AjxPost.prototype.execute =
 function(callback, form, optionalTimeout) {
+	// bug fix #7361
+	var tags = form.getElementsByTagName("input");
+	var inputs = new Array();
+	for (var i = 0; i < tags.length; i++) {
+		if (tags[i].type == "file")
+			inputs.push(tags[i]);
+	}
+	for (var i = 0; i < inputs.length; i++) {
+		var hidden = document.createElement("input");
+		hidden.type = "hidden";
+		hidden.name = "filename" + (i+1);
+		hidden.value = inputs[i].value;
+
+		inputs[i].parentNode.insertBefore(hidden, inputs[i]);
+	}
+
 	form.target = this._iframeId;
 	this._callback = callback;
 	var req = new AjxPostRequest(form);
