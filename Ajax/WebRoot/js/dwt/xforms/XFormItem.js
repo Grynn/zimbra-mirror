@@ -2494,7 +2494,8 @@ Group_XFormItem.prototype.forceUpdate = false;
 Group_XFormItem.prototype.numCols = 2;
 Group_XFormItem.prototype.useParentTable = false;
 Group_XFormItem.prototype.focusable = false;
-
+Group_XFormItem.prototype.cellspacing = 0;
+Group_XFormItem.prototype.cellpadding = 0;
 Group_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
 	this.getForm().outputItemList(this.getItems(), this, html, updateScript, indent, this.getNumCols(), currentCol);
 }
@@ -2638,7 +2639,8 @@ Case_XFormItem.prototype.labelLocation = _NONE_;
 Case_XFormItem.prototype.width = "100%";
 Case_XFormItem.prototype.focusable = false;
 Case_XFormItem.prototype.deferred = true;
-
+Case_XFormItem.prototype.cellspacing = 0;
+Case_XFormItem.prototype.cellpadding = 0;
 Case_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
 	this.getForm().outputItemList([], this, html, updateScript, indent,this.getNumCols(), 0);
 //	this.getForm().outputItemList(this.getItems(), this, html, updateScript, indent + "  ",this.getNumCols(), currentCol);
@@ -2681,7 +2683,9 @@ Case_XFormItem.prototype._outputHTML = function () {
 		if (outerStyle != null && outerStyle != "") {
 			this.outputElementDivStart(html, updateScript, "");
 		}
-		html.append("<table cellspacing=0 cellpadding=0 ", 
+		var cellspacing = this.getInheritedProperty("cellspacing");
+		var cellpadding = this.getInheritedProperty("cellpadding");		
+		html.append("<table cellspacing=",cellspacing," cellpadding=",cellpadding," ",  
 				(XForm._showBorder ? "border=1" : "border=0"),
 				" id=\"", this.getId(),"_table\" ", this.getTableCssString(),">\r");
 		if (colSizes != null) {

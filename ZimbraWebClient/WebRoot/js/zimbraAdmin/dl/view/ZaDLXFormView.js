@@ -374,23 +374,15 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 				], 
 			ref: ZaModel.currentTab, colSpan:"*",cssClass:"ZaTabBar"
 		},
-		{type:_SWITCH_, colSpan:"*", numCols:5,
+		{type:_SWITCH_,
 			items:[
-				{type:_CASE_,  relevant:"instance[ZaModel.currentTab] == 1",  numCols:4, colSpan: "*", colSizes: [400, 20, 420, 30], //["50%","47%", "3%"],
+				{type:_CASE_,  relevant:"instance[ZaModel.currentTab] == 1",  numCols:2,  colSizes: ["48%","48%"], //["50%","47%", "3%"],
 				  items:[
-					 {type:_GROUP_, width: "100%", numCols: 1,  //colSizes:[10,120,"auto",20],
+					 {type:_GROUP_, width: "98%", numCols: 1,  //colSizes:[10,120,"auto",20],
 						items:[	
  						    //{type:_CELLSPACER_, width:10, rowSpan:9},
  						    {type:_SPACER_, height:"5"}, 						    
- 						    /*
- 						    {type: _GROUP_, width: "90%", //numCols: 5, colSize: [10, 150, 150, 10, "auto"],
- 						         items:[
-        							{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.DLXV_LabelListName, label: ZaMsg.DLXV_LabelListName +":", 
-        								onChange:ZaTabView.onFormFieldChanged, forceUpdate:true, tableCssStyle: "80%", inputWidth:"100%"
-        							}
-							     ]
- 						    }, */
- 						    {type: _GROUP_, width: "100%", numCols: 2, colSize: [100, 250], items: [
+ 						    {type: _GROUP_, width: "98%", numCols: 2, items: [
  						    		{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.DLXV_LabelListName, label: ZaMsg.DLXV_LabelListName +":", 
         								onChange:ZaTabView.onFormFieldChanged, forceUpdate:true, tableCssStyle: "width:90%", inputWidth:"100%"
         							},
@@ -418,7 +410,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 							{ref:"members", type:_DWT_LIST_, height:"338", width:"98%", cssClass: "DLTarget", cssStyle:"margin-left: 5px; ",
 								widgetClass:ZaAccMiniListView, headerList:null},
 					        {type:_SPACER_, height:"8"},
-						    {type:_GROUP_, width:"100%", numCols:8, colSizes:[85,5, 85,"100%",80,5,80,5], 
+						    {type:_GROUP_, width:"98%", numCols:8, colSizes:[85,5, 85,"100%",80,5,80,5], 
 								items:[
 									{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemoveAll, width:80, 
 									   relevant:"ZaDLXFormView.shouldEnableRemoveAllButton.call(item)",
@@ -444,11 +436,8 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 							}
 					    ]
 				    },
-				    {type: _GROUP_, width: "100%", items: [
-								{type:_CELLSPACER_},
-							]
-					},
-					{type:_GROUP_, numCols:1, width:"100%", colSizes:["auto"], cssClass:"RadioGrouperBorder",/*label:ZaMsg.DLXV_GroupLabelAddMembers,*/
+
+					{type:_GROUP_, numCols:1, width:"96%", cssClass:"RadioGrouperBorder",
 						items:[			      
 						   {type:_GROUP_, numCols:2, colSizes:["auto", "auto"], 
 						   		items: [
@@ -456,10 +445,9 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 								   	{type:_CELLSPACER_}
 								]
 							},
-					       {type:_GROUP_, numCols:3, colSizes:[50, "auto",80], width:"98%", 
+					       {type:_GROUP_, numCols:3, width:"98%", 
 							   items:[
-							   		{type:_OUTPUT_, value:ZaMsg.DLXV_LabelFind, nowrap:true},
-									{type:_TEXTFIELD_, width:"100%", cssClass:"admin_xform_name_input", ref:ZaSearch.A_query, label:null,
+									{type:_TEXTFIELD_, cssClass:"admin_xform_name_input", ref:ZaSearch.A_query, label:ZaMsg.DLXV_LabelFind,
 								      elementChanged: function(elementValue,instanceValue, event) {
 										  var charCode = event.charCode;
 										  if (charCode == 13 || charCode == 3) {
@@ -475,7 +463,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 								]
 					       },
 					       {type:_SPACER_, height:"5"},
-						   {ref:"memberPool", type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource", 
+						   {ref:"memberPool", type:_DWT_LIST_, height:"200", width:"98%", cssClass: "DLSource", 
 						   		forceUpdate: true, widgetClass:ZaAccMiniListView, headerList:sourceHeaderList},
 					       {type:_SPACER_, height:"5"},
 					       {type:_GROUP_, width:"98%", numCols:8, colSizes:[85,5, 85,"100%",80,5,80,5],
@@ -506,7 +494,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 					       {type:_OUTPUT_, value:ZaMsg.DLXV_GroupLabelEnterAddressBelow},
 					       {ref:"optionalAdd", type:_TEXTAREA_,width:"98%", height:98},
 					       {type:_SPACER_, height:"5"},
-					       {type:_GROUP_, numCols:2, width:"98%", colSizes:[80,"100%"],
+					       {type:_GROUP_, numCols:2, width:"98%", colSizes:[80,"auto"],
 								items: [
 									{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddFromFreeForm, width:"100%",
 										onActivate:"ZaDLXFormView.addFreeFormAddressToMembers.call(this,event)",
@@ -517,8 +505,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 								]
 					       }				       
 						]
-				    },
-				    {type:_CELLSPACER_},
+				    }
 				  ]
 				},
 				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 2", colSizes:[10, "auto"], colSpan:"*",
@@ -534,15 +521,14 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 					]
 				 },
 				 //MemberOf Tab
-				{type:_CASE_, numCols:4, colSpan:"*", relevant:("instance[ZaModel.currentTab] == 3"), colSizes: [450, 20, 420, 30],
+				{type:_CASE_, numCols:2, colSpan:"*", relevant:("instance[ZaModel.currentTab] == 3"), colSizes: ["50%", "50%"],
 					items: [
-								
-						{type:_SPACER_, height:"10"},
 						//layout rapper around the direct/indrect list						
 						{type: _GROUP_, width: "98%", numCols: 1, //colSizes: ["auto", 20],
 							items: [
+							    {type:_SPACER_, height:"5"}, 							
 								//direct member group
-								{type:_GROUP_, numCols:1, cssClass: "RadioGrouperBorder", width: "100%", colSizes:["auto"], //height: 400,
+								{type:_GROUP_, numCols:1, cssClass: "RadioGrouperBorder", width: "96%",  //height: 400,
 									items:[
 										{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
 									   		items: [
@@ -585,7 +571,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 								//{type:_CELLSPACER_},	
 								{type:_SPACER_, height:"10"},	
 								//indirect member group
-								{type:_GROUP_, numCols:1, cssClass: "RadioGrouperBorder", width: "100%", //colSizes:["auto"], height: "48%",
+								{type:_GROUP_, numCols:1, cssClass: "RadioGrouperBorder", width: "98%", //colSizes:["auto"], height: "48%",
 									items:[
 										{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
 									   		items: [
@@ -623,82 +609,77 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 								//{type:_CELLSPACER_}	
 							]
 						},
-						{type: _GROUP_, width: "100%", items: [
-								{type:_CELLSPACER_},
-							]
-						},
 						//non member group
-						{type:_GROUP_, numCols:1, cssClass: "RadioGrouperBorder", width: "98%", //colSizes:["auto"], height: "98%",
-							items:[
-								{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
-							   		items: [
-										{type:_OUTPUT_, value:ZaMsg.DL_NonGroupLabel, cssClass:"RadioGrouperLabel"},
-										{type:_CELLSPACER_}
-									]
-								},
-								{type:_GROUP_, numCols:5, colSizes:[30, "auto",60, 150,15], width:"98%", 
-								   items:[
-								   		{type:_OUTPUT_, value:ZaMsg.DLXV_LabelFind, nowrap:true},
-										{ref:"query", type:_TEXTFIELD_, width:"100%", cssClass:"admin_xform_name_input",  label:null,
-									      elementChanged: function(elementValue,instanceValue, event) {
-											  var charCode = event.charCode;
-											  if (charCode == 13 || charCode == 3) {
-											      ZaAccountMemberOfListView.prototype.srchButtonHndlr.call(this);
-											  } else {
-											      this.getForm().itemChanged(this, elementValue, event);
-											  }
-								      		}
+						//layout rapper around the elements						
+						{type: _GROUP_, width: "98%", numCols: 1, //colSizes: ["auto", 20],
+							items: [
+							    {type:_SPACER_, height:"5"}, 							
+								{type:_GROUP_, numCols:1, cssClass: "RadioGrouperBorder", width: "96%", //colSizes:["auto"], height: "98%",
+									items:[
+										{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
+									   		items: [
+												{type:_OUTPUT_, value:ZaMsg.DL_NonGroupLabel, cssClass:"RadioGrouperLabel"},
+												{type:_CELLSPACER_}
+											]
 										},
-										{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonSearch, width:80,
-										   onActivate:ZaAccountMemberOfListView.prototype.srchButtonHndlr
-										},
-										{ref: ZaAccount.A2_showSameDomain, type: _CHECKBOX_, align:_RIGHT_, msgName:ZaMsg.NAD_SearchSameDomain,
-												label:AjxMessageFormat.format (ZaMsg.NAD_SearchSameDomain),
-												//ZaMsg.NAD_SearchSameDomain,
-												labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",
-												labelCssClass:"xform_label", relevantBehavior: _HIDE_, 
-												relevant: "ZaSettings.DOMAINS_ENABLED"
-										}										
+										{type:_GROUP_, numCols:3, colSizes:[30, "auto",85], width:"98%", 
+										   items:[
+												{ref:"query", type:_TEXTFIELD_, width:"100%", cssClass:"admin_xform_name_input",  label:ZaMsg.DLXV_LabelFind,
+											      elementChanged: function(elementValue,instanceValue, event) {
+													  var charCode = event.charCode;
+													  if (charCode == 13 || charCode == 3) {
+													      ZaAccountMemberOfListView.prototype.srchButtonHndlr.call(this);
+													  } else {
+													      this.getForm().itemChanged(this, elementValue, event);
+													  }
+										      		}
+												},
+												{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonSearch, width:80,
+												   onActivate:ZaAccountMemberOfListView.prototype.srchButtonHndlr
+												},
+												{ref: ZaAccount.A2_showSameDomain, type: _CHECKBOX_, align:_RIGHT_, 												
+														label:null,labelLocation:_NONE_, trueValue:"TRUE", falseValue:"FALSE",
+														relevantBehavior: _HIDE_, 
+														relevant: "ZaSettings.DOMAINS_ENABLED"
+												},										
+												{type:_OUTPUT_, value:ZaMsg.NAD_SearchSameDomain,colSpan:2}
+											]
+								         },
+								        {type:_SPACER_, height:"5"},
+										{ref: ZaAccount.A2_nonMemberList, type: _S_DWT_LIST_, width: "100%", height: 440,
+											cssClass: "DLSource", widgetClass: ZaAccountMemberOfListView, 
+											headerList: nonMemberOfHeaderList, defaultColumnSortable: 0,
+											//createPopupMenu: 
+											forceUpdate: true },
+											
+										{type:_SPACER_, height:"5"},	
+										//add action buttons
+										{type:_GROUP_, width:"100%", numCols:8, colSizes:[85,5, 85,"100%",80,5,80,5],
+											items: [
+											   {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddFromList, width:80,
+												onActivate:"ZaAccountMemberOfListView.addGroups.call(this,event, ZaAccount.A2_nonMemberList)",
+												relevant:"ZaAccountMemberOfListView.shouldEnableAddRemoveButton.call(this, ZaAccount.A2_nonMemberList)",
+												relevantBehavior:_DISABLE_},
+											   {type:_CELLSPACER_},
+											   {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddAll, width:80,
+												onActivate:"ZaAccountMemberOfListView.addAllGroups.call(this,event, ZaAccount.A2_nonMemberList)",
+												relevant:"ZaAccountMemberOfListView.shouldEnableAllButton.call(this, ZaAccount.A2_nonMemberList)",
+												relevantBehavior:_DISABLE_},
+												{type:_CELLSPACER_},
+												{type:_DWT_BUTTON_, label:ZaMsg.Previous, width:75, id:"backButton", icon:"LeftArrow", disIcon:"LeftArrowDis",
+													relevantBehavior:_DISABLE_, relevant:"ZaAccountMemberOfListView.shouldEnableBackButton.call(this, ZaAccount.A2_nonMemberList)",
+													onActivate:"ZaAccountMemberOfListView.backButtonHndlr.call(this,event, ZaAccount.A2_nonMemberList)"
+												},								       
+												{type:_CELLSPACER_},
+												{type:_DWT_BUTTON_, label:ZaMsg.Next, width:75, id:"fwdButton", icon:"RightArrow", disIcon:"RightArrowDis",
+												 	relevantBehavior:_DISABLE_, relevant:"ZaAccountMemberOfListView.shouldEnableForwardButton.call(this, ZaAccount.A2_nonMemberList)",
+													onActivate:"ZaAccountMemberOfListView.fwdButtonHndlr.call(this,event, ZaAccount.A2_nonMemberList)"									
+												},								       
+												{type:_CELLSPACER_}	
+											  ]
+									    }								
 									]
-						         },
-						        {type:_SPACER_, height:"5"},
-								
-								{ref: ZaAccount.A2_nonMemberList, type: _S_DWT_LIST_, width: "100%", height: 455,
-									cssClass: "DLSource", widgetClass: ZaAccountMemberOfListView, 
-									headerList: nonMemberOfHeaderList, defaultColumnSortable: 0,
-									//createPopupMenu: 
-									forceUpdate: true },
-									
-								{type:_SPACER_, height:"5"},	
-								//add action buttons
-								{type:_GROUP_, width:"100%", numCols:8, colSizes:[85,5, 85,"100%",80,5,80,5],
-									items: [
-									   {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddFromList, width:80,
-										onActivate:"ZaAccountMemberOfListView.addGroups.call(this,event, ZaAccount.A2_nonMemberList)",
-										relevant:"ZaAccountMemberOfListView.shouldEnableAddRemoveButton.call(this, ZaAccount.A2_nonMemberList)",
-										relevantBehavior:_DISABLE_},
-									   {type:_CELLSPACER_},
-									   {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddAll, width:80,
-										onActivate:"ZaAccountMemberOfListView.addAllGroups.call(this,event, ZaAccount.A2_nonMemberList)",
-										relevant:"ZaAccountMemberOfListView.shouldEnableAllButton.call(this, ZaAccount.A2_nonMemberList)",
-										relevantBehavior:_DISABLE_},
-										{type:_CELLSPACER_},
-										{type:_DWT_BUTTON_, label:ZaMsg.Previous, width:75, id:"backButton", icon:"LeftArrow", disIcon:"LeftArrowDis",
-											relevantBehavior:_DISABLE_, relevant:"ZaAccountMemberOfListView.shouldEnableBackButton.call(this, ZaAccount.A2_nonMemberList)",
-											onActivate:"ZaAccountMemberOfListView.backButtonHndlr.call(this,event, ZaAccount.A2_nonMemberList)"
-										},								       
-										{type:_CELLSPACER_},
-										{type:_DWT_BUTTON_, label:ZaMsg.Next, width:75, id:"fwdButton", icon:"RightArrow", disIcon:"RightArrowDis",
-										 	relevantBehavior:_DISABLE_, relevant:"ZaAccountMemberOfListView.shouldEnableForwardButton.call(this, ZaAccount.A2_nonMemberList)",
-											onActivate:"ZaAccountMemberOfListView.fwdButtonHndlr.call(this,event, ZaAccount.A2_nonMemberList)"									
-										},								       
-										{type:_CELLSPACER_}	
-									  ]
-							    }								
-							]
-						},
-						{type: _GROUP_, width: "100%", items: [
-								{type:_CELLSPACER_},
+								}
 							]
 						}
 					]

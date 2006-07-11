@@ -498,7 +498,9 @@ XForm.prototype.outputItemList = function (items, parentItem, html, updateScript
 		if (outerStyle != null && outerStyle != "") {
 			parentItem.outputElementDivStart(html, updateScript, indent);
 		}
-		html.append(indent, "<table cellspacing=0 cellpadding=0 ", 
+		var cellspacing = parentItem.getInheritedProperty("cellspacing");
+		var cellpadding = parentItem.getInheritedProperty("cellpadding");		
+		html.append("<table cellspacing=",cellspacing," cellpadding=",cellpadding," ", 
 				(XForm._showBorder ? "border=1" : "border=0"),
 				" id=\"", parentItem.getId(),"_table\" ", parentItem.getTableCssString(),">\r");
 		if (colSizes != null) {
