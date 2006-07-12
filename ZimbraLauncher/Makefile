@@ -21,7 +21,7 @@ MACDEF := -DDARWIN
 JAVA_BINARY = /usr/bin/java
 endif
 
-all: $(BUILD)/zimbra-launcher.jar $(BUILD)/zmtomcatmgr
+all: $(BUILD)/zimbra-launcher.jar $(BUILD)/zmtomcatmgr $(BUILD)/zmtomcatmgr.unrestricted
 
 $(BUILD)/zimbra-launcher.jar: FORCE
 	ant jar
@@ -43,6 +43,9 @@ LAUNCHER_CFLAGS = \
 
 $(BUILD)/zmtomcatmgr: $(SRC)/launcher/zmtomcatmgr.c
 	gcc $(MACDEF) $(LAUNCHER_CFLAGS) -Wall -Wmissing-prototypes -o $@ $<
+
+$(BUILD)/zmtomcatmgr.unrestricted: $(SRC)/launcher/zmtomcatmgr.c
+	gcc $(MACDEF) $(LAUNCHER_CFLAGS) -DUNRESTRICTED_JVM_ARGS -Wall -Wmissing-prototypes -o $@ $<
 
 #
 # Clean

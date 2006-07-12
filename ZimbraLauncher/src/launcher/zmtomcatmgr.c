@@ -108,6 +108,7 @@ StripEnv()
     environ = newEnv;
 }
 
+#ifndef UNRESTRICTED_JVM_ARGS
 /* Allow only known safe VM options.  This might to too conservative -
  * we could just disallow the potentially harmful ones such as
  * -classpath and -Xrun, ie anything that causes code to be loaded
@@ -115,13 +116,51 @@ StripEnv()
  * the safer choice.
  */
 static const char *AllowedJVMArgs[] = {
+    "-XX:SoftRefLRUPolicyMSPerMB",
+    "-XX:+AggressiveOpts",
     "-XX:+AggressiveHeap",
     "-XX:+AllowUserSignalHandlers",
     "-XX:+Print",
+    "-XX:+TraceClassLoading",
+    "-XX:+TraceClassUnloading",
+    "-XX:+DisableExplicitGC",
+    "-XX:+UseParallelGC",
+    "-XX:+UseParallelOldGC",
+    "-XX:ParallelGCThreads",
+    "-XX:+UseAdaptiveSizePolicy",
+    "-XX:+UseConcMarkSweepGC",
+    "-XX:+UseParNewGC",
+    "-XX:+UseCMSCompactAtFullCollection",
+    "-XX:+CMSParallelRemarkEnabled",
+    "-XX:CMSInitiatingOccupancyFraction",
+    "-XX:+UseCMSInitiatingOccupancyOnly",
+    "-XX:CMSFullGCsBeforeCompaction",
+    "-XX:MinHeapFreeRatio",
+    "-XX:MaxHeapFreeRatio",
     "-XX:NewRatio",
+    "-XX:NewSize",
+    "-XX:MaxNewSize",
+    "-XX:PermSize",
+    "-XX:MaxPermSize",
+    "-XX:SurvivorRatio",
+    "-XX:TargetSurvivorRatio",
+    "-XX:MaxTenuringThreshold",
+    "-XX:PretenureSizeThreshold",
+    "-XX:+UseSpinning",
+    "-XX:PreBlockSpin",
+    "-XX:+UseBiasedLocking",
+    "-XX:+UseThreadPriorities",
+    "-XX:+UseTLAB",
+    "-XX:+ResizeTLAB",
+    "-XX:+UseISM",
+    "-XX:+UseLargePages",
+    "-XX:LargePageSizeInBytes",
+    "-XX:CompileThreshold",
+    "-XX:ReservedCodeCacheSize",
     "-Xcomp",
     "-Xconcgc",
     "-Xincgc",
+    "-Xnoincgc",
     "-Xloggc",
     "-Xmn",
     "-Xms",
@@ -142,23 +181,28 @@ static const char *AllowedJVMArgs[] = {
     "-verbose",
     "-version",
 };
+#endif
 
 static char **newArgv;
 static int newArgCount = 0;
 static int newArgCapacity = 0;
 
 static int
-IsAllowedJVMArg(const char *arg) 
+IsAllowedJVMArg(const char *arg)
 {
+#ifndef UNRESTRICTED_JVM_ARGS
     int alsize =  sizeof(AllowedJVMArgs) / sizeof(char *);
     int i;
     for (i = 0; i < alsize; i++) {
-	int compareLen = strlen(AllowedJVMArgs[i]);
-	if (strncmp(arg, AllowedJVMArgs[i], compareLen) == 0) {
-	    return 1;
-	}
+        int compareLen = strlen(AllowedJVMArgs[i]);
+        if (strncmp(arg, AllowedJVMArgs[i], compareLen) == 0) {
+            return 1;
+        }
     }
     return 0;
+#else
+    return 1;
+#endif
 }
 
 static void
