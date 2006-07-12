@@ -76,6 +76,7 @@ case "$1" in
 				killall -TERM ${zimbra_home}/cyrus-sasl-2.1.21.ZIMBRA/sbin/saslauthd > /dev/null 2>&1
 			fi
 		fi
+		exit 0
         ;;
     
     'restart')
