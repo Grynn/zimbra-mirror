@@ -652,6 +652,7 @@
 	@MiniCalButton-clicked@
 }
 
+
 /* Name of the month in the calendar titlebar */
 .DwtCalendarTitleCell {
 	@FullWidth@
@@ -684,7 +685,7 @@
 }
 
 .DwtCalendarDay-today {
-	@MiniCalDay-today@
+	@MiniCalButton-today@
 }
 
 /* hilited because it has appointments */
