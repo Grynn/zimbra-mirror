@@ -111,7 +111,9 @@ function(callback) {
 		var soapDoc = this._soapDocs[i];
 		var reqEl = soapDoc.getMethod();
 		reqEl.setAttribute("id", i);
-		batchSoapDoc.getMethod().appendChild(reqEl);
+		// call removeChild first since Safari complains otherwise
+		var orphan = reqEl.parentNode.removeChild(reqEl);
+		batchSoapDoc.getMethod().appendChild(orphan);
 	}
 	
 	// Issue the BatchRequest
