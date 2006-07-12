@@ -65,6 +65,7 @@ extends HttpServlet {
 	private static final String SKIN_MANIFEST_EXT = ".xml";
 
 	private static final Pattern RE_IFDEF = Pattern.compile("^\\s*#ifdef\\s+(.*?)\\s*$", Pattern.CASE_INSENSITIVE);
+	private static final Pattern RE_IFNDEF = Pattern.compile("^\\s*#ifndef\\s+(.*?)\\s*$", Pattern.CASE_INSENSITIVE);
 	private static final Pattern RE_ENDIF = Pattern.compile("^\\s*#endif(\\s+.*)?$", Pattern.CASE_INSENSITIVE);
 
 	private static final boolean DEBUG = false;
@@ -283,6 +284,15 @@ extends HttpServlet {
 				out.println(commentEnd);
 				String macroName = ifdef.group(1);
 				ignore.push(macros.get(macroName) == null);
+				continue;
+			}
+			Matcher ifndef = RE_IFNDEF.matcher(line);
+			if (ifndef.matches()) {
+				out.print(commentStart);
+				out.print("Info: "+line);
+				out.println(commentEnd);
+				String macroName = ifndef.group(1);
+				ignore.push(macros.get(macroName) != null);
 				continue;
 			}
 			Matcher endif = RE_ENDIF.matcher(line);
