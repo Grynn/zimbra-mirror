@@ -407,6 +407,9 @@ function(str) {
 
 AjxStringUtil.xmlEncode = 
 function(str) {
+	// bug fix #8779 - safari barfs if "str" is not a String type
+	if (!AjxUtil.isString()) return str;
+
 	return str ? str.replace(/&/g,"&amp;").replace(/</g,"&lt;") : "";
 };
 
