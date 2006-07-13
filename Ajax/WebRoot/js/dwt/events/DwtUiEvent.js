@@ -47,9 +47,21 @@ function() {
 	this._returnValue = true;
 }
 
+/**
+ * Pass caller's "this" as 'target' if using IE and the ev may have come from another window. The target
+ * will be used to get to the window that generated the event, so the event can be found.
+ */
 DwtUiEvent.getEvent =
-function(ev) {
-	return (ev) ? ev : ((window.event) ? window.event : null);
+function(ev, target) {
+	ev = ev || window.event;
+	if (ev) return ev;
+
+	// get event from iframe in IE; see http://www.outofhanwell.com/blog/index.php?cat=25
+	if (target) {
+		DBG.println(AjxDebug.DBG3, "getEvent: Checking other window for event");
+		var pw = (target.ownerDocument || target.document || target).parentWindow;
+		return pw ? pw.event : null;
+	}
 }
 
 DwtUiEvent.getTarget =

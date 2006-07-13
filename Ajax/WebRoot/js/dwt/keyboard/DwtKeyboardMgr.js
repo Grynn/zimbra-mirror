@@ -385,7 +385,7 @@ function(focusObj) {
  */
 DwtKeyboardMgr.__onFocusHdlr =
 function(ev) {
-	DBG.println(AjxDebug.DBG3, "DwtKeyboardMgr.__onFocusHdlr" + ", ev: " + ev);
+	DBG.println(AjxDebug.DBG3, "DwtKeyboardMgr.__onFocusHdlr");
 	var kbMgr = DwtShell.getShell(window).getKeyboardMgr();
 	kbMgr.__dwtCtrlHasFocus = true;
 	var focusObj = kbMgr.__focusObj;
@@ -400,7 +400,7 @@ function(ev) {
  */
 DwtKeyboardMgr.__onBlurHdlr =
 function(ev) {
-	DBG.println(AjxDebug.DBG3, "DwtKeyboardMgr.__onBlurHdlr" + ", ev: " + ev);
+	DBG.println(AjxDebug.DBG3, "DwtKeyboardMgr.__onBlurHdlr");
 	var kbMgr = DwtShell.getShell(window).getKeyboardMgr();
 	var focusObj;
 	
@@ -430,6 +430,7 @@ function(ev) {
 DwtKeyboardMgr.__keyUpHdlr =
 function(ev) {
 	DBG.println(AjxDebug.DBG3, "DwtKeyboardMgr.__keyUpHdlr");
+	ev = DwtUiEvent.getEvent(ev, this);
 	var kbMgr = DwtShell.getShell(window).getKeyboardMgr();
 	var kev = DwtShell.keyEvent;
 	kev.setFromDhtmlEvent(ev);
@@ -524,6 +525,7 @@ function(kbMgr, obj) {
 DwtKeyboardMgr.__keyDownHdlr =
 function(ev) {
 	DBG.println(AjxDebug.DBG3, "kbNav: key down");
+	ev = DwtUiEvent.getEvent(ev, this);
 	var shell = DwtShell.getShell(window);
 	var kbMgr = shell.getKeyboardMgr();
 	var kev = DwtShell.keyEvent;
