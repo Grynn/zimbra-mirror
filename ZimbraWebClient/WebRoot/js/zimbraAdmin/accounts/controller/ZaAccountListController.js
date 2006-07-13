@@ -764,7 +764,7 @@ function (ev) {
 			return;			
 		}
 		if(!this._app.dialogs["moveAliasDialog"]) {
-			this._app.dialogs["moveAliasDialog"] = new MoveAliasXDialog(this._container, this._app);
+			this._app.dialogs["moveAliasDialog"] = new MoveAliasXDialog(this._container, this._app, "400px", "300px");
 		}
 		this._app.dialogs["moveAliasDialog"].setAlias(alias);
 		this._app.dialogs["moveAliasDialog"].popup();

@@ -28,7 +28,9 @@ DynSelect_XFormItem.prototype.dataFetcherMethod = null;
 DynSelect_XFormItem.prototype.dataFetcherObject = null;
 DynSelect_XFormItem.prototype.initFormItem = function () {
 	// if we're dealing with an XFormChoices object...
-	this.choices = new XFormChoices([], XFormChoices.OBJECT_LIST, "name", "name");
+	var choices  = this.getInheritedProperty("choices");
+	this.choices = choices ? choices : new XFormChoices([], XFormChoices.OBJECT_LIST, "name", "name");
+//	this.choices = new XFormChoices([], XFormChoices.OBJECT_LIST, "name", "name");
 	//	...set up to receive notification when its choices change
 	var listener = new AjxListener(this, this.choicesChangeLsnr);
 	this.choices.addListener(DwtEvent.XFORMS_CHOICES_CHANGED, listener);

@@ -639,6 +639,12 @@ OSelect_XFormItem.prototype.outputHTML = function(html) {
 	html.append(it);
 }
 
+OSelect_XFormItem.prototype.choicesChangeLsnr = function () {
+	this._choiceDisplayIsDirty = true;
+	delete this.$normalizedChoices;
+	this.showMenu();
+}
+
 OSelect_XFormItem.prototype.outputChoicesHTMLStart = function(html, indent) {
 	html.append(indent, "<table id=", this.getId(),"_menu_table width=100% cellspacing=0 cellpadding=0>\r");
 }

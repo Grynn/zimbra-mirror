@@ -114,7 +114,7 @@ function() {
 	this._containedObject.resultMsg = String(ZaMsg.Alias_Moved_To).replace("{0}",name).replace("{1}",this._containedObject[ZaSearch.A_selected].name); 
 	return true;	
 }
-
+/*
 MoveAliasXDialog.prototype.searchAccounts = 
 function (ev) {
 	try {
@@ -135,13 +135,13 @@ function (ev) {
 			this._searchField.setEnabled(true);	
 		}
 	}
-}
-
+}*/
+/*
 MoveAliasXDialog.srchButtonHndlr = 
 function(evt) {
 	var fieldObj = this.getForm().parent;
 	fieldObj.searchAccounts(evt);
-}
+}*/
 
 MoveAliasXDialog.prototype.getMyXForm = 
 function() {	
@@ -150,7 +150,41 @@ function() {
 		items:[
 			{type: _SWITCH_,
 				items: [
-					{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 1", relevantBehaviorBehavior:_HIDE_,
+					{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 1", relevantBehavior:_HIDE_,
+						items: [
+							{type:_DWT_ALERT_,
+								content:null,ref:"name",
+								getDisplayValue: function (itemVal) {
+									return AjxMessageFormat.format(ZaMsg.MoveAlias_HelpMsg,this.getForm().parent._alias.name);
+								},
+								iconVisible: false,
+								align:_CENTER_,				
+								style: DwtAlert.INFORMATION
+							},						
+							{type:_DYNSELECT_, ref:ZaSearch.A_selected, dataFetcherClass:ZaSearch, dataFetcherMethod:ZaSearch.prototype.dynSelectSearchAccounts,
+								width:"200px", inputSize:30, editable:true, forceUpdate:true,
+								choices:new XFormChoices([], XFormChoices.OBJECT_REFERENCE_LIST, "name", "name"),
+								onChange: function(value, event, form){
+									if (( value instanceof ZaAccount)  && (value.id)){ //an account is selected
+										form.parent._button[MoveAliasXDialog.MOVE_BUTTON].setEnabled(true);
+									}
+									this.setInstanceValue(value);	
+								}									
+							}	
+						]
+					}, 
+					{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 2", relevantBehavior:_HIDE_,
+						items :[
+							{ type: _DWT_ALERT_,
+								  style: DwtAlert.INFORMATION,
+								  iconVisible: false, 
+								  content: null,
+								  ref:"resultMsg",align:_CENTER_, valign:_MIDDLE_,
+								  relevant:"instance.resultMsg !=null"
+							}
+						]
+					}
+/*					{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 1", relevantBehavior:_HIDE_,
 						items: [
 							{type:_OUTPUT_, value:ZaMsg.MoveAlias_SelectTitle},
 							{type:_SPACER_},
@@ -187,7 +221,7 @@ function() {
 								  ref:"resultMsg",align:_CENTER_, valign:_MIDDLE_
 							}						
 						]						
-					}
+					}*/
 				]
 			}
 		]		
