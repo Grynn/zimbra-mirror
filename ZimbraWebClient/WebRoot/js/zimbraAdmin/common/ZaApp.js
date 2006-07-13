@@ -124,7 +124,7 @@ ZaApp.prototype.getSearchListController =
 function() {
 	if (this._controllers[ZaZimbraAdmin._SEARCH_LIST_VIEW] == null) {
 		this._controllers[ZaZimbraAdmin._SEARCH_LIST_VIEW] = new ZaSearchListController(this._appCtxt, this._container, this);
-		this._controllers[ZaZimbraAdmin._SEARCH_LIST_VIEW].addRemovalListener(new AjxListener(this, ZaApp.prototype.handleAccountRemoval));					
+//		this._controllers[ZaZimbraAdmin._SEARCH_LIST_VIEW].addRemovalListener(new AjxListener(this, ZaApp.prototype.handleAccountRemoval));					
 		this._controllers[ZaZimbraAdmin._SEARCH_LIST_VIEW].addRemovalListener(new AjxListener(this.getSearchListController(), this.getSearchListController().handleRemoval));							
 		//the view of the search list is only controlled by the searchlistcontroller, no need to add the domainlistcontroller listener
 		//this._controllers[ZaZimbraAdmin._SEARCH_LIST_VIEW].addRemovalListener(new AjxListener(this.getDomainListController(), this.getDomainListController().handleRemoval));									
@@ -136,7 +136,7 @@ ZaApp.prototype.getAccountListController =
 function() {
 	if (this._controllers[ZaZimbraAdmin._ACCOUNTS_LIST_VIEW] == null) {
 		this._controllers[ZaZimbraAdmin._ACCOUNTS_LIST_VIEW] = new ZaAccountListController(this._appCtxt, this._container, this);
-		this._controllers[ZaZimbraAdmin._ACCOUNTS_LIST_VIEW].addRemovalListener(new AjxListener(this, ZaApp.prototype.handleAccountRemoval));					
+//		this._controllers[ZaZimbraAdmin._ACCOUNTS_LIST_VIEW].addRemovalListener(new AjxListener(this, ZaApp.prototype.handleAccountRemoval));					
 		this._controllers[ZaZimbraAdmin._ACCOUNTS_LIST_VIEW].addRemovalListener(new AjxListener(this.getAccountListController(), this.getAccountListController().handleRemoval));							
 	}
 	return this._controllers[ZaZimbraAdmin._ACCOUNTS_LIST_VIEW]
@@ -150,8 +150,8 @@ function() {
 		this._controllers[ZaZimbraAdmin._ACCOUNT_VIEW].addChangeListener(new AjxListener(this.getAccountListController(), ZaAccountListController.prototype.handleChange));
 		this._controllers[ZaZimbraAdmin._ACCOUNT_VIEW].addCreationListener(new AjxListener(this.getAccountListController(), ZaAccountListController.prototype.handleCreation));	
 		this._controllers[ZaZimbraAdmin._ACCOUNT_VIEW].addRemovalListener(new AjxListener(this.getAccountListController(), ZaAccountListController.prototype.handleRemoval));			
-		this._controllers[ZaZimbraAdmin._ACCOUNT_VIEW].addCreationListener(new AjxListener(this, ZaApp.prototype.handleAccountCreation));			
-		this._controllers[ZaZimbraAdmin._ACCOUNT_VIEW].addRemovalListener(new AjxListener(this, ZaApp.prototype.handleAccountRemoval));					
+//		this._controllers[ZaZimbraAdmin._ACCOUNT_VIEW].addCreationListener(new AjxListener(this, ZaApp.prototype.handleAccountCreation));			
+//		this._controllers[ZaZimbraAdmin._ACCOUNT_VIEW].addRemovalListener(new AjxListener(this, ZaApp.prototype.handleAccountRemoval));					
 	}
 	return this._controllers[ZaZimbraAdmin._ACCOUNT_VIEW];
 }
@@ -520,14 +520,14 @@ function(refresh) {
 	return this._statusList;	
 }
 */
-
+/*
 ZaApp.prototype.getAccountList =
 function(refresh) {
 	if (refresh || this._accountList == null) {
 		this._accountList = ZaSearch.getAll(this).list;
 	}
 	return this._accountList;	
-}
+}*/
 
 ZaApp.prototype.getGlobalConfig =
 function(refresh) {
@@ -612,6 +612,7 @@ function (ev) {
 * @param ev
 * This listener is invoked by any controller that can create an ZaAccount object
 **/
+/*
 ZaApp.prototype.handleAccountCreation = 
 function (ev) {
 	if(ev) {
@@ -625,11 +626,12 @@ function (ev) {
 		}
 	}
 }
-
+*/
 /**
 * @param ev
 * This listener is invoked by ZaAccountViewController or any other controller that can remove an ZaAccount object
 **/
+/*
 ZaApp.prototype.handleAccountRemoval = 
 function (ev) {
 	if(ev) {
@@ -648,7 +650,7 @@ function (ev) {
 		}
 	}
 }
-
+*/
 /**
 * @param ev
 * This listener is invoked by ZaCosController or any other controller that can remove an ZaCos object

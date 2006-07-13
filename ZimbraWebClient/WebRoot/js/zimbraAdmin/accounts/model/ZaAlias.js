@@ -74,7 +74,8 @@ function() {
 		html[idx++] = "</table></div></td></tr>";
 		html[idx++] = "<tr></tr>";
 		//get my account
-		var account = this._app.getAccountList().getItemById(this.attrs[ZaAlias.A_AliasTargetId]);
+//		var account = this._app.getAccountList().getItemById(this.attrs[ZaAlias.A_AliasTargetId]);
+		var account = ZaSearch.findAccount (ZaItem.A_zimbraId,this.attrs[ZaAlias.A_AliasTargetId]);
 		if(account) {
 			idx = this._addRow(ZaItem._attrDesc(ZaAlias.A_targetAccount), 
 						account.attrs[ZaAccount.A_displayname], html, idx);

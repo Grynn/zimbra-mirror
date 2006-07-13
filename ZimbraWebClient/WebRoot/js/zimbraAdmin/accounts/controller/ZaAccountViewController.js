@@ -218,8 +218,7 @@ function () {
 		} 
 		if(cnt==0)
 			mods[ZaAccount.A_zimbraAvailableSkin] = "";
-	} else
-		mods[ZaAccount.A_zimbraAvailableSkin] = "";	
+	} 
 	
 	//save changed fields
 	try {	
