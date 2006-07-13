@@ -36,7 +36,7 @@ zmassert -x ${zimbra_home}/bin/mysqladmin
 zmassert -x ${zimbra_home}/bin/mysql
 zmassert -x ${zimbra_home}/bin/zmlocalconfig
 zmassert -x ${zimbra_home}/bin/zmmypasswd
-zmassert -x ${mysql_directory}/scripts/mysql_install_db
+zmassert -x ${mysql_directory}/bin/mysql_install_db
 zmassert -r ${zimbra_db_directory}/db.sql
 zmassert -r ${zimbra_db_directory}/versions-init.sql
 
@@ -60,7 +60,7 @@ ${zimbra_home}/libexec/zmmycnf > ${mysql_mycnf}
 # Create database
 #
 echo '*' Creating database in ${mysql_data_directory}
-(cd ${mysql_directory}; ./scripts/mysql_install_db \
+(cd ${mysql_directory}; ./bin/mysql_install_db \
     --defaults-file=${mysql_mycnf}) \
     >> ${zimbra_log_directory}/zmmyinit.log 2>&1
 
