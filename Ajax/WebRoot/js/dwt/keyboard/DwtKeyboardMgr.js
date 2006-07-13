@@ -97,6 +97,7 @@ function(tabGroup) {
 	}
 		
 	this.__tabGrpStack.push(tabGroup);
+	this.__currTabGroup = tabGroup;
 	var focusMember = tabGroup.getFocusMember();
 	if (!focusMember) {
 		focusMember = tabGroup.resetFocusMember(true);
@@ -107,7 +108,6 @@ function(tabGroup) {
 	}
 	tabGroup.addFocusChangeListener(this.__tabGroupChangeListenerObj);
 	this.grabFocus(focusMember);
-	this.__currTabGroup = tabGroup;	
 };
 
 /**
@@ -289,14 +289,32 @@ function(timeout) {
 };
 
 /**
+ * Enables/disables keyboard nav.
+ * 
+ * @param enabled	{boolean}	if true, enable keyboard nav
+ */
+DwtKeyboardMgr.prototype.enable =
+function(enabled) {
+	DBG.println(AjxDebug.DBG1, "keyboard nav enabled: " + enabled);
+	this.__enabled = enabled;
+	if (enabled){
+		Dwt.setHandler(document, DwtEvent.ONKEYDOWN, DwtKeyboardMgr.__keyDownHdlr);
+		Dwt.setHandler(document, DwtEvent.ONKEYUP, DwtKeyboardMgr.__keyUpHdlr);
+		Dwt.setHandler(document, DwtEvent.ONKEYPRESS, DwtKeyboardMgr.__keyPressHdlr);
+	} else {
+		Dwt.clearHandler(document, DwtEvent.ONKEYDOWN);
+		Dwt.clearHandler(document, DwtEvent.ONKEYUP);
+		Dwt.clearHandler(document, DwtEvent.ONKEYPRESS);
+	}
+};
+
+/**
  * @private
  */
 DwtKeyboardMgr.prototype.__initKeyboardHandling =
 function() {
 	DBG.println(AjxDebug.DBG3, "Initializing Keyboard Handling");
-	Dwt.setHandler(document, DwtEvent.ONKEYDOWN, DwtKeyboardMgr.__keyDownHdlr);
-	Dwt.setHandler(document, DwtEvent.ONKEYUP, DwtKeyboardMgr.__keyUpHdlr);
-	Dwt.setHandler(document, DwtEvent.ONKEYPRESS, DwtKeyboardMgr.__keyPressHdlr);
+	this.enable(true);
 
 	/* Create our keyboard focus field. This is a dummy input field that will take text
 	 * input for keyboard shortcuts. */
@@ -418,10 +436,7 @@ function(ev) {
 	
 	if (kbMgr.__kbEventStatus != DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED) {
 		//DBG.println(AjxDebug.DBG1, "DwtKeyboardMgr.__keyUpHdlr: KEY UP BLOCKED");
-		kev._stopPropagation = true;
-		kev._returnValue = false;
-		kev.setToDhtmlEvent(ev);
-		return false;
+		return kbMgr.__processKeyEvent(ev, kev, false);
 	 } 
 };
 
@@ -508,7 +523,7 @@ function(kbMgr, obj) {
  */
 DwtKeyboardMgr.__keyDownHdlr =
 function(ev) {
-	DBG.println(AjxDebug.DBG3, "**** kbNav: key down");
+	DBG.println(AjxDebug.DBG3, "kbNav: key down");
 	var shell = DwtShell.getShell(window);
 	var kbMgr = shell.getKeyboardMgr();
 	var kev = DwtShell.keyEvent;
@@ -558,18 +573,10 @@ function(ev) {
 			 		kbMgr.__currTabGroup.resetFocusMember(true);
 			 	}
 		 	}
-			kbMgr.__kbEventStatus = DwtKeyboardMgr.__KEYSEQ_HANDLED;
-			kev._stopPropagation = true;
-			kev._returnValue = false;
-			kev.setToDhtmlEvent(ev);
-			return false;
+		 	return kbMgr.__processKeyEvent(ev, kev, false, DwtKeyboardMgr.__KEYSEQ_HANDLED);
 	 	} else {
 	 		// No tab groups registered, or Alt or Ctrl was down. Let the browser handle it.
-			kbMgr.__kbEventStatus = DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
-			kev._stopPropagation = false;
-			kev._returnValue = true;
-			kev.setToDhtmlEvent(ev);
-			return true;	 		
+		 	return kbMgr.__processKeyEvent(ev, kev, true, DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED);
 	 	}
 	 } else if (kbMgr.__currTabGroup && !focusInTGMember && AjxEnv.isGecko && kev.target instanceof HTMLHtmlElement) {
 	 	/* With FF we focus get set to the <html> element when tabbing in
@@ -599,11 +606,7 @@ function(ev) {
 			&& kbMgr.__killKeySeqTimedActionId == -1 && !kev.ctrlKey && !kev.altKey
 			&& DwtKeyMapMgr.isUsableTextInputValue(keyCode, DwtUiEvent.getTarget(ev)))) {
 		DBG.println(AjxDebug.DBG3, "valid input field data");
-		kbMgr.__kbEventStatus = DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
-		kev._stopPropagation = false;
-		kev._returnValue = true;
-		kev.setToDhtmlEvent(ev);
-		return true;
+	 	return kbMgr.__processKeyEvent(ev, kev, true, DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED);
 	}
 	 
 	/* Cancel any pending time action to kill the keysequence */
@@ -654,20 +657,11 @@ function(ev) {
 	switch (handled) {
 		case DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED:
 			kbMgr.__keySequence.length = 0;
-			kev._stopPropagation = false;
-			kev._returnValue = true;
-			kev.setToDhtmlEvent(ev);
-			return true;
-			break;
-			
+		 	return kbMgr.__processKeyEvent(ev, kev, true);
 		case DwtKeyboardMgr.__KEYSEQ_HANDLED:
 			kbMgr.__keySequence.length = 0;
 		case DwtKeyboardMgr.__KEYSEQ_PENDING:
-			kev._stopPropagation = true;
-			kev._returnValue = false;
-			kev.setToDhtmlEvent(ev);
-			return false;
-			break;
+		 	return kbMgr.__processKeyEvent(ev, kev, false);
 	}
 };
 
@@ -726,4 +720,18 @@ function() {
 DwtKeyboardMgr.prototype.__tabGrpChangeListener =
 function(ev) {
 	this.__doGrabFocus(ev.newFocusMember);
+};
+
+/**
+ * @private
+ */
+DwtKeyboardMgr.prototype.__processKeyEvent =
+function(ev, kev, propagate, status) {
+	if (status) {
+		this.__kbEventStatus = status;
+	}
+	kev._stopPropagation = !propagate;
+	kev._returnValue = propagate;
+	kev.setToDhtmlEvent(ev);
+	return propagate;
 };
