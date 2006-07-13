@@ -134,6 +134,7 @@ function(domain) {
 	ZmCsfeCommand.setServerUri(location.protocol+"//" + domain + ZaSettings.CSFE_SERVER_URI);
 	ZmCsfeCommand.setCookieName(ZaZimbraAdmin._COOKIE_NAME);
 	
+	//License information will be load after the login and in the com_zimbra_license.js
 	ZaServerVersionInfo.load();
 	// Create the global app context
 	var appCtxt = new ZaAppCtxt();
@@ -300,9 +301,8 @@ function() {
 		this._handleException(ex, "ZaZimbraAdmin.prototype.startup", null, true);
 	}
 }
-
+/*
 ZaZimbraAdmin.getLicenseStatus = function () {
-	
 	var result = { 
 		licenseExists: ZaServerVersionInfo.licenseExists, 
 		message: "", 
@@ -324,20 +324,20 @@ ZaZimbraAdmin.getLicenseStatus = function () {
 		result.message =  AjxBuffer.concat(licenseInfoText," ",
 										   formatter.format(ZaServerVersionInfo.licenseExpirationDate));
 	}
-	return result;
-};
+	return result; 
+};*/
 
 ZaZimbraAdmin.prototype._setLicenseStatusMessage = function () {
-	var licenseStatus = ZaZimbraAdmin.getLicenseStatus();
-	if (licenseStatus.licenseExists) {
-		this._statusBox.getHtmlElement().className = licenseStatus.className;
-		this.setStatusMsg(licenseStatus.message);
+	if (ZaLicense) {
+		ZaLicense.setLicenseStatus(this);
 	}
 };
 
 ZaZimbraAdmin.prototype.setStatusMsg = 
 function(msg, clear) {
 	this._statusBox.setText(msg);
+	
+	//HC: Why it has the ZmZimbraMail reference? Somebody please remove it.
 	if (msg && clear) {
 		var act = new AjxTimedAction(null, ZmZimbraMail._clearStatus, [this._statusBox]);
 		AjxTimedAction.scheduleAction(act, ZmZimbraMail.STATUS_LIFE);

@@ -32,9 +32,10 @@ ZaServerVersionInfo.load = function () {
 		soapDoc.setMethodAttribute("onerror", "continue");
 		var versionInfoReq = soapDoc.set("GetVersionInfoRequest");
 		versionInfoReq.setAttribute("xmlns", "urn:zimbraAdmin");
-
-		var licenseInfoReq = soapDoc.set("GetLicenseInfoRequest");
-		licenseInfoReq.setAttribute("xmlns", "urn:zimbraAdmin");
+		
+		
+		//var licenseInfoReq = soapDoc.set("GetLicenseInfoRequest");
+		//licenseInfoReq.setAttribute("xmlns", "urn:zimbraAdmin");
 		var command = new ZmCsfeCommand();
 		var params = new Object();
 		params.soapDoc = soapDoc;	
@@ -46,7 +47,8 @@ ZaServerVersionInfo.load = function () {
 		ZaServerVersionInfo.host = versionResponse.info[0].host;
 		ZaServerVersionInfo.release = versionResponse.info[0].release;
 		ZaServerVersionInfo.version = versionResponse.info[0].version;
-		ZaServerVersionInfo.licenseExists = false;
+		//license expiration information is handled in com_zimbra_license.js
+		/*ZaServerVersionInfo.licenseExists = false;
 		if (resp.GetLicenseInfoResponse[0].expiration != null) {
 			var licenseResponse = resp.GetLicenseInfoResponse[0].expiration[0];
 			if (licenseResponse.date != null && licenseResponse.date != ""){
@@ -55,10 +57,15 @@ ZaServerVersionInfo.load = function () {
 				var now = new Date();
 				ZaServerVersionInfo.licenseExpired = (now.getTime() > ZaServerVersionInfo.licenseExpirationDate.getTime());
 			}
+			//HC: Testing purpose only
+			ZaServerVersionInfo.licenseExists = true ;
+			ZaServerVersionInfo.licenseExpired = true ;
+			ZaServerVersionInfo.licenseExpirationDate = ZaServerVersionInfo._parseDate("20060501") ;
+			///END TESTING
 		} else {
 			ZaServerVersionInfo.licenseExpired = false;
 			ZaServerVersionInfo.licenseExists = false;
-		}
+		} */
 	}
 };
 
