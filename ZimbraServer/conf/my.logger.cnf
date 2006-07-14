@@ -6,6 +6,7 @@ socket       = /opt/zimbra/logger/db/mysql.sock
 pid-file     = /opt/zimbra/logger/db/mysql.pid
 bind-address = localhost
 port         = 7307
+user         = zimbra
 
 skip-external-locking
 
