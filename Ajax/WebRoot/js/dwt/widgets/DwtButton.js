@@ -420,7 +420,6 @@ function() {
 
 DwtButton.prototype._emulateDropDownClick =
 function() {
-	this.trigger();
 	var htmlEl = this._dropDownCell;
 	var p = Dwt.toWindow(htmlEl);
 	// Gotta do what mousedown listener does
@@ -532,7 +531,7 @@ function (){
 
 DwtButton.prototype.deactivate =
 function (){
-	if (this._depressedImageInfo){
+	if (this._hoverImageInfo){
 		this.setImage(this._hoverImageInfo);
 	}
 
