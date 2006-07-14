@@ -57,7 +57,7 @@ if [ "x$1" = "xstart" -o "x$1" = "xreload" ]; then
 		rewriteconfig
 	fi
 	${zimbra_home}/postfix-${postfix_version}/sbin/postmap ${zimbra_home}/conf/postfix_header_checks
-	sudo ${zimbra_home}/postfix-${postfix_version}/sbin/postsuper -r ALL
+	#sudo ${zimbra_home}/postfix-${postfix_version}/sbin/postsuper -r ALL
 fi
 
 sudo ${zimbra_home}/postfix-${postfix_version}/sbin/postalias /etc/aliases
