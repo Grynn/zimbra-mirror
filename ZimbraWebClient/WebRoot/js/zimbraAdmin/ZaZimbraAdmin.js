@@ -328,7 +328,7 @@ ZaZimbraAdmin.getLicenseStatus = function () {
 };*/
 
 ZaZimbraAdmin.prototype._setLicenseStatusMessage = function () {
-	if (ZaLicense) {
+	if (typeof ZaLicense == "function") {
 		ZaLicense.setLicenseStatus(this);
 	}
 };
