@@ -391,7 +391,10 @@ function(actionCode, ev) {
 			break;
 
 		case DwtKeyMap.SELECT_SUBMENU:
+			var menu = this.getMenu();
+			if (!menu) return false;
 			this._emulateDropDownClick();
+			menu.setSelectedItem(0);
 			break;
 	}
 

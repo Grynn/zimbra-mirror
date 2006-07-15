@@ -512,6 +512,7 @@ function(msec) {
 		menu.popdown(msec);
 	this.setClassName(this._origClassName);
 	this.setCursor("pointer");
+	this._isSelected = false;
 }
 
 DwtMenuItem.prototype._isMenuPoppedup =
@@ -528,15 +529,20 @@ function(ev) {
 	}
 	this.parent.__selectedId = this._htmlElId;
 	//this.parent.popup(); // REVISIT: Why does a rollover popup the parent?
-	if (this._style == DwtMenuItem.SEPARATOR_STYLE)
-		return;
+	if (this._style == DwtMenuItem.SEPARATOR_STYLE) return;
+	
+	// deselect current item (if it didn't get a mouseout, as can happen with kb nav)
+	var currItem = this.parent.__currentItem;
+	if (currItem && currItem._isSelected) {
+		currItem._deselect();
+	}
 	var activeItem = this.parent._getActiveItem();
-	this.parent.clearExternallySelectedItems();
+	if (activeItem) {
+		activeItem._deselect();
+	}
 	this.parent.setCurrentItem(this);
 	if (this._style == DwtMenuItem.CASCADE_STYLE || this._style == DwtMenuItem.CHECK_STYLE
 		|| this._style == DwtMenuItem.RADIO_STYLE) {
-		if (activeItem)
-			activeItem._deselect();	
 		if (this._iconCell)
 			this._iconCell.className = this._iconAreaSelClassName;
 		if (this._checkedCell)
@@ -546,8 +552,6 @@ function(ev) {
 		}
 		this.setSelectedStyle();
 	} else if (this._style == DwtMenuItem.PUSH_STYLE || this._style == DwtMenuItem.SELECT_STYLE) {
-		if (activeItem)
-			activeItem._deselect(0);
 		if (activeItem && this._menu && !ev.ersatz) {
 			this._popupMenu(0);
 			this.setSelectedStyle();

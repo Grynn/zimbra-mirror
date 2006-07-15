@@ -191,8 +191,8 @@ function() {
 
 DwtMenu.prototype.popup =
 function(msec, x, y, kbGenerated) {
-	if (this._style == DwtMenu.BAR_STYLE) 
-		return;
+	if (this._style == DwtMenu.BAR_STYLE) return;
+	
 	if (this._popdownActionId != -1) {
 		AjxTimedAction.cancelAction(this._popdownActionId);
 		this._popdownActionId = -1;
@@ -251,47 +251,15 @@ function(actionCode, ev) {
 
 	switch (actionCode) {
 		case DwtKeyMap.SELECT_NEXT:
-		case DwtKeyMap.SELECT_PREV: {
-			var mev = DwtShell.mouseEvent;
-			var currItem = this.__currentItem;
-			
-			// Figure out the next tiem
-			if (currItem)
-				currItem = (actionCode == DwtKeyMap.SELECT_NEXT) 
-						? this._children.getNext(currItem) : this._children.getPrev(currItem);
-			else
-				currItem = this._children.get(0);
-			
-			// Deal with case that we are at the bottom or the top of the list
-			if (!currItem)
-				return;
-
-			/* While the current item is not enabled or is a separator get the 
-			 * next child*/
-			while (currItem && (currItem.getStyle() == DwtMenuItem.SEPARATOR_STYLE || !currItem.getEnabled()))
-				currItem = (actionCode == DwtKeyMap.SELECT_NEXT) 
-						? this._children.getNext(currItem) : this._children.getPrev(currItem);
-				
-			if (currItem) {
-				var mev = DwtShell.mouseEvent;
-				/* If we have a current item then we need to make sure we simulate a
-				 * mouse out event so that the UI can behave correctly*/
-				if (this.__currentItem) {
-					this._setMouseEvent(mev, true, this.__currentItem, null, false, false, false, 0, 0);
-					this.__currentItem._mouseOutListener(mev);
-				}
-				this._setMouseEvent(mev, true, currItem, null, false, false, false, 0, 0);
-				currItem._mouseOverListener(mev);
-			}
+		case DwtKeyMap.SELECT_PREV: 
+			this.setSelectedItem(actionCode == DwtKeyMap.SELECT_NEXT);
 			break;
-		}
-						
-		case DwtKeyMap.SELECT_CURRENT: {
+
+		case DwtKeyMap.SELECT_CURRENT:
  			var mev = DwtShell.mouseEvent;
  			this._setMouseEvent(mev, true, this.__currentItem, DwtMouseEvent.LEFT,false, false, false, 0, 0);
 			this.__currentItem._mouseUpListener(mev);
 			break;
-		}
 		
 		case DwtKeyMap.SELECT_SUBMENU:
 			if (this.__currentItem && this.__currentItem._menu) {
@@ -326,7 +294,7 @@ function(actionCode, ev) {
  */
 DwtMenu.prototype.setCurrentItem =
 function(currItem) {
-	//DBG.println("DwtMenu.prototype.setCurrentItem: " + currItem);
+	DBG.println("DwtMenu.prototype.setCurrentItem: " + currItem.getText());
 	this.__currentItem = currItem;
 }
 
@@ -394,11 +362,40 @@ function(field, value, skipNotify) {
     }
 }
 
+/**
+ * Programmatically selects a menu item. The item can be specified with an index,
+ * or as the next or previous item based on which item is currently selected. If
+ * the new item is a separator or is disabled, it won't be selected. Instead, the
+ * next suitable item will be used.
+ * 
+ * @param which		{boolean|int}	if true, selects the next menu item
+ * 									if false, selects the previous menu item
+ * 									if int, selects the menu item with that index
+ */
 DwtMenu.prototype.setSelectedItem =
-function(index) {
-	var mi = this._children.get(index);
-	mi.setSelectedStyle();
-	this._externallySelected = mi;
+function(which) {
+	var currItem = this.__currentItem;
+	if (typeof(which) == "boolean") {
+		currItem = !currItem ? this._children.get(0) : which ?
+			this._children.getNext(currItem) : this._children.getPrev(currItem);
+	} else {
+		currItem = this._children.get(which);
+	}
+	// While the current item is not enabled or is a separator, try another
+	while (currItem && (currItem.getStyle() == DwtMenuItem.SEPARATOR_STYLE || !currItem.getEnabled())) {
+		currItem = (which === false) ? this._children.getPrev(currItem) : this._children.getNext(currItem);
+	}
+	if (!currItem) return;
+
+	// if we have a current item then we need to make sure we simulate a
+	// mouseout event so that the UI can behave correctly
+	var mev = DwtShell.mouseEvent;
+	if (this.__currentItem) {
+		this._setMouseEvent(mev, true, this.__currentItem, null, false, false, false, 0, 0);
+		this.__currentItem._mouseOutListener(mev);
+	}
+	this._setMouseEvent(mev, true, currItem, null, false, false, false, 0, 0);
+	currItem._mouseOverListener(mev);	// mouseover selects a menu item
 };
 
 DwtMenu.prototype.clearExternallySelectedItems =
