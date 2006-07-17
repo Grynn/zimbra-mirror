@@ -294,7 +294,6 @@ function(actionCode, ev) {
  */
 DwtMenu.prototype.setCurrentItem =
 function(currItem) {
-	DBG.println("DwtMenu.prototype.setCurrentItem: " + currItem.getText());
 	this.__currentItem = currItem;
 }
 

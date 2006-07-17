@@ -177,16 +177,17 @@ function() {
 * 
 * @param busy					[boolean]		if true, set the busy overlay, otherwise hide the busy overlay
 * @param id						[int]*			a unique ID for this instance
-* @param showbusyDialog 		[boolean]*		if true, show the WIP dialog
+* @param showBusyDialog 		[boolean]*		if true, show the WIP dialog
 * @param busyDialogDelay 		[int]*			number of ms to delay before popping up the WIP dialog
 * @param cancelBusyCallback		[AjxCallback]*	callback to run when OK button is pressed in WIP dialog
 */ 
 DwtShell.prototype.setBusy =
-function(busy, id, showbusyDialog, busyDialogDelay, cancelBusyCallback) {
-	if (busy)
+function(busy, id, showBusyDialog, busyDialogDelay, cancelBusyCallback) {
+	if (busy) {
 		this._setBusyCount++;
-	else if (this._setBusyCount > 0)
+	} else if (this._setBusyCount > 0) {
 		this._setBusyCount--;
+	}
 
     if (!this._setBusy && (this._setBusyCount > 0)) {
 		// transition from non-busy to busy state
@@ -203,7 +204,7 @@ function(busy, id, showbusyDialog, busyDialogDelay, cancelBusyCallback) {
 	}
 	
 	// handle busy dialog whether we've changed state or not
-	if (busy && showbusyDialog) {
+	if (busy && showBusyDialog) {
 		if (busyDialogDelay && busyDialogDelay > 0) {
 			this._busyActionId[id] = AjxTimedAction.scheduleAction(this._busyTimedAction, busyDialogDelay);
 		} else {
@@ -221,8 +222,9 @@ function(busy, id, showbusyDialog, busyDialogDelay, cancelBusyCallback) {
     		AjxTimedAction.cancelAction(this._busyActionId[id]);
     		this._busyActionId[id] = -1;
     	}
-   		if (this._busyDialog.isPoppedUp)
+   		if (this._busyDialog.isPoppedUp) {
     		this._busyDialog.popdown();
+   		}
     } 
 }
 
