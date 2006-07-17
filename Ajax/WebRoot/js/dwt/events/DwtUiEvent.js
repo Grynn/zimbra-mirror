@@ -45,6 +45,8 @@ function() {
 	this.ersatz = false; // True means this event was manufactured
 	this._stopPropagation = false;
 	this._returnValue = true;
+	this._dontCallPreventDefault = false; // True means to allow the the (unusual) situation in Firefox where we
+	                                      // want the event handler to return false without calling preventDefault().
 }
 
 /**
@@ -202,24 +204,24 @@ function(ev) {
 
 DwtUiEvent.prototype.setToDhtmlEvent =
 function(ev) {
-	DwtUiEvent.setBehaviour(ev, this._stopPropagation, this._returnValue);	
+	DwtUiEvent.setBehaviour(ev, this._stopPropagation, this._returnValue, this._dontCallPreventDefault);
 }
 
 DwtUiEvent.setBehaviour =
-function(ev, stopPropagation, allowDefault) {
+function(ev, stopPropagation, allowDefault, dontCallPreventDefault) {
 	var dhtmlEv = DwtUiEvent.getEvent(ev);
-	DwtUiEvent.setDhtmlBehaviour(dhtmlEv, stopPropagation, allowDefault);
+	DwtUiEvent.setDhtmlBehaviour(dhtmlEv, stopPropagation, allowDefault, dontCallPreventDefault);
 };
 
 DwtUiEvent.setDhtmlBehaviour =
-function(dhtmlEv, stopPropagation, allowDefault) {
+function(dhtmlEv, stopPropagation, allowDefault, dontCallPreventDefault) {
 	dhtmlEv = dhtmlEv || window.event;
 
 	// stopPropagation is referring to the function found in Mozilla's event object
 	if (dhtmlEv.stopPropagation != null) {
 		if (stopPropagation)
 			dhtmlEv.stopPropagation();
-		if (!allowDefault)
+		if (!allowDefault && !dontCallPreventDefault)
 			dhtmlEv.preventDefault();
 	} else {
 		// IE only..
