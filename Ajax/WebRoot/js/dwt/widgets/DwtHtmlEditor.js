@@ -1007,10 +1007,17 @@ DwtHtmlEditor.prototype.doTableOperation =
 function(cmd, params) {
 	var table = this.getNearestElement("table");
 	var td = this.getNearestElement("td");
+	var cellIndex, rowIndex, tr;
 	if (td) {
-		var cellIndex = td.cellIndex;
-		var tr = td.parentNode;
-		var rowIndex = tr.rowIndex;
+		cellIndex = td.cellIndex;
+		tr = td.parentNode;
+		rowIndex = tr.rowIndex;
+	} else {
+		// Bug 8974: as usual, IE is weird to say the least.
+		cellIndex = 0;
+		tr = this.getNearestElement("tr");
+		if (tr)
+			rowIndex = tr.rowIndex;
 	}
 	while (true) {
 		switch (cmd) {
