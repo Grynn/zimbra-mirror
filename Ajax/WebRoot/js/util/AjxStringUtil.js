@@ -407,9 +407,12 @@ function(str) {
 
 AjxStringUtil.xmlEncode = 
 function(str) {
-	// bug fix #8779 - safari barfs if "str" is not a String type
-	str = "" + str;
-	return str ? str.replace(/&/g,"&amp;").replace(/</g,"&lt;") : "";
+	if (str) {
+		// bug fix #8779 - safari barfs if "str" is not a String type
+		str = "" + str;
+		return str.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+	}
+	return "";
 };
 
 AjxStringUtil.xmlDecode =
