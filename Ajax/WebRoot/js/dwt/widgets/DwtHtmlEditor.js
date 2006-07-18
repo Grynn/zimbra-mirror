@@ -307,12 +307,12 @@ function(rows, cols, width, cellSpacing, cellPadding, alignment) {
 	table.style.borderCollapse = "collapse";
 
 	var tdWidth;
-	// tdWidth = Math.floor(100 / cols) + "%";
-	tdWidth = null;		// disale for now--produces problems
+	tdWidth = Math.floor(100 / cols) + "%";
+	// tdWidth = null;
 
 	var tbody = doc.createElement("tbody");
 	table.appendChild(tbody);
-	table.style.tableLayout = "fixed";
+	// table.style.tableLayout = "fixed";
 
 	for (var i = 0; i < rows; i++) {
 		var tr = doc.createElement("tr");
