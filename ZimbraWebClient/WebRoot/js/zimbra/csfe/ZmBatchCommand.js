@@ -102,6 +102,12 @@ function(callback) {
 		cmd.run(this);
 	}
 
+	// bug fix #9086 - Safari has bugs with appendChild :(
+	if (AjxEnv.isSafari) {
+		this.runSafari(callback);
+		return;
+	}
+
 	// Create the BatchRequest
 	var batchSoapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
 	batchSoapDoc.setMethodAttribute("onerror", this._continue);
@@ -118,8 +124,21 @@ function(callback) {
 	
 	// Issue the BatchRequest
 	var respCallback = new AjxCallback(this, this._handleResponseRun, [callback]);
-	this._appCtxt.getAppController().sendRequest({soapDoc: batchSoapDoc, asyncMode: true,
-												  callback: respCallback});
+	this._appCtxt.getAppController().sendRequest({soapDoc:batchSoapDoc, asyncMode:true, callback:respCallback});
+};
+
+ZmBatchCommand.prototype.runSafari =
+function(callback) {
+	this._responseCount = 0;
+	var runCallback = new AjxCallback(this, this._handleResponseRunSafari, [callback]);
+
+	for (var i = 0; i < this._cmds.length; i++) {
+		var soapDoc = this._soapDocs[i];
+		var reqEl = soapDoc.getMethod();
+		reqEl.setAttribute("id", i);
+
+		this._appCtxt.getAppController().sendRequest({soapDoc:soapDoc, asyncMode:true, callback:runCallback});
+	}
 };
 
 ZmBatchCommand.prototype._handleResponseRun =
@@ -133,6 +152,19 @@ function(callback, result) {
 		this._processResponse(method, batchResponse.BatchResponse[method]);
 	}
 	if (callback) {
+		callback.run(result);
+	}
+};
+
+ZmBatchCommand.prototype._handleResponseRunSafari =
+function(callback, result) {
+	var resp = result.getResponse();
+	for (var i in resp) {
+		this._processResponse(i, resp[i]);
+	}
+
+	// only run the final callback once all async requests have returned
+	if (++this._responseCount == this._cmds.length && callback) {
 		callback.run(result);
 	}
 };
