@@ -129,9 +129,11 @@ DwtCssStyle.removeProperty = function(el, prop) {
 		for (var i = prop.length; --i >= 0;)
 			DwtCssStyle.removeProperty(el, prop[i]);
 	} else {
-		if (AjxEnv.isIE)
+		if (AjxEnv.isIE) {
 			el.style.removeAttribute(prop, true);
-		else
+		} else {
+			prop = prop.replace(/([A-Z])/g, "-$1");
 			el.style.removeProperty(prop);
+		}
 	}
 };
