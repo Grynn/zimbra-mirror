@@ -325,14 +325,7 @@ sub displayVersion {
 	chomp $platform;
 	my $string = "";
 	if ($platform =~ /MACOSX/) {
-		my $release = "";
-		foreach (glob ("/Library/Receipts/zimbra-core*")) {
-			s|.*/zimbra-core.||;
-			s/.pkg//;
-			if ( ($_ cmp $release) > 0 || $release eq "") {
-				$release = $_;
-			}
-		}
+		my $release=`grep -C1 CFBundleGetInfoString /Library/Receipts/zimbra-core.pkg/Contents/Info.plist | tail -1 | sed -e 's/\<[^>]*\>//g' -e 's/^ *//g' | awk -F, '{print $1}'`;
 		$string = "Release $release $platform";
 	} elsif ($platform =~ /DEBIAN/) {
 		my $release = `dpkg -s zimbra-core | egrep '^Version:' | sed -e 's/Version: //'`;
