@@ -313,7 +313,7 @@ function(list, noResultsOk) {
 };
 
 DwtListView.prototype.addItems =
-function(itemArray, index) {
+function(itemArray) {
 	if (AjxUtil.isArray(itemArray)){
 		if (!this._list) {
 			this._list = new AjxVector();
