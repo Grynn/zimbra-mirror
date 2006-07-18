@@ -123,3 +123,15 @@ function(htmlElement) {
 	else if (htmlElement.style)
 		return htmlElement.style;
 };
+
+DwtCssStyle.removeProperty = function(el, prop) {
+	if (prop instanceof Array) {
+		for (var i = prop.length; --i >= 0;)
+			DwtCssStyle.removeProperty(el, prop[i]);
+	} else {
+		if (AjxEnv.isIE)
+			el.style.removeAttribute(prop, true);
+		else
+			el.style.removeProperty(prop);
+	}
+};

@@ -745,6 +745,7 @@ function(useDiv) {
 		html[i++] = "font-size:" + initFontSize + ";";
 		html[i++] = "color:" + initFontColor + ";";
 		html[i++] = " } ";
+		html[i++] = "table td { border: 1px dotted black; }";
 		html[i++] = "</style>";
 	}
 	return html.join("");
@@ -804,7 +805,14 @@ DwtHtmlEditor.prototype._finishHtmlModeInit =
 function(params) {
 	var doc = this._getIframeDoc();
 	try {
-		doc.body.innerHTML = this._pendingContent || "";
+		// doc.body.innerHTML = this._pendingContent || "";
+		//
+		// we can't do the above because the _pendingContent
+		// also contains <html>, <head> and <body> tags +
+		// style information.
+		doc.open();
+		doc.write(this._pendingContent || "");
+		doc.close();
 	} catch (ex) {
 		DBG.println("XXX: Error initializing HTML mode :XXX");
 		return;
@@ -1034,6 +1042,7 @@ function(cmd, params) {
 				var row = table.rows[i];
 				td = row.cells[cellIndex];
 				var new_cell = td.cloneNode(true);
+				DwtCssStyle.removeProperty(new_cell, "width");
 				row.insertBefore(new_cell, td);
 				new_cell.innerHTML = AjxEnv.isGeckoBased ? "<br />" : "";
 			}
