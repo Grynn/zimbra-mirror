@@ -15,7 +15,7 @@
  */
 
 
-package org.apache.kabuki.tools.img;
+package com.zimbra.kabuki.tools.img;
 
 public class ImageMergeException extends Exception {
 

@@ -15,7 +15,7 @@
  */
 
 
-package org.apache.kabuki.tools.img;
+package com.zimbra.kabuki.tools.img;
 
 import org.apache.tools.ant.*;
 import org.apache.tools.ant.util.FileUtils;
@@ -118,8 +118,7 @@ public class ImageSortTask
         });
         if (files.length > 0) {
             FileUtils fileUtils = FileUtils.newFileUtils();
-	        for (int i = 0; i < files.length; i++) {
-	            File targetFile = files[i];
+	        for (File targetFile : files) {
 	            File sourceFile = new File(sourceDir, targetFile.getName());
 	            if (!sourceFile.exists()) {
 	                System.out.println("  Source file missing: "+sourceFile);
@@ -149,8 +148,7 @@ public class ImageSortTask
                 return file.isDirectory();
             }
         });
-        for (int i = 0; i < dirs.length; i++) {
-            File dir = dirs[i];
+        for (File dir : dirs) {
             process(sourceDir, dir, deleteSource, noop, results);
         }
 

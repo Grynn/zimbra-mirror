@@ -15,7 +15,7 @@
  */
 
 
-package org.apache.kabuki.servlets;
+package com.zimbra.kabuki.servlets;
 
 import java.io.*;
 import java.util.*;
@@ -79,7 +79,8 @@ public class Props2JsServlet
     // Data
     //
     
-    private Map/*<Locale,Map<String,byte[]>>*/ buffers = new HashMap();
+    private Map<Locale,Map<String,byte[]>> buffers =
+		new HashMap<Locale,Map<String,byte[]>>();
     
     //
     // HttpServlet methods
@@ -119,14 +120,14 @@ public class Props2JsServlet
     
     private byte[] getBuffer(Locale locale, String uri) throws IOException {
         // get locale buffers
-        Map/*<String,byte[]>*/ localeBuffers = (Map)buffers.get(locale);
+        Map<String,byte[]> localeBuffers = buffers.get(locale);
         if (localeBuffers == null) {
-            localeBuffers = new HashMap();
+            localeBuffers = new HashMap<String,byte[]>();
             buffers.put(locale, localeBuffers);
         }
         
         // get byte buffer
-        byte[] buffer = (byte[])localeBuffers.get(uri);
+        byte[] buffer = localeBuffers.get(uri);
         if (buffer == null) {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             PrintStream out = uri.endsWith(COMPRESSED_EXT) 
@@ -164,13 +165,11 @@ public class Props2JsServlet
             bundle = ResourceBundle.getBundle(basename, locale);
 
             Enumeration keys = bundle.getKeys();
-            Set keySet = new TreeSet();
+            Set<String> keySet = new TreeSet<String>();
             while (keys.hasMoreElements()) {
-                keySet.add(keys.nextElement());
+                keySet.add((String)keys.nextElement());
             }
-            Iterator iter = keySet.iterator();
-            while (iter.hasNext()) {
-                String key = (String)iter.next();
+            for (String key : keySet) {
                 String value = bundle.getString(key);
 
                 out.print(classname);

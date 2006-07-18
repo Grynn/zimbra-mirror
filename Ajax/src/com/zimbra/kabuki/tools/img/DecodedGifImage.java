@@ -15,7 +15,7 @@
  */
 
 
-package org.apache.kabuki.tools.img;
+package com.zimbra.kabuki.tools.img;
 
 import java.awt.*;
 import java.io.*;

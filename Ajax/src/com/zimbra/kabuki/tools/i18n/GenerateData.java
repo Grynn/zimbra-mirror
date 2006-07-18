@@ -15,7 +15,7 @@
  */
 
 
-package org.apache.kabuki.tools.i18n;
+package com.zimbra.kabuki.tools.i18n;
 
 import java.io.*;
 import java.text.*;
@@ -66,7 +66,7 @@ public class GenerateData {
 	private static final Locale DEFAULT_LOCALE = Locale.US;
 	private static final Locale[] LOCALES = Locale.getAvailableLocales();
     
-	private static Map TIMEZONES = new HashMap();
+	private static Map<String,String> TIMEZONES = new HashMap<String,String>();
 	
 	//
 	// Static initializer
@@ -177,32 +177,29 @@ public class GenerateData {
 	
 	public void generate() throws Exception {
         // generate properties for the available locales
-        Map map = new HashMap();
-        for (int i = 0; i < LOCALES.length; i++) {
-            Locale locale = LOCALES[i];
+        Map<Locale,Properties> map = new HashMap<Locale,Properties>();
+        for (Locale locale : LOCALES) {
             //System.out.println(locale);
             Properties props = generate(locale);
             map.put(locale, props);
         }
         
         // merge en and en_US and make it default
-        Properties en = (Properties)map.get(Locale.ENGLISH);
-        Properties enUS = (Properties)map.get(Locale.US);
-        Iterator pnames = enUS.keySet().iterator();
+        Properties en = map.get(Locale.ENGLISH);
+        Properties enUS = map.get(Locale.US);
+		Iterator pnames = enUS.keySet().iterator();
         while (pnames.hasNext()) {
             String pname = (String)pnames.next();
-            String pvalue = enUS.getProperty(pname);
+			String pvalue = enUS.getProperty(pname);
             en.put(pname, pvalue);
         }
         map.remove(Locale.ENGLISH);
         map.put(Locale.US, en);
         
         // remove duplicates
-        Iterator locales = map.keySet().iterator();
-        while (locales.hasNext()) {
-            Locale locale = (Locale)locales.next();
-            Properties props = (Properties)map.get(locale);
-            List chain = getPropertyChain(map, locale);
+		for (Locale locale : map.keySet()) {
+			Properties props = map.get(locale);
+            List<Properties> chain = getPropertyChain(map, locale);
             
             Iterator names = props.keySet().iterator();
             while (names.hasNext()) {
@@ -217,10 +214,8 @@ public class GenerateData {
         
         // save properties files
         Date date = new Date();
-        locales = map.keySet().iterator();
-        while (locales.hasNext()) {
-            Locale locale = (Locale)locales.next();
-            Properties properties = (Properties)map.get(locale);
+        for (Locale locale : map.keySet()) {
+            Properties properties = map.get(locale);
             String suffix = locale.equals(DEFAULT_LOCALE) ? "" : "_" + locale; 
             File file = new File(this.dir, this.basename+suffix+".properties");
             PrintStream out = new PrintStream(new FileOutputStream(file));
@@ -275,7 +270,7 @@ public class GenerateData {
         generateCalendarNames(props, locale);
         generateDateTimeFormats(props, locale);
         generateNumberFormats(props, locale);
-        generateTimeZones(props, locale);
+        generateTimeZones(props/*, locale*/);
         return props;
     } // generate(Locale):Properties
     
@@ -375,12 +370,10 @@ public class GenerateData {
     } // generateCalendarNames(Properties,Locale)
     
     private static void generateDateTimeFormats(Properties props, Locale locale) {
-        for (int i = 0; i < DATE_STYLES.length; i++) {
-            int style = DATE_STYLES[i];
+        for (int style : DATE_STYLES) {
             props.setProperty("formatDate"+toStyle(style), getDateFormat(locale, style));
         }
-        for (int i = 0; i < DATE_STYLES.length; i++) {
-            int style = DATE_STYLES[i];
+        for (int style : DATE_STYLES) {
             props.setProperty("formatTime"+toStyle(style), getTimeFormat(locale, style));
         }
         String shortDateFormat = getDateFormat(locale, DateFormat.SHORT);
@@ -434,9 +427,7 @@ public class GenerateData {
 		calendar.set(Calendar.HOUR_OF_DAY, 12);
 		props.setProperty("periodPm", ampmFormatter.format(calendar.getTime()));
 
-		Iterator iter = TIMEZONES.keySet().iterator();
-		while (iter.hasNext()) {
-			String timezoneId = (String)iter.next();
+		for (String timezoneId : TIMEZONES.keySet()) {
 			TimeZone timezone = TimeZone.getTimeZone(timezoneId);
 			String displayName = timezone.getDisplayName(locale);
 			props.put("timezoneName"+timezoneId, displayName);
@@ -464,31 +455,29 @@ public class GenerateData {
     	props.setProperty("numberSeparatorMoneyDecimal", Character.toString(symbols.getMonetaryDecimalSeparator()));
     } // generateNumberFormats(Properties,Locale)
     
-    private static void generateTimeZones(Properties props, Locale locale) {
-		Iterator iter = TIMEZONES.keySet().iterator();
-		while (iter.hasNext()) {
-			String timezoneId = (String)iter.next();
-			String timezoneValue = (String)TIMEZONES.get(timezoneId);
+    private static void generateTimeZones(Properties props/*, Locale locale*/) {
+		for (String timezoneId : TIMEZONES.keySet()) {
+			String timezoneValue = TIMEZONES.get(timezoneId);
 			props.setProperty("timezoneMap"+timezoneId, timezoneValue);
 		}
     } // generateTimeZones(Properties,Locale)
     
     // Other methods
     
-    private static List getPropertyChain(Map map, Locale locale) {
-        List chain = new LinkedList();
+    private static List<Properties> getPropertyChain(Map<Locale,Properties> map, Locale locale) {
+        List<Properties> chain = new LinkedList<Properties>();
         
         String language = locale.getLanguage();
         String country = locale.getCountry();
         String variant = locale.getVariant();
         if (variant != null && variant.length() > 0) {
-            Object props = map.get(new Locale(language, country));
+            Properties props = map.get(new Locale(language, country));
             if (props != null) {
                 chain.add(props);
             }
         }
         if (country != null && country.length() > 0) {
-            Object props = map.get(new Locale(language));
+            Properties props = map.get(new Locale(language));
             if (props != null) {
                 chain.add(props);
             }
@@ -499,10 +488,8 @@ public class GenerateData {
         return chain;
     }
     
-    private static boolean isDuplicate(List chain, String name, String value) {
-        Iterator iter = chain.iterator();
-        while (iter.hasNext()) {
-            Properties props = (Properties)iter.next();
+    private static boolean isDuplicate(List<Properties> chain, String name, String value) {
+        for (Properties props : chain) {
             String pvalue = (String)props.get(name);
             if (pvalue != null) {
                 return pvalue.equals(value);
@@ -512,8 +499,9 @@ public class GenerateData {
     }
     
     // Convenience methods
-    
-    private static String toString(Collection collection) {
+
+	/***
+	private static String toString(Collection collection) {
         StringBuffer str = new StringBuffer();
         Iterator iter = collection.iterator();
         while (iter.hasNext()) {
@@ -522,8 +510,9 @@ public class GenerateData {
         }
         return str.toString();
     }
-    
-    private static String getDateFormat(Locale locale, int style) {
+	/***/
+
+	private static String getDateFormat(Locale locale, int style) {
         return toPattern(DateFormat.getDateInstance(style, locale)); 
     }
     private static String getTimeFormat(Locale locale, int style) {

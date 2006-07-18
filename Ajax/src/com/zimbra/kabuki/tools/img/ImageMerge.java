@@ -15,7 +15,7 @@
  */
 
 
-package org.apache.kabuki.tools.img;
+package com.zimbra.kabuki.tools.img;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -411,8 +411,7 @@ public class ImageMerge {
                                            final String extension) {
         ArrayList<String> fileNameList = new ArrayList<String>();
 
-        for (Iterator<File> iter = inputDirs.iterator(); iter.hasNext();) {
-            File dir = iter.next();
+        for (File dir : inputDirs) {
             String[] fileNames = dir.list(new FilenameFilter() {
                 public boolean accept(File dir, String name) {
                     int index = name.lastIndexOf("." + extension);
@@ -428,8 +427,8 @@ public class ImageMerge {
                 continue;
 
             String path = dir.getPath();
-            for (int i = 0; i < fileNames.length; i++) {
-                fileNameList.add(path + File.separator + fileNames[i]);
+            for (String fileName : fileNames) {
+                fileNameList.add(path + File.separator + fileName);
             }
         }
         return fileNameList.toArray(new String[0]);
@@ -448,8 +447,7 @@ public class ImageMerge {
         typeList[ImageMerge.HORIZ_LAYOUT] = horizList;
         typeList[ImageMerge.TILE_LAYOUT] = tileList;
 
-        for (int i = 0; i < fileList.length; i++) {
-            String file = fileList[i];
+        for (String file : fileList) {
             int layoutStyle = getLayoutStyleFromFilename(file, suffix);
             ((ArrayList) typeList[layoutStyle]).add(file);
         }
