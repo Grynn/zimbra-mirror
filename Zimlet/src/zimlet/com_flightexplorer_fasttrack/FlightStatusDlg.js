@@ -14,6 +14,24 @@ function FlightStatusDlg(appCtxt, parent, className, zimlet) {
 	this._setMouseEventHdlrs();
 	this._objectManager = new ZmObjectManager(this, this._appCtxt);	
 	
+	this._flightNumInputField = new DwtInputField({parent:this, type:DwtInputField.STRING,
+											initialValue:"", size:null, maxLen:null,
+											errorIconStyle:DwtInputField.ERROR_ICON_NONE,
+											validationStyle:DwtInputField.CONTINUAL_VALIDATION,validatorCtxtObj:this,validator:FlightStatusDlg._onChange});
+	
+	Dwt.setSize(this._flightNumInputField.getInputElement(), "50px", "22px");	
+	this._flightNumInputField.reparentHtmlElement(this.flightNumInputCellid);
+
+	this._flightCodeInputField = new DwtInputField({parent:this, type:DwtInputField.STRING,
+											initialValue:"", size:null, maxLen:null,
+											errorIconStyle:DwtInputField.ERROR_ICON_NONE,
+											validationStyle:DwtInputField.CONTINUAL_VALIDATION});
+	
+	Dwt.setSize(this._flightCodeInputField.getInputElement(), "50px", "22px");	
+	this._flightCodeInputField.reparentHtmlElement(this.flightCodeInputCellid);
+			
+	this._tabGroup.addMember(this._flightNumInputField);
+	this._tabGroup.addMember(this._flightCodeInputField);	
 }
 
 FlightStatusDlg.prototype = new ZmDialog;
@@ -33,6 +51,7 @@ FlightStatusDlg.prototype.popup =
 function(loc) {
 	ZmDialog.prototype.popup.call(this, loc);
 	this.resetFields("N/A");
+//	this.shell.getKeyboardMgr().enable(false);
 }
 
 FlightStatusDlg.prototype._okButtonListener = function () {
@@ -41,6 +60,7 @@ FlightStatusDlg.prototype._okButtonListener = function () {
 
 FlightStatusDlg.prototype.popdown =
 function() {
+//	this.shell.getKeyboardMgr().enable(true);
 	this._appCtxt.getShell().setCursor("default");
 	ZmDialog.prototype.popdown.call(this);
 }
@@ -80,8 +100,8 @@ function(airline,airlinecode) {
 FlightStatusDlg.prototype.setFlightNumber = 
 function(flight) {
 	this.currentFlightNum = flight;
-	if(this._flightNumInputEl) {
-		this._flightNumInputEl.value = flight;
+	if(this._flightNumInputField) {
+		this._flightNumInputField.setValue(flight);
 	}
 }
 
@@ -89,8 +109,8 @@ FlightStatusDlg.prototype.setFlightCode =
 function(code) {
 	this.currentFlightCode = code;
 	this.detailValueCell.innerHTML = ("(" + code + ")");
-	if(this._flightCodeInputEl) {
-		this._flightCodeInputEl.value = code;
+	if(this._flightCodeInputField) {
+		this._flightCodeInputField.setValue(code);
 	}
 }
 
@@ -115,31 +135,40 @@ function() {
 	airlineInputCell.appendChild(this._airlineSelect.getHtmlElement());	
 	this._airlineSelect.addChangeListener(new AjxListener(this, this.flightChanged));
 
-	this._flightNumInputEl = document.createElement("INPUT");
+	/*this._flightNumInputEl = document.createElement("INPUT");
 	this._flightNumInputEl.autocomplete = "OFF";
 	this._flightNumInputEl.type = "text";
 	this._flightNumInputEl.size=5;
 	var fldgId = AjxCore.assignId(this);
 	this._flightNumInputEl._fdlgId = fldgId;	
 	Dwt.setHandler(this._flightNumInputEl, DwtEvent.ONKEYUP, FlightStatusDlg._onChange);
-	
-	this._flightCodeInputEl = document.createElement("INPUT");
+	*/
+											
+	/*this._flightCodeInputEl = document.createElement("INPUT");
 	this._flightCodeInputEl.autocomplete = "OFF";
 	this._flightCodeInputEl.type = "text";
 	this._flightCodeInputEl.size=5;
-
+	*/
 		
+	
 	var flightNumLabelCell = row1.insertCell(row1.cells.length);
 	flightNumLabelCell.className = "Label";
 	flightNumLabelCell.innerHTML = "Flight number:";
+
+	this.flightNumInputCellid = Dwt.getNextId();
 	var flightNumInputCell = row1.insertCell(row1.cells.length);
-	flightNumInputCell.appendChild(this._flightNumInputEl);
+	flightNumInputCell.id = this.flightNumInputCellid;
+	//flightNumInputCell.appendChild(this._flightNumInputEl);
+
 
 	var flightCodeLabelCell = row1.insertCell(row1.cells.length);
 	flightCodeLabelCell.className = "Label";
 	flightCodeLabelCell.innerHTML = "Flight code:";
+
+	this.flightCodeInputCellid = Dwt.getNextId();
 	var flightCodeInputCell = row1.insertCell(row1.cells.length);
-	flightCodeInputCell.appendChild(this._flightCodeInputEl);
+	flightCodeInputCell.id = this.flightCodeInputCellid;
+	//flightCodeInputCell.appendChild(this._flightCodeInputEl);
 			
 	var flightSearchBtnCell = row1.insertCell(row1.cells.length);		
 	var searchButton = new DwtButton(this);
@@ -576,21 +605,24 @@ function () {
 FlightStatusDlg.prototype.flightChanged =
 function (ev) {
 	var code = this._airlineSelect.getValue();
-	if(this._flightNumInputEl.value) {
-		code +=this._flightNumInputEl.value;
+	if(this._flightNumInputField.getValue()) {
+		code +=this._flightNumInputField.getValue();
 	}
 	this.setFlightCode(code);
 }
 
+
 FlightStatusDlg._onChange = 
-function (ev) {
-	var el = DwtUiEvent.getTarget(ev);
+function (value) {
+	this.flightChanged();
+	return value;
+	/*var el = DwtUiEvent.getTarget(ev);
 	if(el) {
 		var fdlg = AjxCore.objectWithId(el._fdlgId);
 		if(fdlg) {
 			fdlg.flightChanged();
 		}
-	}
+	}*/
 }
 FlightStatusDlg.prototype._add2Cal = 
 function () {
