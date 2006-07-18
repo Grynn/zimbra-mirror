@@ -135,7 +135,9 @@ function() {
 		contact = (this._actionObject instanceof ZmContact)
 			? this._actionObject
 			: capp.getContactList().getContactByEmail(this._actionObject.address);
-	} else {
+	}
+
+	if (contact == null) {
 		contact = new ZmContact(this._appCtxt);
 		contact.initFromEmail(this._actionObject);
 	}
