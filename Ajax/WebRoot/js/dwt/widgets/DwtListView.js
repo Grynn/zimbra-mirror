@@ -154,7 +154,9 @@ function(defaultColumnSort) {
 	var htmlArr = new Array();
 	this._headerTableId = DwtListView.HEADER_ID + Dwt.getNextId();
 
-	htmlArr[idx++] = "<table id='" + this._headerTableId + "' cellpadding=0 cellspacing=0 border=0 height=100%";
+	htmlArr[idx++] = "<table id='";
+	htmlArr[idx++] = this._headerTableId;
+	htmlArr[idx++] = "' cellpadding=0 cellspacing=0 border=0 height=100%";
 	htmlArr[idx++] = this._noMaximize ? ">" : " width=100%>";
 	htmlArr[idx++] = "<tr>";
 	var numCols = this._headerList.length;
@@ -163,7 +165,9 @@ function(defaultColumnSort) {
 		if (!headerCol._visible)
 			continue;
 			
-		htmlArr[idx++] = "<td id='" + headerCol._id + "' class='";
+		htmlArr[idx++] = "<td id='";
+		htmlArr[idx++] = headerCol._id;
+		htmlArr[idx++] = "' class='";
 		htmlArr[idx++] = headerCol._id == this._currentColId
 			? "DwtListView-Column DwtListView-ColumnActive'"
 			: "DwtListView-Column'";
@@ -186,17 +190,30 @@ function(defaultColumnSort) {
 			htmlArr[idx++] = "</center></td>";
 		}
 			
-		if (headerCol._label)
-			htmlArr[idx++] = "<td id='" + DwtListView.HEADERITEM_LABEL + headerCol._id + "'>&nbsp;" + headerCol._label + "</td>";
+		if (headerCol._label) {
+			htmlArr[idx++] = "<td id='";
+			htmlArr[idx++] = DwtListView.HEADERITEM_LABEL + headerCol._id;
+			htmlArr[idx++] = "'>&nbsp;";
+			htmlArr[idx++] = headerCol._label;
+			htmlArr[idx++] = "</td>";
+		}
 		
 		if (headerCol._sortable) {
 			var arrowIcon = this._bSortAsc ? "ColumnUpArrow" : "ColumnDownArrow";
 			var id = DwtListView.HEADERITEM_ARROW + headerCol._id;
 			if (headerCol._sortable == defaultColumnSort) {
 				this._currentColId = headerCol._id;
-				htmlArr[idx++] = "<td width=10 id='" + id + "'>" + AjxImg.getImageHtml(arrowIcon) + "</td>";
+				htmlArr[idx++] = "<td width=10 id='";
+				htmlArr[idx++] = id;
+				htmlArr[idx++] = "'>";
+				htmlArr[idx++] = AjxImg.getImageHtml(arrowIcon);
+				htmlArr[idx++] = "</td>";
 			} else {
-				htmlArr[idx++] = "<td width=10 id='" + id + "'>" + AjxImg.getImageHtml(arrowIcon, "visibility:hidden") + "</td>";
+				htmlArr[idx++] = "<td width=10 id='";
+				htmlArr[idx++] = id;
+				htmlArr[idx++] = "'>";
+				htmlArr[idx++] = AjxImg.getImageHtml(arrowIcon, "visibility:hidden");
+				htmlArr[idx++] = "</td>";
 			}
 		}
 		
@@ -204,8 +221,12 @@ function(defaultColumnSort) {
 		if (i < (numCols - 1)) {
 			htmlArr[idx++] = "<td width=4>";
 			htmlArr[idx++] = "<table align=right border=0 cellpadding=0 cellspacing=0 width=2 height=100%><tr>";
-			htmlArr[idx++] = "<td class='DwtListView-Sash'><div style='width: 1px; height: " + (DwtListView.HEADERITEM_HEIGHT-2) + "px; background-color: #8A8A8A'></div></td>";
-			htmlArr[idx++] = "<td class='DwtListView-Sash'><div style='width: 1px; height: " + (DwtListView.HEADERITEM_HEIGHT-2) + "px; background-color: #FFFFFF'></div></td>";
+			htmlArr[idx++] = "<td class='DwtListView-Sash'><div style='width: 1px; height: ";
+			htmlArr[idx++] = (DwtListView.HEADERITEM_HEIGHT-2);
+			htmlArr[idx++] = "px; background-color: #8A8A8A'></div></td>";
+			htmlArr[idx++] = "<td class='DwtListView-Sash'><div style='width: 1px; height: ";
+			htmlArr[idx++] = (DwtListView.HEADERITEM_HEIGHT-2);
+			htmlArr[idx++] = "px; background-color: #FFFFFF'></div></td>";
 			htmlArr[idx++] = "</tr></table>";
 			htmlArr[idx++] = "</td>";
 		}
