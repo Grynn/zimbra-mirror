@@ -69,32 +69,28 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
     width: "100%";
     height: "100%";
 }
-.MainShell {
-	background-color: #B7B7B7;
-	background-image:url(/zimbraAdmin/img/loRes/skins/steel/Steel__BG.gif);
-}
+.MainShell {}
 
 
 /*
 * Splash Screen
 */
-.ZaSplashScreen{ 
-  width:100%;
-  height:100%;
-  top:0;
-  left:0;
-  position:absolute;
+.ZaSplashScreen {
+	@ChromeBg@
+	width:100%;
+	height:100%;
+	top:0;
+	left:0;
+	position:absolute;
 }
+
 .ZaSplashScreen, .ZaSplashScreen table {
-	background-color: #B7B7B7;
-	background-image:url(/zimbraAdmin/img/loRes/skins/steel/Steel__BG.gif);
+	@ChromeBg@
 }
-
-
 
 
 .Text {
-	font-size:12px;
+	font-size:11px;
 }
 
 .ZaStatusView {background-color: #EEEEEE; }
@@ -215,7 +211,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 .ZaServerGeneralPropPage {
 	background-color: rgb(245, 245, 245);
 	width: 100%;
-	align: left;	
+	align: left;
 }
 
 .ZaServerGeneralPropPage .TitleBar {
@@ -244,7 +240,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 .ZaToolBar {
 	width: 100%;
 	height: 100%;
-	background-image:url(/zimbraAdmin/img/loRes/skins/steel/Pebble__BG.gif);
+	@InsetBg@
 	border-style: solid;
 	border-width: 0px 0px 2px 0px;
 	border-bottom-color: #777777;
@@ -299,7 +295,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 
 .HeaderPanel {
 	width:100%;
-	background-image:url(/zimbraAdmin/img/loRes/skins/steel/Steel__BG.gif);	
+	@ChromeBg@
 	border-style: solid;
 	border-width: 0px 0px 2px 0px;
 	border-bottom-color: #777777;	
@@ -440,7 +436,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 
 /* Tab button grid */
 .ZaTabBar {
-	background-image:url(/zimbraAdmin/img/loRes/skins/steel/Pebble__BG.gif);
+	@InsetBg@
 }
 
 .AdminTitle {

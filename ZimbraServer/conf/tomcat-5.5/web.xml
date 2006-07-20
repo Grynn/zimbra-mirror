@@ -344,6 +344,10 @@
         <mime-type>application/x-troff-ms</mime-type>
     </mime-mapping>
     <mime-mapping>
+        <extension>msi</extension>
+        <mime-type>application/x-msi</mime-type>
+    </mime-mapping>
+    <mime-mapping>
         <extension>nc</extension>
         <mime-type>application/x-netcdf</mime-type>
     </mime-mapping>
