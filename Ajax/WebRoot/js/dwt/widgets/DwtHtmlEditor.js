@@ -326,7 +326,14 @@ function(rows, cols, width, cellSpacing, cellPadding, alignment) {
 			} else if (AjxEnv.isIE) {
 				td.innerHTML = "&nbsp;";
 			}
-			td.style.borderTop = td.style.borderLeft = "1px solid #000";
+			if (AjxEnv.isIE)
+				// since in IE we can't select
+				// multiple cells anyway, and since
+				// it's buggy if we only assign half
+				// of the borders.... :-(
+				td.style.border = "1px solid #000";
+			else
+				td.style.borderTop = td.style.borderLeft = "1px solid #000";
 			tr.appendChild(td);
 		}
 	}
@@ -827,9 +834,9 @@ function(params) {
 	// out iframe doc's body in IE - so create a new body...
 	if (AjxEnv.isIE) {
 		doc.open();
-		doc.write("");
+		doc.write(this._pendingContent || "");
 		doc.close();
-		doc.body.innerHTML = this._pendingContent || "";
+		// doc.body.innerHTML = this._pendingContent || "";
 		// these 2 seem to be no-ops.
 		// this._execCommand("2D-Position", false);
 		// this._execCommand("MultipleSelection", true);
@@ -1029,60 +1036,32 @@ function(cmd, params) {
 	}
 	while (true) {
 		switch (cmd) {
-		    case "insertRow":
-			var new_row = tr.cloneNode(true);
-			tr.parentNode.insertBefore(new_row, tr);
-			for (var i = 0; i < new_row.cells.length; ++i)
-				new_row.cells[i].innerHTML = AjxEnv.isGeckoBased ? "<br />" : "";
-			this.selectNodeContents(new_row.cells[cellIndex], true);
+		    case "insertRowAbove":
+			DwtHtmlEditor.table_fixCells(
+				DwtHtmlEditor.table_insertRow(td));
 			break;
 
-		    case "insertColumn":
-			for (var i = 0; i < table.rows.length; ++i) {
-				var row = table.rows[i];
-				td = row.cells[cellIndex];
-				var new_cell = td.cloneNode(true);
-				DwtCssStyle.removeProperty(new_cell, "width");
-				row.insertBefore(new_cell, td);
-				new_cell.innerHTML = AjxEnv.isGeckoBased ? "<br />" : "";
-			}
-			this.selectNodeContents(tr.cells[cellIndex]);
+		    case "insertRowUnder":
+			DwtHtmlEditor.table_fixCells(
+				DwtHtmlEditor.table_insertRow(td, true));
+			break;
+
+		    case "insertColumnBefore":
+			DwtHtmlEditor.table_fixCells(
+				DwtHtmlEditor.table_insertCol(td));
+			break;
+
+		    case "insertColumnAfter":
+			DwtHtmlEditor.table_fixCells(
+				DwtHtmlEditor.table_insertCol(td, true));
 			break;
 
 		    case "deleteRow":
-			var next_tr = null;
-			try {
-				next_tr = table.rows[rowIndex + 1];
-				if (!next_tr)
-					next_tr = table.rows[rowIndex - 1];
-			} catch(ex) {/* Gecko throws an exception if index isn't in collection bounds*/};
-			if (!next_tr) {
-				// if user wants to remove the last row, the whole table goes away
-				cmd = "deleteTable";
-				continue;
-			} else {
-				tr.parentNode.removeChild(tr);
-				this.selectNodeContents(next_tr.cells[cellIndex], true);
-			}
+			DwtHtmlEditor.table_deleteRow(td);
 			break;
 
 		    case "deleteColumn":
-			if (tr.cells.length == 1) {
-				cmd = "deleteTable";
-				continue;
-			}
-			var next_td = null;
-			try {
-				next_td = tr.cells[cellIndex + 1];
-				if (!next_td)
-					next_td = tr.cells[cellIndex - 1];
-			} catch(ex) {};
-			for (var i = 0; i < table.rows.length; ++i) {
-				var row = table.rows[i];
-				td = row.cells[cellIndex];
-				row.removeChild(td);
-			}
-			this.selectNodeContents(next_td, true);
+			DwtHtmlEditor.table_deleteCol(td);
 			break;
 
 		    case "mergeCells":
@@ -1440,3 +1419,221 @@ function() {
 	return iFrameDoc && iFrameDoc.body ?
 		AjxStringUtil.convertHtml2Text(iFrameDoc.body) : "";
 }
+
+/** Table Helper Functions **/
+// XXX: Hairy code!  It's advisable not to mess with it. ;-)
+
+DwtHtmlEditor.table_analyzeCells = function(currentCell) {
+	var table = currentCell.parentNode.parentNode;
+	while (table && !/table/i.test(table.tagName))
+		table = table.parentNode;
+	var spans = {};
+	var rows = table.rows;
+	for (var i = 0; i < rows.length; ++i) {
+		var cells = rows[i].cells;
+		var index = 0;
+		for (var j = 0; j < cells.length;) {
+			var td = cells[j];
+			var cs = td.colSpan || 1;
+			var rs = (td.rowSpan || 1) - 1;
+			var tmp = spans[index];
+			if (tmp) {
+				if (--tmp.rs == 0)
+					spans[index] = null;
+				index += tmp.cs;
+			}
+			td.ZmIndex = index;
+			if (++j < cells.length) {
+				if (rs)
+					spans[index] = { cs: cs, rs: rs };
+				index += cs;
+			}
+		}
+	}
+	return table;
+};
+
+DwtHtmlEditor.table_getCellAt = function(tr, index) {
+	var cells = tr.cells;
+	var last = null, next = null;
+	for (var i = 0; i < cells.length; ++i) {
+		var td = cells[i];
+		var cs = (td.colSpan || 1) - 1;
+		if (td.ZmIndex <= index
+		    && td.ZmIndex + cs >= index) {
+			var rs = (td.rowSpan || 1) - 1;
+			return { td: td, cs: cs, rs: rs };
+		} else if (td.ZmIndex < index) {
+			last = td;
+		} else if (td.ZmIndex + cs > index && !next) {
+			next = td;
+		}
+	}
+	return { last: last, next: next };
+};
+
+DwtHtmlEditor.table_getPrevCellAt = function(tr, index) {
+	var table = tr.parentNode;
+	while (table && !/table/i.test(table.tagName))
+		table = table.parentNode;
+	var rows = table.rows;
+	for (var i = tr.rowIndex; --i >= 0;) {
+		var info = DwtHtmlEditor.table_getCellAt(rows[i], index);
+		if (info.td) {
+			info.dist = tr.rowIndex - i;
+			return info;
+		}
+	}
+	return null;
+};
+
+DwtHtmlEditor.table_fixCells = function(cells) {
+	for (var i = 0; i < cells.length; ++i) {
+		var td = cells[i];
+		if (AjxEnv.isIE) {
+			td.innerHTML = "&nbsp;";
+		} else if (AjxEnv.isGeckoBased) {
+			td.innerHTML = "<br/>";
+		}
+		// who knows what other browsers would like..
+	}
+};
+
+DwtHtmlEditor.table_insertCol = function(td, after) {
+	var table = DwtHtmlEditor.table_analyzeCells(td);
+	var rows = table.rows;
+	var index = td.ZmIndex;
+ 	if (after)
+ 		index += td.colSpan - 1;
+	var newcells = [];
+	var rs = 0;
+	for (var i = 0; i < rows.length; ++i) {
+		var tr = rows[i];
+		var info = DwtHtmlEditor.table_getCellAt(tr, index);
+		var cc = info.td;
+		var newcell = null;
+		if (cc) {
+			if (cc.ZmIndex == index && !after) {
+				newcell = tr.insertCell(cc.cellIndex);
+			} else if (cc.ZmIndex + info.cs == index && after) {
+				newcell = tr.insertCell(cc.cellIndex + 1);
+			}
+			if (newcell) {
+				rs = info.rs;
+			} else {
+				cc.colSpan = info.cs + 2;
+			}
+		} else if (rs > 0) {
+			// FIXME: no notion of "after" in this case?  I suppose so...
+			if (info.last) {
+				newcell = tr.insertCell(info.last.cellIndex + 1);
+			} else if (info.next) {
+				newcell = tr.insertCell(info.next.cellIndex);
+			}
+			--rs;
+		}
+		if (newcell)
+			newcells.push(newcell);
+	}
+	return newcells;
+};
+
+DwtHtmlEditor.table_insertRow = function(td, after) {
+	var tr = td.parentNode;
+	var table = DwtHtmlEditor.table_analyzeCells(td);
+	var index = tr.rowIndex;
+	if (after) {
+		index += td.rowSpan;
+		tr = table.rows[index - 1];
+	}
+	td = table.rows[0].cells[table.rows[0].cells.length-1];
+	var max = td.ZmIndex + td.colSpan;
+	var newrow = table.insertRow(index);
+	var newcells = [];
+	var cells = tr.cells;
+	var newcell;
+	for (var i = 0; i < max; ++i) {
+		var info = DwtHtmlEditor.table_getCellAt(tr, i);
+		if (info.td) {
+			if (!after || !info.rs) {
+				for (var j = 0; j <= info.cs; ++j)
+					newcells.push(newrow.insertCell(-1));
+			} else if (info.rs) {
+				info.td.rowSpan = info.rs + 2;
+			}
+		} else {
+			info = DwtHtmlEditor.table_getPrevCellAt(tr, i);
+			if (after && info.rs == info.dist) {
+				for (var j = 0; j <= info.cs; ++j)
+					newcells.push(newrow.insertCell(-1));
+			} else {
+				info.td.rowSpan = info.rs + 2;
+			}
+		}
+		i += info.cs;
+	}
+	return newcells;
+};
+
+DwtHtmlEditor.table_deleteCol = function(td) {
+	var table = DwtHtmlEditor.table_analyzeCells(td);
+	var rows = table.rows;
+	var index = td.ZmIndex;
+	for (var i = 0; i < rows.length; ++i) {
+		var tr = rows[i];
+		var info = DwtHtmlEditor.table_getCellAt(tr, index);
+		if (info.td) {
+			if (info.cs)
+				info.td.colSpan = info.cs;
+			else {
+				tr.removeChild(info.td);
+				if (tr.cells.length == 0)
+					tr.parentNode.removeChild(tr);
+			}
+			i += info.rs;
+		}
+	}
+	if (table.rows.length == 0)
+		table.parentNode.removeChild(table);
+};
+
+DwtHtmlEditor.table_deleteRow = function(td) {
+	var tr = td.parentNode;
+	var table = DwtHtmlEditor.table_analyzeCells(td);
+	td = table.rows[0].cells[table.rows[0].cells.length-1];
+	var max = td.ZmIndex + td.colSpan;
+	for (var i = max; --i >= 0;) {
+		var info = DwtHtmlEditor.table_getCellAt(tr, i);
+		if (info.td) {
+			if (info.rs) {
+				var nextrow = table.rows[tr.rowIndex+1];
+				var tmp = DwtHtmlEditor.table_getCellAt(nextrow, i);
+				td = null;
+				if (tmp.last) {
+					td = nextrow.insertCell(tmp.last.cellIndex + 1);
+				} else if (tmp.next) {
+					td = nextrow.insertCell(tmp.next.cellIndex);
+				}
+				if (td) {
+					// we should absolutely always get here, but we check anyway...
+					if (info.cs > 0)
+						td.colSpan = info.cs + 1;
+					if (info.rs > 1)
+						td.rowSpan = info.rs;
+				}
+			}
+			tr.removeChild(info.td);
+		} else {
+			info = DwtHtmlEditor.table_getPrevCellAt(tr, i);
+			if (info) {
+				if (info.rs) {
+					info.td.rowSpan = info.rs;
+					i -= info.cs;
+				}
+			}
+		}
+	}
+	tr.parentNode.removeChild(tr);
+	if (table.rows.length == 0)
+		table.parentNode.removeChild(table);
+};
