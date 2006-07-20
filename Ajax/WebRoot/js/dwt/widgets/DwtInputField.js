@@ -282,6 +282,7 @@ function(enabled) {
 DwtInputField.prototype.focus = 
 function() {
 	if (this.getEnabled()) {
+		this._hasFocus = true;
 		this.getInputElement().focus();
 	}
 };
@@ -450,6 +451,7 @@ function(ev) {
 
 DwtInputField._blurHdlr =
 function(ev) {
+	this._hasFocus = false;
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
 	if (obj && obj._validationStyle == DwtInputField.ONEXIT_VALIDATION) {
 		var val = obj._validateInput(obj._inputField.value);
@@ -505,5 +507,8 @@ function(value) {
  */
 DwtInputField.prototype._focusByMouseUpEvent =
 function()  {
+	if (this.getEnabled()) {
+		this._hasFocus = true;
+	}
 };
 

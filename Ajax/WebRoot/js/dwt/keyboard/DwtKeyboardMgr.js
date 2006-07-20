@@ -343,7 +343,18 @@ DwtKeyboardMgr.prototype.__doGrabFocus =
 function(focusObj) {
 	if (!focusObj) return;
 		
-	if (focusObj instanceof DwtControl) {
+	if (focusObj instanceof DwtInputField || !(focusObj instanceof DwtControl)) {
+		// dealing with an input field - native or DwtInputField
+		if (this.__focusObj instanceof DwtControl) {
+			// ctrl -> input
+			this.__oldFocusObj = this.__focusObj;
+		}
+		this.__focusObj = focusObj;
+		// IE throws JS error if you try to focus a disabled or invisible input
+		if (focusObj.focus && !(AjxEnv.isIE && (focusObj.disabled || !Dwt.getVisible(focusObj)))) {
+			focusObj.focus();
+		}
+	} else {
 		DBG.println(AjxDebug.DBG3, "grabFocus: focusObj is a DwtControl: " + focusObj);
 		/* If the current focus of obj and the one grabbing focus are both DwtControls
 		 * then we need to simulate a blur on the control losing focus */
@@ -364,17 +375,6 @@ function(focusObj) {
 		} else {
 			// input -> ctrl: set browser focus to keyboard input field
 			this._kbFocusField.focus();
-		}
-	} else {
-		// dealing with a type of HTML input field
-		if (this.__focusObj instanceof DwtControl) {
-			// ctrl -> input
-			this.__oldFocusObj = this.__focusObj;
-		}
-		this.__focusObj = focusObj;
-		// IE throws JS error if you try to focus a disabled or invisible input
-		if (focusObj.focus && !(AjxEnv.isIE && (focusObj.disabled || !Dwt.getVisible(focusObj)))) {
-			focusObj.focus();
 		}
 	}
 };
@@ -495,10 +495,10 @@ function(ev) {
 DwtKeyboardMgr.__syncFocus =
 function(kbMgr, obj) {
 	
-	/* (BUG 8588) If obj is not the hidden input field (i.e. some other input field, and if
+	/* (BUG 8588) If obj is not the hidden input field (it's some other input field), and if
 	 * a control has focus, then we have a focus mismatch and we need to blur the
 	 * control that thinks it has focus. Note this can happen due to the way focus
-	 * can be set in input fields*/ 
+	 * can be set in input fields. */ 
 	if ((obj != kbMgr._kbFocusField) && kbMgr.__dwtCtrlHasFocus) {
 		DBG.println(AjxDebug.DBG1, "CONTROL DOES NOT HAVE FOCUS: RESETTING");
 		DwtKeyboardMgr.__onBlurHdlr();
