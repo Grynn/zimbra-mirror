@@ -77,6 +77,8 @@ ssl_no_cert_verify
 ssl_no_cn_verify
 ssl_cert_file /opt/zimbra/conf/perdition.pem
 ssl_key_file  /opt/zimbra/conf/perdition.key
+# Never add the domain, handled on the back end
+A all,12
 
 # A|add_domain STATE[,STATE...][,STRIP_DEPTH]:
 # Appends a domain to the USER based on the IP address connected to in
