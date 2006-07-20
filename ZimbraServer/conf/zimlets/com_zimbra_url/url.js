@@ -37,7 +37,7 @@ function() {
 
 // Const
 Com_Zimbra_Url.THUMB_URL = "http://pthumbnails.alexa.com/image_server.cgi?id=" + document.domain + "&url=";
-Com_Zimbra_Url.THUMB_SIZE = 'width="205" height="150"';
+Com_Zimbra_Url.THUMB_SIZE = 'width="111" height="82"';
 
 Com_Zimbra_Url.prototype.match =
 function(line, startIndex) {
