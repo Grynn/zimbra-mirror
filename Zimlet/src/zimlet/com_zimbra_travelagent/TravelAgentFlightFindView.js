@@ -603,7 +603,8 @@ function () {
 		var arriveAirportsCellWork = document.getElementById(this._arriveAirportsSelectIdWork);		
 		if (arriveAirportsCellWork)
 			arriveAirportsCellWork.appendChild(this._arriveAirportsSelectWork.getHtmlElement());
-		this._flightToField.setValue(this.workAirportOptions[0].getValue());
+		if(this.workAirportOptions && this.workAirportOptions.length)
+			this._flightToField.setValue(this.workAirportOptions[0].getValue());
 		
 		if(this._arriveAirportsTitleCellWorkId) {
 			this._arriveAirportsTitleCellWork = document.getElementById(this._arriveAirportsTitleCellWorkId);		
@@ -619,7 +620,9 @@ function () {
 		var arriveAirportsCellHome = document.getElementById(this._arriveAirportsSelectIdHome);		
 		if (arriveAirportsCellHome)
 			arriveAirportsCellHome.appendChild(this._arriveAirportsSelectHome.getHtmlElement());
-		this._flightToField.setValue(this.homeAirportOptions[0].getValue());								
+	
+		if(this.homeAirportOptions && this.homeAirportOptions.length)
+			this._flightToField.setValue(this.homeAirportOptions[0].getValue());								
 		
 		if(this._arriveAirportsTitleCellHomeId) {
 			this._arriveAirportsTitleCellHome = document.getElementById(this._arriveAirportsTitleCellHomeId);		

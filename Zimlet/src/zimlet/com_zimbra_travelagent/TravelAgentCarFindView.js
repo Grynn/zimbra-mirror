@@ -497,7 +497,9 @@ function () {
 		var dropoffAirportsCellWork = document.getElementById(this._dropoffAirportsSelectIdWork);		
 		if (dropoffAirportsCellWork)
 			dropoffAirportsCellWork.appendChild(this._dropoffAirportsSelectWork.getHtmlElement());
-		this._dropoffAirportField.setValue(this.workAirportOptions[0].getValue());					
+	
+		if(this.workAirportOptions && this.workAirportOptions.length)
+			this._dropoffAirportField.setValue(this.workAirportOptions[0].getValue());					
 		
 		if(this._dropoffAirportsTitleCellWorkId) {
 			this._dropoffAirportsTitleCellWork = document.getElementById(this._dropoffAirportsTitleCellWorkId);		
@@ -512,7 +514,9 @@ function () {
 		var dropoffAirportsCellHome = document.getElementById(this._dropoffAirportsSelectIdHome);		
 		if (dropoffAirportsCellHome)
 			dropoffAirportsCellHome.appendChild(this._dropoffAirportsSelectHome.getHtmlElement());
-		this._dropoffAirportField.setValue(this.homeAirportOptions[0].getValue());								
+		
+		if(this.homeAirportOptions && this.homeAirportOptions.length)
+			this._dropoffAirportField.setValue(this.homeAirportOptions[0].getValue());								
 		
 		if(this._dropoffAirportsTitleCellHomeId) {
 			this._dropoffAirportsTitleCellHome = document.getElementById(this._dropoffAirportsTitleCellHomeId);		
