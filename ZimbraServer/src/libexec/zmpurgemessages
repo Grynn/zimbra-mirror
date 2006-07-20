@@ -116,7 +116,7 @@ sub purgeMessages {
 		}
 	$d->end();
 
-	my $response = $SOAP->invoke($url, $d->root(), $context);
+	my $response = $SOAP->invoke($url, $d->root(), $context, 36000);
 
 	# print $response->to_string("pretty"),"\n";
 
