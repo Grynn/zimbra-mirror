@@ -350,8 +350,9 @@ function(focusObj) {
 			this.__oldFocusObj = this.__focusObj;
 		}
 		this.__focusObj = focusObj;
+		var el = (focusObj instanceof DwtInputField) ? focusObj.getInputElement() : focusObj;
 		// IE throws JS error if you try to focus a disabled or invisible input
-		if (focusObj.focus && !(AjxEnv.isIE && (focusObj.disabled || !Dwt.getVisible(focusObj)))) {
+		if (focusObj.focus && !(AjxEnv.isIE && (focusObj.disabled || !Dwt.getVisible(el)))) {
 			focusObj.focus();
 		}
 	} else {
