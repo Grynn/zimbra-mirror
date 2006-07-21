@@ -584,7 +584,7 @@ function(val) {
 
 FlightStatusDlg.prototype._searchButtonListener = 
 function() {
-	var code = this._flightCodeInputEl.value;
+	var code = this._flightCodeInputField.getValue();
 	this.setFlightCode(code);
 	this.resetFields("Please wait. Loading data...");	
 	this.zimlet.getFlightDataAndImage(new AjxCallback(this, this.dataClbk),code);
