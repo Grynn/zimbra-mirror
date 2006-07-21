@@ -1309,6 +1309,12 @@ function() {
 		ev.fontSize = iFrameDoc.queryCommandValue(DwtHtmlEditor._FONT_SIZE);
 		ev.backgroundColor = iFrameDoc.queryCommandValue((AjxEnv.isIE) ? "backcolor" : "hilitecolor");
 		ev.color = iFrameDoc.queryCommandValue("forecolor");
+		if (AjxEnv.isIE) {
+			// For some reason, IE returns a number, so we transform it into
+			// a color specifier that we can actually use
+			ev.backgroundColor = "#" + DwtButtonColorPicker.toHex(ev.backgroundColor, 6).replace(/(..)(..)(..)/, "$3$2$1");
+			ev.color = "#" + DwtButtonColorPicker.toHex(ev.color, 6).replace(/(..)(..)(..)/, "$3$2$1");
+		}
 		ev.justification = null;
 		ev.direction = null;
 
