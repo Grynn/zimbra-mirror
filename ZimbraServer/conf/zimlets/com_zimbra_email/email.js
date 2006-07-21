@@ -73,16 +73,21 @@ function(obj, span, context) {
 	// call base class first to get the action menu
 	var actionMenu = ZmZimletBase.prototype.getActionMenu.call(this, obj, span, context);
 
-	// bug fix #5262 - Change action menu item for contact depending on whether
-	// email address is found in address book or not.
-	if (this._contacts) {
-		var addr = (obj instanceof ZmEmailAddress) ? obj.getAddress() : obj;
-		var found = (this._contacts.getContactByEmail(addr) != null);
-		var newOp = found ? ZmOperation.EDIT_CONTACT : ZmOperation.NEW_CONTACT;
-		var newText = found ? null : ZmMsg.AB_ADD_CONTACT;
-		ZmOperation.setOperation(actionMenu, "NEWCONTACT", newOp, newText);
+	if (!this._appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
+		// make sure to remove adding new contact menu item if contacts are disabled
+		if (actionMenu.getOp("NEWCONTACT"))
+			ZmOperation.removeOperation(actionMenu, "NEWCONTACT", actionMenu._menuItems);
+	} else {
+		// bug fix #5262 - Change action menu item for contact depending on whether
+		// email address is found in address book or not.
+		if (this._contacts) {
+			var addr = (obj instanceof ZmEmailAddress) ? obj.getAddress() : obj;
+			var found = (this._contacts.getContactByEmail(addr) != null);
+			var newOp = found ? ZmOperation.EDIT_CONTACT : ZmOperation.NEW_CONTACT;
+			var newText = found ? null : ZmMsg.AB_ADD_CONTACT;
+			ZmOperation.setOperation(actionMenu, "NEWCONTACT", newOp, newText);
+		}
 	}
-
 	return actionMenu;
 };
 
