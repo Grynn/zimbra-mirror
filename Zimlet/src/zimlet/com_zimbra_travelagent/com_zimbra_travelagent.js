@@ -63,8 +63,8 @@ function (homeOptions, workOptions, workZip, homeZip,addr) {
 	this.tabkeys.push(this.tabView.addTab("Flight", this.flightPage));
 	this.tabkeys.push(this.tabView.addTab("Car", this.carPage));	
 	this.tabkeys.push(this.tabView.addTab("Hotel", this.hotelPage));		
-	var canvas = new ZmDialog(this._appCtxt.getShell(), null, null, "Search travel reservations across multiple engines",null,view);
-	canvas.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(canvas, canvas.popdown));
+	var canvas = new TravelDialog(this._appCtxt.getShell(),  "Search travel reservations across multiple engines",view);
+//	canvas.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(canvas, canvas.popdown));
 	canvas.popup();
 		
 	this.tabView.getTabButton(this.tabkeys[0]).setImage("SideStep-air");
@@ -188,3 +188,22 @@ function(obj) {
 		
 	}
 };
+
+function TravelDialog(parent,title,  view) {
+	if (arguments.length == 0) return;
+	DwtDialog.call(this, parent, null, title, [DwtDialog.CANCEL_BUTTON ], null);
+	if (!view) {
+		this.setContent(this._contentHtml());
+	} else {
+		this.setView(view);
+	}
+
+	this._appCtxt = this.shell.getData(ZmAppCtxt.LABEL);
+	this._msgDialog = this._appCtxt.getMsgDialog();
+		
+	this._treeView = {};
+	this._opc = this._appCtxt.getOverviewController();
+};
+
+TravelDialog.prototype = new ZmDialog;
+TravelDialog.prototype.constructor = TravelDialog;
