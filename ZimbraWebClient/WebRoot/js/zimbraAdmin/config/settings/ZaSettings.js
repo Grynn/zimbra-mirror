@@ -190,6 +190,8 @@ ZaSettings.SYSTEM_CONFIG_ENABLED = true;
 ZaSettings.ADDRESSES_ENABLED = true;
 ZaSettings.RESOURCES_ENABLED = true;
 ZaSettings.SKIN_PREFS_ENABLED = true;
+ZaSettings.LICENSE_ENABLED = true;
+
 // initialization for settings: [name, type, data type, default value]
 ZaSettings.INIT = new Object();
 // IDs FOR HTML COMPONENTS IN THE SKIN
