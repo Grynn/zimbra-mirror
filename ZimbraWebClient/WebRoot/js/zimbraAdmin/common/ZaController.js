@@ -53,7 +53,8 @@ function ZaController(appCtxt, container, app, iKeyName) {
 	this._loginDialog = appCtxt.getLoginDialog();
 
 	this._loginDialog.registerCallback(this.loginCallback, this);
-	
+	this._errorDialog = appCtxt.getErrorDialog();
+	this._msgDialog = appCtxt.getMsgDialog();
 	if(this._app) {
 		this._msgDialog = this._app.dialogs["msgDialog"] = appCtxt.getMsgDialog();
 		this._msgDialog.setApp(app);
@@ -162,10 +163,12 @@ function(msg, ex, noExecReset,style)  {
 		}
 	}
 	// popup alert
-	this._app.dialogs["errorDialog"].setMessage(msg, detailStr, style, ZaMsg.zimbraAdminTitle);
-	if (!this._app.dialogs["errorDialog"].isPoppedUp()) {
-		this._app.dialogs["errorDialog"].popup();
-	}
+	this._errorDialog.setMessage(msg, detailStr, style, ZaMsg.zimbraAdminTitle);
+	
+	if (!this._errorDialog.isPoppedUp()) {
+		this._errorDialog.popup();
+	}		
+
 }
 
 ZaController.prototype.popupMsgDialog = 
@@ -283,7 +286,7 @@ function(ex, method, params, restartOnError, obj) {
 	else 
 	{
 		this._execFrame = {obj: obj, func: method, args: params, restartOnError: restartOnError};
-		this._app.dialogs["errorDialog"].registerCallback(DwtDialog.OK_BUTTON, this._errorDialogCallback, this);
+		this._errorDialog.registerCallback(DwtDialog.OK_BUTTON, this._errorDialogCallback, this);
 		if(!ex.code) {
 			this.popupErrorDialog(ZaMsg.JAVASCRIPT_ERROR + " in method " + method, ex, true);
 		
