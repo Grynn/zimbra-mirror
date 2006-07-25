@@ -559,9 +559,15 @@ function(mode, convert) {
 			iFrame = document.getElementById(this._iFrameId);
 		} else {
 			initializing = true;
-			iFrame = this._initHtmlMode((convert)
+			var content = (convert)
 				? AjxStringUtil.convertToHtml(textArea.value)
-				: textArea.value);
+				: textArea.value;
+			content = [ "<html><head>",
+				    this._getInitialStyle(false),
+				    "</head><body>",
+				    content,
+				    "</body></html>" ].join("");
+			iFrame = this._initHtmlMode(content);
 		}
 		Dwt.setVisible(textArea, false);
 		Dwt.setVisible(iFrame, true);
