@@ -3,21 +3,6 @@
 	<includeCSS>ytraffic.css</includeCSS>
 	<resource>ytraffic.gif</resource>
 	<handlerObject>Com_Zimbra_YTraffic</handlerObject>
-	
-	<contentObject type="keyword">
-		<!-- TODO: Sample matchOn, redefine it later on -->
-		<matchOn>
-			<regex attrs="ig">text</regex>
-		</matchOn>
-		
-		<onClick>
-			<canvas type="window" />
-			<actionUrl target="http://www.google.com/search">
-				<param name="q">${src.objectContent}</param>
-			</actionUrl>
-		</onClick>
-	</contentObject>
-	
 	<zimletPanelItem label="Traffic" icon="YTraffic-panelIcon">		
 		<toolTipText>Yahoo Traffic</toolTipText>
 		<contextMenu>
