@@ -88,6 +88,10 @@ function(obj, span, context) {
 			ZmOperation.setOperation(actionMenu, "NEWCONTACT", newOp, newText);
 		}
 	}
+	if (actionMenu.getOp("SEARCHBUILDER") && !this._appCtxt.get(ZmSetting.BROWSE_ENABLED)) {
+		ZmOperation.removeOperation(actionMenu, "SEARCHBUILDER", actionMenu._menuItems);
+	}
+
 	return actionMenu;
 };
 
