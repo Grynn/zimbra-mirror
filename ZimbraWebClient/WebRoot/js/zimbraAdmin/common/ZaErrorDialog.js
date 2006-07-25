@@ -57,8 +57,8 @@ ZaErrorDialog.prototype.constructor = ZaErrorDialog;
 
 ZaErrorDialog.REPORT_BUTTON = ++DwtDialog.LAST_BUTTON;
 ZaErrorDialog.DETAIL_BUTTON = ++DwtDialog.LAST_BUTTON;
-
-ZaErrorDialog.REPORT_URL = "http://www.zimbra.com/e/";
+ZaErrorDialog.SCHEME = (location.protocol == 'https:') ? "https:" : "http:";
+ZaErrorDialog.REPORT_URL = ZaErrorDialog.SCHEME + "//www.zimbra.com/e/";
 
 
 // Public methods
