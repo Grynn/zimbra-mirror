@@ -92,7 +92,7 @@ sub runCommand {
     my $command = shift;
     my $args = shift;
 
-    if ($host ne $thishost) {
+    if (lc($host) ne lc($thishost)) {
         runRemoteCommand($host, $command, $args);
         return;
     }
