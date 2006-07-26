@@ -34,6 +34,7 @@ ZLoginFactory.NEW_PASSWORD_TR_ID = "ZLoginNewPassword1Tr";
 ZLoginFactory.PASSWORD_CONFIRM_TR_ID = "ZLoginNewPassword2Tr";
 ZLoginFactory.PASSWORD_CONFIRM_ID = "newpass2";
 ZLoginFactory.LOGIN_BUTTON_ID = "ZLoginButton";
+ZLoginFactory.HIDDEN_BUTTON_ID = "ZLoginHiddenButton";
 
 // Constants for tabbing through the login controls.
 ZLoginFactory.TEXT_TYPE = 0;
@@ -248,7 +249,7 @@ ZLoginFactory.getLoginDialogHTML = function (params) {
 										"</div>",
 										"<!-- non-IE browsers dont allow focus for non-INPUT elements so we have to",
 											" create a hidden input to fake focus for our DIV which acts as an input button -->",
-										"<input type='button' style='display:none' id='hiddenButton'>",
+										"<input type='button' style='position:absolute;top:-10000;left:-10000;' id='", ZLoginFactory.HIDDEN_BUTTON_ID, "'>",
 									"</td>",
 								"</tr>",
 							"</table>",
@@ -374,7 +375,7 @@ function(type, id, target) {
 		} else {
 			ZLoginFactory._loginButtonFocus(button);
 			target.blur();
-			document.getElementById('hiddenButton').focus();
+			document.getElementById(ZLoginFactory.HIDDEN_BUTTON_ID).focus();
 		}
 	}
 };

@@ -194,8 +194,15 @@ function() {
 
 ZaLoginDialog._loginListener =
 function(target) {
-	var loginDialogInstance = Dwt.getObjectFromElement(target);
-	loginDialogInstance._loginSelListener();
+	var element = target;
+	while (element) {
+		var object = Dwt.getObjectFromElement(element);
+		if (object instanceof ZaLoginDialog) {
+			object._loginSelListener();
+			break;
+		}
+		element = element.parentNode;
+	}
 };
 
 ZaLoginDialog._loginDiffListener =
