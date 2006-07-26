@@ -88,8 +88,14 @@ function(obj, span, context) {
 			ZmOperation.setOperation(actionMenu, "NEWCONTACT", newOp, newText);
 		}
 	}
+	if (actionMenu.getOp("SEARCH") && !this._appCtxt.get(ZmSetting.SEARCH_ENABLED)) {
+		ZmOperation.removeOperation(actionMenu, "SEARCH", actionMenu._menuItems);
+	}
 	if (actionMenu.getOp("SEARCHBUILDER") && !this._appCtxt.get(ZmSetting.BROWSE_ENABLED)) {
 		ZmOperation.removeOperation(actionMenu, "SEARCHBUILDER", actionMenu._menuItems);
+	}
+	if (actionMenu.getOp("NEWFILTER") && !this._appCtxt.get(ZmSetting.FILTERS_ENABLED)) {
+		ZmOperation.removeOperation(actionMenu, "NEWFILTER", actionMenu._menuItems);
 	}
 
 	return actionMenu;
