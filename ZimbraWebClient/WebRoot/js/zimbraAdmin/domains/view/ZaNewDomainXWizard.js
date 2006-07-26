@@ -854,11 +854,11 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
 								},
 								{type:_GROUP_, numCols:2, width:"100%", 
 								   items:[								
-										{ref:ZaDomain.A_NotebookDomainACLs, type:_ACL_, label:ZaMsg.ACL_Dom,labelLocation:_LEFT_},							
+										{ref:ZaDomain.A_NotebookDomainACLs, type:_ACL_, label:ZaMsg.ACL_Dom+":",labelLocation:_LEFT_},							
 										{type:_SPACER_, height:10},
-										{ref:ZaDomain.A_NotebookAllACLs, type:_ACL_, label:ZaMsg.ACL_All,labelLocation:_LEFT_},
+										{ref:ZaDomain.A_NotebookAllACLs, type:_ACL_, label:ZaMsg.ACL_All+":",labelLocation:_LEFT_},
 										{type:_SPACER_, height:10},
-										{ref:ZaDomain.A_NotebookPublicACLs, type:_ACL_, label:ZaMsg.ACL_Public,labelLocation:_LEFT_,
+										{ref:ZaDomain.A_NotebookPublicACLs, type:_ACL_, label:ZaMsg.ACL_Public+":",labelLocation:_LEFT_,
 											visibleBoxes:{r:true,w:false,a:false,i:false,d:false,x:false}
 										},
 										{type:_SPACER_, height:10}

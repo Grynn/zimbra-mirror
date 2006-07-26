@@ -107,7 +107,7 @@ function(entry) {
 		this._containedObject[ZaDomain.A_NotebookDomainACLs][a] = entry[ZaDomain.A_NotebookDomainACLs][a];
 	}*/
 
-	this._containedObject.notebookAcls = {};
+/*	this._containedObject.notebookAcls = {};
 
 	if(entry.notebookAcls) {
 		for(var gt in entry.notebookAcls) {
@@ -131,13 +131,104 @@ function(entry) {
 				}
 			}
 		}
+	}	*/
+	this._containedObject[ZaDomain.A_allNotebookACLS] = [];
+	this._containedObject[ZaDomain.A_allNotebookACLS]._version=1;
+	if(entry[ZaDomain.A_allNotebookACLS])	{
+		var cnt = entry[ZaDomain.A_allNotebookACLS].length;
+		for(var i = 0; i < cnt; i++) {
+			var aclObj = entry[ZaDomain.A_allNotebookACLS][i];
+			var _newAclObj = {};
+			_newAclObj.gt=aclObj.gt;
+			_newAclObj.name = aclObj.name;
+			_newAclObj.acl = {r:0,w:0,i:0,d:0,a:0,x:0};
+			for (var a in aclObj.acl) {
+				_newAclObj.acl[a] = aclObj.acl[a];
+			}					
+			this._containedObject[ZaDomain.A_allNotebookACLS][i] = _newAclObj;
+		}	
 	}	
-			
 	this._localXForm.setInstance(this._containedObject);
+}
+
+ZaDomainXFormView.aclSelectionListener = 
+function (ev) {
+	var instance = this.getInstance();
+	var arr = this.widget.getSelection();	
+	if(arr && arr.length)
+		instance.acl_selection_cache = arr;
+	else 
+		instance.acl_selection_cache = null;
+		
+	this.getForm().refresh();
+}
+
+ZaDomainXFormView.isDeleteAclEnabled = function () {
+	return (this.instance.acl_selection_cache != null && this.instance.acl_selection_cache.length>0);
+}
+
+ZaDomainXFormView.isEditAclEnabled = function () {
+	return (this.instance.acl_selection_cache != null && this.instance.acl_selection_cache.length==1);
+}
+ZaDomainXFormView.editButtonListener =
+function () {
+	var instance = this.getInstance();
+	if(instance.acl_selection_cache && instance.acl_selection_cache[0]) {	
+		var formPage = this.getForm().parent;
+		if(!formPage.editAclDlg) {
+			formPage.editAclDlg = new ZaEditDomainAclXDialog(formPage._app.getAppCtxt().getShell(), formPage._app);
+			formPage.editAclDlg.registerCallback(DwtDialog.OK_BUTTON, ZaDomainXFormView.updateAcl, this.getForm(), null);						
+		}
+		formPage.editAclDlg.setObject(instance.acl_selection_cache[0]);
+		formPage.editAclDlg.popup();		
+	}
+}
+ZaDomainXFormView.updateAcl = 
+function () {
+	if(this.parent.editAclDlg) {
+		var obj = 
+		this.parent.editAclDlg.popdown();
+	}
+}
+
+ZaDomainXFormView.deleteButtonListener = 
+function () {
+	var instance = this.getInstance();
+	if(instance.acl_selection_cache) {
+		var cnt = instance.acl_selection_cache.length;
+		for(var i=0; i<cnt;i++) {
+			if(instance.acl_selection_cache[i].name && (instance.acl_selection_cache[i].gt==ZaDomain.A_NotebookGroupACLs || instance.acl_selection_cache[i].gt==ZaDomain.A_NotebookUserACLs)) {
+				var cnt2 = instance[ZaDomain.A_allNotebookACLS].length-1;
+				for(var j=cnt2; j >= 0; j--) {
+					if(instance[ZaDomain.A_allNotebookACLS][j].name == instance.acl_selection_cache[i].name) {
+						instance[ZaDomain.A_allNotebookACLS].splice(j,1);
+						break;
+					}
+				}
+			} else if (instance.acl_selection_cache[i].gt) {
+				var cnt2 = instance[ZaDomain.A_allNotebookACLS].length-1;
+				for(var j=cnt2; j >= 0; j--) {
+					if(instance[ZaDomain.A_allNotebookACLS][j].gt == instance.acl_selection_cache[i].gt) {
+						instance[ZaDomain.A_allNotebookACLS][j].acl = {r:0,w:0,i:0,d:0,a:0,x:0};
+						break;
+					}
+				}
+			}
+		}
+	}
+	instance[ZaDomain.A_allNotebookACLS]._version++; 
+	this.getForm().refresh();
 }
 
 ZaDomainXFormView.myXFormModifier = function(xFormObject) {	
 	xFormObject.tableCssStyle="width:100%;overflow:auto;";
+	
+	var headerList = new Array();
+	headerList[0] = new ZaListHeaderItem("gt", ZaMsg.Domain_Notebook_type_col, null, "150px", false, null, false, true);
+	headerList[1] = new ZaListHeaderItem("name", ZaMsg.Domain_Notebook_name_col, null,"200px", false, null, false, true);
+	headerList[2] = new ZaListHeaderItem("acl", ZaMsg.Domain_Notebook_perms_col, null, "200px", null, null, false, true);							
+	
+	
 	xFormObject.items = [
 		{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", 
 			items: [
@@ -275,7 +366,30 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 									width:250,onChange:ZaTabView.onFormFieldChanged
 								},	
 								{type:_SPACER_, height:10},							
-								{type:_GROUP_, numCols:1, colSpan:2, cssClass: "RadioGrouperBorder", width: "100%", //colSizes:["auto"], height: "98%",
+								{ref:ZaDomain.A_allNotebookACLS, colSpan:"*", type:_DWT_LIST_, height:"150", width:"100%", 
+								 	forceUpdate: true, preserveSelection:true, multiselect:true,cssClass: "DLSource", 
+								 	onSelection:ZaDomainXFormView.aclSelectionListener, headerList:headerList, 
+									widgetClass:ZaNotebookACLListView
+								},	
+								{type:_SPACER_, height:10},															
+								{type:_GROUP_, numCols:5, tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", 
+									items: [
+										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,
+											onActivate:"ZaDomainXFormView.deleteButtonListener.call(this);",
+											relevant:"ZaDomainXFormView.isDeleteAclEnabled.call(this)", relevantBehavior:_DISABLE_
+										},
+										{type:_CELLSPACER_},
+										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,
+											onActivate:"ZaDomainXFormView.editButtonListener.call(this);",
+											relevant:"ZaDomainXFormView.isEditAclEnabled.call(this)", relevantBehavior:_DISABLE_
+										},
+										{type:_CELLSPACER_},
+										{type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,
+											onActivate:"ZaDomainXFormView.addButtonListener.call(this);"
+										}
+									]
+								 }
+/*								{type:_GROUP_, numCols:1, colSpan:2, cssClass: "RadioGrouperBorder", width: "100%", //colSizes:["auto"], height: "98%",
 									items:[
 										{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
 									   		items: [
@@ -361,6 +475,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 										}
 									]
 								}
+* /
 								/*,
 								{type:_SPACER_, height:10},
 								{ref:ZaDomain.A_OverwriteTemplates, type:_CHECKBOX_, label:ZaMsg.Domain_OverwriteTemplates, labelLocation:_LEFT_,

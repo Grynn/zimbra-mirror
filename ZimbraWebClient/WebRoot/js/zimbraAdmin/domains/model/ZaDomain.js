@@ -69,7 +69,7 @@ ZaDomain.RESULTSPERPAGE = ZaSettings.RESULTSPERPAGE;
 ZaDomain.MAXSEARCHRESULTS = ZaSettings.MAXSEARCHRESULTS;
 ZaDomain.prototype = new ZaItem;
 ZaDomain.prototype.constructor = ZaDomain;
-
+ZaDomain.ACLLabels = {r:ZaMsg.ACL_R, w:ZaMsg.ACL_W, i:ZaMsg.ACL_I, a:ZaMsg.ACL_A, d:ZaMsg.ACL_D, x:ZaMsg.ACL_X};
 ZaItem.loadMethods["ZaDomain"] = new Array();
 ZaItem.initMethods["ZaDomain"] = new Array();
 
@@ -124,6 +124,7 @@ ZaDomain.A_NotebookDomainACLs = "dom";
 ZaDomain.A_NotebookUserACLs = "usr";
 ZaDomain.A_NotebookGroupACLs = "grp";
 ZaDomain.A_NotebookGuestACLs = "guest";
+ZaDomain.A_allNotebookACLS = "allNotebookACLS";
 //values
 ZaDomain.GAL_Mode_internal = "zimbra";
 ZaDomain.GAL_Mode_external = "ldap";
@@ -745,6 +746,7 @@ ZaDomain.prototype.parseNotebookFolderAcls = function (resp) {
 			&& response.folder[0].acl.grant) {
 			var grants = response.folder[0].acl.grant;
 			var cnt = grants.length;
+			this[ZaDomain.A_allNotebookACLS] = [];
 			for (var gi = 0; gi < cnt; gi++) {
 				var grant = grants[gi];
 				var grantObj = {
@@ -753,13 +755,21 @@ ZaDomain.prototype.parseNotebookFolderAcls = function (resp) {
 					i:grant.perm.indexOf("i")>=0 ? 1 : 0,
 					d:grant.perm.indexOf("d")>=0 ? 1 : 0,
 					a:grant.perm.indexOf("a")>=0 ? 1 : 0,
-					x:grant.perm.indexOf("x")>=0 ? 1 : 0
+					x:grant.perm.indexOf("x")>=0 ? 1 : 0,
+					toString:function () {
+						return this.r+this.w+this.i+this.d+this.a+this.x;
+					}
 				};
-				if(this.notebookAcls[grant.gt] && (this.notebookAcls[grant.gt] instanceof Array)) {
-					this.notebookAcls[grant.gt].push({acl:grantObj, name:grant.d});
+				this[ZaDomain.A_allNotebookACLS].push({acl:grantObj, name:grant.d, gt:grant.gt, 
+						toString:function() {
+							return (this.gt+":"+this.name+":"+this.grantObj.toString());
+						}
+					});
+				/*if(this.notebookAcls[grant.gt] && (this.notebookAcls[grant.gt] instanceof Array)) {
+					this.notebookAcls[grant.gt].push({acl:grantObj, name:grant.d, gt:grant.gt});
 				} else {
 					this.notebookAcls[grant.gt] = grantObj;
-				}
+				}*/
 				
 			}
 			
@@ -847,6 +857,23 @@ function() {
 	}	
 }
 ZaItem.loadMethods["ZaDomain"].push(ZaDomain.loadMethod);
+
+ZaDomain.aclXModel = {
+	items: [
+		{id:"acl",
+			type:_OBJECT_,
+			items: [
+				{id:"r", type:_NUMBER_},
+				{id:"w", type:_NUMBER_},
+				{id:"d", type:_NUMBER_},
+				{id:"i", type:_NUMBER_},
+				{id:"a", type:_NUMBER_},				
+				{id:"x", type:_NUMBER_}
+		]},
+		{id:"name", type:_STRING_},
+		{id:"gt",  type:_STRING_}	
+	]
+}
 
 ZaDomain.myXModel = {
 	items: [
@@ -943,8 +970,8 @@ ZaDomain.myXModel = {
 		{id:ZaDomain.A_NotebookGroupACLs, ref:"notebookAcls/"+ZaDomain.A_NotebookGroupACLs, type:_LIST_,
 			listItem:{type:_OBJECT_,
 				items: [
-					{id:"acl", type:_LIST_, 
-						listItem:{
+					{id:"acl", /*type:_LIST_, 
+						listItem:{*/
 							type:_OBJECT_,
 							items: [
 								{id:"r", type:_NUMBER_},
@@ -954,17 +981,18 @@ ZaDomain.myXModel = {
 								{id:"a", type:_NUMBER_},				
 								{id:"x", type:_NUMBER_}
 							]
-						}
+//						}
 					},
-					{id:"name", type:_STRING_}
+					{id:"name", type:_STRING_},
+					{id:"gt",  type:_STRING_}
 				]
 			}
 		}, 
 		{id:ZaDomain.A_NotebookUserACLs, ref:"notebookAcls/"+ZaDomain.A_NotebookUserACLs, type:_LIST_,
 			listItem:{type:_OBJECT_,
 				items: [
-					{id:"acl", type:_LIST_, 
-						listItem:{
+					{id:"acl",/* type:_LIST_, 
+						listItem:{*/
 							type:_OBJECT_,
 							items: [
 								{id:"r", type:_NUMBER_},
@@ -974,9 +1002,28 @@ ZaDomain.myXModel = {
 								{id:"a", type:_NUMBER_},				
 								{id:"x", type:_NUMBER_}
 							]
-						}
+						//}
 					},
-					{id:"name", type:_STRING_}
+					{id:"name", type:_STRING_},
+					{id:"gt",  type:_STRING_}
+				]
+			}
+		},
+		{id:ZaDomain.A_ACLS, ref:ZaDomain.A_allNotebookACLS, type:_LIST_,
+			listItem:{type:_OBJECT_,
+				items: [
+					{id:"acl", type:_OBJECT_,
+						items: [
+							{id:"r", type:_NUMBER_},
+							{id:"w", type:_NUMBER_},
+							{id:"d", type:_NUMBER_},
+							{id:"i", type:_NUMBER_},
+							{id:"a", type:_NUMBER_},				
+							{id:"x", type:_NUMBER_}
+						]
+					},
+					{id:"name", type:_STRING_}, //null, domain name, group name, user name
+					{id:"gt",  type:_STRING_} //grp, usr, dom, pub, all, guest
 				]
 			}
 		}
