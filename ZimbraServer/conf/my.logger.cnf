@@ -14,7 +14,6 @@ log-slow-queries = /opt/zimbra/log/logger_myslow.log
 long-query-time  = 1
 log-long-format
 log-queries-not-using-indexes
-log-bin
 
 thread_cache      = 10
 max_connections   = 10
