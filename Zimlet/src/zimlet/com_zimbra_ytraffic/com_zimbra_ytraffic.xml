@@ -4,7 +4,7 @@
 	<resource>ytraffic.gif</resource>
 	<handlerObject>Com_Zimbra_YTraffic</handlerObject>
 	<zimletPanelItem label="Traffic" icon="YTraffic-panelIcon">		
-		<toolTipText>Yahoo Traffic</toolTipText>
+		<toolTipText>Yahoo Traffic, double click to launch it.</toolTipText>
 		<contextMenu>
 			<menuItem label="Visit Yahoo Maps with Traffic Informat" id="TRAFFIC.YAHOO.COM" icon="YTraffic-panelIcon">
 				<canvas type="window" width="800" height="600" />
