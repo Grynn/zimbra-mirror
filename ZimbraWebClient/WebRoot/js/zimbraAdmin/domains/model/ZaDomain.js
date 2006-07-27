@@ -402,7 +402,10 @@ ZaDomain.getNotebookACLsRequest = function (obj, soapDoc) {
 			}
 			grantEl.setAttribute("perm", perms);				
 		}
-	}/*
+	}
+}
+
+ZaDomain.getNotebookACLsRequestOld = function (obj, soapDoc) {
 	if(obj.notebookAcls) {
 		for(var gt in obj.notebookAcls) {
 			if(obj.notebookAcls[gt] instanceof Array) {
@@ -447,13 +450,13 @@ ZaDomain.getNotebookACLsRequest = function (obj, soapDoc) {
 				grantEl.setAttribute("perm", perms);					
 			}
 		}
-	}*/
+	}
 }
 
 ZaDomain.setNotebookACLs = function (obj, callback) {
 	var soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
 	soapDoc.setMethodAttribute("onerror", "stop");
-	ZaDomain.getNotebookACLsRequest	(obj,soapDoc);			
+	ZaDomain.getNotebookACLsRequestOld	(obj,soapDoc);			
 	var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;
