@@ -338,7 +338,14 @@ function(rows, cols, width, cellSpacing, cellPadding, alignment) {
 		}
 	}
 
-	this._insertNodeAtSelection(table);
+	var p = doc.createElement("p");
+	p.innerHTML = AjxEnv.isIE ? "&nbsp;" : "<br/>";
+	var df = doc.createDocumentFragment();
+	df.appendChild(p);
+	df.appendChild(table);
+	df.appendChild(p.cloneNode(true));
+
+	this._insertNodeAtSelection(df);
 	this.selectNodeContents(table.rows[0].cells[0], true);
 	return table;
 };
