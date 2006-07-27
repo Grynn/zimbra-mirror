@@ -35,8 +35,10 @@ if [ "X$PLAT" = "XMACOSX" -o "X$PLAT" = "XMACOSXx86" ]; then
 fi
 
 # NOT /opt/zimbra/store, /opt/zimbra/backup takes forever
-chown -R zimbra:zimbra /opt/zimbra/a* /opt/zimbra/[c-ot-z]* /opt/zimbra/s[a-su-z]* /opt/zimbra/perdition-1.17
+chown -R zimbra:zimbra /opt/zimbra/a[m,s]* /opt/zimbra/[c-ot-z]* /opt/zimbra/s[a-su-z]* /opt/zimbra/perdition-1.17
 
+
+chown  root:$ROOTGROUP /opt/zimbra/apache-tomcat-*
 
 chown -R root:$ROOTGROUP /opt/zimbra/libexec
 chown -R root:$ROOTGROUP /opt/zimbra/bin
