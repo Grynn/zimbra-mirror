@@ -41,6 +41,9 @@ my $username="zimbra";
 my $password = `/opt/zimbra/bin/zmlocalconfig -s -m nokey zimbra_logger_mysql_password`;
 chomp $password;
 
+my $platform=`/opt/zimbra/libexec/get_plat_tag.sh`;
+chomp $platform;
+
 my $dbh = DBI->connect($data_source, $username, $password);
 
 if (!$dbh) { 
@@ -116,11 +119,19 @@ my $DEBUG = 0;
 
 $SIG{QUIT} = \&bye;
 
+my $logregex;
+# Apple's got an added field in their syslog entries...
+if ($platform =~ /^MAC/) {
+	$logregex = qr/(^.{15}) \d+\.\d+\.\d+\.\d+ (\S+) ([^[]+)\[(\d+)\]: (.*)$/o;
+} else {
+	$logregex = qr/(^.{15}) (\S+) ([^[]+)\[(\d+)\]: (.*)$/o;
+}
+
 while (<>) {
 	(/last message repeated/) && next;
 
 	my ($log_date, $host, $app, $pid, $msg) =
-		($_ =~ m/(^.{15}) (\S+) ([^[]+)\[(\d+)\]: (.*)$/);
+		($_ =~ m/$logregex/);
 
 	if ($app eq 'slapd' || $app eq 'master') {next;}
 
