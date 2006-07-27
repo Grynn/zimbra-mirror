@@ -49,7 +49,7 @@
 					Thread.sleep(2000);
 				} catch (InterruptedException e) {
 				}
-				System.out.println("nulling reference");
+				//System.out.println("nulling reference");
 				sipStack.deleteListeningPoint(udpListeningPoint);
 				// This will close down the stack and exit all threads
 				udpProvider.removeSipListener(this);
@@ -85,13 +85,14 @@
 			ServerTransaction serverTransactionId =
 					requestReceivedEvent.getServerTransaction();
 
-			System.out.println(
+			/*System.out.println(
 					"\n\nRequest "
 							+ request.getMethod()
 							+ " received at "
 							+ sipStack.getStackName()
 							+ " with server transaction id "
 							+ serverTransactionId);
+			*/
 
 			if (request.getMethod().equals(Request.BYE))
 				processBye(request, serverTransactionId);
@@ -123,7 +124,7 @@
 
 		public void processAck(Request request, ServerTransaction tid) {
 			try {
-				System.out.println("Got an ACK! sending bye : " + tid);
+				//System.out.println("Got an ACK! sending bye : " + tid);
 				if (tid != null) {
 					Dialog dialog = tid.getDialog();
 					Request bye = dialog.createRequest(Request.BYE);
@@ -142,18 +143,18 @@
 				Request request,
 				ServerTransaction serverTransactionId) {
 			try {
-				System.out.println("got a bye .");
+				//System.out.println("got a bye .");
 				if (serverTransactionId == null) {
-					System.out.println("null TID.");
+					//System.out.println("null TID.");
 					return;
 				}
 				Dialog dialog = serverTransactionId.getDialog();
-				System.out.println("Dialog State = " + dialog.getState());
+				//System.out.println("Dialog State = " + dialog.getState());
 				Response response = messageFactory.createResponse
 						(200, request);
 				serverTransactionId.sendResponse(response);
-				System.out.println("Sending OK.");
-				System.out.println("Dialog State = " + dialog.getState());
+				//System.out.println("Sending OK.");
+				//System.out.println("Dialog State = " + dialog.getState());
 
 				this.shutDown();
 
@@ -169,13 +170,15 @@
 			Response response = responseReceivedEvent.getResponse();
 			Transaction tid = responseReceivedEvent.getClientTransaction();
 
+			/*
 			System.out.println(
 					"Response received with client transaction id "
 							+ tid
 							+ ": "
 							+ response.getStatusCode());
+			*/
 			if (tid == null) {
-				System.out.println("Stray response -- dropping ");
+				//System.out.println("Stray response -- dropping ");
 				return;
 			}
 
@@ -190,11 +193,11 @@
 					//	sipProvider.getNewClientTransaction(cancel);
 					Dialog dialog = tid.getDialog();
 					Request ackRequest = dialog.createRequest(Request.ACK);
-					System.out.println("Sending ACK");
+					//System.out.println("Sending ACK");
 					dialog.sendAck(ackRequest);
 
-					System.out.println("Invite accepted:");
-					System.out.println(response.toString());
+					//System.out.println("Invite accepted:");
+					//System.out.println(response.toString());
 
 					Request referRequest = dialog.createRequest(Request.REFER);
 
@@ -213,11 +216,11 @@
 
 					referRequest.setHeader(referToHeader);
 
-					System.out.println("REFER: \n" + referRequest.toString());
+					//System.out.println("REFER: \n" + referRequest.toString());
 
 					//try {Thread.sleep(4000); } catch (Exception ex) {}
 
-					System.out.println("Sending REFER to " + toAddress.toString());
+					//System.out.println("Sending REFER to " + toAddress.toString());
 
 					ClientTransaction ct =
 							udpProvider.getNewClientTransaction(referRequest);
@@ -232,7 +235,7 @@
 								Request.BYE)) {
 					this.shutDown();
 				} else if (response.getStatusCode() == Response.PROXY_AUTHENTICATION_REQUIRED) {
-					System.out.println("Proxy auth required:");
+					//System.out.println("Proxy auth required:");
 					//System.out.println (response.toString());
 
 					//Dialog dialog = tid.getDialog();
@@ -269,7 +272,7 @@
 					inviteRequest.setHeader(response.getHeader("From"));
 
 					listener.inviteTid = udpProvider.getNewClientTransaction(inviteRequest);
-					System.out.println("Sending auth response");
+					//System.out.println("Sending auth response");
 					//System.out.println (inviteRequest.toString());
 					listener.inviteTid.sendRequest();
 
@@ -279,15 +282,15 @@
 						.equals(
 								Request.REFER)) {
 					numCallees--;
-					System.out.println("Referral accepted (" + numCallees + "/" + toArray.length + " remaining)");
-					//System.out.println (response.toString());
+					//System.out.println("Referral accepted (" + numCallees + "/" + toArray.length + " remaining)");
+					////System.out.println (response.toString());
 					if (numCallees == 0) {
 						this.shutDown();
 					}
 				} else if (response.getStatusCode() == Response.TRYING) {
-					System.out.println("Trying number...");
+					//System.out.println("Trying number...");
 				} else {
-					System.out.println("OTHER RESPONSE:\n" + response.toString());
+					//System.out.println("OTHER RESPONSE:\n" + response.toString());
 					this.shutDown();
 				}
 			} catch (Exception ex) {
@@ -338,8 +341,8 @@
 
 		public void processTimeout(javax.sip.TimeoutEvent timeoutEvent) {
 
-			System.out.println("Transaction Time out");
-			System.out.println("TimeoutEvent " + timeoutEvent.getTimeout());
+			//System.out.println("Transaction Time out");
+			//System.out.println("TimeoutEvent " + timeoutEvent.getTimeout());
 		}
 
 		public void init(String args[]) {
@@ -358,7 +361,7 @@
 
 			toArray = toList.split(";");
 
-			System.out.println("Calling from " + from + " to " + toList);
+			//System.out.println("Calling from " + from + " to " + toList);
 
 			// If you want to try TCP transport change the following to
 			String transport = "udp";
@@ -386,13 +389,13 @@
 			try {
 				// Create SipStack object
 				sipStack = sipFactory.createSipStack(properties);
-				System.out.println("createSipStack " + sipStack);
+				//System.out.println("createSipStack " + sipStack);
 			} catch (PeerUnavailableException e) {
 				// could not find
 				// gov.nist.jain.protocol.ip.sip.SipStackImpl
 				// in the classpath
 				e.printStackTrace();
-				System.err.println(e.getMessage());
+				//System.err.println(e.getMessage());
 				this.shutDown();
 				//System.exit(0);
 			}
@@ -409,7 +412,7 @@
 				if (udpListeningPoint == null) {
 					while (true) {
 						myPort = this.getRandomPort();
-						System.out.println("Binding to " + myAddress + ":" + myPort);
+						//System.out.println("Binding to " + myAddress + ":" + myPort);
 						try {
 							udpListeningPoint = sipStack.createListeningPoint
 									(myPort, "udp");
@@ -530,13 +533,13 @@
 					request.setContent(sdpData, contentTypeHeader);
 					request.addHeader(callInfoHeader);
 
-					System.out.println("REQUEST \n" + request.toString());
+					//System.out.println("REQUEST \n" + request.toString());
 					// Create the client transaction.
 					listener.inviteTid = sipProvider.getNewClientTransaction(request);
 
 					// send the request out.
 					listener.inviteTid.sendRequest();
-					System.out.println("REQUEST Sent to " + toAddress.toString());
+					//System.out.println("REQUEST Sent to " + toAddress.toString());
 					try {
 						Thread.sleep(4000);
 					} catch (Exception ex) {
