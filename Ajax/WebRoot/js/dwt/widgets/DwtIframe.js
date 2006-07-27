@@ -45,7 +45,9 @@ function DwtIframe(params) {
 	this._createFrame(params.html);
 	
 	if (params.useKbMgmt) {
-		var doc = this.getDocument();
+		var iframe = this.getIframe();
+		var idoc = Dwt.getIframeDoc(iframe);
+		var doc = AjxEnv.isIE ? idoc : iframe.contentWindow;
 		Dwt.setHandler(doc, DwtEvent.ONKEYDOWN, DwtKeyboardMgr.__keyDownHdlr);
 		Dwt.setHandler(doc, DwtEvent.ONKEYUP, DwtKeyboardMgr.__keyUpHdlr);
 		Dwt.setHandler(doc, DwtEvent.ONKEYPRESS, DwtKeyboardMgr.__keyPressHdlr);

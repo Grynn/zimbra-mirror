@@ -353,8 +353,8 @@ function(focusObj) {
 		var el = (focusObj instanceof DwtInputField) ? focusObj.getInputElement() : focusObj;
 		// IE throws JS error if you try to focus a disabled or invisible input
 		if ((!AjxEnv.isIE && focusObj.focus) ||
-			(AjxEnv.isIE && focusObj.focus && !el.disabled && Dwt.getVisible(el)))
-		{
+			(AjxEnv.isIE && focusObj.focus && !el.disabled && Dwt.getVisible(el))) {
+
 			focusObj.focus();
 		}
 	} else {
@@ -449,6 +449,7 @@ function(ev) {
  */
 DwtKeyboardMgr.__keyPressHdlr =
 function(ev) {
+	ev = DwtUiEvent.getEvent(ev, this);
 	return DwtKeyboardMgr.__keyUpHdlr(ev);
 };
 
