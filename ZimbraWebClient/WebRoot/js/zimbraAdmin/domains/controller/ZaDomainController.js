@@ -142,14 +142,38 @@ function () {
 		renameNotebookAccount = true;
 	}	
 
-	var overWriteACLs = false;	
+	var writeACLs = false;	
+	var permsToRevoke = [];
 	//check if any notebook permissions are changed
-	if(this._currentObject.notebookAcls) {
+	if(tmpObj[ZaDomain.A_allNotebookACLS]._version > 0) {
+		writeACLs = true;	
+		var cnt = this._currentObject[ZaDomain.A_allNotebookACLS].length;
+		for(var i = 0; i < cnt; i++) {
+			if(this._currentObject[ZaDomain.A_allNotebookACLS][i].gt == ZaDomain.A_NotebookUserACLs ||
+				this._currentObject[ZaDomain.A_allNotebookACLS][i].gt == ZaDomain.A_NotebookGroupACLs)	{
+				var cnt2 = tmpObj[ZaDomain.A_allNotebookACLS].length;
+				var foundUser = false;
+				for(var j = 0; j < cnt2; j++) {
+					if(tmpObj[ZaDomain.A_allNotebookACLS][j].name == this._currentObject[ZaDomain.A_allNotebookACLS][i].name) {
+						foundUser = true;
+						break;
+					}
+				}
+				if(!foundUser && this._currentObject[ZaDomain.A_allNotebookACLS][i].zid) {
+					permsToRevoke.push(this._currentObject[ZaDomain.A_allNotebookACLS][i].zid);
+				}
+			}
+		
+		}
+	}
+
+	
+	/*if(this._currentObject.notebookAcls) {
 		for(var gt in this._currentObject.notebookAcls) {
 			if(!(this._currentObject.notebookAcls[gt] instanceof Array)) {
 				for (var a in this._currentObject.notebookAcls[gt]) {
 					if(this._currentObject.notebookAcls[gt][a] != tmpObj.notebookAcls[gt][a]) {
-						overWriteACLs = true;
+						writeACLs = true;
 						break;
 					}
 				}
@@ -157,30 +181,31 @@ function () {
 				var cnt1 = this._currentObject.notebookAcls[gt].length;
 				var cnt2 = tmpObj.notebookAcls[gt].length;
 				if(cnt1 != cnt2) {
-					overWriteACLs = true;
+					writeACLs = true;
 					break;
 				} else {
 					for (var i=0; i< cnt1; i++) {
 						if(typeof (tmpObj.notebookAcls[gt][i]) == "object" && typeof(this._currentObject.notebookAcls[gt][i]) == "object") {
 							for (var a in tmpObj.notebookAcls[gt][i]) {
 								if(this._currentObject.notebookAcls[gt][i][a] != tmpObj.notebookAcls[gt][i][a])	{
-									overWriteACLs = true;
+									writeACLs = true;
 									break;
 								}
-								if(overWriteACLs)
+								if(writeACLs)
 									break;
 							}
 						}
-						if(overWriteACLs)
+						if(writeACLs)
 							break;
 					}
 				}
 			}
-			if(overWriteACLs)
+			if(writeACLs)
 				break;
 		}
-	}	
-	if(haveSmth || overWriteACLs) {
+	}
+	*/	
+	if(haveSmth || writeACLs) {
 		try { 
 			var soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
 			soapDoc.setMethodAttribute("onerror", "stop");		
@@ -227,9 +252,13 @@ function () {
 				ZaDomain.initNotebook(tmpObj,callback) ;		
 			}*/
 			
-			if(overWriteACLs) {
+			if(writeACLs) {
+				if(permsToRevoke.length>0) {
+					ZaDomain.getRevokeACLsrequest(permsToRevoke, soapDoc);
+				}
 				params.accountName = tmpObj[ZaDomain.A_NotebookAccountName] ? tmpObj[ZaDomain.A_NotebookAccountName] : tmpObj.attrs[ZaDomain.A_zimbraNotebookAccount];					
 				ZaDomain.getNotebookACLsRequest	(tmpObj,soapDoc);
+				
 			}
 	
 			params.soapDoc = soapDoc;	
@@ -238,7 +267,7 @@ function () {
 			params.callback = callback;			
 			command.invoke(params);
 	/*	//if(tmpObj[ZaDomain.A_OverwriteNotebookACLs]) {
-			if(overWriteACLs) {
+			if(writeACLs) {
 				var callback = new AjxCallback(this, this.setNotebookAclsCallback);				
 				ZaDomain.setNotebookACLs(tmpObj, callback);
 			}

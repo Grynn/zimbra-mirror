@@ -3833,7 +3833,7 @@ Dwt_List_XFormItem.prototype.setItems = function (itemArray){
 	var defaultColumnSort = this.getInheritedProperty("defaultColumnSortable") ;
 	if (itemArray && itemArray.length > 0) {	
 		//we have to compare the objects, because XForm calls this method every time an item in the list is selected
-		if((itemArray._version && existingArr._version && (itemArray._version != existingArr._version ) )|| (itemArray.join() != existingArr.join()) ) {
+		if((itemArray._version !=null && existingArr._version !=null && (itemArray._version != existingArr._version ) )|| (itemArray.join() != existingArr.join()) ) {
 			var preserveSelection = this.getInheritedProperty("preserveSelection");
 			var selection = null;
 			if(preserveSelection) {
@@ -3845,7 +3845,7 @@ Dwt_List_XFormItem.prototype.setItems = function (itemArray){
 			}
 			//add the default sort column
 			this.widget.set(AjxVector.fromArray(tmpArr), defaultColumnSort);
-			if(itemArray._version)
+			if(itemArray._version != undefined && itemArray._version != null)
 				this.widget.getList().getArray()._version = itemArray._version;
 				
 			if(preserveSelection && selection) {

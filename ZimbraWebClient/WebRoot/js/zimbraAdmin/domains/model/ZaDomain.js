@@ -369,7 +369,40 @@ function (obj, callback) {
 
 }
 
+ZaDomain.getRevokeACLsrequest = function (permsToRevoke, soapDoc) {
+	var cnt = 	permsToRevoke.length;
+	for(var i = 0; i < cnt; i++) {
+		var folderActionRequest = soapDoc.set("FolderActionRequest");
+		folderActionRequest.setAttribute("xmlns", "urn:zimbraMail");				
+		var actionEl = soapDoc.set("action", "",folderActionRequest);
+		actionEl.setAttribute("id", ZaDomain.WIKI_FOLDER_ID);	
+		actionEl.setAttribute("op", "!grant");	
+		actionEl.setAttribute("zid", permsToRevoke[i]);				
+	}
+}
+
 ZaDomain.getNotebookACLsRequest = function (obj, soapDoc) {
+	if(obj[ZaDomain.A_allNotebookACLS]) {
+		var cnt = obj[ZaDomain.A_allNotebookACLS].length;
+		for(var i = 0; i < cnt; i++) {
+			var folderActionRequest = soapDoc.set("FolderActionRequest");
+			folderActionRequest.setAttribute("xmlns", "urn:zimbraMail");				
+			var actionEl = soapDoc.set("action", "",folderActionRequest);
+			actionEl.setAttribute("id", ZaDomain.WIKI_FOLDER_ID);	
+			actionEl.setAttribute("op", "grant");	
+			var grantEl = soapDoc.set("grant", "",actionEl);	
+			grantEl.setAttribute("gt", obj[ZaDomain.A_allNotebookACLS][i].gt);
+			if(obj[ZaDomain.A_allNotebookACLS][i].name) {
+				grantEl.setAttribute("d", obj[ZaDomain.A_allNotebookACLS][i].name);
+			}
+			var perms = "";
+			for(var a in obj[ZaDomain.A_allNotebookACLS][i].acl) {
+				if(obj[ZaDomain.A_allNotebookACLS][i].acl[a]==1)
+					perms+=a;
+			}
+			grantEl.setAttribute("perm", perms);				
+		}
+	}/*
 	if(obj.notebookAcls) {
 		for(var gt in obj.notebookAcls) {
 			if(obj.notebookAcls[gt] instanceof Array) {
@@ -414,7 +447,7 @@ ZaDomain.getNotebookACLsRequest = function (obj, soapDoc) {
 				grantEl.setAttribute("perm", perms);					
 			}
 		}
-	}
+	}*/
 }
 
 ZaDomain.setNotebookACLs = function (obj, callback) {
@@ -760,7 +793,7 @@ ZaDomain.prototype.parseNotebookFolderAcls = function (resp) {
 						return this.r+this.w+this.i+this.d+this.a+this.x;
 					}
 				};
-				this[ZaDomain.A_allNotebookACLS].push({acl:grantObj, name:grant.d, gt:grant.gt, 
+				this[ZaDomain.A_allNotebookACLS].push({acl:grantObj, name:grant.d, zid:grant.zid, gt:grant.gt, 
 						toString:function() {
 							return (this.gt+":"+this.name+":"+this.grantObj.toString());
 						}
@@ -772,6 +805,7 @@ ZaDomain.prototype.parseNotebookFolderAcls = function (resp) {
 				}*/
 				
 			}
+			this[ZaDomain.A_allNotebookACLS]._version = 0;
 			
 		}
 	} catch (ex) {

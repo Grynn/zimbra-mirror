@@ -133,7 +133,7 @@ function(entry) {
 		}
 	}	*/
 	this._containedObject[ZaDomain.A_allNotebookACLS] = [];
-	this._containedObject[ZaDomain.A_allNotebookACLS]._version=1;
+	this._containedObject[ZaDomain.A_allNotebookACLS]._version=entry[ZaDomain.A_allNotebookACLS]._version;
 	if(entry[ZaDomain.A_allNotebookACLS])	{
 		var cnt = entry[ZaDomain.A_allNotebookACLS].length;
 		for(var i = 0; i < cnt; i++) {
@@ -154,6 +154,7 @@ function(entry) {
 ZaDomainXFormView.aclSelectionListener = 
 function (ev) {
 	var instance = this.getInstance();
+
 	var arr = this.widget.getSelection();	
 	if(arr && arr.length)
 		instance.acl_selection_cache = arr;
@@ -161,6 +162,9 @@ function (ev) {
 		instance.acl_selection_cache = null;
 		
 	this.getForm().refresh();
+	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
+		ZaDomainXFormView.editButtonListener.call(this);
+	}	
 }
 
 ZaDomainXFormView.isDeleteAclEnabled = function () {
@@ -170,24 +174,94 @@ ZaDomainXFormView.isDeleteAclEnabled = function () {
 ZaDomainXFormView.isEditAclEnabled = function () {
 	return (this.instance.acl_selection_cache != null && this.instance.acl_selection_cache.length==1);
 }
+ZaDomainXFormView.addButtonListener =
+function () {
+	var formPage = this.getForm().parent;
+	if(!formPage.addAclDlg) {
+		formPage.addAclDlg = new ZaAddDomainAclXDialog(formPage._app.getAppCtxt().getShell(), formPage._app, null, "150px");
+		formPage.addAclDlg.registerCallback(DwtDialog.OK_BUTTON, ZaDomainXFormView.addAcl, this.getForm(), null);						
+	}
+	var obj = {};
+	obj.gt = ZaDomain.A_NotebookUserACLs;
+	obj.name = "";
+	obj.acl = {r:0,w:0,i:0,d:0,a:0,x:0};	
+	formPage.addAclDlg.setObject(obj);
+	formPage.addAclDlg.popup();
+}
+
+ZaDomainXFormView.addAcl = 
+function () {
+	if(this.parent.addAclDlg) {
+		this.parent.addAclDlg.popdown();
+		var obj = this.parent.addAclDlg.getObject();
+		var aclsArr = this.getInstance()[ZaDomain.A_allNotebookACLS];
+		var cnt = aclsArr.length;
+		var foundObj = false;
+		for(var i = 0; i < cnt; i++) {
+			if(aclsArr[i].name == obj.name && aclsArr[i].gt == obj.gt) {
+				for(var a in obj.acl) {
+					if(obj.acl[a]) {
+						aclsArr[i].acl[a] = obj.acl[a];
+					}
+				}
+				foundObj = true;
+				break;
+			}
+		}
+		if(!foundObj) {
+			aclsArr.push(obj);
+		}
+		aclsArr._version++;
+		this.refresh();
+		this.parent.setDirty(true);	
+	}	
+}
+
 ZaDomainXFormView.editButtonListener =
 function () {
 	var instance = this.getInstance();
 	if(instance.acl_selection_cache && instance.acl_selection_cache[0]) {	
 		var formPage = this.getForm().parent;
 		if(!formPage.editAclDlg) {
-			formPage.editAclDlg = new ZaEditDomainAclXDialog(formPage._app.getAppCtxt().getShell(), formPage._app);
+			formPage.editAclDlg = new ZaEditDomainAclXDialog(formPage._app.getAppCtxt().getShell(), formPage._app,null, "150px");
 			formPage.editAclDlg.registerCallback(DwtDialog.OK_BUTTON, ZaDomainXFormView.updateAcl, this.getForm(), null);						
 		}
-		formPage.editAclDlg.setObject(instance.acl_selection_cache[0]);
+		var obj = {};
+		obj.gt = instance.acl_selection_cache[0].gt;
+		obj.name = instance.acl_selection_cache[0].name;
+		obj.acl = {r:0,w:0,i:0,d:0,a:0,x:0};
+		for(var a in instance.acl_selection_cache[0].acl) {
+			obj.acl[a] = instance.acl_selection_cache[0].acl[a];
+		}
+		formPage.editAclDlg.setObject(obj);
 		formPage.editAclDlg.popup();		
 	}
 }
+
+
 ZaDomainXFormView.updateAcl = 
 function () {
 	if(this.parent.editAclDlg) {
-		var obj = 
 		this.parent.editAclDlg.popdown();
+		var obj = this.parent.editAclDlg.getObject();
+		var dirty = false;
+		if(obj.name != this.getInstance().acl_selection_cache[0].name) {
+			dirty = true;
+		} else {
+			for(var a in obj.acl) {
+				if(obj.acl[a] != this.getInstance().acl_selection_cache[0].acl[a]) {
+					dirty = true;
+					break;
+				}
+			}
+		}
+		if(dirty) {
+			this.getInstance().acl_selection_cache[0].acl = obj.acl;
+			this.getInstance().acl_selection_cache[0].name = obj.name;			
+			this.getInstance()[ZaDomain.A_allNotebookACLS]._version++;
+			this.refresh();
+			this.parent.setDirty(true);	
+		}		
 	}
 }
 
@@ -218,6 +292,7 @@ function () {
 	}
 	instance[ZaDomain.A_allNotebookACLS]._version++; 
 	this.getForm().refresh();
+	this.getForm().parent.setDirty(true);	
 }
 
 ZaDomainXFormView.myXFormModifier = function(xFormObject) {	
@@ -323,7 +398,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 						}
 					]						
 				},
-				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 4", 
+				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 4", cssStyle:"padding-left:10px",
 					items:[
 						{type:_DWT_ALERT_,content:null,ref:ZaDomain.A_domainName,
 							getDisplayValue: function (itemVal) {
@@ -345,7 +420,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 						}
 					]
 				}, 
-				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 5",
+				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 5",cssStyle:"padding-left:10px",
 					items : [
 						{type: _DWT_ALERT_,
 						  containerCssStyle: "padding-bottom:0px",
@@ -366,13 +441,13 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 									width:250,onChange:ZaTabView.onFormFieldChanged
 								},	
 								{type:_SPACER_, height:10},							
-								{ref:ZaDomain.A_allNotebookACLS, colSpan:"*", type:_DWT_LIST_, height:"150", width:"100%", 
+								{ref:ZaDomain.A_allNotebookACLS, colSpan:"*", type:_DWT_LIST_, height:"250", width:"100%", 
 								 	forceUpdate: true, preserveSelection:true, multiselect:true,cssClass: "DLSource", 
 								 	onSelection:ZaDomainXFormView.aclSelectionListener, headerList:headerList, 
 									widgetClass:ZaNotebookACLListView
 								},	
 								{type:_SPACER_, height:10},															
-								{type:_GROUP_, numCols:5, tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", 
+								{type:_GROUP_, numCols:5, colSpan:"*",  tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", 
 									items: [
 										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,
 											onActivate:"ZaDomainXFormView.deleteButtonListener.call(this);",

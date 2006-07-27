@@ -24,27 +24,32 @@
  */
 
 /**
-* @class ZaEditDomainAclXDialog
-* @contructor ZaEditDomainAclXDialog
+* @class ZaAddDomainAclXDialog
+* @contructor ZaAddDomainAclXDialog
 * @author Greg Solovyev
 * @param parent
 * param app
 **/
-function ZaEditDomainAclXDialog(parent,  app, w, h) {
+function ZaAddDomainAclXDialog(parent,  app, w, h) {
 	if (arguments.length == 0) return;
-	ZaXDialog.call(this, parent, app, null, ZaMsg.Edit_perms_title, w, h);
+	ZaXDialog.call(this, parent, app, null, ZaMsg.Add_perms_title, w, h);
 	this._containedObject = {acl:{r:0,w:0,i:0,d:0,a:0,x:0},name:"",gt:""};
 	this.initForm(ZaDomain.aclXModel,this.getMyXForm());
 }
 
-ZaEditDomainAclXDialog.prototype = new ZaXDialog;
-ZaEditDomainAclXDialog.prototype.constructor = ZaEditDomainAclXDialog;
+ZaAddDomainAclXDialog.prototype = new ZaXDialog;
+ZaAddDomainAclXDialog.prototype.constructor = ZaAddDomainAclXDialog;
 
-ZaEditDomainAclXDialog.prototype.getMyXForm = 
+ZaAddDomainAclXDialog.prototype.getMyXForm = 
 function() {	
 	var xFormObject = {
 		numCols:2,
 		items:[
+			{type:_OSELECT1_, ref:"gt", choices:[{value:ZaDomain.A_NotebookGroupACLs, label:ZaMsg.ACL_Grp},
+				{value:ZaDomain.A_NotebookUserACLs,label:ZaMsg.ACL_User}
+/*				,{value:ZaDomain.A_NotebookDomainACLs,label:ZaMsg.ACL_Dom},
+				{value:ZaDomain.A_NotebookAllACLs,label:ZaMsg.ACL_All},
+				{value:ZaDomain.A_NotebookPublicACLs,label:ZaMsg.ACL_Public}*/] },
 			{type:_SWITCH_, items:[
 				{type:_CASE_, relevant:"instance.gt==ZaDomain.A_NotebookGroupACLs",
 					items:[
@@ -61,7 +66,7 @@ function() {
 							forceUpdate:true,dataFetcherMethod:ZaSearch.prototype.dynSelectSearchAccounts
 						}						
 					]
-				},
+				}/*,
 				{type:_CASE_, relevant:"instance.gt==ZaDomain.A_NotebookDomainACLs",
 					items:[
 						{ref:"acl", type:_ACL_, label:ZaMsg.ACL_Dom,labelLocation:_LEFT_}						
@@ -77,7 +82,7 @@ function() {
 						{ref:"acl", type:_ACL_, visibleBoxes:{r:true,w:false,a:false,i:false,d:false,x:false},
 						label:ZaMsg.ACL_Public,labelLocation:_LEFT_}						
 					]
-				}				
+				}*/				
 			]}
 		]		
 	}
