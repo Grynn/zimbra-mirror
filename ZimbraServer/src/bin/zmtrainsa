@@ -53,7 +53,7 @@ autoTrainSystem() {
 		test -f ${f} && ${zimbra_home}/dspam/bin/dspam_corpus zimbra ${f}
 	done
 
-	/opt/zimbra/dspam/bin/dspam_clean -p0 $USER
+#	/opt/zimbra/dspam/bin/dspam_clean -p0 $USER
 
 	/bin/rm -rf ${spamdir} ${hamdir}
 }
