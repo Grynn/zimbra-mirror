@@ -50,7 +50,7 @@ ZaDomainController.prototype.constructor = ZaDomainController;
 
 ZaDomainController.prototype.show = 
 function(entry) {
-	entry.refresh();
+//	entry.refresh();
 	this._setView(entry);
 }
 

@@ -854,7 +854,9 @@ function() {
 }
 
 ZaDomain.loadMethod = 
-function() {
+function(by, val) {
+	by = by ? by : "name";
+	val = val ? val : this.attrs[ZaDomain.A_domainName];
 	this.notebookAcls[ZaDomain.A_NotebookAllACLs] = {r:0,w:0,i:0,d:0,a:0,x:0};
 	this.notebookAcls[ZaDomain.A_NotebookPublicACLs] = {r:0,w:0,i:0,d:0,a:0,x:0};
 	this.notebookAcls[ZaDomain.A_NotebookDomainACLs] = {r:1,w:1,i:1,d:1,a:0,x:0};
@@ -869,8 +871,8 @@ function() {
 		}*/];
 
 	var soapDoc = AjxSoapDoc.create("GetDomainRequest", "urn:zimbraAdmin", null);
-	var elBy = soapDoc.set("domain", this.attrs[ZaDomain.A_domainName]);
-	elBy.setAttribute("by", "name");
+	var elBy = soapDoc.set("domain", val);
+	elBy.setAttribute("by", by);
 	
 	var getDomainCommand = new ZmCsfeCommand();
 	var params = new Object();
@@ -890,7 +892,11 @@ function() {
 	
 		var folderEl = soapDoc.set("folder", "");
 		folderEl.setAttribute("l", ZaDomain.WIKI_FOLDER_ID);	
-		this.parseNotebookFolderAcls(getFolderCommand.invoke(params));
+		try {
+			this.parseNotebookFolderAcls(getFolderCommand.invoke(params));
+		} catch (ex) {
+			this._app.getCurrentController()._handleException(ex, "ZaDomain.loadMethod", null, false);
+		}
 	}	
 }
 ZaItem.loadMethods["ZaDomain"].push(ZaDomain.loadMethod);

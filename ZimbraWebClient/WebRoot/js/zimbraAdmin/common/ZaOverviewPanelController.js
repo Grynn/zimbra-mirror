@@ -192,7 +192,7 @@ function (list) {
 			ti1.setText(domainList[ix].name);	
 			ti1.setImage("Domain");
 			ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DOMAIN_VIEW);
-			ti1.setData(ZaOverviewPanelController._OBJ_ID, domainList[ix].id);
+			ti1.setData(ZaOverviewPanelController._OBJ_ID, domainList[ix].name);
 			this._domainsMap[domainList[ix].id] = ti1;
 		}
 	}
@@ -611,12 +611,15 @@ ZaOverviewPanelController.cosTreeListener = function (ev) {
 }
 
 ZaOverviewPanelController.domainTreeListener = function (ev) {
+	var domain = new ZaDomain(this._app);
+	//domain.name = ev.item.getData(ZaOverviewPanelController._OBJ_ID);
+	domain.load("name",ev.item.getData(ZaOverviewPanelController._OBJ_ID));	
 	if(this._app.getCurrentController()) {
 		this._app.getCurrentController().switchToNextView(this._app.getDomainController(),
-		 ZaDomainController.prototype.show,
-		 this._app.getDomainList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
-	} else {					
-		this._app.getDomainController().show(this._app.getDomainList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
+		 ZaDomainController.prototype.show,domain);
+	} else {	
+						
+		this._app.getDomainController().show(domain);
 	}
 }
 

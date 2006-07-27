@@ -133,8 +133,8 @@ function(entry) {
 		}
 	}	*/
 	this._containedObject[ZaDomain.A_allNotebookACLS] = [];
-	this._containedObject[ZaDomain.A_allNotebookACLS]._version=entry[ZaDomain.A_allNotebookACLS]._version;
 	if(entry[ZaDomain.A_allNotebookACLS])	{
+		this._containedObject[ZaDomain.A_allNotebookACLS]._version=entry[ZaDomain.A_allNotebookACLS]._version;		
 		var cnt = entry[ZaDomain.A_allNotebookACLS].length;
 		for(var i = 0; i < cnt; i++) {
 			var aclObj = entry[ZaDomain.A_allNotebookACLS][i];
