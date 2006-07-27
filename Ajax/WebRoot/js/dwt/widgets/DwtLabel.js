@@ -275,7 +275,7 @@ function() {
 		this.__table.align = "right";
 	else if (!(this._style & DwtLabel.ALIGN_LEFT)) {
 		this.__table.align = "center";
-		this.__table.width = "100%";
+		this.__table.width = AjxEnv.isIE ? "95%" : "100%"; // 95% is a hack to deal with border-collapsed tables in IE. Bug 9148.
 	}
 
 	this._row = this.__table.insertRow(0);
