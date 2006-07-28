@@ -63,3 +63,17 @@ DynSelect_XFormItem.prototype.onKeyUp = function(value, event) {
 		this.getForm().itemChanged(this, value, event);
 	}
 }
+
+DynSelect_XFormItem.prototype.updateElement = function (newValue) {
+	OSelect1_XFormItem.prototype.updateElement.call(this, newValue);
+	if(!newValue || newValue=="") {
+		if(!this.dataFetcherObject && this.dataFetcherClass !=null && this.dataFetcherMethod !=null) {
+			this.dataFetcherObject = new this.dataFetcherClass(this.getForm().getController());
+		}
+		if(!this.dataFetcherObject)
+			return;
+		
+		var callback = new AjxCallback(this, this.changeChoicesCallback);
+		this.dataFetcherMethod.call(this.dataFetcherObject, "", null, callback);
+	}
+}
