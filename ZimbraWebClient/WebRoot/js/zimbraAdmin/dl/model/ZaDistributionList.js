@@ -613,7 +613,7 @@ ZaDistributionList.prototype._dedupList = function (vector) {
 		}
 	}
 };
-
+/*
 ZaDistributionList.prototype.addMemberCallback = function (params, resp) {
 	if(resp.isException && resp.isException()) {
 		if(params.finishedCallback)
@@ -631,21 +631,24 @@ ZaDistributionList.prototype.addMemberCallback = function (params, resp) {
 		if(params.finishedCallback)
 			params.finishedCallback.run(true);
 	}
-};
+};*/
 
-ZaDistributionList.prototype.addNewMembersAsync = function (list, finishedCallback) {
+ZaDistributionList.prototype.addNewMembersAsync = function (obj, finishedCallback) {
 	var addMemberSoapDoc, r;
 	var command = new ZmCsfeCommand();
-	var member = list.getLast();
+//	var member = list.getLast();
 	addMemberSoapDoc = AjxSoapDoc.create("AddDistributionListMemberRequest", "urn:zimbraAdmin", null);
 	addMemberSoapDoc.set("id", this.id);
-	addMemberSoapDoc.set("dlm", member.toString());
+	var len = obj._addList.getArray().length;
+	for (var i = 0; i < len; i++) {
+		addMemberSoapDoc.set("dlm", obj._addList.getArray()[i].toString());
+	}
 	var params = new Object();
 	params.soapDoc = addMemberSoapDoc;	
 	params.asyncMode = true;
 	params.callback = finishedCallback;
 	//params.callback = new AjxCallback(this, this.addMemberCallback, {list:list,finishedCallback:finishedCallback});
-	list.removeLast();
+	obj._addList = new AjxVector();
 	command.invoke(params);
 };
 

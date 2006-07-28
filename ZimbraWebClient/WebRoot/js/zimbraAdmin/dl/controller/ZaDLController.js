@@ -179,15 +179,10 @@ ZaDLController.prototype.saveChangesCallback = function (obj, resp) {
 			
 
 			if(obj._addList && obj._addList.size()) {
-				//the list of new members is reduced by each call to addNewMembersAsync
-//				this.getProgressDialog().setProgress({numTotal:this._totalToAdd,numDone:(this._totalToAdd-obj._addList.size()),progressMsg:ZaMsg.MSG_ADDING_DL_MEMBERS})
-	//			this.getProgressDialog().popup();
-		//		this.getProgressDialog().enableOk(false);
-
 				var finishedCallback = new AjxCallback(this,this.saveChangesCallback, obj);
-				this._currentObject.addNewMembersAsync(obj._addList,finishedCallback);
+				this._currentObject.addNewMembersAsync(obj,finishedCallback);
 			} else if(obj._removeList && obj._removeList.size()) {
-				//the list of members to be removed is reduced by each call to addNewMembersAsync
+				//the list of members to be removed is reduced by each call to removeDeletedMembersAsync
 			//	this.getProgressDialog().setProgress({numTotal:this._totalToRemove,numDone:(this._totalToRemove-obj._removeList.size()),progressMsg:ZaMsg.MSG_REMOVING_DL_MEMBERS})
 				//this.getProgressDialog().popup();				
 //				this.getProgressDialog().enableOk(false);
