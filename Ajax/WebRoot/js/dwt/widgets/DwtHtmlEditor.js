@@ -32,10 +32,8 @@ function DwtHtmlEditor(parent, className, posStyle, content, mode, blankIframeSr
 	this.__eventClosure = AjxCallback.simpleClosure(this.__eventClosure, this);
 
 	// init content
-	this._initialStyle = this._getInitialStyle(true);
-	var initialHtml = "<html><head>" + this._getInitialStyle(false) + "</head><body></body></html>";
 	if (!content)
-		content = this._mode == DwtHtmlEditor.HTML ? initialHtml : "";
+		content = this._mode == DwtHtmlEditor.HTML ? "<html><head></head><body></body></html>" : "";
 
 	this._pendingContent = content;
 	this._htmlModeInited = false;
@@ -221,7 +219,7 @@ DwtHtmlEditor.prototype.getContent =
 function() {
 	if (this._mode == DwtHtmlEditor.HTML) {
 		var iframeDoc = this._getIframeDoc();
-		var html = iframeDoc && iframeDoc.body ? (this._initialStyle + this._getIframeDoc().body.innerHTML) : "";
+		var html = iframeDoc && iframeDoc.body ? (this._getIframeDoc().body.innerHTML) : "";
 		return this._embedHtmlContent(html);
 	} else {
 		return document.getElementById(this._textAreaId).value;
@@ -569,11 +567,7 @@ function(mode, convert) {
 			var content = (convert)
 				? AjxStringUtil.convertToHtml(textArea.value)
 				: textArea.value;
-			content = [ "<html><head>",
-				    this._getInitialStyle(false),
-				    "</head><body>",
-				    content,
-				    "</body></html>" ].join("");
+			content = [ "<html><head></head><body>",content,"</body></html>" ].join("");
 			iFrame = this._initHtmlMode(content);
 		}
 		Dwt.setVisible(textArea, false);
@@ -720,63 +714,6 @@ function(content) {
 	return iFrame;
 }
 
-/**
-* @param useDiv 	Set this to true if prepending to the message body. False is
-* 					used to set the default settings for compose editor so as
-* 					you type the fonts appear as they would if the message we
-* 					being read by the receiver
-*/
-DwtHtmlEditor.prototype._getInitialStyle =
-function(useDiv) {
-	var initFontFamily = this._getInitialFontFamily();
-	var initFontSize = this._getInitialFontSize();
-	var initFontColor = this._getInitialFontColor();
-
-	var html = new Array();
-	var i = 0;
-
-	if (useDiv) {
-		html[i++] = "<div style='";
-		html[i++] = "font-family:" + initFontFamily + ";";
-		html[i++] = "font-size:" + initFontSize + ";";
-		html[i++] = "color:" + initFontColor + ";";
-		html[i++] = "'>";
-	} else {
-		html[i++] = "<style type='text/css'>";
-// 		html[i++] = "p { ";
-// 		html[i++] = "font-family:" + initFontFamily + ";";
-// 		html[i++] = "font-size:" + initFontSize + ";";
-// 		html[i++] = "color:" + initFontColor + ";";
-// 		html[i++] = " } ";
-		html[i++] = "body, table { ";
-		html[i++] = "font-family:" + initFontFamily + ";";
-		html[i++] = "font-size:" + initFontSize + ";";
-		html[i++] = "color:" + initFontColor + ";";
-		html[i++] = " } ";
-		html[i++] = "table td { border: 1px dotted black; }";
-		html[i++] = "</style>";
-	}
-	return html.join("");
-}
-
-// overload me to initialize to different font family
-DwtHtmlEditor.prototype._getInitialFontFamily =
-function() {
-	return DwtHtmlEditor._TIMES;
-}
-
-// overload me to initialize to different font size
-DwtHtmlEditor.prototype._getInitialFontSize =
-function() {
-	return "12pt";
-}
-
-// overload me to initialize to different font color
-DwtHtmlEditor.prototype._getInitialFontColor =
-function() {
-	return "black";
-}
-
 DwtHtmlEditor.prototype._createIFrameEl =
 function() {
 	var htmlEl = this.getHtmlElement();
@@ -799,8 +736,7 @@ function() {
 
 DwtHtmlEditor.prototype._initializeContent =
 function(content) {
-	var style = this._getInitialStyle(false);
-	var initHtml = "<html><head>" + style + "</head><body>" + (content || "") + "</body></html>";
+	var initHtml = "<html><head></head><body>" + (content || "") + "</body></html>";
 	var doc = this._getIframeDoc();
 	try {
 		doc.write(initHtml);
