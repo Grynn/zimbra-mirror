@@ -692,9 +692,9 @@ function (mbxId, callback) {
 		if(callback) {
 			params.asyncMode = true;
 			params.callback = callback;
-			resp = command.invoke(params);	
-		} else {
 			command.invoke(params);	
+		} else {
+			resp = command.invoke(params);	
 		}
 		
 	} catch (ex) {
@@ -708,7 +708,7 @@ function (mbxId, callback) {
 }
 
 ZaAccount.startReindexMailbox = 
-function (mbxId) {
+function (mbxId, callback) {
 	var soapDoc = AjxSoapDoc.create("ReIndexRequest", "urn:zimbraAdmin", null);
 	soapDoc.getMethod().setAttribute("action", "start");
 	var attr = soapDoc.set("mbox", null);
@@ -719,7 +719,14 @@ function (mbxId) {
 		var command = new ZmCsfeCommand();
 		var params = new Object();
 		params.soapDoc = soapDoc;	
-		resp = command.invoke(params);
+		if(callback) {
+			params.asyncMode = true;
+			params.callback = callback;
+			command.invoke(params);	
+		} else {
+			resp = command.invoke(params);	
+		}
+
 	} catch (ex) {
 		resp = ex;
 	}
@@ -727,7 +734,7 @@ function (mbxId) {
 }
 
 ZaAccount.abortReindexMailbox = 
-function (mbxId) {
+function (mbxId, callback) {
 	var soapDoc = AjxSoapDoc.create("ReIndexRequest", "urn:zimbraAdmin", null);
 	soapDoc.getMethod().setAttribute("action", "cancel");
 	var attr = soapDoc.set("mbox", null);
@@ -737,7 +744,13 @@ function (mbxId) {
 		var command = new ZmCsfeCommand();
 		var params = new Object();
 		params.soapDoc = soapDoc;	
-		resp = command.invoke(params);	
+		if(callback) {
+			params.asyncMode = true;
+			params.callback = callback;
+			command.invoke(params);	
+		} else {
+			resp = command.invoke(params);	
+		}	
 	} catch (ex) {
 		resp = ex;
 	}

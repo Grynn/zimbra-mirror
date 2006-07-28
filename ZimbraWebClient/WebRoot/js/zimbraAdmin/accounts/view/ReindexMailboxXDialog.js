@@ -83,17 +83,18 @@ function(evt) {
 		//abort outstanding status requests
 		if(this.getForm().parent.asynCommand)
 			this.getForm().parent.asynCommand.cancel();
-			
-		ZaAccount.parseReindexResponse(ZaAccount.abortReindexMailbox(instance.mbxId),instance);
+		var callback = new AjxCallback(this, this.getReindexStatusCallBack);			
+		ZaAccount.abortReindexMailbox(instance.mbxId,callback);
+		//ZaAccount.parseReindexResponse(ZaAccount.abortReindexMailbox(instance.mbxId),instance);
 
-		if(instance.status == "running" || instance.status == "started") {
+		/*if(instance.status == "running" || instance.status == "started") {
 			// schedule next poll
 			this.getForm().parent._pollHandler = AjxTimedAction.scheduleAction(this.getForm().parent.pollAction, instance.pollInterval);		
 		} else if(this.getForm().parent._pollHandler) {
 			//stop polling
 			AjxTimedAction.cancelAction(this.getForm().parent._pollHandler);
 			this.getForm().parent._pollHandler = null;
-		}		
+		}	*/	
 		this.getForm().refresh();
 	} catch (ex) {
 		this.getForm().getController().getCurrentController()._handleException(ex, "ReindexMailboxXDialog.abortReindexMailbox", null, false);
@@ -104,17 +105,19 @@ ReindexMailboxXDialog.startReindexMailbox =
 function(evt) {
 	try {
 		var instance = this.getInstance();
-		ZaAccount.parseReindexResponse(ZaAccount.startReindexMailbox(instance.mbxId),instance);
+		var callback = new AjxCallback(this, this.getReindexStatusCallBack);		
+		ZaAccount.startReindexMailbox(instance.mbxId,callback);
+		//ZaAccount.parseReindexResponse(ZaAccount.startReindexMailbox(instance.mbxId),instance);
 		this.getForm().refresh();
 	
-		if(instance.status == "running" || instance.status == "started") {
+		/*if(instance.status == "running" || instance.status == "started") {
 			// schedule next poll
 			this.getForm().parent._pollHandler = AjxTimedAction.scheduleAction(this.getForm().parent.pollAction, instance.pollInterval);		
 		} else if(this.getForm().parent._pollHandler) {
 			//stop polling
 			AjxTimedAction.cancelAction(this.getForm().parent._pollHandler);
 			this.getForm().parent._pollHandler = null;
-		}
+		}*/
 		//this.getForm().parent._pollHandler = AjxTimedAction.scheduleAction(this.getForm().parent.pollAction, instance.pollInterval);	
 	} catch (ex) {
 		this.getForm().getController().getCurrentController()._handleException(ex, "ReindexMailboxXDialog.startReindexMailbox", null, false);	
