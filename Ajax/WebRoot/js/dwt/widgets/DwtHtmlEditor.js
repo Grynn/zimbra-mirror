@@ -63,12 +63,6 @@ DwtHtmlEditor.PREFORMATTED = 9;
 
 DwtHtmlEditor._STYLES = ["", "<h1>", "<h2>", "<h3>", "<h4>", "<h5>", "<h6>", "<p>", "<address>", "<pre>"];
 
-// Font Family
-DwtHtmlEditor.ARIAL = 1;
-DwtHtmlEditor.COURIER = 2;
-DwtHtmlEditor.TIMES = 3;
-DwtHtmlEditor.VERDANA = 4;
-
 // Font Styles
 DwtHtmlEditor.BOLD_STYLE = "bold";
 DwtHtmlEditor.ITALIC_STYLE = "italic";
@@ -118,6 +112,12 @@ DwtHtmlEditor._TIMES_RE = /times|serif/;
 DwtHtmlEditor._VERDANA_RE = /verdana/;
 DwtHtmlEditor._COURIER_RE = /courier|mono/;
 
+// Font Families
+DwtHtmlEditor.FONT_FAMILY = [
+	{name:"Arial", 			value:DwtHtmlEditor._ARIAL },
+	{name:"Times New Roman",value:DwtHtmlEditor._TIMES },
+	{name:"Courier New", 	value:DwtHtmlEditor._COURIER },
+	{name:"Verdana",		value:DwtHtmlEditor._VERDANA } ];
 
 DwtHtmlEditor._H1_RE = /Heading 1|h1/;
 DwtHtmlEditor._H2_RE = /Heading 2|h2/;
@@ -623,22 +623,8 @@ function(direction) {
 // Font sizes should be 1-7
 DwtHtmlEditor.prototype.setFont =
 function(family, style, size, color, hiliteColor) {
-	if (family) {
-		switch (family) {
-			case DwtHtmlEditor.ARIAL:
-				this._execCommand(DwtHtmlEditor._FONT_NAME, DwtHtmlEditor._ARIAL);
-				break;
-			case DwtHtmlEditor.COURIER:
-				this._execCommand(DwtHtmlEditor._FONT_NAME, DwtHtmlEditor._COURIER);
-				break;
-			case DwtHtmlEditor.TIMES:
-				this._execCommand(DwtHtmlEditor._FONT_NAME, DwtHtmlEditor._TIMES);
-				break;
-			case DwtHtmlEditor.VERDANA:
-				this._execCommand(DwtHtmlEditor._FONT_NAME, DwtHtmlEditor._VERDANA);
-				break;
-		}
-	}
+	if (family)
+		this._execCommand(DwtHtmlEditor._FONT_NAME, family);
 
 	if (style)
 		this._execCommand(style);
@@ -1312,13 +1298,17 @@ function() {
 		if (family) {
 			family = family.toLowerCase();
 			if (family.search(DwtHtmlEditor._VERDANA_RE) != -1)
-				ev.fontFamily = DwtHtmlEditor.VERDANA;
+				ev.fontFamily = 3;
 			else if (family.search(DwtHtmlEditor._ARIAL_RE) != -1)
-				ev.fontFamily = DwtHtmlEditor.ARIAL;
+				ev.fontFamily = 0;
 			else if (family.search(DwtHtmlEditor._TIMES_RE) != -1)
-				ev.fontFamily = DwtHtmlEditor.TIMES;
+				ev.fontFamily = 1;
 			else if (family.search(DwtHtmlEditor._COURIER_RE) != -1)
-				ev.fontFamily = DwtHtmlEditor.COURIER;
+				ev.fontFamily = 2;
+			else
+				ev.fontFamily = null;
+		} else {
+			ev.fontFamily = null;
 		}
 
 		ev.fontSize = iFrameDoc.queryCommandValue(DwtHtmlEditor._FONT_SIZE);
