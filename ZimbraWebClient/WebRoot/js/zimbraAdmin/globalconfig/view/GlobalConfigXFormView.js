@@ -63,8 +63,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 				{value:3, label:ZaMsg.NAD_Tab_MTA},
 				{value:4, label:ZaMsg.NAD_Tab_IMAP},
 				{value:5, label:ZaMsg.NAD_Tab_POP},
-				{value:6, label:ZaMsg.NAD_Tab_AntiSpam},
-				{value:7, label:ZaMsg.NAD_Tab_AntiVirus}
+				{value:6, label:ZaMsg.NAD_Tab_ASAV}
 			]
 		},
 		{type:_SWITCH_, items:[
@@ -368,10 +367,15 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 					width:"100%",colSizes:["100px","400px"], 
 				  items: [
 				  	{ ref: ZaGlobalConfig.A_zimbraSpamCheckEnabled, type: _CHECKBOX_,
-				  	  label: ZaMsg.NAD_Spam_Checking,labelLocation:_LEFT_,
+				  	  label: ZaMsg.NAD_Enable_ASAV,labelLocation:_LEFT_,
 				 	  labelCssClass:"xform_label", align:_LEFT_, 
 					  trueValue:"TRUE", falseValue:"FALSE", 
-					  onChange: ZaTabView.onFormFieldChanged
+					  onChange: ZaTabView.onFormFieldChanged,
+			  	      elementChanged: function(elementValue, instanceValue, event) {
+					    this.getForm().getInstance().attrs[ZaGlobalConfig.A_zimbraVirusCheckEnabled] = elementValue;
+					    this.getForm().itemChanged(this, elementValue, event);
+					  }
+					  
 			  	    },
 				  	{ ref: ZaGlobalConfig.A_zimbraSpamKillPercent, type: _INPUT_,
 			   	      relevant: "instance.attrs[ZaGlobalConfig.A_zimbraSpamCheckEnabled] == 'TRUE'", relevantBehavior: _DISABLE_,
@@ -387,8 +391,30 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 			   	      relevant: "instance.attrs[ZaGlobalConfig.A_zimbraSpamCheckEnabled] == 'TRUE'", relevantBehavior: _DISABLE_,
 				  	  label: ZaMsg.NAD_Spam_SubjectPrefix, width: "20em",
 					  onChange: ZaTabView.onFormFieldChanged
-				  	}
-				]},
+				  	},
+			  	    { ref: ZaGlobalConfig.A_zimbraVirusDefinitionsUpdateFrequency, type: _INPUT_,
+			  	      label: ZaMsg.NAD_Virus_DefUpdateFreq, width: "3em",
+			  	      getDisplayValue: function(value) { return parseInt(value); },
+			  	      elementChanged: function(elementValue, instanceValue, event) {
+					    instanceValue = elementValue+"h";
+					    this.getForm().itemChanged(this, instanceValue, event);
+					  },
+					  onChange: ZaTabView.onFormFieldChanged
+			  	    },
+			  	    { type: _GROUP_, label: ZaMsg.NAD_Virus_Options, labelCssStyle: "vertical-align:top", items: [
+				  	    { ref: ZaGlobalConfig.A_zimbraVirusBlockEncryptedArchive, type: _CHECKBOX_,
+				   	      label: ZaMsg.NAD_Virus_BlockEncrypted,
+						  trueValue:"TRUE", falseValue:"FALSE", 
+						  onChange: ZaTabView.onFormFieldChanged
+				  	    },
+
+					  	{ ref: ZaGlobalConfig.A_zimbraVirusWarnRecipient, type: _CHECKBOX_,
+					  	  label: ZaMsg.NAD_Virus_NotifyRecipient,
+						  trueValue:"TRUE", falseValue:"FALSE", 
+						  onChange: ZaTabView.onFormFieldChanged
+					  	}
+				  	]}				  	
+				]}/*,
 				// security: anti-virus
 				{ type: _CASE_, relevant: "instance[ZaModel.currentTab] == 7", 
 				colSizes:["300px","150", "*"],
@@ -415,7 +441,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 						  onChange: ZaTabView.onFormFieldChanged
 					  	}
 				  	]}
-				]}
+				]}*/
 			]
 		}	
 	];
