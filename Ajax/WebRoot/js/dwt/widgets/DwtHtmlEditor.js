@@ -813,14 +813,8 @@ DwtHtmlEditor.prototype._finishHtmlModeInit =
 function(params) {
 	var doc = this._getIframeDoc();
 	try {
-		// doc.body.innerHTML = this._pendingContent || "";
-		//
-		// we can't do the above because the _pendingContent
-		// also contains <html>, <head> and <body> tags +
-		// style information.
-		doc.open();
-		doc.write(this._pendingContent || "");
-		doc.close();
+		// XXX: DO NOT REMOVE THIS LINE EVER. IT CAUSES NASTY BUGS (8808, 8895)
+		doc.body.innerHTML = this._pendingContent || "";
 	} catch (ex) {
 		DBG.println("XXX: Error initializing HTML mode :XXX");
 		return;
