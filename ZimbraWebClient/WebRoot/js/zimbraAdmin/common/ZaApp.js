@@ -326,7 +326,7 @@ function (resp) {
 			throw(resp.getException());
 		} else {
 			var response = resp.getResponse().Body.SearchDirectoryResponse;
-			this._domainList = new ZaItemList(ZaDomain, this._app);	
+			this._domainList = new ZaItemList(ZaDomain, this);	
 			this._domainList.loadFromJS(response);
 			this._appCtxt.getAppController().getOverviewPanelController().updateDomainList(this._domainList);				
 			EmailAddr_XFormItem.domainChoices.setChoices(this._domainList.getArray());
