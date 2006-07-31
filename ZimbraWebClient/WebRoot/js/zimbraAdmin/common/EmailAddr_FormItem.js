@@ -135,6 +135,7 @@ EmailAddr_XFormItem.prototype.items = [
 					}
 				}	
 			}
+			this.getParentItem()._domainPart = domainPart;
 			this.getForm().itemChanged(this.getParentItem(), val, event);
 		},
 		keyUp:function(newValue,ev) {
