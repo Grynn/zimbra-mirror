@@ -146,10 +146,14 @@ function() {
 	var contact;
 	var capp = this._appCtxt.getApp(ZmZimbraMail.CONTACTS_APP);
 
+	// actionObject can be a ZmContact, a String, or a generic Object (phew!)
 	if (this._actionObject) {
-		contact = (this._actionObject instanceof ZmContact)
-			? this._actionObject
-			: capp.getContactList().getContactByEmail(this._actionObject.address);
+		if (this._actionObject instanceof ZmContact)
+			contact = this._actionObject;
+		else if (AjxUtil.isString(this._actionObject))
+			contact = capp.getContactList().getContactByEmail(this._actionObject)
+		else
+			contact = capp.getContactList().getContactByEmail(this._actionObject.address);
 	}
 
 	if (contact == null) {
