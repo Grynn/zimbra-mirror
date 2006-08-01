@@ -411,22 +411,22 @@ function(args, linkNameSpecified) {
 	// don't output anything if debugging is off, or timing is on
 	if (this._level == AjxDebug.NONE || this._showTiming) return;
 
-	var levelSpecified = false;
-//	var curLevel = AjxDebug.GBD[this._level];
 	var msgLevel = AjxDebug.DBG1;
-	if (typeof args[0] == "number") {
+	if (typeof args[0] == "number" && typeof this._level == "number") {
 		msgLevel = args[0];
-		levelSpecified = true;
+		if (msgLevel > this._level) return;
+	} else {
+		// custom debug level
+		if (args[0] != this._level) return;
 	}
-	if (msgLevel > this._level) return;
 
 	// NOTE: Can't just slice the items we want because args is not a true Array
 	var array = new Array(args.length);
 	var len = (linkNameSpecified) ? args.length - 1 : args.length;
-	for (var i = 0; i < len; i++)
+	for (var i = 0; i < len; i++) {
 		array[i] = args[i];
-	if (levelSpecified)
-		array.shift();
+	}
+	array.shift();
 
 	return array;
 };
