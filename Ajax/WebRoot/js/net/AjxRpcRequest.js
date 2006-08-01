@@ -190,7 +190,7 @@ function(args) {
  */
 AjxRpcRequest.__handleResponse =
 function(req, callback) {
-	if (!req) {
+	if (!req || !req.__httpReq) {
 		// If IE receives a 500 error, the object reference can be lost
 		DBG.println(AjxDebug.DBG1, "Async RPC request: Lost request object!!!");
 		callback.run( {text: null, xml: null, success: false, status: 500} );
