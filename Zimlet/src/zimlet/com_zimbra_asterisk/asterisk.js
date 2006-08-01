@@ -328,6 +328,12 @@ Com_Zimbra_Asterisk.prototype.setupCall = function(myobj) {
 
 				for (i = 0; i < ar.length ; i++) {
 					var email = ar[i];
+					var jj = email.indexOf("<",0);
+					if (jj != -1) {
+						var k = email.indexOf(">",jj);
+						email = email.slice (jj+1,k);
+					}
+
 					var contact = this._contacts.getContactByEmail(email);
 					if (contact == null) {
 
@@ -522,3 +528,4 @@ Com_Zimbra_Asterisk.prototype._resultCallback = function(result) {
 	//DBG.println(AjxDebug.DBG2, "result:" + r);
 	this.displayStatusMessage(r); 
 };
+
