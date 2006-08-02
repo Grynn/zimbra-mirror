@@ -25,15 +25,23 @@
 
 package com.zimbra.webClient.servlet;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
 import java.util.*;
-import java.util.regex.*;
-
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.xml.parsers.*;
-
-import org.w3c.dom.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * TODO: Clean up this code!
@@ -48,15 +56,11 @@ extends HttpServlet {
 	private static final String P_SKIN = "skin";
 	private static final String P_USER_AGENT = "agent";
 	private static final String P_DEBUG = "debug";
-	/***
-	private static final String P_URI = "uri";
-	/***/
 
 	private static final String H_USER_AGENT = "User-Agent";
 
 	private static final String C_SKIN = "ZM_SKIN";
 
-	private static final String T_CSS = "css";
 	private static final String T_HTML = "html";
 
 	private static final String N_SKIN = "skin";
@@ -172,7 +176,6 @@ extends HttpServlet {
 		// create data buffers
 		CharArrayWriter cout = new CharArrayWriter(4096 << 2); // 16K buffer to start
 		PrintWriter out = new PrintWriter(cout);
-		Properties substitutions = new Properties();
 
 		// get data
 		String skin = getSkin(req);
@@ -192,7 +195,6 @@ extends HttpServlet {
 		int slash = uri.lastIndexOf('/');
 		if (slash != -1) {
 			filenames = uri.substring(slash + 1);
-			uri = uri.substring(0, slash + 1) + skin + SKIN_MANIFEST_EXT;
 		}
 
 		int dot = filenames.lastIndexOf('.');
@@ -211,13 +213,6 @@ extends HttpServlet {
 
 		// load manifest
 		Manifest manifest = new Manifest(manifestFile, macros);
-		if (manifest == null) {
-			out.println(commentStart);
-			out.print(commentContinue);
-			out.println("Warning: no skin manifest");
-			out.println(commentEnd);
-			out.println();
-		}
 
 		// process input files
 		StringTokenizer tokenizer = new StringTokenizer(filenames, ",");
@@ -320,15 +315,7 @@ extends HttpServlet {
 	//
 
 	private static String getRequestURI(HttpServletRequest req) {
-		/***
-		String uri = req.getParameter(P_URI);
-		if (uri == null) {
-			uri = req.getRequestURI();
-		}
-		return uri;
-		/***/
 		return req.getRequestURI();
-		/***/
 	}
 
 	private static Cookie getCookie(HttpServletRequest req, String name) {
@@ -418,7 +405,6 @@ extends HttpServlet {
 
 		// parse user agent
 		String agt = agent.toLowerCase();
-		//System.err.println("USER-AGENT: "+agt);
 		StringTokenizer agtArr = new StringTokenizer(agt, " ;()");
 		int i = 0;
 		int index = -1;
@@ -438,7 +424,6 @@ extends HttpServlet {
 				isNav = true;
 			}
 			do {
-				//System.err.println("TOKEN: "+token);
 				if (token.indexOf("compatible") != -1 ) {
 					isCompatible = true;
 					isNav = false;
@@ -543,6 +528,8 @@ extends HttpServlet {
 			define(macros, "MOZILLA", isMozilla);
 			define(macros, "MOZILLA_1_4_OR_HIGHER", isMozilla1_4up);
 
+			define(macros, "OPERA", isOpera);
+
 			define(macros, "FIREFOX", isFirefox);
 			define(macros, "FIREFOX_1_OR_HIGHER", isFirefox1up);
 			define(macros, "FIREFOX_1_5_OR_HIGHER", isFirefox1_5up);
@@ -568,7 +555,7 @@ extends HttpServlet {
 
 		return macros;
 
-	} // parseUserAgent(String,Map<String,String>)
+	}
 
 	private static double parseFloat(String s) {
 		try {
@@ -656,23 +643,6 @@ extends HttpServlet {
 					InputStream in = new ByteArrayInputStream(bytes);
 
 					substitutions.load(in);
-					/***
-					 InputStream in = new FileInputStream(file);
-					 substitutions.load(in);
-					 in.close();
-					 /***
-					InputStream in = new FileInputStream(file);
-					Properties p = new Properties();
-					p.load(in);
-					in.close();
-
-					Enumeration pnames = p.propertyNames();
-					while (pnames.hasMoreElements()) {
-						String pname = (String)pnames.nextElement();
-						String pvalue = p.getProperty(pname);
-						substitutions.setProperty(pname, pvalue);
-					}
-					/***/
 				}
 				catch (Throwable t) {
 					System.err.println("ERROR loading subst file: "+file);
@@ -691,11 +661,7 @@ extends HttpServlet {
 				if (substKey.equals("InsetBg")) {
 					if (DEBUG) System.err.println("DEBUG: InsetBg (loop) = "+substitutions.getProperty("InsetBg"));
 				}
-				String substValue = getProperty(stack, substKey);
-
-				/*** NOTE: This is done implicitly in getProperty
-				substitutions.setProperty(substKey, substValue);
-				/***/
+				getProperty(stack, substKey);
 			}
 			if (DEBUG) System.err.println("DEBUG: InsetBg (after) = "+substitutions.getProperty("InsetBg"));
 

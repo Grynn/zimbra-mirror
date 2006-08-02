@@ -55,7 +55,7 @@
 
 .DwtTabView {
 	@FullWidth@
-	align: left;	
+	text-align: left;
 }
 
 .DwtTabView .Title {}
@@ -359,7 +359,7 @@
 
 /* ??? USE */
 .DwtSelectMenu .DwtMenuItem 			{	@MenuItem@		}
-.DwtSelectMenu .DwtMenuItem-text 		{	padding-left:@BoxPaddingSize@	text-align:left;	}
+.DwtSelectMenu .DwtMenuItem-text 		{	padding-left:@BoxPaddingSize@;	text-align:left;	}
 .DwtSelectMenu .DwtMenuItem-leftFill 	{	width:19px;		/* ??? SIZE? */	}
 
 .DwtSelectMenu .DwtMenuItem-selected .DwtMenuItem-text{
@@ -465,7 +465,7 @@
 .DwtDialogTitle {
 	@WindowTitleText@
 	width:auto;
-	valign:top;
+	vertical-align:top;
 }
 
 .LightWindowOuterContainer .DwtDialogTitle {
@@ -1186,8 +1186,13 @@
 /* DwtGridSizePicker */
 
 .DwtGridSizePicker table {
-	border-collapse: collapse; 
-	-moz-user-select: none; user-select: none;
+	border-collapse: collapse;
+	#IFDEF GECKO
+	-moz-user-select: none;
+	#ENDIF
+	#IFNDEF GECKO
+	user-select: none;
+	#ENDIF
 	@SeparatorBorder@
 	@InactiveCursor@
 }
@@ -1221,7 +1226,12 @@
 	width: 11px;
 	font-size: 1px;
 	line-height: 1px;
-	-moz-user-select: none; user-select: none;
+	#IFDEF GECKO
+	-moz-user-select: none;
+	#ENDIF
+	#IFNDEF GECKO
+	user-select: none;
+	#ENDIF
 	border-left: 1px solid #000;
 	text-align: center;
 	background-color: #eee;
@@ -1238,7 +1248,13 @@
 .DwtSpinner-Down-disabled { background-color: #eee; }
 
 .DwtSpinner-disabled .DwtSpinner-UpBtn,
-.DwtSpinner-disabled .DwtSpinner-DownBtn { opacity:.3; filter:alpha(opacity=30); }
+.DwtSpinner-disabled .DwtSpinner-DownBtn {
+	opacity:.3;
+	#IFDEF MSIE
+	filter:alpha(opacity=30);
+	#ENDIF
+}
+
 
 /* DwtButtonColorPicker styles */
 
@@ -1246,7 +1262,12 @@
 	width: 10px;
 	height: 10px;
 	@FixIESizeQuirk@
-	-moz-user-select: none; user-select: none;
+	#IFDEF GECKO
+	-moz-user-select: none;
+	#ENDIF
+	#IFNDEF GECKO
+	user-select: none;
+	#ENDIF
 	border: 1px solid;
 	border-color: #000 #fff #fff #000;
 }

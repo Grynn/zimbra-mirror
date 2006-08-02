@@ -1498,12 +1498,11 @@ opacity:.99;
 
 .appt_edit_vsep_cell {
 	height:10px;
-	vertical-align:center;
+	vertical-align:middle;
 	text-align:center;
 }
 .appt_edit_vsep {
 	width:100%;
-	Xborder-bottom:1px solid #CCCCCC;
 }
 
 
