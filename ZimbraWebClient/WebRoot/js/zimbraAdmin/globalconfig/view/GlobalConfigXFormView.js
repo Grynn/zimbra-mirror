@@ -364,7 +364,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 				},
 				// anti-spam
 				{ type: _CASE_, relevant: "instance[ZaModel.currentTab] == 6", 
-					width:"100%",colSizes:["100px","400px"], 
+					width:"100%",colSizes:["300px","*"], 
 				  items: [
 				  	{ ref: ZaGlobalConfig.A_zimbraSpamCheckEnabled, type: _CHECKBOX_,
 				  	  label: ZaMsg.NAD_Enable_ASAV,labelLocation:_LEFT_,
@@ -375,8 +375,9 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 					    this.getForm().getInstance().attrs[ZaGlobalConfig.A_zimbraVirusCheckEnabled] = elementValue;
 					    this.getForm().itemChanged(this, elementValue, event);
 					  }
-					  
 			  	    },
+					{ type: _SEPARATOR_, numCols: 2 },		
+					{type:_OUTPUT_, colSpan:2, value:ZaMsg.NAD_AS_Settings},
 				  	{ ref: ZaGlobalConfig.A_zimbraSpamKillPercent, type: _INPUT_,
 			   	      relevant: "instance.attrs[ZaGlobalConfig.A_zimbraSpamCheckEnabled] == 'TRUE'", relevantBehavior: _DISABLE_,
 				  	  label: ZaMsg.NAD_Spam_KillPercent, width: "4em",
@@ -392,6 +393,8 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 				  	  label: ZaMsg.NAD_Spam_SubjectPrefix, width: "20em",
 					  onChange: ZaTabView.onFormFieldChanged
 				  	},
+				  	{ type: _SEPARATOR_, numCols: 2 },		
+					{type:_OUTPUT_, colSpan:2, value:ZaMsg.NAD_AV_Settings},
 			  	    { ref: ZaGlobalConfig.A_zimbraVirusDefinitionsUpdateFrequency, type: _INPUT_,
 			  	      label: ZaMsg.NAD_Virus_DefUpdateFreq, width: "3em",
 			  	      getDisplayValue: function(value) { return parseInt(value); },
