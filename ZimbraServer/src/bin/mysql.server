@@ -45,7 +45,7 @@ case "$1" in
 	cd ${mysql_directory}; \
             ${mysql_directory}/bin/mysqld_safe \
                 --defaults-file=${mysql_mycnf} \
-                --ledir=${mysql_directory}/bin &
+                --ledir=${mysql_directory}/libexec &
 	;;
     
     'stop')
