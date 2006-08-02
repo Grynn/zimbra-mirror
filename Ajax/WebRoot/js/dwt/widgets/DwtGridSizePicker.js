@@ -28,7 +28,7 @@ function DwtGridSizePicker(parent, title) {
 	DwtControl.call(this, parent, "DwtGridSizePicker");
 	this._title = title;
 	if (parent instanceof DwtMenu)
-		parent.addPopupListener(new AjxListener(this, this._reset));
+		parent.addPopdownListener(new AjxListener(this, this._reset));
 	this._reset();
 // 	if (AjxEnv.isIE && parent && parent instanceof DwtMenu) {
 // 		var table = document.createElement("table");
