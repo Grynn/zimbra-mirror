@@ -596,8 +596,8 @@ Com_Zimbra_SForce.prototype.dlg_addNoteToAccounts = function(accounts, note) {
 	var h3 = document.createElement("h3");
     var i;
     h3.className = "SForce-sec-label SForce-icon-right";
-	//h3.innerHTML = "A = Account, O = Opportunity, C = Contact";
-	h3.innerHTML = "A = Account or O = Opportunity";
+	h3.innerHTML = "A = Account, O = Opportunity, C = Contact";
+	//h3.innerHTML = "A = Account or O = Opportunity";
 	el.appendChild(h3);
 
 	var checkboxes = [];
@@ -621,13 +621,13 @@ Com_Zimbra_SForce.prototype.dlg_addNoteToAccounts = function(accounts, note) {
                 chkContact = false;
             }
         }
-        // Limit the number of contacts shown to 10
-		// REMOVE LISTING OF CONTACTS, just list acctount/opportunity
-/*
-        var displayLimit = acct.Con.length;
-        if(displayLimit > 10) {
-            displayLimit = 10;
-            DBG.println(AjxDebug.DBG3, "Setting contact limit to 10 returned " + acct.Con.length);
+        // Limit the number of contacts shown to 5
+		// REMOVE LISTING OF CONTACTS, just list account/opportunity
+		/**
+		var displayLimit = acct.Con.length;
+        if(displayLimit > 5) {
+            displayLimit = 5;
+            DBG.println(AjxDebug.DBG3, "Setting contact limit to 5 returned " + acct.Con.length);
         }
         if (acct.Con && displayLimit > 0) {
             for (i = 0; i < displayLimit; i++) {
@@ -636,7 +636,7 @@ Com_Zimbra_SForce.prototype.dlg_addNoteToAccounts = function(accounts, note) {
                 html = this._checkBoxHtml(acct.Con[i], cbid, 2, chkContact, html);
             }
         }
-*/
+        **/
     }
     html.push("</tbody></table>");
 	div.innerHTML = html.join("");
@@ -653,11 +653,11 @@ Com_Zimbra_SForce.prototype.dlg_addNoteToAccounts = function(accounts, note) {
     var body;
     if (note.body) {
         body = AjxStringUtil.htmlEncode(note.body);
-    } else if (note._topPart && note._topPart.node && !note.isHtmlMail()) {
-        body = AjxStringUtil.htmlEncode(note._topPart.node.content);
-    } else if (note._topPart && note._topPart.node && note.isHtmlMail()) {
+    } else if (note._topPart && note._topPart.getContentForType) {
         body = AjxStringUtil.htmlEncode(note._topPart.getContentForType(ZmMimeTable.TEXT_PLAIN));
-    }
+    } else {
+		body = "Error - No body found!"
+	}
     div.innerHTML =
 		[ "<table><tbody>",
 		  "<tr>",
@@ -705,8 +705,8 @@ Com_Zimbra_SForce.prototype.dlg_addNoteToAccounts = function(accounts, note) {
 					      for (i = 0; i < ids.length; ++i) {
 							  ids[i].Subject = props.Title;
 						      ids[i].Description = props.Body;
-							  // Might need to make this a config item
 							  ids[i].Status = 'Completed';
+							  ids[i].ActivityDate = Com_Zimbra_SForce.toIsoDate(new Date());
 					      }
 					      this.createSFObject(ids, "Task", function() {
 						      this.displayStatusMessage("Saved " + ids.length + " notes.");
