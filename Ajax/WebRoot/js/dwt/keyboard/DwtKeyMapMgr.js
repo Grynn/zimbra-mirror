@@ -289,11 +289,10 @@ function(keyCode) {
 DwtKeyMapMgr.isUsableTextInputValueUs =
 function(keyCode, element) {
 
-	if (element.tagName.toUpperCase() != "INPUT") return false;
+	var tag = element.tagName.toUpperCase();
+	if ((tag != "INPUT") && (tag != "TEXTAREA")) return false;
 	
-	if (DwtKeyMapMgr._isAlphanumericUs(keyCode) || DwtKeyMapMgr._isPunctuationUs(keyCode) 
-		|| DwtKeyMapMgr._isAlphanumericUs(keyCode))
-		return true;
+	if (DwtKeyMapMgr._isAlphanumericUs(keyCode) || DwtKeyMapMgr._isPunctuationUs(keyCode)) return true;
 		
 	switch (keyCode) {
 		case 37:
@@ -302,9 +301,11 @@ function(keyCode, element) {
 		case 45:
 		case 46:
 		case 35:
-		case 13:
 		case 32:
 			return true;
+
+		case 13:
+			return (tag == "TEXTAREA");
 			
 		default:
 			return false;

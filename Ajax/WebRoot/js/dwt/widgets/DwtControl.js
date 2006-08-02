@@ -470,20 +470,19 @@ function() {
 /** 
  * This method is called to explicitly set keyboard focus to this component.
  */
- DwtControl.prototype.focus =
- function() {
- 	DwtShell.getShell(window).getKeyboardMgr().grabFocus(this);
- };
+DwtControl.prototype.focus =
+function() {
+	DwtShell.getShell(window).getKeyboardMgr().grabFocus(this);
+};
  
- /**
-  * @return true if this control has keyboard focus, else return false
-  * @type Boolean
-  */
-  DwtControl.prototype.hasFocus =
-  function() {
-  	//return DwtShell.getShell(window).getKeyboardMgr().dwtControlHasFocus(this);
-  	return this._hasFocus;
-  };
+/**
+ * @return true if this control has keyboard focus, else return false
+ * @type Boolean
+ */
+DwtControl.prototype.hasFocus =
+function() {
+	return this._hasFocus;
+};
  
 /** 
  * This method is called by the keyboard navigation framework. It should be overriden

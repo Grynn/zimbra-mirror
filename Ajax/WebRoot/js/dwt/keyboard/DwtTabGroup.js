@@ -16,104 +16,78 @@
 
 
 /**
-* @constructor
-* @class
-* This class represents a the tab ordering that is to be used for keyboard
-* navigation among a group of related visual elements. Keyboard navigation follows
-* the order of the components specified in the tab group. Tab groups may of course
-* be nested (thus representing groups of subcomponents in the UI). Thus tab groups
-* may contain other tab groups.
-* 
-* The root tab group (i.e. one without a parent tab group) is a special tab group
-* in that it is responsible for holding the notion of the current focus member 
-* within it's membership. It is also the place where focus listener may be
-* registered (see method documentation)
-* 
-* @param {String}	name					name of this tab group
-* @param {boolean}	blockApplicationHandling		if true, don't fall back to global key
-* 											handler for this tab group
-* 
-* @author Ross Dargahi
-*/
-function DwtTabGroup(name, blockApplicationHandling) {
-	/**@private*/
+ * Creates an empty tab group.
+ * @constructor
+ * @class
+ * A tab group is used to manage keyboard focus among a group of related visual 
+ * elements. It is a tree structure consisting of elements and other tab groups.
+ * 
+ * The root tab group is the only one without a parent tab group, and is the one
+ * that the application interacts with. Focus listeners register with the root
+ * tab group. The root tab group tracks where focus is.
+ * 
+ * @param {String}	name					name of this tab group
+ * @param {boolean}	blockDefaultHandling	if true, don't fall back to default key
+ * 											handler for this tab group
+ * 
+ * @author Ross Dargahi
+ */
+function DwtTabGroup(name, blockDefaultHandling) {
+
 	this.__members = new AjxVector();
-	/**@private*/
 	this.__parent = null;
-	/**@private*/
 	this.__name = name;
-	/**@private*/
-	this.__blockApplicationHandling = blockApplicationHandling;
-	/**@private*/
+	this.__blockApplicationHandling = blockDefaultHandling;
 	this.__currFocusMember = null;
-}
+	this.__evtMgr = new AjxEventMgr();
+};
 
 /** 
- * Exception that is thrown is performing an operation that must occur only on
- * a root tabgroup (i.e. one without a parent
- * @type String
+ * Exception string that is thrown when an operation is attempted
+ * on a non-root tab group.
  */
 DwtTabGroup.NOT_ROOT_TABGROUP = "NOT ROOT TAB GROUP";
 
-/**@private*/
 DwtTabGroup.__changeEvt = new DwtTabGroupEvent();
 
-/**
- * @return return a string version of the class' name
- * @type String
- */
 DwtTabGroup.prototype.toString = 
 function() {
 	return "DwtTabGroup";
-}
+};
 
 /**
- * Adds a focus change listener on the tab group. A focus change listener is fired
- * whenever a method causes the focus member to change. Note that change listeners
- * can only be registered on the root tab group (i.e. a tab group with no parent)
+ * Adds a focus change listener to the root tab group. The listener is called
+ * when the focus member changes. Note that the focus member hasn't actually
+ * been focused yet - only its status within the tab group has changed. It is
+ * up to the listener to implement the appropriate focus action.
  * 
- * @param {AjxListener} listener The listener object to resgier
+ * @param {AjxListener} listener	a listener
  * 
  * @throws DwtTabGroup.NOT_ROOT_TABGROUP
- * 
- * @see AjxListener
  */
 DwtTabGroup.prototype.addFocusChangeListener =
 function(listener) {
-	if (this.__parent != null)
-		throw DwtTabGroup.NOT_ROOT_TABGROUP;
-		
-	if (this.__evtMgr == null)
-		/**@private*/
-		this.__evtMgr = new AjxEventMgr();
-			
+	this.__checkRoot();		
 	this.__evtMgr.addListener(DwtEvent.STATE_CHANGE, listener);
-}
+};
 
 /**
- * Removes a focus change listener from a the tab group. This method may only
- * be called on root tab groups
+ * Removes a focus change listener from the root tab group.
  * 
- * @param {AjxListener} listener The listener object to resgier
+ * @param {AjxListener} listener	a listener
  * 
  * @throws DwtTabGroup.NOT_ROOT_TABGROUP
- *
- * @see AjxListener
  */
 DwtTabGroup.prototype.removeFocusChangeListener =
 function(listener) {
-	if (this.__parent != null)
-		throw DwtTabGroup.NOT_ROOT_TABGROUP;
-		
-	if (this.__evtMgr == null)
-		return;	
+	this.__checkRoot();		
 	this.__evtMgr.removeListener(DwtEvent.STATE_CHANGE, listener);
-}
+};
 
 /**
- * Add a member to the tab group
+ * Adds a member to the tab group.
  * 
- * @param {DwtControl|DwtTabGroup|HTMLElement} member member to be added
+ * @param {DwtControl|DwtTabGroup|HTMLElement} member	member to be added
  * @param {Int} index Index at which to add the member. If omitted, the member
  * 		will be added to the end of the tab group (optional)
  */
@@ -121,13 +95,14 @@ DwtTabGroup.prototype.addMember =
 function(member, index) {
 	this.__members.add(member, index);
 	
-	// Register me as the new parent
-	if (member instanceof DwtTabGroup)
+	// If adding a tab group, register me as its parent
+	if (member instanceof DwtTabGroup) {
 		member.newParent(this);
-}
+	}
+};
 
 /**
- * Add a member to the tab group positioned after <code>afterMember</code>
+ * Adds a member to the tab group, positioned after another member.
  * 
  * @param {DwtControl|DwtTabGroup|HTMLElement} member member to be added
  * @param {DwtControl|DwtTabGroup|HTMLElement} afterMember member after which to add
@@ -136,10 +111,10 @@ function(member, index) {
 DwtTabGroup.prototype.addMemberAfter =
 function(newMember, afterMember) {
 	this.addMember(newMember, this.__members.indexOf(afterMember) + 1);
-}
+};
 
 /**
- * Add a member to the tab group positioned before <code>beforeMember</code>
+ * Adds a member to the tab group, positioned before another member.
  * 
  * @param {DwtControl|DwtTabGroup|HTMLElement} member member to be added
  * @param {DwtControl|DwtTabGroup|HTMLElement} beforeMember member before which to add
@@ -147,19 +122,18 @@ function(newMember, afterMember) {
  */
 DwtTabGroup.prototype.addMemberBefore =
 function(newMember, beforeMember) {
-	var idx = this.__members.indexOf(beforeMember);
-	this.addMember(newMember, (idx != 0) ? idx-- : 0);
-}
+	this.addMember(newMember, this.__members.indexOf(afterMember));
+};
 
 /**
- * This method removes a member for the tab group. If the member being removed
- * is currently the focus member, then we will first try and set focus to the
- * logically previous member. If this fails, we will try the logical next member
+ * This method removes a member from the tab group. If the member being removed
+ * is currently the focus member, then we will try to set focus to the
+ * previous member. If that fails, we will try the next member.
  * 
  * @param {DwtControl|DwtTabGroup|HTMLElement} member member to be removed
  * @param {Boolean} checkEnabled true, then make sure that if we have a newly focused
  * 		member it is enabled (optional)
- * @param {Boolean} dontNotify true notification is not fired. This flag
+ * @param {Boolean} skipNotify true notification is not fired. This flag
  * 		typically set by Dwt tab mangement framework when it is calling into this 
  * 		method (optional)
  * @return removed member This may be null if <code>oldMember</code> is not in the
@@ -167,110 +141,114 @@ function(newMember, beforeMember) {
  * @type DwtControl|DwtTabGroup|HTMLElement
  */
 DwtTabGroup.prototype.removeMember =
-function(member, checkEnabled, dontNotify) {
-	return this.replaceMember(member, null, false, dontNotify);
-}
+function(member, checkEnabled, skipNotify) {
+	return this.replaceMember(member, null, checkEnabled, skipNotify);
+};
 
 /**
  * This method replaces a member in the tab group with a new member. If the member being
- * replaced is currently the focus member, then we will first try and set focus to the
- * logically previous member. If this fails, we will try the logical next member
+ * replaced is currently the focus member, then we will try to set focus to the
+ * previous member. If that fails, we will try the next member.
  * 
  * @param {DwtControl|DwtTabGroup|HTMLElement} oldMember member to be replaced
  * @param {DwtControl|DwtTabGroup|HTMLElement} newMember replacing member
- * 		If this parameter is null, then this method effectively removes <code>oldElement</code>
+ * 		If this parameter is null, then this method effectively removes <code>oldMember</code>
  * @param {Boolean} checkEnabled true, then make sure that if we have a newly focused
  * 		member it is enabled (optional)
- * @param {Boolean} dontNotify true notification is not fired. This flag
- * 		typically set by Dwt tab mangement framework when it is calling into this 
+ * @param {Boolean} skipNotify true notification is not fired. This flag is
+ * 		typically set by the tab management framework when it is calling into this 
  * 		method (optional)
  * @return replaced member. This may be null if <code>oldMember</code> is not in the
- * 		tab groups hierarchy
+ * 		tab group
  * @type DwtControl|DwtTabGroup|HTMLElement
  */
 DwtTabGroup.prototype.replaceMember =
-function(oldMember, newMember, checkEnabled, dontNotify) {
+function(oldMember, newMember, checkEnabled, skipNotify, focusItem) {
 	var tg = this.__getTabGroupForMember(oldMember);
-
-	if (tg == null)
-		return null;
+	if (!tg) return null;
 
 	/* If we are removing the current focus member, then we need to adjust the focus
 	 * member index. If the tab group is empty as a result of the removal
 	 */
 	var root = this.__getRootTabGroup();
-	var focusMember = (root.__currFocusMember == oldMember 
-					   || ((oldMember instanceof DwtTabGroup) && oldMember.contains(root.__currFocusMember)))
-				? true : false;
+	var newFocusMember;
+	if (focusItem) {
+		newFocusMember = focusItem;
+	} else if (root.__currFocusMember == oldMember ||
+		((oldMember instanceof DwtTabGroup) && oldMember.contains(root.__currFocusMember))) {
 
-	if (focusMember) {
-		root.__currFocusMember = this.__getPrevMember(oldMember, checkEnabled);
-		
-		if (!root.__currFocusMember)
-			root.__currFocusMember =  this.__getNextMember(oldMember, checkEnabled);
-			
-		if (!dontNotify)
-			this.__notifyListeners(root.__currFocusMember);
+		if (newMember) {
+			newFocusMember = (newMember instanceof DwtTabGroup) ? newMember.getFirstMember() : newMember;
+		} else {
+			newFocusMember = this.__getPrevMember(oldMember, checkEnabled);
+			if (!newFocusMember) {
+				newFocusMember =  this.__getNextMember(oldMember, checkEnabled);
+			}
+		}
 	}
-	
-	if (newMember == null)	
-		return this.__members.remove(oldMember);
-	else
-		return this.__members.replaceObject(oldMember, newMember);	
-}
+	if (newFocusMember) {
+		root.__currFocusMember = newFocusMember;
+		DBG.println("kbnav", "DwtTabGroup.replaceMember: current focus member is now " + root.__currFocusMember);
+		if (!skipNotify) {
+			this.__notifyListeners(newFocusMember);
+		}
+	}
+		
+	return newMember ? this.__members.replaceObject(oldMember, newMember) : this.__members.remove(oldMember);
+};
 
 /**
- * Checks to see if the tab group contains <code>member</code>
+ * Returns true if this tab group contains <code>member</code>.
  * 
  * @param {DwtControl|DwtTabGroup|HTMLElement} member member for which to search
  * 
- * @returntrue if the tab group contains member
+ * @return true if the tab group contains member
  * @type Boolean
  */
 DwtTabGroup.prototype.contains =
 function(member) {	
 	return (this.__getTabGroupForMember(member)) ? true : false;
-}
+};
 
 /**
- * Set a new parent for the tab group
+ * Sets a new parent for this tab group.
  * 
  * @param {DwtTabGroup} newParent the new parent. If the parent is null, then
- * 		the tabGroup becomes a "Root tabgroup"
+ * 		this tabGroup is the root tab group.
  */
 DwtTabGroup.prototype.newParent =
 function(newParent) {
 	this.__parent = newParent;
-}
+};
 
 /**
- * Gets the first member in the tab group
+ * Returns the first member of the tab group.
  * 
  * @param {Boolean} checkEnabled true, then return first enabled member (optional)
  *
  * @return the first member of the tab group
  * @type DwtControl|HTMLElement
  */
- DwtTabGroup.prototype.getFirstMember =
- function(checkEnabled) {
- 	return this.__getLeftMostMember(checkEnabled);
- }
+DwtTabGroup.prototype.getFirstMember =
+function(checkEnabled) {
+	return this.__getLeftMostMember(checkEnabled);
+};
  
 /**
- * Gets the lst member of the tab group
+ * Returns the last member of the tab group.
  * 
  * @param {Boolean} checkEnabled true, then return last enabled member (optional)
  *
  * @return the last member of the tab group
  * @type DwtControl|HTMLElement
  */
- DwtTabGroup.prototype.getLastMember =
- function(checkEnabled) {
- 	return this.__getRightMostMember(checkEnabled);
- }
+DwtTabGroup.prototype.getLastMember =
+function(checkEnabled) {
+	return this.__getRightMostMember(checkEnabled);
+};
  
 /**
- * Gets the current focus member.
+ * Returns the current focus member.
  * 
  * @return current focus member
  * @type DwtControl|HTMLElement
@@ -279,18 +257,16 @@ function(newParent) {
  */
 DwtTabGroup.prototype.getFocusMember =
 function(){
-	if (this.__parent != null)
-		throw DwtTabGroup.NOT_ROOT_TABGROUP;	
+	this.__checkRoot();
 	return this.__currFocusMember;
-}
+};
 
 /**
- * Set the focus member. 
+ * Sets the current focus member. 
  * 
- * @param {DwtControl|HTMLElement} member The member to which to set focus. member must
- * 		must be a member of the tab group hierarchy
+ * @param {DwtControl|HTMLElement} member The member to which to set focus
  * @param {Boolean} checkEnabled true, then make sure the member is enabled (optional)
- * @param {Boolean} dontNotify true notification is not fired. This flag
+ * @param {Boolean} skipNotify true notification is not fired. This flag
  * 		typically set by Dwt tab mangement framework when it is calling into this 
  * 		method (optional)
  * 
@@ -300,29 +276,30 @@ function(){
  * @throws DwtTabGroup.NOT_ROOT_TABGROUP
  */
 DwtTabGroup.prototype.setFocusMember =
-function(member, checkEnabled, dontNotify) {
-	if (this.__parent != null)
-		throw DwtTabGroup.NOT_ROOT_TABGROUP;
-	
-	if (!this.__checkEnabled(member, checkEnabled))
+function(member, checkEnabled, skipNotify) {
+	this.__checkRoot();	
+	if (!this.__checkEnabled(member, checkEnabled)) {
 		return false;
+	}
 
 	var tg = this.__getTabGroupForMember(member);
-	if (tg != null) {
+	if (tg) {
 		this.__currFocusMember = member;
-		if (!dontNotify)
+		DBG.println("kbnav", "DwtTabGroup.setFocusMember: current focus member is now " + this.__currFocusMember);
+		if (!skipNotify) {
 			this.__notifyListeners(this.__currFocusMember);
+		}
 		return true;	
 	}
 	return false;
-}
+};
 
 /**
- * This method gets then next focus member in the Tab Group. If there is not next
- * member, resets to the first member in the tab group 
+ * This method sets and returns the next focus member in this tab group. If there is no next
+ * member, sets and returns the first member in the tab group.
  * 
  * @param {Boolean} checkEnabled true, then get the next enabled member(optional)
- * @param {Boolean} dontNotify true notification is not fired. This flag
+ * @param {Boolean} skipNotify true notification is not fired. This flag
  * 		typically set by Dwt tab mangement framework when it is calling into this 
  * 		method (optional)
  * 
@@ -333,19 +310,17 @@ function(member, checkEnabled, dontNotify) {
  * @throws DwtTabGroup.NOT_ROOT_TABGROUP
  */
 DwtTabGroup.prototype.getNextFocusMember =
-function(checkEnabled, dontNotify) {
-	if (this.__parent != null)
-		throw DwtTabGroup.NOT_ROOT_TABGROUP;
-		
-	return this.__setFocusMember(true, checkEnabled, dontNotify);
-}
+function(checkEnabled, skipNotify) {
+	this.__checkRoot();		
+	return this.__setFocusMember(true, checkEnabled, skipNotify);
+};
 
 /**
- * This method gets then previous focus member in the Tab Group. If there is not next
- * member, then sets to the last member in the tab group
+ * This method sets and returns the previous focus member in this tab group. If there is no
+ * previous member, sets and returns the last member in the tab group.
  * 
  * @param {Boolean} checkEnabled true, then get the previously enabled member (optional)
- * @param {Boolean} dontNotify true notification is not fired. This flag
+ * @param {Boolean} skipNotify true notification is not fired. This flag
  * 		typically set by Dwt tab mangement framework when it is calling into this 
  * 		method (optional)
  * 
@@ -356,20 +331,17 @@ function(checkEnabled, dontNotify) {
  * @throws DwtTabGroup.NOT_ROOT_TABGROUP
  */
 DwtTabGroup.prototype.getPrevFocusMember =
-function(checkEnabled, dontNotify) {
-	if (this.__parent != null)
-		throw DwtTabGroup.NOT_ROOT_TABGROUP;
-		
-	return this.__setFocusMember(false, checkEnabled, dontNotify);
-}
+function(checkEnabled, skipNotify) {
+	this.__checkRoot();		
+	return this.__setFocusMember(false, checkEnabled, skipNotify);
+};
 
 /**
- * resets the the focus member to the first element in the tab group cascading down
- * the tab gropu hierarchy if the first member is itself a DwtTabGroup
+ * Resets the the focus member to the first element in the tab group.
  * 
  * @param {Boolean} checkEnabled true, then make pick a enabled member to which to
  * 		set focus (optional)
- * @param {Boolean} dontNotify true notification is not fired. This flag
+ * @param {Boolean} skipNotify true notification is not fired. This flag
  * 		typically set by Dwt tab mangement framework when it is calling into this 
  * 		method (optional)
  * 
@@ -379,26 +351,26 @@ function(checkEnabled, dontNotify) {
  * @throws DwtTabGroup.NOT_ROOT_TABGROUP
  */
 DwtTabGroup.prototype.resetFocusMember =
-function(checkEnabled, dontNotify) {
-	if (this.__parent != null)
-		throw DwtTabGroup.NOT_ROOT_TABGROUP;
-	
-	this.__currFocusMember = this.__getLeftMostMember(checkEnabled);
-
-	if (!dontNotify)
+function(checkEnabled, skipNotify) {
+	this.__checkRoot();
+	var focusMember = this.__getLeftMostMember(checkEnabled);
+	if ((focusMember != this.__currFocusMember) && !skipNotify) {
 		this.__notifyListeners(this.__currFocusMember);
+	}
+	DBG.println("kbnav", "DwtTabGroup.resetFocusMember: current focus member is now " + this.__currFocusMember);
+	this.__currFocusMember = focusMember;
 	
 	return this.__currFocusMember;
-}
-
-DwtTabGroup.prototype.blockApplicationHandling =
-function(block) {
-	this.__blockApplicationHandling = blockApplicationHandling;
 };
 
-DwtTabGroup.prototype.isApplicationHandlingBlocked =
+DwtTabGroup.prototype.blockDefaultHandling =
 function(block) {
-	return this.__blockApplicationHandling;
+	this.__blockDefaultHandling = blockDefaultHandling;
+};
+
+DwtTabGroup.prototype.isDefaultHandlingBlocked =
+function(block) {
+	return this.__blockDefaultHandling;
 };
 
 /**
@@ -407,46 +379,56 @@ function(block) {
 DwtTabGroup.prototype.dump =
 function() {
 	this.__dump(this, 0);
-}
+};
 
 /**
- * Gets the previous member in the tag group.
+ * Returns the previous member in the tag group.
  * @private
  */
 DwtTabGroup.prototype.__getPrevMember =
 function(member, checkEnabled) {
-	a = this.__members.getArray();
-	// Start working from the member to the immediate left of <member> leftwards
+	var a = this.__members.getArray();
+	// Start working from the member to the immediate left, then keep going left
 	for (var i = this.__members.indexOf(member) - 1; i > -1; i--) {
 		var prevMember = a[i];
-		/* if sibling is not a tabgroup, then it is the previous child. If the
-		 * sibling is a tabgroup, get it's rightmost member if the tab group is
-		 * not empty.*/
+		/* if sibling is not a tab group, then it is the previous child. If the
+		 * sibling is a tab group, get its rightmost member.*/
 		if (!(prevMember instanceof DwtTabGroup)) {
-			if (this.__checkEnabled(prevMember, checkEnabled))
+			if (this.__checkEnabled(prevMember, checkEnabled)) {
 				return prevMember;
-		} else if ((prevMember = prevMember.__getRightMostMember(checkEnabled)) != null) {
-			if (this.__checkEnabled(prevMember, checkEnabled))
+			}
+		} else {
+			prevMember = prevMember.__getRightMostMember(checkEnabled);
+			if (prevMember && this.__checkEnabled(prevMember, checkEnabled)) {
 				return prevMember;
+			}
 		}
 	}
-	/* If we have fallen through to here it is because the tag group only has 
+	/* If we have fallen through to here it is because the tab group only has 
 	 * one member. So we roll up to the parent, unless we are at the root in 
-	 * which case we return null; */
-	return (this.__parent != null) ? this.__parent.__getPrevMember(this, checkEnabled) : null;
-}
-
-DwtTabGroup.prototype.__checkEnabled =
-function(member, checkEnabled) {
-	if (!checkEnabled)
-		return true;
-	else
-		return (member instanceof DwtControl)
-			? member.getEnabled() : !member.disabled;
-}
+	 * which case we return null. */
+	return this.__parent ? this.__parent.__getPrevMember(this, checkEnabled) : null;
+};
 
 /**
- * Gets the next member in the tag group.
+ * Returns true if the given member can accept focus, or if there is no need to check.
+ * If we are checking, the member must be enabled and visible if it is a control, and
+ * enabled otherwise. A member may also set the "noTab" flag to take itself out of the
+ * tab hierarchy.
+ */
+DwtTabGroup.prototype.__checkEnabled =
+function(member, checkEnabled) {
+	if (!checkEnabled) return true;
+	if (member.noTab) return false;
+	if (member instanceof DwtControl) {
+		return (member.getEnabled() && member.getVisible());
+	} else {
+		return !member.disabled;
+	}
+};
+
+/**
+ * Sets and returns the next member in the tag group.
  * @private
  */
 DwtTabGroup.prototype.__getNextMember =
@@ -457,27 +439,29 @@ function(member, checkEnabled) {
 	// Start working from the member to the immediate left of <member> rightwards
 	for (var i = this.__members.indexOf(member) + 1; i < sz; i++) {
 		var nextMember = a[i];
-		/* if sibling is not a tabgroup, then it is the next child. If the
-		 * sibling is a tabgroup, get it's rightmost member if the tab group is
-		 * not empty.*/
+		/* if sibling is not a tab group, then it is the next child. If the
+		 * sibling is a tab group, get its leftmost member.*/
 		if (!(nextMember instanceof DwtTabGroup)) {
-			if (this.__checkEnabled(nextMember, checkEnabled))
+			if (this.__checkEnabled(nextMember, checkEnabled)) {
 				return nextMember;
-		} else if ((nextMember = nextMember.__getLeftMostMember(checkEnabled)) != null) {
-			if (this.__checkEnabled(nextMember, checkEnabled))
+			}
+		} else {
+			nextMember = nextMember.__getLeftMostMember(checkEnabled);
+			if (nextMember && this.__checkEnabled(nextMember, checkEnabled)) {
 				return nextMember;
+			}
 		}
 	}
 
-	/* If we have fallen through to here it is because the tag group only has 
+	/* If we have fallen through to here it is because the tab group only has 
 	 * one member or we are at the end of the list. So we roll up to the parent, 
-	 * unless we are at the root in which case we return null; */
-	return (this.__parent != null) ? this.__parent.__getNextMember(this, checkEnabled) : null;
-}
+	 * unless we are at the root in which case we return null. */
+	return this.__parent ? this.__parent.__getNextMember(this, checkEnabled) : null;
+};
 
 /**
- *  Finds the right most non-tab group member of the tabgroup. will recurse down
- * into contained tabgroups.
+ * Finds the rightmost member of the tab group. Will recurse down
+ * into contained tab groups if necessary.
  * @private
  */
 DwtTabGroup.prototype.__getRightMostMember =
@@ -485,29 +469,25 @@ function(checkEnabled) {
 	var a = this.__members.getArray();
 	var member = null;
 	
-	/* Work backwards from the rightmost member. If the member is a tabgroup, then
-	 * recurse into it. If member is not a tabgroup, return it as it is the 
-	 * rightmost element */
+	/* Work backwards from the rightmost member. If the member is a tab group, then
+	 * recurse into it. If member is not a tab group, return it as it is the 
+	 * rightmost element. */
 	for (var i = this.__members.size() - 1; i >= 0; i--) {
 		var member = a[i]
 		if (!(member instanceof DwtTabGroup)) {
-			if (this.__checkEnabled(member, checkEnabled))
-				break;
-		} else if (((member = member.__getRightMostMember(checkEnabled)) != null)
-				&& this.__checkEnabled(member, checkEnabled)) {
-			break;
+			if (this.__checkEnabled(member, checkEnabled)) break;
+		} else {
+			member = member.__getRightMostMember(checkEnabled);
+			if (member && this.__checkEnabled(member, checkEnabled)) break;
 		}
 	}
 
-	if (member && this.__checkEnabled(member, checkEnabled))
-		return member;
-	else
-		return null;
-}
+	return (member && this.__checkEnabled(member, checkEnabled)) ? member : null;
+};
 
 /**
- *  Finds the right most non-tab group member of the tabgroup. will recurse down
- * into contained tabgroups.
+ *  Finds the rightmost member of the tab group. Will recurse down
+ * into contained tab groups if necessary.
  * @private
  */
 DwtTabGroup.prototype.__getLeftMostMember =
@@ -522,23 +502,18 @@ function(checkEnabled) {
 	for (var i = 0; i < sz; i++) {
 		var member = a[i]
 		if (!(member instanceof DwtTabGroup)) {
-			if  (this.__checkEnabled(member, checkEnabled)) 
-				break;
-		} else if (((member = member.__getLeftMostMember(checkEnabled)) != null)
-				&& this.__checkEnabled(member, checkEnabled)) {
-			break;
+			if  (this.__checkEnabled(member, checkEnabled)) break;
+		} else {
+			member = member.__getLeftMostMember(checkEnabled);
+			if (member && this.__checkEnabled(member, checkEnabled)) break;
 		}
 	}
 
-	if (member && this.__checkEnabled(member, checkEnabled))
-		return member;
-	else
-		return null;
-}
-
+	return (member && this.__checkEnabled(member, checkEnabled)) ? member : null;
+};
 
 /**
- * Notify's focus change listeners
+ * Notifies focus change listeners.
  * @private
  */
 DwtTabGroup.prototype.__notifyListeners =
@@ -552,7 +527,7 @@ function(newFocusMember) {
 		evt.newFocusMember = newFocusMember;
 		rootTg.__evtMgr.notifyListeners(DwtEvent.STATE_CHANGE, evt);
 	}
-}
+};
 
 /**
  * @private
@@ -560,8 +535,10 @@ function(newFocusMember) {
 DwtTabGroup.prototype.__getRootTabGroup =
 function() {
 	var root = this;
-	while (root.__parent != null)
+	while (root.__parent) {
 		root = root.__parent;
+	}
+	
 	return root;
 }
 
@@ -571,8 +548,9 @@ function() {
 DwtTabGroup.prototype.__dump =
 function(tg, level) {
 	var levelIndent = "";
-	for (var i = 0; i < level; i++)
+	for (var i = 0; i < level; i++) {
 		levelIndent += "&nbsp;&nbsp;&nbsp;&nbsp;";
+	}
 	
 	DBG.println(levelIndent + " TABGROUP: " + tg.__name);
 	levelIndent += "&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -588,47 +566,43 @@ function(tg, level) {
 			DBG.println(levelIndent + "   " + a[i].tagName);
 		}
 	}
-}
+};
 
 /**
- * set's the next/previous focus member.
+ * Sets the next or previous focus member.
  * @private
  */
 DwtTabGroup.prototype.__setFocusMember =
-function(next, checkEnabled, dontNotify) {
+function(next, checkEnabled, skipNotify) {
 	// If there is currently no focus member, then reset to the first member
 	// and return
-	if (this.__currFocusMember == null)
-		return this.resetFocusMember(checkEnabled, dontNotify);
+	if (!this.__currFocusMember) {
+		return this.resetFocusMember(checkEnabled, skipNotify);
+	}
 	
 	var tabGroup = this.__getTabGroupForMember(this.__currFocusMember);
 	var m = (next) ? tabGroup.__getNextMember(this.__currFocusMember, checkEnabled) 
 				   : tabGroup.__getPrevMember(this.__currFocusMember, checkEnabled);
 
-	if (m == null) {
+	if (!m) {
 		m = (next) ? this.__getLeftMostMember(checkEnabled)
 				   : this.__getRightMostMember(checkEnabled);
 
 		// Test for the case where there is only one member in the tabgroup
-		if (m == this.__currFocusMember)
+		if (m == this.__currFocusMember) {
 			return null;
+		}
 	}
 
 	this.__currFocusMember = m;
 	
-	if (!dontNotify)
+	DBG.println("kbnav", "DwtTabGroup._setFocusMember: current focus member is now " + this.__currFocusMember);
+	if (!skipNotify) {
 		this.__notifyListeners(this.__currFocusMember);
-	return this.__currFocusMember;
-}
-
-/**
- * @private
- */
-DwtTabGroup.prototype.__isFocusMember =
-function(member) {
-	var root = this.__getRootTabGroup();
+	}
 	
-}
+	return this.__currFocusMember;
+};
 
 /**
  * @private
@@ -648,6 +622,14 @@ function(member) {
 		}
 	}
 	return null;
-}
+};
 
-
+/**
+ * Throws an exception if this is not the root tab group.
+ */
+DwtTabGroup.prototype.__checkRoot =
+function() {
+	if (this.__parent) {
+		throw DwtTabGroup.NOT_ROOT_TABGROUP;
+	}
+};

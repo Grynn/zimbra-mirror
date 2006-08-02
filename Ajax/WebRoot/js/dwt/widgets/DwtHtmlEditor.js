@@ -160,6 +160,7 @@ DwtHtmlEditor._KEY2CMDS = {
 
 DwtHtmlEditor.prototype.focus =
 function() {
+	DBG.println(AjxDebug.DBG1, "DwtHtmlEditor.prototype.focus");
 	if (this._mode == DwtHtmlEditor.TEXT) {
 		document.getElementById(this._textAreaId).focus();
 	} else {
@@ -757,7 +758,7 @@ function(params) {
 	}
 
 	this._enableDesignMode(doc);
-	this.focus();
+//	this.focus();
 	this._updateState();
 	this._htmlModeInited = true;
 
@@ -775,6 +776,11 @@ function(params) {
 
 	this._registerEditorEventHandlers(document.getElementById(this._iFrameId), doc);
 }
+
+DwtHtmlEditor.prototype._focus =
+function() {
+	this.focus();
+};
 
 DwtHtmlEditor.prototype._getIframeDoc =
 function() {
