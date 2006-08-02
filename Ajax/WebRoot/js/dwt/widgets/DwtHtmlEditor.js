@@ -889,13 +889,40 @@ DwtHtmlEditor.prototype.getSelectedCells = function() {
 				var td = range.startContainer.childNodes[range.startOffset];
 				if (td.parentNode != row) {
 					row = td.parentNode;
-					(cells) && rows.push(cells);
+					cells && rows.push(cells);
 					cells = [];
 				}
 				if (td.tagName && /^td$/i.test(td.tagName))
 					cells.push(td);
 			}
 		} catch(ex) {}
+		rows.push(cells);
+	} else {
+		// it's kind of creepy to do this in IE
+		range = sel.createRange();
+		var orig_range = range.duplicate(); // save selection
+		range.collapse(true); // move to start
+		while (orig_range.compareEndPoints("EndToStart", range) >= 0) {
+			// search for a TD
+			var td = range.parentElement();
+			while (td && td.nodeName.toLowerCase() != "td")
+				td = td.parentNode;
+			if (td) {
+				if (td.parentNode != row) {
+					row = td.parentNode;
+					cells && rows.push(cells);
+					cells = [];
+				}
+				cells.push(td);
+				range.moveToElementText(td); // select full td
+				range.collapse(false);	     // move to end
+			}
+			if (range.move("character", 1) == 0) {
+				// EOF
+				break;
+			}
+		}
+		orig_range.select();
 		rows.push(cells);
 	}
 	if (rows.length == 0 || !rows[0] || rows[0].length == 0) {
