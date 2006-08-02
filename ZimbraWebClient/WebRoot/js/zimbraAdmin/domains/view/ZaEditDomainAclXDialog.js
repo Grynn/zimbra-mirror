@@ -65,12 +65,14 @@ function() {
 				},
 				{type:_CASE_, relevant:"instance.gt==ZaDomain.A_NotebookDomainACLs",
 					items:[
-						{ref:"acl", type:_ACL_, label:ZaMsg.ACL_Dom,labelLocation:_LEFT_}						
+						{ref:"acl", type:_ACL_, label:ZaMsg.ACL_Dom,labelLocation:_LEFT_,
+						visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false}}						
 					]
 				},
 				{type:_CASE_, relevant:"instance.gt==ZaDomain.A_NotebookAllACLs",
 					items:[
-						{ref:"acl", type:_ACL_, label:ZaMsg.ACL_All,labelLocation:_LEFT_}						
+						{ref:"acl", type:_ACL_, label:ZaMsg.ACL_All,labelLocation:_LEFT_,
+						visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false}}						
 					]
 				},								
 				{type:_CASE_, relevant:"instance.gt==ZaDomain.A_NotebookPublicACLs",
