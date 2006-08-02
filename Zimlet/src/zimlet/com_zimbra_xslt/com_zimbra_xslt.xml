@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_xslt" version="1.2" description="XSLT based query Zimlet">
+<zimlet name="com_zimbra_xslt" version="1.3" description="XSLT based query Zimlet">
 	<include>com_zimbra_xslt.js</include>
 
 	<include>amazon/amazon.js</include>

@@ -72,7 +72,7 @@ function(ev) {
 	this.ctxt = ctxt;
 	var ret = service.getRequest(this, q);
 	
-	var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(ret.url);
+	var url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(ret.url);
 	if (ret.req) {
 		AjxRpc.invoke(ret.req, url, {"Content-Type": "text/xml"}, new AjxCallback(this, this.callback, [ canvas, service ]), false);
 	} else {
