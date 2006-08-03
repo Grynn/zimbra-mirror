@@ -32,6 +32,8 @@ DBD_PERL_LIBS 	:= \
 
 PERL_LIBS 	:= \
 	DBI \
+	IO::Zlib \
+	Bit::Vector \
 	HTML::Tagset \
 	HTML::Parser \
 	URI \
