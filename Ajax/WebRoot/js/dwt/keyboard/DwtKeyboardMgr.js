@@ -48,16 +48,13 @@
  * @see DwtKeyMapMgr
  */
 function DwtKeyboardMgr() {
-	/**@private*/
 	this.__tabGrpStack = [];
-	/**@private*/
+	this.__defaultHandlerStack = [];
 	this.__tabGroupChangeListenerObj = new AjxListener(this, this.__tabGrpChangeListener);
-	/**@private*/
 	this.__kbEventStatus = DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
-	/**@private*/
 	this.__keyTimeout = 750;
-	/**@private*/
 	this.__currTabGroup = null;
+	this.__currDefaultHandler = null;
 };
 
 /** This constant is thrown as an exeption
@@ -195,6 +192,37 @@ function(tabGroup) {
 	var otg = this.popTabGroup();
 	this.pushTabGroup(tabGroup);
 	return otg;
+};
+
+DwtKeyboardMgr.prototype.pushDefaultHandler =
+function(handler) {
+	if (!handler) return;
+//	DBG.println("kbnav", "PUSH default handler: " + handler);
+	if (!this.__keyboardHandlingInited) {
+		throw DwtKeyboardMgr.KEYMAP_NOT_REGISTERED;
+	}
+		
+	this.__defaultHandlerStack.push(handler);
+	this.__currDefaultHandler = handler;
+};
+
+DwtKeyboardMgr.prototype.popDefaultHandler =
+function() {
+//	DBG.println("kbnav", "POP default handler");
+	if (!this.__keyboardHandlingInited) {
+		throw DwtKeyboardMgr.KEYMAP_NOT_REGISTERED;
+	}
+	
+	// we never want an empty stack
+	if (this.__defaultHandlerStack.length <= 1) {
+		return null;
+	}
+	
+	var handler = this.__defaultHandlerStack.pop();
+	this.__currDefaultHandler = this.__defaultHandlerStack[this.__defaultHandlerStack.length - 1];
+//	DBG.println("kbnav", "Default handler is now: " + this.__currDefaultHandler);
+
+	return handler;
 };
 
 /**
@@ -651,9 +679,9 @@ function(ev) {
 
 	// If the currently focused control didn't handle the event, hand it to the default key
 	// event handler
-	if ((handled == DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED) && kbMgr.__defaultKeyActionHdlr &&
+	if ((handled == DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED) && kbMgr.__currDefaultHandler &&
 		!(kbMgr.__currTabGroup && kbMgr.__currTabGroup.isDefaultHandlingBlocked())) {
-		handled = kbMgr.__dispatchKeyEvent(kbMgr.__defaultKeyActionHdlr, kev);
+		handled = kbMgr.__dispatchKeyEvent(kbMgr.__currDefaultHandler, kev);
 	}
 
 	kbMgr.__kbEventStatus = handled;
@@ -696,6 +724,9 @@ function(hdlr, ev, forceActionCode) {
 		/* It is possible that the component may not handle a valid action
 		 * particulary actions defined in the default map */
 //		DBG.println("kbnav", "DwtKeyboardMgr.__dispatchKeyEvent: handling action: " + actionCode);
+		if (!hdlr.handleKeyAction) {
+			return DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
+		}
 		return (hdlr.handleKeyAction(actionCode, ev)) ? DwtKeyboardMgr.__KEYSEQ_HANDLED
 													   : DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
 	} else {	

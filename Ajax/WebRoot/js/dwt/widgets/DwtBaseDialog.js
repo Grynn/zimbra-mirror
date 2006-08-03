@@ -173,11 +173,11 @@ function(loc) {
 	
 	this.setZIndex(thisZ);
 	this._poppedUp = true;
-	// REMOVE this.focus();
 
 	// Push our tab group
 	var kbMgr = this._shell.getKeyboardMgr();
 	kbMgr.pushTabGroup(this._tabGroup);
+	kbMgr.pushDefaultHandler(this);
 	this._tabGroup.resetFocusMember(true);
 }
 
@@ -232,9 +232,9 @@ function() {
 		// Pop our tab group
 		var kbMgr = this._shell.getKeyboardMgr();
 		kbMgr.popTabGroup(this._tabGroup);
-		
+		kbMgr.popDefaultHandler();
 	}
-}
+};
 
 /**
  * Sets the content of the dialog to a new view (DwtControl). Essentially reparents
