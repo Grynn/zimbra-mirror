@@ -4,7 +4,7 @@
 
 .SideStepTabView {
 	width: 100%;
-	align: left;	
+	text-align: left;
 	background-color: #EEEEEE;
 }
     
@@ -71,13 +71,13 @@
 }
 
 .SideStepLinkButton-activated {
-	color: ff6600;
+	color: #ff6600;
 	text-decoration: underline;
 	cursor:pointer;
 }
 
 .SideStepLinkButton {
-	color: 0033ff;
+	color: #0033ff;
 	text-decoration: none;
 	cursor:pointer;
 }

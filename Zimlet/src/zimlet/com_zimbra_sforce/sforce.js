@@ -706,7 +706,7 @@ Com_Zimbra_SForce.prototype.dlg_addNoteToAccounts = function(accounts, note) {
 							  ids[i].Subject = props.Title;
 						      ids[i].Description = props.Body;
 							  ids[i].Status = 'Completed';
-							  ids[i].ActivityDate = Com_Zimbra_SForce.toIsoDate(new Date());
+							  ids[i].ActivityDate = Com_Zimbra_SForce.toIsoDateTime(new Date());
 					      }
 					      this.createSFObject(ids, "Task", function() {
 						      this.displayStatusMessage("Saved " + ids.length + " notes.");

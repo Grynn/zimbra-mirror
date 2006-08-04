@@ -207,7 +207,7 @@ function(oldMember, newMember, checkEnabled, skipNotify, focusItem) {
  */
 DwtTabGroup.prototype.contains =
 function(member) {	
-	return (this.__getTabGroupForMember(member)) ? true : false;
+	return (this.__getTabGroupForMember(member));
 };
 
 /**
@@ -419,7 +419,7 @@ function(member, checkEnabled) {
 DwtTabGroup.prototype.__checkEnabled =
 function(member, checkEnabled) {
 	if (!checkEnabled) return true;
-	if (member.noTab) return false;
+	if (!member || member.noTab) return false;
 	if (member instanceof DwtControl) {
 		return (member.getEnabled() && member.getVisible());
 	} else {
@@ -473,7 +473,7 @@ function(checkEnabled) {
 	 * recurse into it. If member is not a tab group, return it as it is the 
 	 * rightmost element. */
 	for (var i = this.__members.size() - 1; i >= 0; i--) {
-		var member = a[i]
+		member = a[i]
 		if (!(member instanceof DwtTabGroup)) {
 			if (this.__checkEnabled(member, checkEnabled)) break;
 		} else {
@@ -500,7 +500,7 @@ function(checkEnabled) {
 	 * recurse into it. If member is not a tabgroup, return it as it is the 
 	 * rightmost element */
 	for (var i = 0; i < sz; i++) {
-		var member = a[i]
+		member = a[i]
 		if (!(member instanceof DwtTabGroup)) {
 			if  (this.__checkEnabled(member, checkEnabled)) break;
 		} else {
