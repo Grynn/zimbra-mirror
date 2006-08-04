@@ -61,6 +61,10 @@ function(entry) {
 */
 ZaDomainController.prototype._setView =
 function(entry) {
+	entry.load("name", entry.attrs[ZaDomain.A_domainName]);
+	/*var domain = new ZaDomain(this._app);
+	//domain.name = ev.item.getData(ZaOverviewPanelController._OBJ_ID);
+	domain.load("name",ev.item.getData(ZaOverviewPanelController._OBJ_ID));	*/
 	if(!this._UICreated) {
 		this._view = new ZaDomainXFormView(this._container, this._app);
    		this._ops = new Array();

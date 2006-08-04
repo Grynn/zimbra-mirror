@@ -612,8 +612,10 @@ ZaOverviewPanelController.cosTreeListener = function (ev) {
 
 ZaOverviewPanelController.domainTreeListener = function (ev) {
 	var domain = new ZaDomain(this._app);
+	domain.name = ev.item.getData(ZaOverviewPanelController._OBJ_ID);
+	domain.attrs[ZaDomain.A_domainName]=ev.item.getData(ZaOverviewPanelController._OBJ_ID);
 	//domain.name = ev.item.getData(ZaOverviewPanelController._OBJ_ID);
-	domain.load("name",ev.item.getData(ZaOverviewPanelController._OBJ_ID));	
+	//domain.load("name",ev.item.getData(ZaOverviewPanelController._OBJ_ID));	
 	if(this._app.getCurrentController()) {
 		this._app.getCurrentController().switchToNextView(this._app.getDomainController(),
 		 ZaDomainController.prototype.show,domain);
