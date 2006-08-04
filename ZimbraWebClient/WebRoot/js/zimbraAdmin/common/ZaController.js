@@ -276,6 +276,7 @@ function(ex, method, params, restartOnError, obj) {
 			this._execFrame = {obj: obj, func: method, args: params, restartOnError: restartOnError};
 			this._loginDialog.registerCallback(this.loginCallback, this);
 			this._loginDialog.setError(ZaMsg.ERROR_SESSION_EXPIRED);
+			this._loginDialog.clearPassword();
 		} else {
 			this._loginDialog.setError(null);
 			bReloginMode = false;
@@ -386,9 +387,11 @@ function (resp) {
 			ex.code == ZmCsfeException.INVALID_REQUEST) 
 		{
 			this._loginDialog.setError(ZaMsg.ERROR_AUTH_FAILED);
+			this._loginDialog.clearPassword();
 			return;
 		} else if(ex.code == ZmCsfeException.SVC_PERM_DENIED) {
 			this._loginDialog.setError(ZaMsg.ERROR_AUTH_NO_ADMIN_RIGHTS);
+			this._loginDialog.clearPassword();
 			return;
 		} else if (ex.code == ZmCsfeException.ACCT_CHANGE_PASSWORD) {
 			this._loginDialog.disablePasswordField(true);
