@@ -670,6 +670,12 @@ function() {
 	return document.getElementById(this._iFrameId);
 }
 
+DwtHtmlEditor.prototype.getInputElement =
+function() {
+	var id = (this._mode == DwtHtmlEditor.HTML) ? this._iFrameId : this._textAreaId;
+	return document.getElementById(id)
+}
+
 DwtHtmlEditor.prototype._initialize =
 function() {
 	if (this._mode == DwtHtmlEditor.HTML)
@@ -1163,12 +1169,12 @@ function(ev) {
 		retVal = mouseEv._returnValue;
 	}
 
+	var cmd = null;
 	if (DwtKeyEvent.isKeyPressEvent(ev)) {
 		var ke = this._keyEvent;
 		ke.setFromDhtmlEvent(ev);
 		if (ke.ctrlKey) {
 			var key = String.fromCharCode(ke.charCode).toLowerCase();
-			var cmd = null;
 			var value = null;
 
 			switch (key) {
@@ -1186,7 +1192,7 @@ function(ev) {
 					try {
 						this.setMode((this._mode == DwtHtmlEditor.HTML) ? DwtHtmlEditor.TEXT : DwtHtmlEditor.HTML, true);
 					} catch (e) {
-						DBG.println("EXCEPTION!: " + e);
+						DBG.println(AjxDebug.DBG1, "EXCEPTION!: " + e);
 					}
 					ke._stopPropagation = true;
 					ke._returnValue = false;
@@ -1200,16 +1206,19 @@ function(ev) {
 						cmd = DwtHtmlEditor._KEY2CMDS[key];
 					break;
 			}
-			if (cmd) {
-				DBG.println("CMD: " + cmd);
-				this._execCommand(cmd, value);
-				DBG.println("AFTER EXEC");
-				ke._stopPropagation = true;
-				ke._returnValue = false;
-				ke.setToDhtmlEvent(ev);
-				retVal = false;
-			}
 		}
+	}
+	if (cmd) {
+		DBG.println(AjxDebug.DBG1, "CMD: " + cmd);
+		this._execCommand(cmd, value);
+		DBG.println(AjxDebug.DBG1, "AFTER EXEC");
+		ke._stopPropagation = true;
+		ke._returnValue = false;
+		ke.setToDhtmlEvent(ev);
+		retVal = false;
+	} else if (ev.type == "keydown") {
+		// pass to keyboard mgr for kb nav
+		retVal = DwtKeyboardMgr.__keyDownHdlr(ev);
 	}
 
 	// TODO notification for any updates etc

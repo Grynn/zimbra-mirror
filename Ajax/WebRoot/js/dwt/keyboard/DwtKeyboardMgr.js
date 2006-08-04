@@ -369,16 +369,18 @@ function() {
 DwtKeyboardMgr.prototype.__doGrabFocus =
 function(focusObj) {
 	if (!focusObj) return;
-		
+	
+	var dwtInputCtrl = (focusObj instanceof DwtInputField || focusObj instanceof ZmHtmlEditor);
 //	DBG.println("kbnav", "DwtKeyboardMgr._doGrabFocus: " + focusObj);
-	if (focusObj instanceof DwtInputField || !(focusObj instanceof DwtControl)) {
-		// dealing with an input field - native or DwtInputField
-		if (this.__focusObj instanceof DwtControl) {
+	if (dwtInputCtrl || !(focusObj instanceof DwtControl)) {
+		// dealing with an input field
+		if (this.__focusObj instanceof DwtControl && !this.__dwtInputCtrl) {
 			// ctrl -> input
 			this.__oldFocusObj = this.__focusObj;
 		}
 		this.__focusObj = focusObj;
-		var el = (focusObj instanceof DwtInputField) ? focusObj.getInputElement() : focusObj;
+		this.__dwtInputCtrl = dwtInputCtrl;
+		var el = dwtInputCtrl ? focusObj.getInputElement() : focusObj;
 		// IE throws JS error if you try to focus a disabled or invisible input
 		if ((!AjxEnv.isIE && focusObj.focus) ||
 			(AjxEnv.isIE && focusObj.focus && !el.disabled && Dwt.getVisible(el))) {
@@ -391,10 +393,11 @@ function(focusObj) {
 		if (this.__dwtCtrlHasFocus && (this.__focusObj instanceof DwtControl)) {
 			// ctrl -> ctrl: blur old ctrl
 			DwtKeyboardMgr.__onBlurHdlr();
-			this.__dwtCtrlHasFocus = true;
+			this.__dwtCtrlHasFocus = true;	// reset
 		}
 			
 		this.__focusObj = focusObj;
+		this.__dwtInputCtrl = false;
 		
 		/* If a DwtControl already has focus, then we need to manually call
 		 * DwtKeyboardMgr.__onFocusHdlr to simulate focus since calling the focus()
@@ -536,7 +539,8 @@ function(kbMgr, obj) {
 	
 //	DBG.println("kbnav", "DwtKeyboardMgr.__syncFocus: focus obj: " + kbMgr.__focusObj + " - obj: " + obj);
 	if (!kbMgr.__dwtCtrlHasFocus) {
-		if (obj != kbMgr.__focusObj) {
+		// DwtInputField ZmHtmlEditor
+		if ((obj != kbMgr.__focusObj) && !kbMgr.__dwtInputCtrl) {
 			DBG.println(AjxDebug.DBG1, "FOCUS MISMATCH - WRONG INPUT!");
 			if (kbMgr.__currTabGroup && kbMgr.__currTabGroup.setFocusMember(obj)) {
 				kbMgr.__focusObj = obj;
