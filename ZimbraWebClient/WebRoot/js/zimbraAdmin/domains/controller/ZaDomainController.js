@@ -154,7 +154,8 @@ function () {
 		var cnt = this._currentObject[ZaDomain.A_allNotebookACLS].length;
 		for(var i = 0; i < cnt; i++) {
 			if(this._currentObject[ZaDomain.A_allNotebookACLS][i].gt == ZaDomain.A_NotebookUserACLs ||
-				this._currentObject[ZaDomain.A_allNotebookACLS][i].gt == ZaDomain.A_NotebookGroupACLs)	{
+				this._currentObject[ZaDomain.A_allNotebookACLS][i].gt == ZaDomain.A_NotebookGroupACLs ||
+				this._currentObject[ZaDomain.A_allNotebookACLS][i].gt == ZaDomain.A_NotebookDomainACLs)	{
 				var cnt2 = tmpObj[ZaDomain.A_allNotebookACLS].length;
 				var foundUser = false;
 				for(var j = 0; j < cnt2; j++) {

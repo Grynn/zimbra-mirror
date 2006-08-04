@@ -168,7 +168,22 @@ function (ev) {
 }
 
 ZaDomainXFormView.isDeleteAclEnabled = function () {
-	return (this.instance.acl_selection_cache != null && this.instance.acl_selection_cache.length>0);
+	var retVal = true;
+	if (this.instance.acl_selection_cache != null && this.instance.acl_selection_cache.length>0) {
+		var cnt = this.instance.acl_selection_cache.length;
+		for(var i=0; i<cnt;i++) {
+			if(this.instance.acl_selection_cache[i].gt==ZaDomain.A_NotebookPublicACLs || 
+				this.instance.acl_selection_cache[i].gt==ZaDomain.A_NotebookAllACLs || 
+				this.instance.acl_selection_cache[i].gt ==ZaDomain.A_NotebookGuestACLs) {		
+				retVal = false;
+				break;
+			}
+		}
+	} else {
+		retVal = false;
+	}
+	
+	return retVal;
 }
 
 ZaDomainXFormView.isEditAclEnabled = function () {
@@ -178,7 +193,7 @@ ZaDomainXFormView.addButtonListener =
 function () {
 	var formPage = this.getForm().parent;
 	if(!formPage.addAclDlg) {
-		formPage.addAclDlg = new ZaAddDomainAclXDialog(formPage._app.getAppCtxt().getShell(), formPage._app, null, "150px");
+		formPage.addAclDlg = new ZaAddDomainAclXDialog(formPage._app.getAppCtxt().getShell(), formPage._app,"550px", "150px");
 		formPage.addAclDlg.registerCallback(DwtDialog.OK_BUTTON, ZaDomainXFormView.addAcl, this.getForm(), null);						
 	}
 	var obj = {};
@@ -223,7 +238,7 @@ function () {
 	if(instance.acl_selection_cache && instance.acl_selection_cache[0]) {	
 		var formPage = this.getForm().parent;
 		if(!formPage.editAclDlg) {
-			formPage.editAclDlg = new ZaEditDomainAclXDialog(formPage._app.getAppCtxt().getShell(), formPage._app,null, "150px");
+			formPage.editAclDlg = new ZaEditDomainAclXDialog(formPage._app.getAppCtxt().getShell(), formPage._app,"550px", "150px");
 			formPage.editAclDlg.registerCallback(DwtDialog.OK_BUTTON, ZaDomainXFormView.updateAcl, this.getForm(), null);						
 		}
 		var obj = {};
@@ -271,7 +286,9 @@ function () {
 	if(instance.acl_selection_cache) {
 		var cnt = instance.acl_selection_cache.length;
 		for(var i=0; i<cnt;i++) {
-			if(instance.acl_selection_cache[i].name && (instance.acl_selection_cache[i].gt==ZaDomain.A_NotebookGroupACLs || instance.acl_selection_cache[i].gt==ZaDomain.A_NotebookUserACLs)) {
+			if(instance.acl_selection_cache[i].name && (instance.acl_selection_cache[i].gt==ZaDomain.A_NotebookGroupACLs ||
+			 instance.acl_selection_cache[i].gt==ZaDomain.A_NotebookUserACLs ||
+			 instance.acl_selection_cache[i].gt==ZaDomain.A_NotebookDomainACLs)) {
 				var cnt2 = instance[ZaDomain.A_allNotebookACLS].length-1;
 				for(var j=cnt2; j >= 0; j--) {
 					if(instance[ZaDomain.A_allNotebookACLS][j].name == instance.acl_selection_cache[i].name) {

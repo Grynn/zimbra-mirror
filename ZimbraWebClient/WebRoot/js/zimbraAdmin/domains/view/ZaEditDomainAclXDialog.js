@@ -65,8 +65,10 @@ function() {
 				},
 				{type:_CASE_, relevant:"instance.gt==ZaDomain.A_NotebookDomainACLs",
 					items:[
-						{ref:"acl", type:_ACL_, label:ZaMsg.ACL_Dom,labelLocation:_LEFT_,
-						visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false}}						
+						{ref:".", type:_ADDR_ACL_, label:null, labelLocation:_NONE_,
+							visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false},
+							forceUpdate:true,dataFetcherMethod:ZaSearch.prototype.dynSelectSearchDomains
+						}					
 					]
 				},
 				{type:_CASE_, relevant:"instance.gt==ZaDomain.A_NotebookAllACLs",

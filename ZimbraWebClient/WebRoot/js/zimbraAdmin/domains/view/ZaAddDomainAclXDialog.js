@@ -47,8 +47,9 @@ function() {
 		numCols:2,
 		items:[
 			{type:_OSELECT1_, ref:"gt", choices:[{value:ZaDomain.A_NotebookGroupACLs, label:ZaMsg.ACL_Grp},
-				{value:ZaDomain.A_NotebookUserACLs,label:ZaMsg.ACL_User}
-/*				,{value:ZaDomain.A_NotebookDomainACLs,label:ZaMsg.ACL_Dom},
+				{value:ZaDomain.A_NotebookUserACLs,label:ZaMsg.ACL_User},
+				{value:ZaDomain.A_NotebookDomainACLs,label:ZaMsg.ACL_Dom}
+  				/*,
 				{value:ZaDomain.A_NotebookAllACLs,label:ZaMsg.ACL_All},
 				{value:ZaDomain.A_NotebookPublicACLs,label:ZaMsg.ACL_Public}*/] },
 			{type:_SWITCH_, items:[
@@ -67,12 +68,15 @@ function() {
 							forceUpdate:true,dataFetcherMethod:ZaSearch.prototype.dynSelectSearchAccounts
 						}						
 					]
-				}/*,
+				},
 				{type:_CASE_, relevant:"instance.gt==ZaDomain.A_NotebookDomainACLs",
 					items:[
-						{ref:"acl", type:_ACL_, label:ZaMsg.ACL_Dom,labelLocation:_LEFT_}						
+						{ref:".", type:_ADDR_ACL_, label:null, labelLocation:_NONE_,
+							visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false},
+							forceUpdate:true,dataFetcherMethod:ZaSearch.prototype.dynSelectSearchDomains
+						}
 					]
-				},
+				}/*,
 				{type:_CASE_, relevant:"instance.gt==ZaDomain.A_NotebookAllACLs",
 					items:[
 						{ref:"acl", type:_ACL_, label:ZaMsg.ACL_All,labelLocation:_LEFT_}						

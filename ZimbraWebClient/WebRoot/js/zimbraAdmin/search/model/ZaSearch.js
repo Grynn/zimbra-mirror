@@ -209,6 +209,21 @@ ZaSearch.prototype.dynSelectSearchGroups = function (value, event, callback) {
 		this._app.getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectDataFetcher");		
 	}
 }
+
+ZaSearch.prototype.dynSelectSearchDomains = function (value, event, callback) {
+	try {
+		var params = new Object();
+		dataCallback = new AjxCallback(this, this.dynSelectDataCallback, callback);
+		params.types = [ZaSearch.DOMAINS];
+		params.callback = dataCallback;
+		params.sortBy = ZaDomain.A_domainName;
+		params.query = ZaSearch.getSearchByNameQuery(value);
+		ZaSearch.searchDirectory(params);
+	} catch (ex) {
+		this._app.getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectSearchDomains");		
+	}
+}
+
 /**
 * Sends SearchDirectoryRequest to the SOAP Servlet
 * @param query - query string
