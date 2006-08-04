@@ -31,25 +31,39 @@ Com_Zimbra_Phone.prototype.constructor = Com_Zimbra_Phone;
 
 Com_Zimbra_Phone.prototype.match =
 function(line, startIndex) {
-	this.RE.lastIndex = startIndex;
-
-	var m = this.RE.exec(line);
-	if (m) {
-		if (m[1] !== "" || m[2] !== "") {
-			var from = 0;
-			var to = m[0].length;
-			if (m[1] !== "") {
-				from++;
+	var a = this.regexps;
+	var ret = null;
+	for (var i = 0; i < a.length; ++i) {
+		var re = a[i];
+		re.lastIndex = startIndex;
+		var m = re.exec(line);
+		if (m && (ret == null || m.index < ret.index)) {
+			if (re.useParen) {
+				for (var j = 1; j < re.useParen; ++j)
+					m.index += m[j].length;
+				m[0] = m[re.useParen];
 			}
-			if (m[2] !== "") {
-				to--;
-			}
-			var m2 = {index: m.index + from};
-			m2[0] = m[0].substring(from, to);
-			m = m2;
+			ret = m;
 		}
 	}
-	return m;
+	return ret;
+};
+
+Com_Zimbra_Phone.prototype.init = function() {
+	var regexps = [];
+	var o = this.xmlObj().contentObject.matchOn[0];
+	var a = o.regex;
+	for (var i = 0; i < a.length; ++i) {
+		o = a[i];
+		var attrs = o.attrs;
+		if (!attrs)
+			attrs = "ig";
+		var re = new RegExp(o._content, attrs);
+		if (o.paren != null)
+			re.useParen = parseInt(o.paren);
+		regexps.push(re);
+	}
+	this.regexps = regexps;
 };
 
 Com_Zimbra_Phone.prototype._getHtmlContent =
@@ -117,12 +131,13 @@ function() {
 	AjxTimedAction.scheduleAction(this._timerObj, 3000);
 };
 
-// TODO: Regex assumes 10 or 11 digit US number.  Need to support intl numbers.
 Com_Zimbra_Phone.getCallToLink =
 function(phoneIn) {
 	if (!phoneIn) {
 		return "";
 	}
 	var phone = AjxStringUtil.trim(phoneIn, true);
-	return 'callto:+1' + phone.replace('+1', '');
+	if (!/^(?:\+|00)/.test(phone))
+		phone = "+1" + phone;
+	return "callto:" + phone;
 };
