@@ -109,13 +109,41 @@ CREATE TABLE mailbox (
    change_checkpoint  INTEGER UNSIGNED NOT NULL DEFAULT 0,
    tracking_sync      INTEGER UNSIGNED NOT NULL DEFAULT 0,
    tracking_imap      BOOLEAN NOT NULL DEFAULT 0,
-   config             TEXT,
    comment            VARCHAR(255),               # usually the main email address originally associated with the mailbox
 
    UNIQUE INDEX i_account_id (account_id),
    INDEX i_index_volume_id (index_volume_id),
 
    CONSTRAINT fk_mailbox_index_volume_id FOREIGN KEY (index_volume_id) REFERENCES volume(id)
+) ENGINE = InnoDB;
+
+#-----------------------------------------------------------------------
+# mailbox metadata info
+#-----------------------------------------------------------------------
+
+CREATE TABLE mailbox_metadata (
+   mailbox_id  INTEGER UNSIGNED NOT NULL,
+   section     VARCHAR(64) NOT NULL,       # e.g. "imap"
+   metadata    MEDIUMTEXT,
+
+   PRIMARY KEY (mailbox_id, section),
+
+   CONSTRAINT fk_metadata_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES mailbox(id) ON DELETE CASCADE
+) ENGINE = InnoDB;
+
+#-----------------------------------------------------------------------
+# out-of-office reply history
+#-----------------------------------------------------------------------
+
+CREATE TABLE out_of_office (
+  mailbox_id  INTEGER UNSIGNED NOT NULL,
+  sent_to     VARCHAR(255) NOT NULL,
+  sent_on     DATETIME NOT NULL,
+
+  PRIMARY KEY (mailbox_id, sent_to),
+  INDEX i_sent_on (sent_on),
+
+  CONSTRAINT fk_out_of_office_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES mailbox(id) ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
 #-----------------------------------------------------------------------
@@ -128,18 +156,6 @@ CREATE TABLE config (
   value       TEXT,
   description TEXT,
   modified    TIMESTAMP
-) ENGINE = InnoDB;
-
-# table for tracking out-of-office replies
-CREATE TABLE out_of_office (
-  mailbox_id  INTEGER UNSIGNED NOT NULL,
-  sent_to     VARCHAR(255) NOT NULL,
-  sent_on     DATETIME NOT NULL,
-
-  PRIMARY KEY (mailbox_id, sent_to),
-  INDEX i_sent_on (sent_on),
-
-  CONSTRAINT fk_out_of_office_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES mailbox(id) ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
 # table for tracking database table maintenance
