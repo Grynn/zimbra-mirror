@@ -412,12 +412,14 @@ function(args, linkNameSpecified) {
 	if (this._level == AjxDebug.NONE || this._showTiming) return;
 
 	var msgLevel = AjxDebug.DBG1;
-	if (typeof args[0] == "number" && typeof this._level == "number") {
-		msgLevel = args[0];
-		if (msgLevel > this._level) return;
-	} else {
-		// custom debug level
-		if (args[0] != this._level) return;
+	if (args.length > 1) {
+		if (typeof args[0] == "number" && typeof this._level == "number") {
+			msgLevel = args[0];
+			if (msgLevel > this._level) return;
+		} else {
+			// check for custom debug level
+			if (args[0] && args[0] != this._level) return;
+		}
 	}
 
 	// NOTE: Can't just slice the items we want because args is not a true Array
@@ -426,7 +428,9 @@ function(args, linkNameSpecified) {
 	for (var i = 0; i < len; i++) {
 		array[i] = args[i];
 	}
-	array.shift();
+	if (len > 1) {
+		array.shift();	// remove level
+	}
 
 	return array;
 };
