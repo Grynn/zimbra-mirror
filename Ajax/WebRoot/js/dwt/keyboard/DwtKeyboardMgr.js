@@ -558,13 +558,13 @@ function(kbMgr, obj) {
  */
 DwtKeyboardMgr.__keyDownHdlr =
 function(ev) {
-//	DBG.println(AjxDebug.DBG3, "kbNav: key down");
 	ev = DwtUiEvent.getEvent(ev, this);
 	var shell = DwtShell.getShell(window);
 	var kbMgr = shell.getKeyboardMgr();
 	var kev = DwtShell.keyEvent;
 	kev.setFromDhtmlEvent(ev);
 	var keyCode = kev.keyCode;
+//	DBG.println("kbnav", "kbNav: key down: " + keyCode);
 
 	// Popdown any tooltip
 	shell.getToolTip().popdown();
@@ -640,7 +640,7 @@ function(ev) {
 	if (DwtKeyMapMgr.isModifier(keyCode)
 		|| (!kbMgr.__dwtCtrlHasFocus 
 			&& kbMgr.__killKeySeqTimedActionId == -1 && !kev.ctrlKey && !kev.altKey
-			&& DwtKeyMapMgr.isUsableTextInputValue(keyCode, DwtUiEvent.getTarget(ev)))) {
+			&& DwtKeyMapMgr.isUsableTextInputValue(keyCode, kev.target))) {
 		DBG.println(AjxDebug.DBG3, "valid input field data");
 	 	return kbMgr.__processKeyEvent(ev, kev, true, DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED);
 	}

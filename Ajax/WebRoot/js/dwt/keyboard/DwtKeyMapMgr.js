@@ -289,8 +289,7 @@ function(keyCode) {
 DwtKeyMapMgr.isUsableTextInputValueUs =
 function(keyCode, element) {
 
-	var tag = element.tagName.toUpperCase();
-	if ((tag != "INPUT") && (tag != "TEXTAREA")) return false;
+	if (!DwtKeyMapMgr.__isInputElement(element)) return false;
 	
 	if (DwtKeyMapMgr._isAlphanumericUs(keyCode) || DwtKeyMapMgr._isPunctuationUs(keyCode)) return true;
 		
@@ -305,11 +304,22 @@ function(keyCode, element) {
 			return true;
 
 		case 13:
+			var tag = element.tagName.toUpperCase();
 			return (tag == "TEXTAREA");
 			
 		default:
 			return false;
 	}	
+};
+
+DwtKeyMapMgr.__isInputElement =
+function(element) {
+	// Are we in an HTML editor? If so, target for IE is <body>, for FF is <html>
+	var dm = element.ownerDocument ? element.ownerDocument.designMode : null;
+	if (dm && (dm.toLowerCase() == "on")) return true;
+
+	var tag = element.tagName.toUpperCase();
+	return (tag == "INPUT" || tag == "TEXTAREA");
 };
 
 DwtKeyMapMgr.__buildFSA =
