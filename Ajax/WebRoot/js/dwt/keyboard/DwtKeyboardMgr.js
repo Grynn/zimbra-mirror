@@ -370,7 +370,7 @@ DwtKeyboardMgr.prototype.__doGrabFocus =
 function(focusObj) {
 	if (!focusObj) return;
 	
-	var dwtInputCtrl = (focusObj instanceof DwtInputField || focusObj instanceof ZmHtmlEditor);
+	var dwtInputCtrl = (focusObj instanceof DwtInputField || focusObj instanceof DwtHtmlEditor);
 //	DBG.println("kbnav", "DwtKeyboardMgr._doGrabFocus: " + focusObj);
 	if (dwtInputCtrl || !(focusObj instanceof DwtControl)) {
 		// dealing with an input field
