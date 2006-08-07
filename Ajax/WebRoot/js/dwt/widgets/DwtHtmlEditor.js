@@ -555,7 +555,6 @@ function(mode, convert) {
 		var textArea = document.getElementById(this._textAreaId);
 		var iFrame;
 		var idoc = this._getIframeDoc();
-		var initializing = false;
 
 		// bug fix #6788 - Safari seems to lose its document so recreate
 		if (this._iFrameId != null && idoc) {
@@ -564,7 +563,6 @@ function(mode, convert) {
 				: textArea.value;
 			iFrame = document.getElementById(this._iFrameId);
 		} else {
-			initializing = true;
 			var content = (convert)
 				? AjxStringUtil.convertToHtml(textArea.value)
 				: textArea.value;
@@ -575,7 +573,7 @@ function(mode, convert) {
 		Dwt.setVisible(iFrame, true);
 
 		// XXX: mozilla hack
-		if (AjxEnv.isGeckoBased && !initializing)
+		if (AjxEnv.isGeckoBased)
 			this._enableDesignMode(this._getIframeDoc());
 	} else {
 		var textArea = this._textAreaId != null
