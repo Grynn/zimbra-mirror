@@ -287,6 +287,7 @@ function(rows, cols, width, cellSpacing, cellPadding, alignment) {
 
 	var doc = this._getIframeDoc();
 	var table = doc.createElement("table");
+	table.className = "DwtHtmlEditor-Table";
 
 	if (width != null) table.style.width = width;
 	else table.style.width = "100%";
