@@ -989,8 +989,8 @@ DwtHtmlEditor.prototype._splitCells = function(td) {
 
 DwtHtmlEditor.prototype.doTableOperation =
 function(cmd, params) {
-	var table = this.getNearestElement("table");
-	var td = this.getNearestElement("td");
+	var table = params.table || this.getNearestElement("table");
+	var td = params.td || this.getNearestElement("td");
 	var cellIndex, rowIndex, tr;
 	if (td) {
 		cellIndex = td.cellIndex;
