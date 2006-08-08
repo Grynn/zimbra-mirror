@@ -95,7 +95,7 @@ ${zimbra_home}/bin/ldap stop
 #
 zmsetvars -f ldap_root_password zimbra_ldap_password
 root_sha=`${zimbra_home}/openldap/sbin/slappasswd -s ${ldap_root_password}`
-zimbra_sha=`${zimbra_home}/openldap/sbin/slappasswd -s ${zimbra_ldap_password}`
+#zimbra_sha=`${zimbra_home}/openldap/sbin/slappasswd -s ${zimbra_ldap_password}`
 config_dir="${zimbra_home}/openldap/etc/openldap"
 
 #
@@ -123,9 +123,9 @@ mv -f /tmp/zimbra.ldif.$$ ${zimbra_home}/openldap/etc/openldap/zimbra.ldif
 #
 # Rerun zimbra.ldif
 #
-echo "Running ldapmodify"
-ldapmodify -c -w ${ldap_root_password} -D ${zimbra_ldap_userdn} \
-	-x -f /opt/zimbra/openldap/etc/openldap/zimbra.ldif > /dev/null 2>&1
+echo "Running ldappasswd"
+ldappasswd -c -w ${ldap_root_password} -D ${zimbra_ldap_userdn} \
+	-x -s ${zimbra_ldap_password} ${zimbra_ldap_userdn} > /dev/null 2>&1
 echo "Password change complete."
 echo ""
 echo "You may need to restart tomcat, if it is running."
