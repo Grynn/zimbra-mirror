@@ -233,6 +233,14 @@ function(date, skipNotify, forceRollOver, dblClick) {
 		var type = dblClick ? DwtCalendar.DATE_DBL_CLICKED : DwtCalendar.DATE_SELECTED;
 		this._notifyListeners(DwtEvent.SELECTION, type, this._date);
 	}
+	
+	// Firefox overflow hack. Need to resize the parent menu when the month changes.
+	if (AjxEnv.isNav) {
+		if ((this.parent instanceof DwtMenu) && oldDate && (newDate.getMonth() != oldDate.getMonth())) {
+			var size = this.getSize();
+			this.parent.setSize(size.x, size.y);
+		}
+	}
 		
 	return true;
 }
