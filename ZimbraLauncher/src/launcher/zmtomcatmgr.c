@@ -121,6 +121,7 @@ static const char *AllowedJVMArgs[] = {
     "-XX:+AggressiveHeap",
     "-XX:+AllowUserSignalHandlers",
     "-XX:+Print",
+    "-XX:+HeapDumpOnOutOfMemoryError",
     "-XX:+TraceClassLoading",
     "-XX:+TraceClassUnloading",
     "-XX:+DisableExplicitGC",
