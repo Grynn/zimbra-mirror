@@ -83,7 +83,8 @@ function(evt) {
 		//abort outstanding status requests
 		if(this.getForm().parent.asynCommand)
 			this.getForm().parent.asynCommand.cancel();
-		var callback = new AjxCallback(this, this.getReindexStatusCallBack);			
+			
+		var callback = new AjxCallback(this.getForm().parent, ReindexMailboxXDialog.prototype.getReindexStatusCallBack);			
 		ZaAccount.abortReindexMailbox(instance.mbxId,callback);
 		//ZaAccount.parseReindexResponse(ZaAccount.abortReindexMailbox(instance.mbxId),instance);
 
@@ -105,7 +106,7 @@ ReindexMailboxXDialog.startReindexMailbox =
 function(evt) {
 	try {
 		var instance = this.getInstance();
-		var callback = new AjxCallback(this, this.getReindexStatusCallBack);		
+		var callback = new AjxCallback(this.getForm().parent, ReindexMailboxXDialog.prototype.getReindexStatusCallBack);		
 		ZaAccount.startReindexMailbox(instance.mbxId,callback);
 		//ZaAccount.parseReindexResponse(ZaAccount.startReindexMailbox(instance.mbxId),instance);
 		this.getForm().refresh();
