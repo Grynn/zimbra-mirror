@@ -384,8 +384,10 @@ function(focusObj) {
 		// IE throws JS error if you try to focus a disabled or invisible input
 		if ((!AjxEnv.isIE && focusObj.focus) ||
 			(AjxEnv.isIE && focusObj.focus && !el.disabled && Dwt.getVisible(el))) {
-
-			focusObj.focus();
+			// ignore exception - IE sometimes throws error, don't know why
+			try {
+				focusObj.focus();
+			} catch(ex) {}
 		}
 	} else {
 		/* If the current focus of obj and the one grabbing focus are both DwtControls
