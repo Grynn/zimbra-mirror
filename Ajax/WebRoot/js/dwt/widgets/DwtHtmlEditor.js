@@ -1026,11 +1026,19 @@ function(cmd, params) {
 			break;
 
 		    case "deleteRow":
-			DwtHtmlEditor.table_deleteRow(td);
+			var td = DwtHtmlEditor.table_deleteRow(td);
+			if (td) {
+				this.selectNodeContents(td, true);
+				this.focus();
+			}
 			break;
 
 		    case "deleteColumn":
-			DwtHtmlEditor.table_deleteCol(td);
+			var td = DwtHtmlEditor.table_deleteCol(td);
+			if (td) {
+				this.selectNodeContents(td, true);
+				this.focus();
+			}
 			break;
 
 		    case "mergeCells":
@@ -1561,6 +1569,15 @@ DwtHtmlEditor.table_deleteCol = function(td) {
 	var table = DwtHtmlEditor.table_analyzeCells(td);
 	var rows = table.rows;
 	var index = td.ZmIndex;
+	var tr = td.parentNode;
+	var nextcell;
+	try {
+		nextcell = tr.cells[td.cellIndex + 1];
+		if (!nextcell)
+			nextcell = tr.cells[td.cellIndex - 1];
+	} catch(ex) {
+		nextcell = null;
+	}
 	for (var i = 0; i < rows.length; ++i) {
 		var tr = rows[i];
 		var info = DwtHtmlEditor.table_getCellAt(tr, index);
@@ -1577,6 +1594,7 @@ DwtHtmlEditor.table_deleteCol = function(td) {
 	}
 	if (table.rows.length == 0)
 		table.parentNode.removeChild(table);
+	return nextcell;
 };
 
 DwtHtmlEditor.table_deleteRow = function(td) {
@@ -1584,11 +1602,12 @@ DwtHtmlEditor.table_deleteRow = function(td) {
 	var table = DwtHtmlEditor.table_analyzeCells(td);
 	td = table.rows[0].cells[table.rows[0].cells.length-1];
 	var max = td.ZmIndex + td.colSpan;
+	var nextrow;
 	for (var i = max; --i >= 0;) {
 		var info = DwtHtmlEditor.table_getCellAt(tr, i);
 		if (info.td) {
 			if (info.rs) {
-				var nextrow = table.rows[tr.rowIndex+1];
+				nextrow = table.rows[tr.rowIndex+1];
 				var tmp = DwtHtmlEditor.table_getCellAt(nextrow, i);
 				td = null;
 				if (tmp.last) {
@@ -1615,7 +1634,16 @@ DwtHtmlEditor.table_deleteRow = function(td) {
 			}
 		}
 	}
+	try {
+		nextrow = table.rows[tr.rowIndex + 1];
+		if (!nextrow)
+			nextrow = table.rows[tr.rowIndex - 1];
+	} catch(ex) {
+		nextrow = null;
+	}
 	tr.parentNode.removeChild(tr);
 	if (table.rows.length == 0)
 		table.parentNode.removeChild(table);
+	if (nextrow)
+		return nextrow.cells[0];
 };
