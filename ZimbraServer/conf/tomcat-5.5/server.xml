@@ -14,6 +14,7 @@
     <Connector port="7070"
         acceptCount="1024"
         enableLookups="false" redirectPort="7443"
+        URIEncoding="UTF-8"
         maxThreads="10" minSpareThreads="10" maxSpareThreads="10"/>
     <!-- user services connector, SSL -->
     <Connector port="7443"
@@ -22,6 +23,7 @@
         maxThreads="10" minSpareThreads="10" maxSpareThreads="10"
         scheme="https" secure="true"
         clientAuth="false" sslProtocol="TLS"
+        URIEncoding="UTF-8"
         keystoreFile="conf/keystore" keystorePass="zimbra"/>
     <!-- admin services connector; requires SSL -->
     <Connector port="7071"
@@ -30,6 +32,7 @@
         maxThreads="10" minSpareThreads="10" maxSpareThreads="10"
         scheme="https" secure="true"
         clientAuth="false" sslProtocol="TLS"
+        URIEncoding="UTF-8"
         keystoreFile="conf/keystore" keystorePass="zimbra"/>
 
     <Engine name="Catalina" defaultHost="localhost">
