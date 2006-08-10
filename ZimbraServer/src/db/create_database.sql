@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    size          INTEGER UNSIGNED NOT NULL,
    volume_id     TINYINT UNSIGNED,
    blob_digest   VARCHAR(28) BINARY,         # reference to blob, meaningful for messages only (type == 5)
-   unread        BOOLEAN NULL,               # stored separately from the other flags so we can index it
+   unread        INTEGER UNSIGNED,           # stored separately from the other flags so we can index it
    flags         INTEGER NOT NULL DEFAULT 0,
    tags          BIGINT NOT NULL DEFAULT 0,
    sender        VARCHAR(128),

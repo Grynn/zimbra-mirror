@@ -105,6 +105,7 @@ CREATE TABLE mailbox (
    account_id         CHAR(36) NOT NULL,          # e.g. "d94e42c4-1636-11d9-b904-4dd689d02402"
    index_volume_id    TINYINT UNSIGNED NOT NULL,
    item_id_checkpoint INTEGER UNSIGNED NOT NULL DEFAULT 0,
+   contact_count      INTEGER UNSIGNED DEFAULT 0,
    size_checkpoint    BIGINT UNSIGNED NOT NULL DEFAULT 0,
    change_checkpoint  INTEGER UNSIGNED NOT NULL DEFAULT 0,
    tracking_sync      INTEGER UNSIGNED NOT NULL DEFAULT 0,
