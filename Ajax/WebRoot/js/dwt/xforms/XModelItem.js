@@ -524,27 +524,35 @@ XModelItem.prototype.validateDate = function(value) {
 		var date = new Date();
 
 		if (value.indexOf("/") > -1) {
-			value = value.split("/");
-			if (value.length == 3) {
-				var month = parseInt(value[0]);
-				var day = parseInt(value[1]);
-				var year = parseInt(value[2]);							
-				
-				if (!isNaN(month) && !isNaN(day) && !isNaN(year)) {
-					month -= 1;
-					date.setFullYear(year, month, day);
-					date.setHours(0,0,0,0);
-					return date; 
-										
-					/*
-					month -= 1;
-					if (year < 1900) {
-						if (year < 50) year += 2000;
-						year += 1900;
+			var dateStrs = value.split("/");
+			if (dateStrs.length == 3){
+				var month = dateStrs[0];
+				var day = dateStrs[1];
+				var year = dateStrs[2];							
+					
+				if (month.length <= 2 && day.length <= 2 && year.length == 4) {
+					//remove the preceeding 0 of the date value,
+					//otherwise parseInt will evaluate it as 0
+					month = parseInt(XModel.removePreceedingZero(month));
+					day = parseInt(XModel.removePreceedingZero(day));
+					year = parseInt(XModel.removePreceedingZero(year));							
+					
+					if (!isNaN(month) && !isNaN(day) && !isNaN(year)) {
+						month -= 1;
+						date.setFullYear(year, month, day);
+						date.setHours(0,0,0,0);
+						return date; 
+											
+						/*
+						month -= 1;
+						if (year < 1900) {
+							if (year < 50) year += 2000;
+							year += 1900;
+						}
+						date.setFullYear(year, month, day);
+						date.setHours(0,0,0,0);
+						return date; */
 					}
-					date.setFullYear(year, month, day);
-					date.setHours(0,0,0,0);
-					return date; */
 				}
 			}
 		} else {
@@ -564,6 +572,18 @@ XModelItem.prototype.validateDate = function(value) {
 	}
 	throw this.getModel().getErrorMessage("invalidDateString", value);
 	return value;
+}
+
+//remove the preceeding zero of a string, it is useful when evaluate a date item
+XModel.removePreceedingZero =
+function (dStr){
+	var pattern = /^[0]*(.*)$/ ;
+	var result = dStr.match(pattern) ;
+	if (result != null) {
+		return result[1];
+	}else{
+		return dStr ;
+	}
 }
 
 
