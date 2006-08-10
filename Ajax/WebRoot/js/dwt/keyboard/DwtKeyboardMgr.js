@@ -384,7 +384,7 @@ function(focusObj) {
 		// IE throws JS error if you try to focus a disabled or invisible input
 		if ((!AjxEnv.isIE && focusObj.focus) ||
 			(AjxEnv.isIE && focusObj.focus && !el.disabled && Dwt.getVisible(el))) {
-			// ignore exception - IE sometimes throws error, don't know why
+			// ignore exception - IE sometimes still throws error, don't know why
 			try {
 				focusObj.focus();
 			} catch(ex) {}
@@ -403,7 +403,7 @@ function(focusObj) {
 		
 		/* If a DwtControl already has focus, then we need to manually call
 		 * DwtKeyboardMgr.__onFocusHdlr to simulate focus since calling the focus()
-		 * method on the input field does nothing*/
+		 * method on the input field does nothing. */
 		if (this.__dwtCtrlHasFocus) {
 			// ctrl -> ctrl: tell newly focused ctrl it got focus
 			DwtKeyboardMgr.__onFocusHdlr();
@@ -523,7 +523,7 @@ function(ev) {
  * are dealing with an input element. If this element is not the current focus object
  * then try and set it to the current focus object (case 2). If the object is not in the
  * tab group hierarchy return false indicating that we should leave all events
- * related to it alone (case 3)
+ * related to it alone (case 3).
  * 
  * @private
  */
@@ -541,9 +541,9 @@ function(kbMgr, obj) {
 	
 //	DBG.println("kbnav", "DwtKeyboardMgr.__syncFocus: focus obj: " + kbMgr.__focusObj + " - obj: " + obj);
 	if (!kbMgr.__dwtCtrlHasFocus) {
-		// DwtInputField ZmHtmlEditor
+		// DwtInputField DwtHtmlEditor
 		if ((obj != kbMgr.__focusObj) && !kbMgr.__dwtInputCtrl) {
-			DBG.println(AjxDebug.DBG1, "FOCUS MISMATCH - WRONG INPUT!");
+			DBG.println(AjxDebug.DBG1, "Focus out of sync, resetting");
 			if (kbMgr.__currTabGroup && kbMgr.__currTabGroup.setFocusMember(obj)) {
 				kbMgr.__focusObj = obj;
 				kbMgr.__oldFocusObj = null;
@@ -601,6 +601,7 @@ function(ev) {
 			 	// a focus member
 				if (focusInTGMember || kbMgr.__currTabGroup.getFocusMember()) {
 				 	if (!kev.shiftKey) {
+//				 		kbMgr.__currTabGroup.dump("kbnav");
 				 		kbMgr.__currTabGroup.getNextFocusMember(true);
 				 	} else {
 				 		kbMgr.__currTabGroup.getPrevFocusMember(true);
@@ -631,19 +632,12 @@ function(ev) {
 		kbMgr._kbFocusField.value = "";
 	}
 	 
-	/* Filter out the following keys: Alt, Shift, Ctrl. Also filter out
-	 * alphanumeric keys if the target of the key event is an input field
-	 * or a text area and there is no pending sequence in play and the key
-	 * is alphanumeric or a punctuation key */
-	 
-	/* TODO not all inputs accept the same values (e.g. text vs radio etc) so 
-	 * we need to differentiate. Should change isUsableTextInputValue(keyCode) to 
-	 * isUsableInputValue(keyCode, inputType) where inputType is the type of input*/ 
+	/* Filter out the following keys: Alt, Shift, Ctrl. Also, if we're in
+	 * an input field, filter out legitimate input. */
 	if (DwtKeyMapMgr.isModifier(keyCode)
 		|| (!kbMgr.__dwtCtrlHasFocus 
 			&& kbMgr.__killKeySeqTimedActionId == -1 && !kev.ctrlKey && !kev.altKey
 			&& DwtKeyMapMgr.isUsableTextInputValue(keyCode, kev.target))) {
-		DBG.println(AjxDebug.DBG3, "valid input field data");
 	 	return kbMgr.__processKeyEvent(ev, kev, true, DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED);
 	}
 	 

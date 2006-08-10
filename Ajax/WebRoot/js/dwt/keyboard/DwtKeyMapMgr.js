@@ -305,7 +305,7 @@ function(keyCode, element) {
 
 		case 13:
 			var tag = element.tagName.toUpperCase();
-			return (tag == "TEXTAREA");
+			return (tag != "INPUT");
 			
 		default:
 			return false;

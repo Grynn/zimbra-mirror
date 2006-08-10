@@ -163,7 +163,7 @@ function(member, checkEnabled, skipNotify) {
  * @type DwtControl|DwtTabGroup|HTMLElement
  */
 DwtTabGroup.prototype.replaceMember =
-function(oldMember, newMember, checkEnabled, skipNotify, focusItem) {
+function(oldMember, newMember, checkEnabled, skipNotify, focusItem, noFocus) {
 	var tg = this.__getTabGroupForMember(oldMember);
 	if (!tg) return null;
 
@@ -186,7 +186,7 @@ function(oldMember, newMember, checkEnabled, skipNotify, focusItem) {
 			}
 		}
 	}
-	if (newFocusMember) {
+	if (newFocusMember && !noFocus) {
 		root.__currFocusMember = newFocusMember;
 //		DBG.println("kbnav", "DwtTabGroup.replaceMember: current focus member is now " + root.__currFocusMember);
 		if (!skipNotify) {
@@ -377,8 +377,8 @@ function(block) {
  * Recrusively dumps the contents of the tab group
  */
 DwtTabGroup.prototype.dump =
-function() {
-	this.__dump(this, 0);
+function(debugLevel) {
+	this.__dump(this, debugLevel);
 };
 
 /**
@@ -546,24 +546,26 @@ function() {
  * @private
  */
 DwtTabGroup.prototype.__dump =
-function(tg, level) {
+function(tg, debugLevel, level) {
+	level = level || 0;
 	var levelIndent = "";
 	for (var i = 0; i < level; i++) {
 		levelIndent += "&nbsp;&nbsp;&nbsp;&nbsp;";
 	}
 	
-	DBG.println(levelIndent + " TABGROUP: " + tg.__name);
+	debugLevel = debugLevel || AjxDebug.DBG1;
+	DBG.println(debugLevel, levelIndent + " TABGROUP: " + tg.__name);
 	levelIndent += "&nbsp;&nbsp;&nbsp;&nbsp;";
 	
 	var sz = tg.__members.size();
 	var a = tg.__members.getArray();
 	for (var i = 0; i < sz; i++) {
 		if (a[i] instanceof DwtTabGroup) {
-			tg.__dump(a[i], level+1);
+			tg.__dump(a[i], debugLevel, level + 1);
 		} else if (a[i] instanceof DwtControl) {
-			DBG.println(levelIndent + "   " + a[i].toString());
+			DBG.println(debugLevel, levelIndent + "   " + a[i].toString());
 		} else {
-			DBG.println(levelIndent + "   " + a[i].tagName);
+			DBG.println(debugLevel, levelIndent + "   " + a[i].tagName);
 		}
 	}
 };
