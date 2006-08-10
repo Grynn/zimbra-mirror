@@ -12,11 +12,11 @@
 
 header DSPAM_SPAM X-DSPAM-Result =~ /^Spam$/
 describe DSPAM_SPAM DSPAM claims it is spam
-score DSPAM_SPAM 0.5
+score DSPAM_SPAM 1.5
 
 header DSPAM_HAM X-DSPAM-Result =~ /^Innocent$/
 describe DSPAM_HAM DSPAM claims it is ham
-score DSPAM_HAM -0.1
+score DSPAM_HAM -0.5
 
 %%uncomment VAR:zimbraMtaMyNetworks%%trusted_networks %%zimbraMtaMyNetworks%%
 
