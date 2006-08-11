@@ -3,7 +3,7 @@
 	<resource>blank_pixel.gif</resource>
 	<handlerObject>Com_Zimbra_Url</handlerObject>
 
-	<serverExtension hasKeyword="url" extensionClass="com.zimbra.cs.zimlet.handler.URLHandler"/>
+	<serverExtension hasKeyword="url" extensionClass="com.zimbra.cs.zimlet.handler.RegexHandler"/>
 	<contentObject type="url">
 		<matchOn>
 			<regex attrs="ig">((telnet:)|((https?|ftp|gopher|news|file):\/\/)|(www\.[\w\.\_\-]+))[^\s\xA0\(\)\&lt;\>\[\]\{\}\'\"]*</regex>

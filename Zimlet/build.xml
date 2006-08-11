@@ -21,8 +21,9 @@
 	<property name="dist.zimlet.dir" location="${dist.dir}/zimlets" />
 	<property name="dist.zimlet-extra.dir" location="${dist.dir}/zimlets-extra" />
 
-	<property name="server.jars.dir" location="../ZimbraServer/jars" />
-	<property name="zimbrastore.jar" location="../ZimbraServer/build/dist/lib/jars/zimbrastore.jar" />
+	<property name="server.dir" location="../ZimbraServer" />
+	<property name="server.jars.dir" location="${server.dir}/jars" />
+	<property name="zimbrastore.jar" location="${server.dir}/build/zimbrastore.jar" />
 	<property name="jars.dir" location="jars" />
 	<property name="config.dir" location="conf" />
 	<property name="src.dir" location="src" />
@@ -30,14 +31,10 @@
 	<property name="src.java.dir" location="${src.dir}/java" />
 	<property name="src.jsp.dir" location="${src.dir}/jsp" />
 
-	<property name="deploy.host" value="localhost" />
-	<property name="deploy.port" value="7070" />
-	<property name="deploy.url" value="http://${deploy.host}:${deploy.port}/manager/" />
-
 	<property name="generated.dir" location="${build.dir}/generated" />
 	<property name="generated.java.dir" location="${generated.dir}/src/java" />
 
-	<property name="zimlets" value=""/>
+	<property name="zimlets" value="com_zimbra_phone,com_zimbra_url,com_zimbra_email,com_zimbra_date"/>
     <property name="zimlets-extra" value="com_zimbra_tracking,com_zimbra_xslt,com_zimbra_ymaps,com_zimbra_rss,com_zimbra_evite,com_zimbra_po,com_zimbra_bugz,com_flightexplorer_fasttrack,com_zimbra_travelagent,com_zimbra_arcade,com_zimbra_collector,com_zimbra_jspsample,com_zimbra_photo,com_zimbra_ytraffic,com_zimbra_gtranslator,com_zimbra_sforce,com_zimbra_sms,com_zimbra_amzn,com_zimbra_wikipedia,com_zimbra_asterisk,com_zimbra_asteriskmwi"/>
 
 	<condition property="is-windows">
@@ -113,9 +110,17 @@
 	<target name="reload-zimlets" depends="deploy-zimlets,restart-tomcat"/>
 	<target name="reload-zimlets-extra" depends="deploy-zimlets-extra,restart-tomcat"/>
 
-	<target name="package-zimlets" depends="build-init">
+	<target name="package-zimlets" depends="build-init,compile">
 		<foreach list="${zimlets}" target="package-zimlet" param="zimlet"/>
+		<zip destfile="${dist.zimlet.dir}/com_zimbra_phone.zip" update="true">
+			<fileset dir="${build.classes.dir}" includes="**/NANPHandler.class"/>
+		</zip>
+	</target>
+	<target name="package-zimlets-extra" depends="build-init,compile">
 		<foreach list="${zimlets-extra}" target="package-zimlet-extra" param="zimlet"/>
+		<zip destfile="${dist.zimlet.dir}/com_zimbra_tracking.zip" update="true">
+			<fileset dir="${build.classes.dir}" includes="**/TrackingHandler.class"/>
+		</zip>
 	</target>
 
 	<target name="package-zimlet">
@@ -145,7 +150,7 @@
 		</foreach>
 	</target>
 
-	<target name="deploy-zimlets-extra" depends="deploy-zimlets">
+	<target name="deploy-zimlets-extra" depends="package-zimlets-extra,deploy-zimlets">
 		<foreach list="${zimlets-extra}" target="install-zimlet" param="zimlet">
 			<param name="action" value="deploy"/>
 			<param name="dir" value="${dist.zimlet-extra.dir}"/>
@@ -167,40 +172,7 @@
 		</java>
 	</target>
 
-	<!-- Tomcat service control -->
-	<target name="restart-tomcat" depends="stop-tomcat,start-tomcat" />
-	<target name="stop-tomcat" depends="stop-tomcat-windows,stop-tomcat-unix" />
-
-	<target name="stop-tomcat-windows" if="is-windows">
-		<exec executable="net">
-			<arg value="stop" />
-			<arg value="apache tomcat" />
-		</exec>
-		<!-- Wait for Tomcat to really go away. -->
-		<echo>Waiting for tomcat to stop</echo>
-		<waitfor checkevery="1" checkeveryunit="second" maxwait="10" maxwaitunit="second">
-			<not><http url="http://${deploy.host}:${deploy.port}/" /></not>
-		</waitfor>
-	</target>
-
-	<target name="stop-tomcat-unix" if="is-unix">
-		<exec executable="${zimbra.home.dir}/bin/tomcat">
-			<arg value="stop" />
-		</exec>
-	</target>
-
-	<target name="start-tomcat" depends="start-tomcat-windows,start-tomcat-unix" />
-
-	<target name="start-tomcat-windows" if="is-windows">
-		<exec executable="net">
-			<arg value="start" />
-			<arg value="apache tomcat" />
-		</exec>
-	</target>
-
-	<target name="start-tomcat-unix" if="is-unix">
-		<exec executable="${zimbra.home.dir}/bin/tomcat">
-			<arg value="start" />
-		</exec>
+	<target name="restart-tomcat">
+		<ant dir="${server.dir}" target="restart-tomcat"/>
 	</target>
 </project>
