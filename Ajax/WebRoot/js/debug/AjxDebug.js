@@ -76,9 +76,10 @@ function() {
 * @param level	 	debug level for the current debugger
 */
 AjxDebug.prototype.setDebugLevel =
-function(level) {
+function(level, dontEnable) {
 	this._level = level;
-	this._enable(level != AjxDebug.NONE);
+	if (!dontEnable)
+		this._enable(level != AjxDebug.NONE);
 };
 
 /**
