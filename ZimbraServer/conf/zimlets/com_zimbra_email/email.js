@@ -102,14 +102,15 @@ function(obj, span, context) {
 };
 
 Com_Zimbra_Email.prototype.clicked =
-function(spanElement, contentObjText, matchContext, canvas) {
-	// TODO need a way to get ev so we can use ev.shiftKey below
-	var inNewWindow = this._appCtxt.get(ZmSetting.NEW_WINDOW_COMPOSE);//|| ev.shiftKey;
+function(spanElement, contentObjText, matchContext, ev) {
+	var inNewWindow = (!this._appCtxt.get(ZmSetting.NEW_WINDOW_COMPOSE) && ev && ev.shiftKey) ||
+					  (this._appCtxt.get(ZmSetting.NEW_WINDOW_COMPOSE) && ev && !ev.shiftKey);
 	var cc = this._appCtxt.getApp(ZmZimbraMail.MAIL_APP).getComposeController();
 	cc.doAction(ZmOperation.NEW_MESSAGE, inNewWindow, null, contentObjText + ZmEmailAddress.SEPARATOR);
 };
 
-Com_Zimbra_Email.prototype.menuItemSelected = function(itemId) {
+Com_Zimbra_Email.prototype.menuItemSelected =
+function(itemId, item, ev) {
 	switch (itemId) {
 		case "SEARCH":
 			this._searchListener();
@@ -118,7 +119,7 @@ Com_Zimbra_Email.prototype.menuItemSelected = function(itemId) {
 			this._browseListener();
 			break;
 		case "NEWEMAIL":
-			this._composeListener();
+			this._composeListener(ev);
 			break;
 		case "NEWCONTACT":
 			this._contactListener();
@@ -165,9 +166,9 @@ function() {
 };
 
 Com_Zimbra_Email.prototype._composeListener =
-function() {
-	// TODO need a way to get ev so we can use ev.shiftKey below
-	var inNewWindow = this._appCtxt.get(ZmSetting.NEW_WINDOW_COMPOSE);//|| ev.shiftKey;
+function(ev) {
+	var inNewWindow = (!this._appCtxt.get(ZmSetting.NEW_WINDOW_COMPOSE) && ev && ev.shiftKey) ||
+					  (this._appCtxt.get(ZmSetting.NEW_WINDOW_COMPOSE) && ev && !ev.shiftKey);
 	var cc = this._appCtxt.getApp(ZmZimbraMail.MAIL_APP).getComposeController();
 	cc.doAction(ZmOperation.NEW_MESSAGE, inNewWindow, null, this._getAddress(this._actionObject) + ZmEmailAddress.SEPARATOR);
 };
