@@ -100,7 +100,7 @@ createKeyStore() {
 
 	rm -f ${TCONF}/keystore
 
-	keytool -genkey -dname "CN=$hostname, OU=Zimbra, O=Zimbra, L=NA, S=NA, C=US" \
+	keytool -validity 730 -genkey -dname "CN=$hostname, OU=Zimbra, O=Zimbra, L=NA, S=NA, C=US" \
 		-alias tomcat -keyalg RSA -keysize 1024 -keystore ${TCONF}/keystore \
 		-storetype JKS -storepass zimbra -keypass zimbra
 
