@@ -125,15 +125,21 @@ function(params) {
 	var hdr = soapDoc.createHeaderElement();
 	var context = soapDoc.set("context", null, hdr, "urn:zimbra");
 
-	if (params.noSession)
+	var ua = soapDoc.set("userAgent", null, context);
+	ua.setAttribute("name", navigator.userAgent);
+	ua.setAttribute("version", AjxEnv.browserVersion);
+
+	if (params.noSession) {
 		soapDoc.set("nosession", null, context);
+	}
 	var sessionId = ZmCsfeCommand.getSessionId();
 	if (sessionId) {
 		var si = soapDoc.set("sessionId", null, context);
 		si.setAttribute("id", sessionId);
 	}
-	if (params.targetServer)
+	if (params.targetServer) {
 		soapDoc.set("targetServer", params.targetServer, context);
+	}
 	if (params.highestNotifySeen) {
 	  	var notify = soapDoc.set("notify", null, context);
 	  	notify.setAttribute("seq", params.highestNotifySeen);
@@ -144,13 +150,12 @@ function(params) {
 		ct.setAttribute("type", "new");
 	}
 	
-	if(params.accountId) {
-		var acc=soapDoc.set("account", params.accountId, context);
+	if (params.accountId) {
+		var acc = soapDoc.set("account", params.accountId, context);
 		acc.setAttribute("by", "id");
-	} else if(params.accountName) {
-		var acc=soapDoc.set("account", params.accountName, context);
+	} else if (params.accountName) {
+		var acc = soapDoc.set("account", params.accountName, context);
 		acc.setAttribute("by", "name");
-		
 	}
 	
 	// Get auth token from cookie if required
