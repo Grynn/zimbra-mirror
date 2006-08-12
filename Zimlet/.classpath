@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry output="build/classes" kind="src" path="java"/>
+	<classpathentry kind="src" path="src/java"/>
 	<classpathentry sourcepath="JRE_SRC" kind="var" path="JRE_LIB"/>
-	<classpathentry kind="con" path="/Users/jylee/ws/main/Zimlet/build/classes"/>
-	<classpathentry kind="lib" path="/Users/jylee/ws/main/Zimlet/jars/ant-contrib-1.0b1.jar"/>
-	<classpathentry kind="lib" path="/Users/jylee/ws/main/Zimlet/jars/j2ee.jar"/>
-	<classpathentry kind="lib" path="/Users/jylee/ws/main/ZimbraServer/build/dist/lib/jars/zimbrastore.jar"/>
+	<classpathentry kind="lib" path="/Zimlet/jars/ant-contrib-1.0b1.jar"/>
+	<classpathentry kind="lib" path="/Zimlet/jars/j2ee.jar"/>
+	<classpathentry kind="lib" path="/ZimbraServer/build/dist/lib/jars/zimbrastore.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraServer"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
