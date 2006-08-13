@@ -23,6 +23,15 @@ zimbraMimeFileExtension: html
 zimbraMimeFileExtension: htm
 description: HTML Document
 
+dn: cn=text/enriched,cn=mime,cn=config,cn=zimbra
+zimbraMimeType: text/enriched
+cn: text/enriched
+objectclass: zimbraMimeEntry
+zimbraMimeIndexingEnabled: TRUE
+zimbraMimeHandlerClass: TextEnrichedHandler
+zimbraMimeFileExtension: txe
+description: Enriched Text Document
+
 dn: cn=text/plain,cn=mime,cn=config,cn=zimbra
 zimbraMimeType: text/plain
 cn: text/plain
