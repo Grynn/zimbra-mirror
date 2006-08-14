@@ -303,7 +303,8 @@ function(rows, cols, width, cellSpacing, cellPadding, alignment) {
 	if (cellPadding != null) table.cellPadding = cellPadding;
 	else table.cellPadding = 0;
 
-	table.style.border = "1px solid #000";
+	if (!AjxEnv.isIE)
+		table.style.border = "1px solid #000";
 	table.style.borderCollapse = "collapse";
 
 	var tdWidth;
