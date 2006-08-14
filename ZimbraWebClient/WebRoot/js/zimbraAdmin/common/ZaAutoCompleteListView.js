@@ -164,6 +164,11 @@ function(ev) {
 	var value = element.value;
 	DBG.println(AjxDebug.DBG3, ev.type + " event, key = " + key + ", value = " + value);
 
+	if (aclv._inputFieldXFormItem) {
+		DBG.println(AjxDebug.DBG1, "Set the inputField " + aclv._inputFieldXFormItem["refPath"] + " value: " + value) ;
+		aclv._inputFieldXFormItem.setInstanceValue(value);
+	}
+
 	// reset timer on any address field key activity
 	if (aclv._acActionId != -1) {
 		AjxTimedAction.cancelAction(aclv._acActionId);
@@ -231,13 +236,14 @@ function(ev) {
 		aclv._inputFieldXForm.setIsDirty(true, aclv._inputFieldXFormItem ) ;
 		//this._inputFieldXForm.notifyListeners(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new DwtXFormsEvent(this._inputFieldXForm, this._inputFieldXFormItem));
 	}
+	
 	return true;
 }
 
 // Public methods
 
 ZaAutoCompleteListView.prototype.toString = 
-function() {
+function () {
 	return "ZaAutoCompleteListView";
 }
 
