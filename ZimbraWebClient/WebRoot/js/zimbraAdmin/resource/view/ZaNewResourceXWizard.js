@@ -208,7 +208,12 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 				elementChanged: function(elementValue,instanceValue, event) {
 								//auto fill the account name when autodisplayname is true
 								if(this.getInstance()[ZaResource.A2_autodisplayname]=="TRUE") {
-									ZaResource.setAutoAccountName(this.getInstance(), elementValue );
+									try {
+										ZaResource.setAutoAccountName(this.getInstance(), elementValue );
+										this.getForm().itemChanged(this.getForm().getItemById(this.getForm().getId()+"_case").__xform.getItemById(this.getForm().getId()+"_resource_email_addr"), this.getInstance()[ZaResource.A_name], event);
+									} catch (ex) {
+										this.getForm().parent._app.getCurrentController()._handleException(ex, "XForm." + ZaResource.A_displayname + ".elementChanged", null, false);
+									}
 								}
 								this.getForm().itemChanged(this, elementValue, event);
 							}
@@ -218,7 +223,7 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 					labelLocation:_LEFT_, choices:ZaResource.resTypeChoices
 			},		
 			{ref:ZaResource.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_ResAccountName,label:ZaMsg.NAD_ResAccountName, 
-					labelLocation:_LEFT_,
+					labelLocation:_LEFT_,id:"resource_email_addr",
 					onChange: function(value, event, form) {
 								//disable the autodisplayname whenever user does some action on the account name
 								this.getInstance()[ZaResource.A2_autodisplayname] = "FALSE";
