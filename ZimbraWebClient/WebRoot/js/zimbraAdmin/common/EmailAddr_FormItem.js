@@ -64,15 +64,20 @@ EmailAddr_XFormItem.prototype.items = [
 					val = emailChunks[0];
 				} 
 				
-				this.getParentItem()._namePart = val;
 			} 
+
+			if(val === null || val ===undefined)
+				val = "";
+				
+			this.getParentItem()._namePart = val;
 			return val;	
 		},
 		elementChanged:function(namePart, instanceValue, event) {
 			var val = namePart + "@";
 			if(this.getParentItem()._domainPart)
 				val += this.getParentItem()._domainPart;
-				
+
+			this.getParentItem()._namePart = val;	
 			this.getForm().itemChanged(this.getParentItem(), val, event);
 		}
 	},
@@ -111,15 +116,23 @@ EmailAddr_XFormItem.prototype.items = [
 				} 
 			}
 			if(!val) {
-				if(this.getChoices() && this.getChoices()._choiceObject && this.getChoices()._choiceObject[0])
-					val = this.getChoices()._choiceObject[0].name;
-			}	
-			this.getParentItem()._domainPart = val;
+				if(!this.getParentItem()._domainPart) {
+					if(this.getChoices() && this.getChoices()._choiceObject && this.getChoices()._choiceObject[0]) {
+						val = this.getChoices()._choiceObject[0].name;
+						this.getParentItem()._domainPart = val;
+					}
+				} else {
+					val = this.getParentItem()._domainPart;
+				}
+			} else {
+				this.getParentItem()._domainPart = val;
+			}
 			
 			return val;
 		},
 		elementChanged:function(domainPart,instanceValue, event) {
 			var val;
+			var oldDomainPart = this.getParentItem()._domainPart;
 			if(this.getParentItem()._namePart) {
 				val = this.getParentItem()._namePart + "@" + domainPart;
 			} else {

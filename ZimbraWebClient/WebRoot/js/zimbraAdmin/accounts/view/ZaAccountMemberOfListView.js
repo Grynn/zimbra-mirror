@@ -474,8 +474,11 @@ function (item, offset){
 			
 			if (ZaSettings.DOMAINS_ENABLED){
 				if (searchByDomain){
-					var curEmail = xform.parent._containedObject.name ;
-					domainName = curEmail.substring (curEmail.indexOf("@")+1);
+					try {
+						var domainName = xform.getItemById(xform.getId()+"_case").__xform.getItemById(xform.getId()+"_dl_name_field")._domainPart;
+					} catch (ex) {
+						domainName = ZaSettings.myDomainName;
+					}
 				}
 			}else{
 				domainName = ZaSettings.myDomainName;
