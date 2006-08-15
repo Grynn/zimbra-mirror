@@ -40,10 +40,10 @@ MailQuota_XModelItem.prototype.setter = "setValue";
 MailQuota_XModelItem.prototype.maxInclusive = 8796093022207;
 MailQuota_XModelItem.prototype.minInclusive = 0;
 
-MailQuota_XModelItem.prototype.getValue =  function(instance, current, ref) {
+MailQuota_XModelItem.prototype.getValue =  function(ins, current, ref) {
 	var value = 0;
-	if(eval("instance." + ref) != null) {
-	  value = eval("instance." + ref) / 1048576;
+	if(eval("ins." + ref) != null) {
+	  value = eval("ins." + ref) / 1048576;
 	  if(value != Math.round(value)) {
 		 value = Number(value).toFixed(2);
 	  }
@@ -89,15 +89,15 @@ MailQuota2_XModelItem.prototype.getValue = function(instance, current, ref) {
 	return value;
 }
 
-MailQuota2_XModelItem.prototype.getSuperValue = function(instance, current, ref) {
+MailQuota2_XModelItem.prototype.getSuperValue = function(ins, current, ref) {
 	var _ref  = ref  ? ref.replace("/", ".") : this.ref.replace("/", ".");
 //	var _ref = this.ref.replace("/", ".");
-	var value = (eval("instance.cos." + _ref) != null) ? Number(eval("instance.cos." + _ref) / 1048576).toFixed(0) : 0;
+	var value = (eval("ins.cos." + _ref) != null) ? Number(eval("ins.cos." + _ref) / 1048576).toFixed(0) : 0;
 	return value;
 }
-MailQuota2_XModelItem.prototype.getLocalValue = function(instance, current, ref) {
+MailQuota2_XModelItem.prototype.getLocalValue = function(ins, current, ref) {
 	var _ref  = ref  ? ref.replace("/", ".") : this.ref.replace("/", ".");
 //	var _ref = this.ref.replace("/", ".");
-	var value = (eval("instance." + _ref) != null) ? Number(eval("instance." + _ref) / 1048576).toFixed(0) : null;
+	var value = (eval("ins." + _ref) != null) ? Number(eval("ins." + _ref) / 1048576).toFixed(0) : null;
 	return value;
 }

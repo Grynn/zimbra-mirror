@@ -27,11 +27,11 @@
  * @param {string} detail Any additional detail (optional)
  */
 function DwtException(msg, code, method, detail) {
-	if (arguments.length == 0) return;
+	if (arguments.length === 0) {return;}
 	AjxException.call(this, msg, code, method, detail);
 }
 
-DwtException.prototype = new AjxException;
+DwtException.prototype = new AjxException();
 DwtException.prototype.constructor = DwtException;
 
 /**
@@ -44,7 +44,7 @@ DwtException.prototype.constructor = DwtException;
 DwtException.prototype.toString = 
 function() {
 	return "DwtException";
-}
+};
 
 /** Invalid parent exception code
  * @type number */

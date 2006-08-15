@@ -791,13 +791,13 @@ FileSize_XModelItem.prototype.setter = "setValue";
 FileSize_XModelItem.prototype.units = AjxUtil.SIZE_MEGABYTES;
 FileSize_XModelItem.prototype.minInclusive = 0;
 
-FileSize_XModelItem.prototype.getValue =  function(instance, current, ref) {
-	var value = eval("instance."+ref);
+FileSize_XModelItem.prototype.getValue =  function(ins, current, ref) {
+	var value = eval("ins."+ref);
 	return value ? AjxUtil.formatSizeForUnits(value, AjxUtil.SIZE_KILOBYTES, false, 2) : 0;
 }
 
-FileSize_XModelItem.prototype.setValue = function(value, instance, current, ref) {
-	return eval("instance."+ref+" = AjxUtil.parseSize(value, this.units)");
+FileSize_XModelItem.prototype.setValue = function(value, ins, current, ref) {
+	return eval("ins."+ref+" = AjxUtil.parseSize(value, this.units)");
 }
 
 HostNameOrIp_XModelItem = function() {}

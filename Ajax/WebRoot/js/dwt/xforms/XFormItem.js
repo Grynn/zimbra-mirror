@@ -1881,8 +1881,7 @@ Textfield_XFormItem.prototype.updateElement = function(newValue) {
 	if (newValue == null) newValue = this.getValue();
 	var inputHelp = this.getInheritedProperty("inputHelp");
 	/*
-	DBG.println("In updateElement: " + "newValue=" + newValue + "###" 
-				+ "elementValue=" + this.getElement().value);	*/
+	DBG.println("In updateElement: " + "newValue=" + newValue + "###" + "elementValue=" + this.getElement().value);	*/
 	if ((newValue == null) && (inputHelp != null)) {
 		 newValue = inputHelp ;
 	}else if (newValue == null){

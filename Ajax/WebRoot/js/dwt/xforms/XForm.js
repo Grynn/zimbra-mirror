@@ -142,7 +142,9 @@ XForm.prototype.getUniqueId = function (prefix) {
 XForm.prototype.getElement = function (id) {
 	if (id == null) id = this.getId();
 	var el = XFG.getEl(id);
-	if (el == null) DBG.println(AjxDebug.DBG2, "getElement(",id,"): no element found");
+	if (el == null) {
+		DBG.println(AjxDebug.DBG2, "getElement(",id,"): no element found");
+	}
 	return el;
 }
 
@@ -835,9 +837,7 @@ XForm.prototype.shouldInsertItem = function (item) {
 }
 
 XForm.prototype.insertExternalWidget = function (item) {
-	DBG.println("insertExternalWidget(): inserting ref=", item.ref,
-				 "  type=", item.type, " id=", item.getId()
-	);
+	DBG.println("insertExternalWidget(): inserting ref=", item.ref,"  type=", item.type, " id=", item.getId());
 			 
 	var insertMethod = item.getInsertMethod();
 
@@ -849,8 +849,7 @@ XForm.prototype.insertExternalWidget = function (item) {
 		this[insertMethod](item, item.getElement());
 		
 	} else {
-		DBG.println("insertExternalWidget(): don't know how to insert item ", item.ref,
-			 "  type=", item.type);
+		DBG.println("insertExternalWidget(): don't know how to insert item ", item.ref,"  type=", item.type);
 	}
 
 	// take the item out of the list to insert so we don't insert it more than once

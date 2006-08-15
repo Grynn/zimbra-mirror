@@ -95,8 +95,7 @@ function(keySeq, mappingName, forceActionCode) {
 	
 	if (!tmpFsa) {
 		// This is essentially an illegal condition.
-		DBG.println(AjxDebug.DBG1, "***** tmpFsa is null! mapping name: " + mappingName + ", key: " + key 
-					+ " - keyseq: " + keySeq);
+		DBG.println(AjxDebug.DBG1, "***** tmpFsa is null! mapping name: " + mappingName + ", key: " + key + " - keyseq: " + keySeq);
 		return null;
 	} else if (tmpFsa[key]) {
 		var binding = tmpFsa[key];

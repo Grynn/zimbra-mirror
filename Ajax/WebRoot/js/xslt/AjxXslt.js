@@ -84,10 +84,7 @@ function() {
 	} else if (AjxEnv.isIE) {
 		var err = doc.parseError;
 	    if (err.errorCode != 0) {
-			DBG.println(AjxDebug.DBG1, "Parse error (" + err.reason +
-										") at line " + err.line +
-										", character " + err.linepos +
-										"\n" + err.srcText);
+			DBG.println(AjxDebug.DBG1, "Parse error (" + err.reason + ") at line " + err.line + ", character " + err.linepos + "\n" + err.srcText);
 			throw new AjxException(err.reason, AjxException.INVALID_PARAM, "AjxXslt.createProcessor");
 		}
 

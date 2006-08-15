@@ -62,17 +62,17 @@ Cos_String_XModelItem.prototype.getValue = function(instance, current, ref) {
 	if (value == null) value = this.getSuperValue(instance);
 	return value;
 }
-Cos_String_XModelItem.prototype.getSuperValue = function(instance) {
-	if(!instance || !instance.cos)
+Cos_String_XModelItem.prototype.getSuperValue = function(ins) {
+	if(!ins || !ins.cos)
 		return null;
 	var _ref = this.ref.replace("/", ".");
-	return eval("instance.cos." + _ref);
+	return eval("ins.cos." + _ref);
 }
-Cos_String_XModelItem.prototype.getLocalValue = function(instance) {
-	if(!instance)
+Cos_String_XModelItem.prototype.getLocalValue = function(ins) {
+	if(!ins)
 		return null;
 	var _ref = this.ref.replace("/", ".");
-	return eval("instance." + _ref);
+	return eval("ins." + _ref);
 }
 
 Cos_String_XModelItem.prototype.setLocalValue = function(value, instance, current, ref) {
@@ -166,27 +166,27 @@ Cos_MailQuota_XModelItem.prototype.getValue = function(instance, current, ref) {
 	return value;
 }
 
-Cos_MailQuota_XModelItem.prototype.getSuperValue = function(instance) {
-	if(!instance)
+Cos_MailQuota_XModelItem.prototype.getSuperValue = function(ins) {
+	if(!ins)
 		return null;
 	var _ref = this.ref.replace("/", ".");
 	var value = 0;
-	if((eval("instance.cos." + _ref) != null) && (eval("instance.cos." + _ref) != 0)) {
-		value = (eval("instance.cos." + _ref) / 1048576);
+	if((eval("ins.cos." + _ref) != null) && (eval("ins.cos." + _ref) != 0)) {
+		value = (eval("ins.cos." + _ref) / 1048576);
 		if(value != Math.round(value)) {
 			value = Number(value).toFixed(2);
 	  	}
 	} 	
-//	var value = (eval("instance.cos." + _ref) != null) ? Number(eval("instance.cos." + _ref) / 1048576).toFixed(0) : 0;
+//	var value = (eval("ins.cos." + _ref) != null) ? Number(eval("ins.cos." + _ref) / 1048576).toFixed(0) : 0;
 	return value;
 }
-Cos_MailQuota_XModelItem.prototype.getLocalValue = function(instance) {
-	if(!instance)
+Cos_MailQuota_XModelItem.prototype.getLocalValue = function(ins) {
+	if(!ins)
 		return null;	
 	var _ref = this.ref.replace("/", ".");
 	var value = null;
-	if(eval("instance." + _ref) != null) {
-		value = (eval("instance." + _ref) / 1048576);
+	if(eval("ins." + _ref) != null) {
+		value = (eval("ins." + _ref) / 1048576);
 		if(value != Math.round(value)) {
 			value = Number(value).toFixed(2);
 	  	}
