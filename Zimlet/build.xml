@@ -104,7 +104,7 @@
 	</target>
 
 	<target name="jar" depends="compile" description="Creates the jar file">
-		<jar destfile="${dist.lib.dir}/zimbrataglib.jar" basedir="${build.classes.dir}" />
+		<jar destfile="${dist.lib.dir}/zimbrataglib.jar" basedir="${build.classes.dir}" excludes="**/zimlet/**" />
 	</target>
 
 	<target name="reload-zimlets" depends="deploy-zimlets,restart-tomcat"/>
