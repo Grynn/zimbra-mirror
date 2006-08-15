@@ -39,7 +39,7 @@
 */
 function AjxDebug(level, name, showTime) {
 	this._dbgName = "AjxDebugWin_" + location.hostname.replace(/\./g,'_');
-	this._level = level;
+	this._level = Number(level);
 	this._showTime = showTime;
 	this._showTiming = false;
 	this._startTimePt = this._lastTimePt = 0;
@@ -76,10 +76,11 @@ function() {
 * @param level	 	debug level for the current debugger
 */
 AjxDebug.prototype.setDebugLevel =
-function(level, dontEnable) {
-	this._level = level;
-	if (!dontEnable)
+function(level, disable) {
+	this._level = Number(level);
+	if (!disable) {
 		this._enable(level != AjxDebug.NONE);
+	}
 };
 
 /**
