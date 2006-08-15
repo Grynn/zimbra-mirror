@@ -29,7 +29,7 @@ zmsetvars zimbra_home zimbra_java_home
 
 platform=`/opt/zimbra/libexec/get_plat_tag.sh`
 if [ "x$platform" = "xRHEL4_64" ]; then
-	zimbra_java_home=/opt/zimbra/jdk1.5.0_07_i386
+	zimbra_java_home=/opt/zimbra/jdk1.5.0_08_i386
 fi
 
 if [ -d ${zimbra_java_home}/jre ]; then
