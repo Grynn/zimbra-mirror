@@ -72,7 +72,7 @@ DwtKeyMapMgr._inited = false;	// Initialization flag
  */
 DwtKeyMapMgr.prototype.getActionCode =
 function(keySeq, mappingName, forceActionCode) {
-	DBG.println(AjxDebug.DBG3, "Getting action code for: " + keySeq + " in map: " + mappingName);
+	//DBG.println(AjxDebug.DBG3, "Getting action code for: " + keySeq + " in map: " + mappingName);
 	var mapping =  this._fsas[mappingName];
 	
 	if (!mapping) {
@@ -336,7 +336,7 @@ function(fsa, mapping, mapName) {
 		var tmpFsa = fsa;
 		for (var j = 0; j < keySeqLen; j++) {
 			var key = keySeq[j];
-			DBG.println(AjxDebug.DBG3, "Processing: " + key);
+			//DBG.println(AjxDebug.DBG3, "Processing: " + key);
 			
 			if (!tmpFsa[key]) {
 				tmpFsa[key] = {};	// first time visiting this key
@@ -345,14 +345,14 @@ function(fsa, mapping, mapName) {
 			if (j == keySeqLen - 1) {
 				/* We are at the last key in the sequence so we can bind the
 				 * action code to it */
-				DBG.println(AjxDebug.DBG3, "BINDING: " + mapping[i]);
+				//DBG.println(AjxDebug.DBG3, "BINDING: " + mapping[i]);
 				tmpFsa[key].actionCode = mapping[i];
 			} else {
 				/* We have more keys in the sequence. If our subMap is null,
 				 * then we need to create it to hold the new key sequences */
 				if (!tmpFsa[key].subMap) {
 					tmpFsa[key].subMap = {};
-					DBG.println(AjxDebug.DBG3, "NEW SUBMAP");
+					//DBG.println(AjxDebug.DBG3, "NEW SUBMAP");
 				}
 					
 				tmpFsa = tmpFsa[key].subMap;
