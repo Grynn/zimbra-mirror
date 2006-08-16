@@ -75,7 +75,7 @@ function DwtListView(parent, className, posStyle, headerList, noMaximize) {
 	this._tmpPoint = new DwtPoint(0, 0);
 
 	this.setMultiSelect(true);
-}
+};
 
 DwtListView.ITEM_SELECTED 		= 1;
 DwtListView.ITEM_DESELECTED 	= 2;
@@ -98,10 +98,10 @@ DwtListView.MAX_REPLENISH_THRESHOLD = 10;
 DwtListView.MIN_COLUMN_WIDTH = 10;
 DwtListView.COL_MOVE_THRESHOLD = 3;
 
-DwtListView._STYLE_CLASS = "_styleClass";
-DwtListView._SELECTED_STYLE_CLASS = "_selectedStyleClass";
-DwtListView._SELECTED_DIS_STYLE_CLASS = "_selectedDisabledStyleClass"
-DwtListView._KBFOCUS_CLASS = "_kbFocusClass";
+DwtListView._STYLE_CLASS				= "_sc";
+DwtListView._SELECTED_STYLE_CLASS		= "_ssc";
+DwtListView._SELECTED_DIS_STYLE_CLASS	= "_sdsc"
+DwtListView._KBFOCUS_CLASS				= "_kfc";
 
 DwtListView.prototype = new DwtComposite;
 DwtListView.prototype.constructor = DwtListView;
@@ -109,7 +109,7 @@ DwtListView.prototype.constructor = DwtListView;
 DwtListView.prototype.toString = 
 function() {
 	return "DwtListView";
-}
+};
 
 DwtListView.prototype.setEnabled = 
 function(enabled) {
@@ -141,7 +141,7 @@ function(enabled) {
 				: Dwt.getAttr(element, DwtListView._SELECTED_DIS_STYLE_CLASS);
 		}
 	}
-}
+};
 
 DwtListView.prototype.createHeaderHtml = 
 function(defaultColumnSort) {
@@ -511,10 +511,10 @@ function(item, now, isDnDIcon) {
 	var div = document.createElement("DIV");
 	div.id = Dwt.getNextId();
 	var rowClassName = AjxBuffer.concat(this._className, "Row");
-	div._styleClass = AjxBuffer.concat("Row ",rowClassName);
-	div._selectedStyleClass = AjxBuffer.concat("Row-", DwtCssStyle.SELECTED, " ", rowClassName);
-	div._selectedDisabledStyleClass = AjxBuffer.concat("Row-", DwtCssStyle.SELECTED, "-" , DwtCssStyle.DISABLED, " ", rowClassName);
-	div.className = div._styleClass;
+	div[DwtListView._STYLE_CLASS] = AjxBuffer.concat("Row ", rowClassName);
+	div[DwtListView._SELECTED_STYLE_CLASS] = AjxBuffer.concat("Row-", DwtCssStyle.SELECTED, " ", rowClassName);
+	div[DwtListView._SELECTED_DIS_STYLE_CLASS] = AjxBuffer.concat("Row-", DwtCssStyle.SELECTED, "-" , DwtCssStyle.DISABLED, " ", rowClassName);
+	div.className = div[DwtListView._STYLE_CLASS];
 	if (typeof(item) == "object") {
 		div.innerHTML = AjxStringUtil.htmlEncode(item.toString());
 	} else {
