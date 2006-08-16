@@ -23,14 +23,10 @@
 * @author Ross Dargahi
 */
 function AjxImg() {
-}
+};
+
 AjxImg.prototype = new Object;
 AjxImg.prototype.constructor = null;
-
-AjxImg.ICON = 1;
-AjxImg.HORIZ_BORDER = 2;
-AjxImg.VERT_BORDER = 3;
-AjxImg.BACKGROUND = 4;
 
 AjxImg._VIEWPORT_ID = "AjxImg_VP";
 
@@ -43,7 +39,7 @@ AjxImg._VIEWPORT_ID = "AjxImg_VP";
 * @param useParenEl 	If true will use the parent element as the root for the image and will not create an intermediate DIV
 */
 AjxImg.setImage =
-function(parentEl, imageName, style, useParentEl) {
+function(parentEl, imageName, useParentEl) {
 	var className = AjxImg.getClassForImage(imageName);
 
 	if (useParentEl) {
@@ -53,32 +49,31 @@ function(parentEl, imageName, style, useParentEl) {
 			parentEl.innerHTML = className 
 			   ? ["<div class='", className, "'></div>"].join("")
 			   : "<div></div>";
-   		}
-		else {
+   		} else {
 			parentEl.firstChild.className = className;
 		}
 	}
-}
+};
 
 AjxImg.getClassForImage =
 function(imageName) {
 	return ["Img", imageName].join("");
-}
+};
 
 AjxImg.getImageClass =
 function(parentEl) {
 	return parentEl.firstChild ? parentEl.firstChild.className : parentEl.className;
-}
+};
 
 AjxImg.getImageElement =
 function(parentEl) {
 	return parentEl.firstChild ? parentEl.firstChild : parentEl;
-}
+};
 
 AjxImg.getParentElement =
 function(imageEl) {
 	return imageEl.parentNode;
-}
+};
 
 /**
 * Gets the "image" as an HTML string. 
@@ -98,7 +93,7 @@ function(imageName, styleStr, attrStr, wrapInTable) {
 		return [pre, "<div class='", "Img", imageName, "' ", styleStr, " ", attrStr, "></div>", post].join("");
 	}
 	return [pre, "<div ", styleStr, " ", attrStr, "></div>", post].join("");
-}
+};
 
 /**
 * Gets the "image" as an HTML string.
