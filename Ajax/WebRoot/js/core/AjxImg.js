@@ -62,7 +62,7 @@ function(parentEl, imageName, style, useParentEl) {
 
 AjxImg.getClassForImage =
 function(imageName) {
-	return "Img" + imageName;
+	return ["Img", imageName].join("");
 }
 
 AjxImg.getImageClass =
@@ -91,12 +91,11 @@ function(imageEl) {
 AjxImg.getImageHtml = 
 function(imageName, styleStr, attrStr, wrapInTable) {
 	attrStr = attrStr || "";
-	var className = AjxImg.getClassForImage(imageName);
-	styleStr = styleStr ? ("style='" + styleStr + "' ") : "";
+	styleStr = styleStr ? (["style='", styleStr, "' "].join("")) : "";
 	var pre = wrapInTable ? "<table style='display:inline' cellpadding=0 cellspacing=0 border=0><tr><td align=center valign=bottom>" : "";
 	var post = wrapInTable ? "</td></tr></table>" : "";
-	if (className) {
-		return [pre, "<div class='", className, "' ", styleStr, " ", attrStr, "></div>", post].join("");
+	if (imageName) {
+		return [pre, "<div class='", "Img", imageName, "' ", styleStr, " ", attrStr, "></div>", post].join("");
 	}
 	return [pre, "<div ", styleStr, " ", attrStr, "></div>", post].join("");
 }
@@ -119,8 +118,8 @@ function(imageName, styleStr, attrStr, label) {
 	html[i++] = "<span class='";
 	html[i++] = className;
 	html[i++] = " inlineIcon'";
-	html[i++] = styleStr ? (" style='" + styleStr + "' ") : "";
-	html[i++] = attrStr ? (" " + attrStr) : "";
+	html[i++] = styleStr ? ([" style='", styleStr, "' "].join("")) : "";
+	html[i++] = attrStr ? ([" ", attrStr].join("")) : "";
 	html[i++] = ">&nbsp;&nbsp;&nbsp;</span>";
 	html[i++] = (label || "");
 	html[i++] = "</span>";
