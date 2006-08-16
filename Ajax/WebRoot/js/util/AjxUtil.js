@@ -317,7 +317,8 @@ function(node, omitName) {
 		if (node.hasChildNodes()) {
 			var cnodes = new Object();
 			var hasChild = false;
-			for (var i = 0; i < node.childNodes.length; i++) {
+			var len = node.childNodes.length;
+			for (var i = 0; i < len; i++) {
 				var child = node.childNodes[i];
 				var cname = child.name ? child.name : child.localName;
 				var isAttr = AjxUtil.NODE_IS_ATTR[cname] || 

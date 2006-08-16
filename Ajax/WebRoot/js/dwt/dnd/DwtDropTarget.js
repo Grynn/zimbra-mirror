@@ -48,7 +48,8 @@ function DwtDropTarget(transferType) {
 	/**@private*/
 	this.__transferTypes = new Array();
 	if (transferType) {
-		for (var i = 0; i < arguments.length; i++)
+		var len = arguments.length;
+		for (var i = 0; i < len; i++)
 			this.__transferTypes[i] = arguments[i];
 			
 		this.__transferTypes.length = i;
@@ -110,7 +111,8 @@ function(dropTargetListener) {
 DwtDropTarget.prototype.isValidTarget =
 function(items) {
 	if (items instanceof Array) {
-		for (var i = 0; i < items.length; i++) {
+		var len = items.length;
+		for (var i = 0; i < len; i++) {
 			if (!this.__checkTarget(items[i]))
 				return false;
 		}
@@ -161,8 +163,10 @@ function() {
  */
 DwtDropTarget.prototype.setTransferTypes =
 function(transferType) {
-	for (var i = 0; i < arguments.length; i++)
+	var len = arguments.length;
+	for (var i = 0; i < len; i++) {
 		this.__transferTypes[i] = arguments[i];
+	}
 	this.__transferTypes.length = i;
 }
 
@@ -196,7 +200,7 @@ function(newOperation) {
 	DwtDropTarget.__dropEvent.action = DwtDropEvent.DRAG_OP_CHANGED;
 	this._evtMgr.notifyListeners(DwtDropTarget.__DROP_LISTENER, DwtDropTarget.__dropEvent);
 	return DwtDropTarget.__dropEvent.doIt;
-}
+};
 
 /** @private */
 DwtDropTarget.prototype._drop =
@@ -206,7 +210,7 @@ function(srcData, ev) {
 	DwtDropTarget.__dropEvent.uiEvent = ev;
 	this._evtMgr.notifyListeners(DwtDropTarget.__DROP_LISTENER, DwtDropTarget.__dropEvent);
 	return DwtDropTarget.__dropEvent.doIt;
-}
+};
 
 
 // Private methods
@@ -214,12 +218,11 @@ function(srcData, ev) {
 /**@private*/
 DwtDropTarget.prototype.__checkTarget =
 function(item) {
-	for (var i = 0; i < this.__transferTypes.length; i++) {
+	var len = this.__transferTypes.length;
+	for (var i = 0; i < len; i++) {
 		if (item instanceof this.__transferTypes[i])
 			return true;
 	}	
 	if (i == this.__transferTypes.length)
 		return false;
-}
-
-
+};

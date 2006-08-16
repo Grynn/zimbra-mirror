@@ -30,7 +30,8 @@ function AjxSoapFault(faultEl) {
 	var reasonStr = prefix + ":Reason";
 	var detailStr = prefix + ":Detail"
 	// We will assume a correctly formatted Fault element
-	for (var i = 0; i < faultEl.childNodes.length; i++) {
+	var len = faultEl.childNodes.length;
+	for (var i = 0; i < len; i++) {
 		var childNode = faultEl.childNodes[i];
 		if (childNode.nodeName == codeStr) {
 			var faultCode = childNode.firstChild.firstChild.nodeValue;

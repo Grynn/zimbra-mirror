@@ -91,7 +91,8 @@ function(htmlElement, cssPropName) {
 			var tokens = cssPropName.split("-");
 			var propName = "";
 			var i;
-			for (i = 0; i < tokens.length; i++) {
+			var len = tokens.length;
+			for (i = 0; i < len; i++) {
 				if (i != 0) 
 					propName += tokens[i].substring(0, 1).toUpperCase();
 				else 

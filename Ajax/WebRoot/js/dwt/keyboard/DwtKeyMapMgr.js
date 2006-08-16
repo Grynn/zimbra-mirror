@@ -106,7 +106,8 @@ function(keySeq, mappingName, forceActionCode) {
 		return (!binding.subMap || forceActionCode) ? binding.actionCode : DwtKeyMapMgr.NOT_A_TERMINAL;
 	} else if (mapping.inherit && mapping.inherit.length) {
 		var actionCode = null;
-		for (var i = 0; i < mapping.inherit.length; i++) {
+		var len = mapping.inherit.length;
+		for (var i = 0; i < len; i++) {
 			DBG.println(AjxDebug.DBG3, "checking inherited map: " + mapping.inherit[i]);
 			actionCode = this.getActionCode(keySeq, mapping.inherit[i], forceActionCode);
 			if (actionCode != null) {

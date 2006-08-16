@@ -357,19 +357,21 @@ function(obj, recurse) {
 		} else {
 			stopRecursion = !recurse;
 			var keys = new Array();
-			for (var i in obj)
+			for (var i in obj) {
 				keys.push(i);
+			}
 
 			isArray ? keys.sort(function(a,b) {return a - b;}) : keys.sort();
 
 
-			if (showBraces)
+			if (showBraces) {
 				text += isArray ? "[" : "{";
-			for (var i = 0; i < keys.length; i++) {
+			}
+			var len = keys.length;
+			for (var i = 0; i < len; i++) {
 				var key = keys[i];
 				var nextObj = obj[key];
 				var value = null;
-				// 5/31/05 EMC:
 				// For dumping events, and dom elements, though I may not want to
 				// traverse the node, I do want to know what the attribute is.
 				if (nextObj == window || nextObj == document || (!AjxEnv.isIE && nextObj instanceof Node)){
@@ -625,13 +627,14 @@ function (node, indent) {
 	if (node == null)
 		return "";
 	var str = "";
-
+	var len;
 	switch (node.nodeType) {
 		case 1:	// Element
 			str += "<div style='color: blue; padding-left: 16px;'>&lt;<span style='color: DarkRed;'>" + node.nodeName + "</span>";
 
 			var attrs = node.attributes;
-			for (var i = 0; i < attrs.length; i++)
+			len = attrs.length;
+			for (var i = 0; i < len; i++)
 				str += this._createXmlAttribute(attrs[i]);
 
 			if (!node.hasChildNodes())
@@ -640,7 +643,8 @@ function (node, indent) {
 			str += "&gt;<br />";
 
 			var cs = node.childNodes;
-			for (var i = 0; i < cs.length; i++)
+			len = cs.length;
+			for (var i = 0; i < len; i++)
 				str += this._createXmlTree(cs[i], indent + 3);
 
 			str += "&lt;/<span style='color: DarkRed;'>" + node.nodeName + "</span>&gt;</div>";
@@ -648,7 +652,8 @@ function (node, indent) {
 
 		case 9:	// Document
 			var cs = node.childNodes;
-			for (var i = 0; i < cs.length; i++)
+			len = cs.length;
+			for (var i = 0; i < len; i++)
 				str += this._createXmlTree(cs[i], indent);
 			break;
 
@@ -663,7 +668,8 @@ function (node, indent) {
 			str += "&lt;?" + node.nodeName;
 
 			var attrs = node.attributes;
-			for (var i = 0; i < attrs.length; i++)
+			len = attrs.length;
+			for (var i = 0; i < len; i++)
 				str += this._createXmlAttribute(attrs[i]);
 
 			str+= "?&gt;<br />"
@@ -750,8 +756,8 @@ function () {
 		var linkDiv;
 		var contentFrameDoc = this._contentFrame.contentWindow.document;
 		var linkFrameDoc = this._linkFrame.contentWindow.document;
-		
-		for (var i = 0 ; i < this._msgQueue.length ; ++i ) {
+		var len = this._msgQueue.length;
+		for (var i = 0 ; i < len; ++i ) {
 			var now = new Date();
 			msg = this._msgQueue[i];
 			contentDiv = contentFrameDoc.createElement('div');

@@ -267,7 +267,8 @@ function(bPoppedUp) {
 	var inputFields = this._getInputFields();
 	
 	if (inputFields) {
-		for (var i = 0; i < inputFields.length; i++) {
+		var len = inputFields.length;
+		for (var i = 0; i < len; i++) {
 			inputFields[i].disabled = !bPoppedUp;
 			if (bPoppedUp)
 				inputFields[i].value = "";

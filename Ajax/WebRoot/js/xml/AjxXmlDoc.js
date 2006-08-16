@@ -221,7 +221,8 @@ function() {
 			// remove old child nodes since we recycle DOMParser and append new
 			while (this.hasChildNodes())
 				this.removeChild(this.lastChild);
-			for (var i = 0; i < domObj.childNodes.length; i++) {
+			var len = domObj.childNodes.length;
+			for (var i = 0; i < len; i++) {
 				var importedNode = this.importNode(domObj.childNodes[i], true);
 				this.appendChild(importedNode);
 			}
@@ -238,9 +239,11 @@ function() {
 			var domParser = new DOMParser();
 			var domObj = domParser.parseFromString(str, "text/xml");
 			// remove old child nodes since we recycle DOMParser and append new
-			while (this.hasChildNodes())
+			while (this.hasChildNodes()) {
 				this.removeChild(this.lastChild);
-			for (var i = 0; i < domObj.childNodes.length; i++) {
+			}
+			var len = domObj.childNodes.length;
+			for (var i = 0; i < len; i++) {
 				var importedNode = this.importNode(domObj.childNodes[i], true);
 				this.appendChild(importedNode);
 			}

@@ -767,7 +767,8 @@ function(cell) {
 		if (cell.tagName && cell.tagName.toLowerCase() == "td") {
 			// get the cells collection from the TD's parent TR
 			var cells = cell.parentNode.cells;
-			for (var i = 0; i < cells.length; i++) {
+			var len = cells.length;
+			for (var i = 0; i < len; i++) {
 				if (cells[i] == cell)
 					return i;
 			}

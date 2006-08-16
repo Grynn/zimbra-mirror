@@ -26,7 +26,8 @@ function getDomDocumentPrefix() {
 	
 	var prefixes = ["MSXML2", "Microsoft", "MSXML", "MSXML3"];
 	var o;
-	for (var i = 0; i < prefixes.length; i++) {
+	var len = prefixes.length;
+	for (var i = 0; i < len; i++) {
 		try {
 			// try to create the objects
 			o = new ActiveXObject(prefixes[i] + ".DomDocument");
@@ -82,7 +83,8 @@ if (window.DOMParser &&
 			this.removeChild(this.lastChild);
 			
 		// insert and import nodes
-		for (var i = 0; i < doc2.childNodes.length; i++)
+		var len = doc2.childNodes.length;
+		for (var i = 0; i < len; i++)
 			this.appendChild(this.importNode(doc2.childNodes[i], true));
 	};
 	

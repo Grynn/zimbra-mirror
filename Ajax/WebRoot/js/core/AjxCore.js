@@ -67,7 +67,8 @@ function(eventSource, eventName, action) {
 
 	if (listenerStruct) {
 		var listenerList = listenerStruct.list;
-		for (var i = 0; i < listenerList.length; i++) {
+		var len = listenerList.length;
+		for (var i = 0; i < len; i++) {
 			if (listenerList[i] == action) {
 				listenerList[i] = null;
 			}
@@ -85,7 +86,8 @@ function(eventSource, eventName) {
 
 	if (listenerStruct) {
 		var listenerList = listenerStruct.list;
-		for (var i = 0; i < listenerList.length; i++) {
+		var len = listenerList.length;
+		for (var i = 0; i < len; i++) {
 			listenerList[i] = null;
 		}
 	}
@@ -156,7 +158,8 @@ function(id) {
 	var closure = function(arg1) {
 		var listenerStruct = AjxCore.objectWithId(id);
 		var listenerList = listenerStruct.list;
-		for (var i = 0; i < listenerList.length; i++) {
+		var len = listenerList.length;
+		for (var i = 0; i < len; i++) {
 			var callback = listenerList[i];
 			if (callback) {
 				if (typeof(callback) == 'string') {
