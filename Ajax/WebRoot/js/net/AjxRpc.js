@@ -154,7 +154,7 @@ function() {
 	for (var i = 0; i < AjxRpc.__rpcCache.length; i++) {
 		rpcCtxt = AjxRpc.__rpcCache[i];
 		if (!rpcCtxt.busy) {
-			DBG.println(AjxDebug.DBG1, "Found free RPC context: " + rpcCtxt.id);
+//			DBG.println(AjxDebug.DBG1, "Found free RPC context: " + rpcCtxt.id);
 			break;
 		}
 	}
@@ -162,15 +162,15 @@ function() {
 	// If there's no free context available, create one
 	if (i == AjxRpc.__rpcCache.length) {
 		if (AjxRpc.__rpcCache.length == AjxRpc.__RPC_CACHE_MAX) {
-			DBG.println(AjxDebug.DBG1, "Out of RPC contexts");
+//			DBG.println(AjxDebug.DBG1, "Out of RPC contexts");
 			throw new AjxException("Out of RPC cache", AjxException.OUT_OF_RPC_CACHE, "AjxRpc.__getFreeRpcCtxt");
 		} else if (i > 0 && (i % AjxRpc.__RPC_REAP_COUNT == 0)) {
-			DBG.println(AjxDebug.DBG1, i + " busy RPC contexts");
+//			DBG.println(AjxDebug.DBG1, i + " busy RPC contexts");
 			AjxRpc.__reap();
 		}
 		var id = "__RpcCtxt_" + i;
 		rpcCtxt = new __RpcCtxt(id);
-		DBG.println(AjxDebug.DBG1, "Created RPC " + id);
+//		DBG.println(AjxDebug.DBG1, "Created RPC " + id);
 		AjxRpc.__rpcCache.push(rpcCtxt);
 	}
 	rpcCtxt.busy = true;
@@ -188,7 +188,7 @@ function() {
 	for (var i = 0; i < AjxRpc.__rpcCache.length; i++) {
 		var rpcCtxt = AjxRpc.__rpcCache[i];
 		if (rpcCtxt.timestamp + AjxRpc.__RPC_REAP_AGE < time) {
-			DBG.println(AjxDebug.DBG1, "AjxRpc.__reap: cleared RPC context " + rpcCtxt.id);
+//			DBG.println(AjxDebug.DBG1, "AjxRpc.__reap: cleared RPC context " + rpcCtxt.id);
 			rpcCtxt.req.cancel();
 			rpcCtxt.busy = false;
 		}

@@ -125,12 +125,12 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
 
 	if (asyncMode) {
 		this.__callback = callback;
-        if(timeout) {
+        if (timeout) {
             var action = new AjxTimedAction(this, AjxRpcRequest.__handleTimeout, {callback: callback, req: this});
             callback._timedActionId = AjxTimedAction.scheduleAction(action, timeout);
         }
         var tempThis = this;
-		DBG.println(AjxDebug.DBG3, "Async RPC request");
+//		DBG.println(AjxDebug.DBG3, "Async RPC request");
 		this.__httpReq.onreadystatechange = function(ev) {AjxRpcRequest.__handleResponse(tempThis, callback);};
 	} else {
 		// IE appears to run handler even on sync requests, so we need to clear it
@@ -140,10 +140,10 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
 	if (requestHeaders) {
 		for (var i in requestHeaders) {
 			this.__httpReq.setRequestHeader(i, requestHeaders[i]);
-			DBG.println(AjxDebug.DBG3, "Async RPC request: Add header " + i + " - " + requestHeaders[i]);
+//			DBG.println(AjxDebug.DBG3, "Async RPC request: Add header " + i + " - " + requestHeaders[i]);
 		}
 	}
-	
+
 	this.__httpReq.send(requestStr);
 	if (asyncMode) {
 		return this.id;
@@ -161,7 +161,7 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
  */
 AjxRpcRequest.prototype.cancel =
 function() {
-	DBG.println(AjxDebug.DBG1, "Aborting HTTP request");
+//	DBG.println(AjxDebug.DBG1, "Aborting HTTP request");
 	this.__httpReq.abort();
 };
 
@@ -174,7 +174,7 @@ function() {
  */
 AjxRpcRequest.__handleTimeout =
 function(args) {
-    DBG.println(AjxDebug.DBG3, "Async RPC request: _handleTimeout");
+//    DBG.println(AjxDebug.DBG3, "Async RPC request: _handleTimeout");
     args.req.cancel();
     args.callback.run( {text: null, xml: null, success: false, status: AjxRpcRequest.TIMEDOUT} );
 };
