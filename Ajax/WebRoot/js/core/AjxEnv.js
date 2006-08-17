@@ -177,7 +177,31 @@ AjxEnv.parseUA = function (userAgent) {
 	//	MOW: having trouble getting safari to render transparency for shadows, skipping there, too
 	AjxEnv.useTransparentPNGs = !AjxEnv.isIE && !AjxEnv.isLinux && !AjxEnv.isSafari;
 	AjxEnv._inited = !AjxEnv.isIE;
+
+	// test for safari nightly
+	// XXX: CHANGE ONCE OFFICIAL 420.x is released!
+	var webkit = AjxEnv.isSafari ? AjxEnv.getWebkitVersion() : null;
+	AjxEnv.isSafariNightly = webkit && webkit['is_nightly'];
 };
+
+// XXX: LAME code provided by the webkit dudes
+AjxEnv.getWebkitVersion =
+function() {
+	var webkit_version;
+	var regex = new RegExp("\\(.*\\) AppleWebKit/(.*) \\((.*)");
+	var matches = regex.exec(navigator.userAgent);
+	if (matches) {
+		var version = matches[1];
+		var bits = version.split(".");
+		var is_nightly = (version[version.length - 1] == "+");
+		var minor = is_nightly ? "+" : parseInt(bits[1]);
+		// If minor is Not a Number (NaN) return an empty string
+		if (isNaN(minor)) minor = "";
+
+		webkit_version = { major:parseInt(bits[0]), minor:minor, is_nightly:is_nightly};
+	}
+	return {major: webkit_version['major'], minor: webkit_version['minor'], is_nightly: webkit_version['is_nightly']};
+}
 
 AjxEnv.reset();
 AjxEnv.parseUA(navigator.userAgent);

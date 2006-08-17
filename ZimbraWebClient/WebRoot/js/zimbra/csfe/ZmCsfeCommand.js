@@ -183,11 +183,11 @@ function(params) {
 		if (params.logRequest)
 			uri = uri + soapDoc._methodEl.nodeName;
 		var requestStr = soapDoc.getXml();
-		if (AjxEnv.isSafari)
+		if (AjxEnv.isSafari && !AjxEnv.isSafariNightly)
 			requestStr = requestStr.replace("soap=", "xmlns:soap=");
-			
+
 		this._st = new Date();
-		
+
 		if (asyncMode) {
 			rpcCallback = new AjxCallback(this, this._runCallback, params.callback);
 			this._rpcId = AjxRpc.invoke(requestStr, uri, {"Content-Type": "application/soap+xml; charset=utf-8"}, rpcCallback);
@@ -263,7 +263,7 @@ function(response, asyncMode) {
 			}
 		}
 	}
-	
+
 	var linkName = "Response";
 	if (respDoc && respDoc.match) {
 		var m = respDoc.match(/\{Body:\{(\w+):/);
@@ -272,12 +272,12 @@ function(response, asyncMode) {
 	DBG.println(AjxDebug.DBG1, ["<H4> RESPONSE", (asyncMode) ? " (asynchronous)" : "" ,"</H4>"].join(""), linkName);
 
 	var data = {};
-		
+
 	if (xmlResponse) {
-		DBG.printXML(AjxDebug.DBG1, respDoc.getXml());	
+		DBG.printXML(AjxDebug.DBG1, respDoc.getXml());
 		data = respDoc._xmlDoc.toJSObject(true, false, true);
 	} else {
-		try {	
+		try {
 			eval("data=" + respDoc);
 		} catch (ex) {
 			DBG.dumpObj(AjxDebug.DBG1, ex);
@@ -286,7 +286,7 @@ function(response, asyncMode) {
 				return result;
 			} else {
 				throw ex;
-			}	
+			}
 		}
 
 	}
@@ -318,7 +318,7 @@ function(response, asyncMode) {
 		if (asyncMode)
 			result.set(data);
 	}
-	
+
 	if (data.Header && data.Header.context && data.Header.context.sessionId)
 		ZmCsfeCommand.setSessionId(data.Header.context.sessionId);
 
@@ -334,7 +334,7 @@ function(response, asyncMode) {
 ZmCsfeCommand.prototype._runCallback =
 function(callback, result) {
 	if (!result) return;
-	
+
 	var response;
 	if (result instanceof ZmCsfeResult) {
 		response = result; // we already got an exception and packaged it
@@ -357,7 +357,7 @@ function(callback, result) {
 ZmCsfeCommand.prototype.cancel =
 function() {
 	if (!this._rpcId) return;
-	
+
 	var req = AjxRpc.getRpcRequest(this._rpcId);
 	if (req)
 		req.cancel();
@@ -383,7 +383,7 @@ function(soapDoc, noAuthTokenRequired, serverUri, targetServer, useXml, noSessio
 		ct.setAttribute("token", changeToken);
 		ct.setAttribute("type", "new");
 	}
-	
+
 	// See if we have an auth token, if not, then mock up and need to authenticate or just have no auth cookie
 	if (!noAuthTokenRequired) {
 		var authToken = ZmCsfeCommand.getAuthToken();
@@ -391,7 +391,7 @@ function(soapDoc, noAuthTokenRequired, serverUri, targetServer, useXml, noSessio
 			throw new ZmCsfeException("AuthToken required", ZmCsfeException.NO_AUTH_TOKEN, "ZmCsfeCommand.invoke");
 		soapDoc.set("authToken", authToken, context);
 	}
-	
+
 	if (!useXml) {
 		var js = soapDoc.set("format", null, context);
 		js.setAttribute("type", "js");
@@ -403,9 +403,9 @@ function(soapDoc, noAuthTokenRequired, serverUri, targetServer, useXml, noSessio
 	var xmlResponse = false;
 	try {
 		var uri = serverUri || ZmCsfeCommand.serverUri;
-		var requestStr = !AjxEnv.isSafari 
-			? soapDoc.getXml() 
-			: soapDoc.getXml().replace("soap=", "xmlns:soap=");
+		var requestStr = AjxEnv.isSafari && !AjxEnv.isSafariNightly
+			? soapDoc.getXml().replace("soap=", "xmlns:soap=")
+			: soapDoc.getXml();
 			
 		var _st = new Date();
 		var response = AjxRpc.invoke(requestStr, uri, {"Content-Type": "application/soap+xml; charset=utf-8"});
