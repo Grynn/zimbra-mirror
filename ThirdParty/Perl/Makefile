@@ -117,7 +117,7 @@ all: $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 
 	@for lib in $(DBFILE_PERL_LIBS); do \
 		echo "Compiling perl lib $$lib"; \
-		perl -I$(DEST_LIB_DIR) -MCPAN -e "force (\"install\", \"$$lib\")" ; \
+		DB_FILE_INCLUDE=$(BDB_INC) DB_FILE_LIB=$(BDB_LIB) perl -I$(DEST_LIB_DIR) -MCPAN -e "force (\"install\", \"$$lib\")" ; \
 	done
 
 	echo "Compiling perl lib DBD::mysql"; \
@@ -139,6 +139,12 @@ all: $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 
 	(cd $(DEST_LIB_DIR); tar czf $(PERL_TGZ_DEST) .)
 	chmod -R a+w $(PERL_TGZ_DEST_DIR)
+
+dbfile:
+	@for lib in $(DBFILE_PERL_LIBS); do \
+		echo "Compiling perl lib $$lib"; \
+		DB_FILE_INCLUDE=$(BDB_INC) DB_FILE_LIB=$(BDB_LIB) perl -I$(DEST_LIB_DIR) -MCPAN -e "force (\"install\", \"$$lib\")" ; \
+	done
 
 sa:
 	@for lib in $(SA_PERL_LIBS); do \
