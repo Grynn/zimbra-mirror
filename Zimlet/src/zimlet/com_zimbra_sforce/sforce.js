@@ -51,6 +51,10 @@ Com_Zimbra_SForce.prototype.init = function() {
     // Add the Salesforce Button to the Compose Page
     this._composerCtrl = this._appCtxt.getApp(ZmZimbraMail.MAIL_APP).getComposeController();
     this._composerCtrl._sforce = this;
+    if(!this._composerCtrl._toolbar) {
+      // initialize the compose controller's toolbar
+      this._composerCtrl._initializeToolBar();
+    }
     this._toolbar = this._composerCtrl._toolbar;
 
     // Add button to toolbar
