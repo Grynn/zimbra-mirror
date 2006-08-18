@@ -218,28 +218,25 @@ function () {
 		}
 		newName = tmpObj.name;
 	}
-	
-	var myCos = null;
-	var maxPwdLen = Number.POSITIVE_INFINITY;
-	var minPwdLen = 1;	
-	if(ZaSettings.COSES_ENABLED) {
-		if(tmpObj.attrs[ZaResource.A_COSId]) {
-			myCos = new ZaCos(this._app);
-			myCos.load("id", tmpObj.attrs[ZaResource.A_COSId]);
-			if(myCos.attrs[ZaCos.A_zimbraMinPwdLength] > 0) {
-				minPwdLen = myCos.attrs[ZaCos.A_zimbraMinPwdLength];
-			}
-			if(myCos.attrs[ZaCos.A_zimbraMaxPwdLength] > 0) {
-				maxPwdLen = myCos.attrs[ZaCos.A_zimbraMaxPwdLength];
-			}		
-		}
-	}		
 
 	var mods = new Object();
 	
 	if(!ZaResource.checkValues(tmpObj, this._app))
 		return false;
 		
+	if(ZaSettings.ACCOUNTS_CHPWD_ENABLED) {
+		//change password if new password is provided
+		if(tmpObj.attrs[ZaResource.A_password]!=null && tmpObj[ZaResource.A2_confirmPassword]!=null && tmpObj.attrs[ZaResource.A_password].length > 0) {
+			try {
+				this._currentObject.changePassword(tmpObj.attrs[ZaResource.A_password]);
+			} catch (ex) {
+				this.popupErrorDialog(ZaMsg.FAILED_SAVE_ACCOUNT, ex, true);
+				return false;				
+				
+			}
+		}
+	}
+			
 	var changeDetails = new Object();
 	
 	//check if need to rename
@@ -259,7 +256,7 @@ function () {
 	
 	//transfer the fields from the tmpObj to the _currentObject
 	for (var a in tmpObj.attrs) {
-		if( a == ZaItem.A_objectClass ||  a==ZaResource.A_mail || a == ZaItem.A_zimbraId) {
+		if(a == ZaResource.A_password || a == ZaItem.A_objectClass ||  a==ZaResource.A_mail || a == ZaItem.A_zimbraId) {
 			continue;
 		}	
 		//check if the value has been modified

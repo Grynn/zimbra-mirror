@@ -721,9 +721,9 @@ function () {
 				opsArray2.push(ZaOperation.VIEW_MAIL);
 				opsArray2.push(ZaOperation.CHNG_PWD);
 			} else if(item.type == ZaItem.RESOURCE) {
+				opsArray1.push(ZaOperation.CHNG_PWD);
 				opsArray2.push(ZaOperation.MOVE_ALIAS);
 				opsArray2.push(ZaOperation.VIEW_MAIL);
-				opsArray2.push(ZaOperation.CHNG_PWD);
 			}
 		} else {
 			opsArray2 = [ZaOperation.EDIT, ZaOperation.DELETE, ZaOperation.CHNG_PWD, ZaOperation.VIEW_MAIL,ZaOperation.MOVE_ALIAS];

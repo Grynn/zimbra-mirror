@@ -96,8 +96,16 @@ function() {
 ZaNewResourceXWizard.prototype.goNext = 
 function() {
 	if (this._containedObject[ZaModel.currentStep] == 1) {
-		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);		
-	} 
+		//check if passwords match
+		if(this._containedObject.attrs[ZaResource.A_password]) {
+			if(this._containedObject.attrs[ZaResource.A_password] != this._containedObject[ZaResource.A2_confirmPassword]) {
+				this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
+				return false;
+			}
+		}
+		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+		
+	} 	
 	
 	this.goPage(this._containedObject[ZaModel.currentStep] + 1);
 	if(this._containedObject[ZaModel.currentStep] == this._lastStep) {
@@ -155,6 +163,7 @@ function(entry) {
 	this._containedObject[ZaResource.A2_autodisplayname] = "TRUE";
 	this._containedObject[ZaResource.A2_autoMailServer] = "TRUE";
 	this._containedObject[ZaResource.A2_autoLocationName] = "TRUE";	
+	this._containedObject[ZaResource.A2_confirmPassword] = null;
 	this._containedObject[ZaModel.currentStep] = 1;
 	var domainName;
 	
@@ -211,6 +220,7 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 									try {
 										ZaResource.setAutoAccountName(this.getInstance(), elementValue );
 										this.getForm().itemChanged(this.getForm().getItemById(this.getForm().getId()+"_case").__xform.getItemById(this.getForm().getId()+"_resource_email_addr"), this.getInstance()[ZaResource.A_name], event);
+										this.getInstance()[ZaResource.A2_autodisplayname]="TRUE";
 									} catch (ex) {
 										this.getForm().parent._app.getCurrentController()._handleException(ex, "XForm." + ZaResource.A_displayname + ".elementChanged", null, false);
 									}
@@ -242,6 +252,9 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 			}
 		);
 	}
+	case1Items.push({ref:ZaResource.A_password, type:_SECRET_, msgName:ZaMsg.NAD_Password,label:ZaMsg.NAD_Password, labelLocation:_LEFT_, cssClass:"admin_xform_name_input"});
+	case1Items.push({ref:ZaResource.A2_confirmPassword, type:_SECRET_, msgName:ZaMsg.NAD_ConfirmPassword,label:ZaMsg.NAD_ConfirmPassword, labelLocation:_LEFT_, cssClass:"admin_xform_name_input"});														
+	
 	case1Items.push({ref:ZaResource.A_accountStatus, type:_OSELECT1_, editable:false, msgName:ZaMsg.NAD_ResourceStatus,
 					  label:ZaMsg.NAD_ResourceStatus, labelLocation:_LEFT_, choices:ZaResource.accountStatusChoices});
 	

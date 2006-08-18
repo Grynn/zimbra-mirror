@@ -35,7 +35,7 @@ function ZaResource(app) {
 	this._init(app);
 }
 
-ZaResource.prototype = new ZaItem;
+ZaResource.prototype = new ZaAccount;
 ZaResource.prototype.constructor = ZaResource;
 
 ZaItem.loadMethods["ZaResource"] = new Array();
@@ -56,14 +56,16 @@ ZaResource.A_street = ZaAccount.A_street;
 ZaResource.A_city = ZaAccount.A_city;
 ZaResource.A_zip = ZaAccount.A_zip;
 ZaResource.A_state = ZaAccount.A_state;
-
+ZaResource.A_password  = ZaAccount.A_password;
+ZaResource.A2_confirmPassword = ZaAccount.A2_confirmPassword;
 //ZaResource.A_mailDeliveryAddress = ZaAccount.A_mailDeliveryAddress;
 ZaResource.A_accountStatus = ZaAccount.A_accountStatus;
 ZaResource.A_notes = ZaAccount.A_notes;
 ZaResource.A_mailHost = ZaAccount.A_mailHost;
 ZaResource.A_COSId = ZaAccount.A_COSId;
 ZaResource.A_zimbraDomainName = ZaAccount.A_zimbraDomainName;
-
+ZaResource.A_zimbraMinPwdLength = ZaAccount.A_zimbraMinPwdLength;
+ZaResource.A_zimbraMaxPwdLength = ZaAccount.A_zimbraMaxPwdLength;
 
 ZaResource.A_locationDisplayName = "zimbraCalResLocationDisplayName";
 ZaResource.A_zimbraAccountCalendarUserType = "zimbraAccountCalendarUserType";
@@ -124,7 +126,6 @@ function(tmpObj, app) {
 		return false;
 	}
 	
-	//var emailRegEx = /^([a-zA-Z0-9_\-])+((\.)?([a-zA-Z0-9_\-])+)*@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 	if(!AjxUtil.EMAIL_RE.test(tmpObj.name) ) {
 		//show error msg
 		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_ACCOUNT_NAME_INVALID);
@@ -147,7 +148,46 @@ function(tmpObj, app) {
 			tmpObj.attrs[ZaResource.A_COSId] = cosList[0].id;
 		}		
 	}
+	//if the account did not have a valid cos id - pick the first COS
+	//validate password length against this account's COS setting
+	if(tmpObj.attrs[ZaResource.A_zimbraMinPwdLength] != null) {
+		minPwdLen = tmpObj.attrs[ZaResource.A_zimbraMinPwdLength];
+	} else if(ZaSettings.COSES_ENABLED) {
+		if(myCos) {
+			if(myCos.attrs[ZaCos.A_zimbraMinPwdLength] > 0) {
+				minPwdLen = myCos.attrs[ZaCos.A_zimbraMinPwdLength];
+			}
+		}
+	}
 	
+	if(tmpObj.attrs[ZaResource.A_zimbraMaxPwdLength] != null) {
+		maxPwdLen = tmpObj.attrs[ZaResource.A_zimbraMaxPwdLength];
+	} else if(ZaSettings.COSES_ENABLED) {
+		if(myCos) {
+			if(myCos.attrs[ZaCos.A_zimbraMaxPwdLength] > 0) {
+				maxPwdLen = myCos.attrs[ZaCos.A_zimbraMaxPwdLength];
+			}		
+		}
+	}
+	//if there is a password - validate it
+	if(tmpObj.attrs[ZaResource.A_password]!=null || tmpObj[ZaResource.A2_confirmPassword]!=null) {
+		if(tmpObj.attrs[ZaResource.A_password] != tmpObj[ZaResource.A2_confirmPassword]) {
+			//show error msg
+			app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
+			return false;
+		} 			
+		if(tmpObj.attrs[ZaResource.A_password].length < minPwdLen || AjxStringUtil.trim(tmpObj.attrs[ZaResource.A_password]).length < minPwdLen) { 
+			//show error msg
+			app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_TOOSHORT + "<br>" + String(ZaMsg.NAD_passMinLengthMsg).replace("{0}",minPwdLen));
+			return false;		
+		}
+		
+		if(AjxStringUtil.trim(tmpObj.attrs[ZaResource.A_password]).length > maxPwdLen) { 
+			//show error msg
+			app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_TOOLONG+ "<br>" + String(ZaMsg.NAD_passMaxLengthMsg).replace("{0}",maxPwdLen));
+			return false;		
+		}
+	} 		
 	return true;
 }
 
@@ -166,6 +206,9 @@ function (tmpObj, resource, app) {
 	var soapDoc = AjxSoapDoc.create("CreateCalendarResourceRequest", "urn:zimbraAdmin", null);
 	soapDoc.set(ZaResource.A_name, tmpObj.name);
 	
+	if(tmpObj.attrs[ZaResource.A_password] && tmpObj.attrs[ZaResource.A_password].length > 0)
+		soapDoc.set(ZaResource.A_password, tmpObj.attrs[ZaResource.A_password]);
+			
 	//set mail host	
 	if(tmpObj[ZaResource.A2_autoMailServer] == "TRUE") {
 		tmpObj.attrs[ZaResource.A_mailHost] = null;
@@ -176,7 +219,7 @@ function (tmpObj, resource, app) {
 		
 	//set all the other attrs automatically
 	for (var aname in tmpObj.attrs) {
-		if( aname == ZaItem.A_objectClass || aname == ZaResource.A_mail) {
+		if(aname == ZaResource.A_password || aname == ZaItem.A_objectClass || aname == ZaResource.A_mail) {
 			continue;
 		}	
 		
@@ -204,7 +247,10 @@ function (tmpObj, resource, app) {
 		switch(ex.code) {
 			case ZmCsfeException.ACCT_EXISTS:
 				app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_ACCOUNT_EXISTS);
-			break;			
+			break;
+			case ZmCsfeException.ACCT_INVALID_PASSWORD:
+				app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_INVALID);
+			break;						
 			default:
 				app.getCurrentController()._handleException(ex, "ZaResource.create", null, false);
 			break;
@@ -252,6 +298,7 @@ function(mods) {
 	params.soapDoc = soapDoc;	
 	resp = modifyAccCommand.invoke(params).Body.ModifyCalendarResourceResponse;
 	this.initFromJS(resp.calresource[0]);
+	this[ZaResource.A2_confirmPassword] = null;
 	//invalidate the original tooltip
 	this._toolTip = null ;
 	return;
@@ -416,6 +463,7 @@ function(by, val, withCos) {
 	} else {
 		this[ZaResource.A2_autoLocationName] = "FALSE";
 	}
+	this[ZaResource.A2_confirmPassword] = null;	
 }
 ZaItem.loadMethods["ZaResource"].push(ZaResource.loadMethod);
 
@@ -469,7 +517,8 @@ ZaResource.myXModel = {
 		{id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId}, 	
 		{id:ZaResource.A_mail, type:_STRING_, ref:"attrs/"+ZaResource.A_mail}, //email address
 		{id:ZaResource.A2_schedulePolicy, type:_STRING_, ref:ZaResource.A2_schedulePolicy},
-								 		
+		{id:ZaResource.A_password, type:_STRING_, ref:"attrs/"+ZaAccount.A_password},
+		{id:ZaResource.A2_confirmPassword, type:_STRING_},						 		
 		//resource properties
 		{id:ZaResource.A_displayname, type:_STRING_, ref:"attrs/"+ZaResource.A_displayname, required:true}, //resource name
 		{id:ZaResource.A_zimbraCalResType, type:_STRING_, ref:"attrs/"+ZaResource.A_zimbraCalResType},//type

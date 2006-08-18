@@ -132,22 +132,6 @@ function () {
 		newName = tmpObj.name;
 	}
 	
-	var myCos = null;
-	var maxPwdLen = Number.POSITIVE_INFINITY;
-	var minPwdLen = 1;	
-	if(ZaSettings.COSES_ENABLED) {
-		if(tmpObj.attrs[ZaAccount.A_COSId]) {
-			myCos = new ZaCos(this._app);
-			myCos.load("id", tmpObj.attrs[ZaAccount.A_COSId]);
-			if(myCos.attrs[ZaCos.A_zimbraMinPwdLength] > 0) {
-				minPwdLen = myCos.attrs[ZaCos.A_zimbraMinPwdLength];
-			}
-			if(myCos.attrs[ZaCos.A_zimbraMaxPwdLength] > 0) {
-				maxPwdLen = myCos.attrs[ZaCos.A_zimbraMaxPwdLength];
-			}		
-		}
-	}		
-
 	var mods = new Object();
 	var changeDetails = new Object();
 	

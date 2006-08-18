@@ -212,7 +212,16 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject) {
 							ZaResource.setEmailChanged.call (this, value, form) ;								
 							this.setInstanceValue(value);						
 						}
-			}			
+			},
+			{ref:ZaResource.A_password, type:_SECRET_, 
+				msgName:ZaMsg.NAD_Password,label:ZaMsg.NAD_Password, labelLocation:_LEFT_,
+				cssClass:"admin_xform_name_input", onChange:ZaTabView.onFormFieldChanged
+			},
+			{ref:ZaResource.A2_confirmPassword, type:_SECRET_, 
+				msgName:ZaMsg.NAD_ConfirmPassword,label:ZaMsg.NAD_ConfirmPassword, labelLocation:_LEFT_, 
+				cssClass:"admin_xform_name_input", onChange:ZaTabView.onFormFieldChanged
+			}
+						
 		];
 	
 	if(ZaSettings.COSES_ENABLED) {

@@ -32,6 +32,7 @@
 * @author Greg Solovyev
 **/
 function ZaAccount(app) {
+	if (arguments.length == 0) return;	
 	ZaItem.call(this, app,"ZaAccount");
 	this._init(app);
 	this.type = ZaItem.ACCOUNT;
@@ -203,7 +204,6 @@ function(tmpObj, app) {
 		return false;
 	}
 
-	//var emailRegEx = /^([a-zA-Z0-9_\-])+((\.)?([a-zA-Z0-9_\-])+)*@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 	if(!AjxUtil.EMAIL_RE.test(tmpObj.name) ) {
 		//show error msg
 		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_ACCOUNT_NAME_INVALID);
