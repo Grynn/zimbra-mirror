@@ -42,14 +42,22 @@ function () {
 	this.items[0].width = this._inputWidth;
 
 	Composite_XFormItem.prototype.initializeItems.call(this);
-	if(EmailAddr_XFormItem.domainChoices) {
-		if(EmailAddr_XFormItem.domainChoices._choiceObject.length >0) {
-			if(EmailAddr_XFormItem.domainChoices._choiceObject[0]) {
-				this._domainPart = EmailAddr_XFormItem.domainChoices._choiceObject[0].name;
-			}	
+	try {
+		if(this.getForm().parent._app) {
+			this._domainPart = this.getForm().parent._app.getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraDefaultDomainName]
+		}
+	} catch (ex) {
+		this._domainPart = null;
+	}
+	if(this._domainPart == null) {
+		if(EmailAddr_XFormItem.domainChoices) {
+			if(EmailAddr_XFormItem.domainChoices._choiceObject.length >0) {
+				if(EmailAddr_XFormItem.domainChoices._choiceObject[0]) {
+					this._domainPart = EmailAddr_XFormItem.domainChoices._choiceObject[0].name;
+				}	
+			}
 		}
 	}
-
 };
 
 EmailAddr_XFormItem.prototype.items = [
@@ -94,10 +102,10 @@ EmailAddr_XFormItem.prototype.items = [
 				} 
 			}
 			if(!val) {
-				if(this.getChoices() && this.getChoices()._choiceObject && this.getChoices()._choiceObject[0])
-					val = this.getChoices()._choiceObject[0].name;
+//				if(this.getChoices() && this.getChoices()._choiceObject && this.getChoices()._choiceObject[0])
+					val = this.getParentItem()._domainPart;
 			}	
-			this.getParentItem()._domainPart = val;
+	//		this.getParentItem()._domainPart = val;
 			
 			return val;
 		}	
