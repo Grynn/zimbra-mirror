@@ -67,38 +67,39 @@ DwtTabView.prototype.removeStateChangeListener = function(listener) {
 
 /**
 * @param title  -  text for the tab button
-* @param tabView - instance of DwtTabViewPage 
+* @param tabView - instance of DwtTabViewPage or an AjxCallback that
+*                  returns an instance of DwtTabViewPage
 * @return - the key for the added tab. This key can be used to retreive the tab using @link getTab
 * public method addTab. Note that this method does not automatically update the tabs panel.
 **/
 DwtTabView.prototype.addTab =
-function (title, tabView) {
+function (title, tabViewOrCallback) {
 	var tabKey = this._tabIx++;	
-	this._tabs[tabKey] = new Object();
-	this._tabs[tabKey]["title"] = title;
 
-	//add the button to the tab bar
-	this._tabs[tabKey]["button"] = this._tabBar.addButton(tabKey, title);
-	//add the page 
-	if(tabView) {
-		this._tabs[tabKey]["view"] = tabView;
-		this._pageDiv.appendChild(this._tabs[tabKey]["view"].getHtmlElement());
-		tabView._tabKey = tabKey;
-	} else {
-		this._tabs[tabKey]["view"] = null;
-	}		
-	
-	if(tabKey==1) { //show the first tab 
-		if(this._tabs[tabKey]["view"])
-			this._tabs[tabKey]["view"].showMe();
+	// create tab entry
+	this._tabs[tabKey] = {
+		title: title,
+		button: this._tabBar.addButton(tabKey, title)
+	};
+
+	//add the page
+	this.setTabView(tabKey, tabViewOrCallback);
+
+	//show the first tab
+	if(tabKey==1) {
+		if (tabViewOrCallback instanceof AjxCallback) {
+			tabViewOrCallback = tabViewOrCallback.run(tabKey);
+		}
+		if(tabViewOrCallback) {
+			tabViewOrCallback.showMe();
+		}
 		this._currentTabKey = tabKey;		
 		this.switchToTab(tabKey);
-	} else {
-		//hide all the other tabs
-		if(this._tabs[tabKey]["view"]) {		
-			this._tabs[tabKey]["view"].hideMe();
-			Dwt.setVisible(this._tabs[tabKey]["view"].getHtmlElement(), false);
-		}			
+	}
+	//hide all the other tabs
+	else if (tabViewOrCallback && !(tabViewOrCallback instanceof AjxCallback)) {
+		tabViewOrCallback.hideMe();
+		Dwt.setVisible(tabViewOrCallback.getHtmlElement(), false);
 	}
 	
 	this._tabBar.addSelectionListener(tabKey, new AjxListener(this, DwtTabView.prototype._tabButtonListener));	
@@ -135,9 +136,28 @@ DwtTabView.prototype.getTabButton =
 function(tabKey) {
 	return this._tabs && this._tabs[tabKey] ? this._tabs[tabKey]["button"] : null;
 };
+
+DwtTabView.prototype.setTabView =
+function(tabKey, tabView) {
+	var tab = this.getTab(tabKey);
+	tab.view = tabView;
+	if (tabView && !(tabView instanceof AjxCallback)) {
+		this._pageDiv.appendChild(tabView.getHtmlElement());
+		tabView._tabKey = tabKey;
+	}
+};
 DwtTabView.prototype.getTabView =
 function(tabKey) {
-	return this._tabs && this._tabs[tabKey] ? this._tabs[tabKey]["view"] : null;
+	var tab = this.getTab(tabKey);
+	var tabView = tab && tab.view;
+	if (tabView instanceof AjxCallback) {
+		var callback = tabView;
+		tabView = callback.run(tabKey);
+		this.setTabView(tabKey, tabView);
+		var size = this._getTabSize();
+		tabView.setSize(size.x, size.y);
+	}
+	return tabView;
 };
 
 DwtTabView.prototype.switchToTab = 
@@ -166,20 +186,29 @@ function() {
 
 DwtTabView.prototype._resetTabSizes = 
 function (width, height) {
-    var tabBarSize = this._tabBar.getSize();
+	if(this._tabs && this._tabs.length) {
+		for(var curTabKey in this._tabs) {
+			var tabView = this._tabs[curTabKey].view;
+			if(tabView && !(tabView instanceof AjxCallback)) {
+				tabView.resetSize(width, height);
+			}	
+		}
+	}		
+};
+
+DwtTabView.prototype._getTabSize = function() {
+	var size = this.getSize();
+	var width = size.x || this.getHtmlElement().clientWidth;
+	var height = size.y || this.getHtmlElement().clientHeight;
+
+	var tabBarSize = this._tabBar.getSize();
 	var tabBarHeight = tabBarSize.y || this._tabBar.getHtmlElement().clientHeight;
 
 	var tabWidth = width;
 	var tabHeight = height - tabBarHeight;
-	
-	if(this._tabs && this._tabs.length) {
-		for(var curTabKey in this._tabs) {
-			if(this._tabs[curTabKey]["view"]) {
-				this._tabs[curTabKey]["view"].resetSize(width, height);
-			}	
-		}
-	}		
-}
+
+	return new DwtPoint(tabWidth, tabHeight);
+};
 
 /**
 * method createHTML 
@@ -232,10 +261,9 @@ function(tabKey) {
 		//hide all the tabs
 		this._hideAllTabs();
 		//make this tab visible
-		if(this._tabs[tabKey]["view"]) {
-			Dwt.setVisible(this._tabs[tabKey]["view"].getHtmlElement(), true);
-			this._tabs[tabKey]["view"].showMe();
-		}
+		var tabView = this.getTabView(tabKey);
+		Dwt.setVisible(tabView.getHtmlElement(), true);
+		tabView.showMe();
 	}
 }
 
@@ -243,10 +271,11 @@ DwtTabView.prototype._hideAllTabs =
 function() {
 	if(this._tabs && this._tabs.length) {
 		for(var curTabKey in this._tabs) {
-			if(this._tabs[curTabKey]["view"]) {
-				this._tabs[curTabKey]["view"].hideMe();
+			var tabView = this._tabs[curTabKey].view;
+			if(tabView && !(tabView instanceof AjxCallback)) {
+				tabView.hideMe();
 				//this._tabs[curTabKey]["view"].setZIndex(DwtTabView.Z_HIDDEN_TAB);
-				Dwt.setVisible(this._tabs[curTabKey]["view"].getHtmlElement(), false);
+				Dwt.setVisible(tabView.getHtmlElement(), false);
 			}	
 		}
 	}
@@ -263,7 +292,7 @@ function() {
  */
 DwtTabView.prototype._tabButtonListener = 
 function (ev) {
-    if(ev.item instanceof DwtButton) {
+	if(ev.item instanceof DwtButton) {
 		this.switchToTab(ev.item.getData("tabKey"));
     } else {
 	if (ev && ev.target) {
@@ -336,7 +365,7 @@ function() {
 }
 
 
-DwtTabViewPage.prototype.resetSize = 
+DwtTabViewPage.prototype.resetSize =
 function(newWidth, newHeight) {
 	if(this._rendered) {
 		this.setSize(newWidth, newHeight);
