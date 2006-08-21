@@ -24,26 +24,28 @@
  * @param options (Array) optional array of options. This can be either
  *                        an array of DwtSelectOptions or an array of strings.
  */
-function DwtSelect(parent, options, className, posStyle, width, height) {
-    var clsName = className || "DwtSelect";
+function DwtSelect(parent, options, className, posStyle) {
+    var clsName = className || "DwtSelectComposite";
     var positionStyle = posStyle || Dwt.STATIC_STYLE;
-    DwtButton.call(this, parent, null, clsName, positionStyle, DwtButton.ACTION_MOUSEDOWN);
+    DwtComposite.call(this, parent, clsName, positionStyle);
 	this._origClassName = this._className;
-	this._activatedClassName = this._className + "-" + DwtCssStyle.ACTIVATED;
-	this._triggeredClassName = this._className + "-" + DwtCssStyle.TRIGGERED;
-	this._width = -1;
+	this._heightClassName =  this._className + "Height";
+	this._menuClassName =  this._className + "Menu";
+	
+	this._menuTableId = false;
 
     // initialize some variables
     this._currentSelectionId = -1;
     this._options = new AjxVector();
     this._optionValuesToIndices = new Object();
     this._selectedValue = this._selectedOption = null;
-    this._renderSelectBoxHtml(options);
+    this._render(options);
 	this.disabled = false;
-	this._shouldToggleMenu = true;
+
+	this._menuListenerObject = new AjxListener(this, this._menuListener);
 }
 
-DwtSelect.prototype = new DwtButton;
+DwtSelect.prototype = new DwtComposite;
 DwtSelect.prototype.constructor = DwtSelect;
 
 DwtSelect.prototype.toString = 
@@ -51,23 +53,20 @@ function() {
     return "DwtSelect";
 };
 
-/**
- * This overrides the _createTable method in DwtLabel. 
- */
-DwtSelect.prototype._createTable =
-function() {
-	this._table = document.createElement("table");
-	this._table.id = Dwt.getNextId();
-	this._row = this._table.insertRow(-1);
-	this.getHtmlElement().appendChild(this._table);
-	
-	// Left is the default alignment. Note that if we do an explicit align left, Firefox freaks out
-	if (this._style & DwtLabel.ALIGN_RIGHT) {
-		this._table.align = "right";
-	} else if (!(this._style & DwtLabel.ALIGN_LEFT)) {
-		this._table.align = "center";
-		this._table.width = "100%";
-	}
+
+DwtSelect.prototype.setText = 
+function(text) {
+	this._button.setText(text);
+};
+
+DwtSelect.prototype.setImage = 
+function(image) {
+	this._button.setImage(image);
+};
+
+DwtSelect.prototype.setAlign =
+function(align) {
+	this._button.setAlign(align);
 };
 
 // -----------------------------------------------------------
@@ -110,69 +109,46 @@ function() {
 };
 
 // -----------------------------------------------------------
-// overridden base class methods
-// -----------------------------------------------------------
-/**
- * Wanted to be able to calculate position relative to a containing
- * element, since the option display div is positioned relative to 
- * the this.getHtmlElement() div.
- */
-DwtSelect.prototype.getBounds = 
-function(anElement, containerElement) {
-	anElement = anElement || this.getHtmlElement();
-    var myBounds = new Object();
-    myBounds.x = 0;
-    myBounds.y = 0;
-    myBounds.width = anElement.offsetWidth;
-    myBounds.height = anElement.offsetHeight;
-    
-    if(containerElement == null) {
-        containerElement = AjxEnv.isIE ? anElement.document.body : anElement.ownerDocument.body;
-    }
-    
-    // account for the scrollbars if necessary
-    var hasScroll = (anElement.scrollLeft !== void 0);
-    var trace = anElement;
-
-    while(trace != containerElement) {
-        myBounds.x += trace.offsetLeft;
-        myBounds.y += trace.offsetTop;
-        
-        var nextEl = trace.offsetParent;
-        while (hasScroll && (trace != nextEl)) {
-            myBounds.x -= trace.scrollLeft;
-            myBounds.y -= trace.scrollTop;
-            trace = AjxEnv.isIE ? nextEl : trace.parentNode;
-        }
-        trace = nextEl;
-    }
-    return myBounds;
-};
-
-// -----------------------------------------------------------
 // rendering methods
 // -----------------------------------------------------------
-DwtSelect.prototype._renderSelectBoxHtml = 
-function (options) {
-    // setup our arrow button
-	this.setDropDownImages(	"SelectPullDownArrow",				// normal
-							"SelectPullDownArrowDis",			// disabled
-							"SelectPullDownArrowHover",			// hover
-						   	"SelectPullDownArrowSel"			// down
-	);
-	var menu = new DwtMenu(this, null, "DwtSelectMenu", null, true);
-	this.setMenu(menu);
-	menu.setAssociatedObj(this);
-    // Add options, if present
+
+DwtSelect.prototype._render = 
+function(options) {
+	var buttonRowId = Dwt.getNextId();
+	this._menuTableId = Dwt.getNextId();
+	var selectedValue = this._selectedValue ? this._selectedValue : "";
+	var html = [
+			  "<div class='", this._heightClassName, "'style='overflow-y:hidden;'>",
+			   "<table border=0 cellpadding=0 cellspacing=0>",
+			    "<tr><td id='", buttonRowId, "'></td></tr>",
+			    "<tr><td>",
+			     "<table id='", this._menuTableId, "' class='", this._menuClassName, "' border=0 cellpadding=0 cellspacing=0>",
+				 "</table>",
+			    "</td></tr> ",
+			   "</table>",
+			  "</div>"];
+	
+	var element = this.getHtmlElement();
+	element.innerHTML = html.join("");
+	
+	// Insert the button.
+	this._button = new DwtButton(this, DwtLabel.ALIGN_LEFT);
+	this._button.reparentHtmlElement(buttonRowId);
+	this._button.setDropDownImages(	"SelectPullDownArrow",				// normal
+									"SelectPullDownArrowDis",			// disabled
+									"SelectPullDownArrowHover",			// hover
+								   	"SelectPullDownArrowSel");			// down
+	this._button.getHtmlElement().style.minWidth = 0;
+	this._button.setMenu(this._menuListenerObject, false);
+	
+	// Fill the list of options.
     if (options) {
-        for (var i = 0; i < options.length; ++i)
+        for (var i = 0; i < options.length; ++i) {
             this.addOption(options[i]);
+        }
     }
-	var el = this.getHtmlElement();
-	// Call down to DwtControl to setup the mouse handlers
-	el._selectObjId = this.getUniqueIdentifier();
-	this.setWidth();
 };
+
 
 // -----------------------------------------------------------
 // public api methods
@@ -194,7 +170,7 @@ function(option, selected, value) {
 	var val = null;
 	if (typeof(option) == 'string') {
 		val = value != null ? value : option;
-		opt = new DwtSelectOption(val, selected, option, this);
+		opt = new DwtSelectOption(val, selected, option, this, null, null);
 	} else {
 		if (option instanceof DwtSelectOption) {
 			opt = option;
@@ -203,27 +179,30 @@ function(option, selected, value) {
 			selected = opt.isSelected();
 		} else if(option instanceof DwtSelectOptionData) {
 			val = value != null ? value : option.value;
-			opt = new DwtSelectOption(val, option.isSelected, option.displayValue, this);
+			opt = new DwtSelectOption(val, option.isSelected, option.displayValue, this, null, null);
 			selected = option.isSelected;
 		} else {
 			return -1;
 		}
 	}
-	
-	if (opt._optionWidth > this._width)
-		this._width = opt._optionWidth;
 
 	this._options.add(opt);
-
 	if (this._options.size() == 1 || selected)
 		this._setSelectedOption(opt);
 
-	this._menu.__isDirty = true;
+	// Insert the option into the table that's below the button.
+	// This is what gives the button the same size as the select menu.
+	var table = document.getElementById(this._menuTableId);
+	var row = table.insertRow(-1);
+	var cell = row.insertCell(-1);
+	cell.className = 'DwtMenuItem';
+	cell.innerHTML = ["<div class='Text'>", AjxStringUtil.htmlEncode(opt.getDisplayValue()), "</div>"].join("");
+
+	// Register listener to create new menu.	
+	this._button.setMenu(this._menuListenerObject, false);
 
     // return the index of the option.
     this._optionValuesToIndices[opt.getValue()] = this._options.size() - 1;
-	this.setWidth();
-
     return (this._options.size() - 1);
 };
 
@@ -236,8 +215,6 @@ function() {
 	this._options.removeAll();
 	this._optionValuesToIndices = null;
 	this._optionValuesToIndices = new Array();
-	this._menu.removeChildren();
-	this._menu.__isDirty = true;
 	this._selectedValue = null;
 	this._selectedOption = null;
 	this._currentSelectionId = -1;
@@ -255,22 +232,12 @@ function() {
 
 DwtSelect.prototype.disable = 
 function() {
-	if (!this.disabled) {
-		this.setEnabled(false);
-		this._setDisabledStyle();
-		this.setHandler(DwtEvent.ONSELECTSTART, this._disableSelectionIE);
-		this.disabled = true;
-	}
+	this._button.setEnabled(false);
 };
 
 DwtSelect.prototype.enable = 
 function() {
-	if (this.disabled) {
-		this.setEnabled(true);
-		this._setEnabledStyle();
-		this.clearHandler(DwtEvent.ONSELECTSTART);
-		this.disabled = false;
-	}
+	this._button.setEnabled(true);
 };
 
 DwtSelect.prototype._disableSelectionIE = 
@@ -350,19 +317,6 @@ function() {
 	return DwtControl.prototype.getSize.call(this).x;
 };
 
-DwtSelect.prototype.setWidth = 
-function() {
-	if (this._lastSetWidth >= this._width) {
-		this._width = this._lastSetWidth;
-		return;
-	}
-	var el = this.getHtmlElement();
-	// not sure why 29 was added; 18 = 16 (width of dropdown icon) + 2 (padding)
-	//	el.style.width = this._width + 29 + "px";
- 	el.style.width = this._width + 18 + "px";
-	this._lastSetWidth = this._width;
-};
-
 DwtSelect.prototype.addChangeListener = 
 function(listener) {
     this.addListener(DwtEvent.ONCHANGE, listener);
@@ -373,11 +327,6 @@ function(listener) {
 // public interface for DwtSelectOption
 // -----------------------------------------------------------
 
-DwtSelect.prototype.getUniqueIdentifier = 
-function() {
-	return this._selectObjId;
-};
-
 DwtSelect.prototype.size = 
 function() {
 	return this._options.size();
@@ -387,39 +336,36 @@ function() {
 // private methods
 // --------------------------------------------------------------------
 
-DwtSelect.prototype._toggleMenu = 
-function(show) {
-    // if an argument was not specified, do the opposite
-	if (this._menu.__isDirty) {
-		var optArr = this._options.getArray();
-		for (var i = 0 ; i < optArr.length; ++i){
-			var mi = new DwtMenuItem(this._menu, DwtMenuItem.SELECT_STYLE);
- 			var text = optArr[i].getDisplayValue();
- 			if (text) {
- 				mi.setText(text);
- 			}
- 			var image = optArr[i].getImage();
- 			if (image) {
- 				mi.setImage(image);
- 				// HACK to get image width
- 				optArr[i]._imageWidth = Dwt.getSize(AjxImg.getImageElement(mi._iconCell)).x;
- 			}
-			mi.addSelectionListener(new AjxListener(this, this._handleOptionSelection));
-			mi._optionIndex = i;
-			optArr[i].setItem(mi);
+DwtSelect.prototype._menuListener =
+function() {
+	var menu = new DwtMenu(this, null, "DwtSelectMenu", null, true);
+	this._button.setMenu(menu, true);
+	menu.setAssociatedObj(this);
+    for (var i = 0, len = this._options.size(); i < len; ++i) {
+		var mi = new DwtMenuItem(menu, DwtMenuItem.SELECT_STYLE);
+		var option = this._options.get(i);
+		var text = option.getDisplayValue();
+		if (text) {
+			mi.setText(text);
 		}
-		this._menu.getHtmlElement().style.width = this.getHtmlElement().style.width;
-		this._menu.__isDirty = false;
-	}
-
-	DwtButton.prototype._toggleMenu.call(this);
-	if (this._selectedOption) {
-		var selectedMenuItem = this._selectedOption.getItem();
-		this._menu.setSelectedItem(selectedMenuItem._optionIndex);
-	}
-
-    return show;
+		var image = option.getImage();
+		if (image) {
+			mi.setImage(image);
+			// HACK to get image width
+			option._imageWidth = Dwt.getSize(AjxImg.getImageElement(mi._iconCell)).x;
+		}
+		mi.addSelectionListener(new AjxListener(this, this._handleOptionSelection));
+		mi._optionIndex = i;
+		option.setItem(mi);
+    }
+    // Set the size of the menu.
+    var size = this._button.getSize();
+	menu.getHtmlElement().style.width = size.x;
+	var el = this.getHtmlElement();
+	
+	return menu;
 };
+
 
 DwtSelect.prototype._handleOptionSelection = 
 function(ev) {
@@ -460,7 +406,6 @@ function(option) {
  		}
 		this._selectedValue = option._value;
 		this._selectedOption = option;
-		this._menu._selectedOptionId = option.getIdentifier();
 	}
     this._updateSelection(option);
 };
@@ -512,10 +457,6 @@ function DwtSelectOptionData (value, displayValue, isSelected) {
  *
  * DwtSelectOption encapsulates the option object that the DwtSelect widget
  * uses. 
- * The owner object that is passed into the constructor must implement the
- * following methods:
- *   getUniqueIdentifier()
- *   calcAndSetWidth(optionObject);
  *
  * @param value (string) -- this is the value for the object, it will be 
  *                          returned in any onchange event.
@@ -524,9 +465,8 @@ function DwtSelectOptionData (value, displayValue, isSelected) {
  * @param displayValue (string) -- The value that the user will see 
  *                                 ( html encoding will be done on this 
  *                                 value internally ).
- * @param owner (DwtSelect) -- implements the methods metioned above.
- * @param optionalDOMId (string) -- an optional id you want assigned to 
- *                                  the outer most underlying element.
+ * @param owner (DwtSelect) -- unused
+ * @param optionalDOMId (string) -- unused
  */
 function DwtSelectOption (value, selected, displayValue, owner, optionalDOMId, image) {
 	this._value = value;
@@ -535,21 +475,7 @@ function DwtSelectOption (value, selected, displayValue, owner, optionalDOMId, i
 	this._image = image;
 
 	this._internalObjectId = DwtSelect._assignId(this);
-	this._optionWidth = this._calculateWidth();	
 }
-
-DwtSelectOption.prototype._calculateWidth = 
-function(str) {
-	var textWidth = 0;
-	if (this._displayValue) {
-		var size = Dwt.getHtmlExtent(AjxStringUtil.htmlEncode(this._displayValue));
-		textWidth = size.x;
-	}
-	// HACK - assume it's a 16 x 16 icon if we don't have width yet
-	var imageWidth = this._imageWidth ? this._imageWidth : 16;
-	
-	return textWidth + imageWidth;
-};
 
 DwtSelectOption.prototype.setItem = 
 function(menuItem) {
@@ -601,33 +527,3 @@ function() {
 	return this._internalObjectId;
 };
 
-DwtSelect.prototype._popupMenu =
-function() {
-	var menu = this.getMenu();
-	var p = menu.parent;
-	var pb = p.getBounds();
-	var ws = menu.shell.getSize();
-	var s = menu.getSize();
-	var x;
-	var y;
-	var vBorder;
-	var hBorder;
-	var pHtmlElement = p.getHtmlElement();
-	// since buttons are often absolutely positioned, and menus aren't, we need x,y relative to window
-	var ptw = Dwt.toWindow(pHtmlElement, 0, 0);
-	vBorder = (pHtmlElement.style.borderLeftWidth == "") ? 0 : parseInt(pHtmlElement.style.borderLeftWidth);
-	x = pb.x + vBorder;
-	hBorder = (pHtmlElement.style.borderTopWidth == "") ? 0 : parseInt(pHtmlElement.style.borderTopWidth);
-	hBorder += (pHtmlElement.style.borderBottomWidth == "") ? 0 : parseInt(pHtmlElement.style.borderBottonWidth);
-	y = pb.y + pb.height + hBorder;
-	x = ((x + s.x) >= (ws.x - 5 )) ? x - (x + s.x - ws.x): x;
-	if ( (y + s.y) >= (ws.y - 5 )) {
-		var myEl = menu.getHtmlElement();
-		myEl.style.height = ws.y - y - 30;
-		myEl.style.overflow = "auto";
-	}
-	//y = ((y + s.y) >= (ws.y - 30 )) ? y - (y + s.y - ws.y) : y;
-
-	//this.setLocation(x, y);
-	menu.popup(0, x, y);
-};

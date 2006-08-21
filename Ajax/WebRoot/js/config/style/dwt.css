@@ -310,7 +310,30 @@
 	@TableFixed@
 }
 
+.DwtSelectComposite {
+	overflow-x:hidden;
+}
+.DwtSelectCompositeHeight {
+	height:24px;
+#IFDEF MSIE
+	height:26px; /* HACK: `There's some extra padding in IE that I need to get rid of */
+#ENDIF	
+	overflow-x:hidden;
+}
+.DwtSelectCompositeMenu {
+	@MenuContainer@
+	margin-top:15; /* Enough space to keep the hidden menu table out of sight */
+	margin-right:12; /* Adds space to account for the dropdown cell in the button */
+}
 
+/* Makes sure the button is stretched to fit its container */
+.DwtSelectComposite .DwtButton table,
+.DwtSelectComposite .DwtButton-disabled table,
+.DwtSelectComposite .DwtButton-triggered table,
+.DwtSelectComposite .DwtButton-activated table,
+.DwtSelectComposite .DwtButton-active table {
+	width:100%;
+}
 
 
 /*
