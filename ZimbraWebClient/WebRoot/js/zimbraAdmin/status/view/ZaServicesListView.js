@@ -70,8 +70,8 @@ function(item, now, isDndIcon) {
 	this.associateItemWithElement(item, div, DwtListView.TYPE_LIST_ITEM);
 
 	var idx = 0;
-	div._styleClass = ZaServicesListView.STYLE_CLASS;
-	div._selectedStyleClass = ZaServicesListView.SELECTED_STYLE_CLASS;
+	div[DwtListView._STYLE_CLASS] = ZaServicesListView.STYLE_CLASS;
+	div[DwtListView._SELECTED_STYLE_CLASS] = ZaServicesListView.SELECTED_STYLE_CLASS;
 	div.className = ZaServicesListView.STYLE_CLASS;
 	
 	idx = ZaServicesListView._writeElement.call(this, html, idx, item, false);

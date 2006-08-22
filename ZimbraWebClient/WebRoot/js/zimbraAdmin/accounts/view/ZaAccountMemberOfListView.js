@@ -541,9 +541,9 @@ function (memberListArr){
 ZaAccountMemberOfListView.prototype._createItemHtml = function (group, now, isDndIcon){
 	var html = new Array(50);
 	var	div = document.createElement("div");
-	div._styleClass = "Row";
-	div._selectedStyleClass = div._styleClass + "-" + DwtCssStyle.SELECTED;
-	div.className = div._styleClass;
+	div[DwtListView._STYLE_CLASS] = "Row";
+	div[DwtListView._SELECTED_STYLE_CLASS] = div[DwtListView._STYLE_CLASS] + "-" + DwtCssStyle.SELECTED;
+	div.className = div[DwtListView._STYLE_CLASS];
 	this.associateItemWithElement(group, div, DwtListView.TYPE_LIST_ITEM);
 	
 	var idx = 0;
