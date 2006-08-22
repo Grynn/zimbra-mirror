@@ -407,7 +407,9 @@
 	@FullSize@
 	position: relative;
 	overflow: auto;
+	#IFDEF GECKO
 	top:3px;
+	#ENDIF
 }
 
 /* ??? SHOTGUN */
