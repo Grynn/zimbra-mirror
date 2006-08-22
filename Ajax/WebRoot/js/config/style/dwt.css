@@ -398,7 +398,7 @@
 
 /* Entire LV control */
 .DwtListView {
-	@ListContainer@
+	@AppBg@
 	@FullWidth@
 }
 
