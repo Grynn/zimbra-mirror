@@ -285,17 +285,12 @@ DwtBaseDialog.prototype.setContent =
 function(text) {
 	var d = this._getContentDiv();
 	if (d) {
-		var content =
-			DwtBorder.getBorderStartHtml(this._borderStyle) + 
-			text + 
-			DwtBorder.getBorderEndHtml(this._borderStyle)
-		;
 		d.innerHTML = text;
 	}
 }
 
 DwtBaseDialog.prototype._getContentDiv =
-function (){
+function() {
 	return this._contentDiv;
 };
 
@@ -353,13 +348,7 @@ function() {
  */
 DwtBaseDialog.prototype._createHtml =
 function() {
-	var htmlElement = this.getHtmlElement();
-	var html = new Array();
-	var idx = 0;
-	html[idx++] = this._getStartBorder();
-	html[idx++] = this._getContentHtml();
-	html[idx++] = this._getEndBorder();
-	htmlElement.innerHTML = html.join("");
+	this.getHtmlElement().innerHTML = [this._getStartBorder(), this._getContentHtml(), this._getEndBorder()].join("");
 	this._contentDiv = document.getElementById(this._contentId);
 }
 
