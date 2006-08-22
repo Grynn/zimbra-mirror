@@ -556,23 +556,30 @@ XFormItem.prototype.getOnActivateHandlerHTML = function() {
 * @author Greg Solovyev
 **/
 XFormItem.prototype.handleKeyUp = function (ev, domItem) {
+	var key = DwtKeyEvent.getCharCode(ev);
 	// don't fire off another if we've already set one up.
-	if (this.keyPressDelayHdlr != null) {
+	if (this.keyPressDelayHdlr != null && key != DwtKeyEvent.KEY_ENTER) {
 		AjxTimedAction.cancelAction(this.keyPressDelayHdlr);
-		XForm.keyPressDelayHdlr = null;
+		this.keyPressDelayHdlr = null;
 	}
 	var form = this.getForm();
 	var evt = new DwtKeyEvent();
 	evt.setFromDhtmlEvent(ev);
 //	ev = ev ? ev : window.event;
-	var key = DwtKeyEvent.getCharCode(ev);
+
 	if (key == DwtKeyEvent.KEY_TAB) {
 		DwtUiEvent.setBehaviour(ev, true, false);
 		return false;
-	}	
-	var action = new AjxTimedAction(this, this.handleKeyPressDelay, [evt, domItem]);
-	//XForm.keyPressDelayHdlr = setTimeout(XForm.handleKeyPressDelay, 250, item, ev, formItem);
-	this.keyPressDelayHdlr = AjxTimedAction.scheduleAction(action, 250);
+	} else if (key == DwtKeyEvent.KEY_ENTER) {
+		if(this.keyPressDelayHdlr)
+			AjxTimedAction._exec(this.keyPressDelayHdlr);
+			
+		this.handleKeyPressDelay(evt,domItem);
+	} else {
+		var action = new AjxTimedAction(this, this.handleKeyPressDelay, [evt, domItem]);
+		//XForm.keyPressDelayHdlr = setTimeout(XForm.handleKeyPressDelay, 250, item, ev, formItem);
+		this.keyPressDelayHdlr = AjxTimedAction.scheduleAction(action, 250);
+	}
 };
 
 XFormItem.prototype.handleKeyDown = function (ev, domItem) {
