@@ -196,8 +196,9 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 		this.$outsideMouseDownListener = new AjxListener(this, this.onOutsideMouseDown);
 	}
 
-	AjxCore.addListener(window, "onmouseup", this.$hideListener);
-	AjxCore.addListener(document.body, "onmousedown", this.$outsideMouseDownListener);
+	AjxCore.addListener(window, DwtEvent.ONMOUSEUP, this.$hideListener);
+	AjxCore.addListener(document.body, DwtEvent.ONMOUSEDOWN, this.$outsideMouseDownListener);
+	Dwt.setHandler(this.getForm().getHtmlElement(), DwtEvent.ONMOUSEWHEEL, this.$outsideMouseDownListener);	
 	DwtEventManager.addListener(DwtEvent.ONMOUSEDOWN, this.$outsideMouseDownListener);	
 	this.menuUp = true;
 }
@@ -220,11 +221,11 @@ OSelect1_XFormItem.prototype.hideMenu = function () {
 	// hide the menu on a timer so we don't have to deal with wierd selection bugs
 	setTimeout(this.getFormGlobalRef()+".getElement('" + this.getMenuElementId() + "').style.display = 'none'", 10);
 
-	AjxCore.removeListener(window, "onmouseup", this.$hideListener);
-	AjxCore.removeListener(document.body, "onmousedown", this.$outsideMouseDownListener);	
+	AjxCore.removeListener(window, DwtEvent.ONMOUSEUP, this.$hideListener);
+	AjxCore.removeListener(document.body, DwtEvent.ONMOUSEDOWN, this.$outsideMouseDownListener);
+	Dwt.clearHandler(this.getForm().getHtmlElement(), DwtEvent.ONMOUSEWHEEL);
 	DwtEventManager.removeListener(DwtEvent.ONMOUSEDOWN, this.$outsideMouseDownListener);
-	
-	if (AjxEnv.isIE && OSelect1_XFormItem._mouseWheelEventAttached) {
+	if (AjxEnv.isIE &&  OSelect1_XFormItem._mouseWheelEventAttached) {
 		var form = this.getForm();
 		var formElement = form.getHtmlElement();
 		if (formElement.detachEvent) {
