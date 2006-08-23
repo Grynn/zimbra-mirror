@@ -335,6 +335,11 @@ function(enabled) {
 	}
 };
 
+DwtKeyboardMgr.prototype.isEnabled =
+function() {
+	return this.__enabled;
+};
+
 /**
  * @private
  */
