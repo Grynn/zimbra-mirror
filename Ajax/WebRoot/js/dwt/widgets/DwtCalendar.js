@@ -59,8 +59,7 @@ function DwtCalendar(parent, className, posStyle, firstDayOfWeek, forceRollOver,
 	
 	if (!this._readOnly)
 		this._installListeners();
-	//MOW:  this.setCursor("default");
-	
+
 	this._selectionMode = DwtCalendar.DAY;
 	
 	this._init();
@@ -234,14 +233,6 @@ function(date, skipNotify, forceRollOver, dblClick) {
 		this._notifyListeners(DwtEvent.SELECTION, type, this._date);
 	}
 	
-	// Firefox overflow hack. Need to resize the parent menu when the month changes.
-	if (AjxEnv.isNav) {
-		if ((this.parent instanceof DwtMenu) && oldDate && (newDate.getMonth() != oldDate.getMonth())) {
-			var size = this.getSize();
-			this.parent.setSize(size.x, size.y);
-		}
-	}
-		
 	return true;
 }
 
@@ -741,16 +732,9 @@ function() {
 	}
     html[idx++] = "</tr>";
 
-	// bug fix #3355
-	var style = AjxEnv.isLinux ? " style='line-height: 12px'" : "";
     for (var i = 0; i < 6; i++) {
- 		html[idx++] = "<tr" + style + ">";
-// MOW: skipping this cell (is it used?) because it's messing up spacings
-// 		html[idx++] = "<td width='2%' id='w:";
-// 		html[idx++] = i;
-// 		html[idx++] = ":"; 
-// 		html[idx++] = this._uuid; 
-// 		html[idx++] = "'</td>";
+		// bug fix #3355 - linux fix
+    	html[idx++] = AjxEnv.isLinux ? "<tr style='line-height:12px'>" : "<tr>";
     	for (var j = 0; j < 7; j++) {
     		html[idx++] = "<td id='";
     		html[idx++] = this._getDayCellId(i * 7 + j);

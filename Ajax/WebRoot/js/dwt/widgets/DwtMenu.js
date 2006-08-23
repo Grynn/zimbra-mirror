@@ -38,7 +38,6 @@
 * @param dialog 	Dialog that this menu is a part of (if any)
 */
 function DwtMenu(parent, style, className, posStyle, dialog) {
-
 	if (arguments.length == 0) return;
 	if (parent) {
 		if (parent instanceof DwtMenuItem || parent instanceof DwtButton) {
@@ -46,9 +45,10 @@ function DwtMenu(parent, style, className, posStyle, dialog) {
 				this._style = DwtMenu.GENERIC_WIDGET_STYLE;
 			else
 				this._style = DwtMenu.DROPDOWN_STYLE;
-		} else
+		} else {
 			this._style = style || DwtMenu.POPUP_STYLE;
-		if (!posStyle) 
+		}
+		if (!posStyle)
 			posStyle = (this._style == DwtMenu.BAR_STYLE) ? DwtControl.STATIC_STYLE : DwtControl.ABSOLUTE_STYLE; 
 	}
 	className = className || "DwtMenu";
@@ -67,11 +67,10 @@ function DwtMenu(parent, style, className, posStyle, dialog) {
 	// Don't need to create table for color picker and calendar picker styles
 	if (this._style != DwtMenu.COLOR_PICKER_STYLE &&
 	    this._style != DwtMenu.CALENDAR_PICKER_STYLE &&
-	    this._style != DwtMenu.GENERIC_WIDGET_STYLE) {
+	    this._style != DwtMenu.GENERIC_WIDGET_STYLE)
+	{
 		this._table = document.createElement("table");
-		this._table.border = 0;
-		this._table.cellPadding = 0;
-		this._table.cellSpacing = 0;
+		this._table.border = this._table.cellPadding = this._table.cellSpacing = 0;
 		htmlElement.appendChild(this._table);
 		this._table.backgroundColor = DwtCssStyle.getProperty(htmlElement, "background-color");
 	}
@@ -87,8 +86,9 @@ function DwtMenu(parent, style, className, posStyle, dialog) {
 	this._popdownActionId = -1;
 	this._popupAction = new AjxTimedAction(this, this._doPopup);
 	this._popupActionId = -1;
- 	if ((this.parent instanceof DwtMenuItem && this.parent.parent._style == DwtMenu.BAR_STYLE)
-		|| !(this.parent instanceof DwtMenuItem)){
+ 	if ((this.parent instanceof DwtMenuItem && this.parent.parent._style == DwtMenu.BAR_STYLE) ||
+ 		!(this.parent instanceof DwtMenuItem))
+	{
 		this._outsideListener = new AjxListener(this, this._outsideMouseDownListener);
 	}
 
@@ -98,8 +98,9 @@ function DwtMenu(parent, style, className, posStyle, dialog) {
 	this.__currentItem = null;
 	this.__preventMenuFocus = false;
 	
-	/* The global capture is used to detect mouse down events outside of the popped up menus and specifically
-	 * outside of our scope of influence (particularly when Dwt is being used in existing HTML */
+	// The global capture is used to detect mouse down events outside of the
+	// popped up menus and specifically outside of our scope of influence
+	// (particularly when Dwt is being used in existing HTML)
 	this._menuCapObj = new DwtMouseEventCapture(this, "DwtMenu", null, DwtMenu._capMouseDownHdlr, null, null, null, false)
 	
 	// Default menu tab group. Note that we disable application handling of
@@ -237,7 +238,6 @@ function() {
 
 DwtMenu.prototype.handleKeyAction =
 function(actionCode, ev) {
-	//DBG.println("DwtMenu.prototype.handleKeyAction: " + this + " id: " + this.getHtmlElement().id);
 	// For now don't deal with anything but BAR, POPUP, and DROPDOWN style menus
 	switch (this._style) {
 		case DwtMenu.BAR_STYLE:
@@ -375,8 +375,9 @@ DwtMenu.prototype.setSelectedItem =
 function(which) {
 	var currItem = this.__currentItem;
 	if (typeof(which) == "boolean") {
-		currItem = !currItem ? this._children.get(0) : which ?
-			this._children.getNext(currItem) : this._children.getPrev(currItem);
+		currItem = !currItem
+			? this._children.get(0)
+			: which ? this._children.getNext(currItem) : this._children.getPrev(currItem);
 	} else {
 		currItem = this._children.get(which);
 	}
@@ -453,19 +454,22 @@ DwtMenu.prototype._addItem =
 function(item, index) {
 	if (this._style == DwtMenu.COLOR_PICKER_STYLE ||
 	    this._style == DwtMenu.CALENDAR_PICKER_STYLE ||
-	    this._style == DwtMenu.GENERIC_WIDGET_STYLE) {
+	    this._style == DwtMenu.GENERIC_WIDGET_STYLE)
+	{
 		// Item better be a color picker & we better not have any children
 		if (this._children.size() > 0 || !(item.parent instanceof DwtMenu) 
 		    || ((this._style == DwtMenu.COLOR_PICKER_STYLE && !(item instanceof DwtColorPicker)) ||
 			(this._style == DwtMenu.CALENDAR_PICKER_STYLE && !(item instanceof DwtCalendar)) ||
 			(this._style == DwtMenu.GENERIC_WIDGET_STYLE && !(item instanceof DwtControl))))
+		{
 			throw new DwtException("Invalid child", DwtException.INVALID_PARAM, "DwtMenu.prototype._addItem");
+		}
 		this._children.add(item);
 		item.reparentHtmlElement(this.getHtmlElement());
 	} else {
 		var row;
 		var col;
-		if (this._style == DwtMenu.BAR_STYLE){
+		if (this._style == DwtMenu.BAR_STYLE) {
 			var rows = this._table.rows;
 			row = (rows.length != 0) ? rows[0]: this._table.insertRow(0);
 			if (index == null || index > row.cells.length)
@@ -510,8 +514,11 @@ function(child, skipNotify) {
 	var sz = this._children.size();
 	var a = this._children.getArray();
 	for (var i = 0; i < sz; i++) {
-		if (a[i] != child && a[i]._style == DwtMenuItem.RADIO_STYLE && a[i]._radioGroupId == radioGroupId
-			&& a[i]._itemChecked) {
+		if (a[i] != child &&
+			a[i]._style == DwtMenuItem.RADIO_STYLE &&
+			a[i]._radioGroupId == radioGroupId &&
+			a[i]._itemChecked)
+		{
 			a[i].setChecked(false, skipNotify);
 			break;
 		}
@@ -572,7 +579,8 @@ function() {
 	this._menuItemsWithSubmenus--;
 }
 
-DwtMenu.prototype.dontStealFocus = function(val) {
+DwtMenu.prototype.dontStealFocus =
+function(val) {
 	if (val == null)
 		val = true;
 	this.__preventMenuFocus = !!val;
@@ -583,8 +591,10 @@ function(x, y, kbGenerated) {
 	var ws = this.shell.getSize();
 	var s = this.getSize();
 
-	if (((this._style == DwtMenu.POPUP_STYLE || (this._style == DwtMenu.DROPDOWN_STYLE && this.parent instanceof DwtMenuItem)) && s.y >= ws.y) || 
-		(this._style == DwtMenu.DROPDOWN_STYLE && y + s.y >= ws.y)) {
+	if (((this._style == DwtMenu.POPUP_STYLE ||
+		(this._style == DwtMenu.DROPDOWN_STYLE && this.parent instanceof DwtMenuItem)) && s.y >= ws.y) ||
+		(this._style == DwtMenu.DROPDOWN_STYLE && y + s.y >= ws.y))
+	{
 		var space = ws.y;
 		var newY = null;
 		if (this._style == DwtMenu.DROPDOWN_STYLE && !(this.parent instanceof DwtMenuItem)) {
@@ -751,7 +761,8 @@ function() {
 	}
 
 	if ((this._style == DwtMenu.POPUP_STYLE || this._style == DwtMenu.DROPDOWN_STYLE) &&
-		this._table.rows.length && this._table.rows[0].cells.length) {
+		this._table.rows.length && this._table.rows[0].cells.length)
+	{
 		var numColumns = this._table.rows[0].cells.length;
 		var numRows = this._table.rows.length;
 		for (var i = 1; i < numColumns; i++) {
@@ -853,7 +864,7 @@ function() {
 
 DwtMenu.closeActiveMenu =
 function() {
-	if (DwtMenu._activeMenuUp){
+	if (DwtMenu._activeMenuUp) {
 		DwtMenu._activeMenu.popdown();
 	}
 };
