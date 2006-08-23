@@ -438,7 +438,8 @@ function() {
 		count--;
 	}
 
-	var lastCell = document.getElementById(this._headerList[lastColIdx]._id);
+	var lastCol = this._headerList[lastColIdx];
+	var lastCell = document.getElementById(lastCol._id);
 	var div = lastCell.firstChild;
 	var scrollbarPad = 16;
 	
@@ -446,11 +447,11 @@ function() {
 	var rowWidth = this._listDiv.clientWidth;
 	
 	if (headerWidth != rowWidth) {
-		lastCell.style.width = div.style.width = this._headerList[lastColIdx]._width
-			? (this._headerList[lastColIdx]._width + scrollbarPad)
+		lastCell.style.width = div.style.width = lastCol._width != null && lastCol._width != "auto" 
+			? (lastCol._width + scrollbarPad)
 			: (lastCell.clientWidth + scrollbarPad);
 	} else {
-		lastCell.style.width = div.style.width = (this._headerList[lastColIdx]._width || "");
+		lastCell.style.width = div.style.width = (lastCol._width || "");
 	}
 };
 
