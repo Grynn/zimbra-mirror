@@ -63,11 +63,33 @@ function(html, idx, obj, context) {
 	if (escapedUrl.substr(0, 4) == 'www.') {
 		escapedUrl = "http://" + escapedUrl + "/";
 	}
-	html[idx++] = '<a target="_blank" href="' + escapedUrl + '">' + AjxStringUtil.htmlEncode(obj) + '</a>';
+	html[idx++] = "<a target='_blank' href='";
+	html[idx++] = escapedUrl;
+	html[idx++] = "'>";
+	html[idx++] = AjxStringUtil.htmlEncode(obj);
+	html[idx++] = "</a>";
 	return idx;
 };
 
 Com_Zimbra_Url.prototype.toolTipPoppedUp =
 function(spanElement, obj, context, canvas) {
-	canvas.innerHTML = '<img src="' + this.getResource('blank_pixel.gif') + '" ' + Com_Zimbra_Url.THUMB_SIZE + ' style="background: url(' + Com_Zimbra_Url.THUMB_URL + obj + ')"/>';
+/*
+	var html = [];
+	var i = 0;
+
+	html[i++] = "<img src='";
+	html[i++] = this.getResource("blank_pixel.gif");
+	html[i++] = "' ";
+	html[i++] = Com_Zimbra_Url.THUMB_SIZE;
+	html[i++] = " style='background: url(";
+	html[i++] = '"';
+	html[i++] = Com_Zimbra_Url.THUMB_URL;
+	html[i++] = obj;
+	html[i++] = '"';
+	html[i++] = ")'/>";
+
+	canvas.innerHTML = html.join("");
+*/
+	// XXX: until we pay for alexa, just show the full URL
+	canvas.innerHTML = obj;
 };
