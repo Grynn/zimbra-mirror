@@ -50,6 +50,7 @@ my %SIMPLE_COMMANDS =
      "stop snmp"        => "/opt/zimbra/bin/zmswatchctl stop",
      "stop spell"       => "/opt/zimbra/bin/zmspellctl stop",
 
+     "status"           => "/opt/zimbra/bin/zmcontrol status",
      "startup"          => "/opt/zimbra/bin/zmcontrol startup",
      "shutdown"         => "/opt/zimbra/bin/zmcontrol shutdown",
 
