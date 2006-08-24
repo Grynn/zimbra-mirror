@@ -319,12 +319,9 @@
 }
 
 .DwtSelectComposite {
-	overflow-x:hidden;
 }
 .DwtSelectCompositeHeight {
 	height:24px;
-
-	overflow-x:hidden;
 }
 .DwtSelectCompositeMenu {
 	@MenuContainer@

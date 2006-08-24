@@ -118,7 +118,7 @@ function(options) {
 	this._menuTableId = Dwt.getNextId();
 	var selectedValue = this._selectedValue ? this._selectedValue : "";
 	var html = [
-			  "<div class='", this._heightClassName, "'style='overflow-y:hidden;'>",
+			  "<div class='", this._heightClassName, "'style='overflow:hidden;'>",
 			   "<table border=0 cellpadding=0 cellspacing=0>",
 			    "<tr><td id='", buttonRowId, "'></td></tr>",
 			    "<tr><td>",
