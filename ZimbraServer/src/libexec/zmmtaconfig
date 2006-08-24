@@ -768,22 +768,30 @@ if ($fork) {
 		close PIDFILE;
 		exit (0);
 	}
+
+	close STDIN;
+	setVar();
+	while (1) {
+		# don't rewrite configs if we can't contact ldap
+		# same goes for restarting servers
+		if (runCmd("$homedir/bin/zmprov -l gacf > /dev/null 2>&1")) {
+			sleep 60;
+			next;
+		}
+		readConfig();
+		compareKeys();
+		stopStartServers();
+		print STDERR "Sleeping\n";
+		sleep 60;
+		%prevknownkeys=%knownkeys;
+		%knownkeys = ();
+		$VARS_SET=0;
+		$SERVICE_SET=0;
+		$LOCALS_SET=0;
+		$firstrun = 0;
+	}
 }
 
 setVar();
 
-close STDIN;
 
-while (1) {
-	readConfig();
-	compareKeys();
-	stopStartServers();
-	print STDERR "Sleeping\n";
-	sleep 60;
-	%prevknownkeys=%knownkeys;
-	%knownkeys = ();
-	$VARS_SET=0;
-	$SERVICE_SET=0;
-	$LOCALS_SET=0;
-	$firstrun = 0;
-}
