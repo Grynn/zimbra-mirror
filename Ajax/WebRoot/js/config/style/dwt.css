@@ -310,14 +310,20 @@
 	@TableFixed@
 }
 
+.DwtSelectComposite .DwtButton table,
+.DwtSelectComposite .DwtButton-activated table,
+.DwtSelectComposite .DwtButton-triggered table,
+.DwtSelectComposite .DwtButton-disabled table {
+	@CompactTable@
+	@TableFixed@
+}
+
 .DwtSelectComposite {
 	overflow-x:hidden;
 }
 .DwtSelectCompositeHeight {
 	height:24px;
-#IFDEF MSIE
-	height:26px; /* HACK: `There's some extra padding in IE that I need to get rid of */
-#ENDIF	
+
 	overflow-x:hidden;
 }
 .DwtSelectCompositeMenu {
