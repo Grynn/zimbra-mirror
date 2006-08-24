@@ -261,7 +261,7 @@ function(element) {
 
 DwtHtmlEditor.prototype.insertText =
 function(text) {
-	var node = document.createTextNode(text);
+	var node = this._getIframeDoc().createTextNode(text);
 	this._insertNodeAtSelection(node);
 };
 
