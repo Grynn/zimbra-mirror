@@ -557,7 +557,7 @@ XFormItem.prototype.getOnActivateHandlerHTML = function() {
 **/
 XFormItem.prototype.handleKeyUp = function (ev, domItem) {
 	var key = DwtKeyEvent.getCharCode(ev);
-	// don't fire off another if we've already set one up.
+	// don't fire off another if we've already set one up unless this is an ENTER key
 	if (this.keyPressDelayHdlr != null && key != DwtKeyEvent.KEY_ENTER) {
 		AjxTimedAction.cancelAction(this.keyPressDelayHdlr);
 		this.keyPressDelayHdlr = null;
@@ -565,16 +565,10 @@ XFormItem.prototype.handleKeyUp = function (ev, domItem) {
 	var form = this.getForm();
 	var evt = new DwtKeyEvent();
 	evt.setFromDhtmlEvent(ev);
-//	ev = ev ? ev : window.event;
 
 	if (key == DwtKeyEvent.KEY_TAB) {
 		DwtUiEvent.setBehaviour(ev, true, false);
 		return false;
-	} else if (key == DwtKeyEvent.KEY_ENTER) {
-		if(this.keyPressDelayHdlr)
-			AjxTimedAction._exec(this.keyPressDelayHdlr);
-			
-		this.handleKeyPressDelay(evt,domItem);
 	} else {
 		var action = new AjxTimedAction(this, this.handleKeyPressDelay, [evt, domItem]);
 		//XForm.keyPressDelayHdlr = setTimeout(XForm.handleKeyPressDelay, 250, item, ev, formItem);
