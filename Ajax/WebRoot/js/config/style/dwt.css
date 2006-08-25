@@ -1204,14 +1204,6 @@
 	vertical-align:top;
 }
 
-.DwtShellBusyDialog .DwtButton,
-.DwtShellBusyDialog .DwtButton-triggered,
-.DwtShellBusyDialog .DwtButton-activated,
-.DwtShellBusyDialog .DwtButton-active {
-	width:100px;
-}
-
-
 
 /* DwtGridSizePicker */
 

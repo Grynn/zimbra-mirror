@@ -362,7 +362,7 @@ function(htmlElement) {
     this._busyDialog.registerCallback(DwtShell.CANCEL_BUTTON, this._busyCancelButtonListener, this);
     var txtId = Dwt.getNextId();
     var html = [
-        "<table xborder=1 class='DialogContent'><tr>",
+        "<table class='DialogContent'><tr>",
             "<td><div class='WaitIcon'></div></td><td class='MsgText' id='", txtId, "'>&nbsp;</td>",
         "</tr></table>"].join("");
     
