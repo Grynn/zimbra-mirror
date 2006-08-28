@@ -39,10 +39,10 @@ function DwtSelect(parent, options, className, posStyle) {
     this._options = new AjxVector();
     this._optionValuesToIndices = new Object();
     this._selectedValue = this._selectedOption = null;
-    this._render(options);
 	this.disabled = false;
-
 	this._menuListenerObject = new AjxListener(this, this._menuListener);
+
+    this._render(options);
 }
 
 DwtSelect.prototype = new DwtComposite;
