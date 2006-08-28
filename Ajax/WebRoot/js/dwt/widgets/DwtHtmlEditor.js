@@ -1240,7 +1240,6 @@ function(ev) {
 		// a range selection on a call to DwtHtmlEditor.focus()
 		if (iFrameDoc.selection.type == "None") {
 			this._currInsPt.collapse(false);
-			this._currInsPt.text = "";
 		}
 	}
 
