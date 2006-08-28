@@ -44,14 +44,10 @@ function AjxRpcRequest(id) {
 	/** (optional) id for this object.
 	 * @type String|Int */
     this.id = id;
-	if (AjxEnv.isIE) {
-		/** private*/
-		this.__httpReq = new ActiveXObject(AjxRpcRequest.__msxmlVers);
-	} else if (AjxEnv.isSafari || AjxEnv.isNav) {
-		/** private*/
-		this.__httpReq =  new XMLHttpRequest();
-	}
-}
+	/** private*/
+    this.__httpReq = AjxRpcRequest.__msxmlVers ? new ActiveXObject(AjxRpcRequest.__msxmlVers) :
+    											 new XMLHttpRequest();
+};
 
 /**
  * Timed out exception
@@ -227,11 +223,11 @@ function(ctxt) {
 /** @private */
 AjxRpcRequest.__init =
 function() {
-	if (AjxEnv.isIE) {
+	if (!window.XMLHttpRequest && window.ActiveXObject) {
+		// search for the latest xmlhttp version on user's machine (IE 6)
 		var msxmlVers = ["MSXML2.XMLHTTP.4.0", "MSXML2.XMLHTTP.3.0", "MSXML2.XMLHTTP", "Microsoft.XMLHTTP"];
 		for (var i = 0; i < msxmlVers.length; i++) {
 			try {
-				// search for the xml version on user's machine
 				var x = new ActiveXObject(msxmlVers[i]);
 				AjxRpcRequest.__msxmlVers = msxmlVers[i];
 				break;
