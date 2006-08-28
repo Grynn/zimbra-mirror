@@ -339,8 +339,7 @@ function(rows, cols, width, cellSpacing, cellPadding, alignment) {
 		}
 	}
 
-	var p = doc.createElement("p");
-	p.innerHTML = AjxEnv.isIE ? "&nbsp;" : "<br/>";
+	var p = doc.createElement("br");
 	var df = doc.createDocumentFragment();
 	df.appendChild(p);
 	df.appendChild(table);
