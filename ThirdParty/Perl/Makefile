@@ -125,7 +125,7 @@ all: $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 
 	@for lib in $(SA_PERL_LIBS); do \
 		echo "Compiling perl lib $$lib"; \
-		perl -I$(DEST_LIB_DIR) -MCPAN -e 'get "Mail::SpamAssassin"; $$CPAN::Config->{makepl_arg}.="DATADIR=/opt/zimbra/conf/spamassassin"; force ("install", "Mail::SpamAssassin")' ; \
+		perl -I$(DEST_LIB_DIR) -MCPAN -e 'get "Mail::SpamAssassin"; $$CPAN::Config->{makepl_arg}="DATADIR=/opt/zimbra/conf/spamassassin"; force ("install", "Mail::SpamAssassin")' ; \
 	done	
 
 	@for lib in $(SWATCH); do \
@@ -149,7 +149,7 @@ dbfile:
 sa:
 	@for lib in $(SA_PERL_LIBS); do \
 		echo "Compiling perl lib $$lib"; \
-		perl -I$(DEST_LIB_DIR) -MCPAN -e 'get "Mail::SpamAssassin"; $$CPAN::Config->{makepl_arg}.="DATADIR=/opt/zimbra/conf/spamassassin"; force ("install", "Mail::SpamAssassin")' ; \
+		perl -I$(DEST_LIB_DIR) -MCPAN -e 'get "Mail::SpamAssassin"; $$CPAN::Config->{makepl_arg}="DATADIR=/opt/zimbra/conf/spamassassin"; force ("install", "Mail::SpamAssassin")' ; \
 	done	
 
 $(PERL_TGZ_DEST_DIR):
@@ -161,6 +161,9 @@ $(DEST_LIB_DIR):
 DBD:
 	echo "Compiling perl lib DBD::mysql"; \
 	perl -I$(DEST_LIB_DIR) -MCPAN -e 'get DBI; $$CPAN::Config->{makepl_arg}.=" --nocatchstderr --mysql_config=\"/opt/zimbra/mysql/bin/mysql_config\" --libs=\"-L/opt/zimbra/mysql/lib -lmysqlclient -lz -lm\" --cflags=\" -I$(MYSQL_INCLUDE) -Os -fno-common\" "; $$CPAN::Config->{make_arg} .=" LD_RUN_PATH=/opt/zimbra/mysql/lib"; force ("install", "DBD::mysql")' ; \
+
+allclean:
+	rm -rf $(CLEAN_TARGETS)
 
 clean:
 	rm -rf $(CLEAN_TARGETS)
