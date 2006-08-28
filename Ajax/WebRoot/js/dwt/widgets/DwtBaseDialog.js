@@ -54,7 +54,6 @@ function DwtBaseDialog(parent, className, title, zIndex, mode, loc, view, dragHa
 
 	this._shell = parent;
 	this._zIndex = zIndex || Dwt.Z_DIALOG;
-
 	this._mode = mode || DwtBaseDialog.MODAL;
 	
 	this._loc = new DwtPoint();
@@ -79,15 +78,10 @@ function DwtBaseDialog(parent, className, title, zIndex, mode, loc, view, dragHa
 	// make dialog draggable within boundaries of shell
 	var htmlElement = this.getHtmlElement();
 	
-	// Workaround for the hidden cursor issue in Gecko based browsers like FireFox
-	//if (AjxEnv.isGeckoBased)
-	//	htmlElement.style.overflow = "auto";
-		
 	var dHandleId = dragHandleId ? dragHandleId : (htmlElement.id + "_handle");
 	this._initializeDragging(dHandleId);
 	
 	// reset tab index
-	// REMOVE this._tabIndex = 0;
     this.setZIndex(Dwt.Z_HIDDEN); // not displayed until popup() called
 	this._positionDialog(DwtBaseDialog.__nowhereLoc);
 }
@@ -439,7 +433,6 @@ function(x, y) {
 
 DwtBaseDialog.prototype._duringDrag =
 function(x, y) {
-// 	DBG.println("during drag x:", x, " y:", y);
 	// overload me
 };
 

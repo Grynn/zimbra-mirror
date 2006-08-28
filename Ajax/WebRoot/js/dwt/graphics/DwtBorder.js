@@ -122,15 +122,14 @@ DwtBorder.registerBorder(
 			"<div class='DwtDialog WindowOuterContainer'>",
 				"<table cellspacing=0 cellpadding=0 style='cursor:move;'>",
 					"<tr id='{$titleId}'>",
-						"<td class='minWidth'><!--$icon--><\/td>",
+						"<td class='minWidth'><!--$icon--></td>",
 						"<td id='{$titleTextId}' class='DwtDialogTitle'>{$title}</td>",
 						"<td class='minWidth'><div class='{$closeIcon2}'></div></td>",
 						"<td class='minWidth'><div class='{$closeIcon1}'></div></td>",
 					"</tr>",
 					"<tr>",
-						"<td class='DwtDialogBody WindowInnerContainer' colspan='3'  style='cursor:default;'>"
+						"<td class='DwtDialogBody WindowInnerContainer' colspan='3' style='cursor:default;'>"
 		),
-		
 		end: AjxBuffer.concat(
 						"</td>",
 					"</tr>",
@@ -148,15 +147,14 @@ DwtBorder.registerBorder(
 		start: AjxBuffer.concat(
 			"<div class='DwtDialog LightWindowOuterContainer'>",
 				"<table class='full_size' cellspacing=0 cellpadding=0 style='cursor:move;'>",
-					"<tr id='{$id}'>",
+					"<tr id='{$titleId}'>",
 						"<td class='minWidth'><!--$icon--></td>",
-						"<td id='{$id}_title' class='DwtDialogTitle' width='*'>{$title}</td>",
+						"<td id='{$titleTextId}' class='DwtDialogTitle' width='*'>{$title}</td>",
 						"<td id='{$id}_close' class='minWidth'></td>",
 					"</tr>",
 					"<tr>",
 						"<td id='{$id}_contents' class='DwtDialogBody LIghtWindowInnerContainer full_size' colspan='3'>"
 		),
-		
 		end: AjxBuffer.concat(
 						"</td>",
 					"</tr>",

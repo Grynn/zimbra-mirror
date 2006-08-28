@@ -317,15 +317,13 @@ function(actionCode, ev) {
 // -----------------------------------------------------------------------
 DwtDialog.prototype._getStartBorder = 
 function() {
-	var html = new Array();
+	var html = new Array(5);
 	var idx = 0;
 	html[idx++] = DwtBaseDialog.prototype._getStartBorder.call(this);
 	if (AjxEnv.isNav) {
 		html[idx++] = "<input type='button' id='";
 		html[idx++] = this._focusElementId = Dwt.getNextId();
-		html[idx++] = "' style='height:0px; width:0px;";
-		html[idx++] = "display:none;";
-		html[idx++] = "'>";
+		html[idx++] = "' style='height:0px; width:0px; display:none;'>";
 	}
 
 	return html.join("");
