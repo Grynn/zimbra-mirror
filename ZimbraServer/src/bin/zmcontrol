@@ -327,7 +327,7 @@ sub displayVersion {
 	if ($platform =~ /MACOSX/) {
 		my $release=`grep -C1 CFBundleGetInfoString /Library/Receipts/zimbra-core.pkg/Contents/Info.plist | tail -1 | sed -e 's/\<[^>]*\>//g' -e 's/^ *//g' | awk -F, '{print $1}'`;
 		$string = "Release $release $platform";
-	} elsif ($platform =~ /DEBIAN/) {
+	} elsif ($platform =~ /DEBIAN/ || $platform =~ /UBUNTU/) {
 		my $release = `dpkg -s zimbra-core | egrep '^Version:' | sed -e 's/Version: //'`;
 		chomp $release;
 		$string = "Release $release $platform";
