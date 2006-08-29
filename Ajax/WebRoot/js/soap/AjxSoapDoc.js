@@ -216,7 +216,7 @@ function() {
 
 AjxSoapDoc.prototype.getXml =
 function() {
-	return AjxEnv.isSafari
+	return AjxEnv.isSafari || AjxEnv.isOpera
 		? (AjxXmlDoc.getXml(this._xmlDoc.getDoc()))
 		: this._xmlDoc.getDoc().xml;
 };

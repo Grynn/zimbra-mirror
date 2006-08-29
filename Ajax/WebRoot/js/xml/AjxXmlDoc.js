@@ -211,28 +211,32 @@ function() {
 			} catch (ex) {
 			}
 		}
-		if (AjxXmlDoc._msxmlVers == null)
+		if (!AjxXmlDoc._msxmlVers) {
 			throw new AjxException("MSXML not installed", AjxException.INTERNAL_ERROR, "AjxXmlDoc._init");
-	} else if (AjxEnv.isNav) {
+		}
+	} else if (AjxEnv.isNav || AjxEnv.isOpera) {
 		// add loadXML to Document's API
 		Document.prototype.loadXML = function(str) {
 			var domParser = new DOMParser();
 			var domObj = domParser.parseFromString(str, "text/xml");
 			// remove old child nodes since we recycle DOMParser and append new
-			while (this.hasChildNodes())
+			while (this.hasChildNodes()) {
 				this.removeChild(this.lastChild);
+			}
 			var len = domObj.childNodes.length;
 			for (var i = 0; i < len; i++) {
 				var importedNode = this.importNode(domObj.childNodes[i], true);
 				this.appendChild(importedNode);
 			}
 		}
-
-		_NodeGetXml = function() {
-			var ser = new XMLSerializer();
-			return ser.serializeToString(this);
+		
+		if (AjxEnv.isNav) {
+			_NodeGetXml = function() {
+				var ser = new XMLSerializer();
+				return ser.serializeToString(this);
+			}
+			Node.prototype.__defineGetter__("xml", _NodeGetXml);
 		}
-		Node.prototype.__defineGetter__("xml", _NodeGetXml);
 	} else if (AjxEnv.isSafari) {
 		// add loadXML to Document's API
 		document.__proto__.loadXML = function(str) {
