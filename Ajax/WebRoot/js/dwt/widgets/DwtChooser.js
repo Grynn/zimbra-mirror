@@ -879,6 +879,10 @@ function(item, id, skipNotify) {
 				break;
 			}
 		}
+		if (!item._buttonIds) {
+			item._buttonIds = [];
+		}
+		item._buttonIds.push(id);
 	}
 
 	item._buttonId = id;
@@ -915,7 +919,14 @@ function(item, skipNotify) {
 	if (!list) return;
 	if (!list.contains(item)) return;
 	
-	this._data[item._buttonId].remove(item);
+	if (this._hasMultiButtons) {
+		var a = item._buttonIds;
+		for (var i = 0; i < a.length; i++) {
+			this._data[a[i]].remove(item);
+		}
+	} else {
+		this._data[item._buttonId].remove(item);
+	}
 	this.targetListView.removeItem(item, skipNotify);
 };
 
