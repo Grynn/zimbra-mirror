@@ -93,6 +93,7 @@ function(listener) {
  */
 DwtTabGroup.prototype.addMember =
 function(member, index) {
+	if (!member) {return;}
 	this.__members.add(member, index);
 	
 	// If adding a tab group, register me as its parent
