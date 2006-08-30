@@ -873,7 +873,7 @@
 	@Text-required@
 }
 
-
+.DwtPropertyEditor .Field { width: auto; }
 
 
 
