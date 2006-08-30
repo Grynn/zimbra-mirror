@@ -235,6 +235,12 @@ function (mods) {
 				attr.setAttribute("n", aname);
 			}
 		} else {
+			//bug fix 10354: ingnore the changed ZaLicense Properties
+			if ((typeof ZaLicense == "function") && (ZaSettings.LICENSE_ENABLED)){
+				if (ZaAccountMemberOfListView._find (ZaLicense.myXModel.items, aname, "id") > -1 ){
+					continue ;
+				}
+			}
 			var attr = soapDoc.set("a", mods[aname]);
 			attr.setAttribute("n", aname);
 		}
