@@ -338,7 +338,7 @@ function() {
 
 DwtSelect.prototype._menuListener =
 function() {
-	var menu = new DwtMenu(this, null, "DwtSelectMenu", null, true);
+	var menu = new DwtMenu(this, DwtMenu.DROPDOWN_STYLE, "DwtSelectMenu", null, true);
 	this._button.setMenu(menu, true);
 	menu.setAssociatedObj(this);
     for (var i = 0, len = this._options.size(); i < len; ++i) {
