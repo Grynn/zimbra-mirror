@@ -1,6 +1,7 @@
 <zimletConfig name="com_zimbra_asterisk" version="1.0">
   <global>
     <property name="sipHost">192.168.1.254</property>
-    <property name="myAddress">10.10.131.83</property>
+    <property name="myAddress">10.10.131.163</property>
+    <property name="debug">true</property>
   </global>
 </zimletConfig>

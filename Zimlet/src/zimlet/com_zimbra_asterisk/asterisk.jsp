@@ -31,6 +31,7 @@
 
 		// To run on two machines change these to suit.
 		public String myAddress;
+		private Boolean debug;
 		private int myPort;
 
 		protected ClientTransaction inviteTid;
@@ -124,7 +125,9 @@
 
 		public void processAck(Request request, ServerTransaction tid) {
 			try {
-				//System.out.println("Got an ACK! sending bye : " + tid);
+				if (debug) {
+					System.out.println("Got an ACK! sending bye : " + tid);
+				}
 				if (tid != null) {
 					Dialog dialog = tid.getDialog();
 					Request bye = dialog.createRequest(Request.BYE);
@@ -143,18 +146,26 @@
 				Request request,
 				ServerTransaction serverTransactionId) {
 			try {
-				//System.out.println("got a bye .");
+				if (debug) {
+					System.out.println("got a bye .");
+				}
 				if (serverTransactionId == null) {
-					//System.out.println("null TID.");
+					if (debug) {
+						System.out.println("null TID.");
+					}
 					return;
 				}
 				Dialog dialog = serverTransactionId.getDialog();
-				//System.out.println("Dialog State = " + dialog.getState());
+				if (debug) {
+					System.out.println("Dialog State = " + dialog.getState());
+				}
 				Response response = messageFactory.createResponse
 						(200, request);
 				serverTransactionId.sendResponse(response);
-				//System.out.println("Sending OK.");
-				//System.out.println("Dialog State = " + dialog.getState());
+				if (debug) {
+					System.out.println("Sending OK.");
+					System.out.println("Dialog State = " + dialog.getState());
+				}
 
 				this.shutDown();
 
@@ -170,15 +181,18 @@
 			Response response = responseReceivedEvent.getResponse();
 			Transaction tid = responseReceivedEvent.getClientTransaction();
 
-			/*
-			System.out.println(
+			
+			if (debug) {
+				System.out.println(
 					"Response received with client transaction id "
 							+ tid
 							+ ": "
 							+ response.getStatusCode());
-			*/
+			}
 			if (tid == null) {
-				//System.out.println("Stray response -- dropping ");
+				if (debug) {
+					System.out.println("Stray response -- dropping ");
+				}
 				return;
 			}
 
@@ -193,11 +207,15 @@
 					//	sipProvider.getNewClientTransaction(cancel);
 					Dialog dialog = tid.getDialog();
 					Request ackRequest = dialog.createRequest(Request.ACK);
-					//System.out.println("Sending ACK");
+					if (debug) {
+					  System.out.println("Sending ACK");
+					}
 					dialog.sendAck(ackRequest);
 
-					//System.out.println("Invite accepted:");
-					//System.out.println(response.toString());
+					if (debug) {
+						System.out.println("Invite accepted:");
+						System.out.println(response.toString());
+					}
 
 					Request referRequest = dialog.createRequest(Request.REFER);
 
@@ -216,11 +234,15 @@
 
 					referRequest.setHeader(referToHeader);
 
-					//System.out.println("REFER: \n" + referRequest.toString());
+					if (debug) {
+						System.out.println("REFER: \n" + referRequest.toString());
+					}
 
 					//try {Thread.sleep(4000); } catch (Exception ex) {}
 
-					//System.out.println("Sending REFER to " + toAddress.toString());
+					if (debug) {
+						System.out.println("Sending REFER to " + toAddress.toString());
+					}
 
 					ClientTransaction ct =
 							udpProvider.getNewClientTransaction(referRequest);
@@ -235,8 +257,10 @@
 								Request.BYE)) {
 					this.shutDown();
 				} else if (response.getStatusCode() == Response.PROXY_AUTHENTICATION_REQUIRED) {
-					//System.out.println("Proxy auth required:");
-					//System.out.println (response.toString());
+					if (debug) {
+						System.out.println("Proxy auth required:");
+						System.out.println (response.toString());
+					}
 
 					//Dialog dialog = tid.getDialog();
 					//Request inviteRequest = dialog.createRequest(Request.INVITE);
@@ -272,8 +296,10 @@
 					inviteRequest.setHeader(response.getHeader("From"));
 
 					listener.inviteTid = udpProvider.getNewClientTransaction(inviteRequest);
-					//System.out.println("Sending auth response");
-					//System.out.println (inviteRequest.toString());
+					if (debug) {
+						System.out.println("Sending auth response");
+						System.out.println (inviteRequest.toString());
+					}
 					listener.inviteTid.sendRequest();
 
 				} else if (response.getStatusCode() == Response.ACCEPTED
@@ -282,15 +308,25 @@
 						.equals(
 								Request.REFER)) {
 					numCallees--;
-					//System.out.println("Referral accepted (" + numCallees + "/" + toArray.length + " remaining)");
-					////System.out.println (response.toString());
+					if (debug) {
+						System.out.println("Referral accepted (" + numCallees + "/" + toArray.length + " remaining)");
+						System.out.println (response.toString());
+					}
 					if (numCallees == 0) {
 						this.shutDown();
 					}
 				} else if (response.getStatusCode() == Response.TRYING) {
-					//System.out.println("Trying number...");
+					if (debug) {
+						System.out.println("Trying number...");
+					}
+				} else if (response.getStatusCode() == Response.RINGING) {
+					if (debug) {
+						System.out.println("Trying number...");
+					}
 				} else {
-					//System.out.println("OTHER RESPONSE:\n" + response.toString());
+					if (debug) {
+						System.out.println("OTHER RESPONSE:\n" + response.toString());
+					}
 					this.shutDown();
 				}
 			} catch (Exception ex) {
@@ -341,27 +377,39 @@
 
 		public void processTimeout(javax.sip.TimeoutEvent timeoutEvent) {
 
-			//System.out.println("Transaction Time out");
-			//System.out.println("TimeoutEvent " + timeoutEvent.getTimeout());
+			if (debug) {
+				System.out.println("Transaction Time out");
+				System.out.println("TimeoutEvent " + timeoutEvent.getTimeout());
+			}
 		}
 
-		public void init(String args[]) {
+		public String init(String args[]) {
 			SipFactory sipFactory;
 			sipStack = null;
 			sipFactory = SipFactory.getInstance();
 			sipFactory.setPathName("gov.nist");
 			Properties properties = new Properties();
 
+			//myAddress = java.net.InetAddress.getLocalHost().getHostAddress();
 			myAddress = args[0];
 			sipHost = args[1];
 			from = args[2];
 			toList = args[3];
 			user = args[4];
 			pass = args[5];
+			String dbg = args[6];
+			if (dbg.equals("true")) {
+				System.out.println ("Asterisk debug mode on");
+				debug = true;
+			} else {
+				debug = false;
+			}
 
 			toArray = toList.split(";");
 
-			//System.out.println("Calling from " + from + " to " + toList);
+			if (debug)  {
+				System.out.println("Calling from " + from + " to " + toList);
+			}
 
 			// If you want to try TCP transport change the following to
 			String transport = "udp";
@@ -389,7 +437,9 @@
 			try {
 				// Create SipStack object
 				sipStack = sipFactory.createSipStack(properties);
-				//System.out.println("createSipStack " + sipStack);
+				if (debug) {
+					System.out.println("createSipStack " + sipStack);
+				}
 			} catch (PeerUnavailableException e) {
 				// could not find
 				// gov.nist.jain.protocol.ip.sip.SipStackImpl
@@ -410,9 +460,11 @@
 				Invite listener;
 
 				if (udpListeningPoint == null) {
-					while (true) {
+					for (int count = 0; count < 5; count++) {
 						myPort = this.getRandomPort();
-						//System.out.println("Binding to " + myAddress + ":" + myPort);
+						if (debug) {
+							System.out.println("Binding to " + myAddress + ":" + myPort);
+						}
 						try {
 							udpListeningPoint = sipStack.createListeningPoint
 									(myPort, "udp");
@@ -420,7 +472,11 @@
 						} catch (InvalidArgumentException ex) {
 						}
 					}
+				}
 
+				if (udpListeningPoint == null) {
+					System.out.println ("Failed to bind to "+myAddress);
+					return "Failed to bind to "+myAddress;
 				}
 
 				if (udpProvider == null) {
@@ -533,15 +589,19 @@
 					request.setContent(sdpData, contentTypeHeader);
 					request.addHeader(callInfoHeader);
 
-					//System.out.println("REQUEST \n" + request.toString());
+					if (debug) {
+						System.out.println("REQUEST \n" + request.toString());
+					}
 					// Create the client transaction.
 					listener.inviteTid = sipProvider.getNewClientTransaction(request);
 
 					// send the request out.
 					listener.inviteTid.sendRequest();
-					//System.out.println("REQUEST Sent to " + toAddress.toString());
+					if (debug) {
+						System.out.println("REQUEST Sent to " + toAddress.toString());
+					}
 					try {
-						Thread.sleep(4000);
+						//Thread.sleep(4000);
 					} catch (Exception ex) {
 					}
 				}
@@ -551,13 +611,16 @@
 				System.out.println(ex.getMessage());
 				ex.printStackTrace();
 				this.usage();
+				return "Call failed "+ex.getMessage();
 			}
+			return "Call successfully established from " + from + " to " + toList;
 		}
 	}
 
 	Map zConfig = (Map) request.getAttribute("config");
 	String sipHost = (String) ((Map) zConfig.get("global")).get("sipHost");
 	String myAddress = (String) ((Map) zConfig.get("global")).get("myAddress");
+	String debug = (String) ((Map) zConfig.get("global")).get("debug");
 
 	String to = request.getParameter("to");
 	String from = request.getParameter("from");
@@ -581,7 +644,7 @@
 	from = from.replace(".", "");
 	from = from.trim();
 
-	String args[] = {myAddress, sipHost, from, to, user, pass};
-	new Invite().init(args);
-	out.println("Call successfully established from " + from + " to " + to);
+	String args[] = {myAddress, sipHost, from, to, user, pass, debug};
+	String foo = new Invite().init(args);
+	out.println(foo);
 %>
