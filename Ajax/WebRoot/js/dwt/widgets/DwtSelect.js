@@ -230,6 +230,30 @@ function() {
 	return this._name;
 };
 
+/**
+ * @return The enabled state of the control
+ * @type Boolean
+ * 
+ * @see #setEnabled
+ */
+DwtSelect.prototype.getEnabled =
+function() {
+	return this._button.getEnabled();
+};
+
+/**
+ * Sets the control's enabled state. If <code>setHtmlElement</code> is true, then 
+ * this method will also set the control's html element disabled attribute
+ * 
+ * @param {Boolean} enabled true the control is enabled
+ * @param {Boolean} setHtmlElement true, then set the control's html element 
+ * 		disabled attribute (optional)
+ */
+DwtSelect.prototype.setEnabled =
+function(enabled, setHtmlElement) {
+	this._button.setEnabled(enabled, setHtmlElement);
+};
+
 DwtSelect.prototype.disable = 
 function() {
 	this._button.setEnabled(false);
