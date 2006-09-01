@@ -1354,7 +1354,30 @@ DwtControl.prototype.clearContent =
 function() {
 	this.getHtmlElement().innerHTML = "";
 };
- 
+
+/**
+ * Applies part of the hack to make the blinking curosor show up in
+ * Firefox text input fields. This should be called when some DOM
+ * region -- such as a dialog or a tab page -- is being displayed.
+ */
+DwtControl.prototype.applyCaretHack =
+function() {
+	if (Dwt.CARET_HACK_ENABLED) {
+		// Go up the hierarchy and find the element that is a child of the shell.
+		var shellChild = this;
+		while (shellChild.parent && !(shellChild.parent instanceof DwtShell)) {
+			shellChild = shellChild.parent;	
+		}
+		// Remove the child from the shell, and then put it back exactly where it was.
+		if (shellChild) {
+			var shellElement = shellChild.parent.getHtmlElement();
+			var childElement = shellChild.getHtmlElement();
+			var sibling = childElement.nextSibling;
+			shellElement.removeChild(childElement);
+			shellElement.insertBefore(childElement, sibling);
+		}
+	}
+};
 
 /**
  * This protected method is called by the keyboard navigate infrastructure when a control 
@@ -2205,6 +2228,7 @@ function() {
 	this.__controlEvent = DwtControl.__controlEvent;
 	this._dragging = DwtControl._NO_DRAG;
 	this.__ctrlInited = true;
+
 	// Make sure this is the last thing we do
 	this.parent.addChild(this, this.__index);
 };

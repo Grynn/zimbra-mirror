@@ -40,6 +40,9 @@
 * @param validatorCtxtObj	[object]			object context for validation function
 * @param className			[string]			CSS class
 * @param posStyle			[constant]			positioning style
+* @param skipCaretHack		[boolean]			true to NOT do hack to make the caret show up in Firefox.
+* 												The hack uses a block display div, so for an input that needs
+* 												to be displayed inline, set this parameter to true.
 */
 function DwtInputField(params) {
 
@@ -56,12 +59,15 @@ function DwtInputField(params) {
 	var inputFieldId = Dwt.getNextId();
 	var errorIconId = Dwt.getNextId();
 	var htmlEl = this.getHtmlElement();
+	var doCursorHack = params.skipCaretHack;
+	var hackBegin = doCursorHack ? "" : Dwt.CARET_HACK_BEGIN;
+	var hackEnd = doCursorHack ? "" : Dwt.CARET_HACK_END;
 	if (this._errorIconStyle == DwtInputField.ERROR_ICON_NONE) {
 		if (params.rows && params.rows > 1) {
-			htmlEl.innerHTML =["<textarea id='", inputFieldId, "' rows=", params.rows, "></textarea"].join("");
+			htmlEl.innerHTML =[hackBegin, "<textarea id='", inputFieldId, "' rows=", params.rows, "></textarea>", hackEnd].join("");
 		} else {
-			htmlEl.innerHTML = ["<input autocomplete='off' id='", inputFieldId, "' type='",
-				(this._type != DwtInputField.PASSWORD) ? "text" : "password", "'/>"].join("");
+			htmlEl.innerHTML = [hackBegin, "<input autocomplete='off' id='", inputFieldId, "' type='",
+				(this._type != DwtInputField.PASSWORD) ? "text" : "password", "'/>", hackEnd].join("");
 		}
 				
 	} else {
@@ -70,9 +76,9 @@ function DwtInputField(params) {
 		if (this._errorIconStyle == DwtInputField.ERROR_ICON_LEFT)
 			htmlArr[i++] = ["<td style='padding-right:2px;'id='", errorIconId, "'></td>"].join("");
 
-		htmlArr[i++] = ["<td><input autocomplete='off' id='", inputFieldId, "' type='",
+		htmlArr[i++] = ["<td>", hackBegin, "<input autocomplete='off' id='", inputFieldId, "' type='",
 			(this._type != DwtInputField.PASSWORD) ? "text" : "password",
-			"'/></td>"].join("");
+			"'/>", hackEnd, "</td>"].join("");
 
 		if (this._errorIconStyle == DwtInputField.ERROR_ICON_RIGHT)
 			htmlArr[i++] = ["<td style='padding-left:2px;' id='", errorIconId, "'></td>"].join("");

@@ -64,7 +64,7 @@ function DwtBaseDialog(parent, className, title, zIndex, mode, loc, view, dragHa
 		this._loc.x = this._loc.y = Dwt.LOC_NOWHERE;
 	}
 	
-	this._ffHackDisabled = false;
+	this._ffHackDisabled = true;
 	
 	// Default dialog tab group. Note that we disable application handling of
 	// keyboard shortcuts, since we don't want the view underneath reacting to
@@ -140,7 +140,9 @@ function(dragHandleId) {
 DwtBaseDialog.prototype.popup =
 function(loc) {
 	if (this._poppedUp) return;
-	
+
+	this.applyCaretHack();
+
 	this.cleanup(true);
 	var thisZ = this._zIndex;
 	// if we're modal, setup the veil effect,

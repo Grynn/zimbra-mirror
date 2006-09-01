@@ -262,6 +262,7 @@ function(tabKey) {
 		this._hideAllTabs();
 		//make this tab visible
 		var tabView = this.getTabView(tabKey);
+		this.applyCaretHack();
 		Dwt.setVisible(tabView.getHtmlElement(), true);
 		tabView.showMe();
 	}
