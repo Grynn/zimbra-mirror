@@ -800,7 +800,7 @@ function() {
 };
 
 /**
- * Set's the control's enabled state. If <code>setHtmlElement</code> is true, then 
+ * Sets the control's enabled state. If <code>setHtmlElement</code> is true, then 
  * this method will also set the control's html element disabled attribute
  * 
  * @param {Boolean} enabled true the control is enabled
