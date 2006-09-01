@@ -114,7 +114,6 @@ function(loc) {
 		this._shell._veilOverlay.dialogZ.push(thisZ);
 		Dwt.setZIndex(this._shell._veilOverlay, veilZ);
 	}
-	Dwt._ffOverflowHack(this._htmlElId, thisZ, false);
 	loc = this._loc = loc || this._loc; // use whichever has a value, local has precedence
 	var sizeShell = this._shell.getSize();
 	var sizeThis = this.getSize();

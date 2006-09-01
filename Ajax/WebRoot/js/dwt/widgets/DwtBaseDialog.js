@@ -64,8 +64,6 @@ function DwtBaseDialog(parent, className, title, zIndex, mode, loc, view, dragHa
 		this._loc.x = this._loc.y = Dwt.LOC_NOWHERE;
 	}
 	
-	this._ffHackDisabled = true;
-	
 	// Default dialog tab group. Note that we disable application handling of
 	// keyboard shortcuts, since we don't want the view underneath reacting to
 	// keystrokes in the dialog.
@@ -152,11 +150,6 @@ function(loc) {
 	}
 
 	this._shell._veilOverlay.activeDialogs.push(this);
-
-	
-	// Deal with Firefox's horrible bug with absolutely 
-	// positioned divs and inputs floating over them.
-	if (!this._ffHackDisabled) Dwt._ffOverflowHack(this._htmlElId, thisZ, null, false);
 	
 	// use whichever has a value, local has precedence
 	if (loc) {
@@ -175,11 +168,6 @@ function(loc) {
 	kbMgr.pushTabGroup(this._tabGroup);
 	kbMgr.pushDefaultHandler(this);
 	this._tabGroup.resetFocusMember(true);
-}
-
-DwtBaseDialog.prototype._disableFFhack = 
-function() {
-	this._ffHackDisabled = true;
 }
 
 DwtBaseDialog.prototype.focus = 
@@ -220,7 +208,6 @@ function() {
 		if (this._mode == DwtBaseDialog.MODAL) {
 			this._undoModality(myZIndex);
 		} else {
-			if (!this._ffHackDisabled) Dwt._ffOverflowHack(this._htmlElId, myZIndex, null, false);
 			this._shell._veilOverlay.activeDialogs.pop();
 		}
 		//this.removeKeyListeners();
@@ -374,7 +361,6 @@ function (myZIndex) {
 	var veilZ = this._shell._veilOverlay.veilZ;
 	veilZ.pop();
 	var newVeilZ = veilZ[veilZ.length - 1];
-	if (!this._ffHackDisabled) Dwt._ffOverflowHack(this._htmlElId, myZIndex, null, false);
 	Dwt.setZIndex(this._shell._veilOverlay, newVeilZ);
 	this._shell._veilOverlay.dialogZ.pop();
 	this._shell._veilOverlay.activeDialogs.pop();

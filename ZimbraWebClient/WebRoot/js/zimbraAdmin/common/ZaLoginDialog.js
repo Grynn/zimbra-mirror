@@ -112,11 +112,6 @@ function(loc) {
 
 	this._shell._veilOverlay.activeDialogs.push(this);
 
-	
-	// Deal with Firefox's horrible bug with absolutely 
-	// positioned divs and inputs floating over them.
-	if (!this._ffHackDisabled) Dwt._ffOverflowHack(this._htmlElId, thisZ, null, false);
-	
 	// use whichever has a value, local has precedence
 	if (loc) {
 		this._loc.x = loc.x;
