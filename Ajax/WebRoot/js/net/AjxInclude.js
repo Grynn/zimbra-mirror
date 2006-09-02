@@ -35,10 +35,9 @@
  * @author Mihai Bazon, <mihai@zimbra.com>
  */
 function AjxInclude(includes, baseurl, callback, proxy) {
-	var script = null;
 	var head = document.getElementsByTagName("head")[0];
 
-	function loadNextScript() {
+	function loadNextScript(script) {
 		if (AjxEnv.isIE && script && !/loaded|complete/.test(script.readyState))
 			return;
 		if (script) {
@@ -56,18 +55,20 @@ function AjxInclude(includes, baseurl, callback, proxy) {
 			var fullurl = scripts.shift();
 			var orig = fullurl;
 			if (!/^((https?|ftps?):\x2f\x2f|\x2f)/.test(fullurl)) {
-				// relative URL, add cache param
-                if(cacheKillerVersion) {
-                    fullurl = baseurl + fullurl + "?v=" + cacheKillerVersion;
-                } else {
-                    fullurl = baseurl + fullurl;
-                }
-             } else if (proxy && fullurl.indexOf('/') != 0) {
+				if (baseurl)
+					fullurl = baseurl + fullurl;
+				if (cacheKillerVersion)
+					fullurl += "?v=" + cacheKillerVersion;
+			} else if (proxy && fullurl.indexOf('/') != 0) {
  				// fully qualified URL-s will go through our proxy
  				fullurl = proxy + AjxStringUtil.urlEncode(fullurl);
 			}
-			script = document.createElement("script");
-			script[AjxInclude.eventName] = loadNextScript;
+			var script = document.createElement("script");
+			var handler = AjxCallback.simpleClosure(loadNextScript, null, script);
+			if (AjxEnv.isIE)
+				script.attachEvent("onreadystatechange", handler);
+			else
+				script.addEventListener("load", handler, true);
 			script.type = "text/javascript";
 			script.src = fullurl;
 			window.status = "Loading script: " + orig;
@@ -80,10 +81,8 @@ function AjxInclude(includes, baseurl, callback, proxy) {
 		}
 	};
 
-	loadNextScript();
+	loadNextScript(null);
 };
-
-AjxInclude.eventName = AjxEnv.isIE ? "onreadystatechange" : "onload";
 
 // The document.write hack.  If files are present in this array, they will be
 // favored by AjxInclude (see inner function loadNextScript).  I originally

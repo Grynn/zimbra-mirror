@@ -1,0 +1,25 @@
+<zimlet name="com_zimbra_ads" version="0.1" description="Displays Amazon ads">
+  <include>amazon-ads.js</include>
+  <include>amazon-categories.js</include>
+  <includeCSS>amazon.css</includeCSS>
+  <handlerObject>Com_Zimbra_Ads</handlerObject>
+
+  <zimletPanelItem label="Amazon Store" icon="AMAZON-panelIcon">
+
+    <toolTipText>Click to configure your Amazon Store preferences</toolTipText>
+
+    <contextMenu>
+      <menuItem label="Preferences..." id="PREFERENCES" />
+    </contextMenu>
+
+  </zimletPanelItem>
+
+  <userProperties>
+    <property type="string" name="category" label="Category" value="pc-hardware" />
+    <property type="string" name="subcategory" label="Subcategory" value="13900871" />
+    <property type="string" name="keywords" label="Keywords" value="" />
+    <property type="boolean" name="useKeywords" label="Use keywords" value="false" />
+    <property type="boolean" name="random" label="Random" value="false" />
+  </userProperties>
+
+</zimlet>
