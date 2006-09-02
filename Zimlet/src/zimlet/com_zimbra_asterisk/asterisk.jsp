@@ -315,13 +315,32 @@
 					if (numCallees == 0) {
 						this.shutDown();
 					}
+				/*
+				# TRYING - 100
+				# RINGING - 180
+				# CALL_IS_BEING_FORWARDED - 181
+				# QUEUED - 182
+				# SESSION_PROGRESS - 183
+				*/
 				} else if (response.getStatusCode() == Response.TRYING) {
 					if (debug) {
 						System.out.println("Trying number...");
 					}
 				} else if (response.getStatusCode() == Response.RINGING) {
 					if (debug) {
-						System.out.println("Trying number...");
+						System.out.println("Ringing number...");
+					}
+				} else if (response.getStatusCode() == Response.CALL_IS_BEING_FORWARDED) {
+					if (debug) {
+						System.out.println("Forwarding response...");
+					}
+				} else if (response.getStatusCode() == Response.QUEUED) {
+					if (debug) {
+						System.out.println("Queued response...");
+					}
+				} else if (response.getStatusCode() == Response.SESSION_PROGRESS) {
+					if (debug) {
+						System.out.println("Session progress response...");
 					}
 				} else {
 					if (debug) {
