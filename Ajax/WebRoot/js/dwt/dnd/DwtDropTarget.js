@@ -48,11 +48,15 @@ function DwtDropTarget(transferType) {
 	/**@private*/
 	this.__transferTypes = new Array();
 	if (transferType) {
-		var len = arguments.length;
-		for (var i = 0; i < len; i++)
-			this.__transferTypes[i] = arguments[i];
-			
-		this.__transferTypes.length = i;
+		if (transferType instanceof Array) {
+			this.__transferTypes = transferType;
+		} else {
+			var len = arguments.length;
+			for (var i = 0; i < len; i++)
+				this.__transferTypes[i] = arguments[i];
+				
+			this.__transferTypes.length = i;
+		}
 	}
 }
 

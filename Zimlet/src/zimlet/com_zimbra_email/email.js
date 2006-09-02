@@ -31,7 +31,9 @@ Com_Zimbra_Email.prototype.constructor = Com_Zimbra_Email;
 
 Com_Zimbra_Email.prototype.init =
 function() {
-	this._contacts = this._appCtxt.getApp(ZmZimbraMail.CONTACTS_APP).getContactList();
+	if (this._appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
+		this._contacts = this._appCtxt.getApp(ZmZimbraMail.CONTACTS_APP).getContactList();
+	}
 };
 
 Com_Zimbra_Email.prototype._getHtmlContent =
