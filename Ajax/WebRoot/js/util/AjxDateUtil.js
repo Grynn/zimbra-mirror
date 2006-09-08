@@ -61,9 +61,6 @@ AjxDateUtil._daysPerMonth = {
 	11:31
 };
 
-AjxDateUtil._12hour = "12";
-AjxDateUtil._24hour = "24";
-
 AjxDateUtil._init =
 function() {                                           
 	AjxDateUtil._dateFormat = AjxDateFormat.getDateInstance(AjxDateFormat.SHORT).clone();
@@ -106,6 +103,20 @@ function(y, m) {
 AjxDateUtil.isLeapYear =
 function(y) {
 	return (new Date(y, 1, 29)).getMonth() == 1;
+};
+
+/* returns true if user's locale uses 24-hour time
+ */
+AjxDateUtil.isLocale24Hour =
+function() {
+	// XXX: is there better/easier way to determine this?!
+	var timeFormatter = AjxDateFormat.getTimeInstance(AjxDateFormat.SHORT);
+	var len = timeFormatter._segments.length;
+	for (var j = 0; j < len; j++) {
+		if (timeFormatter._segments[j]._s == "a")
+			return false;
+	}
+	return true;
 };
 
 /**
