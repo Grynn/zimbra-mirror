@@ -321,7 +321,15 @@ sub skipUntil {
 
 sub runCmd {
 	# print STDERR "RUNNING: @_\n";
-	return 0xffff & system (@_);
+	system (@_);
+	return $? >> 8;
+}
+
+sub isLdapRunning {
+
+	return 1 
+	 if (`zmprov -l gacf 2> /dev/null | grep zimbraSmtpPort 2> /dev/null` =~ m/^zimbraSmtpPort/);
+	return undef;
 }
 
 sub processLine {
@@ -755,6 +763,7 @@ sub controlProcess {
 
 my $cpid;
 
+
 if ($fork) {
 	if (-f "$homedir/log/zmmtaconfig.pid") {
 		$cpid = `cat $homedir/log/zmmtaconfig.pid`;
@@ -770,28 +779,26 @@ if ($fork) {
 	}
 
 	close STDIN;
-	setVar();
-	while (1) {
-		# don't rewrite configs if we can't contact ldap
-		# same goes for restarting servers
-		if (runCmd("$homedir/bin/zmprov -l gacf > /dev/null 2>&1")) {
-			sleep 60;
-			next;
-		}
-		readConfig();
-		compareKeys();
-		stopStartServers();
-		print STDERR "Sleeping\n";
-		sleep 60;
-		%prevknownkeys=%knownkeys;
-		%knownkeys = ();
-		$VARS_SET=0;
-		$SERVICE_SET=0;
-		$LOCALS_SET=0;
-		$firstrun = 0;
-	}
 }
-
 setVar();
-
-
+while (1) {
+	# don't rewrite configs if we can't contact ldap
+	# same goes for restarting servers
+	unless (isLdapRunning()) {
+		print STDERR "Sleeping...Couldn't contact LDAP return=$?\n";
+		sleep 60;
+		next;
+	}
+	readConfig();
+	compareKeys();
+	stopStartServers();
+	print STDERR "Sleeping\n";
+	sleep 60;
+	%prevknownkeys=%knownkeys;
+	%knownkeys = ();
+	$VARS_SET=0;
+	$SERVICE_SET=0;
+	$LOCALS_SET=0;
+	$firstrun = 0;
+}
+exit;
