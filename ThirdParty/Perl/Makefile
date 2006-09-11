@@ -6,6 +6,8 @@ PERL_ROOT ?= $(shell pwd)
 P4_ROOT ?= $(shell cd $(PERL_ROOT)/../..; pwd)
 ZIMBRA_HOME ?= /opt/zimbra
 
+LOGFILE ?= /tmp/ThirdParty-Perllibs.log
+
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
 PERL 	:= $(shell which perl)
@@ -109,42 +111,55 @@ CLEAN_TARGETS	=	\
 
 all: $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 	mkdir -p $(TMPDIR)
-
+	@echo "Logging to $(LOGFILE)"
 	@for lib in $(PERL_LIBS); do \
-		echo "Compiling perl lib $$lib"; \
-		LDFLAGS="-fPIC" CFLAGS="-fPIC" BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) perl -I$(DEST_LIB_DIR) -MCPAN -e "$$CPAN::Config->{make_arg}.='CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; $$CPAN::Config->{makepl_arg}.='CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; force (\"install\", \"$$lib\")" ; \
+		echo -n "Compiling perl lib $$lib ..."; \
+		LDFLAGS="-fPIC" CFLAGS="-fPIC" BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) perl -I$(DEST_LIB_DIR) -MCPAN -e "$$CPAN::Config->{make_arg}.='CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; $$CPAN::Config->{makepl_arg}.='CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
+		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 
 	@for lib in $(DBFILE_PERL_LIBS); do \
-		echo "Compiling perl lib $$lib"; \
-		DB_FILE_INCLUDE=$(BDB_INC) DB_FILE_LIB=$(BDB_LIB) perl -I$(DEST_LIB_DIR) -MCPAN -e "force (\"install\", \"$$lib\")" ; \
+		echo -n "Compiling perl lib $$lib ..."; \
+		DB_FILE_INCLUDE=$(BDB_INC) DB_FILE_LIB=$(BDB_LIB) perl -I$(DEST_LIB_DIR) -MCPAN -e "force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
+		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 
-	echo "Compiling perl lib DBD::mysql"; \
-	perl -I$(DEST_LIB_DIR) -MCPAN -e 'get DBI; $$CPAN::Config->{makepl_arg}.=" --nocatchstderr --mysql_config=\"/opt/zimbra/mysql/bin/mysql_config\" --libs=\"-L/opt/zimbra/mysql/lib -lmysqlclient -lz -lm\" --cflags=\" -I$(MYSQL_INCLUDE) -Os -fno-common\" "; $$CPAN::Config->{make_arg} .=" LD_RUN_PATH=/opt/zimbra/mysql/lib"; force ("install", "DBD::mysql")' ; \
+	@echo -n "Compiling perl lib DBD::mysql ..."; \
+	perl -I$(DEST_LIB_DIR) -MCPAN -e 'get DBI; $$CPAN::Config->{makepl_arg}.=" --nocatchstderr --mysql_config=\"/opt/zimbra/mysql/bin/mysql_config\" --libs=\"-L/opt/zimbra/mysql/lib -lmysqlclient -lz -lm\" --cflags=\" -I$(MYSQL_INCLUDE) -Os -fno-common\" "; $$CPAN::Config->{make_arg} .=" LD_RUN_PATH=/opt/zimbra/mysql/lib"; force ("install", "DBD::mysql")' >> $(LOGFILE) 2>&1; \
+	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 
 	@for lib in $(SA_PERL_LIBS); do \
-		echo "Compiling perl lib $$lib"; \
-		perl -I$(DEST_LIB_DIR) -MCPAN -e 'get "Mail::SpamAssassin"; $$CPAN::Config->{makepl_arg}="DATADIR=/opt/zimbra/conf/spamassassin"; force ("install", "Mail::SpamAssassin")' ; \
+		echo -n "Compiling perl lib $$lib" ...; \
+		perl -I$(DEST_LIB_DIR) -MCPAN -e 'get "Mail::SpamAssassin"; $$CPAN::Config->{makepl_arg}="DATADIR=/opt/zimbra/conf/spamassassin"; force ("install", "Mail::SpamAssassin")' >> $(LOGFILE) 2>&1; \
+	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done	
 
 	@for lib in $(SWATCH); do \
-		echo "Compiling perl lib $$lib"; \
+		echo -n "Compiling perl lib $$lib ..."; \
 		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xzf $$lib.tar.gz; cd $$lib; \
 			BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) \
 			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
-			make; make install;) \
+			make; make install;) > $(LOGFILE) 2>&1; \
+			if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done	
+	@echo -n "Creating $(PERL_TGZ_DEST)..."; \
+	(cd $(DEST_LIB_DIR); tar czf $(PERL_TGZ_DEST) .); \
+	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi
+	chmod -R a+w $(PERL_TGZ_DEST_DIR)
 
-	(cd $(DEST_LIB_DIR); tar czf $(PERL_TGZ_DEST) .)
+tarball:
+	@echo -n "Creating $(PERL_TGZ_DEST)..."; \
+	(cd $(DEST_LIB_DIR); tar czf $(PERL_TGZ_DEST) .); \
+	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi
 	chmod -R a+w $(PERL_TGZ_DEST_DIR)
 
 dbfile:
-	@for lib in $(DBFILE_PERL_LIBS); do \
-		echo "Compiling perl lib $$lib"; \
-		DB_FILE_INCLUDE=$(BDB_INC) DB_FILE_LIB=$(BDB_LIB) perl -I$(DEST_LIB_DIR) -MCPAN -e "force (\"install\", \"$$lib\")" ; \
-	done
+	@(for lib in $(DBFILE_PERL_LIBS); do \
+		echo -n "Compiling perl lib $$lib"; \
+		(DB_FILE_INCLUDE=$(BDB_INC) DB_FILE_LIB=$(BDB_LIB) perl -I$(DEST_LIB_DIR) -MCPAN -e "force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
+		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "SUCCEEDED.";  fi \
+	done)
 
 sa:
 	@for lib in $(SA_PERL_LIBS); do \
