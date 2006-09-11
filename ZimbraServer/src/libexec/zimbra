@@ -44,14 +44,23 @@ case "$1" in
 		command shutdown
 		command startup
 		RETVAL=$?
+    if [ -d /var/lock/subsys -a $RETVAL -eq 0 ]; then
+      touch /var/lock/subsys/zimbra
+    fi
 		;;
 	start)
 		command startup
 		RETVAL=$?
+    if [ -d /var/lock/subsys -a $RETVAL -eq 0 ]; then
+      touch /var/lock/subsys/zimbra
+    fi
 		;;
 	stop)
 		command shutdown
 		RETVAL=$?
+    if [ -d /var/lock/subsys -a $RETVAL -eq 0 ]; then
+      rm -f /var/lock/subsys/zimbra
+    fi
 		;;
 	reload|status)
 		command $1
