@@ -328,7 +328,7 @@ sub runCmd {
 sub isLdapRunning {
 
 	return 1 
-	 if (`zmprov -l gacf 2> /dev/null | grep zimbraSmtpPort 2> /dev/null` =~ m/^zimbraSmtpPort/);
+	 if (`zmprov -l gacf 2> /dev/null | grep zimbraSmtpPort 2> /dev/null` =~ m/^zimbraSmtpPort/m);
 	return undef;
 }
 
