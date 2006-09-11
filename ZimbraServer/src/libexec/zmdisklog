@@ -31,6 +31,8 @@ use lib "/opt/zimbra/zimbramon/lib";
 
 use Zimbra::Mon::Logger;
 
+$ENV{PATH} = "/bin:/usr/bin:/sbin:/usr/sbin:/opt/zimbra/bin";
+
 # Exit if software-only node.
 exit(0) unless (-f '/opt/zimbra/conf/localconfig.xml');
 
