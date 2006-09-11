@@ -785,9 +785,11 @@ while (1) {
 	# don't rewrite configs if we can't contact ldap
 	# same goes for restarting servers
 	unless (isLdapRunning()) {
-		print STDERR "Sleeping...Couldn't contact LDAP return=$?\n";
-		sleep 60;
-		next;
+    if (scalar keys %FORCE == 0) {
+		  print STDERR "Sleeping...Couldn't contact LDAP return=$?\n";
+		  sleep 60;
+		  next;
+    }
 	}
 	readConfig();
 	compareKeys();
