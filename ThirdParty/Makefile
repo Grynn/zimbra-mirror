@@ -51,7 +51,10 @@ DIRS := mysql \
 	popt \
 	perdition \
 	PostFix/PostFix-$(POSTFIX_VERSION) \
-	dspam
+	dspam \
+	Perl
+
+LOGFILE := /tmp/ThirdParty.make.log
 
 all: $(ZIMBRA_HOME) build 
 
@@ -59,11 +62,12 @@ $(ZIMBRA_HOME):
 	mkdir -p $@
 
 build:
-	for dir in $(DIRS); do \
-		echo "*** Building in $$dir"; \
-		make -C $$dir; \
-	done
-	make -C apache-httpd tar
+	 @(for dir in $(DIRS); do \
+		echo -n "*** Building in $$dir "; \
+		make -C $$dir >> $(LOGFILE) 2>&1; \
+		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "SUCCEEDED.";  fi \
+	done)
+	@(make -C apache-httpd tar $(LOGFILE))
 
 clean:
 	for dir in $(DIRS); do \
@@ -78,26 +82,29 @@ allclean:
 	done
 
 mysql: force
-	(cd $@; make)
+	(cd $@; make > $(LOGFILE).$$ 2>&1)
 
 sleepycat: force
-	(cd $@; make)
+	(cd $@; make > $(LOGFILE).$$ 2>&1)
 
 openldap: force
-	(cd $@; make)
+	(cd $@; make > $(LOGFILE).$$ 2>&1)
 
 cyrus-sasl: force
-	(cd $@; make)
+	(cd $@; make > $(LOGFILE).$$ 2>&1)
 
 aspell: force
-	(cd $@; make)
+	(cd $@; make > $(LOGFILE).$$ 2>&1)
 
 clamav: force
-	(cd $@; make)
+	(cd $@; make > $(LOGFILE).$$ 2>&1)
 
 postfix: PostFix/PostFix-$(POSTFIX_VERSION)
 
 PostFix/PostFix-$(POSTFIX_VERSION): force
+	(cd $@; make > $(LOGFILE).$$ 2>&1)
+
+perl:
 	(cd $@; make)
 
 force: ;
