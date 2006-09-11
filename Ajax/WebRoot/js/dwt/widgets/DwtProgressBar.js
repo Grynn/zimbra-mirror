@@ -159,8 +159,8 @@ function() {
 
 	this._row = this._table.insertRow(-1);
 
-	if(AjxEnv.isLinux)
-		this._row.style.lineHeight = 13;
+	//if(AjxEnv.isLinux)
+		//this._row.style.lineHeight = 13;
 	
 	this._cell = this._row.insertCell(-1);
 	
