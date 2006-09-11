@@ -1,0 +1,7 @@
+#ifndef ZIMBRA_VERSION_H
+#define ZIMBRA_VERSION_H
+
+#define ZIMBRA_PACKAGE "@PACKAGE@"
+#define ZIMBRA_VERSION "@VERSION@"
+
+#endif
