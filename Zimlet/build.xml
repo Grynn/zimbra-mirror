@@ -97,7 +97,7 @@
 		</javac>
 	</target>
 
-	<target name="package" depends="jar" description="Prepare distribution files">
+	<target name="package" depends="jar,package-zimlets" description="Prepare distribution files">
 		<copy todir="${dist.conf.dir}">
 			<fileset dir="${config.dir}" includes="*"/>
 		</copy>
@@ -115,10 +115,11 @@
 		<zip destfile="${dist.zimlet.dir}/com_zimbra_phone.zip" update="true">
 			<fileset dir="${build.classes.dir}" includes="**/NANPHandler.class"/>
 		</zip>
+		<echo message="dist.zimlet.dir=${dist.zimlet.dir}" file="${dist.dir}/build.properties" />
 	</target>
 	<target name="package-zimlets-extra" depends="build-init,compile">
 		<foreach list="${zimlets-extra}" target="package-zimlet-extra" param="zimlet"/>
-		<zip destfile="${dist.zimlet.dir}/com_zimbra_tracking.zip" update="true">
+		<zip destfile="${dist.zimlet-extra.dir}/com_zimbra_tracking.zip" update="true">
 			<fileset dir="${build.classes.dir}" includes="**/TrackingHandler.class"/>
 		</zip>
 	</target>
