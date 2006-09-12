@@ -30,7 +30,7 @@
 	</classpathentry>
 	<classpathentry sourcepath="/ThirdParty/junit-3.8.1" kind="lib" path="jars/junit-3.8.1.jar">
 		<attributes>
-			<attribute value="http://junit.sourceforge.net/javadoc/" name="javadoc_location"/>
+			<attribute value="http://www.junit.org/junit/javadoc/3.8.1/" name="javadoc_location"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="jars/commons-beanutils-1.6.1.jar"/>
