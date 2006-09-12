@@ -102,7 +102,6 @@ COMMIT;
 
 CREATE TABLE mailbox (
    id                 INTEGER UNSIGNED NOT NULL PRIMARY KEY,
-   group_id           INTEGER UNSIGNED NOT NULL,  # mailbox group
    account_id         CHAR(36) NOT NULL,          # e.g. "d94e42c4-1636-11d9-b904-4dd689d02402"
    index_volume_id    TINYINT UNSIGNED NOT NULL,
    item_id_checkpoint INTEGER UNSIGNED NOT NULL DEFAULT 0,
@@ -179,3 +178,4 @@ CREATE TABLE service_status (
   
   UNIQUE INDEX i_server_service (server(100), service(100))
 ) ENGINE = MyISAM;
+

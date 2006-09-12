@@ -28,6 +28,7 @@ CREATE DATABASE ${DATABASE_NAME}
 DEFAULT CHARACTER SET utf8;
 
 CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
+   mailbox_id    INTEGER UNSIGNED NOT NULL,
    id            INTEGER UNSIGNED NOT NULL,
    type          TINYINT NOT NULL,           # 1 = folder, 3 = tag, etc.
    parent_id     INTEGER UNSIGNED,
@@ -48,50 +49,56 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    change_date   INTEGER UNSIGNED,           # UNIX-style timestamp for last row modification
    mod_content   INTEGER UNSIGNED NOT NULL,  # change number for last change to "content" (e.g. blob)
 
-   PRIMARY KEY (id),
-   INDEX i_type (type),                      # for looking up folders and tags
-   INDEX i_parent_id (parent_id),            # for looking up a parent\'s children
-   INDEX i_folder_id_date (folder_id, date), # for looking up by folder and sorting by date
-   INDEX i_index_id (index_id),              # for looking up based on search results
-   INDEX i_unread (unread),                  # there should be a small number of items with unread=TRUE
+   PRIMARY KEY (mailbox_id, id),
+   INDEX i_type (mailbox_id, type),          # for looking up folders and tags
+   INDEX i_parent_id (mailbox_id, parent_id),# for looking up a parent\'s children
+   INDEX i_folder_id_date (mailbox_id, folder_id, date), # for looking up by folder and sorting by date
+   INDEX i_index_id (mailbox_id, index_id),  # for looking up based on search results
+   INDEX i_unread (mailbox_id, unread),      # there should be a small number of items with unread=TRUE
                                              # no compound index on (unread, date), so we save space at
                                              # the expense of sorting a small number of rows
-   INDEX i_date (date),                      # fallback index in case other constraints are not specified
-   INDEX i_mod_metadata (mod_metadata),      # used by the sync code
-   INDEX i_tags_date (tags, date),           # for tag searches
-   INDEX i_flags_date (flags, date),         # for flag searches
-   INDEX i_volume_id (volume_id),            # for the foreign key into the volume table
-   
-   CONSTRAINT fk_mail_item_parent_id FOREIGN KEY (parent_id) REFERENCES ${DATABASE_NAME}.mail_item(id),
-   CONSTRAINT fk_mail_item_folder_id FOREIGN KEY (folder_id) REFERENCES ${DATABASE_NAME}.mail_item(id),
+   INDEX i_date (mailbox_id, date),          # fallback index in case other constraints are not specified
+   INDEX i_mod_metadata (mailbox_id, mod_metadata),      # used by the sync code
+   INDEX i_tags_date (mailbox_id, tags, date),           # for tag searches
+   INDEX i_flags_date (mailbox_id, flags, date),         # for flag searches
+   INDEX i_volume_id (mailbox_id, volume_id),            # for the foreign key into the volume table
+
+   CONSTRAINT fk_mail_item_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id),
+   #CONSTRAINT fk_mail_item_parent_id FOREIGN KEY (mailbox_id, parent_id) REFERENCES ${DATABASE_NAME}.mail_item(mailbox_id, id),
+   #CONSTRAINT fk_mail_item_folder_id FOREIGN KEY (mailbox_id, folder_id) REFERENCES ${DATABASE_NAME}.mail_item(mailbox_id, id),
    CONSTRAINT fk_mail_item_volume_id FOREIGN KEY (volume_id) REFERENCES zimbra.volume(id)
 ) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.open_conversation (
+   mailbox_id  INTEGER UNSIGNED NOT NULL,
    hash        CHAR(28) BINARY NOT NULL,
    conv_id     INTEGER UNSIGNED NOT NULL,
 
-   PRIMARY KEY (hash),
-   INDEX i_conv_id (conv_id),
-   CONSTRAINT fk_open_conversation_conv_id FOREIGN KEY (conv_id) REFERENCES ${DATABASE_NAME}.mail_item(id) ON DELETE CASCADE
+   PRIMARY KEY (mailbox_id, hash),
+   INDEX i_conv_id (mailbox_id, conv_id),
+   CONSTRAINT fk_open_conversation_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id),
+   CONSTRAINT fk_open_conversation_conv_id FOREIGN KEY (mailbox_id, conv_id) REFERENCES ${DATABASE_NAME}.mail_item(mailbox_id, id) ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.appointment (
+   mailbox_id  INTEGER UNSIGNED NOT NULL,
    uid         VARCHAR(255) NOT NULL,
    item_id     INTEGER UNSIGNED NOT NULL,
    start_time  DATETIME NOT NULL,
    end_time    DATETIME,
 
-   PRIMARY KEY (uid),
-   INDEX i_item_id (item_id),
-   CONSTRAINT fk_appointment_item_id FOREIGN KEY (item_id) REFERENCES ${DATABASE_NAME}.mail_item(id) ON DELETE CASCADE
+   PRIMARY KEY (mailbox_id, uid),
+   INDEX i_item_id (mailbox_id, item_id),
+   CONSTRAINT fk_appointment_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id),
+   CONSTRAINT fk_appointment_item_id FOREIGN KEY (mailbox_id, item_id) REFERENCES ${DATABASE_NAME}.mail_item(mailbox_id, id) ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.tombstone (
+   mailbox_id  INTEGER UNSIGNED NOT NULL,
    sequence    INTEGER UNSIGNED NOT NULL,  # change number for deletion
    date        INTEGER UNSIGNED NOT NULL,  # deletion date as a UNIX-style timestamp
    ids         TEXT,
 
-   INDEX i_sequence (sequence)
+   INDEX i_sequence (mailbox_id, sequence),
+   CONSTRAINT fk_tombstone_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id)
 ) ENGINE = InnoDB;
-
