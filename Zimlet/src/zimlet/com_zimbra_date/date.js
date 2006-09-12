@@ -101,7 +101,7 @@ var $RE_DD = "(\\d{1,2})";
 
 var $RE_YEAR42 = "(\\d{4}|\\d{2})";
 
-var $RE_OP_TIME = "(?:\\s+\\d{1,2}:\\d{2}:\\d{2}\\s*)?";
+var $RE_OP_TIME = "(?:\\s+\\d{1,2}:\\d{2}:\\d{2})?";
 
 var $RE_OP_DOW = "(?:\\s*" + $RE_DOW + "\\s*)?";
 
@@ -267,7 +267,7 @@ function(line, startIndex) {
 	return result;
 };
 
-// {June 6th, 2005}, {June 6}, {May 3rd, 04}, {May 24 10:11:26 2005},
+// {June 6th, 2005}, {June 6}, {May 24 10:11:26 2005},
 
 function ZmDate4ObjectHandler(appCtxt) {
 	Com_Zimbra_Date.call(this, appCtxt);
@@ -276,7 +276,7 @@ function ZmDate4ObjectHandler(appCtxt) {
 ZmDate4ObjectHandler.prototype = new Com_Zimbra_Date();
 ZmDate4ObjectHandler.prototype.constructor = ZmDate4ObjectHandler;
 ZmDate4ObjectHandler.prototype.name = "com_zimbra_date4";
-ZmDate4ObjectHandler.REGEX = new RegExp("\\b" + $RE_MONTH + $RE_SP + $RE_DOM + $RE_OP_TIME + $RE_OP_YEAR42 + "\\b", "ig");
+ZmDate4ObjectHandler.REGEX = new RegExp("\\b" + $RE_MONTH + $RE_SP + $RE_DOM + $RE_OP_TIME + $RE_OP_YEAR4 + "\\b", "ig");
 
 ZmDate4ObjectHandler.prototype.match =
 function(line, startIndex) {
@@ -288,14 +288,16 @@ function(line, startIndex) {
 	var month = Com_Zimbra_Date.MONTH[result[1].toLowerCase()];
 	var dom = parseInt(result[2], 10);
 	d.setMonth(month, dom);
-	if (result[3]) {
+	if (result[4]) {
 		var year = parseInt(result[3], 10);
-		if (year < 20) {
-			year += 2000;
-		} else if (year < 100) {
-			year += 1900;
+		if (year > 1000) {
+			d.setYear(year);
+		}		
+	} else if (result[3]) {
+		var year = parseInt(result[3], 10);
+		if (year > 1000) {
+			d.setYear(year);
 		}
-		d.setYear(year);
 	}
 	result.context = {date: d, monthOnly: 0};
 	return result;
