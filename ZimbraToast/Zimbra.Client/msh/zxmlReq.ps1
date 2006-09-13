@@ -1,0 +1,1 @@
+$global:zreq.ToXmlDocument().get_InnerXml()
