@@ -141,7 +141,7 @@ DwtButtonColorPicker.prototype.__colorDisplay_onMouseOver = function(ev, div) {
 	if (!this.getEnabled())
 		return;
 // 	div.style.backgroundColor = "";
-	Dwt.addClass(div, "DwtButtonColorPicker-display-disable");
+	Dwt.addClass(div, "ImgDisable");
 };
 
 DwtButtonColorPicker.prototype.__colorDisplay_onMouseOut = function(ev, div) {
@@ -149,7 +149,7 @@ DwtButtonColorPicker.prototype.__colorDisplay_onMouseOut = function(ev, div) {
 		return;
 // 	if (this.__color)
 // 		div.style.backgroundColor = this.__color;
-	Dwt.delClass(div, "DwtButtonColorPicker-display-disable");
+	Dwt.delClass(div, "ImgDisable");
 };
 
 /// Clears the selected color.  This function is called when the color display

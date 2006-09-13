@@ -1281,8 +1281,8 @@
 /* DwtButtonColorPicker styles */
 
 .DwtButtonColorPicker-display {
-	width: 10px;
-	height: 10px;
+	width: 14px;
+	height: 14px;
 	@FixIESizeQuirk@
 	#IFDEF GECKO
 	-moz-user-select: none;
@@ -1292,8 +1292,4 @@
 	#ENDIF
 	border: 1px solid;
 	border-color: #000 #fff #fff #000;
-}
-
-.DwtButtonColorPicker-display-disable {
-	background: url("/zimbra/js/ajax/config/style/disable.gif") no-repeat 50% 50%;
 }
