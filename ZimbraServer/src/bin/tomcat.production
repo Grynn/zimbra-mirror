@@ -58,7 +58,7 @@ EOF
 			fi
 			cat >>${tomcat_directory}/webapps/zimbra/downloads/index.html<<EOF
 <BR>
-<A HREF="/zimbra/downloads/${filename}">${filename}</A>
+<A HREF="/downloads/${filename}">${filename}</A>
 EOF
 		done
 		cat >>${tomcat_directory}/webapps/zimbra/downloads/index.html<<EOF

@@ -54,14 +54,14 @@ function() {
 	} else {
 		var i = 0;
 		var html = [];
-		html[i++] = "<table id=\"reminderTable\" style=\"width: 300px;border: 1px solid grey; padding: 0.5em;\"><tr><td><img src=\"/zimbra/img/loRes/common/CloseDis.gif\"/></td><td><b>";
+		html[i++] = "<table id=\"reminderTable\" style=\"width: 300px;border: 1px solid grey; padding: 0.5em;\"><tr><td><img src=\"/img/loRes/common/CloseDis.gif\"/></td><td><b>";
 		html[i++] = this.getMessage('appointment');
 		html[i++] = "</b></td><td><b>";
 		html[i++] = this.getMessage('reminder');
 		html[i++] = "</b></td></tr>";
 		for(var j=0;j<Com_Zimbra_Reminder._reminders.length;j++) {
 			html[i++] = "<tr id=\"remind" + j + "\"><td><img onclick=\"Com_Zimbra_Reminder._cancelReminder(" + j;
-			html[i++] = ")\" src=\"/zimbra/img/loRes/common/Close.gif\"/></td><td>";
+			html[i++] = ")\" src=\"/img/loRes/common/Close.gif\"/></td><td>";
 			html[i++] = Com_Zimbra_Reminder._reminders[j].name;
 			html[i++] = "</td><td>";
 			html[i++] = Com_Zimbra_Reminder._reminders[j].remindTime;

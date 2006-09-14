@@ -200,7 +200,7 @@
 
 <body>
 <table width=100% cellspacing=5>
-    <tr><td colspan=2 class='zimbraToday'><a target="_new" href="http://www.zimbra.com"><img src='/zimbra/img/loRes/logo/AppBanner.gif' border=0 /></a></td></tr>
+    <tr><td colspan=2 class='zimbraToday'><a target="_new" href="http://www.zimbra.com"><img src='/img/loRes/logo/AppBanner.gif' border=0 /></a></td></tr>
     <tr><td valign=top width=50%>
         <div class='zimbraHeader'>
             <table width='100%' class='zimbraTable' style="border-bottom-width:0;" cellspacing=0 cellpadding=0>
