@@ -48,24 +48,6 @@ ZaServerVersionInfo.load = function () {
 		ZaServerVersionInfo.release = versionResponse.info[0].release;
 		ZaServerVersionInfo.version = versionResponse.info[0].version;
 		//license expiration information is handled in com_zimbra_license.js
-		/*ZaServerVersionInfo.licenseExists = false;
-		if (resp.GetLicenseInfoResponse[0].expiration != null) {
-			var licenseResponse = resp.GetLicenseInfoResponse[0].expiration[0];
-			if (licenseResponse.date != null && licenseResponse.date != ""){
-				ZaServerVersionInfo.licenseExists = true;
-				ZaServerVersionInfo.licenseExpirationDate = ZaServerVersionInfo._parseDate(licenseResponse.date);
-				var now = new Date();
-				ZaServerVersionInfo.licenseExpired = (now.getTime() > ZaServerVersionInfo.licenseExpirationDate.getTime());
-			}
-			//HC: Testing purpose only
-			ZaServerVersionInfo.licenseExists = true ;
-			ZaServerVersionInfo.licenseExpired = true ;
-			ZaServerVersionInfo.licenseExpirationDate = ZaServerVersionInfo._parseDate("20060501") ;
-			///END TESTING
-		} else {
-			ZaServerVersionInfo.licenseExpired = false;
-			ZaServerVersionInfo.licenseExists = false;
-		} */
 	}
 };
 
