@@ -307,6 +307,8 @@ function(ex, method, params, restartOnError, obj) {
 			this.popupErrorDialog(ZaMsg.ERROR_ACCOUNT_EXISTS, ex, true);
 		} else if(ex.code == ZmCsfeException.VOLUME_NO_SUCH_PATH) {
 			this.popupErrorDialog(ZaMsg.ERROR_INVALID_VOLUME_PATH, ex, true);
+		} else if(ex.code == ZmCsfeException.LICENSE_ERROR) {
+			this.popupErrorDialog(ZaMsg.ERROR_LICENSE, ex, true);
 		} else if (ex.code == ZmCsfeException.CSFE_SVC_ERROR || 
 					ex.code == ZmCsfeException.SVC_FAILURE || 
 						(typeof(ex.code) == 'string' && ex.code && ex.code.match(/^(service|account|mail)\./))

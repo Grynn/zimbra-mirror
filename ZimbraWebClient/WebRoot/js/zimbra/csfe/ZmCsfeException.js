@@ -148,3 +148,4 @@ ZmCsfeException.define("MAIL_TOO_MANY_TERMS", "mail.TOO_MANY_QUERY_TERMS_EXPANDE
 ZmCsfeException.define("MAIL_UNABLE_TO_IMPORT_CONTACTS", "mail.UNABLE_TO_IMPORT_CONTACTS", ZMsg.errorUnableToImport);
 
 ZmCsfeException.define("VOLUME_NO_SUCH_PATH", "volume.NO_SUCH_PATH");
+ZmCsfeException.define("LICENSE_ERROR", "service.LICENSE_ERROR");
