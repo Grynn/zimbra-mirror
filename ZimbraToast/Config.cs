@@ -631,7 +631,7 @@ namespace Zimbra.Toast
 			{
 				toaster.SetFields( msgs[i] );
 				Invoke( new MethodInvoker(ShowToaster) );
-				System.Threading.Thread.Sleep( 1000 * 3 );
+				System.Threading.Thread.Sleep( 1000 * 5 );
 			}
 
 			Invoke( new MethodInvoker(HideToaster) );
@@ -647,6 +647,23 @@ namespace Zimbra.Toast
 			toaster.Hide();
 		}
 
+		public delegate void MoveItemDelegate( String itemId, String targetFolderId );
+
+		public void MoveItem( String itemId, String targetFolderId )
+		{
+			MoveItemDelegate d = new MoveItemDelegate(zimbraSession.MoveItem);
+			d.BeginInvoke( itemId, targetFolderId, null, null );
+			//zimbraSession.MoveItem( itemId, targetFolderId );
+		}
+
+		public delegate void FlagItemDelegate( String itemId );
+
+		public void FlagItem( String itemId )
+		{
+			FlagItemDelegate d = new FlagItemDelegate(zimbraSession.FlagItem);
+			d.BeginInvoke( itemId, null, null );
+			//zimbraSession.FlagItem( itemId );
+		}
 
 		#endregion
 

@@ -18,6 +18,7 @@ namespace Zimbra.Client.Mail
 		public static String GET_MSG_REQUEST				= "GetMsgRequest";
 		public static String SYNC_REQUEST					= "SyncRequest";
 		public static String NO_OP_REQUEST					= "NoOpRequest";
+		public static String MSG_ACTION_REQUEST				= "MsgActionRequest";
         
 		//responses
 		public static String GET_FOLDER_RESPONSE			= "GetFolderResponse";
@@ -27,6 +28,7 @@ namespace Zimbra.Client.Mail
 		public static String GET_APPT_RESPONSE				= "GetAppointmentResponse";
 		public static String GET_MSG_RESPONSE				= "GetMsgResponse";
 		public static String NO_OP_RESPONSE					= "NoOpResponse";
+		public static String MSG_ACTION_RESPONSE			= "MsgActionResponse";
         
 		//elements
 		public static String E_FOLDER						= "folder";
@@ -35,6 +37,7 @@ namespace Zimbra.Client.Mail
 		public static String E_FRAGMENT						= "fr";
 		public static String E_INSTANCE						= "inst";
 		public static String E_MESSAGE						= "m";
+		public static String E_ACTION						= "action"   ;
         
 		//attributes
 		public static String A_PARENT_FOLDER_ID				= "l";
@@ -59,7 +62,7 @@ namespace Zimbra.Client.Mail
 		public static String A_LOCATION						= "loc";
 		public static String A_INV_ID						= "invId";
 		public static String A_COMP_NUM						= "compNum";
-		
+		public static String A_OP							= "op";
 
 
 		//qualified names
@@ -71,6 +74,7 @@ namespace Zimbra.Client.Mail
 			new GetApptSummariesResponse(),
 			new GetAppointmentResponse(),
 			new NoOpResponse(),
+			new MsgActionResponse()
         };
 
 		//IZimbraService

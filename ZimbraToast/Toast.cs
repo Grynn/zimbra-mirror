@@ -135,6 +135,7 @@ namespace Zimbra.Toast
 			this.DeletePictureBox.Size = new System.Drawing.Size(16, 16);
 			this.DeletePictureBox.TabIndex = 22;
 			this.DeletePictureBox.TabStop = false;
+			this.DeletePictureBox.Click += new System.EventHandler(this.DeletePictureBox_Click);
 			this.DeletePictureBox.MouseEnter += new System.EventHandler(this.DeletePictureBox_MouseEnter);
 			this.DeletePictureBox.MouseLeave += new System.EventHandler(this.DeletePictureBox_MouseLeave);
 			// 
@@ -146,6 +147,7 @@ namespace Zimbra.Toast
 			this.FlagPictureBox.Size = new System.Drawing.Size(16, 16);
 			this.FlagPictureBox.TabIndex = 21;
 			this.FlagPictureBox.TabStop = false;
+			this.FlagPictureBox.Click += new System.EventHandler(this.FlagPictureBox_Click);
 			this.FlagPictureBox.MouseEnter += new System.EventHandler(this.FlagPictureBox_MouseEnter);
 			this.FlagPictureBox.MouseLeave += new System.EventHandler(this.FlagPictureBox_MouseLeave);
 			// 
@@ -395,6 +397,16 @@ namespace Zimbra.Toast
 				return;
 
 			System.Diagnostics.Process.Start( config.GetItemUri( currentMsg.itemId ) );
+		}
+
+		private void FlagPictureBox_Click(object sender, System.EventArgs e)
+		{
+			config.FlagItem( this.currentMsg.itemId );
+		}
+
+		private void DeletePictureBox_Click(object sender, System.EventArgs e)
+		{
+			config.MoveItem( this.currentMsg.itemId, "3" );
 		}
 
 	}

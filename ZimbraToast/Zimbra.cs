@@ -43,29 +43,50 @@ namespace Zimbra.Toast
 		{
 			get
 			{
-				if( authResponse == null || authResponse.AuthToken == null ) 
-				{
-					Auth();
-				}
-
 				Zimbra.Client.Mail.NoOpRequest noop = new Zimbra.Client.Mail.NoOpRequest();
-				
-				Zimbra.Client.RequestContext rc = new Zimbra.Client.RequestContext();
-				rc.Update( prevRespContext, authResponse );
-				
-				Zimbra.Client.RequestEnvelope req = new Zimbra.Client.RequestEnvelope( rc, noop );
-				
-				Zimbra.Client.ResponseEnvelope res = dispatcher.SendRequest( req );
-				prevRespContext = res.Context;
-
-
+				Zimbra.Client.ResponseEnvelope res = SendRequest( noop );
 				if( res.Context.Notifications != null ) 
 				{
 					return res.Context.Notifications.CreatedMessages;
 				}
-
 				return new Zimbra.Client.MessageSummary[0];
 			}
+		}
+
+		public void DeleteItem( String itemId )
+		{
+			Zimbra.Client.Mail.MsgActionRequest mar = new Zimbra.Client.Mail.MsgActionRequest( itemId, "delete" );
+			Zimbra.Client.ResponseEnvelope res = SendRequest( mar );
+		}
+
+		public void MoveItem( String itemId, String targetFolderId )
+		{
+			Zimbra.Client.Mail.MsgActionRequest mar = new Zimbra.Client.Mail.MsgActionRequest( itemId, "move", targetFolderId );
+			Zimbra.Client.ResponseEnvelope res = SendRequest( mar );
+		}
+
+
+		public void FlagItem( String itemId )
+		{
+			Zimbra.Client.Mail.MsgActionRequest mar = new Zimbra.Client.Mail.MsgActionRequest( itemId, "flag" );
+			Zimbra.Client.ResponseEnvelope res = SendRequest( mar );
+		}
+
+
+		private Zimbra.Client.ResponseEnvelope SendRequest( Zimbra.Client.Request apiRequest )
+		{
+			if( authResponse == null || authResponse.AuthToken == null ) 
+			{
+				Auth();
+			}
+				
+			Zimbra.Client.RequestContext rc = new Zimbra.Client.RequestContext();
+			rc.Update( prevRespContext, authResponse );
+				
+			Zimbra.Client.RequestEnvelope req = new Zimbra.Client.RequestEnvelope( rc, apiRequest );
+			Zimbra.Client.ResponseEnvelope res = dispatcher.SendRequest( req );
+			prevRespContext = res.Context;
+			return res;
 		}
 
 
