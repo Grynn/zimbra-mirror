@@ -627,10 +627,12 @@ XFormItem.prototype.getKeyPressHandlerHTML = function () {
 
 
 XFormItem.prototype.outputContainerTDStartHTML = function (html, updateScript, indent, colSpan, rowSpan) {
+	var _align = this.getAlign();
 	html.append(indent, "<td id=\"",  this.getId(), "___container\"",
 					(colSpan > 1 ? " colspan=" + colSpan : ""),
 					(rowSpan > 1 ? " rowspan=" + rowSpan : ""),
 					this.getContainerCssString(), 
+					(_align != _UNDEFINED_ ? " align='" + _align + "'" : ""),
 					">\r"
 	);
 } 
@@ -1651,7 +1653,7 @@ XFormItem.prototype.setElementEnabledCssClass = function (enable) {
 	if (enable) {
 		el.className = this.getCssClass();
 	} else {
-		el.className = this.getCssClass() + "_disabled";
+		el.className = (this.getCssClass() + "_disabled");
 	}
 }
 

@@ -278,6 +278,12 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 	width:5em;
 }
 
+.admin_xform_number_input_disabled {
+	width:5em;
+	background-color:transparent;
+	color:@_BaseColorD60_@;
+}
+
 .admin_xform_name_input {
 	width:200px;
 }

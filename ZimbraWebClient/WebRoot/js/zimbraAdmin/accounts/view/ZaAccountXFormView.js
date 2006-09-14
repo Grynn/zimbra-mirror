@@ -761,6 +761,56 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 								{ref:ZaAccount.A_zimbraPasswordLocked, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_PwdLocked,label:ZaMsg.NAD_PwdLocked, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged}
 							]
 						},
+						{type:_SEPARATOR_, colSpan:"*"},
+						{type:_GROUP_, id:"password_lockout_settings",
+							items :[
+								{ref:ZaAccount.A_zimbraPasswordLockoutEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									msgName:ZaMsg.NAD_zimbraPasswordLockoutEnabled,label:ZaMsg.NAD_zimbraPasswordLockoutEnabled, 
+									labelLocation:_LEFT_, 
+									labelCssStyle:"width:250px;", trueValue:"TRUE", falseValue:"FALSE", 
+									onChange:ZaTabView.onFormFieldChanged
+								},
+								{ref:ZaAccount.A_zimbraPasswordLockoutMaxFailures, type:_SUPER_TEXTFIELD_, 
+									relevant: "instance.attrs[ZaAccount.A_zimbraPasswordLockoutEnabled] == 'TRUE'",
+								 	relevantBehavior: _DISABLE_,
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									label:ZaMsg.NAD_zimbraPasswordLockoutMaxFailures+":",
+									subLabel:ZaMsg.NAD_zimbraPasswordLockoutMaxFailuresSub,
+									msgName:ZaMsg.NAD_zimbraPasswordLockoutMaxFailures,
+									labelLocation:_LEFT_, 
+									textFieldCssClass:"admin_xform_number_input", 
+									onChange:ZaTabView.onFormFieldChanged, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
+									labelCssStyle:"width:250px;"
+								},
+								{ref:ZaAccount.A_zimbraPasswordLockoutDuration, type:_SUPER_LIFETIME_, 
+									relevant: "instance.attrs[ZaAccount.A_zimbraPasswordLockoutEnabled] == 'TRUE'",
+									relevantBehavior: _DISABLE_,
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									label:ZaMsg.NAD_zimbraPasswordLockoutDuration+":",
+									subLabel:ZaMsg.NAD_zimbraPasswordLockoutDurationSub,
+									msgName:ZaMsg.NAD_zimbraPasswordLockoutDuration,
+									labelLocation:_LEFT_, 
+									textFieldCssClass:"admin_xform_number_input", 
+									onChange:ZaTabView.onFormFieldChanged, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
+									labelCssStyle:"width:250px;"
+								},
+								{ref:ZaAccount.A_zimbraPasswordLockoutFailureLifetime, type:_SUPER_LIFETIME_, 
+									relevant: "instance.attrs[ZaAccount.A_zimbraPasswordLockoutEnabled] == 'TRUE'",
+									relevantBehavior: _DISABLE_,								
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									label:ZaMsg.NAD_zimbraPasswordLockoutFailureLifetime+":",
+									subLabel:ZaMsg.NAD_zimbraPasswordLockoutFailureLifetimeSub,
+									msgName:ZaMsg.NAD_zimbraPasswordLockoutFailureLifetime,
+									labelLocation:_LEFT_, 
+									textFieldCssClass:"admin_xform_number_input", 
+									onChange:ZaTabView.onFormFieldChanged, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
+									labelCssStyle:"width:250px;"
+								}																		
+							]
+						},
 						{type:_SEPARATOR_, colSpan:"*"},							
 						{type:_GROUP_, 
 							items: [
@@ -770,7 +820,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 								{ref:ZaAccount.A_zimbraMailTrashLifetime, type:_SUPER_LIFETIME1_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_MailTrashLifetime,label:ZaMsg.NAD_MailTrashLifetime+":", labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},
 								{ref:ZaAccount.A_zimbraMailSpamLifetime, type:_SUPER_LIFETIME1_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_MailSpamLifetime,label:ZaMsg.NAD_MailSpamLifetime, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged}
 							]
-						}
+						}					
+			
 					]
 				});
 	}

@@ -347,31 +347,16 @@ Super_Textfield_XFormItem = function () {}
 XFormItemFactory.createItemType("_SUPER_TEXTFIELD_", "super_textfield", Super_Textfield_XFormItem, Super_XFormItem);
 
 Super_Textfield_XFormItem.prototype.useParentTable = false;
-
+Super_Textfield_XFormItem.prototype.subLabel = null;
+Super_Textfield_XFormItem.prototype.numCols = 3;
 Super_Textfield_XFormItem.prototype.initializeItems = function() {
-	var anchorCssStyle = this.getInheritedProperty("anchorCssStyle");
-	if(anchorCssStyle) {
-		this.getItems()[1].cssStyle = anchorCssStyle;
-	} else {
-		this.getItems()[1].cssStyle = "width:200px";
-	}	
-	Composite_XFormItem.prototype.initializeItems.call(this);
+	var subLabel = this.getInheritedProperty("subLabel");
 	var textFieldCssClass = this.getInheritedProperty("textFieldCssClass");
-	if(textFieldCssClass) {
-		this.getItems()[0].cssClass = textFieldCssClass;
-	}		
 	var textFieldCssStyle = this.getInheritedProperty("textFieldCssStyle");
-	if(textFieldCssStyle) {
-		this.getItems()[0].cssStyle = textFieldCssStyle;
-	}
 	var textFieldWidth = this.getInheritedProperty("textFieldWidth");
-	if(textFieldWidth) {
-		this.getItems()[0].width = textFieldWidth;
-	}	
-}	
 
-Super_Textfield_XFormItem.prototype.items = [
-	{	type:_TEXTFIELD_, ref:".",
+	var txtField =	{	
+		type:_TEXTFIELD_, ref:".",align:_RIGHT_,
 		elementChanged: function(elementValue,instanceValue, event) {
 			this.getForm().itemChanged(this, elementValue, event);
 		},		
@@ -380,15 +365,35 @@ Super_Textfield_XFormItem.prototype.items = [
 			Super_XFormItem.updateCss.call(this,5);
 			Textfield_XFormItem.prototype.updateElement.call(this, value);
 		},
-		forceUpdate:true
-	},
-	{	
+		label:subLabel,	labelLocation:(subLabel ? _RIGHT_ : _NONE_),
+		cssClass:textFieldCssClass,
+		cssStyle:textFieldCssStyle,
+		width:textFieldWidth,
+		forceUpdate:true,
+		relevantBehavior:_PARENT_
+	};
+	
+	
+	
+	var anchorCssStyle = this.getInheritedProperty("anchorCssStyle");
+	
+	var anchorHlpr = {	
 		type:_SUPER_ANCHOR_HELPER_, ref:".",
 		relevant:"Super_XFormItem.checkIfOverWriten.call(item)",
 		relevantBehavior:_BLOCK_HIDE_,
-		onChange:Composite_XFormItem.onFieldChange
-	}
-];
+		onChange:Composite_XFormItem.onFieldChange,
+		cssStyle: (anchorCssStyle ? anchorCssStyle : "width:200px")
+	};
+	this.items = [txtField,anchorHlpr];
+	Composite_XFormItem.prototype.initializeItems.call(this);
+	
+
+}	
+
+Super_Textfield_XFormItem.prototype.items = [];
+
+
+
 
 /**
 *	_SUPER_CHECKBOX_ form item type
@@ -580,7 +585,7 @@ Super_Select1_XFormItem.prototype.items = [
 
 function Super_Lifetime_XFormItem() {}
 XFormItemFactory.createItemType("_SUPER_LIFETIME_", "super_lifetime", Super_Lifetime_XFormItem, Super_XFormItem);
-Super_Lifetime_XFormItem.prototype.numCols = 4;
+Super_Lifetime_XFormItem.prototype.numCols = 5;
 Super_Lifetime_XFormItem.prototype.TIME_CHOICES = [
  				{value:"d", label:"Days"},
 				{value:"h", label:"Hours"},
@@ -588,10 +593,11 @@ Super_Lifetime_XFormItem.prototype.TIME_CHOICES = [
 				{value:"s", label:"Seconds"}
 ];
 
+Super_Lifetime_XFormItem.prototype.initializeItems = function() {
+	var subLabel = this.getInheritedProperty("subLabel");
 
-
-Super_Lifetime_XFormItem.prototype.items = [
-	{type:_TEXTFIELD_, ref:".", labelLocation:_NONE_,relevantBehavior:_PARENT_, cssClass:"admin_xform_number_input", 
+	var txtField =	{
+		type:_TEXTFIELD_, ref:".", labelLocation:_NONE_,relevantBehavior:_PARENT_, cssClass:"admin_xform_number_input", 
 		getDisplayValue:function (itemVal) {
 			var val = "1";
 			if(itemVal != null && itemVal.length >0) {
@@ -616,8 +622,10 @@ Super_Lifetime_XFormItem.prototype.items = [
 			Super_XFormItem.updateCss.call(this,5);
 			Textfield_XFormItem.prototype.updateElement.call(this, value);
 		}
-	},
-	{type:_OSELECT1_, ref:".", labelLocation:_NONE_, relevantBehavior:_PARENT_, choices:Super_Lifetime_XFormItem.prototype.TIME_CHOICES,
+	};
+	
+	var selectField = 	{
+		type:_OSELECT1_, ref:".", relevantBehavior:_PARENT_, choices:Super_Lifetime_XFormItem.prototype.TIME_CHOICES,
 		getDisplayValue:function (itemVal){
 			var val = "d";
 			if(itemVal != null && itemVal.length >0) {
@@ -638,15 +646,25 @@ Super_Lifetime_XFormItem.prototype.items = [
 			Super_XFormItem.updateCss.call(this,5);
 			OSelect1_XFormItem.prototype.updateElement.call(this, value);
 		},
+		label:subLabel,	labelLocation:(subLabel ? _RIGHT_ : _NONE_),
 		forceUpdate:true		
-	},
-	{	
+	};
+	var anchorCssStyle = this.getInheritedProperty("anchorCssStyle");
+	
+	var anchorHlpr = {	
 		type:_SUPER_ANCHOR_HELPER_, ref:".",
 		relevant:"Super_XFormItem.checkIfOverWriten.call(item)",
 		relevantBehavior:_BLOCK_HIDE_,
-		onChange:Composite_XFormItem.onFieldChange
-	}
-];
+		onChange:Composite_XFormItem.onFieldChange,
+		cssStyle: (anchorCssStyle ? anchorCssStyle : "width:200px")
+	};
+	this.items = [txtField,selectField,anchorHlpr];
+	Composite_XFormItem.prototype.initializeItems.call(this);	
+}
+
+Super_Lifetime_XFormItem.prototype.items = [ ];
+
+
 
 /**
 * _SUPER_LIFETIME1_ XForm item type
