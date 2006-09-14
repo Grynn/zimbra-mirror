@@ -53,6 +53,7 @@ SECTION mta
 	POSTCONF smtpd_use_tls			yes
 	POSTCONF disable_dns_lookups	VAR !zimbraMtaDnsLookupsEnabled	
 	POSTCONF message_size_limit		VAR zimbraMtaMaxMessageSize
+	POSTCONF mailbox_size_limit		0
 	POSTCONF relayhost				VAR zimbraMtaRelayHost
 	POSTCONF smtpd_recipient_restrictions FILE postfix_recipient_restrictions.cf
 
