@@ -49,7 +49,6 @@ namespace Zimbra.Toast
 		public Config()
 		{
 			InitializeComponent();
-			toaster = new ToastForm();
 		}
 
 
@@ -66,6 +65,22 @@ namespace Zimbra.Toast
 				}
 			}
 			base.Dispose( disposing );
+		}
+
+		public String GetItemUri( String itemId )
+		{
+			bool bExcludePort = 
+				(toastConfig.Port == 80  && !toastConfig.UseSecure) ||
+				(toastConfig.Port == 443 && toastConfig.UseSecure );
+
+ 			System.Text.StringBuilder sb = new System.Text.StringBuilder();
+			sb.AppendFormat( "http{0}://{1}{2}{3}/zimbra/?view=msg&id={4}",
+				(toastConfig.UseSecure)?"s":"",
+				toastConfig.Server,
+				(bExcludePort)?"":":",
+				(bExcludePort)?"":toastConfig.Port.ToString(),
+				itemId );
+			return sb.ToString();
 		}
 
 
@@ -418,6 +433,8 @@ namespace Zimbra.Toast
 		{
 			try 
 			{
+				//create the toaster
+				toaster = new ToastForm(this);
 				//load the params
 				toastConfig = new ToastConfig();
 				//set the tf values

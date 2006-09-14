@@ -28,6 +28,9 @@ namespace Zimbra.Toast
 		private System.Windows.Forms.PictureBox DeletePictureBox;
 		private System.Windows.Forms.ImageList PopupImages;
 
+		Zimbra.Client.MessageSummary currentMsg = null;
+		Zimbra.Toast.Config config = null;
+
 		enum PopupImagesIdx 
 		{
 			CLOSE_GRAY,
@@ -38,8 +41,9 @@ namespace Zimbra.Toast
 			DELETE_RED,
 		}
 
-		public ToastForm()
+		public ToastForm(Config cfg)
 		{
+			this.config = cfg;
 			InitializeComponent();
 			ManualInitializeComponent();
 		}
@@ -57,6 +61,7 @@ namespace Zimbra.Toast
 				}
 			}
 			base.Dispose( disposing );
+			config = null;
 		}
 
 
@@ -165,6 +170,7 @@ namespace Zimbra.Toast
 			this.SnippetLabel.Name = "SnippetLabel";
 			this.SnippetLabel.Size = new System.Drawing.Size(270, 28);
 			this.SnippetLabel.TabIndex = 17;
+			this.SnippetLabel.Click += new System.EventHandler(this.ViewItemInBrowser);
 			// 
 			// SubjectLabel
 			// 
@@ -174,6 +180,7 @@ namespace Zimbra.Toast
 			this.SubjectLabel.Name = "SubjectLabel";
 			this.SubjectLabel.Size = new System.Drawing.Size(244, 16);
 			this.SubjectLabel.TabIndex = 16;
+			this.SubjectLabel.Click += new System.EventHandler(this.ViewItemInBrowser);
 			// 
 			// DisplayNameLabel
 			// 
@@ -183,6 +190,7 @@ namespace Zimbra.Toast
 			this.DisplayNameLabel.Name = "DisplayNameLabel";
 			this.DisplayNameLabel.Size = new System.Drawing.Size(178, 16);
 			this.DisplayNameLabel.TabIndex = 15;
+			this.DisplayNameLabel.Click += new System.EventHandler(this.ViewItemInBrowser);
 			// 
 			// ZimbraLogoPictureBox
 			// 
@@ -364,6 +372,7 @@ namespace Zimbra.Toast
 
 		public void SetFields( Zimbra.Client.MessageSummary msg )
 		{
+			this.currentMsg = msg;
 			SetFrom( msg.email_personal_name );
 			SetSubject( msg.subject );
 			SetSnippet( msg.fragment );
@@ -378,6 +387,14 @@ namespace Zimbra.Toast
 		private void ClosePictureBox_Click(object sender, System.EventArgs e)
 		{
 			this.Hide();
+		}
+
+		private void ViewItemInBrowser(object sender, System.EventArgs e)
+		{
+			if( currentMsg == null || currentMsg.itemId == null || currentMsg.itemId.Length <= 0 )
+				return;
+
+			System.Diagnostics.Process.Start( config.GetItemUri( currentMsg.itemId ) );
 		}
 
 	}
