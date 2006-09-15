@@ -21,12 +21,12 @@ SECTION antispam
 REWRITE conf/amavisd.conf.in conf/amavisd.conf
 REWRITE conf/salocal.cf.in conf/salocal.cf
 
+	POSTCONF content_filter 
 	if SERVICE antivirus
 		POSTCONF content_filter smtp-amavis:[127.0.0.1]:10024
-	else
-		if SERVICE !antispam
-			POSTCONF content_filter 
-		fi
+	fi
+	if SERVICE !antispam
+		POSTCONF content_filter smtp-amavis:[127.0.0.1]:10024
 	fi
 
 	LOCAL ldap_url
@@ -37,6 +37,14 @@ REWRITE conf/salocal.cf.in conf/salocal.cf
 	VAR zimbraSpamSubjectTag
 RESTART antispam mta
 SECTION mta
+
+	POSTCONF content_filter 
+	if SERVICE antivirus
+		POSTCONF content_filter smtp-amavis:[127.0.0.1]:10024
+	fi
+	if SERVICE !antispam
+		POSTCONF content_filter smtp-amavis:[127.0.0.1]:10024
+	fi
 	VAR zimbraMtaRestriction
 	VAR zimbraMtaBlockedExtension
 	VAR zimbraMtaRecipientDelimiter
