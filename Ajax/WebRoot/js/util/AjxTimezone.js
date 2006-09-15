@@ -39,13 +39,33 @@ AjxTimezone.getClientId = function(serverId) {
 };
 
 AjxTimezone.getShortName = function(clientId) {
-	return AjxTimezone._SHORT_NAMES[clientId];
+	var rule = AjxTimezone.getRule(clientId);
+	if (!rule.shortName) {
+		rule.shortName = ["GMT",AjxTimezone._SHORT_NAMES[clientId]].join("");
+	}
+	return rule.shortName;
 };
 AjxTimezone.getMediumName = function(clientId) {
-	return "GMT"+AjxTimezone.getShortName(clientId);
+	var rule = AjxTimezone.getRule(clientId);
+	if (!rule.mediumName) {
+		// NOTE: It's open to debate whether the medium name (which
+		//       is used for drop-down timezone selection) should be
+		//       shown translated. The problem, though, is that the
+		//       translated names that we get from Java are long and
+		//       can change depending on whether the current date is
+		//       in daylight savings time or not. The identifiers,
+		//       on the other hand, are clear and concise with the
+		//       downside that they are only in English.
+		rule.mediumName = [AjxTimezone.getShortName(clientId),' ',clientId].join("");
+	}
+	return rule.mediumName;
 };
 AjxTimezone.getLongName = function(clientId) {
-	return AjxTimezone.getMediumName(clientId)+" ("+I18nMsg["timezoneName"+clientId]+")";
+	var rule = AjxTimezone.getRule(clientId);
+	if (!rule.longName) {
+		rule.longName = [I18nMsg["timezoneName"+clientId+"Long"]," (",AjxTimezone.getShortName(clientId),")"].join("");
+	}
+	return rule.longName;
 };
 
 AjxTimezone.getRule = function(clientId) {
@@ -67,19 +87,75 @@ AjxTimezone.getOffset = function(clientId, date) {
 	return offset;
 };
 
+AjxTimezone.guessMachineTimezone = function() {
+	return AjxTimezone._guessMachineTimezone().name;
+};
+
+AjxTimezone.getAbbreviatedZoneChoices = function() {
+	if (!AjxTimezone._ABBR_ZONE_OPTIONS) {
+		AjxTimezone._ABBR_ZONE_OPTIONS = [];
+		for (var clientId in AjxTimezone._CLIENT2SERVER) {
+			var option = {
+				displayValue: AjxTimezone.getMediumName(clientId),
+				selectedValue: clientId,
+				value: AjxTimezone._CLIENT2SERVER[clientId]
+			};
+			AjxTimezone._ABBR_ZONE_OPTIONS.push(option);
+		}
+		AjxTimezone._ABBR_ZONE_OPTIONS.sort(AjxTimezone._BY_OFFSET);
+	}
+	return AjxTimezone._ABBR_ZONE_OPTIONS;
+};
+AjxTimezone._BY_OFFSET = function(a, b) {
+	var arule = AjxTimezone._CLIENT2RULE[AjxTimezone._SERVER2CLIENT[a.value]];
+	var brule = AjxTimezone._CLIENT2RULE[AjxTimezone._SERVER2CLIENT[b.value]];
+	// sort by offset and then by name
+	var delta = arule.stdOffset - brule.stdOffset;
+	if (delta == 0) {
+		var aname = arule.name;
+		var bname = brule.name;
+		if (aname < bname) delta = -1;
+		else if (aname > bname) delta = 1;
+	}
+	return delta;
+};
+
 // Constants
 
-/** Client identifier for GMT. */
+/**
+ * Client identifier for GMT.
+ * <p>
+ * <strong>Note:</strong>
+ * UK observes daylight savings time so this constant should
+ * <em>not</em> be used as the reference point (i.e. UTC) --
+ * use {@link AjxTimezone.GMT_NO_DST} instead. The name of
+ * this constant is historical.
+ */
 AjxTimezone.GMT = "Europe/London";
 
-/** 
+/**
+ * Client identifier for GMT with no daylight savings time.
+ * <p>
+ * <strong>Note:</strong>
+ * This is a temporary solution at best because at some point in
+ * the future, this timezone may observe daylight savings time.
+ * For a real solution, there should be a UTC entry in the list
+ * of known timezones.
+ */
+AjxTimezone.GMT_NO_DST = "Africa/Casablanca";
+
+/**
+ * <strong>Note:</strong>
+ * Do NOT change this value because it is used to reference messages.
+ */
+AjxTimezone.AUTO_DETECTED = "Auto-Detected";
+
+/**
  * The default timezone is set by guessing the machine timezone later
  * in this file. See the static initialization section below for details.
  */
 AjxTimezone.DEFAULT;
-
-/** Server identifier for fallback timezone. */
-AjxTimezone._FALLBACK = "(GMT-08.00) Pacific Time (US & Canada) / Tijuana";
+AjxTimezone.DEFAULT_RULE;
 
 AjxTimezone._CLIENT2SERVER = {};
 AjxTimezone._SERVER2CLIENT = {};
@@ -229,6 +305,10 @@ AjxTimezone._ruleLists = {
  * One problem with firefox, is if the timezone on the machine changes,
  * the browser isn't updated. You have to restart firefox for it to get the 
  * new machine timezone.
+ * <p>
+ * <strong>Note:</strong>
+ * It looks like the current versions of FF always reflect the current
+ * timezone w/o needing to restart the browser.
  */
 AjxTimezone._guessMachineTimezone = 
 function() {
@@ -268,13 +348,13 @@ function() {
 			}
 		}
 	}
-	return tz ? tz.name : AjxTimezone._FALLBACK;
+	return tz || AjxTimezone._generateDefaultRule(pos);
 };
 
 AjxTimezone._compareRules = 
 function(rule, std, dst, pos) {
 	var equal = false;
-	var d = new Date(rule.changeStd[0], rule.changeStd[1], (rule.changeStd[2] -1)).getTimezoneOffset();
+	var d = new Date(rule.changeStd[0], rule.changeStd[1], (rule.changeStd[2] - 1)).getTimezoneOffset();
 	var s = new Date(rule.changeStd[0], rule.changeStd[1], (rule.changeStd[2] + 1)).getTimezoneOffset();
 	if (!pos) {
 		s = s * -1;
@@ -282,7 +362,7 @@ function(rule, std, dst, pos) {
 	}
 	//alert("name = " + rule.name + ' s = ' + s + " d = " + d + " std = " + std + " dst = " + dst);
 	if ( (std == s) && (dst == d) ) {
-		s = new Date(rule.changeD[0], rule.changeD[1], (rule.changeD[2] -1)).getTimezoneOffset();
+		s = new Date(rule.changeD[0], rule.changeD[1], (rule.changeD[2] - 1)).getTimezoneOffset();
 		d = new Date(rule.changeD[0], rule.changeD[1], (rule.changeD[2] + 1)).getTimezoneOffset();
 		if (!pos) {
 			s = s * -1;
@@ -295,7 +375,112 @@ function(rule, std, dst, pos) {
 	return equal;
 };
 
+AjxTimezone._generateDefaultRule = function(pos) {
+	// create temp dates
+	var d = new Date();
+	d.setMonth(0, 1);
+	d.setHours(0, 0, 0, 0);
+
+	var d2 = new Date();
+	d2.setHours(0, 0, 0, 0);
+
+	// data
+	var stdOff = d.getTimezoneOffset();
+	var lastOff = stdOff;
+	var trans = [];
+
+	// find transition points
+	for (var m = 0; m < 12; m++) {
+		// get last day of this month
+		d2.setMonth(m + 1, 0);
+		var ld = d2.getDate();
+
+		// check each day for a transition
+		for (var md = 1; md <= ld; md++) {
+			d.setMonth(m, md);
+			var curOff = d.getTimezoneOffset();
+			if (curOff != lastOff) {
+				var td = new Date(d.getTime());
+				td.setDate(md - 1);
+
+				// now find exact hour where transition occurs
+				for (var h = 0; h < 24; h++) {
+					td.setHours(h, 0, 0, 0);
+					var transOff = td.getTimezoneOffset();
+					if (transOff == curOff) {
+						break;
+					}
+				}
+				trans.push(td);
+			}
+			lastOff = curOff;
+		}
+	}
+
+	var rule = {
+		stdOffset: stdOff * (pos ? 1 : -1),
+		autoDetected: true
+	};
+	rule.name = ["(GMT",AjxTimezone._generateShortName(rule.stdOffset, true),") ",AjxTimezone.AUTO_DETECTED].join("");
+
+	// generate non-DST rule
+	if (trans.length == 0) {
+		rule.hasDOffset = false;
+
+		AjxTimezone._ruleLists.noDSTList.unshift(rule);
+	}
+
+	// generate DST rule
+	else {
+		// is this the southern hemisphere?
+		var tzo0 = trans[0].getTimezoneOffset();
+		var tzo1 = trans[1].getTimezoneOffset();
+		var flip = tzo0 > tzo1;
+
+		var s2d = trans[flip ? 1 : 0];
+		var d2s = trans[flip ? 0 : 1];
+
+		rule.changeStd = [d2s.getFullYear(), d2s.getMonth(), d2s.getDate(), d2s.getHours() + 1, d2s.getMinutes(), d2s.getSeconds()];
+		rule.dstOffset = s2d.getTimezoneOffset() * (pos ? 1 : -1);
+		rule.changeD = [s2d.getFullYear(), s2d.getMonth(), s2d.getDate(), s2d.getHours() - 1, s2d.getMinutes(), s2d.getSeconds()];
+
+		AjxTimezone._ruleLists.DSTList.unshift(rule);
+	}
+
+	/*** DEBUG ***
+	var a = [];
+	a.push(new Date().toString(),"\n\n");
+	for (var p in rule) {
+		var v = rule[p];
+		a.push(p," = ",(v instanceof Array?v.join():v),"\n");
+	}
+	alert(a.join(""));
+	/***/
+
+	// add message entries for generated rule
+	I18nMsg["timezoneMap"+AjxTimezone.AUTO_DETECTED] = rule.name;
+	I18nMsg["timezoneName"+AjxTimezone.AUTO_DETECTED+"Long"] = AjxMsg.timezoneNameAutoDetectedLong;
+	I18nMsg["timezoneName"+AjxTimezone.AUTO_DETECTED+"LongDST"] = AjxMsg.timezoneNameAutoDetectedLong;
+	I18nMsg["timezoneName"+AjxTimezone.AUTO_DETECTED+"Short"] = AjxMsg.timezoneNameAutoDetectedShort;
+	I18nMsg["timezoneName"+AjxTimezone.AUTO_DETECTED+"ShortDST"] = AjxMsg.timezoneNameAutoDetectedShort;
+
+	return rule;
+};
+
+AjxTimezone._generateShortName = function(offset, period) {
+	if (offset == 0) return "";
+	var sign = offset < 0 ? "-" : "+";
+	var stdOffset = Math.abs(offset);
+	var hours = Math.floor(stdOffset / 60);
+	var minutes = stdOffset % 60;
+	hours = hours < 10 ? '0' + hours : hours;
+	minutes = minutes < 10 ? '0' + minutes : minutes;
+	return [sign,hours,period?".":"",minutes].join("");
+};
+
 // Static initialization
+
+AjxTimezone.DEFAULT_RULE = AjxTimezone._guessMachineTimezone();
 
 var length = "timezoneMap".length;
 for (var prop in I18nMsg) {
@@ -314,14 +499,9 @@ for (var i = 0; i < lists.length; i++) {
 		var rule = list[j];
 		var serverId = rule.name;
 		var clientId = AjxTimezone.getClientId(serverId);
-		var sign = rule.stdOffset < 0 ? "-" : "+";
-		var stdOffset = Math.abs(rule.stdOffset);
-		var hours = stdOffset / 60;
-		var minutes = stdOffset % 60;
-		hours = hours < 10 ? '0' + hours : hours;
-		minutes = minutes < 10 ? '0' + minutes : minutes;
-		AjxTimezone._SHORT_NAMES[clientId] = sign + hours + minutes;
+		AjxTimezone._SHORT_NAMES[clientId] = AjxTimezone._generateShortName(rule.stdOffset);
 		AjxTimezone._CLIENT2RULE[clientId] = rule;
 	}
 }
-AjxTimezone.DEFAULT = AjxTimezone.getClientId(AjxTimezone._guessMachineTimezone());
+
+AjxTimezone.DEFAULT = AjxTimezone.getClientId(AjxTimezone.DEFAULT_RULE.name);

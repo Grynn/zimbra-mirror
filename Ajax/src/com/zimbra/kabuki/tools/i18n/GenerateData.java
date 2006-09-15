@@ -99,7 +99,7 @@ public class GenerateData {
 		TIMEZONES.put("Asia/Karachi", "(GMT+05.00) Islamabad / Karachi / Tashkent");
 		TIMEZONES.put("Asia/Katmandu", "(GMT+05.45) Kathmandu");
 		TIMEZONES.put("Asia/Krasnoyarsk", "(GMT+07.00) Krasnoyarsk");
-		TIMEZONES.put("Asia/Kuala_Lumpur", "(GMT+08.00) Kuala Lumpur / Singaporev");
+		TIMEZONES.put("Asia/Kuala_Lumpur", "(GMT+08.00) Kuala Lumpur / Singapore");
 		TIMEZONES.put("Asia/Kuwait", "(GMT+03.00) Kuwait / Riyadh");
 		TIMEZONES.put("Asia/Magadan", "(GMT+11.00) Magadan / Solomon Is. / New Calenodia");
 		TIMEZONES.put("Asia/Muscat", "(GMT+04.00) Abu Dhabi / Muscat");
@@ -125,7 +125,7 @@ public class GenerateData {
 		TIMEZONES.put("Brazil/East", "(GMT-03.00) Brasilia");
 
 		TIMEZONES.put("Canada/Eastern", "(GMT-04.00) Atlantic Time (Canada)");
-		TIMEZONES.put("Canada/Newfoundland", "(GMT-03.30) Newfoundlan");
+		TIMEZONES.put("Canada/Newfoundland", "(GMT-03.30) Newfoundland");
 		TIMEZONES.put("Canada/Saskatchewan", "(GMT-06.00) Saskatchewan");
 
 		//TIMEZONES.put("Etc/GMT+12", "(GMT-12.00) International Date Line West");
@@ -270,7 +270,7 @@ public class GenerateData {
         generateCalendarNames(props, locale);
         generateDateTimeFormats(props, locale);
         generateNumberFormats(props, locale);
-        generateTimeZones(props/*, locale*/);
+        generateTimeZones(props, locale);
         return props;
     } // generate(Locale):Properties
     
@@ -426,12 +426,6 @@ public class GenerateData {
 		props.setProperty("periodAm", ampmFormatter.format(calendar.getTime()));
 		calendar.set(Calendar.HOUR_OF_DAY, 12);
 		props.setProperty("periodPm", ampmFormatter.format(calendar.getTime()));
-
-		for (String timezoneId : TIMEZONES.keySet()) {
-			TimeZone timezone = TimeZone.getTimeZone(timezoneId);
-			String displayName = timezone.getDisplayName(locale);
-			props.put("timezoneName"+timezoneId, displayName);
-		}
     } // generateDateTimeFormats(Properties,Locale)
     
     private static void generateNumberFormats(Properties props, Locale locale) {
@@ -455,10 +449,21 @@ public class GenerateData {
     	props.setProperty("numberSeparatorMoneyDecimal", Character.toString(symbols.getMonetaryDecimalSeparator()));
     } // generateNumberFormats(Properties,Locale)
     
-    private static void generateTimeZones(Properties props/*, Locale locale*/) {
+    private static void generateTimeZones(Properties props, Locale locale) {
 		for (String timezoneId : TIMEZONES.keySet()) {
 			String timezoneValue = TIMEZONES.get(timezoneId);
 			props.setProperty("timezoneMap"+timezoneId, timezoneValue);
+		}
+
+		String[] name = { "Short", "Long", "ShortDST", "LongDST" };
+		boolean[] dst = { false, false, true, true };
+		int[] type = { TimeZone.SHORT, TimeZone.LONG, TimeZone.SHORT, TimeZone.LONG };
+		for (String timezoneId : TIMEZONES.keySet()) {
+			TimeZone timezone = TimeZone.getTimeZone(timezoneId);
+			for (int i = 0; i < name.length; i++) {
+				String displayName = timezone.getDisplayName(dst[i], type[i], locale);
+				props.put("timezoneName"+timezoneId+name[i], displayName);
+			}
 		}
     } // generateTimeZones(Properties,Locale)
     

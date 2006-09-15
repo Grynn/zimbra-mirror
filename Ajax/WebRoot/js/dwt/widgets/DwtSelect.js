@@ -177,10 +177,10 @@ function(option, selected, value) {
 			if (value)
 				opt.setValue(value);
 			selected = opt.isSelected();
-		} else if(option instanceof DwtSelectOptionData) {
+		} else if(option instanceof DwtSelectOptionData || option.value) {
 			val = value != null ? value : option.value;
-			opt = new DwtSelectOption(val, option.isSelected, option.displayValue, this, null, null);
-			selected = option.isSelected;
+			opt = new DwtSelectOption(val, option.isSelected, option.displayValue, this, null, null, option.selectedValue);
+			selected = Boolean(option.isSelected);
 		} else {
 			return -1;
 		}
@@ -419,7 +419,7 @@ function() {
 
 DwtSelect.prototype._setSelectedOption = 
 function(option) {
-	var displayValue = option.getDisplayValue();
+	var displayValue = option.getSelectedValue() || option.getDisplayValue();
 	var image = option.getImage();
 	if (this._selectedOption != option) {
  		if (displayValue) {
@@ -466,13 +466,14 @@ function() {
 * @class DwtSelectOptionData
 * @constructor
 */
-function DwtSelectOptionData (value, displayValue, isSelected) {
+function DwtSelectOptionData (value, displayValue, isSelected, selectedValue) {
 	if(value == null || displayValue==null) 
 		return null;
 
 	this.value = value;
 	this.displayValue = displayValue;
 	this.isSelected = isSelected;
+	this.selectedValue = selectedValue;
 }
 
 /**
@@ -491,12 +492,16 @@ function DwtSelectOptionData (value, displayValue, isSelected) {
  *                                 value internally ).
  * @param owner (DwtSelect) -- unused
  * @param optionalDOMId (string) -- unused
+ * @param selectedValue 	[string]	Optional. The text value to use
+ *										when this value is the currently
+ *										selected value.
  */
-function DwtSelectOption (value, selected, displayValue, owner, optionalDOMId, image) {
+function DwtSelectOption (value, selected, displayValue, owner, optionalDOMId, image, selectedValue) {
 	this._value = value;
 	this._selected = selected;
 	this._displayValue = displayValue;
 	this._image = image;
+	this._selectedValue = selectedValue;
 
 	this._internalObjectId = DwtSelect._assignId(this);
 }
@@ -519,6 +524,11 @@ function() {
 DwtSelectOption.prototype.getImage = 
 function() {
 	return this._image;
+};
+
+DwtSelectOption.prototype.getSelectedValue =
+function() {
+	return this._selectedValue;
 };
 
 DwtSelectOption.prototype.getValue = 
