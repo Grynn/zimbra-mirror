@@ -31,10 +31,12 @@ use Migrate;
 Migrate::verifySchemaVersion(26);
 
 my @mailboxIds = Migrate::getMailboxIds();
-addContactCountColumn();
+my $sql = addContactCountColumn();
 foreach my $id (@mailboxIds) {
-    resizeUnreadColumn($id);
+    $sql .= resizeUnreadColumn($id);
 }
+
+Migrate::runSql($sql);
 
 Migrate::updateSchemaVersion(26, 27);
 
@@ -52,8 +54,7 @@ SET contact_count = NULL;
 
 ADD_CONTACT_COUNT_COLUMN_EOF
 
-    Migrate::log("Adding CONTACT_COUNT column to zimbra.mailbox.");
-    Migrate::runSql($sql);
+    return $sql;
 }
 
 sub resizeUnreadColumn($) {
@@ -64,6 +65,5 @@ MODIFY COLUMN unread INTEGER UNSIGNED;
 
 RESIZE_UNREAD_COLUMN_EOF
 
-    Migrate::log("Switching column mailbox$mailboxId.MAIL_ITEM.UNREAD to INTEGER.");
-    Migrate::runSql($sql);
+    return $sql;
 }
