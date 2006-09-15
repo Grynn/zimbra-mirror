@@ -33,6 +33,7 @@ my $startTime = time();
 my $CREATE_DB_SQL;
 my $NUM_GROUPS = 1000;
 my %MBOX_GROUPS;
+my %DROPPED_DBS;
 
 sub init();
 sub addGroupIdColumn();
@@ -46,18 +47,44 @@ init();
 
 Migrate::verifySchemaVersion(27);
 
-addGroupIdColumn();
+my $sql;
+my $sqlfile = "/tmp/migrate-MailboxGroup.sql";
+open(SQL, "> $sqlfile") or die "Unable to open $sqlfile for write: $!";
+
+$sql = addGroupIdColumn();
+print SQL $sql;
+print SQL "\n";
 
 my @mailboxIds = Migrate::getMailboxIds();
 foreach my $id (@mailboxIds) {
     my $oldDb = "mailbox$id";
     my $newDb = "mboxgroup" . getGroupId($id);
-    createMailboxGroup($newDb);
-    exportImportMailbox($id);
-    dropDatabase($oldDb);
+    $sql = createMailboxGroup($newDb);
+    if ($sql) {
+        print SQL $sql;
+        print SQL "\n";
+    }
+    $sql = exportImportMailbox($id);
+    print SQL $sql;
+    print SQL "\n";
+    $sql = dropDatabase($oldDb);
+    print SQL $sql;
+    print SQL "\n";
 }
 
-dropOrphans();
+$sql = dropOrphans();
+print SQL $sql;
+print SQL "\n";
+
+close(SQL);
+print "Executing SQL statements in $sqlfile\n";
+my $rc = system("/opt/zimbra/bin/mysql -v -A zimbra < $sqlfile");
+$rc >>= 8;
+if ($rc != 0) {
+    die "mysql invication failed, exit code = $rc: $!";
+}
+print "Successfully finished executing SQL statements in $sqlfile\n";
+#unlink($sqlfile);
 
 Migrate::updateSchemaVersion(27, 28);
 
@@ -85,6 +112,23 @@ sub init() {
     $NUM_GROUPS = $numGroups;
 }
 
+sub dropDatabase($) {
+    my $db = shift;
+    $DROPPED_DBS{$db} = 1;
+    return "# Dropping database $db\nDROP DATABASE IF EXISTS $db;\n";
+}
+
+sub dropOrphans() {
+    my $sql = '';
+    my @orphans = Migrate::runSql("SHOW DATABASES LIKE 'mailbox\%'");
+    foreach my $db (@orphans) {
+        if (!exists($DROPPED_DBS{$db})) {
+            $sql .= dropDatabase($db);
+        }
+    }
+    return $sql;
+}
+
 sub getGroupId($) {
     my $id = shift;
     return ($id - 1) % $NUM_GROUPS + 1;
@@ -92,24 +136,23 @@ sub getGroupId($) {
 
 sub addGroupIdColumn() {
     my $sql = <<_ADD_GROUP_ID_;
+# Adding group_id column to zimbra.mailbox table
 ALTER TABLE zimbra.mailbox
 ADD COLUMN group_id INTEGER UNSIGNED NOT NULL AFTER id;
 
 UPDATE zimbra.mailbox SET group_id = MOD(id - 1, $NUM_GROUPS) + 1;
 _ADD_GROUP_ID_
 
-    Migrate::log("Adding group_id column to zimbra.mailbox table.");
-    Migrate::runSql($sql);
+    return $sql;
 }
 
 sub createMailboxGroup($) {
     my $db = shift;
-    return if (exists $MBOX_GROUPS{$db});
+    return '' if (exists $MBOX_GROUPS{$db});
     my $sql = $CREATE_DB_SQL;
     $sql =~ s/\${DATABASE_NAME}/$db/gm;
-    Migrate::log("Creating mailbox group $db");
-    Migrate::runSql($sql);
     $MBOX_GROUPS{$db} = 1;
+    return $sql;
 }
 
 sub getDumpFile($$) {
@@ -121,7 +164,7 @@ sub exportImportMailbox($) {
     my $id = shift;
     my $oldDb = "mailbox$id";
     my $newDb = "mboxgroup" . getGroupId($id);
-    my $sql;
+    my $sql = '';
     my $file;
 
     my $exportOptions =
@@ -138,7 +181,8 @@ sub exportImportMailbox($) {
     #
     ##########################
 
-    $sql = <<_EXPORT_MAIL_ITEM_;
+    $sql .= <<_EXPORT_MAIL_ITEM_;
+# Exporting $oldDb.mail_item data to $fileMailItem
 SELECT
     $id, id, type, parent_id, folder_id, index_id, imap_id,
     date, size, volume_id, blob_digest, unread, flags, tags, sender,
@@ -146,40 +190,35 @@ SELECT
   INTO OUTFILE '$fileMailItem'
   $exportOptions
   FROM $oldDb.mail_item;
+
 _EXPORT_MAIL_ITEM_
 
-    Migrate::log("Exporting $oldDb.mail_item data to $fileMailItem");
-    Migrate::runSql($sql);
-
-    $sql = <<_EXPORT_OPEN_CONVERSATION_;
+    $sql .= <<_EXPORT_OPEN_CONVERSATION_;
+# Exporting $oldDb.open_conversation data to $fileOpenConversation
 SELECT $id, hash, conv_id
   INTO OUTFILE '$fileOpenConversation'
   $exportOptions
   FROM $oldDb.open_conversation;
+
 _EXPORT_OPEN_CONVERSATION_
 
-    Migrate::log("Exporting $oldDb.open_conversation data to $fileOpenConversation");
-    Migrate::runSql($sql);
-
-    $sql = <<_EXPORT_APPOINTMENT_;
+    $sql .= <<_EXPORT_APPOINTMENT_;
+# Exporting $oldDb.appointment data to $fileAppointment
 SELECT $id, uid, item_id, start_time, end_time
   INTO OUTFILE '$fileAppointment'
   $exportOptions
   FROM $oldDb.appointment;
+
 _EXPORT_APPOINTMENT_
 
-    Migrate::log("Exporting $oldDb.appointment data to $fileAppointment");
-    Migrate::runSql($sql);
-
-    $sql = <<_EXPORT_TOMBSTONE_;
+    $sql .= <<_EXPORT_TOMBSTONE_;
+# Exporting $oldDb.tombstone data to $fileTombstone
 SELECT $id, sequence, date, ids
   INTO OUTFILE '$fileTombstone'
   $exportOptions
   FROM $oldDb.tombstone;
-_EXPORT_TOMBSTONE_
 
-    Migrate::log("Exporting $oldDb.tombstone data to $fileTombstone");
-    Migrate::runSql($sql);
+_EXPORT_TOMBSTONE_
 
     ##########################
     #
@@ -193,7 +232,8 @@ _EXPORT_TOMBSTONE_
     for ($i = 0; $i < 4; $i++) {
         my $table = $tables[$i];
         my $file = $files[$i];
-        $sql = <<_IMPORT_;
+        $sql .= <<_IMPORT_;
+# Importing $file file into $newDb.$table
 SET FOREIGN_KEY_CHECKS = 0;
 SET UNIQUE_CHECKS = 0;
 
@@ -204,159 +244,16 @@ LOAD DATA INFILE '$file'
 
 SET FOREIGN_KEY_CHECKS = 1;
 SET UNIQUE_CHECKS = 1;
-_IMPORT_
 
-        Migrate::log("Importing $file file into $newDb.$table");
-        Migrate::runSql($sql);
+_IMPORT_
     }
 
+    $sql .= 'system rm -f';
     for ($i = 0; $i < 4; $i++) {
         my $file = $files[$i];
-        if (!unlink($file)) {
-            Migrate::log("Error unlinking $file: $!");
-        }
+	$sql .= " $file";
     }
-}
+    $sql .= "\n";
 
-sub dropDatabase($) {
-    my $db = shift;
-    Migrate::log("Dropping database $db");
-    Migrate::runSql("DROP DATABASE $db");
-}
-
-sub dropOrphans() {
-    my @orphans = Migrate::runSql("SHOW DATABASES LIKE 'mailbox\%'");
-    foreach my $db (@orphans) {
-        dropDatabase($db);
-    }
-}
-
-
-
-##############################################################################
-#
-# Unused
-#
-##############################################################################
-
-sub copyData($) {
-    my $id = shift;
-    my $oldDb = "mailbox$id";
-    my $newDb = "mboxgroup" . getGroupId($id);
-    my $sql = <<_COPY_DB_SQL_;
-SET FOREIGN_KEY_CHECKS = 0;
-
-INSERT INTO $newDb.mail_item
-    (mailbox_id, id, type, parent_id, folder_id, index_id, imap_id,
-     date, size, volume_id, blob_digest, unread, flags, tags, sender,
-     subject, metadata, mod_metadata, change_date, mod_content)
-  SELECT
-    $id, id, type, parent_id, folder_id, index_id, imap_id,
-    date, size, volume_id, blob_digest, unread, flags, tags, sender,
-    subject, metadata, mod_metadata, change_date, mod_content
-  FROM $oldDb.mail_item;
-
-INSERT INTO $newDb.open_conversation
-    (mailbox_id, hash, conv_id)
-  SELECT
-    $id, hash, conv_id
-  FROM $oldDb.open_conversation;
-
-INSERT INTO $newDb.appointment
-    (mailbox_id, uid, item_id, start_time, end_time)
-  SELECT
-    $id, uid, item_id, start_time, end_time
-  FROM $oldDb.appointment;
-
-INSERT INTO $newDb.tombstone
-    (mailbox_id, sequence, date, ids)
-  SELECT
-    $id, sequence, date, ids
-  FROM $oldDb.tombstone;
-
-SET FOREIGN_KEY_CHECKS = 1;
-_COPY_DB_SQL_
-
-    Migrate::log("Copying data from $oldDb to $newDb");
-    Migrate::runSql($sql);
-}
-
-sub updateMailboxDatabase($) {
-    my $id = shift;
-    my $db = "mailbox$id";
-    my $newDb = "mboxgroup" . getGroupId($id);
-    my $sql = <<_UPDATE_MAILBOX_DB_;
-SET FOREIGN_KEY_CHECKS = 0;
-SET UNIQUE_CHECKS = 0;
-
-ALTER TABLE $db.mail_item
-    DROP PRIMARY KEY,
-    DROP INDEX i_type,
-    DROP INDEX i_parent_id,
-    DROP INDEX i_folder_id_date,
-    DROP INDEX i_index_id,
-    DROP INDEX i_unread,
-    DROP INDEX i_date,
-    DROP INDEX i_mod_metadata,
-    DROP INDEX i_tags_date,
-    DROP INDEX i_flags_date,
-    DROP INDEX i_volume_id,
-    DROP FOREIGN KEY fk_mail_item_parent_id,
-    DROP FOREIGN KEY fk_mail_item_folder_id,
-    ADD COLUMN mailbox_id INTEGER UNSIGNED NOT NULL FIRST,
-    ADD PRIMARY KEY (mailbox_id, id),
-    ADD INDEX i_type (mailbox_id, id),
-    ADD INDEX i_parent_id (mailbox_id, parent_id),
-    ADD INDEX i_folder_id_date (mailbox_id, folder_id, date),
-    ADD INDEX i_index_id (mailbox_id, index_id),
-    ADD INDEX i_unread (mailbox_id, unread),
-    ADD INDEX i_date (mailbox_id, date),
-    ADD INDEX i_mod_metadata (mailbox_id, mod_metadata),
-    ADD INDEX i_tags_date (mailbox_id, tags, date),
-    ADD INDEX i_flags_date (mailbox_id, flags, date),
-    ADD INDEX i_volume_id (mailbox_id, volume_id),
-    ADD CONSTRAINT fk_mail_item_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id),
-    ADD CONSTRAINT fk_mail_item_volume_id FOREIGN KEY (volume_id) REFERENCES zimbra.volume(id);
-
-ALTER TABLE $db.open_conversation
-    DROP PRIMARY KEY,
-    DROP INDEX i_conv_id,
-    DROP CONSTRAINT fk_open_conversation_conv_id,
-    ADD COLUMN mailbox_id INTEGER UNSIGNED NOT NULL FIRST,
-    ADD PRIMARY KEY (mailbox_id, hash),
-    ADD INDEX i_conv_id (mailbox_id, conv_id),
-    ADD CONSTRAINT fk_open_conversation_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id),
-    ADD CONSTRAINT fk_open_conversation_conv_id FOREIGN KEY (mailbox_id, conv_id) REFERENCES \$\{DATABASE_NAME\}.mail_item(mailbox_id, id) ON DELETE CASCADE;
-
-ALTER TABLE $db.appointment
-    DROP PRIMARY KEY
-    DROP INDEX i_item_id,
-    DROP CONSTRAINT fk_appointment_item_id,
-    ADD COLUMN mailbox_id INTEGER UNSIGNED NOT NULL FIRST,
-    ADD PRIMARY KEY (mailbox_id, uid),
-    ADD INDEX i_item_id (mailbox_id, item_id),
-    ADD CONSTRAINT fk_appointment_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id),
-    ADD CONSTRAINT fk_appointment_item_id FOREIGN KEY (mailbox_id, item_id) REFERENCES \$\{DATABASE_NAME\}.mail_item(mailbox_id, id) ON DELETE CASCADE;
-
-ALTER TABLE $db.tombstone
-    DROP INDEX i_sequence,
-    ADD COLUMN mailbox_id INTEGER UNSIGNED NOT NULL FIRST,
-    ADD INDEX i_sequence (mailbox_id, sequence),
-    ADD CONSTRAINT fk_tombstone_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id);
-
-RENAME TABLE $db.mail_item TO $newDb.mail_item;
-
-RENAME TABLE $db.open_conversation TO $newDb.open_conversation;
-
-RENAME TABLE $db.appointment TO $newDb.appointment;
-
-RENAME TABLE $db.tombstone TO $newDb.tombstone;
-
-SET FOREIGN_KEY_CHECKS = 1;
-SET UNIQUE_CHECKS = 1;
-
-_UPDATE_MAILBOX_DB_
-
-    Migrate::log("Updating mailbox $id");
-    Migrate::runSql($sql);
+    return $sql;
 }
