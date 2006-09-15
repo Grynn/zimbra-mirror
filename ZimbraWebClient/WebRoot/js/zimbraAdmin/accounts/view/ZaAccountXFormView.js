@@ -807,7 +807,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 									textFieldCssClass:"admin_xform_number_input", 
 									onChange:ZaTabView.onFormFieldChanged, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
-									labelCssStyle:"width:250px;"
+									labelCssStyle:"width:250px;white-space:normal;",
+									nowrap:false,labelWrap:true
 								}																		
 							]
 						},
