@@ -218,22 +218,92 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 						]
 					},
 					{type:_CASE_, relevant:"instance[ZaModel.currentTab]==5", id:"cos_form_advanced_tab",
-						colSizes:["300px","*"],
+						numCols:1,
 						items: [
-							{ref:ZaCos.A_zimbraAttachmentsBlocked, type:_CHECKBOX_,  msgName:ZaMsg.NAD_RemoveAllAttachments,label:ZaMsg.NAD_RemoveAllAttachments, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_},
-							{ref:ZaCos.A_zimbraMailQuota, type:_TEXTFIELD_, msgName:ZaMsg.NAD_MailQuota,label:ZaMsg.NAD_MailQuota+":", labelLocation:_LEFT_, cssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged},
-							{ref:ZaCos.A_zimbraContactMaxNumEntries, type:_INPUT_, msgName:ZaMsg.NAD_ContactMaxNumEntries,label:ZaMsg.NAD_ContactMaxNumEntries+":", labelLocation:_LEFT_, cssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged},
-							{ref:ZaCos.A_zimbraMinPwdLength, type:_TEXTFIELD_, msgName:ZaMsg.NAD_passMinLength,label:ZaMsg.NAD_passMinLength+":", labelLocation:_LEFT_, cssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged},
-							{ref:ZaCos.A_zimbraMaxPwdLength, type:_INPUT_, msgName:ZaMsg.NAD_passMaxLength,label:ZaMsg.NAD_passMaxLength+":", labelLocation:_LEFT_, cssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged},
-							{ref:ZaCos.A_zimbraMinPwdAge, type:_INPUT_, msgName:ZaMsg.NAD_passMinAge,label:ZaMsg.NAD_passMinAge+":", labelLocation:_LEFT_, cssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged},
-							{ref:ZaCos.A_zimbraMaxPwdAge, type:_INPUT_, msgName:ZaMsg.NAD_passMaxAge,label:ZaMsg.NAD_passMaxAge+":", labelLocation:_LEFT_, cssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged},
-							{ref:ZaCos.A_zimbraEnforcePwdHistory, type:_INPUT_, msgName:ZaMsg.NAD_passEnforceHistory,label:ZaMsg.NAD_passEnforceHistory+":", labelLocation:_LEFT_, cssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged},
-							{ref:ZaCos.A_zimbraPasswordLocked, type:_CHECKBOX_, msgName:ZaMsg.NAD_PwdLocked,label:ZaMsg.NAD_PwdLocked, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_},
-							{ref:ZaCos.A_zimbraAuthTokenLifetime, type:_LIFETIME1_, msgName:ZaMsg.NAD_AuthTokenLifetime,label:ZaMsg.NAD_AuthTokenLifetime+":",labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},																		
-							{ref:ZaCos.A_zimbraMailIdleSessionTimeout, type:_LIFETIME1_, msgName:ZaMsg.NAD_MailIdleSessionTimeout,label:ZaMsg.NAD_MailIdleSessionTimeout+":",labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},																											
-							{ref:ZaCos.A_zimbraMailMessageLifetime, type:_LIFETIME1_, msgName:ZaMsg.NAD_MailMessageLifetime,label:ZaMsg.NAD_MailMessageLifetime+":",labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},
-							{ref:ZaCos.A_zimbraMailTrashLifetime, type:_LIFETIME1_, msgName:ZaMsg.NAD_MailTrashLifetime,label:ZaMsg.NAD_MailTrashLifetime+":", labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},
-							{ref:ZaCos.A_zimbraMailSpamLifetime, type:_LIFETIME1_, msgName:ZaMsg.NAD_MailSpamLifetime,label:ZaMsg.NAD_MailSpamLifetime, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged}
+							{type:_GROUP_, id:"cos_attachment_settings",
+								items :[						
+									{ref:ZaCos.A_zimbraAttachmentsBlocked, type:_CHECKBOX_,  msgName:ZaMsg.NAD_RemoveAllAttachments,label:ZaMsg.NAD_RemoveAllAttachments, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", labelCssStyle:"width:250px;", align:_LEFT_},
+								]
+							},
+							{type:_SEPARATOR_, colSpan:"*"},
+							{type:_GROUP_, id:"cos_quota_settings",
+								items: [											
+									{ref:ZaCos.A_zimbraMailQuota, type:_TEXTFIELD_, msgName:ZaMsg.NAD_MailQuota,label:ZaMsg.NAD_MailQuota+":", labelLocation:_LEFT_, cssClass:"admin_xform_number_input", labelCssStyle:"width:250px;",onChange:ZaTabView.onFormFieldChanged},
+									{ref:ZaCos.A_zimbraContactMaxNumEntries, type:_INPUT_, msgName:ZaMsg.NAD_ContactMaxNumEntries,label:ZaMsg.NAD_ContactMaxNumEntries+":", labelLocation:_LEFT_, cssClass:"admin_xform_number_input", labelCssStyle:"width:250px;", onChange:ZaTabView.onFormFieldChanged},
+								]
+							},
+							{type:_SEPARATOR_, colSpan:"*"},
+							{type:_GROUP_,id:"cos_password_settings",
+								items: [							
+									{ref:ZaCos.A_zimbraMinPwdLength, type:_TEXTFIELD_, msgName:ZaMsg.NAD_passMinLength,label:ZaMsg.NAD_passMinLength+":", labelLocation:_LEFT_, cssClass:"admin_xform_number_input", labelCssStyle:"width:250px;",onChange:ZaTabView.onFormFieldChanged},
+									{ref:ZaCos.A_zimbraMaxPwdLength, type:_INPUT_, msgName:ZaMsg.NAD_passMaxLength,label:ZaMsg.NAD_passMaxLength+":", labelLocation:_LEFT_, cssClass:"admin_xform_number_input",labelCssStyle:"width:250px;", onChange:ZaTabView.onFormFieldChanged},
+									{ref:ZaCos.A_zimbraMinPwdAge, type:_INPUT_, msgName:ZaMsg.NAD_passMinAge,label:ZaMsg.NAD_passMinAge+":", labelLocation:_LEFT_, cssClass:"admin_xform_number_input",labelCssStyle:"width:250px;", onChange:ZaTabView.onFormFieldChanged},
+									{ref:ZaCos.A_zimbraMaxPwdAge, type:_INPUT_, msgName:ZaMsg.NAD_passMaxAge,label:ZaMsg.NAD_passMaxAge+":", labelLocation:_LEFT_, cssClass:"admin_xform_number_input", labelCssStyle:"width:250px;",onChange:ZaTabView.onFormFieldChanged},
+									{ref:ZaCos.A_zimbraEnforcePwdHistory, type:_INPUT_, msgName:ZaMsg.NAD_passEnforceHistory,label:ZaMsg.NAD_passEnforceHistory+":", labelLocation:_LEFT_, cssClass:"admin_xform_number_input",labelCssStyle:"width:250px;", onChange:ZaTabView.onFormFieldChanged}
+								]
+							},
+							{type:_SEPARATOR_, colSpan:"*"},
+							{type:_GROUP_, id:"cos_password_lockout_settings",
+								items :[
+									{ref:ZaCos.A_zimbraPasswordLocked, type:_CHECKBOX_, 
+										msgName:ZaMsg.NAD_PwdLocked,
+										label:ZaMsg.NAD_PwdLocked, labelLocation:_LEFT_, 
+										trueValue:"TRUE", falseValue:"FALSE", 
+										onChange:ZaTabView.onFormFieldChanged,
+										labelCssClass:"xform_label",labelCssStyle:"width:250px;", align:_LEFT_
+									},
+									{ref:ZaCos.A_zimbraPasswordLockoutEnabled, type:_CHECKBOX_, 
+										msgName:ZaMsg.NAD_zimbraPasswordLockoutEnabled,
+										label:ZaMsg.NAD_zimbraPasswordLockoutEnabled, 
+										labelLocation:_LEFT_, align:_LEFT_, 
+										labelCssClass:"xform_label", labelCssStyle:"width:250px;",
+										trueValue:"TRUE", falseValue:"FALSE", 
+										onChange:ZaTabView.onFormFieldChanged
+									},
+									{ref:ZaCos.A_zimbraPasswordLockoutMaxFailures, type:_TEXTFIELD_, 
+										relevant: "instance.attrs[ZaCos.A_zimbraPasswordLockoutEnabled] == 'TRUE'",
+									 	relevantBehavior: _DISABLE_,
+										label:ZaMsg.NAD_zimbraPasswordLockoutMaxFailures+":",
+										subLabel:ZaMsg.NAD_zimbraPasswordLockoutMaxFailuresSub,
+										msgName:ZaMsg.NAD_zimbraPasswordLockoutMaxFailures,
+										labelLocation:_LEFT_, labelCssStyle:"width:250px;",
+										cssClass:"admin_xform_number_input", 
+										onChange:ZaTabView.onFormFieldChanged
+									},
+									{ref:ZaCos.A_zimbraPasswordLockoutDuration, type:_LIFETIME_, 
+										relevant: "instance.attrs[ZaCos.A_zimbraPasswordLockoutEnabled] == 'TRUE'",
+										relevantBehavior: _DISABLE_,
+										label:ZaMsg.NAD_zimbraPasswordLockoutDuration+":",
+										subLabel:ZaMsg.NAD_zimbraPasswordLockoutDurationSub,
+										msgName:ZaMsg.NAD_zimbraPasswordLockoutDuration,
+										labelLocation:_LEFT_, labelCssStyle:"width:250px;",
+										textFieldCssClass:"admin_xform_number_input", 
+										onChange:ZaTabView.onFormFieldChanged
+									},
+									{ref:ZaCos.A_zimbraPasswordLockoutFailureLifetime, type:_LIFETIME_, 
+										relevant: "instance.attrs[ZaCos.A_zimbraPasswordLockoutEnabled] == 'TRUE'",
+										relevantBehavior: _DISABLE_,								
+										label:ZaMsg.NAD_zimbraPasswordLockoutFailureLifetime+":",
+										subLabel:ZaMsg.NAD_zimbraPasswordLockoutFailureLifetimeSub,
+										msgName:ZaMsg.NAD_zimbraPasswordLockoutFailureLifetime,
+										labelLocation:_LEFT_, 
+										textFieldCssClass:"admin_xform_number_input", 
+										onChange:ZaTabView.onFormFieldChanged,
+										labelCssStyle:"width:250px;white-space:normal;",
+										nowrap:false,labelWrap:true
+									}																		
+								]
+							},
+							{type:_SEPARATOR_, colSpan:"*"},
+							{type:_GROUP_, 
+								items: [														
+									{ref:ZaCos.A_zimbraAuthTokenLifetime, type:_LIFETIME_, msgName:ZaMsg.NAD_AuthTokenLifetime,label:ZaMsg.NAD_AuthTokenLifetime+":",labelLocation:_LEFT_, labelCssStyle:"width:250px;",onChange:ZaTabView.onFormFieldChanged},																		
+									{ref:ZaCos.A_zimbraMailIdleSessionTimeout, type:_LIFETIME_, msgName:ZaMsg.NAD_MailIdleSessionTimeout,label:ZaMsg.NAD_MailIdleSessionTimeout+":",labelLocation:_LEFT_, labelCssStyle:"width:250px;",onChange:ZaTabView.onFormFieldChanged},																											
+									{ref:ZaCos.A_zimbraMailMessageLifetime, type:_LIFETIME1_, msgName:ZaMsg.NAD_MailMessageLifetime,label:ZaMsg.NAD_MailMessageLifetime+":",labelLocation:_LEFT_,labelCssStyle:"width:250px;", onChange:ZaTabView.onFormFieldChanged},
+									{ref:ZaCos.A_zimbraMailTrashLifetime, type:_LIFETIME1_, msgName:ZaMsg.NAD_MailTrashLifetime,label:ZaMsg.NAD_MailTrashLifetime+":", labelLocation:_LEFT_, labelCssStyle:"width:250px;",onChange:ZaTabView.onFormFieldChanged},
+									{ref:ZaCos.A_zimbraMailSpamLifetime, type:_LIFETIME1_, msgName:ZaMsg.NAD_MailSpamLifetime,label:ZaMsg.NAD_MailSpamLifetime, labelLocation:_LEFT_,labelCssStyle:"width:250px;", onChange:ZaTabView.onFormFieldChanged}
+								]
+							}
 						]
 					}
 				]

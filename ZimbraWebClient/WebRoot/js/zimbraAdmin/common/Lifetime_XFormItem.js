@@ -24,6 +24,29 @@
  */
 
 /**
+* _MLIFETIME XModelItem
+**/
+
+MLifetime_XModelItem = function () {}
+XModelItemFactory.createItemType("_MLIFETIME_", "mlifetime", MLifetime_XModelItem);
+MLifetime_XModelItem.prototype.validateType = function (value) {
+	var val = "1";
+	if(value != null && value.length >0) {
+		if(value.length > 1) {
+			val = value.substr(0, value.length-1);				
+		} else {
+			if(value == "0") {
+				val = "0";
+			} else {
+				val = "1";
+			}
+		}
+	}
+	
+	val =  XModelItem.prototype.validateNumber.call(this, val);
+	return value;
+}
+/**
 * XFormItem class: "lifetime (composite item)
 * this item is used in the Admin UI to display fields such as session token lifetime
 * instance values are strings that contain numbers and characters (/^([0-9])+([dhms])?$/;)
