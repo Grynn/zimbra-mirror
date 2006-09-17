@@ -864,6 +864,9 @@ namespace Zimbra.Toast
 		//the filename of the configuration file
 		private static String filename = "ztoastcfg.xml";
 
+		//key that identifies the password in the password db
+		private static String PASSWORD_KEY = "ZT0A5T";
+
 		//default polling interval is 5 minutes
 		private static UInt16 DEFAULT_POLL_INTERVAL = 5;
 
@@ -878,7 +881,7 @@ namespace Zimbra.Toast
 		private static String CFG_SERVER		= "Server";
 		private static String CFG_USE_SECURE	= "UseSecure";
 		private static String CFG_ACCOUNT		= "Account";
-		private static String CFG_PASSWORD		= "Password";
+		private static String CFG_PASSWORD		= "EncryptedPassword";
 		private static String CFG_POLL_INTERVAL = "PollInterval";
 		private static String CFG_CLICK_URL		= "ClickURLPathFmt";
 		private static String CFG_LOCATION		= "WindowLocation";
@@ -903,7 +906,7 @@ namespace Zimbra.Toast
 			server			= GetConfigParamString( doc, CFG_ZIMBRA_TOAST + "/" + CFG_SERVER, null );
 			useSecure		= GetConfigParamBool  ( doc, CFG_ZIMBRA_TOAST + "/" + CFG_USE_SECURE, true );
 			account			= GetConfigParamString( doc, CFG_ZIMBRA_TOAST + "/" + CFG_ACCOUNT, null );
-			password		= GetConfigParamString( doc, CFG_ZIMBRA_TOAST + "/" + CFG_PASSWORD, null );
+			password		= GetConfigParamPassword( doc, CFG_ZIMBRA_TOAST + "/" + CFG_PASSWORD, null );
 			pollInterval	= GetConfigParamUInt16( doc, CFG_ZIMBRA_TOAST + "/" + CFG_POLL_INTERVAL, DEFAULT_POLL_INTERVAL );
 			clickURLPathFmt = GetConfigParamString( doc, CFG_ZIMBRA_TOAST + "/" + CFG_CLICK_URL, DEFAULT_CLICK_URL_PATH_FMT );
 			location		= GetConfigParamPoint ( doc, CFG_ZIMBRA_TOAST + "/" + CFG_LOCATION, new Point( 100, 100 ) );
@@ -993,6 +996,21 @@ namespace Zimbra.Toast
 		}
 
 
+		private String GetConfigParamPassword( XmlDocument doc, String xpath, String strDefault )
+		{
+			String temp = GetConfigParamString( doc, xpath, null );
+			try
+			{
+				//decrypt the buffer
+				return DPAPI.Decrypt( temp );
+			}
+			catch(Exception)
+			{
+				return strDefault;
+			}
+		}
+
+
 		/// <summary>
 		/// Create a new ToastConfig object with the given params
 		/// </summary>
@@ -1046,7 +1064,7 @@ namespace Zimbra.Toast
 			SaveElement( doc, zimbraToast, CFG_SERVER, server );
 			SaveElement( doc, zimbraToast, CFG_USE_SECURE, useSecure.ToString() );
 			SaveElement( doc, zimbraToast, CFG_ACCOUNT, account );
-			SaveElement( doc, zimbraToast, CFG_PASSWORD, password );
+			SaveElement( doc, zimbraToast, CFG_PASSWORD, EncryptedPassword );
 			SaveElement( doc, zimbraToast, CFG_POLL_INTERVAL, pollInterval.ToString() );
 			SaveElement( doc, zimbraToast, CFG_CLICK_URL, clickURLPathFmt );
 			
@@ -1233,6 +1251,14 @@ namespace Zimbra.Toast
 			return sb.ToString();
 		}
 
+
+		public String EncryptedPassword
+		{
+			get
+			{
+				return DPAPI.Encrypt( DPAPI.KeyType.UserKey, this.password, null, PASSWORD_KEY );
+			}
+		}
 
 
 	}

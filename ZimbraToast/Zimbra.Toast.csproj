@@ -114,6 +114,11 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Crypt.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "MailboxMonitor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
