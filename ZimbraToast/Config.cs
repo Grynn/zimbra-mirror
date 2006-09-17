@@ -6,6 +6,7 @@ using System.Threading;
 using System.Collections;
 using System.Windows.Forms;
 using System.ComponentModel;
+using Microsoft.Win32; //need it for mailto registration
 
 
 
@@ -51,6 +52,7 @@ namespace Zimbra.Toast
 		private int				currentMsgIdx			= 0;
 		private ToastForm		toastForm				= null;
 		private AutoResetEvent	displayCompletionEvent	= null;
+		private System.Windows.Forms.Button RegisterMailto;
 
 		private Zimbra.Client.MessageSummary[] msgSummaries = null;
 		
@@ -114,6 +116,7 @@ namespace Zimbra.Toast
 			this.ShowWindowMenuItem = new System.Windows.Forms.MenuItem();
 			this.ExitMenuItem = new System.Windows.Forms.MenuItem();
 			this.DefaultToolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.RegisterMailto = new System.Windows.Forms.Button();
 			this.ConfigurationTabControl.SuspendLayout();
 			this.ConfigrationTabPage.SuspendLayout();
 			this.AdvancedGroupBox.SuspendLayout();
@@ -128,7 +131,7 @@ namespace Zimbra.Toast
 			this.ConfigurationTabControl.Location = new System.Drawing.Point(6, 8);
 			this.ConfigurationTabControl.Name = "ConfigurationTabControl";
 			this.ConfigurationTabControl.SelectedIndex = 0;
-			this.ConfigurationTabControl.Size = new System.Drawing.Size(352, 344);
+			this.ConfigurationTabControl.Size = new System.Drawing.Size(352, 368);
 			this.ConfigurationTabControl.TabIndex = 0;
 			this.ConfigurationTabControl.TabStop = false;
 			// 
@@ -140,12 +143,13 @@ namespace Zimbra.Toast
 			this.ConfigrationTabPage.Controls.Add(this.ServerConnectionGroupBox);
 			this.ConfigrationTabPage.Location = new System.Drawing.Point(4, 22);
 			this.ConfigrationTabPage.Name = "ConfigrationTabPage";
-			this.ConfigrationTabPage.Size = new System.Drawing.Size(344, 318);
+			this.ConfigrationTabPage.Size = new System.Drawing.Size(344, 342);
 			this.ConfigrationTabPage.TabIndex = 0;
 			this.ConfigrationTabPage.Text = "Configuration";
 			// 
 			// AdvancedGroupBox
 			// 
+			this.AdvancedGroupBox.Controls.Add(this.RegisterMailto);
 			this.AdvancedGroupBox.Controls.Add(this.ClickURLPathFmtTextBox);
 			this.AdvancedGroupBox.Controls.Add(this.ClickURLLabel);
 			this.AdvancedGroupBox.Controls.Add(this.PollingIntervalUpDown);
@@ -154,7 +158,7 @@ namespace Zimbra.Toast
 			this.AdvancedGroupBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.AdvancedGroupBox.Location = new System.Drawing.Point(12, 210);
 			this.AdvancedGroupBox.Name = "AdvancedGroupBox";
-			this.AdvancedGroupBox.Size = new System.Drawing.Size(316, 88);
+			this.AdvancedGroupBox.Size = new System.Drawing.Size(316, 112);
 			this.AdvancedGroupBox.TabIndex = 2;
 			this.AdvancedGroupBox.TabStop = false;
 			this.AdvancedGroupBox.Text = "Advanced";
@@ -357,7 +361,7 @@ namespace Zimbra.Toast
 			// 
 			this.OK_Button.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.OK_Button.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.OK_Button.Location = new System.Drawing.Point(283, 358);
+			this.OK_Button.Location = new System.Drawing.Point(283, 382);
 			this.OK_Button.Name = "OK_Button";
 			this.OK_Button.TabIndex = 1;
 			this.OK_Button.Text = "OK";
@@ -396,12 +400,23 @@ namespace Zimbra.Toast
 			this.ExitMenuItem.Text = "Exit";
 			this.ExitMenuItem.Click += new System.EventHandler(this.ExitMenuItem_Click);
 			// 
+			// RegisterMailto
+			// 
+			this.RegisterMailto.BackColor = System.Drawing.SystemColors.Control;
+			this.RegisterMailto.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.RegisterMailto.Location = new System.Drawing.Point(102, 76);
+			this.RegisterMailto.Name = "RegisterMailto";
+			this.RegisterMailto.Size = new System.Drawing.Size(202, 23);
+			this.RegisterMailto.TabIndex = 10;
+			this.RegisterMailto.Text = "Register Mailto Handler";
+			this.RegisterMailto.Click += new System.EventHandler(this.RegisterMailto_Click);
+			// 
 			// Config
 			// 
 			this.AcceptButton = this.OK_Button;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.BackColor = System.Drawing.SystemColors.Control;
-			this.ClientSize = new System.Drawing.Size(364, 391);
+			this.ClientSize = new System.Drawing.Size(364, 413);
 			this.ControlBox = false;
 			this.Controls.Add(this.OK_Button);
 			this.Controls.Add(this.ConfigurationTabControl);
@@ -567,6 +582,35 @@ namespace Zimbra.Toast
 				mailboxMonitor.StopMonitoring();
 			SaveParams();
 		}
+
+
+		/// <summary>
+		/// use ZWC as the default mailto handler
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void RegisterMailto_Click(object sender, System.EventArgs e)
+		{
+			String openCmd = "\"" + System.Windows.Forms.Application.ExecutablePath + "\" \"%1\"";
+			RegistryKey key = Registry.LocalMachine.OpenSubKey( @"software\classes\mailto\shell\open\command", true );
+			key.SetValue( "", openCmd );
+
+			RegistryKey zimbraKey = Registry.LocalMachine.CreateSubKey( @"Software\Clients\Mail\Zimbra" );
+			zimbraKey.SetValue( "", "Zimbra" );
+			
+			key = zimbraKey.CreateSubKey( @"Protocols\mailto\shell\open\command" );
+			key.SetValue( "", openCmd );
+
+			key = zimbraKey.CreateSubKey( @"Shell\open\command" );
+			key.SetValue( "", openCmd );
+
+			System.Windows.Forms.MessageBox.Show( 
+				"Registered Successfully", 
+				"Register Zimbra As Mailto Handler", 
+				System.Windows.Forms.MessageBoxButtons.OK, 
+				System.Windows.Forms.MessageBoxIcon.Information );
+		}
+
 		
 		#endregion Form Control Event Handlers
 
@@ -592,6 +636,7 @@ namespace Zimbra.Toast
 				bMatch = this.PasswordTextBox.Text.Equals( this.VerifyPasswordTextBox.Text );
 			}
 			this.OK_Button.Enabled = bAllValues && bMatch;
+			this.RegisterMailto.Enabled = bAllValues && bMatch;
 		}
 
 
@@ -781,6 +826,7 @@ namespace Zimbra.Toast
 			}
 		}
 		#endregion
+
 	}
 
 
@@ -1133,6 +1179,44 @@ namespace Zimbra.Toast
 		/// <returns></returns>
 		public String GetItemUri( String itemId )
 		{
+			System.Text.StringBuilder sb = new System.Text.StringBuilder( GetServerUri() );
+			
+			//append the configurable path portion
+			sb.AppendFormat( this.clickURLPathFmt, itemId );
+
+			return sb.ToString();
+		}
+
+
+
+		/// <summary>
+		/// url to open a compose window in ZWC
+		/// </summary>
+		/// <param name="mailToUrl"></param>
+		/// <returns></returns>
+		public String GetMailtoUri( String mailToUrl )
+		{
+			System.Text.StringBuilder sb = new System.Text.StringBuilder( GetServerUri() );
+
+			mailToUrl = mailToUrl.Replace( "mailto:", "to=" );
+			int idx = mailToUrl.IndexOf( '?' );
+			if( idx != -1 ) 
+			{
+				mailToUrl = mailToUrl.Substring( 0, idx ) + "&" + mailToUrl.Substring( idx + 1 );
+			}
+
+			sb.AppendFormat( "/zimbra/mail?view=compose&{0}", mailToUrl );
+
+			return sb.ToString();
+		}
+
+
+		/// <summary>
+		/// returns the server uri
+		/// </summary>
+		/// <returns></returns>
+		public String GetServerUri()
+		{
 			bool bExcludePort = 
 				(Port == 80  && !UseSecure) ||
 				(Port == 443 && UseSecure );
@@ -1145,9 +1229,6 @@ namespace Zimbra.Toast
 				Server,
 				(bExcludePort)?"":":",
 				(bExcludePort)?"":Port.ToString() );
-
-			//append the configurable path portion
-			sb.AppendFormat( this.clickURLPathFmt, itemId );
 
 			return sb.ToString();
 		}

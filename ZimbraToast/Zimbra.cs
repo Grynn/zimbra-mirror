@@ -106,21 +106,36 @@ namespace Zimbra.Toast
 	//application entry point
 	public class Application
 	{
+
+		/// <summary>
+		/// invoked to handle a mailto url
+		/// </summary>
+		/// <param name="mailToUrl"></param>
+		private static void HandleMailTo( String mailToUrl )
+		{
+			ToastConfig config = new ToastConfig();
+			System.Diagnostics.Process.Start( config.GetMailtoUri( mailToUrl ) );
+		}
+
+
+
+
 		/// <summary>
 		/// The main entry point for the application.
 		/// </summary>
 		[STAThread]
-		static void Main() 
+		static void Main(String[] args) 
 		{
-			//load the application configuration information
-
-			//if its not configured display the configuration dialog
-
-			//the default application form is the configuration form
-			//System.Windows.Forms.Application.Run(new ToastForm());
+			//if we are handling a mailto url, do it and return
+			if( args.Length == 1 )
+			{
+				HandleMailTo( args[0] );
+				return;
+			}
+			
+			//otherwise, we are running the tray app
 			System.Windows.Forms.Application.EnableVisualStyles();
 			System.Windows.Forms.Application.DoEvents();
-
 			System.Windows.Forms.Application.Run( new Config() );
 		}
 
