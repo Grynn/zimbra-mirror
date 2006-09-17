@@ -12,7 +12,7 @@ namespace Zimbra.Toast
 	/// <summary>
 	/// The main toaster window - displays alert data
 	/// </summary>
-	public class ToastForm : System.Windows.Forms.Form
+	public class ToastForm : TransparentDialog
 	{
 		private System.Windows.Forms.Panel RootPanel;
 		private System.Windows.Forms.Panel BodyPanel;
@@ -26,10 +26,9 @@ namespace Zimbra.Toast
 		private System.ComponentModel.IContainer components;
 		private System.Windows.Forms.PictureBox FlagPictureBox;
 		private System.Windows.Forms.PictureBox DeletePictureBox;
+		private System.Windows.Forms.Timer timer;
 		private System.Windows.Forms.ImageList PopupImages;
-
-		Zimbra.Client.MessageSummary currentMsg = null;
-		Zimbra.Toast.Config config = null;
+		private Zimbra.Client.MessageSummary msg;
 
 		enum PopupImagesIdx 
 		{
@@ -41,13 +40,40 @@ namespace Zimbra.Toast
 			DELETE_RED,
 		}
 
-		public ToastForm(Config cfg)
+		#region Custom events and delegates
+
+		//'open' the item
+		public delegate void OpenItemHandler( String itemId );
+
+		//'flag' the item
+		public delegate void FlagItemHandler( String itemId );
+
+		//'delete' the item
+		public delegate void DeleteItemHandler( String itemId );
+
+		//open item event
+		public event OpenItemHandler OnOpenItem;
+
+		//flag item event
+		public event FlagItemHandler OnFlagItem;
+
+		//delete item event
+		public event DeleteItemHandler OnDeleteItem;
+
+
+		#endregion
+
+		/// <summary>
+		/// Create a new toaster for the given msg summary
+		/// </summary>
+		public ToastForm(Zimbra.Client.MessageSummary msg)
 		{
-			this.config = cfg;
+			this.msg = msg;
 			InitializeComponent();
 			ManualInitializeComponent();
 		}
 
+		#region cleanup
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
@@ -61,18 +87,22 @@ namespace Zimbra.Toast
 				}
 			}
 			base.Dispose( disposing );
-			config = null;
 		}
+		#endregion
 
-
+		#region Form related initialization
+		
+		/// <summary>
+		/// Additional componenet configuration
+		/// </summary>
 		private void ManualInitializeComponent()
 		{
 			this.ClosePictureBox.Image = this.PopupImages.Images[ (int)PopupImagesIdx.CLOSE_GRAY ];
 			this.FlagPictureBox.Image = this.PopupImages.Images[ (int)PopupImagesIdx.FLAG_GRAY ];
 			this.DeletePictureBox.Image = this.PopupImages.Images[ (int)PopupImagesIdx.DELETE_GRAY ];
+
 		}
 
-		#region Windows Form Designer generated code
 		/// <summary>
 		/// Required method for Designer support - do not modify
 		/// the contents of this method with the code editor.
@@ -93,6 +123,7 @@ namespace Zimbra.Toast
 			this.ThinBlackSeperatorPanel = new System.Windows.Forms.Panel();
 			this.TitleBarPanel = new System.Windows.Forms.Panel();
 			this.PopupImages = new System.Windows.Forms.ImageList(this.components);
+			this.timer = new System.Windows.Forms.Timer(this.components);
 			this.RootPanel.SuspendLayout();
 			this.BodyPanel.SuspendLayout();
 			this.SuspendLayout();
@@ -107,6 +138,8 @@ namespace Zimbra.Toast
 			this.RootPanel.Name = "RootPanel";
 			this.RootPanel.Size = new System.Drawing.Size(330, 78);
 			this.RootPanel.TabIndex = 0;
+			this.RootPanel.MouseEnter += new System.EventHandler(this.ToastForm_MouseEnter);
+			this.RootPanel.MouseLeave += new System.EventHandler(this.ToastForm_MouseLeave);
 			// 
 			// BodyPanel
 			// 
@@ -124,7 +157,9 @@ namespace Zimbra.Toast
 			this.BodyPanel.Size = new System.Drawing.Size(328, 70);
 			this.BodyPanel.TabIndex = 1;
 			this.BodyPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BodyPanel_MouseUp);
+			this.BodyPanel.MouseEnter += new System.EventHandler(this.ToastForm_MouseEnter);
 			this.BodyPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.BodyPanel_MouseMove);
+			this.BodyPanel.MouseLeave += new System.EventHandler(this.ToastForm_MouseLeave);
 			this.BodyPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BodyPanel_MouseDown);
 			// 
 			// DeletePictureBox
@@ -172,7 +207,9 @@ namespace Zimbra.Toast
 			this.SnippetLabel.Name = "SnippetLabel";
 			this.SnippetLabel.Size = new System.Drawing.Size(270, 28);
 			this.SnippetLabel.TabIndex = 17;
-			this.SnippetLabel.Click += new System.EventHandler(this.ViewItemInBrowser);
+			this.SnippetLabel.Click += new System.EventHandler(this.ZimbraItem_Click);
+			this.SnippetLabel.MouseEnter += new System.EventHandler(this.ToastForm_MouseEnter);
+			this.SnippetLabel.MouseLeave += new System.EventHandler(this.ToastForm_MouseLeave);
 			// 
 			// SubjectLabel
 			// 
@@ -182,7 +219,9 @@ namespace Zimbra.Toast
 			this.SubjectLabel.Name = "SubjectLabel";
 			this.SubjectLabel.Size = new System.Drawing.Size(244, 16);
 			this.SubjectLabel.TabIndex = 16;
-			this.SubjectLabel.Click += new System.EventHandler(this.ViewItemInBrowser);
+			this.SubjectLabel.Click += new System.EventHandler(this.ZimbraItem_Click);
+			this.SubjectLabel.MouseEnter += new System.EventHandler(this.ToastForm_MouseEnter);
+			this.SubjectLabel.MouseLeave += new System.EventHandler(this.ToastForm_MouseLeave);
 			// 
 			// DisplayNameLabel
 			// 
@@ -192,7 +231,9 @@ namespace Zimbra.Toast
 			this.DisplayNameLabel.Name = "DisplayNameLabel";
 			this.DisplayNameLabel.Size = new System.Drawing.Size(178, 16);
 			this.DisplayNameLabel.TabIndex = 15;
-			this.DisplayNameLabel.Click += new System.EventHandler(this.ViewItemInBrowser);
+			this.DisplayNameLabel.Click += new System.EventHandler(this.ZimbraItem_Click);
+			this.DisplayNameLabel.MouseEnter += new System.EventHandler(this.ToastForm_MouseEnter);
+			this.DisplayNameLabel.MouseLeave += new System.EventHandler(this.ToastForm_MouseLeave);
 			// 
 			// ZimbraLogoPictureBox
 			// 
@@ -204,6 +245,8 @@ namespace Zimbra.Toast
 			this.ZimbraLogoPictureBox.TabIndex = 12;
 			this.ZimbraLogoPictureBox.TabStop = false;
 			this.ZimbraLogoPictureBox.Click += new System.EventHandler(this.ZimbraLogoPictureBox_Click);
+			this.ZimbraLogoPictureBox.MouseEnter += new System.EventHandler(this.ToastForm_MouseEnter);
+			this.ZimbraLogoPictureBox.MouseLeave += new System.EventHandler(this.ToastForm_MouseLeave);
 			// 
 			// ThinBlackSeperatorPanel
 			// 
@@ -212,6 +255,8 @@ namespace Zimbra.Toast
 			this.ThinBlackSeperatorPanel.Name = "ThinBlackSeperatorPanel";
 			this.ThinBlackSeperatorPanel.Size = new System.Drawing.Size(368, 1);
 			this.ThinBlackSeperatorPanel.TabIndex = 3;
+			this.ThinBlackSeperatorPanel.MouseEnter += new System.EventHandler(this.ToastForm_MouseEnter);
+			this.ThinBlackSeperatorPanel.MouseLeave += new System.EventHandler(this.ToastForm_MouseLeave);
 			// 
 			// TitleBarPanel
 			// 
@@ -223,7 +268,9 @@ namespace Zimbra.Toast
 			this.TitleBarPanel.Size = new System.Drawing.Size(328, 6);
 			this.TitleBarPanel.TabIndex = 0;
 			this.TitleBarPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.TitleBarPanel_MouseUp);
+			this.TitleBarPanel.MouseEnter += new System.EventHandler(this.ToastForm_MouseEnter);
 			this.TitleBarPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.TitleBarPanel_MouseMove);
+			this.TitleBarPanel.MouseLeave += new System.EventHandler(this.ToastForm_MouseLeave);
 			this.TitleBarPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TitleBarPanel_MouseDown);
 			// 
 			// PopupImages
@@ -231,6 +278,11 @@ namespace Zimbra.Toast
 			this.PopupImages.ImageSize = new System.Drawing.Size(16, 16);
 			this.PopupImages.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("PopupImages.ImageStream")));
 			this.PopupImages.TransparentColor = System.Drawing.Color.Transparent;
+			// 
+			// timer
+			// 
+			this.timer.Interval = 3000;
+			this.timer.Tick += new System.EventHandler(this.timer_Tick);
 			// 
 			// ToastForm
 			// 
@@ -243,8 +295,13 @@ namespace Zimbra.Toast
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "ToastForm";
+			this.Opacity = 0.80000000000000038;
 			this.ShowInTaskbar = false;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "Zimbra Toast";
+			this.Load += new System.EventHandler(this.ToastForm_Load);
+			this.MouseEnter += new System.EventHandler(this.ToastForm_MouseEnter);
+			this.MouseLeave += new System.EventHandler(this.ToastForm_MouseLeave);
 			this.RootPanel.ResumeLayout(false);
 			this.BodyPanel.ResumeLayout(false);
 			this.ResumeLayout(false);
@@ -316,36 +373,48 @@ namespace Zimbra.Toast
 		private void ClosePictureBox_MouseEnter(object sender, System.EventArgs e)
 		{
 			this.ClosePictureBox.Image = this.PopupImages.Images[ (int)PopupImagesIdx.CLOSE_RED ];
+			ToastForm_MouseEnter( sender, e );
 		}
 
 		private void ClosePictureBox_MouseLeave(object sender, System.EventArgs e)
 		{
 			this.ClosePictureBox.Image = this.PopupImages.Images[ (int)PopupImagesIdx.CLOSE_GRAY ];
+			ToastForm_MouseLeave( sender, e );
 		}
 
 		private void FlagPictureBox_MouseEnter(object sender, System.EventArgs e)
 		{
 			this.FlagPictureBox.Image = this.PopupImages.Images[ (int)PopupImagesIdx.FLAG_RED ];
+			ToastForm_MouseEnter( sender, e );
 		}
 
 		private void FlagPictureBox_MouseLeave(object sender, System.EventArgs e)
 		{
 			this.FlagPictureBox.Image = this.PopupImages.Images[ (int)PopupImagesIdx.FLAG_GRAY ];
+			ToastForm_MouseLeave( sender, e );
 		}
 
 		private void DeletePictureBox_MouseEnter(object sender, System.EventArgs e)
 		{
 			this.DeletePictureBox.Image = this.PopupImages.Images[ (int)PopupImagesIdx.DELETE_RED];
+			ToastForm_MouseEnter( sender, e );
 		}
 
 		private void DeletePictureBox_MouseLeave(object sender, System.EventArgs e)
 		{
-			this.DeletePictureBox.Image = this.PopupImages.Images[ (int)PopupImagesIdx.DELETE_GRAY];		
+			this.DeletePictureBox.Image = this.PopupImages.Images[ (int)PopupImagesIdx.DELETE_GRAY];	
+			ToastForm_MouseLeave( sender, e );
 		}
 		#endregion 
 
-
-		private void UpdateMessageLabel( System.Windows.Forms.Label l, String s, String e )
+		#region Update the text on the toaster
+		/// <summary>
+		/// Helper to update a label on the toaster
+		/// </summary>
+		/// <param name="l">the label to update</param>
+		/// <param name="s">the string to put int the label</param>
+		/// <param name="e">if s is invalid, put </param>
+		private void  UpdateMessageLabel( System.Windows.Forms.Label l, String s, String e )
 		{
 			if( s == null || s.Length == 0 ) 
 			{
@@ -357,58 +426,290 @@ namespace Zimbra.Toast
 			}
 		}
 
+		/// <summary>
+		/// Update the from label on the toaster
+		/// </summary>
+		/// <param name="from"></param>
 		private void SetFrom( String from )
 		{
 			UpdateMessageLabel( this.DisplayNameLabel, from, "<Unknown Sender>" );
 		}
 
+		/// <summary>
+		/// update the subject on the toaster
+		/// </summary>
+		/// <param name="subject"></param>
 		private void SetSubject( String subject )
 		{
 			UpdateMessageLabel( this.SubjectLabel, subject, "<No Subject>" );
 		}
 
+		/// <summary>
+		/// update the snippet on the toaster
+		/// </summary>
+		/// <param name="snippet"></param>
 		private void SetSnippet( String snippet )
 		{
 			UpdateMessageLabel( this.SnippetLabel, snippet, "<No body>" );
 		}
 
-		public void SetFields( Zimbra.Client.MessageSummary msg )
+		#endregion
+
+		#region Button Handlers
+
+		/// <summary>
+		/// the close button was clicked
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void ClosePictureBox_Click(object sender, System.EventArgs e)
 		{
-			this.currentMsg = msg;
-			SetFrom( msg.email_personal_name );
+			this.CloseNoFade();
+		}
+
+		/// <summary>
+		/// something about the item was clicked
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void ZimbraItem_Click(object sender, System.EventArgs e )
+		{
+			OnOpenItem(this.msg.itemId);
+		}
+
+		/// <summary>
+		/// the zimbra logo was clicked
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void ZimbraLogoPictureBox_Click(object sender, System.EventArgs e)
+		{
+			System.Diagnostics.Process.Start( "http://www.zimbra.com" );
+		}
+
+		/// <summary>
+		/// the flag button was clicked
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void FlagPictureBox_Click(object sender, System.EventArgs e)
+		{
+			//fire OnFlagItem
+			OnFlagItem(this.msg.itemId);
+			this.FlagPictureBox.Enabled = false;
+		}
+
+		/// <summary>
+		/// the delete button was clicked
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void DeletePictureBox_Click(object sender, System.EventArgs e)
+		{
+			//fire OnDeleteItem
+			OnDeleteItem(this.msg.itemId);
+			this.DeletePictureBox.Enabled = false;
+		}
+
+		#endregion
+
+		#region Window fade-in / fade-out handling
+		/// <summary>
+		/// Called when the timer expires incidacting the toaster
+		/// should start closing
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void timer_Tick(object sender, System.EventArgs e)
+		{
+			Close();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void ToastForm_Load(object sender, System.EventArgs e)
+		{
+			timer.Enabled = true;
+			SetFrom( msg.email_address );
 			SetSubject( msg.subject );
 			SetSnippet( msg.fragment );
 		}
 
 
-		private void ZimbraLogoPictureBox_Click(object sender, System.EventArgs e)
+		/// <summary>
+		/// stop fading and stop the close-window-timer
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void ToastForm_MouseEnter(object sender, System.EventArgs e)
 		{
-			//open http://www.zimbra.com using the default browser
+			//stop fading, set opacity to max
+			timer.Stop();
+			CancelFade();
 		}
 
-		private void ClosePictureBox_Click(object sender, System.EventArgs e)
-		{
-			this.Hide();
-		}
 
-		private void ViewItemInBrowser(object sender, System.EventArgs e)
+		/// <summary>
+		/// resume fading-out
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void ToastForm_MouseLeave(object sender, System.EventArgs e)
 		{
-			if( currentMsg == null || currentMsg.itemId == null || currentMsg.itemId.Length <= 0 )
-				return;
-
-			System.Diagnostics.Process.Start( config.GetItemUri( currentMsg.itemId ) );
+			//resume fading
+			this.Opacity = 0.8;
+			Close();
 		}
+		#endregion
 
-		private void FlagPictureBox_Click(object sender, System.EventArgs e)
-		{
-			config.FlagItem( this.currentMsg.itemId );
-		}
-
-		private void DeletePictureBox_Click(object sender, System.EventArgs e)
-		{
-			config.MoveItem( this.currentMsg.itemId, "3" );
-		}
 
 	}
 
+
+
+
+
+
+
+	/// <summary>
+	/// Base class that gives any form that derives from it the effect of slowly 
+	/// appearing and then disapperaing. Much like outlook email notification pop-ups.
+	/// </summary>
+	public class TransparentDialog : System.Windows.Forms.Form
+	{
+		private bool			m_bShowing		= true;
+		private bool			m_bForceClose	= false;
+		private Timer			m_clock			= null;
+		private IContainer		components		= null;
+		private DialogResult	m_origDialogResult;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public TransparentDialog()
+		{
+			InitializeComponents();
+		}
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		void InitializeComponents()
+		{
+			this.components = new System.ComponentModel.Container();
+			this.m_clock =  new Timer(this.components);
+			this.m_clock.Interval = 100;
+			this.SuspendLayout();
+			this.m_clock.Tick += new EventHandler(Animate);
+			this.Load += new EventHandler(TransparentDialog_Load);
+			this.Closing += new CancelEventHandler(TransparentDialog_Closing);
+			this.ResumeLayout(false);
+			this.PerformLayout();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		protected void CancelFade()
+		{
+			m_clock.Stop();
+			this.Opacity = 1;
+		}
+
+
+		protected void CloseNoFade()
+		{
+			m_bForceClose = true;
+			Close();
+		}
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void TransparentDialog_Load(object sender, EventArgs e)
+		{
+			this.Opacity = 0.0;
+			m_bShowing = true;
+
+			m_clock.Start();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void TransparentDialog_Closing(object sender, CancelEventArgs e)
+		{
+			if (!m_bForceClose)
+			{
+				m_origDialogResult = this.DialogResult;
+				e.Cancel = true;
+				m_bShowing = false;
+				m_clock.Start();
+			}
+			else
+			{
+				this.DialogResult = m_origDialogResult;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Animate(object sender, EventArgs e)
+		{
+			double o = this.Opacity;
+			if (m_bShowing)
+			{
+				if (this.Opacity < .8)
+				{
+					this.Opacity += 0.025;
+				}
+				else
+				{
+					m_clock.Stop();
+				}
+			}
+			else
+			{
+				if (this.Opacity > .4)
+				{
+					this.Opacity -= 0.025;
+				}
+				else if (this.Opacity > 0 )
+				{
+					this.Opacity -= 0.015;
+				}
+				else
+				{
+					m_clock.Stop();
+					m_bForceClose = true;
+					this.Close();
+					this.Dispose();
+				}
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="disposing"></param>
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing && (components != null))
+			{
+				components.Dispose();
+			}
+			base.Dispose(disposing);
+		}
+	}
 }

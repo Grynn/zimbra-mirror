@@ -1,13 +1,9 @@
 using System;
 using System.Xml;
 
-//  http(s)://server/zimbra/?view=msg&id=<id>
 
 namespace Zimbra.Toast
 {
-
-
-
 
 	/// <summary>
 	/// Establish a communication channel with zimbra
@@ -19,7 +15,6 @@ namespace Zimbra.Toast
 		private Zimbra.Client.Dispatcher			dispatcher		= null;
 		private Zimbra.Client.ResponseContext		prevRespContext = null;
 		private Zimbra.Client.Account.AuthResponse	authResponse	= null;
-
 
 		/// <summary>
 		/// Create th session
@@ -123,8 +118,8 @@ namespace Zimbra.Toast
 
 			//the default application form is the configuration form
 			//System.Windows.Forms.Application.Run(new ToastForm());
-//			System.Windows.Forms.Application.EnableVisualStyles();
-//			System.Windows.Forms.Application.DoEvents();
+			System.Windows.Forms.Application.EnableVisualStyles();
+			System.Windows.Forms.Application.DoEvents();
 
 			System.Windows.Forms.Application.Run( new Config() );
 		}

@@ -40,6 +40,7 @@ namespace Zimbra.Client
 		public static String A_EMAIL_DISPLAY		= "d";
 		public static String A_EMAIL_ADDRESS		= "a";
 		public static String A_EMAIL_PERSONAL_NAME	= "p";
+		public static String A_PARENT_FOLDER_ID		= "l";
 
 		public static Response[] responses = {  };
 		public String NamespacePrefix{ get{ return NS_PREFIX; }}

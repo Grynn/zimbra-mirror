@@ -1,10 +1,13 @@
 ﻿using System;
-using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
-using System.Windows.Forms;
 using System.IO;
 using System.Xml;
+using System.Drawing;
+using System.Threading;
+using System.Collections;
+using System.Windows.Forms;
+using System.ComponentModel;
+
+
 
 namespace Zimbra.Toast
 {
@@ -23,9 +26,8 @@ namespace Zimbra.Toast
 		private System.Windows.Forms.ContextMenu TrayMenu;
 		private System.Windows.Forms.MenuItem ShowWindowMenuItem;
 		private System.Windows.Forms.MenuItem ExitMenuItem;
-		private System.Windows.Forms.Button OK_Button;
-		private System.Windows.Forms.MenuItem ShowToastMenuItem;
 		private System.Windows.Forms.MenuItem CheckNowMenuItem;
+		private System.Windows.Forms.Button OK_Button;
 		private System.ComponentModel.IContainer components;
 		private System.Windows.Forms.GroupBox ZimbraAccountGroupBox;
 		private System.Windows.Forms.TextBox AccountTextBox;
@@ -34,14 +36,24 @@ namespace Zimbra.Toast
 		private System.Windows.Forms.Label PasswordLabel;
 		private System.Windows.Forms.TextBox VerifyPasswordTextBox;
 		private System.Windows.Forms.Label VerifyPasswordLabel;
+		private System.Windows.Forms.GroupBox AdvancedGroupBox;
+		private System.Windows.Forms.NumericUpDown PollingIntervalUpDown;
+		private System.Windows.Forms.Label PollIntervalLabel;
+		private System.Windows.Forms.Label PollIntervalUnitsLabel;
+		private System.Windows.Forms.Label ClickURLLabel;
+		private System.Windows.Forms.ToolTip DefaultToolTip;
+		private System.Windows.Forms.TextBox ClickURLPathFmtTextBox;
+		
+		private ToastConfig		toastConfig				= null;
+		private ZimbraSession	zimbraSession			= null;
+		private MailboxMonitor	mailboxMonitor			= null;
+		
+		private int				currentMsgIdx			= 0;
+		private ToastForm		toastForm				= null;
+		private AutoResetEvent	displayCompletionEvent	= null;
 
-
-		private ToastForm					toaster			= null;
-		private ToastConfig					toastConfig		= null;
-		private ZimbraSession				zimbraSession	= null;
-		private System.Timers.Timer			timer			= new System.Timers.Timer();
-		private System.Threading.Thread		monitorThread	= null;
-
+		private Zimbra.Client.MessageSummary[] msgSummaries = null;
+		
 
 		/// <summary>
 		/// Default constructor
@@ -67,23 +79,6 @@ namespace Zimbra.Toast
 			base.Dispose( disposing );
 		}
 
-		public String GetItemUri( String itemId )
-		{
-			bool bExcludePort = 
-				(toastConfig.Port == 80  && !toastConfig.UseSecure) ||
-				(toastConfig.Port == 443 && toastConfig.UseSecure );
-
- 			System.Text.StringBuilder sb = new System.Text.StringBuilder();
-			sb.AppendFormat( "http{0}://{1}{2}{3}/zimbra/?view=msg&id={4}",
-				(toastConfig.UseSecure)?"s":"",
-				toastConfig.Server,
-				(bExcludePort)?"":":",
-				(bExcludePort)?"":toastConfig.Port.ToString(),
-				itemId );
-			return sb.ToString();
-		}
-
-
 		#region Windows Form Designer generated code
 		/// <summary>
 		/// Required method for Designer support - do not modify
@@ -95,6 +90,12 @@ namespace Zimbra.Toast
 			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(Config));
 			this.ConfigurationTabControl = new System.Windows.Forms.TabControl();
 			this.ConfigrationTabPage = new System.Windows.Forms.TabPage();
+			this.AdvancedGroupBox = new System.Windows.Forms.GroupBox();
+			this.ClickURLPathFmtTextBox = new System.Windows.Forms.TextBox();
+			this.ClickURLLabel = new System.Windows.Forms.Label();
+			this.PollingIntervalUpDown = new System.Windows.Forms.NumericUpDown();
+			this.PollIntervalUnitsLabel = new System.Windows.Forms.Label();
+			this.PollIntervalLabel = new System.Windows.Forms.Label();
 			this.ZimbraAccountGroupBox = new System.Windows.Forms.GroupBox();
 			this.VerifyPasswordTextBox = new System.Windows.Forms.TextBox();
 			this.VerifyPasswordLabel = new System.Windows.Forms.Label();
@@ -110,11 +111,13 @@ namespace Zimbra.Toast
 			this.TrayIcon = new System.Windows.Forms.NotifyIcon(this.components);
 			this.TrayMenu = new System.Windows.Forms.ContextMenu();
 			this.CheckNowMenuItem = new System.Windows.Forms.MenuItem();
-			this.ShowToastMenuItem = new System.Windows.Forms.MenuItem();
 			this.ShowWindowMenuItem = new System.Windows.Forms.MenuItem();
 			this.ExitMenuItem = new System.Windows.Forms.MenuItem();
+			this.DefaultToolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.ConfigurationTabControl.SuspendLayout();
 			this.ConfigrationTabPage.SuspendLayout();
+			this.AdvancedGroupBox.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.PollingIntervalUpDown)).BeginInit();
 			this.ZimbraAccountGroupBox.SuspendLayout();
 			this.ServerConnectionGroupBox.SuspendLayout();
 			this.SuspendLayout();
@@ -125,20 +128,103 @@ namespace Zimbra.Toast
 			this.ConfigurationTabControl.Location = new System.Drawing.Point(6, 8);
 			this.ConfigurationTabControl.Name = "ConfigurationTabControl";
 			this.ConfigurationTabControl.SelectedIndex = 0;
-			this.ConfigurationTabControl.Size = new System.Drawing.Size(352, 238);
+			this.ConfigurationTabControl.Size = new System.Drawing.Size(352, 344);
 			this.ConfigurationTabControl.TabIndex = 0;
 			this.ConfigurationTabControl.TabStop = false;
 			// 
 			// ConfigrationTabPage
 			// 
 			this.ConfigrationTabPage.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.ConfigrationTabPage.Controls.Add(this.AdvancedGroupBox);
 			this.ConfigrationTabPage.Controls.Add(this.ZimbraAccountGroupBox);
 			this.ConfigrationTabPage.Controls.Add(this.ServerConnectionGroupBox);
 			this.ConfigrationTabPage.Location = new System.Drawing.Point(4, 22);
 			this.ConfigrationTabPage.Name = "ConfigrationTabPage";
-			this.ConfigrationTabPage.Size = new System.Drawing.Size(344, 212);
+			this.ConfigrationTabPage.Size = new System.Drawing.Size(344, 318);
 			this.ConfigrationTabPage.TabIndex = 0;
 			this.ConfigrationTabPage.Text = "Configuration";
+			// 
+			// AdvancedGroupBox
+			// 
+			this.AdvancedGroupBox.Controls.Add(this.ClickURLPathFmtTextBox);
+			this.AdvancedGroupBox.Controls.Add(this.ClickURLLabel);
+			this.AdvancedGroupBox.Controls.Add(this.PollingIntervalUpDown);
+			this.AdvancedGroupBox.Controls.Add(this.PollIntervalUnitsLabel);
+			this.AdvancedGroupBox.Controls.Add(this.PollIntervalLabel);
+			this.AdvancedGroupBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.AdvancedGroupBox.Location = new System.Drawing.Point(12, 210);
+			this.AdvancedGroupBox.Name = "AdvancedGroupBox";
+			this.AdvancedGroupBox.Size = new System.Drawing.Size(316, 88);
+			this.AdvancedGroupBox.TabIndex = 2;
+			this.AdvancedGroupBox.TabStop = false;
+			this.AdvancedGroupBox.Text = "Advanced";
+			// 
+			// ClickURLPathFmtTextBox
+			// 
+			this.ClickURLPathFmtTextBox.Location = new System.Drawing.Point(102, 48);
+			this.ClickURLPathFmtTextBox.Name = "ClickURLPathFmtTextBox";
+			this.ClickURLPathFmtTextBox.Size = new System.Drawing.Size(202, 20);
+			this.ClickURLPathFmtTextBox.TabIndex = 8;
+			this.ClickURLPathFmtTextBox.Text = "/zimbra/?view=msg&id={0}";
+			this.DefaultToolTip.SetToolTip(this.ClickURLPathFmtTextBox, "Path portion of the URL to open when an item is clicked. Use {0} to represent the" +
+				" items id.");
+			// 
+			// ClickURLLabel
+			// 
+			this.ClickURLLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.ClickURLLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.ClickURLLabel.Location = new System.Drawing.Point(10, 50);
+			this.ClickURLLabel.Name = "ClickURLLabel";
+			this.ClickURLLabel.Size = new System.Drawing.Size(84, 16);
+			this.ClickURLLabel.TabIndex = 6;
+			this.ClickURLLabel.Text = "Click Item URL";
+			this.ClickURLLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// PollingIntervalUpDown
+			// 
+			this.PollingIntervalUpDown.Location = new System.Drawing.Point(102, 22);
+			this.PollingIntervalUpDown.Maximum = new System.Decimal(new int[] {
+																				  30,
+																				  0,
+																				  0,
+																				  0});
+			this.PollingIntervalUpDown.Minimum = new System.Decimal(new int[] {
+																				  1,
+																				  0,
+																				  0,
+																				  0});
+			this.PollingIntervalUpDown.Name = "PollingIntervalUpDown";
+			this.PollingIntervalUpDown.Size = new System.Drawing.Size(46, 20);
+			this.PollingIntervalUpDown.TabIndex = 5;
+			this.PollingIntervalUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.DefaultToolTip.SetToolTip(this.PollingIntervalUpDown, "How often to check for new messages.");
+			this.PollingIntervalUpDown.Value = new System.Decimal(new int[] {
+																				1,
+																				0,
+																				0,
+																				0});
+			// 
+			// PollIntervalUnitsLabel
+			// 
+			this.PollIntervalUnitsLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.PollIntervalUnitsLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.PollIntervalUnitsLabel.Location = new System.Drawing.Point(156, 24);
+			this.PollIntervalUnitsLabel.Name = "PollIntervalUnitsLabel";
+			this.PollIntervalUnitsLabel.Size = new System.Drawing.Size(84, 16);
+			this.PollIntervalUnitsLabel.TabIndex = 4;
+			this.PollIntervalUnitsLabel.Text = "Minutes";
+			this.PollIntervalUnitsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// PollIntervalLabel
+			// 
+			this.PollIntervalLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.PollIntervalLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.PollIntervalLabel.Location = new System.Drawing.Point(10, 24);
+			this.PollIntervalLabel.Name = "PollIntervalLabel";
+			this.PollIntervalLabel.Size = new System.Drawing.Size(84, 16);
+			this.PollIntervalLabel.TabIndex = 2;
+			this.PollIntervalLabel.Text = "Polling Interval";
+			this.PollIntervalLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// ZimbraAccountGroupBox
 			// 
@@ -164,6 +250,7 @@ namespace Zimbra.Toast
 			this.VerifyPasswordTextBox.Size = new System.Drawing.Size(202, 20);
 			this.VerifyPasswordTextBox.TabIndex = 7;
 			this.VerifyPasswordTextBox.Text = "";
+			this.DefaultToolTip.SetToolTip(this.VerifyPasswordTextBox, "Your Zimbra account password.");
 			this.VerifyPasswordTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Configuration_TextFieldKeyPress);
 			// 
 			// VerifyPasswordLabel
@@ -185,6 +272,7 @@ namespace Zimbra.Toast
 			this.PasswordTextBox.Size = new System.Drawing.Size(202, 20);
 			this.PasswordTextBox.TabIndex = 5;
 			this.PasswordTextBox.Text = "";
+			this.DefaultToolTip.SetToolTip(this.PasswordTextBox, "Your Zimbra account password.");
 			this.PasswordTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Configuration_TextFieldKeyPress);
 			// 
 			// PasswordLabel
@@ -205,6 +293,7 @@ namespace Zimbra.Toast
 			this.AccountTextBox.Size = new System.Drawing.Size(202, 20);
 			this.AccountTextBox.TabIndex = 3;
 			this.AccountTextBox.Text = "";
+			this.DefaultToolTip.SetToolTip(this.AccountTextBox, "Your Zimbra account name.  Example me@zimbra.company.com");
 			this.AccountTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Configuration_TextFieldKeyPress);
 			// 
 			// AccountLabel
@@ -238,16 +327,20 @@ namespace Zimbra.Toast
 			this.ServerNameTextBox.Size = new System.Drawing.Size(202, 20);
 			this.ServerNameTextBox.TabIndex = 1;
 			this.ServerNameTextBox.Text = "";
+			this.DefaultToolTip.SetToolTip(this.ServerNameTextBox, "The name of yoru Zimbra server. Example zimbra.company.com");
 			this.ServerNameTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Configuration_TextFieldKeyPress);
 			// 
 			// UseSecureConnectionCheckBox
 			// 
+			this.UseSecureConnectionCheckBox.Checked = true;
+			this.UseSecureConnectionCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.UseSecureConnectionCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.UseSecureConnectionCheckBox.Location = new System.Drawing.Point(102, 48);
 			this.UseSecureConnectionCheckBox.Name = "UseSecureConnectionCheckBox";
 			this.UseSecureConnectionCheckBox.Size = new System.Drawing.Size(182, 18);
 			this.UseSecureConnectionCheckBox.TabIndex = 2;
 			this.UseSecureConnectionCheckBox.Text = "Use Secure Connection";
+			this.DefaultToolTip.SetToolTip(this.UseSecureConnectionCheckBox, "Use a secure connection when communication with your Zimbra server");
 			// 
 			// ServerNameLabel
 			// 
@@ -257,13 +350,14 @@ namespace Zimbra.Toast
 			this.ServerNameLabel.Name = "ServerNameLabel";
 			this.ServerNameLabel.Size = new System.Drawing.Size(84, 16);
 			this.ServerNameLabel.TabIndex = 0;
-			this.ServerNameLabel.Text = "Server Name:";
+			this.ServerNameLabel.Text = "Server Name";
 			this.ServerNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// OK_Button
 			// 
+			this.OK_Button.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.OK_Button.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.OK_Button.Location = new System.Drawing.Point(283, 252);
+			this.OK_Button.Location = new System.Drawing.Point(283, 358);
 			this.OK_Button.Name = "OK_Button";
 			this.OK_Button.TabIndex = 1;
 			this.OK_Button.Text = "OK";
@@ -281,7 +375,6 @@ namespace Zimbra.Toast
 			// 
 			this.TrayMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
 																					 this.CheckNowMenuItem,
-																					 this.ShowToastMenuItem,
 																					 this.ShowWindowMenuItem,
 																					 this.ExitMenuItem});
 			// 
@@ -289,30 +382,26 @@ namespace Zimbra.Toast
 			// 
 			this.CheckNowMenuItem.Index = 0;
 			this.CheckNowMenuItem.Text = "Check For New Mail";
-			// 
-			// ShowToastMenuItem
-			// 
-			this.ShowToastMenuItem.Index = 1;
-			this.ShowToastMenuItem.Text = "Show Toast";
-			this.ShowToastMenuItem.Click += new System.EventHandler(this.ShowToastMenuItem_Click);
+			this.CheckNowMenuItem.Click += new System.EventHandler(this.CheckNowMenuItem_Click);
 			// 
 			// ShowWindowMenuItem
 			// 
-			this.ShowWindowMenuItem.Index = 2;
+			this.ShowWindowMenuItem.Index = 1;
 			this.ShowWindowMenuItem.Text = "Settings";
 			this.ShowWindowMenuItem.Click += new System.EventHandler(this.ShowWindowMenuItem_Click);
 			// 
 			// ExitMenuItem
 			// 
-			this.ExitMenuItem.Index = 3;
+			this.ExitMenuItem.Index = 2;
 			this.ExitMenuItem.Text = "Exit";
 			this.ExitMenuItem.Click += new System.EventHandler(this.ExitMenuItem_Click);
 			// 
 			// Config
 			// 
+			this.AcceptButton = this.OK_Button;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.BackColor = System.Drawing.SystemColors.Control;
-			this.ClientSize = new System.Drawing.Size(364, 283);
+			this.ClientSize = new System.Drawing.Size(364, 391);
 			this.ControlBox = false;
 			this.Controls.Add(this.OK_Button);
 			this.Controls.Add(this.ConfigurationTabControl);
@@ -328,6 +417,8 @@ namespace Zimbra.Toast
 			this.Load += new System.EventHandler(this.Config_Load);
 			this.ConfigurationTabControl.ResumeLayout(false);
 			this.ConfigrationTabPage.ResumeLayout(false);
+			this.AdvancedGroupBox.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.PollingIntervalUpDown)).EndInit();
 			this.ZimbraAccountGroupBox.ResumeLayout(false);
 			this.ServerConnectionGroupBox.ResumeLayout(false);
 			this.ResumeLayout(false);
@@ -343,8 +434,7 @@ namespace Zimbra.Toast
 		/// <param name="e"></param>
 		private void TrayIcon_DoubleClick(object sender, System.EventArgs e)
 		{
-			Show();
-			WindowState = FormWindowState.Normal;
+			mailboxMonitor.CheckMailbox();
 		}
 
 
@@ -376,10 +466,18 @@ namespace Zimbra.Toast
 		/// <param name="e"></param>
 		private void ShowToastMenuItem_Click(object sender, System.EventArgs e)
 		{
-			this.toaster.Show();
+			//this.toaster.Show();
 		}
 
-
+		/// <summary>
+		/// Check for new stuff right now
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void CheckNowMenuItem_Click(object sender, System.EventArgs e)
+		{
+			mailboxMonitor.CheckMailbox();
+		}
 		#endregion
 
 		#region Form Control Event Handlers
@@ -406,10 +504,18 @@ namespace Zimbra.Toast
 		/// <param name="e"></param>
 		private void OKButton_Click(object sender, System.EventArgs e)
 		{
-			SaveParams();
 			Hide();
+			
+			if( mailboxMonitor != null )
+				mailboxMonitor.StopMonitoring();
 
-			StartMonitoring();
+			//this updates both toastConfig and zimbraSession
+			SaveParams();
+			
+			mailboxMonitor.Update( zimbraSession, toastConfig.PollInterval );
+
+			//start monitoring
+			mailboxMonitor.StartMonitoring();
 		}
 
 
@@ -431,29 +537,35 @@ namespace Zimbra.Toast
 		/// <param name="e"></param>
 		private void Config_Load(object sender, System.EventArgs e)
 		{
-			try 
-			{
-				//create the toaster
-				toaster = new ToastForm(this);
-				//load the params
-				toastConfig = new ToastConfig();
-				//set the tf values
-				InitDialogFields();
-				//create the zimbra session
-				//StartMonitoring();
-			} 
-			catch(Exception) 
-			{
-			}
+			//load the params from the file - defaults used if file doesn't exist
+			toastConfig = new ToastConfig();
 
+			//create the zimbra session
+			UpdateZimbraSession();
+							
+			//initialize the mailbox monitor
+			mailboxMonitor = new MailboxMonitor( zimbraSession, toastConfig.PollInterval );
+
+			//the toaster needs to know when new msgs arrive 
+			mailboxMonitor.OnNewMsgs += new Zimbra.Toast.MailboxMonitor.NewMsgHandler(DisplayNewMessages);
+
+			//set the tf values
+			InitDialogFields();
+			
 			UpdateOkButton();
 		}
 		
-
 		
+		/// <summary>
+		/// Form is closing, shut everything down
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void Config_Closing(object sender, System.ComponentModel.CancelEventArgs e)
 		{
-			StopMonitoring();
+			if( mailboxMonitor != null )
+				mailboxMonitor.StopMonitoring();
+			SaveParams();
 		}
 		
 		#endregion Form Control Event Handlers
@@ -471,7 +583,8 @@ namespace Zimbra.Toast
 				TfHasValue( this.ServerNameTextBox ) &&
 				TfHasValue( this.AccountTextBox ) &&
 				TfHasValue( this.PasswordTextBox ) &&
-				TfHasValue( this.VerifyPasswordTextBox ) );
+				TfHasValue( this.VerifyPasswordTextBox ) &&
+				TfHasValue( this.ClickURLPathFmtTextBox ) );
 
 			bool bMatch = false;
 			if( TfHasValue(PasswordTextBox) && TfHasValue(VerifyPasswordTextBox)) 
@@ -507,12 +620,41 @@ namespace Zimbra.Toast
 		/// </summary>
 		private void SaveParams()
 		{
+			UpdateToastConfig();
+			toastConfig.Save();
+		}
+
+
+		/// <summary>
+		/// Update the toast config based on whats in the UI
+		/// </summary>
+		private void UpdateToastConfig()
+		{
 			toastConfig = new ToastConfig( 
 				this.ServerNameTextBox.Text,
 				this.UseSecureConnectionCheckBox.Checked,
 				this.AccountTextBox.Text,
-				this.PasswordTextBox.Text );
-			toastConfig.Save();
+				this.PasswordTextBox.Text,
+				(ushort)this.PollingIntervalUpDown.Value,
+				this.ClickURLPathFmtTextBox.Text,
+				toastConfig.Location );
+
+			//any time we update the toast config we should update the zimbra session
+			UpdateZimbraSession();
+		}
+
+
+		/// <summary>
+		/// update thee zimbra session with whats in the toast config
+		/// </summary>
+		private void UpdateZimbraSession()
+		{
+			zimbraSession = new ZimbraSession(
+					toastConfig.Account, 
+					toastConfig.Password,
+					toastConfig.Server,
+					toastConfig.Port,
+					toastConfig.UseSecure );
 		}
 
 		/// <summary>
@@ -533,155 +675,130 @@ namespace Zimbra.Toast
 			this.AccountTextBox.Text = toastConfig.Account;
 			this.PasswordTextBox.Text = toastConfig.Password;
 			this.VerifyPasswordTextBox.Text = toastConfig.Password;
+			this.PollingIntervalUpDown.Value = toastConfig.PollInterval;
+			this.ClickURLPathFmtTextBox.Text = toastConfig.ClickURLPathFmt;
 		}
 
 		#endregion
 
-		#region Mailbox Monitoring stuff
-		
-		/// <summary>
-		/// Start monitoring the zimbra mailbox for new items.  
-		/// If monitoring has started, it will be stopped and restarted.
-		/// </summary>
-		private void StartMonitoring()
-		{
-			if( monitorThread != null )
-			{
-				StopMonitoring();
-			}
-
-			zimbraSession = new ZimbraSession( 
-				toastConfig.Account, 
-				toastConfig.Password, 
-				toastConfig.Server,
-				toastConfig.Port, 
-				toastConfig.UseSecure );
-
-			monitorThread = new System.Threading.Thread( new System.Threading.ThreadStart(MonitorMailbox) );
-			monitorThread.Start();
-		}
-
+		#region Toaser event handlers
 
 		/// <summary>
-		/// Resume monitoring the zimbra mailbox for new items.
-		/// If monitoring is not paused, does nothing.
+		/// Open the item in a browser
 		/// </summary>
-		private void ResumeMonitoring()
+		/// <param name="itemId"></param>
+		private void OpenItem( String itemId )
 		{
-			if( monitorThread != null ) 
-			{
-				monitorThread.Resume();
-			}
+			//open the uri in the default browsers
+			String uri = toastConfig.GetItemUri( itemId );
+
+			//this could be dangerous, but at lease we are
+			//assured it starts with "http"
+			System.Diagnostics.Process.Start( uri );
 		}
 
 		/// <summary>
-		/// Pause monitoring of the zimbra mailbox 
+		/// Tell Zimbra to flag the item
 		/// </summary>
-		private void PauseMonitoring()
+		/// <param name="itemId"></param>
+		private void FlagItem( String itemId )
 		{
-			if( monitorThread != null )
-			{
-				monitorThread.Suspend();
-			}
+			//for now do it in the UI thread to block the UI
+			zimbraSession.FlagItem(itemId);
 		}
 
 		/// <summary>
-		/// Stop monitoring the zimbra mailbox
+		/// Tell zimbra to move the item to the trash folder
 		/// </summary>
-		private void StopMonitoring()
+		/// <param name="itemId"></param>
+		private void DeleteItem( String itemId )
 		{
-			if( monitorThread == null  ) 
+			zimbraSession.MoveItem( itemId, "3" );
+		}
+
+		#endregion
+
+		#region handle display of msg summaries (cycle toaster)
+		/// <summary>
+		/// This should be called in the mailboxmonitors worker thread
+		/// the idea is to hold it up while toast is being displayed so
+		/// it doesn't poll the server and obtain a new MessageSummary[]
+		/// </summary>
+		/// <param name="msgs">the new messages on the server</param>
+		/// <param name="are">the event to signal once all msgs have been displayed</param>
+		public void DisplayNewMessages( Zimbra.Client.MessageSummary[] msgs, AutoResetEvent are )
+		{
+			//nothing to display, signal the event and bail
+			if( msgs == null || msgs.Length == 0 ) 
 			{
+				are.Set();
 				return;
 			}
 
-			monitorThread.Abort();
-			monitorThread = null;
+			//setup the state to cycle through the message summaries
+			this.currentMsgIdx = 0;
+			this.msgSummaries = msgs;
+			this.displayCompletionEvent = are;
+
+			//start it
+			Invoke( new MethodInvoker(ShowCurrentMessagSummary) );
 		}
 
 
 		/// <summary>
-		/// monitors the mailbox for new messages and displays 
-		/// the toast for each new item.
+		/// Display the current message summary in a new piece of toast
+		/// assumes the previous toast has been closed
 		/// </summary>
-		private void MonitorMailbox()
+		private void ShowCurrentMessagSummary()
 		{
-			while( true )
+			toastForm = new ToastForm(this.msgSummaries[this.currentMsgIdx++]);
+			toastForm.Location = toastConfig.Location;
+			toastForm.Closed += new EventHandler(ToasterClosed);
+			toastForm.OnOpenItem += new ToastForm.OpenItemHandler(OpenItem);
+			toastForm.OnFlagItem += new ToastForm.FlagItemHandler(FlagItem);
+			toastForm.OnDeleteItem += new ToastForm.DeleteItemHandler(DeleteItem);
+			toastForm.Show();
+		}
+
+
+		/// <summary>
+		/// Handle 'Closed' event fired from a ToastForm
+		/// updates the current msg summary idx and fires off the next toast
+		/// if all msg summaries displayed, signal mailboxMonitor
+		/// </summary>
+		/// <param name="o"></param>
+		/// <param name="a"></param>
+		private void ToasterClosed(object o, EventArgs a)
+		{
+			toastConfig.Location = toastForm.Location;
+			if( this.currentMsgIdx < this.msgSummaries.Length ) 
 			{
-				try 
-				{
-					Zimbra.Client.MessageSummary[] msgs = zimbraSession.NewMsgs;
-
-					if( msgs != null && msgs.Length > 0 ) 
-					{
-						CycleMessages( msgs );
-					}
-
-					System.Threading.Thread.Sleep( 1000 * 5 );
-				}
-				catch(Exception)
-				{
-				}
+				ShowCurrentMessagSummary();
+			}
+			else
+			{
+				this.displayCompletionEvent.Set();
 			}
 		}
-
-		private void CycleMessages(Zimbra.Client.MessageSummary[] msgs)
-		{
-			for( int i = 0; i < msgs.Length; i++ )
-			{
-				toaster.SetFields( msgs[i] );
-				Invoke( new MethodInvoker(ShowToaster) );
-				System.Threading.Thread.Sleep( 1000 * 5 );
-			}
-
-			Invoke( new MethodInvoker(HideToaster) );
-		}
-
-		private void ShowToaster()
-		{
-			toaster.Show();
-		}
-
-		private void HideToaster()
-		{
-			toaster.Hide();
-		}
-
-		public delegate void MoveItemDelegate( String itemId, String targetFolderId );
-
-		public void MoveItem( String itemId, String targetFolderId )
-		{
-			MoveItemDelegate d = new MoveItemDelegate(zimbraSession.MoveItem);
-			d.BeginInvoke( itemId, targetFolderId, null, null );
-			//zimbraSession.MoveItem( itemId, targetFolderId );
-		}
-
-		public delegate void FlagItemDelegate( String itemId );
-
-		public void FlagItem( String itemId )
-		{
-			FlagItemDelegate d = new FlagItemDelegate(zimbraSession.FlagItem);
-			d.BeginInvoke( itemId, null, null );
-			//zimbraSession.FlagItem( itemId );
-		}
-
 		#endregion
-
-
 	}
+
+
+
+
 
 
 
 	/// <summary>
 	/// The toaster configuration - server, port, acct, etc
 	/// </summary>
-	class ToastConfig
+	public class ToastConfig
 	{
 		//the server name (can end in :<port>)
 		private String	server;
 
 		//use a secure connection or clear?
-		private bool	useSecure;
+		private bool	useSecure = true;
 
 		//the zimbra account to monitor
 		private String	account;
@@ -689,8 +806,37 @@ namespace Zimbra.Toast
 		//the password of the zimbra account
 		private String	password;
 
+		//how often to hit the server and check for new messages
+		private UInt16	pollInterval = 1;
+
+		//path to something on the server
+		private String	clickURLPathFmt = DEFAULT_CLICK_URL_PATH_FMT;
+
+		//the top left of the toaster window
+		private Point	location;
+
 		//the filename of the configuration file
 		private static String filename = "ztoastcfg.xml";
+
+		//default polling interval is 5 minutes
+		private static UInt16 DEFAULT_POLL_INTERVAL = 5;
+
+		//default click-url path format specifier
+		private static String DEFAULT_CLICK_URL_PATH_FMT = "/zimbra/?view=msg&id={0}";
+
+		//TODO: request a REST api for this
+		//private static String DEFAULT_CLICK_URL_PATH_FMT = "/service/home/~/?fmt=html&id={0}";
+
+
+		private static String CFG_ZIMBRA_TOAST	= "ZimbraToast";
+		private static String CFG_SERVER		= "Server";
+		private static String CFG_USE_SECURE	= "UseSecure";
+		private static String CFG_ACCOUNT		= "Account";
+		private static String CFG_PASSWORD		= "Password";
+		private static String CFG_POLL_INTERVAL = "PollInterval";
+		private static String CFG_CLICK_URL		= "ClickURLPathFmt";
+		private static String CFG_LOCATION		= "WindowLocation";
+
 		
 
 		/// <summary>
@@ -700,13 +846,106 @@ namespace Zimbra.Toast
 		public ToastConfig()
 		{
 			XmlDocument doc = new XmlDocument();
-			doc.Load(ParamFilename());
+			try
+			{
+				doc.Load(ParamFilename());
+			}
+			catch( Exception )
+			{
+			}
 
-			server = doc.SelectSingleNode( "ZimbraToast/Server" ).InnerText;
-			useSecure = bool.Parse( doc.SelectSingleNode( "ZimbraToast/UseSecure" ).InnerText );
-			account = doc.SelectSingleNode( "ZimbraToast/Account" ).InnerText;
-			password = doc.SelectSingleNode( "ZimbraToast/Password" ).InnerText;
+			server			= GetConfigParamString( doc, CFG_ZIMBRA_TOAST + "/" + CFG_SERVER, null );
+			useSecure		= GetConfigParamBool  ( doc, CFG_ZIMBRA_TOAST + "/" + CFG_USE_SECURE, true );
+			account			= GetConfigParamString( doc, CFG_ZIMBRA_TOAST + "/" + CFG_ACCOUNT, null );
+			password		= GetConfigParamString( doc, CFG_ZIMBRA_TOAST + "/" + CFG_PASSWORD, null );
+			pollInterval	= GetConfigParamUInt16( doc, CFG_ZIMBRA_TOAST + "/" + CFG_POLL_INTERVAL, DEFAULT_POLL_INTERVAL );
+			clickURLPathFmt = GetConfigParamString( doc, CFG_ZIMBRA_TOAST + "/" + CFG_CLICK_URL, DEFAULT_CLICK_URL_PATH_FMT );
+			location		= GetConfigParamPoint ( doc, CFG_ZIMBRA_TOAST + "/" + CFG_LOCATION, new Point( 100, 100 ) );
 		}
+
+
+		/// <summary>
+		/// Return a string configuration parameter from the xml config file
+		/// </summary>
+		/// <param name="doc">the config file</param>
+		/// <param name="xpath">the node</param>
+		/// <returns>the string value of the param, or null if it doesnt exist</returns>
+		private String GetConfigParamString( XmlDocument doc, String xpath, String strDefault )
+		{
+			XmlNode n = doc.SelectSingleNode( xpath );
+			try 
+			{
+				return n.InnerText;
+			}
+			catch( Exception )
+			{
+				return strDefault;
+			}
+		}
+
+		/// <summary>
+		/// Returns a bool configuration paramter from the xml config file
+		/// </summary>
+		/// <param name="doc">the config file</param>
+		/// <param name="xpath">how to get to the node</param>
+		/// <param name="bDefault">the default value if the node doesn't exist or is invalie</param>
+		/// <returns>the bool value of the param, or bDefault if something goes wrong</returns>
+		private bool GetConfigParamBool( XmlDocument doc, String xpath, bool bDefault )
+		{
+			String temp = GetConfigParamString( doc, xpath, null );
+			try
+			{
+				return bool.Parse(temp);
+			}
+			catch( Exception )
+			{
+				return bDefault;
+			}
+		}
+
+		/// <summary>
+		/// Returns a UInt16 configuration parameter from the xml config file
+		/// </summary>
+		/// <param name="doc">the config file</param>
+		/// <param name="xpath">the xpath to get to the node</param>
+		/// <param name="nDefault">the default value if the node doesn't exist or is invalid</param>
+		/// <returns>the UInt16 value of the param, or nDefault if something goes wrong</returns>
+		private UInt16 GetConfigParamUInt16( XmlDocument doc, String xpath, UInt16 nDefault )
+		{
+			String temp = GetConfigParamString( doc, xpath, null );
+			try
+			{
+				return UInt16.Parse(temp);
+			}
+			catch( Exception )
+			{
+				return nDefault;
+			}
+		}
+
+
+
+		/// <summary>
+		/// Return a Point configuration parameter from the xml config file
+		/// </summary>
+		/// <param name="doc">the config file</param>
+		/// <param name="xpath">the xpath to get the node</param>
+		/// <param name="pDefault">the default value if the node doesn't exist or is invalid</param>
+		/// <returns>the Point value of the param or pDefault if something goes wrong</returns>
+		private Point GetConfigParamPoint( XmlDocument doc, String xpath, Point pDefault )
+		{
+			String temp = GetConfigParamString( doc, xpath, null );
+			try
+			{
+				String[] xy = temp.Split( new char[] { ',' } );
+				return new Point( Int32.Parse( xy[0] ), Int32.Parse( xy[1] ) );
+			}
+			catch( Exception )
+			{
+				return pDefault;
+			}
+		}
+
 
 		/// <summary>
 		/// Create a new ToastConfig object with the given params
@@ -715,13 +954,27 @@ namespace Zimbra.Toast
 		/// <param name="useSecure">Use a secure connection</param>
 		/// <param name="account">The account to monitor</param>
 		/// <param name="password">The accounts password</param>
-		public ToastConfig( String server, bool useSecure, String account, String password )
+		/// <param name="pollInterval">The polling interval - must be > 0</param>
+		/// <param name="clickURLPathFmt">The format specifier of the path portion of the url to be opened when an item is clicked</param>
+		/// <param name="location">The default location of the toaster window</param>
+		public ToastConfig( String server, bool useSecure, String account, String password, UInt16 pollInterval, String clickURLPathFmt, Point location )
 		{
 			this.server = server;
 			this.useSecure = useSecure;
 			this.account = account;
 			this.password = password;
+			if( pollInterval > 0 )
+			{
+				this.pollInterval = pollInterval;
+			}
+			else 
+			{
+				this.pollInterval = DEFAULT_POLL_INTERVAL;
+			}
+			this.clickURLPathFmt = clickURLPathFmt;
+			this.location = location;
 		}
+
 
 		/// <summary>
 		/// Retrieve the param file name.
@@ -741,26 +994,35 @@ namespace Zimbra.Toast
 		public void Save()
 		{
 			XmlDocument doc = new XmlDocument();
-			XmlElement zimbraToast = doc.CreateElement( "ZimbraToast" );
+			XmlElement zimbraToast = doc.CreateElement( CFG_ZIMBRA_TOAST );
 			doc.AppendChild( zimbraToast );
 
-			XmlElement eServer = doc.CreateElement( "Server" );
-			zimbraToast.AppendChild( eServer );
-			eServer.InnerText = server;
-
-			XmlElement eUseSecure = doc.CreateElement( "UseSecure" );
-			zimbraToast.AppendChild( eUseSecure );
-			eUseSecure.InnerText = useSecure.ToString();
-
-			XmlElement eAccount = doc.CreateElement( "Account" );
-			zimbraToast.AppendChild( eAccount );
-			eAccount.InnerText = account;
-
-			XmlElement ePassword = doc.CreateElement( "Password" );
-			zimbraToast.AppendChild( ePassword );
-			ePassword.InnerText = password;
+			SaveElement( doc, zimbraToast, CFG_SERVER, server );
+			SaveElement( doc, zimbraToast, CFG_USE_SECURE, useSecure.ToString() );
+			SaveElement( doc, zimbraToast, CFG_ACCOUNT, account );
+			SaveElement( doc, zimbraToast, CFG_PASSWORD, password );
+			SaveElement( doc, zimbraToast, CFG_POLL_INTERVAL, pollInterval.ToString() );
+			SaveElement( doc, zimbraToast, CFG_CLICK_URL, clickURLPathFmt );
+			
+			String point = location.X.ToString() + "," + location.Y.ToString();
+			SaveElement( doc, zimbraToast, CFG_LOCATION, point );
 
 			doc.Save(ParamFilename());
+		}
+
+		
+		/// <summary>
+		/// Write the param to the xml file
+		/// </summary>
+		/// <param name="doc">the xml config document</param>
+		/// <param name="parent">the parent xml node</param>
+		/// <param name="paramName">the name of the param</param>
+		/// <param name="paramValue">the param as a string</param>
+		private static void SaveElement( XmlDocument doc, XmlElement parent, String paramName, String paramValue )
+		{
+			XmlElement e = doc.CreateElement( paramName );
+			parent.AppendChild( e );
+			e.InnerText = paramValue;
 		}
 
 
@@ -831,6 +1093,66 @@ namespace Zimbra.Toast
 		{
 			get{ return useSecure; }
 		}
+
+
+
+		/// <summary>
+		/// how often to poll the server for updates
+		/// </summary>
+		public UInt16 PollInterval
+		{
+			get{ return pollInterval; }
+		}
+
+
+		/// <summary>
+		/// format specifier of the path portion of the URL to open 
+		/// when an item is clicked in the toaster
+		/// </summary>
+		public String ClickURLPathFmt
+		{
+			get{ return clickURLPathFmt; }
+		}
+
+
+		/// <summary>
+		/// the default location of the toaster window
+		/// </summary>
+		public Point Location
+		{
+			get{ return location; }
+			set{ location = value; }
+		}
+
+
+
+		/// <summary>
+		/// Based on the current configration, get the URI for an item
+		/// </summary>
+		/// <param name="itemId"></param>
+		/// <returns></returns>
+		public String GetItemUri( String itemId )
+		{
+			bool bExcludePort = 
+				(Port == 80  && !UseSecure) ||
+				(Port == 443 && UseSecure );
+
+			System.Text.StringBuilder sb = new System.Text.StringBuilder();
+
+			//protocol/server part
+			sb.AppendFormat( "http{0}://{1}{2}{3}",
+				(UseSecure)?"s":"",
+				Server,
+				(bExcludePort)?"":":",
+				(bExcludePort)?"":Port.ToString() );
+
+			//append the configurable path portion
+			sb.AppendFormat( this.clickURLPathFmt, itemId );
+
+			return sb.ToString();
+		}
+
+
 
 	}
 }

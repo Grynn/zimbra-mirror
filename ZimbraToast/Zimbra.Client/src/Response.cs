@@ -13,6 +13,7 @@ namespace Zimbra.Client
 		public String itemId;
 		public String subject;
 		public String fragment;
+		public String parentFolderId;
 
 		public String email_display;
 		public String email_address;
@@ -49,6 +50,7 @@ namespace Zimbra.Client
 				
 				XmlNode msgNode = newMsgNodes[i];
 				s.itemId = XmlUtil.AttributeValue( msgNode.Attributes, ZimbraService.A_ID );
+				s.parentFolderId = XmlUtil.AttributeValue( msgNode.Attributes, ZimbraService.A_PARENT_FOLDER_ID );
 			
 				XmlNode emailNode = msgNode.SelectSingleNode( ZimbraService.NS_PREFIX + ":" + ZimbraService.E_EMAIL, XmlUtil.NamespaceManager );
 				if( emailNode != null ) 
