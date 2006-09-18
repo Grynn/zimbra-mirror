@@ -482,7 +482,8 @@ function (tmpObj, account, app) {
 		params.soapDoc = soapDoc;	
 		resp = createAccCommand.invoke(params).Body.CreateAccountResponse;
 	} catch (ex) {
-		switch(ex.code) {
+		throw ex;
+/*		switch(ex.code) {
 			case ZmCsfeException.ACCT_EXISTS:
 				app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_ACCOUNT_EXISTS);
 			break;
@@ -492,7 +493,7 @@ function (tmpObj, account, app) {
 			default:
 				app.getCurrentController()._handleException(ex, "ZaAccount.create", null, false);
 			break;
-		}
+		}*/
 		return null;
 	}
 	

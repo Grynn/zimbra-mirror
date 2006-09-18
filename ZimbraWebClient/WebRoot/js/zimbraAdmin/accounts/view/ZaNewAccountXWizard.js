@@ -116,7 +116,17 @@ function() {
 			this.popdown();		
 		}
 	} catch (ex) {
-		this._app.getCurrentController()._handleException(ex, "ZaNewAccountXWizard.prototype.finishWizard", null, false);
+		switch(ex.code) {		
+			case ZmCsfeException.ACCT_EXISTS:
+				this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_ACCOUNT_EXISTS);
+			break;
+			case ZmCsfeException.ACCT_INVALID_PASSWORD:
+				this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_INVALID);
+			break;
+			default:
+				this._app.getCurrentController()._handleException(ex, "ZaNewAccountXWizard.prototype.finishWizard", null, false);
+			break;		
+		}
 	}
 }
 
