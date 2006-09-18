@@ -23,21 +23,22 @@ namespace Zimbra.Toast
 		//how often to check for new items on the server (minutes)
 		private UInt16 pollInterval = DEFAULT_POLL_INTERVAL;
 
-		//defines the event handler for new message notification
+		/// <summary>
+		/// Handle new message notifications
+		/// </summary>
 		public delegate void NewMsgHandler( Zimbra.Client.MessageSummary[] newMsgs, System.Threading.AutoResetEvent are );
 
-		//the new message event
+		/// <summary>
+		/// Fired when new messages have arrived on the server
+		/// </summary>
 		public event NewMsgHandler OnNewMsgs;
 
 
 		/// <summary>
 		/// Craete a mailbox monitor for the given account.  Communicate with the give server
 		/// </summary>
-		/// <param name="account">Zimbra account</param>
-		/// <param name="password">Zimbra account password</param>
-		/// <param name="server">Zimbra server to connect to</param>
-		/// <param name="port">port to communicate with</param>
-		/// <param name="useSecure">if true, use a secure connection</param>
+		/// <param name="session">The zimbra sesson to use when monitoring</param>
+		/// <param name="pollInterval">schedule monitoring interval</param>
 		public MailboxMonitor( ZimbraSession session, UInt16 pollInterval )
 		{
 			wakeEvent = new AutoResetEvent(false);
@@ -49,6 +50,7 @@ namespace Zimbra.Toast
 		/// Update the account/server configuration.  If monitoring is in progress, it will
 		/// be stopped and resarted.
 		/// </summary>
+		/// <param name="session">The session to use when monitoring</param>
 		/// <param name="pollInterval">seconds before checking for new items on the server</param>
 		[MethodImpl(MethodImplOptions.Synchronized)]
 		public void Update( ZimbraSession session, UInt16 pollInterval )

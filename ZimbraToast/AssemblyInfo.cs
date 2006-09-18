@@ -8,12 +8,9 @@ using System.Runtime.CompilerServices;
 //
 [assembly: AssemblyTitle("Zimbra Toaster")]
 [assembly: AssemblyDescription("Zimbra Toaster")]
-[assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Zimbra")]
 [assembly: AssemblyProduct("Zimbra Toaster")]
-[assembly: AssemblyCopyright("")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]		
+[assembly: AssemblyCopyright("Copyright ©  2005,2006")]
 
 //
 // Version information for an assembly consists of the following four values:

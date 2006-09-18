@@ -105,9 +105,19 @@ public class DPAPI
         Marshal.Copy(data, 0, blob.pbData, data.Length);
     }
 
-    // Flag indicating the type of key. DPAPI terminology refers to
-    // key types as user store or machine store.
-    public enum KeyType {UserKey = 1, MachineKey};
+    /// <summary>
+	/// Flag indicating the type of key. DPAPI terminology refers to
+	/// key types as user store or machine store. 
+	/// </summary>
+    public enum KeyType {
+		/// <summary>
+		/// User scope
+		/// </summary>
+		UserKey = 1, 
+		/// <summary>
+		/// Machine scope
+		/// </summary>
+		MachineKey};
 
     // It is reasonable to set default key type to user key.
     private static KeyType defaultKeyType = KeyType.UserKey;

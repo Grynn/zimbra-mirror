@@ -1000,23 +1000,58 @@ namespace Zimbra.Toast
 			IntPtr hMod,
 			SoundFlags sf );
 
-		// Flags for playing sounds.  For this example, we are reading 
-		// the sound from a filename, so we need only specify 
-		// SND_FILENAME | SND_ASYNC
+		/// <summary>
+		/// Flags for playing sounds.  For this example, we are reading 
+		/// the sound from a filename, so we need only specify 
+		/// SND_FILENAME | SND_ASYNC 
+		/// </summary>
 		[Flags]
 		public enum SoundFlags : int 
 		{
-			SND_SYNC = 0x0000,  // play synchronously (default) 
-			SND_ASYNC = 0x0001,  // play asynchronously 
-			SND_NODEFAULT = 0x0002,  // silence (!default) if sound not found 
-			SND_MEMORY = 0x0004,  // pszSound points to a memory file
-			SND_LOOP = 0x0008,  // loop the sound until next sndPlaySound 
-			SND_NOSTOP = 0x0010,  // don't stop any currently playing sound 
-			SND_NOWAIT = 0x00002000, // don't wait if the driver is busy 
-			SND_ALIAS = 0x00010000, // name is a registry alias 
-			SND_ALIAS_ID = 0x00110000, // alias is a predefined ID
-			SND_FILENAME = 0x00020000, // name is file name 
-			SND_RESOURCE = 0x00040004  // name is resource name or atom 
+			/// <summary>
+			/// play synchronously (default)
+			/// </summary>
+			SND_SYNC = 0x0000,
+			/// <summary>
+			/// play asynchronously
+			/// </summary>
+			SND_ASYNC = 0x0001,
+			/// <summary>
+			/// silence (!default) if sound not found 
+			/// </summary>
+			SND_NODEFAULT = 0x0002,
+			/// <summary>
+			/// pszSound points to a memory file
+			/// </summary>
+			SND_MEMORY = 0x0004,
+			/// <summary>
+			/// loop the sound until next sndPlaySound 
+			/// </summary>
+			SND_LOOP = 0x0008,
+			/// <summary>
+			/// don't stop any currently playing sound 
+			/// </summary>
+			SND_NOSTOP = 0x0010,
+			/// <summary>
+			/// don't wait if the driver is busy 
+			/// </summary>
+			SND_NOWAIT = 0x00002000,
+			/// <summary>
+			/// name is a registry alias 
+			/// </summary>
+			SND_ALIAS = 0x00010000,
+			/// <summary>
+			/// alias is a predefined ID
+			/// </summary>
+			SND_ALIAS_ID = 0x00110000,
+			/// <summary>
+			/// name is file name 
+			/// </summary>
+			SND_FILENAME = 0x00020000,
+			/// <summary>
+			/// name is resource name or atom 
+			/// </summary>
+			SND_RESOURCE = 0x00040004 
 		}
 		#endregion
 
@@ -1116,6 +1151,7 @@ namespace Zimbra.Toast
 		/// </summary>
 		/// <param name="doc">the config file</param>
 		/// <param name="xpath">the node</param>
+		/// <param name="strDefault">the default string to return if the node doesn't exist or is invalid</param>
 		/// <returns>the string value of the param, or null if it doesnt exist</returns>
 		private String GetConfigParamString( XmlDocument doc, String xpath, String strDefault )
 		{

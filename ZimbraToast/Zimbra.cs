@@ -48,12 +48,21 @@ namespace Zimbra.Toast
 			}
 		}
 
+		/// <summary>
+		/// Delete the item specified by id
+		/// </summary>
+		/// <param name="itemId">The item-id of the item to delete</param>
 		public void DeleteItem( String itemId )
 		{
 			Zimbra.Client.Mail.MsgActionRequest mar = new Zimbra.Client.Mail.MsgActionRequest( itemId, "delete" );
 			Zimbra.Client.ResponseEnvelope res = SendRequest( mar );
 		}
 
+		/// <summary>
+		/// Move the item to the specified folder
+		/// </summary>
+		/// <param name="itemId">The item-id of the item to move</param>
+		/// <param name="targetFolderId">The folder id of the target folder</param>
 		public void MoveItem( String itemId, String targetFolderId )
 		{
 			Zimbra.Client.Mail.MsgActionRequest mar = new Zimbra.Client.Mail.MsgActionRequest( itemId, "move", targetFolderId );
@@ -61,6 +70,10 @@ namespace Zimbra.Toast
 		}
 
 
+		/// <summary>
+		/// Flag the item specified by id
+		/// </summary>
+		/// <param name="itemId">Item id of the item to flag</param>
 		public void FlagItem( String itemId )
 		{
 			Zimbra.Client.Mail.MsgActionRequest mar = new Zimbra.Client.Mail.MsgActionRequest( itemId, "flag" );
@@ -68,6 +81,11 @@ namespace Zimbra.Toast
 		}
 
 
+		/// <summary>
+		/// Send the request, auth if necessary
+		/// </summary>
+		/// <param name="apiRequest">The request to send</param>
+		/// <returns>The servers response</returns>
 		private Zimbra.Client.ResponseEnvelope SendRequest( Zimbra.Client.Request apiRequest )
 		{
 			if( authResponse == null || authResponse.AuthToken == null ) 
@@ -103,7 +121,9 @@ namespace Zimbra.Toast
 
 
 
-	//application entry point
+	/// <summary>
+	/// Application entry-point
+	/// </summary>
 	public class Application
 	{
 

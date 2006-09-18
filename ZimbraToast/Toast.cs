@@ -42,22 +42,35 @@ namespace Zimbra.Toast
 
 		#region Custom events and delegates
 
-		//'open' the item
+		/// <summary>
+		/// delegate for handling OnOpenItem
+		/// </summary>
 		public delegate void OpenItemHandler( String itemId );
 
-		//'flag' the item
+		/// <summary>
+		/// Delegate for handling OnFlagItem
+		/// </summary>
 		public delegate void FlagItemHandler( String itemId );
 
-		//'delete' the item
+		/// <summary>
+		/// Delegate for handling OnDeleteItem
+		/// </summary>
 		public delegate void DeleteItemHandler( String itemId );
 
-		//open item event
+		/// <summary>
+		/// Fired when the user wants to open the current item
+		/// </summary>
 		public event OpenItemHandler OnOpenItem;
 
-		//flag item event
+		/// <summary>
+		/// Fired when the user wants to flag the current item
+		/// </summary>
 		public event FlagItemHandler OnFlagItem;
 
-		//delete item event
+
+		/// <summary>
+		/// Fired when the user wants to delete the item
+		/// </summary>
 		public event DeleteItemHandler OnDeleteItem;
 
 
@@ -611,7 +624,7 @@ namespace Zimbra.Toast
 		}
 
 		/// <summary>
-		/// 
+		/// Cancel the currently in-progress fade and show the window
 		/// </summary>
 		protected void CancelFade()
 		{
@@ -620,6 +633,9 @@ namespace Zimbra.Toast
 		}
 
 
+		/// <summary>
+		/// Close the window without fading out
+		/// </summary>
 		protected void CloseNoFade()
 		{
 			m_bForceClose = true;
