@@ -634,8 +634,8 @@ S_Dwt_List_XFormItem.prototype.setItems = function (itemArray){
 	}
 	tmpArr = new Array();
 	var instance = this.getForm().getInstance();
-	var isGroupOnlyCkbAction = instance[ZaAccount.A2_memberOf]["showGroupOnlyAction"];
-	var isGroupOnly = instance[ZaAccount.A2_memberOf][ZaAccountMemberOfListView.A_isgroup];
+	var isGroupOnlyCkbAction = instance[ZaAccount.A2_memberOf] ? instance[ZaAccount.A2_memberOf]["showGroupOnlyAction"] : false;
+	var isGroupOnly = instance[ZaAccount.A2_memberOf] ? instance[ZaAccount.A2_memberOf][ZaAccountMemberOfListView.A_isgroup] : false;
 	
 	//set the current list id in widget which is used to display the proper noResultMessage
 	this.widget.setCurrentListId(this.id);

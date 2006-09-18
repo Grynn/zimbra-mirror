@@ -378,6 +378,9 @@ function(entry, skipRefresh) {
 			} catch (ex) {
 				// Data corruption may cause anexception. We should catch it here in order to display the form anyway.
 				this._handleException(ex, null, null, false);
+				if (ex.code ==  ZmCsfeException.SVC_PERM_DENIED) {
+					this._app.popView();
+				}
 			}
 		}
 		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
