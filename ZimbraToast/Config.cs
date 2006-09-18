@@ -39,8 +39,13 @@ namespace Zimbra.Toast
 		private System.Windows.Forms.TextBox VerifyPasswordTextBox;
 		private System.Windows.Forms.Label VerifyPasswordLabel;
 		private System.Windows.Forms.ToolTip DefaultToolTip;
-		private System.Windows.Forms.TabPage AdvancedTabPage;
 		private System.Windows.Forms.GroupBox groupBox2;
+		private System.Windows.Forms.Button SoundFileBrowseButton;
+		private System.Windows.Forms.TextBox SoundFileTextBox;
+		private System.Windows.Forms.CheckBox PlaySoundCheckBox;
+		private System.Windows.Forms.Button PlaySoundButton;
+		private System.Windows.Forms.MenuItem ShowNewMessagesMenuItem;
+		private System.Windows.Forms.TabPage GoodiesTabPage;
 		private System.Windows.Forms.GroupBox AdvancedGroupBox;
 		private System.Windows.Forms.Button RegisterMailto;
 		private System.Windows.Forms.TextBox ClickURLPathFmtTextBox;
@@ -48,6 +53,17 @@ namespace Zimbra.Toast
 		private System.Windows.Forms.NumericUpDown PollingIntervalUpDown;
 		private System.Windows.Forms.Label PollIntervalUnitsLabel;
 		private System.Windows.Forms.Label PollIntervalLabel;
+		private System.Windows.Forms.GroupBox FadeControlGroupBox;
+		private System.Windows.Forms.Label UpdateIntervalLabel;
+		private System.Windows.Forms.Label OpacityDeltaLabel;
+		private System.Windows.Forms.Label MaxOpacityLabel;
+		private System.Windows.Forms.Label PauseIntervalLabel;
+		private System.Windows.Forms.NumericUpDown OpacityDeltaNumericUpDown;
+		private System.Windows.Forms.NumericUpDown UpdateIntervalNumericUpDown;
+		private System.Windows.Forms.NumericUpDown PauseIntervalNumericUpDown;
+		private System.Windows.Forms.Button ViewToasterButton;
+		private System.Windows.Forms.Label PauseIntervalUnitsLabel;
+		private System.Windows.Forms.Label UpdateIntervalUnitsLabel;
 		
 		private ToastConfig		toastConfig				= null;
 		private ZimbraSession	zimbraSession			= null;
@@ -56,11 +72,7 @@ namespace Zimbra.Toast
 		private int				currentMsgIdx			= 0;
 		private ToastForm		toastForm				= null;
 		private AutoResetEvent	displayCompletionEvent	= null;
-		private System.Windows.Forms.Button SoundFileBrowseButton;
-		private System.Windows.Forms.TextBox SoundFileTextBox;
-		private System.Windows.Forms.CheckBox PlaySoundCheckBox;
-		private System.Windows.Forms.Button PlaySoundButton;
-		private System.Windows.Forms.MenuItem ShowNewMessagesMenuItem;
+		private System.Windows.Forms.NumericUpDown MaxOpacityNumericUpDown;
 
 		private Zimbra.Client.MessageSummary[] msgSummaries = null;
 		
@@ -111,14 +123,7 @@ namespace Zimbra.Toast
 			this.ServerNameTextBox = new System.Windows.Forms.TextBox();
 			this.UseSecureConnectionCheckBox = new System.Windows.Forms.CheckBox();
 			this.ServerNameLabel = new System.Windows.Forms.Label();
-			this.AdvancedTabPage = new System.Windows.Forms.TabPage();
-			this.AdvancedGroupBox = new System.Windows.Forms.GroupBox();
-			this.RegisterMailto = new System.Windows.Forms.Button();
-			this.ClickURLPathFmtTextBox = new System.Windows.Forms.TextBox();
-			this.ClickURLLabel = new System.Windows.Forms.Label();
-			this.PollingIntervalUpDown = new System.Windows.Forms.NumericUpDown();
-			this.PollIntervalUnitsLabel = new System.Windows.Forms.Label();
-			this.PollIntervalLabel = new System.Windows.Forms.Label();
+			this.GoodiesTabPage = new System.Windows.Forms.TabPage();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.PlaySoundButton = new System.Windows.Forms.Button();
 			this.PlaySoundCheckBox = new System.Windows.Forms.CheckBox();
@@ -128,39 +133,64 @@ namespace Zimbra.Toast
 			this.TrayIcon = new System.Windows.Forms.NotifyIcon(this.components);
 			this.TrayMenu = new System.Windows.Forms.ContextMenu();
 			this.CheckNowMenuItem = new System.Windows.Forms.MenuItem();
+			this.ShowNewMessagesMenuItem = new System.Windows.Forms.MenuItem();
 			this.ShowWindowMenuItem = new System.Windows.Forms.MenuItem();
 			this.ExitMenuItem = new System.Windows.Forms.MenuItem();
 			this.DefaultToolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.ShowNewMessagesMenuItem = new System.Windows.Forms.MenuItem();
+			this.AdvancedGroupBox = new System.Windows.Forms.GroupBox();
+			this.RegisterMailto = new System.Windows.Forms.Button();
+			this.ClickURLPathFmtTextBox = new System.Windows.Forms.TextBox();
+			this.ClickURLLabel = new System.Windows.Forms.Label();
+			this.PollingIntervalUpDown = new System.Windows.Forms.NumericUpDown();
+			this.PollIntervalUnitsLabel = new System.Windows.Forms.Label();
+			this.PollIntervalLabel = new System.Windows.Forms.Label();
+			this.FadeControlGroupBox = new System.Windows.Forms.GroupBox();
+			this.UpdateIntervalLabel = new System.Windows.Forms.Label();
+			this.OpacityDeltaLabel = new System.Windows.Forms.Label();
+			this.MaxOpacityLabel = new System.Windows.Forms.Label();
+			this.PauseIntervalLabel = new System.Windows.Forms.Label();
+			this.MaxOpacityNumericUpDown = new System.Windows.Forms.NumericUpDown();
+			this.OpacityDeltaNumericUpDown = new System.Windows.Forms.NumericUpDown();
+			this.UpdateIntervalNumericUpDown = new System.Windows.Forms.NumericUpDown();
+			this.PauseIntervalNumericUpDown = new System.Windows.Forms.NumericUpDown();
+			this.ViewToasterButton = new System.Windows.Forms.Button();
+			this.PauseIntervalUnitsLabel = new System.Windows.Forms.Label();
+			this.UpdateIntervalUnitsLabel = new System.Windows.Forms.Label();
 			this.ConfigurationTabControl.SuspendLayout();
 			this.ConfigrationTabPage.SuspendLayout();
 			this.ZimbraAccountGroupBox.SuspendLayout();
 			this.ServerConnectionGroupBox.SuspendLayout();
-			this.AdvancedTabPage.SuspendLayout();
+			this.GoodiesTabPage.SuspendLayout();
+			this.groupBox2.SuspendLayout();
 			this.AdvancedGroupBox.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.PollingIntervalUpDown)).BeginInit();
-			this.groupBox2.SuspendLayout();
+			this.FadeControlGroupBox.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.MaxOpacityNumericUpDown)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.OpacityDeltaNumericUpDown)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.UpdateIntervalNumericUpDown)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.PauseIntervalNumericUpDown)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// ConfigurationTabControl
 			// 
 			this.ConfigurationTabControl.Controls.Add(this.ConfigrationTabPage);
-			this.ConfigurationTabControl.Controls.Add(this.AdvancedTabPage);
+			this.ConfigurationTabControl.Controls.Add(this.GoodiesTabPage);
 			this.ConfigurationTabControl.Location = new System.Drawing.Point(6, 8);
 			this.ConfigurationTabControl.Name = "ConfigurationTabControl";
 			this.ConfigurationTabControl.SelectedIndex = 0;
-			this.ConfigurationTabControl.Size = new System.Drawing.Size(352, 288);
+			this.ConfigurationTabControl.Size = new System.Drawing.Size(352, 372);
 			this.ConfigurationTabControl.TabIndex = 0;
 			this.ConfigurationTabControl.TabStop = false;
 			// 
 			// ConfigrationTabPage
 			// 
 			this.ConfigrationTabPage.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.ConfigrationTabPage.Controls.Add(this.AdvancedGroupBox);
 			this.ConfigrationTabPage.Controls.Add(this.ZimbraAccountGroupBox);
 			this.ConfigrationTabPage.Controls.Add(this.ServerConnectionGroupBox);
 			this.ConfigrationTabPage.Location = new System.Drawing.Point(4, 22);
 			this.ConfigrationTabPage.Name = "ConfigrationTabPage";
-			this.ConfigrationTabPage.Size = new System.Drawing.Size(344, 262);
+			this.ConfigrationTabPage.Size = new System.Drawing.Size(344, 346);
 			this.ConfigrationTabPage.TabIndex = 0;
 			this.ConfigrationTabPage.Text = "Configuration";
 			// 
@@ -291,16 +321,123 @@ namespace Zimbra.Toast
 			this.ServerNameLabel.Text = "Server Name";
 			this.ServerNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// AdvancedTabPage
+			// GoodiesTabPage
 			// 
-			this.AdvancedTabPage.BackColor = System.Drawing.SystemColors.ControlLightLight;
-			this.AdvancedTabPage.Controls.Add(this.AdvancedGroupBox);
-			this.AdvancedTabPage.Controls.Add(this.groupBox2);
-			this.AdvancedTabPage.Location = new System.Drawing.Point(4, 22);
-			this.AdvancedTabPage.Name = "AdvancedTabPage";
-			this.AdvancedTabPage.Size = new System.Drawing.Size(344, 262);
-			this.AdvancedTabPage.TabIndex = 1;
-			this.AdvancedTabPage.Text = "Advanced";
+			this.GoodiesTabPage.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.GoodiesTabPage.Controls.Add(this.FadeControlGroupBox);
+			this.GoodiesTabPage.Controls.Add(this.groupBox2);
+			this.GoodiesTabPage.Location = new System.Drawing.Point(4, 22);
+			this.GoodiesTabPage.Name = "GoodiesTabPage";
+			this.GoodiesTabPage.Size = new System.Drawing.Size(344, 346);
+			this.GoodiesTabPage.TabIndex = 1;
+			this.GoodiesTabPage.Text = "Goodies";
+			// 
+			// groupBox2
+			// 
+			this.groupBox2.Controls.Add(this.PlaySoundButton);
+			this.groupBox2.Controls.Add(this.PlaySoundCheckBox);
+			this.groupBox2.Controls.Add(this.SoundFileBrowseButton);
+			this.groupBox2.Controls.Add(this.SoundFileTextBox);
+			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.groupBox2.Location = new System.Drawing.Point(12, 12);
+			this.groupBox2.Name = "groupBox2";
+			this.groupBox2.Size = new System.Drawing.Size(316, 110);
+			this.groupBox2.TabIndex = 4;
+			this.groupBox2.TabStop = false;
+			this.groupBox2.Text = "Sound";
+			// 
+			// PlaySoundButton
+			// 
+			this.PlaySoundButton.BackColor = System.Drawing.SystemColors.Control;
+			this.PlaySoundButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.PlaySoundButton.Location = new System.Drawing.Point(132, 72);
+			this.PlaySoundButton.Name = "PlaySoundButton";
+			this.PlaySoundButton.Size = new System.Drawing.Size(80, 23);
+			this.PlaySoundButton.TabIndex = 15;
+			this.PlaySoundButton.Text = "Play Sound";
+			this.PlaySoundButton.Click += new System.EventHandler(this.PlaySoundButton_Click);
+			// 
+			// PlaySoundCheckBox
+			// 
+			this.PlaySoundCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.PlaySoundCheckBox.Location = new System.Drawing.Point(16, 24);
+			this.PlaySoundCheckBox.Name = "PlaySoundCheckBox";
+			this.PlaySoundCheckBox.Size = new System.Drawing.Size(254, 18);
+			this.PlaySoundCheckBox.TabIndex = 14;
+			this.PlaySoundCheckBox.Text = "Play sound when new messages arive";
+			this.PlaySoundCheckBox.Click += new System.EventHandler(this.PlaySoundCheckBox_Click);
+			// 
+			// SoundFileBrowseButton
+			// 
+			this.SoundFileBrowseButton.BackColor = System.Drawing.SystemColors.Control;
+			this.SoundFileBrowseButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.SoundFileBrowseButton.Location = new System.Drawing.Point(220, 72);
+			this.SoundFileBrowseButton.Name = "SoundFileBrowseButton";
+			this.SoundFileBrowseButton.Size = new System.Drawing.Size(80, 23);
+			this.SoundFileBrowseButton.TabIndex = 13;
+			this.SoundFileBrowseButton.Text = "Browse";
+			this.SoundFileBrowseButton.Click += new System.EventHandler(this.SoundFileBrowseButton_Click);
+			// 
+			// SoundFileTextBox
+			// 
+			this.SoundFileTextBox.Location = new System.Drawing.Point(16, 46);
+			this.SoundFileTextBox.Name = "SoundFileTextBox";
+			this.SoundFileTextBox.ReadOnly = true;
+			this.SoundFileTextBox.Size = new System.Drawing.Size(284, 20);
+			this.SoundFileTextBox.TabIndex = 12;
+			this.SoundFileTextBox.Text = "";
+			this.DefaultToolTip.SetToolTip(this.SoundFileTextBox, "Path portion of the URL to open when an item is clicked. Use {0} to represent the" +
+				" items id.");
+			// 
+			// OK_Button
+			// 
+			this.OK_Button.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.OK_Button.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.OK_Button.Location = new System.Drawing.Point(283, 386);
+			this.OK_Button.Name = "OK_Button";
+			this.OK_Button.TabIndex = 1;
+			this.OK_Button.Text = "OK";
+			this.OK_Button.Click += new System.EventHandler(this.OKButton_Click);
+			// 
+			// TrayIcon
+			// 
+			this.TrayIcon.ContextMenu = this.TrayMenu;
+			this.TrayIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("TrayIcon.Icon")));
+			this.TrayIcon.Text = "Zimbra Toaster";
+			this.TrayIcon.Visible = true;
+			this.TrayIcon.DoubleClick += new System.EventHandler(this.TrayIcon_DoubleClick);
+			// 
+			// TrayMenu
+			// 
+			this.TrayMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																					 this.CheckNowMenuItem,
+																					 this.ShowNewMessagesMenuItem,
+																					 this.ShowWindowMenuItem,
+																					 this.ExitMenuItem});
+			// 
+			// CheckNowMenuItem
+			// 
+			this.CheckNowMenuItem.Index = 0;
+			this.CheckNowMenuItem.Text = "Check For New Mail";
+			this.CheckNowMenuItem.Click += new System.EventHandler(this.CheckNowMenuItem_Click);
+			// 
+			// ShowNewMessagesMenuItem
+			// 
+			this.ShowNewMessagesMenuItem.Index = 1;
+			this.ShowNewMessagesMenuItem.Text = "Show New Messages";
+			this.ShowNewMessagesMenuItem.Click += new System.EventHandler(this.ShowNewMessagesMenuItem_Click);
+			// 
+			// ShowWindowMenuItem
+			// 
+			this.ShowWindowMenuItem.Index = 2;
+			this.ShowWindowMenuItem.Text = "Settings";
+			this.ShowWindowMenuItem.Click += new System.EventHandler(this.ShowWindowMenuItem_Click);
+			// 
+			// ExitMenuItem
+			// 
+			this.ExitMenuItem.Index = 3;
+			this.ExitMenuItem.Text = "Exit";
+			this.ExitMenuItem.Click += new System.EventHandler(this.ExitMenuItem_Click);
 			// 
 			// AdvancedGroupBox
 			// 
@@ -312,10 +449,10 @@ namespace Zimbra.Toast
 			this.AdvancedGroupBox.Controls.Add(this.PollIntervalUnitsLabel);
 			this.AdvancedGroupBox.Controls.Add(this.PollIntervalLabel);
 			this.AdvancedGroupBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.AdvancedGroupBox.Location = new System.Drawing.Point(12, 12);
+			this.AdvancedGroupBox.Location = new System.Drawing.Point(14, 214);
 			this.AdvancedGroupBox.Name = "AdvancedGroupBox";
 			this.AdvancedGroupBox.Size = new System.Drawing.Size(316, 112);
-			this.AdvancedGroupBox.TabIndex = 5;
+			this.AdvancedGroupBox.TabIndex = 6;
 			this.AdvancedGroupBox.TabStop = false;
 			this.AdvancedGroupBox.Text = "Advanced";
 			// 
@@ -399,119 +536,210 @@ namespace Zimbra.Toast
 			this.PollIntervalLabel.Text = "Poll Interval";
 			this.PollIntervalLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// groupBox2
+			// FadeControlGroupBox
 			// 
-			this.groupBox2.Controls.Add(this.PlaySoundButton);
-			this.groupBox2.Controls.Add(this.PlaySoundCheckBox);
-			this.groupBox2.Controls.Add(this.SoundFileBrowseButton);
-			this.groupBox2.Controls.Add(this.SoundFileTextBox);
-			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox2.Location = new System.Drawing.Point(12, 130);
-			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(316, 110);
-			this.groupBox2.TabIndex = 4;
-			this.groupBox2.TabStop = false;
-			this.groupBox2.Text = "Sound";
+			this.FadeControlGroupBox.Controls.Add(this.PauseIntervalUnitsLabel);
+			this.FadeControlGroupBox.Controls.Add(this.UpdateIntervalUnitsLabel);
+			this.FadeControlGroupBox.Controls.Add(this.ViewToasterButton);
+			this.FadeControlGroupBox.Controls.Add(this.PauseIntervalNumericUpDown);
+			this.FadeControlGroupBox.Controls.Add(this.UpdateIntervalNumericUpDown);
+			this.FadeControlGroupBox.Controls.Add(this.OpacityDeltaNumericUpDown);
+			this.FadeControlGroupBox.Controls.Add(this.MaxOpacityNumericUpDown);
+			this.FadeControlGroupBox.Controls.Add(this.PauseIntervalLabel);
+			this.FadeControlGroupBox.Controls.Add(this.UpdateIntervalLabel);
+			this.FadeControlGroupBox.Controls.Add(this.OpacityDeltaLabel);
+			this.FadeControlGroupBox.Controls.Add(this.MaxOpacityLabel);
+			this.FadeControlGroupBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.FadeControlGroupBox.Location = new System.Drawing.Point(12, 128);
+			this.FadeControlGroupBox.Name = "FadeControlGroupBox";
+			this.FadeControlGroupBox.Size = new System.Drawing.Size(316, 180);
+			this.FadeControlGroupBox.TabIndex = 5;
+			this.FadeControlGroupBox.TabStop = false;
+			this.FadeControlGroupBox.Text = "Fade Control";
 			// 
-			// PlaySoundButton
+			// UpdateIntervalLabel
 			// 
-			this.PlaySoundButton.BackColor = System.Drawing.SystemColors.Control;
-			this.PlaySoundButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.PlaySoundButton.Location = new System.Drawing.Point(132, 72);
-			this.PlaySoundButton.Name = "PlaySoundButton";
-			this.PlaySoundButton.Size = new System.Drawing.Size(80, 23);
-			this.PlaySoundButton.TabIndex = 15;
-			this.PlaySoundButton.Text = "Play Sound";
-			this.PlaySoundButton.Click += new System.EventHandler(this.PlaySoundButton_Click);
+			this.UpdateIntervalLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.UpdateIntervalLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.UpdateIntervalLabel.Location = new System.Drawing.Point(32, 84);
+			this.UpdateIntervalLabel.Name = "UpdateIntervalLabel";
+			this.UpdateIntervalLabel.Size = new System.Drawing.Size(84, 16);
+			this.UpdateIntervalLabel.TabIndex = 12;
+			this.UpdateIntervalLabel.Text = "Update Interval";
+			this.UpdateIntervalLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// PlaySoundCheckBox
+			// OpacityDeltaLabel
 			// 
-			this.PlaySoundCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.PlaySoundCheckBox.Location = new System.Drawing.Point(16, 24);
-			this.PlaySoundCheckBox.Name = "PlaySoundCheckBox";
-			this.PlaySoundCheckBox.Size = new System.Drawing.Size(254, 18);
-			this.PlaySoundCheckBox.TabIndex = 14;
-			this.PlaySoundCheckBox.Text = "Play sound when new messages arive";
-			this.PlaySoundCheckBox.Click += new System.EventHandler(this.PlaySoundCheckBox_Click);
+			this.OpacityDeltaLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.OpacityDeltaLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.OpacityDeltaLabel.Location = new System.Drawing.Point(32, 58);
+			this.OpacityDeltaLabel.Name = "OpacityDeltaLabel";
+			this.OpacityDeltaLabel.Size = new System.Drawing.Size(84, 16);
+			this.OpacityDeltaLabel.TabIndex = 10;
+			this.OpacityDeltaLabel.Text = "Opacity Delta";
+			this.OpacityDeltaLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// SoundFileBrowseButton
+			// MaxOpacityLabel
 			// 
-			this.SoundFileBrowseButton.BackColor = System.Drawing.SystemColors.Control;
-			this.SoundFileBrowseButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.SoundFileBrowseButton.Location = new System.Drawing.Point(220, 72);
-			this.SoundFileBrowseButton.Name = "SoundFileBrowseButton";
-			this.SoundFileBrowseButton.Size = new System.Drawing.Size(80, 23);
-			this.SoundFileBrowseButton.TabIndex = 13;
-			this.SoundFileBrowseButton.Text = "Browse";
-			this.SoundFileBrowseButton.Click += new System.EventHandler(this.SoundFileBrowseButton_Click);
+			this.MaxOpacityLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.MaxOpacityLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.MaxOpacityLabel.Location = new System.Drawing.Point(32, 32);
+			this.MaxOpacityLabel.Name = "MaxOpacityLabel";
+			this.MaxOpacityLabel.Size = new System.Drawing.Size(84, 16);
+			this.MaxOpacityLabel.TabIndex = 8;
+			this.MaxOpacityLabel.Text = "Max Opacity";
+			this.MaxOpacityLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// SoundFileTextBox
+			// PauseIntervalLabel
 			// 
-			this.SoundFileTextBox.Location = new System.Drawing.Point(16, 46);
-			this.SoundFileTextBox.Name = "SoundFileTextBox";
-			this.SoundFileTextBox.ReadOnly = true;
-			this.SoundFileTextBox.Size = new System.Drawing.Size(284, 20);
-			this.SoundFileTextBox.TabIndex = 12;
-			this.SoundFileTextBox.Text = "";
-			this.DefaultToolTip.SetToolTip(this.SoundFileTextBox, "Path portion of the URL to open when an item is clicked. Use {0} to represent the" +
-				" items id.");
+			this.PauseIntervalLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.PauseIntervalLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.PauseIntervalLabel.Location = new System.Drawing.Point(32, 112);
+			this.PauseIntervalLabel.Name = "PauseIntervalLabel";
+			this.PauseIntervalLabel.Size = new System.Drawing.Size(84, 16);
+			this.PauseIntervalLabel.TabIndex = 14;
+			this.PauseIntervalLabel.Text = "Pause Interval";
+			this.PauseIntervalLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// OK_Button
+			// MaxOpacityNumericUpDown
 			// 
-			this.OK_Button.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.OK_Button.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.OK_Button.Location = new System.Drawing.Point(283, 302);
-			this.OK_Button.Name = "OK_Button";
-			this.OK_Button.TabIndex = 1;
-			this.OK_Button.Text = "OK";
-			this.OK_Button.Click += new System.EventHandler(this.OKButton_Click);
+			this.MaxOpacityNumericUpDown.DecimalPlaces = 2;
+			this.MaxOpacityNumericUpDown.Increment = new System.Decimal(new int[] {
+																					  1,
+																					  0,
+																					  0,
+																					  131072});
+			this.MaxOpacityNumericUpDown.Location = new System.Drawing.Point(123, 30);
+			this.MaxOpacityNumericUpDown.Maximum = new System.Decimal(new int[] {
+																					10,
+																					0,
+																					0,
+																					65536});
+			this.MaxOpacityNumericUpDown.Minimum = new System.Decimal(new int[] {
+																					5,
+																					0,
+																					0,
+																					65536});
+			this.MaxOpacityNumericUpDown.Name = "MaxOpacityNumericUpDown";
+			this.MaxOpacityNumericUpDown.TabIndex = 15;
+			this.DefaultToolTip.SetToolTip(this.MaxOpacityNumericUpDown, "Maximum opacity when fading in the toaster.");
+			this.MaxOpacityNumericUpDown.Value = new System.Decimal(new int[] {
+																				  53,
+																				  0,
+																				  0,
+																				  131072});
 			// 
-			// TrayIcon
+			// OpacityDeltaNumericUpDown
 			// 
-			this.TrayIcon.ContextMenu = this.TrayMenu;
-			this.TrayIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("TrayIcon.Icon")));
-			this.TrayIcon.Text = "Zimbra Toaster";
-			this.TrayIcon.Visible = true;
-			this.TrayIcon.DoubleClick += new System.EventHandler(this.TrayIcon_DoubleClick);
+			this.OpacityDeltaNumericUpDown.DecimalPlaces = 3;
+			this.OpacityDeltaNumericUpDown.Increment = new System.Decimal(new int[] {
+																						1,
+																						0,
+																						0,
+																						196608});
+			this.OpacityDeltaNumericUpDown.Location = new System.Drawing.Point(123, 56);
+			this.OpacityDeltaNumericUpDown.Maximum = new System.Decimal(new int[] {
+																					  100,
+																					  0,
+																					  0,
+																					  131072});
+			this.OpacityDeltaNumericUpDown.Minimum = new System.Decimal(new int[] {
+																					  1,
+																					  0,
+																					  0,
+																					  196608});
+			this.OpacityDeltaNumericUpDown.Name = "OpacityDeltaNumericUpDown";
+			this.OpacityDeltaNumericUpDown.TabIndex = 16;
+			this.DefaultToolTip.SetToolTip(this.OpacityDeltaNumericUpDown, "Change in opacity when toaster is fading in or out.");
+			this.OpacityDeltaNumericUpDown.Value = new System.Decimal(new int[] {
+																					1,
+																					0,
+																					0,
+																					196608});
 			// 
-			// TrayMenu
+			// UpdateIntervalNumericUpDown
 			// 
-			this.TrayMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					 this.CheckNowMenuItem,
-																					 this.ShowNewMessagesMenuItem,
-																					 this.ShowWindowMenuItem,
-																					 this.ExitMenuItem});
+			this.UpdateIntervalNumericUpDown.Location = new System.Drawing.Point(123, 82);
+			this.UpdateIntervalNumericUpDown.Maximum = new System.Decimal(new int[] {
+																						10000,
+																						0,
+																						0,
+																						0});
+			this.UpdateIntervalNumericUpDown.Minimum = new System.Decimal(new int[] {
+																						1,
+																						0,
+																						0,
+																						0});
+			this.UpdateIntervalNumericUpDown.Name = "UpdateIntervalNumericUpDown";
+			this.UpdateIntervalNumericUpDown.TabIndex = 17;
+			this.DefaultToolTip.SetToolTip(this.UpdateIntervalNumericUpDown, "How often to update the opacity of the toaster when fading in or out.");
+			this.UpdateIntervalNumericUpDown.Value = new System.Decimal(new int[] {
+																					  100,
+																					  0,
+																					  0,
+																					  0});
 			// 
-			// CheckNowMenuItem
+			// PauseIntervalNumericUpDown
 			// 
-			this.CheckNowMenuItem.Index = 0;
-			this.CheckNowMenuItem.Text = "Check For New Mail";
-			this.CheckNowMenuItem.Click += new System.EventHandler(this.CheckNowMenuItem_Click);
+			this.PauseIntervalNumericUpDown.Location = new System.Drawing.Point(123, 110);
+			this.PauseIntervalNumericUpDown.Maximum = new System.Decimal(new int[] {
+																					   10000,
+																					   0,
+																					   0,
+																					   0});
+			this.PauseIntervalNumericUpDown.Minimum = new System.Decimal(new int[] {
+																					   1,
+																					   0,
+																					   0,
+																					   0});
+			this.PauseIntervalNumericUpDown.Name = "PauseIntervalNumericUpDown";
+			this.PauseIntervalNumericUpDown.TabIndex = 18;
+			this.DefaultToolTip.SetToolTip(this.PauseIntervalNumericUpDown, "How long to pause the toaster after fading in.");
+			this.PauseIntervalNumericUpDown.Value = new System.Decimal(new int[] {
+																					 1,
+																					 0,
+																					 0,
+																					 0});
 			// 
-			// ShowWindowMenuItem
+			// ViewToasterButton
 			// 
-			this.ShowWindowMenuItem.Index = 2;
-			this.ShowWindowMenuItem.Text = "Settings";
-			this.ShowWindowMenuItem.Click += new System.EventHandler(this.ShowWindowMenuItem_Click);
+			this.ViewToasterButton.BackColor = System.Drawing.SystemColors.Control;
+			this.ViewToasterButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.ViewToasterButton.Location = new System.Drawing.Point(153, 138);
+			this.ViewToasterButton.Name = "ViewToasterButton";
+			this.ViewToasterButton.Size = new System.Drawing.Size(90, 23);
+			this.ViewToasterButton.TabIndex = 19;
+			this.ViewToasterButton.Text = "View Toaster";
+			this.ViewToasterButton.Click += new System.EventHandler(this.ViewToasterButton_Click);
 			// 
-			// ExitMenuItem
+			// PauseIntervalUnitsLabel
 			// 
-			this.ExitMenuItem.Index = 3;
-			this.ExitMenuItem.Text = "Exit";
-			this.ExitMenuItem.Click += new System.EventHandler(this.ExitMenuItem_Click);
+			this.PauseIntervalUnitsLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.PauseIntervalUnitsLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.PauseIntervalUnitsLabel.Location = new System.Drawing.Point(247, 112);
+			this.PauseIntervalUnitsLabel.Name = "PauseIntervalUnitsLabel";
+			this.PauseIntervalUnitsLabel.Size = new System.Drawing.Size(34, 16);
+			this.PauseIntervalUnitsLabel.TabIndex = 23;
+			this.PauseIntervalUnitsLabel.Text = "(ms)";
+			this.PauseIntervalUnitsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// ShowNewMessagesMenuItem
+			// UpdateIntervalUnitsLabel
 			// 
-			this.ShowNewMessagesMenuItem.Index = 1;
-			this.ShowNewMessagesMenuItem.Text = "Show New Messages";
-			this.ShowNewMessagesMenuItem.Click += new System.EventHandler(this.ShowNewMessagesMenuItem_Click);
+			this.UpdateIntervalUnitsLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.UpdateIntervalUnitsLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.UpdateIntervalUnitsLabel.Location = new System.Drawing.Point(247, 84);
+			this.UpdateIntervalUnitsLabel.Name = "UpdateIntervalUnitsLabel";
+			this.UpdateIntervalUnitsLabel.Size = new System.Drawing.Size(34, 16);
+			this.UpdateIntervalUnitsLabel.TabIndex = 22;
+			this.UpdateIntervalUnitsLabel.Text = "(ms)";
+			this.UpdateIntervalUnitsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// Config
 			// 
 			this.AcceptButton = this.OK_Button;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.BackColor = System.Drawing.SystemColors.Control;
-			this.ClientSize = new System.Drawing.Size(364, 333);
+			this.ClientSize = new System.Drawing.Size(364, 419);
 			this.ControlBox = false;
 			this.Controls.Add(this.OK_Button);
 			this.Controls.Add(this.ConfigurationTabControl);
@@ -529,10 +757,15 @@ namespace Zimbra.Toast
 			this.ConfigrationTabPage.ResumeLayout(false);
 			this.ZimbraAccountGroupBox.ResumeLayout(false);
 			this.ServerConnectionGroupBox.ResumeLayout(false);
-			this.AdvancedTabPage.ResumeLayout(false);
+			this.GoodiesTabPage.ResumeLayout(false);
+			this.groupBox2.ResumeLayout(false);
 			this.AdvancedGroupBox.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.PollingIntervalUpDown)).EndInit();
-			this.groupBox2.ResumeLayout(false);
+			this.FadeControlGroupBox.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.MaxOpacityNumericUpDown)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.OpacityDeltaNumericUpDown)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.UpdateIntervalNumericUpDown)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.PauseIntervalNumericUpDown)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -847,7 +1080,11 @@ namespace Zimbra.Toast
 				(ushort)this.PollingIntervalUpDown.Value,
 				this.ClickURLPathFmtTextBox.Text,
 				toastConfig.Location,
-				this.SoundFileTextBox.Text );
+				this.SoundFileTextBox.Text,
+				(double)this.MaxOpacityNumericUpDown.Value,
+				(double)this.OpacityDeltaNumericUpDown.Value,
+				(Int32)this.UpdateIntervalNumericUpDown.Value,
+				(Int32)this.PauseIntervalNumericUpDown.Value );
 
 			//any time we update the toast config we should update the zimbra session
 			UpdateZimbraSession();
@@ -893,6 +1130,11 @@ namespace Zimbra.Toast
 				this.PlaySoundCheckBox.Checked = true;
 				this.SoundFileTextBox.Text = toastConfig.SoundFile;
 			}
+
+			this.MaxOpacityNumericUpDown.Value = (decimal)toastConfig.MaxOpacity;
+			this.OpacityDeltaNumericUpDown.Value = (decimal)toastConfig.OpacityDelta;
+			this.UpdateIntervalNumericUpDown.Value = toastConfig.UpdateInterval;
+			this.PauseIntervalNumericUpDown.Value = toastConfig.PauseInterval;
 		}
 
 		#endregion
@@ -978,7 +1220,12 @@ namespace Zimbra.Toast
 		/// </summary>
 		private void ShowCurrentMessagSummary()
 		{
-			toastForm = new ToastForm(this.msgSummaries[this.currentMsgIdx++]);
+			toastForm = new ToastForm(
+				this.msgSummaries[this.currentMsgIdx++],
+				toastConfig.MaxOpacity,
+				toastConfig.OpacityDelta,
+				toastConfig.UpdateInterval,
+				toastConfig.PauseInterval );
 			toastForm.Location = toastConfig.Location;
 			toastForm.Closed += new EventHandler(ToasterClosed);
 			toastForm.OnOpenItem += new ToastForm.OpenItemHandler(OpenItem);
@@ -1020,6 +1267,28 @@ namespace Zimbra.Toast
 			string pszSound,
 			IntPtr hMod,
 			SoundFlags sf );
+
+
+		private void ViewToasterButton_Click(object sender, System.EventArgs e)
+		{
+			Zimbra.Client.MessageSummary msg = new Zimbra.Client.MessageSummary();
+			msg.email_address = "sam@zimbra.com";
+			msg.email_display = "Sam Khavari";
+			msg.email_personal_name = "Sam Khavari";
+			msg.fragment = "Do you like how the toaster window fades in and out?";
+			msg.itemId = "2";
+			msg.parentFolderId = "12";
+			msg.subject = "Toaster Window Fading";
+
+			ToastForm tempToaster = new ToastForm( msg,
+				(double)this.MaxOpacityNumericUpDown.Value,
+				(double)this.OpacityDeltaNumericUpDown.Value,
+				(Int32)this.UpdateIntervalNumericUpDown.Value,
+				(Int32)this.PauseIntervalNumericUpDown.Value );
+			tempToaster.Location = toastConfig.Location;
+
+			tempToaster.ShowDialog();
+		}
 
 
 		/// <summary>
@@ -1115,6 +1384,18 @@ namespace Zimbra.Toast
 		//the sound to play when new msgs arrive
 		private String	soundFile;
 
+		//max opacity when fading the toaster in
+		private double	maxOpacity;
+
+		//change in opacity on updates
+		private double	opacityDelta;
+
+		//how often to change the opacity
+		private Int32	updateInterval;
+
+		//how long to pause when at max opacity
+		private Int32	pauseInterval;
+
 		//the filename of the configuration file
 		private static String filename = "ztoastcfg.xml";
 
@@ -1127,19 +1408,35 @@ namespace Zimbra.Toast
 		//default click-url path format specifier
 		private static String DEFAULT_CLICK_URL_PATH_FMT = "/zimbra/?view=msg&id={0}";
 
+		//
+		private static double DEFAULT_MAX_OPACITY = 0.8;
+		
+		//
+		private static double DEFAULT_OPACITY_DELTA = 0.05;
+		
+		//
+		private static Int32  DEFAULT_UPDATE_INTERVAL = 10;
+		
+		//
+		private static Int32  DEFAULT_PAUSE_INTERVAL = 3000;
+
 		//TODO: request a REST api for this
 		//private static String DEFAULT_CLICK_URL_PATH_FMT = "/service/home/~/?fmt=html&id={0}";
 
 
-		private static String CFG_ZIMBRA_TOAST	= "ZimbraToast";
-		private static String CFG_SERVER		= "Server";
-		private static String CFG_USE_SECURE	= "UseSecure";
-		private static String CFG_ACCOUNT		= "Account";
-		private static String CFG_PASSWORD		= "EncryptedPassword";
-		private static String CFG_POLL_INTERVAL = "PollInterval";
-		private static String CFG_CLICK_URL		= "ClickURLPathFmt";
-		private static String CFG_LOCATION		= "WindowLocation";
-		private static String CFG_SOUND_FILE	= "SoundFile";
+		private static String CFG_ZIMBRA_TOAST		= "ZimbraToast";
+		private static String CFG_SERVER			= "Server";
+		private static String CFG_USE_SECURE		= "UseSecure";
+		private static String CFG_ACCOUNT			= "Account";
+		private static String CFG_PASSWORD			= "EncryptedPassword";
+		private static String CFG_POLL_INTERVAL		= "PollInterval";
+		private static String CFG_CLICK_URL			= "ClickURLPathFmt";
+		private static String CFG_LOCATION			= "WindowLocation";
+		private static String CFG_SOUND_FILE		= "SoundFile";
+		private static String CFG_MAX_OPACITY		= "MaxOpacity";
+		private static String CFG_OPACITY_DELTA		= "OpacityDelta";
+		private static String CFG_UPDATE_INTERVAL	= "UpdateInterval";
+		private static String CFG_PAUSE_INTERVAL	= "PauseInterval";
 		
 
 		/// <summary>
@@ -1165,6 +1462,10 @@ namespace Zimbra.Toast
 			clickURLPathFmt = GetConfigParamString( doc, CFG_ZIMBRA_TOAST + "/" + CFG_CLICK_URL, DEFAULT_CLICK_URL_PATH_FMT );
 			location		= GetConfigParamPoint ( doc, CFG_ZIMBRA_TOAST + "/" + CFG_LOCATION, new Point( 100, 100 ) );
 			soundFile		= GetConfigParamString( doc, CFG_ZIMBRA_TOAST + "/" + CFG_SOUND_FILE, null );
+			maxOpacity		= GetConfigParamDouble( doc, CFG_ZIMBRA_TOAST + "/" + CFG_MAX_OPACITY, DEFAULT_MAX_OPACITY );
+			opacityDelta	= GetConfigParamDouble( doc, CFG_ZIMBRA_TOAST + "/" + CFG_OPACITY_DELTA, DEFAULT_OPACITY_DELTA );
+			updateInterval  = GetConfigParamInt32 ( doc, CFG_ZIMBRA_TOAST + "/" + CFG_UPDATE_INTERVAL, DEFAULT_UPDATE_INTERVAL );
+			pauseInterval   = GetConfigParamInt32 ( doc, CFG_ZIMBRA_TOAST + "/" + CFG_PAUSE_INTERVAL, DEFAULT_PAUSE_INTERVAL );
 		}
 
 
@@ -1187,6 +1488,7 @@ namespace Zimbra.Toast
 				return strDefault;
 			}
 		}
+
 
 		/// <summary>
 		/// Returns a bool configuration paramter from the xml config file
@@ -1228,6 +1530,47 @@ namespace Zimbra.Toast
 			}
 		}
 
+
+		/// <summary>
+		/// Returns a Int32 configuration parameter from the xml config file
+		/// </summary>
+		/// <param name="doc">the config file</param>
+		/// <param name="xpath">the node selector</param>
+		/// <param name="nDefault">default value if the node doesn't exist or is invalid</param>
+		/// <returns>the UInt32 value of the param, or nDefault if something goes wrong</returns>
+		private Int32 GetConfigParamInt32( XmlDocument doc, String xpath, Int32 nDefault )
+		{
+			String temp = GetConfigParamString( doc, xpath, null );
+			try
+			{
+				return Int32.Parse(temp);
+			}
+			catch( Exception )
+			{
+				return nDefault;
+			}
+		}
+
+
+		/// <summary>
+		/// Returns a double configuration parameter from the xml config file
+		/// </summary>
+		/// <param name="doc">the config file</param>
+		/// <param name="xpath">the node selector</param>
+		/// <param name="dDefault">the double value of the param, or dDefault if something goes wrong</param>
+		/// <returns></returns>
+		private double GetConfigParamDouble( XmlDocument doc, String xpath, double dDefault )
+		{
+			String temp = GetConfigParamString( doc, xpath, null );
+			try
+			{
+				return Double.Parse(temp);
+			}
+			catch( Exception )
+			{
+				return dDefault;
+			}
+		}
 
 
 		/// <summary>
@@ -1278,6 +1621,10 @@ namespace Zimbra.Toast
 		/// <param name="clickURLPathFmt">The format specifier of the path portion of the url to be opened when an item is clicked</param>
 		/// <param name="location">The default location of the toaster window</param>
 		/// <param name="soundFile">Sound to play when new msgs arrive</param>
+		/// <param name="maxOpacity">Max opacity of the toaster window</param>
+		/// <param name="opacityDelta">change in opacity when fading in or out</param>
+		/// <param name="updateInterval">how often to update the opacity</param>
+		/// <param name="pauseInterval">how long to pause at max opacity</param>
 		public ToastConfig( 
 			String	server, 
 			bool	useSecure, 
@@ -1286,7 +1633,11 @@ namespace Zimbra.Toast
 			UInt16	pollInterval, 
 			String	clickURLPathFmt, 
 			Point	location ,
-			String	soundFile )
+			String	soundFile,
+			double  maxOpacity,
+			double  opacityDelta,
+			Int32  updateInterval,
+			Int32  pauseInterval )
 		{
 			this.server = server;
 			this.useSecure = useSecure;
@@ -1303,6 +1654,10 @@ namespace Zimbra.Toast
 			this.clickURLPathFmt = clickURLPathFmt;
 			this.location = location;
 			this.soundFile = soundFile;
+			this.maxOpacity = maxOpacity;
+			this.opacityDelta = opacityDelta;
+			this.updateInterval = updateInterval;
+			this.pauseInterval = pauseInterval;
 		}
 
 
@@ -1317,6 +1672,7 @@ namespace Zimbra.Toast
 			path = path.Substring( 0, idx ) + filename;
 			return path;
 		}
+
 
 		/// <summary>
 		/// Serialize the parameters to the param file
@@ -1337,6 +1693,11 @@ namespace Zimbra.Toast
 			String point = location.X.ToString() + "," + location.Y.ToString();
 			SaveElement( doc, zimbraToast, CFG_LOCATION, point );
 			SaveElement( doc, zimbraToast, CFG_SOUND_FILE, soundFile );
+
+			SaveElement( doc, zimbraToast, CFG_MAX_OPACITY, this.maxOpacity.ToString() );
+			SaveElement( doc, zimbraToast, CFG_OPACITY_DELTA, this.opacityDelta.ToString() );
+			SaveElement( doc, zimbraToast, CFG_UPDATE_INTERVAL, this.updateInterval.ToString() );
+			SaveElement( doc, zimbraToast, CFG_PAUSE_INTERVAL, this.pauseInterval.ToString() );
 
 			doc.Save(ParamFilename());
 		}
@@ -1543,5 +1904,39 @@ namespace Zimbra.Toast
 		}
 
 
+		/// <summary>
+		/// max opacity of toaster window
+		/// </summary>
+		public double MaxOpacity
+		{
+			get{ return maxOpacity; }
+		}
+
+		/// <summary>
+		/// change in opacity when fading in/out
+		/// </summary>
+		public double OpacityDelta
+		{
+			get{ return opacityDelta; }
+		}
+
+		/// <summary>
+		/// how often to change the opacity of the toaster
+		/// </summary>
+		public Int32 UpdateInterval
+		{
+			get{ return updateInterval; }
+		}
+
+		/// <summary>
+		/// how long to pause at full opacity
+		/// </summary>
+		public Int32 PauseInterval
+		{
+			get{ return pauseInterval; }
+		}
+
+
 	}
 }
+

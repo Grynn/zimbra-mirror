@@ -40,6 +40,11 @@ namespace Zimbra.Toast
 			DELETE_RED,
 		}
 
+		/// <summary>
+		/// how long to pause the toaster when at full opacity
+		/// </summary>
+		private Int32 pauseInterval = 3000;
+
 		#region Custom events and delegates
 
 		/// <summary>
@@ -76,15 +81,28 @@ namespace Zimbra.Toast
 
 		#endregion
 
+
 		/// <summary>
-		/// Create a new toaster for the given msg summary
+		/// 
 		/// </summary>
-		public ToastForm(Zimbra.Client.MessageSummary msg)
+		/// <param name="msg"></param>
+		/// <param name="maxOpacity"></param>
+		/// <param name="opacityDelta"></param>
+		/// <param name="opacityUpdateInterval"></param>
+		/// <param name="pauseInterval"></param>
+		public ToastForm(
+			Zimbra.Client.MessageSummary msg, 
+			double maxOpacity, 
+			double opacityDelta, 
+			Int32 opacityUpdateInterval,
+			Int32 pauseInterval ) : base( maxOpacity, opacityDelta, opacityUpdateInterval )
 		{
 			this.msg = msg;
+			this.pauseInterval = pauseInterval;
 			InitializeComponent();
 			ManualInitializeComponent();
 		}
+
 
 		#region cleanup
 		/// <summary>
@@ -294,7 +312,7 @@ namespace Zimbra.Toast
 			// 
 			// timer
 			// 
-			this.timer.Interval = 3000;
+			this.timer.Interval = this.pauseInterval;
 			this.timer.Tick += new System.EventHandler(this.timer_Tick);
 			// 
 			// ToastForm
@@ -308,7 +326,7 @@ namespace Zimbra.Toast
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "ToastForm";
-			this.Opacity = 0.80000000000000038;
+			this.Opacity = 0.8;
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "Zimbra Toast";
@@ -573,7 +591,7 @@ namespace Zimbra.Toast
 		private void ToastForm_MouseLeave(object sender, System.EventArgs e)
 		{
 			//resume fading
-			this.Opacity = 0.8;
+			this.Opacity = base.maxOpacity;
 			Close();
 		}
 		#endregion
@@ -602,8 +620,35 @@ namespace Zimbra.Toast
 		/// <summary>
 		/// 
 		/// </summary>
-		public TransparentDialog()
+		protected double maxOpacity = 0.8;
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		protected double opacityDelta = 0.05;
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		protected Int32 opacityUpdateInterval = 10;
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		protected double minOpacity = 0.0;
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="maxOpacity"></param>
+		/// <param name="opacityDelta"></param>
+		/// <param name="opacityUpdateInterval"></param>
+		public TransparentDialog( double maxOpacity, double opacityDelta, Int32 opacityUpdateInterval )
 		{
+			this.maxOpacity = maxOpacity;
+			this.opacityDelta = opacityDelta;
+			this.opacityUpdateInterval = opacityUpdateInterval;
 			InitializeComponents();
 		}
 		
@@ -614,7 +659,7 @@ namespace Zimbra.Toast
 		{
 			this.components = new System.ComponentModel.Container();
 			this.m_clock =  new Timer(this.components);
-			this.m_clock.Interval = 100;
+			this.m_clock.Interval = opacityUpdateInterval;
 			this.SuspendLayout();
 			this.m_clock.Tick += new EventHandler(Animate);
 			this.Load += new EventHandler(TransparentDialog_Load);
@@ -686,9 +731,9 @@ namespace Zimbra.Toast
 			double o = this.Opacity;
 			if (m_bShowing)
 			{
-				if (this.Opacity < .8)
+				if (this.Opacity < maxOpacity)
 				{
-					this.Opacity += 0.025;
+					this.Opacity += opacityDelta;
 				}
 				else
 				{
@@ -697,13 +742,9 @@ namespace Zimbra.Toast
 			}
 			else
 			{
-				if (this.Opacity > .4)
+				if (this.Opacity > minOpacity)
 				{
-					this.Opacity -= 0.025;
-				}
-				else if (this.Opacity > 0 )
-				{
-					this.Opacity -= 0.015;
+					this.Opacity -= opacityDelta;
 				}
 				else
 				{
