@@ -91,12 +91,24 @@ function(entry) {
 		_tmpSkins[i].id = "id_"+skin;
 	}
 	this._containedObject[ZaCos.A_zimbraInstalledSkinPool] = _tmpSkins;
-		
-
-
-
 	
-	this._containedObject[ZaCos.A_zimbraMailAllServersInternal] = AjxVector.fromArray(this._app.getMailServers());
+	var _tmpAllServers = this._app.getMailServers();
+	var _tmpMyServers = this._containedObject[ZaCos.A_zimbraMailHostPoolInternal].getArray();
+	var cntAll = _tmpAllServers.length-1;
+	var cntMy = _tmpMyServers.length-1;	
+	for(var ix = cntMy; ix >= 0; ix--) {
+		for (var k = cntAll; k >= 0; k--) {
+			if(_tmpMyServers[ix].id == _tmpAllServers[k].id) {
+				_tmpAllServers.splice(k,1);
+				cntAll--;
+				break;
+			}
+		}
+	}
+	
+	this._containedObject[ZaCos.A_zimbraMailAllServersInternal] = AjxVector.fromArray(_tmpAllServers);
+  	
+  	
   	this._containedObject.globalConfig = this._app.getGlobalConfig();
   	
 	if(!entry[ZaModel.currentTab])

@@ -373,7 +373,7 @@ function () {
 	}
 	//check if host pool has been changed
 	var poolServerIds = new Array();
-	if(tmpObj[ZaCos.A_zimbraMailHostPoolInternal] && tmpObj[ZaCos.A_zimbraMailHostPoolInternal].size()) {
+	if(tmpObj[ZaCos.A_zimbraMailHostPoolInternal]) {
 		var cnt = tmpObj[ZaCos.A_zimbraMailHostPoolInternal].size();
 		
 		for(var i = 0; i < cnt; i ++) {
