@@ -15,6 +15,7 @@ namespace Zimbra.Toast
 		//the thread that monitors the mailbox and fires event
 		private Thread monitorThread = null;
 
+		// used to unblock the monitoring thread
 		private AutoResetEvent wakeEvent = null;
 
 		//the zimbra client session
@@ -22,6 +23,9 @@ namespace Zimbra.Toast
 
 		//how often to check for new items on the server (minutes)
 		private UInt16 pollInterval = DEFAULT_POLL_INTERVAL;
+
+		//the previous set of messages that were obtained
+		private Zimbra.Client.MessageSummary[] prevMsgs = null;
 
 		/// <summary>
 		/// Handle new message notifications
@@ -150,7 +154,7 @@ namespace Zimbra.Toast
 		{
 			//create a timer to wake this thread up periodically
 			long lSleep = pollInterval * 1000 * 60;
-			System.Threading.Timer t = new Timer( new TimerCallback(SignalWorkerThread), null, lSleep, lSleep );
+			System.Threading.Timer t = new Timer( new TimerCallback(CheckForNewMsgs), null, lSleep, lSleep );
 			while( true )
 			{
 				try 
@@ -172,6 +176,17 @@ namespace Zimbra.Toast
 
 
 		/// <summary>
+		/// Set the flag to check for new messages and signal the worker thread
+		/// </summary>
+		/// <param name="o">nothing</param>
+		private void CheckForNewMsgs(object o)
+		{
+			this.prevMsgs = null;
+			SignalWorkerThread(o);
+		}
+
+
+		/// <summary>
 		/// Release the worker thread so it can check for new items on the server
 		/// </summary>
 		/// <param name="o"></param>
@@ -185,8 +200,10 @@ namespace Zimbra.Toast
 		/// check the mailbox right now to see if there are any new messages
 		/// can be called from any thread - request handled asynchronously
 		/// </summary>
-		public void CheckMailbox()
+		/// <param name="msgs">Messages to display - if null, check server</param>
+		public void CheckMailbox(Zimbra.Client.MessageSummary[] msgs)
 		{
+			this.prevMsgs = msgs;
 			SignalWorkerThread(null);
 		}
 
@@ -195,47 +212,57 @@ namespace Zimbra.Toast
 		/// check the mailbox right now to see if there are any new messages
 		/// must run in the mailbox monitors worker thread
 		/// </summary>
-		private void CheckMailbox_Internal()
+		private bool CheckMailbox_Internal()
 		{
 			lock(this)
 			{
-				//check for new messages
-				Zimbra.Client.MessageSummary[] msgs = zimbraSession.NewMsgs;
-						
-				//if we got new stuff, fire off the events
-				if( msgs != null && msgs.Length > 0 ) 
+				Zimbra.Client.MessageSummary[] inboxMsgs = this.prevMsgs;
+
+				if( this.prevMsgs == null ) 
 				{
-					int nCount = 0;
-					for( int i = 0; i < msgs.Length; i++ )
+					//check for new messages
+					Zimbra.Client.MessageSummary[] msgs = zimbraSession.NewMsgs;
+							
+					//if we got new stuff, fire off the events
+					if( msgs != null && msgs.Length > 0 ) 
 					{
-						if( msgs[i].parentFolderId.Equals( "2" ) )
+						int nCount = 0;
+						for( int i = 0; i < msgs.Length; i++ )
 						{
-							nCount++;
-						} 
-						else
+							if( msgs[i].parentFolderId.Equals( "2" ) )
+							{
+								nCount++;
+							} 
+							else
+							{
+								msgs[i] = null;
+							}
+						}
+						
+						if( nCount == 0 )
+							return false;
+
+						int insLoc = 0;
+
+						inboxMsgs = new Zimbra.Client.MessageSummary[ nCount ];
+						for( int i = 0; i < msgs.Length; i++ )
 						{
-							msgs[i] = null;
+							if( msgs[i] != null )
+							{
+								inboxMsgs[insLoc++] = msgs[i];
+							}
 						}
 					}
-					
-					if( nCount == 0 )
-						return;
-
-					int insLoc = 0;
-
-					Zimbra.Client.MessageSummary[] inboxMsgs = new Zimbra.Client.MessageSummary[ nCount ];
-					for( int i = 0; i < msgs.Length; i++ )
-					{
-						if( msgs[i] != null )
-						{
-							inboxMsgs[insLoc++] = msgs[i];
-						}
-					}
-
-					System.Threading.AutoResetEvent are = new AutoResetEvent(false);
-					OnNewMsgs( inboxMsgs, are );
-					are.WaitOne();
+				} 
+				else if( this.prevMsgs.Length <= 0 )
+				{
+					return false;
 				}
+
+				System.Threading.AutoResetEvent are = new AutoResetEvent(false);
+				OnNewMsgs( inboxMsgs, are );
+				are.WaitOne();
+				return true;
 			}
 		}
 	}

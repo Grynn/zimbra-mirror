@@ -60,6 +60,7 @@ namespace Zimbra.Toast
 		private System.Windows.Forms.TextBox SoundFileTextBox;
 		private System.Windows.Forms.CheckBox PlaySoundCheckBox;
 		private System.Windows.Forms.Button PlaySoundButton;
+		private System.Windows.Forms.MenuItem ShowNewMessagesMenuItem;
 
 		private Zimbra.Client.MessageSummary[] msgSummaries = null;
 		
@@ -110,18 +111,7 @@ namespace Zimbra.Toast
 			this.ServerNameTextBox = new System.Windows.Forms.TextBox();
 			this.UseSecureConnectionCheckBox = new System.Windows.Forms.CheckBox();
 			this.ServerNameLabel = new System.Windows.Forms.Label();
-			this.OK_Button = new System.Windows.Forms.Button();
-			this.TrayIcon = new System.Windows.Forms.NotifyIcon(this.components);
-			this.TrayMenu = new System.Windows.Forms.ContextMenu();
-			this.CheckNowMenuItem = new System.Windows.Forms.MenuItem();
-			this.ShowWindowMenuItem = new System.Windows.Forms.MenuItem();
-			this.ExitMenuItem = new System.Windows.Forms.MenuItem();
-			this.DefaultToolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.AdvancedTabPage = new System.Windows.Forms.TabPage();
-			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.SoundFileBrowseButton = new System.Windows.Forms.Button();
-			this.SoundFileTextBox = new System.Windows.Forms.TextBox();
-			this.PlaySoundCheckBox = new System.Windows.Forms.CheckBox();
 			this.AdvancedGroupBox = new System.Windows.Forms.GroupBox();
 			this.RegisterMailto = new System.Windows.Forms.Button();
 			this.ClickURLPathFmtTextBox = new System.Windows.Forms.TextBox();
@@ -129,15 +119,27 @@ namespace Zimbra.Toast
 			this.PollingIntervalUpDown = new System.Windows.Forms.NumericUpDown();
 			this.PollIntervalUnitsLabel = new System.Windows.Forms.Label();
 			this.PollIntervalLabel = new System.Windows.Forms.Label();
+			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.PlaySoundButton = new System.Windows.Forms.Button();
+			this.PlaySoundCheckBox = new System.Windows.Forms.CheckBox();
+			this.SoundFileBrowseButton = new System.Windows.Forms.Button();
+			this.SoundFileTextBox = new System.Windows.Forms.TextBox();
+			this.OK_Button = new System.Windows.Forms.Button();
+			this.TrayIcon = new System.Windows.Forms.NotifyIcon(this.components);
+			this.TrayMenu = new System.Windows.Forms.ContextMenu();
+			this.CheckNowMenuItem = new System.Windows.Forms.MenuItem();
+			this.ShowWindowMenuItem = new System.Windows.Forms.MenuItem();
+			this.ExitMenuItem = new System.Windows.Forms.MenuItem();
+			this.DefaultToolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.ShowNewMessagesMenuItem = new System.Windows.Forms.MenuItem();
 			this.ConfigurationTabControl.SuspendLayout();
 			this.ConfigrationTabPage.SuspendLayout();
 			this.ZimbraAccountGroupBox.SuspendLayout();
 			this.ServerConnectionGroupBox.SuspendLayout();
 			this.AdvancedTabPage.SuspendLayout();
-			this.groupBox2.SuspendLayout();
 			this.AdvancedGroupBox.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.PollingIntervalUpDown)).BeginInit();
+			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// ConfigurationTabControl
@@ -289,49 +291,6 @@ namespace Zimbra.Toast
 			this.ServerNameLabel.Text = "Server Name";
 			this.ServerNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// OK_Button
-			// 
-			this.OK_Button.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.OK_Button.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.OK_Button.Location = new System.Drawing.Point(283, 302);
-			this.OK_Button.Name = "OK_Button";
-			this.OK_Button.TabIndex = 1;
-			this.OK_Button.Text = "OK";
-			this.OK_Button.Click += new System.EventHandler(this.OKButton_Click);
-			// 
-			// TrayIcon
-			// 
-			this.TrayIcon.ContextMenu = this.TrayMenu;
-			this.TrayIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("TrayIcon.Icon")));
-			this.TrayIcon.Text = "Zimbra Toaster";
-			this.TrayIcon.Visible = true;
-			this.TrayIcon.DoubleClick += new System.EventHandler(this.TrayIcon_DoubleClick);
-			// 
-			// TrayMenu
-			// 
-			this.TrayMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					 this.CheckNowMenuItem,
-																					 this.ShowWindowMenuItem,
-																					 this.ExitMenuItem});
-			// 
-			// CheckNowMenuItem
-			// 
-			this.CheckNowMenuItem.Index = 0;
-			this.CheckNowMenuItem.Text = "Check For New Mail";
-			this.CheckNowMenuItem.Click += new System.EventHandler(this.CheckNowMenuItem_Click);
-			// 
-			// ShowWindowMenuItem
-			// 
-			this.ShowWindowMenuItem.Index = 1;
-			this.ShowWindowMenuItem.Text = "Settings";
-			this.ShowWindowMenuItem.Click += new System.EventHandler(this.ShowWindowMenuItem_Click);
-			// 
-			// ExitMenuItem
-			// 
-			this.ExitMenuItem.Index = 2;
-			this.ExitMenuItem.Text = "Exit";
-			this.ExitMenuItem.Click += new System.EventHandler(this.ExitMenuItem_Click);
-			// 
 			// AdvancedTabPage
 			// 
 			this.AdvancedTabPage.BackColor = System.Drawing.SystemColors.ControlLightLight;
@@ -342,52 +301,6 @@ namespace Zimbra.Toast
 			this.AdvancedTabPage.Size = new System.Drawing.Size(344, 262);
 			this.AdvancedTabPage.TabIndex = 1;
 			this.AdvancedTabPage.Text = "Advanced";
-			// 
-			// groupBox2
-			// 
-			this.groupBox2.Controls.Add(this.PlaySoundButton);
-			this.groupBox2.Controls.Add(this.PlaySoundCheckBox);
-			this.groupBox2.Controls.Add(this.SoundFileBrowseButton);
-			this.groupBox2.Controls.Add(this.SoundFileTextBox);
-			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox2.Location = new System.Drawing.Point(12, 130);
-			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(316, 110);
-			this.groupBox2.TabIndex = 4;
-			this.groupBox2.TabStop = false;
-			this.groupBox2.Text = "Sound";
-			// 
-			// SoundFileBrowseButton
-			// 
-			this.SoundFileBrowseButton.BackColor = System.Drawing.SystemColors.Control;
-			this.SoundFileBrowseButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.SoundFileBrowseButton.Location = new System.Drawing.Point(220, 72);
-			this.SoundFileBrowseButton.Name = "SoundFileBrowseButton";
-			this.SoundFileBrowseButton.Size = new System.Drawing.Size(80, 23);
-			this.SoundFileBrowseButton.TabIndex = 13;
-			this.SoundFileBrowseButton.Text = "Browse";
-			this.SoundFileBrowseButton.Click += new System.EventHandler(this.SoundFileBrowseButton_Click);
-			// 
-			// SoundFileTextBox
-			// 
-			this.SoundFileTextBox.Location = new System.Drawing.Point(16, 46);
-			this.SoundFileTextBox.Name = "SoundFileTextBox";
-			this.SoundFileTextBox.ReadOnly = true;
-			this.SoundFileTextBox.Size = new System.Drawing.Size(284, 20);
-			this.SoundFileTextBox.TabIndex = 12;
-			this.SoundFileTextBox.Text = "";
-			this.DefaultToolTip.SetToolTip(this.SoundFileTextBox, "Path portion of the URL to open when an item is clicked. Use {0} to represent the" +
-				" items id.");
-			// 
-			// PlaySoundCheckBox
-			// 
-			this.PlaySoundCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.PlaySoundCheckBox.Location = new System.Drawing.Point(16, 24);
-			this.PlaySoundCheckBox.Name = "PlaySoundCheckBox";
-			this.PlaySoundCheckBox.Size = new System.Drawing.Size(254, 18);
-			this.PlaySoundCheckBox.TabIndex = 14;
-			this.PlaySoundCheckBox.Text = "Play sound when new messages arive";
-			this.PlaySoundCheckBox.Click += new System.EventHandler(this.PlaySoundCheckBox_Click);
 			// 
 			// AdvancedGroupBox
 			// 
@@ -486,6 +399,20 @@ namespace Zimbra.Toast
 			this.PollIntervalLabel.Text = "Poll Interval";
 			this.PollIntervalLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// groupBox2
+			// 
+			this.groupBox2.Controls.Add(this.PlaySoundButton);
+			this.groupBox2.Controls.Add(this.PlaySoundCheckBox);
+			this.groupBox2.Controls.Add(this.SoundFileBrowseButton);
+			this.groupBox2.Controls.Add(this.SoundFileTextBox);
+			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.groupBox2.Location = new System.Drawing.Point(12, 130);
+			this.groupBox2.Name = "groupBox2";
+			this.groupBox2.Size = new System.Drawing.Size(316, 110);
+			this.groupBox2.TabIndex = 4;
+			this.groupBox2.TabStop = false;
+			this.groupBox2.Text = "Sound";
+			// 
 			// PlaySoundButton
 			// 
 			this.PlaySoundButton.BackColor = System.Drawing.SystemColors.Control;
@@ -496,6 +423,88 @@ namespace Zimbra.Toast
 			this.PlaySoundButton.TabIndex = 15;
 			this.PlaySoundButton.Text = "Play Sound";
 			this.PlaySoundButton.Click += new System.EventHandler(this.PlaySoundButton_Click);
+			// 
+			// PlaySoundCheckBox
+			// 
+			this.PlaySoundCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.PlaySoundCheckBox.Location = new System.Drawing.Point(16, 24);
+			this.PlaySoundCheckBox.Name = "PlaySoundCheckBox";
+			this.PlaySoundCheckBox.Size = new System.Drawing.Size(254, 18);
+			this.PlaySoundCheckBox.TabIndex = 14;
+			this.PlaySoundCheckBox.Text = "Play sound when new messages arive";
+			this.PlaySoundCheckBox.Click += new System.EventHandler(this.PlaySoundCheckBox_Click);
+			// 
+			// SoundFileBrowseButton
+			// 
+			this.SoundFileBrowseButton.BackColor = System.Drawing.SystemColors.Control;
+			this.SoundFileBrowseButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.SoundFileBrowseButton.Location = new System.Drawing.Point(220, 72);
+			this.SoundFileBrowseButton.Name = "SoundFileBrowseButton";
+			this.SoundFileBrowseButton.Size = new System.Drawing.Size(80, 23);
+			this.SoundFileBrowseButton.TabIndex = 13;
+			this.SoundFileBrowseButton.Text = "Browse";
+			this.SoundFileBrowseButton.Click += new System.EventHandler(this.SoundFileBrowseButton_Click);
+			// 
+			// SoundFileTextBox
+			// 
+			this.SoundFileTextBox.Location = new System.Drawing.Point(16, 46);
+			this.SoundFileTextBox.Name = "SoundFileTextBox";
+			this.SoundFileTextBox.ReadOnly = true;
+			this.SoundFileTextBox.Size = new System.Drawing.Size(284, 20);
+			this.SoundFileTextBox.TabIndex = 12;
+			this.SoundFileTextBox.Text = "";
+			this.DefaultToolTip.SetToolTip(this.SoundFileTextBox, "Path portion of the URL to open when an item is clicked. Use {0} to represent the" +
+				" items id.");
+			// 
+			// OK_Button
+			// 
+			this.OK_Button.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.OK_Button.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.OK_Button.Location = new System.Drawing.Point(283, 302);
+			this.OK_Button.Name = "OK_Button";
+			this.OK_Button.TabIndex = 1;
+			this.OK_Button.Text = "OK";
+			this.OK_Button.Click += new System.EventHandler(this.OKButton_Click);
+			// 
+			// TrayIcon
+			// 
+			this.TrayIcon.ContextMenu = this.TrayMenu;
+			this.TrayIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("TrayIcon.Icon")));
+			this.TrayIcon.Text = "Zimbra Toaster";
+			this.TrayIcon.Visible = true;
+			this.TrayIcon.DoubleClick += new System.EventHandler(this.TrayIcon_DoubleClick);
+			// 
+			// TrayMenu
+			// 
+			this.TrayMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																					 this.CheckNowMenuItem,
+																					 this.ShowNewMessagesMenuItem,
+																					 this.ShowWindowMenuItem,
+																					 this.ExitMenuItem});
+			// 
+			// CheckNowMenuItem
+			// 
+			this.CheckNowMenuItem.Index = 0;
+			this.CheckNowMenuItem.Text = "Check For New Mail";
+			this.CheckNowMenuItem.Click += new System.EventHandler(this.CheckNowMenuItem_Click);
+			// 
+			// ShowWindowMenuItem
+			// 
+			this.ShowWindowMenuItem.Index = 2;
+			this.ShowWindowMenuItem.Text = "Settings";
+			this.ShowWindowMenuItem.Click += new System.EventHandler(this.ShowWindowMenuItem_Click);
+			// 
+			// ExitMenuItem
+			// 
+			this.ExitMenuItem.Index = 3;
+			this.ExitMenuItem.Text = "Exit";
+			this.ExitMenuItem.Click += new System.EventHandler(this.ExitMenuItem_Click);
+			// 
+			// ShowNewMessagesMenuItem
+			// 
+			this.ShowNewMessagesMenuItem.Index = 1;
+			this.ShowNewMessagesMenuItem.Text = "Show New Messages";
+			this.ShowNewMessagesMenuItem.Click += new System.EventHandler(this.ShowNewMessagesMenuItem_Click);
 			// 
 			// Config
 			// 
@@ -521,9 +530,9 @@ namespace Zimbra.Toast
 			this.ZimbraAccountGroupBox.ResumeLayout(false);
 			this.ServerConnectionGroupBox.ResumeLayout(false);
 			this.AdvancedTabPage.ResumeLayout(false);
-			this.groupBox2.ResumeLayout(false);
 			this.AdvancedGroupBox.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.PollingIntervalUpDown)).EndInit();
+			this.groupBox2.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -537,7 +546,7 @@ namespace Zimbra.Toast
 		/// <param name="e"></param>
 		private void TrayIcon_DoubleClick(object sender, System.EventArgs e)
 		{
-			mailboxMonitor.CheckMailbox();
+			mailboxMonitor.CheckMailbox(null);
 		}
 
 
@@ -579,8 +588,14 @@ namespace Zimbra.Toast
 		/// <param name="e"></param>
 		private void CheckNowMenuItem_Click(object sender, System.EventArgs e)
 		{
-			mailboxMonitor.CheckMailbox();
+			mailboxMonitor.CheckMailbox(null);
 		}
+
+		private void ShowNewMessagesMenuItem_Click(object sender, System.EventArgs e)
+		{
+			mailboxMonitor.CheckMailbox(this.msgSummaries);
+		}
+
 		#endregion
 
 		#region Form Control Event Handlers
@@ -936,6 +951,10 @@ namespace Zimbra.Toast
 				return;
 			}
 
+			//block this so the UI doesn't get confused
+			this.ShowNewMessagesMenuItem.Enabled = false;
+			this.CheckNowMenuItem.Enabled = false;
+
 			//play a sound?
 			if( toastConfig.SoundFile != null ) 
 			{
@@ -985,6 +1004,8 @@ namespace Zimbra.Toast
 			}
 			else
 			{
+				this.ShowNewMessagesMenuItem.Enabled = true;
+				this.CheckNowMenuItem.Enabled = true;
 				this.displayCompletionEvent.Set();
 			}
 		}
@@ -999,6 +1020,7 @@ namespace Zimbra.Toast
 			string pszSound,
 			IntPtr hMod,
 			SoundFlags sf );
+
 
 		/// <summary>
 		/// Flags for playing sounds.  For this example, we are reading 
