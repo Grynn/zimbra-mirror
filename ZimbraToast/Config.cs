@@ -465,6 +465,7 @@ namespace Zimbra.Toast
 			this.RegisterMailto.Size = new System.Drawing.Size(202, 23);
 			this.RegisterMailto.TabIndex = 10;
 			this.RegisterMailto.Text = "Register Mailto Handler";
+			this.RegisterMailto.Click += new System.EventHandler(this.RegisterMailto_Click);
 			// 
 			// ClickURLPathFmtTextBox
 			// 
@@ -683,7 +684,7 @@ namespace Zimbra.Toast
 			// 
 			this.PauseIntervalNumericUpDown.Location = new System.Drawing.Point(123, 110);
 			this.PauseIntervalNumericUpDown.Maximum = new System.Decimal(new int[] {
-																					   10000,
+																					   1000000,
 																					   0,
 																					   0,
 																					   0});
@@ -773,7 +774,7 @@ namespace Zimbra.Toast
 
 		#region Tray Menu Event Handlers
 		/// <summary>
-		/// TrayIcon was double clicked - show the config window
+		/// TrayIcon was double clicked - check for new messages
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1272,12 +1273,12 @@ namespace Zimbra.Toast
 		private void ViewToasterButton_Click(object sender, System.EventArgs e)
 		{
 			Zimbra.Client.MessageSummary msg = new Zimbra.Client.MessageSummary();
-			msg.email_address = "sam@zimbra.com";
-			msg.email_display = "Sam Khavari";
-			msg.email_personal_name = "Sam Khavari";
+			msg.email_address = "sam@company.com";
+			msg.email_display = "Sam Someone";
+			msg.email_personal_name = "Sam Employee";
 			msg.fragment = "Do you like how the toaster window fades in and out?";
-			msg.itemId = "2";
-			msg.parentFolderId = "12";
+			msg.itemId = null;
+			msg.parentFolderId = null;
 			msg.subject = "Toaster Window Fading";
 
 			ToastForm tempToaster = new ToastForm( msg,

@@ -505,7 +505,10 @@ namespace Zimbra.Toast
 		/// <param name="e"></param>
 		private void ZimbraItem_Click(object sender, System.EventArgs e )
 		{
-			OnOpenItem(this.msg.itemId);
+			if( this.msg.itemId != null )
+			{
+				OnOpenItem(this.msg.itemId);
+			}
 		}
 
 		/// <summary>
@@ -526,8 +529,11 @@ namespace Zimbra.Toast
 		private void FlagPictureBox_Click(object sender, System.EventArgs e)
 		{
 			//fire OnFlagItem
-			OnFlagItem(this.msg.itemId);
-			this.FlagPictureBox.Enabled = false;
+			if( this.msg.itemId != null ) 
+			{
+				OnFlagItem(this.msg.itemId);
+				this.FlagPictureBox.Enabled = false;
+			}
 		}
 
 		/// <summary>
@@ -538,8 +544,11 @@ namespace Zimbra.Toast
 		private void DeletePictureBox_Click(object sender, System.EventArgs e)
 		{
 			//fire OnDeleteItem
-			OnDeleteItem(this.msg.itemId);
-			this.DeletePictureBox.Enabled = false;
+			if( this.msg.itemId != null )
+			{
+				OnDeleteItem(this.msg.itemId);
+				this.DeletePictureBox.Enabled = false;
+			}
 		}
 
 		#endregion
