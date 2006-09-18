@@ -1,0 +1,5 @@
+<zimletConfig name="com_zimbra_url" version="1.0">
+    <global>
+        <property name="ZIMLET_CONFIG_REGEX_VALUE">((telnet:)|((https?|ftp|gopher|news|file):\/\/)|(www.[\w\.\_\-]+))[^\s\(\)\&lt;\&gt;\[\]\{\}\&apos;\&quot;]*</property>
+    </global>
+</zimletConfig>
