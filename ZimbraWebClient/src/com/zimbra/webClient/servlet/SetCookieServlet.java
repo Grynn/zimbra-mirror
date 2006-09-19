@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Cookie;
 import java.io.IOException;
+import javax.naming.*;
 
 public class SetCookieServlet extends ZCServlet
 {
@@ -47,10 +48,20 @@ public class SetCookieServlet extends ZCServlet
     private static String redirectLocation;
     
     public void init(ServletConfig servletConfig) {
-        redirectLocation = servletConfig.getInitParameter("mailUrl");
+	try {
+	    Context initCtx = new InitialContext();
+	    Context envCtx = (Context) initCtx.lookup("java:comp/env");
+	    redirectLocation = (String) envCtx.lookup("mailUrl");
+	} catch (NamingException ne) {
+	    ne.printStackTrace();
+	}
         if (redirectLocation == null) {
             redirectLocation = DEFAULT_MAIL_URL;
-        }
+	    // System.err.println("Default redirectLocation ..." + redirectLocation);
+        } else {
+	    redirectLocation = redirectLocation + "/mail";
+	    //System.err.println("Setting redirectLocation to specified " + redirectLocation);
+	}
     }
 
     public void doGet (HttpServletRequest req, HttpServletResponse resp) 

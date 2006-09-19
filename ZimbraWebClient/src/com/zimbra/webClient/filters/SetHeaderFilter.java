@@ -34,6 +34,8 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.naming.*;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -77,6 +79,10 @@ public class SetHeaderFilter implements Filter {
     protected boolean isProdMode = true;
     protected String futureCacheControl = null;
     protected Pattern noCachePattern = null;
+
+    private String mailUrl;
+    private String mailUrlHome;
+    private String mailUrlUser;
     
     // --------------------------------------------------------------
     // init helper methods
@@ -162,6 +168,21 @@ public class SetHeaderFilter implements Filter {
             // http://msdn.microsoft.com/workshop/author/perf/perftips.asp#Use_Cache-Control_Extensions
             futureCacheControl = "public, max-age=" + expiresValue + ", post-check=7200, pre-check=" + expiresValue;
             isProdMode = getInitParameterBool("ProdMode", true);
+	    
+	    try {
+		Context initCtx = new InitialContext();
+		Context envCtx = (Context) initCtx.lookup("java:comp/env");
+		mailUrl = (String) envCtx.lookup("mailUrl");
+	    } catch (NamingException ne) {
+		ne.printStackTrace();
+	    }
+
+	    if (mailUrl == null) {
+		mailUrl = "/zimbra";
+	    }
+	    mailUrlHome = mailUrl + "/home/";
+  	    mailUrlUser = mailUrl + "/user/";
+
             if (debug > 0) {
                 System.out.println("Filter variables:");
                 System.out.println("  debug = " + debug);
@@ -172,6 +193,10 @@ public class SetHeaderFilter implements Filter {
                 System.out.println("  isProdMoe = " + isProdMode);
                 System.out.println("  extensionRegex = " + extensionPattern.pattern());
                 System.out.println("  noCachPattern = " + noCachePattern.pattern());
+                System.out.println("  noCachPattern = " + noCachePattern.pattern());
+		System.out.println("  mailUrl = " + mailUrl);
+		System.out.println("  mailUrlHome = " + mailUrlHome);
+		System.out.println("  mailUrlUser = " + mailUrlUser);
             }
         }
     }
@@ -251,10 +276,10 @@ public class SetHeaderFilter implements Filter {
 				if (debug >0) { System.out.println("unable to forward zimbrasync request"); }
 			}
         } else if (uri.startsWith("/~") ||
-        		uri.startsWith("/home/")        || uri.startsWith("/user/") || 
-        		uri.startsWith("/zimbra/home/") || uri.startsWith("/zimbra/user/") ) {
+		   uri.startsWith("/home/") || uri.startsWith("/user/") || 
+		   uri.startsWith(mailUrlHome) || uri.startsWith(mailUrlUser)) {
             if (uri.startsWith("/~")) uri = "/home"+uri;
-            if (uri.startsWith("/zimbra")) uri = uri.substring(7);
+            if (uri.startsWith(mailUrl)) uri = uri.substring(mailUrl.length());
             String targetContextStr = "/service/";
             ServletContext myContext = config.getServletContext();
             ServletContext targetContext = myContext.getContext( targetContextStr );
