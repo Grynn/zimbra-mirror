@@ -1482,6 +1482,9 @@ namespace Zimbra.Toast
 			XmlNode n = doc.SelectSingleNode( xpath );
 			try 
 			{
+				if( n.InnerText == null || n.InnerText.Length <= 0 )
+					return strDefault;
+
 				return n.InnerText;
 			}
 			catch( Exception )
@@ -1713,7 +1716,7 @@ namespace Zimbra.Toast
 		/// <param name="paramValue">the param as a string</param>
 		private static void SaveElement( XmlDocument doc, XmlElement parent, String paramName, String paramValue )
 		{
-			if( paramValue != null )
+			if( paramValue != null && paramValue.Length > 0 )
 			{
 				XmlElement e = doc.CreateElement( paramName );
 				parent.AppendChild( e );
