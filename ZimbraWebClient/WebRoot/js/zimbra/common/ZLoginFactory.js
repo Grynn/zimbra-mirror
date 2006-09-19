@@ -88,7 +88,7 @@ function(msgs) {
 		
 		showNewPasswordFields : false,
 		newPassword1Msg : msgs["newPassword"] || "",
-		newPassword2Msg : msgs["confirmPassword"] || "",
+		newPassword2Msg : msgs["confirm"] || "",
 	
 		showLicenseMsg : false,
 		licenseMsg : "",
