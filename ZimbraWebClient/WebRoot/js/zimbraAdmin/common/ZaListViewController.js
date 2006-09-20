@@ -115,7 +115,11 @@ function(list) {
 	
 	//update the search result number count now
 	var srCountBt = this._toolbar.getButton (ZaOperation.SEARCH_RESULT_COUNT) ;
-	if (srCountBt) {
+	if (srCountBt ) {
+		if  (this._searchTotal == 0) {
+			s_result_end_n = 0;
+			s_result_start_n = 0;
+		}
 		srCountBt.setText ( AjxMessageFormat.format (ZaMsg.searchResultCount, 
 				[s_result_start_n + " - " + s_result_end_n, this._searchTotal]));
 	}
