@@ -50,6 +50,7 @@ ZaItem.RESOURCE = "calresource";
 ZaItem.DOMAIN = "domain";
 ZaItem.COS = "cos";
 ZaItem.SERVER = "server";
+ZaItem.ZIMLET = "zimlet";
 ZaItem.MAILQ_ITEM = "message";
 ZaItem.MAILQ = "mailque";
 ZaItem.A_objectClass = "objectClass";

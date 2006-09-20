@@ -156,6 +156,22 @@ function() {
 	return this._controllers[ZaZimbraAdmin._ACCOUNT_VIEW];
 }
 
+ZaApp.prototype.getZimletListController =
+function() {
+	if (this._controllers[ZaZimbraAdmin._ZIMLET_LIST_VIEW] == null) {
+		this._controllers[ZaZimbraAdmin._ZIMLET_LIST_VIEW] = new ZaZimletListController(this._appCtxt, this._container, this);
+	}
+	return this._controllers[ZaZimbraAdmin._ZIMLET_LIST_VIEW]
+}
+
+ZaApp.prototype.getZimletViewController =
+function() {
+	if (this._controllers[ZaZimbraAdmin._ZIMLET_VIEW] == null) {
+		this._controllers[ZaZimbraAdmin._ZIMLET_VIEW] = new ZaZimletViewController(this._appCtxt, this._container, this);
+	}
+	return this._controllers[ZaZimbraAdmin._ZIMLET_VIEW];
+}
+
 ZaApp.prototype.getDistributionListController = 
 function (domain) {
 	if (this._controllers[ZaZimbraAdmin._DL_VIEW] == null) {

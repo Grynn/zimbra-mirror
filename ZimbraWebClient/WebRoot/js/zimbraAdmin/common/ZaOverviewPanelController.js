@@ -326,8 +326,10 @@ function (appCtxt, container) {
 	
 	if(ZaSettings.COSES_ENABLED)	
 		this._cosMap = new Object();
+	
 	if(ZaSettings.MAILQ_ENABLED)
 		this._mailqMap = new Object();
+	
 }
 
 ZaOverviewPanelController.prototype._setView =
@@ -452,6 +454,15 @@ function() {
 			
 		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._SERVERS_LIST_VIEW] = ZaOverviewPanelController.serverListTreeListener;		
 		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._SERVER_VIEW] = ZaOverviewPanelController.serverTreeListener;				
+
+		if(ZaSettings.ZIMLETS_ENABLED) {
+			this._zimletsTi = new DwtTreeItem(this._configTi);
+			this._zimletsTi.setText(ZaMsg.OVP_zimlets);
+			this._zimletsTi.setImage("Zimlet");
+			this._zimletsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._ZIMLET_LIST_VIEW);
+			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ZIMLET_LIST_VIEW] = ZaOverviewPanelController.zimletListTreeListener;					
+		}
+
 		
 		ti = new DwtTreeItem(this._configTi);
 		ti.setText(ZaMsg.OVP_global);
@@ -459,7 +470,8 @@ function() {
 		ti.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._GLOBAL_SETTINGS);	
 
 		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._GLOBAL_SETTINGS] = ZaOverviewPanelController.globalSettingsTreeListener;				
-		this._configTi.addSeparator();			
+		this._configTi.addSeparator();	
+		
 	}
 	if(ZaSettings.MONITORING_ENABLED) {
 		this._monitoringTi = new DwtTreeItem(tree, null, null, null, null, "overviewHeader");
@@ -712,6 +724,14 @@ ZaOverviewPanelController.accountListTreeListener = function (ev) {
 
 ZaOverviewPanelController.resourceListTreeListener = function (ev) {
 	this._showAccountsView(ZaItem.RESOURCE,ev);
+}
+
+ZaOverviewPanelController.zimletListTreeListener = function (ev) {
+	if(this._app.getCurrentController()) {
+		this._app.getCurrentController().switchToNextView(this._app.getZimletListController(), ZaZimletListController.prototype.show, ZaZimlet.getAll(this._app));
+	} else {
+		this._app.getZimletListController().show(ZaZimlet.getAll(this._app));
+	}	
 }
 
 ZaOverviewPanelController.cosListTreeListener = function (ev) {
