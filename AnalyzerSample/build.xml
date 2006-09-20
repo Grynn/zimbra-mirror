@@ -1,0 +1,48 @@
+<project name="AnalyzerSample" default="jar"> <!-- default="jar" -->
+	<property name="jar.file" value="analyzersample.jar" />
+	<property name="src.dir" location="src" />
+	<property name="src.java.dir" location="${src.dir}/java" />
+	<property name="build.dir" location="build" />
+	<property name="build.classes.dir" location="${build.dir}/classes" />
+
+	<path id="all.java.path">
+		<pathelement location="${src.java.dir}" />
+	</path>
+
+	<target name="build-init">
+		<mkdir dir="${build.classes.dir}" />
+	</target>
+
+
+	<property environment="env"/>
+	
+	<!-- set up dependency on ZimbraServer -->
+	<condition property="zimbraServer.dir" value="${env.ZIMBRASERVER_DIR}">
+	    <isset property="env.ZIMBRASERVER_DIR" />
+	</condition>	
+	<condition property="zimbraServer.dir" value="../ZimbraServer">
+	    <not><isset property="env.ZIMBRASERVER_DIR"/></not>
+	</condition>	
+
+	<path id="class.path">
+		<pathelement location="${build.classes.dir}" />
+		<pathelement location="${zimbraServer.dir}/build/classes"/>
+		<fileset dir="${zimbraServer.dir}/jars">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+
+	<target name="compile" depends="build-init" description="Compiles the source code">
+		<javac destdir="${build.classes.dir}" debug="true" classpathref="class.path">
+			<src refid="all.java.path" />
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile" description="Creates the jar file">
+		<jar manifest="conf/MANIFEST.MF" destfile="${build.dir}/${jar.file}" basedir="${build.classes.dir}" />
+	</target>
+
+	<target name="clean" description="Removes any temporary files">
+		<delete dir="${build.dir}" />
+	</target>
+</project>
