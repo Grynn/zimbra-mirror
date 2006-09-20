@@ -463,7 +463,14 @@ function() {
 			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ZIMLET_LIST_VIEW] = ZaOverviewPanelController.zimletListTreeListener;					
 		}
 
-		
+		if(ZaSettings.ADMIN_ZIMLETS_ENABLED) {
+			this._adminZimletsTi = new DwtTreeItem(this._configTi);
+			this._adminZimletsTi.setText(ZaMsg.OVP_adminZimlets);
+			this._adminZimletsTi.setImage("AdminZimlet");
+			this._adminZimletsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW);
+			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW] = ZaOverviewPanelController.adminZimletListTreeListener;					
+		}
+				
 		ti = new DwtTreeItem(this._configTi);
 		ti.setText(ZaMsg.OVP_global);
 		ti.setImage("GlobalSettings");
@@ -728,11 +735,20 @@ ZaOverviewPanelController.resourceListTreeListener = function (ev) {
 
 ZaOverviewPanelController.zimletListTreeListener = function (ev) {
 	if(this._app.getCurrentController()) {
-		this._app.getCurrentController().switchToNextView(this._app.getZimletListController(), ZaZimletListController.prototype.show, ZaZimlet.getAll(this._app));
+		this._app.getCurrentController().switchToNextView(this._app.getZimletListController(), ZaZimletListController.prototype.show, ZaZimlet.getAll(this._app,ZaZimlet.EXCLUDE_EXTENSIONS));
 	} else {
-		this._app.getZimletListController().show(ZaZimlet.getAll(this._app));
+		this._app.getZimletListController().show(ZaZimlet.getAll(this._app,ZaZimlet.EXCLUDE_EXTENSIONS));
 	}	
 }
+
+ZaOverviewPanelController.adminZimletListTreeListener = function (ev) {
+	if(this._app.getCurrentController()) {
+		this._app.getCurrentController().switchToNextView(this._app.getZimletListController(), ZaZimletListController.prototype.show, ZaZimlet.getAll(this._app, ZaZimlet.EXCLUDE_MAIL ));
+	} else {
+		this._app.getZimletListController().show(ZaZimlet.getAll(this._app, ZaZimlet.EXCLUDE_MAIL ));
+	}	
+}
+
 
 ZaOverviewPanelController.cosListTreeListener = function (ev) {
 	if(this._app.getCurrentController()) {
