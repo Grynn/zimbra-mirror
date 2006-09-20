@@ -282,10 +282,7 @@ function(mods) {
 			attr.setAttribute("n", aname);
 		}
 	}
-	var targetId = null;
-	if(this.attrs[ZaServer.A_zimbraMailboxServiceEnabled]) {
-		targetId = this.id;
-	}
+
 	var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
