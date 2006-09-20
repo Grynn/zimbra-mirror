@@ -92,3 +92,4 @@ ZaOperation.HOLD = ++ZA_OP_INDEX;
 ZaOperation.REQUEUE = ++ZA_OP_INDEX;
 ZaOperation.RELEASE = ++ZA_OP_INDEX;
 ZaOperation.INIT_NOTEBOOK = ++ZA_OP_INDEX;
+ZaOperation.SEARCH_RESULT_COUNT = ++ZA_OP_INDEX;

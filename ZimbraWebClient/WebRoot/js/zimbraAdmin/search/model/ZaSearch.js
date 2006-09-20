@@ -368,3 +368,14 @@ function ZaSearchQuery (queryString, types, byDomain, byVal, attrsCommaSeparated
 	this.fetchAttrs = (attrsCommaSeparatedString != null)? attrsCommaSeparatedString: ZaSearch.standardAttributes;
 	this.limit = (limit != null)? limit: ZaAccount.RESULTSPERPAGE;
 }
+
+/**
+ * add the search result count information to the toolbar
+ */
+ZaSearch.searchResultCountsView =
+function (opArr) {
+	opArr.push(new ZaOperation(ZaOperation.SEP));								
+	opArr.push(new ZaOperation(ZaOperation.LABEL, AjxMessageFormat.format (ZaMsg.searchResultCount, [0,0]),
+													 null, null, null, null,null,null,null,ZaOperation.SEARCH_RESULT_COUNT));	
+	opArr.push(new ZaOperation(ZaOperation.SEP));
+}

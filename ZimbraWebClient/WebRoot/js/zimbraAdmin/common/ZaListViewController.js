@@ -98,8 +98,11 @@ function(list) {
 	}
 	this._removeList = new Array();
 	this._changeActionsState();
-
+	
+	var s_result_start_n = (this._currentPageNum - 1) * this.RESULTSPERPAGE + 1;
+	var s_result_end_n = this._currentPageNum  * this.RESULTSPERPAGE;
 	if(this.numPages <= this._currentPageNum) {
+		s_result_end_n = this._searchTotal ;
 		this._toolbar.enable([ZaOperation.PAGE_FORWARD], false);
 	} else {
 		this._toolbar.enable([ZaOperation.PAGE_FORWARD], true);
@@ -108,6 +111,13 @@ function(list) {
 		this._toolbar.enable([ZaOperation.PAGE_BACK], false);
 	} else {
 		this._toolbar.enable([ZaOperation.PAGE_BACK], true);
+	}
+	
+	//update the search result number count now
+	var srCountBt = this._toolbar.getButton (ZaOperation.SEARCH_RESULT_COUNT) ;
+	if (srCountBt) {
+		srCountBt.setText ( AjxMessageFormat.format (ZaMsg.searchResultCount, 
+				[s_result_start_n + " - " + s_result_end_n, this._searchTotal]));
 	}
 }
 
@@ -123,9 +133,9 @@ function(params, resp) {
 			var response = resp.getResponse().Body.SearchDirectoryResponse;
 			this._list = new ZaItemList(params.CONS, this._app);	
 			this._list.loadFromJS(response);	
-			var searchTotal = response.searchTotal;
+			this._searchTotal = response.searchTotal;
 			var limit = params.limit ? params.limit : this.RESULTSPERPAGE; 
-			this.numPages = Math.ceil(searchTotal/params.limit);
+			this.numPages = Math.ceil(this._searchTotal/params.limit);
 			if(params.show)
 				this._show(this._list);			
 			else

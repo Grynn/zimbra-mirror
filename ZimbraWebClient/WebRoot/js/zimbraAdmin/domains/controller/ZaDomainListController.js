@@ -138,6 +138,10 @@ function () {
 	//always add Help and navigation buttons at the end of the toolbar    
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.NONE));	
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.PAGE_BACK, ZaMsg.Previous, ZaMsg.PrevPage_tt, "LeftArrow", "LeftArrowDis",  new AjxListener(this, this._prevPageListener)));
+	
+	//add the acount number counts
+	ZaSearch.searchResultCountsView(this._toolbarOperations);
+	
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.PAGE_FORWARD, ZaMsg.Next, ZaMsg.NextPage_tt, "RightArrow", "RightArrowDis", new AjxListener(this, this._nextPageListener)));
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));				
 
