@@ -460,7 +460,7 @@ function () {
 	var dateButtonListener = new AjxListener(this, this._dateButtonListener);
 	var dateCalSelectionListener = new AjxListener(this, this._dateCalSelectionListener);
 		
-	this._departDateButton = ZmApptViewHelper.createMiniCalButton(this, this._departDateMiniCalBtnId, dateButtonListener, dateCalSelectionListener, true);
+	this._departDateButton = ZmApptViewHelper.createMiniCalButton(this, this._departDateMiniCalBtnId, dateButtonListener, dateCalSelectionListener, this._appCtxt, true);
 									
 	this._flightToField = new DwtInputField({parent:this, type:DwtInputField.STRING,
 											initialValue:null, size:null, maxLen:null,
@@ -476,7 +476,7 @@ function () {
 		returnTimeCell.appendChild(this._returnTimeSelect.getHtmlElement());
 	delete this._returnTimeSelectId;	
 
-	this._returnDateButton = ZmApptViewHelper.createMiniCalButton(this, this._returnDateMiniCalBtnId, dateButtonListener, dateCalSelectionListener, true);	
+	this._returnDateButton = ZmApptViewHelper.createMiniCalButton(this, this._returnDateMiniCalBtnId, dateButtonListener, dateCalSelectionListener, this._appCtxt, true);
 	
 	this._adultSelect = new DwtSelect(this,[new DwtSelectOption("1", true, "1"), 
 	new DwtSelectOption("2", false, "2"),
