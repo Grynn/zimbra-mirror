@@ -25,39 +25,35 @@
 
 package com.zimbra.analyzersample;
 
-import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.zimbra.cs.extension.ZimbraExtension;
-import com.zimbra.cs.service.mail.UploadScanner;
+import com.zimbra.cs.index.ZimbraAnalyzer;
 import com.zimbra.cs.service.ServiceException;
-import com.zimbra.cs.tcpserver.TcpServerInputStream;
-import com.zimbra.cs.util.ByteUtil;
-import com.zimbra.cs.util.Zimbra;
 
 public class AnalyzerSample implements ZimbraExtension {
-    
-    private static Log mLog = LogFactory.getLog(AnalyzerSample.class);
 
-    private boolean mInitialized;
+    private static Log sLog = LogFactory.getLog(AnalyzerSample.class);
 
     public AnalyzerSample() {
     }
 
     public synchronized void init() {
+        sLog.info("Initializing "+getName());
+        try {
+            ZimbraAnalyzer.registerAnalyzer(getName(), new Analyzer());
+        } catch (ServiceException e) {
+            sLog.error("Error while registering extension "+getName(), e);
+        }
     }            
 
-	public void destroy() {
-	}
+    public void destroy() {
+        sLog.info("Destroying "+getName());
+        ZimbraAnalyzer.unregisterAnalyzer(getName());
+    }
+
+    public String getName() {
+        return "AnalyzerSample";
+    }
 }
