@@ -1082,8 +1082,7 @@ function(itemDiv, ev) {
 		/* Unmark the KB focus element. We need to do this because it is
 		 * possible for this element to not be the same as the selection 
 		 * anchor due to NEXT and PREV keyboard actions */
-		if (this._kbAnchor != null)
-			this._unmarkKbAnchorElement(true);
+		this._unmarkKbAnchorElement(true);
 
 		// clear out old left click selection(s)
 		var numSelectedItems = this._selectedItems.size();
