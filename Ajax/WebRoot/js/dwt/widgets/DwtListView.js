@@ -626,6 +626,7 @@ function(item, skipNotify) {
 	if (el) {
 		var i;
 		this._deselectAllSelectedItems();
+		this._unmarkKbAnchorElement(true);
 		this._selectedItems.add(el);
 		this._selAnchor = this._kbAnchor = el;
 		el.className = this.getEnabled() 
@@ -665,6 +666,7 @@ function() {
 DwtListView.prototype.setSelectedItems =
 function(selectedArray) {
 	this._deselectAllSelectedItems();
+	this._unmarkKbAnchorElement(true);
 	var i, sz, el;
 	sz = selectedArray.length;
 	for (i = 0; i < sz; ++i) {
@@ -1716,7 +1718,6 @@ function(actionCode, ev) {
 		case DwtKeyMap.SELECT_FIRST:
 			var a = this._list.getArray();
 			if (a && a.length > 1) {
-				this._unmarkKbAnchorElement(true);
 				this.setSelection(a[0]);
 			}
 			break;
@@ -1724,7 +1725,6 @@ function(actionCode, ev) {
 		case DwtKeyMap.SELECT_LAST:
 			var a = this._list.getArray();
 			if (a && a.length > 1) {
-				this._unmarkKbAnchorElement(true);
 				this.setSelection(a[a.length - 1]);
 			}
 			break;
