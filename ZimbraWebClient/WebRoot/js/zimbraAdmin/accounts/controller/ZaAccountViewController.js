@@ -188,7 +188,7 @@ function () {
 
 	//check if zimbraAvailableSkin has been changed
 	var skinIds = new Array();
-	if((tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] instanceof AjxVector) && tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] && tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin].size()) {
+	if((tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] instanceof AjxVector) && tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin]) {
 		var cnt = tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin].size();
 		for(var i = 0; i < cnt; i ++) {
 			skinIds.push(tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin].get(i));
@@ -200,9 +200,13 @@ function () {
 		|| (skinIds.join("") != this._currentObject.attrs[ZaAccount.A_zimbraAvailableSkin].join(""))) {
 			mods[ZaAccount.A_zimbraAvailableSkin] = skinIds;
 		} 
-		if(cnt==0)
-			mods[ZaAccount.A_zimbraAvailableSkin] = "";
-	} 
+		if(cnt==0) {
+			//show error msg
+			this._errorDialog.setMessage(ZaMsg.ERROR_MUST_HAVE_SKINS, null, DwtMessageDialog.CRITICAL_STYLE, null);
+			this._errorDialog.popup();		
+			return false;
+		}
+	}
 	
 	//save changed fields
 	try {	

@@ -141,21 +141,23 @@ function(entry) {
 		//convert strings to objects
 	//	var _tmpSkinMap = {};
 		var skins = entry.attrs[ZaAccount.A_zimbraAvailableSkin];
-		_tmpSkins = [];
-		if(skins == null) {
-			skins = [];
-		} else if (AjxUtil.isString(skins))	 {
-			skins = [skins];
-		}
-		
-		for(var i=0; i<skins.length; i++) {
-			var skin = skins[i];
-			_tmpSkins[i] = new String(skin);
-			_tmpSkins[i].id = "id_"+skin;
-		//	_tmpSkinMap[skin] = _tmpSkins[i];		
-		}
-		this._containedObject.attrs[ZaAccount.A_zimbraAvailableSkin] = _tmpSkins;
-		
+		if(skins != null && skins != "") {
+			_tmpSkins = [];
+			if (AjxUtil.isString(skins))	 {
+				skins = [skins];
+			}
+	
+			for(var i=0; i<skins.length; i++) {
+				var skin = skins[i];
+				_tmpSkins[i] = new String(skin);
+				_tmpSkins[i].id = "id_"+skin;
+			//	_tmpSkinMap[skin] = _tmpSkins[i];		
+			}
+			
+			this._containedObject.attrs[ZaAccount.A_zimbraAvailableSkin] = _tmpSkins;
+		} else
+			this._containedObject.attrs[ZaAccount.A_zimbraAvailableSkin] =null;		
+
 		//convert strings to objects
 		var skins = this._app.getInstalledSkins();
 		var _tmpSkins = [];

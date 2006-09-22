@@ -496,6 +496,7 @@ Super_DwtChooser_XFormItem.prototype.initializeItems = function() {
 	var labelWidth = this.getInheritedProperty("labelWidth");
 	var splitButtons = this.getInheritedProperty("splitButtons");
 	var resetToSuperLabel = this.getInheritedProperty("resetToSuperLabel");
+	
 	/*if(anchorCssStyle) {
 		this.getItems()[0].cssStyle = anchorCssStyle;
 	} else {
@@ -540,7 +541,7 @@ Super_DwtChooser_XFormItem.prototype.initializeItems = function() {
 				{type:_CELLSPACER_},
 				anchorItem,
 				{type:_CELLSPACER_}
-			]
+			],onChange:this.getInheritedProperty("onChange")
 		},
 		chooserItem];
 	Composite_XFormItem.prototype.initializeItems.call(this);
