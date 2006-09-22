@@ -49,8 +49,11 @@ function ZaNewAccountXWizard (parent, app) {
 	if(ZaSettings.ACCOUNTS_PREFS_ENABLED)
 		this.stepChoices.push({value:6, label:ZaMsg.TABT_Preferences});
 
+	if(ZaSettings.SKIN_PREFS_ENABLED) {
+		this.stepChoices.push({value:7, label:ZaMsg.TABT_Themes});
+	}
 	if(ZaSettings.ACCOUNTS_ADVANCED_ENABLED)
-		this.stepChoices.push({value:7, label:ZaMsg.TABT_Advanced});
+		this.stepChoices.push({value:9, label:ZaMsg.TABT_Advanced});
 
 	this._lastStep = this.stepChoices.length;
 
@@ -520,21 +523,37 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 						{ref:ZaAccount.A_zimbraPrefOutOfOfficeReplyEnabled,labelCssStyle:"width:190px;", type:_CHECKBOX_, msgName:ZaMsg.NAD_zimbraPrefOutOfOfficeReplyEnabled,label:ZaMsg.NAD_zimbraPrefOutOfOfficeReplyEnabled, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_},
 						{ref:ZaAccount.A_zimbraPrefOutOfOfficeReply,labelCssStyle:"width:190px;", type:_TEXTAREA_, msgName:ZaMsg.NAD_zimbraPrefOutOfOfficeReply,label:ZaMsg.NAD_zimbraPrefOutOfOfficeReply, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", cssStyle:"width:120px"},
 					];
-		if(ZaSettings.SKIN_PREFS_ENABLED) {
-			prefItems.push({type:_SEPARATOR_});
-			prefItems.push({ref:ZaAccount.A_zimbraPrefSkin,labelCssStyle:"width:190px;", type:_SUPER_SELECT1_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefSkin,label:ZaMsg.NAD_zimbraPrefSkin, labelLocation:_LEFT_,choices:this._app.getInstalledSkins()});
-			prefItems.push({sourceRef: ZaAccount.A_zimbraInstalledSkinPool, ref:ZaCos.A_zimbraAvailableSkin, 
-							type:_SUPER_DWT_CHOOSER_, sorted: true, layoutStyle: DwtChooser.VERT_STYLE,
-				  	  		resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
-				  	  	  	forceUpdate:true,colSpan:2,widgetClass:ZaSkinPoolChooser,splitButtons:true, tableWidth:"150px"
-				  	  	});						
-			
-		}
 		cases.push({type:_CASE_, relevant:"instance[ZaModel.currentStep] == 6", 
 					items :prefItems});
-	}			
+	}		
+
+	if(ZaSettings.SKIN_PREFS_ENABLED) {
+		cases.push({type:_CASE_,id:"account_form_themes_step", numCols:1, width:"100%", relevant:"instance[ZaModel.currentStep]==7", 
+						items: [	
+							{type:_SPACER_},
+							{sourceRef: ZaAccount.A_zimbraInstalledSkinPool, 
+								ref:ZaAccount.A_zimbraAvailableSkin, 
+								type:_SUPER_DWT_CHOOSER_, sorted:true, 
+								resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
+								forceUpdate:true,widgetClass:ZaSkinPoolChooser,
+								relevant:"ZaAccountXFormView.gotSkins.call(this)",
+								width:"100%"
+							},
+							{type:_SPACER_,},
+							{type:_GROUP_, 
+								items:[
+								{ref:ZaAccount.A_zimbraPrefSkin, type:_SUPER_SELECT1_, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefSkin,label:ZaMsg.NAD_zimbraPrefSkin, labelLocation:_LEFT_, 
+									choices:this._app.getInstalledSkins(),
+									relevant:"ZaAccountXFormView.gotSkins.call(this)"}
+								] 
+							}							
+						]
+		});			
+	}
+	
 	if(ZaSettings.ACCOUNTS_ADVANCED_ENABLED) {
-		cases.push({type:_CASE_,id:"account_form_advanced_step", numCols:1, width:"100%", relevant:"instance[ZaModel.currentStep]==7", 
+		cases.push({type:_CASE_,id:"account_form_advanced_step", numCols:1, width:"100%", relevant:"instance[ZaModel.currentStep]==9", 
 						items: [
 							{type:_GROUP_, width:"100%", id:"account_attachment_settings",
 								items :[

@@ -139,7 +139,7 @@ function(entry) {
 	
 	if(ZaSettings.SKIN_PREFS_ENABLED) {
 		//convert strings to objects
-		var _tmpSkinMap = {};
+	//	var _tmpSkinMap = {};
 		var skins = entry.attrs[ZaAccount.A_zimbraAvailableSkin];
 		_tmpSkins = [];
 		if(skins == null) {
@@ -152,7 +152,7 @@ function(entry) {
 			var skin = skins[i];
 			_tmpSkins[i] = new String(skin);
 			_tmpSkins[i].id = "id_"+skin;
-			_tmpSkinMap[skin] = _tmpSkins[i];		
+		//	_tmpSkinMap[skin] = _tmpSkins[i];		
 		}
 		this._containedObject.attrs[ZaAccount.A_zimbraAvailableSkin] = _tmpSkins;
 		
@@ -167,8 +167,8 @@ function(entry) {
 		
 		for(var i=0; i<skins.length; i++) {
 			var skin = skins[i];
-			if(_tmpSkinMap[skin])		
-				continue;
+			/*if(_tmpSkinMap[skin])		
+				continue;*/
 				
 			_tmpSkins[i] = new String(skin);
 			_tmpSkins[i].id = "id_"+skin;
@@ -304,6 +304,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	var _tab6 = ++ZaAccountXFormView.TAB_INDEX;			
 	var _tab7 = ++ZaAccountXFormView.TAB_INDEX;	
 	var _tab8 = ++ZaAccountXFormView.TAB_INDEX;			
+	var _tab9 = ++ZaAccountXFormView.TAB_INDEX;		
+	var _tab10 = ++ZaAccountXFormView.TAB_INDEX;			
 	
 	tabChoices.push({value:_tab1, label:ZaMsg.TABT_GeneralPage});
 	tabChoices.push({value:_tab2, label:ZaMsg.TABT_ContactInfo});
@@ -321,8 +323,14 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	if(ZaSettings.ACCOUNTS_FORWARDING_ENABLED)
 		tabChoices.push({value:_tab7, label:ZaMsg.TABT_Forwarding});
 
+	if(ZaSettings.SKIN_PREFS_ENABLED) 
+		tabChoices.push({value:_tab8, label:ZaMsg.TABT_Themes});	
+
+	if(ZaSettings.ZIMLETS_ENABLED) 
+		tabChoices.push({value:_tab9, label:ZaMsg.TABT_Zimlets});	
+			
 	if(ZaSettings.ACCOUNTS_ADVANCED_ENABLED)
-		tabChoices.push({value:_tab8, label:ZaMsg.TABT_Advanced});
+		tabChoices.push({value:_tab10, label:ZaMsg.TABT_Advanced});
 
 
 	var cases = [];
@@ -655,20 +663,10 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 						{ref:ZaAccount.A_zimbraPrefOutOfOfficeReplyEnabled, type:_CHECKBOX_, msgName:ZaMsg.NAD_zimbraPrefOutOfOfficeReplyEnabled,label:ZaMsg.NAD_zimbraPrefOutOfOfficeReplyEnabled, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_},
 						{ref:ZaAccount.A_zimbraPrefOutOfOfficeReply, type:_TEXTAREA_, msgName:ZaMsg.NAD_zimbraPrefOutOfOfficeReply,label:ZaMsg.NAD_zimbraPrefOutOfOfficeReply, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", onChange:ZaTabView.onFormFieldChanged, colSpan:3, width:"30em"}
 					];
-		if(ZaSettings.SKIN_PREFS_ENABLED) {
-						prefItems.push({type:_SEPARATOR_});
-						prefItems.push({ref:ZaAccount.A_zimbraPrefSkin, type:_SUPER_SELECT1_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefSkin,label:ZaMsg.NAD_zimbraPrefSkin, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged,choices:this._app.getInstalledSkins(),
-						relevant:"ZaAccountXFormView.gotSkins.call(this)"});
-						prefItems.push({sourceRef: ZaAccount.A_zimbraInstalledSkinPool, ref:ZaAccount.A_zimbraAvailableSkin, 
-							type:_SUPER_DWT_CHOOSER_, sorted: true, layoutStyle: DwtChooser.VERT_STYLE,
-				  	  		onChange: ZaTabView.onFormFieldChanged,resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
-				  	  	  	forceUpdate:true,colSpan:2,widgetClass:ZaSkinPoolChooser,
-				  	  	  	relevant:"ZaAccountXFormView.gotSkins.call(this)"
-				  	  	});						
-		}
 		cases.push({type:_CASE_, width:"100%", relevant:("instance[ZaModel.currentTab] == " + _tab5),
 					colSizes:["300px","450px"], items :prefItems});
 	}
+
 
 	if(ZaSettings.ACCOUNTS_ALIASES_ENABLED) {
 		cases.push({type:_CASE_, numCols:1, relevant:("instance[ZaModel.currentTab] == " + _tab6),
@@ -717,8 +715,33 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 					]
 				});
 	}
+
+	if(ZaSettings.SKIN_PREFS_ENABLED) {
+		cases.push({type:_CASE_, id:"account_form_themes_tab", numCols:1,relevant:("instance[ZaModel.currentTab] == " + _tab8),
+			items:[
+				{type:_SPACER_},
+				{sourceRef: ZaAccount.A_zimbraInstalledSkinPool, 
+					ref:ZaAccount.A_zimbraAvailableSkin, 
+					type:_SUPER_DWT_CHOOSER_, sorted:true, 
+					onChange: ZaTabView.onFormFieldChanged,
+					resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
+					forceUpdate:true,widgetClass:ZaSkinPoolChooser,
+					relevant:"ZaAccountXFormView.gotSkins.call(this)",
+					width:"100%"
+				},
+				{type:_SPACER_,},
+				{type:_GROUP_, 
+					items:[
+					{ref:ZaAccount.A_zimbraPrefSkin, type:_SUPER_SELECT1_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefSkin,label:ZaMsg.NAD_zimbraPrefSkin, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged,choices:this._app.getInstalledSkins(),
+						relevant:"ZaAccountXFormView.gotSkins.call(this)"}
+					] 
+				}
+			] 
+		});
+	}	
+
 	if(ZaSettings.ACCOUNTS_ADVANCED_ENABLED) {
-		cases.push({type:_CASE_, id:"account_form_advanced_tab", numCols:1, relevant:("instance[ZaModel.currentTab] == " + _tab8),
+		cases.push({type:_CASE_, id:"account_form_advanced_tab", numCols:1, relevant:("instance[ZaModel.currentTab] == " + _tab10),
 					items: [
 						{type:_GROUP_, id:"account_attachment_settings",
 							items :[

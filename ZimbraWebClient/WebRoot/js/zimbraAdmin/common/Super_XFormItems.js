@@ -478,19 +478,28 @@ Super_HostPort_XFormItem.prototype.items = [
 **/
 Super_DwtChooser_XFormItem = function () {}
 XFormItemFactory.createItemType("_SUPER_DWT_CHOOSER_", "super_dwt_chooser", Super_DwtChooser_XFormItem, Super_XFormItem);
-Super_DwtChooser_XFormItem.prototype.numCols = 3;
+Super_DwtChooser_XFormItem.prototype.numCols = 1;
 
 Super_DwtChooser_XFormItem.prototype.sorted = true;
-Super_DwtChooser_XFormItem.prototype.layoutStyle = DwtChooser.VERT_STYLE;
+Super_DwtChooser_XFormItem.prototype.layoutStyle = DwtChooser.HORIZ_STYLE;
 Super_DwtChooser_XFormItem.prototype.sourceRef = ".";
 Super_DwtChooser_XFormItem.prototype.widgetClass = DwtChooser;
+Super_DwtChooser_XFormItem.prototype.align = _CENTER_;
 
 Super_DwtChooser_XFormItem.prototype.initializeItems = function() {
 	var anchorCssStyle = this.getInheritedProperty("anchorCssStyle");
-	if(anchorCssStyle) {
-		this.getItems()[1].cssStyle = anchorCssStyle;
+	var sorted = this.getInheritedProperty("sorted");
+	var layoutStyle = this.getInheritedProperty("layoutStyle");	
+	var sourceRef = this.getInheritedProperty("sourceRef");	
+	var widgetClass = this.getInheritedProperty("widgetClass");	
+	var tableWidth = this.getInheritedProperty("tableWidth");
+	var labelWidth = this.getInheritedProperty("labelWidth");
+	var splitButtons = this.getInheritedProperty("splitButtons");
+	var resetToSuperLabel = this.getInheritedProperty("resetToSuperLabel");
+	/*if(anchorCssStyle) {
+		this.getItems()[0].cssStyle = anchorCssStyle;
 	} else {
-		this.getItems()[1].cssStyle = "width:200px";
+		this.getItems()[0].cssStyle = "width:200px";
 	}	
 
 	var sorted = this.getInheritedProperty("sorted");
@@ -498,33 +507,49 @@ Super_DwtChooser_XFormItem.prototype.initializeItems = function() {
 	var sourceRef = this.getInheritedProperty("sourceRef");	
 	var widgetClass = this.getInheritedProperty("widgetClass");			
 	
-	this.getItems()[0].sorted = sorted;
-	this.getItems()[0].layoutStyle = layoutStyle;	
-	this.getItems()[0].sourceRef = sourceRef;
-	this.getItems()[0].widgetClass = widgetClass;	
-	this.getItems()[0].tableWidth = (this.getInheritedProperty("tableWidth") ? this.getInheritedProperty("tableWidth") : null);
-	this.getItems()[0].labelWidth = (this.getInheritedProperty("labelWidth") ? this.getInheritedProperty("labelWidth") : null);
-	this.getItems()[0].splitButtons = this.getInheritedProperty("splitButtons");
+	this.getItems()[2].sorted = sorted;
+	this.getItems()[2].layoutStyle = layoutStyle;	
+	this.getItems()[2].sourceRef = sourceRef;
+	this.getItems()[2].widgetClass = widgetClass;	
+	this.getItems()[2].tableWidth = (this.getInheritedProperty("tableWidth") ? this.getInheritedProperty("tableWidth") : null);
+	this.getItems()[2].labelWidth = (this.getInheritedProperty("labelWidth") ? this.getInheritedProperty("labelWidth") : null);
+	this.getItems()[2].splitButtons = this.getInheritedProperty("splitButtons");
+	*/
+	var anchorItem = {	
+			type:_SUPER_ANCHOR_HELPER_, ref:".",
+			relevant:"Super_XFormItem.checkIfOverWriten.call(item)",
+			relevantBehavior:_BLOCK_HIDE_,cssSyle:(anchorCssStyle ? anchorCssStyle : "width:200px;"),
+			onChange:Composite_XFormItem.onFieldChange,
+			label:resetToSuperLabel,align:_CENTER_,
+			containerCssStyle:"width:90%;float:center;align:center;text-align:center;"
+		};
+	var chooserItem = {	type:_DWT_CHOOSER_, ref:".",onChange:Composite_XFormItem.onFieldChange,
+			updateElement:function(value) {
+				Super_XFormItem.updateCss.call(this,5);
+				this.updateWidget(value, true, Super_DwtChooser_XFormItem.getElemValue);
+			},
+			listSize:"90%",
+			sorted:sorted, layoutStyle:layoutStyle,sourceRef:sourceRef,widgetClass:widgetClass,
+			tableWidth:(tableWidth ? tableWidth : null), 
+			labelWidth : (labelWidth ? labelWidth : null), 
+			splitButtons : (splitButtons ? splitButtons : null) 			
+		};
+	this.items = [
+		{type:_GROUP_, align:_CENTER_, ref:".",width:"100%", numCols:3, colSizes:["*","200px","*" ],
+			items:[
+				{type:_CELLSPACER_},
+				anchorItem,
+				{type:_CELLSPACER_}
+			]
+		},
+		chooserItem];
 	Composite_XFormItem.prototype.initializeItems.call(this);
 }	
 Super_DwtChooser_XFormItem.getElemValue = function () {
 	return this.toString();
 }
-Super_DwtChooser_XFormItem.prototype.items = [
-	{	type:_DWT_CHOOSER_, ref:".",
-		onChange:Composite_XFormItem.onFieldChange,
-		updateElement:function(value) {
-			Super_XFormItem.updateCss.call(this,5);
-			this.updateWidget(value, true, Super_DwtChooser_XFormItem.getElemValue);
-		}
-	},
-	{	
-		type:_SUPER_ANCHOR_HELPER_, ref:".",
-		relevant:"Super_XFormItem.checkIfOverWriten.call(item)",
-		relevantBehavior:_BLOCK_HIDE_,
-		onChange:Composite_XFormItem.onFieldChange
-	}
-];
+Super_DwtChooser_XFormItem.prototype.items = [];
+
 
 
 
