@@ -56,7 +56,7 @@ function(entry) {
 	this._containedObject[ZaCos.A_zimbraMailHostPoolInternal] = entry[ZaCos.A_zimbraMailHostPoolInternal].clone();
 	
 	//convert strings to objects
-	var _tmpSkinMap = {};
+	//var _tmpSkinMap = {};
 	var skins = entry.attrs[ZaCos.A_zimbraAvailableSkin];
 	_tmpSkins = [];
 	if(skins == null) {
@@ -69,7 +69,7 @@ function(entry) {
 		var skin = skins[i];
 		_tmpSkins[i] = new String(skin);
 		_tmpSkins[i].id = "id_"+skin;
-		_tmpSkinMap[skin] = _tmpSkins[i];		
+	//	_tmpSkinMap[skin] = _tmpSkins[i];		
 	}
 	this._containedObject.attrs[ZaCos.A_zimbraAvailableSkin] = _tmpSkins;
 	
@@ -84,15 +84,15 @@ function(entry) {
 	
 	for(var i=0; i<skins.length; i++) {
 		var skin = skins[i];
-		if(_tmpSkinMap[skin])		
-			continue;
+	/*	if(_tmpSkinMap[skin])		
+			continue;*/
 			
 		_tmpSkins[i] = new String(skin);
 		_tmpSkins[i].id = "id_"+skin;
 	}
 	this._containedObject[ZaCos.A_zimbraInstalledSkinPool] = _tmpSkins;
 	
-	var _tmpAllServers = this._app.getMailServers();
+	/*var _tmpAllServers = this._app.getMailServers();
 	var _tmpMyServers = this._containedObject[ZaCos.A_zimbraMailHostPoolInternal].getArray();
 	var cntAll = _tmpAllServers.length-1;
 	var cntMy = _tmpMyServers.length-1;	
@@ -104,9 +104,9 @@ function(entry) {
 				break;
 			}
 		}
-	}
+	}*/
 	
-	this._containedObject[ZaCos.A_zimbraMailAllServersInternal] = AjxVector.fromArray(_tmpAllServers);
+	this._containedObject[ZaCos.A_zimbraMailAllServersInternal] = AjxVector.fromArray(this._app.getMailServers());
   	
   	
   	this._containedObject.globalConfig = this._app.getGlobalConfig();
@@ -143,8 +143,10 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 					{value:1, label:ZaMsg.TABT_GeneralPage},
 					{value:2, label:ZaMsg.TABT_Features},
 					{value:3, label:ZaMsg.TABT_Preferences},					
-					{value:4, label:ZaMsg.TABT_ServerPool},										
-					{value:5, label:ZaMsg.TABT_Advanced}										
+					{value:4, label:ZaMsg.TABT_Themes},						
+					{value:5, label:ZaMsg.TABT_Zimlets},											
+					{value:6, label:ZaMsg.TABT_ServerPool},										
+					{value:7, label:ZaMsg.TABT_Advanced}										
 				],cssClass:"ZaTabBar"
 			},
 			{type:_SWITCH_, 
@@ -204,32 +206,49 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 							{ref:ZaCos.A_zimbraPrefCalendarAlwaysShowMiniCal, type:_CHECKBOX_, msgName:ZaMsg.NAD_alwaysShowMiniCal,label:ZaMsg.NAD_alwaysShowMiniCal, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_},							
 							{ref:ZaCos.A_zimbraPrefCalendarUseQuickAdd, type:_CHECKBOX_, msgName:ZaMsg.NAD_useQuickAdd,label:ZaMsg.NAD_useQuickAdd, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_},							
 							{ref:ZaCos.A_zimbraPrefUseTimeZoneListInCalendar, type:_CHECKBOX_, msgName:ZaMsg.NAD_zimbraPrefUseTimeZoneListInCalendar,label:ZaMsg.NAD_zimbraPrefUseTimeZoneListInCalendar, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_},
-							{ref:ZaCos.A_zimbraPrefImapSearchFoldersEnabled, type:_CHECKBOX_, msgName:ZaMsg.NAD_zimbraPrefImapSearchFoldersEnabled,label:ZaMsg.NAD_zimbraPrefImapSearchFoldersEnabled, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_},
-							{type:_SEPARATOR_},	
-							{ref:ZaCos.A_zimbraPrefSkin, type:_OSELECT1_, msgName:ZaMsg.NAD_zimbraPrefSkin,label:ZaMsg.NAD_zimbraPrefSkin, labelLocation:_LEFT_, 
-								onChange:ZaTabView.onFormFieldChanged,choices:this._app.getInstalledSkins(),
-								relevant:"ZaCosXFormView.gotSkins.call(this)"
-								},
-							{sourceRef: ZaCos.A_zimbraInstalledSkinPool, ref:ZaCos.A_zimbraAvailableSkin, 
-								type:_DWT_CHOOSER_, sorted: true, layoutStyle: DwtChooser.VERT_STYLE,
-					  	  		onChange: ZaTabView.onFormFieldChanged,
-					  	  	  	forceUpdate:true,colSpan:2,widgetClass:ZaSkinPoolChooser,
-					  	  	  	relevant:"ZaCosXFormView.gotSkins.call(this)"
-					  	  	}
+							{ref:ZaCos.A_zimbraPrefImapSearchFoldersEnabled, type:_CHECKBOX_, msgName:ZaMsg.NAD_zimbraPrefImapSearchFoldersEnabled,label:ZaMsg.NAD_zimbraPrefImapSearchFoldersEnabled, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_}
+
 						]
 					},
 					{type:_CASE_, relevant:"instance[ZaModel.currentTab]==4", numCols:2, colSizes:["10px", "400px"],
+						items: [
+							{type:_CELLSPACER_},
+							{	sourceRef: ZaCos.A_zimbraInstalledSkinPool, ref:ZaCos.A_zimbraAvailableSkin, 
+								type:_DWT_CHOOSER_, sorted: true, 
+					  	  		onChange: ZaTabView.onFormFieldChanged,
+					  	  	  	listSize:"90%", forceUpdate:true,
+					  	  	  	widgetClass:ZaSkinPoolChooser,
+					  	  	  	relevant:"ZaCosXFormView.gotSkins.call(this)",
+					  	  	  	updateElement:function(value) {
+					  	  	  		this.updateWidget(value, true, function() {return this.id; });	
+					  	  	  	}
+					  	  	},
+							{type:_CELLSPACER_},					  	  	
+							{type:_GROUP_,items:[
+								{	
+									ref:ZaCos.A_zimbraPrefSkin, type:_OSELECT1_, 
+									msgName:ZaMsg.NAD_zimbraPrefSkin,label:ZaMsg.NAD_zimbraPrefSkin, labelLocation:_LEFT_, 
+									onChange:ZaTabView.onFormFieldChanged,choices:this._app.getInstalledSkins(),
+									relevant:"ZaCosXFormView.gotSkins.call(this)"
+								}					  	  							
+							]}
+						]
+					},
+					{type:_CASE_, relevant:"instance[ZaModel.currentTab]==6", numCols:2, colSizes:["10px", "400px"],
 						items: [
 							{type:_CELLSPACER_},
 							{ sourceRef: ZaCos.A_zimbraMailAllServersInternal,
 					  	  	  ref: ZaCos.A_zimbraMailHostPoolInternal, type: _DWT_CHOOSER_,
 							  listCssClass: "DwtChooserListView ZaCosServerPool", sorted: true,
 					  	  	  onChange: ZaTabView.onFormFieldChanged, widgetClass:ZaCosServerPoolChooser,
-					  	  	  listSize:"90%", forceUpdate:true
+					  	  	  listSize:"90%", forceUpdate:true,
+					  	  	  updateElement:function(value) {
+					  	  	  		this.updateWidget(value, true, function() {return this.id; });	
+					  	  	  }
 					  	  	}
 						]
 					},
-					{type:_CASE_, relevant:"instance[ZaModel.currentTab]==5", id:"cos_form_advanced_tab",
+					{type:_CASE_, relevant:"instance[ZaModel.currentTab]==7", id:"cos_form_advanced_tab",
 						numCols:1,
 						items: [
 							{type:_GROUP_, id:"cos_attachment_settings",

@@ -4039,9 +4039,20 @@ Dwt_Chooser_XFormItem.prototype.updateWidget = function(newvalue, dedup, compare
 		this._stateChangeListener = new AjxListener(this, Dwt_Chooser_XFormItem.prototype._handleStateChange)
 	}
 
-	var sourceItems = this.getSourceInstanceValue();
-	if(sourceItems instanceof Array) sourceItems = AjxVector.fromArray(sourceItems);
-
+	var origSourceItems = this.getSourceInstanceValue();
+	var sourceItems;
+	
+	if(origSourceItems instanceof Array) { 
+		var _tmpSrcItems = [];
+		var cnt = origSourceItems.length;
+		for(var i=0; i<cnt;i++) {
+			_tmpSrcItems.push(origSourceItems[i]);
+		}
+		sourceItems = AjxVector.fromArray(_tmpSrcItems);
+	} else {
+		sourceItems = origSourceItems.clone();
+	}
+	
 	var targetItems = this.getTargetInstanceValue();
 	if(targetItems instanceof Array) targetItems = AjxVector.fromArray(targetItems);	
 	if(dedup) {
