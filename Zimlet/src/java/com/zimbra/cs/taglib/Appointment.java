@@ -29,11 +29,13 @@ import java.util.Map;
 
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.mailbox.Mailbox;
+import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.Mailbox.OperationContext;
 import com.zimbra.cs.mailbox.calendar.Invite;
 import com.zimbra.cs.service.ServiceException;
 
 public class Appointment extends ZimbraTag {
+    private static final long serialVersionUID = -4994874857866850527L;
 
     private String mApptId;
     private String mField;
@@ -87,7 +89,7 @@ public class Appointment extends ZimbraTag {
         }
         int cid = Integer.parseInt(mApptId);
         String id = acct.getId();
-        Mailbox mbox = Mailbox.getMailboxByAccountId(id);
+        Mailbox mbox = MailboxManager.getInstance().getMailboxByAccountId(id);
         Invite invite = mbox.getAppointmentById(octxt, cid).getDefaultInvite();
         int fid = sFields.get(mField);
         String val = null;

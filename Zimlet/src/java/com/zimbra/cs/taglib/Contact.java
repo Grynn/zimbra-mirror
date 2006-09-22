@@ -28,10 +28,12 @@ import java.util.Map;
 
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.mailbox.Mailbox;
+import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.Mailbox.OperationContext;
 import com.zimbra.cs.service.ServiceException;
 
 public class Contact extends ZimbraTag {
+    private static final long serialVersionUID = 4310265594871660074L;
 
     private String mContactId;
     private String mField;
@@ -61,7 +63,7 @@ public class Contact extends ZimbraTag {
         }
         int cid = Integer.parseInt(mContactId);
         String id = acct.getId();
-        Mailbox mbox = Mailbox.getMailboxByAccountId(id);
+        Mailbox mbox = MailboxManager.getInstance().getMailboxByAccountId(id);
         com.zimbra.cs.mailbox.Contact con = mbox.getContactById(octxt, cid);
         Map fields = con.getFields();
         String val = (String)fields.get(mField);

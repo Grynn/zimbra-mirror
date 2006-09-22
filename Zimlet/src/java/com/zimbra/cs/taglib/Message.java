@@ -29,11 +29,13 @@ import javax.mail.internet.MimeMessage;
 
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.mailbox.Mailbox;
+import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.Mailbox.OperationContext;
 import com.zimbra.cs.mime.Mime;
 import com.zimbra.cs.service.ServiceException;
 
 public class Message extends ZimbraTag {
+    private static final long serialVersionUID = -6527940306669140648L;
 
     String mId;
     String mField;
@@ -99,7 +101,7 @@ public class Message extends ZimbraTag {
             throw ZimbraTagException.MISSING_ATTR("field");
         }
         int mid = Integer.parseInt(mId);
-        Mailbox mbox = Mailbox.getMailboxByAccountId(acct.getId());
+        Mailbox mbox = MailboxManager.getInstance().getMailboxByAccountId(acct.getId());
         return getMessageContent(mbox.getMessageById(octxt, mid));
     }
 }
