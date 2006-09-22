@@ -188,8 +188,12 @@ public class Jammer {
                     // writers who don't finish an assigned function statement
                     // with a semicolon.
                     destWriter.write('\n');
-                    destWriter.write(script);
-                    destWriter.flush();
+                    try {
+                    	destWriter.write(script);
+                    	destWriter.flush();
+                    } catch (NullPointerException np) {
+                    	this.ownerTask.log("ConcatFiles: " + scriptFile + " empty script", Project.MSG_DEBUG);
+                    }
                     b.close();
                 } else {
                     this.ownerTask.log("ConcatFiles: " + scriptFile + " does not exist", Project.MSG_DEBUG);
