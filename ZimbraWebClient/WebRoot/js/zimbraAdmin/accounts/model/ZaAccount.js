@@ -417,6 +417,13 @@ function(tmpObj, app) {
 		return false;
 		
 	}
+	
+	if(ZaSettings.SKIN_PREFS_ENABLED) {
+		if((tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] instanceof AjxVector) && tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin].size()==0) {
+			app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_MUST_HAVE_SKINS);					
+			return false;			
+		}
+	}
 	return true;
 }
 

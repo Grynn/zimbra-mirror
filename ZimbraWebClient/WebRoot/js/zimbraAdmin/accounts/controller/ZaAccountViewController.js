@@ -187,27 +187,28 @@ function () {
 	}
 
 	//check if zimbraAvailableSkin has been changed
-	var skinIds = new Array();
-	if((tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] instanceof AjxVector) && tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin]) {
-		var cnt = tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin].size();
-		for(var i = 0; i < cnt; i ++) {
-			skinIds.push(tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin].get(i));
+	if(ZaSettings.SKIN_PREFS_ENABLED) {
+		var skinIds = new Array();
+		if((tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] instanceof AjxVector) && tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin]) {
+			var cnt = tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin].size();
+			for(var i = 0; i < cnt; i ++) {
+				skinIds.push(tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin].get(i));
+			}
+			if(!(this._currentObject.attrs[ZaAccount.A_zimbraAvailableSkin] instanceof Array)) {
+				this._currentObject.attrs[ZaAccount.A_zimbraAvailableSkin] = [this._currentObject.attrs[ZaAccount.A_zimbraAvailableSkin]];
+			}
+			if((cnt > 0 && (!this._currentObject.attrs[ZaAccount.A_zimbraAvailableSkin] || !this._currentObject.attrs[ZaAccount.A_zimbraAvailableSkin].length))
+			|| (skinIds.join("") != this._currentObject.attrs[ZaAccount.A_zimbraAvailableSkin].join(""))) {
+				mods[ZaAccount.A_zimbraAvailableSkin] = skinIds;
+			} 
+			if(cnt==0) {
+				//show error msg
+				this._errorDialog.setMessage(ZaMsg.ERROR_MUST_HAVE_SKINS, null, DwtMessageDialog.CRITICAL_STYLE, null);
+				this._errorDialog.popup();		
+				return false;
+			}
 		}
-		if(!(this._currentObject.attrs[ZaAccount.A_zimbraAvailableSkin] instanceof Array)) {
-			this._currentObject.attrs[ZaAccount.A_zimbraAvailableSkin] = [this._currentObject.attrs[ZaAccount.A_zimbraAvailableSkin]];
-		}
-		if((cnt > 0 && (!this._currentObject.attrs[ZaAccount.A_zimbraAvailableSkin] || !this._currentObject.attrs[ZaAccount.A_zimbraAvailableSkin].length))
-		|| (skinIds.join("") != this._currentObject.attrs[ZaAccount.A_zimbraAvailableSkin].join(""))) {
-			mods[ZaAccount.A_zimbraAvailableSkin] = skinIds;
-		} 
-		if(cnt==0) {
-			//show error msg
-			this._errorDialog.setMessage(ZaMsg.ERROR_MUST_HAVE_SKINS, null, DwtMessageDialog.CRITICAL_STYLE, null);
-			this._errorDialog.popup();		
-			return false;
-		}
-	}
-	
+	}	
 	//save changed fields
 	try {	
 		this._currentObject.modify(mods);
