@@ -189,7 +189,7 @@ function () {
 	//check if zimbraAvailableSkin has been changed
 	if(ZaSettings.SKIN_PREFS_ENABLED) {
 		var skinIds = new Array();
-		if((tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] instanceof AjxVector) && tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin]) {
+		if(tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] && (tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] instanceof AjxVector)) {
 			var cnt = tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin].size();
 			for(var i = 0; i < cnt; i ++) {
 				skinIds.push(tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin].get(i));

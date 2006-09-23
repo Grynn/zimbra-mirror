@@ -55,8 +55,7 @@ function(entry) {
 	}
 	this._containedObject[ZaCos.A_zimbraMailHostPoolInternal] = entry[ZaCos.A_zimbraMailHostPoolInternal].clone();
 	
-	//convert strings to objects
-	//var _tmpSkinMap = {};
+
 	var skins = entry.attrs[ZaCos.A_zimbraAvailableSkin];
 	_tmpSkins = [];
 	if(skins == null) {
@@ -65,15 +64,15 @@ function(entry) {
 		skins = [skins];
 	}
 	
+	//convert strings to objects
 	for(var i=0; i<skins.length; i++) {
 		var skin = skins[i];
 		_tmpSkins[i] = new String(skin);
 		_tmpSkins[i].id = "id_"+skin;
-	//	_tmpSkinMap[skin] = _tmpSkins[i];		
 	}
 	this._containedObject.attrs[ZaCos.A_zimbraAvailableSkin] = _tmpSkins;
 	
-	//convert strings to objects
+
 	var skins = this._app.getInstalledSkins();
 	var _tmpSkins = [];
 	if(skins == null) {
@@ -81,30 +80,49 @@ function(entry) {
 	} else if (AjxUtil.isString(skins))	 {
 		skins = [skins];
 	}
-	
+
+	//convert strings to objects	
 	for(var i=0; i<skins.length; i++) {
 		var skin = skins[i];
-	/*	if(_tmpSkinMap[skin])		
-			continue;*/
-			
 		_tmpSkins[i] = new String(skin);
 		_tmpSkins[i].id = "id_"+skin;
 	}
 	this._containedObject[ZaCos.A_zimbraInstalledSkinPool] = _tmpSkins;
 	
-	/*var _tmpAllServers = this._app.getMailServers();
-	var _tmpMyServers = this._containedObject[ZaCos.A_zimbraMailHostPoolInternal].getArray();
-	var cntAll = _tmpAllServers.length-1;
-	var cntMy = _tmpMyServers.length-1;	
-	for(var ix = cntMy; ix >= 0; ix--) {
-		for (var k = cntAll; k >= 0; k--) {
-			if(_tmpMyServers[ix].id == _tmpAllServers[k].id) {
-				_tmpAllServers.splice(k,1);
-				cntAll--;
-				break;
-			}
-		}
-	}*/
+	var zimlets = entry.attrs[ZaCos.A_zimbraZimletAvailableZimlets];
+	_tmpZimlets = [];
+	if(zimlets == null) {
+		zimlets = [];
+	} else if (AjxUtil.isString(zimlets))	 {
+		skins = [zimlets];
+	}
+	
+	//convert strings to objects
+	var cnt = zimlets.length;
+	for(var i=0; i<cnt; i++) {
+		var zimlet = zimlets[i];
+		_tmpZimlets[i] = new String(zimlet);
+		_tmpZimlets[i].id = "id_"+zimlet;
+	}
+	this._containedObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = _tmpZimlets;
+
+	var zimlets = ZaZimlet.getAll();
+	var _tmpZimlets = [];
+	if(zimlets == null) {
+		zimlets = [];
+	} 
+	
+	if(zimlets instanceof ZaItemList || zimlets instanceof AjxVector)
+		zimlets = zimlets.getArray();
+	
+	var cnt = zimlets.length;
+	//convert strings to objects	
+	for(var i=0; i<cnt; i++) {
+		var zimlet = zimlets[i];
+		_tmpZimlets[i] = new String(zimlet.name);
+		_tmpZimlets[i].id = "id_"+zimlet.name;
+	}
+	this._containedObject[ZaCos.A_zimbraInstalledZimletPool] = _tmpZimlets;
 	
 	this._containedObject[ZaCos.A_zimbraMailAllServersInternal] = AjxVector.fromArray(this._app.getMailServers());
   	
@@ -234,6 +252,20 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 							]}
 						]
 					},
+					{type:_CASE_, relevant:"instance[ZaModel.currentTab]==5", numCols:2, colSizes:["10px", "400px"],
+						items: [
+							{type:_CELLSPACER_},
+							{	sourceRef: ZaCos.A_zimbraInstalledZimletPool, ref:ZaCos.A_zimbraZimletAvailableZimlets, 
+								type:_DWT_CHOOSER_, sorted: true, 
+					  	  		onChange: ZaTabView.onFormFieldChanged,
+					  	  	  	listSize:"90%", forceUpdate:true,
+					  	  	  	widgetClass:ZaSkinPoolChooser,
+					  	  	  	updateElement:function(value) {
+					  	  	  		this.updateWidget(value, true, function() {return this.id; });	
+					  	  	  	}
+					  	  	}
+						]
+					},					
 					{type:_CASE_, relevant:"instance[ZaModel.currentTab]==6", numCols:2, colSizes:["10px", "400px"],
 						items: [
 							{type:_CELLSPACER_},

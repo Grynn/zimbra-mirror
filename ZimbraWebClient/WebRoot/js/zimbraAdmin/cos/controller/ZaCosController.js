@@ -386,7 +386,7 @@ function () {
 	
 	//check if zimbraAvailableSkin has been changed
 	var skinIds = new Array();
-	if((tmpObj.attrs[ZaCos.A_zimbraAvailableSkin] instanceof AjxVector) && tmpObj.attrs[ZaCos.A_zimbraAvailableSkin] && tmpObj.attrs[ZaCos.A_zimbraAvailableSkin].size()) {
+	if(tmpObj.attrs[ZaCos.A_zimbraAvailableSkin] && (tmpObj.attrs[ZaCos.A_zimbraAvailableSkin] instanceof AjxVector)) {
 		var cnt = tmpObj.attrs[ZaCos.A_zimbraAvailableSkin].size();
 		for(var i = 0; i < cnt; i ++) {
 			skinIds.push(tmpObj.attrs[ZaCos.A_zimbraAvailableSkin].get(i));
@@ -401,6 +401,24 @@ function () {
 		if(cnt==0)
 			mods[ZaCos.A_zimbraAvailableSkin] = "";
 	}	
+	
+	//check if zimbraZimletAvailableZimlets has been changed
+	var zimIds = new Array();
+	if(tmpObj.attrs[ZaCos.A_zimbraZimletAvailableZimlets] && (tmpObj.attrs[ZaCos.A_zimbraZimletAvailableZimlets] instanceof AjxVector)) {
+		var cnt = tmpObj.attrs[ZaCos.A_zimbraZimletAvailableZimlets].size();
+		for(var i = 0; i < cnt; i ++) {
+			zimIds.push(tmpObj.attrs[ZaCos.A_zimbraZimletAvailableZimlets].get(i));
+		}
+		if(!(this._currentObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets] instanceof Array)) {
+			this._currentObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = [this._currentObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets]];
+		}
+		if((cnt > 0 && (!this._currentObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets] || !this._currentObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets].length))
+		|| (zimIds.join("") != this._currentObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets].join(""))) {
+			mods[ZaCos.A_zimbraZimletAvailableZimlets] = zimIds;
+		} 
+		if(cnt==0)
+			mods[ZaCos.A_zimbraZimletAvailableZimlets] = "";
+	}		
 	//check if need to rename
 	if(!isNew) {
 		if(tmpObj.name != this._currentObject.name) {
