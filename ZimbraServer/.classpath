@@ -71,6 +71,5 @@
 	<classpathentry sourcepath="/ThirdParty/lucene-1.4.3/src/java" kind="lib" path="jars/lucene-1.4.3.jar"/>
 	<classpathentry kind="lib" path="jars/jzlib.jar"/>
 	<classpathentry sourcepath="/ThirdParty/jtnef-1.2.3/src" kind="lib" path="jars/tnef-1.2.3-zimbra.jar"/>
-	<classpathentry kind="lib" path="jars/jsp-api.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
