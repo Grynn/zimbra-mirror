@@ -863,7 +863,16 @@ function(item, id, skipNotify) {
 	if (this._noDuplicates && this._data[id] && this._isDuplicate(item, this._data[id])) {
 		return;
 	}
-	
+
+	// item is being added to target list with multiple transfer buttons,
+	// so we need to clone it on second and subsequent transfers
+	var list = this.targetListView.getList();
+	if (list && list.contains(item) && item.clone) {
+		var newItem = item.clone();
+		newItem.id = Dwt.getNextId();
+		item = newItem;
+	}
+
 	var idx = null;
 	if (this._hasMultiButtons) {
 		// get a list of all the items in order
@@ -879,10 +888,6 @@ function(item, id, skipNotify) {
 				break;
 			}
 		}
-		if (!item._buttonIds) {
-			item._buttonIds = [];
-		}
-		item._buttonIds.push(id);
 	}
 
 	item._buttonId = id;
@@ -919,14 +924,7 @@ function(item, skipNotify) {
 	if (!list) return;
 	if (!list.contains(item)) return;
 	
-	if (this._hasMultiButtons) {
-		var a = item._buttonIds;
-		for (var i = 0; i < a.length; i++) {
-			this._data[a[i]].remove(item);
-		}
-	} else {
-		this._data[item._buttonId].remove(item);
-	}
+	this._data[item._buttonId].remove(item);
 	this.targetListView.removeItem(item, skipNotify);
 };
 
