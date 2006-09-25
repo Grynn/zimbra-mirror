@@ -666,7 +666,6 @@ function() {
 DwtListView.prototype.setSelectedItems =
 function(selectedArray) {
 	this._deselectAllSelectedItems();
-	this._unmarkKbAnchorElement(true);
 	var i, sz, el;
 	sz = selectedArray.length;
 	for (i = 0; i < sz; ++i) {
