@@ -4,6 +4,8 @@
 	<property name="src.java.dir" location="${src.dir}/java" />
 	<property name="build.dir" location="build" />
 	<property name="build.classes.dir" location="${build.dir}/classes" />
+	<property name="common.dir" location="../ZimbraCommon" />
+	<property name="common.classes.dir" location="${common.dir}/build/classes" />
 
 	<path id="all.java.path">
 		<pathelement location="${src.java.dir}" />
@@ -25,14 +27,16 @@
 	</condition>	
 
 	<path id="class.path">
+		<pathelement location="${common.classes.dir}" />
 		<pathelement location="${build.classes.dir}" />
 		<pathelement location="${zimbraServer.dir}/build/classes"/>
-		<fileset dir="${zimbraServer.dir}/jars">
+		<fileset dir="${common.dir}/jars">
 			<include name="**/*.jar"/>
 		</fileset>
 	</path>
 
 	<target name="compile" depends="build-init" description="Compiles the source code">
+		<ant dir="${common.dir}" target="jar" inheritAll="false" />
 		<javac destdir="${build.classes.dir}" debug="true" classpathref="class.path">
 			<src refid="all.java.path" />
 		</javac>

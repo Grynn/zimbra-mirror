@@ -22,7 +22,7 @@
 	<property name="dist.zimlet-extra.dir" location="${dist.dir}/zimlets-extra" />
 
 	<property name="server.dir" location="../ZimbraServer" />
-	<property name="server.jars.dir" location="${server.dir}/jars" />
+	<property name="common.jars.dir" location="../ZimbraCommon/jars" />
 	<property name="zimbrastore.jar" location="${server.dir}/build/zimbrastore.jar" />
 	<property name="jars.dir" location="jars" />
 	<property name="config.dir" location="conf" />
@@ -53,7 +53,7 @@
 		<fileset dir="${jars.dir}">
 			<include name="**/*.jar" />
 		</fileset>
-		<fileset dir="${server.jars.dir}">
+		<fileset dir="${common.jars.dir}">
 			<include name="**/*.jar" />
 		</fileset>
 		<fileset file="${zimbrastore.jar}"/>

@@ -23,7 +23,7 @@
  * ***** END LICENSE BLOCK *****
  */
 
-package com.zimbra.cs.localconfig;
+package com.zimbra.common.localconfig;
 
 import java.io.IOException;
 import java.io.PrintWriter;

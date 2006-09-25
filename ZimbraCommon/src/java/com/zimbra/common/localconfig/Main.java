@@ -23,7 +23,7 @@
  * ***** END LICENSE BLOCK *****
  */
 
-package com.zimbra.cs.localconfig;
+package com.zimbra.common.localconfig;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -35,7 +35,7 @@ import org.apache.commons.cli.ParseException;
 
 import org.dom4j.DocumentException;
 
-import com.zimbra.cs.util.RandomPassword;
+import com.zimbra.common.util.RandomPassword;
 
 public class Main {
     

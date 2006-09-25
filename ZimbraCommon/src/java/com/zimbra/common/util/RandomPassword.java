@@ -23,7 +23,7 @@
  * ***** END LICENSE BLOCK *****
  */
 
-package com.zimbra.cs.util;
+package com.zimbra.common.util;
 
 import java.security.SecureRandom;
 
