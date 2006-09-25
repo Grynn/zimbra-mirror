@@ -81,8 +81,9 @@ function(entry) {
 		skins = [skins];
 	}
 
-	//convert strings to objects	
-	for(var i=0; i<skins.length; i++) {
+	//convert strings to objects
+	var cnt = skins.length;
+	for(var i=0; i<cnt; i++) {
 		var skin = skins[i];
 		_tmpSkins[i] = new String(skin);
 		_tmpSkins[i].id = "id_"+skin;
@@ -94,7 +95,7 @@ function(entry) {
 	if(zimlets == null) {
 		zimlets = [];
 	} else if (AjxUtil.isString(zimlets))	 {
-		skins = [zimlets];
+		zimlets = [zimlets];
 	}
 	
 	//convert strings to objects
@@ -259,7 +260,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 								type:_DWT_CHOOSER_, sorted: true, 
 					  	  		onChange: ZaTabView.onFormFieldChanged,
 					  	  	  	listSize:"90%", forceUpdate:true,
-					  	  	  	widgetClass:ZaSkinPoolChooser,
+					  	  	  	widgetClass:ZaZimletPoolChooser,
 					  	  	  	updateElement:function(value) {
 					  	  	  		this.updateWidget(value, true, function() {return this.id; });	
 					  	  	  	}

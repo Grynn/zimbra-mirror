@@ -139,7 +139,6 @@ function(entry) {
 	
 	if(ZaSettings.SKIN_PREFS_ENABLED) {
 		//convert strings to objects
-	//	var _tmpSkinMap = {};
 		var skins = entry.attrs[ZaAccount.A_zimbraAvailableSkin];
 		if(skins != null && skins != "") {
 			_tmpSkins = [];
@@ -151,7 +150,6 @@ function(entry) {
 				var skin = skins[i];
 				_tmpSkins[i] = new String(skin);
 				_tmpSkins[i].id = "id_"+skin;
-			//	_tmpSkinMap[skin] = _tmpSkins[i];		
 			}
 			
 			this._containedObject.attrs[ZaAccount.A_zimbraAvailableSkin] = _tmpSkins;
@@ -169,9 +167,6 @@ function(entry) {
 		
 		for(var i=0; i<skins.length; i++) {
 			var skin = skins[i];
-			/*if(_tmpSkinMap[skin])		
-				continue;*/
-				
 			_tmpSkins[i] = new String(skin);
 			_tmpSkins[i].id = "id_"+skin;
 		}
@@ -192,6 +187,61 @@ function(entry) {
 			_tmpSkins[i].id = "id_"+skin;
 		}
 		this._containedObject.cos.attrs[ZaAccount.A_zimbraAvailableSkin] = _tmpSkins;
+	}
+	if(ZaSettings.ZIMLETS_ENABLED) {
+		var zimlets = entry.attrs[ZaAccount.A_zimbraZimletAvailableZimlets];
+		if(zimlets != null && zimlets != "") {
+			_tmpZimlets = [];
+			if (AjxUtil.isString(zimlets))	 {
+				zimlets = [zimlets];
+			}
+			
+			var cnt = zimlets.length;
+			for(var i=0; i<cnt; i++) {
+				var zimlet = zimlets[i];
+				_tmpZimlets[i] = new String(zimlet);
+				_tmpZimlets[i].id = "id_"+zimlet;
+			}
+			
+			this._containedObject.attrs[ZaAccount.A_zimbraZimletAvailableZimlets] = _tmpZimlets;
+		} else
+			this._containedObject.attrs[ZaAccount.A_zimbraZimletAvailableZimlets] = null;		
+		
+		
+		//convert strings to objects
+		var zimlets = this._containedObject.cos.attrs[ZaCos.A_zimbraZimletAvailableZimlets];
+		_tmpZimlets = [];
+		if(zimlets == null) {
+			zimlets = [];
+		} else if (AjxUtil.isString(zimlets))	 {
+			zimlets = [zimlets];
+		}
+		
+		for(var i=0; i<zimlets.length; i++) {
+			var zimlet = zimlets[i];
+			_tmpZimlets[i] = new String(zimlet);
+			_tmpZimlets[i].id = "id_"+zimlet;
+		}
+		this._containedObject.cos.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = _tmpZimlets;
+					
+		//convert strings to objects
+		var zimlets = ZaZimlet.getAll();
+		var _tmpZimlets = [];
+		if(zimlets == null) {
+			zimlets = [];
+		} 
+		
+		if(zimlets instanceof ZaItemList || zimlets instanceof AjxVector)
+			zimlets = zimlets.getArray();
+			
+		var cnt = zimlets.length;
+		//convert strings to objects	
+		for(var i=0; i<cnt; i++) {
+			var zimlet = zimlets[i];
+			_tmpZimlets[i] = new String(zimlet.name);
+			_tmpZimlets[i].id = "id_"+zimlet.name;
+		}
+		this._containedObject[ZaAccount.A_zimbraInstalledZimletPool] = _tmpZimlets;		
 	}
 	this._localXForm.setInstance(this._containedObject);
 }
@@ -742,6 +792,21 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 		});
 	}	
 
+	if(ZaSettings.ZIMLETS_ENABLED) {
+		cases.push({type:_CASE_, id:"account_form_zimlets_tab", numCols:1,relevant:("instance[ZaModel.currentTab] == " + _tab9),
+			items:[
+				{type:_SPACER_},
+				{sourceRef: ZaAccount.A_zimbraInstalledZimletPool, 
+					ref:ZaAccount.A_zimbraZimletAvailableZimlets, 
+					type:_SUPER_DWT_CHOOSER_, sorted:true, 
+					onChange: ZaTabView.onFormFieldChanged,
+					resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
+					forceUpdate:true,widgetClass:ZaZimletPoolChooser,
+					width:"100%"
+				}
+			] 
+		});
+	}
 	if(ZaSettings.ACCOUNTS_ADVANCED_ENABLED) {
 		cases.push({type:_CASE_, id:"account_form_advanced_tab", numCols:1, relevant:("instance[ZaModel.currentTab] == " + _tab10),
 					items: [
