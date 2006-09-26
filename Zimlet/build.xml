@@ -21,9 +21,12 @@
 	<property name="dist.zimlet.dir" location="${dist.dir}/zimlets" />
 	<property name="dist.zimlet-extra.dir" location="${dist.dir}/zimlets-extra" />
 
+	<property name="common.dir" location="../ZimbraCommon" />
+	<property name="common.jars.dir" location="${common.dir}/jars" />
+	<property name="common.classes.dir" location="../ZimbraCommon/build/classes" />
+
 	<property name="server.dir" location="../ZimbraServer" />
-	<property name="common.jars.dir" location="../ZimbraCommon/jars" />
-	<property name="zimbrastore.jar" location="${server.dir}/build/zimbrastore.jar" />
+	<property name="server.classes.dir" location="${server.dir}/build/classes" />
 	<property name="jars.dir" location="jars" />
 	<property name="config.dir" location="conf" />
 	<property name="src.dir" location="src" />
@@ -49,6 +52,8 @@
 		<pathelement location="${generated.java.dir}" />
 	</path>
 	<path id="class.path">
+		<pathelement location="${common.classes.dir}" />
+		<pathelement location="${server.classes.dir}" />
 		<pathelement location="${build.classes.dir}" />
 		<fileset dir="${jars.dir}">
 			<include name="**/*.jar" />
@@ -56,7 +61,6 @@
 		<fileset dir="${common.jars.dir}">
 			<include name="**/*.jar" />
 		</fileset>
-		<fileset file="${zimbrastore.jar}"/>
 	</path>
 
 	<taskdef resource="net/sf/antcontrib/antlib.xml">
