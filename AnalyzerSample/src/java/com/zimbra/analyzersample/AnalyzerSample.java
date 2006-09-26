@@ -48,7 +48,7 @@ public class AnalyzerSample implements ZimbraExtension {
         }
     }            
 
-    public void destroy() {
+    public synchronized void destroy() {
         sLog.info("Destroying "+getName());
         ZimbraAnalyzer.unregisterAnalyzer(getName());
     }
