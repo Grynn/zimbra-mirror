@@ -59,7 +59,7 @@ if ($options{t}) {
 
 my $zimbraHost = `zmhostname`;
 chomp $zimbraHost;
-print "From: Zimbra on $zimbraHost\n";
+print "From: zimbra\@$zimbraHost\n";
 print "Subject: Daily mail report from $startTime to $endTime\n\n";
 
 print "Generating report\n";
