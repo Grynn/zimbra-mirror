@@ -67,12 +67,6 @@ case "$1" in
 		if [ ! -d /opt/zimbra/amavisd/var ]; then
 			mkdir /opt/zimbra/amavisd/var
 		fi
-		if [ "x$platform" != "xMACOSX" -a "x$platform" != "xMACOSXx86" ]; then
-			mount -t tmpfs | grep ${zimbra_home}/amavisd-new-2.4.1/tmp > /dev/null 2>&1
-			if [ $? != 0 ]; then
-				mount ${zimbra_home}/amavisd-new-2.4.1/tmp
-			fi
-		fi
 		if [ x$2 = "x" ]; then
 			rewriteconfig
 		fi
