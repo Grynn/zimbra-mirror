@@ -164,7 +164,7 @@ function() {
 	return this._controllers[ZaZimbraAdmin._ZIMLET_LIST_VIEW]
 }
 
-ZaApp.prototype.getZimletViewController =
+ZaApp.prototype.getZimletController =
 function() {
 	if (this._controllers[ZaZimbraAdmin._ZIMLET_VIEW] == null) {
 		this._controllers[ZaZimbraAdmin._ZIMLET_VIEW] = new ZaZimletViewController(this._appCtxt, this._container, this);

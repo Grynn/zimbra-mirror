@@ -152,3 +152,7 @@ function(by, val, withConfig) {
 	this.initFromJS(resp.Body.GetZimletResponse.zimlet[0]);
 }
 ZaItem.loadMethods["ZaZimlet"].push(ZaZimlet.loadMethod);
+
+ZaZimlet.myXModel = { 
+	items:[]	
+}
