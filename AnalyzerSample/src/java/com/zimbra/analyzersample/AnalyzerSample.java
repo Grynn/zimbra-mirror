@@ -32,6 +32,14 @@ import com.zimbra.cs.extension.ZimbraExtension;
 import com.zimbra.cs.index.ZimbraAnalyzer;
 import com.zimbra.cs.service.ServiceException;
 
+/**
+ * 
+ * A sample Zimbra Extension which provides a custom
+ * Lucene analyzer.  The extension must call ZimbraAnalyzer.registerAnalyzer()
+ * on startup to register itself with the system.  The custom analyzer is
+ * invoked based on the COS or Account setting zimbraTextAnalyzer.
+ * 
+ */
 public class AnalyzerSample implements ZimbraExtension {
 
     private static Log sLog = LogFactory.getLog(AnalyzerSample.class);
@@ -39,6 +47,13 @@ public class AnalyzerSample implements ZimbraExtension {
     public AnalyzerSample() {
     }
 
+    /* (non-Javadoc)
+     * @see com.zimbra.cs.extension.ZimbraExtension#init()
+     * 
+     * The extension can provide any name to ZimbraAnalyzer.registerAnalyzer() 
+     * however that name must be unique or else the registration will fail.
+     * 
+     */
     public synchronized void init() {
         sLog.info("Initializing "+getName());
         try {
