@@ -378,7 +378,7 @@ function(eventType, event) {
 
 /**
  * Disposes of the control. This method will remove the control from under the
- * control of it's parent and release any resources associate with the compontent
+ * control of its parent and release any resources associate with the compontent
  * it will also notify any event listeners on registered  <i>DwtEvent.DISPOSE</i> event type
  * 
  * Subclasses may override this method to perform their own dispose functionality but
@@ -545,7 +545,7 @@ function(htmlEl) {
 };
 
 /**
- * This method set's the event handling function for a given event type. This method
+ * This method sets the event handling function for a given event type. This method
  * should be used judiciously as it can lead to unexpected results (for example if
  * overriding the control's mouse handlers). This method calls through to <i>Dwt.setHandler</i>
  * 
@@ -564,7 +564,7 @@ function(eventType, hdlrFunc) {
 };
 
 /**
- * This method set's the event handling function for a given event type. This method
+ * This method sets the event handling function for a given event type. This method
  * should be used judiciously as it can lead to unexpected results (for example if
  * overriding the control's mouse handlers)
  * 
@@ -584,7 +584,7 @@ function(eventType) {
 
 /**
  * Gets the bounds of the component. Bounds includes the location (not relevant for
- * statically position elements) and dimensions of the control (i.e. it's <i>div</i>
+ * statically position elements) and dimensions of the control (i.e. its <i>div</i>
  * element). 
  * 
  * @return The control's bounds
@@ -667,12 +667,12 @@ function(x, y, width, height) {
 }
 
 /**
- * Return's the class name of this control. The class name may be set
+ * Returns the class name of this control. The class name may be set
  * when constructing the control. If it is not passed into the constructor, it
  * defaults to the control's class name. The class name is generally used as the 
  * CSS class name for the control, although control's that change visual behaviour
  * based on state may append (or even use different) class names. See the documentation
- * of the specific component for detals
+ * of the specific component for details.
  * 
  * @return control's class name
  * @type String
@@ -685,7 +685,7 @@ function() {
 };
 
 /**
- * Set's the control's classname. This also autmatically sets the control's CSS
+ * Sets the control's classname. This also autmatically sets the control's CSS
  * class name (i.e. the control's htmlElement's class name). Subclasses of <i>DwtControl</i>
  * may override this method to perform a different behaviour. 
  * 
@@ -1200,7 +1200,7 @@ function(text) {
 };
 
 /**
- * @return true if the control is visible (i.e. it's HTML elements display style 
+ * @return true if the control is visible (i.e. its HTML elements display style 
  * 		attribute is not none)
  * @type Boolean
  * 
@@ -1247,7 +1247,7 @@ function(visible) {
 };
 
 /**
- * @return true if the control is visible (i.e. it's HTML elements visibility play style 
+ * @return true if the control is visible (i.e. its HTML elements visibility play style 
  * 		attribute is not hiddeen)
  * @type Boolean
  * 
@@ -1450,7 +1450,7 @@ function(dragOp) {
 
 /**
  * Subclasses may override this method to set the DnD icon properties based on whether drops are
- * allowed. The default implementation set's the class on the HTML element obtained
+ * allowed. The default implementation sets the class on the HTML element obtained
  * from <code>_getDnDIcon</code> to "DropAllowed" if <code>dropAllowed</code> is true and
  * to "DropNotAllowed" if false
  * 
@@ -1538,7 +1538,7 @@ function(icon) {
  };
 
 /**
- . _dragHover is called multiple times as the user hover's over
+ . _dragHover is called multiple times as the user hovers over
  * the control. _dragLeave is called when the drag operation exits the control. 
  * _drop is called when the item is dropped on the target.
  */
@@ -1746,7 +1746,7 @@ function(ev) {
  * Check the state of the control, if it is not disposed and is not initialized, then
  * as a side-effect it will initialize it (meaning it will create the HTML element
  * for the control and insert it into the DOM. This is pertinent for controls that
- * were created <i>deferred</i> (see the contructor documentation)
+ * were created <i>deferred</i> (see the constructor documentation)
  * 
  * @return true if the control is not disposed, else false
  * @type Boolean

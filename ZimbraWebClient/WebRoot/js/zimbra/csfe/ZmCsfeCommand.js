@@ -100,7 +100,7 @@ function(fault, method) {
 	return new ZmCsfeException(reasonText, errorCode, method, faultCode, fault.Detail.Error.a);
 };
 
-/*
+/**
 * Sends a SOAP request to the server and processes the response.
 *
 * @param soapDoc		[AjxSoapDoc]	The SOAP document that represents the request
@@ -216,7 +216,7 @@ function(params) {
 	}
 };
 
-/*
+/**
 * Takes the response to an RPC request and returns a JS object with the response data.
 *
 * @param response	[Object]	RPC response with properties "text" and "xml"
@@ -325,7 +325,7 @@ function(response, asyncMode) {
 	return asyncMode ? result : data;
 };
 
-/*
+/**
 * Runs the callback that was passed to invoke() for an async command.
 *
 * @param callback	[AjxCallback]	Callback to run with response data
@@ -472,4 +472,3 @@ function(soapDoc, noAuthTokenRequired, serverUri, targetServer, useXml, noSessio
 
 	return data;
 };
-
