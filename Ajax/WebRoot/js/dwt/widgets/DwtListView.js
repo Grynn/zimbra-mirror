@@ -1348,6 +1348,8 @@ function() {
 		cDiv = this._parentEl.removeChild(this._parentEl.firstChild);
 		AjxCore.unassignId(Dwt.getAttr(cDiv, "_itemIndex"));
 	}
+	this._selectedItems.removeAll();
+	this._rightSelItems = null;
 };
 
 DwtListView.prototype._destroyDnDIcon =

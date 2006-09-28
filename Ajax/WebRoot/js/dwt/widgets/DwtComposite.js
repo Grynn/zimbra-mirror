@@ -100,7 +100,6 @@ function() {
 }
 
 /**
- * @return
  * @type array
  */
 DwtComposite.prototype.getChildren =

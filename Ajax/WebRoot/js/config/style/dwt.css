@@ -1168,6 +1168,10 @@
 	@BoxMargin@
 }
 
+.DwtChooserTextField {
+	margin-left: 5px;
+}
+
 /*
  * DwtShellBusyDialog - dialog that comes up when the server is taking a long time to respond
  */

@@ -60,6 +60,7 @@
 * @param listSize		[int]*				list width (if HORIZ) or height (if VERT)
 * @param sourceEmptyOk	[boolean]*			if true, don't show "No Results" in source list view
 * @param allButtons		[boolean]*			if true, offer "Add All" and "Remove All" buttons
+* @param hasTextField	[boolean]*			if true, create a text field for user input
 */
 function DwtChooser(params) {
 
@@ -76,6 +77,7 @@ function DwtChooser(params) {
 	this._listSize = params.listSize;
 	this._sourceEmptyOk = params.sourceEmptyOk;
 	this._allButtons = params.allButtons;
+	this._hasTextField = params.hasTextField;
 
 	this._handleButtonInfo(params.buttonInfo);
 	this._mode = params.mode ? params.mode :
@@ -309,6 +311,9 @@ function(view) {
 	this._reset(view);
 	this._setActiveButton(this._buttonInfo[0].id); // make first button active by default
 	this._enableButtons();
+	if (this._hasTextField) {
+		this._textField.setValue("");
+	}
 };
 
 /*
@@ -391,6 +396,9 @@ function() {
 		this._addAllButtonDivId		= Dwt.getNextId();
 		this._removeAllButtonDivId	= Dwt.getNextId();
 	}
+	if (this._hasTextField) {
+		this._textFieldTdId = Dwt.getNextId();
+	}
 
 	var html = [];
 	var idx = 0;
@@ -434,9 +442,17 @@ function() {
 		// target list
 		html[idx++] = "<td id='";
 		html[idx++] = this._targetListViewDivId;
-		html[idx++] = "'></td>";	
+		html[idx++] = "'></td>";
 
-		html[idx++] = "</tr></table>";
+		html[idx++] = "</tr>";
+		
+		if (this._hasTextField) {
+			html[idx++] = "<tr><td id='";
+			html[idx++] = this._textFieldTdId;
+			html[idx++] = "'></td><td>&nbsp;</td><td>&nbsp;</td></tr>"
+		}
+
+		html[idx++] = "</table>";
 	} else {
 		// source list
 		html[idx++] = "<div id='";
@@ -556,6 +572,14 @@ function() {
 		}
 	}
 	
+	if (this._hasTextField) {
+		var params = {parent: this, type: DwtInputField.STRING, className: "DwtChooserTextField"};
+		this._textField = new DwtInputField(params);
+		this._textField.reparentHtmlElement(this._textFieldTdId);
+		this._textField.getInputElement()._chooserId = AjxCore.assignId(this);
+		this._textField.setHandler(DwtEvent.ONKEYUP, DwtChooser._onKeyUp);
+	}
+	
 	if (this._selectStyle == DwtChooser.SINGLE_SELECT) {
 		this.sourceListView.setMultiSelect(false);
 		this.targetListView.setMultiSelect(false);
@@ -620,6 +644,9 @@ function(width, height) {
 	}
 	this.sourceListView.setSize(w, sh);
 	this.targetListView.setSize(w, th);
+	if (this._textField) {
+		Dwt.setSize(this._textField.getInputElement(), w, Dwt.DEFAULT);
+	}
 };
 
 /*
@@ -703,7 +730,12 @@ function(ev) {
 			this._enableButtons();
 		}
 	} else {
-		this._setActiveButton(id);
+		var email = this._getEmailFromText();
+		if (email) {
+			this.transfer([email], id);
+		} else {
+			this._setActiveButton(id);
+		}
 	}
 };
 
@@ -753,20 +785,20 @@ function(ev) {
 * Enable/disable buttons as appropriate.
 */
 DwtChooser.prototype._enableButtons =
-function() {
+function(sForce, tForce) {
 	var sourceList = this.sourceListView.getList();
 	var targetList = this.targetListView.getList();
-	var sourceSize = sourceList ? sourceList.size() : 0;
-	var targetSize = targetList ? targetList.size() : 0;
-	var sourceSelCount = this.sourceListView.getSelectionCount();
-	var targetSelCount = this.targetListView.getSelectionCount();
+	var sourceEnabled = (sForce || (this.sourceListView.getSelectionCount() > 0));
 	for (var i = 0; i < this._buttonInfo.length; i++) {
 		var id = this._buttonInfo[i].id;
-		this._button[id].setEnabled(sourceSelCount > 0);
+		this._button[id].setEnabled(sourceEnabled);
 	}
-	this._removeButton.setEnabled(targetSelCount > 0);
+	var targetEnabled = (tForce || (this.targetListView.getSelectionCount() > 0));
+	this._removeButton.setEnabled(targetEnabled);
 
 	if (this._allButtons && (this._selectStyle == DwtChooser.MULTI_SELECT)) {
+		var sourceSize = sourceList ? sourceList.size() : 0;
+		var targetSize = targetList ? targetList.size() : 0;
 		this._addAllButton.setEnabled((sourceSize > 0) && (targetSize < this._sourceSize));
 		this._removeAllButton.setEnabled(targetSize > 0);
 	}
@@ -939,6 +971,31 @@ function(view, item) {
 		}
 	}
 	return null;
+};
+
+DwtChooser.prototype._getEmailFromText =
+function() {
+	var text = this._textField.getValue();
+	var email = ZmEmailAddress.parse(text);
+	if (email) {
+		email.id = Dwt.getNextId();
+		return email;
+	}
+};
+
+DwtChooser._onKeyUp =
+function(ev) {
+	var el = DwtUiEvent.getTarget(ev);
+	var chooser = AjxCore.objectWithId(el._chooserId);
+	var key = DwtKeyEvent.getCharCode(ev);
+	DBG.println("***** chooser text input: " + key);
+	chooser._enableButtons(true);
+	if (key == 3 || key == 13) {
+		var email = chooser._getEmailFromText();
+		if (email) {
+			chooser.transfer([email], chooser._activeButtonId);
+		}
+	}
 };
 
 /**
