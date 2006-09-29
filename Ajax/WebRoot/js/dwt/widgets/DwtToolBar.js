@@ -135,7 +135,11 @@ function(type, element, index) {
 			var perc = Math.floor(100 / this._numFillers);
 			col.style.width = [perc, "%"].join("");
 		} else {
-			col.style.width = "1";
+			if (!AjxEnv.isGeckoBased) {
+				// FIXME: I wonder why we need this at all
+				// bug 10891, seems to affect FF only.
+				col.style.width = "1px";
+			}
 		}
 			
 		col.appendChild(element);
