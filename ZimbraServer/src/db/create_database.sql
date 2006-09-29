@@ -97,6 +97,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.tombstone (
    mailbox_id  INTEGER UNSIGNED NOT NULL,
    sequence    INTEGER UNSIGNED NOT NULL,  # change number for deletion
    date        INTEGER UNSIGNED NOT NULL,  # deletion date as a UNIX-style timestamp
+   type        TINYINT,                    # 1 = folder, 3 = tag, etc.
    ids         TEXT,
 
    INDEX i_sequence (mailbox_id, sequence),

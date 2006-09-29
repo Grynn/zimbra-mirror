@@ -106,6 +106,10 @@ sub getMailboxIds() {
     return runSql("SELECT id FROM mailbox ORDER BY id");
 }
 
+sub getMailboxGroups() {
+    return runSql("SHOW DATABASES LIKE 'mboxgroup%'");
+}
+
 sub runSql(@) {
     my ($script, $logScript) = @_;
 
