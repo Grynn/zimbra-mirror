@@ -448,7 +448,9 @@ function() {
 		
 		if (this._hasTextField) {
 			html[idx++] = "<tr><td>";
-			html[idx++] = "<table border=0 width=100%><tr><td style='white-space:nowrap; width:1%'>Add custom:</td><td id='";
+			html[idx++] = "<table border=0 width=100%><tr><td style='white-space:nowrap; width:1%'>";
+			html[idx++] = AjxMsg.add;
+			html[idx++] = ":</td><td id='";
 			html[idx++] = this._textFieldTdId;
 			html[idx++] = "'></td></tr></table>";
 			html[idx++] = "</td><td>&nbsp;</td><td>&nbsp;</td></tr>";
@@ -988,8 +990,6 @@ function(ev) {
 	var el = DwtUiEvent.getTarget(ev);
 	var chooser = AjxCore.objectWithId(el._chooserId);
 	var key = DwtKeyEvent.getCharCode(ev);
-	DBG.println("***** chooser text input: " + key);
-	chooser._enableButtons(true);
 	if (key == 3 || key == 13) {
 		var email = chooser._getEmailFromText();
 		if (email) {
@@ -997,6 +997,7 @@ function(ev) {
 			el.value = "";
 		}
 	}
+	chooser._enableButtons(el.value.length);
 };
 
 /**
