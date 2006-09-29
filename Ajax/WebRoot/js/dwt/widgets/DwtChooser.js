@@ -447,9 +447,11 @@ function() {
 		html[idx++] = "</tr>";
 		
 		if (this._hasTextField) {
-			html[idx++] = "<tr><td id='";
+			html[idx++] = "<tr><td>";
+			html[idx++] = "<table border=0 width=100%><tr><td style='white-space:nowrap; width:1%'>Add custom:</td><td id='";
 			html[idx++] = this._textFieldTdId;
-			html[idx++] = "'></td><td>&nbsp;</td><td>&nbsp;</td></tr>"
+			html[idx++] = "'></td></tr></table>";
+			html[idx++] = "</td><td>&nbsp;</td><td>&nbsp;</td></tr>";
 		}
 
 		html[idx++] = "</table>";
@@ -578,6 +580,7 @@ function() {
 		this._textField.reparentHtmlElement(this._textFieldTdId);
 		this._textField.getInputElement()._chooserId = AjxCore.assignId(this);
 		this._textField.setHandler(DwtEvent.ONKEYUP, DwtChooser._onKeyUp);
+		Dwt.setSize(this._textField.getInputElement(), "100%", Dwt.DEFAULT);
 	}
 	
 	if (this._selectStyle == DwtChooser.SINGLE_SELECT) {
@@ -644,9 +647,6 @@ function(width, height) {
 	}
 	this.sourceListView.setSize(w, sh);
 	this.targetListView.setSize(w, th);
-	if (this._textField) {
-		Dwt.setSize(this._textField.getInputElement(), w, Dwt.DEFAULT);
-	}
 };
 
 /*
@@ -994,6 +994,7 @@ function(ev) {
 		var email = chooser._getEmailFromText();
 		if (email) {
 			chooser.transfer([email], chooser._activeButtonId);
+			el.value = "";
 		}
 	}
 };
