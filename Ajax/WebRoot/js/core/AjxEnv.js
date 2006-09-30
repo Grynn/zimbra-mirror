@@ -136,7 +136,7 @@ AjxEnv.parseUA = function (userAgent) {
 		AjxEnv.isNav4 = (AjxEnv.isNav && (AjxEnv.browserVersion  == 4) &&
 						(!AjxEnv.isIE));
 		AjxEnv.isNav6 = (AjxEnv.isNav && AjxEnv.trueNs && 
-						(AjxEnv.browserVersion >=6.0) && 
+						(AjxEnv.browserVersion >= 6.0) && 
 						(AjxEnv.browserVersion < 7.0));
 		AjxEnv.isNav6up = (AjxEnv.isNav && AjxEnv.trueNs && 
 						  (AjxEnv.browserVersion >= 6.0));
@@ -155,6 +155,8 @@ AjxEnv.parseUA = function (userAgent) {
 		AjxEnv.isIE5_5up =(AjxEnv.isIE && (AjxEnv.browserVersion >= 5.5));
 		AjxEnv.isIE6  = (AjxEnv.isIE && (AjxEnv.browserVersion == 6.0));
 		AjxEnv.isIE6up = (AjxEnv.isIE && (AjxEnv.browserVersion >= 6.0));
+		AjxEnv.isIE7  = (AjxEnv.isIE && (AjxEnv.browserVersion == 7.0));
+		AjxEnv.isIE7up = (AjxEnv.isIE && (AjxEnv.browserVersion >= 7.0));
 
 		AjxEnv.isMozilla = ((AjxEnv.isNav && AjxEnv.mozVersion && 
 							AjxEnv.isGeckoBased && (AjxEnv.geckoDate != 0)));
@@ -162,7 +164,47 @@ AjxEnv.parseUA = function (userAgent) {
 		AjxEnv.isFirefox = ((AjxEnv.isMozilla && AjxEnv.isFirefox));
 		AjxEnv.isFirefox1up = (AjxEnv.isFirefox && AjxEnv.browserVersion >= 1.0);
 		AjxEnv.isFirefox1_5up = (AjxEnv.isFirefox && AjxEnv.browserVersion >= 1.5);
-
+		
+		AjxEnv.browser = "";
+		if (AjxEnv.isOpera) {
+			AjxEnv.browser = "OPERA";
+		} else if (AjxEnv.isSafari) {
+			AjxEnv.browser = "SAF";
+		} else if (isWebTv) {
+			AjxEnv.browser = "WEBTV";
+		} else if (isHotJava) {
+			AjxEnv.browser = "HOTJAVA";
+		} else if (AjxEnv.isFirefox1_5up) {
+			AjxEnv.browser = "FF1.5";
+		} else if (AjxEnv.isFirefox1up) {
+			AjxEnv.browser = "FF1.0";
+		} else if (AjxEnv.isFirefox) {
+			AjxEnv.browser = "FF";
+		} else if (AjxEnv.isNav7) {
+			AjxEnv.browser = "NAV7";
+		} else if (AjxEnv.isNav6) {
+			AjxEnv.browser = "NAV6";
+		} else if (AjxEnv.isNav4) {
+			AjxEnv.browser = "NAV4";
+		} else if (AjxEnv.isIE7) {
+			AjxEnv.browser = "IE7";
+		} else if (AjxEnv.isIE6) {
+			AjxEnv.browser = "IE6";
+		} else if (AjxEnv.isIE5) {
+			AjxEnv.browser = "IE5";
+		} else if (AjxEnv.isIE4) {
+			AjxEnv.browser = "IE4";
+		} else if (AjxEnv.isIE3) {
+			AjxEnv.browser = "IE";
+		}
+		AjxEnv.platform = "";
+		if (AjxEnv.isWindows) {
+			AjxEnv.platform = "Win";
+		} else if (AjxEnv.isMac) {
+			AjxEnv.platform = "Mac";
+		} else if (AjxEnv.isLinux) {
+			AjxEnv.platform = "Linux";
+		}
 	}
 	// setup some global setting we can check for high resolution
 	if (AjxEnv.isIE){
