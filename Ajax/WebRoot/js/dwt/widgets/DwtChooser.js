@@ -381,6 +381,11 @@ function() {
 	return document.getElementById(this._targetListViewDivId);
 };
 
+DwtChooser.prototype.getTextField =
+function() {
+	return this._textField;
+};
+
 /*
 * Creates the HTML framework, with placeholders for elements which are created
 * later.
@@ -493,7 +498,7 @@ function() {
 		// target list
 		html[idx++] = "<div id='";
 		html[idx++] = this._targetListViewDivId;
-		html[idx++] = "'></div>";	
+		html[idx++] = "'></div>";
 	}
 
 	this.getHtmlElement().innerHTML = html.join("");
@@ -502,7 +507,7 @@ function() {
 /*
 * Takes button info and sets up various bits of internal data for later use.
 */
-DwtChooser.prototype._handleButtonInfo = 
+DwtChooser.prototype._handleButtonInfo =
 function(buttonInfo) {
 
 	if (!buttonInfo) {
@@ -519,7 +524,7 @@ function(buttonInfo) {
 			this._buttonInfo[0].id = Dwt.getNextId();
 		}
 		this._activeButtonId = this._buttonInfo[0].id;
-	}			
+	}
 	for (var i = 0; i < this._buttonInfo.length; i++) {
 		var id = this._buttonInfo[i].id;
 		this._buttonDivId[id] = Dwt.getNextId();
@@ -531,7 +536,7 @@ function(buttonInfo) {
 /*
 * Creates and places elements into the DOM.
 */
-DwtChooser.prototype._initialize = 
+DwtChooser.prototype._initialize =
 function() {
 
 	// create and add transfer buttons
@@ -551,12 +556,12 @@ function() {
 	this.sourceListView = this._createSourceListView();
 	this._addListView(this.sourceListView, this._sourceListViewDivId);
 	this.sourceListView.addSelectionListener(new AjxListener(this, this._sourceListener));
-	
+
 	// create and add target list view
 	this.targetListView = this._createTargetListView();
 	this._addListView(this.targetListView, this._targetListViewDivId);
 	this.targetListView.addSelectionListener(new AjxListener(this, this._targetListener));
-	
+
 	// create and add the remove button
 	this._removeButtonId = Dwt.getNextId();
 	this._removeButton = this._setupButton(DwtChooser.REMOVE_BTN_ID, this._removeButtonId, this._removeButtonDivId, AjxMsg.remove);
@@ -575,20 +580,20 @@ function() {
 			this._removeAllButton.setVisible(false);
 		}
 	}
-	
+
 	if (this._hasTextField) {
-		var params = {parent: this, type: DwtInputField.STRING, className: "DwtChooserTextField"};
+		var params = {parent: this, type: DwtInputField.STRING};
 		this._textField = new DwtInputField(params);
 		this._textField.reparentHtmlElement(this._textFieldTdId);
 		this._textField.getInputElement()._chooserId = AjxCore.assignId(this);
 		this._textField.setHandler(DwtEvent.ONKEYUP, DwtChooser._onKeyUp);
 		Dwt.setSize(this._textField.getInputElement(), "100%", Dwt.DEFAULT);
 	}
-	
+
 	if (this._selectStyle == DwtChooser.SINGLE_SELECT) {
 		this.sourceListView.setMultiSelect(false);
 		this.targetListView.setMultiSelect(false);
-	}	
+	}
 };
 
 /*
@@ -613,7 +618,7 @@ function() {
 * @param listView		[DwtChooserListView]	the list view
 * @param listViewDivId	[string]				ID of container DIV
 */
-DwtChooser.prototype._addListView = 
+DwtChooser.prototype._addListView =
 function(listView, listViewDivId) {
 	var listDiv = document.getElementById(listViewDivId);
  	listDiv.appendChild(listView.getHtmlElement());
@@ -821,8 +826,8 @@ function(view, index) {
 };
 
 /*
-* Makes a button "active" (the default for double-clicks). Done by 
-* manipulating the style class. The active/non-active class is set as the 
+* Makes a button "active" (the default for double-clicks). Done by
+* manipulating the style class. The active/non-active class is set as the
 * "_origClassName" so that activation/triggering still work. This only
 * applies if there are multiple transfer buttons.
 *
@@ -941,7 +946,7 @@ function(item, skipNotify) {
 	var list = this.sourceListView.getList();
 	if (!list) return;
 	if (!list.contains(item)) return;
-	
+
 	this.sourceListView.removeItem(item, skipNotify);
 };
 
@@ -957,7 +962,7 @@ function(item, skipNotify) {
 	var list = this.targetListView.getList();
 	if (!list) return;
 	if (!list.contains(item)) return;
-	
+
 	this._data[item._buttonId].remove(item);
 	this.targetListView.removeItem(item, skipNotify);
 };
