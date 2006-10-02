@@ -35,11 +35,18 @@ $FORMAT_FORMFEED = "\n";
 
 my $ldappass = `/opt/zimbra/bin/zmlocalconfig -s -m nokey zimbra_ldap_password`;
 my $ldapdn  = `/opt/zimbra/bin/zmlocalconfig -s -m nokey zimbra_ldap_userdn`;
+my $ldaphost  = `/opt/zimbra/bin/zmlocalconfig -s -m nokey ldap_host`;
 chop($ldappass);
 chop($ldapdn);
+chop($ldaphost);
+
+if ($ldaphost eq '') {
+  $ldaphost = "localhost";
+}
+
 my $ldapsearch = "/opt/zimbra/openldap/bin/ldapsearch";
 my $ldapquery = "(&(objectclass=zimbraAccount)(!(objectclass=zimbraCalendarResource)))";
-my $ldapargs = "-x -w $ldappass -D $ldapdn";
+my $ldapargs = "-x -h $ldaphost -w $ldappass -D $ldapdn";
 my $ldapattrs =  "zimbraMailDeliveryAddress zimbraAccountStatus createTimestamp zimbraLastLogonTimestamp";
 
 my $search = "$ldapsearch $ldapargs '$ldapquery' $ldapattrs";
