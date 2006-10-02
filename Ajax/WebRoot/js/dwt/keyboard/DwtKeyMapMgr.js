@@ -99,7 +99,7 @@ function(keySeq, mappingName, forceActionCode) {
 		return null;
 	} else if (tmpFsa[key]) {
 		var binding = tmpFsa[key];
-		/* If the bunding does not have a submap, then it must have an action code
+		/* If the binding does not have a submap, then it must have an action code
 		 * so return it. Else if the binding does not have an action code (i.e. it
 		 * has a submap only) or if forceActionCode is false, then return DwtKeyMapMgr.NOT_A_TERMINAL
 		 * since we are to behave like an intermediate node. Else return the action code. */
@@ -202,6 +202,7 @@ function() {
 	DwtKeyMapMgr._KEYCODES[16]  = DwtKeyMap.SHIFT;
 	DwtKeyMapMgr._KEYCODES[32]  = DwtKeyMap.SPACE;
 	DwtKeyMapMgr._KEYCODES[9]   = DwtKeyMap.TAB;
+	DwtKeyMapMgr._KEYCODES[220] = DwtKeyMap.BACKSLASH;
 	
 	// Function keys
 	for (var i = 112; i < 124; i++) 
@@ -223,7 +224,6 @@ function() {
 	DwtKeyMapMgr._KEYCODES[191] = "/";
 	DwtKeyMapMgr._KEYCODES[186] = ";";
 	DwtKeyMapMgr._KEYCODES[219] = "[";
-	DwtKeyMapMgr._KEYCODES[220] = "\\";
 	DwtKeyMapMgr._KEYCODES[221] = "]";
 	DwtKeyMapMgr._KEYCODES[192] = "`";
 	DwtKeyMapMgr._KEYCODES[187] = "=";	

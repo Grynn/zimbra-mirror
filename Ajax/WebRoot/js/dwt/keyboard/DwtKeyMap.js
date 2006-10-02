@@ -73,6 +73,7 @@ DwtKeyMap.HOME			= "Home";
 DwtKeyMap.PAGE_DOWN		= "PgDown";
 DwtKeyMap.PAGE_UP		= "PgUp";
 DwtKeyMap.SPACE			= "Space";
+DwtKeyMap.BACKSLASH		= "Backslash";
 
 // Action codes
 DwtKeyMap.ACTION				= "ContextMenu";
