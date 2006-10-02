@@ -23,20 +23,30 @@
  * ***** END LICENSE BLOCK *****
  */
 
-package com.zimbra.cs.util;
+/*
+ * Created on Sep 16, 2004
+ *
+ * TODO To change the template for this generated file go to
+ * Window - Preferences - Java - Code Style - Code Templates
+ */
+package com.zimbra.common.util;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-public class SystemUtil {
 
-    public static String getStackTrace() {
-        return getStackTrace(new Throwable());
+/**
+ * @author tim
+ *
+ * Dead-Simple: does what it says - writes data about the exception to a string.
+ */
+public final class ExceptionToString {
+    public static final String ToString(Exception e) {
+    	StringWriter sw = new StringWriter();
+    	PrintWriter pw = new PrintWriter(sw);
+    	e.printStackTrace(pw);
+    	pw.close();
+    	return sw.toString();
     }
     
-    public static String getStackTrace(Throwable t) {
-        StringWriter writer = new StringWriter();
-        t.printStackTrace(new PrintWriter(writer));
-        return writer.toString();
-    }
 }

@@ -22,7 +22,7 @@
  * 
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.util;
+package com.zimbra.common.util;
 
 import java.io.IOException;
 import java.net.InetAddress;

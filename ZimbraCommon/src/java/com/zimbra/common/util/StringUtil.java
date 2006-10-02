@@ -26,7 +26,7 @@
 /*
  * Created on Oct 4, 2004
  */
-package com.zimbra.cs.util;
+package com.zimbra.common.util;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

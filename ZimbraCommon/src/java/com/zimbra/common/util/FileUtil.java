@@ -29,7 +29,7 @@
  * TODO To change the template for this generated file go to
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
-package com.zimbra.cs.util;
+package com.zimbra.common.util;
 
 import java.io.File;
 import java.io.FileInputStream;

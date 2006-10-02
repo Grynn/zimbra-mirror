@@ -5,5 +5,6 @@
 	<classpathentry sourcepath="JRE_SRC" kind="var" path="JRE_LIB"/>
 	<classpathentry kind="lib" path="jars/ant-contrib-1.0b1.jar"/>
 	<classpathentry kind="lib" path="jars/j2ee.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

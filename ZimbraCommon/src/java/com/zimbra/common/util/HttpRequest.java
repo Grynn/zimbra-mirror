@@ -26,7 +26,7 @@
  * HttpRequeset.java
  */
 
-package com.zimbra.cs.util;
+package com.zimbra.common.util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

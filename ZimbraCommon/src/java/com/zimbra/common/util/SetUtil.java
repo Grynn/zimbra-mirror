@@ -22,13 +22,14 @@
  * 
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.util;
+package com.zimbra.common.util;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class SetUtil {
 
+	
 	/**
 	 * Out gets the intersection of elements in lhs and rhs
 	 * 
@@ -37,10 +38,11 @@ public class SetUtil {
 	 * @param rhs
 	 * @return
 	 */
-	public static <T> Set<T> intersect(Set<T> lhs, Set<T> rhs) {
-		Set<T> out = new HashSet<T>();
+	static public HashSet intersect(Set<? extends Object> lhs, Set<? extends Object> rhs) 
+	{
+		HashSet out = new HashSet();
 		
-		for (T o : lhs) {
+		for (Object o : lhs) {
 			if (rhs.contains(o))
 				out.add(o);
 		}
@@ -55,8 +57,9 @@ public class SetUtil {
 	 * @param rhs
 	 * @return
 	 */
-	public static <T> Set<T> intersect(Set<T> out, Set<T> lhs, Set<T> rhs) {
-		for (T o : lhs) {
+	static public Set intersect(Set out, Set<? extends Object> lhs, Set<? extends Object> rhs) {
+		
+		for (Object o : lhs) {
 			if (rhs.contains(o))
 				out.add(o);
 		}
@@ -71,11 +74,12 @@ public class SetUtil {
 	 * @param rhs
 	 * @return
 	 */
-	public static <T> Set<T> union (Set<T> out, Set<T> lhs, Set<T> rhs) {
-		for (T o : lhs) {
+	static public Set union (Set out, Set<? extends Object> lhs, Set<? extends Object> rhs) {
+		
+		for (Object o : lhs) {
 			out.add(o);
 		}
-		for (T o : rhs) {
+		for (Object o : rhs) {
 			out.add(o);
 		}
 		return out;
@@ -89,10 +93,14 @@ public class SetUtil {
 	 * @param rhs
 	 * @return
 	 */
-	public static <T> Set<T> union (Set<T> lhs, Set<T> rhs) {
-		for (T o : rhs) {
+	static public Set union (Set lhs, Set<? extends Object> rhs) 
+	{
+		for (Object o : rhs) {
 			lhs.add(o);
 		}
 		return lhs;
 	}
+	
+	
+	
 }

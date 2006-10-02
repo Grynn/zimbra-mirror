@@ -26,7 +26,7 @@
  * HttpRequestLine.java
  */
 
-package com.zimbra.cs.util;
+package com.zimbra.common.util;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

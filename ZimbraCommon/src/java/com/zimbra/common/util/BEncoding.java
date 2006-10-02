@@ -26,7 +26,7 @@
 /*
  * Created on Jul 7, 2005
  */
-package com.zimbra.cs.util;
+package com.zimbra.common.util;
 
 import java.util.*;
 

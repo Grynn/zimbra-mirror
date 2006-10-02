@@ -22,7 +22,7 @@
  * 
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.util;
+package com.zimbra.common.util;
 
 import java.io.File;
 import java.util.Iterator;
@@ -34,10 +34,6 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.NDC;
 import org.apache.log4j.PropertyConfigurator;
 
-import com.zimbra.cs.account.Account;
-import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.account.Provisioning.AccountBy;
-import com.zimbra.cs.service.ServiceException;
 
 /**
  * @author schemers
@@ -290,27 +286,6 @@ public class ZimbraLog {
     
     public static void popbackItemId(int itemId) {
     	popbackContext("item", Integer.toString(itemId));
-    }
-    
-    /**
-     * 
-     * @param id account id to lookup
-     * @param nameKey name key to add to context if account lookup is ok
-     * @param idOnlyKey id key to add to context if account lookup fails
-     */
-    public static void addAccountToContext(String id, String nameKey, String idOnlyKey) {
-        Account acct = null;
-        try {
-            acct = Provisioning.getInstance().get(AccountBy.id, id);
-        } catch (ServiceException se) {
-            ZimbraLog.misc.warn("unable to lookup account for log, id: "+id, se);
-        }
-        if (acct == null) {
-            ZimbraLog.addToContext(idOnlyKey, id);
-        } else {
-            ZimbraLog.addToContext(nameKey, acct.getName());
-            
-        }
     }
     
     public static void addAccountNameToContext(String accountName) {

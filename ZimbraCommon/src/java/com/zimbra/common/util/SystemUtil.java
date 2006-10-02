@@ -23,19 +23,20 @@
  * ***** END LICENSE BLOCK *****
  */
 
-package com.zimbra.cs.util;
+package com.zimbra.common.util;
 
-/**
- * A place to keep commonly-used constants.
- * 
- * @author bburtin
- */
-public class Constants
-{
-    public static final long MILLIS_PER_SECOND = 1000;
-    public static final long MILLIS_PER_MINUTE = MILLIS_PER_SECOND * 60;
-    public static final long MILLIS_PER_HOUR =  MILLIS_PER_MINUTE * 60;
-    public static final long MILLIS_PER_DAY = MILLIS_PER_HOUR * 24;
-    public static final long MILLIS_PER_WEEK = MILLIS_PER_DAY * 7;    
-    public static final long MILLIS_PER_MONTH = MILLIS_PER_DAY * 31;    
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
+public class SystemUtil {
+
+    public static String getStackTrace() {
+        return getStackTrace(new Throwable());
+    }
+    
+    public static String getStackTrace(Throwable t) {
+        StringWriter writer = new StringWriter();
+        t.printStackTrace(new PrintWriter(writer));
+        return writer.toString();
+    }
 }

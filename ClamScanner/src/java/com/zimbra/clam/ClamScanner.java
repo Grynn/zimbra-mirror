@@ -43,7 +43,7 @@ import com.zimbra.cs.extension.ZimbraExtension;
 import com.zimbra.cs.service.mail.UploadScanner;
 import com.zimbra.cs.service.ServiceException;
 import com.zimbra.cs.tcpserver.TcpServerInputStream;
-import com.zimbra.cs.util.ByteUtil;
+import com.zimbra.common.util.ByteUtil;
 import com.zimbra.cs.util.Zimbra;
 
 public class ClamScanner extends UploadScanner implements ZimbraExtension {

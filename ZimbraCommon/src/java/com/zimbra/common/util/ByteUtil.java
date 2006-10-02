@@ -26,7 +26,7 @@
 /*
  * Created on Apr 18, 2004
  */
-package com.zimbra.cs.util;
+package com.zimbra.common.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

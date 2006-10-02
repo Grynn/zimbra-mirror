@@ -23,15 +23,19 @@
  * ***** END LICENSE BLOCK *****
  */
 
-/*
- * Created on Apr 17, 2004
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Generation - Code and Comments
+package com.zimbra.common.util;
+
+/**
+ * A place to keep commonly-used constants.
+ * 
+ * @author bburtin
  */
-package com.zimbra.cs.util;
-
-
-public class BlobMetaDataEncodingException extends Exception {
-    public BlobMetaDataEncodingException(String message) { super(message); }
+public class Constants
+{
+    public static final long MILLIS_PER_SECOND = 1000;
+    public static final long MILLIS_PER_MINUTE = MILLIS_PER_SECOND * 60;
+    public static final long MILLIS_PER_HOUR =  MILLIS_PER_MINUTE * 60;
+    public static final long MILLIS_PER_DAY = MILLIS_PER_HOUR * 24;
+    public static final long MILLIS_PER_WEEK = MILLIS_PER_DAY * 7;    
+    public static final long MILLIS_PER_MONTH = MILLIS_PER_DAY * 31;    
 }

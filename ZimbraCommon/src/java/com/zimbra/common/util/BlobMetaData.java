@@ -27,7 +27,7 @@
  * Created on Apr 8, 2004
  *
  */
-package com.zimbra.cs.util;
+package com.zimbra.common.util;
 
 import java.text.ParseException;
 import java.util.HashMap;

@@ -23,30 +23,30 @@
  * ***** END LICENSE BLOCK *****
  */
 
-package com.zimbra.cs.util;
+package com.zimbra.common.util;
 
-import java.security.cert.X509Certificate;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
-import javax.net.ssl.X509TrustManager;
+public class DateTimeUtil {
 
-/**
- * Allows Java code to make SSL connections without certificates.  This
- * class is insecure and should only be used for testing.  See SSLNOTES.txt
- * in the JavaMail distribution for more details.
- *  
- * @author bburtin
- */
-public class DummyTrustManager implements X509TrustManager {
-    
-    public void checkClientTrusted(X509Certificate[] cert, String authType) {
-        // everything is trusted
-    }
-    
-    public void checkServerTrusted(X509Certificate[] cert, String authType) {
-        // everything is trusted
-    }
-    
-    public X509Certificate[] getAcceptedIssuers() {
-        return new X509Certificate[0];
+    /**
+     * Determines if the two dates are in the same day in the given time zone.
+     * @param t1
+     * @param t2
+     * @param tz
+     * @return
+     */
+    public static boolean sameDay(Date t1, Date t2, TimeZone tz) {
+        Calendar cal1 = new GregorianCalendar(tz);
+        cal1.setTime(t1);
+        Calendar cal2 = new GregorianCalendar(tz);
+        cal2.setTime(t2);
+        return
+            cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+            cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH) &&
+            cal1.get(Calendar.DAY_OF_MONTH) == cal2.get(Calendar.DAY_OF_MONTH);
     }
 }
