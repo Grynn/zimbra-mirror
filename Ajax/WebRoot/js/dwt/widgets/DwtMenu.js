@@ -261,13 +261,13 @@ function(actionCode, ev) {
 			this.__currentItem._mouseUpListener(mev);
 			break;
 		
-		case DwtKeyMap.SELECT_SUBMENU:
+		case DwtKeyMap.SUBMENU:
 			if (this.__currentItem && this.__currentItem._menu) {
 				this.__currentItem._popupMenu(0, true);	
 			}
 			break;
 			
-		case DwtKeyMap.SELECT_PARENTMENU:
+		case DwtKeyMap.PARENTMENU:
 			if (this.parent instanceof DwtMenuItem)
 				this.popdown(0);
 			break;

@@ -44,7 +44,7 @@
 * <h4>Keyboard Actions</h4>
 * <ul>
 * <li>DwtKeyMap.SELECT_CURRENT - triggers the button</li>
-* <li>DwtKeyMap.SELECT_SUBMENU - display's the button's submenu if one is set
+* <li>DwtKeyMap.SUBMENU - display's the button's submenu if one is set
 * </ul>
 *
 * @author Ross Dargahi
@@ -386,11 +386,11 @@ DwtButton.prototype.handleKeyAction =
 function(actionCode, ev) {
     DBG.println("DwtButton.prototype.handleKeyAction");
 	switch (actionCode) {
-		case DwtKeyMap.SELECT_CURRENT:
+		case DwtKeyMap.SELECT:
 			this._emulateSingleClick();
 			break;
 
-		case DwtKeyMap.SELECT_SUBMENU:
+		case DwtKeyMap.SUBMENU:
 			var menu = this.getMenu();
 			if (!menu) return false;
 			this._emulateDropDownClick();

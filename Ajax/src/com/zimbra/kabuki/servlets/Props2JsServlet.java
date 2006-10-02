@@ -74,6 +74,7 @@ public class Props2JsServlet
     
     private static final String BASENAME_PREFIX = "/msgs/";
     private static final String COMPRESSED_EXT = ".zgz";
+    private static final String KEYS = "Keys";
     
     //
     // Data
@@ -155,6 +156,9 @@ public class Props2JsServlet
     private void load(PrintStream out, Locale locale, String classname) {
         String basename = BASENAME_PREFIX+classname;
 
+        if (classname.indexOf(KEYS) != -1) {
+        	basename = "/keys/" + classname;
+        }
         out.println();
         out.println("// Basename: "+basename);
 

@@ -172,10 +172,10 @@ function(item) {
 	var kmm = this.shell.getKeyboardMgr().__keyMapMgr;
 	if (this._style == DwtToolBar.HORIZ_STYLE) {
 		kmm.removeMapping("DwtButton", "ArrowRight");
-		kmm.setMapping("DwtButton", "ArrowDown", DwtKeyMap.SELECT_SUBMENU);
+		kmm.setMapping("DwtButton", "ArrowDown", DwtKeyMap.SUBMENU);
 	} else {
 		kmm.removeMapping("DwtButton", "ArrowDown");
-		kmm.setMapping("DwtButton", "ArrowRight", DwtKeyMap.SELECT_SUBMENU);
+		kmm.setMapping("DwtButton", "ArrowRight", DwtKeyMap.SUBMENU);
 	}
 	kmm.reloadMap("DwtButton");
 

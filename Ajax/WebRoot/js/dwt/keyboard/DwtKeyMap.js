@@ -16,82 +16,22 @@
 
 
 /**
-* @constructor
-* @class
-* This class provides the basic keyboard mappings for Dwt components. It is also
-* the base class for application keymaps. 
-* 
-* @author Ross Dargahi
-*/
+ * Creates and loads a key map.
+ * @constructor
+ * @class
+ * This class provides the basic keyboard mappings for Dwt components. The
+ * key bindings are taken from the class AjxKeys, which is populated from a
+ * properties file. The identifiers used in the properties file must match
+ * those used here.
+ * 
+ * @author Ross Dargahi
+ */
 function DwtKeyMap(subclassInit) {
-	if (subclassInit) 
-		return;
-		
-	// Always specify Control, then Alt, then Shift. All Chars must be upper case
+	if (subclassInit) {	return };
+
 	this._map = {};
-	
-	this._map["DwtDialog"] = {
-		"Enter":			DwtKeyMap.ENTER,
-		"Esc":				DwtKeyMap.CANCEL
-	};
-
-	this._map["DwtButton"] = {
-		"Enter":			DwtKeyMap.SELECT_CURRENT,
-		"ArrowDown":		DwtKeyMap.SELECT_SUBMENU	
-	};
-	
-	this._map["DwtListView"] = {
-		"Space":			DwtKeyMap.SELECT_CURRENT,
-			
-		"Ctrl+Space":		DwtKeyMap.ADD_SELECT_CURRENT,
-		"Ctrl+`":			DwtKeyMap.ADD_SELECT_CURRENT, // Mac FF
-			
-		"ArrowDown":		DwtKeyMap.SELECT_NEXT,
-		"Space":			DwtKeyMap.SELECT_NEXT,
-		"Shift+ArrowDown":	DwtKeyMap.ADD_SELECT_NEXT,
-		"Ctrl+ArrowDown":	DwtKeyMap.NEXT,
-		"ArrowUp":			DwtKeyMap.SELECT_PREV,
-		"Shift+ArrowUp":	DwtKeyMap.ADD_SELECT_PREV,
-		"Ctrl+ArrowUp":		DwtKeyMap.PREV,
-
-		"Ctrl+A":			DwtKeyMap.SELECT_ALL,
-		"Home":				DwtKeyMap.SELECT_FIRST,
-		"End":				DwtKeyMap.SELECT_LAST,
-		
-		"Enter":			DwtKeyMap.DBLCLICK,
-		
-		"Comma":			DwtKeyMap.ACTION,
-		"Shift+Comma":		DwtKeyMap.ACTION,
-		"Ctrl+Enter":		DwtKeyMap.ACTION,
-		"Ctrl+M":			DwtKeyMap.ACTION  // Mac FF
-	};
-	
-	this._map["DwtMenu"] = {
-		"Esc":				DwtKeyMap.CANCEL,
-		"Enter":			DwtKeyMap.SELECT_CURRENT,	
-		"ArrowDown":		DwtKeyMap.SELECT_NEXT,
-		"ArrowUp":			DwtKeyMap.SELECT_PREV,
-		"ArrowLeft":		DwtKeyMap.SELECT_PARENTMENU,
-		"ArrowRight":		DwtKeyMap.SELECT_SUBMENU
-	};
-	
-	this._map["DwtToolBar-horiz"] = {
-
-		"INHERIT":			"DwtButton",
-
-		"ArrowLeft":		DwtKeyMap.PREV,
-		"ArrowRight":		DwtKeyMap.NEXT
-	};
-
-	this._map["DwtToolBar-vert"] = {
-
-		"INHERIT":			"DwtButton",
-
-		"ArrowUp":			DwtKeyMap.PREV,
-		"ArrowDown":		DwtKeyMap.NEXT
-	};
+	this._load(this._map, AjxKeys, DwtKeyMap.MAP_NAME);
 };
-
 
 DwtKeyMap.deserialize =
 function(keymap) {
@@ -103,8 +43,17 @@ function(keymap) {
 	alert("DwtKeyMap.serialize: NOT IMPLEMENTED");
 };
 
-// Key names
+// translations for map names used in properties file
+DwtKeyMap.MAP_NAME = {};
+DwtKeyMap.MAP_NAME["dialog"]			= "DwtDialog";
+DwtKeyMap.MAP_NAME["button"]			= "DwtButton";
+DwtKeyMap.MAP_NAME["list"]				= "DwtListView";
+DwtKeyMap.MAP_NAME["menu"]				= "DwtMenu";
+DwtKeyMap.MAP_NAME["toolbar"]			= "DwtToolBar";
+DwtKeyMap.MAP_NAME["toolbarHorizontal"]	= "DwtToolBar-horiz";
+DwtKeyMap.MAP_NAME["toolbarVertical"]	= "DwtToolBar-vert";
 
+// Key names
 DwtKeyMap.CTRL			= "Ctrl+";
 DwtKeyMap.META			= "Meta+";
 DwtKeyMap.ALT			= "Alt+";
@@ -126,23 +75,22 @@ DwtKeyMap.PAGE_UP		= "PgUp";
 DwtKeyMap.SPACE			= "Space";
 
 // Action codes
-DwtKeyMap.ACTION				= "DwtAction";
-DwtKeyMap.ADD_SELECT_CURRENT	= "DwtAddCurrent";
-DwtKeyMap.ADD_SELECT_NEXT		= "DwtAddNext";
-DwtKeyMap.ADD_SELECT_PREV		= "DwtAddPrevious";
-DwtKeyMap.CANCEL				= "DwtCancel";
-DwtKeyMap.DBLCLICK				= "DwtDoubleClick";
-DwtKeyMap.DONE					= "DwtDone";
-DwtKeyMap.NEXT					= "DwtNext";
-DwtKeyMap.PREV					= "DwtPrevious";
-DwtKeyMap.SELECT_ALL			= "DwtSelectAll";
-DwtKeyMap.SELECT_CURRENT		= "DwtSelectCurrent";
-DwtKeyMap.SELECT_FIRST			= "DwtSelectFirst";
-DwtKeyMap.SELECT_LAST			= "DwtSelectLast";
-DwtKeyMap.SELECT_NEXT			= "DwtSelectNext";
-DwtKeyMap.SELECT_PREV			= "DwtSelectPrevious";
-DwtKeyMap.SELECT_SUBMENU		= "DwtSubMenu";
-DwtKeyMap.SELECT_PARENTMENU		= "DwtParentMenu";
+DwtKeyMap.ACTION				= "ContextMenu";
+DwtKeyMap.SELECT_CURRENT		= "SelectCurrent";
+DwtKeyMap.ADD_SELECT_NEXT		= "AddNext";
+DwtKeyMap.ADD_SELECT_PREV		= "AddPrevious";
+DwtKeyMap.CANCEL				= "Cancel";
+DwtKeyMap.DBLCLICK				= "DoubleClick";
+DwtKeyMap.NEXT					= "Next";
+DwtKeyMap.PREV					= "Previous";
+DwtKeyMap.SELECT_ALL			= "SelectAll";
+DwtKeyMap.SELECT				= "Select";
+DwtKeyMap.SELECT_FIRST			= "SelectFirst";
+DwtKeyMap.SELECT_LAST			= "SelectLast";
+DwtKeyMap.SELECT_NEXT			= "SelectNext";
+DwtKeyMap.SELECT_PREV			= "SelectPrevious";
+DwtKeyMap.SUBMENU				= "SubMenu";
+DwtKeyMap.PARENTMENU			= "ParentMenu";
 
 DwtKeyMap.SEP = ","; // Key separator
 DwtKeyMap.INHERIT = "INHERIT"; // Inherit keyword.
@@ -150,4 +98,22 @@ DwtKeyMap.INHERIT = "INHERIT"; // Inherit keyword.
 DwtKeyMap.prototype.getMap =
 function() {
 	return this._map;
+};
+
+DwtKeyMap.prototype._load =
+function(map, keys, mapNames) {
+	for (var i in keys) {
+		var parts = i.split(".");
+		var mapName = mapNames[parts[0]];
+		var action = parts[1];
+		var keySequence = keys[i];
+		if (!map[mapName]) {
+			map[mapName]= {};
+		}
+		if (action == DwtKeyMap.INHERIT) {
+			map[mapName][action] = mapNames[keySequence];
+		} else {
+			map[mapName][keySequence] = action;
+		}
+	}
 };

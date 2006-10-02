@@ -1686,11 +1686,11 @@ function() {
 DwtListView.prototype.handleKeyAction =
 function(actionCode, ev) {
 	switch (actionCode) {
-		case DwtKeyMap.SELECT_CURRENT:
+		case DwtKeyMap.SELECT:
 			this._emulateSingleClick(this._kbAnchor, DwtMouseEvent.LEFT);
 			break;
 			
-		case DwtKeyMap.ADD_SELECT_CURRENT:
+		case DwtKeyMap.SELECT_CURRENT:
 			this._emulateSingleClick(this._kbAnchor, DwtMouseEvent.LEFT, true);
 			break;
 			
@@ -1721,6 +1721,7 @@ function(actionCode, ev) {
 			if (a && a.length > 1) {
 				this.setSelection(a[0]);
 			}
+			this._scrollList(this._kbAnchor);
 			break;
 
 		case DwtKeyMap.SELECT_LAST:
@@ -1728,6 +1729,7 @@ function(actionCode, ev) {
 			if (a && a.length > 1) {
 				this.setSelection(a[a.length - 1]);
 			}
+			this._scrollList(this._kbAnchor);
 			break;
 
 		case DwtKeyMap.PREV:
