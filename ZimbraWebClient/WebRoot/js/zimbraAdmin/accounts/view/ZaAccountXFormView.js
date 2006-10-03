@@ -781,7 +781,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 					relevant:"ZaAccountXFormView.gotSkins.call(this)",
 					width:"100%"
 				},
-				{type:_SPACER_,},
+				{type:_SPACER_},
 				{type:_GROUP_, 
 					items:[
 					{ref:ZaAccount.A_zimbraPrefSkin, type:_SUPER_SELECT1_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefSkin,label:ZaMsg.NAD_zimbraPrefSkin, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged,choices:this._app.getInstalledSkins(),

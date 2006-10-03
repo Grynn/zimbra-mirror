@@ -539,7 +539,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 								relevant:"ZaAccountXFormView.gotSkins.call(this)",
 								width:"100%"
 							},
-							{type:_SPACER_,},
+							{type:_SPACER_},
 							{type:_GROUP_, 
 								items:[
 								{ref:ZaAccount.A_zimbraPrefSkin, type:_SUPER_SELECT1_, 
