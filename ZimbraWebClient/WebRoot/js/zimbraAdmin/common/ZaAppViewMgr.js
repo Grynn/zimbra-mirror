@@ -261,17 +261,41 @@ function(components, doFit, noSetZ) {
 		if (Dwt.contains(contEl, htmlEl))
 			throw new AjxException("element already added to container: " + cid);		
 		Dwt.removeChildren(contEl);
+		
 		list.push(cid);
-
+		
 		if (!noSetZ)
 			comp.zShow(true);
+		
+		if (cid == ZaAppViewMgr.C_SEARCH_BUILDER  || cid == ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR ) {
+			//this._components[ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR].setLocation(Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
+			DBG.println(AjxDebug.DBG1, "Enforce Z-index to hidden " + cid) ;
+			comp.zShow(false);
+		}
 
 		if (cid == ZaAppViewMgr.C_SASH)
 			comp.setCursor("default");
 	}
 	if (doFit)
 		this._stickToGrid(list);
+		
+	
 }
+ZaAppViewMgr.prototype.showSearchBuilder =
+function(visible) {
+	DBG.println(AjxDebug.DBG1, "show search builder: " + visible);
+	skin.showSearchBuilder(visible);
+	this._components[ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR].zShow(visible);
+	this._components[ZaAppViewMgr.C_SEARCH_BUILDER].zShow(visible);
+	var list = [ZaAppViewMgr.C_SEARCH_BUILDER, ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR,
+				ZaAppViewMgr.C_CURRENT_APP, ZaAppViewMgr.C_APP_CHOOSER, ZaAppViewMgr.C_TREE,
+				ZaAppViewMgr.C_TREE_FOOTER, ZaAppViewMgr.C_TOOLBAR_TOP, ZaAppViewMgr.C_APP_CONTENT];
+	this._stickToGrid(list);
+	// search builder contains forms, and browsers have quirks around form fields and z-index
+	if (!visible) {
+		this._components[ZaAppViewMgr.C_SEARCH_BUILDER].setLocation(Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
+	}
+};
 // Private methods
 
 ZaAppViewMgr.prototype._stickToGrid = 

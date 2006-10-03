@@ -71,6 +71,8 @@ ZaZimbraAdmin._STATUS = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._STATISTICS = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._STATISTICS_BY_SERVER = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._SEARCH_LIST_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._SEARCH_BUILDER_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._SEARCH_BUILDER_TOOLBAR_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._ZIMLET_LIST_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 
@@ -540,6 +542,8 @@ function() {
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_TREE] = this.getOverviewPanelController().getOverviewPanel();
 	elements[ZaAppViewMgr.C_SEARCH] = this._app.getSearchListController().getSearchPanel();		
+	elements[ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR] = this._app.getSearchBuilderToolbarController ().getSearchBuilderTBPanel();
+	elements[ZaAppViewMgr.C_SEARCH_BUILDER] = this._app.getSearchBuilderController().getSearchBuilderPanel();
 	elements[ZaAppViewMgr.C_CURRENT_APP] = new ZaCurrentAppToolBar(this._shell);
 	this._appViewMgr.addComponents(elements, true);
 
@@ -557,7 +561,6 @@ function(ev) {
 	window.status = ZaMsg.done;
 	return true;
 }
-
 
 // This method is called by the window.onbeforeunload method.
 ZaZimbraAdmin._confirmExitMethod =

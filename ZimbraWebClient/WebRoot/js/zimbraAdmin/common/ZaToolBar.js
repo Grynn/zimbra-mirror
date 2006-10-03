@@ -159,8 +159,13 @@ function(buttonId, imageId, text, disImageId, toolTip, enabled, className) {
 ZaToolBar.prototype._createSeparator =
 function() {
 	var ctrl = new DwtControl(this);
-	var html = "<table><tr><td class=\"ImgAppToolbarSectionSep__V\" height=20px width=3px> </td></tr></table>";
+	var html = ZaToolBar.getSeparatorHtml ();
 	ctrl.setContent(html);
+}
+
+ZaToolBar.getSeparatorHtml =
+function () {
+	return "<table><tr><td class=\"ImgAppToolbarSectionSep__V\" height=20px width=3px> </td></tr></table>";
 }
 
 ZaToolBar.prototype._buttonId =

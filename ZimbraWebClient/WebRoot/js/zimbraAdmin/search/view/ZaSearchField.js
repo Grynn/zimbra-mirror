@@ -89,7 +89,21 @@ function() {
 		}	
 	}
 	params.types = objList;
-	params.query = ZaSearch.getSearchByNameQuery(this._containedObject[ZaSearch.A_query]);
+	
+	//TODO: To See if the advanced Search is enabled.
+	var sb_controller = this._app.getSearchBuilderController()
+	var isAdvanced = sb_controller.isSBVisible () ;
+	if (isAdvanced) {
+		DBG.println(AjxDebug.DBG1, "Advanced Search ....") ;
+		params.query = sb_controller.getQuery ();
+		params.types = sb_controller.getAddressTypes ();
+		
+	}else {
+		DBG.println(AjxDebug.DBG1, "Basic Search ....") ;
+		params.query = ZaSearch.getSearchByNameQuery(this._containedObject[ZaSearch.A_query]);
+	}
+	
+	this._isSearchButtonClicked = false ;
 	
 	if (this._callbackFunc != null) {
 		if (this._callbackObj != null) {
@@ -106,7 +120,22 @@ function() {
 ZaSearchField.srchButtonHndlr = 
 function(evt) {
 	var fieldObj = this.getForm().parent;
+	//fieldObj._isSearchButtonClicked = true ; //to Distinguish the action from the overveiw tree items
 	fieldObj.invokeCallback(evt);
+}
+
+//only show or hide the advanced search options
+ZaSearchField.advancedButtonHndlr =
+function (evt) {
+	//DBG.println(AjxDebug.DBG1, "Advanced Button Clicked ...") ;
+	var form = this.getForm() ;
+	var app = form.parent._app ;
+	var sb_controller = app.getSearchBuilderController ();
+	sb_controller.toggleVisible ();
+	app._appViewMgr.showSearchBuilder (sb_controller.isSBVisible());
+	
+	//clear the search field
+	sb_controller.setQuery ();
 }
 
 ZaSearchField.prototype.getItemByName =
@@ -119,6 +148,15 @@ function (name) {
 	}
 	
 	return null ;
+}
+
+ZaSearchField.prototype.setTooltipForSearchBuildButton =
+function (tooltip){
+	//change the tooltip for the search build button
+	var searchBuildButtonItem = this.getItemByName("searchBuildButton") ;
+	if (searchBuildButtonItem) {
+		searchBuildButtonItem.getWidget().setToolTipContent (tooltip);
+	}
 }
 
 ZaSearchField.prototype.setTooltipForSearchButton =
@@ -203,7 +241,7 @@ ZaSearchField.prototype._getMyXForm = function() {
 	ZaSearchField.searchChoices.setChoices(newMenuOpList);
 	
 	var xFormObject = {
-		tableCssStyle:"width:100%;padding:2px;",numCols:4,width:"100%",
+		tableCssStyle:"width:100%;padding:2px;",numCols:5,width:"100%",
 		items: [
 //			{type:_OUTPUT_, value:ZaMsg.searchForAccountsLabel, nowrap:true},
 			{type:_MENU_BUTTON_, label:null, choices:ZaSearchField.searchChoices, toolTipContent:ZaMsg.searchToolTip, icon:"SearchAll", cssClass:"DwtToolbarButton"},
@@ -220,6 +258,9 @@ ZaSearchField.prototype._getMyXForm = function() {
 			},
 			{type:_DWT_BUTTON_, label:ZaMsg.search, toolTipContent:ZaMsg.searchForAll, icon:ZaMsg.search, name: "searchButton",
 					onActivate:ZaSearchField.srchButtonHndlr, cssClass:"DwtToolbarButton"},
+			{type: _OUTPUT_, value: ZaToolBar.getSeparatorHtml() },
+			{type:_DWT_BUTTON_, label:ZaMsg.advanced_search, tootTipContent: ZaMsg.tt_advanced_search_open, name: "searchBuildButton",
+					onActivate:ZaSearchField.advancedButtonHndlr, cssClass: "DwtToolbarButton" }
 			/*{type:_OUTPUT_, value:ZaMsg.Filter+":", label:null},
 			{type:_CHECKBOX_, ref:ZaSearch.A_fAccounts,label:ZaMsg.Filter_Accounts, labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"},					
 			{type:_CHECKBOX_, ref:ZaSearch.A_fAliases,label:ZaMsg.Filter_Aliases, labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"},

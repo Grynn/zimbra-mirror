@@ -58,8 +58,6 @@ ZaSearchListController.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_a
 ZaController.initToolbarMethods["ZaSearchListController"] = new Array();
 ZaController.initPopupMenuMethods["ZaSearchListController"] = new Array();
 
-
-
 ZaSearchListController.prototype.show = function (doPush) {
 	var callback = new AjxCallback(this, this.searchCallback, {limit:this.RESULTSPERPAGE,CONS:null,show:doPush});
 	var searchParams = {

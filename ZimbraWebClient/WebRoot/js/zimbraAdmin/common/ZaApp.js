@@ -129,8 +129,27 @@ function() {
 		//the view of the search list is only controlled by the searchlistcontroller, no need to add the domainlistcontroller listener
 		//this._controllers[ZaZimbraAdmin._SEARCH_LIST_VIEW].addRemovalListener(new AjxListener(this.getDomainListController(), this.getDomainListController().handleRemoval));									
 	}
-	return this._controllers[ZaZimbraAdmin._SEARCH_LIST_VIEW]
+	return this._controllers[ZaZimbraAdmin._SEARCH_LIST_VIEW] ;
 }
+
+ZaApp.prototype.getSearchBuilderController =
+function() {
+	if (this._controllers[ZaZimbraAdmin._SEARCH_BUILDER_VIEW] == null) {
+		this._controllers[ZaZimbraAdmin._SEARCH_BUILDER_VIEW] = new ZaSearchBuilderController(this._appCtxt, this._container, this);
+		this._controllers[ZaZimbraAdmin._SEARCH_BUILDER_VIEW].addRemovalListener(new AjxListener(this.getSearchBuilderController(), this.getSearchBuilderController().handleRemoval));							
+	}
+	return this._controllers[ZaZimbraAdmin._SEARCH_BUILDER_VIEW] ;
+}
+
+ZaApp.prototype.getSearchBuilderToolbarController = ZaApp.prototype.getSearchBuilderController ;
+/*
+function() {
+	if (this._controllers[ZaZimbraAdmin._SEARCH_BUILDER_TOOLBAR_VIEW] == null) {
+		this._controllers[ZaZimbraAdmin._SEARCH_BUILDER_TOOLBAR_VIEW] = new ZaSearchBuilderToolbarController(this._appCtxt, this._container, this);
+		this._controllers[ZaZimbraAdmin._SEARCH_BUILDER_TOOLBAR_VIEW].addRemovalListener(new AjxListener(this.getSearchBuilderToolbarController(), this.getSearchBuilderToolbarController().handleRemoval));							
+	}
+	return this._controllers[ZaZimbraAdmin._SEARCH_BUILDER_TOOLBAR_VIEW] ;
+}*/
 
 ZaApp.prototype.getAccountListController =
 function() {
