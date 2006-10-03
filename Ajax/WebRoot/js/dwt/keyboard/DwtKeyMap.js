@@ -103,23 +103,27 @@ function() {
 
 DwtKeyMap.prototype._load =
 function(map, keys, mapNames) {
+	var curPlatform = AjxEnv.platform.toLowerCase();
 	for (var propName in keys) {
 		var propValue = keys[propName];
 		if (!(typeof propValue == "string")) { continue; }
 		var parts = propName.split(".");
 		var mapName = mapNames[parts[0]];
-		var action = parts[1];
-		var keySequences = propValue.split(";");
 		if (!map[mapName]) {
 			map[mapName]= {};
 		}
+		var action = parts[1];
+		var platform = parts[2];
+		var keySequences = propValue.split(";");
 		var len = keySequences.length;
 		for (var i = 0; i < len; i++) {
 			var ks = AjxStringUtil.trim(keySequences[i]);
 			if (action == DwtKeyMap.INHERIT) {
 				map[mapName][action] = mapNames[ks];
 			} else {
-				map[mapName][ks] = action;
+				if (!platform || (platform == curPlatform)) {
+					map[mapName][ks] = action;
+				}
 			}
 		}
 	}
