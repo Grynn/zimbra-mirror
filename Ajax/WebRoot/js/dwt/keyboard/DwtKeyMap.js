@@ -103,18 +103,24 @@ function() {
 
 DwtKeyMap.prototype._load =
 function(map, keys, mapNames) {
-	for (var i in keys) {
-		var parts = i.split(".");
+	for (var propName in keys) {
+		var propValue = keys[propName];
+		if (!(typeof propValue == "string")) { continue; }
+		var parts = propName.split(".");
 		var mapName = mapNames[parts[0]];
 		var action = parts[1];
-		var keySequence = keys[i];
+		var keySequences = propValue.split(";");
 		if (!map[mapName]) {
 			map[mapName]= {};
 		}
-		if (action == DwtKeyMap.INHERIT) {
-			map[mapName][action] = mapNames[keySequence];
-		} else {
-			map[mapName][keySequence] = action;
+		var len = keySequences.length;
+		for (var i = 0; i < len; i++) {
+			var ks = AjxStringUtil.trim(keySequences[i]);
+			if (action == DwtKeyMap.INHERIT) {
+				map[mapName][action] = mapNames[ks];
+			} else {
+				map[mapName][ks] = action;
+			}
 		}
 	}
 };
