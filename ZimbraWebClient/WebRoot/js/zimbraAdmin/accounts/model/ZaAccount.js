@@ -75,6 +75,10 @@ ZaAccount.A_COSId = "zimbraCOSId";
 ZaAccount.A_isAdminAccount = "zimbraIsAdminAccount";
 ZaAccount.A_zimbraMinPwdLength="zimbraPasswordMinLength";
 ZaAccount.A_zimbraMaxPwdLength="zimbraPasswordMaxLength";
+ZaAccount.A_zimbraPasswordMinUpperCaseChars = "zimbraPasswordMinUpperCaseChars";
+ZaAccount.A_zimbraPasswordMinLowerCaseChars = "zimbraPasswordMinLowerCaseChars";
+ZaAccount.A_zimbraPasswordMinPunctuationChars = "zimbraPasswordMinPunctuationChars";
+ZaAccount.A_zimbraPasswordMinNumericChars = "zimbraPasswordMinNumericChars";
 ZaAccount.A_zimbraMinPwdAge="zimbraPasswordMinAge";
 ZaAccount.A_zimbraMaxPwdAge="zimbraPasswordMaxAge";
 ZaAccount.A_zimbraEnforcePwdHistory="zimbraPasswordEnforceHistory";
@@ -1123,6 +1127,12 @@ ZaAccount.myXModel = {
 		{id:ZaAccount.A_isAdminAccount, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_isAdminAccount},
 		{id:ZaAccount.A_zimbraMaxPwdLength, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraMaxPwdLength, maxInclusive:2147483647, minInclusive:0},
 		{id:ZaAccount.A_zimbraMinPwdLength, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraMinPwdLength, maxInclusive:2147483647, minInclusive:0},
+
+		{id:ZaAccount.A_zimbraPasswordMinUpperCaseChars, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraPasswordMinUpperCaseChars, maxInclusive:2147483647, minInclusive:0},
+		{id:ZaAccount.A_zimbraPasswordMinLowerCaseChars, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraPasswordMinLowerCaseChars, maxInclusive:2147483647, minInclusive:0},
+		{id:ZaAccount.A_zimbraPasswordMinPunctuationChars, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraPasswordMinPunctuationChars, maxInclusive:2147483647, minInclusive:0},
+		{id:ZaAccount.A_zimbraPasswordMinNumericChars, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraPasswordMinNumericChars, maxInclusive:2147483647, minInclusive:0},
+
 		{id:ZaAccount.A_zimbraMinPwdAge, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraMinPwdAge, maxInclusive:2147483647, minInclusive:0},
 		{id:ZaAccount.A_zimbraMaxPwdAge, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraMaxPwdAge, maxInclusive:2147483647, minInclusive:0},
 		{id:ZaAccount.A_zimbraEnforcePwdHistory, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraEnforcePwdHistory, maxInclusive:2147483647, minInclusive:0},

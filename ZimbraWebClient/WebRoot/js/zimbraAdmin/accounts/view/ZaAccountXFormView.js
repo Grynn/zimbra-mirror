@@ -845,6 +845,36 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 									onChange:ZaTabView.onFormFieldChanged
 								},
 								{ref:ZaAccount.A_zimbraMaxPwdLength, type:_SUPER_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_passMaxLength,label:ZaMsg.NAD_passMaxLength+":", labelLocation:_LEFT_, textFieldCssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged},
+
+								{ref:ZaAccount.A_zimbraPasswordMinUpperCaseChars, labelCssStyle:"width:250px;", 
+									type:_SUPER_TEXTFIELD_, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									msgName:ZaMsg.NAD_zimbraPasswordMinUpperCaseChars,label:ZaMsg.NAD_zimbraPasswordMinUpperCaseChars+":", labelLocation:_LEFT_, 
+									textFieldCssClass:"admin_xform_number_input", 
+									onChange:ZaTabView.onFormFieldChanged
+								},
+								{ref:ZaAccount.A_zimbraPasswordMinLowerCaseChars, labelCssStyle:"width:250px;", 
+									type:_SUPER_TEXTFIELD_, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									msgName:ZaMsg.NAD_zimbraPasswordMinLowerCaseChars,label:ZaMsg.NAD_zimbraPasswordMinLowerCaseChars+":", labelLocation:_LEFT_, 
+									textFieldCssClass:"admin_xform_number_input", 
+									onChange:ZaTabView.onFormFieldChanged
+								},
+								{ref:ZaAccount.A_zimbraPasswordMinPunctuationChars, labelCssStyle:"width:250px;", 
+									type:_SUPER_TEXTFIELD_, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									msgName:ZaMsg.NAD_zimbraPasswordMinPunctuationChars,label:ZaMsg.NAD_zimbraPasswordMinPunctuationChars+":", labelLocation:_LEFT_, 
+									textFieldCssClass:"admin_xform_number_input", 
+									onChange:ZaTabView.onFormFieldChanged
+								},
+								{ref:ZaAccount.A_zimbraPasswordMinNumericChars, labelCssStyle:"width:250px;", 
+									type:_SUPER_TEXTFIELD_, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									msgName:ZaMsg.NAD_zimbraPasswordMinNumericChars,label:ZaMsg.NAD_zimbraPasswordMinNumericChars+":", labelLocation:_LEFT_, 
+									textFieldCssClass:"admin_xform_number_input", 
+									onChange:ZaTabView.onFormFieldChanged
+								},
+																
 								{ref:ZaAccount.A_zimbraMinPwdAge, type:_SUPER_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_passMinAge,label:ZaMsg.NAD_passMinAge+":", labelLocation:_LEFT_, textFieldCssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged},
 								{ref:ZaAccount.A_zimbraMaxPwdAge, type:_SUPER_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_passMaxAge,label:ZaMsg.NAD_passMaxAge+":", labelLocation:_LEFT_, textFieldCssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged},
 								{ref:ZaAccount.A_zimbraEnforcePwdHistory, type:_SUPER_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_passEnforceHistory,label:ZaMsg.NAD_passEnforceHistory+":", labelLocation:_LEFT_, textFieldCssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged}

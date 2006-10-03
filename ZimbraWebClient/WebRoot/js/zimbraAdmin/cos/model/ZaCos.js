@@ -49,6 +49,10 @@ ZaCos.A_zimbraNotes="zimbraNotes";
 ZaCos.A_zimbraMailQuota="zimbraMailQuota";
 ZaCos.A_zimbraMinPwdLength="zimbraPasswordMinLength";
 ZaCos.A_zimbraMaxPwdLength="zimbraPasswordMaxLength";
+ZaCos.A_zimbraPasswordMinUpperCaseChars = "zimbraPasswordMinUpperCaseChars";
+ZaCos.A_zimbraPasswordMinLowerCaseChars = "zimbraPasswordMinLowerCaseChars";
+ZaCos.A_zimbraPasswordMinPunctuationChars = "zimbraPasswordMinPunctuationChars";
+ZaCos.A_zimbraPasswordMinNumericChars = "zimbraPasswordMinNumericChars";
 ZaCos.A_zimbraMinPwdAge = "zimbraPasswordMinAge";
 ZaCos.A_zimbraMaxPwdAge = "zimbraPasswordMaxAge";
 ZaCos.A_zimbraEnforcePwdHistory ="zimbraPasswordEnforceHistory";
@@ -331,6 +335,10 @@ ZaCos.myXModel = {
 		{id:ZaCos.A_zimbraMailQuota, type:_MAILQUOTA_, ref:"attrs."+ZaCos.A_zimbraMailQuota}, 
 		{id:ZaCos.A_zimbraMinPwdLength, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraMinPwdLength, maxInclusive:2147483647, minInclusive:0}, 
 		{id:ZaCos.A_zimbraMaxPwdLength, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraMaxPwdLength, maxInclusive:2147483647, minInclusive:0}, 
+		{id:ZaCos.A_zimbraPasswordMinUpperCaseChars, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraPasswordMinUpperCaseChars, maxInclusive:2147483647, minInclusive:0}, 
+		{id:ZaCos.A_zimbraPasswordMinLowerCaseChars, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraPasswordMinLowerCaseChars, maxInclusive:2147483647, minInclusive:0}, 
+		{id:ZaCos.A_zimbraPasswordMinPunctuationChars, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraPasswordMinPunctuationChars, maxInclusive:2147483647, minInclusive:0}, 
+		{id:ZaCos.A_zimbraPasswordMinNumericChars, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraPasswordMinNumericChars, maxInclusive:2147483647, minInclusive:0}, 
 		{id:ZaCos.A_zimbraMinPwdAge, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraMinPwdAge, maxInclusive:2147483647, minInclusive:0}, 
 		{id:ZaCos.A_zimbraMaxPwdAge, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraMaxPwdAge, maxInclusive:2147483647, minInclusive:0},
 		{id:ZaCos.A_zimbraEnforcePwdHistory, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraEnforcePwdHistory, maxInclusive:2147483647, minInclusive:0},
