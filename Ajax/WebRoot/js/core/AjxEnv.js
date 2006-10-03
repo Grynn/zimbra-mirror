@@ -20,6 +20,7 @@ function AjxEnv() {
 
 AjxEnv._inited = false;
 
+AjxEnv.DEFAULT_LOCALE = window.navigator.userLanguage || window.navigator.language || window.navigator.systemLanguage;
 
 AjxEnv.reset = function () {
 	AjxEnv.browserVersion = -1;
