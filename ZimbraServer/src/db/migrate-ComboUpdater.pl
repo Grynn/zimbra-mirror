@@ -35,7 +35,7 @@ my $sql;
 my $curSchemaVersion = Migrate::getSchemaVersion();
 my $beginSchemaVersion = $curSchemaVersion;
 
-while ($curSchemaVersion >= 21 && $curSchemaVersion < 27) {
+while ($curSchemaVersion >= 20 && $curSchemaVersion < 27) {
   $sql .= &{"schema${curSchemaVersion}"};
   $curSchemaVersion++;
 }
@@ -46,12 +46,12 @@ Migrate::updateSchemaVersion($beginSchemaVersion,27);
 
 exit(0);
 
-sub schema21 {
+sub schema20 {
   my $sql = "drop table if exists redolog_sequence;\n";
   return $sql;
 }
 
-sub schema22 {
+sub schema21 {
   my $sql;
   foreach my $id (@mailboxIds) {
     $sql .= <<EOF_SQL;
@@ -65,7 +65,7 @@ EOF_SQL
   return $sql;
 }
 
-sub schema23 {
+sub schema22 {
     my $sql = <<ADD_TRACKING_IMAP_COLUMN_EOF;
 ALTER TABLE zimbra.mailbox MODIFY tracking_sync INTEGER UNSIGNED NOT NULL DEFAULT 0;
 ALTER TABLE zimbra.mailbox ADD COLUMN tracking_imap BOOLEAN NOT NULL DEFAULT 0 AFTER tracking_sync;
@@ -78,11 +78,10 @@ ALTER TABLE $dbName.mail_item ADD COLUMN imap_id INTEGER UNSIGNED AFTER folder_i
 UPDATE $dbName.mail_item SET imap_id = id WHERE type IN (5, 6, 8, 11, 14);
 ADD_IMAP_ID_COLUMN_EOF
   }
-  #print "schema23: $sql\n\n\n";
   return $sql;
 }
 
-sub schema24 {
+sub schema23 {
 
   my $sql;
 
@@ -99,7 +98,7 @@ EOF_CREATE_EMAILED_CONTACT_FOLDER
 
 }
 
-sub schema25 {
+sub schema24 {
   my $sql;
   foreach my $id (@mailboxIds) {
     $sql .= <<EOF_SET_CHECKED_CALENDAR_FLAG;
@@ -109,7 +108,7 @@ EOF_SET_CHECKED_CALENDAR_FLAG
   return $sql;
 }
 
-sub schema26 {
+sub schema25 {
   my $sql;
   $sql .= <<CREATE_MAILBOX_METADATA_EOF;
 CREATE TABLE zimbra.mailbox_metadata ( mailbox_id  INTEGER UNSIGNED NOT NULL, section     VARCHAR(64) NOT NULL, metadata    MEDIUMTEXT, PRIMARY KEY (mailbox_id, section), CONSTRAINT fk_metadata_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES mailbox(id) ON DELETE CASCADE) ENGINE = InnoDB;
@@ -121,7 +120,7 @@ REMOVE_CONFIG_EOF
   return $sql;
 }
 
-sub schema27 {
+sub schema26 {
   my $sql;
   $sql .= <<ADD_CONTACT_COUNT_COLUMN_EOF;
 ALTER TABLE zimbra.mailbox ADD COLUMN contact_count INTEGER UNSIGNED DEFAULT 0 AFTER item_id_checkpoint;
