@@ -3,8 +3,11 @@ function ZaSearchBuilderToolbarView (parent, app){
 	this._ops = [] ;
 	this._ops.push(new ZaOperation(ZaOperation.SEARCH_BY_BASIC, ZaMsg.searchByBasic, ZaMsg.tt_searchByBasic, "SearchAll", "SearchAll", new AjxListener(this, this.basicTypeSelectHndlr)));
 	this._ops.push(new ZaOperation(ZaOperation.SEARCH_BY_ADDESS_TYPE, ZaMsg.searchByAddressType, ZaMsg.tt_searchByAddressType, "SearchAll", "SearchAll", new AjxListener(this, this.objTypeSelectHndlr)));
-	this._ops.push(new ZaOperation(ZaOperation.SEARCH_BY_DOMAIN, ZaMsg.searchByDomain, ZaMsg.tt_searchByDomain, "Domain", "DomainDis", new AjxListener(this, this.domainSelectHndlr)));
-	this._ops.push(new ZaOperation(ZaOperation.SEARCH_BY_SERVER, ZaMsg.searchByServer, ZaMsg.tt_searchByServer, "Server", "ServerDis", new AjxListener(this, this.serverSelectHndlr)));
+	if (!ZaSettings.isDomainAdmin) { //hide domain and server feature for the domain admin
+		DBG.println(AjxDebug.DBG1, "Domain Admin - No advanced cross domain or server search");
+		this._ops.push(new ZaOperation(ZaOperation.SEARCH_BY_DOMAIN, ZaMsg.searchByDomain, ZaMsg.tt_searchByDomain, "Domain", "DomainDis", new AjxListener(this, this.domainSelectHndlr)));
+		this._ops.push(new ZaOperation(ZaOperation.SEARCH_BY_SERVER, ZaMsg.searchByServer, ZaMsg.tt_searchByServer, "Server", "ServerDis", new AjxListener(this, this.serverSelectHndlr)));
+	}
 	this._ops.push(new ZaOperation(ZaOperation.SEP));
 	this._ops.push(new ZaOperation(ZaOperation.SEARCH_BY_REMOVE_ALL, ZaMsg.searchByRemoveAll, ZaMsg.tt_searchByRemoveAll, null, null, new AjxListener(this, this.removeSelectHndlr)));
 	this._ops.push(new ZaOperation(ZaOperation.NONE));
@@ -78,5 +81,4 @@ function (event) {
 	
 	//clear the search field
 	this._controller.setQuery ();
-	
 }

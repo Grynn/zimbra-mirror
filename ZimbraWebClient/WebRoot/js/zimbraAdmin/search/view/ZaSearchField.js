@@ -90,12 +90,14 @@ function() {
 	}
 	params.types = objList;
 	
-	//TODO: To See if the advanced Search is enabled.
 	var sb_controller = this._app.getSearchBuilderController()
 	var isAdvanced = sb_controller.isSBVisible () ;
 	if (isAdvanced) {
-		DBG.println(AjxDebug.DBG1, "Advanced Search ....") ;
-		params.query = sb_controller.getQuery ();
+		DBG.println(AjxDebug.DBG1, "Advanced Search ... " ) ;
+		//Use the text in the search field to do a search
+		//params.query = sb_controller.getQuery ();
+		params.query = this._containedObject[ZaSearch.A_query];
+		DBG.println(AjxDebug.DBG1, "Query = " + params.query) ;
 		params.types = sb_controller.getAddressTypes ();
 		
 	}else {
