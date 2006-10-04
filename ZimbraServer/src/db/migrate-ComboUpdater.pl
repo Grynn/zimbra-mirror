@@ -28,13 +28,12 @@ use strict;
 no strict "refs";
 use Migrate;
 
-Migrate::verifySchemaVersion(21);
-
 my @mailboxIds = Migrate::getMailboxIds();
 my $timestamp = time();
 my $sql;
 
 my $curSchemaVersion = Migrate::getSchemaVersion();
+my $beginSchemaVersion = $curSchemaVersion;
 
 while ($curSchemaVersion >= 21 && $curSchemaVersion < 27) {
   $sql .= &{"schema${curSchemaVersion}"};
@@ -43,7 +42,7 @@ while ($curSchemaVersion >= 21 && $curSchemaVersion < 27) {
 
 Migrate::runSql($sql);
 
-Migrate::updateSchemaVersion(21,27);
+Migrate::updateSchemaVersion($beginSchemaVersion,27);
 
 exit(0);
 
