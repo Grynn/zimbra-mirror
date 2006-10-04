@@ -72,10 +72,8 @@ public class Props2JsServlet
     // Constants
     //
     
-    private static final String BASENAME_PREFIX = "/msgs/";
     private static final String COMPRESSED_EXT = ".zgz";
-    private static final String KEYS = "Keys";
-    
+
     //
     // Data
     //
@@ -119,7 +117,8 @@ public class Props2JsServlet
     	return req.getLocale();
     } // getLocale(HttpServletRequest):Locale
     
-    private byte[] getBuffer(Locale locale, String uri) throws IOException {
+    private synchronized byte[] getBuffer(Locale locale, String uri)
+	throws IOException {
         // get locale buffers
         Map<String,byte[]> localeBuffers = buffers.get(locale);
         if (localeBuffers == null) {
@@ -136,12 +135,30 @@ public class Props2JsServlet
             				: new PrintStream(bos); 
             out.println("// Locale: "+locale);
 
-            String filenames = uri.substring(uri.lastIndexOf('/')+1);
+			// This gets the base directory for the resource bundle
+			// basename. For example, if the URI is:
+			//
+			//   .../msgs/I18nMsg.js
+			//
+			// then the basedir is "/msgs/" and if the URI is:
+			//
+			//   .../keys/ZmKeys.js
+			//
+			//       then the basedir is "/keys/".
+			//
+			// NOTE: The <url-pattern>s in the web.xml file restricts
+			//       which URLs map to this servlet so there's no risk
+			//       that the basedir will be other than what we expect.
+			int lastSlash = uri.lastIndexOf('/');
+			int prevSlash = uri.substring(0, lastSlash).lastIndexOf('/');
+			String basedir = uri.substring(prevSlash, lastSlash + 1);
+
+			String filenames = uri.substring(uri.lastIndexOf('/')+1);
             String classnames = filenames.substring(0, filenames.indexOf('.'));
             StringTokenizer tokenizer = new StringTokenizer(classnames, ",");
             while (tokenizer.hasMoreTokens()) {
                 String classname = tokenizer.nextToken();
-                load(out, locale, classname);
+                load(out, locale, basedir, classname);
             }
             
             // save buffer
@@ -153,12 +170,10 @@ public class Props2JsServlet
         return buffer;
     } // getBuffer(Locale,String):byte[]
 
-    private void load(PrintStream out, Locale locale, String classname) {
-        String basename = BASENAME_PREFIX+classname;
+    private void load(PrintStream out, Locale locale,
+					  String basedir, String classname) {
+        String basename = basedir+classname;
 
-        if (classname.indexOf(KEYS) != -1) {
-        	basename = "/keys/" + classname;
-        }
         out.println();
         out.println("// Basename: "+basename);
 
@@ -169,7 +184,8 @@ public class Props2JsServlet
 		}
         catch (MissingResourceException e) {
             out.println("// resource bundle not found");
-        }
+			System.out.println("unable to load resource bundle: "+basename);
+		}
 		catch (IOException e) {
 			out.println("// error: "+e.getMessage());
 		}
