@@ -126,7 +126,8 @@ ZaSearchBuilderController.filterSelectionListener =
 function (value) {
 	var targetEl = value.target ;
 	
-	if (targetEl instanceof HTMLInputElement) {
+//	if (targetEl instanceof HTMLInputElement) { //not Supported by IE
+	if (targetEl.type && targetEl.type == "checkbox") {
 		var ref = this.getRef ();
 		var item = targetEl.value ;
 		var form = this.getForm ();
