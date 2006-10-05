@@ -95,31 +95,31 @@
 		<mkdir dir="${generated.java.dir}" />
 	</target>
 
-	<target name="compile" depends="build-init" description="Compiles the source code">
+	<target name="compile" depends="build-init">
 		<javac destdir="${build.classes.dir}" debug="true" classpathref="class.path">
 			<src refid="all.java.path" />
 		</javac>
 	</target>
 
-	<target name="package" depends="jar,package-zimlets" description="Prepare distribution files">
+	<target name="package" depends="jar,package-zimlets">
 		<copy todir="${dist.conf.dir}">
 			<fileset dir="${config.dir}" includes="*"/>
 		</copy>
 	</target>
 
-	<target name="jar" depends="compile" description="Creates the jar file">
+	<target name="jar" depends="compile">
 		<jar destfile="${dist.lib.dir}/zimbrataglib.jar" basedir="${build.classes.dir}" excludes="**/zimlet/**" />
 	</target>
 
-	<target name="reload-zimlets" depends="deploy-zimlets,restart-tomcat"/>
-	<target name="reload-zimlets-extra" depends="deploy-zimlets-extra,restart-tomcat"/>
+	<target name="reload-zimlets" depends="deploy-zimlets,restart-tomcat" description="Reload Zimlets"/>
+	<target name="reload-zimlets-extra" depends="deploy-zimlets-extra,restart-tomcat" description="Reload Zimlets Extra"/>
 
 	<target name="package-zimlets" depends="build-init,compile">
 		<foreach list="${zimlets}" target="package-zimlet" param="zimlet"/>
 		<zip destfile="${dist.zimlet.dir}/com_zimbra_phone.zip" update="true">
 			<fileset dir="${build.classes.dir}" includes="**/NANPHandler.class"/>
 		</zip>
-		<echo message="dist.zimlet.dir=${dist.zimlet.dir}" file="${dist.dir}/build.properties" />
+		<echo message="dist.zimlet.dir=${dist.zimlet.dir}" file="${dist.dir}/build.properties"/>
 	</target>
 	<target name="package-zimlets-extra" depends="build-init,compile">
 		<foreach list="${zimlets-extra}" target="package-zimlet-extra" param="zimlet"/>

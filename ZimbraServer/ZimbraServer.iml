@@ -343,6 +343,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="tomcat" level="project" />
     <orderEntryProperties />
   </component>
 </module>

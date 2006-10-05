@@ -83,6 +83,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="tomcat" level="project" />
     <orderEntryProperties />
   </component>
   <component name="WebModuleBuildComponent">
@@ -135,6 +136,10 @@
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/standard.jar" />
       <url>jar://$MODULE_DIR$/jars/standard.jar!/</url>
+    </containerElement>
+    <containerElement type="library" name="tomcat" level="project">
+      <attribute name="method" value="0" />
+      <attribute name="URI" value="/WEB-INF/lib" />
     </containerElement>
     <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/WEB-INF/web.xml" optional="false" version="2.3" />
     <webroots>
