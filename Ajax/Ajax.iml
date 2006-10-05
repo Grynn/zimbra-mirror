@@ -103,6 +103,11 @@
       <attribute name="URI" value="/WEB-INF/lib/gifencoder.jar" />
       <url>jar://$MODULE_DIR$/jars/gifencoder.jar!/</url>
     </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="0" />
+      <attribute name="URI" value="&lt;N/A&gt;" />
+      <url>jar://$MODULE_DIR$/jars/servlet-api.jar!/</url>
+    </containerElement>
     <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/WEB-INF/web.xml" optional="false" version="2.3" />
     <webroots>
       <root url="file://$MODULE_DIR$/WEB-INF" relative="/WEB-INF" />

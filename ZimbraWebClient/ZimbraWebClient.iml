@@ -127,6 +127,11 @@
       <url>jar://$MODULE_DIR$/jars/jstl.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
+      <attribute name="method" value="0" />
+      <attribute name="URI" value="&lt;N/A&gt;" />
+      <url>jar://$MODULE_DIR$/jars/servlet-api.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/standard.jar" />
       <url>jar://$MODULE_DIR$/jars/standard.jar!/</url>
