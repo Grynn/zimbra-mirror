@@ -190,9 +190,11 @@ function(params) {
 		this._st = new Date();
 
 		if (asyncMode) {
+//			DBG.println(AjxDebug.DBG1, "set callback for asynchronous response");	
 			rpcCallback = new AjxCallback(this, this._runCallback, params.callback);
 			this._rpcId = AjxRpc.invoke(requestStr, uri, {"Content-Type": "application/soap+xml; charset=utf-8"}, rpcCallback);
 		} else {
+//			DBG.println(AjxDebug.DBG1, "parse response synchronously");	
 			var response = AjxRpc.invoke(requestStr, uri, {"Content-Type": "application/soap+xml; charset=utf-8"});
 			if (!params.returnXml) {
 				return this._getResponseData(response, false);

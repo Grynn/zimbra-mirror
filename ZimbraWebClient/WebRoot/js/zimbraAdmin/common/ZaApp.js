@@ -404,6 +404,7 @@ function(refresh) {
 ZaApp.prototype.getServerByName =
 function(serverName) {
 	if (this._serverList == null) {
+//		DBG.println(AjxDebug.DBG1, "ZaApp.prototype.getServerByName :: this._serverList is null ");
 		this._serverList = ZaServer.getAll(this);
 	}
 	var cnt = this._serverList.getArray().length;
@@ -455,6 +456,7 @@ function(refresh) {
 ZaApp.prototype.getServerListChoices =
 function(refresh) {
 	if (refresh || this._serverList == null) {
+//		DBG.println(AjxDebug.DBG1, "ZaApp.prototype.getServerListChoices :: this._serverList is null ");		
 		this._serverList = ZaServer.getAll(this);
 	}
 	if(refresh || this._serverChoices == null) {
@@ -487,6 +489,7 @@ function(refresh){
 ZaApp.prototype.getServerListChoices2 =
 function(refresh) {
 	if (refresh || this._serverList == null) {
+//		DBG.println(AjxDebug.DBG1, "ZaApp.prototype.getServerListChoices2 :: this._serverList is null ");				
 		this._serverList = ZaServer.getAll(this);
 	}
 	if(refresh || this._serverChoices2 == null) {
@@ -510,6 +513,7 @@ function(refresh) {
 ZaApp.prototype.getServerMap =
 function(refresh) {
 	if(refresh || this._serverList == null) {
+//		DBG.println(AjxDebug.DBG1, "ZaApp.prototype.getServerMap :: this._serverList is null ");						
 		this._serverList = ZaServer.getAll(this);
 	}
 	if(refresh || this._serverMap == null) {

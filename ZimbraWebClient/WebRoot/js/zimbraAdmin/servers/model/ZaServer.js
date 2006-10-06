@@ -248,7 +248,9 @@ function(app) {
 	var soapDoc = AjxSoapDoc.create("GetAllServersRequest", "urn:zimbraAdmin", null);	
 	var command = new ZmCsfeCommand();
 	var params = new Object();
-	params.soapDoc = soapDoc;	
+	params.soapDoc = soapDoc;
+	params.asyncMode=false;	
+//	DBG.println(AjxDebug.DBG1, "Sending GetAllServersRequest for Server");
 	var resp = command.invoke(params).Body.GetAllServersResponse;	
 	var list = new ZaItemList(ZaServer, app);
 	list.loadFromJS(resp);	

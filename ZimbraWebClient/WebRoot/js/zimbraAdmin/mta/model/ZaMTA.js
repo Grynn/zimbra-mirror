@@ -141,7 +141,9 @@ ZaMTA.getAll = function (app) {
 	soapDoc.getMethod().setAttribute("service", "mta");
 	var command = new ZmCsfeCommand();
 	var params = new Object();
+	params.asyncMode=false;
 	params.soapDoc = soapDoc;	
+//	DBG.println(AjxDebug.DBG1, "Sending GetAllServersRequest for MTA");
 	var resp = command.invoke(params).Body.GetAllServersResponse;	
 	var list = new ZaItemList(ZaMTA, app);
 	list.loadFromJS(resp);	

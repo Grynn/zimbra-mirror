@@ -136,9 +136,9 @@ function (ev) {
 
 
 ZaOverviewPanelController.prototype.searchDomains = function() {
-	if(this._app) {
+/*	if(this._app) {
 		this._app.searchDomains();
-	} else {	
+	} else {	*/
 		var callback = new AjxCallback(this, this.domainSearchCallback);
 		var searchParams = {
 				query:"", 
@@ -150,7 +150,7 @@ ZaOverviewPanelController.prototype.searchDomains = function() {
 				callback:callback
 		}
 		ZaSearch.searchDirectory(searchParams);
-	}
+	//}
 }
 
 ZaOverviewPanelController.prototype.domainSearchCallback = 
@@ -436,6 +436,7 @@ function() {
 		
 		try {
 			//add server nodes
+//			DBG.println(AjxDebug.DBG1, "add server nodes ");				
 			var serverList = this._app.getServerList().getArray();
 			if(serverList && serverList.length) {
 				var cnt = serverList.length;
@@ -499,6 +500,7 @@ function() {
 		
 		try {
 			//add server statistics nodes
+//			DBG.println(AjxDebug.DBG1, "add server statistics nodes ");	
 			var serverList = this._app.getServerList().getArray();
 			if(serverList && serverList.length) {
 				var cnt = serverList.length;
@@ -645,6 +647,7 @@ ZaOverviewPanelController.domainTreeListener = function (ev) {
 }
 
 ZaOverviewPanelController.serverTreeListener = function (ev) {
+//	DBG.println(AjxDebug.DBG1, "ZaOverviewPanelController.serverTreeListener called");
 	if(this._app.getCurrentController()) {
 		this._app.getCurrentController().switchToNextView(this._app.getServerController(),
 		 ZaServerController.prototype.show,
