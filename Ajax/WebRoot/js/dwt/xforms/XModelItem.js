@@ -796,8 +796,8 @@ FileSize_XModelItem.prototype.getValue =  function(ins, current, ref) {
 	return value ? AjxUtil.formatSizeForUnits(value, AjxUtil.SIZE_KILOBYTES, false, 2) : 0;
 }
 
-FileSize_XModelItem.prototype.setValue = function(value, ins, current, ref) {
-	return eval("ins."+ref+" = AjxUtil.parseSize(value, this.units)");
+FileSize_XModelItem.prototype.setValue = function(val, ins, current, ref) {
+	return eval("ins."+ref+" = AjxUtil.parseSize(val, this.units)");
 }
 
 HostNameOrIp_XModelItem = function() {}
