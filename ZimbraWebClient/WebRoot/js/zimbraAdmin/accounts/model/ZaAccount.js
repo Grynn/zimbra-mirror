@@ -157,6 +157,7 @@ ZaAccount.A_zimbraFeatureSkinChangeEnabled = "zimbraFeatureSkinChangeEnabled";
 ZaAccount.A_zimbraFeatureOutOfOfficeReplyEnabled = "zimbraFeatureOutOfOfficeReplyEnabled";
 ZaAccount.A_zimbraFeatureNewMailNotificationEnabled = "zimbraFeatureNewMailNotificationEnabled";
 ZaAccount.A_zimbraHideInGal = "zimbraHideInGal";
+ZaAccount.A_zimbraMailCanonicalAddress = "zimbraMailCanonicalAddress";
 //security
 ZaAccount.A_zimbraPasswordLockoutEnabled = "zimbraPasswordLockoutEnabled";
 ZaAccount.A_zimbraPasswordLockoutDuration = "zimbraPasswordLockoutDuration";
@@ -1119,6 +1120,7 @@ ZaAccount.myXModel = {
 		{id:ZaAccount.A_zip, type:_STRING_, ref:"attrs/"+ZaAccount.A_zip},
 		{id:ZaAccount.A_state, type:_STRING_, ref:"attrs/"+ZaAccount.A_state},
 		{id:ZaAccount.A_mailDeliveryAddress, type:_STRING_, ref:"attrs/"+ZaAccount.A_mailDeliveryAddress},
+		{id:ZaAccount.A_zimbraMailCanonicalAddress, type:_STRING_, ref:"attrs/"+ZaAccount.A_zimbraMailCanonicalAddress, pattern:AjxUtil.EMAIL_RE},		
 		{id:ZaAccount.A_accountStatus, type:_STRING_, ref:"attrs/"+ZaAccount.A_accountStatus},
 		{id:ZaAccount.A_notes, type:_STRING_, ref:"attrs/"+ZaAccount.A_notes},
 		{id:ZaAccount.A_zimbraMailQuota, type:_COS_MAILQUOTA_, ref:"attrs/"+ZaAccount.A_zimbraMailQuota},
