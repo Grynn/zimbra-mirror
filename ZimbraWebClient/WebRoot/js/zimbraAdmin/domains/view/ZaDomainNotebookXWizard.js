@@ -32,7 +32,7 @@
 **/
 function ZaDomainNotebookXWizard(parent,  app, w, h) {
 	this._app=app;
-	ZaXWizardDialog.call(this, parent,app, null, ZaMsg.NDD_Title, "550px", "300px","ZaDomainNotebookXWizard");
+	ZaXWizardDialog.call(this, parent,app, null, ZaMsg.NDW_Title, "550px", "300px","ZaDomainNotebookXWizard");
 
 	this.stepChoices = [
 		{label:ZaMsg.TABT_GeneralPage, value:1},
