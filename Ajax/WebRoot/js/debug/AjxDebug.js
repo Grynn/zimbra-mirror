@@ -547,11 +547,11 @@ function() {
 
 AjxDebug.prototype._finishInitWindow =
 function() {
-	this._contentFrame = this._document.getElementById(AjxDebug._CONTENT_FRAME_ID);
-	this._linkFrame = this._document.getElementById(AjxDebug._LINK_FRAME_ID);
+	this._contentFrame = this._debugWindow.document.getElementById(AjxDebug._CONTENT_FRAME_ID);
 
+	this._linkFrame = this._debugWindow.document.getElementById(AjxDebug._LINK_FRAME_ID);
 	// Create the mark and clear buttons
-	var buttonFrame = this._document.getElementById(AjxDebug._BUTTON_FRAME_ID);
+	var buttonFrame = this._debugWindow.document.getElementById(AjxDebug._BUTTON_FRAME_ID);
 	var buttonFrameDoc = buttonFrame.contentWindow.document;
 	var buttonFrameBody = buttonFrameDoc.body;
 
