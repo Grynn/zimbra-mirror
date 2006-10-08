@@ -36,6 +36,7 @@ function DwtKeyMapMgr(keyMap) {
 	}
 		
 	var map = this._map = keyMap.getMap();
+	this._args = keyMap._args;
 	
 	// build FSA for each mapping
 	this._fsas = {};
@@ -103,7 +104,11 @@ function(keySeq, mappingName, forceActionCode) {
 		 * so return it. Else if the binding does not have an action code (i.e. it
 		 * has a submap only) or if forceActionCode is false, then return DwtKeyMapMgr.NOT_A_TERMINAL
 		 * since we are to behave like an intermediate node. Else return the action code. */
-		return (!binding.subMap || forceActionCode) ? binding.actionCode : DwtKeyMapMgr.NOT_A_TERMINAL;
+		if (!binding.subMap || forceActionCode) {
+			return binding.actionCode;
+		} else {
+			return DwtKeyMapMgr.NOT_A_TERMINAL;
+		}
 	} else if (mapping.inherit && mapping.inherit.length) {
 		var actionCode = null;
 		var len = mapping.inherit.length;
@@ -134,10 +139,31 @@ function(keyCode) {
 };
 
 /**
- * Allow the programatic setting of a key sequence mapping for a given map
+ * Returns the action for the given map and key sequence.
+ */
+DwtKeyMapMgr.prototype.getAction =
+function(mapName, keySeq) {
+	return this._map[mapName][keySeq];
+};
+
+/**
+ * Returns the key sequence associated with the given map and action.
+ */
+DwtKeyMapMgr.prototype.getKeySequence =
+function(mapName, action) {
+	for (var ks in this._map[mapName]) {
+		if (this._map[mapName][ks] == action) {
+			return ks;
+		}
+	}
+	return null;
+};
+
+/**
+ * Allow the programmatic setting of a key sequence mapping for a given map
  * 
- * @param {string} mapName map name to effect
- * @param {string} keySeq the key sequence to set
+ * @param {string} 			mapName map name to affect
+ * @param {string} 			keySeq the key sequence to set
  * @param {string|number} action the action code for the key sequence
  */
 DwtKeyMapMgr.prototype.setMapping =
@@ -148,7 +174,7 @@ function(mapName, keySeq, action) {
 /**
  * Allow the programatting removal of a key sequence mapping for a given map
  * 
- * @param {string} mapName map name to effect
+ * @param {string} mapName map name to affect
  * @param {string} keySeq the key sequence to remove
  */
 DwtKeyMapMgr.prototype.removeMapping =
@@ -159,7 +185,7 @@ function(mapName, keySeq) {
 /**
  * Replace the key sequence for a given action in a keymap 
  * 
- * @param {string} mapName map name to effect
+ * @param {string} mapName map name to affect
  * @param {string} oldKeySeq the key sequence to replace
  * @param {string} newKeySeq the new key sequence
  */
@@ -169,6 +195,19 @@ function(mapName, oldKeySeq, newKeySeq) {
 	if (!action) return;
 	this.removeMapping(mapName, oldKeySeq);
 	this.setMapping(mapName, newKeySeq, action);
+};
+
+DwtKeyMapMgr.prototype.setArg =
+function(mapName, action, arg) {
+	if (!this._args[mapName]) {
+		this._args[mapName] = {};
+	}
+	this._args[mapName][action] = arg;
+};
+
+DwtKeyMapMgr.prototype.getArg =
+function(mapName, action) {
+	return this._args[mapName][action];
 };
 
 /**

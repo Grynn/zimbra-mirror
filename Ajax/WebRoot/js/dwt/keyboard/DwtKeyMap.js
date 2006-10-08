@@ -30,6 +30,7 @@ function DwtKeyMap(subclassInit) {
 	if (subclassInit) {	return };
 
 	this._map = {};
+	this._args = {};
 	this._load(this._map, AjxKeys, DwtKeyMap.MAP_NAME);
 };
 
@@ -52,6 +53,7 @@ DwtKeyMap.MAP_NAME["menu"]				= "DwtMenu";
 DwtKeyMap.MAP_NAME["toolbar"]			= "DwtToolBar";
 DwtKeyMap.MAP_NAME["toolbarHorizontal"]	= "DwtToolBar-horiz";
 DwtKeyMap.MAP_NAME["toolbarVertical"]	= "DwtToolBar-vert";
+DwtKeyMap.MAP_NAME["tabView"]			= "DwtTabView";
 
 // Key names
 DwtKeyMap.CTRL			= "Ctrl+";
@@ -82,8 +84,11 @@ DwtKeyMap.ADD_SELECT_NEXT		= "AddNext";
 DwtKeyMap.ADD_SELECT_PREV		= "AddPrevious";
 DwtKeyMap.CANCEL				= "Cancel";
 DwtKeyMap.DBLCLICK				= "DoubleClick";
+DwtKeyMap.GOTO_TAB				= "GoToTab";
 DwtKeyMap.NEXT					= "Next";
+DwtKeyMap.NEXT_TAB				= "NextTab";
 DwtKeyMap.PREV					= "Previous";
+DwtKeyMap.PREV_TAB				= "PreviousTab";
 DwtKeyMap.SELECT_ALL			= "SelectAll";
 DwtKeyMap.SELECT				= "Select";
 DwtKeyMap.SELECT_FIRST			= "SelectFirst";
@@ -92,6 +97,8 @@ DwtKeyMap.SELECT_NEXT			= "SelectNext";
 DwtKeyMap.SELECT_PREV			= "SelectPrevious";
 DwtKeyMap.SUBMENU				= "SubMenu";
 DwtKeyMap.PARENTMENU			= "ParentMenu";
+
+DwtKeyMap.GOTO_TAB_RE = new RegExp(DwtKeyMap.GOTO_TAB + "(\\d+)");
 
 DwtKeyMap.SEP = ","; // Key separator
 DwtKeyMap.INHERIT = "INHERIT"; // Inherit keyword.
@@ -114,12 +121,18 @@ function(map, keys, mapNames) {
 		}
 		var action = parts[1];
 		var platform = parts[2];
-		var keySequences = propValue.split(";");
-		var len = keySequences.length;
-		for (var i = 0; i < len; i++) {
-			var ks = AjxStringUtil.trim(keySequences[i]);
+		var keySequences = propValue.split(/\s*;\s*/);
+		var kslen = keySequences.length;
+		for (var i = 0; i < kslen; i++) {
+			var ks = keySequences[i];
 			if (action == DwtKeyMap.INHERIT) {
-				map[mapName][action] = mapNames[ks];
+				var parents = ks.split(/\s*,\s*/);
+				var parents1 = [];
+				var plen = parents.length;
+				for (var p = 0; p < plen; p++) {
+					parents1[p] = mapNames[parents[p]];
+				}
+				map[mapName][action] = parents1.join(",");
 			} else {
 				if (!platform || (platform == curPlatform)) {
 					map[mapName][ks] = action;

@@ -103,7 +103,7 @@ function (title, tabViewOrCallback) {
 	}
 	
 	this._tabBar.addSelectionListener(tabKey, new AjxListener(this, DwtTabView.prototype._tabButtonListener));	
-		
+	
 	return tabKey;
 }
 
@@ -181,6 +181,61 @@ DwtTabView.prototype.getActiveView =
 function() {
 	return this._tabs[this._currentTabKey].view;
 }
+
+DwtTabView.prototype.getKeyMapName =
+function() {
+	return "DwtTabView";
+};
+
+DwtTabView.prototype.resetKeyBindings =
+function() {
+	var kbm = this.shell.getKeyboardMgr();
+	if (kbm.isEnabled()) {
+		var kmm = kbm.__keyMapMgr;
+		var ks = kmm.getKeySequence("DwtTabView", "GoToTab");
+		var num = this.getNumTabs();
+		for (var i = 1; i <= num; i++) {
+			var newKs = ks.replace(/NNN/, i);
+			kmm.setMapping("DwtTabView", newKs, "GoToTab" + i);
+		}
+		kmm.reloadMap("DwtTabView");
+	}
+};
+
+DwtTabView.prototype.handleKeyAction =
+function(actionCode) {
+	DBG.println(AjxDebug.DBG3, "DwtTabView.handleKeyAction");
+
+	switch (actionCode) {
+
+		case DwtKeyMap.NEXT_TAB:
+			var curTab = this.getCurrentTab();
+			if (curTab < this.getNumTabs()) {
+				this.switchToTab(curTab + 1);
+			}
+			break;
+			
+		case DwtKeyMap.PREV_TAB:
+			var curTab = this.getCurrentTab();
+			if (curTab > 1) {
+				this.switchToTab(curTab - 1);
+			}
+			break;
+		
+		default:
+			// Handle action code like "GoToTab3"
+			var m = actionCode.match(DwtKeyMap.GOTO_TAB_RE);
+			if (m && m.length) {
+				var idx = m[1];
+				if ((idx <= this.getNumTabs()) && (idx != this.getCurrentTab())) {
+					this.switchToTab(idx);
+				}
+			} else {
+				return false;
+			}
+	}
+	return true;
+};
 
 //protected methods
 
@@ -296,25 +351,24 @@ function (ev) {
 	if(ev.item instanceof DwtButton) {
 		this.switchToTab(ev.item.getData("tabKey"));
     } else {
-	if (ev && ev.target) {
-	    /**
-	    * Greg Solovyev 1/3/2005 
-		* changed ev.target.offsetParent.offsetParent to
-		* lookup for the table up the elements stack, because the mouse down event may come from the img elements 
-		* as well as from the td elements.	    
-		**/
-	    var elem = ev.target;
-	    while(elem.tagName != "TABLE" && elem.offsetParent ) {
-	    	elem = elem.offsetParent;
-	    }
-	    var tabKey = elem.getAttribute("tabKey");
-	    if ((tabKey !== void 0) && (tabKey !== null)){
-			this.switchToTab(tabKey);
-	    }
-	}
+		if (ev && ev.target) {
+		    /**
+		    * Greg Solovyev 1/3/2005 
+			* changed ev.target.offsetParent.offsetParent to
+			* lookup for the table up the elements stack, because the mouse down event may come from the img elements 
+			* as well as from the td elements.	    
+			**/
+		    var elem = ev.target;
+		    while(elem.tagName != "TABLE" && elem.offsetParent ) {
+		    	elem = elem.offsetParent;
+		    }
+		    var tabKey = elem.getAttribute("tabKey");
+		    if ((tabKey !== void 0) && (tabKey !== null)){
+				this.switchToTab(tabKey);
+		    }
+		}
     }
 }
-	    
 
 /**
 * @class
