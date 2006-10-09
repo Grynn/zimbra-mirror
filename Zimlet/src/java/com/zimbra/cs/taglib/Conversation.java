@@ -24,6 +24,8 @@
  */
 package com.zimbra.cs.taglib;
 
+import java.util.List;
+
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
@@ -56,7 +58,7 @@ public class Conversation extends Message {
         int cid = Integer.parseInt(mId);
         int index = Integer.parseInt(mIndex);
         Mailbox mbox = MailboxManager.getInstance().getMailboxByAccountId(acct.getId());
-        com.zimbra.cs.mailbox.Message[] msgs = mbox.getMessagesByConversation(octxt, cid);
-        return getMessageContent(msgs[index]);
+        List<com.zimbra.cs.mailbox.Message> msgs = mbox.getMessagesByConversation(octxt, cid);
+        return getMessageContent(msgs.get(index));
     }
 }
