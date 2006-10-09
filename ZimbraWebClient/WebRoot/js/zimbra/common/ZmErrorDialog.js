@@ -112,28 +112,35 @@ function(text) {
 ZmErrorDialog.prototype._getContentHtml =
 function() {
 	this._detailCellId = Dwt.getNextId();
-	var html = new Array();
+	var html = [];
 	var idx = 0;
 
 	html[idx++] = DwtMessageDialog.prototype._getContentHtml.call(this);
-	html[idx++] = "<div id='" + this._detailCellId + "'></div>";
+	html[idx++] = "<div id='";
+	html[idx++] = this._detailCellId;
+	html[idx++] = "'></div>";
 	
 	return html.join("");
 };
 
 ZmErrorDialog.prototype._getDetailHtml =
 function() {
-	return "<div class='vSpace'></div><table cellspacing=0 cellpadding=0 width='100%'>" +
-		   "<tr><td><textarea readonly rows='10'>" + this._detailStr + "</textarea></td></tr></table>";
+	return ["<div class='vSpace'></div><table cellspacing=0 cellpadding=0 width='100%'>",
+			"<tr><td><textarea readonly rows='10'>",
+			this._detailStr,
+			"</textarea></td></tr></table>"].join("");
 };
 
 ZmErrorDialog.prototype._getNavigatorInfo = 
 function() {
-	var strNav = new Array();
+	var strNav = [];
 	var idx = 0;
 	
 	// Add the url
-	strNav[idx++] = "\n\n" + "href: " + location.href + "\n";
+	strNav[idx++] = "\n\n";
+	strNav[idx++] = "href: ";
+	strNav[idx++] = location.href;
+	strNav[idx++] = "\n";
 
 	for (var i in navigator) {
 		// Skip functions
@@ -146,7 +153,7 @@ function() {
 
 ZmErrorDialog.prototype._getSubjectPrefix = 
 function() {
-	var strSubj = new Array();
+	var strSubj = [];
 	var idx = 0;
 	
 	strSubj[idx++] = "ER: ";
@@ -181,17 +188,25 @@ function() {
 ZmErrorDialog.prototype._getUserPrefs = 
 function() {
 	var currSearch = this._appCtxt.getCurrentSearch();
-	var strPrefs = new Array();
+	var strPrefs = [];
 	var idx = 0;
 
 	// Add username and current search
-	strPrefs[idx++] = "\n\n" + "username: " + this._appCtxt.get(ZmSetting.USERNAME) + "\n";
+	strPrefs[idx++] = "\n\n";
+	strPrefs[idx++] = "username: ";
+	strPrefs[idx++] = this._appCtxt.get(ZmSetting.USERNAME);
+	strPrefs[idx++] = "\n";
 	if (currSearch) {
-		strPrefs[idx++] = "currentSearch: " + currSearch.query + "\n";
+		strPrefs[idx++] = "currentSearch: ";
+		strPrefs[idx++] = currSearch.query;
+		strPrefs[idx++] = "\n";
 	}
 	for (var i in ZmSetting.INIT) {
 		if (ZmSetting.INIT[i][0]) {
-			strPrefs[idx++] = ZmSetting.INIT[i][0] + ": " + ("" + ZmSetting.INIT[i][3]) + "\n";
+			strPrefs[idx++] = ZmSetting.INIT[i][0];
+			strPrefs[idx++] = ": ";
+			strPrefs[idx++] = ("" + ZmSetting.INIT[i][3]);
+			strPrefs[idx++] = "\n";
 		}
 	}
 	return strPrefs.join("");
@@ -216,22 +231,37 @@ function() {
 
 		
 	// generate html form for submission via POST
-	var html = new Array();
+	var html = [];
 	var idx = 0;
 	var subject = this._subjPfx + this._detailStr.substring(0,40);
 	var scheme = (location.protocol == 'https:') ? "https:" : "http:";
-	html[idx++] = "<html><head></head><body>";
-	html[idx++] = "<form id='" + formId + "' method='POST' action='" + scheme + ZmErrorDialog.REPORT_URL + "'>";
-	html[idx++] = "<textarea name='details'>" + this._detailStr;
-	html[idx++] = "version - " + this._appCtxt.get(ZmSetting.CLIENT_VERSION) + "\n";
-	html[idx++] = "release - " + this._appCtxt.get(ZmSetting.CLIENT_RELEASE) + "\n";
-	html[idx++] = "date - " + this._appCtxt.get(ZmSetting.CLIENT_DATETIME);
+	html[idx++] = "<html><head></head><body><form id='";
+	html[idx++] = formId;
+	html[idx++] = "' method='POST' action='";
+	html[idx++] = scheme;
+	html[idx++] = ZmErrorDialog.REPORT_URL;
+	html[idx++] = "'>";
+	html[idx++] = "<textarea name='details'>";
+	html[idx++] = this._detailStr;
+	html[idx++] = "version - ";
+	html[idx++] = this._appCtxt.get(ZmSetting.CLIENT_VERSION);
+	html[idx++] = "\n";
+	html[idx++] = "release - ";
+	html[idx++] = this._appCtxt.get(ZmSetting.CLIENT_RELEASE);
+	html[idx++] = "\n";
+	html[idx++] = "date - ";
+	html[idx++] = this._appCtxt.get(ZmSetting.CLIENT_DATETIME);
 	html[idx++] = "</textarea>";
-	html[idx++] = "<textarea name='navigator'>" + this._strNav + "</textarea>";
-	html[idx++] = "<textarea name='prefs'>" + strPrefs + "</textarea>";
-	html[idx++] = "<textarea name='subject'>" + subject + "</textarea>";
-	html[idx++] = "</form>";
-	html[idx++] = "</body></html>";
+	html[idx++] = "<textarea name='navigator'>";
+	html[idx++] = this._strNav;
+	html[idx++] = "</textarea>";
+	html[idx++] = "<textarea name='prefs'>";
+	html[idx++] = strPrefs;
+	html[idx++] = "</textarea>";
+	html[idx++] = "<textarea name='subject'>";
+	html[idx++] = subject;
+	html[idx++] = "</textarea>";
+	html[idx++] = "</form></body></html>";
 
 	var idoc = Dwt.getIframeDoc(this._iframe);
 	idoc.open();
