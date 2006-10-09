@@ -591,7 +591,10 @@ function(x, y, kbGenerated) {
 	var ws = this.shell.getSize();
 	var s = this.getSize();
 
-	if (((this._style == DwtMenu.POPUP_STYLE ||
+    // bug 9583 - can't query border size so just subtract generic padding
+    ws.y -= 10;
+
+    if (((this._style == DwtMenu.POPUP_STYLE ||
 		(this._style == DwtMenu.DROPDOWN_STYLE && this.parent instanceof DwtMenuItem)) && s.y >= ws.y) ||
 		(this._style == DwtMenu.DROPDOWN_STYLE && y + s.y >= ws.y))
 	{
