@@ -1,9 +1,37 @@
+/*
+ * ***** BEGIN LICENSE BLOCK *****
+ * Version: ZPL 1.2
+ * 
+ * The contents of this file are subject to the Zimbra Public License
+ * Version 1.2 ("License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.zimbra.com/license
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+ * the License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is: Zimbra Collaboration Suite Web Client
+ * 
+ * The Initial Developer of the Original Code is Zimbra, Inc.
+ * Portions created by Zimbra are Copyright (C) 2005, 2006 Zimbra, Inc.
+ * All Rights Reserved.
+ * 
+ * Contributor(s):
+ * 
+ * ***** END LICENSE BLOCK *****
+ */
+
+/**
+* @class ZaSearchBuilderController
+* @contructor ZaSearchBuilderController
+* Provides all the data and UI action controlls over the advanced search builder options
+* @author Charles Cao
+**/
 function ZaSearchBuilderController(appCtxt, container, app) {
 	ZaController.call(this, appCtxt, container, app, "ZaSearchBuilderController");
-   	 
    	this._option_views = [];
-   		
-   	
 	this._searchBuildPanel = null;
 	this._searchBuildTBPanel = null ;
 	this._searchBuilderVisible = false ; //also indicate whether the advanced search query should be used
@@ -18,14 +46,10 @@ function ZaSearchBuilderController(appCtxt, container, app) {
 ZaSearchBuilderController.prototype = new ZaController();
 ZaSearchBuilderController.prototype.constructor = ZaSearchBuilderController;
 
-ZaController.initToolbarMethods["ZaSearchBuilderController"] = new Array();
-//ZaController.initPopupMenuMethods["ZaSearchBuilderController"] = new Array();
-
-
 ZaSearchBuilderController.prototype.getSearchBuilderPanel =
 function () {
 	if (! this._searchBuildPanel) {
-		DBG.println(AjxDebug.DBG1, "Initialize the search builder panel") ;
+		DBG.println(AjxDebug.DBG3, "Initializing the search builder option panel.") ;
 		this._searchBuildPanel = new ZaSearchBuilderView (this._app.getAppCtxt().getShell(),  this._app);
 		//always display the basic search when the search builder view is initialized.
 		this.addOptionView (ZaSearchOption.BASIC_TYPE_ID) ;
@@ -37,7 +61,7 @@ function () {
 ZaSearchBuilderController.prototype.getSearchBuilderTBPanel =
 function () {
 	if (! this._searchBuildTBPanel) {
-		DBG.println(AjxDebug.DBG1, "Initialize the search builder toolbar panel") ;
+		DBG.println(AjxDebug.DBG3, "Initialize the search builder toolbar panel.") ;
 		this._searchBuildTBPanel = new ZaSearchBuilderToolbarView (this._app.getAppCtxt().getShell(),  this._app);
 	}
 	return this._searchBuildTBPanel ;
@@ -55,12 +79,10 @@ function () {
 
 ZaSearchBuilderController.handleOptions =
 function (value, event, form){
-	DBG.println(AjxDebug.DBG1, "Handling the options ...");
+	DBG.println(AjxDebug.DBG3, "Handling the options on the search builder toolbar ...");
 	this.setInstanceValue(value);
 	//set the query value
 	var form = this.getForm ();
-	//var instance = form.getInstance () ;
-	//ZaSearch.getAdancedSearchQuery (instance) ;
 	var controller = form.parent._controller ;
 	controller.setQuery () ;
 	
@@ -90,14 +112,6 @@ function (value, event, form) {
 			callback:callback
 	}
 	ZaSearch.searchDirectory(searchParams);
-}
-
-ZaSearchBuilderController.filterServers =
-function (value, event, form) {
-	this.setInstanceValue (value);
-	var callback = new AjxCallback(this, ZaSearchBuilderController.optionFilterCallback);
-	
-	
 }
 
 ZaSearchBuilderController.prototype.listAllServers =
@@ -139,26 +153,25 @@ function (value) {
 			checkedFiltersVector = instance["options"][ZaSearchOption.A_serverListChecked];
 		}
 		var controller = form.parent._controller ;
-		DBG.println(AjxDebug.DBG1, item + " is selected ... ");
+		DBG.println(AjxDebug.DBG3, item + " is selected ... ");
 		if (targetEl.checked) { //after the selection it will be uncheck
-			DBG.println(AjxDebug.DBG1, "remove the choice " + targetEl.value );
+			DBG.println(AjxDebug.DBG3, "remove the choice " + targetEl.value );
 			checkedFiltersVector.remove(item);
 			//controller._domainFiltersVector.remove(domain) ;
 		}else{
-			DBG.println(AjxDebug.DBG1, "add the choice " + targetEl.value );
+			DBG.println(AjxDebug.DBG3, "add the choice " + targetEl.value );
 			checkedFiltersVector.add(item);
 			//controller._domainFiltersVector.add (domain) ;
 		}
 		
-		DBG.println(AjxDebug.DBG1, "Update the query ... ");
+		DBG.println(AjxDebug.DBG3, "Update the query ... ");
 		controller.setQuery () ;
 	}
 }
 
-
 ZaSearchBuilderController.optionFilterCallback =
 function (resp) {
-	DBG.println(AjxDebug.DBG1, "Check for the filter results") ;
+	DBG.println(AjxDebug.DBG3, "Check for the filter results ... ") ;
 	var form = this.getForm ();
 	try {
 		if(!resp) {
@@ -170,11 +183,9 @@ function (resp) {
 			var response = resp.getResponse().Body.SearchDirectoryResponse;
 			if (response.domain && response.domain.length > 0) {
 				var domains = new Array (response.domain.length);
-				 
 				for (var i =0; i < domains.length; i ++) {
 					domains[i] = response.domain[i].name ;
 				}
-				
 				var searchTotal = response.searchTotal;
 				
 				//set the list and refresh the list UI
@@ -184,14 +195,6 @@ function (resp) {
 				this.setInstanceValue (new AjxVector (), "/options/" + ZaSearchOption.A_domainListChecked);
 				form.refresh () ;
 			}
-			
-			
-			//var limit = params.limit ? params.limit : this.RESULTSPERPAGE; 
-			//this.numPages = Math.ceil(this._searchTotal/params.limit);
-			//if(params.show)
-				//this._show(this._list);			
-			//else
-				//this._updateUI(this._list);
 		}
 	} catch (ex) {
 		if (ex.code != ZmCsfeException.MAIL_QUERY_PARSE_ERROR) {
@@ -200,10 +203,13 @@ function (resp) {
 			form.parent._controller.popupErrorDialog(ZaMsg.queryParseError, ex);
 		}		
 	}
-	
 }
 
-
+/**
+ * Set the query value based on the LDAP query language for the advanced search 
+ * and the query value will be displayed on the search bar also.
+ * 
+ */
 ZaSearchBuilderController.prototype.setQuery =
 function () {
 	var optionViews = this.getOptionViews () ;
@@ -365,7 +371,7 @@ function (arr) {
 	if (arr.length > 1) {
 		query = "(|" + query + ")";	
 	}
-	DBG.println (AjxDebug.DBG1, "Same Option Type Filter = " + query) ;
+	DBG.println (AjxDebug.DBG3, "Same Option Type Filter = " + query) ;
 	return query ;
 }
 
@@ -376,7 +382,7 @@ function (arr) {
 	if (arr.length > 1) {
 		query = "(&" + query + ")";	
 	}
-	DBG.println (AjxDebug.DBG1, "One Option Type Filter = " + query) ;
+	DBG.println (AjxDebug.DBG3, "One Option Type Filter = " + query) ;
 	
 	return query ;
 }
@@ -410,6 +416,11 @@ function () {
 	return this._searchTypes ;
 }
 
+/**
+ * add an option picker in the search options panel based on the optionId which is 
+ * defined in the option button view.  And update the corresponding 
+ * data structure this._option_views
+ */
 ZaSearchBuilderController.prototype.addOptionView =
 function (optionId) {
 	var position = this._option_views.length ;
@@ -453,6 +464,8 @@ function () {
 	}
 }
 
+//remove an option picker from the search option panel. And update the corresponding 
+//data structure this._option_views
 ZaSearchBuilderController.prototype.removeOptionView =
 function (position, reposition){
 	var option = this._option_views[position] ;
@@ -497,9 +510,3 @@ ZaSearchBuilderController.prototype.getOptionViews =
 function (){
 	return this._option_views ;
 }
-
-/*
-ZaSearchBuilderController.prototype.isEnabled =
-function () {
-	return this._enabled ;
-} */
