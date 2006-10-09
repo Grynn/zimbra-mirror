@@ -547,46 +547,50 @@ function() {
 
 AjxDebug.prototype._finishInitWindow =
 function() {
-	this._contentFrame = this._debugWindow.document.getElementById(AjxDebug._CONTENT_FRAME_ID);
+	try {
+		this._contentFrame = this._debugWindow.document.getElementById(AjxDebug._CONTENT_FRAME_ID);
+		this._linkFrame = this._debugWindow.document.getElementById(AjxDebug._LINK_FRAME_ID);
+		// Create the mark and clear buttons
+		var buttonFrame = this._debugWindow.document.getElementById(AjxDebug._BUTTON_FRAME_ID);
+		var buttonFrameDoc = buttonFrame.contentWindow.document;
+		var buttonFrameBody = buttonFrameDoc.body;
+	
+		var markBtn = this._markBtn = buttonFrameDoc.createElement("button");
+		markBtn.innerHTML = "Mark";
+		markBtn._dbg = this;
+		markBtn.onclick = AjxDebug._mark;
+	
+		var clearBtn = this._clearBtn = buttonFrameDoc.createElement("button");
+		clearBtn._contentFrameId = AjxDebug._CONTENT_FRAME_ID;
+		clearBtn._linkFrameId = AjxDebug._LINK_FRAME_ID;
+		clearBtn.innerHTML = "Clear";
+		clearBtn._dbg = this;
+		clearBtn.onclick = AjxDebug._clear;
+	
+		buttonFrameBody.appendChild(markBtn);
+		buttonFrameBody.appendChild(buttonFrameDoc.createTextNode(" "));
+		buttonFrameBody.appendChild(clearBtn);
+	
+		} catch (ex) {
+			//IE chokes on the popup window on cold start-up (when IE is started for the fisrt time after system reboot)
+			//This should not prevent the app from running and should not bother the user
+		}
+		// If we're not using a div
+		// Set a cookie telling ourselves that a debug window is already open
+		document.cookie = "AjxDebugWinOpen=true";
+	
+		// setup an onunload method
+		if (!AjxEnv.isIE) {
+			this._debugWindow.onunload = AjxDebug.unloadHandler;
+			window.addEventListener('unload', AjxDebug.myWindowUnloadHandler, true);
+		} else {
+			this._debugWindow.attachEvent('onunload', AjxDebug.unloadHandler);
+			window.attachEvent = AjxDebug.myWindowUnloadHandler;
+		}
+	
+		this._dbgWindowInited = true;
+		this._showMessages();
 
-	this._linkFrame = this._debugWindow.document.getElementById(AjxDebug._LINK_FRAME_ID);
-	// Create the mark and clear buttons
-	var buttonFrame = this._debugWindow.document.getElementById(AjxDebug._BUTTON_FRAME_ID);
-	var buttonFrameDoc = buttonFrame.contentWindow.document;
-	var buttonFrameBody = buttonFrameDoc.body;
-
-	var markBtn = this._markBtn = buttonFrameDoc.createElement("button");
-	markBtn.innerHTML = "Mark";
-	markBtn._dbg = this;
-	markBtn.onclick = AjxDebug._mark;
-
-	var clearBtn = this._clearBtn = buttonFrameDoc.createElement("button");
-	clearBtn._contentFrameId = AjxDebug._CONTENT_FRAME_ID;
-	clearBtn._linkFrameId = AjxDebug._LINK_FRAME_ID;
-	clearBtn.innerHTML = "Clear";
-	clearBtn._dbg = this;
-	clearBtn.onclick = AjxDebug._clear;
-
-	buttonFrameBody.appendChild(markBtn);
-	buttonFrameBody.appendChild(buttonFrameDoc.createTextNode(" "));
-	buttonFrameBody.appendChild(clearBtn);
-
-
-	// If we're not using a div
-	// Set a cookie telling ourselves that a debug window is already open
-	document.cookie = "AjxDebugWinOpen=true";
-
-	// setup an onunload method
-	if (!AjxEnv.isIE) {
-		this._debugWindow.onunload = AjxDebug.unloadHandler;
-		window.addEventListener('unload', AjxDebug.myWindowUnloadHandler, true);
-	} else {
-		this._debugWindow.attachEvent('onunload', AjxDebug.unloadHandler);
-		window.attachEvent = AjxDebug.myWindowUnloadHandler;
-	}
-
-	this._dbgWindowInited = true;
-	this._showMessages();
 };
 
 
