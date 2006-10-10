@@ -23,6 +23,6 @@
 # 
 # ***** END LICENSE BLOCK *****
 # 
-source /opt/zimbra/zmshutil || exit 1
+source /opt/zimbra/bin/zmshutil || exit 1
 zmsetvars
 sudo /opt/zimbra/postfix-${postfix_version}/sbin/qshape.pl "$@"
