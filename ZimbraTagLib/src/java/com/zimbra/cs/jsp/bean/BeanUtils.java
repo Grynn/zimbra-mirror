@@ -1,0 +1,271 @@
+/*
+ * ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1
+ * 
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 ("License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.zimbra.com/license
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+ * the License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is: Zimbra Collaboration Suite Server.
+ * 
+ * The Initial Developer of the Original Code is Zimbra, Inc.
+ * Portions created by Zimbra are Copyright (C) 2006 Zimbra, Inc.
+ * All Rights Reserved.
+ * 
+ * Contributor(s): 
+ * 
+ * ***** END LICENSE BLOCK *****
+ */
+package com.zimbra.cs.jsp.bean;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.jstl.fmt.LocaleSupport;
+
+import com.zimbra.cs.jsp.ZJspSession;
+import com.zimbra.cs.service.ServiceException;
+import com.zimbra.cs.zclient.ZEmailAddress;
+import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.cs.zclient.ZTag;
+
+public class BeanUtils {
+
+    private static void addAddr(StringBuilder sb, ZEmailAddress email, int size) {
+        if (email == null) return;
+        if (sb.length() > 0) sb.append(", ");
+        if (size > 1 && email.getDisplay() != null)
+            sb.append(email.getDisplay());        
+        else if (email.getPersonal() != null)
+            sb.append(email.getPersonal());
+        else if (email.getAddress() != null)
+            sb.append(email.getAddress());
+    }
+    
+    public static String getAddrs(List<ZEmailAddress> addrs) {
+        if ( addrs == null) return null;
+        int len = addrs.size();
+        StringBuilder sb = new StringBuilder();
+        for (ZEmailAddress addr: addrs) {
+            addAddr(sb, addr, len);
+        }
+        String result = sb.toString();
+        return result.length() == 0 ? null : result; 
+    }
+    
+    public static String getHeaderAddrs(List<ZEmailAddress> addrs, String type) {
+        if ( addrs == null) return null;
+        StringBuilder sb = new StringBuilder();
+        for (ZEmailAddress addr: addrs) {
+            if (type != null && addr.getType().equals(type)) {
+                if (sb.length() > 0) sb.append("; ");
+                String p = addr.getPersonal();
+                boolean useP = p!= null && p.length() > 0;
+                if (useP) sb.append(p);
+                String a = addr.getAddress();
+                if (a != null && a.length() > 0) {
+                    if (useP) sb.append(" <");
+                    sb.append(a);
+                    if (useP) sb.append('>');
+                }
+            }
+        }
+        String result = sb.toString();
+        return result.length() == 0 ? null : result; 
+    }
+
+    public static String getAddr(ZEmailAddress addr) {
+        String result;
+        if ( addr == null) return null;
+        else if (addr.getPersonal() != null)
+            result = addr.getPersonal();
+        else if (addr.getAddress() != null)
+            result = addr.getAddress();
+        else
+            return null;
+        return result.length() == 0 ? null : result;         
+    }
+
+    private static String replaceAll(String text, Pattern pattern, String replace) {
+        Matcher m = pattern.matcher(text);
+        StringBuffer sb = null;
+        while (m.find()) {
+            if (sb == null) sb = new StringBuffer();
+            m.appendReplacement(sb, replace);
+        }
+        if (sb != null) m.appendTail(sb);
+        return sb == null ? text : sb.toString();
+    }
+    
+    private static final Pattern sAMP = Pattern.compile("&", Pattern.MULTILINE);
+    private static final Pattern sTWO_SPACES = Pattern.compile("  ", Pattern.MULTILINE);
+    private static final Pattern sLEADING_SPACE = Pattern.compile("^ ", Pattern.MULTILINE);
+    private static final Pattern sTAB = Pattern.compile("\\t", Pattern.MULTILINE);
+    private static final Pattern sLT = Pattern.compile("<", Pattern.MULTILINE);
+    private static final Pattern sGT = Pattern.compile(">", Pattern.MULTILINE);
+    private static final Pattern sNL = Pattern.compile("\\r?\\n", Pattern.MULTILINE);    
+    
+    public static String textToHtml(String text) {
+        if (text == null || text.length() == 0) return "";
+        String s = replaceAll(text, sAMP, "&amp;");
+        s = replaceAll(s, sTWO_SPACES, " &nbsp;");
+        s = replaceAll(s, sLEADING_SPACE, "&nbsp;");
+        s = replaceAll(s, sLT, "&lt;");
+        s = replaceAll(s, sGT, "&gt;");
+        s = replaceAll(s, sTAB, "<pre style='display:inline;'>\t</pre>");        
+        s = replaceAll(s, sNL, "<br />");
+        return s;
+    }
+
+    /**
+     * truncat given text at length, then walk back until you hit a whitespace.
+     *  
+     * @param text text to truncate
+     * @param length length to truncate too
+     * @param ellipses whether or not to add ellipses
+     * @return truncated string
+     */
+    public static String truncate(String text, int length, boolean ellipses) {
+        if (text.length() < length) return text;
+        int n = Math.min(length, text.length());
+        for (int i=n-1; i > 0; i--) {
+            if (Character.isWhitespace(text.charAt(i))) {
+                return text.substring(0, i)+(ellipses ? " ..." : "");
+            }
+        }
+        return text.subSequence(0, length)+(ellipses ? " ..." : "");
+    }
+    
+    public static String displaySize(long size) {
+        String units;
+        double dsize;
+        if (size >= 1073741824) {
+            dsize = size/1073741824.0; 
+            units = " GB";
+        } else if (size >= 1048576) {
+            dsize = size/1048576.0;
+            units = " MB";
+        } else if (size >= 1024) { 
+            dsize = size/1024.0; 
+            units = " KB";
+        } else { 
+            dsize = size;
+            units = " B";
+        }
+        return Math.round(dsize) + units;
+    }
+
+    private enum DateTimeFmt { DTF_TIME_SHORT, DTF_DATE_MEDIUM, DTF_DATE_SHORT }
+   
+    private static DateFormat getDateFormat(PageContext pc, DateTimeFmt fmt) {
+        DateFormat df = (DateFormat) pc.getAttribute(fmt.name(), PageContext.REQUEST_SCOPE);
+        if (df == null) {
+            switch (fmt) {
+            case DTF_DATE_MEDIUM:
+                df = new SimpleDateFormat(LocaleSupport.getLocalizedMessage(pc, "formatDateMediumNoYear"));
+                break;
+            case DTF_TIME_SHORT:
+                df = DateFormat.getTimeInstance(DateFormat.SHORT, pc.getRequest().getLocale());
+                break;
+            case DTF_DATE_SHORT:
+            default:
+                df = DateFormat.getDateInstance(DateFormat.SHORT, pc.getRequest().getLocale());
+                break;
+            }
+            pc.setAttribute(fmt.name(), df, PageContext.REQUEST_SCOPE);
+        }
+        return df;
+    }
+
+    public static String displayMsgDate(PageContext pc, Date msg) {
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.HOUR, 0);
+        long nowTime = cal.getTimeInMillis();
+        long msgTime = msg.getTime();
+        
+        if (msgTime >= nowTime) {
+            // show hour and return
+            return getDateFormat(pc, DateTimeFmt.DTF_TIME_SHORT).format(msg);
+        }
+        
+        long nowYear = cal.get(Calendar.YEAR);
+        cal.setTimeInMillis(msgTime);
+        long msgYear = cal.get(Calendar.YEAR);
+        
+        if (nowYear == msgYear) {
+            return getDateFormat(pc, DateTimeFmt.DTF_DATE_MEDIUM).format(msg);            
+        } else {
+            return getDateFormat(pc, DateTimeFmt.DTF_DATE_SHORT).format(msg);                        
+        }
+    }
+    
+    public static String getAttr(PageContext pc, String attr) throws JspException, ServiceException {
+        ZMailbox mbox = ZJspSession.getZMailbox(pc);
+        List<String> val = mbox.getAccountInfo(false).getAttrs().get(attr);
+        return (val.size() > 0) ? val.get(0) : null;
+    }
+    
+    public static String getMessage(PageContext pc, String key) {
+        return LocaleSupport.getLocalizedMessage(pc, key);
+    }
+    
+    public static String getValueOrMessage(PageContext pc, String value, String key) {
+        return (value == null || value.length() == 0) ? LocaleSupport.getLocalizedMessage(pc, key) : value;
+    }
+    
+    public static String repeatString(String string, int count) {
+        if (count==0) return "";
+        StringBuilder sb = new StringBuilder(string.length()*count);
+        while(count-- > 0) sb.append(string);
+        return sb.toString();
+    }
+    
+    private static final Pattern sCOMMA = Pattern.compile(",");
+
+    // todo: add some per-requeset caching?
+    public static List<ZTagBean> getTags(PageContext pc, String idList) throws JspException {
+        ZMailbox mbox = ZJspSession.getZMailbox(pc);
+        if (idList == null || idList.length() == 0) return null;
+        String[] ids = sCOMMA.split(idList);
+        List<ZTagBean> tags = new ArrayList<ZTagBean>(ids.length);
+        for (String id: ids) {
+            ZTag tag = mbox.getTagById(id);
+            if (tag != null) tags.add(new ZTagBean(tag));
+        }
+        return tags;
+    }
+
+    // todo: add some per-request caching?
+    public static String getTagNames(PageContext pc, String idList) throws JspException {
+        ZMailbox mbox = ZJspSession.getZMailbox(pc);
+        if (idList == null || idList.length() == 0) return null;
+        String[] ids = sCOMMA.split(idList);
+        StringBuilder sb = new StringBuilder();
+        for (String id: ids) {
+            ZTag tag = mbox.getTagById(id);
+            if (tag != null) {
+                if (sb.length() > 0) sb.append(',');
+                sb.append(tag.getName());
+            }
+        }
+        return sb.toString();
+    }
+    
+}

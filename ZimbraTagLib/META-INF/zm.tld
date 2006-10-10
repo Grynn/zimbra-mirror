@@ -1,0 +1,611 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+        version="2.0">
+
+    <description>A tag library exercising SimpleTag handlers.</description>
+    <tlib-version>1.0</tlib-version>
+
+    <short-name>ZimbraTagLibrary</short-name>
+    <uri>com.zimbra.zm</uri>
+
+    <tag>
+        <description>
+            Iterates over all mailbox tags.
+        </description>
+        <name>forEachTag</name>
+        <tag-class>com.zimbra.cs.jsp.tag.ForEachTagTag</tag-class>
+        <body-content>scriptless</body-content>
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.jsp.bean.ZTagBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+        <attribute>
+            <description>
+                Name of the exported scoped variable for the
+                current item of the iteration.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+
+    </tag>
+
+    <tag>
+        <description>
+            Iterates over all mailbox folders
+        </description>
+        <name>forEachFolder</name>
+        <tag-class>com.zimbra.cs.jsp.tag.ForEachFolderTag</tag-class>
+        <body-content>scriptless</body-content>
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.jsp.bean.ZFolderBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+        <attribute>
+            <description>
+                Name of the exported scoped variable for the
+                current item of the iteration.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+
+    </tag>
+
+    <tag>
+        <description>
+            Searches.
+        </description>
+        <name>search</name>
+        <tag-class>com.zimbra.cs.jsp.tag.SearchTag</tag-class>
+        <body-content>empty</body-content>
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.jsp.bean.ZSearchResultBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+        <attribute>
+            <description>
+                Name of the exported scoped variable for the
+                current item of the iteration.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <description>search query
+            </description>
+            <name>query</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>max number of results to return</description>
+            <name>limit</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>offset to start at</description>
+            <name>offset</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>types of objects to return (conversaion, message, contact,appointment)</description>
+            <name>types</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>sort order (dateDesc, dateAsc, subjDesc, subjAsc, nameDesc, nameAsc)</description>
+            <name>sort</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>search context</description>
+            <name>searchContext</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>conversation id to search in</description>
+            <name>conv</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>mark message as read</description>
+            <name>markread</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>fetch first message</description>
+            <name>fetchfirst</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>prefer HTML</description>
+            <name>wanthtml</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+
+    </tag>
+
+    <tag>
+        <description>
+            login
+        </description>
+        <name>login</name>
+        <tag-class>com.zimbra.cs.jsp.tag.LoginTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <description>
+                Username
+            </description>
+            <name>username</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>
+                Password
+            </description>
+            <name>password</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>
+                remember me
+            </description>
+            <name>rememberme</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>
+                URL
+            </description>
+            <name>url</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            logout. clears cookie and JSP session.
+        </description>
+        <name>logout</name>
+        <tag-class>com.zimbra.cs.jsp.tag.LogoutTag</tag-class>
+        <body-content>empty</body-content>
+    </tag>
+
+    <tag>
+        <description>
+            Retreive a message.
+        </description>
+
+        <name>getMessage</name>
+
+        <tag-class>com.zimbra.cs.jsp.tag.GetMessageTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.jsp.bean.ZMessageBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the ZMessageBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+
+        <attribute>
+            <description>message id</description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+
+        </attribute>
+
+        <attribute>
+            <description>mark message as read</description>
+            <name>markread</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>prefer HTML</description>
+            <name>wanthtml</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>return the raw message content</description>
+            <name>raw</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>"1" to "neuter" IMG tags returned in HTML content; this involves switching
+                the "src" attribute to "dfsrc" so that images don't display by default
+            </description>
+            <name>neuterimages</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>supply a "part" and the retrieved data will be on the specified message/rfc822 subpart.
+                if the part does not exist or is not a message/rfc822 part, mail.NO_SUCH_PART</description>
+            <name>part</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+    </tag>
+
+    <tag>
+        <description>
+            Retreive a conversation.
+        </description>
+
+        <name>getConversation</name>
+
+        <tag-class>com.zimbra.cs.jsp.tag.GetConversationTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.jsp.bean.ZConversationBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the ZConversationBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+
+        <attribute>
+            <description>conversation id</description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+    </tag>
+
+
+    <tag>
+        <description>
+            Retreive a contact.
+        </description>
+
+        <name>getContact</name>
+
+        <tag-class>com.zimbra.cs.jsp.tag.GetContactTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.jsp.bean.ZContactBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the ZContactBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+
+        <attribute>
+            <description>contact id</description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>return modified date</description>
+            <name>sync</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+
+    <tag>
+        <description>
+            Convert an exception into a ZExceptionBean
+        </description>
+
+        <name>getException</name>
+
+        <tag-class>com.zimbra.cs.jsp.tag.GetExceptionTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.jsp.bean.ZExceptionBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the ZExceptionBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+
+        <attribute>
+            <description>the exception</description>
+            <name>exception</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>            
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Retreive the ZMailboxBean
+        </description>
+
+        <name>getMailbox</name>
+
+        <tag-class>com.zimbra.cs.jsp.tag.GetMailboxTag</tag-class>
+
+        <body-content>empty</body-content>
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.jsp.bean.ZMailboxBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the ZMailboxBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            look at the query strings and compute SearchContext
+        </description>
+        <name>computeSearchContext</name>
+        <tag-class>com.zimbra.cs.jsp.tag.ComputeSearchContextTag</tag-class>
+        <body-content>empty</body-content>
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.jsp.tag.SearchContext</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name for exported request scoped variable
+            </description>
+            <name>var</name>
+            <required>true</required>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
+       <attribute>
+            <description>
+                default search (mail, contacts, calendar)
+            </description>
+            <name>default</name>
+           <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+       <attribute>
+            <description>
+                search limit
+            </description>
+            <name>limit</name>
+           <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>types of objects to return (conversaion, message, contact,appointment)</description>
+            <name>types</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>if true, use cached saerch if possible</description>
+            <name>usecache</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            call saerch conv
+        </description>
+        <name>searchConv</name>
+        <tag-class>com.zimbra.cs.jsp.tag.SearchConvTag</tag-class>
+        <body-content>empty</body-content>
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.jsp.bean.ZSearchResultBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name for exported request scoped variable
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+       <attribute>
+            <description>
+                context from computeQuery
+            </description>
+            <name>context</name>
+           <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>com.zimbra.cs.jsp.tag.SearchContext</type>
+        </attribute>
+        <attribute>
+            <description>
+                fetch first message in conv
+            </description>
+            <name>fetchfirst</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>boolean</type>
+        </attribute>
+
+       <attribute>
+            <description>
+                search limit
+            </description>
+            <name>limit</name>
+           <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        
+        <attribute>
+            <description>mark message as read</description>
+            <name>markread</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>prefer HTML</description>
+            <name>wanthtml</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>
+                ZConversationHitBean
+            </description>
+            <name>conv</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>com.zimbra.cs.jsp.bean.ZConversationHitBean</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            compute next/prev item offset/index based on current context plus index
+        </description>
+        <name>computeNextPrevItem</name>
+        <tag-class>com.zimbra.cs.jsp.tag.ComputeNextPrevItemTag</tag-class>
+        <body-content>empty</body-content>
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.jsp.bean.NextPrevItemBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name for exported request scoped variable
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+       <attribute>
+            <description>
+                search result bean
+            </description>
+            <name>searchResult</name>
+           <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>com.zimbra.cs.jsp.bean.ZSearchResultBean</type>
+        </attribute>
+        <attribute>
+            <description>
+                index of current item
+            </description>
+            <name>index</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>int</type>
+        </attribute>
+    </tag>
+
+    <function>
+        <name>anySet</name>
+        <function-class>com.zimbra.cs.jsp.bean.ZContactBean</function-class>
+        <function-signature>boolean anySet(com.zimbra.cs.jsp.bean.ZContactBean,java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>truncate</name>
+        <function-class>com.zimbra.cs.jsp.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String truncate(java.lang.String,int,boolean)</function-signature>
+    </function>
+
+    <function>
+        <name>displaySize</name>
+        <function-class>com.zimbra.cs.jsp.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String displaySize(long)</function-signature>
+    </function>
+
+    <function>
+        <name>displayMsgDate</name>
+        <function-class>com.zimbra.cs.jsp.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String
+            displayMsgDate(javax.servlet.jsp.PageContext,java.util.Date)</function-signature>
+    </function>
+
+    <function>
+        <name>m</name>
+        <function-class>com.zimbra.cs.jsp.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String
+            getMessage(javax.servlet.jsp.PageContext,java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>vm</name>
+        <function-class>com.zimbra.cs.jsp.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String
+            getValueOrMessage(javax.servlet.jsp.PageContext,java.lang.String,java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>getTags</name>
+        <function-class>com.zimbra.cs.jsp.bean.BeanUtils</function-class>
+        <function-signature>java.util.List&lt;com.zimbra.cs.jsp.bean.ZTagBean&gt;
+            getTags(javax.servlet.jsp.PageContext,java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>getTagNames</name>
+        <function-class>com.zimbra.cs.jsp.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String
+            getTagNames(javax.servlet.jsp.PageContext,java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>repeatString</name>
+        <function-class>com.zimbra.cs.jsp.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String repeatString(java.lang.String, int)</function-signature>
+    </function>
+
+</taglib>
