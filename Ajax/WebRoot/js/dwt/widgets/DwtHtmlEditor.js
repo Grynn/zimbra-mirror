@@ -789,7 +789,7 @@ function() {
 
 DwtHtmlEditor.prototype._getIframeDoc =
 function() {
-	return Dwt.getIframeDoc(document.getElementById(this._iFrameId));
+	return this._iFrameId ? Dwt.getIframeDoc(document.getElementById(this._iFrameId)) : null;
 }
 
 DwtHtmlEditor.prototype._getIframeWin =
