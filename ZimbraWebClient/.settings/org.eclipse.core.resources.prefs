@@ -1,5 +1,10 @@
-#Wed Mar 08 12:28:06 PST 2006
+#Mon Jul 31 14:55:40 PDT 2006
 eclipse.preferences.version=1
 encoding//WebRoot/WEB-INF/web.xml=ISO-8859-1
+encoding//WebRoot/js/zimbra/config/msgs/ZMsg_ru.properties.koi8=koi8-r
 encoding//WebRoot/js/zimbra/config/msgs/ZMsg_ru.properties_cp1251=Cp1251
+encoding//WebRoot/js/zimbraAdmin/config/msgs/ZaMsg_ru.properties.koi8=koi8-r
+encoding//WebRoot/js/zimbraMail/config/msgs/ZmMsg.properties.txt=koi8-r
+encoding//WebRoot/js/zimbraMail/config/msgs/ZmMsg_ru.properties.koi8=koi8-r
 encoding//WebRoot/js/zimbraMail/config/msgs/ZmMsg_ru.properties_koi8=koi8-r
+encoding//WebRoot/js/zimbraMail/config/msgs/lellik.properties.koi8=koi8-r

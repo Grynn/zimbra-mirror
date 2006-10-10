@@ -3826,16 +3826,18 @@ Dwt_List_XFormItem.prototype.updateWidget = function (newValue) {
 
 Dwt_List_XFormItem.prototype.setItems = function (itemArray){
 	var list = this.widget.getList();
-	var existingArr = [];
+	var existingArr = new Array();
 	var tmpArr = new Array();
 	if (list) {
 		existingArr = list.getArray();
-	}
+	} 
 	tmpArr = new Array();
 	var defaultColumnSort = this.getInheritedProperty("defaultColumnSortable") ;
 	if (itemArray && itemArray.length > 0) {	
 		//we have to compare the objects, because XForm calls this method every time an item in the list is selected
-		if((itemArray._version !=null && existingArr._version !=null && (itemArray._version != existingArr._version ) )|| (itemArray.join() != existingArr.join()) ) {
+		if( (itemArray._version !=null && existingArr._version !=null && (itemArray._version != existingArr._version ) )
+			|| (itemArray.length != existingArr.length) 
+			|| (itemArray.join() != existingArr.join()) ) {
 			var preserveSelection = this.getInheritedProperty("preserveSelection");
 			var selection = null;
 			if(preserveSelection) {
