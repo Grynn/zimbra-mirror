@@ -25,7 +25,7 @@
         <form method="get" action="clv">
             <table border=0 width=100%>
                 <tr>
-                    <td><input id="searchbox" type="text" size=25 maxlength=256 name=query></td>
+                    <td><input id="searchbox" type="text" size=25 maxlength=256 name=sq></td>
                     <td><input id="searchMailButton" type="submit" name="mail" value="Search Mail"></td>
                     <td><input id="searchWebButton" type="submit" name="web" value="Search the Web"></td>
                     <td class="searchOptions">
