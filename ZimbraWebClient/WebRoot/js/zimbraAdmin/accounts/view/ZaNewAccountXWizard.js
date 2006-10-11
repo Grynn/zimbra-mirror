@@ -312,7 +312,7 @@ function(entry) {
 		this._containedObject.cos.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = _tmpZimlets;
 					
 		//convert strings to objects
-		var zimlets = ZaZimlet.getAll();
+		var zimlets = ZaZimlet.getAll(this._app, "extension");
 		var _tmpZimlets = [];
 		if(zimlets == null) {
 			zimlets = [];

@@ -107,7 +107,7 @@ function(entry) {
 	}
 	this._containedObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = _tmpZimlets;
 
-	var zimlets = ZaZimlet.getAll();
+	var zimlets = ZaZimlet.getAll(this._app, "extension");
 	var _tmpZimlets = [];
 	if(zimlets == null) {
 		zimlets = [];
