@@ -27,6 +27,19 @@ public class SearchContext {
     private String mBackTo; // text to use for "back to..."
     private String mSelectedId; // id of item in overview tree that is selected
     private String mQuery; // computed search query that we will run
+    private String mSq; // from sq= attr
+    private String mSfi; // from sfi = attr
+    private String mSti; // from sti = attr
+
+    public String getSq() { return mSq; }
+    public void setSq(String sq) { mSq = sq; }
+
+    public String getSfi() { return mSfi; }
+    public void setSfi(String sfi) { mSfi = sfi; }
+
+    public String getSti() { return mSti;}
+    public void setSti(String sti) { mSti = sti; }
+
     private ZSearchParams mParams;
     private ZSearchResultBean mResult;
     private boolean mShowMatches;

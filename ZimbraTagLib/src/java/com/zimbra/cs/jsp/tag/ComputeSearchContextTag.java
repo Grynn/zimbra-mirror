@@ -144,6 +144,10 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
         String sf = req.getParameter(QP_SEARCH_FOLDER_ID);
         String st = req.getParameter(QP_SEARCH_TAG_ID);
 
+        result.setSq(sq);
+        result.setSfi(sf);
+        result.setSti(st);
+
         if (mTypes == null) {
             if (mDefault.equals(TYPE_CONTACTS)) {
                 mTypes = ZSearchParams.TYPE_CONTACT;

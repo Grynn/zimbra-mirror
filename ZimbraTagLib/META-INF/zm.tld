@@ -507,6 +507,13 @@
             <rtexprvalue>true</rtexprvalue>
             <type>com.zimbra.cs.jsp.bean.ZConversationHitBean</type>
         </attribute>
+
+        <attribute>
+            <description>sort order (dateDesc, dateAsc, subjDesc, subjAsc, nameDesc, nameAsc)</description>
+            <name>sort</name>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
     </tag>
 
     <tag>
