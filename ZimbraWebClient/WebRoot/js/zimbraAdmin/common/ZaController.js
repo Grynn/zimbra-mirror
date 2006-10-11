@@ -629,3 +629,21 @@ function(details) {
 		this._handleException(ex, "ZaController.prototype.fireRemovalEvent", details, false);	
 	}
 }
+
+//item should be an xform item
+ZaController.showTooltip =
+function (event, item) {
+	var dwtEv = new DwtUiEvent(true);
+	dwtEv.setFromDhtmlEvent(event)
+	var shell = DwtShell.getShell(window);
+	var tooltip = shell.getToolTip();
+	tooltip.setContent(item.getInheritedProperty("toolTipContent"));
+	tooltip.popup(dwtEv.docX, dwtEv.docY);
+}
+
+ZaController.hideTooltip =
+function (event) {
+	var shell = DwtShell.getShell(window);
+	var tooltip = shell.getToolTip();
+	tooltip.popdown();
+}

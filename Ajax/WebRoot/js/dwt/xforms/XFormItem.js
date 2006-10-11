@@ -1772,7 +1772,22 @@ XFormItem.prototype.choicesAreDirty = function () {
 	return (this._choiceDisplayIsDirty == true || this.getAlwaysUpdateChoices());
 }
 
+XFormItem.prototype.showInputTooltip =
+function (event) {
+	var dwtEv = new DwtUiEvent(true);
+	dwtEv.setFromDhtmlEvent(event)
+	var shell = DwtShell.getShell(window);
+	var tooltip = shell.getToolTip();
+	tooltip.setContent(this.getInheritedProperty("toolTipContent"));
+	tooltip.popup(dwtEv.docX, dwtEv.docY);
+}
 
+XFormItem.prototype.hideInputTooltip =
+function (event) {
+	var shell = DwtShell.getShell(window);
+	var tooltip = shell.getToolTip();
+	tooltip.popdown();
+}
 
 
 
@@ -1849,6 +1864,7 @@ XFormItemFactory.registerItemType("_INPUT_", "input", Textfield_XFormItem);
 Textfield_XFormItem.prototype._inputType = "text";
 Textfield_XFormItem.prototype.cssClass = "xform_field";
 Textfield_XFormItem.prototype.elementChangeHandler="onkeypress";
+//Textfield_XFormItem.prototype.onclickHandler="onclick";
 Textfield_XFormItem.prototype.focusable = true;
 Textfield_XFormItem.prototype.containerCssClass = "xform_field_container";
 
@@ -1876,8 +1892,39 @@ Textfield_XFormItem.prototype.outputHTML = function (html, updateScript, indent,
 	html.append(indent, 
 			"<input autocomplete='off' id=\"", this.getId(),"\" type=\"", inputType, "\"", this.getCssString(), 
 				this.getChangeHandlerHTML(), this.getFocusHandlerHTML(),
+				this.getClickHandlerHTML(), this.getMouseoutHandlerHTML(),
 				(value != null ? " value=\"" + value + "\"" :""), //: (inputHelp != null ? " value=\"" + inputHelp + "\""
 			">");
+}
+
+Textfield_XFormItem.prototype.getClickHandlerHTML =
+function () {
+	var formId = this.getFormGlobalRef(), 
+		itemId = this.getId()
+		;
+	
+	var onClickAction = "";
+	
+	var onClickFunc = this.getInheritedProperty("onClick") ;
+	onClickAction = AjxBuffer.concat(" onclick=\"", onClickFunc || "XFormItem.prototype.showInputTooltip" , 
+			".call(" ,   this.getGlobalRef(), ", event );\" ");
+			
+	return AjxBuffer.concat( onClickAction );	
+}
+
+Textfield_XFormItem.prototype.getMouseoutHandlerHTML =
+function () {
+	var formId = this.getFormGlobalRef(), 
+		itemId = this.getId()
+		;
+	
+	var onMouseoutAction = "";
+	
+	var onMouseoutFunc = this.getInheritedProperty("onMouseout") ;
+	onMouseoutAction = AjxBuffer.concat(" onmouseout=\"", onMouseoutFunc || "XFormItem.prototype.hideInputTooltip" , 
+						".call(" ,   this.getGlobalRef(), ", event );\" ");
+						
+	return AjxBuffer.concat( onMouseoutAction );	
 }
 
 Textfield_XFormItem.prototype.updateElement = function(newValue) {

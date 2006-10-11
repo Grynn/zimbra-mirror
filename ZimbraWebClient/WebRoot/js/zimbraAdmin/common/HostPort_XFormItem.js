@@ -64,7 +64,9 @@ HostPort_XFormItem.prototype.items = [
 				val += this.getParentItem()._portPart;				
 			}
 			this.getForm().itemChanged(this.getParentItem(), val, event);
-		}
+		},
+		onClick: "Super_HostPort_XFormItem.handleClick",
+		onMouseout: "Super_HostPort_XFormItem.handleMouseout"
 	},
 	{type:_OUTPUT_, width:"5px", labelLocation:_NONE_, label:null,relevantBehavior:_PARENT_,value:":"},
 	{type:_TEXTFIELD_,width:"40px",forceUpdate:true, ref:".", labelLocation:_NONE_, label:null, relevantBehavior:_PARENT_, 
@@ -95,4 +97,3 @@ HostPort_XFormItem.prototype.items = [
 		}
 	}
 ];
-

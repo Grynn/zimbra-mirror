@@ -354,6 +354,7 @@ Super_Textfield_XFormItem.prototype.initializeItems = function() {
 	var textFieldCssClass = this.getInheritedProperty("textFieldCssClass");
 	var textFieldCssStyle = this.getInheritedProperty("textFieldCssStyle");
 	var textFieldWidth = this.getInheritedProperty("textFieldWidth");
+	var toolTip = this.getInheritedProperty("toolTipContent");
 
 	var txtField =	{	
 		type:_TEXTFIELD_, ref:".",align:_RIGHT_,
@@ -361,6 +362,9 @@ Super_Textfield_XFormItem.prototype.initializeItems = function() {
 			this.getForm().itemChanged(this, elementValue, event);
 		},		
 		onChange:Composite_XFormItem.onFieldChange,
+		//onClick: "Super_Textfield_XFormItem.handleClick",
+		//onMouseout: "Super_Textfield_XFormItem.handleMouseout",
+		toolTipContent: toolTip,
 		updateElement:function(value) {
 			Super_XFormItem.updateCss.call(this,5);
 			Textfield_XFormItem.prototype.updateElement.call(this, value);
@@ -391,9 +395,6 @@ Super_Textfield_XFormItem.prototype.initializeItems = function() {
 }	
 
 Super_Textfield_XFormItem.prototype.items = [];
-
-
-
 
 /**
 *	_SUPER_CHECKBOX_ form item type
@@ -460,6 +461,8 @@ Super_HostPort_XFormItem.prototype.numCols = 3;
 Super_HostPort_XFormItem.prototype.items = [
 	{	type:_HOSTPORT_, ref:".",
 		onChange:Composite_XFormItem.onFieldChange,
+		onClick: "Super_HostPort_XFormItem.handleClick",
+		onMouseout: "Super_HostPort_XFormItem.handleMouseout",
 		updateElement:function(value) {
 			Super_XFormItem.updateCss.call(this,5);
 			//HostPort_XFormItem.prototype.updateElement.call(this, value);
@@ -472,6 +475,31 @@ Super_HostPort_XFormItem.prototype.items = [
 		onChange:Composite_XFormItem.onFieldChange,cssStyle:"width:100px"
 	}
 ];
+
+Super_HostPort_XFormItem.handleClick =
+function (event, _parent) {
+	//DBG.println(AjxDebug.DBG1, "Handle Click from Super Items ...");
+	var p = _parent || this ; //used for the call from the HostPort_XFormItem
+	p = p.getParentItem () ; 
+	var focusFunc = p.getInheritedProperty("onClick") ;
+	if (focusFunc != null && focusFunc != "") {
+		var func = new Function ("event", "item", "return " + focusFunc + "( event, item);") ;
+		func (event, p) ;
+	}
+}
+
+Super_HostPort_XFormItem.handleMouseout =
+function (event, _parent) {
+	//DBG.println(AjxDebug.DBG1, "Handle onmouseout event ...");
+	var p = _parent || this ;
+	p = p.getParentItem () ; //get the super_textfield item from the _textfield_
+	var focusFunc = p.getInheritedProperty("onMouseout") ;
+	if (focusFunc != null && focusFunc != "") {
+		var func = new Function ("event",  "item", "return " + focusFunc + "(event, item);") ;
+		func (event, p) ;
+	}
+}
+
 
 /**
 *	SUPER_DWT_CHOOSER form item type

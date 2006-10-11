@@ -42,6 +42,8 @@ ZaTabView.XFormModifiers["ZaServerXFormView"] = new Array();
 
 ZaServerXFormView.onFormFieldChanged = 
 function (value, event, form) {
+	DBG.println (AjxDebug.DBG1, "On Form Field Changed ...");
+	
 	form.parent.setDirty(true);
 	this.setInstanceValue(value);
 	return value;
@@ -339,6 +341,9 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 					  label:ZaMsg.NAD_MTA_WebMailHostname,
 					  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
 					  onChange: ZaServerXFormView.onFormFieldChanged,
+					  //onClick: "ZaController.showInputTooltip",
+					  toolTipContent: ZaMsg.tt_MTA_WebMailHostname,
+					  //onMouseout: "ZaController.hideInputTooltip",
 					  textFieldCssClass:"admin_xform_name_input"
 					},
 					{ref:ZaServer.A_SmtpPort, type:_OUTPUT_, 
@@ -352,6 +357,9 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 			      	{ ref:ZaServer.A_zimbraMtaRelayHost, type:_SUPER_HOSTPORT_,
 			      	  label: ZaMsg.NAD_MTA_RelayMTA, 
 			      	  onChange: ZaServerXFormView.onFormFieldChanged,
+			      	  onClick: "ZaController.showTooltip",
+					  toolTipContent: ZaMsg.tt_MTA_RelayMTA,
+					  onMouseout: "ZaController.hideTooltip",
 			      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
 			      	},
 			        { ref: ZaServer.A_zimbraMtaDnsLookupsEnabled, type:_SUPER_CHECKBOX_,

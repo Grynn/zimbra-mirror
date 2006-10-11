@@ -142,7 +142,8 @@ function (optionId){
 		 },*/
 		 { type: _TEXTFIELD_, ref:  ZaSearchOption.A_basic_uid,
 			label: ZaMsg.search_option_uid, align: _LEFT_, width: 100, 
-			onChange: ZaSearchBuilderController.handleOptions
+			onChange: ZaSearchBuilderController.handleOptions,
+		  	toolTipContent: ZaMsg.tt_search_option_uid
 		 },
 		 /*
 		 { type: _TEXTFIELD_, ref:  ZaSearchOption.A_basic_cn,
@@ -160,6 +161,7 @@ function (optionId){
 		 { type: _TEXTFIELD_, ref:  ZaSearchOption.A_basic_zimbraId,
 			label: ZaMsg.search_option_zimbraId, align: _LEFT_, width: 100, 
 			onChange: ZaSearchBuilderController.handleOptions
+			
 		 },
 		 { type:_OSELECT1_, ref:ZaSearchOption.A_basic_status, editable:false, 
 		 	msgName:ZaMsg.NAD_AccountStatus,label:ZaMsg.NAD_AccountStatus, 
@@ -215,6 +217,7 @@ function (optionId){
 		{ type: _SEPARATOR_ , width: 150 },*/
 		{ type: _TEXTFIELD_, ref:  ZaSearchOption.A_domainFilter,
 			label: ZaMsg.search_option_filter, align: _LEFT_, width: 100, 
+		  	toolTipContent: ZaMsg.tt_domain_search_option_filter,
 			onChange: ZaSearchBuilderController.filterDomains
 		 },
 		 {type: _GROUP_, width: 150, colSpan: "*", height: "100%", items :[
