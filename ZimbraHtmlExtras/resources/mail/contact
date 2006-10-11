@@ -19,8 +19,17 @@
 </style>
 <body>
 
+<c:url value="contacts" var="closeurl">
+	<c:if test="${! empty context}"><c:param name='sc' value='${context.id}'/></c:if>
+	<c:param name='so' value='${context.searchResult.offset}'/>
+	<c:param name='si' value='${context.currentItemIndex}'/>
+	<c:if test="${!empty param.sq}"><c:param name='sq' value='${param.sq}'/></c:if>
+	<c:if test="${!empty param.sfi}"><c:param name='sfi' value='${param.sfi}'/></c:if>
+	<c:if test="${!empty param.sti}"><c:param name='sti' value='${param.sti}'/></c:if>
+</c:url>
+
 <c:set var="toolbar">
-							<td class='toolbar unread'><nobr><a href="contacts">&#171; ${fn:escapeXml(context.backTo)}</a></nobr></td>
+							<td class='toolbar unread'><nobr><a href="${closeurl}">&#171; ${fn:escapeXml(context.backTo)}</a></nobr></td>
 							<td class='toolbar unread'><button><fmt:message key="compose"/></button></td>
 							<td class='toolbar'><button><fmt:message key="delete"/></button></td>
 							<td width=100%></td>

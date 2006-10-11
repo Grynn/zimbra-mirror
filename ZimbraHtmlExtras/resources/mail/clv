@@ -20,7 +20,7 @@
 		<button>Report Spam</button>
 	</td>
 	<td class='toolbar'>
-		<button>Delete</button>
+		<button><fmt:message key="delete"/></button>
 	</td>
 	<td class='toolbar'>
 		<select name="action">
@@ -40,12 +40,12 @@
     <td class='toolbar'><a href="clv?offset=0">Refresh</a></td>
     <td width=100%></td>
 	<td>
-		<nobr><app:searchPageLeft context="${context}" urlTarget="clv"/></nobr>
+		<nobr><app:searchPageLeft context="${context}" urlTarget="clv"/>&nbsp;</nobr>
 	</td>
 	<td>
-		<nobr><app:searchPageOffset searchResult="${context.searchResult}"/></nobr>
+		<nobr><app:searchPageOffset searchResult="${context.searchResult}"/>&nbsp;</nobr>
 	</td>
-	<td>
+	<td style='padding-right:9px'>
 		<nobr><app:searchPageRight context="${context}" urlTarget="clv"/></nobr>
 	</td>
 </c:set>

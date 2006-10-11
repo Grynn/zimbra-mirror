@@ -1,3 +1,8 @@
+body {
+	margin-top: 0;
+	padding-top: 0;
+}
+
 body, td, div, p, a, span, input {
 	font-family: arial, sans-serif;
 	font-size: 12px;

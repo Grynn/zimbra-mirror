@@ -7,20 +7,20 @@
 
 <table border=0 cellpadding=0 cellspacing=0 width=100%>
 <tr class="topbar">
-	<td class="leftPane" rowspan=2><a href="http://www.zimbra.com" target="_blank">
+	<td class="leftPane"><a href="http://www.zimbra.com" target="_blank">
 		<app:img src="zimbra_logo.gif" width='150' height='50' border='0'/></a>
 	</td>
-	<td width=100%></td>
-	<td class="username" id="username">${mailbox.name}</td>
-	<td class='cellSeparator'>|</td>
-	<td class="nowrap"><a href="login?op=options">Settings</a></td>
-	<td class='cellSeparator'>|</td>
-	<td class="nowrap"><a href="login?op=help">Help</a></td>
-	<td class='cellSeparator'>|</td>
-	<td class="nowrap"><a href="login?op=logout">Sign out</a></td>
-</tr>
-<tr>
-    <td colspan=100><br>
+    <td valign=top colspan=2>
+		<table border=0 align=right><tr>
+			<td class="username" id="username">${mailbox.name}</td>
+			<td class='cellSeparator'>|</td>
+			<td class="nowrap"><a href="login?op=options">Settings</a></td>
+			<td class='cellSeparator'>|</td>
+			<td class="nowrap"><a href="login?op=help">Help</a></td>
+			<td class='cellSeparator'>|</td>
+			<td class="nowrap"><a href="login?op=logout">Sign out</a></td>
+		</tr></table>
+		<br><br>
 		<form method="get" action="clv">
 			<table border=0 width=100%>
 			<tr>
@@ -62,7 +62,7 @@
 	<td valign=top class="leftPane" id="leftPane">
 		<app:overviewTree/>
 	</td>
-	<td valign=top colspan=100>
+	<td valign=top>
 		<table border=0 cellpadding=0 cellspacing=0 width=100%>
 		<tr>
 			<td id="rightPane">

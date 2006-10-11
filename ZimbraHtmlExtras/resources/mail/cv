@@ -38,8 +38,17 @@ paramaters:
 
 <body>
 
+<c:url value="clv" var="closeurl">
+	<c:param name='so' value='${context.searchResult.offset}'/>
+	<c:param name='si' value='${context.currentItemIndex}'/>
+	<c:if test="${! empty context}"><c:param name='sc' value='${context.id}'/></c:if>
+	<c:if test="${!empty param.sq}"><c:param name='sq' value='${param.sq}'/></c:if>
+	<c:if test="${!empty param.sfi}"><c:param name='sfi' value='${param.sfi}'/></c:if>
+	<c:if test="${!empty param.sti}"><c:param name='sti' value='${param.sti}'/></c:if>
+</c:url>
+
 <c:set var="toolbar">
-	<td class='toolbar unread'><nobr><a href="clv">&#171; ${fn:escapeXml(context.backTo)}</a></nobr></td>
+	<td class='toolbar unread'><nobr><a href="${closeurl}" accesskey="z">&#171; ${fn:escapeXml(context.backTo)}</a></nobr></td>
 	<td class='toolbar'><button>Report Spam</button></td>
 	<td class='toolbar'><button>Delete</button></td>
 	<td class='toolbar'>
