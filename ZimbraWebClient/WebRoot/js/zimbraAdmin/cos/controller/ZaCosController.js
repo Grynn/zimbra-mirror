@@ -37,10 +37,13 @@ function ZaCosController(appCtxt, container,app) {
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/cos/class_of_service.htm";		
 	this.deleteMsg = ZaMsg.Q_DELETE_COS;
 	this.objType = ZaEvent.S_COS;
+	this._toolbarOperations = new Array();	
 }
 
 ZaCosController.prototype = new ZaXFormViewController();
 ZaCosController.prototype.constructor = ZaCosController;
+ZaController.initToolbarMethods["ZaCosController"] = new Array();
+ZaController.setViewMethods["ZaCosController"] = new Array();
 
 /**
 *	@method show
@@ -53,24 +56,65 @@ function(entry) {
 }
 
 
+/**
+*	@method setViewMethod 
+*	@param entry - isntance of ZaCos class
+*/
+ZaCosController.setViewMethod =
+function(entry) {
+	try {
+	   	//create toolbar
+		if(!this._UICreated) {
+			this._initToolbar();
+			//always add Help button at the end of the toolbar		
+			this._toolbarOperations.push(new ZaOperation(ZaOperation.NONE));
+			this._toolbarOperations.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));							
+			this._toolbar = new ZaToolBar(this._container, this._toolbarOperations);
+	
+		  	this._view = new ZaCosXFormView(this._container, this._app, entry.id);
+			var elements = new Object();
+			elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
+			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;			  	
+		    this._app.createView(ZaZimbraAdmin._COS_VIEW, elements);  	
+		    this._UICreated = true;
+	  	}
+	
+		this._app.pushView(ZaZimbraAdmin._COS_VIEW);
+		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
+		if(!entry.id || (entry.name == "default")) {
+			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
+		} else {
+			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);  				
+		}	
+		this._view.setDirty(false);
+		entry[ZaModel.currentTab] = "1"
+	  	this._view.setObject(entry);
+
+	} catch (ex) {
+		this._handleException(ex, "ZaCosController.prototype._setView", null, false);	
+	}
+	this._currentObject = entry;
+}
+ZaController.setViewMethods["ZaCosController"].push(ZaCosController.setViewMethod);
 
 /**
-* Adds listener to modifications in the contained ZaCos 
-* @param listener
+* @method initToolbarMethod
+* This method creates ZaOperation objects 
+* All the ZaOperation objects are added to this._toolbarOperations array which is then used to 
+* create the toolbar for this view.
+* Each ZaOperation object defines one toolbar button.
+* Help button is always the last button in the toolbar
 **/
-ZaCosController.prototype.addCosChangeListener = 
-function(listener) {
-	this._evtMgr.addListener(ZaEvent.E_MODIFY, listener);
+ZaCosController.initToolbarMethod = 
+function () {
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.COSTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener)));
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.COSTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener)));    	
+   	this._toolbarOperations.push(new ZaOperation(ZaOperation.SEP));
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.COSTBB_New_tt, "NewCOS", "NewCOSDis", new AjxListener(this, ZaCosController.prototype._newButtonListener)));
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.COSTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener)));    	    	
 }
+ZaController.initToolbarMethods["ZaCosController"].push(ZaCosController.initToolbarMethod);
 
-/**
-* Removes listener to modifications in the controlled ZaCos 
-* @param listener
-**/
-ZaCosController.prototype.removeCosChangeListener = 
-function(listener) {
-	this._evtMgr.removeListener(ZaEvent.E_MODIFY, listener);    	
-}
 
 /**
 * Adds listener to creation of an ZaCos 
@@ -106,52 +150,6 @@ function(listener) {
 ZaCosController.prototype.removeCosRemovalListener = 
 function(listener) {
 	this._evtMgr.removeListener(ZaEvent.E_REMOVE, listener);    	
-}
-
-
-
-/**
-*	@method _setView 
-*	@param entry - isntance of ZaCos class
-*/
-ZaCosController.prototype._setView =
-function(entry) {
-	try {
-	   	//create toolbar
-		if(!this._UICreated) {
-		   	this._ops = new Array();
-	   		this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.COSTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener)));
-	   		this._ops.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.COSTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener)));    	
-   			this._ops.push(new ZaOperation(ZaOperation.SEP));
-	   		this._ops.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.COSTBB_New_tt, "NewCOS", "NewCOSDis", new AjxListener(this, ZaCosController.prototype._newButtonListener)));
-	   		this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.COSTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener)));    	    	
-			this._ops.push(new ZaOperation(ZaOperation.NONE));
-			this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));							
-			this._toolbar = new ZaToolBar(this._container, this._ops);
-	
-		  	this._view = new ZaCosXFormView(this._container, this._app, entry.id);
-			var elements = new Object();
-			elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
-			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;			  	
-		    this._app.createView(ZaZimbraAdmin._COS_VIEW, elements);  	
-		    this._UICreated = true;
-	  	}
-	
-		this._app.pushView(ZaZimbraAdmin._COS_VIEW);
-		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
-		if(!entry.id || (entry.name == "default")) {
-			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
-		} else {
-			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);  				
-		}	
-		this._view.setDirty(false);
-		entry[ZaModel.currentTab] = "1"
-	  	this._view.setObject(entry);
-
-	} catch (ex) {
-		this._handleException(ex, "ZaCosController.prototype._setView", null, false);	
-	}
-	this._currentObject = entry;
 }
 
 /**

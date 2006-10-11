@@ -39,11 +39,14 @@ function ZaAccountViewController(appCtxt, container, app) {
 	this.objType = ZaEvent.S_ACCOUNT;
 	this._helpURL = ZaAccountViewController.helpURL;
 	this.deleteMsg = ZaMsg.Q_DELETE_ACCOUNT;
+	this._toolbarOperations = new Array();
 }
 
 ZaAccountViewController.prototype = new ZaXFormViewController();
 ZaAccountViewController.prototype.constructor = ZaAccountViewController;
 ZaAccountViewController.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/provisioning_accounts.htm";		
+ZaController.initToolbarMethods["ZaAccountViewController"] = new Array();
+ZaController.setViewMethods["ZaAccountViewController"] = new Array();
 //public methods
 
 /**
@@ -59,17 +62,75 @@ function(entry, skipRefresh) {
 	this._setView(entry, skipRefresh);
 }
 
+ZaAccountViewController.initToolbarMethod =
+function () {
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener)));
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.ALTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener)));    	
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.SEP));
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW_WIZARD, ZaMsg.TBB_New, ZaMsg.ALTBB_New_tt, "Account", "AccountDis", new AjxListener(this, ZaAccountViewController.prototype._newButtonListener)));   			    	
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ALTBB_Delete_tt,"Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener)));    	    	
+	if(ZaSettings.ACCOUNTS_VIEW_MAIL_ENABLED)
+		this._toolbarOperations.push(new ZaOperation(ZaOperation.VIEW_MAIL, ZaMsg.ACTBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, "ReadMailbox", "ReadMailboxDis", new AjxListener(this, ZaAccountViewController.prototype._viewMailListener)));		
 
-ZaAccountViewController.prototype.setDirty = 
-function (isD) {
-	if(isD)
-		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(true);
-	else
-		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
+	if(ZaSettings.ACCOUNTS_REINDEX_ENABLED)
+		this._toolbarOperations.push(new ZaOperation(ZaOperation.REINDEX_MAILBOX, ZaMsg.ACTBB_ReindexMbx, ZaMsg.ACTBB_ReindexMbx_tt, "ReadMailbox", "ReadMailboxDis", new AjxListener(this, ZaAccountViewController.prototype._reindexMbxListener)));					
+
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.NONE));
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));		
 }
+ZaController.initToolbarMethods["ZaAccountViewController"].push(ZaAccountViewController.initToolbarMethod);
 
+/**
+*	@method setViewMethod 
+*	@param entry - isntance of ZaDomain class
+*/
+ZaAccountViewController.setViewMethod =
+function(entry) {
+	try {
+
+		if(!this._UICreated) {
+
+			this._initToolbar();
+			this._toolbar = new ZaToolBar(this._container, this._toolbarOperations);
+	
+	  		this._view = new ZaAccountXFormView(this._container, this._app);
+			var elements = new Object();
+			elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
+			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		  		
+	    	this._app.createView(ZaZimbraAdmin._ACCOUNT_VIEW, elements);
+	    	this._UICreated = true;
+  		}
+		this._app.pushView(ZaZimbraAdmin._ACCOUNT_VIEW);
+		if(entry.id) {
+			try {
+				entry.refresh(!ZaSettings.COSES_ENABLED);
+			} catch (ex) {
+				// Data corruption may cause anexception. We should catch it here in order to display the form anyway.
+				this._handleException(ex, null, null, false);
+				if (ex.code ==  ZmCsfeException.SVC_PERM_DENIED) {
+					this._app.popView();
+				}
+			}
+		}
+		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
+		if(!entry.id) {
+			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
+		} else {
+			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);  				
+		}	
+		this._view.setDirty(false);
+		entry.attrs[ZaAccount.A_password] = null; //get rid of VALUE-BLOCKED
+		entry[ZaModel.currentTab] = "1"
+		this._view.setObject(entry);
+		this._currentObject = entry;
+	} catch (ex) {
+		this._handleException(ex, "ZaAccountViewController.prototype._setView", null, false);
+	}	
+	this._cosChanged = false;
+	this._domainsChanged = false;
+}
+ZaController.setViewMethods["ZaAccountViewController"].push(ZaAccountViewController.setViewMethod);
 //Private/protected methods
-
 /**
 * saves the changes in the fields, calls modify or create on the current ZaAccount
 * @return Boolean - indicates if the changes were succesfully saved
@@ -342,70 +403,7 @@ ZaAccountViewController.prototype._findAlias = function (alias) {
 	return results.list.getArray()[0];
 };
 
-/**
-*	@method _setView 
-*	@param entry - isntance of ZaAccount class
-*	@param skipRefresh - forces to skip entry.refresh() call
-*/
-ZaAccountViewController.prototype._setView =
-function(entry, skipRefresh) {
-	try {
 
-		if(!this._UICreated) {
-	   		this._ops = new Array();
-   			this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener)));
-   			this._ops.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.ALTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener)));    	
-   			this._ops.push(new ZaOperation(ZaOperation.SEP));
-	 		this._ops.push(new ZaOperation(ZaOperation.NEW_WIZARD, ZaMsg.TBB_New, ZaMsg.ALTBB_New_tt, "Account", "AccountDis", new AjxListener(this, ZaAccountViewController.prototype._newButtonListener)));   			    	
-   			this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ALTBB_Delete_tt,"Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener)));    	    	
-   			if(ZaSettings.ACCOUNTS_VIEW_MAIL_ENABLED)
-				this._ops.push(new ZaOperation(ZaOperation.VIEW_MAIL, ZaMsg.ACTBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, "ReadMailbox", "ReadMailboxDis", new AjxListener(this, ZaAccountViewController.prototype._viewMailListener)));		
-	
-			if(ZaSettings.ACCOUNTS_REINDEX_ENABLED)
-				this._ops.push(new ZaOperation(ZaOperation.REINDEX_MAILBOX, ZaMsg.ACTBB_ReindexMbx, ZaMsg.ACTBB_ReindexMbx_tt, "ReadMailbox", "ReadMailboxDis", new AjxListener(this, ZaAccountViewController.prototype._reindexMbxListener)));					
-	
-			this._ops.push(new ZaOperation(ZaOperation.NONE));
-			this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));		
-
-			this._toolbar = new ZaToolBar(this._container, this._ops);
-	
-	  		this._view = new ZaAccountXFormView(this._container, this._app);
-			var elements = new Object();
-			elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
-			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		  		
-	    	this._app.createView(ZaZimbraAdmin._ACCOUNT_VIEW, elements);
-	    	this._UICreated = true;
-  		}
-		this._app.pushView(ZaZimbraAdmin._ACCOUNT_VIEW);
-		if(entry.id && !skipRefresh) {
-			try {
-				entry.refresh(!ZaSettings.COSES_ENABLED);
-			} catch (ex) {
-				// Data corruption may cause anexception. We should catch it here in order to display the form anyway.
-				this._handleException(ex, null, null, false);
-				if (ex.code ==  ZmCsfeException.SVC_PERM_DENIED) {
-					this._app.popView();
-				}
-			}
-		}
-		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
-		if(!entry.id) {
-			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
-		} else {
-			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);  				
-		}	
-		this._view.setDirty(false);
-		entry.attrs[ZaAccount.A_password] = null; //get rid of VALUE-BLOCKED
-		entry[ZaModel.currentTab] = "1"
-		this._view.setObject(entry);
-		this._currentObject = entry;
-	} catch (ex) {
-		this._handleException(ex, "ZaAccountViewController.prototype._setView", null, false);
-	}	
-	this._cosChanged = false;
-	this._domainsChanged = false;
-	
-}
 
 // new button was pressed
 ZaAccountViewController.prototype._newButtonListener =

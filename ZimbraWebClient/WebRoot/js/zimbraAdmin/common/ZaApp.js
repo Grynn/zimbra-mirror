@@ -306,9 +306,9 @@ function() {
 	if (this._controllers[ZaZimbraAdmin._COS_VIEW] == null) {
 		this._controllers[ZaZimbraAdmin._COS_VIEW] = new ZaCosController(this._appCtxt, this._container, this);
 		//since we are creating the COS controller now - register all the interested listeners with it
-		this._controllers[ZaZimbraAdmin._COS_VIEW].addCosChangeListener(new AjxListener(this, ZaApp.prototype.handleCosChange));			
-		this._controllers[ZaZimbraAdmin._COS_VIEW].addCosChangeListener(new AjxListener(this.getCosListController(), ZaCosListController.prototype.handleCosChange));
-		this._controllers[ZaZimbraAdmin._COS_VIEW].addCosChangeListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleCosChange));						
+		this._controllers[ZaZimbraAdmin._COS_VIEW].addChangeListener(new AjxListener(this, ZaApp.prototype.handleCosChange));			
+		this._controllers[ZaZimbraAdmin._COS_VIEW].addChangeListener(new AjxListener(this.getCosListController(), ZaCosListController.prototype.handleCosChange));
+		this._controllers[ZaZimbraAdmin._COS_VIEW].addChangeListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleCosChange));						
 
 		this._controllers[ZaZimbraAdmin._COS_VIEW].addCosCreationListener(new AjxListener(this.getCosListController(), ZaCosListController.prototype.handleCosCreation));	
 		this._controllers[ZaZimbraAdmin._COS_VIEW].addCosCreationListener(new AjxListener(this, ZaApp.prototype.handleCosCreation));			
