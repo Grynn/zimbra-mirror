@@ -31,11 +31,6 @@
     </tag-file>
 
     <tag-file>
-        <name>appTabs</name>
-        <path>/WEB-INF/tags/appTabs.tag</path>
-    </tag-file>
-
-    <tag-file>
         <name>view</name>
         <path>/WEB-INF/tags/view.tag</path>
     </tag-file>
@@ -61,23 +56,8 @@
     </tag-file>
 
     <tag-file>
-        <name>contactFolderTree</name>
-        <path>/WEB-INF/tags/contactFolderTree.tag</path>
-    </tag-file>
-
-    <tag-file>
         <name>overviewTree</name>
         <path>/WEB-INF/tags/overviewTree.tag</path>
-    </tag-file>
-
-    <tag-file>
-        <name>displayContact</name>
-        <path>/WEB-INF/tags/displayContact.tag</path>
-    </tag-file>
-
-    <tag-file>
-        <name>displayMessage</name>
-        <path>/WEB-INF/tags/displayMessage.tag</path>
     </tag-file>
 
     <tag-file>
@@ -85,10 +65,6 @@
         <path>/WEB-INF/tags/img.tag</path>
     </tag-file>
 
-    <tag-file>
-        <name>miniTagImage</name>
-        <path>/WEB-INF/tags/miniTagImage.tag</path>
-    </tag-file>
     <tag-file>
         <name>searchPageLeft</name>
         <path>/WEB-INF/tags/searchPageLeft.tag</path>
