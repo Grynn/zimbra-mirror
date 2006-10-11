@@ -103,7 +103,6 @@
             <lib dir="${zimbratl.build.dir}" includes="zimbrataglib.jar"/>
             <lib dir="${common.jars.dir}" includes="**.jar" excludes="${war.exclude}"/>
             <lib dir="${jars.dir}" includes="**.jar" excludes="${war.exclude}"/>
-            <classes dir="${build.dir}/classes" includes="**/*.class"/>
             <webinf dir="WEB-INF" includes="**" excludes="**/web.xml"/>
             <fileset dir="resources" includes="**"/>
         </war>
