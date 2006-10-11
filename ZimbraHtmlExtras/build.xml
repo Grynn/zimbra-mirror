@@ -89,6 +89,8 @@
     <target name="dev-sync" description="Quick Copy HTML Web Client">
         <copy verbose="true" todir="${deploy.dir}${deploy.path}">
             <fileset dir="resources" includes="**"/>
+        </copy>
+        <copy verbose="true" todir="${deploy.dir}${deploy.path}/WEB-INF">
             <fileset dir="WEB-INF" includes="**"/>
         </copy>
     </target>
