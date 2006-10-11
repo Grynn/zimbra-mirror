@@ -1296,3 +1296,7 @@
 	border: 1px solid;
 	border-color: #000 #fff #fff #000;
 }
+
+.DwtMessageComposite TABLE {
+    border-collapse: collapse;
+}
