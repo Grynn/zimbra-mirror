@@ -10,7 +10,7 @@
 
 <c:if test="${!empty label}"><fmt:message key="${label}" var="label"/></c:if>
 <div class='labelContent' style='padding-left: ${4+folder.depth*8}px'>
-    <a href='clv?sfi=${folder.id}'>
-        ${fn:escapeXml(folder.name)}
-    </a>
+	<a href='clv?sfi=${folder.id}'>
+		${fn:escapeXml(folder.name)}
+	</a>
 </div>

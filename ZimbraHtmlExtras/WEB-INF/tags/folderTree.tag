@@ -17,12 +17,12 @@
 <p/>
 
 <zm:forEachFolder var="folder">
-    <c:if test="${!folder.isSystemFolder and (folder.isNullView or folder.isMessageView or folder.isConversationView)}">
-        <c:if test="${!folder.isSearchFolder}">
-            <app:overviewFolder folder="${folder}"/>
-        </c:if>
-        <c:if test="${folder.isSearchFolder and folder.depth gt 0}">
-            <app:overviewSearchFolder folder="${folder}"/>
-        </c:if>
-    </c:if>
+	<c:if test="${!folder.isSystemFolder and (folder.isNullView or folder.isMessageView or folder.isConversationView)}">
+		<c:if test="${!folder.isSearchFolder}">
+			<app:overviewFolder folder="${folder}"/>
+		</c:if>
+		<c:if test="${folder.isSearchFolder and folder.depth gt 0}">
+			<app:overviewSearchFolder folder="${folder}"/>
+		</c:if>
+	</c:if>
 </zm:forEachFolder>

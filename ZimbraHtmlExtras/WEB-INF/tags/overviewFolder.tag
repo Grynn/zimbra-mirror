@@ -12,8 +12,8 @@
 
 <c:if test="${!empty label}"><fmt:message key="${label}" var="label"/></c:if>
 <div class="folder<c:if test="${folder.hasUnread}"> unread</c:if><c:if test="${folder.id eq requestScope.context.selectedId}"> folderSelected</c:if>" style='padding-left: ${4+folder.depth*8}px'>
-    <a href='clv?sfi=${folder.id}'>
-        ${fn:escapeXml(folder.name)}
-        <c:if test="${folder.hasUnread}"> (${folder.unreadCount})</c:if>
-    </a>
+	<a href='clv?sfi=${folder.id}'>
+		${fn:escapeXml(folder.name)}
+		<c:if test="${folder.hasUnread}"> (${folder.unreadCount})</c:if>
+	</a>
 </div>

@@ -11,7 +11,9 @@
         <c:if test="${!empty title}"><fmt:message key="zimbraTitle"/>: ${fn:escapeXml(title)}</c:if>
     </title>
     <style type="text/css">
-        @import url( "<c:url value="/style/style.css"/>" );
+		@import url( "<c:url value="/style/nifty.css"/>" );
+		@import url( "<c:url value="/style/common.css"/>" );
+		@import url( "<c:url value="/style/mail.css"/>" );
     </style>
     <jsp:doBody/>
 </head>

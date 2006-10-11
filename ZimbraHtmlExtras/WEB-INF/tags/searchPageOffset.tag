@@ -8,8 +8,6 @@
 
 <c:set var="first" value="${searchResult.size eq 0 ? 0 : searchResult.offset+1}"/>
 <c:set var="last" value="${searchResult.offset+searchResult.size}"/>    
-<span class='Paging'>
-${first} <c:if test="${first ne last}"> - ${last}</c:if>
-<c:if test="${!empty max}"> of ${max} </c:if>
-<c:if test="${empty max and !searchResult.hasMore}">&nbsp;<fmt:message key="of"/>&nbsp;${last} </c:if>
-</span>
+<b>${first}<c:if test="${first ne last}"> - ${last}</c:if></b>
+<c:if test="${!empty max}"> of ${max}</c:if>
+<b><c:if test="${empty max and !searchResult.hasMore}"></b>&nbsp;<fmt:message key="of"/>&nbsp;<b>${last}</b> </c:if>
