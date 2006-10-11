@@ -1,0 +1,41 @@
+body, td, div, p, a, span, input {
+	font-family: arial, sans-serif;
+	font-size: 12px;
+}
+
+button {
+	font-family: arial, sans-serif;
+	font-size: 11px;
+}
+
+select {
+	font-family: arial, sans-serif;
+	font-size: 12px;
+}
+
+form {
+	margin: 0;
+}
+
+.welcome {
+	font-size: 16px;
+	font-weight: bolder;
+}
+
+.footer {
+	color: #666666;
+	font-size: 13px;
+	text-align: center;
+}
+
+.footer-small, .footer-small :link {
+	font-size: 11px;
+}
+
+.nowrap {
+	white-space: nowrap;
+}
+
+.error {
+	color :red;
+}

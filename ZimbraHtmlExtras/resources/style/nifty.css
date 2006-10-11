@@ -1,0 +1,22 @@
+/* nifty global */
+.r1 { margin: 0 2; }.r2 { margin: 0 1; }.r3 { margin: 0 0; }
+
+
+/* nifty login */
+.login { 	width: 100%;	background: rgb(195, 217, 255);}.rtopLogin, .rbottomLogin { 	display: block;	background: #FFF}.rtopLogin b, .rbottomLogin b {	display:block;	height: 1px;	overflow: hidden; 	background: rgb(195, 217, 255);}.rtopLogin .r4, .rbottomLogin .r4 { 	margin: 0;	height: 1;}
+
+
+/* nifty labels */
+.niftyLabel { 	width: 100%;	background: rgb(181, 237, 188);
+}.rtopNiftyLabel, .rbottomNiftyLabel { 	display: block;	background: #FFF}.rtopNiftyLabel b, .rbottomNiftyLabel b {	display:block;	height: 1px;	overflow: hidden; 	background: rgb(181, 237, 188);}.rtopNiftyLabel .r4, .rbottomNiftyLabel .r4 { 	margin: 0;	height: 1;}
+
+
+/* nifty mail */
+.niftyMail { 	width: 100%;	background: rgb(195, 217, 255);
+}.rtopNiftyMail, .rbottomNiftyMail { 	display: block;	background: #FFF}.rtopNiftyMail b, .rbottomNiftyMail b {	display:block;	height: 1px;	overflow: hidden; 	background: rgb(195, 217, 255);}.rtopNiftyMail .r4, .rbottomNiftyMail .r4 { 	margin: 0;	height: 1;}
+
+
+/* nifty error */
+.niftyError { 	width: 100%;	background: rgb(250, 209, 99);
+	visibility: hidden;
+}.rtopNiftyError, .rbottomNiftyError { 	display: block;	background: #FFF}.rtopNiftyError b, .rbottomNiftyError b {	display:block;	height: 1px;	overflow: hidden; 	background: rgb(250, 209, 99);}.rtopNiftyError .r4, .rbottomNiftyError .r4 { 	margin: 0;	height: 1;}

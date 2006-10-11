@@ -1,0 +1,256 @@
+:link, :visited, :active {
+	color: rgb(0,0,204);
+}
+
+.topbar {
+	font-size: 75%;
+}
+
+.username {
+	font-weight: bold;
+}
+
+.leftPane {
+	padding-left: 10px;
+	width: 155px;
+}
+
+.error {
+	font-weight: bold;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.searchOptions :link {
+	white-space: nowrap;
+	font-size: 85%;
+}
+
+.cellSeparator {
+	padding: 0 3;
+}
+
+.unread {
+	font-weight: bold;
+}
+
+.quota {
+	text-align: center;
+	color: rgb(0, 102, 51);
+	font-weight: bold;
+	font-size: 80%;
+}
+
+.folder, .folder :link {
+	line-height: 13pt;
+	padding-left: 4px;
+}
+
+.folderSelected {
+	background-color: rgb(195, 217, 255);
+	font-weight: bold;
+}
+
+.labelContent, .labelContent :link {
+	color: rgb(0, 102, 51);
+}
+
+.labelEdit {
+	text-align: right;
+	padding-bottom: 2px;
+	background-color: white;
+}
+
+.labelSmall {
+	font-size: 85%;
+	color: rgb(0, 102, 51);
+}
+
+.inbox {
+	padding-left: 9px;
+}
+
+.inboxContent {
+	background-color: rgb(232, 238, 247);
+}
+
+.toolbar {
+	padding: 0 8 5 0;
+}
+
+.actions, .actions :link {
+	text-decoration: none;
+	padding-bottom: 5px;
+}
+
+.actionOption {
+	padding-left: 15px;
+}
+
+.subjLink:link, .subjLink:active, .subjLink:visited {
+	text-decoration: none;
+	color: #000000;
+}
+
+.convRow {
+	cursor: pointer;
+}
+
+.convCell {
+	border-bottom-width: 1;
+	border-bottom-style: solid;
+	border-bottom-color: rgb(187, 187, 187);
+}
+
+.convSubj {
+	/*white-space: nowrap;*/
+	overflow: hidden;
+}
+
+.convParts {
+	width: 187px;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.convDate {
+	width: 65px;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.convHeader {
+	font-size: 150%;
+	font-weight: bold;
+}
+
+.convContent {
+	background-color: #FFFFFF;
+	padding: 2 10 10 8;
+}
+
+.convTopContent {
+	padding: 5 10 0 15;
+}
+
+.convBotContent {
+	padding: 20;
+}
+
+.msgHeaderCell {
+	color: rgb(0,104,28);
+	font-weight: bold;
+	font-size: 80%;
+	white-space: nowrap;
+}
+
+.msgFragContainer {
+	width: 100%;
+	table-layout: fixed;
+}
+
+.msgFrag, .msgFrag :link {
+	color: rgb(102, 102, 102);
+	text-decoration: none;
+}
+
+.msgText {
+	font-size:80%;
+	white-space:nowrap;
+}
+
+.msgOptions, .msgOptions :link {
+	color: rgb(0, 0, 204);
+	white-space: nowrap;
+	font-size: 80%;
+}
+
+.msgActionContainer {
+	height: 100%;
+}
+
+.noResults {
+	text-align: center;
+	background-color: white;
+}
+
+
+/***************/
+/* card styles */
+/***************/
+.cTop {
+	background-color: transparent;
+	background-image: url('../images/card_top.gif');
+	background-attachment: scroll;
+	background-position: top center;
+}
+
+.cTopLeft {
+	background-color: transparent;
+	background-image: url('../images/card_tl.gif');
+	background-attachment: scroll;
+	background-position: top left;
+}
+
+.cTopRight {
+	background-color: transparent;
+	background-image: url('../images/card_tr.gif');
+	background-attachment: scroll;
+	background-position: top right;
+}
+
+.cConnector {
+	background-color: transparent;
+	background-image: url('../images/card_stl.gif');
+	background-attachment: scroll;
+	background-position: top left;
+}
+
+.cTop, .cBot {
+	padding: 1;
+	width: 100%;
+	background-repeat: repeat-x;
+}
+
+.cTopLeft, .cBotLeft, .cConnector {
+	padding: 0 10 0 0;
+	background-repeat: no-repeat;
+}
+
+.cTopRight, .cBotRight {
+	padding: 0 9 0 0;
+	background-repeat: no-repeat;
+}
+
+.cBot {
+	background-image: url('../images/card_bot.gif');
+	background-position: bottom center;
+}
+
+.cBotLeft {
+	background-color: transparent;
+	background-image: url('../images/card_bl.gif');
+	background-position: bottom left;
+}
+
+.cBotRight {
+	background-image: url('../images/card_br.gif');
+	background-position: bottom right;
+}
+
+.cMiddle, .cActionMiddle {
+	background-position: left center;
+	background-repeat: repeat-y;
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: rgb(232, 232, 232);
+}
+
+.cMiddle {
+	background-image: url('../images/card_left.gif');
+}
+
+.cActionMiddle {
+	background-image: url('../images/card_left2.gif');
+	background-color: rgb(238, 238, 238);
+}

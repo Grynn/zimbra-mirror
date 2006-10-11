@@ -1,0 +1,364 @@
+<%@ page buffer="8kb" autoFlush="true" %>
+<%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="zm" uri="com.zimbra.zm" %>
+<%@ taglib prefix="app" uri="com.zimbra.mailapp" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+
+<zm:getContact id="${param.id}" var="contact"/>
+
+<title>Contacts - ${contact.displayFileAs}</title>
+<style type="text/css">
+	@import url("style/nifty.css");
+	@import url("style/common.css");
+	@import url("style/mail.css");
+	@import url("style/contacts.css");
+</style>
+</head>
+<body leftmargin=0 rightmargin=0>
+
+<c:set var="toolbar">
+							<td class='toolbar unread'><nobr><a href="contacts">&#171; Back to Contacts</a></td>
+							<td class='toolbar unread'><button>Compose</button></td>
+							<td class='toolbar'><button>Delete</button></td>
+							<td width=100%></td>
+							<td><nobr><a href="contact">Add Contact</a> - </td>
+							<td><nobr><a href="import">Import</a> - </td>
+							<td style="padding-right:3px"><nobr><a href="export">Export</a></td>
+</c:set>
+
+<zm:getMailbox var="mailbox"/>
+
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr class="topbar">
+	<td class="leftPane" rowspan=2><a href="http://www.zimbra.com" target="_blank"><img src="images/zimbra_logo.gif" width=150 height=50 border=0></a></td>
+	<td width=100%></td>
+	<td class="username" id="username">${mailbox.name}</td>
+	<td class='cellSeparator'>|</td>
+	<td class="nowrap"><a href="login?op=options">Settings</a></td>
+	<td class='cellSeparator'>|</td>
+	<td class="nowrap"><a href="login?op=help">Help</a></td>
+	<td class='cellSeparator'>|</td>
+	<td class="nowrap"><a href="login?op=logout">Sign out</a></td>
+</tr>
+<tr>
+	<td colspan=100><br>
+		<form method="get" action="clv">
+		<table border=0 width=100%>
+		<tr>
+			<td><input id="searchbox" type="text" size=25 maxlen=256 name=query></td>
+			<td><input id="searchMailButton" type="submit" name="mail" value="Search Mail"></td>
+			<td><input id="searchWebButton" type="submit" name="web" value="Search the Web"></td>
+			<td class="searchOptions">
+				<a href="javascript:;">Show search options</a><br>
+				<a href="javascript:;">Create a filter</a>
+			</td>
+			<td width=100%></td>
+		</tr>
+		<tr>
+			<td colspan=100 align=middle>
+				<div style='width:200px' class="niftyError" id='errorContainer'>
+					<b class="rtopNiftyError">
+						<b class="r1"></b>
+						<b class="r2"></b>
+						<b class="r3"></b>
+						<b class="r4"></b>
+					</b>
+					<span id='error' class='error'>
+						Error goes here
+					</span>
+					<b class="rbottomNiftyError">
+						<b class="r4"></b>
+						<b class="r3"></b>
+						<b class="r2"></b>
+						<b class="r1"></b>
+					</b>
+				</div>
+			</td>
+		</tr>
+		</table>
+		</form>
+	</td>
+</tr>
+<tr>
+	<td valign=top class="leftPane" id="leftPane">
+		<b class='folder'><a href="javascript:;">Compose Mail</a></b><p>
+
+		<div class="folder<c:if test="${mailbox.inbox.hasUnread}"> unread</c:if><c:if test="${mailbox.inbox.id eq selected}"> folderSelected</c:if>">
+			<a href='${empty base ? "clv" : base}?query=in:"${mailbox.inbox.pathUrlEncoded}"'>
+				${fn:escapeXml(empty label ? mailbox.inbox.name : label)} <c:if test="${mailbox.inbox.hasUnread}"> (${mailbox.inbox.unreadCount}) </c:if>
+			</a>
+		</div>
+		<div class="folder<c:if test="${mailbox.sent.hasUnread}"> unread</c:if><c:if test="${mailbox.sent.id eq selected}"> folderSelected</c:if>">
+			<a href='${empty base ? "clv" : base}?query=in:"${mailbox.sent.pathUrlEncoded}"'>
+				${fn:escapeXml(empty label ? mailbox.sent.name : label)} <c:if test="${mailbox.sent.hasUnread}"> (${mailbox.sent.unreadCount}) </c:if>
+			</a>
+		</div>
+		<div class="folder<c:if test="${mailbox.drafts.hasUnread}"> unread</c:if><c:if test="${mailbox.drafts.id eq selected}"> folderSelected</c:if>">
+			<a href='${empty base ? "clv" : base}?query=in:"${mailbox.drafts.pathUrlEncoded}"'>
+				${fn:escapeXml(empty label ? mailbox.drafts.name : label)} <c:if test="${mailbox.drafts.hasUnread}"> (${mailbox.drafts.unreadCount}) </c:if>
+			</a>
+		</div>
+		<div class="folder<c:if test="${mailbox.spam.hasUnread}"> unread</c:if><c:if test="${mailbox.spam.id eq selected}"> folderSelected</c:if>">
+			<a href='${empty base ? "clv" : base}?query=in:"${mailbox.spam.pathUrlEncoded}"'>
+				${fn:escapeXml(empty label ? mailbox.spam.name : label)} <c:if test="${mailbox.spam.hasUnread}"> (${mailbox.spam.unreadCount}) </c:if>
+			</a>
+		</div>
+		<div class="folder<c:if test="${mailbox.trash.hasUnread}"> unread</c:if><c:if test="${mailbox.trash.id eq selected}"> folderSelected</c:if>">
+			<a href='${empty base ? "clv" : base}?query=in:"${mailbox.trash.pathUrlEncoded}"'>
+				${fn:escapeXml(empty label ? mailbox.trash.name : label)} <c:if test="${mailbox.trash.hasUnread}"> (${mailbox.trash.unreadCount}) </c:if>
+			</a>
+		</div>
+		<p>
+		<zm:forEachFolder var="folder">
+		<c:if test="${!folder.isSystemFolder and (folder.isNullView or folder.isMessageView or folder.isConversationView)}">
+			<c:if test="${!folder.isSearchFolder}">
+				<c:if test="${!empty label}"><fmt:message key="${label}" var="label"/></c:if>
+				<div class="folder<c:if test="${folder.hasUnread}"> unread</c:if><c:if test="${folder.id eq selected}"> folderSelected</c:if>" style='padding-left: ${4+folder.depth*8}px'>
+					<a href='${empty base ? "clv" : base}?query=in:"${folder.pathUrlEncoded}"'>
+						${fn:escapeXml(empty label ? folder.name : label)} <c:if test="${folder.hasUnread}"> (${folder.unreadCount}) </c:if>
+					</a>
+				</div>
+			</c:if>
+		</c:if>
+		</zm:forEachFolder>     
+		<p>
+		<div class='folder folderSelected'><a href="javascript:;">Contacts</a></div><p>
+		<div style='width:140px' class="niftyLabel">
+			<b class="rtopNiftyLabel">
+				<b class="r1"></b>
+				<b class="r2"></b>
+				<b class="r3"></b>
+				<b class="r4"></b>
+			</b>
+			<span style='cursor:pointer;'>
+				&nbsp;<img src="images/opentriangle.gif" width=11 height=11> <fmt:message key="searches"/><br>
+				<table border=0 cellpadding=3 cellspacing=0 width=100%>
+				<tr><td>
+					<table border=0 cellpadding=2 cellspacing=2 width=100% bgcolor="#FFFFFF"><tr><td>
+						<zm:forEachFolder var="folder">
+							<c:if test="${folder.isSearchFolder and (folder.depth eq 0)}">
+								<c:if test="${!empty label}"><fmt:message key="${label}" var="label"/></c:if>
+								<div class='labelContent'>
+									<a href='clv?query=${fn:escapeXml(folder.query)}'>
+										${fn:escapeXml(empty label ? folder.name : label)}
+									</a>
+								</div>
+							</c:if>
+						</zm:forEachFolder>
+					</td></tr></table>
+				</td></tr>
+				</table>
+			</span>
+			<b class="rbottomNiftyLabel">
+				<b class="r4"></b>
+				<b class="r3"></b>
+				<b class="r2"></b>
+				<b class="r1"></b>
+			</b>
+		</div><p>
+		<div style='width:140px' class="niftyLabel">
+			<b class="rtopNiftyLabel">
+				<b class="r1"></b>
+				<b class="r2"></b>
+				<b class="r3"></b>
+				<b class="r4"></b>
+			</b>
+			<span style='cursor:pointer;'>
+				&nbsp;<img src="images/opentriangle.gif" width=11 height=11> Labels<br>
+				<table border=0 cellpadding=3 cellspacing=0 width=100%>
+				<tr><td>
+					<table border=0 cellpadding=2 cellspacing=2 width=100% bgcolor="#FFFFFF"><tr><td>
+						<zm:forEachTag var="tag">
+							<div class='labelContent ${tag.hasUnread ? ' unread' : ''}'>
+								<a href='clv?query=tag:"${fn:escapeXml(tag.name)}"'/>
+									<c:out value="${tag.name}"/>
+									<c:if test="${tag.hasUnread}"> (${tag.unreadCount}) </c:if>
+								</a>
+							</div>
+						</zm:forEachTag>
+					</td></tr></table>
+					<div class="labelContent labelEdit"><a href="javascript:;">Edit labels</a></div>
+				</td></tr>
+				</table>
+			</span>
+			<b class="rbottomNiftyLabel">
+				<b class="r4"></b>
+				<b class="r3"></b>
+				<b class="r2"></b>
+				<b class="r1"></b>
+			</b>
+		</div>
+	</td>
+	<td valign=top colspan=100>
+		<table border=0 cellpadding=0 cellspacing=0 width=100%>
+		<tr>
+			<td id="rightPane">
+				<div class="niftyMail">
+					<b class="rtopNiftyMail">
+						<b class="r1"></b>
+						<b class="r2"></b>
+						<b class="r3"></b>
+						<b class="r4"></b>
+					</b>
+					<div class="inbox" id="inbox">
+						<table border=0 cellpadding=0 cellspacing=0 width=100%>
+						<tr>
+							${toolbar}
+						</tr>
+						<tr>
+							<td colspan=100 class="contactContent">
+								<table border=0 cellpadding=0 cellspacing=0>
+								<tr>
+									<td rowspan=2 class="cTopLeft"></td>
+									<td class="cTop" colspan=2 height=4></td>
+									<td rowspan=2 class="cTopRight"></td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+								</tr>
+								</table>
+								<div class="cMiddle contactTopContent">
+									<table border=0><tr>
+										<td><img src="images/red_ghost.jpg" width=96 height=96 border=0></td>
+										<td valign=top>
+											<c:set var="tagNames" value="${fn:escapeXml(zm:getTagNames(pageContext, contact.tagIds))}"/>
+											<div class="contactNameTitle">${fn:escapeXml(empty contact.displayFileAs ? noDisplayAs : contact.displayFileAs)}</div>
+											<div class="contactEmailTitle"><c:if test="${empty contact.displayEmail}">&nbsp;</c:if>${fn:escapeXml(contact.displayEmail)}</div>
+											<div class="labelSmall">${tagNames}</div>
+										</td>
+									</tr></table>
+								</div>
+								<div class="cMiddle contactBotContent">
+									<c:if test="${!empty contact.notes}"><div>${contact.notes}</div></c:if>
+									<table border=0 cellpadding=3 cellspacing=0 style="font-size:80%; width:30em">
+									<c:if test="${zm:anySet(contact,'workStreet workCity workState workPostalCode workCountry workURL workPhone workPhone2 workFax assistantPhone companyPhone callbackPhone')}">
+										<tr><td colspan=2 style="border-bottom-width:1px; border-bottom-style:solid; border-bottom-color:#BBBBBB">&nbsp;</td></tr>
+										<tr><td colspan=2 style="font-weight:bold; padding-bottom:10px"><fmt:message key="work"/></td></tr>
+										<c:if test="${zm:anySet(contact,'workStreet workCity workState workPostalCode workCountry')}">
+										<tr>
+											<td class="contactLabel">Address:</td>
+											<td class="contactOutput">
+												<c:if test="${!empty contact.workStreet}">${fn:escapeXml(contact.workStreet)}<br></c:if>
+												<c:if test="${zm:anySet(contact,'workCity workState workPostalCode workCountry')}">
+													<c:if test="${!empty contact.workCity}">${fn:escapeXml(contact.workCity)}<c:if test="${!empty contact.workState}">,&nbsp;</c:if></c:if>
+													<c:if test="${!empty contact.workState}">${fn:escapeXml(contact.workState)}</c:if>
+													<c:if test="${!empty contact.workPostalCode}">${fn:escapeXml(contact.workPostalCode)}</c:if>
+													<c:if test="${!empty contact.workCountry}"><br>${fn:escapeXml(contact.workCountry)}</c:if>
+												</c:if>
+											</td>
+										</tr>
+										</c:if>
+										<app:contactPhone label="phone" phone="${contact.workPhone}"/>
+										<app:contactPhone label="phone2" phone="${contact.workPhone2}"/>
+										<app:contactPhone label="fax" phone="${contact.workFax}"/>
+										<app:contactPhone label="assistant" phone="${contact.assistantPhone}"/>
+										<app:contactPhone label="company" phone="${contact.companyPhone}"/>
+										<app:contactPhone label="callback" phone="${contact.callbackPhone}"/>
+										<c:if test="${!empty contact.workURL}">
+											<tr><td class="contactLabel">Url:</td><td><a target=_blank href="<c:url value="${contact.workURL}"/>">${fn:escapeXml(contact.workURL)}</a></td></tr>
+										</c:if>
+									</c:if>
+									<c:if test="${zm:anySet(contact,'homeStreet homeCity homeState homePostalCode homeCountry homeURL homePhone homePhone2 homeFax mobilePhone pager carPhone')}">
+										<tr><td colspan=2 style="border-bottom-width:1px; border-bottom-style:solid; border-bottom-color:#BBBBBB">&nbsp;</td></tr>
+										<tr><td colspan=2 style="font-weight:bold; padding-bottom:10px"><fmt:message key="home"/></td></tr>
+										<c:if test="${zm:anySet(contact,'homeStreet homeCity homeState homePostalCode homeCountry')}">
+										<tr>
+											<td class="contactLabel">Address:</td>
+											<td class="contactOutput">
+												<c:if test="${!empty contact.homeStreet}">${fn:escapeXml(contact.homeStreet)}<br></c:if>
+												<c:if test="${zm:anySet(contact,'homeCity homeState homePostalCode homeCountry')}">
+													<c:if test="${!empty contact.homeCity}">${fn:escapeXml(contact.homeCity)}<c:if test="${!empty contact.homeState}">,&nbsp;</c:if></c:if>
+													<c:if test="${!empty contact.homeState}">${fn:escapeXml(contact.homeState)}</c:if>
+													<c:if test="${!empty contact.homePostalCode}">${fn:escapeXml(contact.homePostalCode)}</c:if>
+													<c:if test="${!empty contact.homeCountry}"><br>${fn:escapeXml(contact.homeCountry)}</c:if>
+												</c:if>
+											</td>
+										</tr>
+										</c:if>
+										<app:contactPhone label="phone" phone="${contact.homePhone}"/>
+										<app:contactPhone label="phone2" phone="${contact.homePhone2}"/>
+										<app:contactPhone label="fax" phone="${contact.homeFax}"/>
+										<app:contactPhone label="mobile" phone="${contact.mobilePhone}"/>
+										<app:contactPhone label="pager" phone="${contact.pager}"/>
+										<app:contactPhone label="car" phone="${contact.carPhone}"/>
+										<c:if test="${!empty contact.homeURL}">
+											<tr><td class="contactLabel">Url:</td><td><a target=_blank href="<c:url value="${contact.homeURL}"/>">${fn:escapeXml(contact.homeURL)}</a></td></tr>
+										</c:if>
+									</c:if>
+									<c:if test="${zm:anySet(contact,'otherStreet otherCity otherState otherPostalCode otherCountry otherURL otherPhone otherFax')}">
+										<tr><td colspan=2 style="border-bottom-width:1px; border-bottom-style:solid; border-bottom-color:#BBBBBB">&nbsp;</td></tr>
+										<tr><td colspan=2 style="font-weight:bold; padding-bottom:10px"><fmt:message key="other"/></td></tr>
+										<c:if test="${zm:anySet(contact,'otherStreet otherCity otherState otherPostalCode otherCountry')}">
+										<tr>
+											<td class="contactLabel">Address:</td>
+											<td class="contactOutput">
+												<c:if test="${!empty contact.otherStreet}">${fn:escapeXml(contact.otherStreet)}<br></c:if>
+												<c:if test="${zm:anySet(contact,'otherCity otherState otherPostalCode otherCountry')}">
+													<c:if test="${!empty contact.otherCity}">${fn:escapeXml(contact.otherCity)}<c:if test="${!empty contact.otherState}">,&nbsp;</c:if></c:if>
+													<c:if test="${!empty contact.otherState}">${fn:escapeXml(contact.otherState)}</c:if>
+													<c:if test="${!empty contact.otherPostalCode}">${fn:escapeXml(contact.otherPostalCode)}</c:if>
+													<c:if test="${!empty contact.otherCountry}"><br>${fn:escapeXml(contact.otherCountry)}</c:if>
+												</c:if>
+											</td>
+										</tr>
+										</c:if>
+										<app:contactPhone label="otherPhone" phone="${contact.otherPhone}"/>
+										<app:contactPhone label="otherFax" phone="${contact.otherFax}"/>
+										<c:if test="${!empty contact.otherURL}">
+											<tr><td class="contactLabel">Url:</td><td><a target=_blank href="<c:url value="${contact.otherURL}"/>">${fn:escapeXml(contact.otherURL)}</a></td></tr>
+										</c:if>
+									</c:if>
+									</table><p>
+									<div><a href="javascript:;">edit contact information</a></div>
+								</div>
+								<table border=0 cellpadding=0 cellspacing=0 height=8><tr>
+									<td class="cBotLeft"></td>
+									<td class="cBot"></td>
+									<td class="cBotRight"></td>
+								</tr></table>
+							</td>
+						</tr>
+						<tr><td height=5></td></tr>
+						<tr>
+							${toolbar}
+						</tr>
+						</table>
+					</div>
+					<b class="rbottomNiftyMail">
+						<b class="r4"></b>
+						<b class="r3"></b>
+						<b class="r2"></b>
+						<b class="r1"></b>
+					</b>
+				</div>
+			</td>
+		</tr>
+		<tr><td><br></td></tr>
+		<tr>
+			<td class="quota" id="quota">
+				<c:set var="max" value="${mailbox.attrs.zimbraMailQuota[0]}"/>
+				You are currently using ${zm:displaySize(mailbox.size)} of ${max==0 ? zm:m(pageContext, 'unlimited') : zm:displaySize(max)}.
+			</td>
+		</tr>
+		<tr>
+			<td class="footer footer-small">
+				<a href="http://www.zimbra.com/privacy.html" target="_blank">Privacy Policy</a> - 
+				<a href="http://www.zimbra.com/license/" target="_blank">License</a> - 
+				<a href="http://www.zimbra.com/legal.html" target="_blank">Trademarks</a><br>
+				&copy; 2006 Zimbra Inc.
+			</td>
+		</tr>
+		</table>
+	</td>
+	<td>&nbsp;</td>
+</tr>
+</table>
+
+</body>
+</html>

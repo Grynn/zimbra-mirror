@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4">
+	<context-param>
+		<param-name>javax.servlet.jsp.jstl.fmt.fallbackLocale</param-name>
+		<param-value>en</param-value>
+	</context-param>
+	<context-param>
+	   <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
+	   <param-value>HtmlExtras</param-value>
+	</context-param>
+	<context-param>
+		<param-name>admin.allowed.ports</param-name>
+		<param-value>7071</param-value>
+	</context-param>
+	
+	<context-param>
+	   <param-name>zimbra.soap.url</param-name>
+	   <param-value>http://localhost:7070/service/soap</param-value>
+	</context-param>
+	
+	<context-param>
+	   <param-name>zimbra.jsp.session.timeout</param-name>
+	   <param-value>14400</param-value>
+	</context-param>	
+		   
+	<welcome-file-list>
+		<welcome-file>login</welcome-file>
+	</welcome-file-list>
+
+	<env-entry>
+		<description>
+			The protocol mode can be one of three modes - mixed, http,
+			or https.
+		</description>
+		<env-entry-name>protocolMode</env-entry-name>
+		<env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>http</env-entry-value>
+    </env-entry>
+	<env-entry>
+		<description>
+			The http and httpsPort need to be in sync with the webserver
+			or the proxy - these are the ports that will be used in
+			redirects.
+		</description>
+		<env-entry-name>httpsPort</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>7443</env-entry-value>
+	</env-entry>
+
+	<env-entry>
+		<env-entry-name>httpPort</env-entry-name>
+		<env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>7070</env-entry-value>
+    </env-entry>
+
+	<env-entry>
+		<env-entry-name>mailUrl</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>@mailUrl@</env-entry-value>
+	</env-entry>
+
+    <jsp-config>
+      <jsp-property-group>
+          <url-pattern>/mail/*</url-pattern>
+          <url-pattern>/login</url-pattern>
+      </jsp-property-group>
+    </jsp-config>    
+    
+</web-app>
+

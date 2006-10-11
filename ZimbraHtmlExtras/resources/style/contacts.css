@@ -1,0 +1,77 @@
+.tab {
+	font-weight: bold;
+	white-space: nowrap;
+	padding: 6 10 6 10;
+}
+
+.tabSelected {
+	background-color: rgb(255, 255, 248);
+}
+
+.contactHeaderCol {
+	padding: 8 0 5 0;
+}
+
+.contactBorder {
+	border-width: 0 0 1 0;
+	border-style: solid;
+	border-color: #CCCCCC;
+}
+
+.contactHeader {
+	background-color: #FFFFFF;
+	font-weight: bold;
+}
+
+.contactName, .contactName :link {
+	width: 100px;
+	white-space: nowrap;
+	overflow: hidden;
+	color: #000000;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.contactDetails :link {
+	color: #000000;
+	text-decoration: none;
+}
+
+.contactsContent {
+	background-color: #FFFFF8;
+}
+
+.contactContent {
+	background-color: #FFFFFF;
+	padding: 10;
+}
+
+.contactTopContent {
+	padding: 0 20 0 20;
+}
+
+.contactBotContent {
+	padding: 20;
+}
+
+.contactNameTitle {
+	font-size: 200%;
+	font-weight: bold;
+}
+
+.contactEmailTitle {
+	font-size: 140%;
+}
+
+.contactLabel {
+	padding-left: 3em;
+	width: 1%;
+	text-align: right;
+	vertical-align: top;
+	white-space: nowrap;
+}
+
+.contactOutput {
+	vertical-align: top;
+	white-space: nowrap;
+}

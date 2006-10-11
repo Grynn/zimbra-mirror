@@ -1,0 +1,354 @@
+<%@ page buffer="8kb" autoFlush="true" %>
+<%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="zm" uri="com.zimbra.zm" %>
+<%@ taglib prefix="app" uri="com.zimbra.htmlextras" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%--
+paramaters:
+  offset=...
+  sq|sf|st=...
+
+--%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<zm:computeSearchContext var="context" default="mail" usecache="false"/>
+<title>${fn:escapeXml(context.title)}</title>
+
+<style type="text/css">
+	@import url("<c:url value="/style/nifty.css"/>");
+	@import url("<c:url value="/style/common.css"/>");
+	@import url("<c:url value="/style/mail.css"/>");
+</style>
+
+</head>
+<body>
+
+<c:set value="${empty param.id ? context.searchResult.hits[0].id : param.id}" var="cid"/>
+
+<c:set var="toolbar">
+							<td class='toolbar'><button>Report Spam</button></td>
+							<td class='toolbar'><button>Delete</button></td>
+							<td class='toolbar'>
+								<select>
+									<option selected disabled>More actions...</option>
+									<option value='read' class='actionOption'>Mark as read</option>
+									<option value='unread' class='actionOption'>Mark as unread</option>
+									<option value='star' class='actionOption'>Add star</option>
+									<option value='unstar' class='actionOption'>Remove star</option>
+									<option disabled>--------</option>
+									<option disabled>Apply label:</option>
+									<zm:forEachTag var="tag">
+										<option class='actionOption' value='<c:out value="${tag.id}"/>'><c:out value="${tag.name}"/></option>
+									</zm:forEachTag>
+									<option class='actionOption' value='new'>New Label...</option>
+								</select>
+							</td>
+							<td class='toolbar'><a href="clv?offset=0">Refresh</a></td>
+							<td width=100%></td>
+							<c:if test="${param.offset gt 0}">
+								<c:url value="clv" var="url">
+									<c:param name='offset' value='${context.searchResult.prevOffset}'/>
+									<c:if test="${!empty context}"><c:param name='sc' value='${context.id}'/></c:if>
+									<c:if test="${!empty param.sq}"><c:param name='sq' value='${param.sq}'/></c:if>
+									<c:if test="${!empty param.sf}"><c:param name='sf' value='${param.sf}'/></c:if>
+									<c:if test="${!empty param.st}"><c:param name='st' value='${param.st}'/></c:if>
+								</c:url>
+								<td class='toolbar'><nobr><a href="${url}">&lt; Newer</a></nobr></td>
+							</c:if>
+							<c:if test="${context.searchResult.size gt 0}">
+								<td class='toolbar' id='paging'><nobr><b>${context.searchResult.offset+1} - ${context.searchResult.offset+context.searchResult.size}</b></nobr></td>
+							</c:if>
+							<c:if test="${context.searchResult.hasMore}">
+								<c:url value="clv" var="url">
+									<c:param name='offset' value='${context.searchResult.nextOffset}'/>
+									<c:if test="${!empty context}"><c:param name='sc' value='${context.id}'/></c:if>
+									<c:if test="${!empty param.sq}"><c:param name='sq' value='${param.sq}'/></c:if>
+									<c:if test="${!empty param.sf}"><c:param name='sf' value='${param.sf}'/></c:if>
+									<c:if test="${!empty param.st}"><c:param name='st' value='${param.st}'/></c:if>
+								</c:url>
+								<td class='toolbar'><nobr><a href="${url}">Older &gt;</a></nobr></td>
+							</c:if>							
+</c:set>
+
+<zm:getMailbox var="mailbox"/>
+
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr class="topbar">
+	<td class="leftPane" rowspan=2><a href="http://www.zimbra.com" target="_blank"><app:img src="zimbra_logo.gif" width='150' height='50' border='0'/></a></td>
+	<td width=100%></td>
+	<td class="username" id="username">${mailbox.name}</td>
+	<td class='cellSeparator'>|</td>
+	<td class="nowrap"><a href="login?op=options">Settings</a></td>
+	<td class='cellSeparator'>|</td>
+	<td class="nowrap"><a href="login?op=help">Help</a></td>
+	<td class='cellSeparator'>|</td>
+	<td class="nowrap"><a href="login?op=logout">Sign out</a></td>
+</tr>
+<tr>
+	<td colspan=100><br>
+		<form method="get" action="clv">
+		<table border=0 width=100%>
+		<tr>
+			<td><input id="searchbox" type="text" size=25 maxlength=256 name=query></td>
+			<td><input id="searchMailButton" type="submit" name="mail" value="Search Mail"></td>
+			<td><input id="searchWebButton" type="submit" name="web" value="Search the Web"></td>
+			<td class="searchOptions">
+				<a href="javascript:;">Show search options</a><br>
+				<a href="javascript:;">Create a filter</a>
+			</td>
+			<td width=100%></td>
+		</tr>
+		<tr>
+			<td colspan=100 align=middle>
+				<div style='width:200px' class="niftyError" id='errorContainer'>
+					<b class="rtopNiftyError">
+						<b class="r1"></b>
+						<b class="r2"></b>
+						<b class="r3"></b>
+						<b class="r4"></b>
+					</b>
+					<span id='error' class='error'>
+						Error goes here
+					</span>
+					<b class="rbottomNiftyError">
+						<b class="r4"></b>
+						<b class="r3"></b>
+						<b class="r2"></b>
+						<b class="r1"></b>
+					</b>
+				</div>
+			</td>
+		</tr>
+		</table>
+		</form>
+	</td>
+</tr>
+<tr>
+	<td valign=top class="leftPane" id="leftPane">
+		<b class='folder'><a href="javascript:;">Compose Mail</a></b><p>
+
+		<div class="folder folderSelected<c:if test="${mailbox.inbox.hasUnread}"> unread</c:if>">
+			<a href='clv?sf=${mailbox.inbox.id}'>
+				${fn:escapeXml(mailbox.inbox.name)} <c:if test="${mailbox.inbox.hasUnread}"> (${mailbox.inbox.unreadCount}) </c:if>
+			</a>
+		</div>
+		<div class="folder<c:if test="${mailbox.sent.hasUnread}"> unread</c:if>">
+			<a href='clv?sf=${mailbox.sent.id}'>
+				${fn:escapeXml(mailbox.sent.name)} <c:if test="${mailbox.sent.hasUnread}"> (${mailbox.sent.unreadCount}) </c:if>
+			</a>
+		</div>
+		<div class="folder<c:if test="${mailbox.drafts.hasUnread}"> unread</c:if>">
+			<a href='clv?sf=${mailbox.drafts.id}'>
+				${fn:escapeXml(mailbox.drafts.name)} <c:if test="${mailbox.drafts.hasUnread}"> (${mailbox.drafts.unreadCount}) </c:if>
+			</a>
+		</div>
+		<div class="folder<c:if test="${mailbox.spam.hasUnread}"> unread</c:if>">
+			<a href='clv?sf=${mailbox.spam.id}'>
+				${fn:escapeXml(mailbox.spam.name)} <c:if test="${mailbox.spam.hasUnread}"> (${mailbox.spam.unreadCount}) </c:if>
+			</a>
+		</div>
+		<div class="folder<c:if test="${mailbox.trash.hasUnread}"> unread</c:if>">
+			<a href='clv?sf=${mailbox.trash.id}'>
+				${fn:escapeXml(mailbox.trash.name)} <c:if test="${mailbox.trash.hasUnread}"> (${mailbox.trash.unreadCount}) </c:if>
+			</a>
+		</div>
+		<p>
+		<zm:forEachFolder var="folder">
+		<c:if test="${!folder.isSystemFolder and (folder.isNullView or folder.isMessageView or folder.isConversationView)}">
+			<c:if test="${!folder.isSearchFolder}">
+				<div class="folder<c:if test="${folder.hasUnread}"> unread</c:if>" style='padding-left: ${4+folder.depth*8}px'>
+					<a href="clv?sf=${folder.id}">
+						${fn:escapeXml(folder.name)} <c:if test="${folder.hasUnread}"> (${folder.unreadCount}) </c:if>
+					</a>
+				</div>
+			</c:if>
+		</c:if>
+		</zm:forEachFolder>     
+		<p>
+		<b class='folder'><a href="contacts">Contacts</a></b><p>
+		<div style='width:140px' class="niftyLabel">
+			<b class="rtopNiftyLabel">
+				<b class="r1"></b>
+				<b class="r2"></b>
+				<b class="r3"></b>
+				<b class="r4"></b>
+			</b>
+			<span style='cursor:pointer;'>
+				&nbsp;<app:img src="opentriangle.gif" width='11' height='11'/> <fmt:message key="searches"/><br>
+				<table border=0 cellpadding=3 cellspacing=0 width=100%>
+				<tr><td>
+					<table border=0 cellpadding=2 cellspacing=2 width=100% bgcolor="#FFFFFF"><tr><td>
+						<zm:forEachFolder var="folder">
+							<c:if test="${folder.isSearchFolder and (folder.depth eq 0)}">
+								<div class='labelContent'>
+									<a href='clv?sf=${folder.id}'>
+										${fn:escapeXml(folder.name)}
+									</a>
+								</div>
+							</c:if>
+						</zm:forEachFolder>
+					</td></tr></table>
+				</td></tr>
+				</table>
+			</span>
+			<b class="rbottomNiftyLabel">
+				<b class="r4"></b>
+				<b class="r3"></b>
+				<b class="r2"></b>
+				<b class="r1"></b>
+			</b>
+		</div><p>
+		<div style='width:140px' class="niftyLabel">
+			<b class="rtopNiftyLabel">
+				<b class="r1"></b>
+				<b class="r2"></b>
+				<b class="r3"></b>
+				<b class="r4"></b>
+			</b>
+			<span style='cursor:pointer;'>
+				&nbsp;<app:img src="opentriangle.gif" width='11' height='11'/> Labels<br>
+				<table border=0 cellpadding=3 cellspacing=0 width=100%>
+				<tr><td>
+					<table border=0 cellpadding=2 cellspacing=2 width=100% bgcolor="#FFFFFF"><tr><td>
+						<zm:forEachTag var="tag">
+							<div class='labelContent ${tag.hasUnread ? ' unread' : ''}'>
+								<a href='clv?st=${tag.id}'>
+									<c:out value="${tag.name}"/>
+									<c:if test="${tag.hasUnread}"> (${tag.unreadCount}) </c:if>
+								</a>
+							</div>
+						</zm:forEachTag>
+					</td></tr></table>
+					<div class="labelContent labelEdit"><a href="javascript:;">Edit labels</a></div>
+				</td></tr>
+				</table>
+			</span>
+			<b class="rbottomNiftyLabel">
+				<b class="r4"></b>
+				<b class="r3"></b>
+				<b class="r2"></b>
+				<b class="r1"></b>
+			</b>
+		</div>
+	</td>
+	<td valign=top colspan=100>
+		<table border=0 cellpadding=0 cellspacing=0 width=100%>
+		<tr>
+			<td id="rightPane">
+				<div class="niftyMail">
+					<b class="rtopNiftyMail">
+						<b class="r1"></b>
+						<b class="r2"></b>
+						<b class="r3"></b>
+						<b class="r4"></b>
+					</b>
+					<div class="inbox" id="inbox">
+						<table border=0 cellpadding=0 cellspacing=0 width=100%>
+						<tr>
+							${toolbar}
+						</tr>
+						<tr>
+							<td colspan=100 class='actions'>
+								Select: 
+								<a href='javascript:;'>All</a>,
+								<a href='javascript:;'>None</a>, 
+								<a href='javascript:;'>Read</a>, 
+								<a href='javascript:;'>Unread</a>, 
+								<a href='javascript:;'>Starred</a>, 
+								<a href='javascript:;'>Unstarred</a>
+							</td>
+						</tr>
+						<tr>
+							<td colspan=100 id='inboxContent' class='inboxContent'>
+								<table border=0 width=100% cellpadding=0 cellspacing=0>
+								<c:forEach items="${context.searchResult.convHits}" var="conv" varStatus="status">
+									<tr class="convRow" ${conv.isUnread ? ' style="font-weight:bold"' : ''}>
+										<td width=10 class='convCell'>&nbsp;</td>
+										<td width=20 class='convCell'><input type='checkbox' name='convCheckbox' value='1'/></td>
+										<td width=20 class='convCell' ><app:img src="${conv.isFlagged ? 'star_on_sm_2.gif' : 'star_off_2.gif'}"/></td>
+										<td class='convCell convParts'>
+											<c:out value="${conv.displayRecipients}" default="${zm:m(pageContext, 'unknownRecipient')}"/>
+											<c:if test="${conv.messageCount > 1}">&nbsp;(${conv.messageCount})</c:if>
+										</td>
+										<td class='convCell convSubj'>
+											<c:set var="tagNames" value="${fn:escapeXml(zm:getTagNames(pageContext, conv.tagIds))}"/>
+											<span class="labelSmall">${tagNames}</span>
+											<c:url value="cv" var="url">
+												<c:param name='id' value='${conv.id}'/>
+												<c:param name='offset' value='${param.offset}'/>
+												<c:if test="${!empty context}"><c:param name='sc' value='${context.id}'/></c:if>
+												<c:if test="${!status.last || context.searchResult.hasMore}"><c:param name='n' value='${status.index}'/></c:if>
+												<c:if test="${!empty param.sq}"><c:param name='sq' value='${param.sq}'/></c:if>
+												<c:if test="${!empty param.sf}"><c:param name='sf' value='${param.sf}'/></c:if>
+												<c:if test="${!empty param.st}"><c:param name='st' value='${param.st}'/></c:if>
+											</c:url>
+											<a class="subjLink" href="${url}">
+												<c:out value="${empty conv.subject ? zm:m(pageContext, 'noSubject') : zm:truncate(conv.subject,100,true)}"/>
+											</a>
+										</td>
+										<td width=20 class='convCell'>
+											<app:img src="${conv.hasAttachment ? 'paperclip.gif' : 'blank16.gif'}" width='15' height='15' border='0'/>
+										</td>
+										<td class='convCell convDate'>
+											${fn:escapeXml(zm:displayMsgDate(pageContext, conv.date))}
+										</td>
+									</tr>
+								</c:forEach>
+								</table>
+								<c:if test="${context.searchResult.size == 0}">
+									<div class='noResults'><br><br>No messages matched your search.<br><br></div>
+								</c:if>
+							</td>
+						</tr>
+						<tr><td height=5></td></tr>
+						<tr>
+							${toolbar}
+						</tr>
+						<tr>
+							<td colspan=100 class='actions'>
+								Select: 
+								<a href='javascript:;'>All</a>,
+								<a href='javascript:;'>None</a>, 
+								<a href='javascript:;'>Read</a>, 
+								<a href='javascript:;'>Unread</a>, 
+								<a href='javascript:;'>Starred</a>, 
+								<a href='javascript:;'>Unstarred</a>
+							</td>
+						</tr>
+						</table>
+					</div>
+					<b class="rbottomNiftyMail">
+						<b class="r4"></b>
+						<b class="r3"></b>
+						<b class="r2"></b>
+						<b class="r1"></b>
+					</b>
+				</div>
+			</td>
+		</tr>
+		<tr><td><br></td></tr>
+		<tr>
+			<td class="quota" id="quota">
+				<c:set var="max" value="${mailbox.attrs.zimbraMailQuota[0]}"/>
+				You are currently using ${zm:displaySize(mailbox.size)} of ${max==0 ? zm:m(pageContext, 'unlimited') : zm:displaySize(max)}.
+			</td>
+		</tr>
+		<tr>
+			<td class="footer footer-small">
+				<a href="http://www.zimbra.com/privacy.html" target="_blank">Privacy Policy</a> - 
+				<a href="http://www.zimbra.com/license/" target="_blank">License</a> - 
+				<a href="http://www.zimbra.com/legal.html" target="_blank">Trademarks</a><br>
+				&copy; 2006 Zimbra Inc.
+			</td>
+		</tr>
+		</table>
+	</td>
+	<td>&nbsp;</td>
+</tr>
+</table>
+
+</body>
+</html>

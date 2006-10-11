@@ -1,0 +1,117 @@
+<project name="ZimbraHtmlExtras" default="war">
+
+    <property environment="env"/>
+
+    <property name="build.dir" location="build"/>
+
+    <property name="server.dir" location="../ZimbraServer"/>
+    <property name="server.build.dir" location="${server.dir}/build"/>
+    <property name="server.build.classes.dir" location="${server.build.dir}/classes"/>
+    <property name="server.jars.dir" location="${server.dir}/jars"/>
+
+    <property name="common.dir" location="../ZimbraCommon"/>
+    <property name="common.build.dir" location="${common.dir}/build"/>
+    <property name="common.build.classes.dir" location="${common.build.dir}/classes"/>
+    <property name="common.jars.dir" location="${common.dir}/jars"/>
+
+    <property name="zimbratl.dir" location="../ZimbraTagLib"/>
+    <property name="zimbratl.build.dir" location="${zimbratl.dir}/build"/>
+    <property name="zimbratl.build.classes.dir" location="${zimbratl.build.dir}/classes"/>
+    <property name="zimbratl.jars.dir" location="${zimbratl.dir}/jars"/>
+    
+    <property name="warfile" location="${build.dir}/zmail.war"/>
+
+    <property name="jars.dir" location="jars"/>
+
+    <condition property="deploy.dir" value="${env.DEPLOY_DIR}">
+        <isset property="env.DEPLOY_DIR"/>
+    </condition>
+
+    <condition property="deploy.dir" value="/opt/zimbra/tomcat/webapps">
+        <not>
+            <isset property="env.DEPLOY_DIR"/>
+        </not>
+    </condition>
+
+    <condition property="deploy.url" value="${env.DEPLOY_URL}">
+        <isset property="env.DEPLOY_URL"/>
+    </condition>
+    <condition property="deploy.url" value="http://localhost:7070/manager/">
+        <not>
+            <isset property="env.DEPLOY_URL"/>
+        </not>
+    </condition>
+
+    <property name="deploy.war" value="${warfile}"/>
+    <property name="deploy.user" value="zimbra"/>
+    <property name="deploy.password" value="zimbra"/>
+    <property name="deploy.path" value="/zmail"/>
+
+    <path id="class.path">
+        <pathelement location="${server.build.classes.dir}"/>
+        <fileset dir="${jars.dir}">
+            <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="${server.jars.dir}">
+            <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="${common.jars.dir}">
+            <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="${zimbratl.jars.dir}">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+
+     <taskdef name="deploy" classname="org.apache.catalina.ant.DeployTask" classpathref="class.path"/>
+
+
+    <target name="build-init">
+        <mkdir dir="${build.dir}"/>
+    </target>
+
+    <target name="compile" depends="build-init">
+        <ant dir="${server.dir}" target="jar" inheritAll="false"/>
+        <ant dir="${common.dir}" target="jar" inheritAll="false"/>
+        <ant dir="${zimbratl.dir}" target="jar" inheritAll="false"/>
+    </target>
+
+    <target name="clean" depends="build-init" description="Removes any built/temporary files">
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <!--
+    This target is meant only to be run after a full deploy has
+    been done once. It does not deal with the java code used by the
+    ZimbraWebClient webapp, so if there are any java changes, another
+    deploy will have to be run.
+    -->
+    <target name="dev-sync" description="Quick Copy HTML Web Client">
+        <copy verbose="true" todir="${deploy.dir}${deploy.path}">
+            <fileset dir="resources" includes="**"/>
+            <fileset dir="WEB-INF" includes="**"/>
+        </copy>
+    </target>
+
+    <property name="war.exclude"
+              value="servlet-api.jar,jsp-api.jar,mail.jar,activation.jar,zimbra-native.jar,KeyView.jar"/>
+    
+    <target name="war" depends="build-init,compile">
+        <war warfile="${warfile}" webxml="WEB-INF/web.xml">
+            <lib dir="${server.build.dir}" includes="zimbrastore.jar"/>
+            <lib dir="${common.build.dir}" includes="zimbracommon.jar"/>
+            <lib dir="${zimbratl.build.dir}" includes="zimbrataglib.jar"/>
+            <lib dir="${common.jars.dir}" includes="**.jar" excludes="${war.exclude}"/>
+            <lib dir="${jars.dir}" includes="**.jar" excludes="${war.exclude}"/>
+            <classes dir="${build.dir}/classes" includes="**/*.class"/>
+            <webinf dir="WEB-INF" includes="**" excludes="**/web.xml"/>
+            <fileset dir="resources" includes="**"/>
+        </war>
+    </target>
+
+    <target name="deploy" depends="war" description="Deploy HTML Web Client">
+        <deploy url="${deploy.url}" username="${deploy.user}" password="${deploy.password}"
+                path="${deploy.path}" war="${deploy.war}" update="true"/>
+    </target>
+
+</project>
