@@ -341,9 +341,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 					  label:ZaMsg.NAD_MTA_WebMailHostname,
 					  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
 					  onChange: ZaServerXFormView.onFormFieldChanged,
-					  //onClick: "ZaController.showInputTooltip",
 					  toolTipContent: ZaMsg.tt_MTA_WebMailHostname,
-					  //onMouseout: "ZaController.hideInputTooltip",
 					  textFieldCssClass:"admin_xform_name_input"
 					},
 					{ref:ZaServer.A_SmtpPort, type:_OUTPUT_, 
