@@ -8,7 +8,6 @@
     <property name="server.dir" location="../ZimbraServer"/>
     <property name="server.build.dir" location="${server.dir}/build"/>
     <property name="server.build.classes.dir" location="${server.build.dir}/classes"/>
-    <property name="server.jars.dir" location="${server.dir}/jars"/>
 
     <property name="common.dir" location="../ZimbraCommon"/>
     <property name="common.build.dir" location="${common.dir}/build"/>
@@ -50,9 +49,7 @@
         <fileset dir="${jars.dir}">
             <include name="**/*.jar"/>
         </fileset>
-        <fileset dir="${server.jars.dir}">
-            <include name="**/*.jar"/>
-        </fileset>
+
         <fileset dir="${common.jars.dir}">
             <include name="**/*.jar"/>
         </fileset>

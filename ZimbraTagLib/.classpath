@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/java"/>
-	<classpathentry kind="lib" path="build/zimbrataglib.jar"/>
 	<classpathentry kind="lib" path="jars/jsp-api.jar"/>
 	<classpathentry kind="lib" path="jars/jstl.jar"/>
 	<classpathentry kind="lib" path="jars/servlet-api.jar"/>
