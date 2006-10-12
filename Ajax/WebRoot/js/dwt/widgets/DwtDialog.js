@@ -297,9 +297,7 @@ function(actionCode, ev) {
 			break;
 			
 		case DwtKeyMap.CANCEL:
-			if (this._buttonDesc[DwtDialog.CANCEL_BUTTON]) {
-				this.popdown();
-			}
+			this.popdown();
 			break;
 			
 		default:
