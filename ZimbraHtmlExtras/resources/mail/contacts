@@ -65,13 +65,9 @@ paramaters:
 					</td>
 					<td width=100%></td>
 					<td class="nowrap">
-						<c:if test="${param.offset > 0}">
-							<a href="contacts?offset=${context.searchResult.prevOffset}">&lsaquo; <fmt:message key="previous"/></a>
-						</c:if>
-						<b>${context.searchResult.offset+1} - ${context.searchResult.offset+context.searchResult.size}</b>
-						<c:if test="${context.searchResult.hasMore}">
-							<a href="contacts?offset=${context.searchResult.nextOffset}"><fmt:message key="next"/> &rsaquo;</a>&nbsp;
-						</c:if>
+						<app:searchPageLeft keys="${keys}" context="${context}" urlTarget="contacts"/>
+						<app:searchPageOffset searchResult="${context.searchResult}"/>
+						<app:searchPageRight keys="${keys}" context="${context}" urlTarget="contacts"/>
 					</td>
 				</tr></table>
 			</td>
@@ -89,21 +85,16 @@ paramaters:
 				<tr>
 					<td width=25 class="contactBorder"><input type="checkbox" name=t value="1"></td>
 					<td class="contactBorder"><div class="contactName">
-                        <c:url value="contact" var="url">
-                            <c:if test="${! empty context}"><c:param name='sc' value='${context.id}'/></c:if>
-                            <c:param name='si' value='${status.index}'/>
-                            <c:param name='so' value='${context.searchResult.offset}'/>
-                            <c:if test="${!empty param.sq}"><c:param name='sq' value='${param.sq}'/></c:if>
-                            <c:if test="${!empty param.sf}"><c:param name='sf' value='${param.sf}'/></c:if>
-                            <c:if test="${!empty param.st}"><c:param name='st' value='${param.st}'/></c:if>
-                        </c:url>
-						<a href="${url}">${fn:escapeXml(empty contact.fileAsStr ? '<None>' : contact.fileAsStr)}</a>
+						<zm:currentResultUrl var="contactUrl" value="/mail/contact" index="${status.index}" context="${context}"/>
+						<a href="${contactUrl}">
+							${fn:escapeXml(empty contact.fileAsStr ? '<None>' : contact.fileAsStr)}
+						</a>
 					</div></td>
 					<td width=25 class="contactBorder">&nbsp;</td>
 					<td class="contactBorder">
 						<c:set var="tagNames" value="${fn:escapeXml(zm:getTagNames(pageContext, contact.tagIds))}"/>
 						<span class="labelSmall">${tagNames}</span>
-						<span class="contactDetails"><c:if test="${empty contact.displayEmail}">&nbsp;</c:if><a href="${url}">${fn:escapeXml(contact.displayEmail)}</a></span>
+						<span class="contactDetails"><c:if test="${empty contact.displayEmail}">&nbsp;</c:if><a href="${contactUrl}">${fn:escapeXml(contact.displayEmail)}</a></span>
 					</td>
 				</tr>
 				</c:forEach>

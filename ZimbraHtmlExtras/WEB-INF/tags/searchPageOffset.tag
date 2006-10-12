@@ -10,4 +10,5 @@
 <c:set var="last" value="${searchResult.offset+searchResult.size}"/>    
 <b>${first}<c:if test="${first ne last}"> - ${last}</c:if></b>
 <c:if test="${!empty max}"> of ${max}</c:if>
-<b><c:if test="${empty max and !searchResult.hasMore}"></b>&nbsp;<fmt:message key="of"/>&nbsp;<b>${last}</b> </c:if>
+<c:if test="${empty max and !searchResult.hasMore}">&nbsp;<fmt:message key="of"/>&nbsp;<b>${last}</b> </c:if>
+<c:if test="${!searchResult.hasMore}">&nbsp;</c:if>

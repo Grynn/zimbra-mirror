@@ -23,7 +23,7 @@ paramaters:
 <c:if test="${empty csi}">
 	<c:set var="csi" value="${convSearchResult.size-1}"/>
 </c:if>
-<zm:getMessage var="message" id="${convSearchResult.messageHits[csi].id}" markread="true" wanthtml="false" neuterimages="${empty param.cim}"/>
+<zm:getMessage var="message" id="${convSearchResult.messageHits[csi].id}" markread="true" wanthtml="true" neuterimages="${empty param.xim}"/>
 
 <app:head title="${convHit.subject}"/>
 
@@ -58,19 +58,14 @@ paramaters:
 		</select>
 	</td>
 	<td width=100%></td>
-
-<%-- NEED SERVER SUPPORT FOR NEXT/PREV CONVERSATION
-		<c:if test="${param.offset gt 0}">
-			<td class='toolbar'><nobr><a href="clv?offset=${searchResult.previousOffset}">&lt; Newer</a></td>
-		</c:if>
-		<c:if test="${searchResult.size gt 0}">
-			<td class='toolbar' id='paging'><nobr><b>${param.offset+1} - ${param.offset+searchResult.size}</b></td>
-		</c:if>
-		<c:if test="${searchResult.hasMore}">
-			<td class='toolbar'><nobr><a href="clv?offset=${searchResult.nextOffset}">Older &gt;</a></td>
-		</c:if>
---%>
-
+	<c:if test="${context.hasPrevItem}">
+		<zm:prevItemUrl var="prevItemUrl" value="/mail/cv" cursor="${convCursor}" context="${context}"/>
+		<td class='toolbar unread'><nobr><a <c:if test="${keys}">accesskey="b"</c:if> href="${prevItemUrl}">&lsaquo; Newer</a></nobr></td>
+	</c:if>
+	<c:if test="${context.hasNextItem}">
+		<zm:nextItemUrl var="nextItemUrl" value="/mail/cv" cursor="${convCursor}" context="${context}"/>
+		<td class='toolbar unread'><nobr><a <c:if test="${keys}">accesskey="f"</c:if> href="${nextItemUrl}">Older &rsaquo;</a></nobr></td>
+	</c:if>
 </c:set>
 
 <zm:getMailbox var="mailbox"/>
@@ -119,37 +114,20 @@ paramaters:
 							</c:if>
 							<tr>
 								<td class="msgHeaderCell">
-									<app:img src="${mess.isFlagged ? 'star_on_sm_2.gif' : 'star_off_2.gif'}" style="cursor:pointer"/>&nbsp;
+									<app:img src="${mess.isFlagged ? 'star_on_sm_2.gif' : 'star_off_2.gif'}" style="cursor:pointer"/>
 									<span>${fn:escapeXml(mess.displaySender)}</span>&nbsp;
 								</td>
 								<td width=100% valign=bottom>
 									<c:if test="${status.last}">
-										<table border=0 cellpadding=0 cellspacing=0 class="msgFragContainer">
-											<tr><td class="msgText">
-												to ${fn:escapeXml(message.displayTo)}
-											</td></tr>
-										</table>
+										<div class="msgText">
+											to ${fn:escapeXml(message.displayTo)}
+										</div>
 									</c:if>
 									<c:if test="${!status.last}">
-										<table border=0 cellpadding=0 cellspacing=0 class="msgFragContainer">
-											<tr><td class="msgText">
-												<div style="white-space:nowrap; overflow:hidden">
-													<span class="msgFrag">
-														<c:url value="cv" var="url">
-															<c:param name='csi' value='${status.index}'/>
-															<c:param name='su' value='1'/>
-															<c:param name='si' value='${context.currentItemIndex}'/>
-															<c:param name='so' value='${context.searchResult.offset}'/>
-															<c:if test="${!empty context}"><c:param name='sc' value='${context.id}'/></c:if>
-															<c:if test="${!empty param.sq}"><c:param name='sq' value='${param.sq}'/></c:if>
-															<c:if test="${!empty param.sfi}"><c:param name='sfi' value='${param.sfi}'/></c:if>
-															<c:if test="${!empty param.sti}"><c:param name='sti' value='${param.sti}'/></c:if>
-														</c:url>
-														<a href="${url}">${fn:escapeXml(empty mess.fragment ? zm:m(pageContext, 'noFragment') : zm:truncate(mess.fragment,100, true))}</a>
-													</span>
-												</div>
-											</td></tr>
-										</table>
+										<div class="msgFrag">
+											<zm:currentResultUrl var="msgUrl" value="cv"  context="${context}" cso="${convSearchResult.offset}" csi="${status.index}"/>
+											<a href="${msgUrl}">${fn:escapeXml(empty mess.fragment ? zm:m(pageContext, 'noFragment') : zm:truncate(mess.fragment,100, true))}</a>
+										</div>
 									</c:if>
 								</td>
 								<c:if test="${status.last}">
@@ -158,7 +136,7 @@ paramaters:
 								<c:if test="${!status.last}">
 									<td></td>
 								</c:if>
-								<td class="msgText" align=right>
+								<td class="nowrap" align=right>
 									<c:if test="${mess.hasAttachment eq true}">
 										&nbsp;<app:img src="paperclip.gif" width='15' height='15' border='0' style="vertical-align:middle"/>
 									</c:if>

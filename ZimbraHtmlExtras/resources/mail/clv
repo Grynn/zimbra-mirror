@@ -40,13 +40,13 @@
     <td class='toolbar'><a href="clv?offset=0">Refresh</a></td>
     <td width=100%></td>
 	<td>
-		<nobr><app:searchPageLeft context="${context}" urlTarget="clv"/>&nbsp;</nobr>
+		<nobr><app:searchPageLeft keys="${keys}" context="${context}" urlTarget="clv"/>&nbsp;</nobr>
 	</td>
 	<td>
 		<nobr><app:searchPageOffset searchResult="${context.searchResult}"/>&nbsp;</nobr>
 	</td>
 	<td style='padding-right:9px'>
-		<nobr><app:searchPageRight context="${context}" urlTarget="clv"/></nobr>
+		<nobr><app:searchPageRight keys="${keys}" context="${context}" urlTarget="clv"/></nobr>
 	</td>
 </c:set>
 
@@ -93,15 +93,7 @@
 								<td class='convCell convSubj'>
 									<c:set var="tagNames" value="${fn:escapeXml(zm:getTagNames(pageContext, conv.tagIds))}"/>
 									<span class="labelSmall">${tagNames}</span>
-									<c:url value="cv" var="url">
-										<c:param name='su' value='1'/>
-										<c:param name='si' value='${status.index}'/>
-										<c:param name='so' value='${context.searchResult.offset}'/>
-										<c:if test="${!empty context}"><c:param name='sc' value='${context.id}'/></c:if>
-										<c:if test="${!empty param.sq}"><c:param name='sq' value='${param.sq}'/></c:if>
-										<c:if test="${!empty param.sfi}"><c:param name='sfi' value='${param.sfi}'/></c:if>
-										<c:if test="${!empty param.sti}"><c:param name='sti' value='${param.sti}'/></c:if>
-									</c:url>
+									<zm:currentResultUrl var="url" value="cv" index="${status.index}" context="${context}" usecache="true"/>
 									<a class="subjLink" href="${url}" accesskey="p">
 										<c:out value="${empty conv.subject ? zm:m(pageContext, 'noSubject') : zm:truncate(conv.subject,100,true)}"/>
 									</a>

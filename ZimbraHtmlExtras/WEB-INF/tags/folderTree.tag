@@ -11,7 +11,7 @@
 <app:overviewFolder folder="${mailbox.inbox}" key="i" label="inbox"/>
 <app:overviewFolder folder="${mailbox.sent}" key="s" label="sent"/>
 <app:overviewFolder folder="${mailbox.drafts}" key="d" label="drafts"/>
-<app:overviewFolder folder="${mailbox.spam}" key="u" label="junk"/>
+<app:overviewFolder folder="${mailbox.spam}" key="u" label="spam"/>
 <app:overviewFolder folder="${mailbox.trash}" key="t" label="trash"/>
 
 <p/>

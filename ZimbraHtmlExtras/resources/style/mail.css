@@ -40,7 +40,7 @@
 	font-size: 80%;
 }
 
-.folder, .folder :link {
+.folder, .folder :link, .folder :visited, .folder :active {
 	line-height: 13pt;
 	padding-left: 4px;
 }
@@ -50,7 +50,7 @@
 	font-weight: bold;
 }
 
-.labelContent, .labelContent :link {
+.labelContent, .labelContent :link,  .labelContent :visited, .labelContent :active {
 	color: rgb(0, 102, 51);
 }
 
@@ -63,6 +63,7 @@
 .labelSmall {
 	font-size: 85%;
 	color: rgb(0, 102, 51);
+	font-weight: normal;
 }
 
 .inbox {
@@ -77,7 +78,7 @@
 	padding: 0 8 5 0;
 }
 
-.actions, .actions :link {
+.actions, .actions :link, .actions :visited, .actions :active {
 	text-decoration: none;
 	padding-bottom: 5px;
 }
@@ -143,25 +144,23 @@
 	white-space: nowrap;
 }
 
-.msgFragContainer {
-	width: 100%;
-	table-layout: fixed;
-}
-
-.msgFrag, .msgFrag :link {
+.msgFrag, .msgFrag :link, .msgFrag :visited, .msgFrag :active {
 	color: rgb(102, 102, 102);
 	text-decoration: none;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 .msgText {
-	font-size:80%;
-	white-space:nowrap;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
-.msgOptions, .msgOptions :link {
+.msgOptions, .msgOptions :link, .msgOptions :visited, .msgOptions :active {
 	color: rgb(0, 0, 204);
 	white-space: nowrap;
 	font-size: 80%;
+	padding: 0 5 0 3;
 }
 
 .msgActionContainer {
