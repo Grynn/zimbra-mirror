@@ -17,22 +17,13 @@ paramaters:
 <c:set var="convHit" value="${context.currentItem}"/>
 
 <c:set var="csi" value="${param.csi}"/>
-<zm:searchConv var="convSearchResult" conv="${convHit}" context="${context}" fetchfirst="${empty csi}" markread="true" wanthtml="false"/>
+<zm:searchConv var="convSearchResult" conv="${convHit}" context="${context}" markread="true" wanthtml="false" sort="dateAsc"/>
 <zm:computeNextPrevItem var="convCursor" searchResult="${context.searchResult}" index="${context.currentItemIndex}"/>
 
-<c:set var="message" value="${null}"/>
 <c:if test="${empty csi}">
-	<c:set var="csi" value="${convSearchResult.fetchedMessageIndex}"/>
-	<c:if test="${csi ge 0}">
-		<c:set var="message" value="${convSearchResult.messageHits[csi].message}"/>
-	</c:if>
+	<c:set var="csi" value="${convSearchResult.size-1}"/>
 </c:if>
-<c:if test="${message eq null}">
-	<c:if test="${csi lt 0 or csi ge convSearchResult.size}">
-		<c:set var="csi" value="0"/>
-	</c:if>
-	<zm:getMessage var="message" id="${convSearchResult.messageHits[csi].id}" markread="true" wanthtml="false" neuterimages="${empty param.cim}"/>
-</c:if>
+<zm:getMessage var="message" id="${convSearchResult.messageHits[csi].id}" markread="true" wanthtml="false" neuterimages="${empty param.cim}"/>
 
 <app:head title="${convHit.subject}"/>
 
@@ -99,105 +90,112 @@ paramaters:
 		</tr>
 		<tr>
 			<td colspan=100 class="convContent">
-				<table border=0 cellpadding=2 cellspacing=2 width=100%>
-					<tr>
-						<td width=100%>
-							<span class="convHeader">${fn:escapeXml(message.subject)}</span>
-							<c:set var="tagNames" value="${fn:escapeXml(zm:getTagNames(pageContext, message.tagIds))}"/>
-							<span class="labelSmall">${tagNames}</span>
-						</td>
-						<td class="nowrap" valign=top>
-							<app:img src="tearoff_icon.gif" width='16' height='16' border='0' style="vertical-align:middle"/> <a href="javascript:;">New window</a>
-							&nbsp;&nbsp;
-							<app:img src="print_icon.gif" width='16' height='16' border='0' style="vertical-align:middle"/> <a href="javascript:;">Print all</a>
-						</td>
-					</tr>
-				</table>
-				<c:forEach items="${convSearchResult.messageHits}" var="mess" varStatus="status">
-					<table border=0 cellpadding=0 cellspacing=0>
-						<c:if test="${status.first}">
-							<tr>
-								<td rowspan=2 class="cTopLeft"></td>
-								<td class="cTop" colspan=4 height=4></td>
-								<td rowspan=2 class="cTopRight"></td>
-							</tr>
-						</c:if>
-						<c:if test="${!status.first}">
-							<tr>
-								<td rowspan=2 class="cConnector"></td>
-								<td class="cTop" colspan=4 height=4></td>
-								<td rowspan=2 class="cTopRight"></td>
-							</tr>
-						</c:if>
+				<table border=0 width=100%><tr>
+				<td valign=top colspan=4 width=100%>
+					<table border=0 cellpadding=2 cellspacing=2 width=100%>
 						<tr>
-							<td class="msgHeaderCell">
-								<app:img src="${mess.isFlagged ? 'star_on_sm_2.gif' : 'star_off_2.gif'}" style="cursor:pointer"/>&nbsp;
-								<span>${fn:escapeXml(mess.displaySender)}</span>&nbsp;
-							</td>
-							<td width=100% valign=bottom>
-								<c:if test="${status.last}">
-									<table border=0 cellpadding=0 cellspacing=0 class="msgFragContainer">
-										<tr><td class="msgText">
-											to ${fn:escapeXml(message.displayTo)}
-										</td></tr>
-									</table>
-								</c:if>
-								<c:if test="${!status.last}">
-									<table border=0 cellpadding=0 cellspacing=0 class="msgFragContainer">
-										<tr><td class="msgText">
-											<div style="white-space:nowrap; overflow:hidden">
-												<span class="msgFrag">
-													<c:url value="cv" var="url">
-														<c:param name="id" value="${param.id}"/>
-														<c:param name="query" value="${param.query}"/>
-														<c:param name="offset" value="${param.offset}"/>
-														<c:param name="cvoffset" value="${param.cvoffset}"/>
-														<c:param name="mid" value="${mess.id}"/>
-													</c:url>
-													<a href="${url}">${fn:escapeXml(empty mess.fragment ? zm:m(pageContext, 'noFragment') : zm:truncate(mess.fragment,100, true))}</a>
-												</span>
-											</div>
-										</td></tr>
-									</table>
-								</c:if>
-							</td>
-							<c:if test="${status.last}">
-								<td class="msgOptions"><a href="javascript:;">More options</a></td>
-							</c:if>
-							<c:if test="${!status.last}">
-								<td></td>
-							</c:if>
-							<td class="msgText" align=right>
-								<c:if test="${mess.hasAttachment eq true}">
-									&nbsp;<app:img src="paperclip.gif" width='15' height='15' border='0' style="vertical-align:middle"/>
-								</c:if>
-								<span>${fn:escapeXml(zm:displayMsgDate(pageContext, mess.date))}</span>
+							<td width=100%>
+								<span class="convHeader">${fn:escapeXml(message.subject)}</span>
+								<c:set var="tagNames" value="${fn:escapeXml(zm:getTagNames(pageContext, message.tagIds))}"/>
+								<span class="labelSmall">${tagNames}</span>
 							</td>
 						</tr>
 					</table>
-				</c:forEach>
-				<div class="cMiddle convTopContent">
-					<c:set var="body" value="${message.body}"/>
-					<c:if test="${body.contentType eq 'text/html'}">
-						${body.content}
+					<c:forEach items="${convSearchResult.messageHits}" var="mess" varStatus="status">
+						<table border=0 cellpadding=0 cellspacing=0>
+							<c:if test="${status.first}">
+								<tr>
+									<td rowspan=2 class="cTopLeft"></td>
+									<td class="cTop" colspan=4 height=4></td>
+									<td rowspan=2 class="cTopRight"></td>
+								</tr>
+							</c:if>
+							<c:if test="${!status.first}">
+								<tr>
+									<td rowspan=2 class="cConnector"></td>
+									<td class="cTop" colspan=4 height=4></td>
+									<td rowspan=2 class="cTopRight"></td>
+								</tr>
+							</c:if>
+							<tr>
+								<td class="msgHeaderCell">
+									<app:img src="${mess.isFlagged ? 'star_on_sm_2.gif' : 'star_off_2.gif'}" style="cursor:pointer"/>&nbsp;
+									<span>${fn:escapeXml(mess.displaySender)}</span>&nbsp;
+								</td>
+								<td width=100% valign=bottom>
+									<c:if test="${status.last}">
+										<table border=0 cellpadding=0 cellspacing=0 class="msgFragContainer">
+											<tr><td class="msgText">
+												to ${fn:escapeXml(message.displayTo)}
+											</td></tr>
+										</table>
+									</c:if>
+									<c:if test="${!status.last}">
+										<table border=0 cellpadding=0 cellspacing=0 class="msgFragContainer">
+											<tr><td class="msgText">
+												<div style="white-space:nowrap; overflow:hidden">
+													<span class="msgFrag">
+														<c:url value="cv" var="url">
+															<c:param name='csi' value='${status.index}'/>
+															<c:param name='su' value='1'/>
+															<c:param name='si' value='${context.currentItemIndex}'/>
+															<c:param name='so' value='${context.searchResult.offset}'/>
+															<c:if test="${!empty context}"><c:param name='sc' value='${context.id}'/></c:if>
+															<c:if test="${!empty param.sq}"><c:param name='sq' value='${param.sq}'/></c:if>
+															<c:if test="${!empty param.sfi}"><c:param name='sfi' value='${param.sfi}'/></c:if>
+															<c:if test="${!empty param.sti}"><c:param name='sti' value='${param.sti}'/></c:if>
+														</c:url>
+														<a href="${url}">${fn:escapeXml(empty mess.fragment ? zm:m(pageContext, 'noFragment') : zm:truncate(mess.fragment,100, true))}</a>
+													</span>
+												</div>
+											</td></tr>
+										</table>
+									</c:if>
+								</td>
+								<c:if test="${status.last}">
+									<td class="msgOptions"><a href="javascript:;">More options</a></td>
+								</c:if>
+								<c:if test="${!status.last}">
+									<td></td>
+								</c:if>
+								<td class="msgText" align=right>
+									<c:if test="${mess.hasAttachment eq true}">
+										&nbsp;<app:img src="paperclip.gif" width='15' height='15' border='0' style="vertical-align:middle"/>
+									</c:if>
+									<span>${fn:escapeXml(zm:displayMsgDate(pageContext, mess.date))}</span>
+								</td>
+							</tr>
+						</table>
+					</c:forEach>
+					<div class="cMiddle convTopContent">
+						<c:set var="body" value="${message.body}"/>
+						<c:if test="${body.contentType eq 'text/html'}">
+							${body.content}
+						</c:if>
+						<c:if test="${!(body.contentType eq 'text/html')}">
+							${body.textContentAsHtml}
+						</c:if>
+						<br><br>
+					</div>
+					<div class="cMiddle cActionMiddle">
+						<span class="msgActionLink"><fmt:message key="reply"/></span>
+						<span class="msgActionLink"><fmt:message key="forward"/></span>
+						<textarea wrap=soft rows=2 class="msgActionTextArea"></textarea>
+					</div>
+					<table border=0 cellpadding=0 cellspacing=0 height=8><tr>
+						<td class="cBotLeft cGray"></td>
+						<td class="cBot cGray"></td>
+						<td class="cBotRight cGray"></td>
+					</tr></table>
+				</td>
+				<td valign=top style="padding: 0 25 0 5">
+					<div class="sidebarLink"><app:img src="tearoff_icon.gif" width='16' height='16' border='0'/> <a href="javascript:;" style="vertical-align: top">New window</a></div>
+					<div class="sidebarLink"><app:img src="print_icon.gif" width='16' height='16' border='0'/> <a href="javascript:;" style="vertical-align: top">Print all</a></div>
+					<c:if test="${!(csi eq 0)}">
+						<div class="sidebarLink"><app:img src="expand_icon.gif" width='16' height='16' border='0'/> <a href="javascript:;" style="vertical-align: top">Expand all</a></div>
 					</c:if>
-					<c:if test="${!(body.contentType eq 'text/html')}">
-						${body.textContentAsHtml}
-					</c:if>
-				</div>
-				<div class="cMiddle convBotContent">
-						<%--
-														<form action="" method="post" onsubmit="return false" enctype="multipart/form-data" accept-charset="utf-8" class="cActionMiddle">
-															<table border=0 width=100% cellpadding=0 cellspacing=0 class="msgActionContainer">
-															<tr><td></td></tr>
-															</table>
-														</form>
-						--%>
-				</div>
-				<table border=0 cellpadding=0 cellspacing=0 height=8><tr>
-					<td class="cBotLeft"></td>
-					<td class="cBot"></td>
-					<td class="cBotRight"></td>
+					<app:ads content="${convHit.subject} ${convHit.subject}"/>
+				</td>
 				</tr></table>
 			</td>
 		</tr>
