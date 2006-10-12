@@ -64,6 +64,15 @@
 
     </path>
 
+
+    <target name="docs" depends="jar" description="build tld docs in build/docs directory">
+        <java fork="true" jar="jars/tlddoc.jar" failonerror="true">
+            <arg line="-d ${build.dir}/docs"/>
+            <arg value="${jarfile}"/>
+        </java>
+    </target>
+
+
     <target name="build-init">
         <mkdir dir="${build.dir}"/>
     </target>

@@ -4,10 +4,10 @@
         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
         version="2.0">
 
-    <description>A tag library exercising SimpleTag handlers.</description>
+    <description>Contains tags and functions for interacting with the Zimbra Collaboration Suite.</description>
     <tlib-version>1.0</tlib-version>
 
-    <short-name>ZimbraTagLibrary</short-name>
+    <short-name>zm</short-name>
     <uri>com.zimbra.zm</uri>
 
     <tag>
@@ -582,9 +582,22 @@
     </tag-file>
 
     <function>
+        <description>Used to determine if any of the specified fields are set in a contact</description>
         <name>anySet</name>
         <function-class>com.zimbra.cs.jsp.bean.ZContactBean</function-class>
         <function-signature>boolean anySet(com.zimbra.cs.jsp.bean.ZContactBean,java.lang.String)</function-signature>
+        <example>
+                        <![CDATA[ ]]>
+
+            <![CDATA[
+
+            <c:if test="${zm:anySet(contact,'email email2 email3')}">
+              ...
+            </c:if>
+
+            ]]>
+<![CDATA[ ]]>            
+        </example>
     </function>
 
     <function>
