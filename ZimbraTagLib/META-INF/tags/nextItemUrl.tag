@@ -1,7 +1,7 @@
 <%@ tag body-content="empty" dynamic-attributes="dynattrs" %>
 <%@ attribute name="var" rtexprvalue="false" required="true" type="java.lang.String" %>
 <%@ attribute name="value" rtexprvalue="true" required="true" type="java.lang.String" %>
-<%@ attribute name="index" rtexprvalue="true" required="true" %>
+<%@ attribute name="cursor" rtexprvalue="true" required="true" type="com.zimbra.cs.jsp.bean.NextPrevItemBean" %>
 <%@ attribute name="context" rtexprvalue="true" required="true" type="com.zimbra.cs.jsp.tag.SearchContext" %>
 <%@ attribute name="usecache" rtexprvalue="true" required="false"  %>
 <%@ variable name-from-attribute="var" alias='urlVar' scope="AT_END" variable-class="java.lang.String" %>
@@ -12,8 +12,8 @@
 
 <c:url value="${value}" var="urlVar">
     <c:if test="${usecache}"><c:param name='su' value='1'/></c:if>
-    <c:param name='si' value='${index}'/>
-    <c:param name='so' value='${context.searchResult.prevOffset}'/>
+    <c:param name='si' value='${cursor.nextIndex}'/>
+    <c:param name='so' value='${cursor.nextOffset}'/>
     <c:if test="${!empty context}"><c:param name='sc' value='${context.id}'/></c:if>
     <c:if test="${!empty context.sq}"><c:param name='sq' value='${context}.sq}'/></c:if>
     <c:if test="${!empty context.sfi}"><c:param name='sfi' value='${context.sfi}'/></c:if>

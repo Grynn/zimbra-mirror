@@ -568,7 +568,17 @@
 
     <tag-file>
         <name>prevResultUrl</name>
-        <path>/META-INF/tags/nextResultUrl.tag</path>
+        <path>/META-INF/tags/prevResultUrl.tag</path>
+    </tag-file>
+
+    <tag-file>
+        <name>prevItemUrl</name>
+        <path>/META-INF/tags/prevItemUrl.tag</path>
+    </tag-file>
+
+    <tag-file>
+        <name>nextItemUrl</name>
+        <path>/META-INF/tags/nextItemUrl.tag</path>
     </tag-file>
 
     <function>
