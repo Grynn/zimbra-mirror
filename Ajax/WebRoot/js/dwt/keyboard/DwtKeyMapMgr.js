@@ -207,7 +207,7 @@ function(mapName, action, arg) {
 
 DwtKeyMapMgr.prototype.getArg =
 function(mapName, action) {
-	return this._args[mapName][action];
+	return this._args[mapName] ? this._args[mapName][action] : null;
 };
 
 /**
