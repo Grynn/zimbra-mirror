@@ -7,8 +7,8 @@
 
 <table border=0 cellpadding=0 cellspacing=0 width=100%>
 <tr class="topbar">
-	<td class="leftPane"><a href="http://www.zimbra.com" target="_blank">
-		<app:img src="zimbra_logo.gif" width='150' height='50' border='0'/></a>
+	<td class="leftPane">
+		<a href="http://www.zimbra.com" target="_blank"><app:img src="zimbra_logo.gif" width='150' height='50' border='0'/></a>
 	</td>
     <td valign=top colspan=2>
 		<table border=0 align=right><tr>
