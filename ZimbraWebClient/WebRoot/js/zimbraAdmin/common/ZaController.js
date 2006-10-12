@@ -216,7 +216,11 @@ function(entry) {
 		var cnt = methods.length;
 		for(var i = 0; i < cnt; i++) {
 			if(typeof(methods[i]) == "function") {
-				methods[i].call(this,entry);
+				try {
+					methods[i].call(this,entry);
+				} catch (ex) {
+					this._handleException(ex, "ZaController.prototype._setView");
+				}
 			}
 		}
 	}	
@@ -535,7 +539,11 @@ ZaController.prototype._initToolbar = function () {
 		var cnt = methods.length;
 		for(var i = 0; i < cnt; i++) {
 			if(typeof(methods[i]) == "function") {
-				methods[i].call(this);
+				try {
+					methods[i].call(this);
+				} catch (ex) {
+					this._handleException(ex, "ZaController.prototype._initToolbar");
+				}
 			}
 		}
 	}	
@@ -554,7 +562,11 @@ ZaController.prototype._initPopupMenu = function () {
 		var cnt = methods.length;
 		for(var i = 0; i < cnt; i++) {
 			if(typeof(methods[i]) == "function") {
-				methods[i].call(this);
+				try {
+					methods[i].call(this);
+				} catch (ex) {
+					this._handleException(ex, "ZaController.prototype._initPopupMenu");
+				}
 			}
 		}
 	}	
