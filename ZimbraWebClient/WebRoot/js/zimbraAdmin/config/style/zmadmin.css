@@ -538,3 +538,8 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 	background-color: white;
 	border: outset 1px #91c8c8;
 }
+
+.XFormDwtListView {
+	@ListContainer@
+	@BoxMargin@
+}
