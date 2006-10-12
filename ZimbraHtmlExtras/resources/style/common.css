@@ -33,7 +33,7 @@ form {
 	text-align: center;
 }
 
-.footer-small, .footer-small :link {
+.footer-small, .footer-small :link, .footer-small :visited, .footer-small :active {
 	font-size: 11px;
 }
 

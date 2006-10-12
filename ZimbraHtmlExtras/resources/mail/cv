@@ -169,8 +169,13 @@ paramaters:
 				<td valign=top style="padding: 0 25 0 5">
 					<div class="sidebarLink"><app:img src="tearoff_icon.gif" width='16' height='16' border='0'/> <a href="javascript:;" style="vertical-align: top">New window</a></div>
 					<div class="sidebarLink"><app:img src="print_icon.gif" width='16' height='16' border='0'/> <a href="javascript:;" style="vertical-align: top">Print all</a></div>
-					<c:if test="${!(csi eq 0)}">
-						<div class="sidebarLink"><app:img src="expand_icon.gif" width='16' height='16' border='0'/> <a href="javascript:;" style="vertical-align: top">Expand all</a></div>
+					<c:if test="${!(csi eq 0) and !(param.expand eq 1)}">
+						<zm:currentResultUrl var="expandAllUrl" value="cv" context="${context}" cso="${convSearchResult.offset}" csi="${csi}" expand="1"/>
+						<div class="sidebarLink"><app:img src="expand_icon.gif" width='16' height='16' border='0'/> <a href="${expandAllUrl}" style="vertical-align: top">Expand all</a></div>
+					</c:if>
+					<c:if test="${!(csi eq 0) and (param.expand eq 1)}">
+						<zm:currentResultUrl var="expandAllUrl" value="cv" context="${context}" cso="${convSearchResult.offset}" csi="${csi}"/>
+						<div class="sidebarLink"><app:img src="collapse_icon.gif" width='16' height='16' border='0'/> <a href="${expandAllUrl}" style="vertical-align: top">Collapse all</a></div>
 					</c:if>
 					<app:ads content="${convHit.subject} ${convHit.subject}"/>
 				</td>
