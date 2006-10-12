@@ -556,6 +556,21 @@
         </attribute>
     </tag>
 
+   <tag-file>
+        <name>currentResultUrl</name>
+        <path>/META-INF/tags/currentResultUrl.tag</path>
+    </tag-file>
+
+    <tag-file>
+        <name>nextResultUrl</name>
+        <path>/META-INF/tags/nextResultUrl.tag</path>
+    </tag-file>
+
+    <tag-file>
+        <name>prevResultUrl</name>
+        <path>/META-INF/tags/nextResultUrl.tag</path>
+    </tag-file>
+
     <function>
         <name>anySet</name>
         <function-class>com.zimbra.cs.jsp.bean.ZContactBean</function-class>
