@@ -177,7 +177,8 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 					   	},
 						{ ref: ZaGlobalConfig.A_zimbraSmtpHostname, type: _TEXTFIELD_, 
 						  onChange:ZaTabView.onFormFieldChanged,
-						  label:ZaMsg.NAD_MTA_WebMailHostname
+						  label:ZaMsg.NAD_MTA_WebMailHostname,
+						  toolTipContent: ZaMsg.tt_MTA_WebMailHostname,
 						},
 						{ ref: ZaGlobalConfig.A_zimbraSmtpPort, type: _OUTPUT_, 
 						  label: ZaMsg.NAD_MTA_WebMailPort
@@ -196,7 +197,14 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 						},								
 						{ type: _SEPARATOR_, numCols: 2 },*/
 						{ref:ZaGlobalConfig.A_zimbraMtaRelayHost,label:ZaMsg.NAD_MTA_RelayMTA,
-							type:_HOSTPORT_,onChange:ZaTabView.onFormFieldChanged
+							type:_HOSTPORT_,onChange:ZaTabView.onFormFieldChanged,
+							 onClick: "ZaController.showTooltip",
+					 		 toolTipContent: ZaMsg.tt_MTA_RelayMTA,
+					 		 onMouseout: "ZaController.hideTooltip"
+						},
+						{ref:ZaGlobalConfig.A_zimbraMtaMyNetworks,label:ZaMsg.NAD_MTA_MyNetworks,
+							type:_TEXTFIELD_,onChange:ZaTabView.onFormFieldChanged ,
+							toolTipContent: ZaMsg.tt_MTA_MyNetworks
 						},
 						{ ref: ZaGlobalConfig.A_zimbraMtaMaxMessageSize, type: _TEXTFIELD_, 
 						  label: ZaMsg.NAD_MTA_MaxMsgSize, width: "6em",

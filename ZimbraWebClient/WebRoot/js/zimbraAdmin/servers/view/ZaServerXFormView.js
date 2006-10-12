@@ -360,6 +360,13 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 					  onMouseout: "ZaController.hideTooltip",
 			      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
 			      	},
+			      	{ref:ZaServer.A_zimbraMtaMyNetworks,label:ZaMsg.NAD_MTA_MyNetworks,
+						type:_SUPER_TEXTFIELD_, 
+						onChange: ZaServerXFormView.onFormFieldChanged,
+						resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+						toolTipContent: ZaMsg.tt_MTA_MyNetworks,
+						textFieldCssClass:"admin_xform_name_input"
+					},
 			        { ref: ZaServer.A_zimbraMtaDnsLookupsEnabled, type:_SUPER_CHECKBOX_,
 			      	  label:ZaMsg.NAD_MTA_DnsLookups,
 			      	  trueValue: "TRUE", falseValue: "FALSE",

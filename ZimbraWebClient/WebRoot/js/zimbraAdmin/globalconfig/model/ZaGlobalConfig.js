@@ -54,6 +54,7 @@ ZaGlobalConfig.A_zimbraMtaTlsAuthOnly = "zimbraMtaTlsAuthOnly";
 ZaGlobalConfig.A_zimbraMtaDnsLookupsEnabled  = "zimbraMtaDnsLookupsEnabled";
 ZaGlobalConfig.A_zimbraMtaMaxMessageSize = "zimbraMtaMaxMessageSize";
 ZaGlobalConfig.A_zimbraMtaRelayHost = "zimbraMtaRelayHost";
+ZaGlobalConfig.A_zimbraMtaMyNetworks = "zimbraMtaMyNetworks";
 //ZaGlobalConfig.A_zimbraMtaRelayHostInternal = "__zimbraMtaRelayHost";
 //ZaGlobalConfig.A_zimbraMtaRelayPortInternal = "__zimbraMtaRelayPort";
 ZaGlobalConfig.A_zimbraComponentAvailable = "zimbraComponentAvailable";
@@ -312,6 +313,8 @@ ZaGlobalConfig.myXModel = {
 		{ id:ZaGlobalConfig.A_zimbraMtaMaxMessageSize, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaMaxMessageSize, type: _FILE_SIZE_, units: AjxUtil.SIZE_KILOBYTES, required: true },
 		{ id:ZaGlobalConfig.A_zimbraFileUploadMaxSize, ref:"attrs/" + ZaGlobalConfig.A_zimbraFileUploadMaxSize, type: _FILE_SIZE_, units: AjxUtil.SIZE_KILOBYTES, required: true },		
 		{ id:ZaGlobalConfig.A_zimbraMtaRelayHost, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaRelayHost, type: _HOSTNAME_OR_IP_, maxLength: 256 },
+		{ id:ZaGlobalConfig.A_zimbraMtaMyNetworks, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaMyNetworks, type: _STRING_, maxLength: 256 },
+		
 //		{ id:ZaGlobalConfig.A_zimbraMtaRelayHostInternal, setterScope:_MODEL_,getterScope:_MODEL_, getter:"getRelayHost", setter:"setRelayHost", ref:"attrsInternal/" + ZaGlobalConfig.A_zimbraMtaRelayHostInternal, type: _HOSTNAME_OR_IP_, maxLength: 256 },		
 //		{ id:ZaGlobalConfig.A_zimbraMtaRelayPortInternal,setterScope:_MODEL_,getterScope:_MODEL_, getter:"getRelayPort", setter:"setRelayPort", ref:"attrsInternal/" + ZaGlobalConfig.A_zimbraMtaRelayPortInternal, type: _PORT_},				
 		{ id:ZaGlobalConfig.A_zimbraMtaDnsLookupsEnabled, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaDnsLookupsEnabled, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
