@@ -113,19 +113,23 @@ DwtMessageComposite.prototype._controls;
  *                              controls that comprise this composite.
  * @param callback  [AjxCallback]   (Optional) Callback to create UI
  *                                  components.
+ * @param hintsCallback [AjxCallback]   (Optional) Callback to provide
+ *                                      display hints for the container
+ *                                      element of the UI component.
  */
 DwtMessageComposite.prototype.setFormat =
-function(message, callback) {
+function(message, callback, hintsCallback) {
     // create formatter
     this._formatter = new AjxMessageFormat(message);
     this._controls = {};
 
     // create HTML
-    var id = Dwt.getNextId();
+    var id = this._htmlElId;
     var a = ["<table border='0'><tr valign='center'>"];
 
     var segments = this._formatter.getSegments();
     var cells = {};
+    var hints = {};
     for (var i = 0; i < segments.length; i++) {
         var cid = [id,i].join("_");
         a.push("<td id='",cid,"'>");
@@ -137,6 +141,7 @@ function(message, callback) {
                 control = new DwtInputField({parent:this});
             }
             cells[cid] = control.getHtmlElement();
+            hints[cid] = hintsCallback && hintsCallback.run(this, segment, i);
 
             var sindex = segment.getIndex();
             this._controls[sindex] = this._controls[sindex] || control;
@@ -152,13 +157,29 @@ function(message, callback) {
 
     // insert HTML
     var el = this.getHtmlElement();
+    /***
     el.innerHTML = a.join("");
+    /***/
+    // HACK: IE seems to throw away input elements when they are children
+    //       of an element when you set the innerHTML to something else,
+    //       regardless of the fact that there are outstanding references
+    //       to said elements! Ugh.
+    var count = el.childNodes.length;
+    var tempEl = document.createElement("DIV");
+    tempEl.className = id+'_container';
+    el.appendChild(tempEl);
+    tempEl.innerHTML = a.join("");
+    /***/
 
     // insert controls
     for (var cid in cells) {
         var cell = cells[cid];
         var parentEl = document.getElementById(cid);
         parentEl.appendChild(cell);
+
+        for (var p in hints[cid]) {
+            parentEl[p] = hints[cid][p];
+        }
     }
 };
 
