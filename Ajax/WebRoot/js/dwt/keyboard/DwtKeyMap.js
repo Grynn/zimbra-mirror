@@ -113,7 +113,7 @@ function(map, keys, mapNames) {
 	var curPlatform = AjxEnv.platform.toLowerCase();
 	for (var propName in keys) {
 		var propValue = keys[propName];
-		if (!(typeof propValue == "string")) { continue; }
+		if (typeof propValue != "string") { continue; }
 		var parts = propName.split(".");
 		var mapName = mapNames[parts[0]];
 		if (!map[mapName]) {
@@ -122,14 +122,12 @@ function(map, keys, mapNames) {
 		var action = parts[1];
 		var platform = parts[2];
 		var keySequences = propValue.split(/\s*;\s*/);
-		var kslen = keySequences.length;
-		for (var i = 0; i < kslen; i++) {
+		for (var i = 0; i < keySequences.length; i++) {
 			var ks = keySequences[i];
 			if (action == DwtKeyMap.INHERIT) {
 				var parents = ks.split(/\s*,\s*/);
 				var parents1 = [];
-				var plen = parents.length;
-				for (var p = 0; p < plen; p++) {
+				for (var p = 0; p < parents.length; p++) {
 					parents1[p] = mapNames[parents[p]];
 				}
 				map[mapName][action] = parents1.join(",");

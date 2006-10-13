@@ -255,7 +255,7 @@ function(actionCode, ev) {
 			this.setSelectedItem(actionCode == DwtKeyMap.SELECT_NEXT);
 			break;
 
-		case DwtKeyMap.SELECT_CURRENT:
+		case DwtKeyMap.SELECT:
  			var mev = DwtShell.mouseEvent;
  			this._setMouseEvent(mev, true, this.__currentItem, DwtMouseEvent.LEFT,false, false, false, 0, 0);
 			this.__currentItem._mouseUpListener(mev);

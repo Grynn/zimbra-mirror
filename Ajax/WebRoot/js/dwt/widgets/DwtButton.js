@@ -43,7 +43,7 @@
 *
 * <h4>Keyboard Actions</h4>
 * <ul>
-* <li>DwtKeyMap.SELECT_CURRENT - triggers the button</li>
+* <li>DwtKeyMap.SELECT - triggers the button</li>
 * <li>DwtKeyMap.SUBMENU - display's the button's submenu if one is set
 * </ul>
 *
