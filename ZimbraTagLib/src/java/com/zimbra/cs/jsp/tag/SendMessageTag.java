@@ -82,16 +82,16 @@ public class SendMessageTag extends ZimbraSimpleTag {
             List<ZEmailAddress> addrs = new ArrayList<ZEmailAddress>();
 
             if (mTo != null && mTo.length() > 0)
-                addrs.addAll(mbox.parseAddresses(mTo, ZEmailAddress.EMAIL_TYPE_TO));
+                addrs.addAll(ZEmailAddress.parseAddresses(mTo, ZEmailAddress.EMAIL_TYPE_TO));
 
             if (mCc != null && mCc.length() > 0)
-                addrs.addAll(mbox.parseAddresses(mCc, ZEmailAddress.EMAIL_TYPE_CC));
+                addrs.addAll(ZEmailAddress.parseAddresses(mCc, ZEmailAddress.EMAIL_TYPE_CC));
 
             if (mFrom != null && mFrom.length() > 0)
-                addrs.addAll(mbox.parseAddresses(mFrom, ZEmailAddress.EMAIL_TYPE_FROM));
+                addrs.addAll(ZEmailAddress.parseAddresses(mFrom, ZEmailAddress.EMAIL_TYPE_FROM));
 
             if (mBcc != null && mBcc.length() > 0)
-                addrs.addAll(mbox.parseAddresses(mBcc, ZEmailAddress.EMAIL_TYPE_BCC));
+                addrs.addAll(ZEmailAddress.parseAddresses(mBcc, ZEmailAddress.EMAIL_TYPE_BCC));
 
             ZSendMessageResponse response = mbox.sendMessage(addrs, mSubject, mOrigId, mContentType, mContent, null, null, null, null);
 
