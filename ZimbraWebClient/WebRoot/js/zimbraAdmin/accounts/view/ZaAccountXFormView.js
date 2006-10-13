@@ -173,7 +173,12 @@ function(entry) {
 		this._containedObject[ZaAccount.A_zimbraInstalledSkinPool] = _tmpSkins;
 		
 		//convert strings to objects
-		var skins = this._containedObject.cos.attrs[ZaAccount.A_zimbraAvailableSkin];
+		var skins;
+		if(ZaSettings.COSES_ENABLED) {	
+			skins = this._containedObject.cos.attrs[ZaAccount.A_zimbraAvailableSkin];
+		} else {
+			skins = this._containedObject.attrs[ZaAccount.A_zimbraAvailableSkin];
+		}
 		_tmpSkins = [];
 		if(skins == null) {
 			skins = [];
@@ -186,7 +191,11 @@ function(entry) {
 			_tmpSkins[i] = new String(skin);
 			_tmpSkins[i].id = "id_"+skin;
 		}
-		this._containedObject.cos.attrs[ZaAccount.A_zimbraAvailableSkin] = _tmpSkins;
+		if(ZaSettings.COSES_ENABLED) {	
+			this._containedObject.cos.attrs[ZaAccount.A_zimbraAvailableSkin] = _tmpSkins;
+		} else {
+			this._containedObject.attrs[ZaAccount.A_zimbraAvailableSkin] = _tmpSkins;
+		}
 	}
 	if(ZaSettings.ZIMLETS_ENABLED) {
 		var zimlets = entry.attrs[ZaAccount.A_zimbraZimletAvailableZimlets];
@@ -209,7 +218,12 @@ function(entry) {
 		
 		
 		//convert strings to objects
-		var zimlets = this._containedObject.cos.attrs[ZaCos.A_zimbraZimletAvailableZimlets];
+		var zimlets;
+		if(ZaSettings.COSES_ENABLED) {	
+			 zimlets = this._containedObject.cos.attrs[ZaCos.A_zimbraZimletAvailableZimlets];
+		} else {
+			 zimlets = this._containedObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets];
+		}
 		_tmpZimlets = [];
 		if(zimlets == null) {
 			zimlets = [];
@@ -222,7 +236,11 @@ function(entry) {
 			_tmpZimlets[i] = new String(zimlet);
 			_tmpZimlets[i].id = "id_"+zimlet;
 		}
-		this._containedObject.cos.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = _tmpZimlets;
+		if(ZaSettings.COSES_ENABLED) {			
+			this._containedObject.cos.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = _tmpZimlets;
+		} else {
+			this._containedObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = _tmpZimlets;
+		}
 					
 		//convert strings to objects
 		var zimlets = ZaZimlet.getAll(this._app, "extension");
