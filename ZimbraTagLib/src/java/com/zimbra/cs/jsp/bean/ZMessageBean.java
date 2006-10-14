@@ -27,16 +27,11 @@ package com.zimbra.cs.jsp.bean;
 import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.Collections;
-import java.util.Arrays;
-import java.util.HashSet;
 
 import com.zimbra.common.util.DateUtil;
 import com.zimbra.cs.zclient.ZEmailAddress;
 import com.zimbra.cs.zclient.ZMessage;
 import com.zimbra.cs.zclient.ZMessage.ZMimePart;
-import com.zimbra.cs.mime.Mime;
 
 public class ZMessageBean {
 
@@ -52,7 +47,9 @@ public class ZMessageBean {
      * @return comma-separated list of tag ids
      */
     public String getTagIds() { return mMsg.getTagIds(); }
-    
+
+    public String getPartName() { return mMsg.getPartName(); }
+
     public String getFlags() { return mMsg.getFlags(); }
     
     public boolean getHasFlags() { return mMsg.hasFlags(); }

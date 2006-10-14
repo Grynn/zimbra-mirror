@@ -78,6 +78,7 @@ public class ZMimePartBean {
     public static final String CT_VIDEO				= "video";
     public static final String CT_VIDEO_WMV			= "video/x-ms-wmv";
     public static final String CT_XML_ZIMBRA_SHARE	= "xml/x-zimbra-share";
+    public static final String CT_PLAIN_TEXT		= "plain/text"; // strange, saw this type...
 
     private static final Set<String> sIgnoredTypes =
             new HashSet<String>(Arrays.asList(new String[] {
@@ -117,6 +118,7 @@ public class ZMimePartBean {
         sTypeToImage.put(CT_IMG,                "doctypes/ImageDoc.gif");
         sTypeToImage.put(CT_MSG_RFC822,			"doctypes/MessageDoc.gif");
         sTypeToImage.put(CT_TEXT,				"doctypes/GenericDoc.gif");
+        sTypeToImage.put(CT_PLAIN_TEXT,			"doctypes/GenericDoc.gif");        
         sTypeToImage.put(CT_TEXT_HTML, 			"doctypes/HtmlDoc.gif");
     }
 
@@ -184,7 +186,11 @@ public class ZMimePartBean {
     }
 
     public boolean getIsOctectStream() {
-        return getContentType().equalsIgnoreCase(Mime.CT_APPLICATION_OCTET_STREAM);
+        return getContentType().equalsIgnoreCase(CT_APP_OCTET_STREAM);
+    }
+
+    public boolean getIsMssage() {
+        return getContentType().equalsIgnoreCase(CT_MSG_RFC822);
     }
 
     public String getImage() {
