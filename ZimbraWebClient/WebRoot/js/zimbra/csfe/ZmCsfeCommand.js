@@ -269,7 +269,7 @@ function(response, asyncMode) {
 
 	var linkName = "Response";
 	if (respDoc && respDoc.match) {
-		var m = respDoc.match(/\{Body:\{(\w+):/);
+		var m = respDoc.match(/\{"?Body"?:\{"?(\w+)"?:/);
 		if (m && m.length) linkName = m[1];
 	}
 	DBG.println(AjxDebug.DBG1, ["<H4> RESPONSE", (asyncMode) ? " (asynchronous)" : "" ,"</H4>"].join(""), linkName);
