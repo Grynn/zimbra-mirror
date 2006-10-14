@@ -113,7 +113,7 @@ Com_Zimbra_Arcade_Asst.prototype.constructor = Com_Zimbra_Arcade_Asst;
 Com_Zimbra_Arcade_Asst.prototype.okHandler =
 function(dialog) {
 	// get reference to the arcade zimlet
-	var zm = this._appCtxt.getSettings().getZimletManager();
+	var zm = this._appCtxt.getZimletMgr();
 	var arcadeZimlet = zm ? zm._ZIMLETS_BY_ID["com_zimbra_arcade"] : null;
 
 	if (arcadeZimlet && this._game) {

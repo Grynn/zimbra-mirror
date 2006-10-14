@@ -216,7 +216,7 @@ Com_Zimbra_sms_Asst.prototype.constructor = Com_Zimbra_sms_Asst;
 Com_Zimbra_sms_Asst.prototype.okHandler =
 function(dialog) {
 	// get reference to the sms zimlet
-	var zm = this._appCtxt.getSettings().getZimletManager();
+	var zm = this._appCtxt.getZimletMgr();
 	var zimlet = zm ? zm._ZIMLETS_BY_ID["com_zimbra_sms"] : null;
 	if (zimlet && this._body) {
 		var toValue = (this._to != null) ? this._to : zimlet.handlerObject.getUserProperty("cellNum");		

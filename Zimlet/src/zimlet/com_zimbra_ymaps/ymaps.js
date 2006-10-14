@@ -166,7 +166,7 @@ Com_Zimbra_YMaps_Asst.prototype.constructor = Com_Zimbra_YMaps_Asst;
 Com_Zimbra_YMaps_Asst.prototype.okHandler =
 function(dialog) {
 	// get reference to the ymaps zimlet
-	var zm = this._appCtxt.getSettings().getZimletManager();
+	var zm = this._appCtxt.getZimletMgr();
 	var zimlet = zm ? zm._ZIMLETS_BY_ID["com_zimbra_ymaps"] : null;
 	if (zimlet && this._address) {
 		zimlet.handlerObject.toolTipPoppedUp(null, this._address, null, dialog.getAssistantDiv());
