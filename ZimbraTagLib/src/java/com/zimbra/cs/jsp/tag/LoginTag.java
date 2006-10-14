@@ -83,6 +83,7 @@ public class LoginTag extends ZimbraSimpleTag {
             } else {
                 authTokenCookie.setMaxAge(-1);
             }
+            authTokenCookie.setPath("/");
             response.addCookie(authTokenCookie);
             ZJspSession.setSession((PageContext)jctxt, mbox);
         } catch (ServiceException e) {
