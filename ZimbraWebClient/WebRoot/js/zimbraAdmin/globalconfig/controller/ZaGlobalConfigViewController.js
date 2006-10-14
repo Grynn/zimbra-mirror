@@ -183,30 +183,6 @@ function () {
 	//var changeDetails = new Object();
 	this._currentObject.modify(mods);
 	
-	/*
-	// save server changes
-	var originalServerId = tmpObj.attrs[ZaGlobalConfig.A_originalMonitorHost];
-	var currentServerId = tmpObj.attrs[ZaGlobalConfig.A_currentMonitorHost];
-	//DBG.println("original server id: "+originalServerId+", current server id: "+currentServerId);
-	if (currentServerId && (currentServerId != originalServerId)) {
-		function setMonitorHost(serverChoices, serverId, value) {
-			var server = serverChoices ? serverChoices.getChoiceByValue(serverId) : null;
-			if (server) {
-				var mods = {};
-				mods[ZaServer.A_zimbraIsMonitorHost] = value;
-				server.modify(mods);
-			}
-
-		}
-
-		var serverChoices = this._app.getServerListChoices();
-		if (originalServerId) {
-			// unset original server as monitor host
-			setMonitorHost(serverChoices, originalServerId, '');
-		}	
-		setMonitorHost(serverChoices, currentServerId, 'TRUE');
-	}
-	*/
 	//if modification took place - fire a Settings Change Event
 	//changeDetails["obj"] = this._currentObject;
 	//changeDetails["modFields"] = mods;

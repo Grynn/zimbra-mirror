@@ -271,8 +271,8 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 		case1Items.push({type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_MailServer, labelLocation:_LEFT_,
 							items: [
 								{ ref: ZaResource.A_mailHost, type: _OSELECT1_, label: null, editable:false, 
-									choices: this._app.getServerListChoices2(), 
-									relevant:"instance[ZaResource.A2_autoMailServer]==\"FALSE\" && form.getController().getServerListChoices2().getChoices().values.length != 0",
+									choices: this._app.getServerListChoices(), 
+									relevant:"instance[ZaResource.A2_autoMailServer]==\"FALSE\" && form.getController().getServerListChoices().getChoices().values.length != 0",
 									relevantBehavior:_DISABLE_
 							  	},
 								{ref:ZaResource.A2_autoMailServer, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,

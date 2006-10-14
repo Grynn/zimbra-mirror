@@ -41,7 +41,6 @@ function ZaApp(appCtxt, container) {
 	this._cosListChoices = null;//new XFormChoices([], XFormChoices.OBJECT_LIST, "id", "name");	
 	this._domainListChoices = null;//new XFormChoices([], XFormChoices.OBJECT_LIST, "name", "name");	
 	this._serverChoices = null; 
-	this._serverChoices2 = null; 	
 	this._serverMap = null;
 	this._controllers = new Object();
 	this.dialogs = {};
@@ -453,23 +452,6 @@ function(refresh) {
 
 
 
-ZaApp.prototype.getServerListChoices =
-function(refresh) {
-	if (refresh || this._serverList == null) {
-//		DBG.println(AjxDebug.DBG1, "ZaApp.prototype.getServerListChoices :: this._serverList is null ");		
-		this._serverList = ZaServer.getAll(this);
-	}
-	if(refresh || this._serverChoices == null) {
-		if(this._serverChoices == null) {
-			this._serverChoices = new XFormChoices(this._serverList.getArray(), XFormChoices.OBJECT_LIST, "id", "name");
-		} else {	
-			this._serverChoices.setChoices(this._serverList.getArray());
-			this._serverChoices.dirtyChoices();
-		}
-	}
-	return this._serverChoices;	
-}
-
 ZaApp.prototype.getClusterServerChoices = 
 function(refresh){
 	if (refresh || this._clusterServerList == null) {
@@ -486,13 +468,12 @@ function(refresh){
 	return this._clusterServerChoices;
 };
 
-ZaApp.prototype.getServerListChoices2 =
+ZaApp.prototype.getServerListChoices =
 function(refresh) {
 	if (refresh || this._serverList == null) {
-//		DBG.println(AjxDebug.DBG1, "ZaApp.prototype.getServerListChoices2 :: this._serverList is null ");				
 		this._serverList = ZaServer.getAll(this);
 	}
-	if(refresh || this._serverChoices2 == null) {
+	if(refresh || this._serverChoices == null) {
 		var arr = this._serverList.getArray();
 		var mailServerArr = [];
 		for (var i = 0 ; i < arr.length; ++i) {
@@ -500,14 +481,14 @@ function(refresh) {
 				mailServerArr.push(arr[i]);
 			}
 		}
-		if(this._serverChoices2 == null) {
-			this._serverChoices2 = new XFormChoices(mailServerArr, XFormChoices.OBJECT_LIST, ZaServer.A_ServiceHostname, ZaServer.A_ServiceHostname);
+		if(this._serverChoices == null) {
+			this._serverChoices = new XFormChoices(mailServerArr, XFormChoices.OBJECT_LIST, ZaServer.A_ServiceHostname, ZaServer.A_ServiceHostname);
 		} else {	
-			this._serverChoices2.setChoices(mailServerArr);
-			this._serverChoices2.dirtyChoices();
+			this._serverChoices.setChoices(mailServerArr);
+			this._serverChoices.dirtyChoices();
 		}
 	}
-	return this._serverChoices2;	
+	return this._serverChoices;	
 }
 
 ZaApp.prototype.getServerMap =
@@ -725,17 +706,10 @@ function (ev) {
 		if(this._serverList) {
 			this._serverList=ZaServer.getAll(this);
 			if(this._serverChoices == null) {
-				this._serverChoices = new XFormChoices(this._serverList.getArray(), XFormChoices.OBJECT_LIST, "id", "name");
+				this._serverChoices = new XFormChoices(this._serverList.getArray(), XFormChoices.OBJECT_LIST, ZaServer.A_ServiceHostname, ZaServer.A_ServiceHostname);
 			} else {	
 				this._serverChoices.setChoices(this._serverList.getArray());
 				this._serverChoices.dirtyChoices();
-			}
-
-			if(this._serverChoices2 == null) {
-				this._serverChoices2 = new XFormChoices(this._serverList.getArray(), XFormChoices.OBJECT_LIST, ZaServer.A_ServiceHostname, ZaServer.A_ServiceHostname);
-			} else {	
-				this._serverChoices2.setChoices(this._serverList.getArray());
-				this._serverChoices2.dirtyChoices();
 			}
 
 			this._serverMap = new Object();
@@ -768,17 +742,10 @@ function (ev) {
 			}
 		}
 		if(this._serverChoices == null) {
-			this._serverChoices = new XFormChoices(this._serverList.getArray(), XFormChoices.OBJECT_LIST, "id", "name");
+			this._serverChoices = new XFormChoices(this._serverList.getArray(), XFormChoices.OBJECT_LIST, ZaServer.A_ServiceHostname, ZaServer.A_ServiceHostname);
 		} else {	
 			this._serverChoices.setChoices(this._serverList.getArray());
 			this._serverChoices.dirtyChoices();
-		}
-
-		if(this._serverChoices2 == null) {
-			this._serverChoices2 = new XFormChoices(this._serverList.getArray(), XFormChoices.OBJECT_LIST, ZaServer.A_ServiceHostname, ZaServer.A_ServiceHostname);
-		} else {	
-			this._serverChoices2.setChoices(this._serverList.getArray());
-			this._serverChoices2.dirtyChoices();
 		}		
 		
 		this._serverMap = new Object();
