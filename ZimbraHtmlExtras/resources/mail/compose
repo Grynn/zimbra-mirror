@@ -1,0 +1,105 @@
+<%@ page buffer="8kb" autoFlush="true" %>
+<%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="zm" uri="com.zimbra.zm" %>
+<%@ taglib prefix="app" uri="com.zimbra.htmlextras" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:if test="${!empty param.cancel}">
+	<%-- TODO: forward back to original page we came from --%>
+	<jsp:forward page="clv"/>"
+</c:if>
+<c:if test="${!empty param.send}">
+	<zm:sendMessage var="sendResult"
+					subject="${fn:trim(param.subject)}"
+					to="${fn:trim(param.to)}"
+					cc="${fn:trim(param.cc)}"
+					bcc="${fn:trim(param.bcc)}"
+					content="${param.body}"
+	/>
+	<%-- TODO: check for errors, etc, set success message var and forward to prev page, or set error message and continue --%>
+	<jsp:forward page="clv"/>"
+</c:if>
+<c:if test="${!empty param.draft}">
+	<%-- TODO: zm:saveDraft --%>
+</c:if>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<app:head title="${zm:m(pageContext, 'compose')}"/>
+
+<body>
+<c:set var="toolbar">
+	<td class="toolbar">&nbsp;</td>
+	<td class="toolbar"><input class="composeBtn unread" name="send" type="submit" value="Send"></td>
+	<td class="toolbar"><input class="composeBtn" name="draft" type="submit" value="Save Now" style='width:100px'></td>
+	<td class="toolbar"><input class="composeBtn" name="cancel" type="submit" value="Discard"></td>
+	<td width=100%></td>
+</c:set>
+
+<zm:getMailbox var="mailbox"/>
+<app:view selected='compose' folders="true" tags="true" searches="true" contacts="true" mailbox="${mailbox}">
+<form action="compose" method="post">
+<div class="niftyMail">
+	<b class="rtopNiftyMail">
+		<b class="r1" style="margin-left:0"></b>
+		<b class="r2" style="margin-left:0"></b>
+		<b class="r3"></b>
+		<b class="r4"></b>
+	</b>
+
+	<table border=0 cellpadding=0 cellspacing=0 width=100%>
+		<tr>
+				${toolbar}
+				<td style='padding-right:3px'><a href="javascript:;"><app:img src="tearoff_icon.gif" width="16" height="16" border="0"/></a></td>
+		</tr>
+		<tr>
+			<td colspan=100 class='composeContent'>
+				<table boreder=0 width=100%>
+					<tr>
+						<td class="composeLabel"><fmt:message key="to"/>:</td>
+						<td width=100%><textarea name="to" rows="2" style="width:98%"></textarea></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td width=100%><span class="composeActionLink">Add Cc</span> | <span class="composeActionLink">Add Bcc</span></td>
+					</tr>
+					<tr>
+						<td class="composeLabel"><fmt:message key="subject"/>:</td>
+						<td width=100%><input name="subject" style="width:98%"></td>
+					</tr>
+					<tr>
+						<td class="composeLabel"><app:img src="paperclip.gif" width="15" height="15" border="0"/></td>
+						<td width=100%><span class="composeActionLink">Attach a file</span></td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td colspan=100>
+				<table border=0 cellpadding=2 cellspacing=2>
+				<tr><td style="width:80ex;">
+					<textarea name="body" class="composeBody" wrap=soft rows=18></textarea>
+				</td></tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td height=5></td>
+		</tr>
+		<tr>
+				${toolbar}
+		</tr>
+	</table>
+	<b class="rbottomNiftyMail">
+		<b class="r4"></b>
+		<b class="r3"></b>
+		<b class="r2"></b>
+		<b class="r1"></b>
+	</b>
+</div>
+</form>
+</app:view>
+</body>
+</html>

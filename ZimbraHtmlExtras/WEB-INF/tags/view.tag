@@ -1,4 +1,11 @@
 <%@ tag body-content="scriptless" %>
+<%@ attribute name="selected" rtexprvalue="true" required="false" %>
+<%@ attribute name="folders" rtexprvalue="true" required="false" %>
+<%@ attribute name="searches" rtexprvalue="true" required="false" %>
+<%@ attribute name="contacts" rtexprvalue="true" required="false" %>
+<%@ attribute name="calendars" rtexprvalue="true" required="false" %>
+<%@ attribute name="ads" rtexprvalue="true" required="false" %>
+<%@ attribute name="tags" rtexprvalue="true" required="false" %>
 <%@ attribute name="mailbox" rtexprvalue="true" required="true" type="com.zimbra.cs.jsp.bean.ZMailboxBean" %>
 <%@ taglib prefix="app" uri="com.zimbra.htmlextras" %>
 <%@ taglib prefix="zm" uri="com.zimbra.zm" %>
@@ -60,7 +67,7 @@
 </tr>
 <tr>
 	<td valign=top class="leftPane" id="leftPane">
-		<app:overviewTree/>
+		<app:overviewTree selected="${selected}" contacts="${contacts}" tags="${tags}" searches="${searches}" folders="${folders}"/>
 	</td>
 	<td valign=top>
 		<table border=0 cellpadding=0 cellspacing=0 width=100%>

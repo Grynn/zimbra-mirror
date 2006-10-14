@@ -76,6 +76,7 @@
 
 .toolbar {
 	padding: 0 8 5 0;
+	white-space: nowrap;
 }
 
 .actions, .actions :link, .actions :visited, .actions :active {
@@ -189,6 +190,36 @@
 .noResults {
 	text-align: center;
 	background-color: white;
+}
+
+.composeBtn {
+	font-size: 95%;
+}
+
+.composeContent {
+	background-color: rgb(224, 236, 255);
+}
+
+.composeLabel {
+	font-weight: bold;
+	text-align: right;
+	vertical-align: top;
+	white-space: nowrap;
+	overflow: hidden;
+	padding-left: 5px;
+}
+
+.composeActionLink {
+	text-decoration: underline;
+	cursor: pointer;
+	white-space: nowrap;
+	color: rgb(0, 0, 204);
+}
+
+.composeBody {
+	width: 100%;
+	height: 100%;
+	padding: 5px;
 }
 
 

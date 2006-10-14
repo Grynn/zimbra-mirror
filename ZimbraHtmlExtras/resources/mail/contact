@@ -34,13 +34,13 @@
 							<td class='toolbar'><button><fmt:message key="delete"/></button></td>
 							<td width=100%></td>
 							<td><nobr><a href="contact"><fmt:message key="addContact"/></a> - </nobr></td>
-							<td><nobr><a href="import"><fmt:message key="import"/></a> - </nobr></td>
-							<td style="padding-right:3px"><nobr><a href="export"><fmt:message key="export"/></a></nobr></td>
+							<td><nobr><a href="javascript:;"><fmt:message key="import"/></a> - </nobr></td>
+							<td style="padding-right:3px"><nobr><a href="javascript:;"><fmt:message key="export"/></a></nobr></td>
 </c:set>
 
 <zm:getMailbox var="mailbox"/>
 
-<app:view mailbox="${mailbox}">
+<app:view selected="contacts" folders="true" tags="true" searches="true" contacts="true" mailbox="${mailbox}">
 <div class="niftyMail">
 	<b class="rtopNiftyMail">
 		<b class="r1"></b>

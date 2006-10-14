@@ -38,7 +38,7 @@ paramaters:
 </c:set>
 
 <zm:getMailbox var="mailbox"/>
-<app:view mailbox="${mailbox}">
+<app:view selected="contacts" folders="true" tags="true" searches="true" contacts="true" mailbox="${mailbox}">
 
 <div class="niftyMail">
 	<b class="rtopNiftyMail">
