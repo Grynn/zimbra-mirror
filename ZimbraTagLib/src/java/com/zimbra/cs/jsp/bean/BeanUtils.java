@@ -118,18 +118,57 @@ public class BeanUtils {
     private static final Pattern sTAB = Pattern.compile("\\t", Pattern.MULTILINE);
     private static final Pattern sLT = Pattern.compile("<", Pattern.MULTILINE);
     private static final Pattern sGT = Pattern.compile(">", Pattern.MULTILINE);
-    private static final Pattern sNL = Pattern.compile("\\r?\\n", Pattern.MULTILINE);    
-    
-    public static String textToHtml(String text) {
+    private static final Pattern sNL = Pattern.compile("\\r?\\n", Pattern.MULTILINE);
+    private static final Pattern sURL = Pattern.compile(
+            "((telnet:)|((https?|ftp|gopher|news|file):\\/\\/)|(www\\.[\\w\\.\\_\\-]+))[^\\s\\xA0\\(\\)\\<\\>\\[\\]\\{\\}\'\"]*",
+            Pattern.MULTILINE);
+
+    private static String htmlEncode(String text) {
+        if (text == null || text.length() == 0) return "";
+        String s = replaceAll(text, sAMP, "&amp;");
+        s = replaceAll(s, sLT, "&lt;");
+        s = replaceAll(s, sGT, "&gt;");
+        return s;
+    }
+
+    private static String internalTextToHtml(String text) {
         if (text == null || text.length() == 0) return "";
         String s = replaceAll(text, sAMP, "&amp;");
         s = replaceAll(s, sTWO_SPACES, " &nbsp;");
         s = replaceAll(s, sLEADING_SPACE, "&nbsp;");
         s = replaceAll(s, sLT, "&lt;");
         s = replaceAll(s, sGT, "&gt;");
-        s = replaceAll(s, sTAB, "<pre style='display:inline;'>\t</pre>");        
+        s = replaceAll(s, sTAB, "<pre style='display:inline;'>\t</pre>");
         s = replaceAll(s, sNL, "<br />");
         return s;
+    }
+
+    public static String textToHtml(String text) {
+        Matcher m = sURL.matcher(text);
+        StringBuilder sb = new StringBuilder();
+        int lastIndex = 0; // lastIndex we copied from
+        while (m.find()) {
+            //if (sb == null) sb = new StringBuilder();
+            if (m.start() > lastIndex) {
+                sb.append(internalTextToHtml(text.substring(lastIndex, m.start())));
+            }
+            String url = m.group();
+            char last = url.charAt(url.length()-1);
+            if (last == '.' || last == '!' || last == ',')
+                url = url.substring(0, url.length()-1);
+
+            sb.append("<a target='_blank' href='");
+            if (url.length() > 4 && url.substring(0,4).startsWith("www.")) sb.append("http://");
+            sb.append(url);
+            sb.append("'>");
+            sb.append(htmlEncode(url));
+            sb.append("</a>");
+            lastIndex = m.start()+url.length();
+        }
+        if (lastIndex < text.length()) {
+            sb.append(internalTextToHtml(text.substring(lastIndex)));
+        }
+        return sb.toString(); 
     }
 
     /**
