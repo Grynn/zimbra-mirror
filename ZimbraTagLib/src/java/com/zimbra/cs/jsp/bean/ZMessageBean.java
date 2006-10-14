@@ -26,11 +26,13 @@ package com.zimbra.cs.jsp.bean;
 
 import java.util.Date;
 import java.util.List;
+import java.util.ArrayList;
 
 import com.zimbra.common.util.DateUtil;
 import com.zimbra.cs.zclient.ZEmailAddress;
 import com.zimbra.cs.zclient.ZMessage;
 import com.zimbra.cs.zclient.ZMessage.ZMimePart;
+import com.zimbra.cs.mime.Mime;
 
 public class ZMessageBean {
 
@@ -121,6 +123,29 @@ public class ZMessageBean {
     public ZMimePartBean getBody() {
         ZMimePart body = getBody(mMsg.getMimeStructure());
         return body == null ? null : new ZMimePartBean(body);
+    }
+
+    private List<ZMimePartBean> mAttachments;
+
+    public List<ZMimePartBean> getAttachments() {
+        if (mAttachments == null) {
+            mAttachments = new ArrayList<ZMimePartBean>();
+            ZMimePart top = mMsg.getMimeStructure();
+            if (top.getContentType().equalsIgnoreCase(Mime.CT_MULTIPART_MIXED)) {
+                for (ZMimePart child: top.getChildren()) {
+                    if (child.isBody()) continue;
+                    if (child.getContentLocation() != null ||
+                            child.getContentId() != null ||
+                            child.getFileName()!= null ||
+                            child.getContentType().equalsIgnoreCase(Mime.CT_MESSAGE_RFC822)) {
+                        mAttachments.add(new ZMimePartBean(child));
+                        
+                    }
+
+                }
+            }
+        }
+        return mAttachments;
     }
 
     public String getDisplayTo() {

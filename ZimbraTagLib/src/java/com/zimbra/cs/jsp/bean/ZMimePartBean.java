@@ -26,6 +26,7 @@
 package com.zimbra.cs.jsp.bean;
 
 import com.zimbra.cs.zclient.ZMessage.ZMimePart;
+import com.zimbra.cs.mime.Mime;
 
 import java.util.List;
 
@@ -73,4 +74,29 @@ public class ZMimePartBean {
     public String getTextContentAsHtml() {
         return BeanUtils.textToHtml(getContent());
     }
+
+    public String getDisplayName() {
+        return getName() != null ? getName() : getFileName();
+    }
+
+    public String getDisplaySize() {
+        return BeanUtils.displaySize(getSize());
+    }
+
+    public boolean getIsImage() {
+        return getContentType().toLowerCase().startsWith("image");
+    }
+
+    public boolean getIsAudio() {
+        return getContentType().toLowerCase().startsWith("audio");
+    }
+
+    public boolean getIsVideo() {
+        return getContentType().toLowerCase().startsWith("video");
+    }
+
+    public boolean getIsOctectStream() {
+        return getContentType().equalsIgnoreCase(Mime.CT_APPLICATION_OCTET_STREAM);
+    }
+
 }
