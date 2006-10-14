@@ -29,8 +29,96 @@ import com.zimbra.cs.zclient.ZMessage.ZMimePart;
 import com.zimbra.cs.mime.Mime;
 
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 
 public class ZMimePartBean {
+
+
+    public static final String CT_APP               = "application";
+    public static final String CT_APP_ADOBE_PDF	    = "application/pdf";
+    public static final String CT_APP_ADOBE_PS	    = "application/postscript";
+    public static final String CT_APP_APPLE_DOUBLE 	= "application/applefile";		// IGNORE
+    public static final String CT_APP_EXE           = "application/exe";
+    public static final String CT_APP_MS_DOWNLOAD	= "application/x-msdownload";
+    public static final String CT_APP_MS_EXCEL		= "application/vnd.ms-excel";
+    public static final String CT_APP_MS_PPT		= "application/vnd.ms-powerpoint";
+    public static final String CT_APP_MS_PROJECT	= "application/vnd.ms-project";
+    public static final String CT_APP_MS_TNEF		= "application/ms-tnef"; 		// IGNORE
+    public static final String CT_APP_MS_TNEF2 		= "application/vnd.ms-tnef"; 	// IGNORE (added per bug 2339)
+    public static final String CT_APP_MS_VISIO		= "application/vnd.visio";
+    public static final String CT_APP_MS_WORD		= "application/msword";
+    public static final String CT_APP_OCTET_STREAM	= "application/octet-stream";
+    public static final String CT_APP_ZIP			= "application/zip";
+    public static final String CT_APP_ZIP2			= "application/x-zip-compressed";
+    public static final String CT_AUDIO				= "audio";
+    public static final String CT_AUDIO_WAV			= "audio/x-wav";
+    public static final String CT_AUDIO_MP3			= "audio/mpeg";
+    public static final String CT_IMG				= "image";
+    public static final String CT_IMG_GIF			= "image/gif";
+    public static final String CT_IMG_JPEG			= "image/jpeg";
+    public static final String CT_IMG_PNG			= "image/png";
+    public static final String CT_IMG_TIFF			= "image/tiff";
+    public static final String CT_MSG_RFC822		= "message/rfc822";
+    public static final String CT_MULTI_ALT			= "multipart/alternative"; 		// IGNORE
+    public static final String CT_MULTI_MIXED		= "multipart/mixed"; 			// IGNORE
+    public static final String CT_MULTI_RELATED		= "multipart/related"; 			// IGNORE
+    public static final String CT_MULTI_APPLE_DBL 	= "multipart/appledouble"; 		// IGNORE
+    public static final String CT_TEXT				= "text";
+    public static final String CT_TEXT_RTF			= "text/enriched";
+    public static final String CT_TEXT_HTML			= "text/html";
+    public static final String CT_TEXT_CAL			= "text/calendar"; 				// IGNORE
+    public static final String CT_TEXT_JAVA			= "text/x-java";
+    public static final String CT_TEXT_VCARD		= "text/x-vcard";
+    public static final String CT_TEXT_PLAIN		= "text/plain";
+    public static final String CT_TEXT_XML			= "text/xml";
+    public static final String CT_VIDEO				= "video";
+    public static final String CT_VIDEO_WMV			= "video/x-ms-wmv";
+    public static final String CT_XML_ZIMBRA_SHARE	= "xml/x-zimbra-share";
+
+    private static final Set<String> sIgnoredTypes =
+            new HashSet<String>(Arrays.asList(new String[] {
+                    CT_APP_APPLE_DOUBLE,
+                    CT_APP_MS_TNEF,
+                    CT_APP_MS_TNEF2,
+                    CT_MULTI_ALT,
+                    CT_MULTI_MIXED,
+                    CT_MULTI_RELATED,
+                    CT_MULTI_APPLE_DBL,
+                    CT_TEXT_CAL
+            }));
+
+    public static boolean isIgnoredPArt(ZMimePart part) {
+        return sIgnoredTypes.contains(part.getContentType());
+    }
+
+    private static final Map<String,String> sTypeToImage = new HashMap<String, String>();
+
+    static {
+        sTypeToImage.put(CT_APP,               "doctypes/ExeDoc.gif");
+        sTypeToImage.put(CT_APP_ADOBE_PDF,     "doctypes/PDFDoc.gif");
+        sTypeToImage.put(CT_APP_ADOBE_PS,      "doctypes/GenericDoc.gif");
+        sTypeToImage.put(CT_APP_EXE,           "doctypes/ExeDoc.gif");
+
+        sTypeToImage.put(CT_APP_MS_DOWNLOAD,   "doctypes/ExeDoc.gif");
+        sTypeToImage.put(CT_APP_MS_EXCEL,		"doctypes/MSExcelDoc.gif");
+        sTypeToImage.put(CT_APP_MS_PPT,			"doctypes/MSPowerpointDoc.gif");
+        sTypeToImage.put(CT_APP_MS_PROJECT,		"doctypes/MSProjectDoc.gif");
+        sTypeToImage.put(CT_APP_MS_VISIO,		"doctypes/MSVisioDoc.gif");
+        sTypeToImage.put(CT_APP_MS_WORD,        "doctypes/MSWordDoc.gif");
+        sTypeToImage.put(CT_APP_OCTET_STREAM,	"doctypes/UnknownDoc.gif");
+        sTypeToImage.put(CT_APP_ZIP,            "doctypes/ZipDoc.gif");
+        sTypeToImage.put(CT_APP_ZIP2,			"doctypes/ZipDoc.gif");
+        sTypeToImage.put(CT_AUDIO,				"doctypes/AudioDoc.gif");
+        sTypeToImage.put(CT_VIDEO,				"doctypes/VideoDoc.gif");
+        sTypeToImage.put(CT_IMG,                "doctypes/ImageDoc.gif");
+        sTypeToImage.put(CT_MSG_RFC822,			"doctypes/MessageDoc.gif");
+        sTypeToImage.put(CT_TEXT,				"doctypes/GenericDoc.gif");
+        sTypeToImage.put(CT_TEXT_HTML, 			"doctypes/HtmlDoc.gif");
+    }
 
     private ZMimePart mMimePart;
 
@@ -84,19 +172,33 @@ public class ZMimePartBean {
     }
 
     public boolean getIsImage() {
-        return getContentType().toLowerCase().startsWith("image");
+        return getContentType().toLowerCase().startsWith(CT_IMG);
     }
 
     public boolean getIsAudio() {
-        return getContentType().toLowerCase().startsWith("audio");
+        return getContentType().toLowerCase().startsWith(CT_AUDIO);
     }
 
     public boolean getIsVideo() {
-        return getContentType().toLowerCase().startsWith("video");
+        return getContentType().toLowerCase().startsWith(CT_VIDEO);
     }
 
     public boolean getIsOctectStream() {
         return getContentType().equalsIgnoreCase(Mime.CT_APPLICATION_OCTET_STREAM);
+    }
+
+    public String getImage() {
+        String ct = getContentType();
+        String image = sTypeToImage.get(ct);
+        if (image == null) {
+            int index = ct.indexOf('/');
+            if (index != -1) {
+                ct = ct.substring(0, index);
+                image = sTypeToImage.get(ct);
+            }
+        }
+        if (image == null) image = sTypeToImage.get(CT_APP_OCTET_STREAM);
+        return image;
     }
 
 }

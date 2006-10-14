@@ -27,6 +27,10 @@ package com.zimbra.cs.jsp.bean;
 import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.Collections;
+import java.util.Arrays;
+import java.util.HashSet;
 
 import com.zimbra.common.util.DateUtil;
 import com.zimbra.cs.zclient.ZEmailAddress;
@@ -127,27 +131,46 @@ public class ZMessageBean {
 
     private List<ZMimePartBean> mAttachments;
 
-    public List<ZMimePartBean> getAttachments() {
+
+    
+    private void  addAttachments(List<ZMimePartBean> list, ZMimePart part) {
+        if (part.isBody()) return;
+
+        boolean rfc822 = ZMimePartBean.CT_MSG_RFC822.equalsIgnoreCase(part.getContentType());
+
+        if (
+                rfc822 ||
+                part.getContentLocation() != null ||
+                "attachment".equalsIgnoreCase(part.getContentDispostion()) ||
+                part.getContentId() != null ||
+                part.getFileName()!= null) {
+            if (!ZMimePartBean.isIgnoredPArt(part))
+                list.add(new ZMimePartBean(part));
+        }
+
+        if (rfc822) return;
+
+        for (ZMimePart child: part.getChildren()) {
+            addAttachments(list, child);
+        }
+    }
+
+    public synchronized List<ZMimePartBean> getAttachments() {
         if (mAttachments == null) {
             mAttachments = new ArrayList<ZMimePartBean>();
             ZMimePart top = mMsg.getMimeStructure();
-            if (top.getContentType().equalsIgnoreCase(Mime.CT_MULTIPART_MIXED)) {
-                for (ZMimePart child: top.getChildren()) {
-                    if (child.isBody()) continue;
-                    if (child.getContentLocation() != null ||
-                            child.getContentId() != null ||
-                            child.getFileName()!= null ||
-                            child.getContentType().equalsIgnoreCase(Mime.CT_MESSAGE_RFC822)) {
-                        mAttachments.add(new ZMimePartBean(child));
-                        
-                    }
-
-                }
+            //if (top.getContentType().equalsIgnoreCase(Mime.CT_MULTIPART_MIXED)) {
+            for (ZMimePart child: top.getChildren()) {
+                addAttachments(mAttachments, child);
             }
         }
         return mAttachments;
     }
 
+    public int getNumberOfAttachments() {
+        return getAttachments().size();
+    }
+    
     public String getDisplayTo() {
         return BeanUtils.getHeaderAddrs(getEmailAddresses(), ZEmailAddress.EMAIL_TYPE_TO);
     }
