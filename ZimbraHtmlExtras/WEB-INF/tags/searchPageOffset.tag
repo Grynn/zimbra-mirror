@@ -1,5 +1,5 @@
 <%@ tag body-content="empty" dynamic-attributes="dynattrs" %>
-<%@ attribute name="searchResult" rtexprvalue="true" required="true" type="com.zimbra.cs.jsp.bean.ZSearchResultBean"%>
+<%@ attribute name="searchResult" rtexprvalue="true" required="true" type="com.zimbra.cs.taglib.bean.ZSearchResultBean"%>
 <%@ attribute name="max" rtexprvalue="true" required="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>

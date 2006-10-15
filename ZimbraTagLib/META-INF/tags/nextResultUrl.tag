@@ -2,7 +2,7 @@
 <%@ attribute name="var" rtexprvalue="false" required="true" type="java.lang.String" %>
 <%@ attribute name="value" rtexprvalue="true" required="true" type="java.lang.String" %>
 <%@ attribute name="index" rtexprvalue="true" required="true" %>
-<%@ attribute name="context" rtexprvalue="true" required="true" type="com.zimbra.cs.jsp.tag.SearchContext" %>
+<%@ attribute name="context" rtexprvalue="true" required="true" type="com.zimbra.cs.taglib.tag.SearchContext" %>
 <%@ attribute name="usecache" rtexprvalue="true" required="false"  %>
 <%@ variable name-from-attribute="var" alias='urlVar' scope="AT_END" variable-class="java.lang.String" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>

@@ -6,7 +6,7 @@
 <%@ attribute name="calendars" rtexprvalue="true" required="false" %>
 <%@ attribute name="ads" rtexprvalue="true" required="false" %>
 <%@ attribute name="tags" rtexprvalue="true" required="false" %>
-<%@ attribute name="mailbox" rtexprvalue="true" required="true" type="com.zimbra.cs.jsp.bean.ZMailboxBean" %>
+<%@ attribute name="mailbox" rtexprvalue="true" required="true" type="com.zimbra.cs.taglib.bean.ZMailboxBean" %>
 <%@ taglib prefix="app" uri="com.zimbra.htmlextras" %>
 <%@ taglib prefix="zm" uri="com.zimbra.zm" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>

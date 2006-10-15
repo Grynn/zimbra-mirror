@@ -13,7 +13,7 @@
     <tag>
         <description>sends a message</description>
         <name>sendMessage</name>
-        <tag-class>com.zimbra.cs.jsp.tag.SendMessageTag</tag-class>
+        <tag-class>com.zimbra.cs.taglib.tag.SendMessageTag</tag-class>
         <body-content>empty</body-content>        
         <variable>
             <name-from-attribute>var</name-from-attribute>
@@ -97,11 +97,11 @@
             Iterates over all mailbox tags.
         </description>
         <name>forEachTag</name>
-        <tag-class>com.zimbra.cs.jsp.tag.ForEachTagTag</tag-class>
+        <tag-class>com.zimbra.cs.taglib.tag.ForEachTagTag</tag-class>
         <body-content>scriptless</body-content>
         <variable>
             <name-from-attribute>var</name-from-attribute>
-            <variable-class>com.zimbra.cs.jsp.bean.ZTagBean</variable-class>
+            <variable-class>com.zimbra.cs.taglib.bean.ZTagBean</variable-class>
             <scope>AT_END</scope>
         </variable>
         <attribute>
@@ -120,11 +120,11 @@
             Iterates over all mailbox folders
         </description>
         <name>forEachFolder</name>
-        <tag-class>com.zimbra.cs.jsp.tag.ForEachFolderTag</tag-class>
+        <tag-class>com.zimbra.cs.taglib.tag.ForEachFolderTag</tag-class>
         <body-content>scriptless</body-content>
         <variable>
             <name-from-attribute>var</name-from-attribute>
-            <variable-class>com.zimbra.cs.jsp.bean.ZFolderBean</variable-class>
+            <variable-class>com.zimbra.cs.taglib.bean.ZFolderBean</variable-class>
             <scope>AT_END</scope>
         </variable>
         <attribute>
@@ -143,11 +143,11 @@
             Searches.
         </description>
         <name>search</name>
-        <tag-class>com.zimbra.cs.jsp.tag.SearchTag</tag-class>
+        <tag-class>com.zimbra.cs.taglib.tag.SearchTag</tag-class>
         <body-content>empty</body-content>
         <variable>
             <name-from-attribute>var</name-from-attribute>
-            <variable-class>com.zimbra.cs.jsp.bean.ZSearchResultBean</variable-class>
+            <variable-class>com.zimbra.cs.taglib.bean.ZSearchResultBean</variable-class>
             <scope>AT_END</scope>
         </variable>
         <attribute>
@@ -224,7 +224,7 @@
             login
         </description>
         <name>login</name>
-        <tag-class>com.zimbra.cs.jsp.tag.LoginTag</tag-class>
+        <tag-class>com.zimbra.cs.taglib.tag.LoginTag</tag-class>
         <body-content>empty</body-content>
         <attribute>
             <description>
@@ -265,7 +265,7 @@
             logout. clears cookie and JSP session.
         </description>
         <name>logout</name>
-        <tag-class>com.zimbra.cs.jsp.tag.LogoutTag</tag-class>
+        <tag-class>com.zimbra.cs.taglib.tag.LogoutTag</tag-class>
         <body-content>empty</body-content>
     </tag>
 
@@ -276,13 +276,13 @@
 
         <name>getMessage</name>
 
-        <tag-class>com.zimbra.cs.jsp.tag.GetMessageTag</tag-class>
+        <tag-class>com.zimbra.cs.taglib.tag.GetMessageTag</tag-class>
 
         <body-content>empty</body-content>
 
         <variable>
             <name-from-attribute>var</name-from-attribute>
-            <variable-class>com.zimbra.cs.jsp.bean.ZMessageBean</variable-class>
+            <variable-class>com.zimbra.cs.taglib.bean.ZMessageBean</variable-class>
             <scope>AT_END</scope>
         </variable>
 
@@ -344,13 +344,13 @@
 
         <name>getConversation</name>
 
-        <tag-class>com.zimbra.cs.jsp.tag.GetConversationTag</tag-class>
+        <tag-class>com.zimbra.cs.taglib.tag.GetConversationTag</tag-class>
 
         <body-content>empty</body-content>
 
         <variable>
             <name-from-attribute>var</name-from-attribute>
-            <variable-class>com.zimbra.cs.jsp.bean.ZConversationBean</variable-class>
+            <variable-class>com.zimbra.cs.taglib.bean.ZConversationBean</variable-class>
             <scope>AT_END</scope>
         </variable>
 
@@ -379,13 +379,13 @@
 
         <name>getContact</name>
 
-        <tag-class>com.zimbra.cs.jsp.tag.GetContactTag</tag-class>
+        <tag-class>com.zimbra.cs.taglib.tag.GetContactTag</tag-class>
 
         <body-content>empty</body-content>
 
         <variable>
             <name-from-attribute>var</name-from-attribute>
-            <variable-class>com.zimbra.cs.jsp.bean.ZContactBean</variable-class>
+            <variable-class>com.zimbra.cs.taglib.bean.ZContactBean</variable-class>
             <scope>AT_END</scope>
         </variable>
 
@@ -420,13 +420,13 @@
 
         <name>getException</name>
 
-        <tag-class>com.zimbra.cs.jsp.tag.GetExceptionTag</tag-class>
+        <tag-class>com.zimbra.cs.taglib.tag.GetExceptionTag</tag-class>
 
         <body-content>empty</body-content>
 
         <variable>
             <name-from-attribute>var</name-from-attribute>
-            <variable-class>com.zimbra.cs.jsp.bean.ZExceptionBean</variable-class>
+            <variable-class>com.zimbra.cs.taglib.bean.ZExceptionBean</variable-class>
             <scope>AT_END</scope>
         </variable>
 
@@ -453,12 +453,12 @@
 
         <name>getMailbox</name>
 
-        <tag-class>com.zimbra.cs.jsp.tag.GetMailboxTag</tag-class>
+        <tag-class>com.zimbra.cs.taglib.tag.GetMailboxTag</tag-class>
 
         <body-content>empty</body-content>
         <variable>
             <name-from-attribute>var</name-from-attribute>
-            <variable-class>com.zimbra.cs.jsp.bean.ZMailboxBean</variable-class>
+            <variable-class>com.zimbra.cs.taglib.bean.ZMailboxBean</variable-class>
             <scope>AT_END</scope>
         </variable>
 
@@ -476,11 +476,11 @@
             look at the query strings and compute SearchContext
         </description>
         <name>computeSearchContext</name>
-        <tag-class>com.zimbra.cs.jsp.tag.ComputeSearchContextTag</tag-class>
+        <tag-class>com.zimbra.cs.taglib.tag.ComputeSearchContextTag</tag-class>
         <body-content>empty</body-content>
         <variable>
             <name-from-attribute>var</name-from-attribute>
-            <variable-class>com.zimbra.cs.jsp.tag.SearchContext</variable-class>
+            <variable-class>com.zimbra.cs.taglib.tag.SearchContext</variable-class>
             <scope>AT_END</scope>
         </variable>
 
@@ -525,11 +525,11 @@
             call saerch conv
         </description>
         <name>searchConv</name>
-        <tag-class>com.zimbra.cs.jsp.tag.SearchConvTag</tag-class>
+        <tag-class>com.zimbra.cs.taglib.tag.SearchConvTag</tag-class>
         <body-content>empty</body-content>
         <variable>
             <name-from-attribute>var</name-from-attribute>
-            <variable-class>com.zimbra.cs.jsp.bean.ZSearchResultBean</variable-class>
+            <variable-class>com.zimbra.cs.taglib.bean.ZSearchResultBean</variable-class>
             <scope>AT_END</scope>
         </variable>
 
@@ -547,7 +547,7 @@
             <name>context</name>
            <required>true</required>
             <rtexprvalue>true</rtexprvalue>
-            <type>com.zimbra.cs.jsp.tag.SearchContext</type>
+            <type>com.zimbra.cs.taglib.tag.SearchContext</type>
         </attribute>
         <attribute>
             <description>
@@ -587,7 +587,7 @@
             <name>conv</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
-            <type>com.zimbra.cs.jsp.bean.ZConversationHitBean</type>
+            <type>com.zimbra.cs.taglib.bean.ZConversationHitBean</type>
         </attribute>
 
         <attribute>
@@ -603,11 +603,11 @@
             compute next/prev item offset/index based on current context plus index
         </description>
         <name>computeNextPrevItem</name>
-        <tag-class>com.zimbra.cs.jsp.tag.ComputeNextPrevItemTag</tag-class>
+        <tag-class>com.zimbra.cs.taglib.tag.ComputeNextPrevItemTag</tag-class>
         <body-content>empty</body-content>
         <variable>
             <name-from-attribute>var</name-from-attribute>
-            <variable-class>com.zimbra.cs.jsp.bean.NextPrevItemBean</variable-class>
+            <variable-class>com.zimbra.cs.taglib.bean.NextPrevItemBean</variable-class>
             <scope>AT_END</scope>
         </variable>
 
@@ -625,7 +625,7 @@
             <name>searchResult</name>
            <required>true</required>
             <rtexprvalue>true</rtexprvalue>
-            <type>com.zimbra.cs.jsp.bean.ZSearchResultBean</type>
+            <type>com.zimbra.cs.taglib.bean.ZSearchResultBean</type>
         </attribute>
         <attribute>
             <description>
@@ -666,8 +666,8 @@
     <function>
         <description>Used to determine if any of the specified fields are set in a contact</description>
         <name>anySet</name>
-        <function-class>com.zimbra.cs.jsp.bean.ZContactBean</function-class>
-        <function-signature>boolean anySet(com.zimbra.cs.jsp.bean.ZContactBean,java.lang.String)</function-signature>
+        <function-class>com.zimbra.cs.taglib.bean.ZContactBean</function-class>
+        <function-signature>boolean anySet(com.zimbra.cs.taglib.bean.ZContactBean,java.lang.String)</function-signature>
         <example>
                         <![CDATA[ ]]>
 
@@ -684,54 +684,54 @@
 
     <function>
         <name>truncate</name>
-        <function-class>com.zimbra.cs.jsp.bean.BeanUtils</function-class>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String truncate(java.lang.String,int,boolean)</function-signature>
     </function>
 
     <function>
         <name>displaySize</name>
-        <function-class>com.zimbra.cs.jsp.bean.BeanUtils</function-class>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String displaySize(long)</function-signature>
     </function>
 
     <function>
         <name>displayMsgDate</name>
-        <function-class>com.zimbra.cs.jsp.bean.BeanUtils</function-class>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String
             displayMsgDate(javax.servlet.jsp.PageContext,java.util.Date)</function-signature>
     </function>
 
     <function>
         <name>m</name>
-        <function-class>com.zimbra.cs.jsp.bean.BeanUtils</function-class>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String
             getMessage(javax.servlet.jsp.PageContext,java.lang.String)</function-signature>
     </function>
 
     <function>
         <name>vm</name>
-        <function-class>com.zimbra.cs.jsp.bean.BeanUtils</function-class>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String
             getValueOrMessage(javax.servlet.jsp.PageContext,java.lang.String,java.lang.String)</function-signature>
     </function>
 
     <function>
         <name>getTags</name>
-        <function-class>com.zimbra.cs.jsp.bean.BeanUtils</function-class>
-        <function-signature>java.util.List&lt;com.zimbra.cs.jsp.bean.ZTagBean&gt;
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.util.List&lt;com.zimbra.cs.taglib.bean.ZTagBean&gt;
             getTags(javax.servlet.jsp.PageContext,java.lang.String)</function-signature>
     </function>
 
     <function>
         <name>getTagNames</name>
-        <function-class>com.zimbra.cs.jsp.bean.BeanUtils</function-class>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String
             getTagNames(javax.servlet.jsp.PageContext,java.lang.String)</function-signature>
     </function>
 
     <function>
         <name>repeatString</name>
-        <function-class>com.zimbra.cs.jsp.bean.BeanUtils</function-class>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String repeatString(java.lang.String, int)</function-signature>
     </function>
 

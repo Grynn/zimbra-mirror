@@ -1,5 +1,5 @@
 <%@ tag body-content="empty" %>
-<%@ attribute name="folder" rtexprvalue="true" required="true" type="com.zimbra.cs.jsp.bean.ZFolderBean" %>
+<%@ attribute name="folder" rtexprvalue="true" required="true" type="com.zimbra.cs.taglib.bean.ZFolderBean" %>
 <%@ attribute name="label" rtexprvalue="true" required="false" %>
 <%@ attribute name="base" rtexprvalue="true" required="false" %>
 <%@ attribute name="key" rtexprvalue="true" required="false" %>
