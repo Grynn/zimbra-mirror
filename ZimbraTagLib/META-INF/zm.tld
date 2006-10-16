@@ -276,7 +276,7 @@
 
         <name>getMessage</name>
 
-        <tag-class>com.zimbra.cs.taglib.tag.GetMessageTag</tag-class>
+        <tag-class>com.zimbra.cs.taglib.tag.msg.GetMessageTag</tag-class>
 
         <body-content>empty</body-content>
 
@@ -482,7 +482,7 @@
 
     <tag>
         <description>
-            Mark a conversation read/unread.
+            Flag/unflag a conversation.
         </description>
 
         <name>flagConversation</name>
@@ -698,6 +698,255 @@
         </attribute>
         <attribute>
             <description>conversation id(s) to mark as spam/not spam</description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>destination folder id</description>
+            <name>folderid</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>spam state (true=spam, false=not spam)</description>
+            <name>spam</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>boolean</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Hard-delete a message. Use moveMessage if you just want to move to trash.
+        </description>
+
+        <name>deleteMessage</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.msg.DeleteMessageTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZActionResultBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the ZActionResultBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+         <attribute>
+             <description>message id(s) to delete</description>
+             <name>id</name>
+             <required>true</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>java.lang.String</type>
+         </attribute>
+     </tag>
+
+    <tag>
+        <description>
+             Mark a message read/unread.
+         </description>
+
+        <name>markMessageRead</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.msg.MarkMessageReadTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZActionResultBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the ZActionResultBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+
+         <attribute>
+             <description>message id(s) to mark read/unread</description>
+             <name>id</name>
+             <required>true</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>java.lang.String</type>
+         </attribute>
+
+         <attribute>
+             <description>read state (true=read, false=unread)</description>
+             <name>read</name>
+             <required>true</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>boolean</type>
+         </attribute>
+     </tag>
+
+    <tag>
+        <description>
+            Flag/unflag a message.
+        </description>
+
+        <name>flagMessage</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.msg.FlagMessageTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZActionResultBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the ZActionResultBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <description>message id(s) to flag/unflag</description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+         <attribute>
+             <description>flag state (true=flagged, false=unflagged)</description>
+             <name>flag</name>
+             <required>true</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>boolean</type>
+         </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Move a message to a folder.
+        </description>
+
+        <name>moveMessage</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.msg.MoveMessageTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZActionResultBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the ZActionResultBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <description>message id(s) to move</description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+         <attribute>
+             <description>destination folder id</description>
+             <name>folderid</name>
+             <required>true</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>java.lang.String</type>
+         </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Tag a message.
+        </description>
+
+        <name>tagMessage</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.msg.TagMessageTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZActionResultBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the ZActionResultBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <description>message id(s) to tag</description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+         <attribute>
+             <description>tag id</description>
+             <name>tagid</name>
+             <required>true</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>java.lang.String</type>
+         </attribute>
+        <attribute>
+            <description>tag state (true=tag, false=untag)</description>
+            <name>tag</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>boolean</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Mark a message spam/unspam, and optionally move to a specific folder.
+        </description>
+
+        <name>markMessageSpam</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.msg.MarkMessageSpamTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZActionResultBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the ZActionResultBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <description>message id(s) to mark as spam/not spam</description>
             <name>id</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>

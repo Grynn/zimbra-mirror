@@ -193,6 +193,10 @@ public class ZFolderBean {
         return depth;
     }
 
+    public boolean getIsMessageMoveTarget() {
+        return getIsConversationMoveTarget();
+    }
+
     public boolean getIsConversationMoveTarget() {
         return (getIsMessageView() || getIsConversationView() || getIsNullView()) &&
                 !(getIsDrafts() || getIsMountPoint() || getIsSearchFolder() || getRemoteURL() != null);
