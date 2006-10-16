@@ -238,7 +238,8 @@ function () {
 				continue; //skip uid, it is changed throw a separate request
 			}
 			if(tmpObj.attrs[a] instanceof Array) {
-				if(tmpObj.attrs[a].join(",").valueOf() !=  this._currentObject.attrs[a].join(",").valueOf()) {
+				if(this._currentObject.attrs[a] && tmpObj.attrs[a] 
+					&& tmpObj.attrs[a].join(",").valueOf() !=  this._currentObject.attrs[a].join(",").valueOf()) {
 					mods[a] = tmpObj.attrs[a];
 				}
 			} else {

@@ -518,10 +518,16 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 					]
 				});								
 	}
+	
+	var zimbraFeatureMailForwardingEnabledType = _SUPER_CHECKBOX_ ;
+	if (ZaSettings.isDomainAdmin || !ZaSettings.COSES_ENABLED) {
+		zimbraFeatureMailForwardingEnabledType = _CHECKBOX_ ;
+	}
+	
 	if(ZaSettings.ACCOUNTS_FORWARDING_ENABLED) {
 		cases.push({type:_CASE_, numCols:2, relevant:"instance[ZaModel.currentStep] == ZaNewAccountXWizard.FORWARDING_STEP",
 					items: [
-						{ref:ZaAccount.A_zimbraFeatureMailForwardingEnabled, type:_SUPER_CHECKBOX_,
+						{ref:ZaAccount.A_zimbraFeatureMailForwardingEnabled, type:zimbraFeatureMailForwardingEnabledType,
 							resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
 							msgName:ZaMsg.NAD_zimbraFeatureMailForwardingEnabled,
 							label:ZaMsg.NAD_zimbraFeatureMailForwardingEnabled,labelLocation:_LEFT_, 

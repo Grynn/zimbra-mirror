@@ -159,9 +159,9 @@ Cos_MailQuota_XModelItem.prototype.minInclusive = 0;
 
 Cos_MailQuota_XModelItem.prototype.getValue = function(instance, current, ref) {
 	var value = this.getLocalValue(instance, current, ref);
-	if (value == null) value = this.getSuperValue(instance, current, ref);
-	if(value == 0)
-		value = "0";
+	if (value == null ) value = this.getSuperValue(instance, current, ref);
+	//if(value == 0 && value != "")
+		//value = "0";
 		
 	return value;
 }
@@ -170,8 +170,9 @@ Cos_MailQuota_XModelItem.prototype.getSuperValue = function(ins) {
 	if(!ins)
 		return null;
 	var _ref = this.ref.replace("/", ".");
-	var value = 0;
-	if((eval("ins.cos." + _ref) != null) && (eval("ins.cos." + _ref) != 0)) {
+	//var value = 0;
+	var value = null;
+	if((eval("ins.cos." + _ref) != null) && (eval("ins.cos." + _ref) != 0) && (eval("ins.cos." + _ref) != "")) {
 		value = (eval("ins.cos." + _ref) / 1048576);
 		if(value != Math.round(value)) {
 			value = Number(value).toFixed(2);
@@ -184,19 +185,21 @@ Cos_MailQuota_XModelItem.prototype.getLocalValue = function(ins) {
 	if(!ins)
 		return null;	
 	var _ref = this.ref.replace("/", ".");
-	var value = null;
-	if(eval("ins." + _ref) != null) {
+	var value =null;
+	if(eval("ins." + _ref) != null && eval("ins." + _ref) != "") {
 		value = (eval("ins." + _ref) / 1048576);
 		if(value != Math.round(value)) {
 			value = Number(value).toFixed(2);
 	  	}
 	} 
-	return value;
+	return value || eval("ins." + _ref) ;
 }
 
 Cos_MailQuota_XModelItem.prototype.setLocalValue = function(value, instance, current, ref) {
-	var val = (value != null) ? Math.round(value * 1048576) : null;
-	this.setValueAt(instance, val, ref);	
+	if (value != null && value != "") {
+		 value = Math.round(value * 1048576);
+	}
+	this.setValueAt(instance, value, ref);	
 }
 
 /**

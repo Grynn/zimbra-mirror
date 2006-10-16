@@ -758,10 +758,16 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 					]
 				});
 	}
+	
+	var zimbraFeatureMailForwardingEnabledType = _SUPER_CHECKBOX_ ;
+	if (ZaSettings.isDomainAdmin || !ZaSettings.COSES_ENABLED) {
+		zimbraFeatureMailForwardingEnabledType = _CHECKBOX_ ;
+	}
+	
 	if(ZaSettings.ACCOUNTS_FORWARDING_ENABLED) {
 		cases.push({type:_CASE_, numCols:2, relevant:("instance[ZaModel.currentTab] == " + _tab7), 
 					items: [
-						{ref:ZaAccount.A_zimbraFeatureMailForwardingEnabled,resetToSuperLabel:ZaMsg.NAD_ResetToCOS, type:_SUPER_CHECKBOX_, 
+						{ref:ZaAccount.A_zimbraFeatureMailForwardingEnabled,resetToSuperLabel:ZaMsg.NAD_ResetToCOS, type:zimbraFeatureMailForwardingEnabledType, 
 							label:ZaMsg.NAD_zimbraFeatureMailForwardingEnabled,  labelCssClass:"xform_label", labelLocation:_LEFT_, 
 							trueValue:"TRUE", falseValue:"FALSE",
 							onChange:ZaTabView.onFormFieldChanged, align:_LEFT_
