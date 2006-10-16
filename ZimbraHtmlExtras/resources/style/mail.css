@@ -183,6 +183,22 @@
 	width: 100%;
 }
 
+.msgAttachSep {
+	width: 50%;
+	border-top: 2px solid rgb(170, 170, 170);
+}
+
+.msgAttachContainer {
+	padding: 5px;
+}
+
+.msgAttachImage {
+	border: 2px solid rgb(195, 217, 255);
+	padding: 5px;
+	width: 200px;
+	height: 160px;
+}
+
 .sidebarLink {
 	padding: 2 0 2 0;
 }

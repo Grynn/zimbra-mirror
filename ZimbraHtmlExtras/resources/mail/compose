@@ -28,7 +28,7 @@
 
 <app:head title="${zm:m(pageContext, 'compose')}"/>
 
-<body>
+<body onload="document.composeForm.to.focus()">
 <c:set var="toolbar">
 	<td class="toolbar">&nbsp;</td>
 	<td class="toolbar"><input class="composeBtn unread" name="send" type="submit" value="Send"></td>
@@ -39,7 +39,7 @@
 
 <zm:getMailbox var="mailbox"/>
 <app:view selected='compose' folders="true" tags="true" searches="true" contacts="true" mailbox="${mailbox}">
-<form action="compose" method="post">
+<form action="compose" method="post" name="composeForm">
 <div class="niftyMail">
 	<b class="rtopNiftyMail">
 		<b class="r1" style="margin-left:0"></b>
