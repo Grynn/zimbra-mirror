@@ -32,21 +32,23 @@ import com.zimbra.cs.zclient.ZMailbox.ZActionResult;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 
-public class MoveConversationTag extends ZimbraSimpleTag {
+public class TagConversationTag extends ZimbraSimpleTag {
 
     private String mTc;
     private String mId;
-    private String mFolderid;
+    private String mTagid;
     private String mVar;
+    private boolean mTag; 
 
     public void setVar(String var) { mVar = var; }
     public void setTc(String tc) { mTc = tc; }
     public void setId(String id) { mId = id; }
-    public void setFolderid(String folderid) { mFolderid = folderid; }
+    public void setTag(boolean tag) { mTag = tag; }
+    public void setTagid(String tagid) { mTagid = tagid; }
 
     public void doTag() throws JspException {
         try {
-            ZActionResult result = getMailbox().moveConversation(mId, mFolderid, mTc);
+            ZActionResult result = getMailbox().tagConversation(mId, mTagid, mTag, mTc);
             getJspContext().setAttribute(mVar, new ZActionResultBean(result), PageContext.PAGE_SCOPE);
         } catch (ServiceException e) {
             throw new JspException(e);

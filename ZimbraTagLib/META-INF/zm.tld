@@ -592,6 +592,70 @@
              <type>java.lang.String</type>
          </attribute>
     </tag>
+
+    <tag>
+        <description>
+            Tag a conversation.
+        </description>
+
+        <name>tagConversation</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.conv.TagConversationTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZActionResultBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the ZActionResultBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[
+                   [-]{constraint} = list of characters; constrains the set of affected items in a conversation <br />
+                   t - include items in the Trash <br />
+                   j - include items in Spam/Junk<br />
+                   s - include items in the user's Sent folder (not necessarily "Sent")<br />
+                   o - include items in any other folder<br />
+                   a leading '-' means to negate the constraint (e.g. "-t" means all messages not in Trash)<br />
+                 ]]>
+            </description>
+            <name>tc</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>conversation id(s) to tag</description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+         <attribute>
+             <description>tag id</description>
+             <name>tagid</name>
+             <required>true</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>java.lang.String</type>
+         </attribute>
+        <attribute>
+            <description>tag state (true=tag, false=untag)</description>
+            <name>tag</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>boolean</type>
+        </attribute>
+    </tag>
+    
     <tag>
         <description>
             Mark a conversation as spam/unspam, and optionally move to a specific folder.
