@@ -68,4 +68,11 @@
 	<td class="cBotLeft cGray"></td>
 	<td class="cBot cGray"></td>
 	<td class="cBotRight cGray"></td>
-</tr></table>
+</tr></table><br>
+
+<c:forEach var="part" items="${message.attachments}">
+	<c:if test="${part.isMssage}">
+		<zm:getMessage var="partMessage" id="${message.id}" part="${part.partName}"/>
+		<app:displayMessage message="${partMessage}" startNew="true"/>
+	</c:if>
+</c:forEach>

@@ -6,13 +6,6 @@
 <%@ taglib prefix="zm" uri="com.zimbra.zm" %>
 <%@ taglib prefix="app" uri="com.zimbra.htmlextras" %>
 
-<c:forEach var="part" items="${message.attachments}">
-	<c:if test="${part.isMssage}">
-		<zm:getMessage var="partMessage" id="${message.id}" part="${part.partName}"/>
-		<app:displayMessage message="${partMessage}" startNew="true"/>
-	</c:if>
-</c:forEach>
-
 <div class="msgAttachContainer">
 <c:forEach var="part" items="${message.attachments}">
 	<c:if test="${!part.isMssage}">
