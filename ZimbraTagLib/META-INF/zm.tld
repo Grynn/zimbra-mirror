@@ -344,7 +344,7 @@
 
         <name>getConversation</name>
 
-        <tag-class>com.zimbra.cs.taglib.tag.GetConversationTag</tag-class>
+        <tag-class>com.zimbra.cs.taglib.tag.conv.GetConversationTag</tag-class>
 
         <body-content>empty</body-content>
 
@@ -371,6 +371,289 @@
 
     </tag>
 
+    <tag>
+        <description>
+            Hard-delete a conversation. Use moveConversation if you just want to move to trash.
+        </description>
+
+        <name>deleteConversation</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.conv.DeleteConversationTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZActionResultBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the ZActionResultBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+         <attribute>
+             <description>
+              <![CDATA[
+                 [-]{constraint} = list of characters; constrains the set of affected items in a conversation <br />
+                 t - include items in the Trash <br />
+                 j - include items in Spam/Junk<br />
+                 s - include items in the user's Sent folder (not necessarily "Sent")<br />
+                 o - include items in any other folder<br />
+                 a leading '-' means to negate the constraint (e.g. "-t" means all messages not in Trash)<br />
+               ]]>                 
+             </description>
+             <name>tc</name>
+             <required>false</required>
+             <rtexprvalue>true</rtexprvalue>             
+             <type>java.lang.String</type>
+         </attribute>
+
+         <attribute>
+             <description>conversation id(s) to delete</description>
+             <name>id</name>
+             <required>true</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>java.lang.String</type>
+         </attribute>
+     </tag>
+
+    <tag>
+        <description>
+             Mark a conversation read/unread.
+         </description>
+
+        <name>markConversationRead</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.conv.MarkConversationReadTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZActionResultBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the ZActionResultBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+
+        <attribute>
+             <description>
+              <![CDATA[
+                 [-]{constraint} = list of characters; constrains the set of affected items in a conversation <br />
+                 t - include items in the Trash <br />
+                 j - include items in Spam/Junk<br />
+                 s - include items in the user's Sent folder (not necessarily "Sent")<br />
+                 o - include items in any other folder<br />
+                 a leading '-' means to negate the constraint (e.g. "-t" means all messages not in Trash)<br />
+               ]]>
+             </description>
+             <name>tc</name>
+             <required>false</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>java.lang.String</type>
+        </attribute>
+
+         <attribute>
+             <description>conversation id(s) to mark read/unread</description>
+             <name>id</name>
+             <required>true</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>java.lang.String</type>
+         </attribute>
+
+         <attribute>
+             <description>read state (true=read, false=unread)</description>
+             <name>read</name>
+             <required>true</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>boolean</type>
+         </attribute>
+     </tag>
+
+    <tag>
+        <description>
+            Mark a conversation read/unread.
+        </description>
+
+        <name>flagConversation</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.conv.FlagConversationTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZActionResultBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the ZActionResultBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[
+                   [-]{constraint} = list of characters; constrains the set of affected items in a conversation <br />
+                   t - include items in the Trash <br />
+                   j - include items in Spam/Junk<br />
+                   s - include items in the user's Sent folder (not necessarily "Sent")<br />
+                   o - include items in any other folder<br />
+                   a leading '-' means to negate the constraint (e.g. "-t" means all messages not in Trash)<br />
+                 ]]>
+            </description>
+            <name>tc</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>conversation id(s) to flag/unflag</description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>            
+        </attribute>
+         <attribute>
+             <description>flag state (true=flagged, false=unflagged)</description>
+             <name>flag</name>
+             <required>true</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>boolean</type>
+         </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Move a conversation to a folder.
+        </description>
+
+        <name>moveConversation</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.conv.MoveConversationTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZActionResultBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the ZActionResultBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[
+                   [-]{constraint} = list of characters; constrains the set of affected items in a conversation <br />
+                   t - include items in the Trash <br />
+                   j - include items in Spam/Junk<br />
+                   s - include items in the user's Sent folder (not necessarily "Sent")<br />
+                   o - include items in any other folder<br />
+                   a leading '-' means to negate the constraint (e.g. "-t" means all messages not in Trash)<br />
+                 ]]>
+            </description>
+            <name>tc</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>conversation id(s) to move</description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+         <attribute>
+             <description>destination folder id</description>
+             <name>folderid</name>
+             <required>true</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>java.lang.String</type>
+         </attribute>
+    </tag>
+    <tag>
+        <description>
+            Mark a conversation as spam/unspam, and optionally move to a specific folder.
+        </description>
+
+        <name>markConversationSpam</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.conv.MarkConversationSpamTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZActionResultBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the ZActionResultBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[
+                   [-]{constraint} = list of characters; constrains the set of affected items in a conversation <br />
+                   t - include items in the Trash <br />
+                   j - include items in Spam/Junk<br />
+                   s - include items in the user's Sent folder (not necessarily "Sent")<br />
+                   o - include items in any other folder<br />
+                   a leading '-' means to negate the constraint (e.g. "-t" means all messages not in Trash)<br />
+                 ]]>
+            </description>
+            <name>tc</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>conversation id(s) to mark as spam/not spam</description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>destination folder id</description>
+            <name>folderid</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>spam state (true=spam, false=not spam)</description>
+            <name>spam</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>boolean</type>
+        </attribute>
+    </tag>
 
     <tag>
         <description>
@@ -525,7 +808,7 @@
             call saerch conv
         </description>
         <name>searchConv</name>
-        <tag-class>com.zimbra.cs.taglib.tag.SearchConvTag</tag-class>
+        <tag-class>com.zimbra.cs.taglib.tag.conv.SearchConvTag</tag-class>
         <body-content>empty</body-content>
         <variable>
             <name-from-attribute>var</name-from-attribute>

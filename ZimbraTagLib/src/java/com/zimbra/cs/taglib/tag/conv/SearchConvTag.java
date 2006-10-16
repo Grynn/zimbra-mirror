@@ -6,14 +6,6 @@
  * Version 1.1 ("License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
  * http://www.zimbra.com/license
-/*
- * ***** BEGIN LICENSE BLOCK *****
- * Version: MPL 1.1
- *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 ("License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.zimbra.com/license
  *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
@@ -30,10 +22,12 @@
  *
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.taglib.tag;
+package com.zimbra.cs.taglib.tag.conv;
 
 import com.zimbra.cs.taglib.bean.ZSearchResultBean;
 import com.zimbra.cs.taglib.bean.ZConversationHitBean;
+import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
+import com.zimbra.cs.taglib.tag.SearchContext;
 import com.zimbra.cs.zclient.*;
 import com.zimbra.cs.service.ServiceException;
 

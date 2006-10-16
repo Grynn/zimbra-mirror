@@ -6,14 +6,6 @@
  * Version 1.1 ("License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
  * http://www.zimbra.com/license
-/*
- * ***** BEGIN LICENSE BLOCK *****
- * Version: MPL 1.1
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 ("License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.zimbra.com/license
  * 
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
@@ -32,18 +24,17 @@
  */
 package com.zimbra.cs.taglib.tag;
 
-import java.io.IOException;
-import java.util.List;
+import com.zimbra.cs.service.ServiceException;
+import com.zimbra.cs.taglib.bean.ZContactBean;
+import com.zimbra.cs.zclient.ZContact;
+import com.zimbra.cs.zclient.ZFolder;
+import com.zimbra.cs.zclient.ZMailbox;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
-
-import com.zimbra.cs.taglib.bean.ZContactBean;
-import com.zimbra.cs.service.ServiceException;
-import com.zimbra.cs.zclient.ZContact;
-import com.zimbra.cs.zclient.ZFolder;
-import com.zimbra.cs.zclient.ZMailbox;
+import java.io.IOException;
+import java.util.List;
 
 public class GetContactTag extends ZimbraSimpleTag {
     
