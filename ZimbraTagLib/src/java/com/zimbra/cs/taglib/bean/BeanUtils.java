@@ -24,6 +24,16 @@
  */
 package com.zimbra.cs.taglib.bean;
 
+import com.zimbra.cs.service.ServiceException;
+import com.zimbra.cs.taglib.ZJspSession;
+import com.zimbra.cs.zclient.ZEmailAddress;
+import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.cs.zclient.ZTag;
+import com.zimbra.cs.zclient.ZFolder;
+
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.jstl.fmt.LocaleSupport;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,16 +43,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.jstl.fmt.LocaleSupport;
-
-import com.zimbra.cs.taglib.ZJspSession;
-import com.zimbra.cs.service.ServiceException;
-import com.zimbra.cs.zclient.ZEmailAddress;
-import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZTag;
 
 public class BeanUtils {
 
@@ -306,5 +306,18 @@ public class BeanUtils {
         }
         return sb.toString();
     }
-    
+
+    public static String getTagName(PageContext pc, String id) throws JspException {
+        ZMailbox mbox = ZJspSession.getZMailbox(pc);
+        if (id == null) return null;
+        ZTag tag = mbox.getTagById(id);
+        return tag == null ? null : tag.getName();
+    }
+
+    public static String getFolderName(PageContext pc, String id) throws JspException {
+        ZMailbox mbox = ZJspSession.getZMailbox(pc);
+        if (id == null) return null;
+        ZFolder f = mbox.getFolderById(id);
+        return f == null ? null : f.getName();
+    }
 }

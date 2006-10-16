@@ -1076,6 +1076,20 @@
             getTagNames(javax.servlet.jsp.PageContext,java.lang.String)</function-signature>
     </function>
 
+
+    <function>
+        <name>getTagName</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String
+            getTagName(javax.servlet.jsp.PageContext,java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>getFolderName</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String
+            getFolderName(javax.servlet.jsp.PageContext,java.lang.String)</function-signature>
+    </function>
     <function>
         <name>repeatString</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>

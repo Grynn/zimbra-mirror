@@ -24,13 +24,13 @@
  */
 package com.zimbra.cs.taglib.bean;
 
-import java.util.List;
-
 import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZGrant;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZMountpoint;
 import com.zimbra.cs.zclient.ZSearchFolder;
+
+import java.util.List;
 
 public class ZFolderBean {
     
@@ -191,5 +191,10 @@ public class ZFolderBean {
             if (path.charAt(i) == ZMailbox.PATH_SEPARATOR_CHAR) depth++; 
         }
         return depth;
+    }
+
+    public boolean getIsConversationMoveTarget() {
+        return (getIsMessageView() || getIsConversationView() || getIsNullView()) &&
+                !(getIsDrafts() || getIsMountPoint() || getIsSearchFolder() || getRemoteURL() != null);
     }
 }
