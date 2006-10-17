@@ -201,4 +201,9 @@ public class ZFolderBean {
         return (getIsMessageView() || getIsConversationView() || getIsNullView()) &&
                 !(getIsDrafts() || getIsMountPoint() || getIsSearchFolder() || getRemoteURL() != null);
     }
+
+    public boolean getIsContactMoveTarget() {
+        return (getIsContactView() || getIsTrash()) &&
+                !(getIsDrafts() || getIsMountPoint() || getIsSearchFolder() || getRemoteURL() != null);
+    }
 }

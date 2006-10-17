@@ -102,7 +102,7 @@
         <variable>
             <name-from-attribute>var</name-from-attribute>
             <variable-class>com.zimbra.cs.taglib.bean.ZTagBean</variable-class>
-            <scope>AT_END</scope>
+            <scope>NESTED</scope>
         </variable>
         <attribute>
             <description>
@@ -125,7 +125,7 @@
         <variable>
             <name-from-attribute>var</name-from-attribute>
             <variable-class>com.zimbra.cs.taglib.bean.ZFolderBean</variable-class>
-            <scope>AT_END</scope>
+            <scope>NESTED</scope>
         </variable>
         <attribute>
             <description>
@@ -975,7 +975,7 @@
 
         <name>getContact</name>
 
-        <tag-class>com.zimbra.cs.taglib.tag.GetContactTag</tag-class>
+        <tag-class>com.zimbra.cs.taglib.tag.contact.GetContactTag</tag-class>
 
         <body-content>empty</body-content>
 
@@ -1008,6 +1008,165 @@
         </attribute>
     </tag>
 
+    <tag>
+        <description>
+            Hard-delete a contact. Use moveContact if you just want to move to trash.
+        </description>
+
+        <name>deleteContact</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.contact.DeleteContactTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZActionResultBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the ZActionResultBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+         <attribute>
+             <description>contact id(s) to delete</description>
+             <name>id</name>
+             <required>true</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>java.lang.String</type>
+         </attribute>
+     </tag>
+
+    <tag>
+        <description>
+            Flag/unflag a contact.
+        </description>
+
+        <name>flagContact</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.contact.FlagContactTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZActionResultBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the ZActionResultBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <description>contact id(s) to flag/unflag</description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+         <attribute>
+             <description>flag state (true=flagged, false=unflagged)</description>
+             <name>flag</name>
+             <required>true</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>boolean</type>
+         </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Move a contact to a folder.
+        </description>
+
+        <name>moveContact</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.contact.MoveContactTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZActionResultBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the ZActionResultBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <description>contact id(s) to move</description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+         <attribute>
+             <description>destination folder id</description>
+             <name>folderid</name>
+             <required>true</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>java.lang.String</type>
+         </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Tag a message.
+        </description>
+
+        <name>tagContact</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.contact.TagContactTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZActionResultBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the ZActionResultBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <description>contact id(s) to tag</description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+         <attribute>
+             <description>tag id</description>
+             <name>tagid</name>
+             <required>true</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>java.lang.String</type>
+         </attribute>
+        <attribute>
+            <description>tag state (true=tag, false=untag)</description>
+            <name>tag</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>boolean</type>
+        </attribute>
+    </tag>
 
     <tag>
         <description>
@@ -1234,7 +1393,7 @@
         </attribute>
     </tag>
 
-   <tag-file>
+    <tag-file>
         <name>currentResultUrl</name>
         <path>/META-INF/tags/currentResultUrl.tag</path>
     </tag-file>

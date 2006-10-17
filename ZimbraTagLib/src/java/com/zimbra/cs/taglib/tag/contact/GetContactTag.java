@@ -22,10 +22,11 @@
  * 
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.taglib.tag;
+package com.zimbra.cs.taglib.tag.contact;
 
 import com.zimbra.cs.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZContactBean;
+import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 import com.zimbra.cs.zclient.ZContact;
 import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZMailbox;
