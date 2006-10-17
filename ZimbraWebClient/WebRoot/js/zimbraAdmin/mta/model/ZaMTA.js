@@ -109,7 +109,7 @@ ZaMTA.prototype.QCountsCallback = function (resp) {
 	if(!resp) {
 		var ex = new ZmCsfeException(ZMsg.errorEmptyResponse,CSFE_SVC_ERROR,"ZaMTA.prototype.QCountsCallback");
 		this._app.getCurrentController()._handleException(ex, "ZaMTA.prototype.QCountsCallback");
-		this.goPrev();
+		//this.goPrev();
 		return;		
 	}
 	if(resp.isException && resp.isException()) {
@@ -350,7 +350,7 @@ ZaMTA.prototype.mailQStatusCallback = function (arg,resp) {
 	if(!resp) {
 		var ex = new ZmCsfeException(ZMsg.errorEmptyResponse,CSFE_SVC_ERROR,"ZaMTA.prototype.mailQStatusCallback");
 		this._app.getCurrentController()._handleException(ex, "ZaMTA.prototype.mailQStatusCallback");
-		this.goPrev();
+		//this.goPrev();
 		return;		
 	}
 	if(resp.isException && resp.isException()) {
