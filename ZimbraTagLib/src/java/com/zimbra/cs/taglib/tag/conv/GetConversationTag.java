@@ -29,6 +29,7 @@ import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 import com.zimbra.cs.service.ServiceException;
 import com.zimbra.cs.zclient.ZConversation;
 import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.cs.zclient.ZMailbox.Fetch;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
@@ -39,8 +40,11 @@ public class GetConversationTag extends ZimbraSimpleTag {
 
     private String mVar;
     private String mId;
+    private Fetch mFetch;
 
     public void setVar(String var) { this.mVar = var; }
+    
+    public void setFetch(String fetch) throws ServiceException { this.mFetch = Fetch.fromString(fetch); }    
 
     public void setId(String id) { this.mId = id; }
 
@@ -48,7 +52,7 @@ public class GetConversationTag extends ZimbraSimpleTag {
         JspContext jctxt = getJspContext();
         try {
             ZMailbox mbox = getMailbox();
-            ZConversation conv = mbox.getConversation(mId);
+            ZConversation conv = mbox.getConversation(mId, mFetch);
             jctxt.setAttribute(mVar, new ZConversationBean(conv),  PageContext.PAGE_SCOPE);
         } catch (ServiceException e) {
             getJspContext().getOut().write(e.toString());

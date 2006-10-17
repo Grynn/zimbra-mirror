@@ -205,9 +205,10 @@
         </attribute>
 
         <attribute>
-            <description>fetch first message</description>
-            <name>fetchfirst</name>
+            <description>fetch (none,first,all) messages in a search</description>
+            <name>fetch</name>
             <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
         </attribute>
 
         <attribute>
@@ -353,6 +354,16 @@
             <variable-class>com.zimbra.cs.taglib.bean.ZConversationBean</variable-class>
             <scope>AT_END</scope>
         </variable>
+
+        <attribute>
+            <description>
+                fetch none/first//all messages in conv
+            </description>
+            <name>fetch</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
 
         <attribute>
             <description>
@@ -1306,12 +1317,12 @@
         </attribute>
         <attribute>
             <description>
-                fetch first message in conv
+                fetch first/hits/all message in conv
             </description>
-            <name>fetchfirst</name>
+            <name>fetch</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
-            <type>boolean</type>
+            <type>java.lang.String</type>
         </attribute>
 
        <attribute>

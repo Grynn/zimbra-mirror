@@ -28,6 +28,7 @@ import com.zimbra.cs.taglib.bean.ZSearchResultBean;
 import com.zimbra.cs.service.ServiceException;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZMailbox.SearchSortBy;
+import com.zimbra.cs.zclient.ZMailbox.Fetch;
 import com.zimbra.cs.zclient.ZSearchParams;
 import com.zimbra.cs.zclient.ZSearchResult;
 import org.apache.commons.collections.map.LRUMap;
@@ -54,8 +55,7 @@ public class SearchTag extends ZimbraSimpleTag {
     private SearchSortBy mSortBy = SearchSortBy.dateDesc;
     private boolean mWanthtml;
     private boolean mMarkread;
-    private boolean mFetchfirst;
-
+    private Fetch mFetch;
 
     public void setVar(String var) { this.mVar = var; }
 
@@ -78,7 +78,7 @@ public class SearchTag extends ZimbraSimpleTag {
 
     public void setWanthtml(boolean wanthtml) { this.mWanthtml = wanthtml; }
 
-    public void setFetchfirst(boolean fetch) { this.mFetchfirst = fetch; }
+    public void setFetch(String fetch) throws ServiceException { this.mFetch = Fetch.fromString(fetch); }
 
     public void setSearchContext(long context) { this.mSearchContext = context; }
 
@@ -96,7 +96,7 @@ public class SearchTag extends ZimbraSimpleTag {
             params.setLimit(mLimit);
             params.setSortBy(mSortBy);
             params.setTypes(mTypes);
-            params.setFetchFirstMessage(mFetchfirst);
+            params.setFetch(mFetch);
             params.setPeferHtml(mWanthtml);
             params.setMarkAsRead(mMarkread);
 

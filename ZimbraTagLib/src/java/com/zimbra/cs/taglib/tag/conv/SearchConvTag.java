@@ -29,6 +29,7 @@ import com.zimbra.cs.taglib.bean.ZConversationHitBean;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 import com.zimbra.cs.taglib.tag.SearchContext;
 import com.zimbra.cs.zclient.*;
+import com.zimbra.cs.zclient.ZMailbox.Fetch;
 import com.zimbra.cs.service.ServiceException;
 
 import javax.servlet.ServletRequest;
@@ -47,7 +48,7 @@ public class SearchConvTag extends ZimbraSimpleTag {
     private int mLimit = DEFAULT_CONV_SEARCH_LIMIT;
     private boolean mWanthtml;
     private boolean mMarkread;
-    private boolean mFetchfirst;
+    private Fetch mFetch;
     private ZMailbox.SearchSortBy mSortBy = null;
 
     public void setVar(String var) { this.mVar = var; }
@@ -56,7 +57,7 @@ public class SearchConvTag extends ZimbraSimpleTag {
 
     public void setConv(ZConversationHitBean hit) {this.mHit = hit; }
 
-    public void setFetchfirst(boolean fetchfirst) { this.mFetchfirst = fetchfirst; }
+    public void setFetch(String fetch) throws ServiceException { this.mFetch = Fetch.fromString(fetch); }
 
     public void setMarkread(boolean markread) { this.mMarkread = markread; }
 
@@ -92,7 +93,7 @@ public class SearchConvTag extends ZimbraSimpleTag {
             ZSearchParams params =  new ZSearchParams(mContext.getParams());
             params.setOffset(getInt(req, QP_CONV_SEARCH_OFFSET, 0));
             params.setLimit(mLimit); // TODO: prefs
-            params.setFetchFirstMessage(mFetchfirst);
+            params.setFetch(mFetch);
             params.setPeferHtml(mWanthtml);
             params.setMarkAsRead(mMarkread);
             if (mSortBy != null) params.setSortBy(mSortBy);
