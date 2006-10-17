@@ -99,23 +99,10 @@ DwtHtmlEditor.BORDER_RIGHT  = 5;
 
 // PRIVATE Class Attributes
 
-// Font Family Definitions & RegExs
-DwtHtmlEditor._ARIAL = "Arial, Helvetica, sans-serif";
-DwtHtmlEditor._COURIER = "Courier New, Courier, mono";
-DwtHtmlEditor._TIMES = "Times New Roman, Times, serif";
-DwtHtmlEditor._VERDANA = "Verdana, Arial, Helvetica, sans-serif";
-
 DwtHtmlEditor._ARIAL_RE = /arial|helvetica|sans-serif/;
 DwtHtmlEditor._TIMES_RE = /times|serif/;
 DwtHtmlEditor._VERDANA_RE = /verdana/;
 DwtHtmlEditor._COURIER_RE = /courier|mono/;
-
-// Font Families
-DwtHtmlEditor.FONT_FAMILY = [
-	{name:"Arial", 			value:DwtHtmlEditor._ARIAL },
-	{name:"Times New Roman",value:DwtHtmlEditor._TIMES },
-	{name:"Courier New", 	value:DwtHtmlEditor._COURIER },
-	{name:"Verdana",		value:DwtHtmlEditor._VERDANA } ];
 
 DwtHtmlEditor._H1_RE = /Heading 1|h1/;
 DwtHtmlEditor._H2_RE = /Heading 2|h2/;
@@ -623,7 +610,7 @@ function(family, style, size, color, hiliteColor) {
 	if (style)
 		this._execCommand(style);
 
-	if (size && size > 0 && size < 8)
+	if (size)
 		this._execCommand(DwtHtmlEditor._FONT_SIZE, size);
 
 	if (color)
@@ -1389,8 +1376,6 @@ DwtHtmlEditor.prototype._execCommand =
 function(command, option) {
 	if (this._mode != DwtHtmlEditor.HTML)
 		return;
-
-// DBG.println("CMD: " + command + " - Option: " + option);
 
 	try {
 		this.focus();

@@ -62,7 +62,8 @@ DwtButtonColorPicker._hexdigits = [ '0', '1', '2', '3', '4', '5', '6', '7', '8',
 ///
 /// @param n {int} number to convert
 /// @param pad {int, optional} number of digits in the final number (zero-padded if required).
-DwtButtonColorPicker.toHex = function(n, pad) {
+DwtButtonColorPicker.toHex =
+function(n, pad) {
 	var digits = [];
 	while (n) {
 		var d = DwtButtonColorPicker._hexdigits[n & 15];
@@ -81,7 +82,8 @@ DwtButtonColorPicker.toHex = function(n, pad) {
 /// Protected function that is called when a color is chosen from the popup
 /// DwtColorPicker.  Sets the current color to the chosen one and calls the
 /// DwtButton's selection handlers if any.
-DwtButtonColorPicker.prototype._colorPicked = function(ev) {
+DwtButtonColorPicker.prototype._colorPicked =
+function(ev) {
 	var color = ev.detail;
 	this.__color = this.__detail = color;
 	if (this.__colorDisplay) {
@@ -98,7 +100,8 @@ DwtButtonColorPicker.prototype._colorPicked = function(ev) {
 
 /// Call this function to display a DIV that shows the currently selected
 /// color.  This DIV also has the ability to clear the current color.
-DwtButtonColorPicker.prototype.showColorDisplay = function() {
+DwtButtonColorPicker.prototype.showColorDisplay =
+function(disableMouseOver) {
 	var row = this._row, idx = 0;
 	if (this._textCell)
 		idx = Dwt.getCellIndex(this._textCell);
@@ -106,14 +109,17 @@ DwtButtonColorPicker.prototype.showColorDisplay = function() {
 		idx = Dwt.getCellIndex(this._imageCell) + 1;
 	var div = this.__colorDisplay = row.insertCell(idx);
 	div.innerHTML = "<div unselectable class='DwtButtonColorPicker-display'>&nbsp;</div>";
-	div = div.firstChild;
-	div.onmouseover = DwtButtonColorPicker.__colorDisplay_onMouseOver;
-	div.onmouseout = DwtButtonColorPicker.__colorDisplay_onMouseOut;
-	div.onmousedown = DwtButtonColorPicker.__colorDisplay_onMouseDown;
+	if (!disableMouseOver) {
+		div = div.firstChild;
+		div.onmouseover = DwtButtonColorPicker.__colorDisplay_onMouseOver;
+		div.onmouseout = DwtButtonColorPicker.__colorDisplay_onMouseOut;
+		div.onmousedown = DwtButtonColorPicker.__colorDisplay_onMouseDown;
+	}
 };
 
 /// @return currently selected color
-DwtButtonColorPicker.prototype.getColor = function() {
+DwtButtonColorPicker.prototype.getColor =
+function() {
 	return this.__color;
 };
 
@@ -121,7 +127,8 @@ DwtButtonColorPicker.prototype.getColor = function() {
 ///
 /// @param {string} color The desired color.  Pass the empty string to clear
 ///                       the selection.
-DwtButtonColorPicker.prototype.setColor = function(color) {
+DwtButtonColorPicker.prototype.setColor =
+function(color) {
 	// let's make sure we keep it in #RRGGBB format
 	var rgb = color.match(DwtButtonColorPicker._RGB_RE);
 	if (rgb) {
@@ -137,24 +144,24 @@ DwtButtonColorPicker.prototype.setColor = function(color) {
 
 /// When the color display DIV is hovered, we show a small "X" icon to suggest
 /// the end user that the selected color can be cleared.
-DwtButtonColorPicker.prototype.__colorDisplay_onMouseOver = function(ev, div) {
+DwtButtonColorPicker.prototype.__colorDisplay_onMouseOver =
+function(ev, div) {
 	if (!this.getEnabled())
 		return;
-// 	div.style.backgroundColor = "";
 	Dwt.addClass(div, "ImgDisable");
 };
 
-DwtButtonColorPicker.prototype.__colorDisplay_onMouseOut = function(ev, div) {
+DwtButtonColorPicker.prototype.__colorDisplay_onMouseOut =
+function(ev, div) {
 	if (!this.getEnabled())
 		return;
-// 	if (this.__color)
-// 		div.style.backgroundColor = this.__color;
 	Dwt.delClass(div, "ImgDisable");
 };
 
 /// Clears the selected color.  This function is called when the color display
 /// DIV is clicked.
-DwtButtonColorPicker.prototype.__colorDisplay_onMouseDown = function(ev, div) {
+DwtButtonColorPicker.prototype.__colorDisplay_onMouseDown =
+function(ev, div) {
 	if (!this.getEnabled())
 		return;
 	var dwtev = DwtShell.mouseEvent;
@@ -177,17 +184,20 @@ DwtButtonColorPicker.prototype.__colorDisplay_onMouseDown = function(ev, div) {
 
 // static event dispatchers
 
-DwtButtonColorPicker.__colorDisplay_onMouseOver = function(ev) {
+DwtButtonColorPicker.__colorDisplay_onMouseOver =
+function(ev) {
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
 	obj.__colorDisplay_onMouseOver(ev, this);
 };
 
-DwtButtonColorPicker.__colorDisplay_onMouseOut = function(ev) {
+DwtButtonColorPicker.__colorDisplay_onMouseOut =
+function(ev) {
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
 	obj.__colorDisplay_onMouseOut(ev, this);
 };
 
-DwtButtonColorPicker.__colorDisplay_onMouseDown = function(ev) {
+DwtButtonColorPicker.__colorDisplay_onMouseDown =
+function(ev) {
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
 	obj.__colorDisplay_onMouseDown(ev, this);
 };
