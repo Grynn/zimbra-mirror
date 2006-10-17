@@ -178,7 +178,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 						{ ref: ZaGlobalConfig.A_zimbraSmtpHostname, type: _TEXTFIELD_, 
 						  onChange:ZaTabView.onFormFieldChanged,
 						  label:ZaMsg.NAD_MTA_WebMailHostname,
-						  toolTipContent: ZaMsg.tt_MTA_WebMailHostname,
+						  toolTipContent: ZaMsg.tt_MTA_WebMailHostname
 						},
 						{ ref: ZaGlobalConfig.A_zimbraSmtpPort, type: _OUTPUT_, 
 						  label: ZaMsg.NAD_MTA_WebMailPort
