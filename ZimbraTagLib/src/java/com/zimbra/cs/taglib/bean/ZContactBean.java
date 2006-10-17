@@ -24,22 +24,20 @@
  */
 package com.zimbra.cs.taglib.bean;
 
-import java.util.Map;
-import java.util.regex.Pattern;
-
 import com.zimbra.cs.mailbox.Contact;
 import com.zimbra.cs.service.ServiceException;
 import com.zimbra.cs.zclient.ZContact;
+
+import java.util.Map;
+import java.util.regex.Pattern;
 
 public class ZContactBean {
 
     private ZContact mContact;
     private String mFileAs;
-    private String mFolderName;
     
-    public ZContactBean(ZContact contact, String folderName) {
+    public ZContactBean(ZContact contact) {
         mContact = contact;
-        mFolderName = folderName;
     }
        
     public String getId() { return mContact.getId(); }
@@ -60,8 +58,6 @@ public class ZContactBean {
 
     public String getRevision() { return mContact.getRevision(); }
     
-    public String getFolderName() { return mFolderName; }
-
     /**
      * @return time in msecs
      */

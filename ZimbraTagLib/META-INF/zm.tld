@@ -1094,6 +1094,120 @@
 
     <tag>
         <description>
+            Create a contact
+        </description>
+
+        <name>createContact</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.contact.CreateContactTag</tag-class>
+
+        <body-content>scriptless</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>java.lang.String</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the ZContactBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <description>folder id to create contact in</description>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>tag ids to create contact with</description>
+            <name>tagids</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+         <attribute>
+             <description>allow unknown contact fields to used</description>
+             <name>force</name>
+             <required>false</required>             
+             <rtexprvalue>true</rtexprvalue>
+             <type>boolean</type>
+         </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Modify a contact
+        </description>
+
+        <name>modifyContact</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.contact.ModifyContactTag</tag-class>
+
+        <body-content>scriptless</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>java.lang.String</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the ZContactBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <description>contact id to modify</description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+         <attribute>
+             <description>replace (true) or merge modify fields with contact</description>
+             <name>replace</name>
+             <required>false</required>             
+             <rtexprvalue>true</rtexprvalue>
+             <type>boolean</type>
+         </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            A field for a contact being created or modified
+        </description>
+
+        <name>field</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.contact.FieldTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                Name of the field.
+            </description>
+            <name>name</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <description>
+               Value of the field.
+            </description>
+            <name>value</name>
+            <required>true</required>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
             Move a contact to a folder.
         </description>
 
