@@ -791,10 +791,10 @@ zimbraTimeZoneDaylightDtStart: 16010101T020000
 zimbraTimeZoneDaylightOffset: +1100
 zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
 
-# (GMT+11.00) Magadan / Solomon Is. / New Calenodia
-dn: cn=(GMT\+11.00) Magadan / Solomon Is. / New Calenodia,cn=timezones,cn=config,cn=zimbra
+# (GMT+11.00) Magadan / Solomon Is. / New Caledonia
+dn: cn=(GMT\+11.00) Magadan / Solomon Is. / New Caledonia,cn=timezones,cn=config,cn=zimbra
 objectclass: zimbraTimeZone
-cn: (GMT+11.00) Magadan / Solomon Is. / New Calenodia
+cn: (GMT+11.00) Magadan / Solomon Is. / New Caledonia
 zimbraTimeZoneStandardDtStart: 16010101T000000
 zimbraTimeZoneStandardOffset: +1100
 zimbraTimeZoneDaylightDtStart: 16010101T000000

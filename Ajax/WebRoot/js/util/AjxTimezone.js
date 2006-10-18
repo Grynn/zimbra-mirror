@@ -205,7 +205,7 @@ AjxTimezone._ruleLists = {
 		{ name:"(GMT+09.30) Darwin", 									stdOffset: 570, hasDOffset: false },
 		{ name:"(GMT+10.00) Brisbane", 									stdOffset: 600, hasDOffset: false },
 		{ name:"(GMT+10.00) Guam / Port Moresby", 						stdOffset: 600, hasDOffset: false },
-		{ name:"(GMT+11.00) Magadan / Solomon Is. / New Calenodia", 	stdOffset: 660, hasDOffset: false },
+		{ name:"(GMT+11.00) Magadan / Solomon Is. / New Caledonia", 	stdOffset: 660, hasDOffset: false },
 		{ name:"(GMT+12.00) Fiji / Kamchatka / Marshall Is.", 			stdOffset: 720, hasDOffset: false },
 		{ name:"(GMT+13.00) Nuku'alofa", 								stdOffset: 780, hasDOffset: false }
 	],
