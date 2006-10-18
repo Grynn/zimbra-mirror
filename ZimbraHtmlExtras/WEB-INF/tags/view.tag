@@ -21,11 +21,11 @@
 		<table border=0 align=right><tr>
 			<td class="username" id="username">${mailbox.name}</td>
 			<td class='cellSeparator'>|</td>
-			<td class="nowrap"><a href="login?op=options">Settings</a></td>
+			<td class="nowrap"><a href="<c:url value="/mail/options"/>">Settings</a></td>
 			<td class='cellSeparator'>|</td>
-			<td class="nowrap"><a href="login?op=help">Help</a></td>
+			<td class="nowrap"><a href="<c:url value="/mail/help"/>">Help</a></td>
 			<td class='cellSeparator'>|</td>
-			<td class="nowrap"><a href="login?op=logout">Sign out</a></td>
+			<td class="nowrap"><a href="<c:url value="/login?op=logout"/>">Sign out</a></td>
 		</tr></table>
 		<br><br>
 		<form method="get" action="clv">
