@@ -27,8 +27,10 @@ package com.zimbra.cs.taglib.bean;
 import com.zimbra.cs.mailbox.Contact;
 import com.zimbra.cs.service.ServiceException;
 import com.zimbra.cs.zclient.ZContact;
+import com.zimbra.cs.zclient.ZEmailAddress;
 
 import java.util.Map;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class ZContactBean {
@@ -169,6 +171,12 @@ public class ZContactBean {
 
     public String getWorkURL() { return mContact.getAttrs().get("workURL"); }
 
+    public boolean getIsGroup() { return mContact.getAttrs().get("dlist") != null; }
+
+    public List<ZEmailAddress> getGroupMembers() throws ServiceException {
+        return ZEmailAddress.parseAddresses(mContact.getAttrs().get("dlist"), ZEmailAddress.EMAIL_TYPE_TO);
+    }
+    
     public String getDisplayFileAs() {
         if (mFileAs == null) {
             try {

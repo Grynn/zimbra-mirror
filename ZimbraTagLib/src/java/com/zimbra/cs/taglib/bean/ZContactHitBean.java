@@ -34,6 +34,8 @@ public class ZContactHitBean extends ZSearchHitBean {
         super(hit, HitType.contact);
         mHit = hit;
     }
+
+    public boolean getIsGroup() { return mHit.isgGroup(); }
     
     public String getId() { return mHit.getId(); }
     
@@ -68,5 +70,12 @@ public class ZContactHitBean extends ZSearchHitBean {
             return getEmail3();
         else
             return "";
+    }
+
+    public String getImage() {
+        if (getIsGroup())
+            return "contacts/Group.gif";
+        else
+            return "contacts/Contact.gif";
     }
 }
