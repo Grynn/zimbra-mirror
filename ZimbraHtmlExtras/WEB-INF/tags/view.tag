@@ -11,6 +11,7 @@
 <%@ taglib prefix="zm" uri="com.zimbra.zm" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <table border=0 cellpadding=0 cellspacing=0 width=100%>
 <tr class="topbar">
@@ -21,22 +22,22 @@
 		<table border=0 align=right><tr>
 			<td class="username" id="username">${mailbox.name}</td>
 			<td class='cellSeparator'>|</td>
-			<td class="nowrap"><a href="<c:url value="/mail/options"/>">Settings</a></td>
+			<td class="nowrap"><a href="<c:url value="/mail/options"/>"><fmt:message key="settings"/></a></td>
 			<td class='cellSeparator'>|</td>
-			<td class="nowrap"><a href="<c:url value="/mail/help"/>">Help</a></td>
+			<td class="nowrap"><a href="<c:url value="/mail/help"/>"><fmt:message key="help"/></a></td>
 			<td class='cellSeparator'>|</td>
-			<td class="nowrap"><a href="<c:url value="/login?op=logout"/>">Sign out</a></td>
+			<td class="nowrap"><a href="<c:url value="/login?op=logout"/>"><fmt:message key="signOut"/></a></td>
 		</tr></table>
 		<br><br>
-		<form method="get" action="clv">
+		<form method="get" action="/mail/clv">
 			<table border=0 width=100%>
 			<tr>
 				<td><input id="searchbox" type="text" size=25 maxlength=256 name=sq></td>
-				<td><input id="searchMailButton" type="submit" name="mail" value="Search Mail"></td>
-				<td><input id="searchWebButton" type="submit" name="web" value="Search the Web"></td>
+				<td><input id="searchMailButton" type="submit" name="mail" value='<fmt:message key="searchMail"/>'></td>
+				<td><input id="searchWebButton" type="submit" name="web" value='<fmt:message key="searchWeb"/>'></td>
 				<td class="searchOptions">
-					<a href="javascript:;">Show search options</a><br>
-					<a href="javascript:;">Create a filter</a>
+					<a href="javascript:;"><fmt:message key="showSearchOptions"/></a><br>
+					<a href="javascript:;"><fmt:message key="createFilter"/></a>
 				</td>
 				<td width=100%></td>
 			</tr>
@@ -88,9 +89,9 @@
 		</tr>
 		<tr>
 			<td class="footer footer-small">
-				<a href="http://www.zimbra.com/privacy.html" target="_blank">Privacy Policy</a> -
-				<a href="http://www.zimbra.com/license/" target="_blank">License</a> -
-				<a href="http://www.zimbra.com/legal.html" target="_blank">Trademarks</a><br>
+				<a href="http://www.zimbra.com/privacy.html" target="_blank"><fmt:message key="privacyPolicy"/></a> -
+				<a href="http://www.zimbra.com/license/" target="_blank"><fmt:message key="license"/></a> -
+				<a href="http://www.zimbra.com/legal.html" target="_blank"><fmt:message key="trademarks"/></a><br>
 				&copy; 2006 Zimbra Inc.
 			</td>
 		</tr>

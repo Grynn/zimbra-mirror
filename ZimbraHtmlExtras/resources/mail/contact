@@ -30,8 +30,8 @@
 
 <c:set var="toolbar">
 							<td class='toolbar unread'><nobr><a href="${closeurl}">&#171; ${fn:escapeXml(context.backTo)}</a></nobr></td>
-							<td class='toolbar unread'><button><fmt:message key="compose"/></button></td>
-							<td class='toolbar'><button><fmt:message key="delete"/></button></td>
+							<td class='toolbar unread'><input class="inputSubmit" type="submit" name="actcompsoe" value="<fmt:message key="compose"/>"/></td>
+							<td class='toolbar'><input class="inputSubmit" type="submit" name="acttrash" value="<fmt:message key="delete"/>"/></td>
 							<td width=100%></td>
 							<td><nobr><a href="contact"><fmt:message key="addContact"/></a> - </nobr></td>
 							<td><nobr><a href="javascript:;"><fmt:message key="import"/></a> - </nobr></td>
@@ -48,7 +48,7 @@
 		<b class="r3"></b>
 		<b class="r4"></b>
 	</b>
-	<div class="inbox" id="inbox">
+	<div class="inbox">
 		<table border=0 cellpadding=0 cellspacing=0 width=100%>
 		<tr>
 			${toolbar}
@@ -84,7 +84,7 @@
 						<tr><td colspan=2 style="font-weight:bold; padding-bottom:10px"><fmt:message key="work"/></td></tr>
 						<c:if test="${zm:anySet(contact,'workStreet workCity workState workPostalCode workCountry')}">
 						<tr>
-							<td class="contactLabel">Address:</td>
+							<td class="contactLabel"><fmt:message key="address"/></td>
 							<td class="contactOutput">
 								<c:if test="${!empty contact.workStreet}">${fn:escapeXml(contact.workStreet)}<br></c:if>
 								<c:if test="${zm:anySet(contact,'workCity workState workPostalCode workCountry')}">
@@ -103,7 +103,7 @@
 						<app:contactPhone label="company" phone="${contact.companyPhone}"/>
 						<app:contactPhone label="callback" phone="${contact.callbackPhone}"/>
 						<c:if test="${!empty contact.workURL}">
-							<tr><td class="contactLabel">Url:</td><td><a target=_blank href="<c:url value="${contact.workURL}"/>">${fn:escapeXml(contact.workURL)}</a></td></tr>
+							<tr><td class="contactLabel"><fmt:message key="url"/>:</td><td><a target=_blank href="<c:url value="${contact.workURL}"/>">${fn:escapeXml(contact.workURL)}</a></td></tr>
 						</c:if>
 					</c:if>
 					<c:if test="${zm:anySet(contact,'homeStreet homeCity homeState homePostalCode homeCountry homeURL homePhone homePhone2 homeFax mobilePhone pager carPhone')}">
@@ -111,7 +111,7 @@
 						<tr><td colspan=2 style="font-weight:bold; padding-bottom:10px"><fmt:message key="home"/></td></tr>
 						<c:if test="${zm:anySet(contact,'homeStreet homeCity homeState homePostalCode homeCountry')}">
 						<tr>
-							<td class="contactLabel">Address:</td>
+							<td class="contactLabel"><fmt:message key="address"/></td>
 							<td class="contactOutput">
 								<c:if test="${!empty contact.homeStreet}">${fn:escapeXml(contact.homeStreet)}<br></c:if>
 								<c:if test="${zm:anySet(contact,'homeCity homeState homePostalCode homeCountry')}">
@@ -130,7 +130,7 @@
 						<app:contactPhone label="pager" phone="${contact.pager}"/>
 						<app:contactPhone label="car" phone="${contact.carPhone}"/>
 						<c:if test="${!empty contact.homeURL}">
-							<tr><td class="contactLabel">Url:</td><td><a target=_blank href="<c:url value="${contact.homeURL}"/>">${fn:escapeXml(contact.homeURL)}</a></td></tr>
+							<tr><td class="contactLabel"><fmt:message key="url"/>:</td><td><a target=_blank href="<c:url value="${contact.homeURL}"/>">${fn:escapeXml(contact.homeURL)}</a></td></tr>
 						</c:if>
 					</c:if>
 					<c:if test="${zm:anySet(contact,'otherStreet otherCity otherState otherPostalCode otherCountry otherURL otherPhone otherFax')}">
@@ -138,7 +138,7 @@
 						<tr><td colspan=2 style="font-weight:bold; padding-bottom:10px"><fmt:message key="other"/></td></tr>
 						<c:if test="${zm:anySet(contact,'otherStreet otherCity otherState otherPostalCode otherCountry')}">
 						<tr>
-							<td class="contactLabel">Address:</td>
+							<td class="contactLabel"><fmt:message key="address"/></td>
 							<td class="contactOutput">
 								<c:if test="${!empty contact.otherStreet}">${fn:escapeXml(contact.otherStreet)}<br></c:if>
 								<c:if test="${zm:anySet(contact,'otherCity otherState otherPostalCode otherCountry')}">
@@ -153,11 +153,11 @@
 						<app:contactPhone label="otherPhone" phone="${contact.otherPhone}"/>
 						<app:contactPhone label="otherFax" phone="${contact.otherFax}"/>
 						<c:if test="${!empty contact.otherURL}">
-							<tr><td class="contactLabel">Url:</td><td><a target=_blank href="<c:url value="${contact.otherURL}"/>">${fn:escapeXml(contact.otherURL)}</a></td></tr>
+							<tr><td class="contactLabel"><fmt:message key="url"/>:</td><td><a target=_blank href="<c:url value="${contact.otherURL}"/>">${fn:escapeXml(contact.otherURL)}</a></td></tr>
 						</c:if>
 					</c:if>
 					</table><p>
-					<div><a href="javascript:;">edit contact information</a></div>
+					<div><a href="javascript:;"><fmt:message key="editContactInfo"/></a></div>
 				</div>
 				<table border=0 cellpadding=0 cellspacing=0 height=8><tr>
 					<td class="cBotLeft"></td>

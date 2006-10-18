@@ -8,7 +8,7 @@ body, td, div, p, a, span, input {
 	font-size: 12px;
 }
 
-button {
+button, .inputSubmit {
 	font-family: arial, sans-serif;
 	font-size: 11px;
 }

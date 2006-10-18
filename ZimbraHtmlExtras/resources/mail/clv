@@ -17,27 +17,39 @@
 
 <c:set var="toolbar">
 	<td class='toolbar'>
-		<button>Report Spam</button>
+		<input class="inputSubmit" type="submit" name="actspam" value="<fmt:message key="reportSpam"/>">
 	</td>
 	<td class='toolbar'>
-		<button><fmt:message key="delete"/></button>
+		<input class="inputSubmit" type="submit" name="acttrash" value="<fmt:message key="delete"/>"/>
+	</td>
+	<td class='toolbar'>
+		<select name="actionfid">
+			<option selected disabled><fmt:message key="move"/></option>
+			<zm:forEachFolder var="folder">
+				<c:if test="${folder.isConversationMoveTarget}">
+					<option value="m:${folder.id}" />${zm:repeatString('&nbsp;&nbsp;', folder.depth)}${fn:escapeXml(folder.name)}
+				</c:if>
+			</zm:forEachFolder>
+		</select>
+		<input class="inputSubmit" type="submit" name="actmove" value="<fmt:message key="move"/>">
 	</td>
 	<td class='toolbar'>
 		<select name="action">
-			<option selected disabled>More actions...</option>
-			<option value='read' class='actionOption'>Mark as read</option>
-			<option value='unread' class='actionOption'>Mark as unread</option>
-			<option value='star' class='actionOption'>Add star</option>
-			<option value='unstar' class='actionOption'>Remove star</option>
+			<option selected disabled><fmt:message key="moreActions"/></option>
+			<option value='read' class='actionOption'><fmt:message key="markAsRead"/></option>
+			<option value='unread' class='actionOption'><fmt:message key="markAsUnread"/></option>
+			<option value='star' class='actionOption'><fmt:message key="addStar"/></option>
+			<option value='unstar' class='actionOption'><fmt:message key="removeStar"/></option>
 			<option disabled>--------</option>
-			<option disabled>Apply label:</option>
+			<option disabled><fmt:message key="applyLabel"/></option>
 			<zm:forEachTag var="tag">
 				<option class='actionOption' value='<c:out value="${tag.id}"/>'><c:out value="${tag.name}"/></option>
 			</zm:forEachTag>
-			<option class='actionOption' value='new'>New Label...</option>
+			<option class='actionOption' value='new'><fmt:message key="newLabel"/></option>
 		</select>
+		<input class="inputSubmit" type="submit" value='<fmt:message key="go"/>'/>
 	</td>
-    <td class='toolbar'><a href="clv?offset=0">Refresh</a></td>
+    <td class='toolbar'><a href="clv?offset=0"><fmt:message key="refresh"/></a></td>
     <td width=100%></td>
 	<td>
 		<nobr><app:searchPageLeft keys="${keys}" context="${context}" urlTarget="clv"/>&nbsp;</nobr>
@@ -67,17 +79,17 @@
 			</tr>
 			<tr>
 				<td colspan=100 class='actions'>
-					Select:
-					<a href='javascript:;'>All</a>,
-					<a href='javascript:;'>None</a>,
-					<a href='javascript:;'>Read</a>,
-					<a href='javascript:;'>Unread</a>,
-					<a href='javascript:;'>Starred</a>,
-					<a href='javascript:;'>Unstarred</a>
+					<fmt:message key="select"/>
+					<a href='javascript:;'><fmt:message key="all"/></a>,
+					<a href='javascript:;'><fmt:message key="none"/></a>,
+					<a href='javascript:;'><fmt:message key="read"/></a>,
+					<a href='javascript:;'><fmt:message key="unread"/></a>,
+					<a href='javascript:;'><fmt:message key="starred"/></a>,
+					<a href='javascript:;'><fmt:message key="unstarred"/></a>
 				</td>
 			</tr>
 			<tr>
-				<td colspan=100 id='inboxContent' class='inboxContent'>
+				<td colspan=100 class='inboxContent'>
 					<table border=0 width=100% cellpadding=0 cellspacing=0>
 						<c:forEach items="${context.searchResult.convHits}" var="conv" varStatus="status">
 							<tr class="convRow" ${conv.isUnread ? ' style="font-weight:bold"' : ''}>
@@ -120,13 +132,13 @@
 			</tr>
 			<tr>
 				<td colspan=100 class='actions'>
-					Select:
-					<a href='javascript:;'>All</a>,
-					<a href='javascript:;'>None</a>,
-					<a href='javascript:;'>Read</a>,
-					<a href='javascript:;'>Unread</a>,
-					<a href='javascript:;'>Starred</a>,
-					<a href='javascript:;'>Unstarred</a>
+					<fmt:message key="select"/>
+					<a href='javascript:;'><fmt:message key="all"/></a>,
+					<a href='javascript:;'><fmt:message key="none"/></a>,
+					<a href='javascript:;'><fmt:message key="read"/></a>,
+					<a href='javascript:;'><fmt:message key="unread"/></a>,
+					<a href='javascript:;'><fmt:message key="starred"/></a>,
+					<a href='javascript:;'><fmt:message key="unstarred"/></a>
 				</td>
 			</tr>
 		</table>

@@ -41,31 +41,31 @@ paramaters:
 <c:set var="keys" value="true"/>
 <c:set var="toolbar">
 	<td class='toolbar unread'><nobr><a href="${closeurl}" accesskey="z">&#171; ${fn:escapeXml(context.backTo)}</a></nobr></td>
-	<td class='toolbar'><button>Report Spam</button></td>
-	<td class='toolbar'><button>Delete</button></td>
+	<td class='toolbar'><input class="inputSubmit" type="submit" name="actspam" value="<fmt:message key="reportSpam"/>"></td>
+	<td class='toolbar'><input class="inputSubmit" type="submit" name="acttrash" value="<fmt:message key="delete"/>"/></td>
 	<td class='toolbar'>
-		<select>
-			<option selected disabled>More actions...</option>
-			<option value='read' class='actionOption'>Mark as read</option>
-			<option value='unread' class='actionOption'>Mark as unread</option>
-			<option value='star' class='actionOption'>Add star</option>
-			<option value='unstar' class='actionOption'>Remove star</option>
+		<select name="action">
+			<option selected disabled><fmt:message key="moreActions"/></option>
+			<option value='read' class='actionOption'><fmt:message key="markAsRead"/></option>
+			<option value='unread' class='actionOption'><fmt:message key="markAsUnread"/></option>
+			<option value='star' class='actionOption'><fmt:message key="addStar"/></option>
+			<option value='unstar' class='actionOption'><fmt:message key="removeStar"/></option>
 			<option disabled>--------</option>
-			<option disabled>Apply label:</option>
+			<option disabled><fmt:message key="applyLabel"/></option>
 			<zm:forEachTag var="tag">
 				<option class='actionOption' value='<c:out value="${tag.id}"/>'><c:out value="${tag.name}"/></option>
 			</zm:forEachTag>
-			<option class='actionOption' value='new'>New Label...</option>
+			<option class='actionOption' value='new'><fmt:message key="newLabel"/></option>
 		</select>
 	</td>
 	<td width=100%></td>
 	<c:if test="${context.hasPrevItem}">
 		<zm:prevItemUrl var="prevItemUrl" value="/mail/cv" cursor="${convCursor}" context="${context}"/>
-		<td class='toolbar unread'><nobr><a <c:if test="${keys}">accesskey="b"</c:if> href="${prevItemUrl}">&lsaquo; Newer</a></nobr></td>
+		<td class='toolbar unread'><nobr><a <c:if test="${keys}">accesskey="b"</c:if> href="${prevItemUrl}">&lsaquo; <fmt:message key="newer"/></a></nobr></td>
 	</c:if>
 	<c:if test="${context.hasNextItem}">
 		<zm:nextItemUrl var="nextItemUrl" value="/mail/cv" cursor="${convCursor}" context="${context}"/>
-		<td class='toolbar unread'><nobr><a <c:if test="${keys}">accesskey="f"</c:if> href="${nextItemUrl}">Older &rsaquo;</a></nobr></td>
+		<td class='toolbar unread'><nobr><a <c:if test="${keys}">accesskey="f"</c:if> href="${nextItemUrl}"><fmt:message key="older"/> &rsaquo;</a></nobr></td>
 	</c:if>
 </c:set>
 
@@ -79,7 +79,7 @@ paramaters:
 		<b class="r3"></b>
 		<b class="r4"></b>
 	</b>
-	<div class="inbox" id="inbox">
+	<div class="inbox">
 		<table border=0 cellpadding=0 cellspacing=0 width=100%>
 		<tr>
 				${toolbar}
@@ -141,15 +141,15 @@ paramaters:
 					<app:displayMessage message="${message}" nosubject="true" startNew="${startNew}" externalImageUrl="${extImageUrl}"/>
 				</td>
 				<td valign=top>
-					<div class="sidebarLink"><app:img src="tearoff_icon.gif" width='16' height='16' border='0'/> <a href="javascript:;" style="vertical-align: top">New window</a></div>
-					<div class="sidebarLink"><app:img src="print_icon.gif" width='16' height='16' border='0'/> <a href="javascript:;" style="vertical-align: top">Print all</a></div>
+					<div class="sidebarLink"><app:img src="tearoff_icon.gif" width='16' height='16' border='0'/> <a href="javascript:;" style="vertical-align: top"><fmt:message key="newWindow"/></a></div>
+					<div class="sidebarLink"><app:img src="print_icon.gif" width='16' height='16' border='0'/> <a href="javascript:;" style="vertical-align: top"><fmt:message key="printAll"/></a></div>
 					<c:if test="${!(csi eq 0) and !(param.expand eq 1)}">
 						<zm:currentResultUrl var="expandAllUrl" value="cv" context="${context}" cso="${convSearchResult.offset}" csi="${csi}" expand="1"/>
-						<div class="sidebarLink"><app:img src="expand_icon.gif" width='16' height='16' border='0'/> <a href="${expandAllUrl}" style="vertical-align: top">Expand all</a></div>
+						<div class="sidebarLink"><app:img src="expand_icon.gif" width='16' height='16' border='0'/> <a href="${expandAllUrl}" style="vertical-align: top"><fmt:message key="expandAll"/></a></div>
 					</c:if>
 					<c:if test="${!(csi eq 0) and (param.expand eq 1)}">
 						<zm:currentResultUrl var="expandAllUrl" value="cv" context="${context}" cso="${convSearchResult.offset}" csi="${csi}"/>
-						<div class="sidebarLink"><app:img src="collapse_icon.gif" width='16' height='16' border='0'/> <a href="${expandAllUrl}" style="vertical-align: top">Collapse all</a></div>
+						<div class="sidebarLink"><app:img src="collapse_icon.gif" width='16' height='16' border='0'/> <a href="${expandAllUrl}" style="vertical-align: top"><fmt:message key="collapseAll"/></a></div>
 					</c:if>
 					<app:ads content="${convHit.subject} ${convHit.subject}"/>
 				</td>

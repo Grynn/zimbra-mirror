@@ -23,8 +23,8 @@ paramaters:
 <zm:computeSearchContext var="context" default="contacts"/>
 
 <c:set var="toolbar">
-							<td class='toolbar unread'><button><fmt:message key="compose"/></button></td>
-							<td class='toolbar'><button><fmt:message key="delete"/></button></td>
+							<td class='toolbar unread'><input class="inputSubmit" type="submit" name="actcompose" value="<fmt:message key="compose"/>"></td>
+							<td class='toolbar'><input class="inputSubmit" type="submit" name="acttrash" value="<fmt:message key="delete"/>"></td>
 							<td class='toolbar'>
 								<select style="width:25ex">
 									<option selected disabled><fmt:message key="addToGroup"/></option>
@@ -32,9 +32,9 @@ paramaters:
 								</select>
 							</td>
 							<td width=100%></td>
-							<td><nobr><a href="contact"><fmt:message key="addContact"/></a> - </nobr></td>
-							<td><nobr><a href="import"><fmt:message key="import"/></a> - </nobr></td>
-							<td style="padding-right:3px"><nobr><a href="export"><fmt:message key="export"/></a></nobr></td>
+							<td><nobr><a href="/mail/contact"><fmt:message key="addContact"/></a> - </nobr></td>
+							<td><nobr><a href="/mail/import"><fmt:message key="import"/></a> - </nobr></td>
+							<td style="padding-right:3px"><nobr><a href="/mail/export"><fmt:message key="export"/></a></nobr></td>
 </c:set>
 
 <zm:getMailbox var="mailbox"/>
@@ -60,7 +60,7 @@ paramaters:
 					<td class="nowrap">
 						<form action="contacts" method="post">
 							<input type="text" size="15">
-							<input type="submit" value="Search Contacts">
+							<input type="submit" value="<fmt:message key="searchContacts"/>">
 						</form>
 					</td>
 					<td width=100%></td>
@@ -107,7 +107,7 @@ paramaters:
 		<tr><td height=5></td></tr>
 		<tr>
 			<td colspan=100 class='actions'>
-				Select:
+				<fmt:message key="select"/>
 				<a href='javascript:;'><fmt:message key="all"/></a>,
 				<a href='javascript:;'><fmt:message key="none"/></a>,
 			</td>
@@ -125,6 +125,5 @@ paramaters:
 	</b>
 </div>
 </app:view>
-
 </body>
 </html>
