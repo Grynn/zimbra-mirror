@@ -69,7 +69,6 @@ function() {
 	this._parentView.getHtmlElement().style.overflow = "auto";
 
 	this._collectorDialog = this._createDialog({title:"Contact Collector", view:this._parentView});
-	this._collectorDialog._disableFFhack();
 	this._collectorDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._collectorDialogOkListener));
 
 	// get reference to user's contact list (making sure contacts app is enabled as well)
