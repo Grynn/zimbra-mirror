@@ -9,11 +9,12 @@
 
 <tr>
 	<td colspan=100 align=middle>
+		<table border=0 cellpadding=0 cellspacing=0><tr><td>
 		<c:if test="${empty requestScope.statusMessage}">
 			<div style='visibility:hidden'>
 		</c:if>
 		<c:if test="${!empty requestScope.statusMessage}">
-			<div style='width:200px' class="niftyError">
+			<div class="niftyError">
 		</c:if>
 			<b class="rtopNiftyError">
 				<b class="r1"></b>
@@ -22,10 +23,10 @@
 				<b class="r4"></b>
 			</b>
 			<c:if test="${empty requestScope.statusMessage}">
-				<div>&nbsp;</div>
+				&nbsp;
 			</c:if>
 			<c:if test="${!empty requestScope.statusMessage}">
-				<div class='${requestScope.statusClass} unread'>${requestScope.statusMessage}</div>
+				&nbsp;<span class='${requestScope.statusClass} unread'>${requestScope.statusMessage}</span>&nbsp;
 			</c:if>
 			<b class="rbottomNiftyError">
 				<b class="r4"></b>
@@ -34,5 +35,6 @@
 				<b class="r1"></b>
 			</b>
 		</div>
+		</td></tr></table>
 	</td>
 </tr>

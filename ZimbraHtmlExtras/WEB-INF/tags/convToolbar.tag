@@ -27,8 +27,8 @@
 		<option selected disabled><fmt:message key="moreActions"/></option>
 		<option value='read' class='actionOption'><fmt:message key="markAsRead"/></option>
 		<option value='unread' class='actionOption'><fmt:message key="markAsUnread"/></option>
-		<option value='star' class='actionOption'><fmt:message key="addStar"/></option>
-		<option value='unstar' class='actionOption'><fmt:message key="removeStar"/></option>
+		<option value='flag' class='actionOption'><fmt:message key="addStar"/></option>
+		<option value='unflag' class='actionOption'><fmt:message key="removeStar"/></option>
 		<option disabled>--------</option>
 		<option disabled><fmt:message key="applyLabel"/></option>
 		<zm:forEachTag var="tag">
@@ -37,7 +37,7 @@
 		<option class='actionOption' value='new'><fmt:message key="newLabel"/></option>
 		<option disabled><fmt:message key="removeLabel"/></option>
 		<zm:forEachTag var="tag">
-			<option class='actionOption' value="t:${tag.id}">${fn:escapeXml(tag.name)}</option>
+			<option class='actionOption' value="u:${tag.id}">${fn:escapeXml(tag.name)}</option>
 		</zm:forEachTag>
 	</select>
 	<input class="inputSubmit" type="submit" name="actgo" value='<fmt:message key="go"/>'/>
