@@ -41,23 +41,7 @@ paramaters:
 <c:set var="keys" value="true"/>
 <c:set var="toolbar">
 	<td class='toolbar unread'><nobr><a href="${closeurl}" accesskey="z">&#171; ${fn:escapeXml(context.backTo)}</a></nobr></td>
-	<td class='toolbar'><input class="inputSubmit" type="submit" name="actspam" value="<fmt:message key="reportSpam"/>"></td>
-	<td class='toolbar'><input class="inputSubmit" type="submit" name="acttrash" value="<fmt:message key="delete"/>"/></td>
-	<td class='toolbar'>
-		<select name="action">
-			<option selected disabled><fmt:message key="moreActions"/></option>
-			<option value='read' class='actionOption'><fmt:message key="markAsRead"/></option>
-			<option value='unread' class='actionOption'><fmt:message key="markAsUnread"/></option>
-			<option value='star' class='actionOption'><fmt:message key="addStar"/></option>
-			<option value='unstar' class='actionOption'><fmt:message key="removeStar"/></option>
-			<option disabled>--------</option>
-			<option disabled><fmt:message key="applyLabel"/></option>
-			<zm:forEachTag var="tag">
-				<option class='actionOption' value='<c:out value="${tag.id}"/>'><c:out value="${tag.name}"/></option>
-			</zm:forEachTag>
-			<option class='actionOption' value='new'><fmt:message key="newLabel"/></option>
-		</select>
-	</td>
+	<app:convToolbar/>
 	<td width=100%></td>
 	<c:if test="${context.hasPrevItem}">
 		<zm:prevItemUrl var="prevItemUrl" value="/mail/cv" cursor="${convCursor}" context="${context}"/>

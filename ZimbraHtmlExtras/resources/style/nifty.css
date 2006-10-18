@@ -80,7 +80,6 @@
 .niftyError { 
 	width: 100%;
 	background: rgb(250, 209, 99);
-	display: none;
 }
 
 .rtopNiftyError, .rbottomNiftyError { 

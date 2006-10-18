@@ -41,27 +41,7 @@
 				</td>
 				<td width=100%></td>
 			</tr>
-			<tr>
-				<td colspan=100 align=middle>
-					<div style='width:200px' class="niftyError" id='errorContainer'>
-						<b class="rtopNiftyError">
-							<b class="r1"></b>
-							<b class="r2"></b>
-							<b class="r3"></b>
-							<b class="r4"></b>
-						</b>
-						<span id='error' class='error'>
-							Error goes here
-						</span>
-						<b class="rbottomNiftyError">
-							<b class="r4"></b>
-							<b class="r3"></b>
-							<b class="r2"></b>
-							<b class="r1"></b>
-						</b>
-					</div>
-				</td>
-			</tr>
+			<app:statusArea/>
 			</table>
 		</form>
 	</td>

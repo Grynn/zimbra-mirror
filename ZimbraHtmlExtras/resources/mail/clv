@@ -8,47 +8,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 
+<c:if test="${!(empty param.actgo and empty param.actspam and empty param.acttrash and empty param.actmove)}">
+	<app:clvAction/>
+</c:if>
 <zm:computeSearchContext var="context" default="mail" usecache="false"/>
+<c:set var="cid" value="${empty param.id ? context.searchResult.hits[0].id : param.id}"/>
 <app:head title="${context.title}"/>
 
 <body>
 
-<c:set var="cid" value="${empty param.id ? context.searchResult.hits[0].id : param.id}"/>
-
 <c:set var="toolbar">
-	<td class='toolbar'>
-		<input class="inputSubmit" type="submit" name="actspam" value="<fmt:message key="reportSpam"/>">
-	</td>
-	<td class='toolbar'>
-		<input class="inputSubmit" type="submit" name="acttrash" value="<fmt:message key="delete"/>"/>
-	</td>
-	<td class='toolbar'>
-		<select name="actionfid">
-			<option selected disabled><fmt:message key="move"/></option>
-			<zm:forEachFolder var="folder">
-				<c:if test="${folder.isConversationMoveTarget}">
-					<option value="m:${folder.id}" />${zm:repeatString('&nbsp;&nbsp;', folder.depth)}${fn:escapeXml(folder.name)}
-				</c:if>
-			</zm:forEachFolder>
-		</select>
-		<input class="inputSubmit" type="submit" name="actmove" value="<fmt:message key="move"/>">
-	</td>
-	<td class='toolbar'>
-		<select name="action">
-			<option selected disabled><fmt:message key="moreActions"/></option>
-			<option value='read' class='actionOption'><fmt:message key="markAsRead"/></option>
-			<option value='unread' class='actionOption'><fmt:message key="markAsUnread"/></option>
-			<option value='star' class='actionOption'><fmt:message key="addStar"/></option>
-			<option value='unstar' class='actionOption'><fmt:message key="removeStar"/></option>
-			<option disabled>--------</option>
-			<option disabled><fmt:message key="applyLabel"/></option>
-			<zm:forEachTag var="tag">
-				<option class='actionOption' value='<c:out value="${tag.id}"/>'><c:out value="${tag.name}"/></option>
-			</zm:forEachTag>
-			<option class='actionOption' value='new'><fmt:message key="newLabel"/></option>
-		</select>
-		<input class="inputSubmit" type="submit" value='<fmt:message key="go"/>'/>
-	</td>
+	<app:convToolbar/>
     <td class='toolbar'><a href="clv?offset=0"><fmt:message key="refresh"/></a></td>
     <td width=100%></td>
 	<td>
@@ -64,6 +34,10 @@
 
 <zm:getMailbox var="mailbox"/>
 <app:view folders="true" tags="true" searches="true" contacts="true" mailbox="${mailbox}">
+
+<zm:currentResultUrl var="currentUrl" value="clv" context="${context}"/>
+<form action="${currentUrl}" method="post">
+
 <div class="niftyMail">
 	<b class="rtopNiftyMail">
 		<b class="r1"></b>
@@ -94,7 +68,7 @@
 						<c:forEach items="${context.searchResult.convHits}" var="conv" varStatus="status">
 							<tr class="convRow" ${conv.isUnread ? ' style="font-weight:bold"' : ''}>
 								<td width=10 class='convCell'>&nbsp;</td>
-								<td width=20 class='convCell'><input type='checkbox' name='convCheckbox' value='1'/></td>
+								<td width=20 class='convCell'><input type='checkbox' name="id" value="${conv.id}"/></td>
 								<td width=20 class='convCell'>
 									<app:img src="${conv.isFlagged ? 'star_on_sm_2.gif' : 'star_off_2.gif'}"/>
 								</td>
@@ -150,6 +124,7 @@
 		<b class="r1"></b>
 	</b>
 </div>
+</form>
 </app:view>
 </body>
 </html>
