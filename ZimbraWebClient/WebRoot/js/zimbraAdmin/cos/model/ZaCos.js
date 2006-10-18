@@ -176,6 +176,15 @@ function (obj) {
 		}
 	}
 	this[ZaCos.A_zimbraMailHostPoolInternal] = hostVector;
+	
+	if (ZaDomainAdmin) {
+		if (this.attrs[ZaCos.A_zimbraDomainAdminMaxMailQuota] >= 0) {
+			this[ZaCos.A2_zimbraDomainAdminMailQuotaAllowed] = 'TRUE';
+		}else{
+			this[ZaCos.A2_zimbraDomainAdminMailQuotaAllowed] = 'FALSE' ;
+		}
+	}
+	
 }
 
 /**

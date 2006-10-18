@@ -160,8 +160,8 @@ Cos_MailQuota_XModelItem.prototype.minInclusive = 0;
 Cos_MailQuota_XModelItem.prototype.getValue = function(instance, current, ref) {
 	var value = this.getLocalValue(instance, current, ref);
 	if (value == null ) value = this.getSuperValue(instance, current, ref);
-	//if(value == 0 && value != "")
-		//value = "0";
+	if(typeof value == "number" && value == 0)
+		value = "0";
 		
 	return value;
 }

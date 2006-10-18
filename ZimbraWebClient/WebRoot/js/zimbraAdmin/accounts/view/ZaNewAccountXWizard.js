@@ -473,6 +473,10 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 								}
 							]
 						});
+	case1Items.push({ref:ZaAccount.A_zimbraMailCanonicalAddress, type:_TEXTFIELD_,
+						msgName:ZaMsg.NAD_CanonicalFrom,label:ZaMsg.NAD_CanonicalFrom, 
+						labelLocation:_LEFT_,  align:_LEFT_
+					});
 	case1Items.push({ref:ZaAccount.A_accountStatus, type:_OSELECT1_, msgName:ZaMsg.NAD_AccountStatus, editable:false, label:ZaMsg.NAD_AccountStatus, labelLocation:_LEFT_, choices:this.accountStatusChoices});
 	case1Items.push({ref:ZaAccount.A_description, type:_INPUT_, msgName:ZaMsg.NAD_Description,label:ZaMsg.NAD_Description, labelLocation:_LEFT_, cssClass:"admin_xform_name_input"});
 	if(ZaSettings.SERVERS_ENABLED) {

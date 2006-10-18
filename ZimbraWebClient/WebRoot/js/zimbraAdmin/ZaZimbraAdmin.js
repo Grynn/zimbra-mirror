@@ -297,7 +297,7 @@ function() {
 		var resp = command.invoke(params);
 		//var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false);		
 		//initialize my rights
-		ZaZimbraAdmin.initInfo (resp);
+		//ZaZimbraAdmin.initInfo (resp);
 		if(!ZaSettings.initialized)
 			ZaSettings.init();
 		else
@@ -309,6 +309,7 @@ function() {
 }
 
 //process the GetInfoRequest response to set the domainAdminMaxMailQuota value in MB
+/*
 ZaZimbraAdmin.initInfo =
 function (resp) {
 	if (resp && resp.Body && resp.Body.GetInfoResponse && resp.Body.GetInfoResponse.attrs && resp.Body.GetInfoResponse.attrs.attr){
@@ -326,7 +327,7 @@ function (resp) {
 			}
 		}
 	}
-}
+}*/
 
 ZaZimbraAdmin.prototype._setLicenseStatusMessage = function () {
 	if ((typeof ZaLicense == "function") && (ZaSettings.LICENSE_ENABLED)){

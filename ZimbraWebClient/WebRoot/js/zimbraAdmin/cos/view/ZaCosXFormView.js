@@ -55,7 +55,10 @@ function(entry) {
 	}
 	this._containedObject[ZaCos.A_zimbraMailHostPoolInternal] = entry[ZaCos.A_zimbraMailHostPoolInternal].clone();
 	
-
+	if (ZaDomainAdmin) {
+		this._containedObject[ZaCos.A2_zimbraDomainAdminMailQuotaAllowed] = entry [ZaCos.A2_zimbraDomainAdminMailQuotaAllowed];
+	}
+	
 	var skins = entry.attrs[ZaCos.A_zimbraAvailableSkin];
 	_tmpSkins = [];
 	if(skins == null) {
@@ -296,6 +299,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 									{ref:ZaCos.A_zimbraContactMaxNumEntries, type:_INPUT_, msgName:ZaMsg.NAD_ContactMaxNumEntries,label:ZaMsg.NAD_ContactMaxNumEntries+":", labelLocation:_LEFT_, cssClass:"admin_xform_number_input", labelCssStyle:"width:250px;", onChange:ZaTabView.onFormFieldChanged},
 								]
 							},
+							
 							{type:_SEPARATOR_, colSpan:"*"},
 							{type:_GROUP_,id:"cos_password_settings",
 								items: [							
