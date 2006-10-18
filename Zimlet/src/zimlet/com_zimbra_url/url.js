@@ -36,8 +36,9 @@ function() {
 };
 
 // Const
-Com_Zimbra_Url.THUMB_URL = "http://pthumbnails.alexa.com/image_server.cgi?id=" + document.domain + "&url=";
-Com_Zimbra_Url.THUMB_SIZE = 'width="111" height="82"';
+//Com_Zimbra_Url.THUMB_URL = "http://pthumbnails.alexa.com/image_server.cgi?id=" + document.domain + "&url=";
+Com_Zimbra_Url.THUMB_URL = "http://images.websnapr.com/?url=";
+Com_Zimbra_Url.THUMB_SIZE = 'width="200" height="150"';
 
 Com_Zimbra_Url.prototype.match =
 function(line, startIndex) {
@@ -73,7 +74,6 @@ function(html, idx, obj, context) {
 
 Com_Zimbra_Url.prototype.toolTipPoppedUp =
 function(spanElement, obj, context, canvas) {
-/*
 	var html = [];
 	var i = 0;
 
@@ -89,7 +89,4 @@ function(spanElement, obj, context, canvas) {
 	html[i++] = ")'/>";
 
 	canvas.innerHTML = html.join("");
-*/
-	// XXX: until we pay for alexa, just show the full URL
-	canvas.innerHTML = obj;
 };
