@@ -191,6 +191,9 @@ function(resp) {
 				}
 				item.type = ix;	
 				item.initFromJS(arr[i]);
+				if (item instanceof ZaDomain && item.attrs[ZaDomain.A_domainType] == "alias"){
+					continue ;
+				}
 				this.add(item);			
 			}
 		}  

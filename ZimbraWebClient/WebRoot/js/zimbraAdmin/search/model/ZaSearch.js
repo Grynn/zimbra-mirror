@@ -84,6 +84,7 @@ ZaSearch.standardAttributes = [ZaAccount.A_displayname,
 							ZaAccount.A_description,
 							ZaDistributionList.A_mailStatus,
 							ZaResource.A_zimbraCalResType,
+							ZaDomain.A_domainType,
 							ZaDomain.A_domainName].join();
 /**
 * Sends SearchDirectoryRequest to the SOAP Servlet

@@ -77,6 +77,7 @@ ZaItem.initMethods["ZaDomain"] = new Array();
 ZaDomain.A_description = "description";
 ZaDomain.A_notes = "zimbraNotes";
 ZaDomain.A_domainName = "zimbraDomainName";
+ZaDomain.A_domainType = "zimbraDomainType" ;
 ZaDomain.A_domainDefaultCOSId = "zimbraDomainDefaultCOSId";
 
 //GAL
