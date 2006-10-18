@@ -166,7 +166,7 @@ ZLoginFactory.getLoginDialogHTML = function (params) {
 							"<tr><td id='ZLoginBannerContainer'>",
 									"<div id='ZLoginBannerPanel'>",
 										"<table class='zLoginTable'><tr>",
-											"<td><div id='ZLoginBannerImage' class='ImgLoginBanner'", 
+											"<td><div style='cursor:pointer' id='ZLoginBannerImage' class='ImgLoginBanner'", 
 													" onclick='window.open(\"", params.companyURL, "\", \"_blank\")'></div></td>",
 											"<td valign=top id='ZLoginShortVersion'>", params.shortVersion, "</td>",
 										"</tr></table>",
