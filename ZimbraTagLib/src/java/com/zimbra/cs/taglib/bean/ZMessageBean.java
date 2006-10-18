@@ -24,14 +24,14 @@
  */
 package com.zimbra.cs.taglib.bean;
 
-import java.util.Date;
-import java.util.List;
-import java.util.ArrayList;
-
 import com.zimbra.common.util.DateUtil;
 import com.zimbra.cs.zclient.ZEmailAddress;
 import com.zimbra.cs.zclient.ZMessage;
 import com.zimbra.cs.zclient.ZMessage.ZMimePart;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class ZMessageBean {
 
