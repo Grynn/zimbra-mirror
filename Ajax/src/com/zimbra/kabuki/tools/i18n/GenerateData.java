@@ -101,7 +101,7 @@ public class GenerateData {
 		TIMEZONES.put("Asia/Krasnoyarsk", "(GMT+07.00) Krasnoyarsk");
 		TIMEZONES.put("Asia/Kuala_Lumpur", "(GMT+08.00) Kuala Lumpur / Singapore");
 		TIMEZONES.put("Asia/Kuwait", "(GMT+03.00) Kuwait / Riyadh");
-		TIMEZONES.put("Asia/Magadan", "(GMT+11.00) Magadan / Solomon Is. / New Calenodia");
+		TIMEZONES.put("Asia/Magadan", "(GMT+11.00) Magadan / Solomon Is. / New Caledonia");
 		TIMEZONES.put("Asia/Muscat", "(GMT+04.00) Abu Dhabi / Muscat");
 		TIMEZONES.put("Asia/Novosibirsk", "(GMT+06.00) Almaty / Novosibirsk");
 		TIMEZONES.put("Asia/Rangoon", "(GMT+06.30) Rangoon");
