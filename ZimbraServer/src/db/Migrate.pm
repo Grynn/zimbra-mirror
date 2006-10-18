@@ -25,6 +25,8 @@
 package Migrate;
 
 use strict;
+use DBI;
+use POSIX qw(:signal_h :errno_h :sys_wait_h);
 
 #############
 
@@ -114,7 +116,7 @@ sub runSql(@) {
     my ($script, $logScript) = @_;
 
     if (! defined($logScript)) {
-	$logScript = 1;
+	    $logScript = 0;
     }
 
     # Write the last script to a text file for debugging
@@ -191,6 +193,111 @@ sub runLoggerSql(@) {
     unlink($tempFile);
     return @output;
 }
+
+sub runSqlParallel(@) {
+  my ($procs, @statements) = @_;
+  my $debug = 0;    # debug output
+  my $verbose = 0;  # incremental verbage
+  my $progress = 1; # output little .'s
+  my $quiet = 0;    # no output (overrides verbose but not debug)
+  my $started = 0;  # internal counter
+  my $finished = 0; # internal counter
+  my $running = 0;  # internal counter
+  my $prog_cnt = 0; # internal counter
+  my $timeout = 30;   # alarm timeout
+  my $delay = 0;   # delay x seconds before launching new command;
+  $procs = 1 unless $procs;    # number of simultaneous connections
+  my ($progress_cnt, $numItems);
+  
+  $quiet = 1 if $progress;
+  $verbose = 0 if ($quiet);
+  my %pids; 
+  if ($debug || $verbose gt 1) {
+    print "Timeout  => $timeout\n";
+    print "verbose  => $verbose\n";
+    print "debug    => $debug\n";
+    print "items    => ", scalar@statements, "\n";
+    print "procs    => $procs\n";
+  }
+
+  foreach my $statement (@statements) {
+    next if $statement eq "";
+    chomp($statement);
+    $prog_cnt = &progress(scalar @statements, $prog_cnt);
+  
+    print "Forking: \"$statement\"\n" if $verbose;
+    # The child process, core here.
+    unless ($pids{$statement} = fork()) {
+      # set an alarm in case the command hangs.
+      $SIG{ALRM} = sub { &alarm_handler($statement,$timeout,$quiet) };
+      alarm($timeout);
+      my $data_source = "dbi:mysql:database=$DATABASE;mysql_read_default_file=/opt/zimbra/conf/my.cnf;mysql_socket=/opt/zimbra/db/mysql.sock";
+      my $dbh;
+      until ($dbh) {
+        $dbh = DBI->connect($data_source, $DB_USER, $DB_PASSWORD, { PrintError => 0 }); 
+        sleep 1;
+      }
+      unless ($dbh->do($statement) ) {
+        warn "DB: $statement: $DBI::errstr\n";
+        exit 1;
+      }
+      $dbh->disconnect;
+  
+      # execute the statement
+      alarm(0);
+      exit;
+    }
+    ++$started;
+    $running = $started - $finished;
+    if ($running >= $procs) {
+      $finished++ if (&mywaiter);
+    }
+    sleep($delay) if $delay;
+  }
+  until ($finished >= $started) {
+    print "Final wait: Finished $finished of $started\n" if $verbose;
+    $finished++ if (&mywaiter);
+    sleep 1;
+  }
+  print "\n" if $progress;
+}
+
+
+sub alarm_handler {
+  my ($item,$to,$q) = $_[0];
+  print "$item => Cmd exceeded $to seconds.\n" unless $q;
+  exit 1;
+}
+
+sub mywaiter {
+  my ($pid,$exit_value, $signal_num, $dumped_core);
+  $pid = wait;
+  return undef if ($pid == -1);
+
+  $exit_value = $? >> 8;
+  $signal_num = $? & 127;
+  $dumped_core = $? & 128;
+
+  die unless $exit_value == 0;
+  if (defined $exit_value) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
+sub progress($$) {
+  my ($total, $current) = @_;
+  my $norm = $total/80;
+
+  $current++;
+  if ($current >= $norm) {
+    print ".";
+    $current = 0;
+  }
+  return $current;
+}
+   
 
 sub log
 {
