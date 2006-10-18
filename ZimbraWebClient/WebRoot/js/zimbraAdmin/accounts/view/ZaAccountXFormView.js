@@ -205,7 +205,7 @@ function(entry) {
 	if(ZaSettings.ZIMLETS_ENABLED) {
 		var zimlets = entry.attrs[ZaAccount.A_zimbraZimletAvailableZimlets];
 		if(zimlets != null && zimlets != "") {
-			_tmpZimlets = [];
+			var _tmpZimlets = [];
 			if (AjxUtil.isString(zimlets))	 {
 				zimlets = [zimlets];
 			}
@@ -229,7 +229,7 @@ function(entry) {
 		} else {
 			 zimlets = this._containedObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets];
 		}
-		_tmpZimlets = [];
+		var _tmpZimlets = [];
 		if(zimlets == null) {
 			zimlets = [];
 		} else if (AjxUtil.isString(zimlets))	 {
@@ -249,7 +249,7 @@ function(entry) {
 					
 		//convert strings to objects
 		var zimlets = ZaZimlet.getAll(this._app, "extension");
-		var _tmpZimlets = [];
+		_tmpZimlets = [];
 		if(zimlets == null) {
 			zimlets = [];
 		} 

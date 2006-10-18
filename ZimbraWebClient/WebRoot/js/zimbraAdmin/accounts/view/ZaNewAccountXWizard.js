@@ -301,6 +301,7 @@ function(entry) {
 			_tmpSkins[i] = new String(skin);
 			_tmpSkins[i].id = "id_"+skin;
 		}
+		var _tmpZimlets = [];
 		if(ZaSettings.COSES_ENABLED) {			
 			this._containedObject.cos.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = _tmpZimlets;
 		} else {
@@ -308,9 +309,9 @@ function(entry) {
 		}
 	}
 	if(ZaSettings.ZIMLETS_ENABLED) {
+		var _tmpZimlets = [];
 		var zimlets = entry.attrs[ZaAccount.A_zimbraZimletAvailableZimlets];
 		if(zimlets != null && zimlets != "") {
-			_tmpZimlets = [];
 			if (AjxUtil.isString(zimlets))	 {
 				zimlets = [zimlets];
 			}
@@ -354,7 +355,7 @@ function(entry) {
 					
 		//convert strings to objects
 		var zimlets = ZaZimlet.getAll(this._app, "extension");
-		var _tmpZimlets = [];
+		_tmpZimlets = [];
 		if(zimlets == null) {
 			zimlets = [];
 		} 

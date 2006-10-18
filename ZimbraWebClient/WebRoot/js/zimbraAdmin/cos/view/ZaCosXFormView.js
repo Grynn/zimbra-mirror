@@ -94,7 +94,7 @@ function(entry) {
 	this._containedObject[ZaCos.A_zimbraInstalledSkinPool] = _tmpSkins;
 	
 	var zimlets = entry.attrs[ZaCos.A_zimbraZimletAvailableZimlets];
-	_tmpZimlets = [];
+	var _tmpZimlets = [];
 	if(zimlets == null) {
 		zimlets = [];
 	} else if (AjxUtil.isString(zimlets))	 {
@@ -111,7 +111,7 @@ function(entry) {
 	this._containedObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = _tmpZimlets;
 
 	var zimlets = ZaZimlet.getAll(this._app, "extension");
-	var _tmpZimlets = [];
+	_tmpZimlets = [];
 	if(zimlets == null) {
 		zimlets = [];
 	} 
