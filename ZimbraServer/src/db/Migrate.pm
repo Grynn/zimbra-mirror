@@ -204,7 +204,7 @@ sub runSqlParallel(@) {
   my $finished = 0; # internal counter
   my $running = 0;  # internal counter
   my $prog_cnt = 0; # internal counter
-  my $timeout = 30;   # alarm timeout
+  my $timeout = 0;   # alarm timeout
   my $delay = 0;   # delay x seconds before launching new command;
   $procs = 1 unless $procs;    # number of simultaneous connections
   my ($progress_cnt, $numItems);
@@ -219,17 +219,29 @@ sub runSqlParallel(@) {
     print "items    => ", scalar@statements, "\n";
     print "procs    => $procs\n";
   }
+  return if (scalar @statements == 0);
+  chomp(@statements);
 
-  foreach my $statement (@statements) {
-    next if $statement eq "";
-    chomp($statement);
+  # break up each into $procs chunks
+  my $split = int(scalar @statements / $procs); 
+  my ($i, $j,@items);
+  $i = $j = 0;
+  for (0..$#statements) {
+    push(@{$items[$i]}, $statements[$_]);
+    $j++;
+    if ($j == $split) {
+      $j=0; $i++;
+    }
+  }
+
+  foreach my $array (@items) {
+    next if (@$array == 0);
     $prog_cnt = &progress(scalar @statements, $prog_cnt);
-  
-    print "Forking: \"$statement\"\n" if $verbose;
+
     # The child process, core here.
-    unless ($pids{$statement} = fork()) {
+    unless ($pids{$array} = fork()) {
       # set an alarm in case the command hangs.
-      $SIG{ALRM} = sub { &alarm_handler($statement,$timeout,$quiet) };
+      $SIG{ALRM} = sub { &alarm_handler($array,$timeout,$quiet) };
       alarm($timeout);
       my $data_source = "dbi:mysql:database=$DATABASE;mysql_read_default_file=/opt/zimbra/conf/my.cnf;mysql_socket=/opt/zimbra/db/mysql.sock";
       my $dbh;
@@ -237,16 +249,19 @@ sub runSqlParallel(@) {
         $dbh = DBI->connect($data_source, $DB_USER, $DB_PASSWORD, { PrintError => 0 }); 
         sleep 1;
       }
-      unless ($dbh->do($statement) ) {
-        warn "DB: $statement: $DBI::errstr\n";
-        exit 1;
+      foreach my $statement (@$array) {
+        unless ($dbh->do($statement) ) {
+          print "DB: $statement: $DBI::errstr\n";
+          exit 1;
+        }
       }
       $dbh->disconnect;
-  
       # execute the statement
       alarm(0);
       exit;
     }
+
+    # parent house keeping
     ++$started;
     $running = $started - $finished;
     if ($running >= $procs) {
@@ -254,6 +269,8 @@ sub runSqlParallel(@) {
     }
     sleep($delay) if $delay;
   }
+
+  # make sure everything finished
   until ($finished >= $started) {
     print "Final wait: Finished $finished of $started\n" if $verbose;
     $finished++ if (&mywaiter);
