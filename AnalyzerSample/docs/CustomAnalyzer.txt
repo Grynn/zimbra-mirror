@@ -1,0 +1,21 @@
+Steps for creating a custom plug-in analyzer:
+
+
+1) Copy the code in this project to some other location: update the package references for the new location.
+
+2) Change AnalyzerSample.getName() to return the name of your analyzer.  This name is some unique identifier for your analyzer: it must not be the same as any other analyzer in the system.
+
+3) In Analyzer.java, modify the TokenStream() function to return an instance of your custom analyzer for any LuceneFields you want to custom analyze.
+
+4) Compile your Analyzer.
+
+5) Install your analyzer's .JAR file into /opt/zimbra/lib/ext/Name-Of-Your-Analyzer/Name-Of-Your-Analyzer.jar.  You will need to re-start your server.
+
+6) Modify the zimbraTextAnalyzer Account or COS settings of the user or users to point to your new analyzer:
+    zmprov ma user1@mydomain.com zimbraTextAnalyzer Name-Of-Your-Analyzer
+
+7) New messages will be analyzed with the new plugin.  Search strings will be analyzed with the new plugin.
+
+
+
+
