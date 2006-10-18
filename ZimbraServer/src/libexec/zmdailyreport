@@ -57,7 +57,7 @@ if ($options{t}) {
 	$endTime = tsToSqlTime(time(),1);
 }
 
-my $zimbraHost = `zmhostname`;
+my $zimbraHost = `/opt/zimbra/bin/zmhostname`;
 chomp $zimbraHost;
 print "From: zimbra\@$zimbraHost\n";
 print "Subject: Daily mail report from $startTime to $endTime\n\n";
