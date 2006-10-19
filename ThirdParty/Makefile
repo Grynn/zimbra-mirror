@@ -18,21 +18,22 @@ CYRUS_VERSION ?= cyrus-sasl-2.1.21.ZIMBRA
 ASPELL_VERSION ?= aspell-0.60.3.tar.gz
 CLAMAV_VERSION ?= clamav-0.88.tar.gz
 
-MYSQL_VERSION ?= standard-4.1.20-pc-linux-gnu-i686
-MYSQL_CLIENT_VERSION ?= standard-4.1.20-clientlibs
+MYSQL_VERSION_STRING ?= 5.0.26
+MYSQL_VERSION ?= standard-$(MYSQL_VERSION_STRING)-pc-linux-gnu-i686
+MYSQL_CLIENT_VERSION ?= standard-$(MYSQL_VERSION_STRING)-clientlibs
 
 ifeq ($(BUILD_PLATFORM), MACOSX)
-    MYSQL_VERSION := standard-4.1.20-apple-darwin8.2.0-powerpc
-	MYSQL_CLIENT_VERSION := standard-4.1.20-apple-darwin8.2.0-powerpc
+    MYSQL_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin8.2.0-powerpc
+	MYSQL_CLIENT_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin8.2.0-powerpc
 endif
 
 ifeq ($(BUILD_PLATFORM), MACOSXx86)
-	MYSQL_VERSION := standard-4.1.20-apple-darwin8.2.0-i686
-	MYSQL_CLIENT_VERSION := standard-4.1.20-apple-darwin8.2.0-i686
+	MYSQL_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin8.2.0-i686
+	MYSQL_CLIENT_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin8.2.0-i686
 endif
 
-MYSQL_VERSION ?= standard-4.1.20-pc-linux-gnu-i686
-MYSQL_CLIENT_VERSION ?= standard-4.1.20-clientlibs
+MYSQL_VERSION ?= standard-$(MYSQL_VERSION_STRING)-pc-linux-gnu-i686
+MYSQL_CLIENT_VERSION ?= standard-$(MYSQL_VERSION_STRING)-clientlibs
 
 HTTPD_VERSION ?= 2.0.54
 
