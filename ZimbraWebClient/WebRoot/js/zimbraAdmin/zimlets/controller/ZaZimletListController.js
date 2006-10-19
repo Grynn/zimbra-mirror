@@ -66,7 +66,7 @@ function(list) {
 ZaZimletListController.initToolbarMethod =
 function () {
    	this._toolbarOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.SERTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaZimletListController.prototype._editButtonListener)));    	
-   	//this._toolbarOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.SERTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaZimletListController.prototype._deleteButtonListener)));    	    	
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.DEPLOY_ZIMLET, ZaMsg.TBB_DeployNew, ZaMsg.TBB_DeployNew_tt, "RestoreMailbox", "RestoreMailboxDis", new AjxListener(this, this.deployZimletListener)));				
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.NONE));
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));				
 }
@@ -78,6 +78,19 @@ function () {
    	//this._popupOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.SERTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaZimletListController.prototype._deleteButtonListener)));    	    	
 }
 ZaController.initPopupMenuMethods["ZaZimletListController"].push(ZaZimletListController.initPopupMenuMethod);
+
+ZaZimletListController.prototype.deployZimletListener = 
+function (ev) {
+	try {
+		this._deployZimletWizard = new ZaZimletDeployXWizard(this._container, this._app);		
+		var zimlet = new ZaZimlet(this._app);
+		this._deployZimletWizard.setObject(zimlet);		
+		this._deployZimletWizard.popup();
+	} catch (ex) {
+		this._handleException(ex, "ZaZimletListController.prototype.deployZimletListener", null, false);
+	}
+	return;
+}
 
 ZaZimletListController.prototype._createUI = function () {
 	try {

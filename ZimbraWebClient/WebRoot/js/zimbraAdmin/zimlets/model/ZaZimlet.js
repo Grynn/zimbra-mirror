@@ -40,10 +40,19 @@ ZaZimlet.A_zimbraZimletContentObject = "zimbraZimletContentObject";
 ZaZimlet.A_zimbraZimletPanelItem = "zimbraZimletPanelItem";
 ZaZimlet.A_zimbraZimletScript = "zimbraZimletScript";
 ZaZimlet.A_zimbraZimletServerIndexRegex = "zimbraZimletServerIndexRegex";
+ZaZimlet.A_attachmentId = "attId";
+ZaZimlet.A_deployStatus = "deployStatus";
+ZaZimlet.A_statusMsg = "statusMsg";
 ZaZimlet.EXCLUDE_MAIL = "mail";
 ZaZimlet.EXCLUDE_EXTENSIONS = "extension";
 ZaZimlet.EXCLUDE_NONE = "none";	
-
+ZaZimlet.STATUS_FAILED = "failed";
+ZaZimlet.STATUS_SUCCEEDED = "succeeded";
+ZaZimlet.STATUS_PENDING = "pending";
+ZaZimlet.ACTION_DEPLOY_ALL = "deployAll";
+ZaZimlet.ACTION_DEPLOY_LOCAL = "deployLocal";
+ZaZimlet.ACTION_DEPLOY_STATUS = "status";
+ZaZimlet.A_progress = "progress";
 ZaZimlet.prototype.toString = function() {
 	return this.name;
 }
@@ -136,6 +145,25 @@ function() {
 ZaZimlet.prototype.refresh = 
 function() {
 	this.load();	
+}
+
+ZaZimlet.deploy = function (action,attId, callback) {
+	var soapDoc = AjxSoapDoc.create("DeployZimletRequest", "urn:zimbraAdmin", null);
+	if(action)
+		soapDoc.getMethod().setAttribute("action", action);		
+		
+	var contentEl = soapDoc.set("content", "");
+	if(attId) {
+		contentEl.setAttribute("aid", attId);
+	}
+	this.asynCommand = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	if(callback) {
+		params.asyncMode = true;
+		params.callback = callback;
+	}
+	this.asynCommand.invoke(params);	
 }
 
 ZaZimlet.loadMethod = 
