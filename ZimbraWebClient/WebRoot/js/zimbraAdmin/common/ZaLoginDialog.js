@@ -163,17 +163,15 @@ function(visible, transparentBg) {
 ZaLoginDialog.autoDomainName =
 function (){
 	var domainName = location.hostname ;
-	DBG.println(AjxDebug.DBG1, "Auto append the domain name " + domainName + " to the user field.");
-	
 	var userIdEl = ZLoginFactory.get(ZLoginFactory.USER_ID);
 	if (userIdEl && userIdEl.value != null && userIdEl.value.length > 0 ) {
 		var u = userIdEl.value ;
 		if (u.indexOf("@") < 0 ) { //no @
+			DBG.println(AjxDebug.DBG3, "Auto append the domain name " + domainName + " to the user field.");
 			userIdEl.value = u + "@" + domainName ;
+			DBG.println(AjxDebug.DBG3, "Current user name = " + userIdEl.value) ;
 		}
 	}
-	
-	DBG.println(AjxDebug.DBG1, "Current user name = " + userIdEl.value) ;
 }
 
 ZaLoginDialog.prototype.addChild =
