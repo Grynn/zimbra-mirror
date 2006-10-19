@@ -114,6 +114,8 @@ ZaMTA.prototype.QCountsCallback = function (resp) {
 	}
 	if(resp.isException && resp.isException()) {
 		this._app.getCurrentController()._handleException(resp.getException(), "ZaMTA.prototype.QCountsCallback");
+		var details = {obj:this,qName:null,poll:false};
+		this._app.getMTAController().fireChangeEvent(details);		
 		return;
 	} 	
 	var response = resp.getResponse();
@@ -128,7 +130,6 @@ ZaMTA.prototype.QCountsCallback = function (resp) {
 	} else {
 		var ex = new ZmCsfeException(ZMsg.errorUnknownDoc,ZmCsfeException.SVC_UNKNOWN_DOCUMENT,"ZaMTA.prototype.QCountsCallback");
 		this._app.getCurrentController()._handleException(ex, "ZaMTA.prototype.QCountsCallback");
-		return;	
 	}
 }
 
