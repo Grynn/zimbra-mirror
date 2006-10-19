@@ -147,6 +147,33 @@ function(visible, transparentBg) {
 	}
 
 	Dwt.setHandler(this._getContentDiv(), DwtEvent.ONKEYDOWN, ZLoginFactory.handleKeyPress);
+	
+	//set the event handler for the user id field and password field
+	var userIdEl = ZLoginFactory.get(ZLoginFactory.USER_ID);
+ 	var passwdEl = ZLoginFactory.get(ZLoginFactory.PASSWORD_ID);
+   	if (userIdEl) {
+   		userIdEl.onblur= ZaLoginDialog.autoDomainName ; 
+   	}
+   	
+   	if (passwdEl) {
+   		passwdEl.onfocus = ZaLoginDialog.autoDomainName ;
+   	}
+}
+
+ZaLoginDialog.autoDomainName =
+function (){
+	var domainName = location.hostname ;
+	DBG.println(AjxDebug.DBG1, "Auto append the domain name " + domainName + " to the user field.");
+	
+	var userIdEl = ZLoginFactory.get(ZLoginFactory.USER_ID);
+	if (userIdEl && userIdEl.value != null && userIdEl.value.length > 0 ) {
+		var u = userIdEl.value ;
+		if (u.indexOf("@") < 0 ) { //no @
+			userIdEl.value = u + "@" + domainName ;
+		}
+	}
+	
+	DBG.println(AjxDebug.DBG1, "Current user name = " + userIdEl.value) ;
 }
 
 ZaLoginDialog.prototype.addChild =
