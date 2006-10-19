@@ -67,7 +67,7 @@ echo '*' Creating database in ${logger_mysql_data_directory}
 echo '*' Starting logger_mysql server
 ${zimbra_home}/bin/logmysql.server start \
     >> ${zimbra_log_directory}/zmmyinit.log 2>&1
-sleep 1
+sleep 15
 
 #
 # Load zimbra sql files
