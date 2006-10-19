@@ -35,11 +35,15 @@ public class ModifyContactTag extends ContactOpTag {
 
     private String mId;
     private String mVar;
+    private String mFolderid;
+    private String mTagids;
     private boolean mReplace;
 
     public void setId(String id) { mId = id; }
+    public void setFolderid(String folderid) { mFolderid = folderid; }
     public void setVar(String var) { mVar = var; }
     public void setReplace(boolean replace) { mReplace = replace; }
+    public void setTags(String tagids) { mTagids = tagids; } 
 
     public void doTag() throws JspException, IOException {
         try {
@@ -48,7 +52,9 @@ public class ModifyContactTag extends ContactOpTag {
             if (mAttrs.isEmpty())
                 throw new JspTagException("no attrs specified for contact");
 
-            String id = getMailbox().modifyContact(mId, mReplace, mAttrs);
+            String id = (mId == null || mId.length() == 0) ?
+                    getMailbox().createContact(mFolderid, mTagids, mAttrs) :
+                    getMailbox().modifyContact(mId, mReplace, mAttrs);
             getJspContext().setAttribute(mVar, id, PageContext.PAGE_SCOPE);
         } catch (ServiceException e) {
             throw new JspTagException(e);

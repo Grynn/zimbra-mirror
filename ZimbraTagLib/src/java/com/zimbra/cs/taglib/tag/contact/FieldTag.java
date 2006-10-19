@@ -38,7 +38,7 @@ public class FieldTag extends ZimbraSimpleTag {
     public void setName(String name) { mName = name; }
 
     public void doTag() throws JspException {
-        ContactOpTag op = (ContactOpTag) findAncestorWithClass(this, CreateContactTag.class);
+        ContactOpTag op = (ContactOpTag) findAncestorWithClass(this, ContactOpTag.class);
         if (op == null)
                 throw new JspTagException("The field tag must be used within a create/modify contact tag");
         op.addAttr(mName, mValue);

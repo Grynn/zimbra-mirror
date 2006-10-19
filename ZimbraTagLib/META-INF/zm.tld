@@ -1111,14 +1111,14 @@
 
         <attribute>
             <description>
-                Name of the exported scoped variable to store the ZContactBean in.
+                id of created contact.
             </description>
             <name>var</name>
             <required>true</required>
         </attribute>
         <attribute>
             <description>folder id to create contact in</description>
-            <name>id</name>
+            <name>folderid</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>
@@ -1158,15 +1158,16 @@
 
         <attribute>
             <description>
-                Name of the exported scoped variable to store the ZContactBean in.
+                id of modified/created contact.
             </description>
             <name>var</name>
             <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
-            <description>contact id to modify</description>
+            <description>contact id to modify. if not present (or empty), a contact will be created.</description>
             <name>id</name>
-            <required>true</required>
+            <required>false</required>
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>
         </attribute>
@@ -1177,6 +1178,20 @@
              <rtexprvalue>true</rtexprvalue>
              <type>boolean</type>
          </attribute>
+        <attribute>
+            <description>folder id to create contact in (not used with modify)</description>
+            <name>folderid</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>tag ids to create contact with</description>
+            <name>tagids</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>        
     </tag>
 
     <tag>
@@ -1196,6 +1211,7 @@
             </description>
             <name>name</name>
             <required>true</required>
+            <rtexprvalue>true</rtexprvalue>            
         </attribute>
         <attribute>
             <description>
@@ -1203,6 +1219,7 @@
             </description>
             <name>value</name>
             <required>true</required>
+            <rtexprvalue>true</rtexprvalue>            
         </attribute>
     </tag>
 
