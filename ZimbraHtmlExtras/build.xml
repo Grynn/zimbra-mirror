@@ -66,7 +66,7 @@
         <mkdir dir="${build.dir}"/>
     </target>
 
-    <target name="compile" depends="build-init">
+    <target name="compile-external" depends="build-init">
         <ant dir="${server.dir}" target="jar" inheritAll="false"/>
         <ant dir="${common.dir}" target="jar" inheritAll="false"/>
         <ant dir="${zimbratl.dir}" target="jar" inheritAll="false"/>
@@ -94,7 +94,7 @@
     <property name="war.exclude"
               value="servlet-api.jar,jsp-api.jar,mail.jar,activation.jar,zimbra-native.jar,KeyView.jar"/>
     
-    <target name="war" depends="build-init,compile">
+    <target name="war" depends="build-init">
         <war warfile="${warfile}" webxml="WEB-INF/web.xml">
             <lib dir="${server.build.dir}" includes="zimbrastore.jar"/>
             <lib dir="${common.build.dir}" includes="zimbracommon.jar"/>
@@ -111,4 +111,7 @@
                 path="${deploy.path}" war="${deploy.war}" update="true"/>
     </target>
 
+    <target name="full-deploy" depends="compile-external,war,deploy" description="Deploy HTML Web Client. compiles external sources">
+    </target>
+    
 </project>
