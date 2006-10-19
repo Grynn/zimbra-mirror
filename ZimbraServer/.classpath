@@ -63,7 +63,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/ical4j-0.9.16-patched.jar"/>
-	<classpathentry sourcepath="/ThirdParty/mysql-connector-java-3.1.12/src" kind="lib" path="/ZimbraCommon/jars/mysql-connector-java-3.1.12-bin.jar"/>
+	<classpathentry sourcepath="/ThirdParty/connector-j/mysql-connector-java-5.0.3/src" kind="lib" path="/ZimbraCommon/jars/mysql-connector-java-5.0.3-bin.jar"/>
 	<classpathentry sourcepath="/ThirdParty/commons-httpclient-3.0/src" kind="lib" path="/ZimbraCommon/jars/commons-httpclient-3.0.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-codec-1.3.jar"/>
 	<classpathentry sourcepath="/ThirdParty/ganymed-ssh2/ganymed-ssh2-build209/src" kind="lib" path="/ZimbraCommon/jars/ganymed-ssh2-build209.jar"/>
