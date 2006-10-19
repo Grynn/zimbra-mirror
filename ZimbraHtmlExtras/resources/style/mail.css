@@ -43,11 +43,16 @@
 .folder, .folder :link, .folder :visited, .folder :active {
 	line-height: 13pt;
 	padding-left: 4px;
+	white-space: nowrap;
 }
 
 .folderSelected {
 	background-color: rgb(195, 217, 255);
 	font-weight: bold;
+}
+
+.sharedFolder :link, .sharedFolder :visited, .sharedFolder :active {
+	color: orange;
 }
 
 .labelContent, .labelContent :link,  .labelContent :visited, .labelContent :active {

@@ -13,7 +13,7 @@
 </td>
 <td class='toolbar'>
 	<select name="actionfid">
-		<option selected disabled><fmt:message key="move"/></option>
+		<option selected disabled><fmt:message key="moveTo"/></option>
 		<zm:forEachFolder var="folder">
 			<c:if test="${folder.isConversationMoveTarget}">
 				<option value="m:${folder.id}" />${zm:repeatString('&nbsp;&nbsp;', folder.depth)}${fn:escapeXml(folder.name)}

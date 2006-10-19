@@ -59,6 +59,11 @@
 	font-weight: bold;
 }
 
+.contactEditTitle {
+	font-size: 140%;
+	font-weight: bold;
+}
+
 .contactEmailTitle {
 	font-size: 140%;
 }
@@ -74,4 +79,8 @@
 .contactOutput {
 	vertical-align: top;
 	white-space: nowrap;
+}
+
+.contactSep {
+	border-bottom: 1px solid rgb(187, 187, 187);
 }

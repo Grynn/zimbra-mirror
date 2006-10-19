@@ -46,6 +46,21 @@
 	</tag-file>
 
 	<tag-file>
+		<name>contactsAction</name>
+		<path>/WEB-INF/tags/contactsAction.tag</path>
+	</tag-file>
+
+	<tag-file>
+		<name>contactAction</name>
+		<path>/WEB-INF/tags/contactAction.tag</path>
+	</tag-file>
+
+	<tag-file>
+		<name>contactsToolbar</name>
+		<path>/WEB-INF/tags/contactsToolbar.tag</path>
+	</tag-file>
+
+	<tag-file>
 		<name>status</name>
 		<path>/WEB-INF/tags/status.tag</path>
 	</tag-file>
@@ -78,6 +93,11 @@
 	<tag-file>
 		<name>searchFolderTree</name>
 		<path>/WEB-INF/tags/searchFolderTree.tag</path>
+	</tag-file>
+
+	<tag-file>
+		<name>contactFolderTree</name>
+		<path>/WEB-INF/tags/contactFolderTree.tag</path>
 	</tag-file>
 
 	<tag-file>

@@ -29,7 +29,7 @@
 			<td class="nowrap"><a href="<c:url value="/login?op=logout"/>"><fmt:message key="signOut"/></a></td>
 		</tr></table>
 		<br><br>
-		<form method="get" action="/mail/clv">
+		<form method="get" action="clv">
 			<table border=0 width=100%>
 			<tr>
 				<td><input id="searchbox" type="text" size=25 maxlength=256 name=sq></td>

@@ -11,17 +11,10 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <div class="folder ${selected eq 'compose' ? 'folderSelected' : 'unread'}">
-	<a href="compose"><fmt:message key="composeMail"/></a>
+	<a href="/mail/compose"><fmt:message key="composeMail"/></a>
 </div><p/>
 
 <c:if test="${folders}"><app:folderTree/></c:if><p/>
-
-<c:if test="${contacts}">
-	<div class="folder ${selected eq 'contacts' ? 'folderSelected' : 'unread'}">
-		<a href="<c:url value="/mail/contacts"/>"><fmt:message key="contacts"/></a>
-	</div><p/>
-</c:if>
-
+<c:if test="${contacts}"><app:contactFolderTree selected="${selected}"/><p/></c:if>
 <c:if test="${searches}"><app:searchFolderTree/><p/></c:if>
-
 <c:if test="${tags}"><app:tagTree/></c:if>
