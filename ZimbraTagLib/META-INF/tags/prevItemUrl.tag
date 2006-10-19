@@ -18,7 +18,7 @@
     <c:if test="${!empty context.sq}"><c:param name='sq' value='${context}.sq}'/></c:if>
     <c:if test="${!empty context.sfi}"><c:param name='sfi' value='${context.sfi}'/></c:if>
     <c:if test="${!empty context.sti}"><c:param name='sti' value='${context.sti}'/></c:if>
-    <c:forEach items="${dynattrs}" var="param">
-        <c:param name='${param.key}' value='${param.value}'/>
+    <c:forEach items="${dynattrs}" var="a">
+        <c:param name='${a.key}' value='${a.value}'/>
     </c:forEach>
 </c:url>
