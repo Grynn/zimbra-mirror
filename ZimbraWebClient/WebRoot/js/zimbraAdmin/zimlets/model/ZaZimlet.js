@@ -135,7 +135,8 @@ function() {
 ZaZimlet.prototype.remove = 
 function() {
 	var soapDoc = AjxSoapDoc.create("UndeployZimletRequest", "urn:zimbraAdmin", null);
-	soapDoc.set("id", this.id);
+	soapDoc.getMethod().setAttribute("name", this.name);	
+	//soapDoc.set("id", this.id);
 	var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	

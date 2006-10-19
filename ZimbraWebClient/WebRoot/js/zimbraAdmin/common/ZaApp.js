@@ -155,7 +155,7 @@ function() {
 	if (this._controllers[ZaZimbraAdmin._ACCOUNTS_LIST_VIEW] == null) {
 		this._controllers[ZaZimbraAdmin._ACCOUNTS_LIST_VIEW] = new ZaAccountListController(this._appCtxt, this._container, this);
 //		this._controllers[ZaZimbraAdmin._ACCOUNTS_LIST_VIEW].addRemovalListener(new AjxListener(this, ZaApp.prototype.handleAccountRemoval));					
-		this._controllers[ZaZimbraAdmin._ACCOUNTS_LIST_VIEW].addRemovalListener(new AjxListener(this.getAccountListController(), this.getAccountListController().handleRemoval));							
+		this._controllers[ZaZimbraAdmin._ACCOUNTS_LIST_VIEW].addRemovalListener(new AjxListener(this._controllers[ZaZimbraAdmin._ACCOUNTS_LIST_VIEW], this._controllers[ZaZimbraAdmin._ACCOUNTS_LIST_VIEW].handleRemoval));							
 	}
 	return this._controllers[ZaZimbraAdmin._ACCOUNTS_LIST_VIEW]
 }
@@ -178,6 +178,7 @@ ZaApp.prototype.getZimletListController =
 function() {
 	if (this._controllers[ZaZimbraAdmin._ZIMLET_LIST_VIEW] == null) {
 		this._controllers[ZaZimbraAdmin._ZIMLET_LIST_VIEW] = new ZaZimletListController(this._appCtxt, this._container, this);
+		this._controllers[ZaZimbraAdmin._ZIMLET_LIST_VIEW].addRemovalListener(new AjxListener(this._controllers[ZaZimbraAdmin._ZIMLET_LIST_VIEW], this._controllers[ZaZimbraAdmin._ZIMLET_LIST_VIEW].handleRemoval));							
 	}
 	return this._controllers[ZaZimbraAdmin._ZIMLET_LIST_VIEW]
 }
