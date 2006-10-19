@@ -24,15 +24,14 @@
  */
 package com.zimbra.cs.taglib.tag;
 
-import java.io.IOException;
+import com.zimbra.cs.taglib.ZJspSession;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
-
-import com.zimbra.cs.taglib.ZJspSession;
+import java.io.IOException;
 
 public class LogoutTag extends ZimbraSimpleTag {
     
@@ -42,6 +41,7 @@ public class LogoutTag extends ZimbraSimpleTag {
         HttpServletResponse response = (HttpServletResponse) pageContext.getResponse();            
         Cookie authTokenCookie = new Cookie(ZJspSession.COOKIE_NAME, "");
         authTokenCookie.setMaxAge(0);
+        authTokenCookie.setPath("/");
         response.addCookie(authTokenCookie);
         ZJspSession.clearSession((PageContext)jctxt);
     }
