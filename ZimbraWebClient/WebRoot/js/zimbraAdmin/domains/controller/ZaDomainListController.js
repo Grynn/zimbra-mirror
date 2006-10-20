@@ -199,25 +199,6 @@ function(details) {
 }
 
 /**
-*	Private method that notifies listeners to that the controlled ZaDomain (are) removed
-* 	@param details
-*/
-ZaDomainListController.prototype._fireRemovalEvent =
-function(details) {
-	try {
-		if (this._evtMgr.isListenerRegistered(ZaEvent.E_REMOVE)) {
-			var evt = new ZaEvent(ZaEvent.S_DOMAIN);
-			evt.set(ZaEvent.E_REMOVE, this);
-			evt.setDetails(details);
-			this._evtMgr.notifyListeners(ZaEvent.E_REMOVE, evt);
-		}
-	} catch (ex) {
-		this._handleException(ex, "ZaDomainListController.prototype._fireRemovalEvent", details, false);	
-	}
-}
-
-
-/**
 * This listener is called when the item in the list is double clicked. It call ZaDomainController.show method
 * in order to display the Domain View
 **/
@@ -308,7 +289,6 @@ function(ev) {
 		var arrItems = this._contentView.getSelection();
 		var cnt = arrItems.length;
 		for(var key =0; key < cnt; key++) {
-			var item = DwtListView.prototype.getItemFromElement.call(this, arrItems[key]);
 			if(arrItems[key]) {
 				this._removeList.push(arrItems[key]);
 			}
@@ -371,7 +351,7 @@ function () {
 		}
 		this._list.remove(this._removeList[key]); //remove from the list
 	}
-	this._fireRemovalEvent(successRemList); 		
+	this.fireRemovalEvent(successRemList); 		
 	this._removeConfirmMessageDialog.popdown();
 	this._contentView.setUI();
 	this.show();
