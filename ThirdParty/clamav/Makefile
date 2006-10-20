@@ -8,7 +8,7 @@ ifeq ($(BUILD_PLATFORM), )
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
-CLAMAV_VERSION ?= 0.88.4
+CLAMAV_VERSION ?= 0.88.5
 
 all: build tar
 
@@ -18,7 +18,7 @@ build:
 	./configure --prefix=/opt/zimbra/clamav-$(CLAMAV_VERSION) \
 	--with-user=zimbra --with-group=zimbra --disable-zlib-vcheck; \
 	make; make install)
-	(cd $(ZIMBRA_HOME); ln -s clamav-$(CLAMAV_VERSION) clamav)
+	-(cd $(ZIMBRA_HOME); ln -s clamav-$(CLAMAV_VERSION) clamav)
 
 tar:
 	mkdir -p $(CLAMAV_ROOT)/builds/$(BUILD_PLATFORM)
