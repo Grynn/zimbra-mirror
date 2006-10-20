@@ -458,7 +458,7 @@ function(ev) {
 	else if (obj._validationStyle == DwtInputField.CONTINUAL_VALIDATION)
 		val = obj._validateInput(keyEv.target.value);
 
-	if (val != null)
+	if (val != null && val != keyEv.target.value)
 		keyEv.target.value = val;
 
 	return true;
