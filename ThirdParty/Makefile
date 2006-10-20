@@ -52,8 +52,7 @@ DIRS := mysql \
 	popt \
 	perdition \
 	PostFix/PostFix-$(POSTFIX_VERSION) \
-	dspam \
-	Perl
+	dspam
 
 LOGFILE := /tmp/ThirdParty.make.log
 
@@ -66,9 +65,11 @@ build:
 	 @(for dir in $(DIRS); do \
 		echo -n "*** Building in $$dir "; \
 		make -C $$dir >> $(LOGFILE) 2>&1; \
-		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "SUCCEEDED.";  fi \
+		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "SUCCEEDED.";  fi ; \
+		if [ -x /sbin/ldconfig ]; then /sbin/ldconfig; fi ;\
 	done)
-	@(make -C apache-httpd tar $(LOGFILE))
+	@(echo -n "*** Building in Perl "; make -C Perl ) 
+	@(make -C apache-httpd tar >> $(LOGFILE) 2>&1)
 
 clean:
 	for dir in $(DIRS); do \
