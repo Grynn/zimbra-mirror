@@ -46,7 +46,7 @@ if ($platform =~ /MACOSX/) {
 	$DFCMD = "df -ml ";
 } else {
 	$MNTCMD = "mount -t ext3";
-	$DFCMD = "df -ml ";
+	$DFCMD = "df -mlP ";
 }
 
 my $dt = `date "+%Y-%m-%d %H:%M:%S"`;
