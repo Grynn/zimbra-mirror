@@ -47,21 +47,19 @@
 	</td>
 </tr>
 <tr>
-	<td valign=top class="leftPane" id="leftPane">
+	<td valign=top class="leftPane">
 		<app:overviewTree selected="${selected}" contacts="${contacts}" tags="${tags}" searches="${searches}" folders="${folders}"/>
 	</td>
 	<td valign=top>
 		<table border=0 cellpadding=0 cellspacing=0 width=100%>
 		<tr>
-			<td id="rightPane">
-				<jsp:doBody/>
-			</td>
+			<td><jsp:doBody/></td>
 		</tr>
 		<tr>
 			<td><br></td>
 		</tr>
 		<tr>
-			<td class="quota" id="quota">
+			<td class="quota">
 				<c:set var="max" value="${mailbox.attrs.zimbraMailQuota[0]}"/>
 				You are currently using ${zm:displaySize(mailbox.size)}
 				of ${max==0 ? zm:m(pageContext, 'unlimited') : zm:displaySize(max)}.
