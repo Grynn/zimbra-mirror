@@ -53,16 +53,17 @@ ZaListView.prototype._createItemHtml = function(item) {}
 
 ZaListView.prototype._mouseOverAction =
 function(ev, div) {
-	if (div._type == DwtListView.TYPE_HEADER_ITEM) {
+	var type = Dwt.getAttr(div, "_type");
+	if (_type == DwtListView.TYPE_HEADER_ITEM) {
 		if(this._headerList[div._itemIndex]._sortable) {
 			div.className = "DwtListView-Column DwtListView-ColumnHover";		
 			this.setToolTipContent(ZaMsg.LST_ClickToSort_tt + " " + this._headerList[div._itemIndex].getLabel());	
 		} else {
 			this.setToolTipContent(null);
 		}
-	} else if (div._type == DwtListView.TYPE_HEADER_SASH) {
+	} else if (_type == DwtListView.TYPE_HEADER_SASH) {
 		div.style.cursor = AjxEnv.isIE ? "col-resize" : "e-resize";
-    } else if (div._type == DwtListView.TYPE_LIST_ITEM){
+    } else if (_type == DwtListView.TYPE_LIST_ITEM){
 		var item = this.getItemFromElement(div);
 		if (item && item.getToolTip)
 			this.setToolTipContent(item.getToolTip());
@@ -98,22 +99,7 @@ function(columnItem, bSortAsc) {
 	}
 	this.setUI();
 }
-ZaListView.prototype.unsetSortedColStyle = 
-function(columnId) {
-		// unset current column arrow
-		oldArrowId = DwtListView.HEADERITEM_ARROW + columnId;
-		oldArrowCell = document.getElementById(oldArrowId);
-		if (oldArrowCell && oldArrowCell.firstChild) {
-			var imgEl = (AjxImg._mode == AjxImg.SINGLE_IMG) ? oldArrowCell.firstChild : oldArrowCell.firstChild.firstChild;
-			if (imgEl)
-				imgEl.style.visibility = "hidden";
-		}
-		
-		// reset style for old sorted column
-		var oldSortedCol = document.getElementById(this._currentColId);
-		if (oldSortedCol)
-			oldSortedCol.className = "DwtListView-Column";
-}
+
 /*
 ZaListView.prototype._columnClicked =
 function(clickedCol, ev) {
@@ -129,12 +115,12 @@ function(clickedCol, ev) {
 		}
 	}
 }*/
-
+/*
 ZaListView.prototype._getParentForColResize = 
 function() {
 	// overload me to return a higher inheritance chain parent
 	return this.parent;
-}
+}*/
 
 function ZaListHeaderItem(idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible) {
 	DwtListHeaderItem.call(this, idPrefix, label, iconInfo, width, sortable, sortField, visible);
