@@ -13,26 +13,40 @@ paramaters:
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 
+<c:if test="${!empty param.doAction}"><app:msgAction/></c:if>
 <zm:computeSearchContext var="context" default="mail" usecache="true"/>
 <c:set var="convHit" value="${context.currentItem}"/>
 
 <c:set var="csi" value="${param.csi}"/>
-<zm:searchConv var="convSearchResult" conv="${convHit}" context="${context}" markread="true" wanthtml="false" sort="dateAsc"/>
+<c:set var="fetch" value="${empty csi ? 'first' : 'none'}"/>
+<c:if test="${!empty param.expand}"><c:set var="fetch" value="all"/></c:if>
+<zm:searchConv var="convSearchResult" conv="${convHit}" context="${context}" markread="true" fetch="${empty csi ? 'first' : 'none'}" wanthtml="false" sort="dateAsc"/>
 <zm:computeNextPrevItem var="convCursor" searchResult="${context.searchResult}" index="${context.currentItemIndex}"/>
 
-<c:if test="${empty csi}">
-	<c:set var="csi" value="${convSearchResult.size-1}"/>
+<c:set var="message" value="${null}"/>
+<c:if test="${empty param.expand}">
+	<c:if test="${empty csi}">
+	<%--<c:set var="csi" value="${convSearchResult.fetchedMessageIndex}"/>--%>
+		<c:set var="csi" value="${convSearchResult.size-1}"/>
+		<c:if test="${csi ge 0}">
+			<c:set var="message" value="${convSearchResult.messageHits[csi].message}"/>
+		</c:if>
+	</c:if>
+	<c:if test="${message eq null}">
+		<c:if test="${csi lt 0 or csi ge convSearchResult.size}">
+			<c:set var="csi" value="0"/>
+		</c:if>
+		<zm:getMessage var="message" id="${convSearchResult.messageHits[csi].id}" markread="true" wanthtml="true" neuterimages="${empty param.xim}"/>
+	</c:if>
 </c:if>
-<zm:getMessage var="message" id="${convSearchResult.messageHits[csi].id}" markread="true" wanthtml="true" neuterimages="${empty param.xim}"/>
 
 <app:head title="${convHit.subject}"/>
 
 <body>
-
 <c:url value="clv" var="closeurl">
 	<c:param name='so' value='${context.searchResult.offset}'/>
 	<c:param name='si' value='${context.currentItemIndex}'/>
-	<c:if test="${! empty context}"><c:param name='sc' value='${context.id}'/></c:if>
+	<c:if test="${!empty context}"><c:param name='sc' value='${context.id}'/></c:if>
 	<c:if test="${!empty param.sq}"><c:param name='sq' value='${param.sq}'/></c:if>
 	<c:if test="${!empty param.sfi}"><c:param name='sfi' value='${param.sfi}'/></c:if>
 	<c:if test="${!empty param.sti}"><c:param name='sti' value='${param.sti}'/></c:if>
@@ -77,52 +91,64 @@ paramaters:
 						<c:set var="tagNames" value="${fn:escapeXml(zm:getTagNames(pageContext, message.tagIds))}"/>
 						<span class="labelSmall">${tagNames}</span>
 					</div>
-					<c:set var="startNew" value="true"/>
-					<c:if test="${convSearchResult.size gt 1}">
-						<c:set var="startNew" value="false"/>
-						<table border=0 cellpadding=0 cellspacing=0>
-						<c:forEach items="${convSearchResult.messageHits}" var="mess" varStatus="status" begin="0" end="${csi-1}">
-							<c:if test="${status.first}">
+					<c:if test="${empty param.expand}">
+						<c:set var="startNew" value="true"/>
+						<c:if test="${convSearchResult.size gt 1}">
+							<c:set var="startNew" value="false"/>
+							<table border=0 cellpadding=0 cellspacing=0>
+							<c:forEach items="${convSearchResult.messageHits}" var="mess" varStatus="status" begin="0" end="${csi-1}">
+								<c:if test="${status.first}">
+									<tr>
+										<td rowspan=2 class="cTopLeft"></td>
+										<td class="cTop" colspan=4 height=4></td>
+										<td rowspan=2 class="cTopRight"></td>
+									</tr>
+								</c:if>
+								<c:if test="${!status.first}">
+									<tr>
+										<td rowspan=2 class="cConnector"></td>
+										<td class="cTop" colspan=4 height=4></td>
+										<td rowspan=2 class="cTopRight"></td>
+									</tr>
+								</c:if>
 								<tr>
-									<td rowspan=2 class="cTopLeft"></td>
-									<td class="cTop" colspan=4 height=4></td>
-									<td rowspan=2 class="cTopRight"></td>
+									<td class="msgHeaderCell">
+										<app:img src="${mess.isFlagged ? 'star_on_sm_2.gif' : 'star_off_2.gif'}" style="cursor:pointer"/>
+										<span>${fn:escapeXml(mess.displaySender)}</span>&nbsp;
+									</td>
+									<td width=100% valign=bottom>
+										<div class="msgFrag">
+											<zm:currentResultUrl var="msgUrl" value="cv"  context="${context}" cso="${convSearchResult.offset}" csi="${status.index}"/>
+											<a href="${msgUrl}">${fn:escapeXml(empty mess.fragment ? zm:m(pageContext, 'noFragment') : zm:truncate(mess.fragment,100, true))}</a>
+										</div>
+									</td>
+									<td></td>
+									<td class="nowrap" align=right>
+										<c:if test="${mess.hasAttachment eq true}">
+											&nbsp;<app:img src="paperclip.gif" width='15' height='15' border='0' style="vertical-align:middle"/>
+										</c:if>
+										${fn:escapeXml(zm:displayMsgDate(pageContext, mess.date))}
+									</td>
 								</tr>
+							</c:forEach>
+							</table>
+						</c:if>
+						<c:set var="extImageUrl" value=""/>
+						<c:if test="${empty param.xim}">
+							<zm:currentResultUrl var="extImageUrl" value="cv" context="${context}" cso="${convSearchResult.offset}" csi="${csi}" xim="1"/>
+						</c:if>
+						<app:displayMessage message="${message}" nosubject="true" startNew="${startNew}" externalImageUrl="${extImageUrl}"/>
+					</c:if>
+					<c:if test="${!empty param.expand}">
+						<c:forEach items="${convSearchResult.messageHits}" var="mess" varStatus="status">
+							<zm:getMessage var="message" id="${mess.id}" markread="true" wanthtml="true" neuterimages="${empty param.xim}"/>
+							<c:set var="extImageUrl" value=""/>
+							<c:if test="${empty param.xim}">
+								<zm:currentResultUrl var="extImageUrl" value="cv" context="${context}" cso="${convSearchResult.offset}" csi="${status.index}" xim="1"/>
 							</c:if>
-							<c:if test="${!status.first}">
-								<tr>
-									<td rowspan=2 class="cConnector"></td>
-									<td class="cTop" colspan=4 height=4></td>
-									<td rowspan=2 class="cTopRight"></td>
-								</tr>
-							</c:if>
-							<tr>
-								<td class="msgHeaderCell">
-									<app:img src="${mess.isFlagged ? 'star_on_sm_2.gif' : 'star_off_2.gif'}" style="cursor:pointer"/>
-									<span>${fn:escapeXml(mess.displaySender)}</span>&nbsp;
-								</td>
-								<td width=100% valign=bottom>
-									<div class="msgFrag">
-										<zm:currentResultUrl var="msgUrl" value="cv"  context="${context}" cso="${convSearchResult.offset}" csi="${status.index}"/>
-										<a href="${msgUrl}">${fn:escapeXml(empty mess.fragment ? zm:m(pageContext, 'noFragment') : zm:truncate(mess.fragment,100, true))}</a>
-									</div>
-								</td>
-								<td></td>
-								<td class="nowrap" align=right>
-									<c:if test="${mess.hasAttachment eq true}">
-										&nbsp;<app:img src="paperclip.gif" width='15' height='15' border='0' style="vertical-align:middle"/>
-									</c:if>
-									${fn:escapeXml(zm:displayMsgDate(pageContext, mess.date))}
-								</td>
-							</tr>
+							<app:displayMessage message="${message}" nosubject="true" startNew="true" externalImageUrl="${extImageUrl}"/>
 						</c:forEach>
-						</table>
 					</c:if>
-					<c:set var="extImageUrl" value=""/>
-					<c:if test="${empty param.xim}">
-						<zm:currentResultUrl var="extImageUrl" value="cv" context="${context}" cso="${convSearchResult.offset}" csi="${csi}" xim="1"/>
-					</c:if>
-					<app:displayMessage message="${message}" nosubject="true" startNew="${startNew}" externalImageUrl="${extImageUrl}"/>
 				</td>
 				<td valign=top>
 					<div class="sidebarLink"><app:img src="tearoff_icon.gif" width='16' height='16' border='0'/> <a href="javascript:;" style="vertical-align: top"><fmt:message key="newWindow"/></a></div>

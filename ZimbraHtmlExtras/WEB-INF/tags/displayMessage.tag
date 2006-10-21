@@ -35,7 +35,7 @@
 			to ${fn:escapeXml(message.displayTo)}
 		</div>
 	</td>
-	<td class="msgOptions"><a href="javascript:;">More options</a></td>
+	<td class="msgOptions"><a href="javascript:;"><fmt:message key="moreOptions"/></a></td>
 	<td class="nowrap" align=right>
 		<c:if test="${message.hasAttachment eq true}">
 			&nbsp;<app:img src="paperclip.gif" width='15' height='15' border='0' style="vertical-align:middle"/>
