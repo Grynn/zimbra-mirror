@@ -54,7 +54,7 @@
 	</c:if>
 	<br><br>
 	<c:if test="${!empty message.attachments}">
-		<div class="msgAttachSep"></div>
+		<div class="msgAttachSep"></div><br>
 		<app:attachments message="${message}"/>
 	</c:if>
 	<br><br>
@@ -69,10 +69,3 @@
 	<td class="cBot cGray"></td>
 	<td class="cBotRight cGray"></td>
 </tr></table><br>
-
-<c:forEach var="part" items="${message.attachments}">
-	<c:if test="${part.isMssage}">
-		<zm:getMessage var="partMessage" id="${message.id}" part="${part.partName}"/>
-		<app:displayMessage message="${partMessage}" startNew="true"/>
-	</c:if>
-</c:forEach>

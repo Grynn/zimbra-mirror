@@ -8,6 +8,21 @@
 
 <div class="msgAttachContainer">
 <c:forEach var="part" items="${message.attachments}">
+	<c:if test="${part.isMssage}">
+		<zm:getMessage var="partMessage" id="${message.id}" part="${part.partName}"/>
+		<c:set var="body" value="${partMessage.body}"/>
+		<c:if test="${body.contentType eq 'text/html'}">
+			${body.content}
+		</c:if>
+		<c:if test="${!(body.contentType eq 'text/html')}">
+			${body.textContentAsHtml}
+		</c:if>
+		<br><br>
+		<app:attachments message="${partMessage}"/>
+	</c:if>
+</c:forEach>
+
+<c:forEach var="part" items="${message.attachments}">
 	<c:if test="${!part.isMssage}">
 		<c:set var="pname" value="${part.displayName}"/>
 		<c:if test="${empty pname}">
