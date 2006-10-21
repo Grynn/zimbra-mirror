@@ -227,6 +227,16 @@ function(entry) {
 	//Instrumentation code end	
 }
 
+//Listeners for default toolbar buttons (close, save, delete)
+/**
+* member of ZaController
+* @param 	ev event object
+* handles the Close button click. Returns to the previous view.
+**/ 
+ZaController.prototype.closeButtonListener =
+function(ev) {
+	this._app.popView();
+}
 
 ZaController.prototype._helpButtonListener =
 function() {
@@ -585,7 +595,10 @@ function () {
 **/
 ZaController.prototype.getToolBar = 
 function () {
-	return this._toolbar;	
+	if (this._toolbar != null)	
+		return this._toolbar;	
+	else
+		return null;
 }
 
 /**

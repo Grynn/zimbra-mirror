@@ -285,7 +285,7 @@ function (curPage, totalPage, hide ){
 	try {
 		//enable the page back/forward button
 		if ( controller instanceof ZaServerStatsController ){
-			var toolBar = controller.getToolbar();			
+			var toolBar = controller.getToolBar();			
 			if (toolBar){
 				if (! hide) {
 					if (curPage > 1 ){ 

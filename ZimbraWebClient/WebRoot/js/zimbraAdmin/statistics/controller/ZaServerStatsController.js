@@ -78,12 +78,6 @@ function(item) {
 	this._contentView.setObject(item);
 }
 
-ZaServerStatsController.prototype.getToolbar =
-function (){
-	if (this._toolbar != null)
-		return this._toolbar;
-};
-
 ZaServerStatsController.prototype._prevPageListener = 
 function (ev) {
 	var mbxPage = this._contentView._mbxPage ;
