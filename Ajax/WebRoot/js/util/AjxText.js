@@ -1542,7 +1542,7 @@ AjxNumberFormat.NumberSegment.prototype.format = function(number) {
 	// format
 	var s = this._parent._showExponent
 	      ? number.toExponential(this._parent._maxFracDigits).toUpperCase().replace(/E\+/,"E")
-	      : number.toFixed(this._parent._maxFracDigits);
+	      : number.toFixed(this._parent._maxFracDigits || 0);
 	s = this._normalize(s);
 	return s;
 };
