@@ -53,7 +53,7 @@ ZaListView.prototype._createItemHtml = function(item) {}
 
 ZaListView.prototype._mouseOverAction =
 function(ev, div) {
-	var type = Dwt.getAttr(div, "_type");
+	var _type = Dwt.getAttr(div, "_type");
 	if (_type == DwtListView.TYPE_HEADER_ITEM) {
 		if(this._headerList[div._itemIndex]._sortable) {
 			div.className = "DwtListView-Column DwtListView-ColumnHover";		
