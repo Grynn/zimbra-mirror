@@ -31,17 +31,27 @@ import com.zimbra.cs.zclient.ZMessage.ZMimePart;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ZMessageBean {
 
 	private ZMessage mMsg;
-	
-	public ZMessageBean(ZMessage msg) {
+    private Set<String> mUsedParts = new HashSet<String>();
+    private int mExternalImages = 0;
+
+    public ZMessageBean(ZMessage msg) {
 		mMsg = msg;
 	}
 	   
     public String getId() { return mMsg.getId(); }
+
+    public int getExternalImageCount() {
+        return mExternalImages;
+    }
     
     /**
      * @return comma-separated list of tag ids
@@ -128,10 +138,9 @@ public class ZMessageBean {
 
     private List<ZMimePartBean> mAttachments;
 
-
-    
     private void  addAttachments(List<ZMimePartBean> list, ZMimePart part) {
         if (part.isBody()) return;
+        if (mUsedParts.contains(part.getPartName())) return;
 
         boolean rfc822 = ZMimePartBean.CT_MSG_RFC822.equalsIgnoreCase(part.getContentType());
 
@@ -191,5 +200,66 @@ public class ZMessageBean {
     public String getDisplayReplyTo() {
         return BeanUtils.getHeaderAddrs(getEmailAddresses(), ZEmailAddress.EMAIL_TYPE_REPLY_TO);
     }
-    
+
+    private static Pattern sIMG = Pattern.compile("(<IMG.+)dfsrc=\"([^\"]+)\"", Pattern.CASE_INSENSITIVE);
+
+    public String getBodyHtmlContent() {
+        ZMimePart root = mMsg.getMimeStructure();
+        ZMimePart body = getBody(root);
+        if (root == null || body == null) return null;
+
+        boolean isRelated = root.getContentType().equals(ZMimePartBean.CT_MULTI_RELATED);
+
+        Matcher m = sIMG.matcher(body.getContent());
+
+        if (isRelated) {
+            StringBuffer sb = new StringBuffer();
+            while (m.find()) {
+                String src = m.group(2);
+                if (src != null && src.startsWith("cid:")) {
+                    src = resolveContentId(src.substring(4), root);
+                } else if (src != null && src.indexOf(':') == -1) {
+                    src = resolveContentLocation(src, root);
+                }
+                if (src != null)
+                    m.appendReplacement(sb, m.group(1) + "src=\"" + src + "\"");
+                else {
+                    mExternalImages++;
+                    m.appendReplacement(sb, m.group(0));
+                }
+            }
+            m.appendTail(sb);
+            return sb.toString();
+        } else {
+            while (m.find()) {
+                mExternalImages++;
+            }
+            return body.getContent();
+        }
+    }
+
+    private String resolveContentId(String origcid, ZMimePart root) {
+        String cid = "<" + origcid + ">";
+        for (ZMimePart part : root.getChildren()) {
+            String partCid = part.getContentId();
+            if (cid.equals(partCid)) {
+                mUsedParts.add(part.getPartName());
+                // TODO: move this into ZMimePart                
+                return "/home/~/?id="+mMsg.getId()+"&part="+part.getPartName()+"&auth=co";
+            }
+        }
+        return null;
+    }
+
+    private String resolveContentLocation(String src, ZMimePart root) {
+        for (ZMimePart part : root.getChildren()) {
+            String partCL = part.getContentLocation();
+            if (src.equals(partCL)) {
+                mUsedParts.add(part.getPartName());
+                // TODO: move this into ZMimePart
+                return "/home/~/?id="+mMsg.getId()+"&part="+part.getPartName()+"&auth=co";
+            }
+        }
+        return null;
+    }
 }

@@ -15,7 +15,7 @@
     <c:param name='si' value='${cursor.nextIndex}'/>
     <c:param name='so' value='${cursor.nextOffset}'/>
     <c:if test="${!empty context}"><c:param name='sc' value='${context.id}'/></c:if>
-    <c:if test="${!empty context.sq}"><c:param name='sq' value='${context}.sq}'/></c:if>
+    <c:if test="${!empty context.sq}"><c:param name='sq' value='${context.sq}'/></c:if>
     <c:if test="${!empty context.sfi}"><c:param name='sfi' value='${context.sfi}'/></c:if>
     <c:if test="${!empty context.sti}"><c:param name='sti' value='${context.sti}'/></c:if>
     <c:forEach items="${dynattrs}" var="a">
