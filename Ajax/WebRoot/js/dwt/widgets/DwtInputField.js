@@ -369,6 +369,10 @@ function(value) {
 	var n = new Number(value);
 	if (isNaN(n) || (Math.round(n) != n) || (n.toString() != value))
 		throw AjxMsg.notAnInteger;
+	if (this._minNumVal && value < this._minNumVal)
+		throw AjxMessageFormat.format(AjxMsg.numberLessThanMin, this._minNumVal);
+	if (this._maxNumVal && value > this._maxNumVal)
+		throw AjxMessageFormat.format(AjxMsg.numberMoreThanMax, this._maxNumVal);
 	return value;
 };
 
