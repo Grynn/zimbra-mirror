@@ -53,6 +53,7 @@ AjxEnv.reset = function () {
 	AjxEnv.isMozilla = false;
 	AjxEnv.isMozilla1_4up = false;
 	AjxEnv.isSafari = false;
+	AjxEnv.isCamino = false;
 	AjxEnv.isGeckoBased = false;
 	AjxEnv.isOpera = false;
 	AjxEnv.useTransparentPNGs = false;
@@ -83,11 +84,11 @@ AjxEnv.parseUA = function (userAgent) {
 			if (token.indexOf('compatible') != -1 ) {
 				isCompatible = true;
 				AjxEnv.isNav = false;
-			} else if ((token.indexOf('opera')) != -1){
+			} else if ((token.indexOf('opera')) != -1) {
 				AjxEnv.isOpera = true;
 				AjxEnv.isNav = false;
 				AjxEnv.browserVersion = parseFloat(agtArr[i+1]);
-			} else if ((token.indexOf('spoofer')) != -1){
+			} else if ((token.indexOf('spoofer')) != -1) {
 				isSpoofer = true;
 				AjxEnv.isNav = false;
 			} else if ((token.indexOf('webtv')) != -1) {
@@ -99,30 +100,33 @@ AjxEnv.parseUA = function (userAgent) {
 			} else if ((index = token.indexOf('msie')) != -1) {
 				AjxEnv.isIE = true;
 				AjxEnv.browserVersion = parseFloat(agtArr[i+1]);
-			} else if ((index = token.indexOf('gecko/')) != -1){
+			} else if ((index = token.indexOf('gecko/')) != -1) {
 				AjxEnv.isGeckoBased = true;
 				AjxEnv.geckoDate = parseFloat(token.substr(index + 6));
-			} else if ((index = token.indexOf('rv:')) != -1){
+			} else if ((index = token.indexOf('rv:')) != -1) {
 				AjxEnv.mozVersion = parseFloat(token.substr(index + 3));
 				AjxEnv.browserVersion = AjxEnv.mozVersion;
-			} else if ((index = token.indexOf('firefox/')) != -1){
+			} else if ((index = token.indexOf('firefox/')) != -1) {
 				AjxEnv.isFirefox = true;
 				AjxEnv.browserVersion = parseFloat(token.substr(index + 8));
-			} else if ((index = token.indexOf('netscape6/')) != -1){
+			} else if ((index = token.indexOf('camino/')) != -1) {
+				AjxEnv.isCamino = true;
+				AjxEnv.browserVersion = parseFloat(token.substr(index + 7));
+			} else if ((index = token.indexOf('netscape6/')) != -1) {
 				AjxEnv.trueNs = true;
 				AjxEnv.browserVersion = parseFloat(token.substr(index + 10));
-			} else if ((index = token.indexOf('netscape/')) != -1){
+			} else if ((index = token.indexOf('netscape/')) != -1) {
 				AjxEnv.trueNs = true;
 				AjxEnv.browserVersion = parseFloat(token.substr(index + 9));
-			} else if ((index = token.indexOf('safari/')) != -1){
+			} else if ((index = token.indexOf('safari/')) != -1) {
 				AjxEnv.isSafari = true;
 				AjxEnv.browserVersion = parseFloat(token.substr(index + 7));
-			} else if (token.indexOf('windows') != -1){
+			} else if (token.indexOf('windows') != -1) {
 				AjxEnv.isWindows = true;
 			} else if ((token.indexOf('macintosh') != -1) ||
-					   (token.indexOf('mac_') != -1)){
+					   (token.indexOf('mac_') != -1)) {
 				AjxEnv.isMac = true;
-			} else if (token.indexOf('linux') != -1){
+			} else if (token.indexOf('linux') != -1) {
 				AjxEnv.isLinux = true;
 			}
 		}
@@ -171,6 +175,8 @@ AjxEnv.parseUA = function (userAgent) {
 			AjxEnv.browser = "OPERA";
 		} else if (AjxEnv.isSafari) {
 			AjxEnv.browser = "SAF";
+		} else if (AjxEnv.isCamino) {
+			AjxEnv.browser = "CAM";
 		} else if (isWebTv) {
 			AjxEnv.browser = "WEBTV";
 		} else if (isHotJava) {
