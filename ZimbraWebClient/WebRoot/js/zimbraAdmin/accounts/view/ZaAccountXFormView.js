@@ -80,7 +80,7 @@ function(entry) {
 	this._containedObject[ZaAccount.A2_nonMemberList + "_offset"] = entry[ZaAccount.A2_nonMemberList + "_offset"];
 	this._containedObject[ZaAccount.A2_nonMemberList + "_more"] = entry[ZaAccount.A2_nonMemberList + "_more"];
 	
-	if (ZaDomainAdmin) {
+	if ((typeof ZaDomainAdmin == "function")) {
 		this._containedObject[ZaAccount.A2_zimbraDomainAdminMailQuotaAllowed] = entry [ZaAccount.A2_zimbraDomainAdminMailQuotaAllowed];
 	}
 	

@@ -55,7 +55,7 @@ function(entry) {
 	}
 	this._containedObject[ZaCos.A_zimbraMailHostPoolInternal] = entry[ZaCos.A_zimbraMailHostPoolInternal].clone();
 	
-	if (ZaDomainAdmin) {
+	if (typeof ZaDomainAdmin == "function") {
 		this._containedObject[ZaCos.A2_zimbraDomainAdminMailQuotaAllowed] = entry [ZaCos.A2_zimbraDomainAdminMailQuotaAllowed];
 	}
 	
