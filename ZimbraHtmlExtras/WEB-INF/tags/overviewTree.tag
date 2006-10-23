@@ -11,7 +11,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <div class="folder ${selected eq 'compose' ? 'folderSelected' : 'unread'}">
-	<a href="/mail/compose"><fmt:message key="composeMail"/></a>
+	<a href="compose"><fmt:message key="composeMail"/></a>
 </div><p/>
 
 <c:if test="${folders}"><app:folderTree/></c:if><p/>
