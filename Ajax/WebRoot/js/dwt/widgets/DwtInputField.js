@@ -66,7 +66,15 @@ function DwtInputField(params) {
 	var hackEnd = doCursorHack ? "" : Dwt.CARET_HACK_END;
 	if (this._errorIconStyle == DwtInputField.ERROR_ICON_NONE) {
 		if (params.rows && params.rows > 1) {
-			htmlEl.innerHTML =[hackBegin, "<textarea id='", inputFieldId, "' rows=", params.rows, "></textarea>", hackEnd].join("");
+			var htmlArr = [hackBegin, "<textarea id='", inputFieldId, "' rows=", params.rows];
+			var i = htmlArr.length;
+			if (params.size) {
+				htmlArr[i++] = " cols=";
+				htmlArr[i++] = params.size;
+			}
+			htmlArr[i++] = "></textarea>"
+			htmlArr[i++] = hackEnd;
+			htmlEl.innerHTML = htmlArr.join("");
 		} else {
 			htmlEl.innerHTML = [hackBegin, "<input autocomplete='off' id='", inputFieldId, "' type='",
 				(this._type != DwtInputField.PASSWORD) ? "text" : "password", "'/>", hackEnd].join("");
