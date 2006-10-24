@@ -148,7 +148,8 @@ function(visible, transparentBg) {
 
 	Dwt.setHandler(this._getContentDiv(), DwtEvent.ONKEYDOWN, ZLoginFactory.handleKeyPress);
 	
-	//set the event handler for the user id field and password field
+	//set the event handler for the user id field and password field\
+	/* Use the Virtual host in the AuthRequest
 	var userIdEl = ZLoginFactory.get(ZLoginFactory.USER_ID);
  	var passwdEl = ZLoginFactory.get(ZLoginFactory.PASSWORD_ID);
    	if (userIdEl) {
@@ -157,9 +158,9 @@ function(visible, transparentBg) {
    	
    	if (passwdEl) {
    		passwdEl.onfocus = ZaLoginDialog.autoDomainName ;
-   	}
+   	}*/
 }
-
+/*
 ZaLoginDialog.autoDomainName =
 function (){
 	var domainName = location.hostname ;
@@ -172,7 +173,7 @@ function (){
 			DBG.println(AjxDebug.DBG3, "Current user name = " + userIdEl.value) ;
 		}
 	}
-}
+}*/
 
 ZaLoginDialog.prototype.addChild =
 function(child, childHtmlElement) {

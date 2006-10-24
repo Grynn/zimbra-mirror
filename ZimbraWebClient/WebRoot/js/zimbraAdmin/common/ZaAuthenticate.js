@@ -60,7 +60,7 @@ function (uname, pword, callback) {
 	this.uname = uname;
 	soapDoc.set("name", uname);
 	soapDoc.set("password", pword);
-	
+	soapDoc.set("virtualHost", location.hostname);
 	var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
