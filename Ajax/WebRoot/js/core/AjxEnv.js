@@ -169,7 +169,8 @@ AjxEnv.parseUA = function (userAgent) {
 		AjxEnv.isFirefox = ((AjxEnv.isMozilla && AjxEnv.isFirefox));
 		AjxEnv.isFirefox1up = (AjxEnv.isFirefox && AjxEnv.browserVersion >= 1.0);
 		AjxEnv.isFirefox1_5up = (AjxEnv.isFirefox && AjxEnv.browserVersion >= 1.5);
-		
+		AjxEnv.isFirefox2_0up = (AjxEnv.isFirefox && AjxEnv.browserVersion >= 2.0);
+
 		AjxEnv.browser = "";
 		if (AjxEnv.isOpera) {
 			AjxEnv.browser = "OPERA";
@@ -181,6 +182,8 @@ AjxEnv.parseUA = function (userAgent) {
 			AjxEnv.browser = "WEBTV";
 		} else if (isHotJava) {
 			AjxEnv.browser = "HOTJAVA";
+		} else if (AjxEnv.isFirefox2_0up) {
+			AjxEnv.browser = "FF2.0";
 		} else if (AjxEnv.isFirefox1_5up) {
 			AjxEnv.browser = "FF1.5";
 		} else if (AjxEnv.isFirefox1up) {
