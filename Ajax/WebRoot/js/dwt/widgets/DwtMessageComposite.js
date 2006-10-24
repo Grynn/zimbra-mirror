@@ -131,11 +131,13 @@ function(message, callback, hintsCallback) {
     var cells = {};
     var hints = {};
     for (var i = 0; i < segments.length; i++) {
-        var cid = [id,i].join("_");
-        a.push("<td id='",cid,"'>");
-
         var segment = segments[i];
-        if (segment instanceof AjxMessageFormat.MessageSegment) {
+        var isMsgSegment = segment instanceof AjxMessageFormat.MessageSegment;
+
+        var cid = [id,i].join("_");
+        a.push("<td id='",cid,"' class='",(isMsgSegment?"MessageControl"+segment.getIndex():""),"'>");
+
+        if (isMsgSegment) {
             var control = callback ? callback.run(this, segment, i) : null;
             if (!control) {
                 control = new DwtInputField({parent:this});
