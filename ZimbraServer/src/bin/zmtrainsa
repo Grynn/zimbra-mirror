@@ -37,13 +37,14 @@ autoTrainSystem() {
 
 	${zimbra_home}/libexec/sa-learn -p ${zimbra_home}/conf/salocal.cf \
 		--dbpath ${zimbra_home}/amavisd/.spamassassin/ -L --no-sync \
-		--spam ${spamdir}
+		--siteconfigpath ${zimbra_home}/conf/spamassassin --spam ${spamdir}
 
 	${zimbra_home}/libexec/sa-learn -p ${zimbra_home}/conf/salocal.cf \
 		--dbpath ${zimbra_home}/amavisd/.spamassassin/ -L --no-sync \
-		--ham ${hamdir}
+		--siteconfigpath ${zimbra_home}/conf/spamassassin --ham ${hamdir}
 
 	${zimbra_home}/libexec/sa-learn -p ${zimbra_home}/conf/salocal.cf \
+		--siteconfigpath ${zimbra_home}/conf/spamassassin \
 		--dbpath ${zimbra_home}/amavisd/.spamassassin/ --sync
 
 	for f in ${spamdir}/*; do
