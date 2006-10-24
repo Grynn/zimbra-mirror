@@ -171,6 +171,7 @@ ZaAccount.A_zimbraPasswordModifiedTime = "zimbraPasswordModifiedTime";
 ZaAccount.ACCOUNT_STATUS_ACTIVE = "active";
 ZaAccount.ACCOUNT_STATUS_MAINTENANCE = "maintenance";
 ZaAccount.ACCOUNT_STATUS_LOCKED = "locked";
+ZaAccount.ACCOUNT_STATUS_LOCKOUT = "lockout";
 ZaAccount.ACCOUNT_STATUS_CLOSED = "closed";
 
 //this attributes are not used in the XML object, but is used in the model
@@ -1263,6 +1264,7 @@ ZaAccount._ACCOUNT_STATUS = new Object ();
 ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_ACTIVE] = ZaMsg.accountStatus_active;
 ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_CLOSED] = ZaMsg.accountStatus_closed;
 ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_LOCKED] = ZaMsg.accountStatus_locked;
+ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_LOCKOUT] = ZaMsg.accountStatus_lockout;
 ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_MAINTENANCE] = ZaMsg.accountStatus_maintenance;
 
 ZaAccount.initMethod = function (app) {
