@@ -63,6 +63,7 @@ function ZmBatchCommand(appCtxt, continueOnError) {
 	this._respCallbacks = [];
 	this._errorCallbacks = [];
 	this._execFrames = [];
+	this._callbacks = [];
 };
 
 ZmBatchCommand.prototype.toString =
@@ -83,6 +84,16 @@ function(cmd) {
 ZmBatchCommand.prototype.size =
 function() {
 	return this._cmds.length;
+};
+
+/**
+ * Adds a callback to be invoked when the batch command is completed.
+ * 
+ * @param cmd	[AjxCallback]	a command
+ */
+ZmBatchCommand.prototype.addCallback =
+function(callback) {
+	this._callbacks[this._callbacks.length] = callback;
 };
 
 /**
@@ -153,6 +164,9 @@ function(callback, result) {
 	}
 	if (callback) {
 		callback.run(result);
+	}
+	for (var i = 0, count = this._callbacks.length; i < count; i++) {
+		this._callbacks[i].run(result);
 	}
 };
 

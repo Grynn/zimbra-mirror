@@ -1363,15 +1363,16 @@ function() {
 DwtControl.prototype.applyCaretHack =
 function() {
 	if (Dwt.CARET_HACK_ENABLED) {
+		var shellElement = this.shell.getHtmlElement();
+		var myElement = this.getHtmlElement();
+		
 		// Go up the hierarchy and find the element that is a child of the shell.
-		var shellChild = this;
-		while (shellChild.parent && !(shellChild.parent instanceof DwtShell)) {
-			shellChild = shellChild.parent;	
+		var childElement = myElement;
+		while (childElement.parentNode && (childElement.parentNode != shellElement)) {
+			childElement = childElement.parentNode;	
 		}
 		// Remove the child from the shell, and then put it back exactly where it was.
-		if (shellChild) {
-			var shellElement = shellChild.parent.getHtmlElement();
-			var childElement = shellChild.getHtmlElement();
+		if (childElement) {
 			var sibling = childElement.nextSibling;
 			shellElement.removeChild(childElement);
 			shellElement.insertBefore(childElement, sibling);
