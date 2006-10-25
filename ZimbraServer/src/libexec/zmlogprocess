@@ -888,7 +888,7 @@ sub processAmavis {
 					last;
 				}
 
-				if ($msg =~ /\(([^)]+)\) (Passed|Blocked) ([^,]+), (?:LOCAL )?\[([^]]+)\] \[([^]]+)\] <([^>]*)> -> (<[^>]+>(?:,<[^>]+>)*),(?: quarantine: [^,]+,)? Message-ID: <([^>]+)>,(?: Resent-Message-ID: <[^>]+>,)? mail_id: \S+, Hits: (\S+), (\d+) ms/) {
+				if ($msg =~ /\(([^)]+)\) (Passed|Blocked) ([^,]+), (?:LOCAL )?\[([^]]+)\] \[([^]]+)\] <([^>]*)> -> (<[^>]+>(?:,<[^>]+>)*),(?: quarantine: [^,]+,)? Message-ID: <([^>]+)>,(?: Resent-Message-ID: <[^>]+>,)? mail_id: \S+, Hits: (\S+), queued_as: (\S+), (\d+) ms/) {
 					my $pid = $1;
 					my $disp = $2;
 					my $reason = $3;
@@ -898,7 +898,8 @@ sub processAmavis {
 					my $recips = $7;
 					my $msgid = $8;
 					my $hits = $9;
-					my $ms = $10;
+          my $queued_as = $10;
+					my $ms = $11;
 
 					my @r = split (' ',$reason,2);
 					$r[1] =~ s/\(//;
