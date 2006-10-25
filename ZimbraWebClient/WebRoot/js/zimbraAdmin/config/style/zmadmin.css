@@ -543,3 +543,47 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 	@ListContainer@
 	@BoxMargin@
 }
+
+/* 
+ *  Row display and highlighting in list views
+ *	NOTE: these should probably be more specific names!
+ */
+.Row, .Row-selected, .Row-matched, .Row-matched-drag, 
+.Row-drag, .Row-selected-drag, .Row-selected-right, .Row-selected-disabled {
+	@ListItemContainer@
+}
+
+.selected, .Row-selected, .Row-selected-drag, .Row-selected-disabled { 
+	@ListItemContainer-selected@
+}
+
+.Row-error td, { 
+	@ListItemText-matched@
+	@Text-unread@
+}
+
+.Row-Focus {
+	@ListItemContainer-focused@
+}
+
+
+.Row-selected-right, .Row-drag, .Row-matched-drag { 
+	@ListItemContainer-rightClicked@
+}
+
+.Row-selected table, .Row-selected-drag table, .Row-drag table, 
+.Row-matched-drag table, .Row-selected-right table { 
+	@ListItemText@
+}
+
+.Row table, .Row-selected table, .Row-matched table, .Row-matched-drag table, .Row-dnd table, 
+.Row-selected-drag table, .Row-drag table, .Row-selected-right table {
+	table-layout: fixed;
+}
+
+.Row, .Row-selected, .Row-selected-disabled, .Row-dnd, 
+.Row td, .Row div, .Row-selected td, .Row-matched td, .Row-dnd td, .Row-selected-drag td, 
+.Row-drag td, .Row-matched-drag td, .Row-selected-right td {
+	@ListItemText@
+}
+
