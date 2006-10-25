@@ -59,6 +59,14 @@ function(list) {
 			this.isExtension = (list.getArray()[0].attrs[ZaZimlet.A_zimbraZimletIsExtension]=="TRUE");
 
 		this._list = list;
+	} else {
+		if(this.isExtension) {
+			this._list = ZaZimlet.getAll(this._app, ZaZimlet.EXCLUDE_MAIL);
+		} else {
+			this._list = ZaZimlet.getAll(this._app,ZaZimlet.EXCLUDE_EXTENSIONS);			
+		}
+		this._contentView.set(this._list.getVector());
+		
 	}		
 	this._app.pushView(ZaZimbraAdmin._ZIMLET_LIST_VIEW);			
 
@@ -87,23 +95,6 @@ function () {
 }
 ZaController.initPopupMenuMethods["ZaZimletListController"].push(ZaZimletListController.initPopupMenuMethod);
 
-/**
-* @param ev
-* This listener is invoked by any other controller that can change an object in this controller
-**/
-ZaZimletListController.prototype.handleChange = 
-function (ev) {
-	if(ev && this.objType && ev.type==this.objType) {
-		if(ev.getDetails()) {
-			if(ev.getDetails().attrs[ZaZimlet.A_zimbraZimletIsExtension] && ev.getDetails().attrs[ZaZimlet.A_zimbraZimletIsExtension]=="TRUE") {
-				this.show(ZaZimlet.getAll(this._app, ZaZimlet.EXCLUDE_MAIL ));							
-			} else {
-				this.show(ZaZimlet.getAll(this._app,ZaZimlet.EXCLUDE_EXTENSIONS));
-			}
-
-		}
-	}
-}
 
 ZaZimletListController.prototype.disableZimletListener = 
 function (ev) {
@@ -314,7 +305,7 @@ function () {
 		onArray = [ZaOperation.EDIT];
 		
 		var arrItems = this._contentView.getSelection();
-		if(arrItems[0].name && arrItems[0].name.substr(0,10)=="com_zimbra") {
+		if(arrItems[0].name && arrItems[0].name.substr(0,10)=="com_zimbra" && arrItems[0].attrs[ZaZimlet.A_zimbraZimletIsExtension] && arrItems[0].attrs[ZaZimlet.A_zimbraZimletIsExtension]=="TRUE") {
 			offArray.push(ZaOperation.DELETE);
 		} else {
 			onArray.push(ZaOperation.DELETE);			
@@ -342,7 +333,7 @@ function () {
 				gotEnabled = true;
 			
 			if(!gotInternal) {
-				if(arrItems[0].name && arrItems[0].name.substr(0,10)=="com_zimbra") {
+				if(arrItems[i].name && arrItems[i].name.substr(0,10)=="com_zimbra" && arrItems[i].attrs[ZaZimlet.A_zimbraZimletIsExtension] && arrItems[i].attrs[ZaZimlet.A_zimbraZimletIsExtension]=="TRUE") {
 					gotInternal = true;
 				} 		
 			}

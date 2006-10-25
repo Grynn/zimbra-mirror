@@ -67,27 +67,6 @@ function(details) {
 
 
 
-/**
-* member of ZaXFormViewController
-*	Private method that notifies listeners that a new object is created
-* 	@param details
-*/
-ZaXFormViewController.prototype.fireCreationEvent =
-function(details) {
-	try {
-		if (this._evtMgr.isListenerRegistered(ZaEvent.E_CREATE)) {
-			var evt = new ZaEvent(this.objType);
-			evt.set(ZaEvent.E_CREATE, this);
-			if(details)
-				evt.setDetails(details);
-				
-			this._evtMgr.notifyListeners(ZaEvent.E_CREATE, evt);
-		}
-	} catch (ex) {
-		this._handleException(ex, "ZaXFormViewController.prototype.fireCreationEvent", details, false);	
-	}
-
-}
 
 //Listeners for default toolbar buttons (close, save, delete)
 /**

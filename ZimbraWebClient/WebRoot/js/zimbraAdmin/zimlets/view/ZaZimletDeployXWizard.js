@@ -239,6 +239,7 @@ ZaZimletDeployXWizard.prototype.deployZimletClbck = function (resp) {
 					this._pollHandler = AjxTimedAction.scheduleAction(this.pollAction, this.pollInterval);		
 				} else {
 					AjxTimedAction.cancelAction(this._pollHandler);
+					this._app.getCurrentController().fireCreationEvent(new ZaZimlet(this._app));
 				}
 			}
 		}
