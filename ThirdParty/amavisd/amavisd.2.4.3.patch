@@ -1,0 +1,96 @@
+--- amavisd-new-2.4.3/amavisd	2006-10-01 17:05:20.000000000 -0700
++++ amavisd	2006-10-25 16:19:35.000000000 -0700
+@@ -1,4 +1,4 @@
+-#!/usr/bin/perl -T
++#!/usr/bin/perl
+ 
+ #------------------------------------------------------------------------------
+ # This is amavisd-new.
+@@ -274,6 +274,7 @@
+     [qw(
+       $helpers_home $dspam
+       $sa_local_tests_only $sa_auto_whitelist $sa_timeout $sa_debug
++      	  $sa_rules_file $sa_site_rules_file $sa_userprefs_file
+     )],
+     'platform' => [qw(
+       $can_truncate $unicode_aware $eol
+@@ -641,7 +642,7 @@
+   $spam_quarantine_to       = 'spam-quarantine';
+   $bad_header_quarantine_to = 'bad-header-quarantine';
+   $clean_quarantine_to      = 'clean-quarantine';
+-  $archive_quarantine_to    = 'archive-quarantine';
++  $archive_quarantine_to    = undef; # 'archive-quarantine';
+ 
+   # similar to $spam_quarantine_to, but the lookup key is the sender address
+   $spam_quarantine_bysender_to = undef;  # dflt: no by-sender spam quarantine
+@@ -1341,7 +1342,7 @@
+     elsif ($errn)      { $msg = "is inaccessible: $!" }
+     elsif (-d _)       { $msg = "is a directory" }
+     elsif (!-f _)      { $msg = "is not a regular file" }
+-    elsif ($> && -o _) { $msg = "should not be owned by EUID $>"}
++#    elsif ($> && -o _) { $msg = "should not be owned by EUID $>"}
+     elsif ($> && -w _) { $msg = "is writable by EUID $>, EGID $)" }
+     if (defined $msg)  { die "Config file \"$config_file\" $msg," }
+     $! = 0;
+@@ -6662,7 +6663,7 @@
+                          prolong_timer waiting_for_client 
+                          switch_to_my_time switch_to_client_time
+                          snmp_counters_init snmp_count dynamic_destination
+-                         ccat_maj ccat_min cmp_ccat cmp_ccat_maj cloexec xtext_encode);
++                         ccat_maj ccat_min cmp_ccat_maj cloexec xtext_encode);
+   import Amavis::Log qw(open_log close_log);
+   import Amavis::Timing qw(section_time get_time_so_far);
+   import Amavis::rfc2821_2822_Tools;
+@@ -7118,8 +7119,8 @@
+           rename($config_file.'.moved', $config_file);  # try to rename back
+           $m = 'is writable (confirmed)';
+         }
+-        push(@msg, "Directory of a config file \"$config_file\" $m, ".
+-                   "UID $<, EUID $>, EGID $)" );
++#        push(@msg, "Directory of a config file \"$config_file\" $m, ".
++#                   "UID $<, EUID $>, EGID $)" );
+       }
+       last  if @msg;
+     }
+@@ -9224,6 +9225,14 @@
+       push(@qar_addr, $q)  if $q ne '' && !grep {$_ eq $q} @qar_addr;
+     }
+   }  # endfor per_recip_data
++  if (defined($qar_method) && $qar_method ne '') {  # archiving quarantine on sender
++    my($sender) = $msginfo->sender;
++    if ($sender ne '') {
++			my($q) = lookup(0,$sender,@{ca('archive_quarantine_to_maps')});
++			$q = $sender  if $q ne '' && $qar_method =~ /^bsmtp:/i;  # orig.recip
++			push(@qar_addr, $q)  if $q ne '' && !grep {$_ eq $q} @qar_addr;
++		}
++  }
+   if ($ccat == CC_SPAM) {
+     my($sqbsm) = ca('spam_quarantine_bysender_to_maps');
+     if (@$sqbsm) {  # by-sender spam quarantine (hardly useful, rarely used)
+@@ -9231,7 +9240,6 @@
+       push(@q_addr, $q)  if defined $q && $q ne '' && !grep {$_ eq $q} @q_addr;
+     }
+   }
+-
+   my($spam_level_bar); my($slc) = c('sa_spam_level_char');
+   $spam_level_bar = $slc x min(64, $whitelisted_any ? 0 : $blacklisted_any ? 64
+                                    : 0+$spam_level+$boost_max)  if $slc ne '';
+@@ -11144,7 +11152,7 @@
+     amavisLocal amavisMessageSizeLimit amavisWarnVirusRecip
+     amavisWarnBannedRecip amavisWarnBadHeaderRecip amavisVirusAdmin
+     amavisNewVirusAdmin amavisSpamAdmin amavisBannedAdmin
+-    amavisBadHeaderAdmin amavisBannedRuleNames
++    amavisBadHeaderAdmin amavisBannedRuleNames amavisArchiveQuarantineTo
+   );
+ 
+   @mv_ldap_attrs = qw(amavisBlacklistSender amavisWhitelistSender);
+@@ -15618,6 +15626,9 @@
+     local_tests_only  => $sa_local_tests_only,
+     home_dir_for_helpers => $helpers_home,
+     stop_at_threshold => 0,
++	rules_filename => $sa_rules_file,
++	site_rules_filename => $sa_site_rules_file,
++	userprefs_filename => $sa_userprefs_file,
+ #   LOCAL_STATE_DIR   => '/var/lib',
+ #   PREFIX            => '/usr/local',
+ #   DEF_RULES_DIR     => '/usr/local/share/spamassassin',
