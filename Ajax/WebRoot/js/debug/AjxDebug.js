@@ -251,7 +251,23 @@ function(msg, restart) {
 	return interval;
 };
 
+AjxDebug.prototype.getContentFrame = function () {
+	if(this._contentFrame)
+		return this._contentFrame;
+	else if(this._debugWindow && this._debugWindow.document)
+		return this._debugWindow.document.getElementById(AjxDebug._CONTENT_FRAME_ID);
+	else
+		return null;
+}
 
+AjxDebug.prototype.getLinkFrame = function () {
+	if(this._linkFrame)
+		return this._linkFrame;
+	else if(this._debugWindow && this._debugWindow.document)
+		return this._debugWindow.document.getElementById(AjxDebug._LINK_FRAME_ID);
+	else
+		return null;
+}
 // Private methods
 
 AjxDebug.prototype._enable =
@@ -601,8 +617,8 @@ function() {
 */
 AjxDebug.prototype._scrollToBottom =
 function() {
-	var contentBody = this._contentFrame.contentWindow.document.body;
-	var linkBody = this._linkFrame.contentWindow.document.body;
+	var contentBody = this.getContentFrame().contentWindow.document.body;
+	var linkBody = this.getLinkFrame().contentWindow.document.body;
 
 	contentBody.scrollTop = contentBody.scrollHeight;
 	linkBody.scrollTop = linkBody.scrollHeight;
@@ -753,34 +769,37 @@ function () {
 		// happens at startup, and many messages will be written
 		return;
 	}
-
-	if (this._msgQueue.length > 0) {
-		var msg;
-		var contentDiv;
-		var linkDiv;
-		var contentFrameDoc = this._contentFrame.contentWindow.document;
-		var linkFrameDoc = this._linkFrame.contentWindow.document;
-		var len = this._msgQueue.length;
-		for (var i = 0 ; i < len; ++i ) {
-			var now = new Date();
-			msg = this._msgQueue[i];
-			contentDiv = contentFrameDoc.createElement('div');
-			contentDiv.innerHTML = [msg.message, msg.eHtml].join("");
-			if (msg.linkName) {
-				linkDiv = linkFrameDoc.createElement('div');
-				linkDiv._targetId = contentDiv.id = [AjxDebug._getNextId(), now.getMilliseconds()].join("");
-				linkDiv._dbg = this;
-				linkDiv.className = "Link";
-				linkDiv.onclick = AjxDebug._linkClicked;
-				linkDiv.innerHTML = msg.linkName  + " - [" + this._getTimeStamp(now) + "]";;	
-				linkFrameDoc.body.appendChild(linkDiv);
+	try {
+		if (this._msgQueue.length > 0) {
+			var msg;
+			var contentDiv;
+			var linkDiv;
+			var contentFrameDoc = this.getContentFrame().contentWindow.document;
+			var linkFrameDoc = this.getLinkFrame().contentWindow.document;
+			var len = this._msgQueue.length;
+			for (var i = 0 ; i < len; ++i ) {
+				var now = new Date();
+				msg = this._msgQueue[i];
+				contentDiv = contentFrameDoc.createElement('div');
+				contentDiv.innerHTML = [msg.message, msg.eHtml].join("");
+				if (msg.linkName) {
+					linkDiv = linkFrameDoc.createElement('div');
+					linkDiv._targetId = contentDiv.id = [AjxDebug._getNextId(), now.getMilliseconds()].join("");
+					linkDiv._dbg = this;
+					linkDiv.className = "Link";
+					linkDiv.onclick = AjxDebug._linkClicked;
+					linkDiv.innerHTML = msg.linkName  + " - [" + this._getTimeStamp(now) + "]";;	
+					linkFrameDoc.body.appendChild(linkDiv);
+				}
+				contentFrameDoc.body.appendChild(contentDiv);		
 			}
-			contentFrameDoc.body.appendChild(contentDiv);		
 		}
+	
+		this._msgQueue.length = 0;
+		this._scrollToBottom();
+	} catch (ex) {
+		//debuggins should not stop execution
 	}
-
-	this._msgQueue.length = 0;
-	this._scrollToBottom();
 };
 
 AjxDebug._linkClicked =
@@ -802,7 +821,7 @@ function() {
 
 AjxDebug.prototype._parseHtmlFragment = 
 function (htmlStr) {
-	var div = this._contentFrame.contentWindow.document.createElement('div');	
+	var div = this.getContentFrame().contentWindow.document.createElement('div');	
 	div.innerHTML = htmlStr;
 	return div;
 };
