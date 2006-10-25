@@ -248,8 +248,8 @@ function() {
  * @see #getObjectFromElement
  */
 Dwt.associateElementWithObject =
-function(domElement, jsObject) {
-	domElement.dwtObj = jsObject.__internalId = AjxCore.assignId(jsObject);
+function(domElement, jsObject, attrName) {
+	domElement[attrName||"dwtObj"] = jsObject.__internalId = AjxCore.assignId(jsObject);
 };
 
 /**
@@ -263,9 +263,9 @@ function(domElement, jsObject) {
  * @see #getObjectFromElement
  */
 Dwt.disassociateElementFromObject =
-function(domElement, jsObject) {
+function(domElement, jsObject, attrName) {
 	if (domElement){
-		delete domElement.dwtObj;
+		delete domElement[attrName||"dwtObj"];
 	}
 	if (jsObject.__internalId){
 		AjxCore.unassignId(jsObject.__internalId);
@@ -273,8 +273,8 @@ function(domElement, jsObject) {
 };
 
 Dwt.getObjectFromElement =
-function(domElement) {
-	return AjxCore.objectWithId(domElement.dwtObj);
+function(domElement, attrName) {
+	return AjxCore.objectWithId(domElement[attrName||"dwtObj"]);
 };
 
 Dwt.findAncestor =

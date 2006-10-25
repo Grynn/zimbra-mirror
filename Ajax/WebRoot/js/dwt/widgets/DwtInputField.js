@@ -43,6 +43,7 @@
 * @param skipCaretHack		[boolean]			true to NOT do hack to make the caret show up in Firefox.
 * 												The hack uses a block display div, so for an input that needs
 * 												to be displayed inline, set this parameter to true.
+* @param required           [boolean]           True to mark as required.
 * 
 * TODO: override a bunch of DwtControl methods and apply them to input element
 */
@@ -121,6 +122,10 @@ function DwtInputField(params) {
 	this.setValidatorFunction(params.validatorCtxtObj, params.validator);
 	this._setMouseEventHdlrs(false);
 	this._setKeyPressEventHdlr(false);
+
+    if (params.required != null) {
+        this.setRequired(params.required);
+    }
 };
 
 DwtInputField.prototype = new DwtControl;
@@ -461,6 +466,11 @@ function(ev) {
 
 	var obj = keyEv.dwtObj;
 	var keyCode = keyEv.keyCode;
+
+    var obj = keyEv.dwtObj;
+    if (obj.notifyListeners(DwtUiEvent.ONKEYUP, keyEv)) {
+        return true;
+    }
 
 	// ENTER || TAB
 	var val = null;

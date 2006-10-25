@@ -476,3 +476,18 @@ function(array, object, strict) {
 	}
 	return -1;
 };
+
+AjxUtil.keys = function(object) {
+    var keys = [];
+    for (var p in object) {
+        keys.push(p);
+    }
+    return keys;
+};
+AjxUtil.values = function(object) {
+    var values = [];
+    for (var p in object) {
+        values.push(object[p]);
+    }
+    return values;
+};

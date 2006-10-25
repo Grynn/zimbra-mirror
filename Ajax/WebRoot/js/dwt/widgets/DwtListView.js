@@ -396,7 +396,25 @@ function(skipNotify) {
 	}
 };
 
-DwtListView.prototype.reIndexColumn = 
+DwtListView.prototype.redrawItem = function(item) {
+    var odiv = this._getElFromItem(item);
+    if (odiv) {
+        var ndiv = this._createItemHtml(item, true); // now???
+        this.associateItemWithElement(item, ndiv);
+        odiv.parentNode.replaceChild(ndiv, odiv);
+
+        var selection = this.getSelectedItems().getArray();
+        for (var i = 0; i < selection.length; i++) {
+            var sitem = selection[i];
+            if (sitem === item) {
+                this.setSelectedItems([].concat(selection));
+                break;
+            }
+        }
+    }
+};
+
+DwtListView.prototype.reIndexColumn =
 function(columnIdx, newIdx) {
 	// do some sanity checks before continuing
 	if (this._headerList == null) 

@@ -57,8 +57,9 @@ function ZmBatchCommand(appCtxt, continueOnError) {
 	
 	this._appCtxt = appCtxt;
 	this._continue = (continueOnError === false) ? "stop" : "continue";
-	
-	this._cmds = [];
+
+    this.curId = 0;
+    this._cmds = [];
 	this._soapDocs = [];
 	this._respCallbacks = [];
 	this._errorCallbacks = [];
@@ -83,7 +84,7 @@ function(cmd) {
 
 ZmBatchCommand.prototype.size =
 function() {
-	return this._cmds.length;
+	return this.curId;
 };
 
 /**
@@ -107,10 +108,10 @@ function(callback) {
 	
 	// Invoke each command so that it hands us its SOAP doc, response callback, and
 	// error callback
-	for (var i = 0; i < this._cmds.length; i++) {
-		this.curId = i;
+    for (var i = 0; i < this._cmds.length; i++) {
 		var cmd = this._cmds[i];
 		cmd.run(this);
+        this.curId++;
 	}
 
 	// bug fix #9086 - Safari has bugs with appendChild :(
@@ -124,7 +125,8 @@ function(callback) {
 	batchSoapDoc.setMethodAttribute("onerror", this._continue);
 
 	// Add each command's request element to the BatchRequest, and set its ID
-	for (var i = 0; i < this._cmds.length; i++) {
+    var size = this.size();
+    for (var i = 0; i < size; i++) {
 		var soapDoc = this._soapDocs[i];
 		var reqEl = soapDoc.getMethod();
 		reqEl.setAttribute("id", i);
@@ -198,6 +200,12 @@ function(soapDoc, respCallback, errorCallback, execFrame) {
 	this._respCallbacks[this.curId] = respCallback;
 	this._errorCallbacks[this.curId] = errorCallback;
 	this._execFrames[this.curId] = execFrame;
+};
+
+ZmBatchCommand.prototype.addNewRequestParams =
+function(soapDoc, respCallback, errorCallback, execFrame) {
+    this.addRequestParams(soapDoc, respCallback, errorCallback, execFrame);
+    this.curId++;
 };
 
 /*
