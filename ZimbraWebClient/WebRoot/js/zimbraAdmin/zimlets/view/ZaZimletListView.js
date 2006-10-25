@@ -84,6 +84,11 @@ function(zimlet, now, isDndIcon) {
 			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + ">";
 			html[idx++] = AjxStringUtil.htmlEncode(zimlet.attrs[ZaZimlet.A_zimbraZimletDescription ]);
 			html[idx++] = "</td>";
+		} else if(id.indexOf(ZaZimlet.A_zimbraZimletEnabled )==0) {	
+			// description
+			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + ">";
+			html[idx++] = (zimlet.attrs[ZaZimlet.A_zimbraZimletEnabled] == "TRUE") ?  AjxStringUtil.htmlEncode(ZaMsg.NAD_Enabled) :AjxStringUtil.htmlEncode(ZaMsg.NAD_Disabled) ;
+			html[idx++] = "</td>";
 		}
 	}
 	html[idx++] = "</tr></table>";
@@ -100,6 +105,8 @@ function() {
 	headerList[0] = new ZaListHeaderItem(ZaZimlet.A_name, ZaMsg.CLV_Name_col, null, 200, sortable++, "name", true, true);
 
 	headerList[1] = new ZaListHeaderItem(ZaZimlet.A_zimbraZimletDescription, ZaMsg.DLV_Description_col, null, null, null, ZaZimlet.A_zimbraZimletDescription, true, true);
+
+	headerList[2] = new ZaListHeaderItem(ZaZimlet.A_zimbraZimletEnabled, ZaMsg.ALV_Status_col, null, null, null, ZaZimlet.A_zimbraZimletEnabled, true, true);	
 		
 	return headerList;
 }

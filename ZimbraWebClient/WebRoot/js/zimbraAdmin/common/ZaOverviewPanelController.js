@@ -459,7 +459,7 @@ function() {
 		if(ZaSettings.ZIMLETS_ENABLED) {
 			this._zimletsTi = new DwtTreeItem(this._configTi);
 			this._zimletsTi.setText(ZaMsg.OVP_zimlets);
-			this._zimletsTi.setImage("Zimlet");
+			this._zimletsTi.setImage("ImgZimlet");
 			this._zimletsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._ZIMLET_LIST_VIEW);
 			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ZIMLET_LIST_VIEW] = ZaOverviewPanelController.zimletListTreeListener;					
 		}

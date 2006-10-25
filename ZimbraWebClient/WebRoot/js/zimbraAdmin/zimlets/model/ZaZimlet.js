@@ -71,13 +71,37 @@ function(app, exclude) {
 	return list;
 }
 
+ZaZimlet.prototype.enable = function (enabled, callback) {
+	var soapDoc = AjxSoapDoc.create("ModifyZimletRequest", "urn:zimbraAdmin", null);
+	var zimletEl = soapDoc.set("zimlet", "");
+	zimletEl.setAttribute("name", this.name);
+	var statusEl = soapDoc.set("status", "",zimletEl);	
+	if(enabled)	 {
+		statusEl.setAttribute("value","enabled");
+		this.attrs[ZaZimlet.A_zimbraZimletEnabled] = "TRUE";
+	} else {
+		statusEl.setAttribute("value","disabled");
+		this.attrs[ZaZimlet.A_zimbraZimletEnabled] = "FALSE";		
+	}
+	var asynCommand = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	if(callback) {
+		params.asyncMode = true;
+		params.callback = callback;
+	}
+
+	asynCommand.invoke(params);	
+	
+}
+
 /**
 * @param mods - map of modified attributes
 * modifies object's information in the database
 **/
 ZaZimlet.prototype.modify =
 function(mods) {
-	var soapDoc = AjxSoapDoc.create("ModifyZimletRequest", "urn:zimbraAdmin", null);
+	/*var soapDoc = AjxSoapDoc.create("ModifyZimletRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
 	for (var aname in mods) {
 		if (mods[aname] instanceof Array) {
@@ -101,7 +125,7 @@ function(mods) {
 	var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	var resp = command.invoke(params).Body.ModifyZimletResponse;		
+	var resp = command.invoke(params).Body.ModifyZimletResponse;*/		
 }
 
 /**
@@ -157,14 +181,14 @@ ZaZimlet.deploy = function (action,attId, callback) {
 	if(attId) {
 		contentEl.setAttribute("aid", attId);
 	}
-	this.asynCommand = new ZmCsfeCommand();
+	var asynCommand = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	if(callback) {
 		params.asyncMode = true;
 		params.callback = callback;
 	}
-	this.asynCommand.invoke(params);	
+	asynCommand.invoke(params);	
 }
 
 ZaZimlet.loadMethod = 

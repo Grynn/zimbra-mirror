@@ -70,8 +70,8 @@ function(list) {
 ZaZimletListController.initToolbarMethod =
 function () {
 //   	this._toolbarOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.SERTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaZimletListController.prototype._editButtonListener)));    	
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.DEPLOY_ZIMLET, ZaMsg.TBB_DeployNew, ZaMsg.TBB_DeployNew_tt, "RestoreMailbox", "RestoreMailboxDis", new AjxListener(this, this.deployZimletListener)));				
-   	this._toolbarOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Undeploy, ZaMsg.DTBB_Undeploy_tt, "Delete", "DeleteDis", new AjxListener(this, this._undeployButtonListener)));    	    		
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.DEPLOY_ZIMLET, ZaMsg.TBB_DeployNew, ZaMsg.TBB_DeployNew_tt, "ImgDeploy", "ImgDeploy", new AjxListener(this, this.deployZimletListener)));				
+   	this._toolbarOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Undeploy, ZaMsg.DTBB_Undeploy_tt, "ImgUndeploy", "ImgUndeploy", new AjxListener(this, this._undeployButtonListener)));    	    		
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.NONE));
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));				
 }
@@ -81,9 +81,62 @@ ZaZimletListController.initPopupMenuMethod =
 function () {
 //   	this._popupOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.SERTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaZimletListController.prototype._editButtonListener)));    	
    	this._popupOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Undeploy, ZaMsg.DTBB_Undeploy_tt, "Delete", "DeleteDis", new AjxListener(this, this._undeployButtonListener)));    	    		
+   	this._popupOperations.push(new ZaOperation(ZaOperation.ENABLE_ZIMLET, ZaMsg.TBB_Enable, ZaMsg.ZTBB_Enable_tt, null, null, new AjxListener(this, this.enableZimletListener)));    	    		   	   	
+   	this._popupOperations.push(new ZaOperation(ZaOperation.DISABLE_ZIMLET, ZaMsg.TBB_Disable, ZaMsg.ZTBB_Disable_tt, null, null, new AjxListener(this, this.disableZimletListener)));    	    		   	   	
 
 }
 ZaController.initPopupMenuMethods["ZaZimletListController"].push(ZaZimletListController.initPopupMenuMethod);
+
+/**
+* @param ev
+* This listener is invoked by any other controller that can change an object in this controller
+**/
+ZaZimletListController.prototype.handleChange = 
+function (ev) {
+	if(ev && this.objType && ev.type==this.objType) {
+		if(ev.getDetails()) {
+			if(ev.getDetails().attrs[ZaZimlet.A_zimbraZimletIsExtension] && ev.getDetails().attrs[ZaZimlet.A_zimbraZimletIsExtension]=="TRUE") {
+				this.show(ZaZimlet.getAll(this._app, ZaZimlet.EXCLUDE_MAIL ));							
+			} else {
+				this.show(ZaZimlet.getAll(this._app,ZaZimlet.EXCLUDE_EXTENSIONS));
+			}
+
+		}
+	}
+}
+
+ZaZimletListController.prototype.disableZimletListener = 
+function (ev) {
+	try {
+		var arrItems = this._contentView.getSelection();
+		var cnt = arrItems.length;
+		for (var i=0; i<cnt; i++) {
+			if(arrItems[i]) {
+				arrItems[i].enable(false,new AjxCallback(this, this.fireChangeEvent,arrItems[i] ));
+			}
+		}
+	} catch (ex) {
+		this._handleException(ex, "ZaZimletListController.prototype.disableZimletListener", null, false);
+	}
+	return;
+}
+
+
+ZaZimletListController.prototype.enableZimletListener = 
+function (ev) {
+	try {
+		var arrItems = this._contentView.getSelection();
+		var cnt = arrItems.length;
+		for (var i=0; i<cnt; i++) {
+			if(arrItems[i]) {
+				arrItems[i].enable(true, new AjxCallback(this, this.fireChangeEvent,arrItems[i] ));
+			}
+		}
+	} catch (ex) {
+		this._handleException(ex, "ZaZimletListController.prototype.enableZimletListener", null, false);
+	}
+	return;
+}
 
 ZaZimletListController.prototype.deployZimletListener = 
 function (ev) {
@@ -255,17 +308,77 @@ function () {
 ZaZimletListController.prototype._changeActionsState = 
 function () {
 	var cnt = this._contentView.getSelectionCount();
+	var offArray = [];
+	var onArray = [];
 	if(cnt == 1) {
-		var opsArray = [ZaOperation.EDIT];
-		this._toolbar.enable(opsArray, true);
-		this._actionMenu.enable(opsArray, true);
+		onArray = [ZaOperation.EDIT];
+		
+		var arrItems = this._contentView.getSelection();
+		if(arrItems[0].name && arrItems[0].name.substr(0,10)=="com_zimbra") {
+			offArray.push(ZaOperation.DELETE);
+		} else {
+			onArray.push(ZaOperation.DELETE);			
+		}
+		
+		if(arrItems[0].attrs[ZaZimlet.A_zimbraZimletEnabled] == "FALSE") {
+			onArray.push(ZaOperation.ENABLE_ZIMLET);
+			offArray.push(ZaOperation.DISABLE_ZIMLET);	
+		} else if (arrItems[0].attrs[ZaZimlet.A_zimbraZimletEnabled] == "TRUE") {
+			onArray.push(ZaOperation.DISABLE_ZIMLET);
+			offArray.push(ZaOperation.ENABLE_ZIMLET);			
+		}		
 	} else if (cnt > 1){
-		var opsArray1 = [ZaOperation.EDIT];
-		this._toolbar.enable(opsArray1, false);
-		this._actionMenu.enable(opsArray1, false);
+		offArray = [ZaOperation.EDIT]; 
+			
+		var arrItems = this._contentView.getSelection();
+		var cnt = arrItems.length;
+		var gotEnabled = false;
+		var gotDisabled = false;
+		var gotInternal = false;	
+		for(var i=0;i<cnt;i++) {
+			if(arrItems[i].attrs[ZaZimlet.A_zimbraZimletEnabled] == "FALSE")	
+				gotDisabled = true;
+			else if(arrItems[i].attrs[ZaZimlet.A_zimbraZimletEnabled] == "TRUE")	
+				gotEnabled = true;
+			
+			if(!gotInternal) {
+				if(arrItems[0].name && arrItems[0].name.substr(0,10)=="com_zimbra") {
+					gotInternal = true;
+				} 		
+			}
+			
+			if(gotEnabled && gotDisabled && gotInternal) {
+				//nothing else to look for
+				break;
+			}
+			
+		}
+		if(gotInternal) {
+			offArray.push(ZaOperation.DELETE);
+		} else {
+			onArray.push(ZaOperation.DELETE);
+		}
+		
+		if(gotEnabled && gotDisabled) {
+			offArray.push(ZaOperation.ENABLE_ZIMLET);
+			offArray.push(ZaOperation.DISABLE_ZIMLET);						
+		} else if (gotEnabled) {
+			onArray.push(ZaOperation.DISABLE_ZIMLET);									
+			offArray.push(ZaOperation.ENABLE_ZIMLET);			
+		} else if (gotDisabled) {
+			onArray.push(ZaOperation.ENABLE_ZIMLET);									
+			offArray.push(ZaOperation.DISABLE_ZIMLET);			
+		}		
+
 	} else {
-		var opsArray = [ZaOperation.EDIT];
-		this._toolbar.enable(opsArray, false);
-		this._actionMenu.enable(opsArray, false);
+		offArray = [ZaOperation.EDIT,ZaOperation.DISABLE_ZIMLET,ZaOperation.DELETE,ZaOperation.ENABLE_ZIMLET];
+	}
+	if(onArray.length) {
+		this._toolbar.enable(onArray, true);
+		this._actionMenu.enable(onArray, true);
+	}
+	if(offArray.length) {
+		this._toolbar.enable(offArray, false);
+		this._actionMenu.enable(offArray, false);	
 	}
 }

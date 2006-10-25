@@ -638,6 +638,25 @@ function(listener) {
 }
 
 /**
+* member of ZaXFormViewController
+* Adds listener to modifications in the contained ZaAccount 
+* @param listener
+**/
+ZaController.prototype.addChangeListener = 
+function(listener) {
+	this._evtMgr.addListener(ZaEvent.E_MODIFY, listener);
+}
+
+/**
+* member of ZaXFormViewController
+* Removes listener to modifications in the controlled ZaAccount 
+* @param listener
+**/
+ZaController.prototype.removeChangeListener = 
+function(listener) {
+	this._evtMgr.removeListener(ZaEvent.E_MODIFY, listener);    	
+}
+/**
 *	Private method that notifies listeners to that the controlled ZaAccount is (are) removed
 * 	@param details
 */
@@ -655,6 +674,25 @@ function(details) {
 	}
 }
 
+/**
+* member of ZaXFormViewController
+*	Method that notifies listeners to that the controlled object is changed
+* 	@param details {String}
+*/
+ZaController.prototype.fireChangeEvent =
+function(details) {
+	try {
+		if (this._evtMgr.isListenerRegistered(ZaEvent.E_MODIFY)) {
+			var evt = new ZaEvent(this.objType);
+			evt.set(ZaEvent.E_MODIFY, this);
+			if(details)
+				evt.setDetails(details);			
+			this._evtMgr.notifyListeners(ZaEvent.E_MODIFY, evt);
+		}
+	} catch (ex) {
+		this._handleException(ex, "ZaXFormViewController.prototype.fireChangeEvent", null, false);	
+	}
+}
 //item should be an xform item
 ZaController.showTooltip =
 function (event, item) {
