@@ -75,6 +75,8 @@ start()
 		sleep 2
 		getpid
 		if [ "x$PID" = "x" ]; then
+		  sudo /opt/zimbra/openldap-2.3.21/libexec/slapd -l LOCAL0 -4 -u zimbra -h "$my_url" \
+			-f /opt/zimbra/conf/slapd.conf -d 1 2>&1 | grep failed
 			echo "ERROR - failed to start slapd"
 			echo ""
 			exit 1
