@@ -224,13 +224,15 @@ ZaZimletDeployXWizard.prototype.deployZimletClbck = function (resp) {
 						msgLines.push(AjxMessageFormat.format(ZaMsg.ZMLT_DeployProgres, [progress[i].server,ZaMsg.ZMLT_StatusSuccess]))						
 					}
 				}
+
 				instance[ZaZimlet.A_progress] = msgLines.join("<br/>");
+
 				if(hasErrors) {
 					instance[ZaZimlet.A_deployStatus]=ZaZimlet.STATUS_FAILED;
 					instance[ZaZimlet.A_statusMsg] = ZaMsg.ZMLT_failedDeployZimlet;
 				} else if(done && !hasErrors) {
 					instance[ZaZimlet.A_deployStatus]=ZaZimlet.STATUS_SUCCEEDED;
-					instance[ZaZimlet.A_statusMsg] = ZMLT_DeployZimletComplete;	
+					instance[ZaZimlet.A_statusMsg] = ZaMsg.ZMLT_DeployZimletComplete;	
 				} 
 				if(!done) {
 					//schedule another request
@@ -241,7 +243,7 @@ ZaZimletDeployXWizard.prototype.deployZimletClbck = function (resp) {
 			}
 		}
 	} catch (ex) {
-		this._app.geCurrentController()._handleException(ex, "ZaZimletDeployXWizard.srchAccountsClbck");	
+		this._app.getCurrentController()._handleException(ex, "ZaZimletDeployXWizard.srchAccountsClbck");	
 	}	
 	this._localXForm.setInstance(instance);	
 }
