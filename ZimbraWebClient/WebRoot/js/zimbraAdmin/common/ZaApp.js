@@ -181,7 +181,9 @@ function() {
 		this._controllers[ZaZimbraAdmin._ZIMLET_LIST_VIEW].addRemovalListener(new AjxListener(this._controllers[ZaZimbraAdmin._ZIMLET_LIST_VIEW], this._controllers[ZaZimbraAdmin._ZIMLET_LIST_VIEW].handleRemoval));							
 		this._controllers[ZaZimbraAdmin._ZIMLET_LIST_VIEW].addCreationListener(new AjxListener(this._controllers[ZaZimbraAdmin._ZIMLET_LIST_VIEW], this._controllers[ZaZimbraAdmin._ZIMLET_LIST_VIEW].handleCreation));			
 		this._controllers[ZaZimbraAdmin._ZIMLET_LIST_VIEW].addChangeListener(new AjxListener(this._controllers[ZaZimbraAdmin._ZIMLET_LIST_VIEW], this._controllers[ZaZimbraAdmin._ZIMLET_LIST_VIEW].handleChange));
+		this._controllers[ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW] = this._controllers[ZaZimbraAdmin._ZIMLET_LIST_VIEW];
 	}
+	
 	return this._controllers[ZaZimbraAdmin._ZIMLET_LIST_VIEW]
 }
 

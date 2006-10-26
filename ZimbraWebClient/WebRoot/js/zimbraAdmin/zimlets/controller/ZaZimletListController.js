@@ -67,8 +67,12 @@ function(list) {
 		}
 		this._contentView.set(this._list.getVector());
 		
-	}		
-	this._app.pushView(ZaZimbraAdmin._ZIMLET_LIST_VIEW);			
+	}	
+	if(this.isExtension) {
+		this._app.pushView(ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW);					
+	} else {	
+		this._app.pushView(ZaZimbraAdmin._ZIMLET_LIST_VIEW);			
+	}
 
 	this._removeList = new Array();
 		
@@ -157,7 +161,7 @@ ZaZimletListController.prototype._createUI = function () {
 		}
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 		this._app.createView(ZaZimbraAdmin._ZIMLET_LIST_VIEW, elements);
-
+		this._app.createView(ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW, elements);
 
 		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 		this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
