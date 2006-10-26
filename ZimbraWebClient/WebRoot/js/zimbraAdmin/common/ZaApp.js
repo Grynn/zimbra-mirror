@@ -348,7 +348,7 @@ ZaApp.prototype.searchDomains = function(query) {
 			types:[ZaSearch.DOMAINS],
 			sortBy:ZaDomain.A_domainName,
 			offset:"0",
-			sortAscending:"0",
+			sortAscending:"1",
 			limit:ZaDomain.MAXSEARCHRESULTS,
 			callback:callback
 	}

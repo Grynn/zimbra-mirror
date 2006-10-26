@@ -114,10 +114,10 @@ function (params) {
 		ZaSearch._currentQuery = "";
 	}
 
-	var sortBy = (params.sortBy != undefined)? params.sortBy: ZaItem.A_zimbraId;
+	var sortBy = (params.sortBy != undefined)? params.sortBy: ZaAccount.A_name;
 	var limit = (params.limit != undefined)? params.limit: ZaAccount.RESULTSPERPAGE;
 	var offset = (params.offset != undefined) ? params.offset : "0";
-	var sortAscending = (params.sortAscending != null)? params.sortAscending : "0";
+	var sortAscending = (params.sortAscending != null)? params.sortAscending : "1";
 	
 	soapDoc.getMethod().setAttribute("offset", offset);
 	soapDoc.getMethod().setAttribute("limit", limit);
@@ -239,12 +239,13 @@ ZaSearch.prototype.dynSelectSearchDomains = function (value, event, callback) {
 **/
 ZaSearch.search =
 function(query, types, pagenum, orderby, isascending, app, attrs, limit, domainName) {
-	if(!orderby) orderby = ZaAccount.A_uid;
-	var myisascending = "0";
+	//if(!orderby) orderby = ZaAccount.A_uid;
+	if(!orderby) orderby = ZaAccount.A_name;
+	var myisascending = "1";
 	
-	if(isascending) {
-		myisascending = "1";
-	} 
+	if(!isascending ) {
+		myisascending = "0";
+	}
 	
 	limit = (limit != null)? limit: ZaAccount.RESULTSPERPAGE;
 	

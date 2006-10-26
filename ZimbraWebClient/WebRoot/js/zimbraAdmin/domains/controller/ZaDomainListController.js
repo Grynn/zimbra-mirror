@@ -52,7 +52,7 @@ ZaDomainListController.prototype.show = function (doPush) {
 			types:[ZaSearch.DOMAINS],
 			sortBy:ZaDomain.A_domainName,
 			offset:this.RESULTSPERPAGE*(this._currentPageNum-1),
-			sortAscending:"0",
+			sortAscending:"1",
 			limit:this.RESULTSPERPAGE,
 			callback:callback
 	}

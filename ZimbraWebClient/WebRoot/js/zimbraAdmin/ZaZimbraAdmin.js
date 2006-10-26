@@ -479,8 +479,8 @@ ZaZimbraAdmin.prototype._showAccountsView = function (defaultType, ev){
 	var acctListController = this._app.getAccountListController();
 	acctListController.setPageNum(1);	
 	acctListController.setQuery("");
-	acctListController.setSortOrder("0");
-	acctListController.setSortField(ZaAccount.A_uid);
+	acctListController.setSortOrder("1");
+	acctListController.setSortField(ZaAccount.A_name);
 	var types = [];
 	if(typeof(defaultType) == 'object' && defaultType.length) {
 		for(var i = 0; i < defaultType.length; i++) {

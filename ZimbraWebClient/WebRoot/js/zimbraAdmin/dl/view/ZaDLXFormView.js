@@ -75,7 +75,7 @@ ZaDLXFormView.removeMembers = function(event) {
 ZaDLXFormView.srchButtonHndlr = 
 function(evt) {
 	var fieldObj = this.getForm().parent;
-	fieldObj.searchAccounts(null, false);
+	fieldObj.searchAccounts(null, true);
 }
 
 /**
@@ -86,7 +86,7 @@ function(evt) {
 	var fieldObj = this.getForm().parent;
 	var currentPageNum = this.getInstanceValue("/poolPagenum");
 	this.setInstanceValue(currentPageNum+1,"/poolPagenum");
-	fieldObj.searchAccounts(null, false);
+	fieldObj.searchAccounts(null, true);
 }
 
 /**
@@ -97,7 +97,7 @@ function(evt) {
 	var fieldObj = this.getForm().parent;
 	var currentPageNum = this.getInstanceValue("/poolPagenum")-1;
 	this.setInstanceValue(currentPageNum,"/poolPagenum");
-	fieldObj.searchAccounts(null, false);
+	fieldObj.searchAccounts(null, true);
 }
 
 /**

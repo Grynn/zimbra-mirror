@@ -145,7 +145,7 @@ ZaOverviewPanelController.prototype.searchDomains = function() {
 				types:[ZaSearch.DOMAINS],
 				sortBy:ZaDomain.A_domainName,
 				offset:"0",
-				sortAscending:"0",
+				sortAscending:"1",
 				limit:ZaDomain.MAXSEARCHRESULTS,
 				callback:callback
 		}
@@ -796,8 +796,8 @@ ZaOverviewPanelController.prototype._showAccountsView = function (defaultType, e
 	var acctListController = this._app.getAccountListController();
 	acctListController.setPageNum(1);	
 	acctListController.setQuery("");
-	acctListController.setSortOrder("0");
-	acctListController.setSortField(ZaAccount.A_uid);
+	acctListController.setSortOrder("1");
+	acctListController.setSortField(ZaAccount.A_name);
 	acctListController.setSearchTypes([ZaSearch.TYPES[defaultType]]);
 	acctListController.setDefaultType(defaultType);
 	if(defaultType == ZaItem.DL) {
