@@ -752,6 +752,17 @@
 	@InputField-disabled@
 }
 
+.DwtInputField-hint input,
+.DwtSimpleInput-hint {
+	@Text-light@
+}
+
+.DwtInputField-errorhint input,
+.DwtSimpleInput-errorhint {
+	@InputField-error@
+	@Text-light@
+}
+
 
 /*
  *  DwtWizardDialog - multi-step "wizard" dialog for creating new things

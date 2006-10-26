@@ -44,6 +44,7 @@
 * 												The hack uses a block display div, so for an input that needs
 * 												to be displayed inline, set this parameter to true.
 * @param required           [boolean]           True to mark as required.
+* @param hint				[string]			A hint to display in the input field when the value is empty.
 * 
 * TODO: override a bunch of DwtControl methods and apply them to input element
 */
@@ -52,6 +53,8 @@ function DwtInputField(params) {
 	if (arguments.length == 0) return;
 	this._origClassName = params.className ? params.className : "DwtInputField";
 	this._errorClassName = this._origClassName + "-Error";
+	this._hintClassName = this._origClassName + "-hint";
+	this._errorHintClassName = this._origClassName + "-errorhint";
 	DwtControl.call(this, params.parent, params.className, params.posStyle);
 
 	this._type = params.type ? params.type : DwtInputField.STRING;
@@ -59,6 +62,10 @@ function DwtInputField(params) {
 							params.validator ? DwtInputField.ERROR_ICON_RIGHT : DwtInputField.ERROR_ICON_NONE;
 	this._validationStyle = params.validationStyle ? params.validationStyle : DwtInputField.ONEXIT_VALIDATION;
 
+	this._hasError = false;
+	this._hintIsVisible = false;
+	this._hint = params.hint;
+	
 	var inputFieldId = Dwt.getNextId();
 	var errorIconId = Dwt.getNextId();
 	var htmlEl = this.getHtmlElement();
@@ -109,6 +116,7 @@ function DwtInputField(params) {
 
 	this._inputField.onkeyup = DwtInputField._keyUpHdlr;
 	this._inputField.onblur = DwtInputField._blurHdlr;
+	this._inputField.onfocus = DwtInputField._focusHdlr;
 
 	if (params.size)
 		this._inputField.size = params.size;
@@ -234,7 +242,7 @@ function() {
 */
 DwtInputField.prototype.getValue =
 function() {
-	return this._inputField.value;
+	return this._hintIsVisible ? '' : this._inputField.value;
 };
 
 /**
@@ -245,10 +253,35 @@ function() {
 DwtInputField.prototype.setValue =
 function(value, noValidate) {
 	this._inputField.value = value;
-	if (!noValidate) {
+	if (this._isHintVisible && value) {
+		this._hideHint();
+	} else if (!value) {
+		this._showHint();
+	}
+	if(!noValidate) {
 		value = this._validateInput(value);
 		if (value != null)
 			this._inputField.value = value;
+	}
+};
+
+/**
+ * Sets the hint for the input field.
+ *
+ * @param hint [string] the hint
+ */
+DwtInputField.prototype.setHint =
+function(hint) {
+	var oldHint = this._hint;
+	this._hint = hint;
+	if (this._isHintVisible) {
+		this.getInputElement().value = hint;
+		if (!hint) {
+			this._isHintVisible = false;
+			this._updateClassName();
+		}
+	} else {
+		this._showHint();
 	}
 };
 
@@ -263,9 +296,9 @@ DwtInputField.prototype.setValidNumberRange =
 function(min, max) {
 	this._minNumVal = min;
 	this._maxNumVal = max;
-	var value = this._validateInput(this._inputField.value);
+	var value = this._validateInput(this.getValue());
 	if (value != null)
-		this._inputField.value = value;
+		this.setValue(value);
 };
 
 DwtInputField.prototype.setValidStringLengths =
@@ -336,8 +369,8 @@ function() {
 	try {
 		if (typeof this._validator == "function") {
 			return this._validatorObj
-				? this._validator.call(this._validatorObj, this._inputField.value)
-				: this._validator(this._inputField.value);
+				? this._validator.call(this._validatorObj, this.getValue())
+				: this._validator(this.getValue());
 		} else {
 			return this._validator.test(this._inputField.value);
 		}
@@ -358,9 +391,9 @@ function() {
  */
 DwtInputField.prototype.validate =
 function() {
-	var value = this._validateInput(this._inputField.value);
+	var value = this._validateInput(this.getValue());
 	if (value != null) {
-		this._inputField.value = value;
+		this.setValue(value);
 		return true;
 	} else {
 		return false;
@@ -476,25 +509,74 @@ function(ev) {
 	var val = null;
 	if ((keyCode == 0x0D || keyCode == 0x09)
 	    && obj._validationStyle == DwtInputField.ONEXIT_VALIDATION)
-		val = obj._validateInput(keyEv.target.value);
+		val = obj._validateInput(obj.getValue());
 	else if (obj._validationStyle == DwtInputField.CONTINUAL_VALIDATION)
-		val = obj._validateInput(keyEv.target.value);
+		val = obj._validateInput(obj.getValue());
 
-	if (val != null && val != keyEv.target.value)
-		keyEv.target.value = val;
+	if (val != null && val != obj.getValue())
+		obj.setValue(val);
 
 	return true;
 };
 
 DwtInputField._blurHdlr =
 function(ev) {
-	this._hasFocus = false;
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
-	if (obj && obj._validationStyle == DwtInputField.ONEXIT_VALIDATION) {
-		var val = obj._validateInput(obj._inputField.value);
-		if (val != null)
-			obj._inputField.value = val;
+	if (obj) {
+		obj._hasFocus = false;
+		if (obj._validationStyle == DwtInputField.ONEXIT_VALIDATION) {
+			var val = obj._validateInput(obj.getValue());
+			if (val != null)
+				obj.setValue(val);
+		}
+		obj._showHint();
 	}
+};
+
+DwtInputField._focusHdlr =
+function(ev) {
+	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+	if (obj) {
+		obj._hideHint();
+	}
+};
+
+DwtInputField.prototype._hideHint = 
+function() {
+	if (this._hintIsVisible) {
+		this.getInputElement().value = '';
+		this._hintIsVisible = false;
+		this._updateClassName();
+	}
+};
+
+DwtInputField.prototype._showHint = 
+function() {
+	if (!this._hintIsVisible && this._hint) {
+		var element = this.getInputElement();
+		if (!element.value) {
+			element.value = this._hint;
+			this._hintIsVisible = true;
+			this._updateClassName();
+		}
+	}
+};
+
+DwtInputField.prototype._updateClassName = 
+function() {
+	var className;
+	if (this._hasError) {
+		if (this._hintIsVisible && !this._hasFocus) {
+			className = this._errorHintClassName;
+		} else {
+			className = this._errorClassName;
+		}
+	} else if (this._hintIsVisible && !this._hasFocus) {
+		className = this._hintClassName;
+	} else {
+		className = this._origClassName;
+	}
+	this.getHtmlElement().className = className;
 };
 
 DwtInputField.prototype._validateInput =
@@ -519,19 +601,20 @@ function(value) {
 	}
 
 	if (errorStr) {
-		this.getHtmlElement().className = this._errorClassName;
+		this._hasError = true;
 		if (this._errorIconTd)
 			this._errorIconTd.innerHTML = DwtInputField._ERROR_ICON_HTML;
 		this.setToolTipContent(errorStr);
 		isValid = false;
 		retVal = null;
 	} else {
-		this.getHtmlElement().className = this._origClassName;
+		this._hasError = false;
 		if (this._errorIconTd)
 			this._errorIconTd.innerHTML = DwtInputField._NOERROR_ICON_HTML;
 		this.setToolTipContent(null);
 		isValid = true;
 	}
+	this._updateClassName();
 
 	if (this._validationCallback)
 		this._validationCallback.run(this, isValid, value);
