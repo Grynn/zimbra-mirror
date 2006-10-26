@@ -37,12 +37,6 @@ public class OfflineMailboxManager extends MailboxManager {
     public OfflineMailboxManager() throws ServiceException  {
         super();
 
-        // make sure all mailboxes have been provisioned
-        if (Provisioning.getInstance() instanceof OfflineProvisioning) {
-            for (Account acct : ((OfflineProvisioning) Provisioning.getInstance()).getAllAccounts())
-                getMailboxByAccount(acct);
-        }
-
         // wait 5 seconds, then start to sync
         if (sSyncTask == null) {
             sSyncTask = new SyncTask();

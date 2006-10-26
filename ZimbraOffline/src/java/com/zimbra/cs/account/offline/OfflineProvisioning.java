@@ -24,6 +24,7 @@ import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.*;
 import com.zimbra.cs.account.NamedEntry.Visitor;
 import com.zimbra.cs.db.DbOfflineDirectory;
+import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.mailbox.calendar.ICalTimeZone;
 import com.zimbra.cs.mime.MimeTypeInfo;
@@ -477,6 +478,14 @@ public class OfflineProvisioning extends Provisioning {
         DbOfflineDirectory.createDirectoryEntry(EntryType.ACCOUNT, emailAddress, attrs);
         Account acct = new Account(emailAddress, zgi.getId(), attrs, sDefaultCos.getAccountDefaults());
         sAccountCache.put(acct);
+
+        try {
+            // fault in the mailbox so it's picked up by the sync loop
+            MailboxManager.getInstance().getMailboxByAccount(acct);
+        } catch (ServiceException e) {
+            OfflineLog.offline.warn("could not create mailbox for account " + emailAddress, e);
+        }
+
         return acct;
     }
 
