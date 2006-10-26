@@ -136,6 +136,11 @@ function (evt) {
 	sb_controller.toggleVisible ();
 	app._appViewMgr.showSearchBuilder (sb_controller.isSBVisible());
 	
+	if (sb_controller.isSBVisible()) {
+		this.widget.setToolTipContent(ZaMsg.tt_advanced_search_close);
+	}else{
+		this.widget.setToolTipContent (ZaMsg.tt_advanced_search_open) ;
+	}
 	//clear the search field
 	sb_controller.setQuery ();
 }
@@ -261,7 +266,7 @@ ZaSearchField.prototype._getMyXForm = function() {
 			{type:_DWT_BUTTON_, label:ZaMsg.search, toolTipContent:ZaMsg.searchForAll, icon:ZaMsg.search, name: "searchButton",
 					onActivate:ZaSearchField.srchButtonHndlr, cssClass:"DwtToolbarButton"},
 			{type: _OUTPUT_, value: ZaToolBar.getSeparatorHtml() },
-			{type:_DWT_BUTTON_, label:ZaMsg.advanced_search, tootTipContent: ZaMsg.tt_advanced_search_open, name: "searchBuildButton",
+			{type:_DWT_BUTTON_, label:ZaMsg.advanced_search, toolTipContent: ZaMsg.tt_advanced_search_open, name: "searchBuildButton",
 					onActivate:ZaSearchField.advancedButtonHndlr, cssClass: "DwtToolbarButton" }
 			/*{type:_OUTPUT_, value:ZaMsg.Filter+":", label:null},
 			{type:_CHECKBOX_, ref:ZaSearch.A_fAccounts,label:ZaMsg.Filter_Accounts, labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"},					

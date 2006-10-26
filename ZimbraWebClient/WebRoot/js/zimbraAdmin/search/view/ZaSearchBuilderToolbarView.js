@@ -42,7 +42,7 @@ function ZaSearchBuilderToolbarView (parent, app){
 	this._ops.push(new ZaOperation(ZaOperation.SEP));
 	this._ops.push(new ZaOperation(ZaOperation.SEARCH_BY_REMOVE_ALL, ZaMsg.searchByRemoveAll, ZaMsg.tt_searchByRemoveAll, null, null, new AjxListener(this, this.removeSelectHndlr)));
 	this._ops.push(new ZaOperation(ZaOperation.NONE));
-	this._ops.push(new ZaOperation (ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.ALTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeHndlr)));   
+	this._ops.push(new ZaOperation (ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.tt_advanced_search_close, "Close", "CloseDis", new AjxListener(this, this.closeHndlr)));   
 	ZaToolBar.call(this, parent, this._ops);
 	
 	this._table.width = "100%";
@@ -105,11 +105,14 @@ function (event) {
 //clear all the options and close the search builder view
 ZaSearchBuilderToolbarView.prototype.closeHndlr =
 function (event) {
-	DBG.println (AjxDebug.DBG1, "Close ... ");
+	DBG.println (AjxDebug.DBG3, "Close ... ");
 	
 	this._controller.toggleVisible ();
 	this._app._appViewMgr.showSearchBuilder (this._controller.isSBVisible());
 	
 	//clear the search field
 	this._controller.setQuery ();
+	
+	//reset the advanced search button tooltip
+	this._app.getSearchListController()._searchField.setTooltipForSearchBuildButton (ZaMsg.tt_advanced_search_open);
 }
