@@ -52,18 +52,24 @@ XFormChoices.normalizeChoices = function (choices, type, valueProperty, labelPro
 			values = []; labels = [];
 			if (valueProperty == null) valueProperty = "value";
 			if (labelProperty == null) labelProperty = "label";
-			for (var i = 0; i < choices.length; i++) {
-				values.push(choices[i][valueProperty]);
-				labels.push(choices[i][labelProperty]);
+			var cnt = choices.length;
+			for (var i = 0; i < cnt; i++) {
+				if(choices[i]) {				
+					values.push(choices[i][valueProperty]);
+					labels.push(choices[i][labelProperty]);
+				}
 			}
 		
 			break;
 		case XFormChoices.OBJECT_REFERENCE_LIST:
 			values = []; labels = [];
 			if (labelProperty == null) labelProperty = "label";
-			for (var i = 0; i < choices.length; i++) {
-				values.push(choices[i]);
-				labels.push(choices[i][labelProperty]);
+			var cnt = choices.length;
+			for (var i = 0; i < cnt; i++) {
+				if(choices[i]) {
+					values.push(choices[i]);
+					labels.push(choices[i][labelProperty]);
+				}
 			}		
 			break;	
 
