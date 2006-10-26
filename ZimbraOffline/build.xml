@@ -3,6 +3,7 @@
 	<!-- Properties -->
 	
 	<property name="jar.file" value="zimbraoffline.jar" />
+	<property name="config.dir" value="conf" />
 	<property name="src.dir" location="src" />
 	<property name="src.java.dir" location="${src.dir}/java" />
 	<property name="build.dir" location="build" />
@@ -10,12 +11,15 @@
 	<property name="server.classes.dir" location="../ZimbraServer/build/classes" />
 	<property name="license.classes.dir" location="../ZimbraLicenseTools/build/classes" />
 	<property name="zimbra.home.dir" location="/opt/zimbra" />
-	<property name="offline.deploy.dir" location="${zimbra.home.dir}/lib/ext/offline" />
-	<property name="offline.jar.name" value="zimbraoffline.jar" />
 	<property name="common.dir" location="../ZimbraCommon" />
 	<property name="common.classes.dir" location="${common.dir}/build/classes" />
 	<property name="common.jars.dir" location="${common.dir}/jars" />
 
+	<property name="server.war.file" location="../ZimbraServer/build/service.war"/>
+	<property name="war.file" location="${build.dir}/service.war"/>
+
+	<taskdef name="deploy" classname="org.apache.catalina.ant.DeployTask" classpathref="class.path" />
+	
 	<condition property="is-windows">
 		<os family="windows" />
 	</condition>
@@ -50,33 +54,35 @@
 			<src refid="all.java.path" />
 		</javac>
 	</target>
+	
 	<target name="jar" depends="compile" description="Creates the jar file">
-		<jar manifest="conf/MANIFEST.MF" destfile="${build.dir}/${jar.file}" basedir="${build.classes.dir}" />
+		<jar destfile="${build.dir}/${jar.file}" basedir="${build.classes.dir}" />
 	</target>
 
 	<target name="clean" description="Removes build files and undeploys extension">
-		<antcall target="stop-tomcat"/>
 		<delete dir="${build.dir}" />
-		<delete dir="${offline.deploy.dir}" />
-		<antcall target="start-tomcat"/>
-	</target>
-	
-	<target name="deploy" depends="jar" description="Deploys the extension">
-		<copy todir="${offline.deploy.dir}">
-			<fileset dir="${build.dir}" includes="${offline.jar.name}" />
-		</copy>
 	</target>
 
-	<target name="post-reset-the-world"
-			depends="deploy"
-			description="Run this after reset-the-world to get offline running on dev setup."/>
+	<target name="war" depends="jar">
+		<ant dir="../ZimbraServer" target="war" inheritAll="false"/>
+		<copy file="${server.war.file}" todir="${build.dir}"/>
+		<copy file="${src.dir}/db/create_database.sql" todir="/opt/zimbra/db"/>
+		<war file="${war.file}" update="true" webxml="${config.dir}/web.xml">
+			<lib file="${build.dir}/${jar.file}"/>
+		</war>
+	</target>
 
-	<!-- Utility stuff below -->
-	
-	<target name="start-tomcat">
-		<ant dir="../ZimbraServer" target="start-tomcat" inheritAll="false"/>
+	<property name="deploy.war" value="${warfile}" />
+	<property name="deploy.host" value="localhost" />
+	<property name="deploy.port" value="7070" />
+
+	<target name="deploy" depends="war">
+		<deploy url="http://${deploy.host}:${deploy.port}/manager/" username="zimbra" password="zimbra" path="/service" war="${war.file}" update="true" />
 	</target>
-	<target name="stop-tomcat">
-		<ant dir="../ZimbraServer" target="stop-tomcat" inheritAll="false"/>
+
+	<target name="db-init">
+		<sql driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:7306/" userid="root" password="zimbra"
+			 classpathref="class.path" onerror="continue" keepformat="true" src="src/db/db.sql" />
 	</target>
+
 </project>
