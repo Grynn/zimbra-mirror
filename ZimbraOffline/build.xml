@@ -1,0 +1,82 @@
+<project name="ZimbraOffline" default="jar">
+	
+	<!-- Properties -->
+	
+	<property name="jar.file" value="zimbraoffline.jar" />
+	<property name="src.dir" location="src" />
+	<property name="src.java.dir" location="${src.dir}/java" />
+	<property name="build.dir" location="build" />
+	<property name="build.classes.dir" location="${build.dir}/classes" />
+	<property name="server.classes.dir" location="../ZimbraServer/build/classes" />
+	<property name="license.classes.dir" location="../ZimbraLicenseTools/build/classes" />
+	<property name="zimbra.home.dir" location="/opt/zimbra" />
+	<property name="offline.deploy.dir" location="${zimbra.home.dir}/lib/ext/offline" />
+	<property name="offline.jar.name" value="zimbraoffline.jar" />
+	<property name="common.dir" location="../ZimbraCommon" />
+	<property name="common.classes.dir" location="${common.dir}/build/classes" />
+	<property name="common.jars.dir" location="${common.dir}/jars" />
+
+	<condition property="is-windows">
+		<os family="windows" />
+	</condition>
+	<condition property="is-unix">
+		<not>
+			<os family="windows" />
+		</not>
+	</condition>
+
+	<path id="all.java.path">
+		<pathelement location="${src.java.dir}" />
+	</path>
+
+	<path id="class.path">
+		<pathelement location="${common.classes.dir}" />
+		<pathelement location="${build.classes.dir}" />
+		<pathelement location="${server.classes.dir}" />
+		<pathelement location="${license.classes.dir}" />
+		<fileset dir="${common.jars.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<!-- Targets -->
+	<target name="build-init">
+		<mkdir dir="${build.classes.dir}" />
+	</target>
+
+	<target name="compile" depends="build-init" description="Compiles the source code">
+		<ant dir="${common.dir}" target="jar" inheritAll="false" />
+		<javac destdir="${build.classes.dir}" debug="true" classpathref="class.path">
+			<src refid="all.java.path" />
+		</javac>
+	</target>
+	<target name="jar" depends="compile" description="Creates the jar file">
+		<jar manifest="conf/MANIFEST.MF" destfile="${build.dir}/${jar.file}" basedir="${build.classes.dir}" />
+	</target>
+
+	<target name="clean" description="Removes build files and undeploys extension">
+		<antcall target="stop-tomcat"/>
+		<delete dir="${build.dir}" />
+		<delete dir="${offline.deploy.dir}" />
+		<antcall target="start-tomcat"/>
+	</target>
+	
+	<target name="deploy" depends="jar" description="Deploys the extension">
+		<copy todir="${offline.deploy.dir}">
+			<fileset dir="${build.dir}" includes="${offline.jar.name}" />
+		</copy>
+	</target>
+
+	<target name="post-reset-the-world"
+			depends="deploy"
+			description="Run this after reset-the-world to get offline running on dev setup."/>
+
+	<!-- Utility stuff below -->
+	
+	<target name="start-tomcat">
+		<ant dir="../ZimbraServer" target="start-tomcat" inheritAll="false"/>
+	</target>
+	<target name="stop-tomcat">
+		<ant dir="../ZimbraServer" target="stop-tomcat" inheritAll="false"/>
+	</target>
+</project>
