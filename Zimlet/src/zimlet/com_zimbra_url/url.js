@@ -74,6 +74,10 @@ function(html, idx, obj, context) {
 
 Com_Zimbra_Url.prototype.toolTipPoppedUp =
 function(spanElement, obj, context, canvas) {
+	var url = obj;
+	if (/^\s*true\s*$/i.test(this.getConfig("stripUrls"))) {
+		url = url.replace(/[?#].*$/, "");
+	}
 	var html = [];
 	var i = 0;
 
@@ -84,7 +88,7 @@ function(spanElement, obj, context, canvas) {
 	html[i++] = " style='background: url(";
 	html[i++] = '"';
 	html[i++] = Com_Zimbra_Url.THUMB_URL;
-	html[i++] = obj;
+	html[i++] = url;
 	html[i++] = '"';
 	html[i++] = ")'/>";
 
