@@ -338,6 +338,9 @@ Com_Zimbra_SForce.prototype.contactDropped = function(contact) {
 	}
 };
 
+Com_Zimbra_SForce.prototype.onContactChanged = function(contact, mods) {
+};
+
 Com_Zimbra_SForce.prototype.dlg_createAccount = function(acct_data, contact_data) {
 	var view = new DwtComposite(this.getShell());
 
@@ -415,6 +418,11 @@ Com_Zimbra_SForce.prototype.dlg_createAccount = function(acct_data, contact_data
 		  value    : contact_data.get("lastName"),
 		  required : true },
 
+		{ label    : "Title",
+		  name     : "Title",
+		  type     : "string",
+		  value    : contact_data.get("jobTitle") },
+
 		{ label    : "Email",
 		  name     : "Email",
 		  type     : "string",
@@ -453,7 +461,7 @@ Com_Zimbra_SForce.prototype.dlg_createAccount = function(acct_data, contact_data
 			function $create_contact() {
 				this.createSFObject(contact, "Contact", function(id) {
 					var name = contact.LastName || contact.FirstName || contact.Email || id;
-					this.displayStatusMessage("New contact created: " + name);
+					this.displayStatusMessage("SForce contact saved: " + name);
 				});
 			};
 			////
@@ -466,7 +474,7 @@ Com_Zimbra_SForce.prototype.dlg_createAccount = function(acct_data, contact_data
 				delete acct.Id;
 				this.createSFObject(acct, "Account", function(id) {
 					var name = acct.Name || contact.Website || id;
-					this.displayStatusMessage("New account created: " + name);
+					this.displayStatusMessage("SForce account created: " + name);
 					contact.AccountId = id;
 					$create_contact.call(this);
 				});
@@ -784,6 +792,12 @@ Com_Zimbra_SForce.prototype.doDrop = function(obj) {
 /// Called by the Zimbra framework when the SForce panel item was clicked
 Com_Zimbra_SForce.prototype.singleClicked = function() {
 	this.login();
+};
+
+Com_Zimbra_SForce.prototype.onContactModified = function(contact, mods) {
+	for (var i in mods)
+		contact[i] = mods[i];
+	this.doDrop(contact);	// delegate
 };
 
 /// Called by the Zimbra framework when some menu item that doesn't have an
