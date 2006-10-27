@@ -29,6 +29,7 @@
 function ZaAccMiniListView(parent, className, posStyle, headerList) {
 	//var headerList = this._getHeaderList();
 	ZaListView.call(this, parent, className, posStyle, headerList);
+	this.hideHeader = true;
 }
 
 ZaAccMiniListView.prototype = new ZaListView;
@@ -37,6 +38,13 @@ ZaAccMiniListView.prototype.constructor = ZaAccMiniListView;
 ZaAccMiniListView.prototype.toString = function() {
 	return "ZaAccMiniListView";
 };
+
+ZaAccMiniListView.prototype.createHeaderHtml = function (defaultColumnSort) {
+	if(!this.hideHeader) {
+		DwtListView.prototype.createHeaderHtml.call(this,defaultColumnSort);
+	} 
+}
+
 
 ZaAccMiniListView.prototype._createItemHtml =
 function(account, now, isDndIcon) {

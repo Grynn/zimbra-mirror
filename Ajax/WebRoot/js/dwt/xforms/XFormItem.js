@@ -3824,8 +3824,17 @@ Dwt_List_XFormItem.prototype.getOnSelectionMethod = function() {
 Dwt_List_XFormItem.prototype.constructWidget = function () {
 	var headerList = this.getInheritedProperty("headerList");
 	var listClass = this.getInheritedProperty("widgetClass");
+	
+	var hideHeader = this.getInheritedProperty("hideHeader");
 
-	var widget = new listClass(this.getForm(), this.getCssClass(), null, headerList);
+	var widget = new listClass(this.getForm(), this.getCssClass(), null, ((hideHeader!=undefined && hideHeader==true ) ? null : headerList));
+	if(hideHeader != undefined) {
+		widget.shideHeader=hideHeader;
+		if(hideHeader && headerList) {
+			widget._headerList = headerList;
+		}
+	}	
+
 	var multiselect = this.getInheritedProperty("multiselect");
 	if(multiselect != undefined) {
 		widget.setMultiSelect(multiselect);
@@ -3849,7 +3858,8 @@ Dwt_List_XFormItem.prototype.constructWidget = function () {
 	if(createPopupMenumethod != null) {
 		createPopupMenumethod.call(this, widget);
 	}
-	
+
+
 	return widget;
 };
 
