@@ -317,7 +317,7 @@ function(date, pad) {
 AjxDateUtil._getDate = 
 function(date, pad) {
 	var myVal = date.getDate();
-	return pad == true ? AjxDateUtil._pad(myVal) : myVal;
+	return pad ? AjxDateUtil._pad(myVal) : myVal;
 };
 
 AjxDateUtil._getWeekday =
