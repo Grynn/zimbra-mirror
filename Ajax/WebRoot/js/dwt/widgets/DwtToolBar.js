@@ -101,7 +101,7 @@ DwtToolBar.prototype._createFillerElement = DwtToolBar.prototype._createSpacerEl
 DwtToolBar.prototype.addFiller =
 function(className, index) {
 	var el = this._createFillerElement();
-	el.className = className ? className : this._defaultFillClass;
+	if (className) el.className = className;
 	this._addItem(DwtToolBar.FILLER, el, index);
 	return el;
 };
@@ -118,11 +118,11 @@ function(type, element, index) {
 
 	var row, col;
 	if (this._style == DwtToolBar.HORIZ_STYLE) {
-		row = (this._table.rows.length != 0) ? this._table.rows[0]: this._table.insertRow(0);
+		row = (this._table.rows.length != 0) ? this._table.rows[0] : this._table.insertRow(0);
 		row.align = "center";
 		row.vAlign = "middle";
 		
-		var cellIndex = index ? index : row.cells.length;
+		var cellIndex = index || row.cells.length;
 		col = row.insertCell(cellIndex);
 		col.align = "center";
 		col.vAlign = "middle";
