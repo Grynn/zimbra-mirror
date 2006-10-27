@@ -206,6 +206,25 @@ function(option, selected, value) {
     return (this._options.size() - 1);
 };
 
+/**
+ * Renames an option.
+ * 
+ * @param value	{object} value the value of the option to rename
+ * @param name	{string} name the new name
+ */
+DwtSelect.prototype.rename =
+function(value, name) {
+	var option = this.getOptionWithValue(value);
+	option._displayValue = name;
+
+	if (this.__selectedOption && (this.__selectedOption._value == value))	{
+		this.setText(name);
+	}
+	
+	// Register listener to create new menu.	
+	this._button.setMenu(this._menuListenerObject, false);
+};
+
 DwtSelect.prototype.clearOptions = 
 function() {
 	var opts = this._options.getArray();
