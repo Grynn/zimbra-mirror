@@ -149,6 +149,8 @@
 	<target name="offline-add-sync-targets" depends="offline-build-init">
 		<!-- insert only account-creation commands here, of the form "ca foo@zimbra.com my-p455w0rd offlineRemoteServerUri 'https://dogfood.zimbra.com'" -->
 		<echo file="${build.zmprov}">
+			ca offline@zimbra.com test123 \
+				offlineRemoteServerUri 'https://dogfood.zimbra.com'
 		</echo>
 
 		<java classname="com.zimbra.cs.account.ProvUtil" fork="true" classpathref="offline.class.path" failonerror="true">
