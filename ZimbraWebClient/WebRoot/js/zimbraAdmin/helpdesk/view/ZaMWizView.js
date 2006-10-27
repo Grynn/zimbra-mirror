@@ -67,7 +67,7 @@ ZaMigrationWizView.myXFormModifier = function(xFormObject) {
 			{type:_OUTPUT_, label:null, value:ZaMsg.DOWNLOAD_PAGE_1, colSpan:"*", cssStyle:"font-size:12px;"},
 
 			{type:_SPACER_, colSpan:"*"},
-			{type:_GROUP_, numCols:2, zName:"DownloadsMainGroup",
+			{type:_GROUP_, numCols:3, zName:"DownloadsMainGroup",
 				items: [
 					{type:_GROUP_,numCols:4,
 						items: [
@@ -81,6 +81,15 @@ ZaMigrationWizView.myXFormModifier = function(xFormObject) {
 						items: [
 							{type:_OUTPUT_,  value:AjxImg.getImageHtml("MigrationWiz")},
 							{type:_OUTPUT_, cssStyle:"font-size:12px;", labelLocation:_NONE_, label:null, value:ZaMsg.MIG_WIZ_DOWNLOAD_LINK},
+							{type:_CELLSPACER_},
+							{type:_CELLSPACER_}							
+							
+						]
+					},
+					{type:_GROUP_,numCols:4,
+						items: [
+							{type:_OUTPUT_,  value:AjxImg.getImageHtml("MigrationWiz")},
+							{type:_OUTPUT_, cssStyle:"font-size:12px;", labelLocation:_NONE_, label:null, value:ZaMsg.DOMINO_MIG_WIZ_DOWNLOAD_LINK},
 							{type:_CELLSPACER_},
 							{type:_CELLSPACER_}							
 							
