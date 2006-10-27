@@ -392,7 +392,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 						{type:_GROUP_,useParentTable:true, colSpan:"*", relevant:"instance.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad",
 							items:[
 								{ref:ZaDomain.A_AuthLdapUserDn, type:_OUTPUT_, label:ZaMsg.Domain_AuthLdapUserDn, labelLocation:_LEFT_},
-								{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL+":", labelLocation:_LEFT_,showAddButton:false, showRemoveButton:false,
+								{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL, labelLocation:_LEFT_,showAddButton:false, showRemoveButton:false,
 									items:[
 										{type:_OUTPUT_, ref:".", label:null,labelLocation:_NONE_}
 									]
@@ -402,7 +402,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 						{type:_GROUP_,useParentTable:true, colSpan:"*", relevant:"instance.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ldap",
 							items:[
 								{ref:ZaDomain.A_AuthLdapUserDn, type:_OUTPUT_, label:ZaMsg.Domain_AuthLdapUserDn, labelLocation:_LEFT_},
-								{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL+":", labelLocation:_LEFT_,showAddButton:false, showRemoveButton:false,
+								{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL, labelLocation:_LEFT_,showAddButton:false, showRemoveButton:false,
 									items:[
 										{type:_OUTPUT_, ref:".", label:null,labelLocation:_NONE_}
 									]
