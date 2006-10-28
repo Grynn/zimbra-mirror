@@ -8,11 +8,12 @@
 # See 'perldoc Mail::SpamAssassin::Conf' for details.
 #
 # <@LICENSE>
-# Copyright 2004 Apache Software Foundation
-# 
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to you under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at:
 # 
 #     http://www.apache.org/licenses/LICENSE-2.0
 # 
@@ -68,9 +69,6 @@ header __IMS_MSGID		MESSAGEID =~ /^<[A-F\d]{36,40}\@\S+>$/m
 meta FORGED_MUA_IMS		(__IMS_MUA && !__IMS_MSGID && !__UNUSABLE_MSGID)
 describe FORGED_MUA_IMS		Forged mail pretending to be from IMS
 
-# Outlook mailers often use this Message-ID
-header __OUTLOOK_DOLLARS_MSGID	MESSAGEID =~ /^<[0-9a-f]{12}\$[0-9a-f]{8}\$[0-9a-f]{8}\@\S+>$/m
-
 # Outlook Express 4, 5, and 6
 header __OE_MUA			X-Mailer =~ /\bOutlook Express [456]\./
 header __OE_MSGID_1		MESSAGEID =~ /^<[A-Za-z0-9-]{7}[A-Za-z0-9]{20}\@hotmail\.com>$/m
@@ -81,7 +79,7 @@ meta __FORGED_OE		(__OE_MUA && !__OE_MSGID_1 && !__OE_MSGID_2 && !__OE_MSGID_3 &
 # Outlook versions that usually use "dollar signs"
 header __OUTLOOK_DOLLARS_MUA	X-Mailer =~ /^Microsoft Outlook(?: 8| CWS, Build 9|, Build 10)\./
 header __OUTLOOK_DOLLARS_OTHER	MESSAGEID =~ /^<\!\~\!/m
-meta __FORGED_OUTLOOK_DOLLARS	(__OUTLOOK_DOLLARS_MUA && !__OUTLOOK_DOLLARS_MSGID && !__OUTLOOK_DOLLARS_OTHER && !__IMS_MSGID && !__UNUSABLE_MSGID)
+meta __FORGED_OUTLOOK_DOLLARS	(__OUTLOOK_DOLLARS_MUA && !__OE_MSGID_2 && !__OUTLOOK_DOLLARS_OTHER && !__IMS_MSGID && !__UNUSABLE_MSGID)
 
 # use new meta rules to implement FORGED_MUA_OUTLOOK rule from 2.60
 meta FORGED_MUA_OUTLOOK		(__FORGED_OE || __FORGED_OUTLOOK_DOLLARS)
@@ -89,8 +87,8 @@ describe FORGED_MUA_OUTLOOK	Forged mail pretending to be from MS Outlook
 
 # Outlook IMO (Internet Mail Only)
 header __OIMO_MUA		X-Mailer =~ /Outlook IMO/
-header __OIMO_MSGID		MESSAGEID =~ /^<[A-P]{26}A[AB]\.[-_\w.]+\@\S+>$/m
-meta FORGED_MUA_OIMO		(__OIMO_MUA && !__OIMO_MSGID && !__OUTLOOK_DOLLARS_MSGID && !__UNUSABLE_MSGID)
+header __OIMO_MSGID		MESSAGEID =~ /^<[A-P]{26}A[ABC]\.[-\w.]+\@\S+>$/m
+meta FORGED_MUA_OIMO		(__OIMO_MUA && !__OIMO_MSGID && !__OE_MSGID_2 && !__UNUSABLE_MSGID)
 describe FORGED_MUA_OIMO	Forged mail pretending to be from MS Outlook IMO
 
 # QUALCOMM Eudora
@@ -127,7 +125,10 @@ meta FORGED_MUA_THEBAT_BOUN     (__THEBAT_MUA_V1 && __CTYPE_HAS_BOUNDARY && !__B
 describe FORGED_MUA_THEBAT_CS	Mail pretending to be from The Bat! (charset)
 describe FORGED_MUA_THEBAT_BOUN Mail pretending to be from The Bat! (boundary)
 
-meta FORGED_OUTLOOK_HTML	(__ANY_OUTLOOK_MUA && MIME_HTML_ONLY)
+# bug 4649: bulk mail sent via Yahoo! often looks forged, even when it is not
+header __YAHOO_BULK		Received =~ /from \[\S+\] by \S+\.(?:groups|scd|dcn)\.yahoo\.com with NNFMP/
+
+meta FORGED_OUTLOOK_HTML	(!__YAHOO_BULK && __ANY_OUTLOOK_MUA && MIME_HTML_ONLY)
 describe FORGED_OUTLOOK_HTML	Outlook can't send HTML message only
 
 # bug 2525: FORGED_IMS_HTML fp'ing because new IMS *DOES* use text/html
@@ -135,7 +136,7 @@ describe FORGED_OUTLOOK_HTML	Outlook can't send HTML message only
 # after that to get away with it.
 header __IMS_HTML_BUILDS	X-Mailer =~ /^Internet Mail Service .(?:[6789]\.|5\.[6789]|5\.5\.(?:[3456789]|2[789]|26[6789]|265[6789]))/
 header __IMS_HTML_RCVD		Received =~ /\bby \S+ with Internet Mail Service .(?:[6789]\.|5\.[6789]|5\.5\.(?:[3456789]|2[789]|26[6789]|265[6789]))/
-meta FORGED_IMS_HTML		(__IMS_MUA && MIME_HTML_ONLY && !(__IMS_HTML_BUILDS && __IMS_HTML_RCVD))
+meta FORGED_IMS_HTML		(!__YAHOO_BULK && __IMS_MUA && MIME_HTML_ONLY && !(__IMS_HTML_BUILDS && __IMS_HTML_RCVD))
 describe FORGED_IMS_HTML	IMS can't send HTML message only
 
 meta FORGED_THEBAT_HTML		(__THEBAT_MUA_V1 && MIME_HTML_ONLY)
@@ -197,10 +198,10 @@ describe FORGED_QUALCOMM_TAGS	QUALCOMM mailers can't send HTML in this format
 meta FORGED_AOL_TAGS		(__ANY_AOL_MUA && __MIME_HTML && !__TAG_EXISTS_HTML)
 describe FORGED_AOL_TAGS	AOL mailers can't send HTML in this format
 
-meta FORGED_IMS_TAGS		(__ANY_IMS_MUA && __MIME_HTML && !(__TAG_EXISTS_HTML && __TAG_EXISTS_HEAD && __TAG_EXISTS_META && __TAG_EXISTS_BODY))
+meta FORGED_IMS_TAGS		(!__YAHOO_BULK && __ANY_IMS_MUA && __MIME_HTML && !(__TAG_EXISTS_HTML && __TAG_EXISTS_HEAD && __TAG_EXISTS_META && __TAG_EXISTS_BODY))
 describe FORGED_IMS_TAGS	IMS mailers can't send HTML in this format
 
-meta FORGED_OUTLOOK_TAGS	(__ANY_OUTLOOK_MUA && __MIME_HTML && !(__TAG_EXISTS_HTML && __TAG_EXISTS_HEAD && __TAG_EXISTS_META && __TAG_EXISTS_BODY))
+meta FORGED_OUTLOOK_TAGS	(!__YAHOO_BULK && __ANY_OUTLOOK_MUA && __MIME_HTML && !(__TAG_EXISTS_HTML && __TAG_EXISTS_HEAD && __TAG_EXISTS_META && __TAG_EXISTS_BODY))
 describe FORGED_OUTLOOK_TAGS	Outlook can't send HTML in this format
 
 # Send-Safe ratware (idea from Alan Curry)

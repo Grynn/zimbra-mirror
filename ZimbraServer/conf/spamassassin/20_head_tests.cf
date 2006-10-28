@@ -5,11 +5,12 @@
 # See 'perldoc Mail::SpamAssassin::Conf' for details.
 #
 # <@LICENSE>
-# Copyright 2004 Apache Software Foundation
-# 
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to you under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at:
 # 
 #     http://www.apache.org/licenses/LICENSE-2.0
 # 
@@ -136,7 +137,7 @@ describe MSGID_OUTLOOK_INVALID	Message-Id is fake (in Outlook Express format)
 
 # catches a few spams missed by MSGID_OUTLOOK_INVALID
 header __HAS_OUTLOOK_IN_MAILER	X-Mailer =~ /\bMSCRM\b|Microsoft (?:CDO|Outlook|Office Outlook)\b/
-meta MSGID_DOLLARS		(__OUTLOOK_DOLLARS_MSGID && !__HAS_OUTLOOK_IN_MAILER && !__UNUSABLE_MSGID)
+meta MSGID_DOLLARS		(__OE_MSGID_2 && !__HAS_OUTLOOK_IN_MAILER && !__UNUSABLE_MSGID)
 describe MSGID_DOLLARS		Message-Id has pattern used in spam
 
 # negative lookahead exempts this MUA from circa 1997-2000 

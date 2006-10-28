@@ -4,11 +4,12 @@
 # See 'perldoc Mail::SpamAssassin::Conf' for details.
 #
 # <@LICENSE>
-# Copyright 2004 Apache Software Foundation
-# 
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to you under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at:
 # 
 #     http://www.apache.org/licenses/LICENSE-2.0
 # 
@@ -362,7 +363,6 @@ lang de describe HTML_BACKHAIR_4 HTML-Markierungen sollen Wˆrter tarnen
 lang de describe HTML_BACKHAIR_8 HTML-Markierungen sollen Wˆrter tarnen
 lang de describe HTML_ATTR_BAD HTML-Markierungen mit vielen ung¸ltigen Attributen
 lang de describe HTML_ATTR_UNIQUE HTML-Markierungen mit zuf‰lligen Attributen
-lang de describe HTML_WEB_BUGS Bildhyperlink mit Identifizierungsnummer
 lang de describe HTML_TAG_BALANCE_BODY Anzahl "body"-Tags nicht ausgeglichen
 lang de describe HTML_TAG_BALANCE_HEAD Anzahl "head"-Tags nicht ausgeglichen
 lang de describe HTML_TAG_EXIST_MARQUEE HTML-Element "marquee" gefunden
@@ -583,27 +583,6 @@ lang de describe BAYES_60 Spamwahrscheinlichkeit nach Bayes-Test: 60-80%
 lang de describe BAYES_80 Spamwahrscheinlichkeit nach Bayes-Test: 80-95%
 lang de describe BAYES_95 Spamwahrscheinlichkeit nach Bayes-Test: 95-99%
 lang de describe BAYES_99 Spamwahrscheinlichkeit nach Bayes-Test: 99-100%
-lang de describe HASHCASH_20 Enth‰lt korrekte Hashcash-Kennzeichnung (20 bits)
-lang de describe HASHCASH_21 Enth‰lt korrekte Hashcash-Kennzeichnung (21 bits)
-lang de describe HASHCASH_22 Enth‰lt korrekte Hashcash-Kennzeichnung (22 bits)
-lang de describe HASHCASH_23 Enth‰lt korrekte Hashcash-Kennzeichnung (23 bits)
-lang de describe HASHCASH_24 Enth‰lt korrekte Hashcash-Kennzeichnung (24 bits)
-lang de describe HASHCASH_25 Enth‰lt korrekte Hashcash-Kennzeichnung (25 bits)
-lang de describe HASHCASH_HIGH Enth‰lt korrekte Hashcash-Kennzeichnung (> 25 bits)
-lang de describe HASHCASH_2SPEND Hashcash-Markierung bereits in anderer Nachricht verwendet
-lang de describe SPF_PASS SPF: Senderechner entspricht SPF-Datensatz
-lang de describe SPF_FAIL SPF: Senderechner entspricht nicht SPF-Datensatz (fail)
-lang de describe SPF_SOFTFAIL Senderechner entspricht nicht SPF-Datensatz (softfail)
-lang de describe SPF_HELO_PASS SPF: HELO-Name entspricht dem SPF-Datensatz
-lang de describe SPF_HELO_FAIL HELO-Name entspricht nicht SPF-Datensatz (fail)
-lang de describe SPF_HELO_SOFTFAIL HELO-Name entspricht nicht SPF-Datensatz (softfail)
-lang de describe URIBL_SBL Enth‰lt URL in SBL-Liste (http://www.spamhaus.org/sbl/)
-lang de describe URIBL_SC_SURBL Enth‰lt URL in SC-Liste  (www.surbl.org)
-lang de describe URIBL_WS_SURBL Enth‰lt URL in WS-Liste (www.surbl.org)
-lang de describe URIBL_PH_SURBL Enth‰lt URL in PH-Liste (www.surbl.org)
-lang de describe URIBL_OB_SURBL Enth‰lt URL in OB-Liste (www.surbl.org)
-lang de describe URIBL_AB_SURBL Enth‰lt URL in AB-Liste (www.surbl.org)
-lang de describe AWL Absenderadresse in der automatischen weiﬂen Liste
 lang de describe USER_IN_BLACKLIST Absenderadresse steht in Ihrer persˆnlichen schwarzen Liste
 lang de describe USER_IN_WHITELIST Absenderadresse steht in Ihrer persˆnlichen weiﬂen Liste
 lang de describe USER_IN_DEF_WHITELIST Absenderadresse steht in der allgemeinen weiﬂen Liste
@@ -612,6 +591,39 @@ lang de describe USER_IN_WHITELIST_TO Empf‰ngeradresse steht in Ihrer persˆnlich
 lang de describe USER_IN_MORE_SPAM_TO Empf‰ngeradresse soll fast alle (Spam-) Nachrichten erhalten
 lang de describe USER_IN_ALL_SPAM_TO Empf‰ngeradresse soll alle (Spam-) Nachrichten erhalten
 
+ifplugin Mail::SpamAssassin::Plugin::Hashcash
+lang de describe HASHCASH_20 Enth‰lt korrekte Hashcash-Kennzeichnung (20 bits)
+lang de describe HASHCASH_21 Enth‰lt korrekte Hashcash-Kennzeichnung (21 bits)
+lang de describe HASHCASH_22 Enth‰lt korrekte Hashcash-Kennzeichnung (22 bits)
+lang de describe HASHCASH_23 Enth‰lt korrekte Hashcash-Kennzeichnung (23 bits)
+lang de describe HASHCASH_24 Enth‰lt korrekte Hashcash-Kennzeichnung (24 bits)
+lang de describe HASHCASH_25 Enth‰lt korrekte Hashcash-Kennzeichnung (25 bits)
+lang de describe HASHCASH_HIGH Enth‰lt korrekte Hashcash-Kennzeichnung (> 25 bits)
+lang de describe HASHCASH_2SPEND Hashcash-Markierung bereits in anderer Nachricht verwendet
+endif
+
+ifplugin Mail::SpamAssassin::Plugin::SPF
+lang de describe SPF_PASS SPF: Senderechner entspricht SPF-Datensatz
+lang de describe SPF_FAIL SPF: Senderechner entspricht nicht SPF-Datensatz (fail)
+lang de describe SPF_SOFTFAIL Senderechner entspricht nicht SPF-Datensatz (softfail)
+lang de describe SPF_HELO_PASS SPF: HELO-Name entspricht dem SPF-Datensatz
+lang de describe SPF_HELO_FAIL HELO-Name entspricht nicht SPF-Datensatz (fail)
+lang de describe SPF_HELO_SOFTFAIL HELO-Name entspricht nicht SPF-Datensatz (softfail)
+endif
+
+ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
+lang de describe URIBL_SBL Enth‰lt URL in SBL-Liste (http://www.spamhaus.org/sbl/)
+lang de describe URIBL_SC_SURBL Enth‰lt URL in SC-Liste  (www.surbl.org)
+lang de describe URIBL_WS_SURBL Enth‰lt URL in WS-Liste (www.surbl.org)
+lang de describe URIBL_PH_SURBL Enth‰lt URL in PH-Liste (www.surbl.org)
+lang de describe URIBL_OB_SURBL Enth‰lt URL in OB-Liste (www.surbl.org)
+lang de describe URIBL_AB_SURBL Enth‰lt URL in AB-Liste (www.surbl.org)
+lang de describe URIBL_JP_SURBL Enth‰lt URL in JP-Liste (www.surbl.org)
+endif
+
+ifplugin Mail::SpamAssassin::Plugin::AWL
+lang de describe AWL Absenderadresse in der automatischen weiﬂen Liste
+endif
 
 ifplugin Mail::SpamAssassin::Plugin::AntiVirus
 lang de describe MIME_SUSPECT_NAME MIME-Dateiname entspricht nicht dem MIME-Typ
