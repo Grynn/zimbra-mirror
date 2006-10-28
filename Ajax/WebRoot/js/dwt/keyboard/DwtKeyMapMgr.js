@@ -147,16 +147,17 @@ function(mapName, keySeq) {
 };
 
 /**
- * Returns the key sequence associated with the given map and action.
+ * Returns the key sequences associated with the given map and action.
  */
-DwtKeyMapMgr.prototype.getKeySequence =
+DwtKeyMapMgr.prototype.getKeySequences =
 function(mapName, action) {
+	var keySeqs = [];
 	for (var ks in this._map[mapName]) {
 		if (this._map[mapName][ks] == action) {
-			return ks;
+			keySeqs.push(ks);
 		}
 	}
-	return null;
+	return keySeqs;
 };
 
 /**

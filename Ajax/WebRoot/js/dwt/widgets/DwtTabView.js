@@ -192,11 +192,14 @@ function() {
 	var kbm = this.shell.getKeyboardMgr();
 	if (kbm.isEnabled()) {
 		var kmm = kbm.__keyMapMgr;
-		var ks = kmm.getKeySequence("DwtTabView", "GoToTab");
 		var num = this.getNumTabs();
-		for (var i = 1; i <= num; i++) {
-			var newKs = ks.replace(/NNN/, i);
-			kmm.setMapping("DwtTabView", newKs, "GoToTab" + i);
+		var seqs = kmm.getKeySequences("DwtTabView", "GoToTab");
+		for (var k = 0; k < seqs.length; k++) {
+			var ks = seqs[k];
+			for (var i = 1; i <= num; i++) {
+				var newKs = ks.replace(/NNN/, i);
+				kmm.setMapping("DwtTabView", newKs, "GoToTab" + i);
+			}
 		}
 		kmm.reloadMap("DwtTabView");
 	}
