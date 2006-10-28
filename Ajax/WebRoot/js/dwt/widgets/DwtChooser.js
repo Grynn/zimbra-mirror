@@ -249,6 +249,7 @@ function(list, skipNotify) {
 			var index = this._getInsertionIndex(this.sourceListView, list[i]);
 			this.sourceListView.addItem(list[i], index, true);
 		}
+		this._sourceSize = list ? list.length : 0;
 	}
 	this.removeItems(list, DwtChooserListView.TARGET);
 };
@@ -806,7 +807,7 @@ function(sForce, tForce) {
 	if (this._allButtons && (this._selectStyle == DwtChooser.MULTI_SELECT)) {
 		var sourceSize = sourceList ? sourceList.size() : 0;
 		var targetSize = targetList ? targetList.size() : 0;
-		this._addAllButton.setEnabled((sourceSize > 0) && (targetSize < this._sourceSize));
+		this._addAllButton.setEnabled(sourceSize > 0);
 		this._removeAllButton.setEnabled(targetSize > 0);
 	}
 };
