@@ -1,10 +1,10 @@
-<zimlet name="com_zimbra_tracking" version="1.1" description="Tracking Number">
+<zimlet name="com_zimbra_tracking" version="1.2" description="Tracking Number Zimlet">
 	<serverExtension hasKeyword="tracking" extensionClass="com.zimbra.cs.zimlet.handler.TrackingHandler"/>
-	<include>tracking.js</include>
+	<include>shipping.js</include>
 	<handlerObject>Com_Zimbra_Tracking</handlerObject>
 	<contentObject type="tracking">
 		<matchOn>
-			<regex>Overrode in tracking.js</regex>
+			<regex>Overrode in shipping.js</regex>
 		</matchOn>
 	</contentObject>
 </zimlet>
