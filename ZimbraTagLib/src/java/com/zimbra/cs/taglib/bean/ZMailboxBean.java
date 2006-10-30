@@ -24,12 +24,13 @@
  */
 package com.zimbra.cs.taglib.bean;
 
-import java.util.List;
-import java.util.Map;
-
 import com.zimbra.cs.service.ServiceException;
 import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.cs.zclient.ZGetInfoResult;
+
+import java.util.List;
+import java.util.Map;
 
 public class ZMailboxBean {
 
@@ -65,5 +66,7 @@ public class ZMailboxBean {
     public ZFolderBean getAutoContacts() { return getFolderBeanById(ZFolder.ID_AUTO_CONTACTS); }
  
     public Map<String, List<String>> getAttrs() throws ServiceException { return mMbox.getAccountInfo(false).getAttrs(); }
+
+    public ZGetInfoResult getAccountInfo() throws ServiceException { return mMbox.getAccountInfo(false); }
     
 }
