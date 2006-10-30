@@ -164,11 +164,11 @@ function(callback, result) {
 	for (var method in batchResponse.BatchResponse) {
 		this._processResponse(method, batchResponse.BatchResponse[method]);
 	}
-	if (callback) {
-		callback.run(result);
-	}
 	for (var i = 0, count = this._callbacks.length; i < count; i++) {
 		this._callbacks[i].run(result);
+	}
+	if (callback) {
+		callback.run(result);
 	}
 };
 
