@@ -33,7 +33,19 @@ public class DeltaSync {
 
     private static final OfflineContext sContext = new OfflineContext();
 
+    private final OfflineMailbox ombx;
+    private final Set<Integer> mSyncRenames = new HashSet<Integer>();
+
+    DeltaSync(OfflineMailbox mbox) {
+        ombx = mbox;
+    }
+
+
     public static int sync(OfflineMailbox ombx) throws ServiceException {
+        return new DeltaSync(ombx).sync();
+    }
+
+    public int sync() throws ServiceException {
         int token = ombx.getSyncToken();
         if (token <= 0)
             return InitialSync.sync(ombx);
@@ -44,16 +56,16 @@ public class DeltaSync {
 
         OfflineLog.offline.debug("starting delta sync");
         ombx.setSyncState(SyncState.DELTA);
-        deltaSync(response, ombx);
+        deltaSync(response);
         ombx.setSyncState(SyncState.SYNC, token);
         OfflineLog.offline.debug("ending delta sync");
 
         return token;
     }
 
-    private static void deltaSync(Element response, OfflineMailbox ombx) throws ServiceException {
+    private void deltaSync(Element response) throws ServiceException {
         // make sure to handle deletes first, as tags can reuse ids
-        Set<Integer> foldersToDelete = processLeafDeletes(response, ombx);
+        Set<Integer> foldersToDelete = processLeafDeletes(response);
 
         // sync down metadata changes and note items that need to be downloaded in full
         StringBuilder contacts = null;
@@ -64,7 +76,7 @@ public class DeltaSync {
 
             if (type.equals(MailService.E_TAG)) {
                 // can't tell new tags from modified ones, so might as well go through the initial sync process
-                InitialSync.syncTag(change, ombx);
+                new InitialSync(ombx).syncTag(change);
                 continue;
             }
 
@@ -75,26 +87,26 @@ public class DeltaSync {
                 if (create)
                     (messages == null ? messages = new HashMap<Integer,Integer>() : messages).put(id, folderId);
                 else
-                    syncMessage(change, ombx, folderId);
+                    syncMessage(change, folderId);
             } else if (type.equals(MailService.E_CONTACT)) {
                 if (create)
                     (contacts == null ? contacts = new StringBuilder() : contacts.append(',')).append(id);
                 else
-                    syncContact(change, ombx, folderId);
+                    syncContact(change, folderId);
             } else if (InitialSync.KNOWN_FOLDER_TYPES.contains(type)) {
                 // can't tell new folders from modified ones, so might as well go through the initial sync process
-                syncContainer(change, ombx, id);
+                syncContainer(change, id);
             }
         }
 
         // for messages and contacts that are created or had their content modified, fetch new content
         if (messages != null) {
             for (Map.Entry<Integer,Integer> msg : messages.entrySet())
-                InitialSync.syncMessage(ombx, msg.getKey(), msg.getValue());
+                new InitialSync(ombx).syncMessage(msg.getKey(), msg.getValue());
         }
         if (contacts != null) {
-            for (Element eContact : InitialSync.fetchContacts(contacts.toString(), ombx).listElements())
-                InitialSync.syncContact(eContact, ombx, (int) eContact.getAttributeLong(MailService.A_FOLDER));
+            for (Element eContact : InitialSync.fetchContacts(ombx, contacts.toString()).listElements())
+                new InitialSync(ombx).syncContact(eContact, (int) eContact.getAttributeLong(MailService.A_FOLDER));
         }
 
         // delete any deleted folders, starting from the bottom of the tree
@@ -108,7 +120,7 @@ public class DeltaSync {
         }
     }
 
-    private static Set<Integer> processLeafDeletes(Element response, OfflineMailbox ombx) throws ServiceException {
+    private Set<Integer> processLeafDeletes(Element response) throws ServiceException {
         Element delement = response.getOptionalElement(MailService.E_DELETED);
         if (delement == null)
             return null;
@@ -139,17 +151,17 @@ public class DeltaSync {
         return (foldersToDelete.isEmpty() ? null : foldersToDelete);
     }
 
-    private static void syncContainer(Element elt, OfflineMailbox ombx, int id) throws ServiceException {
+    private void syncContainer(Element elt, int id) throws ServiceException {
         String type = elt.getName();
         if (type.equalsIgnoreCase(MailService.E_SEARCH))
-            syncSearchFolder(elt, ombx, id);
+            syncSearchFolder(elt, id);
         else if (type.equalsIgnoreCase(MailService.E_MOUNT))
-            syncMountpoint(elt, ombx, id);
+            syncMountpoint(elt, id);
         else if (type.equalsIgnoreCase(MailService.E_FOLDER))
-            syncFolder(elt, ombx, id);
+            syncFolder(elt, id);
     }
 
-    static void syncSearchFolder(Element elt, OfflineMailbox ombx, int id) throws ServiceException {
+    void syncSearchFolder(Element elt, int id) throws ServiceException {
         byte color = (byte) elt.getAttributeLong(MailService.A_COLOR, MailItem.DEFAULT_COLOR);
         int flags = Flag.flagsToBitmask(elt.getAttribute(MailService.A_FLAGS, null));
 
@@ -164,22 +176,22 @@ public class DeltaSync {
 
         synchronized (ombx) {
             // deal with the case where the referenced search folder doesn't exist
-            Folder folder = getFolder(ombx, id);
+            Folder folder = getFolder(id);
             if (folder == null) {
                 // if it's been locally deleted but not pushed to the server yet, just return and let the delete happen later
                 if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_SEARCHFOLDER))
                     return;
                 // resolve any naming conflicts and actually create the folder
-                if (resolveFolderConflicts(ombx, elt, id, MailItem.TYPE_SEARCHFOLDER, folder)) {
-                    InitialSync.syncSearchFolder(elt, ombx, id);
+                if (resolveFolderConflicts(elt, id, MailItem.TYPE_SEARCHFOLDER, folder)) {
+                    new InitialSync(ombx).syncSearchFolder(elt, id);
                     return;
                 } else {
-                    folder = getFolder(ombx, id);
+                    folder = getFolder(id);
                 }
             }
 
             // if the search folder was moved/renamed locally, that trumps any changes made remotely
-            resolveFolderConflicts(ombx, elt, id, MailItem.TYPE_SEARCHFOLDER, folder);
+            resolveFolderConflicts(elt, id, MailItem.TYPE_SEARCHFOLDER, folder);
 
             int parentId = (int) elt.getAttributeLong(MailService.A_FOLDER);
             String name = elt.getAttribute(MailService.A_NAME);
@@ -195,7 +207,7 @@ public class DeltaSync {
         }
     }
 
-    static void syncMountpoint(Element elt, OfflineMailbox ombx, int id) throws ServiceException {
+    void syncMountpoint(Element elt, int id) throws ServiceException {
         int flags = Flag.flagsToBitmask(elt.getAttribute(MailService.A_FLAGS, null));
         byte color = (byte) elt.getAttributeLong(MailService.A_COLOR, MailItem.DEFAULT_COLOR);
 
@@ -206,22 +218,22 @@ public class DeltaSync {
 
         synchronized (ombx) {
             // deal with the case where the referenced mountpoint doesn't exist
-            Folder folder = getFolder(ombx, id);
+            Folder folder = getFolder(id);
             if (folder == null) {
                 // if it's been locally deleted but not pushed to the server yet, just return and let the delete happen later
                 if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_MOUNTPOINT))
                     return;
                 // resolve any naming conflicts and actually create the folder
-                if (resolveFolderConflicts(ombx, elt, id, MailItem.TYPE_MOUNTPOINT, folder)) {
-                    InitialSync.syncMountpoint(elt, ombx, id);
+                if (resolveFolderConflicts(elt, id, MailItem.TYPE_MOUNTPOINT, folder)) {
+                    new InitialSync(ombx).syncMountpoint(elt, id);
                     return;
                 } else {
-                    folder = getFolder(ombx, id);
+                    folder = getFolder(id);
                 }
             }
 
             // if the mountpoint was moved/renamed locally, that trumps any changes made remotely
-            resolveFolderConflicts(ombx, elt, id, MailItem.TYPE_MOUNTPOINT, folder);
+            resolveFolderConflicts(elt, id, MailItem.TYPE_MOUNTPOINT, folder);
 
             int parentId = (int) elt.getAttributeLong(MailService.A_FOLDER);
             String name = elt.getAttribute(MailService.A_NAME);
@@ -234,12 +246,12 @@ public class DeltaSync {
         }
     }
 
-    static void syncFolder(Element elt, OfflineMailbox ombx, int id) throws ServiceException {
+    void syncFolder(Element elt, int id) throws ServiceException {
         int flags = Flag.flagsToBitmask(elt.getAttribute(MailService.A_FLAGS, null)) & ~Flag.BITMASK_UNREAD;
         byte color = (byte) elt.getAttributeLong(MailService.A_COLOR, MailItem.DEFAULT_COLOR);
         String url = elt.getAttribute(MailService.A_URL, null);
 
-        ACL acl = InitialSync.parseACL(elt.getOptionalElement(MailService.E_ACL));
+        ACL acl = new InitialSync(ombx).parseACL(elt.getOptionalElement(MailService.E_ACL));
 
         int timestamp = (int) elt.getAttributeLong(MailService.A_CHANGE_DATE);
         int changeId = (int) elt.getAttributeLong(MailService.A_MODIFIED_SEQUENCE);
@@ -248,22 +260,22 @@ public class DeltaSync {
 
         synchronized (ombx) {
             // deal with the case where the referenced folder doesn't exist
-            Folder folder = getFolder(ombx, id);
+            Folder folder = getFolder(id);
             if (folder == null) {
                 // if it's been locally deleted but not pushed to the server yet, just return and let the delete happen later
                 if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_FOLDER))
                     return;
                 // resolve any naming conflicts and actually create the folder
-                if (resolveFolderConflicts(ombx, elt, id, MailItem.TYPE_FOLDER, folder)) {
-                    InitialSync.syncFolder(elt, ombx, id);
+                if (resolveFolderConflicts(elt, id, MailItem.TYPE_FOLDER, folder)) {
+                    new InitialSync(ombx).syncFolder(elt, id);
                     return;
                 } else {
-                    folder = getFolder(ombx, id);
+                    folder = getFolder(id);
                 }
             }
 
             // if the folder was moved/renamed locally, that trumps any changes made remotely
-            resolveFolderConflicts(ombx, elt, id, MailItem.TYPE_FOLDER, folder);
+            resolveFolderConflicts(elt, id, MailItem.TYPE_FOLDER, folder);
 
             int parentId = (id == Mailbox.ID_FOLDER_ROOT) ? id : (int) elt.getAttributeLong(MailService.A_FOLDER);
             String name = (id == Mailbox.ID_FOLDER_ROOT) ? "ROOT" : elt.getAttribute(MailService.A_NAME);
@@ -284,7 +296,7 @@ public class DeltaSync {
         }
     }
 
-    private static Folder getFolder(OfflineMailbox ombx, int id) throws ServiceException {
+    private Folder getFolder(int id) throws ServiceException {
         try {
             return ombx.getFolderById(sContext, id);
         } catch (MailServiceException.NoSuchItemException nsie) {
@@ -292,7 +304,7 @@ public class DeltaSync {
         }
     }
 
-    private static boolean resolveFolderConflicts(OfflineMailbox ombx, Element elt, int id, byte type, Folder local) throws ServiceException {
+    private boolean resolveFolderConflicts(Element elt, int id, byte type, Folder local) throws ServiceException {
         int change_mask = (local == null ? 0 : ombx.getChangeMask(sContext, id, type));
 
         // if the folder was moved/renamed locally, that trumps any changes made remotely
@@ -302,14 +314,14 @@ public class DeltaSync {
         }
 
         String name = (id == Mailbox.ID_FOLDER_ROOT) ? "ROOT" : elt.getAttribute(MailService.A_NAME);
-        if ((change_mask & Change.MODIFIED_NAME) != 0) {
+        if ((change_mask & Change.MODIFIED_NAME) != 0 && !mSyncRenames.contains(id)) {
             name = local.getName();  elt.addAttribute(MailService.A_NAME, name);
         }
 
         // if the parent folder doesn't exist or is of an incompatible type, default to using the top-level user folder as the container
-        Folder parent = getFolder(ombx, parentId);
+        Folder parent = getFolder(parentId);
         if (parent == null || !parent.canContain(type)) {
-            parentId = Mailbox.ID_FOLDER_USER_ROOT;  parent = getFolder(ombx, parentId);
+            parentId = Mailbox.ID_FOLDER_USER_ROOT;  parent = getFolder(parentId);
             elt.addAttribute(MailService.A_FOLDER, parentId).addAttribute(InitialSync.A_RELOCATED, true);
         }
 
@@ -331,6 +343,8 @@ public class DeltaSync {
                 return false;
             } else if (conflict.isMutable()) {
                 ombx.renameFolder(null, conflict.getId(), newName);
+                if ((conflict_mask & Change.MODIFIED_NAME) == 0)
+                    mSyncRenames.add(conflict.getId());
             } else {
                 name = newName;
                 elt.addAttribute(MailService.A_NAME, name).addAttribute(InitialSync.A_RELOCATED, true);
@@ -344,7 +358,7 @@ public class DeltaSync {
         return true;
     }
 
-    private static boolean isCompatibleFolder(Folder folder, Element elt, byte type) {
+    private boolean isCompatibleFolder(Folder folder, Element elt, byte type) {
         if (type != folder.getType())
             return false;
 
@@ -354,13 +368,13 @@ public class DeltaSync {
             return false;
     }
 
-    static void syncTag(Element elt, OfflineMailbox ombx) throws ServiceException {
+    void syncTag(Element elt) throws ServiceException {
         int id = (int) elt.getAttributeLong(MailService.A_ID);
         try {
             // make sure that the tag we're delta-syncing actually exists
             ombx.getTagById(sContext, id);
         } catch (MailServiceException.NoSuchItemException nsie) {
-            InitialSync.syncTag(elt, ombx);
+            new InitialSync(ombx).syncTag(elt);
             return;
         }
 
@@ -384,14 +398,14 @@ public class DeltaSync {
         OfflineLog.offline.debug("delta: updated tag (" + id + "): " + name);
     }
 
-    static void syncContact(Element elt, OfflineMailbox ombx, int folderId) throws ServiceException {
+    void syncContact(Element elt, int folderId) throws ServiceException {
         int id = (int) elt.getAttributeLong(MailService.A_ID);
         Contact cn = null;
         try {
             // make sure that the contact we're delta-syncing actually exists
             cn = ombx.getContactById(sContext, id);
         } catch (MailServiceException.NoSuchItemException nsie) {
-            InitialSync.syncContact(elt, ombx, folderId);
+            new InitialSync(ombx).syncContact(elt, folderId);
             return;
         }
 
@@ -418,14 +432,14 @@ public class DeltaSync {
         OfflineLog.offline.debug("delta: updated contact (" + id + "): " + cn.getFileAsString());
     }
 
-    static void syncMessage(Element elt, OfflineMailbox ombx, int folderId) throws ServiceException {
+    void syncMessage(Element elt, int folderId) throws ServiceException {
         int id = (int) elt.getAttributeLong(MailService.A_ID);
         Message msg = null;
         try {
             // make sure that the message we're delta-syncing actually exists
             msg = ombx.getMessageById(sContext, id);
         } catch (MailServiceException.NoSuchItemException nsie) {
-            InitialSync.syncMessage(ombx, id, folderId);
+            new InitialSync(ombx).syncMessage(id, folderId);
             return;
         }
 
@@ -442,7 +456,7 @@ public class DeltaSync {
         // double-check to make sure that it's just a metadata change
 //        if (mod_content != msg.getSavedSequence() || date != msg.getDate() / 1000) {
 //            // content changed; must re-download body
-//            InitialSync.syncMessage(ombx, id, folderId);
+//            new InitialSync(ombx).syncMessage(id, folderId);
 //            return;
 //        }
 

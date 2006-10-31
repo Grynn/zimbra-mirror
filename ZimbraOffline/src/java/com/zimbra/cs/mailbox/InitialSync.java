@@ -50,14 +50,25 @@ public class InitialSync {
 
     private static final OfflineContext sContext = new OfflineContext();
 
+    private final OfflineMailbox ombx;
+
+    InitialSync(OfflineMailbox mbox) {
+        ombx = mbox;
+    }
+
+
     public static int sync(OfflineMailbox ombx) throws ServiceException {
+        return new InitialSync(ombx).sync();
+    }
+
+    public int sync() throws ServiceException {
         Element request = new Element.XMLElement(MailService.SYNC_REQUEST);
         Element response = ombx.sendRequest(request);
         int token = (int) response.getAttributeLong(MailService.A_TOKEN);
 
         OfflineLog.offline.debug("starting initial sync");
         ombx.setSyncState(SyncState.INITIAL);
-        initialFolderSync(response.getElement(MailService.E_FOLDER), ombx);
+        initialFolderSync(response.getElement(MailService.E_FOLDER));
         ombx.setSyncState(SyncState.SYNC, token);
         OfflineLog.offline.debug("ending initial sync");
 
@@ -68,43 +79,43 @@ public class InitialSync {
             MailService.E_FOLDER, MailService.E_SEARCH, MailService.E_MOUNT
     ));
 
-    private static void initialFolderSync(Element elt, OfflineMailbox ombx) throws ServiceException {
+    private void initialFolderSync(Element elt) throws ServiceException {
         int folderId = (int) elt.getAttributeLong(MailService.A_ID);
 
         // first, sync the container itself
-        syncContainer(elt, ombx, folderId);
+        syncContainer(elt, folderId);
 
         // next, sync the leaf-node contents
         if (elt.getName().equals(MailService.E_FOLDER)) {
             if (folderId == Mailbox.ID_FOLDER_TAGS) {
                 for (Element eTag : elt.listElements(MailService.E_TAG))
-                    syncTag(eTag, ombx);
+                    syncTag(eTag);
                 return;
             }
 
             Element eMessageIds = elt.getOptionalElement(MailService.E_MSG);
             if (eMessageIds != null) {
                 for (String msgId : eMessageIds.getAttribute(MailService.A_IDS).split(","))
-                    syncMessage(ombx, Integer.parseInt(msgId), folderId);
+                    syncMessage(Integer.parseInt(msgId), folderId);
             }
 
             Element eContactIds = elt.getOptionalElement(MailService.E_CONTACT);
             if (eContactIds != null) {
                 String ids = eContactIds.getAttribute(MailService.A_IDS);
                 // FIXME: if a contact is deleted between sync and here, this will throw an exception
-                for (Element eContact : fetchContacts(ids, ombx).listElements())
-                    syncContact(eContact, ombx, folderId);
+                for (Element eContact : fetchContacts(ombx, ids).listElements())
+                    syncContact(eContact, folderId);
             }
         }
 
         // finally, sync the children
         for (Element child : elt.listElements()) {
             if (KNOWN_FOLDER_TYPES.contains(child.getName()))
-                initialFolderSync(child, ombx);
+                initialFolderSync(child);
         }
     }
 
-    public static int resume(OfflineMailbox ombx) throws ServiceException {
+    public int resume() throws ServiceException {
         Element request = new Element.XMLElement(MailService.SYNC_REQUEST);
         Element response = ombx.sendRequest(request);
         int token = (int) response.getAttributeLong(MailService.A_TOKEN);
@@ -114,60 +125,60 @@ public class InitialSync {
         for (Folder folder : ombx.getFolderById(sContext, Mailbox.ID_FOLDER_ROOT).getSubfolderHierarchy())
             folders.put(folder.getId(), folder);
         ombx.setSyncState(SyncState.INITIAL);
-        resumeFolderSync(response.getElement(MailService.E_FOLDER), ombx, folders);
+        resumeFolderSync(response.getElement(MailService.E_FOLDER), folders);
         ombx.setSyncState(SyncState.SYNC, token);
         OfflineLog.offline.debug("ending initial sync");
 
         return token;
     }
 
-    private static void resumeFolderSync(Element elt, OfflineMailbox ombx, Map<Integer,Folder> folders) throws ServiceException {
+    private void resumeFolderSync(Element elt, Map<Integer,Folder> folders) throws ServiceException {
         int folderId = (int) elt.getAttributeLong(MailService.A_ID);
 
         // first, sync the container itself
-        syncContainer(elt, ombx, folderId);
+        syncContainer(elt, folderId);
 
         // next, sync the leaf-node contents
         if (elt.getName().equals(MailService.E_FOLDER)) {
             if (folderId == Mailbox.ID_FOLDER_TAGS) {
                 for (Element eTag : elt.listElements(MailService.E_TAG))
-                    syncTag(eTag, ombx);
+                    syncTag(eTag);
                 return;
             }
 
             Element eMessageIds = elt.getOptionalElement(MailService.E_MSG);
             if (eMessageIds != null) {
                 for (String msgId : eMessageIds.getAttribute(MailService.A_IDS).split(","))
-                    syncMessage(ombx, Integer.parseInt(msgId), folderId);
+                    syncMessage(Integer.parseInt(msgId), folderId);
             }
 
             Element eContactIds = elt.getOptionalElement(MailService.E_CONTACT);
             if (eContactIds != null) {
                 String ids = eContactIds.getAttribute(MailService.A_IDS);
                 // FIXME: if a contact is deleted between sync and here, this will throw an exception
-                for (Element eContact : fetchContacts(ids, ombx).listElements())
-                    syncContact(eContact, ombx, folderId);
+                for (Element eContact : fetchContacts(ombx, ids).listElements())
+                    syncContact(eContact, folderId);
             }
         }
 
         // finally, sync the children
         for (Element child : elt.listElements()) {
             if (KNOWN_FOLDER_TYPES.contains(child.getName()))
-                resumeFolderSync(child, ombx, folders);
+                resumeFolderSync(child, folders);
         }
     }
 
-    private static void syncContainer(Element elt, OfflineMailbox ombx, int id) throws ServiceException {
+    private void syncContainer(Element elt, int id) throws ServiceException {
         String type = elt.getName();
         if (type.equalsIgnoreCase(MailService.E_SEARCH))
-            syncSearchFolder(elt, ombx, id);
+            syncSearchFolder(elt, id);
         else if (type.equalsIgnoreCase(MailService.E_MOUNT))
-            syncMountpoint(elt, ombx, id);
+            syncMountpoint(elt, id);
         else if (type.equalsIgnoreCase(MailService.E_FOLDER))
-            syncFolder(elt, ombx, id);
+            syncFolder(elt, id);
     }
 
-    static void syncSearchFolder(Element elt, OfflineMailbox ombx, int id) throws ServiceException {
+    void syncSearchFolder(Element elt, int id) throws ServiceException {
         int parentId = (int) elt.getAttributeLong(MailService.A_FOLDER);
         String name = elt.getAttribute(MailService.A_NAME);
         byte color = (byte) elt.getAttributeLong(MailService.A_COLOR, MailItem.DEFAULT_COLOR);
@@ -200,11 +211,11 @@ public class InitialSync {
         } catch (ServiceException e) {
             if (e.getCode() != MailServiceException.ALREADY_EXISTS)
                 throw e;
-            DeltaSync.syncSearchFolder(elt, ombx, id);
+            new DeltaSync(ombx).syncSearchFolder(elt, id);
         }
     }
 
-    static void syncMountpoint(Element elt, OfflineMailbox ombx, int id) throws ServiceException {
+    void syncMountpoint(Element elt, int id) throws ServiceException {
         int parentId = (int) elt.getAttributeLong(MailService.A_FOLDER);
         String name = elt.getAttribute(MailService.A_NAME);
         int flags = Flag.flagsToBitmask(elt.getAttribute(MailService.A_FLAGS, null));
@@ -235,14 +246,14 @@ public class InitialSync {
         } catch (ServiceException e) {
             if (e.getCode() != MailServiceException.ALREADY_EXISTS)
                 throw e;
-            DeltaSync.syncMountpoint(elt, ombx, id);
+            new DeltaSync(ombx).syncMountpoint(elt, id);
         }
     }
 
-    static void syncFolder(Element elt, OfflineMailbox ombx, int id) throws ServiceException {
+    void syncFolder(Element elt, int id) throws ServiceException {
         if (id <= Mailbox.HIGHEST_SYSTEM_ID) {
             // we know the system folders already exist...
-            DeltaSync.syncFolder(elt, ombx, id);
+            new DeltaSync(ombx).syncFolder(elt, id);
             return;
         }
 
@@ -279,11 +290,11 @@ public class InitialSync {
         } catch (ServiceException e) {
             if (e.getCode() != MailServiceException.ALREADY_EXISTS)
                 throw e;
-            DeltaSync.syncFolder(elt, ombx, id);
+            new DeltaSync(ombx).syncFolder(elt, id);
         }
     }
 
-    static ACL parseACL(Element eAcl) throws ServiceException {
+    ACL parseACL(Element eAcl) throws ServiceException {
         if (eAcl == null)
             return null;
         ACL acl = new ACL();
@@ -298,7 +309,7 @@ public class InitialSync {
         return acl;
     }
 
-    static void syncTag(Element elt, OfflineMailbox ombx) throws ServiceException {
+    void syncTag(Element elt) throws ServiceException {
         int id = (int) elt.getAttributeLong(MailService.A_ID);
         String name = elt.getAttribute(MailService.A_NAME);
         byte color = (byte) elt.getAttributeLong(MailService.A_COLOR, MailItem.DEFAULT_COLOR);
@@ -321,18 +332,18 @@ public class InitialSync {
         } catch (ServiceException e) {
             if (e.getCode() != MailServiceException.ALREADY_EXISTS)
                 throw e;
-            DeltaSync.syncTag(elt, ombx);
+            new DeltaSync(ombx).syncTag(elt);
         }
     }
 
-    static Element fetchContacts(String ids, OfflineMailbox ombx) throws ServiceException {
+    static Element fetchContacts(OfflineMailbox ombx, String ids) throws ServiceException {
         Element request = new Element.XMLElement(MailService.GET_CONTACTS_REQUEST);
         request.addAttribute(MailService.A_SYNC, true);
         request.addElement(MailService.E_CONTACT).addAttribute(MailService.A_ID, ids);
         return ombx.sendRequest(request);
     }
 
-    static void syncContact(Element elt, OfflineMailbox ombx, int folderId) throws ServiceException {
+    void syncContact(Element elt, int folderId) throws ServiceException {
         int id = (int) elt.getAttributeLong(MailService.A_ID);
         byte color = (byte) elt.getAttributeLong(MailService.A_COLOR, MailItem.DEFAULT_COLOR);
         int flags = Flag.flagsToBitmask(elt.getAttribute(MailService.A_FLAGS, null));
@@ -363,7 +374,7 @@ public class InitialSync {
         } catch (ServiceException e) {
             if (e.getCode() != MailServiceException.ALREADY_EXISTS)
                 throw e;
-            DeltaSync.syncContact(elt, ombx, folderId);
+            new DeltaSync(ombx).syncContact(elt, folderId);
         }
     }
 
@@ -374,7 +385,7 @@ public class InitialSync {
             USE_SYNC_FORMATTER.put(SyncFormatter.QP_NOHDR, "1");
         }
 
-    static void syncMessage(OfflineMailbox ombx, int id, int folderId) throws ServiceException {
+    void syncMessage(int id, int folderId) throws ServiceException {
         byte[] content = null;
         Map<String, String> headers = new HashMap<String, String>();
         try {
@@ -469,6 +480,6 @@ public class InitialSync {
         sync.addAttribute(MailService.A_FLAGS, Flag.bitmaskToFlags(flags)).addAttribute(MailService.A_TAGS, tags).addAttribute(MailService.A_CONV_ID, convId);
         sync.addAttribute(MailService.A_CHANGE_DATE, timestamp).addAttribute(MailService.A_MODIFIED_SEQUENCE, changeId);
         sync.addAttribute(MailService.A_DATE, received * 1000L).addAttribute(MailService.A_REVISION, mod_content);
-        DeltaSync.syncMessage(sync, ombx, folderId);
+        new DeltaSync(ombx).syncMessage(sync, folderId);
     }
 }
