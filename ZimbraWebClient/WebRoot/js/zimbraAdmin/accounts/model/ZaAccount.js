@@ -1330,5 +1330,5 @@ function (elementValue, form){
 ZaAccount.getDomain =
 function (accountName) {
 	if (!accountName) return null;
-	return accountName.substring(accountName.indexOf ("@") + 1 ) ;	
+	return accountName.substring(accountName.lastIndexOf ("@") + 1 ) ;	
 }
