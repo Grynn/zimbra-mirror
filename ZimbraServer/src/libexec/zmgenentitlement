@@ -1,0 +1,38 @@
+#!/bin/bash
+# look for the entitlement data from the ZCS license
+license=/opt/zimbra/conf/ZCSLicense.xml
+if ! [ -f "$license" ]; then
+    echo "error: unable to read license information" > /dev/stderr
+    exit 1
+fi
+# pull the license UUID from the license file
+key=$(cat $license | grep LicenseId | awk -F= '{print $NF}' | awk -F\" '{print $2}')
+# calculate how we were called (e.g. /etc/conary/entitlements/conary.rpath.com)
+server=$(basename $0)
+case $server in
+  conary.rpath.com)
+    class=zimbra-zcs
+    ;;
+  zimbra.liquidsys.com)
+    class=zimbra-zcs
+    ;;
+  *)
+    echo "error: script was called as $0. it should only be called via a symlink that matches the server name"
+    exit 1
+    ;;
+esac
+
+cat << EOF
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<!DOCTYPE entitlement [
+<!ELEMENT entitlement (server, class, key)>
+<!ELEMENT server (#PCDATA)>
+<!ELEMENT class (#PCDATA)>
+<!ELEMENT key (#PCDATA)>
+]>
+<entitlement>
+  <server>$server</server>
+  <class>$class</class>
+  <key>$key</key>
+</entitlement>
+EOF
