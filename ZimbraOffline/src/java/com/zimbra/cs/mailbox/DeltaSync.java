@@ -170,17 +170,21 @@ public class DeltaSync {
                 if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_SEARCHFOLDER))
                     return;
                 // resolve any naming conflicts and actually create the folder
-                resolveFolderConflicts(ombx, elt, id, MailItem.TYPE_SEARCHFOLDER, folder);
-                InitialSync.syncSearchFolder(elt, ombx, id);
-                return;
+                if (resolveFolderConflicts(ombx, elt, id, MailItem.TYPE_SEARCHFOLDER, folder)) {
+                    InitialSync.syncSearchFolder(elt, ombx, id);
+                    return;
+                } else {
+                    folder = getFolder(ombx, id);
+                }
             }
 
             // if the search folder was moved/renamed locally, that trumps any changes made remotely
-            int change_mask = resolveFolderConflicts(ombx, elt, id, MailItem.TYPE_SEARCHFOLDER, folder);
+            resolveFolderConflicts(ombx, elt, id, MailItem.TYPE_SEARCHFOLDER, folder);
 
             int parentId = (int) elt.getAttributeLong(MailService.A_FOLDER);
             String name = elt.getAttribute(MailService.A_NAME);
 
+            int change_mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_SEARCHFOLDER);
             ombx.renameFolder(sContext, id, parentId, name);
             if ((change_mask & Change.MODIFIED_QUERY) == 0)
                 ombx.modifySearchFolder(sContext, id, query, searchTypes, sort);
@@ -208,9 +212,12 @@ public class DeltaSync {
                 if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_MOUNTPOINT))
                     return;
                 // resolve any naming conflicts and actually create the folder
-                resolveFolderConflicts(ombx, elt, id, MailItem.TYPE_MOUNTPOINT, folder);
-                InitialSync.syncMountpoint(elt, ombx, id);
-                return;
+                if (resolveFolderConflicts(ombx, elt, id, MailItem.TYPE_MOUNTPOINT, folder)) {
+                    InitialSync.syncMountpoint(elt, ombx, id);
+                    return;
+                } else {
+                    folder = getFolder(ombx, id);
+                }
             }
 
             // if the mountpoint was moved/renamed locally, that trumps any changes made remotely
@@ -247,17 +254,21 @@ public class DeltaSync {
                 if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_FOLDER))
                     return;
                 // resolve any naming conflicts and actually create the folder
-                resolveFolderConflicts(ombx, elt, id, MailItem.TYPE_FOLDER, folder);
-                InitialSync.syncFolder(elt, ombx, id);
-                return;
+                if (resolveFolderConflicts(ombx, elt, id, MailItem.TYPE_FOLDER, folder)) {
+                    InitialSync.syncFolder(elt, ombx, id);
+                    return;
+                } else {
+                    folder = getFolder(ombx, id);
+                }
             }
 
             // if the folder was moved/renamed locally, that trumps any changes made remotely
-            int change_mask = resolveFolderConflicts(ombx, elt, id, MailItem.TYPE_FOLDER, folder);
+            resolveFolderConflicts(ombx, elt, id, MailItem.TYPE_FOLDER, folder);
 
             int parentId = (id == Mailbox.ID_FOLDER_ROOT) ? id : (int) elt.getAttributeLong(MailService.A_FOLDER);
             String name = (id == Mailbox.ID_FOLDER_ROOT) ? "ROOT" : elt.getAttribute(MailService.A_NAME);
 
+            int change_mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_FOLDER);
             if (id != Mailbox.ID_FOLDER_ROOT)
                 ombx.renameFolder(sContext, id, parentId, name);
             // XXX: do we need to sync if the folder has perms but the new ACL is empty?
@@ -281,9 +292,7 @@ public class DeltaSync {
         }
     }
 
-    // private static final int RENAME_MASK = Change.MODIFIED_FOLDER | Change.MODIFIED_NAME | Change.MODIFIED_CONFLICT;
-
-    private static int resolveFolderConflicts(OfflineMailbox ombx, Element elt, int id, byte type, Folder local) throws ServiceException {
+    private static boolean resolveFolderConflicts(OfflineMailbox ombx, Element elt, int id, byte type, Folder local) throws ServiceException {
         int change_mask = (local == null ? 0 : ombx.getChangeMask(sContext, id, type));
 
         // if the folder was moved/renamed locally, that trumps any changes made remotely
@@ -307,14 +316,20 @@ public class DeltaSync {
         // if there's a folder naming conflict within the target folder, usually push the local folder out of the way
         Folder conflict = parent.findSubfolder(name);
         if (conflict != null && conflict.getId() != id) {
+            int conflict_mask = ombx.getChangeMask(sContext, conflict.getId(), conflict.getType());
+
             String uuid = '{' + UUID.randomUUID().toString() + '}', newName;
             if (name.length() + uuid.length() > Folder.MAX_FOLDER_LENGTH)
                 newName = name.substring(0, Folder.MAX_FOLDER_LENGTH - uuid.length()) + uuid;
             else
                 newName = name + uuid;
 
-            // XXX: if non-relocated and the target was a pending create (change_mask & MODIFIED_CONFLICT), maybe merge the two folders?
-            if (conflict.isMutable()) {
+            if (local == null && (conflict_mask & Change.MODIFIED_CONFLICT) != 0 && isCompatibleFolder(conflict, elt, type)) {
+                // if the new and existing folders are identical and being created, try to merge them
+                ombx.renumberItem(sContext, conflict.getId(), type, id);
+                ombx.setChangeMask(sContext, id, type, conflict_mask & ~Change.MODIFIED_CONFLICT);
+                return false;
+            } else if (conflict.isMutable()) {
                 ombx.renameFolder(null, conflict.getId(), newName);
             } else {
                 name = newName;
@@ -326,7 +341,17 @@ public class DeltaSync {
         if (local != null && elt.getAttributeBool(InitialSync.A_RELOCATED, false))
             ombx.renameFolder(null, id, parentId, name);
 
-        return change_mask;
+        return true;
+    }
+
+    private static boolean isCompatibleFolder(Folder folder, Element elt, byte type) {
+        if (type != folder.getType())
+            return false;
+
+        if (type == MailItem.TYPE_FOLDER)
+           return folder.getDefaultView() == MailItem.getTypeForName(elt.getAttribute(MailService.A_DEFAULT_VIEW, null));
+        else
+            return false;
     }
 
     static void syncTag(Element elt, OfflineMailbox ombx) throws ServiceException {
