@@ -2,5 +2,12 @@
     <global>
         <property name="ZIMLET_CONFIG_REGEX_VALUE">((telnet:)|((https?|ftp|gopher|news|file):\/\/)|(www.[\w\.\_\-]+))[^\s\(\)\&lt;\&gt;\[\]\{\}\&apos;\&quot;]*</property>
         <property name="stripUrls">true</property>
+
+        <!-- for Alexa Thumbnails, for registered users, uncomment and fill these values with Alexa ID and Key -->
+<!--
+        <property name="alexaThumbnailId"></property>
+        <property name="alexaThumbnailKey"></property>
+        <property name="allowedDomains">ast.amazonaws.com</property>
+-->
     </global>
 </zimletConfig>
