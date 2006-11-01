@@ -35,7 +35,7 @@ function ZaZimletDeployXWizard(parent, app) {
 	this._app = app;
 	this.stepChoices = [
 		{label:ZaMsg.ZMLT_UploadFileStep_Title, value:1},
-		{label:ZaMsg.ZMLT_Deploying_Title, value:2},
+		{label:ZaMsg.ZMLT_Deploying_Title, value:2}
 	];	
 	this.currentPageNum = 0;
 	this.initForm(ZaZimlet.myXModel,this.getMyXForm());	

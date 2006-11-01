@@ -633,7 +633,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 						{ref:ZaAccount.A_prefMailSignature,labelCssStyle:"width:190px;", type:_TEXTAREA_, msgName:ZaMsg.NAD_prefMailSignature,label:ZaMsg.NAD_prefMailSignature, labelLocation:_LEFT_, labelCssStyle: "vertical-align:top"},
 						{type:_SEPARATOR_},
 						{ref:ZaAccount.A_zimbraPrefOutOfOfficeReplyEnabled,labelCssStyle:"width:190px;", type:_CHECKBOX_, msgName:ZaMsg.NAD_zimbraPrefOutOfOfficeReplyEnabled,label:ZaMsg.NAD_zimbraPrefOutOfOfficeReplyEnabled, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_},
-						{ref:ZaAccount.A_zimbraPrefOutOfOfficeReply,labelCssStyle:"width:190px;", type:_TEXTAREA_, msgName:ZaMsg.NAD_zimbraPrefOutOfOfficeReply,label:ZaMsg.NAD_zimbraPrefOutOfOfficeReply, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", cssStyle:"width:120px"},
+						{ref:ZaAccount.A_zimbraPrefOutOfOfficeReply,labelCssStyle:"width:190px;", type:_TEXTAREA_, msgName:ZaMsg.NAD_zimbraPrefOutOfOfficeReply,label:ZaMsg.NAD_zimbraPrefOutOfOfficeReply, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", cssStyle:"width:120px"}
 					];
 		cases.push({type:_CASE_, relevant:"instance[ZaModel.currentStep] == ZaNewAccountXWizard.PREFS_STEP", 
 					items :prefItems});

@@ -602,7 +602,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 							]
 						},
 						{type: _GROUP_, width: "100%", items: [
-								{type:_CELLSPACER_},
+								{type:_CELLSPACER_}
 							]
 						},
 						//non member group
@@ -676,7 +676,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 							]
 						},
 						{type: _GROUP_, width: "100%", items: [
-								{type:_CELLSPACER_},
+								{type:_CELLSPACER_}
 							]
 						}
 						

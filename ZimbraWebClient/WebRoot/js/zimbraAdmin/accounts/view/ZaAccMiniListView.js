@@ -101,10 +101,14 @@ function(account, now, isDndIcon) {
 				html[idx++] = "</nobr></td>";	
 			} 
 		}
-	} else {
+	} else if(typeof(account)=="object") {
 		html[idx++] = "<td width=100%>";
 		html[idx++] = AjxStringUtil.htmlEncode(account.name);
 		html[idx++] = "</td>";
+	} else {
+		html[idx++] = "<td width=100%>";
+		html[idx++] = AjxStringUtil.htmlEncode(String(account));		
+		html[idx++] = "</td>";		
 	}
 	
 	html[idx++] = "</tr></table>";
@@ -138,3 +142,16 @@ ZaAccMiniListView.prototype._sortColumn = function (columnItem, bSortAsc){
 		this.parent.parent.searchAccounts(columnItem.getSortField(),bSortAsc);
 	}
 };
+/*
+ZaAccMiniListView.prototype._sizeChildren =
+function(height) {
+	if (this._listDiv && (height != Dwt.DEFAULT))
+		Dwt.setSize(this._listDiv, Dwt.DEFAULT, height - DwtListView.HEADERITEM_HEIGHT);	
+	if(this._listDiv) {
+		if (this._headerList && (height != Dwt.DEFAULT) && !this.hideHeader) {
+			Dwt.setSize(this._listDiv, Dwt.DEFAULT, height - DwtListView.HEADERITEM_HEIGHT);
+		} else {
+			Dwt.setSize(this._listDiv, Dwt.DEFAULT, height);
+		}
+	}
+}*/

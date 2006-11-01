@@ -290,14 +290,14 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 						items: [
 							{type:_GROUP_, id:"cos_attachment_settings",
 								items :[						
-									{ref:ZaCos.A_zimbraAttachmentsBlocked, type:_CHECKBOX_,  msgName:ZaMsg.NAD_RemoveAllAttachments,label:ZaMsg.NAD_RemoveAllAttachments, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", labelCssStyle:"width:250px;", align:_LEFT_},
+									{ref:ZaCos.A_zimbraAttachmentsBlocked, type:_CHECKBOX_,  msgName:ZaMsg.NAD_RemoveAllAttachments,label:ZaMsg.NAD_RemoveAllAttachments, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", labelCssStyle:"width:250px;", align:_LEFT_}
 								]
 							},
 							{type:_SEPARATOR_, colSpan:"*"},
 							{type:_GROUP_, id:"cos_quota_settings",
 								items: [											
 									{ref:ZaCos.A_zimbraMailQuota, type:_TEXTFIELD_, msgName:ZaMsg.NAD_MailQuota,label:ZaMsg.NAD_MailQuota+":", labelLocation:_LEFT_, cssClass:"admin_xform_number_input", labelCssStyle:"width:250px;",onChange:ZaTabView.onFormFieldChanged},
-									{ref:ZaCos.A_zimbraContactMaxNumEntries, type:_INPUT_, msgName:ZaMsg.NAD_ContactMaxNumEntries,label:ZaMsg.NAD_ContactMaxNumEntries+":", labelLocation:_LEFT_, cssClass:"admin_xform_number_input", labelCssStyle:"width:250px;", onChange:ZaTabView.onFormFieldChanged},
+									{ref:ZaCos.A_zimbraContactMaxNumEntries, type:_INPUT_, msgName:ZaMsg.NAD_ContactMaxNumEntries,label:ZaMsg.NAD_ContactMaxNumEntries+":", labelLocation:_LEFT_, cssClass:"admin_xform_number_input", labelCssStyle:"width:250px;", onChange:ZaTabView.onFormFieldChanged}
 								]
 							},
 							

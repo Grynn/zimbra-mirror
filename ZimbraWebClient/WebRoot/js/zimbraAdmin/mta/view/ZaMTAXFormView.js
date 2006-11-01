@@ -553,7 +553,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_rdomain, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu, preserveSelection:true, multiselect:true,onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu, preserveSelection:true, multiselect:true,onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_CELLSPACER_},
@@ -564,7 +564,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_origip, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,preserveSelection:true, multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,preserveSelection:true, multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_CELLSPACER_},
@@ -575,7 +575,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_sdomain, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},	
 							{type:_CELLSPACER_},
@@ -586,7 +586,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_raddress, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_CELLSPACER_},
@@ -597,7 +597,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_saddress, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_CELLSPACER_},							
@@ -608,7 +608,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_error, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							}						
 						]},
@@ -641,7 +641,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 							 }
 						]},			
 					    {ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_messages, onSelection:ZaMTAXFormView.msgListSelectionListener, type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource",
-						   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, widgetClass:ZaQMessagesListView, headerList:msgHeaderList},								
+						   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, widgetClass:ZaQMessagesListView, headerList:msgHeaderList}								
 							]
 						}		
 					]
@@ -680,7 +680,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_IncomingQ+"/"+ZaMTA.A_rdomain, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu, preserveSelection:true, multiselect:true,onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu, preserveSelection:true, multiselect:true,onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_CELLSPACER_},
@@ -691,7 +691,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_IncomingQ+"/"+ZaMTA.A_origip, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,preserveSelection:true, multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,preserveSelection:true, multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_CELLSPACER_},
@@ -702,7 +702,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_IncomingQ+"/"+ZaMTA.A_sdomain, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},	
 							{type:_CELLSPACER_},
@@ -713,7 +713,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_IncomingQ+"/"+ZaMTA.A_raddress, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_CELLSPACER_},
@@ -724,7 +724,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_IncomingQ+"/"+ZaMTA.A_saddress, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							}						
 						]},
@@ -756,7 +756,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 							}														
 						]},										
 					    {ref:ZaMTA.A_IncomingQ+"/"+ZaMTA.A_messages, onSelection:ZaMTAXFormView.msgListSelectionListener, type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource", 
-						   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, widgetClass:ZaQMessagesListView, headerList:msgHeaderList},								
+						   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, widgetClass:ZaQMessagesListView, headerList:msgHeaderList}								
 							]
 						}		
 					]
@@ -795,7 +795,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_ActiveQ+"/"+ZaMTA.A_rdomain, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu, preserveSelection:true, multiselect:true,onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu, preserveSelection:true, multiselect:true,onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_CELLSPACER_},
@@ -806,7 +806,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_ActiveQ+"/"+ZaMTA.A_origip, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,preserveSelection:true, multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,preserveSelection:true, multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_CELLSPACER_},
@@ -817,7 +817,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_ActiveQ+"/"+ZaMTA.A_sdomain, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},	
 							{type:_CELLSPACER_},
@@ -828,7 +828,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_ActiveQ+"/"+ZaMTA.A_raddress, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_CELLSPACER_},
@@ -839,7 +839,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_ActiveQ+"/"+ZaMTA.A_saddress, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							}						
 						]},
@@ -872,7 +872,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 							 }
 						]},									
 						{ref:ZaMTA.A_ActiveQ+"/"+ZaMTA.A_messages, onSelection:ZaMTAXFormView.msgListSelectionListener, type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource", 
-						   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, widgetClass:ZaQMessagesListView, headerList:msgHeaderList},								
+						   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, widgetClass:ZaQMessagesListView, headerList:msgHeaderList}								
 							]
 						}		
 					]
@@ -911,7 +911,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_HoldQ+"/"+ZaMTA.A_rdomain, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu, preserveSelection:true, multiselect:true,onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu, preserveSelection:true, multiselect:true,onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_CELLSPACER_},
@@ -922,7 +922,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_HoldQ+"/"+ZaMTA.A_origip, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,preserveSelection:true, multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,preserveSelection:true, multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_CELLSPACER_},
@@ -933,7 +933,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_HoldQ+"/"+ZaMTA.A_sdomain, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},	
 							{type:_CELLSPACER_},
@@ -944,7 +944,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_HoldQ+"/"+ZaMTA.A_raddress, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_CELLSPACER_},
@@ -955,7 +955,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_HoldQ+"/"+ZaMTA.A_saddress, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							}						
 						]},
@@ -987,7 +987,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 							}
 						]},								
 					    {ref:ZaMTA.A_HoldQ+"/"+ZaMTA.A_messages, onSelection:ZaMTAXFormView.msgListSelectionListener, type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource", 
-						   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, widgetClass:ZaQMessagesListView, headerList:msgHeaderList},								
+						   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, widgetClass:ZaQMessagesListView, headerList:msgHeaderList}								
 							]
 						}		
 					]
@@ -1028,7 +1028,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_CorruptQ+"/"+ZaMTA.A_rdomain, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu, preserveSelection:true, multiselect:true,onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu, preserveSelection:true, multiselect:true,onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_CELLSPACER_},
@@ -1039,7 +1039,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_CorruptQ+"/"+ZaMTA.A_origip, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,preserveSelection:true, multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,preserveSelection:true, multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_CELLSPACER_},
@@ -1050,7 +1050,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_CorruptQ+"/"+ZaMTA.A_sdomain, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},	
 							{type:_CELLSPACER_},
@@ -1061,7 +1061,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_CorruptQ+"/"+ZaMTA.A_raddress, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_CELLSPACER_},
@@ -1072,7 +1072,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 										]
 									},
 								    {ref:ZaMTA.A_CorruptQ+"/"+ZaMTA.A_saddress, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
-							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList},								
+							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							}						
 						]},
@@ -1104,7 +1104,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 							 }					
 						]},									
 					    {ref:ZaMTA.A_CorruptQ+"/"+ZaMTA.A_messages, onSelection:ZaMTAXFormView.msgListSelectionListener, type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource", 
-						   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, widgetClass:ZaQMessagesListView, headerList:msgHeaderList},								
+						   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, widgetClass:ZaQMessagesListView, headerList:msgHeaderList}								
 							]
 						}		
 					]

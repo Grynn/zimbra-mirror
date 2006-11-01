@@ -3829,7 +3829,7 @@ Dwt_List_XFormItem.prototype.constructWidget = function () {
 
 	var widget = new listClass(this.getForm(), this.getCssClass(), null, ((hideHeader!=undefined && hideHeader==true ) ? null : headerList));
 	if(hideHeader != undefined) {
-		widget.shideHeader=hideHeader;
+		widget.hideHeader = hideHeader;
 		if(hideHeader && headerList) {
 			widget._headerList = headerList;
 		}

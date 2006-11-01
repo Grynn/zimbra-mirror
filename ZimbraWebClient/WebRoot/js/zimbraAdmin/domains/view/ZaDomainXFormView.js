@@ -500,7 +500,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 												{ref:ZaDomain.A_NotebookPublicACLs, type:_ACL_, label:ZaMsg.ACL_Public,labelLocation:_LEFT_,
 													visibleBoxes:{r:true,w:false,a:false,i:false,d:false,x:false},
 													onChange:ZaTabView.onFormFieldChanged},
-												{type:_SPACER_, height:10},
+												{type:_SPACER_, height:10}
 											]
 										}
 									]
