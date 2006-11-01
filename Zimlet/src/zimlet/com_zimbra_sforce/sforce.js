@@ -338,9 +338,6 @@ Com_Zimbra_SForce.prototype.contactDropped = function(contact) {
 	}
 };
 
-Com_Zimbra_SForce.prototype.onContactChanged = function(contact, mods) {
-};
-
 Com_Zimbra_SForce.prototype.dlg_createAccount = function(acct_data, contact_data) {
 	var view = new DwtComposite(this.getShell());
 
@@ -794,11 +791,11 @@ Com_Zimbra_SForce.prototype.singleClicked = function() {
 	this.login();
 };
 
-Com_Zimbra_SForce.prototype.onContactModified = function(contact, mods) {
-	for (var i in mods)
-		contact[i] = mods[i];
-	this.doDrop(contact);	// delegate
-};
+// Com_Zimbra_SForce.prototype.onContactModified = function(contact, mods) {
+// 	for (var i in mods)
+// 		contact[i] = mods[i];
+// 	this.doDrop(contact);	// delegate
+// };
 
 /// Called by the Zimbra framework when some menu item that doesn't have an
 /// <actionURL> was selected
