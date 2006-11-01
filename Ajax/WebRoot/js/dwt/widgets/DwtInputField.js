@@ -253,15 +253,15 @@ function() {
 DwtInputField.prototype.setValue =
 function(value, noValidate) {
 	this._inputField.value = value;
-	if (this._isHintVisible && value) {
-		this._hideHint();
-	} else if (!value) {
-		this._showHint();
-	}
 	if(!noValidate) {
 		value = this._validateInput(value);
 		if (value != null)
 			this._inputField.value = value;
+	}
+	if (this._hintIsVisible && value) {
+		this._hideHint(value);
+	} else if (!value) {
+		this._showHint();
 	}
 };
 
@@ -274,10 +274,10 @@ DwtInputField.prototype.setHint =
 function(hint) {
 	var oldHint = this._hint;
 	this._hint = hint;
-	if (this._isHintVisible) {
+	if (this._hintIsVisible) {
 		this.getInputElement().value = hint;
 		if (!hint) {
-			this._isHintVisible = false;
+			this._hintIsVisible = false;
 			this._updateClassName();
 		}
 	} else {
@@ -529,7 +529,9 @@ function(ev) {
 			if (val != null)
 				obj.setValue(val);
 		}
-		obj._showHint();
+		if (!obj._hintIsVisible && obj._hint) {
+			obj._showHint();
+		}
 	}
 };
 
@@ -537,22 +539,22 @@ DwtInputField._focusHdlr =
 function(ev) {
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
 	if (obj) {
-		obj._hideHint();
+		if (obj._hintIsVisible) {
+			obj._hideHint('');
+		}
 	}
 };
 
 DwtInputField.prototype._hideHint = 
-function() {
-	if (this._hintIsVisible) {
-		this.getInputElement().value = '';
-		this._hintIsVisible = false;
-		this._updateClassName();
-	}
+function(value) {
+	this.getInputElement().value = value;
+	this._hintIsVisible = false;
+	this._updateClassName();
 };
 
 DwtInputField.prototype._showHint = 
 function() {
-	if (!this._hintIsVisible && this._hint) {
+	if (this._hint) {
 		var element = this.getInputElement();
 		if (!element.value) {
 			element.value = this._hint;
