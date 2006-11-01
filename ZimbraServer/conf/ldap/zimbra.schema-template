@@ -42,6 +42,7 @@ objectIdentifier zimbraObjectEntry ZimbraObjectClass:13
 objectIdentifier zimbraTimeZone ZimbraObjectClass:14
 objectIdentifier zimbraZimletEntry ZimbraObjectClass:15
 objectIdentifier zimbraCalendarResource ZimbraObjectClass:16
+objectIdentifier zimbraIdentity ZimbraObjectClass:17
 
 ###########################################################################
 # attribute definitions
@@ -257,3 +258,11 @@ objectclass ( zimbraCalendarResource
 	DESC 'Calendar resource object'
 	SUP top AUXILIARY
 ${CLASS_MEMBERS_CALENDARRESOURCE})
+
+# zimbraIdentity is the account identity object, which stores information about
+# Email "identities"
+objectclass ( zimbraIdentity
+        NAME 'zimbraIdentity'
+        DESC 'Account Email Identity information'
+        SUP top STRUCTURAL
+${CLASS_MEMBERS_IDENTITY})
