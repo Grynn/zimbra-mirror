@@ -265,7 +265,7 @@ function(domElement, jsObject, attrName) {
 Dwt.disassociateElementFromObject =
 function(domElement, jsObject, attrName) {
 	if (domElement){
-		delete domElement[attrName||"dwtObj"];
+		domElement.removeAttribute(attrName||"dwtObj");
 	}
 	if (jsObject.__internalId){
 		AjxCore.unassignId(jsObject.__internalId);

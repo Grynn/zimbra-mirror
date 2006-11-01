@@ -105,7 +105,7 @@ function(callback) {
  */
 ZmBatchCommand.prototype.run =
 function(callback) {
-	
+
 	// Invoke each command so that it hands us its SOAP doc, response callback, and
 	// error callback
     for (var i = 0; i < this._cmds.length; i++) {
@@ -145,7 +145,8 @@ function(callback) {
 	this._responseCount = 0;
 	var runCallback = new AjxCallback(this, this._handleResponseRunSafari, [callback]);
 
-	for (var i = 0; i < this._cmds.length; i++) {
+    var size = this.size();
+    for (var i = 0; i < size; i++) {
 		var soapDoc = this._soapDocs[i];
 		var reqEl = soapDoc.getMethod();
 		reqEl.setAttribute("id", i);
@@ -180,7 +181,8 @@ function(callback, result) {
 	}
 
 	// only run the final callback once all async requests have returned
-	if (++this._responseCount == this._cmds.length && callback) {
+    var size = this.size();
+    if (++this._responseCount == size && callback) {
 		callback.run(result);
 	}
 };

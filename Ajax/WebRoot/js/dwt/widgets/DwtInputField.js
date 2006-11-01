@@ -57,8 +57,13 @@ function DwtInputField(params) {
 	this._errorHintClassName = this._origClassName + "-errorhint";
 	DwtControl.call(this, params.parent, params.className, params.posStyle);
 
-	this._type = params.type ? params.type : DwtInputField.STRING;
-	this._errorIconStyle = params.errorIconStyle ? params.errorIconStyle :
+    this._inputEventHandlers = {};
+
+    this._type = params.type ? params.type : DwtInputField.STRING;
+    this._rows = params.rows ? params.rows : 1;
+    this._size = params.size;
+
+    this._errorIconStyle = params.errorIconStyle ? params.errorIconStyle :
 							params.validator ? DwtInputField.ERROR_ICON_RIGHT : DwtInputField.ERROR_ICON_NONE;
 	this._validationStyle = params.validationStyle ? params.validationStyle : DwtInputField.ONEXIT_VALIDATION;
 
@@ -84,19 +89,16 @@ function DwtInputField(params) {
 			htmlArr[i++] = hackEnd;
 			htmlEl.innerHTML = htmlArr.join("");
 		} else {
-			htmlEl.innerHTML = [hackBegin, "<input autocomplete='off' id='", inputFieldId, "' type='",
-				(this._type != DwtInputField.PASSWORD) ? "text" : "password", "'/>", hackEnd].join("");
+			htmlEl.innerHTML = [hackBegin, "<input id='",inputFieldId,"'>", hackEnd].join("");
 		}
-				
+
 	} else {
 		var htmlArr = ["<table cellspacing='0' cellpadding='0'><tr>"];
 		var i = 1;
 		if (this._errorIconStyle == DwtInputField.ERROR_ICON_LEFT)
 			htmlArr[i++] = ["<td style='padding-right:2px;'id='", errorIconId, "'></td>"].join("");
 
-		htmlArr[i++] = ["<td>", hackBegin, "<input autocomplete='off' id='", inputFieldId, "' type='",
-			(this._type != DwtInputField.PASSWORD) ? "text" : "password",
-			"'/>", hackEnd, "</td>"].join("");
+		htmlArr[i++] = ["<td>", hackBegin, "<input id='", inputFieldId, "'>", hackEnd, "</td>"].join("");
 
 		if (this._errorIconStyle == DwtInputField.ERROR_ICON_RIGHT)
 			htmlArr[i++] = ["<td style='padding-left:2px;' id='", errorIconId, "'></td>"].join("");
@@ -111,23 +113,29 @@ function DwtInputField(params) {
 		}
 	}
 
-	this._inputField = document.getElementById(inputFieldId);
-	Dwt.associateElementWithObject(this._inputField, this);
+    if (this._rows > 1) {
+        this._inputField = document.getElementById(inputFieldId);
+        Dwt.associateElementWithObject(this._inputField, this);
 
-	this._inputField.onkeyup = DwtInputField._keyUpHdlr;
-	this._inputField.onblur = DwtInputField._blurHdlr;
-	this._inputField.onfocus = DwtInputField._focusHdlr;
+        this._inputField.onkeyup = DwtInputField._keyUpHdlr;
+        this._inputField.onblur = DwtInputField._blurHdlr;
 
-	if (params.size)
-		this._inputField.size = params.size;
-	if (params.maxLen)
-		this._inputField.maxLength = this._maxLen = params.maxLen;
+        if (params.size)
+            this._inputField.size = params.size;
+        if (params.maxLen)
+            this._inputField.maxLength = this._maxLen = params.maxLen;
 
-	//MOW:  this.setCursor("default");
+        //MOW:  this.setCursor("default");
 
-	this._inputField.value = params.initialValue || "";
+        this._inputField.value = params.initialValue || "";
+    }
+    else {
+        var oinput = document.getElementById(inputFieldId);
+        var ninput = this.__createInputEl(params);
+        oinput.parentNode.replaceChild(ninput, oinput);
+    }
 
-	this.setValidatorFunction(params.validatorCtxtObj, params.validator);
+    this.setValidatorFunction(params.validatorCtxtObj, params.validator);
 	this._setMouseEventHdlrs(false);
 	this._setKeyPressEventHdlr(false);
 
@@ -170,8 +178,66 @@ function() {
 DwtInputField.prototype.setHandler =
 function(eventType, hdlrFunc) {
 	if (!this._checkState()) return;
-
+    this._inputEventHandlers[eventType] = hdlrFunc;
 	Dwt.setHandler(this.getInputElement(), eventType, hdlrFunc);
+};
+
+DwtInputField.prototype.setInputType = function(type) {
+    if (type != this._type && this._rows == 1) {
+        this._type = type;
+        if (AjxEnv.isIE) {
+            var oinput = this._inputField;
+            var ninput = this.__createInputEl();
+            oinput.parentNode.replaceChild(ninput, oinput);
+        }
+        else {
+            this._inputField.type = this._type != DwtInputField.PASSWORD ? "text" : "password";
+        }
+    }
+}
+DwtInputField.prototype.__createInputEl = function(params) {
+    // clean up old input field if present
+    var oinput = this._inputField;
+    if (oinput) {
+        for (var eventType in this._inputEventHandlers) {
+            oinput.removeAttribute(eventType);
+        }
+        Dwt.disassociateElementFromObject(oinput, this);
+    }
+
+    // create new input field
+    var type = this._type != DwtInputField.PASSWORD ? "text" : "password";
+    var ninput = document.createElement(AjxEnv.isIE ? ["<INPUT type='",type,"'>"].join("") : "INPUT");
+    if (!AjxEnv.isIE) {
+        ninput.type = type;
+    }
+    this._inputField = ninput;
+
+    // set common values
+    var size = params ? params.size : oinput.size;
+    var maxLen = params ? params.maxLen : oinput.maxLength;
+
+    ninput.autocomplete = "off";
+    if (size) {
+        ninput.size = size;
+    }
+    if (maxLen) {
+        ninput.maxLength = maxLen;
+    }
+    ninput.value = (params ? params.initialValue : oinput.value) || "";
+    ninput.readonly = oinput ? oinput.readonly : false;
+
+    // associate with this control
+    Dwt.associateElementWithObject(ninput, this);
+
+    // add event handlers
+    ninput.onkeyup = DwtInputField._keyUpHdlr;
+    ninput.onblur = DwtInputField._blurHdlr;
+    for (var eventType in this._inputEventHandlers) {
+        ninput[eventType] = this._inputEventHandlers[eventType];
+    }
+
+    return ninput;
 };
 
 /**
