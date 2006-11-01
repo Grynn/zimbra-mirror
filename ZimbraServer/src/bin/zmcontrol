@@ -27,7 +27,6 @@
 #use strict;
 
 use strict;
-
 my $id = `id -u -n`;
 chomp $id;
 if ($id ne "zimbra") {die "Run as the zimbra user!\n";}
@@ -45,6 +44,9 @@ use lib "/opt/zimbra/zimbramon/lib";
 use Zimbra::Mon::Logger;
 
 use Getopt::Std;
+
+my $TIMEOUT = 180;
+$SIG{ALRM} = sub { print "Timeout after $TIMEOUT seconds\n"; exit(1) };
 
 my $localHostName = getHostName();
 
@@ -135,6 +137,7 @@ sub runRemoteCommand {
 
 sub doStatus {
 	$services = getEnabledServices();
+  alarm($TIMEOUT);
 	if (scalar(keys %$services) == 0) {
 		print "Cannot determine services - exiting\n";
 		return 1;
@@ -159,6 +162,7 @@ sub doStatus {
 	}
 	unlink ("/tmp/zmcontrol_status.$$");
 	unlink ("/tmp/zmcontrol_err.$$");
+  alarm(0);
 	return $status;
 }
 
