@@ -119,6 +119,7 @@ function DwtInputField(params) {
 
         this._inputField.onkeyup = DwtInputField._keyUpHdlr;
         this._inputField.onblur = DwtInputField._blurHdlr;
+		this._inputField.onfocus = DwtInputField._focusHdlr;
 
         if (params.size)
             this._inputField.size = params.size;
@@ -233,6 +234,7 @@ DwtInputField.prototype.__createInputEl = function(params) {
     // add event handlers
     ninput.onkeyup = DwtInputField._keyUpHdlr;
     ninput.onblur = DwtInputField._blurHdlr;
+	ninput.onfocus = DwtInputField._focusHdlr;
     for (var eventType in this._inputEventHandlers) {
         ninput[eventType] = this._inputEventHandlers[eventType];
     }
