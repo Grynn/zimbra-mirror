@@ -756,7 +756,7 @@ function(params) {
 
 	// bug fix #4722 - setting design mode for the first time seems to null
 	// out iframe doc's body in IE - so create a new body...
-	if (AjxEnv.isIE) {
+//	if (AjxEnv.isIE) {
 		doc.open();
 		doc.write(this._pendingContent || "");
 		doc.close();
@@ -764,7 +764,7 @@ function(params) {
 		// these 2 seem to be no-ops.
 		// this._execCommand("2D-Position", false);
 		// this._execCommand("MultipleSelection", true);
-	}
+//	}
 
 	this._registerEditorEventHandlers(document.getElementById(this._iFrameId), doc);
 }
@@ -1338,8 +1338,8 @@ function(iFrameDoc) {
 		iFrameDoc.designMode = "on";
 		// Probably a regression of FF 1.5.0.1/Linux requires us to
 		// reset event handlers here (Zimbra bug: 6545).
-		if (AjxEnv.isGeckoBased && (AjxEnv.isLinux || AjxEnv.isMac))
-			this._registerEditorEventHandlers(document.getElementById(this._iFrameId), iFrameDoc);
+// 		if (AjxEnv.isGeckoBased && (AjxEnv.isLinux || AjxEnv.isMac))
+// 			this._registerEditorEventHandlers(document.getElementById(this._iFrameId), iFrameDoc);
 	} catch (ex) {
 		//Gecko may take some time to enable design mode..
 		if (AjxEnv.isGeckoBased) {
