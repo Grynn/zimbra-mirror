@@ -757,7 +757,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 									labelCssStyle:"width:250px;", trueValue:"TRUE", falseValue:"FALSE"
 								},
 								{ref:ZaAccount.A_zimbraPasswordLockoutMaxFailures, type:_SUPER_TEXTFIELD_, 
-									relevant: "instance.attrs[ZaAccount.A_zimbraPasswordLockoutEnabled] == 'TRUE'",
+									relevant: "ZaAccountXFormView.isPasswordLockoutEnabled.call(this)",
 								 	relevantBehavior: _DISABLE_,
 									txtBoxLabel:ZaMsg.NAD_zimbraPasswordLockoutMaxFailures+":",
 									toolTipContent:ZaMsg.NAD_zimbraPasswordLockoutMaxFailuresSub,
@@ -772,7 +772,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 						{type:_GROUP_, colSizes:["250px","60px","100px","150px"],numCols:4,
 							items :[
 								{ref:ZaAccount.A_zimbraPasswordLockoutDuration, type:_SUPER_LIFETIME_, 
-									relevant: "instance.attrs[ZaAccount.A_zimbraPasswordLockoutEnabled] == 'TRUE'",
+									relevant: "ZaAccountXFormView.isPasswordLockoutEnabled.call(this)",
 									relevantBehavior: _DISABLE_,
 									txtBoxLabel:ZaMsg.NAD_zimbraPasswordLockoutDuration+":",
 									toolTipContent:ZaMsg.NAD_zimbraPasswordLockoutDurationSub,
@@ -781,7 +781,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS
 								},
 								{ref:ZaAccount.A_zimbraPasswordLockoutFailureLifetime, type:_SUPER_LIFETIME_, 
-									relevant: "instance.attrs[ZaAccount.A_zimbraPasswordLockoutEnabled] == 'TRUE'",
+									relevant: "ZaAccountXFormView.isPasswordLockoutEnabled.call(this)",
 									relevantBehavior: _DISABLE_,								
 									txtBoxLabel:ZaMsg.NAD_zimbraPasswordLockoutFailureLifetime+":",
 									toolTipContent:ZaMsg.NAD_zimbraPasswordLockoutFailureLifetimeSub,
