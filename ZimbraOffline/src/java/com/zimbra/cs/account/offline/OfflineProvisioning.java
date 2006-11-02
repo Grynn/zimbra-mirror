@@ -885,4 +885,28 @@ public class OfflineProvisioning extends Provisioning {
     public void removeMembers(DistributionList list, String[] member) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("removeMembers");
     }
+
+    @Override
+    public Identity createIdentity(Account account, String identityName, Map<String, Object> attrs) throws ServiceException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void deleteIdentity(Account account, String identityName) throws ServiceException {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public List<Identity> getAllIdentities(Account account) throws ServiceException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void modifyIdentity(Account account, String identityName, Map<String, Object> attrs) throws ServiceException {
+        // TODO Auto-generated method stub
+        
+    }
 }
