@@ -906,10 +906,13 @@ AjxDateFormat.HourSegment.prototype.toString = function() {
 
 AjxDateFormat.HourSegment.prototype.format = function(date) {
 	var hours = date.getHours();
-	if (hours > 12 && /[hK]/.test(this._s)) {
+    if (hours > 12 && /[hK]/.test(this._s)) {
 		hours -= 12;
 	}
-	/***
+    else if (hours == 0 && /[h]/.test(this._s)) {
+        hours = 12;
+    }
+    /***
 	// NOTE: This is commented out to match the Java formatter output
 	//       but from the comments for these meta-chars, it doesn't
 	//       seem right.
