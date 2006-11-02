@@ -59,6 +59,16 @@ function(text) {
 	this._button.setText(text);
 };
 
+DwtSelect.prototype.setToolTipContent = 
+function(text) {
+	this._button.setToolTipContent(text);
+};
+
+DwtSelect.prototype.getToolTipContent = 
+function() {
+	return this._button.getToolTipContent();
+};
+
 DwtSelect.prototype.setImage = 
 function(image) {
 	this._button.setImage(image);
