@@ -132,7 +132,9 @@ function(tmpObj, app) {
 		return false;
 	}
 	
-	var myCos = null;	
+	var myCos = null;
+	var maxPwdLen = Number.POSITIVE_INFINITY;
+	var minPwdLen = 1;	
 	
 	//find out what is this account's COS
 	if(ZaSettings.COSES_ENABLED) {
