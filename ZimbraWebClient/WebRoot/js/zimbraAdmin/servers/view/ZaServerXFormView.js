@@ -273,37 +273,44 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 						{ type: _GROUP_, label: ZaMsg.NAD_Service_EnabledServices, labelCssStyle: "vertical-align:top",
 						  items: [
 						  	{ ref: ZaServer.A_zimbraLdapServiceEnabled, type: _CHECKBOX_,
-						  	  relevant: "instance.attrs[ZaServer.A_zimbraLdapServiceInstalled]", relevantBehavior: _DISABLE_,
+						  	  relevant: "instance.attrs[ZaServer.A_zimbraLdapServiceInstalled]", 
+						  	  relevantBehavior: _DISABLE_,
 						  	  label: ZaMsg.NAD_Service_LDAP,
 					  	      onChange: ZaServerXFormView.onFormFieldChanged
 						  	},
 						  	{ ref: ZaServer.A_zimbraMailboxServiceEnabled, type: _CHECKBOX_,
-						  	  relevant: "instance.attrs[ZaServer.A_zimbraMailboxServiceInstalled]", relevantBehavior: _DISABLE_,
+						  	  relevant: "instance.attrs[ZaServer.A_zimbraMailboxServiceInstalled]", 
+						  	  relevantBehavior: _DISABLE_,
 						  	  label: ZaMsg.NAD_Service_Mailbox,
 					  	      onChange: ZaServerXFormView.onFormFieldChanged
 						  	},
 						  	{ ref: ZaServer.A_zimbraMailProxyServiceEnabled, type: _CHECKBOX_,
-						  	  relevant: "instance.attrs[ZaServer.A_zimbraMailProxyServiceInstalled]", relevantBehavior: _DISABLE_,
+						  	  relevant: "instance.attrs[ZaServer.A_zimbraMailProxyServiceInstalled]", 
+						  	  relevantBehavior: _DISABLE_,
 						  	  label: ZaMsg.NAD_Service_Imapproxy,
 					  	      onChange: ZaServerXFormView.onFormFieldChanged
 						  	},						  	
 						  	{ ref: ZaServer.A_zimbraMtaServiceEnabled, type: _CHECKBOX_,
-						  	  relevant: "instance.attrs[ZaServer.A_zimbraMtaServiceInstalled]", relevantBehavior: _DISABLE_,
+						  	  relevant: "instance.attrs[ZaServer.A_zimbraMtaServiceInstalled]", 
+						  	  relevantBehavior: _DISABLE_,
 						  	  label: ZaMsg.NAD_Service_MTA,
 					  	      onChange: ZaServerXFormView.onFormFieldChanged
 						  	},
 						  	{ ref: ZaServer.A_zimbraSnmpServiceEnabled, type: _CHECKBOX_,
-						  	  relevant: "instance.attrs[ZaServer.A_zimbraSnmpServiceInstalled]", relevantBehavior: _DISABLE_,
+						  	  relevant: "instance.attrs[ZaServer.A_zimbraSnmpServiceInstalled]", 
+						  	  relevantBehavior: _DISABLE_,
 						  	  label: ZaMsg.NAD_Service_SNMP,
 					  	      onChange: ZaServerXFormView.onFormFieldChanged
 						  	},
 						  	{ ref: ZaServer.A_zimbraAntiSpamServiceEnabled, type: _CHECKBOX_,
-						  	  relevant: "instance.attrs[ZaServer.A_zimbraAntiSpamServiceInstalled]", relevantBehavior: _DISABLE_,
+						  	  relevant: "instance.attrs[ZaServer.A_zimbraAntiSpamServiceInstalled]", 
+						  	  relevantBehavior: _DISABLE_,
 						  	  label: ZaMsg.NAD_Service_AntiSpam,
 					  	      onChange: ZaServerXFormView.onFormFieldChanged
 						  	},
 						  	{ ref: ZaServer.A_zimbraAntiVirusServiceEnabled, type: _CHECKBOX_,
-						  	  relevant: "instance.attrs[ZaServer.A_zimbraAntiVirusServiceInstalled]", relevantBehavior: _DISABLE_,
+						  	  relevant: "instance.attrs[ZaServer.A_zimbraAntiVirusServiceInstalled]", 
+						  	  relevantBehavior: _DISABLE_,
 						  	  label: ZaMsg.NAD_Service_AntiVirus,
 					  	      onChange: ZaServerXFormView.onFormFieldChanged
 						  	},
@@ -320,13 +327,13 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 						]}
 					]
 				}, 
-				{ type: _CASE_,  width:"100%", relevant: "instance[ZaModel.currentTab] == 3",colSizes:["100px","300px"],
+				{ type: _CASE_,  width:"100%", relevant: "instance[ZaModel.currentTab] == 3",colSizes:["250px","300px"],
 			      items: [
 			      	{ ref:ZaServer.A_zimbraMtaAuthEnabled, type: _SUPER_CHECKBOX_,
 			      	  trueValue: "TRUE", falseValue: "FALSE",
 			      	  onChange: ZaServerXFormView.onFormFieldChanged,
 			      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
-			      	  label:ZaMsg.NAD_MTA_Authentication
+			      	  checkBoxLabel:ZaMsg.NAD_MTA_Authentication
 		      	    },
 			      	{ ref:ZaServer.A_zimbraMtaTlsAuthOnly, type: _SUPER_CHECKBOX_,
 			      	  relevant:"ZaServerXFormView.getTLSEnabled.call(item)",
@@ -334,11 +341,11 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 			      	  trueValue: "TRUE", falseValue: "FALSE",
 			      	  onChange: ZaServerXFormView.onFormFieldChanged,
 			      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
-			      	  label:ZaMsg.NAD_MTA_TlsAuthenticationOnly
+			      	  checkBoxLabel:ZaMsg.NAD_MTA_TlsAuthenticationOnly
 		      	    },
 			      	{type:_SEPARATOR_, numCols:2},
 					{ref:ZaServer.A_SmtpHostname, type:_SUPER_TEXTFIELD_, 
-					  label:ZaMsg.NAD_MTA_WebMailHostname,
+					  txtBoxLabel:ZaMsg.NAD_MTA_WebMailHostname,
 					  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
 					  onChange: ZaServerXFormView.onFormFieldChanged,
 					  toolTipContent: ZaMsg.tt_MTA_WebMailHostname,
@@ -360,7 +367,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 					  onMouseout: "ZaController.hideTooltip",
 			      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
 			      	},
-			      	{ref:ZaServer.A_zimbraMtaMyNetworks,label:ZaMsg.NAD_MTA_MyNetworks,
+			      	{ref:ZaServer.A_zimbraMtaMyNetworks,txtBoxLabel:ZaMsg.NAD_MTA_MyNetworks,
 						type:_SUPER_TEXTFIELD_, 
 						onChange: ZaServerXFormView.onFormFieldChanged,
 						resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
@@ -368,13 +375,13 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 						textFieldCssClass:"admin_xform_name_input"
 					},
 			        { ref: ZaServer.A_zimbraMtaDnsLookupsEnabled, type:_SUPER_CHECKBOX_,
-			      	  label:ZaMsg.NAD_MTA_DnsLookups,
+			      	  checkBoxLabel:ZaMsg.NAD_MTA_DnsLookups,
 			      	  trueValue: "TRUE", falseValue: "FALSE",
 			      	  onChange: ZaServerXFormView.onFormFieldChanged,
 			      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
 		      	    }
 			    ]},
-				{type:_CASE_, width:"100%",colSizes:["100px","400px"], relevant:"instance[ZaModel.currentTab] == 4", 
+				{type:_CASE_, width:"100%",colSizes:["250px","400px"], relevant:"instance[ZaModel.currentTab] == 4", 
 					items:[
 						{ type: _DWT_ALERT_,
 						  containerCssStyle: "padding-bottom:0px",
@@ -383,7 +390,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 						  content: ZaMsg.Alert_ServerRestart
 						},							
 				      	{ ref: ZaServer.A_ImapServerEnabled, type: _SUPER_CHECKBOX_,
-				      	  label:ZaMsg.NAD_IMAP_Service,
+				      	  checkBoxLabel:ZaMsg.NAD_IMAP_Service,
 				      	  trueValue: "TRUE", falseValue: "FALSE",
 				      	  onChange: ZaServerXFormView.onFormFieldChanged,
 				      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
@@ -391,26 +398,26 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 						{ ref: ZaServer.A_zimbraImapBindPort, type:_SUPER_TEXTFIELD_, 
 						  relevant: "ZaServerXFormView.getIMAPEnabled.call(item)",
 						  relevantBehavior: _DISABLE_,
-						  label: ZaMsg.NAD_IMAP_Port, width: "5em",
+						  txtBoxLabel: ZaMsg.NAD_IMAP_Port, width: "5em",
 						  onChange: ZaServerXFormView.onFormFieldChanged,
 				      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
 						},	
 						{ ref: ZaServer.A_zimbraImapProxyBindPort, type:_SUPER_TEXTFIELD_, 
 						  relevant: "ZaServerXFormView.getMailProxyEnabled.call(item)",
 						  relevantBehavior: _HIDE_,
-						  label: ZaMsg.NAD_IMAP_Proxy_Port, width: "5em",
+						  txtBoxLabel: ZaMsg.NAD_IMAP_Proxy_Port, width: "5em",
 						  onChange: ZaServerXFormView.onFormFieldChanged,
 				      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
 						},							
 						{ ref: ZaServer.A_zimbraImapNumThreads, type:_SUPER_TEXTFIELD_, 
 						  relevant: "ZaServerXFormView.getIMAPEnabled.call(item)",
 						  relevantBehavior: _DISABLE_,
-						  label: ZaMsg.NAD_IMAP_NumThreads, width: "5em",
+						  txtBoxLabel: ZaMsg.NAD_IMAP_NumThreads, width: "5em",
 						  onChange: ZaServerXFormView.onFormFieldChanged,
 				      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
 						},							
 					    {ref: ZaServer.A_ImapSSLServerEnabled, type: _SUPER_CHECKBOX_,
-						  label:ZaMsg.NAD_IMAP_SSLService,
+						  checkBoxLabel:ZaMsg.NAD_IMAP_SSLService,
 					      relevant:"ZaServerXFormView.getIMAPEnabled.call(item)",
 					      trueValue: "TRUE", falseValue: "FALSE",
 					      onChange: ZaServerXFormView.onFormFieldChanged,
@@ -420,19 +427,19 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 						{ ref: ZaServer.A_ImapSSLBindPort, type:_SUPER_TEXTFIELD_, 
 						  relevant: "ZaServerXFormView.getIMAPSSLEnabled.call(item)",
 						  relevantBehavior: _DISABLE_,
-						  label: ZaMsg.NAD_IMAP_SSLPort, width: "5em",
+						  txtBoxLabel: ZaMsg.NAD_IMAP_SSLPort, width: "5em",
 						  onChange: ZaServerXFormView.onFormFieldChanged,
 				      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
 						},		
 						{ ref: ZaServer.A_zimbraImapSSLProxyBindPort, type:_SUPER_TEXTFIELD_, 
 						  relevant: "ZaServerXFormView.getIMAPSSLProxyEnabled.call(item)",
 						  relevantBehavior: _HIDE_,
-						  label: ZaMsg.NAD_IMAP_SSL_Proxy_Port, width: "5em",
+						  txtBoxLabel: ZaMsg.NAD_IMAP_SSL_Proxy_Port, width: "5em",
 						  onChange: ZaServerXFormView.onFormFieldChanged,
 				      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
 						},										      	
 				      	{ ref: ZaServer.A_ImapCleartextLoginEnabled, type: _SUPER_CHECKBOX_,
-				      	  label:ZaMsg.NAD_IMAP_CleartextLoginEnabled,
+				      	  checkBoxLabel:ZaMsg.NAD_IMAP_CleartextLoginEnabled,
 				      	  relevant:"ZaServerXFormView.getIMAPEnabled.call(item)",
 				      	  trueValue: "TRUE", falseValue: "FALSE",
 				      	  onChange: ZaServerXFormView.onFormFieldChanged,
@@ -441,7 +448,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 			      	    }							  
 					]
 				},
-				{type:_CASE_, width:"100%",colSizes:["100px","400px"], relevant:"instance[ZaModel.currentTab] == 5", 
+				{type:_CASE_, width:"100%",colSizes:["250px","400px"], relevant:"instance[ZaModel.currentTab] == 5", 
 					items:[
 						{ type: _DWT_ALERT_,
 						  containerCssStyle: "padding-bottom:0px",
@@ -453,13 +460,13 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 				      	  trueValue: "TRUE", falseValue: "FALSE",
 				      	  onChange: ZaServerXFormView.onFormFieldChanged,
 				      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
-				      	  label:ZaMsg.NAD_POP_Service, 
+				      	  checkBoxLabel:ZaMsg.NAD_POP_Service, 
 				      	  relevantBehavior:_DISABLE_
 			      	    },		
 						{ ref: ZaServer.A_zimbraPop3BindPort, type:_SUPER_TEXTFIELD_, 
 						  relevant:"ZaServerXFormView.getPOP3Enabled.call(item)",
 						  relevantBehavior: _DISABLE_,
-						  label: ZaMsg.NAD_POP_Port,
+						  txtBoxLabel: ZaMsg.NAD_POP_Port,
 						  cssClass:"admin_xform_name_input",
 						  onChange:ZaServerXFormView.onFormFieldChanged,
 				      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
@@ -467,7 +474,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 						{ ref: ZaServer.A_zimbraPop3ProxyBindPort, type:_SUPER_TEXTFIELD_, 
 						  relevant:"ZaServerXFormView.getPOP3ProxyEnabled.call(item)",
 						  relevantBehavior: _HIDE_,
-						  label: ZaMsg.NAD_POP_proxy_Port,
+						  txtBoxLabel: ZaMsg.NAD_POP_proxy_Port,
 						  cssClass:"admin_xform_name_input",
 						  onChange:ZaServerXFormView.onFormFieldChanged,
 				      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
@@ -489,12 +496,12 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 						{ ref: ZaServer.A_zimbraPop3NumThreads, type:_SUPER_TEXTFIELD_, 
 						  relevant: "ZaServerXFormView.getPOP3Enabled.call(item)",
 						  relevantBehavior: _DISABLE_,
-						  label: ZaMsg.NAD_POP_NumThreads, width: "5em",
+						  txtBoxLabel: ZaMsg.NAD_POP_NumThreads, width: "5em",
 						  onChange: ZaServerXFormView.onFormFieldChanged,
 				      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
 						},
 				      	{ ref: ZaServer.A_Pop3SSLServerEnabled, type: _SUPER_CHECKBOX_,
-				      	  label:ZaMsg.NAD_POP_SSL,
+				      	  checkBoxLabel:ZaMsg.NAD_POP_SSL,
 				      	  relevant:"ZaServerXFormView.getPOP3Enabled.call(item)",
 				      	  relevantBehavior: _DISABLE_,
 				      	  trueValue: "TRUE", falseValue: "FALSE",
@@ -505,7 +512,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 						{ ref: ZaServer.A_zimbraPop3SSLBindPort, type:_SUPER_TEXTFIELD_, 
 						  relevant:"ZaServerXFormView.getPOP3SSLEnabled.call(item)",
 						  relevantBehavior: _DISABLE_,
-						  label: ZaMsg.NAD_POP_SSL_Port,
+						  txtBoxLabel: ZaMsg.NAD_POP_SSL_Port,
 						  cssClass:"admin_xform_name_input",
 						  onChange:ZaServerXFormView.onFormFieldChanged,
 				      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
@@ -513,13 +520,13 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 						{ ref: ZaServer.A_zimbraPop3SSLProxyBindPort, type:_SUPER_TEXTFIELD_, 
 						  relevant:"ZaServerXFormView.getPOP3SSLProxyEnabled.call(item)",
 						  relevantBehavior: _HIDE_,
-						  label: ZaMsg.NAD_POP_SSL_proxy_Port,
+						  txtBoxLabel: ZaMsg.NAD_POP_SSL_proxy_Port,
 						  cssClass:"admin_xform_name_input",
 						  onChange:ZaServerXFormView.onFormFieldChanged,
 				      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
 					  	},						  			      	    						  
 				      	{ ref: ZaServer.A_Pop3CleartextLoginEnabled, type: _SUPER_CHECKBOX_,
-				      	  label:ZaMsg.NAD_POP_CleartextLoginEnabled,
+				      	  checkBoxLabel:ZaMsg.NAD_POP_CleartextLoginEnabled,
 				      	  relevant:"ZaServerXFormView.getPOP3Enabled.call(item)",
 				      	  relevantBehavior: _DISABLE_,
 				      	  trueValue: "TRUE", falseValue: "FALSE",

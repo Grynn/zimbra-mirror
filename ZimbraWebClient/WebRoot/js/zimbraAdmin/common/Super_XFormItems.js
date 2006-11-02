@@ -349,30 +349,31 @@ Super_AnchorHelper_XFormItem.prototype.resetToSuperValue = function(event) {
 Super_Textfield_XFormItem = function () {}
 XFormItemFactory.createItemType("_SUPER_TEXTFIELD_", "super_textfield", Super_Textfield_XFormItem, Super_XFormItem);
 
-Super_Textfield_XFormItem.prototype.useParentTable = false;
-Super_Textfield_XFormItem.prototype.subLabel = null;
+Super_Textfield_XFormItem.prototype.useParentTable = true;
+Super_Textfield_XFormItem.prototype.txtBoxLabel = null;
 Super_Textfield_XFormItem.prototype.numCols = 3;
+Super_Textfield_XFormItem.prototype.colSizes = ["300px","250","200px"];
+Super_Textfield_XFormItem.prototype.colSpan = 3;
 Super_Textfield_XFormItem.prototype.initializeItems = function() {
-	var subLabel = this.getInheritedProperty("subLabel");
+	var txtBoxLabel = this.getInheritedProperty("txtBoxLabel");
 	var textFieldCssClass = this.getInheritedProperty("textFieldCssClass");
 	var textFieldCssStyle = this.getInheritedProperty("textFieldCssStyle");
 	var textFieldWidth = this.getInheritedProperty("textFieldWidth");
 	var toolTip = this.getInheritedProperty("toolTipContent");
 
 	var txtField =	{	
-		type:_TEXTFIELD_, ref:".",align:_RIGHT_,
+		type:_TEXTFIELD_, ref:".",align:_LEFT_,
 		elementChanged: function(elementValue,instanceValue, event) {
 			this.getForm().itemChanged(this, elementValue, event);
 		},		
 		onChange:Composite_XFormItem.onFieldChange,
-		//onClick: "Super_Textfield_XFormItem.handleClick",
-		//onMouseout: "Super_Textfield_XFormItem.handleMouseout",
 		toolTipContent: toolTip,
 		updateElement:function(value) {
 			Super_XFormItem.updateCss.call(this,5);
 			Textfield_XFormItem.prototype.updateElement.call(this, value);
 		},
-		label:subLabel,	labelLocation:(subLabel ? _RIGHT_ : _NONE_),
+		label:txtBoxLabel,	
+		labelLocation:(txtBoxLabel ? _LEFT_ : _NONE_),
 		cssClass:textFieldCssClass,
 		cssStyle:textFieldCssStyle,
 		width:textFieldWidth,
@@ -405,8 +406,9 @@ Super_Textfield_XFormItem.prototype.items = [];
 Super_Checkbox_XFormItem = function () {}
 XFormItemFactory.createItemType("_SUPER_CHECKBOX_", "super_checkbox", Super_Checkbox_XFormItem, Super_XFormItem);
 
-Super_Checkbox_XFormItem.prototype.useParentTable = false;
-Super_Checkbox_XFormItem.prototype.numCols = 2;
+Super_Checkbox_XFormItem.prototype.useParentTable = true;
+Super_Checkbox_XFormItem.prototype.numCols = 3;
+Super_Checkbox_XFormItem.prototype.colSizes = ["250px","200px","150px"];
 Super_Checkbox_XFormItem.prototype.initializeItems = function() {
 	var anchorCssStyle = this.getInheritedProperty("anchorCssStyle");
 	if(anchorCssStyle) {
@@ -416,10 +418,19 @@ Super_Checkbox_XFormItem.prototype.initializeItems = function() {
 	}	
 	Composite_XFormItem.prototype.initializeItems.call(this);
 	var checkBoxLabel = this.getInheritedProperty("checkBoxLabel");
+	//var checkBoxLabel = this.getLabel();
+	/*if(!checkBoxLabel)
+		checkBoxLabel = this.getInheritedProperty("checkBoxLabel");*/
+		
 	var checkBoxLabelLocation = this.getInheritedProperty("checkBoxLabelLocation");
+	//var checkBoxLabelLocation = this.getLabelLocation();
+/*	if(!checkBoxLabelLocation)
+		checkBoxLabelLocation = this.getInheritedProperty("checkBoxLabelLocation");*/
+		
 	if(checkBoxLabel) {
 		this.getItems()[0].label = checkBoxLabel;
 		this.numCols = 3;
+		this.colSpan=3;
 	}
 	if(checkBoxLabelLocation) {
 		this.getItems()[0].labelLocation = checkBoxLabelLocation;
@@ -431,7 +442,7 @@ Super_Checkbox_XFormItem.prototype.initializeItems = function() {
 }	
 
 Super_Checkbox_XFormItem.prototype.items = [
-	{	type:_CHECKBOX_, ref:".", align:_LEFT_,
+	{	type:_CHECKBOX_, ref:".", 
 		//trueValue:"TRUE", falseValue:"FALSE", 
 		onChange:Composite_XFormItem.onFieldChange,
 		updateElement:function(value) {
@@ -642,7 +653,10 @@ Super_Select1_XFormItem.prototype.items = [
 
 function Super_Lifetime_XFormItem() {}
 XFormItemFactory.createItemType("_SUPER_LIFETIME_", "super_lifetime", Super_Lifetime_XFormItem, Super_XFormItem);
-Super_Lifetime_XFormItem.prototype.numCols = 5;
+Super_Lifetime_XFormItem.prototype.numCols = 4;
+Super_Lifetime_XFormItem.prototype.colSpan = 4;
+Super_Lifetime_XFormItem.prototype.colSizes =["250px","60px","100px","150px"];
+Super_Lifetime_XFormItem.prototype.useParenttable = true;
 Super_Lifetime_XFormItem.prototype.TIME_CHOICES = [
  				{value:"d", label:"Days"},
 				{value:"h", label:"Hours"},
@@ -651,10 +665,18 @@ Super_Lifetime_XFormItem.prototype.TIME_CHOICES = [
 ];
 
 Super_Lifetime_XFormItem.prototype.initializeItems = function() {
-	var subLabel = this.getInheritedProperty("subLabel");
-
+	var txtBoxLabel = this.getInheritedProperty("txtBoxLabel");
+	var toolTip = this.getInheritedProperty("toolTipContent");
+	
 	var txtField =	{
-		type:_TEXTFIELD_, ref:".", labelLocation:_NONE_,relevantBehavior:_PARENT_, cssClass:"admin_xform_number_input", 
+		type:_TEXTFIELD_, ref:".", 
+		label:txtBoxLabel,	
+		toolTipContent: toolTip,
+		nowrap:this.getInheritedProperty("nowrap"),
+		labelWrap:this.getInheritedProperty("labelWrap"),		
+		labelCssStyle:this.getLabelCssStyle(),
+		labelLocation:(txtBoxLabel ? _LEFT_ : _NONE_),
+		relevantBehavior:_PARENT_, cssClass:"admin_xform_number_input", 
 		getDisplayValue:function (itemVal) {
 			var val = "1";
 			if(itemVal != null && itemVal.length >0) {
@@ -682,7 +704,8 @@ Super_Lifetime_XFormItem.prototype.initializeItems = function() {
 	};
 	
 	var selectField = 	{
-		type:_OSELECT1_, ref:".", relevantBehavior:_PARENT_, choices:Super_Lifetime_XFormItem.prototype.TIME_CHOICES,
+		type:_OSELECT1_, ref:".", relevantBehavior:_PARENT_, 
+		choices:Super_Lifetime_XFormItem.prototype.TIME_CHOICES,
 		getDisplayValue:function (itemVal){
 			var val = "d";
 			if(itemVal != null && itemVal.length >0) {
@@ -703,7 +726,8 @@ Super_Lifetime_XFormItem.prototype.initializeItems = function() {
 			Super_XFormItem.updateCss.call(this,5);
 			OSelect1_XFormItem.prototype.updateElement.call(this, value);
 		},
-		label:subLabel,	labelLocation:(subLabel ? _RIGHT_ : _NONE_),
+		label:null,
+		labelLocation:_NONE_,
 		forceUpdate:true		
 	};
 	var anchorCssStyle = this.getInheritedProperty("anchorCssStyle");
@@ -729,13 +753,104 @@ Super_Lifetime_XFormItem.prototype.items = [ ];
 function Super_Lifetime1_XFormItem() {}
 XFormItemFactory.createItemType("_SUPER_LIFETIME1_", "super_lifetime1", Super_Lifetime1_XFormItem, Super_XFormItem);
 Super_Lifetime1_XFormItem.prototype.numCols = 4;
+Super_Lifetime1_XFormItem.prototype.colSpan = 4;
+Super_Lifetime1_XFormItem.prototype.colSizes =["250px","60px","100px","150px"];
+Super_Lifetime1_XFormItem.prototype.useParenttable = true;
 Super_Lifetime1_XFormItem.prototype.TIME_CHOICES = [
  				{value:"d", label:"Days"},
 				{value:"h", label:"Hours"}
 ];
 
+Super_Lifetime1_XFormItem.prototype.initializeItems = function() {
+	var txtBoxLabel = this.getInheritedProperty("txtBoxLabel");
+	var toolTip = this.getInheritedProperty("toolTipContent");
+	
+	var txtField =	{
+		type:_TEXTFIELD_, ref:".", 
+		label:txtBoxLabel,	
+		toolTipContent: toolTip,
+		nowrap:this.getInheritedProperty("nowrap"),
+		labelWrap:this.getInheritedProperty("labelWrap"),		
+		labelCssStyle:this.getLabelCssStyle(),
+		labelLocation:(txtBoxLabel ? _LEFT_ : _NONE_),
+		relevantBehavior:_PARENT_, cssClass:"admin_xform_number_input", 
+		getDisplayValue:function (itemVal) {
+			var val = "1";
+			if(itemVal != null && itemVal.length >0) {
+				if(itemVal.length > 1) {
+					val = itemVal.substr(0, itemVal.length-1);				
+				} else {
+					if(itemVal == "0") {
+						val = "0";
+					} else {
+						val = "1";
+					}
+				}
+			}
+			this.getParentItem()._numericPart = val;
+			return val;	
+		},
+		elementChanged:function(numericPart, instanceValue, event) {
+			var val = numericPart + this.getParentItem()._stringPart;
+			this.getForm().itemChanged(this, val, event);
+		},onChange:Composite_XFormItem.onFieldChange,
+		updateElement:function(value) {
+			Super_XFormItem.updateCss.call(this,5);
+			Textfield_XFormItem.prototype.updateElement.call(this, value);
+		}
+	};
+	
+	var selectField = 	{
+		type:_OSELECT1_, ref:".", relevantBehavior:_PARENT_, 
+		choices:Super_Lifetime_XFormItem.prototype.TIME_CHOICES,
+		getDisplayValue:function (itemVal){
+			var val = "d";
+			if(itemVal != null && itemVal.length >0) {
+				if(itemVal.length > 1) {
+					val = itemVal.substr(itemVal.length-1, 1);
+				} else if (itemVal != "0") {
+					val = (itemVal == "d" || itemVal == "h" || itemVal== "m" || itemVal == "s") ? itemVal : "d";
+				}
+			}
+			this.getParentItem()._stringPart = val;
+			return val;
+		},
+		elementChanged:function(stringPart,instanceValue, event) {
+			var val = this.getParentItem()._numericPart + stringPart;
+			this.getForm().itemChanged(this.getParentItem(), val, event);
+		},
+		updateElement:function(value) {
+			Super_XFormItem.updateCss.call(this,5);
+			OSelect1_XFormItem.prototype.updateElement.call(this, value);
+		},
+		label:null,
+		labelLocation:_NONE_,
+		forceUpdate:true		
+	};
+	var anchorCssStyle = this.getInheritedProperty("anchorCssStyle");
+	
+	var anchorHlpr = {	
+		type:_SUPER_ANCHOR_HELPER_, ref:".",
+		relevant:"Super_XFormItem.checkIfOverWriten.call(item)",
+		relevantBehavior:_BLOCK_HIDE_,
+		onChange:Composite_XFormItem.onFieldChange,
+		cssStyle: (anchorCssStyle ? anchorCssStyle : "width:200px")
+	};
+	this.items = [txtField,selectField,anchorHlpr];
+	Composite_XFormItem.prototype.initializeItems.call(this);	
+}
+
+Super_Lifetime1_XFormItem.prototype.items = [ ];/*
 Super_Lifetime1_XFormItem.prototype.items = [
-	{type:_TEXTFIELD_, ref:".", labelLocation:_NONE_,relevantBehavior:_PARENT_, cssClass:"admin_xform_number_input", 
+	{type:_TEXTFIELD_, ref:".", 
+		label:txtBoxLabel,	
+		toolTipContent: toolTip,
+		nowrap:this.getInheritedProperty("nowrap"),
+		labelWrap:this.getInheritedProperty("labelWrap"),		
+		labelCssStyle:this.getLabelCssStyle(),
+		labelLocation:(txtBoxLabel ? _LEFT_ : _NONE_),
+		relevantBehavior:_PARENT_, 
+		cssClass:"admin_xform_number_input", 
 		getDisplayValue:function (itemVal) {
 			var val = "1";
 			if(itemVal != null && itemVal.length >0) {
@@ -791,4 +906,4 @@ Super_Lifetime1_XFormItem.prototype.items = [
 		relevantBehavior:_BLOCK_HIDE_,
 		onChange:Composite_XFormItem.onFieldChange
 	}
-];
+];*/
