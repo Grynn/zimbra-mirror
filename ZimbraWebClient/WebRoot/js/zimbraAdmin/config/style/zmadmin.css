@@ -548,3 +548,28 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 .DwtListView-Rows TD {
 	vertical-align:top;
 }
+
+/* Search builder toolbar (buttons only) */
+.ZaSearchBuilderToolBar {
+	margin-top: 3px;
+	width: 100%;
+	height: 100%;
+}
+
+.ZaSearchOptionView {
+	@PickerContainer@
+}
+
+.ZaSearchOptionView .DwtTree {
+	@PageBg@;
+}
+
+/* Header for each Option */
+.ZaSearchOptionView .DwtToolBar {
+	@WidgetHeaderContainer@
+	@WidgetHeaderSize-medium@
+}
+
+.ZaSearchOptionOverview {
+	overflow: hidden;
+}

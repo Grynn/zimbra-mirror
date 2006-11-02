@@ -129,10 +129,10 @@ function (optionId){
 }
 
 ZaSearchOption.getObjectTypeXForm = 
-function (optionId){
+function (optionId, height){
 	var xform = {
-			numCols:2, width: 150, 
-			cssStyle: "margin-top: 30px", 
+			numCols:2, width: 150, cssClass: "ZaSearchOptionOverview",
+			cssStyle: "margin-top: 30px;", 
 			items: []
 	}
 	
@@ -221,8 +221,10 @@ function (optionId){
 		  	toolTipContent: ZaMsg.tt_domain_search_option_filter,
 			onChange: ZaSearchBuilderController.filterDomains
 		 },
-		 {type: _GROUP_, width: 150, colSpan: "*", height: "100%", items :[
-				 {type: _DWT_LIST_, ref: ZaSearchOption.A_domainList,  width: 145, height: 150, 	
+		 {type: _GROUP_, width: 150, colSpan: "*", height: height - 30 - 25, 
+		 	cssStyle: "overflow:auto; position:absolute;",
+		 	items :[
+				 {type: _DWT_LIST_, ref: ZaSearchOption.A_domainList,  width: 148, height: height - 30 - 25,  
 					 forceUpdate: true, widgetClass: ZaOptionList, 
 					 multiselect: true, preserveSelection: true, 
 					 onSelection: ZaSearchBuilderController.filterSelectionListener
@@ -245,8 +247,10 @@ function (optionId){
 			onChange: ZaSearchBuilderController.filterServers
 		 },*/
 		 
-		 {type: _GROUP_, width: 150, colSpan: "*", height: "100%", items :[
-				 {type: _DWT_LIST_, ref: ZaSearchOption.A_serverList,  width: 145, height: 175, 	
+		 {type: _GROUP_, width: 150, colSpan: "*", height: height - 30, 
+		 	cssStyle: "overflow:auto; position:absolute;",
+		 	items :[
+				 {type: _DWT_LIST_, ref: ZaSearchOption.A_serverList,  width: 148, height: height - 30,  	
 					 forceUpdate: true, widgetClass: ZaOptionList, 
 					 multiselect: true, preserveSelection: true, 
 					 onSelection: ZaSearchBuilderController.filterSelectionListener
@@ -302,7 +306,8 @@ function () {
 /////////////////////////////////////////////////////////////////////////////////////
 //the list view for the domain and server filter
 function ZaOptionList (parent, app, className) {
-	DwtListView.call(this, parent, null, Dwt.STATIC_STYLE);
+	//DwtListView.call(this, parent, null, Dwt.STATIC_STYLE);
+	DwtListView.call(this, parent, null, Dwt.ABSOLUTE_STYLE);
 }
 
 ZaOptionList.prototype = new DwtListView;
@@ -323,7 +328,7 @@ function(item) {
 	this.associateItemWithElement(item, div, DwtListView.TYPE_LIST_ITEM);
 	
 	var idx = 0;
-	html[idx++] = "<table width='100%' cellspacing='2' cellpadding='0'><tr><td width=20>"
+	html[idx++] = "<table width='100%' cellspacing='0' cellpadding='0'><tr><td width=20>"
 	html[idx++] = "<input type=checkbox value='" + item + "' /></td>" ;
 	html[idx++] = "<td>"+ item + "</td></tr></table>";
 	

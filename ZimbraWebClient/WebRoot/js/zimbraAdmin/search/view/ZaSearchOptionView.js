@@ -38,7 +38,10 @@
 function ZaSearchOptionView (parent, app, optionId, width, position){
 	DwtComposite.call(this, parent, "ZaSearchOptionView", Dwt.ABSOLUTE_STYLE, true);		
 	this._width = width || ZaSearchOptionView.WIDTH ;
-	var height = parent.getH () - 5;
+	//var height = parent.getH () - 5;
+	//var height = parent.getH() || ZaSearchOptionView.HEIGHT ; //parent.getH() doesn't work well in IE at the initialization time
+	var height = ZaSearchOptionView.HEIGHT ;
+	DBG.println(AjxDebug.DBG3, "Height of ZaSearchOptionView = " + height);
 	var x = parent.getNextOptionX();
 	var y = 0 ;
 	this.setBounds (x, y, this._width, height);
@@ -63,10 +66,10 @@ function ZaSearchOptionView (parent, app, optionId, width, position){
 	tb_items.push(new ZaOperation(ZaOperation.NONE));
 	tb_items.push(new ZaOperation(ZaOperation.CLOSE, null, ZaMsg.ALTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener)));    	
 	
-	this._header = new ZaToolBar (this, tb_items) ;
-	this._header.setSize (this._width, 25);
-	
-	this.initForm (ZaSearchOption.getObjectTypeXModel(optionId), ZaSearchOption.getObjectTypeXForm (optionId), ZaSearchOption.getDefaultInstance(optionId));
+	this._header = new ZaToolBar (this, tb_items, null, "DwtToolBar") ;
+	//this._header.setSize (this._width, 25); //set the width, will lost the right border with the proper color.
+	this._header.setSize (null, 25);
+	this.initForm (ZaSearchOption.getObjectTypeXModel(optionId), ZaSearchOption.getObjectTypeXForm (optionId, height), ZaSearchOption.getDefaultInstance(optionId));
 }
 
 ZaSearchOptionView.prototype = new DwtComposite ;
@@ -74,7 +77,8 @@ ZaSearchOptionView.prototype.constructor = ZaSearchOptionView ;
 
 ZaSearchOptionView.WIDTH = 150 ;
 ZaSearchOptionView.BASIC_OPTION_WIDTH = 200 ;
-ZaSearchOptionView.MARGIN = 1 ;
+ZaSearchOptionView.MARGIN = 0 ;
+ZaSearchOptionView.HEIGHT = 225 ;
 
 ZaSearchOptionView.prototype.closeButtonListener = 
 function (event){
