@@ -62,6 +62,7 @@
 
 	<target name="offline-compile" depends="offline-build-init" description="Compiles the source code">
 		<ant dir="${common.dir}" target="jar" inheritAll="false" />
+		<ant dir="../ZimbraServer" target="war" inheritAll="false" />
 		<javac destdir="${build.classes.dir}" debug="true" classpathref="offline.class.path">
 			<src refid="all.java.path" />
 		</javac>
@@ -76,9 +77,9 @@
 	</target>
 
 	<target name="offline-war" depends="offline-jar">
-		<ant dir="../ZimbraServer" target="war" inheritAll="false"/>
 		<copy file="${server.warfile}" todir="${build.dir}"/>
-		<war file="${warfile}" update="true" webxml="${config.dir}/web.xml">
+		<copy file="${config.dir}/web.xml" todir="${build.dir}"/>
+		<war file="${warfile}" update="true" webxml="${build.dir}/web.xml">
 			<lib file="${build.dir}/${jarfile}"/>
 		</war>
 	</target>
@@ -185,7 +186,7 @@
 		<antcall target="offline-init-opt-zimbra"/>
 		<ant dir="../ZimbraServer" target="start-tomcat" inheritAll="false"/>
 		<antcall target="offline-deploy-war"/>
-		<ant dir="../ZimbraServer" target="deploy-zimlets" inheritAll="false"/>
+		<!-- <ant dir="../ZimbraServer" target="deploy-zimlets" inheritAll="false"/> -->
 		<antcall target="offline-add-sync-targets"/>
 	</target>
 
