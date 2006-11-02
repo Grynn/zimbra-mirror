@@ -61,6 +61,8 @@ PERL_LIBS 	:= \
 	Compress::Zlib \
 	BerkeleyDB \
 	Digest::SHA1 \
+	Digest::HMAC \
+	Digest::HMAC_MD5 \
 	Convert::TNEF \
 	Convert::UUlib \
 	Archive::Tar \
