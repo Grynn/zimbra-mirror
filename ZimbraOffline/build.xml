@@ -76,6 +76,7 @@
 	</target>
 
 	<target name="offline-war" depends="offline-jar">
+		<ant dir="../ZimbraServer" target="war" inheritAll="false"/>
 		<copy file="${server.warfile}" todir="${build.dir}"/>
 		<war file="${warfile}" update="true" webxml="${config.dir}/web.xml">
 			<lib file="${build.dir}/${jarfile}"/>
@@ -175,8 +176,8 @@
 	</target>
 
 	<target name="offline-reset-the-world" depends="offline-clean">
+		<ant dir="../ZimbraCommon" target="clean" inheritAll="false"/>
 		<ant dir="../ZimbraServer" target="clean" inheritAll="false"/>
-		<ant dir="../ZimbraServer" target="war" inheritAll="false"/>
 		<antcall target="offline-war"/>
 		<ant dir="../ZimbraServer" target="stop-servers" inheritAll="false"/>
 		<antcall target="offline-db-init"/>
