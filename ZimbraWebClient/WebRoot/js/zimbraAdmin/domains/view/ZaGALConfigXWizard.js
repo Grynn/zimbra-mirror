@@ -204,9 +204,14 @@ function (arg) {
 				var len = response.cn.length;
 				for (var ix=0;ix<len;ix++) {
 					var cnObject = new Object();
-					if(response.cn[ix]._attrs) {
-						for (var a in response.cn[ix]._attrs) {
-							cnObject[a] = response.cn[ix]._attrs[a];
+					if(response.cn[ix].a && response.cn[ix].a instanceof Array) {
+						var attrsArray = response.cn[ix].a;
+						var cnt = attrsArray.length;
+						
+						for (var j=0;j<cnt;j++) {
+							if(attrsArray[j] && attrsArray[j].n) {
+								cnObject[attrsArray[j].n] = attrsArray[j]._content;
+							}
 						}
 						this._containedObject[ZaDomain.A_GALTestSearchResults].push(cnObject);						
 					}
@@ -214,44 +219,7 @@ function (arg) {
 			}
 		}	
 	}
-	/*
-	if(arg instanceof AjxException || arg instanceof ZmCsfeException || arg instanceof AjxSoapException) {
-		this._containedObject[ZaDomain.A_GALTestResultCode] = arg.code;
-		this._containedObject[ZaDomain.A_GALTestMessage] = arg.detail;
-		this._containedObject[ZaDomain.A_GALTestSearchResults] = null;		
-	} else {
-		this._containedObject[ZaDomain.A_GALTestResultCode] = arg.getBody().firstChild.firstChild.firstChild.nodeValue;
-		if(this._containedObject[ZaDomain.A_GALTestResultCode] != ZaDomain.Check_OK) {
-			this._containedObject[ZaDomain.A_GALTestMessage] = arg.getBody().firstChild.childNodes[1].firstChild.nodeValue;		
-			this._containedObject[ZaDomain.A_GALTestSearchResults] = null;			
-		} else {
-			//parse returned contacts
-			this._containedObject[ZaDomain.A_GALTestSearchResults] = new Array();				
-			var childNodes = arg.getBody().firstChild.childNodes;
-			if(childNodes) {
-				var cnt = childNodes.length;
-				for(var i = 0; i < cnt; i ++) {
-					if(childNodes[i].nodeName!="cn")
-						continue;
-						
-					var attrNodes = childNodes[i].childNodes;
-					if(attrNodes) {
-						var cnObject = new Object();
-						var countAttrs = attrNodes.length;
-						for(var ix =0; ix < countAttrs; ix++) {
-							var attrNode = attrNodes[ix];
-							if (attrNode.nodeName != 'a') continue;
-							if(attrNode.firstChild != null) {
-								cnObject[attrNode.getAttribute("n")] = attrNode.firstChild.nodeValue;
-							}
-						}
-						if(countAttrs)
-							this._containedObject[ZaDomain.A_GALTestSearchResults].push(cnObject);
-					}						
-				}
-			}
-		}
-	}*/
+
 	this.goPage(6);
 }
 
