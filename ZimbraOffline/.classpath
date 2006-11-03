@@ -20,5 +20,5 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-logging.jar"/>
-	<classpathentry kind="output" path="build"/>
+	<classpathentry kind="output" path="build/classes"/>
 </classpath>
