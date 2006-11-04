@@ -909,4 +909,28 @@ public class OfflineProvisioning extends Provisioning {
         // TODO Auto-generated method stub
         
     }
+
+    @Override
+    public DataSource createDataSource(Account account, DataSource.Type type, String dsName, Map<String, Object> attrs) throws ServiceException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void deleteDataSource(Account account, String dataSourceId) throws ServiceException {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public List<DataSource> getAllDataSources(Account account) throws ServiceException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void modifyDataSource(Account account, String dataSourceId, Map<String, Object> attrs) throws ServiceException {
+        // TODO Auto-generated method stub
+        
+    }
 }
