@@ -150,7 +150,8 @@ function(visible, transparentBg) {
 	
 	//set the focus on the user name field
 	var userIdEl = ZLoginFactory.get(ZLoginFactory.USER_ID);
-	userIdEl.focus();
+	if(!userIdEl.disabled)
+		userIdEl.focus();
 	//set the event handler for the user id field and password field\
 	/* Use the Virtual host in the AuthRequest
 	var userIdEl = ZLoginFactory.get(ZLoginFactory.USER_ID);
