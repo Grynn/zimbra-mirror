@@ -43,6 +43,8 @@ objectIdentifier zimbraTimeZone ZimbraObjectClass:14
 objectIdentifier zimbraZimletEntry ZimbraObjectClass:15
 objectIdentifier zimbraCalendarResource ZimbraObjectClass:16
 objectIdentifier zimbraIdentity ZimbraObjectClass:17
+objectIdentifier zimbraDataSource ZimbraObjectClass:18
+objectIdentifier zimbraPop3DataSource ZimbraObjectClass:19
 
 ###########################################################################
 # attribute definitions
@@ -266,3 +268,17 @@ objectclass ( zimbraIdentity
         DESC 'Account Email Identity information'
         SUP top STRUCTURAL
 ${CLASS_MEMBERS_IDENTITY})
+
+# zimbraDataSource is the base class for data source objects
+objectclass ( zimbraDataSource
+        NAME 'zimbraDataSource'
+        DESC 'base class for data source objects'
+        SUP top STRUCTURAL
+${CLASS_MEMBERS_DATASOURCE})
+
+# zimbraDataSource is the base class for pop3 data source objects
+objectclass ( zimbraPop3DataSource
+	NAME 'zimbraPop3DataSource'
+	DESC 'Pop3 data source object'
+	SUP zimbraDataSource STRUCTURAL
+${CLASS_MEMBERS_POP3DATASOURCE})
