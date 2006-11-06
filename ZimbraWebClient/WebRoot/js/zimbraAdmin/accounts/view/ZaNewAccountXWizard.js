@@ -424,7 +424,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 	}
 	case1Items.push({ref:ZaAccount.A_password, type:_SECRET_, msgName:ZaMsg.NAD_Password,label:ZaMsg.NAD_Password, labelLocation:_LEFT_, cssClass:"admin_xform_name_input"});
 	case1Items.push({ref:ZaAccount.A2_confirmPassword, type:_SECRET_, msgName:ZaMsg.NAD_ConfirmPassword,label:ZaMsg.NAD_ConfirmPassword, labelLocation:_LEFT_, cssClass:"admin_xform_name_input"});														
-	case1Items.push({ref:ZaAccount.A_zimbraPasswordMustChange,align:_LEFT_, type:_CHECKBOX_,msgName:ZaMsg.NAD_MustChangePwd,label:ZaMsg.NAD_MustChangePwd+":",labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label"});
+	case1Items.push({ref:ZaAccount.A_zimbraPasswordMustChange, type:_CHECKBOX_,msgName:ZaMsg.NAD_MustChangePwd,
+				label:ZaMsg.NAD_MustChangePwd, trueValue:"TRUE", falseValue:"FALSE"});
 	case1Items.push({ref:ZaAccount.A_isAdminAccount,type:_CHECKBOX_, 
 								msgName:ZaMsg.NAD_IsAdmin,label:ZaMsg.NAD_IsAdmin,
 								trueValue:"TRUE", falseValue:"FALSE",relevantBehavior:_HIDE_
@@ -523,21 +524,28 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 					]
 				});								
 	}
-	
-	var zimbraFeatureMailForwardingEnabledType = _SUPER_CHECKBOX_ ;
+							
+	var zimbraFeatureMailForwardingEnabledItem = 
+				{ref:ZaAccount.A_zimbraFeatureMailForwardingEnabled, 
+					msgName:ZaMsg.NAD_zimbraFeatureMailForwardingEnabled,
+					trueValue:"TRUE", falseValue:"FALSE"
+				}
+
 	if (ZaSettings.isDomainAdmin || !ZaSettings.COSES_ENABLED) {
-		zimbraFeatureMailForwardingEnabledType = _CHECKBOX_ ;
+		zimbraFeatureMailForwardingEnabledItem.type = _CHECKBOX_ ;
+		zimbraFeatureMailForwardingEnabledItem.label = ZaMsg.NAD_zimbraFeatureMailForwardingEnabled ;
+	}else{
+		zimbraFeatureMailForwardingEnabledItem.type = _SUPER_CHECKBOX_ ;
+		zimbraFeatureMailForwardingEnabledItem.resetToSuperLabel = ZaMsg.NAD_ResetToCOS;
+		zimbraFeatureMailForwardingEnabledItem.labelCssStyle  = "width:190px;";
+		zimbraFeatureMailForwardingEnabledItem.checkBoxLabel = ZaMsg.NAD_zimbraFeatureMailForwardingEnabled;
+		zimbraFeatureMailForwardingEnabledItem.labelLocation = _LEFT_; 
 	}
 	
 	if(ZaSettings.ACCOUNTS_FORWARDING_ENABLED) {
 		cases.push({type:_CASE_, numCols:2, relevant:"instance[ZaModel.currentStep] == ZaNewAccountXWizard.FORWARDING_STEP",
 					items: [
-						{ref:ZaAccount.A_zimbraFeatureMailForwardingEnabled, type:zimbraFeatureMailForwardingEnabledType,
-							resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
-							msgName:ZaMsg.NAD_zimbraFeatureMailForwardingEnabled,
-							label:ZaMsg.NAD_zimbraFeatureMailForwardingEnabled,
-							trueValue:"TRUE", falseValue:"FALSE"
-						},
+						zimbraFeatureMailForwardingEnabledItem,
 						{ref:ZaAccount.A_zimbraPrefMailForwardingAddress,width:250,
 							labelCssClass:"xform_label",
 							type:_TEXTFIELD_, msgName:ZaMsg.NAD_zimbraPrefMailForwardingAddress,
