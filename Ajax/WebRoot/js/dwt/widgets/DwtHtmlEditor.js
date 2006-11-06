@@ -756,7 +756,7 @@ function(params) {
 
 	// bug fix #4722 - setting design mode for the first time seems to null
 	// out iframe doc's body in IE - so create a new body...
-//	if (AjxEnv.isIE) {
+	if (AjxEnv.isIE) {
 		doc.open();
 		doc.write(this._pendingContent || "");
 		doc.close();
@@ -764,7 +764,7 @@ function(params) {
 		// these 2 seem to be no-ops.
 		// this._execCommand("2D-Position", false);
 		// this._execCommand("MultipleSelection", true);
-//	}
+	}
 
 	this._registerEditorEventHandlers(document.getElementById(this._iFrameId), doc);
 }
