@@ -406,6 +406,7 @@ DwtInputField.prototype.setEnabled =
 function(enabled) {
 	DwtControl.prototype.setEnabled.call(this, enabled);
 	this.getInputElement().disabled = !enabled;
+	this._validateInput(this.getValue());
 };
 
 DwtInputField.prototype.focus = 
@@ -434,10 +435,13 @@ function(visible) {
  */
 DwtInputField.prototype.isValid =
 function() {
+	if (!this.getEnabled()) {
+		return this.getValue();
+	}
 	try {
 		if (typeof this._validator == "function") {
 			return this._validatorObj
-				? this._validator.call(this._validatorObj, this.getValue())
+				? this._validator.call(this._validatorObj, this.getValue(), this)
 				: this._validator(this.getValue());
 		} else {
 			return this._validator.test(this._inputField.value);
@@ -655,21 +659,25 @@ function(value) {
 	var retVal;
 	var errorStr;
 
-	try {
-		if (typeof this._validator == "function") {
-			retVal = value = this._validatorObj
-				? this._validator.call(this._validatorObj, value)
-				: this._validator(value);
-		} else if (!this._validator.test(value)) {
-			errorStr = this._errorString;
+	if (!this.getEnabled()) {
+		retVal = this.getValue();
+	} else {
+		try {
+			if (typeof this._validator == "function") {
+				retVal = value = this._validatorObj
+					? this._validator.call(this._validatorObj, value, this)
+					: this._validator(value);
+			} else if (!this._validator.test(value)) {
+				errorStr = this._errorString;
+			}
+		} catch(ex) {
+			if (typeof ex == "string")
+				errorStr = ex;
+			else
+				throw ex;
 		}
-	} catch(ex) {
-		if (typeof ex == "string")
-			errorStr = ex;
-		else
-			throw ex;
 	}
-
+	
 	if (errorStr) {
 		this._hasError = true;
 		if (this._errorIconTd)
