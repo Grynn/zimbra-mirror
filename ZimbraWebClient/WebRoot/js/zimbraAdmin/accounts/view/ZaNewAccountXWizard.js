@@ -596,7 +596,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 					]
 				});
 	}	
-	if(ZaSettings.ACCOUNTS_PREFS_ENABLED) {
+		if(ZaSettings.ACCOUNTS_PREFS_ENABLED) {
 		var prefItems = [
 				{ref:ZaAccount.A_prefSaveToSent,  type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_prefSaveToSent,checkBoxLabel:ZaMsg.NAD_prefSaveToSent,trueValue:"TRUE", falseValue:"FALSE"},
 						{ref:ZaAccount.A_zimbraPrefMessageViewHtmlPreferred, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefMessageViewHtmlPreferred,checkBoxLabel:ZaMsg.NAD_zimbraPrefMessageViewHtmlPreferred, trueValue:"TRUE", falseValue:"FALSE"},
@@ -638,7 +638,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 					];
 		cases.push({type:_CASE_, relevant:"instance[ZaModel.currentStep] == ZaNewAccountXWizard.PREFS_STEP", 
 					items :prefItems});
-	}		
+	}	
 
 	if(ZaSettings.SKIN_PREFS_ENABLED) {
 		cases.push({type:_CASE_,id:"account_form_themes_step", numCols:1, width:"100%", relevant:"instance[ZaModel.currentStep]==ZaNewAccountXWizard.SKINS_STEP", 
@@ -777,7 +777,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 								}
 							]
 						},
-						{type:_GROUP_, colSizes:["250px","60px","100px","150px"],numCols:4,
+						{type:_GROUP_, colSizes:["250px","80px","120px","150px"],numCols:4,
 							items :[
 								{ref:ZaAccount.A_zimbraPasswordLockoutDuration, type:_SUPER_LIFETIME_, 
 									relevant: "ZaAccountXFormView.isPasswordLockoutEnabled.call(this)",
@@ -802,7 +802,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 							]
 						},
 						{type:_SEPARATOR_, colSpan:3},							
-						{type:_GROUP_, colSizes:["250px","60px","100px","150px"],numCols:4,
+						{type:_GROUP_, colSizes:["250px","80px","120px","150px"],numCols:4,
 							items: [
 								{ref:ZaAccount.A_zimbraAuthTokenLifetime,
 									type:_SUPER_LIFETIME_, 
