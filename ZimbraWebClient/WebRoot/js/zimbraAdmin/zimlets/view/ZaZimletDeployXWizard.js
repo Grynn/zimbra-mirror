@@ -48,11 +48,13 @@ ZaZimletDeployXWizard.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_ac
 ZaZimletDeployXWizard.prototype = new ZaXWizardDialog;
 ZaZimletDeployXWizard.prototype.constructor = ZaZimletDeployXWizard;
 ZaXDialog.XFormModifiers["ZaZimletDeployXWizard"] = new Array();
+ZaZimletDeployXWizard.ZimletUploadFormId = null;
+ZaZimletDeployXWizard.ZimletUploadAttachmentInputId = null;	
 
-ZaZimletDeployXWizard.ZimletUploadAttachmentInputId = Dwt.getNextId();
-ZaZimletDeployXWizard.ZimletUploadFormId = Dwt.getNextId();
 ZaZimletDeployXWizard.getUploadFormHtml =
 function (){
+	ZaZimletDeployXWizard.ZimletUploadFormId = Dwt.getNextId();
+	ZaZimletDeployXWizard.ZimletUploadAttachmentInputId = Dwt.getNextId();	
 	//var uri = location.protocol + "//" + document.domain + appContextPath 
 	//							+ "/../service/upload";
 	var uri = appContextPath + "/../service/upload";
