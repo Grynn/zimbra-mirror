@@ -43,7 +43,9 @@ function ZaSearchBuilderToolbarView (parent, app){
 	this._ops.push(new ZaOperation(ZaOperation.SEARCH_BY_REMOVE_ALL, ZaMsg.searchByRemoveAll, ZaMsg.tt_searchByRemoveAll, null, null, new AjxListener(this, this.removeSelectHndlr)));
 	this._ops.push(new ZaOperation(ZaOperation.NONE));
 	this._ops.push(new ZaOperation (ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.tt_advanced_search_close, "Close", "CloseDis", new AjxListener(this, this.closeHndlr)));   
-	ZaToolBar.call(this, parent, this._ops);
+	
+	ZaToolBar.call(this, parent, this._ops, null, AjxEnv.isIE ? null : "ZaSearchBuilderToolBar" );
+	
 	
 	this._table.width = "100%";
 	this._app = app;

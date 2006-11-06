@@ -304,12 +304,16 @@ function (filter, key, value) {
 ZaSearchBuilderController.prototype.getSearchTypesFromFilters =
 function () {
 	var searchTypeFilterArr = this._filterObj[ZaSearchOption.OBJECT_TYPE_ID] ;
-	if (searchTypeFilterArr != null && searchTypeFilterArr.length > 0) {
+	if (this._objTypeOptionViewPosition < 0){ //the objType option is hidden and search all the object types
+		return ZaSearchOption.getDefaultObjectTypes();
+	}else if (searchTypeFilterArr != null && searchTypeFilterArr.length > 0) {
 		return searchTypeFilterArr ;
-	}else{
+	}else {
 		return [];
 	}
 }
+
+
 
 ZaSearchBuilderController.prototype.getQueryFromFilters =
 function () {
@@ -432,13 +436,14 @@ function (optionId) {
 		if (this._objTypeOptionViewPosition >= 0 ) {
 			return ; //object type option only display for one time
 		}
-		/*
 		else{
 			this._objTypeOptionViewPosition = position;
-		}*/
+		}
 	}else if (optionId == ZaSearchOption.SERVER_ID){
 		if (this._serverOptionViewPosition >= 0 ) {
 			return ; //object type option only display for one time
+		}else{
+			this._serverOptionViewPosition = position;
 		}
 	}
 	/*
