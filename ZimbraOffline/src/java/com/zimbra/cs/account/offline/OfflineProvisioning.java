@@ -873,7 +873,7 @@ public class OfflineProvisioning extends Provisioning {
 
     @Override
     public List searchCalendarResources(Domain d, EntrySearchFilter filter, String[] returnAttrs, String sortAttr, boolean sortAscending) throws ServiceException {
-        return new ArrayList<CalendarResource>();
+        return Collections.emptyList();
     }
 
     @Override
@@ -900,8 +900,7 @@ public class OfflineProvisioning extends Provisioning {
 
     @Override
     public List<Identity> getAllIdentities(Account account) throws ServiceException {
-        // TODO Auto-generated method stub
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
@@ -924,8 +923,7 @@ public class OfflineProvisioning extends Provisioning {
 
     @Override
     public List<DataSource> getAllDataSources(Account account) throws ServiceException {
-        // TODO Auto-generated method stub
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
