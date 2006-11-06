@@ -29,14 +29,6 @@
     <servlet-name>PrivilegedServlet</servlet-name>
     <!-- PrivilegedServlet will bind to privileged ports and drop privileges. -->
     <servlet-class>com.zimbra.cs.servlet.PrivilegedServlet</servlet-class>
-    <init-param>
-      <param-name>provisioning.provider</param-name>
-      <param-value>com.zimbra.cs.account.offline.OfflineProvisioning</param-value>
-    </init-param>
-    <init-param>
-      <param-name>mailbox.provider</param-name>
-      <param-value>com.zimbra.cs.mailbox.OfflineMailboxManager</param-value>
-    </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
 

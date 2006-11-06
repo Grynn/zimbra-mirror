@@ -30,23 +30,23 @@ public class OfflineMailboxManager extends MailboxManager {
     // private static final long SYNC_INTERVAL = 5 * Constants.MILLIS_PER_MINUTE;
     private static final long SYNC_INTERVAL = 15 * Constants.MILLIS_PER_SECOND;
 
-    public static Timer sTimer = new Timer(true);
-    private static SyncTask sSyncTask;
+    private static Timer    mTimer = new Timer(true);
+    private static SyncTask mSyncTask;
 
 
     public OfflineMailboxManager() throws ServiceException  {
         super();
 
         // wait 5 seconds, then start to sync
-        if (sSyncTask == null) {
-            sSyncTask = new SyncTask();
-            sTimer.schedule(sSyncTask, 5 * Constants.MILLIS_PER_SECOND, SYNC_INTERVAL);
+        if (mSyncTask == null) {
+            mSyncTask = new SyncTask();
+            mTimer.schedule(mSyncTask, 5 * Constants.MILLIS_PER_SECOND, SYNC_INTERVAL);
         }
     }
 
     @Override
     public void shutdown() {
-        sTimer.cancel();
+        mTimer.cancel();
     }
 
     @Override
@@ -60,11 +60,11 @@ public class OfflineMailboxManager extends MailboxManager {
     }
 
     public void sync() {
-        sSyncTask.run();
+        mSyncTask.run();
     }
 
 
-    private static class SyncTask extends TimerTask {
+    private class SyncTask extends TimerTask {
         private boolean inProgress;
         private long lastSync = System.currentTimeMillis();
 //        private boolean reset = false;
@@ -85,10 +85,9 @@ public class OfflineMailboxManager extends MailboxManager {
 //                    } catch (ServiceException e) { }
 //                }
 
-                MailboxManager mmgr = MailboxManager.getInstance();
-                for (String acctId : mmgr.getAccountIds()) {
+                for (String acctId : getAccountIds()) {
                     try {
-                        Mailbox mbox = mmgr.getMailboxByAccountId(acctId);
+                        Mailbox mbox = getMailboxByAccountId(acctId);
                         if (!(mbox instanceof OfflineMailbox))
                             continue;
                         OfflineMailbox ombx = (OfflineMailbox) mbox;
@@ -97,7 +96,7 @@ public class OfflineMailboxManager extends MailboxManager {
                         if (state == SyncState.INITIAL) {
                             // FIXME: wiping the mailbox when detecting interrupted initial sync is bad
                             ombx.deleteMailbox();
-                            mbox = mmgr.getMailboxByAccountId(acctId);
+                            mbox = getMailboxByAccountId(acctId);
                             if (!(mbox instanceof OfflineMailbox))
                                 continue;
                             ombx = (OfflineMailbox) mbox;
