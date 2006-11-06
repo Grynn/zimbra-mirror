@@ -31,6 +31,14 @@ public class OfflineMailSender extends MailSender {
     public int sendMimeMessage(OperationContext octxt, Mailbox mbox, int saveToFolder, MimeMessage mm, List<InternetAddress> newContacts,
                                List<Upload> uploads, int origMsgId, String replyType, boolean ignoreFailedAddresses, boolean replyToSender)
     throws ServiceException {
+        try {
+            // for messages that aren't actually *sent*, just go down the standard save-to-sent path
+            if (mm.getAllRecipients() == null)
+                return super.sendMimeMessage(octxt, mbox, saveToFolder, mm, newContacts, uploads, origMsgId, replyType, ignoreFailedAddresses, replyToSender);
+        } catch (MessagingException me) {
+            throw ServiceException.FAILURE("could not determine message recipients; aborting mail send", me);
+        }
+
         Account acct = mbox.getAccount();
         Account authuser = octxt == null ? null : octxt.getAuthenticatedUser();
         if (authuser == null)
