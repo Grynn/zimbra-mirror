@@ -569,7 +569,7 @@ function(ev) {
 	var keyCode = keyEv.keyCode;
 
     var obj = keyEv.dwtObj;
-    if (obj.notifyListeners(DwtUiEvent.ONKEYUP, keyEv)) {
+    if (obj.notifyListeners(DwtEvent.ONKEYUP, keyEv)) {
         return true;
     }
 
