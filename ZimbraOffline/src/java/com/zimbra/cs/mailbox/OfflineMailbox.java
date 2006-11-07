@@ -521,7 +521,7 @@ public class OfflineMailbox extends Mailbox {
             if (requiresAuth)
                 transport.setAuthToken(getAuthToken());
             transport.setSoapProtocol(SoapProtocol.Soap12);
-            return transport.invokeWithoutSession(request);
+            return transport.invokeWithoutSession(request.detach());
         } catch (IOException e) {
             throw ServiceException.PROXY_ERROR(e, mSoapUrl);
         } finally {
