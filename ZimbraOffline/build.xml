@@ -173,9 +173,20 @@
 	</target>
 
 	<target name="offline-deploy-zimlets">
+		<ant dir="../Zimlet" target="package-zimlets" inheritAll="false"/>
 		<foreach target="offline-install-zimlet" param="zimlet">
 			<path>
 				<fileset dir="${zimlet.dir}/zimlets" includes="**/*.zip"/>
+			</path>
+			<param name="action" value="deploy"/>
+		</foreach>
+	</target>
+
+	<target name="offline-deploy-zimlets-extra">
+		<ant dir="../Zimlet" target="package-zimlets-extra" inheritAll="false"/>
+		<foreach target="offline-install-zimlet" param="zimlet">
+			<path>
+				<fileset dir="${zimlet.dir}/zimlets-extra" includes="**/*.zip"/>
 			</path>
 			<param name="action" value="deploy"/>
 		</foreach>
