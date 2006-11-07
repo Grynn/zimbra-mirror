@@ -136,7 +136,9 @@ function (ev) {
 ZaZimletListController.prototype.deployZimletListener = 
 function (ev) {
 	try {
-		this._deployZimletWizard = new ZaZimletDeployXWizard(this._container, this._app);		
+		if(!this._deployZimletWizard)
+			this._deployZimletWizard = new ZaZimletDeployXWizard(this._container, this._app);		
+	
 		var zimlet = new ZaZimlet(this._app);
 		this._deployZimletWizard.setObject(zimlet);		
 		this._deployZimletWizard.popup();
