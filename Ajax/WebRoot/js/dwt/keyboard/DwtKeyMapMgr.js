@@ -230,6 +230,8 @@ function() {
 	DwtKeyMapMgr._KEYCODES[38]  = DwtKeyMap.ARROW_UP;
 	DwtKeyMapMgr._KEYCODES[8]   = DwtKeyMap.BACKSPACE;
 	DwtKeyMapMgr._KEYCODES[188] = DwtKeyMap.COMMA;
+	DwtKeyMapMgr._KEYCODES[186] = DwtKeyMap.SEMICOLON;
+	DwtKeyMapMgr._KEYCODES[59]  = DwtKeyMap.SEMICOLON;
 	DwtKeyMapMgr._KEYCODES[17]  = DwtKeyMap.CTRL;
 	DwtKeyMapMgr._KEYCODES[46]  = DwtKeyMap.DELETE;
 	DwtKeyMapMgr._KEYCODES[35]  = DwtKeyMap.END;

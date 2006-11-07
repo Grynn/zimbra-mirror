@@ -67,6 +67,7 @@ DwtKeyMap.ARROW_RIGHT	= "ArrowRight";
 DwtKeyMap.ARROW_UP		= "ArrowUp";
 DwtKeyMap.BACKSPACE		= "Backspace";
 DwtKeyMap.COMMA			= "Comma";
+DwtKeyMap.SEMICOLON		= "Semicolon";
 DwtKeyMap.DELETE		= "Del";
 DwtKeyMap.END			= "End";
 DwtKeyMap.ENTER			= "Enter";
