@@ -325,7 +325,6 @@ public class DeltaSync {
             elt.addAttribute(MailService.A_FOLDER, parentId).addAttribute(InitialSync.A_RELOCATED, true);
         }
 
-        // if there's a folder naming conflict within the target folder, usually push the local folder out of the way
         Folder conflict = parent.findSubfolder(name);
         if (conflict != null && conflict.getId() != id) {
             int conflict_mask = ombx.getChangeMask(sContext, conflict.getId(), conflict.getType());
@@ -341,13 +340,15 @@ public class DeltaSync {
                 ombx.renumberItem(sContext, conflict.getId(), type, id);
                 ombx.setChangeMask(sContext, id, type, conflict_mask & ~Change.MODIFIED_CONFLICT);
                 return false;
-            } else if (conflict.isMutable()) {
+            } else if (!conflict.isMutable() || (conflict_mask & Change.MODIFIED_NAME) != 0) {
+                // either the local user also renamed the folder or the folder's immutable, so the local client wins
+                name = newName;
+                elt.addAttribute(MailService.A_NAME, name).addAttribute(InitialSync.A_RELOCATED, true);
+            } else {
+                // if there's a folder naming conflict within the target folder, usually push the local folder out of the way
                 ombx.renameFolder(null, conflict.getId(), newName);
                 if ((conflict_mask & Change.MODIFIED_NAME) == 0)
                     mSyncRenames.add(conflict.getId());
-            } else {
-                name = newName;
-                elt.addAttribute(MailService.A_NAME, name).addAttribute(InitialSync.A_RELOCATED, true);
             }
         }
 
@@ -398,6 +399,14 @@ public class DeltaSync {
         OfflineLog.offline.debug("delta: updated tag (" + id + "): " + name);
     }
 
+    private Tag getTag(int id) throws ServiceException {
+        try {
+            return ombx.getTagById(sContext, id);
+        } catch (MailServiceException.NoSuchItemException nsie) {
+            return null;
+        }
+    }
+
     void syncContact(Element elt, int folderId) throws ServiceException {
         int id = (int) elt.getAttributeLong(MailService.A_ID);
         Contact cn = null;
@@ -423,7 +432,7 @@ public class DeltaSync {
         int mod_content = (int) elt.getAttributeLong(MailService.A_REVISION);
 
         synchronized (ombx) {
-            int change_mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_TAG);
+            int change_mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_CONTACT);
             if ((change_mask & Change.MODIFIED_CONTENT) == 0 && !fields.isEmpty())
                 ombx.modifyContact(sContext, id, fields, true);
             ombx.syncMetadata(sContext, id, MailItem.TYPE_CONTACT, folderId, flags, tags, color);
