@@ -204,3 +204,4 @@ function (value, event, form) {
 	this.setInstanceValue(value);
 	return value;
 }
+

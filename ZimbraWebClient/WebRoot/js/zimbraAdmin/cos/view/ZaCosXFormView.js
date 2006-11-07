@@ -222,7 +222,8 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 							{ref:ZaCos.A_zimbraPrefContactsPerPage, type:_OSELECT1_, msgName:ZaMsg.NAD_PrefContactsPerPage,label:ZaMsg.NAD_PrefContactsPerPage+":", labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},
 							{ref:ZaCos.A_zimbraPrefMailItemsPerPage, type:_OSELECT1_, msgName:ZaMsg.NAD_zimbraPrefMailItemsPerPage,label:ZaMsg.NAD_zimbraPrefMailItemsPerPage, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},
 							{ref:ZaCos.A_zimbraPrefMailInitialSearch, type:_TEXTFIELD_, cssClass:"admin_xform_name_input", msgName:ZaMsg.NAD_zimbraPrefMailInitialSearch,label:ZaMsg.NAD_zimbraPrefMailInitialSearch, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},
-							{ref:ZaCos.A_zimbraPrefMailPollingInterval, type:_LIFETIME_, msgName:ZaMsg.NAD_zimbraPrefMailPollingInterval,label:ZaMsg.NAD_zimbraPrefMailPollingInterval+":", labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},
+							{ref:ZaCos.A_zimbraPrefMailPollingInterval, type:_LIFETIME_, msgName:ZaMsg.NAD_zimbraPrefMailPollingInterval,label:ZaMsg.NAD_zimbraPrefMailPollingInterval+":", labelLocation:_LEFT_, onChange:ZaCosXFormView.validatePollingInterval},
+							{ref:ZaCos.A_zimbraMailMinPollingInterval, type:_LIFETIME_, msgName:ZaMsg.NAD_zimbraMailMinPollingInterval, label:ZaMsg.NAD_zimbraMailMinPollingInterval+":", labelLocation:_LEFT_, onChange:ZaCosXFormView.validatePollingInterval},
 							{ref:ZaCos.A_zimbraPrefCalendarApptReminderWarningTime, type:_OSELECT1_, msgName:ZaMsg.NAD_zimbraPrefCalendarApptReminderWarningTime,label:ZaMsg.NAD_zimbraPrefCalendarApptReminderWarningTime+":", labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},							
 							{ref:ZaCos.A_zimbraPrefShowSearchString, type:_CHECKBOX_, msgName:ZaMsg.NAD_zimbraPrefShowSearchString,label:ZaMsg.NAD_zimbraPrefShowSearchString, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_},
 							{ref:ZaCos.A_zimbraPrefCalendarAlwaysShowMiniCal, type:_CHECKBOX_, msgName:ZaMsg.NAD_alwaysShowMiniCal,label:ZaMsg.NAD_alwaysShowMiniCal, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_},							
@@ -386,3 +387,21 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 		];
 };
 ZaTabView.XFormModifiers["ZaCosXFormView"].push(ZaCosXFormView.myXFormModifier);
+
+ZaCosXFormView.validatePollingInterval =
+function (value, event, form) {
+	DBG.println(AjxDebug.DBG3, "The polling interval = " + value);
+	var instance = form.getInstance ();
+	this.setInstanceValue(value);
+	var prefPollingInterval = instance.attrs[ZaCos.A_zimbraPrefMailPollingInterval] ;
+	var minPollingInterval = instance.attrs[ZaCos.A_zimbraMailMinPollingInterval] ;
+	var prefPollingIntervalItem = form.getItemsById (ZaCos.A_zimbraPrefMailPollingInterval)[0];
+	if (ZaUtil.getLifeTimeInSeconds(prefPollingInterval) < ZaUtil.getLifeTimeInSeconds(minPollingInterval)){
+		prefPollingIntervalItem.setError (ZaMsg.tt_mailPollingIntervalError + minPollingInterval) ;
+		form.parent.setDirty(false);	
+	}else{
+		prefPollingIntervalItem.clearError();	
+		form.parent.setDirty(true);	
+	}
+}
+

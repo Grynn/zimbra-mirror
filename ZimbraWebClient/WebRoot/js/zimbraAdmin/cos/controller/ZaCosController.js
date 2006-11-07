@@ -305,7 +305,22 @@ function () {
 		this._errorDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_zimbraPrefMailPollingInterval + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
 		this._errorDialog.popup();		
 		return false;
-	}		
+	}	
+	
+	var n_minPollingInterval = tmpObj.attrs[ZaCos.A_zimbraMailMinPollingInterval] ;
+	
+	if(!AjxUtil.isLifeTime(n_minPollingInterval)) {
+		//show error msg
+		this._errorDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_zimbraMailMinPollingInterval + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+		this._errorDialog.popup();		
+		return false;
+	}
+	
+	var o_minPollingInterval = this._currentObject.attrs[ZaCos.A_zimbraMailMinPollingInterval] ;
+	if (ZaUtil.getLifeTimeInSeconds (n_minPollingInterval)
+		 > ZaUtil.getLifeTimeInSeconds(o_minPollingInterval)){	
+		this.popupMsgDialog(AjxMessageFormat.format (ZaMsg.tt_minPollingIntervalWarning, [o_minPollingInterval, n_minPollingInterval]),  true);
+	}
 	
 	if(!AjxUtil.isLifeTime(tmpObj.attrs[ZaCos.A_zimbraMailMessageLifetime])) {
 		//show error msg
