@@ -850,3 +850,11 @@ XFormItemFactory.createItemType("_ZAGROUP_", "zagroup", ZAGroup_XFormItem, Group
 ZAGroup_XFormItem.prototype.numCols = 2;
 ZAGroup_XFormItem.prototype.colSizes = ["275px","*"];
 ZAGroup_XFormItem.prototype.cssStyle = "margin-top:20px;margin-bottom:0px;padding-bottom:0px;";
+
+function ZARightGrouper_XFormItem() {}
+XFormItemFactory.createItemType("_ZARIGHT_GROUPER_", "zaright_grouper", ZARightGrouper_XFormItem, Grouper_XFormItem);
+ZARightGrouper_XFormItem.prototype.borderCssClass = "RightGrouperBorder";
+
+function ZALeftGrouper_XFormItem() {}
+XFormItemFactory.createItemType("_ZALEFT_GROUPER_", "zleft_grouper", ZALeftGrouper_XFormItem, Grouper_XFormItem);
+ZALeftGrouper_XFormItem.prototype.borderCssClass = "LeftGrouperBorder";

@@ -569,21 +569,23 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	var nonMemberOfHeaderList = new ZaAccountMemberOfsourceHeaderList(ZaAccountMemberOfsourceHeaderList.NON);
 	
 	//MemberOf Tab
-	var case3={type:_CASE_, numCols:4, relevant:("instance[ZaModel.currentTab] == " + _tab3), colSizes: [450, 20, 420, 30],
+	var case3={type:_CASE_, numCols:2, relevant:("instance[ZaModel.currentTab] == " + _tab3), colSizes: ["50%","50%"],
 					items: [
 						{type:_SPACER_, height:"10"},
 						//layout rapper around the direct/indrect list						
 						{type: _GROUP_, width: "98%", numCols: 1, //colSizes: ["auto", 20],
 							items: [
 								//direct member group
-								{type:_GROUP_, numCols:1, cssClass: "RadioGrouperBorder", width: "100%", colSizes:["auto"], //height: 400,
+								//{type:_GROUP_, numCols:1, cssClass: "RadioGrouperBorder", width: "100%", colSizes:["auto"], //height: 400,
+								{type:_ZALEFT_GROUPER_, numCols:1, width: "100%", 
+									label:ZaMsg.Account_DirectGroupLabel,
 									items:[
-										{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
+										/*{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
 									   		items: [
 												{type:_OUTPUT_, value:ZaMsg.Account_DirectGroupLabel, cssClass:"RadioGrouperLabel"},
 												{type:_CELLSPACER_}
 											]
-										},
+										},*/
 										{ref: ZaAccount.A2_directMemberList, type: _S_DWT_LIST_, width: "100%", height: 200,
 											cssClass: "DLSource", widgetClass: ZaAccountMemberOfListView, 
 											headerList: directMemberOfHeaderList, defaultColumnSortable: 0,
@@ -619,14 +621,15 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 								//{type:_CELLSPACER_},	
 								{type:_SPACER_, height:"10"},	
 								//indirect member group
-								{type:_GROUP_, numCols:1, cssClass: "RadioGrouperBorder", width: "100%", //colSizes:["auto"], height: "48%",
+							//	{type:_GROUP_, numCols:1, cssClass: "RadioGrouperBorder", width: "100%", //colSizes:["auto"], height: "48%",
+								{type:_ZALEFT_GROUPER_, numCols:1,  width: "100%", label:ZaMsg.Account_IndirectGroupLabel,
 									items:[
-										{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
+								/*		{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
 									   		items: [
 												{type:_OUTPUT_, value:ZaMsg.Account_IndirectGroupLabel, cssClass:"RadioGrouperLabel"},
 												{type:_CELLSPACER_}
 											]
-										},
+										},*/
 										//{type:_SPACER_, height:"5"},
 										{ref: ZaAccount.A2_indirectMemberList, type: _S_DWT_LIST_, width: "100%", height: 200,
 											cssClass: "DLSource", widgetClass: ZaAccountMemberOfListView, 
@@ -657,19 +660,17 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 								//{type:_CELLSPACER_}	
 							]
 						},
-						{type: _GROUP_, width: "100%", items: [
-								{type:_CELLSPACER_}
-							]
-						},
+
 						//non member group
-						{type:_GROUP_, numCols:1, cssClass: "RadioGrouperBorder", width: "98%", //colSizes:["auto"], height: "98%",
+						//{type:_GROUP_, numCols:1, cssClass: "RadioGrouperBorder", width: "98%", //colSizes:["auto"], height: "98%",
+						{type:_ZARIGHT_GROUPER_, numCols:1, width: "100%", label:ZaMsg.Account_NonGroupLabel,
 							items:[
-								{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
+								/*{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
 							   		items: [
 										{type:_OUTPUT_, value:ZaMsg.Account_NonGroupLabel, cssClass:"RadioGrouperLabel"},
 										{type:_CELLSPACER_}
 									]
-								},
+								},*/
 								{type:_GROUP_, numCols:5, colSizes:[30, "auto",60, 150,15], width:"98%", 
 								   items:[
 								   		{type:_OUTPUT_, value:ZaMsg.DLXV_LabelFind, nowrap:true},
