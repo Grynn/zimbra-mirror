@@ -351,6 +351,7 @@ public class OfflineProvisioning extends Provisioning {
                     createIdentity(acct, zident.getName(), zident.getAttrs());
             }
         } catch (ServiceException e) {
+            OfflineLog.offline.error("error syncing identities for account " + emailAddress, e);
             deleteAccount(zgi.getId());
             throw e;
         }
@@ -360,6 +361,7 @@ public class OfflineProvisioning extends Provisioning {
             for (ZDataSource zdsrc : zgi.getDataSources())
                 createDataSource(acct, zdsrc.getType(), zdsrc.getName(), zdsrc.getAttrs());
         } catch (ServiceException e) {
+            OfflineLog.offline.error("error syncing data sources for account " + emailAddress, e);
             deleteAccount(zgi.getId());
             throw e;
         }
@@ -849,18 +851,19 @@ public class OfflineProvisioning extends Provisioning {
         if (existing.size() >= account.getLongAttr(A_zimbraDataSourceMaxNumEntries, 20))
             throw AccountServiceException.TOO_MANY_DATA_SOURCES();
 
+        String dsid = (String) attrs.remove(A_zimbraDataSourceId);
         attrs.put(A_zimbraDataSourceName, name); // must be the same
 
         HashMap attrManagerContext = new HashMap();
         AttributeManager.getInstance().preModify(attrs, null, attrManagerContext, true, true);
 
-        String dsid = (String) attrs.get(A_zimbraDataSourceId);
         if (dsid == null)
-            attrs.put(A_zimbraDataSourceId, dsid = UUID.randomUUID().toString());
+            dsid = UUID.randomUUID().toString();
+        attrs.put(A_zimbraDataSourceId, dsid);
+        attrs.put(A_offlineDataSourceType, type.toString());
         attrs.put(A_objectClass, "zimbraDataSource");
         if (attrs.get(A_zimbraDataSourcePassword) instanceof String)
             attrs.put(A_zimbraDataSourcePassword, DataSource.encryptData(dsid, (String) attrs.get(A_zimbraDataSourcePassword)));
-        attrs.put(A_offlineDataSourceType, type.toString());
 
         DbOfflineDirectory.createDirectoryLeafEntry(EntryType.DATASOURCE, account, name, dsid, attrs);
         DataSource dsrc = new DataSource(type, name, dsid, attrs);
