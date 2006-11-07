@@ -511,11 +511,11 @@ public class OfflineMailbox extends Mailbox {
     }
 
 
-    Element sendRequest(Element request) throws ServiceException {
+    public Element sendRequest(Element request) throws ServiceException {
         return sendRequest(request, true);
     }
 
-    Element sendRequest(Element request, boolean requiresAuth) throws ServiceException {
+    public Element sendRequest(Element request, boolean requiresAuth) throws ServiceException {
         SoapHttpTransport transport = new SoapHttpTransport(mSoapUrl);
         try {
             if (requiresAuth)

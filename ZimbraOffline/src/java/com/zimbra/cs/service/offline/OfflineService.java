@@ -13,6 +13,7 @@ package com.zimbra.cs.service.offline;
 import org.dom4j.Namespace;
 import org.dom4j.QName;
 
+import com.zimbra.cs.service.mail.MailService;
 import com.zimbra.soap.DocumentDispatcher;
 import com.zimbra.soap.DocumentService;
 
@@ -27,6 +28,10 @@ public class OfflineService implements DocumentService {
 
     public void registerHandlers(DocumentDispatcher dispatcher) {
         // sync
-        dispatcher.registerHandler(SYNC_REQUEST, new Sync());
+        dispatcher.registerHandler(SYNC_REQUEST, new OfflineSync());
+
+        // fetching external data
+        dispatcher.registerHandler(MailService.IMPORT_DATA_REQUEST, new OfflineImportData());
+        dispatcher.registerHandler(MailService.FOLDER_ACTION_REQUEST, new OfflineFolderAction());
     }
 }
