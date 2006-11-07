@@ -227,7 +227,7 @@
 
 	<target name="offline-service-deploy" depends="offline-war,offline-refresh-opt-zimbra,offline-deploy-war,offline-deploy-zimlets" />
 
-	<target name="offline-reset-the-world" depends="offline-clean">
+	<target name="offline-reset-the-world" depends="offline-clean" description="Offline R-T-W">
 		<ant dir="../ZimbraCommon" target="clean" inheritAll="false"/>
 		<ant dir="../ZimbraServer" target="clean" inheritAll="false"/>
 		<antcall target="offline-war"/>
