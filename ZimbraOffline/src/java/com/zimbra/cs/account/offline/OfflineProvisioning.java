@@ -45,7 +45,7 @@ public class OfflineProvisioning extends Provisioning {
 
 
     public enum EntryType {
-        ACCOUNT("acct"), DATASOURCE("dsrc"), IDENTITY("id"), COS("cos"), CONFIG("conf"), ZIMLET("zmlt");
+        ACCOUNT("acct"), DATASOURCE("dsrc"), IDENTITY("idnt"), COS("cos"), CONFIG("conf"), ZIMLET("zmlt");
 
         private String mAbbr;
         private EntryType(String abbr)  { mAbbr = abbr; }

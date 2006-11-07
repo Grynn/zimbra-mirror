@@ -113,7 +113,7 @@ public class DbOfflineDirectory {
     throws ServiceException, SQLException {
         PreparedStatement stmt = null;
         try {
-            String table = (etype == EntryType.IDENTITY ? "zimbra.directory_leaf_attrs" : "zimbra.directory_attrs");
+            String table = (etype == EntryType.IDENTITY || etype == EntryType.DATASOURCE ? "zimbra.directory_leaf_attrs" : "zimbra.directory_attrs");
             stmt = conn.prepareStatement("INSERT INTO " + table + " (entry_id, name, value) VALUES (?, ?, ?)");
             stmt.setInt(1, entryId);
             stmt.setString(2, key);
