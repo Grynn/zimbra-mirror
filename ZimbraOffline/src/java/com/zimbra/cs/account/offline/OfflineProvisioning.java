@@ -931,4 +931,10 @@ public class OfflineProvisioning extends Provisioning {
         // TODO Auto-generated method stub
         
     }
+
+    @Override
+    public DataSource get(Account account, DataSourceBy keyType, String key) throws ServiceException {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
