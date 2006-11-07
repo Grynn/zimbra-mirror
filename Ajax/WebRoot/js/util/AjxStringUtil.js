@@ -686,7 +686,12 @@ AjxStringUtil._LF = /\n/;
 AjxStringUtil.convertHtml2Text =
 function(domRoot) {
 	if (!domRoot) return null;
-	var text = new Array();
+    if (typeof domRoot == "string") {
+        var domNode = document.createElement("SPAN");
+        domNode.innerHTML = domRoot;
+        domRoot = domNode;
+    }
+    var text = new Array();
 	var idx = 0;
 	var ctxt = new Object();
 	this._traverse(domRoot, text, idx, AjxStringUtil._NO_LIST, 0, 0, ctxt);
