@@ -64,18 +64,19 @@ public class DbOfflineDirectory {
         }
     }
 
-    public static void createDirectoryLeafEntry(EntryType etype, NamedEntry parent, String name, Map<String,Object> attrs) throws ServiceException {
+    public static void createDirectoryLeafEntry(EntryType etype, NamedEntry parent, String name, String id, Map<String,Object> attrs) throws ServiceException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
             conn = DbPool.getConnection();
 
-            stmt = conn.prepareStatement("INSERT INTO zimbra.directory_leaf (parent_id, entry_type, entry_name) VALUES (?, ?, ?)",
-                                         Statement.RETURN_GENERATED_KEYS);
+            stmt = conn.prepareStatement("INSERT INTO zimbra.directory_leaf (parent_id, entry_type, entry_name, zimbra_id)" +
+                    " VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, getIdForParent(conn, parent));
             stmt.setString(2, etype.toString());
             stmt.setString(3, name);
+            stmt.setString(4, id);
             stmt.executeUpdate();
             rs = stmt.getGeneratedKeys();
             if (!rs.next())
@@ -234,13 +235,18 @@ public class DbOfflineDirectory {
     }
 
     public static Map<String,Object> readDirectoryLeaf(EntryType etype, NamedEntry parent, String name) throws ServiceException {
+        return readDirectoryLeaf(etype, parent, OfflineProvisioning.A_offlineDn, name);
+    }
+
+    public static Map<String,Object> readDirectoryLeaf(EntryType etype, NamedEntry parent, String lookupKey, String lookupValue)
+    throws ServiceException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
             conn = DbPool.getConnection();
 
-            int entryId = getIdForLeaf(conn, etype, parent, name);
+            int entryId = getIdForLeaf(conn, etype, parent, lookupKey, lookupValue);
             if (entryId <= 0)
                 return null;
 
@@ -254,7 +260,7 @@ public class DbOfflineDirectory {
                 return null;
             return attrs;
         } catch (SQLException e) {
-            throw ServiceException.FAILURE("fetching " + etype + ": " + parent.getName() + '/' + name, e);
+            throw ServiceException.FAILURE("fetching " + etype + ": " + parent.getName() + '/' + lookupValue, e);
         } finally {
             DbPool.closeResults(rs);
             DbPool.closeStatement(stmt);
@@ -374,21 +380,37 @@ public class DbOfflineDirectory {
         return parentId;
     }
 
-    private static int getIdForLeaf(Connection conn, EntryType etype, NamedEntry parent, String name) throws ServiceException {
+    private static int getIdForLeaf(Connection conn, EntryType etype, NamedEntry parent, String lookupKey, String lookupValue) throws ServiceException {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            stmt = conn.prepareStatement("SELECT entry_id FROM zimbra.directory_leaf" +
-                    " WHERE parent_id = ? AND entry_type = ? and entry_name = ?");
-            stmt.setInt(1, getIdForParent(conn, parent));
-            stmt.setString(2, etype.toString());
-            stmt.setString(3, name);
+            if (lookupKey.equals(Provisioning.A_zimbraId)) {
+                stmt = conn.prepareStatement("SELECT entry_id FROM zimbra.directory_leaf" +
+                        " WHERE parent_id = ? AND entry_type = ? and zimbra_id = ?");
+                stmt.setInt(1, getIdForParent(conn, parent));
+                stmt.setString(2, etype.toString());
+                stmt.setString(3, lookupValue);
+            } else if (lookupKey.equals(OfflineProvisioning.A_offlineDn)) {
+                stmt = conn.prepareStatement("SELECT entry_id FROM zimbra.directory_leaf" +
+                        " WHERE parent_id = ? AND entry_type = ? and entry_name = ?");
+                stmt.setInt(1, getIdForParent(conn, parent));
+                stmt.setString(2, etype.toString());
+                stmt.setString(3, lookupValue);
+            } else {
+                stmt = conn.prepareStatement("SELECT da.entry_id FROM zimbra.directory_leaf_attrs da, zimbra.directory_leaf d" +
+                        " WHERE d.parent_id = ? AND d.entry_type = ? AND da.name = ? AND da.value = ? and da.entry_id = d.entry_id" +
+                        " GROUP BY da.entry_id");
+                stmt.setInt(1, getIdForParent(conn, parent));
+                stmt.setString(2, etype.toString());
+                stmt.setString(3, lookupKey);
+                stmt.setString(4, lookupValue);
+            }
             rs = stmt.executeQuery();
             if (rs.next())
                 return rs.getInt(1);
             return -1;
         } catch (SQLException e) {
-            throw ServiceException.FAILURE("fetching id for " + etype + ": " + parent.getName() + '/' + name, e);
+            throw ServiceException.FAILURE("fetching id for " + etype + ": " + parent.getName() + '/' + lookupValue, e);
         } finally {
             DbPool.closeResults(rs);
             DbPool.closeStatement(stmt);

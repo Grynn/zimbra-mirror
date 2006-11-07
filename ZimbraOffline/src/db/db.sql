@@ -179,7 +179,9 @@ CREATE TABLE directory_leaf (
    parent_id   INTEGER UNSIGNED NOT NULL,
    entry_type  CHAR(4) NOT NULL,
    entry_name  VARCHAR(128) NOT NULL,
+   zimbra_id   CHAR(73),
 
+   UNIQUE INDEX i_zimbra_id (zimbra_id),
    UNIQUE INDEX i_parent_entry_type_name (parent_id, entry_type, entry_name),
 
    CONSTRAINT fk_dleaf_entry_id FOREIGN KEY (parent_id) REFERENCES directory(entry_id) ON DELETE CASCADE

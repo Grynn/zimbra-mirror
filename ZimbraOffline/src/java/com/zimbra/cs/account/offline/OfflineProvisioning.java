@@ -31,6 +31,7 @@ import com.zimbra.cs.mime.MimeTypeInfo;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.service.ServiceException;
 import com.zimbra.cs.servlet.ZimbraServlet;
+import com.zimbra.cs.zclient.ZDataSource;
 import com.zimbra.cs.zclient.ZGetInfoResult;
 import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZMailbox;
@@ -40,22 +41,24 @@ public class OfflineProvisioning extends Provisioning {
     public static final String A_offlineDn = "offlineDn";
     public static final String A_offlineRemotePassword = "offlineRemotePassword";
     public static final String A_offlineRemoteServerUri = "offlineRemoteServerUri";
+    public static final String A_offlineDataSourceType = "offlineDataSourceType";
 
 
     public enum EntryType {
-        ACCOUNT("acct"), COS("cos"), CONFIG("conf"), IDENTITY("id"), ZIMLET("zmlt");
+        ACCOUNT("acct"), DATASOURCE("dsrc"), IDENTITY("id"), COS("cos"), CONFIG("conf"), ZIMLET("zmlt");
 
         private String mAbbr;
         private EntryType(String abbr)  { mAbbr = abbr; }
         public String toString()        { return mAbbr; }
 
         public static EntryType typeForEntry(Entry e) {
-            if (e instanceof Account)        return ACCOUNT;
-            else if (e instanceof Cos)       return COS;
-            else if (e instanceof Config)    return CONFIG;
-            else if (e instanceof Identity)  return IDENTITY;
-            else if (e instanceof Zimlet)    return ZIMLET;
-            else                             return null;
+            if (e instanceof Account)          return ACCOUNT;
+            else if (e instanceof Identity)    return IDENTITY;
+            else if (e instanceof DataSource)  return DATASOURCE;
+            else if (e instanceof Cos)         return COS;
+            else if (e instanceof Config)      return CONFIG;
+            else if (e instanceof Zimlet)      return ZIMLET;
+            else                               return null;
         }
     }
 
@@ -203,6 +206,8 @@ public class OfflineProvisioning extends Provisioning {
             throw OfflineServiceException.UNSUPPORTED("modifyAttrs(" + e.getClass().getSimpleName() + ")");
         else if (etype == EntryType.IDENTITY)
             throw ServiceException.INVALID_REQUEST("must use Provisioning.modifyIdentity() instead", null);
+        else if (etype == EntryType.DATASOURCE)
+            throw ServiceException.INVALID_REQUEST("must use Provisioning.modifyDataSource() instead", null);
 
         HashMap context = new HashMap();
         AttributeManager.getInstance().preModify(attrs, e, context, false, checkImmutable, allowCallback);
@@ -351,6 +356,15 @@ public class OfflineProvisioning extends Provisioning {
         }
 
         try {
+            // create data source entries in database
+            for (ZDataSource zdsrc : zgi.getDataSources())
+                createDataSource(acct, zdsrc.getType(), zdsrc.getName(), zdsrc.getAttrs());
+        } catch (ServiceException e) {
+            deleteAccount(zgi.getId());
+            throw e;
+        }
+
+        try {
             // fault in the mailbox so it's picked up by the sync loop
             MailboxManager.getInstance().getMailboxByAccount(acct);
         } catch (ServiceException e) {
@@ -416,6 +430,7 @@ public class OfflineProvisioning extends Provisioning {
         }
         if (attrs == null)
             return null;
+
         acct = new Account((String) attrs.get(A_mail), (String) attrs.get(A_zimbraId), attrs, sDefaultCos.getAccountDefaults());
         sAccountCache.put(acct);
         return acct;
@@ -785,7 +800,7 @@ public class OfflineProvisioning extends Provisioning {
         HashMap attrManagerContext = new HashMap();
         AttributeManager.getInstance().preModify(attrs, null, attrManagerContext, true, true);
 
-        DbOfflineDirectory.createDirectoryLeafEntry(EntryType.IDENTITY, account, name, attrs);
+        DbOfflineDirectory.createDirectoryLeafEntry(EntryType.IDENTITY, account, name, null, attrs);
         Identity identity = new Identity(name, attrs);
         AttributeManager.getInstance().postModify(attrs, identity, attrManagerContext, true);
         return identity;
@@ -829,20 +844,47 @@ public class OfflineProvisioning extends Provisioning {
     }
 
     @Override
-    public DataSource createDataSource(Account account, DataSource.Type type, String dsName, Map<String, Object> attrs) throws ServiceException {
-        // TODO Auto-generated method stub
-        return null;
+    public DataSource createDataSource(Account account, DataSource.Type type, String name, Map<String, Object> attrs) throws ServiceException {
+        List<DataSource> existing = getAllDataSources(account);
+        if (existing.size() >= account.getLongAttr(A_zimbraDataSourceMaxNumEntries, 20))
+            throw AccountServiceException.TOO_MANY_DATA_SOURCES();
+
+        attrs.put(A_zimbraDataSourceName, name); // must be the same
+
+        HashMap attrManagerContext = new HashMap();
+        AttributeManager.getInstance().preModify(attrs, null, attrManagerContext, true, true);
+
+        String dsid = (String) attrs.get(A_zimbraDataSourceId);
+        if (dsid == null)
+            attrs.put(A_zimbraDataSourceId, dsid = UUID.randomUUID().toString());
+        attrs.put(A_objectClass, "zimbraDataSource");
+        if (attrs.get(A_zimbraDataSourcePassword) instanceof String)
+            attrs.put(A_zimbraDataSourcePassword, DataSource.encryptData(dsid, (String) attrs.get(A_zimbraDataSourcePassword)));
+        attrs.put(A_offlineDataSourceType, type.toString());
+
+        DbOfflineDirectory.createDirectoryLeafEntry(EntryType.DATASOURCE, account, name, dsid, attrs);
+        DataSource dsrc = new DataSource(type, name, dsid, attrs);
+        AttributeManager.getInstance().postModify(attrs, dsrc, attrManagerContext, true);
+        return dsrc;
     }
 
     @Override
     public void deleteDataSource(Account account, String dataSourceId) throws ServiceException {
-        // TODO Auto-generated method stub
-        
+        DataSource dsrc = get(account, DataSourceBy.id, dataSourceId);
+        if (dsrc != null)
+            DbOfflineDirectory.deleteDirectoryLeaf(EntryType.DATASOURCE, account, dsrc.getName());
     }
 
     @Override
     public List<DataSource> getAllDataSources(Account account) throws ServiceException {
-        return Collections.emptyList();
+        List<String> names = DbOfflineDirectory.listAllDirectoryLeaves(EntryType.DATASOURCE, account);
+        if (names.isEmpty())
+            return Collections.emptyList();
+
+        List<DataSource> sources = new ArrayList<DataSource>(names.size());
+        for (String name : names)
+            sources.add(get(account, DataSourceBy.name, name));
+        return sources;
     }
 
     @Override
@@ -853,7 +895,16 @@ public class OfflineProvisioning extends Provisioning {
 
     @Override
     public DataSource get(Account account, DataSourceBy keyType, String key) throws ServiceException {
-        // TODO Auto-generated method stub
-        return null;
+        Map<String,Object> attrs = null;
+        if (keyType == DataSourceBy.name) {
+            attrs = DbOfflineDirectory.readDirectoryLeaf(EntryType.DATASOURCE, account, A_offlineDn, key);
+        } else if (keyType == DataSourceBy.id) {
+            attrs = DbOfflineDirectory.readDirectoryLeaf(EntryType.DATASOURCE, account, A_zimbraId, key);
+        }
+        if (attrs == null)
+            return null;
+
+        DataSource.Type type = DataSource.Type.fromString((String) attrs.get(A_offlineDataSourceType));
+        return new DataSource(type, (String) attrs.get(A_zimbraDataSourceName), (String) attrs.get(A_zimbraDataSourceId), attrs);
     }
 }
