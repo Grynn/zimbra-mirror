@@ -28,14 +28,12 @@ import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.mailbox.calendar.ICalTimeZone;
 import com.zimbra.cs.mime.MimeTypeInfo;
-import com.zimbra.cs.object.ObjectType;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.service.ServiceException;
 import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.zclient.ZGetInfoResult;
+import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zimlet.ZimletHandler;
-import com.zimbra.cs.zimlet.ZimletUtil;
 
 public class OfflineProvisioning extends Provisioning {
 
@@ -45,18 +43,19 @@ public class OfflineProvisioning extends Provisioning {
 
 
     public enum EntryType {
-        ACCOUNT("acct"), COS("cos"), CONFIG("conf"), ZIMLET("zmlt");
+        ACCOUNT("acct"), COS("cos"), CONFIG("conf"), IDENTITY("id"), ZIMLET("zmlt");
 
         private String mAbbr;
         private EntryType(String abbr)  { mAbbr = abbr; }
         public String toString()        { return mAbbr; }
 
         public static EntryType typeForEntry(Entry e) {
-            if (e instanceof Account)      return ACCOUNT;
-            else if (e instanceof Cos)     return COS;
-            else if (e instanceof Config)  return CONFIG;
-            else if (e instanceof Zimlet)  return ZIMLET;
-            else                           return null;
+            if (e instanceof Account)        return ACCOUNT;
+            else if (e instanceof Cos)       return COS;
+            else if (e instanceof Config)    return CONFIG;
+            else if (e instanceof Identity)  return IDENTITY;
+            else if (e instanceof Zimlet)    return ZIMLET;
+            else                             return null;
         }
     }
 
@@ -73,6 +72,7 @@ public class OfflineProvisioning extends Provisioning {
                     attrs = new HashMap<String, Object>(2);
                     attrs.put(A_cn, "config");
                     attrs.put(A_objectClass, "zimbraGlobalConfig");
+                    attrs.put(A_zimbraInstalledSkin, new String[] { "bare", "froggy", "harvest", "lavender", "rose", "sand", "sky", "steel", "ttt", "vanilla" } );
                     DbOfflineDirectory.createDirectoryEntry(EntryType.CONFIG, "config", attrs);
                 }
                 return new OfflineLocalConfig(attrs);
@@ -118,7 +118,7 @@ public class OfflineProvisioning extends Provisioning {
 
     private static final Cos sDefaultCos = OfflineCos.instantiate();
     static class OfflineCos extends Cos {
-        public OfflineCos(String name, String id, Map<String, Object> attrs) {
+        OfflineCos(String name, String id, Map<String, Object> attrs) {
             super(name, id, attrs);
         }
         static OfflineCos instantiate() {
@@ -144,47 +144,22 @@ public class OfflineProvisioning extends Provisioning {
         }
     }
 
-    private static final Map<String,Zimlet> sZimlets = OfflineZimlet.instantiateAll();
-    static class OfflineZimlet extends Zimlet implements ObjectType {
-        OfflineZimlet(String name, String id, Map<String, Object> attrs) {
-            super(name, id, attrs);
+    class OfflineIdentity extends Identity {
+        private final String mAccountZID;
+        OfflineIdentity(Account acct, String name, Map<String,Object> attrs) {
+            super(name, attrs);
+            mAccountZID = acct.getId();
         }
-        static Map<String,Zimlet> instantiateAll() {
-            Map<String,Zimlet> zmap = new HashMap<String,Zimlet>();
-            try {
-                List<String> ids = DbOfflineDirectory.listAllDirectoryEntries(EntryType.ZIMLET);
-                for (String id : ids) {
-                    Map<String, Object> attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.ZIMLET, A_zimbraId, id);
-                    if (attrs == null)
-                        continue;
-                    String name = (String) attrs.get(A_cn);
-                    if (name != null)
-                        zmap.put(name.toLowerCase(), new OfflineZimlet(name, id, attrs));
-                }
-                return zmap;
-            } catch (ServiceException e) {
-                // throw RuntimeException because we're being called at startup...
-                throw new RuntimeException("failure instantiating zimlets", e);
-            }
+        Account getAccount() throws ServiceException {
+            return get(AccountBy.id, mAccountZID);
         }
-        @Override
-        public String getAttr(String name, boolean applyDefaults) {
-            OfflineLog.offline.debug("fetching zimlet attr: " + name);
-            return super.getAttr(name, applyDefaults);
-        }
-        public String getType()              { return getAttr(Provisioning.A_cn); }
-        public String getDescription()       { return getAttr(Provisioning.A_zimbraZimletDescription); }
-        public boolean isIndexingEnabled()   { return getBooleanAttr(Provisioning.A_zimbraZimletIndexingEnabled, false); }
-        public String getHandlerClassName()  { return getAttr(Provisioning.A_zimbraZimletHandlerClass); }
-        public ZimletHandler getHandler()    { return ZimletUtil.getHandler(getName()); }
-        public String getHandlerConfig()     { return getAttr(Provisioning.A_zimbraZimletHandlerConfig); }
-        public String getServerIndexRegex()  { return getAttr(Provisioning.A_zimbraZimletServerIndexRegex); }
     }
 
     private static final List<MimeTypeInfo> sMimeTypes = OfflineMimeType.instantiateAll();
     static class OfflineMimeType implements MimeTypeInfo {
         private String mType, mHandler, mFileExtensions[];
         private boolean mIndexed;
+
         private OfflineMimeType(String type, String handler, boolean index, String[] fext) {
             mType = type;  mHandler = handler;  mIndexed = index;  mFileExtensions = fext;
         }
@@ -209,126 +184,8 @@ public class OfflineProvisioning extends Provisioning {
         }
     }
 
+    private static final Map<String,Zimlet> sZimlets = OfflineZimlet.instantiateAll();
     private static final Map<String,WellKnownTimeZone> sTimeZones = OfflineTimeZone.instantiateAll();
-    static class OfflineTimeZone extends WellKnownTimeZone {
-        private OfflineTimeZone(String name, String id, Map<String, Object> attrs)  { super(name, id, attrs); }
-
-        private static void register(Map<String,WellKnownTimeZone> tzmap, String name, String stdStart, String stdOffset, String stdRule,
-                                     String dayStart, String dayOffset, String dayRule) {
-            Map<String,Object> attrs = new HashMap<String,Object>(5);
-            attrs.put(A_zimbraId, UUID.randomUUID().toString());
-            attrs.put(A_cn, name);
-            attrs.put(A_zimbraTimeZoneStandardDtStart, stdStart);
-            attrs.put(A_zimbraTimeZoneStandardOffset, stdOffset);
-            if (stdRule != null)
-                attrs.put(A_zimbraTimeZoneStandardRRule, stdRule);
-            attrs.put(A_zimbraTimeZoneDaylightDtStart, dayStart);
-            attrs.put(A_zimbraTimeZoneDaylightOffset, dayOffset);
-            if (dayRule != null)
-                attrs.put(A_zimbraTimeZoneDaylightRRule, dayRule);
-            tzmap.put(name, new OfflineTimeZone(name, (String) attrs.get(A_zimbraId), attrs));
-        }
-        private static void register(Map<String,WellKnownTimeZone> tzmap, String name, String stdOffset) {
-            register(tzmap, name, "16010101T000000", stdOffset, null, "16010101T000000", stdOffset, null);
-        }
-        private static void registerUS(Map<String,WellKnownTimeZone> tzmap, String name, String stdOffset, String dayOffset) {
-            register(tzmap, name, "16010101T020000", stdOffset, "FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU",
-                                  "16010101T020000", dayOffset, "FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=4;BYDAY=1SU");
-        }
-        private static void registerEU(Map<String,WellKnownTimeZone> tzmap, String name, String stdOffset, String dayOffset) {
-            register(tzmap, name, "16010101T030000", stdOffset, "FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU",
-                                  "16010101T020000", dayOffset, "FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=1SU");
-        }
-        private static void registerOther(Map<String,WellKnownTimeZone> tzmap, String name, String stdOffset, String stdTime, String stdRule, String dayOffset, String dayTime, String dayRule) {
-            register(tzmap, name, "16010101T" + stdTime, stdOffset, "FREQ=YEARLY;WKST=MO;INTERVAL=1;" + stdRule, "16010101T" + dayTime, dayOffset, "FREQ=YEARLY;WKST=MO;INTERVAL=1;" + dayRule);
-        }
-        static Map<String,WellKnownTimeZone> instantiateAll() {
-            // just hardcode 'em for now...
-            Map<String,WellKnownTimeZone> tzmap = new HashMap<String,WellKnownTimeZone>(12);
-            register(tzmap, "(GMT-12.00) International Date Line West",             "-1200");
-            register(tzmap, "(GMT-11.00) Midway Island / Samoa",                    "-1100");
-            register(tzmap, "(GMT-10.00) Hawaii",                                   "-1000");
-            register(tzmap, "(GMT-07.00) Arizona",                                  "-0700");
-            register(tzmap, "(GMT-06.00) Central America",                          "-0600");
-            register(tzmap, "(GMT-06.00) Saskatchewan",                             "-0600");
-            register(tzmap, "(GMT-05.00) Bogota / Lima / Quito",                    "-0500");
-            register(tzmap, "(GMT-05.00) Indiana (East)",                           "-0500");
-            register(tzmap, "(GMT-04.00) Atlantic Time (Canada)",                   "-0400");
-            register(tzmap, "(GMT-04.00) Caracas / La Paz",                         "-0400");
-            register(tzmap, "(GMT-03.00) Buenos Aires / Georgetown",                "-0300");
-            register(tzmap, "(GMT-01.00) Cape Verde Is.",                           "-0100");
-            register(tzmap, "(GMT) Casablanca / Monrovia",                          "+0000");
-            register(tzmap, "(GMT+01.00) West Central Africa",                      "+0100");
-            register(tzmap, "(GMT+02.00) Harare / Pretoria",                        "+0200");
-            register(tzmap, "(GMT+02.00) Jerusalem",                                "+0200");
-            register(tzmap, "(GMT+03.00) Kuwait / Riyadh",                          "+0300");
-            register(tzmap, "(GMT+03.00) Nairobi",                                  "+0300");
-            register(tzmap, "(GMT+04.00) Abu Dhabi / Muscat",                       "+0400");
-            register(tzmap, "(GMT+04.30) Kabul",                                    "+0430");
-            register(tzmap, "(GMT+05.00) Islamabad / Karachi / Tashkent",           "+0500");
-            register(tzmap, "(GMT+05.30) Chennai / Kolkata / Mumbai / New Delhi",   "+0530");
-            register(tzmap, "(GMT+05.45) Kathmandu",                                "+0545");
-            register(tzmap, "(GMT+06.00) Astana / Dhaka",                           "+0600");
-            register(tzmap, "(GMT+06.00) Sri Jayawardenepura",                      "+0600");
-            register(tzmap, "(GMT+06.30) Rangoon",                                  "+0630");
-            register(tzmap, "(GMT+07.00) Bangkok / Hanoi / Jakarta",                "+0700");
-            register(tzmap, "(GMT+08.00) Beijing / Chongqing / Hong Kong / Urumqi", "+0800");
-            register(tzmap, "(GMT+08.00) Kuala Lumpur / Singapore",                 "+0800");
-            register(tzmap, "(GMT+08.00) Perth",                                    "+0800");
-            register(tzmap, "(GMT+08.00) Taipei",                                   "+0800");
-            register(tzmap, "(GMT+09.00) Osaka / Sapporo / Tokyo",                  "+0900");
-            register(tzmap, "(GMT+09.00) Seoul",                                    "+0900");
-            register(tzmap, "(GMT+09.30) Darwin",                                   "+0930");
-            register(tzmap, "(GMT+10.00) Brisbane",                                 "+1000");
-            register(tzmap, "(GMT+10.00) Guam / Port Moresby",                      "+1000");
-            register(tzmap, "(GMT+11.00) Magadan / Solomon Is. / New Caledonia",    "+1100");
-            register(tzmap, "(GMT+12.00) Fiji / Kamchatka / Marshall Is.",          "+1200");
-            register(tzmap, "(GMT+13.00) Nuku'alofa",                               "+1300");
-
-            registerUS(tzmap, "(GMT-09.00) Alaska",                                "-0900", "-0800");
-            registerUS(tzmap, "(GMT-08.00) Pacific Time (US & Canada) / Tijuana",  "-0800", "-0700");
-            registerUS(tzmap, "(GMT-07.00) Chihuahua / La Paz / Mazatlan",         "-0700", "-0600");
-            registerUS(tzmap, "(GMT-07.00) Mountain Time (US & Canada)",           "-0700", "-0600");
-            registerUS(tzmap, "(GMT-06.00) Central Time (US & Canada)",            "-0600", "-0500");
-            registerUS(tzmap, "(GMT-06.00) Guadalajara / Mexico City / Monterrey", "-0600", "-0500");
-            registerUS(tzmap, "(GMT-05.00) Eastern Time (US & Canada)",            "-0500", "-0400");
-            registerUS(tzmap, "(GMT-03.30) Newfoundland",                          "-0330", "-0230");
-            registerUS(tzmap, "(GMT-03.00) Greenland",                             "-0300", "-0200");
-
-            registerEU(tzmap, "(GMT-01.00) Azores",                                                "-0100", "+0000");
-            registerEU(tzmap, "(GMT+01.00) Amsterdam / Berlin / Bern / Rome / Stockholm / Vienna", "+0100", "+0200");
-            registerEU(tzmap, "(GMT+01.00) Belgrade / Bratislava / Budapest / Ljubljana / Prague", "+0100", "+0200");
-            registerEU(tzmap, "(GMT+01.00) Brussels / Copenhagen / Madrid / Paris",                "+0100", "+0200");
-            registerEU(tzmap, "(GMT+01.00) Sarajevo / Skopje / Warsaw / Zagreb",                   "+0100", "+0200");
-            registerEU(tzmap, "(GMT+02.00) Athens / Beirut / Istanbul / Minsk",                    "+0200", "+0300");
-            registerEU(tzmap, "(GMT+03.00) Moscow / St. Petersburg / Volgograd",                   "+0300", "+0400");
-            registerEU(tzmap, "(GMT+04.00) Baku / Tbilisi / Yerevan",                              "+0400", "+0500");
-            registerEU(tzmap, "(GMT+05.00) Ekaterinburg",                                          "+0500", "+0600");
-            registerEU(tzmap, "(GMT+06.00) Almaty / Novosibirsk",                                  "+0600", "+0700");
-            registerEU(tzmap, "(GMT+07.00) Krasnoyarsk",                                           "+0700", "+0800");
-            registerEU(tzmap, "(GMT+08.00) Irkutsk / Ulaan Bataar",                                "+0800", "+0900");
-            registerEU(tzmap, "(GMT+09.00) Yakutsk",                                               "+0900", "+1000");
-            registerEU(tzmap, "(GMT+10.00) Vladivostok",                                           "+1000", "+1100");
-
-            registerOther(tzmap, "(GMT-04.00) Santiago",                      "-0400", "000000", "BYMONTH=3;BYDAY=2SA",   "-0300", "000000", "BYMONTH=10;BYDAY=2SA");
-            registerOther(tzmap, "(GMT-03.00) Brasilia",                      "-0300", "020000", "BYMONTH=2;BYDAY=2SU",   "-0200", "020000", "BYMONTH=10;BYDAY=3SU");
-            registerOther(tzmap, "(GMT-02.00) Mid-Atlantic",                  "-0200", "020000", "BYMONTH=9;BYDAY=-1SU",  "-0100", "020000", "BYMONTH=3;BYDAY=-1SU");
-            registerOther(tzmap, "(GMT+02.00) Bucharest",                     "+0200", "010000", "BYMONTH=10;BYDAY=-1SU", "+0300", "000000", "BYMONTH=3;BYDAY=-1SU");
-            registerOther(tzmap, "(GMT+02.00) Cairo",                         "+0200", "020000", "BYMONTH=9;BYDAY=-1WE",  "+0300", "020000", "BYMONTH=5;BYDAY=1FR");
-            registerOther(tzmap, "(GMT+03.00) Baghdad",                       "+0300", "040000", "BYMONTH=10;BYDAY=1SU",  "+0400", "030000", "BYMONTH=4;BYDAY=1SU");
-            registerOther(tzmap, "(GMT+03.30) Tehran",                        "+0330", "020000", "BYMONTH=9;BYDAY=4TU",   "+0430", "020000", "BYMONTH=3;BYDAY=1SU");
-            registerOther(tzmap, "(GMT+09.30) Adelaide",                      "+0930", "030000", "BYMONTH=3;BYDAY=-1SU",  "+1030", "020000", "BYMONTH=10;BYDAY=-1SU");
-            registerOther(tzmap, "(GMT+10.00) Canberra / Melbourne / Sydney", "+1000", "030000", "BYMONTH=3;BYDAY=-1SU",  "+1100", "020000", "BYMONTH=10;BYDAY=-1SU");
-            registerOther(tzmap, "(GMT+10.00) Hobart",                        "+1000", "030000", "BYMONTH=3;BYDAY=-1SU",  "+1100", "020000", "BYMONTH=10;BYDAY=1SU");
-            registerOther(tzmap, "(GMT+12.00) Auckland / Wellington",         "+1200", "020000", "BYMONTH=3;BYDAY=3SU",   "+1300", "020000", "BYMONTH=10;BYDAY=1SU");
-
-            registerOther(tzmap, "(GMT) Greenwich Mean Time - Dublin / Edinburgh / Lisbon / London", "+0000", "020000", "BYMONTH=10;BYDAY=-1SU", "+0000", "010000", "BYMONTH=3;BYDAY=-1SU");
-            registerOther(tzmap, "(GMT+02.00) Helsinki / Kyiv / Riga / Sofia / Tallinn / Vilnius",   "+0200", "040000", "BYMONTH=10;BYDAY=-1SU", "+0300", "030000", "BYMONTH=3;BYDAY=-1SU");
-
-            return tzmap;
-        }
-    }
-
 
     private static NamedEntryCache<Account> sAccountCache =
         new NamedEntryCache<Account>(LC.ldap_cache_account_maxsize.intValue(), LC.ldap_cache_account_maxage.intValue() * Constants.MILLIS_PER_MINUTE); 
@@ -344,13 +201,15 @@ public class OfflineProvisioning extends Provisioning {
         EntryType etype = EntryType.typeForEntry(e);
         if (etype == null)
             throw OfflineServiceException.UNSUPPORTED("modifyAttrs(" + e.getClass().getSimpleName() + ")");
+        else if (etype == EntryType.IDENTITY)
+            throw ServiceException.INVALID_REQUEST("must use Provisioning.modifyIdentity() instead", null);
 
         HashMap context = new HashMap();
         AttributeManager.getInstance().preModify(attrs, e, context, false, checkImmutable, allowCallback);
-        if (etype == EntryType.ACCOUNT || etype == EntryType.ZIMLET || etype == EntryType.COS) {
-            DbOfflineDirectory.modifyDirectoryEntry(etype, A_zimbraId, e.getAttr(A_zimbraId), attrs);
-        } else if (etype == EntryType.CONFIG) {
+        if (etype == EntryType.CONFIG) {
             DbOfflineDirectory.modifyDirectoryEntry(etype, A_offlineDn, "config", attrs);
+        } else {
+            DbOfflineDirectory.modifyDirectoryEntry(etype, A_zimbraId, e.getAttr(A_zimbraId), attrs);
         }
         reload(e);
         AttributeManager.getInstance().postModify(attrs, e, context, false, allowCallback);
@@ -363,10 +222,10 @@ public class OfflineProvisioning extends Provisioning {
             throw OfflineServiceException.UNSUPPORTED("reload(" + e.getClass().getSimpleName() + ")");
 
         Map<String,Object> attrs = null;
-        if (etype == EntryType.ACCOUNT || etype == EntryType.ZIMLET || etype == EntryType.COS) {
-            attrs = DbOfflineDirectory.readDirectoryEntry(etype, A_zimbraId, e.getAttr(A_zimbraId));
-        } else if (etype == EntryType.CONFIG) {
+        if (etype == EntryType.CONFIG) {
             attrs = DbOfflineDirectory.readDirectoryEntry(etype, A_offlineDn, "config");
+        } else {
+            attrs = DbOfflineDirectory.readDirectoryEntry(etype, A_zimbraId, e.getAttr(A_zimbraId));
         }
         if (attrs == null)
             throw AccountServiceException.NO_SUCH_ACCOUNT(e.getAttr(A_mail));
@@ -475,9 +334,21 @@ public class OfflineProvisioning extends Provisioning {
         attrs.remove(A_zimbraIsAdminAccount);
         attrs.remove(A_zimbraIsDomainAdminAccount);
 
+        // create account entry in database
         DbOfflineDirectory.createDirectoryEntry(EntryType.ACCOUNT, emailAddress, attrs);
         Account acct = new Account(emailAddress, zgi.getId(), attrs, sDefaultCos.getAccountDefaults());
         sAccountCache.put(acct);
+
+        try {
+            // create identity entries in database
+            for (ZIdentity zident : zgi.getIdentities()) {
+                if (!zident.getName().equalsIgnoreCase(DEFAULT_IDENTITY_NAME))
+                    createIdentity(acct, zident.getName(), zident.getAttrs());
+            }
+        } catch (ServiceException e) {
+            deleteAccount(zgi.getId());
+            throw e;
+        }
 
         try {
             // fault in the mailbox so it's picked up by the sync loop
@@ -506,6 +377,10 @@ public class OfflineProvisioning extends Provisioning {
     @Override
     public void deleteAccount(String zimbraId) throws ServiceException {
         DbOfflineDirectory.deleteDirectoryEntry(EntryType.ACCOUNT, zimbraId);
+
+        Account acct = sAccountCache.getById(zimbraId);
+        if (acct != null)
+            sAccountCache.remove(acct.getName(), acct.getId());
     }
 
     @Override
@@ -886,27 +761,71 @@ public class OfflineProvisioning extends Provisioning {
         throw OfflineServiceException.UNSUPPORTED("removeMembers");
     }
 
-    @Override
-    public Identity createIdentity(Account account, String identityName, Map<String, Object> attrs) throws ServiceException {
-        // TODO Auto-generated method stub
-        return null;
+    private void validateIdentityAttrs(Map<String, Object> attrs) throws ServiceException {
+        Set<String> validAttrs = AttributeManager.getInstance().getLowerCaseAttrsInClass(AttributeClass.identity);
+        for (String key : attrs.keySet()) {
+            if (key.equalsIgnoreCase(A_objectClass))
+                continue;
+            else if (!validAttrs.contains(key.toLowerCase()))
+                throw ServiceException.INVALID_REQUEST("unable to modify attr: "+key, null);
+        }        
     }
 
     @Override
-    public void deleteIdentity(Account account, String identityName) throws ServiceException {
-        // TODO Auto-generated method stub
-        
+    public Identity createIdentity(Account account, String name, Map<String, Object> attrs) throws ServiceException {
+        if (name.equalsIgnoreCase(DEFAULT_IDENTITY_NAME))
+            throw AccountServiceException.IDENTITY_EXISTS(name);
+
+        List<Identity> existing = getAllIdentities(account);
+        if (existing.size() >= account.getLongAttr(A_zimbraIdentityMaxNumEntries, 20))
+            throw AccountServiceException.TOO_MANY_IDENTITIES();
+
+        attrs.put(A_objectClass, "zimbraIdentity");
+        validateIdentityAttrs(attrs);
+        HashMap attrManagerContext = new HashMap();
+        AttributeManager.getInstance().preModify(attrs, null, attrManagerContext, true, true);
+
+        DbOfflineDirectory.createDirectoryLeafEntry(EntryType.IDENTITY, account, name, attrs);
+        Identity identity = new Identity(name, attrs);
+        AttributeManager.getInstance().postModify(attrs, identity, attrManagerContext, true);
+        return identity;
+    }
+
+    @Override
+    public void deleteIdentity(Account account, String name) throws ServiceException {
+        if (name.equalsIgnoreCase(DEFAULT_IDENTITY_NAME))
+            throw ServiceException.INVALID_REQUEST("can't delete default identity", null);
+        DbOfflineDirectory.deleteDirectoryLeaf(EntryType.IDENTITY, account, name);
     }
 
     @Override
     public List<Identity> getAllIdentities(Account account) throws ServiceException {
-        return Collections.emptyList();
+        List<String> names = DbOfflineDirectory.listAllDirectoryLeaves(EntryType.IDENTITY, account);
+
+        List<Identity> identities = new ArrayList<Identity>(names.size() + 1);
+        identities.add(getDefaultIdentity(account));
+        for (String name : names)
+            identities.add(getIdentityByName(account, name));
+        return identities;
     }
 
     @Override
-    public void modifyIdentity(Account account, String identityName, Map<String, Object> attrs) throws ServiceException {
-        // TODO Auto-generated method stub
-        
+    public void modifyIdentity(Account account, String name, Map<String, Object> attrs) throws ServiceException {
+        validateIdentityAttrs(attrs);
+        if (name.equalsIgnoreCase(DEFAULT_IDENTITY_NAME)) {
+            modifyAttrs(account, attrs);
+            return;
+        }
+
+        Identity identity = getIdentityByName(account, name);
+        // FIXME: INCOMPLETE!
+    }
+
+    private OfflineIdentity getIdentityByName(Account account, String name) throws ServiceException {
+        Map<String,Object> existing = DbOfflineDirectory.readDirectoryLeaf(EntryType.IDENTITY, account, name);
+        if (existing == null)
+            throw AccountServiceException.NO_SUCH_IDENTITY(name);
+        return new OfflineIdentity(account, name, existing);
     }
 
     @Override
