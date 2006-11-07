@@ -54,6 +54,11 @@ function() {
 };
 
 
+DwtSelect.prototype.getButton = 
+function() {
+	return this._button;
+};
+
 DwtSelect.prototype.setText = 
 function(text) {
 	this._button.setText(text);
