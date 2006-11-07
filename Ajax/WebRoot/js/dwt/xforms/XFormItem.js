@@ -2791,8 +2791,10 @@ Case_XFormItem.prototype._outputHTML = function () {
 **/
 function TopGrouper_XFormItem() {}
 XFormItemFactory.createItemType("_TOP_GROUPER_", "top_grouper", TopGrouper_XFormItem, RadioGrouper_XFormItem)
-TopGrouper_XFormItem.prototype.borderCssClass = "xform_top_grouper_border";
-
+TopGrouper_XFormItem.prototype.borderCssClass = "TopGrouperBorder";
+TopGrouper_XFormItem.prototype.labelCssClass = "GrouperLabel";
+TopGrouper_XFormItem.prototype.labelLocation = _INLINE_;		// managed manually by this class
+TopGrouper_XFormItem.prototype.insetCssClass = "GrouperInset";
 // output the label
 TopGrouper_XFormItem.prototype.outputHTMLStart = function (html, updateScript, indent, currentCol) {
 	html.append(
