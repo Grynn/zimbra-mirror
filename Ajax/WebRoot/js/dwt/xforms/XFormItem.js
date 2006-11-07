@@ -2624,7 +2624,7 @@ Border_XFormItem.prototype.updateElement = function () {
 * @constructor
 **/
 function Grouper_XFormItem() {}
-XFormItemFactory.createItemType("_GROUPER_", "grouper", Grouper_XFormItem, Group_XFormItem)
+XFormItemFactory.createItemType("_GROUPER_", "grouper", Grouper_XFormItem, Group_XFormItem);
 Grouper_XFormItem.prototype.labelCssClass = "GrouperLabel";
 Grouper_XFormItem.prototype.labelLocation = _INLINE_;		// managed manually by this class
 Grouper_XFormItem.prototype.borderCssClass = "GrouperBorder";
@@ -2795,6 +2795,7 @@ TopGrouper_XFormItem.prototype.borderCssClass = "TopGrouperBorder";
 TopGrouper_XFormItem.prototype.labelCssClass = "GrouperLabel";
 TopGrouper_XFormItem.prototype.labelLocation = _INLINE_;		// managed manually by this class
 TopGrouper_XFormItem.prototype.insetCssClass = "GrouperInset";
+
 // output the label
 TopGrouper_XFormItem.prototype.outputHTMLStart = function (html, updateScript, indent, currentCol) {
 	html.append(
