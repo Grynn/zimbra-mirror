@@ -655,7 +655,7 @@ function Super_Lifetime_XFormItem() {}
 XFormItemFactory.createItemType("_SUPER_LIFETIME_", "super_lifetime", Super_Lifetime_XFormItem, Super_XFormItem);
 Super_Lifetime_XFormItem.prototype.numCols = 4;
 Super_Lifetime_XFormItem.prototype.colSpan = 4;
-Super_Lifetime_XFormItem.prototype.colSizes =["250px","80px","120px","150px"];
+Super_Lifetime_XFormItem.prototype.colSizes =["275px","80px","120px","150px"];
 Super_Lifetime_XFormItem.prototype.useParenttable = true;
 Super_Lifetime_XFormItem.prototype.TIME_CHOICES = [
  				{value:"d", label:"Days"},
@@ -754,7 +754,7 @@ function Super_Lifetime1_XFormItem() {}
 XFormItemFactory.createItemType("_SUPER_LIFETIME1_", "super_lifetime1", Super_Lifetime1_XFormItem, Super_XFormItem);
 Super_Lifetime1_XFormItem.prototype.numCols = 4;
 Super_Lifetime1_XFormItem.prototype.colSpan = 4;
-Super_Lifetime1_XFormItem.prototype.colSizes =["250px","60px","100px","150px"];
+Super_Lifetime1_XFormItem.prototype.colSizes =["275px","80px","120px","150px"];
 Super_Lifetime1_XFormItem.prototype.useParenttable = true;
 Super_Lifetime1_XFormItem.prototype.TIME_CHOICES = [
  				{value:"d", label:"Days"},

@@ -509,7 +509,10 @@ XForm.prototype.outputItemList = function (items, parentItem, html, updateScript
 			html.append(indent, " <colgroup>\r");
 			for (var i = 0; i < colSizes.length; i++) {
 				var size = colSizes[i];
-				if (size < 1) size = size * 100 + "%";
+				if(isNaN(size)) {
+					if (size < 1) 
+						size = size * 100 + "%";
+				}
 				html.append(indent, "<col width=", size, ">\r");
 			}
 			html.append(indent, "</colgroup>\r");
