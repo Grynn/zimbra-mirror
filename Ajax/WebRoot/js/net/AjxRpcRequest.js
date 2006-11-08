@@ -197,12 +197,17 @@ function(req, callback) {
         if(callback._timedActionId !== null) {
             AjxTimedAction.cancelAction(callback._timedActionId);
         }
-		//DBG.println(AjxDebug.DBG3, "Async RPC request: HTTP status = " + req.__httpReq.status);
-        if (req.__httpReq.status == 200) {
+        var status = 500;
+        try {
+            status = req.__httpReq.status;
+        } catch (ex) {
+            // Use default status of 500 above.
+        }
+        if (status == 200) {
 			callback.run( {text: req.__httpReq.responseText, xml: req.__httpReq.responseXML, success: true} );				
-		} else {
-			callback.run( {text: req.__httpReq.responseText, xml: req.__httpReq.responseXML, success: false, status: req.__httpReq.status} );
-		}
+        } else {
+			callback.run( {text: req.__httpReq.responseText, xml: req.__httpReq.responseXML, success: false, status: status} );
+        }
 		
 		if (req.__ctxt)
 			req.__ctxt.busy = false;
