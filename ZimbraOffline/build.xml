@@ -29,8 +29,10 @@
 	<property name="server.warfile" location="${server.build.dir}/service.war"/>
 	<property name="server.jarfile" location="${server.build.dir}/zimbrastore.jar" />
 	<property name="common.jarfile" location="${common.dir}/build/zimbracommon.jar" />
-	
-	<condition property="is-windows">
+
+    <property name="ical4j.jar" value="ical4j-0.9.16-patched.jar" />
+    
+    <condition property="is-windows">
 		<os family="windows" />
 	</condition>
 	<condition property="is-unix">
