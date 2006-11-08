@@ -511,6 +511,8 @@ public class OfflineMailbox extends Mailbox {
     }
 
 
+    public static final int SERVER_REQUEST_TIMEOUT_SECS = 4;
+
     public Element sendRequest(Element request) throws ServiceException {
         return sendRequest(request, true);
     }
@@ -518,6 +520,8 @@ public class OfflineMailbox extends Mailbox {
     public Element sendRequest(Element request, boolean requiresAuth) throws ServiceException {
         SoapHttpTransport transport = new SoapHttpTransport(mSoapUrl);
         try {
+            transport.setRetryCount(1);
+            transport.setTimeout(SERVER_REQUEST_TIMEOUT_SECS * 1000);
             if (requiresAuth)
                 transport.setAuthToken(getAuthToken());
             transport.setSoapProtocol(SoapProtocol.Soap12);

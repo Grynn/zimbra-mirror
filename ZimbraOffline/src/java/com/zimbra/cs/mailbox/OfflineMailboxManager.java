@@ -14,7 +14,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.zimbra.common.util.Constants;
-import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.Provisioning;
@@ -22,6 +21,7 @@ import com.zimbra.cs.account.Provisioning.AccountBy;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.mailbox.Mailbox.MailboxData;
 import com.zimbra.cs.mailbox.OfflineMailbox.SyncState;
+import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.service.ServiceException;
 
 public class OfflineMailboxManager extends MailboxManager {
@@ -106,14 +106,26 @@ public class OfflineMailboxManager extends MailboxManager {
                             InitialSync.sync(ombx);
                         } else if (state == SyncState.INITIAL) {
 //                          InitialSync.resume(ombx);
-                            ZimbraLog.mailbox.warn("detected interrupted initial sync; cannot recover at present: " + acctId);
+                            OfflineLog.offline.warn("detected interrupted initial sync; cannot recover at present: " + acctId);
                             continue;
                         }
                         DeltaSync.sync(ombx);
                         if (PushChanges.sync(ombx))
                             DeltaSync.sync(ombx);
                     } catch (ServiceException e) {
-                        ZimbraLog.mailbox.warn("failed to sync account " + acctId, e);
+                        if (e.getCode().equals(ServiceException.PROXY_ERROR)) {
+                            Throwable cause = e.getCause();
+                            if (cause instanceof java.net.NoRouteToHostException)
+                                OfflineLog.offline.debug("java.net.NoRouteToHostException: offline and unreachable account " + acctId);
+                            else if (cause instanceof org.apache.commons.httpclient.ConnectTimeoutException)
+                                OfflineLog.offline.debug("org.apache.commons.httpclient.ConnectTimeoutException: no connect after " + OfflineMailbox.SERVER_REQUEST_TIMEOUT_SECS + " seconds for account " + acctId);
+                            else if (cause instanceof java.net.SocketTimeoutException)
+                                OfflineLog.offline.info("java.net.SocketTimeoutException: read timed out after " + OfflineMailbox.SERVER_REQUEST_TIMEOUT_SECS + " seconds for account " + acctId);
+                            else
+                                OfflineLog.offline.warn("error communicating with account " + acctId, e);
+                        } else {
+                            OfflineLog.offline.warn("failed to sync account " + acctId, e);
+                        }
                     }
                 }
                 lastSync = System.currentTimeMillis();
