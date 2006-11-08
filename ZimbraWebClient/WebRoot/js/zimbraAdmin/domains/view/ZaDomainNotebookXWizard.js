@@ -212,6 +212,7 @@ ZaDomainNotebookXWizard.myXFormModifier = function(xFormObject) {
 											repeatInstance:{name:"test@test.com",acl:{r:0,w:0,i:0,d:0,a:0,x:0}}, 
 											showAddButton:true, showRemoveButton:true, 
 											addButtonLabel:ZaMsg.Domain_AddGrpAcl, 
+											addButtonWidth: 100,
 											showAddOnNextRow:true,
 											removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,								
 											items: [
