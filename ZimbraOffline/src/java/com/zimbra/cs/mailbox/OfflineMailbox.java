@@ -511,7 +511,7 @@ public class OfflineMailbox extends Mailbox {
     }
 
 
-    public static final int SERVER_REQUEST_TIMEOUT_SECS = 4;
+    public static final int SERVER_REQUEST_TIMEOUT_SECS = 6;
 
     public Element sendRequest(Element request) throws ServiceException {
         return sendRequest(request, true);
