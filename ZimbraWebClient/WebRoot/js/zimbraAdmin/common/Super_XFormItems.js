@@ -842,13 +842,13 @@ Super_Lifetime1_XFormItem.prototype.initializeItems = function() {
 
 Super_Lifetime1_XFormItem.prototype.items = [ ];
 
-TopGrouper_XFormItem.prototype.colSizes = ["275px","*"];
+TopGrouper_XFormItem.prototype.colSizes = ["275px","275px"];
 TopGrouper_XFormItem.prototype.numCols = 2;
 
 function ZAGroup_XFormItem() {}
 XFormItemFactory.createItemType("_ZAGROUP_", "zagroup", ZAGroup_XFormItem, Group_XFormItem);
 ZAGroup_XFormItem.prototype.numCols = 2;
-ZAGroup_XFormItem.prototype.colSizes = ["275px","*"];
+ZAGroup_XFormItem.prototype.colSizes = ["275px","275px"];
 ZAGroup_XFormItem.prototype.cssStyle = "margin-top:20px;margin-bottom:0px;padding-bottom:0px;";
 
 function ZARightGrouper_XFormItem() {}
