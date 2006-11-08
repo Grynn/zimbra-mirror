@@ -70,7 +70,18 @@ echo '*' Creating database in ${mysql_data_directory}
 echo '*' Starting mysql server
 ${zimbra_home}/bin/mysql.server start \
     >> ${zimbra_log_directory}/zmmyinit.log 2>&1
-sleep 15
+
+# make sure we can connect before continuing 
+until `echo "show processlist" | ${zimbra_home}/bin/mysql -u root --password= > /dev/null 2>&1`; do
+  let i++
+  sleep 5
+  if [ $i -gt 25 ]; then
+    echo '*' Failed to connect to mysql...giving up!
+    exit -1
+  else 
+    echo '*' Failed to connect to mysql...retrying
+  fi
+done
 
 #
 # Load zimbra sql files
