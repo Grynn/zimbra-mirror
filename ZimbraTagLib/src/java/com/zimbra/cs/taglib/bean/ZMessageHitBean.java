@@ -24,11 +24,11 @@
  */
 package com.zimbra.cs.taglib.bean;
 
+import com.zimbra.cs.zclient.ZEmailAddress;
+import com.zimbra.cs.zclient.ZMessageHit;
+
 import java.util.Date;
 import java.util.List;
-
-import com.zimbra.cs.zclient.ZMessageHit;
-import com.zimbra.cs.zclient.ZEmailAddress;
 
 public class ZMessageHitBean extends ZSearchHitBean {
 
@@ -101,4 +101,22 @@ public class ZMessageHitBean extends ZSearchHitBean {
      *  @return names (1.2.3...) of mime part(s) that matched, or empty list.
      */
     public List<String> getMimePartHits() { return mHit.getMimePartHits(); }
+
+    public String getStatusImage() {
+        // TODO: handle appointments
+        if (getIsUnread())
+            return "mail/MsgStatusUnread.gif";
+        else if (getIsDraft())
+            return "mail/MsgStatusDraft.gif";
+        else if (getIsRepliedTo())
+            return "mail/MsgStatusReply.gif";
+        else if (getIsForwarded())
+            return "mail/MsgStatusForward.gif";
+        else if (getIsSentByMe())
+            return "mail/MsgStatusSent.gif";
+        else
+            return "mail/MsgStatusRead.gif";
+    }
+
 }
+
