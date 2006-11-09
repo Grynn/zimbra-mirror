@@ -68,5 +68,7 @@ public class ZMailboxBean {
     public Map<String, List<String>> getAttrs() throws ServiceException { return mMbox.getAccountInfo(false).getAttrs(); }
 
     public ZGetInfoResult getAccountInfo() throws ServiceException { return mMbox.getAccountInfo(false); }
+
+    public boolean getHasTags()  { return !mMbox.getAllTags().isEmpty(); }
     
 }
