@@ -38,9 +38,6 @@
 		<fileset dir="jars">
 			<include name="**/*.jar"/>
 		</fileset>
-		<fileset dir="${zimbraServer.dir}/jars">
-			<include name="**/*.jar"/>
-		</fileset>
 		<fileset dir="${zimbraCommon.dir}/jars">
 			<include name="**/*.jar"/>
 		</fileset>
