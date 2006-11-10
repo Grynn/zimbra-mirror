@@ -112,6 +112,20 @@ sub getMailboxGroups() {
     return runSql("SHOW DATABASES LIKE 'mboxgroup%'");
 }
 
+#
+# Return a hash where the keys are mailboxID and the values are group_id
+#
+sub getMailboxes() {
+  my @rows = runSql("SELECT id,group_id from mailbox");
+  my %toRet;
+  foreach my $row (@rows) {
+    if ($row =~ /([^\t\s]+)\t+([^\t\s]+)/) {
+      $toRet{$1} = $2;
+    }
+  }
+  return %toRet;
+}
+
 sub runSql(@) {
     my ($script, $logScript) = @_;
 

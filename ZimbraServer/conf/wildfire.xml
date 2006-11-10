@@ -86,9 +86,5 @@
         </group>
     </provider>
     
-    <key name="xmpp.domain"><value>timsmac.local</value></key>
-    
     <setup>true</setup>
-
-    
 </jive>
