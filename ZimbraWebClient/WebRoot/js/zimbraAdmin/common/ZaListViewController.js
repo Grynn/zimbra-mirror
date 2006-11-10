@@ -203,6 +203,7 @@ ZaListViewController.prototype.handleRemoval =
 function (ev) {
 	if(ev &&  this.objType && ev.type==this.objType) {
 		if(ev.getDetails()) {
+			this._currentPageNum = 1 ; //due to bug 12091, always go back to the first page after the deleting of items.
 			this.show();			
 		}
 	}
