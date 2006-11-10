@@ -70,7 +70,6 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jzlib.jar"/>
 	<classpathentry sourcepath="/ThirdParty/jtnef-1.2.3/src" kind="lib" path="/ZimbraCommon/jars/tnef-1.2.3-zimbra.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Lucene-1.9.1"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraIM"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
