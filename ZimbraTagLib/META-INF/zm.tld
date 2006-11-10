@@ -1535,6 +1535,148 @@
         </attribute>
     </tag>
 
+    <tag>
+        <description>
+            Create a tag
+        </description>
+
+        <name>createTag</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.tag.CreateTagTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>java.lang.String</variable-class>
+            <scope>AT_BEGIN</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                id of created tag.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <description>name of tag to create</description>
+            <name>name</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>color of tag: orange, blue, cyan, green, purple, red, yellow</description>
+            <name>color</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Modify tag's color.
+        </description>
+
+        <name>modifyTagColor</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.tag.ModifyTagColorTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                id of tag to modify.
+            </description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>            
+        </attribute>
+        <attribute>
+            <description>color of tag: orange, blue, cyan, green, purple, red, yellow</description>
+            <name>color</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Rename a tag
+        </description>
+
+        <name>renameTag</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.tag.RenameTagTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                id of tag to rename.
+            </description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>new tag name </description>
+            <name>newname</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Delete a tag
+        </description>
+
+        <name>deleteTag</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.tag.DeleteTagTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                id of tag to delete.
+            </description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Mark all items with tag read.
+        </description>
+
+        <name>markTagRead</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.tag.MarkTagReadTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                id of tag to mark read.
+            </description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
     <tag-file>
         <name>currentResultUrl</name>
         <path>/META-INF/tags/currentResultUrl.tag</path>
@@ -1647,6 +1789,7 @@
         <function-signature>java.lang.String
             getFolderName(javax.servlet.jsp.PageContext,java.lang.String)</function-signature>
     </function>
+
     <function>
         <name>repeatString</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
