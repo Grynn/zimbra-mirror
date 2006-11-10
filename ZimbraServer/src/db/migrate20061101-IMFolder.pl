@@ -49,8 +49,8 @@ sub createIMsFolder() {
     my $sql = <<EOF_CREATE_IMS_FOLDER;
     
 UPDATE $databaseName.mail_item
-SET subject = "IMs1"
-WHERE subject = "IMs" AND folder_id = 1 AND id != 14 AND mailbox_id = $mailboxId;
+SET subject = "Chats1"
+WHERE subject = "Chats" AND folder_id = 1 AND id != 14 AND mailbox_id = $mailboxId;
 
 EOF_CREATE_IMS_FOLDER
 
@@ -61,7 +61,7 @@ EOF_CREATE_IMS_FOLDER
 INSERT INTO $databaseName.mail_item
   (mailbox_id, subject, id, type, parent_id, folder_id, mod_metadata, mod_content, metadata, date, change_date)
 VALUES
-  ($mailboxId, "IMs", 14, 1, 1, 1, 1, 1, "d1:ai1e4:unxti14e1:vi9e2:vti5ee", $timestamp, $timestamp)
+  ($mailboxId, "Chats", 14, 1, 1, 1, 1, 1, "d1:ai1e4:unxti14e1:vi9e2:vti5ee", $timestamp, $timestamp)
 ON DUPLICATE KEY UPDATE id = 14;
 
 UPDATE $databaseName.mail_item mi, zimbra.mailbox mbx
