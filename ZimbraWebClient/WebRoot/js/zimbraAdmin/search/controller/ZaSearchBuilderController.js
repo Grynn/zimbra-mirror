@@ -245,9 +245,12 @@ function () {
 	//update the search field textbox entry
 	var searchFieldXform = this._app.getSearchListController()._searchField._localXForm;
 	var	searchFieldInstance = searchFieldXform.getInstance ();
+	var searchFieldItem = searchFieldXform.getItemsById(ZaSearch.A_query)[0];
 	if (this.isSBVisible()){
+		searchFieldItem["toolTipContent"] = ZaMsg.tt_advancedSearchField ;
 		searchFieldInstance[ZaSearch.A_query] = this._query ;
 	}else{ //clear the search field is not advacned search
+		searchFieldItem["toolTipContent"] = null ;
 		searchFieldInstance[ZaSearch.A_query] = "" ;
 	}
 	searchFieldXform.refresh ();

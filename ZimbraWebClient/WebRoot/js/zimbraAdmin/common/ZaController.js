@@ -323,6 +323,8 @@ function(ex, method, params, restartOnError, obj) {
 			this.popupErrorDialog(ZaMsg.ERROR_INVALID_VOLUME_PATH, ex, true);
 		} else if(ex.code == ZmCsfeException.LICENSE_ERROR) {
 			this.popupErrorDialog(ZaMsg.ERROR_LICENSE, ex, true);
+		} else if (ex.code == ZmCsfeException.SVC_INVALID_REQUEST) {
+			this.popupErrorDialog(ZaMsg.ERROR_INVALID_REQUEST, ex, true);
 		} else if (ex.code == ZmCsfeException.CSFE_SVC_ERROR || 
 					ex.code == ZmCsfeException.SVC_FAILURE || 
 						(typeof(ex.code) == 'string' && ex.code && ex.code.match(/^(service|account|mail)\./))
@@ -358,8 +360,9 @@ function(username, password) {
 		this.auth.execute(username, password,callback);
 	} catch (ex) {
 		this._showLoginDialog();
-		if (ex.code == ZmCsfeException.ACCT_AUTH_FAILED || 
-			ex.code == ZmCsfeException.INVALID_REQUEST) 
+		if (ex.code == ZmCsfeException.ACCT_AUTH_FAILED 
+		   //HC: this code doesn't exist || ex.code == ZmCsfeException.INVALID_REQUEST
+		   ) 
 		{
 			this._loginDialog.setError(ZaMsg.ERROR_AUTH_FAILED);
 			return;
@@ -399,8 +402,9 @@ function (resp) {
 	if(resp.isException && resp.isException()) {
 		this._showLoginDialog();
 		var ex = resp.getException();
-		if (ex.code == ZmCsfeException.ACCT_AUTH_FAILED || 
-			ex.code == ZmCsfeException.INVALID_REQUEST) 
+		if (ex.code == ZmCsfeException.ACCT_AUTH_FAILED 
+		    //HC: this code doesn't exist || ex.code == ZmCsfeException.INVALID_REQUEST 
+		   ) 
 		{
 			this._loginDialog.setError(ZaMsg.ERROR_AUTH_FAILED);
 			this._loginDialog.clearPassword();
