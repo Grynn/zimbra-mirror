@@ -845,11 +845,27 @@ Super_Lifetime1_XFormItem.prototype.items = [ ];
 TopGrouper_XFormItem.prototype.colSizes = ["275px","275px"];
 TopGrouper_XFormItem.prototype.numCols = 2;
 
+function ZATopGrouper_XFormItem() {}
+XFormItemFactory.createItemType("_ZA_TOP_GROUPER_", "za_top_grouper", ZATopGrouper_XFormItem, TopGrouper_XFormItem);
+ZATopGrouper_XFormItem.prototype.numCols = 2;
+ZATopGrouper_XFormItem.prototype.colSizes = ["275px","275px"];
+
+function ZAWizTopGrouper_XFormItem() {}
+XFormItemFactory.createItemType("_ZAWIZ_TOP_GROUPER_", "zawiz_top_grouper", ZAWizTopGrouper_XFormItem, TopGrouper_XFormItem);
+ZAWizTopGrouper_XFormItem.prototype.numCols = 2;
+ZAWizTopGrouper_XFormItem.prototype.colSizes = ["150px","370px"];
+
 function ZAGroup_XFormItem() {}
 XFormItemFactory.createItemType("_ZAGROUP_", "zagroup", ZAGroup_XFormItem, Group_XFormItem);
 ZAGroup_XFormItem.prototype.numCols = 2;
 ZAGroup_XFormItem.prototype.colSizes = ["275px","275px"];
 ZAGroup_XFormItem.prototype.cssStyle = "margin-top:20px;margin-bottom:0px;padding-bottom:0px;";
+
+function ZAWizGroup_XFormItem() {}
+XFormItemFactory.createItemType("_ZAWIZGROUP_", "zawizgroup", ZAWizGroup_XFormItem, Group_XFormItem);
+ZAWizGroup_XFormItem.prototype.numCols = 2;
+ZAWizGroup_XFormItem.prototype.colSizes = ["150px","275px"];
+ZAWizGroup_XFormItem.prototype.cssStyle = "margin-top:20px;margin-bottom:0px;padding-bottom:0px;";
 
 function ZARightGrouper_XFormItem() {}
 XFormItemFactory.createItemType("_ZARIGHT_GROUPER_", "zaright_grouper", ZARightGrouper_XFormItem, Grouper_XFormItem);
