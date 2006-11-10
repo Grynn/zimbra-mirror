@@ -123,7 +123,7 @@ function(newMember, afterMember) {
  */
 DwtTabGroup.prototype.addMemberBefore =
 function(newMember, beforeMember) {
-	this.addMember(newMember, this.__members.indexOf(afterMember));
+	this.addMember(newMember, this.__members.indexOf(beforeMember));
 };
 
 /**
