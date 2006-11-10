@@ -47,8 +47,8 @@ my $popCapabilities = "--pop_capability \"TOP  USER  UIDL  STLS  EXPIRE 31 USER\
 
 my %serverOpts = (
 	"imap4"	=> "--ssl_mode tls_listen $imapCapabilities",
-	"imap4s" => "--ssl_mode ssl_all $popCapabilities",
-	"pop3"	=> "--ssl_mode tls_listen $imapCapabilities",
+	"imap4s" => "--ssl_mode ssl_all $imapCapabilities",
+	"pop3"	=> "--ssl_mode tls_listen $popCapabilities",
 	"pop3s"	=> "--ssl_mode ssl_all $popCapabilities"
 	);
 
