@@ -1193,9 +1193,6 @@ namespace Zimbra.Toast
 				nMsgs = msgs.Length;
 			}
 
-			//update the new message count
-			this.TrayIcon.Text = nMsgs + " new message" + ((nMsgs!=1)?"":"s");
-
 			//nothing to display, signal the event and bail
 			if( msgs == null || msgs.Length == 0 ) 
 			{
@@ -1218,6 +1215,9 @@ namespace Zimbra.Toast
 			this.currentMsgIdx = 0;
 			this.msgSummaries = msgs;
 			this.displayCompletionEvent = are;
+
+			//update the new message count in the tray icon tooltip
+			this.TrayIcon.Text = nMsgs + " new message" + ((nMsgs!=1)?"":"s");
 
 			//start it
 			Invoke( new MethodInvoker(ShowCurrentMessagSummary) );

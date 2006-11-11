@@ -181,14 +181,22 @@ namespace Zimbra.Toast
 					{
 						System.Windows.Forms.DialogResult dr;
 						dr = System.Windows.Forms.MessageBox.Show(
-								"Error Monitoring Mailbox\nThe security certificate presented be the server is not valid.\n\n" +
-								"Continue communicating with the server?",
-								"Zimbra Toast - Invalid Certificate",
-								System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Question );
+							"Error Monitoring Mailbox\nThe security certificate presented be the server is not valid.\n\n" +
+							"Continue communicating with the server?",
+							"Zimbra Toast - Invalid Certificate",
+							System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Question );
 						if( dr == System.Windows.Forms.DialogResult.Yes ) 
 						{
 							System.Net.ServicePointManager.CertificatePolicy = new InvalidCertOKPolicy();
 						}
+					}	
+					else 
+					{
+						System.Windows.Forms.MessageBox.Show(
+							"WebException: " + we.Status.ToString() + "\n" + 
+							we.Message + "\n" + we.StackTrace,
+							"Zimbra Toast - WebException",
+							System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error );
 					}
 				}
 				catch(Exception e)
