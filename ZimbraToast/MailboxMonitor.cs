@@ -160,17 +160,51 @@ namespace Zimbra.Toast
 				try 
 				{
 					CheckMailbox_Internal();
-					wakeEvent.WaitOne();
 				}
 				catch(System.Threading.ThreadAbortException)
 				{
+					//if the thread is reqested to die, really kill it
 					return;
+				}
+				catch(Zimbra.Client.ZimbraException ze)
+				{
+					//if an soap fault was thrown, let the user know
+					//and continue monitoring the mailbox
+					System.Windows.Forms.MessageBox.Show(
+						"Zimbra server returned an error message: " +  ze.Fault.Code + "\n" + ze.Fault.Description + "\n", 
+						"Zimbra Toast - Error", 
+						System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error );
+				}
+				catch(System.Net.WebException we)
+				{
+					if( we.Status == System.Net.WebExceptionStatus.TrustFailure ) 
+					{
+						System.Windows.Forms.DialogResult dr;
+						dr = System.Windows.Forms.MessageBox.Show(
+								"Error Monitoring Mailbox\nThe security certificate presented be the server is not valid.\n\n" +
+								"Continue communicating with the server?",
+								"Zimbra Toast - Invalid Certificate",
+								System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Question );
+						if( dr == System.Windows.Forms.DialogResult.Yes ) 
+						{
+							System.Net.ServicePointManager.CertificatePolicy = new InvalidCertOKPolicy();
+						}
+					}
 				}
 				catch(Exception e)
 				{
-					e.GetType();
-					return;
+					//if some other error occurred, let the user know
+					//and continue monitoring the mailbox
+					String msg = e.Message;
+					Type type = e.GetType();
+					String stackTrace = e.StackTrace;
+
+					System.Windows.Forms.MessageBox.Show(
+						"Error monitoring mailbox\n" + msg + "\n\n" + type + "\n" + stackTrace, 
+						"Zimbra Toast - Unexpected Error", 
+						System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error );
 				}
+				wakeEvent.WaitOne();
 			}
 		}
 

@@ -1,5 +1,7 @@
 using System;
 using System.Xml;
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
 
 
 namespace Zimbra.Toast
@@ -118,6 +120,38 @@ namespace Zimbra.Toast
 
 	}
 
+
+
+	/// <summary>
+	/// Used to indicate that an invalid ssl certificate is ok 
+	/// </summary>
+	public class InvalidCertOKPolicy : ICertificatePolicy 
+	{
+		/// <summary>
+		/// The CheckValidationResult method implements the application 
+		/// certificate validation policy. The method can examine the 
+		/// srvPoint, certificate, request, and certificateProblem parameters 
+		/// to determine whether the certificate should be honored.
+		/// 
+		/// The certificateProblem parameter is a Security Support Provider 
+		/// Interface (SSPI) status code. For more information, see the SSPI 
+		/// documentation on MSDN.
+		/// </summary>
+		/// <param name="srvPoint">The ServicePoint that will use the certificate</param>
+		/// <param name="certificate">The certificate to validate</param>
+		/// <param name="request">the request that received the certificate</param>
+		/// <param name="certificateProblem">the problem encountered when using the certificate</param>
+		/// <returns></returns>
+		public bool CheckValidationResult(
+			ServicePoint		srvPoint, 
+			X509Certificate		certificate,
+			WebRequest			request,
+			int					certificateProblem) 
+		{
+			return true;
+
+		} // end CheckValidationResult
+	} // class MyPolicy
 
 
 

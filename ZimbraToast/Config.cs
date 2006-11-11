@@ -1187,6 +1187,15 @@ namespace Zimbra.Toast
 		/// <param name="are">the event to signal once all msgs have been displayed</param>
 		public void DisplayNewMessages( Zimbra.Client.MessageSummary[] msgs, AutoResetEvent are )
 		{
+			int nMsgs = 0;
+			if( msgs != null ) 
+			{
+				nMsgs = msgs.Length;
+			}
+
+			//update the new message count
+			this.TrayIcon.Text = nMsgs + " new message" + ((nMsgs!=1)?"":"s");
+
 			//nothing to display, signal the event and bail
 			if( msgs == null || msgs.Length == 0 ) 
 			{
@@ -1409,17 +1418,17 @@ namespace Zimbra.Toast
 		//default click-url path format specifier
 		private static String DEFAULT_CLICK_URL_PATH_FMT = "/zimbra/?view=msg&id={0}";
 
-		//
+		//default maximum opacity for the fade of the toaster window
 		private static double DEFAULT_MAX_OPACITY = 0.8;
 		
-		//
-		private static double DEFAULT_OPACITY_DELTA = 0.05;
+		//default change in opacity for the fade of the toaster window
+		private static double DEFAULT_OPACITY_DELTA = 0.01;
 		
-		//
+		//default update interval for the fade of the toaster window
 		private static Int32  DEFAULT_UPDATE_INTERVAL = 10;
 		
-		//
-		private static Int32  DEFAULT_PAUSE_INTERVAL = 3000;
+		//how long toaster window waits at full opacity before fading out
+		private static Int32  DEFAULT_PAUSE_INTERVAL = 5000;
 
 		//TODO: request a REST api for this
 		//private static String DEFAULT_CLICK_URL_PATH_FMT = "/service/home/~/?fmt=html&id={0}";
