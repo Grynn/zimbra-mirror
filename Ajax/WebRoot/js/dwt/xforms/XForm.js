@@ -176,18 +176,27 @@ XForm.prototype.focusElement = function (id) {
 	}
 };
 
-XForm.prototype.focusNext = function(id) {
-	if(this.tabIdOrder && this.tabIdOrder.length > 0) {
-		var cnt = this.tabIdOrder.length;
+XForm.prototype.focusNext = function(id, currentTabId) {
+	var tabIdOrder = null ;
+	if (currentTabId != null ) {
+		tabIdOrder = this.tabIdOrder[currentTabId];
+	}else {
+		tabIdOrder = this.tabIdOrder ;
+	}
+	
+	if(tabIdOrder && tabIdOrder.length > 0) {
+		var cnt = tabIdOrder.length;
+		//DBG.println(AjxDebug.DBG1, "TabIdOrder: length = " + tabIdOrder.length + "<br />" + tabIdOrder.toString());
+		
 		if (id == null) {
-			this.focusElement(this.tabIdOrder[0]);
+			this.focusElement(tabIdOrder[0]);
 		} else {
 			for (var i = 0; i < cnt; i++) {
-				if(this.tabIdOrder[i] == id) {
-					if(this.tabIdOrder[i+1]) {
-						this.focusElement(this.tabIdOrder[i+1]);
+				if(tabIdOrder[i] == id) {
+					if(tabIdOrder[(i+1) % cnt]) {
+						this.focusElement(tabIdOrder[(i+1) % cnt]);
 					} else {
-						this.focusElement(this.tabIdOrder[0]);
+						this.focusElement(tabIdOrder[0]);
 					}
 					break;
 				}

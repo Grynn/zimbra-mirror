@@ -587,7 +587,9 @@ XFormItem.prototype.handleKeyDown = function (ev, domItem) {
 		return false;
 	} else if (key == DwtKeyEvent.KEY_TAB) {
 		DwtUiEvent.setBehaviour(ev, true, false);
-		this.getForm().focusNext(this.getId());
+		var currentTabId = XFormItem.getParentCaseItemId(this) ;
+		//DBG.println(AjxDebug.DBG1, "Current Tab ID = " + currentTabId);
+		this.getForm().focusNext(this.getId(), currentTabId);
 		return false;
 	}
 	return true;
@@ -688,7 +690,21 @@ XFormItem.prototype.outputLabelCellHTML = function (html, updateScript, indent, 
 
 }
 
-
+XFormItem.getParentCaseItemId =
+function (item){
+	//DBG.println(AjxDebug.DBG1, "Enter the getParentCaseItemId() ...");
+	
+	while (item != null) {
+		var p = item.getParentItem();
+		if (p == null || (! p instanceof XFormItem)){
+			return null ; //no parent item or p is not an XFormItem
+		}else if (p instanceof Case_XFormItem) {	
+			return p.getId ();
+		}
+		//DBG.println(AjxDebug.DBG1, "Continue the getParentCaseItemId() ...");
+		item = p ;
+	}
+}
 
 //
 //	update script
@@ -726,7 +742,28 @@ XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript, inde
 			"_____________________________________________________++;\r",
 			"item = form.getItemById('", this.getId(),"');\r"
 	);
-
+	
+	//tab CASE_XFORMITEM parent id
+	var currentTabId = null ; //used to controll th TAB key focus order
+	currentTabId = XFormItem.getParentCaseItemId(this);
+	
+	updateScript.append(
+		"var _tabIdOrder = item.getForm().tabIdOrder ;",
+		"var _currentTabIdOrder = null ;"
+	);
+		
+	if (currentTabId != null) {
+		updateScript.append(
+			"if (! _tabIdOrder.", currentTabId, ") {",
+				"_tabIdOrder.", currentTabId, " = [] ;",
+			"}",
+			
+			"_currentTabIdOrder = _tabIdOrder.", currentTabId, " ;");
+	}else {
+		updateScript.append(
+			"_currentTabIdOrder = _tabIdOrder ;" );
+	}
+	
 	// if there is a relevant attribute, 
 	//		get whether or not this item is relevant, and
 	//		write a script that will show or hide the container element
@@ -773,7 +810,8 @@ XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript, inde
 			if (this.focusable) {
 				updateScript.append(
 // 					"DBG.println(AjxDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
-					"item.getForm().tabIdOrder.push(item.getId());\r"
+//					It should be in the tab order if the element is hidden.
+					"_currentTabIdOrder.push(item.getId());\r"
 				);
 			}
 			updateScript.append("item.show();\r");
@@ -786,7 +824,8 @@ XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript, inde
 			if (this.focusable) {
 				updateScript.append(
 // 					"DBG.println(AjxDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
-					"item.getForm().tabIdOrder.push(item.getId());\r"
+//					It should be in the tab order if the element is hidden.
+					"_currentTabIdOrder.push(item.getId());\r"
 				);
 			}
 			updateScript.append("item.show();\r");
@@ -800,7 +839,8 @@ XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript, inde
 			if (this.focusable) {
 				updateScript.append(
 // 					"DBG.println(AjxDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
-					"item.getForm().tabIdOrder.push(item.getId());\r"
+//					It should be in the tab order if the element is disabled.
+					"_currentTabIdOrder.push(item.getId());\r"
 				);
 			}
 			updateScript.append(
@@ -812,7 +852,7 @@ XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript, inde
 		if (this.focusable) {
 			updateScript.append(
 // 				"DBG.println(AjxDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
-				"item.getForm().tabIdOrder.push(item.getId());\r"
+				"_currentTabIdOrder.push(item.getId());\r"
 			);
 		}
 	}
