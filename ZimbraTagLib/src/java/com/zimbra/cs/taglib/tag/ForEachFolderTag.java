@@ -24,23 +24,28 @@
  */
 package com.zimbra.cs.taglib.tag;
 
-import java.io.IOException;
-import java.util.List;
+import com.zimbra.cs.service.ServiceException;
+import com.zimbra.cs.taglib.bean.ZFolderBean;
+import com.zimbra.cs.zclient.ZFolder;
+import com.zimbra.cs.zclient.ZMailbox;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.JspFragment;
-
-import com.zimbra.cs.taglib.bean.ZFolderBean;
-import com.zimbra.cs.service.ServiceException;
-import com.zimbra.cs.zclient.ZFolder;
-import com.zimbra.cs.zclient.ZMailbox;
+import java.io.IOException;
+import java.util.List;
 
 public class ForEachFolderTag extends ZimbraSimpleTag {
     
     private String mVar;
-    
+    private String mParentId;
+    private boolean mSkipRoot = true;
+    private boolean mSkipSystem = false;
+
+    public void setParentid(String parentId) { this.mParentId = parentId != null && parentId.length() ==0 ? null : parentId; }
     public void setVar(String var) { this.mVar = var; }
+    public void setSkiproot(boolean skiproot) { this.mSkipRoot = skiproot; }
+    public void setSkipsystem(boolean skipsystem) { this.mSkipSystem = skipsystem; }
     
     public void doTag() throws JspException, IOException {
         JspFragment body = getJspBody();
@@ -49,14 +54,20 @@ public class ForEachFolderTag extends ZimbraSimpleTag {
         try {
             ZMailbox mbox = getMailbox();
             JspContext jctxt = getJspContext();
-            handleFolder(mbox.getUserRoot(), body, jctxt, true);
+            handleFolder(mParentId == null ? mbox.getUserRoot() : mbox.getFolderById(mParentId), body, jctxt, mSkipRoot, mSkipSystem);            
         } catch (ServiceException e) {
             getJspContext().getOut().write(e.toString());
         }
     }    
     
-    private void handleFolder(ZFolder folder, JspFragment body, JspContext jctxt, boolean skip)
+    private void handleFolder(ZFolder folder, JspFragment body, JspContext jctxt, boolean skip, boolean skipsystem)
     throws ServiceException, JspException, IOException {
+        if (folder == null)
+            return;
+
+        if (skipsystem && folder.isSystemFolder() && !folder.getId().equals(ZFolder.ID_USER_ROOT))
+            return;
+        
         if (!skip) {
             jctxt.setAttribute(mVar, new ZFolderBean(folder));
             body.invoke(null);
@@ -64,7 +75,7 @@ public class ForEachFolderTag extends ZimbraSimpleTag {
         List<ZFolder> subfolders = folder.getSubFolders();
         for (ZFolder subfolder : subfolders) {
             if (subfolder != null)
-                handleFolder(subfolder, body, jctxt, false);
+                handleFolder(subfolder, body, jctxt, false, skipsystem);
         }
     }
 }
