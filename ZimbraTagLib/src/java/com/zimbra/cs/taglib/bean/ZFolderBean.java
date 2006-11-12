@@ -63,6 +63,19 @@ public class ZFolderBean {
      */
     public String getPath() { return mFolder.getPath(); }
 
+    /** Returns the folder's  path relative to the root
+     * @return path
+     */
+    public String getRootRelativePath() {
+        String path = mFolder.getPath();
+        if (path.startsWith(ZMailbox.PATH_SEPARATOR)) {
+            return path.substring(ZMailbox.PATH_SEPARATOR.length());
+        } else {
+            return path;
+        }
+    }
+
+
     /**
      * @return Returns the folder's absolute path, with special chars in the names
      * URL encoded.
