@@ -55,8 +55,11 @@ function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell, us
 		window.onbeforeunload = confirmExitMethod;
 
 	document.body.style.margin = 0;
-	if (docBodyScrollable != null && !docBodyScrollable)
+	if (docBodyScrollable != null && !docBodyScrollable) {
+		if (AjxEnv.isIE)
+			document.body.onscroll = DwtShell.__onBodyScroll;
 		document.body.style.overflow = "hidden";
+	}
 
     document.body.onselect = DwtShell._preventDefaultSelectPrt;
 	document.body.onselectstart = DwtShell._preventDefaultSelectPrt;
@@ -447,3 +450,9 @@ function(ev) {
 	}
 };
 
+DwtShell.__onBodyScroll = function() {
+	// alert(document.body.scrollTop + "/" + document.body.scrollLeft);
+	document.body.scrollTop = 0;
+	document.body.scrollLeft = 0;
+	// DwtShell._resizeHdlr();
+};
