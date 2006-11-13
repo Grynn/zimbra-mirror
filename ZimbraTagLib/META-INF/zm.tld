@@ -1743,7 +1743,7 @@
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <description>color of tag: orange, blue, cyan, green, purple, red, yellow, pink, gray</description>
+            <description>color of folder: orange, blue, cyan, green, purple, red, yellow, pink, gray</description>
             <name>color</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
@@ -1884,6 +1884,75 @@
             </description>
             <name>id</name>
             <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+
+    <tag>
+        <description>
+            Create a search folder
+        </description>
+
+        <name>createSearchFolder</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.folder.CreateSearchFolderTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZFolderBean</variable-class>
+            <scope>AT_BEGIN</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                ZFolderBean for created folder.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <description>parent id of new folder</description>
+            <name>parentid</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>name of folder to create</description>
+            <name>name</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>search query</description>
+            <name>query</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>types to search for: conversation, message, contact, appointment, document, wiki </description>
+            <name>types</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>sort order (dateDesc, dateAsc, subjDesc, subjAsc)</description>            
+            <name>sort</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>color of folder: orange, blue, cyan, green, purple, red, yellow, pink, gray</description>
+            <name>color</name>
+            <required>false</required>
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>
         </attribute>

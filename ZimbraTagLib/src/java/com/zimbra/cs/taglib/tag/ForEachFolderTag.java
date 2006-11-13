@@ -34,6 +34,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.JspFragment;
 import java.io.IOException;
 import java.util.List;
+import java.util.Collections;
 
 public class ForEachFolderTag extends ZimbraSimpleTag {
     
@@ -73,6 +74,7 @@ public class ForEachFolderTag extends ZimbraSimpleTag {
             body.invoke(null);
         }
         List<ZFolder> subfolders = folder.getSubFolders();
+        Collections.sort(subfolders);
         for (ZFolder subfolder : subfolders) {
             if (subfolder != null)
                 handleFolder(subfolder, body, jctxt, false, skipsystem);
