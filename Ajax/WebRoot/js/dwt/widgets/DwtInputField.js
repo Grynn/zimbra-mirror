@@ -54,6 +54,7 @@ function DwtInputField(params) {
 	this._origClassName = params.className ? params.className : "DwtInputField";
 	this._errorClassName = this._origClassName + "-Error";
 	this._hintClassName = this._origClassName + "-hint";
+	this._disabledClassName = this._origClassName + "-disabled";
 	this._errorHintClassName = this._origClassName + "-errorhint";
 	DwtControl.call(this, params.parent, params.className, params.posStyle);
 
@@ -639,7 +640,9 @@ function() {
 DwtInputField.prototype._updateClassName = 
 function() {
 	var className;
-	if (this._hasError) {
+	if (!this.getEnabled()) {
+		className = this._disabledClassName;
+	} else if (this._hasError) {
 		if (this._hintIsVisible && !this._hasFocus) {
 			className = this._errorHintClassName;
 		} else {
