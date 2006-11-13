@@ -226,6 +226,8 @@ function(html) {
 */
 DwtHtmlEditor.prototype.setContent =
 function(content) {
+	if (AjxEnv.isIE)
+		this._currInsPt = null; // reset insertion pointer, bug 11623
 	if (this._mode == DwtHtmlEditor.HTML) {
 		// If the html is initialed then go ahead and set the content, else let the
 		// _finishHtmlModeInit run before we try setting the content
