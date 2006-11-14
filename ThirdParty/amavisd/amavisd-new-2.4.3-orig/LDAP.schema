@@ -377,17 +377,6 @@ attributetype ( 1.3.6.1.4.1.15312.2.2.1.33
   SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
   SINGLE-VALUE )
 
-#dn: cn=schema
-#changetype: modify
-#add: attributetypes
-attributetype ( 1.3.6.1.4.1.15312.2.2.1.34
-  NAME 'amavisArchiveQuarantineTo'
-  DESC 'Archive Quarantine to'
-  EQUALITY caseIgnoreIA5Match
-  SUBSTR caseIgnoreIA5SubstringsMatch
-  SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
-  SINGLE-VALUE )
-
 
 # Classes
 #---------
@@ -418,7 +407,7 @@ objectclass ( 1.3.6.1.4.1.15312.2.2.2.1
         amavisSpamAdmin $ amavisBannedAdmin $ amavisBadHeaderAdmin $
         amavisBannedRuleNames $
         amavisSpamDsnCutoffLevel $ amavisSpamQuarantineCutoffLevel $
-        amavisSpamSubjectTag $ amavisSpamSubjectTag2 $ amavisArchiveQuarantineTo $
+        amavisSpamSubjectTag $ amavisSpamSubjectTag2 $
         cn $ description ) )
 
 #--------------------------------------------------------------------------
