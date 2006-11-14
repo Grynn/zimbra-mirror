@@ -1,9 +1,10 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zimbra.Toast", "Zimbra.Toast.csproj", "{1F511A88-DC2F-4D2B-9D0E-8D529F6F054D}"
 	ProjectSection(ProjectDependencies) = postProject
+		{E7198AE0-D78D-4AAC-93B5-F8754DBE7EEE} = {E7198AE0-D78D-4AAC-93B5-F8754DBE7EEE}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zimbra.Client", "Zimbra.Client\Zimbra.Client.csproj", "{E7198AE0-D78D-4AAC-93B5-F8754DBE7EEE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zimbra.Client", "..\ZimbraCSharpClient\Zimbra.Client.csproj", "{E7198AE0-D78D-4AAC-93B5-F8754DBE7EEE}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject

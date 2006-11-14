@@ -27,7 +27,6 @@ using System.Xml;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
 
-
 namespace Zimbra.Toast
 {
 
@@ -211,9 +210,19 @@ namespace Zimbra.Toast
 				return;
 			}
 			
-			//otherwise, we are running the tray app
-			System.Windows.Forms.Application.EnableVisualStyles();
-			System.Windows.Forms.Application.DoEvents();
+			//set the visual styles
+			//some runtimes won't support these calls, so 
+			//if they fail, continue.
+			try 
+			{
+				//otherwise, we are running the tray app
+				System.Windows.Forms.Application.EnableVisualStyles();
+				System.Windows.Forms.Application.DoEvents();
+			}
+			catch(Exception)
+			{
+			}
+
 			System.Windows.Forms.Application.Run( new Config() );
 		}
 
