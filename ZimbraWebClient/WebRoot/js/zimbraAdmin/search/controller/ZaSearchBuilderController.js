@@ -80,11 +80,18 @@ function () {
 ZaSearchBuilderController.handleOptions =
 function (value, event, form){
 	DBG.println(AjxDebug.DBG3, "Handling the options on the search builder toolbar ...");
-	this.setInstanceValue(value);
-	//set the query value
-	var form = this.getForm ();
+	
 	var controller = form.parent._controller ;
-	controller.setQuery () ;
+	var searchField = controller._app.getSearchListController()._searchField ;
+	
+	var charCode = event.charCode;
+	if (charCode == 13 || charCode == 3) {
+	   searchField.invokeCallback();
+	} else {
+		this.setInstanceValue(value);
+		//set the query value
+		controller.setQuery () ;
+	}
 	
 	//disable the domain option button if domain is checked
 	/*
