@@ -62,6 +62,7 @@ namespace Zimbra.Toast
 		public event NewMsgHandler OnNewMsgs;
 
 
+
 		/// <summary>
 		/// Craete a mailbox monitor for the given account.  Communicate with the give server
 		/// </summary>
@@ -169,6 +170,32 @@ namespace Zimbra.Toast
 		}
 
 
+
+		/// <summary>
+		/// True if the fault is informing the client it must re-authenticate
+		/// </summary>
+		/// <param name="faultCode">the lowercase fault code returned by the server</param>
+		/// <returns>true, if the fault is informing the client it must re-authenticate</returns>
+		private static bool RequiresReAuth( String faultCode )
+		{
+			return faultCode.CompareTo( "service.auth_required" ) == 0 || 
+				   faultCode.CompareTo( "service.auth_expired"  ) == 0;
+		}
+
+
+		/// <summary>
+		/// true if the fault is temporary and should be silently ignored
+		/// </summary>
+		/// <param name="faultCode">the lowercase fault code returned by the server</param>
+		/// <returns>true if the fault is temporary and should be silently ignored</returns>
+		private static bool IgnorableFault( String faultCode )
+		{
+			return faultCode.CompareTo( "service.temporarily_unavailable" ) == 0 ||
+				   faultCode.CompareTo( "account.maintenance_mode" ) == 0 ||
+				   faultCode.CompareTo( "mail.maintenance" ) == 0;
+		}
+
+
 		/// <summary>
 		/// monitors the mailbox for new messages and fires
 		/// 
@@ -192,12 +219,21 @@ namespace Zimbra.Toast
 				}
 				catch(Zimbra.Client.ZimbraException ze)
 				{
-					//if an soap fault was thrown, let the user know
-					//and continue monitoring the mailbox
-					System.Windows.Forms.MessageBox.Show(
-						"Zimbra server returned an error message: " +  ze.Fault.Code + "\n" + ze.Fault.Description + "\n", 
-						"Zimbra Toast - Error", 
-						System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error );
+					String faultCode = ze.Fault.Code.ToLower();
+
+					if( RequiresReAuth(faultCode) ) 
+					{
+						zimbraSession.InvalidateAuthToken();
+					}
+					else if( !IgnorableFault(faultCode) )
+					{
+						//if an soap fault was thrown, let the user know
+						//and continue monitoring the mailbox
+						System.Windows.Forms.MessageBox.Show(
+							"Zimbra server returned an error message: " +  ze.Fault.Code + "\n" + ze.Fault.Description + "\n", 
+							"Zimbra Toast - Error", 
+							System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error );
+					}
 				}
 				catch(System.Net.WebException we)
 				{

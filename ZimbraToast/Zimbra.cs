@@ -128,6 +128,16 @@ namespace Zimbra.Toast
 		}
 
 
+		/// <summary>
+		/// Invalidate the auth token cached in this session object
+		/// Forces an auth before the next request is issued to the server
+		/// </summary>
+		public void InvalidateAuthToken()
+		{
+			authResponse = null;
+			prevRespContext = null;
+		}
+
 
 		/// <summary>
 		/// Authenticate against the server
