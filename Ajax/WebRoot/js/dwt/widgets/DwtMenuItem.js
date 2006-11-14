@@ -243,7 +243,7 @@ function(imageInfo) {
 		return;
 		
 	if (this._iconCell == null) {
-		this._addIconCell(this);
+		this._addIconCell();
 		this.parent._menuItemHasIcon();
 	}
 		
@@ -440,7 +440,7 @@ function() {
 }
 
 DwtMenuItem.prototype._addIconCell =
-function(className) {
+function() {
 	if (this._iconCell == null) {
 		var i = (!this._checkedCell) ? 0 : 1;
 		this._iconCell = this._row.insertCell(i++);
@@ -448,8 +448,7 @@ function(className) {
 		this._iconCell.align = "center";
 		this._iconCell.width =  DwtMenuItem._IMAGECELL_DIM;
 		this._iconCell.height = (this._style != DwtMenuItem.SEPARATOR_STYLE) ?  DwtMenuItem._IMAGECELL_DIM : DwtMenuItem._SEPAARATOR_DIM;
-		if (className == null) className = this._iconAreaClassName;	
-		this._iconCell.className = className;
+		this._iconCell.className = this._iconAreaClassName;
 	}
 }
 
