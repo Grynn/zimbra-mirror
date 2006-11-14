@@ -192,6 +192,8 @@ public class ZFolderBean {
     
     public boolean getIsMountPoint() { return mFolder instanceof ZMountpoint; }
 
+    public boolean getIsFeed() { return mFolder.getRemoteURL() != null; }
+
     public String getCanonicalId() { return (mFolder instanceof ZMountpoint) ? ((ZMountpoint)mFolder).getCanonicalRemoteId() : mFolder.getId(); }
 
     private int mDepth = -1;
