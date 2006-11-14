@@ -1,7 +1,7 @@
 #--------------------------------------------------------------------------
 # LDAP Schema for amavisd-new                          Jacques Supcik, PhD
 #-----------------------------                   IP-Plus Internet Services
-# Release 1.2.1                          Swisscom Enterprise Solutions Ltd
+# Release 1.2.2                          Swisscom Enterprise Solutions Ltd
 # 30 May 2004                                      3050 Bern - Switzerland
 #--------------------------------------------------------------------------
 # Copyright (c) 2004 Jacques Supcik, Swisscom Enterprise Solutions Ltd.
@@ -330,7 +330,63 @@ attributetype ( 1.3.6.1.4.1.15312.2.2.1.29
   DESC 'Banned rule names'
   EQUALITY caseIgnoreIA5Match
   SUBSTR caseIgnoreIA5SubstringsMatch
-  SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
+  SINGLE-VALUE )
+
+#dn: cn=schema
+#changetype: modify
+#add: attributetypes
+attributetype ( 1.3.6.1.4.1.15312.2.2.1.30
+  NAME 'amavisSpamDsnCutoffLevel'
+  DESC 'Spam DSN Cutoff Level'
+  EQUALITY caseIgnoreIA5Match
+  SUBSTR caseIgnoreIA5SubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
+  SINGLE-VALUE )
+
+#dn: cn=schema
+#changetype: modify
+#add: attributetypes
+attributetype ( 1.3.6.1.4.1.15312.2.2.1.31
+  NAME 'amavisSpamQuarantineCutoffLevel'
+  DESC 'Spam Quarantine Cutoff Level'
+  EQUALITY caseIgnoreIA5Match
+  SUBSTR caseIgnoreIA5SubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
+  SINGLE-VALUE )
+
+#dn: cn=schema
+#changetype: modify
+#add: attributetypes
+attributetype ( 1.3.6.1.4.1.15312.2.2.1.32
+  NAME 'amavisSpamSubjectTag'
+  DESC 'Spam Subject Tag'
+  EQUALITY caseExactIA5Match
+  SUBSTR caseExactSubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
+  SINGLE-VALUE )
+
+#dn: cn=schema
+#changetype: modify
+#add: attributetypes
+attributetype ( 1.3.6.1.4.1.15312.2.2.1.33
+  NAME 'amavisSpamSubjectTag2'
+  DESC 'Spam Subject Tag2'
+  EQUALITY caseExactIA5Match
+  SUBSTR caseExactSubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
+  SINGLE-VALUE )
+
+#dn: cn=schema
+#changetype: modify
+#add: attributetypes
+attributetype ( 1.3.6.1.4.1.15312.2.2.1.34
+  NAME 'amavisArchiveQuarantineTo'
+  DESC 'Archive Quarantine to'
+  EQUALITY caseIgnoreIA5Match
+  SUBSTR caseIgnoreIA5SubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
+  SINGLE-VALUE )
 
 
 # Classes
@@ -339,7 +395,7 @@ attributetype ( 1.3.6.1.4.1.15312.2.2.1.29
 # amavisAccount
 # This class is an auxiliary class, this mean that the class will be added
 # to a structural class. Usually, the structural class is the class that
-# represent the mail account itself (e.g an inetOrgPerson)
+# represent the mail account itself (e.g. an inetOrgPerson)
 
 #dn: cn=schema
 #changetype: modify
@@ -348,7 +404,6 @@ objectclass ( 1.3.6.1.4.1.15312.2.2.2.1
   NAME 'amavisAccount' AUXILIARY
   DESC 'Amavisd Account'
   SUP top
-  MUST ( mail )
   MAY ( amavisVirusLover $ amavisBypassVirusChecks $
         amavisSpamLover $ amavisBypassSpamChecks $
         amavisBannedFilesLover $ amavisBypassBannedChecks $
@@ -362,6 +417,8 @@ objectclass ( 1.3.6.1.4.1.15312.2.2.2.1
         amavisWarnBadHeaderRecip $ amavisVirusAdmin $ amavisNewVirusAdmin $
         amavisSpamAdmin $ amavisBannedAdmin $ amavisBadHeaderAdmin $
         amavisBannedRuleNames $
+        amavisSpamDsnCutoffLevel $ amavisSpamQuarantineCutoffLevel $
+        amavisSpamSubjectTag $ amavisSpamSubjectTag2 $ amavisArchiveQuarantineTo $
         cn $ description ) )
 
 #--------------------------------------------------------------------------
@@ -733,4 +790,3 @@ objectclass ( 1.3.6.1.4.1.15312.2.2.2.1
 # Free Software Foundation.  If the Document does not specify a version
 # number of this License, you may choose any version ever published (not
 # as a draft) by the Free Software Foundation.
-
