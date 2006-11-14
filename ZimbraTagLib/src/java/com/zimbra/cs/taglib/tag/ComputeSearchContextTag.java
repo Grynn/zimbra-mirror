@@ -29,6 +29,8 @@ import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZSearchFolder;
 import com.zimbra.cs.zclient.ZSearchParams;
 import com.zimbra.cs.zclient.ZTag;
+import com.zimbra.cs.taglib.bean.ZFolderBean;
+import com.zimbra.cs.taglib.bean.ZTagBean;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.jsp.JspException;
@@ -191,6 +193,7 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
                     result.setQuery("in:\"" + folder.getPath() + "\"");
                     result.setBackTo(LocaleSupport.getLocalizedMessage(pageContext, "backToFolder", new Object[] {folder.getName()}));
                 }
+                result.setFolder(new ZFolderBean(folder));
                 result.setTitle(folder.getName());
                 result.setSelectedId(folder.getId());
                 return;
@@ -203,6 +206,7 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
                 result.setTitle(tag.getName());
                 result.setBackTo(LocaleSupport.getLocalizedMessage(pageContext, "backToTag", new Object[] {tag.getName()}));                                    
                 result.setSelectedId(tag.getId());
+                result.setTag(new ZTagBean(tag));                
                 result.setShowMatches(true);
                 return;
             }

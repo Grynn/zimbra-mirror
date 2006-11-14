@@ -24,9 +24,11 @@
  */
 package com.zimbra.cs.taglib.tag;
 
+import com.zimbra.cs.service.ServiceException;
+import com.zimbra.cs.taglib.bean.ZFolderBean;
 import com.zimbra.cs.taglib.bean.ZSearchHitBean;
 import com.zimbra.cs.taglib.bean.ZSearchResultBean;
-import com.zimbra.cs.service.ServiceException;
+import com.zimbra.cs.taglib.bean.ZTagBean;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZSearchParams;
 import org.apache.commons.collections.map.LRUMap;
@@ -47,6 +49,8 @@ public class SearchContext {
     private String mSq; // from sq= attr
     private String mSfi; // from sfi = attr
     private String mSti; // from sti = attr
+    private ZFolderBean mFolderBean;
+    private ZTagBean mTagBean;
 
     public String getSq() { return mSq; }
     public void setSq(String sq) { mSq = sq; }
@@ -56,6 +60,15 @@ public class SearchContext {
 
     public String getSti() { return mSti;}
     public void setSti(String sti) { mSti = sti; }
+
+    public ZFolderBean getFolder() { return mFolderBean; }
+    public void setFolder(ZFolderBean folder) { mFolderBean = folder; }
+
+    public ZTagBean getTag() { return mTagBean; }
+    public void setTag(ZTagBean tag) { mTagBean = tag; }
+
+    public boolean getIsFolderSearch() { return mFolderBean != null; }
+    public boolean getIsTagSearch() { return mTagBean != null; }
 
     private ZSearchParams mParams;
     private ZSearchResultBean mResult;

@@ -217,6 +217,26 @@ public class ZFolderBean {
                 !(getIsDrafts() || getIsMountPoint() || getIsSearchFolder() || getRemoteURL() != null);
     }
 
+    public boolean getIsMessageFolderMarkReadTarget() {
+        return (getIsMessageView() || getIsConversationView() || getIsNullView()) &&
+                !(getIsDrafts() || getIsMountPoint() || getIsSearchFolder());
+    }
+
+    public boolean getIsMessageFolderRenameTarget() {
+        return (getIsMessageView() || getIsConversationView() || getIsNullView()) &&
+                !(getIsSystemFolder() || getIsSearchFolder());
+    }
+
+    public boolean getIsMessageFolderMoveSource() {
+        return (getIsMessageView() || getIsConversationView() || getIsNullView()) &&
+                !(getIsSystemFolder() || getIsSearchFolder());
+    }
+
+    public boolean getIsMessageFolderDeleteTarget() {
+        return (getIsMessageView() || getIsConversationView() || getIsNullView()) &&
+                !(getIsSystemFolder() || getIsSearchFolder());
+    }
+
     public boolean getIsContactMoveTarget() {
         return (getIsContactView() || getIsTrash()) &&
                 !(getIsDrafts() || getIsMountPoint() || getIsSearchFolder() || getRemoteURL() != null);
