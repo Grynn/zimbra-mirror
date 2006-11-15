@@ -41,7 +41,7 @@ function ZaTabView (parent, app, iKeyName) {
 	this._drawn = false;	
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
 	this._containedObject = null;
-	this.setScrollStyle(DwtControl.SCROLL);
+	this.setScrollStyle(Dwt.VISIBLE);
 	this._currentSubTab = [];
 }
 
@@ -83,6 +83,11 @@ function (xModelMetaData, xFormMetaData) {
 	this._localXForm.setController(this._app);
 	this._localXForm.draw();
 	this._drawn = true;
+}
+
+ZaTabView.prototype.setBounds = function (x, y, width, height) {	
+	DwtControl.prototype.setBounds.call(this,x, y, width, height);
+	
 }
 
 /**

@@ -349,10 +349,10 @@ Super_AnchorHelper_XFormItem.prototype.resetToSuperValue = function(event) {
 Super_Textfield_XFormItem = function () {}
 XFormItemFactory.createItemType("_SUPER_TEXTFIELD_", "super_textfield", Super_Textfield_XFormItem, Super_XFormItem);
 
-Super_Textfield_XFormItem.prototype.useParentTable = true;
+Super_Textfield_XFormItem.prototype.useParentTable = false;
 Super_Textfield_XFormItem.prototype.txtBoxLabel = null;
 Super_Textfield_XFormItem.prototype.numCols = 3;
-Super_Textfield_XFormItem.prototype.colSizes = ["300px","250","200px"];
+Super_Textfield_XFormItem.prototype.colSizes = ["275px","275px","150px"];
 Super_Textfield_XFormItem.prototype.colSpan = 3;
 Super_Textfield_XFormItem.prototype.initializeItems = function() {
 	var txtBoxLabel = this.getInheritedProperty("txtBoxLabel");
@@ -406,16 +406,16 @@ Super_Textfield_XFormItem.prototype.items = [];
 Super_Checkbox_XFormItem = function () {}
 XFormItemFactory.createItemType("_SUPER_CHECKBOX_", "super_checkbox", Super_Checkbox_XFormItem, Super_XFormItem);
 
-Super_Checkbox_XFormItem.prototype.useParentTable = true;
+Super_Checkbox_XFormItem.prototype.useParentTable = false;
 Super_Checkbox_XFormItem.prototype.numCols = 3;
-Super_Checkbox_XFormItem.prototype.colSizes = ["250px","200px","150px"];
+Super_Checkbox_XFormItem.prototype.colSizes = ["275px","275px","150px"];
 Super_Checkbox_XFormItem.prototype.initializeItems = function() {
 	var anchorCssStyle = this.getInheritedProperty("anchorCssStyle");
 	if(anchorCssStyle) {
 		this.getItems()[1].cssStyle = anchorCssStyle;
-	} else {
+	} /*else {
 		this.getItems()[1].cssStyle = "width:200px";
-	}	
+	}	*/
 	Composite_XFormItem.prototype.initializeItems.call(this);
 	var checkBoxLabel = this.getInheritedProperty("checkBoxLabel");
 	//var checkBoxLabel = this.getLabel();
@@ -656,7 +656,7 @@ XFormItemFactory.createItemType("_SUPER_LIFETIME_", "super_lifetime", Super_Life
 Super_Lifetime_XFormItem.prototype.numCols = 4;
 Super_Lifetime_XFormItem.prototype.colSpan = 4;
 Super_Lifetime_XFormItem.prototype.colSizes =["275px","80px","120px","150px"];
-Super_Lifetime_XFormItem.prototype.useParenttable = true;
+Super_Lifetime_XFormItem.prototype.useParenttable = false;
 Super_Lifetime_XFormItem.prototype.TIME_CHOICES = [
  				{value:"d", label:"Days"},
 				{value:"h", label:"Hours"},
@@ -755,7 +755,7 @@ XFormItemFactory.createItemType("_SUPER_LIFETIME1_", "super_lifetime1", Super_Li
 Super_Lifetime1_XFormItem.prototype.numCols = 4;
 Super_Lifetime1_XFormItem.prototype.colSpan = 4;
 Super_Lifetime1_XFormItem.prototype.colSizes =["275px","80px","120px","150px"];
-Super_Lifetime1_XFormItem.prototype.useParenttable = true;
+Super_Lifetime1_XFormItem.prototype.useParenttable = false;
 Super_Lifetime1_XFormItem.prototype.TIME_CHOICES = [
  				{value:"d", label:"Days"},
 				{value:"h", label:"Hours"}
@@ -874,3 +874,29 @@ ZARightGrouper_XFormItem.prototype.borderCssClass = "RightGrouperBorder";
 function ZALeftGrouper_XFormItem() {}
 XFormItemFactory.createItemType("_ZALEFT_GROUPER_", "zleft_grouper", ZALeftGrouper_XFormItem, Grouper_XFormItem);
 ZALeftGrouper_XFormItem.prototype.borderCssClass = "LeftGrouperBorder";
+
+function ZATabCase_XFormItem() {}
+XFormItemFactory.createItemType("_ZATABCASE_", "zatabcase",ZATabCase_XFormItem, Case_XFormItem);
+ZATabCase_XFormItem.prototype.align = _LEFT_;
+ZATabCase_XFormItem.prototype.valign = _TOP_;
+ZATabCase_XFormItem.prototype.getCustomHeight = function () {
+	try {
+		var totalHeight = this.getForm().parent.getHtmlElement().offsetHeight;
+		var headerHeight = this.getForm().getItemsById("xform_header")[0].getElement().offsetHeight;
+		var tabBarHeight = this.getForm().getItemsById("xform_tabbar")[0].getElement().offsetHeight;
+		return totalHeight - headerHeight - tabBarHeight;
+	} catch (ex) {
+		
+	}
+	return "100%";						
+};
+ZATabCase_XFormItem.prototype.resizeHdlr = 
+function() {
+	try {
+		var element = this.getElement();
+		var height = this.cacheInheritedMethod("getCustomHeight", "$getCustomHeight").call(this);
+		element.style.height = height;
+	} catch (ex) {
+		
+	}
+};

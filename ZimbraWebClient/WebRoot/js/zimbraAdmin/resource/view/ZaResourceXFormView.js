@@ -198,7 +198,7 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject) {
 	tabChoices.push({value:_tab2, label:ZaMsg.TABT_ResLocationContact});
 
 	var cases = [];
-	var case1 = {type:_CASE_,  relevant:("instance[ZaModel.currentTab] == " + _tab1), height:"400px",  align:_LEFT_, valign:_TOP_};
+	var case1 = {type:_ZATABCASE_,  relevant:("instance[ZaModel.currentTab] == " + _tab1), height:"400px",  align:_LEFT_, valign:_TOP_};
 	
 	var case1Items = 
 		[	{ref:ZaResource.A_displayname, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ResourceName,label:ZaMsg.NAD_ResourceName, labelLocation:_LEFT_, width: "200px" },			
@@ -249,7 +249,7 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject) {
 	cases.push(case1);
 	
 	var defaultWidth = 200 ;
-	var case2={type:_CASE_, numCols:2, relevant:("instance[ZaModel.currentTab] == " + _tab2),colSizes:["150px","300px"],
+	var case2={type:_ZATABCASE_, numCols:2, relevant:("instance[ZaModel.currentTab] == " + _tab2),colSizes:["150px","300px"],
 					items: [
 						{ref:ZaResource.A_zimbraCalResSite, type:_TEXTFIELD_, msgName:ZaMsg.NAD_Site,label:ZaMsg.NAD_Site, labelLocation:_LEFT_, width:defaultWidth, elementChanged: ZaResource.setAutoLocationName},
 						{ref:ZaResource.A_zimbraCalResBuilding, type:_TEXTFIELD_, msgName:ZaMsg.NAD_Building,label:ZaMsg.NAD_Building, labelLocation:_LEFT_, width:defaultWidth, elementChanged: ZaResource.setAutoLocationName},						
@@ -298,15 +298,15 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject) {
 				};
 	cases.push(case2);
 		
-	xFormObject.tableCssStyle="width:100%;overflow:auto;";
+	xFormObject.tableCssStyle="width:100%;";
 	xFormObject.items = [
-			{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", 
+			{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"xform_header", 
 				items: [
 					{type:_GROUP_,	numCols:4,colSizes:["90px","350px","100px","200px"],items:headerItems}
 				],
 				cssStyle:"padding-top:5px; padding-bottom:5px"
 			},
-			{type:_TAB_BAR_,  ref:ZaModel.currentTab,choices:tabChoices,cssClass:"ZaTabBar"},
+			{type:_TAB_BAR_,  ref:ZaModel.currentTab,choices:tabChoices,cssClass:"ZaTabBar", id:"xform_tabbar"},
 			{type:_SWITCH_, align:_LEFT_, valign:_TOP_, items:cases}
 	];
 };

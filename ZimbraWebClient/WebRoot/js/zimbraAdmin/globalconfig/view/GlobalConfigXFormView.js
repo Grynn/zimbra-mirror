@@ -53,9 +53,10 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 		  containerCssStyle: "padding-bottom:0px",
 		  style: DwtAlert.WARNING,
 		  iconVisible: false, 
-		  content: ZaMsg.Alert_GlobalConfig
+		  content: ZaMsg.Alert_GlobalConfig,
+		  id:"xform_header"
 		},
-		{type:_TAB_BAR_,  ref:ZaModel.currentTab,
+		{type:_TAB_BAR_,  ref:ZaModel.currentTab,id:"xform_tabbar",
 		 	containerCssStyle: "padding-top:0px", 
 			choices:[
 				{value:1, label:ZaMsg.NAD_Tab_General},
@@ -67,7 +68,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 			]
 		},
 		{type:_SWITCH_, items:[
-				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 1",
+				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 1",
 					colSizes:["300px","*"],
 				 	items:[
 						{ ref: ZaGlobalConfig.A_zimbraGalMaxResults, type:_INPUT_, 
@@ -89,7 +90,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 						}
 					]
 				},
-				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 2", id:"gs_form_attachment_tab", items:[
+				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 2", id:"gs_form_attachment_tab", items:[
 				  	{ type: _GROUP_, id:"attachment_settings",
 				  	  label: ZaMsg.NAD_Attach_IncomingAttachments, labelCssStyle: "vertical-align:top",
 				  	  items: [
@@ -160,7 +161,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 			    	  	}
 			    	]}
 				]},
-				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 3", width:"100%",colSizes:["100px","400px"], 
+				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 3", width:"100%",colSizes:["100px","400px"], 
 					items:[
 					  	{ ref: ZaGlobalConfig.A_zimbraMtaAuthEnabled, type: _CHECKBOX_,
 					   	  label:ZaMsg.NAD_MTA_Authentication,labelLocation:_LEFT_,
@@ -253,7 +254,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 						  	}
 						]}
 				]},
-				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 4",
+				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 4",
 					width:"100%",colSizes:["100px","400px"], 
 					items: [
 						{ type: _DWT_ALERT_,
@@ -312,7 +313,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 
 					]
 				},
-				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 5", 
+				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 5", 
 					width:"100%",colSizes:["100px","400px"], 
 					items: [
 						{ type: _DWT_ALERT_,
@@ -371,7 +372,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 					]
 				},
 				// anti-spam
-				{ type: _CASE_, relevant: "instance[ZaModel.currentTab] == 6", 
+				{ type: _ZATABCASE_, relevant: "instance[ZaModel.currentTab] == 6", 
 					width:"100%",colSizes:["300px","*"], 
 				  items: [
 				  	{ ref: ZaGlobalConfig.A_zimbraSpamCheckEnabled, type: _CHECKBOX_,
@@ -427,7 +428,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 				  	]}				  	
 				]}/*,
 				// security: anti-virus
-				{ type: _CASE_, relevant: "instance[ZaModel.currentTab] == 7", 
+				{ type: _ZATABCASE_, relevant: "instance[ZaModel.currentTab] == 7", 
 				colSizes:["300px","150", "*"],
 				  items: [
 			  	    { ref: ZaGlobalConfig.A_zimbraVirusDefinitionsUpdateFrequency, type: _INPUT_,

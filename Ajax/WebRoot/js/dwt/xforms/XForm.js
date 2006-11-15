@@ -497,18 +497,22 @@ XForm.prototype.getOutstandingRowSpanCols = function (parentItem) {
 * @param currentCol
 * @param skipTable
 **/
-XForm.prototype.outputItemList = function (items, parentItem, html, updateScript, indent, numCols, currentCol, skipTable) {
+XForm.prototype.outputItemList = function (items, parentItem, html, updateScript, indent, numCols, currentCol, skipTable, skipOuter) {
 	if (parentItem.outputHTMLStart) {
 		parentItem.outputHTMLStart(html, updateScript, indent, currentCol);
 	}
 	var drawTable = (parentItem.getUseParentTable() == false && skipTable != true);
-	if (drawTable) {
-		var colSizes = parentItem.getColSizes();
-		//XXX MOW: appending an elementDiv around the container if we need to style it
-		var outerStyle = parentItem.getCssString();
+	var outerStyle = null;
+	if(!skipOuter) {
+		outerStyle = parentItem.getCssString();
 		if (outerStyle != null && outerStyle != "") {
 			parentItem.outputElementDivStart(html, updateScript, indent);
 		}
+	}
+
+	if (drawTable) {
+		var colSizes = parentItem.getColSizes();
+		//XXX MOW: appending an elementDiv around the container if we need to style it
 		var cellspacing = parentItem.getInheritedProperty("cellspacing");
 		var cellpadding = parentItem.getInheritedProperty("cellpadding");		
 		html.append("<table cellspacing=",cellspacing," cellpadding=",cellpadding," ", 
@@ -626,10 +630,11 @@ XForm.prototype.outputItemList = function (items, parentItem, html, updateScript
 	
 	if (drawTable) {
 		html.append("\r", indent, indent,"</tbody></table>\r");
-		if (outerStyle != null) {
-			parentItem.outputElementDivEnd(html, updateScript, indent);
-		}
 	}
+	if (outerStyle != null && outerStyle != "") {
+		parentItem.outputElementDivEnd(html, updateScript, indent);
+	}
+
 
 	if (parentItem.outputHTMLEnd) {
 		parentItem.outputHTMLEnd(html, updateScript, indent, currentCol);

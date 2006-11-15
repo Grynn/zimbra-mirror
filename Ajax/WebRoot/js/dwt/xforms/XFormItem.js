@@ -1540,9 +1540,6 @@ XFormItem.prototype.getTableCssString = function () {
 	var width = this.getWidth();
 	if (width != null) 	style += ";width:"+ width;
 	
-//	var height = this.getHeight();
-//	if (height != null)	style += ";height:"+ height;
-	
 	var overflow = this.getOverflow();
 	if (overflow != null) {
 		if(style.length)
@@ -2721,21 +2718,24 @@ CollapsableRadioGrouper_XFormItem.prototype.getLabel = function () {
 * @constructor
 **/
 function Case_XFormItem() {}
-XFormItemFactory.createItemType("_CASE_", "case", Case_XFormItem, Group_XFormItem)
+XFormItemFactory.createItemType("_CASE_", "case", Case_XFormItem, Group_XFormItem);
 
 //	type defaults
 Case_XFormItem.prototype.labelLocation = _NONE_;
+Case_XFormItem.prototype.useParentTable = false;
 Case_XFormItem.prototype.width = "100%";
 Case_XFormItem.prototype.focusable = false;
 Case_XFormItem.prototype.deferred = true;
 Case_XFormItem.prototype.cellspacing = 0;
 Case_XFormItem.prototype.cellpadding = 0;
+Case_XFormItem.prototype.cssClass = "XFormCase";
+	
 Case_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
-	this.getForm().outputItemList([], this, html, updateScript, indent,this.getNumCols(), 0);
+//	this.getForm().outputItemList([], this, html, updateScript, indent,this.getNumCols(), 0);
 //	this.getForm().outputItemList(this.getItems(), this, html, updateScript, indent + "  ",this.getNumCols(), currentCol);
 	this.deferred = this.getInheritedProperty("deferred");
 	if(this.deferred) {
-		this.getForm().outputItemList([], this, html, updateScript, indent,this.getNumCols(), 0);
+		this.getForm().outputItemList([], this, html, updateScript, indent,this.getNumCols(), 0, true, false);
 	} else {
 		this.getForm().outputItemList(this.getItems(), this, html, updateScript, indent, this.getNumCols(), currentCol);
 	}
@@ -2749,9 +2749,19 @@ Case_XFormItem.prototype._outputHTML = function () {
 		return;
 	}
 	var masterId = this.getId();
-		
-	var table = element.getElementsByTagName("table")[0];
-	var tbody = element.getElementsByTagName("tbody")[0];
+	
+	if(this.cacheInheritedMethod("getCustomHeight", "$getCustomHeight")) {
+		var height = this.cacheInheritedMethod("getCustomHeight", "$getCustomHeight").call(this);
+		element.style.height = height;
+		var shell = AjxCore.objectWithId(window._dwtShell);
+		if(shell) {
+			if(this.cacheInheritedMethod("resizeHdlr", "$resizeHdlr")) {
+				shell.addControlListener(new AjxListener(this, this.cacheInheritedMethod("resizeHdlr", "$resizeHdlr")));
+			}
+		}
+	}	
+//	var table = element.getElementsByTagName("table")[0];
+	//var tbody = element.getElementsByTagName("tbody")[0];
 
 	if (AjxEnv.isIE) {
 		var tempDiv = this.createElement("temp",null,"div","");
@@ -2768,10 +2778,10 @@ Case_XFormItem.prototype._outputHTML = function () {
 	if (drawTable) {
 		var colSizes = this.getColSizes();
 		//XXX MOW: appending an elementDiv around the container if we need to style it
-		var outerStyle = this.getCssString();
+/*		var outerStyle = this.getCssString();
 		if (outerStyle != null && outerStyle != "") {
 			this.outputElementDivStart(html, updateScript, "");
-		}
+		}*/
 		var cellspacing = this.getInheritedProperty("cellspacing");
 		var cellpadding = this.getInheritedProperty("cellpadding");		
 		html.append("<table cellspacing=",cellspacing," cellpadding=",cellpadding," ",  
@@ -2788,7 +2798,7 @@ Case_XFormItem.prototype._outputHTML = function () {
 		}
 		html.append("<tbody>\r");
 	}
-	form.outputItemList(this.getItems(), this, html, updateScript,"", this.getNumCols(), 0, true);
+	form.outputItemList(this.getItems(), this, html, updateScript,"", this.getNumCols(), 0, true, true);
 	html.append("</table>");	
 
 	

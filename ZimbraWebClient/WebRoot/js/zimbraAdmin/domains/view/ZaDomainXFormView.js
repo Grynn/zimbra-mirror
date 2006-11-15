@@ -322,7 +322,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 	
 	
 	xFormObject.items = [
-		{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", 
+		{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"xform_header", 
 			items: [
 				{type:_GROUP_,	numCols:4,colSizes:["32px","350px","100px","250px"],
 					items: [
@@ -341,10 +341,10 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 				{value:3, label:ZaMsg.Domain_Tab_Authentication},
 				{value:4, label:ZaMsg.Domain_Tab_VirtualHost},
 				{value:5, label:ZaMsg.Domain_Tab_Notebook}				
-			],cssClass:"ZaTabBar"
+			],cssClass:"ZaTabBar", id:"xform_tabbar"
 		},
 		{type:_SWITCH_, items:[
-				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 1", 
+				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 1", 
 				colSizes:["300px","*"],
 				items:[
 						{ ref: ZaDomain.A_domainName, type:_OUTPUT_, 
@@ -364,7 +364,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 						}
 					]
 				},
-				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 2", 
+				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 2", 
 				colSizes:["300px","*"],
 					items: [
 						{ref:ZaDomain.A_GalMode, type:_OUTPUT_, label:ZaMsg.Domain_GalMode, choices:this.GALModes},
@@ -385,7 +385,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 						}
 					]						
 				}, 
-				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 3", 
+				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 3", 
 					colSizes:["300px","*"],
 					items: [
 						{ref:ZaDomain.A_AuthMech, type:_OUTPUT_, label:ZaMsg.Domain_AuthMech, choices:this.AuthMechs},
@@ -415,7 +415,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 						}
 					]						
 				},
-				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 4", cssStyle:"padding-left:10px",
+				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 4", cssStyle:"padding-left:10px",
 					items:[
 						{type:_DWT_ALERT_,content:null,ref:ZaDomain.A_domainName,
 							getDisplayValue: function (itemVal) {
@@ -437,7 +437,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 						}
 					]
 				}, 
-				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 5",cssStyle:"padding-left:10px",
+				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 5",cssStyle:"padding-left:10px",
 					items : [
 						{type: _DWT_ALERT_,
 						  containerCssStyle: "padding-bottom:0px",

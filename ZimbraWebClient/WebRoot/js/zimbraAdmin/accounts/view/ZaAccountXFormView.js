@@ -417,8 +417,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 
 
 	var cases = [];
-	var case1 = {type:_CASE_,  relevant:("instance[ZaModel.currentTab] == " + _tab1), height:"400px",  
-		align:_LEFT_, valign:_TOP_, numCols:1};
+	var case1 = {type:_ZATABCASE_,  relevant:("instance[ZaModel.currentTab] == " + _tab1),   
+		numCols:1};
 	
 	var case1Items = [
 		{type:_TOP_GROUPER_, label:ZaMsg.NAD_AccountNameGrouper, id:"account_form_name_group",
@@ -537,7 +537,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	case1Items.push(notesGroup);
 	case1.items = case1Items;
 	cases.push(case1);
-	var case2={type:_CASE_, numCols:1, relevant:("instance[ZaModel.currentTab] == " + _tab2),
+	var case2={type:_ZATABCASE_, numCols:1, relevant:("instance[ZaModel.currentTab] == " + _tab2),
 					items: [
 						{type:_ZAGROUP_, 
 							items:[
@@ -569,7 +569,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	var nonMemberOfHeaderList = new ZaAccountMemberOfsourceHeaderList(ZaAccountMemberOfsourceHeaderList.NON);
 	
 	//MemberOf Tab
-	var case3={type:_CASE_, numCols:2, relevant:("instance[ZaModel.currentTab] == " + _tab3), colSizes: ["50%","50%"],
+	var case3={type:_ZATABCASE_, numCols:2, relevant:("instance[ZaModel.currentTab] == " + _tab3), colSizes: ["50%","50%"],
 					items: [
 						{type:_SPACER_, height:"10"},
 						//layout rapper around the direct/indrect list						
@@ -743,7 +743,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	cases.push(case3);		
 					
 	if(ZaSettings.ACCOUNTS_FEATURES_ENABLED) {
-		cases.push({type:_CASE_,id:"account_form_features_tab",  numCols:1, width:"100%", relevant:("instance[ZaModel.currentTab] == " + _tab4),
+		cases.push({type:_ZATABCASE_,id:"account_form_features_tab",  numCols:1, width:"100%", relevant:("instance[ZaModel.currentTab] == " + _tab4),
 				items: [
 					{ type: _DWT_ALERT_,
 					  containerCssStyle: "padding-top:20px;width:400px;",
@@ -853,13 +853,13 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 						{ref:ZaAccount.A_zimbraPrefOutOfOfficeReply, type:_TEXTAREA_, msgName:ZaMsg.NAD_zimbraPrefOutOfOfficeReply,label:ZaMsg.NAD_zimbraPrefOutOfOfficeReply, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", onChange:ZaTabView.onFormFieldChanged, colSpan:3, width:"30em"}
 						
 					];
-		cases.push({type:_CASE_, width:"100%", relevant:("instance[ZaModel.currentTab] == " + _tab5),
+		cases.push({type:_ZATABCASE_, width:"100%", relevant:("instance[ZaModel.currentTab] == " + _tab5),
 					colSizes:["300px","250","200px"], items :prefItems});
 	}
 
 
 	if(ZaSettings.ACCOUNTS_ALIASES_ENABLED) {
-		cases.push({type:_CASE_, numCols:1, relevant:("instance[ZaModel.currentTab] == " + _tab6),
+		cases.push({type:_ZATABCASE_, numCols:1, relevant:("instance[ZaModel.currentTab] == " + _tab6),
 					items: [
 						{type:_OUTPUT_, value:ZaMsg.NAD_EditAliasesGroup},
 						{ref:ZaAccount.A_zimbraMailAlias, type:_REPEAT_, label:null, repeatInstance:emptyAlias, showAddButton:true, showRemoveButton:true, 
@@ -881,7 +881,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	}
 	
 	if(ZaSettings.ACCOUNTS_FORWARDING_ENABLED) {
-		cases.push({type:_CASE_, numCols:2, relevant:("instance[ZaModel.currentTab] == " + _tab7), 
+		cases.push({type:_ZATABCASE_, numCols:2, relevant:("instance[ZaModel.currentTab] == " + _tab7), 
 					items: [
 						{ref:ZaAccount.A_zimbraFeatureMailForwardingEnabled,resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 							type:zimbraFeatureMailForwardingEnabledType, 
@@ -914,7 +914,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	}
 
 	if(ZaSettings.SKIN_PREFS_ENABLED) {
-		cases.push({type:_CASE_, id:"account_form_themes_tab", numCols:1,relevant:("instance[ZaModel.currentTab] == " + _tab8),
+		cases.push({type:_ZATABCASE_, id:"account_form_themes_tab", numCols:1,relevant:("instance[ZaModel.currentTab] == " + _tab8),
 			items:[
 				{type:_SPACER_},
 				{sourceRef: ZaAccount.A_zimbraInstalledSkinPool, 
@@ -938,7 +938,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	}	
 
 	if(ZaSettings.ZIMLETS_ENABLED) {
-		cases.push({type:_CASE_, id:"account_form_zimlets_tab", numCols:1,relevant:("instance[ZaModel.currentTab] == " + _tab9),
+		cases.push({type:_ZATABCASE_, id:"account_form_zimlets_tab", numCols:1,relevant:("instance[ZaModel.currentTab] == " + _tab9),
 			items:[
 				{type:_SPACER_},
 				{sourceRef: ZaAccount.A_zimbraInstalledZimletPool, 
@@ -953,10 +953,10 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 		});
 	}
 	if(ZaSettings.ACCOUNTS_ADVANCED_ENABLED) {
-		cases.push({type:_CASE_, id:"account_form_advanced_tab", numCols:1,
+		cases.push({type:_ZATABCASE_, id:"account_form_advanced_tab", numCols:1,
 					relevant:("instance[ZaModel.currentTab] == " + _tab10),
 					items: [
-						{type:_TOP_GROUPER_, id:"account_attachment_settings",colSizes:["275px","250px","200px"],numCols:3,
+						{type:_ZA_TOP_GROUPER_, id:"account_attachment_settings",colSizes:["auto"],numCols:1,
 							label:ZaMsg.NAD_AttachmentsGrouper,
 							items :[
 								{ref:ZaAccount.A_zimbraAttachmentsBlocked, type:_SUPER_CHECKBOX_, 
@@ -968,7 +968,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 							]
 						},
 
-						{type:_TOP_GROUPER_, id:"account_quota_settings",colSizes:["275px","250px","200px"],numCols:3,
+						{type:_ZA_TOP_GROUPER_, id:"account_quota_settings",colSizes:["auto"],numCols:1,
 							label:ZaMsg.NAD_QuotaGrouper,
 							items: [
 								{ref:ZaAccount.A_zimbraMailQuota, type:_SUPER_TEXTFIELD_, 
@@ -982,9 +982,13 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 							]
 						},
 
-						{type:_TOP_GROUPER_,id:"account_password_settings",colSizes:["275px","250px","200px"],numCols:3,
+						{type:_ZA_TOP_GROUPER_,id:"account_password_settings",colSizes:["auto"],numCols:1,
 							label:ZaMsg.NAD_PasswordGrouper,
 							items: [
+								{ref:ZaAccount.A_zimbraPasswordLocked, type:_SUPER_CHECKBOX_, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									msgName:ZaMsg.NAD_PwdLocked,checkBoxLabel:ZaMsg.NAD_PwdLocked, 
+								 	trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged},
 								{ref:ZaAccount.A_zimbraMinPwdLength, 
 									type:_SUPER_TEXTFIELD_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
@@ -1030,13 +1034,9 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 								{ref:ZaAccount.A_zimbraEnforcePwdHistory, type:_SUPER_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_passEnforceHistory,txtBoxLabel:ZaMsg.NAD_passEnforceHistory+":", labelLocation:_LEFT_, textFieldCssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged}
 							]
 						},
-						{type:_TOP_GROUPER_, id:"password_lockout_settings",colSizes:["275px","250px","200px"],numCols:3,
+						{type:_ZA_TOP_GROUPER_, id:"password_lockout_settings",colSizes:["auto"],numCols:1,
 							label:ZaMsg.NAD_FailedLoginGrouper,
 							items :[
-								{ref:ZaAccount.A_zimbraPasswordLocked, type:_SUPER_CHECKBOX_, 
-									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
-									msgName:ZaMsg.NAD_PwdLocked,checkBoxLabel:ZaMsg.NAD_PwdLocked, 
-								 	trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged},
 								{ref:ZaAccount.A_zimbraPasswordLockoutEnabled, 
 									type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.NAD_zimbraPasswordLockoutEnabled,
@@ -1054,12 +1054,9 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 									textFieldCssClass:"admin_xform_number_input", 
 									onChange:ZaTabView.onFormFieldChanged, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS
-								}
-							]
-						},
-						{type:_GROUP_, colSizes:["*"],numCols:1,
-							items :[
+								},
 								{ref:ZaAccount.A_zimbraPasswordLockoutDuration, type:_SUPER_LIFETIME_, 
+									colSpan:3,
 									relevant: "ZaAccountXFormView.isPasswordLockoutEnabled.call(this)",
 									relevantBehavior: _DISABLE_,
 									txtBoxLabel:ZaMsg.NAD_zimbraPasswordLockoutDuration+":",
@@ -1070,6 +1067,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS
 								},
 								{ref:ZaAccount.A_zimbraPasswordLockoutFailureLifetime, type:_SUPER_LIFETIME_, 
+									colSpan:3,									
 									relevant: "ZaAccountXFormView.isPasswordLockoutEnabled.call(this)",
 									relevantBehavior: _DISABLE_,								
 									txtBoxLabel:ZaMsg.NAD_zimbraPasswordLockoutFailureLifetime+":",
@@ -1081,9 +1079,10 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 									labelCssStyle:"white-space:normal;",
 									nowrap:false,labelWrap:true
 								}																		
+								
 							]
 						},
-						{type:_TOP_GROUPER_, colSizes:["*"],numCols:1,
+						{type:_ZA_TOP_GROUPER_, colSizes:["auto"],numCols:1,
 							label:ZaMsg.NAD_TimeoutGrouper,
 							items: [
 								{ref:ZaAccount.A_zimbraAuthTokenLifetime,
@@ -1118,16 +1117,16 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				});
 	}
 	
-	xFormObject.tableCssStyle="width:100%;overflow:auto;";
+	xFormObject.tableCssStyle="width:100%;";
 	xFormObject.items = [
-			{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", 
+			{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"xform_header",
 				items: [
 					{type:_GROUP_,	numCols:4,colSizes:["90px","350px","100px","200px"],items:headerItems}
 				],
 				cssStyle:"padding-top:5px; padding-bottom:5px"
 			},
-			{type:_TAB_BAR_,  ref:ZaModel.currentTab,choices:tabChoices,cssClass:"ZaTabBar"},
-			{type:_SWITCH_, align:_LEFT_, valign:_TOP_, items:cases}
+			{type:_TAB_BAR_,  ref:ZaModel.currentTab,choices:tabChoices,cssClass:"ZaTabBar", id:"xform_tabbar"},
+			{type:_SWITCH_, align:_LEFT_, valign:_TOP_, items:cases,cssStyle:"height:600px"}
 	];
 };
 ZaTabView.XFormModifiers["ZaAccountXFormView"].push(ZaAccountXFormView.myXFormModifier);

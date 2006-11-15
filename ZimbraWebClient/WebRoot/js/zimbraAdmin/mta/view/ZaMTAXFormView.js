@@ -498,7 +498,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 	msgHeaderList[8] = new ZaListHeaderItem(null, null, null, null, null, null, false, true);						
 
 	xFormObject.items = [
-		{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", 
+		{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"xform_header", 
 			items: [
 				{type:_GROUP_,	numCols:6,colSizes:["32px","250px","auto", "130px","250px", "auto"],
 					items: [
@@ -516,10 +516,10 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 			relevantBehavior:_HIDE_,
 			containerCssStyle: "padding-top:0px",
 			choices:ZaMTAXFormView.tabChoices,
-			cssClass:"ZaTabBar"
+			cssClass:"ZaTabBar", id:"xform_tabbar"
 		},
 		{type:_SWITCH_, items:[
-				{type:_CASE_, numCols:1, cssClass:(AjxEnv.isIE ? "IEcontainer" : ""), width:"100%",/*colSizes:["10", "250","10","250","10"], */relevant:"instance[ZaModel.currentTab] == " + ZaMTAXFormView._tab1, 
+				{type:_ZATABCASE_, numCols:1, cssClass:(AjxEnv.isIE ? "IEcontainer" : ""), width:"100%",/*colSizes:["10", "250","10","250","10"], */relevant:"instance[ZaModel.currentTab] == " + ZaMTAXFormView._tab1, 
 					items:[	
 						{type:_SPACER_, height:"15"},
 						{type:_GROUP_,numCols:8, colSizes:["10%", "10%","10%", "18%", "12%", "25%", "auto", "10%"],tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
@@ -646,7 +646,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 						}		
 					]
 				},							
-				{type:_CASE_, numCols:1, cssClass:(AjxEnv.isIE ? "IEcontainer" : ""), width:"100%",/*colSizes:["10", "250","10","250","10"], */relevant:"instance[ZaModel.currentTab] == " + ZaMTAXFormView._tab2, 
+				{type:_ZATABCASE_, numCols:1, cssClass:(AjxEnv.isIE ? "IEcontainer" : ""), width:"100%",/*colSizes:["10", "250","10","250","10"], */relevant:"instance[ZaModel.currentTab] == " + ZaMTAXFormView._tab2, 
 					items:[	
 						{type:_SPACER_, height:"15"},
 						{type:_GROUP_,numCols:8, colSizes:["10%", "10%","10%", "18%", "12%", "25%", "auto", "10%"],tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
@@ -761,7 +761,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 						}		
 					]
 				},
-				{type:_CASE_, numCols:1, cssClass:(AjxEnv.isIE ? "IEcontainer" : ""), width:"100%",relevant:"instance[ZaModel.currentTab] == " + ZaMTAXFormView._tab3, 
+				{type:_ZATABCASE_, numCols:1, cssClass:(AjxEnv.isIE ? "IEcontainer" : ""), width:"100%",relevant:"instance[ZaModel.currentTab] == " + ZaMTAXFormView._tab3, 
 					items:[	
 						{type:_SPACER_, height:"15"},
 						{type:_GROUP_,numCols:8, colSizes:["10%", "10%","10%", "18%", "12%", "25%", "auto", "10%"],tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
@@ -877,7 +877,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 						}		
 					]
 				},
-				{type:_CASE_, numCols:1, cssClass:(AjxEnv.isIE ? "IEcontainer" : ""), width:"100%",relevant:"instance[ZaModel.currentTab] == " + ZaMTAXFormView._tab4, 
+				{type:_ZATABCASE_, numCols:1, cssClass:(AjxEnv.isIE ? "IEcontainer" : ""), width:"100%",relevant:"instance[ZaModel.currentTab] == " + ZaMTAXFormView._tab4, 
 					items:[	
 						{type:_SPACER_, height:"15"},
 						{type:_GROUP_,numCols:8, colSizes:["10%", "10%","10%", "18%", "12%", "25%", "auto", "10%"],tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
@@ -993,7 +993,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 					]
 				},											
 					
-				{type:_CASE_, numCols:1, cssClass:(AjxEnv.isIE ? "IEcontainer" : ""), width:"100%",relevant:"instance[ZaModel.currentTab] == " + ZaMTAXFormView._tab5, 
+				{type:_ZATABCASE_, numCols:1, cssClass:(AjxEnv.isIE ? "IEcontainer" : ""), width:"100%",relevant:"instance[ZaModel.currentTab] == " + ZaMTAXFormView._tab5, 
 					items:[	
 						{type:_SPACER_, height:"15"},
 						

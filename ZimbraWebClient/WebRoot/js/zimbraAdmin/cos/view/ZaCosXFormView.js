@@ -148,7 +148,7 @@ ZaCosXFormView.gotSkins = function () {
 ZaCosXFormView.myXFormModifier = function(xFormObject) {	
 	xFormObject.tableCssStyle = "width:100%;overflow:auto;";
 	xFormObject.items = [
-			{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", 
+			{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"xform_header", 
 				items: [
 					{type:_GROUP_,	numCols:4,colSizes:["32px","350px","100px","250px"],
 						items: [
@@ -169,11 +169,11 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 					{value:5, label:ZaMsg.TABT_Zimlets},											
 					{value:6, label:ZaMsg.TABT_ServerPool},										
 					{value:7, label:ZaMsg.TABT_Advanced}										
-				],cssClass:"ZaTabBar"
+				],cssClass:"ZaTabBar", id:"xform_tabbar"
 			},
 			{type:_SWITCH_, 
 				items:[
-					{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 1", 
+					{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 1", 
 					colSizes:["150px","*"],
 						items:[
 							{ref:ZaCos.A_name, type:_INPUT_, msgName:ZaMsg.NAD_DisplayName,label:ZaMsg.NAD_DisplayName+":", labelLocation:_LEFT_, cssClass:"admin_xform_name_input", onChange:ZaTabView.onFormFieldChanged, required:true, width: "20em"},
@@ -181,7 +181,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 							{ref:ZaCos.A_zimbraNotes, type:_TEXTAREA_, msgName:ZaMsg.NAD_Notes,label:ZaMsg.NAD_Notes, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", onChange:ZaTabView.onFormFieldChanged,width: "30em"}							
 						]
 					}, 
-					{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 2",
+					{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 2",
 						colSizes:["300px","*"],
 						items: [
 							{ref:ZaCos.A_zimbraFeatureContactsEnabled, type:_CHECKBOX_, msgName:ZaMsg.NAD_FeatureContactsEnabled,label:ZaMsg.NAD_FeatureContactsEnabled, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_},							
@@ -208,7 +208,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 							{ref:ZaCos.A_zimbraFeatureSkinChangeEnabled, type:_CHECKBOX_, msgName:ZaMsg.NAD_zimbraFeatureSkinChangeEnabled,label:ZaMsg.NAD_zimbraFeatureSkinChangeEnabled, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_}							
 						]
 					},
-					{type:_CASE_,relevant:"instance[ZaModel.currentTab] == 3",
+					{type:_ZATABCASE_,relevant:"instance[ZaModel.currentTab] == 3",
 					colSizes:["300px","*"],
 						items :[
 							{ref:ZaCos.A_zimbraPrefSaveToSent, type:_CHECKBOX_, msgName:ZaMsg.NAD_prefSaveToSent,label:ZaMsg.NAD_prefSaveToSent, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_},
@@ -236,7 +236,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 							{ref:ZaCos.A_zimbraPrefUseKeyboardShortcuts, type:_CHECKBOX_, msgName:ZaMsg.NAD_prefKeyboardShort,label:ZaMsg.NAD_prefKeyboardShort, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label", align:_LEFT_}
 						]
 					},
-					{type:_CASE_, relevant:"instance[ZaModel.currentTab]==4", numCols:2, colSizes:["10px", "400px"],
+					{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab]==4", numCols:2, colSizes:["10px", "400px"],
 						items: [
 							{type:_CELLSPACER_},
 							{	sourceRef: ZaCos.A_zimbraInstalledSkinPool, ref:ZaCos.A_zimbraAvailableSkin, 
@@ -260,7 +260,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 							]}
 						]
 					},
-					{type:_CASE_, relevant:"instance[ZaModel.currentTab]==5", numCols:2, colSizes:["10px", "400px"],
+					{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab]==5", numCols:2, colSizes:["10px", "400px"],
 						items: [
 							{type:_CELLSPACER_},
 							{	sourceRef: ZaCos.A_zimbraInstalledZimletPool, ref:ZaCos.A_zimbraZimletAvailableZimlets, 
@@ -274,7 +274,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 					  	  	}
 						]
 					},					
-					{type:_CASE_, relevant:"instance[ZaModel.currentTab]==6", numCols:2, colSizes:["10px", "400px"],
+					{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab]==6", numCols:2, colSizes:["10px", "400px"],
 						items: [
 							{type:_CELLSPACER_},
 							{ sourceRef: ZaCos.A_zimbraMailAllServersInternal,
@@ -288,7 +288,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 					  	  	}
 						]
 					},
-					{type:_CASE_, relevant:"instance[ZaModel.currentTab]==7", id:"cos_form_advanced_tab",
+					{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab]==7", id:"cos_form_advanced_tab",
 						numCols:1,
 						items: [
 							{type:_GROUP_, id:"cos_attachment_settings",

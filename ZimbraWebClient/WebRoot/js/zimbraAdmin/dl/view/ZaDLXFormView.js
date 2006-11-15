@@ -353,7 +353,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 	    };
 	    
 	xFormObject.items = [
-		{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", 
+		{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"xform_header", 
 			items: [
 				{type:_GROUP_,	numCols:4,colSizes:["32px","350px","100px","250px"],
 					items: [
@@ -372,11 +372,11 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 					{value:2, label:ZaMsg.DLXV_TabNotes},
 					{value:3, label:ZaMsg.TABT_MemberOf}
 				], 
-			ref: ZaModel.currentTab, colSpan:"*",cssClass:"ZaTabBar"
+			ref: ZaModel.currentTab, colSpan:"*",cssClass:"ZaTabBar", id:"xform_tabbar"
 		},
 		{type:_SWITCH_,
 			items:[
-				{type:_CASE_,  relevant:"instance[ZaModel.currentTab] == 1",  numCols:2,  colSizes: ["48%","48%"], //["50%","47%", "3%"],
+				{type:_ZATABCASE_,  relevant:"instance[ZaModel.currentTab] == 1",  numCols:2,  colSizes: ["48%","48%"], //["50%","47%", "3%"],
 				  items:[
 					 {type:_GROUP_, width: "98%", numCols: 1,  //colSizes:[10,120,"auto",20],
 						items:[	
@@ -509,7 +509,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 				    }
 				  ]
 				},
-				{type:_CASE_, relevant:"instance[ZaModel.currentTab] == 2", colSizes:[10, "auto"], colSpan:"*",
+				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 2", colSizes:[10, "auto"], colSpan:"*",
 					items:[
 					    {type:_SPACER_, height:5},
 					    {type:_SPACER_, height:5},
@@ -522,7 +522,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 					]
 				 },
 				 //MemberOf Tab
-				{type:_CASE_, numCols:2, colSpan:"*", relevant:("instance[ZaModel.currentTab] == 3"), colSizes: ["50%", "50%"],
+				{type:_ZATABCASE_, numCols:2, colSpan:"*", relevant:("instance[ZaModel.currentTab] == 3"), colSizes: ["50%", "50%"],
 					items: [
 						//layout rapper around the direct/indrect list						
 						{type: _GROUP_, width: "98%", numCols: 1, //colSizes: ["auto", 20],

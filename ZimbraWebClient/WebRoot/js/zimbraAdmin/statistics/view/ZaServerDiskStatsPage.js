@@ -143,7 +143,7 @@ ZaServerDiskStatsPage.prototype._getXForm = function () {
 		tableCssStyle:"width:100%",
 	    itemDefaults:{ },
 	    items:[
-		   {type:_SPACER_, height:10, colSpan:"*" },
+		   {type:_SPACER_, height:"10px", colSpan:"*",id:"xform_header" },
 		
 		   {type:_TAB_BAR_,  ref:ZaModel.currentTab, colSpan:"*",
 		    choices:[
@@ -152,31 +152,31 @@ ZaServerDiskStatsPage.prototype._getXForm = function () {
 			     {value:3, label:ZaMsg.TABT_StatsDataLastMonths},
 			     {value:4, label:ZaMsg.TABT_StatsDataLastYear}
 			    ],
-		    cssClass:"ZaTabBar"
+		    cssClass:"ZaTabBar", id:"xform_tabbar"
 		   },
 
 		   {type:_SWITCH_, align:_LEFT_, valign:_TOP_, 
 		    items:[
-			   {type:_CASE_,  relevant:"instance[ZaModel.currentTab] == 1", align:_LEFT_, valign:_TOP_, 
+			   {type:_ZATABCASE_,  relevant:"instance[ZaModel.currentTab] == 1", align:_LEFT_, valign:_TOP_, 
 			    items:[
 				   {type:_SPACER_, height:10, colSpan:"*" },
 				   {ref: "images", type:_OUTPUT_ , getDisplayValue:"return this.getFormController().writeImageHtml(1)"}
 				   ]
 			   },
-			   {type:_CASE_,  relevant:"instance[ZaModel.currentTab] == 2", align:_LEFT_, valign:_TOP_, 
+			   {type:_ZATABCASE_,  relevant:"instance[ZaModel.currentTab] == 2", align:_LEFT_, valign:_TOP_, 
 			    items:[
 				   {type:_SPACER_, height:10, colSpan:"*" },
 				   {ref: "images",type:_OUTPUT_ , getDisplayValue:"return this.getFormController().writeImageHtml(2)"}
 				   ]
 			   },
 
-			   {type:_CASE_,  relevant:"instance[ZaModel.currentTab] == 3", align:_LEFT_, valign:_TOP_, 
+			   {type:_ZATABCASE_,  relevant:"instance[ZaModel.currentTab] == 3", align:_LEFT_, valign:_TOP_, 
 			    items:[
 				   {type:_SPACER_, height:10, colSpan:"*" },
 				   {ref: "images", type:_OUTPUT_ , getDisplayValue:"return this.getFormController().writeImageHtml(3)"}
 				   ]
 			   },
-			   {type:_CASE_,  relevant:"instance[ZaModel.currentTab] == 4", align:_LEFT_, valign:_TOP_, 
+			   {type:_ZATABCASE_,  relevant:"instance[ZaModel.currentTab] == 4", align:_LEFT_, valign:_TOP_, 
 			    items:[
 				   {type:_SPACER_, height:10, colSpan:"*" },
 				   {ref: "images",type:_OUTPUT_ , getDisplayValue:"return this.getFormController().writeImageHtml(4)"}

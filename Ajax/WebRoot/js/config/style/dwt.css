@@ -1017,6 +1017,15 @@
 	@NormalButton-clicked@	
 }
 
+.XFormCase, .xform_container {
+	overflow-x:auto;
+	overflow-y:auto;
+}
+
+.XFormCase {
+//	height:100%;
+	overflow-y:auto;
+}
 
 /* Groupers -- the xforms way of doing fieldSets... */
 .GrouperBorder,

@@ -216,7 +216,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 	xFormObject.tableCssStyle="width:100%;position:static;overflow:auto;";
 	
 	xFormObject.items = [
-		{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", 
+		{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"xform_header", 
 			items: [
 				{type:_GROUP_,	numCols:4,colSizes:["32px","350px","100px","250px"],
 					items: [
@@ -240,10 +240,10 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 				{value:5, label:ZaMsg.NAD_Tab_POP},
 				{value:6, label:ZaMsg.NAD_Tab_VolumeMgt}										
 			],
-			cssClass:"ZaTabBar"
+			cssClass:"ZaTabBar", id:"xform_tabbar"
 		},
 		{type:_SWITCH_, items:[
-				{type:_CASE_, width:"100%",colSizes:["100px","300px"], relevant:"instance[ZaModel.currentTab] == 1", 
+				{type:_ZATABCASE_, width:"100%",colSizes:["100px","300px"], relevant:"instance[ZaModel.currentTab] == 1", 
 					items:[
 						{ref:ZaServer.A_name, type:_OUTPUT_, label:ZaMsg.NAD_DisplayName+":", labelLocation:_LEFT_},
 						{ ref: ZaServer.A_description, type:_INPUT_, 
@@ -268,7 +268,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 					    }
 					]
 				},
-				{type:_CASE_, width:"100%",colSizes:["100px","300px"], relevant:"instance[ZaModel.currentTab] == 2", 
+				{type:_ZATABCASE_, width:"100%",colSizes:["100px","300px"], relevant:"instance[ZaModel.currentTab] == 2", 
 					items:[
 						{ type: _GROUP_, label: ZaMsg.NAD_Service_EnabledServices, labelCssStyle: "vertical-align:top",
 						  items: [
@@ -327,7 +327,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 						]}
 					]
 				}, 
-				{ type: _CASE_,  width:"100%", relevant: "instance[ZaModel.currentTab] == 3",colSizes:["250px","300px"],
+				{ type: _ZATABCASE_,  width:"100%", relevant: "instance[ZaModel.currentTab] == 3",colSizes:["250px","300px"],
 			      items: [
 			      	{ ref:ZaServer.A_zimbraMtaAuthEnabled, type: _SUPER_CHECKBOX_,
 			      	  trueValue: "TRUE", falseValue: "FALSE",
@@ -381,7 +381,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 			      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
 		      	    }
 			    ]},
-				{type:_CASE_, width:"100%",colSizes:["250px","400px"], relevant:"instance[ZaModel.currentTab] == 4", 
+				{type:_ZATABCASE_, width:"100%",colSizes:["250px","400px"], relevant:"instance[ZaModel.currentTab] == 4", 
 					items:[
 						{ type: _DWT_ALERT_,
 						  containerCssStyle: "padding-bottom:0px",
@@ -448,7 +448,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 			      	    }							  
 					]
 				},
-				{type:_CASE_, width:"100%",colSizes:["250px","400px"], relevant:"instance[ZaModel.currentTab] == 5", 
+				{type:_ZATABCASE_, width:"100%",colSizes:["250px","400px"], relevant:"instance[ZaModel.currentTab] == 5", 
 					items:[
 						{ type: _DWT_ALERT_,
 						  containerCssStyle: "padding-bottom:0px",
@@ -536,7 +536,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 			      	    }							  
 					]
 				},
-				{type:_CASE_, relevant:"((instance[ZaModel.currentTab] == 6) && ZaServerXFormView.getMailboxEnabled.call(item))", 
+				{type:_ZATABCASE_, relevant:"((instance[ZaModel.currentTab] == 6) && ZaServerXFormView.getMailboxEnabled.call(item))", 
 					items:[
 						{type:_GROUP_, numCols:5,  
 							items: [
@@ -571,7 +571,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 						}
 					]
 				},
-				{type:_CASE_, relevant:"((instance[ZaModel.currentTab] == 6) && !instance[ZaServer.A_showVolumes])", 					
+				{type:_ZATABCASE_, relevant:"((instance[ZaModel.currentTab] == 6) && !instance[ZaServer.A_showVolumes])", 					
 					items: [
 						{ type: _DWT_ALERT_,
 						  cssClass: "DwtTabTable",
