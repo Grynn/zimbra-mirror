@@ -517,7 +517,15 @@ function(node) {
 		var sel = this._getRange();
 		var range = sel.createRange();
 		var id = "FOO-" + Dwt.getNextId();
-		range.pasteHTML("<span id='" + id + "'></span>");
+		try {
+			range.pasteHTML("<span id='" + id + "'></span>");
+		} catch(ex) {
+			// bug 12158: IE throws error when the range
+			// spans over a table and following text, so
+			// let's collapse it.
+			range.collapse(false);
+			range.pasteHTML("<span id='" + id + "'></span>");
+		}
  		var el = this._getIframeDoc().getElementById(id);
  		el.parentNode.insertBefore(node, el);
  		el.parentNode.removeChild(el);
