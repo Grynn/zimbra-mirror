@@ -51,8 +51,7 @@ public class NANPHandler implements ZimletHandler {
 	// FIXME: this needs to be much more robust...
 	// needed something for testing...
     private Pattern NANP_NUMBER_PATTERN = Pattern.compile(
-    "((?:\\(?\\d{3}\\)?[-.\\s]?)|[^\\d])\\d{3}[-.\\s]\\d{4}");
-    ///((?:\(?\d{3}\)?[-.\s]?)|[^\d])\d{3}[-.\s]\d{4}/}   
+    "\\b(\\(?\\d{3}\\)?[-. ])?\\d{3}[-. ]\\d{4}\\b");
     
     /**
      * first digit of area code or exchange must be 2-9
@@ -68,7 +67,7 @@ public class NANPHandler implements ZimletHandler {
     
 	public String[] match(String text, ZimletConf config) {
         Matcher m = NANP_NUMBER_PATTERN.matcher(text);
-        List l = new ArrayList();
+        List<String> l = new ArrayList<String>();
         while (m.find()) {
         	String match = text.substring(m.start(), m.end());
         	StringBuffer digits = new StringBuffer(10);
@@ -83,5 +82,27 @@ public class NANPHandler implements ZimletHandler {
         	l.add(match);
         }
         return (String[])l.toArray(new String[0]);
+	}
+	
+	private void test(String str) {
+		String[] res = match(str, null);
+		System.out.print( res.length > 0 ? "true" : "false");
+		System.out.print(" - ");
+		System.out.println(str);
+	}
+	public static void main(String[] args) throws Exception {
+		NANPHandler h = new NANPHandler();
+		h.test(" phone: 555-1212 ");
+		h.test(" phone: 1-213-555-1212 ");
+		h.test(" (213) 555-1212 ");
+		h.test("213-555-1212");
+		h.test("213.555.1212");
+		h.test("213 555 1212");
+		h.test("1213-555-1212");
+		h.test("213_555_1212");
+		h.test("213-555-12123");
+		h.test("213 555 1212123123");
+		h.test("213 55531212");
+		h.test("_Part_173_14431377.1162933715308");
 	}
 }

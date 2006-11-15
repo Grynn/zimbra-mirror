@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_phone" version="1.1" description="Phone Number">
+<zimlet name="com_zimbra_phone" version="1.2" description="Phone Number">
 	<serverExtension hasKeyword="phone" extensionClass="com.zimbra.cs.zimlet.handler.NANPHandler"/>
 	<include>phone.js</include>
 	<handlerObject>Com_Zimbra_Phone</handlerObject>
