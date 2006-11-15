@@ -357,7 +357,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 						{ref:ZaDomain.A_domainDefaultCOSId, type:_OSELECT1_, 
 							label:ZaMsg.Domain_DefaultCOS, labelLocation:_LEFT_, 
 							choices:this._app.getCosListChoices(), onChange:ZaTabView.onFormFieldChanged
-						},						  	
+						},				  	
 						{ ref: ZaDomain.A_notes, type:_TEXTAREA_, 
 						  label:ZaMsg.NAD_Notes, labelCssStyle:"vertical-align:top", width:250,
 						  onChange:ZaTabView.onFormFieldChanged

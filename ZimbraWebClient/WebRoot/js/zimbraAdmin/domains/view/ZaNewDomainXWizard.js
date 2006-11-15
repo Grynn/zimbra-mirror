@@ -573,7 +573,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
 						{ref:ZaDomain.A_domainDefaultCOSId, type:_OSELECT1_, 
 							label:ZaMsg.Domain_DefaultCOS, labelLocation:_LEFT_, 
 							choices:this._app.getCosListChoices()
-						},							
+						},
 						{ref:ZaDomain.A_notes, type:_TEXTAREA_, label:ZaMsg.NAD_Notes, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", width:250}
 					]
 				},

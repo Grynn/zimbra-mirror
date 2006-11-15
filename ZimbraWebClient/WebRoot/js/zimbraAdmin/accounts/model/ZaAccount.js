@@ -370,12 +370,12 @@ function(tmpObj, app) {
 		return false;
 	}
 	
-	if (min_mailPollingInterval == "" || min_mailPollingInterval == null) {
+	if ((min_mailPollingInterval == "" || min_mailPollingInterval == null)&& (myCos)) {
 		//take the cos value
 		min_mailPollingInterval = myCos.attrs[ZaAccount.A_zimbraMailMinPollingInterval];
 	}
 	
-	if (p_mailPollingInterval == "" || p_mailPollingInterval == null){
+	if ((p_mailPollingInterval == "" || p_mailPollingInterval == null) && (myCos)){
 		p_mailPollingInterval = myCos.attrs[ZaAccount.A_zimbraPrefMailPollingInterval];
 	}
 	
