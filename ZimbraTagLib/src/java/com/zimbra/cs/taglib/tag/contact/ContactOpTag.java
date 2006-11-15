@@ -24,9 +24,9 @@
  */
 package com.zimbra.cs.taglib.tag.contact;
 
+import com.zimbra.cs.mailbox.Contact;
 import com.zimbra.cs.service.ServiceException;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
-import com.zimbra.cs.zclient.ZContact;
 
 import javax.servlet.jsp.JspTagException;
 import java.util.HashMap;
@@ -42,7 +42,7 @@ public class ContactOpTag extends ZimbraSimpleTag {
     public void addAttr(String name, String value) throws JspTagException {
         if (!mForce) {
             try {
-                ZContact.Attr.fromString(name); // make sure it is a known attr name
+                Contact.Attr.fromString(name); // make sure it is a known attr name
             } catch (ServiceException e) {
                 throw new JspTagException(e);
             }
