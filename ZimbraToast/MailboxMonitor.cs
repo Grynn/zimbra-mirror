@@ -206,11 +206,13 @@ namespace Zimbra.Toast
 			//create a timer to wake this thread up periodically
 			long lSleep = pollInterval * 1000 * 60;
 			System.Threading.Timer t = new Timer( new TimerCallback(CheckForNewMsgs), null, lSleep, lSleep );
+			bool bError = false;
 			while( true )
 			{
 				try 
 				{
 					CheckMailbox_Internal();
+					bError = false;
 				}
 				catch(System.Threading.ThreadAbortException)
 				{
@@ -225,14 +227,18 @@ namespace Zimbra.Toast
 					{
 						zimbraSession.InvalidateAuthToken();
 					}
-					else if( !IgnorableFault(faultCode) )
+					else if( !IgnorableFault(faultCode)  )
 					{
-						//if an soap fault was thrown, let the user know
-						//and continue monitoring the mailbox
-						System.Windows.Forms.MessageBox.Show(
-							"Zimbra server returned an error message: " +  ze.Fault.Code + "\n" + ze.Fault.Description + "\n", 
-							"Zimbra Toast - Error", 
-							System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error );
+						if( bError ) 
+						{
+							//if an soap fault was thrown, let the user know
+							//and continue monitoring the mailbox
+							System.Windows.Forms.MessageBox.Show(
+								"Zimbra server returned an error message: " +  ze.Fault.Code + "\n" + ze.Fault.Description + "\n", 
+								"Zimbra Toast - Error", 
+								System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error );
+						}
+						bError = true;
 					}
 				}
 				catch(System.Net.WebException we)
@@ -250,27 +256,35 @@ namespace Zimbra.Toast
 							System.Net.ServicePointManager.CertificatePolicy = new InvalidCertOKPolicy();
 						}
 					}	
-					else 
+					else
 					{
-						System.Windows.Forms.MessageBox.Show(
-							"WebException: " + we.Status.ToString() + "\n" + 
-							we.Message + "\n" + we.StackTrace,
-							"Zimbra Toast - WebException",
-							System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error );
+						if( bError ) 
+						{
+							System.Windows.Forms.MessageBox.Show(
+								"WebException: " + we.Status.ToString() + "\n" + 
+								we.Message + "\n" + we.StackTrace,
+								"Zimbra Toast - WebException",
+								System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error );
+						}
+						bError = true;
 					}
 				}
 				catch(Exception e)
 				{
-					//if some other error occurred, let the user know
-					//and continue monitoring the mailbox
-					String msg = e.Message;
-					Type type = e.GetType();
-					String stackTrace = e.StackTrace;
+					if( bError ) 
+					{
+						//if some other error occurred, let the user know
+						//and continue monitoring the mailbox
+						String msg = e.Message;
+						Type type = e.GetType();
+						String stackTrace = e.StackTrace;
 
-					System.Windows.Forms.MessageBox.Show(
-						"Error monitoring mailbox\n" + msg + "\n\n" + type + "\n" + stackTrace, 
-						"Zimbra Toast - Unexpected Error", 
-						System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error );
+						System.Windows.Forms.MessageBox.Show(
+							"Error monitoring mailbox\n" + msg + "\n\n" + type + "\n" + stackTrace, 
+							"Zimbra Toast - Unexpected Error", 
+							System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error );
+					}
+					bError = true;
 				}
 				wakeEvent.WaitOne();
 			}
