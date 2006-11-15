@@ -992,6 +992,7 @@ function(cmd, params) {
 		if (tr)
 			rowIndex = tr.rowIndex;
 	}
+	var cells = params.cells;
 	while (true) {
 		switch (cmd) {
 		    case "insertRowAbove":
@@ -1015,23 +1016,26 @@ function(cmd, params) {
 			break;
 
 		    case "deleteRow":
-			var td = DwtHtmlEditor.table_deleteRow(td);
-			if (td) {
-				this.selectNodeContents(td, true);
-				this.focus();
+			for (var i = 0; i < cells.length; ++i) {
+				var td = DwtHtmlEditor.table_deleteRow(cells[i][0]);
+				if (td) {
+					this.selectNodeContents(td, true);
+					this.focus();
+				}
 			}
 			break;
 
 		    case "deleteColumn":
-			var td = DwtHtmlEditor.table_deleteCol(td);
-			if (td) {
-				this.selectNodeContents(td, true);
-				this.focus();
+			for (var i = 0; i < cells[0].length; ++i) {
+				var td = DwtHtmlEditor.table_deleteCol(cells[0][i]);
+				if (td) {
+					this.selectNodeContents(td, true);
+					this.focus();
+				}
 			}
 			break;
 
 		    case "mergeCells":
-			var cells = params.cells;
 			td = cells[0][0];
 			var html = [ td.innerHTML.replace(/<br>$/i, "") ];
 			for (var i = 0; i < cells.length; ++i) {
@@ -1340,8 +1344,8 @@ function(iFrameDoc) {
 		iFrameDoc.designMode = "on";
 		// Probably a regression of FF 1.5.0.1/Linux requires us to
 		// reset event handlers here (Zimbra bug: 6545).
-// 		if (AjxEnv.isGeckoBased && (AjxEnv.isLinux || AjxEnv.isMac))
-// 			this._registerEditorEventHandlers(document.getElementById(this._iFrameId), iFrameDoc);
+ 		if (AjxEnv.isGeckoBased && (AjxEnv.isLinux || AjxEnv.isMac))
+ 			this._registerEditorEventHandlers(document.getElementById(this._iFrameId), iFrameDoc);
 	} catch (ex) {
 		//Gecko may take some time to enable design mode..
 		if (AjxEnv.isGeckoBased) {
