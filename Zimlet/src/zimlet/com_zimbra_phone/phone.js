@@ -43,7 +43,8 @@ function(line, startIndex) {
 					m.index += m[j].length;
 				m[0] = m[re.useParen];
 			}
-			ret = m;
+			if (!/^000/.test(m[0]))
+				ret = m;
 		}
 	}
 	return ret;
