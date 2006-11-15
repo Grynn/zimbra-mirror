@@ -502,7 +502,7 @@ XModelItem.prototype.validateNumber = function(value) {
 		throw this.getModel().getErrorMessage("numberLessThanEqualMin", minExclusive);
 	}
 
-	return value;
+	return nvalue;
 }
 
 
