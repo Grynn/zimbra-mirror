@@ -87,7 +87,16 @@ function(callback, form, optionalTimeout) {
 	var failureAction = new AjxTimedAction(this, this._onFailure, [req.id]);
 	var timeout = optionalTimeout? optionalTimeout: 5000;
 	AjxPost._outStandingRequests[req.id] = req;
-	req.send(failureAction, timeout);
+	try {
+		req.send(failureAction, timeout);
+	} catch (ex) {
+		if (AjxEnv.isIE) {
+			if (ex.number == -2147024891) { // 0x80070005: E_ACCESSDENIED (Couldn't open file)
+				throw new AjxException(ZmMsg.uploadErrorAccessDenied, ex.number);
+			}
+		}
+		throw ex;
+	}
 };
 
 
