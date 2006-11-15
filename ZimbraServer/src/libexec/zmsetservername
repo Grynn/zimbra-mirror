@@ -42,7 +42,10 @@ fi
 source /opt/zimbra/bin/zmshutil || exit 1
 zmsetvars -f zimbra_home
 
+SERVICES=`/opt/zimbra/bin/zmprov -l gs ${zimbra_server_hostname} | sed -ne '/^zimbraServiceEnabled/ s/zimbraServiceEnabled: //p'`
+
 /opt/zimbra/bin/zmcontrol stop
+sleep 10
 
 if [ "x${ldap_is_master}" = "xtrue" ]; then
 	ldap start
@@ -85,9 +88,55 @@ zmlocalconfig -e zimbra_server_hostname=${NAME}
 foo=`echo ${ldap_master_url} | sed -e "s|${zimbra_server_hostname}|${NAME}|g"`
 if [ "x{$foo}" != "x${ldap_master_url}" ]; then
 	zmlocalconfig -e ldap_master_url=$foo
+	ldap_master_url=$foo
 fi
 
 foo=`echo ${ldap_url} | sed -e "s|${zimbra_server_hostname}|${NAME}|g"`
 if [ "x{$foo}" != "x${ldap_url}" ]; then
 	zmlocalconfig -e ldap_url=$foo
+	ldap_url=$foo
+fi
+
+foo=`echo ${ldap_host} | sed -e "s|${zimbra_server_hostname}|${NAME}|g"`
+if [ "x{$foo}" != "x${ldap_host}" ]; then
+	zmlocalconfig -e ldap_host=$foo
+	ldap_host=$foo
+fi
+foo=`echo ${smtp_destination} | sed -e "s|${zimbra_server_hostname}|${NAME}|g"`
+if [ "x{$foo}" != "x${smtp_destination}" ]; then
+	zmlocalconfig -e smtp_destination=$foo
+	smtp_destination=$foo
+fi
+foo=`echo ${av_notify_user} | sed -e "s|${zimbra_server_hostname}|${NAME}|g"`
+if [ "x{$foo}" != "x${av_notify_user}" ]; then
+	zmlocalconfig -e av_notify_user=$foo
+	av_notify_user=$foo
+fi
+foo=`echo ${snmp_trap_host} | sed -e "s|${zimbra_server_hostname}|${NAME}|g"`
+if [ "x{$foo}" != "x${snmp_trap_host}" ]; then
+	zmlocalconfig -e snmp_trap_host=$foo
+	snmp_trap_host=$foo
+fi
+foo=`echo ${smtp_source} | sed -e "s|${zimbra_server_hostname}|${NAME}|g"`
+if [ "x{$foo}" != "x${smtp_source}" ]; then
+	zmlocalconfig -e smtp_source=$foo
+	smtp_source=$foo
+fi
+
+# resource the vars
+zmsetvars -f
+
+# rewrite the ldap-*.cf file for postfix
+echo $SERVICES | grep -q mta
+if [ $? == 0 ]; then
+  echo -n "Reinitializing the mta config..."
+  /opt/zimbra/libexec/zmmtainit ${ldap_host} ${ldap_port}
+  echo "done."
+fi
+
+# rewrite swatchrc
+echo $SERVICES | grep -q snmp
+if [ $? == 0 ]; then
+  echo -n "Reinitializing snmp config..."
+  /opt/zimbra/libexec/zmsnmpinit
 fi
