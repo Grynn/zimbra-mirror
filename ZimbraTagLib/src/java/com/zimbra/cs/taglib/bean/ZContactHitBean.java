@@ -35,7 +35,9 @@ public class ZContactHitBean extends ZSearchHitBean {
         mHit = hit;
     }
 
-    public boolean getIsGroup() { return mHit.isgGroup(); }
+    public boolean getIsContact() { return !mHit.isGroup(); }
+    
+    public boolean getIsGroup() { return mHit.isGroup(); }
     
     public String getId() { return mHit.getId(); }
     
