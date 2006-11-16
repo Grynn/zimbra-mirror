@@ -276,12 +276,12 @@ Super_XFormItem.updateCss = function(levels) {
 		container = container.parentNode;
 	}
 	if(Super_XFormItem.checkIfOverWriten.call(this)) {
-		if(container.className != null && container.className != "ZmOverride")
+		if(container.className != null && container.className != "ZaOverride")
 			this._originalClassName = container.className;
 		else 
 			this._originalClassName	= "xform_field_container";
 			
-		container.className="ZmOverride";
+		container.className="ZaOverride";
 	} else {
 		if(this._originalClassName != null)
 			container.className=this._originalClassName;
@@ -390,7 +390,7 @@ Super_Textfield_XFormItem.prototype.initializeItems = function() {
 		relevant:"Super_XFormItem.checkIfOverWriten.call(item)",
 		relevantBehavior:_BLOCK_HIDE_,
 		onChange:Composite_XFormItem.onFieldChange,
-		cssStyle: (anchorCssStyle ? anchorCssStyle : "width:200px")
+		cssStyle: (anchorCssStyle ? anchorCssStyle : "width:150px")
 	};
 	this.items = [txtField,anchorHlpr];
 	Composite_XFormItem.prototype.initializeItems.call(this);
@@ -405,6 +405,10 @@ Super_Textfield_XFormItem.prototype.items = [];
 **/
 Super_Checkbox_XFormItem = function () {}
 XFormItemFactory.createItemType("_SUPER_CHECKBOX_", "super_checkbox", Super_Checkbox_XFormItem, Super_XFormItem);
+
+SuperFeature_Checkbox_XFormItem = function () {}
+XFormItemFactory.createItemType("_SUPER_FEATURE_CHECKBOX_", "super_checkbox", SuperFeature_Checkbox_XFormItem, Super_Checkbox_XFormItem);
+SuperFeature_Checkbox_XFormItem.prototype.colSizes = ["150px","250px","150px"];
 
 Super_Checkbox_XFormItem.prototype.useParentTable = false;
 Super_Checkbox_XFormItem.prototype.numCols = 3;
@@ -457,7 +461,7 @@ Super_Checkbox_XFormItem.prototype.items = [
 		relevant:"Super_XFormItem.checkIfOverWriten.call(item)",
 		onChange:Composite_XFormItem.onFieldChange,
 		relevantBehavior:_BLOCK_HIDE_,
-		cssStyle:"width:100px"
+		cssStyle:"width:150px"
 	}
 ];
 
@@ -561,7 +565,7 @@ Super_DwtChooser_XFormItem.prototype.initializeItems = function() {
 	var anchorItem = {	
 			type:_SUPER_ANCHOR_HELPER_, ref:".",
 			relevant:"Super_XFormItem.checkIfOverWriten.call(item)",
-			relevantBehavior:_BLOCK_HIDE_,cssSyle:(anchorCssStyle ? anchorCssStyle : "width:200px;"),
+			relevantBehavior:_BLOCK_HIDE_,cssSyle:(anchorCssStyle ? anchorCssStyle : "width:150px;"),
 			onChange:Composite_XFormItem.onFieldChange,
 			label:resetToSuperLabel,align:_CENTER_,
 			containerCssStyle:"width:90%;float:center;align:center;text-align:center;"
@@ -608,7 +612,7 @@ Super_Select1_XFormItem.prototype.initializeItems = function() {
 	if(anchorCssStyle) {
 		this.getItems()[1].cssStyle = anchorCssStyle;
 	} else {
-		this.getItems()[1].cssStyle = "width:200px";
+		this.getItems()[1].cssStyle = "width:150px";
 	}	
 
 	var trueValue = this.getInheritedProperty("trueValue");
@@ -737,7 +741,7 @@ Super_Lifetime_XFormItem.prototype.initializeItems = function() {
 		relevant:"Super_XFormItem.checkIfOverWriten.call(item)",
 		relevantBehavior:_BLOCK_HIDE_,
 		onChange:Composite_XFormItem.onFieldChange,
-		cssStyle: (anchorCssStyle ? anchorCssStyle : "width:200px")
+		cssStyle: (anchorCssStyle ? anchorCssStyle : "width:150px")
 	};
 	this.items = [txtField,selectField,anchorHlpr];
 	Composite_XFormItem.prototype.initializeItems.call(this);	
@@ -834,7 +838,7 @@ Super_Lifetime1_XFormItem.prototype.initializeItems = function() {
 		relevant:"Super_XFormItem.checkIfOverWriten.call(item)",
 		relevantBehavior:_BLOCK_HIDE_,
 		onChange:Composite_XFormItem.onFieldChange,
-		cssStyle: (anchorCssStyle ? anchorCssStyle : "width:200px")
+		cssStyle: (anchorCssStyle ? anchorCssStyle : "width:150px")
 	};
 	this.items = [txtField,selectField,anchorHlpr];
 	Composite_XFormItem.prototype.initializeItems.call(this);	
